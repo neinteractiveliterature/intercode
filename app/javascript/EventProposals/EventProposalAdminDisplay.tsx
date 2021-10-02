@@ -37,13 +37,17 @@ function EventProposalAdminNotes({ eventProposalId }: EventProposalAdminNotesPro
           if (!queryData) {
             return;
           }
-          cache.writeQuery({
+          cache.writeQuery<EventProposalAdminNotesQueryData>({
             query: EventProposalAdminNotesQuery,
             variables: { eventProposalId },
             data: {
-              eventProposal: {
-                ...queryData.eventProposal,
-                admin_notes: adminNotes,
+              ...queryData,
+              convention: {
+                ...queryData.convention,
+                event_proposal: {
+                  ...queryData.convention.event_proposal,
+                  admin_notes: adminNotes,
+                },
               },
             },
           });
@@ -60,7 +64,12 @@ function EventProposalAdminNotes({ eventProposalId }: EventProposalAdminNotesPro
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  return <AdminNotes value={data?.eventProposal.admin_notes ?? ''} mutate={updateAdminNotes} />;
+  return (
+    <AdminNotes
+      value={data?.convention.event_proposal.admin_notes ?? ''}
+      mutate={updateAdminNotes}
+    />
+  );
 }
 
 function useLoadEventProposal() {
@@ -69,37 +78,39 @@ function useLoadEventProposal() {
 }
 
 export default LoadQueryWrapper(useLoadEventProposal, function EventProposalAdminDisplay({ data }) {
-  usePageTitle(data.eventProposal.title);
+  usePageTitle(data.convention.event_proposal.title);
 
-  const eventProposalId = data.eventProposal.id;
+  const eventProposalId = data.convention.event_proposal.id;
 
   return (
     <>
       <div className="d-flex justify-space-between align-items-baseline">
         <div className="col">
           <h1>
-            {data.eventProposal.title}{' '}
-            <small className="text-muted">({data.eventProposal.event_category.name})</small>
+            {data.convention.event_proposal.title}{' '}
+            <small className="text-muted">
+              ({data.convention.event_proposal.event_category.name})
+            </small>
           </h1>
         </div>
 
         {data.currentAbility.can_update_event_proposal ? (
-          <EventProposalStatusUpdater eventProposal={data.eventProposal} />
+          <EventProposalStatusUpdater eventProposal={data.convention.event_proposal} />
         ) : (
           <div>
             <strong>Status: </strong>
-            {humanize(data.eventProposal.status)}
+            {humanize(data.convention.event_proposal.status)}
           </div>
         )}
       </div>
 
       <div className="my-4 d-flex align-items-end">
-        {data.eventProposal.event ? (
-          <Link to={`/events/${data.eventProposal.event.id}`} className="btn btn-link">
+        {data.convention.event_proposal.event ? (
+          <Link to={`/events/${data.convention.event_proposal.event.id}`} className="btn btn-link">
             Go to event
           </Link>
         ) : null}
-        {!data.eventProposal.event && data.currentAbility.can_update_event_proposal ? (
+        {!data.convention.event_proposal.event && data.currentAbility.can_update_event_proposal ? (
           <Link
             to={`/admin_event_proposals/${eventProposalId}/edit`}
             className="btn btn-outline-primary"

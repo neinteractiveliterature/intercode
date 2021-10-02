@@ -245,6 +245,7 @@
     "ratings": {
       "clearButton": "",
       "favoriteButton": "",
+      "helpText": "",
       "hideButton": ""
     },
     "registrationPolicies": {

@@ -20,7 +20,7 @@ export type CreateEventProposalModalProps = {
   cancel: () => void;
   visible: boolean;
   userEventProposals: NonNullable<
-    NonNullable<ProposeEventButtonQueryData['myProfile']>['user']
+    NonNullable<ProposeEventButtonQueryData['convention']['my_profile']>['user']
   >['event_proposals'];
   proposableEventCategories: ProposeEventButtonQueryData['convention']['event_categories'];
   departments: ProposeEventButtonQueryData['convention']['departments'];
@@ -33,7 +33,7 @@ function CreateEventProposalModal({
   userEventProposals,
   proposableEventCategories,
   departments,
-}: CreateEventProposalModalProps) {
+}: CreateEventProposalModalProps): JSX.Element {
   const { t } = useTranslation();
   const [cloneEventProposal, setCloneEventProposal] = useState<typeof userEventProposals[0]>();
   const topLevelEventCategories = useMemo(
@@ -81,9 +81,11 @@ function CreateEventProposalModal({
         eventCategoryId: eventCategory.id,
       },
     });
-    await apolloClient.clearStore();
 
-    onCreate(data!.createEventProposal!.event_proposal);
+    if (data) {
+      await apolloClient.clearStore();
+      onCreate(data.createEventProposal.event_proposal);
+    }
   };
 
   return (

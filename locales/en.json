@@ -245,6 +245,7 @@
     "ratings": {
       "clearButton": "Clear rating",
       "favoriteButton": "Mark as favorite",
+      "helpText": "You can mark an event as a “favorite” by clicking the <1></1> icon on it, and you can hide an event from your default view by clicking the <4></4> icon. To revert to “TBD,” click the icon again. Your preferences are always private, and event runners and convention staff cannot see what you’ve favorited or hidden.",
       "hideButton": "Hide event"
     },
     "registrationPolicies": {

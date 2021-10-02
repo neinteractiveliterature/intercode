@@ -1,9 +1,10 @@
 import { useMemo } from 'react';
 import { useRouteMatch } from 'react-router-dom';
-import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
+import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import FormResponseChangeHistory from '../FormPresenter/ItemChangeDisplays/FormResponseChangeHistory';
 import { useEventProposalHistoryQuery } from './queries.generated';
+import { FormType } from '../graphqlTypes.generated';
 
 const EXCLUDE_FIELDS = new Set([
   'minimum_age',
@@ -13,44 +14,40 @@ const EXCLUDE_FIELDS = new Set([
   'team_mailing_list_name',
 ]);
 
-function EventProposalHistory() {
+function useEventProposalHistoryQueryFromParams() {
   const match = useRouteMatch<{ id: string }>();
-  const { data, loading, error } = useEventProposalHistoryQuery({
+  return useEventProposalHistoryQuery({
     variables: { id: Number.parseInt(match.params.id, 10) },
   });
-
-  const changes = useMemo(
-    () =>
-      loading || error || !data
-        ? []
-        : data.eventProposal.form_response_changes.filter(
-            (change) => !EXCLUDE_FIELDS.has(change.field_identifier),
-          ),
-    [data, error, loading],
-  );
-
-  const form = useMemo(
-    () =>
-      loading || error || !data ? null : data.eventProposal.event_category.event_proposal_form,
-    [data, error, loading],
-  );
-
-  if (loading) {
-    return <LoadingIndicator iconSet="bootstrap-icons" />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
-  return (
-    <FormResponseChangeHistory
-      changes={changes}
-      convention={data!.convention!}
-      basePath={`/admin_event_proposals/${match.params.id}/history`}
-      form={form!}
-    />
-  );
 }
 
-export default EventProposalHistory;
+export default LoadQueryWrapper(
+  useEventProposalHistoryQueryFromParams,
+  function EventProposalHistory({ data }) {
+    const changes = useMemo(
+      () =>
+        data.convention.event_proposal.form_response_changes.filter(
+          (change) => !EXCLUDE_FIELDS.has(change.field_identifier),
+        ),
+      [data.convention.event_proposal.form_response_changes],
+    );
+
+    const form = data.convention.event_proposal.event_category.event_proposal_form;
+    const effectiveForm: NonNullable<typeof form> = form ?? {
+      __typename: 'Form',
+      form_sections: [],
+      form_type: FormType.EventProposal,
+      id: 0,
+      title: '',
+    };
+
+    return (
+      <FormResponseChangeHistory
+        changes={changes}
+        convention={data.convention}
+        basePath={`/admin_event_proposals/${data.convention.event_proposal.id}/history`}
+        form={effectiveForm}
+      />
+    );
+  },
+);
