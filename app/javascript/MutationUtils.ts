@@ -37,11 +37,11 @@ export function createUpdater<QueryType, TVariables extends OperationVariables, 
     }
 
     const existingObjects = get(arrayPath, data);
-    store.writeQuery({
+    store.writeQuery<QueryType>({
       query,
       variables,
       // eslint-disable-next-line @typescript-eslint/ban-types
-      data: set(arrayPath, [...existingObjects, newObject], data as unknown as object),
+      data: set<QueryType>(arrayPath, [...existingObjects, newObject], data as unknown as object),
     });
   };
 }
@@ -65,10 +65,10 @@ export function deleteUpdater<QueryType, TVariables extends OperationVariables>(
       return;
     }
 
-    store.writeQuery({
+    store.writeQuery<QueryType>({
       query,
       variables: queryVariables,
-      data: set(
+      data: set<QueryType>(
         arrayPath,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         get(arrayPath, data).filter((object: any) => object[idAttribute ?? 'id'] !== id),

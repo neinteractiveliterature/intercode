@@ -9,7 +9,7 @@ export type CmsVariableFieldsFragment = { __typename: 'CmsVariable', id: number,
 export type CmsVariablesQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type CmsVariablesQueryData = { __typename: 'Query', cmsVariables: Array<{ __typename: 'CmsVariable', id: number, key: string, value_json: string, current_ability_can_update: boolean, current_ability_can_delete: boolean }>, currentAbility: { __typename: 'Ability', can_create_cms_variables: boolean } };
+export type CmsVariablesQueryData = { __typename: 'Query', cmsParent: { __typename: 'Convention', id: number, cmsVariables: Array<{ __typename: 'CmsVariable', id: number, key: string, value_json: string, current_ability_can_update: boolean, current_ability_can_delete: boolean }> } | { __typename: 'RootSite', id: number, cmsVariables: Array<{ __typename: 'CmsVariable', id: number, key: string, value_json: string, current_ability_can_update: boolean, current_ability_can_delete: boolean }> }, currentAbility: { __typename: 'Ability', can_create_cms_variables: boolean } };
 
 export type SetCmsVariableMutationVariables = Types.Exact<{
   key: Types.Scalars['String'];
@@ -37,9 +37,12 @@ export const CmsVariableFieldsFragmentDoc = gql`
     `;
 export const CmsVariablesQueryDocument = gql`
     query CmsVariablesQuery {
-  cmsVariables {
+  cmsParent: cmsParentByRequestHost {
     id
-    ...CmsVariableFields
+    cmsVariables {
+      id
+      ...CmsVariableFields
+    }
   }
   currentAbility {
     can_create_cms_variables

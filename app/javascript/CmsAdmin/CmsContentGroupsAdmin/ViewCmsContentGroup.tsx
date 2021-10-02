@@ -1,48 +1,24 @@
-import { useMemo } from 'react';
-import { useRouteMatch } from 'react-router-dom';
-import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
-
 import usePageTitle from '../../usePageTitle';
 import CmsContentGroupFormFields from './CmsContentGroupFormFields';
 import { useCmsContentGroupsAdminQuery } from './queries.generated';
-import FourOhFourPage from '../../FourOhFourPage';
+import { LoadSingleValueFromCollectionWrapper } from '../../GraphqlLoadingWrappers';
 
-function ViewCmsContentGroup() {
-  const { params } = useRouteMatch<{ id: string }>();
-  const { data, loading, error } = useCmsContentGroupsAdminQuery();
-  const contentGroup = useMemo(() => {
-    if (loading || error || !data) {
-      return null;
-    }
+export default LoadSingleValueFromCollectionWrapper(
+  useCmsContentGroupsAdminQuery,
+  (data, id) => data.cmsParent.cmsContentGroups.find((group) => group.id.toString() === id),
+  function ViewCmsContentGroup({ data, value: contentGroup }): JSX.Element {
+    usePageTitle(contentGroup.name);
 
-    return data.cmsContentGroups.find((group) => group.id.toString() === params.id);
-  }, [data, loading, error, params.id]);
+    return (
+      <>
+        <h3 className="mb-4">{contentGroup.name}</h3>
 
-  usePageTitle(`Editing “${(contentGroup || {}).name}”`);
-
-  if (loading) {
-    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
-  if (!contentGroup) {
-    return <FourOhFourPage />;
-  }
-
-  return (
-    <>
-      <h3 className="mb-4">{contentGroup.name}</h3>
-
-      <CmsContentGroupFormFields
-        contentGroup={contentGroup}
-        convention={data!.convention}
-        readOnly
-      />
-    </>
-  );
-}
-
-export default ViewCmsContentGroup;
+        <CmsContentGroupFormFields
+          contentGroup={contentGroup}
+          convention={data.convention}
+          readOnly
+        />
+      </>
+    );
+  },
+);

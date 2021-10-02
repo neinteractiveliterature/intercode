@@ -35,7 +35,7 @@ function AdminProductCard({
               return;
             }
 
-            cache.writeQuery({
+            cache.writeQuery<AdminProductsQueryData>({
               query: AdminProductsQuery,
               data: {
                 ...data,

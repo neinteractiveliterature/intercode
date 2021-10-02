@@ -9,7 +9,7 @@ export type CmsLayoutFieldsFragment = { __typename: 'CmsLayout', id: number, nam
 export type CmsLayoutsAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type CmsLayoutsAdminQueryData = { __typename: 'Query', convention?: { __typename: 'Convention', id: number, name: string } | null | undefined, currentAbility: { __typename: 'Ability', can_create_cms_layouts: boolean }, cmsLayouts: Array<{ __typename: 'CmsLayout', id: number, name?: string | null | undefined, content?: string | null | undefined, navbar_classes?: string | null | undefined, admin_notes?: string | null | undefined, current_ability_can_update: boolean, current_ability_can_delete: boolean }> };
+export type CmsLayoutsAdminQueryData = { __typename: 'Query', convention?: { __typename: 'Convention', id: number, name: string } | null | undefined, currentAbility: { __typename: 'Ability', can_create_cms_layouts: boolean }, cmsParent: { __typename: 'Convention', id: number, cmsLayouts: Array<{ __typename: 'CmsLayout', id: number, name?: string | null | undefined, content?: string | null | undefined, navbar_classes?: string | null | undefined, admin_notes?: string | null | undefined, current_ability_can_update: boolean, current_ability_can_delete: boolean }> } | { __typename: 'RootSite', id: number, cmsLayouts: Array<{ __typename: 'CmsLayout', id: number, name?: string | null | undefined, content?: string | null | undefined, navbar_classes?: string | null | undefined, admin_notes?: string | null | undefined, current_ability_can_update: boolean, current_ability_can_delete: boolean }> } };
 
 export const CmsLayoutFieldsFragmentDoc = gql`
     fragment CmsLayoutFields on CmsLayout {
@@ -24,16 +24,19 @@ export const CmsLayoutFieldsFragmentDoc = gql`
     `;
 export const CmsLayoutsAdminQueryDocument = gql`
     query CmsLayoutsAdminQuery {
-  convention {
+  convention: conventionByRequestHostIfPresent {
     id
     name
   }
   currentAbility {
     can_create_cms_layouts
   }
-  cmsLayouts {
+  cmsParent: cmsParentByRequestHost {
     id
-    ...CmsLayoutFields
+    cmsLayouts {
+      id
+      ...CmsLayoutFields
+    }
   }
 }
     ${CmsLayoutFieldsFragmentDoc}`;

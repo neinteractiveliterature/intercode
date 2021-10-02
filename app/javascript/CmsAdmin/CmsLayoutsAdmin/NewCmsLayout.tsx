@@ -13,7 +13,7 @@ import CmsLayoutForm from './CmsLayoutForm';
 import usePageTitle from '../../usePageTitle';
 import { CmsLayout } from '../../graphqlTypes.generated';
 
-function NewCmsLayout() {
+function NewCmsLayout(): JSX.Element {
   const history = useHistory();
   const [layout, setLayout] = useState<
     Pick<CmsLayout, 'name' | 'admin_notes' | 'navbar_classes' | 'content'>

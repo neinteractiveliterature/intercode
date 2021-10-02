@@ -57,13 +57,24 @@ export default LoadQueryWrapper(useCartQuery, function Cart({ data }) {
             return;
           }
 
-          proxy.writeQuery({
+          proxy.writeQuery<CartQueryData>({
             query: CartQuery,
             data: {
               ...storeData,
-              currentPendingOrder: {
-                ...currentPendingOrder,
-                order_entries: currentPendingOrder.order_entries.filter((entry) => entry.id !== id),
+              convention: {
+                ...storeData.convention,
+                my_profile: storeData.convention.my_profile
+                  ? {
+                      ...storeData.convention.my_profile,
+
+                      current_pending_order: {
+                        ...currentPendingOrder,
+                        order_entries: currentPendingOrder.order_entries.filter(
+                          (entry) => entry.id !== id,
+                        ),
+                      },
+                    }
+                  : undefined,
               },
             },
           });

@@ -19,7 +19,7 @@ export type SyncColorPickerProps = {
   onChange: React.Dispatch<string>;
 };
 
-function SyncColorPicker({ value, onChange }: SyncColorPickerProps) {
+function SyncColorPicker({ value, onChange }: SyncColorPickerProps): JSX.Element {
   return (
     <ChromePicker
       color={decodeValue(value)}

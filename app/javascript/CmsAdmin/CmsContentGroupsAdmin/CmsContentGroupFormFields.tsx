@@ -19,7 +19,8 @@ const ContentGroupPermissionNames = getPermissionNamesForModelType(
   PermissionedModelTypeIndicator.CmsContentGroup,
 );
 
-type ContentGroupTypeWithRequiredId = CmsContentGroupsAdminQueryData['cmsContentGroups'][0];
+type ContentGroupTypeWithRequiredId =
+  CmsContentGroupsAdminQueryData['cmsParent']['cmsContentGroups'][0];
 type ContentGroupType = Omit<ContentGroupTypeWithRequiredId, 'id'> &
   Partial<Pick<ContentGroupTypeWithRequiredId, 'id'>>;
 type PermissionType = ContentGroupType['permissions'][0];
@@ -45,7 +46,7 @@ function CmsContentGroupFormFields({
   permissionsChangeSet,
   addPermission,
   removePermission,
-}: CmsContentGroupFormFieldsProps) {
+}: CmsContentGroupFormFieldsProps): JSX.Element {
   const [roles, setRoles] = useState<RoleType[]>(() => {
     const permissions = uniqWith<PermissionType>(contentGroup.permissions, permissionEquals);
     return permissions.map((permission) => permission.role).filter(notEmpty);

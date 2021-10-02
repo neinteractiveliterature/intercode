@@ -30,7 +30,7 @@ export const CmsPageFields = gql`
 
 export const CmsPagesAdminQuery = gql`
   query CmsPagesAdminQuery {
-    convention {
+    convention: conventionByRequestHostIfPresent {
       id
       name
     }
@@ -39,34 +39,32 @@ export const CmsPagesAdminQuery = gql`
       can_create_pages
     }
 
-    cmsPages {
+    cmsParent: cmsParentByRequestHost {
       id
-      ...CmsPageFields
-    }
 
-    cmsParent {
-      ... on RootSite {
+      cmsPages {
         id
+        ...CmsPageFields
+      }
 
-        root_site_default_layout: default_layout {
+      cmsLayouts {
+        id
+        ...CmsPageAdminLayoutFields
+      }
+
+      ... on RootSite {
+        root_site_default_layout: defaultLayout {
           id
           ...CmsPageAdminLayoutFields
         }
       }
 
       ... on Convention {
-        id
-
-        default_layout {
+        defaultLayout {
           id
           ...CmsPageAdminLayoutFields
         }
       }
-    }
-
-    cmsLayouts {
-      id
-      ...CmsPageAdminLayoutFields
     }
   }
 

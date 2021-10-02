@@ -2,6 +2,8 @@ module Types::CmsParent
   include Types::BaseInterface
   field_class Types::BaseField
 
+  field :id, Int, null: false
+
   definition_methods do
     def resolve_type(object, _context)
       case object

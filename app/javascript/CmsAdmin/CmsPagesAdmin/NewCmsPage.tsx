@@ -2,7 +2,7 @@ import { useState } from 'react';
 import * as React from 'react';
 import { ApolloError } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
-import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
+import { ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import buildPageInput from './buildPageInput';
 import CmsPageForm, { PageFormFields } from './CmsPageForm';
@@ -13,9 +13,8 @@ import { useCreateMutation } from '../../MutationUtils';
 import usePageTitle from '../../usePageTitle';
 import { useCmsPagesAdminQuery } from './queries.generated';
 
-function NewCmsPage() {
+export default LoadQueryWrapper(useCmsPagesAdminQuery, function NewCmsPage({ data }) {
   const history = useHistory();
-  const { data, loading, error } = useCmsPagesAdminQuery();
   const [page, setPage] = useState<PageFormFields>({
     hidden_from_search: false,
   });
@@ -28,14 +27,6 @@ function NewCmsPage() {
   );
 
   usePageTitle('New page');
-
-  if (loading) {
-    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
 
   const formSubmitted = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -53,8 +44,8 @@ function NewCmsPage() {
         <CmsPageForm
           page={page}
           onChange={setPage}
-          cmsLayouts={data!.cmsLayouts}
-          cmsParent={data!.cmsParent}
+          cmsLayouts={data.cmsParent.cmsLayouts}
+          cmsParent={data.cmsParent}
         />
 
         <ErrorDisplay graphQLError={createError as ApolloError} />
@@ -69,6 +60,4 @@ function NewCmsPage() {
       </form>
     </>
   );
-}
-
-export default NewCmsPage;
+});

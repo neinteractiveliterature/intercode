@@ -182,7 +182,7 @@ export default LoadQueryWrapper(useStaffPositionsQuery, function StaffPositionsT
             return;
           }
 
-          proxy.writeQuery({
+          proxy.writeQuery<StaffPositionsQueryData>({
             query: StaffPositionsQuery,
             data: {
               ...storeData,

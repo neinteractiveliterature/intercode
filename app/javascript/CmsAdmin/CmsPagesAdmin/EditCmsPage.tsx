@@ -14,8 +14,8 @@ import { useUpdatePageMutation } from './mutations.generated';
 
 export default LoadSingleValueFromCollectionWrapper(
   useCmsPagesAdminQuery,
-  (data, id) => data.cmsPages.find((p) => id === p.id.toString()),
-  function EditCmsPageForm({ value: initialPage, data: { cmsLayouts, cmsParent } }) {
+  (data, id) => data.cmsParent.cmsPages.find((p) => id === p.id.toString()),
+  function EditCmsPageForm({ value: initialPage, data: { cmsParent } }) {
     const history = useHistory();
     const [page, setPage] = useState(initialPage);
     const [updateMutate] = useUpdatePageMutation();
@@ -46,7 +46,7 @@ export default LoadSingleValueFromCollectionWrapper(
           <CmsPageForm
             page={page}
             onChange={setPage}
-            cmsLayouts={cmsLayouts}
+            cmsLayouts={cmsParent.cmsLayouts}
             cmsParent={cmsParent}
           />
 

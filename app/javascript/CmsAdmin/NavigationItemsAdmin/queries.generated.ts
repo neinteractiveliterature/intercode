@@ -9,7 +9,7 @@ export type AdminNavigationItemFieldsFragment = { __typename: 'CmsNavigationItem
 export type NavigationItemsAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type NavigationItemsAdminQueryData = { __typename: 'Query', convention?: { __typename: 'Convention', id: number, name: string } | null | undefined, cmsPages: Array<{ __typename: 'Page', id: number, name?: string | null | undefined }>, cmsNavigationItems: Array<{ __typename: 'CmsNavigationItem', id: number, position?: number | null | undefined, title?: string | null | undefined, page?: { __typename: 'Page', id: number } | null | undefined, navigation_section?: { __typename: 'CmsNavigationItem', id: number } | null | undefined }> };
+export type NavigationItemsAdminQueryData = { __typename: 'Query', convention?: { __typename: 'Convention', id: number, name: string } | null | undefined, cmsParent: { __typename: 'Convention', id: number, cmsPages: Array<{ __typename: 'Page', id: number, name?: string | null | undefined }>, cmsNavigationItems: Array<{ __typename: 'CmsNavigationItem', id: number, position?: number | null | undefined, title?: string | null | undefined, page?: { __typename: 'Page', id: number } | null | undefined, navigation_section?: { __typename: 'CmsNavigationItem', id: number } | null | undefined }> } | { __typename: 'RootSite', id: number, cmsPages: Array<{ __typename: 'Page', id: number, name?: string | null | undefined }>, cmsNavigationItems: Array<{ __typename: 'CmsNavigationItem', id: number, position?: number | null | undefined, title?: string | null | undefined, page?: { __typename: 'Page', id: number } | null | undefined, navigation_section?: { __typename: 'CmsNavigationItem', id: number } | null | undefined }> } };
 
 export const AdminNavigationItemFieldsFragmentDoc = gql`
     fragment AdminNavigationItemFields on CmsNavigationItem {
@@ -26,17 +26,20 @@ export const AdminNavigationItemFieldsFragmentDoc = gql`
     `;
 export const NavigationItemsAdminQueryDocument = gql`
     query NavigationItemsAdminQuery {
-  convention {
+  convention: conventionByRequestHostIfPresent {
     id
     name
   }
-  cmsPages {
+  cmsParent: cmsParentByRequestHost {
     id
-    name
-  }
-  cmsNavigationItems {
-    id
-    ...AdminNavigationItemFields
+    cmsPages {
+      id
+      name
+    }
+    cmsNavigationItems {
+      id
+      ...AdminNavigationItemFields
+    }
   }
 }
     ${AdminNavigationItemFieldsFragmentDoc}`;

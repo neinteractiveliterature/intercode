@@ -4,7 +4,7 @@ import {
   ErrorDisplay,
   sortByLocaleString,
   useConfirm,
-  PageLoadingIndicator,
+  LoadQueryWrapper,
 } from '@neinteractiveliterature/litform';
 
 import { CmsContentGroupsAdminQuery } from './queries';
@@ -13,86 +13,77 @@ import { useDeleteMutation } from '../../MutationUtils';
 import usePageTitle from '../../usePageTitle';
 import { useCmsContentGroupsAdminQuery } from './queries.generated';
 
-function CmsContentGroupsAdminTable() {
-  const { data, loading, error } = useCmsContentGroupsAdminQuery();
-  const confirm = useConfirm();
-  const deleteContentGroupMutate = useDeleteMutation(DeleteContentGroup, {
-    query: CmsContentGroupsAdminQuery,
-    arrayPath: ['cmsContentGroups'],
-    idVariablePath: ['id'],
-  });
+export default LoadQueryWrapper(
+  useCmsContentGroupsAdminQuery,
+  function CmsContentGroupsAdminTable({ data }) {
+    const confirm = useConfirm();
+    const deleteContentGroupMutate = useDeleteMutation(DeleteContentGroup, {
+      query: CmsContentGroupsAdminQuery,
+      arrayPath: ['cmsContentGroups'],
+      idVariablePath: ['id'],
+    });
 
-  usePageTitle('CMS Content Groups');
+    usePageTitle('CMS Content Groups');
 
-  const contentGroupsSorted = useMemo(() => {
-    if (loading || error || !data) {
-      return [];
-    }
+    const contentGroupsSorted = useMemo(() => {
+      return sortByLocaleString(
+        data.cmsParent.cmsContentGroups,
+        (contentGroup) => contentGroup.name,
+      );
+    }, [data]);
 
-    return sortByLocaleString(data.cmsContentGroups, (contentGroup) => contentGroup.name);
-  }, [data, loading, error]);
+    const deleteContentGroup = (id: number) => deleteContentGroupMutate({ variables: { id } });
 
-  if (loading) {
-    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
-  }
+    return (
+      <>
+        <table className="table table-striped">
+          <tbody>
+            {contentGroupsSorted.map((contentGroup) => (
+              <tr key={contentGroup.id}>
+                <td>{contentGroup.name}</td>
+                <td className="text-end">
+                  {contentGroup.current_ability_can_update ? (
+                    <Link
+                      to={`/cms_content_groups/${contentGroup.id}/edit`}
+                      className="btn btn-secondary btn-sm"
+                    >
+                      Edit
+                    </Link>
+                  ) : (
+                    <Link
+                      to={`/cms_content_groups/${contentGroup.id}`}
+                      className="btn btn-outline-secondary btn-sm"
+                    >
+                      View configuration
+                    </Link>
+                  )}
+                  {contentGroup.current_ability_can_delete && (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        confirm({
+                          prompt: 'Are you sure you want to delete this content group?',
+                          action: () => deleteContentGroup(contentGroup.id),
+                          renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
+                        })
+                      }
+                      className="btn btn-danger btn-sm ms-1"
+                    >
+                      Delete
+                    </button>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
-  const deleteContentGroup = (id: number) => deleteContentGroupMutate({ variables: { id } });
-
-  return (
-    <>
-      <table className="table table-striped">
-        <tbody>
-          {contentGroupsSorted.map((contentGroup) => (
-            <tr key={contentGroup.id}>
-              <td>{contentGroup.name}</td>
-              <td className="text-end">
-                {contentGroup.current_ability_can_update ? (
-                  <Link
-                    to={`/cms_content_groups/${contentGroup.id}/edit`}
-                    className="btn btn-secondary btn-sm"
-                  >
-                    Edit
-                  </Link>
-                ) : (
-                  <Link
-                    to={`/cms_content_groups/${contentGroup.id}`}
-                    className="btn btn-outline-secondary btn-sm"
-                  >
-                    View configuration
-                  </Link>
-                )}
-                {contentGroup.current_ability_can_delete && (
-                  <button
-                    type="button"
-                    onClick={() =>
-                      confirm({
-                        prompt: 'Are you sure you want to delete this content group?',
-                        action: () => deleteContentGroup(contentGroup.id),
-                        renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
-                      })
-                    }
-                    className="btn btn-danger btn-sm ms-1"
-                  >
-                    Delete
-                  </button>
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      {data!.currentAbility.can_create_cms_content_groups && (
-        <Link to="/cms_content_groups/new" className="btn btn-secondary">
-          New content group
-        </Link>
-      )}
-    </>
-  );
-}
-
-export default CmsContentGroupsAdminTable;
+        {data.currentAbility.can_create_cms_content_groups && (
+          <Link to="/cms_content_groups/new" className="btn btn-secondary">
+            New content group
+          </Link>
+        )}
+      </>
+    );
+  },
+);

@@ -9,7 +9,7 @@ export type CmsFileFieldsFragment = { __typename: 'CmsFile', id: number, filenam
 export type CmsFilesAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type CmsFilesAdminQueryData = { __typename: 'Query', convention?: { __typename: 'Convention', id: number, name: string } | null | undefined, currentAbility: { __typename: 'Ability', can_create_cms_files: boolean }, cmsFiles: Array<{ __typename: 'CmsFile', id: number, filename: string, url: string, content_type: string, size: number, current_ability_can_delete: boolean }> };
+export type CmsFilesAdminQueryData = { __typename: 'Query', convention?: { __typename: 'Convention', id: number, name: string } | null | undefined, currentAbility: { __typename: 'Ability', can_create_cms_files: boolean }, cmsParent: { __typename: 'Convention', id: number, cmsFiles: Array<{ __typename: 'CmsFile', id: number, filename: string, url: string, content_type: string, size: number, current_ability_can_delete: boolean }> } | { __typename: 'RootSite', id: number, cmsFiles: Array<{ __typename: 'CmsFile', id: number, filename: string, url: string, content_type: string, size: number, current_ability_can_delete: boolean }> } };
 
 export const CmsFileFieldsFragmentDoc = gql`
     fragment CmsFileFields on CmsFile {
@@ -23,16 +23,19 @@ export const CmsFileFieldsFragmentDoc = gql`
     `;
 export const CmsFilesAdminQueryDocument = gql`
     query CmsFilesAdminQuery {
-  convention {
+  convention: conventionByRequestHostIfPresent {
     id
     name
   }
   currentAbility {
     can_create_cms_files
   }
-  cmsFiles {
+  cmsParent: cmsParentByRequestHost {
     id
-    ...CmsFileFields
+    cmsFiles {
+      id
+      ...CmsFileFields
+    }
   }
 }
     ${CmsFileFieldsFragmentDoc}`;

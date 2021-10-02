@@ -17,7 +17,7 @@ export type FileUploadFormProps = {
   onUpload?: (cmsFile: CmsFile) => void;
 };
 
-function FileUploadForm({ onUpload }: FileUploadFormProps) {
+function FileUploadForm({ onUpload }: FileUploadFormProps): JSX.Element {
   const { t } = useTranslation();
   const [file, setFile] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);

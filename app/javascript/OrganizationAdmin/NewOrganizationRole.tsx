@@ -23,10 +23,8 @@ export default LoadSingleValueFromCollectionWrapper(
       users: [],
       permissions: [],
     });
-    const [
-      mutate,
-      { error: mutationError, loading: mutationInProgress },
-    ] = useCreateOrganizationRoleMutation();
+    const [mutate, { error: mutationError, loading: mutationInProgress }] =
+      useCreateOrganizationRoleMutation();
 
     usePageTitle('New organization role');
 
@@ -57,7 +55,7 @@ export default LoadSingleValueFromCollectionWrapper(
             return;
           }
 
-          proxy.writeQuery({
+          proxy.writeQuery<OrganizationAdminOrganizationsQueryData>({
             query: OrganizationAdminOrganizationsQuery,
             data: {
               ...storeData,

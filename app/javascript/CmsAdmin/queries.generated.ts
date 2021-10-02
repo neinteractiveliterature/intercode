@@ -12,7 +12,7 @@ export type CmsAdminBaseQueryData = { __typename: 'Query', convention?: { __type
 
 export const CmsAdminBaseQueryDocument = gql`
     query CmsAdminBaseQuery {
-  convention {
+  convention: conventionByRequestHostIfPresent {
     id
   }
   currentAbility {

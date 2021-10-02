@@ -398,6 +398,7 @@ export type CmsParent = {
   effectiveCmsLayout: CmsLayout;
   /** Does a full-text search within this domain. */
   fullTextSearch: SearchResult;
+  id: Scalars['Int'];
   /**
    * Returns all the Liquid assigns for regular CMS page rendering in the current domain name.
    * This is a combination of globally-accessible Liquid assigns and domain-specific user-defined

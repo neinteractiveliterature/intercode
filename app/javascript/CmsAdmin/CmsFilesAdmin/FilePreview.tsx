@@ -37,16 +37,12 @@ export type FilePreviewProps = {
   size?: string;
 };
 
-function FilePreview({ url, contentType, filename, size }: FilePreviewProps) {
-  if (!contentType) {
-    return null;
-  }
-
+function FilePreview({ url, contentType, filename, size }: FilePreviewProps): JSX.Element {
   const effectiveSize = size ?? '100px';
 
-  if (contentType.startsWith('image/')) {
+  if (contentType?.startsWith('image/')) {
     if (url == null) {
-      return null;
+      return <></>;
     }
 
     return (
@@ -61,7 +57,7 @@ function FilePreview({ url, contentType, filename, size }: FilePreviewProps) {
 
   return (
     <i
-      className={`bi-${iconForContentType(contentType)}`}
+      className={`bi-${iconForContentType(contentType ?? 'application/octet-stream')}`}
       style={{ fontSize: effectiveSize }}
       aria-hidden
     />

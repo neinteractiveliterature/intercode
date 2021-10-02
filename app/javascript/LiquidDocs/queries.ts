@@ -11,6 +11,8 @@ export const LiquidAssignFields = gql`
 export const LiquidAssignsQuery = gql`
   query LiquidAssignsQuery {
     cmsParent: cmsParentByRequestHost {
+      id
+
       liquidAssigns {
         ...LiquidAssignFields
       }

@@ -21,7 +21,7 @@ function NewStaffPosition(): JSX.Element {
         return;
       }
 
-      proxy.writeQuery({
+      proxy.writeQuery<StaffPositionsQueryData>({
         query: StaffPositionsQuery,
         data: {
           ...data,

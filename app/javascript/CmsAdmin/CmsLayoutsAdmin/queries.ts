@@ -14,7 +14,7 @@ export const CmsLayoutFields = gql`
 
 export const CmsLayoutsAdminQuery = gql`
   query CmsLayoutsAdminQuery {
-    convention {
+    convention: conventionByRequestHostIfPresent {
       id
       name
     }
@@ -23,9 +23,12 @@ export const CmsLayoutsAdminQuery = gql`
       can_create_cms_layouts
     }
 
-    cmsLayouts {
+    cmsParent: cmsParentByRequestHost {
       id
-      ...CmsLayoutFields
+      cmsLayouts {
+        id
+        ...CmsLayoutFields
+      }
     }
   }
 
