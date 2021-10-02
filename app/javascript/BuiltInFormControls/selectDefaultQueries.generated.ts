@@ -9,21 +9,21 @@ export type DefaultEventsQueryVariables = Types.Exact<{
 }>;
 
 
-export type DefaultEventsQueryData = { __typename: 'Query', convention?: Types.Maybe<{ __typename: 'Convention', id: number, events_paginated: { __typename: 'EventsPagination', entries: Array<{ __typename: 'Event', id: number, title?: Types.Maybe<string> }> } }> };
+export type DefaultEventsQueryData = { __typename: 'Query', convention?: { __typename: 'Convention', id: number, events_paginated: { __typename: 'EventsPagination', entries: Array<{ __typename: 'Event', id: number, title?: string | null | undefined }> } } | null | undefined };
 
 export type DefaultUserConProfilesQueryVariables = Types.Exact<{
   name?: Types.Maybe<Types.Scalars['String']>;
 }>;
 
 
-export type DefaultUserConProfilesQueryData = { __typename: 'Query', convention?: Types.Maybe<{ __typename: 'Convention', id: number, user_con_profiles_paginated: { __typename: 'UserConProfilesPagination', entries: Array<{ __typename: 'UserConProfile', id: number, name_without_nickname: string, email?: Types.Maybe<string> }> } }> };
+export type DefaultUserConProfilesQueryData = { __typename: 'Query', convention?: { __typename: 'Convention', id: number, user_con_profiles_paginated: { __typename: 'UserConProfilesPagination', entries: Array<{ __typename: 'UserConProfile', id: number, name_without_nickname: string, email?: string | null | undefined }> } } | null | undefined };
 
 export type DefaultUsersQueryVariables = Types.Exact<{
   name?: Types.Maybe<Types.Scalars['String']>;
 }>;
 
 
-export type DefaultUsersQueryData = { __typename: 'Query', users_paginated: { __typename: 'UsersPagination', entries: Array<{ __typename: 'User', id: number, name?: Types.Maybe<string>, email?: Types.Maybe<string> }> } };
+export type DefaultUsersQueryData = { __typename: 'Query', users_paginated: { __typename: 'UsersPagination', entries: Array<{ __typename: 'User', id: number, name?: string | null | undefined, email?: string | null | undefined }> } };
 
 
 export const DefaultEventsQueryDocument = gql`

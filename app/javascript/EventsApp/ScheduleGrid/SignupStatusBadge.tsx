@@ -6,7 +6,7 @@ export type SignupStatusBadgeProps = {
   myRating?: number;
 };
 
-function SignupStatusBadge({ signupStatus, myRating }: SignupStatusBadgeProps) {
+function SignupStatusBadge({ signupStatus, myRating }: SignupStatusBadgeProps): JSX.Element {
   if (signupStatus === SignupStatus.Confirmed) {
     return <i className="bi-person-circle me-1" title="Confirmed signup" />;
   }

@@ -12,7 +12,7 @@ export type SignupsIndexProps = {
   runPath: string;
 };
 
-function SignupsIndex({ runId, eventId, runPath }: SignupsIndexProps) {
+function SignupsIndex({ runId, eventId, runPath }: SignupsIndexProps): JSX.Element {
   const { t } = useTranslation();
   const signupsTabMatch = useRouteMatch({ path: `${runPath}/admin_signups`, exact: true });
   const signupChangesTabMatch = useRouteMatch({ path: `${runPath}/admin_signups/signup_changes` });

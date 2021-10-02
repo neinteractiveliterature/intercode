@@ -30,6 +30,6 @@ function compareBuckets(a: EventPageBucket, b: EventPageBucket) {
   return (a.name || '').localeCompare(b.name || '', undefined, { sensitivity: 'base' });
 }
 
-export default function sortBuckets(buckets: EventPageBucket[]) {
+export default function sortBuckets(buckets: EventPageBucket[]): EventPageBucket[] {
   return [...buckets].sort(compareBuckets);
 }

@@ -49,9 +49,13 @@ export const allConfigs = configData as ScheduleGridConfig[];
 
 export const allConfigKeys = allConfigs.map((config) => config.key);
 
-export const getConfig = (key: string) => allConfigs.find((config) => config.key === key);
+export function getConfig(key: string): ScheduleGridConfig | undefined {
+  return allConfigs.find((config) => config.key === key);
+}
 
-export function buildCategoryMatchRules(config: ScheduleGridConfig) {
+export function buildCategoryMatchRules(
+  config: ScheduleGridConfig,
+): { matchRule: ScheduleGridMatchRule; targetGroupIndex: number }[] {
   const rules: { matchRule: ScheduleGridMatchRule; targetGroupIndex: number }[] = [];
   config.categoryGroups?.forEach((categoryGroup, targetGroupIndex) => {
     categoryGroup.match.forEach((matchRule: ScheduleGridMatchRule) => {

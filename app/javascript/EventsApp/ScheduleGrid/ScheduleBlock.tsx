@@ -16,7 +16,11 @@ export type ScheduleBlockProps = {
   }) => JSX.Element;
 };
 
-function ScheduleBlock({ layoutBlock, rowHeader, renderEventRun }: ScheduleBlockProps) {
+function ScheduleBlock({
+  layoutBlock,
+  rowHeader,
+  renderEventRun,
+}: ScheduleBlockProps): JSX.Element {
   const layoutResult = useMemo(() => layoutBlock.computeLayout(), [layoutBlock]);
 
   const blockContentStyle = {

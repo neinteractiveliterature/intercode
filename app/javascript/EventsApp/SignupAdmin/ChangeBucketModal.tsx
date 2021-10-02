@@ -15,7 +15,7 @@ export type ChangeBucketModalProps = {
   onCancel: () => void;
 };
 
-function ChangeBucketModal({ signup, onComplete, onCancel }: ChangeBucketModalProps) {
+function ChangeBucketModal({ signup, onComplete, onCancel }: ChangeBucketModalProps): JSX.Element {
   const [changeBucketMutate] = useChangeSignupBucketMutation();
   const [changeBucket, error, requestInProgress] = useAsyncFunction(changeBucketMutate);
   const [bucketKey, setBucketKey] = useState<string | null>();

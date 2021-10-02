@@ -4,8 +4,12 @@ import Timespan, { FiniteTimespan } from '../../Timespan';
 
 import { getMemoizationKeyForTimespan } from '../../TimespanUtils';
 import Schedule from './Schedule';
+import ScheduleGridLayout from './ScheduleGridLayout';
 
-export default function useLayoutForTimespan(schedule: Schedule, timespan?: FiniteTimespan) {
+export default function useLayoutForTimespan(
+  schedule: Schedule,
+  timespan?: FiniteTimespan,
+): ScheduleGridLayout | undefined {
   const timespanKey = getMemoizationKeyForTimespan(timespan);
 
   const minTimespan = useMemo(() => {
@@ -24,7 +28,10 @@ export default function useLayoutForTimespan(schedule: Schedule, timespan?: Fini
   }, [timespanKey]);
 
   const layout = useMemo(
-    () => (minTimespan ? schedule.buildLayoutForTimespanRange(minTimespan, timespan!) : undefined),
+    () =>
+      minTimespan && timespan
+        ? schedule.buildLayoutForTimespanRange(minTimespan, timespan)
+        : undefined,
     [minTimespan, schedule, timespanKey],
   );
 

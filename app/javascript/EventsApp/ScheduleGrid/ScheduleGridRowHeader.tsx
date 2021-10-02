@@ -9,7 +9,10 @@ export type ScheduleGridRowHeaderProps = {
   rowHeader: ReactNode;
 };
 
-function ScheduleGridRowHeader({ layoutResult, rowHeader }: ScheduleGridRowHeaderProps) {
+function ScheduleGridRowHeader({
+  layoutResult,
+  rowHeader,
+}: ScheduleGridRowHeaderProps): JSX.Element {
   const { schedule } = useContext(ScheduleGridContext);
 
   if (!schedule.shouldUseRowHeaders()) {

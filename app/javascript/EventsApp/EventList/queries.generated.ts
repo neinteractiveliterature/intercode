@@ -13,7 +13,7 @@ export type EventListEventsQueryVariables = Types.Exact<{
 }>;
 
 
-export type EventListEventsQueryData = { __typename: 'Query', currentAbility: { __typename: 'Ability', can_read_schedule: boolean }, convention?: Types.Maybe<{ __typename: 'Convention', id: number, name: string, starts_at?: Types.Maybe<any>, ends_at?: Types.Maybe<any>, site_mode: Types.SiteMode, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, events_paginated: { __typename: 'EventsPagination', total_entries: number, total_pages: number, current_page: number, per_page: number, entries: Array<{ __typename: 'Event', id: number, title?: Types.Maybe<string>, created_at?: Types.Maybe<any>, short_blurb_html?: Types.Maybe<string>, form_response_attrs_json?: Types.Maybe<any>, my_rating?: Types.Maybe<number>, event_category: { __typename: 'EventCategory', id: number, name: string, team_member_name: string }, runs: Array<{ __typename: 'Run', id: number, starts_at: any }>, team_members: Array<{ __typename: 'TeamMember', id: number, display_team_member: boolean, user_con_profile: { __typename: 'UserConProfile', id: number, last_name: string, name_without_nickname: string, gravatar_enabled: boolean, gravatar_url: string } }> }> }, event_categories: Array<{ __typename: 'EventCategory', id: number, name: string, scheduling_ui: Types.SchedulingUi, default_color?: Types.Maybe<string>, full_color?: Types.Maybe<string>, signed_up_color?: Types.Maybe<string> }> }> };
+export type EventListEventsQueryData = { __typename: 'Query', currentAbility: { __typename: 'Ability', can_read_schedule: boolean }, convention: { __typename: 'Convention', id: number, name: string, starts_at?: any | null | undefined, ends_at?: any | null | undefined, site_mode: Types.SiteMode, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, events_paginated: { __typename: 'EventsPagination', total_entries: number, total_pages: number, current_page: number, per_page: number, entries: Array<{ __typename: 'Event', id: number, title?: string | null | undefined, created_at?: any | null | undefined, short_blurb_html?: string | null | undefined, form_response_attrs_json?: any | null | undefined, my_rating?: number | null | undefined, event_category: { __typename: 'EventCategory', id: number, name: string, team_member_name: string }, runs: Array<{ __typename: 'Run', id: number, starts_at: any }>, team_members: Array<{ __typename: 'TeamMember', id: number, display_team_member: boolean, user_con_profile: { __typename: 'UserConProfile', id: number, last_name: string, name_without_nickname: string, gravatar_enabled: boolean, gravatar_url: string } }> }> }, event_categories: Array<{ __typename: 'EventCategory', id: number, name: string, scheduling_ui: Types.SchedulingUi, default_color?: string | null | undefined, full_color?: string | null | undefined, signed_up_color?: string | null | undefined }> } };
 
 
 export const EventListEventsQueryDocument = gql`
@@ -21,7 +21,7 @@ export const EventListEventsQueryDocument = gql`
   currentAbility {
     can_read_schedule
   }
-  convention {
+  convention: conventionByRequestHost {
     id
     ...CommonConventionData
     events_paginated(

@@ -4,12 +4,12 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type NotificationTemplateFieldsFragment = { __typename: 'NotificationTemplate', id: number, event_key: string, subject?: Types.Maybe<string>, body_html?: Types.Maybe<string>, body_text?: Types.Maybe<string>, body_sms?: Types.Maybe<string> };
+export type NotificationTemplateFieldsFragment = { __typename: 'NotificationTemplate', id: number, event_key: string, subject?: string | null | undefined, body_html?: string | null | undefined, body_text?: string | null | undefined, body_sms?: string | null | undefined };
 
 export type NotificationAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type NotificationAdminQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, notification_templates: Array<{ __typename: 'NotificationTemplate', id: number, event_key: string, subject?: Types.Maybe<string>, body_html?: Types.Maybe<string>, body_text?: Types.Maybe<string>, body_sms?: Types.Maybe<string> }> } };
+export type NotificationAdminQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, notification_templates: Array<{ __typename: 'NotificationTemplate', id: number, event_key: string, subject?: string | null | undefined, body_html?: string | null | undefined, body_text?: string | null | undefined, body_sms?: string | null | undefined }> } };
 
 export const NotificationTemplateFieldsFragmentDoc = gql`
     fragment NotificationTemplateFields on NotificationTemplate {

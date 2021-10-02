@@ -60,7 +60,7 @@ export const StandaloneEditEventQuery = gql`
       can_update_event(event_id: $eventId)
     }
 
-    convention {
+    convention: conventionByRequestHost {
       id
       ...CommonConventionData
 
@@ -69,13 +69,13 @@ export const StandaloneEditEventQuery = gql`
         ...StandaloneEditEvent_TicketTypeFields
       }
 
+      event(id: $eventId) {
+        id
+        ...StandaloneEditEvent_EventFields
+      }
+
       ticket_name
       event_mailing_list_domain
-    }
-
-    event(id: $eventId) {
-      id
-      ...StandaloneEditEvent_EventFields
     }
   }
 

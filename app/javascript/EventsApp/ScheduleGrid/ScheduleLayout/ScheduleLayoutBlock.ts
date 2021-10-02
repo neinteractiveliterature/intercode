@@ -54,18 +54,31 @@ class ScheduleLayoutBlock {
     });
   }
 
-  addRun(runId: number, timespan: FiniteTimespan) {
+  addRun(runId: number, timespan: FiniteTimespan): void {
     if (!this.schedule.shouldShowRun(runId)) {
       const existingFakeRunTimespan = this.hiddenEventsFakeRunId
         ? this.schedule.getRunTimespan(this.hiddenEventsFakeRunId)
         : undefined;
-      if (existingFakeRunTimespan?.overlapsTimespan(timespan)) {
+      if (this.hiddenEventsFakeRunId && existingFakeRunTimespan?.overlapsTimespan(timespan)) {
         this.hiddenEventRunIds.push(runId);
-        const run = this.schedule.getRun(this.hiddenEventsFakeRunId!)!;
-        const event = this.schedule.getEvent(run.event_id)!;
-        event.title = `+ ${this.hiddenEventRunIds.length} not shown`;
         const expandedTimespan = existingFakeRunTimespan.expandedToFit(timespan);
-        this.schedule.runTimespansById.set(this.hiddenEventsFakeRunId!, expandedTimespan);
+        this.schedule.runTimespansById.set(this.hiddenEventsFakeRunId, expandedTimespan);
+
+        const fakeRun = this.schedule.getRun(this.hiddenEventsFakeRunId);
+        if (fakeRun == null) {
+          Rollbar?.warn(
+            `Attempted to add run ${runId} to fake run ${this.hiddenEventsFakeRunId} but the fake run wasn't in the schedule`,
+          );
+          return;
+        }
+        const fakeEvent = this.schedule.getEvent(fakeRun.event_id);
+        if (fakeEvent == null) {
+          Rollbar?.warn(
+            `Attempted to add run ${runId} to fake event ${fakeRun.event_id} but the fake event wasn't in the schedule`,
+          );
+          return;
+        }
+        fakeEvent.title = `+ ${this.hiddenEventRunIds.length} not shown`;
 
         return;
       }
@@ -80,7 +93,7 @@ class ScheduleLayoutBlock {
     }
   }
 
-  getRunCountInTimespan(event: ScheduleEvent, timespan: FiniteTimespan) {
+  getRunCountInTimespan(event: ScheduleEvent, timespan: FiniteTimespan): number {
     return event.runs.filter((run) => {
       const runTimespan = this.schedule.getRunTimespan(run.id);
       if (!runTimespan) {
@@ -91,7 +104,7 @@ class ScheduleLayoutBlock {
     }).length;
   }
 
-  getTimeSortedRunIds() {
+  getTimeSortedRunIds(): number[] {
     return [...this.runIds].sort((a, b) => {
       const aTimespan = this.schedule.getRunTimespan(a);
       const bTimespan = this.schedule.getRunTimespan(b);
@@ -168,7 +181,10 @@ class ScheduleLayoutBlock {
     let maxColumns = 0;
 
     const runDimensions = this.getTimeSortedRunIds().map((runId) => {
-      const fullTimespan = this.schedule.getRunTimespan(runId)!;
+      const fullTimespan = this.schedule.getRunTimespan(runId);
+      if (!fullTimespan) {
+        throw new Error(`Run ${runId} wasn't in the schedule when computing block layout`);
+      }
       const maxDisplayLength = Math.max(
         MIN_LENGTH,
         fullTimespan.getLength('milliseconds').milliseconds,

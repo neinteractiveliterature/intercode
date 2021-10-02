@@ -6,8 +6,8 @@ import { EventPageQueryData } from './queries.generated';
 import { useWithdrawMySignupMutation } from './mutations.generated';
 
 export type WithdrawMySignupButtonProps = Omit<WithdrawSignupButtonProps, 'withdrawSignup'> & {
-  run: EventPageQueryData['event']['runs'][0];
-  event: EventPageQueryData['event'];
+  run: EventPageQueryData['convention']['event']['runs'][0];
+  event: EventPageQueryData['convention']['event'];
   reloadOnSuccess?: boolean;
 };
 
@@ -16,7 +16,7 @@ function WithdrawMySignupButton({
   event,
   reloadOnSuccess,
   ...otherProps
-}: WithdrawMySignupButtonProps) {
+}: WithdrawMySignupButtonProps): JSX.Element {
   const { t } = useTranslation();
   const [withdrawMutate] = useWithdrawMySignupMutation();
   const confirm = useConfirm();

@@ -107,7 +107,7 @@ export type EditSignupProps = {
   teamMembersUrl: string;
 };
 
-function EditSignup({ teamMembersUrl }: EditSignupProps) {
+function EditSignup({ teamMembersUrl }: EditSignupProps): JSX.Element {
   const { timezoneName } = useContext(AppRootContext);
   const id = Number.parseInt(useParams<{ id: string }>().id, 10);
   const { data, loading, error } = useAdminSignupQuery({ variables: { id } });
@@ -125,8 +125,8 @@ function EditSignup({ teamMembersUrl }: EditSignupProps) {
           'events.signupAdmin.editPageTitle',
           'Editing signup for “{{ name }}” - {{ eventTitle }}',
           {
-            name: data?.signup.user_con_profile.name_without_nickname,
-            eventTitle: data?.signup.run.event.title,
+            name: data?.convention.signup.user_con_profile.name_without_nickname,
+            eventTitle: data?.convention.signup.run.event.title,
           },
         ),
       error || loading,
@@ -153,7 +153,7 @@ function EditSignup({ teamMembersUrl }: EditSignupProps) {
   }
 
   const renderUserSection = () => {
-    const signup = data?.signup;
+    const signup = data?.convention.signup;
     const userConProfile = signup?.user_con_profile;
 
     if (!signup || !userConProfile) {
@@ -206,7 +206,7 @@ function EditSignup({ teamMembersUrl }: EditSignupProps) {
       return null;
     }
 
-    const { signup } = data;
+    const { signup } = data.convention;
 
     if (signup.state !== 'waitlisted') {
       return null;
@@ -226,7 +226,7 @@ function EditSignup({ teamMembersUrl }: EditSignupProps) {
       return null;
     }
 
-    const { signup } = data;
+    const { signup } = data.convention;
 
     return (
       <button
@@ -259,7 +259,7 @@ function EditSignup({ teamMembersUrl }: EditSignupProps) {
       return null;
     }
 
-    const { signup } = data;
+    const { signup } = data.convention;
     const { run } = signup;
     const { event } = run;
     const { registration_policy: registrationPolicy } = event;
@@ -339,7 +339,7 @@ function EditSignup({ teamMembersUrl }: EditSignupProps) {
     <>
       <h1 className="mb-4">
         {t('events.signupAdmin.editPageHeader', 'Edit signup for {{ eventTitle }}', {
-          eventTitle: data?.signup.run.event.title,
+          eventTitle: data?.convention.signup.run.event.title,
         })}
       </h1>
 
@@ -350,13 +350,13 @@ function EditSignup({ teamMembersUrl }: EditSignupProps) {
       </div>
 
       <ForceConfirmSignupModal
-        signup={forceConfirmModal.visible ? data!.signup : undefined}
+        signup={forceConfirmModal.visible ? data?.convention.signup : undefined}
         onComplete={forceConfirmModal.close}
         onCancel={forceConfirmModal.close}
       />
 
       <ChangeBucketModal
-        signup={changeBucketModal.visible ? data!.signup : undefined}
+        signup={changeBucketModal.visible ? data?.convention.signup : undefined}
         onComplete={changeBucketModal.close}
         onCancel={changeBucketModal.close}
       />

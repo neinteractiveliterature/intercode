@@ -54,7 +54,7 @@ function EventBreadcrumbItems({
   convention,
   currentAbility,
   eventPath,
-}: EventBreadcrumbItemsProps) {
+}: EventBreadcrumbItemsProps): JSX.Element {
   const { t } = useTranslation();
   const { timezoneName } = useContext(AppRootContext);
   const history = useHistory();

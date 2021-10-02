@@ -34,11 +34,7 @@ function isElementInViewport(el: HTMLElement) {
   );
 }
 
-function useLoadRunListData() {
-  return useScheduleGridCombinedQuery({ variables: { extendedCounts: false } });
-}
-
-export default LoadQueryWrapper(useLoadRunListData, function RunList({ data }) {
+export default LoadQueryWrapper(useScheduleGridCombinedQuery, function RunList({ data }) {
   const { timezoneName, myProfile } = useContext(AppRootContext);
   const format = useAppDateTimeFormat();
   const { ratingFilter, hideConflicts } = usePersonalScheduleFilters({
@@ -69,25 +65,25 @@ export default LoadQueryWrapper(useLoadRunListData, function RunList({ data }) {
   }, [routeMatch?.params.conventionDay]);
 
   const eventsByRunId = useMemo(() => {
-    const eventMap = new Map<number, typeof data['events'][number]>();
-    data.events.forEach((event) => {
+    const eventMap = new Map<number, typeof data['convention']['events'][number]>();
+    data.convention.events.forEach((event) => {
       event.runs.forEach((run) => {
         eventMap.set(run.id, event);
       });
     });
     return eventMap;
-  }, [data.events]);
+  }, [data.convention.events]);
 
   const sortedRuns = useMemo(
     () =>
       sortBy(
-        flatMap(data.events, (event) => event.runs),
+        flatMap(data.convention.events, (event) => event.runs),
         (run) => [
           DateTime.fromISO(run.starts_at).valueOf(),
           eventsByRunId.get(run.id)?.title?.toLocaleLowerCase(),
         ],
       ),
-    [data.events, eventsByRunId],
+    [data.convention.events, eventsByRunId],
   );
 
   type RunGroup = {
@@ -137,25 +133,28 @@ export default LoadQueryWrapper(useLoadRunListData, function RunList({ data }) {
 
   const timespanByRunId = useMemo(() => {
     const timespanMap = new Map<number, FiniteTimespan>();
-    data.events.forEach((event) => {
+    data.convention.events.forEach((event) => {
       event.runs.forEach((run) => {
         timespanMap.set(run.id, timespanFromRun(timezoneName, event, run));
       });
     });
     return timespanMap;
-  }, [data.events, timezoneName]);
+  }, [data.convention.events, timezoneName]);
 
   const signupCountDataByRunId = useMemo(() => {
     const countMap = new Map<number, SignupCountData>();
-    data.events.forEach((event) => {
+    data.convention.events.forEach((event) => {
       event.runs.forEach((run) => {
         countMap.set(run.id, SignupCountData.fromRun(run));
       });
     });
     return countMap;
-  }, [data.events]);
+  }, [data.convention.events]);
 
-  const conflictingRuns = useMemo(() => findConflictingRuns(data.events), [data.events]);
+  const conflictingRuns = useMemo(
+    () => findConflictingRuns(data.convention.events),
+    [data.convention.events],
+  );
 
   const enteredRunGroup = useCallback(
     (runGroup: RunGroup) => {
@@ -186,8 +185,12 @@ export default LoadQueryWrapper(useLoadRunListData, function RunList({ data }) {
             <div>
               {timeGroups.map(({ startTime, runs }) => {
                 const filteredRuns = runs.filter((run) => {
-                  const event = eventsByRunId.get(run.id)!;
-                  const timespan = timespanByRunId.get(run.id)!;
+                  const event = eventsByRunId.get(run.id);
+                  const timespan = timespanByRunId.get(run.id);
+
+                  if (!event || !timespan) {
+                    return false;
+                  }
 
                   if (
                     hideConflicts &&
@@ -210,8 +213,13 @@ export default LoadQueryWrapper(useLoadRunListData, function RunList({ data }) {
                   <React.Fragment key={startTime.valueOf()}>
                     <div className="mt-2">{format(startTime, 'shortTimeWithZone')}</div>
                     {filteredRuns.map((run) => {
-                      const event = eventsByRunId.get(run.id)!;
-                      const timespan = timespanByRunId.get(run.id)!;
+                      const event = eventsByRunId.get(run.id);
+                      const timespan = timespanByRunId.get(run.id);
+                      const signupCountData = signupCountDataByRunId.get(run.id);
+
+                      if (!event || !timespan || !signupCountData) {
+                        return <React.Fragment key={run.id}></React.Fragment>;
+                      }
 
                       return (
                         <div className="ps-4" key={run.id}>
@@ -226,7 +234,7 @@ export default LoadQueryWrapper(useLoadRunListData, function RunList({ data }) {
                               event={event}
                               run={run}
                               timespan={timespan}
-                              signupCountData={signupCountDataByRunId.get(run.id)!}
+                              signupCountData={signupCountData}
                             />
                           </div>
                         </div>

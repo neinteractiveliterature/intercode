@@ -10,7 +10,7 @@ class ColumnReservation {
     this.runIds = [runId];
   }
 
-  addRun(runId: number, timespan: FiniteTimespan) {
+  addRun(runId: number, timespan: FiniteTimespan): void {
     this.runIds.push(runId);
     this.timespan = this.timespan.expandedToFit(timespan);
   }

@@ -119,14 +119,14 @@ export const UserConProfileSignupsFragment = gql`
 
 export const SignupAdminEventQuery = gql`
   query SignupAdminEventQuery($eventId: Int!) {
-    convention {
+    convention: conventionByRequestHost {
       id
       ...CommonConventionData
-    }
 
-    event(id: $eventId) {
-      id
-      title
+      event(id: $eventId) {
+        id
+        title
+      }
     }
   }
 
@@ -135,20 +135,20 @@ export const SignupAdminEventQuery = gql`
 
 export const AdminSignupQuery = gql`
   query AdminSignupQuery($id: Int!) {
-    convention {
+    convention: conventionByRequestHost {
       id
       ...CommonConventionData
+
+      signup(id: $id) {
+        id
+        ...SignupFields
+      }
     }
 
     currentAbility {
       can_update_bucket_signup(signup_id: $id)
       can_force_confirm_signup(signup_id: $id)
       can_update_counted_signup(signup_id: $id)
-    }
-
-    signup(id: $id) {
-      id
-      ...SignupFields
     }
   }
 
@@ -165,65 +165,65 @@ export const RunSignupsTableSignupsQuery = gql`
     $filters: SignupFiltersInput
     $sort: [SortInput!]
   ) {
-    convention {
+    convention: conventionByRequestHost {
       id
       name
-    }
 
-    event(id: $eventId) {
-      id
-      title
-
-      event_category {
+      event(id: $eventId) {
         id
-        team_member_name
-      }
+        title
 
-      team_members {
-        id
-
-        user_con_profile {
+        event_category {
           id
+          team_member_name
         }
-      }
 
-      registration_policy {
-        buckets {
-          key
-          name
-        }
-      }
+        team_members {
+          id
 
-      run(id: $runId) {
-        id
-
-        signups_paginated(page: $page, per_page: $perPage, filters: $filters, sort: $sort) {
-          total_entries
-          total_pages
-          current_page
-          per_page
-
-          entries {
+          user_con_profile {
             id
-            state
-            counted
-            bucket_key
-            requested_bucket_key
-            age_restrictions_check
+          }
+        }
 
-            run {
-              id
-              starts_at
-            }
+        registration_policy {
+          buckets {
+            key
+            name
+          }
+        }
 
-            user_con_profile {
+        run(id: $runId) {
+          id
+
+          signups_paginated(page: $page, per_page: $perPage, filters: $filters, sort: $sort) {
+            total_entries
+            total_pages
+            current_page
+            per_page
+
+            entries {
               id
-              name_inverted
-              name_without_nickname
-              gravatar_enabled
-              gravatar_url
-              email
-              birth_date
+              state
+              counted
+              bucket_key
+              requested_bucket_key
+              age_restrictions_check
+
+              run {
+                id
+                starts_at
+              }
+
+              user_con_profile {
+                id
+                name_inverted
+                name_without_nickname
+                gravatar_enabled
+                gravatar_url
+                email
+                birth_date
+              }
             }
           }
         }
@@ -234,30 +234,30 @@ export const RunSignupsTableSignupsQuery = gql`
 
 export const RunHeaderRunInfoQuery = gql`
   query RunHeaderRunInfoQuery($eventId: Int!, $runId: Int!) {
-    convention {
+    convention: conventionByRequestHost {
       id
       ...CommonConventionData
-    }
 
-    event(id: $eventId) {
-      id
-      title
-      length_seconds
-
-      registration_policy {
-        total_slots
-        slots_limited
-
-        buckets {
-          name
-          total_slots
-        }
-      }
-
-      run(id: $runId) {
+      event(id: $eventId) {
         id
-        starts_at
-        title_suffix
+        title
+        length_seconds
+
+        registration_policy {
+          total_slots
+          slots_limited
+
+          buckets {
+            name
+            total_slots
+          }
+        }
+
+        run(id: $runId) {
+          id
+          starts_at
+          title_suffix
+        }
       }
     }
   }
@@ -267,63 +267,63 @@ export const RunHeaderRunInfoQuery = gql`
 
 export const RunSignupSummaryQuery = gql`
   query RunSignupSummaryQuery($eventId: Int!, $runId: Int!) {
-    convention {
+    convention: conventionByRequestHost {
       id
       ...CommonConventionData
-    }
 
-    currentAbility {
-      can_read_schedule
-    }
-
-    event(id: $eventId) {
-      id
-      title
-
-      event_category {
+      event(id: $eventId) {
         id
-        team_member_name
-      }
+        title
 
-      registration_policy {
-        buckets {
-          key
-          name
-          expose_attendees
-        }
-      }
-
-      team_members {
-        id
-        user_con_profile {
+        event_category {
           id
+          team_member_name
         }
-      }
 
-      runs {
-        id
-        starts_at
-      }
+        registration_policy {
+          buckets {
+            key
+            name
+            expose_attendees
+          }
+        }
 
-      run(id: $runId) {
-        id
-
-        signups_paginated(per_page: 1000, filters: { state: ["confirmed", "waitlisted"] }) {
-          entries {
+        team_members {
+          id
+          user_con_profile {
             id
-            state
-            bucket_key
-            waitlist_position
+          }
+        }
 
-            user_con_profile {
+        runs {
+          id
+          starts_at
+        }
+
+        run(id: $runId) {
+          id
+
+          signups_paginated(per_page: 1000, filters: { state: ["confirmed", "waitlisted"] }) {
+            entries {
               id
-              name_inverted
-              gravatar_enabled
-              gravatar_url
+              state
+              bucket_key
+              waitlist_position
+
+              user_con_profile {
+                id
+                name_inverted
+                gravatar_enabled
+                gravatar_url
+              }
             }
           }
         }
       }
+    }
+
+    currentAbility {
+      can_read_schedule
     }
   }
 
@@ -332,34 +332,34 @@ export const RunSignupSummaryQuery = gql`
 
 export const UserConProfileSignupsQuery = gql`
   query UserConProfileSignupsQuery($id: Int!) {
-    convention {
+    convention: conventionByRequestHost {
       id
       ...CommonConventionData
-    }
 
-    myProfile {
-      id
-      ability {
-        can_withdraw_all_user_con_profile_signups(user_con_profile_id: $id)
-      }
-    }
-
-    userConProfile(id: $id) {
-      id
-      name_without_nickname
-      ical_secret
-
-      team_members {
+      my_profile {
         id
-
-        event {
-          id
-          title
-          status
+        ability {
+          can_withdraw_all_user_con_profile_signups(user_con_profile_id: $id)
         }
       }
 
-      ...UserConProfileSignupsFragment
+      user_con_profile(id: $id) {
+        id
+        name_without_nickname
+        ical_secret
+
+        team_members {
+          id
+
+          event {
+            id
+            title
+            status
+          }
+        }
+
+        ...UserConProfileSignupsFragment
+      }
     }
   }
 
@@ -375,73 +375,73 @@ export const RunSignupChangesQuery = gql`
     $page: Int
     $perPage: Int
   ) {
-    convention {
+    convention: conventionByRequestHost {
       id
       timezone_name
-    }
 
-    run(id: $runId) {
-      id
-      event {
+      run(id: $runId) {
         id
-        title
-      }
-
-      signup_changes_paginated(page: $page, per_page: $perPage, filters: $filters, sort: $sort) {
-        total_entries
-        total_pages
-        current_page
-        per_page
-
-        entries {
+        event {
           id
-          state
-          counted
-          bucket_key
-          action
-          created_at
+          title
+        }
 
-          previous_signup_change {
+        signup_changes_paginated(page: $page, per_page: $perPage, filters: $filters, sort: $sort) {
+          total_entries
+          total_pages
+          current_page
+          per_page
+
+          entries {
             id
             state
             counted
             bucket_key
-          }
+            action
+            created_at
 
-          run {
-            id
-
-            event {
+            previous_signup_change {
               id
-              title
+              state
+              counted
+              bucket_key
+            }
 
-              event_category {
+            run {
+              id
+
+              event {
                 id
-                team_member_name
-              }
+                title
 
-              registration_policy {
-                buckets {
-                  key
-                  name
-                  anything
-                }
-              }
-
-              team_members {
-                id
-                user_con_profile {
+                event_category {
                   id
+                  team_member_name
+                }
+
+                registration_policy {
+                  buckets {
+                    key
+                    name
+                    anything
+                  }
+                }
+
+                team_members {
+                  id
+                  user_con_profile {
+                    id
+                  }
                 }
               }
             }
-          }
 
-          user_con_profile {
-            id
-            name_inverted
-            gravatar_enabled
-            gravatar_url
+            user_con_profile {
+              id
+              name_inverted
+              gravatar_enabled
+              gravatar_url
+            }
           }
         }
       }

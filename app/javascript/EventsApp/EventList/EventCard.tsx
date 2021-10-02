@@ -1,5 +1,5 @@
 import { Fragment, useMemo, useContext, ReactNode } from 'react';
-// @ts-ignore
+// @ts-expect-error inflected type definitions don't export capitalize
 import { capitalize } from 'inflected';
 import { Link } from 'react-router-dom';
 import { SortingRule } from 'react-table';
@@ -93,7 +93,7 @@ export type EventCardProps = {
   canReadSchedule?: boolean;
 };
 
-const EventCard = ({ event, sortBy, canReadSchedule }: EventCardProps) => {
+function EventCard({ event, sortBy, canReadSchedule }: EventCardProps): JSX.Element {
   const { timezoneName } = useContext(AppRootContext);
   const format = useAppDateTimeFormat();
   const formatRunTime = useFormatRunTime();
@@ -220,6 +220,6 @@ const EventCard = ({ event, sortBy, canReadSchedule }: EventCardProps) => {
       />
     </div>
   );
-};
+}
 
 export default EventCard;

@@ -32,7 +32,7 @@ type EventForConflictingRuns = Pick<ScheduleGridEventFragment, 'can_play_concurr
   }[];
 };
 
-export function findConflictingRuns<T extends EventForConflictingRuns>(events: T[]) {
+export function findConflictingRuns<T extends EventForConflictingRuns>(events: T[]): T['runs'] {
   const conflictingRuns: (T['runs'][number] & { event_id: T['id'] })[] = [];
 
   events.forEach((event) => {
@@ -122,7 +122,7 @@ export default class Schedule {
     this.nextFakeRunId = -1;
 
     this.hideConflicts = hideConflicts;
-    this.myConflictingRuns = findConflictingRuns(events);
+    this.myConflictingRuns = findConflictingRuns(events) as ScheduleRun[];
 
     events.forEach((event) => {
       if (event.can_play_concurrently) {
@@ -142,26 +142,33 @@ export default class Schedule {
     });
   }
 
-  getRun = (runId: number) => this.runsById.get(runId);
+  getRun(runId: number): ScheduleRun | undefined {
+    return this.runsById.get(runId);
+  }
 
-  getEvent = (eventId: number) => this.eventsById.get(eventId);
+  getEvent(eventId: number): ScheduleEvent | undefined {
+    return this.eventsById.get(eventId);
+  }
 
-  getEventForRun = (runId: number) => {
+  getEventForRun(runId: number): ScheduleEvent | undefined {
     const run = this.getRun(runId);
     if (run) {
       return this.getEvent(run.event_id);
     }
     return undefined;
-  };
+  }
 
-  getRunIdsOverlapping = (timespan: Timespan) =>
-    [...this.runTimespansById.entries()]
+  getRunIdsOverlapping(timespan: Timespan): number[] {
+    return [...this.runTimespansById.entries()]
       .filter(([, runTimespan]) => timespan.overlapsTimespan(runTimespan))
       .map(([runId]) => runId);
+  }
 
-  getRunTimespan = (runId: number) => this.runTimespansById.get(runId);
+  getRunTimespan(runId: number): FiniteTimespan | undefined {
+    return this.runTimespansById.get(runId);
+  }
 
-  groupRunIdsByCategory = (runIds: number[]) => {
+  groupRunIdsByCategory(runIds: number[]): ScheduleGroup[] {
     const matchRules = buildCategoryMatchRules(this.config);
     const groups: ScheduleGroup[] = [];
     this.config.categoryGroups?.forEach(({ match, ...otherProps }) =>
@@ -200,9 +207,9 @@ export default class Schedule {
     });
 
     return groups;
-  };
+  }
 
-  groupRunIdsByRoom = (runIds: number[]) => {
+  groupRunIdsByRoom(runIds: number[]): ScheduleGroup[] {
     const runIdsByRoomMap = runIds.reduce((runIdsByRoom, runId) => {
       const run = this.runsById.get(runId);
       if (!run) {
@@ -236,12 +243,18 @@ export default class Schedule {
           runIds: runIdsByRoomMap.get(roomName) ?? [],
         } as ScheduleGroup),
     );
-  };
+  }
 
-  buildScheduleBlocksFromGroups = (groups: ScheduleGroup[], actualTimespan: FiniteTimespan) => {
+  buildScheduleBlocksFromGroups(
+    groups: ScheduleGroup[],
+    actualTimespan: FiniteTimespan,
+  ): [ScheduleLayoutBlock, Omit<ScheduleGroup, 'runIds' | 'id'>][] {
     const blocks = groups.map(
       ({ runIds, id, ...props }) =>
-        [new ScheduleLayoutBlock(id, actualTimespan, runIds, this), props] as const,
+        [new ScheduleLayoutBlock(id, actualTimespan, runIds, this), props] as [
+          ScheduleLayoutBlock,
+          Omit<ScheduleGroup, 'runIds' | 'id'>,
+        ],
     );
 
     if (this.config.filterEmptyGroups) {
@@ -249,7 +262,7 @@ export default class Schedule {
     }
 
     return blocks;
-  };
+  }
 
   buildLayoutForTimespanRange(
     minTimespan: FiniteTimespan,
@@ -257,11 +270,15 @@ export default class Schedule {
   ): ScheduleGridLayout {
     const runIds = this.getRunIdsOverlapping(maxTimespan);
     const allRunsTimespan = expandTimespanToNearestHour(
-      runIds.reduce(
-        (currentMaxTimespan, runId) =>
-          currentMaxTimespan.expandedToFit(this.getRunTimespan(runId)!),
-        minTimespan,
-      ),
+      runIds.reduce((currentMaxTimespan, runId) => {
+        const runTimespan = this.getRunTimespan(runId);
+        if (!runTimespan) {
+          throw new Error(
+            `buildLayoutForTimespanRange: tried to find run ${runId} but it wasn't in the schedule`,
+          );
+        }
+        return currentMaxTimespan.expandedToFit(runTimespan);
+      }, minTimespan),
     );
     const actualTimespan = allRunsTimespan.intersection(maxTimespan);
 
@@ -277,9 +294,11 @@ export default class Schedule {
     );
   }
 
-  shouldUseRowHeaders = () => this.config.groupEventsBy === 'room';
+  shouldUseRowHeaders(): boolean {
+    return this.config.groupEventsBy === 'room';
+  }
 
-  shouldShowRun = (runId: number) => {
+  shouldShowRun(runId: number): boolean {
     const run = this.runsById.get(runId);
     if (!run) {
       return false;
@@ -290,7 +309,11 @@ export default class Schedule {
     }
 
     if (this.hideConflicts) {
-      const runTimespan = this.getRunTimespan(runId)!;
+      const runTimespan = this.getRunTimespan(runId);
+      if (!runTimespan) {
+        Rollbar?.warn(`shouldShowRun: tried to find run ${runId} but it wasn't in the schedule`);
+        return false;
+      }
       const hasConflict = this.myConflictingRuns
         .filter((r) => r.id !== runId)
         .some((r) => this.getRunTimespan(r.id)?.overlapsTimespan(runTimespan));
@@ -311,9 +334,9 @@ export default class Schedule {
     }
 
     return this.myRatingFilter.includes(event.my_rating || 0);
-  };
+  }
 
-  addFakeRun = (timespan: FiniteTimespan, title: string, displayTitle?: string) => {
+  addFakeRun(timespan: FiniteTimespan, title: string, displayTitle?: string): number {
     const fakeRunId = this.nextFakeRunId;
     this.nextFakeRunId -= 1;
 
@@ -364,5 +387,5 @@ export default class Schedule {
     this.runTimespansById.set(fakeRunId, timespan);
 
     return fakeRunId;
-  };
+  }
 }

@@ -12,7 +12,7 @@ export type ScheduleGridHourProps = {
   runIds: number[];
 };
 
-function ScheduleGridHour({ now, runIds }: ScheduleGridHourProps) {
+function ScheduleGridHour({ now, runIds }: ScheduleGridHourProps): JSX.Element {
   const { t } = useTranslation();
   const { schedule, config } = useContext(ScheduleGridContext);
   return (

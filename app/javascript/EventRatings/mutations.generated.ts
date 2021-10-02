@@ -10,7 +10,7 @@ export type RateEventMutationVariables = Types.Exact<{
 }>;
 
 
-export type RateEventMutationData = { __typename: 'Mutation', rateEvent: { __typename: 'RateEventPayload', event: { __typename: 'Event', id: number, my_rating?: Types.Maybe<number> } } };
+export type RateEventMutationData = { __typename: 'Mutation', rateEvent: { __typename: 'RateEventPayload', event: { __typename: 'Event', id: number, my_rating?: number | null | undefined } } };
 
 
 export const RateEventDocument = gql`

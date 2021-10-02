@@ -1,33 +1,38 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  LoadingIndicator,
-  ErrorDisplay,
-  sortByLocaleString,
-} from '@neinteractiveliterature/litform';
+import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
+import groupBy from 'lodash/groupBy';
+import { sortByLocaleString } from '@neinteractiveliterature/litform/lib/ValueUtils';
 
 import FakeEventRun from './FakeEventRun';
 import { useCommonConventionDataQuery } from '../queries.generated';
 import { SignupStatus } from './StylingUtils';
 
-function CategoryLegend() {
+export default LoadQueryWrapper(useCommonConventionDataQuery, function CategoryLegend({ data }) {
   const { t } = useTranslation();
-  const { data, loading, error } = useCommonConventionDataQuery();
-  const sortedEventCategories = useMemo(
-    () =>
-      error || loading || !data
-        ? []
-        : sortByLocaleString(data.convention?.event_categories ?? [], (c) => c.name),
-    [error, loading, data],
-  );
+  const sortedEventCategories = useMemo(() => {
+    const nameSortedEventCategories = sortByLocaleString(
+      data.convention.event_categories,
+      (c) => c.name,
+    );
+    const eventCategoriesByDefaultColor = groupBy(
+      nameSortedEventCategories,
+      (c) => c.default_color ?? '_undefined',
+    );
+    const seenColorGroups = new Set<string>();
+    const sortedCategories: typeof nameSortedEventCategories = [];
 
-  if (loading) {
-    return <LoadingIndicator iconSet="bootstrap-icons" />;
-  }
+    nameSortedEventCategories.forEach((category) => {
+      const groupName = category.default_color ?? '_undefined';
+      if (seenColorGroups.has(groupName)) {
+        return;
+      }
 
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
+      sortedCategories.push(...eventCategoriesByDefaultColor[groupName]);
+      seenColorGroups.add(groupName);
+    });
+    return sortedCategories;
+  }, [data.convention.event_categories]);
 
   const defaultCategory = sortedEventCategories[0];
 
@@ -98,6 +103,4 @@ function CategoryLegend() {
       </div>
     </div>
   );
-}
-
-export default CategoryLegend;
+});

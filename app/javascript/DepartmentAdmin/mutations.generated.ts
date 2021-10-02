@@ -10,7 +10,7 @@ export type CreateDepartmentMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateDepartmentMutationData = { __typename: 'Mutation', createDepartment: { __typename: 'CreateDepartmentPayload', department: { __typename: 'Department', id: number, name: string, proposal_description?: Types.Maybe<string>, event_categories: Array<{ __typename: 'EventCategory', id: number, name: string }> } } };
+export type CreateDepartmentMutationData = { __typename: 'Mutation', createDepartment: { __typename: 'CreateDepartmentPayload', department: { __typename: 'Department', id: number, name: string, proposal_description?: string | null | undefined, event_categories: Array<{ __typename: 'EventCategory', id: number, name: string }> } } };
 
 export type UpdateDepartmentMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
@@ -18,14 +18,14 @@ export type UpdateDepartmentMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateDepartmentMutationData = { __typename: 'Mutation', updateDepartment: { __typename: 'UpdateDepartmentPayload', department: { __typename: 'Department', id: number, name: string, proposal_description?: Types.Maybe<string>, event_categories: Array<{ __typename: 'EventCategory', id: number, name: string }> } } };
+export type UpdateDepartmentMutationData = { __typename: 'Mutation', updateDepartment: { __typename: 'UpdateDepartmentPayload', department: { __typename: 'Department', id: number, name: string, proposal_description?: string | null | undefined, event_categories: Array<{ __typename: 'EventCategory', id: number, name: string }> } } };
 
 export type DeleteDepartmentMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
 }>;
 
 
-export type DeleteDepartmentMutationData = { __typename: 'Mutation', deleteDepartment: { __typename: 'DeleteDepartmentPayload', clientMutationId?: Types.Maybe<string> } };
+export type DeleteDepartmentMutationData = { __typename: 'Mutation', deleteDepartment: { __typename: 'DeleteDepartmentPayload', clientMutationId?: string | null | undefined } };
 
 
 export const CreateDepartmentDocument = gql`

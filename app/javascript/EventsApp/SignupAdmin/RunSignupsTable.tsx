@@ -34,7 +34,7 @@ const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({
 });
 
 type SignupType =
-  RunSignupsTableSignupsQueryData['event']['run']['signups_paginated']['entries'][0];
+  RunSignupsTableSignupsQueryData['convention']['event']['run']['signups_paginated']['entries'][0];
 
 const SignupStateFilter = (props: FilterProps<SignupType>) => {
   const { t } = useTranslation();
@@ -72,15 +72,15 @@ const AgeRestrictionsCheckCell = ({ value }: CellProps<SignupType, string>) => {
 const BucketCell = ({ row: { original } }: CellProps<SignupType>) => {
   const { t } = useTranslation();
   const data = useContext(QueryDataContext) as RunSignupsTableSignupsQueryData;
-  return <>{formatBucket(original, data.event, t)}</>;
+  return <>{formatBucket(original, data.convention.event, t)}</>;
 };
 
 const BucketFilter = (props: FilterProps<SignupType>) => {
   const data = useContext(QueryDataContext) as RunSignupsTableSignupsQueryData;
   const choices = useMemo(
     () =>
-      data?.event
-        ? (data.event.registration_policy?.buckets ?? []).map((bucket) => ({
+      data?.convention.event
+        ? (data.convention.event.registration_policy?.buckets ?? []).map((bucket) => ({
             label: bucket.name ?? bucket.key,
             value: bucket.key,
           }))
@@ -168,7 +168,12 @@ export type RunSignupsTableProps = {
   runPath: string;
 };
 
-function RunSignupsTable({ defaultVisibleColumns, eventId, runId, runPath }: RunSignupsTableProps) {
+function RunSignupsTable({
+  defaultVisibleColumns,
+  eventId,
+  runId,
+  runPath,
+}: RunSignupsTableProps): JSX.Element {
   const { t } = useTranslation();
   const history = useHistory();
   const { data, loading, error } = useSignupAdminEventQuery({ variables: { eventId } });
@@ -181,14 +186,14 @@ function RunSignupsTable({ defaultVisibleColumns, eventId, runId, runPath }: Run
     queryData,
   } = useReactTableWithTheWorks<
     RunSignupsTableSignupsQueryData,
-    RunSignupsTableSignupsQueryData['event']['run']['signups_paginated']['entries'][number],
+    RunSignupsTableSignupsQueryData['convention']['event']['run']['signups_paginated']['entries'][number],
     RunSignupsTableSignupsQueryVariables
   >({
     decodeFilterValue,
     defaultVisibleColumns,
     encodeFilterValue,
-    getData: ({ data: tableData }) => tableData.event.run.signups_paginated.entries,
-    getPages: ({ data: tableData }) => tableData.event.run.signups_paginated.total_pages,
+    getData: ({ data: tableData }) => tableData.convention.event.run.signups_paginated.entries,
+    getPages: ({ data: tableData }) => tableData.convention.event.run.signups_paginated.total_pages,
     getPossibleColumns: getPossibleColumnsFunc,
     useQuery: useRunSignupsTableSignupsQuery,
     storageKeyPrefix: 'adminSignups',
@@ -199,7 +204,7 @@ function RunSignupsTable({ defaultVisibleColumns, eventId, runId, runPath }: Run
     useValueUnless(
       () =>
         t('events.signupAdmin.indexPageTitle', 'Signups - {{ eventTitle }}', {
-          eventTitle: data?.event.title,
+          eventTitle: data?.convention.event.title,
         }),
       error || loading,
     ),

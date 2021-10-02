@@ -16,7 +16,7 @@ function BucketAvailabilityDisplay({
   signupCount,
   remainingCapacity,
   compact,
-}: BucketAvailabilityDisplayProps) {
+}: BucketAvailabilityDisplayProps): JSX.Element {
   const totalCells = signupCount + remainingCapacity;
   const [containerWidth, setContainerWidth] = useState(300);
   const resizeObserverRef = useRef<ResizeObserver>();

@@ -23,11 +23,11 @@ export type EventListCategoryDropdownProps = {
   onChange: React.Dispatch<number[]>;
 };
 
-const EventListCategoryDropdown = ({
+function EventListCategoryDropdown({
   eventCategories,
   value,
   onChange: onChangeProp,
-}: EventListCategoryDropdownProps) => {
+}: EventListCategoryDropdownProps): JSX.Element {
   const [interacted, setInteracted] = useState(false);
   const currentCategories = eventCategories.filter((category) =>
     (value || []).includes(category.id),
@@ -90,6 +90,6 @@ const EventListCategoryDropdown = ({
       </div>
     </DropdownMenu>
   );
-};
+}
 
 export default EventListCategoryDropdown;

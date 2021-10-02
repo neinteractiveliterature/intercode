@@ -4,12 +4,12 @@ import * as Types from '../../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type AdminNavigationItemFieldsFragment = { __typename: 'CmsNavigationItem', id: number, position?: Types.Maybe<number>, title?: Types.Maybe<string>, page?: Types.Maybe<{ __typename: 'Page', id: number }>, navigation_section?: Types.Maybe<{ __typename: 'CmsNavigationItem', id: number }> };
+export type AdminNavigationItemFieldsFragment = { __typename: 'CmsNavigationItem', id: number, position?: number | null | undefined, title?: string | null | undefined, page?: { __typename: 'Page', id: number } | null | undefined, navigation_section?: { __typename: 'CmsNavigationItem', id: number } | null | undefined };
 
 export type NavigationItemsAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type NavigationItemsAdminQueryData = { __typename: 'Query', convention?: Types.Maybe<{ __typename: 'Convention', id: number, name: string }>, cmsPages: Array<{ __typename: 'Page', id: number, name?: Types.Maybe<string> }>, cmsNavigationItems: Array<{ __typename: 'CmsNavigationItem', id: number, position?: Types.Maybe<number>, title?: Types.Maybe<string>, page?: Types.Maybe<{ __typename: 'Page', id: number }>, navigation_section?: Types.Maybe<{ __typename: 'CmsNavigationItem', id: number }> }> };
+export type NavigationItemsAdminQueryData = { __typename: 'Query', convention?: { __typename: 'Convention', id: number, name: string } | null | undefined, cmsPages: Array<{ __typename: 'Page', id: number, name?: string | null | undefined }>, cmsNavigationItems: Array<{ __typename: 'CmsNavigationItem', id: number, position?: number | null | undefined, title?: string | null | undefined, page?: { __typename: 'Page', id: number } | null | undefined, navigation_section?: { __typename: 'CmsNavigationItem', id: number } | null | undefined }> };
 
 export const AdminNavigationItemFieldsFragmentDoc = gql`
     fragment AdminNavigationItemFields on CmsNavigationItem {

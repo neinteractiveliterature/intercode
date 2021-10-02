@@ -85,7 +85,7 @@ function ScheduleViewDropdown({ viewSelected, scheduleView, configs }: ScheduleV
   );
 }
 
-export default function ScheduleApp() {
+export default function ScheduleApp(): JSX.Element {
   const { myProfile, currentAbility, conventionTimespan, siteMode } = useContext(AppRootContext);
   const { t } = useTranslation();
   const { choiceSetValue, choiceSetChanged } = usePersonalScheduleFilters({

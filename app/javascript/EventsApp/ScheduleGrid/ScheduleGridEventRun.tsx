@@ -20,10 +20,9 @@ function ScheduleGridEventRun({
   runDimensions,
   layoutResult,
   scheduleLayoutBlock,
-}: ScheduleGridEventRunProps) {
-  const { schedule, toggleRunDetailsVisibility, isRunDetailsVisible, config } = useContext(
-    ScheduleGridContext,
-  );
+}: ScheduleGridEventRunProps): JSX.Element {
+  const { schedule, toggleRunDetailsVisibility, isRunDetailsVisible, config } =
+    useContext(ScheduleGridContext);
   const detailsVisible = useMemo(
     () =>
       isRunDetailsVisible({ runId: runDimensions.runId, scheduleBlockId: scheduleLayoutBlock.id }),
@@ -41,10 +40,10 @@ function ScheduleGridEventRun({
   );
 
   const run = useMemo(() => schedule.getRun(runDimensions.runId), [schedule, runDimensions.runId]);
-  const event = useMemo(() => schedule.getEventForRun(runDimensions.runId), [
-    schedule,
-    runDimensions.runId,
-  ]);
+  const event = useMemo(
+    () => schedule.getEventForRun(runDimensions.runId),
+    [schedule, runDimensions.runId],
+  );
 
   const signupCountData = useMemo(() => {
     if (!run) {
@@ -64,15 +63,21 @@ function ScheduleGridEventRun({
     }
   }, [run, toggleRunDetailsVisibility, update, scheduleLayoutBlock.id]);
 
-  if (event == null || run == null) {
-    return null;
+  if (event == null || run == null || signupCountData == null) {
+    // if run is null, event is definitely null (and signupCountData is derived from the run)
+    Rollbar?.warn(
+      `ScheduleGridEventRun: tried to render run ${runDimensions.runId} but ${
+        run == null ? 'run and event were null' : 'event was null'
+      }`,
+    );
+    return <></>;
   }
 
   const renderRunDisplay = (ref: Ref<HTMLDivElement>) => (
     <RunDisplay
       event={event}
       run={run}
-      signupCountData={signupCountData!}
+      signupCountData={signupCountData}
       ref={ref}
       toggle={toggleVisibility}
       runDimensions={runDimensions}
@@ -102,7 +107,7 @@ function ScheduleGridEventRun({
           event={event}
           run={run}
           timespan={runDimensions.fullTimespan}
-          signupCountData={signupCountData!}
+          signupCountData={signupCountData}
         />
       )}
     </>

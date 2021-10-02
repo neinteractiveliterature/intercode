@@ -3,13 +3,18 @@ import * as React from 'react';
 import classNames from 'classnames';
 
 import AvailabilityBar from './AvailabilityBar';
-import { getRunClassificationStyles, getRunClassName, SignupStatus } from './StylingUtils';
+import {
+  GetEventCategoryStylesOptions,
+  getRunClassificationStyles,
+  getRunClassName,
+  SignupStatus,
+} from './StylingUtils';
 import { PIXELS_PER_LANE, LANE_GUTTER_HEIGHT } from './LayoutConstants';
 import Timespan from '../../Timespan';
 
 export type FakeEventRunProps = {
   classifyEventsBy?: 'category' | 'fullness';
-  eventCategory: {};
+  eventCategory?: GetEventCategoryStylesOptions['eventCategory'];
   children: ReactNode;
   availability?: number;
   unlimited?: boolean;
@@ -31,7 +36,7 @@ function FakeEventRun({
   withRef,
   zeroCapacity,
   classifyEventsBy,
-}: FakeEventRunProps) {
+}: FakeEventRunProps): JSX.Element {
   const config = {
     classifyEventsBy: classifyEventsBy ?? ('category' as const),
     showSignedUp: true,

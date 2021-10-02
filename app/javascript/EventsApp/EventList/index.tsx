@@ -45,11 +45,11 @@ const fetchMoreEvents = async (fetchMore: FetchMoreFunction, page: number) => {
         const updatedQuery: EventListEventsQueryData = {
           ...prev,
           convention: {
-            ...prev.convention!,
+            ...prev.convention,
             events_paginated: {
-              ...prev.convention!.events_paginated,
+              ...prev.convention.events_paginated,
               entries: [
-                ...(prev.convention!.events_paginated.entries ?? []),
+                ...(prev.convention.events_paginated.entries ?? []),
                 ...(fetchMoreResult?.convention?.events_paginated.entries ?? []),
               ],
             },
@@ -63,7 +63,7 @@ const fetchMoreEvents = async (fetchMore: FetchMoreFunction, page: number) => {
   }
 };
 
-function EventList() {
+function EventList(): JSX.Element {
   const { sortBy, filters, updateSearch } = useReactRouterReactTable({
     ...filterCodecs,
   });
@@ -227,7 +227,7 @@ function EventList() {
       {loading || !data ? null : (
         <>
           <EventListEvents
-            convention={data.convention!}
+            convention={data.convention}
             eventsPaginated={eventsPaginated}
             sortBy={sortBy}
             canReadSchedule={data.currentAbility.can_read_schedule}

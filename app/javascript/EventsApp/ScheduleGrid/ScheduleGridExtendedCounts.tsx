@@ -9,8 +9,18 @@ import AppRootContext from '../../AppRootContext';
 import { SignupState } from '../../graphqlTypes.generated';
 
 function buildHourRunData(runId: number, schedule: Schedule) {
-  const run = schedule.getRun(runId)!;
-  const event = schedule.getEvent(run.event_id)!;
+  const run = schedule.getRun(runId);
+  if (!run) {
+    throw new Error(`buildHourRunData: tried to find run ${runId} but it wasn't in the schedule`);
+  }
+
+  const event = schedule.getEvent(run.event_id);
+  if (!event) {
+    throw new Error(
+      `buildHourRunData: tried to find event ${run.event_id} but it wasn't in the schedule`,
+    );
+  }
+
   const signupCountData = SignupCountData.fromRun(run);
   return {
     run,
@@ -24,7 +34,7 @@ export type ScheduleGridExtendedCountsProps = {
   runIds: number[];
 };
 
-function ScheduleGridExtendedCounts({ now, runIds }: ScheduleGridExtendedCountsProps) {
+function ScheduleGridExtendedCounts({ now, runIds }: ScheduleGridExtendedCountsProps): JSX.Element {
   const { schedule } = useContext(ScheduleGridContext);
   const { timezoneName } = useContext(AppRootContext);
 

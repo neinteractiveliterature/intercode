@@ -5,12 +5,12 @@ import buildEventUrl from '../buildEventUrl';
 import { EventPageQueryData } from './queries.generated';
 
 export type ViewSignupsOptionsProps = {
-  event: EventPageQueryData['event'];
-  run: EventPageQueryData['event']['runs'][0];
+  event: EventPageQueryData['convention']['event'];
+  run: EventPageQueryData['convention']['event']['runs'][0];
   currentAbility: EventPageQueryData['currentAbility'];
 };
 
-function ViewSignupsOptions({ event, run, currentAbility }: ViewSignupsOptionsProps) {
+function ViewSignupsOptions({ event, run, currentAbility }: ViewSignupsOptionsProps): JSX.Element {
   const { t } = useTranslation();
   const eventPath = buildEventUrl(event);
 

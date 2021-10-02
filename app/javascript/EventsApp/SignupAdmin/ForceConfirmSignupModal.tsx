@@ -15,7 +15,11 @@ export type ForceConfirmSignupModalProps = {
   onCancel: () => void;
 };
 
-function ForceConfirmSignupModal({ signup, onComplete, onCancel }: ForceConfirmSignupModalProps) {
+function ForceConfirmSignupModal({
+  signup,
+  onComplete,
+  onCancel,
+}: ForceConfirmSignupModalProps): JSX.Element {
   const [bucketKey, setBucketKey] = useState<string | null>();
   const [forceConfirmMutate] = useForceConfirmSignupMutation();
   const [forceConfirm, error, inProgress] = useAsyncFunction(forceConfirmMutate);

@@ -10,45 +10,45 @@ export type EventHistoryQueryVariables = Types.Exact<{
 }>;
 
 
-export type EventHistoryQueryData = { __typename: 'Query', convention?: Types.Maybe<{ __typename: 'Convention', id: number, starts_at?: Types.Maybe<any>, ends_at?: Types.Maybe<any>, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode }>, event: { __typename: 'Event', id: number, title?: Types.Maybe<string>, event_category: { __typename: 'EventCategory', id: number, event_form: { __typename: 'Form', id: number, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: number, title?: Types.Maybe<string>, position: number, form_items: Array<{ __typename: 'FormItem', id: number, admin_description?: Types.Maybe<string>, position: number, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> } }, form_response_changes: Array<{ __typename: 'FormResponseChange', field_identifier: string, previous_value?: Types.Maybe<any>, new_value?: Types.Maybe<any>, created_at: any, updated_at: any, user_con_profile: { __typename: 'UserConProfile', id: number, name_without_nickname: string } }> } };
+export type EventHistoryQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, starts_at?: any | null | undefined, ends_at?: any | null | undefined, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, event: { __typename: 'Event', id: number, title?: string | null | undefined, event_category: { __typename: 'EventCategory', id: number, event_form: { __typename: 'Form', id: number, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: number, title?: string | null | undefined, position: number, form_items: Array<{ __typename: 'FormItem', id: number, admin_description?: string | null | undefined, position: number, identifier?: string | null | undefined, item_type: string, rendered_properties?: any | null | undefined, default_value?: any | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> } }, form_response_changes: Array<{ __typename: 'FormResponseChange', field_identifier: string, previous_value?: any | null | undefined, new_value?: any | null | undefined, created_at: any, updated_at: any, user_con_profile: { __typename: 'UserConProfile', id: number, name_without_nickname: string } }> } } };
 
 
 export const EventHistoryQueryDocument = gql`
     query EventHistoryQuery($id: Int!) {
-  convention {
+  convention: conventionByRequestHost {
     id
     starts_at
     ends_at
     timezone_name
     timezone_mode
-  }
-  event(id: $id) {
-    id
-    title
-    event_category {
+    event(id: $id) {
       id
-      event_form {
+      title
+      event_category {
         id
-        ...CommonFormFields
-        form_sections {
+        event_form {
           id
-          form_items {
+          ...CommonFormFields
+          form_sections {
             id
-            admin_description
+            form_items {
+              id
+              admin_description
+            }
           }
         }
       }
-    }
-    form_response_changes {
-      user_con_profile {
-        id
-        name_without_nickname
+      form_response_changes {
+        user_con_profile {
+          id
+          name_without_nickname
+        }
+        field_identifier
+        previous_value
+        new_value
+        created_at
+        updated_at
       }
-      field_identifier
-      previous_value
-      new_value
-      created_at
-      updated_at
     }
   }
 }

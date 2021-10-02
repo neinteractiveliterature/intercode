@@ -5,27 +5,27 @@ import { gql } from '@apollo/client';
 import { PermissionedModelFieldsFragmentDoc, PermissionedRoleFieldsFragmentDoc } from '../../Permissions/fragments.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type CmsContentFields_CmsLayout_Fragment = { __typename: 'CmsLayout', id: number, name?: Types.Maybe<string> };
+export type CmsContentFields_CmsLayout_Fragment = { __typename: 'CmsLayout', id: number, name?: string | null | undefined };
 
-export type CmsContentFields_CmsPartial_Fragment = { __typename: 'CmsPartial', id: number, name?: Types.Maybe<string> };
+export type CmsContentFields_CmsPartial_Fragment = { __typename: 'CmsPartial', id: number, name?: string | null | undefined };
 
-export type CmsContentFields_Page_Fragment = { __typename: 'Page', id: number, name?: Types.Maybe<string> };
+export type CmsContentFields_Page_Fragment = { __typename: 'Page', id: number, name?: string | null | undefined };
 
 export type CmsContentFieldsFragment = CmsContentFields_CmsLayout_Fragment | CmsContentFields_CmsPartial_Fragment | CmsContentFields_Page_Fragment;
 
-export type CmsContentGroupFieldsFragment = { __typename: 'CmsContentGroup', id: number, name: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, contents: Array<{ __typename: 'CmsLayout', id: number, name?: Types.Maybe<string> } | { __typename: 'CmsPartial', id: number, name?: Types.Maybe<string> } | { __typename: 'Page', id: number, name?: Types.Maybe<string> }>, permissions: Array<{ __typename: 'Permission', id: number, permission: string, model: { __typename: 'CmsContentGroup', id: number, name: string } | { __typename: 'Convention', id: number, name: string } | { __typename: 'EventCategory', id: number, name: string, default_color?: Types.Maybe<string> }, role: { __typename: 'OrganizationRole', id: number, name: string } | { __typename: 'StaffPosition', id: number, name: string } }> };
+export type CmsContentGroupFieldsFragment = { __typename: 'CmsContentGroup', id: number, name: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, contents: Array<{ __typename: 'CmsLayout', id: number, name?: string | null | undefined } | { __typename: 'CmsPartial', id: number, name?: string | null | undefined } | { __typename: 'Page', id: number, name?: string | null | undefined }>, permissions: Array<{ __typename: 'Permission', id: number, permission: string, model: { __typename: 'CmsContentGroup', id: number, name: string } | { __typename: 'Convention', id: number, name: string } | { __typename: 'EventCategory', id: number, name: string, default_color?: string | null | undefined }, role: { __typename: 'OrganizationRole', id: number, name: string } | { __typename: 'StaffPosition', id: number, name: string } }> };
 
 export type CmsContentGroupsAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type CmsContentGroupsAdminQueryData = { __typename: 'Query', convention?: Types.Maybe<{ __typename: 'Convention', id: number, name: string, staff_positions: Array<{ __typename: 'StaffPosition', id: number, name: string }> }>, cmsContentGroups: Array<{ __typename: 'CmsContentGroup', id: number, name: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, contents: Array<{ __typename: 'CmsLayout', id: number, name?: Types.Maybe<string> } | { __typename: 'CmsPartial', id: number, name?: Types.Maybe<string> } | { __typename: 'Page', id: number, name?: Types.Maybe<string> }>, permissions: Array<{ __typename: 'Permission', id: number, permission: string, model: { __typename: 'CmsContentGroup', id: number, name: string } | { __typename: 'Convention', id: number, name: string } | { __typename: 'EventCategory', id: number, name: string, default_color?: Types.Maybe<string> }, role: { __typename: 'OrganizationRole', id: number, name: string } | { __typename: 'StaffPosition', id: number, name: string } }> }>, currentAbility: { __typename: 'Ability', can_create_cms_content_groups: boolean } };
+export type CmsContentGroupsAdminQueryData = { __typename: 'Query', convention?: { __typename: 'Convention', id: number, name: string, staff_positions: Array<{ __typename: 'StaffPosition', id: number, name: string }> } | null | undefined, cmsContentGroups: Array<{ __typename: 'CmsContentGroup', id: number, name: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, contents: Array<{ __typename: 'CmsLayout', id: number, name?: string | null | undefined } | { __typename: 'CmsPartial', id: number, name?: string | null | undefined } | { __typename: 'Page', id: number, name?: string | null | undefined }>, permissions: Array<{ __typename: 'Permission', id: number, permission: string, model: { __typename: 'CmsContentGroup', id: number, name: string } | { __typename: 'Convention', id: number, name: string } | { __typename: 'EventCategory', id: number, name: string, default_color?: string | null | undefined }, role: { __typename: 'OrganizationRole', id: number, name: string } | { __typename: 'StaffPosition', id: number, name: string } }> }>, currentAbility: { __typename: 'Ability', can_create_cms_content_groups: boolean } };
 
 export type SearchCmsContentQueryVariables = Types.Exact<{
   name?: Types.Maybe<Types.Scalars['String']>;
 }>;
 
 
-export type SearchCmsContentQueryData = { __typename: 'Query', searchCmsContent: Array<{ __typename: 'CmsLayout', id: number, name?: Types.Maybe<string> } | { __typename: 'CmsPartial', id: number, name?: Types.Maybe<string> } | { __typename: 'Page', id: number, name?: Types.Maybe<string> }> };
+export type SearchCmsContentQueryData = { __typename: 'Query', searchCmsContent: Array<{ __typename: 'CmsLayout', id: number, name?: string | null | undefined } | { __typename: 'CmsPartial', id: number, name?: string | null | undefined } | { __typename: 'Page', id: number, name?: string | null | undefined }> };
 
 export const CmsContentFieldsFragmentDoc = gql`
     fragment CmsContentFields on CmsContent {

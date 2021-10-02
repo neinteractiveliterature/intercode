@@ -10,14 +10,14 @@ export type CmsPageQueryVariables = Types.Exact<{
 }>;
 
 
-export type CmsPageQueryData = { __typename: 'Query', convention?: Types.Maybe<{ __typename: 'Convention', id: number, name: string, clickwrap_agreement?: Types.Maybe<string> }>, currentAbility: { __typename: 'Ability', can_manage_any_cms_content: boolean }, myProfile?: Types.Maybe<{ __typename: 'UserConProfile', id: number, accepted_clickwrap_agreement?: Types.Maybe<boolean> }>, cmsPage: { __typename: 'Page', id: number, name?: Types.Maybe<string>, content_html: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, skip_clickwrap_agreement?: Types.Maybe<boolean> } };
+export type CmsPageQueryData = { __typename: 'Query', convention?: { __typename: 'Convention', id: number, name: string, clickwrap_agreement?: string | null | undefined } | null | undefined, currentAbility: { __typename: 'Ability', can_manage_any_cms_content: boolean }, myProfile?: { __typename: 'UserConProfile', id: number, accepted_clickwrap_agreement?: boolean | null | undefined } | null | undefined, cmsPage: { __typename: 'Page', id: number, name?: string | null | undefined, content_html: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, skip_clickwrap_agreement?: boolean | null | undefined } };
 
 export type PageAdminDropdownQueryVariables = Types.Exact<{
   id: Types.Scalars['Int'];
 }>;
 
 
-export type PageAdminDropdownQueryData = { __typename: 'Query', cmsParent: { __typename: 'Convention', id: number, default_layout: { __typename: 'CmsLayout', id: number, name?: Types.Maybe<string> } } | { __typename: 'RootSite', id: number, root_site_default_layout: { __typename: 'CmsLayout', id: number, name?: Types.Maybe<string> } }, cmsPage: { __typename: 'Page', id: number, cms_layout?: Types.Maybe<{ __typename: 'CmsLayout', id: number, name?: Types.Maybe<string> }>, referenced_partials: Array<{ __typename: 'CmsPartial', id: number, name?: Types.Maybe<string> }> } };
+export type PageAdminDropdownQueryData = { __typename: 'Query', cmsParent: { __typename: 'Convention', id: number, default_layout: { __typename: 'CmsLayout', id: number, name?: string | null | undefined } } | { __typename: 'RootSite', id: number, root_site_default_layout: { __typename: 'CmsLayout', id: number, name?: string | null | undefined } }, cmsPage: { __typename: 'Page', id: number, cms_layout?: { __typename: 'CmsLayout', id: number, name?: string | null | undefined } | null | undefined, referenced_partials: Array<{ __typename: 'CmsPartial', id: number, name?: string | null | undefined }> } };
 
 
 export const CmsPageQueryDocument = gql`

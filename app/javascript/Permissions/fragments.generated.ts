@@ -6,7 +6,7 @@ export type PermissionedModelFields_CmsContentGroup_Fragment = { __typename: 'Cm
 
 export type PermissionedModelFields_Convention_Fragment = { __typename: 'Convention', id: number, name: string };
 
-export type PermissionedModelFields_EventCategory_Fragment = { __typename: 'EventCategory', id: number, name: string, default_color?: Types.Maybe<string> };
+export type PermissionedModelFields_EventCategory_Fragment = { __typename: 'EventCategory', id: number, name: string, default_color?: string | null | undefined };
 
 export type PermissionedModelFieldsFragment = PermissionedModelFields_CmsContentGroup_Fragment | PermissionedModelFields_Convention_Fragment | PermissionedModelFields_EventCategory_Fragment;
 

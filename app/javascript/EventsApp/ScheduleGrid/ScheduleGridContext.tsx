@@ -244,7 +244,7 @@ function ScheduleGridProviderTabContent({
   const providerValue = useScheduleGridProvider(
     config,
     convention,
-    (cachedData || {}).events || [],
+    cachedData?.convention.events ?? [],
     myRatingFilter,
     hideConflicts,
   );

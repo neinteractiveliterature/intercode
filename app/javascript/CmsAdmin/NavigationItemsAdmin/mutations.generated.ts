@@ -10,7 +10,7 @@ export type CreateNavigationItemMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateNavigationItemMutationData = { __typename: 'Mutation', createCmsNavigationItem: { __typename: 'CreateCmsNavigationItemPayload', cms_navigation_item: { __typename: 'CmsNavigationItem', id: number, position?: Types.Maybe<number>, title?: Types.Maybe<string>, page?: Types.Maybe<{ __typename: 'Page', id: number }>, navigation_section?: Types.Maybe<{ __typename: 'CmsNavigationItem', id: number }> } } };
+export type CreateNavigationItemMutationData = { __typename: 'Mutation', createCmsNavigationItem: { __typename: 'CreateCmsNavigationItemPayload', cms_navigation_item: { __typename: 'CmsNavigationItem', id: number, position?: number | null | undefined, title?: string | null | undefined, page?: { __typename: 'Page', id: number } | null | undefined, navigation_section?: { __typename: 'CmsNavigationItem', id: number } | null | undefined } } };
 
 export type UpdateNavigationItemMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
@@ -18,7 +18,7 @@ export type UpdateNavigationItemMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateNavigationItemMutationData = { __typename: 'Mutation', updateCmsNavigationItem: { __typename: 'UpdateCmsNavigationItemPayload', cms_navigation_item: { __typename: 'CmsNavigationItem', id: number, position?: Types.Maybe<number>, title?: Types.Maybe<string>, page?: Types.Maybe<{ __typename: 'Page', id: number }>, navigation_section?: Types.Maybe<{ __typename: 'CmsNavigationItem', id: number }> } } };
+export type UpdateNavigationItemMutationData = { __typename: 'Mutation', updateCmsNavigationItem: { __typename: 'UpdateCmsNavigationItemPayload', cms_navigation_item: { __typename: 'CmsNavigationItem', id: number, position?: number | null | undefined, title?: string | null | undefined, page?: { __typename: 'Page', id: number } | null | undefined, navigation_section?: { __typename: 'CmsNavigationItem', id: number } | null | undefined } } };
 
 export type DeleteNavigationItemMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
@@ -32,7 +32,7 @@ export type SortNavigationItemsMutationVariables = Types.Exact<{
 }>;
 
 
-export type SortNavigationItemsMutationData = { __typename: 'Mutation', sortCmsNavigationItems: { __typename: 'SortCmsNavigationItemsPayload', clientMutationId?: Types.Maybe<string> } };
+export type SortNavigationItemsMutationData = { __typename: 'Mutation', sortCmsNavigationItems: { __typename: 'SortCmsNavigationItemsPayload', clientMutationId?: string | null | undefined } };
 
 
 export const CreateNavigationItemDocument = gql`
