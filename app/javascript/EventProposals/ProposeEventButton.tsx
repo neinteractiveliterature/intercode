@@ -30,7 +30,7 @@ export default LoadQueryWrapper<
     history.push(`/event_proposals/${eventProposal.id}/edit`);
   };
 
-  if (!data.myProfile) {
+  if (!data.convention.my_profile) {
     return (
       <SignInButton
         afterSignInPath={window.location.href}
@@ -50,7 +50,7 @@ export default LoadQueryWrapper<
         onCreate={newProposalCreated}
         cancel={modal.close}
         visible={modal.visible}
-        userEventProposals={data.myProfile.user?.event_proposals ?? []}
+        userEventProposals={data.convention.my_profile.user?.event_proposals ?? []}
         proposableEventCategories={data.convention.event_categories.filter(
           (category) => category.proposable,
         )}

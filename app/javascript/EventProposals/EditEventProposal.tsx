@@ -22,15 +22,15 @@ export default LoadQueryWrapper(useLoadEventProposal, function EditEventProposal
 
   usePageTitle(
     t('general.pageTitles.editing', 'Editing “{{ title }}”', {
-      title: data.eventProposal.title,
+      title: data.convention.event_proposal.title,
     }),
   );
 
-  if (data.eventProposal.event) {
-    return <Redirect to={`/events/${data.eventProposal.event.id}/edit`} />;
+  if (data.convention.event_proposal.event) {
+    return <Redirect to={`/events/${data.convention.event_proposal.event.id}/edit`} />;
   }
 
-  const eventProposalId = data.eventProposal.id;
+  const eventProposalId = data.convention.event_proposal.id;
 
   const canDelete = data.currentAbility.can_delete_event_proposal;
   const deleteButtonProps = {

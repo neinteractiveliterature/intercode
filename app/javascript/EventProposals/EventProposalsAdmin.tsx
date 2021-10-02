@@ -39,7 +39,7 @@ function SingleProposalBreadcrumbs() {
         matchProps={{ path: '/admin_event_proposals/:id', exact: true }}
         to={`/admin_event_proposals/${params.id}`}
       >
-        {data?.eventProposal.title}
+        {data?.convention.event_proposal.title}
       </RouteActivatedBreadcrumbItem>
 
       <Route path="/admin_event_proposals/:id/edit">
@@ -63,7 +63,7 @@ function AdminEditEventProposal() {
     useValueUnless(
       () =>
         t('general.pageTitles.editing', 'Editing “{{ title }}”', {
-          title: data?.eventProposal.title,
+          title: data?.convention.event_proposal.title,
         }),
       error || loading,
     ),
@@ -87,7 +87,7 @@ function AdminEditEventProposal() {
   );
 }
 
-function EventProposalsAdmin() {
+function EventProposalsAdmin(): JSX.Element {
   const { t } = useTranslation();
   const authorizationWarning = useAuthorizationRequired('can_read_event_proposals');
 

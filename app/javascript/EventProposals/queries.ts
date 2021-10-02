@@ -56,11 +56,11 @@ export const EventProposalQuery = gql`
     convention: conventionByRequestHost {
       id
       ...EventProposalFormData
-    }
 
-    eventProposal(id: $eventProposalId) {
-      id
-      ...EventProposalFields
+      event_proposal(id: $eventProposalId) {
+        id
+        ...EventProposalFields
+      }
     }
   }
 
@@ -73,18 +73,18 @@ export const EventProposalQueryWithOwner = gql`
     convention: conventionByRequestHost {
       id
       ...EventProposalFormData
-    }
 
-    eventProposal(id: $eventProposalId) {
-      id
-      ...EventProposalFields
-
-      owner {
+      event_proposal(id: $eventProposalId) {
         id
-        name
-        email
-        gravatar_enabled
-        gravatar_url
+        ...EventProposalFields
+
+        owner {
+          id
+          name
+          email
+          gravatar_enabled
+          gravatar_url
+        }
       }
     }
 
@@ -100,42 +100,45 @@ export const EventProposalQueryWithOwner = gql`
 
 export const EventProposalAdminNotesQuery = gql`
   query EventProposalAdminNotesQuery($eventProposalId: Int!) {
-    eventProposal(id: $eventProposalId) {
+    convention: conventionByRequestHost {
       id
-      admin_notes
+      event_proposal(id: $eventProposalId) {
+        id
+        admin_notes
+      }
     }
   }
 `;
 
 export const ProposeEventButtonQuery = gql`
   query ProposeEventButtonQuery {
-    myProfile {
+    convention: conventionByRequestHost {
       id
 
-      user {
+      my_profile {
         id
 
-        event_proposals {
+        user {
           id
-          title
-          status
-          created_at
 
-          event_category {
+          event_proposals {
             id
-            name
-          }
+            title
+            status
+            created_at
 
-          convention {
-            id
-            name
+            event_category {
+              id
+              name
+            }
+
+            convention {
+              id
+              name
+            }
           }
         }
       }
-    }
-
-    convention: conventionByRequestHost {
-      id
 
       departments {
         id
@@ -224,45 +227,45 @@ export const EventProposalHistoryQuery = gql`
       ends_at
       timezone_name
       timezone_mode
-    }
 
-    eventProposal(id: $id) {
-      id
-      title
-
-      owner {
+      event_proposal(id: $id) {
         id
-      }
+        title
 
-      event_category {
-        id
-
-        event_proposal_form {
+        owner {
           id
-          ...CommonFormFields
+        }
 
-          form_sections {
+        event_category {
+          id
+
+          event_proposal_form {
             id
+            ...CommonFormFields
 
-            form_items {
+            form_sections {
               id
-              admin_description
+
+              form_items {
+                id
+                admin_description
+              }
             }
           }
         }
-      }
 
-      form_response_changes {
-        user_con_profile {
-          id
-          name_without_nickname
+        form_response_changes {
+          user_con_profile {
+            id
+            name_without_nickname
+          }
+
+          field_identifier
+          previous_value
+          new_value
+          created_at
+          updated_at
         }
-
-        field_identifier
-        previous_value
-        new_value
-        created_at
-        updated_at
       }
     }
   }
