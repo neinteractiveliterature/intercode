@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::DeleteTeamMember < Mutations::BaseMutation
   field :team_member, Types::TeamMemberType, null: false
 

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::SubmitEventProposal < Mutations::BaseMutation
   field :event_proposal, Types::EventProposalType, null: false
 
@@ -8,9 +9,9 @@ class Mutations::SubmitEventProposal < Mutations::BaseMutation
   def resolve(**_args)
     if event_proposal.status == 'draft'
       event_proposal.update!(status: 'proposed', submitted_at: Time.zone.now)
-      EventProposals::NewProposalNotifier.new(event_proposal: event_proposal)
-        .deliver_later(wait: 5.seconds)
-      EventProposals::ProposalSubmitConfirmationNotifier.new(event_proposal: event_proposal)
+      EventProposals::NewProposalNotifier.new(event_proposal: event_proposal).deliver_later(wait: 5.seconds)
+      EventProposals::ProposalSubmitConfirmationNotifier
+        .new(event_proposal: event_proposal)
         .deliver_later(wait: 5.seconds)
     end
 

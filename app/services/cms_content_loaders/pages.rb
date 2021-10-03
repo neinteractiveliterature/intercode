@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CmsContentLoaders::Pages < CmsContentLoaders::Base
   private
 
@@ -5,9 +6,7 @@ class CmsContentLoaders::Pages < CmsContentLoaders::Base
     super
 
     return success unless content_set.metadata[:root_page_slug]
-    convention.update!(
-      root_page: convention.pages.find_by(slug: content_set.metadata[:root_page_slug])
-    )
+    convention.update!(root_page: convention.pages.find_by(slug: content_set.metadata[:root_page_slug]))
 
     success
   end
@@ -29,10 +28,6 @@ class CmsContentLoaders::Pages < CmsContentLoaders::Base
   end
 
   def taken_special_identifiers
-    if convention.root_page
-      { 'root' => 'root page' }
-    else
-      {}
-    end
+    convention.root_page ? { 'root' => 'root page' } : {}
   end
 end

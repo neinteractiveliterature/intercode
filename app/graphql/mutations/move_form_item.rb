@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::MoveFormItem < Mutations::BaseMutation
   field :form_item, Types::FormItemType, null: false
   field :form_section, Types::FormSectionType, null: false
@@ -15,11 +16,7 @@ class Mutations::MoveFormItem < Mutations::BaseMutation
     end
 
     form_item.update!(form_section: form_section) unless form_section == form_item.form_section
-    if destination_index
-      form_item.insert_at(destination_index + 1)
-    else
-      form_item.move_to_bottom
-    end
+    destination_index ? form_item.insert_at(destination_index + 1) : form_item.move_to_bottom
 
     { form_item: form_item, form_section: form_section }
   end

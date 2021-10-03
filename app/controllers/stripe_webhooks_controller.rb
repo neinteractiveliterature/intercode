@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class StripeWebhooksController < ApplicationController
   skip_forgery_protection
 
@@ -14,6 +15,7 @@ class StripeWebhooksController < ApplicationController
     # This is where handlers would go if we had any yet
     # else
     Rollbar.warn("Unhandled event type for account webhook listener: #{event.type}")
+
     # end
 
     head :ok

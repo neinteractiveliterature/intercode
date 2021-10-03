@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::UserType < Types::BaseObject
   authorize_record
 
@@ -14,10 +15,13 @@ class Types::UserType < Types::BaseObject
   association_loaders User, :user_con_profiles
 
   def event_proposals
-    AssociationLoader.new(User, :event_proposals).load(object).then do |event_proposals|
-      # avoid n+1 in the policy check
-      ::ActiveRecord::Associations::Preloader.new.preload(event_proposals, :owner)
-      event_proposals
-    end
+    AssociationLoader
+      .new(User, :event_proposals)
+      .load(object)
+      .then do |event_proposals|
+        # avoid n+1 in the policy check
+        ::ActiveRecord::Associations::Preloader.new.preload(event_proposals, :owner)
+        event_proposals
+      end
   end
 end

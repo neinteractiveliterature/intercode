@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::CmsNavigationItemInputType < Types::BaseInputObject
   argument :title, String, required: false
   argument :position, Integer, required: false

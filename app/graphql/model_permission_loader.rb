@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class ModelPermissionLoader < GraphQL::Batch::Loader
   def initialize(model, includes = nil)
     @model = model
@@ -13,10 +14,7 @@ class ModelPermissionLoader < GraphQL::Batch::Loader
 
     scope.find_each do |record|
       keys_by_model_id[record.id].each do |(pundit_user, action, _)|
-        fulfill(
-          [pundit_user, action, record.id],
-          Pundit.policy(pundit_user, record).public_send("#{action}?")
-        )
+        fulfill([pundit_user, action, record.id], Pundit.policy(pundit_user, record).public_send("#{action}?"))
       end
     end
 

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # An order from the convention's store
 class OrderDrop < Liquid::Drop
   # @api

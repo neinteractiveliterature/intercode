@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::CmsLayoutType < Types::BaseObject
   field :id, Integer, null: false
   field :name, String, null: true
@@ -25,26 +26,18 @@ class Types::CmsLayoutType < Types::BaseObject
 
   def content_html(path: nil)
     rendering_context = cms_rendering_context_for_path(path)
-    rendering_context.render_layout_content(
-      object,
-      rendering_context.liquid_assigns_for_single_page_app(object)
-    )
+    rendering_context.render_layout_content(object, rendering_context.liquid_assigns_for_single_page_app(object))
   end
 
   def content_html_with_placeholders(path: nil)
     rendering_context = cms_rendering_context_for_path(path)
-    rendering_context.render_layout_content(
-      object,
-      rendering_context.liquid_assigns_for_placeholder_template
-    )
+    rendering_context.render_layout_content(object, rendering_context.liquid_assigns_for_placeholder_template)
   end
 
   private
 
   def cms_rendering_context_for_path(path)
     @cms_rendering_context_by_path ||= {}
-    @cms_rendering_context_by_path[path] ||= cms_rendering_context_for_cms_parent(
-      object.parent, path: path
-    )
+    @cms_rendering_context_by_path[path] ||= cms_rendering_context_for_cms_parent(object.parent, path: path)
   end
 end

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::CreateConventionStripeAccount < Mutations::BaseMutation
   field :stripe_account, Types::StripeAccountType, null: false
 
@@ -9,7 +10,7 @@ class Mutations::CreateConventionStripeAccount < Mutations::BaseMutation
   def resolve
     if convention.stripe_account_id
       raise GraphQL::ExecutionError,
-        "#{convention.name} already has a Stripe account associated with it.  If you want to change\
+            "#{convention.name} already has a Stripe account associated with it.  If you want to change\
  the associated Stripe account, please contact the site administrators."
     end
 

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::TimespanWithValueInputType < Types::BaseInputObject
   argument :start, Types::DateType, required: false
   argument :finish, Types::DateType, required: false

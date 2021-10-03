@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # A staff position at a convention
 class StaffPositionDrop < Liquid::Drop
   include ActionView::Helpers::UrlHelper
@@ -25,7 +26,7 @@ class StaffPositionDrop < Liquid::Drop
 
   # @return [String] A mailto: URL for this staff position
   def email_link
-    return unless email.present?
+    return if email.blank?
     mail_to email
   end
 

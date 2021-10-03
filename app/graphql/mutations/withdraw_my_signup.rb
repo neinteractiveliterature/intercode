@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::WithdrawMySignup < Mutations::BaseMutation
   field :signup, Types::SignupType, null: false
   argument :run_id, Int, required: true, camelize: false
@@ -6,9 +7,7 @@ class Mutations::WithdrawMySignup < Mutations::BaseMutation
 
   define_authorization_check do |args|
     run = context[:convention].runs.find(args[:run_id])
-    @signup = run.signups.where(user_con_profile_id: user_con_profile.id)
-      .where.not(state: 'withdrawn')
-      .first
+    @signup = run.signups.where(user_con_profile_id: user_con_profile.id).where.not(state: 'withdrawn').first
 
     raise GraphQL::ExecutionError, "You are not signed up for #{run.event.title}." unless signup
 

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class EventProposalPolicy < ApplicationPolicy
   EVENT_PROPOSAL_NON_DRAFT_STATUSES = EventProposal::STATUSES.to_a - ['draft']
   EVENT_PROPOSAL_NON_PENDING_STATUSES = EVENT_PROPOSAL_NON_DRAFT_STATUSES - ['proposed']
@@ -5,28 +6,28 @@ class EventProposalPolicy < ApplicationPolicy
   delegate :convention, to: :record
 
   def read?
-    return true if oauth_scoped_disjunction do |d|
-      d.add(:read_events) do
-        user_is_owner? ||
-        (
-          EVENT_PROPOSAL_NON_DRAFT_STATUSES.include?(record.status) &&
-          has_applicable_permission?(:read_pending_event_proposals)
-        ) ||
-        (
-          EVENT_PROPOSAL_NON_PENDING_STATUSES.include?(record.status) &&
-          has_applicable_permission?(:read_event_proposals)
-        )
-      end
+    if oauth_scoped_disjunction do |d|
+         d.add(:read_events) do
+           user_is_owner? ||
+             (
+               EVENT_PROPOSAL_NON_DRAFT_STATUSES.include?(record.status) &&
+                 has_applicable_permission?(:read_pending_event_proposals)
+             ) ||
+             (
+               EVENT_PROPOSAL_NON_PENDING_STATUSES.include?(record.status) &&
+                 has_applicable_permission?(:read_event_proposals)
+             )
+         end
+       end
+      return true
     end
 
     super
   end
 
   def read_admin_notes?
-    return true if oauth_scoped_disjunction do |d|
-      d.add(:read_events) do
-        has_applicable_permission?(:access_admin_notes)
-      end
+    if oauth_scoped_disjunction { |d| d.add(:read_events) { has_applicable_permission?(:access_admin_notes) } }
+      return true
     end
 
     site_admin_read?
@@ -37,38 +38,32 @@ class EventProposalPolicy < ApplicationPolicy
   end
 
   def update?
-    return true if oauth_scoped_disjunction do |d|
-      d.add(:manage_events) do
-        %w[draft proposed reviewing tentative_accept].include?(record.status) && user_is_owner? ||
-        (
-          EVENT_PROPOSAL_NON_DRAFT_STATUSES.include?(record.status) &&
-          has_applicable_permission?(:update_event_proposals)
-        ) ||
-        team_member_for_accepted_proposal?
-      end
+    if oauth_scoped_disjunction do |d|
+         d.add(:manage_events) do
+           (%w[draft proposed reviewing tentative_accept].include?(record.status) && user_is_owner?) ||
+             (
+               EVENT_PROPOSAL_NON_DRAFT_STATUSES.include?(record.status) &&
+                 has_applicable_permission?(:update_event_proposals)
+             ) || team_member_for_accepted_proposal?
+         end
+       end
+      return true
     end
 
     super
   end
 
   def destroy?
-    oauth_scope?(:manage_events) &&
-      record.status == 'draft' &&
-      user &&
-      record.owner.user_id == user.id
+    oauth_scope?(:manage_events) && record.status == 'draft' && user && record.owner.user_id == user.id
   end
 
   def submit?
-    oauth_scope?(:manage_events) &&
-      user &&
-      record.owner.user_id == user.id
+    oauth_scope?(:manage_events) && user && record.owner.user_id == user.id
   end
 
   def update_admin_notes?
-    return true if oauth_scoped_disjunction do |d|
-      d.add(:manage_events) do
-        has_applicable_permission?(:access_admin_notes)
-      end
+    if oauth_scoped_disjunction { |d| d.add(:manage_events) { has_applicable_permission?(:access_admin_notes) } }
+      return true
     end
 
     site_admin_manage?
@@ -77,10 +72,11 @@ class EventProposalPolicy < ApplicationPolicy
   def form_item_viewer_role
     FormItem.highest_level_role(
       team_member: user_is_owner?,
-      admin: (
-        EVENT_PROPOSAL_NON_DRAFT_STATUSES.include?(record.status) &&
-        has_applicable_permission?(:update_event_proposals)
-      )
+      admin:
+        (
+          EVENT_PROPOSAL_NON_DRAFT_STATUSES.include?(record.status) &&
+            has_applicable_permission?(:update_event_proposals)
+        )
     )
   end
 

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Queries::UserConProfileQueryManager < Queries::QueryManager
   def initialize(user:, known_user_con_profiles: [])
     super(user: user)
@@ -6,9 +7,7 @@ class Queries::UserConProfileQueryManager < Queries::QueryManager
     known_user_con_profiles.each do |user_con_profile|
       next if user_con_profile.nil?
 
-      @user_con_profiles.get(user_con_profile.convention_id) do
-        user_con_profile
-      end
+      @user_con_profiles.get(user_con_profile.convention_id) { user_con_profile }
     end
   end
 

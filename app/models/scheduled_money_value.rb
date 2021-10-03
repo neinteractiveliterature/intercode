@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class ScheduledMoneyValue < ScheduledValue::ScheduledValue
   class TimespanWithMoneyValue < ScheduledValue::TimespanWithValue
     def value=(new_value)
@@ -5,9 +6,7 @@ class ScheduledMoneyValue < ScheduledValue::ScheduledValue
     end
 
     def attributes
-      super.merge(
-        value: MoneyCoder.dump(value)
-      )
+      super.merge(value: MoneyCoder.dump(value))
     end
 
     def as_json(_options = nil)
@@ -15,11 +14,7 @@ class ScheduledMoneyValue < ScheduledValue::ScheduledValue
     end
 
     def to_s(format = nil, timezone = nil)
-      [
-        value.format,
-        start_description(format, timezone),
-        finish_description(format, timezone)
-      ].join(' ')
+      [value.format, start_description(format, timezone), finish_description(format, timezone)].join(' ')
     end
   end
 

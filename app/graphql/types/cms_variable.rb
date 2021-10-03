@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::CmsVariable < Types::BaseObject
   field :id, Int, null: false
   field :key, String, null: false

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CsvExportsController < ApplicationController
   class RunSignupsFilenameFinder
     PRIORITIZED_FILENAME_GENERATORS = [
@@ -9,7 +10,7 @@ class CsvExportsController < ApplicationController
       ->(run) { "#{run.event.title} (#{format_run_start_day(run)} in #{format_run_rooms(run)})" },
       ->(run) { "#{run.event.title} (#{format_run_start_time(run)} in #{format_run_rooms(run)})" },
       ->(run) { "#{run.event.title} (run #{run.id})" }
-    ]
+    ].freeze
 
     def format_run_start_day(run)
       run.starts_at.strftime('%a')
@@ -26,10 +27,11 @@ class CsvExportsController < ApplicationController
     # Find a filename that will be unique across all runs, using a variety of filename generation
     # strategies
     def unique_filename(event, run, suffix)
-      filename_generator = PRIORITIZED_FILENAME_GENERATORS.find do |generator|
-        filenames = event.runs.map { |r| generator.call(r) }
-        filenames.uniq.size == filenames.size
-      end
+      filename_generator =
+        PRIORITIZED_FILENAME_GENERATORS.find do |generator|
+          filenames = event.runs.map { |r| generator.call(r) }
+          filenames.uniq.size == filenames.size
+        end
 
       "#{filename_generator.call(run)} #{suffix}"
     end
@@ -73,11 +75,7 @@ class CsvExportsController < ApplicationController
     authorize Order.new(user_con_profile: UserConProfile.new(convention: convention)), :read?
 
     send_table_presenter_csv(
-      Tables::OrdersTableResultsPresenter.for_convention(
-        convention,
-        params[:filters]&.to_unsafe_h,
-        params[:sort]
-      ),
+      Tables::OrdersTableResultsPresenter.for_convention(convention, params[:filters]&.to_unsafe_h, params[:sort]),
       "#{convention.name} Orders"
     )
   end
@@ -118,11 +116,7 @@ class CsvExportsController < ApplicationController
       Tables::SignupChangesTableResultsPresenter.new(
         SignupChangePolicy::Scope.new(
           pundit_user,
-          convention.signup_changes.includes([
-            :user_con_profile,
-            run: :event,
-            signup: { user_con_profile: :signups }
-          ])
+          convention.signup_changes.includes([:user_con_profile, {run: :event, signup: { user_con_profile: :signups }}])
         ).resolve,
         params[:filters]&.to_unsafe_h,
         [{ field: 'created_at', desc: true }],

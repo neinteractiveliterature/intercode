@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::ConventionInputType < Types::BaseInputObject
   argument :accepting_proposals, Boolean, required: false, camelize: false
   argument :starts_at, Types::DateType, required: false, camelize: false

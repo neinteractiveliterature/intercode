@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class UserActivityAlerts::AlertNotifier < Notifier
   attr_reader :alert_user_con_profile, :user_activity_alert, :event
 
@@ -23,16 +24,21 @@ class UserActivityAlerts::AlertNotifier < Notifier
 
   def event_description
     case event.to_sym
-    when :ticket_create then "purchased a #{alert_user_con_profile.ticket.ticket_type.description}"
-    when :user_con_profile_create then 'created a profile'
-    else event.to_s.humanize.downcase
+    when :ticket_create
+      "purchased a #{alert_user_con_profile.ticket.ticket_type.description}"
+    when :user_con_profile_create
+      'created a profile'
+    else
+      event.to_s.humanize.downcase
     end
   end
 
   def event_short_description
     case event.to_sym
-    when :ticket_create then "#{alert_user_con_profile.convention.ticket_name.humanize} create"
-    else event.to_s.humanize
+    when :ticket_create
+      "#{alert_user_con_profile.convention.ticket_name.humanize} create"
+    else
+      event.to_s.humanize
     end
   end
 

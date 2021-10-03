@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::OrderEntryType < Types::BaseObject
   field :id, Integer, null: false
   field :order, Types::OrderType, null: false

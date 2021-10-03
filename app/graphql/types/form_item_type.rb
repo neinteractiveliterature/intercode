@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::FormItemType < Types::BaseObject
   field :id, Int, null: false
   field :position, Int, null: false

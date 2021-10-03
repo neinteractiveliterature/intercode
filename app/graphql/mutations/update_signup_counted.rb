@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::UpdateSignupCounted < Mutations::BaseMutation
   field :signup, Types::SignupType, null: false
 

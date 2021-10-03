@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # An entry in an order
 class OrderEntryDrop < Liquid::Drop
   # @api
@@ -19,9 +20,15 @@ class OrderEntryDrop < Liquid::Drop
   #   @return [ProductVariantDrop] The product variant that was ordered, if applicable
   # @!method describe_products
   #   @return [String] A text description of the product(s) ordered in this entry
-  delegate :id, :order, :price, :price_per_item, :quantity, :product,
-    :product_variant, :describe_products,
-    to: :order_entry
+  delegate :id,
+           :order,
+           :price,
+           :price_per_item,
+           :quantity,
+           :product,
+           :product_variant,
+           :describe_products,
+           to: :order_entry
 
   # @api
   def initialize(order_entry)

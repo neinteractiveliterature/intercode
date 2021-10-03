@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::CreateFormWithJSON < Mutations::BaseMutation
   field :form, Types::FormType, null: false
 

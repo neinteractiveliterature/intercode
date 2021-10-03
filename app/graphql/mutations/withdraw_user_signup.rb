@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::WithdrawUserSignup < Mutations::BaseMutation
   field :signup, Types::SignupType, null: false
   argument :run_id, Int, required: true, camelize: false
@@ -8,23 +9,16 @@ class Mutations::WithdrawUserSignup < Mutations::BaseMutation
 
   define_authorization_check do |args|
     run = convention.runs.find(args[:run_id])
-    @signup = run.signups.where(user_con_profile_id: args[:user_con_profile_id])
-      .where.not(state: 'withdrawn')
-      .first
+    @signup = run.signups.where(user_con_profile_id: args[:user_con_profile_id]).where.not(state: 'withdrawn').first
 
-    unless signup
-      raise GraphQL::ExecutionError, "That user is not signed up for #{run.event.title}."
-    end
+    raise GraphQL::ExecutionError, "That user is not signed up for #{run.event.title}." unless signup
 
     policy(signup).withdraw?
   end
 
   def resolve(**args)
-    EventWithdrawService.new(
-      signup,
-      context[:current_user],
-      suppress_notifications: args[:suppress_notifications]
-    ).call!
+    EventWithdrawService.new(signup, context[:current_user], suppress_notifications: args[:suppress_notifications])
+      .call!
 
     { signup: signup }
   end

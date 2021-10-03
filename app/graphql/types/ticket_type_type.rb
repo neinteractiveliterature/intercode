@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::TicketTypeType < Types::BaseObject
   include DeprecatedTicketApiCompat
 
@@ -23,14 +24,15 @@ class Types::TicketTypeType < Types::BaseObject
     end
   end
 
-  field :publicly_available, Boolean,
-    null: false, deprecation_reason: 'Tickets are now provided through products'
+  field :publicly_available, Boolean, null: false, deprecation_reason: 'Tickets are now provided through products'
   def publicly_available
     ticket_type_publicly_available?(object)
   end
 
-  field :pricing_schedule, Types::ScheduledMoneyValueType,
-    null: false, deprecation_reason: 'Tickets are now provided through products'
+  field :pricing_schedule,
+        Types::ScheduledMoneyValueType,
+        null: false,
+        deprecation_reason: 'Tickets are now provided through products'
   def pricing_schedule
     pricing_schedule_for_ticket_type(object)
   end

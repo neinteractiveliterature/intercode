@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::CouponInputType < Types::BaseInputObject
   argument :code, String, required: false
   argument :provides_product_id, Int, required: false, camelize: false

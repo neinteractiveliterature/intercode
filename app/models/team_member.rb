@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
@@ -36,8 +37,7 @@ class TeamMember < ApplicationRecord
   validates :user_con_profile, presence: true
   validates :user_con_profile_id, uniqueness: { scope: :event_id }
 
-  validates :receive_signup_email,
-    inclusion: { in: Types::ReceiveSignupEmailType.values.keys.map(&:downcase) }
+  validates :receive_signup_email, inclusion: { in: Types::ReceiveSignupEmailType.values.keys.map(&:downcase) }
 
   validates :event, presence: true
   validate :user_con_profile_and_event_must_belong_to_same_convention
@@ -75,9 +75,12 @@ class TeamMember < ApplicationRecord
     return unless event && user_con_profile
     return if event.convention == user_con_profile.convention
 
-    errors.add(:base, "User con profile and event must belong to the same convention!  \
+    errors.add(
+      :base,
+      "User con profile and event must belong to the same convention!  \
 User con profile for #{user_con_profile.name} is from #{user_con_profile.convention.name} and \
-event #{event.name} is from #{event.convention.name}.")
+event #{event.name} is from #{event.convention.name}."
+    )
   end
 
   def sync_team_mailing_list

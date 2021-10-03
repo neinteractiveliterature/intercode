@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::CouponApplicationType < Types::BaseObject
   field :id, Int, null: false
   field :coupon, Types::CouponType, null: false

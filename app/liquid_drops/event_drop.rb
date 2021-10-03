@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # An event in a convention.  Events can have one or more runs, depending on their category.
 class EventDrop < Liquid::Drop
   include Rails.application.routes.url_helpers
@@ -22,8 +23,7 @@ class EventDrop < Liquid::Drop
   #   @return [ActiveSupport::TimeWithZone] The time at which this event was first created in the
   #                                         database (either by being accepted as a proposal, or)
   #                                         by being created manually by con staff
-  delegate :id, :title, :event_proposal, :author, :organization,
-    :email, :event_category, :created_at, to: :event
+  delegate :id, :title, :event_proposal, :author, :organization, :email, :event_category, :created_at, to: :event
 
   # @api
   def initialize(event)
@@ -77,13 +77,7 @@ class EventDrop < Liquid::Drop
   #   @return [String] The participant communication info for this event, rendered to HTML
   # @!method short_blurb
   #   @return [String] The short blurb for this event, rendered to HTML
-  %w[
-    description
-    content_warnings
-    age_restrictions
-    participant_communications
-    short_blurb
-  ].each do |field|
+  %w[description content_warnings age_restrictions participant_communications short_blurb].each do |field|
     define_method field do
       markdown = event.public_send(field)
       return nil unless markdown

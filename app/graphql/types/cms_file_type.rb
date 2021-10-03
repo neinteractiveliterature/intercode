@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::CmsFileType < Types::BaseObject
   field :id, Int, null: false
   field :filename, String, null: false

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class FormSectionPolicy < ApplicationPolicy
   delegate :form, to: :record
 

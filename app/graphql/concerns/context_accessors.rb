@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module ContextAccessors
   %i[
     current_user
@@ -36,9 +37,7 @@ module ContextAccessors
     convention = nil
     if cms_parent.is_a?(Convention)
       convention = cms_parent
-      user_con_profile = cms_parent.user_con_profiles.find_by(
-        user_id: context[:current_user]
-      )
+      user_con_profile = cms_parent.user_con_profiles.find_by(user_id: context[:current_user])
     end
 
     cms_content_finder = CmsContentFinder.new(convention)

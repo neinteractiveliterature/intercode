@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # An event proposal which, if accepted, has an event associated with it
 class EventProposalDrop < Liquid::Drop
   include Rails.application.routes.url_helpers
@@ -37,21 +38,21 @@ class EventProposalDrop < Liquid::Drop
   # @!method updated_at
   #   @return [DateTime] When the proposal was last modified
   delegate :id,
-    :owner,
-    :event,
-    :status,
-    :title,
-    :email,
-    :convention,
-    :event_category,
-    :length_seconds,
-    :description,
-    :short_blurb,
-    :can_play_concurrently,
-    :additional_info,
-    :created_at,
-    :updated_at,
-    to: :event_proposal
+           :owner,
+           :event,
+           :status,
+           :title,
+           :email,
+           :convention,
+           :event_category,
+           :length_seconds,
+           :description,
+           :short_blurb,
+           :can_play_concurrently,
+           :additional_info,
+           :created_at,
+           :updated_at,
+           to: :event_proposal
 
   # @api
   def initialize(event_proposal)

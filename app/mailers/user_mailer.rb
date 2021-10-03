@@ -1,11 +1,8 @@
+# frozen_string_literal: true
 class UserMailer < Devise::Mailer
   attr_accessor :default_url_host, :default_url_port, :default_url_protocol
-  default from: -> (mailer = nil) {
-    UserMailer.from_address_for_mailer(mailer)
-  }
-  default reply_to: -> (mailer = nil) {
-    UserMailer.from_address_for_mailer(mailer)
-  }
+  default from: ->(mailer = nil) { UserMailer.from_address_for_mailer(mailer) }
+  default reply_to: ->(mailer = nil) { UserMailer.from_address_for_mailer(mailer) }
 
   def default_url_options
     app_defaults = Rails.application.config.action_mailer.default_url_options || {}

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::DeleteOrganizationRole < Mutations::BaseMutation
   argument :id, Integer, required: true
 

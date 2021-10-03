@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class JSONFailureApp < Devise::FailureApp
   # never redirect
   def respond

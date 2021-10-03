@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::AcceptClickwrapAgreement < Mutations::BaseMutation
   field :my_profile, Types::UserConProfileType, null: false
 

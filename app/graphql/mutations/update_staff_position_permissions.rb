@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::UpdateStaffPositionPermissions < Mutations::BaseMutation
   field :staff_position, Types::StaffPositionType, null: false, camelize: false
   argument :staff_position_id, Int, required: true, camelize: false
@@ -12,20 +13,12 @@ class Mutations::UpdateStaffPositionPermissions < Mutations::BaseMutation
   end
 
   def resolve(**args)
-    grant_permissions = Types::PermissionInputType.load_permission_input_models(
-      args[:grant_permissions]
-    )
-    revoke_permissions = Types::PermissionInputType.load_permission_input_models(
-      args[:revoke_permissions]
-    )
+    grant_permissions = Types::PermissionInputType.load_permission_input_models(args[:grant_permissions])
+    revoke_permissions = Types::PermissionInputType.load_permission_input_models(args[:revoke_permissions])
 
-    grant_permissions.each do |input|
-      Permission.grant(staff_position, input[:model], input[:permission])
-    end
+    grant_permissions.each { |input| Permission.grant(staff_position, input[:model], input[:permission]) }
 
-    revoke_permissions.each do |input|
-      Permission.revoke(staff_position, input[:model], input[:permission])
-    end
+    revoke_permissions.each { |input| Permission.revoke(staff_position, input[:model], input[:permission]) }
 
     { staff_position: staff_position }
   end

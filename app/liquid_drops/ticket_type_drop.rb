@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # A type of ticket that this convention issues
 class TicketTypeDrop < Liquid::Drop
   include DeprecatedTicketApiCompat
@@ -15,8 +16,14 @@ class TicketTypeDrop < Liquid::Drop
   #   @return [Integer] The default number of tickets of this type events are allowed to provide
   # @!method providing_products
   #   @return [Array<ProductDrop>] Products that provide this type of ticket
-  delegate :id, :name, :description, :next_price_change,
-    :maximum_event_provided_tickets, :allows_event_signups, :providing_products, to: :ticket_type
+  delegate :id,
+           :name,
+           :description,
+           :next_price_change,
+           :maximum_event_provided_tickets,
+           :allows_event_signups,
+           :providing_products,
+           to: :ticket_type
 
   # @api
   def initialize(ticket_type)
@@ -61,8 +68,6 @@ class TicketTypeDrop < Liquid::Drop
   #   in the ticket type's providing product to get this information.
   def next_price_change
     pricing_schedule = pricing_schedule_for_ticket_type(ticket_type)
-    pricing_schedule&.next_value_change_after(Time.zone.now)&.in_time_zone(
-      ticket_type.convention.timezone
-    )
+    pricing_schedule&.next_value_change_after(Time.zone.now)&.in_time_zone(ticket_type.convention.timezone)
   end
 end

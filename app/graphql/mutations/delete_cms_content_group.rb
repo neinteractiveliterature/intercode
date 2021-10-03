@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::DeleteCmsContentGroup < Mutations::BaseMutation
   field :cms_content_group, Types::CmsContentGroupType, null: false
 

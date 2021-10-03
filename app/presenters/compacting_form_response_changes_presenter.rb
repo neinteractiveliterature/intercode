@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CompactingFormResponseChangesPresenter
   attr_reader :changes
 
@@ -6,10 +7,12 @@ class CompactingFormResponseChangesPresenter
   end
 
   def compacted_changes
-    group_changes(changes).map do |grouped_changes|
-      next if grouped_changes.first.previous_value == grouped_changes.last.new_value
-      build_omnibus_change(grouped_changes)
-    end.compact.sort_by(&:created_at)
+    group_changes(changes)
+      .filter_map do |grouped_changes|
+        next if grouped_changes.first.previous_value == grouped_changes.last.new_value
+        build_omnibus_change(grouped_changes)
+      end
+      .sort_by(&:created_at)
   end
 
   private
@@ -24,20 +27,16 @@ class CompactingFormResponseChangesPresenter
       new_value: raw_changes.last.new_value,
       created_at: raw_changes.first.created_at,
       updated_at: raw_changes.last.updated_at,
-      notified_at: raw_changes.map(&:notified_at).compact.max,
+      notified_at: raw_changes.filter_map(&:notified_at).max,
       compacted: true
     )
   end
 
   def group_changes(raw_changes)
-    changes_by_group_identifier = raw_changes.group_by do |change|
-      group_identifier(change)
-    end
+    changes_by_group_identifier = raw_changes.group_by { |change| group_identifier(change) }
 
     changes_by_group_identifier.values.flat_map do |change_group|
-      change_group.sort_by(&:created_at).slice_when do |c1, c2|
-        c2.created_at - c1.created_at >= 1.hour
-      end.to_a
+      change_group.sort_by(&:created_at).slice_when { |c1, c2| c2.created_at - c1.created_at >= 1.hour }.to_a
     end
   end
 

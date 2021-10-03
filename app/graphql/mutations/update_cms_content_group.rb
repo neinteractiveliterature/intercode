@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::UpdateCmsContentGroup < Mutations::BaseMutation
   include CmsContentGroupMutation
 
@@ -14,13 +15,13 @@ class Mutations::UpdateCmsContentGroup < Mutations::BaseMutation
     content_group.update!(name: cms_content_group.name)
     update_cms_contents(content_group, cms_content_group.contents)
 
-    Types::PermissionInputType.load_permission_input_roles(grant_permissions || []).each do |input|
-      Permission.grant(input[:role], content_group, input[:permission])
-    end
+    Types::PermissionInputType
+      .load_permission_input_roles(grant_permissions || [])
+      .each { |input| Permission.grant(input[:role], content_group, input[:permission]) }
 
-    Types::PermissionInputType.load_permission_input_roles(revoke_permissions || []).each do |input|
-      Permission.revoke(input[:role], content_group, input[:permission])
-    end
+    Types::PermissionInputType
+      .load_permission_input_roles(revoke_permissions || [])
+      .each { |input| Permission.revoke(input[:role], content_group, input[:permission]) }
 
     { cms_content_group: content_group }
   end

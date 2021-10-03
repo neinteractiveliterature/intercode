@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class RootSitePolicy < ApplicationPolicy
   def read?
     true

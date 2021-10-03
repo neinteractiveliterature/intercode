@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
@@ -36,16 +37,17 @@ class UserActivityAlert < ApplicationRecord
 
   def trigger_on_event?(event)
     case event.to_sym
-    when :user_con_profile_create then trigger_on_user_con_profile_create?
-    when :ticket_create then trigger_on_ticket_create?
-    else false
+    when :user_con_profile_create
+      trigger_on_user_con_profile_create?
+    when :ticket_create
+      trigger_on_ticket_create?
+    else
+      false
     end
   end
 
   def matches?(user_con_profile)
-    no_filters? ||
-      matches_user?(user_con_profile) ||
-      matches_name?(user_con_profile) ||
+    no_filters? || matches_user?(user_con_profile) || matches_name?(user_con_profile) ||
       matches_email?(user_con_profile)
   end
 
@@ -54,19 +56,15 @@ class UserActivityAlert < ApplicationRecord
   end
 
   def matches_name?(user_con_profile)
-    return unless partial_name.present?
+    return if partial_name.blank?
 
-    names = [
-      user_con_profile.name,
-      user_con_profile.name_without_nickname,
-      user_con_profile.user.name
-    ].map(&:downcase)
+    names = [user_con_profile.name, user_con_profile.name_without_nickname, user_con_profile.user.name].map(&:downcase)
 
     names.any? { |name| name.include?(partial_name.downcase) }
   end
 
   def matches_email?(user_con_profile)
-    return unless email.present?
+    return if email.blank?
 
     # UserConProfile doesn't have its own email field; it delegates to User
     normalize_email(user_con_profile.email) == normalize_email(email)

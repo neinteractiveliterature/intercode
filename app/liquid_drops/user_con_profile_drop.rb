@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # A profile for a user attending a convention.  This is the main object used for all user-specific
 # data in a convention, rather than User, which is just the sitewide account data shared between
 # all conventions.
@@ -34,9 +35,19 @@ class UserConProfileDrop < Liquid::Drop
   # @!method ical_secret
   #   @return [String] The user's iCal secret for this convention (used in the
   #                    {% add_to_calendar_dropdown %} tag)
-  delegate :bio_name, :email, :first_name, :gravatar_url, :id, :last_name,
-    :name, :name_inverted, :nickname, :name_without_nickname, :ticket, :ical_secret,
-    to: :user_con_profile
+  delegate :bio_name,
+           :email,
+           :first_name,
+           :gravatar_url,
+           :id,
+           :last_name,
+           :name,
+           :name_inverted,
+           :nickname,
+           :name_without_nickname,
+           :ticket,
+           :ical_secret,
+           to: :user_con_profile
 
   # @api
   def initialize(user_con_profile)
@@ -46,20 +57,16 @@ class UserConProfileDrop < Liquid::Drop
   # @return [Array<EventDrop>] All the active events at this convention for which this user is a
   #                            team member
   def team_member_events
-    user_con_profile.team_members.includes(event: :event_category)
-      .where(events: { status: 'active' }).map(&:event)
+    user_con_profile.team_members.includes(event: :event_category).where(events: { status: 'active' }).map(&:event)
   end
 
   # @return [Array<SignupDrop>] All the user's signups, excluding withdrawn events
   def signups
-    user_con_profile.signups.where.not(state: 'withdrawn')
-      .includes(
-        event: :event_category,
-        run: {
-          rooms: nil,
-          event: { team_members: :user_con_profile }
-        }
-      ).to_a
+    user_con_profile
+      .signups
+      .where.not(state: 'withdrawn')
+      .includes(event: :event_category, run: { rooms: nil, event: { team_members: :user_con_profile } })
+      .to_a
   end
 
   # @return [String] The user's bio, as HTML
@@ -88,11 +95,7 @@ class UserConProfileDrop < Liquid::Drop
   # @return [String] A webcal:// URL for the user's personal schedule for this convention.  This URL
   #                  is considered secret and should only be given to that user.
   def schedule_calendar_url
-    user_schedule_url(
-      user_con_profile.ical_secret,
-      host: user_con_profile.convention.domain,
-      protocol: 'webcal'
-    )
+    user_schedule_url(user_con_profile.ical_secret, host: user_con_profile.convention.domain, protocol: 'webcal')
   end
 
   # @return [Hash] The user's response to the profile form set up by this convention.  This includes

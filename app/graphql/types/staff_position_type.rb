@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::StaffPositionType < Types::BaseObject
   field :id, Integer, null: false
   field :name, String, null: false

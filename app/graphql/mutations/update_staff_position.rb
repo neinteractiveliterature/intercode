@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::UpdateStaffPosition < Mutations::BaseMutation
   field :staff_position, Types::StaffPositionType, null: false
 

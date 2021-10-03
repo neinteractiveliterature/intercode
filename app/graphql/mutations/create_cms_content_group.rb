@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::CreateCmsContentGroup < Mutations::BaseMutation
   include CmsContentGroupMutation
 
@@ -11,9 +12,9 @@ class Mutations::CreateCmsContentGroup < Mutations::BaseMutation
     content_group = cms_parent.cms_content_groups.create!(name: cms_content_group.name)
     update_cms_contents(content_group, cms_content_group.contents)
 
-    Types::PermissionInputType.load_permission_input_roles(permissions || []).each do |input|
-      Permission.grant(input[:role], content_group, input[:permission])
-    end
+    Types::PermissionInputType
+      .load_permission_input_roles(permissions || [])
+      .each { |input| Permission.grant(input[:role], content_group, input[:permission]) }
 
     { cms_content_group: content_group }
   end

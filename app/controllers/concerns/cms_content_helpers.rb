@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module CmsContentHelpers
   extend ActiveSupport::Concern
 
@@ -7,8 +8,7 @@ module CmsContentHelpers
     @cms_content_finder ||= CmsContentFinder.new(convention)
   end
 
-  delegate :cms_parent, :current_cms_page, :effective_cms_layout, :event_for_path,
-    to: :cms_content_finder
+  delegate :cms_parent, :current_cms_page, :effective_cms_layout, :event_for_path, to: :cms_content_finder
 
   def cms_rendering_context(path: nil)
     effective_path = path || request.path

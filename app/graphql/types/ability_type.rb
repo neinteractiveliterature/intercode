@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLength
   field :can_create_pages, Boolean, null: false
   def can_create_pages
@@ -62,9 +63,7 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
   field :can_override_maximum_event_provided_tickets, Boolean, null: false
 
   def can_override_maximum_event_provided_tickets
-    override = MaximumEventProvidedTicketsOverride.new(
-      event: Event.new(convention: convention)
-    )
+    override = MaximumEventProvidedTicketsOverride.new(event: Event.new(convention: convention))
     policy(override).create?
   end
 
@@ -125,19 +124,13 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
   field :can_read_orders, Boolean, null: false
 
   def can_read_orders
-    !!(
-      convention &&
-      policy(Order.new(user_con_profile: UserConProfile.new(convention: convention))).read?
-    )
+    !!(convention && policy(Order.new(user_con_profile: UserConProfile.new(convention: convention))).read?)
   end
 
   field :can_create_orders, Boolean, null: false
 
   def can_create_orders
-    !!(
-      convention &&
-      policy(Order.new(user_con_profile: UserConProfile.new(convention: convention))).create?
-    )
+    !!(convention && policy(Order.new(user_con_profile: UserConProfile.new(convention: convention))).create?)
   end
 
   field :can_read_schedule, Boolean, null: false
@@ -203,10 +196,7 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
   field :can_manage_signups, Boolean, null: false
 
   def can_manage_signups
-    !!(
-      convention &&
-      policy(Signup.new(run: Run.new(event: Event.new(convention: convention)))).manage?
-    )
+    !!(convention && policy(Signup.new(run: Run.new(event: Event.new(convention: convention)))).manage?)
   end
 
   field :can_manage_staff_positions, Boolean, null: false
@@ -226,11 +216,7 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
   end
 
   def can_read_admin_notes_on_event_proposal(**args)
-    ModelPermissionLoader.for(EventProposal).load([
-      pundit_user,
-      :read_admin_notes,
-      args[:event_proposal_id]
-    ])
+    ModelPermissionLoader.for(EventProposal).load([pundit_user, :read_admin_notes, args[:event_proposal_id]])
   end
 
   field :can_update_admin_notes_on_event_proposal, Boolean, null: false do
@@ -238,11 +224,7 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
   end
 
   def can_update_admin_notes_on_event_proposal(**args)
-    ModelPermissionLoader.for(EventProposal).load([
-      pundit_user,
-      :update_admin_notes,
-      args[:event_proposal_id]
-    ])
+    ModelPermissionLoader.for(EventProposal).load([pundit_user, :update_admin_notes, args[:event_proposal_id]])
   end
 
   field :can_update_event_proposal, Boolean, null: false do
@@ -363,18 +345,15 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
   end
 
   def can_update_user_con_profile(**args)
-    ModelPermissionLoader.for(UserConProfile)
-      .load([pundit_user, :update, args[:user_con_profile_id]])
+    ModelPermissionLoader.for(UserConProfile).load([pundit_user, :update, args[:user_con_profile_id]])
   end
 
   field(
-    :can_update_privileges_user_con_profile, Boolean,
+    :can_update_privileges_user_con_profile,
+    Boolean,
     null: false,
-    deprecation_reason:
-      'Privileges have been removed in favor of permissions.  This will always return false.'
-  ) do
-    argument :user_con_profile_id, Integer, required: true, camelize: false
-  end
+    deprecation_reason: 'Privileges have been removed in favor of permissions.  This will always return false.'
+  ) { argument :user_con_profile_id, Integer, required: true, camelize: false }
 
   def can_update_privileges_user_con_profile(**_args)
     false
@@ -385,8 +364,7 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
   end
 
   def can_delete_user_con_profile(**args)
-    ModelPermissionLoader.for(UserConProfile)
-      .load([pundit_user, :destroy, args[:user_con_profile_id]])
+    ModelPermissionLoader.for(UserConProfile).load([pundit_user, :destroy, args[:user_con_profile_id]])
   end
 
   field :can_become_user_con_profile, Boolean, null: false do
@@ -394,8 +372,7 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
   end
 
   def can_become_user_con_profile(**args)
-    ModelPermissionLoader.for(UserConProfile)
-      .load([pundit_user, :become, args[:user_con_profile_id]])
+    ModelPermissionLoader.for(UserConProfile).load([pundit_user, :become, args[:user_con_profile_id]])
   end
 
   field :can_withdraw_all_user_con_profile_signups, Boolean, null: false do
@@ -403,8 +380,7 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
   end
 
   def can_withdraw_all_user_con_profile_signups(**args)
-    ModelPermissionLoader.for(UserConProfile)
-      .load([pundit_user, :withdraw_all_signups, args[:user_con_profile_id]])
+    ModelPermissionLoader.for(UserConProfile).load([pundit_user, :withdraw_all_signups, args[:user_con_profile_id]])
   end
 
   private

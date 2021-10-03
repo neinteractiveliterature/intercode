@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::UpdateRootSite < Mutations::BaseMutation
   field :root_site, Types::RootSiteType, null: false, camelize: false
 

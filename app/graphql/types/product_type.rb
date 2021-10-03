@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::ProductType < Types::BaseObject
   field :id, Integer, null: false
   field :product_variants, [Types::ProductVariantType], null: false

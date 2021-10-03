@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # The result of a signup being automatically moved from one state or bucket to another
 class SignupMoveResultDrop < Liquid::Drop
   # @api

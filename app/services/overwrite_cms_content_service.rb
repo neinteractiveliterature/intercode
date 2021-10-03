@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class OverwriteCmsContentService < CivilService::Service
   def initialize(convention:, content_set_name:)
     @convention = convention
@@ -9,10 +10,7 @@ class OverwriteCmsContentService < CivilService::Service
   def inner_call
     ActiveRecord::Base.transaction do
       ClearCmsContentService.new(convention: @convention).call!
-      LoadCmsContentSetService.new(
-        convention: @convention,
-        content_set_name: @content_set_name
-      ).call!
+      LoadCmsContentSetService.new(convention: @convention, content_set_name: @content_set_name).call!
 
       success
     end

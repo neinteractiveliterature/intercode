@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AcceptSignupRequestService < CivilService::Service
   class Result < CivilService::Result
     attr_accessor :signup, :withdraw_result
@@ -32,14 +33,10 @@ class AcceptSignupRequestService < CivilService::Service
     success(signup: signup_result.signup, withdraw_result: withdraw_result)
   end
 
-  def with_relevant_locks
+  def with_relevant_locks(&block)
     with_advisory_lock_unless_skip_locking("run_#{signup_request.target_run.id}_signups") do
       if signup_request.replace_signup
-        with_advisory_lock_unless_skip_locking(
-          "run_#{signup_request.replace_signup.run.id}_signups"
-        ) do
-          yield
-        end
+        with_advisory_lock_unless_skip_locking("run_#{signup_request.replace_signup.run.id}_signups", &block)
       else
         yield
       end
@@ -72,8 +69,8 @@ class AcceptSignupRequestService < CivilService::Service
 
   def notify_user
     return if suppress_notifications
+
     # 5-second delay to let the transaction commit
-    SignupRequests::RequestAcceptedNotifier.new(signup_request: signup_request)
-      .deliver_later(wait: 5.seconds)
+    SignupRequests::RequestAcceptedNotifier.new(signup_request: signup_request).deliver_later(wait: 5.seconds)
   end
 end

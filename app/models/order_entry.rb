@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
@@ -38,21 +39,21 @@ class OrderEntry < ApplicationRecord
   validates :order, presence: true
   validates :product, presence: true
   validates :quantity, numericality: { greater_than_or_equal_to: 1 }
-  validates :product_variant_id, uniqueness: { scope: [:order_id, :product_id] }
+  validates :product_variant_id, uniqueness: { scope: %i[order_id product_id] }
   validate :product_variant_must_belong_to_product
 
   before_create do |order_entry|
-    unless order_entry.price_per_item.present?
+    if order_entry.price_per_item.blank?
       price_args = { time: order_entry.order&.paid_at || Time.zone.now }
 
-      if order_entry.product_variant
-        order_entry.price_per_item = (
-          order_entry.product_variant.override_pricing_structure&.price(**price_args) ||
-          order_entry.product.pricing_structure.price(**price_args)
-        )
+      order_entry.price_per_item = if order_entry.product_variant
+        (
+            order_entry.product_variant.override_pricing_structure&.price(**price_args) ||
+              order_entry.product.pricing_structure.price(**price_args)
+          )
       else
-        order_entry.price_per_item = order_entry.product.pricing_structure.price(**price_args)
-      end
+        order_entry.product.pricing_structure.price(**price_args)
+                                   end
     end
   end
 

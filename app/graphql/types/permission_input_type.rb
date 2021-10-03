@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::PermissionInputType < Types::BaseInputObject
   argument :model_type, Types::PermissionedModelTypeIndicator, required: false, camelize: false
   argument :model_id, Int, required: false, camelize: false
@@ -17,12 +18,12 @@ class Types::PermissionInputType < Types::BaseInputObject
     type_field = :"#{association_name}_type"
     id_field = :"#{association_name}_id"
 
-    permission_inputs.group_by { |input| input[type_field] }.flat_map do |record_type, inputs|
-      record_class = record_type.safe_constantize
-      records_by_id = record_class.find(inputs.map { |input| input[id_field] }).index_by(&:id)
-      inputs.map do |input|
-        { association_name => records_by_id[input[id_field]], permission: input[:permission] }
+    permission_inputs
+      .group_by { |input| input[type_field] }
+      .flat_map do |record_type, inputs|
+        record_class = record_type.safe_constantize
+        records_by_id = record_class.find(inputs.map { |input| input[id_field] }).index_by(&:id)
+        inputs.map { |input| { association_name => records_by_id[input[id_field]], :permission => input[:permission] } }
       end
-    end
   end
 end

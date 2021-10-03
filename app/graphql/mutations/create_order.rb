@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::CreateOrder < Mutations::BaseMutation
   include OrderEntryInputs
 
@@ -33,8 +34,7 @@ class Mutations::CreateOrder < Mutations::BaseMutation
 
       next unless order_entry_input.ticket_id
 
-      ticket = Ticket.where(user_con_profile_id: @order.user_con_profile.id)
-        .find(order_entry_input.ticket_id)
+      ticket = Ticket.where(user_con_profile_id: @order.user_con_profile.id).find(order_entry_input.ticket_id)
       ticket.update!(order_entry: order_entry)
       order_entry.tickets.reload
     end

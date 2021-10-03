@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::DeleteCoupon < Mutations::BaseMutation
   field :coupon, Types::CouponType, null: false
 

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::CreatePage < Mutations::BaseMutation
   field :page, Types::PageType, null: false
 

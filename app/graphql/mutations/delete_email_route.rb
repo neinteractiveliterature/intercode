@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::DeleteEmailRoute < Mutations::BaseMutation
   field :email_route, Types::EmailRouteType, null: false
 

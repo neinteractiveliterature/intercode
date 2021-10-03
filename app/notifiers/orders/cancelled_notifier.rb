@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Orders::CancelledNotifier < Notifier
   attr_reader :order, :refund_id
 

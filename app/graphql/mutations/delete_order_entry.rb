@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::DeleteOrderEntry < Mutations::BaseMutation
   field :order_entry, Types::OrderEntryType, null: false
 

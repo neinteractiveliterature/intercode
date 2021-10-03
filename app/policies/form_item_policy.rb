@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class FormItemPolicy < ApplicationPolicy
   delegate :form_section, to: :record
 
@@ -11,10 +12,7 @@ class FormItemPolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      scope.where(
-        form_section_id: FormSectionPolicy::Scope.new(authorization_info, FormSection.all)
-          .select(:id)
-      )
+      scope.where(form_section_id: FormSectionPolicy::Scope.new(authorization_info, FormSection.all).select(:id))
     end
   end
 end

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::RunType < Types::BaseObject
   authorize_record
 
@@ -5,11 +6,10 @@ class Types::RunType < Types::BaseObject
   field :event, Types::EventType, null: false
 
   def event
-    AssociationLoader.for(Run, :event).load(object).then do |event|
-      AssociationLoader.for(Event, :convention).load(event).then do |_convention|
-        event
-      end
-    end
+    AssociationLoader
+      .for(Run, :event)
+      .load(object)
+      .then { |event| AssociationLoader.for(Event, :convention).load(event).then { |_convention| event } }
   end
 
   field :starts_at, Types::DateType, null: false
@@ -30,9 +30,7 @@ class Types::RunType < Types::BaseObject
   field :confirmed_signup_count, Integer, null: false
 
   def confirmed_signup_count
-    SignupCountLoader.for.load(object).then do |presenter|
-      presenter.counted_signups_by_state('confirmed')
-    end
+    SignupCountLoader.for.load(object).then { |presenter| presenter.counted_signups_by_state('confirmed') }
   end
 
   field :confirmed_limited_signup_count, Integer, null: false
@@ -50,20 +48,18 @@ class Types::RunType < Types::BaseObject
   field :not_counted_signup_count, Integer, null: false
 
   def not_counted_signup_count
-    SignupCountLoader.for.load(object).then do |presenter|
-      (
-        presenter.not_counted_signups_by_state('confirmed') +
-        presenter.not_counted_signups_by_state('waitlisted')
-      )
-    end
+    SignupCountLoader
+      .for
+      .load(object)
+      .then do |presenter|
+        (presenter.not_counted_signups_by_state('confirmed') + presenter.not_counted_signups_by_state('waitlisted'))
+      end
   end
 
   field :not_counted_confirmed_signup_count, Integer, null: false
 
   def not_counted_confirmed_signup_count
-    SignupCountLoader.for.load(object).then do |presenter|
-      presenter.not_counted_signups_by_state('confirmed')
-    end
+    SignupCountLoader.for.load(object).then { |presenter| presenter.not_counted_signups_by_state('confirmed') }
   end
 
   field :signup_count_by_state_and_bucket_key_and_counted, Types::JSON, null: false
@@ -96,29 +92,35 @@ class Types::RunType < Types::BaseObject
     argument :page, Integer, required: false
     argument :per_page, Integer, required: false, camelize: false
     argument :filters, Types::SignupFiltersInputType, required: false
-    argument :sort, [Types::SortInputType, null: true], required: false
+    argument :sort, [Types::SortInputType, { null: true }], required: false
   end
 
   def signups_paginated(**args)
     scope = object.signups.includes(:user_con_profile)
 
-    Tables::SignupsTableResultsPresenter.new(scope, pundit_user, args[:filters].to_h, args[:sort])
+    Tables::SignupsTableResultsPresenter
+      .new(scope, pundit_user, args[:filters].to_h, args[:sort])
       .paginate(page: args[:page], per_page: args[:per_page])
   end
 
   pagination_field(
-    :signup_changes_paginated, Types::SignupChangesPaginationType,
-    Types::SignupChangeFiltersInputType, null: false
+    :signup_changes_paginated,
+    Types::SignupChangesPaginationType,
+    Types::SignupChangeFiltersInputType,
+    null: false
   )
 
   def signup_changes_paginated(**args)
-    scope = SignupChangePolicy::Scope.new(
-      pundit_user,
-      object.signup_changes.includes(
-        user_con_profile: [:convention, :team_members, :staff_positions],
-        run: { event: :convention }
-      )
-    ).resolve
+    scope =
+      SignupChangePolicy::Scope.new(
+        pundit_user,
+        object.signup_changes.includes(
+          user_con_profile: %i[convention team_members staff_positions],
+          run: {
+            event: :convention
+          }
+        )
+      ).resolve
 
     Tables::SignupChangesTableResultsPresenter
       .new(scope, args[:filters].to_h, args[:sort])

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class UserConProfilesController < ApplicationController
   include SendCsv
 
@@ -7,9 +8,7 @@ class UserConProfilesController < ApplicationController
   # con profile we're working on the "subject profile" (as in the subject of our actions).
   before_action :authorize_admin_profiles, except: [:revert_become]
 
-  unless Rails.env.test?
-    skip_before_action :verify_authenticity_token, only: [:become, :revert_become]
-  end
+  skip_before_action :verify_authenticity_token, only: %i[become revert_become] unless Rails.env.test?
 
   def become
     identity_assumer = assumed_identity_from_profile || user_con_profile
@@ -22,8 +21,14 @@ class UserConProfilesController < ApplicationController
 
   def revert_become
     unless assumed_identity_from_profile
-      return redirect_to(root_url, alert: "You haven't assumed an identity, so you can't revert \
-back to your normal identity (since you already are your normal identity).")
+      return(
+        redirect_to(
+          root_url,
+          alert:
+            "You haven't assumed an identity, so you can't revert \
+back to your normal identity (since you already are your normal identity)."
+        )
+      )
     end
 
     regular_user_con_profile = assumed_identity_from_profile

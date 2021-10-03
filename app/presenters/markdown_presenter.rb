@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class MarkdownPresenter
   class MarkdownRenderer < Redcarpet::Render::HTML
     include Redcarpet::Render::SmartyPants
@@ -8,20 +9,19 @@ class MarkdownPresenter
     end
   end
 
-  ALLOWED_LIQUID_NODE_CLASSES = [
-    String, Intercode::Liquid::Tags::Spoiler, Intercode::Liquid::Tags::Youtube
-  ]
+  ALLOWED_LIQUID_NODE_CLASSES = [String, Intercode::Liquid::Tags::Spoiler, Intercode::Liquid::Tags::Youtube].freeze
 
   include ActionView::Helpers::SanitizeHelper
   include ActionView::Helpers::TextHelper
 
   def self.markdown_processor
-    @markdown_processor ||= Redcarpet::Markdown.new(
-      MarkdownRenderer.new(link_attributes: { target: '_blank', rel: 'noreferrer' }),
-      no_intra_emphasis: true,
-      autolink: true,
-      footnotes: true
-    )
+    @markdown_processor ||=
+      Redcarpet::Markdown.new(
+        MarkdownRenderer.new(link_attributes: { target: '_blank', rel: 'noreferrer' }),
+        no_intra_emphasis: true,
+        autolink: true,
+        footnotes: true
+      )
   end
 
   def self.strip_single_p(html)
@@ -43,11 +43,12 @@ class MarkdownPresenter
   end
 
   def render(markdown, sanitize_content: true, strip_single_p: true, whitelist_liquid_tags: true)
-    pipeline = build_pipeline(
-      sanitize_content: sanitize_content,
-      strip_single_p: strip_single_p,
-      whitelist_liquid_tags: whitelist_liquid_tags
-    )
+    pipeline =
+      build_pipeline(
+        sanitize_content: sanitize_content,
+        strip_single_p: strip_single_p,
+        whitelist_liquid_tags: whitelist_liquid_tags
+      )
 
     pipeline.inject(markdown) { |acc, elem| elem.call(acc) }
   end
@@ -55,31 +56,17 @@ class MarkdownPresenter
   private
 
   def build_pipeline_core(sanitize_content:, whitelist_liquid_tags:)
-    markdown_renderer = (
-      ->(content) { MarkdownPresenter.markdown_processor.render(content || '') }
-    )
-    sanitizer = (
-      ->(content) { sanitize_html(content, sanitize_content: sanitize_content) }
-    )
-    liquid_renderer = (
-      ->(content) { render_liquid(content, whitelist_liquid_tags: whitelist_liquid_tags) }
-    )
+    markdown_renderer = (->(content) { MarkdownPresenter.markdown_processor.render(content || '') })
+    sanitizer = (->(content) { sanitize_html(content, sanitize_content: sanitize_content) })
+    liquid_renderer = (->(content) { render_liquid(content, whitelist_liquid_tags: whitelist_liquid_tags) })
 
-    if sanitize_content
-      [markdown_renderer, sanitizer, liquid_renderer]
-    else
-      [liquid_renderer, markdown_renderer, sanitizer]
-    end
+    sanitize_content ? [markdown_renderer, sanitizer, liquid_renderer] : [liquid_renderer, markdown_renderer, sanitizer]
   end
 
   def build_pipeline(sanitize_content:, strip_single_p:, whitelist_liquid_tags:)
     [
-      *build_pipeline_core(
-        sanitize_content: sanitize_content, whitelist_liquid_tags: whitelist_liquid_tags
-      ),
-      ->(content) {
-        content.presence || (default_content.present? ? "<p><em>#{default_content}</em></p>" : '')
-      },
+      *build_pipeline_core(sanitize_content: sanitize_content, whitelist_liquid_tags: whitelist_liquid_tags),
+      ->(content) { content.presence || (default_content.present? ? "<p><em>#{default_content}</em></p>" : '') },
       strip_single_p ? ->(content) { MarkdownPresenter.strip_single_p(content) } : nil
     ].compact
   end
@@ -97,16 +84,10 @@ class MarkdownPresenter
     template = Liquid::Template.parse(liquid)
 
     if whitelist_liquid_tags
-      template.root.nodelist.select! do |node|
-        ALLOWED_LIQUID_NODE_CLASSES.any? { |klass| node.is_a?(klass) }
-      end
+      template.root.nodelist.select! { |node| ALLOWED_LIQUID_NODE_CLASSES.any? { |klass| node.is_a?(klass) } }
     end
 
-    if cadmus_renderer
-      cadmus_renderer.render(template, :html)
-    else
-      template.render.html_safe
-    end
+    cadmus_renderer ? cadmus_renderer.render(template, :html) : template.render.html_safe
   rescue StandardError => e
     %(<div class="alert alert-danger">#{e.message}</div>\n#{liquid}).html_safe
   end

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # A ScheduledValue represents a value that changes over time.  For example, the convention's
 # maximum allowed signups and the price of ticket types are ScheduledValues.
 class ScheduledValueDrop < Liquid::Drop
@@ -27,9 +28,7 @@ class ScheduledValueDrop < Liquid::Drop
   # @return [Array<TimespanWithValueDrop>] The timespans covered by this ScheduledValue, along with
   #                                        the value for that range of time
   def timespans
-    scheduled_value.timespans.map do |timespan|
-      TimespanWithValueDrop.new(timespan, timezone)
-    end
+    scheduled_value.timespans.map { |timespan| TimespanWithValueDrop.new(timespan, timezone) }
   end
 
   # @return The current value of this ScheduledValue (type may vary)
@@ -39,9 +38,9 @@ class ScheduledValueDrop < Liquid::Drop
 
   # @return [ActiveSupport::TimeWithZone] When the current value came into effect
   def current_value_change
-    @current_value ||= begin
+    @current_value ||=
       scheduled_value.send(:timespan_containing, now)&.start&.in_time_zone(timezone)
-    end
+      
   end
 
   # @return [ActiveSupport::TimeWithZone] When the value will next change

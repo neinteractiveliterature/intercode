@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::CreateEventCategory < Mutations::BaseMutation
   field :event_category, Types::EventCategoryType, null: false
 

@@ -380,6 +380,7 @@ GEM
       heroics (~> 0.1.1)
       moneta (~> 1.0.0)
       rate_throttle_client (~> 0.1.0)
+    prettier (2.0.0.pre.rc3)
     promise.rb (0.7.4)
     pry (0.14.1)
       coderay (~> 1.1)
@@ -486,6 +487,8 @@ GEM
       activesupport (>= 4.2.0)
       rack (>= 1.1)
       rubocop (>= 1.7.0, < 2.0)
+    rubocop-sequel (0.3.3)
+      rubocop (~> 1.0)
     ruby-progressbar (1.11.0)
     ruby-vips (2.1.2)
       ffi (~> 1.12)
@@ -636,6 +639,7 @@ DEPENDENCIES
   pg_search
   phonelib
   platform-api
+  prettier (= 2.0.0.pre.rc3)
   pry-rails
   pry-remote
   puma
@@ -651,6 +655,7 @@ DEPENDENCIES
   rubocop (= 1.22.1)
   rubocop-performance
   rubocop-rails
+  rubocop-sequel
   scheduled_value (~> 1.4.0)
   sequel
   shoryuken

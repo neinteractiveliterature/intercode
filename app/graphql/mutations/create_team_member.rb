@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::CreateTeamMember < Mutations::BaseMutation
   field :team_member, Types::TeamMemberType, null: false
   field :ticket, Types::TicketType, null: true
@@ -18,12 +19,13 @@ class Mutations::CreateTeamMember < Mutations::BaseMutation
 
   def resolve(**args)
     user_con_profile = convention.user_con_profiles.find(args[:user_con_profile_id])
-    result = CreateTeamMemberService.new(
-      event: event,
-      user_con_profile: user_con_profile,
-      team_member_attrs: args[:team_member].to_h,
-      provide_ticket_type_id: args[:provide_ticket_type_id]
-    ).call!
+    result =
+      CreateTeamMemberService.new(
+        event: event,
+        user_con_profile: user_con_profile,
+        team_member_attrs: args[:team_member].to_h,
+        provide_ticket_type_id: args[:provide_ticket_type_id]
+      ).call!
 
     {
       team_member: result.team_member,

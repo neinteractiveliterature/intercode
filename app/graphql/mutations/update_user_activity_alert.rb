@@ -1,11 +1,10 @@
+# frozen_string_literal: true
 class Mutations::UpdateUserActivityAlert < Mutations::BaseMutation
   field :user_activity_alert, Types::UserActivityAlertType, null: false, camelize: false
 
   argument :id, Int, required: true, camelize: false
   argument :user_activity_alert, Types::UserActivityAlertInputType, required: true, camelize: false
-  argument :add_notification_destinations, [Types::NotificationDestinationInputType],
-    required: true,
-    camelize: false
+  argument :add_notification_destinations, [Types::NotificationDestinationInputType], required: true, camelize: false
   argument :remove_notification_destination_ids, [Int], required: true, camelize: false
 
   load_and_authorize_convention_associated_model :user_activity_alerts, :id, :update

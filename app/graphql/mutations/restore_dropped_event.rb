@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::RestoreDroppedEvent < Mutations::BaseMutation
   field :event, Types::EventType, null: false
 

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class EventVacancyFillService < CivilService::Service
   class Result < CivilService::Result
     attr_accessor :move_results
@@ -11,9 +12,7 @@ class EventVacancyFillService < CivilService::Service
   include SkippableAdvisoryLock
   include ConventionRegistrationFreeze
 
-  def initialize(
-    run, bucket_key, immovable_signups: [], skip_locking: false, suppress_notifications: false
-  )
+  def initialize(run, bucket_key, immovable_signups: [], skip_locking: false, suppress_notifications: false)
     @run = run
     @bucket_key = bucket_key
     @skip_locking = skip_locking
@@ -28,13 +27,9 @@ class EventVacancyFillService < CivilService::Service
     bucket = event.registration_policy.bucket_with_key(bucket_key)
     return success(move_results: []) if bucket.slots_unlimited?
 
-    with_advisory_lock_unless_skip_locking("run_#{run.id}_signups") do
-      fill_bucket_vacancy(bucket_key)
-    end
+    with_advisory_lock_unless_skip_locking("run_#{run.id}_signups") { fill_bucket_vacancy(bucket_key) }
 
-    move_results.each do |result|
-      notify_moved_signup(result) if result.should_notify?
-    end
+    move_results.each { |result| notify_moved_signup(result) if result.should_notify? }
 
     success(move_results: move_results)
   end
@@ -82,8 +77,7 @@ class EventVacancyFillService < CivilService::Service
 
     (
       (signup.no_preference? && counted_limited_bucket?(bucket_with_vacancy)) ||
-      signup.requested_bucket_key == bucket_with_vacancy.key ||
-      bucket_with_vacancy.anything?
+        signup.requested_bucket_key == bucket_with_vacancy.key || bucket_with_vacancy.anything?
     )
   end
 
@@ -92,19 +86,17 @@ class EventVacancyFillService < CivilService::Service
   end
 
   def all_signups_ordered
-    @all_signups_ordered ||= begin
-      all_signups.to_a.sort_by do |signup|
-        signup_priority_key(signup)
-      end
-    end
+    @all_signups_ordered ||=
+      all_signups.to_a.sort_by { |signup| signup_priority_key(signup) }
+      
   end
 
   def all_signups
-    @all_signups ||= begin
-      run.signups.reload
-      run.signups.where.not(state: 'withdrawn')
-        .where.not(id: team_member_signups.map(&:id))
-    end
+    @all_signups ||=
+      begin
+        run.signups.reload
+        run.signups.where.not(state: 'withdrawn').where.not(id: team_member_signups.map(&:id))
+      end
   end
 
   def signups_ordered
@@ -122,16 +114,19 @@ class EventVacancyFillService < CivilService::Service
       # Move waitlisted signups first
       signup.confirmed? ? 1 : 0,
       # don't move confirmed no-preference signups unless necessary
-      (signup.no_preference? && signup.confirmed?) ? 1 : 0,
+      signup.no_preference? && signup.confirmed? ? 1 : 0,
       # When moving confirmed signups, try to keep the earlier signups stable
       signup.created_at.to_i * (signup.confirmed? ? -1 : 1)
     ]
   end
 
   def team_member_signups
-    @team_member_signups ||= run.signups.reload.where(
-      user_con_profile_id: TeamMember.where(event_id: run.event_id).select(:user_con_profile_id)
-    ).to_a
+    @team_member_signups ||=
+      run
+        .signups
+        .reload
+        .where(user_con_profile_id: TeamMember.where(event_id: run.event_id).select(:user_con_profile_id))
+        .to_a
   end
 
   def notify_moved_signup(result)

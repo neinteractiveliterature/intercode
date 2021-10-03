@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::OrderType < Types::BaseObject
   authorize_record
 
@@ -17,7 +18,7 @@ class Types::OrderType < Types::BaseObject
   field :payment_intent_client_secret, String, null: false do
     description <<~MARKDOWN
       Generates a Stripe PaymentIntent for this order and returns the client secret from that
-      PaymentIntent.  This can be used to start a payment on the client side, for example using
+      PaymentIntent. This can be used to start a payment on the client side, for example using
       Apple Pay or Google Pay.
     MARKDOWN
   end
@@ -25,16 +26,19 @@ class Types::OrderType < Types::BaseObject
   def payment_intent_client_secret
     description = object.order_entries.map(&:describe_products).to_sentence
     convention = object.user_con_profile.convention
-    intent = Stripe::PaymentIntent.create(
-      {
-        amount: object.total_price.fractional,
-        currency: object.total_price.currency,
-        description: "#{description} for #{convention.name}",
-        statement_descriptor_suffix: PayOrderService.statement_descriptor_suffix(convention),
-        metadata: { order_id: object.id }
-      },
-      stripe_account: convention.stripe_account_id
-    )
+    intent =
+      Stripe::PaymentIntent.create(
+        {
+          amount: object.total_price.fractional,
+          currency: object.total_price.currency,
+          description: "#{description} for #{convention.name}",
+          statement_descriptor_suffix: PayOrderService.statement_descriptor_suffix(convention),
+          metadata: {
+            order_id: object.id
+          }
+        },
+        stripe_account: convention.stripe_account_id
+      )
 
     intent.client_secret
   end

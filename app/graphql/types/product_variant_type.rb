@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::ProductVariantType < Types::BaseObject
   field :id, Integer, null: false
   field :product, Types::ProductType, null: false
@@ -19,8 +20,7 @@ class Types::ProductVariantType < Types::BaseObject
     object.image&.url
   end
 
-  field :override_price, Types::MoneyType,
-    null: true, deprecation_reason: 'Use override_pricing_structure instead'
+  field :override_price, Types::MoneyType, null: true, deprecation_reason: 'Use override_pricing_structure instead'
   field :override_pricing_structure, Types::PricingStructureType, null: true
   field :position, Integer, null: true
 

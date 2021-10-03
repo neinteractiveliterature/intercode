@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class EventProposal::TimeblockPreference
   include ActiveModel::Model
   include ActiveModel::Serializers::JSON
@@ -14,20 +15,19 @@ class EventProposal::TimeblockPreference
   end
 
   def attributes
-    {
-      start: start,
-      finish: finish,
-      label: label,
-      ordinality: ordinality
-    }
+    { start: start, finish: finish, label: label, ordinality: ordinality }
   end
 
   def ordinality_description
     case ordinality.to_s
-    when '1' then '1st Choice'
-    when '2' then '2nd Choice'
-    when '3' then '3rd Choice'
-    when 'X' then 'Not Available'
+    when '1'
+      '1st Choice'
+    when '2'
+      '2nd Choice'
+    when '3'
+      '3rd Choice'
+    when 'X'
+      'Not Available'
     end
   end
 
@@ -43,8 +43,10 @@ class EventProposal::TimeblockPreference
 
   def normalize_date_input(input)
     case input
-    when String then Time.iso8601(input)
-    else input
+    when String
+      Time.iso8601(input)
+    else
+      input
     end
   end
 end

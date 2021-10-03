@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::CreateCmsPartial < Mutations::BaseMutation
   field :cms_partial, Types::CmsPartialType, null: false
 
