@@ -59,7 +59,7 @@ function RunFormFields<RunType extends RunForRunFormFields>({
     [timezoneName, error, loading, run],
   );
   const conventionTimespan = useMemo(
-    () => (error || loading ? null : timespanFromConvention(data!.convention!)),
+    () => (error || loading || !data ? null : timespanFromConvention(data.convention)),
     [error, loading, data],
   );
   const conventionDayTimespans = useMemo(
@@ -155,7 +155,7 @@ function RunFormFields<RunType extends RunForRunFormFields>({
 
   return (
     <div>
-      <ConventionDaySelect convention={data!.convention!} value={day} onChange={setDay} />
+      {data && <ConventionDaySelect convention={data.convention} value={day} onChange={setDay} />}
       {renderTimeSelect()}
 
       <FormGroupWithLabel label={t('events.edit.roomsLabel', 'Room(s)')}>
@@ -164,7 +164,7 @@ function RunFormFields<RunType extends RunForRunFormFields>({
             id={id}
             label={t('events.edit.roomsLabel', 'Room(s)')}
             name="room_ids"
-            rooms={data!.convention!.rooms}
+            rooms={data?.convention.rooms ?? []}
             isMulti
             value={run.rooms}
             onChange={(rooms: RoomForSelect[]) => onChange((prevRun) => ({ ...prevRun, rooms }))}

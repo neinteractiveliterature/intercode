@@ -25,7 +25,7 @@ export type SignOutButtonProps = {
   caption?: React.ReactNode;
 };
 
-function SignOutButton({ className, caption }: SignOutButtonProps) {
+function SignOutButton({ className, caption }: SignOutButtonProps): JSX.Element {
   const { signOut: authenticityToken } = useContext(AuthenticityTokensContext);
   const afterSessionChange = useAfterSessionChange();
 

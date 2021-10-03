@@ -2637,7 +2637,7 @@ export type Mutation = {
   createFormItem: CreateFormItemPayload;
   createFormSection: CreateFormSectionPayload;
   createFormWithJSON: CreateFormWithJsonPayload;
-  createMaximumEventProvidedTicketsOverride?: Maybe<CreateMaximumEventProvidedTicketsOverridePayload>;
+  createMaximumEventProvidedTicketsOverride: CreateMaximumEventProvidedTicketsOverridePayload;
   createMultipleRuns: CreateMultipleRunsPayload;
   createMySignup: CreateMySignupPayload;
   createOrder: CreateOrderPayload;
@@ -2671,7 +2671,7 @@ export type Mutation = {
   deleteForm: DeleteFormPayload;
   deleteFormItem: DeleteFormItemPayload;
   deleteFormSection: DeleteFormSectionPayload;
-  deleteMaximumEventProvidedTicketsOverride?: Maybe<DeleteMaximumEventProvidedTicketsOverridePayload>;
+  deleteMaximumEventProvidedTicketsOverride: DeleteMaximumEventProvidedTicketsOverridePayload;
   deleteOrderEntry: DeleteOrderEntryPayload;
   deleteOrganizationRole: DeleteOrganizationRolePayload;
   deletePage: DeletePagePayload;
@@ -2720,7 +2720,7 @@ export type Mutation = {
   updateFormItem: UpdateFormItemPayload;
   updateFormSection: UpdateFormSectionPayload;
   updateFormWithJSON: UpdateFormWithJsonPayload;
-  updateMaximumEventProvidedTicketsOverride?: Maybe<UpdateMaximumEventProvidedTicketsOverridePayload>;
+  updateMaximumEventProvidedTicketsOverride: UpdateMaximumEventProvidedTicketsOverridePayload;
   updateNotificationTemplate: UpdateNotificationTemplatePayload;
   updateOrder: UpdateOrderPayload;
   updateOrderEntry: UpdateOrderEntryPayload;

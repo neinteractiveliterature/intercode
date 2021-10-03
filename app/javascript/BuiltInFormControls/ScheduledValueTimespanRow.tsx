@@ -6,7 +6,7 @@ import type { EditingTimespan } from './ScheduledValueEditor';
 
 import DateTimeInput from './DateTimeInput';
 
-export function scheduledValueTimespanIsValid(timespan: EditingTimespan<any>) {
+export function scheduledValueTimespanIsValid(timespan: EditingTimespan<unknown>): boolean {
   if (!timespan.value) {
     return false;
   }
@@ -37,7 +37,7 @@ function ScheduledValueTimespanRow<ValueType>({
   valueDidChange,
   deleteClicked,
   isLastTimespan,
-}: ScheduledValueTimespanRowProps<ValueType>) {
+}: ScheduledValueTimespanRowProps<ValueType>): JSX.Element {
   const rowFinishDidChange = useCallback(
     (finish: string | undefined) => finishDidChange(rowIdentifier, finish),
     [finishDidChange, rowIdentifier],

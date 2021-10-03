@@ -17,14 +17,18 @@ export type ConventionDaySelectProps = {
   onChange: React.Dispatch<DateTime>;
 };
 
-function ConventionDaySelect({ convention, value, onChange }: ConventionDaySelectProps) {
+function ConventionDaySelect({
+  convention,
+  value,
+  onChange,
+}: ConventionDaySelectProps): JSX.Element {
   const { timezoneName, siteMode } = useContext(AppRootContext);
   const format = useAppDateTimeFormat();
   const conventionTimespan = useMemo(() => timespanFromConvention(convention), [convention]);
-  const showDateInput = useMemo(() => conventionRequiresDates(conventionTimespan, siteMode), [
-    conventionTimespan,
-    siteMode,
-  ]);
+  const showDateInput = useMemo(
+    () => conventionRequiresDates(conventionTimespan, siteMode),
+    [conventionTimespan, siteMode],
+  );
   const conventionDays = useMemo(
     () =>
       conventionTimespan.isFinite()

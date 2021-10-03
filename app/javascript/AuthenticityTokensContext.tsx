@@ -21,7 +21,7 @@ const AuthenticityTokensContext = createContext<AuthenticityTokensContextValue>(
 
 export function useAuthenticityTokens(
   initialTokens: Omit<AuthenticityTokensContextValue, 'refresh'>,
-) {
+): AuthenticityTokensContextValue {
   const [tokens, setTokens] = useState(initialTokens);
 
   const refresh = useCallback(async () => {

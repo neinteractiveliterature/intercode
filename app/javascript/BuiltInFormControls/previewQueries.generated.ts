@@ -9,14 +9,14 @@ export type PreviewLiquidQueryVariables = Types.Exact<{
 }>;
 
 
-export type PreviewLiquidQueryData = { __typename: 'Query', previewLiquid: string };
+export type PreviewLiquidQueryData = { __typename: 'Query', cmsParent: { __typename: 'Convention', id: number, previewLiquid: string } | { __typename: 'RootSite', id: number, previewLiquid: string } };
 
 export type PreviewMarkdownQueryVariables = Types.Exact<{
   markdown: Types.Scalars['String'];
 }>;
 
 
-export type PreviewMarkdownQueryData = { __typename: 'Query', previewMarkdown: string };
+export type PreviewMarkdownQueryData = { __typename: 'Query', cmsParent: { __typename: 'Convention', id: number, previewMarkdown: string } | { __typename: 'RootSite', id: number, previewMarkdown: string } };
 
 export type PreviewNotifierLiquidQueryVariables = Types.Exact<{
   eventKey: Types.Scalars['String'];
@@ -24,12 +24,15 @@ export type PreviewNotifierLiquidQueryVariables = Types.Exact<{
 }>;
 
 
-export type PreviewNotifierLiquidQueryData = { __typename: 'Query', previewLiquid: string };
+export type PreviewNotifierLiquidQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, previewLiquid: string } };
 
 
 export const PreviewLiquidQueryDocument = gql`
     query PreviewLiquidQuery($liquid: String!) {
-  previewLiquid(content: $liquid)
+  cmsParent: cmsParentByRequestHost {
+    id
+    previewLiquid(content: $liquid)
+  }
 }
     `;
 
@@ -62,7 +65,10 @@ export type PreviewLiquidQueryLazyQueryHookResult = ReturnType<typeof usePreview
 export type PreviewLiquidQueryQueryResult = Apollo.QueryResult<PreviewLiquidQueryData, PreviewLiquidQueryVariables>;
 export const PreviewMarkdownQueryDocument = gql`
     query PreviewMarkdownQuery($markdown: String!) {
-  previewMarkdown(markdown: $markdown)
+  cmsParent: cmsParentByRequestHost {
+    id
+    previewMarkdown(markdown: $markdown)
+  }
 }
     `;
 
@@ -95,7 +101,10 @@ export type PreviewMarkdownQueryLazyQueryHookResult = ReturnType<typeof usePrevi
 export type PreviewMarkdownQueryQueryResult = Apollo.QueryResult<PreviewMarkdownQueryData, PreviewMarkdownQueryVariables>;
 export const PreviewNotifierLiquidQueryDocument = gql`
     query PreviewNotifierLiquidQuery($eventKey: String!, $liquid: String!) {
-  previewLiquid: previewNotifierLiquid(eventKey: $eventKey, content: $liquid)
+  convention: conventionByRequestHost {
+    id
+    previewLiquid: preview_notifier_liquid(eventKey: $eventKey, content: $liquid)
+  }
 }
     `;
 

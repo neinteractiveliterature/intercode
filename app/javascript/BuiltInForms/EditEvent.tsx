@@ -12,10 +12,10 @@ export type EditEventProps = {
   cancelPath?: string;
   event: Pick<Event, 'id' | 'status' | 'title'>;
   validateForm: () => boolean;
-  updateEvent: () => Promise<any>;
+  updateEvent: () => Promise<unknown>;
   onSave: () => void;
   showDropButton?: boolean;
-  dropEvent?: () => Promise<any>;
+  dropEvent?: () => Promise<unknown>;
   onDrop?: () => void;
 };
 
@@ -29,7 +29,7 @@ export default function EditEvent({
   updateEvent,
   onSave,
   onDrop,
-}: EditEventProps) {
+}: EditEventProps): JSX.Element {
   const [updateEventCallback, updateError, updateInProgress] = useAsyncFunction(
     useCallback(async () => {
       if (!validateForm()) {

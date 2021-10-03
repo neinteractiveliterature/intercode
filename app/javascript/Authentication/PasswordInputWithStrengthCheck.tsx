@@ -64,7 +64,7 @@ function PasswordInputWithStrengthCheck({
   id,
   value,
   onChange,
-}: PasswordInputWithStrengthCheckProps) {
+}: PasswordInputWithStrengthCheckProps): JSX.Element {
   const { t } = useTranslation();
   const passwordStrengthResult = useMemo(() => zxcvbn(value), [value]);
   const hasFeedback = useMemo(

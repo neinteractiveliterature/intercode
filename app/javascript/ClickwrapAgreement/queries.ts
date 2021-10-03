@@ -6,11 +6,11 @@ export const ClickwrapAgreementQuery = gql`
       id
       name
       clickwrap_agreement_html
-    }
 
-    myProfile {
-      id
-      accepted_clickwrap_agreement
+      my_profile {
+        id
+        accepted_clickwrap_agreement
+      }
     }
   }
 `;

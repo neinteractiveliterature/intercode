@@ -74,21 +74,21 @@ export type CreateMaximumEventProvidedTicketsOverrideMutationVariables = Types.E
 }>;
 
 
-export type CreateMaximumEventProvidedTicketsOverrideMutationData = { __typename: 'Mutation', createMaximumEventProvidedTicketsOverride?: { __typename: 'CreateMaximumEventProvidedTicketsOverridePayload', maximum_event_provided_tickets_override: { __typename: 'MaximumEventProvidedTicketsOverride', id: number, override_value: number, ticket_type: { __typename: 'TicketType', id: number, description?: string | null | undefined, maximum_event_provided_tickets: number } } } | null | undefined };
+export type CreateMaximumEventProvidedTicketsOverrideMutationData = { __typename: 'Mutation', createMaximumEventProvidedTicketsOverride: { __typename: 'CreateMaximumEventProvidedTicketsOverridePayload', maximum_event_provided_tickets_override: { __typename: 'MaximumEventProvidedTicketsOverride', id: number, override_value: number, ticket_type: { __typename: 'TicketType', id: number, description?: string | null | undefined, maximum_event_provided_tickets: number } } } };
 
 export type DeleteMaximumEventProvidedTicketsOverrideMutationVariables = Types.Exact<{
   input: Types.DeleteMaximumEventProvidedTicketsOverrideInput;
 }>;
 
 
-export type DeleteMaximumEventProvidedTicketsOverrideMutationData = { __typename: 'Mutation', deleteMaximumEventProvidedTicketsOverride?: { __typename: 'DeleteMaximumEventProvidedTicketsOverridePayload', maximum_event_provided_tickets_override: { __typename: 'MaximumEventProvidedTicketsOverride', id: number, override_value: number, ticket_type: { __typename: 'TicketType', id: number, description?: string | null | undefined, maximum_event_provided_tickets: number } } } | null | undefined };
+export type DeleteMaximumEventProvidedTicketsOverrideMutationData = { __typename: 'Mutation', deleteMaximumEventProvidedTicketsOverride: { __typename: 'DeleteMaximumEventProvidedTicketsOverridePayload', maximum_event_provided_tickets_override: { __typename: 'MaximumEventProvidedTicketsOverride', id: number, override_value: number, ticket_type: { __typename: 'TicketType', id: number, description?: string | null | undefined, maximum_event_provided_tickets: number } } } };
 
 export type UpdateMaximumEventProvidedTicketsOverrideMutationVariables = Types.Exact<{
   input: Types.UpdateMaximumEventProvidedTicketsOverrideInput;
 }>;
 
 
-export type UpdateMaximumEventProvidedTicketsOverrideMutationData = { __typename: 'Mutation', updateMaximumEventProvidedTicketsOverride?: { __typename: 'UpdateMaximumEventProvidedTicketsOverridePayload', maximum_event_provided_tickets_override: { __typename: 'MaximumEventProvidedTicketsOverride', id: number, override_value: number, ticket_type: { __typename: 'TicketType', id: number, description?: string | null | undefined, maximum_event_provided_tickets: number } } } | null | undefined };
+export type UpdateMaximumEventProvidedTicketsOverrideMutationData = { __typename: 'Mutation', updateMaximumEventProvidedTicketsOverride: { __typename: 'UpdateMaximumEventProvidedTicketsOverridePayload', maximum_event_provided_tickets_override: { __typename: 'MaximumEventProvidedTicketsOverride', id: number, override_value: number, ticket_type: { __typename: 'TicketType', id: number, description?: string | null | undefined, maximum_event_provided_tickets: number } } } };
 
 export type UpdateEventAdminNotesMutationVariables = Types.Exact<{
   eventId: Types.Scalars['Int'];

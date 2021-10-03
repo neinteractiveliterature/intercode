@@ -32,7 +32,7 @@ function ArrayEditor<T>({
   getDeletePrompt,
   renderAddValueInput,
   addValueLabel,
-}: ArrayEditorProps<T>) {
+}: ArrayEditorProps<T>): JSX.Element {
   const confirm = useConfirm();
   const [addingValue, setAddingValue] = useState(initialAddValue);
   const addValue = () => {
@@ -100,7 +100,10 @@ export type StringArrayEditorProps = Omit<
   ) => ReactNode;
 };
 
-export function StringArrayEditor({ renderAddValueInput, ...otherProps }: StringArrayEditorProps) {
+export function StringArrayEditor({
+  renderAddValueInput,
+  ...otherProps
+}: StringArrayEditorProps): JSX.Element {
   return (
     <ArrayEditor
       initialAddValue=""

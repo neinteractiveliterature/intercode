@@ -8,7 +8,7 @@ export const AccountFormContentQuery = gql`
 
 export const EditUserQuery = gql`
   query EditUserQuery {
-    convention {
+    convention: conventionByRequestHostIfPresent {
       id
       name
     }

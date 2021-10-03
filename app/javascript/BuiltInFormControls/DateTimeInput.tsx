@@ -36,7 +36,7 @@ export type DateInputProps = Omit<
   onChange: React.Dispatch<string>;
 };
 
-export function DateInput({ value, onChange, ...otherProps }: DateInputProps) {
+export function DateInput({ value, onChange, ...otherProps }: DateInputProps): JSX.Element {
   const dateChanged = (event: React.ChangeEvent<HTMLInputElement>) => onChange(event.target.value);
 
   return (
@@ -60,7 +60,7 @@ export type TimeInputProps = Omit<
   onChange: React.Dispatch<string>;
 };
 
-export function TimeInput({ value, onChange, ...otherProps }: TimeInputProps) {
+export function TimeInput({ value, onChange, ...otherProps }: TimeInputProps): JSX.Element {
   const timeChanged = (event: React.ChangeEvent<HTMLInputElement>) => onChange(event.target.value);
 
   return (
@@ -93,7 +93,7 @@ function DateTimeInput({
   id,
   alwaysShowTimezone,
   ...otherProps
-}: DateTimeInputProps) {
+}: DateTimeInputProps): JSX.Element {
   const { timezoneName: appTimezoneName } = useContext(AppRootContext);
   const effectiveTimezoneName = timezoneName || appTimezoneName;
   const dateTime = useMemo(

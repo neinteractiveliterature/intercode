@@ -49,7 +49,7 @@ export type AccountFormContentQueryLazyQueryHookResult = ReturnType<typeof useAc
 export type AccountFormContentQueryQueryResult = Apollo.QueryResult<AccountFormContentQueryData, AccountFormContentQueryVariables>;
 export const EditUserQueryDocument = gql`
     query EditUserQuery {
-  convention {
+  convention: conventionByRequestHostIfPresent {
     id
     name
   }

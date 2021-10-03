@@ -11,34 +11,39 @@ export type InPlaceEditorInputProps<T> = {
   };
   buttons: ReactNode;
   commitEditing: (event: React.SyntheticEvent) => Promise<void>;
-  cancelEditing: React.EventHandler<any>;
+  cancelEditing: React.EventHandler<React.SyntheticEvent<unknown, Event>>;
 };
 
 const DefaultInPlaceEditorInput = React.forwardRef<
   HTMLInputElement,
   InPlaceEditorInputProps<string>
->(({ inputProps: { value, onChange, committing, disabled, ...inputProps }, buttons }, ref) => (
-  <>
-    <input
-      type="text"
-      className="form-control form-control-sm me-1"
-      value={value || ''}
-      {...inputProps}
-      ref={ref}
-      onChange={(event) => {
-        onChange(event.target.value);
-      }}
-      disabled={disabled || committing}
-    />
-    {buttons}
-  </>
-));
+>(function DefaultInPlaceEditorInput(
+  { inputProps: { value, onChange, committing, disabled, ...inputProps }, buttons },
+  ref,
+) {
+  return (
+    <>
+      <input
+        type="text"
+        className="form-control form-control-sm me-1"
+        value={value || ''}
+        {...inputProps}
+        ref={ref}
+        onChange={(event) => {
+          onChange(event.target.value);
+        }}
+        disabled={disabled || committing}
+      />
+      {buttons}
+    </>
+  );
+});
 
 export type InPlaceEditorInputWrapperProps<T> = {
   initialValue: T;
   commit: ((value: T) => Promise<void>) | ((value: T) => void);
-  cancel: React.EventHandler<any>;
-  inputRef: RefObject<any>;
+  cancel: React.EventHandler<React.SyntheticEvent<unknown, Event>>;
+  inputRef: RefObject<unknown>;
   renderInput: (props: InPlaceEditorInputProps<T>) => JSX.Element;
 };
 
@@ -130,7 +135,7 @@ function DefaultInPlaceEditorInputWrapper(
 
 export type InPlaceEditorProps<T> = {
   value: T;
-  onChange: (value: T) => void | Promise<any>;
+  onChange: (value: T) => void | Promise<unknown>;
   children?: ReactNode;
   renderInput?: (props: InPlaceEditorInputProps<T>) => JSX.Element;
   className?: string;
@@ -142,7 +147,7 @@ function InPlaceEditor<T, InputType extends HTMLElement = HTMLElement>({
   onChange,
   renderInput,
   value,
-}: InPlaceEditorProps<T>) {
+}: InPlaceEditorProps<T>): JSX.Element {
   const [editing, setEditing] = useState(false);
   const inputRef = useRef<InputType>();
 
@@ -189,7 +194,7 @@ function InPlaceEditor<T, InputType extends HTMLElement = HTMLElement>({
           />
         ) : (
           <DefaultInPlaceEditorInputWrapper
-            commit={commitEditing as unknown as (value: string) => void | Promise<any>}
+            commit={commitEditing as unknown as (value: string) => void | Promise<unknown>}
             cancel={cancelEditing}
             initialValue={value as unknown as string}
             inputRef={inputRef}

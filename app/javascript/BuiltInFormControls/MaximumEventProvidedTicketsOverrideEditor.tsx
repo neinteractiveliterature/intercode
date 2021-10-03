@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import * as React from 'react';
-// @ts-ignore
+// @ts-expect-error inflected type definitions don't export capitalize
 import { capitalize } from 'inflected';
 import { useTranslation } from 'react-i18next';
 import { ApolloError } from '@apollo/client';
@@ -38,9 +38,9 @@ export type MEPTOEditorProps = {
   ticketName: string;
   overrides: MEPTOForEditor[];
   ticketTypes: TicketTypeForMEPTO[];
-  createOverride: (input: MEPTOInput) => Promise<any>;
-  updateOverride: (input: { id: number; overrideValue: number }) => Promise<any>;
-  deleteOverride: (id: number) => Promise<any>;
+  createOverride: (input: MEPTOInput) => Promise<unknown>;
+  updateOverride: (input: { id: number; overrideValue: number }) => Promise<unknown>;
+  deleteOverride: (id: number) => Promise<unknown>;
 };
 
 function MaximumEventProvidedTicketsOverrideEditor({
@@ -51,7 +51,7 @@ function MaximumEventProvidedTicketsOverrideEditor({
   createOverride,
   updateOverride,
   deleteOverride,
-}: MEPTOEditorProps) {
+}: MEPTOEditorProps): JSX.Element {
   const { t } = useTranslation();
   const [createOverrideAsync, createError, , clearCreateError] = useAsyncFunction(createOverride);
   const [updateOverrideAsync, updateError, , clearUpdateError] = useAsyncFunction(updateOverride);
@@ -118,11 +118,16 @@ function MaximumEventProvidedTicketsOverrideEditor({
   };
 
   const addOverride = async () => {
+    if (addingOverride.override_value == null) {
+      return;
+    }
+
     clearAllErrors();
+
     await createOverrideAsync({
       eventId,
       ticketTypeId: addingOverride.ticket_type.id,
-      overrideValue: addingOverride.override_value!,
+      overrideValue: addingOverride.override_value,
     });
 
     setAddingOverride({
@@ -221,7 +226,7 @@ function MaximumEventProvidedTicketsOverrideEditor({
                 <select
                   className="form-select"
                   value={addingOverride.ticket_type.id}
-                  onChange={addingTicketTypeIdDidChange}
+                  onBlur={addingTicketTypeIdDidChange}
                 >
                   <option
                     aria-label={t('general.placeholderOptionLabel', 'Blank placeholder option')}
