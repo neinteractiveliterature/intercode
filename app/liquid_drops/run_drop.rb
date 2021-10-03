@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # A run of an event
 class RunDrop < Liquid::Drop
   include Rails.application.routes.url_helpers

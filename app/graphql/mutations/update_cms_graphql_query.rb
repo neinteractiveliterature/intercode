@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::UpdateCmsGraphqlQuery < Mutations::BaseMutation
   field :query, Types::CmsGraphqlQueryType, null: false
 

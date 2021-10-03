@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::PermissionType < Types::BaseObject
   field :id, Int, null: false
   field :model, Types::PermissionedModelType, null: false

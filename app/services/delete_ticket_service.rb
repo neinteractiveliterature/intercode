@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class DeleteTicketService < CivilService::Service
   include SplitTicketOrder
 
@@ -26,9 +27,7 @@ class DeleteTicketService < CivilService::Service
       end
 
       # Canceling the order will automatically destroy the ticket
-      CancelOrderService.new(
-        order: ticket.order_entry.order, whodunit: whodunit, skip_refund: !refund
-      ).call!
+      CancelOrderService.new(order: ticket.order_entry.order, whodunit: whodunit, skip_refund: !refund).call!
     else
       ticket.destroy!
       success(refund_status: :not_refunded)

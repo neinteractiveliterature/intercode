@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::UpdateConvention < Mutations::BaseMutation
   include ScheduledValueInputs
 
@@ -12,12 +13,11 @@ class Mutations::UpdateConvention < Mutations::BaseMutation
   end
 
   def resolve(**args)
-    convention_data = args[:convention].to_h.merge(
-      'maximum_event_signups' => process_scheduled_value_input(
-        args[:convention].maximum_event_signups
-      ),
-      'updated_by' => current_user
-    )
+    convention_data =
+      args[:convention].to_h.merge(
+        'maximum_event_signups' => process_scheduled_value_input(args[:convention].maximum_event_signups),
+        'updated_by' => current_user
+      )
 
     @convention.update!(convention_data)
 

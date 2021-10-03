@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class LoadCmsContentSetService < CivilService::Service
   attr_reader :convention, :content_set, :content_set_name
 
@@ -19,9 +20,7 @@ class LoadCmsContentSetService < CivilService::Service
       CmsContentLoaders::Pages,
       CmsContentLoaders::CmsPartials,
       CmsContentLoaders::NotificationTemplates
-    ].each do |loader_class|
-      loader_class.new(convention: convention, content_set: content_set).call!
-    end
+    ].each { |loader_class| loader_class.new(convention: convention, content_set: content_set).call! }
 
     load_form_content
     load_navigation_items
@@ -32,15 +31,14 @@ class LoadCmsContentSetService < CivilService::Service
   end
 
   def load_form_content
-    content_set.all_form_contents_by_name.values.each do |content|
-      form = case content['form_type']
-      when 'user_con_profile'
-        convention.create_user_con_profile_form!(
-          convention: convention, form_type: content['form_type']
-        )
-      else
-        convention.forms.create!(convention: convention, form_type: content['form_type'])
-      end
+    content_set.all_form_contents_by_name.each_value do |content|
+      form =
+        case content['form_type']
+        when 'user_con_profile'
+          convention.create_user_con_profile_form!(convention: convention, form_type: content['form_type'])
+        else
+          convention.forms.create!(convention: convention, form_type: content['form_type'])
+        end
 
       ImportFormContentService.new(form: form, content: content).call!
     end
@@ -49,13 +47,7 @@ class LoadCmsContentSetService < CivilService::Service
   end
 
   def load_files
-    content_set.all_file_paths.each do |path|
-      File.open(path, 'rb') do |file|
-        convention.cms_files.create!(
-          file: file
-        )
-      end
-    end
+    content_set.all_file_paths.each { |path| File.open(path, 'rb') { |file| convention.cms_files.create!(file: file) } }
   end
 
   def load_navigation_items
@@ -69,20 +61,19 @@ class LoadCmsContentSetService < CivilService::Service
 
   def load_variables
     return unless content_set.metadata[:variables]
-    content_set.metadata[:variables].each do |key, value|
-      convention.cms_variables.create!(key: key, value: value)
-    end
+    content_set.metadata[:variables].each { |key, value| convention.cms_variables.create!(key: key, value: value) }
   end
 
   def populate_navigation_item(item, data)
     item.title = data[:title]
 
-    if data[:item_type] == 'section'
+    case data[:item_type]
+    when 'section'
       data[:navigation_links].each_with_index do |link_data, i|
         link = item.navigation_links.new(position: i + 1, parent: convention)
         populate_navigation_item(link, link_data)
       end
-    elsif data[:item_type] == 'link'
+    when 'link'
       item.page = convention.pages.find_by(slug: data[:page_slug])
     end
   end

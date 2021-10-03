@@ -1,17 +1,16 @@
+# frozen_string_literal: true
 class EventPolicy < ApplicationPolicy
   delegate :convention, to: :record
 
   def read?
-    return true if oauth_scoped_disjunction do |d|
-      d.add(:read_events) do
-        convention.site_mode == 'single_event' ||
-        team_member_for_event?(record) ||
-        (
-          record.status == 'active' &&
-          has_schedule_release_permissions?(convention, convention.show_event_list)
-        ) ||
-        has_applicable_permission?('read_inactive_events', 'update_events')
-      end
+    if oauth_scoped_disjunction do |d|
+         d.add(:read_events) do
+           convention.site_mode == 'single_event' || team_member_for_event?(record) ||
+             (record.status == 'active' && has_schedule_release_permissions?(convention, convention.show_event_list)) ||
+             has_applicable_permission?('read_inactive_events', 'update_events')
+         end
+       end
+      return true
     end
 
     super
@@ -22,30 +21,24 @@ class EventPolicy < ApplicationPolicy
   end
 
   def read_admin_notes?
-    return true if oauth_scoped_disjunction do |d|
-      d.add(:read_events) do
-        has_applicable_permission?('access_admin_notes')
-      end
+    if oauth_scoped_disjunction { |d| d.add(:read_events) { has_applicable_permission?('access_admin_notes') } }
+      return true
     end
 
     site_admin_read?
   end
 
   def update_admin_notes?
-    return true if oauth_scoped_disjunction do |d|
-      d.add(:manage_events) do
-        has_applicable_permission?('access_admin_notes')
-      end
+    if oauth_scoped_disjunction { |d| d.add(:manage_events) { has_applicable_permission?('access_admin_notes') } }
+      return true
     end
 
     site_admin_manage?
   end
 
   def drop?
-    return true if oauth_scoped_disjunction do |d|
-      d.add(:manage_events) do
-        has_applicable_permission?('update_events')
-      end
+    if oauth_scoped_disjunction { |d| d.add(:manage_events) { has_applicable_permission?('update_events') } }
+      return true
     end
 
     site_admin_manage?
@@ -60,11 +53,10 @@ class EventPolicy < ApplicationPolicy
   end
 
   def update?
-    return true if oauth_scoped_disjunction do |d|
-      d.add(:manage_events) do
-        team_member_for_event?(record) ||
-        has_applicable_permission?('update_events')
-      end
+    if oauth_scoped_disjunction do |d|
+         d.add(:manage_events) { team_member_for_event?(record) || has_applicable_permission?('update_events') }
+       end
+      return true
     end
 
     site_admin_manage?
@@ -107,18 +99,14 @@ class EventPolicy < ApplicationPolicy
       disjunctive_where do |dw|
         if user
           dw.add(
-            id: TeamMember.where(user_con_profile: UserConProfile.where(user_id: user.id))
-              .select(:event_id),
+            id: TeamMember.where(user_con_profile: UserConProfile.where(user_id: user.id)).select(:event_id),
             status: 'active'
           )
         end
 
         dw.add(convention: Convention.where(site_mode: 'single_event'))
 
-        dw.add(
-          convention: conventions_with_schedule_release_permissions(:show_event_list),
-          status: 'active'
-        )
+        dw.add(convention: conventions_with_schedule_release_permissions(:show_event_list), status: 'active')
         dw.add(convention: conventions_with_permission('read_inactive_events'))
 
         # event updaters can see dropped events in their categories
@@ -132,27 +120,18 @@ class EventPolicy < ApplicationPolicy
     # The fast path where we can do simpler checks inside a single convention
     def resolve_for_single_convention(convention)
       return scope.all if convention.site_mode == 'single_event'
-      if has_convention_permission?(convention, 'read_inactive_events', 'update_events')
-        return scope.all
-      end
-      if has_schedule_release_permissions?(convention, convention.show_event_list)
-        return scope.where(status: 'active')
-      end
+      return scope.all if has_convention_permission?(convention, 'read_inactive_events', 'update_events')
+      return scope.where(status: 'active') if has_schedule_release_permissions?(convention, convention.show_event_list)
 
       disjunctive_where do |dw|
         if user
           dw.add(
-            id: TeamMember.where(user_con_profile: UserConProfile.where(user_id: user.id))
-              .select(:event_id),
+            id: TeamMember.where(user_con_profile: UserConProfile.where(user_id: user.id)).select(:event_id),
             status: 'active'
           )
         end
 
-        dw.add(
-          event_category_id: event_category_ids_with_permission_in_convention(
-            convention, 'update_events'
-          )
-        )
+        dw.add(event_category_id: event_category_ids_with_permission_in_convention(convention, 'update_events'))
       end
     end
   end

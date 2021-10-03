@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateTeamMemberService < CivilService::Service
   include SkippableAdvisoryLock
 
@@ -18,22 +19,15 @@ class CreateTeamMemberService < CivilService::Service
   private
 
   def inner_call
-    team_member = event.team_members.create!(
-      team_member_attrs.merge(
-        user_con_profile: user_con_profile,
-        updated_by: user_con_profile.user
+    team_member =
+      event.team_members.create!(
+        team_member_attrs.merge(user_con_profile: user_con_profile, updated_by: user_con_profile.user)
       )
-    )
 
     ticket = provide_ticket_if_applicable
     converted_signups, move_results = convert_signups
 
-    success(
-      team_member: team_member,
-      ticket: ticket,
-      converted_signups: converted_signups,
-      move_results: move_results
-    )
+    success(team_member: team_member, ticket: ticket, converted_signups: converted_signups, move_results: move_results)
   end
 
   def provide_ticket_if_applicable
@@ -48,14 +42,15 @@ class CreateTeamMemberService < CivilService::Service
   end
 
   def convert_signups
-    convertible_signups = Signup.joins(:run).includes(:run)
-      .where(user_con_profile_id: user_con_profile.id, runs: { event_id: event.id })
-      .where(state: %w[confirmed waitlisted])
-      .to_a
+    convertible_signups =
+      Signup
+        .joins(:run)
+        .includes(:run)
+        .where(user_con_profile_id: user_con_profile.id, runs: { event_id: event.id })
+        .where(state: %w[confirmed waitlisted])
+        .to_a
 
-    move_results = convertible_signups.flat_map do |signup|
-      convert_signup(signup)
-    end
+    move_results = convertible_signups.flat_map { |signup| convert_signup(signup) }
 
     [convertible_signups, move_results]
   end

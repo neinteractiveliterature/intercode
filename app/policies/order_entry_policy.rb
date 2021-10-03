@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class OrderEntryPolicy < ApplicationPolicy
   delegate :order, to: :record
   delegate :user_con_profile, to: :order
@@ -8,18 +9,20 @@ class OrderEntryPolicy < ApplicationPolicy
   end
 
   def manage?
-    return true if oauth_scoped_disjunction do |d|
-      d.add(:manage_profile) do
-        order.status == 'pending' && user && user.id == user_con_profile.user.id
-      end
+    if oauth_scoped_disjunction do |d|
+         d.add(:manage_profile) { order.status == 'pending' && user && user.id == user_con_profile.user.id }
+       end
+      return true
     end
 
     super
   end
 
   def change_price?
-    return true if oauth_scoped_disjunction do |d|
-      d.add(:manage_conventions) { has_convention_permission?(convention, 'update_orders') }
+    if oauth_scoped_disjunction do |d|
+         d.add(:manage_conventions) { has_convention_permission?(convention, 'update_orders') }
+       end
+      return true
     end
 
     site_admin_manage?

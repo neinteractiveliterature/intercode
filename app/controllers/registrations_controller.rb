@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class RegistrationsController < Devise::RegistrationsController
   include RedirectWithAuthentication
 
@@ -5,9 +6,7 @@ class RegistrationsController < Devise::RegistrationsController
   prepend_before_action :disable_destroy, only: [:destroy]
 
   def new
-    respond_to do |format|
-      format.html { redirect_with_authentication('signUp') }
-    end
+    respond_to { |format| format.html { redirect_with_authentication('signUp') } }
   end
 
   private

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
@@ -19,16 +20,17 @@ class EmailRoute < ApplicationRecord
   def self.parse_address(raw_address)
     return nil if raw_address.blank?
 
-    address = if raw_address.is_a?(Mail::Address)
-      raw_address
-    else
-      begin
-        Mail::Address.new(raw_address)
-      rescue
-        # unparseable address
-        return nil
+    address =
+      if raw_address.is_a?(Mail::Address)
+        raw_address
+      else
+        begin
+          Mail::Address.new(raw_address)
+        rescue StandardError
+          # unparseable address
+          return nil
+        end
       end
-    end
 
     return nil unless address.local # 'undisclosed-recipients:;' as an address produces this
     return nil unless address.domain # 'Ouyang' as an address produces this

@@ -1,7 +1,8 @@
+# frozen_string_literal: true
 class Types::UserConProfileType < Types::BaseObject
   include FormResponseAttrsFields
 
-  LEGACY_PHONE_DEPRECATION_REASON = (<<~TEXT).tr("\n", ' ').strip
+  LEGACY_PHONE_DEPRECATION_REASON = <<~TEXT.tr("\n", ' ').strip
   Daytime phone, evening phone, best time to call, and preferred contact method fields are
   deprecated in favor of just using the mobile phone and/or email address.  For conventions that
   used the deprecated fields, they will remain available in form_response_attrs_json.
@@ -21,9 +22,10 @@ class Types::UserConProfileType < Types::BaseObject
 
   field :id, Integer, null: false
   field :convention, Types::ConventionType, null: false
-  field :privileges, [String, null: true],
-    null: true,
-    deprecation_reason: 'Privileges are deprecated in favor of permissions and staff positions'
+  field :privileges,
+        [String, { null: true }],
+        null: true,
+        deprecation_reason: 'Privileges are deprecated in favor of permissions and staff positions'
 
   def privileges
     AssociationLoader.for(UserConProfile, :user).load(object).then(&:privileges)
@@ -50,8 +52,8 @@ class Types::UserConProfileType < Types::BaseObject
 
   field :current_pending_order, Types::OrderType, null: true do
     description <<~MARKDOWN
-      If this profile has a pending order, returns that order.  Otherwise, returns null.
-    MARKDOWN
+    If this profile has a pending order, returns that order. Otherwise, returns null.
+  MARKDOWN
   end
 
   # This is a little bit of a weird thing to expose here; normally we'd just have people query for
@@ -59,8 +61,7 @@ class Types::UserConProfileType < Types::BaseObject
   field :user_id, Integer, null: false
 
   def bio_html
-    MarkdownLoader.for('user_con_profile', 'No bio provided')
-      .load([[object, 'bio_html'], object.bio])
+    MarkdownLoader.for('user_con_profile', 'No bio provided').load([[object, 'bio_html'], object.bio])
   end
 
   def form_response_attrs_json
@@ -71,9 +72,7 @@ class Types::UserConProfileType < Types::BaseObject
       allowed_attrs.delete('email') unless policy(object).read_email?
       allowed_attrs.delete('birth_date') unless policy(object).read_birth_date?
       unless policy(object).read_personal_info?
-        allowed_attrs.select! do |attr|
-          %w[first_name last_name nickname email birth_date].include?(attr)
-        end
+        allowed_attrs.select! { |attr| %w[first_name last_name nickname email birth_date].include?(attr) }
       end
 
       attrs.slice(*allowed_attrs)
@@ -86,13 +85,7 @@ class Types::UserConProfileType < Types::BaseObject
   end
   field :staff_positions, [Types::StaffPositionType], null: false
 
-  association_loaders UserConProfile,
-    :convention,
-    :orders,
-    :signups,
-    :signup_requests,
-    :ticket,
-    :user
+  association_loaders UserConProfile, :convention, :orders, :signups, :signup_requests, :ticket, :user
 
   def email
     AssociationLoader.for(UserConProfile, :user).load(object).then(&:email)
@@ -103,38 +96,44 @@ class Types::UserConProfileType < Types::BaseObject
   end
 
   def staff_positions
-    AssociationLoader.for(UserConProfile, :staff_positions).load(object).then do |staff_positions|
-      staff_positions
+    AssociationLoader
+      .for(UserConProfile, :staff_positions)
+      .load(object)
+      .then do |staff_positions|
+        staff_positions
 
-      # TODO: talk to Dave about this, it will break the bios page as currently coded
-      # because the page assumes Con Com is visible
-      # if context[:query_from_liquid]
-      #   staff_positions.select(&:visible?)
-      # else
-      #   staff_positions
-      # end
-    end
+        # TODO: talk to Dave about this, it will break the bios page as currently coded
+        # because the page assumes Con Com is visible
+        # if context[:query_from_liquid]
+        #   staff_positions.select(&:visible?)
+        # else
+        #   staff_positions
+        # end
+      end
   end
 
   def team_members
-    AssociationLoader.for(UserConProfile, :team_members).load(object).then do |team_members|
-      # Policy code is going to check fields on the convention, so it absolutely needs to be
-      # loaded to avoid n+1 queries in all cases
-      eager_load_promises = team_members.map do |team_member|
-        AssociationLoader.for(TeamMember, :event).load(team_member).then do |event|
-          AssociationLoader.for(Event, :convention).load(event)
-        end
-      end
+    AssociationLoader
+      .for(UserConProfile, :team_members)
+      .load(object)
+      .then do |team_members|
+        # Policy code is going to check fields on the convention, so it absolutely needs to be
+        # loaded to avoid n+1 queries in all cases
+        eager_load_promises =
+          team_members.map do |team_member|
+            AssociationLoader
+              .for(TeamMember, :event)
+              .load(team_member)
+              .then { |event| AssociationLoader.for(Event, :convention).load(event) }
+          end
 
-      Promise.all(eager_load_promises).then do |_events|
-        readable_team_members = team_members.select { |team_member| policy(team_member).read? }
-        if context[:query_from_liquid]
-          readable_team_members.select(&:display?)
-        else
-          readable_team_members
-        end
+        Promise
+          .all(eager_load_promises)
+          .then do |_events|
+            readable_team_members = team_members.select { |team_member| policy(team_member).read? }
+            context[:query_from_liquid] ? readable_team_members.select(&:display?) : readable_team_members
+          end
       end
-    end
   end
 
   field :birth_date, Types::DateType, null: true
@@ -149,14 +148,10 @@ class Types::UserConProfileType < Types::BaseObject
   personal_info_field :zipcode, String, null: true
   personal_info_field :country, String, null: true
   personal_info_field :mobile_phone, String, null: true
-  personal_info_field :day_phone, String,
-    null: true, deprecation_reason: LEGACY_PHONE_DEPRECATION_REASON
-  personal_info_field :evening_phone, String,
-    null: true, deprecation_reason: LEGACY_PHONE_DEPRECATION_REASON
-  personal_info_field :best_call_time, String,
-    null: true, deprecation_reason: LEGACY_PHONE_DEPRECATION_REASON
-  personal_info_field :preferred_contact, String,
-    null: true, deprecation_reason: LEGACY_PHONE_DEPRECATION_REASON
+  personal_info_field :day_phone, String, null: true, deprecation_reason: LEGACY_PHONE_DEPRECATION_REASON
+  personal_info_field :evening_phone, String, null: true, deprecation_reason: LEGACY_PHONE_DEPRECATION_REASON
+  personal_info_field :best_call_time, String, null: true, deprecation_reason: LEGACY_PHONE_DEPRECATION_REASON
+  personal_info_field :preferred_contact, String, null: true, deprecation_reason: LEGACY_PHONE_DEPRECATION_REASON
   personal_info_field :accepted_clickwrap_agreement, Boolean, null: true
   personal_info_field :ical_secret, String, null: true
 
@@ -164,11 +159,7 @@ class Types::UserConProfileType < Types::BaseObject
   field :ability, Types::AbilityType, null: true
 
   def ability
-    if object == context[:user_con_profile]
-      pundit_user
-    else
-      AuthorizationInfoLoader.for(UserConProfile).load(object)
-    end
+    object == context[:user_con_profile] ? pundit_user : AuthorizationInfoLoader.for(UserConProfile).load(object)
   end
 
   field :orders, [Types::OrderType], null: false
@@ -185,11 +176,7 @@ class Types::UserConProfileType < Types::BaseObject
   field :can_override_maximum_event_provided_tickets, Boolean, null: false
 
   def can_override_maximum_event_provided_tickets
-    user = if object == context[:user_con_profile]
-      pundit_user
-    else
-      AuthorizationInfo.new(object.user, nil)
-    end
+    user = object == context[:user_con_profile] ? pundit_user : AuthorizationInfo.new(object.user, nil)
 
     override = context[:convention].ticket_types.new.maximum_event_provided_tickets_overrides.new
     Pundit.policy(user, override).create?

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
@@ -27,7 +28,7 @@ class CmsPartial < ApplicationRecord
   has_and_belongs_to_many :pages
   has_many :cms_content_group_associations, as: :content
   has_many :cms_content_groups, through: :cms_content_group_associations
-  before_commit :set_performance_metadata, on: [:create, :update]
+  before_commit :set_performance_metadata, on: %i[create update]
 
   cadmus_partial
 

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # A request to sign up for a run of an event
 class SignupRequestDrop < Liquid::Drop
   # @api

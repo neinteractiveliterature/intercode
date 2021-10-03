@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::UpdateOrganizationRole < Mutations::BaseMutation
   field :organization_role, Types::OrganizationRoleType, null: false
 
@@ -13,11 +14,9 @@ class Mutations::UpdateOrganizationRole < Mutations::BaseMutation
   def resolve(**args)
     organization_role.update!(
       user_ids: organization_role.user_ids + args[:add_user_ids] - args[:remove_user_ids],
-      **(args[:organization_role].to_h)
+      **args[:organization_role].to_h
     )
-    args[:add_permissions].each do |permission|
-      organization_role.permissions.create!(permission.to_h)
-    end
+    args[:add_permissions].each { |permission| organization_role.permissions.create!(permission.to_h) }
     organization_role.permissions.where(id: args[:remove_permission_ids]).destroy_all
 
     # not sure why, but if I don't do this it seems like permissions get returned twice

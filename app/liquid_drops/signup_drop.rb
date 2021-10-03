@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # A signup for a run of an event
 class SignupDrop < Liquid::Drop
   # @api
@@ -15,8 +16,7 @@ class SignupDrop < Liquid::Drop
   #   @return [RegistrationPolicy::BucketDrop] The bucket assigned to this signup
   # @!method requested_bucket
   #   @return [RegistrationPolicy::BucketDrop] The bucket the user requested to sign up in, if any
-  delegate :id, :run, :user_con_profile, :state, :bucket, :requested_bucket, :team_member?,
-    to: :signup
+  delegate :id, :run, :user_con_profile, :state, :bucket, :requested_bucket, :team_member?, to: :signup
 
   # @return [Boolean] Whether or not this signup is for an event team member
   alias team_member team_member?

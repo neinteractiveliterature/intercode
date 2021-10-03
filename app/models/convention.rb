@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
@@ -60,11 +61,11 @@
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
 # rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 class Convention < ApplicationRecord
-  TICKET_MODES = %w[disabled required_for_signup]
-  SITE_MODES = %w[convention single_event event_series]
-  SIGNUP_MODES = %w[self_service moderated]
-  EMAIL_MODES = %w[forward staff_emails_to_catch_all]
-  TIMEZONE_MODES = %w[convention_local user_local]
+  TICKET_MODES = %w[disabled required_for_signup].freeze
+  SITE_MODES = %w[convention single_event event_series].freeze
+  SIGNUP_MODES = %w[self_service moderated].freeze
+  EMAIL_MODES = %w[forward staff_emails_to_catch_all].freeze
+  TIMEZONE_MODES = %w[convention_local user_local].freeze
 
   before_destroy :nullify_associated_content
 
@@ -110,8 +111,7 @@ class Convention < ApplicationRecord
 
   validates :name, presence: true
   validates :domain, presence: true, uniqueness: true
-  validates :timezone_name,
-    presence: true, unless: ->(convention) { convention.timezone_mode == 'user_local' }
+  validates :timezone_name, presence: true, unless: ->(convention) { convention.timezone_mode == 'user_local' }
   validates :show_schedule, inclusion: { in: %w[yes gms priv no] }
   validates :show_event_list, inclusion: { in: %w[yes gms priv no] }
   validates :ticket_mode, inclusion: { in: TICKET_MODES }, presence: true
@@ -140,9 +140,7 @@ class Convention < ApplicationRecord
     return false if ended?
     return false if ticket_mode == 'disabled'
 
-    products.ticket_providing.available.any? do |product|
-      product.pricing_structure.price(time: Time.zone.now)
-    end
+    products.ticket_providing.available.any? { |product| product.pricing_structure.price(time: Time.zone.now) }
   end
 
   def length_seconds
@@ -154,7 +152,7 @@ class Convention < ApplicationRecord
   end
 
   def timezone
-    return nil unless timezone_name.present?
+    return nil if timezone_name.blank?
     ActiveSupport::TimeZone[timezone_name]
   end
 
@@ -178,13 +176,13 @@ class Convention < ApplicationRecord
   private
 
   def maximum_event_signups_must_cover_all_time
-    return if maximum_event_signups.try!(:covers_all_time?)
+    return if maximum_event_signups&.covers_all_time?
 
     errors.add(:maximum_event_signups, 'must cover all time')
   end
 
   def timezone_name_must_be_valid
-    return unless timezone_name.present?
+    return if timezone_name.blank?
 
     tz = timezone
     unless tz
@@ -193,30 +191,27 @@ class Convention < ApplicationRecord
     end
 
     return if tz.tzinfo.canonical_identifier == tz.tzinfo.identifier
-    errors.add(:timezone_name, "must refer to a canonical IANA timezone \
-(in this case, probably #{tz.tzinfo.canonical_identifier})")
+    errors.add(
+      :timezone_name,
+      "must refer to a canonical IANA timezone \
+(in this case, probably #{tz.tzinfo.canonical_identifier})"
+    )
   end
 
   def site_mode_must_be_possible
-    if site_mode == 'single_event'
-      unless ticket_mode == 'disabled'
-        errors.add(:base, 'Single-event sites cannot sell tickets (yet)')
-      end
+    case site_mode
+    when 'single_event'
+      errors.add(:base, 'Single-event sites cannot sell tickets (yet)') unless ticket_mode == 'disabled'
 
       if events.count > 1
-        errors.add(
-          :site_mode,
-          'single_event is not valid because this convention has multiple events already'
-        )
+        errors.add(:site_mode, 'single_event is not valid because this convention has multiple events already')
       end
-    elsif site_mode == 'event_series'
-      unless ticket_mode == 'disabled'
-        errors.add(:base, 'Event series sites cannot sell tickets (yet)')
-      end
+    when 'event_series'
+      errors.add(:base, 'Event series sites cannot sell tickets (yet)') unless ticket_mode == 'disabled'
     end
   end
 
-  SCHEDULE_RELEASE_PERMISSIVITY_ORDER = %w[no priv gms yes]
+  SCHEDULE_RELEASE_PERMISSIVITY_ORDER = %w[no priv gms yes].freeze
   def show_event_list_must_be_at_least_as_permissive_as_show_schedule
     show_event_list_permissivity = SCHEDULE_RELEASE_PERMISSIVITY_ORDER.index(show_event_list)
     show_schedule_permissivity = SCHEDULE_RELEASE_PERMISSIVITY_ORDER.index(show_schedule)

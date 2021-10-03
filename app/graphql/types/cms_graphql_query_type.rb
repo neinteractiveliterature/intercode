@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::CmsGraphqlQueryType < Types::BaseObject
   field :id, Int, null: false
   field :identifier, String, null: false

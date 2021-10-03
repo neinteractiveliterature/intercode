@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
@@ -35,6 +36,6 @@ class CmsNavigationItem < ApplicationRecord
   private
 
   def touch_parent
-    parent.touch if parent && parent.persisted?
+    parent.touch if parent&.persisted?
   end
 end

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Tables::SignupsTableResultsPresenter < Tables::TableResultsPresenter
   def self.for_run(run, pundit_user, filters, sort, visible_field_ids = nil)
     scope = SignupPolicy::Scope.new(pundit_user, run.signups.includes(:user_con_profile))
@@ -5,12 +6,15 @@ class Tables::SignupsTableResultsPresenter < Tables::TableResultsPresenter
   end
 
   def self.signup_spy_for_convention(convention, pundit_user)
-    scope = SignupPolicy::Scope.new(
-      pundit_user,
-      convention.signups.joins(run: :event)
-      .includes(user_con_profile: :signups, run: :event)
-      .where(events: { convention_id: convention.id })
-    )
+    scope =
+      SignupPolicy::Scope.new(
+        pundit_user,
+        convention
+          .signups
+          .joins(run: :event)
+          .includes(user_con_profile: :signups, run: :event)
+          .where(events: { convention_id: convention.id })
+      )
 
     new(
       scope.resolve,
@@ -37,7 +41,8 @@ class Tables::SignupsTableResultsPresenter < Tables::TableResultsPresenter
 
   field :name, 'Name' do
     def apply_filter(scope, value)
-      scope.joins(:user_con_profile)
+      scope
+        .joins(:user_con_profile)
         .where(
           "lower(user_con_profiles.last_name) like :value \
 OR lower(user_con_profiles.first_name) like :value",
@@ -61,11 +66,7 @@ OR lower(user_con_profiles.first_name) like :value",
   field :event_title, 'Event' do
     def apply_filter(scope, value)
       run_scope = Run.where(id: scope.select(:run_id))
-      event_scope = Names.string_search(
-        Event.where(id: run_scope.select(:event_id)),
-        value,
-        ['title']
-      )
+      event_scope = Names.string_search(Event.where(id: run_scope.select(:event_id)), value, ['title'])
       scope.joins(:run).where(runs: { event_id: event_scope.select(:id) })
     end
 
@@ -103,8 +104,7 @@ OR lower(user_con_profiles.first_name) like :value",
 
   field :email, 'Email' do
     def apply_filter(scope, value)
-      scope.joins(user_con_profile: :user)
-        .where('lower(users.email) like :value', value: "%#{value.downcase}%")
+      scope.joins(user_con_profile: :user).where('lower(users.email) like :value', value: "%#{value.downcase}%")
     end
 
     def expand_scope_for_sort(scope, _direction)

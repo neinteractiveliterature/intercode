@@ -1,14 +1,17 @@
+# frozen_string_literal: true
 class Types::SearchableModelType < Types::BaseUnion
-  possible_types(
-    Types::EventType, Types::EventProposalType, Types::PageType, Types::UserConProfileType
-  )
+  possible_types(Types::EventType, Types::EventProposalType, Types::PageType, Types::UserConProfileType)
 
   def self.resolve_type(object, _context)
     case object
-    when Event then Types::EventType
-    when EventProposal then Types::EventProposalType
-    when Page then Types::PageType
-    when UserConProfile then Types::UserConProfileType
+    when Event
+      Types::EventType
+    when EventProposal
+      Types::EventProposalType
+    when Page
+      Types::PageType
+    when UserConProfile
+      Types::UserConProfileType
     end
   end
 end

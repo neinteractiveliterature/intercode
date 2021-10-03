@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
@@ -25,7 +26,7 @@ class CmsVariable < ApplicationRecord
 
   validates :key, presence: true
   validates :key, format: { with: /\A[a-z]\w*\z/ }
-  validates :key, uniqueness: { scope: [:parent_type, :parent_id] }
+  validates :key, uniqueness: { scope: %i[parent_type parent_id] }
 
   # @api
   def to_liquid
@@ -35,6 +36,6 @@ class CmsVariable < ApplicationRecord
   private
 
   def touch_parent
-    parent.touch if parent && parent.persisted?
+    parent.touch if parent&.persisted?
   end
 end

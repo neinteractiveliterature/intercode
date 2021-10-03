@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
@@ -30,10 +31,6 @@ class NotificationDestination < ApplicationRecord
   belongs_to :user_con_profile, optional: true
 
   def user_con_profiles
-    if staff_position
-      staff_position.user_con_profiles
-    else
-      [user_con_profile]
-    end
+    staff_position ? staff_position.user_con_profiles : [user_con_profile]
   end
 end

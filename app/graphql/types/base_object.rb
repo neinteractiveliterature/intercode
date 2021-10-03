@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::BaseObject < GraphQL::Schema::Object
   include ContextAccessors
 
@@ -9,9 +10,7 @@ class Types::BaseObject < GraphQL::Schema::Object
   end
 
   def self.association_loaders(model_class, *associations)
-    associations.each do |association|
-      association_loader model_class, association
-    end
+    associations.each { |association| association_loader model_class, association }
   end
 
   def self.pagination_field(name, pagination_type, filters_input_type, **options, &block)
@@ -27,9 +26,9 @@ class Types::BaseObject < GraphQL::Schema::Object
       end
       argument :sort, [Types::SortInputType], required: false do
         description <<~MARKDOWN
-          A set of fields to use for ordering the result set.  The second field is used as a
+          A set of fields to use for ordering the result set. The second field is used as a
           tiebreaker for the first, the third field is used as a tiebreaker for the first two,
-          and so on.  If the sort argument is missing or empty, the order of items will be left
+          and so on. If the sort argument is missing or empty, the order of items will be left
           up to the database (and may be unpredictable).
         MARKDOWN
       end

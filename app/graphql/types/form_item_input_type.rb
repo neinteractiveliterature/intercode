@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::FormItemInputType < Types::BaseInputObject
   argument :identifier, String, required: false
   argument :item_type, String, required: false, camelize: false

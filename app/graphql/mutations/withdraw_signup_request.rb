@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::WithdrawSignupRequest < Mutations::BaseMutation
   field :signup_request, Types::SignupRequestType, null: false
 

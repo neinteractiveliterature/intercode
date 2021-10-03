@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::OrganizationType < Types::BaseObject
   field :id, Int, null: false
   field :name, String, null: false

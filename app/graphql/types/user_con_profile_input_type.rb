@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::UserConProfileInputType < Types::BaseInputObject
   argument :first_name, String, required: false, camelize: false
   argument :last_name, String, required: false, camelize: false

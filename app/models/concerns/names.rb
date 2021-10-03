@@ -1,11 +1,13 @@
+# frozen_string_literal: true
 module Names
   def self.string_search(scope, search_string, columns)
     model = scope.is_a?(ActiveRecord::Relation) ? scope.model : scope
     query = columns.map { |column| "lower(#{model.table_name}.#{column}) like :term" }.join(' OR ')
 
-    search_string.split(/\s+/).select(&:present?).inject(scope || model) do |working_scope, term|
-      working_scope.where(query, term: "%#{term.downcase}%")
-    end
+    search_string
+      .split(/\s+/)
+      .select(&:present?)
+      .inject(scope || model) { |working_scope, term| working_scope.where(query, term: "%#{term.downcase}%") }
   end
 
   extend ActiveSupport::Concern
@@ -25,8 +27,7 @@ module Names
   end
 
   included do
-    scope :name_search, ->(search_string, columns: %w[first_name last_name]) do
-      Names.string_search(self, search_string, columns)
-    end
+    scope :name_search,
+          ->(search_string, columns: %w[first_name last_name]) { Names.string_search(self, search_string, columns) }
   end
 end

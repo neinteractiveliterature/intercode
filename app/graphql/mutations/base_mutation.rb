@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::BaseMutation < GraphQL::Schema::RelayClassicMutation
   include ContextAccessors
 
@@ -16,9 +17,7 @@ class Mutations::BaseMutation < GraphQL::Schema::RelayClassicMutation
     end
   end
 
-  def self.return_true_or_not_authorized_error(
-    authorized, current_user, message: 'Unauthorized mutation'
-  )
+  def self.return_true_or_not_authorized_error(authorized, current_user, message: 'Unauthorized mutation')
     return true if authorized
     raise IntercodeSchema::NotAuthorizedError.new(message, current_user: current_user)
   end
@@ -31,15 +30,15 @@ class Mutations::BaseMutation < GraphQL::Schema::RelayClassicMutation
   end
 
   def self.check_authorization(policy, action, message: 'Unauthorized mutation')
-    return_true_or_not_authorized_error(
-      policy.public_send("#{action}?"),
-      policy.user,
-      message: message
-    )
+    return_true_or_not_authorized_error(policy.public_send("#{action}?"), policy.user, message: message)
   end
 
   def self.load_and_authorize_model_with_id(
-    model_class, id_field, action, message: 'Unauthorized mutation', argument_name: nil
+    model_class,
+    id_field,
+    action,
+    message: 'Unauthorized mutation',
+    argument_name: nil
   )
     field_name = model_class.name.underscore
     attr_reader field_name
@@ -52,7 +51,10 @@ class Mutations::BaseMutation < GraphQL::Schema::RelayClassicMutation
   end
 
   def self.load_and_authorize_convention_associated_model(
-    association, id_field, action, message: 'Unauthorized mutation'
+    association,
+    id_field,
+    action,
+    message: 'Unauthorized mutation'
   )
     reflection = Convention.reflect_on_association(association)
     raise NameError, "No association called #{association} on Convention" unless reflection
@@ -66,9 +68,7 @@ class Mutations::BaseMutation < GraphQL::Schema::RelayClassicMutation
     end
   end
 
-  def self.authorize_arbitrary_convention_associated_model(
-    association, action, message: 'Unauthorized mutation'
-  )
+  def self.authorize_arbitrary_convention_associated_model(association, action, message: 'Unauthorized mutation')
     define_method :authorized? do |_args|
       model = convention.public_send(association).new
       self.class.check_authorization(policy(model), action, message: message)
@@ -82,9 +82,7 @@ class Mutations::BaseMutation < GraphQL::Schema::RelayClassicMutation
     end
   end
 
-  def self.authorize_create_convention_associated_model(
-    association, message: 'Unauthorized mutation'
-  )
+  def self.authorize_create_convention_associated_model(association, message: 'Unauthorized mutation')
     authorize_arbitrary_convention_associated_model(association, :create, message: message)
   end
 
@@ -92,9 +90,7 @@ class Mutations::BaseMutation < GraphQL::Schema::RelayClassicMutation
     authorize_arbitrary_cms_model(association, :create, message: message)
   end
 
-  def self.load_and_authorize_cms_model(
-    association, id_field, action, message: 'Unauthorized mutation'
-  )
+  def self.load_and_authorize_cms_model(association, id_field, action, message: 'Unauthorized mutation')
     # Convention is a CMS parent and we're going to treat it as canonical for these associations
     reflection = Convention.reflect_on_association(association)
     raise NameError, "No association called #{association} on Convention" unless reflection

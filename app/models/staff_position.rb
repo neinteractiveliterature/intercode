@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
@@ -29,9 +30,9 @@ class StaffPosition < ApplicationRecord
   has_and_belongs_to_many :user_con_profiles
   has_many :permissions, dependent: :destroy
   has_one :catch_all_convention,
-    class_name: 'Convention',
-    foreign_key: 'catch_all_staff_position_id',
-    dependent: :nullify
+          class_name: 'Convention',
+          foreign_key: 'catch_all_staff_position_id',
+          dependent: :nullify
 
   validates :name, presence: true
 

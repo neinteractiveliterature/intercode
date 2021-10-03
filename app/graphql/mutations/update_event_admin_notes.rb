@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::UpdateEventAdminNotes < Mutations::BaseMutation
   field :event, Types::EventType, null: false, camelize: false
 

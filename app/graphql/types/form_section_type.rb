@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::FormSectionType < Types::BaseObject
   authorize_record
 
@@ -8,13 +9,14 @@ class Types::FormSectionType < Types::BaseObject
   field :form_items, [Types::FormItemType], null: false, camelize: false
 
   field :preview_form_item, Types::FormItemType, null: false do
-    argument :form_item, Types::FormItemInputType,
-      required: true,
-      description: 'The fields to use for constructing the form item to preview.'
+    argument :form_item,
+             Types::FormItemInputType,
+             required: true,
+             description: 'The fields to use for constructing the form item to preview.'
 
     description <<~MARKDOWN
-      Given a FormItemInput, returns a preview version of that form item within this section.  This
-      does not actually save the form item.  This is mostly useful because of the
+      Given a FormItemInput, returns a preview version of that form item within this section. This
+      does not actually save the form item. This is mostly useful because of the
       `rendered_properties` field inside FormItem, which lets clients retrieve
       a rendered HTML version of the Liquid-enabled properties of the form item.
     MARKDOWN

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Tables::UsersTableResultsPresenter < Tables::TableResultsPresenter
   field :id, 'ID'
 
@@ -48,9 +49,7 @@ class Tables::UsersTableResultsPresenter < Tables::TableResultsPresenter
     end
 
     def sql_order(direction)
-      clauses = ['site_admin'].map do |priv_name|
-        "#{priv_name} #{invert_sort_direction direction}"
-      end
+      clauses = ['site_admin'].map { |priv_name| "#{priv_name} #{invert_sort_direction direction}" }
 
       clauses.join(', ')
     end

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # A ticket for this convention (which may allow its holder to sign up for events)
 class TicketDrop < Liquid::Drop
   # @api
@@ -19,8 +20,14 @@ class TicketDrop < Liquid::Drop
   # @!method updated_at
   #   @return [ActiveSupport::TimeWithZone] The time at which this ticket was last updated in the
   #                                         database
-  delegate :id, :user_con_profile, :provided_by_event,
-    :allows_event_signups, :ticket_type, :created_at, :updated_at, to: :ticket
+  delegate :id,
+           :user_con_profile,
+           :provided_by_event,
+           :allows_event_signups,
+           :ticket_type,
+           :created_at,
+           :updated_at,
+           to: :ticket
 
   # @!method name
   #   @return [String] The unique name of the type of this ticket

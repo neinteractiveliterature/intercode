@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # The convention itself
 class ConventionDrop < Liquid::Drop
   # @api
@@ -25,9 +26,19 @@ class ConventionDrop < Liquid::Drop
   #   @return [OrganizationDrop] The organization running this convention
   # @!method canceled
   #   @return [Boolean] Whether or not the convention is canceled
-  delegate :id, :name, :started?, :ended?, :event_mailing_list_domain, :accepting_proposals,
-    :show_schedule, :show_event_list, :ticket_name, :organization, :ticket_mode, :canceled,
-    to: :convention
+  delegate :id,
+           :name,
+           :started?,
+           :ended?,
+           :event_mailing_list_domain,
+           :accepting_proposals,
+           :show_schedule,
+           :show_event_list,
+           :ticket_name,
+           :organization,
+           :ticket_mode,
+           :canceled,
+           to: :convention
 
   # @return [Boolean] Whether or not the convention has already started
   alias started started?
@@ -70,13 +81,15 @@ class ConventionDrop < Liquid::Drop
   #                          limited buckets
   def runs_with_openings
     presenters = SignupCountPresenter.for_runs(convention.runs.includes(:event))
-    presenters.select do |_run_id, presenter|
-      buckets = presenter.run.event.registration_policy.buckets.select(&:slots_limited?)
-      limited_signup_count = buckets.map do |bucket|
-        presenter.signup_count(state: 'confirmed', bucket_key: bucket.key)
-      end.sum
-      limited_signup_count < buckets.map(&:total_slots).sum
-    end.values.map(&:run)
+    presenters
+      .select do |_run_id, presenter|
+        buckets = presenter.run.event.registration_policy.buckets.select(&:slots_limited?)
+        limited_signup_count =
+          buckets.sum { |bucket| presenter.signup_count(state: 'confirmed', bucket_key: bucket.key) }
+        limited_signup_count < buckets.sum(&:total_slots)
+      end
+      .values
+      .map(&:run)
   end
 
   # @deprecated
@@ -137,9 +150,7 @@ class ConventionDrop < Liquid::Drop
   # @example Retrieving the vendor liaison email address for a convention
   #   {{ convention.staff_positions_by_name.vendor_liaison.email }}
   def staff_positions_by_name
-    convention.staff_positions.index_by do |staff_position|
-      staff_position.name.gsub(/\W/, '_').downcase
-    end
+    convention.staff_positions.index_by { |staff_position| staff_position.name.gsub(/\W/, '_').downcase }
   end
 
   # @return [Array<TicketTypeDrop>] All ticket types for this convention
@@ -154,9 +165,12 @@ class ConventionDrop < Liquid::Drop
   def ticket_counts_by_type
     ticket_counts_by_type_id = convention.tickets.group(:ticket_type_id).count
 
-    convention.ticket_types.each_with_object({}) do |ticket_type, hash|
-      hash[ticket_type.name] = ticket_counts_by_type_id[ticket_type.id] || 0
-    end.merge('total' => ticket_counts_by_type_id.values.sum)
+    convention
+      .ticket_types
+      .each_with_object({}) do |ticket_type, hash|
+        hash[ticket_type.name] = ticket_counts_by_type_id[ticket_type.id] || 0
+      end
+      .merge('total' => ticket_counts_by_type_id.values.sum)
   end
 
   # @return [ScheduledValueDrop] The schedule of maximum event signups for this convention

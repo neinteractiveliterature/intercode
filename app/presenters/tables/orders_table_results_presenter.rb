@@ -1,7 +1,7 @@
+# frozen_string_literal: true
 class Tables::OrdersTableResultsPresenter < Tables::TableResultsPresenter
   def self.for_convention(convention, filters, sort)
-    scope = convention.orders.where.not(status: 'pending')
-      .includes(order_entries: [:product, :product_variant])
+    scope = convention.orders.where.not(status: 'pending').includes(order_entries: %i[product product_variant])
 
     new(scope, filters, sort)
   end
@@ -9,7 +9,7 @@ class Tables::OrdersTableResultsPresenter < Tables::TableResultsPresenter
   field :id, 'ID' do
     def apply_filter(scope, value)
       id = value.to_i
-      return scope if id == 0
+      return scope if id.zero?
 
       scope.where(id: id)
     end
@@ -17,7 +17,8 @@ class Tables::OrdersTableResultsPresenter < Tables::TableResultsPresenter
 
   field :user_name, 'User' do
     def apply_filter(scope, value)
-      scope.joins(:user_con_profile)
+      scope
+        .joins(:user_con_profile)
         .where(
           "lower(user_con_profiles.last_name) like :value \
 OR lower(user_con_profiles.first_name) like :value",

@@ -1,9 +1,8 @@
+# frozen_string_literal: true
 module FormResponse
   extend ActiveSupport::Concern
 
-  included do
-    has_many :form_response_changes, as: :response
-  end
+  included { has_many :form_response_changes, as: :response }
 
   class_methods do
     def form_response_attrs
@@ -19,9 +18,7 @@ module FormResponse
   def filter_form_response_attributes_for_assignment(attributes, form_items, pundit_user)
     writer_role = Pundit.policy(pundit_user, self).form_item_writer_role
     form_items_by_identifier = form_items.index_by { |item| item.identifier.to_s }
-    attributes.stringify_keys.select do |key, _|
-      form_items_by_identifier[key]&.writeable_by?(writer_role)
-    end
+    attributes.stringify_keys.select { |key, _| form_items_by_identifier[key]&.writeable_by?(writer_role) }
   end
 
   def assign_form_response_attributes(attributes)
@@ -79,8 +76,10 @@ module FormResponse
   # Used for comparing values when determining form response changes
   def normalize_form_response_value(value)
     case value
-    when Hash then value.stringify_keys
-    else value
+    when Hash
+      value.stringify_keys
+    else
+      value
     end
   end
 end

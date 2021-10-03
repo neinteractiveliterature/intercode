@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # A registration bucket for an event
 class RegistrationPolicy::BucketDrop < Liquid::Drop
   # @api
@@ -27,8 +28,17 @@ class RegistrationPolicy::BucketDrop < Liquid::Drop
   # @!method expose_attendees
   #   @return [Boolean] Whether or not to allow other attendees to see that a person is in this
   #                     bucket in the signup summary page
-  delegate :key, :name, :description, :minimum_slots, :preferred_slots, :total_slots,
-    :slots_limited, :anything, :not_counted, :expose_attendees, to: :bucket
+  delegate :key,
+           :name,
+           :description,
+           :minimum_slots,
+           :preferred_slots,
+           :total_slots,
+           :slots_limited,
+           :anything,
+           :not_counted,
+           :expose_attendees,
+           to: :bucket
 
   # @api
   def initialize(bucket)

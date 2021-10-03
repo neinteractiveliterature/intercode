@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::UpdateCmsNavigationItem < Mutations::BaseMutation
   field :cms_navigation_item, Types::CmsNavigationItemType, null: false
 

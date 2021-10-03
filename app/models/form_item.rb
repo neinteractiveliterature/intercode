@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
@@ -27,9 +28,8 @@
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
 class FormItem < ApplicationRecord
-  DEFAULT_PROPERTIES_CONFIG = JSON.parse(
-    File.read(File.expand_path('config/form_item_default_properties.json', Rails.root))
-  )
+  DEFAULT_PROPERTIES_CONFIG =
+    JSON.parse(File.read(File.expand_path('config/form_item_default_properties.json', Rails.root)))
 
   PROPERTIES_SCHEMA = {
     age_restrictions: {
@@ -92,7 +92,7 @@ class FormItem < ApplicationRecord
 
   # In order from lowest to highest rank.  Higher roles always include lower roles
   # Must be updated in sync with FORM_ITEM_ROLES in FormItemUtils.ts
-  ROLE_VALUES = %w[normal confirmed_attendee team_member all_profiles_basic_access admin]
+  ROLE_VALUES = %w[normal confirmed_attendee team_member all_profiles_basic_access admin].freeze
 
   belongs_to :form_section
   has_one :form, through: :form_section
@@ -101,20 +101,19 @@ class FormItem < ApplicationRecord
   validates :item_type, presence: true
   validates :item_type, inclusion: { in: PROPERTIES_SCHEMA.keys.map(&:to_s) }
   validate :ensure_unique_identifier_across_form
-  validates :identifier, uniqueness: {
-    allow_nil: true,
-    conditions: -> { joins(:form_section) },
-    scope: 'form_sections.form_id'
-  }
+  validates :identifier,
+            uniqueness: {
+              allow_nil: true,
+              conditions: -> { joins(:form_section) },
+              scope: 'form_sections.form_id'
+            }
   validate :ensure_properties_match_schema
   validates :visibility, inclusion: { in: ROLE_VALUES }
   validates :writeability, inclusion: { in: ROLE_VALUES }
 
   def self.highest_level_role(**role_hash)
     roles = Set.new(role_hash.select { |_, v| v }.keys.map(&:to_s))
-    highest_explicit_role = ROLE_VALUES.reverse.find do |role|
-      roles.include?(role)
-    end
+    highest_explicit_role = ROLE_VALUES.reverse.find { |role| roles.include?(role) }
     highest_explicit_role || 'normal'
   end
 
@@ -158,11 +157,9 @@ class FormItem < ApplicationRecord
   end
 
   def ensure_unique_identifier_across_form
-    return unless identifier.present?
+    return if identifier.blank?
 
-    other_identifiers_scope = FormItem.where(
-      form_section_id: FormSection.where(form_id: form.id).select(:id)
-    )
+    other_identifiers_scope = FormItem.where(form_section_id: FormSection.where(form_id: form.id).select(:id))
     other_identifiers_scope = other_identifiers_scope.where.not(id: id) if persisted?
     other_identifiers = other_identifiers_scope.pluck(:identifier)
 

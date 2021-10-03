@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::SignupMoveResultType < Types::BaseObject
   field :signup_id, Int, null: false
   field :state, Types::SignupStateType, null: false

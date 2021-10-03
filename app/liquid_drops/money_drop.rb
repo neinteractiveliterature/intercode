@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # An amount of money
 class MoneyDrop < Liquid::Drop
   # @api

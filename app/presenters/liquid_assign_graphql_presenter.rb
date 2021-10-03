@@ -1,8 +1,7 @@
+# frozen_string_literal: true
 class LiquidAssignGraphqlPresenter
   def self.from_hash(hash)
-    hash.map do |name, assign|
-      new(name, assign)
-    end
+    hash.map { |name, assign| new(name, assign) }
   end
 
   attr_reader :name, :assign
@@ -14,12 +13,18 @@ class LiquidAssignGraphqlPresenter
 
   def drop_class_name
     case assign
-    when ActiveSupport::SafeBuffer then 'String'
-    when Array then "Array<#{recursive_drop_class_name(nil, assign.first)}>"
-    when CmsVariable then 'CmsVariable'
-    when Hash then hash_drop_class_name
-    when Proc then recursive_drop_class_name(name, assign.call)
-    else assign.to_liquid.class.name
+    when ActiveSupport::SafeBuffer
+      'String'
+    when Array
+      "Array<#{recursive_drop_class_name(nil, assign.first)}>"
+    when CmsVariable
+      'CmsVariable'
+    when Hash
+      hash_drop_class_name
+    when Proc
+      recursive_drop_class_name(name, assign.call)
+    else
+      assign.to_liquid.class.name
     end
   end
 

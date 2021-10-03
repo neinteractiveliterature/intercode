@@ -1,7 +1,6 @@
+# frozen_string_literal: true
 class Mutations::DeleteMaximumEventProvidedTicketsOverride < Mutations::BaseMutation
-  field :maximum_event_provided_tickets_override,
-    Types::MaximumEventProvidedTicketsOverrideType,
-    null: false
+  field :maximum_event_provided_tickets_override, Types::MaximumEventProvidedTicketsOverrideType, null: false
 
   argument :id, Integer, required: true
 

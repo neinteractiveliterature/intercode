@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::CreateEventProposal < Mutations::BaseMutation
   field :event_proposal, Types::EventProposalType, null: false
 
@@ -12,19 +13,11 @@ class Mutations::CreateEventProposal < Mutations::BaseMutation
     end
 
     event_category = context[:convention].event_categories.find(event_category_id)
-    unless event_category.event_proposal_form
-      raise "#{event_category.name} is not a proposable event category"
-    end
+    raise "#{event_category.name} is not a proposable event category" unless event_category.event_proposal_form
 
     event_proposal = context[:convention].event_proposals.new
-    event_proposal.assign_attributes(
-      owner: context[:user_con_profile],
-      status: 'draft',
-      event_category: event_category
-    )
-    event_proposal.assign_default_values_from_form_items(
-      event_proposal.event_category.event_proposal_form.form_items
-    )
+    event_proposal.assign_attributes(owner: context[:user_con_profile], status: 'draft', event_category: event_category)
+    event_proposal.assign_default_values_from_form_items(event_proposal.event_category.event_proposal_form.form_items)
 
     clone_attributes_from_event_proposal_id(clone_event_proposal_id, event_proposal)
     event_proposal.save!
@@ -36,13 +29,12 @@ class Mutations::CreateEventProposal < Mutations::BaseMutation
     return unless id
 
     template_proposal = find_template_proposal(id)
-    compatible_items = compatible_items_from_template(
-      template_proposal.event_category.event_proposal_form,
-      event_proposal.event_category.event_proposal_form
-    )
-    clone_attributes = template_proposal.read_form_response_attributes_for_form_items(
-      compatible_items
-    )
+    compatible_items =
+      compatible_items_from_template(
+        template_proposal.event_category.event_proposal_form,
+        event_proposal.event_category.event_proposal_form
+      )
+    clone_attributes = template_proposal.read_form_response_attributes_for_form_items(compatible_items)
     event_proposal.assign_form_response_attributes(clone_attributes)
   end
 
@@ -50,9 +42,7 @@ class Mutations::CreateEventProposal < Mutations::BaseMutation
     template_form.form_items.select do |template_item|
       next false if template_item.identifier == 'event_email' # never copy event email
 
-      proposal_form_item = proposal_form.form_items.find do |item|
-        item.identifier == template_item.identifier
-      end
+      proposal_form_item = proposal_form.form_items.find { |item| item.identifier == template_item.identifier }
       next false unless proposal_form_item
 
       proposal_form_item.item_type == template_item.item_type

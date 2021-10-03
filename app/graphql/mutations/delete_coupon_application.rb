@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::DeleteCouponApplication < Mutations::BaseMutation
   field :coupon_application, Types::CouponApplicationType, null: false
   argument :id, Int, required: true, camelize: false

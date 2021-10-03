@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
@@ -65,8 +66,6 @@ class RootSite < ApplicationRecord
   end
 
   def url
-    Rails.application.routes.url_helpers.root_url(
-      Rails.application.config.action_mailer.default_url_options
-    )
+    Rails.application.routes.url_helpers.root_url(Rails.application.config.action_mailer.default_url_options)
   end
 end

@@ -1,16 +1,18 @@
+# frozen_string_literal: true
 class GraphqlController < ApplicationController
   class Context
-    METHODS = {
-      current_user: :current_user,
-      pundit_user: :pundit_user,
-      user_con_profile: :user_con_profile,
-      convention: :convention,
-      cadmus_renderer: :cadmus_renderer,
-      current_pending_order: :current_pending_order,
-      assumed_identity_from_profile: :assumed_identity_from_profile,
-      verified_request: :verified_request?,
-      timezone_for_request: :timezone_for_request
-    }.transform_values { |method_name| ApplicationController.instance_method(method_name) }
+    METHODS =
+      {
+        current_user: :current_user,
+        pundit_user: :pundit_user,
+        user_con_profile: :user_con_profile,
+        convention: :convention,
+        cadmus_renderer: :cadmus_renderer,
+        current_pending_order: :current_pending_order,
+        assumed_identity_from_profile: :assumed_identity_from_profile,
+        verified_request: :verified_request?,
+        timezone_for_request: :timezone_for_request
+      }.transform_values { |method_name| ApplicationController.instance_method(method_name) }
 
     def initialize(controller, **values)
       @controller = controller
@@ -64,25 +66,19 @@ class GraphqlController < ApplicationController
     query = params[:query]
     operation_name = params[:operationName]
 
-    IntercodeSchema.execute(
-      query,
-      variables: variables,
-      context: Context.new(self),
-      operation_name: operation_name
-    )
+    IntercodeSchema.execute(query, variables: variables, context: Context.new(self), operation_name: operation_name)
   end
 
   def clean_backtraces(result)
-    return result unless result['errors'].present?
+    return result if result['errors'].blank?
     return result if Rails.configuration.consider_all_requests_local
 
     result.merge(
-      'errors' => result['errors'].map do |error|
-        next error unless error['extensions'].present?
-        error.merge(
-          'extensions' => error['extensions'].except('backtrace')
-        )
-      end
+      'errors' =>
+        result['errors'].map do |error|
+          next error if error['extensions'].blank?
+          error.merge('extensions' => error['extensions'].except('backtrace'))
+        end
     )
   end
 
@@ -90,11 +86,7 @@ class GraphqlController < ApplicationController
   def ensure_hash(ambiguous_param)
     case ambiguous_param
     when String
-      if ambiguous_param.present?
-        ensure_hash(JSON.parse(ambiguous_param))
-      else
-        {}
-      end
+      ambiguous_param.present? ? ensure_hash(JSON.parse(ambiguous_param)) : {}
     when Hash, ActionController::Parameters
       ambiguous_param
     when nil

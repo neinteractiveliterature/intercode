@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::MutationType < Types::BaseObject
   graphql_name 'Mutation'
 
@@ -58,8 +59,7 @@ class Types::MutationType < Types::BaseObject
   field :createConvention, null: false, mutation: Mutations::CreateConvention
   field :updateConvention, null: false, mutation: Mutations::UpdateConvention
   field :setConventionCanceled, null: false, mutation: Mutations::SetConventionCanceled
-  field :createConventionStripeAccount, null: false,
-                                        mutation: Mutations::CreateConventionStripeAccount
+  field :createConventionStripeAccount, null: false, mutation: Mutations::CreateConventionStripeAccount
 
   ### Coupon
   field :createCoupon, null: false, mutation: Mutations::CreateCoupon
@@ -105,8 +105,7 @@ class Types::MutationType < Types::BaseObject
   field :deleteEventProposal, null: false, mutation: Mutations::DeleteEventProposal
   field :submitEventProposal, null: false, mutation: Mutations::SubmitEventProposal
   field :transitionEventProposal, null: false, mutation: Mutations::TransitionEventProposal
-  field :updateEventProposalAdminNotes, null: false,
-                                        mutation: Mutations::UpdateEventProposalAdminNotes
+  field :updateEventProposalAdminNotes, null: false, mutation: Mutations::UpdateEventProposalAdminNotes
 
   ### Form
 
@@ -133,14 +132,14 @@ class Types::MutationType < Types::BaseObject
   ### MaximumEventProvidedTicketsOverride
 
   field :createMaximumEventProvidedTicketsOverride,
-    null: false,
-    mutation: Mutations::CreateMaximumEventProvidedTicketsOverride
+        null: false,
+        mutation: Mutations::CreateMaximumEventProvidedTicketsOverride
   field :updateMaximumEventProvidedTicketsOverride,
-    null: false,
-    mutation: Mutations::UpdateMaximumEventProvidedTicketsOverride
+        null: false,
+        mutation: Mutations::UpdateMaximumEventProvidedTicketsOverride
   field :deleteMaximumEventProvidedTicketsOverride,
-    null: false,
-    mutation: Mutations::DeleteMaximumEventProvidedTicketsOverride
+        null: false,
+        mutation: Mutations::DeleteMaximumEventProvidedTicketsOverride
 
   ### NotificationTemplate
 
@@ -148,8 +147,7 @@ class Types::MutationType < Types::BaseObject
 
   ### OrderEntry
 
-  field :addOrderEntryToCurrentPendingOrder, null: false,
-                                             mutation: Mutations::AddOrderEntryToCurrentPendingOrder
+  field :addOrderEntryToCurrentPendingOrder, null: false, mutation: Mutations::AddOrderEntryToCurrentPendingOrder
   field :createOrderEntry, null: false, mutation: Mutations::CreateOrderEntry
   field :updateOrderEntry, null: false, mutation: Mutations::UpdateOrderEntry
   field :deleteOrderEntry, null: false, mutation: Mutations::DeleteOrderEntry
@@ -218,8 +216,7 @@ class Types::MutationType < Types::BaseObject
 
   field :createStaffPosition, null: false, mutation: Mutations::CreateStaffPosition
   field :updateStaffPosition, null: false, mutation: Mutations::UpdateStaffPosition
-  field :updateStaffPositionPermissions, null: false,
-                                         mutation: Mutations::UpdateStaffPositionPermissions
+  field :updateStaffPositionPermissions, null: false, mutation: Mutations::UpdateStaffPositionPermissions
   field :deleteStaffPosition, null: false, mutation: Mutations::DeleteStaffPosition
 
   ### TeamMember
@@ -234,8 +231,7 @@ class Types::MutationType < Types::BaseObject
   field :updateTicket, null: false, mutation: Mutations::UpdateTicket
   field :deleteTicket, null: false, mutation: Mutations::DeleteTicket
   field :provideEventTicket, null: false, mutation: Mutations::ProvideEventTicket
-  field :convertTicketToEventProvided, null: false,
-                                       mutation: Mutations::ConvertTicketToEventProvided
+  field :convertTicketToEventProvided, null: false, mutation: Mutations::ConvertTicketToEventProvided
 
   ### TicketType
 
@@ -258,7 +254,6 @@ class Types::MutationType < Types::BaseObject
   field :createUserConProfile, null: false, mutation: Mutations::CreateUserConProfile
   field :updateUserConProfile, null: false, mutation: Mutations::UpdateUserConProfile
   field :deleteUserConProfile, null: false, mutation: Mutations::DeleteUserConProfile
-  field :withdrawAllUserConProfileSignups, null: false,
-                                           mutation: Mutations::WithdrawAllUserConProfileSignups
+  field :withdrawAllUserConProfileSignups, null: false, mutation: Mutations::WithdrawAllUserConProfileSignups
   field :acceptClickwrapAgreement, null: false, mutation: Mutations::AcceptClickwrapAgreement
 end

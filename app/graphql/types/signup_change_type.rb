@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::SignupChangeType < Types::BaseObject
   authorize_record
 
@@ -17,19 +18,25 @@ class Types::SignupChangeType < Types::BaseObject
 
   # Ugly AF, but it gets us everything the policy wants
   def signup
-    AssociationLoader.for(SignupChange, :signup).load(object).then do |signup|
-      run_promise = AssociationLoader.for(Signup, :run).load(signup).then do |run|
-        AssociationLoader.for(Run, :event).load(run).then do |event|
-          AssociationLoader.for(Event, :convention).load(event)
-        end
-      end
+    AssociationLoader
+      .for(SignupChange, :signup)
+      .load(object)
+      .then do |signup|
+        run_promise =
+          AssociationLoader
+            .for(Signup, :run)
+            .load(signup)
+            .then do |run|
+              AssociationLoader
+                .for(Run, :event)
+                .load(run)
+                .then { |event| AssociationLoader.for(Event, :convention).load(event) }
+            end
 
-      Promise.all([
-        run_promise, AssociationLoader.for(Signup, :user_con_profile).load(signup)
-      ]).then do |_results|
-        signup
+        Promise
+          .all([run_promise, AssociationLoader.for(Signup, :user_con_profile).load(signup)])
+          .then { |_results| signup }
       end
-    end
   end
 
   def counted

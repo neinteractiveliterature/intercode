@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::DeleteRun < Mutations::BaseMutation
   field :run, Types::RunType, null: false
 

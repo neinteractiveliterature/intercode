@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class FormApiJSONLoader < GraphQL::Batch::Loader
   attr_reader :cadmus_renderer
 
@@ -10,8 +11,6 @@ class FormApiJSONLoader < GraphQL::Batch::Loader
       ::ActiveRecord::Associations::Preloader.new.preload(keys, association_name)
     end
 
-    keys.each do |form|
-      fulfill(form, FormApiPresenter.new(form, cadmus_renderer).as_json)
-    end
+    keys.each { |form| fulfill(form, FormApiPresenter.new(form, cadmus_renderer).as_json) }
   end
 end

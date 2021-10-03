@@ -1,12 +1,20 @@
+# frozen_string_literal: true
 class Tables::SignupRequestsTableResultsPresenter < Tables::TableResultsPresenter
   def self.for_convention(convention:, pundit_user:, filters: {}, sort: nil, visible_field_ids: nil)
     scope = SignupRequestPolicy::Scope.new(pundit_user, convention.signup_requests).resolve
     new(
-      base_scope: scope.includes(
-        user_con_profile: [:team_members, :staff_positions],
-        target_run: { event: :convention },
-        replace_signup: { run: { event: :convention } }
-      ),
+      base_scope:
+        scope.includes(
+          user_con_profile: %i[team_members staff_positions],
+          target_run: {
+            event: :convention
+          },
+          replace_signup: {
+            run: {
+              event: :convention
+            }
+          }
+        ),
       convention: convention,
       pundit_user: pundit_user,
       filters: filters,
@@ -19,7 +27,7 @@ class Tables::SignupRequestsTableResultsPresenter < Tables::TableResultsPresente
     column_filter
 
     def sql_order(direction)
-      Arel.sql(<<~SQL)
+      Arel.sql(<<~SQL.squish)
       (
         CASE
         WHEN state = 'pending' THEN 0
@@ -36,9 +44,7 @@ class Tables::SignupRequestsTableResultsPresenter < Tables::TableResultsPresente
 
   attr_reader :pundit_user, :convention
 
-  def initialize(
-    base_scope:, convention:, pundit_user:, filters: {}, sort: nil, visible_field_ids: nil
-  )
+  def initialize(base_scope:, convention:, pundit_user:, filters: {}, sort: nil, visible_field_ids: nil)
     super(base_scope, filters, sort, visible_field_ids)
     @convention = convention
     @pundit_user = pundit_user

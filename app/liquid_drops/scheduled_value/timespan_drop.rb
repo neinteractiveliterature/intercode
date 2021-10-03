@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # A range of time.  Both "start" and "finish" are optional; omitting either of them will lead to
 # an infinite-length timespan.
 class ScheduledValue::TimespanDrop < Liquid::Drop

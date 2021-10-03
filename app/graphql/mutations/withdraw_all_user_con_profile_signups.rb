@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::WithdrawAllUserConProfileSignups < Mutations::BaseMutation
   field :user_con_profile, Types::UserConProfileType, null: false, camelize: false
 
@@ -11,9 +12,10 @@ class Mutations::WithdrawAllUserConProfileSignups < Mutations::BaseMutation
   end
 
   def resolve(**_args)
-    user_con_profile.signups.where.not(state: 'withdrawn').each do |signup|
-      EventWithdrawService.new(signup, current_user).call!
-    end
+    user_con_profile
+      .signups
+      .where.not(state: 'withdrawn')
+      .each { |signup| EventWithdrawService.new(signup, current_user).call! }
 
     { user_con_profile: user_con_profile.reload }
   end

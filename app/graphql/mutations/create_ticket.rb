@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::CreateTicket < Mutations::BaseMutation
   field :ticket, Types::TicketType, null: false
 

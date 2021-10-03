@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::SubmitOrder < Mutations::BaseMutation
   field :order, Types::OrderType, null: false
 
@@ -9,12 +10,13 @@ class Mutations::SubmitOrder < Mutations::BaseMutation
   load_and_authorize_model_with_id Order, :id, :submit
 
   def resolve(**args)
-    service = SubmitOrderService.new(
-      order,
-      payment_mode: args[:payment_mode],
-      stripe_token: args[:stripe_token],
-      payment_intent_id: args[:payment_intent_id]
-    )
+    service =
+      SubmitOrderService.new(
+        order,
+        payment_mode: args[:payment_mode],
+        stripe_token: args[:stripe_token],
+        payment_intent_id: args[:payment_intent_id]
+      )
     result = service.call
 
     if result.failure?

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class StripeAccountController < ApplicationController
   before_action :ensure_authorized
 
@@ -9,12 +10,15 @@ class StripeAccountController < ApplicationController
   end
 
   def refresh
-    account_link = Stripe::AccountLink.create({
-      account: convention.stripe_account_id,
-      refresh_url: stripe_account_refresh_url,
-      return_url: stripe_accont_return_url,
-      type: 'account_onboarding'
-    })
+    account_link =
+      Stripe::AccountLink.create(
+        {
+          account: convention.stripe_account_id,
+          refresh_url: stripe_account_refresh_url,
+          return_url: stripe_accont_return_url,
+          type: 'account_onboarding'
+        }
+      )
 
     redirect_to account_link.url
   end

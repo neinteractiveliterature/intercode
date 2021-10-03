@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class EventProposals::ProposalSubmitConfirmationNotifier < Notifier
   include EventProposals::EventProposalNotificationsHelper
 
@@ -5,10 +6,7 @@ class EventProposals::ProposalSubmitConfirmationNotifier < Notifier
 
   def initialize(event_proposal:)
     @event_proposal = event_proposal
-    super(
-      convention: event_proposal.convention,
-      event_key: 'event_proposals/proposal_submit_confirmation'
-    )
+    super(convention: event_proposal.convention, event_key: 'event_proposals/proposal_submit_confirmation')
   end
 
   def liquid_assigns

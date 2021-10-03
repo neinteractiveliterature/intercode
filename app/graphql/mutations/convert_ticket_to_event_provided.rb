@@ -1,7 +1,6 @@
+# frozen_string_literal: true
 class Mutations::ConvertTicketToEventProvided < Mutations::BaseMutation
-  field :deleted_ticket, Types::TicketType,
-    'The ticket we deleted in order to provide a new ticket',
-    null: false
+  field :deleted_ticket, Types::TicketType, 'The ticket we deleted in order to provide a new ticket', null: false
   field :refund_status, Types::RefundStatusType, null: false
   field :ticket, Types::TicketType, 'The new ticket we just provided', null: false
 
@@ -20,23 +19,18 @@ class Mutations::ConvertTicketToEventProvided < Mutations::BaseMutation
   def resolve(**args)
     ticket_type = convention.ticket_types.find(args[:ticket_type_id])
     existing_ticket = subject_profile.ticket
-    unless existing_ticket
-      raise "#{subject_profile.name_without_nickname} has no #{convention.ticket_name}"
-    end
+    raise "#{subject_profile.name_without_nickname} has no #{convention.ticket_name}" unless existing_ticket
 
-    delete_result = DeleteTicketService.new(
-      ticket: existing_ticket,
-      whodunit: user_con_profile,
-      refund: existing_ticket.order_entry.present?,
-      operation_name: 'conversion to event-provided ticket'
-    ).call!
+    delete_result =
+      DeleteTicketService.new(
+        ticket: existing_ticket,
+        whodunit: user_con_profile,
+        refund: existing_ticket.order_entry.present?,
+        operation_name: 'conversion to event-provided ticket'
+      ).call!
     subject_profile.reload
     result = ProvideEventTicketService.new(event, subject_profile, ticket_type).call!
 
-    {
-      ticket: result.ticket,
-      deleted_ticket: existing_ticket,
-      refund_status: delete_result.refund_status.to_s.upcase
-    }
+    { ticket: result.ticket, deleted_ticket: existing_ticket, refund_status: delete_result.refund_status.to_s.upcase }
   end
 end

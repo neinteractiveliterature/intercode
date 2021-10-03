@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
@@ -29,7 +30,7 @@
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
 # rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 class Signup < ApplicationRecord
-  STATES = %w[confirmed waitlisted withdrawn]
+  STATES = %w[confirmed waitlisted withdrawn].freeze
 
   belongs_to :user_con_profile
   has_one :user, through: :user_con_profile
@@ -41,7 +42,7 @@ class Signup < ApplicationRecord
   has_many :signup_changes, dependent: :destroy
 
   validates :state, inclusion: { in: STATES }
-  validates :bucket_key, presence: { if: -> (signup) { signup.counted? && signup.confirmed? } }
+  validates :bucket_key, presence: { if: ->(signup) { signup.counted? && signup.confirmed? } }
   validate :must_be_in_existing_bucket
 
   STATES.each do |state_name|
@@ -84,27 +85,25 @@ class Signup < ApplicationRecord
     return 'N/A' if event.minimum_age.blank?
     return 'Unknown age' if user_con_profile.birth_date.blank?
 
-    if user_con_profile.age_as_of(run.starts_at) >= event.minimum_age
-      'OK'
-    else
-      'Too young'
-    end
+    user_con_profile.age_as_of(run.starts_at) >= event.minimum_age ? 'OK' : 'Too young'
   end
 
   def log_signup_change!(**attrs)
     save! unless persisted?
-    signup_changes.create!({
-      signup: self,
-      run_id: run_id,
-      user_con_profile_id: user_con_profile_id,
-      previous_signup_change: signup_changes.order(created_at: :desc).first,
-      updated_by_id: updated_by_id,
-      bucket_key: bucket_key,
-      requested_bucket_key: requested_bucket_key,
-      state: state,
-      counted: counted,
-      **attrs
-    })
+    signup_changes.create!(
+      {
+        signup: self,
+        run_id: run_id,
+        user_con_profile_id: user_con_profile_id,
+        previous_signup_change: signup_changes.order(created_at: :desc).first,
+        updated_by_id: updated_by_id,
+        bucket_key: bucket_key,
+        requested_bucket_key: requested_bucket_key,
+        state: state,
+        counted: counted,
+        **attrs
+      }
+    )
   end
 
   private
@@ -129,13 +128,16 @@ class Signup < ApplicationRecord
   end
 
   def bucket_validity_error_message
-    @bucket_validity_error_message ||= begin
-      bucket_names = run.registration_policy.buckets.map(&:key).to_sentence(
-        last_word_connector: ', or ',
-        two_words_connector: ' or '
-      )
+    @bucket_validity_error_message ||=
+      begin
+        bucket_names =
+          run
+            .registration_policy
+            .buckets
+            .map(&:key)
+            .to_sentence(last_word_connector: ', or ', two_words_connector: ' or ')
 
-      "must be one of #{bucket_names}"
-    end
+        "must be one of #{bucket_names}"
+      end
   end
 end

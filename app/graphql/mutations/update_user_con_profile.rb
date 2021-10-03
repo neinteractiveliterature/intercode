@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::UpdateUserConProfile < Mutations::BaseMutation
   field :user_con_profile, Types::UserConProfileType, null: false
 

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::CreateFormItem < Mutations::BaseMutation
   field :form_item, Types::FormItemType, null: false
 

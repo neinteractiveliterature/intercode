@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::UpdateEventProposal < Mutations::BaseMutation
   field :event_proposal, Types::EventProposalType, null: false
 

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Queries::PermissionsQueryManager < Queries::QueryManager
   def initialize(user:)
     super(user: user)
@@ -8,9 +9,7 @@ class Queries::PermissionsQueryManager < Queries::QueryManager
   def all_model_permissions_in_convention(convention)
     return {} unless convention && user
 
-    @all_model_permissions_in_convention.get(convention.id) do
-      load_all_model_permissions_in_convention(convention)
-    end
+    @all_model_permissions_in_convention.get(convention.id) { load_all_model_permissions_in_convention(convention) }
   end
 
   def all_model_permissions_in_convention_for_model_type(convention, model_type)
@@ -18,10 +17,8 @@ class Queries::PermissionsQueryManager < Queries::QueryManager
   end
 
   def all_model_permissions(model_type, model)
-    user_permissions = all_model_permissions_in_convention_for_model_type(
-      convention_for_model(model_type, model),
-      model_type
-    )
+    user_permissions =
+      all_model_permissions_in_convention_for_model_type(convention_for_model(model_type, model), model_type)
 
     user_permissions[model.id] || Set.new
   end
@@ -31,17 +28,13 @@ class Queries::PermissionsQueryManager < Queries::QueryManager
     model_type = association_name.to_sym
 
     define_method "#{association_name.pluralize}_with_permission" do |*permissions|
-      model_class.where(
-        id: user_permission_scope.where(
-          permission: permissions
-        ).select(:"#{association_name}_id")
-      )
+      model_class.where(id: user_permission_scope.where(permission: permissions).select(:"#{association_name}_id"))
     end
 
     ids_with_permission_in_convention_name = "#{association_name}_ids_with_permission_in_convention"
     define_method ids_with_permission_in_convention_name do |convention, *permissions|
       permission_sets = all_model_permissions_in_convention_for_model_type(convention, model_type)
-      return [] unless permission_sets.present?
+      return [] if permission_sets.blank?
 
       permission_sets.select do |_model_id, permission_set|
         permissions.any? { |permission| permission_set.include?(permission.to_s) }
@@ -53,9 +46,8 @@ class Queries::PermissionsQueryManager < Queries::QueryManager
     end
 
     define_method "has_#{association_name}_permission_in_convention?" do |convention, *permissions|
-      permission_sets = all_model_permissions_in_convention_for_model_type(convention, model_type)
-        .values
-      return false unless permission_sets.present?
+      permission_sets = all_model_permissions_in_convention_for_model_type(convention, model_type).values
+      return false if permission_sets.blank?
 
       user_permissions = permission_sets.inject(&:+)
       permissions.any? { |permission| user_permissions.include?(permission.to_s) }
@@ -86,24 +78,21 @@ class Queries::PermissionsQueryManager < Queries::QueryManager
   end
 
   def organizations_with_permission(*permissions)
-    Organization.where(
-      id: user_organization_roles_with_permission(*permissions).select(:organization_id)
-    )
+    Organization.where(id: user_organization_roles_with_permission(*permissions).select(:organization_id))
   end
 
   def user_organization_roles_with_permission(*permissions)
     OrganizationRole.where(
-      id: user_permission_scope.where(permission: permissions)
-        .where.not(organization_role_id: nil)
-        .select(:organization_role_id)
+      id:
+        user_permission_scope
+          .where(permission: permissions)
+          .where.not(organization_role_id: nil)
+          .select(:organization_role_id)
     )
   end
 
   def conventions_with_organization_permission(*permissions)
-    Convention.where(
-      organization_id: user_organization_roles_with_permission(*permissions)
-        .select(:organization_id)
-    )
+    Convention.where(organization_id: user_organization_roles_with_permission(*permissions).select(:organization_id))
   end
 
   def user_permission_scope
@@ -113,7 +102,7 @@ class Queries::PermissionsQueryManager < Queries::QueryManager
   private
 
   def select_all_permissions_in_convention(convention)
-    convention_where_clause = <<~SQL
+    convention_where_clause = <<~SQL.squish
         convention_id = ?
         OR event_category_id IN (
           #{convention.event_categories.select(:id).to_sql}
@@ -127,17 +116,23 @@ class Queries::PermissionsQueryManager < Queries::QueryManager
   end
 
   def select_all_permissions_in_convention_with_model_type_and_id(convention)
-    sql_rows = select_all_permissions_in_convention(convention)
-      .pluck(:permission, :convention_id, :event_category_id, :cms_content_group_id)
+    sql_rows =
+      select_all_permissions_in_convention(convention).pluck(
+        :permission,
+        :convention_id,
+        :event_category_id,
+        :cms_content_group_id
+      )
 
     sql_rows.map do |(permission, convention_id, event_category_id, cms_content_group_id)|
-      (model_type, model_id) = if convention_id
-        [:convention, convention_id]
-      elsif event_category_id
-        [:event_category, event_category_id]
-      elsif cms_content_group_id
-        [:cms_content_group, cms_content_group_id]
-      end
+      model_type, model_id =
+        if convention_id
+          [:convention, convention_id]
+        elsif event_category_id
+          [:event_category, event_category_id]
+        elsif cms_content_group_id
+          [:cms_content_group, cms_content_group_id]
+        end
 
       [permission, model_type, model_id]
     end
@@ -147,8 +142,7 @@ class Queries::PermissionsQueryManager < Queries::QueryManager
     select_all_permissions_in_convention_with_model_type_and_id(convention)
       .group_by { |(_permission, model_type, _model_id)| model_type }
       .transform_values do |model_type_rows|
-        rows_by_model_id = model_type_rows
-          .group_by { |(_permission, _model_type, model_id)| model_id }
+        rows_by_model_id = model_type_rows.group_by { |(_permission, _model_type, model_id)| model_id }
 
         rows_by_model_id.transform_values do |model_id_rows|
           Set.new(model_id_rows.map { |(permission, _model_type, _model_id)| permission })

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Queries::QueryManager
   def self.query_methods
     instance_methods(false)

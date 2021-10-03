@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::MarkOrderPaid < Mutations::BaseMutation
   field :order, Types::OrderType, null: false
 
@@ -10,7 +11,8 @@ class Mutations::MarkOrderPaid < Mutations::BaseMutation
 
     order.update!(
       status: 'paid',
-      payment_note: "Marked as paid by #{user_con_profile.name_without_nickname} \
+      payment_note:
+        "Marked as paid by #{user_con_profile.name_without_nickname} \
 on #{Time.now.in_time_zone(convention.timezone).strftime('%B %-d, %Y at %l:%M%P')}"
     )
 

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
@@ -35,21 +36,16 @@
 class Permission < ApplicationRecord
   include ExclusiveArc
 
-  PERMISSION_NAMES_CONFIG = JSON.parse(File.read(
-    File.expand_path('config/permission_names.json', Rails.root)
-  ))
+  PERMISSION_NAMES_CONFIG = JSON.parse(File.read(File.expand_path('config/permission_names.json', Rails.root)))
 
   exclusive_arc :role, [StaffPosition, OrganizationRole]
   exclusive_arc :model, [CmsContentGroup, Convention, EventCategory]
 
-  scope :for_user, ->(user) do
-    where(
-      staff_position: StaffPosition.joins(:user_con_profiles)
-        .where(user_con_profiles: { user_id: user.id })
-    ).or(
-      where(organization_role: OrganizationRole.joins(:users).where(users: { id: user.id }))
-    )
-  end
+  scope :for_user,
+        ->(user) {
+          where(staff_position: StaffPosition.joins(:user_con_profiles).where(user_con_profiles: { user_id: user.id }))
+            .or(where(organization_role: OrganizationRole.joins(:users).where(users: { id: user.id })))
+        }
 
   def self.permission_names_for_model_type(model_type)
     PERMISSION_NAMES_CONFIG.flat_map do |permission_set|
@@ -62,9 +58,7 @@ class Permission < ApplicationRecord
   end
 
   def self.grant(role, model, *permissions)
-    permissions.each do |permission|
-      create!(role: role, model: model, permission: permission)
-    end
+    permissions.each { |permission| create!(role: role, model: model, permission: permission) }
   end
 
   def self.revoke(role, model, *permissions)

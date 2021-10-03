@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module EnvironmentBasedUploader
   extend ActiveSupport::Concern
 
@@ -10,9 +11,7 @@ module EnvironmentBasedUploader
   end
 
   def self.missing_keys_for_fog
-    %w[AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_S3_BUCKET].select do |required_key|
-      ENV[required_key].blank?
-    end
+    %w[AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_S3_BUCKET].select { |required_key| ENV[required_key].blank? }
   end
 
   included do

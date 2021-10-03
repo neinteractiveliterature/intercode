@@ -1,9 +1,9 @@
+# frozen_string_literal: true
 class OrganizationRolePolicy < ApplicationPolicy
   def read?
     oauth_scoped_disjunction do |d|
       d.add(:read_organizations) do
-        site_admin? ||
-          has_organization_permission?(record.organization_id, 'manage_organization_access')
+        site_admin? || has_organization_permission?(record.organization_id, 'manage_organization_access')
       end
     end
   end
@@ -11,8 +11,7 @@ class OrganizationRolePolicy < ApplicationPolicy
   def manage?
     oauth_scoped_disjunction do |d|
       d.add(:manage_organizations) do
-        site_admin? ||
-          has_organization_permission?(record.organization_id, 'manage_organization_access')
+        site_admin? || has_organization_permission?(record.organization_id, 'manage_organization_access')
       end
     end
   end

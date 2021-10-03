@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::CreateFormSection < Mutations::BaseMutation
   field :form_section, Types::FormSectionType, null: false
 

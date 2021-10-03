@@ -1,7 +1,8 @@
+# frozen_string_literal: true
 module CmsContentGroupMutation
   def update_cms_contents(content_group, contents)
     contents_by_type = contents.group_by(&:content_type)
-    Types::CmsContentTypeIndicator.values.keys.each do |content_type|
+    Types::CmsContentTypeIndicator.values.each_key do |content_type|
       contents = contents_by_type[content_type]
       if contents.blank?
         content_group.public_send(content_type.tableize).clear

@@ -1,11 +1,10 @@
+# frozen_string_literal: true
 class EventProposals::UnfinishedDraftReminderNotifier < Notifier
   attr_reader :event_proposal
 
   def initialize(event_proposal:)
     @event_proposal = event_proposal
-    super(
-      convention: event_proposal.convention, event_key: 'event_proposals/unfinished_draft_reminder'
-    )
+    super(convention: event_proposal.convention, event_key: 'event_proposals/unfinished_draft_reminder')
   end
 
   def liquid_assigns

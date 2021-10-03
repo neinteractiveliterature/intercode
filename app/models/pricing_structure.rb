@@ -1,8 +1,9 @@
+# frozen_string_literal: true
 class PricingStructure
   include ActiveModel::Model
   include ActiveModel::Serializers::JSON
 
-  PRICING_STRATEGIES = %w[fixed scheduled_value]
+  PRICING_STRATEGIES = %w[fixed scheduled_value].freeze
   FIXED_VALUE_CODER = MoneyCoder
   SCHEDULED_VALUE_CODER = ActiveModelCoder.new('ScheduledMoneyValue')
 
@@ -20,10 +21,7 @@ class PricingStructure
   end
 
   def attributes
-    {
-      pricing_strategy: pricing_strategy,
-      value: coder_for_strategy.dump(value)
-    }
+    { pricing_strategy: pricing_strategy, value: coder_for_strategy.dump(value) }
   end
 
   def as_json(_options = nil)
@@ -32,9 +30,12 @@ class PricingStructure
 
   def price(time: nil)
     case value
-    when Money then value
-    when ScheduledMoneyValue then value.value_at(time || Time.zone.now)
-    else raise TypeError, "Can't get a price from #{value.inspect}"
+    when Money
+      value
+    when ScheduledMoneyValue
+      value.value_at(time || Time.zone.now)
+    else
+      raise TypeError, "Can't get a price from #{value.inspect}"
     end
   end
 
@@ -46,23 +47,31 @@ class PricingStructure
 
   def coder_for_strategy
     case pricing_strategy
-    when 'fixed' then FIXED_VALUE_CODER
-    when 'scheduled_value' then SCHEDULED_VALUE_CODER
-    else raise "Invalid pricing strategy: #{pricing_strategy.inspect}"
+    when 'fixed'
+      FIXED_VALUE_CODER
+    when 'scheduled_value'
+      SCHEDULED_VALUE_CODER
+    else
+      raise "Invalid pricing strategy: #{pricing_strategy.inspect}"
     end
   end
 
   def ensure_value_type_is_correct
     return nil unless value # other validations will handle the nil case
 
-    expected_class = case pricing_strategy
-    when 'fixed' then Money
-    when 'scheduled_value' then ScheduledMoneyValue
-    else return # let the other validations handle this case
-    end
+    expected_class =
+      case pricing_strategy
+      when 'fixed'
+        Money
+      when 'scheduled_value'
+        ScheduledMoneyValue
+      else
+        return # let the other validations handle this case
+      end
 
     return if value.is_a?(expected_class)
-    errors.add :value, "should be a #{expected_class.name} object (because pricing strategy is \
+    errors.add :value,
+               "should be a #{expected_class.name} object (because pricing strategy is \
 #{pricing_strategy.inspect}) but is a #{value.class.name} object instead"
   end
 end

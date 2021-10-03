@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::EventProposalType < Types::BaseObject
   include FormResponseAttrsFields
 
@@ -26,14 +27,16 @@ class Types::EventProposalType < Types::BaseObject
   field :form, Types::FormType, null: true
 
   def form
-    AssociationLoader.for(EventProposal, :event_category).load(object).then do |event_category|
-      AssociationLoader.for(EventCategory, :event_proposal_form).load(event_category)
-    end
+    AssociationLoader
+      .for(EventProposal, :event_category)
+      .load(object)
+      .then { |event_category| AssociationLoader.for(EventCategory, :event_proposal_form).load(event_category) }
   end
 
   def form_response_changes
-    AssociationLoader.for(EventProposal, :form_response_changes).load(object).then do |changes|
-      CompactingFormResponseChangesPresenter.new(changes).compacted_changes
-    end
+    AssociationLoader
+      .for(EventProposal, :form_response_changes)
+      .load(object)
+      .then { |changes| CompactingFormResponseChangesPresenter.new(changes).compacted_changes }
   end
 end

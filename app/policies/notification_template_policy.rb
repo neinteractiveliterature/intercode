@@ -1,21 +1,22 @@
+# frozen_string_literal: true
 class NotificationTemplatePolicy < ApplicationPolicy
   delegate :convention, to: :record
 
   def read?
-    return true if oauth_scoped_disjunction do |d|
-      d.add(:read_conventions) do
-        has_convention_permission?(convention, 'read_notification_templates')
-      end
+    if oauth_scoped_disjunction do |d|
+         d.add(:read_conventions) { has_convention_permission?(convention, 'read_notification_templates') }
+       end
+      return true
     end
 
     super
   end
 
   def manage?
-    return true if oauth_scoped_disjunction do |d|
-      d.add(:manage_conventions) do
-        has_convention_permission?(convention, 'update_notification_templates')
-      end
+    if oauth_scoped_disjunction do |d|
+         d.add(:manage_conventions) { has_convention_permission?(convention, 'update_notification_templates') }
+       end
+      return true
     end
 
     super
@@ -27,9 +28,7 @@ class NotificationTemplatePolicy < ApplicationPolicy
 
       disjunctive_where do |dw|
         if oauth_scope?(:read_conventions)
-          dw.add(
-            convention_id: conventions_with_permission('read_notification_templates').select(:id)
-          )
+          dw.add(convention_id: conventions_with_permission('read_notification_templates').select(:id))
         end
       end
     end

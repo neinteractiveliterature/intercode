@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassLength
   implements Types::CmsParent
 
@@ -5,10 +6,7 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
 
   field :bio_eligible_user_con_profiles, [Types::UserConProfileType], null: false
   def bio_eligible_user_con_profiles
-    object.user_con_profiles.can_have_bio.includes(
-      :staff_positions,
-      team_members: { event: :convention }
-    )
+    object.user_con_profiles.can_have_bio.includes(:staff_positions, team_members: { event: :convention })
   end
 
   field :canceled, Boolean, null: false
@@ -21,23 +19,22 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
     cadmus_renderer.render(Liquid::Template.parse(object.clickwrap_agreement), :html)
   end
 
-  field :cms_content_groups, [Types::CmsContentGroupType],
-    deprecation_reason: 'Please use `cmsContentGroups` instead.', null: false
-  field :cms_layouts, [Types::CmsLayoutType],
-    deprecation_reason: 'Please use `cmsLayouts` instead.', null: false
-  field :cms_navigation_items, [Types::CmsNavigationItemType],
-    deprecation_reason: 'Please use `cmsNavigationItems` instead.', null: false
+  field :cms_content_groups,
+        [Types::CmsContentGroupType],
+        deprecation_reason: 'Please use `cmsContentGroups` instead.',
+        null: false
+  field :cms_layouts, [Types::CmsLayoutType], deprecation_reason: 'Please use `cmsLayouts` instead.', null: false
+  field :cms_navigation_items,
+        [Types::CmsNavigationItemType],
+        deprecation_reason: 'Please use `cmsNavigationItems` instead.',
+        null: false
 
-  pagination_field :coupons_paginated, Types::CouponsPaginationType,
-    Types::CouponFiltersInputType, null: false
+  pagination_field :coupons_paginated, Types::CouponsPaginationType, Types::CouponFiltersInputType, null: false
 
   def coupons_paginated(**args)
-    Tables::CouponsTableResultsPresenter.for_convention(
-      convention: object,
-      pundit_user: pundit_user,
-      filters: args[:filters].to_h,
-      sort: args[:sort]
-    ).paginate(page: args[:page], per_page: args[:per_page])
+    Tables::CouponsTableResultsPresenter
+      .for_convention(convention: object, pundit_user: pundit_user, filters: args[:filters].to_h, sort: args[:sort])
+      .paginate(page: args[:page], per_page: args[:per_page])
   end
 
   field :created_at, Types::DateType, null: true
@@ -51,7 +48,7 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
     argument :id, Integer, required: true, description: 'The ID of the event to find'
 
     description <<~MARKDOWN
-      Finds an active event by ID in this convention.  If there is no event with that ID in this
+      Finds an active event by ID in this convention. If there is no event with that ID in this
       convention, or the event is no longer active, errors out.
     MARKDOWN
   end
@@ -70,17 +67,18 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
     if args[:current_ability_can_read_event_proposals]
       promise.then do |event_categories|
         event_categories.select do |category|
-          policy(
-            EventProposal.new(event_category: category, convention: convention, status: 'proposed')
-          ).read?
+          policy(EventProposal.new(event_category: category, convention: convention, status: 'proposed')).read?
         end
       end
     else
-      AssociationLoader.for(Convention, :event_categories).load(object).then do |event_categories|
-        # reading #proposable? will attempt to n+1 these if we don't do this
-        ::ActiveRecord::Associations::Preloader.new.preload(event_categories, :event_proposal_form)
-        event_categories
-      end
+      AssociationLoader
+        .for(Convention, :event_categories)
+        .load(object)
+        .then do |event_categories|
+          # reading #proposable? will attempt to n+1 these if we don't do this
+          ::ActiveRecord::Associations::Preloader.new.preload(event_categories, :event_proposal_form)
+          event_categories
+        end
     end
   end
 
@@ -88,7 +86,7 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
     argument :id, Integer, required: true, description: 'The ID of the event proposal to find.'
 
     description <<~MARKDOWN
-      Finds an event proposal by ID in this convention.  If there is no event proposal with that ID
+      Finds an event proposal by ID in this convention. If there is no event proposal with that ID
       in this convention, errors out.
     MARKDOWN
   end
@@ -97,16 +95,12 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
     object.event_proposals.find(args[:id])
   end
 
-  pagination_field :event_proposals_paginated, Types::EventProposalsPaginationType,
-    Types::EventProposalFiltersInputType
+  pagination_field :event_proposals_paginated, Types::EventProposalsPaginationType, Types::EventProposalFiltersInputType
 
   def event_proposals_paginated(**args)
-    Tables::EventProposalsTableResultsPresenter.for_convention(
-      object,
-      pundit_user,
-      args[:filters].to_h,
-      args[:sort]
-    ).paginate(page: args[:page], per_page: args[:per_page])
+    Tables::EventProposalsTableResultsPresenter
+      .for_convention(object, pundit_user, args[:filters].to_h, args[:sort])
+      .paginate(page: args[:page], per_page: args[:per_page])
   end
 
   field :event_mailing_list_domain, String, null: true
@@ -116,21 +110,26 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
       Returns all active events in convention associated with the domain name of this HTTP request.
       Filterable by a range of start/finish times.
 
-      **CAUTION:** this query can return a lot of data and take a long time.  Please be careful
+      **CAUTION:** this query can return a lot of data and take a long time. Please be careful
       when using it.
     MARKDOWN
 
-    argument :extended_counts, Boolean,
-      required: false, deprecation_reason: 'This no longer does anything.'
-    argument :include_dropped, Boolean,
-      required: false, description: 'If true, includes dropped events in addition to active events.'
-    argument :start, Types::DateType,
-      required: false,
-      description: "If present, only returns events that occur at this time or later. \
+    argument :extended_counts, Boolean, required: false, deprecation_reason: 'This no longer does anything.'
+    argument :include_dropped,
+             Boolean,
+             required: false,
+             description: 'If true, includes dropped events in addition to active events.'
+    argument :start,
+             Types::DateType,
+             required: false,
+             description:
+               "If present, only returns events that occur at this time or later. \
 (These events may have started before that time, but will still be ongoing during it.)"
-    argument :finish, Types::DateType,
-      required: false,
-      description: "If present, only returns events that occur earlier than this time \
+    argument :finish,
+             Types::DateType,
+             required: false,
+             description:
+               "If present, only returns events that occur earlier than this time \
 (non-inclusive.) These events may end after this time, but start before it."
   end
 
@@ -149,19 +148,16 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
   pagination_field :events_paginated, Types::EventsPaginationType, Types::EventFiltersInputType
 
   def events_paginated(**args)
-    Tables::EventsTableResultsPresenter.for_convention(
-      convention: object,
-      pundit_user: pundit_user,
-      filters: args[:filters].to_h,
-      sort: args[:sort]
-    ).paginate(page: args[:page], per_page: args[:per_page])
+    Tables::EventsTableResultsPresenter
+      .for_convention(convention: object, pundit_user: pundit_user, filters: args[:filters].to_h, sort: args[:sort])
+      .paginate(page: args[:page], per_page: args[:per_page])
   end
 
   field :form, Types::FormType, null: false do
     argument :id, Integer, required: true, description: 'The ID of the form to find.'
 
     description <<~MARKDOWN
-      Finds a form by ID in this convention.  If there is no form with that ID in this convention,
+      Finds a form by ID in this convention. If there is no form with that ID in this convention,
       errors out.
     MARKDOWN
   end
@@ -187,25 +183,24 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
 
   field :my_profile, Types::UserConProfileType, null: true do
     description <<~MARKDOWN
-      Returns the convention-specific profile for the current user within this convention.  If no
+      Returns the convention-specific profile for the current user within this convention. If no
       user is signed in, returns null.
     MARKDOWN
   end
 
   def my_profile
-    @my_profile ||= (
+    @my_profile ||=
       if object == context[:convention]
         # Avoids redundant database queries
         context[:user_con_profile]
       elsif context[:user]
         object.user_con_profiles.find_by(user_id: context[:user].id)
       end
-    )
   end
 
   field :my_signups, [Types::SignupType], null: false, camelize: false do
     description <<~MARKDOWN
-      Returns all signups for the current user within this convention.  If no user is signed in,
+      Returns all signups for the current user within this convention. If no user is signed in,
       returns an empty array.
     MARKDOWN
   end
@@ -217,13 +212,14 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
   field :notification_templates, [Types::NotificationTemplateType], null: false
 
   field :notifier_liquid_assigns, [Types::LiquidAssign], null: false do
-    argument :event_key, String,
-      required: true,
-      description: 'The key of the notification event to use for generating assigns.'
+    argument :event_key,
+             String,
+             required: true,
+             description: 'The key of the notification event to use for generating assigns.'
 
     description <<~MARKDOWN
       Returns all the Liquid assigns for rendering a particular notification event in this
-      convention.   This is a combination of globally-accessible Liquid assigns, values specific
+      convention. This is a combination of globally-accessible Liquid assigns, values specific
       to that notification event, and convention-specific user-defined CMS variables.
     MARKDOWN
   end
@@ -235,40 +231,34 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
 
   field :name, String, null: false
 
-  field :orders, Types::OrdersConnectionType,
-    max_page_size: 1000,
-    null: true,
-    connection: true,
-    deprecation_reason: "Deprecated for potential performance implications.  Please use \
+  field :orders,
+        Types::OrdersConnectionType,
+        max_page_size: 1000,
+        null: true,
+        connection: true,
+        deprecation_reason:
+          "Deprecated for potential performance implications.  Please use \
 `orders_paginated` instead." do
     authorize do |value, _args, context|
-      Pundit.policy(
-        context[:pundit_user],
-        Order.new(user_con_profile: UserConProfile.new(convention: value))
-      ).read?
+      Pundit.policy(context[:pundit_user], Order.new(user_con_profile: UserConProfile.new(convention: value))).read?
     end
   end
 
   def orders
-    object.orders.where.not(status: 'pending')
-      .includes(order_entries: [:product, :product_variant])
+    object.orders.where.not(status: 'pending').includes(order_entries: %i[product product_variant])
   end
 
   pagination_field :orders_paginated, Types::OrdersPaginationType, Types::OrderFiltersInputType
 
   def orders_paginated(filters: nil, sort: nil, page: nil, per_page: nil)
-    scope = policy_scope(
-      object.orders.where.not(status: 'pending')
-        .includes(order_entries: [:product, :product_variant])
-    )
+    scope =
+      policy_scope(object.orders.where.not(status: 'pending').includes(order_entries: %i[product product_variant]))
 
-    Tables::OrdersTableResultsPresenter.new(scope, filters.to_h, sort)
-      .paginate(page: page, per_page: per_page)
+    Tables::OrdersTableResultsPresenter.new(scope, filters.to_h, sort).paginate(page: page, per_page: per_page)
   end
 
   field :organization, Types::OrganizationType, null: true
-  field :pages, [Types::PageType],
-    null: false, deprecation_reason: 'This field is being renamed to `cmsPages`.'
+  field :pages, [Types::PageType], null: false, deprecation_reason: 'This field is being renamed to `cmsPages`.'
 
   field :pre_schedule_content_html, String, null: true
 
@@ -279,9 +269,10 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
   end
 
   field :preview_notifier_liquid, String, null: false do
-    argument :event_key, String,
-      required: true,
-      description: 'The key of the notification event to use for generating the preview.'
+    argument :event_key,
+             String,
+             required: true,
+             description: 'The key of the notification event to use for generating the preview.'
     argument :content, String, required: true, description: 'The Liquid content to render.'
 
     description <<~MARKDOWN
@@ -289,23 +280,19 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
       current domain's CMS context as if it were the content for that notification type.
     MARKDOWN
 
-    authorize do |_value, _args, context|
-      Pundit.policy(context[:pundit_user], object).view_reports?
-    end
+    authorize { |_value, _args, context| Pundit.policy(context[:pundit_user], object).view_reports? }
   end
 
   def preview_notifier_liquid(event_key:, content:)
     notifier = NotifierPreviewFactory.new(convention: object, event_key: event_key).notifier
-    notifier.cadmus_renderer.render(
-      Liquid::Template.parse(content), :html, assigns: notifier.liquid_assigns
-    )
+    notifier.cadmus_renderer.render(Liquid::Template.parse(content), :html, assigns: notifier.liquid_assigns)
   end
 
   field :product, Types::ProductType, null: false do
     argument :id, Integer, required: true, description: 'The ID of the product to find.'
 
     description <<~MARKDOWN
-      Finds a product by ID in this convention.  If there is no product with that ID in this
+      Finds a product by ID in this convention. If there is no product with that ID in this
       convention, errors out.
     MARKDOWN
   end
@@ -320,9 +307,7 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
   end
 
   def products(only_ticket_providing: false, only_available: false)
-    if !only_ticket_providing && !only_available
-      return AssociationLoader.for(Convention, :products).load(object)
-    end
+    return AssociationLoader.for(Convention, :products).load(object) if !only_ticket_providing && !only_available
 
     scope = convention.products
     scope = scope.ticket_providing if only_ticket_providing
@@ -344,7 +329,7 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
     argument :id, Integer, required: true, description: 'The ID of the run to find'
 
     description <<~MARKDOWN
-      Finds an active run by ID in this convention.  If there is no run with that ID in this
+      Finds an active run by ID in this convention. If there is no run with that ID in this
       convention, or the run's event is no longer active, errors out.
     MARKDOWN
   end
@@ -361,7 +346,7 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
     argument :id, Integer, required: true, description: 'The ID of the signup to find.'
 
     description <<~MARKDOWN
-      Finds a signup by ID in this convention.  If there is no signup with that ID in this
+      Finds a signup by ID in this convention. If there is no signup with that ID in this
       convention, errors out.
     MARKDOWN
   end
@@ -371,18 +356,23 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
   end
 
   pagination_field(
-    :signup_changes_paginated, Types::SignupChangesPaginationType,
-    Types::SignupChangeFiltersInputType, null: false
+    :signup_changes_paginated,
+    Types::SignupChangesPaginationType,
+    Types::SignupChangeFiltersInputType,
+    null: false
   )
 
   def signup_changes_paginated(**args)
-    scope = SignupChangePolicy::Scope.new(
-      pundit_user,
-      convention.signup_changes.includes(
-        user_con_profile: [:convention, :team_members, :staff_positions],
-        run: { event: :convention }
-      )
-    ).resolve
+    scope =
+      SignupChangePolicy::Scope.new(
+        pundit_user,
+        convention.signup_changes.includes(
+          user_con_profile: %i[convention team_members staff_positions],
+          run: {
+            event: :convention
+          }
+        )
+      ).resolve
 
     Tables::SignupChangesTableResultsPresenter
       .new(scope, args[:filters].to_h, args[:sort])
@@ -394,35 +384,34 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
   end
 
   def signup_counts_by_state
-    object.signups.group(:state).count.map do |(state, count)|
-      { state: state, count: count }
-    end
+    object.signups.group(:state).count.map { |(state, count)| { state: state, count: count } }
   end
 
   field :signup_mode, Types::SignupModeType, null: false
   field :signup_requests_open, Boolean, null: false
 
-  pagination_field :signup_requests_paginated, Types::SignupRequestsPaginationType,
-    Types::SignupRequestFiltersInputType, null: false
+  pagination_field :signup_requests_paginated,
+                   Types::SignupRequestsPaginationType,
+                   Types::SignupRequestFiltersInputType,
+                   null: false
 
   def signup_requests_paginated(**args)
-    Tables::SignupRequestsTableResultsPresenter.for_convention(
-      convention: object,
-      pundit_user: pundit_user,
-      filters: args[:filters].to_h,
-      sort: args[:sort]
-    ).paginate(page: args[:page], per_page: args[:per_page])
+    Tables::SignupRequestsTableResultsPresenter
+      .for_convention(convention: object, pundit_user: pundit_user, filters: args[:filters].to_h, sort: args[:sort])
+      .paginate(page: args[:page], per_page: args[:per_page])
   end
 
   pagination_field(
-    :signup_spy_paginated, Types::SignupsPaginationType, Types::SignupFiltersInputType,
-    null: false, deprecation_reason: 'Use signup_changes_paginated instead'
-  ) do
-    authorize_action :view_reports
-  end
+    :signup_spy_paginated,
+    Types::SignupsPaginationType,
+    Types::SignupFiltersInputType,
+    null: false,
+    deprecation_reason: 'Use signup_changes_paginated instead'
+  ) { authorize_action :view_reports }
 
   def signup_spy_paginated(**args)
-    Tables::SignupsTableResultsPresenter.signup_spy_for_convention(object, pundit_user)
+    Tables::SignupsTableResultsPresenter
+      .signup_spy_for_convention(object, pundit_user)
       .paginate(page: args[:page], per_page: args[:per_page])
   end
 
@@ -432,7 +421,7 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
     argument :id, Integer, required: true, description: 'The ID of the staff position to find.'
 
     description <<~MARKDOWN
-      Finds a staff position by ID in this convention.  If there is no staff position with that ID
+      Finds a staff position by ID in this convention. If there is no staff position with that ID
       in this convention, errors out.
     MARKDOWN
   end
@@ -449,8 +438,7 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
   field :ticket_mode, Types::TicketModeType, null: false
   field :ticket_name, String, null: false
   field :ticket_types, [Types::TicketTypeType], null: false
-  field :tickets_available_for_purchase, Boolean,
-    null: false, method: :tickets_available_for_purchase?
+  field :tickets_available_for_purchase, Boolean, null: false, method: :tickets_available_for_purchase?
   field :timezone_mode, Types::TimezoneModeType, null: false
   field :timezone_name, String, null: true
   field :updated_at, Types::DateType, null: true
@@ -467,7 +455,7 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
     argument :id, Integer, required: true, description: 'The ID of the UserConProfile to find.'
 
     description <<~MARKDOWN
-      Finds a UserConProfile by ID in the convention associated with this convention.  If there is
+      Finds a UserConProfile by ID in the convention associated with this convention. If there is
       no UserConProfile with that ID in this convention, errors out.
     MARKDOWN
   end
@@ -477,11 +465,10 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
   end
 
   field :user_con_profile_by_user_id, Types::UserConProfileType, null: false do
-    argument :user_id, Integer,
-      required: true, description: 'The user ID of the UserConProfile to find.'
+    argument :user_id, Integer, required: true, description: 'The user ID of the UserConProfile to find.'
 
     description <<~MARKDOWN
-      Finds a UserConProfile by user ID in the convention associated with this convention.  If
+      Finds a UserConProfile by user ID in the convention associated with this convention. If
       there is no UserConProfile with that user ID in this convention, errors out.
     MARKDOWN
   end
@@ -492,16 +479,14 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
 
   field :user_con_profile_form, Types::FormType, null: false
 
-  pagination_field :user_con_profiles_paginated, Types::UserConProfilesPaginationType,
-    Types::UserConProfileFiltersInputType
+  pagination_field :user_con_profiles_paginated,
+                   Types::UserConProfilesPaginationType,
+                   Types::UserConProfileFiltersInputType
 
   def user_con_profiles_paginated(**args)
-    Tables::UserConProfilesTableResultsPresenter.for_convention(
-      object,
-      pundit_user,
-      args[:filters].to_h,
-      args[:sort]
-    ).paginate(page: args[:page], per_page: args[:per_page])
+    Tables::UserConProfilesTableResultsPresenter
+      .for_convention(object, pundit_user, args[:filters].to_h, args[:sort])
+      .paginate(page: args[:page], per_page: args[:per_page])
   end
 
   association_loaders(

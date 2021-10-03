@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
@@ -42,24 +43,20 @@ class Page < ApplicationRecord
   has_and_belongs_to_many :cms_files
   has_and_belongs_to_many :cms_partials
 
-  before_commit :set_performance_metadata, on: [:create, :update]
+  before_commit :set_performance_metadata, on: %i[create update]
   after_commit :touch_parent
 
   multisearchable(
-    against: [:name, :content_for_search],
-    additional_attributes: ->(page) {
+    against: %i[name content_for_search],
+    additional_attributes: ->(page) do
       convention = page.parent.is_a?(Convention) ? page.parent : nil
       { convention_id: convention&.id, hidden_from_search: page.hidden_from_search }
-    }
+    end
   )
 
   def effective_cms_layout
     return cms_layout if cms_layout
-    if parent
-      parent.default_layout
-    else
-      RootSite.instance&.default_layout
-    end
+    parent ? parent.default_layout : RootSite.instance&.default_layout
   end
 
   def to_liquid
@@ -81,7 +78,7 @@ class Page < ApplicationRecord
   def content_for_search
     convention = parent.is_a?(Convention) ? parent : nil
     strip_tags(CmsContentFinder.new(convention).cms_rendering_context.render_page_content(self))
-  rescue => e
+  rescue StandardError => e
     Rails.logger.debug e
     ''
   end
@@ -95,6 +92,6 @@ class Page < ApplicationRecord
   end
 
   def touch_parent
-    parent.touch if parent && parent.persisted?
+    parent.touch if parent&.persisted?
   end
 end

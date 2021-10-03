@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::UpdateOrder < Mutations::BaseMutation
   field :order, Types::OrderType, null: false
 

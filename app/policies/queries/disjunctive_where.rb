@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Queries::DisjunctiveWhere
   def self.build(scope, &block)
     instance = new(scope)
@@ -20,8 +21,6 @@ class Queries::DisjunctiveWhere
     return scope if where_clauses.none?
 
     initial_scope = scope.where(where_clauses.first)
-    where_clauses.slice(1..-1).inject(initial_scope) do |working_scope, clause|
-      working_scope.or(scope.where(clause))
-    end
+    where_clauses.slice(1..-1).inject(initial_scope) { |working_scope, clause| working_scope.or(scope.where(clause)) }
   end
 end

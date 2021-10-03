@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::DeleteProduct < Mutations::BaseMutation
   field :product, Types::ProductType, null: false
 
@@ -6,9 +7,7 @@ class Mutations::DeleteProduct < Mutations::BaseMutation
   load_and_authorize_convention_associated_model :products, :id, :destroy
 
   def resolve(**_args)
-    if product.order_entries.any?
-      raise StandardError, 'This product cannot be deleted because it has been ordered.'
-    end
+    raise StandardError, 'This product cannot be deleted because it has been ordered.' if product.order_entries.any?
 
     product.destroy!
 

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # A currency used for money
 class Money::CurrencyDrop < Liquid::Drop
   # @api
@@ -7,6 +8,14 @@ class Money::CurrencyDrop < Liquid::Drop
     @currency = currency
   end
 
-  delegate :iso_code, :iso_numeric, :name, :subunit, :symbol, :disambiguate_symbol,
-    :thousands_separator, :decimal_mark, :symbol_first, to: :currency
+  delegate :iso_code,
+           :iso_numeric,
+           :name,
+           :subunit,
+           :symbol,
+           :disambiguate_symbol,
+           :thousands_separator,
+           :decimal_mark,
+           :symbol_first,
+           to: :currency
 end

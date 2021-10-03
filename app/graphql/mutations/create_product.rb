@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::CreateProduct < Mutations::BaseMutation
   include ProductMutationHelper
 
@@ -9,9 +10,7 @@ class Mutations::CreateProduct < Mutations::BaseMutation
 
   def resolve(**args)
     product_fields = args[:product].to_h.deep_symbolize_keys
-    product_fields[:pricing_structure] = coerce_pricing_structure_input(
-      product_fields[:pricing_structure]
-    )
+    product_fields[:pricing_structure] = coerce_pricing_structure_input(product_fields[:pricing_structure])
     product_variant_fields = product_fields.delete(:product_variants)
     product_fields.delete(:delete_variant_ids) # no point even trying to process this on a create
 

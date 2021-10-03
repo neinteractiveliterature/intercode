@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # The available slots for a single bucket in an event run
 class BucketAvailabilityDrop < Liquid::Drop
   # @api
@@ -10,8 +11,7 @@ class BucketAvailabilityDrop < Liquid::Drop
   # @!method available_slots
   #   @return [Integer] The number of slots available in this bucket (or nil if the bucket is
   #                     unlimited)
-  delegate :bucket, :confirmed_count, :available_slots,
-    to: :bucket_availability_presenter
+  delegate :bucket, :confirmed_count, :available_slots, to: :bucket_availability_presenter
 
   # @api
   def initialize(bucket_availability_presenter)

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::CreateSignupRequest < Mutations::BaseMutation
   field :signup_request, Types::SignupRequestType, null: false
 
@@ -15,16 +16,15 @@ class Mutations::CreateSignupRequest < Mutations::BaseMutation
   def resolve(**args)
     raise 'Signup requests are closed.' unless convention.signup_requests_open?
 
-    replace_signup = if args[:replace_signup_id]
-      user_con_profile.signups.find(args[:replace_signup_id])
-    end
+    replace_signup = (user_con_profile.signups.find(args[:replace_signup_id]) if args[:replace_signup_id])
 
-    signup_request = user_con_profile.signup_requests.create!(
-      target_run: target_run,
-      replace_signup: replace_signup,
-      requested_bucket_key: args[:requested_bucket_key],
-      updated_by: current_user
-    )
+    signup_request =
+      user_con_profile.signup_requests.create!(
+        target_run: target_run,
+        replace_signup: replace_signup,
+        requested_bucket_key: args[:requested_bucket_key],
+        updated_by: current_user
+      )
 
     SignupRequests::NewSignupRequestNotifier.new(signup_request: signup_request).deliver_later
 

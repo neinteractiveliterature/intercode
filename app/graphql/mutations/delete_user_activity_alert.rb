@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::DeleteUserActivityAlert < Mutations::BaseMutation
   field :user_activity_alert, Types::UserActivityAlertType, null: false, camelize: false
 

@@ -200,6 +200,7 @@
     "@graphql-codegen/typescript-operations": "2.1.8",
     "@graphql-codegen/typescript-react-apollo": "3.1.6",
     "@graphql-eslint/eslint-plugin": "2.2.0",
+    "@prettier/plugin-ruby": "file:../prettier-plugin-ruby/prettier-plugin-ruby-2.0.0-rc10.tgz",
     "@testing-library/jest-dom": "5.14.1",
     "@testing-library/react-hooks": "7.0.2",
     "@types/events": "3.0.0",
@@ -256,7 +257,10 @@
   "lint-staged": {
     "*.{js,jsx,ts,tsx,gql,graphql}": "eslint --cache --fix",
     "*.{js,jsx,ts,tsx,css,scss,md}": "prettier --write",
-    "*.{rb,rake}": "bundle exec rubocop -a"
+    "*.{rb,rake}": [
+      "prettier --write",
+      "bundle exec rubocop -a"
+    ]
   },
   "cacheDirectories": [
     ".yarn/cache"

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::UpdateDepartment < Mutations::BaseMutation
   graphql_name 'UpdateDepartment'
 

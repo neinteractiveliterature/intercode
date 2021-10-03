@@ -1,10 +1,11 @@
+# frozen_string_literal: true
 module CmsReferences
   def each_liquid_node(&block)
     each_node_in_liquid_block(liquid_template.root, &block)
   end
 
   def each_node_in_liquid_block(liquid_block, &block)
-    return to_enum(__method__, liquid_block) unless block_given?
+    return to_enum(__method__, liquid_block) unless block
 
     liquid_block.nodelist.each do |node|
       yield node
@@ -25,8 +26,8 @@ module CmsReferences
   def referenced_partial_names
     each_liquid_node
       .select { |node| node.is_a?(Liquid::Include) }
-      .map { |include_node| template_name_for_include_node(include_node) }
-      .compact
+      .filter_map { |include_node| template_name_for_include_node(include_node) }
+      
   end
 
   def referenced_partials_direct(blacklist = [])
@@ -42,15 +43,14 @@ module CmsReferences
 
   def referenced_partials_recursive(blacklist = [])
     direct_partials = referenced_partials_direct(blacklist)
-    direct_partials + direct_partials.flat_map do |partial|
-      partial.referenced_partials_recursive(blacklist + direct_partials.map(&:name))
-    end
+    direct_partials +
+      direct_partials.flat_map do |partial|
+        partial.referenced_partials_recursive(blacklist + direct_partials.map(&:name))
+      end
   end
 
   def referenced_file_names
-    each_liquid_node
-      .select { |node| node.is_a?(CadmusFiles::FileUrlTag) }
-      .map(&:filename)
+    each_liquid_node.select { |node| node.is_a?(CadmusFiles::FileUrlTag) }.map(&:filename)
   end
 
   def referenced_files_recursive

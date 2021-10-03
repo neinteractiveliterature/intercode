@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::CreateCmsLayout < Mutations::BaseMutation
   field :cms_layout, Types::CmsLayoutType, null: false
 

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::ProductInputType < Types::BaseInputObject
   argument :available, Boolean, required: false
   argument :name, String, required: false

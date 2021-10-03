@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::NotificationDestinationType < Types::BaseObject
   field :id, Int, null: false
   field :source, Types::NotificationSourceType, null: false

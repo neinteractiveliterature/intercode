@@ -1,7 +1,6 @@
+# frozen_string_literal: true
 class Mutations::CreateMaximumEventProvidedTicketsOverride < Mutations::BaseMutation
-  field :maximum_event_provided_tickets_override,
-    Types::MaximumEventProvidedTicketsOverrideType,
-    null: false
+  field :maximum_event_provided_tickets_override, Types::MaximumEventProvidedTicketsOverrideType, null: false
 
   argument :event_id, Integer, required: true, camelize: false
   argument :ticket_type_id, Integer, required: true, camelize: false
@@ -15,10 +14,11 @@ class Mutations::CreateMaximumEventProvidedTicketsOverride < Mutations::BaseMuta
   end
 
   def resolve(**args)
-    override = event.maximum_event_provided_tickets_overrides.create!(
-      ticket_type_id: args[:ticket_type_id],
-      override_value: args[:override_value]
-    )
+    override =
+      event.maximum_event_provided_tickets_overrides.create!(
+        ticket_type_id: args[:ticket_type_id],
+        override_value: args[:override_value]
+      )
 
     { maximum_event_provided_tickets_override: override }
   end

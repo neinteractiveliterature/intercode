@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::UpdateProduct < Mutations::BaseMutation
   include ProductMutationHelper
 
@@ -17,14 +18,9 @@ class Mutations::UpdateProduct < Mutations::BaseMutation
 
   def resolve(**args)
     product_fields = args[:product].to_h.deep_symbolize_keys
-    product_fields[:pricing_structure] = coerce_pricing_structure_input(
-      product_fields[:pricing_structure]
-    )
+    product_fields[:pricing_structure] = coerce_pricing_structure_input(product_fields[:pricing_structure])
 
-    create_or_update_variants(
-      product,
-      product_fields.delete(:product_variants)
-    )
+    create_or_update_variants(product, product_fields.delete(:product_variants))
 
     (product_fields.delete(:delete_variant_ids) || []).each do |variant_id|
       product.product_variants.find { |v| v.id == variant_id }.destroy!

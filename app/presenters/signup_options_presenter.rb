@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class SignupOptionsPresenter
   class BucketSignupOption
     attr_reader :bucket, :index, :hide_label
@@ -154,15 +155,15 @@ class SignupOptionsPresenter
   end
 
   def no_preference_options
-    @no_preference_options ||= begin
+    @no_preference_options ||=
       if !event.registration_policy.allow_no_preference_signups?
-        []
-      elsif buckets.reject(&:slots_unlimited?).count(&:counted?) <= 1
-        []
-      else
-        [NoPreferenceSignupOption.new]
-      end
-    end
+          []
+        elsif buckets.reject(&:slots_unlimited?).count(&:counted?) <= 1
+          []
+        else
+          [NoPreferenceSignupOption.new]
+        end
+      
   end
 
   def not_counted_options
@@ -172,9 +173,7 @@ class SignupOptionsPresenter
   private
 
   def partitioned_options_for_event
-    @partitioned_options_for_event ||= signup_options_for_event.partition do |option|
-      main_option?(option)
-    end
+    @partitioned_options_for_event ||= signup_options_for_event.partition { |option| main_option?(option) }
   end
 
   # If there are no auxiliary options, all options are main
@@ -190,37 +189,39 @@ class SignupOptionsPresenter
   end
 
   def signup_options_for_event
-    @signup_options_for_event ||= if team_member?
-      [TeamMemberSignupOption.new(event.team_member_name)]
-    else
-      non_anything_buckets_count = buckets.count { |b| !b.anything? }
-      buckets.each_with_index.map do |bucket, index|
-        next if bucket.anything?
-        BucketSignupOption.new(
-          bucket,
-          index,
-          bucket.counted? && non_anything_buckets_count <= 1
-        )
-      end.compact + no_preference_options
-    end
+    @signup_options_for_event ||=
+      if team_member?
+        [TeamMemberSignupOption.new(event.team_member_name)]
+      else
+        non_anything_buckets_count = buckets.count { |b| !b.anything? }
+        buckets
+          .each_with_index
+          .filter_map do |bucket, index|
+            next if bucket.anything?
+            BucketSignupOption.new(bucket, index, bucket.counted? && non_anything_buckets_count <= 1)
+          end
+           + no_preference_options
+      end
   end
 
   def team_member?
     return @team_member unless @team_member.nil?
-    @team_member = event.team_members.any? do |team_member|
-      team_member.user_con_profile == user_con_profile
-    end
+    @team_member = event.team_members.any? { |team_member| team_member.user_con_profile == user_con_profile }
   end
 
   def user_signup_by_run_id
-    @user_signup_by_run_id ||= if user_con_profile
-      Signup.where(
-        user_con_profile_id: user_con_profile.id,
-        run_id: Run.where(event_id: event.id).select(:id),
-        state: %w[confirmed waitlisted]
-      ).to_a.index_by(&:run_id)
-    else
-      {}
-    end
+    @user_signup_by_run_id ||=
+      if user_con_profile
+        Signup
+          .where(
+            user_con_profile_id: user_con_profile.id,
+            run_id: Run.where(event_id: event.id).select(:id),
+            state: %w[confirmed waitlisted]
+          )
+          .to_a
+          .index_by(&:run_id)
+      else
+        {}
+      end
   end
 end

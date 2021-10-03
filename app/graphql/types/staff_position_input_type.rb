@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::StaffPositionInputType < Types::BaseInputObject
   argument :name, String, required: false
   argument :email, String, required: false

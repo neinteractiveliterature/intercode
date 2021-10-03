@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::CreateUserConProfile < Mutations::BaseMutation
   field :user_con_profile, Types::UserConProfileType, null: false
 
@@ -11,13 +12,9 @@ class Mutations::CreateUserConProfile < Mutations::BaseMutation
     ensure_no_existing_user_con_profile(user)
 
     user_con_profile = convention.user_con_profiles.new(user: user)
-    user_con_profile.assign_default_values_from_form_items(
-      convention.user_con_profile_form.form_items
-    )
+    user_con_profile.assign_default_values_from_form_items(convention.user_con_profile_form.form_items)
 
-    most_recent_profile = user.user_con_profiles.joins(:convention)
-      .order(Arel.sql('conventions.starts_at DESC'))
-      .first
+    most_recent_profile = user.user_con_profiles.joins(:convention).order(Arel.sql('conventions.starts_at DESC')).first
 
     if most_recent_profile
       assign_filtered_attrs(
@@ -27,13 +24,8 @@ class Mutations::CreateUserConProfile < Mutations::BaseMutation
     end
 
     user_con_profile_attrs = args[:user_con_profile].to_h.stringify_keys
-    user_con_profile_attrs.merge!(
-      JSON.parse(user_con_profile_attrs.delete('form_response_attrs_json'))
-    )
-    assign_filtered_attrs(
-      user_con_profile,
-      user_con_profile_attrs.select { |_key, value| value.present? }
-    )
+    user_con_profile_attrs.merge!(JSON.parse(user_con_profile_attrs.delete('form_response_attrs_json')))
+    assign_filtered_attrs(user_con_profile, user_con_profile_attrs.select { |_key, value| value.present? })
     user_con_profile.needs_update = true
     user_con_profile.save!
 
@@ -54,9 +46,6 @@ class Mutations::CreateUserConProfile < Mutations::BaseMutation
     existing_profile = convention.user_con_profiles.find_by(user_id: user.id)
     return unless existing_profile
 
-    raise(
-      GraphQL::ExecutionError,
-      "#{existing_profile.name} is already an attendee of #{convention.name}"
-    )
+    raise(GraphQL::ExecutionError, "#{existing_profile.name} is already an attendee of #{convention.name}")
   end
 end

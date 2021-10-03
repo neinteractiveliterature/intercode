@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class RunAvailabilityPresenter
   class BucketAvailability
     attr_reader :bucket, :signup_count_presenter
@@ -18,7 +19,7 @@ class RunAvailabilityPresenter
 
     def has_availability?
       return true if bucket.slots_unlimited?
-      available_slots > 0
+      available_slots.positive?
     end
 
     def full?
@@ -31,9 +32,11 @@ class RunAvailabilityPresenter
   end
 
   def self.for_runs(runs)
-    SignupCountPresenter.for_runs(runs).transform_values do |signup_count_presenter|
-      new(signup_count_presenter.run, signup_count_presenter: signup_count_presenter)
-    end
+    SignupCountPresenter
+      .for_runs(runs)
+      .transform_values do |signup_count_presenter|
+        new(signup_count_presenter.run, signup_count_presenter: signup_count_presenter)
+      end
   end
 
   attr_reader :run, :signup_count_presenter
@@ -46,9 +49,8 @@ class RunAvailabilityPresenter
   end
 
   def availability_by_bucket
-    @bucket_availabilities ||= registration_policy.buckets.map do |bucket|
-      BucketAvailability.new(bucket, signup_count_presenter)
-    end
+    @bucket_availabilities ||=
+      registration_policy.buckets.map { |bucket| BucketAvailability.new(bucket, signup_count_presenter) }
   end
 
   def full?

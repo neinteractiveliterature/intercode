@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AuthenticityTokensController < ApplicationController
   skip_before_action :redirect_if_user_con_profile_needs_update
   skip_before_action :ensure_clickwrap_agreement_accepted

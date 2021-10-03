@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::RenameCmsFile < Mutations::BaseMutation
   field :cms_file, Types::CmsFileType, null: false
 

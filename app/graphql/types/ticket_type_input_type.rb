@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::TicketTypeInputType < Types::BaseInputObject
   argument :name, String, required: false
   argument :publicly_available, Boolean, required: false, camelize: false

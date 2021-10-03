@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::SignupType < Types::BaseObject
   authorize_record
 
@@ -13,9 +14,7 @@ class Types::SignupType < Types::BaseObject
   field :run, Types::RunType, null: false
   field :user_con_profile, Types::UserConProfileType, null: false, camelize: false
   field :choice, Int, null: true do
-    authorize do |_value, _args, context|
-      Pundit.policy(context[:pundit_user], context[:convention]).view_reports?
-    end
+    authorize { |_value, _args, context| Pundit.policy(context[:pundit_user], context[:convention]).view_reports? }
   end
   field :waitlist_position, Int, null: true, camelize: false
 

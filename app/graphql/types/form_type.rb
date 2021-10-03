@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::FormType < Types::BaseObject
   field :id, Int, null: false
   field :title, String, null: false
@@ -5,10 +6,12 @@ class Types::FormType < Types::BaseObject
     argument :id, Int, required: true, description: 'The ID of the form section to find.'
   end
   field :form_sections, [Types::FormSectionType], null: false, camelize: false
-  field :form_api_json, Types::JSON,
-    null: false,
-    camelize: false,
-    deprecation_reason: "The old form API export is deprecated; please use the \"form\" field \
+  field :form_api_json,
+        Types::JSON,
+        null: false,
+        camelize: false,
+        deprecation_reason:
+          "The old form API export is deprecated; please use the \"form\" field \
 and its subfields instead"
   field :form_type, Types::FormTypeType, null: false, camelize: false
   field :export_json, Types::JSON, null: false, camelize: false
@@ -16,8 +19,7 @@ and its subfields instead"
   field :proposal_event_categories, [Types::EventCategoryType], null: false, camelize: false
   field :user_con_profile_conventions, [Types::ConventionType], null: false, camelize: false
 
-  association_loaders Form, :form_sections, :event_categories, :proposal_event_categories,
-    :user_con_profile_conventions
+  association_loaders Form, :form_sections, :event_categories, :proposal_event_categories, :user_con_profile_conventions
 
   authorize_record
 

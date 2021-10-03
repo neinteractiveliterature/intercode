@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
@@ -52,34 +53,31 @@ class EventProposal < ApplicationRecord
   STATUSES = Set.new(%w[draft proposed reviewing tentative_accept accepted rejected withdrawn])
 
   register_form_response_attrs :title,
-    :email,
-    :event_email,
-    :age_restrictions,
-    :team_mailing_list_name,
-    :length_seconds,
-    :description,
-    :short_blurb,
-    :registration_policy,
-    :can_play_concurrently,
-    :timeblock_preferences
+                               :email,
+                               :event_email,
+                               :age_restrictions,
+                               :team_mailing_list_name,
+                               :length_seconds,
+                               :description,
+                               :short_blurb,
+                               :registration_policy,
+                               :can_play_concurrently,
+                               :timeblock_preferences
 
   belongs_to :convention
   belongs_to :owner, class_name: 'UserConProfile', optional: true
   belongs_to :event, optional: true
   belongs_to :event_category
 
-  STATUSES.each do |status|
-    scope status, -> { where(status: status) }
-  end
+  STATUSES.each { |status| scope status, -> { where(status: status) } }
 
   scope :submitted, -> { where.not(status: 'draft') }
   scope :reminded, -> { where.not(reminded_at: nil) }
   scope :not_reminded, -> { where(reminded_at: nil) }
 
   serialize :registration_policy, ActiveModelCoder.new('RegistrationPolicy')
-  serialize :timeblock_preferences, JSONArrayCoderWrapper.new(
-    ActiveModelCoder.new('EventProposal::TimeblockPreference')
-  )
+  serialize :timeblock_preferences,
+            JSONArrayCoderWrapper.new(ActiveModelCoder.new('EventProposal::TimeblockPreference'))
 
   validates :status, inclusion: { in: STATUSES }
   validate :length_fits_in_convention
@@ -88,20 +86,20 @@ class EventProposal < ApplicationRecord
   indexable_markdown_field(:short_blurb_for_search) { short_blurb }
 
   multisearchable(
-    against: [
-      :title,
-      :authors_for_search,
-      :organization_for_search,
-      :owner_for_search,
-      :description_for_search,
-      :short_blurb_for_search
+    against: %i[
+      title
+      authors_for_search
+      organization_for_search
+      owner_for_search
+      description_for_search
+      short_blurb_for_search
     ],
-    additional_attributes: ->(proposal) {
+    additional_attributes: ->(proposal) do
       {
         convention_id: proposal.convention_id,
         hidden_from_search: %w[accepted rejected withdrawn].include?(proposal.status)
       }
-    }
+    end
   )
 
   def to_liquid
