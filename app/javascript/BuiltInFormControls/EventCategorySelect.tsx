@@ -11,7 +11,11 @@ export type EventCategorySelectProps = Omit<BootstrapFormSelectProps, 'label'> &
   label?: ReactNode;
 };
 
-function EventCategorySelect({ eventCategories, label, ...props }: EventCategorySelectProps) {
+function EventCategorySelect({
+  eventCategories,
+  label,
+  ...props
+}: EventCategorySelectProps): JSX.Element {
   const { t } = useTranslation();
   const categoryOptions = eventCategories.map((category) => (
     <option value={category.id.toString()} key={category.id}>

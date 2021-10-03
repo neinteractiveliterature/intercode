@@ -31,16 +31,18 @@ const AuthenticationModalContext = React.createContext<AuthenticationModalContex
   setUnauthenticatedError: () => {},
 });
 
-export function useAuthenticationModalProvider(recaptchaSiteKey?: string) {
-  const { visible, state, setState, open, close } = useModal<AuthenticationModalState>();
+export function useAuthenticationModalProvider(
+  recaptchaSiteKey?: string,
+): AuthenticationModalContextData {
+  const { state, setState, ...otherModalData } = useModal<AuthenticationModalState>();
   const [afterSignInPath, setAfterSignInPath] = useState<string>();
   const [unauthenticatedError, setUnauthenticatedError] = useState(false);
 
-  const contextValue = useMemo(
+  const contextValue = useMemo<AuthenticationModalContextData>(
     () => ({
-      visible,
-      open,
-      close,
+      state,
+      setState,
+      ...otherModalData,
       afterSignInPath,
       setAfterSignInPath,
       currentView: state?.currentView,
@@ -49,17 +51,14 @@ export function useAuthenticationModalProvider(recaptchaSiteKey?: string) {
       unauthenticatedError,
       setUnauthenticatedError,
     }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       afterSignInPath,
-      close,
-      open,
       recaptchaSiteKey,
       setState,
       setUnauthenticatedError,
       state,
       unauthenticatedError,
-      visible,
+      otherModalData,
     ],
   );
 

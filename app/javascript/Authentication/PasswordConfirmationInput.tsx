@@ -10,7 +10,11 @@ export type PasswordConfirmationInputProps = {
   password: string;
 };
 
-function PasswordConfirmationInput({ value, onChange, password }: PasswordConfirmationInputProps) {
+function PasswordConfirmationInput({
+  value,
+  onChange,
+  password,
+}: PasswordConfirmationInputProps): JSX.Element {
   const { t } = useTranslation();
   const [interactedWithConfirmation, setInteractedWithConfirmation] = useState(false);
 

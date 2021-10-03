@@ -9,14 +9,14 @@ export type DefaultEventsQueryVariables = Types.Exact<{
 }>;
 
 
-export type DefaultEventsQueryData = { __typename: 'Query', convention?: { __typename: 'Convention', id: number, events_paginated: { __typename: 'EventsPagination', entries: Array<{ __typename: 'Event', id: number, title?: string | null | undefined }> } } | null | undefined };
+export type DefaultEventsQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, events_paginated: { __typename: 'EventsPagination', entries: Array<{ __typename: 'Event', id: number, title?: string | null | undefined }> } } };
 
 export type DefaultUserConProfilesQueryVariables = Types.Exact<{
   name?: Types.Maybe<Types.Scalars['String']>;
 }>;
 
 
-export type DefaultUserConProfilesQueryData = { __typename: 'Query', convention?: { __typename: 'Convention', id: number, user_con_profiles_paginated: { __typename: 'UserConProfilesPagination', entries: Array<{ __typename: 'UserConProfile', id: number, name_without_nickname: string, email?: string | null | undefined }> } } | null | undefined };
+export type DefaultUserConProfilesQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, user_con_profiles_paginated: { __typename: 'UserConProfilesPagination', entries: Array<{ __typename: 'UserConProfile', id: number, name_without_nickname: string, email?: string | null | undefined }> } } };
 
 export type DefaultUsersQueryVariables = Types.Exact<{
   name?: Types.Maybe<Types.Scalars['String']>;
@@ -28,7 +28,7 @@ export type DefaultUsersQueryData = { __typename: 'Query', users_paginated: { __
 
 export const DefaultEventsQueryDocument = gql`
     query DefaultEventsQuery($title: String) {
-  convention {
+  convention: conventionByRequestHost {
     id
     events_paginated(filters: {title: $title}, per_page: 50) {
       entries {
@@ -69,7 +69,7 @@ export type DefaultEventsQueryLazyQueryHookResult = ReturnType<typeof useDefault
 export type DefaultEventsQueryQueryResult = Apollo.QueryResult<DefaultEventsQueryData, DefaultEventsQueryVariables>;
 export const DefaultUserConProfilesQueryDocument = gql`
     query DefaultUserConProfilesQuery($name: String) {
-  convention {
+  convention: conventionByRequestHost {
     id
     user_con_profiles_paginated(filters: {name: $name}, per_page: 50) {
       entries {

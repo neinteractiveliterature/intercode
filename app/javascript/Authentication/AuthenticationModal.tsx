@@ -14,7 +14,7 @@ const SignUpForm = lazyWithBundleHashCheck(
   () => import(/* webpackChunkName: "authentication-forms" */ './SignUpForm'),
 );
 
-function AuthenticationModal() {
+function AuthenticationModal(): JSX.Element {
   const { visible, currentView } = useContext(AuthenticationModalContext);
 
   const renderView = () => {

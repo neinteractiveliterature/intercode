@@ -56,7 +56,7 @@ export type AppWrapperProps = {
   stripePublishableKey: string;
 };
 
-function AppWrapper<P>(WrappedComponent: React.ComponentType<P>) {
+function AppWrapper<P>(WrappedComponent: React.ComponentType<P>): React.ComponentType<P> {
   function Wrapper(props: P & AppWrapperProps) {
     const {
       authenticityTokens,

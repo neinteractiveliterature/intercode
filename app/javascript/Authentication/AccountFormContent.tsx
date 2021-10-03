@@ -1,7 +1,7 @@
 import parseCmsContent from '../parseCmsContent';
 import { useAccountFormContentQuery } from './queries.generated';
 
-function AccountFormContent() {
+function AccountFormContent(): JSX.Element {
   const { data, loading, error } = useAccountFormContentQuery();
 
   if (error || loading) {

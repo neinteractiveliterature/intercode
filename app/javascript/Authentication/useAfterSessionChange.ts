@@ -1,7 +1,10 @@
 import { useCallback } from 'react';
 import { useToastOnNextPageLoad } from '@neinteractiveliterature/litform';
 
-export default function useAfterSessionChange() {
+export default function useAfterSessionChange(): (
+  destPath?: string,
+  toastMessage?: Parameters<typeof toastOnNextPageLoad>[0],
+) => Promise<void> {
   const toastOnNextPageLoad = useToastOnNextPageLoad();
   const afterSessionChange = useCallback(
     async (destPath, toastMessage?: Parameters<typeof toastOnNextPageLoad>[0]) => {

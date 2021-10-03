@@ -18221,9 +18221,13 @@
                 }
               ],
               "type": {
-                "kind": "OBJECT",
-                "name": "CreateMaximumEventProvidedTicketsOverridePayload",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CreateMaximumEventProvidedTicketsOverridePayload",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -19339,9 +19343,13 @@
                 }
               ],
               "type": {
-                "kind": "OBJECT",
-                "name": "DeleteMaximumEventProvidedTicketsOverridePayload",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "DeleteMaximumEventProvidedTicketsOverridePayload",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -20952,9 +20960,13 @@
                 }
               ],
               "type": {
-                "kind": "OBJECT",
-                "name": "UpdateMaximumEventProvidedTicketsOverridePayload",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "UpdateMaximumEventProvidedTicketsOverridePayload",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null

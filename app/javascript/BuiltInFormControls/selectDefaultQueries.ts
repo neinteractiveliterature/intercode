@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 
 export const DefaultEventsQuery = gql`
   query DefaultEventsQuery($title: String) {
-    convention {
+    convention: conventionByRequestHost {
       id
       events_paginated(filters: { title: $title }, per_page: 50) {
         entries {
@@ -16,7 +16,7 @@ export const DefaultEventsQuery = gql`
 
 export const DefaultUserConProfilesQuery = gql`
   query DefaultUserConProfilesQuery($name: String) {
-    convention {
+    convention: conventionByRequestHost {
       id
       user_con_profiles_paginated(filters: { name: $name }, per_page: 50) {
         entries {

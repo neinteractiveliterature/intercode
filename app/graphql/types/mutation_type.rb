@@ -133,10 +133,13 @@ class Types::MutationType < Types::BaseObject
   ### MaximumEventProvidedTicketsOverride
 
   field :createMaximumEventProvidedTicketsOverride,
+    null: false,
     mutation: Mutations::CreateMaximumEventProvidedTicketsOverride
   field :updateMaximumEventProvidedTicketsOverride,
+    null: false,
     mutation: Mutations::UpdateMaximumEventProvidedTicketsOverride
   field :deleteMaximumEventProvidedTicketsOverride,
+    null: false,
     mutation: Mutations::DeleteMaximumEventProvidedTicketsOverride
 
   ### NotificationTemplate

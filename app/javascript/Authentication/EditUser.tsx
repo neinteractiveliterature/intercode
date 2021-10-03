@@ -91,11 +91,16 @@ export default LoadQueryWrapper(
 
     const onSubmit = async (event: React.SyntheticEvent) => {
       event.preventDefault();
+
       if (!formState) {
         return;
       }
+      if (!authenticityToken) {
+        throw new Error('No authenticity token received from server');
+      }
+
       await updateUserAsync(
-        authenticityToken!,
+        authenticityToken,
         formState,
         password,
         passwordConfirmation,

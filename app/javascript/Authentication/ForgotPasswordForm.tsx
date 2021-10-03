@@ -44,19 +44,22 @@ async function resetPassword(authenticityToken: string, email: string) {
   return responseJson;
 }
 
-function ForgotPasswordForm() {
+function ForgotPasswordForm(): JSX.Element {
   const { t } = useTranslation();
   const { close: closeModal, setCurrentView } = useContext(AuthenticationModalContext);
   const authenticityToken = useContext(AuthenticityTokensContext).resetPassword;
   const [email, setEmail] = useState('');
   const [success, setSuccess] = useState(false);
-  const [resetPasswordAsync, resetPasswordError, resetPasswordInProgress] = useAsyncFunction(
-    resetPassword,
-  );
+  const [resetPasswordAsync, resetPasswordError, resetPasswordInProgress] =
+    useAsyncFunction(resetPassword);
 
   const onSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
-    await resetPasswordAsync(authenticityToken!, email);
+    if (!authenticityToken) {
+      throw new Error('No authenticity token received from server');
+    }
+
+    await resetPasswordAsync(authenticityToken, email);
     setSuccess(true);
   };
 

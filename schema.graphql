@@ -3400,7 +3400,7 @@ type Mutation {
     Parameters for CreateMaximumEventProvidedTicketsOverride
     """
     input: CreateMaximumEventProvidedTicketsOverrideInput!
-  ): CreateMaximumEventProvidedTicketsOverridePayload
+  ): CreateMaximumEventProvidedTicketsOverridePayload!
   createMultipleRuns(
     """
     Parameters for CreateMultipleRuns
@@ -3604,7 +3604,7 @@ type Mutation {
     Parameters for DeleteMaximumEventProvidedTicketsOverride
     """
     input: DeleteMaximumEventProvidedTicketsOverrideInput!
-  ): DeleteMaximumEventProvidedTicketsOverridePayload
+  ): DeleteMaximumEventProvidedTicketsOverridePayload!
   deleteOrderEntry(
     """
     Parameters for DeleteOrderEntry
@@ -3898,7 +3898,7 @@ type Mutation {
     Parameters for UpdateMaximumEventProvidedTicketsOverride
     """
     input: UpdateMaximumEventProvidedTicketsOverrideInput!
-  ): UpdateMaximumEventProvidedTicketsOverridePayload
+  ): UpdateMaximumEventProvidedTicketsOverridePayload!
   updateNotificationTemplate(
     """
     Parameters for UpdateNotificationTemplate

@@ -182,7 +182,7 @@ function LiquidInput(props: LiquidInputProps): JSX.Element {
             variables: { liquid: liquidContent, eventKey: notifierEventKey },
             fetchPolicy: 'no-cache',
           });
-          return response.data?.previewLiquid ?? '';
+          return response.data?.convention.previewLiquid ?? '';
         }
 
         const response = await client.query<PreviewLiquidQueryData>({
@@ -191,7 +191,7 @@ function LiquidInput(props: LiquidInputProps): JSX.Element {
           fetchPolicy: 'no-cache',
         });
 
-        return parseCmsContent(response.data?.previewLiquid ?? '').bodyComponents;
+        return parseCmsContent(response.data?.cmsParent.previewLiquid ?? '').bodyComponents;
       };
 
   const addFile = (file: CmsFile) => {

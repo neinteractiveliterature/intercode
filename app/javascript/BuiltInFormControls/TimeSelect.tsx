@@ -18,7 +18,7 @@ export type TimeSelectProps = {
   children?: ReactNode;
 };
 
-function TimeSelect({ value, timespan, onChange, children }: TimeSelectProps) {
+function TimeSelect({ value, timespan, onChange, children }: TimeSelectProps): JSX.Element {
   const format = useAppDateTimeFormat();
   const hourValues = useMemo(
     () => {
@@ -46,7 +46,7 @@ function TimeSelect({ value, timespan, onChange, children }: TimeSelectProps) {
     [getMemoizationKeyForTimespan(timespan)],
   );
 
-  const inputChanged = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const inputChanged = (event: React.FocusEvent<HTMLSelectElement>) => {
     const newValue = event.target.value;
 
     if (newValue && newValue !== '') {
@@ -75,10 +75,12 @@ function TimeSelect({ value, timespan, onChange, children }: TimeSelectProps) {
   const hourInputId = useUniqueId('hour-');
   const minuteInputId = useUniqueId('minute-');
 
-  const [hourSelect, minuteSelect] = ([
-    ['Hour', 'hour', hourOptions, hourInputId],
-    ['Minute', 'minute', minuteOptions, minuteInputId],
-  ] as const).map(([label, name, options, selectId]) => (
+  const [hourSelect, minuteSelect] = (
+    [
+      ['Hour', 'hour', hourOptions, hourInputId],
+      ['Minute', 'minute', minuteOptions, minuteInputId],
+    ] as const
+  ).map(([label, name, options, selectId]) => (
     <label className="form-label" key={name} htmlFor={selectId}>
       <span className="visually-hidden">{label}</span>
       <select
@@ -86,7 +88,7 @@ function TimeSelect({ value, timespan, onChange, children }: TimeSelectProps) {
         className="form-select me-1"
         name={name}
         value={value[name] == null ? '' : value[name]}
-        onChange={inputChanged}
+        onBlur={inputChanged}
       >
         <option aria-label="No value selected" />
         {options}

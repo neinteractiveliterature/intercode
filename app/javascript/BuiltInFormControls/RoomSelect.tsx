@@ -9,7 +9,7 @@ export type RoomSelectProps = Omit<
   rooms: RoomForSelect[];
 };
 
-function RoomSelect({ rooms, ...otherProps }: RoomSelectProps) {
+function RoomSelect({ rooms, ...otherProps }: RoomSelectProps): JSX.Element {
   return (
     <Select
       options={rooms}

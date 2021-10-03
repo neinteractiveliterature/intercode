@@ -1,8 +1,7 @@
 import { useContext, useState, Suspense } from 'react';
 import * as React from 'react';
-// eslint-disable-next-line import/no-named-as-default
 import ReCAPTCHA from 'react-google-recaptcha';
-// @ts-expect-error
+// @ts-expect-error array-to-sentence has no TypeScript declarations
 import arrayToSentence from 'array-to-sentence';
 import { humanize } from 'inflected';
 import { useTranslation } from 'react-i18next';
@@ -65,7 +64,7 @@ async function signUp(
   }
 }
 
-function SignUpForm() {
+function SignUpForm(): JSX.Element {
   const { t } = useTranslation();
   const {
     close: closeModal,
@@ -82,7 +81,11 @@ function SignUpForm() {
 
   const onSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
-    await signUp(authenticityToken!, formState, password, passwordConfirmation, captchaValue ?? '');
+    if (!authenticityToken) {
+      throw new Error('No authenticity token received from server');
+    }
+
+    await signUp(authenticityToken, formState, password, passwordConfirmation, captchaValue ?? '');
     await afterSessionChange(window.location.href, {
       title: 'Account signup',
       body: 'Account created.  Welcome!',

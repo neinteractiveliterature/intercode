@@ -18,7 +18,9 @@ export type EditingScheduledValue<ValueType> = {
   timespans: EditingTimespan<ValueType>[];
 };
 
-export function scheduledValueIsValid(scheduledValue: Partial<EditingScheduledValue<any>>) {
+export function scheduledValueIsValid(
+  scheduledValue: Partial<EditingScheduledValue<unknown>>,
+): boolean {
   if (!scheduledValue.timespans || scheduledValue.timespans.length < 1) {
     return false;
   }
@@ -43,8 +45,8 @@ function addTimespanToScheduledValue<
   const everyTimespanFinishes = newTimespans.every((timespan) => timespan.finish);
 
   let startTime: string | undefined;
-  if (lastTimespan && everyTimespanFinishes) {
-    startTime = lastTimespan.finish!;
+  if (lastTimespan && lastTimespan.finish && everyTimespanFinishes) {
+    startTime = lastTimespan.finish;
   }
 
   newTimespans.push({ start: startTime, finish: undefined, value: undefined });
@@ -167,7 +169,7 @@ function ScheduledValueEditor<ValueType>({
   timezone,
   dispatch,
   buildValueInput,
-}: ScheduledValueEditorProps<ValueType>) {
+}: ScheduledValueEditorProps<ValueType>): JSX.Element {
   const addRowClicked = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     dispatch({ type: 'addTimespan' });

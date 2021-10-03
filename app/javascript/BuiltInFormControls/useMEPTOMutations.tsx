@@ -13,13 +13,13 @@ export type UseMEPTOMutationsProps<OverrideType> = {
     };
 
     update: MutationUpdaterFn<{
-      __typename: any;
+      __typename: string;
       createMaximumEventProvidedTicketsOverride: {
-        __typename: any;
+        __typename: string;
         maximum_event_provided_tickets_override: OverrideType;
       };
     }>;
-  }) => Promise<any>;
+  }) => Promise<unknown>;
 
   updateMutate: (options: {
     variables: {
@@ -28,7 +28,7 @@ export type UseMEPTOMutationsProps<OverrideType> = {
         override_value: number;
       };
     };
-  }) => Promise<any>;
+  }) => Promise<unknown>;
 
   deleteMutate: (options: {
     variables: {
@@ -36,11 +36,11 @@ export type UseMEPTOMutationsProps<OverrideType> = {
         id: number;
       };
     };
-    update: (store: ApolloCache<any>) => void;
-  }) => Promise<any>;
+    update: (store: ApolloCache<unknown>) => void;
+  }) => Promise<unknown>;
 
-  createUpdater: (store: ApolloCache<any>, eventId: number, override: OverrideType) => void;
-  deleteUpdater: (store: ApolloCache<any>, id: number) => void;
+  createUpdater: (store: ApolloCache<unknown>, eventId: number, override: OverrideType) => void;
+  deleteUpdater: (store: ApolloCache<unknown>, id: number) => void;
 };
 
 export type MEPTOMutations = Pick<
