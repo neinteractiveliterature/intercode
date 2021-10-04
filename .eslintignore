@@ -6,3 +6,4 @@ public/*
 /jest.config.js
 /doc-site
 /.yarn
+**/*.generated.ts

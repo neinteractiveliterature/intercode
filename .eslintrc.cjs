@@ -38,8 +38,8 @@ module.exports = {
     // 'babel',
     'jest',
     'jsx-a11y',
-    'graphql',
     'react-hooks',
+    '@graphql-eslint',
     '@typescript-eslint',
   ],
 
@@ -50,10 +50,6 @@ module.exports = {
     'jest/no-focused-tests': 'error',
     'jest/no-identical-title': 'error',
     'jest/valid-expect': 'error',
-    'graphql/template-strings': ['error', { env: 'apollo', schemaJson }],
-    'graphql/required-fields': ['error', { env: 'apollo', schemaJson, requiredFields: ['id'] }],
-    'graphql/named-operations': ['error', { env: 'apollo', schemaJson }],
-    'graphql/no-deprecated-fields': ['warn', { env: 'apollo', schemaJson }],
     'no-underscore-dangle': ['error', { allow: ['__typename'] }],
     'react/destructuring-assignment': 'off',
     'react/jsx-props-no-spreading': 'off',
@@ -88,7 +84,13 @@ module.exports = {
     '@typescript-eslint/no-empty-function': 'off',
     '@typescript-eslint/no-unused-vars': [
       'error', { ignoreRestSiblings: true }
-    ]
+    ],
+    '@graphql-eslint/no-operation-name-suffix': 'off',
+    '@graphql-eslint/no-deprecated': 'warn',
+    // I would like to enable these but we use imported fragments everywhere and there's a known
+    // false positive with that
+    '@graphql-eslint/known-fragment-names': 'off',
+    '@graphql-eslint/no-unused-fragments': 'off'
   },
 
   overrides: [
@@ -115,6 +117,11 @@ module.exports = {
         ],
       },
     },
+    {
+      "files": ["*.graphql"],
+      "parser": "@graphql-eslint/eslint-plugin",
+      "plugins": ["@graphql-eslint"],
+    }
   ],
 
   settings: {
