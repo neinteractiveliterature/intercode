@@ -9076,7 +9076,31 @@ __metadata:
   languageName: node
   linkType: hard
 
-"css-minimizer-webpack-plugin@npm:3.0.2, css-minimizer-webpack-plugin@npm:^3.0.1":
+"css-minimizer-webpack-plugin@npm:3.1.0":
+  version: 3.1.0
+  resolution: "css-minimizer-webpack-plugin@npm:3.1.0"
+  dependencies:
+    cssnano: ^5.0.6
+    jest-worker: ^27.0.2
+    p-limit: ^3.0.2
+    postcss: ^8.3.5
+    schema-utils: ^3.1.0
+    serialize-javascript: ^6.0.0
+    source-map: ^0.6.1
+  peerDependencies:
+    webpack: ^5.0.0
+  peerDependenciesMeta:
+    clean-css:
+      optional: true
+    csso:
+      optional: true
+    esbuild:
+      optional: true
+  checksum: d3c5aa3f838ab19a14809c9f09dd661ca1498f93203643d5014df3c58c3839dab9837fb18ab05743a9b6638f2257e801ec80105673ed715be64f6c4d42736e95
+  languageName: node
+  linkType: hard
+
+"css-minimizer-webpack-plugin@npm:^3.0.1":
   version: 3.0.2
   resolution: "css-minimizer-webpack-plugin@npm:3.0.2"
   dependencies:
@@ -21028,7 +21052,7 @@ resolve@^2.0.0-next.3:
     core-js-compat: 3.18.1
     crypto-browserify: 3.12.0
     css-loader: 6.3.0
-    css-minimizer-webpack-plugin: 3.0.2
+    css-minimizer-webpack-plugin: 3.1.0
     csv-string: 4.0.1
     custom-event-polyfill: 1.0.7
     debounce-promise: 3.1.2
