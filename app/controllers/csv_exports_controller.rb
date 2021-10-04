@@ -116,7 +116,9 @@ class CsvExportsController < ApplicationController
       Tables::SignupChangesTableResultsPresenter.new(
         SignupChangePolicy::Scope.new(
           pundit_user,
-          convention.signup_changes.includes([:user_con_profile, {run: :event, signup: { user_con_profile: :signups }}])
+          convention.signup_changes.includes(
+            [:user_con_profile, { run: :event, signup: { user_con_profile: :signups } }]
+          )
         ).resolve,
         params[:filters]&.to_unsafe_h,
         [{ field: 'created_at', desc: true }],

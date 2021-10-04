@@ -38,9 +38,7 @@ class ScheduledValueDrop < Liquid::Drop
 
   # @return [ActiveSupport::TimeWithZone] When the current value came into effect
   def current_value_change
-    @current_value ||=
-      scheduled_value.send(:timespan_containing, now)&.start&.in_time_zone(timezone)
-      
+    @current_value ||= scheduled_value.send(:timespan_containing, now)&.start&.in_time_zone(timezone)
   end
 
   # @return [ActiveSupport::TimeWithZone] When the value will next change

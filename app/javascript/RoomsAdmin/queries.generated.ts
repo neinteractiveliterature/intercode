@@ -7,18 +7,18 @@ const defaultOptions =  {}
 export type RoomsAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type RoomsAdminQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, rooms: Array<{ __typename: 'Room', id: number, name?: string | null | undefined, runs: Array<{ __typename: 'Run', id: number }> }> } };
+export type RoomsAdminQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, rooms: Array<{ __typename: 'Room', name?: string | null | undefined, id: string, runs: Array<{ __typename: 'Run', id: string }> }> } };
 
 
 export const RoomsAdminQueryDocument = gql`
     query RoomsAdminQuery {
   convention: conventionByRequestHost {
-    id
+    id: transitionalId
     rooms {
-      id
+      id: transitionalId
       name
       runs {
-        id
+        id: transitionalId
       }
     }
   }

@@ -5,7 +5,7 @@ export const CreateCoupon = gql`
   mutation CreateCoupon($coupon: CouponInput!) {
     createCoupon(input: { coupon: $coupon }) {
       coupon {
-        id
+        id: transitionalId
         ...AdminCouponFields
       }
     }
@@ -18,7 +18,7 @@ export const UpdateCoupon = gql`
   mutation UpdateCoupon($id: Int!, $coupon: CouponInput!) {
     updateCoupon(input: { id: $id, coupon: $coupon }) {
       coupon {
-        id
+        id: transitionalId
         ...AdminCouponFields
       }
     }

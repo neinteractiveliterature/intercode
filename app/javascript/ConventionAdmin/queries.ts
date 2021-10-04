@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 
 export const ConventionAdminConventionFields = gql`
   fragment ConventionAdminConventionFields on Convention {
-    id
+    id: transitionalId
     accepting_proposals
     starts_at
     ends_at
@@ -44,32 +44,32 @@ export const ConventionAdminConventionFields = gql`
     }
 
     defaultLayout {
-      id
+      id: transitionalId
       name
     }
 
     cmsLayouts {
-      id
+      id: transitionalId
       name
     }
 
     rootPage {
-      id
+      id: transitionalId
       name
     }
 
     cmsPages {
-      id
+      id: transitionalId
       name
     }
 
     staff_positions {
-      id
+      id: transitionalId
       name
     }
 
     catch_all_staff_position {
-      id
+      id: transitionalId
       name
     }
   }
@@ -78,12 +78,12 @@ export const ConventionAdminConventionFields = gql`
 export const ConventionAdminConventionQuery = gql`
   query ConventionAdminConventionQuery {
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       ...ConventionAdminConventionFields
     }
 
     rootSite {
-      id
+      id: transitionalId
       url
     }
   }
@@ -94,7 +94,7 @@ export const ConventionAdminConventionQuery = gql`
 export const StripeAccountOnboardingLinkQuery = gql`
   query StripeAccountOnboardingLinkQuery($baseUrl: String!) {
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
 
       stripe_account {
         id

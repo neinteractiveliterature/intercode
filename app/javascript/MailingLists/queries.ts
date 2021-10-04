@@ -23,7 +23,7 @@ export const MailingListsResultFields = gql`
 export const MailingListsMenuQuery = gql`
   query MailingListsMenuQuery {
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       ticket_mode
       ticket_name
     }
@@ -33,7 +33,7 @@ export const MailingListsMenuQuery = gql`
 export const TicketedAttendeesQuery = gql`
   query TicketedAttendeesQuery {
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       name
       ticket_name
 
@@ -51,7 +51,7 @@ export const TicketedAttendeesQuery = gql`
 export const EventProposersQuery = gql`
   query EventProposersQuery {
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       name
 
       mailing_lists {
@@ -68,7 +68,7 @@ export const EventProposersQuery = gql`
 export const TeamMembersMailingListQuery = gql`
   query TeamMembersMailingListQuery {
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       name
 
       mailing_lists {
@@ -85,7 +85,7 @@ export const TeamMembersMailingListQuery = gql`
 export const UsersWithPendingBioQuery = gql`
   query UsersWithPendingBioQuery {
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       name
 
       mailing_lists {
@@ -102,7 +102,7 @@ export const UsersWithPendingBioQuery = gql`
 export const WaitlistMailingListsQuery = gql`
   query WaitlistMailingListsQuery {
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       name
       timezone_name
 
@@ -113,11 +113,11 @@ export const WaitlistMailingListsQuery = gql`
           }
           metadata_fields
           run {
-            id
+            id: transitionalId
             starts_at
             title_suffix
             event {
-              id
+              id: transitionalId
               title
             }
           }
@@ -132,7 +132,7 @@ export const WaitlistMailingListsQuery = gql`
 export const WhosFreeFormConventionQuery = gql`
   query WhosFreeFormConventionQuery {
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       name
       starts_at
       ends_at
@@ -145,7 +145,7 @@ export const WhosFreeFormConventionQuery = gql`
 export const WhosFreeQuery = gql`
   query WhosFreeQuery($start: Date!, $finish: Date!) {
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       name
 
       mailing_lists {

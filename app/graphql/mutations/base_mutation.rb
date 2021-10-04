@@ -44,7 +44,8 @@ class Mutations::BaseMutation < GraphQL::Schema::RelayClassicMutation
     attr_reader field_name
 
     define_method :authorized? do |args|
-      model = model_class.find_by!(id_field => args[argument_name || id_field])
+      id_value = args[argument_name || :"transitional_#{id_field}"] || args[id_field]
+      model = model_class.find_by!(id_field => id_value)
       instance_variable_set(:"@#{field_name}", model)
       self.class.check_authorization(policy(model), action, message: message)
     end
@@ -62,7 +63,8 @@ class Mutations::BaseMutation < GraphQL::Schema::RelayClassicMutation
     attr_reader field_name
 
     define_method :authorized? do |args|
-      model = convention.public_send(association).find_by!(id_field => args[id_field])
+      id_value = args[:"transitional_#{id_field}"] || args[id_field]
+      model = convention.public_send(association).find_by!(id_field => id_value)
       instance_variable_set(:"@#{field_name}", model)
       self.class.check_authorization(policy(model), action, message: message)
     end
@@ -101,6 +103,14 @@ class Mutations::BaseMutation < GraphQL::Schema::RelayClassicMutation
       model = cms_parent.public_send(association).find_by!(id_field => args[id_field])
       instance_variable_set(:"@#{field_name}", model)
       self.class.check_authorization(policy(model), action, message: message)
+    end
+  end
+
+  def process_transitional_ids_in_input(input, *id_fields)
+    id_fields.reduce(input.to_h) do |working_input, id_field|
+      next working_input unless working_input.key?(:"transitional_#{id_field}")
+      transitional_id_value = working_input[:"transitional_#{id_field}"]
+      working_input.except(:"transitional_#{id_field}").merge({ id_field => transitional_id_value&.to_i })
     end
   end
 end

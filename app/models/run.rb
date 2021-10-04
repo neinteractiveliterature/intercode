@@ -73,9 +73,7 @@ class Run < ApplicationRecord
     registration_policy
       .buckets
       .map(&:key)
-      .index_with do |bucket_key|
-        bucket_with_key(bucket_key).available_slots(signups[bucket_key] || [])
-      end
+      .index_with { |bucket_key| bucket_with_key(bucket_key).available_slots(signups[bucket_key] || []) }
   end
 
   def timespan

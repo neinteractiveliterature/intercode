@@ -8,19 +8,13 @@ import { getProvidableTicketTypes, getRemainingTicketCountByType } from './Provi
 import { TeamMembersQueryData } from './queries.generated';
 
 export type ProvidableTicketTypeSelectionProps = {
-  convention: Pick<
-    NonNullable<TeamMembersQueryData['convention']>,
-    'ticket_types' | 'ticket_name'
-  > & {
+  convention: Pick<NonNullable<TeamMembersQueryData['convention']>, 'ticket_types' | 'ticket_name'> & {
     event: Pick<TeamMembersQueryData['convention']['event'], 'title'> & {
-      provided_tickets: Pick<
-        TeamMembersQueryData['convention']['event']['provided_tickets'][0],
-        'ticket_type'
-      >[];
+      provided_tickets: Pick<TeamMembersQueryData['convention']['event']['provided_tickets'][0], 'ticket_type'>[];
     };
   };
-  value?: number;
-  onChange: React.Dispatch<number>;
+  value?: string;
+  onChange: React.Dispatch<string>;
   disabled?: boolean;
 };
 
@@ -72,9 +66,7 @@ function ProvidableTicketTypeSelection({
         caption=""
         choices={choices}
         value={value == null ? '' : value.toString()}
-        onChange={(newValue: string) => {
-          onChange(Number.parseInt(newValue, 10));
-        }}
+        onChange={(newValue: string) => onChange(newValue)}
         disabled={disabled}
       />
     </>

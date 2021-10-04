@@ -4,57 +4,57 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type UserActivityAlertsAdminConventionFieldsFragment = { __typename: 'Convention', id: number, ticket_name: string, ticket_mode: Types.TicketMode, staff_positions: Array<{ __typename: 'StaffPosition', id: number, name: string }> };
+export type UserActivityAlertsAdminConventionFieldsFragment = { __typename: 'Convention', ticket_name: string, ticket_mode: Types.TicketMode, id: string, staff_positions: Array<{ __typename: 'StaffPosition', name: string, id: string }> };
 
-export type UserActivityAlertFieldsFragment = { __typename: 'UserActivityAlert', id: number, email?: string | null | undefined, partial_name?: string | null | undefined, trigger_on_user_con_profile_create: boolean, trigger_on_ticket_create: boolean, user?: { __typename: 'User', id: number, name?: string | null | undefined } | null | undefined, notification_destinations: Array<{ __typename: 'NotificationDestination', id: number, staff_position?: { __typename: 'StaffPosition', id: number, name: string } | null | undefined, user_con_profile?: { __typename: 'UserConProfile', id: number, name_without_nickname: string } | null | undefined }> };
+export type UserActivityAlertFieldsFragment = { __typename: 'UserActivityAlert', email?: string | null | undefined, partial_name?: string | null | undefined, trigger_on_user_con_profile_create: boolean, trigger_on_ticket_create: boolean, id: string, user?: { __typename: 'User', name?: string | null | undefined, id: string } | null | undefined, notification_destinations: Array<{ __typename: 'NotificationDestination', id: string, staff_position?: { __typename: 'StaffPosition', name: string, id: string } | null | undefined, user_con_profile?: { __typename: 'UserConProfile', name_without_nickname: string, id: string } | null | undefined }> };
 
 export type ConventionTicketNameQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type ConventionTicketNameQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, ticket_name: string, ticket_mode: Types.TicketMode, staff_positions: Array<{ __typename: 'StaffPosition', id: number, name: string }> } };
+export type ConventionTicketNameQueryData = { __typename: 'Query', convention: { __typename: 'Convention', ticket_name: string, ticket_mode: Types.TicketMode, id: string, staff_positions: Array<{ __typename: 'StaffPosition', name: string, id: string }> } };
 
 export type UserActivityAlertQueryVariables = Types.Exact<{
   id: Types.Scalars['Int'];
 }>;
 
 
-export type UserActivityAlertQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, ticket_name: string, ticket_mode: Types.TicketMode, user_activity_alert: { __typename: 'UserActivityAlert', id: number, email?: string | null | undefined, partial_name?: string | null | undefined, trigger_on_user_con_profile_create: boolean, trigger_on_ticket_create: boolean, user?: { __typename: 'User', id: number, name?: string | null | undefined } | null | undefined, notification_destinations: Array<{ __typename: 'NotificationDestination', id: number, staff_position?: { __typename: 'StaffPosition', id: number, name: string } | null | undefined, user_con_profile?: { __typename: 'UserConProfile', id: number, name_without_nickname: string } | null | undefined }> }, staff_positions: Array<{ __typename: 'StaffPosition', id: number, name: string }> } };
+export type UserActivityAlertQueryData = { __typename: 'Query', convention: { __typename: 'Convention', ticket_name: string, ticket_mode: Types.TicketMode, id: string, user_activity_alert: { __typename: 'UserActivityAlert', email?: string | null | undefined, partial_name?: string | null | undefined, trigger_on_user_con_profile_create: boolean, trigger_on_ticket_create: boolean, id: string, user?: { __typename: 'User', name?: string | null | undefined, id: string } | null | undefined, notification_destinations: Array<{ __typename: 'NotificationDestination', id: string, staff_position?: { __typename: 'StaffPosition', name: string, id: string } | null | undefined, user_con_profile?: { __typename: 'UserConProfile', name_without_nickname: string, id: string } | null | undefined }> }, staff_positions: Array<{ __typename: 'StaffPosition', name: string, id: string }> } };
 
 export type UserActivityAlertsAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type UserActivityAlertsAdminQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, ticket_name: string, ticket_mode: Types.TicketMode, user_activity_alerts: Array<{ __typename: 'UserActivityAlert', id: number, email?: string | null | undefined, partial_name?: string | null | undefined, trigger_on_user_con_profile_create: boolean, trigger_on_ticket_create: boolean, user?: { __typename: 'User', id: number, name?: string | null | undefined } | null | undefined, notification_destinations: Array<{ __typename: 'NotificationDestination', id: number, staff_position?: { __typename: 'StaffPosition', id: number, name: string } | null | undefined, user_con_profile?: { __typename: 'UserConProfile', id: number, name_without_nickname: string } | null | undefined }> }> } };
+export type UserActivityAlertsAdminQueryData = { __typename: 'Query', convention: { __typename: 'Convention', ticket_name: string, ticket_mode: Types.TicketMode, id: string, user_activity_alerts: Array<{ __typename: 'UserActivityAlert', email?: string | null | undefined, partial_name?: string | null | undefined, trigger_on_user_con_profile_create: boolean, trigger_on_ticket_create: boolean, id: string, user?: { __typename: 'User', name?: string | null | undefined, id: string } | null | undefined, notification_destinations: Array<{ __typename: 'NotificationDestination', id: string, staff_position?: { __typename: 'StaffPosition', name: string, id: string } | null | undefined, user_con_profile?: { __typename: 'UserConProfile', name_without_nickname: string, id: string } | null | undefined }> }> } };
 
 export const UserActivityAlertsAdminConventionFieldsFragmentDoc = gql`
     fragment UserActivityAlertsAdminConventionFields on Convention {
-  id
+  id: transitionalId
   ticket_name
   ticket_mode
   staff_positions {
-    id
+    id: transitionalId
     name
   }
 }
     `;
 export const UserActivityAlertFieldsFragmentDoc = gql`
     fragment UserActivityAlertFields on UserActivityAlert {
-  id
+  id: transitionalId
   email
   partial_name
   trigger_on_user_con_profile_create
   trigger_on_ticket_create
   user {
-    id
+    id: transitionalId
     name
   }
   notification_destinations {
-    id
+    id: transitionalId
     staff_position {
-      id
+      id: transitionalId
       name
     }
     user_con_profile {
-      id
+      id: transitionalId
       name_without_nickname
     }
   }
@@ -63,7 +63,7 @@ export const UserActivityAlertFieldsFragmentDoc = gql`
 export const ConventionTicketNameQueryDocument = gql`
     query ConventionTicketNameQuery {
   convention: conventionByRequestHost {
-    id
+    id: transitionalId
     ...UserActivityAlertsAdminConventionFields
   }
 }
@@ -98,10 +98,10 @@ export type ConventionTicketNameQueryQueryResult = Apollo.QueryResult<Convention
 export const UserActivityAlertQueryDocument = gql`
     query UserActivityAlertQuery($id: Int!) {
   convention: conventionByRequestHost {
-    id
+    id: transitionalId
     ...UserActivityAlertsAdminConventionFields
     user_activity_alert(id: $id) {
-      id
+      id: transitionalId
       ...UserActivityAlertFields
     }
   }
@@ -139,11 +139,11 @@ export type UserActivityAlertQueryQueryResult = Apollo.QueryResult<UserActivityA
 export const UserActivityAlertsAdminQueryDocument = gql`
     query UserActivityAlertsAdminQuery {
   convention: conventionByRequestHost {
-    id
+    id: transitionalId
     ticket_name
     ticket_mode
     user_activity_alerts {
-      id
+      id: transitionalId
       ...UserActivityAlertFields
     }
   }

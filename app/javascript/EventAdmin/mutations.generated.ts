@@ -11,84 +11,84 @@ export type CreateEventMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateEventMutationData = { __typename: 'Mutation', createEvent: { __typename: 'CreateEventPayload', event: { __typename: 'Event', id: number, title?: string | null | undefined, author?: string | null | undefined, description?: string | null | undefined, organization?: string | null | undefined, url?: string | null | undefined, con_mail_destination?: string | null | undefined, can_play_concurrently: boolean, short_blurb?: string | null | undefined, participant_communications?: string | null | undefined, age_restrictions?: string | null | undefined, content_warnings?: string | null | undefined, email?: string | null | undefined, length_seconds: number, status?: string | null | undefined, description_html?: string | null | undefined, form_response_attrs_json?: any | null | undefined, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, admin_notes?: string | null | undefined, event_category: { __typename: 'EventCategory', id: number, name: string }, registration_policy?: { __typename: 'RegistrationPolicy', slots_limited?: boolean | null | undefined, prevent_no_preference_signups: boolean, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null | undefined, description?: string | null | undefined, minimum_slots?: number | null | undefined, preferred_slots?: number | null | undefined, total_slots?: number | null | undefined, slots_limited: boolean, anything: boolean, not_counted: boolean }> } | null | undefined, runs: Array<{ __typename: 'Run', id: number, starts_at: any, schedule_note?: string | null | undefined, title_suffix?: string | null | undefined, room_names: Array<string>, confirmed_signup_count: number, not_counted_signup_count: number, signup_count_by_state_and_bucket_key_and_counted: any, rooms: Array<{ __typename: 'Room', id: number, name?: string | null | undefined }>, my_signups: Array<{ __typename: 'Signup', id: number, state: Types.SignupState }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: number, state: Types.SignupRequestState }> }>, maximum_event_provided_tickets_overrides: Array<{ __typename: 'MaximumEventProvidedTicketsOverride', id: number, override_value: number, ticket_type: { __typename: 'TicketType', id: number, description?: string | null | undefined, maximum_event_provided_tickets: number } }> } } };
+export type CreateEventMutationData = { __typename: 'Mutation', createEvent: { __typename: 'CreateEventPayload', event: { __typename: 'Event', title?: string | null | undefined, author?: string | null | undefined, description?: string | null | undefined, organization?: string | null | undefined, url?: string | null | undefined, con_mail_destination?: string | null | undefined, can_play_concurrently: boolean, short_blurb?: string | null | undefined, participant_communications?: string | null | undefined, age_restrictions?: string | null | undefined, content_warnings?: string | null | undefined, email?: string | null | undefined, length_seconds: number, status?: string | null | undefined, description_html?: string | null | undefined, form_response_attrs_json?: any | null | undefined, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, admin_notes?: string | null | undefined, id: string, event_category: { __typename: 'EventCategory', name: string, id: string }, registration_policy?: { __typename: 'RegistrationPolicy', slots_limited?: boolean | null | undefined, prevent_no_preference_signups: boolean, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null | undefined, description?: string | null | undefined, minimum_slots?: number | null | undefined, preferred_slots?: number | null | undefined, total_slots?: number | null | undefined, slots_limited: boolean, anything: boolean, not_counted: boolean }> } | null | undefined, runs: Array<{ __typename: 'Run', starts_at: any, schedule_note?: string | null | undefined, title_suffix?: string | null | undefined, room_names: Array<string>, confirmed_signup_count: number, not_counted_signup_count: number, signup_count_by_state_and_bucket_key_and_counted: any, id: string, rooms: Array<{ __typename: 'Room', name?: string | null | undefined, id: string }>, my_signups: Array<{ __typename: 'Signup', state: Types.SignupState, id: string }>, my_signup_requests: Array<{ __typename: 'SignupRequest', state: Types.SignupRequestState, id: string }> }>, maximum_event_provided_tickets_overrides: Array<{ __typename: 'MaximumEventProvidedTicketsOverride', override_value: number, id: string, ticket_type: { __typename: 'TicketType', description?: string | null | undefined, maximum_event_provided_tickets: number, id: string } }> } } };
 
 export type CreateFillerEventMutationVariables = Types.Exact<{
   input: Types.CreateFillerEventInput;
 }>;
 
 
-export type CreateFillerEventMutationData = { __typename: 'Mutation', createFillerEvent: { __typename: 'CreateFillerEventPayload', event: { __typename: 'Event', id: number, title?: string | null | undefined, author?: string | null | undefined, description?: string | null | undefined, organization?: string | null | undefined, url?: string | null | undefined, con_mail_destination?: string | null | undefined, can_play_concurrently: boolean, short_blurb?: string | null | undefined, participant_communications?: string | null | undefined, age_restrictions?: string | null | undefined, content_warnings?: string | null | undefined, email?: string | null | undefined, length_seconds: number, status?: string | null | undefined, description_html?: string | null | undefined, form_response_attrs_json?: any | null | undefined, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, admin_notes?: string | null | undefined, event_category: { __typename: 'EventCategory', id: number, name: string }, registration_policy?: { __typename: 'RegistrationPolicy', slots_limited?: boolean | null | undefined, prevent_no_preference_signups: boolean, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null | undefined, description?: string | null | undefined, minimum_slots?: number | null | undefined, preferred_slots?: number | null | undefined, total_slots?: number | null | undefined, slots_limited: boolean, anything: boolean, not_counted: boolean }> } | null | undefined, runs: Array<{ __typename: 'Run', id: number, starts_at: any, schedule_note?: string | null | undefined, title_suffix?: string | null | undefined, room_names: Array<string>, confirmed_signup_count: number, not_counted_signup_count: number, signup_count_by_state_and_bucket_key_and_counted: any, rooms: Array<{ __typename: 'Room', id: number, name?: string | null | undefined }>, my_signups: Array<{ __typename: 'Signup', id: number, state: Types.SignupState }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: number, state: Types.SignupRequestState }> }>, maximum_event_provided_tickets_overrides: Array<{ __typename: 'MaximumEventProvidedTicketsOverride', id: number, override_value: number, ticket_type: { __typename: 'TicketType', id: number, description?: string | null | undefined, maximum_event_provided_tickets: number } }> } } };
+export type CreateFillerEventMutationData = { __typename: 'Mutation', createFillerEvent: { __typename: 'CreateFillerEventPayload', event: { __typename: 'Event', title?: string | null | undefined, author?: string | null | undefined, description?: string | null | undefined, organization?: string | null | undefined, url?: string | null | undefined, con_mail_destination?: string | null | undefined, can_play_concurrently: boolean, short_blurb?: string | null | undefined, participant_communications?: string | null | undefined, age_restrictions?: string | null | undefined, content_warnings?: string | null | undefined, email?: string | null | undefined, length_seconds: number, status?: string | null | undefined, description_html?: string | null | undefined, form_response_attrs_json?: any | null | undefined, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, admin_notes?: string | null | undefined, id: string, event_category: { __typename: 'EventCategory', name: string, id: string }, registration_policy?: { __typename: 'RegistrationPolicy', slots_limited?: boolean | null | undefined, prevent_no_preference_signups: boolean, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null | undefined, description?: string | null | undefined, minimum_slots?: number | null | undefined, preferred_slots?: number | null | undefined, total_slots?: number | null | undefined, slots_limited: boolean, anything: boolean, not_counted: boolean }> } | null | undefined, runs: Array<{ __typename: 'Run', starts_at: any, schedule_note?: string | null | undefined, title_suffix?: string | null | undefined, room_names: Array<string>, confirmed_signup_count: number, not_counted_signup_count: number, signup_count_by_state_and_bucket_key_and_counted: any, id: string, rooms: Array<{ __typename: 'Room', name?: string | null | undefined, id: string }>, my_signups: Array<{ __typename: 'Signup', state: Types.SignupState, id: string }>, my_signup_requests: Array<{ __typename: 'SignupRequest', state: Types.SignupRequestState, id: string }> }>, maximum_event_provided_tickets_overrides: Array<{ __typename: 'MaximumEventProvidedTicketsOverride', override_value: number, id: string, ticket_type: { __typename: 'TicketType', description?: string | null | undefined, maximum_event_provided_tickets: number, id: string } }> } } };
 
 export type DropEventMutationVariables = Types.Exact<{
   input: Types.DropEventInput;
 }>;
 
 
-export type DropEventMutationData = { __typename: 'Mutation', dropEvent: { __typename: 'DropEventPayload', event: { __typename: 'Event', id: number, status?: string | null | undefined } } };
+export type DropEventMutationData = { __typename: 'Mutation', dropEvent: { __typename: 'DropEventPayload', event: { __typename: 'Event', status?: string | null | undefined, id: string } } };
 
 export type RestoreDroppedEventMutationVariables = Types.Exact<{
   input: Types.RestoreDroppedEventInput;
 }>;
 
 
-export type RestoreDroppedEventMutationData = { __typename: 'Mutation', restoreDroppedEvent: { __typename: 'RestoreDroppedEventPayload', event: { __typename: 'Event', id: number, status?: string | null | undefined } } };
+export type RestoreDroppedEventMutationData = { __typename: 'Mutation', restoreDroppedEvent: { __typename: 'RestoreDroppedEventPayload', event: { __typename: 'Event', status?: string | null | undefined, id: string } } };
 
 export type UpdateEventMutationVariables = Types.Exact<{
   input: Types.UpdateEventInput;
 }>;
 
 
-export type UpdateEventMutationData = { __typename: 'Mutation', updateEvent: { __typename: 'UpdateEventPayload', event: { __typename: 'Event', id: number, title?: string | null | undefined, author?: string | null | undefined, description?: string | null | undefined, organization?: string | null | undefined, url?: string | null | undefined, con_mail_destination?: string | null | undefined, can_play_concurrently: boolean, short_blurb?: string | null | undefined, participant_communications?: string | null | undefined, age_restrictions?: string | null | undefined, content_warnings?: string | null | undefined, email?: string | null | undefined, length_seconds: number, status?: string | null | undefined, description_html?: string | null | undefined, form_response_attrs_json?: any | null | undefined, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, admin_notes?: string | null | undefined, event_category: { __typename: 'EventCategory', id: number, name: string }, registration_policy?: { __typename: 'RegistrationPolicy', slots_limited?: boolean | null | undefined, prevent_no_preference_signups: boolean, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null | undefined, description?: string | null | undefined, minimum_slots?: number | null | undefined, preferred_slots?: number | null | undefined, total_slots?: number | null | undefined, slots_limited: boolean, anything: boolean, not_counted: boolean }> } | null | undefined, runs: Array<{ __typename: 'Run', id: number, starts_at: any, schedule_note?: string | null | undefined, title_suffix?: string | null | undefined, room_names: Array<string>, confirmed_signup_count: number, not_counted_signup_count: number, signup_count_by_state_and_bucket_key_and_counted: any, rooms: Array<{ __typename: 'Room', id: number, name?: string | null | undefined }>, my_signups: Array<{ __typename: 'Signup', id: number, state: Types.SignupState }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: number, state: Types.SignupRequestState }> }>, maximum_event_provided_tickets_overrides: Array<{ __typename: 'MaximumEventProvidedTicketsOverride', id: number, override_value: number, ticket_type: { __typename: 'TicketType', id: number, description?: string | null | undefined, maximum_event_provided_tickets: number } }> } } };
+export type UpdateEventMutationData = { __typename: 'Mutation', updateEvent: { __typename: 'UpdateEventPayload', event: { __typename: 'Event', title?: string | null | undefined, author?: string | null | undefined, description?: string | null | undefined, organization?: string | null | undefined, url?: string | null | undefined, con_mail_destination?: string | null | undefined, can_play_concurrently: boolean, short_blurb?: string | null | undefined, participant_communications?: string | null | undefined, age_restrictions?: string | null | undefined, content_warnings?: string | null | undefined, email?: string | null | undefined, length_seconds: number, status?: string | null | undefined, description_html?: string | null | undefined, form_response_attrs_json?: any | null | undefined, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, admin_notes?: string | null | undefined, id: string, event_category: { __typename: 'EventCategory', name: string, id: string }, registration_policy?: { __typename: 'RegistrationPolicy', slots_limited?: boolean | null | undefined, prevent_no_preference_signups: boolean, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null | undefined, description?: string | null | undefined, minimum_slots?: number | null | undefined, preferred_slots?: number | null | undefined, total_slots?: number | null | undefined, slots_limited: boolean, anything: boolean, not_counted: boolean }> } | null | undefined, runs: Array<{ __typename: 'Run', starts_at: any, schedule_note?: string | null | undefined, title_suffix?: string | null | undefined, room_names: Array<string>, confirmed_signup_count: number, not_counted_signup_count: number, signup_count_by_state_and_bucket_key_and_counted: any, id: string, rooms: Array<{ __typename: 'Room', name?: string | null | undefined, id: string }>, my_signups: Array<{ __typename: 'Signup', state: Types.SignupState, id: string }>, my_signup_requests: Array<{ __typename: 'SignupRequest', state: Types.SignupRequestState, id: string }> }>, maximum_event_provided_tickets_overrides: Array<{ __typename: 'MaximumEventProvidedTicketsOverride', override_value: number, id: string, ticket_type: { __typename: 'TicketType', description?: string | null | undefined, maximum_event_provided_tickets: number, id: string } }> } } };
 
 export type CreateRunMutationVariables = Types.Exact<{
   input: Types.CreateRunInput;
 }>;
 
 
-export type CreateRunMutationData = { __typename: 'Mutation', createRun: { __typename: 'CreateRunPayload', run: { __typename: 'Run', id: number, starts_at: any, schedule_note?: string | null | undefined, title_suffix?: string | null | undefined, room_names: Array<string>, confirmed_signup_count: number, not_counted_signup_count: number, signup_count_by_state_and_bucket_key_and_counted: any, rooms: Array<{ __typename: 'Room', id: number, name?: string | null | undefined }>, my_signups: Array<{ __typename: 'Signup', id: number, state: Types.SignupState }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: number, state: Types.SignupRequestState }> } } };
+export type CreateRunMutationData = { __typename: 'Mutation', createRun: { __typename: 'CreateRunPayload', run: { __typename: 'Run', starts_at: any, schedule_note?: string | null | undefined, title_suffix?: string | null | undefined, room_names: Array<string>, confirmed_signup_count: number, not_counted_signup_count: number, signup_count_by_state_and_bucket_key_and_counted: any, id: string, rooms: Array<{ __typename: 'Room', name?: string | null | undefined, id: string }>, my_signups: Array<{ __typename: 'Signup', state: Types.SignupState, id: string }>, my_signup_requests: Array<{ __typename: 'SignupRequest', state: Types.SignupRequestState, id: string }> } } };
 
 export type CreateMultipleRunsMutationVariables = Types.Exact<{
   input: Types.CreateMultipleRunsInput;
 }>;
 
 
-export type CreateMultipleRunsMutationData = { __typename: 'Mutation', createMultipleRuns: { __typename: 'CreateMultipleRunsPayload', runs: Array<{ __typename: 'Run', id: number, starts_at: any, schedule_note?: string | null | undefined, title_suffix?: string | null | undefined, room_names: Array<string>, confirmed_signup_count: number, not_counted_signup_count: number, signup_count_by_state_and_bucket_key_and_counted: any, rooms: Array<{ __typename: 'Room', id: number, name?: string | null | undefined }>, my_signups: Array<{ __typename: 'Signup', id: number, state: Types.SignupState }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: number, state: Types.SignupRequestState }> }> } };
+export type CreateMultipleRunsMutationData = { __typename: 'Mutation', createMultipleRuns: { __typename: 'CreateMultipleRunsPayload', runs: Array<{ __typename: 'Run', starts_at: any, schedule_note?: string | null | undefined, title_suffix?: string | null | undefined, room_names: Array<string>, confirmed_signup_count: number, not_counted_signup_count: number, signup_count_by_state_and_bucket_key_and_counted: any, id: string, rooms: Array<{ __typename: 'Room', name?: string | null | undefined, id: string }>, my_signups: Array<{ __typename: 'Signup', state: Types.SignupState, id: string }>, my_signup_requests: Array<{ __typename: 'SignupRequest', state: Types.SignupRequestState, id: string }> }> } };
 
 export type UpdateRunMutationVariables = Types.Exact<{
   input: Types.UpdateRunInput;
 }>;
 
 
-export type UpdateRunMutationData = { __typename: 'Mutation', updateRun: { __typename: 'UpdateRunPayload', run: { __typename: 'Run', id: number, starts_at: any, schedule_note?: string | null | undefined, title_suffix?: string | null | undefined, room_names: Array<string>, confirmed_signup_count: number, not_counted_signup_count: number, signup_count_by_state_and_bucket_key_and_counted: any, rooms: Array<{ __typename: 'Room', id: number, name?: string | null | undefined }>, my_signups: Array<{ __typename: 'Signup', id: number, state: Types.SignupState }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: number, state: Types.SignupRequestState }> } } };
+export type UpdateRunMutationData = { __typename: 'Mutation', updateRun: { __typename: 'UpdateRunPayload', run: { __typename: 'Run', starts_at: any, schedule_note?: string | null | undefined, title_suffix?: string | null | undefined, room_names: Array<string>, confirmed_signup_count: number, not_counted_signup_count: number, signup_count_by_state_and_bucket_key_and_counted: any, id: string, rooms: Array<{ __typename: 'Room', name?: string | null | undefined, id: string }>, my_signups: Array<{ __typename: 'Signup', state: Types.SignupState, id: string }>, my_signup_requests: Array<{ __typename: 'SignupRequest', state: Types.SignupRequestState, id: string }> } } };
 
 export type DeleteRunMutationVariables = Types.Exact<{
   input: Types.DeleteRunInput;
 }>;
 
 
-export type DeleteRunMutationData = { __typename: 'Mutation', deleteRun: { __typename: 'DeleteRunPayload', run: { __typename: 'Run', id: number, starts_at: any, schedule_note?: string | null | undefined, title_suffix?: string | null | undefined, room_names: Array<string>, confirmed_signup_count: number, not_counted_signup_count: number, signup_count_by_state_and_bucket_key_and_counted: any, rooms: Array<{ __typename: 'Room', id: number, name?: string | null | undefined }>, my_signups: Array<{ __typename: 'Signup', id: number, state: Types.SignupState }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: number, state: Types.SignupRequestState }> } } };
+export type DeleteRunMutationData = { __typename: 'Mutation', deleteRun: { __typename: 'DeleteRunPayload', run: { __typename: 'Run', starts_at: any, schedule_note?: string | null | undefined, title_suffix?: string | null | undefined, room_names: Array<string>, confirmed_signup_count: number, not_counted_signup_count: number, signup_count_by_state_and_bucket_key_and_counted: any, id: string, rooms: Array<{ __typename: 'Room', name?: string | null | undefined, id: string }>, my_signups: Array<{ __typename: 'Signup', state: Types.SignupState, id: string }>, my_signup_requests: Array<{ __typename: 'SignupRequest', state: Types.SignupRequestState, id: string }> } } };
 
 export type CreateMaximumEventProvidedTicketsOverrideMutationVariables = Types.Exact<{
   input: Types.CreateMaximumEventProvidedTicketsOverrideInput;
 }>;
 
 
-export type CreateMaximumEventProvidedTicketsOverrideMutationData = { __typename: 'Mutation', createMaximumEventProvidedTicketsOverride: { __typename: 'CreateMaximumEventProvidedTicketsOverridePayload', maximum_event_provided_tickets_override: { __typename: 'MaximumEventProvidedTicketsOverride', id: number, override_value: number, ticket_type: { __typename: 'TicketType', id: number, description?: string | null | undefined, maximum_event_provided_tickets: number } } } };
+export type CreateMaximumEventProvidedTicketsOverrideMutationData = { __typename: 'Mutation', createMaximumEventProvidedTicketsOverride: { __typename: 'CreateMaximumEventProvidedTicketsOverridePayload', maximum_event_provided_tickets_override: { __typename: 'MaximumEventProvidedTicketsOverride', override_value: number, id: string, ticket_type: { __typename: 'TicketType', description?: string | null | undefined, maximum_event_provided_tickets: number, id: string } } } };
 
 export type DeleteMaximumEventProvidedTicketsOverrideMutationVariables = Types.Exact<{
   input: Types.DeleteMaximumEventProvidedTicketsOverrideInput;
 }>;
 
 
-export type DeleteMaximumEventProvidedTicketsOverrideMutationData = { __typename: 'Mutation', deleteMaximumEventProvidedTicketsOverride: { __typename: 'DeleteMaximumEventProvidedTicketsOverridePayload', maximum_event_provided_tickets_override: { __typename: 'MaximumEventProvidedTicketsOverride', id: number, override_value: number, ticket_type: { __typename: 'TicketType', id: number, description?: string | null | undefined, maximum_event_provided_tickets: number } } } };
+export type DeleteMaximumEventProvidedTicketsOverrideMutationData = { __typename: 'Mutation', deleteMaximumEventProvidedTicketsOverride: { __typename: 'DeleteMaximumEventProvidedTicketsOverridePayload', maximum_event_provided_tickets_override: { __typename: 'MaximumEventProvidedTicketsOverride', override_value: number, id: string, ticket_type: { __typename: 'TicketType', description?: string | null | undefined, maximum_event_provided_tickets: number, id: string } } } };
 
 export type UpdateMaximumEventProvidedTicketsOverrideMutationVariables = Types.Exact<{
   input: Types.UpdateMaximumEventProvidedTicketsOverrideInput;
 }>;
 
 
-export type UpdateMaximumEventProvidedTicketsOverrideMutationData = { __typename: 'Mutation', updateMaximumEventProvidedTicketsOverride: { __typename: 'UpdateMaximumEventProvidedTicketsOverridePayload', maximum_event_provided_tickets_override: { __typename: 'MaximumEventProvidedTicketsOverride', id: number, override_value: number, ticket_type: { __typename: 'TicketType', id: number, description?: string | null | undefined, maximum_event_provided_tickets: number } } } };
+export type UpdateMaximumEventProvidedTicketsOverrideMutationData = { __typename: 'Mutation', updateMaximumEventProvidedTicketsOverride: { __typename: 'UpdateMaximumEventProvidedTicketsOverridePayload', maximum_event_provided_tickets_override: { __typename: 'MaximumEventProvidedTicketsOverride', override_value: number, id: string, ticket_type: { __typename: 'TicketType', description?: string | null | undefined, maximum_event_provided_tickets: number, id: string } } } };
 
 export type UpdateEventAdminNotesMutationVariables = Types.Exact<{
   eventId: Types.Scalars['Int'];
@@ -96,14 +96,14 @@ export type UpdateEventAdminNotesMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateEventAdminNotesMutationData = { __typename: 'Mutation', updateEventAdminNotes: { __typename: 'UpdateEventAdminNotesPayload', event: { __typename: 'Event', id: number, title?: string | null | undefined, author?: string | null | undefined, description?: string | null | undefined, organization?: string | null | undefined, url?: string | null | undefined, con_mail_destination?: string | null | undefined, can_play_concurrently: boolean, short_blurb?: string | null | undefined, participant_communications?: string | null | undefined, age_restrictions?: string | null | undefined, content_warnings?: string | null | undefined, email?: string | null | undefined, length_seconds: number, status?: string | null | undefined, description_html?: string | null | undefined, form_response_attrs_json?: any | null | undefined, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, admin_notes?: string | null | undefined, event_category: { __typename: 'EventCategory', id: number, name: string }, registration_policy?: { __typename: 'RegistrationPolicy', slots_limited?: boolean | null | undefined, prevent_no_preference_signups: boolean, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null | undefined, description?: string | null | undefined, minimum_slots?: number | null | undefined, preferred_slots?: number | null | undefined, total_slots?: number | null | undefined, slots_limited: boolean, anything: boolean, not_counted: boolean }> } | null | undefined, runs: Array<{ __typename: 'Run', id: number, starts_at: any, schedule_note?: string | null | undefined, title_suffix?: string | null | undefined, room_names: Array<string>, confirmed_signup_count: number, not_counted_signup_count: number, signup_count_by_state_and_bucket_key_and_counted: any, rooms: Array<{ __typename: 'Room', id: number, name?: string | null | undefined }>, my_signups: Array<{ __typename: 'Signup', id: number, state: Types.SignupState }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: number, state: Types.SignupRequestState }> }>, maximum_event_provided_tickets_overrides: Array<{ __typename: 'MaximumEventProvidedTicketsOverride', id: number, override_value: number, ticket_type: { __typename: 'TicketType', id: number, description?: string | null | undefined, maximum_event_provided_tickets: number } }> } } };
+export type UpdateEventAdminNotesMutationData = { __typename: 'Mutation', updateEventAdminNotes: { __typename: 'UpdateEventAdminNotesPayload', event: { __typename: 'Event', title?: string | null | undefined, author?: string | null | undefined, description?: string | null | undefined, organization?: string | null | undefined, url?: string | null | undefined, con_mail_destination?: string | null | undefined, can_play_concurrently: boolean, short_blurb?: string | null | undefined, participant_communications?: string | null | undefined, age_restrictions?: string | null | undefined, content_warnings?: string | null | undefined, email?: string | null | undefined, length_seconds: number, status?: string | null | undefined, description_html?: string | null | undefined, form_response_attrs_json?: any | null | undefined, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, admin_notes?: string | null | undefined, id: string, event_category: { __typename: 'EventCategory', name: string, id: string }, registration_policy?: { __typename: 'RegistrationPolicy', slots_limited?: boolean | null | undefined, prevent_no_preference_signups: boolean, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null | undefined, description?: string | null | undefined, minimum_slots?: number | null | undefined, preferred_slots?: number | null | undefined, total_slots?: number | null | undefined, slots_limited: boolean, anything: boolean, not_counted: boolean }> } | null | undefined, runs: Array<{ __typename: 'Run', starts_at: any, schedule_note?: string | null | undefined, title_suffix?: string | null | undefined, room_names: Array<string>, confirmed_signup_count: number, not_counted_signup_count: number, signup_count_by_state_and_bucket_key_and_counted: any, id: string, rooms: Array<{ __typename: 'Room', name?: string | null | undefined, id: string }>, my_signups: Array<{ __typename: 'Signup', state: Types.SignupState, id: string }>, my_signup_requests: Array<{ __typename: 'SignupRequest', state: Types.SignupRequestState, id: string }> }>, maximum_event_provided_tickets_overrides: Array<{ __typename: 'MaximumEventProvidedTicketsOverride', override_value: number, id: string, ticket_type: { __typename: 'TicketType', description?: string | null | undefined, maximum_event_provided_tickets: number, id: string } }> } } };
 
 
 export const CreateEventDocument = gql`
     mutation CreateEvent($input: CreateEventInput!) {
   createEvent(input: $input) {
     event {
-      id
+      id: transitionalId
       ...EventFields
     }
   }
@@ -139,7 +139,7 @@ export const CreateFillerEventDocument = gql`
     mutation CreateFillerEvent($input: CreateFillerEventInput!) {
   createFillerEvent(input: $input) {
     event {
-      id
+      id: transitionalId
       ...EventFields
     }
   }
@@ -175,7 +175,7 @@ export const DropEventDocument = gql`
     mutation DropEvent($input: DropEventInput!) {
   dropEvent(input: $input) {
     event {
-      id
+      id: transitionalId
       status
     }
   }
@@ -211,7 +211,7 @@ export const RestoreDroppedEventDocument = gql`
     mutation RestoreDroppedEvent($input: RestoreDroppedEventInput!) {
   restoreDroppedEvent(input: $input) {
     event {
-      id
+      id: transitionalId
       status
     }
   }
@@ -247,7 +247,7 @@ export const UpdateEventDocument = gql`
     mutation UpdateEvent($input: UpdateEventInput!) {
   updateEvent(input: $input) {
     event {
-      id
+      id: transitionalId
       ...EventFields
     }
   }
@@ -283,7 +283,7 @@ export const CreateRunDocument = gql`
     mutation CreateRun($input: CreateRunInput!) {
   createRun(input: $input) {
     run {
-      id
+      id: transitionalId
       ...RunFields
     }
   }
@@ -319,7 +319,7 @@ export const CreateMultipleRunsDocument = gql`
     mutation CreateMultipleRuns($input: CreateMultipleRunsInput!) {
   createMultipleRuns(input: $input) {
     runs {
-      id
+      id: transitionalId
       ...RunFields
     }
   }
@@ -355,7 +355,7 @@ export const UpdateRunDocument = gql`
     mutation UpdateRun($input: UpdateRunInput!) {
   updateRun(input: $input) {
     run {
-      id
+      id: transitionalId
       ...RunFields
     }
   }
@@ -391,7 +391,7 @@ export const DeleteRunDocument = gql`
     mutation DeleteRun($input: DeleteRunInput!) {
   deleteRun(input: $input) {
     run {
-      id
+      id: transitionalId
       ...RunFields
     }
   }
@@ -427,7 +427,7 @@ export const CreateMaximumEventProvidedTicketsOverrideDocument = gql`
     mutation CreateMaximumEventProvidedTicketsOverride($input: CreateMaximumEventProvidedTicketsOverrideInput!) {
   createMaximumEventProvidedTicketsOverride(input: $input) {
     maximum_event_provided_tickets_override {
-      id
+      id: transitionalId
       ...MaximumEventProvidedTicketsOverrideFields
     }
   }
@@ -463,7 +463,7 @@ export const DeleteMaximumEventProvidedTicketsOverrideDocument = gql`
     mutation DeleteMaximumEventProvidedTicketsOverride($input: DeleteMaximumEventProvidedTicketsOverrideInput!) {
   deleteMaximumEventProvidedTicketsOverride(input: $input) {
     maximum_event_provided_tickets_override {
-      id
+      id: transitionalId
       ...MaximumEventProvidedTicketsOverrideFields
     }
   }
@@ -499,7 +499,7 @@ export const UpdateMaximumEventProvidedTicketsOverrideDocument = gql`
     mutation UpdateMaximumEventProvidedTicketsOverride($input: UpdateMaximumEventProvidedTicketsOverrideInput!) {
   updateMaximumEventProvidedTicketsOverride(input: $input) {
     maximum_event_provided_tickets_override {
-      id
+      id: transitionalId
       ...MaximumEventProvidedTicketsOverrideFields
     }
   }
@@ -535,7 +535,7 @@ export const UpdateEventAdminNotesDocument = gql`
     mutation UpdateEventAdminNotes($eventId: Int!, $adminNotes: String!) {
   updateEventAdminNotes(input: {id: $eventId, admin_notes: $adminNotes}) {
     event {
-      id
+      id: transitionalId
       ...EventFields
     }
   }

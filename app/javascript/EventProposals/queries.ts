@@ -3,7 +3,7 @@ import { CommonFormFields } from '../Models/commonFormFragments';
 
 export const EventProposalFields = gql`
   fragment EventProposalFields on EventProposal {
-    id
+    id: transitionalId
     title
     status
     form_response_attrs_json
@@ -11,17 +11,17 @@ export const EventProposalFields = gql`
     current_user_form_item_writer_role
 
     event_category {
-      id
+      id: transitionalId
       name
 
       event_proposal_form {
-        id
+        id: transitionalId
         ...CommonFormFields
 
         form_sections {
-          id
+          id: transitionalId
           form_items {
-            id
+            id: transitionalId
             admin_description
           }
         }
@@ -29,7 +29,7 @@ export const EventProposalFields = gql`
     }
 
     event {
-      id
+      id: transitionalId
     }
   }
 
@@ -38,7 +38,7 @@ export const EventProposalFields = gql`
 
 export const EventProposalFormData = gql`
   fragment EventProposalFormData on Convention {
-    id
+    id: transitionalId
     starts_at
     ends_at
     timezone_name
@@ -54,11 +54,11 @@ export const EventProposalQuery = gql`
     }
 
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       ...EventProposalFormData
 
       event_proposal(id: $eventProposalId) {
-        id
+        id: transitionalId
         ...EventProposalFields
       }
     }
@@ -71,15 +71,15 @@ export const EventProposalQuery = gql`
 export const EventProposalQueryWithOwner = gql`
   query EventProposalQueryWithOwner($eventProposalId: Int!) {
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       ...EventProposalFormData
 
       event_proposal(id: $eventProposalId) {
-        id
+        id: transitionalId
         ...EventProposalFields
 
         owner {
-          id
+          id: transitionalId
           name
           email
           gravatar_enabled
@@ -101,9 +101,9 @@ export const EventProposalQueryWithOwner = gql`
 export const EventProposalAdminNotesQuery = gql`
   query EventProposalAdminNotesQuery($eventProposalId: Int!) {
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       event_proposal(id: $eventProposalId) {
-        id
+        id: transitionalId
         admin_notes
       }
     }
@@ -113,27 +113,27 @@ export const EventProposalAdminNotesQuery = gql`
 export const ProposeEventButtonQuery = gql`
   query ProposeEventButtonQuery {
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
 
       my_profile {
-        id
+        id: transitionalId
 
         user {
-          id
+          id: transitionalId
 
           event_proposals {
-            id
+            id: transitionalId
             title
             status
             created_at
 
             event_category {
-              id
+              id: transitionalId
               name
             }
 
             convention {
-              id
+              id: transitionalId
               name
             }
           }
@@ -141,23 +141,23 @@ export const ProposeEventButtonQuery = gql`
       }
 
       departments {
-        id
+        id: transitionalId
         name
         proposal_description
 
         event_categories {
-          id
+          id: transitionalId
         }
       }
 
       event_categories {
-        id
+        id: transitionalId
         name
         proposable
         proposal_description
 
         department {
-          id
+          id: transitionalId
         }
       }
     }
@@ -172,11 +172,11 @@ export const EventProposalsAdminQuery = gql`
     $sort: [SortInput!]
   ) {
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       timezone_name
 
       event_categories(current_ability_can_read_event_proposals: true) {
-        id
+        id: transitionalId
         name
         default_color
       }
@@ -188,7 +188,7 @@ export const EventProposalsAdminQuery = gql`
         per_page
 
         entries {
-          id
+          id: transitionalId
           title
           length_seconds
           status
@@ -196,7 +196,7 @@ export const EventProposalsAdminQuery = gql`
           updated_at
 
           event_category {
-            id
+            id: transitionalId
             name
             default_color
           }
@@ -208,7 +208,7 @@ export const EventProposalsAdminQuery = gql`
           }
 
           owner {
-            id
+            id: transitionalId
             name_inverted
             gravatar_enabled
             gravatar_url
@@ -222,32 +222,32 @@ export const EventProposalsAdminQuery = gql`
 export const EventProposalHistoryQuery = gql`
   query EventProposalHistoryQuery($id: Int!) {
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       starts_at
       ends_at
       timezone_name
       timezone_mode
 
       event_proposal(id: $id) {
-        id
+        id: transitionalId
         title
 
         owner {
-          id
+          id: transitionalId
         }
 
         event_category {
-          id
+          id: transitionalId
 
           event_proposal_form {
-            id
+            id: transitionalId
             ...CommonFormFields
 
             form_sections {
-              id
+              id: transitionalId
 
               form_items {
-                id
+                id: transitionalId
                 admin_description
               }
             }
@@ -256,7 +256,7 @@ export const EventProposalHistoryQuery = gql`
 
         form_response_changes {
           user_con_profile {
-            id
+            id: transitionalId
             name_without_nickname
           }
 

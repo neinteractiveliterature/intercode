@@ -13,7 +13,7 @@ export const EventListEventsQuery = gql`
     }
 
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       ...CommonConventionData
 
       events_paginated(page: $page, per_page: $pageSize, filters: $filters, sort: $sort) {
@@ -23,7 +23,7 @@ export const EventListEventsQuery = gql`
         per_page
 
         entries {
-          id
+          id: transitionalId
           title
           created_at
           short_blurb_html
@@ -31,22 +31,22 @@ export const EventListEventsQuery = gql`
           my_rating
 
           event_category {
-            id
+            id: transitionalId
             name
             team_member_name
           }
 
           runs {
-            id
+            id: transitionalId
             starts_at
           }
 
           team_members {
-            id
+            id: transitionalId
             display_team_member
 
             user_con_profile {
-              id
+              id: transitionalId
               last_name
               name_without_nickname
               gravatar_enabled

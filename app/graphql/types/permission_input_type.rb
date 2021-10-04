@@ -1,9 +1,21 @@
 # frozen_string_literal: true
 class Types::PermissionInputType < Types::BaseInputObject
   argument :model_type, Types::PermissionedModelTypeIndicator, required: false, camelize: false
-  argument :model_id, Int, required: false, camelize: false
+  argument :model_id,
+           Int,
+           deprecation_reason:
+             'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+           required: false,
+           camelize: false
+  argument :transitional_model_id, ID, required: false, camelize: true
   argument :role_type, Types::PermissionedRoleTypeIndicator, required: false, camelize: false
-  argument :role_id, Int, required: false, camelize: false
+  argument :role_id,
+           Int,
+           deprecation_reason:
+             'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+           required: false,
+           camelize: false
+  argument :transitional_role_id, ID, required: false, camelize: true
   argument :permission, String, required: true
 
   def self.load_permission_input_models(permission_inputs)

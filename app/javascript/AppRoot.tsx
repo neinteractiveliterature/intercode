@@ -14,9 +14,7 @@ import getI18n from './setupI18Next';
 import { lazyWithBundleHashCheck } from './checkBundleHash';
 import { timespanFromConvention } from './TimespanUtils';
 
-const NavigationBar = lazyWithBundleHashCheck(
-  () => import(/* webpackChunkName: 'navigation-bar' */ './NavigationBar'),
-);
+const NavigationBar = lazyWithBundleHashCheck(() => import(/* webpackChunkName: 'navigation-bar' */ './NavigationBar'));
 
 // Avoid unnecessary layout checks when moving between pages that can't change layout
 function normalizePathForLayout(path: string) {
@@ -40,7 +38,7 @@ function AppRoot(): JSX.Element {
     variables: { path: normalizePathForLayout(location.pathname) },
   });
 
-  const [cachedCmsLayoutId, setCachedCmsLayoutId] = useState<number>();
+  const [cachedCmsLayoutId, setCachedCmsLayoutId] = useState<string>();
   const [layoutChanged, setLayoutChanged] = useState(false);
 
   const bodyComponents = useMemo(() => {
@@ -55,9 +53,7 @@ function AppRoot(): JSX.Element {
     }).bodyComponents;
   }, [data, error, loading]);
 
-  const cachedBodyComponents = useCachedLoadableValue(loading, error, () => bodyComponents, [
-    bodyComponents,
-  ]);
+  const cachedBodyComponents = useCachedLoadableValue(loading, error, () => bodyComponents, [bodyComponents]);
   const appRootContextValue = useCachedLoadableValue(
     loading,
     error,
@@ -70,9 +66,7 @@ function AppRoot(): JSX.Element {
             conventionCanceled: data.convention?.canceled,
             conventionName: data.convention?.name,
             conventionDomain: data.convention?.domain,
-            conventionTimespan: data?.convention
-              ? timespanFromConvention(data.convention)
-              : undefined,
+            conventionTimespan: data?.convention ? timespanFromConvention(data.convention) : undefined,
             currentAbility: data.currentAbility,
             currentPendingOrder: data.convention?.my_profile?.current_pending_order,
             currentUser: data.currentUser,
@@ -92,12 +86,7 @@ function AppRoot(): JSX.Element {
   );
 
   useEffect(() => {
-    if (
-      !loading &&
-      !error &&
-      data &&
-      cachedCmsLayoutId !== data.cmsParentByRequestHost.effectiveCmsLayout.id
-    ) {
+    if (!loading && !error && data && cachedCmsLayoutId !== data.cmsParentByRequestHost.effectiveCmsLayout.id) {
       if (cachedCmsLayoutId) {
         // if the layout changed we need a full page reload to rerender the <head>
         setLayoutChanged(true);

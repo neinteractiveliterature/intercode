@@ -2,7 +2,12 @@
 class Types::OrderType < Types::BaseObject
   authorize_record
 
-  field :id, Integer, null: false
+  field :id,
+        Integer,
+        deprecation_reason:
+          'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+        null: false
+  field :transitional_id, ID, method: :id, null: false, camelize: true
   field :user_con_profile, Types::UserConProfileType, null: false
   field :status, Types::OrderStatusType, null: false
   field :total_price_before_discounts, Types::MoneyType, null: false

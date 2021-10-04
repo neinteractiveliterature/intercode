@@ -3,13 +3,13 @@ import { gql } from '@apollo/client';
 export const RoomsAdminQuery = gql`
   query RoomsAdminQuery {
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       rooms {
-        id
+        id: transitionalId
         name
 
         runs {
-          id
+          id: transitionalId
         }
       }
     }

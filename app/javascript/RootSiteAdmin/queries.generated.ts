@@ -4,47 +4,47 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type PageFieldsFragment = { __typename: 'Page', id: number, name?: string | null | undefined };
+export type PageFieldsFragment = { __typename: 'Page', name?: string | null | undefined, id: string };
 
-export type RootSiteAdminLayoutFieldsFragment = { __typename: 'CmsLayout', id: number, name?: string | null | undefined };
+export type RootSiteAdminLayoutFieldsFragment = { __typename: 'CmsLayout', name?: string | null | undefined, id: string };
 
-export type RootSiteFieldsFragment = { __typename: 'RootSite', id: number, site_name: string, rootPage: { __typename: 'Page', id: number, name?: string | null | undefined }, defaultLayout: { __typename: 'CmsLayout', id: number, name?: string | null | undefined }, cmsPages: Array<{ __typename: 'Page', id: number, name?: string | null | undefined }>, cmsLayouts: Array<{ __typename: 'CmsLayout', id: number, name?: string | null | undefined }> };
+export type RootSiteFieldsFragment = { __typename: 'RootSite', site_name: string, id: string, rootPage: { __typename: 'Page', name?: string | null | undefined, id: string }, defaultLayout: { __typename: 'CmsLayout', name?: string | null | undefined, id: string }, cmsPages: Array<{ __typename: 'Page', name?: string | null | undefined, id: string }>, cmsLayouts: Array<{ __typename: 'CmsLayout', name?: string | null | undefined, id: string }> };
 
 export type RootSiteAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type RootSiteAdminQueryData = { __typename: 'Query', rootSite: { __typename: 'RootSite', id: number, site_name: string, rootPage: { __typename: 'Page', id: number, name?: string | null | undefined }, defaultLayout: { __typename: 'CmsLayout', id: number, name?: string | null | undefined }, cmsPages: Array<{ __typename: 'Page', id: number, name?: string | null | undefined }>, cmsLayouts: Array<{ __typename: 'CmsLayout', id: number, name?: string | null | undefined }> } };
+export type RootSiteAdminQueryData = { __typename: 'Query', rootSite: { __typename: 'RootSite', site_name: string, id: string, rootPage: { __typename: 'Page', name?: string | null | undefined, id: string }, defaultLayout: { __typename: 'CmsLayout', name?: string | null | undefined, id: string }, cmsPages: Array<{ __typename: 'Page', name?: string | null | undefined, id: string }>, cmsLayouts: Array<{ __typename: 'CmsLayout', name?: string | null | undefined, id: string }> } };
 
 export const PageFieldsFragmentDoc = gql`
     fragment PageFields on Page {
-  id
+  id: transitionalId
   name
 }
     `;
 export const RootSiteAdminLayoutFieldsFragmentDoc = gql`
     fragment RootSiteAdminLayoutFields on CmsLayout {
-  id
+  id: transitionalId
   name
 }
     `;
 export const RootSiteFieldsFragmentDoc = gql`
     fragment RootSiteFields on RootSite {
-  id
+  id: transitionalId
   site_name
   rootPage {
-    id
+    id: transitionalId
     ...PageFields
   }
   defaultLayout {
-    id
+    id: transitionalId
     ...RootSiteAdminLayoutFields
   }
   cmsPages {
-    id
+    id: transitionalId
     ...PageFields
   }
   cmsLayouts {
-    id
+    id: transitionalId
     ...RootSiteAdminLayoutFields
   }
 }
@@ -53,7 +53,7 @@ ${RootSiteAdminLayoutFieldsFragmentDoc}`;
 export const RootSiteAdminQueryDocument = gql`
     query RootSiteAdminQuery {
   rootSite {
-    id
+    id: transitionalId
     ...RootSiteFields
   }
 }

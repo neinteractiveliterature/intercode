@@ -86,9 +86,7 @@ class EventVacancyFillService < CivilService::Service
   end
 
   def all_signups_ordered
-    @all_signups_ordered ||=
-      all_signups.to_a.sort_by { |signup| signup_priority_key(signup) }
-      
+    @all_signups_ordered ||= all_signups.to_a.sort_by { |signup| signup_priority_key(signup) }
   end
 
   def all_signups

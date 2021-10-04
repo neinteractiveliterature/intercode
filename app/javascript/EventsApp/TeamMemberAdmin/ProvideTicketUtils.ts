@@ -2,18 +2,11 @@ import { TeamMembersQueryData } from './queries.generated';
 
 type ConventionType = Pick<NonNullable<TeamMembersQueryData['convention']>, 'ticket_types'>;
 type EventType = {
-  provided_tickets: Pick<
-    TeamMembersQueryData['convention']['event']['provided_tickets'][0],
-    'ticket_type'
-  >[];
+  provided_tickets: Pick<TeamMembersQueryData['convention']['event']['provided_tickets'][0], 'ticket_type'>[];
 };
 
-export function getProvidableTicketTypes(
-  convention: ConventionType,
-): ConventionType['ticket_types'] {
-  return convention.ticket_types.filter(
-    (ticketType) => ticketType.maximum_event_provided_tickets > 0,
-  );
+export function getProvidableTicketTypes(convention: ConventionType): ConventionType['ticket_types'] {
+  return convention.ticket_types.filter((ticketType) => ticketType.maximum_event_provided_tickets > 0);
 }
 
 export function getProvidedTicketCountByType(
@@ -23,9 +16,7 @@ export function getProvidedTicketCountByType(
   return Object.assign(
     {},
     ...getProvidableTicketTypes(convention).map((ticketType) => ({
-      [ticketType.id]: event.provided_tickets.filter(
-        (ticket) => ticket.ticket_type.id === ticketType.id,
-      ).length,
+      [ticketType.id]: event.provided_tickets.filter((ticket) => ticket.ticket_type.id === ticketType.id).length,
     })),
   );
 }
@@ -33,7 +24,7 @@ export function getProvidedTicketCountByType(
 export function getRemainingTicketCountByType(
   convention: ConventionType,
   event: EventType,
-): { [ticketTypeId: number]: number } {
+): { [ticketTypeId: string]: number } {
   const providableTicketTypes = getProvidableTicketTypes(convention);
   const providedTicketCountsByType = getProvidedTicketCountByType(convention, event);
 

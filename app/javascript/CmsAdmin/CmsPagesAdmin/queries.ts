@@ -2,14 +2,14 @@ import { gql } from '@apollo/client';
 
 export const CmsPageAdminLayoutFields = gql`
   fragment CmsPageAdminLayoutFields on CmsLayout {
-    id
+    id: transitionalId
     name
   }
 `;
 
 export const CmsPageFields = gql`
   fragment CmsPageFields on Page {
-    id
+    id: transitionalId
     name
     slug
     content
@@ -20,7 +20,7 @@ export const CmsPageFields = gql`
     current_ability_can_delete
 
     cms_layout {
-      id
+      id: transitionalId
       ...CmsPageAdminLayoutFields
     }
   }
@@ -31,7 +31,7 @@ export const CmsPageFields = gql`
 export const CmsPagesAdminQuery = gql`
   query CmsPagesAdminQuery {
     convention: conventionByRequestHostIfPresent {
-      id
+      id: transitionalId
       name
     }
 
@@ -40,28 +40,28 @@ export const CmsPagesAdminQuery = gql`
     }
 
     cmsParent: cmsParentByRequestHost {
-      id
+      id: transitionalId
 
       cmsPages {
-        id
+        id: transitionalId
         ...CmsPageFields
       }
 
       cmsLayouts {
-        id
+        id: transitionalId
         ...CmsPageAdminLayoutFields
       }
 
       ... on RootSite {
         root_site_default_layout: defaultLayout {
-          id
+          id: transitionalId
           ...CmsPageAdminLayoutFields
         }
       }
 
       ... on Convention {
         defaultLayout {
-          id
+          id: transitionalId
           ...CmsPageAdminLayoutFields
         }
       }

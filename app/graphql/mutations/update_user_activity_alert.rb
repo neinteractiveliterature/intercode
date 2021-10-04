@@ -2,10 +2,16 @@
 class Mutations::UpdateUserActivityAlert < Mutations::BaseMutation
   field :user_activity_alert, Types::UserActivityAlertType, null: false, camelize: false
 
-  argument :id, Int, required: true, camelize: false
+  argument :id,
+           Int,
+           deprecation_reason:
+             'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+           required: false,
+           camelize: false
+  argument :transitional_id, ID, required: false, camelize: true
   argument :user_activity_alert, Types::UserActivityAlertInputType, required: true, camelize: false
   argument :add_notification_destinations, [Types::NotificationDestinationInputType], required: true, camelize: false
-  argument :remove_notification_destination_ids, [Int], required: true, camelize: false
+  argument :remove_notification_destination_ids, [Int], required: false, camelize: false
 
   load_and_authorize_convention_associated_model :user_activity_alerts, :id, :update
 

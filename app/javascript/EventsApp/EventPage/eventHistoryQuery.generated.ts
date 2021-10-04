@@ -10,29 +10,29 @@ export type EventHistoryQueryVariables = Types.Exact<{
 }>;
 
 
-export type EventHistoryQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, starts_at?: any | null | undefined, ends_at?: any | null | undefined, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, event: { __typename: 'Event', id: number, title?: string | null | undefined, event_category: { __typename: 'EventCategory', id: number, event_form: { __typename: 'Form', id: number, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: number, title?: string | null | undefined, position: number, form_items: Array<{ __typename: 'FormItem', id: number, admin_description?: string | null | undefined, position: number, identifier?: string | null | undefined, item_type: string, rendered_properties?: any | null | undefined, default_value?: any | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> } }, form_response_changes: Array<{ __typename: 'FormResponseChange', field_identifier: string, previous_value?: any | null | undefined, new_value?: any | null | undefined, created_at: any, updated_at: any, user_con_profile: { __typename: 'UserConProfile', id: number, name_without_nickname: string } }> } } };
+export type EventHistoryQueryData = { __typename: 'Query', convention: { __typename: 'Convention', starts_at?: any | null | undefined, ends_at?: any | null | undefined, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, id: string, event: { __typename: 'Event', title?: string | null | undefined, id: string, event_category: { __typename: 'EventCategory', id: string, event_form: { __typename: 'Form', title: string, form_type: Types.FormType, id: string, form_sections: Array<{ __typename: 'FormSection', title?: string | null | undefined, position: number, id: string, form_items: Array<{ __typename: 'FormItem', admin_description?: string | null | undefined, position: number, identifier?: string | null | undefined, item_type: string, rendered_properties?: any | null | undefined, default_value?: any | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole, id: string }> }> } }, form_response_changes: Array<{ __typename: 'FormResponseChange', field_identifier: string, previous_value?: any | null | undefined, new_value?: any | null | undefined, created_at: any, updated_at: any, user_con_profile: { __typename: 'UserConProfile', name_without_nickname: string, id: string } }> } } };
 
 
 export const EventHistoryQueryDocument = gql`
     query EventHistoryQuery($id: Int!) {
   convention: conventionByRequestHost {
-    id
+    id: transitionalId
     starts_at
     ends_at
     timezone_name
     timezone_mode
     event(id: $id) {
-      id
+      id: transitionalId
       title
       event_category {
-        id
+        id: transitionalId
         event_form {
-          id
+          id: transitionalId
           ...CommonFormFields
           form_sections {
-            id
+            id: transitionalId
             form_items {
-              id
+              id: transitionalId
               admin_description
             }
           }
@@ -40,7 +40,7 @@ export const EventHistoryQueryDocument = gql`
       }
       form_response_changes {
         user_con_profile {
-          id
+          id: transitionalId
           name_without_nickname
         }
         field_identifier

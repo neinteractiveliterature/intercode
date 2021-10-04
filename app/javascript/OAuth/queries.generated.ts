@@ -9,7 +9,7 @@ export type OAuthAuthorizationPromptQueryVariables = Types.Exact<{
 }>;
 
 
-export type OAuthAuthorizationPromptQueryData = { __typename: 'Query', oauthPreAuth: any, currentUser?: { __typename: 'User', id: number } | null | undefined };
+export type OAuthAuthorizationPromptQueryData = { __typename: 'Query', oauthPreAuth: any, currentUser?: { __typename: 'User', id: string } | null | undefined };
 
 export type OAuthAuthorizedApplicationsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
@@ -20,7 +20,7 @@ export type OAuthAuthorizedApplicationsQueryData = { __typename: 'Query', myAuth
 export const OAuthAuthorizationPromptQueryDocument = gql`
     query OAuthAuthorizationPromptQuery($queryParams: Json!) {
   currentUser {
-    id
+    id: transitionalId
   }
   oauthPreAuth(queryParams: $queryParams)
 }

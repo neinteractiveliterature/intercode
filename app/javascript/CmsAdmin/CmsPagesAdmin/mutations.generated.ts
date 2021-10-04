@@ -10,7 +10,7 @@ export type CreatePageMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreatePageMutationData = { __typename: 'Mutation', createPage: { __typename: 'CreatePagePayload', page: { __typename: 'Page', id: number, name?: string | null | undefined, slug?: string | null | undefined, content?: string | null | undefined, admin_notes?: string | null | undefined, skip_clickwrap_agreement?: boolean | null | undefined, hidden_from_search: boolean, current_ability_can_update: boolean, current_ability_can_delete: boolean, cms_layout?: { __typename: 'CmsLayout', id: number, name?: string | null | undefined } | null | undefined } } };
+export type CreatePageMutationData = { __typename: 'Mutation', createPage: { __typename: 'CreatePagePayload', page: { __typename: 'Page', name?: string | null | undefined, slug?: string | null | undefined, content?: string | null | undefined, admin_notes?: string | null | undefined, skip_clickwrap_agreement?: boolean | null | undefined, hidden_from_search: boolean, current_ability_can_update: boolean, current_ability_can_delete: boolean, id: string, cms_layout?: { __typename: 'CmsLayout', name?: string | null | undefined, id: string } | null | undefined } } };
 
 export type UpdatePageMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
@@ -18,7 +18,7 @@ export type UpdatePageMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdatePageMutationData = { __typename: 'Mutation', updatePage: { __typename: 'UpdatePagePayload', page: { __typename: 'Page', id: number, name?: string | null | undefined, slug?: string | null | undefined, content?: string | null | undefined, admin_notes?: string | null | undefined, skip_clickwrap_agreement?: boolean | null | undefined, hidden_from_search: boolean, current_ability_can_update: boolean, current_ability_can_delete: boolean, cms_layout?: { __typename: 'CmsLayout', id: number, name?: string | null | undefined } | null | undefined } } };
+export type UpdatePageMutationData = { __typename: 'Mutation', updatePage: { __typename: 'UpdatePagePayload', page: { __typename: 'Page', name?: string | null | undefined, slug?: string | null | undefined, content?: string | null | undefined, admin_notes?: string | null | undefined, skip_clickwrap_agreement?: boolean | null | undefined, hidden_from_search: boolean, current_ability_can_update: boolean, current_ability_can_delete: boolean, id: string, cms_layout?: { __typename: 'CmsLayout', name?: string | null | undefined, id: string } | null | undefined } } };
 
 export type DeletePageMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
@@ -32,7 +32,7 @@ export const CreatePageDocument = gql`
     mutation CreatePage($page: PageInput!) {
   createPage(input: {page: $page}) {
     page {
-      id
+      id: transitionalId
       ...CmsPageFields
     }
   }
@@ -68,7 +68,7 @@ export const UpdatePageDocument = gql`
     mutation UpdatePage($id: Int!, $page: PageInput!) {
   updatePage(input: {id: $id, page: $page}) {
     page {
-      id
+      id: transitionalId
       ...CmsPageFields
     }
   }

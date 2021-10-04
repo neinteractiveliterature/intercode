@@ -11,7 +11,6 @@ import {
   CouponApplication,
   Money,
   OrderEntry,
-  OrderEntryInput,
   OrderInput,
   OrderStatus,
   Product,
@@ -23,18 +22,18 @@ import { useCreateCouponApplicationMutation, useCreateOrderMutation } from './mu
 export type CreatingOrder = Omit<OrderInput, 'payment_amount'> & {
   status: OrderStatus;
   payment_amount: Money;
-  order_entries: (Pick<OrderEntry, 'price_per_item' | 'quantity'> &
-    Pick<OrderEntryInput, 'ticket_id'> & {
-      product: Pick<Product, 'id' | '__typename' | 'name'>;
-      product_variant?: Pick<ProductVariant, 'id' | '__typename' | 'name'> | null;
-      generatedId: string;
-    })[];
+  order_entries: (Pick<OrderEntry, 'price_per_item' | 'quantity'> & {
+    ticket_id: string;
+    product: Pick<Product, '__typename' | 'name'> & { id: string };
+    product_variant?: (Pick<ProductVariant, '__typename' | 'name'> & { id: string }) | null;
+    generatedId: string;
+  })[];
   coupon_applications: (Partial<Pick<CouponApplication, 'id' | 'discount'>> & {
     coupon: {
       code: string;
     };
   })[];
-  user_con_profile?: Pick<UserConProfile, 'id' | 'name_without_nickname'>;
+  user_con_profile?: Pick<UserConProfile, 'name_without_nickname'> & { id: string };
 };
 
 type OrderEntryType = CreatingOrder['order_entries'][0];
@@ -86,11 +85,11 @@ function NewOrderModal({ visible, close, initialOrder }: NewOrderModalProps): JS
         },
         status: order.status,
         orderEntries: order.order_entries.map((orderEntry) => ({
-          product_id: orderEntry.product.id,
-          product_variant_id: orderEntry.product_variant?.id,
+          transitionalProductId: orderEntry.product.id,
+          transitionalProductVariantId: orderEntry.product_variant?.id,
           quantity: orderEntry.quantity,
           price_per_item: orderEntry.price_per_item,
-          ticket_id: orderEntry.ticket_id,
+          transitionalTicketId: orderEntry.ticket_id,
         })),
       },
     });
@@ -127,10 +126,7 @@ function NewOrderModal({ visible, close, initialOrder }: NewOrderModalProps): JS
       order_entries: [...prevOrder.order_entries, { ...orderEntry, generatedId: uuidv4() }],
     }));
 
-  const updateOrderEntry = async (
-    orderEntry: OrderEntryType,
-    attributes: Partial<OrderEntryType>,
-  ) =>
+  const updateOrderEntry = async (orderEntry: OrderEntryType, attributes: Partial<OrderEntryType>) =>
     setOrder((prevOrder) => ({
       ...prevOrder,
       order_entries: prevOrder.order_entries.map((entry) => {
@@ -145,9 +141,7 @@ function NewOrderModal({ visible, close, initialOrder }: NewOrderModalProps): JS
   const deleteOrderEntry = async (orderEntry: OrderEntryType) =>
     setOrder((prevOrder) => ({
       ...prevOrder,
-      order_entries: prevOrder.order_entries.filter(
-        (entry) => entry.generatedId !== orderEntry.generatedId,
-      ),
+      order_entries: prevOrder.order_entries.filter((entry) => entry.generatedId !== orderEntry.generatedId),
     }));
 
   const createCouponApplication = async (couponCode: string) =>
@@ -156,9 +150,7 @@ function NewOrderModal({ visible, close, initialOrder }: NewOrderModalProps): JS
       coupon_applications: [...prevOrder.coupon_applications, { coupon: { code: couponCode } }],
     }));
 
-  const deleteCouponApplication = async (
-    couponApplication: CreatingOrder['coupon_applications'][0],
-  ) =>
+  const deleteCouponApplication = async (couponApplication: CreatingOrder['coupon_applications'][0]) =>
     setOrder((prevOrder) => ({
       ...prevOrder,
       coupon_applications: prevOrder.coupon_applications.filter(
@@ -186,20 +178,10 @@ function NewOrderModal({ visible, close, initialOrder }: NewOrderModalProps): JS
         <ErrorDisplay graphQLError={createOrderError as ApolloError} />
       </div>
       <div className="modal-footer">
-        <button
-          type="button"
-          className="btn btn-secondary"
-          onClick={close}
-          disabled={createOrderInProgress}
-        >
+        <button type="button" className="btn btn-secondary" onClick={close} disabled={createOrderInProgress}>
           Cancel
         </button>
-        <button
-          type="button"
-          className="btn btn-primary"
-          onClick={createClicked}
-          disabled={createOrderInProgress}
-        >
+        <button type="button" className="btn btn-primary" onClick={createClicked} disabled={createOrderInProgress}>
           Create
         </button>
       </div>

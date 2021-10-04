@@ -10,7 +10,7 @@ export type CreatePartialMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreatePartialMutationData = { __typename: 'Mutation', createCmsPartial: { __typename: 'CreateCmsPartialPayload', cms_partial: { __typename: 'CmsPartial', id: number, name?: string | null | undefined, content?: string | null | undefined, admin_notes?: string | null | undefined, current_ability_can_update: boolean, current_ability_can_delete: boolean } } };
+export type CreatePartialMutationData = { __typename: 'Mutation', createCmsPartial: { __typename: 'CreateCmsPartialPayload', cms_partial: { __typename: 'CmsPartial', name?: string | null | undefined, content?: string | null | undefined, admin_notes?: string | null | undefined, current_ability_can_update: boolean, current_ability_can_delete: boolean, id: string } } };
 
 export type UpdatePartialMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
@@ -18,7 +18,7 @@ export type UpdatePartialMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdatePartialMutationData = { __typename: 'Mutation', updateCmsPartial: { __typename: 'UpdateCmsPartialPayload', cms_partial: { __typename: 'CmsPartial', id: number, name?: string | null | undefined, content?: string | null | undefined, admin_notes?: string | null | undefined, current_ability_can_update: boolean, current_ability_can_delete: boolean } } };
+export type UpdatePartialMutationData = { __typename: 'Mutation', updateCmsPartial: { __typename: 'UpdateCmsPartialPayload', cms_partial: { __typename: 'CmsPartial', name?: string | null | undefined, content?: string | null | undefined, admin_notes?: string | null | undefined, current_ability_can_update: boolean, current_ability_can_delete: boolean, id: string } } };
 
 export type DeletePartialMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
@@ -32,7 +32,7 @@ export const CreatePartialDocument = gql`
     mutation CreatePartial($cmsPartial: CmsPartialInput!) {
   createCmsPartial(input: {cms_partial: $cmsPartial}) {
     cms_partial {
-      id
+      id: transitionalId
       ...CmsPartialFields
     }
   }
@@ -68,7 +68,7 @@ export const UpdatePartialDocument = gql`
     mutation UpdatePartial($id: Int!, $cmsPartial: CmsPartialInput!) {
   updateCmsPartial(input: {id: $id, cms_partial: $cmsPartial}) {
     cms_partial {
-      id
+      id: transitionalId
       ...CmsPartialFields
     }
   }

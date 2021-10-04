@@ -10,11 +10,7 @@ import TableHeader from '../Tables/TableHeader';
 import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
 import MergeUsersModal from './MergeUsersModal';
 import usePageTitle from '../usePageTitle';
-import {
-  UsersTableUsersQueryData,
-  UsersTableUsersQueryVariables,
-  useUsersTableUsersQuery,
-} from './queries.generated';
+import { UsersTableUsersQueryData, UsersTableUsersQueryVariables, useUsersTableUsersQuery } from './queries.generated';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
 
 type UserType = UsersTableUsersQueryData['users_paginated']['entries'][0];
@@ -69,7 +65,7 @@ const defaultVisibleColumns = ['id', 'first_name', 'last_name', 'email'];
 
 function UsersTable(): JSX.Element {
   const history = useHistory();
-  const mergeModal = useModal<{ userIds: number[] }>();
+  const mergeModal = useModal<{ userIds: string[] }>();
   usePageTitle('Users');
 
   const { tableInstance, refetch, tableHeaderProps, loading } = useReactTableWithTheWorks<

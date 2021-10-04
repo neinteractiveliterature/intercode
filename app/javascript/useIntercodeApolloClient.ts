@@ -1,12 +1,5 @@
 import { useMemo, RefObject } from 'react';
-import {
-  ApolloClient,
-  ApolloLink,
-  Operation,
-  NextLink,
-  InMemoryCache,
-  NormalizedCacheObject,
-} from '@apollo/client';
+import { ApolloClient, ApolloLink, Operation, NextLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client';
 import { useAuthHeadersLink, useErrorHandlerLink } from '@neinteractiveliterature/litform';
 import { createUploadLink } from 'apollo-upload-client';
 import { DateTime } from 'luxon';

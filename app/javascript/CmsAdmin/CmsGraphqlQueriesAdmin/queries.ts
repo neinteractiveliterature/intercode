@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 
 export const CmsGraphqlQueryFields = gql`
   fragment CmsGraphqlQueryFields on CmsGraphqlQuery {
-    id
+    id: transitionalId
     identifier
     query
     admin_notes
@@ -14,9 +14,9 @@ export const CmsGraphqlQueryFields = gql`
 export const CmsGraphqlQueriesQuery = gql`
   query CmsGraphqlQueriesQuery {
     cmsParent: cmsParentByRequestHost {
-      id
+      id: transitionalId
       cmsGraphqlQueries {
-        id
+        id: transitionalId
         ...CmsGraphqlQueryFields
       }
     }

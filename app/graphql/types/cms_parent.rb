@@ -3,7 +3,12 @@ module Types::CmsParent
   include Types::BaseInterface
   field_class Types::BaseField
 
-  field :id, Int, null: false
+  field :id,
+        Int,
+        deprecation_reason:
+          'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+        null: false
+  field :transitional_id, ID, method: :id, null: false, camelize: true
 
   definition_methods do
     def resolve_type(object, _context)
@@ -33,7 +38,17 @@ module Types::CmsParent
   end
 
   field :cms_content_group, Types::CmsContentGroupType, null: false do
-    argument :id, Int, required: true, description: 'The ID of the CMS content group to find.'
+    argument :id,
+             Int,
+             deprecation_reason:
+               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             required: false,
+             description: 'The ID of the CMS content group to find.'
+    argument :transitional_id,
+             ID,
+             required: false,
+             description: 'The ID of the CMS content group to find.',
+             camelize: true
 
     description <<~MARKDOWN
       Finds a CMS content group by ID within the domain name of this HTTP request. If there is no
@@ -59,7 +74,13 @@ module Types::CmsParent
   end
 
   field :cms_page, Types::PageType, null: false do
-    argument :id, Int, required: false, description: 'The ID of the page to find.'
+    argument :id,
+             Int,
+             deprecation_reason:
+               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             required: false,
+             description: 'The ID of the page to find.'
+    argument :transitional_id, ID, required: false, description: 'The ID of the page to find.', camelize: true
     argument :slug, String, required: false, description: 'The unique slug of the page to find.'
     argument :root_page, Boolean, required: false, description: 'If true, returns the root page for this domain.'
 

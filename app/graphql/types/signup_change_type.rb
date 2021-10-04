@@ -2,7 +2,12 @@
 class Types::SignupChangeType < Types::BaseObject
   authorize_record
 
-  field :id, Int, null: false
+  field :id,
+        Int,
+        deprecation_reason:
+          'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+        null: false
+  field :transitional_id, ID, method: :id, null: false, camelize: true
   field :state, Types::SignupStateType, null: false
   field :counted, Boolean, null: false
   field :previous_signup_change, Types::SignupChangeType, null: true

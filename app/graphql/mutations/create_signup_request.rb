@@ -2,9 +2,21 @@
 class Mutations::CreateSignupRequest < Mutations::BaseMutation
   field :signup_request, Types::SignupRequestType, null: false
 
-  argument :target_run_id, Int, required: true, camelize: false
+  argument :target_run_id,
+           Int,
+           deprecation_reason:
+             'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+           required: false,
+           camelize: false
+  argument :transitional_target_run_id, ID, required: false, camelize: true
   argument :requested_bucket_key, String, required: false, camelize: false
-  argument :replace_signup_id, Int, required: false, camelize: false
+  argument :replace_signup_id,
+           Int,
+           deprecation_reason:
+             'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+           required: false,
+           camelize: false
+  argument :transitional_replace_signup_id, ID, required: false, camelize: true
 
   attr_reader :target_run
 

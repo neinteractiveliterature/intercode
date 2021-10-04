@@ -6,23 +6,23 @@ import { CommonFormItemFieldsFragmentDoc } from '../Models/commonFormFragments.g
 import { CommonFormFieldsFragmentDoc, CommonFormSectionFieldsFragmentDoc } from '../Models/commonFormFragments.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type FormFieldsFragment = { __typename: 'Form', id: number, title: string, form_type: Types.FormType, export_json: any, event_categories: Array<{ __typename: 'EventCategory', id: number, name: string }>, proposal_event_categories: Array<{ __typename: 'EventCategory', id: number, name: string }>, user_con_profile_conventions: Array<{ __typename: 'Convention', id: number, name: string }> };
+export type FormFieldsFragment = { __typename: 'Form', title: string, form_type: Types.FormType, export_json: any, id: string, event_categories: Array<{ __typename: 'EventCategory', name: string, id: string }>, proposal_event_categories: Array<{ __typename: 'EventCategory', name: string, id: string }>, user_con_profile_conventions: Array<{ __typename: 'Convention', name: string, id: string }> };
 
-export type FormEditorFormItemFieldsFragment = { __typename: 'FormItem', id: number, admin_description?: string | null | undefined, public_description?: string | null | undefined, properties?: any | null | undefined, position: number, identifier?: string | null | undefined, item_type: string, rendered_properties?: any | null | undefined, default_value?: any | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole };
+export type FormEditorFormItemFieldsFragment = { __typename: 'FormItem', admin_description?: string | null | undefined, public_description?: string | null | undefined, properties?: any | null | undefined, position: number, identifier?: string | null | undefined, item_type: string, rendered_properties?: any | null | undefined, default_value?: any | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole, id: string };
 
-export type FormEditorDataFragment = { __typename: 'Form', id: number, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: number, title?: string | null | undefined, position: number, form_items: Array<{ __typename: 'FormItem', id: number, admin_description?: string | null | undefined, public_description?: string | null | undefined, properties?: any | null | undefined, position: number, identifier?: string | null | undefined, item_type: string, rendered_properties?: any | null | undefined, default_value?: any | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> };
+export type FormEditorDataFragment = { __typename: 'Form', title: string, form_type: Types.FormType, id: string, form_sections: Array<{ __typename: 'FormSection', title?: string | null | undefined, position: number, id: string, form_items: Array<{ __typename: 'FormItem', admin_description?: string | null | undefined, public_description?: string | null | undefined, properties?: any | null | undefined, position: number, identifier?: string | null | undefined, item_type: string, rendered_properties?: any | null | undefined, default_value?: any | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole, id: string }> }> };
 
 export type FormAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type FormAdminQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, name: string, forms: Array<{ __typename: 'Form', id: number, title: string, form_type: Types.FormType, export_json: any, event_categories: Array<{ __typename: 'EventCategory', id: number, name: string }>, proposal_event_categories: Array<{ __typename: 'EventCategory', id: number, name: string }>, user_con_profile_conventions: Array<{ __typename: 'Convention', id: number, name: string }> }> } };
+export type FormAdminQueryData = { __typename: 'Query', convention: { __typename: 'Convention', name: string, id: string, forms: Array<{ __typename: 'Form', title: string, form_type: Types.FormType, export_json: any, id: string, event_categories: Array<{ __typename: 'EventCategory', name: string, id: string }>, proposal_event_categories: Array<{ __typename: 'EventCategory', name: string, id: string }>, user_con_profile_conventions: Array<{ __typename: 'Convention', name: string, id: string }> }> } };
 
 export type FormEditorQueryVariables = Types.Exact<{
   id: Types.Scalars['Int'];
 }>;
 
 
-export type FormEditorQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, name: string, starts_at?: any | null | undefined, ends_at?: any | null | undefined, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, event_mailing_list_domain?: string | null | undefined, form: { __typename: 'Form', id: number, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: number, title?: string | null | undefined, position: number, form_items: Array<{ __typename: 'FormItem', id: number, admin_description?: string | null | undefined, public_description?: string | null | undefined, properties?: any | null | undefined, position: number, identifier?: string | null | undefined, item_type: string, rendered_properties?: any | null | undefined, default_value?: any | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> } } };
+export type FormEditorQueryData = { __typename: 'Query', convention: { __typename: 'Convention', name: string, starts_at?: any | null | undefined, ends_at?: any | null | undefined, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, event_mailing_list_domain?: string | null | undefined, id: string, form: { __typename: 'Form', title: string, form_type: Types.FormType, id: string, form_sections: Array<{ __typename: 'FormSection', title?: string | null | undefined, position: number, id: string, form_items: Array<{ __typename: 'FormItem', admin_description?: string | null | undefined, public_description?: string | null | undefined, properties?: any | null | undefined, position: number, identifier?: string | null | undefined, item_type: string, rendered_properties?: any | null | undefined, default_value?: any | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole, id: string }> }> } } };
 
 export type PreviewFormItemQueryVariables = Types.Exact<{
   formId: Types.Scalars['Int'];
@@ -31,31 +31,31 @@ export type PreviewFormItemQueryVariables = Types.Exact<{
 }>;
 
 
-export type PreviewFormItemQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, form: { __typename: 'Form', id: number, form_section: { __typename: 'FormSection', id: number, preview_form_item: { __typename: 'FormItem', id: number, admin_description?: string | null | undefined, public_description?: string | null | undefined, properties?: any | null | undefined, position: number, identifier?: string | null | undefined, item_type: string, rendered_properties?: any | null | undefined, default_value?: any | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole } } } } };
+export type PreviewFormItemQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, form: { __typename: 'Form', id: string, form_section: { __typename: 'FormSection', id: string, preview_form_item: { __typename: 'FormItem', admin_description?: string | null | undefined, public_description?: string | null | undefined, properties?: any | null | undefined, position: number, identifier?: string | null | undefined, item_type: string, rendered_properties?: any | null | undefined, default_value?: any | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole, id: string } } } } };
 
 export const FormFieldsFragmentDoc = gql`
     fragment FormFields on Form {
-  id
+  id: transitionalId
   title
   form_type
   export_json
   event_categories {
-    id
+    id: transitionalId
     name
   }
   proposal_event_categories {
-    id
+    id: transitionalId
     name
   }
   user_con_profile_conventions {
-    id
+    id: transitionalId
     name
   }
 }
     `;
 export const FormEditorFormItemFieldsFragmentDoc = gql`
     fragment FormEditorFormItemFields on FormItem {
-  id
+  id: transitionalId
   admin_description
   public_description
   properties
@@ -64,12 +64,12 @@ export const FormEditorFormItemFieldsFragmentDoc = gql`
     ${CommonFormItemFieldsFragmentDoc}`;
 export const FormEditorDataFragmentDoc = gql`
     fragment FormEditorData on Form {
-  id
+  id: transitionalId
   ...CommonFormFields
   form_sections {
-    id
+    id: transitionalId
     form_items {
-      id
+      id: transitionalId
       ...FormEditorFormItemFields
     }
   }
@@ -79,10 +79,10 @@ ${FormEditorFormItemFieldsFragmentDoc}`;
 export const FormAdminQueryDocument = gql`
     query FormAdminQuery {
   convention: conventionByRequestHost {
-    id
+    id: transitionalId
     name
     forms {
-      id
+      id: transitionalId
       ...FormFields
     }
   }
@@ -118,7 +118,7 @@ export type FormAdminQueryQueryResult = Apollo.QueryResult<FormAdminQueryData, F
 export const FormEditorQueryDocument = gql`
     query FormEditorQuery($id: Int!) {
   convention: conventionByRequestHost {
-    id
+    id: transitionalId
     name
     starts_at
     ends_at
@@ -126,7 +126,7 @@ export const FormEditorQueryDocument = gql`
     timezone_mode
     event_mailing_list_domain
     form(id: $id) {
-      id
+      id: transitionalId
       ...FormEditorData
     }
   }
@@ -163,13 +163,13 @@ export type FormEditorQueryQueryResult = Apollo.QueryResult<FormEditorQueryData,
 export const PreviewFormItemQueryDocument = gql`
     query PreviewFormItemQuery($formId: Int!, $formSectionId: Int!, $formItem: FormItemInput!) {
   convention: conventionByRequestHost {
-    id
+    id: transitionalId
     form(id: $formId) {
-      id
+      id: transitionalId
       form_section(id: $formSectionId) {
-        id
+        id: transitionalId
         preview_form_item(formItem: $formItem) {
-          id
+          id: transitionalId
           ...FormEditorFormItemFields
         }
       }

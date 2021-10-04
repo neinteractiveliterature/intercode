@@ -68,7 +68,13 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
   end
 
   field :can_update_signup, Boolean, null: false do
-    argument :signup_id, Integer, required: true, camelize: false
+    argument :signup_id,
+             Integer,
+             deprecation_reason:
+               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             required: false,
+             camelize: false
+    argument :transitional_signup_id, ID, required: false, camelize: true
   end
 
   def can_update_signup(**args)
@@ -76,7 +82,13 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
   end
 
   field :can_update_counted_signup, Boolean, null: false do
-    argument :signup_id, Integer, required: true, camelize: false
+    argument :signup_id,
+             Integer,
+             deprecation_reason:
+               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             required: false,
+             camelize: false
+    argument :transitional_signup_id, ID, required: false, camelize: true
   end
 
   def can_update_counted_signup(**args)
@@ -84,7 +96,13 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
   end
 
   field :can_force_confirm_signup, Boolean, null: false do
-    argument :signup_id, Integer, required: true, camelize: false
+    argument :signup_id,
+             Integer,
+             deprecation_reason:
+               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             required: false,
+             camelize: false
+    argument :transitional_signup_id, ID, required: false, camelize: true
   end
 
   def can_force_confirm_signup(**args)
@@ -92,7 +110,13 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
   end
 
   field :can_update_bucket_signup, Boolean, null: false do
-    argument :signup_id, Integer, required: true, camelize: false
+    argument :signup_id,
+             Integer,
+             deprecation_reason:
+               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             required: false,
+             camelize: false
+    argument :transitional_signup_id, ID, required: false, camelize: true
   end
 
   def can_update_bucket_signup(**args)
@@ -106,7 +130,13 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
   end
 
   field :can_update_event, Boolean, null: false do
-    argument :event_id, Integer, required: true, camelize: false
+    argument :event_id,
+             Integer,
+             deprecation_reason:
+               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             required: false,
+             camelize: false
+    argument :transitional_event_id, ID, required: false, camelize: true
   end
 
   def can_update_event(**args)
@@ -114,7 +144,13 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
   end
 
   field :can_delete_event, Boolean, null: false do
-    argument :event_id, Integer, required: true, camelize: false
+    argument :event_id,
+             Integer,
+             deprecation_reason:
+               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             required: false,
+             camelize: false
+    argument :transitional_event_id, ID, required: false, camelize: true
   end
 
   def can_delete_event(**args)
@@ -212,7 +248,13 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
   end
 
   field :can_read_admin_notes_on_event_proposal, Boolean, null: false do
-    argument :event_proposal_id, Integer, required: true, camelize: false
+    argument :event_proposal_id,
+             Integer,
+             deprecation_reason:
+               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             required: false,
+             camelize: false
+    argument :transitional_event_proposal_id, ID, required: false, camelize: true
   end
 
   def can_read_admin_notes_on_event_proposal(**args)
@@ -220,7 +262,13 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
   end
 
   field :can_update_admin_notes_on_event_proposal, Boolean, null: false do
-    argument :event_proposal_id, Integer, required: true, camelize: false
+    argument :event_proposal_id,
+             Integer,
+             deprecation_reason:
+               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             required: false,
+             camelize: false
+    argument :transitional_event_proposal_id, ID, required: false, camelize: true
   end
 
   def can_update_admin_notes_on_event_proposal(**args)
@@ -228,7 +276,13 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
   end
 
   field :can_update_event_proposal, Boolean, null: false do
-    argument :event_proposal_id, Integer, required: true, camelize: false
+    argument :event_proposal_id,
+             Integer,
+             deprecation_reason:
+               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             required: false,
+             camelize: false
+    argument :transitional_event_proposal_id, ID, required: false, camelize: true
   end
 
   def can_update_event_proposal(**args)
@@ -236,7 +290,13 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
   end
 
   field :can_delete_event_proposal, Boolean, null: false do
-    argument :event_proposal_id, Integer, required: true, camelize: false
+    argument :event_proposal_id,
+             Integer,
+             deprecation_reason:
+               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             required: false,
+             camelize: false
+    argument :transitional_event_proposal_id, ID, required: false, camelize: true
   end
 
   def can_delete_event_proposal(**args)
@@ -256,7 +316,13 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
   end
 
   field :can_update_ticket, Boolean, null: false do
-    argument :ticket_id, Integer, required: true, camelize: false
+    argument :ticket_id,
+             Integer,
+             deprecation_reason:
+               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             required: false,
+             camelize: false
+    argument :transitional_ticket_id, ID, required: false, camelize: true
   end
 
   def can_update_ticket(**args)
@@ -264,7 +330,13 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
   end
 
   field :can_delete_ticket, Boolean, null: false do
-    argument :ticket_id, Integer, required: true, camelize: false
+    argument :ticket_id,
+             Integer,
+             deprecation_reason:
+               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             required: false,
+             camelize: false
+    argument :transitional_ticket_id, ID, required: false, camelize: true
   end
 
   def can_delete_ticket(**args)
@@ -284,7 +356,13 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
   end
 
   field :can_read_event_signups, Boolean, null: false do
-    argument :event_id, Integer, required: true, camelize: false
+    argument :event_id,
+             Integer,
+             deprecation_reason:
+               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             required: false,
+             camelize: false
+    argument :transitional_event_id, ID, required: false, camelize: true
   end
 
   def can_read_event_signups(**args)
@@ -341,7 +419,13 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
   end
 
   field :can_update_user_con_profile, Boolean, null: false do
-    argument :user_con_profile_id, Integer, required: true, camelize: false
+    argument :user_con_profile_id,
+             Integer,
+             deprecation_reason:
+               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             required: false,
+             camelize: false
+    argument :transitional_user_con_profile_id, ID, required: false, camelize: true
   end
 
   def can_update_user_con_profile(**args)
@@ -353,14 +437,28 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
     Boolean,
     null: false,
     deprecation_reason: 'Privileges have been removed in favor of permissions.  This will always return false.'
-  ) { argument :user_con_profile_id, Integer, required: true, camelize: false }
+  ) do
+    argument :user_con_profile_id,
+             Integer,
+             deprecation_reason:
+               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             required: false,
+             camelize: false
+    argument :transitional_user_con_profile_id, ID, required: false, camelize: true
+  end
 
   def can_update_privileges_user_con_profile(**_args)
     false
   end
 
   field :can_delete_user_con_profile, Boolean, null: false do
-    argument :user_con_profile_id, Integer, required: true, camelize: false
+    argument :user_con_profile_id,
+             Integer,
+             deprecation_reason:
+               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             required: false,
+             camelize: false
+    argument :transitional_user_con_profile_id, ID, required: false, camelize: true
   end
 
   def can_delete_user_con_profile(**args)
@@ -368,7 +466,13 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
   end
 
   field :can_become_user_con_profile, Boolean, null: false do
-    argument :user_con_profile_id, Integer, required: true, camelize: false
+    argument :user_con_profile_id,
+             Integer,
+             deprecation_reason:
+               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             required: false,
+             camelize: false
+    argument :transitional_user_con_profile_id, ID, required: false, camelize: true
   end
 
   def can_become_user_con_profile(**args)
@@ -376,7 +480,13 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
   end
 
   field :can_withdraw_all_user_con_profile_signups, Boolean, null: false do
-    argument :user_con_profile_id, Integer, required: true, camelize: false
+    argument :user_con_profile_id,
+             Integer,
+             deprecation_reason:
+               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             required: false,
+             camelize: false
+    argument :transitional_user_con_profile_id, ID, required: false, camelize: true
   end
 
   def can_withdraw_all_user_con_profile_signups(**args)

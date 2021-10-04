@@ -64,8 +64,6 @@ class AuthorizationInfo
   end
 
   def actual_user
-    @actual_user ||=
-      assumed_identity_from_profile ? assumed_identity_from_profile.user : user
-      
+    @actual_user ||= assumed_identity_from_profile ? assumed_identity_from_profile.user : user
   end
 end

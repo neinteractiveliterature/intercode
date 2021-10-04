@@ -1,8 +1,20 @@
 # frozen_string_literal: true
 class Mutations::WithdrawUserSignup < Mutations::BaseMutation
   field :signup, Types::SignupType, null: false
-  argument :run_id, Int, required: true, camelize: false
-  argument :user_con_profile_id, Int, required: true, camelize: false
+  argument :run_id,
+           Int,
+           deprecation_reason:
+             'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+           required: false,
+           camelize: false
+  argument :transitional_run_id, ID, required: false, camelize: true
+  argument :user_con_profile_id,
+           Int,
+           deprecation_reason:
+             'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+           required: false,
+           camelize: false
+  argument :transitional_user_con_profile_id, ID, required: false, camelize: true
   argument :suppress_notifications, Boolean, required: false, camelize: false
 
   attr_reader :signup

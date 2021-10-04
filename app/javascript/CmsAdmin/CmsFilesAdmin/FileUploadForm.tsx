@@ -9,12 +9,11 @@ import { CreateCmsFile } from './mutations';
 import FilePreview from './FilePreview';
 import { useCreateMutation } from '../../MutationUtils';
 import useAsyncFunction from '../../useAsyncFunction';
-import { CmsFile } from '../../graphqlTypes.generated';
 import { CmsFilesAdminQueryData, CmsFilesAdminQueryVariables } from './queries.generated';
 import { CreateCmsFileMutationVariables, CreateCmsFileMutationData } from './mutations.generated';
 
 export type FileUploadFormProps = {
-  onUpload?: (cmsFile: CmsFile) => void;
+  onUpload?: (cmsFile: CreateCmsFileMutationData['createCmsFile']['cms_file']) => void;
 };
 
 function FileUploadForm({ onUpload }: FileUploadFormProps): JSX.Element {
@@ -76,11 +75,7 @@ function FileUploadForm({ onUpload }: FileUploadFormProps): JSX.Element {
       <div className="card-body">
         {file ? (
           <div className="d-flex align-items-start">
-            <FilePreview
-              filename={(file || {}).name}
-              contentType={(file || {}).type}
-              url={imageUrl ?? undefined}
-            />
+            <FilePreview filename={(file || {}).name} contentType={(file || {}).type} url={imageUrl ?? undefined} />
             <button className="btn btn-secondary ms-4" type="button" onClick={clearFile}>
               {t('cms.fileUploadForm.clearFileButton', 'Clear')}
             </button>

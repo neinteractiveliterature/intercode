@@ -5,7 +5,7 @@ export const CreatePage = gql`
   mutation CreatePage($page: PageInput!) {
     createPage(input: { page: $page }) {
       page {
-        id
+        id: transitionalId
         ...CmsPageFields
       }
     }
@@ -18,7 +18,7 @@ export const UpdatePage = gql`
   mutation UpdatePage($id: Int!, $page: PageInput!) {
     updatePage(input: { id: $id, page: $page }) {
       page {
-        id
+        id: transitionalId
         ...CmsPageFields
       }
     }

@@ -22,9 +22,8 @@ class CmsContentSet
   def all_form_contents_by_name
     @all_forms_by_name ||=
       all_form_paths_with_names.each_with_object({}) do |(form_path, form_name), hash|
-          hash[form_name] = JSON.parse(File.read(form_path))
-        end
-      
+        hash[form_name] = JSON.parse(File.read(form_path))
+      end
   end
 
   def all_form_paths_with_names
@@ -124,10 +123,9 @@ class CmsContentSet
 
     @inherit_content_sets ||=
       metadata[:inherit].flat_map do |content_set_name|
-          content_set = CmsContentSet.new(name: content_set_name)
-          [content_set, *content_set.inherit_content_sets]
-        end
-      
+        content_set = CmsContentSet.new(name: content_set_name)
+        [content_set, *content_set.inherit_content_sets]
+      end
   end
 
   def root_path

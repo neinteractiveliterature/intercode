@@ -4,12 +4,12 @@ import { PricingStructureFields } from '../Store/pricingStructureFields';
 export const TicketPurchaseFormQuery = gql`
   query TicketPurchaseFormQuery {
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       name
       ticket_name
 
       products(only_ticket_providing: true, only_available: true) {
-        id
+        id: transitionalId
         name
         description_html
 
@@ -19,20 +19,20 @@ export const TicketPurchaseFormQuery = gql`
       }
 
       ticket_types {
-        id
+        id: transitionalId
         description
 
         providing_products {
-          id
+          id: transitionalId
         }
       }
 
       my_profile {
-        id
+        id: transitionalId
         name_without_nickname
 
         ticket {
-          id
+          id: transitionalId
         }
       }
     }
@@ -44,25 +44,25 @@ export const TicketPurchaseFormQuery = gql`
 export const MyTicketDisplayQuery = gql`
   query MyTicketDisplayQuery {
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       name
       ticket_name
       timezone_name
 
       my_profile {
-        id
+        id: transitionalId
         name_without_nickname
 
         ticket {
-          id
+          id: transitionalId
           created_at
           updated_at
 
           order_entry {
-            id
+            id: transitionalId
 
             order {
-              id
+              id: transitionalId
               charge_id
             }
 
@@ -73,12 +73,12 @@ export const MyTicketDisplayQuery = gql`
           }
 
           ticket_type {
-            id
+            id: transitionalId
             description
           }
 
           provided_by_event {
-            id
+            id: transitionalId
             title
           }
         }

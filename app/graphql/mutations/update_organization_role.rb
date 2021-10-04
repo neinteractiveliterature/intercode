@@ -2,7 +2,13 @@
 class Mutations::UpdateOrganizationRole < Mutations::BaseMutation
   field :organization_role, Types::OrganizationRoleType, null: false
 
-  argument :id, Integer, required: true, camelize: false
+  argument :id,
+           Integer,
+           deprecation_reason:
+             'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+           required: false,
+           camelize: false
+  argument :transitional_id, ID, required: false, camelize: true
   argument :organization_role, Types::OrganizationRoleInputType, required: true, camelize: false
   argument :add_user_ids, [Integer], required: false, camelize: false
   argument :remove_user_ids, [Integer], required: false, camelize: false

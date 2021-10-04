@@ -67,8 +67,11 @@ class CmsRenderingContext
     doc.xpath('//body/*').remove
     doc.xpath('//body').first.inner_html =
       NOSCRIPT_WARNING +
-        tag.div('', 'data-react-class' => 'AppRoot',
-          'data-react-props' => (controller&.app_component_props || {}).to_json)
+        tag.div(
+          '',
+          'data-react-class' => 'AppRoot',
+          'data-react-props' => (controller&.app_component_props || {}).to_json
+        )
     doc.to_s.html_safe
   rescue StandardError => e
     Rollbar.warn(e)
@@ -97,13 +100,19 @@ class CmsRenderingContext
     liquid_assigns.merge(
       'content_for_head' => '',
       'content_for_navbar' =>
-        tag.div('', 'data-react-class' => 'NavigationBar',
+        tag.div(
+          '',
+          'data-react-class' => 'NavigationBar',
           'data-react-props' => {
             navbarClasses: cms_layout.navbar_classes || ApplicationHelper::DEFAULT_NAVBAR_CLASSES
-          }.to_json),
+          }.to_json
+        ),
       'content_for_layout' =>
-        tag.div('', 'data-react-class' => 'AppRouter',
-          'data-react-props' => { alert: controller&.flash&.alert }.to_json)
+        tag.div(
+          '',
+          'data-react-class' => 'AppRouter',
+          'data-react-props' => { alert: controller&.flash&.alert }.to_json
+        )
     )
   end
 

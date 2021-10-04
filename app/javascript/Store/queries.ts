@@ -16,7 +16,7 @@ export const AdminOrdersQuery = gql`
     }
 
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       timezone_name
 
       orders_paginated(page: $page, per_page: $perPage, filters: $filters, sort: $sort) {
@@ -25,7 +25,7 @@ export const AdminOrdersQuery = gql`
         total_pages
 
         entries {
-          id
+          id: transitionalId
           ...AdminOrderFieldsFragment
         }
       }
@@ -38,13 +38,13 @@ export const AdminOrdersQuery = gql`
 export const AdminProductsQuery = gql`
   query AdminProductsQuery {
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       products {
-        id
+        id: transitionalId
         ...AdminProductFields
       }
       ticket_types {
-        id
+        id: transitionalId
         description
       }
     }
@@ -65,7 +65,7 @@ export const AdminStoreAbilityQuery = gql`
     }
 
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       timezone_name
     }
   }
@@ -74,15 +74,15 @@ export const AdminStoreAbilityQuery = gql`
 export const CartQuery = gql`
   query CartQuery {
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       name
 
       my_profile {
-        id
+        id: transitionalId
         name_without_nickname
 
         current_pending_order {
-          id
+          id: transitionalId
           ...CartOrderFields
         }
       }
@@ -95,22 +95,22 @@ export const CartQuery = gql`
 export const OrderHistoryQuery = gql`
   query OrderHistoryQuery {
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       name
       timezone_name
 
       staff_positions {
-        id
+        id: transitionalId
         name
         email
       }
 
       my_profile {
-        id
+        id: transitionalId
         name_without_nickname
 
         orders {
-          id
+          id: transitionalId
           status
           submitted_at
 
@@ -125,23 +125,23 @@ export const OrderHistoryQuery = gql`
           }
 
           coupon_applications {
-            id
+            id: transitionalId
             ...CouponApplicationFields
           }
 
           order_entries {
-            id
+            id: transitionalId
             quantity
 
             product {
-              id
+              id: transitionalId
               name
               image_url
               payment_options
             }
 
             product_variant {
-              id
+              id: transitionalId
               name
               image_url
             }
@@ -167,9 +167,9 @@ export const OrderHistoryQuery = gql`
 export const OrderSummaryQuery = gql`
   query OrderSummaryQuery {
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       products {
-        id
+        id: transitionalId
         name
 
         order_quantities_by_status {
@@ -178,7 +178,7 @@ export const OrderSummaryQuery = gql`
         }
 
         product_variants {
-          id
+          id: transitionalId
           name
 
           order_quantities_by_status {
@@ -194,13 +194,13 @@ export const OrderSummaryQuery = gql`
 export const OrderFormProductQuery = gql`
   query OrderFormProductQuery($productId: Int!) {
     currentUser {
-      id
+      id: transitionalId
     }
 
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       product(id: $productId) {
-        id
+        id: transitionalId
         image_url
         name
         pricing_structure {
@@ -208,11 +208,11 @@ export const OrderFormProductQuery = gql`
         }
         description_html
         provides_ticket_type {
-          id
+          id: transitionalId
         }
 
         product_variants {
-          id
+          id: transitionalId
           name
           position
           override_pricing_structure {
@@ -229,11 +229,11 @@ export const OrderFormProductQuery = gql`
 export const CurrentPendingOrderPaymentIntentClientSecret = gql`
   query CurrentPendingOrderPaymentIntentClientSecretQuery {
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       my_profile {
-        id
+        id: transitionalId
         current_pending_order {
-          id
+          id: transitionalId
           payment_intent_client_secret
         }
       }

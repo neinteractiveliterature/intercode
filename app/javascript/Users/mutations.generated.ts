@@ -6,22 +6,22 @@ import { DetailedUserFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
 export type MergeUsersMutationVariables = Types.Exact<{
-  userIds: Array<Types.Scalars['Int']> | Types.Scalars['Int'];
-  winningUserId: Types.Scalars['Int'];
+  userIds: Array<Types.Scalars['ID']> | Types.Scalars['ID'];
+  winningUserId: Types.Scalars['ID'];
   winningUserConProfiles: Array<Types.WinningUserConProfileInput> | Types.WinningUserConProfileInput;
 }>;
 
 
-export type MergeUsersMutationData = { __typename: 'Mutation', mergeUsers: { __typename: 'MergeUsersPayload', user: { __typename: 'User', id: number, name?: string | null | undefined, first_name?: string | null | undefined, last_name?: string | null | undefined, email?: string | null | undefined, privileges?: Array<string> | null | undefined, user_con_profiles: Array<{ __typename: 'UserConProfile', id: number, email?: string | null | undefined, ticket?: { __typename: 'Ticket', id: number } | null | undefined, signups: Array<{ __typename: 'Signup', id: number, state: Types.SignupState }>, convention: { __typename: 'Convention', id: number, name: string, domain?: string | null | undefined, starts_at?: any | null | undefined, ticket_name: string, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode }, staff_positions: Array<{ __typename: 'StaffPosition', id: number, name: string }> }> } } };
+export type MergeUsersMutationData = { __typename: 'Mutation', mergeUsers: { __typename: 'MergeUsersPayload', user: { __typename: 'User', name?: string | null | undefined, first_name?: string | null | undefined, last_name?: string | null | undefined, email?: string | null | undefined, privileges?: Array<string> | null | undefined, id: string, user_con_profiles: Array<{ __typename: 'UserConProfile', email?: string | null | undefined, id: string, ticket?: { __typename: 'Ticket', id: string } | null | undefined, signups: Array<{ __typename: 'Signup', state: Types.SignupState, id: string }>, convention: { __typename: 'Convention', name: string, domain?: string | null | undefined, starts_at?: any | null | undefined, ticket_name: string, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, id: string }, staff_positions: Array<{ __typename: 'StaffPosition', name: string, id: string }> }> } } };
 
 
 export const MergeUsersDocument = gql`
-    mutation MergeUsers($userIds: [Int!]!, $winningUserId: Int!, $winningUserConProfiles: [WinningUserConProfileInput!]!) {
+    mutation MergeUsers($userIds: [ID!]!, $winningUserId: ID!, $winningUserConProfiles: [WinningUserConProfileInput!]!) {
   mergeUsers(
-    input: {userIds: $userIds, winningUserId: $winningUserId, winningUserConProfiles: $winningUserConProfiles}
+    input: {transitionalUserIds: $userIds, transitionalWinningUserId: $winningUserId, winningUserConProfiles: $winningUserConProfiles}
   ) {
     user {
-      id
+      id: transitionalId
       ...DetailedUserFields
     }
   }

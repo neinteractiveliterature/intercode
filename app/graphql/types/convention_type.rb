@@ -45,7 +45,13 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
   field :ends_at, Types::DateType, null: true
 
   field :event, Types::EventType, null: false do
-    argument :id, Integer, required: true, description: 'The ID of the event to find'
+    argument :id,
+             Integer,
+             deprecation_reason:
+               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             required: false,
+             description: 'The ID of the event to find'
+    argument :transitional_id, ID, required: false, description: 'The ID of the event to find', camelize: true
 
     description <<~MARKDOWN
       Finds an active event by ID in this convention. If there is no event with that ID in this
@@ -54,7 +60,7 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
   end
 
   def event(**args)
-    object.events.active.find(args[:id])
+    object.events.active.find(args[:transitional_id] || args[:id])
   end
 
   field :event_categories, [Types::EventCategoryType], null: false do
@@ -83,7 +89,13 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
   end
 
   field :event_proposal, Types::EventProposalType, null: false do
-    argument :id, Integer, required: true, description: 'The ID of the event proposal to find.'
+    argument :id,
+             Integer,
+             deprecation_reason:
+               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             required: false,
+             description: 'The ID of the event proposal to find.'
+    argument :transitional_id, ID, required: false, description: 'The ID of the event proposal to find.', camelize: true
 
     description <<~MARKDOWN
       Finds an event proposal by ID in this convention. If there is no event proposal with that ID
@@ -154,7 +166,13 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
   end
 
   field :form, Types::FormType, null: false do
-    argument :id, Integer, required: true, description: 'The ID of the form to find.'
+    argument :id,
+             Integer,
+             deprecation_reason:
+               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             required: false,
+             description: 'The ID of the form to find.'
+    argument :transitional_id, ID, required: false, description: 'The ID of the form to find.', camelize: true
 
     description <<~MARKDOWN
       Finds a form by ID in this convention. If there is no form with that ID in this convention,
@@ -168,7 +186,12 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
 
   field :forms, [Types::FormType], null: false
   field :hidden, Boolean, null: false
-  field :id, Integer, null: false
+  field :id,
+        Integer,
+        deprecation_reason:
+          'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+        null: false
+  field :transitional_id, ID, method: :id, null: false, camelize: true
   field :language, String, null: false
   field :location, Types::JSON, null: true
 
@@ -289,7 +312,13 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
   end
 
   field :product, Types::ProductType, null: false do
-    argument :id, Integer, required: true, description: 'The ID of the product to find.'
+    argument :id,
+             Integer,
+             deprecation_reason:
+               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             required: false,
+             description: 'The ID of the product to find.'
+    argument :transitional_id, ID, required: false, description: 'The ID of the product to find.', camelize: true
 
     description <<~MARKDOWN
       Finds a product by ID in this convention. If there is no product with that ID in this
@@ -326,7 +355,13 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
   field :rooms, [Types::RoomType], null: false
 
   field :run, Types::RunType, null: false do
-    argument :id, Integer, required: true, description: 'The ID of the run to find'
+    argument :id,
+             Integer,
+             deprecation_reason:
+               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             required: false,
+             description: 'The ID of the run to find'
+    argument :transitional_id, ID, required: false, description: 'The ID of the run to find', camelize: true
 
     description <<~MARKDOWN
       Finds an active run by ID in this convention. If there is no run with that ID in this
@@ -343,7 +378,13 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
   field :show_schedule, Types::ShowScheduleType, null: true
 
   field :signup, Types::SignupType, null: false do
-    argument :id, Integer, required: true, description: 'The ID of the signup to find.'
+    argument :id,
+             Integer,
+             deprecation_reason:
+               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             required: false,
+             description: 'The ID of the signup to find.'
+    argument :transitional_id, ID, required: false, description: 'The ID of the signup to find.', camelize: true
 
     description <<~MARKDOWN
       Finds a signup by ID in this convention. If there is no signup with that ID in this
@@ -418,7 +459,13 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
   field :site_mode, Types::SiteModeType, null: false
 
   field :staff_position, Types::StaffPositionType, null: false do
-    argument :id, Integer, required: true, description: 'The ID of the staff position to find.'
+    argument :id,
+             Integer,
+             deprecation_reason:
+               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             required: false,
+             description: 'The ID of the staff position to find.'
+    argument :transitional_id, ID, required: false, description: 'The ID of the staff position to find.', camelize: true
 
     description <<~MARKDOWN
       Finds a staff position by ID in this convention. If there is no staff position with that ID
@@ -443,7 +490,12 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
   field :timezone_name, String, null: true
   field :updated_at, Types::DateType, null: true
   field :user_activity_alert, Types::UserActivityAlertType, null: false do
-    argument :id, Integer, required: true
+    argument :id,
+             Integer,
+             deprecation_reason:
+               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             required: false
+    argument :transitional_id, ID, required: false, camelize: true
   end
 
   def user_activity_alert(id:)
@@ -452,7 +504,13 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
   field :user_activity_alerts, [Types::UserActivityAlertType], null: false
 
   field :user_con_profile, Types::UserConProfileType, null: false do
-    argument :id, Integer, required: true, description: 'The ID of the UserConProfile to find.'
+    argument :id,
+             Integer,
+             deprecation_reason:
+               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             required: false,
+             description: 'The ID of the UserConProfile to find.'
+    argument :transitional_id, ID, required: false, description: 'The ID of the UserConProfile to find.', camelize: true
 
     description <<~MARKDOWN
       Finds a UserConProfile by ID in the convention associated with this convention. If there is
@@ -465,7 +523,17 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
   end
 
   field :user_con_profile_by_user_id, Types::UserConProfileType, null: false do
-    argument :user_id, Integer, required: true, description: 'The user ID of the UserConProfile to find.'
+    argument :user_id,
+             Integer,
+             deprecation_reason:
+               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             required: false,
+             description: 'The user ID of the UserConProfile to find.'
+    argument :transitional_user_id,
+             ID,
+             required: false,
+             description: 'The user ID of the UserConProfile to find.',
+             camelize: true
 
     description <<~MARKDOWN
       Finds a UserConProfile by user ID in the convention associated with this convention. If

@@ -4,12 +4,12 @@ import * as Types from '../../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type CmsVariableFieldsFragment = { __typename: 'CmsVariable', id: number, key: string, value_json: string, current_ability_can_update: boolean, current_ability_can_delete: boolean };
+export type CmsVariableFieldsFragment = { __typename: 'CmsVariable', key: string, value_json: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, id: string };
 
 export type CmsVariablesQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type CmsVariablesQueryData = { __typename: 'Query', cmsParent: { __typename: 'Convention', id: number, cmsVariables: Array<{ __typename: 'CmsVariable', id: number, key: string, value_json: string, current_ability_can_update: boolean, current_ability_can_delete: boolean }> } | { __typename: 'RootSite', id: number, cmsVariables: Array<{ __typename: 'CmsVariable', id: number, key: string, value_json: string, current_ability_can_update: boolean, current_ability_can_delete: boolean }> }, currentAbility: { __typename: 'Ability', can_create_cms_variables: boolean } };
+export type CmsVariablesQueryData = { __typename: 'Query', cmsParent: { __typename: 'Convention', id: string, cmsVariables: Array<{ __typename: 'CmsVariable', key: string, value_json: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, id: string }> } | { __typename: 'RootSite', id: string, cmsVariables: Array<{ __typename: 'CmsVariable', key: string, value_json: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, id: string }> }, currentAbility: { __typename: 'Ability', can_create_cms_variables: boolean } };
 
 export type SetCmsVariableMutationVariables = Types.Exact<{
   key: Types.Scalars['String'];
@@ -17,18 +17,18 @@ export type SetCmsVariableMutationVariables = Types.Exact<{
 }>;
 
 
-export type SetCmsVariableMutationData = { __typename: 'Mutation', setCmsVariable: { __typename: 'SetCmsVariablePayload', cms_variable: { __typename: 'CmsVariable', id: number, key: string, value_json: string, current_ability_can_update: boolean, current_ability_can_delete: boolean } } };
+export type SetCmsVariableMutationData = { __typename: 'Mutation', setCmsVariable: { __typename: 'SetCmsVariablePayload', cms_variable: { __typename: 'CmsVariable', key: string, value_json: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, id: string } } };
 
 export type DeleteCmsVariableMutationVariables = Types.Exact<{
   key: Types.Scalars['String'];
 }>;
 
 
-export type DeleteCmsVariableMutationData = { __typename: 'Mutation', deleteCmsVariable: { __typename: 'DeleteCmsVariablePayload', cms_variable: { __typename: 'CmsVariable', id: number, key: string, value_json: string, current_ability_can_update: boolean, current_ability_can_delete: boolean } } };
+export type DeleteCmsVariableMutationData = { __typename: 'Mutation', deleteCmsVariable: { __typename: 'DeleteCmsVariablePayload', cms_variable: { __typename: 'CmsVariable', key: string, value_json: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, id: string } } };
 
 export const CmsVariableFieldsFragmentDoc = gql`
     fragment CmsVariableFields on CmsVariable {
-  id
+  id: transitionalId
   key
   value_json
   current_ability_can_update
@@ -38,9 +38,9 @@ export const CmsVariableFieldsFragmentDoc = gql`
 export const CmsVariablesQueryDocument = gql`
     query CmsVariablesQuery {
   cmsParent: cmsParentByRequestHost {
-    id
+    id: transitionalId
     cmsVariables {
-      id
+      id: transitionalId
       ...CmsVariableFields
     }
   }
@@ -80,7 +80,7 @@ export const SetCmsVariableMutationDocument = gql`
     mutation SetCmsVariableMutation($key: String!, $value_json: String!) {
   setCmsVariable(input: {cms_variable: {key: $key, value_json: $value_json}}) {
     cms_variable {
-      id
+      id: transitionalId
       ...CmsVariableFields
     }
   }
@@ -117,7 +117,7 @@ export const DeleteCmsVariableMutationDocument = gql`
     mutation DeleteCmsVariableMutation($key: String!) {
   deleteCmsVariable(input: {key: $key}) {
     cms_variable {
-      id
+      id: transitionalId
       ...CmsVariableFields
     }
   }

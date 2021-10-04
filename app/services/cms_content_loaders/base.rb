@@ -77,11 +77,11 @@ class CmsContentLoaders::Base < CivilService::Service
         end
 
         next unless existing_content_identifiers.include?(name)
-                  errors.add(
-                    :base,
-                    "A #{subdir.singularize} named #{name} already exists in \
+        errors.add(
+          :base,
+          "A #{subdir.singularize} named #{name} already exists in \
         #{convention.name}"
-                  )
+        )
       end
   end
 end

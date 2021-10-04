@@ -33,14 +33,11 @@ module EventEmail
   end
 
   def reserved_team_mailing_list_names
-    convention
-      .staff_positions
-      .filter_map do |staff_position|
-        next unless staff_position.email
-        address = Mail::Address.new(staff_position.email)
-        address.local
-      end
-      
+    convention.staff_positions.filter_map do |staff_position|
+      next unless staff_position.email
+      address = Mail::Address.new(staff_position.email)
+      address.local
+    end
   end
 
   def team_mailing_list_name_must_not_be_reserved

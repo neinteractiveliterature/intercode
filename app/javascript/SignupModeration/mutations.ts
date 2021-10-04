@@ -40,7 +40,7 @@ export const AcceptSignupRequest = gql`
   mutation AcceptSignupRequest($id: Int!) {
     acceptSignupRequest(input: { id: $id }) {
       signup_request {
-        id
+        id: transitionalId
         ...SignupModerationSignupRequestFields
       }
     }
@@ -53,7 +53,7 @@ export const RejectSignupRequest = gql`
   mutation RejectSignupRequest($id: Int!) {
     rejectSignupRequest(input: { id: $id }) {
       signup_request {
-        id
+        id: transitionalId
         ...SignupModerationSignupRequestFields
       }
     }

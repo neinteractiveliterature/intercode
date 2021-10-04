@@ -3,23 +3,23 @@ import { CommonFormItemFields, CommonFormFields } from '../Models/commonFormFrag
 
 export const FormFields = gql`
   fragment FormFields on Form {
-    id
+    id: transitionalId
     title
     form_type
     export_json
 
     event_categories {
-      id
+      id: transitionalId
       name
     }
 
     proposal_event_categories {
-      id
+      id: transitionalId
       name
     }
 
     user_con_profile_conventions {
-      id
+      id: transitionalId
       name
     }
   }
@@ -27,7 +27,7 @@ export const FormFields = gql`
 
 export const FormEditorFormItemFields = gql`
   fragment FormEditorFormItemFields on FormItem {
-    id
+    id: transitionalId
     admin_description
     public_description
     properties
@@ -39,14 +39,14 @@ export const FormEditorFormItemFields = gql`
 
 export const FormEditorData = gql`
   fragment FormEditorData on Form {
-    id
+    id: transitionalId
     ...CommonFormFields
 
     form_sections {
-      id
+      id: transitionalId
 
       form_items {
-        id
+        id: transitionalId
         ...FormEditorFormItemFields
       }
     }
@@ -59,11 +59,11 @@ export const FormEditorData = gql`
 export const FormAdminQuery = gql`
   query FormAdminQuery {
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       name
 
       forms {
-        id
+        id: transitionalId
         ...FormFields
       }
     }
@@ -75,7 +75,7 @@ export const FormAdminQuery = gql`
 export const FormEditorQuery = gql`
   query FormEditorQuery($id: Int!) {
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       name
       starts_at
       ends_at
@@ -83,7 +83,7 @@ export const FormEditorQuery = gql`
       timezone_mode
       event_mailing_list_domain
       form(id: $id) {
-        id
+        id: transitionalId
         ...FormEditorData
       }
     }
@@ -95,13 +95,13 @@ export const FormEditorQuery = gql`
 export const PreviewFormItemQuery = gql`
   query PreviewFormItemQuery($formId: Int!, $formSectionId: Int!, $formItem: FormItemInput!) {
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       form(id: $formId) {
-        id
+        id: transitionalId
         form_section(id: $formSectionId) {
-          id
+          id: transitionalId
           preview_form_item(formItem: $formItem) {
-            id
+            id: transitionalId
             ...FormEditorFormItemFields
           }
         }

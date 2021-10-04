@@ -74,7 +74,12 @@ removed in favor of `conventionByRequestHostIfPresent`." do
   alias assert_convention convention_by_request_host
 
   field :convention_by_id, Types::ConventionType, null: false do
-    argument :id, Integer, required: true
+    argument :id,
+             Integer,
+             deprecation_reason:
+               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             required: false
+    argument :transitional_id, ID, required: false, camelize: true
     description <<~MARKDOWN
     Finds a convention by ID. If a matching one can't be found, the request will error out.
   MARKDOWN
@@ -137,7 +142,13 @@ implications.  Please use conventions_paginated instead." do
         deprecation_reason:
           "Domain-specific queries are \
 being deprecated.  Please use the `event` field on the Convention type instead." do
-    argument :id, Integer, required: true, description: 'The ID of the event to find'
+    argument :id,
+             Integer,
+             deprecation_reason:
+               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             required: false,
+             description: 'The ID of the event to find'
+    argument :transitional_id, ID, required: false, description: 'The ID of the event to find', camelize: true
 
     description <<~MARKDOWN
       Finds an active event by ID in the convention associated with the domain name of this HTTP
@@ -156,7 +167,13 @@ being deprecated.  Please use the `event` field on the Convention type instead."
         deprecation_reason:
           'Domain-specific queries are being
 deprecated.  Please use the `run` field on the Convention type instead.' do
-    argument :id, Integer, required: true, description: 'The ID of the run to find'
+    argument :id,
+             Integer,
+             deprecation_reason:
+               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             required: false,
+             description: 'The ID of the run to find'
+    argument :transitional_id, ID, required: false, description: 'The ID of the run to find', camelize: true
 
     description <<~MARKDOWN
       Finds an active run by ID in the convention associated with the domain name of this HTTP
@@ -237,7 +254,13 @@ being deprecated.  Please use the `events` field on the Convention type instead.
         deprecation_reason:
           "Domain-specific queries are being deprecated.  Please use the \
 `event_proposal` field on the Convention type instead." do
-    argument :id, Integer, required: true, description: 'The ID of the event proposal to find.'
+    argument :id,
+             Integer,
+             deprecation_reason:
+               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             required: false,
+             description: 'The ID of the event proposal to find.'
+    argument :transitional_id, ID, required: false, description: 'The ID of the event proposal to find.', camelize: true
 
     description <<~MARKDOWN
       Finds an event proposal by ID in the convention associated with the domain name of this HTTP
@@ -401,7 +424,17 @@ Please use the `cmsContentGroups` field on the CmsParent interface instead." do
         deprecation_reason:
           "Domain-specific queries are being deprecated. \
 Please use the `cmsContentGroup` field on the CmsParent interface instead." do
-    argument :id, Int, required: true, description: 'The ID of the CMS content group to find.'
+    argument :id,
+             Int,
+             deprecation_reason:
+               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             required: false,
+             description: 'The ID of the CMS content group to find.'
+    argument :transitional_id,
+             ID,
+             required: false,
+             description: 'The ID of the CMS content group to find.',
+             camelize: true
 
     description <<~MARKDOWN
       Finds a CMS content group by ID within the domain name of this HTTP request. If there is no
@@ -450,7 +483,13 @@ Please use the `searchCmsContent` field on the CmsParent interface instead." do
         deprecation_reason:
           "Domain-specific queries are being deprecated. \
 Please use the `cmsPage` field on the CmsParent interface instead." do
-    argument :id, Int, required: false, description: 'The ID of the page to find.'
+    argument :id,
+             Int,
+             deprecation_reason:
+               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             required: false,
+             description: 'The ID of the page to find.'
+    argument :transitional_id, ID, required: false, description: 'The ID of the page to find.', camelize: true
     argument :slug, String, required: false, description: 'The unique slug of the page to find.'
     argument :root_page, Boolean, required: false, description: 'If true, returns the root page for this domain.'
 
@@ -606,7 +645,13 @@ Please use the `effectiveCmsLayout` field on the CmsParent interface instead." d
         deprecation_reason:
           "Domain-specific queries are being deprecated. \
 Please use the `user_con_profile` field on the Convention object instead." do
-    argument :id, Integer, required: true, description: 'The ID of the UserConProfile to find.'
+    argument :id,
+             Integer,
+             deprecation_reason:
+               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             required: false,
+             description: 'The ID of the UserConProfile to find.'
+    argument :transitional_id, ID, required: false, description: 'The ID of the UserConProfile to find.', camelize: true
 
     description <<~MARKDOWN
       Finds a UserConProfile by ID in the convention associated with the domain name of this HTTP
@@ -625,7 +670,13 @@ Please use the `user_con_profile` field on the Convention object instead." do
         deprecation_reason:
           "Domain-specific queries are being deprecated. \
 Please use the `form` field on the Convention object instead." do
-    argument :id, Integer, required: true, description: 'The ID of the form to find.'
+    argument :id,
+             Integer,
+             deprecation_reason:
+               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             required: false,
+             description: 'The ID of the form to find.'
+    argument :transitional_id, ID, required: false, description: 'The ID of the form to find.', camelize: true
 
     description <<~MARKDOWN
       Finds a form by ID in the convention associated with the domain name of this HTTP
@@ -644,7 +695,13 @@ Please use the `form` field on the Convention object instead." do
         deprecation_reason:
           "Domain-specific queries are being deprecated. \
 Please use the `staff_position` field on the Convention object instead." do
-    argument :id, Integer, required: true, description: 'The ID of the staff position to find.'
+    argument :id,
+             Integer,
+             deprecation_reason:
+               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             required: false,
+             description: 'The ID of the staff position to find.'
+    argument :transitional_id, ID, required: false, description: 'The ID of the staff position to find.', camelize: true
 
     description <<~MARKDOWN
       Finds a staff position by ID in the convention associated with the domain name of this HTTP
@@ -703,7 +760,17 @@ Please use the `notifier_liquid_assigns` field on the Convention type instead." 
         deprecation_reason:
           "Domain-specific queries are being deprecated. \
 Please use the `preview_form_item` field on the FormSection type instead." do
-    argument :form_section_id, Int, required: true, description: 'The ID of the form section to preview the item in.'
+    argument :form_section_id,
+             Int,
+             deprecation_reason:
+               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             required: false,
+             description: 'The ID of the form section to preview the item in.'
+    argument :transitional_form_section_id,
+             ID,
+             required: false,
+             description: 'The ID of the form section to preview the item in.',
+             camelize: true
     argument :form_item,
              Types::FormItemInputType,
              required: true,
@@ -800,7 +867,13 @@ Please use the `preview_notifier_liquid` field on the Convention type instead." 
         deprecation_reason:
           "Domain-specific queries are being deprecated. \
 Please use the `product` field on the Convention type instead." do
-    argument :id, Integer, required: true, description: 'The ID of the product to find.'
+    argument :id,
+             Integer,
+             deprecation_reason:
+               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             required: false,
+             description: 'The ID of the product to find.'
+    argument :transitional_id, ID, required: false, description: 'The ID of the product to find.', camelize: true
 
     description <<~MARKDOWN
       Finds a product by ID in the convention associated with the domain name of this HTTP
@@ -941,7 +1014,13 @@ Please use the `fullTextSearch` field on the CmsParent interface instead." do
         deprecation_reason:
           "Domain-specific queries are being deprecated. \
 Please use the `signup` field on the Convention type instead." do
-    argument :id, Integer, required: true, description: 'The ID of the signup to find.'
+    argument :id,
+             Integer,
+             deprecation_reason:
+               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             required: false,
+             description: 'The ID of the signup to find.'
+    argument :transitional_id, ID, required: false, description: 'The ID of the signup to find.', camelize: true
 
     description <<~MARKDOWN
       Finds a signup by ID in the convention associated with the domain name of this HTTP
@@ -968,7 +1047,13 @@ Please use the `signup` field on the Convention type instead." do
   end
 
   field :user, Types::UserType, null: false do
-    argument :id, Integer, required: true, description: 'The ID of the user to find.'
+    argument :id,
+             Integer,
+             deprecation_reason:
+               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             required: false,
+             description: 'The ID of the user to find.'
+    argument :transitional_id, ID, required: false, description: 'The ID of the user to find.', camelize: true
 
     description <<~MARKDOWN
     Finds a user by ID. If there is no user with that ID, errors out.
@@ -980,16 +1065,22 @@ Please use the `signup` field on the Convention type instead." do
   end
 
   field :users, [Types::UserType], null: false do
-    argument :ids, [Integer], required: true, description: 'The IDs of the users to find.'
+    argument :ids,
+             [Integer],
+             required: false,
+             description: 'The IDs of the users to find.',
+             deprecation_reason:
+               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.'
+    argument :transitional_ids, [ID], required: false, description: 'The IDs of the users to find.'
 
     description <<~MARKDOWN
-    Finds up to 25 users by ID. If any of the IDs don't match an existing user, errors out.
-  MARKDOWN
+      Finds up to 25 users by ID. If any of the IDs don't match an existing user, errors out.
+    MARKDOWN
   end
 
-  def users(ids:)
+  def users(ids: nil, transitional_ids: nil)
     raise GraphQL::ExecutionError, "Can't retrieve more than 25 users in a single query" if ids.size > 25
 
-    User.find(ids)
+    User.find(transitional_ids || ids)
   end
 end

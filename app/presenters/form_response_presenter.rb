@@ -25,11 +25,9 @@ class FormResponsePresenter
   def as_json_with_rendered_markdown(group_cache_key, object_cache_key, default_content)
     raw_json = as_json(replacement_content_format: 'markdown')
     render_promises =
-      form
-        .form_items
-        .filter_map do |form_item| render_form_item(group_cache_key, object_cache_key, default_content, form_item, 
-raw_json) end
-        
+      form.form_items.filter_map do |form_item|
+        render_form_item(group_cache_key, object_cache_key, default_content, form_item, raw_json)
+      end
 
     Promise.all(render_promises).then { |render_results| raw_json.merge(render_results.to_h) }
   end

@@ -67,9 +67,7 @@ class Coupon < ApplicationRecord
 
   def ensure_exactly_one_discount_model
     discount_models =
-      %w[fixed_amount provides_product percent_discount].index_with do |field|
-        public_send(field)
-      end.compact
+      %w[fixed_amount provides_product percent_discount].index_with { |field| public_send(field) }.compact
 
     return if discount_models.size == 1
 

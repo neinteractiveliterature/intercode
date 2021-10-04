@@ -231,13 +231,12 @@ sign up for events."
   def conflicting_signups
     @conflicting_signups ||=
       if team_member?
-          # You can be a team member for multiple events at once, as long as you're not also a
-          # regular participant in anything that disallows concurrent signups
-          concurrent_signups.reject(&:team_member?)
-        else
-          concurrent_signups
-        end
-      
+        # You can be a team member for multiple events at once, as long as you're not also a
+        # regular participant in anything that disallows concurrent signups
+        concurrent_signups.reject(&:team_member?)
+      else
+        concurrent_signups
+      end
   end
 
   def existing_signups

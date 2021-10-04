@@ -4,7 +4,12 @@ class Types::EventType < Types::BaseObject
 
   authorize_record
 
-  field :id, Integer, null: false
+  field :id,
+        Integer,
+        deprecation_reason:
+          'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+        null: false
+  field :transitional_id, ID, method: :id, null: false, camelize: true
 
   field :title, String, null: true
   field :author, String, null: true
@@ -46,7 +51,12 @@ class Types::EventType < Types::BaseObject
   end
 
   field :run, Types::RunType, null: false do
-    argument :id, Integer, required: true
+    argument :id,
+             Integer,
+             deprecation_reason:
+               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             required: false
+    argument :transitional_id, ID, required: false, camelize: true
   end
 
   def run(**args)

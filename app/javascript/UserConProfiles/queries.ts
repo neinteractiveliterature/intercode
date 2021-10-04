@@ -5,14 +5,14 @@ import { AdminProductFields } from '../Store/adminProductFields';
 
 export const UserConProfileFormData = gql`
   fragment UserConProfileFormData on Convention {
-    id
+    id: transitionalId
     starts_at
     ends_at
     timezone_name
     timezone_mode
 
     user_con_profile_form {
-      id
+      id: transitionalId
       ...CommonFormFields
     }
   }
@@ -22,7 +22,7 @@ export const UserConProfileFormData = gql`
 
 export const UserConProfileFields = gql`
   fragment UserConProfileFields on UserConProfile {
-    id
+    id: transitionalId
     name
     form_response_attrs_json
     gravatar_enabled
@@ -32,15 +32,15 @@ export const UserConProfileFields = gql`
 
 export const UserConProfileAdminTicketFields = gql`
   fragment UserConProfileAdminTicketFields on Ticket {
-    id
+    id: transitionalId
     created_at
     updated_at
 
     order_entry {
-      id
+      id: transitionalId
 
       order {
-        id
+        id: transitionalId
         ...AdminOrderFieldsFragment
       }
 
@@ -51,13 +51,13 @@ export const UserConProfileAdminTicketFields = gql`
     }
 
     ticket_type {
-      id
+      id: transitionalId
       description
       name
     }
 
     provided_by_event {
-      id
+      id: transitionalId
       title
     }
   }
@@ -70,10 +70,10 @@ export const UserConProfileQuery = gql`
     convention: conventionByRequestHost {
       ...UserConProfileFormData
 
-      id
+      id: transitionalId
 
       user_con_profile(id: $id) {
-        id
+        id: transitionalId
         current_user_form_item_viewer_role
         current_user_form_item_writer_role
         ...UserConProfileFields
@@ -88,7 +88,7 @@ export const UserConProfileQuery = gql`
 export const UserConProfileAdminQuery = gql`
   query UserConProfileAdminQuery($id: Int!) {
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       name
       starts_at
       ends_at
@@ -98,7 +98,7 @@ export const UserConProfileAdminQuery = gql`
       ticket_mode
 
       my_profile {
-        id
+        id: transitionalId
         ability {
           can_read_signups
           can_update_user_con_profile(user_con_profile_id: $id)
@@ -108,7 +108,7 @@ export const UserConProfileAdminQuery = gql`
       }
 
       user_con_profile(id: $id) {
-        id
+        id: transitionalId
         email
         user_id
         name
@@ -118,32 +118,32 @@ export const UserConProfileAdminQuery = gql`
         gravatar_url
 
         ticket {
-          id
+          id: transitionalId
           ...UserConProfileAdminTicketFields
         }
       }
 
       user_con_profile_form {
-        id
+        id: transitionalId
         ...CommonFormFields
 
         form_sections {
-          id
+          id: transitionalId
           form_items {
-            id
+            id: transitionalId
             admin_description
           }
         }
       }
 
       ticket_types {
-        id
+        id: transitionalId
         description
         name
         maximum_event_provided_tickets
 
         providing_products {
-          id
+          id: transitionalId
           ...AdminProductFields
         }
       }
@@ -163,7 +163,7 @@ export const UserConProfilesTableUserConProfilesQuery = gql`
     $sort: [SortInput!]
   ) {
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       name
       starts_at
       ends_at
@@ -173,19 +173,19 @@ export const UserConProfilesTableUserConProfilesQuery = gql`
       ticket_mode
 
       ticket_types {
-        id
+        id: transitionalId
         name
       }
 
       user_con_profile_form {
-        id
+        id: transitionalId
         ...CommonFormFields
 
         form_sections {
-          id
+          id: transitionalId
 
           form_items {
-            id
+            id: transitionalId
             admin_description
           }
         }
@@ -198,7 +198,7 @@ export const UserConProfilesTableUserConProfilesQuery = gql`
         per_page
 
         entries {
-          id
+          id: transitionalId
           name_inverted
           first_name
           last_name
@@ -212,15 +212,15 @@ export const UserConProfilesTableUserConProfilesQuery = gql`
           user_id
 
           team_members {
-            id
+            id: transitionalId
           }
 
           ticket {
-            id
+            id: transitionalId
             updated_at
 
             order_entry {
-              id
+              id: transitionalId
               price_per_item {
                 fractional
                 currency_code
@@ -228,7 +228,7 @@ export const UserConProfilesTableUserConProfilesQuery = gql`
             }
 
             ticket_type {
-              id
+              id: transitionalId
               name
             }
           }
@@ -245,32 +245,32 @@ export const UserConProfilesTableUserConProfilesQuery = gql`
 `;
 
 export const ConvertToEventProvidedTicketQuery = gql`
-  query ConvertToEventProvidedTicketQuery($eventId: Int!) {
+  query ConvertToEventProvidedTicketQuery($eventId: ID!) {
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       ticket_name
 
-      event(id: $eventId) {
-        id
+      event(transitionalId: $eventId) {
+        id: transitionalId
         title
 
         event_category {
-          id
+          id: transitionalId
           can_provide_tickets
         }
 
         provided_tickets {
-          id
+          id: transitionalId
           ticket_type {
-            id
+            id: transitionalId
             name
           }
         }
       }
 
       ticket_types {
-        id
-        maximum_event_provided_tickets(event_id: $eventId)
+        id: transitionalId
+        maximum_event_provided_tickets(transitionalEventId: $eventId)
         description
         name
       }
@@ -282,7 +282,7 @@ export const AddAttendeeUsersQuery = gql`
   query AddAttendeeUsersQuery($name: String) {
     users_paginated(filters: { name: $name }, per_page: 50) {
       entries {
-        id
+        id: transitionalId
         name
         email
         first_name

@@ -10,6 +10,7 @@ export const PricingStructureFields = gql`
     }
 
     value {
+      # eslint-disable-next-line @graphql-eslint/naming-convention
       __typename
 
       ... on Money {

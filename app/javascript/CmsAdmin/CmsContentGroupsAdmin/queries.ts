@@ -3,20 +3,21 @@ import { PermissionedRoleFields, PermissionedModelFields } from '../../Permissio
 
 export const CmsContentFields = gql`
   fragment CmsContentFields on CmsContent {
+    # eslint-disable-next-line @graphql-eslint/naming-convention
     __typename
 
     ... on Page {
-      id
+      id: transitionalId
       name
     }
 
     ... on CmsPartial {
-      id
+      id: transitionalId
       name
     }
 
     ... on CmsLayout {
-      id
+      id: transitionalId
       name
     }
   }
@@ -24,7 +25,7 @@ export const CmsContentFields = gql`
 
 export const CmsContentGroupFields = gql`
   fragment CmsContentGroupFields on CmsContentGroup {
-    id
+    id: transitionalId
     name
     current_ability_can_update
     current_ability_can_delete
@@ -34,7 +35,7 @@ export const CmsContentGroupFields = gql`
     }
 
     permissions {
-      id
+      id: transitionalId
       permission
 
       model {
@@ -55,19 +56,19 @@ export const CmsContentGroupFields = gql`
 export const CmsContentGroupsAdminQuery = gql`
   query CmsContentGroupsAdminQuery {
     convention: conventionByRequestHostIfPresent {
-      id
+      id: transitionalId
       name
 
       staff_positions {
-        id
+        id: transitionalId
         name
       }
     }
 
     cmsParent: cmsParentByRequestHost {
-      id
+      id: transitionalId
       cmsContentGroups {
-        id
+        id: transitionalId
         ...CmsContentGroupFields
       }
     }
@@ -83,7 +84,7 @@ export const CmsContentGroupsAdminQuery = gql`
 export const SearchCmsContentQuery = gql`
   query SearchCmsContentQuery($name: String) {
     cmsParent: cmsParentByRequestHost {
-      id
+      id: transitionalId
 
       typeaheadSearchCmsContent(name: $name) {
         ...CmsContentFields

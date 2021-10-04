@@ -2,7 +2,13 @@
 class Mutations::RejectSignupRequest < Mutations::BaseMutation
   field :signup_request, Types::SignupRequestType, null: false
 
-  argument :id, Int, required: true, camelize: false
+  argument :id,
+           Int,
+           deprecation_reason:
+             'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+           required: false,
+           camelize: false
+  argument :transitional_id, ID, required: false, camelize: true
 
   load_and_authorize_model_with_id SignupRequest, :id, :reject
 

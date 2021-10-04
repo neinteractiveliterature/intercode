@@ -1,14 +1,11 @@
 import { DropdownMenu } from '../UIComponents/DropdownMenu';
 
 export type MultiUserActionsDropdownProps = {
-  selectedUserIds: number[];
-  onClickMerge: (userIds: number[]) => void;
+  selectedUserIds: string[];
+  onClickMerge: (userIds: string[]) => void;
 };
 
-function MultiUserActionsDropdown({
-  selectedUserIds,
-  onClickMerge,
-}: MultiUserActionsDropdownProps): JSX.Element {
+function MultiUserActionsDropdown({ selectedUserIds, onClickMerge }: MultiUserActionsDropdownProps): JSX.Element {
   return (
     <DropdownMenu buttonClassName="btn btn-outline-primary dropdown-toggle" buttonContent="Actions">
       <button
