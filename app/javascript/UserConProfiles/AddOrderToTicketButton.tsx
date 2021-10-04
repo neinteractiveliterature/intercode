@@ -8,22 +8,23 @@ import { Money, OrderStatus, Product, UserConProfile } from '../graphqlTypes.gen
 export type AddOrderToTicketButtonProps = {
   className?: string;
   ticket: {
-    id: number;
+    id: string;
     ticket_type: {
-      id: number;
+      id: string;
     };
   };
   convention: {
     ticket_types: {
-      id: number;
-      providing_products: (Pick<Product, 'id' | 'name' | '__typename'> & {
+      id: string;
+      providing_products: (Pick<Product, 'name' | '__typename'> & {
+        id: string;
         pricing_structure?: null | {
           price?: Money | null;
         };
       })[];
     }[];
   };
-  userConProfile: Pick<UserConProfile, 'id' | 'name_without_nickname'>;
+  userConProfile: Pick<UserConProfile, 'name_without_nickname'> & { id: string };
 };
 
 function AddOrderToTicketButton({
@@ -50,11 +51,7 @@ function AddOrderToTicketButton({
 
   return (
     <>
-      <button
-        className={className || 'btn btn-outline-primary'}
-        onClick={newOrderModal.open}
-        type="button"
-      >
+      <button className={className || 'btn btn-outline-primary'} onClick={newOrderModal.open} type="button">
         Add order
       </button>
       <NewOrderModal

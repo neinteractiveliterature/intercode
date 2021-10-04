@@ -20,10 +20,10 @@ describe('ConventionForm', () => {
     cmsLayouts: [],
     defaultLayout: {
       __typename: 'CmsLayout',
-      id: 0,
+      id: '0',
     },
     email_from: 'noreply@convention.test',
-    id: 0,
+    id: '0',
     language: 'en',
     cmsPages: [],
     signup_requests_open: false,
@@ -50,7 +50,7 @@ describe('ConventionForm', () => {
     email_mode: EmailMode.Forward,
     rootPage: {
       __typename: 'Page',
-      id: 0,
+      id: '0',
     },
   };
 
@@ -61,7 +61,7 @@ describe('ConventionForm', () => {
     render(
       <ConventionForm
         initialConvention={{ ...defaultInitialConvention, ...initialConventionProps }}
-        rootSite={{ __typename: 'RootSite', url: 'https://example.com', id: 123 }}
+        rootSite={{ __typename: 'RootSite', url: 'https://example.com', id: '123' }}
         // eslint-disable-next-line @typescript-eslint/no-empty-function
         saveConvention={async () => {}}
         cmsLayouts={[]}
@@ -96,9 +96,7 @@ describe('ConventionForm', () => {
     expect((getByLabelText('Convention starts') as HTMLInputElement).value).toEqual('2019-04-18');
     expect((getByLabelText('Convention ends') as HTMLInputElement).value).toEqual('2019-04-18');
     expect((getByLabelText('Name') as HTMLInputElement).value).toEqual('myName');
-    expect((getByLabelText('Convention domain name') as HTMLInputElement).value).toEqual(
-      'myDomain',
-    );
+    expect((getByLabelText('Convention domain name') as HTMLInputElement).value).toEqual('myDomain');
     expect(getByText('Time zone').closest('div')).toHaveTextContent(
       'Time zoneUTC+00:00 Etc/UTC (Coordinated Universal Time)',
     );

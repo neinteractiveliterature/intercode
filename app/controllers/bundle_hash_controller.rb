@@ -18,10 +18,9 @@ class BundleHashController < ApplicationController
   def bundle_hash
     self.class.bundle_hash_value ||=
       if Rails.env.development?
-          'dev_server'
-        else
-          Digest::MD5.hexdigest(File.read(Rails.root.join('public/packs/assets-manifest.json')))
-        end
-      
+        'dev_server'
+      else
+        Digest::MD5.hexdigest(File.read(Rails.root.join('public/packs/assets-manifest.json')))
+      end
   end
 end

@@ -4,23 +4,23 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type ConventionAdminConventionFieldsFragment = { __typename: 'Convention', id: number, accepting_proposals?: boolean | null | undefined, starts_at?: any | null | undefined, ends_at?: any | null | undefined, canceled: boolean, name: string, domain?: string | null | undefined, email_from: string, email_mode: Types.EmailMode, event_mailing_list_domain?: string | null | undefined, location?: any | null | undefined, language: string, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, show_schedule?: Types.ShowSchedule | null | undefined, show_event_list?: Types.ShowSchedule | null | undefined, hidden: boolean, maximum_tickets?: number | null | undefined, ticket_name: string, clickwrap_agreement?: string | null | undefined, ticket_mode: Types.TicketMode, site_mode: Types.SiteMode, signup_mode: Types.SignupMode, signup_requests_open: boolean, stripe_account_ready_to_charge: boolean, stripe_account?: { __typename: 'StripeAccount', id: string, email?: string | null | undefined, charges_enabled: boolean, display_name?: string | null | undefined } | null | undefined, maximum_event_signups?: { __typename: 'ScheduledValue', timespans: Array<{ __typename: 'TimespanWithValue', start?: any | null | undefined, finish?: any | null | undefined, value: string }> } | null | undefined, defaultLayout: { __typename: 'CmsLayout', id: number, name?: string | null | undefined }, cmsLayouts: Array<{ __typename: 'CmsLayout', id: number, name?: string | null | undefined }>, rootPage: { __typename: 'Page', id: number, name?: string | null | undefined }, cmsPages: Array<{ __typename: 'Page', id: number, name?: string | null | undefined }>, staff_positions: Array<{ __typename: 'StaffPosition', id: number, name: string }>, catch_all_staff_position?: { __typename: 'StaffPosition', id: number, name: string } | null | undefined };
+export type ConventionAdminConventionFieldsFragment = { __typename: 'Convention', accepting_proposals?: boolean | null | undefined, starts_at?: any | null | undefined, ends_at?: any | null | undefined, canceled: boolean, name: string, domain?: string | null | undefined, email_from: string, email_mode: Types.EmailMode, event_mailing_list_domain?: string | null | undefined, location?: any | null | undefined, language: string, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, show_schedule?: Types.ShowSchedule | null | undefined, show_event_list?: Types.ShowSchedule | null | undefined, hidden: boolean, maximum_tickets?: number | null | undefined, ticket_name: string, clickwrap_agreement?: string | null | undefined, ticket_mode: Types.TicketMode, site_mode: Types.SiteMode, signup_mode: Types.SignupMode, signup_requests_open: boolean, stripe_account_ready_to_charge: boolean, id: string, stripe_account?: { __typename: 'StripeAccount', id: string, email?: string | null | undefined, charges_enabled: boolean, display_name?: string | null | undefined } | null | undefined, maximum_event_signups?: { __typename: 'ScheduledValue', timespans: Array<{ __typename: 'TimespanWithValue', start?: any | null | undefined, finish?: any | null | undefined, value: string }> } | null | undefined, defaultLayout: { __typename: 'CmsLayout', name?: string | null | undefined, id: string }, cmsLayouts: Array<{ __typename: 'CmsLayout', name?: string | null | undefined, id: string }>, rootPage: { __typename: 'Page', name?: string | null | undefined, id: string }, cmsPages: Array<{ __typename: 'Page', name?: string | null | undefined, id: string }>, staff_positions: Array<{ __typename: 'StaffPosition', name: string, id: string }>, catch_all_staff_position?: { __typename: 'StaffPosition', name: string, id: string } | null | undefined };
 
 export type ConventionAdminConventionQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type ConventionAdminConventionQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, accepting_proposals?: boolean | null | undefined, starts_at?: any | null | undefined, ends_at?: any | null | undefined, canceled: boolean, name: string, domain?: string | null | undefined, email_from: string, email_mode: Types.EmailMode, event_mailing_list_domain?: string | null | undefined, location?: any | null | undefined, language: string, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, show_schedule?: Types.ShowSchedule | null | undefined, show_event_list?: Types.ShowSchedule | null | undefined, hidden: boolean, maximum_tickets?: number | null | undefined, ticket_name: string, clickwrap_agreement?: string | null | undefined, ticket_mode: Types.TicketMode, site_mode: Types.SiteMode, signup_mode: Types.SignupMode, signup_requests_open: boolean, stripe_account_ready_to_charge: boolean, stripe_account?: { __typename: 'StripeAccount', id: string, email?: string | null | undefined, charges_enabled: boolean, display_name?: string | null | undefined } | null | undefined, maximum_event_signups?: { __typename: 'ScheduledValue', timespans: Array<{ __typename: 'TimespanWithValue', start?: any | null | undefined, finish?: any | null | undefined, value: string }> } | null | undefined, defaultLayout: { __typename: 'CmsLayout', id: number, name?: string | null | undefined }, cmsLayouts: Array<{ __typename: 'CmsLayout', id: number, name?: string | null | undefined }>, rootPage: { __typename: 'Page', id: number, name?: string | null | undefined }, cmsPages: Array<{ __typename: 'Page', id: number, name?: string | null | undefined }>, staff_positions: Array<{ __typename: 'StaffPosition', id: number, name: string }>, catch_all_staff_position?: { __typename: 'StaffPosition', id: number, name: string } | null | undefined }, rootSite: { __typename: 'RootSite', id: number, url: string } };
+export type ConventionAdminConventionQueryData = { __typename: 'Query', convention: { __typename: 'Convention', accepting_proposals?: boolean | null | undefined, starts_at?: any | null | undefined, ends_at?: any | null | undefined, canceled: boolean, name: string, domain?: string | null | undefined, email_from: string, email_mode: Types.EmailMode, event_mailing_list_domain?: string | null | undefined, location?: any | null | undefined, language: string, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, show_schedule?: Types.ShowSchedule | null | undefined, show_event_list?: Types.ShowSchedule | null | undefined, hidden: boolean, maximum_tickets?: number | null | undefined, ticket_name: string, clickwrap_agreement?: string | null | undefined, ticket_mode: Types.TicketMode, site_mode: Types.SiteMode, signup_mode: Types.SignupMode, signup_requests_open: boolean, stripe_account_ready_to_charge: boolean, id: string, stripe_account?: { __typename: 'StripeAccount', id: string, email?: string | null | undefined, charges_enabled: boolean, display_name?: string | null | undefined } | null | undefined, maximum_event_signups?: { __typename: 'ScheduledValue', timespans: Array<{ __typename: 'TimespanWithValue', start?: any | null | undefined, finish?: any | null | undefined, value: string }> } | null | undefined, defaultLayout: { __typename: 'CmsLayout', name?: string | null | undefined, id: string }, cmsLayouts: Array<{ __typename: 'CmsLayout', name?: string | null | undefined, id: string }>, rootPage: { __typename: 'Page', name?: string | null | undefined, id: string }, cmsPages: Array<{ __typename: 'Page', name?: string | null | undefined, id: string }>, staff_positions: Array<{ __typename: 'StaffPosition', name: string, id: string }>, catch_all_staff_position?: { __typename: 'StaffPosition', name: string, id: string } | null | undefined }, rootSite: { __typename: 'RootSite', url: string, id: string } };
 
 export type StripeAccountOnboardingLinkQueryVariables = Types.Exact<{
   baseUrl: Types.Scalars['String'];
 }>;
 
 
-export type StripeAccountOnboardingLinkQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, stripe_account?: { __typename: 'StripeAccount', id: string, account_onboarding_link: string } | null | undefined } };
+export type StripeAccountOnboardingLinkQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, stripe_account?: { __typename: 'StripeAccount', id: string, account_onboarding_link: string } | null | undefined } };
 
 export const ConventionAdminConventionFieldsFragmentDoc = gql`
     fragment ConventionAdminConventionFields on Convention {
-  id
+  id: transitionalId
   accepting_proposals
   starts_at
   ends_at
@@ -59,27 +59,27 @@ export const ConventionAdminConventionFieldsFragmentDoc = gql`
     }
   }
   defaultLayout {
-    id
+    id: transitionalId
     name
   }
   cmsLayouts {
-    id
+    id: transitionalId
     name
   }
   rootPage {
-    id
+    id: transitionalId
     name
   }
   cmsPages {
-    id
+    id: transitionalId
     name
   }
   staff_positions {
-    id
+    id: transitionalId
     name
   }
   catch_all_staff_position {
-    id
+    id: transitionalId
     name
   }
 }
@@ -87,11 +87,11 @@ export const ConventionAdminConventionFieldsFragmentDoc = gql`
 export const ConventionAdminConventionQueryDocument = gql`
     query ConventionAdminConventionQuery {
   convention: conventionByRequestHost {
-    id
+    id: transitionalId
     ...ConventionAdminConventionFields
   }
   rootSite {
-    id
+    id: transitionalId
     url
   }
 }
@@ -126,7 +126,7 @@ export type ConventionAdminConventionQueryQueryResult = Apollo.QueryResult<Conve
 export const StripeAccountOnboardingLinkQueryDocument = gql`
     query StripeAccountOnboardingLinkQuery($baseUrl: String!) {
   convention: conventionByRequestHost {
-    id
+    id: transitionalId
     stripe_account {
       id
       account_onboarding_link(base_url: $baseUrl)

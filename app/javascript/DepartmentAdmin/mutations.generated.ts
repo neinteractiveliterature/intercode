@@ -10,7 +10,7 @@ export type CreateDepartmentMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateDepartmentMutationData = { __typename: 'Mutation', createDepartment: { __typename: 'CreateDepartmentPayload', department: { __typename: 'Department', id: number, name: string, proposal_description?: string | null | undefined, event_categories: Array<{ __typename: 'EventCategory', id: number, name: string }> } } };
+export type CreateDepartmentMutationData = { __typename: 'Mutation', createDepartment: { __typename: 'CreateDepartmentPayload', department: { __typename: 'Department', name: string, proposal_description?: string | null | undefined, id: string, event_categories: Array<{ __typename: 'EventCategory', name: string, id: string }> } } };
 
 export type UpdateDepartmentMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
@@ -18,7 +18,7 @@ export type UpdateDepartmentMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateDepartmentMutationData = { __typename: 'Mutation', updateDepartment: { __typename: 'UpdateDepartmentPayload', department: { __typename: 'Department', id: number, name: string, proposal_description?: string | null | undefined, event_categories: Array<{ __typename: 'EventCategory', id: number, name: string }> } } };
+export type UpdateDepartmentMutationData = { __typename: 'Mutation', updateDepartment: { __typename: 'UpdateDepartmentPayload', department: { __typename: 'Department', name: string, proposal_description?: string | null | undefined, id: string, event_categories: Array<{ __typename: 'EventCategory', name: string, id: string }> } } };
 
 export type DeleteDepartmentMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
@@ -32,7 +32,7 @@ export const CreateDepartmentDocument = gql`
     mutation CreateDepartment($department: DepartmentInput!) {
   createDepartment(input: {department: $department}) {
     department {
-      id
+      id: transitionalId
       ...AdminDepartmentFields
     }
   }
@@ -68,7 +68,7 @@ export const UpdateDepartmentDocument = gql`
     mutation UpdateDepartment($id: Int!, $department: DepartmentInput!) {
   updateDepartment(input: {id: $id, department: $department}) {
     department {
-      id
+      id: transitionalId
       ...AdminDepartmentFields
     }
   }

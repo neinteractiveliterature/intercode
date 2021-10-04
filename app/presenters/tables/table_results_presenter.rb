@@ -200,6 +200,7 @@ class Tables::TableResultsPresenter
       sort.filter_map do |entry|
         direction = entry[:desc] ? 'DESC' : 'ASC'
         fields[entry[:field].to_sym].sql_order(direction)
+      end
     )
   end
 

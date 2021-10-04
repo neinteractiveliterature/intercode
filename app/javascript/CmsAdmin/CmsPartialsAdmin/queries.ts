@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 
 export const CmsPartialFields = gql`
   fragment CmsPartialFields on CmsPartial {
-    id
+    id: transitionalId
     name
     content
     admin_notes
@@ -14,7 +14,7 @@ export const CmsPartialFields = gql`
 export const CmsPartialsAdminQuery = gql`
   query CmsPartialsAdminQuery {
     convention: conventionByRequestHostIfPresent {
-      id
+      id: transitionalId
       name
     }
 
@@ -23,9 +23,9 @@ export const CmsPartialsAdminQuery = gql`
     }
 
     cmsParent: cmsParentByRequestHost {
-      id
+      id: transitionalId
       cmsPartials {
-        id
+        id: transitionalId
         ...CmsPartialFields
       }
     }

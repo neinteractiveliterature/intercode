@@ -1,15 +1,11 @@
 import { gql } from '@apollo/client';
-import {
-  TeamMemberFields,
-  TeamMemberFieldsWithoutPersonalInfo,
-  TeamMemberTicketFields,
-} from './queries';
+import { TeamMemberFields, TeamMemberFieldsWithoutPersonalInfo, TeamMemberTicketFields } from './queries';
 
 export const CreateTeamMember = gql`
   mutation CreateTeamMember($input: CreateTeamMemberInput!) {
     createTeamMember(input: $input) {
       team_member {
-        id
+        id: transitionalId
         ...TeamMemberFields
       }
     }
@@ -22,7 +18,7 @@ export const DeleteTeamMember = gql`
   mutation DeleteTeamMember($input: DeleteTeamMemberInput!) {
     deleteTeamMember(input: $input) {
       team_member {
-        id
+        id: transitionalId
         ...TeamMemberFieldsWithoutPersonalInfo
       }
     }
@@ -35,7 +31,7 @@ export const UpdateTeamMember = gql`
   mutation UpdateTeamMember($input: UpdateTeamMemberInput!) {
     updateTeamMember(input: $input) {
       team_member {
-        id
+        id: transitionalId
         ...TeamMemberFieldsWithoutPersonalInfo
       }
     }
@@ -54,7 +50,7 @@ export const ProvideEventTicket = gql`
       }
     ) {
       ticket {
-        id
+        id: transitionalId
         ...TeamMemberTicketFields
       }
     }

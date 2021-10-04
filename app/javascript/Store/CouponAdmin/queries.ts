@@ -4,7 +4,7 @@ import { CouponFields } from '../couponFields';
 
 export const AdminCouponFields = gql`
   fragment AdminCouponFields on Coupon {
-    id
+    id: transitionalId
     ...CouponFields
     usage_limit
     expires_at
@@ -21,13 +21,13 @@ export const AdminCouponsQuery = gql`
     $per_page: Int
   ) {
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       coupons_paginated(filters: $filters, sort: $sort, page: $page, per_page: $per_page) {
         current_page
         total_pages
 
         entries {
-          id
+          id: transitionalId
           ...AdminCouponFields
         }
       }

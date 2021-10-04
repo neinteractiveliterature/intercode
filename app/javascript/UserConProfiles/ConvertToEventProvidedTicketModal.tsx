@@ -11,22 +11,19 @@ import TicketingStatusDescription, {
   TicketingStatusDescriptionProps,
 } from '../EventsApp/TeamMemberAdmin/TicketingStatusDescription';
 import useAsyncFunction from '../useAsyncFunction';
-import {
-  useConvertToEventProvidedTicketQuery,
-  UserConProfileAdminQueryData,
-} from './queries.generated';
+import { useConvertToEventProvidedTicketQuery, UserConProfileAdminQueryData } from './queries.generated';
 import { useConvertTicketToEventProvidedMutation } from './mutations.generated';
 import { DefaultEventsQueryData } from '../BuiltInFormControls/selectDefaultQueries.generated';
-import { Convention, UserConProfile } from '../graphqlTypes.generated';
+import { Convention } from '../graphqlTypes.generated';
 
 type EventSpecificSectionProps = {
   event: {
-    id: number;
+    id: string;
   };
   userConProfile: TicketingStatusDescriptionProps['userConProfile'];
   convention: Pick<Convention, 'name' | 'ticket_name'>;
-  ticketTypeId?: number;
-  setTicketTypeId: React.Dispatch<number>;
+  ticketTypeId?: string;
+  setTicketTypeId: React.Dispatch<string>;
   disabled?: boolean;
 };
 
@@ -72,13 +69,11 @@ function EventSpecificSection({
 
 export type ConvertToEventProvidedTicketModalProps = {
   convention: Pick<Convention, 'name' | 'ticket_name'>;
-  userConProfile: TicketingStatusDescriptionProps['userConProfile'] & Pick<UserConProfile, 'id'>;
+  userConProfile: TicketingStatusDescriptionProps['userConProfile'] & { id: string };
   visible: boolean;
   onClose: () => void;
 };
-type EventType = NonNullable<
-  DefaultEventsQueryData['convention']
->['events_paginated']['entries'][0];
+type EventType = NonNullable<DefaultEventsQueryData['convention']>['events_paginated']['entries'][0];
 
 function ConvertToEventProvidedTicketModal({
   convention,
@@ -87,7 +82,7 @@ function ConvertToEventProvidedTicketModal({
   onClose,
 }: ConvertToEventProvidedTicketModalProps): JSX.Element {
   const [event, setEvent] = useState<EventType>();
-  const [ticketTypeId, setTicketTypeId] = useState<number>();
+  const [ticketTypeId, setTicketTypeId] = useState<string>();
   const [convertMutate] = useConvertTicketToEventProvidedMutation();
   const [convertTicketToEventProvided, error, inProgress] = useAsyncFunction(convertMutate);
 
@@ -147,9 +142,7 @@ function ConvertToEventProvidedTicketModal({
           ’s
           {' existing '}
           {convention.ticket_name}
-          {
-            ' and create a new one for them, provided by an event.  If they paid for their existing '
-          }
+          {' and create a new one for them, provided by an event.  If they paid for their existing '}
           {convention.ticket_name}, that payment will be refunded.
         </p>
 

@@ -86,12 +86,10 @@ class Notifier
 
     content = sms_content
 
-    user_con_profiles_for_destinations(destinations)
-      .filter_map do |user_con_profile|
-        next nil unless user_con_profile.allow_sms?
-        DeliverSmsJob.new(user_con_profile, content, ENV['TWILIO_SMS_DEBUG_DESTINATION'].present?)
-      end
-      
+    user_con_profiles_for_destinations(destinations).filter_map do |user_con_profile|
+      next nil unless user_con_profile.allow_sms?
+      DeliverSmsJob.new(user_con_profile, content, ENV['TWILIO_SMS_DEBUG_DESTINATION'].present?)
+    end
   end
 
   def should_deliver_sms?

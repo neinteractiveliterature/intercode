@@ -4,23 +4,10 @@ import { assertNever } from 'assert-never';
 import { notEmpty } from '@neinteractiveliterature/litform';
 
 import { FormEditorQuery } from './queries';
-import {
-  FormSection,
-  FormItemInput,
-  RegistrationPolicy,
-  FormItemRole,
-  FormItem,
-} from '../graphqlTypes.generated';
-import {
-  CommonFormSectionFieldsFragment,
-  CommonFormItemFieldsFragment,
-} from '../Models/commonFormFragments.generated';
+import { FormSection, FormItemInput, RegistrationPolicy, FormItemRole, FormItem } from '../graphqlTypes.generated';
+import { CommonFormSectionFieldsFragment, CommonFormItemFieldsFragment } from '../Models/commonFormFragments.generated';
 import { FormEditorQueryData, FormEditorFormItemFieldsFragment } from './queries.generated';
-import {
-  TimeblockDefinition,
-  TimeblockOmission,
-  UnparsedTimeblockPreference,
-} from '../FormPresenter/TimeblockTypes';
+import { TimeblockDefinition, TimeblockOmission, UnparsedTimeblockPreference } from '../FormPresenter/TimeblockTypes';
 import FormTypes from '../../../config/form_types.json';
 import { ArrayWithGeneratedIds, ArrayWithoutGeneratedIds } from '../GeneratedIdUtils';
 
@@ -34,12 +21,7 @@ export const FORM_ITEM_ROLES: FormItemRole[] = [
   FormItemRole.Admin,
 ];
 
-const GENERATED_ID_ARRAY_PROPERTIES = [
-  'choices',
-  'presets',
-  'timeblocks',
-  'omit_timeblocks',
-] as const;
+const GENERATED_ID_ARRAY_PROPERTIES = ['choices', 'presets', 'timeblocks', 'omit_timeblocks'] as const;
 export type GeneratedIdArrayProperty = typeof GENERATED_ID_ARRAY_PROPERTIES[number];
 
 export type ParsedFormItem<PropertiesType, ValueType, ItemType = string> = Omit<
@@ -62,39 +44,25 @@ export type FormItemPropertiesType<FormItemType> = FormItemType extends ParsedFo
   ? PropertiesType
   : never;
 
-export type FormItemValueType<FormItemType> = FormItemType extends ParsedFormItem<
-  unknown,
-  infer ValueType,
-  unknown
->
+export type FormItemValueType<FormItemType> = FormItemType extends ParsedFormItem<unknown, infer ValueType, unknown>
   ? ValueType
   : never;
 
-export type WithRequiredIdentifier<T extends ParsedFormItem<unknown, unknown>> = Omit<
-  T,
-  'identifier'
-> & {
+export type WithRequiredIdentifier<T extends ParsedFormItem<unknown, unknown>> = Omit<T, 'identifier'> & {
   identifier: NonNullable<T['identifier']>;
 };
 
 export type PropertiesWithGeneratedIds<T> = T extends undefined
   ? undefined
   : {
-      [K in keyof T]: K extends GeneratedIdArrayProperty
-        ? ArrayWithGeneratedIds<T[K], string>
-        : T[K];
+      [K in keyof T]: K extends GeneratedIdArrayProperty ? ArrayWithGeneratedIds<T[K], string> : T[K];
     };
 
 export type PropertiesWithoutGeneratedIds<T> = {
-  [K in keyof T]: K extends GeneratedIdArrayProperty
-    ? ArrayWithoutGeneratedIds<T[K], string>
-    : T[K];
+  [K in keyof T]: K extends GeneratedIdArrayProperty ? ArrayWithoutGeneratedIds<T[K], string> : T[K];
 };
 
-export type WithRequiredProperties<T extends ParsedFormItem<unknown, unknown>> = Omit<
-  T,
-  'properties'
-> & {
+export type WithRequiredProperties<T extends ParsedFormItem<unknown, unknown>> = Omit<T, 'properties'> & {
   properties: NonNullable<T['properties']>;
 };
 
@@ -108,7 +76,7 @@ export type ParsedFormItemWithGeneratedIds<T extends ParsedFormItem<unknown, unk
 
 export type ParsedFormSection<
   FormItemType extends ParsedFormItem<unknown, unknown> = ParsedFormItem<unknown, unknown>,
-> = Omit<FormSection, 'form_items' | 'form' | 'preview_form_item'> & { form_items: FormItemType[] };
+> = Omit<CommonFormSectionFieldsFragment, 'form_items' | 'form' | 'preview_form_item'> & { form_items: FormItemType[] };
 
 export type CommonQuestionProperties = {
   identifier: string;
@@ -169,9 +137,7 @@ export type FreeTextProperties = CommonQuestionProperties & {
   advisory_character_limit?: number;
 };
 
-export type FreeTextFormItem = WithRequiredIdentifier<
-  ParsedFormItem<FreeTextProperties, string, 'free_text'>
->;
+export type FreeTextFormItem = WithRequiredIdentifier<ParsedFormItem<FreeTextProperties, string, 'free_text'>>;
 
 export function valueIsFreeTextValue(value: unknown): value is FormItemValueType<FreeTextFormItem> {
   return typeof value === 'string';
@@ -192,9 +158,7 @@ export type MultipleChoiceFormItem = WithRequiredIdentifier<
   ParsedFormItem<MultipleChoiceProperties, string | string[], 'multiple_choice'>
 >;
 
-export function valueIsMultipleChoiceValue(
-  value: unknown,
-): value is FormItemValueType<MultipleChoiceFormItem> {
+export function valueIsMultipleChoiceValue(value: unknown): value is FormItemValueType<MultipleChoiceFormItem> {
   if (typeof value === 'string') {
     return true;
   }
@@ -220,9 +184,7 @@ export type RegistrationPolicyFormItem = WithRequiredIdentifier<
   ParsedFormItem<RegistrationPolicyProperties, RegistrationPolicy, 'registration_policy'>
 >;
 
-export function valueIsRegistrationPolicyValue(
-  value: unknown,
-): value is FormItemValueType<RegistrationPolicyFormItem> {
+export function valueIsRegistrationPolicyValue(value: unknown): value is FormItemValueType<RegistrationPolicyFormItem> {
   if (typeof value !== 'object' || value == null) {
     return false;
   }
@@ -245,11 +207,7 @@ export type TimeblockPreferenceProperties = CommonQuestionProperties & {
 };
 
 export type TimeblockPreferenceFormItem = WithRequiredIdentifier<
-  ParsedFormItem<
-    TimeblockPreferenceProperties,
-    UnparsedTimeblockPreference[],
-    'timeblock_preference'
-  >
+  ParsedFormItem<TimeblockPreferenceProperties, UnparsedTimeblockPreference[], 'timeblock_preference'>
 >;
 
 export function valueIsTimeblockPreferenceValue(
@@ -261,9 +219,7 @@ export function valueIsTimeblockPreferenceValue(
 
   return value.every((preference) =>
     (['start', 'finish', 'label', 'ordinality'] as const).every(
-      (field) =>
-        Object.prototype.hasOwnProperty.call(preference, field) &&
-        typeof preference[field] === 'string',
+      (field) => Object.prototype.hasOwnProperty.call(preference, field) && typeof preference[field] === 'string',
     ),
   );
 }
@@ -272,9 +228,7 @@ export type TimespanProperties = CommonQuestionProperties & {
   caption: string;
 };
 
-export type TimespanFormItem = WithRequiredIdentifier<
-  ParsedFormItem<TimespanProperties, number, 'timespan'>
->;
+export type TimespanFormItem = WithRequiredIdentifier<ParsedFormItem<TimespanProperties, number, 'timespan'>>;
 
 export function valueIsTimespanValue(value: unknown): value is FormItemValueType<TimespanFormItem> {
   return typeof value === 'number';
@@ -345,9 +299,7 @@ export function parseFormItemObject<PropertiesType, ValueType>(
   };
 }
 
-export function parseTypedFormItemObject(
-  formItem: CommonFormItemFieldsFragment,
-): TypedFormItem | undefined {
+export function parseTypedFormItemObject(formItem: CommonFormItemFieldsFragment): TypedFormItem | undefined {
   const parsedFormItem = parseFormItemObject(formItem);
   const typedFormItem = parsedFormItem as TypedFormItem;
 
@@ -366,17 +318,13 @@ export function parseTypedFormItemObject(
       assertNever(typedFormItem, true);
       if (typeof Rollbar !== 'undefined') {
         // @ts-expect-error This is deliberately unreachable, but we want a Rollbar if this happens
-        Rollbar.warn(
-          `Form item ${parsedFormItem.id} has unknown type ${formItem.item_type}, ignoring`,
-        );
+        Rollbar.warn(`Form item ${parsedFormItem.id} has unknown type ${formItem.item_type}, ignoring`);
       }
       return undefined;
   }
 }
 
-export function parseTypedFormItemArray(
-  formItems: CommonFormItemFieldsFragment[],
-): TypedFormItem[] {
+export function parseTypedFormItemArray(formItems: CommonFormItemFieldsFragment[]): TypedFormItem[] {
   return formItems.map(parseTypedFormItemObject).filter(notEmpty);
 }
 
@@ -410,9 +358,7 @@ export function parseFormSectionObject(formSection: FormSection): ParsedFormSect
   };
 }
 
-export function serializeParsedFormSection(
-  formSection: ParsedFormSection,
-): CommonFormSectionFieldsFragment {
+export function serializeParsedFormSection(formSection: ParsedFormSection): CommonFormSectionFieldsFragment {
   return {
     ...formSection,
     form_items: formSection.form_items.map(serializeParsedFormItem),
@@ -482,10 +428,7 @@ export function formItemPropertyUpdater<
   PropertiesType extends Record<string, unknown>,
   FormItemType extends ParsedFormItem<PropertiesType, unknown>,
   PropertyName extends keyof PropertiesType,
->(
-  property: PropertyName,
-  onChange: (mutator: (prevFormItem: FormItemType) => FormItemType) => void,
-) {
+>(property: PropertyName, onChange: (mutator: (prevFormItem: FormItemType) => FormItemType) => void) {
   return (newValue: PropertiesType[PropertyName]): void =>
     onChange((prevFormItem) => {
       const newFormItem = {
@@ -546,8 +489,7 @@ export type FormTypeDefinition =
   | typeof FormTypes['event_proposal']
   | typeof FormTypes['user_con_profile'];
 
-export type StandardItemIdentifier<FormType extends FormTypeDefinition> =
-  keyof FormType['standard_items'];
+export type StandardItemIdentifier<FormType extends FormTypeDefinition> = keyof FormType['standard_items'];
 
 export type AnyStandardItemIdentifier =
   | StandardItemIdentifier<typeof FormTypes['event']>
@@ -557,13 +499,7 @@ export type AnyStandardItemIdentifier =
 export type StandardItem = Partial<
   Omit<
     FormEditorFormItemFieldsFragment,
-    | 'id'
-    | '__typename'
-    | 'item_type'
-    | 'position'
-    | 'properties'
-    | 'rendered_properties'
-    | 'identifier'
+    'id' | '__typename' | 'item_type' | 'position' | 'properties' | 'rendered_properties' | 'identifier'
   >
 > & {
   identifier: string;
@@ -574,10 +510,7 @@ export type StandardItem = Partial<
   default_properties?: Record<string, unknown>;
 };
 
-export function findStandardItem(
-  formType?: FormTypeDefinition,
-  identifier?: string | null,
-): StandardItem | undefined {
+export function findStandardItem(formType?: FormTypeDefinition, identifier?: string | null): StandardItem | undefined {
   if (!formType || !identifier) {
     return undefined;
   }
@@ -603,10 +536,7 @@ export function roleIsAtLeast(a: FormItemRole, b: FormItemRole): boolean {
   return FORM_ITEM_ROLES.indexOf(a) >= FORM_ITEM_ROLES.indexOf(b);
 }
 
-export function formItemVisibleTo(
-  formItem: Pick<FormItem, 'visibility'>,
-  role: FormItemRole,
-): boolean {
+export function formItemVisibleTo(formItem: Pick<FormItem, 'visibility'>, role: FormItemRole): boolean {
   return roleIsAtLeast(role, formItem.visibility);
 }
 

@@ -1,7 +1,13 @@
 # frozen_string_literal: true
 class Mutations::WithdrawMySignup < Mutations::BaseMutation
   field :signup, Types::SignupType, null: false
-  argument :run_id, Int, required: true, camelize: false
+  argument :run_id,
+           Int,
+           deprecation_reason:
+             'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+           required: false,
+           camelize: false
+  argument :transitional_run_id, ID, required: false, camelize: true
 
   attr_reader :signup
 

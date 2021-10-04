@@ -6,16 +6,11 @@ import { ErrorDisplay, sortByLocaleString } from '@neinteractiveliterature/litfo
 
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
 import { ProposeEventButtonQueryData } from './queries.generated';
-import {
-  CreateEventProposalMutationData,
-  useCreateEventProposalMutation,
-} from './mutations.generated';
+import { CreateEventProposalMutationData, useCreateEventProposalMutation } from './mutations.generated';
 
 export type CreateEventProposalModalProps = {
   onCreate: (
-    newEventProposal: NonNullable<
-      CreateEventProposalMutationData['createEventProposal']
-    >['event_proposal'],
+    newEventProposal: NonNullable<CreateEventProposalMutationData['createEventProposal']>['event_proposal'],
   ) => void;
   cancel: () => void;
   visible: boolean;
@@ -44,18 +39,13 @@ function CreateEventProposalModal({
     () => sortByLocaleString([...topLevelEventCategories, ...departments], (entity) => entity.name),
     [departments, topLevelEventCategories],
   );
-  const [department, setDepartment] = useState(
-    topLevelEntities.length > 1 ? undefined : departments[0],
-  );
+  const [department, setDepartment] = useState(topLevelEntities.length > 1 ? undefined : departments[0]);
   const [eventCategory, setEventCategory] = useState(() =>
     department && department.event_categories.length === 1
-      ? proposableEventCategories.find(
-          (category) => category.id === department.event_categories[0].id,
-        )
+      ? proposableEventCategories.find((category) => category.id === department.event_categories[0].id)
       : undefined,
   );
-  const [createProposal, { loading: createInProgress, error: createError }] =
-    useCreateEventProposalMutation();
+  const [createProposal, { loading: createInProgress, error: createError }] = useCreateEventProposalMutation();
   const apolloClient = useApolloClient();
 
   const departmentEventCategories = useMemo(
@@ -77,8 +67,8 @@ function CreateEventProposalModal({
     }
     const { data } = await createProposal({
       variables: {
-        cloneEventProposalId: cloneEventProposal?.id,
-        eventCategoryId: eventCategory.id,
+        cloneEventProposalId: cloneEventProposal?.id.toString(),
+        eventCategoryId: eventCategory.id.toString(),
       },
     });
 
@@ -90,9 +80,7 @@ function CreateEventProposalModal({
 
   return (
     <Modal visible={visible} dialogClassName="modal-lg" className="text-body">
-      <div className="modal-header">
-        {t('eventProposals.newProposalModal.title', 'New event proposal')}
-      </div>
+      <div className="modal-header">{t('eventProposals.newProposalModal.title', 'New event proposal')}</div>
       <div className="modal-body text-start">
         <SelectWithLabel
           label={t(
@@ -102,9 +90,7 @@ function CreateEventProposalModal({
           options={topLevelEntities}
           isClearable={topLevelEntities.length > 1}
           isDisabled={createInProgress}
-          value={
-            department || (eventCategory && eventCategory.department == null ? eventCategory : null)
-          }
+          value={department || (eventCategory && eventCategory.department == null ? eventCategory : null)}
           getOptionValue={(option) => `${option.__typename}:${option.id}`}
           getOptionLabel={(option) => option.name}
           onChange={(entity: typeof topLevelEntities[0]) => {
@@ -163,17 +149,13 @@ function CreateEventProposalModal({
             .filter((eventProposal) => eventProposal.status !== 'draft')
             .filter(
               (eventProposal) =>
-                eventCategory &&
-                eventProposal.event_category.name.toLowerCase() ===
-                  eventCategory.name.toLowerCase(),
+                eventCategory && eventProposal.event_category.name.toLowerCase() === eventCategory.name.toLowerCase(),
             )}
           isClearable
           isDisabled={createInProgress}
           value={cloneEventProposal}
           getOptionValue={(option) => option.id.toString()}
-          getOptionLabel={(option) =>
-            `${option.title} (${option.event_category.name}, ${option.convention.name})`
-          }
+          getOptionLabel={(option) => `${option.title} (${option.event_category.name}, ${option.convention.name})`}
           onChange={(proposal: typeof userEventProposals[0]) => {
             setCloneEventProposal(proposal);
           }}
@@ -181,8 +163,7 @@ function CreateEventProposalModal({
 
         {cloneEventProposal &&
         eventCategory &&
-        cloneEventProposal.event_category.name.toLowerCase() !==
-          eventCategory.name.toLowerCase() ? (
+        cloneEventProposal.event_category.name.toLowerCase() !== eventCategory.name.toLowerCase() ? (
           <div className="mt-4 alert alert-warning">
             {t(
               'eventProposals.newProposalModal.cloneFromDifferentCategoryWarning',
@@ -202,12 +183,7 @@ function CreateEventProposalModal({
         <ErrorDisplay graphQLError={createError} />
       </div>
       <div className="modal-footer">
-        <button
-          className="btn btn-secondary"
-          type="button"
-          disabled={createInProgress}
-          onClick={cancel}
-        >
+        <button className="btn btn-secondary" type="button" disabled={createInProgress} onClick={cancel}>
           {t('buttons.cancel', 'Cancel')}
         </button>
         <button

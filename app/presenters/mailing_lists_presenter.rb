@@ -47,8 +47,7 @@ class MailingListsPresenter
   def team_members
     events = convention.events.active.includes(team_members: { user_con_profile: :user }).order_by_title
 
-    emails_by_event =
-      events.index_with { |event| team_member_emails_for_event(event) }.to_h
+    emails_by_event = events.index_with { |event| team_member_emails_for_event(event) }.to_h
 
     Result.new(events.flat_map { |event| emails_by_event[event] }, [:event])
   end

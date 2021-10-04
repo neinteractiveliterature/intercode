@@ -3,7 +3,7 @@ import { CommonFormFields } from '../Models/commonFormFragments';
 
 export const TicketTypeFields = gql`
   fragment TicketTypeFields on TicketType {
-    id
+    id: transitionalId
     description
     maximum_event_provided_tickets
   }
@@ -12,11 +12,11 @@ export const TicketTypeFields = gql`
 export const MaximumEventProvidedTicketsOverrideFields = gql`
   fragment MaximumEventProvidedTicketsOverrideFields on MaximumEventProvidedTicketsOverride {
     ticket_type {
-      id
+      id: transitionalId
       ...TicketTypeFields
     }
 
-    id
+    id: transitionalId
     override_value
   }
 
@@ -25,14 +25,14 @@ export const MaximumEventProvidedTicketsOverrideFields = gql`
 
 export const RoomFields = gql`
   fragment RoomFields on Room {
-    id
+    id: transitionalId
     name
   }
 `;
 
 export const EventPageEventCategoryFields = gql`
   fragment EventPageEventCategoryFields on EventCategory {
-    id
+    id: transitionalId
     name
     scheduling_ui
     default_color
@@ -40,13 +40,13 @@ export const EventPageEventCategoryFields = gql`
     signed_up_color
 
     event_form {
-      id
+      id: transitionalId
       ...CommonFormFields
 
       form_sections {
-        id
+        id: transitionalId
         form_items {
-          id
+          id: transitionalId
           admin_description
         }
       }
@@ -58,7 +58,7 @@ export const EventPageEventCategoryFields = gql`
 
 export const ConventionFields = gql`
   fragment ConventionFields on Convention {
-    id
+    id: transitionalId
     name
     starts_at
     ends_at
@@ -68,17 +68,17 @@ export const ConventionFields = gql`
     site_mode
 
     event_categories {
-      id
+      id: transitionalId
       ...EventPageEventCategoryFields
     }
 
     rooms {
-      id
+      id: transitionalId
       ...RoomFields
     }
 
     ticket_types {
-      id
+      id: transitionalId
       ...TicketTypeFields
     }
     ticket_name
@@ -92,7 +92,7 @@ export const ConventionFields = gql`
 
 export const RunFields = gql`
   fragment RunFields on Run {
-    id
+    id: transitionalId
     starts_at
     schedule_note
     title_suffix
@@ -103,17 +103,17 @@ export const RunFields = gql`
     signup_count_by_state_and_bucket_key_and_counted
 
     rooms {
-      id
+      id: transitionalId
       ...RoomFields
     }
 
     my_signups {
-      id
+      id: transitionalId
       state
     }
 
     my_signup_requests {
-      id
+      id: transitionalId
       state
     }
   }
@@ -123,7 +123,7 @@ export const RunFields = gql`
 
 export const EventFields = gql`
   fragment EventFields on Event {
-    id
+    id: transitionalId
     title
     author
     description
@@ -145,7 +145,7 @@ export const EventFields = gql`
     admin_notes
 
     event_category {
-      id
+      id: transitionalId
       name
     }
 
@@ -166,12 +166,12 @@ export const EventFields = gql`
     }
 
     runs {
-      id
+      id: transitionalId
       ...RunFields
     }
 
     maximum_event_provided_tickets_overrides {
-      id
+      id: transitionalId
       ...MaximumEventProvidedTicketsOverrideFields
     }
   }
@@ -188,11 +188,11 @@ export const EventAdminEventsQuery = gql`
     }
 
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       ...ConventionFields
 
       events(includeDropped: true) {
-        id
+        id: transitionalId
         ...EventFields
       }
     }

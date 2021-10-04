@@ -10,31 +10,31 @@ export type CmsPageQueryVariables = Types.Exact<{
 }>;
 
 
-export type CmsPageQueryData = { __typename: 'Query', convention?: { __typename: 'Convention', id: number, name: string, clickwrap_agreement?: string | null | undefined, my_profile?: { __typename: 'UserConProfile', id: number, accepted_clickwrap_agreement?: boolean | null | undefined } | null | undefined } | null | undefined, cmsParent: { __typename: 'Convention', id: number, cmsPage: { __typename: 'Page', id: number, name?: string | null | undefined, content_html: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, skip_clickwrap_agreement?: boolean | null | undefined } } | { __typename: 'RootSite', id: number, cmsPage: { __typename: 'Page', id: number, name?: string | null | undefined, content_html: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, skip_clickwrap_agreement?: boolean | null | undefined } }, currentAbility: { __typename: 'Ability', can_manage_any_cms_content: boolean } };
+export type CmsPageQueryData = { __typename: 'Query', convention?: { __typename: 'Convention', name: string, clickwrap_agreement?: string | null | undefined, id: string, my_profile?: { __typename: 'UserConProfile', accepted_clickwrap_agreement?: boolean | null | undefined, id: string } | null | undefined } | null | undefined, cmsParent: { __typename: 'Convention', id: string, cmsPage: { __typename: 'Page', name?: string | null | undefined, content_html: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, skip_clickwrap_agreement?: boolean | null | undefined, id: string } } | { __typename: 'RootSite', id: string, cmsPage: { __typename: 'Page', name?: string | null | undefined, content_html: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, skip_clickwrap_agreement?: boolean | null | undefined, id: string } }, currentAbility: { __typename: 'Ability', can_manage_any_cms_content: boolean } };
 
 export type PageAdminDropdownQueryVariables = Types.Exact<{
   id: Types.Scalars['Int'];
 }>;
 
 
-export type PageAdminDropdownQueryData = { __typename: 'Query', cmsParent: { __typename: 'Convention', id: number, defaultLayout: { __typename: 'CmsLayout', id: number, name?: string | null | undefined }, cmsPage: { __typename: 'Page', id: number, cms_layout?: { __typename: 'CmsLayout', id: number, name?: string | null | undefined } | null | undefined, referenced_partials: Array<{ __typename: 'CmsPartial', id: number, name?: string | null | undefined }> } } | { __typename: 'RootSite', id: number, root_site_default_layout: { __typename: 'CmsLayout', id: number, name?: string | null | undefined }, cmsPage: { __typename: 'Page', id: number, cms_layout?: { __typename: 'CmsLayout', id: number, name?: string | null | undefined } | null | undefined, referenced_partials: Array<{ __typename: 'CmsPartial', id: number, name?: string | null | undefined }> } } };
+export type PageAdminDropdownQueryData = { __typename: 'Query', cmsParent: { __typename: 'Convention', id: string, defaultLayout: { __typename: 'CmsLayout', name?: string | null | undefined, id: string }, cmsPage: { __typename: 'Page', id: string, cms_layout?: { __typename: 'CmsLayout', name?: string | null | undefined, id: string } | null | undefined, referenced_partials: Array<{ __typename: 'CmsPartial', name?: string | null | undefined, id: string }> } } | { __typename: 'RootSite', id: string, root_site_default_layout: { __typename: 'CmsLayout', name?: string | null | undefined, id: string }, cmsPage: { __typename: 'Page', id: string, cms_layout?: { __typename: 'CmsLayout', name?: string | null | undefined, id: string } | null | undefined, referenced_partials: Array<{ __typename: 'CmsPartial', name?: string | null | undefined, id: string }> } } };
 
 
 export const CmsPageQueryDocument = gql`
     query CmsPageQuery($slug: String, $rootPage: Boolean) {
   convention: conventionByRequestHostIfPresent {
-    id
+    id: transitionalId
     name
     clickwrap_agreement
     my_profile {
-      id
+      id: transitionalId
       accepted_clickwrap_agreement
     }
   }
   cmsParent: cmsParentByRequestHost {
-    id
+    id: transitionalId
     cmsPage(slug: $slug, rootPage: $rootPage) {
-      id
+      id: transitionalId
       name
       content_html
       current_ability_can_update
@@ -79,27 +79,27 @@ export type CmsPageQueryQueryResult = Apollo.QueryResult<CmsPageQueryData, CmsPa
 export const PageAdminDropdownQueryDocument = gql`
     query PageAdminDropdownQuery($id: Int!) {
   cmsParent: cmsParentByRequestHost {
-    id
+    id: transitionalId
     cmsPage(id: $id) {
-      id
+      id: transitionalId
       cms_layout {
-        id
+        id: transitionalId
         name
       }
       referenced_partials {
-        id
+        id: transitionalId
         name
       }
     }
     ... on Convention {
       defaultLayout {
-        id
+        id: transitionalId
         name
       }
     }
     ... on RootSite {
       root_site_default_layout: defaultLayout {
-        id
+        id: transitionalId
         name
       }
     }

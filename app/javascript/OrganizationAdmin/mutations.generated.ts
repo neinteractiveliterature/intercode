@@ -13,7 +13,7 @@ export type CreateOrganizationRoleMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateOrganizationRoleMutationData = { __typename: 'Mutation', createOrganizationRole: { __typename: 'CreateOrganizationRolePayload', organization_role: { __typename: 'OrganizationRole', id: number, name: string, users: Array<{ __typename: 'User', id: number, name?: string | null | undefined, email?: string | null | undefined }>, permissions: Array<{ __typename: 'Permission', id: number, permission: string }> } } };
+export type CreateOrganizationRoleMutationData = { __typename: 'Mutation', createOrganizationRole: { __typename: 'CreateOrganizationRolePayload', organization_role: { __typename: 'OrganizationRole', name: string, id: string, users: Array<{ __typename: 'User', name?: string | null | undefined, email?: string | null | undefined, id: string }>, permissions: Array<{ __typename: 'Permission', permission: string, id: string }> } } };
 
 export type UpdateOrganizationRoleMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
@@ -25,7 +25,7 @@ export type UpdateOrganizationRoleMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateOrganizationRoleMutationData = { __typename: 'Mutation', updateOrganizationRole: { __typename: 'UpdateOrganizationRolePayload', organization_role: { __typename: 'OrganizationRole', id: number, name: string, users: Array<{ __typename: 'User', id: number, name?: string | null | undefined, email?: string | null | undefined }>, permissions: Array<{ __typename: 'Permission', id: number, permission: string }> } } };
+export type UpdateOrganizationRoleMutationData = { __typename: 'Mutation', updateOrganizationRole: { __typename: 'UpdateOrganizationRolePayload', organization_role: { __typename: 'OrganizationRole', name: string, id: string, users: Array<{ __typename: 'User', name?: string | null | undefined, email?: string | null | undefined, id: string }>, permissions: Array<{ __typename: 'Permission', permission: string, id: string }> } } };
 
 export type DeleteOrganizationRoleMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
@@ -41,7 +41,7 @@ export const CreateOrganizationRoleDocument = gql`
     input: {organization_id: $organizationId, organization_role: {name: $name}, user_ids: $userIds, permissions: $permissions}
   ) {
     organization_role {
-      id
+      id: transitionalId
       ...OrganizationRoleFields
     }
   }
@@ -82,7 +82,7 @@ export const UpdateOrganizationRoleDocument = gql`
     input: {id: $id, organization_role: {name: $name}, add_user_ids: $addUserIds, remove_user_ids: $removeUserIds, add_permissions: $addPermissions, remove_permission_ids: $removePermissionIds}
   ) {
     organization_role {
-      id
+      id: transitionalId
       ...OrganizationRoleFields
     }
   }

@@ -14,7 +14,7 @@ export const UsersTableUsersQuery = gql`
       per_page
 
       entries {
-        id
+        id: transitionalId
         name_inverted
         first_name
         last_name
@@ -31,7 +31,7 @@ export const UsersTableUsersQuery = gql`
 
 export const DetailedUserFields = gql`
   fragment DetailedUserFields on User {
-    id
+    id: transitionalId
     name
     first_name
     last_name
@@ -39,20 +39,20 @@ export const DetailedUserFields = gql`
     privileges
 
     user_con_profiles {
-      id
+      id: transitionalId
       email
 
       ticket {
-        id
+        id: transitionalId
       }
 
       signups {
-        id
+        id: transitionalId
         state
       }
 
       convention {
-        id
+        id: transitionalId
         name
         domain
         starts_at
@@ -62,7 +62,7 @@ export const DetailedUserFields = gql`
       }
 
       staff_positions {
-        id
+        id: transitionalId
         name
       }
     }
@@ -72,7 +72,7 @@ export const DetailedUserFields = gql`
 export const UserAdminQuery = gql`
   query UserAdminQuery($id: Int!) {
     user(id: $id) {
-      id
+      id: transitionalId
       ...DetailedUserFields
     }
   }
@@ -81,9 +81,9 @@ export const UserAdminQuery = gql`
 `;
 
 export const MergeUsersModalQuery = gql`
-  query MergeUsersModalQuery($ids: [Int!]!) {
-    users(ids: $ids) {
-      id
+  query MergeUsersModalQuery($ids: [ID!]!) {
+    users(transitionalIds: $ids) {
+      id: transitionalId
       ...DetailedUserFields
     }
   }

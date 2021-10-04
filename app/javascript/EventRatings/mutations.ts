@@ -4,7 +4,7 @@ export const RateEvent = gql`
   mutation RateEvent($eventId: Int!, $rating: Int!) {
     rateEvent(input: { event_id: $eventId, rating: $rating }) {
       event {
-        id
+        id: transitionalId
         my_rating
       }
     }

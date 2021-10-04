@@ -4,12 +4,7 @@ import { Link } from 'react-router-dom';
 // eslint-disable-next-line no-restricted-imports
 import { useQuery } from '@apollo/client';
 import { DateTime } from 'luxon';
-import {
-  useModal,
-  useConfirm,
-  ErrorDisplay,
-  LoadingIndicator,
-} from '@neinteractiveliterature/litform';
+import { useModal, useConfirm, ErrorDisplay, LoadingIndicator } from '@neinteractiveliterature/litform';
 
 import ConvertToEventProvidedTicketModal from './ConvertToEventProvidedTicketModal';
 import formatMoney from '../formatMoney';
@@ -20,14 +15,7 @@ import {
 } from './queries';
 import AddOrderToTicketButton, { AddOrderToTicketButtonProps } from './AddOrderToTicketButton';
 import AppRootContext from '../AppRootContext';
-import {
-  Event,
-  Order,
-  OrderEntry,
-  Ticket,
-  TicketType,
-  UserConProfile,
-} from '../graphqlTypes.generated';
+import { Event } from '../graphqlTypes.generated';
 import { useDeleteTicketMutation } from './mutations.generated';
 import {
   UserConProfileAdminQueryData,
@@ -36,31 +24,33 @@ import {
 } from './queries.generated';
 import { useAppDateTimeFormat } from '../TimeUtils';
 
+type UserConProfileData = UserConProfileAdminQueryData['convention']['user_con_profile'];
+type TicketData = NonNullable<UserConProfileData['ticket']>;
+type OrderEntryData = NonNullable<TicketData['order_entry']>;
+
 type TicketAdminControlsProps = {
   convention: {
     name: string;
     ticket_name: string;
     ticket_types: AddOrderToTicketButtonProps['convention']['ticket_types'];
   };
-  userConProfile: Pick<UserConProfile, 'id' | 'name' | 'name_without_nickname'> & {
+  userConProfile: Pick<UserConProfileData, 'id' | 'name' | 'name_without_nickname'> & {
     ticket?:
       | null
-      | (Pick<Ticket, 'id' | 'created_at' | 'updated_at'> & {
+      | (Pick<TicketData, 'id' | 'created_at' | 'updated_at'> & {
           provided_by_event?: null | Pick<Event, 'title'>;
-          ticket_type: Pick<TicketType, 'id' | 'name' | 'description'>;
+          ticket_type: Pick<TicketData['ticket_type'], 'id' | 'name' | 'description'>;
           order_entry?:
             | null
-            | (Pick<OrderEntry, 'price_per_item'> & {
-                order?: null | Pick<Order, 'charge_id' | 'payment_note'>;
+            | (Pick<OrderEntryData, 'price_per_item'> & {
+                order?: null | Pick<OrderEntryData['order'], 'charge_id' | 'payment_note'>;
               });
         });
   };
 };
 
 function TicketAdminControls({ convention, userConProfile }: TicketAdminControlsProps) {
-  const query = userConProfile.ticket
-    ? TicketAdminWithTicketAbilityQuery
-    : TicketAdminWithoutTicketAbilityQuery;
+  const query = userConProfile.ticket ? TicketAdminWithTicketAbilityQuery : TicketAdminWithoutTicketAbilityQuery;
 
   const { data, loading, error } = useQuery<
     TicketAdminWithTicketAbilityQueryData | TicketAdminWithoutTicketAbilityQueryData
@@ -131,22 +121,14 @@ function TicketAdminControls({ convention, userConProfile }: TicketAdminControls
     );
   }
 
-  if (
-    ticket &&
-    (currentAbility as TicketAdminWithTicketAbilityQueryData['currentAbility']).can_update_ticket
-  ) {
+  if (ticket && (currentAbility as TicketAdminWithTicketAbilityQueryData['currentAbility']).can_update_ticket) {
     buttons.push(
-      <Link
-        to={`/user_con_profiles/${userConProfile.id}/admin_ticket/edit`}
-        className="btn btn-secondary"
-      >
+      <Link to={`/user_con_profiles/${userConProfile.id}/admin_ticket/edit`} className="btn btn-secondary">
         Edit {convention.ticket_name}
       </Link>,
     );
 
-    if (
-      (currentAbility as TicketAdminWithTicketAbilityQueryData['currentAbility']).can_delete_ticket
-    ) {
+    if ((currentAbility as TicketAdminWithTicketAbilityQueryData['currentAbility']).can_delete_ticket) {
       if (!ticket.provided_by_event) {
         buttons.push(
           <>
@@ -214,10 +196,7 @@ function TicketAdminControls({ convention, userConProfile }: TicketAdminControls
     }
   } else if (currentAbility?.can_create_tickets) {
     buttons.push(
-      <Link
-        to={`/user_con_profiles/${userConProfile.id}/admin_ticket/new`}
-        className="btn btn-secondary"
-      >
+      <Link to={`/user_con_profiles/${userConProfile.id}/admin_ticket/new`} className="btn btn-secondary">
         Create {convention.ticket_name}
       </Link>,
     );
@@ -276,18 +255,12 @@ function TicketAdminSection({ convention, userConProfile }: TicketAdminSectionPr
 
         <dt className="col-md-3">Created</dt>
         <dd className="col-md-9">
-          {format(
-            DateTime.fromISO(ticket.created_at, { zone: timezoneName }),
-            'longWeekdayDateTimeWithZone',
-          )}
+          {format(DateTime.fromISO(ticket.created_at, { zone: timezoneName }), 'longWeekdayDateTimeWithZone')}
         </dd>
 
         <dt className="col-md-3">Last updated</dt>
         <dd className="col-md-9">
-          {format(
-            DateTime.fromISO(ticket.updated_at, { zone: timezoneName }),
-            'longWeekdayDateTimeWithZone',
-          )}
+          {format(DateTime.fromISO(ticket.updated_at, { zone: timezoneName }), 'longWeekdayDateTimeWithZone')}
         </dd>
       </dl>
     );

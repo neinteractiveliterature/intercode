@@ -2,8 +2,20 @@
 class Mutations::CreateUserSignup < Mutations::BaseMutation
   field :signup, Types::SignupType, null: false
 
-  argument :run_id, Int, required: true, camelize: false
-  argument :user_con_profile_id, Int, required: true, camelize: false
+  argument :run_id,
+           Int,
+           deprecation_reason:
+             'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+           required: false,
+           camelize: false
+  argument :transitional_run_id, ID, required: false, camelize: true
+  argument :user_con_profile_id,
+           Int,
+           deprecation_reason:
+             'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+           required: false,
+           camelize: false
+  argument :transitional_user_con_profile_id, ID, required: false, camelize: true
   argument :requested_bucket_key, String, required: false, camelize: false
   argument :no_requested_bucket, Boolean, required: false, camelize: false
   argument :suppress_notifications, Boolean, required: false, camelize: false

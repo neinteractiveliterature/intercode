@@ -3,12 +3,12 @@ import { gql } from '@apollo/client';
 export const ClickwrapAgreementQuery = gql`
   query ClickwrapAgreementQuery {
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       name
       clickwrap_agreement_html
 
       my_profile {
-        id
+        id: transitionalId
         accepted_clickwrap_agreement
       }
     }

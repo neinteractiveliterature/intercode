@@ -10,7 +10,7 @@ export type CreateLayoutMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateLayoutMutationData = { __typename: 'Mutation', createCmsLayout: { __typename: 'CreateCmsLayoutPayload', cms_layout: { __typename: 'CmsLayout', id: number, name?: string | null | undefined, content?: string | null | undefined, navbar_classes?: string | null | undefined, admin_notes?: string | null | undefined, current_ability_can_update: boolean, current_ability_can_delete: boolean } } };
+export type CreateLayoutMutationData = { __typename: 'Mutation', createCmsLayout: { __typename: 'CreateCmsLayoutPayload', cms_layout: { __typename: 'CmsLayout', name?: string | null | undefined, content?: string | null | undefined, navbar_classes?: string | null | undefined, admin_notes?: string | null | undefined, current_ability_can_update: boolean, current_ability_can_delete: boolean, id: string } } };
 
 export type UpdateLayoutMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
@@ -18,7 +18,7 @@ export type UpdateLayoutMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateLayoutMutationData = { __typename: 'Mutation', updateCmsLayout: { __typename: 'UpdateCmsLayoutPayload', cms_layout: { __typename: 'CmsLayout', id: number, name?: string | null | undefined, content?: string | null | undefined, navbar_classes?: string | null | undefined, admin_notes?: string | null | undefined, current_ability_can_update: boolean, current_ability_can_delete: boolean } } };
+export type UpdateLayoutMutationData = { __typename: 'Mutation', updateCmsLayout: { __typename: 'UpdateCmsLayoutPayload', cms_layout: { __typename: 'CmsLayout', name?: string | null | undefined, content?: string | null | undefined, navbar_classes?: string | null | undefined, admin_notes?: string | null | undefined, current_ability_can_update: boolean, current_ability_can_delete: boolean, id: string } } };
 
 export type DeleteLayoutMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
@@ -32,7 +32,7 @@ export const CreateLayoutDocument = gql`
     mutation CreateLayout($cmsLayout: CmsLayoutInput!) {
   createCmsLayout(input: {cms_layout: $cmsLayout}) {
     cms_layout {
-      id
+      id: transitionalId
       ...CmsLayoutFields
     }
   }
@@ -68,7 +68,7 @@ export const UpdateLayoutDocument = gql`
     mutation UpdateLayout($id: Int!, $cmsLayout: CmsLayoutInput!) {
   updateCmsLayout(input: {id: $id, cms_layout: $cmsLayout}) {
     cms_layout {
-      id
+      id: transitionalId
       ...CmsLayoutFields
     }
   }

@@ -15,94 +15,90 @@ import { ConventionInput } from '../graphqlTypes.generated';
 import { EditingScheduledValue } from '../BuiltInFormControls/ScheduledValueEditor';
 import { MaximumEventSignupsValue } from './MaximumEventSignupsPreview';
 
-export default LoadQueryWrapper(
-  useConventionAdminConventionQuery,
-  function ConventionAdmin({ data }) {
-    const history = useHistory();
-    const [updateMutate] = useUpdateConventionMutation();
-    const [mutate, mutationError] = useAsyncFunction(updateMutate);
-    const apolloClient = useApolloClient();
-    const authorizationWarning = useAuthorizationRequired('can_update_convention');
+export default LoadQueryWrapper(useConventionAdminConventionQuery, function ConventionAdmin({ data }) {
+  const history = useHistory();
+  const [updateMutate] = useUpdateConventionMutation();
+  const [mutate, mutationError] = useAsyncFunction(updateMutate);
+  const apolloClient = useApolloClient();
+  const authorizationWarning = useAuthorizationRequired('can_update_convention');
 
-    const initialConvention: ConventionFormConvention = useMemo(() => {
-      return {
-        ...data.convention,
-        maximum_event_signups: data.convention.maximum_event_signups
-          ? (data.convention
-              .maximum_event_signups as EditingScheduledValue<MaximumEventSignupsValue>)
-          : { timespans: [] },
-      };
-    }, [data]);
-
-    usePageTitle('Convention Settings');
-
-    if (authorizationWarning) return authorizationWarning;
-
-    const saveConvention = async (convention: ConventionFormConvention) => {
-      const conventionInput: ConventionInput = {
-        ...pick(convention, [
-          'accepting_proposals',
-          'starts_at',
-          'ends_at',
-          'name',
-          'domain',
-          'email_from',
-          'email_mode',
-          'event_mailing_list_domain',
-          'location',
-          'timezone_name',
-          'timezone_mode',
-          'show_schedule',
-          'show_event_list',
-          'maximum_tickets',
-          'signup_mode',
-          'signup_requests_open',
-          'site_mode',
-          'hidden',
-          'ticket_name',
-          'ticket_mode',
-          'clickwrap_agreement',
-          'language',
-        ]),
-        maximum_event_signups: {
-          timespans: convention.maximum_event_signups.timespans.map((timespan) => ({
-            start: timespan.start,
-            finish: timespan.finish,
-            string_value: timespan.value,
-          })),
-        },
-        default_layout_id: convention.defaultLayout?.id,
-        root_page_id: convention.rootPage.id,
-        catch_all_staff_position_id: convention.catch_all_staff_position?.id,
-      };
-      await mutate({
-        variables: {
-          input: {
-            convention: conventionInput,
-          },
-        },
-      });
-
-      await apolloClient.resetStore();
-      history.push('/');
+  const initialConvention: ConventionFormConvention = useMemo(() => {
+    return {
+      ...data.convention,
+      maximum_event_signups: data.convention.maximum_event_signups
+        ? (data.convention.maximum_event_signups as EditingScheduledValue<MaximumEventSignupsValue>)
+        : { timespans: [] },
     };
+  }, [data]);
 
-    return (
+  usePageTitle('Convention Settings');
+
+  if (authorizationWarning) return authorizationWarning;
+
+  const saveConvention = async (convention: ConventionFormConvention) => {
+    const conventionInput: ConventionInput = {
+      ...pick(convention, [
+        'accepting_proposals',
+        'starts_at',
+        'ends_at',
+        'name',
+        'domain',
+        'email_from',
+        'email_mode',
+        'event_mailing_list_domain',
+        'location',
+        'timezone_name',
+        'timezone_mode',
+        'show_schedule',
+        'show_event_list',
+        'maximum_tickets',
+        'signup_mode',
+        'signup_requests_open',
+        'site_mode',
+        'hidden',
+        'ticket_name',
+        'ticket_mode',
+        'clickwrap_agreement',
+        'language',
+      ]),
+      maximum_event_signups: {
+        timespans: convention.maximum_event_signups.timespans.map((timespan) => ({
+          start: timespan.start,
+          finish: timespan.finish,
+          string_value: timespan.value,
+        })),
+      },
+      transitionalDefaultLayoutId: convention.defaultLayout?.id.toString(),
+      transitionalRootPageId: convention.rootPage.id.toString(),
+      transitionalCatchAllStaffPositionId: convention.catch_all_staff_position?.id.toString(),
+    };
+    await mutate({
+      variables: {
+        input: {
+          convention: conventionInput,
+        },
+      },
+    });
+
+    await apolloClient.resetStore();
+    history.push('/');
+  };
+
+  return (
+    <div className="mb-4">
       <div className="mb-4">
-        <div className="mb-4">
-          <ConventionFormHeader convention={data.convention} compact />
-        </div>
-
-        <ConventionForm
-          initialConvention={initialConvention}
-          saveConvention={saveConvention}
-          cmsLayouts={data.convention.cmsLayouts}
-          pages={data.convention.cmsPages}
-          rootSite={data.rootSite}
-        />
-
-        <ErrorDisplay graphQLError={mutationError as ApolloError} />
+        <ConventionFormHeader convention={data.convention} compact />
       </div>
-    );
-  },
-);
+
+      <ConventionForm
+        initialConvention={initialConvention}
+        saveConvention={saveConvention}
+        cmsLayouts={data.convention.cmsLayouts}
+        pages={data.convention.cmsPages}
+        rootSite={data.rootSite}
+      />
+
+      <ErrorDisplay graphQLError={mutationError as ApolloError} />
+    </div>
+  );
+});

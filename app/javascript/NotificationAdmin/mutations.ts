@@ -10,7 +10,7 @@ export const UpdateNotificationTemplate = gql`
       input: { event_key: $eventKey, notification_template: $notificationTemplate }
     ) {
       notification_template {
-        id
+        id: transitionalId
         ...NotificationTemplateFields
       }
     }

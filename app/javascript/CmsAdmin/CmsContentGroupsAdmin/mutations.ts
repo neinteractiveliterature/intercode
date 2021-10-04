@@ -10,7 +10,7 @@ export const CreateContentGroup = gql`
       input: { cms_content_group: $cmsContentGroup, permissions: $permissions }
     ) {
       cms_content_group {
-        id
+        id: transitionalId
         ...CmsContentGroupFields
       }
     }
@@ -35,7 +35,7 @@ export const UpdateContentGroup = gql`
       }
     ) {
       cms_content_group {
-        id
+        id: transitionalId
         ...CmsContentGroupFields
       }
     }

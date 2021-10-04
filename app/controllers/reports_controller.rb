@@ -32,7 +32,7 @@ class ReportsController < ApplicationController
         .regular
         .active
         .where.not(event_category_id: volunteer_event_category_ids)
-        .includes(:event_category, team_members: :user_con_profile, runs: [:rooms, {signups: :user_con_profile}])
+        .includes(:event_category, team_members: :user_con_profile, runs: [:rooms, { signups: :user_con_profile }])
         .order_by_title
   end
 
@@ -41,7 +41,7 @@ class ReportsController < ApplicationController
       convention
         .user_con_profiles
         .joins(:ticket)
-        .includes(signups: [:event, {run: :rooms}])
+        .includes(signups: [:event, { run: :rooms }])
         .sort_by { |ucp| ucp.name_inverted.downcase }
   end
 
@@ -51,7 +51,7 @@ class ReportsController < ApplicationController
 
   def single_user_printable
     @subject_profile =
-      convention.user_con_profiles.includes(signups: [:event, {run: :rooms}]).find(params[:user_con_profile_id])
+      convention.user_con_profiles.includes(signups: [:event, { run: :rooms }]).find(params[:user_con_profile_id])
 
     team_member_events_scope = TeamMember.where(user_con_profile_id: @subject_profile.id)
     @events =
@@ -59,7 +59,7 @@ class ReportsController < ApplicationController
         .where(id: team_member_events_scope.select(:event_id))
         .where.not(event_category_id: volunteer_event_category_ids)
         .active
-        .includes(:event_category, team_members: :user_con_profile, runs: [:rooms, {signups: :user_con_profile}])
+        .includes(:event_category, team_members: :user_con_profile, runs: [:rooms, { signups: :user_con_profile }])
         .order_by_title
   end
 

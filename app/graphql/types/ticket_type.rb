@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 class Types::TicketType < Types::BaseObject
-  field :id, Integer, null: false
+  field :id,
+        Integer,
+        deprecation_reason:
+          'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+        null: false
+  field :transitional_id, ID, method: :id, null: false, camelize: true
   field :convention, Types::ConventionType, null: false
   field :user_con_profile, Types::UserConProfileType, null: false
   field :ticket_type, Types::TicketTypeType, null: false

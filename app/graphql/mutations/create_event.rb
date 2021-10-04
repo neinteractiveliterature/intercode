@@ -7,7 +7,10 @@ class Mutations::CreateEvent < Mutations::BaseMutation
   authorize_create_convention_associated_model :events
 
   def resolve(**args)
-    event_attrs = args[:event].to_h.merge(updated_by: user_con_profile.user).stringify_keys
+    event_attrs =
+      process_transitional_ids_in_input(args[:event].to_h, :event_category_id)
+        .merge(updated_by: user_con_profile.user)
+        .stringify_keys
     form_response_attrs = JSON.parse(event_attrs.delete('form_response_attrs_json'))
 
     event = convention.events.new(event_attrs)

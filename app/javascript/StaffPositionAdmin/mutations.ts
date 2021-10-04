@@ -5,7 +5,7 @@ export const CreateStaffPosition = gql`
   mutation CreateStaffPosition($input: CreateStaffPositionInput!) {
     createStaffPosition(input: $input) {
       staff_position {
-        id
+        id: transitionalId
         ...StaffPositionFields
       }
     }
@@ -18,7 +18,7 @@ export const UpdateStaffPosition = gql`
   mutation UpdateStaffPosition($input: UpdateStaffPositionInput!) {
     updateStaffPosition(input: $input) {
       staff_position {
-        id
+        id: transitionalId
         ...StaffPositionFields
       }
     }
@@ -41,7 +41,7 @@ export const UpdateStaffPositionPermissions = gql`
       }
     ) {
       staff_position {
-        id
+        id: transitionalId
         ...StaffPositionFields
       }
     }
@@ -54,7 +54,7 @@ export const DeleteStaffPosition = gql`
   mutation DeleteStaffPosition($input: DeleteStaffPositionInput!) {
     deleteStaffPosition(input: $input) {
       staff_position {
-        id
+        id: transitionalId
       }
     }
   }

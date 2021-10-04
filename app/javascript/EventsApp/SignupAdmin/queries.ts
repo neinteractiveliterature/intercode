@@ -3,29 +3,29 @@ import { CommonConventionData } from '../queries';
 
 export const SignupFields = gql`
   fragment SignupFields on Signup {
-    id
+    id: transitionalId
     state
     counted
     bucket_key
     requested_bucket_key
 
     run {
-      id
+      id: transitionalId
       title_suffix
       starts_at
       ends_at
 
       rooms {
-        id
+        id: transitionalId
         name
       }
 
       event {
-        id
+        id: transitionalId
         title
 
         event_category {
-          id
+          id: transitionalId
           team_member_name
         }
 
@@ -38,16 +38,16 @@ export const SignupFields = gql`
         }
 
         team_members {
-          id
+          id: transitionalId
           user_con_profile {
-            id
+            id: transitionalId
           }
         }
       }
     }
 
     user_con_profile {
-      id
+      id: transitionalId
       name_without_nickname
       nickname
       birth_date
@@ -66,29 +66,29 @@ export const SignupFields = gql`
 
 export const UserConProfileSignupsFragment = gql`
   fragment UserConProfileSignupsFragment on UserConProfile {
-    id
+    id: transitionalId
     signups {
-      id
+      id: transitionalId
       state
       counted
       bucket_key
       requested_bucket_key
 
       user_con_profile {
-        id
+        id: transitionalId
       }
 
       run {
-        id
+        id: transitionalId
         starts_at
 
         event {
-          id
+          id: transitionalId
           title
           length_seconds
 
           event_category {
-            id
+            id: transitionalId
             team_member_name
           }
 
@@ -100,16 +100,16 @@ export const UserConProfileSignupsFragment = gql`
           }
 
           team_members {
-            id
+            id: transitionalId
 
             user_con_profile {
-              id
+              id: transitionalId
             }
           }
         }
 
         rooms {
-          id
+          id: transitionalId
           name
         }
       }
@@ -120,11 +120,11 @@ export const UserConProfileSignupsFragment = gql`
 export const SignupAdminEventQuery = gql`
   query SignupAdminEventQuery($eventId: Int!) {
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       ...CommonConventionData
 
       event(id: $eventId) {
-        id
+        id: transitionalId
         title
       }
     }
@@ -136,11 +136,11 @@ export const SignupAdminEventQuery = gql`
 export const AdminSignupQuery = gql`
   query AdminSignupQuery($id: Int!) {
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       ...CommonConventionData
 
       signup(id: $id) {
-        id
+        id: transitionalId
         ...SignupFields
       }
     }
@@ -166,23 +166,23 @@ export const RunSignupsTableSignupsQuery = gql`
     $sort: [SortInput!]
   ) {
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       name
 
       event(id: $eventId) {
-        id
+        id: transitionalId
         title
 
         event_category {
-          id
+          id: transitionalId
           team_member_name
         }
 
         team_members {
-          id
+          id: transitionalId
 
           user_con_profile {
-            id
+            id: transitionalId
           }
         }
 
@@ -194,7 +194,7 @@ export const RunSignupsTableSignupsQuery = gql`
         }
 
         run(id: $runId) {
-          id
+          id: transitionalId
 
           signups_paginated(page: $page, per_page: $perPage, filters: $filters, sort: $sort) {
             total_entries
@@ -203,7 +203,7 @@ export const RunSignupsTableSignupsQuery = gql`
             per_page
 
             entries {
-              id
+              id: transitionalId
               state
               counted
               bucket_key
@@ -211,12 +211,12 @@ export const RunSignupsTableSignupsQuery = gql`
               age_restrictions_check
 
               run {
-                id
+                id: transitionalId
                 starts_at
               }
 
               user_con_profile {
-                id
+                id: transitionalId
                 name_inverted
                 name_without_nickname
                 gravatar_enabled
@@ -235,11 +235,11 @@ export const RunSignupsTableSignupsQuery = gql`
 export const RunHeaderRunInfoQuery = gql`
   query RunHeaderRunInfoQuery($eventId: Int!, $runId: Int!) {
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       ...CommonConventionData
 
       event(id: $eventId) {
-        id
+        id: transitionalId
         title
         length_seconds
 
@@ -254,7 +254,7 @@ export const RunHeaderRunInfoQuery = gql`
         }
 
         run(id: $runId) {
-          id
+          id: transitionalId
           starts_at
           title_suffix
         }
@@ -268,15 +268,15 @@ export const RunHeaderRunInfoQuery = gql`
 export const RunSignupSummaryQuery = gql`
   query RunSignupSummaryQuery($eventId: Int!, $runId: Int!) {
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       ...CommonConventionData
 
       event(id: $eventId) {
-        id
+        id: transitionalId
         title
 
         event_category {
-          id
+          id: transitionalId
           team_member_name
         }
 
@@ -289,29 +289,29 @@ export const RunSignupSummaryQuery = gql`
         }
 
         team_members {
-          id
+          id: transitionalId
           user_con_profile {
-            id
+            id: transitionalId
           }
         }
 
         runs {
-          id
+          id: transitionalId
           starts_at
         }
 
         run(id: $runId) {
-          id
+          id: transitionalId
 
           signups_paginated(per_page: 1000, filters: { state: ["confirmed", "waitlisted"] }) {
             entries {
-              id
+              id: transitionalId
               state
               bucket_key
               waitlist_position
 
               user_con_profile {
-                id
+                id: transitionalId
                 name_inverted
                 gravatar_enabled
                 gravatar_url
@@ -333,26 +333,26 @@ export const RunSignupSummaryQuery = gql`
 export const UserConProfileSignupsQuery = gql`
   query UserConProfileSignupsQuery($id: Int!) {
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       ...CommonConventionData
 
       my_profile {
-        id
+        id: transitionalId
         ability {
           can_withdraw_all_user_con_profile_signups(user_con_profile_id: $id)
         }
       }
 
       user_con_profile(id: $id) {
-        id
+        id: transitionalId
         name_without_nickname
         ical_secret
 
         team_members {
-          id
+          id: transitionalId
 
           event {
-            id
+            id: transitionalId
             title
             status
           }
@@ -376,13 +376,13 @@ export const RunSignupChangesQuery = gql`
     $perPage: Int
   ) {
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       timezone_name
 
       run(id: $runId) {
-        id
+        id: transitionalId
         event {
-          id
+          id: transitionalId
           title
         }
 
@@ -393,7 +393,7 @@ export const RunSignupChangesQuery = gql`
           per_page
 
           entries {
-            id
+            id: transitionalId
             state
             counted
             bucket_key
@@ -401,21 +401,21 @@ export const RunSignupChangesQuery = gql`
             created_at
 
             previous_signup_change {
-              id
+              id: transitionalId
               state
               counted
               bucket_key
             }
 
             run {
-              id
+              id: transitionalId
 
               event {
-                id
+                id: transitionalId
                 title
 
                 event_category {
-                  id
+                  id: transitionalId
                   team_member_name
                 }
 
@@ -428,16 +428,16 @@ export const RunSignupChangesQuery = gql`
                 }
 
                 team_members {
-                  id
+                  id: transitionalId
                   user_con_profile {
-                    id
+                    id: transitionalId
                   }
                 }
               }
             }
 
             user_con_profile {
-              id
+              id: transitionalId
               name_inverted
               gravatar_enabled
               gravatar_url

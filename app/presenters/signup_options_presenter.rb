@@ -157,13 +157,12 @@ class SignupOptionsPresenter
   def no_preference_options
     @no_preference_options ||=
       if !event.registration_policy.allow_no_preference_signups?
-          []
-        elsif buckets.reject(&:slots_unlimited?).count(&:counted?) <= 1
-          []
-        else
-          [NoPreferenceSignupOption.new]
-        end
-      
+        []
+      elsif buckets.reject(&:slots_unlimited?).count(&:counted?) <= 1
+        []
+      else
+        [NoPreferenceSignupOption.new]
+      end
   end
 
   def not_counted_options
@@ -194,13 +193,11 @@ class SignupOptionsPresenter
         [TeamMemberSignupOption.new(event.team_member_name)]
       else
         non_anything_buckets_count = buckets.count { |b| !b.anything? }
-        buckets
-          .each_with_index
-          .filter_map do |bucket, index|
-            next if bucket.anything?
-            BucketSignupOption.new(bucket, index, bucket.counted? && non_anything_buckets_count <= 1)
-          end
-           + no_preference_options
+        buckets.each_with_index.filter_map do |bucket, index|
+          next if bucket.anything?
+          BucketSignupOption.new(bucket, index, bucket.counted? && non_anything_buckets_count <= 1)
+        end
+        +no_preference_options
       end
   end
 

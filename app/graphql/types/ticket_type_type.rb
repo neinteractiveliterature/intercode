@@ -2,7 +2,12 @@
 class Types::TicketTypeType < Types::BaseObject
   include DeprecatedTicketApiCompat
 
-  field :id, Integer, null: false
+  field :id,
+        Integer,
+        deprecation_reason:
+          'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+        null: false
+  field :transitional_id, ID, method: :id, null: false, camelize: true
   field :name, String, null: false
   field :counts_towards_convention_maximum, Boolean, null: false
   field :allows_event_signups, Boolean, null: false
@@ -13,7 +18,13 @@ class Types::TicketTypeType < Types::BaseObject
   association_loaders TicketType, :convention, :providing_products
 
   field :maximum_event_provided_tickets, Integer, null: false do
-    argument :event_id, Integer, required: false, camelize: false
+    argument :event_id,
+             Integer,
+             deprecation_reason:
+               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             required: false,
+             camelize: false
+    argument :transitional_event_id, ID, required: false, camelize: true
   end
 
   def maximum_event_provided_tickets(**args)

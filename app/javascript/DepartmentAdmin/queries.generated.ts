@@ -4,20 +4,20 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type AdminDepartmentFieldsFragment = { __typename: 'Department', id: number, name: string, proposal_description?: string | null | undefined, event_categories: Array<{ __typename: 'EventCategory', id: number, name: string }> };
+export type AdminDepartmentFieldsFragment = { __typename: 'Department', name: string, proposal_description?: string | null | undefined, id: string, event_categories: Array<{ __typename: 'EventCategory', name: string, id: string }> };
 
 export type DepartmentAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type DepartmentAdminQueryData = { __typename: 'Query', currentAbility: { __typename: 'Ability', can_update_departments: boolean }, convention: { __typename: 'Convention', id: number, departments: Array<{ __typename: 'Department', id: number, name: string, proposal_description?: string | null | undefined, event_categories: Array<{ __typename: 'EventCategory', id: number, name: string }> }> } };
+export type DepartmentAdminQueryData = { __typename: 'Query', currentAbility: { __typename: 'Ability', can_update_departments: boolean }, convention: { __typename: 'Convention', id: string, departments: Array<{ __typename: 'Department', name: string, proposal_description?: string | null | undefined, id: string, event_categories: Array<{ __typename: 'EventCategory', name: string, id: string }> }> } };
 
 export const AdminDepartmentFieldsFragmentDoc = gql`
     fragment AdminDepartmentFields on Department {
-  id
+  id: transitionalId
   name
   proposal_description
   event_categories {
-    id
+    id: transitionalId
     name
   }
 }
@@ -28,9 +28,9 @@ export const DepartmentAdminQueryDocument = gql`
     can_update_departments
   }
   convention: conventionByRequestHost {
-    id
+    id: transitionalId
     departments {
-      id
+      id: transitionalId
       ...AdminDepartmentFields
     }
   }

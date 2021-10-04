@@ -5,7 +5,7 @@ export const CreateCmsFile = gql`
   mutation CreateCmsFile($file: Upload!) {
     createCmsFile(input: { file: $file }) {
       cms_file {
-        id
+        id: transitionalId
         ...CmsFileFields
       }
     }
@@ -17,7 +17,7 @@ export const RenameCmsFile = gql`
   mutation RenameCmsFile($id: Int!, $filename: String!) {
     renameCmsFile(input: { id: $id, filename: $filename }) {
       cms_file {
-        id
+        id: transitionalId
         ...CmsFileFields
       }
     }

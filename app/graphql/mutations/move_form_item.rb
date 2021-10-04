@@ -3,8 +3,19 @@ class Mutations::MoveFormItem < Mutations::BaseMutation
   field :form_item, Types::FormItemType, null: false
   field :form_section, Types::FormSectionType, null: false
 
-  argument :id, Integer, required: true
-  argument :form_section_id, Integer, required: true, camelize: false
+  argument :id,
+           Integer,
+           deprecation_reason:
+             'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+           required: false
+  argument :transitional_id, ID, required: false, camelize: true
+  argument :form_section_id,
+           Integer,
+           deprecation_reason:
+             'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+           required: false,
+           camelize: false
+  argument :transitional_form_section_id, ID, required: false, camelize: true
   argument :destination_index, Integer, required: false, camelize: false
 
   load_and_authorize_model_with_id FormItem, :id, :update

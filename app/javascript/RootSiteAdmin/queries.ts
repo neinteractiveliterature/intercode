@@ -2,40 +2,40 @@ import { gql } from '@apollo/client';
 
 export const PageFields = gql`
   fragment PageFields on Page {
-    id
+    id: transitionalId
     name
   }
 `;
 
 export const RootSiteAdminLayoutFields = gql`
   fragment RootSiteAdminLayoutFields on CmsLayout {
-    id
+    id: transitionalId
     name
   }
 `;
 
 export const RootSiteFields = gql`
   fragment RootSiteFields on RootSite {
-    id
+    id: transitionalId
     site_name
 
     rootPage {
-      id
+      id: transitionalId
       ...PageFields
     }
 
     defaultLayout {
-      id
+      id: transitionalId
       ...RootSiteAdminLayoutFields
     }
 
     cmsPages {
-      id
+      id: transitionalId
       ...PageFields
     }
 
     cmsLayouts {
-      id
+      id: transitionalId
       ...RootSiteAdminLayoutFields
     }
   }
@@ -47,7 +47,7 @@ export const RootSiteFields = gql`
 export const RootSiteAdminQuery = gql`
   query RootSiteAdminQuery {
     rootSite {
-      id
+      id: transitionalId
       ...RootSiteFields
     }
   }

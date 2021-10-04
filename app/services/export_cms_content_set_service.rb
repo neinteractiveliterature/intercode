@@ -86,23 +86,21 @@ class ExportCmsContentSetService < CivilService::Service
 
   def frontmatter_for_content(model)
     model
-        .attributes
-        .except(
-          'content',
-          'body_html',
-          'event_key',
-          'id',
-          'slug',
-          'parent_id',
-          'parent_type',
-          'cms_layout_id',
-          'convention_id',
-          'created_at',
-          'updated_at'
-        )
-        .compact
-
-    
+      .attributes
+      .except(
+        'content',
+        'body_html',
+        'event_key',
+        'id',
+        'slug',
+        'parent_id',
+        'parent_type',
+        'cms_layout_id',
+        'convention_id',
+        'created_at',
+        'updated_at'
+      )
+      .compact
   end
 
   def export_files

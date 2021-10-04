@@ -3,7 +3,7 @@ import { gql } from '@apollo/client';
 export const SiteSearchQuery = gql`
   query SiteSearchQuery($query: String!) {
     cmsParent: cmsParentByRequestHost {
-      id
+      id: transitionalId
 
       fullTextSearch(query: $query) {
         total_entries
@@ -12,25 +12,26 @@ export const SiteSearchQuery = gql`
           highlight
 
           model {
+            # eslint-disable-next-line @graphql-eslint/naming-convention
             __typename
 
             ... on Page {
-              id
+              id: transitionalId
               slug
             }
 
             ... on Event {
-              id
+              id: transitionalId
               title
             }
 
             ... on EventProposal {
-              id
+              id: transitionalId
               title
             }
 
             ... on UserConProfile {
-              id
+              id: transitionalId
             }
           }
         }

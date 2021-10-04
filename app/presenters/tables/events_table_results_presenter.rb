@@ -102,8 +102,6 @@ class Tables::EventsTableResultsPresenter < Tables::TableResultsPresenter
   def user_con_profile
     return nil unless pundit_user&.user
 
-    @user_con_profile ||=
-      convention.user_con_profiles.find_by(user_id: pundit_user.user.id)
-      
+    @user_con_profile ||= convention.user_con_profiles.find_by(user_id: pundit_user.user.id)
   end
 end

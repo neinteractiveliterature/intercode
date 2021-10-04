@@ -3,7 +3,7 @@ import { RunBasicSignupData, CommonConventionData } from '../queries';
 
 export const ScheduleGridEventFragment = gql`
   fragment ScheduleGridEventFragment on Event {
-    id
+    id: transitionalId
     title
     length_seconds
     short_blurb_html
@@ -11,7 +11,7 @@ export const ScheduleGridEventFragment = gql`
     can_play_concurrently
 
     event_category {
-      id
+      id: transitionalId
       name
       default_color
       signed_up_color
@@ -37,7 +37,7 @@ export const ScheduleGridEventFragment = gql`
     }
 
     runs(start: $start, finish: $finish) {
-      id
+      id: transitionalId
       starts_at
       schedule_note
       title_suffix
@@ -56,7 +56,7 @@ export const ScheduleGridEventFragment = gql`
 export const ScheduleGridConventionDataQuery = gql`
   query ScheduleGridConventionDataQuery {
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       pre_schedule_content_html
       ...CommonConventionData
     }
@@ -68,9 +68,9 @@ export const ScheduleGridConventionDataQuery = gql`
 export const ScheduleGridEventsQuery = gql`
   query ScheduleGridEventsQuery($start: Date, $finish: Date) {
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       events(start: $start, finish: $finish) {
-        id
+        id: transitionalId
         ...ScheduleGridEventFragment
       }
     }
@@ -82,12 +82,12 @@ export const ScheduleGridEventsQuery = gql`
 export const ScheduleGridCombinedQuery = gql`
   query ScheduleGridCombinedQuery($start: Date, $finish: Date) {
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       pre_schedule_content_html
       ...CommonConventionData
 
       events(start: $start, finish: $finish) {
-        id
+        id: transitionalId
         ...ScheduleGridEventFragment
       }
     }

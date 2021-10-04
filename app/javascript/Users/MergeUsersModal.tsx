@@ -12,10 +12,7 @@ import pluralizeWithCount from '../pluralizeWithCount';
 import { MergeUsersModalQueryData, useMergeUsersModalQuery } from './queries.generated';
 import { useMergeUsersMutation } from './mutations.generated';
 
-function renderIfQueryReady(
-  render: () => JSX.Element,
-  { loading, error }: { loading: boolean; error?: ApolloError },
-) {
+function renderIfQueryReady(render: () => JSX.Element, { loading, error }: { loading: boolean; error?: ApolloError }) {
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
   }
@@ -34,15 +31,15 @@ type ConventionType = UserConProfileType['convention'];
 export type MergeUsersModalProps = {
   closeModal: () => void;
   visible: boolean;
-  userIds?: number[];
+  userIds?: string[];
 };
 
 function MergeUsersModal({ closeModal, visible, userIds }: MergeUsersModalProps): JSX.Element {
   const { data, loading, error } = useMergeUsersModalQuery({
     variables: { ids: userIds || [] },
   });
-  const [winningUserId, setWinningUserId] = useState<number>();
-  const [winningProfileIds, setWinningProfileIds] = useState(new Map<number, number>());
+  const [winningUserId, setWinningUserId] = useState<string>();
+  const [winningProfileIds, setWinningProfileIds] = useState(new Map<string, string>());
   const [mutate, { error: mutationError, loading: mutationInProgress }] = useMergeUsersMutation();
 
   const performMerge = async () => {
@@ -56,12 +53,10 @@ function MergeUsersModal({ closeModal, visible, userIds }: MergeUsersModalProps)
       variables: {
         userIds: userIds,
         winningUserId: winningUserId,
-        winningUserConProfiles: [...winningProfileIds.entries()].map(
-          ([conventionId, userConProfileId]) => ({
-            conventionId,
-            userConProfileId,
-          }),
-        ),
+        winningUserConProfiles: [...winningProfileIds.entries()].map(([conventionId, userConProfileId]) => ({
+          transitionalConventionId: conventionId,
+          transitionalUserConProfileId: userConProfileId,
+        })),
       },
     });
     closeModal();
@@ -71,13 +66,13 @@ function MergeUsersModal({ closeModal, visible, userIds }: MergeUsersModalProps)
     if (loading || error) {
       if (winningUserId !== null) {
         setWinningUserId(undefined);
-        setWinningProfileIds(new Map<number, number>());
+        setWinningProfileIds(new Map<string, string>());
       }
     }
   }, [error, loading, winningUserId]);
 
   let allConventions: ConventionType[] = [];
-  const profilesByConventionId = new Map<number, UserConProfileType[]>();
+  const profilesByConventionId = new Map<string, UserConProfileType[]>();
   if (!loading && !error && data) {
     allConventions = sortBy(
       uniqBy(
@@ -102,9 +97,7 @@ function MergeUsersModal({ closeModal, visible, userIds }: MergeUsersModalProps)
     .filter(([, profiles]) => profiles.length > 1)
     .map(([conventionId]) => conventionId);
 
-  const fullyDisambiguated = ambiguousProfileConventionIds.every((conventionId) =>
-    winningProfileIds.get(conventionId),
-  );
+  const fullyDisambiguated = ambiguousProfileConventionIds.every((conventionId) => winningProfileIds.get(conventionId));
 
   const renderMergePreview = () => {
     if (!winningUserId || !data) {
@@ -137,15 +130,10 @@ function MergeUsersModal({ closeModal, visible, userIds }: MergeUsersModalProps)
 
           <ChoiceSet
             choices={userConProfiles.map((profile) => {
-              const ticketWording = profile.ticket
-                ? `Has ${convention.ticket_name}`
-                : `No ${convention.ticket_name}`;
+              const ticketWording = profile.ticket ? `Has ${convention.ticket_name}` : `No ${convention.ticket_name}`;
               const signups = profile.signups.filter((signup) => signup.state !== 'withdrawn');
               return {
-                label: `${profile.email}’s profile [${ticketWording}, ${pluralizeWithCount(
-                  'signup',
-                  signups.length,
-                )}]`,
+                label: `${profile.email}’s profile [${ticketWording}, ${pluralizeWithCount('signup', signups.length)}]`,
                 value: profile.id.toString(),
               };
             })}
@@ -153,7 +141,7 @@ function MergeUsersModal({ closeModal, visible, userIds }: MergeUsersModalProps)
             onChange={(value: string) =>
               setWinningProfileIds((prevWinningProfileIds) => {
                 const newWinningProfileIds = new Map(prevWinningProfileIds);
-                newWinningProfileIds.set(convention.id, Number.parseInt(value, 10));
+                newWinningProfileIds.set(convention.id, value);
                 return newWinningProfileIds;
               })
             }
@@ -166,8 +154,8 @@ function MergeUsersModal({ closeModal, visible, userIds }: MergeUsersModalProps)
       <div className="mt-4">
         <p>
           {'User account '}
-          {winningUserId} will be preserved. All the others will be deleted, and their convention
-          profiles will be merged into it. The resulting account will look like this:
+          {winningUserId} will be preserved. All the others will be deleted, and their convention profiles will be
+          merged into it. The resulting account will look like this:
         </p>
 
         <dl className="row mb-0">
@@ -181,9 +169,7 @@ function MergeUsersModal({ closeModal, visible, userIds }: MergeUsersModalProps)
           <dd className="col-sm-9">{winningUser.email}</dd>
 
           <dt className="col-sm-3">Privileges</dt>
-          <dd className="col-sm-9">
-            {allPrivileges.map((priv) => humanize(priv ?? '')).join(', ')}
-          </dd>
+          <dd className="col-sm-9">{allPrivileges.map((priv) => humanize(priv ?? '')).join(', ')}</dd>
 
           <dt className="col-sm-3">Conventions</dt>
           <dd className="col-sm-9">
@@ -208,7 +194,7 @@ function MergeUsersModal({ closeModal, visible, userIds }: MergeUsersModalProps)
           value: user.id.toString(),
         }))}
         value={winningUserId?.toString()}
-        onChange={(newValue: string) => setWinningUserId(Number.parseInt(newValue, 10))}
+        onChange={(newValue: string) => setWinningUserId(newValue)}
       />
 
       {renderMergePreview()}

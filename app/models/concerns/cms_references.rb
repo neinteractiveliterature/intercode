@@ -27,7 +27,6 @@ module CmsReferences
     each_liquid_node
       .select { |node| node.is_a?(Liquid::Include) }
       .filter_map { |include_node| template_name_for_include_node(include_node) }
-      
   end
 
   def referenced_partials_direct(blacklist = [])

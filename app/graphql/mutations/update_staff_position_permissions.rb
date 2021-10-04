@@ -1,7 +1,13 @@
 # frozen_string_literal: true
 class Mutations::UpdateStaffPositionPermissions < Mutations::BaseMutation
   field :staff_position, Types::StaffPositionType, null: false, camelize: false
-  argument :staff_position_id, Int, required: true, camelize: false
+  argument :staff_position_id,
+           Int,
+           deprecation_reason:
+             'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+           required: false,
+           camelize: false
+  argument :transitional_staff_position_id, ID, required: false, camelize: true
   argument :grant_permissions, [Types::PermissionInputType], required: true, camelize: false
   argument :revoke_permissions, [Types::PermissionInputType], required: true, camelize: false
 

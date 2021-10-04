@@ -3,10 +3,10 @@ import { gql } from '@apollo/client';
 import { UserConProfileFields, UserConProfileAdminTicketFields } from './queries';
 
 export const CreateUserConProfile = gql`
-  mutation CreateUserConProfile($user_id: Int!, $user_con_profile: UserConProfileInput!) {
-    createUserConProfile(input: { user_id: $user_id, user_con_profile: $user_con_profile }) {
+  mutation CreateUserConProfile($user_id: ID!, $user_con_profile: UserConProfileInput!) {
+    createUserConProfile(input: { transitionalUserId: $user_id, user_con_profile: $user_con_profile }) {
       user_con_profile {
-        id
+        id: transitionalId
       }
     }
   }
@@ -16,7 +16,7 @@ export const UpdateUserConProfile = gql`
   mutation UpdateUserConProfile($input: UpdateUserConProfileInput!) {
     updateUserConProfile(input: $input) {
       user_con_profile {
-        id
+        id: transitionalId
         ...UserConProfileFields
       }
     }
@@ -29,7 +29,7 @@ export const DeleteUserConProfile = gql`
   mutation DeleteUserConProfile($userConProfileId: Int!) {
     deleteUserConProfile(input: { id: $userConProfileId }) {
       user_con_profile {
-        id
+        id: transitionalId
       }
     }
   }
@@ -39,7 +39,7 @@ export const CreateTicket = gql`
   mutation CreateTicket($userConProfileId: Int!, $ticket: TicketInput!) {
     createTicket(input: { user_con_profile_id: $userConProfileId, ticket: $ticket }) {
       ticket {
-        id
+        id: transitionalId
         ...UserConProfileAdminTicketFields
       }
     }
@@ -49,10 +49,10 @@ export const CreateTicket = gql`
 `;
 
 export const UpdateTicket = gql`
-  mutation UpdateTicket($id: Int!, $ticket: TicketInput!) {
-    updateTicket(input: { id: $id, ticket: $ticket }) {
+  mutation UpdateTicket($id: ID!, $ticket: TicketInput!) {
+    updateTicket(input: { transitionalId: $id, ticket: $ticket }) {
       ticket {
-        id
+        id: transitionalId
         ...UserConProfileAdminTicketFields
       }
     }
@@ -62,10 +62,10 @@ export const UpdateTicket = gql`
 `;
 
 export const DeleteTicket = gql`
-  mutation DeleteTicket($ticketId: Int!, $refund: Boolean!) {
-    deleteTicket(input: { id: $ticketId, refund: $refund }) {
+  mutation DeleteTicket($ticketId: ID!, $refund: Boolean!) {
+    deleteTicket(input: { transitionalId: $ticketId, refund: $refund }) {
       ticket {
-        id
+        id: transitionalId
       }
     }
   }
@@ -73,19 +73,19 @@ export const DeleteTicket = gql`
 
 export const ConvertTicketToEventProvided = gql`
   mutation ConvertTicketToEventProvided(
-    $eventId: Int!
-    $ticketTypeId: Int!
-    $userConProfileId: Int!
+    $eventId: ID!
+    $ticketTypeId: ID!
+    $userConProfileId: ID!
   ) {
     convertTicketToEventProvided(
       input: {
-        event_id: $eventId
-        ticket_type_id: $ticketTypeId
-        user_con_profile_id: $userConProfileId
+        transitionalEventId: $eventId
+        transitionalTicketTypeId: $ticketTypeId
+        transitionalUserConProfileId: $userConProfileId
       }
     ) {
       ticket {
-        id
+        id: transitionalId
         ...UserConProfileAdminTicketFields
       }
     }

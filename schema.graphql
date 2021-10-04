@@ -1,5 +1,5 @@
 type Ability {
-  can_become_user_con_profile(user_con_profile_id: Int!): Boolean!
+  can_become_user_con_profile(transitionalUserConProfileId: ID, user_con_profile_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")): Boolean!
   can_create_cms_content_groups: Boolean!
   can_create_cms_files: Boolean!
   can_create_cms_graphql_queries: Boolean!
@@ -11,11 +11,11 @@ type Ability {
   can_create_pages: Boolean!
   can_create_tickets: Boolean!
   can_create_user_con_profiles: Boolean!
-  can_delete_event(event_id: Int!): Boolean!
-  can_delete_event_proposal(event_proposal_id: Int!): Boolean!
-  can_delete_ticket(ticket_id: Int!): Boolean!
-  can_delete_user_con_profile(user_con_profile_id: Int!): Boolean!
-  can_force_confirm_signup(signup_id: Int!): Boolean!
+  can_delete_event(event_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID."), transitionalEventId: ID): Boolean!
+  can_delete_event_proposal(event_proposal_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID."), transitionalEventProposalId: ID): Boolean!
+  can_delete_ticket(ticket_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID."), transitionalTicketId: ID): Boolean!
+  can_delete_user_con_profile(transitionalUserConProfileId: ID, user_con_profile_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")): Boolean!
+  can_force_confirm_signup(signup_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID."), transitionalSignupId: ID): Boolean!
   can_list_events: Boolean!
   can_manage_any_cms_content: Boolean!
   can_manage_conventions: Boolean!
@@ -28,10 +28,10 @@ type Ability {
   can_manage_staff_positions: Boolean!
   can_manage_ticket_types: Boolean!
   can_override_maximum_event_provided_tickets: Boolean!
-  can_read_admin_notes_on_event_proposal(event_proposal_id: Int!): Boolean!
+  can_read_admin_notes_on_event_proposal(event_proposal_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID."), transitionalEventProposalId: ID): Boolean!
   can_read_any_mailing_list: Boolean!
   can_read_event_proposals: Boolean!
-  can_read_event_signups(event_id: Int!): Boolean!
+  can_read_event_signups(event_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID."), transitionalEventId: ID): Boolean!
   can_read_orders: Boolean!
   can_read_organizations: Boolean!
   can_read_reports: Boolean!
@@ -41,23 +41,23 @@ type Ability {
   can_read_user_activity_alerts: Boolean!
   can_read_user_con_profiles: Boolean!
   can_read_users: Boolean!
-  can_update_admin_notes_on_event_proposal(event_proposal_id: Int!): Boolean!
-  can_update_bucket_signup(signup_id: Int!): Boolean!
+  can_update_admin_notes_on_event_proposal(event_proposal_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID."), transitionalEventProposalId: ID): Boolean!
+  can_update_bucket_signup(signup_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID."), transitionalSignupId: ID): Boolean!
   can_update_convention: Boolean!
-  can_update_counted_signup(signup_id: Int!): Boolean!
+  can_update_counted_signup(signup_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID."), transitionalSignupId: ID): Boolean!
   can_update_departments: Boolean!
-  can_update_event(event_id: Int!): Boolean!
+  can_update_event(event_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID."), transitionalEventId: ID): Boolean!
   can_update_event_categories: Boolean!
-  can_update_event_proposal(event_proposal_id: Int!): Boolean!
+  can_update_event_proposal(event_proposal_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID."), transitionalEventProposalId: ID): Boolean!
   can_update_notification_templates: Boolean!
   can_update_orders: Boolean!
-  can_update_privileges_user_con_profile(user_con_profile_id: Int!): Boolean! @deprecated(reason: "Privileges have been removed in favor of permissions.  This will always return false.")
+  can_update_privileges_user_con_profile(transitionalUserConProfileId: ID, user_con_profile_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")): Boolean! @deprecated(reason: "Privileges have been removed in favor of permissions.  This will always return false.")
   can_update_products: Boolean!
-  can_update_signup(signup_id: Int!): Boolean!
+  can_update_signup(signup_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID."), transitionalSignupId: ID): Boolean!
   can_update_signups: Boolean!
-  can_update_ticket(ticket_id: Int!): Boolean!
-  can_update_user_con_profile(user_con_profile_id: Int!): Boolean!
-  can_withdraw_all_user_con_profile_signups(user_con_profile_id: Int!): Boolean!
+  can_update_ticket(ticket_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID."), transitionalTicketId: ID): Boolean!
+  can_update_user_con_profile(transitionalUserConProfileId: ID, user_con_profile_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")): Boolean!
+  can_withdraw_all_user_con_profile_signups(transitionalUserConProfileId: ID, user_con_profile_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")): Boolean!
 }
 
 """
@@ -89,7 +89,8 @@ input AcceptSignupRequestInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -142,8 +143,9 @@ input CancelOrderInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   skip_refund: Boolean
+  transitionalId: ID
 }
 
 """
@@ -169,9 +171,10 @@ type CmsContentGroup {
   contents: [CmsContent!]!
   current_ability_can_delete: Boolean!
   current_ability_can_update: Boolean!
-  id: Int!
+  id: Int! @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   name: String!
   permissions: [Permission!]!
+  transitionalId: ID!
 }
 
 input CmsContentGroupInput {
@@ -181,7 +184,8 @@ input CmsContentGroupInput {
 
 input CmsContentInput {
   content_type: CmsContentTypeIndicator!
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 enum CmsContentTypeIndicator {
@@ -194,8 +198,9 @@ type CmsFile {
   content_type: String!
   current_ability_can_delete: Boolean!
   filename: String!
-  id: Int!
+  id: Int! @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   size: Int!
+  transitionalId: ID!
   url: String!
 }
 
@@ -203,9 +208,10 @@ type CmsGraphqlQuery {
   admin_notes: String
   current_ability_can_delete: Boolean!
   current_ability_can_update: Boolean!
-  id: Int!
+  id: Int! @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   identifier: String!
   query: String!
+  transitionalId: ID!
 }
 
 input CmsGraphqlQueryInput {
@@ -221,9 +227,10 @@ type CmsLayout {
   content_html_with_placeholders(path: String): String
   current_ability_can_delete: Boolean!
   current_ability_can_update: Boolean!
-  id: Int!
+  id: Int! @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   name: String
   navbar_classes: String
+  transitionalId: ID!
 }
 
 input CmsLayoutInput {
@@ -234,33 +241,36 @@ input CmsLayoutInput {
 }
 
 type CmsNavigationItem {
-  id: Int!
+  id: Int! @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   navigation_items: [CmsNavigationItem]
   navigation_section: CmsNavigationItem
   page: Page
   position: Int
   title: String
+  transitionalId: ID!
 }
 
 input CmsNavigationItemInput {
-  navigation_section_id: Int
-  page_id: Int
+  navigation_section_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  page_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   position: Int
   title: String
+  transitionalNavigationSectionId: ID
+  transitionalPageId: ID
 }
 
 """
-A CMS parent is a web site managed by Intercode.  It acts as a container for CMS content, such
+A CMS parent is a web site managed by Intercode. It acts as a container for CMS content, such
 as pages, partials, files, layouts, variables, content groups, and user-defined GraphQL queries.
 
 Most CMS parents are conventions, so their content will be convention-specific and scoped to
-that convention's domain name.  The exception to this is the root site, which is what Intercode
-renders when there is no convention associated with the current domain name.  (See the RootSite
+that convention's domain name. The exception to this is the root site, which is what Intercode
+renders when there is no convention associated with the current domain name. (See the RootSite
 object for more details about this.)
 """
 interface CmsParent {
   """
-  Finds a CMS content group by ID within the domain name of this HTTP request.  If there is no
+  Finds a CMS content group by ID within the domain name of this HTTP request. If there is no
   CMS content group with that ID, or the CMS content group is associated with a different
   domain name, errors out.
   """
@@ -268,7 +278,12 @@ interface CmsParent {
     """
     The ID of the CMS content group to find.
     """
-    id: Int!
+    id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+
+    """
+    The ID of the CMS content group to find.
+    """
+    transitionalId: ID
   ): CmsContentGroup!
 
   """
@@ -297,16 +312,16 @@ interface CmsParent {
   cmsNavigationItems: [CmsNavigationItem!]!
 
   """
-  Finds a CMS page within the domain name of this HTTP request.  Exactly one of the three
-  optional arguments (`id`, `slug`, and `rootPage`) must be specified.  These each represent a
-  different way of finding a page.  If the desired page can't be found within the current
+  Finds a CMS page within the domain name of this HTTP request. Exactly one of the three
+  optional arguments (`id`, `slug`, and `rootPage`) must be specified. These each represent a
+  different way of finding a page. If the desired page can't be found within the current
   domain name, errors out.
   """
   cmsPage(
     """
     The ID of the page to find.
     """
-    id: Int
+    id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
 
     """
     If true, returns the root page for this domain.
@@ -317,6 +332,11 @@ interface CmsParent {
     The unique slug of the page to find.
     """
     slug: String
+
+    """
+    The ID of the page to find.
+    """
+    transitionalId: ID
   ): Page!
 
   """
@@ -337,7 +357,7 @@ interface CmsParent {
   default_layout: CmsLayout! @deprecated(reason: "Use `defaultLayout` instead")
 
   """
-  Returns the CMS layout to be used for a particular URL path within the current domain.  (This
+  Returns the CMS layout to be used for a particular URL path within the current domain. (This
   will be the page-specific layout if the URL corresponds to a page with a layout override, or
   the default layout for the domain otherwise.)
   """
@@ -357,7 +377,7 @@ interface CmsParent {
     """
     query: String!
   ): SearchResult!
-  id: Int!
+  id: Int! @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
 
   """
   Returns all the Liquid assigns for regular CMS page rendering in the current domain name.
@@ -387,6 +407,7 @@ interface CmsParent {
   ): String!
   rootPage: Page!
   root_page: Page! @deprecated(reason: "Use `rootPage` instead")
+  transitionalId: ID!
 
   """
   Finds CMS content by partial name, case-insensitive, within the current domain's CMS content.
@@ -409,8 +430,9 @@ type CmsPartial {
   content: String
   current_ability_can_delete: Boolean!
   current_ability_can_update: Boolean!
-  id: Int!
+  id: Int! @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   name: String
+  transitionalId: ID!
 }
 
 input CmsPartialInput {
@@ -422,8 +444,9 @@ input CmsPartialInput {
 type CmsVariable {
   current_ability_can_delete: Boolean!
   current_ability_can_update: Boolean!
-  id: Int!
+  id: Int! @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   key: String!
+  transitionalId: ID!
   value_json: String!
 }
 
@@ -448,7 +471,7 @@ type Convention implements CmsParent {
   clickwrap_agreement_html: String
 
   """
-  Finds a CMS content group by ID within the domain name of this HTTP request.  If there is no
+  Finds a CMS content group by ID within the domain name of this HTTP request. If there is no
   CMS content group with that ID, or the CMS content group is associated with a different
   domain name, errors out.
   """
@@ -456,7 +479,12 @@ type Convention implements CmsParent {
     """
     The ID of the CMS content group to find.
     """
-    id: Int!
+    id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+
+    """
+    The ID of the CMS content group to find.
+    """
+    transitionalId: ID
   ): CmsContentGroup!
 
   """
@@ -485,16 +513,16 @@ type Convention implements CmsParent {
   cmsNavigationItems: [CmsNavigationItem!]!
 
   """
-  Finds a CMS page within the domain name of this HTTP request.  Exactly one of the three
-  optional arguments (`id`, `slug`, and `rootPage`) must be specified.  These each represent a
-  different way of finding a page.  If the desired page can't be found within the current
+  Finds a CMS page within the domain name of this HTTP request. Exactly one of the three
+  optional arguments (`id`, `slug`, and `rootPage`) must be specified. These each represent a
+  different way of finding a page. If the desired page can't be found within the current
   domain name, errors out.
   """
   cmsPage(
     """
     The ID of the page to find.
     """
-    id: Int
+    id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
 
     """
     If true, returns the root page for this domain.
@@ -505,6 +533,11 @@ type Convention implements CmsParent {
     The unique slug of the page to find.
     """
     slug: String
+
+    """
+    The ID of the page to find.
+    """
+    transitionalId: ID
   ): Page!
 
   """
@@ -541,9 +574,9 @@ type Convention implements CmsParent {
     per_page: Int
 
     """
-    A set of fields to use for ordering the result set.  The second field is used as a
+    A set of fields to use for ordering the result set. The second field is used as a
     tiebreaker for the first, the third field is used as a tiebreaker for the first two,
-    and so on.  If the sort argument is missing or empty, the order of items will be left
+    and so on. If the sort argument is missing or empty, the order of items will be left
     up to the database (and may be unpredictable).
     """
     sort: [SortInput!]
@@ -555,7 +588,7 @@ type Convention implements CmsParent {
   domain: String
 
   """
-  Returns the CMS layout to be used for a particular URL path within the current domain.  (This
+  Returns the CMS layout to be used for a particular URL path within the current domain. (This
   will be the page-specific layout if the URL corresponds to a page with a layout override, or
   the default layout for the domain otherwise.)
   """
@@ -570,27 +603,37 @@ type Convention implements CmsParent {
   ends_at: Date
 
   """
-  Finds an active event by ID in this convention.  If there is no event with that ID in this
+  Finds an active event by ID in this convention. If there is no event with that ID in this
   convention, or the event is no longer active, errors out.
   """
   event(
     """
     The ID of the event to find
     """
-    id: Int!
+    id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+
+    """
+    The ID of the event to find
+    """
+    transitionalId: ID
   ): Event!
   event_categories(current_ability_can_read_event_proposals: Boolean): [EventCategory!]!
   event_mailing_list_domain: String
 
   """
-  Finds an event proposal by ID in this convention.  If there is no event proposal with that ID
+  Finds an event proposal by ID in this convention. If there is no event proposal with that ID
   in this convention, errors out.
   """
   event_proposal(
     """
     The ID of the event proposal to find.
     """
-    id: Int!
+    id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+
+    """
+    The ID of the event proposal to find.
+    """
+    transitionalId: ID
   ): EventProposal!
   event_proposals_paginated(
     """
@@ -609,9 +652,9 @@ type Convention implements CmsParent {
     per_page: Int
 
     """
-    A set of fields to use for ordering the result set.  The second field is used as a
+    A set of fields to use for ordering the result set. The second field is used as a
     tiebreaker for the first, the third field is used as a tiebreaker for the first two,
-    and so on.  If the sort argument is missing or empty, the order of items will be left
+    and so on. If the sort argument is missing or empty, the order of items will be left
     up to the database (and may be unpredictable).
     """
     sort: [SortInput!]
@@ -621,7 +664,7 @@ type Convention implements CmsParent {
   Returns all active events in convention associated with the domain name of this HTTP request.
   Filterable by a range of start/finish times.
 
-  **CAUTION:** this query can return a lot of data and take a long time.  Please be careful
+  **CAUTION:** this query can return a lot of data and take a long time. Please be careful
   when using it.
   """
   events(
@@ -661,23 +704,28 @@ type Convention implements CmsParent {
     per_page: Int
 
     """
-    A set of fields to use for ordering the result set.  The second field is used as a
+    A set of fields to use for ordering the result set. The second field is used as a
     tiebreaker for the first, the third field is used as a tiebreaker for the first two,
-    and so on.  If the sort argument is missing or empty, the order of items will be left
+    and so on. If the sort argument is missing or empty, the order of items will be left
     up to the database (and may be unpredictable).
     """
     sort: [SortInput!]
   ): EventsPagination!
 
   """
-  Finds a form by ID in this convention.  If there is no form with that ID in this convention,
+  Finds a form by ID in this convention. If there is no form with that ID in this convention,
   errors out.
   """
   form(
     """
     The ID of the form to find.
     """
-    id: Int!
+    id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+
+    """
+    The ID of the form to find.
+    """
+    transitionalId: ID
   ): Form!
   forms: [Form!]!
 
@@ -691,7 +739,7 @@ type Convention implements CmsParent {
     query: String!
   ): SearchResult!
   hidden: Boolean!
-  id: Int!
+  id: Int! @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   language: String!
 
   """
@@ -706,13 +754,13 @@ type Convention implements CmsParent {
   maximum_tickets: Int
 
   """
-  Returns the convention-specific profile for the current user within this convention.  If no
+  Returns the convention-specific profile for the current user within this convention. If no
   user is signed in, returns null.
   """
   my_profile: UserConProfile
 
   """
-  Returns all signups for the current user within this convention.  If no user is signed in,
+  Returns all signups for the current user within this convention. If no user is signed in,
   returns an empty array.
   """
   my_signups: [Signup!]!
@@ -721,7 +769,7 @@ type Convention implements CmsParent {
 
   """
   Returns all the Liquid assigns for rendering a particular notification event in this
-  convention.   This is a combination of globally-accessible Liquid assigns, values specific
+  convention. This is a combination of globally-accessible Liquid assigns, values specific
   to that notification event, and convention-specific user-defined CMS variables.
   """
   notifier_liquid_assigns(
@@ -768,9 +816,9 @@ type Convention implements CmsParent {
     per_page: Int
 
     """
-    A set of fields to use for ordering the result set.  The second field is used as a
+    A set of fields to use for ordering the result set. The second field is used as a
     tiebreaker for the first, the third field is used as a tiebreaker for the first two,
-    and so on.  If the sort argument is missing or empty, the order of items will be left
+    and so on. If the sort argument is missing or empty, the order of items will be left
     up to the database (and may be unpredictable).
     """
     sort: [SortInput!]
@@ -816,14 +864,19 @@ type Convention implements CmsParent {
   ): String!
 
   """
-  Finds a product by ID in this convention.  If there is no product with that ID in this
+  Finds a product by ID in this convention. If there is no product with that ID in this
   convention, errors out.
   """
   product(
     """
     The ID of the product to find.
     """
-    id: Int!
+    id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+
+    """
+    The ID of the product to find.
+    """
+    transitionalId: ID
   ): Product!
   products(only_available: Boolean, only_ticket_providing: Boolean): [Product!]!
   reports: ConventionReports!
@@ -832,27 +885,37 @@ type Convention implements CmsParent {
   root_page: Page! @deprecated(reason: "Use `rootPage` instead")
 
   """
-  Finds an active run by ID in this convention.  If there is no run with that ID in this
+  Finds an active run by ID in this convention. If there is no run with that ID in this
   convention, or the run's event is no longer active, errors out.
   """
   run(
     """
     The ID of the run to find
     """
-    id: Int!
+    id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+
+    """
+    The ID of the run to find
+    """
+    transitionalId: ID
   ): Run!
   show_event_list: ShowSchedule
   show_schedule: ShowSchedule
 
   """
-  Finds a signup by ID in this convention.  If there is no signup with that ID in this
+  Finds a signup by ID in this convention. If there is no signup with that ID in this
   convention, errors out.
   """
   signup(
     """
     The ID of the signup to find.
     """
-    id: Int!
+    id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+
+    """
+    The ID of the signup to find.
+    """
+    transitionalId: ID
   ): Signup!
   signup_changes_paginated(
     """
@@ -871,9 +934,9 @@ type Convention implements CmsParent {
     per_page: Int
 
     """
-    A set of fields to use for ordering the result set.  The second field is used as a
+    A set of fields to use for ordering the result set. The second field is used as a
     tiebreaker for the first, the third field is used as a tiebreaker for the first two,
-    and so on.  If the sort argument is missing or empty, the order of items will be left
+    and so on. If the sort argument is missing or empty, the order of items will be left
     up to the database (and may be unpredictable).
     """
     sort: [SortInput!]
@@ -898,9 +961,9 @@ type Convention implements CmsParent {
     per_page: Int
 
     """
-    A set of fields to use for ordering the result set.  The second field is used as a
+    A set of fields to use for ordering the result set. The second field is used as a
     tiebreaker for the first, the third field is used as a tiebreaker for the first two,
-    and so on.  If the sort argument is missing or empty, the order of items will be left
+    and so on. If the sort argument is missing or empty, the order of items will be left
     up to the database (and may be unpredictable).
     """
     sort: [SortInput!]
@@ -922,9 +985,9 @@ type Convention implements CmsParent {
     per_page: Int
 
     """
-    A set of fields to use for ordering the result set.  The second field is used as a
+    A set of fields to use for ordering the result set. The second field is used as a
     tiebreaker for the first, the third field is used as a tiebreaker for the first two,
-    and so on.  If the sort argument is missing or empty, the order of items will be left
+    and so on. If the sort argument is missing or empty, the order of items will be left
     up to the database (and may be unpredictable).
     """
     sort: [SortInput!]
@@ -932,14 +995,19 @@ type Convention implements CmsParent {
   site_mode: SiteMode!
 
   """
-  Finds a staff position by ID in this convention.  If there is no staff position with that ID
+  Finds a staff position by ID in this convention. If there is no staff position with that ID
   in this convention, errors out.
   """
   staff_position(
     """
     The ID of the staff position to find.
     """
-    id: Int!
+    id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+
+    """
+    The ID of the staff position to find.
+    """
+    transitionalId: ID
   ): StaffPosition!
   staff_positions: [StaffPosition!]!
   starts_at: Date
@@ -951,6 +1019,7 @@ type Convention implements CmsParent {
   tickets_available_for_purchase: Boolean!
   timezone_mode: TimezoneMode!
   timezone_name: String
+  transitionalId: ID!
 
   """
   Finds CMS content by partial name, case-insensitive, within the current domain's CMS content.
@@ -967,29 +1036,39 @@ type Convention implements CmsParent {
     name: String
   ): [CmsContent!]!
   updated_at: Date
-  user_activity_alert(id: Int!): UserActivityAlert!
+  user_activity_alert(id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID."), transitionalId: ID): UserActivityAlert!
   user_activity_alerts: [UserActivityAlert!]!
 
   """
-  Finds a UserConProfile by ID in the convention associated with this convention.  If there is
+  Finds a UserConProfile by ID in the convention associated with this convention. If there is
   no UserConProfile with that ID in this convention, errors out.
   """
   user_con_profile(
     """
     The ID of the UserConProfile to find.
     """
-    id: Int!
+    id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+
+    """
+    The ID of the UserConProfile to find.
+    """
+    transitionalId: ID
   ): UserConProfile!
 
   """
-  Finds a UserConProfile by user ID in the convention associated with this convention.  If
+  Finds a UserConProfile by user ID in the convention associated with this convention. If
   there is no UserConProfile with that user ID in this convention, errors out.
   """
   user_con_profile_by_user_id(
     """
     The user ID of the UserConProfile to find.
     """
-    userId: Int!
+    transitionalUserId: ID
+
+    """
+    The user ID of the UserConProfile to find.
+    """
+    userId: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   ): UserConProfile!
   user_con_profile_form: Form!
   user_con_profiles_paginated(
@@ -1009,9 +1088,9 @@ type Convention implements CmsParent {
     per_page: Int
 
     """
-    A set of fields to use for ordering the result set.  The second field is used as a
+    A set of fields to use for ordering the result set. The second field is used as a
     tiebreaker for the first, the third field is used as a tiebreaker for the first two,
-    and so on.  If the sort argument is missing or empty, the order of items will be left
+    and so on. If the sort argument is missing or empty, the order of items will be left
     up to the database (and may be unpredictable).
     """
     sort: [SortInput!]
@@ -1025,9 +1104,9 @@ input ConventionFiltersInput {
 
 input ConventionInput {
   accepting_proposals: Boolean
-  catch_all_staff_position_id: Int
+  catch_all_staff_position_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   clickwrap_agreement: String
-  default_layout_id: Int
+  default_layout_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   domain: String
   email_from: String
   email_mode: EmailMode
@@ -1039,7 +1118,7 @@ input ConventionInput {
   maximum_event_signups: ScheduledValueInput
   maximum_tickets: Int
   name: String
-  root_page_id: Int
+  root_page_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   show_event_list: ShowSchedule
   show_schedule: ShowSchedule
   signup_mode: SignupMode
@@ -1050,6 +1129,9 @@ input ConventionInput {
   ticket_name: String
   timezone_mode: TimezoneMode
   timezone_name: String
+  transitionalCatchAllStaffPositionId: ID
+  transitionalDefaultLayoutId: ID
+  transitionalRootPageId: ID
 }
 
 type ConventionReports {
@@ -1090,9 +1172,12 @@ input ConvertTicketToEventProvidedInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  event_id: Int!
-  ticket_type_id: Int!
-  user_con_profile_id: Int!
+  event_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  ticket_type_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalEventId: ID
+  transitionalTicketTypeId: ID
+  transitionalUserConProfileId: ID
+  user_con_profile_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
 }
 
 """
@@ -1121,17 +1206,19 @@ type Coupon {
   convention: Convention!
   expires_at: Date
   fixed_amount: Money
-  id: Int!
+  id: Int! @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   percent_discount: BigDecimal
   provides_product: Product
+  transitionalId: ID!
   usage_limit: Int
 }
 
 type CouponApplication {
   coupon: Coupon!
   discount: Money!
-  id: Int!
+  id: Int! @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   order: Order!
+  transitionalId: ID!
 }
 
 input CouponFiltersInput {
@@ -1143,7 +1230,8 @@ input CouponInput {
   expires_at: Date
   fixed_amount: MoneyInput
   percent_discount: BigDecimal
-  provides_product_id: Int
+  provides_product_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalProvidesProductId: ID
   usage_limit: Int
 }
 
@@ -1311,10 +1399,12 @@ input CreateConventionInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  clone_convention_id: Int
+  clone_convention_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   cms_content_set_name: String
   convention: ConventionInput!
-  organization_id: Int
+  organization_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalCloneConventionId: ID
+  transitionalOrganizationId: ID
 }
 
 """
@@ -1358,7 +1448,8 @@ input CreateCouponApplicationInput {
   """
   clientMutationId: String
   coupon_code: String!
-  order_id: Int!
+  order_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalOrderId: ID
 }
 
 """
@@ -1490,8 +1581,10 @@ input CreateEventProposalInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  clone_event_proposal_id: Int
-  event_category_id: Int!
+  clone_event_proposal_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  event_category_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalCloneEventProposalId: ID
+  transitionalEventCategoryId: ID
 }
 
 """
@@ -1549,7 +1642,8 @@ input CreateFormItemInput {
   """
   clientMutationId: String
   form_item: FormItemInput!
-  form_section_id: Int
+  form_section_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalFormSectionId: ID
 }
 
 """
@@ -1582,8 +1676,9 @@ input CreateFormSectionInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  form_id: Int
+  form_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   form_section: FormSectionInput!
+  transitionalFormId: ID
 }
 
 """
@@ -1628,9 +1723,11 @@ input CreateMaximumEventProvidedTicketsOverrideInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  event_id: Int!
+  event_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   override_value: Int!
-  ticket_type_id: Int!
+  ticket_type_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalEventId: ID
+  transitionalTicketTypeId: ID
 }
 
 """
@@ -1652,8 +1749,9 @@ input CreateMultipleRunsInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  event_id: Int!
+  event_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   runs: [RunInput!]!
+  transitionalEventId: ID
 }
 
 """
@@ -1677,7 +1775,8 @@ input CreateMySignupInput {
   clientMutationId: String
   no_requested_bucket: Boolean
   requested_bucket_key: String
-  run_id: Int!
+  run_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalRunId: ID
 }
 
 """
@@ -1700,7 +1799,8 @@ input CreateOrderEntryInput {
   """
   clientMutationId: String
   order_entry: OrderEntryInput!
-  order_id: Int!
+  order_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalOrderId: ID
 }
 
 """
@@ -1725,7 +1825,8 @@ input CreateOrderInput {
   order: OrderInput!
   order_entries: [OrderEntryInput!]
   status: OrderStatus!
-  user_con_profile_id: Int!
+  transitionalUserConProfileId: ID
+  user_con_profile_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
 }
 
 """
@@ -1747,10 +1848,11 @@ input CreateOrganizationRoleInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  organization_id: Int!
+  organization_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   organization_role: OrganizationRoleInput!
   permissions: [PermissionInput!]!
-  user_ids: [Int!]!
+  transitionalOrganizationId: ID
+  user_ids: [Int!]
 }
 
 """
@@ -1838,8 +1940,9 @@ input CreateRunInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  event_id: Int!
+  event_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   run: RunInput!
+  transitionalEventId: ID
 }
 
 """
@@ -1861,9 +1964,11 @@ input CreateSignupRequestInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  replace_signup_id: Int
+  replace_signup_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   requested_bucket_key: String
-  target_run_id: Int!
+  target_run_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalReplaceSignupId: ID
+  transitionalTargetRunId: ID
 }
 
 """
@@ -1907,10 +2012,13 @@ input CreateTeamMemberInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  event_id: Int!
-  provide_ticket_type_id: Int
+  event_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  provide_ticket_type_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   team_member: TeamMemberInput!
-  user_con_profile_id: Int!
+  transitionalEventId: ID
+  transitionalProvideTicketTypeId: ID
+  transitional_user_con_profile_id: ID
+  user_con_profile_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
 }
 
 """
@@ -1936,7 +2044,8 @@ input CreateTicketInput {
   """
   clientMutationId: String
   ticket: TicketInput!
-  user_con_profile_id: Int!
+  transitionalUserConProfileId: ID
+  user_con_profile_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
 }
 
 """
@@ -2003,8 +2112,9 @@ input CreateUserConProfileInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
+  transitionalUserId: ID
   user_con_profile: UserConProfileInput!
-  user_id: Int!
+  user_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
 }
 
 """
@@ -2028,9 +2138,11 @@ input CreateUserSignupInput {
   clientMutationId: String
   no_requested_bucket: Boolean
   requested_bucket_key: String
-  run_id: Int!
+  run_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   suppress_notifications: Boolean
-  user_con_profile_id: Int!
+  transitionalRunId: ID
+  transitionalUserConProfileId: ID
+  user_con_profile_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
 }
 
 """
@@ -2057,7 +2169,8 @@ input DeleteCmsContentGroupInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -2079,7 +2192,8 @@ input DeleteCmsFileInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -2101,7 +2215,8 @@ input DeleteCmsGraphqlQueryInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -2123,7 +2238,8 @@ input DeleteCmsLayoutInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -2145,7 +2261,8 @@ input DeleteCmsNavigationItemInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -2167,7 +2284,8 @@ input DeleteCmsPartialInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -2211,7 +2329,8 @@ input DeleteCouponApplicationInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -2233,7 +2352,8 @@ input DeleteCouponInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -2255,7 +2375,8 @@ input DeleteDepartmentInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -2277,7 +2398,8 @@ input DeleteEmailRouteInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -2299,7 +2421,8 @@ input DeleteEventCategoryInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -2321,7 +2444,8 @@ input DeleteEventProposalInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -2343,7 +2467,8 @@ input DeleteFormInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -2354,7 +2479,8 @@ input DeleteFormItemInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -2386,7 +2512,8 @@ input DeleteFormSectionInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -2407,7 +2534,8 @@ input DeleteMaximumEventProvidedTicketsOverrideInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -2429,7 +2557,8 @@ input DeleteOrderEntryInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -2451,7 +2580,8 @@ input DeleteOrganizationRoleInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -2472,7 +2602,8 @@ input DeletePageInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -2494,7 +2625,8 @@ input DeleteProductInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -2516,7 +2648,8 @@ input DeleteRoomInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -2538,7 +2671,8 @@ input DeleteRunInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -2560,7 +2694,8 @@ input DeleteStaffPositionInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -2582,7 +2717,8 @@ input DeleteTeamMemberInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -2604,8 +2740,9 @@ input DeleteTicketInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   refund: Boolean
+  transitionalId: ID
 }
 
 """
@@ -2627,7 +2764,8 @@ input DeleteTicketTypeInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -2649,7 +2787,8 @@ input DeleteUserActivityAlertInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -2671,7 +2810,8 @@ input DeleteUserConProfileInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -2687,9 +2827,10 @@ type DeleteUserConProfilePayload {
 
 type Department {
   event_categories: [EventCategory!]!
-  id: Int!
+  id: Int! @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   name: String!
   proposal_description: String
+  transitionalId: ID!
 }
 
 input DepartmentInput {
@@ -2705,7 +2846,8 @@ input DropEventInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -2733,8 +2875,9 @@ enum EmailMode {
 
 type EmailRoute {
   forward_addresses: [String!]
-  id: Int!
+  id: Int! @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   receiver_address: String!
+  transitionalId: ID!
 }
 
 input EmailRouteFiltersInput {
@@ -2790,7 +2933,7 @@ type Event {
   form_response_attrs_json: Json
   form_response_attrs_json_with_rendered_markdown: Json
   form_response_changes: [FormResponseChange!]!
-  id: Int!
+  id: Int! @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   length_seconds: Int!
   maximum_event_provided_tickets_overrides: [MaximumEventProvidedTicketsOverride!]!
   my_rating: Int
@@ -2799,7 +2942,7 @@ type Event {
   private_signup_list: Boolean
   provided_tickets: [Ticket!]!
   registration_policy: RegistrationPolicy
-  run(id: Int!): Run!
+  run(id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID."), transitionalId: ID): Run!
   runs(excludeConflicts: Boolean, finish: Date, start: Date): [Run!]!
   short_blurb: String
   short_blurb_html: String
@@ -2809,6 +2952,7 @@ type Event {
   team_members: [TeamMember!]!
   title: String
   total_slots: Int
+  transitionalId: ID!
   url: String
 }
 
@@ -2836,35 +2980,39 @@ type EventCategory {
     per_page: Int
 
     """
-    A set of fields to use for ordering the result set.  The second field is used as a
+    A set of fields to use for ordering the result set. The second field is used as a
     tiebreaker for the first, the third field is used as a tiebreaker for the first two,
-    and so on.  If the sort argument is missing or empty, the order of items will be left
+    and so on. If the sort argument is missing or empty, the order of items will be left
     up to the database (and may be unpredictable).
     """
     sort: [SortInput!]
   ): EventsPagination!
   full_color: String
-  id: Int!
+  id: Int! @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   name: String!
   proposable: Boolean!
   proposal_description: String
   scheduling_ui: SchedulingUi!
   signed_up_color: String
   team_member_name: String!
+  transitionalId: ID!
 }
 
 input EventCategoryInput {
   can_provide_tickets: Boolean
   default_color: String
-  department_id: Int
-  event_form_id: Int
-  event_proposal_form_id: Int
+  department_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  event_form_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  event_proposal_form_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   full_color: String
   name: String
   proposal_description: String
   scheduling_ui: SchedulingUi
   signed_up_color: String
   team_member_name: String
+  transitionalDepartmentId: ID
+  transitionalEventFormId: ID
+  transitionalEventProposalFormId: ID
 }
 
 input EventFiltersInput {
@@ -2875,8 +3023,9 @@ input EventFiltersInput {
 }
 
 input EventInput {
-  event_category_id: Int
+  event_category_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   form_response_attrs_json: String
+  transitionalEventCategoryId: ID
 }
 
 type EventProposal {
@@ -2891,13 +3040,14 @@ type EventProposal {
   form_response_attrs_json: Json
   form_response_attrs_json_with_rendered_markdown: Json
   form_response_changes: [FormResponseChange!]!
-  id: Int!
+  id: Int! @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   length_seconds: Int
   owner: UserConProfile!
   registration_policy: RegistrationPolicy
   status: String!
   submitted_at: Date!
   title: String
+  transitionalId: ID!
   updated_at: Date!
 }
 
@@ -2978,7 +3128,8 @@ input ForceConfirmSignupInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -3000,13 +3151,19 @@ type Form {
     """
     The ID of the form section to find.
     """
-    id: Int!
+    id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+
+    """
+    The ID of the form section to find.
+    """
+    transitionalId: ID
   ): FormSection!
   form_sections: [FormSection!]!
   form_type: FormType!
-  id: Int!
+  id: Int! @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   proposal_event_categories: [EventCategory!]!
   title: String!
+  transitionalId: ID!
   user_con_profile_conventions: [Convention!]!
 }
 
@@ -3018,13 +3175,14 @@ type FormItem {
   admin_description: String
   default_value: Json
   form_section: FormSection!
-  id: Int!
+  id: Int! @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   identifier: String
   item_type: String!
   position: Int!
   properties: Json
   public_description: String
   rendered_properties: Json
+  transitionalId: ID!
   visibility: FormItemRole!
   writeability: FormItemRole!
 }
@@ -3062,12 +3220,12 @@ type FormResponseChange {
 type FormSection {
   form: Form!
   form_items: [FormItem!]!
-  id: Int!
+  id: Int! @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   position: Int!
 
   """
-  Given a FormItemInput, returns a preview version of that form item within this section.  This
-  does not actually save the form item.  This is mostly useful because of the
+  Given a FormItemInput, returns a preview version of that form item within this section. This
+  does not actually save the form item. This is mostly useful because of the
   `rendered_properties` field inside FormItem, which lets clients retrieve
   a rendered HTML version of the Liquid-enabled properties of the form item.
   """
@@ -3078,6 +3236,7 @@ type FormSection {
     formItem: FormItemInput!
   ): FormItem!
   title: String
+  transitionalId: ID!
 }
 
 input FormSectionInput {
@@ -3140,7 +3299,8 @@ input MarkOrderPaidInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -3156,9 +3316,10 @@ type MarkOrderPaidPayload {
 
 type MaximumEventProvidedTicketsOverride {
   event: Event!
-  id: Int!
+  id: Int! @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   override_value: Int!
   ticket_type: TicketType!
+  transitionalId: ID!
 }
 
 """
@@ -3169,9 +3330,15 @@ input MergeUsersInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  userIds: [Int!]!
+
+  """
+  The user IDs to merge.
+  """
+  transitionalUserIds: [ID!]
+  transitionalWinningUserId: ID
+  userIds: [Int!] @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   winningUserConProfiles: [WinningUserConProfileInput!]!
-  winningUserId: Int!
+  winningUserId: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
 }
 
 """
@@ -3204,8 +3371,10 @@ input MoveFormItemInput {
   """
   clientMutationId: String
   destination_index: Int
-  form_section_id: Int!
-  id: Int!
+  form_section_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalFormSectionId: ID
+  transitionalId: ID
 }
 
 """
@@ -3229,7 +3398,8 @@ input MoveFormSectionInput {
   """
   clientMutationId: String
   destination_index: Int!
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -4034,15 +4204,18 @@ type Mutation {
 }
 
 type NotificationDestination {
-  id: Int!
+  id: Int! @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   source: NotificationSource!
   staff_position: StaffPosition
+  transitionalId: ID!
   user_con_profile: UserConProfile
 }
 
 input NotificationDestinationInput {
-  staff_position_id: Int
-  user_con_profile_id: Int
+  staff_position_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalStaffPositionId: ID
+  transitionalUserConProfileId: ID
+  user_con_profile_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
 }
 
 union NotificationSource = UserActivityAlert
@@ -4052,8 +4225,9 @@ type NotificationTemplate {
   body_sms: String
   body_text: String
   event_key: String!
-  id: Int!
+  id: Int! @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   subject: String
+  transitionalId: ID!
 }
 
 input NotificationTemplateInput {
@@ -4066,14 +4240,14 @@ input NotificationTemplateInput {
 type Order {
   charge_id: String
   coupon_applications: [CouponApplication!]!
-  id: Int!
+  id: Int! @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   order_entries: [OrderEntry!]!
   paid_at: Date
   payment_amount: Money
 
   """
   Generates a Stripe PaymentIntent for this order and returns the client secret from that
-  PaymentIntent.  This can be used to start a payment on the client side, for example using
+  PaymentIntent. This can be used to start a payment on the client side, for example using
   Apple Pay or Google Pay.
   """
   payment_intent_client_secret: String!
@@ -4082,6 +4256,7 @@ type Order {
   submitted_at: Date
   total_price: Money!
   total_price_before_discounts: Money!
+  transitionalId: ID!
   user_con_profile: UserConProfile!
 }
 
@@ -4102,21 +4277,25 @@ type OrderEdge {
 
 type OrderEntry {
   describe_products: String!
-  id: Int!
+  id: Int! @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   order: Order!
   price: Money!
   price_per_item: Money!
   product: Product!
   product_variant: ProductVariant
   quantity: Int!
+  transitionalId: ID!
 }
 
 input OrderEntryInput {
   price_per_item: MoneyInput
-  product_id: Int
-  product_variant_id: Int
+  product_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  product_variant_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   quantity: Int
-  ticket_id: Int
+  ticket_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalProductId: ID
+  transitionalProductVariantId: ID
+  transitionalTicketId: ID
 }
 
 input OrderFiltersInput {
@@ -4204,16 +4383,18 @@ type OrdersPagination implements PaginationInterface {
 type Organization {
   conventions: [Convention!]!
   current_ability_can_manage_access: Boolean!
-  id: Int!
+  id: Int! @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   name: String!
   organization_roles: [OrganizationRole!]!
+  transitionalId: ID!
 }
 
 type OrganizationRole {
-  id: Int!
+  id: Int! @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   name: String!
   organization: Organization!
   permissions: [Permission!]!
+  transitionalId: ID!
   users: [User!]!
 }
 
@@ -4229,11 +4410,12 @@ type Page {
   current_ability_can_delete: Boolean!
   current_ability_can_update: Boolean!
   hidden_from_search: Boolean!
-  id: Int!
+  id: Int! @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   name: String
   referenced_partials: [CmsPartial!]!
   skip_clickwrap_agreement: Boolean
   slug: String
+  transitionalId: ID!
 }
 
 """
@@ -4263,26 +4445,27 @@ type PageInfo {
 
 input PageInput {
   admin_notes: String
-  cms_layout_id: Int
+  cms_layout_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   content: String
   hidden_from_search: Boolean
   name: String
   skip_clickwrap_agreement: Boolean
   slug: String
+  transitionalCmsLayoutId: ID
 }
 
 """
-PaginationInterface provides a way to use offset-based pagination on a list of objects.  This
+PaginationInterface provides a way to use offset-based pagination on a list of objects. This
 is useful for UIs such as Intercode's table views, which provide a way to jump between numbered
 pages.
 
 Page numbers in PaginationInterface are 1-based (so, the first page is page 1, then page 2,
-etc.)  The number of items per page can be controlled via the per_page argument on paginated
-fields.  It defaults to 20, and can go up to 200.
+etc.) The number of items per page can be controlled via the per_page argument on paginated
+fields. It defaults to 20, and can go up to 200.
 
 Offset-based pagination is different from
 [Relay's cursor-based pagination](https://relay.dev/graphql/connections.htm) that is more
-commonly used in GraphQL APIs.  We chose to go with an offset-based approach due to our UI
+commonly used in GraphQL APIs. We chose to go with an offset-based approach due to our UI
 needs, but if a cursor-based approach is desirable in the future, we may also implement Relay
 connections alongside our existing pagination fields.
 """
@@ -4316,18 +4499,21 @@ enum PaymentMode {
 }
 
 type Permission {
-  id: Int!
+  id: Int! @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   model: PermissionedModel!
   permission: String!
   role: PermissionedRole!
+  transitionalId: ID!
 }
 
 input PermissionInput {
-  model_id: Int
+  model_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   model_type: PermissionedModelTypeIndicator
   permission: String!
-  role_id: Int
+  role_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   role_type: PermissionedRoleTypeIndicator
+  transitionalModelId: ID
+  transitionalRoleId: ID
 }
 
 union PermissionedModel = CmsContentGroup | Convention | EventCategory
@@ -4375,7 +4561,7 @@ type Product {
   available: Boolean!
   description: String
   description_html: String
-  id: Int!
+  id: Int! @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   image_url: String
   name: String!
   order_quantities_by_status: [OrderQuantityByStatus!]!
@@ -4384,6 +4570,7 @@ type Product {
   pricing_structure: PricingStructure!
   product_variants: [ProductVariant!]!
   provides_ticket_type: TicketType
+  transitionalId: ID!
 }
 
 input ProductInput {
@@ -4395,13 +4582,14 @@ input ProductInput {
   payment_options: [String!]
   pricing_structure: PricingStructureInput
   product_variants: [ProductVariantInput!]
-  provides_ticket_type_id: Int
+  provides_ticket_type_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalProvidesTicketTypeId: ID
 }
 
 type ProductVariant {
   description: String
   description_html: String
-  id: Int!
+  id: Int! @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   image_url: String
   name: String!
   order_quantities_by_status: [OrderQuantityByStatus!]!
@@ -4409,14 +4597,16 @@ type ProductVariant {
   override_pricing_structure: PricingStructure
   position: Int
   product: Product!
+  transitionalId: ID!
 }
 
 input ProductVariantInput {
   description: String
-  id: Int
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   image: Upload
   name: String
   override_pricing_structure: PricingStructureInput
+  transitionalId: ID
 }
 
 """
@@ -4427,9 +4617,12 @@ input ProvideEventTicketInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  event_id: Int!
-  ticket_type_id: Int!
-  user_con_profile_id: Int!
+  event_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  ticket_type_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalEventId: ID
+  transitionalTicketTypeId: ID
+  transitionalUserConProfileId: ID
+  user_con_profile_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
 }
 
 """
@@ -4446,7 +4639,7 @@ type ProvideEventTicketPayload {
 type Query {
   """
   If there is a CMS partial on the root site called `account_form_text`, renders it to HTML
-  and returns the result.  Otherwise, returns null.
+  and returns the result. Otherwise, returns null.
 
   This is used by the "update your account" pages as a way to clarify that your account is
   shared between multiple conventions.
@@ -4454,20 +4647,20 @@ type Query {
   accountFormContentHtml: String
 
   """
-  Returns the convention associated with the domain name of this HTTP request.  If one is not
-  present, the request will error out.  (For a version that will return null instead of
+  Returns the convention associated with the domain name of this HTTP request. If one is not
+  present, the request will error out. (For a version that will return null instead of
   erroring out, use `convention`.)
   """
   assertConvention: Convention! @deprecated(reason: "This field is being renamed to `conventionByRequestHost`.")
 
   """
   If the current user is an assumed identity (using the "become user" feature), this returns
-  the actual profile of the signed-in account.  If not, returns null.
+  the actual profile of the signed-in account. If not, returns null.
   """
   assumedIdentityFromProfile: UserConProfile
 
   """
-  Finds a CMS content group by ID within the domain name of this HTTP request.  If there is no
+  Finds a CMS content group by ID within the domain name of this HTTP request. If there is no
   CMS content group with that ID, or the CMS content group is associated with a different
   domain name, errors out.
   """
@@ -4475,7 +4668,12 @@ type Query {
     """
     The ID of the CMS content group to find.
     """
-    id: Int!
+    id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+
+    """
+    The ID of the CMS content group to find.
+    """
+    transitionalId: ID
   ): CmsContentGroup! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `cmsContentGroup` field on the CmsParent interface instead.")
 
   """
@@ -4504,16 +4702,16 @@ type Query {
   cmsNavigationItems: [CmsNavigationItem!]! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `cmsNavigationItems` field on the CmsParent interface instead.")
 
   """
-  Finds a CMS page within the domain name of this HTTP request.  Exactly one of the three
-  optional arguments (`id`, `slug`, and `rootPage`) must be specified.  These each represent a
-  different way of finding a page.  If the desired page can't be found within the current
+  Finds a CMS page within the domain name of this HTTP request. Exactly one of the three
+  optional arguments (`id`, `slug`, and `rootPage`) must be specified. These each represent a
+  different way of finding a page. If the desired page can't be found within the current
   domain name, errors out.
   """
   cmsPage(
     """
     The ID of the page to find.
     """
-    id: Int
+    id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
 
     """
     If true, returns the root page for this domain.
@@ -4524,6 +4722,11 @@ type Query {
     The unique slug of the page to find.
     """
     slug: String
+
+    """
+    The ID of the page to find.
+    """
+    transitionalId: ID
   ): Page! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `cmsPage` field on the CmsParent interface instead.")
 
   """
@@ -4532,20 +4735,20 @@ type Query {
   cmsPages: [Page!]! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `searchCmsContent` field on the CmsParent interface instead.")
 
   """
-  Returns the CMS parent object associated with the domain name of this HTTP request.  In a
-  convention domain, this is the `Convention` itself.  Otherwise, it's the `RootSite`.
+  Returns the CMS parent object associated with the domain name of this HTTP request. In a
+  convention domain, this is the `Convention` itself. Otherwise, it's the `RootSite`.
   """
   cmsParent: CmsParent! @deprecated(reason: "This query is being renamed to `cmsParentByRequestHost`.")
 
   """
-  Returns the CMS parent object associated with a given domain name.  In a
-  convention domain, this is the `Convention` itself.  Otherwise, it's the `RootSite`.
+  Returns the CMS parent object associated with a given domain name. In a
+  convention domain, this is the `Convention` itself. Otherwise, it's the `RootSite`.
   """
   cmsParentByDomain(domain: String!): CmsParent!
 
   """
-  Returns the CMS parent object associated with the domain name of this HTTP request.  In a
-  convention domain, this is the `Convention` itself.  Otherwise, it's the `RootSite`.
+  Returns the CMS parent object associated with the domain name of this HTTP request. In a
+  convention domain, this is the `Convention` itself. Otherwise, it's the `RootSite`.
   """
   cmsParentByRequestHost: CmsParent!
 
@@ -4561,7 +4764,7 @@ type Query {
 
   """
   Returns the convention associated with the domain name of this HTTP request, or null if there
-  is none.  (For a version that will either return a convention or error out, use
+  is none. (For a version that will either return a convention or error out, use
   `assertConvention`.)
   """
   convention: Convention @deprecated(reason: "This field is being removed in favor of `conventionByRequestHostIfPresent`.")
@@ -4577,19 +4780,19 @@ type Query {
   ): Convention!
 
   """
-  Finds a convention by ID.  If a matching one can't be found, the request will error out.
+  Finds a convention by ID. If a matching one can't be found, the request will error out.
   """
-  conventionById(id: Int!): Convention!
+  conventionById(id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID."), transitionalId: ID): Convention!
 
   """
-  Returns the convention associated with the domain name of this HTTP request.  If one is not
-  present, the request will error out.  (For a version that will return null instead of
+  Returns the convention associated with the domain name of this HTTP request. If one is not
+  present, the request will error out. (For a version that will return null instead of
   erroring out, use `conventionByRequestHostIfPresent`.)
   """
   conventionByRequestHost: Convention!
 
   """
-  Returns the convention associated with the domain name of this HTTP request.  If one is not
+  Returns the convention associated with the domain name of this HTTP request. If one is not
   present, returns null.
   """
   conventionByRequestHostIfPresent: Convention
@@ -4600,7 +4803,7 @@ type Query {
   conventions: [Convention!]! @deprecated(reason: "This field is being removed due to its potential performance implications.  Please use conventions_paginated instead.")
 
   """
-  Returns a paginated list of conventions.  See PaginationInterface for details on how to use
+  Returns a paginated list of conventions. See PaginationInterface for details on how to use
   paginated lists, and ConventionFiltersInput for filters you can use here.
   """
   conventions_paginated(
@@ -4620,9 +4823,9 @@ type Query {
     per_page: Int
 
     """
-    A set of fields to use for ordering the result set.  The second field is used as a
+    A set of fields to use for ordering the result set. The second field is used as a
     tiebreaker for the first, the third field is used as a tiebreaker for the first two,
-    and so on.  If the sort argument is missing or empty, the order of items will be left
+    and so on. If the sort argument is missing or empty, the order of items will be left
     up to the database (and may be unpredictable).
     """
     sort: [SortInput!]
@@ -4636,7 +4839,7 @@ type Query {
 
   """
   If there is a signed-in user and they have a pending store order open in the convention
-  associated with the domain name of this HTTP request, returns that order.  Otherwise, returns
+  associated with the domain name of this HTTP request, returns that order. Otherwise, returns
   null.
   """
   currentPendingOrder: Order @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `current_pending_order` field on the UserConProfile type instead.")
@@ -4644,7 +4847,7 @@ type Query {
   """
   If there is a signed-in user and they have a pending store order open in the convention
   associated with the domain name of this HTTP request, this generates a Stripe PaymentIntent
-  for that order and returns the client secret from that PaymentIntent.  This can be used to
+  for that order and returns the client secret from that PaymentIntent. This can be used to
   start a payment on the client side, for example using Apple Pay or Google Pay.
 
   If there is no signed-in user, this query will error out.
@@ -4652,12 +4855,12 @@ type Query {
   currentPendingOrderPaymentIntentClientSecret: String! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `payment_intent_client_secret` field on the Order type instead.")
 
   """
-  Returns the currently signed-in user.  If no user is signed in, returns null.
+  Returns the currently signed-in user. If no user is signed in, returns null.
   """
   currentUser: User
 
   """
-  Returns the CMS layout to be used for a particular URL path within the current domain.  (This
+  Returns the CMS layout to be used for a particular URL path within the current domain. (This
   will be the page-specific layout if the URL corresponds to a page with a layout override, or
   the default layout for the domain otherwise.)
   """
@@ -4689,9 +4892,9 @@ type Query {
     per_page: Int
 
     """
-    A set of fields to use for ordering the result set.  The second field is used as a
+    A set of fields to use for ordering the result set. The second field is used as a
     tiebreaker for the first, the third field is used as a tiebreaker for the first two,
-    and so on.  If the sort argument is missing or empty, the order of items will be left
+    and so on. If the sort argument is missing or empty, the order of items will be left
     up to the database (and may be unpredictable).
     """
     sort: [SortInput!]
@@ -4699,33 +4902,43 @@ type Query {
 
   """
   Finds an active event by ID in the convention associated with the domain name of this HTTP
-  request.  If there is no event with that ID, or the event is associated with a different
+  request. If there is no event with that ID, or the event is associated with a different
   convention, or the event is no longer active, errors out.
   """
   event(
     """
     The ID of the event to find
     """
-    id: Int!
+    id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+
+    """
+    The ID of the event to find
+    """
+    transitionalId: ID
   ): Event! @deprecated(reason: "Domain-specific queries are being deprecated.  Please use the `event` field on the Convention type instead.")
 
   """
   Finds an event proposal by ID in the convention associated with the domain name of this HTTP
-  request.  If there is no event proposal with that ID, or the event proposal is associated
+  request. If there is no event proposal with that ID, or the event proposal is associated
   with a different convention, errors out.
   """
   eventProposal(
     """
     The ID of the event proposal to find.
     """
-    id: Int!
+    id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+
+    """
+    The ID of the event proposal to find.
+    """
+    transitionalId: ID
   ): EventProposal! @deprecated(reason: "Domain-specific queries are being deprecated.  Please use the `event_proposal` field on the Convention type instead.")
 
   """
   Returns all active events in convention associated with the domain name of this HTTP request.
   Filterable by a range of start/finish times.
 
-  **CAUTION:** this query can return a lot of data and take a long time.  Please be careful
+  **CAUTION:** this query can return a lot of data and take a long time. Please be careful
   when using it.
   """
   events(
@@ -4751,14 +4964,19 @@ type Query {
 
   """
   Finds a form by ID in the convention associated with the domain name of this HTTP
-  request.  If there is no form with that ID, or the form is associated
+  request. If there is no form with that ID, or the form is associated
   with a different convention, errors out.
   """
   form(
     """
     The ID of the form to find.
     """
-    id: Int!
+    id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+
+    """
+    The ID of the form to find.
+    """
+    transitionalId: ID
   ): Form! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `form` field on the Convention object instead.")
 
   """
@@ -4769,26 +4987,26 @@ type Query {
   liquidAssigns: [LiquidAssign!]! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `liquidAssigns` field on the CmsParent interface instead.")
 
   """
-  Returns the authorized OAuth applications for the current user.  If no user is signed in,
+  Returns the authorized OAuth applications for the current user. If no user is signed in,
   returns null.
   """
   myAuthorizedApplications: [AuthorizedApplication!]!
 
   """
   Returns the convention-specific profile for the current user within the convention associated
-  with the domain name of this HTTP request.  If no user is signed in, returns null.
+  with the domain name of this HTTP request. If no user is signed in, returns null.
   """
   myProfile: UserConProfile @deprecated(reason: "Domain-specific queries are being deprecated.  Please use the `my_profile` field on the Convention type instead.")
 
   """
   Returns all signups for the current user within the convention associated with the domain name
-  of this HTTP request.  If no user is signed in, returns an empty array.
+  of this HTTP request. If no user is signed in, returns an empty array.
   """
   my_signups: [Signup!]! @deprecated(reason: "Domain-specific queries are being deprecated.  Please use the `my_signups` field on the Convention type instead.")
 
   """
   Returns all the Liquid assigns for rendering a particular notification event in the current
-  domain name.   This is a combination of globally-accessible Liquid assigns, values specific
+  domain name. This is a combination of globally-accessible Liquid assigns, values specific
   to that notification event, and domain-specific user-defined CMS variables.
   """
   notifierLiquidAssigns(
@@ -4805,7 +5023,7 @@ type Query {
 
   This essentially emulates the JSON behavior of
   [Doorkeeper](https://github.com/doorkeeper-gem/doorkeeper)'s API-only mode if you go to
-  `/oauth/authorize` with query parameters.  The only reason this query exists, rather than
+  `/oauth/authorize` with query parameters. The only reason this query exists, rather than
   simply having clients actually call `/oauth/authorize`, is that we're running Doorkeeper
   in regular mode so that we can get the server-rendered HTML admin views.
 
@@ -4828,7 +5046,7 @@ type Query {
 
   """
   Given a form section ID and a FormItemInput, returns a preview version of that form item
-  within that section.  This does not actually save the form item.  This is mostly useful
+  within that section. This does not actually save the form item. This is mostly useful
   because of the `rendered_properties` field inside FormItem, which lets clients retrieve
   a rendered HTML version of the Liquid-enabled properties of the form item.
   """
@@ -4841,7 +5059,12 @@ type Query {
     """
     The ID of the form section to preview the item in.
     """
-    formSectionId: Int!
+    formSectionId: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+
+    """
+    The ID of the form section to preview the item in.
+    """
+    transitionalFormSectionId: ID
   ): FormItem! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `preview_form_item` field on the FormSection type instead.")
 
   """
@@ -4884,14 +5107,19 @@ type Query {
 
   """
   Finds a product by ID in the convention associated with the domain name of this HTTP
-  request.  If there is no product with that ID, or the product is associated
+  request. If there is no product with that ID, or the product is associated
   with a different convention, errors out.
   """
   product(
     """
     The ID of the product to find.
     """
-    id: Int!
+    id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+
+    """
+    The ID of the product to find.
+    """
+    transitionalId: ID
   ): Product! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `product` field on the Convention type instead.")
 
   """
@@ -4901,14 +5129,19 @@ type Query {
 
   """
   Finds an active run by ID in the convention associated with the domain name of this HTTP
-  request.  If there is no run with that ID, or the run's event is associated with a different
+  request. If there is no run with that ID, or the run's event is associated with a different
   convention, or the run's event is no longer active, errors out.
   """
   run(
     """
     The ID of the run to find
     """
-    id: Int!
+    id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+
+    """
+    The ID of the run to find
+    """
+    transitionalId: ID
   ): Run! @deprecated(reason: "Domain-specific queries are being\ndeprecated.  Please use the `run` field on the Convention type instead.")
 
   """
@@ -4934,14 +5167,19 @@ type Query {
 
   """
   Finds a signup by ID in the convention associated with the domain name of this HTTP
-  request.  If there is no signup with that ID, or the signup is associated
+  request. If there is no signup with that ID, or the signup is associated
   with a different convention, errors out.
   """
   signup(
     """
     The ID of the signup to find.
     """
-    id: Int!
+    id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+
+    """
+    The ID of the signup to find.
+    """
+    transitionalId: ID
   ): Signup! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `signup` field on the Convention type instead.")
 
   """
@@ -4957,50 +5195,70 @@ type Query {
 
   """
   Finds a staff position by ID in the convention associated with the domain name of this HTTP
-  request.  If there is no staff position with that ID, or the staff position is associated
+  request. If there is no staff position with that ID, or the staff position is associated
   with a different convention, errors out.
   """
   staffPosition(
     """
     The ID of the staff position to find.
     """
-    id: Int!
+    id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+
+    """
+    The ID of the staff position to find.
+    """
+    transitionalId: ID
   ): StaffPosition! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `staff_position` field on the Convention object instead.")
 
   """
-  Finds a user by ID.  If there is no user with that ID, errors out.
+  Finds a user by ID. If there is no user with that ID, errors out.
   """
   user(
     """
     The ID of the user to find.
     """
-    id: Int!
+    id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+
+    """
+    The ID of the user to find.
+    """
+    transitionalId: ID
   ): User!
 
   """
   Finds a UserConProfile by ID in the convention associated with the domain name of this HTTP
-  request.  If there is no UserConProfile with that ID, or the UserConProfile is associated
+  request. If there is no UserConProfile with that ID, or the UserConProfile is associated
   with a different convention, errors out.
   """
   userConProfile(
     """
     The ID of the UserConProfile to find.
     """
-    id: Int!
+    id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+
+    """
+    The ID of the UserConProfile to find.
+    """
+    transitionalId: ID
   ): UserConProfile! @deprecated(reason: "Domain-specific queries are being deprecated. Please use the `user_con_profile` field on the Convention object instead.")
 
   """
-  Finds up to 25 users by ID.  If any of the IDs don't match an existing user, errors out.
+  Finds up to 25 users by ID. If any of the IDs don't match an existing user, errors out.
   """
   users(
     """
     The IDs of the users to find.
     """
-    ids: [Int!]!
+    ids: [Int!] @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+
+    """
+    The IDs of the users to find.
+    """
+    transitionalIds: [ID!]
   ): [User!]!
 
   """
-  Returns a paginated list of users.  See PaginationInterface for details on how to use
+  Returns a paginated list of users. See PaginationInterface for details on how to use
   paginated lists, and UserFiltersInput for filters you can use here.
   """
   users_paginated(
@@ -5020,9 +5278,9 @@ type Query {
     per_page: Int
 
     """
-    A set of fields to use for ordering the result set.  The second field is used as a
+    A set of fields to use for ordering the result set. The second field is used as a
     tiebreaker for the first, the third field is used as a tiebreaker for the first two,
-    and so on.  If the sort argument is missing or empty, the order of items will be left
+    and so on. If the sort argument is missing or empty, the order of items will be left
     up to the database (and may be unpredictable).
     """
     sort: [SortInput!]
@@ -5037,8 +5295,9 @@ input RateEventInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  event_id: Int!
+  event_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   rating: Int!
+  transitionalEventId: ID
 }
 
 """
@@ -5120,7 +5379,8 @@ input RejectSignupRequestInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -5143,7 +5403,8 @@ input RenameCmsFileInput {
   """
   clientMutationId: String
   filename: String!
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -5165,7 +5426,8 @@ input RestoreDroppedEventInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -5201,9 +5463,10 @@ type RevokeAuthorizedApplicationPayload {
 }
 
 type Room {
-  id: Int!
+  id: Int! @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   name: String
   runs: [Run!]!
+  transitionalId: ID!
 }
 
 input RoomInput {
@@ -5212,7 +5475,7 @@ input RoomInput {
 
 type RootSite implements CmsParent {
   """
-  Finds a CMS content group by ID within the domain name of this HTTP request.  If there is no
+  Finds a CMS content group by ID within the domain name of this HTTP request. If there is no
   CMS content group with that ID, or the CMS content group is associated with a different
   domain name, errors out.
   """
@@ -5220,7 +5483,12 @@ type RootSite implements CmsParent {
     """
     The ID of the CMS content group to find.
     """
-    id: Int!
+    id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+
+    """
+    The ID of the CMS content group to find.
+    """
+    transitionalId: ID
   ): CmsContentGroup!
 
   """
@@ -5249,16 +5517,16 @@ type RootSite implements CmsParent {
   cmsNavigationItems: [CmsNavigationItem!]!
 
   """
-  Finds a CMS page within the domain name of this HTTP request.  Exactly one of the three
-  optional arguments (`id`, `slug`, and `rootPage`) must be specified.  These each represent a
-  different way of finding a page.  If the desired page can't be found within the current
+  Finds a CMS page within the domain name of this HTTP request. Exactly one of the three
+  optional arguments (`id`, `slug`, and `rootPage`) must be specified. These each represent a
+  different way of finding a page. If the desired page can't be found within the current
   domain name, errors out.
   """
   cmsPage(
     """
     The ID of the page to find.
     """
-    id: Int
+    id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
 
     """
     If true, returns the root page for this domain.
@@ -5269,6 +5537,11 @@ type RootSite implements CmsParent {
     The unique slug of the page to find.
     """
     slug: String
+
+    """
+    The ID of the page to find.
+    """
+    transitionalId: ID
   ): Page!
 
   """
@@ -5289,7 +5562,7 @@ type RootSite implements CmsParent {
   default_layout: CmsLayout! @deprecated(reason: "Use `defaultLayout` instead")
 
   """
-  Returns the CMS layout to be used for a particular URL path within the current domain.  (This
+  Returns the CMS layout to be used for a particular URL path within the current domain. (This
   will be the page-specific layout if the URL corresponds to a page with a layout override, or
   the default layout for the domain otherwise.)
   """
@@ -5310,7 +5583,7 @@ type RootSite implements CmsParent {
     query: String!
   ): SearchResult!
   host: String!
-  id: Int!
+  id: Int! @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
 
   """
   Returns all the Liquid assigns for regular CMS page rendering in the current domain name.
@@ -5341,6 +5614,7 @@ type RootSite implements CmsParent {
   rootPage: Page!
   root_page: Page! @deprecated(reason: "Use `rootPage` instead")
   site_name: String!
+  transitionalId: ID!
 
   """
   Finds CMS content by partial name, case-insensitive, within the current domain's CMS content.
@@ -5360,9 +5634,11 @@ type RootSite implements CmsParent {
 }
 
 input RootSiteInput {
-  default_layout_id: Int
-  root_page_id: Int
+  default_layout_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  root_page_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   site_name: String
+  transitionalDefaultLayoutId: ID
+  transitionalRootPageId: ID
 }
 
 type Run {
@@ -5371,7 +5647,7 @@ type Run {
   current_ability_can_signup_summary_run: Boolean!
   ends_at: Date!
   event: Event!
-  id: Int!
+  id: Int! @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   my_signup_requests: [SignupRequest!]!
   my_signups: [Signup!]!
   not_counted_confirmed_signup_count: Int!
@@ -5396,9 +5672,9 @@ type Run {
     per_page: Int
 
     """
-    A set of fields to use for ordering the result set.  The second field is used as a
+    A set of fields to use for ordering the result set. The second field is used as a
     tiebreaker for the first, the third field is used as a tiebreaker for the first two,
-    and so on.  If the sort argument is missing or empty, the order of items will be left
+    and so on. If the sort argument is missing or empty, the order of items will be left
     up to the database (and may be unpredictable).
     """
     sort: [SortInput!]
@@ -5407,6 +5683,7 @@ type Run {
   signups_paginated(filters: SignupFiltersInput, page: Int, per_page: Int, sort: [SortInput]): SignupsPagination!
   starts_at: Date!
   title_suffix: String
+  transitionalId: ID!
   waitlisted_signup_count: Int!
 }
 
@@ -5485,7 +5762,8 @@ input SetConventionCanceledInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -5512,10 +5790,11 @@ type Signup {
   choice: Int
   counted: Boolean!
   created_at: Date!
-  id: Int!
+  id: Int! @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   requested_bucket_key: String
   run: Run!
   state: SignupState!
+  transitionalId: ID!
   updated_at: Date!
   user_con_profile: UserConProfile!
   waitlist_position: Int
@@ -5526,11 +5805,12 @@ type SignupChange {
   bucket_key: String
   counted: Boolean!
   created_at: Date!
-  id: Int!
+  id: Int! @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   previous_signup_change: SignupChange
   run: Run!
   signup: Signup!
   state: SignupState!
+  transitionalId: ID!
   updated_at: Date!
   user_con_profile: UserConProfile!
 }
@@ -5609,12 +5889,13 @@ type SignupMoveResult {
 
 type SignupRequest {
   created_at: Date!
-  id: Int!
+  id: Int! @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   replace_signup: Signup
   requested_bucket_key: String
   result_signup: Signup
   state: SignupRequestState!
   target_run: Run!
+  transitionalId: ID!
   updated_at: Date!
   updated_by: User!
   user_con_profile: UserConProfile!
@@ -5737,12 +6018,12 @@ type SortCmsNavigationItemsPayload {
 }
 
 """
-A description of a field to sort a result set by.  This is typically used in pagination
+A description of a field to sort a result set by. This is typically used in pagination
 fields to specify how the results should be ordered.
 """
 input SortInput {
   """
-  If true, the field will be sorted in descending order.  If false, it will be sorted in
+  If true, the field will be sorted in descending order. If false, it will be sorted in
   ascending order.
   """
   desc: Boolean!
@@ -5757,9 +6038,10 @@ type StaffPosition {
   cc_addresses: [String!]!
   email: String
   email_aliases: [String!]!
-  id: Int!
+  id: Int! @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   name: String!
   permissions: [Permission!]!
+  transitionalId: ID!
   user_con_profiles: [UserConProfile!]!
   visible: Boolean
 }
@@ -5789,7 +6071,8 @@ input SubmitEventProposalInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -5811,10 +6094,11 @@ input SubmitOrderInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   payment_intent_id: String
   payment_mode: PaymentMode!
   stripe_token: String
+  transitionalId: ID
 }
 
 """
@@ -5833,10 +6117,11 @@ type TeamMember {
   display_team_member: Boolean!
   email: String
   event: Event!
-  id: Int!
+  id: Int! @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   receive_con_email: Boolean!
   receive_signup_email: ReceiveSignupEmail!
   show_email: Boolean!
+  transitionalId: ID!
   user_con_profile: UserConProfile!
 }
 
@@ -5851,12 +6136,13 @@ type Ticket {
   charge_id: String @deprecated(reason: "Use order_entry for payment fields")
   convention: Convention!
   created_at: Date!
-  id: Int!
+  id: Int! @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   order_entry: OrderEntry
   payment_amount: Money @deprecated(reason: "Use order_entry for payment fields")
   payment_note: String @deprecated(reason: "Use order_entry for payment fields")
   provided_by_event: Event
   ticket_type: TicketType!
+  transitionalId: ID!
   updated_at: Date!
   user_con_profile: UserConProfile!
 }
@@ -5868,8 +6154,10 @@ type TicketCountByTypeAndPaymentAmount {
 }
 
 input TicketInput {
-  provided_by_event_id: Int
-  ticket_type_id: Int!
+  provided_by_event_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  ticket_type_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalProvidedByEventId: ID
+  transitionalTicketTypeId: ID
 }
 
 enum TicketMode {
@@ -5889,12 +6177,13 @@ type TicketType {
   convention: Convention!
   counts_towards_convention_maximum: Boolean!
   description: String
-  id: Int!
-  maximum_event_provided_tickets(event_id: Int): Int!
+  id: Int! @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  maximum_event_provided_tickets(event_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID."), transitionalEventId: ID): Int!
   name: String!
   pricing_schedule: ScheduledMoneyValue! @deprecated(reason: "Tickets are now provided through products")
   providing_products: [Product!]!
   publicly_available: Boolean! @deprecated(reason: "Tickets are now provided through products")
+  transitionalId: ID!
 }
 
 input TicketTypeInput {
@@ -5952,8 +6241,9 @@ input TransitionEventProposalInput {
   """
   clientMutationId: String
   drop_event: Boolean
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   status: String!
+  transitionalId: ID
 }
 
 """
@@ -5977,8 +6267,9 @@ input UpdateCmsContentGroupInput {
   clientMutationId: String
   cms_content_group: CmsContentGroupInput!
   grant_permissions: [PermissionInput!]
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   revoke_permissions: [PermissionInput!]
+  transitionalId: ID
 }
 
 """
@@ -6000,8 +6291,9 @@ input UpdateCmsGraphqlQueryInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   query: CmsGraphqlQueryInput!
+  transitionalId: ID
 }
 
 """
@@ -6024,7 +6316,8 @@ input UpdateCmsLayoutInput {
   """
   clientMutationId: String
   cms_layout: CmsLayoutInput!
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -6047,7 +6340,8 @@ input UpdateCmsNavigationItemInput {
   """
   clientMutationId: String
   cms_navigation_item: CmsNavigationItemInput
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -6070,7 +6364,8 @@ input UpdateCmsPartialInput {
   """
   clientMutationId: String
   cms_partial: CmsPartialInput!
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -6093,7 +6388,8 @@ input UpdateConventionInput {
   """
   clientMutationId: String
   convention: ConventionInput!
-  id: Int
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -6116,7 +6412,8 @@ input UpdateCouponInput {
   """
   clientMutationId: String
   coupon: CouponInput!
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -6139,7 +6436,8 @@ input UpdateDepartmentInput {
   """
   clientMutationId: String
   department: DepartmentInput!
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -6162,7 +6460,8 @@ input UpdateEmailRouteInput {
   """
   clientMutationId: String
   email_route: EmailRouteInput!
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -6186,7 +6485,8 @@ input UpdateEventAdminNotesInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -6209,7 +6509,8 @@ input UpdateEventCategoryInput {
   """
   clientMutationId: String
   event_category: EventCategoryInput!
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -6232,7 +6533,8 @@ input UpdateEventInput {
   """
   clientMutationId: String
   event: EventInput
-  id: Int
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -6256,7 +6558,8 @@ input UpdateEventProposalAdminNotesInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -6279,7 +6582,8 @@ input UpdateEventProposalInput {
   """
   clientMutationId: String
   event_proposal: EventProposalInput!
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -6302,7 +6606,8 @@ input UpdateFormInput {
   """
   clientMutationId: String
   form: FormInput!
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -6314,7 +6619,8 @@ input UpdateFormItemInput {
   """
   clientMutationId: String
   form_item: FormItemInput!
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -6348,7 +6654,8 @@ input UpdateFormSectionInput {
   """
   clientMutationId: String
   form_section: FormSectionInput!
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -6371,7 +6678,8 @@ input UpdateFormWithJSONInput {
   """
   clientMutationId: String
   form_json: String!
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -6393,8 +6701,9 @@ input UpdateMaximumEventProvidedTicketsOverrideInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   override_value: Int!
+  transitionalId: ID
 }
 
 """
@@ -6439,8 +6748,9 @@ input UpdateOrderEntryInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   order_entry: OrderEntryInput!
+  transitionalId: ID
 }
 
 """
@@ -6462,8 +6772,9 @@ input UpdateOrderInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   order: OrderInput!
+  transitionalId: ID
 }
 
 """
@@ -6488,10 +6799,11 @@ input UpdateOrganizationRoleInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   organization_role: OrganizationRoleInput!
   remove_permission_ids: [Int!]
   remove_user_ids: [Int!]
+  transitionalId: ID
 }
 
 """
@@ -6513,8 +6825,9 @@ input UpdatePageInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   page: PageInput!
+  transitionalId: ID
 }
 
 """
@@ -6536,8 +6849,9 @@ input UpdateProductInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   product: ProductInput!
+  transitionalId: ID
 }
 
 """
@@ -6559,8 +6873,9 @@ input UpdateRoomInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   room: RoomInput!
+  transitionalId: ID
 }
 
 """
@@ -6604,8 +6919,9 @@ input UpdateRunInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   run: RunInput!
+  transitionalId: ID
 }
 
 """
@@ -6629,7 +6945,8 @@ input UpdateSignupBucketInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -6652,7 +6969,8 @@ input UpdateSignupCountedInput {
   """
   clientMutationId: String
   counted: Boolean!
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -6674,8 +6992,9 @@ input UpdateStaffPositionInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   staff_position: StaffPositionInput!
+  transitionalId: ID
 }
 
 """
@@ -6699,7 +7018,8 @@ input UpdateStaffPositionPermissionsInput {
   clientMutationId: String
   grant_permissions: [PermissionInput!]!
   revoke_permissions: [PermissionInput!]!
-  staff_position_id: Int!
+  staff_position_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalStaffPositionId: ID
 }
 
 """
@@ -6721,8 +7041,9 @@ input UpdateTeamMemberInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   team_member: TeamMemberInput!
+  transitionalId: ID
 }
 
 """
@@ -6744,8 +7065,9 @@ input UpdateTicketInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   ticket: TicketInput!
+  transitionalId: ID
 }
 
 """
@@ -6767,8 +7089,9 @@ input UpdateTicketTypeInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   ticket_type: TicketTypeInput!
+  transitionalId: ID
 }
 
 """
@@ -6792,8 +7115,9 @@ input UpdateUserActivityAlertInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
-  remove_notification_destination_ids: [Int!]!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  remove_notification_destination_ids: [Int!]
+  transitionalId: ID
   user_activity_alert: UserActivityAlertInput!
 }
 
@@ -6816,7 +7140,8 @@ input UpdateUserConProfileInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
   user_con_profile: UserConProfileInput!
 }
 
@@ -6837,20 +7162,22 @@ type User {
   email: String
   event_proposals: [EventProposal!]!
   first_name: String
-  id: Int!
+  id: Int! @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   last_name: String
   name: String
   name_inverted: String
   privileges: [String!]
+  transitionalId: ID!
   user_con_profiles: [UserConProfile!]!
 }
 
 type UserActivityAlert {
   convention: Convention!
   email: String
-  id: Int!
+  id: Int! @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   notification_destinations: [NotificationDestination!]!
   partial_name: String
+  transitionalId: ID!
   trigger_on_ticket_create: Boolean!
   trigger_on_user_con_profile_create: Boolean!
   user: User
@@ -6859,9 +7186,10 @@ type UserActivityAlert {
 input UserActivityAlertInput {
   email: String
   partial_name: String
+  transitionalUserId: ID
   trigger_on_ticket_create: Boolean
   trigger_on_user_con_profile_create: Boolean
-  user_id: Int
+  user_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
 }
 
 type UserConProfile {
@@ -6880,7 +7208,7 @@ type UserConProfile {
   country: String
 
   """
-  If this profile has a pending order, returns that order.  Otherwise, returns null.
+  If this profile has a pending order, returns that order. Otherwise, returns null.
   """
   current_pending_order: Order
   current_user_form_item_viewer_role: FormItemRole!
@@ -6894,7 +7222,7 @@ type UserConProfile {
   gravatar_enabled: Boolean!
   gravatar_url: String!
   ical_secret: String
-  id: Int!
+  id: Int! @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   last_name: String!
   mobile_phone: String
   name: String!
@@ -6913,6 +7241,7 @@ type UserConProfile {
   state: String
   team_members: [TeamMember!]!
   ticket: Ticket
+  transitionalId: ID!
   user: User
   user_id: Int!
   zipcode: String
@@ -7010,8 +7339,10 @@ type UsersPagination implements PaginationInterface {
 }
 
 input WinningUserConProfileInput {
-  conventionId: Int!
-  userConProfileId: Int!
+  conventionId: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalConventionId: ID
+  transitionalUserConProfileId: ID
+  userConProfileId: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
 }
 
 """
@@ -7022,7 +7353,8 @@ input WithdrawAllUserConProfileSignupsInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  user_con_profile_id: Int!
+  transitionalUserConProfileId: ID
+  user_con_profile_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
 }
 
 """
@@ -7044,7 +7376,8 @@ input WithdrawMySignupInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  run_id: Int!
+  run_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalRunId: ID
 }
 
 """
@@ -7066,7 +7399,8 @@ input WithdrawSignupRequestInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  id: Int!
+  id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalId: ID
 }
 
 """
@@ -7088,9 +7422,11 @@ input WithdrawUserSignupInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  run_id: Int!
+  run_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   suppress_notifications: Boolean
-  user_con_profile_id: Int!
+  transitionalRunId: ID
+  transitionalUserConProfileId: ID
+  user_con_profile_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
 }
 
 """

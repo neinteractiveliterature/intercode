@@ -10,13 +10,11 @@ class SignupBucketFinder
   end
 
   def find_bucket
-    
-        # try not to bump people out of their signup buckets...
-        @actual_bucket ||=
+    # try not to bump people out of their signup buckets...
+    @actual_bucket ||=
       prioritized_buckets_with_capacity.first ||
-          # but do it if you have to
-          prioritized_buckets.find { |bucket| movable_signups_for_bucket(bucket).any? }
-      
+        # but do it if you have to
+        prioritized_buckets.find { |bucket| movable_signups_for_bucket(bucket).any? }
   end
 
   def movable_signups_for_bucket(bucket)
@@ -29,7 +27,6 @@ class SignupBucketFinder
   def prioritized_buckets
     @prioritized_buckets ||=
       requested_bucket_key ? prioritized_buckets_with_requested_bucket : prioritized_buckets_without_requested_bucket
-      
   end
 
   def prioritized_buckets_with_capacity

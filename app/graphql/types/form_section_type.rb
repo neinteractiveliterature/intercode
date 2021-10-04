@@ -2,7 +2,12 @@
 class Types::FormSectionType < Types::BaseObject
   authorize_record
 
-  field :id, Int, null: false
+  field :id,
+        Int,
+        deprecation_reason:
+          'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+        null: false
+  field :transitional_id, ID, method: :id, null: false, camelize: true
   field :title, String, null: true
   field :form, Types::FormType, null: false, camelize: false
   field :position, Int, null: false

@@ -12,14 +12,15 @@ import {
   useCreateCouponApplicationMutation,
   useDeleteCouponApplicationMutation,
 } from './mutations.generated';
-import { Coupon, CouponApplication, Product } from '../graphqlTypes.generated';
+import { Coupon, CouponApplication } from '../graphqlTypes.generated';
 
 export type EditOrderModalProps = {
   order?: AdminOrderTypeWithId & {
     order_entries: (Omit<AdminOrderEntryWithIdType, 'product'> & {
-      product: NonNullable<AdminOrderEntryWithIdType['product']> & Pick<Product, 'id'>;
+      product: NonNullable<AdminOrderEntryWithIdType['product']> & { id: string };
     })[];
-    coupon_applications: (Pick<CouponApplication, 'id' | 'discount'> & {
+    coupon_applications: (Pick<CouponApplication, 'discount'> & {
+      id: string;
       coupon: Pick<Coupon, 'code'>;
     })[];
   };
@@ -58,10 +59,10 @@ function EditOrderModal({ order, closeModal }: EditOrderModalProps): JSX.Element
       await createOrderEntryMutate({
         variables: {
           input: {
-            order_id: order.id,
+            transitionalOrderId: order.id,
             order_entry: {
-              product_id: orderEntry.product.id,
-              product_variant_id: orderEntry.product_variant?.id,
+              transitionalProductId: orderEntry.product.id,
+              transitionalProductVariantId: orderEntry.product_variant?.id,
               quantity: orderEntry.quantity,
               price_per_item: orderEntry.price_per_item,
             },

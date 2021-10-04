@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 
 export const EmailRouteFields = gql`
   fragment EmailRouteFields on EmailRoute {
-    id
+    id: transitionalId
     receiver_address
     forward_addresses
   }
@@ -19,7 +19,7 @@ export const RootSiteEmailRoutesAdminTableQuery = gql`
       total_pages
 
       entries {
-        id
+        id: transitionalId
         ...EmailRouteFields
       }
     }

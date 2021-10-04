@@ -87,8 +87,8 @@ class SignupCountPresenter
         end
 
       if state == 'waitlisted' && (signups_by_bucket_key[nil] && (signups_by_bucket_key[nil][:not_counted]).positive?)
-          bucket_texts << "No preference: #{signups_by_bucket_key[nil][:not_counted]}"
-        end
+        bucket_texts << "No preference: #{signups_by_bucket_key[nil][:not_counted]}"
+      end
 
       bucket_texts
     end
@@ -106,7 +106,8 @@ class SignupCountPresenter
   def confirmed_limited_count
     @confirmed_limited_count ||=
       buckets
-        .select(&:slots_limited?).sum { |bucket| signup_count_by_state_and_bucket_key_and_counted['confirmed'][bucket.key][:counted] }
+        .select(&:slots_limited?)
+        .sum { |bucket| signup_count_by_state_and_bucket_key_and_counted['confirmed'][bucket.key][:counted] }
   end
 
   # Waitlisted signups are never counted, so count them all here

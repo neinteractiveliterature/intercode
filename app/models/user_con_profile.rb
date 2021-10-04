@@ -147,7 +147,9 @@ class UserConProfile < ApplicationRecord
   end
 
   def can_have_bio?
-    return team_members.size.positive? || staff_positions.size.positive? if team_members.loaded? && staff_positions.loaded?
+    if team_members.loaded? && staff_positions.loaded?
+      return team_members.size.positive? || staff_positions.size.positive?
+    end
 
     team_members.any? || staff_positions.any?
   end

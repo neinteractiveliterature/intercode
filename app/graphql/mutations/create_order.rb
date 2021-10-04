@@ -4,7 +4,13 @@ class Mutations::CreateOrder < Mutations::BaseMutation
 
   field :order, Types::OrderType, null: false
 
-  argument :user_con_profile_id, Integer, required: true, camelize: false
+  argument :user_con_profile_id,
+           Integer,
+           deprecation_reason:
+             'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+           required: false,
+           camelize: false
+  argument :transitional_user_con_profile_id, ID, required: false, camelize: true
   argument :order, Types::OrderInputType, required: true
   argument :status, Types::OrderStatusType, required: true
   argument :order_entries, [Types::OrderEntryInputType], required: false, camelize: false
@@ -12,7 +18,7 @@ class Mutations::CreateOrder < Mutations::BaseMutation
   attr_reader :order
 
   define_method :authorized? do |args|
-    user_con_profile = UserConProfile.find(args[:user_con_profile_id])
+    user_con_profile = UserConProfile.find(args[:transitional_user_con_profile_id] || args[:user_con_profile_id])
     @order = user_con_profile.orders.new
     self.class.check_authorization(policy(@order), :create)
   end

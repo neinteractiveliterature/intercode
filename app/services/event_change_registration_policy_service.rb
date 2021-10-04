@@ -58,7 +58,7 @@ class EventChangeRegistrationPolicyService < CivilService::Service
         place_signup signup, bucket_finder, destination_bucket
       elsif signup.confirmed?
         immovable_signups << signup
-          log_immovable_signup(signup)
+        log_immovable_signup(signup)
       end
 
       log_bucket_counts

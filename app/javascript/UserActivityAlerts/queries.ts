@@ -2,12 +2,12 @@ import { gql } from '@apollo/client';
 
 export const UserActivityAlertsAdminConventionFields = gql`
   fragment UserActivityAlertsAdminConventionFields on Convention {
-    id
+    id: transitionalId
     ticket_name
     ticket_mode
 
     staff_positions {
-      id
+      id: transitionalId
       name
     }
   }
@@ -15,26 +15,26 @@ export const UserActivityAlertsAdminConventionFields = gql`
 
 export const UserActivityAlertFields = gql`
   fragment UserActivityAlertFields on UserActivityAlert {
-    id
+    id: transitionalId
     email
     partial_name
     trigger_on_user_con_profile_create
     trigger_on_ticket_create
     user {
-      id
+      id: transitionalId
       name
     }
 
     notification_destinations {
-      id
+      id: transitionalId
 
       staff_position {
-        id
+        id: transitionalId
         name
       }
 
       user_con_profile {
-        id
+        id: transitionalId
         name_without_nickname
       }
     }
@@ -44,7 +44,7 @@ export const UserActivityAlertFields = gql`
 export const ConventionTicketNameQuery = gql`
   query ConventionTicketNameQuery {
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       ...UserActivityAlertsAdminConventionFields
     }
   }
@@ -55,11 +55,11 @@ export const ConventionTicketNameQuery = gql`
 export const UserActivityAlertQuery = gql`
   query UserActivityAlertQuery($id: Int!) {
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       ...UserActivityAlertsAdminConventionFields
 
       user_activity_alert(id: $id) {
-        id
+        id: transitionalId
         ...UserActivityAlertFields
       }
     }
@@ -72,12 +72,12 @@ export const UserActivityAlertQuery = gql`
 export const UserActivityAlertsAdminQuery = gql`
   query UserActivityAlertsAdminQuery {
     convention: conventionByRequestHost {
-      id
+      id: transitionalId
       ticket_name
       ticket_mode
 
       user_activity_alerts {
-        id
+        id: transitionalId
         ...UserActivityAlertFields
       }
     }

@@ -2,15 +2,21 @@
 class Mutations::CreateOrganizationRole < Mutations::BaseMutation
   field :organization_role, Types::OrganizationRoleType, null: false
 
-  argument :organization_id, Integer, required: true, camelize: false
+  argument :organization_id,
+           Integer,
+           deprecation_reason:
+             'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+           required: false,
+           camelize: false
+  argument :transitional_organization_id, ID, required: false, camelize: true
   argument :organization_role, Types::OrganizationRoleInputType, required: true, camelize: false
-  argument :user_ids, [Integer], required: true, camelize: false
+  argument :user_ids, [Integer], required: false, camelize: false
   argument :permissions, [Types::PermissionInputType], required: true
 
   attr_reader :organization
 
   define_authorization_check do |args|
-    @organization = Organization.find(args[:organization_id])
+    @organization = Organization.find(args[:transitional_organization_id] || args[:organization_id])
     policy(OrganizationRole.new(organization: organization)).create?
   end
 
