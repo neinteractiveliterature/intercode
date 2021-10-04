@@ -1,8 +1,8 @@
-{
+module.exports = {
   "printWidth": 120,
   "singleQuote": true,
   "trailingComma": "all",
-  "plugins": ["@prettier/plugin-ruby"],
+  "plugins": [require.resolve("@prettier/plugin-ruby")],
   "overrides": [
     {
       "files": "*.rb",
@@ -11,4 +11,4 @@
       }
     }
   ]
-}
+};
