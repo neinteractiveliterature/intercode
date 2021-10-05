@@ -29,8 +29,67 @@ class IntercodeSchema < GraphQL::Schema
     end
   end
 
+  class DeprecatedUsageAnalyzer < GraphQL::Analysis::AST::Analyzer
+    def initialize(query_or_multiplex)
+      super
+      @context = query_or_multiplex.context
+      @deprecated_usages = Set.new
+    end
+
+    def on_leave_field(node, _parent, visitor)
+      operation_name = visitor.query.operation_name
+      check_deprecated_field_usage(node, visitor, operation_name)
+
+      argument_names = visitor.query.arguments_for(node, visitor.field_definition).keys
+      argument_names.each do |argument_name|
+        check_deprecated_argument_usage(node, visitor, argument_name, operation_name)
+      end
+    end
+
+    def check_deprecated_field_usage(node, visitor, operation_name)
+      return if visitor.field_definition.deprecation_reason.blank?
+
+      @deprecated_usages.add(
+        {
+          operation_name: operation_name,
+          graphql_type: visitor.field_definition.owner.graphql_name,
+          field_name: node.name,
+          argument_name: nil
+        }
+      )
+    end
+
+    def check_deprecated_argument_usage(node, visitor, argument_name, operation_name)
+      argument = visitor.field_definition.arguments.symbolize_keys[argument_name.to_sym]
+      return if argument.deprecation_reason.blank?
+
+      @deprecated_usages.add(
+        {
+          operation_name: operation_name,
+          graphql_type: visitor.field_definition.owner.graphql_name,
+          field_name: node.name,
+          argument_name: argument_name
+        }
+      )
+    end
+
+    def result
+      return if @deprecated_usages.blank?
+
+      client_address = @context[:controller].request.ip
+      user_agent = @context[:controller].request.user_agent
+
+      @deprecated_usages.each do |usage|
+        DeprecatedGraphQlUsage.create(**usage, client_address: client_address, user_agent: user_agent)
+      end
+      Rails.logger.warn("Deprecated GraphQL fields/arguments used: #{@deprecated_usages.as_json.inspect}")
+    end
+  end
+
   mutation(Types::MutationType)
   query(Types::QueryType)
+
+  query_analyzer DeprecatedUsageAnalyzer
 
   use GraphQL::Batch
 
