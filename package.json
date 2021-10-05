@@ -64,7 +64,7 @@
     "@lezer/common": "0.15.7",
     "@neinteractiveliterature/litform": "0.20.0",
     "@popperjs/core": "2.10.2",
-    "@stripe/react-stripe-js": "1.5.0",
+    "@stripe/react-stripe-js": "1.6.0",
     "@stripe/stripe-js": "1.19.1",
     "@testing-library/react": "12.1.2",
     "@types/apollo-upload-client": "14.1.0",
