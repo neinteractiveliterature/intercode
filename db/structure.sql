@@ -1153,6 +1153,42 @@ ALTER SEQUENCE public.departments_id_seq OWNED BY public.departments.id;
 
 
 --
+-- Name: deprecated_graph_ql_usages; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.deprecated_graph_ql_usages (
+    id bigint NOT NULL,
+    operation_name text,
+    graphql_type text,
+    field_name text,
+    argument_name text,
+    user_agent text,
+    client_address inet,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: deprecated_graph_ql_usages_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.deprecated_graph_ql_usages_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: deprecated_graph_ql_usages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.deprecated_graph_ql_usages_id_seq OWNED BY public.deprecated_graph_ql_usages.id;
+
+
+--
 -- Name: email_routes; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2737,6 +2773,13 @@ ALTER TABLE ONLY public.departments ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
+-- Name: deprecated_graph_ql_usages id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.deprecated_graph_ql_usages ALTER COLUMN id SET DEFAULT nextval('public.deprecated_graph_ql_usages_id_seq'::regclass);
+
+
+--
 -- Name: email_routes id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -3127,6 +3170,14 @@ ALTER TABLE ONLY public.coupons
 
 ALTER TABLE ONLY public.departments
     ADD CONSTRAINT departments_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: deprecated_graph_ql_usages deprecated_graph_ql_usages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.deprecated_graph_ql_usages
+    ADD CONSTRAINT deprecated_graph_ql_usages_pkey PRIMARY KEY (id);
 
 
 --
@@ -5283,6 +5334,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210530161658'),
 ('20210815202439'),
 ('20210821174502'),
-('20210915155339');
+('20210915155339'),
+('20211005145053');
 
 
