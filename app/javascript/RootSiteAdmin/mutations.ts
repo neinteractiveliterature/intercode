@@ -2,13 +2,13 @@ import { gql } from '@apollo/client';
 import { RootSiteFields } from './queries';
 
 export const UpdateRootSite = gql`
-  mutation UpdateRootSite($siteName: String, $defaultLayoutId: Int, $rootPageId: Int) {
+  mutation UpdateRootSite($siteName: String, $defaultLayoutId: ID, $rootPageId: ID) {
     updateRootSite(
       input: {
         root_site: {
           site_name: $siteName
-          default_layout_id: $defaultLayoutId
-          root_page_id: $rootPageId
+          transitionalDefaultLayoutId: $defaultLayoutId
+          transitionalRootPageId: $rootPageId
         }
       }
     ) {

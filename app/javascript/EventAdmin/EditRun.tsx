@@ -29,7 +29,7 @@ function EditRun({ convention, events }: EditRunProps): JSX.Element {
     if (match.path.endsWith('/new')) {
       return {
         __typename: 'Run',
-        id: 0,
+        id: '',
         my_signups: [],
         my_signup_requests: [],
         starts_at: undefined,
@@ -43,7 +43,7 @@ function EditRun({ convention, events }: EditRunProps): JSX.Element {
       };
     }
 
-    return event.runs.find((r) => r.id.toString() === match.params.runId);
+    return event.runs.find((r) => r.id === match.params.runId);
   }, [match.path, match.params.runId, event]);
 
   const cancelEditing = () => {

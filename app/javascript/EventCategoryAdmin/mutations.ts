@@ -15,8 +15,8 @@ export const CreateEventCategory = gql`
 `;
 
 export const UpdateEventCategory = gql`
-  mutation UpdateEventCategory($id: Int!, $eventCategory: EventCategoryInput!) {
-    updateEventCategory(input: { id: $id, event_category: $eventCategory }) {
+  mutation UpdateEventCategory($id: ID!, $eventCategory: EventCategoryInput!) {
+    updateEventCategory(input: { transitionalId: $id, event_category: $eventCategory }) {
       event_category {
         id: transitionalId
         ...EventCategoryFields
@@ -28,8 +28,8 @@ export const UpdateEventCategory = gql`
 `;
 
 export const DeleteEventCategory = gql`
-  mutation DeleteEventCategory($id: Int!) {
-    deleteEventCategory(input: { id: $id }) {
+  mutation DeleteEventCategory($id: ID!) {
+    deleteEventCategory(input: { transitionalId: $id }) {
       clientMutationId
     }
   }

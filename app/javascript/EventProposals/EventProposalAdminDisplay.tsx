@@ -16,7 +16,7 @@ import {
 import { useUpdateEventProposalAdminNotesMutation } from './mutations.generated';
 
 export type EventProposalAdminNotesProps = {
-  eventProposalId: number;
+  eventProposalId: string;
 };
 
 function EventProposalAdminNotes({ eventProposalId }: EventProposalAdminNotesProps) {
@@ -64,16 +64,11 @@ function EventProposalAdminNotes({ eventProposalId }: EventProposalAdminNotesPro
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  return (
-    <AdminNotes
-      value={data?.convention.event_proposal.admin_notes ?? ''}
-      mutate={updateAdminNotes}
-    />
-  );
+  return <AdminNotes value={data?.convention.event_proposal.admin_notes ?? ''} mutate={updateAdminNotes} />;
 }
 
 function useLoadEventProposal() {
-  const eventProposalId = Number.parseInt(useParams<{ id: string }>().id, 10);
+  const eventProposalId = useParams<{ id: string }>().id;
   return useEventProposalQueryWithOwner({ variables: { eventProposalId } });
 }
 
@@ -88,9 +83,7 @@ export default LoadQueryWrapper(useLoadEventProposal, function EventProposalAdmi
         <div className="col">
           <h1>
             {data.convention.event_proposal.title}{' '}
-            <small className="text-muted">
-              ({data.convention.event_proposal.event_category.name})
-            </small>
+            <small className="text-muted">({data.convention.event_proposal.event_category.name})</small>
           </h1>
         </div>
 
@@ -111,10 +104,7 @@ export default LoadQueryWrapper(useLoadEventProposal, function EventProposalAdmi
           </Link>
         ) : null}
         {!data.convention.event_proposal.event && data.currentAbility.can_update_event_proposal ? (
-          <Link
-            to={`/admin_event_proposals/${eventProposalId}/edit`}
-            className="btn btn-outline-primary"
-          >
+          <Link to={`/admin_event_proposals/${eventProposalId}/edit`} className="btn btn-outline-primary">
             Edit proposal
           </Link>
         ) : null}

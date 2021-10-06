@@ -13,7 +13,7 @@ export type CreatePartialMutationVariables = Types.Exact<{
 export type CreatePartialMutationData = { __typename: 'Mutation', createCmsPartial: { __typename: 'CreateCmsPartialPayload', cms_partial: { __typename: 'CmsPartial', name?: string | null | undefined, content?: string | null | undefined, admin_notes?: string | null | undefined, current_ability_can_update: boolean, current_ability_can_delete: boolean, id: string } } };
 
 export type UpdatePartialMutationVariables = Types.Exact<{
-  id: Types.Scalars['Int'];
+  id: Types.Scalars['ID'];
   cmsPartial: Types.CmsPartialInput;
 }>;
 
@@ -21,7 +21,7 @@ export type UpdatePartialMutationVariables = Types.Exact<{
 export type UpdatePartialMutationData = { __typename: 'Mutation', updateCmsPartial: { __typename: 'UpdateCmsPartialPayload', cms_partial: { __typename: 'CmsPartial', name?: string | null | undefined, content?: string | null | undefined, admin_notes?: string | null | undefined, current_ability_can_update: boolean, current_ability_can_delete: boolean, id: string } } };
 
 export type DeletePartialMutationVariables = Types.Exact<{
-  id: Types.Scalars['Int'];
+  id: Types.Scalars['ID'];
 }>;
 
 
@@ -65,8 +65,8 @@ export type CreatePartialMutationHookResult = ReturnType<typeof useCreatePartial
 export type CreatePartialMutationResult = Apollo.MutationResult<CreatePartialMutationData>;
 export type CreatePartialMutationOptions = Apollo.BaseMutationOptions<CreatePartialMutationData, CreatePartialMutationVariables>;
 export const UpdatePartialDocument = gql`
-    mutation UpdatePartial($id: Int!, $cmsPartial: CmsPartialInput!) {
-  updateCmsPartial(input: {id: $id, cms_partial: $cmsPartial}) {
+    mutation UpdatePartial($id: ID!, $cmsPartial: CmsPartialInput!) {
+  updateCmsPartial(input: {transitionalId: $id, cms_partial: $cmsPartial}) {
     cms_partial {
       id: transitionalId
       ...CmsPartialFields
@@ -102,8 +102,8 @@ export type UpdatePartialMutationHookResult = ReturnType<typeof useUpdatePartial
 export type UpdatePartialMutationResult = Apollo.MutationResult<UpdatePartialMutationData>;
 export type UpdatePartialMutationOptions = Apollo.BaseMutationOptions<UpdatePartialMutationData, UpdatePartialMutationVariables>;
 export const DeletePartialDocument = gql`
-    mutation DeletePartial($id: Int!) {
-  deleteCmsPartial(input: {id: $id}) {
+    mutation DeletePartial($id: ID!) {
+  deleteCmsPartial(input: {transitionalId: $id}) {
     clientMutationId
   }
 }

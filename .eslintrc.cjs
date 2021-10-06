@@ -87,6 +87,9 @@ module.exports = {
     ],
     '@graphql-eslint/no-operation-name-suffix': 'off',
     '@graphql-eslint/no-deprecated': 'warn',
+    // TODO turn these back on once we're done with the transitionalIds
+    '@graphql-eslint/strict-id-in-types': 'off',
+    '@graphql-eslint/avoid-typename-prefix': 'off',
     // I would like to enable these but we use imported fragments everywhere and there's a known
     // false positive with that
     '@graphql-eslint/known-fragment-names': 'off',
@@ -121,6 +124,12 @@ module.exports = {
       "files": ["*.graphql"],
       "parser": "@graphql-eslint/eslint-plugin",
       "plugins": ["@graphql-eslint"],
+    },
+    {
+      "files": ["schema.graphql"],
+      "rules": {
+        '@graphql-eslint/executable-definitions': 'off'
+      }
     }
   ],
 

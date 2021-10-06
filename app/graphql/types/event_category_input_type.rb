@@ -5,7 +5,8 @@ class Types::EventCategoryInputType < Types::BaseInputObject
   argument :department_id,
            Int,
            deprecation_reason:
-             'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
            required: false,
            camelize: false
   argument :transitional_department_id, ID, required: false, camelize: true
@@ -14,14 +15,16 @@ class Types::EventCategoryInputType < Types::BaseInputObject
   argument :event_form_id,
            Int,
            deprecation_reason:
-             'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
            required: false,
            camelize: false
   argument :transitional_event_form_id, ID, required: false, camelize: true
   argument :event_proposal_form_id,
            Int,
            deprecation_reason:
-             'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
            required: false,
            camelize: false
   argument :transitional_event_proposal_form_id, ID, required: false, camelize: true

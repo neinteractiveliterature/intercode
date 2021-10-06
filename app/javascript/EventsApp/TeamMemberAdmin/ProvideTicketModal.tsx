@@ -22,15 +22,9 @@ export type ProvideTicketModalProps = {
   visible: boolean;
 };
 
-function ProvideTicketModal({
-  event,
-  convention,
-  onClose,
-  teamMember,
-  visible,
-}: ProvideTicketModalProps): JSX.Element {
+function ProvideTicketModal({ event, convention, onClose, teamMember, visible }: ProvideTicketModalProps): JSX.Element {
   const { t } = useTranslation();
-  const [ticketTypeId, setTicketTypeId] = useState<number>();
+  const [ticketTypeId, setTicketTypeId] = useState<string>();
   const [provideTicketMutate] = useProvideEventTicketMutation();
   const [provideTicketAsync, error, mutationInProgress] = useAsyncFunction(provideTicketMutate);
 
@@ -103,10 +97,7 @@ function ProvideTicketModal({
         {teamMember ? (
           <>
             <p>
-              <TicketingStatusDescription
-                userConProfile={teamMember.user_con_profile}
-                convention={convention}
-              />
+              <TicketingStatusDescription userConProfile={teamMember.user_con_profile} convention={convention} />
             </p>
 
             {teamMember && !teamMember.user_con_profile.ticket ? (
@@ -130,12 +121,7 @@ function ProvideTicketModal({
           </button>
         ) : (
           <>
-            <button
-              type="button"
-              className="btn btn-secondary"
-              onClick={onClose}
-              disabled={mutationInProgress}
-            >
+            <button type="button" className="btn btn-secondary" onClick={onClose} disabled={mutationInProgress}>
               {t('buttons.cancel', 'Cancel')}
             </button>
             <button

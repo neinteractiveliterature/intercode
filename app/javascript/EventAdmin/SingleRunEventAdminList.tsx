@@ -17,7 +17,7 @@ import { useDropEventMutation } from './mutations.generated';
 import { useFormatRunTimespan } from '../EventsApp/runTimeFormatting';
 
 export type SingleRunEventAdminListProps = {
-  eventCategoryId: number;
+  eventCategoryId: string;
 };
 
 export default LoadQueryWrapper<
@@ -65,7 +65,7 @@ export default LoadQueryWrapper<
             onClick={() =>
               confirm({
                 prompt: 'Are you sure you want to drop this event?',
-                action: () => drop({ variables: { input: { id: event.id } } }),
+                action: () => drop({ variables: { input: { transitionalId: event.id } } }),
                 renderError: (e) => <ErrorDisplay graphQLError={e} />,
               })
             }

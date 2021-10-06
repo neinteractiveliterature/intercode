@@ -8,7 +8,7 @@ import { PaymentDetails } from './OrderPaymentForm';
 import { PaymentMode } from '../graphqlTypes.generated';
 
 export default function useSubmitOrder(): (
-  orderId: number,
+  orderId: string,
   paymentMode: PaymentMode,
   paymentDetails: PaymentDetails,
   paymentIntent?: PaymentIntent,
@@ -19,14 +19,14 @@ export default function useSubmitOrder(): (
   const [mutate] = useSubmitOrderMutation();
   const submitOrder = useCallback(
     async (
-      orderId: number,
+      orderId: string,
       paymentMode: PaymentMode,
       { stripeToken, paymentIntentId }: { stripeToken?: string; paymentIntentId?: string },
     ) => {
       await mutate({
         variables: {
           input: {
-            id: orderId,
+            transitionalId: orderId,
             payment_mode: paymentMode,
             stripe_token: stripeToken,
             payment_intent_id: paymentIntentId,
@@ -39,7 +39,7 @@ export default function useSubmitOrder(): (
   );
 
   const submitCheckOutViaStripe = useCallback(
-    async (orderId: number, paymentMode: PaymentMode, paymentDetails: PaymentDetails) => {
+    async (orderId: string, paymentMode: PaymentMode, paymentDetails: PaymentDetails) => {
       if (!stripe) {
         throw new Error('Stripe is not initialized');
       }
@@ -70,13 +70,13 @@ export default function useSubmitOrder(): (
   );
 
   const submitCheckOutWithoutStripe = useCallback(
-    (orderId: number, paymentMode: PaymentMode) => submitOrder(orderId, paymentMode, {}),
+    (orderId: string, paymentMode: PaymentMode) => submitOrder(orderId, paymentMode, {}),
     [submitOrder],
   );
 
   return useCallback(
     async (
-      orderId: number,
+      orderId: string,
       paymentMode: PaymentMode,
       paymentDetails: PaymentDetails,
       paymentIntent?: PaymentIntent,

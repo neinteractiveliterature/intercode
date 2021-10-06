@@ -38,7 +38,7 @@ function FakeRun({ event }: FakeRunProps) {
 }
 
 export type RunsSectionProps = {
-  eventId: number;
+  eventId: string;
 };
 
 export default LoadQueryWithVariablesWrapper(
@@ -55,8 +55,7 @@ export default LoadQueryWithVariablesWrapper(
     const event = convention.event;
 
     const showFakeRun =
-      sortedRuns.length === 0 ||
-      (convention?.site_mode === 'convention' && !currentAbility.can_read_schedule);
+      sortedRuns.length === 0 || (convention?.site_mode === 'convention' && !currentAbility.can_read_schedule);
 
     return (
       <div className="run-card-deck">

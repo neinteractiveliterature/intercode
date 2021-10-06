@@ -22,7 +22,7 @@ function NewTicketType({ ticketName }: NewTicketTypeProps): JSX.Element {
   const [ticketType, setTicketType] = useState<EditingTicketType>({
     __typename: 'TicketType',
     allows_event_signups: true,
-    id: 0,
+    id: '',
     providing_products: [],
     name: '',
     description: '',

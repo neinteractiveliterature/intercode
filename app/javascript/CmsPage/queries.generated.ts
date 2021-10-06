@@ -13,7 +13,7 @@ export type CmsPageQueryVariables = Types.Exact<{
 export type CmsPageQueryData = { __typename: 'Query', convention?: { __typename: 'Convention', name: string, clickwrap_agreement?: string | null | undefined, id: string, my_profile?: { __typename: 'UserConProfile', accepted_clickwrap_agreement?: boolean | null | undefined, id: string } | null | undefined } | null | undefined, cmsParent: { __typename: 'Convention', id: string, cmsPage: { __typename: 'Page', name?: string | null | undefined, content_html: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, skip_clickwrap_agreement?: boolean | null | undefined, id: string } } | { __typename: 'RootSite', id: string, cmsPage: { __typename: 'Page', name?: string | null | undefined, content_html: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, skip_clickwrap_agreement?: boolean | null | undefined, id: string } }, currentAbility: { __typename: 'Ability', can_manage_any_cms_content: boolean } };
 
 export type PageAdminDropdownQueryVariables = Types.Exact<{
-  id: Types.Scalars['Int'];
+  id: Types.Scalars['ID'];
 }>;
 
 
@@ -77,10 +77,10 @@ export type CmsPageQueryHookResult = ReturnType<typeof useCmsPageQuery>;
 export type CmsPageQueryLazyQueryHookResult = ReturnType<typeof useCmsPageQueryLazyQuery>;
 export type CmsPageQueryQueryResult = Apollo.QueryResult<CmsPageQueryData, CmsPageQueryVariables>;
 export const PageAdminDropdownQueryDocument = gql`
-    query PageAdminDropdownQuery($id: Int!) {
+    query PageAdminDropdownQuery($id: ID!) {
   cmsParent: cmsParentByRequestHost {
     id: transitionalId
-    cmsPage(id: $id) {
+    cmsPage(transitionalId: $id) {
       id: transitionalId
       cms_layout {
         id: transitionalId

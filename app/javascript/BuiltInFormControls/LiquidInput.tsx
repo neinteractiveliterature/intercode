@@ -24,7 +24,6 @@ import FilePreview from '../CmsAdmin/CmsFilesAdmin/FilePreview';
 import SelectWithLabel from './SelectWithLabel';
 import FileUploadForm from '../CmsAdmin/CmsFilesAdmin/FileUploadForm';
 import { PreviewNotifierLiquidQueryData, PreviewLiquidQueryData } from './previewQueries.generated';
-import { CmsFile } from '../graphqlTypes.generated';
 import parseCmsContent from '../parseCmsContent';
 
 type SelectableCmsFile = CmsFilesAdminQueryData['cmsParent']['cmsFiles'][number];
@@ -69,7 +68,7 @@ function AddFileModal({ visible, fileChosen, close }: AddFileModalProps) {
               getOptionValue={(f) => f.filename}
               value={file}
               onChange={(newValue) => {
-                setFile(newValue as CmsFile | null);
+                setFile(newValue as SelectableCmsFile | null);
               }}
               formatOptionLabel={(f) => (
                 <div className="d-flex align-items-center">

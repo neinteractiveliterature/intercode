@@ -3,7 +3,8 @@ class Types::FormType < Types::BaseObject
   field :id,
         Int,
         deprecation_reason:
-          'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+          "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
         null: false
   field :transitional_id, ID, method: :id, null: false, camelize: true
   field :title, String, null: false
@@ -11,7 +12,8 @@ class Types::FormType < Types::BaseObject
     argument :id,
              Int,
              deprecation_reason:
-               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
              required: false,
              description: 'The ID of the form section to find.'
     argument :transitional_id, ID, required: false, description: 'The ID of the form section to find.', camelize: true

@@ -27,10 +27,7 @@ function isElementInViewport(el: HTMLElement) {
   const windowWidth = window.innerWidth || document.documentElement.clientWidth;
 
   return (
-    rect.left >= 0 &&
-    rect.top >= 0 &&
-    rect.left + rect.width <= windowWidth &&
-    rect.top + rect.height <= windowHeight
+    rect.left >= 0 && rect.top >= 0 && rect.left + rect.width <= windowWidth && rect.top + rect.height <= windowHeight
   );
 }
 
@@ -48,10 +45,7 @@ export default LoadQueryWrapper(useScheduleGridCombinedQuery, function RunList({
   const { t } = useTranslation();
 
   usePageTitle(
-    `${t('navigation.events.eventSchedule', 'Event Schedule')} (${t(
-      'schedule.views.listView',
-      'List view',
-    )})`,
+    `${t('navigation.events.eventSchedule', 'Event Schedule')} (${t('schedule.views.listView', 'List view')})`,
   );
 
   useLayoutEffect(() => {
@@ -65,7 +59,7 @@ export default LoadQueryWrapper(useScheduleGridCombinedQuery, function RunList({
   }, [routeMatch?.params.conventionDay]);
 
   const eventsByRunId = useMemo(() => {
-    const eventMap = new Map<number, typeof data['convention']['events'][number]>();
+    const eventMap = new Map<string, typeof data['convention']['events'][number]>();
     data.convention.events.forEach((event) => {
       event.runs.forEach((run) => {
         eventMap.set(run.id, event);
@@ -78,10 +72,7 @@ export default LoadQueryWrapper(useScheduleGridCombinedQuery, function RunList({
     () =>
       sortBy(
         flatMap(data.convention.events, (event) => event.runs),
-        (run) => [
-          DateTime.fromISO(run.starts_at).valueOf(),
-          eventsByRunId.get(run.id)?.title?.toLocaleLowerCase(),
-        ],
+        (run) => [DateTime.fromISO(run.starts_at).valueOf(), eventsByRunId.get(run.id)?.title?.toLocaleLowerCase()],
       ),
     [data.convention.events, eventsByRunId],
   );
@@ -132,7 +123,7 @@ export default LoadQueryWrapper(useScheduleGridCombinedQuery, function RunList({
   );
 
   const timespanByRunId = useMemo(() => {
-    const timespanMap = new Map<number, FiniteTimespan>();
+    const timespanMap = new Map<string, FiniteTimespan>();
     data.convention.events.forEach((event) => {
       event.runs.forEach((run) => {
         timespanMap.set(run.id, timespanFromRun(timezoneName, event, run));
@@ -142,7 +133,7 @@ export default LoadQueryWrapper(useScheduleGridCombinedQuery, function RunList({
   }, [data.convention.events, timezoneName]);
 
   const signupCountDataByRunId = useMemo(() => {
-    const countMap = new Map<number, SignupCountData>();
+    const countMap = new Map<string, SignupCountData>();
     data.convention.events.forEach((event) => {
       event.runs.forEach((run) => {
         countMap.set(run.id, SignupCountData.fromRun(run));
@@ -151,16 +142,11 @@ export default LoadQueryWrapper(useScheduleGridCombinedQuery, function RunList({
     return countMap;
   }, [data.convention.events]);
 
-  const conflictingRuns = useMemo(
-    () => findConflictingRuns(data.convention.events),
-    [data.convention.events],
-  );
+  const conflictingRuns = useMemo(() => findConflictingRuns(data.convention.events), [data.convention.events]);
 
   const enteredRunGroup = useCallback(
     (runGroup: RunGroup) => {
-      history.replace(
-        `/events/schedule/${conventionDayUrlPortion(runGroup.dayStart)}${history.location.search}`,
-      );
+      history.replace(`/events/schedule/${conventionDayUrlPortion(runGroup.dayStart)}${history.location.search}`);
     },
     [history, conventionDayUrlPortion],
   );
@@ -241,9 +227,7 @@ export default LoadQueryWrapper(useScheduleGridCombinedQuery, function RunList({
                       );
                     })}
                     {filteredRuns.length < runs.length && (
-                      <div className="ps-4 text-muted">
-                        +{runs.length - filteredRuns.length} hidden
-                      </div>
+                      <div className="ps-4 text-muted">+{runs.length - filteredRuns.length} hidden</div>
                     )}
                   </React.Fragment>
                 );

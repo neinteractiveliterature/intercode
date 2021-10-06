@@ -102,7 +102,7 @@ function getPossibleColumns(): Column<OrderType>[] {
 
 function OrderAdmin(): JSX.Element {
   const newOrderModal = useModal();
-  const [editingOrderId, setEditingOrderId] = useState<number>();
+  const [editingOrderId, setEditingOrderId] = useState<string>();
   usePageTitle('Orders');
 
   const { tableHeaderProps, queryData, tableInstance, loading } = useReactTableWithTheWorks({
@@ -120,9 +120,7 @@ function OrderAdmin(): JSX.Element {
   const editingOrder = useMemo(
     () =>
       editingOrderId
-        ? queryData?.convention?.orders_paginated?.entries?.find(
-            (order) => order.id === editingOrderId,
-          )
+        ? queryData?.convention?.orders_paginated?.entries?.find((order) => order.id === editingOrderId)
         : undefined,
     [queryData, editingOrderId],
   );
@@ -135,11 +133,7 @@ function OrderAdmin(): JSX.Element {
           exportUrl="/csv_exports/orders"
           renderLeftContent={() =>
             queryData?.currentAbility?.can_create_orders && (
-              <button
-                type="button"
-                className="btn btn-outline-primary ms-2"
-                onClick={newOrderModal.open}
-              >
+              <button type="button" className="btn btn-outline-primary ms-2" onClick={newOrderModal.open}>
                 <i className="bi-plus" /> New order
               </button>
             )
@@ -150,9 +144,7 @@ function OrderAdmin(): JSX.Element {
           tableInstance={tableInstance}
           loading={loading}
           onClickRow={
-            queryData?.currentAbility.can_update_orders
-              ? (row) => setEditingOrderId(row.original.id)
-              : undefined
+            queryData?.currentAbility.can_update_orders ? (row) => setEditingOrderId(row.original.id) : undefined
           }
         />
 

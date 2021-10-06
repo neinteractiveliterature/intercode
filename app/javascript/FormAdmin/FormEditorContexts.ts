@@ -20,10 +20,7 @@ import type {
 import FormTypes from '../../../config/form_types.json';
 
 export type FormEditorForm = Omit<FormEditorQueryData['convention']['form'], 'form_sections'> & {
-  form_sections: (Omit<
-    FormEditorQueryData['convention']['form']['form_sections'][0],
-    'form_items'
-  > & {
+  form_sections: (Omit<FormEditorQueryData['convention']['form']['form_sections'][0], 'form_items'> & {
     form_items: TypedFormItem[];
   })[];
 };
@@ -45,18 +42,18 @@ export type FormEditorContextValue = {
   form: FormEditorForm;
   formTypeIdentifier: FormType;
   formType: FormTypeDefinition;
-  formItemsById: Map<number, TypedFormItem>;
+  formItemsById: Map<string, TypedFormItem>;
 };
 
 export const FormEditorContext = React.createContext<FormEditorContextValue>({
   convention: {
     __typename: 'Convention',
-    id: 0,
+    id: '',
     name: '',
     timezone_mode: TimezoneMode.UserLocal,
     form: {
       __typename: 'Form',
-      id: 0,
+      id: '',
       title: '',
       form_type: FormType.Event,
       form_sections: [],
@@ -65,7 +62,7 @@ export const FormEditorContext = React.createContext<FormEditorContextValue>({
   currentSection: undefined,
   form: {
     __typename: 'Form',
-    id: 0,
+    id: '',
     title: '',
     form_type: FormType.Event,
     form_sections: [],
@@ -86,7 +83,7 @@ export type FormItemEditorContextValue = {
 export const FormItemEditorContext = React.createContext<FormItemEditorContextValue>({
   formItem: {
     __typename: 'FormItem',
-    id: 0,
+    id: '',
     position: 1,
     item_type: 'static_text',
     properties: {
@@ -102,7 +99,7 @@ export const FormItemEditorContext = React.createContext<FormItemEditorContextVa
   },
   previewFormItem: {
     __typename: 'FormItem',
-    id: 0,
+    id: '',
     position: 1,
     item_type: 'static_text',
     rendered_properties: {

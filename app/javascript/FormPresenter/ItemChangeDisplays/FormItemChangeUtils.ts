@@ -7,35 +7,28 @@ import Timespan, { FiniteTimespan } from '../../Timespan';
 import { FormResponseChange, UserConProfile } from '../../graphqlTypes.generated';
 import { CommonFormFieldsFragment } from '../../Models/commonFormFragments.generated';
 import { getFormItemsByIdentifier } from '../../Models/Form';
-import {
-  ParsedFormItem,
-  parseFormItemObject,
-  FormItemValueType,
-} from '../../FormAdmin/FormItemUtils';
+import { ParsedFormItem, parseFormItemObject, FormItemValueType } from '../../FormAdmin/FormItemUtils';
 
 export function sortChanges<T extends Pick<FormResponseChange, 'created_at'>>(changes: T[]): T[] {
-  return [...changes].sort(
-    (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
-  );
+  return [...changes].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 }
 
 export function getChangeId(
   change: Pick<FormResponseChange, 'field_identifier' | 'previous_value' | 'new_value'>,
 ): string {
-  return new MD5()
-    .update(`${change.field_identifier}-${change.previous_value}-${change.new_value}`)
-    .digest('hex');
+  return new MD5().update(`${change.field_identifier}-${change.previous_value}-${change.new_value}`).digest('hex');
 }
 
 export type UnknownFormItemType = ParsedFormItem<unknown, { toString(): string }, string>;
 
-export type ParsedFormResponseChange<
-  FormItemType extends UnknownFormItemType = UnknownFormItemType,
-> = Omit<FormResponseChange, 'previous_value' | 'new_value' | 'user_con_profile'> & {
+export type ParsedFormResponseChange<FormItemType extends UnknownFormItemType = UnknownFormItemType> = Omit<
+  FormResponseChange,
+  'previous_value' | 'new_value' | 'user_con_profile'
+> & {
   id: string;
   previous_value: FormItemValueType<FormItemType> | undefined;
   new_value: FormItemValueType<FormItemType> | undefined;
-  user_con_profile: Partial<UserConProfile>;
+  user_con_profile: Partial<Omit<UserConProfile, 'id'> & { id: string }>;
   formItem: FormItemType;
 };
 
@@ -43,7 +36,7 @@ export type ParseableFormResponseChange = Pick<
   FormResponseChange,
   '__typename' | 'field_identifier' | 'previous_value' | 'new_value' | 'created_at' | 'updated_at'
 > & {
-  user_con_profile: Partial<UserConProfile>;
+  user_con_profile: Partial<Omit<UserConProfile, 'id'> & { id: string }>;
 };
 
 export function processChanges<T extends ParseableFormResponseChange>(
@@ -79,14 +72,10 @@ export function buildChangeGroups(
   const groupedChanges = sortedProcessedChanges.reduce<typeof sortedProcessedChanges[]>(
     (workingSet, change) => {
       const lastChangeGroup = workingSet[workingSet.length - 1];
-      const lastChange =
-        lastChangeGroup.length > 0 ? lastChangeGroup[lastChangeGroup.length - 1] : null;
+      const lastChange = lastChangeGroup.length > 0 ? lastChangeGroup[lastChangeGroup.length - 1] : null;
       if (
         lastChange &&
-        (DateTime.fromISO(lastChange.created_at).diff(
-          DateTime.fromISO(change.created_at),
-          'minutes',
-        ).minutes >= 60 ||
+        (DateTime.fromISO(lastChange.created_at).diff(DateTime.fromISO(change.created_at), 'minutes').minutes >= 60 ||
           change.user_con_profile.id !== lastChange.user_con_profile.id)
       ) {
         return [...workingSet, [change]];
@@ -111,8 +100,5 @@ export function getTimespanForChangeGroup(changeGroup: FormResponseChangeGroup):
 
   const sortedTimestamps = sortBy(allTimestamps, (timestamp) => timestamp.toMillis());
 
-  return Timespan.finiteFromDateTimes(
-    sortedTimestamps[0],
-    sortedTimestamps[sortedTimestamps.length - 1],
-  );
+  return Timespan.finiteFromDateTimes(sortedTimestamps[0], sortedTimestamps[sortedTimestamps.length - 1]);
 }

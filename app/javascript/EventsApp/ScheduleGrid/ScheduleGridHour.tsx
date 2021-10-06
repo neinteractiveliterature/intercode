@@ -9,7 +9,7 @@ import { humanizeTime } from '../../TimeUtils';
 
 export type ScheduleGridHourProps = {
   now: DateTime;
-  runIds: number[];
+  runIds: string[];
 };
 
 function ScheduleGridHour({ now, runIds }: ScheduleGridHourProps): JSX.Element {

@@ -7,8 +7,8 @@ import RunSignupsTable from './RunSignupsTable';
 import RunSignupChangesTable from './RunSignupChangesTable';
 
 export type SignupsIndexProps = {
-  runId: number;
-  eventId: number;
+  runId: string;
+  eventId: string;
   runPath: string;
 };
 
@@ -57,9 +57,8 @@ function SignupsIndex({ runId, eventId, runPath }: SignupsIndexProps): JSX.Eleme
         <Route path={`${runPath}/admin_signups/emails/semicolon`}>
           <div className="alert alert-warning mb-2">
             <Trans i18nKey="events.signupsAdmin.emailsSemicolonWarning">
-              <strong>Note:</strong> Most email apps use comma-separated address lists. Only Outlook
-              uses semicolon-separated address lists. If you’re not using Outlook, try
-              comma-separated first.
+              <strong>Note:</strong> Most email apps use comma-separated address lists. Only Outlook uses
+              semicolon-separated address lists. If you’re not using Outlook, try comma-separated first.
             </Trans>
           </div>
           <RunEmailList runId={runId} eventId={eventId} separator="; " />
@@ -72,14 +71,7 @@ function SignupsIndex({ runId, eventId, runPath }: SignupsIndexProps): JSX.Eleme
             runId={runId}
             eventId={eventId}
             runPath={runPath}
-            defaultVisibleColumns={[
-              'id',
-              'state',
-              'name',
-              'bucket',
-              'age_restrictions_check',
-              'email',
-            ]}
+            defaultVisibleColumns={['id', 'state', 'name', 'bucket', 'age_restrictions_check', 'email']}
           />
         </Route>
         <Redirect to={`${runPath}/admin_signups`} />

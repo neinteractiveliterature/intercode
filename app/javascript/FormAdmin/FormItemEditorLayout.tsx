@@ -30,16 +30,13 @@ function addGeneratedIdsToFormItem(formItem: TypedFormItem): FormEditorFormItem 
 function FormItemEditorLayout(): JSX.Element {
   const match = useRouteMatch<{ itemId: string; id: string; sectionId: string }>();
   const history = useHistory();
-  const { convention, currentSection, formType, formTypeIdentifier, formItemsById } =
-    useContext(FormEditorContext);
+  const { convention, currentSection, formType, formTypeIdentifier, formItemsById } = useContext(FormEditorContext);
   const apolloClient = useApolloClient();
   const initialFormItem = useMemo(
-    () => currentSection?.form_items.find((item) => item.id.toString() === match.params.itemId),
+    () => currentSection?.form_items.find((item) => item.id === match.params.itemId),
     [currentSection, match.params.itemId],
   );
-  const [previewFormItem, setPreviewFormItem] = useState(() =>
-    formItemsById.get(initialFormItem?.id ?? 0),
-  );
+  const [previewFormItem, setPreviewFormItem] = useState(() => formItemsById.get(initialFormItem?.id ?? ''));
   const refreshRenderedFormItem = useCallback(
     async (newFormItem) => {
       if (!currentSection) {
@@ -68,10 +65,7 @@ function FormItemEditorLayout(): JSX.Element {
   const hasChanges = useMemo(
     () =>
       formItem && initialFormItem
-        ? !isEqual(
-            buildFormItemInput<unknown>(initialFormItem),
-            buildFormItemInput<unknown>(formItem),
-          )
+        ? !isEqual(buildFormItemInput<unknown>(initialFormItem), buildFormItemInput<unknown>(formItem))
         : false,
     [formItem, initialFormItem],
   );

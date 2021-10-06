@@ -7,11 +7,7 @@ import { ErrorDisplay, FormGroupWithLabel } from '@neinteractiveliterature/litfo
 import ConventionDaySelect from '../BuiltInFormControls/ConventionDaySelect';
 import TimeSelect from '../BuiltInFormControls/TimeSelect';
 import Timespan from '../Timespan';
-import {
-  timespanFromConvention,
-  timespanFromRun,
-  getConventionDayTimespans,
-} from '../TimespanUtils';
+import { timespanFromConvention, timespanFromRun, getConventionDayTimespans } from '../TimespanUtils';
 import { EventAdminEventsQuery } from './queries';
 import useAsyncFunction from '../useAsyncFunction';
 import ProspectiveRunSchedule from './ProspectiveRunSchedule';
@@ -26,6 +22,7 @@ import {
   EventFieldsFragment,
   RoomFieldsFragment,
 } from './queries.generated';
+import { RunInput } from '../graphqlTypes.generated';
 
 type FuzzyTimeWithoutSecond = Omit<FuzzyTime, 'second'>;
 type CompleteFuzzyTimeWithoutSecond = {
@@ -62,10 +59,7 @@ function ScheduleMultipleRunsModal({
   const { timezoneName } = useContext(AppRootContext);
   const conventionTimespan = useMemo(() => timespanFromConvention(convention), [convention]);
   const conventionDayTimespans = useMemo(
-    () =>
-      conventionTimespan.isFinite()
-        ? getConventionDayTimespans(conventionTimespan, timezoneName)
-        : [],
+    () => (conventionTimespan.isFinite() ? getConventionDayTimespans(conventionTimespan, timezoneName) : []),
     [timezoneName, conventionTimespan],
   );
   const conventionDayTimespan = useMemo(
@@ -93,8 +87,7 @@ function ScheduleMultipleRunsModal({
   }, [timespan, timezoneName, event.length_seconds]);
 
   const existingRunTimespans = useMemo(
-    () =>
-      event.runs.map((run) => timespanFromRun(timezoneNameForConvention(convention), event, run)),
+    () => event.runs.map((run) => timespanFromRun(timezoneNameForConvention(convention), event, run)),
     [event, convention],
   );
 
@@ -102,9 +95,7 @@ function ScheduleMultipleRunsModal({
     () =>
       timespansWithinRange.filter(
         (runTimespan) =>
-          !existingRunTimespans.some((existingTimespan) =>
-            existingTimespan.overlapsTimespan(runTimespan),
-          ),
+          !existingRunTimespans.some((existingTimespan) => existingTimespan.overlapsTimespan(runTimespan)),
       ),
     [timespansWithinRange, existingRunTimespans],
   );
@@ -113,7 +104,7 @@ function ScheduleMultipleRunsModal({
     () =>
       nonConflictingTimespansWithinRange.map((t, index) => ({
         __typename: 'Run' as const,
-        id: index * -1,
+        id: `prospectiveRun${index}`,
         starts_at: t.start.toISO(),
         rooms,
       })),
@@ -123,21 +114,21 @@ function ScheduleMultipleRunsModal({
   const eventForProspectiveRunSchedule = useMemo(
     () => ({
       ...event,
-      id: event.id || -1,
+      id: event.id || `prospectiveEvent`,
       runs: event.runs || [],
     }),
     [event],
   );
 
   const scheduleRuns = useCallback(async () => {
-    const runs = nonConflictingTimespansWithinRange.map((nonConflictingTimespan) => ({
+    const runs: RunInput[] = nonConflictingTimespansWithinRange.map((nonConflictingTimespan) => ({
       starts_at: nonConflictingTimespan.start.toISO(),
-      room_ids: rooms.map((room) => room.id),
+      transitionalRoomIds: rooms.map((room) => room.id),
     }));
 
     await createMultipleRuns({
       variables: {
-        input: { event_id: event.id, runs },
+        input: { transitionalEventId: event.id, runs },
       },
       update: (store, { data }) => {
         const eventsData = store.readQuery<EventAdminEventsQueryData>({
@@ -207,14 +198,10 @@ function ScheduleMultipleRunsModal({
     const runTimespanItems = runTimespans.map((runTimespan) => {
       let description: ReactNode = format(runTimespan.start, 'shortTime');
       const runConflicts =
-        nonConflictingTimespans.find((nonConflictingTimespan) =>
-          nonConflictingTimespan.isSame(runTimespan),
-        ) == null;
+        nonConflictingTimespans.find((nonConflictingTimespan) => nonConflictingTimespan.isSame(runTimespan)) == null;
 
       if (runConflicts) {
-        description = (
-          <del title={`There is already a run scheduled at ${description}`}>{description}</del>
-        );
+        description = <del title={`There is already a run scheduled at ${description}`}>{description}</del>;
       }
 
       return (
@@ -271,12 +258,7 @@ function ScheduleMultipleRunsModal({
         <div className="modal-footer">
           <div className="d-flex w-100">
             <div className="col text-end pe-0">
-              <button
-                type="button"
-                className="btn btn-secondary me-2"
-                onClick={onCancel}
-                disabled={createInProgress}
-              >
+              <button type="button" className="btn btn-secondary me-2" onClick={onCancel} disabled={createInProgress}>
                 Cancel
               </button>
               <button

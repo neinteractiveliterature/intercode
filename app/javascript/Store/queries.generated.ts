@@ -45,7 +45,7 @@ export type OrderSummaryQueryVariables = Types.Exact<{ [key: string]: never; }>;
 export type OrderSummaryQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, products: Array<{ __typename: 'Product', name: string, id: string, order_quantities_by_status: Array<{ __typename: 'OrderQuantityByStatus', status: string, quantity: number }>, product_variants: Array<{ __typename: 'ProductVariant', name: string, id: string, order_quantities_by_status: Array<{ __typename: 'OrderQuantityByStatus', status: string, quantity: number }> }> }> } };
 
 export type OrderFormProductQueryVariables = Types.Exact<{
-  productId: Types.Scalars['Int'];
+  productId: Types.Scalars['ID'];
 }>;
 
 
@@ -377,13 +377,13 @@ export type OrderSummaryQueryHookResult = ReturnType<typeof useOrderSummaryQuery
 export type OrderSummaryQueryLazyQueryHookResult = ReturnType<typeof useOrderSummaryQueryLazyQuery>;
 export type OrderSummaryQueryQueryResult = Apollo.QueryResult<OrderSummaryQueryData, OrderSummaryQueryVariables>;
 export const OrderFormProductQueryDocument = gql`
-    query OrderFormProductQuery($productId: Int!) {
+    query OrderFormProductQuery($productId: ID!) {
   currentUser {
     id: transitionalId
   }
   convention: conventionByRequestHost {
     id: transitionalId
-    product(id: $productId) {
+    product(transitionalId: $productId) {
       id: transitionalId
       image_url
       name

@@ -29,13 +29,13 @@ export const UpdateStaffPosition = gql`
 
 export const UpdateStaffPositionPermissions = gql`
   mutation UpdateStaffPositionPermissions(
-    $staffPositionId: Int!
+    $staffPositionId: ID!
     $grantPermissions: [PermissionInput!]!
     $revokePermissions: [PermissionInput!]!
   ) {
     updateStaffPositionPermissions(
       input: {
-        staff_position_id: $staffPositionId
+        transitionalStaffPositionId: $staffPositionId
         grant_permissions: $grantPermissions
         revoke_permissions: $revokePermissions
       }

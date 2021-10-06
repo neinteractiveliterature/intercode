@@ -12,10 +12,7 @@ import deserializeFormResponse, { WithFormResponse } from '../Models/deserialize
 import { useEventProposalQuery, EventProposalQueryData } from './queries.generated';
 import { ConventionForFormItemDisplay } from '../FormPresenter/ItemDisplays/FormItemDisplay';
 import { CommonFormFieldsFragment } from '../Models/commonFormFragments.generated';
-import {
-  useUpdateEventProposalMutation,
-  useSubmitEventProposalMutation,
-} from './mutations.generated';
+import { useUpdateEventProposalMutation, useSubmitEventProposalMutation } from './mutations.generated';
 import { LoadQueryWithVariablesWrapper } from '../GraphqlLoadingWrappers';
 
 function parseResponseErrors(error: ApolloError) {
@@ -23,9 +20,7 @@ function parseResponseErrors(error: ApolloError) {
   if (!graphQLErrors) {
     return {};
   }
-  const updateError = graphQLErrors.find((graphQLError) =>
-    isEqual(graphQLError.path, ['updateEventProposal']),
-  );
+  const updateError = graphQLErrors.find((graphQLError) => isEqual(graphQLError.path, ['updateEventProposal']));
   const { validationErrors } = updateError?.extensions ?? {};
   return validationErrors;
 }
@@ -71,7 +66,7 @@ function EventProposalFormInner({
         const promise = updateEventProposal({
           variables: {
             input: {
-              id: proposal.id,
+              transitionalId: proposal.id,
               event_proposal: {
                 form_response_attrs_json: JSON.stringify(proposal.form_response_attrs),
               },
@@ -95,7 +90,7 @@ function EventProposalFormInner({
       submitEventProposal({
         variables: {
           input: {
-            id: proposal.id,
+            transitionalId: proposal.id,
           },
         },
       }),
@@ -155,7 +150,7 @@ function EventProposalFormInner({
 }
 
 export type EventProposalFormProps = {
-  eventProposalId: number;
+  eventProposalId: string;
   afterSubmit?: () => void;
   exitButton?: ReactNode;
 };

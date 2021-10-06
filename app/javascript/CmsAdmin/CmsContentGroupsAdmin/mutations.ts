@@ -2,13 +2,8 @@ import { gql } from '@apollo/client';
 import { CmsContentGroupFields } from './queries';
 
 export const CreateContentGroup = gql`
-  mutation CreateContentGroup(
-    $cmsContentGroup: CmsContentGroupInput!
-    $permissions: [PermissionInput!]
-  ) {
-    createCmsContentGroup(
-      input: { cms_content_group: $cmsContentGroup, permissions: $permissions }
-    ) {
+  mutation CreateContentGroup($cmsContentGroup: CmsContentGroupInput!, $permissions: [PermissionInput!]) {
+    createCmsContentGroup(input: { cms_content_group: $cmsContentGroup, permissions: $permissions }) {
       cms_content_group {
         id: transitionalId
         ...CmsContentGroupFields
@@ -21,14 +16,14 @@ export const CreateContentGroup = gql`
 
 export const UpdateContentGroup = gql`
   mutation UpdateContentGroup(
-    $id: Int!
+    $id: ID!
     $cmsContentGroup: CmsContentGroupInput!
     $grantPermissions: [PermissionInput!]
     $revokePermissions: [PermissionInput!]
   ) {
     updateCmsContentGroup(
       input: {
-        id: $id
+        transitionalId: $id
         cms_content_group: $cmsContentGroup
         grant_permissions: $grantPermissions
         revoke_permissions: $revokePermissions
@@ -45,8 +40,8 @@ export const UpdateContentGroup = gql`
 `;
 
 export const DeleteContentGroup = gql`
-  mutation DeleteContentGroup($id: Int!) {
-    deleteCmsContentGroup(input: { id: $id }) {
+  mutation DeleteContentGroup($id: ID!) {
+    deleteCmsContentGroup(input: { transitionalId: $id }) {
       clientMutationId
     }
   }

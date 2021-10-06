@@ -3,19 +3,12 @@ import classnames from 'classnames';
 import { DateTime } from 'luxon';
 import { LoadQueryWrapper, notEmpty } from '@neinteractiveliterature/litform';
 
-import {
-  ScheduleGridContext,
-  useScheduleGridProvider,
-} from '../EventsApp/ScheduleGrid/ScheduleGridContext';
+import { ScheduleGridContext, useScheduleGridProvider } from '../EventsApp/ScheduleGrid/ScheduleGridContext';
 import { PIXELS_PER_HOUR, PIXELS_PER_LANE } from '../EventsApp/ScheduleGrid/LayoutConstants';
 import useLayoutForTimespan from '../EventsApp/ScheduleGrid/useLayoutForTimespan';
 import Timespan from '../Timespan';
 import ScheduleGridHeaderBlock from '../EventsApp/ScheduleGrid/ScheduleGridHeaderBlock';
-import {
-  getConventionDayTimespans,
-  timespanFromConvention,
-  ConventionForTimespanUtils,
-} from '../TimespanUtils';
+import { getConventionDayTimespans, timespanFromConvention, ConventionForTimespanUtils } from '../TimespanUtils';
 import {
   getRunClassName,
   getRunStyle,
@@ -25,10 +18,7 @@ import {
 import ScheduleBlock from '../EventsApp/ScheduleGrid/ScheduleBlock';
 import AvailabilityBar from '../EventsApp/ScheduleGrid/AvailabilityBar';
 import AppRootContext from '../AppRootContext';
-import {
-  RunDimensions,
-  ScheduleLayoutResult,
-} from '../EventsApp/ScheduleGrid/ScheduleLayout/ScheduleLayoutBlock';
+import { RunDimensions, ScheduleLayoutResult } from '../EventsApp/ScheduleGrid/ScheduleLayout/ScheduleLayoutBlock';
 import { ScheduleGridConfig } from '../EventsApp/ScheduleGrid/ScheduleGridConfig';
 import {
   useEventAdminEventsQuery,
@@ -67,15 +57,12 @@ function isProspectiveRun(run: ScheduleRun | undefined | null): run is Prospecti
     return false;
   }
 
-  return (
-    Object.prototype.hasOwnProperty.call(run, 'prospectiveRun') &&
-    (run as ProspectiveRun).prospectiveRun === true
-  );
+  return Object.prototype.hasOwnProperty.call(run, 'prospectiveRun') && (run as ProspectiveRun).prospectiveRun === true;
 }
 
 type ProspectiveRunScheduleEventRunProps = {
   convention: ConventionForTimespanUtils & {
-    event_categories: (GetEventCategoryStylesOptions['eventCategory'] & { id: number })[];
+    event_categories: (GetEventCategoryStylesOptions['eventCategory'] & { id: string })[];
   };
   runDimensions: RunDimensions;
   layoutResult: ScheduleLayoutResult;
@@ -102,8 +89,7 @@ function ProspectiveRunScheduleEventRun({
     () =>
       getRunStyle({
         event: event ?? {},
-        eventCategory:
-          convention.event_categories.find((c) => c.id === event?.event_category.id) ?? {},
+        eventCategory: convention.event_categories.find((c) => c.id === event?.event_category.id) ?? {},
         signupStatus: isProspectiveRun(run) ? SignupStatus.Confirmed : null,
         config: SCHEDULE_GRID_CONFIG,
         signupCountData: FAKE_SIGNUP_COUNT_DATA,
@@ -167,11 +153,7 @@ export type ProspectiveRunScheduleProps = {
   event: EventFieldsFragment;
 };
 
-export default LoadQueryWrapper<
-  EventAdminEventsQueryData,
-  EventAdminEventsQueryVariables,
-  ProspectiveRunScheduleProps
->(
+export default LoadQueryWrapper<EventAdminEventsQueryData, EventAdminEventsQueryVariables, ProspectiveRunScheduleProps>(
   useEventAdminEventsQuery,
   function ProspectiveRunSchedule({ day, runs, event, data }): JSX.Element {
     const { timezoneName } = useContext(AppRootContext);
@@ -232,10 +214,7 @@ export default LoadQueryWrapper<
     }, [data, event, prospectiveRuns, runs]);
 
     const conventionDayTimespans = useMemo(
-      () =>
-        conventionTimespan?.isFinite()
-          ? getConventionDayTimespans(conventionTimespan, timezoneName)
-          : undefined,
+      () => (conventionTimespan?.isFinite() ? getConventionDayTimespans(conventionTimespan, timezoneName) : undefined),
       [conventionTimespan, timezoneName],
     );
 
@@ -272,10 +251,7 @@ export default LoadQueryWrapper<
               <ScheduleGridHeaderBlock timespan={layout.timespan} runIds={layout.runIds} />
             </div>
             {layout.blocksWithOptions.map(([layoutBlock, options]) => (
-              <div
-                className={classnames('d-flex', { 'flex-grow-1': (options || {}).flexGrow })}
-                key={layoutBlock.id}
-              >
+              <div className={classnames('d-flex', { 'flex-grow-1': (options || {}).flexGrow })} key={layoutBlock.id}>
                 <ScheduleBlock
                   layoutBlock={layoutBlock}
                   rowHeader={options.rowHeader}

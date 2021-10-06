@@ -10,11 +10,8 @@ export function findBucket<BucketType extends Pick<RegistrationPolicyBucket, 'ke
   return registrationPolicy.buckets.find((bucket) => bucket.key === bucketKey);
 }
 
-export type SignupForFormatBucket = Pick<
-  Signup,
-  'bucket_key' | 'counted' | 'state' | 'requested_bucket_key'
-> & {
-  user_con_profile?: { id: number };
+export type SignupForFormatBucket = Pick<Signup, 'bucket_key' | 'counted' | 'state' | 'requested_bucket_key'> & {
+  user_con_profile?: { id: string };
 };
 
 export type EventForFormatBucket = {
@@ -27,14 +24,10 @@ export type EventForFormatBucket = {
       name?: string | null;
     }[];
   };
-  team_members: { user_con_profile?: { id: number } }[];
+  team_members: { user_con_profile?: { id: string } }[];
 };
 
-export function formatBucket(
-  signup: SignupForFormatBucket,
-  event: EventForFormatBucket,
-  t: TFunction,
-): string {
+export function formatBucket(signup: SignupForFormatBucket, event: EventForFormatBucket, t: TFunction): string {
   const { bucket_key: bucketKey } = signup;
   const registrationPolicy = event.registration_policy ?? { buckets: [] };
 
@@ -45,11 +38,7 @@ export function formatBucket(
       });
     }
 
-    if (
-      event.team_members.some(
-        (teamMember) => teamMember.user_con_profile?.id === signup.user_con_profile?.id,
-      )
-    ) {
+    if (event.team_members.some((teamMember) => teamMember.user_con_profile?.id === signup.user_con_profile?.id)) {
       return t('signups.states.teamMemberNotCounted', '{{ teamMemberName }} (not counted)', {
         teamMemberName: humanize(underscore(event.event_category.team_member_name)),
       });
@@ -58,11 +47,9 @@ export function formatBucket(
     if (signup.state === 'waitlisted') {
       const requestedBucket = findBucket(signup.requested_bucket_key, registrationPolicy);
       if (requestedBucket) {
-        return t(
-          'signups.states.waitlistedWithRequestedBucket',
-          'Waitlisted (requested {{ requestedBucketName }})',
-          { requestedBucketName: requestedBucket.name },
-        );
+        return t('signups.states.waitlistedWithRequestedBucket', 'Waitlisted (requested {{ requestedBucketName }})', {
+          requestedBucketName: requestedBucket.name,
+        });
       }
 
       return t('signups.states.waitlistedNoPreference', 'Waitlisted (no preference)');
@@ -79,11 +66,9 @@ export function formatBucket(
   }
 
   if (requestedBucket) {
-    return t(
-      'signups.states.inUnrequestedBucket',
-      '{{ bucketName }} (requested {{ requestedBucketName }})',
-      { bucketName: bucket?.name ?? t('signups.states.noBucketName', 'None') },
-    );
+    return t('signups.states.inUnrequestedBucket', '{{ bucketName }} (requested {{ requestedBucketName }})', {
+      bucketName: bucket?.name ?? t('signups.states.noBucketName', 'None'),
+    });
   }
 
   if (bucket) {
@@ -114,27 +99,19 @@ export function formatSignupState(state: SignupState | undefined | null, t: TFun
   }
 }
 
-export function formatSignupStatus(
-  signup: SignupForFormatBucket,
-  event: EventForFormatBucket,
-  t: TFunction,
-): string {
+export function formatSignupStatus(signup: SignupForFormatBucket, event: EventForFormatBucket, t: TFunction): string {
   if (signup.state === 'confirmed') {
     return formatBucket(signup, event, t);
   }
 
-  const requestedBucket = findBucket(
-    signup.requested_bucket_key,
-    event.registration_policy ?? { buckets: [] },
-  );
+  const requestedBucket = findBucket(signup.requested_bucket_key, event.registration_policy ?? { buckets: [] });
   const stateText = formatSignupState(signup.state, t);
 
   if (requestedBucket) {
-    return t(
-      'signups.states.stateWithRequestedBucket',
-      '{{ state }} (requested {{ requestedBucket }})',
-      { state: stateText, requestedBucket: requestedBucket.name },
-    );
+    return t('signups.states.stateWithRequestedBucket', '{{ state }} (requested {{ requestedBucket }})', {
+      state: stateText,
+      requestedBucket: requestedBucket.name,
+    });
   }
 
   return stateText;

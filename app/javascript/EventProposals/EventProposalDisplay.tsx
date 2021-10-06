@@ -10,7 +10,7 @@ import deserializeFormResponse from '../Models/deserializeFormResponse';
 import { LoadQueryWithVariablesWrapper } from '../GraphqlLoadingWrappers';
 
 export type EventProposalDisplayProps = {
-  eventProposalId: number;
+  eventProposalId: string;
 };
 
 export default LoadQueryWithVariablesWrapper(
@@ -20,17 +20,12 @@ export default LoadQueryWithVariablesWrapper(
     const formItems = useMemo(() => {
       const form = data.convention.event_proposal.event_category.event_proposal_form;
       if (!form) {
-        throw new Error(
-          `Event category ${data.convention.event_proposal.event_category.name} has no proposal form`,
-        );
+        throw new Error(`Event category ${data.convention.event_proposal.event_category.name} has no proposal form`);
       }
       return parseTypedFormItemArray(getSortedFormItems(form));
     }, [data]);
 
-    const formResponse = useMemo(
-      () => deserializeFormResponse(data.convention.event_proposal),
-      [data],
-    );
+    const formResponse = useMemo(() => deserializeFormResponse(data.convention.event_proposal), [data]);
 
     const renderFormItems = () => {
       if (formResponse == null) {

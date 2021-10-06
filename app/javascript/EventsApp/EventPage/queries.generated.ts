@@ -15,7 +15,7 @@ export type EventPageRunFieldsFragment = { __typename: 'Run', title_suffix?: str
 export type RunCardRegistrationPolicyFieldsFragment = { __typename: 'RegistrationPolicy', slots_limited?: boolean | null | undefined, prevent_no_preference_signups: boolean, total_slots_including_not_counted?: number | null | undefined, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null | undefined, description?: string | null | undefined, not_counted: boolean, slots_limited: boolean, anything: boolean, minimum_slots?: number | null | undefined, total_slots?: number | null | undefined }> };
 
 export type EventPageQueryVariables = Types.Exact<{
-  eventId: Types.Scalars['Int'];
+  eventId: Types.Scalars['ID'];
 }>;
 
 
@@ -86,12 +86,12 @@ export const RunCardRegistrationPolicyFieldsFragmentDoc = gql`
 }
     `;
 export const EventPageQueryDocument = gql`
-    query EventPageQuery($eventId: Int!) {
+    query EventPageQuery($eventId: ID!) {
   __typename
   currentAbility {
     can_read_schedule
-    can_update_event(event_id: $eventId)
-    can_read_event_signups(event_id: $eventId)
+    can_update_event(transitionalEventId: $eventId)
+    can_read_event_signups(transitionalEventId: $eventId)
   }
   convention: conventionByRequestHost {
     id: transitionalId
@@ -99,7 +99,7 @@ export const EventPageQueryDocument = gql`
     my_profile {
       id: transitionalId
     }
-    event(id: $eventId) {
+    event(transitionalId: $eventId) {
       id: transitionalId
       title
       length_seconds

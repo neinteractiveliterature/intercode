@@ -33,9 +33,7 @@ function OrderHistoryOrderEntry({ orderEntry }: OrderHistoryOrderEntryProps) {
           <div className="flex-grow-1">
             <strong>{name}</strong>
           </div>
-          {imageUrl && (
-            <img className="me-4" src={imageUrl} alt={name} style={{ width: '100px' }} />
-          )}
+          {imageUrl && <img className="me-4" src={imageUrl} alt={name} style={{ width: '100px' }} />}
         </div>
       </td>
       <td className="text-end">{orderEntry.quantity}</td>
@@ -66,11 +64,7 @@ type OrderHistoryOrderStatusProps = {
   paymentModal: ModalData<PaymentModalState>;
 };
 
-function OrderHistoryOrderStatus({
-  order,
-  convention,
-  paymentModal,
-}: OrderHistoryOrderStatusProps) {
+function OrderHistoryOrderStatus({ order, convention, paymentModal }: OrderHistoryOrderStatusProps) {
   if (order.status === 'paid') {
     const opsPosition = convention.staff_positions.find(
       (staffPosition) => staffPosition.name === 'Operations Coordinator',
@@ -88,9 +82,9 @@ function OrderHistoryOrderStatus({
         </div>
         {opsEmail && (
           <a
-            href={`mailto:${opsEmail}?subject=${encodeURIComponent(
-              emailSubject,
-            )}&body=${encodeURIComponent(emailBody)}`}
+            href={`mailto:${opsEmail}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(
+              emailBody,
+            )}`}
           >
             <small>Request cancellation</small>
           </a>
@@ -138,9 +132,7 @@ type OrderHistoryOrderProps = {
 function OrderHistoryOrder({ order, convention, paymentModal }: OrderHistoryOrderProps) {
   const { timezoneName } = useContext(AppRootContext);
   const format = useAppDateTimeFormat();
-  const submittedTime = order.submitted_at
-    ? DateTime.fromISO(order.submitted_at, { zone: timezoneName })
-    : undefined;
+  const submittedTime = order.submitted_at ? DateTime.fromISO(order.submitted_at, { zone: timezoneName }) : undefined;
 
   return (
     <li key={order.id} className="card mb-4">
@@ -150,11 +142,7 @@ function OrderHistoryOrder({ order, convention, paymentModal }: OrderHistoryOrde
           <small>{submittedTime && format(submittedTime, 'longWeekdayDateTimeWithZone')}</small>
         </div>
         <div className="text-end">
-          <OrderHistoryOrderStatus
-            order={order}
-            convention={convention}
-            paymentModal={paymentModal}
-          />
+          <OrderHistoryOrderStatus order={order} convention={convention} paymentModal={paymentModal} />
         </div>
       </div>
       <div className="card-body p-0">
@@ -194,26 +182,19 @@ export default LoadQueryWrapper(useOrderHistoryQuery, function OrderHistory({ da
         <h1 className="mb-4">My order history</h1>
         <ul className="list-unstyled">
           {orders.map((order) => (
-            <OrderHistoryOrder
-              key={order.id}
-              convention={data.convention}
-              order={order}
-              paymentModal={paymentModal}
-            />
+            <OrderHistoryOrder key={order.id} convention={data.convention} order={order} paymentModal={paymentModal} />
           ))}
 
           <OrderPaymentModal
             visible={paymentModal.visible}
             onCancel={paymentModal.close}
             initialName={data.convention.my_profile?.name_without_nickname}
-            orderId={paymentModal.state?.order?.id ?? 0}
+            orderId={paymentModal.state?.order?.id ?? ''}
             onComplete={paymentModal.close}
             paymentOptions={
               paymentModal.state
                 ? intersection(
-                    ...paymentModal.state.order.order_entries.map(
-                      (entry) => entry.product.payment_options,
-                    ),
+                    ...paymentModal.state.order.order_entries.map((entry) => entry.product.payment_options),
                   ).filter((paymentOption) => paymentOption !== 'pay_at_convention')
                 : []
             }

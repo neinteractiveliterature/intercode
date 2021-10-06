@@ -9,7 +9,7 @@ import { useDeleteEventProposalMutation } from './mutations.generated';
 import { useEventProposalQuery } from './queries.generated';
 
 function useLoadEventProposal() {
-  const eventProposalId = Number.parseInt(useParams<{ id: string }>().id, 10);
+  const eventProposalId = useParams<{ id: string }>().id;
   return useEventProposalQuery({ variables: { eventProposalId } });
 }
 

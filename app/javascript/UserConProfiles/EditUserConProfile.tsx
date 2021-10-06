@@ -12,90 +12,82 @@ import { useUserConProfileQuery, UserConProfileAdminQueryData } from './queries.
 import { useUpdateUserConProfileMutation } from './mutations.generated';
 
 function useUserConProfileQueryFromParams() {
-  const id = Number.parseInt(useParams<{ id: string }>().id, 10);
+  const id = useParams<{ id: string }>().id;
   return useUserConProfileQuery({ variables: { id } });
 }
 
-export default LoadQueryWrapper(
-  useUserConProfileQueryFromParams,
-  function EditUserConProfile({ data }) {
-    const history = useHistory();
-    const {
-      userConProfile: initialUserConProfile,
-      convention,
-      form,
-    } = buildFormStateFromData(data.convention.user_con_profile, data.convention);
+export default LoadQueryWrapper(useUserConProfileQueryFromParams, function EditUserConProfile({ data }) {
+  const history = useHistory();
+  const {
+    userConProfile: initialUserConProfile,
+    convention,
+    form,
+  } = buildFormStateFromData(data.convention.user_con_profile, data.convention);
 
-    const [userConProfile, setUserConProfile] = useState(initialUserConProfile);
+  const [userConProfile, setUserConProfile] = useState(initialUserConProfile);
 
-    const [mutate] = useUpdateUserConProfileMutation({
-      update: (cache, result) => {
-        const variables = { id: initialUserConProfile.id };
-        let query: UserConProfileAdminQueryData | null = null;
-        query = cache.readQuery<UserConProfileAdminQueryData>({
+  const [mutate] = useUpdateUserConProfileMutation({
+    update: (cache, result) => {
+      const variables = { id: initialUserConProfile.id };
+      let query: UserConProfileAdminQueryData | null = null;
+      query = cache.readQuery<UserConProfileAdminQueryData>({
+        query: UserConProfileAdminQuery,
+        variables,
+      });
+
+      if (query) {
+        cache.writeQuery<UserConProfileAdminQueryData>({
           query: UserConProfileAdminQuery,
           variables,
-        });
-
-        if (query) {
-          cache.writeQuery<UserConProfileAdminQueryData>({
-            query: UserConProfileAdminQuery,
-            variables,
-            data: {
-              ...query,
-              convention: {
-                ...query.convention,
-                user_con_profile: {
-                  ...query.convention.user_con_profile,
-                  ...result.data?.updateUserConProfile?.user_con_profile,
-                },
-              },
-            },
-          });
-        }
-      },
-    });
-
-    const [updateUserConProfile, updateError, updateInProgress] = useAsyncFunction(
-      useCallback(async () => {
-        await mutate({
-          variables: {
-            input: {
-              id: userConProfile.id,
+          data: {
+            ...query,
+            convention: {
+              ...query.convention,
               user_con_profile: {
-                form_response_attrs_json: JSON.stringify(userConProfile.form_response_attrs),
+                ...query.convention.user_con_profile,
+                ...result.data?.updateUserConProfile?.user_con_profile,
               },
             },
           },
         });
+      }
+    },
+  });
 
-        history.push(`/user_con_profiles/${userConProfile.id}`);
-      }, [mutate, history, userConProfile]),
-    );
+  const [updateUserConProfile, updateError, updateInProgress] = useAsyncFunction(
+    useCallback(async () => {
+      await mutate({
+        variables: {
+          input: {
+            transitionalId: userConProfile.id,
+            user_con_profile: {
+              form_response_attrs_json: JSON.stringify(userConProfile.form_response_attrs),
+            },
+          },
+        },
+      });
 
-    usePageTitle(`Editing “${initialUserConProfile.name}”`);
+      history.push(`/user_con_profiles/${userConProfile.id}`);
+    }, [mutate, history, userConProfile]),
+  );
 
-    return (
-      <div>
-        <h1 className="mb-4">Editing {userConProfile.name}</h1>
-        <UserConProfileForm<typeof userConProfile>
-          userConProfile={userConProfile}
-          onChange={setUserConProfile}
-          footerContent={
-            <button
-              className="btn btn-primary"
-              type="button"
-              onClick={updateUserConProfile}
-              disabled={updateInProgress}
-            >
-              Save changes
-            </button>
-          }
-          form={form}
-          convention={convention}
-        />
-        <ErrorDisplay graphQLError={updateError as ApolloError} />
-      </div>
-    );
-  },
-);
+  usePageTitle(`Editing “${initialUserConProfile.name}”`);
+
+  return (
+    <div>
+      <h1 className="mb-4">Editing {userConProfile.name}</h1>
+      <UserConProfileForm<typeof userConProfile>
+        userConProfile={userConProfile}
+        onChange={setUserConProfile}
+        footerContent={
+          <button className="btn btn-primary" type="button" onClick={updateUserConProfile} disabled={updateInProgress}>
+            Save changes
+          </button>
+        }
+        form={form}
+        convention={convention}
+      />
+      <ErrorDisplay graphQLError={updateError as ApolloError} />
+    </div>
+  );
+});

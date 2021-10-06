@@ -4,10 +4,7 @@ import { LoadQueryWrapper, ErrorDisplay } from '@neinteractiveliterature/litform
 
 import useOrganizationRoleForm, { OrganizationRoleFormState } from './useOrganizationRoleForm';
 import usePageTitle from '../usePageTitle';
-import {
-  OrganizationAdminOrganizationsQueryData,
-  useOrganizationAdminOrganizationsQuery,
-} from './queries.generated';
+import { OrganizationAdminOrganizationsQueryData, useOrganizationAdminOrganizationsQuery } from './queries.generated';
 import { useUpdateOrganizationRoleMutation } from './mutations.generated';
 import FourOhFourPage from '../FourOhFourPage';
 
@@ -16,22 +13,14 @@ type EditOrganizationRoleFormProps = {
   initialOrganizationRole: OrganizationAdminOrganizationsQueryData['organizations'][number]['organization_roles'][number];
 };
 
-function EditOrganizationRoleForm({
-  organization,
-  initialOrganizationRole,
-}: EditOrganizationRoleFormProps) {
+function EditOrganizationRoleForm({ organization, initialOrganizationRole }: EditOrganizationRoleFormProps) {
   const history = useHistory();
 
   const { renderForm, formState } = useOrganizationRoleForm(initialOrganizationRole);
-  const [mutate, { error: mutationError, loading: mutationInProgress }] =
-    useUpdateOrganizationRoleMutation();
+  const [mutate, { error: mutationError, loading: mutationInProgress }] = useUpdateOrganizationRoleMutation();
 
   usePageTitle(`Editing “${initialOrganizationRole.name}”`);
-  const updateOrganizationRole = async ({
-    name,
-    usersChangeSet,
-    permissionsChangeSet,
-  }: OrganizationRoleFormState) => {
+  const updateOrganizationRole = async ({ name, usersChangeSet, permissionsChangeSet }: OrganizationRoleFormState) => {
     await mutate({
       variables: {
         id: initialOrganizationRole.id,
@@ -75,30 +64,20 @@ function EditOrganizationRoleForm({
   );
 }
 
-export default LoadQueryWrapper(
-  useOrganizationAdminOrganizationsQuery,
-  function EditOrganizationRole({ data }) {
-    const params = useParams<{ organizationId: string; organizationRoleId: string }>();
-    const organizationId = Number.parseInt(params.organizationId, 10);
-    const organizationRoleId = Number.parseInt(params.organizationRoleId, 10);
-    const organization = useMemo(
-      () => data.organizations.find((org) => org.id === organizationId),
-      [data, organizationId],
-    );
-    const initialOrganizationRole = useMemo(
-      () => organization?.organization_roles.find((role) => role.id === organizationRoleId),
-      [organization, organizationRoleId],
-    );
+export default LoadQueryWrapper(useOrganizationAdminOrganizationsQuery, function EditOrganizationRole({ data }) {
+  const { organizationId, organizationRoleId } = useParams<{ organizationId: string; organizationRoleId: string }>();
+  const organization = useMemo(
+    () => data.organizations.find((org) => org.id === organizationId),
+    [data, organizationId],
+  );
+  const initialOrganizationRole = useMemo(
+    () => organization?.organization_roles.find((role) => role.id === organizationRoleId),
+    [organization, organizationRoleId],
+  );
 
-    if (!organization || !initialOrganizationRole) {
-      return <FourOhFourPage />;
-    }
+  if (!organization || !initialOrganizationRole) {
+    return <FourOhFourPage />;
+  }
 
-    return (
-      <EditOrganizationRoleForm
-        organization={organization}
-        initialOrganizationRole={initialOrganizationRole}
-      />
-    );
-  },
-);
+  return <EditOrganizationRoleForm organization={organization} initialOrganizationRole={initialOrganizationRole} />;
+});

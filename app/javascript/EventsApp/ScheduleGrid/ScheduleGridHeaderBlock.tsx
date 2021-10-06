@@ -5,7 +5,7 @@ import { FiniteTimespan } from '../../Timespan';
 
 export type ScheduleGridHeaderBlockProps = {
   timespan: FiniteTimespan;
-  runIds: number[];
+  runIds: string[];
 };
 
 function ScheduleGridHeaderBlock({ timespan, runIds }: ScheduleGridHeaderBlockProps) {

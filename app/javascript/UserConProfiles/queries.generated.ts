@@ -14,14 +14,14 @@ export type UserConProfileFieldsFragment = { __typename: 'UserConProfile', name:
 export type UserConProfileAdminTicketFieldsFragment = { __typename: 'Ticket', created_at: any, updated_at: any, id: string, order_entry?: { __typename: 'OrderEntry', id: string, order: { __typename: 'Order', status: Types.OrderStatus, submitted_at?: any | null | undefined, charge_id?: string | null | undefined, payment_note?: string | null | undefined, id: string, user_con_profile: { __typename: 'UserConProfile', name_without_nickname: string, id: string }, total_price: { __typename: 'Money', fractional: number, currency_code: string }, payment_amount?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, coupon_applications: Array<{ __typename: 'CouponApplication', id: string, discount: { __typename: 'Money', fractional: number, currency_code: string }, coupon: { __typename: 'Coupon', code: string, percent_discount?: any | null | undefined, id: string, fixed_amount?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, provides_product?: { __typename: 'Product', name: string, id: string } | null | undefined } }>, order_entries: Array<{ __typename: 'OrderEntry', quantity: number, describe_products: string, id: string, product: { __typename: 'Product', name: string, id: string }, product_variant?: { __typename: 'ProductVariant', name: string, id: string } | null | undefined, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } }> }, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } } | null | undefined, ticket_type: { __typename: 'TicketType', description?: string | null | undefined, name: string, id: string }, provided_by_event?: { __typename: 'Event', title?: string | null | undefined, id: string } | null | undefined };
 
 export type UserConProfileQueryVariables = Types.Exact<{
-  id: Types.Scalars['Int'];
+  id: Types.Scalars['ID'];
 }>;
 
 
 export type UserConProfileQueryData = { __typename: 'Query', convention: { __typename: 'Convention', starts_at?: any | null | undefined, ends_at?: any | null | undefined, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, id: string, user_con_profile: { __typename: 'UserConProfile', current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, name: string, form_response_attrs_json?: any | null | undefined, gravatar_enabled: boolean, gravatar_url: string, id: string }, user_con_profile_form: { __typename: 'Form', title: string, form_type: Types.FormType, id: string, form_sections: Array<{ __typename: 'FormSection', title?: string | null | undefined, position: number, id: string, form_items: Array<{ __typename: 'FormItem', position: number, identifier?: string | null | undefined, item_type: string, rendered_properties?: any | null | undefined, default_value?: any | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole, id: string }> }> } } };
 
 export type UserConProfileAdminQueryVariables = Types.Exact<{
-  id: Types.Scalars['Int'];
+  id: Types.Scalars['ID'];
 }>;
 
 
@@ -57,7 +57,7 @@ export type TicketAdminWithoutTicketAbilityQueryVariables = Types.Exact<{ [key: 
 export type TicketAdminWithoutTicketAbilityQueryData = { __typename: 'Query', currentAbility: { __typename: 'Ability', can_create_tickets: boolean } };
 
 export type TicketAdminWithTicketAbilityQueryVariables = Types.Exact<{
-  ticketId: Types.Scalars['Int'];
+  ticketId: Types.Scalars['ID'];
 }>;
 
 
@@ -113,11 +113,11 @@ export const UserConProfileAdminTicketFieldsFragmentDoc = gql`
 }
     ${AdminOrderFieldsFragmentDoc}`;
 export const UserConProfileQueryDocument = gql`
-    query UserConProfileQuery($id: Int!) {
+    query UserConProfileQuery($id: ID!) {
   convention: conventionByRequestHost {
     ...UserConProfileFormData
     id: transitionalId
-    user_con_profile(id: $id) {
+    user_con_profile(transitionalId: $id) {
       id: transitionalId
       current_user_form_item_viewer_role
       current_user_form_item_writer_role
@@ -156,7 +156,7 @@ export type UserConProfileQueryHookResult = ReturnType<typeof useUserConProfileQ
 export type UserConProfileQueryLazyQueryHookResult = ReturnType<typeof useUserConProfileQueryLazyQuery>;
 export type UserConProfileQueryQueryResult = Apollo.QueryResult<UserConProfileQueryData, UserConProfileQueryVariables>;
 export const UserConProfileAdminQueryDocument = gql`
-    query UserConProfileAdminQuery($id: Int!) {
+    query UserConProfileAdminQuery($id: ID!) {
   convention: conventionByRequestHost {
     id: transitionalId
     name
@@ -170,12 +170,12 @@ export const UserConProfileAdminQueryDocument = gql`
       id: transitionalId
       ability {
         can_read_signups
-        can_update_user_con_profile(user_con_profile_id: $id)
-        can_delete_user_con_profile(user_con_profile_id: $id)
-        can_become_user_con_profile(user_con_profile_id: $id)
+        can_update_user_con_profile(transitionalUserConProfileId: $id)
+        can_delete_user_con_profile(transitionalUserConProfileId: $id)
+        can_become_user_con_profile(transitionalUserConProfileId: $id)
       }
     }
-    user_con_profile(id: $id) {
+    user_con_profile(transitionalId: $id) {
       id: transitionalId
       email
       user_id
@@ -481,11 +481,11 @@ export type TicketAdminWithoutTicketAbilityQueryHookResult = ReturnType<typeof u
 export type TicketAdminWithoutTicketAbilityQueryLazyQueryHookResult = ReturnType<typeof useTicketAdminWithoutTicketAbilityQueryLazyQuery>;
 export type TicketAdminWithoutTicketAbilityQueryQueryResult = Apollo.QueryResult<TicketAdminWithoutTicketAbilityQueryData, TicketAdminWithoutTicketAbilityQueryVariables>;
 export const TicketAdminWithTicketAbilityQueryDocument = gql`
-    query TicketAdminWithTicketAbilityQuery($ticketId: Int!) {
+    query TicketAdminWithTicketAbilityQuery($ticketId: ID!) {
   currentAbility {
     can_create_tickets
-    can_update_ticket(ticket_id: $ticketId)
-    can_delete_ticket(ticket_id: $ticketId)
+    can_update_ticket(transitionalTicketId: $ticketId)
+    can_delete_ticket(transitionalTicketId: $ticketId)
   }
 }
     `;

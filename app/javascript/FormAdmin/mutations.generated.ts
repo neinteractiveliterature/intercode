@@ -17,7 +17,7 @@ export type CreateFormWithJsonMutationVariables = Types.Exact<{
 export type CreateFormWithJsonMutationData = { __typename: 'Mutation', createFormWithJSON: { __typename: 'CreateFormWithJSONPayload', form: { __typename: 'Form', title: string, form_type: Types.FormType, export_json: any, id: string, event_categories: Array<{ __typename: 'EventCategory', name: string, id: string }>, proposal_event_categories: Array<{ __typename: 'EventCategory', name: string, id: string }>, user_con_profile_conventions: Array<{ __typename: 'Convention', name: string, id: string }> } } };
 
 export type UpdateFormWithJsonMutationVariables = Types.Exact<{
-  id: Types.Scalars['Int'];
+  id: Types.Scalars['ID'];
   formJSON: Types.Scalars['String'];
 }>;
 
@@ -33,7 +33,7 @@ export type CreateFormMutationVariables = Types.Exact<{
 export type CreateFormMutationData = { __typename: 'Mutation', createForm: { __typename: 'CreateFormPayload', form: { __typename: 'Form', title: string, form_type: Types.FormType, export_json: any, id: string, event_categories: Array<{ __typename: 'EventCategory', name: string, id: string }>, proposal_event_categories: Array<{ __typename: 'EventCategory', name: string, id: string }>, user_con_profile_conventions: Array<{ __typename: 'Convention', name: string, id: string }> } } };
 
 export type UpdateFormMutationVariables = Types.Exact<{
-  id: Types.Scalars['Int'];
+  id: Types.Scalars['ID'];
   form: Types.FormInput;
 }>;
 
@@ -41,14 +41,14 @@ export type UpdateFormMutationVariables = Types.Exact<{
 export type UpdateFormMutationData = { __typename: 'Mutation', updateForm: { __typename: 'UpdateFormPayload', form: { __typename: 'Form', title: string, form_type: Types.FormType, id: string, form_sections: Array<{ __typename: 'FormSection', title?: string | null | undefined, position: number, id: string, form_items: Array<{ __typename: 'FormItem', admin_description?: string | null | undefined, public_description?: string | null | undefined, properties?: any | null | undefined, position: number, identifier?: string | null | undefined, item_type: string, rendered_properties?: any | null | undefined, default_value?: any | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole, id: string }> }> } } };
 
 export type DeleteFormMutationVariables = Types.Exact<{
-  id: Types.Scalars['Int'];
+  id: Types.Scalars['ID'];
 }>;
 
 
 export type DeleteFormMutationData = { __typename: 'Mutation', deleteForm: { __typename: 'DeleteFormPayload', clientMutationId?: string | null | undefined } };
 
 export type CreateFormSectionMutationVariables = Types.Exact<{
-  formId: Types.Scalars['Int'];
+  formId: Types.Scalars['ID'];
   formSection: Types.FormSectionInput;
 }>;
 
@@ -56,7 +56,7 @@ export type CreateFormSectionMutationVariables = Types.Exact<{
 export type CreateFormSectionMutationData = { __typename: 'Mutation', createFormSection: { __typename: 'CreateFormSectionPayload', form_section: { __typename: 'FormSection', title?: string | null | undefined, position: number, id: string, form_items: Array<{ __typename: 'FormItem', admin_description?: string | null | undefined, public_description?: string | null | undefined, properties?: any | null | undefined, position: number, identifier?: string | null | undefined, item_type: string, rendered_properties?: any | null | undefined, default_value?: any | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole, id: string }> } } };
 
 export type UpdateFormSectionMutationVariables = Types.Exact<{
-  id: Types.Scalars['Int'];
+  id: Types.Scalars['ID'];
   formSection: Types.FormSectionInput;
 }>;
 
@@ -64,14 +64,14 @@ export type UpdateFormSectionMutationVariables = Types.Exact<{
 export type UpdateFormSectionMutationData = { __typename: 'Mutation', updateFormSection: { __typename: 'UpdateFormSectionPayload', form_section: { __typename: 'FormSection', title?: string | null | undefined, position: number, id: string, form_items: Array<{ __typename: 'FormItem', admin_description?: string | null | undefined, public_description?: string | null | undefined, properties?: any | null | undefined, position: number, identifier?: string | null | undefined, item_type: string, rendered_properties?: any | null | undefined, default_value?: any | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole, id: string }> } } };
 
 export type DeleteFormSectionMutationVariables = Types.Exact<{
-  id: Types.Scalars['Int'];
+  id: Types.Scalars['ID'];
 }>;
 
 
 export type DeleteFormSectionMutationData = { __typename: 'Mutation', deleteFormSection: { __typename: 'DeleteFormSectionPayload', clientMutationId?: string | null | undefined } };
 
 export type MoveFormSectionMutationVariables = Types.Exact<{
-  id: Types.Scalars['Int'];
+  id: Types.Scalars['ID'];
   destinationIndex: Types.Scalars['Int'];
 }>;
 
@@ -79,7 +79,7 @@ export type MoveFormSectionMutationVariables = Types.Exact<{
 export type MoveFormSectionMutationData = { __typename: 'Mutation', moveFormSection: { __typename: 'MoveFormSectionPayload', form: { __typename: 'Form', title: string, form_type: Types.FormType, id: string, form_sections: Array<{ __typename: 'FormSection', title?: string | null | undefined, position: number, id: string, form_items: Array<{ __typename: 'FormItem', admin_description?: string | null | undefined, public_description?: string | null | undefined, properties?: any | null | undefined, position: number, identifier?: string | null | undefined, item_type: string, rendered_properties?: any | null | undefined, default_value?: any | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole, id: string }> }> } } };
 
 export type CreateFormItemMutationVariables = Types.Exact<{
-  formSectionId: Types.Scalars['Int'];
+  formSectionId: Types.Scalars['ID'];
   formItem: Types.FormItemInput;
 }>;
 
@@ -87,7 +87,7 @@ export type CreateFormItemMutationVariables = Types.Exact<{
 export type CreateFormItemMutationData = { __typename: 'Mutation', createFormItem: { __typename: 'CreateFormItemPayload', form_item: { __typename: 'FormItem', admin_description?: string | null | undefined, public_description?: string | null | undefined, properties?: any | null | undefined, position: number, identifier?: string | null | undefined, item_type: string, rendered_properties?: any | null | undefined, default_value?: any | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole, id: string } } };
 
 export type UpdateFormItemMutationVariables = Types.Exact<{
-  id: Types.Scalars['Int'];
+  id: Types.Scalars['ID'];
   formItem: Types.FormItemInput;
 }>;
 
@@ -95,15 +95,15 @@ export type UpdateFormItemMutationVariables = Types.Exact<{
 export type UpdateFormItemMutationData = { __typename: 'Mutation', updateFormItem: { __typename: 'UpdateFormItemPayload', form_item: { __typename: 'FormItem', admin_description?: string | null | undefined, public_description?: string | null | undefined, properties?: any | null | undefined, position: number, identifier?: string | null | undefined, item_type: string, rendered_properties?: any | null | undefined, default_value?: any | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole, id: string } } };
 
 export type DeleteFormItemMutationVariables = Types.Exact<{
-  id: Types.Scalars['Int'];
+  id: Types.Scalars['ID'];
 }>;
 
 
 export type DeleteFormItemMutationData = { __typename: 'Mutation', deleteFormItem: { __typename: 'DeleteFormItemPayload', clientMutationId?: string | null | undefined } };
 
 export type MoveFormItemMutationVariables = Types.Exact<{
-  id: Types.Scalars['Int'];
-  formSectionId: Types.Scalars['Int'];
+  id: Types.Scalars['ID'];
+  formSectionId: Types.Scalars['ID'];
   destinationIndex?: Types.Maybe<Types.Scalars['Int']>;
 }>;
 
@@ -149,8 +149,8 @@ export type CreateFormWithJsonMutationHookResult = ReturnType<typeof useCreateFo
 export type CreateFormWithJsonMutationResult = Apollo.MutationResult<CreateFormWithJsonMutationData>;
 export type CreateFormWithJsonMutationOptions = Apollo.BaseMutationOptions<CreateFormWithJsonMutationData, CreateFormWithJsonMutationVariables>;
 export const UpdateFormWithJsonDocument = gql`
-    mutation UpdateFormWithJSON($id: Int!, $formJSON: String!) {
-  updateFormWithJSON(input: {id: $id, form_json: $formJSON}) {
+    mutation UpdateFormWithJSON($id: ID!, $formJSON: String!) {
+  updateFormWithJSON(input: {transitionalId: $id, form_json: $formJSON}) {
     form {
       id: transitionalId
       ...FormFields
@@ -223,8 +223,8 @@ export type CreateFormMutationHookResult = ReturnType<typeof useCreateFormMutati
 export type CreateFormMutationResult = Apollo.MutationResult<CreateFormMutationData>;
 export type CreateFormMutationOptions = Apollo.BaseMutationOptions<CreateFormMutationData, CreateFormMutationVariables>;
 export const UpdateFormDocument = gql`
-    mutation UpdateForm($id: Int!, $form: FormInput!) {
-  updateForm(input: {id: $id, form: $form}) {
+    mutation UpdateForm($id: ID!, $form: FormInput!) {
+  updateForm(input: {transitionalId: $id, form: $form}) {
     form {
       id: transitionalId
       ...FormEditorData
@@ -260,8 +260,8 @@ export type UpdateFormMutationHookResult = ReturnType<typeof useUpdateFormMutati
 export type UpdateFormMutationResult = Apollo.MutationResult<UpdateFormMutationData>;
 export type UpdateFormMutationOptions = Apollo.BaseMutationOptions<UpdateFormMutationData, UpdateFormMutationVariables>;
 export const DeleteFormDocument = gql`
-    mutation DeleteForm($id: Int!) {
-  deleteForm(input: {id: $id}) {
+    mutation DeleteForm($id: ID!) {
+  deleteForm(input: {transitionalId: $id}) {
     clientMutationId
   }
 }
@@ -293,8 +293,10 @@ export type DeleteFormMutationHookResult = ReturnType<typeof useDeleteFormMutati
 export type DeleteFormMutationResult = Apollo.MutationResult<DeleteFormMutationData>;
 export type DeleteFormMutationOptions = Apollo.BaseMutationOptions<DeleteFormMutationData, DeleteFormMutationVariables>;
 export const CreateFormSectionDocument = gql`
-    mutation CreateFormSection($formId: Int!, $formSection: FormSectionInput!) {
-  createFormSection(input: {form_id: $formId, form_section: $formSection}) {
+    mutation CreateFormSection($formId: ID!, $formSection: FormSectionInput!) {
+  createFormSection(
+    input: {transitionalFormId: $formId, form_section: $formSection}
+  ) {
     form_section {
       id: transitionalId
       ...CommonFormSectionFields
@@ -335,8 +337,8 @@ export type CreateFormSectionMutationHookResult = ReturnType<typeof useCreateFor
 export type CreateFormSectionMutationResult = Apollo.MutationResult<CreateFormSectionMutationData>;
 export type CreateFormSectionMutationOptions = Apollo.BaseMutationOptions<CreateFormSectionMutationData, CreateFormSectionMutationVariables>;
 export const UpdateFormSectionDocument = gql`
-    mutation UpdateFormSection($id: Int!, $formSection: FormSectionInput!) {
-  updateFormSection(input: {id: $id, form_section: $formSection}) {
+    mutation UpdateFormSection($id: ID!, $formSection: FormSectionInput!) {
+  updateFormSection(input: {transitionalId: $id, form_section: $formSection}) {
     form_section {
       id: transitionalId
       ...CommonFormSectionFields
@@ -377,8 +379,8 @@ export type UpdateFormSectionMutationHookResult = ReturnType<typeof useUpdateFor
 export type UpdateFormSectionMutationResult = Apollo.MutationResult<UpdateFormSectionMutationData>;
 export type UpdateFormSectionMutationOptions = Apollo.BaseMutationOptions<UpdateFormSectionMutationData, UpdateFormSectionMutationVariables>;
 export const DeleteFormSectionDocument = gql`
-    mutation DeleteFormSection($id: Int!) {
-  deleteFormSection(input: {id: $id}) {
+    mutation DeleteFormSection($id: ID!) {
+  deleteFormSection(input: {transitionalId: $id}) {
     clientMutationId
   }
 }
@@ -410,8 +412,10 @@ export type DeleteFormSectionMutationHookResult = ReturnType<typeof useDeleteFor
 export type DeleteFormSectionMutationResult = Apollo.MutationResult<DeleteFormSectionMutationData>;
 export type DeleteFormSectionMutationOptions = Apollo.BaseMutationOptions<DeleteFormSectionMutationData, DeleteFormSectionMutationVariables>;
 export const MoveFormSectionDocument = gql`
-    mutation MoveFormSection($id: Int!, $destinationIndex: Int!) {
-  moveFormSection(input: {id: $id, destination_index: $destinationIndex}) {
+    mutation MoveFormSection($id: ID!, $destinationIndex: Int!) {
+  moveFormSection(
+    input: {transitionalId: $id, destination_index: $destinationIndex}
+  ) {
     form {
       id: transitionalId
       ...FormEditorData
@@ -447,8 +451,10 @@ export type MoveFormSectionMutationHookResult = ReturnType<typeof useMoveFormSec
 export type MoveFormSectionMutationResult = Apollo.MutationResult<MoveFormSectionMutationData>;
 export type MoveFormSectionMutationOptions = Apollo.BaseMutationOptions<MoveFormSectionMutationData, MoveFormSectionMutationVariables>;
 export const CreateFormItemDocument = gql`
-    mutation CreateFormItem($formSectionId: Int!, $formItem: FormItemInput!) {
-  createFormItem(input: {form_section_id: $formSectionId, form_item: $formItem}) {
+    mutation CreateFormItem($formSectionId: ID!, $formItem: FormItemInput!) {
+  createFormItem(
+    input: {transitionalFormSectionId: $formSectionId, form_item: $formItem}
+  ) {
     form_item {
       id: transitionalId
       ...FormEditorFormItemFields
@@ -484,8 +490,8 @@ export type CreateFormItemMutationHookResult = ReturnType<typeof useCreateFormIt
 export type CreateFormItemMutationResult = Apollo.MutationResult<CreateFormItemMutationData>;
 export type CreateFormItemMutationOptions = Apollo.BaseMutationOptions<CreateFormItemMutationData, CreateFormItemMutationVariables>;
 export const UpdateFormItemDocument = gql`
-    mutation UpdateFormItem($id: Int!, $formItem: FormItemInput!) {
-  updateFormItem(input: {id: $id, form_item: $formItem}) {
+    mutation UpdateFormItem($id: ID!, $formItem: FormItemInput!) {
+  updateFormItem(input: {transitionalId: $id, form_item: $formItem}) {
     form_item {
       id: transitionalId
       ...FormEditorFormItemFields
@@ -521,8 +527,8 @@ export type UpdateFormItemMutationHookResult = ReturnType<typeof useUpdateFormIt
 export type UpdateFormItemMutationResult = Apollo.MutationResult<UpdateFormItemMutationData>;
 export type UpdateFormItemMutationOptions = Apollo.BaseMutationOptions<UpdateFormItemMutationData, UpdateFormItemMutationVariables>;
 export const DeleteFormItemDocument = gql`
-    mutation DeleteFormItem($id: Int!) {
-  deleteFormItem(input: {id: $id}) {
+    mutation DeleteFormItem($id: ID!) {
+  deleteFormItem(input: {transitionalId: $id}) {
     clientMutationId
   }
 }
@@ -554,9 +560,9 @@ export type DeleteFormItemMutationHookResult = ReturnType<typeof useDeleteFormIt
 export type DeleteFormItemMutationResult = Apollo.MutationResult<DeleteFormItemMutationData>;
 export type DeleteFormItemMutationOptions = Apollo.BaseMutationOptions<DeleteFormItemMutationData, DeleteFormItemMutationVariables>;
 export const MoveFormItemDocument = gql`
-    mutation MoveFormItem($id: Int!, $formSectionId: Int!, $destinationIndex: Int) {
+    mutation MoveFormItem($id: ID!, $formSectionId: ID!, $destinationIndex: Int) {
   moveFormItem(
-    input: {id: $id, form_section_id: $formSectionId, destination_index: $destinationIndex}
+    input: {transitionalId: $id, transitionalFormSectionId: $formSectionId, destination_index: $destinationIndex}
   ) {
     form_section {
       id: transitionalId

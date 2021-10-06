@@ -6,7 +6,7 @@ import { CommonFormFieldsFragmentDoc, CommonFormSectionFieldsFragmentDoc, Common
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
 export type EventHistoryQueryVariables = Types.Exact<{
-  id: Types.Scalars['Int'];
+  id: Types.Scalars['ID'];
 }>;
 
 
@@ -14,14 +14,14 @@ export type EventHistoryQueryData = { __typename: 'Query', convention: { __typen
 
 
 export const EventHistoryQueryDocument = gql`
-    query EventHistoryQuery($id: Int!) {
+    query EventHistoryQuery($id: ID!) {
   convention: conventionByRequestHost {
     id: transitionalId
     starts_at
     ends_at
     timezone_name
     timezone_mode
-    event(id: $id) {
+    event(transitionalId: $id) {
       id: transitionalId
       title
       event_category {

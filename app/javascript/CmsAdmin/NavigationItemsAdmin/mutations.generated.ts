@@ -13,7 +13,7 @@ export type CreateNavigationItemMutationVariables = Types.Exact<{
 export type CreateNavigationItemMutationData = { __typename: 'Mutation', createCmsNavigationItem: { __typename: 'CreateCmsNavigationItemPayload', cms_navigation_item: { __typename: 'CmsNavigationItem', position?: number | null | undefined, title?: string | null | undefined, id: string, page?: { __typename: 'Page', id: string } | null | undefined, navigation_section?: { __typename: 'CmsNavigationItem', id: string } | null | undefined } } };
 
 export type UpdateNavigationItemMutationVariables = Types.Exact<{
-  id: Types.Scalars['Int'];
+  id: Types.Scalars['ID'];
   navigationItem: Types.CmsNavigationItemInput;
 }>;
 
@@ -21,7 +21,7 @@ export type UpdateNavigationItemMutationVariables = Types.Exact<{
 export type UpdateNavigationItemMutationData = { __typename: 'Mutation', updateCmsNavigationItem: { __typename: 'UpdateCmsNavigationItemPayload', cms_navigation_item: { __typename: 'CmsNavigationItem', position?: number | null | undefined, title?: string | null | undefined, id: string, page?: { __typename: 'Page', id: string } | null | undefined, navigation_section?: { __typename: 'CmsNavigationItem', id: string } | null | undefined } } };
 
 export type DeleteNavigationItemMutationVariables = Types.Exact<{
-  id: Types.Scalars['Int'];
+  id: Types.Scalars['ID'];
 }>;
 
 
@@ -72,8 +72,10 @@ export type CreateNavigationItemMutationHookResult = ReturnType<typeof useCreate
 export type CreateNavigationItemMutationResult = Apollo.MutationResult<CreateNavigationItemMutationData>;
 export type CreateNavigationItemMutationOptions = Apollo.BaseMutationOptions<CreateNavigationItemMutationData, CreateNavigationItemMutationVariables>;
 export const UpdateNavigationItemDocument = gql`
-    mutation UpdateNavigationItem($id: Int!, $navigationItem: CmsNavigationItemInput!) {
-  updateCmsNavigationItem(input: {id: $id, cms_navigation_item: $navigationItem}) {
+    mutation UpdateNavigationItem($id: ID!, $navigationItem: CmsNavigationItemInput!) {
+  updateCmsNavigationItem(
+    input: {transitionalId: $id, cms_navigation_item: $navigationItem}
+  ) {
     cms_navigation_item {
       id: transitionalId
       ...AdminNavigationItemFields
@@ -109,8 +111,8 @@ export type UpdateNavigationItemMutationHookResult = ReturnType<typeof useUpdate
 export type UpdateNavigationItemMutationResult = Apollo.MutationResult<UpdateNavigationItemMutationData>;
 export type UpdateNavigationItemMutationOptions = Apollo.BaseMutationOptions<UpdateNavigationItemMutationData, UpdateNavigationItemMutationVariables>;
 export const DeleteNavigationItemDocument = gql`
-    mutation DeleteNavigationItem($id: Int!) {
-  deleteCmsNavigationItem(input: {id: $id}) {
+    mutation DeleteNavigationItem($id: ID!) {
+  deleteCmsNavigationItem(input: {transitionalId: $id}) {
     cms_navigation_item {
       id: transitionalId
     }

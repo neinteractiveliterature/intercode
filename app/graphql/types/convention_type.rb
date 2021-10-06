@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassLength
+class Types::ConventionType < Types::BaseObject
   implements Types::CmsParent
 
   field :accepting_proposals, Boolean, null: true
@@ -48,7 +48,8 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
     argument :id,
              Integer,
              deprecation_reason:
-               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
              required: false,
              description: 'The ID of the event to find'
     argument :transitional_id, ID, required: false, description: 'The ID of the event to find', camelize: true
@@ -92,7 +93,8 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
     argument :id,
              Integer,
              deprecation_reason:
-               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
              required: false,
              description: 'The ID of the event proposal to find.'
     argument :transitional_id, ID, required: false, description: 'The ID of the event proposal to find.', camelize: true
@@ -169,7 +171,8 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
     argument :id,
              Integer,
              deprecation_reason:
-               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
              required: false,
              description: 'The ID of the form to find.'
     argument :transitional_id, ID, required: false, description: 'The ID of the form to find.', camelize: true
@@ -189,7 +192,8 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
   field :id,
         Integer,
         deprecation_reason:
-          'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+          "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
         null: false
   field :transitional_id, ID, method: :id, null: false, camelize: true
   field :language, String, null: false
@@ -315,7 +319,8 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
     argument :id,
              Integer,
              deprecation_reason:
-               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
              required: false,
              description: 'The ID of the product to find.'
     argument :transitional_id, ID, required: false, description: 'The ID of the product to find.', camelize: true
@@ -358,7 +363,8 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
     argument :id,
              Integer,
              deprecation_reason:
-               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
              required: false,
              description: 'The ID of the run to find'
     argument :transitional_id, ID, required: false, description: 'The ID of the run to find', camelize: true
@@ -381,7 +387,8 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
     argument :id,
              Integer,
              deprecation_reason:
-               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
              required: false,
              description: 'The ID of the signup to find.'
     argument :transitional_id, ID, required: false, description: 'The ID of the signup to find.', camelize: true
@@ -462,7 +469,8 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
     argument :id,
              Integer,
              deprecation_reason:
-               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
              required: false,
              description: 'The ID of the staff position to find.'
     argument :transitional_id, ID, required: false, description: 'The ID of the staff position to find.', camelize: true
@@ -493,7 +501,8 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
     argument :id,
              Integer,
              deprecation_reason:
-               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
              required: false
     argument :transitional_id, ID, required: false, camelize: true
   end
@@ -507,7 +516,8 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
     argument :id,
              Integer,
              deprecation_reason:
-               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
              required: false,
              description: 'The ID of the UserConProfile to find.'
     argument :transitional_id, ID, required: false, description: 'The ID of the UserConProfile to find.', camelize: true
@@ -526,7 +536,8 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
     argument :user_id,
              Integer,
              deprecation_reason:
-               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
              required: false,
              description: 'The user ID of the UserConProfile to find.'
     argument :transitional_user_id,

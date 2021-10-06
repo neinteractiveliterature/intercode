@@ -73,7 +73,7 @@ export const FormAdminQuery = gql`
 `;
 
 export const FormEditorQuery = gql`
-  query FormEditorQuery($id: Int!) {
+  query FormEditorQuery($id: ID!) {
     convention: conventionByRequestHost {
       id: transitionalId
       name
@@ -82,7 +82,7 @@ export const FormEditorQuery = gql`
       timezone_name
       timezone_mode
       event_mailing_list_domain
-      form(id: $id) {
+      form(transitionalId: $id) {
         id: transitionalId
         ...FormEditorData
       }
@@ -93,12 +93,12 @@ export const FormEditorQuery = gql`
 `;
 
 export const PreviewFormItemQuery = gql`
-  query PreviewFormItemQuery($formId: Int!, $formSectionId: Int!, $formItem: FormItemInput!) {
+  query PreviewFormItemQuery($formId: ID!, $formSectionId: ID!, $formItem: FormItemInput!) {
     convention: conventionByRequestHost {
       id: transitionalId
-      form(id: $formId) {
+      form(transitionalId: $formId) {
         id: transitionalId
-        form_section(id: $formSectionId) {
+        form_section(transitionalId: $formSectionId) {
           id: transitionalId
           preview_form_item(formItem: $formItem) {
             id: transitionalId

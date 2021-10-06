@@ -23,10 +23,7 @@ import { useCmsFilesAdminQuery } from './queries.generated';
 
 function CmsFilesAdmin(): JSX.Element {
   const { data, loading, error, refetch } = useCmsFilesAdminQuery();
-  const deleteFileMutate = useDeleteMutation<
-    DeleteCmsFileMutationVariables,
-    DeleteCmsFileMutationData
-  >(DeleteCmsFile, {
+  const deleteFileMutate = useDeleteMutation<DeleteCmsFileMutationVariables, DeleteCmsFileMutationData>(DeleteCmsFile, {
     query: CmsFilesAdminQuery,
     arrayPath: ['cmsFiles'],
     idVariablePath: ['id'],
@@ -37,8 +34,8 @@ function CmsFilesAdmin(): JSX.Element {
 
   usePageTitle('CMS Files');
 
-  const deleteFile = (id: number) => deleteFileMutate({ variables: { id } });
-  const renameFile = (id: number, filename: string) =>
+  const deleteFile = (id: string) => deleteFileMutate({ variables: { id } });
+  const renameFile = (id: string, filename: string) =>
     renameFileMutate({
       variables: { id, filename },
     });
@@ -75,10 +72,7 @@ function CmsFilesAdmin(): JSX.Element {
                 </div>
               )}
               <small className="text-break fw-bold">
-                <InPlaceEditor
-                  value={cmsFile.filename}
-                  onChange={(filename) => renameFile(cmsFile.id, filename)}
-                />
+                <InPlaceEditor value={cmsFile.filename} onChange={(filename) => renameFile(cmsFile.id, filename)} />
               </small>
               <CopyToClipboardButton
                 className="btn btn-sm btn-outline-primary"
@@ -90,11 +84,7 @@ function CmsFilesAdmin(): JSX.Element {
             </div>
             <div className="card-body text-center py-2">
               <a href={cmsFile.url}>
-                <FilePreview
-                  url={cmsFile.url}
-                  contentType={cmsFile.content_type}
-                  filename={cmsFile.filename}
-                />
+                <FilePreview url={cmsFile.url} contentType={cmsFile.content_type} filename={cmsFile.filename} />
               </a>
             </div>
             <div className="card-footer text-end">

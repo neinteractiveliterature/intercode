@@ -5,19 +5,10 @@ import { useTranslation } from 'react-i18next';
 import ChoiceSetFilter from '../../Tables/ChoiceSetFilter';
 import EmailList from '../../UIComponents/EmailList';
 import usePageTitle from '../../usePageTitle';
-import {
-  RunSignupsTableSignupsQueryData,
-  useRunSignupsTableSignupsQuery,
-} from './queries.generated';
+import { RunSignupsTableSignupsQueryData, useRunSignupsTableSignupsQuery } from './queries.generated';
 import { LoadQueryWithVariablesWrapper } from '../../GraphqlLoadingWrappers';
 
-function getEmails({
-  data,
-  includes,
-}: {
-  data: RunSignupsTableSignupsQueryData;
-  includes: string[];
-}) {
+function getEmails({ data, includes }: { data: RunSignupsTableSignupsQueryData; includes: string[] }) {
   const teamMemberUserConProfileIds = data.convention.event.team_members.map(
     (teamMember) => teamMember.user_con_profile.id,
   );
@@ -52,8 +43,8 @@ function getEmails({
 }
 
 export type RunEmailListProps = {
-  runId: number;
-  eventId: number;
+  runId: string;
+  eventId: string;
   separator: ', ' | '; ';
 };
 
@@ -89,15 +80,9 @@ export default LoadQueryWithVariablesWrapper(
             multiple
             choices={[
               {
-                label: t(
-                  'events.signupAdmin.emailFilters.teamMembers',
-                  'Include {{ teamMemberName }}',
-                  {
-                    teamMemberName: pluralize(
-                      data.convention.event.event_category.team_member_name,
-                    ),
-                  },
-                ),
+                label: t('events.signupAdmin.emailFilters.teamMembers', 'Include {{ teamMemberName }}', {
+                  teamMemberName: pluralize(data.convention.event.event_category.team_member_name),
+                }),
                 value: 'teamMembers',
               },
               {
@@ -122,9 +107,7 @@ export default LoadQueryWithVariablesWrapper(
                 .sort()
                 .map((include) => {
                   if (include === 'teamMembers') {
-                    return humanize(
-                      underscore(pluralize(data.convention.event.event_category.team_member_name)),
-                    );
+                    return humanize(underscore(pluralize(data.convention.event.event_category.team_member_name)));
                   }
 
                   return t(`signups.states.${include}`, humanize(underscore(include)));

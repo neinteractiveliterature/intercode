@@ -5,7 +5,8 @@ class Mutations::CreateFormItem < Mutations::BaseMutation
   argument :form_section_id,
            Integer,
            deprecation_reason:
-             'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
            required: false,
            camelize: false
   argument :transitional_form_section_id, ID, required: false, camelize: true

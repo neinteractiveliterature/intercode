@@ -5,12 +5,20 @@ class Mutations::CreateOrganizationRole < Mutations::BaseMutation
   argument :organization_id,
            Integer,
            deprecation_reason:
-             'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
            required: false,
            camelize: false
   argument :transitional_organization_id, ID, required: false, camelize: true
   argument :organization_role, Types::OrganizationRoleInputType, required: true, camelize: false
-  argument :user_ids, [Integer], required: false, camelize: false
+  argument :user_ids,
+           [Integer],
+           deprecation_reason:
+             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
+           required: false,
+           camelize: false
+  argument :transitional_user_ids, [ID], required: false, camelize: true
   argument :permissions, [Types::PermissionInputType], required: true
 
   attr_reader :organization
@@ -21,9 +29,10 @@ class Mutations::CreateOrganizationRole < Mutations::BaseMutation
   end
 
   def resolve(**args)
-    new_role = organization.organization_roles.create!(args[:organization_role].to_h)
-    new_role.update!(user_ids: args[:user_ids])
-    args[:permissions].each { |permission| new_role.permissions.create!(permission.to_h) }
+    processed_args = process_transitional_ids_in_input(args, :user_ids)
+    new_role = organization.organization_roles.create!(processed_args[:organization_role].to_h)
+    new_role.update!(user_ids: processed_args[:user_ids])
+    processed_args[:permissions].each { |permission| new_role.permissions.create!(permission.to_h) }
 
     # not sure why, but if I don't do this it seems like permissions get returned twice
     new_role.reload

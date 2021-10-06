@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 import SelectWithLabel, { SelectWithLabelProps } from './SelectWithLabel';
 import { Organization } from '../graphqlTypes.generated';
 
-type OrganizationForSelect = Pick<Organization, 'id' | 'name'>;
+type OrganizationForSelect = Pick<Organization, 'name'> & { id: string };
 export type OrganizationSelectProps<IsMulti extends boolean> = Omit<
   SelectWithLabelProps<OrganizationForSelect, IsMulti>,
   'label'

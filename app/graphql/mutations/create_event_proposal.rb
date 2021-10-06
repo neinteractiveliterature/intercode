@@ -5,14 +5,16 @@ class Mutations::CreateEventProposal < Mutations::BaseMutation
   argument :event_category_id,
            Int,
            deprecation_reason:
-             'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
            required: false,
            camelize: false
   argument :transitional_event_category_id, ID, required: false, camelize: true
   argument :clone_event_proposal_id,
            Int,
            deprecation_reason:
-             'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
            required: false,
            camelize: false
   argument :transitional_clone_event_proposal_id, ID, required: false, camelize: true

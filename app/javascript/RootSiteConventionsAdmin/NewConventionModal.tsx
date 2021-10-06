@@ -27,21 +27,14 @@ import {
   RootSiteConventionsAdminTableQueryData,
   useNewConventionModalQuery,
 } from './queries.generated';
-import { Convention, Organization, TimezoneMode } from '../graphqlTypes.generated';
+import { Convention, TimezoneMode } from '../graphqlTypes.generated';
 import { useCreateConventionMutation } from './mutations.generated';
 
 type CreatingConvention = Pick<
   Convention,
-  | 'name'
-  | 'domain'
-  | 'email_from'
-  | 'language'
-  | 'starts_at'
-  | 'ends_at'
-  | 'timezone_mode'
-  | 'timezone_name'
+  'name' | 'domain' | 'email_from' | 'language' | 'starts_at' | 'ends_at' | 'timezone_mode' | 'timezone_name'
 > & {
-  organization?: Pick<Organization, 'id'> | null;
+  organization?: { id: string } | null;
 };
 
 const DEFAULT_PROPS: CreatingConvention = {
@@ -64,11 +57,7 @@ export type NewConventionModalProps = {
   cloneConvention?: RootSiteConventionsAdminTableQueryData['conventions_paginated']['entries'][0];
 };
 
-export default LoadQueryWrapper<
-  NewConventionModalQueryData,
-  NewConventionModalQueryVariables,
-  NewConventionModalProps
->(
+export default LoadQueryWrapper<NewConventionModalQueryData, NewConventionModalQueryVariables, NewConventionModalProps>(
   useNewConventionModalQuery,
   function NewConventionModal({ visible, close, cloneConvention, data }) {
     const history = useHistory();
@@ -82,28 +71,21 @@ export default LoadQueryWrapper<
       () => (cloneConvention ? timespanFromConvention(cloneConvention) : null),
       [cloneConvention],
     );
-    const [cmsContentSet, setCmsContentSet] = useState<
-      typeof CMS_CONTENT_SET_OPTIONS[0] | null | undefined
-    >(cloneConvention ? null : CMS_CONTENT_SET_OPTIONS[0]);
-
-    const [
-      setName,
-      setDomain,
-      setEmailFrom,
-      setOrganization,
-      setLanguage,
-      setTimezoneName,
-      setEndsAt,
-    ] = usePropertySetters(
-      setConvention,
-      'name',
-      'domain',
-      'email_from',
-      'organization',
-      'language',
-      'timezone_name',
-      'ends_at',
+    const [cmsContentSet, setCmsContentSet] = useState<typeof CMS_CONTENT_SET_OPTIONS[0] | null | undefined>(
+      cloneConvention ? null : CMS_CONTENT_SET_OPTIONS[0],
     );
+
+    const [setName, setDomain, setEmailFrom, setOrganization, setLanguage, setTimezoneName, setEndsAt] =
+      usePropertySetters(
+        setConvention,
+        'name',
+        'domain',
+        'email_from',
+        'organization',
+        'language',
+        'timezone_name',
+        'ends_at',
+      );
 
     const setTimezoneMode = (timezoneMode: TimezoneMode) => {
       setConvention((prevConvention) => ({
@@ -117,19 +99,16 @@ export default LoadQueryWrapper<
       if (
         newStartsAt &&
         cloneConventionTimespan?.isFinite() &&
-        timespanFromConvention(convention).getLength('days') ===
-          cloneConventionTimespan.getLength('days')
+        timespanFromConvention(convention).getLength('days') === cloneConventionTimespan.getLength('days')
       ) {
         const newStartsAtInZone = convention.timezone_name
           ? DateTime.fromISO(newStartsAt, { zone: convention.timezone_name })
           : DateTime.fromISO(newStartsAt);
-        const newEndsAt = newStartsAtInZone
-          .plus({ days: cloneConventionTimespan.getLength('days').days })
-          .set({
-            hour: cloneConventionTimespan.finish.hour,
-            minute: cloneConventionTimespan.finish.minute,
-            second: cloneConventionTimespan.finish.second,
-          });
+        const newEndsAt = newStartsAtInZone.plus({ days: cloneConventionTimespan.getLength('days').days }).set({
+          hour: cloneConventionTimespan.finish.hour,
+          minute: cloneConventionTimespan.finish.minute,
+          second: cloneConventionTimespan.finish.second,
+        });
         setConvention((prevConvention) => ({
           ...prevConvention,
           starts_at: newStartsAt,
@@ -170,24 +149,14 @@ export default LoadQueryWrapper<
 
     return (
       <Modal visible={visible} dialogClassName="modal-lg">
-        <div className="modal-header">
-          {cloneConvention ? `Clone ${cloneConvention.name}` : 'New convention'}
-        </div>
+        <div className="modal-header">{cloneConvention ? `Clone ${cloneConvention.name}` : 'New convention'}</div>
 
         <div className="modal-body">
           <BootstrapFormInput label="Name" value={convention.name} onTextChange={setName} />
 
-          <BootstrapFormInput
-            label="Domain name"
-            value={convention.domain ?? ''}
-            onTextChange={setDomain}
-          />
+          <BootstrapFormInput label="Domain name" value={convention.domain ?? ''} onTextChange={setDomain} />
 
-          <BootstrapFormInput
-            label="Email from"
-            value={convention.email_from}
-            onTextChange={setEmailFrom}
-          />
+          <BootstrapFormInput label="Email from" value={convention.email_from} onTextChange={setEmailFrom} />
 
           <OrganizationSelect
             organizations={data.organizations}
@@ -209,11 +178,7 @@ export default LoadQueryWrapper<
           />
 
           {convention.timezone_mode === 'convention_local' && (
-            <TimezoneSelect
-              label="Time zone"
-              value={convention.timezone_name}
-              onChange={setTimezoneName}
-            />
+            <TimezoneSelect label="Time zone" value={convention.timezone_name} onChange={setTimezoneName} />
           )}
 
           <FormGroupWithLabel label="Starts at">
@@ -255,20 +220,10 @@ export default LoadQueryWrapper<
         </div>
 
         <div className="modal-footer">
-          <button
-            className="btn btn-secondary"
-            type="button"
-            onClick={close}
-            disabled={createInProgress}
-          >
+          <button className="btn btn-secondary" type="button" onClick={close} disabled={createInProgress}>
             Cancel
           </button>
-          <button
-            className="btn btn-primary"
-            type="button"
-            onClick={createClicked}
-            disabled={createInProgress}
-          >
+          <button className="btn btn-primary" type="button" onClick={createClicked} disabled={createInProgress}>
             {createInProgress ? (
               <LoadingIndicator iconSet="bootstrap-icons" />
             ) : (

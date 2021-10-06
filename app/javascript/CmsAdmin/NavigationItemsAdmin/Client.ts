@@ -2,13 +2,9 @@ import { ApolloClient, FetchResult } from '@apollo/client';
 import { CadmusNavbarAdminClient } from 'cadmus-navbar-admin/lib/CadmusNavbarAdminClient';
 import { NavigationItem } from 'cadmus-navbar-admin/lib/NavigationItem';
 import { EditingNavigationItem } from 'cadmus-navbar-admin/lib/EditingNavigationItemContext';
-import { parseIntOrNull } from '@neinteractiveliterature/litform';
 import NavigationItemStore from 'cadmus-navbar-admin/lib/NavigationItemStore';
 import { NavigationItemsAdminQuery } from './queries';
-import {
-  AdminNavigationItemFieldsFragment,
-  NavigationItemsAdminQueryData,
-} from './queries.generated';
+import { AdminNavigationItemFieldsFragment, NavigationItemsAdminQueryData } from './queries.generated';
 import {
   CreateNavigationItemDocument,
   CreateNavigationItemMutationData,
@@ -23,7 +19,7 @@ import {
   UpdateNavigationItemMutationData,
   UpdateNavigationItemMutationVariables,
 } from './mutations.generated';
-import { CmsNavigationItemInput } from '../../graphqlTypes.generated';
+import { CmsNavigationItemInput, UpdateCmsNavigationItemInput } from '../../graphqlTypes.generated';
 
 function graphqlNavigationItemToCadmusNavbarAdminObject(
   navigationItem: AdminNavigationItemFieldsFragment,
@@ -119,30 +115,24 @@ class Client implements CadmusNavbarAdminClient {
     let operation: 'create' | 'update';
     const navigationItemInput: CmsNavigationItemInput = {
       title: navigationItem.title,
-      navigation_section_id: parseIntOrNull(navigationItem.navigation_section_id ?? ''),
-      page_id: parseIntOrNull(navigationItem.page_id ?? ''),
+      transitionalNavigationSectionId: navigationItem.navigation_section_id,
+      transitionalPageId: navigationItem.page_id,
       position: navigationItem.position,
     };
-    const navigationItemId = parseIntOrNull(navigationItem.id ?? '');
+    const navigationItemId = navigationItem.id;
 
     try {
       if (navigationItemId != null) {
         operation = 'update';
         mutate = () =>
-          this.apolloClient.mutate<
-            UpdateNavigationItemMutationData,
-            UpdateNavigationItemMutationVariables
-          >({
+          this.apolloClient.mutate<UpdateNavigationItemMutationData, UpdateNavigationItemMutationVariables>({
             mutation: UpdateNavigationItemDocument,
             variables: { id: navigationItemId, navigationItem: navigationItemInput },
           });
       } else {
         operation = 'create';
         mutate = () =>
-          this.apolloClient.mutate<
-            CreateNavigationItemMutationData,
-            CreateNavigationItemMutationVariables
-          >({
+          this.apolloClient.mutate<CreateNavigationItemMutationData, CreateNavigationItemMutationVariables>({
             mutation: CreateNavigationItemDocument,
             variables: { navigationItem: navigationItemInput },
             update: (cache, { data: resultData }) => {
@@ -171,8 +161,7 @@ class Client implements CadmusNavbarAdminClient {
       if (!data) {
         throw new Error('No data returned from mutation');
       }
-      const mutationResponse =
-        operation === 'update' ? data.updateCmsNavigationItem : data.createCmsNavigationItem;
+      const mutationResponse = operation === 'update' ? data.updateCmsNavigationItem : data.createCmsNavigationItem;
 
       await this.apolloClient.resetStore();
       return graphqlNavigationItemToCadmusNavbarAdminObject(mutationResponse.cms_navigation_item);
@@ -186,16 +175,10 @@ class Client implements CadmusNavbarAdminClient {
 
   async deleteNavigationItem(navigationItem: NavigationItem): Promise<void> {
     this.requestsInProgress.deletingNavigationItem = true;
-    const navigationItemId = parseIntOrNull(navigationItem.id);
-    if (navigationItemId == null) {
-      throw new Error(`Invalid navigation item ID: ${JSON.stringify(navigationItem.id)}`);
-    }
+    const navigationItemId = navigationItem.id;
 
     try {
-      await this.apolloClient.mutate<
-        DeleteNavigationItemMutationData,
-        DeleteNavigationItemMutationVariables
-      >({
+      await this.apolloClient.mutate<DeleteNavigationItemMutationData, DeleteNavigationItemMutationVariables>({
         mutation: DeleteNavigationItemDocument,
         variables: { id: navigationItemId },
         update: (cache) => {
@@ -211,9 +194,7 @@ class Client implements CadmusNavbarAdminClient {
               ...data,
               cmsParent: {
                 ...data.cmsParent,
-                cmsNavigationItems: data.cmsParent.cmsNavigationItems.filter(
-                  (item) => item.id !== navigationItemId,
-                ),
+                cmsNavigationItems: data.cmsParent.cmsNavigationItems.filter((item) => item.id !== navigationItemId),
               },
             },
           });
@@ -229,20 +210,17 @@ class Client implements CadmusNavbarAdminClient {
   }
 
   async sortNavigationItems(navigationItems: NavigationItemStore): Promise<void> {
-    const sortItems = navigationItems.map((navigationItem) => ({
-      id: Number.parseInt(navigationItem.id, 10),
+    const sortItems: UpdateCmsNavigationItemInput[] = navigationItems.map((navigationItem) => ({
+      transitionalId: navigationItem.id,
       cms_navigation_item: {
         position: navigationItem.position,
-        navigation_section_id: parseIntOrNull(navigationItem.navigation_section_id ?? ''),
+        transitionalNavigationSectionId: navigationItem.navigation_section_id,
       },
     }));
 
     this.requestsInProgress.sortingNavigationItems = true;
     try {
-      await this.apolloClient.mutate<
-        SortNavigationItemsMutationData,
-        SortNavigationItemsMutationVariables
-      >({
+      await this.apolloClient.mutate<SortNavigationItemsMutationData, SortNavigationItemsMutationVariables>({
         mutation: SortNavigationItemsDocument,
         variables: { sortItems },
         update: (cache) => {
@@ -253,7 +231,7 @@ class Client implements CadmusNavbarAdminClient {
             return;
           }
           const newNavigationItems = data.cmsParent.cmsNavigationItems.map((item) => {
-            const sortItem = sortItems.find((si) => si.id === item.id);
+            const sortItem = sortItems.find((si) => si.transitionalId === item.id);
             if (sortItem == null) {
               return item;
             }

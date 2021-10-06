@@ -8,7 +8,7 @@ import Schedule from './Schedule';
 import AppRootContext from '../../AppRootContext';
 import { SignupState } from '../../graphqlTypes.generated';
 
-function buildHourRunData(runId: number, schedule: Schedule) {
+function buildHourRunData(runId: string, schedule: Schedule) {
   const run = schedule.getRun(runId);
   if (!run) {
     throw new Error(`buildHourRunData: tried to find run ${runId} but it wasn't in the schedule`);
@@ -16,9 +16,7 @@ function buildHourRunData(runId: number, schedule: Schedule) {
 
   const event = schedule.getEvent(run.event_id);
   if (!event) {
-    throw new Error(
-      `buildHourRunData: tried to find event ${run.event_id} but it wasn't in the schedule`,
-    );
+    throw new Error(`buildHourRunData: tried to find event ${run.event_id} but it wasn't in the schedule`);
   }
 
   const signupCountData = SignupCountData.fromRun(run);
@@ -31,7 +29,7 @@ function buildHourRunData(runId: number, schedule: Schedule) {
 
 export type ScheduleGridExtendedCountsProps = {
   now: DateTime;
-  runIds: number[];
+  runIds: string[];
 };
 
 function ScheduleGridExtendedCounts({ now, runIds }: ScheduleGridExtendedCountsProps): JSX.Element {
@@ -91,8 +89,7 @@ function ScheduleGridExtendedCounts({ now, runIds }: ScheduleGridExtendedCountsP
         {minimumSlots}/{preferredSlots}/{totalSlots}
       </div>
       <div>
-        <span className="text-success">{confirmedSignups}</span>/
-        <span className="text-info">{notCountedSignups}</span>/
+        <span className="text-success">{confirmedSignups}</span>/<span className="text-info">{notCountedSignups}</span>/
         <span className="text-danger">{waitlistedSignups}</span>
       </div>
       <div>Total: {playerCount}</div>

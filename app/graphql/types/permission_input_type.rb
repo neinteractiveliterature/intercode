@@ -4,7 +4,8 @@ class Types::PermissionInputType < Types::BaseInputObject
   argument :model_id,
            Int,
            deprecation_reason:
-             'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
            required: false,
            camelize: false
   argument :transitional_model_id, ID, required: false, camelize: true
@@ -12,7 +13,8 @@ class Types::PermissionInputType < Types::BaseInputObject
   argument :role_id,
            Int,
            deprecation_reason:
-             'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
            required: false,
            camelize: false
   argument :transitional_role_id, ID, required: false, camelize: true

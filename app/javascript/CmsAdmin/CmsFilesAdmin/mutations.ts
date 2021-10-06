@@ -14,8 +14,8 @@ export const CreateCmsFile = gql`
 `;
 
 export const RenameCmsFile = gql`
-  mutation RenameCmsFile($id: Int!, $filename: String!) {
-    renameCmsFile(input: { id: $id, filename: $filename }) {
+  mutation RenameCmsFile($id: ID!, $filename: String!) {
+    renameCmsFile(input: { transitionalId: $id, filename: $filename }) {
       cms_file {
         id: transitionalId
         ...CmsFileFields
@@ -26,8 +26,8 @@ export const RenameCmsFile = gql`
 `;
 
 export const DeleteCmsFile = gql`
-  mutation DeleteCmsFile($id: Int!) {
-    deleteCmsFile(input: { id: $id }) {
+  mutation DeleteCmsFile($id: ID!) {
+    deleteCmsFile(input: { transitionalId: $id }) {
       clientMutationId
     }
   }

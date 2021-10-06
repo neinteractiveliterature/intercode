@@ -7,15 +7,11 @@ import { BootstrapFormSelectProps } from '@neinteractiveliterature/litform/lib/B
 import { EventCategory } from '../graphqlTypes.generated';
 
 export type EventCategorySelectProps = Omit<BootstrapFormSelectProps, 'label'> & {
-  eventCategories: Pick<EventCategory, 'id' | 'name'>[];
+  eventCategories: (Pick<EventCategory, 'name'> & { id: string })[];
   label?: ReactNode;
 };
 
-function EventCategorySelect({
-  eventCategories,
-  label,
-  ...props
-}: EventCategorySelectProps): JSX.Element {
+function EventCategorySelect({ eventCategories, label, ...props }: EventCategorySelectProps): JSX.Element {
   const { t } = useTranslation();
   const categoryOptions = eventCategories.map((category) => (
     <option value={category.id.toString()} key={category.id}>
@@ -24,10 +20,7 @@ function EventCategorySelect({
   ));
 
   return (
-    <BootstrapFormSelect
-      label={label || t('eventCategorySelect.defaultLabel', 'Event Category')}
-      {...props}
-    >
+    <BootstrapFormSelect label={label || t('eventCategorySelect.defaultLabel', 'Event Category')} {...props}>
       <option aria-label={t('general.placeholderOptionLabel', 'Blank placeholder option')} />
       {categoryOptions}
     </BootstrapFormSelect>

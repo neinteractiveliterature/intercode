@@ -13,7 +13,7 @@ export type CreateCmsGraphqlQueryMutationVariables = Types.Exact<{
 export type CreateCmsGraphqlQueryMutationData = { __typename: 'Mutation', createCmsGraphqlQuery: { __typename: 'CreateCmsGraphqlQueryPayload', query: { __typename: 'CmsGraphqlQuery', identifier: string, query: string, admin_notes?: string | null | undefined, current_ability_can_update: boolean, current_ability_can_delete: boolean, id: string } } };
 
 export type UpdateCmsGraphqlQueryMutationVariables = Types.Exact<{
-  id: Types.Scalars['Int'];
+  id: Types.Scalars['ID'];
   query: Types.CmsGraphqlQueryInput;
 }>;
 
@@ -21,7 +21,7 @@ export type UpdateCmsGraphqlQueryMutationVariables = Types.Exact<{
 export type UpdateCmsGraphqlQueryMutationData = { __typename: 'Mutation', updateCmsGraphqlQuery: { __typename: 'UpdateCmsGraphqlQueryPayload', query: { __typename: 'CmsGraphqlQuery', identifier: string, query: string, admin_notes?: string | null | undefined, current_ability_can_update: boolean, current_ability_can_delete: boolean, id: string } } };
 
 export type DeleteCmsGraphqlQueryMutationVariables = Types.Exact<{
-  id: Types.Scalars['Int'];
+  id: Types.Scalars['ID'];
 }>;
 
 
@@ -65,8 +65,8 @@ export type CreateCmsGraphqlQueryHookResult = ReturnType<typeof useCreateCmsGrap
 export type CreateCmsGraphqlQueryMutationResult = Apollo.MutationResult<CreateCmsGraphqlQueryMutationData>;
 export type CreateCmsGraphqlQueryMutationOptions = Apollo.BaseMutationOptions<CreateCmsGraphqlQueryMutationData, CreateCmsGraphqlQueryMutationVariables>;
 export const UpdateCmsGraphqlQueryDocument = gql`
-    mutation UpdateCmsGraphqlQuery($id: Int!, $query: CmsGraphqlQueryInput!) {
-  updateCmsGraphqlQuery(input: {id: $id, query: $query}) {
+    mutation UpdateCmsGraphqlQuery($id: ID!, $query: CmsGraphqlQueryInput!) {
+  updateCmsGraphqlQuery(input: {transitionalId: $id, query: $query}) {
     query {
       id: transitionalId
       ...CmsGraphqlQueryFields
@@ -102,8 +102,8 @@ export type UpdateCmsGraphqlQueryHookResult = ReturnType<typeof useUpdateCmsGrap
 export type UpdateCmsGraphqlQueryMutationResult = Apollo.MutationResult<UpdateCmsGraphqlQueryMutationData>;
 export type UpdateCmsGraphqlQueryMutationOptions = Apollo.BaseMutationOptions<UpdateCmsGraphqlQueryMutationData, UpdateCmsGraphqlQueryMutationVariables>;
 export const DeleteCmsGraphqlQueryDocument = gql`
-    mutation DeleteCmsGraphqlQuery($id: Int!) {
-  deleteCmsGraphqlQuery(input: {id: $id}) {
+    mutation DeleteCmsGraphqlQuery($id: ID!) {
+  deleteCmsGraphqlQuery(input: {transitionalId: $id}) {
     query {
       id: transitionalId
     }

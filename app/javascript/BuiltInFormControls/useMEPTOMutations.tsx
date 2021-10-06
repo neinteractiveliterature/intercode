@@ -6,8 +6,8 @@ export type UseMEPTOMutationsProps<OverrideType> = {
   createMutate: (options: {
     variables: {
       input: {
-        event_id: number;
-        ticket_type_id: number;
+        transitionalEventId: string;
+        transitionalTicketTypeId: string;
         override_value: number;
       };
     };
@@ -24,7 +24,7 @@ export type UseMEPTOMutationsProps<OverrideType> = {
   updateMutate: (options: {
     variables: {
       input: {
-        id: number;
+        transitionalId: string;
         override_value: number;
       };
     };
@@ -33,20 +33,17 @@ export type UseMEPTOMutationsProps<OverrideType> = {
   deleteMutate: (options: {
     variables: {
       input: {
-        id: number;
+        transitionalId: string;
       };
     };
     update: (store: ApolloCache<unknown>) => void;
   }) => Promise<unknown>;
 
-  createUpdater: (store: ApolloCache<unknown>, eventId: number, override: OverrideType) => void;
-  deleteUpdater: (store: ApolloCache<unknown>, id: number) => void;
+  createUpdater: (store: ApolloCache<unknown>, eventId: string, override: OverrideType) => void;
+  deleteUpdater: (store: ApolloCache<unknown>, id: string) => void;
 };
 
-export type MEPTOMutations = Pick<
-  MEPTOEditorProps,
-  'createOverride' | 'updateOverride' | 'deleteOverride'
->;
+export type MEPTOMutations = Pick<MEPTOEditorProps, 'createOverride' | 'updateOverride' | 'deleteOverride'>;
 
 export default function useMEPTOMutations<OverrideType>({
   createMutate,
@@ -60,8 +57,8 @@ export default function useMEPTOMutations<OverrideType>({
       createMutate({
         variables: {
           input: {
-            event_id: eventId,
-            ticket_type_id: ticketTypeId,
+            transitionalEventId: eventId,
+            transitionalTicketTypeId: ticketTypeId,
             override_value: overrideValue,
           },
         },
@@ -71,8 +68,7 @@ export default function useMEPTOMutations<OverrideType>({
             createUpdater(
               store,
               eventId,
-              data.createMaximumEventProvidedTicketsOverride
-                .maximum_event_provided_tickets_override,
+              data.createMaximumEventProvidedTicketsOverride.maximum_event_provided_tickets_override,
             );
           }
         },
@@ -81,11 +77,11 @@ export default function useMEPTOMutations<OverrideType>({
   );
 
   const updateOverride: MEPTOMutations['updateOverride'] = useCallback(
-    ({ id, overrideValue }: { id: number; overrideValue: number }) =>
+    ({ id, overrideValue }: { id: string; overrideValue: number }) =>
       updateMutate({
         variables: {
           input: {
-            id,
+            transitionalId: id,
             override_value: overrideValue,
           },
         },
@@ -94,11 +90,11 @@ export default function useMEPTOMutations<OverrideType>({
   );
 
   const deleteOverride: MEPTOMutations['deleteOverride'] = useCallback(
-    (id: number) =>
+    (id: string) =>
       deleteMutate({
         variables: {
           input: {
-            id,
+            transitionalId: id,
           },
         },
 

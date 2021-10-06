@@ -16,11 +16,7 @@ import pluralizeWithCount from '../pluralizeWithCount';
 import usePageTitle from '../usePageTitle';
 import { useCreateMutation, useDeleteMutation } from '../MutationUtils';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
-import {
-  RoomsAdminQueryData,
-  RoomsAdminQueryVariables,
-  useRoomsAdminQuery,
-} from './queries.generated';
+import { RoomsAdminQueryData, RoomsAdminQueryVariables, useRoomsAdminQuery } from './queries.generated';
 import {
   CreateRoomMutationData,
   CreateRoomMutationVariables,
@@ -60,9 +56,9 @@ export default LoadQueryWrapper(useRoomsAdminQuery, function RoomsAdmin({ data }
 
   if (authorizationWarning) return authorizationWarning;
 
-  const roomNameDidChange = (id: number, name: string) =>
+  const roomNameDidChange = (id: string, name: string) =>
     updateRoom({
-      variables: { input: { id, room: { name } } },
+      variables: { input: { transitionalId: id, room: { name } } },
     });
 
   const createRoomWasClicked = async (event: React.SyntheticEvent) => {
@@ -79,9 +75,9 @@ export default LoadQueryWrapper(useRoomsAdminQuery, function RoomsAdmin({ data }
     }
   };
 
-  const deleteRoomConfirmed = (roomId: number) =>
+  const deleteRoomConfirmed = (roomId: string) =>
     deleteRoom({
-      variables: { input: { id: roomId } },
+      variables: { input: { transitionalId: roomId } },
     });
 
   const sortedRooms = sortByLocaleString(data.convention.rooms, (room) => room.name ?? '');
@@ -99,9 +95,7 @@ export default LoadQueryWrapper(useRoomsAdminQuery, function RoomsAdmin({ data }
         </div>
         <div className="flex-grow-1">
           {room.runs.length > 0 ? (
-            <span className="text-muted">
-              ({pluralizeWithCount('event run', room.runs.length)})
-            </span>
+            <span className="text-muted">({pluralizeWithCount('event run', room.runs.length)})</span>
           ) : null}
         </div>
         <button
@@ -152,9 +146,7 @@ export default LoadQueryWrapper(useRoomsAdminQuery, function RoomsAdmin({ data }
           </li>
         </ul>
 
-        <ErrorDisplay
-          graphQLError={(createError || updateError || deleteError) as ApolloError | undefined}
-        />
+        <ErrorDisplay graphQLError={(createError || updateError || deleteError) as ApolloError | undefined} />
       </div>
     </>
   );

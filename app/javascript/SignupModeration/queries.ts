@@ -98,17 +98,17 @@ export const CreateSignupEventsQuery = gql`
 `;
 
 export const CreateSignupRunCardQuery = gql`
-  query CreateSignupRunCardQuery($userConProfileId: Int!, $eventId: Int!) {
+  query CreateSignupRunCardQuery($userConProfileId: ID!, $eventId: ID!) {
     currentAbility {
       can_read_schedule
-      can_read_event_signups(event_id: $eventId)
-      can_update_event(event_id: $eventId)
+      can_read_event_signups(transitionalEventId: $eventId)
+      can_update_event(transitionalEventId: $eventId)
     }
 
     convention: conventionByRequestHost {
       id: transitionalId
 
-      event(id: $eventId) {
+      event(transitionalId: $eventId) {
         id: transitionalId
         title
         length_seconds
@@ -141,7 +141,7 @@ export const CreateSignupRunCardQuery = gql`
         }
       }
 
-      user_con_profile(id: $userConProfileId) {
+      user_con_profile(transitionalId: $userConProfileId) {
         id: transitionalId
         name_without_nickname
 

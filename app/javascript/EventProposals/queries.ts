@@ -48,16 +48,16 @@ export const EventProposalFormData = gql`
 `;
 
 export const EventProposalQuery = gql`
-  query EventProposalQuery($eventProposalId: Int!) {
+  query EventProposalQuery($eventProposalId: ID!) {
     currentAbility {
-      can_delete_event_proposal(event_proposal_id: $eventProposalId)
+      can_delete_event_proposal(transitionalEventProposalId: $eventProposalId)
     }
 
     convention: conventionByRequestHost {
       id: transitionalId
       ...EventProposalFormData
 
-      event_proposal(id: $eventProposalId) {
+      event_proposal(transitionalId: $eventProposalId) {
         id: transitionalId
         ...EventProposalFields
       }
@@ -69,12 +69,12 @@ export const EventProposalQuery = gql`
 `;
 
 export const EventProposalQueryWithOwner = gql`
-  query EventProposalQueryWithOwner($eventProposalId: Int!) {
+  query EventProposalQueryWithOwner($eventProposalId: ID!) {
     convention: conventionByRequestHost {
       id: transitionalId
       ...EventProposalFormData
 
-      event_proposal(id: $eventProposalId) {
+      event_proposal(transitionalId: $eventProposalId) {
         id: transitionalId
         ...EventProposalFields
 
@@ -89,8 +89,8 @@ export const EventProposalQueryWithOwner = gql`
     }
 
     currentAbility {
-      can_update_event_proposal(event_proposal_id: $eventProposalId)
-      can_read_admin_notes_on_event_proposal(event_proposal_id: $eventProposalId)
+      can_update_event_proposal(transitionalEventProposalId: $eventProposalId)
+      can_read_admin_notes_on_event_proposal(transitionalEventProposalId: $eventProposalId)
     }
   }
 
@@ -99,10 +99,10 @@ export const EventProposalQueryWithOwner = gql`
 `;
 
 export const EventProposalAdminNotesQuery = gql`
-  query EventProposalAdminNotesQuery($eventProposalId: Int!) {
+  query EventProposalAdminNotesQuery($eventProposalId: ID!) {
     convention: conventionByRequestHost {
       id: transitionalId
-      event_proposal(id: $eventProposalId) {
+      event_proposal(transitionalId: $eventProposalId) {
         id: transitionalId
         admin_notes
       }
@@ -165,12 +165,7 @@ export const ProposeEventButtonQuery = gql`
 `;
 
 export const EventProposalsAdminQuery = gql`
-  query EventProposalsAdminQuery(
-    $page: Int
-    $perPage: Int
-    $filters: EventProposalFiltersInput
-    $sort: [SortInput!]
-  ) {
+  query EventProposalsAdminQuery($page: Int, $perPage: Int, $filters: EventProposalFiltersInput, $sort: [SortInput!]) {
     convention: conventionByRequestHost {
       id: transitionalId
       timezone_name
@@ -220,7 +215,7 @@ export const EventProposalsAdminQuery = gql`
 `;
 
 export const EventProposalHistoryQuery = gql`
-  query EventProposalHistoryQuery($id: Int!) {
+  query EventProposalHistoryQuery($id: ID!) {
     convention: conventionByRequestHost {
       id: transitionalId
       starts_at
@@ -228,7 +223,7 @@ export const EventProposalHistoryQuery = gql`
       timezone_name
       timezone_mode
 
-      event_proposal(id: $id) {
+      event_proposal(transitionalId: $id) {
         id: transitionalId
         title
 

@@ -7,8 +7,8 @@ import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
 export type UpdateRootSiteMutationVariables = Types.Exact<{
   siteName?: Types.Maybe<Types.Scalars['String']>;
-  defaultLayoutId?: Types.Maybe<Types.Scalars['Int']>;
-  rootPageId?: Types.Maybe<Types.Scalars['Int']>;
+  defaultLayoutId?: Types.Maybe<Types.Scalars['ID']>;
+  rootPageId?: Types.Maybe<Types.Scalars['ID']>;
 }>;
 
 
@@ -16,9 +16,9 @@ export type UpdateRootSiteMutationData = { __typename: 'Mutation', updateRootSit
 
 
 export const UpdateRootSiteDocument = gql`
-    mutation UpdateRootSite($siteName: String, $defaultLayoutId: Int, $rootPageId: Int) {
+    mutation UpdateRootSite($siteName: String, $defaultLayoutId: ID, $rootPageId: ID) {
   updateRootSite(
-    input: {root_site: {site_name: $siteName, default_layout_id: $defaultLayoutId, root_page_id: $rootPageId}}
+    input: {root_site: {site_name: $siteName, transitionalDefaultLayoutId: $defaultLayoutId, transitionalRootPageId: $rootPageId}}
   ) {
     root_site {
       id: transitionalId

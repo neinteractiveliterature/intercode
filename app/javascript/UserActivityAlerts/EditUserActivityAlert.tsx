@@ -19,101 +19,84 @@ function useLoadUserActivityAlert() {
   return useUserActivityAlertQuery({ variables: { id: userActivityAlertId } });
 }
 
-export default LoadQueryWrapper(
-  useLoadUserActivityAlert,
-  function EditUserActivityAlertForm({ data }) {
-    usePageTitle('Editing user activity alert');
-    const history = useHistory();
-    const [userActivityAlert, setUserActivityAlert] = useState(data.convention.user_activity_alert);
-    const [
-      notificationDestinationChangeSet,
-      addNotificationDestination,
-      removeNotificationDestination,
-    ] = useChangeSet<typeof userActivityAlert['notification_destinations'][0]>();
-    const [updateMutate] = useUpdateUserActivityAlertMutation();
-    const [update, updateError, updateInProgress] = useAsyncFunction(updateMutate);
-    const deleteMutate = useDeleteMutation(DeleteUserActivityAlert, {
-      query: UserActivityAlertsAdminQuery,
-      arrayPath: ['convention', 'user_activity_alerts'],
-      idVariablePath: ['id'],
+export default LoadQueryWrapper(useLoadUserActivityAlert, function EditUserActivityAlertForm({ data }) {
+  usePageTitle('Editing user activity alert');
+  const history = useHistory();
+  const [userActivityAlert, setUserActivityAlert] = useState(data.convention.user_activity_alert);
+  const [notificationDestinationChangeSet, addNotificationDestination, removeNotificationDestination] =
+    useChangeSet<typeof userActivityAlert['notification_destinations'][0]>();
+  const [updateMutate] = useUpdateUserActivityAlertMutation();
+  const [update, updateError, updateInProgress] = useAsyncFunction(updateMutate);
+  const deleteMutate = useDeleteMutation(DeleteUserActivityAlert, {
+    query: UserActivityAlertsAdminQuery,
+    arrayPath: ['convention', 'user_activity_alerts'],
+    idVariablePath: ['id'],
+  });
+  const combinedUserActivityAlert = useMemo(
+    () => ({
+      ...userActivityAlert,
+      notification_destinations: notificationDestinationChangeSet.apply(userActivityAlert.notification_destinations),
+    }),
+    [notificationDestinationChangeSet, userActivityAlert],
+  );
+  const confirm = useConfirm();
+
+  const saveClicked = async () => {
+    await update({
+      variables: {
+        id: userActivityAlert.id,
+        userActivityAlert: buildUserActivityAlertInput(userActivityAlert),
+        addNotificationDestinations: notificationDestinationChangeSet.getAddValues().map((addValue) => {
+          if (addValue.staff_position) {
+            return { transitionalStaffPositionId: addValue.staff_position.id };
+          }
+          if (addValue.user_con_profile) {
+            return { transitionalUserConProfileId: addValue.user_con_profile.id };
+          }
+          throw new Error('Notification destination must have either a staff position or user con profile');
+        }),
+        removeNotificationDestinationIds: notificationDestinationChangeSet.getRemoveIds(),
+      },
     });
-    const combinedUserActivityAlert = useMemo(
-      () => ({
-        ...userActivityAlert,
-        notification_destinations: notificationDestinationChangeSet.apply(
-          userActivityAlert.notification_destinations,
-        ),
-      }),
-      [notificationDestinationChangeSet, userActivityAlert],
-    );
-    const confirm = useConfirm();
 
-    const saveClicked = async () => {
-      await update({
-        variables: {
-          id: userActivityAlert.id,
-          userActivityAlert: buildUserActivityAlertInput(userActivityAlert),
-          addNotificationDestinations: notificationDestinationChangeSet
-            .getAddValues()
-            .map((addValue) => {
-              if (addValue.staff_position) {
-                return { staff_position_id: addValue.staff_position.id };
-              }
-              if (addValue.user_con_profile) {
-                return { user_con_profile_id: addValue.user_con_profile.id };
-              }
-              throw new Error(
-                'Notification destination must have either a staff position or user con profile',
-              );
-            }),
-          removeNotificationDestinationIds: notificationDestinationChangeSet.getRemoveIds(),
-        },
-      });
+    history.push('/user_activity_alerts');
+  };
 
-      history.push('/user_activity_alerts');
-    };
+  const deleteClicked = async () => {
+    await deleteMutate({ variables: { id: userActivityAlert.id } });
+    history.push('/');
+  };
 
-    const deleteClicked = async () => {
-      await deleteMutate({ variables: { id: userActivityAlert.id } });
-      history.push('/');
-    };
-
-    return (
-      <>
-        .{' '}
-        <div className="d-flex align-items-start mb-4">
-          <h1 className="flex-grow-1">Edit user activity alert</h1>
-          <button
-            className="btn btn-danger"
-            type="button"
-            onClick={() => {
-              confirm({
-                action: deleteClicked,
-                prompt: 'Are you sure you want to delete this alert?',
-              });
-            }}
-          >
-            <i className="bi-trash" /> Delete
-          </button>
-        </div>
-        <UserActivityAlertForm
-          userActivityAlert={combinedUserActivityAlert}
-          convention={data.convention}
-          onChange={setUserActivityAlert}
-          onAddNotificationDestination={addNotificationDestination}
-          onRemoveNotificationDestination={removeNotificationDestination}
-          disabled={updateInProgress}
-        />
-        <ErrorDisplay graphQLError={updateError as ApolloError} />
+  return (
+    <>
+      .{' '}
+      <div className="d-flex align-items-start mb-4">
+        <h1 className="flex-grow-1">Edit user activity alert</h1>
         <button
-          className="btn btn-primary mt-4"
+          className="btn btn-danger"
           type="button"
-          onClick={saveClicked}
-          disabled={updateInProgress}
+          onClick={() => {
+            confirm({
+              action: deleteClicked,
+              prompt: 'Are you sure you want to delete this alert?',
+            });
+          }}
         >
-          Save changes
+          <i className="bi-trash" /> Delete
         </button>
-      </>
-    );
-  },
-);
+      </div>
+      <UserActivityAlertForm
+        userActivityAlert={combinedUserActivityAlert}
+        convention={data.convention}
+        onChange={setUserActivityAlert}
+        onAddNotificationDestination={addNotificationDestination}
+        onRemoveNotificationDestination={removeNotificationDestination}
+        disabled={updateInProgress}
+      />
+      <ErrorDisplay graphQLError={updateError as ApolloError} />
+      <button className="btn btn-primary mt-4" type="button" onClick={saveClicked} disabled={updateInProgress}>
+        Save changes
+      </button>
+    </>
+  );
+});

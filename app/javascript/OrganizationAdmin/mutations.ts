@@ -3,16 +3,16 @@ import { OrganizationRoleFields } from './queries';
 
 export const CreateOrganizationRole = gql`
   mutation CreateOrganizationRole(
-    $organizationId: Int!
+    $organizationId: ID!
     $name: String!
-    $userIds: [Int!]!
+    $userIds: [ID!]!
     $permissions: [PermissionInput!]!
   ) {
     createOrganizationRole(
       input: {
-        organization_id: $organizationId
+        transitionalOrganizationId: $organizationId
         organization_role: { name: $name }
-        user_ids: $userIds
+        transitionalUserIds: $userIds
         permissions: $permissions
       }
     ) {
@@ -28,21 +28,21 @@ export const CreateOrganizationRole = gql`
 
 export const UpdateOrganizationRole = gql`
   mutation UpdateOrganizationRole(
-    $id: Int!
+    $id: ID!
     $name: String
-    $addUserIds: [Int!]
-    $removeUserIds: [Int!]
+    $addUserIds: [ID!]
+    $removeUserIds: [ID!]
     $addPermissions: [PermissionInput!]
-    $removePermissionIds: [Int!]
+    $removePermissionIds: [ID!]
   ) {
     updateOrganizationRole(
       input: {
-        id: $id
+        transitionalId: $id
         organization_role: { name: $name }
-        add_user_ids: $addUserIds
-        remove_user_ids: $removeUserIds
+        transitionalAddUserIds: $addUserIds
+        transitionalRemoveUserIds: $removeUserIds
         add_permissions: $addPermissions
-        remove_permission_ids: $removePermissionIds
+        transitionalRemovePermissionIds: $removePermissionIds
       }
     ) {
       organization_role {
@@ -56,8 +56,8 @@ export const UpdateOrganizationRole = gql`
 `;
 
 export const DeleteOrganizationRole = gql`
-  mutation DeleteOrganizationRole($id: Int!) {
-    deleteOrganizationRole(input: { id: $id }) {
+  mutation DeleteOrganizationRole($id: ID!) {
+    deleteOrganizationRole(input: { transitionalId: $id }) {
       clientMutationId
     }
   }

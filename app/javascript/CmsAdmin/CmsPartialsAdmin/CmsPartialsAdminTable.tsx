@@ -1,11 +1,6 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  ErrorDisplay,
-  sortByLocaleString,
-  useConfirm,
-  LoadQueryWrapper,
-} from '@neinteractiveliterature/litform';
+import { ErrorDisplay, sortByLocaleString, useConfirm, LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import { CmsPartialsAdminQuery } from './queries';
 import { DeletePartial } from './mutations';
@@ -27,7 +22,7 @@ export default LoadQueryWrapper(useCmsPartialsAdminQuery, function CmsPartialsAd
     return sortByLocaleString(data.cmsParent.cmsPartials, (partial) => partial.name ?? '');
   }, [data.cmsParent.cmsPartials]);
 
-  const deletePartial = (id: number) => deletePartialMutate({ variables: { id } });
+  const deletePartial = (id: string) => deletePartialMutate({ variables: { id } });
 
   return (
     <>
@@ -46,17 +41,11 @@ export default LoadQueryWrapper(useCmsPartialsAdminQuery, function CmsPartialsAd
               </td>
               <td className="text-end">
                 {partial.current_ability_can_update ? (
-                  <Link
-                    to={`/cms_partials/${partial.id}/edit`}
-                    className="btn btn-secondary btn-sm"
-                  >
+                  <Link to={`/cms_partials/${partial.id}/edit`} className="btn btn-secondary btn-sm">
                     Edit
                   </Link>
                 ) : (
-                  <Link
-                    to={`/cms_partials/${partial.id}/view_source`}
-                    className="btn btn-outline-secondary btn-sm"
-                  >
+                  <Link to={`/cms_partials/${partial.id}/view_source`} className="btn btn-outline-secondary btn-sm">
                     View source
                   </Link>
                 )}

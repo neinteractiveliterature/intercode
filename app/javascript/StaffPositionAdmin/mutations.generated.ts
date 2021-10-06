@@ -20,7 +20,7 @@ export type UpdateStaffPositionMutationVariables = Types.Exact<{
 export type UpdateStaffPositionMutationData = { __typename: 'Mutation', updateStaffPosition: { __typename: 'UpdateStaffPositionPayload', staff_position: { __typename: 'StaffPosition', name: string, email?: string | null | undefined, visible?: boolean | null | undefined, email_aliases: Array<string>, cc_addresses: Array<string>, id: string, user_con_profiles: Array<{ __typename: 'UserConProfile', name_without_nickname: string, gravatar_url: string, gravatar_enabled: boolean, id: string }>, permissions: Array<{ __typename: 'Permission', permission: string, id: string, model: { __typename: 'CmsContentGroup', name: string, id: string } | { __typename: 'Convention', name: string, id: string } | { __typename: 'EventCategory', name: string, default_color?: string | null | undefined, id: string } }> } } };
 
 export type UpdateStaffPositionPermissionsMutationVariables = Types.Exact<{
-  staffPositionId: Types.Scalars['Int'];
+  staffPositionId: Types.Scalars['ID'];
   grantPermissions: Array<Types.PermissionInput> | Types.PermissionInput;
   revokePermissions: Array<Types.PermissionInput> | Types.PermissionInput;
 }>;
@@ -109,9 +109,9 @@ export type UpdateStaffPositionMutationHookResult = ReturnType<typeof useUpdateS
 export type UpdateStaffPositionMutationResult = Apollo.MutationResult<UpdateStaffPositionMutationData>;
 export type UpdateStaffPositionMutationOptions = Apollo.BaseMutationOptions<UpdateStaffPositionMutationData, UpdateStaffPositionMutationVariables>;
 export const UpdateStaffPositionPermissionsDocument = gql`
-    mutation UpdateStaffPositionPermissions($staffPositionId: Int!, $grantPermissions: [PermissionInput!]!, $revokePermissions: [PermissionInput!]!) {
+    mutation UpdateStaffPositionPermissions($staffPositionId: ID!, $grantPermissions: [PermissionInput!]!, $revokePermissions: [PermissionInput!]!) {
   updateStaffPositionPermissions(
-    input: {staff_position_id: $staffPositionId, grant_permissions: $grantPermissions, revoke_permissions: $revokePermissions}
+    input: {transitionalStaffPositionId: $staffPositionId, grant_permissions: $grantPermissions, revoke_permissions: $revokePermissions}
   ) {
     staff_position {
       id: transitionalId

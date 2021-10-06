@@ -14,32 +14,31 @@ import {
 } from './queries.generated';
 
 export type RecurringEventAdminProps = {
-  eventCategoryId: number;
+  eventCategoryId: string;
 };
 
-export default LoadQueryWrapper<
-  EventAdminEventsQueryData,
-  EventAdminEventsQueryVariables,
-  RecurringEventAdminProps
->(useEventAdminEventsQuery, function RecurringEventAdmin({ data, eventCategoryId }): JSX.Element {
-  const [eventCategory, sortedEvents] = useEventAdminCategory(data, eventCategoryId);
+export default LoadQueryWrapper<EventAdminEventsQueryData, EventAdminEventsQueryVariables, RecurringEventAdminProps>(
+  useEventAdminEventsQuery,
+  function RecurringEventAdmin({ data, eventCategoryId }): JSX.Element {
+    const [eventCategory, sortedEvents] = useEventAdminCategory(data, eventCategoryId);
 
-  usePageTitle(pluralize(eventCategory?.name ?? ''));
+    usePageTitle(pluralize(eventCategory?.name ?? ''));
 
-  return (
-    <div>
-      <Link className="btn btn-primary mt-4" to={`${buildEventCategoryUrl(eventCategory)}/new`}>
-        {'Create new '}
-        {eventCategory?.name.toLowerCase()}
-      </Link>
-      <hr className="my-4" />
-      {sortedEvents.map((event) => (
-        <RecurringEventSection convention={data.convention} event={event} key={event.id} />
-      ))}
-      <Route
-        path={`${buildEventCategoryUrl(eventCategory)}/:eventId/runs/:runId/edit`}
-        render={() => <EditRun events={data.convention.events} convention={data.convention} />}
-      />
-    </div>
-  );
-});
+    return (
+      <div>
+        <Link className="btn btn-primary mt-4" to={`${buildEventCategoryUrl(eventCategory)}/new`}>
+          {'Create new '}
+          {eventCategory?.name.toLowerCase()}
+        </Link>
+        <hr className="my-4" />
+        {sortedEvents.map((event) => (
+          <RecurringEventSection convention={data.convention} event={event} key={event.id} />
+        ))}
+        <Route
+          path={`${buildEventCategoryUrl(eventCategory)}/:eventId/runs/:runId/edit`}
+          render={() => <EditRun events={data.convention.events} convention={data.convention} />}
+        />
+      </div>
+    );
+  },
+);

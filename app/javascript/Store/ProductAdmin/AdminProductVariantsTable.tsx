@@ -3,6 +3,7 @@ import * as React from 'react';
 import { closestCenter, DndContext, DragOverlay } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { useBasicSortableHandlers, useMatchWidthStyle } from '@neinteractiveliterature/litform';
+import { v4 as uuidv4 } from 'uuid';
 
 import AdminProductVariantEditRow from './AdminProductVariantEditRow';
 import sortProductVariants from '../sortProductVariants';
@@ -36,7 +37,7 @@ type AdminProductVariantsTableCommonProps = {
 type AdminProductVariantsTableEditingProps = AdminProductVariantsTableCommonProps & {
   editing: boolean;
   onChange: React.Dispatch<EditingVariant[]>;
-  deleteVariant: React.Dispatch<number>;
+  deleteVariant: React.Dispatch<string>;
 };
 
 type AdminProductVariantsTableViewingProps = AdminProductVariantsTableCommonProps & {
@@ -70,14 +71,13 @@ function AdminProductVariantsTable(props: AdminProductVariantsTableProps): JSX.E
   const sensors = useSortableDndSensors();
 
   const addVariantClicked = () => {
-    const position =
-      Math.max(0, ...product.product_variants.map((variant) => variant.position ?? 0)) + 1;
+    const position = Math.max(0, ...product.product_variants.map((variant) => variant.position ?? 0)) + 1;
 
     onChange([
       ...product.product_variants,
       {
         __typename: 'ProductVariant',
-        generatedId: new Date().getTime(),
+        generatedId: uuidv4(),
         name: '',
         description: '',
         position,
@@ -94,9 +94,7 @@ function AdminProductVariantsTable(props: AdminProductVariantsTableProps): JSX.E
       props.deleteVariant(variant.id);
     } else {
       onChange(
-        product.product_variants.filter(
-          (existingVariant) => !realOrGeneratedIdsMatch(variant, existingVariant),
-        ),
+        product.product_variants.filter((existingVariant) => !realOrGeneratedIdsMatch(variant, existingVariant)),
       );
     }
   };
@@ -125,13 +123,11 @@ function AdminProductVariantsTable(props: AdminProductVariantsTableProps): JSX.E
 
   const { draggingItem, ...sortableHandlers } = useBasicSortableHandlers(
     useCallback(
-      (id: string) =>
-        sortedVariants.find((variant) => getRealOrGeneratedId(variant).toString() === id),
+      (id: string) => sortedVariants.find((variant) => getRealOrGeneratedId(variant).toString() === id),
       [sortedVariants],
     ),
     useCallback(
-      (id: string) =>
-        sortedVariants.findIndex((variant) => getRealOrGeneratedId(variant).toString() === id),
+      (id: string) => sortedVariants.findIndex((variant) => getRealOrGeneratedId(variant).toString() === id),
       [sortedVariants],
     ),
     moveVariant,

@@ -15,21 +15,17 @@ import deserializeFormResponse from '../Models/deserializeFormResponse';
 import { getSortedParsedFormItems } from '../Models/Form';
 
 function UserConProfileAdminDisplay(): JSX.Element {
-  const userConProfileId = Number.parseInt(useParams<{ id: string }>().id, 10);
+  const userConProfileId = useParams<{ id: string }>().id;
   const history = useHistory();
   const { data, loading, error } = useUserConProfileAdminQuery({
     variables: { id: userConProfileId },
   });
   const formItems = useMemo(
-    () =>
-      loading || error || !data
-        ? []
-        : getSortedParsedFormItems(data.convention.user_con_profile_form),
+    () => (loading || error || !data ? [] : getSortedParsedFormItems(data.convention.user_con_profile_form)),
     [data, loading, error],
   );
   const formResponse = useMemo(
-    () =>
-      loading || error || !data ? null : deserializeFormResponse(data.convention.user_con_profile),
+    () => (loading || error || !data ? null : deserializeFormResponse(data.convention.user_con_profile)),
     [data, loading, error],
   );
   const confirm = useConfirm();
@@ -92,11 +88,7 @@ function UserConProfileAdminDisplay(): JSX.Element {
             </li>
           ) : null}
           <li className="list-group-item">
-            <a
-              href={`/reports/user_con_profiles/${userConProfileId}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href={`/reports/user_con_profiles/${userConProfileId}`} target="_blank" rel="noopener noreferrer">
               Printable report
             </a>
           </li>
@@ -189,10 +181,7 @@ function UserConProfileAdminDisplay(): JSX.Element {
         </table>
 
         {data.convention.ticket_mode !== 'disabled' && (
-          <TicketAdminSection
-            userConProfile={data.convention.user_con_profile}
-            convention={data.convention}
-          />
+          <TicketAdminSection userConProfile={data.convention.user_con_profile} convention={data.convention} />
         )}
       </div>
 

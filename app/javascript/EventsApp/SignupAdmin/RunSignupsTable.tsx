@@ -15,9 +15,7 @@ import FreeTextFilter from '../../Tables/FreeTextFilter';
 import SignupStateCell from '../../Tables/SignupStateCell';
 import TableHeader from '../../Tables/TableHeader';
 import ReactTableWithTheWorks from '../../Tables/ReactTableWithTheWorks';
-import useReactTableWithTheWorks, {
-  QueryDataContext,
-} from '../../Tables/useReactTableWithTheWorks';
+import useReactTableWithTheWorks, { QueryDataContext } from '../../Tables/useReactTableWithTheWorks';
 import usePageTitle from '../../usePageTitle';
 import useValueUnless from '../../useValueUnless';
 import UserConProfileWithGravatarCell from '../../Tables/UserConProfileWithGravatarCell';
@@ -33,8 +31,7 @@ const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({
   bucket: FilterCodecs.stringArray,
 });
 
-type SignupType =
-  RunSignupsTableSignupsQueryData['convention']['event']['run']['signups_paginated']['entries'][0];
+type SignupType = RunSignupsTableSignupsQueryData['convention']['event']['run']['signups_paginated']['entries'][0];
 
 const SignupStateFilter = (props: FilterProps<SignupType>) => {
   const { t } = useTranslation();
@@ -142,9 +139,7 @@ function getPossibleColumns(t: TFunction): Column<SignupType>[] {
       width: 40,
       accessor: (signup: SignupType) =>
         ageAsOf(
-          signup.user_con_profile.birth_date
-            ? DateTime.fromISO(signup.user_con_profile.birth_date)
-            : undefined,
+          signup.user_con_profile.birth_date ? DateTime.fromISO(signup.user_con_profile.birth_date) : undefined,
           DateTime.fromISO(signup.run.starts_at),
         ),
       disableSortBy: false,
@@ -163,17 +158,12 @@ function getPossibleColumns(t: TFunction): Column<SignupType>[] {
 
 export type RunSignupsTableProps = {
   defaultVisibleColumns: string[];
-  eventId: number;
-  runId: number;
+  eventId: string;
+  runId: string;
   runPath: string;
 };
 
-function RunSignupsTable({
-  defaultVisibleColumns,
-  eventId,
-  runId,
-  runPath,
-}: RunSignupsTableProps): JSX.Element {
+function RunSignupsTable({ defaultVisibleColumns, eventId, runId, runPath }: RunSignupsTableProps): JSX.Element {
   const { t } = useTranslation();
   const history = useHistory();
   const { data, loading, error } = useSignupAdminEventQuery({ variables: { eventId } });

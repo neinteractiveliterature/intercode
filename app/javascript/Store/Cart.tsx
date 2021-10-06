@@ -2,12 +2,7 @@ import { useCallback } from 'react';
 import intersection from 'lodash/intersection';
 import { useHistory } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
-import {
-  useModal,
-  useConfirm,
-  ErrorDisplay,
-  LoadQueryWrapper,
-} from '@neinteractiveliterature/litform';
+import { useModal, useConfirm, ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import { CartQuery } from './queries';
 import OrderPaymentModal from './OrderPaymentModal';
@@ -39,17 +34,17 @@ export default LoadQueryWrapper(useCartQuery, function Cart({ data }) {
   usePageTitle('Cart');
 
   const updateOrderEntry = useCallback(
-    (id, quantity) =>
+    (id: string, quantity: number) =>
       updateMutate({
-        variables: { input: { id, order_entry: { quantity } } },
+        variables: { input: { transitionalId: id, order_entry: { quantity } } },
       }),
     [updateMutate],
   );
 
   const deleteOrderEntry = useCallback(
-    (id) =>
+    (id: string) =>
       deleteMutate({
-        variables: { input: { id } },
+        variables: { input: { transitionalId: id } },
         update: (proxy) => {
           const storeData = proxy.readQuery<CartQueryData>({ query: CartQuery });
           const currentPendingOrder = storeData?.convention.my_profile?.current_pending_order;
@@ -69,9 +64,7 @@ export default LoadQueryWrapper(useCartQuery, function Cart({ data }) {
 
                       current_pending_order: {
                         ...currentPendingOrder,
-                        order_entries: currentPendingOrder.order_entries.filter(
-                          (entry) => entry.id !== id,
-                        ),
+                        order_entries: currentPendingOrder.order_entries.filter((entry) => entry.id !== id),
                       },
                     }
                   : undefined,
@@ -85,7 +78,7 @@ export default LoadQueryWrapper(useCartQuery, function Cart({ data }) {
 
   const [changeQuantity, changeQuantityError] = useAsyncFunction(
     useCallback(
-      async (orderEntryId: number, newQuantity: number) => {
+      async (orderEntryId: string, newQuantity: number) => {
         if (newQuantity === 0) {
           await deleteOrderEntry(orderEntryId);
         } else {
@@ -150,9 +143,7 @@ export default LoadQueryWrapper(useCartQuery, function Cart({ data }) {
 
       <CartContents
         removeFromCart={removeFromCart}
-        changeQuantity={(entry: OrderEntryType, quantity: number) =>
-          changeQuantity(entry.id, quantity)
-        }
+        changeQuantity={(entry: OrderEntryType, quantity: number) => changeQuantity(entry.id, quantity)}
         checkOutButton={
           <button type="button" className="btn btn-primary mt-2" onClick={checkOutModal.open}>
             <i className="bi-cart-fill" /> Check out

@@ -6,7 +6,8 @@ module Types::CmsParent
   field :id,
         Int,
         deprecation_reason:
-          'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+          "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
         null: false
   field :transitional_id, ID, method: :id, null: false, camelize: true
 
@@ -41,7 +42,8 @@ module Types::CmsParent
     argument :id,
              Int,
              deprecation_reason:
-               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
              required: false,
              description: 'The ID of the CMS content group to find.'
     argument :transitional_id,
@@ -77,7 +79,8 @@ module Types::CmsParent
     argument :id,
              Int,
              deprecation_reason:
-               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
              required: false,
              description: 'The ID of the page to find.'
     argument :transitional_id, ID, required: false, description: 'The ID of the page to find.', camelize: true

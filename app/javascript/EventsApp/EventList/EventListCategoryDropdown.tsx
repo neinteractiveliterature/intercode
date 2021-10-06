@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { pluralize } from 'inflected';
 import { useLocation } from 'react-router-dom';
-import { notEmpty, parseIntOrNull, ChoiceSet } from '@neinteractiveliterature/litform';
+import { ChoiceSet } from '@neinteractiveliterature/litform';
 
 import { EventListEventsQueryData } from './queries.generated';
 import { DropdownMenu } from '../../UIComponents/DropdownMenu';
@@ -19,8 +19,8 @@ function shouldAutoCloseOnNavigate(prevLocation: LocationType, location: Locatio
 
 export type EventListCategoryDropdownProps = {
   eventCategories: ConventionType['event_categories'];
-  value: number[];
-  onChange: React.Dispatch<number[]>;
+  value: string[];
+  onChange: React.Dispatch<string[]>;
 };
 
 function EventListCategoryDropdown({
@@ -29,9 +29,7 @@ function EventListCategoryDropdown({
   onChange: onChangeProp,
 }: EventListCategoryDropdownProps): JSX.Element {
   const [interacted, setInteracted] = useState(false);
-  const currentCategories = eventCategories.filter((category) =>
-    (value || []).includes(category.id),
-  );
+  const currentCategories = eventCategories.filter((category) => (value || []).includes(category.id));
 
   let categoryDescription = 'All event types';
   if (currentCategories.length === 1) {
@@ -67,12 +65,10 @@ function EventListCategoryDropdown({
         <ChoiceSet
           choices={sortedCategories.map((category) => ({
             label: category.name,
-            value: category.id.toString(),
+            value: category.id,
           }))}
           value={choiceSetValue}
-          onChange={(integerArray) => {
-            onChange((integerArray ?? []).map(parseIntOrNull).filter(notEmpty));
-          }}
+          onChange={(categoryIds) => onChange(categoryIds ?? [])}
           multiple
         />
       </div>

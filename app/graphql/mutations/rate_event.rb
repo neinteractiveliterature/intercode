@@ -5,7 +5,8 @@ class Mutations::RateEvent < Mutations::BaseMutation
   argument :event_id,
            Integer,
            deprecation_reason:
-             'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
            required: false,
            camelize: false
   argument :transitional_event_id, ID, required: false, camelize: true

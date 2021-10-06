@@ -1,10 +1,6 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  sortByLocaleString,
-  useGraphQLConfirm,
-  LoadQueryWrapper,
-} from '@neinteractiveliterature/litform';
+import { sortByLocaleString, useGraphQLConfirm, LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import { CmsPagesAdminQuery } from './queries';
 import { DeletePage } from './mutations';
@@ -26,7 +22,7 @@ export default LoadQueryWrapper(useCmsPagesAdminQuery, function CmsPagesAdminTab
     return sortByLocaleString(data.cmsParent.cmsPages, (page) => page.name ?? '');
   }, [data]);
 
-  const deletePage = (id: number) => deletePageMutate({ variables: { id } });
+  const deletePage = (id: string) => deletePageMutate({ variables: { id } });
 
   return (
     <>
@@ -54,10 +50,7 @@ export default LoadQueryWrapper(useCmsPagesAdminQuery, function CmsPagesAdminTab
                     Edit
                   </Link>
                 ) : (
-                  <Link
-                    to={`/cms_pages/${page.id}/view_source`}
-                    className="btn btn-outline-secondary btn-sm"
-                  >
+                  <Link to={`/cms_pages/${page.id}/view_source`} className="btn btn-outline-secondary btn-sm">
                     View source
                   </Link>
                 )}

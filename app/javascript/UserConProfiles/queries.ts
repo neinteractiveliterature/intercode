@@ -66,13 +66,13 @@ export const UserConProfileAdminTicketFields = gql`
 `;
 
 export const UserConProfileQuery = gql`
-  query UserConProfileQuery($id: Int!) {
+  query UserConProfileQuery($id: ID!) {
     convention: conventionByRequestHost {
       ...UserConProfileFormData
 
       id: transitionalId
 
-      user_con_profile(id: $id) {
+      user_con_profile(transitionalId: $id) {
         id: transitionalId
         current_user_form_item_viewer_role
         current_user_form_item_writer_role
@@ -86,7 +86,7 @@ export const UserConProfileQuery = gql`
 `;
 
 export const UserConProfileAdminQuery = gql`
-  query UserConProfileAdminQuery($id: Int!) {
+  query UserConProfileAdminQuery($id: ID!) {
     convention: conventionByRequestHost {
       id: transitionalId
       name
@@ -101,13 +101,13 @@ export const UserConProfileAdminQuery = gql`
         id: transitionalId
         ability {
           can_read_signups
-          can_update_user_con_profile(user_con_profile_id: $id)
-          can_delete_user_con_profile(user_con_profile_id: $id)
-          can_become_user_con_profile(user_con_profile_id: $id)
+          can_update_user_con_profile(transitionalUserConProfileId: $id)
+          can_delete_user_con_profile(transitionalUserConProfileId: $id)
+          can_become_user_con_profile(transitionalUserConProfileId: $id)
         }
       }
 
-      user_con_profile(id: $id) {
+      user_con_profile(transitionalId: $id) {
         id: transitionalId
         email
         user_id
@@ -301,11 +301,11 @@ export const TicketAdminWithoutTicketAbilityQuery = gql`
 `;
 
 export const TicketAdminWithTicketAbilityQuery = gql`
-  query TicketAdminWithTicketAbilityQuery($ticketId: Int!) {
+  query TicketAdminWithTicketAbilityQuery($ticketId: ID!) {
     currentAbility {
       can_create_tickets
-      can_update_ticket(ticket_id: $ticketId)
-      can_delete_ticket(ticket_id: $ticketId)
+      can_update_ticket(transitionalTicketId: $ticketId)
+      can_delete_ticket(transitionalTicketId: $ticketId)
     }
   }
 `;

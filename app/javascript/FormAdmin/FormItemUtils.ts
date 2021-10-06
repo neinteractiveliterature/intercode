@@ -351,7 +351,9 @@ export function serializeParsedFormItem<FormItemType extends ParsedFormItem<unkn
   return serialized;
 }
 
-export function parseFormSectionObject(formSection: FormSection): ParsedFormSection {
+export function parseFormSectionObject(
+  formSection: Omit<FormSection, 'id' | 'form_items'> & { id: string; form_items: CommonFormItemFieldsFragment[] },
+): ParsedFormSection {
   return {
     ...formSection,
     form_items: formSection.form_items.map(parseFormItemObject),
@@ -443,8 +445,8 @@ export function formItemPropertyUpdater<
 }
 
 export function mutationUpdaterForFormSection<ResultDataType>(
-  formId: number,
-  formSectionId: number | undefined,
+  formId: string,
+  formSectionId: string | undefined,
   updater: (
     section: CommonFormSectionFieldsFragment,
     mutationResultData: ResultDataType,

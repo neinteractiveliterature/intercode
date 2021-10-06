@@ -1,11 +1,6 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  ErrorDisplay,
-  useConfirm,
-  sortByLocaleString,
-  LoadQueryWrapper,
-} from '@neinteractiveliterature/litform';
+import { ErrorDisplay, useConfirm, sortByLocaleString, LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import { CmsLayoutsAdminQuery } from './queries';
 import { DeleteLayout } from './mutations';
@@ -27,7 +22,7 @@ export default LoadQueryWrapper(useCmsLayoutsAdminQuery, function CmsLayoutsAdmi
 
   usePageTitle('CMS Layouts');
 
-  const deleteLayout = (id: number) => deleteLayoutMutate({ variables: { id } });
+  const deleteLayout = (id: string) => deleteLayoutMutate({ variables: { id } });
 
   return (
     <>
@@ -50,10 +45,7 @@ export default LoadQueryWrapper(useCmsLayoutsAdminQuery, function CmsLayoutsAdmi
                     Edit
                   </Link>
                 ) : (
-                  <Link
-                    to={`/cms_layouts/${layout.id}/view_source`}
-                    className="btn btn-outline-secondary btn-sm"
-                  >
+                  <Link to={`/cms_layouts/${layout.id}/view_source`} className="btn btn-outline-secondary btn-sm">
                     View source
                   </Link>
                 )}

@@ -13,7 +13,7 @@ export type StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFieldsFragmen
 export type StandaloneEditEvent_EventFieldsFragment = { __typename: 'Event', title?: string | null | undefined, form_response_attrs_json?: any | null | undefined, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, id: string, event_category: { __typename: 'EventCategory', name: string, id: string, event_form: { __typename: 'Form', title: string, form_type: Types.FormType, id: string, form_sections: Array<{ __typename: 'FormSection', title?: string | null | undefined, position: number, id: string, form_items: Array<{ __typename: 'FormItem', position: number, identifier?: string | null | undefined, item_type: string, rendered_properties?: any | null | undefined, default_value?: any | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole, id: string }> }> } }, maximum_event_provided_tickets_overrides: Array<{ __typename: 'MaximumEventProvidedTicketsOverride', override_value: number, id: string, ticket_type: { __typename: 'TicketType', description?: string | null | undefined, maximum_event_provided_tickets: number, id: string } }> };
 
 export type StandaloneEditEventQueryVariables = Types.Exact<{
-  eventId: Types.Scalars['Int'];
+  eventId: Types.Scalars['ID'];
 }>;
 
 
@@ -59,11 +59,11 @@ export const StandaloneEditEvent_EventFieldsFragmentDoc = gql`
     ${CommonFormFieldsFragmentDoc}
 ${StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFieldsFragmentDoc}`;
 export const StandaloneEditEventQueryDocument = gql`
-    query StandaloneEditEventQuery($eventId: Int!) {
+    query StandaloneEditEventQuery($eventId: ID!) {
   currentAbility {
     can_override_maximum_event_provided_tickets
-    can_delete_event(event_id: $eventId)
-    can_update_event(event_id: $eventId)
+    can_delete_event(transitionalEventId: $eventId)
+    can_update_event(transitionalEventId: $eventId)
   }
   convention: conventionByRequestHost {
     id: transitionalId
@@ -72,7 +72,7 @@ export const StandaloneEditEventQueryDocument = gql`
       id: transitionalId
       ...StandaloneEditEvent_TicketTypeFields
     }
-    event(id: $eventId) {
+    event(transitionalId: $eventId) {
       id: transitionalId
       ...StandaloneEditEvent_EventFields
     }
