@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { FormItemRole } from '../../app/javascript/graphqlTypes.generated';
 import {
   CommonFormFieldsFragment,
@@ -41,7 +43,7 @@ export default function formFromExportJSON(exportJSON: any): CommonFormFieldsFra
 
     formSections.push({
       ...sectionProps,
-      id: formSectionId,
+      id: formSectionId.toString(),
       position: formSectionId,
       form_items: formItems,
     });

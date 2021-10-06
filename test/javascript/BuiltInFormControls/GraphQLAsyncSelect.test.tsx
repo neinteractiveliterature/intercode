@@ -9,11 +9,11 @@ import { UserConProfile } from '../../../app/javascript/graphqlTypes.generated';
 
 const FakeQuery = gql`
   query FakeQuery($name: String) {
-    convention {
-      id
+    convention: conventionByRequestHost {
+      id: transitionalId
       user_con_profiles_paginated(filters: { name: $name }) {
         entries {
-          id
+          id: transitionalId
           name_without_nickname
         }
       }
@@ -51,8 +51,11 @@ describe('GraphQLAsyncSelect', () => {
     },
   ];
 
-  const renderUserConProfileSelect = (
-    props?: Partial<GraphQLAsyncSelectProps<any, any, false>>,
+  const renderUserConProfileSelect = <
+    DataType extends typeof defaultMocks[0]['result']['data'],
+    OptionType extends DataType['convention']['user_con_profiles_paginated']['entries'][number],
+  >(
+    props?: Partial<GraphQLAsyncSelectProps<DataType, OptionType, false>>,
     mocks?: MockedResponse[],
   ) =>
     render(
