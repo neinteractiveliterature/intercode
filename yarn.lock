@@ -16777,14 +16777,14 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"mini-css-extract-plugin@npm:2.3.0":
-  version: 2.3.0
-  resolution: "mini-css-extract-plugin@npm:2.3.0"
+"mini-css-extract-plugin@npm:2.4.1":
+  version: 2.4.1
+  resolution: "mini-css-extract-plugin@npm:2.4.1"
   dependencies:
     schema-utils: ^3.1.0
   peerDependencies:
     webpack: ^5.0.0
-  checksum: 3c2f5ff29ba4d85999be36f4414b9b7200751411c6961b1ac7faa8ea5ae09b9e74bcb3b0425dbc94083d57d828449b393e56ccb709c2b5c766d968023726e25d
+  checksum: b12c81d5dbdbfeb927a72ce2c22c09f7fb7cd48e20b53fcf7981865728d45e3e7bab4acef97a73eaf9e01407de2f11bca3a59b6a80c266ab831df997c59a8d61
   languageName: node
   linkType: hard
 
@@ -21138,7 +21138,7 @@ resolve@^2.0.0-next.3:
     luxon: 2.0.2
     mapbox-gl: 1.13.1
     md5.js: 1.3.5
-    mini-css-extract-plugin: 2.3.0
+    mini-css-extract-plugin: 2.4.1
     minimist: 1.2.5
     path-complete-extname: 1.0.0
     payment: 2.4.6
