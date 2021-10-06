@@ -29,7 +29,7 @@
 #  fk_rails_...  (provides_product_id => products.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+
 class Coupon < ApplicationRecord
   belongs_to :convention
   belongs_to :provides_product, class_name: 'Product', optional: true

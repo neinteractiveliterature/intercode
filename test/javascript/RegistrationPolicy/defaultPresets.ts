@@ -63,8 +63,7 @@ const presets = [
         {
           key: 'horde',
           name: 'Horde',
-          description:
-            'Players who will be playing multiple characters over the course of the game',
+          description: 'Players who will be playing multiple characters over the course of the game',
           slots_limited: true,
         },
       ],

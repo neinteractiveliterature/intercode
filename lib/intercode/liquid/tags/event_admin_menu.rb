@@ -33,7 +33,4 @@ module Intercode
   end
 end
 
-Liquid::Template.register_tag(
-  'event_admin_menu',
-  Intercode::Liquid::Tags::EventAdminMenu
-)
+Liquid::Template.register_tag('event_admin_menu', Intercode::Liquid::Tags::EventAdminMenu)

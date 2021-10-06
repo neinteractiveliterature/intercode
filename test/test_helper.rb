@@ -16,11 +16,7 @@ if ENV['CI'].present?
     Minitest.backtrace_filter
   )
 else
-  Minitest::Reporters.use!(
-    Minitest::Reporters::ProgressReporter.new,
-    ENV,
-    Minitest.backtrace_filter
-  )
+  Minitest::Reporters.use!(Minitest::Reporters::ProgressReporter.new, ENV, Minitest.backtrace_filter)
 end
 
 class ActiveSupport::TestCase
@@ -29,11 +25,12 @@ class ActiveSupport::TestCase
 
   class TestGraphqlContext
     def self.with_user_con_profile(user_con_profile, **attrs)
-      rendering_context = CmsRenderingContext.new(
-        cms_parent: user_con_profile&.convention,
-        controller: nil,
-        timezone: ActiveSupport::TimeZone['UTC']
-      )
+      rendering_context =
+        CmsRenderingContext.new(
+          cms_parent: user_con_profile&.convention,
+          controller: nil,
+          timezone: ActiveSupport::TimeZone['UTC']
+        )
 
       new(
         user_con_profile: user_con_profile,
@@ -72,9 +69,7 @@ class ActiveSupport::TestCase
     end
 
     def backtrace
-      error_with_backtrace = errors.find do |error|
-        error['extensions'] && error['extensions']['backtrace'].present?
-      end
+      error_with_backtrace = errors.find { |error| error['extensions'] && error['extensions']['backtrace'].present? }
       return super unless error_with_backtrace
 
       error_with_backtrace['extensions']['backtrace']
@@ -83,11 +78,7 @@ class ActiveSupport::TestCase
 
   def execute_graphql_query(query, user_con_profile: nil, context_attrs: {}, **options)
     context = TestGraphqlContext.with_user_con_profile(user_con_profile, **context_attrs)
-    result = IntercodeSchema.execute(
-      query,
-      context: context,
-      **options
-    )
+    result = IntercodeSchema.execute(query, context: context, **options)
     raise GraphqlTestExecutionError.new(result) if result['errors'].present?
     result
   end

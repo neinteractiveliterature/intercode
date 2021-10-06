@@ -6,10 +6,7 @@ module Intercode
         include ActionView::Helpers::TagHelper
 
         def render_react_component(context)
-          render_low_level_component_tag(
-            component_name(context),
-            merge_controller_props(context, props(context))
-          )
+          render_low_level_component_tag(component_name(context), merge_controller_props(context, props(context)))
         end
 
         def merge_controller_props(context, component_props)
@@ -18,12 +15,7 @@ module Intercode
         end
 
         def render_low_level_component_tag(classname, component_props)
-          content_tag(
-            :div,
-            '',
-            'data-react-class' => classname,
-            'data-react-props' => JSON.dump(component_props)
-          )
+          content_tag(:div, '', 'data-react-class' => classname, 'data-react-props' => JSON.dump(component_props))
         end
 
         def component_name(_context)

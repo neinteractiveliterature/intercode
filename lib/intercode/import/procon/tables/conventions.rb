@@ -3,12 +3,7 @@ class Intercode::Import::Procon::Tables::Conventions < Intercode::Import::Procon
 
   after_create_record do |row, convention|
     if convention.site_mode == 'convention'
-      convention.create_root_page!(
-        parent: convention,
-        slug: 'root',
-        name: 'Root page',
-        content: root_page(row)
-      )
+      convention.create_root_page!(parent: convention, slug: 'root', name: 'Root page', content: root_page(row))
 
       LoadCmsContentSetService.new(convention: convention, content_set_name: 'procon_import').call!
       overwrite_layout_if_applicable(convention)
@@ -139,8 +134,7 @@ class Intercode::Import::Procon::Tables::Conventions < Intercode::Import::Procon
       {{ content_for_layout }}
     LIQUID
 
-    if site_template[:footer].blank?
-      inner_content = <<~HTML
+    inner_content = <<~HTML if site_template[:footer].blank?
         <div class="container">
           {{ content_for_navbar }}
         </div>
@@ -148,7 +142,6 @@ class Intercode::Import::Procon::Tables::Conventions < Intercode::Import::Procon
           {{ content_for_layout }}
         </div>
       HTML
-    end
 
     <<~HTML
       <!DOCTYPE html>

@@ -26,7 +26,7 @@
 #  fk_rails_...  (updated_by_id => users.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+
 class Run < ApplicationRecord
   belongs_to :event
   belongs_to :updated_by, class_name: 'User', optional: true

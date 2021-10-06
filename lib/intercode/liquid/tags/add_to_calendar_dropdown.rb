@@ -40,7 +40,4 @@ module Intercode
   end
 end
 
-Liquid::Template.register_tag(
-  'add_to_calendar_dropdown',
-  Intercode::Liquid::Tags::AddToCalendarDropdown
-)
+Liquid::Template.register_tag('add_to_calendar_dropdown', Intercode::Liquid::Tags::AddToCalendarDropdown)

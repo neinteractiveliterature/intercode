@@ -28,9 +28,10 @@ class Intercode::Import::Intercode1::Tables::Rooms < Intercode::Import::Intercod
       super
     else
       logger.info("Importing legacy rooms since table doesn't exist")
-      self.class.legacy_room_names_from_connection(connection).each do |name|
-        id_map[name] = @con.rooms.create!(name: name)
-      end
+      self
+        .class
+        .legacy_room_names_from_connection(connection)
+        .each { |name| id_map[name] = @con.rooms.create!(name: name) }
     end
   end
 

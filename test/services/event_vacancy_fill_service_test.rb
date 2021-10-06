@@ -23,29 +23,16 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
 
   def create_signup(**attrs)
     user_con_profile = create(:user_con_profile, convention: convention)
-    create(
-      :signup,
-      user_con_profile: user_con_profile,
-      run: the_run,
-      **attrs
-    )
+    create(:signup, user_con_profile: user_con_profile, run: the_run, **attrs)
   end
 
-  let(:anything_signup) do
-    create_signup(state: 'confirmed', bucket_key: 'anything', requested_bucket_key: bucket_key)
-  end
+  let(:anything_signup) { create_signup(state: 'confirmed', bucket_key: 'anything', requested_bucket_key: bucket_key) }
 
-  let(:waitlist_signup) do
-    create_signup(state: 'waitlisted', requested_bucket_key: bucket_key)
-  end
+  let(:waitlist_signup) { create_signup(state: 'waitlisted', requested_bucket_key: bucket_key) }
 
-  let(:waitlist_no_pref_signup) do
-    create_signup(state: 'waitlisted', requested_bucket_key: nil)
-  end
+  let(:waitlist_no_pref_signup) { create_signup(state: 'waitlisted', requested_bucket_key: nil) }
 
-  let(:no_pref_signup) do
-    create_signup(state: 'confirmed', bucket_key: bucket_key, requested_bucket_key: nil)
-  end
+  let(:no_pref_signup) { create_signup(state: 'confirmed', bucket_key: bucket_key, requested_bucket_key: nil) }
 
   subject { EventVacancyFillService.new(the_run, bucket_key) }
 
@@ -80,12 +67,8 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
   end
 
   it 'moves a no-preference signup out of the way in order to fill a vacancy' do
-    travel(-2.seconds) do
-      no_pref_signup
-    end
-    travel(-1.second) do
-      anything_signup
-    end
+    travel(-2.seconds) { no_pref_signup }
+    travel(-1.second) { anything_signup }
     waitlist_signup
 
     result = EventVacancyFillService.new(the_run, 'cats').call
@@ -110,12 +93,8 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
   end
 
   it 'handles waitlisted signups in strictly chronological order, regardless of no-pref status' do
-    travel(-2.seconds) do
-      anything_signup
-    end
-    travel(-1.second) do
-      waitlist_no_pref_signup
-    end
+    travel(-2.seconds) { anything_signup }
+    travel(-1.second) { waitlist_no_pref_signup }
     waitlist_signup
 
     result = EventVacancyFillService.new(the_run, 'anything').call
@@ -133,9 +112,7 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
   end
 
   it 'does not move confirmed signups if not necessary' do
-    travel(-1.second) do
-      anything_signup
-    end
+    travel(-1.second) { anything_signup }
     waitlist_signup
 
     result = subject.call
@@ -178,15 +155,8 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
 
   it 'disallows vacancy filling in a frozen convention' do
     convention.update!(
-      maximum_event_signups: ScheduledValue::ScheduledValue.new(
-        timespans: [
-          {
-            start: nil,
-            finish: nil,
-            value: 'not_now'
-          }
-        ]
-      )
+      maximum_event_signups:
+        ScheduledValue::ScheduledValue.new(timespans: [{ start: nil, finish: nil, value: 'not_now' }])
     )
 
     result = subject.call
@@ -244,9 +214,7 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
       let(:bucket_key) { 'pc' }
 
       it 'will not fill them in using not-counted signups' do
-        create_signup(
-          state: 'confirmed', bucket_key: 'npc', requested_bucket_key: 'npc', counted: false
-        )
+        create_signup(state: 'confirmed', bucket_key: 'npc', requested_bucket_key: 'npc', counted: false)
 
         result = subject.call
         assert result.success?

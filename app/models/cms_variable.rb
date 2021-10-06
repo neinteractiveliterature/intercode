@@ -18,7 +18,7 @@
 #  index_cms_variables_on_parent_id_and_key  (parent_id,key) UNIQUE
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+
 class CmsVariable < ApplicationRecord
   include Cadmus::Concerns::ModelWithParent
   model_with_parent

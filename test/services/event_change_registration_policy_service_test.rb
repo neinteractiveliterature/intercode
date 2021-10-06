@@ -51,9 +51,7 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
       )
     end
 
-    before do
-      signup
-    end
+    before { signup }
 
     it 'moves the signup' do
       result = subject.call
@@ -84,13 +82,14 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
       create(
         :event,
         convention: convention,
-        registration_policy: RegistrationPolicy.new(
-          buckets: [
-            { key: 'dogs', slots_limited: true, total_slots: 2 },
-            { key: 'cats', slots_limited: true, total_slots: 1 },
-            { key: 'anything', slots_limited: true, total_slots: 1, anything: true }
-          ]
-        )
+        registration_policy:
+          RegistrationPolicy.new(
+            buckets: [
+              { key: 'dogs', slots_limited: true, total_slots: 2 },
+              { key: 'cats', slots_limited: true, total_slots: 1 },
+              { key: 'anything', slots_limited: true, total_slots: 1, anything: true }
+            ]
+          )
       )
     end
 
@@ -240,13 +239,14 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
       create(
         :event,
         convention: convention,
-        registration_policy: RegistrationPolicy.new(
-          buckets: [
-            { key: 'dogs', slots_limited: true, total_slots: 0 },
-            { key: 'cats', slots_limited: true, total_slots: 1 },
-            { key: 'anything', slots_limited: true, total_slots: 1, anything: true }
-          ]
-        )
+        registration_policy:
+          RegistrationPolicy.new(
+            buckets: [
+              { key: 'dogs', slots_limited: true, total_slots: 0 },
+              { key: 'cats', slots_limited: true, total_slots: 1 },
+              { key: 'anything', slots_limited: true, total_slots: 1, anything: true }
+            ]
+          )
       )
     end
 

@@ -1,9 +1,6 @@
 import * as React from 'react';
 
-export default function buildTestScheduledValueInput(
-  value: string,
-  onChange: React.Dispatch<string>,
-) {
+export default function buildTestScheduledValueInput(value: string, onChange: React.Dispatch<string>): JSX.Element {
   const processChangeEvent = (event: React.ChangeEvent<HTMLInputElement>) => {
     onChange(event.target.value);
   };

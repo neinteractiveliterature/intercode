@@ -10,6 +10,7 @@ module Devise
         params[scope] && params[scope]['email'] && params[scope]['password']
       end
 
+      # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       def authenticate!
         p = mapping.to.find_for_authentication(email: params[scope]['email'])
 
@@ -17,12 +18,13 @@ module Devise
           pass
         else
           bcrypted_legacy_password = BCrypt::Password.new(p.legacy_password_sha1)
-          sha1_digest = Devise::Encryptable::Encryptors::Sha1.digest(
-            params[scope]['password'],
-            10,
-            p.legacy_password_sha1_salt,
-            mapping.to.pepper
-          )
+          sha1_digest =
+            Devise::Encryptable::Encryptors::Sha1.digest(
+              params[scope]['password'],
+              10,
+              p.legacy_password_sha1_salt,
+              mapping.to.pepper
+            )
 
           if bcrypted_legacy_password == sha1_digest
             # save password as non-legacy version for next time
@@ -40,6 +42,7 @@ module Devise
           end
         end
       end
+      # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
     end
   end
 end

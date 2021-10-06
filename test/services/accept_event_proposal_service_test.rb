@@ -5,9 +5,7 @@ class AcceptEventProposalServiceTest < ActiveSupport::TestCase
   let(:event_category) { create(:event_category, convention: convention) }
   let(:event_proposal) do
     build(:event_proposal, event_category: event_category, convention: convention).tap do |proposal|
-      proposal.assign_default_values_from_form_items(
-        proposal.event_category.event_proposal_form.form_items
-      )
+      proposal.assign_default_values_from_form_items(proposal.event_category.event_proposal_form.form_items)
       proposal.save!
     end
   end
@@ -28,10 +26,7 @@ class AcceptEventProposalServiceTest < ActiveSupport::TestCase
   end
 
   it 'copies fields that do not match in name' do
-    event_proposal.assign_form_response_attributes(
-      authors: 'Alexander Graham Bell',
-      player_communications: 'ahoy hoy!'
-    )
+    event_proposal.assign_form_response_attributes(authors: 'Alexander Graham Bell', player_communications: 'ahoy hoy!')
     event_proposal.save!
 
     event = AcceptEventProposalService.new(event_proposal: event_proposal).call!.event
@@ -43,16 +38,20 @@ class AcceptEventProposalServiceTest < ActiveSupport::TestCase
     event_category.event_proposal_form.form_sections.first.form_items.create!(
       identifier: 'secret_password',
       item_type: 'free_text',
-      properties: { caption: 'Secret password', lines: 1 }
+      properties: {
+        caption: 'Secret password',
+        lines: 1
+      }
     )
     event_category.event_form.form_sections.first.form_items.create!(
       identifier: 'secret_password',
       item_type: 'free_text',
-      properties: { caption: 'Secret password', lines: 1 }
+      properties: {
+        caption: 'Secret password',
+        lines: 1
+      }
     )
-    event_proposal.assign_form_response_attributes(
-      secret_password: 'swordfish'
-    )
+    event_proposal.assign_form_response_attributes(secret_password: 'swordfish')
     event_proposal.save!
 
     event = AcceptEventProposalService.new(event_proposal: event_proposal).call!.event

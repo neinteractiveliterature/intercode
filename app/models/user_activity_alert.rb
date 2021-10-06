@@ -25,7 +25,7 @@
 #  fk_rails_...  (user_id => users.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+
 class UserActivityAlert < ApplicationRecord
   belongs_to :convention
   belongs_to :user, optional: true

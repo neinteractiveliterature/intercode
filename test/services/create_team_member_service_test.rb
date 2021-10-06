@@ -45,8 +45,11 @@ class CreateTeamMemberServiceTest < ActiveSupport::TestCase
     let(:signup) do
       create(
         :signup,
-        run: the_run, user_con_profile: user_con_profile,
-        state: 'confirmed', bucket_key: 'unlimited', counted: true
+        run: the_run,
+        user_con_profile: user_con_profile,
+        state: 'confirmed',
+        bucket_key: 'unlimited',
+        counted: true
       )
     end
 
@@ -65,13 +68,15 @@ class CreateTeamMemberServiceTest < ActiveSupport::TestCase
     describe 'limited buckets' do
       let(:event) do
         create(
-          :event, convention: convention, event_category: event_category,
-                  registration_policy: {
-                    buckets: [
-                      { key: 'dogs', name: 'dogs', slots_limited: true, total_slots: 3 },
-                      { key: 'cats', name: 'cats', slots_limited: true, total_slots: 2 }
-                    ]
-                  }
+          :event,
+          convention: convention,
+          event_category: event_category,
+          registration_policy: {
+            buckets: [
+              { key: 'dogs', name: 'dogs', slots_limited: true, total_slots: 3 },
+              { key: 'cats', name: 'cats', slots_limited: true, total_slots: 2 }
+            ]
+          }
         )
       end
 
@@ -79,8 +84,11 @@ class CreateTeamMemberServiceTest < ActiveSupport::TestCase
         let(:signup) do
           create(
             :signup,
-            run: the_run, user_con_profile: user_con_profile,
-            state: 'waitlisted', requested_bucket_key: 'dogs', counted: false
+            run: the_run,
+            user_con_profile: user_con_profile,
+            state: 'waitlisted',
+            requested_bucket_key: 'dogs',
+            counted: false
           )
         end
 
@@ -99,23 +107,28 @@ class CreateTeamMemberServiceTest < ActiveSupport::TestCase
         let(:signup) do
           create(
             :signup,
-            run: the_run, user_con_profile: user_con_profile,
-            state: 'confirmed', bucket_key: 'dogs', requested_bucket_key: 'dogs', counted: true
+            run: the_run,
+            user_con_profile: user_con_profile,
+            state: 'confirmed',
+            bucket_key: 'dogs',
+            requested_bucket_key: 'dogs',
+            counted: true
           )
         end
         let(:waitlist_signup) do
-          create(
-            :signup,
-            run: the_run,
-            state: 'waitlisted', requested_bucket_key: 'dogs', counted: false
-          )
+          create(:signup, run: the_run, state: 'waitlisted', requested_bucket_key: 'dogs', counted: false)
         end
 
         before do
           signup
           create_list(
-            :signup, 2,
-            run: the_run, state: 'confirmed', bucket_key: 'dogs', requested_bucket_key: 'dogs', counted: true
+            :signup,
+            2,
+            run: the_run,
+            state: 'confirmed',
+            bucket_key: 'dogs',
+            requested_bucket_key: 'dogs',
+            counted: true
           )
           waitlist_signup
         end

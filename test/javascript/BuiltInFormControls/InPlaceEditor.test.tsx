@@ -1,13 +1,11 @@
 import { render, fireEvent } from '../testUtils';
-import InPlaceEditor, {
-  InPlaceEditorProps,
-} from '../../../app/javascript/BuiltInFormControls/InPlaceEditor';
+import InPlaceEditor, { InPlaceEditorProps } from '../../../app/javascript/BuiltInFormControls/InPlaceEditor';
 
 describe('InPlaceEditor', () => {
   const onChange = jest.fn();
   beforeEach(onChange.mockReset);
 
-  const renderEditor = (props?: Partial<InPlaceEditorProps<any>>) =>
+  const renderEditor = (props?: Partial<InPlaceEditorProps<unknown>>) =>
     render(<InPlaceEditor value="someValue" onChange={onChange} {...props} />);
 
   test('it renders just the value by default', async () => {

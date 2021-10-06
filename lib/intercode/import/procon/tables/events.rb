@@ -33,17 +33,14 @@ class Intercode::Import::Procon::Tables::Events < Intercode::Import::Procon::Tab
 
   def dataset
     not_a_proposal = (Sequel.~(Sequel[{ type: 'ProposedEvent' }]) | Sequel[{ type: nil }])
-    super.where(
-      not_a_proposal &
-      Sequel[{
-        parent_id: @convention_id_map.select { |_id, con| con.site_mode == 'convention' }.keys
-      }]
-    ).or(
-      not_a_proposal &
-      Sequel[{
-        id: @convention_id_map.select { |_id, con| con.site_mode == 'single_event' }.keys
-      }]
-    )
+    super
+      .where(
+        not_a_proposal &
+          Sequel[{ parent_id: @convention_id_map.select { |_id, con| con.site_mode == 'convention' }.keys }]
+      )
+      .or(
+        not_a_proposal & Sequel[{ id: @convention_id_map.select { |_id, con| con.site_mode == 'single_event' }.keys }]
+      )
   end
 
   private
@@ -51,16 +48,19 @@ class Intercode::Import::Procon::Tables::Events < Intercode::Import::Procon::Tab
   def build_record(row)
     convention_id = row[:parent_id] || row[:id]
     convention = @convention_id_map[convention_id]
-    event = convention.events.find_or_create_by(title: row[:fullname]) do |evt|
-      evt.assign_attributes(
-        event_category: convention.event_categories.find_by!(name: event_category_name(row)),
-        registration_policy: registration_policy(row),
-        status: 'active',
-        event_proposal: @proposed_event_id_map[row[:proposed_event_id]],
-        con_mail_destination: 'gms'
-      )
-      evt.assign_form_response_attributes(form_response_attributes(row))
-    end
+    event =
+      convention
+        .events
+        .find_or_create_by(title: row[:fullname]) do |evt|
+          evt.assign_attributes(
+            event_category: convention.event_categories.find_by!(name: event_category_name(row)),
+            registration_policy: registration_policy(row),
+            status: 'active',
+            event_proposal: @proposed_event_id_map[row[:proposed_event_id]],
+            con_mail_destination: 'gms'
+          )
+          evt.assign_form_response_attributes(form_response_attributes(row))
+        end
 
     create_run_and_rooms(row, event)
   end
@@ -68,14 +68,10 @@ class Intercode::Import::Procon::Tables::Events < Intercode::Import::Procon::Tab
   def create_run_and_rooms(row, event)
     run = event.runs.create!(starts_at: force_timezone(row[:start], event.convention.timezone_name))
 
-    location_names = connection[:locations]
-      .join(:event_locations, location_id: :id)
-      .where(event_id: event.id)
-      .map(:name)
+    location_names =
+      connection[:locations].join(:event_locations, location_id: :id).where(event_id: event.id).map(:name)
 
-    run.rooms = location_names.map do |name|
-      event.convention.rooms.find_or_create!(name: name)
-    end
+    run.rooms = location_names.map { |name| event.convention.rooms.find_or_create!(name: name) }
     run.save!
 
     run
@@ -95,9 +91,7 @@ class Intercode::Import::Procon::Tables::Events < Intercode::Import::Procon::Tab
 
   def registration_policy(row)
     if row[:type] != 'LimitedCapacityEvent'
-      if event_registration_open?(row) || event_has_counted_attendances?(row)
-        return RegistrationPolicy.unlimited
-      end
+      return RegistrationPolicy.unlimited if event_registration_open?(row) || event_has_counted_attendances?(row)
       return RegistrationPolicy.new
     end
 
@@ -110,25 +104,26 @@ class Intercode::Import::Procon::Tables::Events < Intercode::Import::Procon::Tab
 
     [
       RegistrationPolicy::Bucket.new(
-        buckets.find { |bucket| bucket.key == 'flex' }.attributes.merge(
-          key: 'signups',
-          name: 'Signups',
-          description: 'Signups for this event',
-          slots_limited: true,
-          anything: false
-        )
+        buckets
+          .find { |bucket| bucket.key == 'flex' }
+          .attributes
+          .merge(
+            key: 'signups',
+            name: 'Signups',
+            description: 'Signups for this event',
+            slots_limited: true,
+            anything: false
+          )
       )
     ]
   end
 
   def buckets_for_event(row)
     [
-      *connection[:attendee_slots].where(event_id: row[:id]).map do |attendee_slot_row|
-        bucket_for_attendee_slot_row(attendee_slot_row)
-      end,
-      *buckets_for_registration_bucket_rows(
-        connection[:registration_buckets].where(event_id: row[:id]).to_a
-      )
+      *connection[:attendee_slots]
+        .where(event_id: row[:id])
+        .map { |attendee_slot_row| bucket_for_attendee_slot_row(attendee_slot_row) },
+      *buckets_for_registration_bucket_rows(connection[:registration_buckets].where(event_id: row[:id]).to_a)
     ]
   end
 
@@ -142,21 +137,26 @@ class Intercode::Import::Procon::Tables::Events < Intercode::Import::Procon::Tab
     )
   end
 
+  # rubocop:disable Metrics/MethodLength
   def buckets_for_registration_bucket_rows(registration_bucket_rows)
     registration_bucket_rows.map do |registration_bucket_row|
       # When ProCon migrated away from the registration_bucket_rows table, the registration_rules
       # rows backing these were lost, so we have to intuit the 'gender' of each signup bucket from
       # the row's position in the list (which we can because the code that generated these was
       # deterministic)
-      gender_for_row = if registration_bucket_rows.size == 1
-        'neutral'
-      else
-        case registration_bucket_row[:position]
-        when 1 then 'male'
-        when 2 then 'female'
-        when 3 then 'neutral'
+      gender_for_row =
+        if registration_bucket_rows.size == 1
+          'neutral'
+        else
+          case registration_bucket_row[:position]
+          when 1
+            'male'
+          when 2
+            'female'
+          when 3
+            'neutral'
+          end
         end
-      end
 
       RegistrationPolicy::Bucket.new(
         BUCKET_ATTRS_BY_GENDER[gender_for_row].merge(
@@ -168,10 +168,14 @@ class Intercode::Import::Procon::Tables::Events < Intercode::Import::Procon::Tab
     end
   end
 
+  # rubocop:enable Metrics/MethodLength
+
   def event_category_name(row)
     case row[:type]
-    when 'LimitedCapacityEvent' then 'Larp'
-    else 'Con services'
+    when 'LimitedCapacityEvent'
+      'Larp'
+    else
+      'Con services'
     end
   end
 end

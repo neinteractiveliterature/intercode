@@ -46,9 +46,7 @@ from other conventions" do
     it 'returns nothing to anyone else' do
       user_activity_alert
       user_con_profile = create(:user_con_profile, convention: convention)
-      resolved_alerts = UserActivityAlertPolicy::Scope.new(
-        user_con_profile.user, UserActivityAlert.all
-      ).resolve
+      resolved_alerts = UserActivityAlertPolicy::Scope.new(user_con_profile.user, UserActivityAlert.all).resolve
 
       assert_equal [], resolved_alerts.sort
     end

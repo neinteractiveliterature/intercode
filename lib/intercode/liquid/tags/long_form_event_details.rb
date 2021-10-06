@@ -33,7 +33,4 @@ module Intercode
   end
 end
 
-Liquid::Template.register_tag(
-  'long_form_event_details',
-  Intercode::Liquid::Tags::LongFormEventDetails
-)
+Liquid::Template.register_tag('long_form_event_details', Intercode::Liquid::Tags::LongFormEventDetails)

@@ -5,9 +5,7 @@ module Intercode::Import::Intercode1::Php
       temp_program.write php
       temp_program.flush
 
-      output, = Open3.capture2(
-        'php', '-d', 'display_errors=stderr', '-d', 'short_open_tag=1', temp_program.path
-      )
+      output, = Open3.capture2('php', '-d', 'display_errors=stderr', '-d', 'short_open_tag=1', temp_program.path)
       output
     ensure
       temp_program.close

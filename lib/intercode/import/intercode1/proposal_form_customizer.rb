@@ -30,13 +30,10 @@ class Intercode::Import::Intercode1::ProposalFormCustomizer
   def add_omit_timeblocks_for_convention
     return unless friday_date
 
-    item = convention.event_proposal_form.form_items
-      .where(identifier: 'timeblock_preferences').first
+    item = convention.event_proposal_form.form_items.where(identifier: 'timeblock_preferences').first
     return unless item
 
-    item.properties = item.properties.merge(
-      'omit_timeblocks' => [{ 'label' => 'Morning', 'date' => friday_date }]
-    )
+    item.properties = item.properties.merge('omit_timeblocks' => [{ 'label' => 'Morning', 'date' => friday_date }])
     item.save!
   end
 end

@@ -23,11 +23,7 @@ module Intercode
       def pluralize(input, singular = nil, plural = nil)
         return input.pluralize if input.is_a?(String)
 
-        if input.to_i == 1
-          "#{input} #{singular}"
-        else
-          "#{input} #{plural}"
-        end
+        input.to_i == 1 ? "#{input} #{singular}" : "#{input} #{plural}"
       end
 
       # Outputs either a clickable mailto: link (if the user is currently logged in), or an
@@ -45,11 +41,7 @@ module Intercode
       def email_link(input)
         return unless input
 
-        if @context['user']
-          %(<a href="mailto:#{input}">#{input}</a>)
-        else
-          ApplicationHelper.obfuscated_email(input)
-        end
+        @context['user'] ? "<a href=\"mailto:#{input}\">#{input}</a>" : ApplicationHelper.obfuscated_email(input)
       end
 
       # Given an array of strings, outputs an English representation of that array.
@@ -176,9 +168,7 @@ module Intercode
       private
 
       def find_effective_timezone(timezone_name = nil)
-        effective_timezone_name = (
-          timezone_name.presence || @context.registers['convention'].timezone_name
-        )
+        effective_timezone_name = (timezone_name.presence || @context.registers['convention'].timezone_name)
         ActiveSupport::TimeZone[effective_timezone_name]
       end
 
@@ -218,17 +208,9 @@ module Intercode
       end
 
       def describe_timespan(timespan, format, timezone)
-        start = if timespan.start
-          timespan.start.in_time_zone(timezone).strftime(format)
-        else
-          'anytime'
-        end
+        start = timespan.start ? timespan.start.in_time_zone(timezone).strftime(format) : 'anytime'
 
-        finish = if timespan.finish
-          timespan.finish.in_time_zone(timezone).strftime(format)
-        else
-          'indefinitely'
-        end
+        finish = timespan.finish ? timespan.finish.in_time_zone(timezone).strftime(format) : 'indefinitely'
 
         deduped_start, deduped_finish = remove_common_middle(start, finish, ' ')
         [deduped_start, deduped_finish].join(timespan.finish ? ' to ' : ' ')

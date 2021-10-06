@@ -1,7 +1,5 @@
 import { render, fireEvent, waitFor } from '../testUtils';
-import TimezoneSelect, {
-  TimezoneSelectProps,
-} from '../../../app/javascript/BuiltInFormControls/TimezoneSelect';
+import TimezoneSelect, { TimezoneSelectProps } from '../../../app/javascript/BuiltInFormControls/TimezoneSelect';
 
 describe('TimezoneSelect', () => {
   const renderComponent = (overrideProps?: Partial<TimezoneSelectProps>) =>

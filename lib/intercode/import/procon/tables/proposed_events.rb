@@ -21,11 +21,12 @@ class Intercode::Import::Procon::Tables::ProposedEvents < Intercode::Import::Pro
 
   def build_record(row)
     convention = @convention_id_map.fetch(row[:parent_id])
-    proposal = convention.event_proposals.new(
-      event_category: convention.event_categories.find_by!(name: 'Larp'),
-      status: accepted?(row) ? 'accepted' : 'reviewing',
-      owner: user_con_profile_for_person_id(row[:proposer_id], convention)
-    )
+    proposal =
+      convention.event_proposals.new(
+        event_category: convention.event_categories.find_by!(name: 'Larp'),
+        status: accepted?(row) ? 'accepted' : 'reviewing',
+        owner: user_con_profile_for_person_id(row[:proposer_id], convention)
+      )
     proposal.assign_form_response_attributes(form_response_attributes(row))
     proposal
   end

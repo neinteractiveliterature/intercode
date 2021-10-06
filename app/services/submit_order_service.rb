@@ -29,28 +29,31 @@ class SubmitOrderService < CivilService::Service
     when 'free'
       order.update!(status: 'paid', submitted_at: Time.zone.now)
     when 'payment_intent'
-      pi = Stripe::PaymentIntent.retrieve(payment_intent_id, stripe_account: convention.stripe_account_id)
-      if pi.status == 'succeeded'
-        charge = pi.charges.first
-        order.update!(
-          status: 'paid',
-          payment_amount: order.total_price,
-          payment_note:
-            "Paid via Stripe on \
-#{Time.at(charge.created).in_time_zone(convention.timezone)} (Charge ID #{charge.id})",
-          charge_id: charge.id,
-          paid_at: Time.zone.at(charge.created),
-          submitted_at: Time.zone.now
-        )
-      else
-        order.update!(status: 'unpaid', submitted_at: Time.zone.now)
-      end
+      update_order_from_payment_intent
     else
       order.update!(status: 'unpaid', submitted_at: Time.zone.now)
     end
 
     ticket_providers.each(&:call!)
     success
+  end
+
+  def update_order_from_payment_intent
+    pi = Stripe::PaymentIntent.retrieve(payment_intent_id, stripe_account: convention.stripe_account_id)
+    if pi.status == 'succeeded'
+      charge = pi.charges.first
+      order.update!(
+        status: 'paid',
+        payment_amount: order.total_price,
+        payment_note:
+          "Paid via Stripe on #{Time.at(charge.created).in_time_zone(convention.timezone)} (Charge ID #{charge.id})",
+        charge_id: charge.id,
+        paid_at: Time.zone.at(charge.created),
+        submitted_at: Time.zone.now
+      )
+    else
+      order.update!(status: 'unpaid', submitted_at: Time.zone.now)
+    end
   end
 
   def ticket_providing_order_entries

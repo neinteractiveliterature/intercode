@@ -13,22 +13,14 @@ Doorkeeper.configure do
   orm :active_record
 
   # This block will be called to check whether the resource owner is authenticated or not.
-  resource_owner_authenticator do
-    if user_signed_in?
-      current_user
-    else
-      NullResourceOwner.new
-    end
-  end
+  resource_owner_authenticator { user_signed_in? ? current_user : NullResourceOwner.new }
 
   # If you didn't skip applications controller from Doorkeeper routes in your application routes.rb
   # file then you need to declare this block in order to restrict access to the web interface for
   # adding oauth authorized applications. In other case it will return 403 Forbidden response
   # every time somebody will try to access the admin web interface.
   #
-  admin_authenticator do
-    authorize Doorkeeper::Application.new, :manage?
-  end
+  admin_authenticator { authorize Doorkeeper::Application.new, :manage? }
 
   # If you are planning to use Doorkeeper in Rails 5 API-only application, then you might
   # want to use API mode that will skip all the views management and change the way how
@@ -102,20 +94,20 @@ Doorkeeper.configure do
   # Define access token scopes for your provider
   # For more information go to
   # https://github.com/doorkeeper-gem/doorkeeper/wiki/Using-Scopes
-  default_scopes  :public
+  default_scopes :public
   optional_scopes :openid,
-    :read_profile,
-    :read_signups,
-    :read_events,
-    :read_conventions,
-    :read_organizations,
-    :read_email_routing,
-    :manage_profile,
-    :manage_signups,
-    :manage_events,
-    :manage_conventions,
-    :manage_organizations,
-    :manage_email_routing
+                  :read_profile,
+                  :read_signups,
+                  :read_events,
+                  :read_conventions,
+                  :read_organizations,
+                  :read_email_routing,
+                  :manage_profile,
+                  :manage_signups,
+                  :manage_events,
+                  :manage_conventions,
+                  :manage_organizations,
+                  :manage_email_routing
 
   # Change the way client credentials are retrieved from the request object.
   # By default it retrieves first from the `HTTP_AUTHORIZATION` header, then
@@ -134,7 +126,8 @@ Doorkeeper.configure do
   # access_token_methods :from_bearer_authorization, :from_access_token_param, :from_bearer_param
 
   # Change the native redirect uri for client apps
-  # When clients register with the following redirect uri, they won't be redirected to any server and the authorization code will be displayed within the provider
+  # When clients register with the following redirect uri, they won't be redirected to any server and the authorization
+  # code will be displayed within the provider
   # The value can be any string. Use nil to disable this feature. When disabled, clients must provide a valid URL
   # (Similar behaviour: https://developers.google.com/accounts/docs/OAuth2InstalledApp#choosingredirecturi)
   #
@@ -226,10 +219,8 @@ Doorkeeper::JWT.configure do
     {
       iat: Time.current.utc.to_i,
       exp: (Time.current + opts[:expires_in].seconds).utc.to_i,
-
       # @see JWT reserved claims - https://tools.ietf.org/html/draft-jones-json-web-token-07#page-7
       jti: SecureRandom.uuid,
-
       user: {
         id: user.id,
         email: user.email,
@@ -242,9 +233,7 @@ Doorkeeper::JWT.configure do
 
   # Optionally set additional headers for the JWT. See
   # https://tools.ietf.org/html/rfc7515#section-4.1
-  token_headers do |_opts|
-    { kid: Doorkeeper::OpenidConnect.signing_key[:kid] }
-  end
+  token_headers { |_opts| { kid: Doorkeeper::OpenidConnect.signing_key[:kid] } }
 
   # Use the application secret specified in the access grant token. Defaults to
   # `false`. If you specify `use_application_secret true`, both `secret_key` and

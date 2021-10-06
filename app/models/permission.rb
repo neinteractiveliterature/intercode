@@ -32,7 +32,7 @@
 #  fk_rails_...  (staff_position_id => staff_positions.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+
 class Permission < ApplicationRecord
   include ExclusiveArc
 

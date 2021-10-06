@@ -3,9 +3,7 @@ require 'test_helper'
 class EventSignupServiceTest < ActiveSupport::TestCase
   include ActiveJob::TestHelper
 
-  let(:convention) do
-    create :convention, :with_notification_templates, ticket_mode: 'required_for_signup'
-  end
+  let(:convention) { create :convention, :with_notification_templates, ticket_mode: 'required_for_signup' }
   let(:event) { create :event, convention: convention }
   let(:the_run) { create :run, event: event }
   let(:user_con_profile) { create :user_con_profile, convention: convention }
@@ -28,21 +26,14 @@ class EventSignupServiceTest < ActiveSupport::TestCase
   end
 
   describe 'with a ticket that does not allow signups' do
-    let(:ticket_type) do
-      create :free_ticket_type, convention: convention, allows_event_signups: false
-    end
+    let(:ticket_type) { create :free_ticket_type, convention: convention, allows_event_signups: false }
 
-    setup do
-      ticket
-    end
+    setup { ticket }
 
     it 'disallows signups' do
       result = subject.call
       assert result.failure?
-      assert_match(
-        /\AYou have a #{Regexp.escape ticket_type.description}/,
-        result.errors.full_messages.join('\n')
-      )
+      assert_match(/\AYou have a #{Regexp.escape ticket_type.description}/, result.errors.full_messages.join('\n'))
     end
   end
 
@@ -57,9 +48,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
   end
 
   describe 'with a valid ticket' do
-    setup do
-      ticket
-    end
+    setup { ticket }
 
     it 'signs the user up for an event' do
       result = subject.call
@@ -97,18 +86,13 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
       result = subject.call
       assert result.failure?
-      assert_match(
-         /already signed up/,
-         result.errors.full_messages.join('\n')
-      )
+      assert_match(/already signed up/, result.errors.full_messages.join('\n'))
     end
 
     describe 'as a team member' do
       let(:requested_bucket_key) { nil }
 
-      setup do
-        create(:team_member, event: event, user_con_profile: user_con_profile)
-      end
+      setup { create(:team_member, event: event, user_con_profile: user_con_profile) }
 
       it 'signs up a team member as not counted' do
         result = subject.call
@@ -122,15 +106,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
       it 'does not care whether signups are open yet' do
         convention.update!(
-          maximum_event_signups: ScheduledValue::ScheduledValue.new(
-            timespans: [
-              {
-                start: nil,
-                finish: nil,
-                value: 'not_yet'
-              }
-            ]
-          )
+          maximum_event_signups:
+            ScheduledValue::ScheduledValue.new(timespans: [{ start: nil, finish: nil, value: 'not_yet' }])
         )
 
         result = subject.call
@@ -141,15 +118,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
     it 'allows signups if the user has not yet reached the current signup limit' do
       convention.update!(
-        maximum_event_signups: ScheduledValue::ScheduledValue.new(
-          timespans: [
-            {
-              start: nil,
-              finish: nil,
-              value: '1'
-            }
-          ]
-        )
+        maximum_event_signups: ScheduledValue::ScheduledValue.new(timespans: [{ start: nil, finish: nil, value: '1' }])
       )
 
       result = subject.call
@@ -159,24 +128,11 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
     it 'does not count non-counted signups towards the signup limit' do
       convention.update!(
-        maximum_event_signups: ScheduledValue::ScheduledValue.new(
-          timespans: [
-            {
-              start: nil,
-              finish: nil,
-              value: '1'
-            }
-          ]
-        )
+        maximum_event_signups: ScheduledValue::ScheduledValue.new(timespans: [{ start: nil, finish: nil, value: '1' }])
       )
       another_event = create(:event, convention: convention)
       another_run = create(:run, event: another_event, starts_at: the_run.ends_at)
-      create(
-        :signup,
-        counted: false,
-        user_con_profile: user_con_profile,
-        run: another_run
-      )
+      create(:signup, counted: false, user_con_profile: user_con_profile, run: another_run)
 
       result = subject.call
       assert result.success?
@@ -185,25 +141,12 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
     it 'does count waitlisted signups towards the signup limit' do
       convention.update!(
-        maximum_event_signups: ScheduledValue::ScheduledValue.new(
-          timespans: [
-            {
-              start: nil,
-              finish: nil,
-              value: '1'
-            }
-          ]
-        )
+        maximum_event_signups: ScheduledValue::ScheduledValue.new(timespans: [{ start: nil, finish: nil, value: '1' }])
       )
 
       another_event = create(:event, convention: convention)
       another_run = create(:run, event: another_event, starts_at: the_run.ends_at)
-      create(
-        :signup,
-        state: 'waitlisted',
-        user_con_profile: user_con_profile,
-        run: another_run
-      )
+      create(:signup, state: 'waitlisted', user_con_profile: user_con_profile, run: another_run)
 
       result = subject.call
       assert result.failure?
@@ -212,24 +155,11 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
     it 'does not count withdrawn signups towards the signup limit' do
       convention.update!(
-        maximum_event_signups: ScheduledValue::ScheduledValue.new(
-          timespans: [
-            {
-              start: nil,
-              finish: nil,
-              value: '1'
-            }
-          ]
-        )
+        maximum_event_signups: ScheduledValue::ScheduledValue.new(timespans: [{ start: nil, finish: nil, value: '1' }])
       )
       another_event = create(:event, convention: convention)
       another_run = create(:run, event: another_event, starts_at: the_run.ends_at)
-      create(
-        :signup,
-        state: 'withdrawn',
-        user_con_profile: user_con_profile,
-        run: another_run
-      )
+      create(:signup, state: 'withdrawn', user_con_profile: user_con_profile, run: another_run)
 
       result = subject.call
       assert result.success?
@@ -238,15 +168,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
     it 'disallows signups if the user has reached the current signup limit' do
       convention.update!(
-        maximum_event_signups: ScheduledValue::ScheduledValue.new(
-          timespans: [
-            {
-              start: nil,
-              finish: nil,
-              value: '1'
-            }
-          ]
-        )
+        maximum_event_signups: ScheduledValue::ScheduledValue.new(timespans: [{ start: nil, finish: nil, value: '1' }])
       )
 
       other_event = create(:event, convention: convention, length_seconds: event.length_seconds)
@@ -261,15 +183,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
     it 'disallows signups if signups are not yet open' do
       convention.update!(
-        maximum_event_signups: ScheduledValue::ScheduledValue.new(
-          timespans: [
-            {
-              start: nil,
-              finish: nil,
-              value: 'not_yet'
-            }
-          ]
-        )
+        maximum_event_signups:
+          ScheduledValue::ScheduledValue.new(timespans: [{ start: nil, finish: nil, value: 'not_yet' }])
       )
 
       result = subject.call
@@ -279,20 +194,14 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
     it 'disallows signups to a frozen convention' do
       convention.update!(
-        maximum_event_signups: ScheduledValue::ScheduledValue.new(
-          timespans: [
-            {
-              start: nil,
-              finish: nil,
-              value: 'not_now'
-            }
-          ]
-        )
+        maximum_event_signups:
+          ScheduledValue::ScheduledValue.new(timespans: [{ start: nil, finish: nil, value: 'not_now' }])
       )
 
       result = subject.call
       assert result.failure?
-      assert_match /\ARegistrations for #{Regexp.escape convention.name} are frozen/, result.errors.full_messages.join('\n')
+      assert_match /\ARegistrations for #{Regexp.escape convention.name} are frozen/,
+                   result.errors.full_messages.join('\n')
     end
 
     describe 'with a conflicting event' do
@@ -300,21 +209,23 @@ class EventSignupServiceTest < ActiveSupport::TestCase
       let(:other_run) { create(:run, event: other_event, starts_at: the_run.starts_at) }
 
       it 'disallows signups with conflicting waitlist games' do
-        waitlist_signup1 = create(
-          :signup,
-          user_con_profile: user_con_profile,
-          run: other_run,
-          state: 'waitlisted',
-          bucket_key: nil,
-          requested_bucket_key: 'unlimited'
-        )
+        waitlist_signup1 =
+          create(
+            :signup,
+            user_con_profile: user_con_profile,
+            run: other_run,
+            state: 'waitlisted',
+            bucket_key: nil,
+            requested_bucket_key: 'unlimited'
+          )
 
         assert waitlist_signup1.waitlisted?
 
         result = subject.call
         assert result.failure?
         assert waitlist_signup1.reload.waitlisted?
-        assert_match /\AYou are already waitlisted for #{Regexp.escape other_event.title}/, result.errors.full_messages.join('\n')
+        assert_match /\AYou are already waitlisted for #{Regexp.escape other_event.title}/,
+                     result.errors.full_messages.join('\n')
       end
 
       it 'disallows signups to conflicting events' do
@@ -323,7 +234,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
         result = subject.call
         assert result.failure?
-        assert_match /\AYou are already signed up for #{Regexp.escape other_event.title}/, result.errors.full_messages.join('\n')
+        assert_match /\AYou are already signed up for #{Regexp.escape other_event.title}/,
+                     result.errors.full_messages.join('\n')
       end
 
       it 'allows signups to conflicting events that allow concurrent signups' do
@@ -415,7 +327,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase
         it 'disallows signups to a nonexistent bucket' do
           result = subject.call
           assert result.failure?
-          assert_match /\APlease choose one of the following buckets: dogs, cats.\z/, result.errors.full_messages.join('\n')
+          assert_match /\APlease choose one of the following buckets: dogs, cats.\z/,
+                       result.errors.full_messages.join('\n')
         end
       end
 
@@ -425,7 +338,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase
         it 'disallows signups to the anything bucket' do
           result = subject.call
           assert result.failure?
-          assert_match /\APlease choose one of the following buckets: dogs, cats.\z/, result.errors.full_messages.join('\n')
+          assert_match /\APlease choose one of the following buckets: dogs, cats.\z/,
+                       result.errors.full_messages.join('\n')
         end
       end
 
@@ -469,7 +383,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase
           it 'prevents it' do
             result = subject.call
             assert result.failure?
-            assert_match /\APlease choose one of the following buckets: dogs, cats.\z/, result.errors.full_messages.join('\n')
+            assert_match /\APlease choose one of the following buckets: dogs, cats.\z/,
+                         result.errors.full_messages.join('\n')
           end
         end
       end

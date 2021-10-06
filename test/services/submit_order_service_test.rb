@@ -2,8 +2,7 @@ require 'test_helper'
 
 class SubmitOrderServiceTest < ActiveSupport::TestCase
   let(:convention) do
-    create(:convention, :with_notification_templates,
-      starts_at: 2.days.from_now, ends_at: 4.days.from_now)
+    create(:convention, :with_notification_templates, starts_at: 2.days.from_now, ends_at: 4.days.from_now)
   end
   let(:user_con_profile) { create(:user_con_profile, convention: convention) }
   let(:order) { create(:order, user_con_profile: user_con_profile) }
@@ -17,16 +16,9 @@ class SubmitOrderServiceTest < ActiveSupport::TestCase
 
   describe 'ticket-providing products' do
     let(:ticket_type) { create(:paid_ticket_type, convention: convention) }
-    let(:order_entry) do
-      order.order_entries.create!(
-        product: ticket_type.providing_products.first,
-        quantity: 1
-      )
-    end
+    let(:order_entry) { order.order_entries.create!(product: ticket_type.providing_products.first, quantity: 1) }
 
-    before do
-      order_entry
-    end
+    before { order_entry }
 
     it 'buys a ticket' do
       assert_difference('Ticket.count', 1) { subject.call! }
@@ -46,9 +38,7 @@ class SubmitOrderServiceTest < ActiveSupport::TestCase
     end
 
     describe 'if you already have a ticket' do
-      before do
-        create(:ticket, ticket_type: ticket_type, user_con_profile: user_con_profile)
-      end
+      before { create(:ticket, ticket_type: ticket_type, user_con_profile: user_con_profile) }
 
       it 'fails with an error' do
         result = subject.call
@@ -73,9 +63,7 @@ class SubmitOrderServiceTest < ActiveSupport::TestCase
     end
 
     describe 'if the con is over' do
-      before do
-        convention.update!(ends_at: 5.minutes.ago)
-      end
+      before { convention.update!(ends_at: 5.minutes.ago) }
 
       it 'fails with an error' do
         result = subject.call

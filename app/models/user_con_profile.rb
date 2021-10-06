@@ -44,7 +44,7 @@
 #  fk_rails_...  (user_id => users.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+
 class UserConProfile < ApplicationRecord
   include PgSearch::Model
   include FormResponse

@@ -11,7 +11,10 @@ Devise.setup do |config|
   # note that it will be overwritten if you use your own mailer class with default "from" parameter.
   config.mailer_sender = 'overridden-in-user-mailer@example.com'
 
-  config.secret_key = ENV['DEVISE_SECRET_KEY'] || 'ccad6eab004acb9d2c45bd5a5ad385fe101d536b5271f139f59848a349fb144a7b8eddaa19af1fd7ed9a92dd0409781db162d80bf91dd399e414a5611497bc8f'
+  config.secret_key =
+    ENV['DEVISE_SECRET_KEY'] ||
+      "ccad6eab004acb9d2c45bd5a5ad385fe101d536b5271f139f59848a349fb144a7b8eddaa19af1fd7ed9a92dd0409781db162d80bf91dd39\
+9e414a5611497bc8f"
 
   # Configure the class responsible to send e-mails.
   config.mailer = 'UserMailer'
@@ -77,7 +80,7 @@ Devise.setup do |config|
   # Notice that if you are skipping storage for all authentication paths, you
   # may want to disable generating routes to Devise's sessions controller by
   # passing :skip => :sessions to `devise_for` in your config/routes.rb
-  config.skip_session_storage = [:http_auth, :doorkeeper]
+  config.skip_session_storage = %i[http_auth doorkeeper]
 
   # ==> Configuration for :database_authenticatable
   # For bcrypt, this is the cost for hashing the password and defaults to 10. If
@@ -89,7 +92,8 @@ Devise.setup do |config|
   config.stretches = Rails.env.test? ? 1 : 10
 
   # Setup a pepper to generate the encrypted password.
-  # config.pepper = "f78d729eb6a8ae1956de170ba5372a3f08e66e58d152dcd69892ad6f2a763e18af66d8b56717de8419554e383deada50f93e86d1d4719794dfd85fc2a3bec57b"
+  # config.pepper = "f78d729eb6a8ae1956de170ba5372a3f08e66e58d152dcd69892ad6f2a763e18af66d8b56717de8419554e383deada50f\
+  #   93e86d1d4719794dfd85fc2a3bec57b"
 
   # ==> Configuration for :confirmable
   # A period that the user is allowed to access the website even without
@@ -216,7 +220,5 @@ Devise.setup do |config|
   # If you want to use other strategies, that are not supported by Devise, or
   # change the failure app, you can configure them inside the config.warden block.
   #
-  config.warden do |manager|
-    manager.failure_app = JSONFailureApp
-  end
+  config.warden { |manager| manager.failure_app = JSONFailureApp }
 end

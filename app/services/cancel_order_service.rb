@@ -17,7 +17,7 @@ class CancelOrderService < CivilService::Service
 
   private
 
-  def inner_call
+  def inner_call # rubocop:disable Metrics/AbcSize
     refund, refund_status = refund_order
 
     action = 'Cancelled '
@@ -27,7 +27,7 @@ class CancelOrderService < CivilService::Service
       status: 'cancelled',
       payment_note:
         [
-          "#{action} by #{whodunit.name_without_nickname} \
+          "#{action} by #{whodunit.name_without_nickname}
 on #{Time.now.in_time_zone(convention.timezone).strftime('%B %-d, %Y at %l:%M%P')}",
           order.payment_note.presence
         ].compact.join('; ')

@@ -26,7 +26,7 @@
 #  fk_rails_...  (page_id => pages.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+
 class CmsNavigationItem < ApplicationRecord
   include CadmusNavbar::NavigationItem
   cadmus_navigation_item

@@ -2,7 +2,7 @@ require 'test_helper'
 
 class RegistrationPolicy::UnlimitedTest < ActiveSupport::TestCase
   let(:convention) { create :convention, :with_notification_templates }
-  let(:event) { create :event, convention: convention}
+  let(:event) { create :event, convention: convention }
   let(:event_run) { create :run, event: event }
   let(:free_ticket_type) { create(:free_ticket_type, convention: convention) }
   subject { RegistrationPolicy.unlimited }

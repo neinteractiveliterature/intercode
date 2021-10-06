@@ -52,11 +52,7 @@ class Intercode::Import::Intercode1::Tables::BidTimes < Intercode::Import::Inter
   end
 
   def import!
-    if connection.table_exists?(:BidTimes)
-      import_from_table!
-    else
-      import_from_legacy_columns!
-    end
+    connection.table_exists?(:BidTimes) ? import_from_table! : import_from_legacy_columns!
   end
 
   private
@@ -84,11 +80,7 @@ class Intercode::Import::Intercode1::Tables::BidTimes < Intercode::Import::Inter
       event_proposal = @event_proposals_id_map[row[:BidId]]
       LEGACY_BID_TIME_COLUMNS.each do |column_name, time_data|
         next unless row[column_name].present?
-        timeblock_preference = build_timeblock_preference(
-          time_data[:day],
-          time_data[:slot],
-          row[column_name]
-        )
+        timeblock_preference = build_timeblock_preference(time_data[:day], time_data[:slot], row[column_name])
         add_timeblock_preference_to_proposal(timeblock_preference, event_proposal)
       end
     end
@@ -99,9 +91,8 @@ class Intercode::Import::Intercode1::Tables::BidTimes < Intercode::Import::Inter
   end
 
   def timeblock_preference_form_item
-    @timeblock_preference_form_item ||= (
-      @convention.event_proposal_form.form_items.find_by!(identifier: 'timeblock_preferences')
-    )
+    @timeblock_preference_form_item ||=
+      (@convention.event_proposal_form.form_items.find_by!(identifier: 'timeblock_preferences'))
   end
 
   def beginning_of_convention_day(day)
@@ -111,20 +102,22 @@ class Intercode::Import::Intercode1::Tables::BidTimes < Intercode::Import::Inter
   end
 
   def timeblock_definition(slot)
-    timeblock_preference_form_item.properties['timeblocks'].find do |timeblock|
-      timeblock['label'] == slot
-    end
+    timeblock_preference_form_item.properties['timeblocks'].find { |timeblock| timeblock['label'] == slot }
   end
 
   def calculate_timeblock_time(day_start, time_hash)
     current_time = day_start.dup
 
     time_hash.each do |key, value|
-      time_change = case key.to_s
-      when 'hour' then value.hours
-      when 'minute' then value.minutes
-      when 'second' then value.seconds
-      end
+      time_change =
+        case key.to_s
+        when 'hour'
+          value.hours
+        when 'minute'
+          value.minutes
+        when 'second'
+          value.seconds
+        end
 
       current_time += time_change
     end
@@ -147,9 +140,7 @@ class Intercode::Import::Intercode1::Tables::BidTimes < Intercode::Import::Inter
   def add_timeblock_preference_to_proposal(timeblock_preference, event_proposal)
     form_item_identifier = timeblock_preference_form_item.identifier
 
-    current_preferences = event_proposal.read_form_response_attribute(
-      form_item_identifier
-    )
+    current_preferences = event_proposal.read_form_response_attribute(form_item_identifier)
 
     event_proposal.assign_form_response_attributes(
       form_item_identifier => (current_preferences || []) + [timeblock_preference]

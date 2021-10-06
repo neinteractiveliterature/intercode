@@ -11,9 +11,7 @@ class MailingListsPolicyTest < ActiveSupport::TestCase
 
   MAIL_PERMISSION_NAMES.each do |permission_name|
     describe "users with #{permission_name}" do
-      let(:user) do
-        create_user_with_permission_in_convention(permission_name, convention)
-      end
+      let(:user) { create_user_with_permission_in_convention(permission_name, convention) }
       let(:policy) { MailingListsPolicy.new(user, mailing_lists_presenter) }
 
       it "lets #{permission_name} users read_any_mailing_list" do

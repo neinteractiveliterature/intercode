@@ -48,15 +48,8 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
 
   it 'disallows withdrawals in a frozen convention' do
     convention.update!(
-      maximum_event_signups: ScheduledValue::ScheduledValue.new(
-        timespans: [
-          {
-            start: nil,
-            finish: nil,
-            value: 'not_now'
-          }
-        ]
-      )
+      maximum_event_signups:
+        ScheduledValue::ScheduledValue.new(timespans: [{ start: nil, finish: nil, value: 'not_now' }])
     )
 
     result = subject.call
@@ -132,10 +125,8 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
     end
 
     it 'does not try to fill an overfilled bucket' do
-      extra_signup = create(
-        :signup,
-        run: the_run, state: 'confirmed', bucket_key: bucket_key, requested_bucket_key: bucket_key
-      )
+      extra_signup =
+        create(:signup, run: the_run, state: 'confirmed', bucket_key: bucket_key, requested_bucket_key: bucket_key)
       waitlist_signup
 
       result = subject.call

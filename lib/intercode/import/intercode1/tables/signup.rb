@@ -1,9 +1,5 @@
 class Intercode::Import::Intercode1::Tables::Signup < Intercode::Import::Intercode1::Table
-  STATE_MAP = {
-    'Confirmed' => 'confirmed',
-    'Waitlisted' => 'waitlisted',
-    'Withdrawn' => 'withdrawn'
-  }
+  STATE_MAP = { 'Confirmed' => 'confirmed', 'Waitlisted' => 'waitlisted', 'Withdrawn' => 'withdrawn' }
 
   def initialize(connection, con, run_id_map, user_id_map, user_con_profile_id_map)
     super connection
@@ -19,6 +15,7 @@ class Intercode::Import::Intercode1::Tables::Signup < Intercode::Import::Interco
 
   private
 
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def build_record(row)
     run = @run_id_map[row[:RunId]]
     user_con_profile = @user_con_profile_id_map[row[:UserId]]
@@ -51,6 +48,8 @@ class Intercode::Import::Intercode1::Tables::Signup < Intercode::Import::Interco
     )
   end
 
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+
   # Try to put them in the bucket for their signup gender first; if that fails, try to
   # put them in the anything bucket.  Failing all else, don't put them in a bucket (i.e.
   # waitlist them).
@@ -64,23 +63,16 @@ class Intercode::Import::Intercode1::Tables::Signup < Intercode::Import::Interco
   end
 
   def anything_bucket_key(run)
-    if run.registration_policy.buckets.size == 1
-      run.registration_policy.buckets.first.key
-    else
-      'flex'
-    end
+    run.registration_policy.buckets.size == 1 ? run.registration_policy.buckets.first.key : 'flex'
   end
 
   def gender_bucket_key(row, run)
     case row[:State]
     when 'Confirmed'
       bucket_key = row[:Gender].downcase
-      if run.registration_policy.bucket_with_key(bucket_key)
-        bucket_key
-      else
-        anything_bucket_key(run)
-      end
-    when 'Waitlisted' then nil
+      run.registration_policy.bucket_with_key(bucket_key) ? bucket_key : anything_bucket_key(run)
+    when 'Waitlisted'
+      nil
     end
   end
 

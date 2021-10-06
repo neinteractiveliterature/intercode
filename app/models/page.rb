@@ -28,7 +28,7 @@
 #  fk_rails_...  (cms_layout_id => cms_layouts.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+
 class Page < ApplicationRecord
   include PgSearch::Model
   include Cadmus::Page
