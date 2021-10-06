@@ -1,12 +1,12 @@
 import formFromExportJSON from '../formFromExportJSON';
-import { TimezoneMode, Event, FormItemRole } from '../../../app/javascript/graphqlTypes.generated';
+import { TimezoneMode, Event, FormItemRole, FormType } from '../../../app/javascript/graphqlTypes.generated';
 import { ConventionForFormItemDisplay } from '../../../app/javascript/FormPresenter/ItemDisplays/FormItemDisplay';
 import { FormResponse } from '../../../app/javascript/FormPresenter/useFormResponse';
 import { DEFAULT_EVENT_FORM_RESPONSE_ATTRS } from '../../../app/javascript/EventAdmin/useEventForm';
 
 export const minimalForm = formFromExportJSON({
   title: 'Regular event form',
-  form_type: 'event',
+  form_type: FormType.Event,
   sections: [
     {
       title: 'Event Properties',
