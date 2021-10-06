@@ -8,8 +8,8 @@ import { useFormatRunTimespan } from '../runTimeFormatting';
 import { LoadQueryWithVariablesWrapper } from '../../GraphqlLoadingWrappers';
 
 export type RunHeaderProps = {
-  eventId: number;
-  runId: number;
+  eventId: string;
+  runId: string;
 };
 
 export default LoadQueryWithVariablesWrapper(
@@ -26,9 +26,7 @@ export default LoadQueryWithVariablesWrapper(
       <div>
         <h1 className="mb-0">
           {event.title}
-          {event.run.title_suffix && event.run.title_suffix.trim() !== ''
-            ? `- ${event.run.title_suffix}`
-            : ''}
+          {event.run.title_suffix && event.run.title_suffix.trim() !== '' ? `- ${event.run.title_suffix}` : ''}
         </h1>
 
         <h3 className="mt-0">
@@ -48,11 +46,7 @@ export default LoadQueryWithVariablesWrapper(
 
           {(event.registration_policy?.buckets.length ?? 0) > 1 ? (
             <li className="list-inline-item">
-              (
-              {event.registration_policy?.buckets
-                .map((bucket) => `${bucket.name}: ${bucket.total_slots}`)
-                .join(', ')}
-              )
+              ({event.registration_policy?.buckets.map((bucket) => `${bucket.name}: ${bucket.total_slots}`).join(', ')})
             </li>
           ) : null}
         </ul>

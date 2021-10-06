@@ -91,7 +91,7 @@ export type UpdateMaximumEventProvidedTicketsOverrideMutationVariables = Types.E
 export type UpdateMaximumEventProvidedTicketsOverrideMutationData = { __typename: 'Mutation', updateMaximumEventProvidedTicketsOverride: { __typename: 'UpdateMaximumEventProvidedTicketsOverridePayload', maximum_event_provided_tickets_override: { __typename: 'MaximumEventProvidedTicketsOverride', override_value: number, id: string, ticket_type: { __typename: 'TicketType', description?: string | null | undefined, maximum_event_provided_tickets: number, id: string } } } };
 
 export type UpdateEventAdminNotesMutationVariables = Types.Exact<{
-  eventId: Types.Scalars['Int'];
+  eventId: Types.Scalars['ID'];
   adminNotes: Types.Scalars['String'];
 }>;
 
@@ -532,8 +532,10 @@ export type UpdateMaximumEventProvidedTicketsOverrideMutationHookResult = Return
 export type UpdateMaximumEventProvidedTicketsOverrideMutationResult = Apollo.MutationResult<UpdateMaximumEventProvidedTicketsOverrideMutationData>;
 export type UpdateMaximumEventProvidedTicketsOverrideMutationOptions = Apollo.BaseMutationOptions<UpdateMaximumEventProvidedTicketsOverrideMutationData, UpdateMaximumEventProvidedTicketsOverrideMutationVariables>;
 export const UpdateEventAdminNotesDocument = gql`
-    mutation UpdateEventAdminNotes($eventId: Int!, $adminNotes: String!) {
-  updateEventAdminNotes(input: {id: $eventId, admin_notes: $adminNotes}) {
+    mutation UpdateEventAdminNotes($eventId: ID!, $adminNotes: String!) {
+  updateEventAdminNotes(
+    input: {transitionalId: $eventId, admin_notes: $adminNotes}
+  ) {
     event {
       id: transitionalId
       ...EventFields

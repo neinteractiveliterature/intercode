@@ -9,7 +9,7 @@ import { UserConProfileAdminQueryData, useUserConProfileAdminQuery } from './que
 import { useCreateTicketMutation } from './mutations.generated';
 
 export default LoadQueryWrapper(useUserConProfileAdminQuery, function NewTicket({ data }) {
-  const userConProfileId = Number.parseInt(useParams<{ id: string }>().id, 10);
+  const userConProfileId = useParams<{ id: string }>().id;
   const history = useHistory();
   const [createTicket] = useCreateTicketMutation({
     update: (cache, result) => {

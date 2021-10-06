@@ -16,7 +16,7 @@ const EXCLUDE_FIELDS = new Set([
 ]);
 
 export type EventHistoryProps = {
-  eventId: number;
+  eventId: string;
   eventPath: string;
 };
 
@@ -28,9 +28,7 @@ export default LoadQueryWithVariablesWrapper(
 
     const changes = useMemo(
       () =>
-        data.convention.event.form_response_changes.filter(
-          (change) => !EXCLUDE_FIELDS.has(change.field_identifier),
-        ),
+        data.convention.event.form_response_changes.filter((change) => !EXCLUDE_FIELDS.has(change.field_identifier)),
       [data],
     );
 

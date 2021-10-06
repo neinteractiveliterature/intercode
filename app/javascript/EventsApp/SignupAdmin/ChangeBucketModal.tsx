@@ -19,7 +19,7 @@ function ChangeBucketModal({ signup, onComplete, onCancel }: ChangeBucketModalPr
   const [changeBucketMutate] = useChangeSignupBucketMutation();
   const [changeBucket, error, requestInProgress] = useAsyncFunction(changeBucketMutate);
   const [bucketKey, setBucketKey] = useState<string | null>();
-  const [prevSignupId, setPrevSignupId] = useState<number>();
+  const [prevSignupId, setPrevSignupId] = useState<string>();
   const { t } = useTranslation();
 
   const okClicked = useCallback(async () => {
@@ -50,11 +50,9 @@ function ChangeBucketModal({ signup, onComplete, onCancel }: ChangeBucketModalPr
       <div>
         <BucketInput
           signup={signup}
-          caption={t(
-            'events.signupAdmin.changeBucketInputCaption',
-            'Please choose a signup bucket for {{ name }}.',
-            { name: signup.user_con_profile.name_without_nickname },
-          )}
+          caption={t('events.signupAdmin.changeBucketInputCaption', 'Please choose a signup bucket for {{ name }}.', {
+            name: signup.user_con_profile.name_without_nickname,
+          })}
           name="bucketKey"
           value={bucketKey}
           onChange={setBucketKey}
@@ -67,9 +65,7 @@ function ChangeBucketModal({ signup, onComplete, onCancel }: ChangeBucketModalPr
 
   return (
     <Modal visible={signup != null}>
-      <div className="modal-header">
-        {t('events.signupAdmin.changeBucketHeader', 'Change signup bucket')}
-      </div>
+      <div className="modal-header">{t('events.signupAdmin.changeBucketHeader', 'Change signup bucket')}</div>
       <div className="modal-body">{renderBody()}</div>
       <div className="modal-footer">
         <button className="btn btn-secondary" onClick={onCancel} type="button">

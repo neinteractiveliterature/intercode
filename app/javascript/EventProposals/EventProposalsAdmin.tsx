@@ -16,7 +16,7 @@ import { useEventProposalQuery, useEventProposalQueryWithOwner } from './queries
 function SingleProposalBreadcrumbs() {
   const { t } = useTranslation();
   const params = useParams<{ id: string }>();
-  const eventProposalId = Number.parseInt(params.id, 10);
+  const eventProposalId = params.id;
   const { data, loading, error } = useEventProposalQueryWithOwner({
     variables: { eventProposalId },
   });
@@ -56,7 +56,7 @@ function SingleProposalBreadcrumbs() {
 function AdminEditEventProposal() {
   const { t } = useTranslation();
   const history = useHistory();
-  const eventProposalId = Number.parseInt(useParams<{ id: string }>().id, 10);
+  const eventProposalId = useParams<{ id: string }>().id;
   const { data, loading, error } = useEventProposalQuery({ variables: { eventProposalId } });
 
   usePageTitle(
@@ -76,10 +76,7 @@ function AdminEditEventProposal() {
         history.push(`/admin_event_proposals/${eventProposalId}`);
       }}
       exitButton={
-        <Link
-          className="btn btn-outline-secondary me-2"
-          to={`/admin_event_proposals/${eventProposalId}`}
-        >
+        <Link className="btn btn-outline-secondary me-2" to={`/admin_event_proposals/${eventProposalId}`}>
           {t('admin.eventProposals.edit.exitButton', 'Return to proposal')}
         </Link>
       }

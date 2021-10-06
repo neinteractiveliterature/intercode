@@ -6,12 +6,14 @@ class Mutations::MergeUsers < Mutations::BaseMutation
            [Integer],
            required: false,
            deprecation_reason:
-             'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.'
+             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID."
   argument :transitional_user_ids, [ID], required: false, description: 'The user IDs to merge.'
   argument :winning_user_id,
            Integer,
            deprecation_reason:
-             'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
            required: false
   argument :transitional_winning_user_id, ID, required: false
   argument :winning_user_con_profiles, [Types::WinningUserConProfileInputType], required: true

@@ -4,12 +4,7 @@ import { AdminProductFields } from './adminProductFields';
 import { PricingStructureFields } from './pricingStructureFields';
 
 export const AdminOrdersQuery = gql`
-  query AdminOrdersQuery(
-    $page: Int
-    $perPage: Int
-    $filters: OrderFiltersInput
-    $sort: [SortInput!]
-  ) {
+  query AdminOrdersQuery($page: Int, $perPage: Int, $filters: OrderFiltersInput, $sort: [SortInput!]) {
     currentAbility {
       can_create_orders
       can_update_orders
@@ -192,14 +187,14 @@ export const OrderSummaryQuery = gql`
 `;
 
 export const OrderFormProductQuery = gql`
-  query OrderFormProductQuery($productId: Int!) {
+  query OrderFormProductQuery($productId: ID!) {
     currentUser {
       id: transitionalId
     }
 
     convention: conventionByRequestHost {
       id: transitionalId
-      product(id: $productId) {
+      product(transitionalId: $productId) {
         id: transitionalId
         image_url
         name

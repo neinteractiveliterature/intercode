@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import * as React from 'react';
 import classNames from 'classnames';
+import { v4 as uuidv4 } from 'uuid';
 
 import AvailabilityBar from './AvailabilityBar';
 import {
@@ -91,13 +92,10 @@ function FakeEventRun({
           },
           unlimited: unlimited ?? false,
           runDimensions: {
-            fullTimespan: Timespan.finiteFromStrings(
-              '1970-01-01T00:00:00Z',
-              '1970-01-01T00:00:00Z',
-            ),
+            fullTimespan: Timespan.finiteFromStrings('1970-01-01T00:00:00Z', '1970-01-01T00:00:00Z'),
             timespan: Timespan.finiteFromStrings('1970-01-01T00:00:00Z', '1970-01-01T00:00:00Z'),
             laneIndex: 0,
-            runId: 0,
+            runId: uuidv4(),
             timeAxisSizePercent: 100,
             timeAxisStartPercent: 0,
           },
@@ -111,11 +109,7 @@ function FakeEventRun({
         <div className="schedule-grid-event-content-main">{children}</div>
       </div>
 
-      <AvailabilityBar
-        availabilityFraction={availability ?? 0.0}
-        unlimited={unlimited}
-        runStyle={runStyle}
-      />
+      <AvailabilityBar availabilityFraction={availability ?? 0.0} unlimited={unlimited} runStyle={runStyle} />
     </div>
   );
 }

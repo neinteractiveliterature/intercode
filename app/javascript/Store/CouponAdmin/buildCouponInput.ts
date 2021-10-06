@@ -12,8 +12,8 @@ export default function buildCouponInput(
 
   return {
     code: coupon.code,
-    // blankProduct uses 0 as its ID
-    provides_product_id: providesProductId === 0 ? undefined : providesProductId,
+    // blankProduct uses '' as its ID
+    transitionalProvidesProductId: providesProductId === '' ? undefined : providesProductId,
     fixed_amount: buildMoneyInput(coupon.fixed_amount),
     percent_discount: coupon.percent_discount,
     usage_limit: coupon.usage_limit,

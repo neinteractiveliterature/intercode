@@ -3,7 +3,7 @@ import ChangeSet from '../ChangeSet';
 
 import { permissionEquals, findPermission, PartialPolymorphicPermission } from './PermissionUtils';
 
-export type PermissionWithId = PartialPolymorphicPermission & { id: number };
+export type PermissionWithId = PartialPolymorphicPermission & { id: string };
 
 export type UsePermissionsChangeSetOptions = {
   initialPermissions: PermissionWithId[];
@@ -13,7 +13,7 @@ export type UsePermissionsChangeSetOptions = {
     initialPermissions: PermissionWithId[],
     isEqual: (a: PartialPolymorphicPermission, b: PartialPolymorphicPermission) => boolean,
   ) => void;
-  remove?: (id: number) => void;
+  remove?: (id: string) => void;
 };
 
 export type UsePermissionsChangeSetResult = {

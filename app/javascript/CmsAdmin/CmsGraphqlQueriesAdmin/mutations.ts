@@ -15,8 +15,8 @@ export const CreateCmsGraphqlQuery = gql`
 `;
 
 export const UpdateCmsGraphqlQuery = gql`
-  mutation UpdateCmsGraphqlQuery($id: Int!, $query: CmsGraphqlQueryInput!) {
-    updateCmsGraphqlQuery(input: { id: $id, query: $query }) {
+  mutation UpdateCmsGraphqlQuery($id: ID!, $query: CmsGraphqlQueryInput!) {
+    updateCmsGraphqlQuery(input: { transitionalId: $id, query: $query }) {
       query {
         id: transitionalId
         ...CmsGraphqlQueryFields
@@ -28,8 +28,8 @@ export const UpdateCmsGraphqlQuery = gql`
 `;
 
 export const DeleteCmsGraphqlQuery = gql`
-  mutation DeleteCmsGraphqlQuery($id: Int!) {
-    deleteCmsGraphqlQuery(input: { id: $id }) {
+  mutation DeleteCmsGraphqlQuery($id: ID!) {
+    deleteCmsGraphqlQuery(input: { transitionalId: $id }) {
       query {
         id: transitionalId
       }

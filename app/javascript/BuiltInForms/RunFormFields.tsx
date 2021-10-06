@@ -15,18 +15,13 @@ import { timespanFromConvention, getConventionDayTimespans } from '../TimespanUt
 import ProspectiveRunSchedule from '../EventAdmin/ProspectiveRunSchedule';
 import RoomSelect, { RoomForSelect } from '../BuiltInFormControls/RoomSelect';
 import AppRootContext from '../AppRootContext';
-import {
-  useEventAdminEventsQuery,
-  EventAdminEventsQueryData,
-} from '../EventAdmin/queries.generated';
+import { useEventAdminEventsQuery, EventAdminEventsQueryData } from '../EventAdmin/queries.generated';
 import { Run } from '../graphqlTypes.generated';
 import { useAppDateTimeFormat } from '../TimeUtils';
 import Timespan from '../Timespan';
 
-export type RunForRunFormFields = Pick<
-  Run,
-  '__typename' | 'id' | 'title_suffix' | 'schedule_note'
-> & {
+export type RunForRunFormFields = Pick<Run, '__typename' | 'title_suffix' | 'schedule_note'> & {
+  id: string;
   rooms: RoomForSelect[];
   starts_at?: Run['starts_at'];
 };
@@ -52,10 +47,7 @@ function RunFormFields<RunType extends RunForRunFormFields>({
   const { data, loading, error } = useEventAdminEventsQuery();
 
   const startsAt = useMemo(
-    () =>
-      !error && !loading && run && run.starts_at
-        ? DateTime.fromISO(run.starts_at, { zone: timezoneName })
-        : null,
+    () => (!error && !loading && run && run.starts_at ? DateTime.fromISO(run.starts_at, { zone: timezoneName }) : null),
     [timezoneName, error, loading, run],
   );
   const conventionTimespan = useMemo(
@@ -63,10 +55,7 @@ function RunFormFields<RunType extends RunForRunFormFields>({
     [error, loading, data],
   );
   const conventionDayTimespans = useMemo(
-    () =>
-      conventionTimespan?.isFinite()
-        ? getConventionDayTimespans(conventionTimespan, timezoneName)
-        : null,
+    () => (conventionTimespan?.isFinite() ? getConventionDayTimespans(conventionTimespan, timezoneName) : null),
     [conventionTimespan, timezoneName],
   );
   const [day, setDay] = useState<DateTime | undefined>(() =>
@@ -97,15 +86,12 @@ function RunFormFields<RunType extends RunForRunFormFields>({
     onChange((prevRun) => ({ ...prevRun, starts_at: startTime ? startTime.toISO() : null }));
   }, [onChange, startTime]);
 
-  const runsForProspectiveRunSchedule = useMemo(
-    () => (run.starts_at ? [run as WithStartsAt<RunType>] : []),
-    [run],
-  );
+  const runsForProspectiveRunSchedule = useMemo(() => (run.starts_at ? [run as WithStartsAt<RunType>] : []), [run]);
 
   const eventForProspectiveRunSchedule = useMemo(
     () => ({
       ...event,
-      id: event.id || -1,
+      id: event.id || 'prospectiveEvent',
       runs: event.runs || [],
     }),
     [event],
@@ -119,13 +105,7 @@ function RunFormFields<RunType extends RunForRunFormFields>({
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  const timeInputChanged = ({
-    hour: newHour,
-    minute: newMinute,
-  }: {
-    hour?: number;
-    minute?: number;
-  }) => {
+  const timeInputChanged = ({ hour: newHour, minute: newMinute }: { hour?: number; minute?: number }) => {
     setHour(newHour);
     setMinute(newMinute);
   };
@@ -146,8 +126,7 @@ function RunFormFields<RunType extends RunForRunFormFields>({
       <fieldset className="mb-3">
         <legend className="col-form-label">{t('events.edit.timeLabel', 'Time')}</legend>
         <TimeSelect value={{ hour, minute }} onChange={timeInputChanged} timespan={timespan}>
-          {startTime &&
-            `- ${format(startTime.plus({ seconds: event.length_seconds }), 'shortTime')}`}
+          {startTime && `- ${format(startTime.plus({ seconds: event.length_seconds }), 'shortTime')}`}
         </TimeSelect>
       </fieldset>
     );

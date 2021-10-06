@@ -11,7 +11,7 @@ import { LoadQueryWithVariablesWrapper } from '../GraphqlLoadingWrappers';
 export type PageAdminDropdownProps = {
   showEdit: boolean;
   showDelete: boolean;
-  pageId: number;
+  pageId: string;
 };
 
 function getEffectiveLayout(
@@ -70,11 +70,7 @@ export default LoadQueryWithVariablesWrapper(
                 Edit layout
               </Link>
               {cmsPage.referenced_partials.map((partial) => (
-                <Link
-                  to={`/cms_partials/${partial.id}/edit`}
-                  className="dropdown-item"
-                  key={partial.id}
-                >
+                <Link to={`/cms_partials/${partial.id}/edit`} className="dropdown-item" key={partial.id}>
                   <MenuIcon icon="bi-paperclip" />
                   Edit partial “{partial.name}”
                 </Link>
@@ -91,11 +87,7 @@ export default LoadQueryWithVariablesWrapper(
                 View layout source
               </Link>
               {cmsPage.referenced_partials.map((partial) => (
-                <Link
-                  to={`/cms_partials/${partial.id}/view_source`}
-                  className="dropdown-item"
-                  key={partial.id}
-                >
+                <Link to={`/cms_partials/${partial.id}/view_source`} className="dropdown-item" key={partial.id}>
                   <MenuIcon icon="bi-paperclip" />
                   View partial “{partial.name}”
                 </Link>

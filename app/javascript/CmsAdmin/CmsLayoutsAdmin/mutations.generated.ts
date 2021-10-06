@@ -13,7 +13,7 @@ export type CreateLayoutMutationVariables = Types.Exact<{
 export type CreateLayoutMutationData = { __typename: 'Mutation', createCmsLayout: { __typename: 'CreateCmsLayoutPayload', cms_layout: { __typename: 'CmsLayout', name?: string | null | undefined, content?: string | null | undefined, navbar_classes?: string | null | undefined, admin_notes?: string | null | undefined, current_ability_can_update: boolean, current_ability_can_delete: boolean, id: string } } };
 
 export type UpdateLayoutMutationVariables = Types.Exact<{
-  id: Types.Scalars['Int'];
+  id: Types.Scalars['ID'];
   cmsLayout: Types.CmsLayoutInput;
 }>;
 
@@ -21,7 +21,7 @@ export type UpdateLayoutMutationVariables = Types.Exact<{
 export type UpdateLayoutMutationData = { __typename: 'Mutation', updateCmsLayout: { __typename: 'UpdateCmsLayoutPayload', cms_layout: { __typename: 'CmsLayout', name?: string | null | undefined, content?: string | null | undefined, navbar_classes?: string | null | undefined, admin_notes?: string | null | undefined, current_ability_can_update: boolean, current_ability_can_delete: boolean, id: string } } };
 
 export type DeleteLayoutMutationVariables = Types.Exact<{
-  id: Types.Scalars['Int'];
+  id: Types.Scalars['ID'];
 }>;
 
 
@@ -65,8 +65,8 @@ export type CreateLayoutMutationHookResult = ReturnType<typeof useCreateLayoutMu
 export type CreateLayoutMutationResult = Apollo.MutationResult<CreateLayoutMutationData>;
 export type CreateLayoutMutationOptions = Apollo.BaseMutationOptions<CreateLayoutMutationData, CreateLayoutMutationVariables>;
 export const UpdateLayoutDocument = gql`
-    mutation UpdateLayout($id: Int!, $cmsLayout: CmsLayoutInput!) {
-  updateCmsLayout(input: {id: $id, cms_layout: $cmsLayout}) {
+    mutation UpdateLayout($id: ID!, $cmsLayout: CmsLayoutInput!) {
+  updateCmsLayout(input: {transitionalId: $id, cms_layout: $cmsLayout}) {
     cms_layout {
       id: transitionalId
       ...CmsLayoutFields
@@ -102,8 +102,8 @@ export type UpdateLayoutMutationHookResult = ReturnType<typeof useUpdateLayoutMu
 export type UpdateLayoutMutationResult = Apollo.MutationResult<UpdateLayoutMutationData>;
 export type UpdateLayoutMutationOptions = Apollo.BaseMutationOptions<UpdateLayoutMutationData, UpdateLayoutMutationVariables>;
 export const DeleteLayoutDocument = gql`
-    mutation DeleteLayout($id: Int!) {
-  deleteCmsLayout(input: {id: $id}) {
+    mutation DeleteLayout($id: ID!) {
+  deleteCmsLayout(input: {transitionalId: $id}) {
     clientMutationId
   }
 }

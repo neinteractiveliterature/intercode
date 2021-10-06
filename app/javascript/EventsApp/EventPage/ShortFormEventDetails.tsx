@@ -12,7 +12,7 @@ import { useEventPageQuery } from './queries.generated';
 import { LoadQueryWithVariablesWrapper } from '../../GraphqlLoadingWrappers';
 
 export type ShortFormEventDetailsProps = {
-  eventId: number;
+  eventId: string;
 };
 
 export default LoadQueryWithVariablesWrapper(
@@ -23,10 +23,7 @@ export default LoadQueryWithVariablesWrapper(
 
     const { shortFormItems, formResponse } = useSectionizedFormItems(data.convention.event);
 
-    const displayTeamMembers = useMemo(
-      () => teamMembersForDisplay(data.convention.event),
-      [data.convention.event],
-    );
+    const displayTeamMembers = useMemo(() => teamMembersForDisplay(data.convention.event), [data.convention.event]);
 
     const { convention } = data;
     const event = convention.event;
@@ -56,9 +53,7 @@ export default LoadQueryWithVariablesWrapper(
           ))}
         {displayTeamMembers.length > 0 ? (
           <>
-            <dt className="col-md-3">
-              {pluralize(humanize(underscore(event.event_category.team_member_name)))}
-            </dt>
+            <dt className="col-md-3">{pluralize(humanize(underscore(event.event_category.team_member_name)))}</dt>
             <dd className="col-md-9">
               <ul className="list-unstyled mb-0">
                 {displayTeamMembers.map((teamMember) => (

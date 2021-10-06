@@ -10,7 +10,7 @@ import { Event } from '../graphqlTypes.generated';
 export type EditEventProps = {
   children?: ReactNode;
   cancelPath?: string;
-  event: Pick<Event, 'id' | 'status' | 'title'>;
+  event: Pick<Event, 'status' | 'title'> & { id: string };
   validateForm: () => boolean;
   updateEvent: () => Promise<unknown>;
   onSave: () => void;
@@ -57,11 +57,7 @@ export default function EditEvent({
 
   return (
     <form className="my-4">
-      <EditEventHeader
-        event={event}
-        showDropButton={showDropButton ?? false}
-        dropEvent={dropEventCallback}
-      />
+      <EditEventHeader event={event} showDropButton={showDropButton ?? false} dropEvent={dropEventCallback} />
 
       {children}
 

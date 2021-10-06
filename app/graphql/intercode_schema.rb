@@ -40,7 +40,7 @@ class IntercodeSchema < GraphQL::Schema
       operation_name = visitor.query.operation_name
       check_deprecated_field_usage(node, visitor, operation_name)
 
-      argument_names = visitor.query.arguments_for(node, visitor.field_definition).keys
+      argument_names = node.arguments.map(&:name)
       argument_names.each do |argument_name|
         check_deprecated_argument_usage(node, visitor, argument_name, operation_name)
       end

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLength
+class Types::AbilityType < Types::BaseObject
   field :can_create_pages, Boolean, null: false
   def can_create_pages
     policy(Page.new(parent: convention)).create?
@@ -71,7 +71,8 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
     argument :signup_id,
              Integer,
              deprecation_reason:
-               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
              required: false,
              camelize: false
     argument :transitional_signup_id, ID, required: false, camelize: true
@@ -85,7 +86,8 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
     argument :signup_id,
              Integer,
              deprecation_reason:
-               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
              required: false,
              camelize: false
     argument :transitional_signup_id, ID, required: false, camelize: true
@@ -99,7 +101,8 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
     argument :signup_id,
              Integer,
              deprecation_reason:
-               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
              required: false,
              camelize: false
     argument :transitional_signup_id, ID, required: false, camelize: true
@@ -113,7 +116,8 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
     argument :signup_id,
              Integer,
              deprecation_reason:
-               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
              required: false,
              camelize: false
     argument :transitional_signup_id, ID, required: false, camelize: true
@@ -133,7 +137,8 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
     argument :event_id,
              Integer,
              deprecation_reason:
-               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
              required: false,
              camelize: false
     argument :transitional_event_id, ID, required: false, camelize: true
@@ -147,7 +152,8 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
     argument :event_id,
              Integer,
              deprecation_reason:
-               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
              required: false,
              camelize: false
     argument :transitional_event_id, ID, required: false, camelize: true
@@ -251,7 +257,8 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
     argument :event_proposal_id,
              Integer,
              deprecation_reason:
-               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
              required: false,
              camelize: false
     argument :transitional_event_proposal_id, ID, required: false, camelize: true
@@ -265,7 +272,8 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
     argument :event_proposal_id,
              Integer,
              deprecation_reason:
-               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
              required: false,
              camelize: false
     argument :transitional_event_proposal_id, ID, required: false, camelize: true
@@ -279,7 +287,8 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
     argument :event_proposal_id,
              Integer,
              deprecation_reason:
-               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
              required: false,
              camelize: false
     argument :transitional_event_proposal_id, ID, required: false, camelize: true
@@ -293,7 +302,8 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
     argument :event_proposal_id,
              Integer,
              deprecation_reason:
-               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
              required: false,
              camelize: false
     argument :transitional_event_proposal_id, ID, required: false, camelize: true
@@ -319,7 +329,8 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
     argument :ticket_id,
              Integer,
              deprecation_reason:
-               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
              required: false,
              camelize: false
     argument :transitional_ticket_id, ID, required: false, camelize: true
@@ -333,7 +344,8 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
     argument :ticket_id,
              Integer,
              deprecation_reason:
-               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
              required: false,
              camelize: false
     argument :transitional_ticket_id, ID, required: false, camelize: true
@@ -359,7 +371,8 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
     argument :event_id,
              Integer,
              deprecation_reason:
-               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
              required: false,
              camelize: false
     argument :transitional_event_id, ID, required: false, camelize: true
@@ -422,7 +435,8 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
     argument :user_con_profile_id,
              Integer,
              deprecation_reason:
-               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
              required: false,
              camelize: false
     argument :transitional_user_con_profile_id, ID, required: false, camelize: true
@@ -441,7 +455,8 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
     argument :user_con_profile_id,
              Integer,
              deprecation_reason:
-               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
              required: false,
              camelize: false
     argument :transitional_user_con_profile_id, ID, required: false, camelize: true
@@ -455,7 +470,8 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
     argument :user_con_profile_id,
              Integer,
              deprecation_reason:
-               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
              required: false,
              camelize: false
     argument :transitional_user_con_profile_id, ID, required: false, camelize: true
@@ -469,7 +485,8 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
     argument :user_con_profile_id,
              Integer,
              deprecation_reason:
-               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
              required: false,
              camelize: false
     argument :transitional_user_con_profile_id, ID, required: false, camelize: true
@@ -483,7 +500,8 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
     argument :user_con_profile_id,
              Integer,
              deprecation_reason:
-               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
              required: false,
              camelize: false
     argument :transitional_user_con_profile_id, ID, required: false, camelize: true

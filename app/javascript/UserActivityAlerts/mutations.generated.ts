@@ -14,17 +14,17 @@ export type CreateUserActivityAlertMutationVariables = Types.Exact<{
 export type CreateUserActivityAlertMutationData = { __typename: 'Mutation', createUserActivityAlert: { __typename: 'CreateUserActivityAlertPayload', user_activity_alert: { __typename: 'UserActivityAlert', email?: string | null | undefined, partial_name?: string | null | undefined, trigger_on_user_con_profile_create: boolean, trigger_on_ticket_create: boolean, id: string, user?: { __typename: 'User', name?: string | null | undefined, id: string } | null | undefined, notification_destinations: Array<{ __typename: 'NotificationDestination', id: string, staff_position?: { __typename: 'StaffPosition', name: string, id: string } | null | undefined, user_con_profile?: { __typename: 'UserConProfile', name_without_nickname: string, id: string } | null | undefined }> } } };
 
 export type UpdateUserActivityAlertMutationVariables = Types.Exact<{
-  id: Types.Scalars['Int'];
+  id: Types.Scalars['ID'];
   userActivityAlert: Types.UserActivityAlertInput;
   addNotificationDestinations: Array<Types.NotificationDestinationInput> | Types.NotificationDestinationInput;
-  removeNotificationDestinationIds: Array<Types.Scalars['Int']> | Types.Scalars['Int'];
+  removeNotificationDestinationIds: Array<Types.Scalars['ID']> | Types.Scalars['ID'];
 }>;
 
 
 export type UpdateUserActivityAlertMutationData = { __typename: 'Mutation', updateUserActivityAlert: { __typename: 'UpdateUserActivityAlertPayload', user_activity_alert: { __typename: 'UserActivityAlert', email?: string | null | undefined, partial_name?: string | null | undefined, trigger_on_user_con_profile_create: boolean, trigger_on_ticket_create: boolean, id: string, user?: { __typename: 'User', name?: string | null | undefined, id: string } | null | undefined, notification_destinations: Array<{ __typename: 'NotificationDestination', id: string, staff_position?: { __typename: 'StaffPosition', name: string, id: string } | null | undefined, user_con_profile?: { __typename: 'UserConProfile', name_without_nickname: string, id: string } | null | undefined }> } } };
 
 export type DeleteUserActivityAlertMutationVariables = Types.Exact<{
-  id: Types.Scalars['Int'];
+  id: Types.Scalars['ID'];
 }>;
 
 
@@ -71,9 +71,9 @@ export type CreateUserActivityAlertMutationHookResult = ReturnType<typeof useCre
 export type CreateUserActivityAlertMutationResult = Apollo.MutationResult<CreateUserActivityAlertMutationData>;
 export type CreateUserActivityAlertMutationOptions = Apollo.BaseMutationOptions<CreateUserActivityAlertMutationData, CreateUserActivityAlertMutationVariables>;
 export const UpdateUserActivityAlertDocument = gql`
-    mutation UpdateUserActivityAlert($id: Int!, $userActivityAlert: UserActivityAlertInput!, $addNotificationDestinations: [NotificationDestinationInput!]!, $removeNotificationDestinationIds: [Int!]!) {
+    mutation UpdateUserActivityAlert($id: ID!, $userActivityAlert: UserActivityAlertInput!, $addNotificationDestinations: [NotificationDestinationInput!]!, $removeNotificationDestinationIds: [ID!]!) {
   updateUserActivityAlert(
-    input: {id: $id, user_activity_alert: $userActivityAlert, add_notification_destinations: $addNotificationDestinations, remove_notification_destination_ids: $removeNotificationDestinationIds}
+    input: {transitionalId: $id, user_activity_alert: $userActivityAlert, add_notification_destinations: $addNotificationDestinations, transitionalRemoveNotificationDestinationIds: $removeNotificationDestinationIds}
   ) {
     user_activity_alert {
       id: transitionalId
@@ -112,8 +112,8 @@ export type UpdateUserActivityAlertMutationHookResult = ReturnType<typeof useUpd
 export type UpdateUserActivityAlertMutationResult = Apollo.MutationResult<UpdateUserActivityAlertMutationData>;
 export type UpdateUserActivityAlertMutationOptions = Apollo.BaseMutationOptions<UpdateUserActivityAlertMutationData, UpdateUserActivityAlertMutationVariables>;
 export const DeleteUserActivityAlertDocument = gql`
-    mutation DeleteUserActivityAlert($id: Int!) {
-  deleteUserActivityAlert(input: {id: $id}) {
+    mutation DeleteUserActivityAlert($id: ID!) {
+  deleteUserActivityAlert(input: {transitionalId: $id}) {
     user_activity_alert {
       id: transitionalId
       ...UserActivityAlertFields

@@ -13,7 +13,7 @@ export type CreatePageMutationVariables = Types.Exact<{
 export type CreatePageMutationData = { __typename: 'Mutation', createPage: { __typename: 'CreatePagePayload', page: { __typename: 'Page', name?: string | null | undefined, slug?: string | null | undefined, content?: string | null | undefined, admin_notes?: string | null | undefined, skip_clickwrap_agreement?: boolean | null | undefined, hidden_from_search: boolean, current_ability_can_update: boolean, current_ability_can_delete: boolean, id: string, cms_layout?: { __typename: 'CmsLayout', name?: string | null | undefined, id: string } | null | undefined } } };
 
 export type UpdatePageMutationVariables = Types.Exact<{
-  id: Types.Scalars['Int'];
+  id: Types.Scalars['ID'];
   page: Types.PageInput;
 }>;
 
@@ -21,7 +21,7 @@ export type UpdatePageMutationVariables = Types.Exact<{
 export type UpdatePageMutationData = { __typename: 'Mutation', updatePage: { __typename: 'UpdatePagePayload', page: { __typename: 'Page', name?: string | null | undefined, slug?: string | null | undefined, content?: string | null | undefined, admin_notes?: string | null | undefined, skip_clickwrap_agreement?: boolean | null | undefined, hidden_from_search: boolean, current_ability_can_update: boolean, current_ability_can_delete: boolean, id: string, cms_layout?: { __typename: 'CmsLayout', name?: string | null | undefined, id: string } | null | undefined } } };
 
 export type DeletePageMutationVariables = Types.Exact<{
-  id: Types.Scalars['Int'];
+  id: Types.Scalars['ID'];
 }>;
 
 
@@ -65,8 +65,8 @@ export type CreatePageMutationHookResult = ReturnType<typeof useCreatePageMutati
 export type CreatePageMutationResult = Apollo.MutationResult<CreatePageMutationData>;
 export type CreatePageMutationOptions = Apollo.BaseMutationOptions<CreatePageMutationData, CreatePageMutationVariables>;
 export const UpdatePageDocument = gql`
-    mutation UpdatePage($id: Int!, $page: PageInput!) {
-  updatePage(input: {id: $id, page: $page}) {
+    mutation UpdatePage($id: ID!, $page: PageInput!) {
+  updatePage(input: {transitionalId: $id, page: $page}) {
     page {
       id: transitionalId
       ...CmsPageFields
@@ -102,8 +102,8 @@ export type UpdatePageMutationHookResult = ReturnType<typeof useUpdatePageMutati
 export type UpdatePageMutationResult = Apollo.MutationResult<UpdatePageMutationData>;
 export type UpdatePageMutationOptions = Apollo.BaseMutationOptions<UpdatePageMutationData, UpdatePageMutationVariables>;
 export const DeletePageDocument = gql`
-    mutation DeletePage($id: Int!) {
-  deletePage(input: {id: $id}) {
+    mutation DeletePage($id: ID!) {
+  deletePage(input: {transitionalId: $id}) {
     clientMutationId
   }
 }

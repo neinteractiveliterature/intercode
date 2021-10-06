@@ -16,16 +16,14 @@ import { joinReact } from '../../RenderingUtils';
 import { useFormatRunTimespan } from '../runTimeFormatting';
 import { LoadQueryWithVariablesWrapper } from '../../GraphqlLoadingWrappers';
 
-function filterAndSortSignups(
-  signups: UserConProfileSignupsQueryData['convention']['user_con_profile']['signups'],
-) {
+function filterAndSortSignups(signups: UserConProfileSignupsQueryData['convention']['user_con_profile']['signups']) {
   const filteredSignups = signups.filter(({ state }) => state !== 'withdrawn');
 
   return sortBy(filteredSignups, (signup) => DateTime.fromISO(signup.run.starts_at).valueOf());
 }
 
 export type UserConProfileSignupsCardProps = {
-  userConProfileId: number;
+  userConProfileId: string;
 };
 
 export default LoadQueryWithVariablesWrapper(
@@ -49,8 +47,7 @@ export default LoadQueryWithVariablesWrapper(
           .filter(
             (teamMember) =>
               !data.convention.user_con_profile.signups.some(
-                (signup) =>
-                  signup.run.event.id === teamMember.event.id && signup.state === 'confirmed',
+                (signup) => signup.run.event.id === teamMember.event.id && signup.state === 'confirmed',
               ),
           )
           .filter((teamMember) => teamMember.event.status === 'active')
@@ -62,9 +59,7 @@ export default LoadQueryWithVariablesWrapper(
       <Link to={buildEventUrl(event)}>{event.title}</Link>
     );
 
-    const renderSignup = (
-      signup: UserConProfileSignupsQueryData['convention']['user_con_profile']['signups'][0],
-    ) => (
+    const renderSignup = (signup: UserConProfileSignupsQueryData['convention']['user_con_profile']['signups'][0]) => (
       <li className="list-group-item" key={signup.id}>
         <ul className="list-unstyled">
           <li>

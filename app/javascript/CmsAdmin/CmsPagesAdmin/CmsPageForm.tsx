@@ -17,7 +17,7 @@ import { CmsPagesAdminQueryData } from './queries.generated';
 export type PageFormFields = Pick<
   Page,
   'name' | 'admin_notes' | 'slug' | 'skip_clickwrap_agreement' | 'hidden_from_search' | 'content'
-> & { cms_layout?: Pick<CmsLayout, 'id' | 'name'> | null };
+> & { cms_layout?: (Pick<CmsLayout, 'name'> & { id: string }) | null };
 
 export type CmsPageFormProps<T extends PageFormFields> = {
   page: T;
@@ -34,32 +34,23 @@ function CmsPageForm<T extends PageFormFields>({
   cmsLayouts,
   readOnly,
 }: CmsPageFormProps<T>): JSX.Element {
-  const [
-    setName,
-    setAdminNotes,
-    setSlug,
-    setSkipClickwrapAgreement,
-    setHiddenFromSearch,
-    setCmsLayout,
-    setContent,
-  ] = usePropertySetters(
-    onChange,
-    'name',
-    'admin_notes',
-    'slug',
-    'skip_clickwrap_agreement',
-    'hidden_from_search',
-    'cms_layout',
-    'content',
-  );
+  const [setName, setAdminNotes, setSlug, setSkipClickwrapAgreement, setHiddenFromSearch, setCmsLayout, setContent] =
+    usePropertySetters(
+      onChange,
+      'name',
+      'admin_notes',
+      'slug',
+      'skip_clickwrap_agreement',
+      'hidden_from_search',
+      'cms_layout',
+      'content',
+    );
 
   const extensions = React.useMemo(() => [EditorView.editable.of(!readOnly)], [readOnly]);
 
   const slugInputId = useUniqueId('slug-');
   const defaultLayout =
-    cmsParent.__typename === 'RootSite'
-      ? cmsParent.root_site_default_layout
-      : cmsParent.defaultLayout;
+    cmsParent.__typename === 'RootSite' ? cmsParent.root_site_default_layout : cmsParent.defaultLayout;
 
   const cmsLayoutOptions = useMemo(
     () =>
@@ -82,12 +73,7 @@ function CmsPageForm<T extends PageFormFields>({
 
   return (
     <>
-      <BootstrapFormInput
-        label="Name"
-        value={page.name ?? ''}
-        onTextChange={setName}
-        readOnly={readOnly}
-      />
+      <BootstrapFormInput label="Name" value={page.name ?? ''} onTextChange={setName} readOnly={readOnly} />
 
       <BootstrapFormInput
         label="Admin notes"
@@ -101,9 +87,7 @@ function CmsPageForm<T extends PageFormFields>({
           URL
         </label>
         <div className="input-group">
-          <span className="input-group-text">
-            {`${new URL('/pages', window.location.href).toString()}/`}
-          </span>
+          <span className="input-group-text">{`${new URL('/pages', window.location.href).toString()}/`}</span>
           {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           <input
             id={slugInputId}

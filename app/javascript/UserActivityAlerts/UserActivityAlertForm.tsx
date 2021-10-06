@@ -18,17 +18,12 @@ import { UserActivityAlertQueryData } from './queries.generated';
 type AlertType = UserActivityAlertQueryData['convention']['user_activity_alert'];
 
 export type UserActivityAlertFormProps = {
-  convention: Pick<
-    UserActivityAlertQueryData['convention'],
-    'ticket_name' | 'ticket_mode' | 'staff_positions'
-  >;
+  convention: Pick<UserActivityAlertQueryData['convention'], 'ticket_name' | 'ticket_mode' | 'staff_positions'>;
   disabled?: boolean;
   userActivityAlert: AlertType;
   onChange: React.Dispatch<React.SetStateAction<AlertType>>;
-  onAddNotificationDestination: React.Dispatch<
-    Omit<AlertType['notification_destinations'][number], 'id'>
-  >;
-  onRemoveNotificationDestination: React.Dispatch<number>;
+  onAddNotificationDestination: React.Dispatch<Omit<AlertType['notification_destinations'][number], 'id'>>;
+  onRemoveNotificationDestination: React.Dispatch<string>;
 };
 
 function UserActivityAlertForm({
@@ -62,20 +57,15 @@ function UserActivityAlertForm({
     setAddDestinationType(null);
   };
 
-  const [
-    setPartialName,
-    setEmail,
-    setUser,
-    setTriggerOnUserConProfileCreate,
-    setTriggerOnTicketCreate,
-  ] = usePropertySetters(
-    onChange,
-    'partial_name',
-    'email',
-    'user',
-    'trigger_on_user_con_profile_create',
-    'trigger_on_ticket_create',
-  );
+  const [setPartialName, setEmail, setUser, setTriggerOnUserConProfileCreate, setTriggerOnTicketCreate] =
+    usePropertySetters(
+      onChange,
+      'partial_name',
+      'email',
+      'user',
+      'trigger_on_user_con_profile_create',
+      'trigger_on_ticket_create',
+    );
 
   return (
     <>
@@ -106,15 +96,8 @@ function UserActivityAlertForm({
             <label className="form-label" htmlFor={userSelectId}>
               User account
             </label>
-            <UserSelect
-              inputId={userSelectId}
-              value={userActivityAlert.user}
-              onChange={setUser}
-              disabled={disabled}
-            />
-            <small className="form-text text-muted">
-              Matches across all conventions using this server.
-            </small>
+            <UserSelect inputId={userSelectId} value={userActivityAlert.user} onChange={setUser} disabled={disabled} />
+            <small className="form-text text-muted">Matches across all conventions using this server.</small>
           </div>
         </div>
       </div>
@@ -159,8 +142,7 @@ function UserActivityAlertForm({
                     </>
                   ) : (
                     <>
-                      <strong>User:</strong>{' '}
-                      {notificationDestination.user_con_profile?.name_without_nickname}
+                      <strong>User:</strong> {notificationDestination.user_con_profile?.name_without_nickname}
                     </>
                   )}
                 </div>
@@ -208,11 +190,7 @@ function UserActivityAlertForm({
             )}
 
             {addDestinationType === 'user_con_profile' && (
-              <UserConProfileSelect
-                value={null}
-                onChange={addUserConProfileDestination}
-                disabled={disabled}
-              />
+              <UserConProfileSelect value={null} onChange={addUserConProfileDestination} disabled={disabled} />
             )}
           </li>
         </ul>

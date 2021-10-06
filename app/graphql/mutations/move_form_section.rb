@@ -6,7 +6,8 @@ class Mutations::MoveFormSection < Mutations::BaseMutation
   argument :id,
            Integer,
            deprecation_reason:
-             'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
            required: false
   argument :transitional_id, ID, required: false, camelize: true
   argument :destination_index, Integer, required: true, camelize: false

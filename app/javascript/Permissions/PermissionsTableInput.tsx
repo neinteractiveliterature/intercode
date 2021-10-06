@@ -12,8 +12,8 @@ type PermissionName = {
 };
 
 type BaseRowType =
-  | Pick<PermissionedModel, '__typename' | 'id'>
-  | Pick<PermissionedRole, '__typename' | 'id'>;
+  | (Pick<PermissionedModel, '__typename'> & { id: string })
+  | (Pick<PermissionedRole, '__typename'> & { id: string });
 
 type PermissionsTableInputProps<RowType extends BaseRowType> = UsePermissionsChangeSetOptions & {
   permissionNames: PermissionName[];
@@ -44,10 +44,7 @@ function PermissionsTableInput<RowType extends BaseRowType>({
   });
 
   return (
-    <table
-      className={classNames('table table-responsive', { 'table-hover-cell': !readOnly })}
-      role="grid"
-    >
+    <table className={classNames('table table-responsive', { 'table-hover-cell': !readOnly })} role="grid">
       <thead>
         <tr>
           <th>{rowsHeader}</th>
@@ -71,15 +68,9 @@ function PermissionsTableInput<RowType extends BaseRowType>({
                 changeSet={changeSet}
                 rowType={rowType}
                 model={
-                  rowType === 'model'
-                    ? (row as Pick<PermissionedModel, 'id' | '__typename'>)
-                    : undefined
+                  rowType === 'model' ? (row as Pick<PermissionedModel, '__typename'> & { id: string }) : undefined
                 }
-                role={
-                  rowType === 'role'
-                    ? (row as Pick<PermissionedRole, 'id' | '__typename'>)
-                    : undefined
-                }
+                role={rowType === 'role' ? (row as Pick<PermissionedRole, '__typename'> & { id: string }) : undefined}
                 permission={permission}
                 grantPermission={grantPermission}
                 revokePermission={revokePermission}

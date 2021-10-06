@@ -39,13 +39,10 @@ function formDataFromJSON(json: string): EditingFormJSONData {
 
 export default LoadSingleValueFromCollectionWrapper(
   useFormAdminQuery,
-  (data, id) => data.convention.forms.find((form) => form.id.toString(10) === id),
+  (data, id) => data.convention.forms.find((form) => form.id === id),
   function FormJSONEditor({ value: initialForm }) {
     const history = useHistory();
-    const initialFormData = useMemo(
-      () => formDataFromJSON(initialForm.export_json),
-      [initialForm.export_json],
-    );
+    const initialFormData = useMemo(() => formDataFromJSON(initialForm.export_json), [initialForm.export_json]);
     const [form, setForm] = useState(initialFormData);
     const [createForm, createError, createInProgress] = useAsyncFunction(
       useCreateMutation(CreateFormWithJSON, {
@@ -59,10 +56,7 @@ export default LoadSingleValueFromCollectionWrapper(
     const { t } = useTranslation();
 
     const extensions = useMemo(() => [jsonExtension()], []);
-    const onChange = useCallback(
-      (sectionsJSON: string) => setForm((prevForm) => ({ ...prevForm, sectionsJSON })),
-      [],
-    );
+    const onChange = useCallback((sectionsJSON: string) => setForm((prevForm) => ({ ...prevForm, sectionsJSON })), []);
     const [editorRef] = useStandardCodeMirror({ extensions, value: form.sectionsJSON, onChange });
 
     usePageTitle(initialForm.id ? `Editing “${initialFormData.title}”` : 'New Form');
@@ -101,9 +95,7 @@ export default LoadSingleValueFromCollectionWrapper(
           label="Form type"
           name="form_type"
           value={form.form_type}
-          onValueChange={(formType) =>
-            setForm((prevForm) => ({ ...prevForm, form_type: formType }))
-          }
+          onValueChange={(formType) => setForm((prevForm) => ({ ...prevForm, form_type: formType }))}
           disabled={initialForm.id != null}
         >
           <option disabled selected={form.form_type == null}>

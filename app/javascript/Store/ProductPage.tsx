@@ -14,7 +14,7 @@ import { useOrderFormProductQuery } from './queries.generated';
 function useLoadProduct() {
   const { id } = useParams<{ id: string }>();
   return useOrderFormProductQuery({
-    variables: { productId: Number.parseInt(id, 10) },
+    variables: { productId: id },
   });
 }
 
@@ -41,14 +41,10 @@ export default LoadQueryWrapper(
 
         <div className="mb-4">
           <h1>{product.name}</h1>
-          <div className="lead">
-            {describeUserPricingStructure(product.pricing_structure, timezoneName, t)}
-          </div>
+          <div className="lead">{describeUserPricingStructure(product.pricing_structure, timezoneName, t)}</div>
         </div>
 
-        {product.image_url && (
-          <img className="d-lg-none w-100" src={product.image_url} alt={product.name} />
-        )}
+        {product.image_url && <img className="d-lg-none w-100" src={product.image_url} alt={product.name} />}
 
         {product.description_html && (
           <div className="mb-4">{parseCmsContent(product.description_html).bodyComponents}</div>
@@ -57,11 +53,7 @@ export default LoadQueryWrapper(
         {currentUser ? (
           <ProductOrderForm productId={product.id} />
         ) : (
-          <SignInButton
-            caption="Log in to order"
-            className="btn btn-primary"
-            afterSignInPath={window.location.href}
-          />
+          <SignInButton caption="Log in to order" className="btn btn-primary" afterSignInPath={window.location.href} />
         )}
       </>
     );

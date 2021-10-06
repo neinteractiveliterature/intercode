@@ -77,7 +77,8 @@ removed in favor of `conventionByRequestHostIfPresent`." do
     argument :id,
              Integer,
              deprecation_reason:
-               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
              required: false
     argument :transitional_id, ID, required: false, camelize: true
     description <<~MARKDOWN
@@ -145,7 +146,8 @@ being deprecated.  Please use the `event` field on the Convention type instead."
     argument :id,
              Integer,
              deprecation_reason:
-               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
              required: false,
              description: 'The ID of the event to find'
     argument :transitional_id, ID, required: false, description: 'The ID of the event to find', camelize: true
@@ -170,7 +172,8 @@ deprecated.  Please use the `run` field on the Convention type instead.' do
     argument :id,
              Integer,
              deprecation_reason:
-               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
              required: false,
              description: 'The ID of the run to find'
     argument :transitional_id, ID, required: false, description: 'The ID of the run to find', camelize: true
@@ -257,7 +260,8 @@ being deprecated.  Please use the `events` field on the Convention type instead.
     argument :id,
              Integer,
              deprecation_reason:
-               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
              required: false,
              description: 'The ID of the event proposal to find.'
     argument :transitional_id, ID, required: false, description: 'The ID of the event proposal to find.', camelize: true
@@ -427,7 +431,8 @@ Please use the `cmsContentGroup` field on the CmsParent interface instead." do
     argument :id,
              Int,
              deprecation_reason:
-               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
              required: false,
              description: 'The ID of the CMS content group to find.'
     argument :transitional_id,
@@ -486,7 +491,8 @@ Please use the `cmsPage` field on the CmsParent interface instead." do
     argument :id,
              Int,
              deprecation_reason:
-               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
              required: false,
              description: 'The ID of the page to find.'
     argument :transitional_id, ID, required: false, description: 'The ID of the page to find.', camelize: true
@@ -648,7 +654,8 @@ Please use the `user_con_profile` field on the Convention object instead." do
     argument :id,
              Integer,
              deprecation_reason:
-               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
              required: false,
              description: 'The ID of the UserConProfile to find.'
     argument :transitional_id, ID, required: false, description: 'The ID of the UserConProfile to find.', camelize: true
@@ -673,7 +680,8 @@ Please use the `form` field on the Convention object instead." do
     argument :id,
              Integer,
              deprecation_reason:
-               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
              required: false,
              description: 'The ID of the form to find.'
     argument :transitional_id, ID, required: false, description: 'The ID of the form to find.', camelize: true
@@ -698,7 +706,8 @@ Please use the `staff_position` field on the Convention object instead." do
     argument :id,
              Integer,
              deprecation_reason:
-               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
              required: false,
              description: 'The ID of the staff position to find.'
     argument :transitional_id, ID, required: false, description: 'The ID of the staff position to find.', camelize: true
@@ -763,7 +772,8 @@ Please use the `preview_form_item` field on the FormSection type instead." do
     argument :form_section_id,
              Int,
              deprecation_reason:
-               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
              required: false,
              description: 'The ID of the form section to preview the item in.'
     argument :transitional_form_section_id,
@@ -870,7 +880,8 @@ Please use the `product` field on the Convention type instead." do
     argument :id,
              Integer,
              deprecation_reason:
-               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
              required: false,
              description: 'The ID of the product to find.'
     argument :transitional_id, ID, required: false, description: 'The ID of the product to find.', camelize: true
@@ -1017,7 +1028,8 @@ Please use the `signup` field on the Convention type instead." do
     argument :id,
              Integer,
              deprecation_reason:
-               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
              required: false,
              description: 'The ID of the signup to find.'
     argument :transitional_id, ID, required: false, description: 'The ID of the signup to find.', camelize: true
@@ -1050,7 +1062,8 @@ Please use the `signup` field on the Convention type instead." do
     argument :id,
              Integer,
              deprecation_reason:
-               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
              required: false,
              description: 'The ID of the user to find.'
     argument :transitional_id, ID, required: false, description: 'The ID of the user to find.', camelize: true
@@ -1070,12 +1083,13 @@ Please use the `signup` field on the Convention type instead." do
              required: false,
              description: 'The IDs of the users to find.',
              deprecation_reason:
-               'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.'
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID."
     argument :transitional_ids, [ID], required: false, description: 'The IDs of the users to find.'
 
     description <<~MARKDOWN
-      Finds up to 25 users by ID. If any of the IDs don't match an existing user, errors out.
-    MARKDOWN
+    Finds up to 25 users by ID. If any of the IDs don't match an existing user, errors out.
+  MARKDOWN
   end
 
   def users(ids: nil, transitional_ids: nil)

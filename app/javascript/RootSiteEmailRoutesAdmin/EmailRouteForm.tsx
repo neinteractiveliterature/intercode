@@ -2,13 +2,12 @@ import * as React from 'react';
 import { BootstrapFormInput } from '@neinteractiveliterature/litform';
 
 import { StringArrayEditor } from '../BuiltInFormControls/ArrayEditor';
-import { EmailRoute } from '../graphqlTypes.generated';
 import { usePropertySetters } from '@neinteractiveliterature/litform/lib/usePropertySetters';
 import { EmailRouteFieldsFragment } from './queries.generated';
 
 export type EmailRouteFormProps = {
   emailRoute: EmailRouteFieldsFragment;
-  onChange: React.Dispatch<React.SetStateAction<EmailRoute>>;
+  onChange: React.Dispatch<React.SetStateAction<EmailRouteFieldsFragment>>;
 };
 
 function EmailRouteForm({ emailRoute, onChange }: EmailRouteFormProps): JSX.Element {

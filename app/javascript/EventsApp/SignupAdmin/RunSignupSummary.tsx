@@ -16,9 +16,7 @@ type EventType = RunSignupSummaryQueryData['convention']['event'];
 type SignupType = EventType['run']['signups_paginated']['entries'][0];
 
 function isTeamMember(signup: SignupType, teamMembers: EventType['team_members']) {
-  return teamMembers.some(
-    (teamMember) => teamMember.user_con_profile.id === signup.user_con_profile.id,
-  );
+  return teamMembers.some((teamMember) => teamMember.user_con_profile.id === signup.user_con_profile.id);
 }
 
 function sortSignups(signups: SignupType[], teamMembers: EventType['team_members']) {
@@ -43,17 +41,15 @@ function sortSignups(signups: SignupType[], teamMembers: EventType['team_members
       return (a.waitlist_position ?? 0) - (b.waitlist_position ?? 0);
     }
 
-    return a.user_con_profile.name_inverted.localeCompare(
-      b.user_con_profile.name_inverted,
-      undefined,
-      { sensitivity: 'base' },
-    );
+    return a.user_con_profile.name_inverted.localeCompare(b.user_con_profile.name_inverted, undefined, {
+      sensitivity: 'base',
+    });
   });
 }
 
 export type RunSignupSummaryProps = {
-  eventId: number;
-  runId: number;
+  eventId: string;
+  runId: string;
   eventPath: string;
 };
 
@@ -83,10 +79,8 @@ export default LoadQueryWithVariablesWrapper(
       teamMemberName: string,
     ) => {
       const bucket = findBucket(signup.bucket_key, registrationPolicy ?? { buckets: [] });
-      const suffix =
-        signup.bucket_key && bucket && bucket.expose_attendees ? ` (${bucket.name})` : null;
-      const waitlistPosition =
-        signup.state === 'waitlisted' ? ` #${signup.waitlist_position}` : null;
+      const suffix = signup.bucket_key && bucket && bucket.expose_attendees ? ` (${bucket.name})` : null;
+      const waitlistPosition = signup.state === 'waitlisted' ? ` #${signup.waitlist_position}` : null;
 
       return (
         <tr

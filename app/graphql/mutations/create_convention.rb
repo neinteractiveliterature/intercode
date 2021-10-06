@@ -7,14 +7,16 @@ class Mutations::CreateConvention < Mutations::BaseMutation
   argument :clone_convention_id,
            Integer,
            deprecation_reason:
-             'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
            required: false,
            camelize: false
   argument :transitional_clone_convention_id, ID, required: false, camelize: true
   argument :organization_id,
            Integer,
            deprecation_reason:
-             'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
            required: false,
            camelize: false
   argument :transitional_organization_id, ID, required: false, camelize: true
@@ -23,6 +25,7 @@ class Mutations::CreateConvention < Mutations::BaseMutation
 
   define_authorization_check { |_args| policy(Convention.new).create? }
 
+  # rubocop:disable Metrics/MethodLength
   def resolve(
     convention:,
     clone_convention_id: nil,
@@ -56,4 +59,5 @@ class Mutations::CreateConvention < Mutations::BaseMutation
 
     { convention: new_convention }
   end
+  # rubocop:enable Metrics/MethodLength
 end

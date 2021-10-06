@@ -5,12 +5,7 @@ import { Link, useParams } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
 import { DateTime } from 'luxon';
-import {
-  useModal,
-  useConfirm,
-  ErrorDisplay,
-  PageLoadingIndicator,
-} from '@neinteractiveliterature/litform';
+import { useModal, useConfirm, ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
 import { ageAsOf } from '../../TimeUtils';
 import ChangeBucketModal from './ChangeBucketModal';
@@ -25,15 +20,11 @@ import { useUpdateSignupCountedMutation } from './mutations.generated';
 import { useFormatRunTimespan } from '../runTimeFormatting';
 
 function cityState(userConProfile: SignupFieldsFragment['user_con_profile']) {
-  return [userConProfile.city, userConProfile.state]
-    .filter((item) => item && item.trim() !== '')
-    .join(', ');
+  return [userConProfile.city, userConProfile.state].filter((item) => item && item.trim() !== '').join(', ');
 }
 
 function cityStateZip(userConProfile: SignupFieldsFragment['user_con_profile']) {
-  return [cityState(userConProfile), userConProfile.zipcode]
-    .filter((item) => item && item.trim() !== '')
-    .join(' ');
+  return [cityState(userConProfile), userConProfile.zipcode].filter((item) => item && item.trim() !== '').join(' ');
 }
 
 function getMakeCountedConfirmPrompt(signup: SignupFieldsFragment) {
@@ -45,13 +36,13 @@ function getMakeCountedConfirmPrompt(signup: SignupFieldsFragment) {
       values={{ name: userConProfile.name_without_nickname, eventTitle: run.event.title }}
     >
       <p>
-        Are you sure? This will make {'{{ name }}’s'} signup count towards attendee totals for{' '}
-        {'{{ eventTitle }}'}. {'{{ eventTitle }}'} will also count towards
+        Are you sure? This will make {'{{ name }}’s'} signup count towards attendee totals for {'{{ eventTitle }}'}.{' '}
+        {'{{ eventTitle }}'} will also count towards
         {' {{ name }}’s'} signup limit if there is a signup cap in place.
       </p>
       <p className="text-danger">
-        Caution: this operation does not check whether the signup buckets are already full, and
-        therefore may result in overfilling a bucket.
+        Caution: this operation does not check whether the signup buckets are already full, and therefore may result in
+        overfilling a bucket.
       </p>
     </Trans>
   );
@@ -66,22 +57,18 @@ function getMakeNotCountedConfirmPrompt(signup: SignupFieldsFragment) {
       values={{ name: userConProfile.name_without_nickname, eventTitle: run.event.title }}
     >
       <p>
-        Are you sure? This will make {'{{ name }}’s'} signup not count towards attendee totals for{' '}
-        {'{{ eventTitle }}'}. It will also allow
+        Are you sure? This will make {'{{ name }}’s'} signup not count towards attendee totals for {'{{ eventTitle }}'}.
+        It will also allow
         {' {{ name }}'} to sign up for an additional event if there is a signup cap in place.
       </p>
       <p className="text-danger">
-        Caution: this operation will pull additional attendees into the space freed up by making
-        this signup not count.
+        Caution: this operation will pull additional attendees into the space freed up by making this signup not count.
       </p>
     </Trans>
   );
 }
 
-const renderAddressItem = (
-  userConProfile: SignupFieldsFragment['user_con_profile'],
-  t: TFunction,
-) => {
+const renderAddressItem = (userConProfile: SignupFieldsFragment['user_con_profile'], t: TFunction) => {
   const elements = (
     [
       ['header', t('events.signupAdmin.addressHeader', 'Address:')],
@@ -109,7 +96,7 @@ export type EditSignupProps = {
 
 function EditSignup({ teamMembersUrl }: EditSignupProps): JSX.Element {
   const { timezoneName } = useContext(AppRootContext);
-  const id = Number.parseInt(useParams<{ id: string }>().id, 10);
+  const { id } = useParams<{ id: string }>();
   const { data, loading, error } = useAdminSignupQuery({ variables: { id } });
   const changeBucketModal = useModal();
   const forceConfirmModal = useModal();
@@ -121,14 +108,10 @@ function EditSignup({ teamMembersUrl }: EditSignupProps): JSX.Element {
   usePageTitle(
     useValueUnless(
       () =>
-        t(
-          'events.signupAdmin.editPageTitle',
-          'Editing signup for “{{ name }}” - {{ eventTitle }}',
-          {
-            name: data?.convention.signup.user_con_profile.name_without_nickname,
-            eventTitle: data?.convention.signup.run.event.title,
-          },
-        ),
+        t('events.signupAdmin.editPageTitle', 'Editing signup for “{{ name }}” - {{ eventTitle }}', {
+          name: data?.convention.signup.user_con_profile.name_without_nickname,
+          eventTitle: data?.convention.signup.run.event.title,
+        }),
       error || loading,
     ),
   );
@@ -164,11 +147,7 @@ function EditSignup({ teamMembersUrl }: EditSignupProps): JSX.Element {
       <div className="card me-2">
         <div className="card-header d-flex align-items-center">
           <div className="me-2">
-            <Gravatar
-              url={userConProfile.gravatar_url}
-              enabled={userConProfile.gravatar_enabled}
-              pixelSize={32}
-            />
+            <Gravatar url={userConProfile.gravatar_url} enabled={userConProfile.gravatar_enabled} pixelSize={32} />
           </div>
           <div className="lead">{userConProfile.name_without_nickname}</div>
         </div>
@@ -264,12 +243,8 @@ function EditSignup({ teamMembersUrl }: EditSignupProps): JSX.Element {
     const { event } = run;
     const { registration_policy: registrationPolicy } = event;
     const timespan = Timespan.finiteFromStrings(run.starts_at, run.ends_at);
-    const teamMember = run.event.team_members.find(
-      (tm) => tm.user_con_profile.id === signup.user_con_profile.id,
-    );
-    const bucket = signup.bucket_key
-      ? registrationPolicy?.buckets.find((b) => b.key === signup.bucket_key)
-      : null;
+    const teamMember = run.event.team_members.find((tm) => tm.user_con_profile.id === signup.user_con_profile.id);
+    const bucket = signup.bucket_key ? registrationPolicy?.buckets.find((b) => b.key === signup.bucket_key) : null;
     const requestedBucket = signup.requested_bucket_key
       ? registrationPolicy?.buckets.find((b) => b.key === signup.requested_bucket_key)
       : null;

@@ -9,9 +9,9 @@ import { useCreateUserSignupMutation, useWithdrawUserSignupMutation } from './mu
 import { LoadQueryWithVariablesWrapper } from '../GraphqlLoadingWrappers';
 
 export type CreateSignupRunCardProps = {
-  eventId: number;
-  runId: number;
-  userConProfileId: number;
+  eventId: string;
+  runId: string;
+  userConProfileId: string;
 };
 
 export default LoadQueryWithVariablesWrapper(
@@ -55,10 +55,7 @@ export default LoadQueryWithVariablesWrapper(
     );
 
     const mySignup = useMemo(
-      () =>
-        data.convention.user_con_profile.signups.find(
-          (s) => s.run.id === runId && s.state !== 'withdrawn',
-        ),
+      () => data.convention.user_con_profile.signups.find((s) => s.run.id === runId && s.state !== 'withdrawn'),
       [data, runId],
     );
 
@@ -70,10 +67,7 @@ export default LoadQueryWithVariablesWrapper(
       [data, runId],
     );
 
-    const run = useMemo(
-      () => data.convention.event.runs.find((r) => r.id === runId),
-      [data, runId],
-    );
+    const run = useMemo(() => data.convention.event.runs.find((r) => r.id === runId), [data, runId]);
 
     if (!run) {
       return <ErrorDisplay stringError={`Run ${runId} not found`} />;

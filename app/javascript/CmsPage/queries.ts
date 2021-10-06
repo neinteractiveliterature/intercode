@@ -33,11 +33,11 @@ export const CmsPageQuery = gql`
 `;
 
 export const PageAdminDropdownQuery = gql`
-  query PageAdminDropdownQuery($id: Int!) {
+  query PageAdminDropdownQuery($id: ID!) {
     cmsParent: cmsParentByRequestHost {
       id: transitionalId
 
-      cmsPage(id: $id) {
+      cmsPage(transitionalId: $id) {
         id: transitionalId
         cms_layout {
           id: transitionalId

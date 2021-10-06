@@ -72,14 +72,14 @@ export const RunCardRegistrationPolicyFields = gql`
 `;
 
 export const EventPageQuery = gql`
-  query EventPageQuery($eventId: Int!) {
+  query EventPageQuery($eventId: ID!) {
     # eslint-disable-next-line @graphql-eslint/naming-convention
     __typename
 
     currentAbility {
       can_read_schedule
-      can_update_event(event_id: $eventId)
-      can_read_event_signups(event_id: $eventId)
+      can_update_event(transitionalEventId: $eventId)
+      can_read_event_signups(transitionalEventId: $eventId)
     }
 
     convention: conventionByRequestHost {
@@ -90,7 +90,7 @@ export const EventPageQuery = gql`
         id: transitionalId
       }
 
-      event(id: $eventId) {
+      event(transitionalId: $eventId) {
         id: transitionalId
         title
         length_seconds

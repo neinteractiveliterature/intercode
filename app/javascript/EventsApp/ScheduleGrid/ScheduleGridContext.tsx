@@ -1,13 +1,4 @@
-import {
-  createContext,
-  Suspense,
-  useState,
-  useMemo,
-  useCallback,
-  useContext,
-  useEffect,
-  ReactNode,
-} from 'react';
+import { createContext, Suspense, useState, useMemo, useCallback, useContext, useEffect, ReactNode } from 'react';
 import { detect } from 'detect-browser';
 import { useApolloClient } from '@apollo/client';
 import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
@@ -15,11 +6,7 @@ import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/lit
 import ConventionDayTabContainer from './ConventionDayTabContainer';
 import Schedule from './Schedule';
 import { ScheduleGridEventsQuery } from './queries';
-import {
-  timespanFromConvention,
-  getConventionDayTimespans,
-  ConventionForTimespanUtils,
-} from '../../TimespanUtils';
+import { timespanFromConvention, getConventionDayTimespans, ConventionForTimespanUtils } from '../../TimespanUtils';
 import useCachedLoadableValue from '../../useCachedLoadableValue';
 import ScheduleGridSkeleton from './ScheduleGridSkeleton';
 import AppRootContext from '../../AppRootContext';
@@ -36,7 +23,7 @@ import FourOhFourPage from '../../FourOhFourPage';
 const IS_MOBILE = ['iOS', 'Android OS'].includes(detect()?.os ?? '');
 
 export type RunDetailsVisibilitySpec = {
-  runId: number;
+  runId: string;
   scheduleBlockId: string;
 };
 
@@ -45,7 +32,7 @@ export type ScheduleGridContextValue = {
   config: ScheduleGridConfig;
   convention: ConventionForTimespanUtils;
   isRunDetailsVisible: (visibilityId: RunDetailsVisibilitySpec) => boolean;
-  visibleRunDetails: Map<number, RunDetailsVisibilitySpec[]>;
+  visibleRunDetails: Map<string, RunDetailsVisibilitySpec[]>;
   toggleRunDetailsVisibility: (visibilityId: RunDetailsVisibilitySpec) => void;
 };
 
@@ -74,7 +61,7 @@ export const ScheduleGridContext = createContext<ScheduleGridContextValue>({
   config: skeletonScheduleGridConfig,
   convention: skeletonConvention,
   isRunDetailsVisible: () => false,
-  visibleRunDetails: new Map<number, RunDetailsVisibilitySpec[]>(),
+  visibleRunDetails: new Map<string, RunDetailsVisibilitySpec[]>(),
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   toggleRunDetailsVisibility: () => {},
 });
@@ -94,7 +81,7 @@ function runDetailsVisibilitySpecsMatch(a: RunDetailsVisibilitySpec, b: RunDetai
 }
 
 function checkRunDetailsVisibity(
-  visibleRunDetails: Map<number, RunDetailsVisibilitySpec[]>,
+  visibleRunDetails: Map<string, RunDetailsVisibilitySpec[]>,
   visibilitySpec: RunDetailsVisibilitySpec,
 ) {
   const visibleSpecs = visibleRunDetails.get(visibilitySpec.runId);
@@ -113,13 +100,10 @@ export function useScheduleGridProvider(
   hideConflicts?: boolean,
 ): ScheduleGridContextValue {
   const { timezoneName } = useContext(AppRootContext);
-  const [visibleRunDetails, setVisibleRunDetailsIds] = useState(
-    new Map<number, RunDetailsVisibilitySpec[]>(),
-  );
+  const [visibleRunDetails, setVisibleRunDetailsIds] = useState(new Map<string, RunDetailsVisibilitySpec[]>());
 
   const isRunDetailsVisible = useMemo(
-    () => (visibilitySpec: RunDetailsVisibilitySpec) =>
-      checkRunDetailsVisibity(visibleRunDetails, visibilitySpec),
+    () => (visibilitySpec: RunDetailsVisibilitySpec) => checkRunDetailsVisibity(visibleRunDetails, visibilitySpec),
     [visibleRunDetails],
   );
 
@@ -142,7 +126,7 @@ export function useScheduleGridProvider(
       let newVisibility = false;
 
       setVisibleRunDetailsIds((prevVisibleRunDetails) => {
-        const newVisibleRunDetails = new Map<number, RunDetailsVisibilitySpec[]>();
+        const newVisibleRunDetails = new Map<string, RunDetailsVisibilitySpec[]>();
         prevVisibleRunDetails.forEach((visibleSpecs, visibleRunId) => {
           newVisibleRunDetails.set(visibleRunId, [...visibleSpecs]);
         });
@@ -162,7 +146,7 @@ export function useScheduleGridProvider(
         const runTimespan = schedule.getRunTimespan(visibilitySpec.runId);
         const concurrentRunIds = runTimespan ? schedule.getRunIdsOverlapping(runTimespan) : [];
 
-        concurrentRunIds.forEach((concurrentRunId: number) => {
+        concurrentRunIds.forEach((concurrentRunId: string) => {
           newVisibleRunDetails.delete(concurrentRunId);
         });
         // throw out the old visibility specs for this run because by definition they overlap

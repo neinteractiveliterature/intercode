@@ -5,7 +5,7 @@ import { valueIsPresent } from './valueIsPresent';
 import FormItemDisplay from '../../FormPresenter/ItemDisplays/FormItemDisplay';
 
 export type LongFormEventDetailsProps = {
-  eventId: number;
+  eventId: string;
 };
 
 export default LoadQueryWithVariablesWrapper(

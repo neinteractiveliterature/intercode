@@ -1,42 +1,27 @@
 import { useState } from 'react';
 import { ApolloError } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
-import {
-  useTabs,
-  TabList,
-  TabBody,
-  notEmpty,
-  ErrorDisplay,
-} from '@neinteractiveliterature/litform';
+import { useTabs, TabList, TabBody, notEmpty, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 import PermissionsListInput from '../Permissions/PermissionsListInput';
 import PermissionsTableInput from '../Permissions/PermissionsTableInput';
 import { useChangeSet } from '../ChangeSet';
 import usePageTitle from '../usePageTitle';
-import {
-  getPermissionNamesForModelType,
-  buildPermissionInput,
-} from '../Permissions/PermissionUtils';
+import { getPermissionNamesForModelType, buildPermissionInput } from '../Permissions/PermissionUtils';
 import { PermissionedModelTypeIndicator } from '../graphqlTypes.generated';
 import { useStaffPositionsQuery } from './queries.generated';
 import { PermissionWithId } from '../Permissions/usePermissionsChangeSet';
 import { useUpdateStaffPositionPermissionsMutation } from './mutations.generated';
 import { LoadSingleValueFromCollectionWrapper } from '../GraphqlLoadingWrappers';
 
-const CmsContentGroupPermissionNames = getPermissionNamesForModelType(
-  PermissionedModelTypeIndicator.CmsContentGroup,
-);
-const EventCategoryPermissionNames = getPermissionNamesForModelType(
-  PermissionedModelTypeIndicator.EventCategory,
-);
-const ConventionPermissionNames = getPermissionNamesForModelType(
-  PermissionedModelTypeIndicator.Convention,
-);
+const CmsContentGroupPermissionNames = getPermissionNamesForModelType(PermissionedModelTypeIndicator.CmsContentGroup);
+const EventCategoryPermissionNames = getPermissionNamesForModelType(PermissionedModelTypeIndicator.EventCategory);
+const ConventionPermissionNames = getPermissionNamesForModelType(PermissionedModelTypeIndicator.Convention);
 
 export default LoadSingleValueFromCollectionWrapper(
   useStaffPositionsQuery,
-  (data, id) => data.convention.staff_positions.find((sp) => sp.id.toString(10) === id),
+  (data, id) => data.convention.staff_positions.find((sp) => sp.id === id),
   function EditStaffPositionPermissions({ value: staffPosition, data: { convention } }) {
     const history = useHistory();
     const [changeSet, add, remove] = useChangeSet<PermissionWithId>();
@@ -73,10 +58,7 @@ export default LoadSingleValueFromCollectionWrapper(
             remove={remove}
             rowsHeader="Event Category"
             formatRowHeader={(eventCategory) => (
-              <span
-                className="p-1 rounded"
-                style={getEventCategoryStyles({ eventCategory, variant: 'default' })}
-              >
+              <span className="p-1 rounded" style={getEventCategoryStyles({ eventCategory, variant: 'default' })}>
                 {eventCategory.name}
               </span>
             )}

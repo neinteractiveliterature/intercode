@@ -36,7 +36,7 @@ function compareReservationsForSort(a: ColumnReservation | null, b: ColumnReserv
 class ColumnReservationSet {
   reservations: (ColumnReservation | null)[];
 
-  columnNumberByRunId: Map<number, number>;
+  columnNumberByRunId: Map<string, number>;
 
   constructor() {
     this.clear();
@@ -47,7 +47,7 @@ class ColumnReservationSet {
     this.columnNumberByRunId = new Map();
   }
 
-  reserve(columnNumber: number, runId: number, timespan: FiniteTimespan): void {
+  reserve(columnNumber: number, runId: string, timespan: FiniteTimespan): void {
     const reservation = this.reservations[columnNumber];
     if (reservation != null) {
       reservation.addRun(runId, timespan);
@@ -160,7 +160,7 @@ class ColumnReservationSet {
     this.recalculateRunColumns();
   }
 
-  isColumnReservedForRunId(runId: number): boolean {
+  isColumnReservedForRunId(runId: string): boolean {
     return this.columnNumberByRunId.has(runId);
   }
 }

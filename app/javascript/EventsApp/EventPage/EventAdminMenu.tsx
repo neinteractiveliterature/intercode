@@ -7,7 +7,7 @@ import { useEventPageQuery } from './queries.generated';
 import { LoadQueryWithVariablesWrapper } from '../../GraphqlLoadingWrappers';
 
 export type EventAdminMenuProps = {
-  eventId: number;
+  eventId: string;
 };
 
 export default LoadQueryWithVariablesWrapper(
@@ -39,9 +39,7 @@ export default LoadQueryWithVariablesWrapper(
             </Link>
           </li>
           <li className="list-group-item">
-            <Link to={`${eventPath}/history`}>
-              {t('events.adminMenu.historyLink', 'View edit history')}
-            </Link>
+            <Link to={`${eventPath}/history`}>{t('events.adminMenu.historyLink', 'View edit history')}</Link>
           </li>
         </ul>
       </div>

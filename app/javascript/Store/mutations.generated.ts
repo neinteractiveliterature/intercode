@@ -49,7 +49,7 @@ export type CreateProductMutationVariables = Types.Exact<{
 export type CreateProductMutationData = { __typename: 'Mutation', createProduct: { __typename: 'CreateProductPayload', product: { __typename: 'Product', name: string, description?: string | null | undefined, description_html?: string | null | undefined, image_url?: string | null | undefined, available: boolean, payment_options: Array<string>, id: string, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: any | null | undefined, finish?: any | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } }> } }, product_variants: Array<{ __typename: 'ProductVariant', name: string, description?: string | null | undefined, image_url?: string | null | undefined, position?: number | null | undefined, id: string, override_pricing_structure?: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: any | null | undefined, finish?: any | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } }> } } | null | undefined }>, provides_ticket_type?: { __typename: 'TicketType', description?: string | null | undefined, id: string } | null | undefined } } };
 
 export type UpdateProductMutationVariables = Types.Exact<{
-  id: Types.Scalars['Int'];
+  id: Types.Scalars['ID'];
   product: Types.ProductInput;
 }>;
 
@@ -318,8 +318,8 @@ export type CreateProductMutationHookResult = ReturnType<typeof useCreateProduct
 export type CreateProductMutationResult = Apollo.MutationResult<CreateProductMutationData>;
 export type CreateProductMutationOptions = Apollo.BaseMutationOptions<CreateProductMutationData, CreateProductMutationVariables>;
 export const UpdateProductDocument = gql`
-    mutation UpdateProduct($id: Int!, $product: ProductInput!) {
-  updateProduct(input: {id: $id, product: $product}) {
+    mutation UpdateProduct($id: ID!, $product: ProductInput!) {
+  updateProduct(input: {transitionalId: $id, product: $product}) {
     product {
       id: transitionalId
       ...AdminProductFields

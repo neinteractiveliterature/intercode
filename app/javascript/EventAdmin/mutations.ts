@@ -115,9 +115,7 @@ export const DeleteRun = gql`
 `;
 
 export const CreateMaximumEventProvidedTicketsOverride = gql`
-  mutation CreateMaximumEventProvidedTicketsOverride(
-    $input: CreateMaximumEventProvidedTicketsOverrideInput!
-  ) {
+  mutation CreateMaximumEventProvidedTicketsOverride($input: CreateMaximumEventProvidedTicketsOverrideInput!) {
     createMaximumEventProvidedTicketsOverride(input: $input) {
       maximum_event_provided_tickets_override {
         id: transitionalId
@@ -130,9 +128,7 @@ export const CreateMaximumEventProvidedTicketsOverride = gql`
 `;
 
 export const DeleteMaximumEventProvidedTicketsOverride = gql`
-  mutation DeleteMaximumEventProvidedTicketsOverride(
-    $input: DeleteMaximumEventProvidedTicketsOverrideInput!
-  ) {
+  mutation DeleteMaximumEventProvidedTicketsOverride($input: DeleteMaximumEventProvidedTicketsOverrideInput!) {
     deleteMaximumEventProvidedTicketsOverride(input: $input) {
       maximum_event_provided_tickets_override {
         id: transitionalId
@@ -145,9 +141,7 @@ export const DeleteMaximumEventProvidedTicketsOverride = gql`
 `;
 
 export const UpdateMaximumEventProvidedTicketsOverride = gql`
-  mutation UpdateMaximumEventProvidedTicketsOverride(
-    $input: UpdateMaximumEventProvidedTicketsOverrideInput!
-  ) {
+  mutation UpdateMaximumEventProvidedTicketsOverride($input: UpdateMaximumEventProvidedTicketsOverrideInput!) {
     updateMaximumEventProvidedTicketsOverride(input: $input) {
       maximum_event_provided_tickets_override {
         id: transitionalId
@@ -160,8 +154,8 @@ export const UpdateMaximumEventProvidedTicketsOverride = gql`
 `;
 
 export const UpdateEventAdminNotes = gql`
-  mutation UpdateEventAdminNotes($eventId: Int!, $adminNotes: String!) {
-    updateEventAdminNotes(input: { id: $eventId, admin_notes: $adminNotes }) {
+  mutation UpdateEventAdminNotes($eventId: ID!, $adminNotes: String!) {
+    updateEventAdminNotes(input: { transitionalId: $eventId, admin_notes: $adminNotes }) {
       event {
         id: transitionalId
         ...EventFields

@@ -16,8 +16,8 @@ export const CreateFormWithJSON = gql`
 `;
 
 export const UpdateFormWithJSON = gql`
-  mutation UpdateFormWithJSON($id: Int!, $formJSON: String!) {
-    updateFormWithJSON(input: { id: $id, form_json: $formJSON }) {
+  mutation UpdateFormWithJSON($id: ID!, $formJSON: String!) {
+    updateFormWithJSON(input: { transitionalId: $id, form_json: $formJSON }) {
       form {
         id: transitionalId
         ...FormFields
@@ -42,8 +42,8 @@ export const CreateForm = gql`
 `;
 
 export const UpdateForm = gql`
-  mutation UpdateForm($id: Int!, $form: FormInput!) {
-    updateForm(input: { id: $id, form: $form }) {
+  mutation UpdateForm($id: ID!, $form: FormInput!) {
+    updateForm(input: { transitionalId: $id, form: $form }) {
       form {
         id: transitionalId
         ...FormEditorData
@@ -55,16 +55,16 @@ export const UpdateForm = gql`
 `;
 
 export const DeleteForm = gql`
-  mutation DeleteForm($id: Int!) {
-    deleteForm(input: { id: $id }) {
+  mutation DeleteForm($id: ID!) {
+    deleteForm(input: { transitionalId: $id }) {
       clientMutationId
     }
   }
 `;
 
 export const CreateFormSection = gql`
-  mutation CreateFormSection($formId: Int!, $formSection: FormSectionInput!) {
-    createFormSection(input: { form_id: $formId, form_section: $formSection }) {
+  mutation CreateFormSection($formId: ID!, $formSection: FormSectionInput!) {
+    createFormSection(input: { transitionalFormId: $formId, form_section: $formSection }) {
       form_section {
         id: transitionalId
         ...CommonFormSectionFields
@@ -82,8 +82,8 @@ export const CreateFormSection = gql`
 `;
 
 export const UpdateFormSection = gql`
-  mutation UpdateFormSection($id: Int!, $formSection: FormSectionInput!) {
-    updateFormSection(input: { id: $id, form_section: $formSection }) {
+  mutation UpdateFormSection($id: ID!, $formSection: FormSectionInput!) {
+    updateFormSection(input: { transitionalId: $id, form_section: $formSection }) {
       form_section {
         id: transitionalId
         ...CommonFormSectionFields
@@ -101,16 +101,16 @@ export const UpdateFormSection = gql`
 `;
 
 export const DeleteFormSection = gql`
-  mutation DeleteFormSection($id: Int!) {
-    deleteFormSection(input: { id: $id }) {
+  mutation DeleteFormSection($id: ID!) {
+    deleteFormSection(input: { transitionalId: $id }) {
       clientMutationId
     }
   }
 `;
 
 export const MoveFormSection = gql`
-  mutation MoveFormSection($id: Int!, $destinationIndex: Int!) {
-    moveFormSection(input: { id: $id, destination_index: $destinationIndex }) {
+  mutation MoveFormSection($id: ID!, $destinationIndex: Int!) {
+    moveFormSection(input: { transitionalId: $id, destination_index: $destinationIndex }) {
       form {
         id: transitionalId
         ...FormEditorData
@@ -122,8 +122,8 @@ export const MoveFormSection = gql`
 `;
 
 export const CreateFormItem = gql`
-  mutation CreateFormItem($formSectionId: Int!, $formItem: FormItemInput!) {
-    createFormItem(input: { form_section_id: $formSectionId, form_item: $formItem }) {
+  mutation CreateFormItem($formSectionId: ID!, $formItem: FormItemInput!) {
+    createFormItem(input: { transitionalFormSectionId: $formSectionId, form_item: $formItem }) {
       form_item {
         id: transitionalId
         ...FormEditorFormItemFields
@@ -135,8 +135,8 @@ export const CreateFormItem = gql`
 `;
 
 export const UpdateFormItem = gql`
-  mutation UpdateFormItem($id: Int!, $formItem: FormItemInput!) {
-    updateFormItem(input: { id: $id, form_item: $formItem }) {
+  mutation UpdateFormItem($id: ID!, $formItem: FormItemInput!) {
+    updateFormItem(input: { transitionalId: $id, form_item: $formItem }) {
       form_item {
         id: transitionalId
         ...FormEditorFormItemFields
@@ -148,17 +148,17 @@ export const UpdateFormItem = gql`
 `;
 
 export const DeleteFormItem = gql`
-  mutation DeleteFormItem($id: Int!) {
-    deleteFormItem(input: { id: $id }) {
+  mutation DeleteFormItem($id: ID!) {
+    deleteFormItem(input: { transitionalId: $id }) {
       clientMutationId
     }
   }
 `;
 
 export const MoveFormItem = gql`
-  mutation MoveFormItem($id: Int!, $formSectionId: Int!, $destinationIndex: Int) {
+  mutation MoveFormItem($id: ID!, $formSectionId: ID!, $destinationIndex: Int) {
     moveFormItem(
-      input: { id: $id, form_section_id: $formSectionId, destination_index: $destinationIndex }
+      input: { transitionalId: $id, transitionalFormSectionId: $formSectionId, destination_index: $destinationIndex }
     ) {
       form_section {
         id: transitionalId

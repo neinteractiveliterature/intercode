@@ -13,7 +13,7 @@ import { Money } from '../graphqlTypes.generated';
 import { LoadQueryWithVariablesWrapper } from '../GraphqlLoadingWrappers';
 
 export type ProductOrderFormProps = {
-  productId: number;
+  productId: string;
 };
 
 export default LoadQueryWithVariablesWrapper(
@@ -26,7 +26,7 @@ export default LoadQueryWithVariablesWrapper(
       refetchQueries: [{ query: CartQuery }],
     });
 
-    const [productVariantId, setProductVariantId] = useState<number>();
+    const [productVariantId, setProductVariantId] = useState<string>();
     const [quantity, setQuantity] = useState(1);
 
     const dataComplete = useMemo(
@@ -77,7 +77,7 @@ export default LoadQueryWithVariablesWrapper(
         <select
           className="form-select mb-3"
           value={productVariantId ?? ''}
-          onBlur={(event) => setProductVariantId(parseIntOrNull(event.target.value) ?? undefined)}
+          onBlur={(event) => setProductVariantId(event.target.value)}
         >
           <option disabled value="">
             Select...
@@ -113,9 +113,7 @@ export default LoadQueryWithVariablesWrapper(
 
       let pricePerItem = product.pricing_structure.price.fractional;
       if (productVariantId) {
-        const productVariant = product.product_variants.find(
-          (variant) => variant.id === productVariantId,
-        );
+        const productVariant = product.product_variants.find((variant) => variant.id === productVariantId);
 
         if (productVariant?.override_pricing_structure?.price != null) {
           pricePerItem = productVariant.override_pricing_structure.price.fractional;

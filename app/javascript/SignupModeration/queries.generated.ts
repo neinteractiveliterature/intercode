@@ -17,8 +17,8 @@ export type CreateSignupEventsQueryVariables = Types.Exact<{
 export type CreateSignupEventsQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, events_paginated: { __typename: 'EventsPagination', entries: Array<{ __typename: 'Event', title?: string | null | undefined, length_seconds: number, private_signup_list?: boolean | null | undefined, id: string, runs: Array<{ __typename: 'Run', starts_at: any, title_suffix?: string | null | undefined, id: string, rooms: Array<{ __typename: 'Room', name?: string | null | undefined, id: string }> }> }> } } };
 
 export type CreateSignupRunCardQueryVariables = Types.Exact<{
-  userConProfileId: Types.Scalars['Int'];
-  eventId: Types.Scalars['Int'];
+  userConProfileId: Types.Scalars['ID'];
+  eventId: Types.Scalars['ID'];
 }>;
 
 
@@ -143,15 +143,15 @@ export type CreateSignupEventsQueryHookResult = ReturnType<typeof useCreateSignu
 export type CreateSignupEventsQueryLazyQueryHookResult = ReturnType<typeof useCreateSignupEventsQueryLazyQuery>;
 export type CreateSignupEventsQueryQueryResult = Apollo.QueryResult<CreateSignupEventsQueryData, CreateSignupEventsQueryVariables>;
 export const CreateSignupRunCardQueryDocument = gql`
-    query CreateSignupRunCardQuery($userConProfileId: Int!, $eventId: Int!) {
+    query CreateSignupRunCardQuery($userConProfileId: ID!, $eventId: ID!) {
   currentAbility {
     can_read_schedule
-    can_read_event_signups(event_id: $eventId)
-    can_update_event(event_id: $eventId)
+    can_read_event_signups(transitionalEventId: $eventId)
+    can_update_event(transitionalEventId: $eventId)
   }
   convention: conventionByRequestHost {
     id: transitionalId
-    event(id: $eventId) {
+    event(transitionalId: $eventId) {
       id: transitionalId
       title
       length_seconds
@@ -179,7 +179,7 @@ export const CreateSignupRunCardQueryDocument = gql`
         ...EventPageRunFields
       }
     }
-    user_con_profile(id: $userConProfileId) {
+    user_con_profile(transitionalId: $userConProfileId) {
       id: transitionalId
       name_without_nickname
       signups {

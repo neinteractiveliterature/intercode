@@ -22,14 +22,14 @@ export type UpdateUserConProfileMutationVariables = Types.Exact<{
 export type UpdateUserConProfileMutationData = { __typename: 'Mutation', updateUserConProfile: { __typename: 'UpdateUserConProfilePayload', user_con_profile: { __typename: 'UserConProfile', name: string, form_response_attrs_json?: any | null | undefined, gravatar_enabled: boolean, gravatar_url: string, id: string } } };
 
 export type DeleteUserConProfileMutationVariables = Types.Exact<{
-  userConProfileId: Types.Scalars['Int'];
+  userConProfileId: Types.Scalars['ID'];
 }>;
 
 
 export type DeleteUserConProfileMutationData = { __typename: 'Mutation', deleteUserConProfile: { __typename: 'DeleteUserConProfilePayload', user_con_profile: { __typename: 'UserConProfile', id: string } } };
 
 export type CreateTicketMutationVariables = Types.Exact<{
-  userConProfileId: Types.Scalars['Int'];
+  userConProfileId: Types.Scalars['ID'];
   ticket: Types.TicketInput;
 }>;
 
@@ -137,8 +137,8 @@ export type UpdateUserConProfileMutationHookResult = ReturnType<typeof useUpdate
 export type UpdateUserConProfileMutationResult = Apollo.MutationResult<UpdateUserConProfileMutationData>;
 export type UpdateUserConProfileMutationOptions = Apollo.BaseMutationOptions<UpdateUserConProfileMutationData, UpdateUserConProfileMutationVariables>;
 export const DeleteUserConProfileDocument = gql`
-    mutation DeleteUserConProfile($userConProfileId: Int!) {
-  deleteUserConProfile(input: {id: $userConProfileId}) {
+    mutation DeleteUserConProfile($userConProfileId: ID!) {
+  deleteUserConProfile(input: {transitionalId: $userConProfileId}) {
     user_con_profile {
       id: transitionalId
     }
@@ -172,8 +172,10 @@ export type DeleteUserConProfileMutationHookResult = ReturnType<typeof useDelete
 export type DeleteUserConProfileMutationResult = Apollo.MutationResult<DeleteUserConProfileMutationData>;
 export type DeleteUserConProfileMutationOptions = Apollo.BaseMutationOptions<DeleteUserConProfileMutationData, DeleteUserConProfileMutationVariables>;
 export const CreateTicketDocument = gql`
-    mutation CreateTicket($userConProfileId: Int!, $ticket: TicketInput!) {
-  createTicket(input: {user_con_profile_id: $userConProfileId, ticket: $ticket}) {
+    mutation CreateTicket($userConProfileId: ID!, $ticket: TicketInput!) {
+  createTicket(
+    input: {transitionalUserConProfileId: $userConProfileId, ticket: $ticket}
+  ) {
     ticket {
       id: transitionalId
       ...UserConProfileAdminTicketFields

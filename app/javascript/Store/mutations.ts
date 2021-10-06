@@ -80,8 +80,8 @@ export const CreateProduct = gql`
 `;
 
 export const UpdateProduct = gql`
-  mutation UpdateProduct($id: Int!, $product: ProductInput!) {
-    updateProduct(input: { id: $id, product: $product }) {
+  mutation UpdateProduct($id: ID!, $product: ProductInput!) {
+    updateProduct(input: { transitionalId: $id, product: $product }) {
       product {
         id: transitionalId
         ...AdminProductFields
@@ -195,11 +195,7 @@ export const SubmitOrder = gql`
 `;
 
 export const AddOrderEntryToCurrentPendingOrder = gql`
-  mutation AddOrderEntryToCurrentPendingOrder(
-    $productId: ID!
-    $productVariantId: ID
-    $quantity: Int!
-  ) {
+  mutation AddOrderEntryToCurrentPendingOrder($productId: ID!, $productVariantId: ID, $quantity: Int!) {
     addOrderEntryToCurrentPendingOrder(
       input: {
         order_entry: {

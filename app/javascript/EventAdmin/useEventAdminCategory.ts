@@ -13,7 +13,7 @@ function getNormalizedEventTitle<EventType extends Pick<Event, 'title'>>(event: 
 
 export default function useEventAdminCategory(
   data: EventAdminEventsQueryData,
-  eventCategoryId: number,
+  eventCategoryId: string,
 ): [
   EventAdminEventsQueryData['convention']['event_categories'][number] | undefined,
   EventAdminEventsQueryData['convention']['events'],
@@ -29,10 +29,7 @@ export default function useEventAdminCategory(
       ),
     [data, eventCategoryId],
   );
-  const sortedEvents = useMemo(
-    () => sortByLocaleString(filteredEvents, getNormalizedEventTitle),
-    [filteredEvents],
-  );
+  const sortedEvents = useMemo(() => sortByLocaleString(filteredEvents, getNormalizedEventTitle), [filteredEvents]);
 
   return [eventCategory, sortedEvents];
 }

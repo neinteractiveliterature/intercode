@@ -37,7 +37,7 @@ function NewStaffPosition(): JSX.Element {
 
   const [staffPosition, setStaffPosition] = useState<EditingStaffPosition>({
     __typename: 'StaffPosition',
-    id: 0,
+    id: '',
     name: '',
     email: '',
     user_con_profiles: [],
@@ -55,9 +55,7 @@ function NewStaffPosition(): JSX.Element {
       },
     });
     if (response?.data) {
-      history.replace(
-        `/staff_positions/${response.data.createStaffPosition.staff_position.id}/edit_permissions`,
-      );
+      history.replace(`/staff_positions/${response.data.createStaffPosition.staff_position.id}/edit_permissions`);
     }
   }, [history, mutate, staffPosition]);
 

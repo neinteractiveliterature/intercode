@@ -16,7 +16,7 @@ export type TeamMemberFieldsFragment = { __typename: 'TeamMember', display_team_
 export type TeamMemberFieldsWithoutPersonalInfoFragment = { __typename: 'TeamMember', display_team_member: boolean, show_email: boolean, receive_con_email: boolean, receive_signup_email: Types.ReceiveSignupEmail, id: string, user_con_profile: { __typename: 'UserConProfile', name_without_nickname: string, name_inverted: string, email?: string | null | undefined, id: string, ticket?: { __typename: 'Ticket', id: string, user_con_profile: { __typename: 'UserConProfile', id: string }, ticket_type: { __typename: 'TicketType', name: string, id: string }, provided_by_event?: { __typename: 'Event', title?: string | null | undefined, id: string } | null | undefined } | null | undefined } };
 
 export type TeamMembersQueryVariables = Types.Exact<{
-  eventId: Types.Scalars['Int'];
+  eventId: Types.Scalars['ID'];
 }>;
 
 
@@ -97,11 +97,11 @@ export const TeamMemberFieldsWithoutPersonalInfoFragmentDoc = gql`
 }
     ${TeamMemberUserConProfileSearchFieldsFragmentDoc}`;
 export const TeamMembersQueryDocument = gql`
-    query TeamMembersQuery($eventId: Int!) {
+    query TeamMembersQuery($eventId: ID!) {
   convention: conventionByRequestHost {
     id: transitionalId
     ...CommonConventionData
-    event(id: $eventId) {
+    event(transitionalId: $eventId) {
       id: transitionalId
       title
       event_category {
@@ -122,7 +122,7 @@ export const TeamMembersQueryDocument = gql`
       id: transitionalId
       name
       description
-      maximum_event_provided_tickets(event_id: $eventId)
+      maximum_event_provided_tickets(transitionalEventId: $eventId)
     }
     ticket_name
   }

@@ -16,7 +16,7 @@ import FormItemDisplay from '../../FormPresenter/ItemDisplays/FormItemDisplay';
 import { valueIsPresent } from './valueIsPresent';
 
 export type EventPageProps = {
-  eventId: number;
+  eventId: string;
   eventPath: string;
 };
 

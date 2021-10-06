@@ -2,16 +2,12 @@ import { useCallback } from 'react';
 
 import { buildEventInput, buildRunInput } from './InputBuilders';
 import { EventAdminEventsQuery } from './queries';
-import {
-  useCreateRunMutation,
-  useUpdateEventMutation,
-  useUpdateRunMutation,
-} from './mutations.generated';
+import { useCreateRunMutation, useUpdateEventMutation, useUpdateRunMutation } from './mutations.generated';
 import { EventAdminEventsQueryData } from './queries.generated';
 import { EventCategory, SchedulingUi } from '../graphqlTypes.generated';
 
 export type UseUpdateRegularEventOptions = {
-  event: Parameters<typeof buildEventInput>[0] & { id: number };
+  event: Parameters<typeof buildEventInput>[0] & { id: string };
 };
 
 function useUpdateRegularEvent(): (options: UseUpdateRegularEventOptions) => Promise<void> {
@@ -22,7 +18,7 @@ function useUpdateRegularEvent(): (options: UseUpdateRegularEventOptions) => Pro
         variables: {
           input: {
             ...buildEventInput(event),
-            id: event.id,
+            transitionalId: event.id,
           },
         },
       });
@@ -34,8 +30,8 @@ function useUpdateRegularEvent(): (options: UseUpdateRegularEventOptions) => Pro
 }
 
 export type UseUpdateSingleRunEventOptions = {
-  event: Parameters<typeof buildEventInput>[0] & { id: number };
-  run: Parameters<typeof buildRunInput>[0] & { id?: number | null };
+  event: Parameters<typeof buildEventInput>[0] & { id: string };
+  run: Parameters<typeof buildRunInput>[0] & { id?: string | null };
 };
 
 function useUpdateSingleRunEvent(): (options: UseUpdateSingleRunEventOptions) => Promise<void> {
@@ -45,12 +41,7 @@ function useUpdateSingleRunEvent(): (options: UseUpdateSingleRunEventOptions) =>
 
   return useCallback(
     async ({ event, run }: UseUpdateSingleRunEventOptions) => {
-      const eventInput = {
-        ...buildEventInput(event),
-        id: event.id,
-      };
-
-      await updateEvent({ variables: { input: eventInput } });
+      await updateEvent({ variables: { input: { ...buildEventInput(event), transitionalId: event.id } } });
 
       const runInput = buildRunInput(run);
 
@@ -59,7 +50,7 @@ function useUpdateSingleRunEvent(): (options: UseUpdateSingleRunEventOptions) =>
           variables: {
             input: {
               ...runInput,
-              id: run.id,
+              transitionalId: run.id,
             },
           },
         });
@@ -68,7 +59,7 @@ function useUpdateSingleRunEvent(): (options: UseUpdateSingleRunEventOptions) =>
           variables: {
             input: {
               ...runInput,
-              event_id: event.id,
+              transitionalEventId: event.id,
             },
           },
           update: (store, { data }) => {
@@ -108,9 +99,9 @@ function useUpdateSingleRunEvent(): (options: UseUpdateSingleRunEventOptions) =>
 }
 
 export type UseUpdateEventOptions = {
-  event: Parameters<typeof buildEventInput>[0] & { id: number };
+  event: Parameters<typeof buildEventInput>[0] & { id: string };
   eventCategory: Pick<EventCategory, 'scheduling_ui'>;
-  run?: Parameters<typeof buildRunInput>[0] & { id?: number | null };
+  run?: Parameters<typeof buildRunInput>[0] & { id?: string | null };
 };
 
 export default function useUpdateEvent(): (options: UseUpdateEventOptions) => Promise<void> {

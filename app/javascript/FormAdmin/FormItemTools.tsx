@@ -3,13 +3,7 @@ import { useHistory, useRouteMatch } from 'react-router-dom';
 import { humanize, pluralize } from 'inflected';
 import { ApolloError } from '@apollo/client';
 import { Modal } from 'react-bootstrap4-modal';
-import {
-  useModal,
-  useUniqueId,
-  MultipleChoiceInput,
-  parseIntOrNull,
-  ErrorDisplay,
-} from '@neinteractiveliterature/litform';
+import { useModal, useUniqueId, MultipleChoiceInput, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { FormItemEditorContext, FormEditorContext } from './FormEditorContexts';
 import CommonQuestionFields from './ItemEditors/CommonQuestionFields';
@@ -29,8 +23,7 @@ function StandardItemMetadata() {
   return (
     <>
       <div className="me-2">
-        <i className="bi-wrench" />{' '}
-        <strong>{standardItem.description || humanize(standardItem.identifier)}</strong>
+        <i className="bi-wrench" /> <strong>{standardItem.description || humanize(standardItem.identifier)}</strong>
       </div>
       <div className="me-2">
         <small>Standard item for {pluralize(formType.description)}</small>
@@ -68,9 +61,7 @@ type PropertiesWithCaption = {
   caption: string;
 };
 
-function propertiesHasCaption(
-  properties?: Record<string, unknown>,
-): properties is PropertiesWithCaption {
+function propertiesHasCaption(properties?: Record<string, unknown>): properties is PropertiesWithCaption {
   return (
     typeof properties === 'object' &&
     Object.prototype.hasOwnProperty.call(properties, 'caption') &&
@@ -86,7 +77,7 @@ type MoveFormItemModalProps = {
 function MoveFormItemModal({ visible, close }: MoveFormItemModalProps) {
   const { form, currentSection } = useContext(FormEditorContext);
   const { formItem } = useContext(FormItemEditorContext);
-  const [destinationSectionId, setDestinationSectionId] = useState<number>();
+  const [destinationSectionId, setDestinationSectionId] = useState<string>();
   const [moveFormItemMutate] = useMoveFormItemMutation();
   const [moveFormItem, error, inProgress] = useAsyncFunction(moveFormItemMutate);
   const history = useHistory();
@@ -103,15 +94,11 @@ function MoveFormItemModal({ visible, close }: MoveFormItemModalProps) {
       },
       refetchQueries: [{ query: FormEditorQuery, variables: { id: form.id } }],
     });
-    history.replace(
-      `/admin_forms/${form.id}/edit/section/${destinationSectionId}/item/${formItem.id}`,
-    );
+    history.replace(`/admin_forms/${form.id}/edit/section/${destinationSectionId}/item/${formItem.id}`);
     close();
   };
 
-  const caption = propertiesHasCaption(formItem.properties)
-    ? formItem.properties.caption
-    : undefined;
+  const caption = propertiesHasCaption(formItem.properties) ? formItem.properties.caption : undefined;
 
   return (
     <Modal visible={visible}>
@@ -132,7 +119,7 @@ function MoveFormItemModal({ visible, close }: MoveFormItemModalProps) {
             disabled: currentSection && formSection.id === currentSection.id,
           }))}
           value={destinationSectionId != null ? destinationSectionId.toString() : ''}
-          onChange={(value: string) => setDestinationSectionId(parseIntOrNull(value) ?? undefined)}
+          onChange={(value: string) => setDestinationSectionId(value)}
           disabled={inProgress}
         />
 
@@ -140,12 +127,7 @@ function MoveFormItemModal({ visible, close }: MoveFormItemModalProps) {
       </div>
 
       <div className="modal-footer">
-        <button
-          disabled={inProgress}
-          className="btn btn-secondary me-2"
-          type="button"
-          onClick={close}
-        >
+        <button disabled={inProgress} className="btn btn-secondary me-2" type="button" onClick={close}>
           Cancel
         </button>
 
@@ -201,12 +183,7 @@ function FormItemTools({ saveFormItem }: FormItemToolsProps): JSX.Element {
       >
         <i className={collapsed ? 'bi-caret-right' : 'bi-caret-down'} /> Tools
       </button>
-      <div
-        id={collapseId}
-        className={`${collapseClassName} d-lg-block`}
-        ref={collapseRef}
-        {...otherCollapseProps}
-      >
+      <div id={collapseId} className={`${collapseClassName} d-lg-block`} ref={collapseRef} {...otherCollapseProps}>
         <CommonQuestionFields formItem={formItem} setFormItem={setFormItem} />
         <button className="btn btn-secondary mt-2" type="button" onClick={moveModal.open}>
           Move to another section
@@ -224,12 +201,7 @@ function FormItemTools({ saveFormItem }: FormItemToolsProps): JSX.Element {
         >
           Cancel
         </button>
-        <button
-          type="button"
-          className="btn btn-primary col"
-          onClick={saveFormItem}
-          disabled={disabled}
-        >
+        <button type="button" className="btn btn-primary col" onClick={saveFormItem} disabled={disabled}>
           Save
         </button>
       </div>

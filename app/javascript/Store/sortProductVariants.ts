@@ -1,12 +1,12 @@
 import { ProductVariant } from '../graphqlTypes.generated';
 
-type ProductVariantForSort = Partial<Pick<ProductVariant, 'id' | 'position'>>;
+type ProductVariantForSort = Partial<Pick<ProductVariant, 'position'> & { id: string }>;
 
 const compareProductVariants = (a: ProductVariantForSort, b: ProductVariantForSort) => {
   if (a.position == null) {
     if (b.position == null) {
       if (a.id && b.id) {
-        return a.id - b.id;
+        return a.id.localeCompare(b.id);
       }
 
       return 0;

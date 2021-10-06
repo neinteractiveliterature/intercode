@@ -12,24 +12,20 @@ import { useTeamMembersQuery } from './queries.generated';
 import FourOhFourPage from '../../FourOhFourPage';
 
 export type TeamMemberAdminProps = {
-  eventId: number;
+  eventId: string;
   eventPath: string;
 };
 
 function TeamMemberAdmin({ eventId, eventPath }: TeamMemberAdminProps): JSX.Element {
   const { data, loading, error } = useTeamMembersQuery({ variables: { eventId } });
-  const teamMemberMatch = useRouteMatch<{ teamMemberId: string }>(
-    `${eventPath}/team_members/:teamMemberId(\\d+)`,
-  );
+  const teamMemberMatch = useRouteMatch<{ teamMemberId: string }>(`${eventPath}/team_members/:teamMemberId(\\d+)`);
 
   const teamMember = useMemo(() => {
     if (loading || error || !teamMemberMatch || !data) {
       return null;
     }
 
-    return data.convention.event.team_members.find(
-      (tm) => tm.id.toString() === teamMemberMatch.params.teamMemberId,
-    );
+    return data.convention.event.team_members.find((tm) => tm.id.toString() === teamMemberMatch.params.teamMemberId);
   }, [data, error, loading, teamMemberMatch]);
 
   if (loading) {
@@ -66,10 +62,7 @@ function TeamMemberAdmin({ eventId, eventPath }: TeamMemberAdminProps): JSX.Elem
             </BreadcrumbItem>
           </Route>
           <Route path={`${eventPath}/team_members/:teamMemberId(\\d+)`}>
-            <BreadcrumbItem
-              active
-              to={`${eventPath}/team_members/${teamMemberMatch?.params.teamMemberId}`}
-            >
+            <BreadcrumbItem active to={`${eventPath}/team_members/${teamMemberMatch?.params.teamMemberId}`}>
               {teamMember?.user_con_profile?.name_without_nickname || ''}
             </BreadcrumbItem>
           </Route>

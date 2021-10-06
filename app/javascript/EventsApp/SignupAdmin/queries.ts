@@ -118,12 +118,12 @@ export const UserConProfileSignupsFragment = gql`
 `;
 
 export const SignupAdminEventQuery = gql`
-  query SignupAdminEventQuery($eventId: Int!) {
+  query SignupAdminEventQuery($eventId: ID!) {
     convention: conventionByRequestHost {
       id: transitionalId
       ...CommonConventionData
 
-      event(id: $eventId) {
+      event(transitionalId: $eventId) {
         id: transitionalId
         title
       }
@@ -134,21 +134,21 @@ export const SignupAdminEventQuery = gql`
 `;
 
 export const AdminSignupQuery = gql`
-  query AdminSignupQuery($id: Int!) {
+  query AdminSignupQuery($id: ID!) {
     convention: conventionByRequestHost {
       id: transitionalId
       ...CommonConventionData
 
-      signup(id: $id) {
+      signup(transitionalId: $id) {
         id: transitionalId
         ...SignupFields
       }
     }
 
     currentAbility {
-      can_update_bucket_signup(signup_id: $id)
-      can_force_confirm_signup(signup_id: $id)
-      can_update_counted_signup(signup_id: $id)
+      can_update_bucket_signup(transitionalSignupId: $id)
+      can_force_confirm_signup(transitionalSignupId: $id)
+      can_update_counted_signup(transitionalSignupId: $id)
     }
   }
 
@@ -158,8 +158,8 @@ export const AdminSignupQuery = gql`
 
 export const RunSignupsTableSignupsQuery = gql`
   query RunSignupsTableSignupsQuery(
-    $eventId: Int!
-    $runId: Int!
+    $eventId: ID!
+    $runId: ID!
     $page: Int
     $perPage: Int
     $filters: SignupFiltersInput
@@ -169,7 +169,7 @@ export const RunSignupsTableSignupsQuery = gql`
       id: transitionalId
       name
 
-      event(id: $eventId) {
+      event(transitionalId: $eventId) {
         id: transitionalId
         title
 
@@ -193,7 +193,7 @@ export const RunSignupsTableSignupsQuery = gql`
           }
         }
 
-        run(id: $runId) {
+        run(transitionalId: $runId) {
           id: transitionalId
 
           signups_paginated(page: $page, per_page: $perPage, filters: $filters, sort: $sort) {
@@ -233,12 +233,12 @@ export const RunSignupsTableSignupsQuery = gql`
 `;
 
 export const RunHeaderRunInfoQuery = gql`
-  query RunHeaderRunInfoQuery($eventId: Int!, $runId: Int!) {
+  query RunHeaderRunInfoQuery($eventId: ID!, $runId: ID!) {
     convention: conventionByRequestHost {
       id: transitionalId
       ...CommonConventionData
 
-      event(id: $eventId) {
+      event(transitionalId: $eventId) {
         id: transitionalId
         title
         length_seconds
@@ -253,7 +253,7 @@ export const RunHeaderRunInfoQuery = gql`
           }
         }
 
-        run(id: $runId) {
+        run(transitionalId: $runId) {
           id: transitionalId
           starts_at
           title_suffix
@@ -266,12 +266,12 @@ export const RunHeaderRunInfoQuery = gql`
 `;
 
 export const RunSignupSummaryQuery = gql`
-  query RunSignupSummaryQuery($eventId: Int!, $runId: Int!) {
+  query RunSignupSummaryQuery($eventId: ID!, $runId: ID!) {
     convention: conventionByRequestHost {
       id: transitionalId
       ...CommonConventionData
 
-      event(id: $eventId) {
+      event(transitionalId: $eventId) {
         id: transitionalId
         title
 
@@ -300,7 +300,7 @@ export const RunSignupSummaryQuery = gql`
           starts_at
         }
 
-        run(id: $runId) {
+        run(transitionalId: $runId) {
           id: transitionalId
 
           signups_paginated(per_page: 1000, filters: { state: ["confirmed", "waitlisted"] }) {
@@ -331,7 +331,7 @@ export const RunSignupSummaryQuery = gql`
 `;
 
 export const UserConProfileSignupsQuery = gql`
-  query UserConProfileSignupsQuery($id: Int!) {
+  query UserConProfileSignupsQuery($id: ID!) {
     convention: conventionByRequestHost {
       id: transitionalId
       ...CommonConventionData
@@ -339,11 +339,11 @@ export const UserConProfileSignupsQuery = gql`
       my_profile {
         id: transitionalId
         ability {
-          can_withdraw_all_user_con_profile_signups(user_con_profile_id: $id)
+          can_withdraw_all_user_con_profile_signups(transitionalUserConProfileId: $id)
         }
       }
 
-      user_con_profile(id: $id) {
+      user_con_profile(transitionalId: $id) {
         id: transitionalId
         name_without_nickname
         ical_secret
@@ -369,7 +369,7 @@ export const UserConProfileSignupsQuery = gql`
 
 export const RunSignupChangesQuery = gql`
   query RunSignupChangesQuery(
-    $runId: Int!
+    $runId: ID!
     $filters: SignupChangeFiltersInput
     $sort: [SortInput!]
     $page: Int
@@ -379,7 +379,7 @@ export const RunSignupChangesQuery = gql`
       id: transitionalId
       timezone_name
 
-      run(id: $runId) {
+      run(transitionalId: $runId) {
         id: transitionalId
         event {
           id: transitionalId

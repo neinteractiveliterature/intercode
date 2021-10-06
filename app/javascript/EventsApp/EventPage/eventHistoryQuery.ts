@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 import { CommonFormFields } from '../../Models/commonFormFragments';
 
 export const EventHistoryQuery = gql`
-  query EventHistoryQuery($id: Int!) {
+  query EventHistoryQuery($id: ID!) {
     convention: conventionByRequestHost {
       id: transitionalId
       starts_at
@@ -10,7 +10,7 @@ export const EventHistoryQuery = gql`
       timezone_name
       timezone_mode
 
-      event(id: $id) {
+      event(transitionalId: $id) {
         id: transitionalId
         title
 

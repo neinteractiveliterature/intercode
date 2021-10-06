@@ -5,7 +5,8 @@ class Mutations::CreateUserConProfile < Mutations::BaseMutation
   argument :user_id,
            Integer,
            deprecation_reason:
-             'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
            required: false,
            camelize: false
   argument :transitional_user_id, ID, required: false, camelize: true
@@ -13,6 +14,7 @@ class Mutations::CreateUserConProfile < Mutations::BaseMutation
 
   authorize_create_convention_associated_model :user_con_profiles
 
+  # rubocop:disable Metrics/AbcSize
   def resolve(**args)
     user = User.find(args[:user_id])
     ensure_no_existing_user_con_profile(user)
@@ -38,7 +40,7 @@ class Mutations::CreateUserConProfile < Mutations::BaseMutation
     { user_con_profile: user_con_profile }
   end
 
-  def assign_filtered_attrs(user_con_profile, attrs)
+    def assign_filtered_attrs(user_con_profile, attrs)
     user_con_profile.assign_form_response_attributes(
       user_con_profile.filter_form_response_attributes_for_assignment(
         attrs,

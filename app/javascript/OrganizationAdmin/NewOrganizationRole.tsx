@@ -5,10 +5,7 @@ import { OrganizationAdminOrganizationsQuery } from './queries';
 import useOrganizationRoleForm, { OrganizationRoleFormState } from './useOrganizationRoleForm';
 import usePageTitle from '../usePageTitle';
 import { LoadSingleValueFromCollectionWrapper } from '../GraphqlLoadingWrappers';
-import {
-  OrganizationAdminOrganizationsQueryData,
-  useOrganizationAdminOrganizationsQuery,
-} from './queries.generated';
+import { OrganizationAdminOrganizationsQueryData, useOrganizationAdminOrganizationsQuery } from './queries.generated';
 import { useCreateOrganizationRoleMutation } from './mutations.generated';
 
 export default LoadSingleValueFromCollectionWrapper(
@@ -18,13 +15,12 @@ export default LoadSingleValueFromCollectionWrapper(
     const history = useHistory();
     const { renderForm, formState } = useOrganizationRoleForm({
       __typename: 'OrganizationRole',
-      id: 0,
+      id: '',
       name: '',
       users: [],
       permissions: [],
     });
-    const [mutate, { error: mutationError, loading: mutationInProgress }] =
-      useCreateOrganizationRoleMutation();
+    const [mutate, { error: mutationError, loading: mutationInProgress }] = useCreateOrganizationRoleMutation();
 
     usePageTitle('New organization role');
 

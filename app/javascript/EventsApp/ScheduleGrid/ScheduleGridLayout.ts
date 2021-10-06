@@ -2,14 +2,14 @@ import { FiniteTimespan } from '../../Timespan';
 import type Schedule from './Schedule';
 
 export default class ScheduleGridLayout {
-  runIds: number[];
+  runIds: string[];
 
   timespan: FiniteTimespan;
 
   blocksWithOptions: ReturnType<Schedule['buildScheduleBlocksFromGroups']>;
 
   constructor(
-    runIds: number[],
+    runIds: string[],
     timespan: FiniteTimespan,
     blocksWithOptions: ReturnType<Schedule['buildScheduleBlocksFromGroups']>,
   ) {

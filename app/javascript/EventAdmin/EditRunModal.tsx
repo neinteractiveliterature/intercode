@@ -5,16 +5,8 @@ import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { EventAdminEventsQuery } from './queries';
 import RunFormFields from '../BuiltInForms/RunFormFields';
-import {
-  useCreateRunMutation,
-  useDeleteRunMutation,
-  useUpdateRunMutation,
-} from './mutations.generated';
-import {
-  EventAdminEventsQueryData,
-  EventFieldsFragment,
-  RunFieldsFragment,
-} from './queries.generated';
+import { useCreateRunMutation, useDeleteRunMutation, useUpdateRunMutation } from './mutations.generated';
+import { EventAdminEventsQueryData, EventFieldsFragment, RunFieldsFragment } from './queries.generated';
 
 export type EditingRun = Omit<RunFieldsFragment, 'starts_at'> & {
   starts_at?: RunFieldsFragment['starts_at'];
@@ -52,15 +44,15 @@ function EditRunModal({
         starts_at: run.starts_at,
         title_suffix: run.title_suffix,
         schedule_note: run.schedule_note,
-        room_ids: run.rooms.map((room) => room.id),
+        transitioanlRoomIds: run.rooms.map((room) => room.id),
       },
     };
 
-    if (run.id > 0) {
+    if (run.id) {
       return updateRun({
         variables: {
           input: {
-            id: run.id,
+            transitionalId: run.id,
             ...commonProps,
           },
         },
@@ -70,7 +62,7 @@ function EditRunModal({
     return createRun({
       variables: {
         input: {
-          event_id: event.id,
+          transitionalEventId: event.id,
           ...commonProps,
         },
       },
@@ -117,7 +109,7 @@ function EditRunModal({
     await deleteMutate({
       variables: {
         input: {
-          id: run.id,
+          transitionalId: run.id,
         },
       },
       update: (store) => {
@@ -156,7 +148,7 @@ function EditRunModal({
       return null;
     }
 
-    if (run.id > 0) {
+    if (run.id) {
       return `Edit run of ${event.title} `;
     }
 

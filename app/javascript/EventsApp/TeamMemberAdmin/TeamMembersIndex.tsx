@@ -22,10 +22,7 @@ import { DropdownMenu } from '../../UIComponents/DropdownMenu';
 import FourOhFourPage from '../../FourOhFourPage';
 
 function sortTeamMembers(teamMembers: TeamMembersQueryData['convention']['event']['team_members']) {
-  return sortByLocaleString(
-    teamMembers,
-    (teamMember) => teamMember.user_con_profile.name_inverted ?? '',
-  );
+  return sortByLocaleString(teamMembers, (teamMember) => teamMember.user_con_profile.name_inverted ?? '');
 }
 
 type TeamMemberActionMenuProps = {
@@ -71,11 +68,7 @@ function TeamMemberActionMenu({
           })}
         </Link>
         {event.event_category.can_provide_tickets && convention.ticket_mode !== 'disabled' ? (
-          <button
-            className="dropdown-item cursor-pointer"
-            onClick={openProvideTicketModal}
-            type="button"
-          >
+          <button className="dropdown-item cursor-pointer" onClick={openProvideTicketModal} type="button">
             {t('events.teamMemberAdmin.provideTicketLink', 'Provide {{ ticketName }}', {
               ticketName: convention.ticket_name,
             })}
@@ -109,15 +102,14 @@ function TeamMemberActionMenu({
 }
 
 export type TeamMembersIndexProps = {
-  eventId: number;
+  eventId: string;
   eventPath: string;
 };
 
 function TeamMembersIndex({ eventId, eventPath }: TeamMembersIndexProps): JSX.Element {
   const { t } = useTranslation();
   const { data, loading, error } = useTeamMembersQuery({ variables: { eventId } });
-  const modal =
-    useModal<{ teamMember: TeamMembersQueryData['convention']['event']['team_members'][0] }>();
+  const modal = useModal<{ teamMember: TeamMembersQueryData['convention']['event']['team_members'][0] }>();
 
   const titleizedTeamMemberName = useMemo(
     () =>
@@ -132,12 +124,7 @@ function TeamMembersIndex({ eventId, eventPath }: TeamMembersIndexProps): JSX.El
     [data, error, loading],
   );
 
-  usePageTitle(
-    useValueUnless(
-      () => `${titleizedTeamMemberName} - ${data?.convention.event.title}`,
-      error || loading,
-    ),
-  );
+  usePageTitle(useValueUnless(() => `${titleizedTeamMemberName} - ${data?.convention.event.title}`, error || loading));
 
   if (loading) {
     return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
@@ -175,22 +162,13 @@ function TeamMembersIndex({ eventId, eventPath }: TeamMembersIndexProps): JSX.El
                   })}
                 </th>
                 <th>{t('events.teamMemberAdmin.displayEmailHeader', 'Display email address')}</th>
-                <th>
-                  {t('events.teamMemberAdmin.receiveConEmailHeader', 'Receive email from con')}
-                </th>
-                <th>
-                  {t(
-                    'events.teamMemberAdmin.receiveSignupEmailHeader',
-                    'Receive email on signup or withdrawal',
-                  )}
-                </th>
+                <th>{t('events.teamMemberAdmin.receiveConEmailHeader', 'Receive email from con')}</th>
+                <th>{t('events.teamMemberAdmin.receiveSignupEmailHeader', 'Receive email on signup or withdrawal')}</th>
                 {convention.ticket_mode !== 'disabled' && (
                   <th>
-                    {t(
-                      'events.teamMemberAdmin.hasEventTicketHeader',
-                      '{{ ticketName }} from this event',
-                      { ticketName: titleize(convention.ticket_name) },
-                    )}
+                    {t('events.teamMemberAdmin.hasEventTicketHeader', '{{ ticketName }} from this event', {
+                      ticketName: titleize(convention.ticket_name),
+                    })}
                   </th>
                 )}
                 <th />

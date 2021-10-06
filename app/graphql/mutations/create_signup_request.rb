@@ -5,7 +5,8 @@ class Mutations::CreateSignupRequest < Mutations::BaseMutation
   argument :target_run_id,
            Int,
            deprecation_reason:
-             'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
            required: false,
            camelize: false
   argument :transitional_target_run_id, ID, required: false, camelize: true
@@ -13,7 +14,8 @@ class Mutations::CreateSignupRequest < Mutations::BaseMutation
   argument :replace_signup_id,
            Int,
            deprecation_reason:
-             'IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.',
+             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
            required: false,
            camelize: false
   argument :transitional_replace_signup_id, ID, required: false, camelize: true

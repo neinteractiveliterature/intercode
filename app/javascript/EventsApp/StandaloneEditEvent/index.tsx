@@ -53,7 +53,7 @@ function StandaloneEditEventForm({
     await updateEventMutate({
       variables: {
         input: {
-          id: event.id,
+          transitionalId: event.id,
           event: {
             form_response_attrs_json: JSON.stringify(event.form_response_attrs),
           },
@@ -143,23 +143,22 @@ function StandaloneEditEventForm({
       }}
     >
       <EventForm {...eventFormProps} />
-      {currentAbility.can_override_maximum_event_provided_tickets &&
-        convention.ticket_mode !== 'disabled' && (
-          <MaximumEventProvidedTicketsOverrideEditor
-            {...meptoMutations}
-            ticketName={convention.ticket_name}
-            ticketTypes={convention.ticket_types}
-            // we use initialEvent here because we want it to be controlled by the query result
-            overrides={initialEvent.maximum_event_provided_tickets_overrides}
-            eventId={initialEvent.id}
-          />
-        )}
+      {currentAbility.can_override_maximum_event_provided_tickets && convention.ticket_mode !== 'disabled' && (
+        <MaximumEventProvidedTicketsOverrideEditor
+          {...meptoMutations}
+          ticketName={convention.ticket_name}
+          ticketTypes={convention.ticket_types}
+          // we use initialEvent here because we want it to be controlled by the query result
+          overrides={initialEvent.maximum_event_provided_tickets_overrides}
+          eventId={initialEvent.id}
+        />
+      )}
     </EditEvent>
   );
 }
 
 export type StandaloneEditEventProps = {
-  eventId: number;
+  eventId: string;
   eventPath: string;
 };
 

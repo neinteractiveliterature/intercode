@@ -89,12 +89,12 @@ export const TeamMemberFieldsWithoutPersonalInfo = gql`
 `;
 
 export const TeamMembersQuery = gql`
-  query TeamMembersQuery($eventId: Int!) {
+  query TeamMembersQuery($eventId: ID!) {
     convention: conventionByRequestHost {
       id: transitionalId
       ...CommonConventionData
 
-      event(id: $eventId) {
+      event(transitionalId: $eventId) {
         id: transitionalId
         title
 
@@ -119,7 +119,7 @@ export const TeamMembersQuery = gql`
         id: transitionalId
         name
         description
-        maximum_event_provided_tickets(event_id: $eventId)
+        maximum_event_provided_tickets(transitionalEventId: $eventId)
       }
 
       ticket_name

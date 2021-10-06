@@ -8,8 +8,8 @@ import { useSignupAdminEventQuery } from './queries.generated';
 import { LoadQueryWithVariablesWrapper } from '../../GraphqlLoadingWrappers';
 
 export type SignupAdminProps = {
-  runId: number;
-  eventId: number;
+  runId: string;
+  eventId: string;
   eventPath: string;
 };
 

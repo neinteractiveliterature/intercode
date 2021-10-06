@@ -2,9 +2,7 @@ import { useState, useCallback, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import useMEPTOMutations from '../BuiltInFormControls/useMEPTOMutations';
-import useEventFormWithCategorySelection, {
-  EventFormWithCategorySelection,
-} from './useEventFormWithCategorySelection';
+import useEventFormWithCategorySelection, { EventFormWithCategorySelection } from './useEventFormWithCategorySelection';
 import EditEvent from '../BuiltInForms/EditEvent';
 import MaximumEventProvidedTicketsOverrideEditor from '../BuiltInFormControls/MaximumEventProvidedTicketsOverrideEditor';
 import usePageTitle from '../usePageTitle';
@@ -81,10 +79,9 @@ export default LoadSingleValueFromCollectionWrapper(
               ...storeData.convention,
               events: data.convention.events.map((event) => ({
                 ...event,
-                maximum_event_provided_tickets_overrides:
-                  event.maximum_event_provided_tickets_overrides.filter(
-                    (mepto) => mepto.id !== overrideId,
-                  ),
+                maximum_event_provided_tickets_overrides: event.maximum_event_provided_tickets_overrides.filter(
+                  (mepto) => mepto.id !== overrideId,
+                ),
               })),
             },
           },
@@ -105,15 +102,13 @@ export default LoadSingleValueFromCollectionWrapper(
         __typename: 'Event',
         id: event.id,
         length_seconds:
-          typeof event.form_response_attrs.length_seconds === 'number'
-            ? event.form_response_attrs.length_seconds
-            : 0,
+          typeof event.form_response_attrs.length_seconds === 'number' ? event.form_response_attrs.length_seconds : 0,
         current_user_form_item_viewer_role: event.current_user_form_item_viewer_role,
         current_user_form_item_writer_role: event.current_user_form_item_writer_role,
         can_play_concurrently: false,
         event_category: {
           __typename: 'EventCategory',
-          id: 0,
+          id: '',
           name: 'fake category for single-run event UI',
         },
         maximum_event_provided_tickets_overrides: [],
@@ -126,16 +121,14 @@ export default LoadSingleValueFromCollectionWrapper(
 
     const [dropEventMutate] = useDropEventMutation();
     const dropEvent = useCallback(
-      () => dropEventMutate({ variables: { input: { id: initialEvent.id } } }),
+      () => dropEventMutate({ variables: { input: { transitionalId: initialEvent.id } } }),
       [initialEvent, dropEventMutate],
     );
 
     usePageTitle(`Editing “${initialEvent?.title}”`);
 
     const donePath =
-      data.convention?.site_mode === 'single_event'
-        ? '/'
-        : buildEventCategoryUrl(eventCategory) ?? '/admin_events';
+      data.convention?.site_mode === 'single_event' ? '/' : buildEventCategoryUrl(eventCategory) ?? '/admin_events';
 
     return (
       <EditEvent
@@ -169,10 +162,9 @@ export default LoadSingleValueFromCollectionWrapper(
             />
           )}
 
-        {eventCategory?.scheduling_ui === 'single_run' &&
-          event.form_response_attrs.length_seconds && (
-            <RunFormFields run={run} event={eventForRunFormFields} onChange={setRun} />
-          )}
+        {eventCategory?.scheduling_ui === 'single_run' && event.form_response_attrs.length_seconds && (
+          <RunFormFields run={run} event={eventForRunFormFields} onChange={setRun} />
+        )}
       </EditEvent>
     );
   },

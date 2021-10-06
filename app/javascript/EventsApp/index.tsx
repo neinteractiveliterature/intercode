@@ -11,14 +11,16 @@ import StandaloneEditEvent from './StandaloneEditEvent';
 import TeamMemberAdmin from './TeamMemberAdmin';
 import EventHistory from './EventPage/EventHistory';
 import ScheduleApp from './ScheduleApp';
+import { parseIntOrNull } from '@neinteractiveliterature/litform/lib/ValueUtils';
+import FourOhFourPage from '../FourOhFourPage';
 
 type RunRoutesProps = {
-  eventId: number;
+  eventId: string;
   eventPath: string;
 };
 
 function RunRoutes({ eventId, eventPath }: RunRoutesProps) {
-  const runId = Number.parseInt(useParams<{ runId: string }>().runId, 10);
+  const { runId } = useParams<{ runId: string }>();
   const runPath = `${eventPath}/runs/${runId}`;
 
   return (
@@ -36,8 +38,12 @@ function RunRoutes({ eventId, eventPath }: RunRoutesProps) {
 function EventRoutes() {
   const { siteMode } = useContext(AppRootContext);
   const eventIdSegment = useParams<{ eventId: string }>().eventId;
-  const eventId = Number.parseInt(eventIdSegment, 10);
+  const eventId = parseIntOrNull(eventIdSegment)?.toString();
   const eventPath = `/events/${eventIdSegment}`;
+
+  if (!eventId) {
+    return <FourOhFourPage />;
+  }
 
   return (
     <Switch>
@@ -58,11 +64,7 @@ function EventRoutes() {
         <RunRoutes eventId={eventId} eventPath={eventPath} />
       </Route>
       <Route path={eventPath}>
-        {siteMode === 'single_event' ? (
-          <Redirect to="/" />
-        ) : (
-          <EventPage eventId={eventId} eventPath={eventPath} />
-        )}
+        {siteMode === 'single_event' ? <Redirect to="/" /> : <EventPage eventId={eventId} eventPath={eventPath} />}
       </Route>
     </Switch>
   );

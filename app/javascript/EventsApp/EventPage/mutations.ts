@@ -3,10 +3,10 @@ import { MySignupFields, EventPageRunFields, MySignupRequestFields } from './que
 import { RunBasicSignupData } from '../queries';
 
 export const CreateMySignup = gql`
-  mutation CreateMySignup($runId: Int!, $requestedBucketKey: String, $noRequestedBucket: Boolean) {
+  mutation CreateMySignup($runId: ID!, $requestedBucketKey: String, $noRequestedBucket: Boolean) {
     createMySignup(
       input: {
-        run_id: $runId
+        transitionalRunId: $runId
         requested_bucket_key: $requestedBucketKey
         no_requested_bucket: $noRequestedBucket
       }
@@ -30,8 +30,8 @@ export const CreateMySignup = gql`
 `;
 
 export const WithdrawMySignup = gql`
-  mutation WithdrawMySignup($runId: Int!) {
-    withdrawMySignup(input: { run_id: $runId }) {
+  mutation WithdrawMySignup($runId: ID!) {
+    withdrawMySignup(input: { transitionalRunId: $runId }) {
       signup {
         id: transitionalId
         ...MySignupFields
@@ -51,16 +51,12 @@ export const WithdrawMySignup = gql`
 `;
 
 export const CreateSignupRequest = gql`
-  mutation CreateSignupRequest(
-    $targetRunId: Int!
-    $requestedBucketKey: String
-    $replaceSignupId: Int
-  ) {
+  mutation CreateSignupRequest($targetRunId: ID!, $requestedBucketKey: String, $replaceSignupId: ID) {
     createSignupRequest(
       input: {
-        target_run_id: $targetRunId
+        transitionalTargetRunId: $targetRunId
         requested_bucket_key: $requestedBucketKey
-        replace_signup_id: $replaceSignupId
+        transitionalReplaceSignupId: $replaceSignupId
       }
     ) {
       signup_request {
@@ -74,8 +70,8 @@ export const CreateSignupRequest = gql`
 `;
 
 export const WithdrawSignupRequest = gql`
-  mutation WithdrawSignupRequest($id: Int!) {
-    withdrawSignupRequest(input: { id: $id }) {
+  mutation WithdrawSignupRequest($id: ID!) {
+    withdrawSignupRequest(input: { transitionalId: $id }) {
       signup_request {
         id: transitionalId
         ...MySignupRequestFields

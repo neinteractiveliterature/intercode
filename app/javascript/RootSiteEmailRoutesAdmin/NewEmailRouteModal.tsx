@@ -17,7 +17,7 @@ export type NewEmailRouteModalProps = {
 function NewEmailRouteModal({ visible, close }: NewEmailRouteModalProps): JSX.Element {
   const [emailRoute, setEmailRoute] = useState<EmailRouteFieldsFragment>({
     __typename: 'EmailRoute',
-    id: 0,
+    id: '',
     receiver_address: '',
     forward_addresses: [],
   });
