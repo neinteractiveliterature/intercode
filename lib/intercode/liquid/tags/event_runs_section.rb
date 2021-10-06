@@ -33,7 +33,4 @@ module Intercode
   end
 end
 
-Liquid::Template.register_tag(
-  'event_runs_section',
-  Intercode::Liquid::Tags::EventRunsSection
-)
+Liquid::Template.register_tag('event_runs_section', Intercode::Liquid::Tags::EventRunsSection)

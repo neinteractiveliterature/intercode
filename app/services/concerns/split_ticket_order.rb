@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 module SplitTicketOrder
+  # rubocop:disable Metrics/MethodLength
   def split_ticket_to_new_order(ticket, operation_name)
     order_entry = ticket.order_entry
     order = order_entry.order
@@ -28,4 +29,5 @@ module SplitTicketOrder
 
     order.update!(payment_amount_cents: [order.payment_amount_cents - new_order.payment_amount_cents, 0].max)
   end
+  # rubocop:enable Metrics/MethodLength
 end

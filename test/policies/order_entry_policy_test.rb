@@ -70,9 +70,7 @@ class OrderEntryPolicyTest < ActiveSupport::TestCase
         my_order_entries = my_orders.map { |order| create(:order_entry, order: order) }
         someone = create(:user_con_profile, convention: convention)
         someones_orders = create_list(:order, 3, user_con_profile: someone)
-        someones_order_entries = someones_orders.map do |order|
-          create(:order_entry, order: order)
-        end
+        someones_order_entries = someones_orders.map { |order| create(:order_entry, order: order) }
         other_orders = create_list(:order, 3)
         other_orders.map { |order| create(:order_entry, order: order) }
         resolved_order_entries = OrderEntryPolicy::Scope.new(me, OrderEntry.all).resolve.to_a

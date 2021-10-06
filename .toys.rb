@@ -6,7 +6,7 @@ tool 'setup_tls' do
   include :exec, exit_on_nonzero_status: true
   flag :force_rebuild_ca
 
-  def obtain_ca(force_rebuild) # rubocop:disable Metrics/MethodLength
+  def obtain_ca(force_rebuild) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     if File.exist?('dev_ca.crt') && File.exist?('dev_ca.key') && !force_rebuild
       ca_key = OpenSSL::PKey::RSA.new(File.read('dev_ca.key'))
       ca_cert = OpenSSL::X509::Certificate.new(File.read('dev_ca.crt'))
@@ -17,14 +17,17 @@ tool 'setup_tls' do
       ca_cert = OpenSSL::X509::Certificate.new
       ca_cert.version = 2
       ca_cert.serial = Time.now.to_i
-      ca_cert.subject = OpenSSL::X509::Name.new([
-        ['O', 'New England Interactive Literature'],
-        ['emailAddress', 'webmaster@intercode.test'],
-        ['CN', 'Intercode development CA']
-      ])
+      ca_cert.subject =
+        OpenSSL::X509::Name.new(
+          [
+            ['O', 'New England Interactive Literature'],
+            %w[emailAddress webmaster@intercode.test],
+            ['CN', 'Intercode development CA']
+          ]
+        )
       ca_cert.issuer = ca_cert.subject
       ca_cert.public_key = ca_key.public_key
-      ca_cert.not_before = Time.now # rubocop:disable Rails/TimeZone
+      ca_cert.not_before = Time.now
       ca_cert.not_after = ca_cert.not_before + (365 * 24 * 60 * 60)
       ef = OpenSSL::X509::ExtensionFactory.new
       ef.subject_certificate = ca_cert
@@ -54,7 +57,7 @@ tool 'setup_tls' do
     end
   end
 
-  def run # rubocop:disable Metrics/MethodLength
+  def run # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     require 'openssl'
 
     ca_key, ca_cert = obtain_ca(force_rebuild_ca)
@@ -63,14 +66,13 @@ tool 'setup_tls' do
     cert = OpenSSL::X509::Certificate.new
     cert.version = 2
     cert.serial = Time.now.to_i
-    cert.subject = OpenSSL::X509::Name.new([
-      ['O', 'New England Interactive Literature'],
-      ['emailAddress', 'webmaster@intercode.test'],
-      ['CN', 'intercode.test']
-    ])
+    cert.subject =
+      OpenSSL::X509::Name.new(
+        [['O', 'New England Interactive Literature'], %w[emailAddress webmaster@intercode.test], %w[CN intercode.test]]
+      )
     cert.issuer = ca_cert.subject
     cert.public_key = key.public_key
-    cert.not_before = Time.now # rubocop:disable Rails/TimeZone
+    cert.not_before = Time.now
     cert.not_after = cert.not_before + (365 * 24 * 60 * 60)
 
     ef = OpenSSL::X509::ExtensionFactory.new
@@ -80,12 +82,7 @@ tool 'setup_tls' do
       ef.create_extension('subjectKeyIdentifier', 'hash'),
       ef.create_extension(
         'subjectAltName',
-        [
-          'DNS:intercode.test',
-          'DNS:*.intercode.test',
-          'DNS:interconu.intercode.test',
-          'DNS:localhost'
-        ].join(',')
+        %w[DNS:intercode.test DNS:*.intercode.test DNS:interconu.intercode.test DNS:localhost].join(',')
       )
     ]
     cert.add_extension ef.create_extension('authorityKeyIdentifier', 'keyid,issuer')
@@ -139,9 +136,7 @@ tool 'pull_production_db' do
     database_url = capture('heroku config:get DATABASE_URL')
 
     puts 'Pulling production data'
-    pull_options = (
-      include_form_response_changes ? '' : '--exclude-table-data="form_response_changes"'
-    )
+    pull_options = (include_form_response_changes ? '' : '--exclude-table-data="form_response_changes"')
     sh "docker run -i -t --mount type=bind,source=\"#{Dir.pwd}\",target=/out postgres:13 \
 pg_dump --exclude-table-data=\"sessions\" #{pull_options} -v -x --no-owner -Fp \"#{database_url}\" \
 -f /out/intercode_production.sql"
@@ -179,7 +174,7 @@ tool 'build_sanitized_db' do
     sh "./bin/rails sanitize_db DEVELOPMENT_DATABASE_URL=#{database_url}"
 
     puts 'Creating pgdump file'
-    filename = "intercode_sanitized_#{Time.now.strftime('%Y-%m-%d')}.pgdump" # rubocop:disable Rails/TimeZone
+    filename = "intercode_sanitized_#{Time.now.strftime('%Y-%m-%d')}.pgdump"
     sh "pg_dump -Fc -d intercode_sanitized_tmp -f #{filename}"
 
     puts 'Dropping temporary database'
@@ -203,9 +198,7 @@ tool 'pull_uploads' do
       prod_url = URI("https://uploads.neilhosting.net#{path}")
       puts "Downloading #{prod_url}"
       FileUtils.mkdir_p(File.dirname(dest_path))
-      File.open(dest_path, 'wb') do |outfile|
-        outfile.write(Net::HTTP.get(prod_url))
-      end
+      File.open(dest_path, 'wb') { |outfile| outfile.write(Net::HTTP.get(prod_url)) }
     end
   end
 end
@@ -234,33 +227,24 @@ tool 'update_liquid_doc_json' do
   end
 
   def serialize_method(meth)
-    {
-      name: meth.name,
-      docstring: meth.docstring,
-      tags: meth.tags.map { |tag| serialize_tag(tag) }
-    }
+    { name: meth.name, docstring: meth.docstring, tags: meth.tags.map { |tag| serialize_tag(tag) } }
   end
 
   def serialize_tag(tag)
-    {
-      tag_name: tag.tag_name,
-      name: tag.name,
-      text: tag.text,
-      types: tag.types
-    }
+    { tag_name: tag.tag_name, name: tag.name, text: tag.text, types: tag.types }
   end
 
   def serialize_registry
     classes = YARD::Registry.all.select { |obj| obj.is_a?(YARD::CodeObjects::ClassObject) }
-    filters_module = YARD::Registry.all.find do |obj|
-      obj.is_a?(YARD::CodeObjects::ModuleObject) && obj.path == 'Intercode::Liquid::Filters'
-    end
+    filters_module =
+      YARD::Registry.all.find do |obj|
+        obj.is_a?(YARD::CodeObjects::ModuleObject) && obj.path == 'Intercode::Liquid::Filters'
+      end
 
     {
       classes: classes.map { |klass| serialize_class(klass) },
-      filter_methods: filters_module.meths
-        .select { |meth| meth.visibility == :public }
-        .map { |meth| serialize_method(meth) }
+      filter_methods:
+        filters_module.meths.select { |meth| meth.visibility == :public }.map { |meth| serialize_method(meth) }
     }
   end
 
@@ -271,17 +255,11 @@ tool 'update_liquid_doc_json' do
 
     YARD::Tags::Library.define_tag('Liquid tag name', :liquid_tag_name)
 
-    %w[
-      app/liquid_drops/**/*.rb
-      lib/intercode/liquid/**/*.rb
-      app/models/cms_variable.rb
-    ].each do |path|
+    %w[app/liquid_drops/**/*.rb lib/intercode/liquid/**/*.rb app/models/cms_variable.rb].each do |path|
       YARD.parse(path)
     end
 
-    File.open('liquid_doc.json', 'w') do |file|
-      file.write(JSON.pretty_generate(serialize_registry))
-    end
+    File.open('liquid_doc.json', 'w') { |file| file.write(JSON.pretty_generate(serialize_registry)) }
   end
 end
 
@@ -294,12 +272,7 @@ tool 'download_email' do
 
     ENV['AWS_PROFILE'] = 'neil'
     ENV['AWS_REGION'] = 'us-east-1'
-    message = ReceiveSnsEmailDeliveryService.s3_client.get_object(
-      bucket: 'intercode-inbox',
-      key: message_id
-    ).body.read
-    File.open("#{message_id}.eml", 'w') do |file|
-      file.write message
-    end
+    message = ReceiveSnsEmailDeliveryService.s3_client.get_object(bucket: 'intercode-inbox', key: message_id).body.read
+    File.open("#{message_id}.eml", 'w') { |file| file.write message }
   end
 end

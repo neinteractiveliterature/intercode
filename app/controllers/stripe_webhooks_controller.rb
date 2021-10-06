@@ -30,6 +30,20 @@ class StripeWebhooksController < ApplicationController
       return
     end
 
+    handle_event(event)
+    head :ok
+  end
+
+  private
+
+  def construct_event(endpoint_secret)
+    payload = request.body.read
+    sig_header = request.headers['Stripe-Signature']
+
+    Stripe::Webhook.construct_event(payload, sig_header, endpoint_secret)
+  end
+
+  def handle_event(event)
     case event.type
     when 'account.application.deauthorized'
       account = event.data.object
@@ -46,16 +60,5 @@ class StripeWebhooksController < ApplicationController
     else
       Rollbar.warn("Unhandled event type for Connect webhook listener: #{event.type}")
     end
-
-    head :ok
-  end
-
-  private
-
-  def construct_event(endpoint_secret)
-    payload = request.body.read
-    sig_header = request.headers['Stripe-Signature']
-
-    Stripe::Webhook.construct_event(payload, sig_header, endpoint_secret)
   end
 end

@@ -18,7 +18,7 @@ import RegistrationPolicyPresetSelector from './RegistrationPolicyPresetSelector
 import PreventNoPreferenceSignupRow from './PreventNoPreferenceSignupRow';
 import { RegistrationPolicyPreset } from '../FormAdmin/FormItemUtils';
 
-type EditingRegistrationPolicy<BucketType extends EditingRegistrationBucket> = {
+export type EditingRegistrationPolicy<BucketType extends EditingRegistrationBucket> = {
   buckets: BucketType[];
   prevent_no_preference_signups: boolean;
 };
@@ -60,16 +60,10 @@ function RegistrationPolicyEditor<
     } as unknown as T);
 
   const [preset, setPreset] = useState(() => findPreset(registrationPolicy, presets ?? []));
-  const [custom, setCustom] = useState(
-    () => presets && !preset && (registrationPolicy.buckets || []).length > 0,
-  );
+  const [custom, setCustom] = useState(() => presets && !preset && (registrationPolicy.buckets || []).length > 0);
 
   const headerLabels = useMemo(
-    () => [
-      preset || lockNameAndDescription ? 'Bucket name' : 'Bucket name/description',
-      'Limits',
-      '',
-    ],
+    () => [preset || lockNameAndDescription ? 'Bucket name' : 'Bucket name/description', 'Limits', ''],
     [lockNameAndDescription, preset],
   );
 
@@ -81,8 +75,7 @@ function RegistrationPolicyEditor<
       .filter((key) => key.match(/^custom-\d+$/))
       .map((key) => Number.parseInt(key.replace('custom-', ''), 10));
 
-    const maxBucketKeyNumber =
-      customBucketKeyNumbers.length > 0 ? Math.max(...customBucketKeyNumbers) : 0;
+    const maxBucketKeyNumber = customBucketKeyNumbers.length > 0 ? Math.max(...customBucketKeyNumbers) : 0;
 
     const customBucketNumber = maxBucketKeyNumber + 1;
 
@@ -172,14 +165,11 @@ function RegistrationPolicyEditor<
     );
 
   const renderBucketRow = (bucket: BucketType) => {
-    const bucketInPreset =
-      preset && !!preset.policy.buckets.find((presetBucket) => presetBucket.key === bucket.key);
+    const bucketInPreset = preset && !!preset.policy.buckets.find((presetBucket) => presetBucket.key === bucket.key);
 
-    const lockDelete =
-      bucketInPreset || (lockDeleteBuckets && lockDeleteBuckets.includes(bucket.key));
+    const lockDelete = bucketInPreset || (lockDeleteBuckets && lockDeleteBuckets.includes(bucket.key));
 
-    const lockLimited =
-      bucketInPreset || (lockLimitedBuckets && lockLimitedBuckets.includes(bucket.key));
+    const lockLimited = bucketInPreset || (lockLimitedBuckets && lockLimitedBuckets.includes(bucket.key));
 
     return (
       <RegistrationBucketRow
@@ -282,9 +272,7 @@ function RegistrationPolicyEditor<
     );
   };
 
-  const renderPreviewContent = () => (
-    <RegistrationPolicyPreview registrationPolicy={registrationPolicy} />
-  );
+  const renderPreviewContent = () => <RegistrationPolicyPreview registrationPolicy={registrationPolicy} />;
 
   return (
     <div className="card">

@@ -24,9 +24,7 @@ module Intercode::Import::Procon::EventHelpers
   end
 
   def event_registration_open?(row)
-    connection[:registration_rules]
-      .where(type: 'ClosedEventRule', policy_id: row[:registration_policy_id])
-      .count == 0
+    connection[:registration_rules].where(type: 'ClosedEventRule', policy_id: row[:registration_policy_id]).count == 0
   end
 
   def event_has_counted_attendances?(row)
@@ -34,17 +32,13 @@ module Intercode::Import::Procon::EventHelpers
   end
 
   def can_play_concurrently?(row)
-    connection[:registration_rules].where(
-      policy_id: row[:registration_policy_id],
-      type: 'ExclusiveEventRule'
-    ).count == 0
+    connection[:registration_rules].where(policy_id: row[:registration_policy_id], type: 'ExclusiveEventRule').count ==
+      0
   end
 
   def age_restrictions(row)
-    rule = connection[:registration_rules].where(
-      policy_id: row[:registration_policy_id],
-      type: 'AgeRestrictionRule'
-    ).first
+    rule =
+      connection[:registration_rules].where(policy_id: row[:registration_policy_id], type: 'AgeRestrictionRule').first
     return unless rule
 
     "Must be at least #{rule[:min_age]} years old"

@@ -15,7 +15,7 @@
 #  index_email_routes_on_receiver_address  (receiver_address) UNIQUE
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+
 class EmailRoute < ApplicationRecord
   def self.parse_address(raw_address)
     return nil if raw_address.blank?

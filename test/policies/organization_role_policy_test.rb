@@ -47,9 +47,7 @@ class OrganizationRolePolicyTest < ActiveSupport::TestCase
 
   describe 'Scope' do
     let(:organizations) { create_list(:organization, 3) }
-    let(:organization_roles) do
-      organizations.map { |org| create(:organization_role, organization: org) }
-    end
+    let(:organization_roles) { organizations.map { |org| create(:organization_role, organization: org) } }
 
     it 'returns all organization roles for site admins' do
       user = create(:user, site_admin: true)
@@ -60,6 +58,7 @@ class OrganizationRolePolicyTest < ActiveSupport::TestCase
 
     it 'returns all organization roles for users with manage_organization_access permission' do
       user_organization, user = create_organization_with_managing_user
+
       # we don't need to create a role explicitly, because create_organization_with_managing_user
       # does that in order to grant the user permission
       organization_roles

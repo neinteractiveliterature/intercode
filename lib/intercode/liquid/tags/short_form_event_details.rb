@@ -33,7 +33,4 @@ module Intercode
   end
 end
 
-Liquid::Template.register_tag(
-  'short_form_event_details',
-  Intercode::Liquid::Tags::ShortFormEventDetails
-)
+Liquid::Template.register_tag('short_form_event_details', Intercode::Liquid::Tags::ShortFormEventDetails)

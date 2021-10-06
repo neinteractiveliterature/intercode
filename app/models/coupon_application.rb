@@ -21,7 +21,7 @@
 #  fk_rails_...  (order_id => orders.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+
 class CouponApplication < ApplicationRecord
   belongs_to :coupon
   belongs_to :order

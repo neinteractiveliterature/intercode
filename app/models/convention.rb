@@ -59,7 +59,7 @@
 #  fk_rails_...  (user_con_profile_form_id => forms.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+
 class Convention < ApplicationRecord
   TICKET_MODES = %w[disabled required_for_signup].freeze
   SITE_MODES = %w[convention single_event event_series].freeze

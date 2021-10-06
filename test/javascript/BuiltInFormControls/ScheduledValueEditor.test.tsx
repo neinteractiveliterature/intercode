@@ -31,10 +31,7 @@ describe('ScheduledValueEditor', () => {
 
     // two value rows plus a footer
     expect(getAllByRole('row')).toHaveLength(3);
-    expect(getAllByTestId('testInput').map((input) => (input as HTMLInputElement).value)).toEqual([
-      '1',
-      '2',
-    ]);
+    expect(getAllByTestId('testInput').map((input) => (input as HTMLInputElement).value)).toEqual(['1', '2']);
   });
 
   test('adding a row', async () => {
@@ -74,7 +71,7 @@ describe('ScheduledValueEditor', () => {
 
   describe('scheduledValueIsValid', () => {
     test('it requires at least one timespan', () => {
-      // @ts-expect-error
+      // @ts-expect-error Deliberately invalid input
       expect(scheduledValueIsValid({ timespans: null })).toBeFalsy();
       expect(scheduledValueIsValid({ timespans: [] })).toBeFalsy();
       expect(scheduledValueIsValid({})).toBeFalsy();

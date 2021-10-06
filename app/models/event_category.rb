@@ -35,7 +35,7 @@
 #  fk_rails_...  (event_proposal_form_id => forms.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+
 class EventCategory < ApplicationRecord
   SCHEDULING_UIS = Set.new(%w[regular recurring single_run])
 

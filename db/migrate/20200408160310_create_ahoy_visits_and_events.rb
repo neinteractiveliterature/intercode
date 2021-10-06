@@ -1,5 +1,5 @@
 class CreateAhoyVisitsAndEvents < ActiveRecord::Migration[6.0]
-  def change # rubocop:disable MethodLength
+  def change
     create_table :ahoy_visits do |t|
       t.string :visit_token
       t.string :visitor_token
@@ -55,7 +55,7 @@ class CreateAhoyVisitsAndEvents < ActiveRecord::Migration[6.0]
       t.timestamp :time
     end
 
-    add_index :ahoy_events, [:name, :time]
+    add_index :ahoy_events, %i[name time]
     add_index :ahoy_events, :properties, using: :gin, opclass: :jsonb_path_ops
   end
 end

@@ -36,15 +36,13 @@ FactoryBot.define do
     description { 'Paid ticket' }
 
     after(:build) do |ticket_type|
-      ticket_type.providing_products << build(
-        :product,
-        convention: ticket_type.convention,
-        provides_ticket_type: ticket_type,
-        pricing_structure: PricingStructure.new(
-          pricing_strategy: 'fixed',
-          value: Money.new(2000, 'USD')
+      ticket_type.providing_products <<
+        build(
+          :product,
+          convention: ticket_type.convention,
+          provides_ticket_type: ticket_type,
+          pricing_structure: PricingStructure.new(pricing_strategy: 'fixed', value: Money.new(2000, 'USD'))
         )
-      )
     end
   end
 

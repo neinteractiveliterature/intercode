@@ -23,7 +23,7 @@
 #  fk_rails_...  (uploader_id => users.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+
 class CmsFile < ApplicationRecord
   include CadmusFiles::File
 

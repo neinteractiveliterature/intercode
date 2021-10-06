@@ -50,8 +50,7 @@ class SignupRequestPolicyTest < ActiveSupport::TestCase
       end
 
       it "does not let users #{action} their own signup requests" do
-        refute SignupRequestPolicy.new(signup_request.user_con_profile.user, signup_request)
-          .public_send("#{action}?")
+        refute SignupRequestPolicy.new(signup_request.user_con_profile.user, signup_request).public_send("#{action}?")
       end
 
       it "does not let users #{action} other people's signup requests" do
@@ -64,28 +63,25 @@ class SignupRequestPolicyTest < ActiveSupport::TestCase
     it 'lets users create signup requests in a moderated-signup convention' do
       user_con_profile = create(:user_con_profile, convention: convention)
       convention.update!(signup_mode: 'moderated')
-      new_signup_request = SignupRequest.new(
-        target_run: signup_request.target_run, user_con_profile: user_con_profile
-      )
+      new_signup_request = SignupRequest.new(target_run: signup_request.target_run, user_con_profile: user_con_profile)
       assert SignupRequestPolicy.new(user_con_profile.user, new_signup_request).create?
     end
 
     it 'does not let users create signup requests in a self-service signup convention' do
       user_con_profile = create(:user_con_profile, convention: convention)
       convention.update!(signup_mode: 'self_service')
-      new_signup_request = SignupRequest.new(
-        target_run: signup_request.target_run, user_con_profile: user_con_profile
-      )
+      new_signup_request = SignupRequest.new(target_run: signup_request.target_run, user_con_profile: user_con_profile)
       refute SignupRequestPolicy.new(user_con_profile.user, new_signup_request).create?
     end
 
     it 'does not let users create signup requests for other users' do
       user_con_profile = create(:user_con_profile, convention: convention)
       convention.update!(signup_mode: 'moderated')
-      new_signup_request = SignupRequest.new(
-        target_run: signup_request.target_run,
-        user_con_profile: create(:user_con_profile, convention: convention)
-      )
+      new_signup_request =
+        SignupRequest.new(
+          target_run: signup_request.target_run,
+          user_con_profile: create(:user_con_profile, convention: convention)
+        )
       refute SignupRequestPolicy.new(user_con_profile.user, new_signup_request).create?
     end
   end
@@ -97,16 +93,12 @@ class SignupRequestPolicyTest < ActiveSupport::TestCase
 
     it 'does not let users withdraw their own rejected signup requests' do
       signup_request.update!(state: 'rejected')
-      refute SignupRequestPolicy.new(
-        signup_request.user_con_profile.user, signup_request
-      ).withdraw?
+      refute SignupRequestPolicy.new(signup_request.user_con_profile.user, signup_request).withdraw?
     end
 
     it 'does not let users withdraw their own accepted signup requests' do
       AcceptSignupRequestService.new(signup_request: signup_request, whodunit: create(:user)).call!
-      refute SignupRequestPolicy.new(
-        signup_request.user_con_profile.user, signup_request
-      ).withdraw?
+      refute SignupRequestPolicy.new(signup_request.user_con_profile.user, signup_request).withdraw?
     end
 
     it "does not let users withdraw other people's pending signup requests" do
@@ -126,9 +118,8 @@ class SignupRequestPolicyTest < ActiveSupport::TestCase
     it "returns a regular user's own signup requests" do
       # create another signup request in the same con just to show we don't return it
       create(:signup_request, target_run: signup_request.target_run)
-      resolved_signup_requests = SignupRequestPolicy::Scope.new(
-        signup_request.user_con_profile.user, SignupRequest.all
-      ).resolve
+      resolved_signup_requests =
+        SignupRequestPolicy::Scope.new(signup_request.user_con_profile.user, SignupRequest.all).resolve
 
       assert_equal [signup_request], resolved_signup_requests.sort
     end

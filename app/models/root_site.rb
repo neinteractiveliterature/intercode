@@ -20,7 +20,7 @@
 #  fk_rails_...  (root_page_id => pages.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+
 class RootSite < ApplicationRecord
   belongs_to :root_page, class_name: 'Page'
   belongs_to :default_layout, class_name: 'CmsLayout'

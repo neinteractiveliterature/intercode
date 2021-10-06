@@ -15,9 +15,7 @@ describe EventDrop do
   describe 'with team members' do
     let(:team_members) { 5.times.map { create(:team_member, event: event) } }
 
-    before do
-      team_members
-    end
+    before { team_members }
 
     it 'returns the user con profiles of the team members of the event' do
       assert_equal team_members.map(&:user_con_profile_id).sort, event_drop.team_member_user_con_profiles.map(&:id).sort

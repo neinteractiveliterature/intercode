@@ -11,19 +11,18 @@ class Intercode::Import::Intercode1::Tables::StoreItems < Intercode::Import::Int
 
   def build_record(row)
     File.open(File.expand_path("#{row[:ImageFilename]}", image_dir)) do |image|
-      product = con.products.new(
-        available: yn_to_bool(row[:Available]),
-        name: product_name(row),
-        description: "A #{product_name(row).downcase} with the #{con.name} logo.",
-        image: image,
-        price_cents: row[:PriceCents],
-        price_currency: 'USD',
-        payment_options: %w[stripe pay_at_convention]
-      )
+      product =
+        con.products.new(
+          available: yn_to_bool(row[:Available]),
+          name: product_name(row),
+          description: "A #{product_name(row).downcase} with the #{con.name} logo.",
+          image: image,
+          price_cents: row[:PriceCents],
+          price_currency: 'USD',
+          payment_options: %w[stripe pay_at_convention]
+        )
 
-      sizes(row).each_with_index do |size, i|
-        product.product_variants.new(name: size, position: i + 1)
-      end
+      sizes(row).each_with_index { |size, i| product.product_variants.new(name: size, position: i + 1) }
 
       product
     end

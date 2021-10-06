@@ -87,6 +87,7 @@ class Tables::TableResultsPresenter
     end
   end
 
+  # rubocop:disable Metrics/MethodLength
   def self.build_field_class(id, csv_header, base = Tables::TableResultsPresenter::Field, &block)
     field_class =
       Class.new(base) do
@@ -116,6 +117,8 @@ class Tables::TableResultsPresenter
 
     const_set(constant_name, field_class)
   end
+
+  # rubocop:enable Metrics/MethodLength
 
   def self.field_classes
     @field_classes ||= {}

@@ -32,7 +32,4 @@ module Intercode
   end
 end
 
-Liquid::Template.register_tag(
-  'cookie_consent',
-  Intercode::Liquid::Tags::CookieConsent
-)
+Liquid::Template.register_tag('cookie_consent', Intercode::Liquid::Tags::CookieConsent)

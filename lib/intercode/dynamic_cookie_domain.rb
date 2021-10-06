@@ -11,11 +11,7 @@ module Intercode
     end
 
     def app_level_domain(host)
-      levels = if host =~ /herokuapp\.com\z/
-        3
-      else
-        2
-      end
+      levels = host =~ /herokuapp\.com\z/ ? 3 : 2
 
       host.split('.').reverse.take(levels).reverse.join('.')
     end
@@ -34,11 +30,7 @@ module Intercode
       end
 
       app_level_host = app_level_domain(host)
-      if app_level_host.include?('.')
-        app_level_host
-      else
-        :all
-      end
+      app_level_host.include?('.') ? app_level_host : :all
     end
   end
 end

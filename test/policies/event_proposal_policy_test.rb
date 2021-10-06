@@ -155,23 +155,15 @@ class EventProposalPolicyTest < ActiveSupport::TestCase
 
   describe 'Scope' do
     let(:draft_proposal) do
-      create(:event_proposal,
-        convention: convention, event_category: event_category, status: 'draft'
-      )
+      create(:event_proposal, convention: convention, event_category: event_category, status: 'draft')
     end
     let(:proposed_proposal) do
-      create(:event_proposal,
-        convention: convention, event_category: event_category, status: 'proposed'
-      )
+      create(:event_proposal, convention: convention, event_category: event_category, status: 'proposed')
     end
     let(:reviewing_proposal) do
-      create(:event_proposal,
-        convention: convention, event_category: event_category, status: 'reviewing'
-      )
+      create(:event_proposal, convention: convention, event_category: event_category, status: 'reviewing')
     end
-    let(:other_category_reviewing_proposal) do
-      create(:event_proposal, convention: convention, status: 'reviewing')
-    end
+    let(:other_category_reviewing_proposal) { create(:event_proposal, convention: convention, status: 'reviewing') }
 
     before do
       event_proposal
@@ -185,31 +177,20 @@ class EventProposalPolicyTest < ActiveSupport::TestCase
       user = create_user_with_read_event_proposals_in_event_category(event_category)
       resolved_event_proposals = EventProposalPolicy::Scope.new(user, EventProposal.all).resolve
 
-      assert_equal(
-        [reviewing_proposal].sort,
-        resolved_event_proposals.sort
-      )
+      assert_equal([reviewing_proposal].sort, resolved_event_proposals.sort)
     end
 
     it 'returns proposals past the draft phase to users with read_pending_event_proposals' do
       user = create_user_with_read_pending_event_proposals_in_event_category(event_category)
       resolved_event_proposals = EventProposalPolicy::Scope.new(user, EventProposal.all).resolve
 
-      assert_equal(
-        [event_proposal, reviewing_proposal, proposed_proposal].sort,
-        resolved_event_proposals.sort
-      )
+      assert_equal([event_proposal, reviewing_proposal, proposed_proposal].sort, resolved_event_proposals.sort)
     end
 
     it 'returns all your own proposals' do
-      resolved_event_proposals = EventProposalPolicy::Scope.new(
-        draft_proposal.owner.user, EventProposal.all
-      ).resolve
+      resolved_event_proposals = EventProposalPolicy::Scope.new(draft_proposal.owner.user, EventProposal.all).resolve
 
-      assert_equal(
-        [draft_proposal].sort,
-        resolved_event_proposals.sort
-      )
+      assert_equal([draft_proposal].sort, resolved_event_proposals.sort)
     end
   end
 end

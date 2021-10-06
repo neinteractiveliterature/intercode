@@ -13,10 +13,12 @@ class Intercode::Import::Illyan::Tables::People < Intercode::Import::Illyan::Tab
   private
 
   def build_record(row)
-    User.find_or_initialize_by(email: row[:email].downcase).tap do |user|
-      set_user_name(user, row)
-      return nil unless set_user_password_if_required(user, row)
-    end
+    User
+      .find_or_initialize_by(email: row[:email].downcase)
+      .tap do |user|
+        set_user_name(user, row)
+        return nil unless set_user_password_if_required(user, row)
+      end
   end
 
   def set_user_name(user, row)

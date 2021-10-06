@@ -84,18 +84,22 @@ class Intercode::Import::Intercode1::Configuration
   end
 
   def raw_vars
-    @raw_vars ||= begin
-      php = php_dump_script_for_constants_file
-      JSON.parse(Intercode::Import::Intercode1::Php.exec_php(php, 'dump_con_vars.php'))
-    end
+    @raw_vars ||=
+      begin
+        php = php_dump_script_for_constants_file
+        JSON.parse(Intercode::Import::Intercode1::Php.exec_php(php, 'dump_con_vars.php'))
+      end
   end
 
   def processed_vars
-    raw_vars.symbolize_keys.merge(
-      text_dir: File.expand_path(raw_vars['text_dir'], File.dirname(constants_file)),
-      friday_date: parse_friday_date(raw_vars),
-      php_timezone: ActiveSupport::TimeZone[raw_vars['php_timezone']]
-    ).merge(processed_booleans)
+    raw_vars
+      .symbolize_keys
+      .merge(
+        text_dir: File.expand_path(raw_vars['text_dir'], File.dirname(constants_file)),
+        friday_date: parse_friday_date(raw_vars),
+        php_timezone: ActiveSupport::TimeZone[raw_vars['php_timezone']]
+      )
+      .merge(processed_booleans)
   end
 
   def processed_booleans
@@ -106,17 +110,9 @@ class Intercode::Import::Intercode1::Configuration
 
   def parse_friday_date(raw_vars)
     if raw_vars['friday_date'] =~ /\A(\d?\d)-([A-Za-z]+)-(\d\d\d\d)\z/
-      Date.new(
-        Regexp.last_match(3).to_i,
-        Date::ABBR_MONTHNAMES.index(Regexp.last_match(2)),
-        Regexp.last_match(1).to_i
-      )
+      Date.new(Regexp.last_match(3).to_i, Date::ABBR_MONTHNAMES.index(Regexp.last_match(2)), Regexp.last_match(1).to_i)
     elsif raw_vars['friday_text'] =~ /\A([A-Za-z]+), (\d?\d)-([A-Za-z]+)-(\d\d\d\d)\z/
-      Date.new(
-        Regexp.last_match(4).to_i,
-        Date::ABBR_MONTHNAMES.index(Regexp.last_match(3)),
-        Regexp.last_match(2).to_i
-      )
+      Date.new(Regexp.last_match(4).to_i, Date::ABBR_MONTHNAMES.index(Regexp.last_match(3)), Regexp.last_match(2).to_i)
     else
       raise "FATAL: Can't parse Friday date from FRI_DATE or FRI_TEXT constants"
     end

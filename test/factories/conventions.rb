@@ -71,15 +71,7 @@ FactoryBot.define do
     language { 'en' }
     updated_by { nil }
     maximum_event_signups do
-      ScheduledValue::ScheduledValue.new(
-        timespans: [
-          {
-            start: nil,
-            finish: nil,
-            value: 'unlimited'
-          }
-        ]
-      )
+      ScheduledValue::ScheduledValue.new(timespans: [{ start: nil, finish: nil, value: 'unlimited' }])
     end
     starts_at { Time.utc(2016, 10, 28, 18, 0, 0) }
     ends_at { Time.utc(2016, 10, 30, 18, 0, 0) }
@@ -94,9 +86,7 @@ FactoryBot.define do
       after(:create) do |convention|
         content_set = CmsContentSet.new(name: 'standard')
         CmsContentLoaders::CmsPartials.new(convention: convention, content_set: content_set).call!
-        CmsContentLoaders::NotificationTemplates.new(
-          convention: convention, content_set: content_set
-        ).call!
+        CmsContentLoaders::NotificationTemplates.new(convention: convention, content_set: content_set).call!
       end
     end
 

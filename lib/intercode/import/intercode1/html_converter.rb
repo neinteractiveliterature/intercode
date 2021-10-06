@@ -9,48 +9,43 @@ class Intercode::Import::Intercode1::HtmlConverter
     @file_root = file_root
   end
 
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def convert
     doc = Nokogiri::HTML::DocumentFragment.parse(html, 'UTF-8')
 
     # Try to fix up internal links to other CMS pages
-    doc.css('a[href]').each do |link|
-      if link['href'] =~ /\.pdf\z/
-        cms_file = upload_url(link['href'])
-        link['href'] = "__CMS_FILE_URL_#{cms_file.file.filename}" if cms_file
-      else
-        link['href'] = intercode2_path_for_link(link['href'])
+    doc
+      .css('a[href]')
+      .each do |link|
+        if link['href'] =~ /\.pdf\z/
+          cms_file = upload_url(link['href'])
+          link['href'] = "__CMS_FILE_URL_#{cms_file.file.filename}" if cms_file
+        else
+          link['href'] = intercode2_path_for_link(link['href'])
+        end
       end
-    end
 
     # Fix the weird bad iframe href on the con com meetings page
-    doc.css('iframe').each do |iframe|
-      iframe['src'] = iframe['src'].gsub("\r\n", '')
-    end
+    doc.css('iframe').each { |iframe| iframe['src'] = iframe['src'].gsub("\r\n", '') }
 
     # Find and upload images
-    doc.css('img').each do |img|
-      cms_file = upload_url(img['src'])
-      img['src'] = "__CMS_FILE_URL_#{cms_file.file.filename}" if cms_file
-    end
+    doc
+      .css('img')
+      .each do |img|
+        cms_file = upload_url(img['src'])
+        img['src'] = "__CMS_FILE_URL_#{cms_file.file.filename}" if cms_file
+      end
 
     # Add spacing classes to emulate old header behavior
-    doc.css('h1, h2, h3').each do |header|
-      header['class'] = [header['class'], 'my-3'].compact.join(' ')
-    end
-    doc.css('h4, h5, h6').each do |header|
-      header['class'] = [header['class'], 'my-2'].compact.join(' ')
-    end
+    doc.css('h1, h2, h3').each { |header| header['class'] = [header['class'], 'my-3'].compact.join(' ') }
+    doc.css('h4, h5, h6').each { |header| header['class'] = [header['class'], 'my-2'].compact.join(' ') }
 
     # Nokogiri will escape "{% page_url something_or_other %}" in a href tag, so we temporarily set
     # the href to __PAGE_URL_something_or_other and then post-process it to Liquid here.
-    doc.to_s.gsub(
-      /__PAGE_URL_(\w+)/,
-      '{% page_url \1 %}'
-    ).gsub(
-      /__CMS_FILE_URL_([^\"]+)/,
-      '{% file_url "\1" %}'
-    )
+    doc.to_s.gsub(/__PAGE_URL_(\w+)/, '{% page_url \1 %}').gsub(/__CMS_FILE_URL_([^\"]+)/, '{% file_url "\1" %}')
   end
+
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
   private
 
@@ -81,6 +76,7 @@ class Intercode::Import::Intercode1::HtmlConverter
 
   def upload_url(url)
     parsed_url = URI.parse(url)
+
     # don't change it if it's a local file in the source tree
     return unless parsed_url.scheme.blank? && parsed_url.path.present?
 

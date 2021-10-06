@@ -20,7 +20,7 @@
 #  fk_rails_...  (convention_id => conventions.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+
 class Department < ApplicationRecord
   belongs_to :convention
   has_many :event_categories, dependent: :nullify

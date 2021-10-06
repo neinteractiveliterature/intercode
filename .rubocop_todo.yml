@@ -711,9 +711,3 @@ Style/SymbolProc:
   Exclude:
     - 'db/migrate/20181217193826_create_root_sites.rb'
 
-# Offense count: 979
-# Cop supports --auto-correct.
-# Configuration parameters: AllowHeredoc, AllowURI, URISchemes, IgnoreCopDirectives, IgnoredPatterns.
-# URISchemes: http, https
-Layout/LineLength:
-  Max: 204

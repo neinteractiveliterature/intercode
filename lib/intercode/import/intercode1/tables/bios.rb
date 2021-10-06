@@ -15,10 +15,7 @@ class Intercode::Import::Intercode1::Tables::Bios < Intercode::Import::Intercode
       return
     end
 
-    user_con_profile.assign_attributes(
-      bio: compose_bio(row),
-      show_nickname_in_bio: row[:ShowNickname] != 0
-    )
+    user_con_profile.assign_attributes(bio: compose_bio(row), show_nickname_in_bio: row[:ShowNickname] != 0)
 
     user_con_profile
   end

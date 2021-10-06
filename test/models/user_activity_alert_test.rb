@@ -30,11 +30,7 @@ require 'test_helper'
 class UserActivityAlertTest < ActiveSupport::TestCase
   describe 'event triggers' do
     it 'triggers on specified events' do
-      alert = create(
-        :user_activity_alert,
-        trigger_on_ticket_create: true,
-        trigger_on_user_con_profile_create: true
-      )
+      alert = create(:user_activity_alert, trigger_on_ticket_create: true, trigger_on_user_con_profile_create: true)
 
       assert alert.trigger_on_event?(:ticket_create)
       assert alert.trigger_on_event?(:user_con_profile_create)
@@ -48,11 +44,7 @@ class UserActivityAlertTest < ActiveSupport::TestCase
     end
 
     it 'does not trigger if the event is unknown' do
-      alert = create(
-        :user_activity_alert,
-        trigger_on_ticket_create: true,
-        trigger_on_user_con_profile_create: true
-      )
+      alert = create(:user_activity_alert, trigger_on_ticket_create: true, trigger_on_user_con_profile_create: true)
 
       refute alert.trigger_on_event?(:something_random)
     end
@@ -69,29 +61,10 @@ class UserActivityAlertTest < ActiveSupport::TestCase
   end
 
   describe 'user matching' do
-    let(:bowser) do
-      create(
-        :user,
-        first_name: 'Bowser',
-        last_name: 'Koopa',
-        email: 'bowser@koopakingdom.com'
-      )
-    end
-    let(:peach) do
-      create(
-        :user,
-        first_name: 'Princess',
-        last_name: 'Peach',
-        email: 'peach@mushroomkingdom.com'
-      )
-    end
+    let(:bowser) { create(:user, first_name: 'Bowser', last_name: 'Koopa', email: 'bowser@koopakingdom.com') }
+    let(:peach) { create(:user, first_name: 'Princess', last_name: 'Peach', email: 'peach@mushroomkingdom.com') }
     let(:user_activity_alert) do
-      create(
-        :user_activity_alert,
-        partial_name: 'bowser',
-        email: 'bowser@koopakingdom.com',
-        user: bowser
-      )
+      create(:user_activity_alert, partial_name: 'bowser', email: 'bowser@koopakingdom.com', user: bowser)
     end
     let(:convention) { user_activity_alert.convention }
 
@@ -103,9 +76,7 @@ class UserActivityAlertTest < ActiveSupport::TestCase
       assert user_activity_alert.matches?(create_profile(bowser, convention, copy_name: true))
       assert user_activity_alert.matches?(create_profile(bowser, convention, last_name: 'Bowser'))
       assert user_activity_alert.matches?(create_profile(bowser, convention, nickname: 'Bowser'))
-      assert user_activity_alert.matches?(
-        create_profile(bowser, convention, last_name: 'Mechabowser')
-      )
+      assert user_activity_alert.matches?(create_profile(bowser, convention, last_name: 'Mechabowser'))
     end
 
     describe 'email matching' do
@@ -118,11 +89,7 @@ class UserActivityAlertTest < ActiveSupport::TestCase
         it "matches #{email}" do
           user_activity_alert
           bowser.destroy! # Sorry, but the princess is in another castle
-          profile = create_profile(
-            create(:user, email: email),
-            convention,
-            copy_user: true
-          )
+          profile = create_profile(create(:user, email: email), convention, copy_user: true)
           assert user_activity_alert.matches?(profile)
         end
       end
@@ -139,19 +106,12 @@ class UserActivityAlertTest < ActiveSupport::TestCase
 
     it 'figures out the destinations correctly' do
       staff_member = create(:user_con_profile, convention: convention)
-      staff_position = create(
-        :staff_position,
-        convention: convention,
-        user_con_profiles: [staff_member]
-      )
+      staff_position = create(:staff_position, convention: convention, user_con_profiles: [staff_member])
       other_user_con_profile = create(:user_con_profile, convention: convention)
       user_activity_alert.notification_destinations.create!(staff_position: staff_position)
       user_activity_alert.notification_destinations.create!(user_con_profile: other_user_con_profile)
 
-      assert_equal(
-        [staff_member, other_user_con_profile].sort,
-        user_activity_alert.destination_user_con_profiles.sort
-      )
+      assert_equal([staff_member, other_user_con_profile].sort, user_activity_alert.destination_user_con_profiles.sort)
     end
   end
 

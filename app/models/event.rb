@@ -49,7 +49,7 @@
 #  fk_rails_...  (updated_by_id => users.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+
 class Event < ApplicationRecord
   include AgeRestrictions
   include EventEmail

@@ -26,6 +26,7 @@ class Intercode::Import::Intercode1::StaffPositionImporter
     @staff_positions = staff_positions
   end
 
+  # rubocop:disable Metrics/AbcSize
   def import!
     staff_positions.each do |key, data|
       position_name = STAFF_POSITION_NAMES_BY_KEY[key]
@@ -39,9 +40,7 @@ class Intercode::Import::Intercode1::StaffPositionImporter
       first_name = person_name_parts.first
       last_name = person_name_parts.last
 
-      user_con_profile = con.user_con_profiles
-        .where(first_name: first_name, last_name: last_name)
-        .first
+      user_con_profile = con.user_con_profiles.where(first_name: first_name, last_name: last_name).first
 
       unless user_con_profile
         # if we can't find them by full name, but there's an unambiguous last name for them,
@@ -57,6 +56,8 @@ class Intercode::Import::Intercode1::StaffPositionImporter
       end
     end
   end
+
+  # rubocop:enable Metrics/AbcSize
 
   private
 

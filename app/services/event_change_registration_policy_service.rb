@@ -34,6 +34,7 @@ class EventChangeRegistrationPolicyService < CivilService::Service
       to_place.each { |signup| simulate_signup signup }
     end
 
+    # rubocop:disable Metrics/MethodLength
     def simulate_signup(signup)
       bucket_finder =
         SignupBucketFinder.new(
@@ -63,6 +64,8 @@ class EventChangeRegistrationPolicyService < CivilService::Service
 
       log_bucket_counts
     end
+
+    # rubocop:enable Metrics/MethodLength
 
     private
 

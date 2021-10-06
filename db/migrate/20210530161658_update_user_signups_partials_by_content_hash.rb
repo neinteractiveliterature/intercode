@@ -1,4 +1,3 @@
-# rubocop:disable Metrics/ClassLength
 class UpdateUserSignupsPartialsByContentHash < ActiveRecord::Migration[6.1]
   USER_SIGNUPS_UPDATED_CONTENT_BY_MD5 = {
     # Standard content set version
@@ -34,7 +33,6 @@ class UpdateUserSignupsPartialsByContentHash < ActiveRecord::Migration[6.1]
         </section>
       {% endif %}
     LIQUID
-
     # Spanish version of standard content used by Cyberol
     '6e1adedc16d9462d0b2890ce8fc7804d' => <<~LIQUID,
       {% assign signups = user_con_profile.signups | sort: "starts_at" %}
@@ -69,7 +67,6 @@ class UpdateUserSignupsPartialsByContentHash < ActiveRecord::Migration[6.1]
       {% endif %}
 
     LIQUID
-
     # Unusual variant on standard content set from HRSFANs, Iron GM, etc
     '7a3b8c51ad2aff3b7fad4c9855b0f76c' => <<~LIQUID,
       {% assign signups = user_con_profile.signups | sort: "starts_at" %}
@@ -103,7 +100,6 @@ class UpdateUserSignupsPartialsByContentHash < ActiveRecord::Migration[6.1]
         </section>
       {% endif %}
     LIQUID
-
     # Intercon S version
     '2fd7375184afdc0272030922e3fa3cdc' => <<~LIQUID,
       {% assign signups = user_con_profile.signups | sort: "starts_at" %}
@@ -190,7 +186,6 @@ class UpdateUserSignupsPartialsByContentHash < ActiveRecord::Migration[6.1]
         </section>
       {% endif %}
     LIQUID
-
     # Unusual variant of Intercon S version used by SLAW 2019
     '65473fdced0714d692db4a884dde0989' => <<~LIQUID,
       {% assign signups = user_con_profile.signups | sort: "starts_at" %}
@@ -278,7 +273,6 @@ class UpdateUserSignupsPartialsByContentHash < ActiveRecord::Migration[6.1]
       {% endif %}
 
     LIQUID
-
     # NELCO version
     'f1d52bad605d63a8d63e6052082ba232' => <<~LIQUID
       {% assign signups = user_con_profile.signups | sort: "starts_at" %}
@@ -402,15 +396,11 @@ class UpdateUserSignupsPartialsByContentHash < ActiveRecord::Migration[6.1]
 
   def up
     USER_SIGNUPS_UPDATED_CONTENT_BY_MD5.each do |md5, updated_content|
-      CmsPartial
-        .where('name = ? and md5(content) = ?', 'user_signups', md5)
-        .update_all(content: updated_content)
+      CmsPartial.where('name = ? and md5(content) = ?', 'user_signups', md5).update_all(content: updated_content)
     end
 
     USER_SIGNUP_UPDATED_CONTENT_BY_MD5.each do |md5, updated_content|
-      CmsPartial
-        .where('name = ? and md5(content) = ?', 'user_signup', md5)
-        .update_all(content: updated_content)
+      CmsPartial.where('name = ? and md5(content) = ?', 'user_signup', md5).update_all(content: updated_content)
     end
   end
 end

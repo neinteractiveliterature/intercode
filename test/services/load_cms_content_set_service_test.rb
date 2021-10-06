@@ -2,9 +2,7 @@ require 'test_helper'
 
 describe LoadCmsContentSetService do
   let(:convention) { create(:convention) }
-  let(:service) do
-    LoadCmsContentSetService.new(convention: convention, content_set_name: 'standard')
-  end
+  let(:service) { LoadCmsContentSetService.new(convention: convention, content_set_name: 'standard') }
 
   before do
     convention.forms.destroy_all
@@ -12,9 +10,7 @@ describe LoadCmsContentSetService do
   end
 
   describe 'successfully loading content' do
-    before do
-      @result = service.call
-    end
+    before { @result = service.call }
 
     it 'returns a success result' do
       assert @result.success?
@@ -42,9 +38,7 @@ describe LoadCmsContentSetService do
   end
 
   it 'validates that the content set exists' do
-    result = LoadCmsContentSetService.new(
-      convention: convention, content_set_name: 'nonexistent'
-    ).call
+    result = LoadCmsContentSetService.new(convention: convention, content_set_name: 'nonexistent').call
 
     assert result.failure?
     assert_match(/No content set found/, result.errors.full_messages.join("\n"))
@@ -59,9 +53,7 @@ describe LoadCmsContentSetService do
   end
 
   it 'is invalid if a default layout already exists' do
-    convention.create_default_layout!(
-      name: 'something_other_than_default', content: '{{ content_for_layout }}'
-    )
+    convention.create_default_layout!(name: 'something_other_than_default', content: '{{ content_for_layout }}')
     result = service.call
 
     assert result.failure?
@@ -86,7 +78,8 @@ describe LoadCmsContentSetService do
 
   it 'is invalid if a layout with the same name exists' do
     convention.cms_layouts.create!(
-      name: 'Default', content: '{{ content_for_layout }}<p>Wow that was some boring content</p>'
+      name: 'Default',
+      content: '{{ content_for_layout }}<p>Wow that was some boring content</p>'
     )
     result = service.call
 
@@ -96,7 +89,9 @@ describe LoadCmsContentSetService do
 
   it 'is invalid if user_con_profile_form already exists' do
     convention.create_user_con_profile_form!(
-      title: 'user con profile form', convention: convention, form_type: 'user_con_profile'
+      title: 'user con profile form',
+      convention: convention,
+      form_type: 'user_con_profile'
     )
 
     result = service.call

@@ -27,16 +27,23 @@ class Intercode::Import::Intercode1::RegistrationPolicyFactory
     RegistrationPolicy.new(buckets: buckets)
   end
 
+  # rubocop:disable Metrics/MethodLength
   def registration_bucket(row, gender)
-    key = case gender
-    when 'Neutral' then 'flex'
-    else gender.downcase
-    end
+    key =
+      case gender
+      when 'Neutral'
+        'flex'
+      else
+        gender.downcase
+      end
 
-    name = case gender
-    when 'Neutral' then 'Flex'
-    else "#{gender} role"
-    end
+    name =
+      case gender
+      when 'Neutral'
+        'Flex'
+      else
+        "#{gender} role"
+      end
 
     RegistrationPolicy::Bucket.new(
       key: key,
@@ -50,11 +57,16 @@ class Intercode::Import::Intercode1::RegistrationPolicyFactory
     )
   end
 
+  # rubocop:enable Metrics/MethodLength
+
   def registration_bucket_description(gender)
     case gender
-    when 'Male' then 'Male characters'
-    when 'Female' then 'Female characters'
-    when 'Neutral' then 'Characters that are not strictly defined as male or female'
+    when 'Male'
+      'Male characters'
+    when 'Female'
+      'Female characters'
+    when 'Neutral'
+      'Characters that are not strictly defined as male or female'
     end
   end
 end

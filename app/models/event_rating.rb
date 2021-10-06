@@ -18,7 +18,7 @@
 #  index_event_ratings_on_user_con_profile_id_and_event_id  (user_con_profile_id,event_id) UNIQUE
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+
 class EventRating < ApplicationRecord
   belongs_to :event
   belongs_to :user_con_profile

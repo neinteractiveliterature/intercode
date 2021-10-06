@@ -19,11 +19,7 @@ describe ConventionDrop do
       }
     end
     let(:event_with_openings) do
-      create(
-        :event,
-        convention: convention,
-        registration_policy: limited_registration_policy
-      )
+      create(:event, convention: convention, registration_policy: limited_registration_policy)
     end
     let(:run_with_openings) { create(:run, event: event_with_openings) }
     let(:unlimited_event_with_openings) { create(:event, convention: convention) }
