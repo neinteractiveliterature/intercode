@@ -62,7 +62,7 @@ all id fields are replaced with ones of type ID.",
   end
 
   def run(**args)
-    RecordLoader.for(Run).load(args[:id])
+    RecordLoader.for(Run).load(args[:transitional_id] || args[:id])
   end
 
   field :team_members, [Types::TeamMemberType], null: false

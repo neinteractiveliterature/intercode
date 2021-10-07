@@ -35,9 +35,12 @@ all id fields are replaced with ones of type ID.",
     permission_inputs
       .group_by { |input| input[type_field] }
       .flat_map do |record_type, inputs|
+        processed_inputs = inputs.map { |input| process_transitional_ids_in_input(input, :model_id, :role_id) }
         record_class = record_type.safe_constantize
-        records_by_id = record_class.find(inputs.map { |input| input[id_field] }).index_by(&:id)
-        inputs.map { |input| { association_name => records_by_id[input[id_field]], :permission => input[:permission] } }
+        records_by_id = record_class.find(processed_inputs.map { |input| input[id_field] }).index_by(&:id)
+        processed_inputs.map do |input|
+          { association_name => records_by_id[input[id_field]], :permission => input[:permission] }
+        end
       end
   end
 end

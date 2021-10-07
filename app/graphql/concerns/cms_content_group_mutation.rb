@@ -10,7 +10,7 @@ module CmsContentGroupMutation
       end
 
       content_scope = content_group.parent.public_send(content_type.tableize)
-      content_models = content_scope.find(contents.map(&:id))
+      content_models = content_scope.find(contents.map { |c| c.transitional_id || c.id })
       content_group.public_send("#{content_type.tableize}=", content_models)
     end
   end

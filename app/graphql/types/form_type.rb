@@ -36,8 +36,8 @@ and its subfields instead"
 
   authorize_record
 
-  def form_section(id:)
-    object.form_sections.find(id)
+  def form_section(id: nil, transitional_id: nil)
+    object.form_sections.find(transitional_id || id)
   end
 
   def form_api_json

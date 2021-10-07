@@ -30,8 +30,8 @@ all id fields are replaced with ones of type ID.",
   end
 
   def maximum_event_provided_tickets(**args)
-    if args[:event_id]
-      object.maximum_event_provided_tickets_for_event_id(args[:event_id])
+    if args[:transitional_event_id] || args[:event_id]
+      object.maximum_event_provided_tickets_for_event_id(args[:transitional_event_id] || args[:event_id])
     else
       object.maximum_event_provided_tickets
     end

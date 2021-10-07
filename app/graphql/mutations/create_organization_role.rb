@@ -32,7 +32,9 @@ all id fields are replaced with ones of type ID.",
     processed_args = process_transitional_ids_in_input(args, :user_ids)
     new_role = organization.organization_roles.create!(processed_args[:organization_role].to_h)
     new_role.update!(user_ids: processed_args[:user_ids])
-    processed_args[:permissions].each { |permission| new_role.permissions.create!(permission.to_h) }
+    processed_args[:permissions].each do |permission|
+      new_role.permissions.create!(process_transitional_ids_in_input(permission, :model_id, :role_id))
+    end
 
     # not sure why, but if I don't do this it seems like permissions get returned twice
     new_role.reload

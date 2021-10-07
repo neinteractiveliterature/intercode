@@ -23,7 +23,9 @@ all id fields are replaced with ones of type ID.",
   end
 
   def resolve(**args)
-    product_fields = args[:product].to_h.deep_symbolize_keys
+    product_fields =
+      process_transitional_ids_in_input(args[:product].to_h, :delete_variant_ids, :provides_product_id)
+        .deep_symbolize_keys
     product_fields[:pricing_structure] = coerce_pricing_structure_input(product_fields[:pricing_structure])
 
     create_or_update_variants(product, product_fields.delete(:product_variants))

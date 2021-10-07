@@ -14,8 +14,10 @@ all id fields are replaced with ones of type ID.",
 
   load_and_authorize_convention_associated_model :event_categories, :id, :update
 
-  def resolve(**args)
-    event_category.update!(args[:event_category].to_h)
+  def resolve(**_args)
+    attrs =
+      process_transitional_ids_in_input(event_category.to_h, :department_id, :event_form_id, :event_proposal_form_id)
+    event_category.update!(attrs)
 
     { event_category: event_category }
   end

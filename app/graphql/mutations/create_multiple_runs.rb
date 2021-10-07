@@ -26,7 +26,7 @@ all id fields are replaced with ones of type ID.",
           starts_at: run.starts_at,
           title_suffix: run.title_suffix,
           schedule_note: run.schedule_note,
-          room_ids: run.room_ids,
+          room_ids: run.transitional_room_ids || run.room_ids,
           updated_by: current_user
         }
       end

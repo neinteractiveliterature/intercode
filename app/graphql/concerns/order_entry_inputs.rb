@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 module OrderEntryInputs
   def process_order_entry_input(input, order_entry)
-    order_entry_fields = input.to_h.symbolize_keys
+    order_entry_fields =
+      process_transitional_ids_in_input(input.to_h.symbolize_keys, :product_id, :product_variant_id, :ticket_id)
     order_entry_fields.delete(:ticket_id)
 
     if order_entry_fields[:price_per_item]

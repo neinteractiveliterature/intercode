@@ -59,8 +59,8 @@ all id fields are replaced with ones of type ID.",
     MARKDOWN
   end
 
-  def cms_content_group(id:)
-    object.cms_content_groups.find(id)
+  def cms_content_group(id: nil, transitional_id: nil)
+    object.cms_content_groups.find(transitional_id || id)
   end
 
   field :cms_files, [Types::CmsFileType], null: false do
@@ -95,9 +95,9 @@ all id fields are replaced with ones of type ID.",
     MARKDOWN
   end
 
-  def cms_page(id: nil, slug: nil, root_page: false)
+  def cms_page(id: nil, transitional_id: nil, slug: nil, root_page: false)
     return object.root_page if root_page
-    return object.pages.find(id) if id
+    return object.pages.find(transitional_id || id) if transitional_id || id
     object.pages.find_by!(slug: slug)
   end
 

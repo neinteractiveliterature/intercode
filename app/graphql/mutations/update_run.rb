@@ -14,7 +14,7 @@ all id fields are replaced with ones of type ID.",
   load_and_authorize_model_with_id Run, :id, :update
 
   def resolve(**args)
-    run.update!(args[:run].to_h.merge(updated_by: current_user))
+    run.update!(process_transitional_ids_in_input(args[:run].to_h, :room_ids).merge(updated_by: current_user))
 
     { run: run }
   end

@@ -7,7 +7,8 @@ class Mutations::CreatePage < Mutations::BaseMutation
   authorize_create_cms_model :pages
 
   def resolve(**args)
-    page = cms_parent.pages.create!(args[:page].to_h)
+    attrs = process_transitional_ids_in_input(args[:page].to_h, :cms_layout_id)
+    page = cms_parent.pages.create!(attrs)
 
     { page: page }
   end
