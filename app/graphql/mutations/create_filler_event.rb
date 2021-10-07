@@ -23,7 +23,11 @@ class Mutations::CreateFillerEvent < Mutations::BaseMutation
       )
     )
 
-    event.runs.new(args[:run].to_h.merge(updated_by: user_con_profile.user)) if args[:run]
+    if args[:run]
+      event.runs.new(
+        process_transitional_ids_in_input(args[:run].to_h, :room_ids).merge(updated_by: user_con_profile.user)
+      )
+    end
 
     event.save!
 

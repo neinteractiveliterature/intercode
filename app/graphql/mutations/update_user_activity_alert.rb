@@ -24,10 +24,13 @@ all id fields are replaced with ones of type ID.",
   load_and_authorize_convention_associated_model :user_activity_alerts, :id, :update
 
   def resolve(**args)
-    user_activity_alert.update!(args[:user_activity_alert].to_h)
+    alert_attrs = process_transitional_ids_in_input(user_activity_alert.to_h, :user_id)
+    user_activity_alert.update!(alert_attrs)
 
     args[:add_notification_destinations].each do |add_notification_destination|
-      user_activity_alert.notification_destinations.create!(add_notification_destination.to_h)
+      attrs =
+        process_transitional_ids_in_input(add_notification_destination.to_h, :user_con_profile_id, :staff_position_id)
+      user_activity_alert.notification_destinations.create!(attrs)
     end
 
     (args[:transitional_remove_notification_destination_ids] || args[:remove_notification_destination_ids])

@@ -14,7 +14,9 @@ all id fields are replaced with ones of type ID.",
   load_and_authorize_cms_model :cms_navigation_items, :id, :update
 
   def resolve(**args)
-    cms_navigation_item.update!(args[:cms_navigation_item].to_h)
+    cms_navigation_item_attrs =
+      process_transitional_ids_in_input(args[:cms_navigation_item].to_h, :navigation_section_id, :page_id)
+    cms_navigation_item.update!(cms_navigation_item_attrs)
     { cms_navigation_item: cms_navigation_item }
   end
 end

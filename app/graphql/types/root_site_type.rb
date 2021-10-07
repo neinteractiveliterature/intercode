@@ -16,4 +16,8 @@ all id fields are replaced with ones of type ID.",
   def id
     0
   end
+
+  def transitional_id
+    'singleton'
+  end
 end

@@ -14,7 +14,8 @@ all id fields are replaced with ones of type ID.",
   load_and_authorize_convention_associated_model :staff_positions, :id, :update
 
   def resolve(**args)
-    staff_position.update!(args[:staff_position].to_h)
+    attrs = process_transitional_ids_in_input(args[:staff_position].to_h, :user_con_profile_ids)
+    staff_position.update!(attrs)
 
     { staff_position: staff_position }
   end

@@ -45,7 +45,9 @@ all id fields are replaced with ones of type ID.",
       user_ids: organization_role.user_ids + processed_args[:add_user_ids] - processed_args[:remove_user_ids],
       **processed_args[:organization_role].to_h
     )
-    processed_args[:add_permissions].each { |permission| organization_role.permissions.create!(permission.to_h) }
+    processed_args[:add_permissions].each do |permission|
+      organization_role.permissions.create!(process_transitional_ids_in_input(permission, :model_id, :role_id))
+    end
     organization_role.permissions.where(id: processed_args[:remove_permission_ids]).destroy_all
 
     # not sure why, but if I don't do this it seems like permissions get returned twice

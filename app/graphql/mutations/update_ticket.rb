@@ -15,8 +15,8 @@ all id fields are replaced with ones of type ID.",
   load_and_authorize_convention_associated_model :tickets, :id, :update
 
   def resolve(**args)
-    ticket_attrs = args[:ticket].to_h
-    ticket.update!(ticket_attrs)
+    attrs = process_transitional_ids_in_input(args[:ticket].to_h, :ticket_type_id, :provided_by_event_id)
+    ticket.update!(attrs)
 
     { ticket: ticket }
   end

@@ -21,7 +21,8 @@ all id fields are replaced with ones of type ID.",
   end
 
   def resolve(**args)
-    ticket = ticket_profile.create_ticket!(args[:ticket].to_h)
+    attrs = process_transitional_ids_in_input(args[:ticket].to_h, :ticket_type_id, :provided_by_event_id)
+    ticket = ticket_profile.create_ticket!(attrs)
 
     { ticket: ticket }
   end

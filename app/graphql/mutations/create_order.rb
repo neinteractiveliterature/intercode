@@ -40,9 +40,12 @@ all id fields are replaced with ones of type ID.",
       order_entry.assign_attributes(process_order_entry_input(order_entry_input, order_entry))
       order_entry.save!
 
-      next unless order_entry_input.ticket_id
+      next unless orrder_entry_input.transitional_ticket_id || order_entry_input.ticket_id
 
-      ticket = Ticket.where(user_con_profile_id: @order.user_con_profile.id).find(order_entry_input.ticket_id)
+      ticket =
+        Ticket
+          .where(user_con_profile_id: @order.user_con_profile.id)
+          .find(order_entry_input.transitional_ticket_id || order_entry_input.ticket_id)
       ticket.update!(order_entry: order_entry)
       order_entry.tickets.reload
     end

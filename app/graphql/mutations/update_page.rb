@@ -14,7 +14,8 @@ all id fields are replaced with ones of type ID.",
   load_and_authorize_cms_model :pages, :id, :update
 
   def resolve(**args)
-    page.update!(args[:page].to_h)
+    attrs = process_transitional_ids_in_input(args[:page].to_h, :cms_layout_id)
+    page.update!(attrs)
 
     { page: page }
   end

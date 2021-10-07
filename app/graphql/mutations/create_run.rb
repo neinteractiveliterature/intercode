@@ -20,7 +20,8 @@ all id fields are replaced with ones of type ID.",
   end
 
   def resolve(**args)
-    run = event.runs.create!(args[:run].to_h.merge(updated_by: current_user))
+    run =
+      event.runs.create!(process_transitional_ids_in_input(args[:run].to_h, :room_ids).merge(updated_by: current_user))
 
     { run: run }
   end
