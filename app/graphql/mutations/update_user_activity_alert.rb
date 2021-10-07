@@ -12,7 +12,13 @@ all id fields are replaced with ones of type ID.",
   argument :transitional_id, ID, required: false, camelize: true
   argument :user_activity_alert, Types::UserActivityAlertInputType, required: true, camelize: false
   argument :add_notification_destinations, [Types::NotificationDestinationInputType], required: true, camelize: false
-  argument :remove_notification_destination_ids, [Int], required: false, camelize: false
+  argument :remove_notification_destination_ids,
+           [Int],
+           deprecation_reason:
+             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
+           required: false,
+           camelize: false
   argument :transitional_remove_notification_destination_ids, [ID], required: false
 
   load_and_authorize_convention_associated_model :user_activity_alerts, :id, :update
@@ -24,9 +30,8 @@ all id fields are replaced with ones of type ID.",
       user_activity_alert.notification_destinations.create!(add_notification_destination.to_h)
     end
 
-    args[:remove_notification_destination_ids].each do |remove_id|
-      user_activity_alert.notification_destinations.find(remove_id).destroy!
-    end
+    (args[:transitional_remove_notification_destination_ids] || args[:remove_notification_destination_ids])
+      .each { |remove_id| user_activity_alert.notification_destinations.find(remove_id).destroy! }
 
     { user_activity_alert: user_activity_alert.reload }
   end

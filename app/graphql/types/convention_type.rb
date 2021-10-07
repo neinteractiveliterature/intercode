@@ -106,7 +106,7 @@ all id fields are replaced with ones of type ID.",
   end
 
   def event_proposal(**args)
-    object.event_proposals.find(args[:id])
+    object.event_proposals.find(args[:transitional_id] || args[:id])
   end
 
   pagination_field :event_proposals_paginated, Types::EventProposalsPaginationType, Types::EventProposalFiltersInputType
@@ -184,7 +184,7 @@ all id fields are replaced with ones of type ID.",
   end
 
   def form(**args)
-    object.forms.find(args[:id])
+    object.forms.find(args[:transitional_id] || args[:id])
   end
 
   field :forms, [Types::FormType], null: false
@@ -331,8 +331,8 @@ all id fields are replaced with ones of type ID.",
     MARKDOWN
   end
 
-  def product(id:)
-    policy_scope(object.products).find(id)
+  def product(id: nil, transitional_id: nil)
+    policy_scope(object.products).find(transitional_id || id)
   end
 
   field :products, [Types::ProductType], null: false do
@@ -376,7 +376,7 @@ all id fields are replaced with ones of type ID.",
   end
 
   def run(**args)
-    Run.where(event_id: object.events.active.select(:id)).find(args[:id])
+    Run.where(event_id: object.events.active.select(:id)).find(args[:transitional_id] || args[:id])
   end
 
   field :staff_positions, [Types::StaffPositionType], null: false
@@ -400,7 +400,7 @@ all id fields are replaced with ones of type ID.",
   end
 
   def signup(**args)
-    object.signups.find(args[:id])
+    object.signups.find(args[:transitional_id] || args[:id])
   end
 
   pagination_field(
@@ -481,8 +481,8 @@ all id fields are replaced with ones of type ID.",
     MARKDOWN
   end
 
-  def staff_position(id:)
-    convention.staff_positions.find(id)
+  def staff_position(id: nil, transitional_id: nil)
+    convention.staff_positions.find(transitional_id || id)
   end
 
   field :starts_at, Types::DateType, null: true
@@ -507,8 +507,8 @@ all id fields are replaced with ones of type ID.",
     argument :transitional_id, ID, required: false, camelize: true
   end
 
-  def user_activity_alert(id:)
-    RecordLoader.for(UserActivityAlert, where: { convention_id: object.id }).load(id)
+  def user_activity_alert(id: nil, transitional_id: nil)
+    RecordLoader.for(UserActivityAlert, where: { convention_id: object.id }).load(transitional_id || id)
   end
   field :user_activity_alerts, [Types::UserActivityAlertType], null: false
 
@@ -529,7 +529,7 @@ all id fields are replaced with ones of type ID.",
   end
 
   def user_con_profile(**args)
-    object.user_con_profiles.find(args[:id])
+    object.user_con_profiles.find(args[:transitional_id] || args[:id])
   end
 
   field :user_con_profile_by_user_id, Types::UserConProfileType, null: false do
@@ -552,8 +552,8 @@ all id fields are replaced with ones of type ID.",
     MARKDOWN
   end
 
-  def user_con_profile_by_user_id(user_id:)
-    object.user_con_profiles.find_by!(user_id: user_id)
+  def user_con_profile_by_user_id(user_id: nil, transitional_user_id: nil)
+    object.user_con_profiles.find_by!(user_id: transitional_user_id || user_id)
   end
 
   field :user_con_profile_form, Types::FormType, null: false

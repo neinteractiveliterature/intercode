@@ -14,8 +14,8 @@ all id fields are replaced with ones of type ID.",
 
   define_authorization_check { |_args| !!user_con_profile && !assumed_identity_from_profile }
 
-  def resolve(event_id:, rating:)
-    event_rating = user_con_profile.event_ratings.find_or_initialize_by(event_id: event_id)
+  def resolve(rating:, event_id: nil, transitional_event_id: nil)
+    event_rating = user_con_profile.event_ratings.find_or_initialize_by(event_id: transitional_event_id || event_id)
     event_rating.rating = rating
     event_rating.save!
 

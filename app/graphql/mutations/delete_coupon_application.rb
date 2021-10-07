@@ -10,11 +10,7 @@ all id fields are replaced with ones of type ID.",
            camelize: false
   argument :transitional_id, ID, required: false, camelize: true
 
-  attr_reader :coupon_application
-  def authorized?(args)
-    @coupon_application = CouponApplication.find(args[:id])
-    self.class.check_authorization(policy(coupon_application.order), :manage_coupons)
-  end
+  load_and_authorize_model_with_id CouponApplication, :id, :manage_coupons
 
   def resolve(**_args)
     coupon_application.destroy!

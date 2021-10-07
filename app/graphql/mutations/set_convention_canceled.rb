@@ -14,7 +14,8 @@ all id fields are replaced with ones of type ID.",
   argument :canceled, Boolean, required: true
 
   define_authorization_check do |args|
-    @convention = args[:id] ? Convention.find(args[:id]) : context[:convention]
+    @convention =
+      args[:transitional_id] || args[:id] ? Convention.find(args[:transitional_id] || args[:id]) : context[:convention]
     policy(@convention).manage?
   end
 

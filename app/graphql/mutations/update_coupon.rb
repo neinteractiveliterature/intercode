@@ -10,6 +10,7 @@ all id fields are replaced with ones of type ID.",
            required: false
   argument :transitional_id, ID, required: false, camelize: true
   argument :coupon, Types::CouponInputType, required: true
+
   load_and_authorize_convention_associated_model :coupons, :id, :update
 
   def resolve(**args)

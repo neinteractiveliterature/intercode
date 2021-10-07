@@ -14,8 +14,6 @@ all id fields are replaced with ones of type ID.",
   load_and_authorize_model_with_id TeamMember, :id, :update
 
   def resolve(**args)
-    team_member = TeamMember.find(args[:id])
-
     team_member.update!(args[:team_member].to_h.merge(updated_by: user_con_profile.user))
 
     { team_member: team_member }

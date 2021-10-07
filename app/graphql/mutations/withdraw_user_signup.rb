@@ -22,8 +22,13 @@ all id fields are replaced with ones of type ID.",
   attr_reader :signup
 
   define_authorization_check do |args|
-    run = convention.runs.find(args[:run_id])
-    @signup = run.signups.where(user_con_profile_id: args[:user_con_profile_id]).where.not(state: 'withdrawn').first
+    run = convention.runs.find(args[:transitional_run_id] || args[:run_id])
+    @signup =
+      run
+        .signups
+        .where(user_con_profile_id: args[:transitional_user_con_profile_id] || args[:user_con_profile_id])
+        .where.not(state: 'withdrawn')
+        .first
 
     raise GraphQL::ExecutionError, "That user is not signed up for #{run.event.title}." unless signup
 
