@@ -23,14 +23,19 @@ all id fields are replaced with ones of type ID.",
   attr_reader :target_run
 
   define_authorization_check do |args|
-    @target_run = convention.runs.find(args[:target_run_id])
+    @target_run = convention.runs.find(args[:transitional_target_run_id] || args[:target_run_id])
     policy(SignupRequest.new(target_run: target_run, user_con_profile: user_con_profile)).create?
   end
 
   def resolve(**args)
     raise 'Signup requests are closed.' unless convention.signup_requests_open?
 
-    replace_signup = (user_con_profile.signups.find(args[:replace_signup_id]) if args[:replace_signup_id])
+    replace_signup =
+      (
+        if args[:transitional_replace_signup_id] || args[:replace_signup_id]
+          user_con_profile.signups.find(args[:transitional_replace_signup_id] || args[:replace_signup_id])
+        end
+      )
 
     signup_request =
       user_con_profile.signup_requests.create!(

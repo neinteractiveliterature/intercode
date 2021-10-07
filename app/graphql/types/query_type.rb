@@ -86,8 +86,8 @@ all id fields are replaced with ones of type ID.",
   MARKDOWN
   end
 
-  def convention_by_id(id:)
-    Convention.find(id)
+  def convention_by_id(id: nil, transitional_id: nil)
+    Convention.find(transitional_id || id)
   end
 
   field :conventions,
@@ -160,7 +160,7 @@ all id fields are replaced with ones of type ID.",
   end
 
   def event(**args)
-    assert_convention.events.active.find(args[:id])
+    assert_convention.events.active.find(args[:transitional_id] || args[:id])
   end
 
   field :run,
@@ -186,7 +186,7 @@ all id fields are replaced with ones of type ID.",
   end
 
   def run(**args)
-    Run.where(event_id: assert_convention.events.active.select(:id)).find(args[:id])
+    Run.where(event_id: assert_convention.events.active.select(:id)).find(args[:transitional_id] || args[:id])
   end
 
   field :runs,
@@ -274,7 +274,7 @@ all id fields are replaced with ones of type ID.",
   end
 
   def event_proposal(**args)
-    assert_convention.event_proposals.find(args[:id])
+    assert_convention.event_proposals.find(args[:transitional_id] || args[:id])
   end
 
   field :my_signups,
@@ -448,8 +448,8 @@ all id fields are replaced with ones of type ID.",
     MARKDOWN
   end
 
-  def cms_content_group(id:)
-    cms_parent.cms_content_groups.find(id)
+  def cms_content_group(id: nil, transitional_id: nil)
+    cms_parent.cms_content_groups.find(transitional_id || id)
   end
 
   field :cms_files,
@@ -507,9 +507,9 @@ all id fields are replaced with ones of type ID.",
     MARKDOWN
   end
 
-  def cms_page(id: nil, slug: nil, root_page: false)
+  def cms_page(id: nil, transitional_id: nil, slug: nil, root_page: false)
     return cms_parent.root_page if root_page
-    return cms_parent.pages.find(id) if id
+    return cms_parent.pages.find(transitional_id || id) if transitional_id || id
     cms_parent.pages.find_by!(slug: slug)
   end
 
@@ -668,7 +668,7 @@ all id fields are replaced with ones of type ID.",
   end
 
   def user_con_profile(**args)
-    assert_convention.user_con_profiles.find(args[:id])
+    assert_convention.user_con_profiles.find(args[:transitional_id] || args[:id])
   end
 
   field :form,
@@ -694,7 +694,7 @@ all id fields are replaced with ones of type ID.",
   end
 
   def form(**args)
-    assert_convention.forms.find(args[:id])
+    assert_convention.forms.find(args[:transitional_id] || args[:id])
   end
 
   field :staff_position,
@@ -719,8 +719,8 @@ all id fields are replaced with ones of type ID.",
     MARKDOWN
   end
 
-  def staff_position(id:)
-    assert_convention.staff_positions.find(id)
+  def staff_position(id: nil, transitional_id: nil)
+    assert_convention.staff_positions.find(transitional_id || id)
   end
 
   field :liquid_assigns,
@@ -794,8 +794,8 @@ all id fields are replaced with ones of type ID.",
     MARKDOWN
   end
 
-  def preview_form_item(form_section_id:, form_item:)
-    form_section = FormSection.find(form_section_id)
+  def preview_form_item(form_item:, form_section_id: nil, transitional_form_section_id: nil)
+    form_section = FormSection.find(transitional_form_section_id || form_section_id)
     FormItem.new(form_item.to_h.merge(id: 0, form_section: form_section, position: 1))
   end
 
@@ -893,8 +893,8 @@ all id fields are replaced with ones of type ID.",
     MARKDOWN
   end
 
-  def product(id:)
-    policy_scope(assert_convention.products).find(id)
+  def product(id: nil, transitional_id: nil)
+    policy_scope(assert_convention.products).find(transitional_id || id)
   end
 
   field :oauth_pre_auth, Types::JSON, null: false do
@@ -1042,7 +1042,7 @@ all id fields are replaced with ones of type ID.",
   end
 
   def signup(**args)
-    assert_convention.signups.find(args[:id])
+    assert_convention.signups.find(args[:transitional_id] || args[:id])
   end
 
   pagination_field :users_paginated, Types::UsersPaginationType, Types::UserFiltersInputType, camelize: false do
@@ -1073,8 +1073,8 @@ all id fields are replaced with ones of type ID.",
   MARKDOWN
   end
 
-  def user(id:)
-    User.find(id)
+  def user(id: nil, transitional_id: nil)
+    User.find(transitional_id || id)
   end
 
   field :users, [Types::UserType], null: false do
@@ -1093,7 +1093,9 @@ all id fields are replaced with ones of type ID."
   end
 
   def users(ids: nil, transitional_ids: nil)
-    raise GraphQL::ExecutionError, "Can't retrieve more than 25 users in a single query" if ids.size > 25
+    if (transitional_ids || ids).size > 25
+      raise GraphQL::ExecutionError, "Can't retrieve more than 25 users in a single query"
+    end
 
     User.find(transitional_ids || ids)
   end

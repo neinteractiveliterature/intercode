@@ -14,7 +14,8 @@ all id fields are replaced with ones of type ID.",
   attr_reader :user_con_profile
 
   def authorized?(args)
-    @user_con_profile = convention.user_con_profiles.find(args[:user_con_profile_id])
+    @user_con_profile =
+      convention.user_con_profiles.find(args[:transitional_user_con_profile_id] || args[:user_con_profile_id])
     self.class.check_authorization(policy(user_con_profile), :withdraw_all_signups)
   end
 

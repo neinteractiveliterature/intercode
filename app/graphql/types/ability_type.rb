@@ -379,7 +379,7 @@ all id fields are replaced with ones of type ID.",
   end
 
   def can_read_event_signups(**args)
-    event = context[:convention].events.find(args[:event_id])
+    event = context[:convention].events.find(args[:transitional_event_id] || args[:event_id])
     policy(Signup.new(run: Run.new(event: event))).read?
   end
 
@@ -443,7 +443,9 @@ all id fields are replaced with ones of type ID.",
   end
 
   def can_update_user_con_profile(**args)
-    ModelPermissionLoader.for(UserConProfile).load([pundit_user, :update, args[:user_con_profile_id]])
+    ModelPermissionLoader
+      .for(UserConProfile)
+      .load([pundit_user, :update, args[:transitional_user_con_profile_id] || args[:user_con_profile_id]])
   end
 
   field(
@@ -478,7 +480,9 @@ all id fields are replaced with ones of type ID.",
   end
 
   def can_delete_user_con_profile(**args)
-    ModelPermissionLoader.for(UserConProfile).load([pundit_user, :destroy, args[:user_con_profile_id]])
+    ModelPermissionLoader
+      .for(UserConProfile)
+      .load([pundit_user, :destroy, args[:transitional_user_con_profile_id] || args[:user_con_profile_id]])
   end
 
   field :can_become_user_con_profile, Boolean, null: false do
@@ -493,7 +497,9 @@ all id fields are replaced with ones of type ID.",
   end
 
   def can_become_user_con_profile(**args)
-    ModelPermissionLoader.for(UserConProfile).load([pundit_user, :become, args[:user_con_profile_id]])
+    ModelPermissionLoader
+      .for(UserConProfile)
+      .load([pundit_user, :become, args[:transitional_user_con_profile_id] || args[:user_con_profile_id]])
   end
 
   field :can_withdraw_all_user_con_profile_signups, Boolean, null: false do
@@ -508,7 +514,9 @@ all id fields are replaced with ones of type ID.",
   end
 
   def can_withdraw_all_user_con_profile_signups(**args)
-    ModelPermissionLoader.for(UserConProfile).load([pundit_user, :withdraw_all_signups, args[:user_con_profile_id]])
+    ModelPermissionLoader
+      .for(UserConProfile)
+      .load([pundit_user, :withdraw_all_signups, args[:transitional_user_con_profile_id] || args[:user_con_profile_id]])
   end
 
   private

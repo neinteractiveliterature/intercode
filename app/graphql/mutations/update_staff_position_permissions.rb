@@ -15,7 +15,7 @@ all id fields are replaced with ones of type ID.",
   attr_reader :staff_position
 
   define_authorization_check do |args|
-    @staff_position = convention.staff_positions.find(args[:staff_position_id])
+    @staff_position = convention.staff_positions.find(args[:transitional_staff_position_id] || args[:staff_position_id])
     policy(Permission.new(role: staff_position)).create?
   end
 

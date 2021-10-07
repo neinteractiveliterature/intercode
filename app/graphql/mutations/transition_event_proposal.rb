@@ -16,7 +16,7 @@ all id fields are replaced with ones of type ID.",
   attr_reader :event_proposal
 
   define_authorization_check do |args|
-    @event_proposal = context[:convention].event_proposals.find(args[:id])
+    @event_proposal = context[:convention].event_proposals.find(args[:transitional_id] || args[:id])
     return false if args[:drop_event] && !policy(event_proposal.event).drop?
 
     policy(event_proposal).update?

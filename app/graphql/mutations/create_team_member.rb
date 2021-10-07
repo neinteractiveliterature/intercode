@@ -34,18 +34,19 @@ all id fields are replaced with ones of type ID.",
   attr_reader :event
 
   define_authorization_check do |args|
-    @event = convention.events.find(args[:event_id])
+    @event = convention.events.find(args[:transitional_event_id] || args[:event_id])
     policy(TeamMember.new(event: event)).create?
   end
 
   def resolve(**args)
-    user_con_profile = convention.user_con_profiles.find(args[:user_con_profile_id])
+    user_con_profile =
+      convention.user_con_profiles.find(args[:transitional_user_con_profile_id] || args[:user_con_profile_id])
     result =
       CreateTeamMemberService.new(
         event: event,
         user_con_profile: user_con_profile,
         team_member_attrs: args[:team_member].to_h,
-        provide_ticket_type_id: args[:provide_ticket_type_id]
+        provide_ticket_type_id: args[:transitional_provide_ticket_type_id] || args[:provide_ticket_type_id]
       ).call!
 
     {

@@ -25,8 +25,9 @@ all id fields are replaced with ones of type ID.",
   attr_reader :run, :signup_user_con_profile
 
   define_authorization_check do |args|
-    @run = convention.runs.find(args[:run_id])
-    @signup_user_con_profile = convention.user_con_profiles.find(args[:user_con_profile_id])
+    @run = convention.runs.find(args[:transitional_run_id] || args[:run_id])
+    @signup_user_con_profile =
+      convention.user_con_profiles.find(args[:transitional_user_con_profile_id] || args[:user_con_profile_id])
     policy(Signup.new(run: run, user_con_profile: signup_user_con_profile)).create?
   end
 

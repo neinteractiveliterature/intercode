@@ -15,7 +15,7 @@ all id fields are replaced with ones of type ID.",
   attr_reader :event
 
   define_authorization_check do |args|
-    @event = convention.events.find(args[:event_id])
+    @event = convention.events.find(args[:transitional_event_id] || args[:event_id])
     policy(Run.new(event: event)).create?
   end
 

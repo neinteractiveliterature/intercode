@@ -22,8 +22,8 @@ all id fields are replaced with ones of type ID.",
 
   load_and_authorize_model_with_id FormItem, :id, :update
 
-  def resolve(form_section_id:, destination_index: nil, **_args)
-    form_section = FormSection.find(form_section_id)
+  def resolve(form_section_id: nil, transitional_form_section_id: nil, destination_index: nil, **_args)
+    form_section = FormSection.find(transitional_form_section_id || form_section_id)
     unless form_section.form_id == form_item.form_section.form_id
       raise GraphQL::ExecutionError, 'Destination form section must be in the same form'
     end

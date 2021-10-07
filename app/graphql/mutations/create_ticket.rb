@@ -15,7 +15,8 @@ all id fields are replaced with ones of type ID.",
   attr_reader :ticket_profile
 
   define_authorization_check do |args|
-    @ticket_profile = convention.user_con_profiles.find(args[:user_con_profile_id])
+    @ticket_profile =
+      convention.user_con_profiles.find(args[:transitional_user_con_profile_id] || args[:user_con_profile_id])
     policy(Ticket.new(user_con_profile: ticket_profile)).create?
   end
 

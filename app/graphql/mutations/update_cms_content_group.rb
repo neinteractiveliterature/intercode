@@ -16,8 +16,8 @@ all id fields are replaced with ones of type ID.",
 
   authorize_create_cms_model :cms_content_groups
 
-  def resolve(id:, cms_content_group:, grant_permissions: [], revoke_permissions: [])
-    content_group = cms_parent.cms_content_groups.find(id)
+  def resolve(cms_content_group:, id: nil, transitional_id: nil, grant_permissions: [], revoke_permissions: [])
+    content_group = cms_parent.cms_content_groups.find(transitional_id || id)
     content_group.update!(name: cms_content_group.name)
     update_cms_contents(content_group, cms_content_group.contents)
 

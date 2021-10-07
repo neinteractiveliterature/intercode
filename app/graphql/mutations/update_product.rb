@@ -18,7 +18,7 @@ all id fields are replaced with ones of type ID.",
   attr_reader :product
 
   define_authorization_check do |args|
-    @product = convention.products.includes(:product_variants).find(args[:id])
+    @product = convention.products.includes(:product_variants).find(args[:transitional_id] || args[:id])
     policy(product).update?
   end
 

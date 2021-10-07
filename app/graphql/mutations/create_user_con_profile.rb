@@ -16,7 +16,7 @@ all id fields are replaced with ones of type ID.",
 
   # rubocop:disable Metrics/AbcSize
   def resolve(**args)
-    user = User.find(args[:user_id])
+    user = User.find(args[:transitional_user_id] || args[:user_id])
     ensure_no_existing_user_con_profile(user)
 
     user_con_profile = convention.user_con_profiles.new(user: user)
@@ -40,7 +40,7 @@ all id fields are replaced with ones of type ID.",
     { user_con_profile: user_con_profile }
   end
 
-    def assign_filtered_attrs(user_con_profile, attrs)
+  def assign_filtered_attrs(user_con_profile, attrs)
     user_con_profile.assign_form_response_attributes(
       user_con_profile.filter_form_response_attributes_for_assignment(
         attrs,

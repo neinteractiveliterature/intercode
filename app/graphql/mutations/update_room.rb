@@ -14,8 +14,6 @@ all id fields are replaced with ones of type ID.",
   load_and_authorize_convention_associated_model :rooms, :id, :update
 
   def resolve(**args)
-    room = convention.rooms.find(args[:id])
-
     room.update!(args[:room].to_h)
 
     { room: room }
