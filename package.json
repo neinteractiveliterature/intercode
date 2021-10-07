@@ -179,7 +179,7 @@
     "tzdata": "1.0.27",
     "union-value": "2.0.1",
     "uuid": "8.3.2",
-    "webpack": "5.57.1",
+    "webpack": "5.58.0",
     "webpack-assets-manifest": "5.0.6",
     "webpack-bundle-analyzer": "4.4.2",
     "webpack-dev-middleware": "5.2.1",
