@@ -142,8 +142,8 @@ function LiquidInput(props: LiquidInputProps): JSX.Element {
 
   const languageExtension = useMemo(
     // Once we stop getting weird errors from parseMixed we can use the Liquid grammar
-    // () => liquid({ baseLanguage: html({ matchClosingTags: false }).language }),
-    () => html(),
+    () => liquid({ baseLanguage: html({ matchClosingTags: false }).language }),
+    // () => html({ matchClosingTags: false }),
     [],
   );
 

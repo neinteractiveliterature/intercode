@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Types::RootSiteType < Types::BaseObject
   implements Types::CmsParent
+  include CmsParentImplementation
 
   field :id,
         Int,

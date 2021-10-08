@@ -16,9 +16,9 @@ module Intercode
 
           @destination_variable = match[1]
           @query_identifier = match[2]
-          if match[3]
+          if match[4]
             @variable_defs =
-              match[3]
+              match[4]
                 .split(',')
                 .each_with_object({}) do |variable_def, hash|
                   variable_name, from = variable_def.split(':').map(&:strip)
@@ -35,7 +35,7 @@ module Intercode
 
           variables = variable_defs.transform_values { |variable_name| context[variable_name] }
 
-          result = cms_graphql_query.execute(context: graphql_context, variables: variables)
+          result = cms_graphql_query.execute(context: graphql_context(context), variables: variables)
           hash_result = result.to_h
 
           context.scopes.last[destination_variable] = hash_result['data']
@@ -46,7 +46,7 @@ module Intercode
           true
         end
 
-        def graphql_context
+        def graphql_context(context)
           if context.registers['controller']
             GraphqlController::Context.new(context.registers['controller'], query_from_liquid: true)
           else
