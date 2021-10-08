@@ -8,7 +8,12 @@ import usePageTitle from '../usePageTitle';
 import { UserConProfileAdminQueryData, useUserConProfileAdminQuery } from './queries.generated';
 import { useCreateTicketMutation } from './mutations.generated';
 
-export default LoadQueryWrapper(useUserConProfileAdminQuery, function NewTicket({ data }) {
+function useUserConProfileAdminQueryFromParams() {
+  const userConProfileId = useParams<{ id: string }>().id;
+  return useUserConProfileAdminQuery({ variables: { id: userConProfileId } });
+}
+
+export default LoadQueryWrapper(useUserConProfileAdminQueryFromParams, function NewTicket({ data }) {
   const userConProfileId = useParams<{ id: string }>().id;
   const history = useHistory();
   const [createTicket] = useCreateTicketMutation({

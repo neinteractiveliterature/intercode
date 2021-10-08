@@ -1,20 +1,20 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { ErrorDisplay, sortByLocaleString, useConfirm, LoadQueryWrapper } from '@neinteractiveliterature/litform';
+import {
+  ErrorDisplay,
+  sortByLocaleString,
+  useConfirm,
+  LoadQueryWrapper,
+  deleteObjectFromReferenceArrayUpdater,
+} from '@neinteractiveliterature/litform';
 
-import { CmsContentGroupsAdminQuery } from './queries';
-import { DeleteContentGroup } from './mutations';
-import { useDeleteMutation } from '../../MutationUtils';
 import usePageTitle from '../../usePageTitle';
 import { useCmsContentGroupsAdminQuery } from './queries.generated';
+import { useDeleteContentGroupMutation } from './mutations.generated';
 
 export default LoadQueryWrapper(useCmsContentGroupsAdminQuery, function CmsContentGroupsAdminTable({ data }) {
   const confirm = useConfirm();
-  const deleteContentGroupMutate = useDeleteMutation(DeleteContentGroup, {
-    query: CmsContentGroupsAdminQuery,
-    arrayPath: ['cmsContentGroups'],
-    idVariablePath: ['id'],
-  });
+  const [deleteContentGroupMutate] = useDeleteContentGroupMutation();
 
   usePageTitle('CMS Content Groups');
 
@@ -22,7 +22,11 @@ export default LoadQueryWrapper(useCmsContentGroupsAdminQuery, function CmsConte
     return sortByLocaleString(data.cmsParent.cmsContentGroups, (contentGroup) => contentGroup.name);
   }, [data]);
 
-  const deleteContentGroup = (id: string) => deleteContentGroupMutate({ variables: { id } });
+  const deleteContentGroup = (contentGroup: typeof data.cmsParent.cmsContentGroups[number]) =>
+    deleteContentGroupMutate({
+      variables: { id: contentGroup.id },
+      update: deleteObjectFromReferenceArrayUpdater(data.cmsParent, 'cmsContentGroups', contentGroup),
+    });
 
   return (
     <>
@@ -47,7 +51,7 @@ export default LoadQueryWrapper(useCmsContentGroupsAdminQuery, function CmsConte
                     onClick={() =>
                       confirm({
                         prompt: 'Are you sure you want to delete this content group?',
-                        action: () => deleteContentGroup(contentGroup.id),
+                        action: () => deleteContentGroup(contentGroup),
                         renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
                       })
                     }

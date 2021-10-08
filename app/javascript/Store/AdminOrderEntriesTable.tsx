@@ -130,7 +130,17 @@ function AdminOrderEntriesTable<
       return;
     }
 
-    createOrderEntryAsync(addingItem as T);
+    createOrderEntryAsync({
+      price_per_item: addingItem.price_per_item
+        ? {
+            currency_code: addingItem.price_per_item.currency_code,
+            fractional: addingItem.price_per_item.fractional,
+          }
+        : undefined,
+      product: addingItem.product,
+      quantity: addingItem.quantity,
+      product_variant: addingItem.product_variant,
+    } as T);
     setAddingItem(undefined);
   };
 
@@ -162,7 +172,13 @@ function AdminOrderEntriesTable<
             <td>
               <InPlaceMoneyEditor
                 value={orderEntry.price_per_item}
-                onChange={(value) => updateOrderEntry(orderEntry, { price_per_item: value } as Partial<T>)}
+                onChange={(value) =>
+                  updateOrderEntry(orderEntry, {
+                    price_per_item: value
+                      ? { currency_code: value.currency_code, fractional: value.fractional }
+                      : undefined,
+                  } as Partial<T>)
+                }
               >
                 {formatMoney(orderEntry.price_per_item)}
                 {orderEntry.quantity > 1 && ' each'}

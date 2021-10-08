@@ -7,8 +7,13 @@ import usePageTitle from '../usePageTitle';
 import { useUserConProfileAdminQuery } from './queries.generated';
 import { useUpdateTicketMutation } from './mutations.generated';
 
-export default LoadQueryWrapper(useUserConProfileAdminQuery, function EditTicket({ data }) {
-  const userConProfileId = Number.parseInt(useParams<{ id: string }>().id, 10);
+function useUserConProfileAdminQueryFromParams() {
+  const userConProfileId = useParams<{ id: string }>().id;
+  return useUserConProfileAdminQuery({ variables: { id: userConProfileId } });
+}
+
+export default LoadQueryWrapper(useUserConProfileAdminQueryFromParams, function EditTicket({ data }) {
+  const userConProfileId = useParams<{ id: string }>().id;
   const history = useHistory();
   const [updateTicket] = useUpdateTicketMutation();
 
@@ -28,19 +33,13 @@ export default LoadQueryWrapper(useUserConProfileAdminQuery, function EditTicket
     [updateTicket, history, userConProfileId, data],
   );
 
-  usePageTitle(
-    `Editing ${data.convention.ticket_name} for ${data.convention.user_con_profile.name}`,
-  );
+  usePageTitle(`Editing ${data.convention.ticket_name} for ${data.convention.user_con_profile.name}`);
 
   const { convention } = data;
   const userConProfile = convention.user_con_profile;
 
   if (!userConProfile.ticket) {
-    return (
-      <ErrorDisplay
-        stringError={`${userConProfile.name} has no ${data.convention.ticket_name} to edit`}
-      />
-    );
+    return <ErrorDisplay stringError={`${userConProfile.name} has no ${data.convention.ticket_name} to edit`} />;
   }
 
   return (

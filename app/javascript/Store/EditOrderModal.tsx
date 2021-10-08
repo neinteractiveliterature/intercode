@@ -12,7 +12,7 @@ import {
   useCreateCouponApplicationMutation,
   useDeleteCouponApplicationMutation,
 } from './mutations.generated';
-import { Coupon, CouponApplication } from '../graphqlTypes.generated';
+import { Coupon, CouponApplication, UpdateOrderEntryInput, UpdateOrderInput } from '../graphqlTypes.generated';
 
 export type EditOrderModalProps = {
   order?: AdminOrderTypeWithId & {
@@ -37,7 +37,7 @@ function EditOrderModal({ order, closeModal }: EditOrderModalProps): JSX.Element
   const [deleteCouponApplicationMutate] = useDeleteCouponApplicationMutation();
 
   const updateOrder = useCallback(
-    (attributes) => {
+    (attributes: UpdateOrderInput['order']) => {
       if (!order) {
         return;
       }
@@ -64,7 +64,10 @@ function EditOrderModal({ order, closeModal }: EditOrderModalProps): JSX.Element
               transitionalProductId: orderEntry.product.id,
               transitionalProductVariantId: orderEntry.product_variant?.id,
               quantity: orderEntry.quantity,
-              price_per_item: orderEntry.price_per_item,
+              price_per_item: {
+                currency_code: orderEntry.price_per_item.currency_code,
+                fractional: orderEntry.price_per_item.fractional,
+              },
             },
           },
         },
@@ -74,11 +77,14 @@ function EditOrderModal({ order, closeModal }: EditOrderModalProps): JSX.Element
   );
 
   const updateOrderEntry = useCallback(
-    (orderEntry, attributes) =>
+    (
+      orderEntry: NonNullable<EditOrderModalProps['order']>['order_entries'][0],
+      attributes: UpdateOrderEntryInput['order_entry'],
+    ) =>
       updateOrderEntryMutate({
         variables: {
           input: {
-            id: orderEntry.id,
+            transitionalId: orderEntry.id,
             order_entry: attributes,
           },
         },
@@ -87,12 +93,13 @@ function EditOrderModal({ order, closeModal }: EditOrderModalProps): JSX.Element
   );
 
   const deleteOrderEntry = useCallback(
-    (orderEntry) => deleteOrderEntryMutate({ variables: { input: { id: orderEntry.id } } }),
+    (orderEntry: NonNullable<EditOrderModalProps['order']>['order_entries'][0]) =>
+      deleteOrderEntryMutate({ variables: { input: { transitionalId: orderEntry.id } } }),
     [deleteOrderEntryMutate],
   );
 
   const createCouponApplication = useCallback(
-    async (couponCode) => {
+    async (couponCode: string) => {
       if (!order) {
         return;
       }

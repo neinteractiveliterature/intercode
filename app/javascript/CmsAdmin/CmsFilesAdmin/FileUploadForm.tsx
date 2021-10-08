@@ -2,36 +2,32 @@ import { useState, useCallback } from 'react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ApolloError } from '@apollo/client';
-import { ErrorDisplay, useUniqueId } from '@neinteractiveliterature/litform';
+import { addNewObjectToReferenceArrayUpdater, ErrorDisplay, useUniqueId } from '@neinteractiveliterature/litform';
 
-import { CmsFilesAdminQuery } from './queries';
-import { CreateCmsFile } from './mutations';
 import FilePreview from './FilePreview';
-import { useCreateMutation } from '../../MutationUtils';
 import useAsyncFunction from '../../useAsyncFunction';
-import { CmsFilesAdminQueryData, CmsFilesAdminQueryVariables } from './queries.generated';
-import { CreateCmsFileMutationVariables, CreateCmsFileMutationData } from './mutations.generated';
+import { CmsFileFieldsFragmentDoc, CmsFilesAdminQueryData } from './queries.generated';
+import { CreateCmsFileMutationData, useCreateCmsFileMutation } from './mutations.generated';
 
 export type FileUploadFormProps = {
+  cmsParent: CmsFilesAdminQueryData['cmsParent'];
   onUpload?: (cmsFile: CreateCmsFileMutationData['createCmsFile']['cms_file']) => void;
 };
 
-function FileUploadForm({ onUpload }: FileUploadFormProps): JSX.Element {
+function FileUploadForm({ cmsParent, onUpload }: FileUploadFormProps): JSX.Element {
   const { t } = useTranslation();
   const [file, setFile] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const fileInputId = useUniqueId('file-');
   const [createMutate, createError, createInProgress] = useAsyncFunction(
-    useCreateMutation<
-      CmsFilesAdminQueryData,
-      CmsFilesAdminQueryVariables,
-      CreateCmsFileMutationVariables,
-      CreateCmsFileMutationData
-    >(CreateCmsFile, {
-      query: CmsFilesAdminQuery,
-      arrayPath: ['cmsFiles'],
-      newObjectPath: ['createCmsFile', 'cms_file'],
-    }),
+    useCreateCmsFileMutation({
+      update: addNewObjectToReferenceArrayUpdater(
+        cmsParent,
+        'cmsFiles',
+        (data: CreateCmsFileMutationData) => data.createCmsFile.cms_file,
+        CmsFileFieldsFragmentDoc,
+      ),
+    })[0],
   );
 
   const uploadFileChanged = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {

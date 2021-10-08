@@ -80,7 +80,10 @@ function NewOrderModal({ visible, close, initialOrder }: NewOrderModalProps): JS
       variables: {
         userConProfileId: userConProfile.id,
         order: {
-          payment_amount: paymentAmount,
+          payment_amount: {
+            currency_code: paymentAmount.currency_code,
+            fractional: paymentAmount.fractional,
+          },
           payment_note: order.payment_note,
         },
         status: order.status,
@@ -88,7 +91,10 @@ function NewOrderModal({ visible, close, initialOrder }: NewOrderModalProps): JS
           transitionalProductId: orderEntry.product.id,
           transitionalProductVariantId: orderEntry.product_variant?.id,
           quantity: orderEntry.quantity,
-          price_per_item: orderEntry.price_per_item,
+          price_per_item: {
+            currency_code: orderEntry.price_per_item.currency_code,
+            fractional: orderEntry.price_per_item.fractional,
+          },
           transitionalTicketId: orderEntry.ticket_id,
         })),
       },
