@@ -16600,9 +16600,9 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"mapbox-gl@npm:1.13.1":
-  version: 1.13.1
-  resolution: "mapbox-gl@npm:1.13.1"
+"mapbox-gl@npm:1.13.2":
+  version: 1.13.2
+  resolution: "mapbox-gl@npm:1.13.2"
   dependencies:
     "@mapbox/geojson-rewind": ^0.5.0
     "@mapbox/geojson-types": ^1.0.2
@@ -16627,7 +16627,7 @@ fsevents@^1.2.7:
     supercluster: ^7.1.0
     tinyqueue: ^2.0.3
     vt-pbf: ^3.1.1
-  checksum: af7047d151f0bb080d0a2615b5b4e7f795e511bdd39204b5abead42014a2b36d9ec84b51f98d5c9a00e87215d35ef2c7f82ddde21faab5b83c23c2aa6753b5ab
+  checksum: ea87bbab1b5d2a4597a3170769295dd80b73c06782051d82f9fd9f2839cfc60f56b9043dd707bdac0f9b4a60c087440cc9d215d693cb545b2e446d7c08175458
   languageName: node
   linkType: hard
 
@@ -21357,7 +21357,7 @@ resolve@^2.0.0-next.3:
     lint-staged: 11.2.0
     lodash: 4.17.21
     luxon: 2.0.2
-    mapbox-gl: 1.13.1
+    mapbox-gl: 1.13.2
     md5.js: 1.3.5
     mini-css-extract-plugin: 2.4.2
     minimist: 1.2.5
