@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Types::ConventionType < Types::BaseObject
   implements Types::CmsParent
+  include CmsParentImplementation
 
   field :accepting_proposals, Boolean, null: true
 
