@@ -79,7 +79,7 @@ all id fields are replaced with ones of type ID.",
   end
 
   def can_update_signup(**args)
-    ModelPermissionLoader.for(Signup).load([pundit_user, :update, args[:signup_id]])
+    ModelPermissionLoader.for(Signup).load([pundit_user, :update, args[:transitional_signup_id] || args[:signup_id]])
   end
 
   field :can_update_counted_signup, Boolean, null: false do
@@ -94,7 +94,9 @@ all id fields are replaced with ones of type ID.",
   end
 
   def can_update_counted_signup(**args)
-    ModelPermissionLoader.for(Signup).load([pundit_user, :update_counted, args[:signup_id]])
+    ModelPermissionLoader
+      .for(Signup)
+      .load([pundit_user, :update_counted, args[:transitional_signup_id] || args[:signup_id]])
   end
 
   field :can_force_confirm_signup, Boolean, null: false do
@@ -109,7 +111,9 @@ all id fields are replaced with ones of type ID.",
   end
 
   def can_force_confirm_signup(**args)
-    ModelPermissionLoader.for(Signup).load([pundit_user, :force_confirm, args[:signup_id]])
+    ModelPermissionLoader
+      .for(Signup)
+      .load([pundit_user, :force_confirm, args[:transitional_signup_id] || args[:signup_id]])
   end
 
   field :can_update_bucket_signup, Boolean, null: false do
@@ -124,7 +128,9 @@ all id fields are replaced with ones of type ID.",
   end
 
   def can_update_bucket_signup(**args)
-    ModelPermissionLoader.for(Signup).load([pundit_user, :update_bucket, args[:signup_id]])
+    ModelPermissionLoader
+      .for(Signup)
+      .load([pundit_user, :update_bucket, args[:transitional_signup_id] || args[:signup_id]])
   end
 
   field :can_update_event_categories, Boolean, null: false
@@ -145,7 +151,7 @@ all id fields are replaced with ones of type ID.",
   end
 
   def can_update_event(**args)
-    ModelPermissionLoader.for(Event).load([pundit_user, :update, args[:event_id]])
+    ModelPermissionLoader.for(Event).load([pundit_user, :update, args[:transitional_event_id] || args[:event_id]])
   end
 
   field :can_delete_event, Boolean, null: false do
@@ -160,7 +166,7 @@ all id fields are replaced with ones of type ID.",
   end
 
   def can_delete_event(**args)
-    ModelPermissionLoader.for(Event).load([pundit_user, :destroy, args[:event_id]])
+    ModelPermissionLoader.for(Event).load([pundit_user, :destroy, args[:transitional_event_id] || args[:event_id]])
   end
 
   field :can_read_orders, Boolean, null: false
@@ -265,7 +271,9 @@ all id fields are replaced with ones of type ID.",
   end
 
   def can_read_admin_notes_on_event_proposal(**args)
-    ModelPermissionLoader.for(EventProposal).load([pundit_user, :read_admin_notes, args[:event_proposal_id]])
+    ModelPermissionLoader
+      .for(EventProposal)
+      .load([pundit_user, :read_admin_notes, args[:transitional_event_proposal_id] || args[:event_proposal_id]])
   end
 
   field :can_update_admin_notes_on_event_proposal, Boolean, null: false do
@@ -280,7 +288,9 @@ all id fields are replaced with ones of type ID.",
   end
 
   def can_update_admin_notes_on_event_proposal(**args)
-    ModelPermissionLoader.for(EventProposal).load([pundit_user, :update_admin_notes, args[:event_proposal_id]])
+    ModelPermissionLoader
+      .for(EventProposal)
+      .load([pundit_user, :update_admin_notes, args[:transitional_event_proposal_id] || args[:event_proposal_id]])
   end
 
   field :can_update_event_proposal, Boolean, null: false do
@@ -295,7 +305,9 @@ all id fields are replaced with ones of type ID.",
   end
 
   def can_update_event_proposal(**args)
-    ModelPermissionLoader.for(EventProposal).load([pundit_user, :update, args[:event_proposal_id]])
+    ModelPermissionLoader
+      .for(EventProposal)
+      .load([pundit_user, :update, args[:transitional_event_proposal_id] || args[:event_proposal_id]])
   end
 
   field :can_delete_event_proposal, Boolean, null: false do
@@ -310,7 +322,9 @@ all id fields are replaced with ones of type ID.",
   end
 
   def can_delete_event_proposal(**args)
-    ModelPermissionLoader.for(EventProposal).load([pundit_user, :destroy, args[:event_proposal_id]])
+    ModelPermissionLoader
+      .for(EventProposal)
+      .load([pundit_user, :destroy, args[:transitional_event_proposal_id] || args[:event_proposal_id]])
   end
 
   field :can_update_orders, Boolean, null: false
@@ -337,7 +351,7 @@ all id fields are replaced with ones of type ID.",
   end
 
   def can_update_ticket(**args)
-    ModelPermissionLoader.for(Ticket).load([pundit_user, :update, args[:ticket_id]])
+    ModelPermissionLoader.for(Ticket).load([pundit_user, :update, args[:transitional_ticket_id] || args[:ticket_id]])
   end
 
   field :can_delete_ticket, Boolean, null: false do
@@ -352,7 +366,7 @@ all id fields are replaced with ones of type ID.",
   end
 
   def can_delete_ticket(**args)
-    ModelPermissionLoader.for(Ticket).load([pundit_user, :destroy, args[:ticket_id]])
+    ModelPermissionLoader.for(Ticket).load([pundit_user, :destroy, args[:transitional_ticket_id] || args[:ticket_id]])
   end
 
   field :can_read_organizations, Boolean, null: false

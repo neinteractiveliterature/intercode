@@ -16,11 +16,9 @@ export default LoadQueryWrapper(useEventCategoryAdminQuery, function EventCatego
 
       <table className="table table-striped">
         <tbody>
-          {sortByLocaleString([...eventCategories], (eventCategory) => eventCategory.name).map(
-            (eventCategory) => (
-              <EventCategoryRow eventCategory={eventCategory} key={eventCategory.id} />
-            ),
-          )}
+          {sortByLocaleString([...eventCategories], (eventCategory) => eventCategory.name).map((eventCategory) => (
+            <EventCategoryRow convention={data.convention} eventCategory={eventCategory} key={eventCategory.id} />
+          ))}
         </tbody>
       </table>
 

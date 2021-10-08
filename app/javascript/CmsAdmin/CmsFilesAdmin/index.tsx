@@ -4,37 +4,35 @@ import {
   useConfirm,
   PageLoadingIndicator,
   CopyToClipboardButton,
+  deleteObjectFromReferenceArrayUpdater,
 } from '@neinteractiveliterature/litform';
 import { useTranslation } from 'react-i18next';
 
-import { CmsFilesAdminQuery } from './queries';
-import { DeleteCmsFile } from './mutations';
 import FilePreview from './FilePreview';
 import FileUploadForm from './FileUploadForm';
-import { useDeleteMutation } from '../../MutationUtils';
 import usePageTitle from '../../usePageTitle';
 import InPlaceEditor from '../../BuiltInFormControls/InPlaceEditor';
-import {
-  DeleteCmsFileMutationVariables,
-  DeleteCmsFileMutationData,
-  useRenameCmsFileMutation,
-} from './mutations.generated';
+import { useRenameCmsFileMutation, useDeleteCmsFileMutation } from './mutations.generated';
 import { useCmsFilesAdminQuery } from './queries.generated';
 
 function CmsFilesAdmin(): JSX.Element {
   const { data, loading, error, refetch } = useCmsFilesAdminQuery();
-  const deleteFileMutate = useDeleteMutation<DeleteCmsFileMutationVariables, DeleteCmsFileMutationData>(DeleteCmsFile, {
-    query: CmsFilesAdminQuery,
-    arrayPath: ['cmsFiles'],
-    idVariablePath: ['id'],
-  });
+  const [deleteFileMutate] = useDeleteCmsFileMutation();
   const [renameFileMutate] = useRenameCmsFileMutation();
   const confirm = useConfirm();
   const { t } = useTranslation();
 
   usePageTitle('CMS Files');
 
-  const deleteFile = (id: string) => deleteFileMutate({ variables: { id } });
+  const deleteFile = (file: NonNullable<typeof data>['cmsParent']['cmsFiles'][number]) => {
+    if (!data) {
+      return;
+    }
+    deleteFileMutate({
+      variables: { id: file.id },
+      update: deleteObjectFromReferenceArrayUpdater(data.cmsParent, 'cmsFiles', file),
+    });
+  };
   const renameFile = (id: string, filename: string) =>
     renameFileMutate({
       variables: { id, filename },
@@ -62,7 +60,7 @@ function CmsFilesAdmin(): JSX.Element {
                     onClick={() =>
                       confirm({
                         prompt: `Are you sure you want to delete ${cmsFile.filename}?`,
-                        action: () => deleteFile(cmsFile.id),
+                        action: () => deleteFile(cmsFile),
                         renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
                       })
                     }
@@ -97,7 +95,9 @@ function CmsFilesAdmin(): JSX.Element {
         ))}
       </div>
 
-      {data?.currentAbility.can_create_cms_files && <FileUploadForm onUpload={() => refetch()} />}
+      {data?.currentAbility.can_create_cms_files && (
+        <FileUploadForm cmsParent={data.cmsParent} onUpload={() => refetch()} />
+      )}
     </>
   );
 }
