@@ -679,6 +679,20 @@
               ]
             }
           ]
+        },
+        {
+          "name": "form_response",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "This event, represented as a response to the event form set up for this\nevent category.  This only includes publicly-visible fields; fields not\nvisible to the public will be replaced with a \"this is hidden\" message.",
+              "types": [
+                "Hash"
+              ]
+            }
+          ]
         }
       ]
     },
@@ -2886,6 +2900,20 @@
               ]
             }
           ]
+        },
+        {
+          "name": "form_response",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "This proposal, represented as a response to the proposal form set up for this\nevent category.  This only includes always-visible fields; fields not\nvisible to everyone who can see this proposal will be replaced with a\n\"this is hidden\" message.",
+              "types": [
+                "Hash"
+              ]
+            }
+          ]
         }
       ]
     },
@@ -4027,6 +4055,20 @@
               "text": "A webcal:// URL for the user's personal schedule for this convention.  This URL\nis considered secret and should only be given to that user.",
               "types": [
                 "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "form_response",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The user's response to the profile form set up by this convention.  This includes\nthe fields that the user themselves can see; admin-only fields will be replaced\nwith a \"this is hidden\" message.",
+              "types": [
+                "Hash"
               ]
             }
           ]
