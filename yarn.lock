@@ -3260,7 +3260,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/import@npm:^6.3.1":
+"@graphql-tools/import@npm:^6.3.1, @graphql-tools/import@npm:^6.4.0":
   version: 6.4.1
   resolution: "@graphql-tools/import@npm:6.4.1"
   dependencies:
@@ -3269,18 +3269,6 @@ __metadata:
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
   checksum: a80bff686e9b9b76bf31f6e7e4156beb69d36c64ffeecb52cb84bdc7a495443d976e6bd250868801b8076cbafaf4d8ede9cfe9b950437f09a98f795d7bc4706b
-  languageName: node
-  linkType: hard
-
-"@graphql-tools/import@npm:^6.4.0":
-  version: 6.4.0
-  resolution: "@graphql-tools/import@npm:6.4.0"
-  dependencies:
-    resolve-from: 5.0.0
-    tslib: ~2.3.0
-  peerDependencies:
-    graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: f2fd8b0a192a324637a638c4218d62f8a16824749b5ca796f46be34a539a745c3ac8e5fb38757ee774205fca23c500c7d063d206875e85a21e8f150b8c185a46
   languageName: node
   linkType: hard
 
@@ -3480,7 +3468,7 @@ __metadata:
     tslib: ~2.3.0
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 4d6a04f2129b7a7f913c86f4581c260ae94988ac572302bab9a519e28c12c224d31394ee9c1c8ecc63df98e52f1739ced9d36b0eb06a9d8944a14fa7ad7dbfe4
+  checksum: d4588183100d24bed26e3a6c5319d69e21531e883213c1088b21f67cb722a5ee9b655f44fd3640dce2bd5b747163aab75eac1e70ed27c89395805578bbbf82cc
   languageName: node
   linkType: hard
 
