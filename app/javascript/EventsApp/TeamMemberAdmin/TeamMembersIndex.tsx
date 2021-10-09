@@ -8,18 +8,17 @@ import {
   useConfirm,
   sortByLocaleString,
   PageLoadingIndicator,
+  useDeleteMutationWithReferenceArrayUpdater,
 } from '@neinteractiveliterature/litform';
 
 import Checkmark from './Checkmark';
 import ProvideTicketModal from './ProvideTicketModal';
-import { TeamMembersQuery } from './queries';
 import usePageTitle from '../../usePageTitle';
 import useValueUnless from '../../useValueUnless';
-import { useDeleteMutation } from '../../MutationUtils';
-import { DeleteTeamMember } from './mutations';
 import { TeamMembersQueryData, useTeamMembersQuery } from './queries.generated';
 import { DropdownMenu } from '../../UIComponents/DropdownMenu';
 import FourOhFourPage from '../../FourOhFourPage';
+import { useDeleteTeamMemberMutation } from './mutations.generated';
 
 function sortTeamMembers(teamMembers: TeamMembersQueryData['convention']['event']['team_members']) {
   return sortByLocaleString(teamMembers, (teamMember) => teamMember.user_con_profile.name_inverted ?? '');
@@ -42,13 +41,12 @@ function TeamMemberActionMenu({
 }: TeamMemberActionMenuProps) {
   const { t } = useTranslation();
   const confirm = useConfirm();
-  const deleteTeamMember = useDeleteMutation(DeleteTeamMember, {
-    query: TeamMembersQuery,
-    queryVariables: { eventId: event.id },
-    variables: { input: { id: teamMember.id } },
-    idVariablePath: ['input', 'id'],
-    arrayPath: ['event', 'team_members'],
-  });
+  const [deleteTeamMember] = useDeleteMutationWithReferenceArrayUpdater(
+    useDeleteTeamMemberMutation,
+    event,
+    'team_members',
+    (teamMember) => ({ input: { transitionalId: teamMember.id } }),
+  );
 
   return (
     <DropdownMenu
@@ -87,7 +85,7 @@ function TeamMemberActionMenu({
                   teamMemberName: event.event_category.team_member_name,
                 },
               ),
-              action: () => deleteTeamMember({}),
+              action: () => deleteTeamMember(teamMember),
               renderError: (error) => <ErrorDisplay graphQLError={error} />,
             })
           }

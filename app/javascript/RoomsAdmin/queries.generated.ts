@@ -4,26 +4,33 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
+export type RoomAdminRoomFieldsFragment = { __typename: 'Room', name?: string | null | undefined, id: string, runs: Array<{ __typename: 'Run', id: string }> };
+
 export type RoomsAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type RoomsAdminQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, rooms: Array<{ __typename: 'Room', name?: string | null | undefined, id: string, runs: Array<{ __typename: 'Run', id: string }> }> } };
 
-
+export const RoomAdminRoomFieldsFragmentDoc = gql`
+    fragment RoomAdminRoomFields on Room {
+  id: transitionalId
+  name
+  runs {
+    id: transitionalId
+  }
+}
+    `;
 export const RoomsAdminQueryDocument = gql`
     query RoomsAdminQuery {
   convention: conventionByRequestHost {
     id: transitionalId
     rooms {
       id: transitionalId
-      name
-      runs {
-        id: transitionalId
-      }
+      ...RoomAdminRoomFields
     }
   }
 }
-    `;
+    ${RoomAdminRoomFieldsFragmentDoc}`;
 
 /**
  * __useRoomsAdminQuery__

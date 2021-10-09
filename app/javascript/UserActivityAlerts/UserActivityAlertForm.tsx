@@ -13,12 +13,12 @@ import {
 import UserConProfileSelect from '../BuiltInFormControls/UserConProfileSelect';
 import UserSelect from '../BuiltInFormControls/UserSelect';
 import { DefaultUserConProfilesQueryData } from '../BuiltInFormControls/selectDefaultQueries.generated';
-import { UserActivityAlertQueryData } from './queries.generated';
+import { UserActivityAlertsAdminQueryData } from './queries.generated';
 
-type AlertType = UserActivityAlertQueryData['convention']['user_activity_alert'];
+type AlertType = UserActivityAlertsAdminQueryData['convention']['user_activity_alerts'][number];
 
 export type UserActivityAlertFormProps = {
-  convention: Pick<UserActivityAlertQueryData['convention'], 'ticket_name' | 'ticket_mode' | 'staff_positions'>;
+  convention: Pick<UserActivityAlertsAdminQueryData['convention'], 'ticket_name' | 'ticket_mode' | 'staff_positions'>;
   disabled?: boolean;
   userActivityAlert: AlertType;
   onChange: React.Dispatch<React.SetStateAction<AlertType>>;

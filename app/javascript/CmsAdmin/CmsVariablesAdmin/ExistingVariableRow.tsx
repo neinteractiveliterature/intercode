@@ -1,28 +1,25 @@
 import { ApolloError, useApolloClient } from '@apollo/client';
-import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
+import { useConfirm, ErrorDisplay, useDeleteMutationWithReferenceArrayUpdater } from '@neinteractiveliterature/litform';
 
 import CommitableInput from '../../BuiltInFormControls/CommitableInput';
-import { CmsVariablesQuery, DeleteCmsVariableMutation } from './queries';
 import useAsyncFunction from '../../useAsyncFunction';
-import { useDeleteMutation } from '../../MutationUtils';
-import { CmsVariablesQueryData, useSetCmsVariableMutation } from './queries.generated';
+import { CmsVariablesQueryData, useDeleteCmsVariableMutation, useSetCmsVariableMutation } from './queries.generated';
 
 export type ExistingVariableRowProps = {
+  cmsParent: CmsVariablesQueryData['cmsParent'];
   variable: CmsVariablesQueryData['cmsParent']['cmsVariables'][0];
 };
 
-function ExistingVariableRow({ variable }: ExistingVariableRowProps): JSX.Element {
+function ExistingVariableRow({ cmsParent, variable }: ExistingVariableRowProps): JSX.Element {
   const [setVariableMutate] = useSetCmsVariableMutation();
-  const [setVariable, setVariableError, , clearSetVariableError] =
-    useAsyncFunction(setVariableMutate);
-  const deleteVariableMutate = useDeleteMutation(DeleteCmsVariableMutation, {
-    query: CmsVariablesQuery,
-    arrayPath: ['cmsVariables'],
-    idVariablePath: ['key'],
-    idAttribute: 'key',
-  });
-  const [deleteVariable, deleteVariableError, , clearDeleteVariableError] =
-    useAsyncFunction(deleteVariableMutate);
+  const [setVariable, setVariableError, , clearSetVariableError] = useAsyncFunction(setVariableMutate);
+  const [deleteVariableMutate] = useDeleteMutationWithReferenceArrayUpdater(
+    useDeleteCmsVariableMutation,
+    cmsParent,
+    'cmsVariables',
+    (variable) => ({ key: variable.key }),
+  );
+  const [deleteVariable, deleteVariableError, , clearDeleteVariableError] = useAsyncFunction(deleteVariableMutate);
   const confirm = useConfirm();
   const apolloClient = useApolloClient();
 
@@ -44,7 +41,7 @@ function ExistingVariableRow({ variable }: ExistingVariableRowProps): JSX.Elemen
   };
 
   const deleteConfirmed = async () => {
-    await deleteVariable({ variables: { key: variable.key } });
+    await deleteVariable(variable);
     return apolloClient.resetStore();
   };
 

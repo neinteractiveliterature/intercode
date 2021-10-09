@@ -1676,7 +1676,7 @@ export type CreateTeamMemberInput = {
   team_member: TeamMemberInput;
   transitionalEventId?: Maybe<Scalars['ID']>;
   transitionalProvideTicketTypeId?: Maybe<Scalars['ID']>;
-  transitional_user_con_profile_id?: Maybe<Scalars['ID']>;
+  transitionalUserConProfileId?: Maybe<Scalars['ID']>;
   user_con_profile_id?: Maybe<Scalars['Int']>;
 };
 

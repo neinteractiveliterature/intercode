@@ -7,23 +7,18 @@ import {
   ErrorDisplay,
   sortByLocaleString,
   LoadQueryWrapper,
+  useDeleteMutationWithReferenceArrayUpdater,
 } from '@neinteractiveliterature/litform';
 
-import { DeleteForm } from './mutations';
-import { FormAdminQuery } from './queries';
 import usePageTitle from '../usePageTitle';
-import { useDeleteMutation } from '../MutationUtils';
 import NewFormModal from './NewFormModal';
 import { FormAdminQueryData, useFormAdminQuery } from './queries.generated';
+import { useDeleteFormMutation } from './mutations.generated';
 
 function describeFormUsers(form: FormAdminQueryData['convention']['forms'][0]) {
   return [
-    ...form.user_con_profile_conventions
-      .map((convention) => `User profile form for ${convention.name}`)
-      .sort(),
-    ...form.event_categories
-      .map((eventCategory) => `Event form for ${pluralize(eventCategory.name)}`)
-      .sort(),
+    ...form.user_con_profile_conventions.map((convention) => `User profile form for ${convention.name}`).sort(),
+    ...form.event_categories.map((eventCategory) => `Event form for ${pluralize(eventCategory.name)}`).sort(),
     ...form.proposal_event_categories
       .map((eventCategory) => `Proposal form for ${pluralize(eventCategory.name)}`)
       .sort(),
@@ -32,16 +27,14 @@ function describeFormUsers(form: FormAdminQueryData['convention']['forms'][0]) {
 
 export default LoadQueryWrapper(useFormAdminQuery, function FormAdminIndex({ data }) {
   const confirm = useConfirm();
-  const deleteForm = useDeleteMutation(DeleteForm, {
-    query: FormAdminQuery,
-    arrayPath: ['convention', 'forms'],
-    idVariablePath: ['id'],
-  });
-  const newFormModal = useModal();
-  const sortedForms = useMemo(
-    () => sortByLocaleString(data.convention.forms, (form) => form.title),
-    [data],
+  const [deleteForm] = useDeleteMutationWithReferenceArrayUpdater(
+    useDeleteFormMutation,
+    data.convention,
+    'forms',
+    (form) => ({ id: form.id }),
   );
+  const newFormModal = useModal();
+  const sortedForms = useMemo(() => sortByLocaleString(data.convention.forms, (form) => form.title), [data]);
 
   usePageTitle('Forms');
 
@@ -52,9 +45,7 @@ export default LoadQueryWrapper(useFormAdminQuery, function FormAdminIndex({ dat
         {data.convention.name}
       </h1>
 
-      <div className="alert alert-warning mt-4">
-        Changes to forms take effect immediately. Proceed with caution.
-      </div>
+      <div className="alert alert-warning mt-4">Changes to forms take effect immediately. Proceed with caution.</div>
 
       <table className="table table-striped">
         <thead>
@@ -85,17 +76,14 @@ export default LoadQueryWrapper(useFormAdminQuery, function FormAdminIndex({ dat
                     confirm({
                       prompt: 'Are you sure you want to delete this form?',
                       renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
-                      action: () => deleteForm({ variables: { id: form.id } }),
+                      action: () => deleteForm(form),
                     })
                   }
                 >
                   <i className="bi-trash" />
                   <span className="visually-hidden">Delete form</span>
                 </button>
-                <Link
-                  to={`/admin_forms/${form.id}/edit`}
-                  className="btn btn-sm btn-outline-primary"
-                >
+                <Link to={`/admin_forms/${form.id}/edit`} className="btn btn-sm btn-outline-primary">
                   Edit
                 </Link>
               </td>
@@ -108,7 +96,7 @@ export default LoadQueryWrapper(useFormAdminQuery, function FormAdminIndex({ dat
         New form
       </button>
 
-      <NewFormModal visible={newFormModal.visible} close={newFormModal.close} />
+      <NewFormModal convention={data.convention} visible={newFormModal.visible} close={newFormModal.close} />
     </>
   );
 });

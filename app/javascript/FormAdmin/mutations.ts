@@ -1,6 +1,5 @@
 import { gql } from '@apollo/client';
-import { FormFields, FormEditorData, FormEditorFormItemFields } from './queries';
-import { CommonFormSectionFields } from '../Models/commonFormFragments';
+import { FormFields, FormEditorData, FormEditorFormItemFields, FormEditorFormSectionFields } from './queries';
 
 export const CreateFormWithJSON = gql`
   mutation CreateFormWithJSON($formJSON: String!, $formType: FormType!) {
@@ -67,18 +66,12 @@ export const CreateFormSection = gql`
     createFormSection(input: { transitionalFormId: $formId, form_section: $formSection }) {
       form_section {
         id: transitionalId
-        ...CommonFormSectionFields
-
-        form_items {
-          id: transitionalId
-          ...FormEditorFormItemFields
-        }
+        ...FormEditorFormSectionFields
       }
     }
   }
 
-  ${CommonFormSectionFields}
-  ${FormEditorFormItemFields}
+  ${FormEditorFormSectionFields}
 `;
 
 export const UpdateFormSection = gql`
@@ -86,18 +79,12 @@ export const UpdateFormSection = gql`
     updateFormSection(input: { transitionalId: $id, form_section: $formSection }) {
       form_section {
         id: transitionalId
-        ...CommonFormSectionFields
-
-        form_items {
-          id: transitionalId
-          ...FormEditorFormItemFields
-        }
+        ...FormEditorFormSectionFields
       }
     }
   }
 
-  ${CommonFormSectionFields}
-  ${FormEditorFormItemFields}
+  ${FormEditorFormSectionFields}
 `;
 
 export const DeleteFormSection = gql`
