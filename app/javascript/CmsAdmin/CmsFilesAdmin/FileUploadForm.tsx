@@ -2,10 +2,13 @@ import { useState, useCallback } from 'react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ApolloError } from '@apollo/client';
-import { addNewObjectToReferenceArrayUpdater, ErrorDisplay, useUniqueId } from '@neinteractiveliterature/litform';
+import {
+  ErrorDisplay,
+  useCreateMutationWithReferenceArrayUpdater,
+  useUniqueId,
+} from '@neinteractiveliterature/litform';
 
 import FilePreview from './FilePreview';
-import useAsyncFunction from '../../useAsyncFunction';
 import { CmsFileFieldsFragmentDoc, CmsFilesAdminQueryData } from './queries.generated';
 import { CreateCmsFileMutationData, useCreateCmsFileMutation } from './mutations.generated';
 
@@ -19,15 +22,12 @@ function FileUploadForm({ cmsParent, onUpload }: FileUploadFormProps): JSX.Eleme
   const [file, setFile] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const fileInputId = useUniqueId('file-');
-  const [createMutate, createError, createInProgress] = useAsyncFunction(
-    useCreateCmsFileMutation({
-      update: addNewObjectToReferenceArrayUpdater(
-        cmsParent,
-        'cmsFiles',
-        (data: CreateCmsFileMutationData) => data.createCmsFile.cms_file,
-        CmsFileFieldsFragmentDoc,
-      ),
-    })[0],
+  const [createMutate, { error: createError, loading: createInProgress }] = useCreateMutationWithReferenceArrayUpdater(
+    useCreateCmsFileMutation,
+    cmsParent,
+    'cmsFiles',
+    (data) => data.createCmsFile.cms_file,
+    CmsFileFieldsFragmentDoc,
   );
 
   const uploadFileChanged = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {

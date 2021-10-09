@@ -6,7 +6,7 @@ import {
   LoadQueryWrapper,
   ErrorDisplay,
   useConfirm,
-  deleteObjectFromReferenceArrayUpdater,
+  useDeleteMutationWithReferenceArrayUpdater,
 } from '@neinteractiveliterature/litform';
 
 import pluralizeWithCount from '../pluralizeWithCount';
@@ -50,12 +50,12 @@ export default LoadQueryWrapper(useAdminTicketTypesQuery, function TicketTypesLi
   usePageTitle(`${capitalize(data.convention.ticket_name)} types`);
 
   const confirm = useConfirm();
-  const [deleteTicketTypeMutate] = useDeleteTicketTypeMutation();
-  const deleteTicketType = (ticketType: typeof data.convention.ticket_types[number]) =>
-    deleteTicketTypeMutate({
-      variables: { input: { transitionalId: ticketType.id } },
-      update: deleteObjectFromReferenceArrayUpdater(data.convention, 'ticket_types', ticketType),
-    });
+  const [deleteTicketType] = useDeleteMutationWithReferenceArrayUpdater(
+    useDeleteTicketTypeMutation,
+    data.convention,
+    'ticket_types',
+    (ticketType) => ({ input: { transitionalId: ticketType.id } }),
+  );
 
   const renderTicketTypeDisplay = (ticketType: TicketTypeType) => (
     <div className={`card my-4 overflow-hidden ${cardClassForTicketType(ticketType)}`} key={ticketType.id}>
