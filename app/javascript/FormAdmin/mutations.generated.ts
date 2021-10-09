@@ -4,7 +4,7 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import { FormFieldsFragmentDoc } from './queries.generated';
 import { FormEditorDataFragmentDoc } from './queries.generated';
-import { CommonFormSectionFieldsFragmentDoc } from '../Models/commonFormFragments.generated';
+import { FormEditorFormSectionFieldsFragmentDoc } from './queries.generated';
 import { FormEditorFormItemFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
@@ -299,16 +299,11 @@ export const CreateFormSectionDocument = gql`
   ) {
     form_section {
       id: transitionalId
-      ...CommonFormSectionFields
-      form_items {
-        id: transitionalId
-        ...FormEditorFormItemFields
-      }
+      ...FormEditorFormSectionFields
     }
   }
 }
-    ${CommonFormSectionFieldsFragmentDoc}
-${FormEditorFormItemFieldsFragmentDoc}`;
+    ${FormEditorFormSectionFieldsFragmentDoc}`;
 export type CreateFormSectionMutationFn = Apollo.MutationFunction<CreateFormSectionMutationData, CreateFormSectionMutationVariables>;
 
 /**
@@ -341,16 +336,11 @@ export const UpdateFormSectionDocument = gql`
   updateFormSection(input: {transitionalId: $id, form_section: $formSection}) {
     form_section {
       id: transitionalId
-      ...CommonFormSectionFields
-      form_items {
-        id: transitionalId
-        ...FormEditorFormItemFields
-      }
+      ...FormEditorFormSectionFields
     }
   }
 }
-    ${CommonFormSectionFieldsFragmentDoc}
-${FormEditorFormItemFieldsFragmentDoc}`;
+    ${FormEditorFormSectionFieldsFragmentDoc}`;
 export type UpdateFormSectionMutationFn = Apollo.MutationFunction<UpdateFormSectionMutationData, UpdateFormSectionMutationVariables>;
 
 /**

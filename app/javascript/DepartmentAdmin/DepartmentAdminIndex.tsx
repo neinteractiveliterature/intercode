@@ -3,22 +3,21 @@ import {
   LoadQueryWrapper,
   useGraphQLConfirm,
   sortByLocaleString,
+  useDeleteMutationWithReferenceArrayUpdater,
 } from '@neinteractiveliterature/litform';
 
-import { DepartmentAdminQuery } from './queries';
-import { DeleteDepartment } from './mutations';
-
 import usePageTitle from '../usePageTitle';
-import { useDeleteMutation } from '../MutationUtils';
 import { useDepartmentAdminQuery } from './queries.generated';
+import { useDeleteDepartmentMutation } from './mutations.generated';
 
 export default LoadQueryWrapper(useDepartmentAdminQuery, function DepartmentAdminIndex({ data }) {
   const confirm = useGraphQLConfirm();
-  const deleteDepartment = useDeleteMutation(DeleteDepartment, {
-    query: DepartmentAdminQuery,
-    arrayPath: ['convention', 'departments'],
-    idVariablePath: ['id'],
-  });
+  const [deleteDepartment] = useDeleteMutationWithReferenceArrayUpdater(
+    useDeleteDepartmentMutation,
+    data.convention,
+    'departments',
+    (department) => ({ id: department.id }),
+  );
   usePageTitle('Departments');
 
   return (
@@ -49,7 +48,7 @@ export default LoadQueryWrapper(useDepartmentAdminQuery, function DepartmentAdmi
                   className="btn btn-sm btn-outline-danger me-2"
                   onClick={() =>
                     confirm({
-                      action: () => deleteDepartment({ variables: { id: department.id } }),
+                      action: () => deleteDepartment(department),
                       prompt: `Are you sure you want to delete the department “${department.name}”?`,
                     })
                   }
@@ -57,10 +56,7 @@ export default LoadQueryWrapper(useDepartmentAdminQuery, function DepartmentAdmi
                   <span className="visually-hidden">Delete department</span>
                   <i className="bi-trash" />
                 </button>
-                <Link
-                  to={`/admin_departments/${department.id}/edit`}
-                  className="btn btn-sm btn-outline-secondary"
-                >
+                <Link to={`/admin_departments/${department.id}/edit`} className="btn btn-sm btn-outline-secondary">
                   Edit
                 </Link>
               </td>

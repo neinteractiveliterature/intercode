@@ -1,18 +1,17 @@
 import { gql } from '@apollo/client';
+import { RoomAdminRoomFields } from './queries';
 
 export const CreateRoom = gql`
   mutation CreateRoom($input: CreateRoomInput!) {
     createRoom(input: $input) {
       room {
         id: transitionalId
-        name
-
-        runs {
-          id: transitionalId
-        }
+        ...RoomAdminRoomFields
       }
     }
   }
+
+  ${RoomAdminRoomFields}
 `;
 
 export const UpdateRoom = gql`
@@ -20,14 +19,12 @@ export const UpdateRoom = gql`
     updateRoom(input: $input) {
       room {
         id: transitionalId
-        name
-
-        runs {
-          id: transitionalId
-        }
+        ...RoomAdminRoomFields
       }
     }
   }
+
+  ${RoomAdminRoomFields}
 `;
 
 export const DeleteRoom = gql`

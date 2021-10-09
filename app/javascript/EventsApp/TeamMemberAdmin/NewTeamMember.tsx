@@ -3,18 +3,20 @@ import { humanize, titleize, underscore } from 'inflected';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ApolloError } from '@apollo/client';
-import { ErrorDisplay, useUniqueId } from '@neinteractiveliterature/litform';
+import {
+  ErrorDisplay,
+  useCreateMutationWithReferenceArrayUpdater,
+  useUniqueId,
+} from '@neinteractiveliterature/litform';
 
 import buildTeamMemberInput from './buildTeamMemberInput';
-import { CreateTeamMember } from './mutations';
 import TeamMemberForm from './TeamMemberForm';
-import { TeamMembersQuery, TeamMemberUserConProfilesQuery } from './queries';
+import { TeamMemberUserConProfilesQuery } from './queries';
 import UserConProfileSelect from '../../BuiltInFormControls/UserConProfileSelect';
-import useAsyncFunction from '../../useAsyncFunction';
-import { useCreateMutation } from '../../MutationUtils';
 import usePageTitle from '../../usePageTitle';
-import { TeamMembersQueryData } from './queries.generated';
+import { TeamMemberFieldsFragmentDoc, TeamMembersQueryData } from './queries.generated';
 import { ReceiveSignupEmail } from '../../graphqlTypes.generated';
+import { useCreateTeamMemberMutation } from './mutations.generated';
 
 export type NewTeamMemberProps = {
   event: TeamMembersQueryData['convention']['event'];
@@ -24,24 +26,25 @@ export type NewTeamMemberProps = {
 function NewTeamMember({ event, eventPath }: NewTeamMemberProps): JSX.Element {
   const { t } = useTranslation();
   const history = useHistory();
-  const [teamMember, setTeamMember] = useState<
-    Partial<TeamMembersQueryData['convention']['event']['team_members'][0]>
-  >({
-    user_con_profile: undefined,
-    display_team_member: true,
-    show_email: false,
-    receive_con_email: true,
-    receive_signup_email: ReceiveSignupEmail.NonWaitlistSignups,
-  });
-  const userConProfileSelectId = useUniqueId('user-con-profile-');
-  const [createTeamMember, createError, createInProgress] = useAsyncFunction(
-    useCreateMutation(CreateTeamMember, {
-      query: TeamMembersQuery,
-      queryVariables: { eventId: event.id },
-      arrayPath: ['event', 'team_members'],
-      newObjectPath: ['createTeamMember', 'team_member'],
-    }),
+  const [teamMember, setTeamMember] = useState<Partial<TeamMembersQueryData['convention']['event']['team_members'][0]>>(
+    {
+      user_con_profile: undefined,
+      display_team_member: true,
+      show_email: false,
+      receive_con_email: true,
+      receive_signup_email: ReceiveSignupEmail.NonWaitlistSignups,
+    },
   );
+  const userConProfileSelectId = useUniqueId('user-con-profile-');
+  const [createTeamMember, { error: createError, loading: createInProgress }] =
+    useCreateMutationWithReferenceArrayUpdater(
+      useCreateTeamMemberMutation,
+      event,
+      'team_members',
+      (data) => data.createTeamMember.team_member,
+      TeamMemberFieldsFragmentDoc,
+      'TeamMemberFields',
+    );
 
   usePageTitle(
     t('events.teamMemberAdmin.newPageTitle', 'Add {{ teamMemberName }} - {{ eventTitle }}', {
@@ -61,11 +64,11 @@ function NewTeamMember({ event, eventPath }: NewTeamMemberProps): JSX.Element {
       await createTeamMember({
         variables: {
           input: {
-            event_id: event.id,
+            transitionalEventId: event.id,
             team_member: buildTeamMemberInput(
               teamMember as TeamMembersQueryData['convention']['event']['team_members'][0],
             ),
-            user_con_profile_id: teamMember.user_con_profile.id,
+            transitionalUserConProfileId: teamMember.user_con_profile.id,
           },
         },
       });
@@ -103,23 +106,13 @@ function NewTeamMember({ event, eventPath }: NewTeamMemberProps): JSX.Element {
 
       {teamMember.user_con_profile ? (
         <>
-          <TeamMemberForm
-            event={event}
-            value={teamMember}
-            onChange={setTeamMember}
-            disabled={createInProgress}
-          />
+          <TeamMemberForm event={event} value={teamMember} onChange={setTeamMember} disabled={createInProgress} />
 
           <ErrorDisplay graphQLError={createError as ApolloError} />
 
           <ul className="list-inline mt-4">
             <li className="list-inline-item">
-              <button
-                type="button"
-                className="btn btn-primary"
-                disabled={createInProgress}
-                onClick={createClicked}
-              >
+              <button type="button" className="btn btn-primary" disabled={createInProgress} onClick={createClicked}>
                 {t('events.teamMemberAdmin.addButton', 'Add {{ teamMemberName }}', {
                   teamMemberName: event.event_category.team_member_name,
                 })}
@@ -128,9 +121,7 @@ function NewTeamMember({ event, eventPath }: NewTeamMemberProps): JSX.Element {
           </ul>
         </>
       ) : (
-        <p>
-          {t('events.teamMemberAdmin.selectUserConProfilePrompt', 'Select a person to continue.')}
-        </p>
+        <p>{t('events.teamMemberAdmin.selectUserConProfilePrompt', 'Select a person to continue.')}</p>
       )}
     </>
   );

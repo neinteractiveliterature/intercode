@@ -20,7 +20,7 @@ all id fields are replaced with ones of type ID.",
 all id fields are replaced with ones of type ID.",
            required: false,
            camelize: false
-  argument :transitional_user_con_profile_id, ID, required: false, camelize: false
+  argument :transitional_user_con_profile_id, ID, required: false, camelize: true
   argument :team_member, Types::TeamMemberInputType, required: true, camelize: false
   argument :provide_ticket_type_id,
            Integer,

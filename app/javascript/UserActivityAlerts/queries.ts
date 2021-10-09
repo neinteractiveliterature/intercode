@@ -41,40 +41,11 @@ export const UserActivityAlertFields = gql`
   }
 `;
 
-export const ConventionTicketNameQuery = gql`
-  query ConventionTicketNameQuery {
-    convention: conventionByRequestHost {
-      id: transitionalId
-      ...UserActivityAlertsAdminConventionFields
-    }
-  }
-
-  ${UserActivityAlertsAdminConventionFields}
-`;
-
-export const UserActivityAlertQuery = gql`
-  query UserActivityAlertQuery($id: Int!) {
-    convention: conventionByRequestHost {
-      id: transitionalId
-      ...UserActivityAlertsAdminConventionFields
-
-      user_activity_alert(id: $id) {
-        id: transitionalId
-        ...UserActivityAlertFields
-      }
-    }
-  }
-
-  ${UserActivityAlertsAdminConventionFields}
-  ${UserActivityAlertFields}
-`;
-
 export const UserActivityAlertsAdminQuery = gql`
   query UserActivityAlertsAdminQuery {
     convention: conventionByRequestHost {
       id: transitionalId
-      ticket_name
-      ticket_mode
+      ...UserActivityAlertsAdminConventionFields
 
       user_activity_alerts {
         id: transitionalId
@@ -84,4 +55,5 @@ export const UserActivityAlertsAdminQuery = gql`
   }
 
   ${UserActivityAlertFields}
+  ${UserActivityAlertsAdminConventionFields}
 `;

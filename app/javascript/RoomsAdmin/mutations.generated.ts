@@ -2,6 +2,7 @@
 import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
+import { RoomAdminRoomFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
 export type CreateRoomMutationVariables = Types.Exact<{
@@ -31,14 +32,11 @@ export const CreateRoomDocument = gql`
   createRoom(input: $input) {
     room {
       id: transitionalId
-      name
-      runs {
-        id: transitionalId
-      }
+      ...RoomAdminRoomFields
     }
   }
 }
-    `;
+    ${RoomAdminRoomFieldsFragmentDoc}`;
 export type CreateRoomMutationFn = Apollo.MutationFunction<CreateRoomMutationData, CreateRoomMutationVariables>;
 
 /**
@@ -70,14 +68,11 @@ export const UpdateRoomDocument = gql`
   updateRoom(input: $input) {
     room {
       id: transitionalId
-      name
-      runs {
-        id: transitionalId
-      }
+      ...RoomAdminRoomFields
     }
   }
 }
-    `;
+    ${RoomAdminRoomFieldsFragmentDoc}`;
 export type UpdateRoomMutationFn = Apollo.MutationFunction<UpdateRoomMutationData, UpdateRoomMutationVariables>;
 
 /**

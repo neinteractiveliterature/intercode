@@ -3,12 +3,15 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import { CommonFormItemFieldsFragmentDoc } from '../Models/commonFormFragments.generated';
-import { CommonFormFieldsFragmentDoc, CommonFormSectionFieldsFragmentDoc } from '../Models/commonFormFragments.generated';
+import { CommonFormSectionFieldsFragmentDoc } from '../Models/commonFormFragments.generated';
+import { CommonFormFieldsFragmentDoc } from '../Models/commonFormFragments.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
 export type FormFieldsFragment = { __typename: 'Form', title: string, form_type: Types.FormType, export_json: any, id: string, event_categories: Array<{ __typename: 'EventCategory', name: string, id: string }>, proposal_event_categories: Array<{ __typename: 'EventCategory', name: string, id: string }>, user_con_profile_conventions: Array<{ __typename: 'Convention', name: string, id: string }> };
 
 export type FormEditorFormItemFieldsFragment = { __typename: 'FormItem', admin_description?: string | null | undefined, public_description?: string | null | undefined, properties?: any | null | undefined, position: number, identifier?: string | null | undefined, item_type: string, rendered_properties?: any | null | undefined, default_value?: any | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole, id: string };
+
+export type FormEditorFormSectionFieldsFragment = { __typename: 'FormSection', title?: string | null | undefined, position: number, id: string, form_items: Array<{ __typename: 'FormItem', admin_description?: string | null | undefined, public_description?: string | null | undefined, properties?: any | null | undefined, position: number, identifier?: string | null | undefined, item_type: string, rendered_properties?: any | null | undefined, default_value?: any | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole, id: string }> };
 
 export type FormEditorDataFragment = { __typename: 'Form', title: string, form_type: Types.FormType, id: string, form_sections: Array<{ __typename: 'FormSection', title?: string | null | undefined, position: number, id: string, form_items: Array<{ __typename: 'FormItem', admin_description?: string | null | undefined, public_description?: string | null | undefined, properties?: any | null | undefined, position: number, identifier?: string | null | undefined, item_type: string, rendered_properties?: any | null | undefined, default_value?: any | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole, id: string }> }> };
 
@@ -62,20 +65,28 @@ export const FormEditorFormItemFieldsFragmentDoc = gql`
   ...CommonFormItemFields
 }
     ${CommonFormItemFieldsFragmentDoc}`;
+export const FormEditorFormSectionFieldsFragmentDoc = gql`
+    fragment FormEditorFormSectionFields on FormSection {
+  id: transitionalId
+  ...CommonFormSectionFields
+  form_items {
+    id: transitionalId
+    ...FormEditorFormItemFields
+  }
+}
+    ${CommonFormSectionFieldsFragmentDoc}
+${FormEditorFormItemFieldsFragmentDoc}`;
 export const FormEditorDataFragmentDoc = gql`
     fragment FormEditorData on Form {
   id: transitionalId
   ...CommonFormFields
   form_sections {
     id: transitionalId
-    form_items {
-      id: transitionalId
-      ...FormEditorFormItemFields
-    }
+    ...FormEditorFormSectionFields
   }
 }
     ${CommonFormFieldsFragmentDoc}
-${FormEditorFormItemFieldsFragmentDoc}`;
+${FormEditorFormSectionFieldsFragmentDoc}`;
 export const FormAdminQueryDocument = gql`
     query FormAdminQuery {
   convention: conventionByRequestHost {

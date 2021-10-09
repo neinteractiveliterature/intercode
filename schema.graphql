@@ -2018,7 +2018,7 @@ input CreateTeamMemberInput {
   team_member: TeamMemberInput!
   transitionalEventId: ID
   transitionalProvideTicketTypeId: ID
-  transitional_user_con_profile_id: ID
+  transitionalUserConProfileId: ID
   user_con_profile_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
 }
 
@@ -7123,7 +7123,7 @@ input UpdateUserActivityAlertInput {
   """
   clientMutationId: String
   id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
-  remove_notification_destination_ids: [Int!]
+  remove_notification_destination_ids: [Int!] @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
   transitionalId: ID
   transitionalRemoveNotificationDestinationIds: [ID!]
   user_activity_alert: UserActivityAlertInput!

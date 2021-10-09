@@ -42,7 +42,7 @@ export default LoadQueryWrapper(useEventAdminEventsQuery, function NewEvent({ da
     () => convention.event_categories.find((c) => c.id === eventCategoryIdParam),
     [convention, eventCategoryIdParam],
   );
-  const [createMutate, createError] = useAsyncFunction<unknown, [CreateEventOptions]>(useCreateEvent());
+  const [createMutate, createError] = useAsyncFunction<unknown, [CreateEventOptions]>(useCreateEvent(convention));
   const initialEvent = useMemo<NewEventFormEvent>(
     () => ({
       form_response_attrs: {},

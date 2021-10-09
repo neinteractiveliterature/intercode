@@ -6,47 +6,34 @@ import {
   ErrorDisplay,
   useGraphQLConfirm,
   sortByLocaleString,
+  useDeleteMutationWithReferenceArrayUpdater,
+  useCreateMutationWithReferenceArrayUpdater,
 } from '@neinteractiveliterature/litform';
 
-import { CreateRoom, DeleteRoom } from './mutations';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
-import { RoomsAdminQuery } from './queries';
 import useAsyncFunction from '../useAsyncFunction';
 import pluralizeWithCount from '../pluralizeWithCount';
 import usePageTitle from '../usePageTitle';
-import { useCreateMutation, useDeleteMutation } from '../MutationUtils';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
-import { RoomsAdminQueryData, RoomsAdminQueryVariables, useRoomsAdminQuery } from './queries.generated';
-import {
-  CreateRoomMutationData,
-  CreateRoomMutationVariables,
-  DeleteRoomMutationData,
-  DeleteRoomMutationVariables,
-  useUpdateRoomMutation,
-} from './mutations.generated';
+import { RoomAdminRoomFieldsFragmentDoc, useRoomsAdminQuery } from './queries.generated';
+import { useCreateRoomMutation, useDeleteRoomMutation, useUpdateRoomMutation } from './mutations.generated';
 
 export default LoadQueryWrapper(useRoomsAdminQuery, function RoomsAdmin({ data }) {
   const authorizationWarning = useAuthorizationRequired('can_manage_rooms');
   const [updateMutate] = useUpdateRoomMutation();
-  const [createRoom, createError] = useAsyncFunction(
-    useCreateMutation<
-      RoomsAdminQueryData,
-      RoomsAdminQueryVariables,
-      CreateRoomMutationVariables,
-      CreateRoomMutationData
-    >(CreateRoom, {
-      query: RoomsAdminQuery,
-      arrayPath: ['convention', 'rooms'],
-      newObjectPath: ['createRoom', 'room'],
-    }),
+  const [createRoom, { error: createError }] = useCreateMutationWithReferenceArrayUpdater(
+    useCreateRoomMutation,
+    data.convention,
+    'rooms',
+    (data) => data.createRoom.room,
+    RoomAdminRoomFieldsFragmentDoc,
   );
   const [updateRoom, updateError] = useAsyncFunction(updateMutate);
-  const [deleteRoom, deleteError] = useAsyncFunction(
-    useDeleteMutation<DeleteRoomMutationVariables, DeleteRoomMutationData>(DeleteRoom, {
-      query: RoomsAdminQuery,
-      arrayPath: ['convention', 'rooms'],
-      idVariablePath: ['input', 'id'],
-    }),
+  const [deleteRoom, , { error: deleteError }] = useDeleteMutationWithReferenceArrayUpdater(
+    useDeleteRoomMutation,
+    data.convention,
+    'rooms',
+    (room) => ({ input: { transitionalId: room.id } }),
   );
   const confirm = useGraphQLConfirm();
 
@@ -75,11 +62,6 @@ export default LoadQueryWrapper(useRoomsAdminQuery, function RoomsAdmin({ data }
     }
   };
 
-  const deleteRoomConfirmed = (roomId: string) =>
-    deleteRoom({
-      variables: { input: { transitionalId: roomId } },
-    });
-
   const sortedRooms = sortByLocaleString(data.convention.rooms, (room) => room.name ?? '');
 
   const roomRows = sortedRooms.map((room) => (
@@ -104,7 +86,7 @@ export default LoadQueryWrapper(useRoomsAdminQuery, function RoomsAdmin({ data }
           onClick={() =>
             confirm({
               prompt: 'Are you sure you want to delete this room?',
-              action: () => deleteRoomConfirmed(room.id),
+              action: () => deleteRoom(room),
             })
           }
           type="button"

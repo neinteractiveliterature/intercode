@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import { CommonFormItemFields, CommonFormFields } from '../Models/commonFormFragments';
+import { CommonFormItemFields, CommonFormSectionFields } from '../Models/commonFormFragments';
 
 export const FormFields = gql`
   fragment FormFields on Form {
@@ -37,6 +37,21 @@ export const FormEditorFormItemFields = gql`
   ${CommonFormItemFields}
 `;
 
+export const FormEditorFormSectionFields = gql`
+  fragment FormEditorFormSectionFields on FormSection {
+    id: transitionalId
+    ...CommonFormSectionFields
+
+    form_items {
+      id: transitionalId
+      ...FormEditorFormItemFields
+    }
+  }
+
+  ${CommonFormSectionFields}
+  ${FormEditorFormItemFields}
+`;
+
 export const FormEditorData = gql`
   fragment FormEditorData on Form {
     id: transitionalId
@@ -44,16 +59,11 @@ export const FormEditorData = gql`
 
     form_sections {
       id: transitionalId
-
-      form_items {
-        id: transitionalId
-        ...FormEditorFormItemFields
-      }
+      ...FormEditorFormSectionFields
     }
   }
 
-  ${CommonFormFields}
-  ${FormEditorFormItemFields}
+  ${FormEditorFormSectionFields}
 `;
 
 export const FormAdminQuery = gql`

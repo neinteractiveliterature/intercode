@@ -10967,7 +10967,7 @@
               "deprecationReason": "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID."
             },
             {
-              "name": "transitional_user_con_profile_id",
+              "name": "transitionalUserConProfileId",
               "description": null,
               "type": {
                 "kind": "SCALAR",
@@ -37920,8 +37920,8 @@
                 }
               },
               "defaultValue": null,
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID."
             },
             {
               "name": "transitionalRemoveNotificationDestinationIds",

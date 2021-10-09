@@ -1,36 +1,34 @@
 import { useCallback } from 'react';
 
 import { buildEventInput, buildRunInput } from './InputBuilders';
-import { CreateEvent, CreateFillerEvent } from './mutations';
-import { EventAdminEventsQuery } from './queries';
-import { useCreateMutation } from '../MutationUtils';
-import { EventAdminEventsQueryData, EventAdminEventsQueryVariables } from './queries.generated';
+import { EventAdminEventsQueryData, EventFieldsFragmentDoc } from './queries.generated';
 import {
   CreateEventMutationData,
   CreateEventMutationVariables,
   CreateFillerEventMutationData,
   CreateFillerEventMutationVariables,
+  useCreateEventMutation,
+  useCreateFillerEventMutation,
 } from './mutations.generated';
 import { SchedulingUi } from '../graphqlTypes.generated';
 import { MutationTuple } from '@apollo/client';
+import { useCreateMutationWithReferenceArrayUpdater } from '@neinteractiveliterature/litform/dist';
 
 export type CreateRegularEventResult = ReturnType<
   MutationTuple<CreateEventMutationData, CreateEventMutationVariables>[0]
 >;
 
-export function useCreateRegularEvent(): (options: {
-  event: Parameters<typeof buildEventInput>[0];
-}) => CreateRegularEventResult {
-  const mutate = useCreateMutation<
-    EventAdminEventsQueryData,
-    EventAdminEventsQueryVariables,
-    CreateEventMutationVariables,
-    CreateEventMutationData
-  >(CreateEvent, {
-    query: EventAdminEventsQuery,
-    arrayPath: ['events'],
-    newObjectPath: ['createEvent', 'event'],
-  });
+export function useCreateRegularEvent(
+  convention: EventAdminEventsQueryData['convention'],
+): (options: { event: Parameters<typeof buildEventInput>[0] }) => CreateRegularEventResult {
+  const [mutate] = useCreateMutationWithReferenceArrayUpdater(
+    useCreateEventMutation,
+    convention,
+    'events',
+    (data) => data.createEvent.event,
+    EventFieldsFragmentDoc,
+    'EventFields',
+  );
 
   const createEvent = useCallback(
     ({ event }: { event: Parameters<typeof buildEventInput>[0] }) =>
@@ -49,29 +47,23 @@ export type CreateSingleRunEventResult = ReturnType<
   MutationTuple<CreateFillerEventMutationData, CreateFillerEventMutationVariables>[0]
 >;
 
-export function useCreateSingleRunEvent(): (options: {
+export function useCreateSingleRunEvent(
+  convention: EventAdminEventsQueryData['convention'],
+): (options: {
   event: Parameters<typeof buildEventInput>[0];
   run: Parameters<typeof buildRunInput>[0];
 }) => CreateSingleRunEventResult {
-  const mutate = useCreateMutation<
-    EventAdminEventsQueryData,
-    EventAdminEventsQueryVariables,
-    CreateFillerEventMutationVariables,
-    CreateFillerEventMutationData
-  >(CreateFillerEvent, {
-    query: EventAdminEventsQuery,
-    arrayPath: ['events'],
-    newObjectPath: ['createFillerEvent', 'event'],
-  });
+  const [mutate] = useCreateMutationWithReferenceArrayUpdater(
+    useCreateFillerEventMutation,
+    convention,
+    'events',
+    (data) => data.createFillerEvent.event,
+    EventFieldsFragmentDoc,
+    'EventFields',
+  );
 
   return useCallback(
-    ({
-      event,
-      run,
-    }: {
-      event: Parameters<typeof buildEventInput>[0];
-      run: Parameters<typeof buildRunInput>[0];
-    }) =>
+    ({ event, run }: { event: Parameters<typeof buildEventInput>[0]; run: Parameters<typeof buildRunInput>[0] }) =>
       mutate({
         variables: {
           input: {
@@ -96,9 +88,11 @@ export type CreateEventOptions = {
 
 export type CreateEventResult = CreateRegularEventResult | CreateSingleRunEventResult;
 
-export default function useCreateEvent(): (options: CreateEventOptions) => CreateEventResult {
-  const createRegularEvent = useCreateRegularEvent();
-  const createSingleRunEvent = useCreateSingleRunEvent();
+export default function useCreateEvent(
+  convention: EventAdminEventsQueryData['convention'],
+): (options: CreateEventOptions) => CreateEventResult {
+  const createRegularEvent = useCreateRegularEvent(convention);
+  const createSingleRunEvent = useCreateSingleRunEvent(convention);
 
   const createEvent = useCallback(
     ({

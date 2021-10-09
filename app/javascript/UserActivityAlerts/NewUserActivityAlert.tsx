@@ -1,30 +1,29 @@
 import { useState, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
-import { LoadQueryWrapper, ErrorDisplay } from '@neinteractiveliterature/litform';
+import {
+  LoadQueryWrapper,
+  ErrorDisplay,
+  useCreateMutationWithReferenceArrayUpdater,
+} from '@neinteractiveliterature/litform';
 
 import buildUserActivityAlertInput from './buildUserActivityAlertInput';
 import { useChangeSet } from '../ChangeSet';
-import { CreateUserActivityAlert } from './mutations';
-import { UserActivityAlertsAdminQuery } from './queries';
 import UserActivityAlertForm from './UserActivityAlertForm';
-import { useCreateMutation } from '../MutationUtils';
-import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
 import {
-  useConventionTicketNameQuery,
-  UserActivityAlertQueryData,
+  UserActivityAlertFieldsFragmentDoc,
   UserActivityAlertsAdminQueryData,
-  UserActivityAlertsAdminQueryVariables,
+  useUserActivityAlertsAdminQuery,
 } from './queries.generated';
-import { CreateUserActivityAlertMutationData, CreateUserActivityAlertMutationVariables } from './mutations.generated';
+import { useCreateUserActivityAlertMutation } from './mutations.generated';
 
-export default LoadQueryWrapper(useConventionTicketNameQuery, function NewUserActivityAlert({ data }) {
+export default LoadQueryWrapper(useUserActivityAlertsAdminQuery, function NewUserActivityAlert({ data }) {
   const history = useHistory();
   usePageTitle('New user activity alert');
 
   const [userActivityAlert, setUserActivityAlert] = useState<
-    UserActivityAlertQueryData['convention']['user_activity_alert']
+    UserActivityAlertsAdminQueryData['convention']['user_activity_alerts'][number]
   >({
     __typename: 'UserActivityAlert',
     id: '',
@@ -37,19 +36,14 @@ export default LoadQueryWrapper(useConventionTicketNameQuery, function NewUserAc
   });
   const [notificationDestinationChangeSet, addNotificationDestination, removeNotificationDestination] =
     useChangeSet<
-      UserActivityAlertQueryData['convention']['user_activity_alert']['notification_destinations'][number]
+      UserActivityAlertsAdminQueryData['convention']['user_activity_alerts'][number]['notification_destinations'][number]
     >();
-  const [create, createError, createInProgress] = useAsyncFunction(
-    useCreateMutation<
-      UserActivityAlertsAdminQueryData,
-      UserActivityAlertsAdminQueryVariables,
-      CreateUserActivityAlertMutationVariables,
-      CreateUserActivityAlertMutationData
-    >(CreateUserActivityAlert, {
-      query: UserActivityAlertsAdminQuery,
-      arrayPath: ['convention', 'user_activity_alerts'],
-      newObjectPath: ['createUserActivityAlert', 'user_activity_alert'],
-    }),
+  const [create, { error: createError, loading: createInProgress }] = useCreateMutationWithReferenceArrayUpdater(
+    useCreateUserActivityAlertMutation,
+    data.convention,
+    'user_activity_alerts',
+    (data) => data.createUserActivityAlert.user_activity_alert,
+    UserActivityAlertFieldsFragmentDoc,
   );
   const combinedUserActivityAlert = useMemo(
     () => ({
