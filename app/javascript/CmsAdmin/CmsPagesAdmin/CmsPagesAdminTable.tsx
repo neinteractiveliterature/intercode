@@ -1,28 +1,30 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { sortByLocaleString, useGraphQLConfirm, LoadQueryWrapper } from '@neinteractiveliterature/litform';
+import {
+  sortByLocaleString,
+  useGraphQLConfirm,
+  LoadQueryWrapper,
+  useDeleteMutationWithReferenceArrayUpdater,
+} from '@neinteractiveliterature/litform';
 
-import { CmsPagesAdminQuery } from './queries';
-import { DeletePage } from './mutations';
-import { useDeleteMutation } from '../../MutationUtils';
 import usePageTitle from '../../usePageTitle';
 import { useCmsPagesAdminQuery } from './queries.generated';
+import { useDeletePageMutation } from './mutations.generated';
 
 export default LoadQueryWrapper(useCmsPagesAdminQuery, function CmsPagesAdminTable({ data }) {
   const confirm = useGraphQLConfirm();
-  const deletePageMutate = useDeleteMutation(DeletePage, {
-    query: CmsPagesAdminQuery,
-    arrayPath: ['cmsPages'],
-    idVariablePath: ['id'],
-  });
+  const [deletePage] = useDeleteMutationWithReferenceArrayUpdater(
+    useDeletePageMutation,
+    data.cmsParent,
+    'cmsPages',
+    (page) => ({ id: page.id }),
+  );
 
   usePageTitle('CMS Pages');
 
   const pagesSorted = useMemo(() => {
     return sortByLocaleString(data.cmsParent.cmsPages, (page) => page.name ?? '');
   }, [data]);
-
-  const deletePage = (id: string) => deletePageMutate({ variables: { id } });
 
   return (
     <>
@@ -60,7 +62,7 @@ export default LoadQueryWrapper(useCmsPagesAdminQuery, function CmsPagesAdminTab
                     onClick={() =>
                       confirm({
                         prompt: `Are you sure you want to delete ${page.name}?`,
-                        action: () => deletePage(page.id),
+                        action: () => deletePage(page),
                       })
                     }
                     className="btn btn-danger btn-sm ms-1"

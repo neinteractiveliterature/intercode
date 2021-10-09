@@ -1,26 +1,28 @@
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
-import { ErrorDisplay } from '@neinteractiveliterature/litform';
+import {
+  ErrorDisplay,
+  LoadQueryWrapper,
+  useCreateMutationWithReferenceArrayUpdater,
+} from '@neinteractiveliterature/litform';
 
-import { CmsGraphqlQueriesQuery } from './queries';
 import CmsGraphqlQueryForm from './CmsGraphqlQueryForm';
-import { CreateCmsGraphqlQuery } from './mutations';
-import useAsyncFunction from '../../useAsyncFunction';
 import usePageTitle from '../../usePageTitle';
-import { useCreateMutation } from '../../MutationUtils';
 
 import 'graphiql/graphiql.css';
+import { CmsGraphqlQueryFieldsFragmentDoc, useCmsGraphqlQueriesQuery } from './queries.generated';
+import { useCreateCmsGraphqlQuery } from './mutations.generated';
 
-function NewCmsGraphqlQuery(): JSX.Element {
+export default LoadQueryWrapper(useCmsGraphqlQueriesQuery, function NewCmsGraphqlQuery({ data }): JSX.Element {
   const history = useHistory();
   const [query, setQuery] = useState({ identifier: '', admin_notes: '', query: '' });
-  const [create, createError, createInProgress] = useAsyncFunction(
-    useCreateMutation(CreateCmsGraphqlQuery, {
-      query: CmsGraphqlQueriesQuery,
-      arrayPath: ['cmsGraphqlQueries'],
-      newObjectPath: ['createCmsGraphqlQuery', 'query'],
-    }),
+  const [create, { error: createError, loading: createInProgress }] = useCreateMutationWithReferenceArrayUpdater(
+    useCreateCmsGraphqlQuery,
+    data.cmsParent,
+    'cmsGraphqlQueries',
+    (data) => data.createCmsGraphqlQuery.query,
+    CmsGraphqlQueryFieldsFragmentDoc,
   );
 
   usePageTitle('CMS GraphQL Queries');
@@ -49,16 +51,9 @@ function NewCmsGraphqlQuery(): JSX.Element {
 
       <ErrorDisplay graphQLError={createError as ApolloError} />
 
-      <button
-        type="button"
-        className="btn btn-primary"
-        disabled={createInProgress}
-        onClick={createClicked}
-      >
+      <button type="button" className="btn btn-primary" disabled={createInProgress} onClick={createClicked}>
         Create GraphQL query
       </button>
     </>
   );
-}
-
-export default NewCmsGraphqlQuery;
+});

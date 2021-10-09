@@ -5,7 +5,7 @@ import {
   sortByLocaleString,
   useConfirm,
   LoadQueryWrapper,
-  deleteObjectFromReferenceArrayUpdater,
+  useDeleteMutationWithReferenceArrayUpdater,
 } from '@neinteractiveliterature/litform';
 
 import usePageTitle from '../../usePageTitle';
@@ -14,19 +14,18 @@ import { useDeleteContentGroupMutation } from './mutations.generated';
 
 export default LoadQueryWrapper(useCmsContentGroupsAdminQuery, function CmsContentGroupsAdminTable({ data }) {
   const confirm = useConfirm();
-  const [deleteContentGroupMutate] = useDeleteContentGroupMutation();
+  const [deleteContentGroup] = useDeleteMutationWithReferenceArrayUpdater(
+    useDeleteContentGroupMutation,
+    data.cmsParent,
+    'cmsContentGroups',
+    (item) => ({ id: item.id }),
+  );
 
   usePageTitle('CMS Content Groups');
 
   const contentGroupsSorted = useMemo(() => {
     return sortByLocaleString(data.cmsParent.cmsContentGroups, (contentGroup) => contentGroup.name);
   }, [data]);
-
-  const deleteContentGroup = (contentGroup: typeof data.cmsParent.cmsContentGroups[number]) =>
-    deleteContentGroupMutate({
-      variables: { id: contentGroup.id },
-      update: deleteObjectFromReferenceArrayUpdater(data.cmsParent, 'cmsContentGroups', contentGroup),
-    });
 
   return (
     <>

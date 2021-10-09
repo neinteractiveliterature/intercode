@@ -1,28 +1,31 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { ErrorDisplay, useConfirm, sortByLocaleString, LoadQueryWrapper } from '@neinteractiveliterature/litform';
+import {
+  ErrorDisplay,
+  useConfirm,
+  sortByLocaleString,
+  LoadQueryWrapper,
+  useDeleteMutationWithReferenceArrayUpdater,
+} from '@neinteractiveliterature/litform';
 
-import { CmsLayoutsAdminQuery } from './queries';
-import { DeleteLayout } from './mutations';
-import { useDeleteMutation } from '../../MutationUtils';
 import usePageTitle from '../../usePageTitle';
 import { useCmsLayoutsAdminQuery } from './queries.generated';
+import { useDeleteLayoutMutation } from './mutations.generated';
 
 export default LoadQueryWrapper(useCmsLayoutsAdminQuery, function CmsLayoutsAdminTable({ data }) {
   const confirm = useConfirm();
-  const deleteLayoutMutate = useDeleteMutation(DeleteLayout, {
-    query: CmsLayoutsAdminQuery,
-    arrayPath: ['cmsLayouts'],
-    idVariablePath: ['id'],
-  });
+  const [deleteLayout] = useDeleteMutationWithReferenceArrayUpdater(
+    useDeleteLayoutMutation,
+    data.cmsParent,
+    'cmsLayouts',
+    (layout) => ({ id: layout.id }),
+  );
 
   const layoutsSorted = useMemo(() => {
     return sortByLocaleString(data.cmsParent.cmsLayouts, (layout) => layout.name ?? '');
   }, [data]);
 
   usePageTitle('CMS Layouts');
-
-  const deleteLayout = (id: string) => deleteLayoutMutate({ variables: { id } });
 
   return (
     <>
@@ -55,7 +58,7 @@ export default LoadQueryWrapper(useCmsLayoutsAdminQuery, function CmsLayoutsAdmi
                     onClick={() =>
                       confirm({
                         prompt: 'Are you sure you want to delete this layout?',
-                        action: () => deleteLayout(layout.id),
+                        action: () => deleteLayout(layout),
                         renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
                       })
                     }

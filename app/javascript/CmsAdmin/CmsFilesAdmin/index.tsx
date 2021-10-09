@@ -2,9 +2,9 @@ import bytes from 'bytes';
 import {
   ErrorDisplay,
   useConfirm,
-  PageLoadingIndicator,
   CopyToClipboardButton,
-  deleteObjectFromReferenceArrayUpdater,
+  useDeleteMutationWithReferenceArrayUpdater,
+  LoadQueryWrapper,
 } from '@neinteractiveliterature/litform';
 import { useTranslation } from 'react-i18next';
 
@@ -15,36 +15,24 @@ import InPlaceEditor from '../../BuiltInFormControls/InPlaceEditor';
 import { useRenameCmsFileMutation, useDeleteCmsFileMutation } from './mutations.generated';
 import { useCmsFilesAdminQuery } from './queries.generated';
 
-function CmsFilesAdmin(): JSX.Element {
-  const { data, loading, error, refetch } = useCmsFilesAdminQuery();
-  const [deleteFileMutate] = useDeleteCmsFileMutation();
+export default LoadQueryWrapper(useCmsFilesAdminQuery, function CmsFilesAdmin({ data }): JSX.Element {
+  const { refetch } = useCmsFilesAdminQuery();
+  const [deleteFile] = useDeleteMutationWithReferenceArrayUpdater(
+    useDeleteCmsFileMutation,
+    data.cmsParent,
+    'cmsFiles',
+    (file) => ({ id: file.id }),
+  );
   const [renameFileMutate] = useRenameCmsFileMutation();
   const confirm = useConfirm();
   const { t } = useTranslation();
 
   usePageTitle('CMS Files');
 
-  const deleteFile = (file: NonNullable<typeof data>['cmsParent']['cmsFiles'][number]) => {
-    if (!data) {
-      return;
-    }
-    deleteFileMutate({
-      variables: { id: file.id },
-      update: deleteObjectFromReferenceArrayUpdater(data.cmsParent, 'cmsFiles', file),
-    });
-  };
   const renameFile = (id: string, filename: string) =>
     renameFileMutate({
       variables: { id, filename },
     });
-
-  if (loading) {
-    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
 
   return (
     <>
@@ -100,6 +88,4 @@ function CmsFilesAdmin(): JSX.Element {
       )}
     </>
   );
-}
-
-export default CmsFilesAdmin;
+});

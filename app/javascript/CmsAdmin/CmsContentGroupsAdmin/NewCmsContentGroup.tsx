@@ -2,10 +2,13 @@ import { useState } from 'react';
 import * as React from 'react';
 import { useHistory } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
-import { addNewObjectToReferenceArrayUpdater, ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform';
+import {
+  ErrorDisplay,
+  LoadQueryWrapper,
+  useCreateMutationWithReferenceArrayUpdater,
+} from '@neinteractiveliterature/litform';
 
 import { buildPermissionInput } from '../../Permissions/PermissionUtils';
-import useAsyncFunction from '../../useAsyncFunction';
 import { useChangeSet } from '../../ChangeSet';
 import usePageTitle from '../../usePageTitle';
 import CmsContentGroupFormFields from './CmsContentGroupFormFields';
@@ -14,21 +17,20 @@ import {
   CmsContentGroupsAdminQueryData,
   useCmsContentGroupsAdminQuery,
 } from './queries.generated';
-import { CreateContentGroupMutationData, useCreateContentGroupMutation } from './mutations.generated';
+import { useCreateContentGroupMutation } from './mutations.generated';
 import { CmsContentTypeIndicator } from '../../graphqlTypes.generated';
 
 export default LoadQueryWrapper(useCmsContentGroupsAdminQuery, function NewCmsContentGroup({ data }): JSX.Element {
   const history = useHistory();
-  const [mutate] = useCreateContentGroupMutation({
-    update: addNewObjectToReferenceArrayUpdater(
+  const [createCmsContentGroup, { error: createError, loading: createInProgress }] =
+    useCreateMutationWithReferenceArrayUpdater(
+      useCreateContentGroupMutation,
       data.cmsParent,
       'cmsContentGroups',
-      (data: CreateContentGroupMutationData) => data.createCmsContentGroup.cms_content_group,
+      (data) => data.createCmsContentGroup.cms_content_group,
       CmsContentGroupFieldsFragmentDoc,
       'CmsContentGroupFields',
-    ),
-  });
-  const [createCmsContentGroup, createError, createInProgress] = useAsyncFunction(mutate);
+    );
   const [contentGroup, setContentGroup] = useState<
     Omit<CmsContentGroupsAdminQueryData['cmsParent']['cmsContentGroups'][0], 'id'>
   >({

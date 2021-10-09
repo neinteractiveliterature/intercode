@@ -3,7 +3,7 @@ import {
   ErrorDisplay,
   useConfirm,
   ButtonWithTooltip,
-  deleteObjectFromReferenceArrayUpdater,
+  useDeleteMutationWithReferenceArrayUpdater,
 } from '@neinteractiveliterature/litform';
 
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
@@ -18,9 +18,12 @@ export type EventCategoryRowProps = {
 
 function EventCategoryRow({ convention, eventCategory }: EventCategoryRowProps): JSX.Element {
   const confirm = useConfirm();
-  const [deleteEventCategory] = useDeleteEventCategoryMutation({
-    update: deleteObjectFromReferenceArrayUpdater(convention, 'event_categories', eventCategory),
-  });
+  const [deleteEventCategory] = useDeleteMutationWithReferenceArrayUpdater(
+    useDeleteEventCategoryMutation,
+    convention,
+    'event_categories',
+    (category) => ({ id: category.id }),
+  );
 
   return (
     <tr>
@@ -55,10 +58,7 @@ function EventCategoryRow({ convention, eventCategory }: EventCategoryRowProps):
               confirm({
                 prompt: 'Are you sure you want to delete this event category?',
                 renderError: (error) => <ErrorDisplay graphQLError={error} />,
-                action: () =>
-                  deleteEventCategory({
-                    variables: { id: eventCategory.id },
-                  }),
+                action: () => deleteEventCategory(eventCategory),
               })
             }
           >

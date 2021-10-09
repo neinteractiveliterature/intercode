@@ -2,28 +2,28 @@ import { useState } from 'react';
 import * as React from 'react';
 import { useHistory } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
-import { ErrorDisplay } from '@neinteractiveliterature/litform';
+import {
+  ErrorDisplay,
+  LoadQueryWrapper,
+  useCreateMutationWithReferenceArrayUpdater,
+} from '@neinteractiveliterature/litform';
 
 import buildLayoutInput from './buildLayoutInput';
-import { CmsLayoutsAdminQuery } from './queries';
-import { CreateLayout } from './mutations';
-import useAsyncFunction from '../../useAsyncFunction';
-import { useCreateMutation } from '../../MutationUtils';
 import CmsLayoutForm from './CmsLayoutForm';
 import usePageTitle from '../../usePageTitle';
 import { CmsLayout } from '../../graphqlTypes.generated';
+import { CreateLayoutMutationData, useCreateLayoutMutation } from './mutations.generated';
+import { CmsLayoutFieldsFragmentDoc, useCmsLayoutsAdminQuery } from './queries.generated';
 
-function NewCmsLayout(): JSX.Element {
+export default LoadQueryWrapper(useCmsLayoutsAdminQuery, function NewCmsLayout({ data }): JSX.Element {
   const history = useHistory();
-  const [layout, setLayout] = useState<
-    Pick<CmsLayout, 'name' | 'admin_notes' | 'navbar_classes' | 'content'>
-  >({});
-  const [createLayout, createError, createInProgress] = useAsyncFunction(
-    useCreateMutation(CreateLayout, {
-      query: CmsLayoutsAdminQuery,
-      arrayPath: ['cmsLayouts'],
-      newObjectPath: ['createCmsLayout', 'cms_layout'],
-    }),
+  const [layout, setLayout] = useState<Pick<CmsLayout, 'name' | 'admin_notes' | 'navbar_classes' | 'content'>>({});
+  const [createLayout, { error: createError, loading: createInProgress }] = useCreateMutationWithReferenceArrayUpdater(
+    useCreateLayoutMutation,
+    data.cmsParent,
+    'cmsLayouts',
+    (data: CreateLayoutMutationData) => data.createCmsLayout.cms_layout,
+    CmsLayoutFieldsFragmentDoc,
   );
 
   usePageTitle('New Layout');
@@ -53,6 +53,4 @@ function NewCmsLayout(): JSX.Element {
       />
     </form>
   );
-}
-
-export default NewCmsLayout;
+});

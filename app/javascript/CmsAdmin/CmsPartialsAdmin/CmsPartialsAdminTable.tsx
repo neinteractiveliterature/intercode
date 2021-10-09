@@ -1,28 +1,31 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { ErrorDisplay, sortByLocaleString, useConfirm, LoadQueryWrapper } from '@neinteractiveliterature/litform';
+import {
+  ErrorDisplay,
+  sortByLocaleString,
+  useConfirm,
+  LoadQueryWrapper,
+  useDeleteMutationWithReferenceArrayUpdater,
+} from '@neinteractiveliterature/litform';
 
-import { CmsPartialsAdminQuery } from './queries';
-import { DeletePartial } from './mutations';
-import { useDeleteMutation } from '../../MutationUtils';
 import usePageTitle from '../../usePageTitle';
 import { useCmsPartialsAdminQuery } from './queries.generated';
+import { useDeletePartialMutation } from './mutations.generated';
 
 export default LoadQueryWrapper(useCmsPartialsAdminQuery, function CmsPartialsAdminTable({ data }) {
   const confirm = useConfirm();
-  const deletePartialMutate = useDeleteMutation(DeletePartial, {
-    query: CmsPartialsAdminQuery,
-    arrayPath: ['cmsPartials'],
-    idVariablePath: ['id'],
-  });
+  const [deletePartial] = useDeleteMutationWithReferenceArrayUpdater(
+    useDeletePartialMutation,
+    data.cmsParent,
+    'cmsPartials',
+    (item) => ({ id: item.id }),
+  );
 
   usePageTitle('CMS Partials');
 
   const partialsSorted = useMemo(() => {
     return sortByLocaleString(data.cmsParent.cmsPartials, (partial) => partial.name ?? '');
   }, [data.cmsParent.cmsPartials]);
-
-  const deletePartial = (id: string) => deletePartialMutate({ variables: { id } });
 
   return (
     <>
@@ -55,7 +58,7 @@ export default LoadQueryWrapper(useCmsPartialsAdminQuery, function CmsPartialsAd
                     onClick={() =>
                       confirm({
                         prompt: 'Are you sure you want to delete this partial?',
-                        action: () => deletePartial(partial.id),
+                        action: () => deletePartial(partial),
                         renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
                       })
                     }
