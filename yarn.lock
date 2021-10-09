@@ -3074,24 +3074,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@edno/docusaurus2-graphql-doc-generator@npm:1.4.3":
-  version: 1.4.3
-  resolution: "@edno/docusaurus2-graphql-doc-generator@npm:1.4.3"
+"@edno/docusaurus2-graphql-doc-generator@npm:1.5.0":
+  version: 1.5.0
+  resolution: "@edno/docusaurus2-graphql-doc-generator@npm:1.5.0"
   dependencies:
     "@graphql-inspector/core": ^3.0.1
     "@graphql-tools/graphql-file-loader": ^7.1.0
-    "@graphql-tools/json-file-loader": ^7.2.0
     "@graphql-tools/load": ^7.3.2
-    "@graphql-tools/url-loader": ^7.2.0
     "@oclif/command": ^1.8.0
-    chalk: ^4.1.2
     fs-extra: ^10.0.0
     graphql: ^15.6.0
     lodash: ^4.17.21
-    moment: ^2.29.1
+    picocolors: ^0.2.1
     prettier: ^2.4.1
     slugify: ^1.6.0
-  checksum: d208d76c525aa44f1fbb206c3358438a63acd5cee79117acc62f5f0f50740ee791a8bc26dd7126f759ff596b47bb0e5709f8d85cfe35d9e265704b915aa89027
+  checksum: 2ce0daa9f2dd446f2fa5283d6c173f640f4886cd5809e00c354066dfe6a92122a5087cae140aeb15ba252e8bd188c58381e7803e92b646ba8ea89dae15c02503
   languageName: node
   linkType: hard
 
@@ -3685,7 +3682,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/json-file-loader@npm:^7.0.1, @graphql-tools/json-file-loader@npm:^7.1.2, @graphql-tools/json-file-loader@npm:^7.2.0":
+"@graphql-tools/json-file-loader@npm:^7.0.1, @graphql-tools/json-file-loader@npm:^7.1.2":
   version: 7.2.0
   resolution: "@graphql-tools/json-file-loader@npm:7.2.0"
   dependencies:
@@ -3910,39 +3907,6 @@ __metadata:
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
   checksum: 8ac5f1923b0dd329e3380b2f829cecfca3c5ab93ebfb3c3973503470e48b1ad1c31d0a4ac291dde411046e1fdd0a733b067ce2c45ce65e088e38931969f14f00
-  languageName: node
-  linkType: hard
-
-"@graphql-tools/url-loader@npm:^7.2.0":
-  version: 7.2.0
-  resolution: "@graphql-tools/url-loader@npm:7.2.0"
-  dependencies:
-    "@ardatan/fetch-event-source": 2.0.2
-    "@graphql-tools/delegate": ^8.2.0
-    "@graphql-tools/utils": ^8.2.0
-    "@graphql-tools/wrap": ^8.1.0
-    "@n1ru4l/graphql-live-query": 0.8.1
-    "@types/websocket": 1.0.4
-    "@types/ws": ^7.4.7
-    abort-controller: 3.0.0
-    cross-fetch: 3.1.4
-    extract-files: 11.0.0
-    form-data: 4.0.0
-    graphql-sse: ^1.0.1
-    graphql-ws: ^5.4.1
-    is-promise: 4.0.0
-    isomorphic-ws: 4.0.1
-    lodash: 4.17.21
-    meros: 1.1.4
-    subscriptions-transport-ws: ^0.10.0
-    sync-fetch: 0.3.0
-    tslib: ~2.3.0
-    valid-url: 1.0.9
-    value-or-promise: 1.0.10
-    ws: 8.2.2
-  peerDependencies:
-    graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 541586165622112e867040b4fc5c5ec069902303e0883b6a57bf287b31221b4a87e68389d5933db04c9b62a1e8a8d9a75471306ddf211a93ad8db2aa18929175
   languageName: node
   linkType: hard
 
@@ -4588,15 +4552,6 @@ __metadata:
   peerDependencies:
     graphql: ^15.4.0
   checksum: 33f93fee06d874df9e19a545f957bc2a5e637fd90255b7c003cad98ef7a70684c73f8d962319b4d29973b219a6970690dd84498ae253fa446171f8f39228a729
-  languageName: node
-  linkType: hard
-
-"@n1ru4l/graphql-live-query@npm:0.8.1":
-  version: 0.8.1
-  resolution: "@n1ru4l/graphql-live-query@npm:0.8.1"
-  peerDependencies:
-    graphql: ^15.4.0
-  checksum: cc225009ef19b5e22e6d90f63d887b93241d9dcd74a8fad0f42baa3bd165a5fcadde1f209635ef194eeb238477f3e47b77027a0502d0a739a5d865d07827d54f
   languageName: node
   linkType: hard
 
@@ -8180,16 +8135,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chalk@npm:^4.1.2":
-  version: 4.1.2
-  resolution: "chalk@npm:4.1.2"
-  dependencies:
-    ansi-styles: ^4.1.0
-    supports-color: ^7.1.0
-  checksum: fe75c9d5c76a7a98d45495b91b2172fa3b7a09e0cc9370e5c8feb1c567b85c4288e2b3fded7cfdd7359ac28d6b3844feb8b82b8686842e93d23c827c417e83fc
-  languageName: node
-  linkType: hard
-
 "change-case-all@npm:1.0.14":
   version: 1.0.14
   resolution: "change-case-all@npm:1.0.14"
@@ -10196,7 +10141,7 @@ __metadata:
     "@docusaurus/core": 2.0.0-beta.6
     "@docusaurus/preset-classic": 2.0.0-beta.6
     "@docusaurus/types": 2.0.0-beta.6
-    "@edno/docusaurus2-graphql-doc-generator": 1.4.3
+    "@edno/docusaurus2-graphql-doc-generator": 1.5.0
     "@mdx-js/react": 1.6.22
     "@svgr/webpack": 5.5.0
     clsx: 1.1.1
@@ -12763,15 +12708,6 @@ fsevents@^1.2.7:
   peerDependencies:
     graphql: 14.x || 15.x
   checksum: 5be0398af5cd02694893169bcc3b92f454910dac3b257aa350fa59686d8ef24334619f0b5bdd2fdefea654eab9544ec6f270688255dde9eeff5475d5e64ea073
-  languageName: node
-  linkType: hard
-
-"graphql-sse@npm:^1.0.1":
-  version: 1.0.4
-  resolution: "graphql-sse@npm:1.0.4"
-  peerDependencies:
-    graphql: ">=0.11 <=16"
-  checksum: 19680b094279c9b35af61bfaa422d3170adc2b26b161db0346243461742dd5db5b3e04181d1df5c94f9e8b63b71dfe7c68358f25139c578813b7133e84d664f5
   languageName: node
   linkType: hard
 
@@ -17163,13 +17099,6 @@ fsevents@^1.2.7:
   version: 2.2.2
   resolution: "module-alias@npm:2.2.2"
   checksum: 4b5543f834b484033e5bd184096ca8276b9195e32e88883ee6ea8d3a4789d97c470d26f5fa7271bd7a26588bf67e4d27dbdb594ee327aef1c9619d855dc78342
-  languageName: node
-  linkType: hard
-
-"moment@npm:^2.29.1":
-  version: 2.29.1
-  resolution: "moment@npm:2.29.1"
-  checksum: 1e14d5f422a2687996be11dd2d50c8de3bd577c4a4ca79ba5d02c397242a933e5b941655de6c8cb90ac18f01cc4127e55b4a12ae3c527a6c0a274e455979345e
   languageName: node
   linkType: hard
 
@@ -25107,21 +25036,6 @@ resolve@^2.0.0-next.3:
     utf-8-validate:
       optional: true
   checksum: 22906903c7952790a911627f99e3419d8f251a6a540d9ba4f334a7e0865d7ea7026d8ad23829c3c0f2843a9f15bdb91c646e7f8853a5a5ba25a57dea2cf7d416
-  languageName: node
-  linkType: hard
-
-"ws@npm:8.2.2":
-  version: 8.2.2
-  resolution: "ws@npm:8.2.2"
-  peerDependencies:
-    bufferutil: ^4.0.1
-    utf-8-validate: ^5.0.2
-  peerDependenciesMeta:
-    bufferutil:
-      optional: true
-    utf-8-validate:
-      optional: true
-  checksum: 25e764c631141bdca45badc86e69437b8791e57e461f9a16c0f7cd779baf70c3fbba07ecdd9e0d34fea1155ddcf62ef165cd7f81b68ed545bc7d455c15a85fb0
   languageName: node
   linkType: hard
 
