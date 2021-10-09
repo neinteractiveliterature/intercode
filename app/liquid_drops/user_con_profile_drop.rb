@@ -95,6 +95,16 @@ class UserConProfileDrop < Liquid::Drop
     )
   end
 
+  # @return [Hash] The user's response to the profile form set up by this convention.  This includes
+  #                the fields that the user themselves can see; admin-only fields will be replaced
+  #                with a "this is hidden" message.
+  def form_response
+    FormResponsePresenter.new(
+      user_con_profile.convention.user_con_profile_form,
+      user_con_profile
+    ).as_json_with_rendered_markdown('user_con_profile', user_con_profile, '').sync
+  end
+
   private
 
   # @api
