@@ -72,4 +72,16 @@ class EventProposalDrop < Liquid::Drop
   def history_url
     "/admin_event_proposals/#{event_proposal.id}/history"
   end
+
+  # @return [Hash] This proposal, represented as a response to the proposal form set up for this
+  #                event category.  This only includes always-visible fields; fields not
+  #                visible to everyone who can see this proposal will be replaced with a
+  #                "this is hidden" message.
+  def form_response
+    FormResponsePresenter.new(
+      event_proposal.event_category.event_proposal_form,
+      event_proposal,
+      team_member_name: event_proposal.event_category.team_member_name
+    ).as_json_with_rendered_markdown('event_proposal', event_proposal, '').sync
+  end
 end
