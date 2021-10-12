@@ -17,7 +17,7 @@ export type UserConProfileFormProps<
   form: CommonFormFieldsFragment;
   footerContent?: ReactNode;
   userConProfile: UserConProfileType;
-  onChange: (userConProfile: UserConProfileType) => void;
+  onChange: React.Dispatch<React.SetStateAction<UserConProfileType>>;
   convention: ConventionForFormItemDisplay;
 };
 
@@ -27,17 +27,17 @@ function UserConProfileForm<
       UserConProfile,
       'current_user_form_item_viewer_role' | 'current_user_form_item_writer_role'
     >,
->(props: UserConProfileFormProps<UserConProfileType>) {
+>(props: UserConProfileFormProps<UserConProfileType>): JSX.Element {
   const formResponseValuesChanged = (
     newResponseValues: UserConProfileType['form_response_attrs'],
   ) => {
-    props.onChange({
-      ...props.userConProfile,
+    props.onChange((prevUserConProfile) => ({
+      ...prevUserConProfile,
       form_response_attrs: {
-        ...props.userConProfile.form_response_attrs,
+        ...prevUserConProfile.form_response_attrs,
         ...newResponseValues,
       },
-    });
+    }));
   };
 
   const tabProps = useTabs([

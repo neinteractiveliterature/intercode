@@ -7,5 +7,7 @@ class Types::PricingStructureType < Types::BaseObject
 
   def price(**args)
     object.price(**args)
+  rescue StandardError
+    nil
   end
 end
