@@ -24,7 +24,11 @@ function FormSectionNavItem({ formSection }: FormSectionNavItemProps): JSX.Eleme
   );
 
   const deleteConfirmed = async () => {
-    await deleteFormSection(formSection);
+    const unparsedFormSection = convention.form.form_sections.find((section) => section.id === formSection.id);
+    if (!unparsedFormSection) {
+      throw new Error("Couldn't find form section in original GraphQL server response!");
+    }
+    await deleteFormSection(unparsedFormSection);
     if (currentSection && formSection.id === currentSection.id) {
       history.replace(`/admin_forms/${form.id}/edit`);
     }

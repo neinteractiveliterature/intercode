@@ -10,7 +10,7 @@ class FormItemPresenter
   end
 
   def rendered_properties
-    properties = form_item.properties.deep_dup
+    properties = (form_item.properties || {}).deep_dup
     if form_item.item_type == 'static_text'
       properties['content'] = render_markdown(properties['content'])
     elsif properties['caption']

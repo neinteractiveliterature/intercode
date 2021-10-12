@@ -7,6 +7,7 @@ import { DropdownMenu } from '../UIComponents/DropdownMenu';
 import { useDeletePageMutation } from '../CmsAdmin/CmsPagesAdmin/mutations.generated';
 import { PageAdminDropdownQueryData, usePageAdminDropdownQuery } from './queries.generated';
 import { LoadQueryWithVariablesWrapper } from '../GraphqlLoadingWrappers';
+import { useApolloClient } from '@apollo/client';
 
 export type PageAdminDropdownProps = {
   showEdit: boolean;
@@ -37,11 +38,13 @@ export default LoadQueryWithVariablesWrapper(
     const history = useHistory();
     const confirm = useGraphQLConfirm();
     const [deletePage] = useDeletePageMutation();
+    const apolloClient = useApolloClient();
 
     const deleteConfirmed = useCallback(async () => {
       await deletePage({ variables: { id: pageId } });
       history.replace('/cms_pages');
-    }, [deletePage, pageId, history]);
+      await apolloClient.resetStore();
+    }, [deletePage, apolloClient, pageId, history]);
 
     const { cmsParent } = data;
     const { cmsPage } = cmsParent;

@@ -12,11 +12,7 @@ export type FormItemIdentifierInputProps = {
   onChange: React.Dispatch<string | undefined>;
 };
 
-function FormItemIdentifierInput({
-  formType,
-  value,
-  onChange,
-}: FormItemIdentifierInputProps): JSX.Element {
+function FormItemIdentifierInput({ formType, value, onChange }: FormItemIdentifierInputProps): JSX.Element {
   const standardIdentifiers = useMemo(() => {
     const standardItems = formType.standard_items || {};
     return Object.entries(standardItems).map(([identifier]) => identifier);
@@ -34,14 +30,14 @@ function FormItemIdentifierInput({
       invalidFeedback={
         identifierIsReserved && (
           <>
-            <i className="bi-exclamation-triangle-fill" /> “{normalizedIdentifier}” is a reserved
-            identifier in {pluralize(formType.description)}
+            <i className="bi-exclamation-triangle-fill" /> “{normalizedIdentifier}” is a reserved identifier in{' '}
+            {pluralize(formType.description)}
           </>
         )
       }
       helpText={`An identifier is a short name for your custom form items.  It should contain only lowercase
         letters, digits, and underscores (_).  It must be unique across all items in this form.`}
-      value={value}
+      value={normalizedIdentifier}
       onTextChange={onChange}
     />
   );

@@ -10,7 +10,7 @@ export type CreateCouponMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateCouponMutationData = { __typename: 'Mutation', createCoupon: { __typename: 'CreateCouponPayload', coupon: { __typename: 'Coupon', usage_limit?: number | null | undefined, expires_at?: any | null | undefined, code: string, percent_discount?: any | null | undefined, id: string, fixed_amount?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, provides_product?: { __typename: 'Product', name: string, id: string } | null | undefined } } };
+export type CreateCouponMutationData = { __typename: 'Mutation', createCoupon: { __typename: 'CreateCouponPayload', coupon: { __typename: 'Coupon', usage_limit?: number | null | undefined, expires_at?: string | null | undefined, code: string, percent_discount?: string | null | undefined, id: string, fixed_amount?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, provides_product?: { __typename: 'Product', name: string, id: string } | null | undefined } } };
 
 export type UpdateCouponMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -18,7 +18,7 @@ export type UpdateCouponMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateCouponMutationData = { __typename: 'Mutation', updateCoupon: { __typename: 'UpdateCouponPayload', coupon: { __typename: 'Coupon', usage_limit?: number | null | undefined, expires_at?: any | null | undefined, code: string, percent_discount?: any | null | undefined, id: string, fixed_amount?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, provides_product?: { __typename: 'Product', name: string, id: string } | null | undefined } } };
+export type UpdateCouponMutationData = { __typename: 'Mutation', updateCoupon: { __typename: 'UpdateCouponPayload', coupon: { __typename: 'Coupon', usage_limit?: number | null | undefined, expires_at?: string | null | undefined, code: string, percent_discount?: string | null | undefined, id: string, fixed_amount?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, provides_product?: { __typename: 'Product', name: string, id: string } | null | undefined } } };
 
 export type DeleteCouponMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];

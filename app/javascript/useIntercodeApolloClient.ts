@@ -33,14 +33,7 @@ export function useIntercodeApolloLink(
   const ErrorHandlerLink = useErrorHandlerLink(onUnauthenticatedRef);
 
   const link = useMemo(
-    () =>
-      ApolloLink.from([
-        AuthLink,
-        AddTimezoneLink,
-        ErrorHandlerLink,
-        // @ts-expect-error because @types/apollo-upload-client hasn't been updated for 14.x.x
-        createUploadLink({ uri: '/graphql', fetch }),
-      ]),
+    () => ApolloLink.from([AuthLink, AddTimezoneLink, ErrorHandlerLink, createUploadLink({ uri: '/graphql', fetch })]),
     [AuthLink, AddTimezoneLink, ErrorHandlerLink],
   );
 
@@ -61,16 +54,30 @@ function useIntercodeApolloClient(
           addTypename: true,
           possibleTypes,
           typePolicies: {
-            UserConProfile: {
+            Convention: {
               fields: {
-                ability: {
+                reports: {
                   merge: (existing, incoming) => ({ ...existing, ...incoming }),
+                },
+              },
+            },
+            Event: {
+              fields: {
+                registrationPolicy: {
+                  merge: (existing, incoming) => incoming,
                 },
               },
             },
             Query: {
               fields: {
                 currentAbility: {
+                  merge: (existing, incoming) => ({ ...existing, ...incoming }),
+                },
+              },
+            },
+            UserConProfile: {
+              fields: {
+                ability: {
                   merge: (existing, incoming) => ({ ...existing, ...incoming }),
                 },
               },

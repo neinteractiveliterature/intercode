@@ -9,14 +9,23 @@ import {
 
 import { DndContext, DragOverlay } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { FormEditorContext } from './FormEditorContexts';
-import { serializeParsedFormSection } from './FormItemUtils';
+import { FormEditorContext, FormEditorForm } from './FormEditorContexts';
 import FormSectionNavItem from './FormSectionNavItem';
 import useCollapse from '../NavigationBar/useCollapse';
 import { useMoveFormSectionMutation, useCreateFormSectionMutation } from './mutations.generated';
-import { FormEditorFormSectionFieldsFragmentDoc } from './queries.generated';
+import { FormEditorFormSectionFieldsFragment, FormEditorFormSectionFieldsFragmentDoc } from './queries.generated';
 import { useSortableDndSensors } from '../SortableUtils';
 import FormSectionNavItemDragOverlay from './FormSectionNavItemDragOverlay';
+import { serializeParsedFormItem } from './serializeParsedFormItem';
+
+function serializeParsedFormSection(
+  formSection: FormEditorForm['form_sections'][number],
+): FormEditorFormSectionFieldsFragment {
+  return {
+    ...formSection,
+    form_items: formSection.form_items.map(serializeParsedFormItem),
+  };
+}
 
 function FormSectionNav(): JSX.Element {
   const collapseRef = useRef<HTMLElement>(null);

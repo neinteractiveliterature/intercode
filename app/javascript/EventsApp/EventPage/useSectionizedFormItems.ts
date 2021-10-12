@@ -42,16 +42,17 @@ function getSectionizedFormItems(formData: EventPageForm, formResponse: Record<s
   return { shortFormItems, secretFormItems, longFormItems };
 }
 
-export default function useSectionizedFormItems(
-  event?: EventPageQueryData['convention']['event'],
-): {
+export default function useSectionizedFormItems(event?: EventPageQueryData['convention']['event']): {
   shortFormItems: TypedFormItem[];
   longFormItems: FreeTextFormItem[];
   secretFormItems: TypedFormItem[];
   formResponse: Record<string, unknown>;
 } {
   const formResponse = useMemo(
-    () => (event ? JSON.parse(event.form_response_attrs_json_with_rendered_markdown) : {}),
+    () =>
+      event?.form_response_attrs_json_with_rendered_markdown
+        ? JSON.parse(event.form_response_attrs_json_with_rendered_markdown)
+        : {},
     [event],
   );
 

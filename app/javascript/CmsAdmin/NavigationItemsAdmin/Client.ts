@@ -111,8 +111,7 @@ class Client implements CadmusNavbarAdminClient {
 
   async saveNavigationItem(navigationItem: EditingNavigationItem): Promise<NavigationItem> {
     this.requestsInProgress.savingNavigationItem = true;
-    let mutate: () => Promise<FetchResult>;
-    let operation: 'create' | 'update';
+    let mutate: () => Promise<FetchResult<CreateNavigationItemMutationData | UpdateNavigationItemMutationData>>;
     const navigationItemInput: CmsNavigationItemInput = {
       title: navigationItem.title,
       transitionalNavigationSectionId: navigationItem.navigation_section_id,
@@ -123,37 +122,16 @@ class Client implements CadmusNavbarAdminClient {
 
     try {
       if (navigationItemId != null) {
-        operation = 'update';
         mutate = () =>
           this.apolloClient.mutate<UpdateNavigationItemMutationData, UpdateNavigationItemMutationVariables>({
             mutation: UpdateNavigationItemDocument,
             variables: { id: navigationItemId, navigationItem: navigationItemInput },
           });
       } else {
-        operation = 'create';
         mutate = () =>
           this.apolloClient.mutate<CreateNavigationItemMutationData, CreateNavigationItemMutationVariables>({
             mutation: CreateNavigationItemDocument,
             variables: { navigationItem: navigationItemInput },
-            update: (cache, { data: resultData }) => {
-              const data = cache.readQuery<NavigationItemsAdminQueryData>({
-                query: NavigationItemsAdminQuery,
-              });
-              const newNavigationItem = resultData?.createCmsNavigationItem?.cms_navigation_item;
-              if (!data || !newNavigationItem) {
-                return;
-              }
-              cache.writeQuery<NavigationItemsAdminQueryData>({
-                query: NavigationItemsAdminQuery,
-                data: {
-                  ...data,
-                  cmsParent: {
-                    ...data.cmsParent,
-                    cmsNavigationItems: [...data.cmsParent.cmsNavigationItems, newNavigationItem],
-                  },
-                },
-              });
-            },
           });
       }
 
@@ -161,7 +139,8 @@ class Client implements CadmusNavbarAdminClient {
       if (!data) {
         throw new Error('No data returned from mutation');
       }
-      const mutationResponse = operation === 'update' ? data.updateCmsNavigationItem : data.createCmsNavigationItem;
+      const mutationResponse =
+        'updateCmsNavigationItem' in data ? data.updateCmsNavigationItem : data.createCmsNavigationItem;
 
       await this.apolloClient.resetStore();
       return graphqlNavigationItemToCadmusNavbarAdminObject(mutationResponse.cms_navigation_item);
@@ -181,24 +160,6 @@ class Client implements CadmusNavbarAdminClient {
       await this.apolloClient.mutate<DeleteNavigationItemMutationData, DeleteNavigationItemMutationVariables>({
         mutation: DeleteNavigationItemDocument,
         variables: { id: navigationItemId },
-        update: (cache) => {
-          const data = cache.readQuery<NavigationItemsAdminQueryData>({
-            query: NavigationItemsAdminQuery,
-          });
-          if (!data) {
-            return;
-          }
-          cache.writeQuery<NavigationItemsAdminQueryData>({
-            query: NavigationItemsAdminQuery,
-            data: {
-              ...data,
-              cmsParent: {
-                ...data.cmsParent,
-                cmsNavigationItems: data.cmsParent.cmsNavigationItems.filter((item) => item.id !== navigationItemId),
-              },
-            },
-          });
-        },
       });
       await this.apolloClient.resetStore();
     } catch (error) {
@@ -223,33 +184,6 @@ class Client implements CadmusNavbarAdminClient {
       await this.apolloClient.mutate<SortNavigationItemsMutationData, SortNavigationItemsMutationVariables>({
         mutation: SortNavigationItemsDocument,
         variables: { sortItems },
-        update: (cache) => {
-          const data = cache.readQuery<NavigationItemsAdminQueryData>({
-            query: NavigationItemsAdminQuery,
-          });
-          if (!data) {
-            return;
-          }
-          const newNavigationItems = data.cmsParent.cmsNavigationItems.map((item) => {
-            const sortItem = sortItems.find((si) => si.transitionalId === item.id);
-            if (sortItem == null) {
-              return item;
-            }
-
-            return { ...item, ...sortItem.cms_navigation_item };
-          });
-
-          cache.writeQuery<NavigationItemsAdminQueryData>({
-            query: NavigationItemsAdminQuery,
-            data: {
-              ...data,
-              cmsParent: {
-                ...data.cmsParent,
-                cmsNavigationItems: newNavigationItems,
-              },
-            },
-          });
-        },
       });
 
       await this.apolloClient.resetStore();

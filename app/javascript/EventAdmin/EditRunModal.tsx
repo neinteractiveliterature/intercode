@@ -1,12 +1,16 @@
 import { useCallback, useMemo } from 'react';
 import * as React from 'react';
 import { Modal } from 'react-bootstrap4-modal';
-import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
+import {
+  useConfirm,
+  ErrorDisplay,
+  useCreateMutationWithReferenceArrayUpdater,
+  useDeleteMutationWithReferenceArrayUpdater,
+} from '@neinteractiveliterature/litform';
 
-import { EventAdminEventsQuery } from './queries';
 import RunFormFields from '../BuiltInForms/RunFormFields';
 import { useCreateRunMutation, useDeleteRunMutation, useUpdateRunMutation } from './mutations.generated';
-import { EventAdminEventsQueryData, EventFieldsFragment, RunFieldsFragment } from './queries.generated';
+import { EventFieldsFragment, RunFieldsFragment, RunFieldsFragmentDoc } from './queries.generated';
 
 export type EditingRun = Omit<RunFieldsFragment, 'starts_at'> & {
   starts_at?: RunFieldsFragment['starts_at'];
@@ -33,9 +37,18 @@ function EditRunModal({
   onSaveStart,
   onDelete,
 }: EditRunModalProps): JSX.Element {
-  const [createRun] = useCreateRunMutation();
+  const [createRun] = useCreateMutationWithReferenceArrayUpdater(
+    useCreateRunMutation,
+    event,
+    'runs',
+    (data) => data.createRun.run,
+    RunFieldsFragmentDoc,
+    'RunFields',
+  );
   const [updateRun] = useUpdateRunMutation();
-  const [deleteMutate] = useDeleteRunMutation();
+  const [deleteMutate] = useDeleteMutationWithReferenceArrayUpdater(useDeleteRunMutation, event, 'runs', (run) => ({
+    input: { transitionalId: run.id },
+  }));
   const confirm = useConfirm();
 
   const initiateSaveMutation = useCallback(() => {
@@ -44,7 +57,7 @@ function EditRunModal({
         starts_at: run.starts_at,
         title_suffix: run.title_suffix,
         schedule_note: run.schedule_note,
-        transitioanlRoomIds: run.rooms.map((room) => room.id),
+        transitionalRoomIds: run.rooms.map((room) => room.id),
       },
     };
 
@@ -66,31 +79,6 @@ function EditRunModal({
           ...commonProps,
         },
       },
-      update: (store, { data }) => {
-        const eventsData = store.readQuery<EventAdminEventsQueryData>({
-          query: EventAdminEventsQuery,
-        });
-        const newRun = data?.createRun?.run;
-        if (!eventsData || !newRun) {
-          return;
-        }
-        store.writeQuery<EventAdminEventsQueryData>({
-          query: EventAdminEventsQuery,
-          data: {
-            ...eventsData,
-            convention: {
-              ...eventsData.convention,
-              events: eventsData.convention.events.map((e) => {
-                if (e.id === event.id) {
-                  return { ...e, runs: [...e.runs, newRun] };
-                }
-
-                return e;
-              }),
-            },
-          },
-        });
-      },
     });
   }, [createRun, event, run, updateRun]);
 
@@ -106,42 +94,9 @@ function EditRunModal({
   }, [onSaveSucceeded, onSaveFailed, onSaveStart, initiateSaveMutation]);
 
   const deleteRun = useCallback(async () => {
-    await deleteMutate({
-      variables: {
-        input: {
-          transitionalId: run.id,
-        },
-      },
-      update: (store) => {
-        const eventsData = store.readQuery<EventAdminEventsQueryData>({
-          query: EventAdminEventsQuery,
-        });
-        if (!eventsData) {
-          return;
-        }
-        store.writeQuery<EventAdminEventsQueryData>({
-          query: EventAdminEventsQuery,
-          data: {
-            ...eventsData,
-            convention: {
-              ...eventsData.convention,
-              events: eventsData.convention.events.map((e) => {
-                if (e.id === event.id) {
-                  return {
-                    ...e,
-                    runs: e.runs.filter((r) => r.id !== run.id),
-                  };
-                }
-
-                return e;
-              }),
-            },
-          },
-        });
-      },
-    });
+    await deleteMutate({ ...run, starts_at: 'does not matter for this mutation' });
     onDelete();
-  }, [onDelete, deleteMutate, event, run]);
+  }, [onDelete, deleteMutate, run]);
 
   const title = useMemo(() => {
     if (!run) {

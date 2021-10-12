@@ -59,7 +59,7 @@ function TimeblockPreferenceCell(props: TimeblockPreferenceCellProps): JSX.Eleme
 
   return (
     <td key={format(dayStart, 'longWeekday')}>
-      <select value={ordinality || ''} onBlur={selectorDidChange} className="form-select">
+      <select value={ordinality || ''} onChange={selectorDidChange} className="form-select">
         <option value="">Don&apos;t care</option>
         <option value="1">1st choice</option>
         <option value="2">2nd choice</option>

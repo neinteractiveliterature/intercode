@@ -308,7 +308,7 @@ all id fields are replaced with ones of type ID.",
       current domain's CMS context as if it were the content for that notification type.
     MARKDOWN
 
-    authorize { |_value, _args, context| Pundit.policy(context[:pundit_user], object).view_reports? }
+    authorize { |value, _args, context| Pundit.policy(context[:pundit_user], value).view_reports? }
   end
 
   def preview_notifier_liquid(event_key:, content:)

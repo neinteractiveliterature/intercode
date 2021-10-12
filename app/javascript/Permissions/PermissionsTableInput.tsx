@@ -66,7 +66,6 @@ function PermissionsTableInput<RowType extends BaseRowType>({
                 initialPermissions={initialPermissions}
                 currentPermissions={currentPermissions}
                 changeSet={changeSet}
-                rowType={rowType}
                 model={
                   rowType === 'model' ? (row as Pick<PermissionedModel, '__typename'> & { id: string }) : undefined
                 }

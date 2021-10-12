@@ -1,15 +1,12 @@
 import usePermissionToggle, { UsePermissionToggleOptions } from './usePermissionToggle';
 import PermissionCheckBox from './PermissionCheckBox';
 
-export type PermissionsTableCellProps = UsePermissionToggleOptions & {
-  rowType: 'model' | 'role';
-};
+export type PermissionsTableCellProps = UsePermissionToggleOptions;
 
 function PermissionsTableCell({
   initialPermissions,
   currentPermissions,
   changeSet,
-  rowType,
   model,
   role,
   permission,
@@ -20,8 +17,8 @@ function PermissionsTableCell({
   const { toggle, hasPermission, className } = usePermissionToggle({
     grantPermission,
     revokePermission,
-    model: rowType === 'model' ? model : undefined,
-    role: rowType === 'role' ? role : undefined,
+    model,
+    role,
     permission,
     initialPermissions,
     changeSet,
@@ -42,7 +39,7 @@ function PermissionsTableCell({
       tabIndex={readOnly ? undefined : 0}
       onClick={toggleWithReadOnlyCheck}
       onKeyDown={(event) => {
-        if (event.keyCode === 32 || event.keyCode === 13) {
+        if (event.key === 'Enter' || event.key === ' ') {
           toggleWithReadOnlyCheck();
         }
       }}

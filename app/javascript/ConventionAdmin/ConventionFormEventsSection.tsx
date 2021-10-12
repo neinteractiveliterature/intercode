@@ -1,10 +1,6 @@
 import { useCallback } from 'react';
 import * as React from 'react';
-import {
-  BooleanInput,
-  MultipleChoiceInput,
-  usePropertySetters,
-} from '@neinteractiveliterature/litform';
+import { BooleanInput, MultipleChoiceInput, usePropertySetters } from '@neinteractiveliterature/litform';
 
 import ScheduledValueEditor, {
   scheduledValueReducer,
@@ -44,7 +40,7 @@ const buildMaximumEventSignupsInput = (
   ));
 
   return (
-    <select className="form-select" value={value} onBlur={processChangeEvent}>
+    <select className="form-select" value={value} onChange={processChangeEvent}>
       <option aria-label="Blank placeholder option" />
       {options}
     </select>
@@ -98,8 +94,7 @@ function ConventionFormEventsSection({
           },
           {
             value: 'moderated',
-            label:
-              'Moderated (attendees can request signups and signup changes but con staff must approve them)',
+            label: 'Moderated (attendees can request signups and signup changes but con staff must approve them)',
           },
         ]}
         value={convention.signup_mode}
