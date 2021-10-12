@@ -12,14 +12,7 @@ import { VisibilityDisclosureCard } from './PermissionDisclosures';
 export type TimespanItemInputProps = CommonFormItemInputProps<TimespanFormItem>;
 
 function TimespanItemInput(props: TimespanItemInputProps): JSX.Element {
-  const {
-    formItem,
-    formTypeIdentifier,
-    value: uncheckedValue,
-    valueInvalid,
-    onChange,
-    onInteract,
-  } = props;
+  const { formItem, formTypeIdentifier, value: uncheckedValue, valueInvalid, onChange, onInteract } = props;
   const value = useMemo(() => uncheckedValue ?? null, [uncheckedValue]);
   const [unit, setUnit] = useState(() => getUnitForValue(value).name);
 
@@ -82,12 +75,7 @@ function TimespanItemInput(props: TimespanItemInputProps): JSX.Element {
             />
             <FieldRequiredFeedback valueInvalid={valueInvalid} />
           </div>
-          <select
-            className="form-select ms-2"
-            value={unit}
-            onBlur={unitSelectorDidChange}
-            aria-label="Unit of time"
-          >
+          <select className="form-select ms-2" value={unit} onChange={unitSelectorDidChange} aria-label="Unit of time">
             {options}
           </select>
         </div>

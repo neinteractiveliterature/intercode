@@ -1,10 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import {
-  LoadQueryWrapper,
-  ErrorDisplay,
-  usePropertySetters,
-} from '@neinteractiveliterature/litform';
+import { LoadQueryWrapper, ErrorDisplay, usePropertySetters } from '@neinteractiveliterature/litform';
 
 import NotificationsConfig from '../../../config/notifications.json';
 import LiquidInput from '../BuiltInFormControls/LiquidInput';
@@ -41,10 +37,7 @@ function NotificationConfigurationForm({
   );
 
   // if the page changes and we're still mounted
-  useEffect(
-    () => setNotificationTemplate(initialNotificationTemplate),
-    [initialNotificationTemplate],
-  );
+  useEffect(() => setNotificationTemplate(initialNotificationTemplate), [initialNotificationTemplate]);
 
   const saveClicked = async () => {
     if (!notificationTemplate) {
@@ -85,7 +78,7 @@ function NotificationConfigurationForm({
           value={notificationTemplate.subject ?? ''}
           onChange={setSubject}
           notifierEventKey={eventKey}
-          renderPreview={(previewContent) => <>{previewContent}</>}
+          renderPreview={(previewContent) => <div className="p-2">{previewContent}</div>}
           lines={1}
           disabled={updateInProgress}
         />
@@ -108,7 +101,9 @@ function NotificationConfigurationForm({
           onChange={setBodyText}
           notifierEventKey={eventKey}
           renderPreview={(previewContent) => (
-            <pre style={{ whiteSpace: 'pre-wrap' }}>{previewContent}</pre>
+            <div className="p-2">
+              <pre style={{ whiteSpace: 'pre-wrap' }}>{previewContent}</pre>
+            </div>
           )}
           disabled={updateInProgress}
         />
@@ -122,7 +117,9 @@ function NotificationConfigurationForm({
             onChange={setBodySms}
             notifierEventKey={eventKey}
             renderPreview={(previewContent) => (
-              <pre style={{ whiteSpace: 'pre-wrap' }}>{previewContent}</pre>
+              <div className="p-2">
+                <pre style={{ whiteSpace: 'pre-wrap' }}>{previewContent}</pre>
+              </div>
             )}
             disabled={updateInProgress}
           />
@@ -135,48 +132,35 @@ function NotificationConfigurationForm({
 
       <ErrorDisplay graphQLError={updateError} />
 
-      <button
-        type="button"
-        className="btn btn-primary"
-        onClick={saveClicked}
-        disabled={updateInProgress}
-      >
+      <button type="button" className="btn btn-primary" onClick={saveClicked} disabled={updateInProgress}>
         Save changes
       </button>
     </>
   );
 }
 
-export default LoadQueryWrapper(
-  useNotificationAdminQuery,
-  function NotificationConfiguration({ data }) {
-    const params = useParams<{ category: string; event: string }>();
-    const category = useMemo(
-      () => NotificationsConfig.categories.find((c) => c.key === params.category),
-      [params.category],
-    );
-    const event = useMemo(
-      () => category?.events.find((e) => e.key === params.event),
-      [category, params.event],
-    );
+export default LoadQueryWrapper(useNotificationAdminQuery, function NotificationConfiguration({ data }) {
+  const params = useParams<{ category: string; event: string }>();
+  const category = useMemo(
+    () => NotificationsConfig.categories.find((c) => c.key === params.category),
+    [params.category],
+  );
+  const event = useMemo(() => category?.events.find((e) => e.key === params.event), [category, params.event]);
 
-    const eventKey = category && event ? `${category.key}/${event.key}` : 'FOUR_OH_FOUR';
+  const eventKey = category && event ? `${category.key}/${event.key}` : 'FOUR_OH_FOUR';
 
-    const initialNotificationTemplate = data.convention.notification_templates.find(
-      (t) => t.event_key === eventKey,
-    );
+  const initialNotificationTemplate = data.convention.notification_templates.find((t) => t.event_key === eventKey);
 
-    if (!category || !event || !initialNotificationTemplate) {
-      return <FourOhFourPage />;
-    }
+  if (!category || !event || !initialNotificationTemplate) {
+    return <FourOhFourPage />;
+  }
 
-    return (
-      <NotificationConfigurationForm
-        category={category}
-        event={event}
-        eventKey={eventKey}
-        initialNotificationTemplate={initialNotificationTemplate}
-      />
-    );
-  },
-);
+  return (
+    <NotificationConfigurationForm
+      category={category}
+      event={event}
+      eventKey={eventKey}
+      initialNotificationTemplate={initialNotificationTemplate}
+    />
+  );
+});

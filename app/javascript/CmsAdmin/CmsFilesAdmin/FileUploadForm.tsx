@@ -58,6 +58,10 @@ function FileUploadForm({ cmsParent, onUpload }: FileUploadFormProps): JSX.Eleme
   const uploadFormSubmitted = async (event: React.FormEvent) => {
     event.preventDefault();
     event.stopPropagation();
+    if (!file) {
+      return;
+    }
+
     const response = await createMutate({ variables: { file } });
     if (response?.data?.createCmsFile && onUpload) {
       onUpload(response.data.createCmsFile.cms_file);

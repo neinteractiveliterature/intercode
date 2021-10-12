@@ -87,9 +87,7 @@ function teamIsAllAuthors(author?: string, teamMembers?: EventType['team_members
 
 export type EventCardProps = {
   event: EventType;
-  sortBy?: SortingRule<
-    NonNullable<EventListEventsQueryData['convention']>['events_paginated']['entries'][number]
-  >[];
+  sortBy?: SortingRule<NonNullable<EventListEventsQueryData['convention']>['events_paginated']['entries'][number]>[];
   canReadSchedule?: boolean;
 };
 
@@ -98,7 +96,7 @@ function EventCard({ event, sortBy, canReadSchedule }: EventCardProps): JSX.Elem
   const format = useAppDateTimeFormat();
   const formatRunTime = useFormatRunTime();
   const { myProfile } = useContext(AppRootContext);
-  const formResponse = JSON.parse(event.form_response_attrs_json);
+  const formResponse = event.form_response_attrs_json ? JSON.parse(event.form_response_attrs_json) : {};
   const metadataItems: { key: string; content: ReactNode }[] = [];
   const rateEvent = useRateEvent();
 
@@ -138,11 +136,7 @@ function EventCard({ event, sortBy, canReadSchedule }: EventCardProps): JSX.Elem
   }
 
   if (formResponse.author && !teamIsAllAuthors(formResponse.author, event.team_members)) {
-    const authorDescription = pluralizeWithCount(
-      'Author',
-      formResponse.author.split(/(,|;| and )/).length,
-      true,
-    );
+    const authorDescription = pluralizeWithCount('Author', formResponse.author.split(/(,|;| and )/).length, true);
     metadataItems.push({
       key: 'author',
       content: (
@@ -203,10 +197,7 @@ function EventCard({ event, sortBy, canReadSchedule }: EventCardProps): JSX.Elem
               <p className="m-0">
                 <strong>
                   Added{' '}
-                  {format(
-                    DateTime.fromISO(event.created_at, { zone: timezoneName }),
-                    'longWeekdayDateTimeWithZone',
-                  )}
+                  {format(DateTime.fromISO(event.created_at, { zone: timezoneName }), 'longWeekdayDateTimeWithZone')}
                 </strong>
               </p>
             )

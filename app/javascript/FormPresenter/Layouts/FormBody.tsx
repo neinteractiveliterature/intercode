@@ -6,11 +6,7 @@ import { formResponseValueIsCompleteIfRequired } from '../../Models/FormItem';
 import { ItemInteractionTrackerContext } from '../ItemInteractionTracker';
 import FormItemDisplay, { ConventionForFormItemDisplay } from '../ItemDisplays/FormItemDisplay';
 import { CommonFormItemFieldsFragment } from '../../Models/commonFormFragments.generated';
-import {
-  formItemVisibleTo,
-  formItemWriteableBy,
-  TypedFormItem,
-} from '../../FormAdmin/FormItemUtils';
+import { formItemVisibleTo, formItemWriteableBy, TypedFormItem } from '../../FormAdmin/FormItemUtils';
 import { FormResponse } from '../useFormResponse';
 import { FormItemRole, FormType } from '../../graphqlTypes.generated';
 
@@ -28,7 +24,7 @@ export type FormBodyProps = {
 };
 
 export type FormBodyImperativeHandle = {
-  scrollToItem: (item: CommonFormItemFieldsFragment) => void;
+  scrollToItem: (item: Pick<CommonFormItemFieldsFragment, 'identifier'>) => void;
 };
 
 export default forwardRef<FormBodyImperativeHandle | undefined, FormBodyProps>(function FormBody(
@@ -55,7 +51,7 @@ export default forwardRef<FormBodyImperativeHandle | undefined, FormBodyProps>(f
   );
 
   useImperativeHandle(ref, () => ({
-    scrollToItem: (item: CommonFormItemFieldsFragment) => {
+    scrollToItem: (item: Pick<CommonFormItemFieldsFragment, 'identifier'>) => {
       const { identifier } = item;
       if (!identifier) {
         return;
@@ -125,10 +121,7 @@ export default forwardRef<FormBodyImperativeHandle | undefined, FormBodyProps>(f
               valueInvalid={
                 !!item.identifier &&
                 hasInteractedWithItem(item.identifier) &&
-                !formResponseValueIsCompleteIfRequired(
-                  item,
-                  response.form_response_attrs[item.identifier],
-                )
+                !formResponseValueIsCompleteIfRequired(item, response.form_response_attrs[item.identifier])
               }
               value={value}
               onChange={responseValueChanged}

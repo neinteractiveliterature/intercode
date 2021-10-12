@@ -328,42 +328,12 @@ export function parseTypedFormItemArray(formItems: CommonFormItemFieldsFragment[
   return formItems.map(parseTypedFormItemObject).filter(notEmpty);
 }
 
-export function serializeParsedFormItem<FormItemType extends ParsedFormItem<unknown, unknown>>(
-  formItem: FormItemType,
-): CommonFormItemFieldsFragment {
-  if (formItem.properties != null) {
-    const serialized: FormEditorFormItemFieldsFragment = {
-      ...formItem,
-      default_value: JSON.stringify(formItem.default_value ?? null),
-      properties: JSON.stringify(formItem.properties),
-      rendered_properties: JSON.stringify(formItem.rendered_properties),
-    };
-
-    return serialized;
-  }
-
-  const serialized: CommonFormItemFieldsFragment = {
-    ...formItem,
-    default_value: JSON.stringify(formItem.default_value ?? null),
-    rendered_properties: JSON.stringify(formItem.rendered_properties),
-  };
-
-  return serialized;
-}
-
 export function parseFormSectionObject(
   formSection: Omit<FormSection, 'id' | 'form_items'> & { id: string; form_items: CommonFormItemFieldsFragment[] },
 ): ParsedFormSection {
   return {
     ...formSection,
     form_items: formSection.form_items.map(parseFormItemObject),
-  };
-}
-
-export function serializeParsedFormSection(formSection: ParsedFormSection): CommonFormSectionFieldsFragment {
-  return {
-    ...formSection,
-    form_items: formSection.form_items.map(serializeParsedFormItem),
   };
 }
 
@@ -448,9 +418,9 @@ export function mutationUpdaterForFormSection<ResultDataType>(
   formId: string,
   formSectionId: string | undefined,
   updater: (
-    section: CommonFormSectionFieldsFragment,
+    section: FormEditorQueryData['convention']['form']['form_sections'][number],
     mutationResultData: ResultDataType,
-  ) => CommonFormSectionFieldsFragment,
+  ) => FormEditorQueryData['convention']['form']['form_sections'][number],
 ) {
   return (proxy: ApolloCache<unknown>, mutationResultData: ResultDataType): void => {
     if (formSectionId == null) {

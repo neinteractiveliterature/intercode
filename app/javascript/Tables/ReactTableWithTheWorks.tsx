@@ -22,27 +22,15 @@ function mergeProps<T extends HTMLAttributes<unknown>>(...propSets: T[]) {
   );
 }
 
-function Resizer<RowType extends Record<string, unknown>>({
-  column,
-}: {
-  column: ColumnInstance<RowType>;
-}) {
-  return (
-    <div
-      {...column.getResizerProps()}
-      className={`resizer ${column.isResizing ? 'isResizing' : ''}`}
-    />
-  );
+function Resizer<RowType extends Record<string, unknown>>({ column }: { column: ColumnInstance<RowType> }) {
+  return <div {...column.getResizerProps()} className={`resizer ${column.isResizing ? 'isResizing' : ''}`} />;
 }
 
 export type ReactTableWithTheWorksProps<
   QueryData,
   RowType extends Record<string, unknown>,
   Variables extends GraphQLReactTableVariables = GraphQLReactTableVariables,
-> = Pick<
-  UseReactTableWithTheWorksResult<QueryData, RowType, Variables>,
-  'tableInstance' | 'loading'
-> & {
+> = Pick<UseReactTableWithTheWorksResult<QueryData, RowType, Variables>, 'tableInstance' | 'loading'> & {
   onClickRow?: React.Dispatch<Row<RowType>>;
 };
 
@@ -50,11 +38,7 @@ function ReactTableWithTheWorks<
   QueryData,
   RowType extends Record<string, unknown>,
   Variables extends GraphQLReactTableVariables = GraphQLReactTableVariables,
->({
-  tableInstance,
-  loading,
-  onClickRow,
-}: ReactTableWithTheWorksProps<QueryData, RowType, Variables>): JSX.Element {
+>({ tableInstance, loading, onClickRow }: ReactTableWithTheWorksProps<QueryData, RowType, Variables>): JSX.Element {
   const {
     getTableProps,
     headerGroups,
@@ -93,10 +77,9 @@ function ReactTableWithTheWorks<
     <div className="mb-3 border">
       <div
         {...mergeProps(getTableProps(), {
-          className: classNames(
-            'table react-table table-striped table-highlight table-borderless mb-0',
-            { 'table-hover': onClickRow != null },
-          ),
+          className: classNames('table react-table table-striped table-highlight table-borderless mb-0', {
+            'table-hover': onClickRow != null,
+          }),
         })}
       >
         <div className="thead">
@@ -245,7 +228,7 @@ function ReactTableWithTheWorks<
               <select
                 className="form-select"
                 value={pageSize}
-                onBlur={(e) => {
+                onChange={(e) => {
                   setPageSize(Number(e.target.value));
                 }}
               >

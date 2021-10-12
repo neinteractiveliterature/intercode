@@ -1,7 +1,12 @@
 import { useCallback, useMemo } from 'react';
 import { Redirect, useHistory } from 'react-router-dom';
 import { useApolloClient } from '@apollo/client';
-import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
+import {
+  ErrorDisplay,
+  PageLoadingIndicator,
+  useCreateMutationWithReferenceArrayUpdater,
+  useDeleteMutationWithReferenceArrayUpdater,
+} from '@neinteractiveliterature/litform';
 
 import useEventForm, { EventForm } from '../../EventAdmin/useEventForm';
 import useMEPTOMutations from '../../BuiltInFormControls/useMEPTOMutations';
@@ -12,7 +17,7 @@ import useValueUnless from '../../useValueUnless';
 import {
   useStandaloneEditEventQuery,
   StandaloneEditEventQueryData,
-  StandaloneEditEventQueryDocument,
+  StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFieldsFragmentDoc,
 } from './queries.generated';
 import deserializeFormResponse, { WithFormResponse } from '../../Models/deserializeFormResponse';
 import { CommonFormFieldsFragment } from '../../Models/commonFormFragments.generated';
@@ -63,74 +68,26 @@ function StandaloneEditEventForm({
     await apolloClient.resetStore();
   }, [apolloClient, event, updateEventMutate]);
 
-  const [createMutate] = useStandaloneCreateMaximumEventProvidedTicketsOverrideMutation();
+  const [createMutate] = useCreateMutationWithReferenceArrayUpdater(
+    useStandaloneCreateMaximumEventProvidedTicketsOverrideMutation,
+    initialEvent,
+    'maximum_event_provided_tickets_overrides',
+    (data) => data.createMaximumEventProvidedTicketsOverride.maximum_event_provided_tickets_override,
+    StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFieldsFragmentDoc,
+    'StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFields',
+  );
   const [updateMutate] = useStandaloneUpdateMaximumEventProvidedTicketsOverrideMutation();
-  const [deleteMutate] = useStandaloneDeleteMaximumEventProvidedTicketsOverrideMutation();
+  const [deleteMutate] = useDeleteMutationWithReferenceArrayUpdater(
+    useStandaloneDeleteMaximumEventProvidedTicketsOverrideMutation,
+    initialEvent,
+    'maximum_event_provided_tickets_overrides',
+    (mepto) => ({ input: { transitionalId: mepto.id } }),
+  );
 
   const meptoMutations = useMEPTOMutations({
     createMutate,
     updateMutate,
     deleteMutate,
-    createUpdater: useCallback(
-      (store, updatedEventId, override) => {
-        const queryOptions = { variables: { eventId: initialEvent.id } };
-        const storeData = store.readQuery<StandaloneEditEventQueryData>({
-          query: StandaloneEditEventQueryDocument,
-          ...queryOptions,
-        });
-        if (!storeData) {
-          return;
-        }
-        store.writeQuery<StandaloneEditEventQueryData>({
-          query: StandaloneEditEventQueryDocument,
-          ...queryOptions,
-          data: {
-            ...storeData,
-            convention: {
-              ...storeData.convention,
-              event: {
-                ...storeData.convention.event,
-                maximum_event_provided_tickets_overrides: [
-                  ...storeData.convention.event.maximum_event_provided_tickets_overrides,
-                  override,
-                ],
-              },
-            },
-          },
-        });
-      },
-      [initialEvent.id],
-    ),
-    deleteUpdater: useCallback(
-      (store, id) => {
-        const queryOptions = { variables: { eventId: initialEvent.id } };
-        const storeData = store.readQuery<StandaloneEditEventQueryData>({
-          query: StandaloneEditEventQueryDocument,
-          ...queryOptions,
-        });
-        if (!storeData) {
-          return;
-        }
-        store.writeQuery<StandaloneEditEventQueryData>({
-          query: StandaloneEditEventQueryDocument,
-          ...queryOptions,
-          data: {
-            ...storeData,
-            convention: {
-              ...storeData.convention,
-              event: {
-                ...storeData.convention.event,
-                maximum_event_provided_tickets_overrides:
-                  storeData.convention.event.maximum_event_provided_tickets_overrides.filter(
-                    (override) => override.id !== id,
-                  ),
-              },
-            },
-          },
-        });
-      },
-      [initialEvent.id],
-    ),
   });
 
   return (

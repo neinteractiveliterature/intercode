@@ -14,8 +14,8 @@ export type Scalars = {
   /** Date in ISO8601 format */
   Date: string;
   /** An arbitrary object, serialized as JSON */
-  Json: any;
-  Upload: any;
+  Json: string;
+  Upload: File;
 };
 
 export type Ability = {
@@ -2556,9 +2556,9 @@ export type FormItem = {
   identifier?: Maybe<Scalars['String']>;
   item_type: Scalars['String'];
   position: Scalars['Int'];
-  properties?: Maybe<Scalars['Json']>;
+  properties: Scalars['Json'];
   public_description?: Maybe<Scalars['String']>;
-  rendered_properties?: Maybe<Scalars['Json']>;
+  rendered_properties: Scalars['Json'];
   transitionalId: Scalars['ID'];
   visibility: FormItemRole;
   writeability: FormItemRole;
@@ -5012,6 +5012,7 @@ export type SortCmsNavigationItemsPayload = {
   __typename: 'SortCmsNavigationItemsPayload';
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']>;
+  navigation_items: Array<CmsNavigationItem>;
 };
 
 /**

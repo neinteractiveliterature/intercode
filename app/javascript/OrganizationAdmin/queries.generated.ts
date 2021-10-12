@@ -9,7 +9,7 @@ export type OrganizationRoleFieldsFragment = { __typename: 'OrganizationRole', n
 export type OrganizationAdminOrganizationsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type OrganizationAdminOrganizationsQueryData = { __typename: 'Query', organizations: Array<{ __typename: 'Organization', name: string, current_ability_can_manage_access: boolean, id: string, conventions: Array<{ __typename: 'Convention', name: string, starts_at?: any | null | undefined, id: string }>, organization_roles: Array<{ __typename: 'OrganizationRole', name: string, id: string, users: Array<{ __typename: 'User', name?: string | null | undefined, email?: string | null | undefined, id: string }>, permissions: Array<{ __typename: 'Permission', permission: string, id: string }> }> }> };
+export type OrganizationAdminOrganizationsQueryData = { __typename: 'Query', organizations: Array<{ __typename: 'Organization', name: string, current_ability_can_manage_access: boolean, id: string, conventions: Array<{ __typename: 'Convention', name: string, starts_at?: string | null | undefined, id: string }>, organization_roles: Array<{ __typename: 'OrganizationRole', name: string, id: string, users: Array<{ __typename: 'User', name?: string | null | undefined, email?: string | null | undefined, id: string }>, permissions: Array<{ __typename: 'Permission', permission: string, id: string }> }> }> };
 
 export const OrganizationRoleFieldsFragmentDoc = gql`
     fragment OrganizationRoleFields on OrganizationRole {

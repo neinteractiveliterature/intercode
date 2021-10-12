@@ -88,7 +88,7 @@ function TimeSelect({ value, timespan, onChange, children }: TimeSelectProps): J
         className="form-select me-1"
         name={name}
         value={value[name] == null ? '' : value[name]}
-        onBlur={inputChanged}
+        onChange={inputChanged}
       >
         <option aria-label="No value selected" />
         {options}

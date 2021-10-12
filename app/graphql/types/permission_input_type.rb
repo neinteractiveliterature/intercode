@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class Types::PermissionInputType < Types::BaseInputObject
+  extend TransitionalIds
+
   argument :model_type, Types::PermissionedModelTypeIndicator, required: false, camelize: false
   argument :model_id,
            Int,

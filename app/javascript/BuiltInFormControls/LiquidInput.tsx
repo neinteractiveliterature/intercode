@@ -25,6 +25,7 @@ import SelectWithLabel from './SelectWithLabel';
 import FileUploadForm from '../CmsAdmin/CmsFilesAdmin/FileUploadForm';
 import { PreviewNotifierLiquidQueryData, PreviewLiquidQueryData } from './previewQueries.generated';
 import parseCmsContent from '../parseCmsContent';
+import parsePageContent from '../parsePageContent';
 
 type SelectableCmsFile = CmsFilesAdminQueryData['cmsParent']['cmsFiles'][number];
 
@@ -84,7 +85,7 @@ function AddFileModal({ visible, fileChosen, close }: AddFileModalProps) {
             />
             {data?.currentAbility.can_create_cms_files && (
               <div className="card mt-2">
-                <FileUploadForm onUpload={uploadedFile} />
+                <FileUploadForm onUpload={uploadedFile} cmsParent={data.cmsParent} />
               </div>
             )}
             {file && (
@@ -172,7 +173,8 @@ function LiquidInput(props: LiquidInputProps): JSX.Element {
             variables: { liquid: liquidContent, eventKey: notifierEventKey },
             fetchPolicy: 'no-cache',
           });
-          return response.data?.convention.previewLiquid ?? '';
+
+          return parsePageContent(response.data?.convention.previewLiquid ?? '', {}).bodyComponents;
         }
 
         const response = await client.query<PreviewLiquidQueryData>({

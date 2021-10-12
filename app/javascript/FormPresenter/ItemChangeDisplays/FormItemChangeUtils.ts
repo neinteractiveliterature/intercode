@@ -7,7 +7,13 @@ import Timespan, { FiniteTimespan } from '../../Timespan';
 import { FormResponseChange, UserConProfile } from '../../graphqlTypes.generated';
 import { CommonFormFieldsFragment } from '../../Models/commonFormFragments.generated';
 import { getFormItemsByIdentifier } from '../../Models/Form';
-import { ParsedFormItem, parseFormItemObject, FormItemValueType } from '../../FormAdmin/FormItemUtils';
+import {
+  ParsedFormItem,
+  FormItemValueType,
+  TypedFormItem,
+  parseTypedFormItemObject,
+  valueIsValidForFormItemType,
+} from '../../FormAdmin/FormItemUtils';
 
 export function sortChanges<T extends Pick<FormResponseChange, 'created_at'>>(changes: T[]): T[] {
   return [...changes].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
@@ -21,7 +27,7 @@ export function getChangeId(
 
 export type UnknownFormItemType = ParsedFormItem<unknown, { toString(): string }, string>;
 
-export type ParsedFormResponseChange<FormItemType extends UnknownFormItemType = UnknownFormItemType> = Omit<
+export type ParsedFormResponseChange<FormItemType extends TypedFormItem> = Omit<
   FormResponseChange,
   'previous_value' | 'new_value' | 'user_con_profile'
 > & {
@@ -42,21 +48,38 @@ export type ParseableFormResponseChange = Pick<
 export function processChanges<T extends ParseableFormResponseChange>(
   changes: T[],
   form: CommonFormFieldsFragment,
-): ParsedFormResponseChange[] {
+): ParsedFormResponseChange<TypedFormItem>[] {
   const formItemsByIdentifier = getFormItemsByIdentifier(form);
-  return changes.map((change) => ({
-    compacted: false,
-    ...change,
-    id: getChangeId(change),
-    previous_value: JSON.parse(change.previous_value),
-    new_value: JSON.parse(change.new_value),
-    formItem: parseFormItemObject(formItemsByIdentifier[change.field_identifier]),
-  }));
+  return changes.map((change) => {
+    const formItem = parseTypedFormItemObject(formItemsByIdentifier[change.field_identifier]);
+    if (!formItem) {
+      throw new Error(`Invalid form item type: ${formItemsByIdentifier[change.field_identifier].identifier}`);
+    }
+    const previousValue = change.previous_value ? JSON.parse(change.previous_value) : undefined;
+    const newValue = change.new_value ? JSON.parse(change.new_value) : undefined;
+
+    if (previousValue && !valueIsValidForFormItemType(formItem, previousValue)) {
+      throw new Error(`Invalid previous_value for ${formItem.item_type} item: ${change.previous_value}`);
+    }
+
+    if (newValue && !valueIsValidForFormItemType(formItem, newValue)) {
+      throw new Error(`Invalid new_value for ${formItem.item_type} item: ${change.new_value}`);
+    }
+
+    return {
+      compacted: false,
+      ...change,
+      id: getChangeId(change),
+      previous_value: previousValue,
+      new_value: newValue,
+      formItem,
+    };
+  });
 }
 
 export type FormResponseChangeGroup = {
   id: string;
-  changes: ParsedFormResponseChange[];
+  changes: ParsedFormResponseChange<TypedFormItem>[];
 };
 
 export function buildChangeGroups(

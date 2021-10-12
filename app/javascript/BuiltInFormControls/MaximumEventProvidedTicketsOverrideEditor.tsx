@@ -36,7 +36,7 @@ export type MEPTOEditorProps = {
   ticketTypes: TicketTypeForMEPTO[];
   createOverride: (input: MEPTOInput) => Promise<unknown>;
   updateOverride: (input: { id: string; overrideValue: number }) => Promise<unknown>;
-  deleteOverride: (id: string) => Promise<unknown>;
+  deleteOverride: (mepto: MEPTOForEditor) => Promise<unknown>;
 };
 
 function MaximumEventProvidedTicketsOverrideEditor({
@@ -134,9 +134,9 @@ function MaximumEventProvidedTicketsOverrideEditor({
     });
   };
 
-  const deleteOverrideConfirmed = async (override: { id: string }) => {
+  const deleteOverrideConfirmed = async (override: MEPTOForEditor) => {
     clearAllErrors();
-    await deleteOverrideAsync(override.id);
+    await deleteOverrideAsync(override);
   };
 
   const rows = sortedOverrides.map((override) => (
@@ -212,7 +212,7 @@ function MaximumEventProvidedTicketsOverrideEditor({
                 <select
                   className="form-select"
                   value={addingOverride.ticket_type.id}
-                  onBlur={addingTicketTypeIdDidChange}
+                  onChange={addingTicketTypeIdDidChange}
                 >
                   <option aria-label={t('general.placeholderOptionLabel', 'Blank placeholder option')} />
                   {ticketTypeOptions}

@@ -10,11 +10,7 @@ import useUpdateEvent from './useUpdateEvent';
 import RunFormFields, { RunFormFieldsProps } from '../BuiltInForms/RunFormFields';
 import buildEventCategoryUrl from './buildEventCategoryUrl';
 import deserializeFormResponse from '../Models/deserializeFormResponse';
-import {
-  EventAdminEventsQueryDocument,
-  EventAdminEventsQueryData,
-  useEventAdminEventsQuery,
-} from './queries.generated';
+import { useEventAdminEventsQuery, MaximumEventProvidedTicketsOverrideFieldsFragmentDoc } from './queries.generated';
 import {
   useDropEventMutation,
   useCreateMaximumEventProvidedTicketsOverrideMutation,
@@ -22,6 +18,10 @@ import {
   useDeleteMaximumEventProvidedTicketsOverrideMutation,
 } from './mutations.generated';
 import { LoadSingleValueFromCollectionWrapper } from '../GraphqlLoadingWrappers';
+import {
+  useCreateMutationWithReferenceArrayUpdater,
+  useDeleteMutationWithReferenceArrayUpdater,
+} from '@neinteractiveliterature/litform/dist';
 
 export default LoadSingleValueFromCollectionWrapper(
   useEventAdminEventsQuery,
@@ -31,62 +31,21 @@ export default LoadSingleValueFromCollectionWrapper(
     const initialEvent = useMemo(() => deserializeFormResponse(serializedEvent), [serializedEvent]);
 
     const meptoMutations = useMEPTOMutations({
-      createMutate: useCreateMaximumEventProvidedTicketsOverrideMutation()[0],
+      createMutate: useCreateMutationWithReferenceArrayUpdater(
+        useCreateMaximumEventProvidedTicketsOverrideMutation,
+        serializedEvent,
+        'maximum_event_provided_tickets_overrides',
+        (data) => data.createMaximumEventProvidedTicketsOverride.maximum_event_provided_tickets_override,
+        MaximumEventProvidedTicketsOverrideFieldsFragmentDoc,
+        'MaximumEventProvidedTicketsOverrideFields',
+      )[0],
       updateMutate: useUpdateMaximumEventProvidedTicketsOverrideMutation()[0],
-      deleteMutate: useDeleteMaximumEventProvidedTicketsOverrideMutation()[0],
-      createUpdater: (store, updatedEventId, override) => {
-        const storeData = store.readQuery<EventAdminEventsQueryData>({
-          query: EventAdminEventsQueryDocument,
-        });
-        if (!storeData) {
-          return;
-        }
-        store.writeQuery<EventAdminEventsQueryData>({
-          query: EventAdminEventsQueryDocument,
-          data: {
-            ...storeData,
-            convention: {
-              ...storeData.convention,
-              events: data.convention.events.map((event) => {
-                if (event.id !== updatedEventId) {
-                  return event;
-                }
-
-                return {
-                  ...event,
-                  maximum_event_provided_tickets_overrides: [
-                    ...event.maximum_event_provided_tickets_overrides,
-                    override,
-                  ],
-                };
-              }),
-            },
-          },
-        });
-      },
-      deleteUpdater: (store, overrideId) => {
-        const storeData = store.readQuery<EventAdminEventsQueryData>({
-          query: EventAdminEventsQueryDocument,
-        });
-        if (!storeData) {
-          return;
-        }
-        store.writeQuery<EventAdminEventsQueryData>({
-          query: EventAdminEventsQueryDocument,
-          data: {
-            ...storeData,
-            convention: {
-              ...storeData.convention,
-              events: data.convention.events.map((event) => ({
-                ...event,
-                maximum_event_provided_tickets_overrides: event.maximum_event_provided_tickets_overrides.filter(
-                  (mepto) => mepto.id !== overrideId,
-                ),
-              })),
-            },
-          },
-        });
-      },
+      deleteMutate: useDeleteMutationWithReferenceArrayUpdater(
+        useDeleteMaximumEventProvidedTicketsOverrideMutation,
+        serializedEvent,
+        'maximum_event_provided_tickets_overrides',
+        (mepto) => ({ input: { transitionalId: mepto.id } }),
+      )[0],
     });
 
     const [run, setRun] = useState(initialEvent?.runs[0] || {});

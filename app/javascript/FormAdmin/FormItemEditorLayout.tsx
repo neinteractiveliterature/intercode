@@ -18,6 +18,7 @@ import { PreviewFormItemQuery } from './queries';
 import FormItemInput from '../FormPresenter/ItemInputs/FormItemInput';
 import useAsyncFunction from '../useAsyncFunction';
 import { useUpdateFormItemMutation } from './mutations.generated';
+import { PreviewFormItemQueryData, PreviewFormItemQueryVariables } from './queries.generated';
 
 function addGeneratedIdsToFormItem(formItem: TypedFormItem): FormEditorFormItem {
   return {
@@ -30,7 +31,8 @@ function addGeneratedIdsToFormItem(formItem: TypedFormItem): FormEditorFormItem 
 function FormItemEditorLayout(): JSX.Element {
   const match = useRouteMatch<{ itemId: string; id: string; sectionId: string }>();
   const history = useHistory();
-  const { convention, currentSection, formType, formTypeIdentifier, formItemsById } = useContext(FormEditorContext);
+  const { convention, currentSection, form, formType, formTypeIdentifier, formItemsById } =
+    useContext(FormEditorContext);
   const apolloClient = useApolloClient();
   const initialFormItem = useMemo(
     () => currentSection?.form_items.find((item) => item.id === match.params.itemId),
@@ -39,19 +41,19 @@ function FormItemEditorLayout(): JSX.Element {
   const [previewFormItem, setPreviewFormItem] = useState(() => formItemsById.get(initialFormItem?.id ?? ''));
   const refreshRenderedFormItem = useCallback(
     async (newFormItem) => {
-      if (!currentSection) {
+      if (!currentSection?.id) {
         return;
       }
 
-      const response = await apolloClient.query({
+      const response = await apolloClient.query<PreviewFormItemQueryData, PreviewFormItemQueryVariables>({
         query: PreviewFormItemQuery,
-        variables: { formSectionId: currentSection.id, formItem: buildFormItemInput(newFormItem) },
+        variables: { formId: form.id, formSectionId: currentSection.id, formItem: buildFormItemInput(newFormItem) },
         fetchPolicy: 'no-cache',
       });
-      const responseFormItem = parseTypedFormItemObject(response.data.previewFormItem);
+      const responseFormItem = parseTypedFormItemObject(response.data.convention.form.form_section.preview_form_item);
       setPreviewFormItem(responseFormItem);
     },
-    [apolloClient, currentSection],
+    [apolloClient, currentSection?.id, form.id],
   );
 
   const [formItem, setFormItem] = useDebouncedState<FormEditorFormItem | undefined>(

@@ -1,20 +1,14 @@
 import keyBy from 'lodash/keyBy';
 import flatMap from 'lodash/flatMap';
 
-import {
-  CommonFormFieldsFragment,
-  CommonFormItemFieldsFragment,
-  CommonFormSectionFieldsFragment,
-} from './commonFormFragments.generated';
+import { CommonFormFieldsFragment, CommonFormItemFieldsFragment } from './commonFormFragments.generated';
 import { parseTypedFormItemArray, TypedFormItem } from '../FormAdmin/FormItemUtils';
 
-export function sortFormSections<T extends CommonFormSectionFieldsFragment>(
-  formSections: T[],
-): T[] {
+export function sortFormSections<T extends { position: number }>(formSections: T[]): T[] {
   return [...formSections].sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
 }
 
-export function sortFormItems<T extends CommonFormItemFieldsFragment>(formItems: T[]): T[] {
+export function sortFormItems<T extends { position: number }>(formItems: T[]): T[] {
   return [...formItems].sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
 }
 
@@ -22,15 +16,11 @@ export function sortAndParseFormItems(formItems: CommonFormItemFieldsFragment[])
   return parseTypedFormItemArray(sortFormItems(formItems));
 }
 
-export function getSortedFormSections<T extends CommonFormFieldsFragment>(
-  form: T,
-): T['form_sections'] {
+export function getSortedFormSections<T extends CommonFormFieldsFragment>(form: T): T['form_sections'] {
   return sortFormSections(form.form_sections);
 }
 
-export function getSortedFormItems<T extends CommonFormFieldsFragment>(
-  form: T,
-): T['form_sections'][0]['form_items'] {
+export function getSortedFormItems<T extends CommonFormFieldsFragment>(form: T): T['form_sections'][0]['form_items'] {
   return flatMap(getSortedFormSections(form), (section) => sortFormItems(section.form_items));
 }
 

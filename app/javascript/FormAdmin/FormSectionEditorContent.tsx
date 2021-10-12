@@ -11,9 +11,9 @@ import { FormEditorContext } from './FormEditorContexts';
 import FormEditorItemPreview from './FormEditorItemPreview';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import { useMoveFormItemMutation, useUpdateFormSectionMutation } from './mutations.generated';
-import { serializeParsedFormItem } from './FormItemUtils';
 import { useSortableDndSensors } from '../SortableUtils';
 import FormEditorItemPreviewDragOverlay from './FormEditorItemPreviewDragOverlay';
+import { serializeParsedFormItem } from './serializeParsedFormItem';
 
 function FormSectionEditorContent(): JSX.Element {
   const { currentSection } = useContext(FormEditorContext);
@@ -94,7 +94,7 @@ function FormSectionEditorContent(): JSX.Element {
               strategy={verticalListSortingStrategy}
             >
               {currentSection.form_items.map((formItem) => (
-                <FormEditorItemPreview key={formItem.id} formItem={formItem} />
+                <FormEditorItemPreview key={formItem.id} formSection={currentSection} formItem={formItem} />
               ))}
             </SortableContext>
           </div>

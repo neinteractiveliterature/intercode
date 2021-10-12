@@ -11,9 +11,12 @@ generates:
       - typescript
     config:
       nonOptionalTypename: true
+      strictScalars: true
       scalars:
         BigDecimal: string
         Date: string
+        Json: string
+        Upload: File
   app/javascript/:
     preset: near-operation-file
     presetConfig:
@@ -33,3 +36,9 @@ generates:
       nonOptionalTypename: true
       dedupeOperationSuffix: true
       operationResultSuffix: Data
+      strictScalars: true
+      scalars:
+        BigDecimal: string
+        Date: string
+        Json: string
+        Upload: File

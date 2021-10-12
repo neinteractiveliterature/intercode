@@ -77,7 +77,7 @@ export default LoadQueryWithVariablesWrapper(
         <select
           className="form-select mb-3"
           value={productVariantId ?? ''}
-          onBlur={(event) => setProductVariantId(event.target.value)}
+          onChange={(event) => setProductVariantId(event.target.value)}
         >
           <option disabled value="">
             Select...

@@ -20,8 +20,7 @@ class CancelOrderService < CivilService::Service
   def inner_call # rubocop:disable Metrics/AbcSize
     refund, refund_status = refund_order
 
-    action = 'Cancelled '
-    action << (order.status == 'paid' ? " (#{refund_status.to_s.humanize.downcase})" : 'unpaid')
+    action = "Cancelled #{order.status == 'paid' ? " (#{refund_status.to_s.humanize.downcase})" : 'unpaid'}"
 
     order.update!(
       status: 'cancelled',
