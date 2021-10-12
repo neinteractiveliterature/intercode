@@ -15,6 +15,7 @@ module.exports = {
     'airbnb-typescript',
     'prettier',
     'plugin:@graphql-eslint/recommended',
+    'plugin:jest/recommended'
     // TODO: turn these on once I feel like getting a raft of errors
     // 'plugin:@typescript-eslint/recommended',
     // 'plugin:@typescript-eslint/recommended-requiring-type-checking',
