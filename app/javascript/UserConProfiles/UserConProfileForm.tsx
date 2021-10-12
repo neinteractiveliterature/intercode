@@ -9,10 +9,7 @@ import { UserConProfile } from '../graphqlTypes.generated';
 
 export type UserConProfileFormProps<
   UserConProfileType extends FormResponse &
-    Pick<
-      UserConProfile,
-      'current_user_form_item_viewer_role' | 'current_user_form_item_writer_role'
-    >,
+    Pick<UserConProfile, 'current_user_form_item_viewer_role' | 'current_user_form_item_writer_role'>,
 > = {
   form: CommonFormFieldsFragment;
   footerContent?: ReactNode;
@@ -23,14 +20,9 @@ export type UserConProfileFormProps<
 
 function UserConProfileForm<
   UserConProfileType extends FormResponse &
-    Pick<
-      UserConProfile,
-      'current_user_form_item_viewer_role' | 'current_user_form_item_writer_role'
-    >,
+    Pick<UserConProfile, 'current_user_form_item_viewer_role' | 'current_user_form_item_writer_role'>,
 >(props: UserConProfileFormProps<UserConProfileType>): JSX.Element {
-  const formResponseValuesChanged = (
-    newResponseValues: UserConProfileType['form_response_attrs'],
-  ) => {
+  const formResponseValuesChanged = (newResponseValues: UserConProfileType['form_response_attrs']) => {
     props.onChange((prevUserConProfile) => ({
       ...prevUserConProfile,
       form_response_attrs: {
