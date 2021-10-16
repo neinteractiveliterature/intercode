@@ -1,0 +1,26 @@
+{
+  "version": "1.2.1",
+  "groups": [
+    {
+      "name": "Rails",
+      "description": "Rails server",
+      "enabled": true,
+      "terminals": [
+        {
+          "name": "rails",
+          "path": ".",
+          "cmd": [
+            "bin/rails s -p 5000 -b 'ssl://0.0.0.0:5000?key=dev_certificate.key&cert=dev_certificate.crt&ca=dev_ca.crt'"
+          ],
+          "num": 0
+        }
+      ]
+    },
+    {
+      "name": "Webpack",
+      "description": "webpack-dev-server",
+      "enabled": true,
+      "terminals": [{ "name": "webpack", "path": ".", "cmd": ["yarn run start"], "num": 0 }]
+    }
+  ]
+}
