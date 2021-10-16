@@ -15,32 +15,61 @@ type BaseRowType =
   | (Pick<PermissionedModel, '__typename'> & { id: string })
   | (Pick<PermissionedRole, '__typename'> & { id: string });
 
-type PermissionsTableInputProps<RowType extends BaseRowType> = UsePermissionsChangeSetOptions & {
+type PermissionsTableInputBaseProps<RowsType extends BaseRowType[]> = UsePermissionsChangeSetOptions & {
   permissionNames: PermissionName[];
-  rows: RowType[];
-  rowType: 'model' | 'role';
-  formatRowHeader: (row: RowType) => React.ReactNode;
+  rows: RowsType;
+  formatRowHeader: (row: RowsType[number]) => React.ReactNode;
   rowsHeader?: React.ReactNode;
   readOnly?: boolean;
 };
 
-function PermissionsTableInput<RowType extends BaseRowType>({
-  permissionNames,
-  initialPermissions,
-  changeSet,
-  add,
-  remove,
-  rowsHeader,
-  formatRowHeader,
-  readOnly,
-  rows,
-  rowType,
-}: PermissionsTableInputProps<RowType>): JSX.Element {
+type PermissionsTableInputRoleRowProps<RowsType extends (Pick<PermissionedRole, '__typename'> & { id: string })[]> =
+  PermissionsTableInputBaseProps<RowsType> & {
+    rowType: 'role';
+    // for some role types (e.g. OrganizationRole) there is no model; we want an explicit undefined
+    // prop for this
+    model: (Pick<PermissionedModel, '__typename'> & { id: string }) | undefined;
+  };
+
+type PermissionsTableInputModelRowProps<RowsType extends (Pick<PermissionedModel, '__typename'> & { id: string })[]> =
+  PermissionsTableInputBaseProps<RowsType> & {
+    rowType: 'model';
+    role: Pick<PermissionedRole, '__typename'> & { id: string };
+  };
+
+type PermissionsTableInputProps<RowsType extends BaseRowType[]> = RowsType extends (Pick<
+  PermissionedModel,
+  '__typename'
+> & {
+  id: string;
+})[]
+  ? PermissionsTableInputModelRowProps<RowsType>
+  : RowsType extends (Pick<PermissionedRole, '__typename'> & {
+      id: string;
+    })[]
+  ? PermissionsTableInputRoleRowProps<RowsType>
+  : never;
+
+function PermissionsTableInput<RowsType extends BaseRowType[]>(
+  props: PermissionsTableInputProps<RowsType>,
+): JSX.Element {
+  const { permissionNames, initialPermissions, changeSet, add, remove, rowsHeader, readOnly } = props;
+
   const { currentPermissions, grantPermission, revokePermission } = usePermissionsChangeSet({
     initialPermissions,
     changeSet,
     add,
     remove,
+  });
+
+  const buildCommonCellProperties = (permission: string) => ({
+    initialPermissions: initialPermissions,
+    currentPermissions: currentPermissions,
+    changeSet: changeSet,
+    permission: permission,
+    grantPermission: grantPermission,
+    revokePermission: revokePermission,
+    readOnly: readOnly ?? false,
   });
 
   return (
@@ -57,27 +86,33 @@ function PermissionsTableInput<RowType extends BaseRowType>({
       </thead>
 
       <tbody>
-        {rows.map((row) => (
-          <tr key={row.id}>
-            <th scope="row">{formatRowHeader(row)}</th>
-            {permissionNames.map(({ permission }) => (
-              <PermissionsTableCell
-                key={permission}
-                initialPermissions={initialPermissions}
-                currentPermissions={currentPermissions}
-                changeSet={changeSet}
-                model={
-                  rowType === 'model' ? (row as Pick<PermissionedModel, '__typename'> & { id: string }) : undefined
-                }
-                role={rowType === 'role' ? (row as Pick<PermissionedRole, '__typename'> & { id: string }) : undefined}
-                permission={permission}
-                grantPermission={grantPermission}
-                revokePermission={revokePermission}
-                readOnly={readOnly ?? false}
-              />
+        {props.rowType === 'model'
+          ? props.rows.map((row) => (
+              <tr key={row.id}>
+                <th scope="row">{props.formatRowHeader(row)}</th>
+                {permissionNames.map(({ permission }) => (
+                  <PermissionsTableCell
+                    key={permission}
+                    {...buildCommonCellProperties(permission)}
+                    model={row}
+                    role={props.role}
+                  />
+                ))}
+              </tr>
+            ))
+          : props.rows.map((row) => (
+              <tr key={row.id}>
+                <th scope="row">{props.formatRowHeader(row)}</th>
+                {permissionNames.map(({ permission }) => (
+                  <PermissionsTableCell
+                    key={permission}
+                    {...buildCommonCellProperties(permission)}
+                    model={props.model}
+                    role={row}
+                  />
+                ))}
+              </tr>
             ))}
-          </tr>
-        ))}
       </tbody>
     </table>
   );

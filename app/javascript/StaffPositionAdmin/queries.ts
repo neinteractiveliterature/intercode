@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import { PermissionedModelFields } from '../Permissions/fragments';
+import { PermissionedModelFields, PermissionedRoleFields } from '../Permissions/fragments';
 
 export const StaffPositionFields = gql`
   fragment StaffPositionFields on StaffPosition {
@@ -24,10 +24,15 @@ export const StaffPositionFields = gql`
       model {
         ...PermissionedModelFields
       }
+
+      role {
+        ...PermissionedRoleFields
+      }
     }
   }
 
   ${PermissionedModelFields}
+  ${PermissionedRoleFields}
 `;
 
 export const StaffPositionsQuery = gql`
