@@ -53,6 +53,7 @@ export default LoadSingleValueFromCollectionWrapper(
             initialPermissions={staffPosition.permissions}
             rowType="model"
             rows={convention.event_categories}
+            role={staffPosition}
             changeSet={changeSet}
             add={add}
             remove={remove}
@@ -74,6 +75,7 @@ export default LoadSingleValueFromCollectionWrapper(
             initialPermissions={staffPosition.permissions}
             rowType="model"
             rows={convention.cmsContentGroups}
+            role={staffPosition}
             changeSet={changeSet}
             add={add}
             remove={remove}

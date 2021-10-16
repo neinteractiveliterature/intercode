@@ -5,7 +5,7 @@ export type PermissionCheckBoxProps = {
 function PermissionCheckBox({ hasPermission }: PermissionCheckBoxProps): JSX.Element {
   if (hasPermission) {
     return (
-      <i className="bi-check-square-o">
+      <i className="bi-check-square">
         <span className="visually-hidden">Permitted</span>
       </i>
     );

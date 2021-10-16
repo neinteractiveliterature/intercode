@@ -2,10 +2,7 @@ import { useMemo } from 'react';
 import classNames from 'classnames';
 
 import { findPermission, PartialPolymorphicPermission, permissionEquals } from './PermissionUtils';
-import {
-  UsePermissionsChangeSetOptions,
-  UsePermissionsChangeSetResult,
-} from './usePermissionsChangeSet';
+import { UsePermissionsChangeSetOptions, UsePermissionsChangeSetResult } from './usePermissionsChangeSet';
 
 export type UsePermissionToggleOptions = UsePermissionsChangeSetResult &
   Pick<UsePermissionsChangeSetOptions, 'initialPermissions' | 'changeSet'> &
@@ -51,16 +48,12 @@ export default function usePermissionToggle({
         'table-success':
           changeSet &&
           changeSet.changes.some(
-            (change) =>
-              change.changeType === 'add' &&
-              permissionEquals(change.value, { role, model, permission }),
+            (change) => change.changeType === 'add' && permissionEquals(change.value, { role, model, permission }),
           ),
         'table-danger':
           existingPermission &&
           changeSet &&
-          changeSet.changes.some(
-            (change) => change.changeType === 'remove' && existingPermission.id === change.id,
-          ),
+          changeSet.changes.some((change) => change.changeType === 'remove' && existingPermission.id === change.id),
       }),
     [changeSet, readOnly, existingPermission, role, model, permission],
   );
