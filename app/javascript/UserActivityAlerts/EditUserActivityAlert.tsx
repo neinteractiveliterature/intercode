@@ -61,7 +61,7 @@ export default LoadSingleValueFromCollectionWrapper(
 
     const deleteClicked = async () => {
       await deleteAlert(userActivityAlert);
-      history.push('/');
+      history.push('/user_activity_alerts');
     };
 
     return (

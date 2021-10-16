@@ -24,7 +24,7 @@ all id fields are replaced with ones of type ID.",
   load_and_authorize_convention_associated_model :user_activity_alerts, :id, :update
 
   def resolve(**args)
-    alert_attrs = process_transitional_ids_in_input(user_activity_alert.to_h, :user_id)
+    alert_attrs = process_transitional_ids_in_input(args[:user_activity_alert].to_h, :user_id)
     user_activity_alert.update!(alert_attrs)
 
     args[:add_notification_destinations].each do |add_notification_destination|

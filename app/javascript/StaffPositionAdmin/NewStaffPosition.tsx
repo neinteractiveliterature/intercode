@@ -1,39 +1,28 @@
 import { useState, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
-import { ErrorDisplay } from '@neinteractiveliterature/litform';
+import {
+  ErrorDisplay,
+  LoadQueryWrapper,
+  useCreateMutationWithReferenceArrayUpdater,
+} from '@neinteractiveliterature/litform';
 
 import StaffPositionForm, { EditingStaffPosition } from './StaffPositionForm';
-import { StaffPositionsQuery } from './queries';
-import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
 import buildStaffPositionInput from './buildStaffPositionInput';
 import { useCreateStaffPositionMutation } from './mutations.generated';
-import { StaffPositionsQueryData } from './queries.generated';
+import { StaffPositionFieldsFragmentDoc, useStaffPositionsQuery } from './queries.generated';
 
-function NewStaffPosition(): JSX.Element {
+export default LoadQueryWrapper(useStaffPositionsQuery, function NewStaffPosition({ data }): JSX.Element {
   const history = useHistory();
-  const [createMutate] = useCreateStaffPositionMutation({
-    update: (proxy, result) => {
-      const data = proxy.readQuery<StaffPositionsQueryData>({ query: StaffPositionsQuery });
-      const newStaffPosition = result.data?.createStaffPosition?.staff_position;
-      if (!data || !newStaffPosition) {
-        return;
-      }
-
-      proxy.writeQuery<StaffPositionsQueryData>({
-        query: StaffPositionsQuery,
-        data: {
-          ...data,
-          convention: {
-            ...data.convention,
-            staff_positions: [...data.convention.staff_positions, newStaffPosition],
-          },
-        },
-      });
-    },
-  });
-  const [mutate, error, inProgress] = useAsyncFunction(createMutate);
+  const [createMutate, { error, loading: inProgress }] = useCreateMutationWithReferenceArrayUpdater(
+    useCreateStaffPositionMutation,
+    data.convention,
+    'staff_positions',
+    (data) => data.createStaffPosition.staff_position,
+    StaffPositionFieldsFragmentDoc,
+    'StaffPositionFields',
+  );
 
   const [staffPosition, setStaffPosition] = useState<EditingStaffPosition>({
     __typename: 'StaffPosition',
@@ -47,7 +36,7 @@ function NewStaffPosition(): JSX.Element {
   });
 
   const saveClicked = useCallback(async () => {
-    const response = await mutate({
+    const response = await createMutate({
       variables: {
         input: {
           staff_position: buildStaffPositionInput(staffPosition),
@@ -57,7 +46,7 @@ function NewStaffPosition(): JSX.Element {
     if (response?.data) {
       history.replace(`/staff_positions/${response.data.createStaffPosition.staff_position.id}/edit_permissions`);
     }
-  }, [history, mutate, staffPosition]);
+  }, [history, createMutate, staffPosition]);
 
   usePageTitle('New staff position');
 
@@ -71,6 +60,4 @@ function NewStaffPosition(): JSX.Element {
       </button>
     </div>
   );
-}
-
-export default NewStaffPosition;
+});

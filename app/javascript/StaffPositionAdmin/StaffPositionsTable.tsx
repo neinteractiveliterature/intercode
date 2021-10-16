@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useContext, useMemo, useState } from 'react';
+import { Fragment, useContext, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import groupBy from 'lodash/groupBy';
 import flatMap from 'lodash/flatMap';
@@ -9,10 +9,10 @@ import {
   sortByLocaleString,
   DisclosureTriangle,
   LoadQueryWrapper,
+  useDeleteMutationWithReferenceArrayUpdater,
 } from '@neinteractiveliterature/litform';
 
 import PermissionNames from '../../../config/permission_names.json';
-import { StaffPositionsQuery } from './queries';
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 import usePageTitle from '../usePageTitle';
 import { joinReact } from '../RenderingUtils';
@@ -36,12 +36,7 @@ function UserConProfilesList({ userConProfiles }: UserConProfilesListProps) {
 
   const fullList = userConProfilesSorted.map((ucp) => (
     <span key={ucp.id} className="text-nowrap">
-      <Gravatar
-        enabled={ucp.gravatar_enabled}
-        url={ucp.gravatar_url}
-        imgClassName="align-baseline"
-        pixelSize={16}
-      />{' '}
+      <Gravatar enabled={ucp.gravatar_enabled} url={ucp.gravatar_url} imgClassName="align-baseline" pixelSize={16} />{' '}
       {ucp.name_without_nickname}
     </span>
   ));
@@ -65,9 +60,7 @@ function UserConProfilesList({ userConProfiles }: UserConProfilesListProps) {
   );
 }
 
-function describePermissionAbilities(
-  modelPermissions: Pick<PolymorphicPermission, 'model' | 'permission'>[],
-) {
+function describePermissionAbilities(modelPermissions: Pick<PolymorphicPermission, 'model' | 'permission'>[]) {
   const typename = modelPermissions[0].model.__typename;
   const permissionNameGroups = PermissionNames.filter((group) => group.model_type === typename);
   const permissionNamesForType = flatMap(permissionNameGroups, (group) => group.permissions);
@@ -102,10 +95,7 @@ function describePermissionModel(
       return <strong className="text-nowrap">{model.name}</strong>;
     case 'EventCategory':
       return (
-        <span
-          className="px-1 rounded"
-          style={getEventCategoryStyles({ eventCategory: model, variant: 'default' })}
-        >
+        <span className="px-1 rounded" style={getEventCategoryStyles({ eventCategory: model, variant: 'default' })}>
           {model.name}
         </span>
       );
@@ -169,41 +159,16 @@ export default LoadQueryWrapper(useStaffPositionsQuery, function StaffPositionsT
   const { conventionDomain } = useContext(AppRootContext);
   const confirm = useConfirm();
 
-  const [deleteMutate] = useDeleteStaffPositionMutation();
-  const deleteStaffPosition = useCallback(
-    (id) =>
-      deleteMutate({
-        variables: { input: { id } },
-        update: (proxy) => {
-          const storeData = proxy.readQuery<StaffPositionsQueryData>({
-            query: StaffPositionsQuery,
-          });
-          if (storeData == null) {
-            return;
-          }
-
-          proxy.writeQuery<StaffPositionsQueryData>({
-            query: StaffPositionsQuery,
-            data: {
-              ...storeData,
-              convention: {
-                ...storeData.convention,
-                staff_positions: storeData.convention.staff_positions.filter(
-                  (staffPosition) => staffPosition.id !== id,
-                ),
-              },
-            },
-          });
-        },
-      }),
-    [deleteMutate],
+  const [deleteStaffPosition] = useDeleteMutationWithReferenceArrayUpdater(
+    useDeleteStaffPositionMutation,
+    data.convention,
+    'staff_positions',
+    (staffPosition) => ({ input: { transitionalId: staffPosition.id } }),
   );
 
   usePageTitle('Staff positions');
 
-  const renderRow = (
-    staffPosition: StaffPositionsQueryData['convention']['staff_positions'][0],
-  ) => (
+  const renderRow = (staffPosition: StaffPositionsQueryData['convention']['staff_positions'][0]) => (
     <tr key={staffPosition.id}>
       <td>{staffPosition.name}</td>
       <td>{staffPosition.visible ? <i className="bi-check" /> : null}</td>
@@ -242,10 +207,7 @@ export default LoadQueryWrapper(useStaffPositionsQuery, function StaffPositionsT
           <Link to={`/staff_positions/${staffPosition.id}/edit`} className="dropdown-item">
             Edit settings
           </Link>
-          <Link
-            to={`/staff_positions/${staffPosition.id}/edit_permissions`}
-            className="dropdown-item"
-          >
+          <Link to={`/staff_positions/${staffPosition.id}/edit_permissions`} className="dropdown-item">
             Edit permissions
           </Link>
           <button
@@ -254,7 +216,7 @@ export default LoadQueryWrapper(useStaffPositionsQuery, function StaffPositionsT
             onClick={() =>
               confirm({
                 prompt: `Are you sure you want to delete the staff position ${staffPosition.name}?`,
-                action: () => deleteStaffPosition(staffPosition.id),
+                action: () => deleteStaffPosition(staffPosition),
                 renderError: (e) => <ErrorDisplay graphQLError={e} />,
               })
             }
