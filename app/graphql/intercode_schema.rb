@@ -76,8 +76,8 @@ class IntercodeSchema < GraphQL::Schema
     def result
       return if @deprecated_usages.blank?
 
-      client_address = @context[:controller].request.ip
-      user_agent = @context[:controller].request.user_agent
+      client_address = @context[:controller]&.request&.ip
+      user_agent = @context[:controller]&.request&.user_agent
 
       @deprecated_usages.each do |usage|
         DeprecatedGraphQlUsage.create(**usage, client_address: client_address, user_agent: user_agent)
