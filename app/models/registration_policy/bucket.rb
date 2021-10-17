@@ -50,7 +50,7 @@ class RegistrationPolicy::Bucket
   end
 
   def full?(signups)
-    available_slots(signups).zero?
+    available_slots(signups)&.zero?
   end
 
   def has_available_slots?(signups)
