@@ -21,7 +21,8 @@ gem 'doorkeeper', '5.5.4'
 gem 'devise-doorkeeper'
 gem 'devise-encryptable'
 gem 'doorkeeper-jwt'
-gem 'doorkeeper-openid_connect', git: 'https://github.com/nbudin/doorkeeper-openid_connect.git', branch: 'fix_doorkeeper_52_compat'
+gem 'doorkeeper-openid_connect', git: 'https://github.com/nbudin/doorkeeper-openid_connect.git', 
+branch: 'fix_doorkeeper_52_compat'
 
 # Let's store sessions in the database, shall we?
 gem 'activerecord-session_store'
@@ -128,6 +129,8 @@ group :development do
   gem 'rubocop', '1.22.1'
   gem 'rubocop-performance'
   gem 'rubocop-rails'
+  gem 'rubocop-sequel'
+  gem 'prettier', '2.0.0-rc3'
 
   # Find missing `end` statements
   gem 'dead_end'

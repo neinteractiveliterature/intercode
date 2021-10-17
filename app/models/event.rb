@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
@@ -48,7 +49,7 @@
 #  fk_rails_...  (updated_by_id => users.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+
 class Event < ApplicationRecord
   include AgeRestrictions
   include EventEmail
@@ -76,37 +77,30 @@ class Event < ApplicationRecord
   indexable_markdown_field(:short_blurb_for_search) { short_blurb }
 
   multisearchable(
-    against: [
-      :title,
-      :author,
-      :organization,
-      :team_members_for_search,
-      :description_for_search,
-      :short_blurb_for_search
-    ],
-    additional_attributes: ->(event) {
+    against: %i[title author organization team_members_for_search description_for_search short_blurb_for_search],
+    additional_attributes: ->(event) do
       { convention_id: event.convention_id, hidden_from_search: event.status == 'dropped' }
-    }
+    end
   )
 
   register_form_response_attrs :title,
-    :author,
-    :email,
-    :event_email,
-    :team_mailing_list_name,
-    :organization,
-    :url,
-    :length_seconds,
-    :can_play_concurrently,
-    :con_mail_destination,
-    :description,
-    :short_blurb,
-    :registration_policy,
-    :participant_communications,
-    :age_restrictions,
-    :age_restrictions_description,
-    :minimum_age,
-    :content_warnings
+                               :author,
+                               :email,
+                               :event_email,
+                               :team_mailing_list_name,
+                               :organization,
+                               :url,
+                               :length_seconds,
+                               :can_play_concurrently,
+                               :con_mail_destination,
+                               :description,
+                               :short_blurb,
+                               :registration_policy,
+                               :participant_communications,
+                               :age_restrictions,
+                               :age_restrictions_description,
+                               :minimum_age,
+                               :content_warnings
 
   # Most events belong to the user who proposes it.  Some (like ConSuite or
   # Ops) are owned by the department head
@@ -122,10 +116,7 @@ class Event < ApplicationRecord
   belongs_to :event_category
 
   has_many :maximum_event_provided_tickets_overrides, dependent: :destroy
-  has_many :provided_tickets,
-    class_name: 'Ticket',
-    inverse_of: 'provided_by_event',
-    foreign_key: 'provided_by_event_id'
+  has_many :provided_tickets, class_name: 'Ticket', inverse_of: 'provided_by_event', foreign_key: 'provided_by_event_id'
 
   has_many :event_ratings, dependent: :destroy
 
@@ -138,10 +129,7 @@ class Event < ApplicationRecord
   # All events for a Convention must have a unique title.  Ignore any events
   # that have a status of "Dropped".  If they have a duplicate title we don't
   # care.
-  validates :title, presence: true, uniqueness: {
-    scope: :convention,
-    conditions: -> { where.not(status: 'dropped') }
-  }
+  validates :title, presence: true, uniqueness: { scope: :convention, conditions: -> { where.not(status: 'dropped') } }
 
   # The event's registration policy must also be valid.
   validate :validate_registration_policy
@@ -164,51 +152,45 @@ class Event < ApplicationRecord
   has_one :event_proposal, required: false
   has_many :form_response_changes, as: :response
 
-  after_commit :sync_team_mailing_list, on: [:create, :update]
+  after_commit :sync_team_mailing_list, on: %i[create update]
 
-  STATUSES.each do |status|
-    scope status, -> { where(status: status) }
-  end
+  STATUSES.each { |status| scope status, -> { where(status: status) } }
 
-  scope :regular, -> {
-    where(event_category_id: EventCategory.where(scheduling_ui: 'regular').select(:id))
-  }
+  scope :regular, -> { where(event_category_id: EventCategory.where(scheduling_ui: 'regular').select(:id)) }
 
-  scope :joins_rating_for_user_con_profile, ->(user_con_profile) do
-    if user_con_profile
-      joins(<<~SQL)
+  scope :joins_rating_for_user_con_profile, ->(user_con_profile) { user_con_profile ? joins(<<~SQL.squish) : self }
         LEFT JOIN event_ratings ON (
           events.id = event_ratings.event_id
           AND user_con_profile_id = #{connection.quote(user_con_profile.id)}
         )
       SQL
-    else
-      self
-    end
-  end
 
-  scope :with_rating_for_user_con_profile, ->(user_con_profile, rating) do
-    if user_con_profile
-      rating_array = rating.is_a?(Array) ? rating : [rating]
-      joins_rating_for_user_con_profile(user_con_profile)
-        .where('COALESCE(event_ratings.rating, 0) IN (?)', rating_array)
-    else
-      self
-    end
-  end
+  scope :with_rating_for_user_con_profile,
+        ->(user_con_profile, rating) {
+          if user_con_profile
+            rating_array = rating.is_a?(Array) ? rating : [rating]
+            joins_rating_for_user_con_profile(user_con_profile).where(
+              'COALESCE(event_ratings.rating, 0) IN (?)',
+              rating_array
+            )
+          else
+            self
+          end
+        }
 
-  scope :order_by_rating_for_user_con_profile, ->(user_con_profile, direction = nil) do
-    if user_con_profile
-      joins_rating_for_user_con_profile(user_con_profile)
-        .order(Arel.sql("COALESCE(event_ratings.rating, 0) #{direction || 'DESC'}"))
-    else
-      self
-    end
-  end
+  scope :order_by_rating_for_user_con_profile,
+        ->(user_con_profile, direction = nil) {
+          if user_con_profile
+            joins_rating_for_user_con_profile(user_con_profile).order(
+              Arel.sql("COALESCE(event_ratings.rating, 0) #{direction || 'DESC'}")
+            )
+          else
+            self
+          end
+        }
 
-  scope :with_runs_between, ->(convention, start, finish) do
-    where(id: convention.runs.between(start, finish).select(:event_id))
-  end
+  scope :with_runs_between,
+        ->(convention, start, finish) { where(id: convention.runs.between(start, finish).select(:event_id)) }
 
   serialize :registration_policy, ActiveModelCoder.new('RegistrationPolicy')
 
@@ -241,9 +223,7 @@ class Event < ApplicationRecord
     return unless registration_policy
     return if registration_policy.valid?
 
-    registration_policy.errors.each do |attribute, error|
-      errors.add "registration_policy.#{attribute}", error
-    end
+    registration_policy.errors.each { |attribute, error| errors.add "registration_policy.#{attribute}", error }
   end
 
   def single_run_events_must_have_no_more_than_one_run
@@ -260,14 +240,16 @@ class Event < ApplicationRecord
     before, after = changes['registration_policy']
     return if before == after # ActiveRecord is being overzealous about change detection
 
-    errors.add :registration_policy, "cannot be changed via ActiveRecord on an existing event.  \
+    errors.add :registration_policy,
+               "cannot be changed via ActiveRecord on an existing event.  \
 Use EventChangeRegistrationPolicyService instead."
   end
 
   def event_category_must_be_from_same_convention
     return if convention == event_category.convention
 
-    errors.add :event_category, "is from #{event_category.convention.name} but this event is in \
+    errors.add :event_category,
+               "is from #{event_category.convention.name} but this event is in \
 #{convention.name}"
   end
 

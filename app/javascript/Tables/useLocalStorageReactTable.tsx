@@ -4,7 +4,10 @@ export type UseLocalStorageReactTableOptions = {
   onPageSizeChange?: (newPageSize: number) => void;
 };
 
-export default function useLocalStorageReactTable(storageKeyPrefix: string) {
+export default function useLocalStorageReactTable(storageKeyPrefix: string): {
+  pageSize: number;
+  setAndStorePageSize: (newPageSize: number) => void;
+} {
   const pageSizeKey = useMemo(() => `tables:${storageKeyPrefix}:pageSize`, [storageKeyPrefix]);
 
   const loadPageSize = useCallback(() => {

@@ -3,7 +3,7 @@ import { CellProps } from 'react-table';
 function SignupChoiceCell<RowType extends { counted?: boolean | null }, ValueType>({
   value,
   row: { original },
-}: CellProps<RowType, ValueType>) {
+}: CellProps<RowType, ValueType>): JSX.Element {
   if (original.counted) {
     return <>{value}</>;
   }

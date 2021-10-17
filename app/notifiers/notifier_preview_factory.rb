@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class NotifierPreviewFactory
   attr_reader :event_key, :convention
 
@@ -19,63 +20,75 @@ class NotifierPreviewFactory
   end
 
   def parameters
-    @parameters ||= parameter_names.map do |parameter_name|
-      [parameter_name, parameter_value(parameter_name)]
-    end.to_h
+    @parameters ||= parameter_names.index_with { |parameter_name| parameter_value(parameter_name) }
   end
 
   # This is super not worth refactoring
-  def synthesize_parameter_value(parameter_name) # rubocop:disable Metrics/CyclomaticComplexity
+  def synthesize_parameter_value(parameter_name) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     case parameter_name
-    when :alert_user_con_profile then UserConProfile.new(convention: convention)
-    when :changes then []
+    when :alert_user_con_profile
+      UserConProfile.new(convention: convention)
+    when :changes
+      []
     when :event_proposal
-      EventProposal.new(
-        convention: convention, event_category: EventCategory.new(convention: convention)
-      )
+      EventProposal.new(convention: convention, event_category: EventCategory.new(convention: convention))
     when :event
       if event_key == 'user_activity_alerts/alert'
         'test_event'
       else
         Event.new(convention: convention, event_category: EventCategory.new(convention: convention))
       end
-    when :order then Order.new(user_con_profile: UserConProfile.new(convention: convention))
-    when :signup then Signup.new(run: Run.new(event: Event.new(convention: convention)))
+    when :order
+      Order.new(user_con_profile: UserConProfile.new(convention: convention))
+    when :signup
+      Signup.new(run: Run.new(event: Event.new(convention: convention)))
     when :signup_request
       SignupRequest.new(target_run: Run.new(event: Event.new(convention: convention)))
-    when :ticket then Ticket.new(user_con_profile: UserConProfile.new(convention: convention))
-    when :user_activity_alert then UserActivityAlert.new(convention: convention)
-    when :whodunit then User.new
+    when :ticket
+      Ticket.new(user_con_profile: UserConProfile.new(convention: convention))
+    when :user_activity_alert
+      UserActivityAlert.new(convention: convention)
+    when :whodunit
+      User.new
     end
   end
 
   # This is super not worth refactoring
-  def find_parameter_value(parameter_name) # rubocop:disable Metrics/CyclomaticComplexity
+  def find_parameter_value(parameter_name) # rubocop:disable Metrics
     case parameter_name
-    when :alert_user_con_profile then convention.user_con_profiles.first
+    when :alert_user_con_profile
+      convention.user_con_profiles.first
     when :changes
       [
         convention.events.first&.form_response_changes&.first ||
           convention.event_proposals.first&.form_response_changes&.first
       ]
-    when :event_proposal then convention.event_proposals.first
+    when :event_proposal
+      convention.event_proposals.first
     when :event
-      if event_key == 'user_activity_alerts/alert'
-        'test_event'
-      else
-        convention.events.first
-      end
-    when :move_result then find_signup_move_result
-    when :move_results then [find_signup_move_result]
-    when :order then Order.where(user_con_profile: convention.user_con_profiles.select(:id)).first
-    when :prev_state then 'confirmed'
-    when :prev_bucket_key then 'flex'
-    when :refund_id then 'refund-abc123'
-    when :signup then convention.signups.first
-    when :signup_request then convention.signup_requests.first
-    when :ticket then convention.tickets.first
-    when :user_activity_alert then convention.user_activity_alerts.first
-    when :whodunit then User.first
+      event_key == 'user_activity_alerts/alert' ? 'test_event' : convention.events.first
+    when :move_result
+      find_signup_move_result
+    when :move_results
+      [find_signup_move_result]
+    when :order
+      Order.where(user_con_profile: convention.user_con_profiles.select(:id)).first
+    when :prev_state
+      'confirmed'
+    when :prev_bucket_key
+      'flex'
+    when :refund_id
+      'refund-abc123'
+    when :signup
+      convention.signups.first
+    when :signup_request
+      convention.signup_requests.first
+    when :ticket
+      convention.tickets.first
+    when :user_activity_alert
+      convention.user_activity_alerts.first
+    when :whodunit
+      User.first
     end
   end
 

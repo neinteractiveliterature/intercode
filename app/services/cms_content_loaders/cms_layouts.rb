@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CmsContentLoaders::CmsLayouts < CmsContentLoaders::Base
   private
 
@@ -5,9 +6,7 @@ class CmsContentLoaders::CmsLayouts < CmsContentLoaders::Base
     super
 
     return success unless content_set.metadata[:default_layout_name]
-    default_layout = convention.cms_layouts.find_by(
-      name: content_set.metadata[:default_layout_name]
-    )
+    default_layout = convention.cms_layouts.find_by(name: content_set.metadata[:default_layout_name])
     convention.update!(default_layout: default_layout)
 
     success
@@ -30,10 +29,6 @@ class CmsContentLoaders::CmsLayouts < CmsContentLoaders::Base
   end
 
   def taken_special_identifiers
-    if convention.default_layout
-      { 'Default' => 'default layout' }
-    else
-      {}
-    end
+    convention.default_layout ? { 'Default' => 'default layout' } : {}
   end
 end

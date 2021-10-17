@@ -1,8 +1,8 @@
+# frozen_string_literal: true
 require 'English'
 
 class RefreshSslCertificateService < CivilService::Service
-  attr_reader :heroku_api_token, :heroku_app_name, :root_domain, :no_wildcard_domains,
-    :skip_domains, :staging
+  attr_reader :heroku_api_token, :heroku_app_name, :root_domain, :no_wildcard_domains, :skip_domains, :staging
 
   def initialize(
     heroku_api_token:,
@@ -38,12 +38,13 @@ class RefreshSslCertificateService < CivilService::Service
   end
 
   def existing_certificate
-    @existing_certificate ||= begin
-      uri = URI::HTTPS.build(host: "www.#{root_domain}")
-      Rails.logger.info "Checking #{uri} certificate"
-      response = Net::HTTP.start(uri.host, uri.port, use_ssl: true)
-      response.peer_cert
-    end
+    @existing_certificate ||=
+      begin
+        uri = URI::HTTPS.build(host: "www.#{root_domain}")
+        Rails.logger.info "Checking #{uri} certificate"
+        response = Net::HTTP.start(uri.host, uri.port, use_ssl: true)
+        response.peer_cert
+      end
   end
 
   def existing_certificate_needs_renewal?
@@ -64,10 +65,11 @@ class RefreshSslCertificateService < CivilService::Service
   end
 
   def heroku
-    @heroku ||= begin
-      Rails.logger.info 'Connecting to Heroku Platform API'
-      PlatformAPI.connect_oauth(heroku_api_token)
-    end
+    @heroku ||=
+      begin
+        Rails.logger.info 'Connecting to Heroku Platform API'
+        PlatformAPI.connect_oauth(heroku_api_token)
+      end
   end
 
   def install_acme
@@ -76,26 +78,26 @@ class RefreshSslCertificateService < CivilService::Service
   end
 
   def sni_endpoints
-    @sni_endpoints ||= begin
-      Rails.logger.info 'Requesting existing SNI endpoints'
-      heroku.sni_endpoint.list(heroku_app_name)
-    end
+    @sni_endpoints ||=
+      begin
+        Rails.logger.info 'Requesting existing SNI endpoints'
+        heroku.sni_endpoint.list(heroku_app_name)
+      end
   end
 
   def usable_endpoint
-    @usable_endpoint ||= sni_endpoints.find do |endpoint|
-      pem = endpoint['certificate_chain']
-      cert = OpenSSL::X509::Certificate.new(pem)
-      parse_domains(cert).include?(root_domain)
-    end
+    @usable_endpoint ||=
+      sni_endpoints.find do |endpoint|
+        pem = endpoint['certificate_chain']
+        cert = OpenSSL::X509::Certificate.new(pem)
+        parse_domains(cert).include?(root_domain)
+      end
   end
 
   def parse_domains(cert)
-    alt_names_extension = cert.extensions.map(&:to_h).find do |ext_hash|
-      ext_hash['oid'] == 'subjectAltName'
-    end
+    alt_names_extension = cert.extensions.map(&:to_h).find { |ext_hash| ext_hash['oid'] == 'subjectAltName' }
     if alt_names_extension
-      alt_names_extension['value'].split(',').map(&:strip).map { |entry| entry.gsub(/\ADNS:/, '') }
+      alt_names_extension['value'].split(',').map(&:strip).map { |entry| entry.delete_prefix('DNS:') }
     else
       []
     end
@@ -124,17 +126,11 @@ class RefreshSslCertificateService < CivilService::Service
       private_key: File.read(File.expand_path("#{root_domain}.key", certs_dir))
     }
 
-    if usable_endpoint
-      update_endpoint(usable_endpoint, body)
-    else
-      replace_endpoint(body)
-    end
+    usable_endpoint ? update_endpoint(usable_endpoint, body) : replace_endpoint(body)
   end
 
   def request_certificate
-    domain_args = ssl_domains.map do |domain|
-      "-d #{Shellwords.escape domain}"
-    end
+    domain_args = ssl_domains.map { |domain| "-d #{Shellwords.escape domain}" }
 
     Rails.logger.info 'Requesting certificates'
     sh "~/.acme.sh/acme.sh #{staging ? '--staging ' : ''}\
@@ -143,34 +139,31 @@ class RefreshSslCertificateService < CivilService::Service
   end
 
   def ssl_domains
-    @ssl_domains || begin
-      Rails.logger.info 'Getting app domains'
-      all_domains = heroku.domain.list(heroku_app_name).map { |domain| domain['hostname'] }
-      all_ssl_domains = ([root_domain] + all_domains).flat_map do |domain|
-        ssl_domains_for_host(domain)
-      end.compact.uniq
+    @ssl_domains ||
+      begin
+        Rails.logger.info 'Getting app domains'
+        all_domains = heroku.domain.list(heroku_app_name).map { |domain| domain['hostname'] }
+        all_ssl_domains = ([root_domain] + all_domains).flat_map { |domain| ssl_domains_for_host(domain) }.compact.uniq
 
-      # filter out non-wildcarded domains that are already covered by a wildcard
-      all_ssl_domains.select do |ssl_domain|
-        next true if ssl_domain =~ /\A\*\./ # automatically include wildcards
+        # filter out non-wildcarded domains that are already covered by a wildcard
+        all_ssl_domains.select do |ssl_domain|
+          next true if ssl_domain.start_with?('*.') # automatically include wildcards
 
-        ssl_domain_parts = ssl_domain.split('.')
-        wildcarded_domain_parts = ['*'] + ssl_domain_parts[1..-1]
-        wildcarded_domain = wildcarded_domain_parts.join('.')
-        !all_ssl_domains.include?(wildcarded_domain)
+          ssl_domain_parts = ssl_domain.split('.')
+          wildcarded_domain_parts = ['*'] + ssl_domain_parts[1..]
+          wildcarded_domain = wildcarded_domain_parts.join('.')
+          all_ssl_domains.exclude?(wildcarded_domain)
+        end
       end
-    end
   end
 
   def ssl_domains_for_host(host)
-    return nil if host =~ /herokuapp\.com\z/
+    return nil if host.end_with?('herokuapp.com')
     return nil if skip_domains.include?(host)
     return host if no_wildcard_domains.include?(host)
     parts = host.split('.').reverse
     root_domain_parts = parts.take([2, parts.size - 1].max)
-    [root_domain_parts, root_domain_parts + ['*']].map do |domain_parts|
-      domain_parts.reverse.join('.')
-    end
+    [root_domain_parts, root_domain_parts + ['*']].map { |domain_parts| domain_parts.reverse.join('.') }
   end
 
   def sh(cmd)

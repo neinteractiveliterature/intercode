@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-// @ts-expect-error
+// @ts-expect-error Inflected type declarations don't include capitalize
 import { pluralize, capitalize } from 'inflected';
 import flatMap from 'lodash/flatMap';
 import sum from 'lodash/sum';

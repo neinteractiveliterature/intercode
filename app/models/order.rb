@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
@@ -24,7 +25,7 @@
 #  fk_rails_...  (user_con_profile_id => user_con_profiles.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+
 class Order < ApplicationRecord
   belongs_to :user_con_profile
   has_many :order_entries, dependent: :destroy
@@ -39,15 +40,13 @@ class Order < ApplicationRecord
   monetize :payment_amount_cents, with_model_currency: :payment_amount_currency, allow_nil: true
 
   def total_price_before_discounts
-    return Money.new(0, 'USD') unless order_entries.present?
+    return Money.new(0, 'USD') if order_entries.blank?
     order_entries.sum(&:price)
   end
 
   def total_price
     apps = coupon_applications.includes(:coupon)
-    total_after_discounts = apps.inject(total_price_before_discounts) do |price, app|
-      price - app.discount
-    end
+    total_after_discounts = apps.inject(total_price_before_discounts) { |price, app| price - app.discount }
 
     [total_after_discounts, Money.new(0, 'USD')].max
   end

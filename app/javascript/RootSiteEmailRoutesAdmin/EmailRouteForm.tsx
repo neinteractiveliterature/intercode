@@ -2,34 +2,36 @@ import * as React from 'react';
 import { BootstrapFormInput } from '@neinteractiveliterature/litform';
 
 import { StringArrayEditor } from '../BuiltInFormControls/ArrayEditor';
-import { EmailRoute } from '../graphqlTypes.generated';
+import { usePropertySetters } from '@neinteractiveliterature/litform/lib/usePropertySetters';
+import { EmailRouteFieldsFragment } from './queries.generated';
 
 export type EmailRouteFormProps = {
-  emailRoute: EmailRoute;
-  onChange: React.Dispatch<EmailRoute>;
+  emailRoute: EmailRouteFieldsFragment;
+  onChange: React.Dispatch<React.SetStateAction<EmailRouteFieldsFragment>>;
 };
 
-function EmailRouteForm({ emailRoute, onChange }: EmailRouteFormProps) {
-  const changeField = <F extends keyof EmailRoute>(field: F) => (value: EmailRoute[F]) =>
-    onChange({ ...emailRoute, [field]: value });
+function EmailRouteForm({ emailRoute, onChange }: EmailRouteFormProps): JSX.Element {
+  const [setReceiverAddress, setForwardAddresses] = usePropertySetters(
+    onChange,
+    'receiver_address',
+    'forward_addresses',
+  );
 
   return (
     <>
       <BootstrapFormInput
         label="Receiver email"
         value={emailRoute.receiver_address}
-        onTextChange={changeField('receiver_address')}
+        onTextChange={setReceiverAddress}
       />
 
       <StringArrayEditor
         array={emailRoute.forward_addresses ?? []}
-        onChange={changeField('forward_addresses')}
+        onChange={setForwardAddresses}
         header="Forward addresses"
         renderValue={(value) => value}
         getDeleteButtonLabel={(value) => `Delete forward address ${value}`}
-        getDeletePrompt={(value) =>
-          `Are you sure you want to delete ${value} from the forward addresses?`
-        }
+        getDeletePrompt={(value) => `Are you sure you want to delete ${value} from the forward addresses?`}
         renderAddValueInput={({ value, onChange: onAddValueChange, onKeyDown }) => (
           <input
             type="email"

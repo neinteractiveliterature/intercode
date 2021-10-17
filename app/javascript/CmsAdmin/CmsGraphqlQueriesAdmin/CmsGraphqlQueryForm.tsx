@@ -34,7 +34,7 @@ function CmsGraphqlQueryForm<T extends CmsGraphqlQueryFormFields>({
   value,
   onChange,
   readOnly,
-}: CmsGraphqlQueryFormProps<T>) {
+}: CmsGraphqlQueryFormProps<T>): JSX.Element {
   const { graphql: authenticityToken } = useContext(AuthenticityTokensContext);
   const [setIdentifier, setAdminNotes, setQuery] = usePropertySetters(
     onChange,
@@ -50,6 +50,7 @@ function CmsGraphqlQueryForm<T extends CmsGraphqlQueryFormFields>({
       const request: GraphQLRequest = operation as unknown as GraphQLRequest;
       // eslint-disable-next-line no-param-reassign
       request.query = parse(operation.query);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return execute(link, request) as any;
     },
     [link],

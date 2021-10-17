@@ -11,7 +11,9 @@ const ACTIONS = EnumTypes.SignupChangeAction.enumValues.map(
   (value) => value.name as SignupChangeAction,
 );
 
-function SignupChangeActionFilter<RowType extends object>(props: FilterProps<RowType>) {
+function SignupChangeActionFilter<RowType extends Record<string, unknown>>(
+  props: FilterProps<RowType>,
+): JSX.Element {
   const { t } = useTranslation();
   const choices = useMemo(
     () => ACTIONS.map((action) => ({ value: action, label: describeAction(action, t) })),

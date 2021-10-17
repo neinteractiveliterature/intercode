@@ -5,7 +5,7 @@ import { assertNever } from 'assert-never';
 import SignupStateCell from './SignupStateCell';
 import { SignupChangeAction, SignupState } from '../graphqlTypes.generated';
 
-export function describeAction(action: SignupChangeAction, t: TFunction) {
+export function describeAction(action: SignupChangeAction, t: TFunction): string {
   if (action === 'self_service_signup') {
     return t('tables.signupChange.actions.selfServiceSignup', 'self-service signup');
   }
@@ -48,7 +48,7 @@ export type SignupChangeCellProps = {
   };
 };
 
-const SignupChangeCell = ({ value }: SignupChangeCellProps) => {
+const SignupChangeCell = ({ value }: SignupChangeCellProps): JSX.Element => {
   const { t } = useTranslation();
 
   return (

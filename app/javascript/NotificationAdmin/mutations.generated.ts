@@ -11,7 +11,7 @@ export type UpdateNotificationTemplateMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateNotificationTemplateMutationData = { __typename: 'Mutation', updateNotificationTemplate?: Types.Maybe<{ __typename: 'UpdateNotificationTemplatePayload', notification_template: { __typename: 'NotificationTemplate', id: number, event_key: string, subject?: Types.Maybe<string>, body_html?: Types.Maybe<string>, body_text?: Types.Maybe<string>, body_sms?: Types.Maybe<string> } }> };
+export type UpdateNotificationTemplateMutationData = { __typename: 'Mutation', updateNotificationTemplate: { __typename: 'UpdateNotificationTemplatePayload', notification_template: { __typename: 'NotificationTemplate', event_key: string, subject?: string | null | undefined, body_html?: string | null | undefined, body_text?: string | null | undefined, body_sms?: string | null | undefined, id: string } } };
 
 
 export const UpdateNotificationTemplateDocument = gql`
@@ -20,7 +20,7 @@ export const UpdateNotificationTemplateDocument = gql`
     input: {event_key: $eventKey, notification_template: $notificationTemplate}
   ) {
     notification_template {
-      id
+      id: transitionalId
       ...NotificationTemplateFields
     }
   }

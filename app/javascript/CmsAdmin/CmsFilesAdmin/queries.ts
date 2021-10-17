@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 
 export const CmsFileFields = gql`
   fragment CmsFileFields on CmsFile {
-    id
+    id: transitionalId
     filename
     url
     content_type
@@ -13,8 +13,8 @@ export const CmsFileFields = gql`
 
 export const CmsFilesAdminQuery = gql`
   query CmsFilesAdminQuery {
-    convention {
-      id
+    convention: conventionByRequestHostIfPresent {
+      id: transitionalId
       name
     }
 
@@ -22,9 +22,12 @@ export const CmsFilesAdminQuery = gql`
       can_create_cms_files
     }
 
-    cmsFiles {
-      id
-      ...CmsFileFields
+    cmsParent: cmsParentByRequestHost {
+      id: transitionalId
+      cmsFiles {
+        id: transitionalId
+        ...CmsFileFields
+      }
     }
   }
 

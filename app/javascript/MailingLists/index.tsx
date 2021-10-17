@@ -50,7 +50,7 @@ const MailingListsMenuWrapper = LoadQueryWrapper(
   },
 );
 
-function MailingLists() {
+function MailingLists(): JSX.Element {
   return (
     <Switch>
       <Route path="/mailing_lists/ticketed_attendees">

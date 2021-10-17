@@ -1,46 +1,42 @@
 import { useState, useMemo } from 'react';
 import * as React from 'react';
-// @ts-ignore
+// @ts-expect-error inflected type definitions don't export capitalize
 import { capitalize } from 'inflected';
 import { useTranslation } from 'react-i18next';
 import { ApolloError } from '@apollo/client';
-import {
-  ErrorDisplay,
-  sortByLocaleString,
-  parseIntOrNull,
-  useConfirm,
-} from '@neinteractiveliterature/litform';
+import { ErrorDisplay, sortByLocaleString, parseIntOrNull, useConfirm } from '@neinteractiveliterature/litform';
 
 import InPlaceEditor from './InPlaceEditor';
 import useAsyncFunction from '../useAsyncFunction';
 import { TicketType, MaximumEventProvidedTicketsOverride } from '../graphqlTypes.generated';
 
-type TicketTypeForMEPTO = Pick<TicketType, 'id' | 'description' | 'maximum_event_provided_tickets'>;
+type TicketTypeForMEPTO = Pick<TicketType, 'description' | 'maximum_event_provided_tickets'> & { id: string };
 
 const NULL_TICKET_TYPE: TicketTypeForMEPTO = {
-  id: 0,
+  id: '',
   description: '',
   maximum_event_provided_tickets: 0,
 };
 
-type MEPTOForEditor = Pick<MaximumEventProvidedTicketsOverride, 'id' | 'override_value'> & {
+type MEPTOForEditor = Pick<MaximumEventProvidedTicketsOverride, 'override_value'> & {
+  id: string;
   ticket_type: TicketTypeForMEPTO;
 };
 
 export type MEPTOInput = {
-  eventId: number;
+  eventId: string;
   overrideValue: number;
-  ticketTypeId: number;
+  ticketTypeId: string;
 };
 
 export type MEPTOEditorProps = {
-  eventId: number;
+  eventId: string;
   ticketName: string;
   overrides: MEPTOForEditor[];
   ticketTypes: TicketTypeForMEPTO[];
-  createOverride: (input: MEPTOInput) => Promise<any>;
-  updateOverride: (input: { id: number; overrideValue: number }) => Promise<any>;
-  deleteOverride: (id: number) => Promise<any>;
+  createOverride: (input: MEPTOInput) => Promise<unknown>;
+  updateOverride: (input: { id: string; overrideValue: number }) => Promise<unknown>;
+  deleteOverride: (mepto: MEPTOForEditor) => Promise<unknown>;
 };
 
 function MaximumEventProvidedTicketsOverrideEditor({
@@ -51,7 +47,7 @@ function MaximumEventProvidedTicketsOverrideEditor({
   createOverride,
   updateOverride,
   deleteOverride,
-}: MEPTOEditorProps) {
+}: MEPTOEditorProps): JSX.Element {
   const { t } = useTranslation();
   const [createOverrideAsync, createError, , clearCreateError] = useAsyncFunction(createOverride);
   const [updateOverrideAsync, updateError, , clearUpdateError] = useAsyncFunction(updateOverride);
@@ -75,10 +71,7 @@ function MaximumEventProvidedTicketsOverrideEditor({
     [overrides],
   );
 
-  const sortedTicketTypes = useMemo(
-    () => sortByLocaleString(ticketTypes, (tt) => tt.description ?? ''),
-    [ticketTypes],
-  );
+  const sortedTicketTypes = useMemo(() => sortByLocaleString(ticketTypes, (tt) => tt.description ?? ''), [ticketTypes]);
 
   const unoverriddenTicketTypes = useMemo(
     () =>
@@ -88,13 +81,10 @@ function MaximumEventProvidedTicketsOverrideEditor({
     [overrides, sortedTicketTypes],
   );
 
-  const addingOverrideDataComplete =
-    !!addingOverride.ticket_type.id && addingOverride.override_value != null;
+  const addingOverrideDataComplete = !!addingOverride.ticket_type.id && addingOverride.override_value != null;
 
   const addingTicketTypeIdDidChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const newTicketType = ticketTypes.find(
-      (ticketType) => ticketType.id.toString() === event.target.value,
-    );
+    const newTicketType = ticketTypes.find((ticketType) => ticketType.id.toString() === event.target.value);
 
     if (newTicketType == null) {
       setAddingOverride((prevAddingOverride) => ({
@@ -118,11 +108,16 @@ function MaximumEventProvidedTicketsOverrideEditor({
   };
 
   const addOverride = async () => {
+    if (addingOverride.override_value == null) {
+      return;
+    }
+
     clearAllErrors();
+
     await createOverrideAsync({
       eventId,
       ticketTypeId: addingOverride.ticket_type.id,
-      overrideValue: addingOverride.override_value!,
+      overrideValue: addingOverride.override_value,
     });
 
     setAddingOverride({
@@ -131,7 +126,7 @@ function MaximumEventProvidedTicketsOverrideEditor({
     });
   };
 
-  const existingOverrideValueDidChange = (id: number, overrideValue: string) => {
+  const existingOverrideValueDidChange = (id: string, overrideValue: string) => {
     clearAllErrors();
     updateOverrideAsync({
       id,
@@ -139,9 +134,9 @@ function MaximumEventProvidedTicketsOverrideEditor({
     });
   };
 
-  const deleteOverrideConfirmed = async (override: { id: number }) => {
+  const deleteOverrideConfirmed = async (override: MEPTOForEditor) => {
     clearAllErrors();
-    await deleteOverrideAsync(override.id);
+    await deleteOverrideAsync(override);
   };
 
   const rows = sortedOverrides.map((override) => (
@@ -194,11 +189,7 @@ function MaximumEventProvidedTicketsOverrideEditor({
   return (
     <div className="card bg-light">
       <div className="card-header">
-        {t(
-          'events.ticketQuotaOverrides.header',
-          'Override event-provided {{ ticketName }} quotas',
-          { ticketName },
-        )}
+        {t('events.ticketQuotaOverrides.header', 'Override event-provided {{ ticketName }} quotas', { ticketName })}
       </div>
       <div className="card-body">
         <table className="table table-striped">
@@ -223,9 +214,7 @@ function MaximumEventProvidedTicketsOverrideEditor({
                   value={addingOverride.ticket_type.id}
                   onChange={addingTicketTypeIdDidChange}
                 >
-                  <option
-                    aria-label={t('general.placeholderOptionLabel', 'Blank placeholder option')}
-                  />
+                  <option aria-label={t('general.placeholderOptionLabel', 'Blank placeholder option')} />
                   {ticketTypeOptions}
                 </select>
               </td>
@@ -237,10 +226,7 @@ function MaximumEventProvidedTicketsOverrideEditor({
                   min="0"
                   value={addingOverride.override_value == null ? '' : addingOverride.override_value}
                   onChange={addingOverrideValueDidChange}
-                  aria-label={t(
-                    'events.ticketQuotaOverrides.overridenQuotaHeader',
-                    'Overridden quota',
-                  )}
+                  aria-label={t('events.ticketQuotaOverrides.overridenQuotaHeader', 'Overridden quota')}
                 />
               </td>
               <td>

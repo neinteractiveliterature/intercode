@@ -7,21 +7,26 @@ import { useSubmitOrderMutation } from './mutations.generated';
 import { PaymentDetails } from './OrderPaymentForm';
 import { PaymentMode } from '../graphqlTypes.generated';
 
-export default function useSubmitOrder() {
+export default function useSubmitOrder(): (
+  orderId: string,
+  paymentMode: PaymentMode,
+  paymentDetails: PaymentDetails,
+  paymentIntent?: PaymentIntent,
+) => Promise<void> {
   const stripe = useStripe();
   const elements = useElements();
   const apolloClient = useApolloClient();
   const [mutate] = useSubmitOrderMutation();
   const submitOrder = useCallback(
     async (
-      orderId: number,
+      orderId: string,
       paymentMode: PaymentMode,
       { stripeToken, paymentIntentId }: { stripeToken?: string; paymentIntentId?: string },
     ) => {
       await mutate({
         variables: {
           input: {
-            id: orderId,
+            transitionalId: orderId,
             payment_mode: paymentMode,
             stripe_token: stripeToken,
             payment_intent_id: paymentIntentId,
@@ -34,7 +39,7 @@ export default function useSubmitOrder() {
   );
 
   const submitCheckOutViaStripe = useCallback(
-    async (orderId: number, paymentMode: PaymentMode, paymentDetails: PaymentDetails) => {
+    async (orderId: string, paymentMode: PaymentMode, paymentDetails: PaymentDetails) => {
       if (!stripe) {
         throw new Error('Stripe is not initialized');
       }
@@ -52,23 +57,26 @@ export default function useSubmitOrder() {
         name: paymentDetails.name,
       });
       if (tokenError) {
-        // eslint-disable-next-line @typescript-eslint/no-throw-literal
         throw tokenError;
       }
 
-      await submitOrder(orderId, paymentMode, { stripeToken: token!.id });
+      if (!token) {
+        throw new Error("Can't submit order without a Stripe token");
+      }
+
+      await submitOrder(orderId, paymentMode, { stripeToken: token.id });
     },
     [stripe, submitOrder, elements],
   );
 
   const submitCheckOutWithoutStripe = useCallback(
-    (orderId: number, paymentMode: PaymentMode) => submitOrder(orderId, paymentMode, {}),
+    (orderId: string, paymentMode: PaymentMode) => submitOrder(orderId, paymentMode, {}),
     [submitOrder],
   );
 
   return useCallback(
     async (
-      orderId: number,
+      orderId: string,
       paymentMode: PaymentMode,
       paymentDetails: PaymentDetails,
       paymentIntent?: PaymentIntent,
@@ -76,7 +84,10 @@ export default function useSubmitOrder() {
       if (paymentMode === PaymentMode.Now) {
         await submitCheckOutViaStripe(orderId, paymentMode, paymentDetails);
       } else if (paymentMode === PaymentMode.PaymentIntent) {
-        await submitOrder(orderId, paymentMode, { paymentIntentId: paymentIntent!.id });
+        if (!paymentIntent) {
+          throw new Error("Can't submit order without a payment intent");
+        }
+        await submitOrder(orderId, paymentMode, { paymentIntentId: paymentIntent.id });
       } else {
         await submitCheckOutWithoutStripe(orderId, paymentMode);
       }

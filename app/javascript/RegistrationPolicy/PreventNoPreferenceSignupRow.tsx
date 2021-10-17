@@ -5,6 +5,7 @@ import { isPreventNoPreferenceSignupsApplicable } from './RegistrationPolicyUtil
 import NoPreferenceHelpPopover from './NoPreferenceHelpPopover';
 import { RegistrationPolicyPreset } from '../FormAdmin/FormItemUtils';
 import { RegistrationPolicyForRegistrationPolicyUtils } from './RegistrationPolicy';
+import { useTranslation } from 'react-i18next';
 
 export type PreventNoPreferenceSignupRowProps = {
   columnCount: number;
@@ -18,12 +19,16 @@ function PreventNoPreferenceSignupRow({
   onChange,
   preset,
   registrationPolicy,
-}: PreventNoPreferenceSignupRowProps) {
+}: PreventNoPreferenceSignupRowProps): JSX.Element {
+  const { t } = useTranslation();
   const renderPreventNoPreferenceSignupsDescription = () => {
     if (!isPreventNoPreferenceSignupsApplicable(registrationPolicy)) {
       return (
         <span>
-          &quot;No preference&quot; option is inapplicable
+          {t(
+            'events.registrationPolicies.noPreferenceInapplicable',
+            '“No preference” option is inapplicable',
+          )}
           <NoPreferenceHelpPopover registrationPolicy={registrationPolicy} />
         </span>
       );
@@ -32,7 +37,10 @@ function PreventNoPreferenceSignupRow({
     if (registrationPolicy.prevent_no_preference_signups) {
       return (
         <span>
-          &quot;No preference&quot; option will not be available
+          {t(
+            'events.registrationPolicies.noPreferenceDisabled',
+            '“No preference” option will not be available',
+          )}
           <NoPreferenceHelpPopover registrationPolicy={registrationPolicy} />
         </span>
       );
@@ -40,7 +48,10 @@ function PreventNoPreferenceSignupRow({
 
     return (
       <span>
-        &quot;No preference&quot; option will be available
+        {t(
+          'events.registrationPolicies.noPreferenceEnabled',
+          '“No preference” option will be available',
+        )}
         <NoPreferenceHelpPopover registrationPolicy={registrationPolicy} />
       </span>
     );
@@ -49,7 +60,12 @@ function PreventNoPreferenceSignupRow({
   if (preset || !isPreventNoPreferenceSignupsApplicable(registrationPolicy)) {
     return (
       <tr>
-        <td>No preference</td>
+        <td>
+          {t(
+            'events.registrationPolicies.noPreferenceEnabled',
+            '“No preference” option will be available',
+          )}
+        </td>
         <td colSpan={columnCount - 1}>{renderPreventNoPreferenceSignupsDescription()}</td>
       </tr>
     );
@@ -61,15 +77,27 @@ function PreventNoPreferenceSignupRow({
   return (
     <tr>
       <td className="text-nowrap">
-        No preference
+        {t('signups.noPreference', 'No preference')}
         <NoPreferenceHelpPopover registrationPolicy={registrationPolicy} />
       </td>
       <td colSpan={columnCount - 1}>
         <ChoiceSet
           name="prevent_no_preference_signups"
           choices={[
-            { label: 'Show "no preference" option', value: 'false' },
-            { label: 'Don\'t show "no preference" option', value: 'true' },
+            {
+              label: t(
+                'events.registrationPolicies.enableNoPreference',
+                'Show "no preference" option',
+              ),
+              value: 'false',
+            },
+            {
+              label: t(
+                'events.registrationPolicies.disableNoPreference',
+                'Don’t show "no preference" option',
+              ),
+              value: 'true',
+            },
           ]}
           choiceClassName="form-check-inline"
           value={choiceSetValue}

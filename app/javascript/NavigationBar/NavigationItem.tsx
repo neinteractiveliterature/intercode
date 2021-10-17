@@ -11,7 +11,13 @@ export type NavigationItemProps = {
   iconColorClass?: string;
 };
 
-function NavigationItem({ label, url, inSection, icon, iconColorClass }: NavigationItemProps) {
+function NavigationItem({
+  label,
+  url,
+  inSection,
+  icon,
+  iconColorClass,
+}: NavigationItemProps): JSX.Element {
   const labelContent = (
     <>
       <MenuIcon icon={icon || 'bi-file-earmark-text'} colorClass={iconColorClass} />

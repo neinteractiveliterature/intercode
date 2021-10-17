@@ -10,29 +10,29 @@ export type CreateDepartmentMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateDepartmentMutationData = { __typename: 'Mutation', createDepartment?: Types.Maybe<{ __typename: 'CreateDepartmentPayload', department: { __typename: 'Department', id: number, name: string, proposal_description?: Types.Maybe<string>, event_categories: Array<{ __typename: 'EventCategory', id: number, name: string }> } }> };
+export type CreateDepartmentMutationData = { __typename: 'Mutation', createDepartment: { __typename: 'CreateDepartmentPayload', department: { __typename: 'Department', name: string, proposal_description?: string | null | undefined, id: string, event_categories: Array<{ __typename: 'EventCategory', name: string, id: string }> } } };
 
 export type UpdateDepartmentMutationVariables = Types.Exact<{
-  id: Types.Scalars['Int'];
+  id: Types.Scalars['ID'];
   department: Types.DepartmentInput;
 }>;
 
 
-export type UpdateDepartmentMutationData = { __typename: 'Mutation', updateDepartment?: Types.Maybe<{ __typename: 'UpdateDepartmentPayload', department: { __typename: 'Department', id: number, name: string, proposal_description?: Types.Maybe<string>, event_categories: Array<{ __typename: 'EventCategory', id: number, name: string }> } }> };
+export type UpdateDepartmentMutationData = { __typename: 'Mutation', updateDepartment: { __typename: 'UpdateDepartmentPayload', department: { __typename: 'Department', name: string, proposal_description?: string | null | undefined, id: string, event_categories: Array<{ __typename: 'EventCategory', name: string, id: string }> } } };
 
 export type DeleteDepartmentMutationVariables = Types.Exact<{
-  id: Types.Scalars['Int'];
+  id: Types.Scalars['ID'];
 }>;
 
 
-export type DeleteDepartmentMutationData = { __typename: 'Mutation', deleteDepartment?: Types.Maybe<{ __typename: 'DeleteDepartmentPayload', clientMutationId?: Types.Maybe<string> }> };
+export type DeleteDepartmentMutationData = { __typename: 'Mutation', deleteDepartment: { __typename: 'DeleteDepartmentPayload', clientMutationId?: string | null | undefined } };
 
 
 export const CreateDepartmentDocument = gql`
     mutation CreateDepartment($department: DepartmentInput!) {
   createDepartment(input: {department: $department}) {
     department {
-      id
+      id: transitionalId
       ...AdminDepartmentFields
     }
   }
@@ -65,10 +65,10 @@ export type CreateDepartmentMutationHookResult = ReturnType<typeof useCreateDepa
 export type CreateDepartmentMutationResult = Apollo.MutationResult<CreateDepartmentMutationData>;
 export type CreateDepartmentMutationOptions = Apollo.BaseMutationOptions<CreateDepartmentMutationData, CreateDepartmentMutationVariables>;
 export const UpdateDepartmentDocument = gql`
-    mutation UpdateDepartment($id: Int!, $department: DepartmentInput!) {
-  updateDepartment(input: {id: $id, department: $department}) {
+    mutation UpdateDepartment($id: ID!, $department: DepartmentInput!) {
+  updateDepartment(input: {transitionalId: $id, department: $department}) {
     department {
-      id
+      id: transitionalId
       ...AdminDepartmentFields
     }
   }
@@ -102,8 +102,8 @@ export type UpdateDepartmentMutationHookResult = ReturnType<typeof useUpdateDepa
 export type UpdateDepartmentMutationResult = Apollo.MutationResult<UpdateDepartmentMutationData>;
 export type UpdateDepartmentMutationOptions = Apollo.BaseMutationOptions<UpdateDepartmentMutationData, UpdateDepartmentMutationVariables>;
 export const DeleteDepartmentDocument = gql`
-    mutation DeleteDepartment($id: Int!) {
-  deleteDepartment(input: {id: $id}) {
+    mutation DeleteDepartment($id: ID!) {
+  deleteDepartment(input: {transitionalId: $id}) {
     clientMutationId
   }
 }

@@ -8,7 +8,7 @@ import { useEventCategoryAdminQuery } from './queries.generated';
 export default LoadQueryWrapper(useEventCategoryAdminQuery, function EventCategoryIndex({ data }) {
   usePageTitle('Event Categories');
 
-  const { event_categories: eventCategories } = data!.convention;
+  const { event_categories: eventCategories } = data.convention;
 
   return (
     <>
@@ -16,11 +16,9 @@ export default LoadQueryWrapper(useEventCategoryAdminQuery, function EventCatego
 
       <table className="table table-striped">
         <tbody>
-          {sortByLocaleString([...eventCategories], (eventCategory) => eventCategory.name).map(
-            (eventCategory) => (
-              <EventCategoryRow eventCategory={eventCategory} key={eventCategory.id} />
-            ),
-          )}
+          {sortByLocaleString([...eventCategories], (eventCategory) => eventCategory.name).map((eventCategory) => (
+            <EventCategoryRow convention={data.convention} eventCategory={eventCategory} key={eventCategory.id} />
+          ))}
         </tbody>
       </table>
 

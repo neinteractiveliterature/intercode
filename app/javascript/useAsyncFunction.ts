@@ -5,16 +5,16 @@ export type UseAsyncFunctionOptions = {
   suppressError?: boolean;
 };
 
-export type WrappedAsyncFunction<T, A extends any[]> = (...args: A) => Promise<T | null>;
+export type WrappedAsyncFunction<T, A extends unknown[]> = (...args: A) => Promise<T | null>;
 
-export type UseAsyncFunctionReturn<T, A extends any[]> = [
+export type UseAsyncFunctionReturn<T, A extends unknown[]> = [
   WrappedAsyncFunction<T, A>,
   Error | null,
   boolean,
   () => void,
 ];
 
-export default function useAsyncFunction<T, A extends any[]>(
+export default function useAsyncFunction<T, A extends unknown[]>(
   func: (...args: A) => Promise<T>,
   { suppressError }: UseAsyncFunctionOptions = {},
 ): UseAsyncFunctionReturn<T, A> {

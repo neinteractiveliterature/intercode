@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
@@ -19,7 +20,7 @@
 #  index_cms_partials_on_parent_id_and_parent_type_and_name  (parent_id,parent_type,name) UNIQUE
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+
 class CmsPartial < ApplicationRecord
   include Cadmus::Partial
   include CmsReferences
@@ -27,7 +28,7 @@ class CmsPartial < ApplicationRecord
   has_and_belongs_to_many :pages
   has_many :cms_content_group_associations, as: :content
   has_many :cms_content_groups, through: :cms_content_group_associations
-  before_commit :set_performance_metadata, on: [:create, :update]
+  before_commit :set_performance_metadata, on: %i[create update]
 
   cadmus_partial
 

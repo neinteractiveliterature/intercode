@@ -17,10 +17,7 @@ describe('FormBody', () => {
     errors: {},
   };
 
-  const renderFormBody = (
-    overrideProps: Partial<FormBodyProps> = {},
-    interactedItemIds?: string[],
-  ) => {
+  const renderFormBody = (overrideProps: Partial<FormBodyProps> = {}, interactedItemIds?: string[]) => {
     const interactedItemIdsSet = new Set<string>(interactedItemIds ?? []);
     return render(
       <ItemInteractionTrackerContext.Provider
@@ -57,9 +54,7 @@ describe('FormBody', () => {
     });
 
     it('shows errors on interacted items', async () => {
-      const { getByLabelText } = await renderFormBody({ response: { form_response_attrs: {} } }, [
-        'title',
-      ]);
+      const { getByLabelText } = await renderFormBody({ response: { form_response_attrs: {} } }, ['title']);
       expect(getByLabelText('Title*')).toHaveClass('is-invalid');
     });
   });

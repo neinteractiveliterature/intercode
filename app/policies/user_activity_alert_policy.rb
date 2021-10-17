@@ -1,21 +1,22 @@
+# frozen_string_literal: true
 class UserActivityAlertPolicy < ApplicationPolicy
   delegate :convention, to: :record
 
   def read?
-    return true if oauth_scoped_disjunction do |d|
-      d.add(:read_conventions) do
-        has_convention_permission?(convention, 'update_user_activity_alerts')
-      end
+    if oauth_scoped_disjunction do |d|
+         d.add(:read_conventions) { has_convention_permission?(convention, 'update_user_activity_alerts') }
+       end
+      return true
     end
 
     super
   end
 
   def manage?
-    return true if oauth_scoped_disjunction do |d|
-      d.add(:manage_conventions) do
-        has_convention_permission?(convention, 'update_user_activity_alerts')
-      end
+    if oauth_scoped_disjunction do |d|
+         d.add(:manage_conventions) { has_convention_permission?(convention, 'update_user_activity_alerts') }
+       end
+      return true
     end
 
     super

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
@@ -17,7 +18,7 @@
 #  index_cms_variables_on_parent_id_and_key  (parent_id,key) UNIQUE
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+
 class CmsVariable < ApplicationRecord
   include Cadmus::Concerns::ModelWithParent
   model_with_parent
@@ -25,7 +26,7 @@ class CmsVariable < ApplicationRecord
 
   validates :key, presence: true
   validates :key, format: { with: /\A[a-z]\w*\z/ }
-  validates :key, uniqueness: { scope: [:parent_type, :parent_id] }
+  validates :key, uniqueness: { scope: %i[parent_type parent_id] }
 
   # @api
   def to_liquid
@@ -35,6 +36,6 @@ class CmsVariable < ApplicationRecord
   private
 
   def touch_parent
-    parent.touch if parent && parent.persisted?
+    parent.touch if parent&.persisted?
   end
 end

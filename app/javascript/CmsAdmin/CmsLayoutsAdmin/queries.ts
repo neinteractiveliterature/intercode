@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 
 export const CmsLayoutFields = gql`
   fragment CmsLayoutFields on CmsLayout {
-    id
+    id: transitionalId
     name
     content
     navbar_classes
@@ -14,8 +14,8 @@ export const CmsLayoutFields = gql`
 
 export const CmsLayoutsAdminQuery = gql`
   query CmsLayoutsAdminQuery {
-    convention {
-      id
+    convention: conventionByRequestHostIfPresent {
+      id: transitionalId
       name
     }
 
@@ -23,9 +23,12 @@ export const CmsLayoutsAdminQuery = gql`
       can_create_cms_layouts
     }
 
-    cmsLayouts {
-      id
-      ...CmsLayoutFields
+    cmsParent: cmsParentByRequestHost {
+      id: transitionalId
+      cmsLayouts {
+        id: transitionalId
+        ...CmsLayoutFields
+      }
     }
   }
 

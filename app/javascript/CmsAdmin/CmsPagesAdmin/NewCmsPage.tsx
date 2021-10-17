@@ -2,40 +2,33 @@ import { useState } from 'react';
 import * as React from 'react';
 import { ApolloError } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
-import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
+import {
+  ErrorDisplay,
+  LoadQueryWrapper,
+  useCreateMutationWithReferenceArrayUpdater,
+} from '@neinteractiveliterature/litform';
 
 import buildPageInput from './buildPageInput';
 import CmsPageForm, { PageFormFields } from './CmsPageForm';
-import { CmsPagesAdminQuery } from './queries';
-import { CreatePage } from './mutations';
-import useAsyncFunction from '../../useAsyncFunction';
-import { useCreateMutation } from '../../MutationUtils';
 import usePageTitle from '../../usePageTitle';
-import { useCmsPagesAdminQuery } from './queries.generated';
+import { CmsPageFieldsFragmentDoc, useCmsPagesAdminQuery } from './queries.generated';
+import { CreatePageMutationData, useCreatePageMutation } from './mutations.generated';
 
-function NewCmsPage() {
+export default LoadQueryWrapper(useCmsPagesAdminQuery, function NewCmsPage({ data }) {
   const history = useHistory();
-  const { data, loading, error } = useCmsPagesAdminQuery();
   const [page, setPage] = useState<PageFormFields>({
     hidden_from_search: false,
   });
-  const [createPage, createError, createInProgress] = useAsyncFunction(
-    useCreateMutation(CreatePage, {
-      query: CmsPagesAdminQuery,
-      arrayPath: ['cmsPages'],
-      newObjectPath: ['createPage', 'page'],
-    }),
+  const [createPage, { error: createError, loading: createInProgress }] = useCreateMutationWithReferenceArrayUpdater(
+    useCreatePageMutation,
+    data.cmsParent,
+    'cmsPages',
+    (data: CreatePageMutationData) => data.createPage.page,
+    CmsPageFieldsFragmentDoc,
+    'CmsPageFields',
   );
 
   usePageTitle('New page');
-
-  if (loading) {
-    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
 
   const formSubmitted = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -50,12 +43,7 @@ function NewCmsPage() {
   return (
     <>
       <form onSubmit={formSubmitted}>
-        <CmsPageForm
-          page={page}
-          onChange={setPage}
-          cmsLayouts={data!.cmsLayouts}
-          cmsParent={data!.cmsParent}
-        />
+        <CmsPageForm page={page} onChange={setPage} cmsLayouts={data.cmsParent.cmsLayouts} cmsParent={data.cmsParent} />
 
         <ErrorDisplay graphQLError={createError as ApolloError} />
 
@@ -69,6 +57,4 @@ function NewCmsPage() {
       </form>
     </>
   );
-}
-
-export default NewCmsPage;
+});

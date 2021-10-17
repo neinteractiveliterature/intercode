@@ -5,7 +5,7 @@ import EditDepartment from './EditDepartment';
 import NewDepartment from './NewDepartment';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 
-function DepartmentAdmin() {
+function DepartmentAdmin(): JSX.Element {
   const authorizationWarning = useAuthorizationRequired('can_update_departments');
 
   if (authorizationWarning) return authorizationWarning;

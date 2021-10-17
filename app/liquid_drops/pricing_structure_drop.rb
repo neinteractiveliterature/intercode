@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # A pricing structure for a product, which can follow one of a variety of pricing strategies
 # (e.g. fixed price, scheduled price changes, etc.)
 class PricingStructureDrop < Liquid::Drop

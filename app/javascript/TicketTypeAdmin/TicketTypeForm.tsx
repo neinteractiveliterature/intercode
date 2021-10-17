@@ -22,7 +22,7 @@ export type TicketTypeFormProps = {
   ticketName: string;
 };
 
-function TicketTypeForm({ ticketType, ticketName, onChange }: TicketTypeFormProps) {
+function TicketTypeForm({ ticketType, ticketName, onChange }: TicketTypeFormProps): JSX.Element {
   const [
     setName,
     setDescription,

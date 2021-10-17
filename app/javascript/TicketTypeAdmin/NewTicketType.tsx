@@ -15,14 +15,14 @@ export type NewTicketTypeProps = {
   ticketName: string;
 };
 
-function NewTicketType({ ticketName }: NewTicketTypeProps) {
+function NewTicketType({ ticketName }: NewTicketTypeProps): JSX.Element {
   const history = useHistory();
   usePageTitle(`New ${ticketName} type`);
 
   const [ticketType, setTicketType] = useState<EditingTicketType>({
     __typename: 'TicketType',
     allows_event_signups: true,
-    id: 0,
+    id: '',
     providing_products: [],
     name: '',
     description: '',
@@ -38,7 +38,7 @@ function NewTicketType({ ticketName }: NewTicketTypeProps) {
         return;
       }
 
-      proxy.writeQuery({
+      proxy.writeQuery<AdminTicketTypesQueryData>({
         query: AdminTicketTypesQuery,
         data: {
           ...data,

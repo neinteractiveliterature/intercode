@@ -15,7 +15,7 @@ import {
 import { TimeblockDefinition, TimeblockPreferenceOrdinality } from './TimeblockTypes';
 import { TimeblockPreferenceFormItem } from '../FormAdmin/FormItemUtils';
 
-export function getTimeblockTimespanForDisplay(timeblock: TimeblockDefinition) {
+export function getTimeblockTimespanForDisplay(timeblock: TimeblockDefinition): FiniteTimespan {
   return Timespan.finiteFromDateTimes(
     DateTime.fromObject({ year: 2020, month: 1, day: 1 }).plus({
       hours: timeblock.start.hour,
@@ -30,7 +30,7 @@ export function getTimeblockTimespanForDisplay(timeblock: TimeblockDefinition) {
   );
 }
 
-export function describeTimeblock(timeblock: TimeblockDefinition, t: TFunction) {
+export function describeTimeblock(timeblock: TimeblockDefinition, t: TFunction): string {
   const timespan = getTimeblockTimespanForDisplay(timeblock);
 
   return `${formatLCM(timespan.start, getDateTimeFormat('shortTime', t))} - ${formatLCM(
@@ -39,7 +39,7 @@ export function describeTimeblock(timeblock: TimeblockDefinition, t: TFunction) 
   )}`;
 }
 
-export function describeOrdinality(ordinality?: TimeblockPreferenceOrdinality | null) {
+export function describeOrdinality(ordinality?: TimeblockPreferenceOrdinality | null): string {
   if (ordinality == null) {
     return "Don't care";
   }
@@ -126,7 +126,7 @@ function isTimeblockValid(
 export function getValidTimeblocks(
   convention: ConventionForTimespanUtils,
   formItem: TimeblockPreferenceFormItem,
-) {
+): ConcreteTimeblock[] {
   return getAllPossibleTimeblocks(convention, formItem).filter((timeblock) =>
     isTimeblockValid(convention, formItem, timeblock),
   );
@@ -192,6 +192,6 @@ export function rotateTimeblockColumnsToRows(
 export function getColumnHeader(
   column: TimeblockColumn,
   format: ReturnType<typeof useAppDateTimeFormat>,
-) {
+): string {
   return format(column.dayStart, 'longWeekday');
 }

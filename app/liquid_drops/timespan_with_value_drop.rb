@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # A timespan inside a ScheduledValue that associates a range of time with a particular value
 class TimespanWithValueDrop < Liquid::Drop
   # @api
@@ -47,10 +48,7 @@ class TimespanWithValueDrop < Liquid::Drop
   # @example
   #   "anytime"
   def description_without_value
-    [
-      timespan_with_value.start_description(:date_only),
-      timespan_with_value.finish_description(:date_only)
-    ].join(' ')
+    [timespan_with_value.start_description(:date_only), timespan_with_value.finish_description(:date_only)].join(' ')
   end
 
   # @return [String] A shorter format of the human-readable description of the timespan and its
@@ -94,8 +92,10 @@ class TimespanWithValueDrop < Liquid::Drop
     value_object = timespan_with_value.value
 
     case value_object
-    when Money then value_object.format
-    else value_object
+    when Money
+      value_object.format
+    else
+      value_object
     end
   end
 end

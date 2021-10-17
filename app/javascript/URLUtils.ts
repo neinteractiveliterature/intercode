@@ -4,7 +4,7 @@ import fromPairs from 'lodash/fromPairs';
 
 type LocationType = ReturnType<typeof useLocation>;
 
-export function searchParamsEqual(a: URLSearchParams, b: URLSearchParams) {
+export function searchParamsEqual(a: URLSearchParams, b: URLSearchParams): boolean {
   return isEqual(fromPairs([...a.entries()]), fromPairs([...b.entries()]));
 }
 
@@ -12,7 +12,7 @@ export function locationsEqualWithSearchParamsTransform(
   a: LocationType,
   b: LocationType,
   transform: (params: URLSearchParams) => URLSearchParams,
-) {
+): boolean {
   if (a.pathname !== b.pathname) {
     return false;
   }

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
@@ -26,12 +27,12 @@
 #  fk_rails_...  (user_con_profile_id => user_con_profiles.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+
 class Ticket < ApplicationRecord
   belongs_to :user_con_profile
   belongs_to :ticket_type
   belongs_to :provided_by_event, class_name: 'Event', optional: true, inverse_of: 'provided_tickets'
-  belongs_to :order_entry, optional: :true
+  belongs_to :order_entry, optional: true
 
   validates :user_con_profile, :ticket_type, presence: true
   validates :user_con_profile, uniqueness: true
@@ -42,9 +43,8 @@ class Ticket < ApplicationRecord
   delegate :user, to: :user_con_profile
   delegate :allows_event_signups?, :allows_event_signups, to: :ticket_type
 
-  scope :counts_towards_convention_maximum, -> {
-    joins(:ticket_type).where(ticket_types: { counts_towards_convention_maximum: true })
-  }
+  scope :counts_towards_convention_maximum,
+        -> { joins(:ticket_type).where(ticket_types: { counts_towards_convention_maximum: true }) }
 
   after_commit :send_user_activity_alerts, on: :create
 

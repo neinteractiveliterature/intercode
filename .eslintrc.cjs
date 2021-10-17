@@ -11,14 +11,15 @@ module.exports = {
   },
 
   extends: [
-    'airbnb',
-    'airbnb-typescript',
-    'prettier',
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
     'plugin:@graphql-eslint/recommended',
-    'plugin:jest/recommended'
-    // TODO: turn these on once I feel like getting a raft of errors
-    // 'plugin:@typescript-eslint/recommended',
-    // 'plugin:@typescript-eslint/recommended-requiring-type-checking',
+    'plugin:react/recommended',
+    'plugin:react/jsx-runtime',
+    'plugin:react-hooks/recommended',
+    'plugin:jest/recommended',
+    'plugin:jsx-a11y/recommended',
+    'prettier',
   ],
 
   parser: '@typescript-eslint/parser',
@@ -28,14 +29,17 @@ module.exports = {
     ecmaFeatures: {
       jsx: true,
     },
-    project: './tsconfig.json',
+    // This makes linting orders of magnitude slower :(
+    // project: './tsconfig.json',
+    extraFileExtensions: ['.graphql'],
   },
 
   plugins: [
     // 'babel',
     'jest',
-    'graphql',
+    'jsx-a11y',
     'react-hooks',
+    '@graphql-eslint',
     '@typescript-eslint',
   ],
 
@@ -46,15 +50,12 @@ module.exports = {
     'jest/no-focused-tests': 'error',
     'jest/no-identical-title': 'error',
     'jest/valid-expect': 'error',
-    'graphql/template-strings': ['error', { env: 'apollo', schemaJson }],
-    'graphql/required-fields': ['error', { env: 'apollo', schemaJson, requiredFields: ['id'] }],
-    'graphql/named-operations': ['error', { env: 'apollo', schemaJson }],
-    'graphql/no-deprecated-fields': ['warn', { env: 'apollo', schemaJson }],
     'no-underscore-dangle': ['error', { allow: ['__typename'] }],
     'react/destructuring-assignment': 'off',
     'react/jsx-props-no-spreading': 'off',
     'react/jsx-uses-react': 'off',
     'react/react-in-jsx-scope': 'off',
+    'jsx-a11y/no-onchange': 'off',
     'jsx-a11y/label-has-for': 'off',
     'jsx-a11y/label-has-associated-control': [
       'error',
@@ -81,6 +82,19 @@ module.exports = {
     'import/default': 'off',
     'import/no-named-as-default-member': 'off',
     'prefer-arrow-callback': ['error', { allowNamedFunctions: true }],
+    '@typescript-eslint/no-empty-function': 'off',
+    '@typescript-eslint/no-unused-vars': [
+      'error', { ignoreRestSiblings: true }
+    ],
+    '@graphql-eslint/no-operation-name-suffix': 'off',
+    '@graphql-eslint/no-deprecated': 'warn',
+    // TODO turn these back on once we're done with the transitionalIds
+    '@graphql-eslint/strict-id-in-types': 'off',
+    '@graphql-eslint/avoid-typename-prefix': 'off',
+    // I would like to enable these but we use imported fragments everywhere and there's a known
+    // false positive with that
+    '@graphql-eslint/known-fragment-names': 'off',
+    '@graphql-eslint/no-unused-fragments': 'off'
   },
 
   overrides: [
@@ -107,6 +121,17 @@ module.exports = {
         ],
       },
     },
+    {
+      "files": ["*.graphql"],
+      "parser": "@graphql-eslint/eslint-plugin",
+      "plugins": ["@graphql-eslint"],
+    },
+    {
+      "files": ["schema.graphql"],
+      "rules": {
+        '@graphql-eslint/executable-definitions': 'off'
+      }
+    }
   ],
 
   settings: {
@@ -118,5 +143,8 @@ module.exports = {
       },
     },
     'import/ignore': ['test/javascript/testUtils.js'],
+    react: {
+      version: 'detect',
+    },
   },
 };

@@ -8,27 +8,27 @@ const defaultOptions =  {}
 export type ReportsMenuQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type ReportsMenuQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, ticket_mode: Types.TicketMode, ticket_name: string } };
+export type ReportsMenuQueryData = { __typename: 'Query', convention: { __typename: 'Convention', ticket_mode: Types.TicketMode, ticket_name: string, id: string } };
 
 export type AttendanceByPaymentAmountQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type AttendanceByPaymentAmountQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, ticket_name: string, reports: { __typename: 'ConventionReports', ticket_count_by_type_and_payment_amount: Array<{ __typename: 'TicketCountByTypeAndPaymentAmount', count: number, ticket_type: { __typename: 'TicketType', id: number, name: string, description?: Types.Maybe<string>, providing_products: Array<{ __typename: 'Product', id: number, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: Types.Maybe<any>, finish?: Types.Maybe<any>, value: { __typename: 'Money', fractional: number, currency_code: string } }> } } }> }, payment_amount: { __typename: 'Money', fractional: number, currency_code: string } }>, total_revenue: { __typename: 'Money', fractional: number, currency_code: string } } } };
+export type AttendanceByPaymentAmountQueryData = { __typename: 'Query', convention: { __typename: 'Convention', ticket_name: string, id: string, reports: { __typename: 'ConventionReports', ticket_count_by_type_and_payment_amount: Array<{ __typename: 'TicketCountByTypeAndPaymentAmount', count: number, ticket_type: { __typename: 'TicketType', name: string, description?: string | null | undefined, id: string, providing_products: Array<{ __typename: 'Product', id: string, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: string | null | undefined, finish?: string | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } }> } } }> }, payment_amount: { __typename: 'Money', fractional: number, currency_code: string } }>, total_revenue: { __typename: 'Money', fractional: number, currency_code: string } } } };
 
 export type EventProvidedTicketsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type EventProvidedTicketsQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, ticket_name: string, reports: { __typename: 'ConventionReports', event_provided_tickets: Array<{ __typename: 'EventProvidedTicketList', provided_by_event: { __typename: 'Event', id: number, title?: Types.Maybe<string> }, tickets: Array<{ __typename: 'Ticket', id: number, user_con_profile: { __typename: 'UserConProfile', id: number, name_inverted: string }, ticket_type: { __typename: 'TicketType', id: number, description?: Types.Maybe<string> } }> }> } } };
+export type EventProvidedTicketsQueryData = { __typename: 'Query', convention: { __typename: 'Convention', ticket_name: string, id: string, reports: { __typename: 'ConventionReports', event_provided_tickets: Array<{ __typename: 'EventProvidedTicketList', provided_by_event: { __typename: 'Event', title?: string | null | undefined, id: string }, tickets: Array<{ __typename: 'Ticket', id: string, user_con_profile: { __typename: 'UserConProfile', name_inverted: string, id: string }, ticket_type: { __typename: 'TicketType', description?: string | null | undefined, id: string } }> }> } } };
 
 export type EventsByChoiceQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type EventsByChoiceQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, reports: { __typename: 'ConventionReports', events_by_choice: Array<{ __typename: 'EventWithChoiceCounts', event: { __typename: 'Event', id: number, title?: Types.Maybe<string> }, choice_counts: Array<{ __typename: 'ChoiceCount', state: Types.SignupState, choice: number, count: number }> }> } } };
+export type EventsByChoiceQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, reports: { __typename: 'ConventionReports', events_by_choice: Array<{ __typename: 'EventWithChoiceCounts', event: { __typename: 'Event', title?: string | null | undefined, id: string }, choice_counts: Array<{ __typename: 'ChoiceCount', state: Types.SignupState, choice: number, count: number }> }> } } };
 
 export type SignupCountsByStateQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type SignupCountsByStateQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, signup_counts_by_state: Array<{ __typename: 'SignupCountByState', state: Types.SignupState, count: number }> } };
+export type SignupCountsByStateQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, signup_counts_by_state: Array<{ __typename: 'SignupCountByState', state: Types.SignupState, count: number }> } };
 
 export type SignupSpySignupChangesQueryVariables = Types.Exact<{
   filters?: Types.Maybe<Types.SignupChangeFiltersInput>;
@@ -38,13 +38,13 @@ export type SignupSpySignupChangesQueryVariables = Types.Exact<{
 }>;
 
 
-export type SignupSpySignupChangesQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, timezone_name?: Types.Maybe<string>, signup_changes_paginated: { __typename: 'SignupChangesPagination', total_entries: number, total_pages: number, current_page: number, per_page: number, entries: Array<{ __typename: 'SignupChange', id: number, state: Types.SignupState, counted: boolean, bucket_key?: Types.Maybe<string>, action: Types.SignupChangeAction, created_at: any, previous_signup_change?: Types.Maybe<{ __typename: 'SignupChange', id: number, state: Types.SignupState, counted: boolean, bucket_key?: Types.Maybe<string> }>, signup: { __typename: 'Signup', id: number, choice?: Types.Maybe<number> }, run: { __typename: 'Run', id: number, event: { __typename: 'Event', id: number, title?: Types.Maybe<string>, event_category: { __typename: 'EventCategory', id: number, team_member_name: string }, registration_policy?: Types.Maybe<{ __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: Types.Maybe<string>, anything: boolean }> }>, team_members: Array<{ __typename: 'TeamMember', id: number, user_con_profile: { __typename: 'UserConProfile', id: number } }> } }, user_con_profile: { __typename: 'UserConProfile', id: number, name_inverted: string, gravatar_enabled: boolean, gravatar_url: string } }> } } };
+export type SignupSpySignupChangesQueryData = { __typename: 'Query', convention: { __typename: 'Convention', timezone_name?: string | null | undefined, id: string, signup_changes_paginated: { __typename: 'SignupChangesPagination', total_entries: number, total_pages: number, current_page: number, per_page: number, entries: Array<{ __typename: 'SignupChange', state: Types.SignupState, counted: boolean, bucket_key?: string | null | undefined, action: Types.SignupChangeAction, created_at: string, id: string, previous_signup_change?: { __typename: 'SignupChange', state: Types.SignupState, counted: boolean, bucket_key?: string | null | undefined, id: string } | null | undefined, signup: { __typename: 'Signup', choice?: number | null | undefined, id: string }, run: { __typename: 'Run', id: string, event: { __typename: 'Event', title?: string | null | undefined, id: string, event_category: { __typename: 'EventCategory', team_member_name: string, id: string }, registration_policy?: { __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null | undefined, anything: boolean }> } | null | undefined, team_members: Array<{ __typename: 'TeamMember', id: string, user_con_profile: { __typename: 'UserConProfile', id: string } }> } }, user_con_profile: { __typename: 'UserConProfile', name_inverted: string, gravatar_enabled: boolean, gravatar_url: string, id: string } }> } } };
 
 
 export const ReportsMenuQueryDocument = gql`
     query ReportsMenuQuery {
-  convention: assertConvention {
-    id
+  convention: conventionByRequestHost {
+    id: transitionalId
     ticket_mode
     ticket_name
   }
@@ -79,18 +79,18 @@ export type ReportsMenuQueryLazyQueryHookResult = ReturnType<typeof useReportsMe
 export type ReportsMenuQueryQueryResult = Apollo.QueryResult<ReportsMenuQueryData, ReportsMenuQueryVariables>;
 export const AttendanceByPaymentAmountQueryDocument = gql`
     query AttendanceByPaymentAmountQuery {
-  convention: assertConvention {
-    id
+  convention: conventionByRequestHost {
+    id: transitionalId
     ticket_name
     reports {
       ticket_count_by_type_and_payment_amount {
         count
         ticket_type {
-          id
+          id: transitionalId
           name
           description
           providing_products {
-            id
+            id: transitionalId
             pricing_structure {
               ...PricingStructureFields
             }
@@ -138,23 +138,23 @@ export type AttendanceByPaymentAmountQueryLazyQueryHookResult = ReturnType<typeo
 export type AttendanceByPaymentAmountQueryQueryResult = Apollo.QueryResult<AttendanceByPaymentAmountQueryData, AttendanceByPaymentAmountQueryVariables>;
 export const EventProvidedTicketsQueryDocument = gql`
     query EventProvidedTicketsQuery {
-  convention: assertConvention {
-    id
+  convention: conventionByRequestHost {
+    id: transitionalId
     ticket_name
     reports {
       event_provided_tickets {
         provided_by_event {
-          id
+          id: transitionalId
           title
         }
         tickets {
-          id
+          id: transitionalId
           user_con_profile {
-            id
+            id: transitionalId
             name_inverted
           }
           ticket_type {
-            id
+            id: transitionalId
             description
           }
         }
@@ -192,12 +192,12 @@ export type EventProvidedTicketsQueryLazyQueryHookResult = ReturnType<typeof use
 export type EventProvidedTicketsQueryQueryResult = Apollo.QueryResult<EventProvidedTicketsQueryData, EventProvidedTicketsQueryVariables>;
 export const EventsByChoiceQueryDocument = gql`
     query EventsByChoiceQuery {
-  convention: assertConvention {
-    id
+  convention: conventionByRequestHost {
+    id: transitionalId
     reports {
       events_by_choice {
         event {
-          id
+          id: transitionalId
           title
         }
         choice_counts {
@@ -239,8 +239,8 @@ export type EventsByChoiceQueryLazyQueryHookResult = ReturnType<typeof useEvents
 export type EventsByChoiceQueryQueryResult = Apollo.QueryResult<EventsByChoiceQueryData, EventsByChoiceQueryVariables>;
 export const SignupCountsByStateQueryDocument = gql`
     query SignupCountsByStateQuery {
-  convention: assertConvention {
-    id
+  convention: conventionByRequestHost {
+    id: transitionalId
     signup_counts_by_state {
       state
       count
@@ -277,8 +277,8 @@ export type SignupCountsByStateQueryLazyQueryHookResult = ReturnType<typeof useS
 export type SignupCountsByStateQueryQueryResult = Apollo.QueryResult<SignupCountsByStateQueryData, SignupCountsByStateQueryVariables>;
 export const SignupSpySignupChangesQueryDocument = gql`
     query SignupSpySignupChangesQuery($filters: SignupChangeFiltersInput, $page: Int, $perPage: Int, $sort: [SortInput!]) {
-  convention: assertConvention {
-    id
+  convention: conventionByRequestHost {
+    id: transitionalId
     timezone_name
     signup_changes_paginated(
       page: $page
@@ -291,29 +291,29 @@ export const SignupSpySignupChangesQueryDocument = gql`
       current_page
       per_page
       entries {
-        id
+        id: transitionalId
         state
         counted
         bucket_key
         action
         created_at
         previous_signup_change {
-          id
+          id: transitionalId
           state
           counted
           bucket_key
         }
         signup {
-          id
+          id: transitionalId
           choice
         }
         run {
-          id
+          id: transitionalId
           event {
-            id
+            id: transitionalId
             title
             event_category {
-              id
+              id: transitionalId
               team_member_name
             }
             registration_policy {
@@ -324,15 +324,15 @@ export const SignupSpySignupChangesQueryDocument = gql`
               }
             }
             team_members {
-              id
+              id: transitionalId
               user_con_profile {
-                id
+                id: transitionalId
               }
             }
           }
         }
         user_con_profile {
-          id
+          id: transitionalId
           name_inverted
           gravatar_enabled
           gravatar_url

@@ -16,11 +16,7 @@ export type SignupOption = {
   teamMember: boolean;
 };
 
-function isMainOption(
-  option: SignupOption,
-  noPreferenceOptions: SignupOption[],
-  notCountedOptions: SignupOption[],
-) {
+function isMainOption(option: SignupOption, noPreferenceOptions: SignupOption[], notCountedOptions: SignupOption[]) {
   if (option.bucket && option.bucket.anything) {
     return false;
   }
@@ -33,23 +29,17 @@ function isMainOption(
 }
 
 function isTeamMember(
-  event: { team_members: { user_con_profile: { id: number } }[] },
-  userConProfile?: { id: number },
+  event: { team_members: { user_con_profile: { id: string } }[] },
+  userConProfile?: { id: string },
 ) {
   if (!userConProfile) {
     return false;
   }
 
-  return event.team_members.some(
-    (teamMember) => teamMember.user_con_profile.id === userConProfile.id,
-  );
+  return event.team_members.some((teamMember) => teamMember.user_con_profile.id === userConProfile.id);
 }
 
-function buildBucketSignupOption(
-  bucket: SignupOptionBucket,
-  index: number,
-  hideLabel: boolean,
-): SignupOption {
+function buildBucketSignupOption(bucket: SignupOptionBucket, index: number, hideLabel: boolean): SignupOption {
   return {
     key: bucket.key,
     label: hideLabel ? undefined : bucket.name ?? undefined,
@@ -63,7 +53,7 @@ function buildBucketSignupOption(
 }
 
 function buildNoPreferenceOptions(
-  event: Pick<EventPageQueryData['event'], 'registration_policy'>,
+  event: Pick<EventPageQueryData['convention']['event'], 'registration_policy'>,
 ): SignupOption[] {
   if ((event.registration_policy || {}).prevent_no_preference_signups) {
     return [];
@@ -98,7 +88,7 @@ function allSignupOptions(
         team_member_name: string;
       };
     },
-  userConProfile?: { id: number },
+  userConProfile?: { id: string },
 ): SignupOption[] {
   if (isTeamMember(event, userConProfile)) {
     return [
@@ -127,11 +117,7 @@ function allSignupOptions(
           return null;
         }
 
-        return buildBucketSignupOption(
-          bucket,
-          index,
-          !bucket.not_counted && nonAnythingBuckets.length === 1,
-        );
+        return buildBucketSignupOption(bucket, index, !bucket.not_counted && nonAnythingBuckets.length === 1);
       })
       .filter(notEmpty),
     ...buildNoPreferenceOptions(event),
@@ -146,8 +132,8 @@ export type PartitionedSignupOptions = {
 
 export default function buildSignupOptions(
   event: Parameters<typeof allSignupOptions>[0],
-  userConProfile?: { id: number },
-) {
+  userConProfile?: { id: string },
+): PartitionedSignupOptions {
   const allOptions = allSignupOptions(event, userConProfile);
   const noPreferenceOptions = allOptions.filter((option) => option.noPreference);
   const notCountedOptions = allOptions.filter((option) => !option.counted);

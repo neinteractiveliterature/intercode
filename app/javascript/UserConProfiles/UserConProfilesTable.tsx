@@ -89,7 +89,7 @@ const TicketTypeFilter = (props: FilterProps<UserConProfilesTableRow>) => {
       data
         ? [
             { label: t('tables.ticketStatus.unpaid', 'Unpaid'), value: 'none' },
-            ...data.convention!.ticket_types.map((ticketType) => ({
+            ...data.convention.ticket_types.map((ticketType) => ({
               label: humanize(ticketType.name),
               value: ticketType.id.toString(),
             })),
@@ -174,11 +174,11 @@ function getPossibleColumns(
       Cell: EmailCell,
       Filter: FreeTextFilter,
     },
-    ...(data.convention!.ticket_mode === 'disabled'
+    ...(data.convention.ticket_mode === 'disabled'
       ? []
       : [
           {
-            Header: <>{humanize(data.convention!.ticket_name || 'ticket')}</>,
+            Header: <>{humanize(data.convention.ticket_name || 'ticket')}</>,
             id: 'ticket',
             accessor: 'ticket' as const,
             width: 150,
@@ -191,7 +191,7 @@ function getPossibleColumns(
             Header: (
               <>
                 {t('admin.userConProfiles.ticketType', '{{ ticketName }} type', {
-                  ticketName: humanize(data.convention!.ticket_name || 'ticket'),
+                  ticketName: humanize(data.convention.ticket_name || 'ticket'),
                 })}
               </>
             ),
@@ -232,7 +232,7 @@ function getPossibleColumns(
       Cell: BooleanCell,
       Filter: BooleanChoiceSetFilter,
     },
-    ...(data.convention!.ticket_mode === 'disabled'
+    ...(data.convention.ticket_mode === 'disabled'
       ? []
       : [
           {
@@ -241,7 +241,7 @@ function getPossibleColumns(
                 {t(
                   'admin.userConProfiles.ticketStatusChangedAt',
                   '{{ ticketName }} status changed',
-                  { ticketName: humanize(data.convention!.ticket_name || 'ticket') },
+                  { ticketName: humanize(data.convention.ticket_name || 'ticket') },
                 )}
               </>
             ),
@@ -286,7 +286,7 @@ function getPossibleColumns(
       <FormItemDisplay
         formItem={formItem}
         value={value}
-        convention={data.convention!}
+        convention={data.convention}
         displayMode="admin"
       />
     );
@@ -307,7 +307,7 @@ export type UserConProfilesTableProps = {
   defaultVisibleColumns?: string[];
 };
 
-function UserConProfilesTable({ defaultVisibleColumns }: UserConProfilesTableProps) {
+function UserConProfilesTable({ defaultVisibleColumns }: UserConProfilesTableProps): JSX.Element {
   const { timezoneName } = useContext(AppRootContext);
   const { t } = useTranslation();
   const history = useHistory();
@@ -316,7 +316,7 @@ function UserConProfilesTable({ defaultVisibleColumns }: UserConProfilesTablePro
       getPossibleColumns(
         data,
         t,
-        getSortedParsedFormItems(data.convention!.user_con_profile_form),
+        getSortedParsedFormItems(data.convention.user_con_profile_form),
         timezoneName,
       ),
     [t, timezoneName],
@@ -329,8 +329,8 @@ function UserConProfilesTable({ defaultVisibleColumns }: UserConProfilesTablePro
     decodeFilterValue,
     defaultVisibleColumns,
     encodeFilterValue,
-    getData: ({ data }) => data!.convention!.user_con_profiles_paginated.entries,
-    getPages: ({ data }) => data!.convention!.user_con_profiles_paginated.total_pages,
+    getData: ({ data }) => data?.convention.user_con_profiles_paginated.entries,
+    getPages: ({ data }) => data?.convention.user_con_profiles_paginated.total_pages,
     getPossibleColumns: getPossibleColumnsWithTranslation,
     useQuery: useUserConProfilesTableUserConProfilesQuery,
     storageKeyPrefix: 'userConProfiles',

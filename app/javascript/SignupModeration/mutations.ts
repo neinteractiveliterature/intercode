@@ -3,15 +3,15 @@ import { SignupModerationSignupRequestFields } from './queries';
 
 export const CreateUserSignup = gql`
   mutation CreateUserSignup(
-    $runId: Int!
-    $userConProfileId: Int!
+    $runId: ID!
+    $userConProfileId: ID!
     $requestedBucketKey: String
     $noRequestedBucket: Boolean
   ) {
     createUserSignup(
       input: {
-        run_id: $runId
-        user_con_profile_id: $userConProfileId
+        transitionalRunId: $runId
+        transitionalUserConProfileId: $userConProfileId
         requested_bucket_key: $requestedBucketKey
         no_requested_bucket: $noRequestedBucket
         suppress_notifications: true
@@ -23,11 +23,11 @@ export const CreateUserSignup = gql`
 `;
 
 export const WithdrawUserSignup = gql`
-  mutation WithdrawUserSignup($runId: Int!, $userConProfileId: Int!) {
+  mutation WithdrawUserSignup($runId: ID!, $userConProfileId: ID!) {
     withdrawUserSignup(
       input: {
-        run_id: $runId
-        user_con_profile_id: $userConProfileId
+        transitionalRunId: $runId
+        transitionalUserConProfileId: $userConProfileId
         suppress_notifications: true
       }
     ) {
@@ -37,10 +37,10 @@ export const WithdrawUserSignup = gql`
 `;
 
 export const AcceptSignupRequest = gql`
-  mutation AcceptSignupRequest($id: Int!) {
-    acceptSignupRequest(input: { id: $id }) {
+  mutation AcceptSignupRequest($id: ID!) {
+    acceptSignupRequest(input: { transitionalId: $id }) {
       signup_request {
-        id
+        id: transitionalId
         ...SignupModerationSignupRequestFields
       }
     }
@@ -50,10 +50,10 @@ export const AcceptSignupRequest = gql`
 `;
 
 export const RejectSignupRequest = gql`
-  mutation RejectSignupRequest($id: Int!) {
-    rejectSignupRequest(input: { id: $id }) {
+  mutation RejectSignupRequest($id: ID!) {
+    rejectSignupRequest(input: { transitionalId: $id }) {
       signup_request {
-        id
+        id: transitionalId
         ...SignupModerationSignupRequestFields
       }
     }

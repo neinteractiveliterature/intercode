@@ -1,9 +1,7 @@
 import { DateTime } from 'luxon';
 
 import { render, fireEvent, queries } from '../testUtils';
-import TimeSelect, {
-  TimeSelectProps,
-} from '../../../app/javascript/BuiltInFormControls/TimeSelect';
+import TimeSelect, { TimeSelectProps } from '../../../app/javascript/BuiltInFormControls/TimeSelect';
 import Timespan from '../../../app/javascript/Timespan';
 import { formatLCM } from '../../../app/javascript/TimeUtils';
 
@@ -46,12 +44,8 @@ describe('TimeSelect', () => {
     expect(hourOptions.map((option) => option.innerHTML)).toEqual([
       '',
       ...[...Array(24).keys()].map((hour) => formatLCM(START_TIME.set({ hour }), 'haaa')),
-      ...[...Array(24).keys()].map(
-        (hour) => `${formatLCM(START_TIME.set({ hour }), 'haaa')} (+1 day)`,
-      ),
-      ...[...Array(24).keys()].map(
-        (hour) => `${formatLCM(START_TIME.set({ hour }), 'haaa')} (+2 days)`,
-      ),
+      ...[...Array(24).keys()].map((hour) => `${formatLCM(START_TIME.set({ hour }), 'haaa')} (+1 day)`),
+      ...[...Array(24).keys()].map((hour) => `${formatLCM(START_TIME.set({ hour }), 'haaa')} (+2 days)`),
     ]);
   });
 

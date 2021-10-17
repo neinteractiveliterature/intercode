@@ -16,10 +16,10 @@ import {
 } from './mutations.generated';
 
 function updateCacheAfterSignup(
-  cache: ApolloCache<any>,
-  event: EventPageQueryData['event'],
-  run: EventPageQueryData['event']['runs'][0],
-  signup: EventPageQueryData['event']['runs'][0]['my_signups'][0],
+  cache: ApolloCache<unknown>,
+  event: EventPageQueryData['convention']['event'],
+  run: EventPageQueryData['convention']['event']['runs'][0],
+  signup: EventPageQueryData['convention']['event']['runs'][0]['my_signups'][0],
 ) {
   const data = cache.readQuery<EventPageQueryData, EventPageQueryVariables>({
     query: EventPageQuery,
@@ -29,42 +29,50 @@ function updateCacheAfterSignup(
     return;
   }
 
-  cache.writeQuery({
+  cache.writeQuery<EventPageQueryData>({
     query: EventPageQuery,
     variables: { eventId: event.id },
     data: {
       ...data,
-      event: {
-        ...data.event,
-        runs: data.event.runs.map((eventRun) => {
-          if (eventRun.id === run.id) {
-            return {
-              ...eventRun,
-              my_signups: [...eventRun.my_signups, signup],
-            };
-          }
+      convention: {
+        ...data.convention,
+        event: {
+          ...data.convention.event,
+          runs: data.convention.event.runs.map((eventRun) => {
+            if (eventRun.id === run.id) {
+              return {
+                ...eventRun,
+                my_signups: [...eventRun.my_signups, signup],
+              };
+            }
 
-          return eventRun;
-        }),
+            return eventRun;
+          }),
+        },
       },
     },
   });
 }
 
 export type EventPageRunCardProps = {
-  event: EventPageQueryData['event'];
-  run: EventPageQueryData['event']['runs'][0];
-  myProfile: EventPageQueryData['myProfile'];
+  event: EventPageQueryData['convention']['event'];
+  run: EventPageQueryData['convention']['event']['runs'][0];
+  myProfile: EventPageQueryData['convention']['my_profile'];
   currentAbility: EventPageQueryData['currentAbility'];
 };
 
-function EventPageRunCard({ event, run, myProfile, currentAbility }: EventPageRunCardProps) {
+function EventPageRunCard({
+  event,
+  run,
+  myProfile,
+  currentAbility,
+}: EventPageRunCardProps): JSX.Element {
   const { t } = useTranslation();
   const { signupMode } = useContext(AppRootContext);
-  const signupOptions = useMemo(() => buildSignupOptions(event, myProfile ?? undefined), [
-    event,
-    myProfile,
-  ]);
+  const signupOptions = useMemo(
+    () => buildSignupOptions(event, myProfile ?? undefined),
+    [event, myProfile],
+  );
   const confirm = useConfirm();
   const createModeratedSignupModal = useModal<{ signupOption: SignupOption }>();
   const mySignup = run.my_signups.find((signup) => signup.state !== 'withdrawn');
@@ -165,13 +173,17 @@ function EventPageRunCard({ event, run, myProfile, currentAbility }: EventPageRu
   };
 
   const withdrawPendingSignupRequest = () => {
+    if (!myPendingSignupRequest) {
+      return Promise.reject(new Error('No pending signup request to withdraw'));
+    }
+
     confirm({
       prompt: t(
         'events.withdrawPrompt.signupRequest',
         'Are you sure you want to withdraw your request to sign up for {{ eventTitle }}?',
         { eventTitle: event.title },
       ),
-      action: () => withdrawSignupRequestMutate({ variables: { id: myPendingSignupRequest!.id } }),
+      action: () => withdrawSignupRequestMutate({ variables: { id: myPendingSignupRequest.id } }),
       renderError: (error) => <ErrorDisplay graphQLError={error} />,
     });
 

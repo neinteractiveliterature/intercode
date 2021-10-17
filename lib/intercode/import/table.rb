@@ -37,19 +37,15 @@ class Intercode::Import::Table
 
       id_map[row_id(row)] = record
 
-      if self.class.after_create_record_callback
-        instance_exec(row, record, &self.class.after_create_record_callback)
-      end
+      instance_exec(row, record, &self.class.after_create_record_callback) if self.class.after_create_record_callback
     end
   end
 
   private
 
-  def build_record(row)
-  end
+  def build_record(row); end
 
-  def row_id(row)
-  end
+  def row_id(row); end
 
   def logger
     Intercode::Import::ImportLogger.instance

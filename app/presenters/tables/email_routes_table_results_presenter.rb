@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Tables::EmailRoutesTableResultsPresenter < Tables::TableResultsPresenter
   field :receiver_address, 'Receiver address' do
     ilike_column_filter :receiver_address

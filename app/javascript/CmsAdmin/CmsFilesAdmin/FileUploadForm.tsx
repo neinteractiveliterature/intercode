@@ -2,37 +2,32 @@ import { useState, useCallback } from 'react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ApolloError } from '@apollo/client';
-import { ErrorDisplay, useUniqueId } from '@neinteractiveliterature/litform';
+import {
+  ErrorDisplay,
+  useCreateMutationWithReferenceArrayUpdater,
+  useUniqueId,
+} from '@neinteractiveliterature/litform';
 
-import { CmsFilesAdminQuery } from './queries';
-import { CreateCmsFile } from './mutations';
 import FilePreview from './FilePreview';
-import { useCreateMutation } from '../../MutationUtils';
-import useAsyncFunction from '../../useAsyncFunction';
-import { CmsFile } from '../../graphqlTypes.generated';
-import { CmsFilesAdminQueryData, CmsFilesAdminQueryVariables } from './queries.generated';
-import { CreateCmsFileMutationVariables, CreateCmsFileMutationData } from './mutations.generated';
+import { CmsFileFieldsFragmentDoc, CmsFilesAdminQueryData } from './queries.generated';
+import { CreateCmsFileMutationData, useCreateCmsFileMutation } from './mutations.generated';
 
 export type FileUploadFormProps = {
-  onUpload?: (cmsFile: CmsFile) => void;
+  cmsParent: CmsFilesAdminQueryData['cmsParent'];
+  onUpload?: (cmsFile: CreateCmsFileMutationData['createCmsFile']['cms_file']) => void;
 };
 
-function FileUploadForm({ onUpload }: FileUploadFormProps) {
+function FileUploadForm({ cmsParent, onUpload }: FileUploadFormProps): JSX.Element {
   const { t } = useTranslation();
   const [file, setFile] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const fileInputId = useUniqueId('file-');
-  const [createMutate, createError, createInProgress] = useAsyncFunction(
-    useCreateMutation<
-      CmsFilesAdminQueryData,
-      CmsFilesAdminQueryVariables,
-      CreateCmsFileMutationVariables,
-      CreateCmsFileMutationData
-    >(CreateCmsFile, {
-      query: CmsFilesAdminQuery,
-      arrayPath: ['cmsFiles'],
-      newObjectPath: ['createCmsFile', 'cms_file'],
-    }),
+  const [createMutate, { error: createError, loading: createInProgress }] = useCreateMutationWithReferenceArrayUpdater(
+    useCreateCmsFileMutation,
+    cmsParent,
+    'cmsFiles',
+    (data) => data.createCmsFile.cms_file,
+    CmsFileFieldsFragmentDoc,
   );
 
   const uploadFileChanged = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,6 +58,10 @@ function FileUploadForm({ onUpload }: FileUploadFormProps) {
   const uploadFormSubmitted = async (event: React.FormEvent) => {
     event.preventDefault();
     event.stopPropagation();
+    if (!file) {
+      return;
+    }
+
     const response = await createMutate({ variables: { file } });
     if (response?.data?.createCmsFile && onUpload) {
       onUpload(response.data.createCmsFile.cms_file);
@@ -76,11 +75,7 @@ function FileUploadForm({ onUpload }: FileUploadFormProps) {
       <div className="card-body">
         {file ? (
           <div className="d-flex align-items-start">
-            <FilePreview
-              filename={(file || {}).name}
-              contentType={(file || {}).type}
-              url={imageUrl ?? undefined}
-            />
+            <FilePreview filename={(file || {}).name} contentType={(file || {}).type} url={imageUrl ?? undefined} />
             <button className="btn btn-secondary ms-4" type="button" onClick={clearFile}>
               {t('cms.fileUploadForm.clearFileButton', 'Clear')}
             </button>

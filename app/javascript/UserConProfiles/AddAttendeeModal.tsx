@@ -19,7 +19,7 @@ export type AddAttendeeModalProps = {
 
 type UserType = AddAttendeeUsersQueryData['users_paginated']['entries'][0];
 
-function AddAttendeeModal({ conventionName, visible }: AddAttendeeModalProps) {
+function AddAttendeeModal({ conventionName, visible }: AddAttendeeModalProps): JSX.Element {
   const { t } = useTranslation();
   const history = useHistory();
   const apolloClient = useApolloClient();

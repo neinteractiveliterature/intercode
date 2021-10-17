@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 
 export const CommonFormItemFields = gql`
   fragment CommonFormItemFields on FormItem {
-    id
+    id: transitionalId
     position
     identifier
     item_type
@@ -15,11 +15,11 @@ export const CommonFormItemFields = gql`
 
 export const CommonFormSectionFields = gql`
   fragment CommonFormSectionFields on FormSection {
-    id
+    id: transitionalId
     title
     position
     form_items {
-      id
+      id: transitionalId
       ...CommonFormItemFields
     }
   }
@@ -29,12 +29,12 @@ export const CommonFormSectionFields = gql`
 
 export const CommonFormFields = gql`
   fragment CommonFormFields on Form {
-    id
+    id: transitionalId
     title
     form_type
 
     form_sections {
-      id
+      id: transitionalId
       ...CommonFormSectionFields
     }
   }

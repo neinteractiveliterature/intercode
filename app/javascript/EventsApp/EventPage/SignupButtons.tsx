@@ -7,7 +7,7 @@ export type SignupButtonsProps = {
   disabled?: boolean;
 };
 
-function SignupButtons({ signupOptions, onClick, disabled }: SignupButtonsProps) {
+function SignupButtons({ signupOptions, onClick, disabled }: SignupButtonsProps): JSX.Element {
   if (signupOptions.length === 0) {
     return <></>;
   }

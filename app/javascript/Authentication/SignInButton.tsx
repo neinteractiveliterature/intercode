@@ -10,7 +10,12 @@ export type SignInButtonProps = {
   afterSignInPath?: string;
 };
 
-function SignInButton({ className, caption, initiallyOpen, afterSignInPath }: SignInButtonProps) {
+function SignInButton({
+  className,
+  caption,
+  initiallyOpen,
+  afterSignInPath,
+}: SignInButtonProps): JSX.Element {
   const { open, setAfterSignInPath } = useContext(AuthenticationModalContext);
   const openModal = useCallback(() => {
     open({ currentView: 'signIn' });

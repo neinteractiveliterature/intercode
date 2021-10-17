@@ -7,19 +7,19 @@ const defaultOptions =  {}
 export type ClickwrapAgreementQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type ClickwrapAgreementQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, name: string, clickwrap_agreement_html?: Types.Maybe<string> }, myProfile?: Types.Maybe<{ __typename: 'UserConProfile', id: number, accepted_clickwrap_agreement?: Types.Maybe<boolean> }> };
+export type ClickwrapAgreementQueryData = { __typename: 'Query', convention: { __typename: 'Convention', name: string, clickwrap_agreement_html?: string | null | undefined, id: string, my_profile?: { __typename: 'UserConProfile', accepted_clickwrap_agreement?: boolean | null | undefined, id: string } | null | undefined } };
 
 
 export const ClickwrapAgreementQueryDocument = gql`
     query ClickwrapAgreementQuery {
-  convention: assertConvention {
-    id
+  convention: conventionByRequestHost {
+    id: transitionalId
     name
     clickwrap_agreement_html
-  }
-  myProfile {
-    id
-    accepted_clickwrap_agreement
+    my_profile {
+      id: transitionalId
+      accepted_clickwrap_agreement
+    }
   }
 }
     `;

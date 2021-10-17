@@ -15,7 +15,7 @@ export type ScheduleGridProps = {
   timespan: FiniteTimespan;
 };
 
-function ScheduleGrid({ timespan }: ScheduleGridProps) {
+function ScheduleGrid({ timespan }: ScheduleGridProps): JSX.Element {
   const { config, schedule } = useContext(ScheduleGridContext);
   const { t } = useTranslation();
 

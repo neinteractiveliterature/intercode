@@ -27,7 +27,7 @@ export type TextDiffDisplayProps = {
   after?: string | null;
 };
 
-function TextDiffDisplay({ before, after }: TextDiffDisplayProps) {
+function TextDiffDisplay({ before, after }: TextDiffDisplayProps): JSX.Element {
   const diff = useMemo(() => {
     const wordDiff = diffWords(before || '', after || '');
     if (wordDiff.length > 10) {

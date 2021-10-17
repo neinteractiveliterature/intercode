@@ -1,34 +1,38 @@
-/* eslint-disable import/prefer-default-export */
 import { gql } from '@apollo/client';
 
 export const SiteSearchQuery = gql`
   query SiteSearchQuery($query: String!) {
-    siteSearch(query: $query) {
-      total_entries
-      entries {
-        title
-        highlight
+    cmsParent: cmsParentByRequestHost {
+      id: transitionalId
 
-        model {
-          __typename
+      fullTextSearch(query: $query) {
+        total_entries
+        entries {
+          title
+          highlight
 
-          ... on Page {
-            id
-            slug
-          }
+          model {
+            # eslint-disable-next-line @graphql-eslint/naming-convention
+            __typename
 
-          ... on Event {
-            id
-            title
-          }
+            ... on Page {
+              id: transitionalId
+              slug
+            }
 
-          ... on EventProposal {
-            id
-            title
-          }
+            ... on Event {
+              id: transitionalId
+              title
+            }
 
-          ... on UserConProfile {
-            id
+            ... on EventProposal {
+              id: transitionalId
+              title
+            }
+
+            ... on UserConProfile {
+              id: transitionalId
+            }
           }
         }
       }

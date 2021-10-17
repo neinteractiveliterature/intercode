@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module FormResponseAttrsFields
   extend ActiveSupport::Concern
 
@@ -10,27 +11,35 @@ module FormResponseAttrsFields
 
   def form_response_attrs_json
     form.then do |form|
-      AssociationLoader.for(Form, :form_items).load(form).then do |_form_items|
-        FormResponsePresenter.new(
-          form,
-          object,
-          viewer_role: current_user_form_item_viewer_role,
-          team_member_name: respond_to?(:event_category) ? event_category&.team_member_name : nil
-        ).as_json
-      end
+      AssociationLoader
+        .for(Form, :form_items)
+        .load(form)
+        .then do |_form_items|
+          FormResponsePresenter.new(
+            form,
+            object,
+            viewer_role: current_user_form_item_viewer_role,
+            team_member_name: respond_to?(:event_category) ? event_category&.team_member_name : nil
+          ).as_json
+        end
     end
   end
 
   def form_response_attrs_json_with_rendered_markdown
     form.then do |form|
-      AssociationLoader.for(Form, :form_items).load(form).then do |_form_items|
-        FormResponsePresenter.new(
-          form,
-          object,
-          viewer_role: current_user_form_item_viewer_role,
-          team_member_name: respond_to?(:event_category) ? event_category&.team_member_name : nil
-        ).as_json_with_rendered_markdown('event', object, '')
-      end
+      AssociationLoader
+        .for(Form, :form_items)
+        .load(form)
+        .then do |_form_items|
+          FormResponsePresenter
+            .new(
+              form,
+              object,
+              viewer_role: current_user_form_item_viewer_role,
+              team_member_name: respond_to?(:event_category) ? event_category&.team_member_name : nil
+            )
+            .as_json_with_rendered_markdown('event', object, '')
+        end
     end
   end
 

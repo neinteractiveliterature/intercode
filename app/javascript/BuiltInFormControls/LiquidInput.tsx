@@ -17,28 +17,30 @@ import {
 import { CodeInputProps } from '@neinteractiveliterature/litform/lib/CodeInput';
 import { Extension } from '@codemirror/state';
 
-import { useCmsFilesAdminQueryLazyQuery } from '../CmsAdmin/CmsFilesAdmin/queries.generated';
+import { CmsFilesAdminQueryData, useCmsFilesAdminQueryLazyQuery } from '../CmsAdmin/CmsFilesAdmin/queries.generated';
 import { PreviewLiquidQuery, PreviewNotifierLiquidQuery } from './previewQueries';
 import MenuIcon from '../NavigationBar/MenuIcon';
 import FilePreview from '../CmsAdmin/CmsFilesAdmin/FilePreview';
 import SelectWithLabel from './SelectWithLabel';
 import FileUploadForm from '../CmsAdmin/CmsFilesAdmin/FileUploadForm';
 import { PreviewNotifierLiquidQueryData, PreviewLiquidQueryData } from './previewQueries.generated';
-import { CmsFile } from '../graphqlTypes.generated';
 import parseCmsContent from '../parseCmsContent';
+import parsePageContent from '../parsePageContent';
+
+type SelectableCmsFile = CmsFilesAdminQueryData['cmsParent']['cmsFiles'][number];
 
 type AddFileModalProps = {
   visible: boolean;
-  fileChosen: (file: CmsFile) => void;
+  fileChosen: (file: SelectableCmsFile) => void;
   close: () => void;
 };
 
 function AddFileModal({ visible, fileChosen, close }: AddFileModalProps) {
   const { t } = useTranslation();
   const [loadData, { called, data, loading, error }] = useCmsFilesAdminQueryLazyQuery();
-  const [file, setFile] = useState<CmsFile | null>(null);
+  const [file, setFile] = useState<SelectableCmsFile | null>(null);
 
-  const uploadedFile = (newFile: CmsFile) => {
+  const uploadedFile = (newFile: SelectableCmsFile) => {
     setFile(newFile);
   };
 
@@ -60,14 +62,14 @@ function AddFileModal({ visible, fileChosen, close }: AddFileModalProps) {
           <ErrorDisplay graphQLError={error} />
         ) : (
           <>
-            <SelectWithLabel<CmsFile>
+            <SelectWithLabel<SelectableCmsFile>
               label={t('cms.addFileModal.chooseExistingFileLabel', 'Choose existing file')}
-              options={data?.cmsFiles || []}
+              options={data?.cmsParent.cmsFiles ?? []}
               getOptionLabel={(f) => f.filename}
               getOptionValue={(f) => f.filename}
               value={file}
               onChange={(newValue) => {
-                setFile(newValue as CmsFile | null);
+                setFile(newValue as SelectableCmsFile | null);
               }}
               formatOptionLabel={(f) => (
                 <div className="d-flex align-items-center">
@@ -83,20 +85,14 @@ function AddFileModal({ visible, fileChosen, close }: AddFileModalProps) {
             />
             {data?.currentAbility.can_create_cms_files && (
               <div className="card mt-2">
-                <FileUploadForm onUpload={uploadedFile} />
+                <FileUploadForm onUpload={uploadedFile} cmsParent={data.cmsParent} />
               </div>
             )}
             {file && (
               <div className="card mt-2">
-                <div className="card-header">
-                  {t('cms.addFileModal.filePreview.title', 'Preview')}
-                </div>
+                <div className="card-header">{t('cms.addFileModal.filePreview.title', 'Preview')}</div>
                 <div className="card-body">
-                  <FilePreview
-                    url={file.url}
-                    contentType={file.content_type}
-                    filename={file.filename}
-                  />
+                  <FilePreview url={file.url} contentType={file.content_type} filename={file.filename} />
                 </div>
               </div>
             )}
@@ -129,12 +125,7 @@ function AddFileModal({ visible, fileChosen, close }: AddFileModalProps) {
 
 export type LiquidInputProps = Omit<
   CodeInputProps,
-  | 'editorDidMount'
-  | 'editorRef'
-  | 'getPreviewContent'
-  | 'previewButtonText'
-  | 'editButtonText'
-  | 'extraNavControls'
+  'editorDidMount' | 'editorRef' | 'getPreviewContent' | 'previewButtonText' | 'editButtonText' | 'extraNavControls'
 > &
   Pick<UseStandardCodeMirrorExtensionsOptions, 'onChange'> & {
     notifierEventKey?: string;
@@ -142,7 +133,7 @@ export type LiquidInputProps = Omit<
     extensions?: Extension[];
   };
 
-function LiquidInput(props: LiquidInputProps) {
+function LiquidInput(props: LiquidInputProps): JSX.Element {
   const { t } = useTranslation();
   const [showingDocs, setShowingDocs] = useState(false);
   const [currentDocTab, setCurrentDocTab] = useState('convention');
@@ -152,8 +143,8 @@ function LiquidInput(props: LiquidInputProps) {
 
   const languageExtension = useMemo(
     // Once we stop getting weird errors from parseMixed we can use the Liquid grammar
-    // () => liquid({ baseLanguage: html({ matchClosingTags: false }).language }),
-    () => html(),
+    () => liquid({ baseLanguage: html({ matchClosingTags: false }).language }),
+    // () => html({ matchClosingTags: false }),
     [],
   );
 
@@ -182,7 +173,8 @@ function LiquidInput(props: LiquidInputProps) {
             variables: { liquid: liquidContent, eventKey: notifierEventKey },
             fetchPolicy: 'no-cache',
           });
-          return response.data?.previewLiquid ?? '';
+
+          return parsePageContent(response.data?.convention.previewLiquid ?? '', {}).bodyComponents;
         }
 
         const response = await client.query<PreviewLiquidQueryData>({
@@ -191,10 +183,10 @@ function LiquidInput(props: LiquidInputProps) {
           fetchPolicy: 'no-cache',
         });
 
-        return parseCmsContent(response.data?.previewLiquid ?? '').bodyComponents;
+        return parseCmsContent(response.data?.cmsParent.previewLiquid ?? '').bodyComponents;
       };
 
-  const addFile = (file: CmsFile) => {
+  const addFile = (file: SelectableCmsFile) => {
     editorView.dispatch(editorView.state.replaceSelection(`{% file_url ${file.filename} %}`));
     editorView.focus();
   };
@@ -204,9 +196,7 @@ function LiquidInput(props: LiquidInputProps) {
       return null;
     }
 
-    const liquidDocsUrl = notifierEventKey
-      ? `/liquid_docs?notifier_event_key=${notifierEventKey}`
-      : '/liquid_docs';
+    const liquidDocsUrl = notifierEventKey ? `/liquid_docs?notifier_event_key=${notifierEventKey}` : '/liquid_docs';
 
     return (
       <>
@@ -221,10 +211,7 @@ function LiquidInput(props: LiquidInputProps) {
                     className={classNames('nav-link', { active: currentDocTab === 'convention' })}
                     onClick={(e) => docTabClicked(e, 'convention')}
                   >
-                    {t(
-                      'cms.liquidInput.help.conventionSpecificMarkup',
-                      'Convention-specific markup',
-                    )}
+                    {t('cms.liquidInput.help.conventionSpecificMarkup', 'Convention-specific markup')}
                   </a>
                 </li>
                 <li className="nav-item">
@@ -251,9 +238,7 @@ function LiquidInput(props: LiquidInputProps) {
             </div>
           </header>
           <iframe
-            src={
-              currentDocTab === 'convention' ? liquidDocsUrl : 'https://shopify.github.io/liquid/'
-            }
+            src={currentDocTab === 'convention' ? liquidDocsUrl : 'https://shopify.github.io/liquid/'}
             title={t('cms.liquidInput.help.iframeTitle', 'Documentation')}
             className="flex-grow-1 border-0"
           />
@@ -274,11 +259,7 @@ function LiquidInput(props: LiquidInputProps) {
         extraNavControls={
           <>
             <li className="nav-item">
-              <button
-                type="button"
-                className="btn btn-link nav-link px-2 py-0"
-                onClick={addFileModal.open}
-              >
+              <button type="button" className="btn btn-link nav-link px-2 py-0" onClick={addFileModal.open}>
                 <MenuIcon icon="bi-file-earmark-image" colorClass="" />
                 {t('cms.liquidInput.addFileButton', 'Add file…')}
               </button>
@@ -302,11 +283,7 @@ function LiquidInput(props: LiquidInputProps) {
       >
         {renderDocs()}
       </CodeInput>
-      <AddFileModal
-        visible={addFileModal.visible}
-        close={addFileModal.close}
-        fileChosen={addFile}
-      />
+      <AddFileModal visible={addFileModal.visible} close={addFileModal.close} fileChosen={addFile} />
     </>
   );
 }

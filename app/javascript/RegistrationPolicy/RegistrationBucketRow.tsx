@@ -48,7 +48,7 @@ function RegistrationBucketRow<T extends EditingRegistrationBucket>({
   validateComplete,
   lockDelete,
   onDelete,
-}: RegistrationBucketRowProps<T>) {
+}: RegistrationBucketRowProps<T>): JSX.Element {
   const updateBucket = useCallback(
     (newValue: T) => onChange(registrationBucket.key, newValue),
     [registrationBucket.key, onChange],
@@ -119,9 +119,9 @@ function RegistrationBucketRow<T extends EditingRegistrationBucket>({
             />
             Counted for signups?{' '}
             <HelpPopover iconSet="bootstrap-icons">
-              “Counted” buckets count towards the attendee’s number of signups, and are included in
-              the “No Preference” option. If the bucket is <em>not</em> counted, any attendees who
-              click “No Preference” won’t end up in this bucket.
+              “Counted” buckets count towards the attendee’s number of signups, and are included in the “No Preference”
+              option. If the bucket is <em>not</em> counted, any attendees who click “No Preference” won’t end up in
+              this bucket.
             </HelpPopover>
           </label>
         </div>
@@ -139,9 +139,9 @@ function RegistrationBucketRow<T extends EditingRegistrationBucket>({
               />
               Show bucket name in signup list?{' '}
               <HelpPopover iconSet="bootstrap-icons">
-                If checked, attendees will be able to see which of their fellow attendees are in
-                this bucket via the signup summary page. (The signup summary always lists fellow
-                attendees’ names, but normally doesn’t show which bucket they’re in.)
+                If checked, attendees will be able to see which of their fellow attendees are in this bucket via the
+                signup summary page. (The signup summary always lists fellow attendees’ names, but normally doesn’t show
+                which bucket they’re in.)
               </HelpPopover>
             </label>
           </div>
@@ -166,7 +166,7 @@ function RegistrationBucketRow<T extends EditingRegistrationBucket>({
           field: 'minimum_slots',
           min: 0,
           inputId: minId,
-          value: registrationBucket.minimum_slots,
+          value: registrationBucket.minimum_slots ?? '',
           setValue: setMinimumSlots,
         },
         {
@@ -174,7 +174,7 @@ function RegistrationBucketRow<T extends EditingRegistrationBucket>({
           field: 'preferred_slots',
           min: 0,
           inputId: preferredId,
-          value: registrationBucket.preferred_slots,
+          value: registrationBucket.preferred_slots ?? '',
           setValue: setPreferredSlots,
         },
         {
@@ -182,7 +182,7 @@ function RegistrationBucketRow<T extends EditingRegistrationBucket>({
           field: 'total_slots',
           min: 0,
           inputId: maxId,
-          value: registrationBucket.total_slots,
+          value: registrationBucket.total_slots ?? '',
           setValue: setTotalSlots,
         },
       ] as const

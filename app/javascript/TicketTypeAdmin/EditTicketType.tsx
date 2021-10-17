@@ -29,7 +29,7 @@ export default LoadSingleValueFromCollectionWrapper(
         await mutate({
           variables: {
             input: {
-              id: ticketType.id,
+              transitionalId: ticketType.id,
               ticket_type: buildTicketTypeInput(ticketType),
             },
           },
@@ -46,12 +46,7 @@ export default LoadSingleValueFromCollectionWrapper(
           &rdquo;
         </h1>
         <TicketTypeForm ticketType={ticketType} ticketName={ticketName} onChange={setTicketType} />
-        <button
-          type="button"
-          className="btn btn-primary"
-          onClick={saveClicked}
-          disabled={inProgress}
-        >
+        <button type="button" className="btn btn-primary" onClick={saveClicked} disabled={inProgress}>
           Save changes
         </button>
         <ErrorDisplay graphQLError={error as ApolloError} />

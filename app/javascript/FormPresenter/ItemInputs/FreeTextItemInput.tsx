@@ -66,7 +66,7 @@ function AdvisoryLimitDisplay({
 
 export type FreeTextItemInputProps = CommonFormItemInputProps<FreeTextFormItem>;
 
-function FreeTextItemInput(props: FreeTextItemInputProps) {
+function FreeTextItemInput(props: FreeTextItemInputProps): JSX.Element {
   const {
     formItem,
     formTypeIdentifier,
@@ -76,7 +76,7 @@ function FreeTextItemInput(props: FreeTextItemInputProps) {
     valueInvalid,
   } = props;
   const domId = useUniqueId(`${formItem.identifier}-`);
-  const value = typeof uncheckedValue === 'string' ? uncheckedValue : '';
+  const value = uncheckedValue ?? '';
 
   const userInteracted = useCallback(
     () => onInteract(formItem.identifier),

@@ -18,18 +18,13 @@ const ORDER_STATUS_CHOICES = EnumTypes.OrderStatus.enumValues
   .map((enumValue) => ({ label: enumValue.name, value: enumValue.name }))
   .filter((choice) => choice.value !== 'pending');
 
-export type AdminOrderType = Pick<
-  Order,
-  'status' | 'charge_id' | 'paid_at' | 'payment_amount' | 'payment_note'
-> & {
+export type AdminOrderType = Pick<Order, 'status' | 'charge_id' | 'paid_at' | 'payment_amount' | 'payment_note'> & {
   user_con_profile?: Pick<UserConProfile, 'name_without_nickname'>;
 };
 
-export type AdminOrderTypeWithId = AdminOrderType & { id: number };
+export type AdminOrderTypeWithId = AdminOrderType & { id: string };
 
-export function adminOrderHasId(
-  order: AdminOrderType | AdminOrderTypeWithId,
-): order is AdminOrderTypeWithId {
+export function adminOrderHasId(order: AdminOrderType | AdminOrderTypeWithId): order is AdminOrderTypeWithId {
   return 'id' in order && order.id != null;
 }
 
@@ -61,14 +56,14 @@ function CancelOrderButton({ order, skipRefund }: CancelOrderButtonProps) {
         <p>Are you sure you want to cancel order #{order.id}?</p>
         {order.charge_id ? (
           <div className="alert alert-danger mb-0">
-            This will not issue a refund. Please make sure this is what you want to do. If you would
-            rather issue a refund, cancel this and select “Cancel and refund” instead.
+            This will not issue a refund. Please make sure this is what you want to do. If you would rather issue a
+            refund, cancel this and select “Cancel and refund” instead.
           </div>
         ) : (
           <div className="alert alert-warning mb-0">
             Because there is no Stripe charge associated with this order,{' '}
-            {order.user_con_profile?.name_without_nickname} will not automatically receive a refund,
-            so they will have to be refunded manually.
+            {order.user_con_profile?.name_without_nickname} will not automatically receive a refund, so they will have
+            to be refunded manually.
           </div>
         )}
       </div>
@@ -145,7 +140,7 @@ export type AdminOrderFormProps<T extends AdminOrderType> = {
   updateOrder: React.Dispatch<Partial<T>>;
 };
 
-function AdminOrderForm<T extends AdminOrderType>({ order, updateOrder }: AdminOrderFormProps<T>) {
+function AdminOrderForm<T extends AdminOrderType>({ order, updateOrder }: AdminOrderFormProps<T>): JSX.Element {
   const { timezoneName } = useContext(AppRootContext);
   const format = useAppDateTimeFormat();
 
@@ -159,9 +154,7 @@ function AdminOrderForm<T extends AdminOrderType>({ order, updateOrder }: AdminO
           ) : (
             <UserConProfileSelect
               value={order.user_con_profile}
-              onChange={(value: T['user_con_profile']) =>
-                updateOrder({ user_con_profile: value } as Partial<T>)
-              }
+              onChange={(value: T['user_con_profile']) => updateOrder({ user_con_profile: value } as Partial<T>)}
             />
           )}
         </dd>
@@ -181,10 +174,7 @@ function AdminOrderForm<T extends AdminOrderType>({ order, updateOrder }: AdminO
               <li className="list-inline-item">
                 {humanize(order.status)}
                 {order.paid_at
-                  ? `on ${format(
-                      DateTime.fromISO(order.paid_at, { zone: timezoneName }),
-                      'shortWeekdayDateTime',
-                    )}`
+                  ? `on ${format(DateTime.fromISO(order.paid_at, { zone: timezoneName }), 'shortWeekdayDateTime')}`
                   : null}
               </li>
               <li className="list-inline-item">

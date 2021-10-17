@@ -1,11 +1,19 @@
+# frozen_string_literal: true
 class Mutations::UpdateEventProposal < Mutations::BaseMutation
   field :event_proposal, Types::EventProposalType, null: false
 
-  argument :id, Integer, required: true
+  argument :id,
+           Integer,
+           deprecation_reason:
+             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
+           required: false
+  argument :transitional_id, ID, required: false, camelize: true
   argument :event_proposal, Types::EventProposalInputType, required: true, camelize: false
 
   load_and_authorize_convention_associated_model :event_proposals, :id, :update
 
+  # rubocop:disable Metrics/MethodLength
   def resolve(**args)
     event_proposal_attrs = args[:event_proposal].to_h.stringify_keys
     event_proposal.assign_form_response_attributes(
@@ -32,4 +40,5 @@ class Mutations::UpdateEventProposal < Mutations::BaseMutation
 
     { event_proposal: event_proposal }
   end
+  # rubocop:enable Metrics/MethodLength
 end

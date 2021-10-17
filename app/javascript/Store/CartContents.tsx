@@ -12,14 +12,16 @@ import describeCoupon from './describeCoupon';
 import ApplyCouponControl from './ApplyCouponControl';
 import { CartQueryData, CartQueryVariables, useCartQuery } from './queries.generated';
 
-type OrderType = NonNullable<CartQueryData['currentPendingOrder']>;
+type OrderType = NonNullable<
+  NonNullable<CartQueryData['convention']['my_profile']>['current_pending_order']
+>;
 type OrderEntryType = OrderType['order_entries'][0];
 
 export type CartContentsProps = {
   removeFromCart?: (entry: OrderEntryType) => void;
-  createCouponApplication?: (code: string) => Promise<any>;
-  deleteCouponApplication?: (application: OrderType['coupon_applications'][0]) => Promise<any>;
-  changeQuantity?: (entry: OrderEntryType, quantity: number) => Promise<any>;
+  createCouponApplication?: (code: string) => Promise<unknown>;
+  deleteCouponApplication?: (application: OrderType['coupon_applications'][0]) => Promise<unknown>;
+  changeQuantity?: (entry: OrderEntryType, quantity: number) => Promise<unknown>;
   checkOutButton?: React.ReactNode;
 };
 
@@ -35,11 +37,13 @@ export default LoadQueryWrapper<CartQueryData, CartQueryVariables, CartContentsP
   }) {
     const confirm = useConfirm();
 
-    if (!data.currentPendingOrder || data.currentPendingOrder.order_entries.length === 0) {
+    const currentPendingOrder = data.convention.my_profile?.current_pending_order;
+
+    if (!currentPendingOrder || currentPendingOrder.order_entries.length === 0) {
       return <>Your cart is empty.</>;
     }
 
-    const rows = data.currentPendingOrder.order_entries.map((entry) => (
+    const rows = currentPendingOrder.order_entries.map((entry) => (
       <tr key={entry.id}>
         <td>
           {entry.product.name}
@@ -91,17 +95,17 @@ export default LoadQueryWrapper<CartQueryData, CartQueryVariables, CartContentsP
           </thead>
           <tbody>{rows}</tbody>
           <tfoot>
-            {data.currentPendingOrder.coupon_applications.length > 0 && (
+            {currentPendingOrder.coupon_applications.length > 0 && (
               <>
                 <tr className="bg-light">
                   <td colSpan={2}>
                     <em>Total before coupons</em>
                   </td>
                   <td colSpan={2}>
-                    <em>{formatMoney(data.currentPendingOrder.total_price_before_discounts)}</em>
+                    <em>{formatMoney(currentPendingOrder.total_price_before_discounts)}</em>
                   </td>
                 </tr>
-                {data.currentPendingOrder.coupon_applications.map((app) => (
+                {currentPendingOrder.coupon_applications.map((app) => (
                   <tr key={app.id} className="bg-light">
                     <td colSpan={2}>
                       Coupon code: <code>{app.coupon.code}</code>
@@ -141,13 +145,11 @@ export default LoadQueryWrapper<CartQueryData, CartQueryVariables, CartContentsP
             <tr className="bg-warning-light">
               <td colSpan={2}>
                 <strong>
-                  {data.currentPendingOrder.coupon_applications.length > 0
-                    ? 'Grand total'
-                    : 'Total'}
+                  {currentPendingOrder.coupon_applications.length > 0 ? 'Grand total' : 'Total'}
                 </strong>
               </td>
               <td colSpan={2}>
-                <strong>{formatMoney(data.currentPendingOrder.total_price)}</strong>
+                <strong>{formatMoney(currentPendingOrder.total_price)}</strong>
               </td>
             </tr>
           </tfoot>

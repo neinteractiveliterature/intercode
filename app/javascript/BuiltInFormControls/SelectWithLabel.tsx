@@ -14,7 +14,7 @@ function SelectWithLabel<OptionType, IsMulti extends boolean = false>({
   label,
   helpText,
   ...otherProps
-}: SelectWithLabelProps<OptionType, IsMulti>) {
+}: SelectWithLabelProps<OptionType, IsMulti>): JSX.Element {
   return (
     <FormGroupWithLabel label={label} name={otherProps.name} helpText={helpText}>
       {(id) => <Select<OptionType, IsMulti> inputId={id} {...otherProps} />}

@@ -17,7 +17,7 @@ function CmsPartialForm<T extends CmsPartialFormFields>({
   partial,
   onChange,
   readOnly,
-}: CmsPartialFormProps<T>) {
+}: CmsPartialFormProps<T>): JSX.Element {
   const [setName, setAdminNotes, setContent] = usePropertySetters(
     onChange,
     'name',

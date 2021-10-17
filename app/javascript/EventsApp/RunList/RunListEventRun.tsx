@@ -9,8 +9,8 @@ import RunDisplay from '../ScheduleGrid/RunDisplay';
 import SignupCountData from '../SignupCountData';
 
 export type RunListEventRunProps = {
-  event: ScheduleGridCombinedQueryData['events'][number];
-  run: ScheduleGridCombinedQueryData['events'][number]['runs'][number];
+  event: ScheduleGridCombinedQueryData['convention']['events'][number];
+  run: ScheduleGridCombinedQueryData['convention']['events'][number]['runs'][number];
   timespan: FiniteTimespan;
   signupCountData: SignupCountData;
 };
@@ -20,7 +20,7 @@ export default function RunListEventRun({
   run,
   timespan,
   signupCountData,
-}: RunListEventRunProps) {
+}: RunListEventRunProps): JSX.Element {
   const format = useAppDateTimeFormat();
   const [detailsVisible, setDetailsVisible] = useState(false);
   const toggle = useCallback(() => setDetailsVisible((prevVisible) => !prevVisible), []);

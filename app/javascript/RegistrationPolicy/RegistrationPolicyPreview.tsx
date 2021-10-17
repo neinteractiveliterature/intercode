@@ -10,7 +10,9 @@ export type RegistrationPolicyPreviewProps = {
   registrationPolicy: RegistrationPolicyForRegistrationPolicyUtils;
 };
 
-function RegistrationPolicyPreview({ registrationPolicy }: RegistrationPolicyPreviewProps) {
+function RegistrationPolicyPreview({
+  registrationPolicy,
+}: RegistrationPolicyPreviewProps): JSX.Element {
   const blankSignupCounts = buildBlankSignupCountsFromRegistrationPolicy(registrationPolicy);
   const registrationPolicyForDisplay = useMemo(() => {
     const { buckets, ...otherProps } = registrationPolicy;

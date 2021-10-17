@@ -20,7 +20,7 @@ export enum SignupStatus {
 export function userSignupStatus(run: {
   my_signups: { state: SignupState }[];
   my_signup_requests: { state: SignupRequestState }[];
-}) {
+}): SignupStatus | null {
   if (run.my_signups.some((signup) => signup.state === SignupState.Confirmed)) {
     return SignupStatus.Confirmed;
   }
@@ -67,7 +67,7 @@ export function getRunClassName({
   signupCountData,
   unlimited,
   runDimensions,
-}: GetRunClassNameOptions) {
+}: GetRunClassNameOptions): string {
   return classNames(
     'schedule-grid-event',
     'small',
@@ -172,7 +172,7 @@ export function getRunClassificationStyles({
   signupCountData,
   event,
   signupStatus,
-}: GetRunClassificationStylesOptions) {
+}: GetRunClassificationStylesOptions): CSSProperties {
   if (config.classifyEventsBy === 'category') {
     let variant: EventStyleVariant = 'default';
     if (signupStatus != null) {

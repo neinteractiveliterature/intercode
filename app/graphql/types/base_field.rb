@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::BaseField < GraphQL::Schema::Field
   def authorize(&block)
     @authorization_block = block

@@ -1,16 +1,16 @@
 import { EventPageQueryData } from '../EventsApp/EventPage/queries.generated';
-import { FormType, EventCategory } from '../graphqlTypes.generated';
+import { FormType } from '../graphqlTypes.generated';
 import { CommonFormFieldsFragment } from '../Models/commonFormFragments.generated';
 
-const BLANK_FORM: NonNullable<EventPageQueryData['event']['form']> = {
+const BLANK_FORM: NonNullable<EventPageQueryData['convention']['event']['form']> = {
   __typename: 'Form',
-  id: 0,
+  id: '',
   title: '',
   form_type: FormType.Event,
   form_sections: [],
 };
 
-export type EventCategoryFormData = Pick<EventCategory, 'id'> & {
+export type EventCategoryFormData = { id: string } & {
   event_form: CommonFormFieldsFragment;
   event_proposal_form?: CommonFormFieldsFragment;
 };
@@ -19,7 +19,7 @@ export type ConventionForEventCategoryForms<EventCategoryType extends EventCateg
 };
 
 function getFormDataForEventCategoryId<EventCategoryType extends EventCategoryFormData>(
-  eventCategoryId: number | undefined | null,
+  eventCategoryId: string | undefined | null,
   convention: ConventionForEventCategoryForms<EventCategoryType>,
   getData: (eventCategory: EventCategoryFormData) => CommonFormFieldsFragment | null | undefined,
 ): CommonFormFieldsFragment {
@@ -35,20 +35,16 @@ function getFormDataForEventCategoryId<EventCategoryType extends EventCategoryFo
 }
 
 export function getEventFormForEventCategoryId<EventCategoryType extends EventCategoryFormData>(
-  eventCategoryId: number | undefined | null,
+  eventCategoryId: string | undefined | null,
   convention: ConventionForEventCategoryForms<EventCategoryType>,
-) {
-  return getFormDataForEventCategoryId(
-    eventCategoryId,
-    convention,
-    (eventCategory) => eventCategory.event_form,
-  );
+): CommonFormFieldsFragment {
+  return getFormDataForEventCategoryId(eventCategoryId, convention, (eventCategory) => eventCategory.event_form);
 }
 
 export function getProposalFormForEventCategoryId<EventCategoryType extends EventCategoryFormData>(
-  eventCategoryId: number | undefined | null,
+  eventCategoryId: string | undefined | null,
   convention: ConventionForEventCategoryForms<EventCategoryType>,
-) {
+): CommonFormFieldsFragment {
   return getFormDataForEventCategoryId(
     eventCategoryId,
     convention,

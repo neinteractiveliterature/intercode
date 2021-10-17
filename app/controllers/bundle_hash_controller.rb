@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class BundleHashController < ApplicationController
   skip_before_action :ensure_assumed_identity_matches_convention
   skip_before_action :ensure_user_con_profile_exists
@@ -15,12 +16,11 @@ class BundleHashController < ApplicationController
   private
 
   def bundle_hash
-    self.class.bundle_hash_value ||= begin
+    self.class.bundle_hash_value ||=
       if Rails.env.development?
         'dev_server'
       else
         Digest::MD5.hexdigest(File.read(Rails.root.join('public/packs/assets-manifest.json')))
       end
-    end
   end
 end

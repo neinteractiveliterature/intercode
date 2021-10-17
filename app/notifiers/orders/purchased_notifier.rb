@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Orders::PurchasedNotifier < Notifier
   attr_reader :order
 

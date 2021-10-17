@@ -1,10 +1,10 @@
 import {
   WithRequiredProperties,
   ParsedFormItemWithGeneratedIds,
-  ParsedFormItem,
+  TypedFormItem,
 } from './FormItemUtils';
 
-export type FormItemEditorProps<FormItemType extends ParsedFormItem<any, any>> = {
+export type FormItemEditorProps<FormItemType extends TypedFormItem> = {
   formItem: ParsedFormItemWithGeneratedIds<WithRequiredProperties<FormItemType>>;
   setFormItem: React.Dispatch<
     React.SetStateAction<ParsedFormItemWithGeneratedIds<WithRequiredProperties<FormItemType>>>

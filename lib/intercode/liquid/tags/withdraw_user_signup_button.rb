@@ -35,8 +35,12 @@ module Intercode
 
         def props(context)
           {
-            event: { title: context[signup_variable_name].event.title },
-            run: { id: context[signup_variable_name].run.id },
+            event: {
+              title: context[signup_variable_name].event.title
+            },
+            run: {
+              id: context[signup_variable_name].run.id
+            },
             buttonText: button_text,
             buttonClass: button_class,
             reloadOnSuccess: true
@@ -47,7 +51,4 @@ module Intercode
   end
 end
 
-Liquid::Template.register_tag(
-  'withdraw_user_signup_button',
-  Intercode::Liquid::Tags::WithdrawUserSignupButton
-)
+Liquid::Template.register_tag('withdraw_user_signup_button', Intercode::Liquid::Tags::WithdrawUserSignupButton)

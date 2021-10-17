@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::MailingListsWaitlistsResultType < Types::BaseObject
   field :emails, [Types::ContactEmailType], null: false
   field :metadata_fields, [String], null: false

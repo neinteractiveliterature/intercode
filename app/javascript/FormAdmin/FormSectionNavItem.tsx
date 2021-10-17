@@ -1,32 +1,34 @@
 import { useContext } from 'react';
 import { NavLink, useHistory, useRouteMatch } from 'react-router-dom';
-import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
+import { useConfirm, ErrorDisplay, useDeleteMutationWithReferenceArrayUpdater } from '@neinteractiveliterature/litform';
 
 import { useSortable } from '@dnd-kit/sortable';
-import { DeleteFormSection } from './mutations';
 import { FormEditorContext, FormEditorForm } from './FormEditorContexts';
-import { FormEditorQuery } from './queries';
-import { useDeleteMutation } from '../MutationUtils';
 import { getSortableStyle } from '../SortableUtils';
+import { useDeleteFormSectionMutation } from './mutations.generated';
 
 export type FormSectionNavItemProps = {
   formSection: FormEditorForm['form_sections'][0];
 };
 
-function FormSectionNavItem({ formSection }: FormSectionNavItemProps) {
-  const { form, currentSection } = useContext(FormEditorContext);
+function FormSectionNavItem({ formSection }: FormSectionNavItemProps): JSX.Element {
+  const { form, currentSection, convention } = useContext(FormEditorContext);
   const confirm = useConfirm();
   const history = useHistory();
   const match = useRouteMatch<{ id: string }>();
-  const deleteFormSection = useDeleteMutation(DeleteFormSection, {
-    query: FormEditorQuery,
-    queryVariables: { id: form.id },
-    arrayPath: ['form', 'form_sections'],
-    idVariablePath: ['id'],
-  });
+  const [deleteFormSection] = useDeleteMutationWithReferenceArrayUpdater(
+    useDeleteFormSectionMutation,
+    convention.form,
+    'form_sections',
+    (section) => ({ id: section.id }),
+  );
 
   const deleteConfirmed = async () => {
-    await deleteFormSection({ variables: { id: formSection.id } });
+    const unparsedFormSection = convention.form.form_sections.find((section) => section.id === formSection.id);
+    if (!unparsedFormSection) {
+      throw new Error("Couldn't find form section in original GraphQL server response!");
+    }
+    await deleteFormSection(unparsedFormSection);
     if (currentSection && formSection.id === currentSection.id) {
       history.replace(`/admin_forms/${form.id}/edit`);
     }

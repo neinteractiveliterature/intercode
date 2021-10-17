@@ -1,8 +1,11 @@
+# frozen_string_literal: true
 module MoneyCoder
   def self.load(value)
     case value
-    when nil then nil
-    when Money then value
+    when nil
+      nil
+    when Money
+      value
     when Hash
       symbolized_value = value.symbolize_keys
       Money.new(symbolized_value[:fractional], symbolized_value[:currency_code])

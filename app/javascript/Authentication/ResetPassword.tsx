@@ -42,7 +42,7 @@ async function changePassword(
   }
 }
 
-function ResetPassword() {
+function ResetPassword(): JSX.Element {
   const { t } = useTranslation();
   const location = useLocation();
   const resetPasswordToken = useMemo(
@@ -57,8 +57,12 @@ function ResetPassword() {
 
   const onSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
+    if (!authenticityToken) {
+      throw new Error('No authenticity token received from server');
+    }
+
     await changePasswordAsync(
-      authenticityToken!,
+      authenticityToken,
       resetPasswordToken,
       password,
       passwordConfirmation,

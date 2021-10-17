@@ -1,11 +1,29 @@
 import { gql } from '@apollo/client';
 
-// eslint-disable-next-line import/prefer-default-export
 export const AppRootQuery = gql`
   query AppRootQuery($path: String!) {
-    effectiveCmsLayout(path: $path) {
-      id
-      content_html(path: $path)
+    cmsParentByRequestHost {
+      id: transitionalId
+
+      effectiveCmsLayout(path: $path) {
+        id: transitionalId
+        content_html(path: $path)
+      }
+
+      cmsNavigationItems {
+        id: transitionalId
+        position
+        title
+
+        navigation_section {
+          id: transitionalId
+        }
+
+        page {
+          id: transitionalId
+          slug
+        }
+      }
     }
 
     currentAbility {
@@ -37,39 +55,17 @@ export const AppRootQuery = gql`
     }
 
     currentUser {
-      id
+      id: transitionalId
       name
-    }
-
-    currentPendingOrder {
-      id
-      order_entries {
-        id
-        quantity
-      }
-    }
-
-    myProfile {
-      id
-      name
-      accepted_clickwrap_agreement
-      name_without_nickname
-      first_name
-      last_name
-      gravatar_enabled
-      gravatar_url
-      ticket {
-        id
-      }
     }
 
     assumedIdentityFromProfile {
-      id
+      id: transitionalId
       name_without_nickname
     }
 
-    convention {
-      id
+    convention: conventionByRequestHostIfPresent {
+      id: transitionalId
       name
       domain
       accepting_proposals
@@ -85,33 +81,41 @@ export const AppRootQuery = gql`
       clickwrap_agreement
       tickets_available_for_purchase
       ticket_name
+
       ticket_types {
-        id
+        id: transitionalId
         providing_products {
-          id
+          id: transitionalId
           available
+        }
+      }
+
+      my_profile {
+        id: transitionalId
+        name
+        accepted_clickwrap_agreement
+        name_without_nickname
+        first_name
+        last_name
+        gravatar_enabled
+        gravatar_url
+        ticket {
+          id: transitionalId
+        }
+
+        current_pending_order {
+          id: transitionalId
+          order_entries {
+            id: transitionalId
+            quantity
+          }
         }
       }
     }
 
     rootSite {
-      id
+      id: transitionalId
       site_name
-    }
-
-    cmsNavigationItems {
-      id
-      position
-      title
-
-      navigation_section {
-        id
-      }
-
-      page {
-        id
-        slug
-      }
     }
   }
 `;

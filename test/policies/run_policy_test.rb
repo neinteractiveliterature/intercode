@@ -23,13 +23,10 @@ class RunPolicyTest < ActiveSupport::TestCase
       it 'lets team members read' do
         event = create(:event, convention: convention)
         team_member = create(:team_member, event: event)
-        assert RunPolicy.new(team_member.user_con_profile.user, the_run)
-          .read?
+        assert RunPolicy.new(team_member.user_con_profile.user, the_run).read?
       end
 
-      %w[
-        read_prerelease_schedule read_limited_prerelease_schedule update_events
-      ].each do |permission|
+      %w[read_prerelease_schedule read_limited_prerelease_schedule update_events].each do |permission|
         it "lets people with #{permission} permission in convention read runs" do
           user = create_user_with_permission_in_convention(permission, convention)
           assert RunPolicy.new(user, the_run).read?
@@ -66,8 +63,7 @@ class RunPolicyTest < ActiveSupport::TestCase
       it 'does not let team members read' do
         event = create(:event, convention: convention)
         team_member = create(:team_member, event: event)
-        refute RunPolicy.new(team_member.user_con_profile.user, the_run)
-          .read?
+        refute RunPolicy.new(team_member.user_con_profile.user, the_run).read?
       end
 
       it 'does not let regular attendees read' do
@@ -100,8 +96,7 @@ class RunPolicyTest < ActiveSupport::TestCase
       it 'does not let team members read' do
         event = create(:event, convention: convention)
         team_member = create(:team_member, event: event)
-        refute RunPolicy.new(team_member.user_con_profile.user, the_run)
-          .read?
+        refute RunPolicy.new(team_member.user_con_profile.user, the_run).read?
       end
 
       it 'does not let regular attendees read' do
@@ -177,9 +172,7 @@ class RunPolicyTest < ActiveSupport::TestCase
         assert_equal [the_run].sort, resolved_runs.sort
       end
 
-      %w[
-        read_prerelease_schedule read_limited_prerelease_schedule update_events
-      ].each do |permission|
+      %w[read_prerelease_schedule read_limited_prerelease_schedule update_events].each do |permission|
         it "returns all runs to users with #{permission} permission in convention" do
           user = create_user_with_permission_in_convention(permission, convention)
           resolved_runs = RunPolicy::Scope.new(user, Run.all).resolve

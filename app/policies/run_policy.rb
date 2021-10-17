@@ -1,13 +1,16 @@
+# frozen_string_literal: true
 class RunPolicy < ApplicationPolicy
   delegate :event, to: :record
   delegate :convention, to: :event
 
   def read?
-    return true if oauth_scoped_disjunction do |d|
-      d.add(:read_events) do
-        convention.site_mode == 'single_event' ||
-        has_schedule_release_permissions?(convention, convention.show_schedule)
-      end
+    if oauth_scoped_disjunction do |d|
+         d.add(:read_events) do
+           convention.site_mode == 'single_event' ||
+             has_schedule_release_permissions?(convention, convention.show_schedule)
+         end
+       end
+      return true
     end
 
     super
@@ -19,10 +22,8 @@ class RunPolicy < ApplicationPolicy
   end
 
   def manage?
-    return true if oauth_scoped_disjunction do |d|
-      d.add(:manage_events) do
-        has_convention_permission?(convention, 'update_runs')
-      end
+    if oauth_scoped_disjunction { |d| d.add(:manage_events) { has_convention_permission?(convention, 'update_runs') } }
+      return true
     end
 
     super
@@ -34,17 +35,9 @@ class RunPolicy < ApplicationPolicy
       return scope.all if site_admin?
 
       disjunctive_where do |dw|
-        dw.add(
-          event: Event.where(
-            convention: conventions_with_schedule_release_permissions(:show_schedule)
-          )
-        )
+        dw.add(event: Event.where(convention: conventions_with_schedule_release_permissions(:show_schedule)))
 
-        dw.add(
-          event: Event.where(
-            convention: Convention.where(site_mode: 'single_event')
-          )
-        )
+        dw.add(event: Event.where(convention: Convention.where(site_mode: 'single_event')))
       end
     end
   end

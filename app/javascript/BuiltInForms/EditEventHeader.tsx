@@ -5,12 +5,12 @@ import { ErrorDisplay, useConfirm } from '@neinteractiveliterature/litform';
 import { Event } from '../graphqlTypes.generated';
 
 export type EditEventHeaderProps = {
-  event: Pick<Event, 'id' | 'status' | 'title'>;
+  event: Pick<Event, 'status' | 'title'> & { id: string };
   showDropButton: boolean;
   dropEvent: () => void;
 };
 
-function EditEventHeader({ event, showDropButton, dropEvent }: EditEventHeaderProps) {
+function EditEventHeader({ event, showDropButton, dropEvent }: EditEventHeaderProps): JSX.Element {
   const { t } = useTranslation();
   const confirm = useConfirm();
 
@@ -42,9 +42,7 @@ function EditEventHeader({ event, showDropButton, dropEvent }: EditEventHeaderPr
       {dropButton}
 
       <h3 className="mb-4">
-        {event.id
-          ? t('events.edit.editHeader', 'Edit event')
-          : t('events.edit.newHeader', 'New event')}
+        {event.id ? t('events.edit.editHeader', 'Edit event') : t('events.edit.newHeader', 'New event')}
       </h3>
     </header>
   );

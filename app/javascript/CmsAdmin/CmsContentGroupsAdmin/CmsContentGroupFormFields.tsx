@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import * as React from 'react';
 import uniqWith from 'lodash/uniqWith';
 import { BootstrapFormInput, FormGroupWithLabel, notEmpty } from '@neinteractiveliterature/litform';
@@ -6,20 +6,16 @@ import { BootstrapFormInput, FormGroupWithLabel, notEmpty } from '@neinteractive
 import CmsContentSelect, { CmsContentOption } from './CmsContentSelect';
 import PermissionsTableInput from '../../Permissions/PermissionsTableInput';
 import SelectWithLabel from '../../BuiltInFormControls/SelectWithLabel';
-import {
-  permissionEquals,
-  getPermissionNamesForModelType,
-} from '../../Permissions/PermissionUtils';
+import { permissionEquals, getPermissionNamesForModelType } from '../../Permissions/PermissionUtils';
 import { CmsContentGroupsAdminQueryData } from './queries.generated';
 import ChangeSet from '../../ChangeSet';
 import { PermissionedModelTypeIndicator } from '../../graphqlTypes.generated';
 import { UsePermissionsChangeSetOptions } from '../../Permissions/usePermissionsChangeSet';
+import assertNever from 'assert-never';
 
-const ContentGroupPermissionNames = getPermissionNamesForModelType(
-  PermissionedModelTypeIndicator.CmsContentGroup,
-);
+const ContentGroupPermissionNames = getPermissionNamesForModelType(PermissionedModelTypeIndicator.CmsContentGroup);
 
-type ContentGroupTypeWithRequiredId = CmsContentGroupsAdminQueryData['cmsContentGroups'][0];
+type ContentGroupTypeWithRequiredId = CmsContentGroupsAdminQueryData['cmsParent']['cmsContentGroups'][0];
 type ContentGroupType = Omit<ContentGroupTypeWithRequiredId, 'id'> &
   Partial<Pick<ContentGroupTypeWithRequiredId, 'id'>>;
 type PermissionType = ContentGroupType['permissions'][0];
@@ -32,7 +28,7 @@ export type CmsContentGroupFormFieldsProps = {
   disabled?: boolean;
   readOnly?: boolean;
   permissionsChangeSet?: ChangeSet<PermissionType>;
-  addPermission?: React.Dispatch<Pick<PermissionType, 'role' | 'permission'>>;
+  addPermission?: React.Dispatch<Pick<PermissionType, 'role' | 'model' | 'permission'>>;
   removePermission?: UsePermissionsChangeSetOptions['remove'];
 };
 
@@ -45,11 +41,19 @@ function CmsContentGroupFormFields({
   permissionsChangeSet,
   addPermission,
   removePermission,
-}: CmsContentGroupFormFieldsProps) {
+}: CmsContentGroupFormFieldsProps): JSX.Element {
   const [roles, setRoles] = useState<RoleType[]>(() => {
     const permissions = uniqWith<PermissionType>(contentGroup.permissions, permissionEquals);
     return permissions.map((permission) => permission.role).filter(notEmpty);
   });
+
+  const contentGroupWithIdForPermissionTable: ContentGroupTypeWithRequiredId = useMemo(
+    () => ({
+      ...contentGroup,
+      id: contentGroup.id ?? 'unsaved',
+    }),
+    [contentGroup],
+  );
 
   const addRole = (role: RoleType) => {
     if (!addPermission) {
@@ -58,7 +62,7 @@ function CmsContentGroupFormFields({
 
     setRoles((prevStaffPositions) => [...prevStaffPositions, role]);
     ContentGroupPermissionNames.forEach((permissionName) => {
-      addPermission({ role, permission: permissionName.permission });
+      addPermission({ role, model: contentGroupWithIdForPermissionTable, permission: permissionName.permission });
     });
   };
 
@@ -95,13 +99,13 @@ function CmsContentGroupFormFields({
               permissionNames={ContentGroupPermissionNames}
               initialPermissions={contentGroup.permissions}
               rowType="role"
+              model={contentGroupWithIdForPermissionTable}
               rows={roles}
               formatRowHeader={(role) => {
-                if (role.__typename === 'StaffPosition') {
+                if (role.__typename === 'StaffPosition' || role.__typename === 'OrganizationRole') {
                   return role.name;
                 }
-
-                return `${role.__typename} ${role.id}`;
+                assertNever(role);
               }}
               readOnly={readOnly}
               changeSet={permissionsChangeSet}

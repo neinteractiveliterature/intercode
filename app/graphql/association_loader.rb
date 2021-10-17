@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AssociationLoader < GraphQL::Batch::Loader
   def self.validate(model, association_name)
     new(model, association_name)
@@ -11,9 +12,7 @@ class AssociationLoader < GraphQL::Batch::Loader
   end
 
   def load(record)
-    unless record.is_a?(@model)
-      raise TypeError, "#{@model} loader can't load association for #{record.class}"
-    end
+    raise TypeError, "#{@model} loader can't load association for #{record.class}" unless record.is_a?(@model)
     return Promise.resolve(read_association(record)) if association_loaded?(record)
     super
   end

@@ -18,18 +18,16 @@ class Intercode::Import::Intercode1::Tables::BidInfo < Intercode::Import::Interc
   private
 
   def build_record(row)
-    @convention.cms_partials.new(
-      name: 'ProposalInfo',
-      content: compose_partial_content(row)
-    )
+    @convention.cms_partials.new(name: 'ProposalInfo', content: compose_partial_content(row))
   end
 
   def compose_partial_content(row)
-    html = Intercode::Import::Intercode1::HtmlConverter.new(
-      html: row[:BidInfo],
-      convention: @convention,
-      file_root: @file_root
-    ).convert
+    html =
+      Intercode::Import::Intercode1::HtmlConverter.new(
+        html: row[:BidInfo],
+        convention: @convention,
+        file_root: @file_root
+      ).convert
 
     <<-HTML
 #{html}

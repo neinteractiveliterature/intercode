@@ -24,7 +24,7 @@ export type MarkdownInputProps = Omit<
     extensions?: Extension[];
   };
 
-const MarkdownInput = (props: MarkdownInputProps) => {
+function MarkdownInput(props: MarkdownInputProps): JSX.Element {
   const client = useApolloClient();
   const { t } = useTranslation();
   const languageExtension = useMemo(
@@ -57,10 +57,10 @@ const MarkdownInput = (props: MarkdownInputProps) => {
           fetchPolicy: 'no-cache',
         });
 
-        return parsePageContent(response.data?.previewMarkdown ?? '').bodyComponents;
+        return parsePageContent(response.data?.cmsParent.previewMarkdown ?? '').bodyComponents;
       }}
     />
   );
-};
+}
 
 export default MarkdownInput;

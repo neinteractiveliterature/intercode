@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::EventProposalsPaginationType < Types::PaginationType
   entries_field Types::EventProposalType
 

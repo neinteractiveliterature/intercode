@@ -8,32 +8,32 @@ import { getProvidableTicketTypes, getRemainingTicketCountByType } from './Provi
 import { TeamMembersQueryData } from './queries.generated';
 
 export type ProvidableTicketTypeSelectionProps = {
-  convention: Pick<NonNullable<TeamMembersQueryData['convention']>, 'ticket_types' | 'ticket_name'>;
-  event: Pick<TeamMembersQueryData['event'], 'title'> & {
-    provided_tickets: Pick<TeamMembersQueryData['event']['provided_tickets'][0], 'ticket_type'>[];
+  convention: Pick<NonNullable<TeamMembersQueryData['convention']>, 'ticket_types' | 'ticket_name'> & {
+    event: Pick<TeamMembersQueryData['convention']['event'], 'title'> & {
+      provided_tickets: Pick<TeamMembersQueryData['convention']['event']['provided_tickets'][0], 'ticket_type'>[];
+    };
   };
-  value?: number;
-  onChange: React.Dispatch<number>;
+  value?: string;
+  onChange: React.Dispatch<string>;
   disabled?: boolean;
 };
 
 function ProvidableTicketTypeSelection({
   convention,
-  event,
   value,
   onChange,
   disabled,
-}: ProvidableTicketTypeSelectionProps) {
+}: ProvidableTicketTypeSelectionProps): JSX.Element {
   const { t } = useTranslation();
   const providableTicketTypes = getProvidableTicketTypes(convention);
-  const remainingCountByType = getRemainingTicketCountByType(convention, event);
+  const remainingCountByType = getRemainingTicketCountByType(convention, convention.event);
 
   const totalRemaining = sumBy(Object.entries(remainingCountByType), ([, remaining]) => remaining);
   const providabilityDescription = t(
     'events.teamMemberAdmin.ticketProvidability',
     '{{ eventTitle }} has {{ count }} {{ ticketName }} remaining to provide.',
     {
-      eventTitle: event.title,
+      eventTitle: convention.event.title,
       count: totalRemaining,
       ticketName: totalRemaining === 1 ? convention.ticket_name : pluralize(convention.ticket_name),
     },
@@ -66,9 +66,7 @@ function ProvidableTicketTypeSelection({
         caption=""
         choices={choices}
         value={value == null ? '' : value.toString()}
-        onChange={(newValue: string) => {
-          onChange(Number.parseInt(newValue, 10));
-        }}
+        onChange={(newValue: string) => onChange(newValue)}
         disabled={disabled}
       />
     </>

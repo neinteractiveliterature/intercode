@@ -63,7 +63,7 @@ function renderCommonRoutes() {
   ];
 }
 
-function renderCommonInConventionRoutes({ signupMode }: { signupMode: SignupMode }) {
+function renderCommonInConventionRoutes({ signupMode }: { signupMode: SignupMode | undefined }) {
   return [
     <Route path="/admin_departments" key="adminDepartments">
       <PageComponents.DepartmentAdmin />
@@ -136,7 +136,7 @@ function renderCommonInConventionRoutes({ signupMode }: { signupMode: SignupMode
   ];
 }
 
-function renderConventionModeRoutes({ signupMode }: { signupMode: SignupMode }) {
+function renderConventionModeRoutes({ signupMode }: { signupMode: SignupMode | undefined }) {
   return [
     <Route path="/admin_event_proposals" key="adminEventProposals">
       <PageComponents.EventProposalsAdmin />
@@ -154,7 +154,7 @@ function renderConventionModeRoutes({ signupMode }: { signupMode: SignupMode }) 
   ];
 }
 
-function renderSingleEventModeRoutes({ signupMode }: { signupMode: SignupMode }) {
+function renderSingleEventModeRoutes({ signupMode }: { signupMode: SignupMode | undefined }) {
   return [...renderCommonInConventionRoutes({ signupMode })];
 }
 
@@ -192,7 +192,7 @@ export type AppRouterProps = {
   alert?: ReactNode;
 };
 
-function AppRouter({ alert }: AppRouterProps) {
+function AppRouter({ alert }: AppRouterProps): JSX.Element {
   const location = useLocation();
   const { conventionName, signupMode, siteMode } = useContext(AppRootContext);
   const [showAlert, setShowAlert] = useState(alert != null);
@@ -207,10 +207,10 @@ function AppRouter({ alert }: AppRouterProps) {
     }
 
     if (siteMode === 'single_event') {
-      return renderSingleEventModeRoutes({ signupMode: signupMode! });
+      return renderSingleEventModeRoutes({ signupMode });
     }
 
-    return renderConventionModeRoutes({ signupMode: signupMode! });
+    return renderConventionModeRoutes({ signupMode });
   };
 
   return (

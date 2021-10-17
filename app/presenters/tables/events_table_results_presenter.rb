@@ -1,8 +1,7 @@
+# frozen_string_literal: true
 class Tables::EventsTableResultsPresenter < Tables::TableResultsPresenter
   def self.for_convention(convention:, pundit_user:, filters: {}, sort: nil, visible_field_ids: nil)
-    scope = Pundit.policy_scope(
-      pundit_user, convention.events.where(status: 'active').includes(:convention)
-    )
+    scope = Pundit.policy_scope(pundit_user, convention.events.where(status: 'active').includes(:convention))
     new(
       base_scope: scope,
       convention: convention,
@@ -42,7 +41,7 @@ class Tables::EventsTableResultsPresenter < Tables::TableResultsPresenter
     delegate :user_con_profile, :pundit_user, to: :presenter
 
     def apply_filter(scope, value)
-      return scope unless value.present?
+      return scope if value.blank?
       scope.with_rating_for_user_con_profile(user_con_profile, value)
     end
 
@@ -65,7 +64,7 @@ class Tables::EventsTableResultsPresenter < Tables::TableResultsPresenter
 
     def expand_scope_for_sort(scope, _direction)
       Pundit.authorize(pundit_user, convention, :schedule?)
-      scope.joins(<<~SQL)
+      scope.joins(<<~SQL.squish)
         LEFT JOIN runs ON (
           runs.event_id = events.id AND
           runs.starts_at = (
@@ -94,9 +93,7 @@ class Tables::EventsTableResultsPresenter < Tables::TableResultsPresenter
 
   attr_reader :pundit_user, :convention
 
-  def initialize(
-    base_scope:, convention:, pundit_user:, filters: {}, sort: nil, visible_field_ids: nil
-  )
+  def initialize(base_scope:, convention:, pundit_user:, filters: {}, sort: nil, visible_field_ids: nil)
     super(base_scope, filters, sort, visible_field_ids)
     @convention = convention
     @pundit_user = pundit_user
@@ -105,8 +102,6 @@ class Tables::EventsTableResultsPresenter < Tables::TableResultsPresenter
   def user_con_profile
     return nil unless pundit_user&.user
 
-    @user_con_profile ||= begin
-      convention.user_con_profiles.find_by(user_id: pundit_user.user.id)
-    end
+    @user_con_profile ||= convention.user_con_profiles.find_by(user_id: pundit_user.user.id)
   end
 end

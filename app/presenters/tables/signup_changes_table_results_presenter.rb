@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Tables::SignupChangesTableResultsPresenter < Tables::TableResultsPresenter
   def self.for_convention(convention, pundit_user, filters = {}, sort = nil, visible_field_ids: nil)
     scope = SignupChangePolicy::Scope.new(pundit_user, convention.signup_changes).resolve

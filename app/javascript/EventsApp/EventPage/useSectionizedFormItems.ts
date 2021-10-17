@@ -4,9 +4,9 @@ import { FreeTextFormItem, TypedFormItem } from '../../FormAdmin/FormItemUtils';
 import { getSortedParsedFormItems } from '../../Models/Form';
 import { EventPageQueryData } from './queries.generated';
 
-type EventPageForm = NonNullable<EventPageQueryData['event']['form']>;
+type EventPageForm = NonNullable<EventPageQueryData['convention']['event']['form']>;
 
-function getSectionizedFormItems(formData: EventPageForm, formResponse: { [x: string]: any }) {
+function getSectionizedFormItems(formData: EventPageForm, formResponse: Record<string, unknown>) {
   const displayFormItems = getSortedParsedFormItems(formData).filter(
     (item) =>
       item.identifier &&
@@ -17,7 +17,7 @@ function getSectionizedFormItems(formData: EventPageForm, formResponse: { [x: st
   );
   const shortFormItems: TypedFormItem[] = [];
   const secretFormItems: TypedFormItem[] = [];
-  const longFormItems: TypedFormItem[] = [];
+  const longFormItems: FreeTextFormItem[] = [];
   displayFormItems.forEach((item) => {
     if (item.visibility !== 'normal') {
       secretFormItems.push(item);
@@ -42,9 +42,17 @@ function getSectionizedFormItems(formData: EventPageForm, formResponse: { [x: st
   return { shortFormItems, secretFormItems, longFormItems };
 }
 
-export default function useSectionizedFormItems(event?: EventPageQueryData['event']) {
+export default function useSectionizedFormItems(event?: EventPageQueryData['convention']['event']): {
+  shortFormItems: TypedFormItem[];
+  longFormItems: FreeTextFormItem[];
+  secretFormItems: TypedFormItem[];
+  formResponse: Record<string, unknown>;
+} {
   const formResponse = useMemo(
-    () => (event ? JSON.parse(event.form_response_attrs_json_with_rendered_markdown) : null),
+    () =>
+      event?.form_response_attrs_json_with_rendered_markdown
+        ? JSON.parse(event.form_response_attrs_json_with_rendered_markdown)
+        : {},
     [event],
   );
 
@@ -54,8 +62,8 @@ export default function useSectionizedFormItems(event?: EventPageQueryData['even
         ? getSectionizedFormItems(event.form, formResponse)
         : {
             shortFormItems: [] as TypedFormItem[],
-            secretFormItems: [] as FreeTextFormItem[],
-            longFormItems: [] as TypedFormItem[],
+            secretFormItems: [] as TypedFormItem[],
+            longFormItems: [] as FreeTextFormItem[],
             formResponse: {},
           },
     [event, formResponse],

@@ -45,10 +45,11 @@ class SanitizeDatabaseService < CivilService::Service
       last_name: Faker::Name.last_name,
       email: Faker::Internet.safe_email(name: "#{first_name}#{user.id}"),
       password: 'password',
-      legacy_password_md5: nil
+      legacy_password_md5: nil,
     )
   end
 
+  # rubocop:disable Metrics/AbcSize
   def sanitize_user_con_profile(user_con_profile)
     user = user_con_profile.user
     return if dev_emails.include?(user.email)
@@ -67,30 +68,29 @@ class SanitizeDatabaseService < CivilService::Service
       evening_phone: Faker::PhoneNumber.phone_number,
       mobile_phone: Faker::PhoneNumber.phone_number,
       best_call_time: Faker::Lorem.sentence,
-      ical_secret: Devise.friendly_token
+      ical_secret: Devise.friendly_token,
     }
 
-    sanitized_present_fields = sanitized_fields.select do |key, _|
-      user_con_profile.public_send(key).present?
-    end
+    sanitized_present_fields = sanitized_fields.select { |key, _| user_con_profile.public_send(key).present? }
 
     user_con_profile.update!(sanitized_present_fields)
   end
+  # rubocop:enable Metrics/AbcSize
 end
 
 desc 'Sanitize the local copy of the database by anonymizing user data'
 task sanitize_db: :environment do
   require 'faker'
 
-  dev_emails = [
-    'natbudin@gmail.com',
-    'david@rigitech.com',
-    'marleigh@mit.edu',
-    'rwensley314@gmail.com',
-    'dancesthroughlife@gmail.com',
-    'hannahdotread@gmail.com',
-    'lisefrac@gmail.com',
-    'elfracal@electric-monk.net'
+  dev_emails = %w[
+    natbudin@gmail.com
+    david@rigitech.com
+    marleigh@mit.edu
+    rwensley314@gmail.com
+    dancesthroughlife@gmail.com
+    hannahdotread@gmail.com
+    lisefrac@gmail.com
+    elfracal@electric-monk.net
   ]
   sanitizer = SanitizeDatabaseService.new(dev_emails: dev_emails)
   sanitizer.call!

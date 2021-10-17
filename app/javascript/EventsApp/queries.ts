@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 
 export const CommonConventionData = gql`
   fragment CommonConventionData on Convention {
-    id
+    id: transitionalId
     name
     starts_at
     ends_at
@@ -13,7 +13,7 @@ export const CommonConventionData = gql`
     ticket_mode
 
     event_categories {
-      id
+      id: transitionalId
       name
       scheduling_ui
       default_color
@@ -25,16 +25,16 @@ export const CommonConventionData = gql`
 
 export const RunBasicSignupData = gql`
   fragment RunBasicSignupData on Run {
-    id
+    id: transitionalId
     signup_count_by_state_and_bucket_key_and_counted
 
     my_signups {
-      id
+      id: transitionalId
       state
     }
 
     my_signup_requests {
-      id
+      id: transitionalId
       state
     }
   }
@@ -42,8 +42,8 @@ export const RunBasicSignupData = gql`
 
 export const CommonConventionDataQuery = gql`
   query CommonConventionDataQuery {
-    convention {
-      id
+    convention: conventionByRequestHost {
+      id: transitionalId
       ...CommonConventionData
     }
   }

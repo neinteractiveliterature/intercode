@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module CmsContentPolicy
   extend ActiveSupport::Concern
 
@@ -13,16 +14,17 @@ module CmsContentPolicy
 
       disjunctive_where do |dw|
         if oauth_scope?(:manage_conventions)
-          model_name = self.class.name.split('::')[-2].gsub(/Policy\z/, '')
+          model_name = self.class.name.split('::')[-2].delete_suffix('Policy')
 
+          dw.add(parent_type: 'Convention', parent_id: conventions_with_permission('update_cms_content'))
           dw.add(
-            parent_type: 'Convention', parent_id: conventions_with_permission('update_cms_content')
-          )
-          dw.add(
-            id: CmsContentGroupAssociation.where(
-              content_type: model_name,
-              cms_content_group_id: cms_content_groups_with_permission('update_content').select(:id)
-            ).select(:content_id)
+            id:
+              CmsContentGroupAssociation
+                .where(
+                  content_type: model_name,
+                  cms_content_group_id: cms_content_groups_with_permission('update_content').select(:id)
+                )
+                .select(:content_id)
           )
         end
       end
@@ -34,16 +36,16 @@ module CmsContentPolicy
   end
 
   def manage?
-    return true if oauth_scoped_disjunction do |d|
-      d.add(:manage_conventions) do
-        has_convention_permission?(convention, 'update_cms_content') ||
-        (
-          record.respond_to?(:cms_content_groups) &&
-          group_ids_with_update_content_in_convention.any? do |id|
-            record.cms_content_group_ids.include?(id)
-          end
-        )
-      end
+    if oauth_scoped_disjunction do |d|
+         d.add(:manage_conventions) do
+           has_convention_permission?(convention, 'update_cms_content') ||
+             (
+               record.respond_to?(:cms_content_groups) &&
+                 group_ids_with_update_content_in_convention.any? { |id| record.cms_content_group_ids.include?(id) }
+             )
+         end
+       end
+      return true
     end
 
     super

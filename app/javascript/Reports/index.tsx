@@ -83,7 +83,7 @@ const ReportsMenu = LoadQueryWrapper(useReportsMenuQuery, function ReportsMenu({
   );
 });
 
-function Reports() {
+function Reports(): JSX.Element {
   const authorizationWarning = useAuthorizationRequired('can_read_reports');
   if (authorizationWarning) return authorizationWarning;
 

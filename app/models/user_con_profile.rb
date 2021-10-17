@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
@@ -43,7 +44,7 @@
 #  fk_rails_...  (user_id => users.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+
 class UserConProfile < ApplicationRecord
   include PgSearch::Model
   include FormResponse
@@ -64,45 +65,39 @@ class UserConProfile < ApplicationRecord
   delegate :email, to: :user, allow_nil: true
 
   validates :name, presence: true
-  validates :preferred_contact,
-    inclusion: { in: %w[email day_phone evening_phone], allow_blank: true }
+  validates :preferred_contact, inclusion: { in: %w[email day_phone evening_phone], allow_blank: true }
 
   before_create :generate_ical_secret
   after_commit :send_user_activity_alerts, on: :create
-  after_commit :touch_team_member_events, on: [:create, :update]
+  after_commit :touch_team_member_events, on: %i[create update]
 
   scope :is_team_member, -> { joins(:team_members).distinct }
 
   scope :has_staff_position, -> { joins(:staff_positions).distinct }
 
-  scope :can_have_bio, -> {
-    where(id: has_staff_position.select(:id))
-      .or(where(id: is_team_member.select(:id)))
-  }
+  scope :can_have_bio, -> { where(id: has_staff_position.select(:id)).or(where(id: is_team_member.select(:id))) }
 
   multisearchable(
-    against: [:name_without_nickname, :nickname, :email],
-    additional_attributes: ->(user_con_profile) {
-      { convention_id: user_con_profile.convention_id }
-    }
+    against: %i[name_without_nickname nickname email],
+    additional_attributes: ->(user_con_profile) { { convention_id: user_con_profile.convention_id } }
   )
 
   register_form_response_attrs :first_name,
-    :last_name,
-    :nickname,
-    :birth_date,
-    :address,
-    :city,
-    :state,
-    :zipcode,
-    :country,
-    :mobile_phone,
-    :allow_sms,
-    :day_phone,
-    :evening_phone,
-    :best_call_time,
-    :preferred_contact,
-    :receive_whos_free_emails
+                               :last_name,
+                               :nickname,
+                               :birth_date,
+                               :address,
+                               :city,
+                               :state,
+                               :zipcode,
+                               :country,
+                               :mobile_phone,
+                               :allow_sms,
+                               :day_phone,
+                               :evening_phone,
+                               :best_call_time,
+                               :preferred_contact,
+                               :receive_whos_free_emails
 
   def paid?
     ticket
@@ -121,12 +116,8 @@ class UserConProfile < ApplicationRecord
   def age_as_of(date)
     return unless birth_date
 
-    on_or_after_birthday = (
-      date.month > birth_date.month || (
-        date.month == birth_date.month &&
-        date.day >= birth_date.day
-      )
-    )
+    on_or_after_birthday =
+      (date.month > birth_date.month || (date.month == birth_date.month && date.day >= birth_date.day))
 
     date.year - birth_date.year - (on_or_after_birthday ? 0 : 1)
   end
@@ -151,13 +142,13 @@ class UserConProfile < ApplicationRecord
   delegate :privileges, to: :user
 
   def is_team_member? # rubocop:disable Naming/PredicateName
-    return team_members.size > 0 if team_members.loaded?
+    return team_members.size.positive? if team_members.loaded?
     self.class.is_team_member.where(id: id).any?
   end
 
   def can_have_bio?
     if team_members.loaded? && staff_positions.loaded?
-      return team_members.size > 0 || staff_positions.size > 0
+      return team_members.size.positive? || staff_positions.size.positive?
     end
 
     team_members.any? || staff_positions.any?
@@ -171,10 +162,14 @@ class UserConProfile < ApplicationRecord
 
   def preferred_contact_humanized
     case preferred_contact
-    when 'day_phone' then 'Daytime phone'
-    when 'evening_phone' then 'Evening phone'
-    when 'email' then 'Email'
-    else preferred_contact.try(:humanize)
+    when 'day_phone'
+      'Daytime phone'
+    when 'evening_phone'
+      'Evening phone'
+    when 'email'
+      'Email'
+    else
+      preferred_contact.try(:humanize)
     end
   end
 
@@ -187,19 +182,11 @@ class UserConProfile < ApplicationRecord
   end
 
   def name_parts
-    [
-      first_name,
-      nickname.present? ? "\"#{nickname}\"" : nil,
-      last_name
-    ]
+    [first_name, nickname.present? ? "\"#{nickname}\"" : nil, last_name]
   end
 
   def bio_name
-    [
-      first_name,
-      (show_nickname_in_bio && nickname.present?) ? "\"#{nickname}\"" : nil,
-      last_name
-    ].compact.join(' ')
+    [first_name, show_nickname_in_bio && nickname.present? ? "\"#{nickname}\"" : nil, last_name].compact.join(' ')
   end
 
   def gravatar_url
@@ -213,6 +200,26 @@ class UserConProfile < ApplicationRecord
   def order_summary
     OrderSummaryPresenter.preload_associations([self])
     OrderSummaryPresenter.new(user_con_profile: self).order_summary
+  end
+
+  def current_pending_order
+    return @current_pending_order if defined?(@current_pending_order)
+    @current_pending_order ||=
+      begin
+        pending_orders = orders.pending.to_a
+
+        if pending_orders.empty?
+          nil
+        elsif pending_orders.size > 1
+          # combine orders into one cart
+          first_order = pending_orders.pop
+          OrderEntry.where(order_id: pending_orders.map(&:id)).update_all(order_id: first_order.id)
+          pending_orders.destroy_all
+          first_order.reload
+        else
+          pending_orders.first
+        end
+      end
   end
 
   private

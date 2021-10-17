@@ -1,6 +1,9 @@
 import { Money } from './graphqlTypes.generated';
 
-export default function formatMoney(moneyValue: Money | null | undefined, includeCurrency = true) {
+export default function formatMoney(
+  moneyValue: Money | null | undefined,
+  includeCurrency = true,
+): string {
   if (moneyValue == null) {
     return '';
   }

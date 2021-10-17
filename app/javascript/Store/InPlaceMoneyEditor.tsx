@@ -8,7 +8,7 @@ export type InPlaceMoneyEditorProps = MoneyInputProps & {
   children?: React.ReactNode;
 };
 
-function InPlaceMoneyEditor({ value, children, ...props }: InPlaceMoneyEditorProps) {
+function InPlaceMoneyEditor({ value, children, ...props }: InPlaceMoneyEditorProps): JSX.Element {
   return (
     <InPlaceEditor
       value={value}

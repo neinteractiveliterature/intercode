@@ -1,11 +1,18 @@
+# frozen_string_literal: true
 class EventWithdrawService < CivilService::Service
   class Result < CivilService::Result
     attr_accessor :move_results, :prev_bucket_key, :prev_state
   end
   self.result_class = Result
 
-  attr_reader :signup, :whodunit, :suppress_notifications, :allow_non_self_service_signups,
-    :move_results, :prev_bucket_key, :prev_state, :prev_counted
+  attr_reader :signup,
+              :whodunit,
+              :suppress_notifications,
+              :allow_non_self_service_signups,
+              :move_results,
+              :prev_bucket_key,
+              :prev_state,
+              :prev_counted
   delegate :run, to: :signup
   delegate :event, to: :run
   delegate :convention, to: :event
@@ -13,10 +20,7 @@ class EventWithdrawService < CivilService::Service
   include SkippableAdvisoryLock
   include ConventionRegistrationFreeze
 
-  def initialize(
-    signup, whodunit,
-    skip_locking: false, suppress_notifications: false
-  )
+  def initialize(signup, whodunit, skip_locking: false, suppress_notifications: false)
     @signup = signup
     @whodunit = whodunit
     @skip_locking = skip_locking
@@ -46,12 +50,9 @@ class EventWithdrawService < CivilService::Service
     return if suppress_notifications
 
     # Wait 30 seconds because the transaction hasn't been committed yet
-    Signups::WithdrawalNotifier.new(
-      signup: signup,
-      prev_state: prev_state,
-      prev_bucket_key: prev_bucket_key,
-      move_results: move_results
-    ).deliver_later(wait: 5.seconds)
+    Signups::WithdrawalNotifier
+      .new(signup: signup, prev_state: prev_state, prev_bucket_key: prev_bucket_key, move_results: move_results)
+      .deliver_later(wait: 5.seconds)
   end
 
   def move_signups(prev_state, prev_bucket_key, prev_counted)

@@ -5,16 +5,16 @@ import { useTranslation } from 'react-i18next';
 
 import AppRootContext from '../AppRootContext';
 
-function TicketPurchaseNavigationItem() {
+function TicketPurchaseNavigationItem(): JSX.Element {
   const { t } = useTranslation();
   const { myProfile, ticketName, ticketTypes } = useContext(AppRootContext);
 
   if (!ticketTypes) {
-    return null;
+    return <></>;
   }
 
   if (!myProfile || myProfile.ticket) {
-    return null;
+    return <></>;
   }
 
   if (
@@ -22,7 +22,7 @@ function TicketPurchaseNavigationItem() {
       ticketType.providing_products.some((product) => product.available),
     )
   ) {
-    return null;
+    return <></>;
   }
 
   return (

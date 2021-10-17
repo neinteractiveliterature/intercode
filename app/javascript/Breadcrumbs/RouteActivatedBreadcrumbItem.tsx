@@ -13,7 +13,7 @@ function RouteActivatedBreadcrumbItem({
   to,
   children,
   matchProps,
-}: RouteActivatedBreadcrumbItemProps) {
+}: RouteActivatedBreadcrumbItemProps): JSX.Element {
   const match = useRouteMatch(matchProps);
 
   return (

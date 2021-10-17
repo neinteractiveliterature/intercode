@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Tables::EventProposalsTableResultsPresenter < Tables::TableResultsPresenter
   def self.for_convention(convention, pundit_user, filters, sort, visible_field_ids = nil)
     scope = Pundit.policy_scope(pundit_user, convention.event_proposals.where.not(status: 'draft'))
@@ -34,7 +35,8 @@ class Tables::EventProposalsTableResultsPresenter < Tables::TableResultsPresente
 
   field :owner, 'Submitted by' do
     def apply_filter(scope, value)
-      scope.joins(:owner)
+      scope
+        .joins(:owner)
         .where(
           "lower(user_con_profiles.last_name) like :value \
 OR lower(user_con_profiles.first_name) like :value",
@@ -47,8 +49,10 @@ OR lower(user_con_profiles.first_name) like :value",
     end
 
     def sql_order(direction)
-      Arel.sql("user_con_profiles.last_name #{direction}, \
-user_con_profiles.first_name #{direction}")
+      Arel.sql(
+        "user_con_profiles.last_name #{direction}, \
+user_con_profiles.first_name #{direction}"
+      )
     end
 
     def generate_csv_cell(event_proposal)
@@ -82,9 +86,11 @@ user_con_profiles.first_name #{direction}")
     column_filter
 
     def sql_order(direction)
-      Arel.sql("(status IN ('proposed', 'reviewing')) #{invert_sort_direction direction}, \
+      Arel.sql(
+        "(status IN ('proposed', 'reviewing')) #{invert_sort_direction direction}, \
 (status IN ('tentative_accept')) #{invert_sort_direction direction}, \
-status #{direction}")
+status #{direction}"
+      )
     end
   end
 

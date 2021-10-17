@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
-// @ts-expect-error
+// @ts-expect-error inflected type definitions don't include capitalize
 import { capitalize } from 'inflected';
 import { useHistory } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
@@ -8,35 +8,31 @@ import {
   BootstrapFormInput,
   BootstrapFormSelect,
   ErrorDisplay,
+  useCreateMutationWithReferenceArrayUpdater,
 } from '@neinteractiveliterature/litform';
 
-import { CreateForm } from './mutations';
-import { FormAdminQuery } from './queries';
 import FormTypes from '../../../config/form_types.json';
 import useAsyncFunction from '../useAsyncFunction';
-import { useCreateMutation } from '../MutationUtils';
-import { FormAdminQueryData, FormAdminQueryVariables } from './queries.generated';
-import { CreateFormMutationData, CreateFormMutationVariables } from './mutations.generated';
+import { FormAdminQueryData, FormFieldsFragmentDoc } from './queries.generated';
+import { useCreateFormMutation } from './mutations.generated';
 
 export type NewFormModalProps = {
+  convention: FormAdminQueryData['convention'];
   visible: boolean;
   close: () => void;
 };
 
-function NewFormModal({ visible, close }: NewFormModalProps) {
+function NewFormModal({ convention, visible, close }: NewFormModalProps): JSX.Element {
   const history = useHistory();
   const [title, setTitle] = useState('');
   const [formType, setFormType] = useState('');
-  const createFormMutate = useCreateMutation<
-    FormAdminQueryData,
-    FormAdminQueryVariables,
-    CreateFormMutationVariables,
-    CreateFormMutationData
-  >(CreateForm, {
-    query: FormAdminQuery,
-    arrayPath: ['convention', 'forms'],
-    newObjectPath: ['createForm', 'form'],
-  });
+  const [createFormMutate] = useCreateMutationWithReferenceArrayUpdater(
+    useCreateFormMutation,
+    convention,
+    'forms',
+    (data) => data.createForm.form,
+    FormFieldsFragmentDoc,
+  );
 
   const createForm = useCallback(
     async ({ title: t, formType: ft }) => {
@@ -57,13 +53,7 @@ function NewFormModal({ visible, close }: NewFormModalProps) {
       <div className="modal-header">New form</div>
 
       <div className="modal-body">
-        <BootstrapFormInput
-          label="Title"
-          name="title"
-          value={title}
-          onTextChange={setTitle}
-          disabled={inProgress}
-        />
+        <BootstrapFormInput label="Title" name="title" value={title} onTextChange={setTitle} disabled={inProgress} />
 
         <BootstrapFormSelect
           label="Form type"

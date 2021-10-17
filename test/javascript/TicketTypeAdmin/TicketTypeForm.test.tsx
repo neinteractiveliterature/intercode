@@ -7,7 +7,7 @@ test('TicketTypeForm matches snapshot', async () => {
       ticketType={{
         __typename: 'TicketType',
         allows_event_signups: true,
-        id: 0,
+        id: '0',
         providing_products: [],
         name: '',
         description: '',

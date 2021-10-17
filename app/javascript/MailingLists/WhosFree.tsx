@@ -29,7 +29,7 @@ function WhosFreeResults({ timespan }: { timespan: FiniteTimespan }) {
   );
 }
 
-function WhosFree() {
+function WhosFree(): JSX.Element {
   const [timespan, setTimespan] = useState<FiniteTimespan>();
 
   usePageTitle('Who‘s free');

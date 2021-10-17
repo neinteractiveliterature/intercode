@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Signups::UserSignupMovedNotifier < Notifier
   attr_reader :move_result
   delegate :signup, to: :move_result

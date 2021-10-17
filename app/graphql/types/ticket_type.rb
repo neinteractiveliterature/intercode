@@ -1,5 +1,12 @@
+# frozen_string_literal: true
 class Types::TicketType < Types::BaseObject
-  field :id, Integer, null: false
+  field :id,
+        Integer,
+        deprecation_reason:
+          "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
+        null: false
+  field :transitional_id, ID, method: :id, null: false, camelize: true
   field :convention, Types::ConventionType, null: false
   field :user_con_profile, Types::UserConProfileType, null: false
   field :ticket_type, Types::TicketTypeType, null: false
@@ -12,18 +19,15 @@ class Types::TicketType < Types::BaseObject
 
   authorize_record
 
-  field :payment_amount, Types::MoneyType,
-    null: true, deprecation_reason: 'Use order_entry for payment fields'
+  field :payment_amount, Types::MoneyType, null: true, deprecation_reason: 'Use order_entry for payment fields'
   def payment_amount
     object.order_entry&.price_per_item
   end
-  field :payment_note, String,
-    null: true, deprecation_reason: 'Use order_entry for payment fields'
+  field :payment_note, String, null: true, deprecation_reason: 'Use order_entry for payment fields'
   def payment_note
     object.order_entry&.order&.payment_note
   end
-  field :charge_id, String,
-    null: true, deprecation_reason: 'Use order_entry for payment fields'
+  field :charge_id, String, null: true, deprecation_reason: 'Use order_entry for payment fields'
   def charge_id
     object.order_entry&.order&.charge_id
   end

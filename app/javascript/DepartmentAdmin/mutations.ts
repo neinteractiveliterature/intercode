@@ -5,7 +5,7 @@ export const CreateDepartment = gql`
   mutation CreateDepartment($department: DepartmentInput!) {
     createDepartment(input: { department: $department }) {
       department {
-        id
+        id: transitionalId
         ...AdminDepartmentFields
       }
     }
@@ -15,10 +15,10 @@ export const CreateDepartment = gql`
 `;
 
 export const UpdateDepartment = gql`
-  mutation UpdateDepartment($id: Int!, $department: DepartmentInput!) {
-    updateDepartment(input: { id: $id, department: $department }) {
+  mutation UpdateDepartment($id: ID!, $department: DepartmentInput!) {
+    updateDepartment(input: { transitionalId: $id, department: $department }) {
       department {
-        id
+        id: transitionalId
         ...AdminDepartmentFields
       }
     }
@@ -28,8 +28,8 @@ export const UpdateDepartment = gql`
 `;
 
 export const DeleteDepartment = gql`
-  mutation DeleteDepartment($id: Int!) {
-    deleteDepartment(input: { id: $id }) {
+  mutation DeleteDepartment($id: ID!) {
+    deleteDepartment(input: { transitionalId: $id }) {
       clientMutationId
     }
   }

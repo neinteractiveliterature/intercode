@@ -28,7 +28,7 @@ function CommitableInput({
   renderInput,
   placeholder,
   label,
-}: CommitableInputProps) {
+}: CommitableInputProps): JSX.Element {
   const [editing, setEditing] = useState(false);
   const [editingValue, setEditingValue] = useState<string | undefined>('');
   const [commitInProgress, setCommitInProgress] = useState(false);

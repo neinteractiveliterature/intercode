@@ -4,43 +4,28 @@ import {
   ErrorDisplay,
   sortByLocaleString,
   useConfirm,
-  PageLoadingIndicator,
+  LoadQueryWrapper,
+  useDeleteMutationWithReferenceArrayUpdater,
 } from '@neinteractiveliterature/litform';
 
-import { CmsPartialsAdminQuery } from './queries';
-import { DeletePartial } from './mutations';
-import { useDeleteMutation } from '../../MutationUtils';
 import usePageTitle from '../../usePageTitle';
 import { useCmsPartialsAdminQuery } from './queries.generated';
+import { useDeletePartialMutation } from './mutations.generated';
 
-function CmsPartialsAdminTable() {
-  const { data, loading, error } = useCmsPartialsAdminQuery();
+export default LoadQueryWrapper(useCmsPartialsAdminQuery, function CmsPartialsAdminTable({ data }) {
   const confirm = useConfirm();
-  const deletePartialMutate = useDeleteMutation(DeletePartial, {
-    query: CmsPartialsAdminQuery,
-    arrayPath: ['cmsPartials'],
-    idVariablePath: ['id'],
-  });
+  const [deletePartial] = useDeleteMutationWithReferenceArrayUpdater(
+    useDeletePartialMutation,
+    data.cmsParent,
+    'cmsPartials',
+    (item) => ({ id: item.id }),
+  );
 
   usePageTitle('CMS Partials');
 
   const partialsSorted = useMemo(() => {
-    if (error || loading || !data) {
-      return [];
-    }
-
-    return sortByLocaleString(data.cmsPartials, (partial) => partial.name ?? '');
-  }, [data, loading, error]);
-
-  if (loading) {
-    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
-  const deletePartial = (id: number) => deletePartialMutate({ variables: { id } });
+    return sortByLocaleString(data.cmsParent.cmsPartials, (partial) => partial.name ?? '');
+  }, [data.cmsParent.cmsPartials]);
 
   return (
     <>
@@ -59,17 +44,11 @@ function CmsPartialsAdminTable() {
               </td>
               <td className="text-end">
                 {partial.current_ability_can_update ? (
-                  <Link
-                    to={`/cms_partials/${partial.id}/edit`}
-                    className="btn btn-secondary btn-sm"
-                  >
+                  <Link to={`/cms_partials/${partial.id}/edit`} className="btn btn-secondary btn-sm">
                     Edit
                   </Link>
                 ) : (
-                  <Link
-                    to={`/cms_partials/${partial.id}/view_source`}
-                    className="btn btn-outline-secondary btn-sm"
-                  >
+                  <Link to={`/cms_partials/${partial.id}/view_source`} className="btn btn-outline-secondary btn-sm">
                     View source
                   </Link>
                 )}
@@ -79,7 +58,7 @@ function CmsPartialsAdminTable() {
                     onClick={() =>
                       confirm({
                         prompt: 'Are you sure you want to delete this partial?',
-                        action: () => deletePartial(partial.id),
+                        action: () => deletePartial(partial),
                         renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
                       })
                     }
@@ -94,13 +73,11 @@ function CmsPartialsAdminTable() {
         </tbody>
       </table>
 
-      {data!.currentAbility.can_create_cms_partials && (
+      {data.currentAbility.can_create_cms_partials && (
         <Link to="/cms_partials/new" className="btn btn-secondary">
           New partial
         </Link>
       )}
     </>
   );
-}
-
-export default CmsPartialsAdminTable;
+});

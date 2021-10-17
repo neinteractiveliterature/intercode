@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # A user account on the site.  Most of the relevant data for the user is not here, but in
 # UserConProfileDrop, which is the user's profile for a particular convention.
 class UserDrop < Liquid::Drop

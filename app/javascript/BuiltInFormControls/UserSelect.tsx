@@ -11,7 +11,7 @@ type UserNameLabelProps<OptionType> = MultiValueGenericProps<OptionType> & {
     name?: string;
   };
   children: ReactNode;
-  [x: string]: any;
+  [x: string]: unknown;
 };
 
 function UserNameLabel<OptionType>({ children, ...otherProps }: UserNameLabelProps<OptionType>) {
@@ -28,7 +28,7 @@ type DO<QueryType extends DefaultUsersQueryData> = NonNullable<
 export type UserSelectProps<
   DataType,
   OptionType extends OptionTypeBase,
-  IsMulti extends boolean = false
+  IsMulti extends boolean = false,
 > = Omit<
   GraphQLAsyncSelectProps<DataType, OptionType, IsMulti>,
   | 'isClearable'
@@ -45,7 +45,7 @@ export type UserSelectProps<
 function UserSelect<DataType extends DQ = DQ, OptionType extends DO<DataType> = DO<DQ>>({
   usersQuery,
   ...otherProps
-}: UserSelectProps<DataType, OptionType>) {
+}: UserSelectProps<DataType, OptionType>): JSX.Element {
   return (
     <GraphQLAsyncSelect<DataType, OptionType>
       isClearable

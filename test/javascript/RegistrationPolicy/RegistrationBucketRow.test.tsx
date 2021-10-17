@@ -49,17 +49,12 @@ describe('RegistrationBucketRow', () => {
       await waitFor(() => {}); // TODO: figure out a better way
     });
 
-    // @ts-expect-error
+    // @ts-expect-error This is going to get assigned during the act call
     return result;
   };
 
   test('it renders the correct field values', async () => {
-    const {
-      getByDisplayValue,
-      getByLabelText,
-      getByRole,
-      getByText,
-    } = await renderRegistrationBucketRow();
+    const { getByDisplayValue, getByLabelText, getByRole, getByText } = await renderRegistrationBucketRow();
     expect(getByRole('row')).not.toHaveClass('anything-bucket');
     expect(getByDisplayValue('test')).toBeTruthy();
     expect(getByDisplayValue('a bucket for testing')).toBeTruthy();

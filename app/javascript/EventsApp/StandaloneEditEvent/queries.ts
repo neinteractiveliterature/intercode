@@ -5,7 +5,7 @@ import { CommonFormFields } from '../../Models/commonFormFragments';
 
 export const StandaloneEditEvent_TicketTypeFields = gql`
   fragment StandaloneEditEvent_TicketTypeFields on TicketType {
-    id
+    id: transitionalId
     description
     maximum_event_provided_tickets
   }
@@ -14,11 +14,11 @@ export const StandaloneEditEvent_TicketTypeFields = gql`
 export const StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFields = gql`
   fragment StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFields on MaximumEventProvidedTicketsOverride {
     ticket_type {
-      id
+      id: transitionalId
       ...StandaloneEditEvent_TicketTypeFields
     }
 
-    id
+    id: transitionalId
     override_value
   }
 
@@ -27,23 +27,23 @@ export const StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFields = gql
 
 export const StandaloneEditEvent_EventFields = gql`
   fragment StandaloneEditEvent_EventFields on Event {
-    id
+    id: transitionalId
     title
     form_response_attrs_json
     current_user_form_item_viewer_role
     current_user_form_item_writer_role
 
     event_category {
-      id
+      id: transitionalId
       name
       event_form {
-        id
+        id: transitionalId
         ...CommonFormFields
       }
     }
 
     maximum_event_provided_tickets_overrides {
-      id
+      id: transitionalId
       ...StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFields
     }
   }
@@ -53,29 +53,29 @@ export const StandaloneEditEvent_EventFields = gql`
 `;
 
 export const StandaloneEditEventQuery = gql`
-  query StandaloneEditEventQuery($eventId: Int!) {
+  query StandaloneEditEventQuery($eventId: ID!) {
     currentAbility {
       can_override_maximum_event_provided_tickets
-      can_delete_event(event_id: $eventId)
-      can_update_event(event_id: $eventId)
+      can_delete_event(transitionalEventId: $eventId)
+      can_update_event(transitionalEventId: $eventId)
     }
 
-    convention {
-      id
+    convention: conventionByRequestHost {
+      id: transitionalId
       ...CommonConventionData
 
       ticket_types {
-        id
+        id: transitionalId
         ...StandaloneEditEvent_TicketTypeFields
+      }
+
+      event(transitionalId: $eventId) {
+        id: transitionalId
+        ...StandaloneEditEvent_EventFields
       }
 
       ticket_name
       event_mailing_list_domain
-    }
-
-    event(id: $eventId) {
-      id
-      ...StandaloneEditEvent_EventFields
     }
   }
 

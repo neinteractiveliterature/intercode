@@ -14,12 +14,13 @@ import usePageTitle from '../usePageTitle';
 import { useFormEditorQuery } from './queries.generated';
 import { FormType } from '../graphqlTypes.generated';
 import { useUpdateFormMutation } from './mutations.generated';
+import FourOhFourPage from '../FourOhFourPage';
 
-function FormEditor() {
+function FormEditor(): JSX.Element {
   const match = useRouteMatch<{ id: string; sectionId?: string; itemId?: string }>();
   const { data, error, loading } = useFormEditorQuery({
     variables: {
-      id: Number.parseInt(match.params.id, 10),
+      id: match.params.id,
     },
   });
   const [updateForm] = useUpdateFormMutation();
@@ -28,7 +29,7 @@ function FormEditor() {
     if (loading || error || !data) {
       return {
         __typename: 'Form',
-        id: 0,
+        id: '',
         form_type: FormType.Event,
         title: '',
         form_sections: [],
@@ -36,12 +37,10 @@ function FormEditor() {
     }
 
     return {
-      ...data.form,
-      form_sections: sortBy(data.form.form_sections, 'position').map((formSection) => ({
+      ...data.convention.form,
+      form_sections: sortBy(data.convention.form.form_sections, 'position').map((formSection) => ({
         ...formSection,
-        form_items: sortBy(formSection.form_items, 'position')
-          .map(parseTypedFormItemObject)
-          .filter(notEmpty),
+        form_items: sortBy(formSection.form_items, 'position').map(parseTypedFormItemObject).filter(notEmpty),
       })),
     };
   }, [data, error, loading]);
@@ -49,15 +48,12 @@ function FormEditor() {
   const formItemsById = useMemo(
     () =>
       new Map(
-        flatMap(form.form_sections, (formSection) =>
-          formSection.form_items.map((formItem) => [formItem.id, formItem]),
-        ),
+        flatMap(form.form_sections, (formSection) => formSection.form_items.map((formItem) => [formItem.id, formItem])),
       ),
     [form],
   );
 
-  const updateFormTitle = (title: string) =>
-    updateForm({ variables: { id: form.id, form: { title } } });
+  const updateFormTitle = (title: string) => updateForm({ variables: { id: form.id, form: { title } } });
 
   usePageTitle(form.id ? `Editing “${form.title}”` : 'New Form');
 
@@ -69,6 +65,10 @@ function FormEditor() {
     return <ErrorDisplay graphQLError={error} />;
   }
 
+  if (!data) {
+    return <FourOhFourPage />;
+  }
+
   let currentSection: FormEditorForm['form_sections'][0] | undefined;
 
   if (!match.params.sectionId) {
@@ -77,22 +77,17 @@ function FormEditor() {
       return <Redirect to={`/admin_forms/${match.params.id}/edit/section/${firstSection.id}`} />;
     }
   } else {
-    currentSection = form.form_sections.find(
-      (formSection) => formSection.id.toString() === match.params.sectionId,
-    );
+    currentSection = form.form_sections.find((formSection) => formSection.id.toString() === match.params.sectionId);
   }
 
-  const { convention } = data!;
+  const { convention } = data;
   const formType = FormTypes[form.form_type] || {};
 
   return (
     <div className="form-editor">
       <div className="form-editor-top-navbar px-2 navbar navbar-light bg-warning-light">
         {match.params.itemId && currentSection ? (
-          <Link
-            to={`/admin_forms/${form.id}/edit/section/${currentSection.id}`}
-            className="btn btn-secondary"
-          >
+          <Link to={`/admin_forms/${form.id}/edit/section/${currentSection.id}`} className="btn btn-secondary">
             <i className="bi-chevron-left" /> Back to section
           </Link>
         ) : (
@@ -101,11 +96,7 @@ function FormEditor() {
           </Link>
         )}
         <div className="flex-grow-1 ms-2">
-          <InPlaceEditor
-            className="d-flex align-items-start w-100"
-            value={form.title}
-            onChange={updateFormTitle}
-          >
+          <InPlaceEditor className="d-flex align-items-start w-100" value={form.title} onChange={updateFormTitle}>
             <div className="navbar-brand">{form.title}</div>
           </InPlaceEditor>
         </div>
@@ -113,7 +104,7 @@ function FormEditor() {
 
       <FormEditorContext.Provider
         value={{
-          convention: convention!,
+          convention,
           currentSection,
           form,
           formTypeIdentifier: form.form_type,

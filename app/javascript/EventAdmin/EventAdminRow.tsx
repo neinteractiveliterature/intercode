@@ -23,7 +23,7 @@ export type EventAdminRowProps = {
   convention: ConventionFieldsFragment;
 };
 
-function EventAdminRow({ event, convention }: EventAdminRowProps) {
+function EventAdminRow({ event, convention }: EventAdminRowProps): JSX.Element {
   const { t } = useTranslation();
   const { timezoneName } = useContext(AppRootContext);
   const [updateEventAdminNotes] = useUpdateEventAdminNotesMutation();
@@ -35,7 +35,7 @@ function EventAdminRow({ event, convention }: EventAdminRowProps) {
     [event.length_seconds],
   );
   const eventCategory = useMemo(
-    () => convention.event_categories.find((c) => c.id === event.event_category.id)!,
+    () => convention.event_categories.find((c) => c.id === event.event_category.id),
     [convention.event_categories, event.event_category],
   );
 
@@ -105,6 +105,10 @@ function EventAdminRow({ event, convention }: EventAdminRowProps) {
       </button>
     );
   };
+
+  if (!eventCategory) {
+    return <></>;
+  }
 
   return (
     <tr>

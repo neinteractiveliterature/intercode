@@ -12,6 +12,7 @@ class Doorkeeper::ApplicationPolicyTest < ActiveSupport::TestCase
 
       it "does not let site admins #{action} if they have a doorkeeper_token" do
         user = create(:user, site_admin: true)
+
         # not bothering to create a real Doorkeeper::OAuth::Token instance since we just check
         # for existence
         pundit_user = AuthorizationInfo.new(user, {})
@@ -32,31 +33,26 @@ class Doorkeeper::ApplicationPolicyTest < ActiveSupport::TestCase
 
     it 'returns all applications for site admins' do
       user = create(:user, site_admin: true)
-      resolved_applications = Doorkeeper::ApplicationPolicy::Scope.new(
-        user, Doorkeeper::Application.all
-      ).resolve
+      resolved_applications = Doorkeeper::ApplicationPolicy::Scope.new(user, Doorkeeper::Application.all).resolve
 
       assert_equal applications.sort, resolved_applications.sort
     end
 
     it 'returns no applications for site admins with a doorkeeper_token' do
       user = create(:user, site_admin: true)
+
       # not bothering to create a real Doorkeeper::OAuth::Token instance since we just check
       # for existence
       pundit_user = AuthorizationInfo.new(user, {})
 
-      resolved_applications = Doorkeeper::ApplicationPolicy::Scope.new(
-        pundit_user, Doorkeeper::Application.all
-      ).resolve
+      resolved_applications = Doorkeeper::ApplicationPolicy::Scope.new(pundit_user, Doorkeeper::Application.all).resolve
 
       assert_equal [], resolved_applications.sort
     end
 
     it 'returns no applications for anyone else' do
       user = create(:user)
-      resolved_applications = Doorkeeper::ApplicationPolicy::Scope.new(
-        user, Doorkeeper::Application.all
-      ).resolve
+      resolved_applications = Doorkeeper::ApplicationPolicy::Scope.new(user, Doorkeeper::Application.all).resolve
 
       assert_equal [], resolved_applications.sort
     end

@@ -1,13 +1,13 @@
 Doorkeeper::OpenidConnect.configure do
-  issuer "#{Rails.env.production? ? 'https' : 'http'}://#{Rails.application.config.action_mailer.default_url_options[:host]}"
+  issuer(
+    "#{Rails.env.production? ? 'https' : 'http'}://#{Rails.application.config.action_mailer.default_url_options[:host]}"
+  )
 
   signing_key ENV['OPENID_CONNECT_SIGNING_KEY']
 
   subject_types_supported [:public]
 
-  resource_owner_from_access_token do |access_token|
-    User.find_by(id: access_token.resource_owner_id)
-  end
+  resource_owner_from_access_token { |access_token| User.find_by(id: access_token.resource_owner_id) }
 
   auth_time_from_resource_owner(&:current_sign_in_at)
 
@@ -17,9 +17,7 @@ Doorkeeper::OpenidConnect.configure do
     redirect_to new_user_session_url
   end
 
-  subject do |resource_owner, _application|
-    resource_owner.id
-  end
+  subject { |resource_owner, _application| resource_owner.id }
 
   # Protocol to use when generating URIs for the discovery endpoint,
   # for example if you also use HTTPS in development

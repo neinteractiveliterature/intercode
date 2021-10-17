@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
@@ -29,15 +30,22 @@
 #  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+
 class User < ApplicationRecord
   include Names
 
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable,
   # :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :legacy_md5_authenticatable, :legacy_sha1_authenticatable,
-    :registerable, :recoverable, :rememberable, :trackable, :validatable, :doorkeeper
+  devise :database_authenticatable,
+         :legacy_md5_authenticatable,
+         :legacy_sha1_authenticatable,
+         :registerable,
+         :recoverable,
+         :rememberable,
+         :trackable,
+         :validatable,
+         :doorkeeper
 
   validates :name, presence: true
 
@@ -50,11 +58,7 @@ class User < ApplicationRecord
   attr_accessor :reset_password_mail_options
 
   def privileges
-    if site_admin?
-      ['site_admin']
-    else
-      []
-    end
+    site_admin? ? ['site_admin'] : []
   end
 
   def blank_password!
@@ -66,9 +70,7 @@ class User < ApplicationRecord
   end
 
   def serializable_hash(_options = nil)
-    attributes.symbolize_keys.slice(
-      :id, :email, :first_name, :last_name, :site_admin, :created_at, :updated_at
-    )
+    attributes.symbolize_keys.slice(:id, :email, :first_name, :last_name, :site_admin, :created_at, :updated_at)
   end
 
   protected

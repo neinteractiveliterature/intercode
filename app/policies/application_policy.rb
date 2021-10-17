@@ -1,10 +1,15 @@
+# frozen_string_literal: true
 class ApplicationPolicy
   include AuthorizationInfo::QueryMethods
 
   attr_reader :authorization_info, :record
-  delegate :user, :doorkeeper_token, :assumed_identity_from_profile, :oauth_scope?,
-    :oauth_scoped_disjunction, :actual_user,
-    to: :authorization_info
+  delegate :user,
+           :doorkeeper_token,
+           :assumed_identity_from_profile,
+           :oauth_scope?,
+           :oauth_scoped_disjunction,
+           :actual_user,
+           to: :authorization_info
 
   def initialize(authorization_info_or_user, record)
     @authorization_info = AuthorizationInfo.cast(authorization_info_or_user)
@@ -43,8 +48,7 @@ class ApplicationPolicy
     include AuthorizationInfo::QueryMethods
 
     attr_reader :authorization_info, :scope
-    delegate :user, :doorkeeper_token, :assumed_identity_from_profile, :oauth_scope?,
-      to: :authorization_info
+    delegate :user, :doorkeeper_token, :assumed_identity_from_profile, :oauth_scope?, to: :authorization_info
 
     def initialize(authorization_info_or_user, scope)
       @authorization_info = AuthorizationInfo.cast(authorization_info_or_user)
@@ -52,11 +56,7 @@ class ApplicationPolicy
     end
 
     def resolve
-      if oauth_scope?(:read_conventions) && site_admin?
-        scope.all
-      else
-        scope.none
-      end
+      oauth_scope?(:read_conventions) && site_admin? ? scope.all : scope.none
     end
 
     private

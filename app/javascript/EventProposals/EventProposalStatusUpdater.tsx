@@ -36,10 +36,12 @@ function getStatus(key: string) {
 }
 
 export type EventProposalStatusUpdaterProps = {
-  eventProposal: EventProposalQueryWithOwnerQueryData['eventProposal'];
+  eventProposal: EventProposalQueryWithOwnerQueryData['convention']['event_proposal'];
 };
 
-function EventProposalStatusUpdater({ eventProposal }: EventProposalStatusUpdaterProps) {
+function EventProposalStatusUpdater({
+  eventProposal,
+}: EventProposalStatusUpdaterProps): JSX.Element {
   const [status, setStatus] = useState(eventProposal.status);
   const [dropEvent, setDropEvent] = useState(false);
   const { open: openModal, close: closeModal, visible: modalVisible } = useModal();

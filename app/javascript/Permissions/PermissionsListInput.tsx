@@ -20,7 +20,7 @@ function PermissionsListRow({
   changeSet,
   currentPermissions,
   readOnly,
-}: PermissionsListRowProps) {
+}: PermissionsListRowProps): JSX.Element {
   const { toggle, hasPermission, className } = usePermissionToggle({
     grantPermission,
     revokePermission,
@@ -69,7 +69,7 @@ function PermissionsListInput({
   remove,
   header,
   readOnly,
-}: PermissionsListInputProps) {
+}: PermissionsListInputProps): JSX.Element {
   const { currentPermissions, grantPermission, revokePermission } = usePermissionsChangeSet({
     initialPermissions,
     changeSet,

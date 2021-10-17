@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::CreateCmsFile < Mutations::BaseMutation
   field :cms_file, Types::CmsFileType, null: false
   argument :file, ApolloUploadServer::Upload, required: true

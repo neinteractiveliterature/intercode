@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class TicketTypePolicy < ApplicationPolicy
   delegate :convention, to: :record
 
@@ -6,8 +7,10 @@ class TicketTypePolicy < ApplicationPolicy
   end
 
   def manage?
-    return true if oauth_scoped_disjunction do |d|
-      d.add(:manage_conventions) { has_convention_permission?(convention, 'update_ticket_types') }
+    if oauth_scoped_disjunction do |d|
+         d.add(:manage_conventions) { has_convention_permission?(convention, 'update_ticket_types') }
+       end
+      return true
     end
 
     super

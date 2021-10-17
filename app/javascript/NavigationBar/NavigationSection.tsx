@@ -9,7 +9,7 @@ export type NavigationSectionProps = {
   label: ReactNode;
 };
 
-function NavigationSection({ children, label }: NavigationSectionProps) {
+function NavigationSection({ children, label }: NavigationSectionProps): JSX.Element {
   const [dropdownLi, setDropdownLi] = useState<HTMLLIElement | null>(null);
   const [dropdownMenu, setDropdownMenu] = useState<HTMLDivElement | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);

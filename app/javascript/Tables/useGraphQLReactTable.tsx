@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { QueryResult, QueryHookOptions } from '@apollo/client';
+import { QueryResult, QueryHookOptions, ApolloQueryResult, ApolloError } from '@apollo/client';
 import { Filters, SortingRule } from 'react-table';
 
 import {
@@ -12,7 +12,7 @@ import { SortInput } from '../graphqlTypes.generated';
 export type GraphQLReactTableVariables = {
   page?: number | null;
   perPage?: number | null;
-  filters?: { [field: string]: any } | null;
+  filters?: { [field: string]: unknown } | null;
   sort?: SortInput | SortInput[] | null;
 };
 
@@ -27,9 +27,9 @@ function queryResultHasData<QueryData, Variables>(
 }
 
 export type UseGraphQLReactTableOptions<
-  RowType extends object,
+  RowType extends Record<string, unknown>,
   QueryData,
-  Variables extends GraphQLReactTableVariables = GraphQLReactTableVariables
+  Variables extends GraphQLReactTableVariables = GraphQLReactTableVariables,
 > = {
   getData: (queryData: QueryResultWithData<QueryData, Variables>) => RowType[];
   getPages: (queryData: QueryResultWithData<QueryData, Variables>) => number;
@@ -42,9 +42,9 @@ export type UseGraphQLReactTableOptions<
 };
 
 export default function useGraphQLReactTable<
-  RowType extends object,
+  RowType extends Record<string, unknown>,
   QueryData,
-  Variables extends GraphQLReactTableVariables = GraphQLReactTableVariables
+  Variables extends GraphQLReactTableVariables = GraphQLReactTableVariables,
 >({
   getData,
   getPages,
@@ -54,7 +54,14 @@ export default function useGraphQLReactTable<
   sortBy,
   page,
   pageSize,
-}: UseGraphQLReactTableOptions<RowType, QueryData, Variables>) {
+}: UseGraphQLReactTableOptions<RowType, QueryData, Variables>): {
+  data: RowType[];
+  pages: number;
+  refetch: (variables?: Partial<Variables>) => Promise<ApolloQueryResult<QueryData>>;
+  loading: boolean;
+  error?: ApolloError;
+  queryData: QueryData | null | undefined;
+} {
   const effectiveVariables = useMemo(
     () => ({
       ...(variables as Variables),

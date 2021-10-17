@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class ApplicationController < ActionController::Base
   include Pundit
   include CmsContentHelpers
@@ -61,42 +62,27 @@ class ApplicationController < ActionController::Base
   def authenticity_token_props
     {
       graphql: graphql_authenticity_token,
-      changePassword: form_authenticity_token(form_options: {
-        action: user_password_path, method: 'PUT'
-      }),
-      denyAuthorization: form_authenticity_token(form_options: {
-        action: oauth_authorization_path, method: 'DELETE'
-      }),
-      grantAuthorization: form_authenticity_token(form_options: {
-        action: oauth_authorization_path, method: 'POST'
-      }),
-      resetPassword: form_authenticity_token(form_options: {
-        action: user_password_path, method: 'POST'
-      }),
-      signIn: form_authenticity_token(form_options: {
-        action: user_session_path, method: 'POST'
-      }),
-      signOut: form_authenticity_token(form_options: {
-        action: destroy_user_session_path, method: 'DELETE'
-      }),
-      signUp: form_authenticity_token(form_options: {
-        action: user_registration_path, method: 'POST'
-      }),
-      updateUser: form_authenticity_token(form_options: {
-        action: user_registration_path, method: 'PATCH'
-      })
+      changePassword: form_authenticity_token(form_options: { action: user_password_path, method: 'PUT' }),
+      denyAuthorization: form_authenticity_token(form_options: { action: oauth_authorization_path, method: 'DELETE' }),
+      grantAuthorization: form_authenticity_token(form_options: { action: oauth_authorization_path, method: 'POST' }),
+      resetPassword: form_authenticity_token(form_options: { action: user_password_path, method: 'POST' }),
+      signIn: form_authenticity_token(form_options: { action: user_session_path, method: 'POST' }),
+      signOut: form_authenticity_token(form_options: { action: destroy_user_session_path, method: 'DELETE' }),
+      signUp: form_authenticity_token(form_options: { action: user_registration_path, method: 'POST' }),
+      updateUser: form_authenticity_token(form_options: { action: user_registration_path, method: 'PATCH' })
     }
   end
 
   protected
 
   def pundit_user
-    @pundit_user ||= AuthorizationInfo.new(
-      current_user,
-      doorkeeper_token,
-      assumed_identity_from_profile: assumed_identity_from_profile,
-      known_user_con_profiles: [user_con_profile, assumed_identity_from_profile].compact
-    )
+    @pundit_user ||=
+      AuthorizationInfo.new(
+        current_user,
+        doorkeeper_token,
+        assumed_identity_from_profile: assumed_identity_from_profile,
+        known_user_con_profiles: [user_con_profile, assumed_identity_from_profile].compact
+      )
   end
 
   # Returns the appropriate Convention object for the domain name of the request.  This relies on
@@ -115,45 +101,43 @@ class ApplicationController < ActionController::Base
 
   def assumed_identity_from_profile
     return unless session[:assumed_identity_from_profile_id]
-    @assumed_identity_from_profile ||= UserConProfile.find(
-      session[:assumed_identity_from_profile_id]
-    )
+    @assumed_identity_from_profile ||= UserConProfile.find(session[:assumed_identity_from_profile_id])
   end
   helper_method :assumed_identity_from_profile
 
   def current_pending_order
     return unless user_con_profile
 
-    @current_pending_order ||= begin
-      pending_orders = user_con_profile.orders.pending.to_a
-      return unless pending_orders.any?
+    @current_pending_order ||=
+      begin
+        pending_orders = user_con_profile.orders.pending.to_a
+        return unless pending_orders.any?
 
-      if pending_orders.size > 1
-        # combine orders into one cart
-        first_order = pending_orders.pop
-        OrderEntry.where(order_id: pending_orders.map(&:id)).update_all(order_id: first_order.id)
-        pending_orders.destroy_all
-        first_order.reload
-      else
-        pending_orders.first
+        if pending_orders.size > 1
+          # combine orders into one cart
+          first_order = pending_orders.pop
+          OrderEntry.where(order_id: pending_orders.map(&:id)).update_all(order_id: first_order.id)
+          pending_orders.destroy_all
+          first_order.reload
+        else
+          pending_orders.first
+        end
       end
-    end
   end
   helper_method :current_pending_order
 
   def timezone_for_request
-    @timezone_for_request ||= if convention&.timezone_mode == 'convention_local'
-      convention.timezone
-    elsif request.headers['X-Intercode-User-Timezone'].present?
-      ActiveSupport::TimeZone[request.headers['X-Intercode-User-Timezone']]
-    end
+    @timezone_for_request ||=
+      if convention&.timezone_mode == 'convention_local'
+        convention.timezone
+      elsif request.headers['X-Intercode-User-Timezone'].present?
+        ActiveSupport::TimeZone[request.headers['X-Intercode-User-Timezone']]
+      end
   end
 
   def use_convention_timezone(&block)
     if timezone_for_request
-      Notifier.use_timezone(timezone_for_request) do
-        Time.use_zone(timezone_for_request, &block)
-      end
+      Notifier.use_timezone(timezone_for_request) { Time.use_zone(timezone_for_request, &block) }
     else
       yield
     end
@@ -172,9 +156,7 @@ class ApplicationController < ActionController::Base
       user.permit(:email, :password, :password_confirmation, :remember_me, :first_name, :last_name)
     end
     devise_parameter_sanitizer.permit(:account_update) do |user|
-      user.permit(
-        :email, :password, :password_confirmation, :current_password, :first_name, :last_name
-      )
+      user.permit(:email, :password, :password_confirmation, :current_password, :first_name, :last_name)
     end
   end
 
@@ -184,16 +166,11 @@ class ApplicationController < ActionController::Base
     elsif request.referer
       begin
         referer_uri = URI(request.referer)
-        host_matches = %w[scheme host port].all? do |field|
-          request.public_send(field) == referer_uri.public_send(field)
-        end
+        host_matches =
+          %w[scheme host port].all? { |field| request.public_send(field) == referer_uri.public_send(field) }
 
-        if host_matches
-          request.referer
-        else
-          root_path
-        end
-      rescue
+        host_matches ? request.referer : root_path
+      rescue StandardError
         root_path
       end
     else
@@ -208,7 +185,9 @@ class ApplicationController < ActionController::Base
     domain = assumed_identity_from_profile.convention.domain
     domain << ":#{request.port}"
 
-    redirect_to "#{request.protocol}#{domain}#{request.path}", alert: "You used “become user” \
+    redirect_to "#{request.protocol}#{domain}#{request.path}",
+                alert:
+                  "You used “become user” \
 on the #{assumed_identity_from_profile.convention.name} site to assume the identity of \
 #{current_user.name} for this session.  In order to visit other conventions’ \
 sites, please use the “Revert to #{assumed_identity_from_profile.name}” option above."
@@ -222,7 +201,7 @@ sites, please use the “Revert to #{assumed_identity_from_profile.name}” opti
 
   def devise_or_doorkeeper_controller?
     return true if devise_controller?
-    return true if self.class.name =~ /\ADoorkeeper::/
+    return true if self.class.name.start_with?('Doorkeeper::')
     false
   end
 end

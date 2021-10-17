@@ -10,23 +10,23 @@ class Intercode::Import::Intercode1::Tables::PriceSchedule < Intercode::Import::
   end
 
   def build_ticket_type
-    con.ticket_types.new(
-      name: 'weekend',
-      description: 'Full-weekend badge',
-      pricing_schedule: price_schedule_converted
-    )
+    con.ticket_types.new(name: 'weekend', description: 'Full-weekend badge', pricing_schedule: price_schedule_converted)
   end
 
   private
 
   def price_schedule_converted
-    timespans = price_schedule.map do |price_point|
-      {
-        start: convert_date(price_point['start_date']),
-        finish: convert_date(price_point['end_date']),
-        value: { fractional: price_point['price'] * 100, currency_code: 'USD' }
-      }
-    end
+    timespans =
+      price_schedule.map do |price_point|
+        {
+          start: convert_date(price_point['start_date']),
+          finish: convert_date(price_point['end_date']),
+          value: {
+            fractional: price_point['price'] * 100,
+            currency_code: 'USD'
+          }
+        }
+      end
 
     { timespans: timespans }
   end

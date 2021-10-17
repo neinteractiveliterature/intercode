@@ -4,10 +4,10 @@ import { useTranslation } from 'react-i18next';
 import useAsyncFunction from '../../useAsyncFunction';
 
 export type RefreshButtonProps = {
-  refreshData: () => Promise<any>;
+  refreshData: () => Promise<unknown>;
 };
 
-function RefreshButton({ refreshData }: RefreshButtonProps) {
+function RefreshButton({ refreshData }: RefreshButtonProps): JSX.Element {
   const { t } = useTranslation();
   const [refreshAsync, , refreshInProgress] = useAsyncFunction(refreshData);
 

@@ -3,11 +3,7 @@ import { Modal } from 'react-bootstrap4-modal';
 import { ApolloError, useApolloClient } from '@apollo/client';
 import { PaymentRequestButtonElement, useStripe } from '@stripe/react-stripe-js';
 import { PaymentRequest, PaymentRequestPaymentMethodEvent } from '@stripe/stripe-js';
-import {
-  ErrorDisplay,
-  MultipleChoiceInput,
-  PageLoadingIndicator,
-} from '@neinteractiveliterature/litform';
+import { ErrorDisplay, MultipleChoiceInput, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
 import OrderPaymentForm, { PaymentDetails } from './OrderPaymentForm';
 import paymentDetailsComplete from './paymentDetailsComplete';
@@ -19,14 +15,14 @@ import { Money, PaymentMode } from '../graphqlTypes.generated';
 import { CurrentPendingOrderPaymentIntentClientSecretQueryData } from './queries.generated';
 import { CurrentPendingOrderPaymentIntentClientSecret } from './queries';
 
-// eslint-disable-next-line global-require
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const PoweredByStripeLogo = require('../images/powered_by_stripe.svg').default as string;
 
 type OrderPaymentModalContentsProps = {
   onCancel: () => void;
   onComplete: () => void;
   initialName?: string;
-  orderId: number;
+  orderId: string;
   paymentOptions: string[];
   totalPrice: Money;
 };
@@ -57,18 +53,27 @@ function OrderPaymentModalContents({
       }
 
       const detailsFromEvent: PaymentDetails = {
-        name: ev.payerName!,
+        name: ev.payerName ?? '',
       };
 
-      let clientSecret: string = '';
+      let clientSecret = '';
 
       try {
-        const { data } =
-          await apolloClient.query<CurrentPendingOrderPaymentIntentClientSecretQueryData>({
-            query: CurrentPendingOrderPaymentIntentClientSecret,
-          });
+        const { data } = await apolloClient.query<CurrentPendingOrderPaymentIntentClientSecretQueryData>({
+          query: CurrentPendingOrderPaymentIntentClientSecret,
+        });
 
-        clientSecret = data.currentPendingOrderPaymentIntentClientSecret;
+        const myProfile = data.convention.my_profile;
+        if (!myProfile) {
+          throw new Error('Must be logged in to check out');
+        }
+
+        const currentPendingOrder = myProfile.current_pending_order;
+        if (!currentPendingOrder) {
+          throw new Error('There is no order in progress');
+        }
+
+        clientSecret = currentPendingOrder.payment_intent_client_secret;
       } catch (error) {
         ev.complete('fail');
       }
@@ -147,10 +152,7 @@ function OrderPaymentModalContents({
     { suppressError: true },
   );
 
-  const disabled =
-    !paymentMode ||
-    submitting ||
-    (paymentMode === 'now' && !paymentDetailsComplete(paymentDetails));
+  const disabled = !paymentMode || submitting || (paymentMode === 'now' && !paymentDetailsComplete(paymentDetails));
 
   const renderCheckOutModalContent = () => {
     if (totalPrice.fractional === 0) {
@@ -195,11 +197,7 @@ function OrderPaymentModalContents({
                 {paymentRequest && !choseManualCardEntry && (
                   <>
                     <PaymentRequestButtonElement options={{ paymentRequest }} />
-                    <button
-                      className="btn btn-link"
-                      type="button"
-                      onClick={() => setChoseManualCardEntry(true)}
-                    >
+                    <button className="btn btn-link" type="button" onClick={() => setChoseManualCardEntry(true)}>
                       Or, enter card details manually
                     </button>
                   </>
@@ -224,24 +222,12 @@ function OrderPaymentModalContents({
               <img src={PoweredByStripeLogo} alt="Powered by Stripe" className="me-4" />
             ) : null}
           </div>
-          <button
-            type="button"
-            className="btn btn-secondary me-2"
-            onClick={onCancel}
-            disabled={submitting}
-          >
+          <button type="button" className="btn btn-secondary me-2" onClick={onCancel} disabled={submitting}>
             Cancel
           </button>
           {awaitingPaymentRequestResult || (paymentRequest && !choseManualCardEntry) ? null : (
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={submitCheckOut}
-              disabled={disabled}
-            >
-              {totalPrice.fractional === 0
-                ? 'Submit order (free)'
-                : `Pay ${formatMoney(totalPrice)}`}
+            <button type="button" className="btn btn-primary" onClick={submitCheckOut} disabled={disabled}>
+              {totalPrice.fractional === 0 ? 'Submit order (free)' : `Pay ${formatMoney(totalPrice)}`}
             </button>
           )}
         </div>
@@ -263,7 +249,7 @@ function OrderPaymentModal({
   orderId,
   paymentOptions,
   totalPrice,
-}: OrderPaymentModalProps) {
+}: OrderPaymentModalProps): JSX.Element {
   return (
     <Modal visible={visible && orderId != null} dialogClassName="modal-lg">
       {visible && orderId != null && (

@@ -1,4 +1,4 @@
-export default function scrollToLocationHash() {
+export default function scrollToLocationHash(): void {
   const { hash } = window.location;
   if (hash && hash.startsWith('#')) {
     const id = hash.substr(1);

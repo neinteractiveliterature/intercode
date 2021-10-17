@@ -3,13 +3,13 @@ import { PricingStructureFields } from '../Store/pricingStructureFields';
 
 export const TicketPurchaseFormQuery = gql`
   query TicketPurchaseFormQuery {
-    convention: assertConvention {
-      id
+    convention: conventionByRequestHost {
+      id: transitionalId
       name
       ticket_name
 
       products(only_ticket_providing: true, only_available: true) {
-        id
+        id: transitionalId
         name
         description_html
 
@@ -19,21 +19,21 @@ export const TicketPurchaseFormQuery = gql`
       }
 
       ticket_types {
-        id
+        id: transitionalId
         description
 
         providing_products {
-          id
+          id: transitionalId
         }
       }
-    }
 
-    myProfile {
-      id
-      name_without_nickname
+      my_profile {
+        id: transitionalId
+        name_without_nickname
 
-      ticket {
-        id
+        ticket {
+          id: transitionalId
+        }
       }
     }
   }
@@ -43,44 +43,44 @@ export const TicketPurchaseFormQuery = gql`
 
 export const MyTicketDisplayQuery = gql`
   query MyTicketDisplayQuery {
-    convention: assertConvention {
-      id
+    convention: conventionByRequestHost {
+      id: transitionalId
       name
       ticket_name
       timezone_name
-    }
 
-    myProfile {
-      id
-      name_without_nickname
+      my_profile {
+        id: transitionalId
+        name_without_nickname
 
-      ticket {
-        id
-        created_at
-        updated_at
+        ticket {
+          id: transitionalId
+          created_at
+          updated_at
 
-        order_entry {
-          id
+          order_entry {
+            id: transitionalId
 
-          order {
-            id
-            charge_id
+            order {
+              id: transitionalId
+              charge_id
+            }
+
+            price_per_item {
+              fractional
+              currency_code
+            }
           }
 
-          price_per_item {
-            fractional
-            currency_code
+          ticket_type {
+            id: transitionalId
+            description
           }
-        }
 
-        ticket_type {
-          id
-          description
-        }
-
-        provided_by_event {
-          id
-          title
+          provided_by_event {
+            id: transitionalId
+            title
+          }
         }
       }
     }

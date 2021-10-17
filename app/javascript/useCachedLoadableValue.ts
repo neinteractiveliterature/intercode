@@ -5,7 +5,7 @@ export default function useCachedLoadableValue<T>(
   error: Error | null | undefined,
   getValue: () => T,
   dependencies: DependencyList = [],
-) {
+): T | null {
   const [cachedValue, setCachedValue] = useState<T | null>(null);
 
   useEffect(

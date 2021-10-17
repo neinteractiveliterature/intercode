@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class ProductPolicy < ApplicationPolicy
   delegate :convention, to: :record
 
@@ -6,8 +7,10 @@ class ProductPolicy < ApplicationPolicy
   end
 
   def manage?
-    return true if oauth_scoped_disjunction do |d|
-      d.add(:manage_conventions) { has_convention_permission?(convention, 'update_products') }
+    if oauth_scoped_disjunction do |d|
+         d.add(:manage_conventions) { has_convention_permission?(convention, 'update_products') }
+       end
+      return true
     end
 
     super

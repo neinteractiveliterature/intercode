@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class EventProposals::NewProposalNotifier < Notifier
   include EventProposals::EventProposalNotificationsHelper
 

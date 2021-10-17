@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Tables::ConventionsTableResultsPresenter < Tables::TableResultsPresenter
   field :id, 'ID'
 

@@ -1,11 +1,15 @@
+# frozen_string_literal: true
 class Types::CmsContentType < Types::BaseUnion
   possible_types Types::PageType, Types::CmsPartialType, Types::CmsLayoutType
 
   def self.resolve_type(object, _context)
     case object
-    when Page then Types::PageType
-    when CmsPartial then Types::CmsPartialType
-    when CmsLayout then Types::CmsLayoutType
+    when Page
+      Types::PageType
+    when CmsPartial
+      Types::CmsPartialType
+    when CmsLayout
+      Types::CmsLayoutType
     end
   end
 end

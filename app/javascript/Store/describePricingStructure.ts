@@ -9,7 +9,7 @@ import { formatLCM, getDateTimeFormat } from '../TimeUtils';
 
 export function describeAdminPricingStructure(
   pricingStructure?: Pick<PricingStructure, 'pricing_strategy' | 'value'> | null,
-) {
+): string | null {
   if (!pricingStructure) {
     return null;
   }
@@ -36,13 +36,13 @@ export function describeUserPricingStructure(
   pricingStructure: Pick<PricingStructure, 'pricing_strategy' | 'value'> | undefined | null,
   timezoneName: string,
   t: TFunction,
-) {
+): string | null {
   if (!pricingStructure) {
     return null;
   }
 
   if (pricingStructure.pricing_strategy === 'fixed') {
-    return `${formatMoney(pricingStructure.value as Money)}`;
+    return formatMoney(pricingStructure.value as Money);
   }
 
   if (pricingStructure.pricing_strategy === 'scheduled_value') {
@@ -70,13 +70,13 @@ export function describeUserPricingStructure(
 
 export function describeCurrentPrice(
   pricingStructure?: Pick<PricingStructure, 'pricing_strategy' | 'value'> | null,
-) {
+): string | null {
   if (!pricingStructure) {
     return null;
   }
 
   if (pricingStructure.pricing_strategy === 'fixed') {
-    return `${formatMoney(pricingStructure.value as Money)}`;
+    return formatMoney(pricingStructure.value as Money);
   }
 
   if (pricingStructure.pricing_strategy === 'scheduled_value') {
@@ -85,7 +85,7 @@ export function describeCurrentPrice(
       return 'Currently unavailable';
     }
 
-    return `${formatMoney(currentValue)}`;
+    return formatMoney(currentValue);
   }
 
   return null;

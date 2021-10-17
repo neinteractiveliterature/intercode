@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useModal, sortByLocaleString, LoadQueryWrapper } from '@neinteractiveliterature/litform';
+import { v4 as uuidv4 } from 'uuid';
 
 import AdminProductCard from './AdminProductCard';
 import usePageTitle from '../../usePageTitle';
@@ -13,35 +14,33 @@ import { useAdminProductsQuery } from '../queries.generated';
 import { duplicateProductForEditing, EditingProduct } from './EditingProductTypes';
 import { getRealOrGeneratedId, realOrGeneratedIdsMatch } from '../../GeneratedIdUtils';
 
-const blankProduct: EditingProduct = {
-  __typename: 'Product',
-  delete_variant_ids: [],
-  payment_options: [],
-  generatedId: new Date().getTime(),
-  name: '',
-  description: '',
-  image_url: null,
-  product_variants: [],
-  available: true,
-};
+function generateBlankProduct(): EditingProduct {
+  return {
+    __typename: 'Product',
+    delete_variant_ids: [],
+    payment_options: [],
+    generatedId: uuidv4(),
+    name: '',
+    description: '',
+    image_url: null,
+    product_variants: [],
+    available: true,
+  };
+}
 
 const ProductAdminPage = LoadQueryWrapper(useAdminProductsQuery, function ProductAdmin({ data }) {
   const [newProducts, setNewProducts] = useState<EditingProduct[]>([]);
-  const [editingProductIds, setEditingProductIds] = useState<number[]>([]);
+  const [editingProductIds, setEditingProductIds] = useState<string[]>([]);
   const pricingStructureModal = useModal<PricingStructureModalState>();
 
   const existingProducts = useMemo(
-    () =>
-      sortByLocaleString(data.convention.products, (product) => product.name).map(
-        duplicateProductForEditing,
-      ),
+    () => sortByLocaleString(data.convention.products, (product) => product.name).map(duplicateProductForEditing),
     [data.convention.products],
   );
 
   usePageTitle('Products');
 
-  const newProductClicked = () =>
-    setNewProducts((prevNewProducts) => [...prevNewProducts, blankProduct]);
+  const newProductClicked = () => setNewProducts((prevNewProducts) => [...prevNewProducts, generateBlankProduct()]);
 
   const removeNewProduct = (product: EditingProduct) =>
     setNewProducts((prevNewProducts) =>

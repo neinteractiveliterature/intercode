@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::DeleteCmsVariable < Mutations::BaseMutation
   field :cms_variable, Types::CmsVariable, null: false, camelize: false
 

@@ -1,25 +1,25 @@
 import { gql } from '@apollo/client';
-import { CommonFormItemFields, CommonFormFields } from '../Models/commonFormFragments';
+import { CommonFormFields, CommonFormItemFields, CommonFormSectionFields } from '../Models/commonFormFragments';
 
 export const FormFields = gql`
   fragment FormFields on Form {
-    id
+    id: transitionalId
     title
     form_type
     export_json
 
     event_categories {
-      id
+      id: transitionalId
       name
     }
 
     proposal_event_categories {
-      id
+      id: transitionalId
       name
     }
 
     user_con_profile_conventions {
-      id
+      id: transitionalId
       name
     }
   }
@@ -27,7 +27,7 @@ export const FormFields = gql`
 
 export const FormEditorFormItemFields = gql`
   fragment FormEditorFormItemFields on FormItem {
-    id
+    id: transitionalId
     admin_description
     public_description
     properties
@@ -37,33 +37,44 @@ export const FormEditorFormItemFields = gql`
   ${CommonFormItemFields}
 `;
 
-export const FormEditorData = gql`
-  fragment FormEditorData on Form {
-    id
-    ...CommonFormFields
+export const FormEditorFormSectionFields = gql`
+  fragment FormEditorFormSectionFields on FormSection {
+    id: transitionalId
+    ...CommonFormSectionFields
 
-    form_sections {
-      id
-
-      form_items {
-        id
-        ...FormEditorFormItemFields
-      }
+    form_items {
+      id: transitionalId
+      ...FormEditorFormItemFields
     }
   }
 
-  ${CommonFormFields}
+  ${CommonFormSectionFields}
   ${FormEditorFormItemFields}
+`;
+
+export const FormEditorData = gql`
+  fragment FormEditorData on Form {
+    id: transitionalId
+    ...CommonFormFields
+
+    form_sections {
+      id: transitionalId
+      ...FormEditorFormSectionFields
+    }
+  }
+
+  ${FormEditorFormSectionFields}
+  ${CommonFormFields}
 `;
 
 export const FormAdminQuery = gql`
   query FormAdminQuery {
-    convention: assertConvention {
-      id
+    convention: conventionByRequestHost {
+      id: transitionalId
       name
 
       forms {
-        id
+        id: transitionalId
         ...FormFields
       }
     }
@@ -73,20 +84,19 @@ export const FormAdminQuery = gql`
 `;
 
 export const FormEditorQuery = gql`
-  query FormEditorQuery($id: Int!) {
-    convention: assertConvention {
-      id
+  query FormEditorQuery($id: ID!) {
+    convention: conventionByRequestHost {
+      id: transitionalId
       name
       starts_at
       ends_at
       timezone_name
       timezone_mode
       event_mailing_list_domain
-    }
-
-    form(id: $id) {
-      id
-      ...FormEditorData
+      form(transitionalId: $id) {
+        id: transitionalId
+        ...FormEditorData
+      }
     }
   }
 
@@ -94,10 +104,19 @@ export const FormEditorQuery = gql`
 `;
 
 export const PreviewFormItemQuery = gql`
-  query PreviewFormItemQuery($formSectionId: Int!, $formItem: FormItemInput!) {
-    previewFormItem(formSectionId: $formSectionId, formItem: $formItem) {
-      id
-      ...FormEditorFormItemFields
+  query PreviewFormItemQuery($formId: ID!, $formSectionId: ID!, $formItem: FormItemInput!) {
+    convention: conventionByRequestHost {
+      id: transitionalId
+      form(transitionalId: $formId) {
+        id: transitionalId
+        form_section(transitionalId: $formSectionId) {
+          id: transitionalId
+          preview_form_item(formItem: $formItem) {
+            id: transitionalId
+            ...FormEditorFormItemFields
+          }
+        }
+      }
     }
   }
 

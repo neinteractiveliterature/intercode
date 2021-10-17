@@ -35,7 +35,7 @@ function RegistrationPolicyItemEditorPresetRow({
   preset,
   deletePreset,
   onChange,
-}: RegistrationPolicyItemEditorPresetRowProps) {
+}: RegistrationPolicyItemEditorPresetRowProps): JSX.Element {
   const confirm = useConfirm();
   const modal = useModal();
   const { isDragging, setNodeRef, transform, transition, listeners, attributes } = useSortable({

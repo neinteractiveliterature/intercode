@@ -65,11 +65,7 @@ class CmsContentPolicyTest < ActiveSupport::TestCase
     end
   end
 
-  %i[
-    cms_layout
-    cms_partial
-    page
-  ].each do |cms_model_name|
+  %i[cms_layout cms_partial page].each do |cms_model_name|
     model_class = cms_model_name.to_s.camelize.safe_constantize
     policy_finder = Pundit::PolicyFinder.new(model_class)
     policy_class = policy_finder.policy!

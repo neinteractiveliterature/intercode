@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::RegistrationPolicyBucketInputType < Types::BaseInputObject
   argument :key, String, required: true
   argument :name, String, required: false

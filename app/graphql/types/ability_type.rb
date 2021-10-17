@@ -1,4 +1,5 @@
-class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLength
+# frozen_string_literal: true
+class Types::AbilityType < Types::BaseObject
   field :can_create_pages, Boolean, null: false
   def can_create_pages
     policy(Page.new(parent: convention)).create?
@@ -62,42 +63,74 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
   field :can_override_maximum_event_provided_tickets, Boolean, null: false
 
   def can_override_maximum_event_provided_tickets
-    override = MaximumEventProvidedTicketsOverride.new(
-      event: Event.new(convention: convention)
-    )
+    override = MaximumEventProvidedTicketsOverride.new(event: Event.new(convention: convention))
     policy(override).create?
   end
 
   field :can_update_signup, Boolean, null: false do
-    argument :signup_id, Integer, required: true, camelize: false
+    argument :signup_id,
+             Integer,
+             deprecation_reason:
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
+             required: false,
+             camelize: false
+    argument :transitional_signup_id, ID, required: false, camelize: true
   end
 
   def can_update_signup(**args)
-    ModelPermissionLoader.for(Signup).load([pundit_user, :update, args[:signup_id]])
+    ModelPermissionLoader.for(Signup).load([pundit_user, :update, args[:transitional_signup_id] || args[:signup_id]])
   end
 
   field :can_update_counted_signup, Boolean, null: false do
-    argument :signup_id, Integer, required: true, camelize: false
+    argument :signup_id,
+             Integer,
+             deprecation_reason:
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
+             required: false,
+             camelize: false
+    argument :transitional_signup_id, ID, required: false, camelize: true
   end
 
   def can_update_counted_signup(**args)
-    ModelPermissionLoader.for(Signup).load([pundit_user, :update_counted, args[:signup_id]])
+    ModelPermissionLoader
+      .for(Signup)
+      .load([pundit_user, :update_counted, args[:transitional_signup_id] || args[:signup_id]])
   end
 
   field :can_force_confirm_signup, Boolean, null: false do
-    argument :signup_id, Integer, required: true, camelize: false
+    argument :signup_id,
+             Integer,
+             deprecation_reason:
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
+             required: false,
+             camelize: false
+    argument :transitional_signup_id, ID, required: false, camelize: true
   end
 
   def can_force_confirm_signup(**args)
-    ModelPermissionLoader.for(Signup).load([pundit_user, :force_confirm, args[:signup_id]])
+    ModelPermissionLoader
+      .for(Signup)
+      .load([pundit_user, :force_confirm, args[:transitional_signup_id] || args[:signup_id]])
   end
 
   field :can_update_bucket_signup, Boolean, null: false do
-    argument :signup_id, Integer, required: true, camelize: false
+    argument :signup_id,
+             Integer,
+             deprecation_reason:
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
+             required: false,
+             camelize: false
+    argument :transitional_signup_id, ID, required: false, camelize: true
   end
 
   def can_update_bucket_signup(**args)
-    ModelPermissionLoader.for(Signup).load([pundit_user, :update_bucket, args[:signup_id]])
+    ModelPermissionLoader
+      .for(Signup)
+      .load([pundit_user, :update_bucket, args[:transitional_signup_id] || args[:signup_id]])
   end
 
   field :can_update_event_categories, Boolean, null: false
@@ -107,37 +140,45 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
   end
 
   field :can_update_event, Boolean, null: false do
-    argument :event_id, Integer, required: true, camelize: false
+    argument :event_id,
+             Integer,
+             deprecation_reason:
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
+             required: false,
+             camelize: false
+    argument :transitional_event_id, ID, required: false, camelize: true
   end
 
   def can_update_event(**args)
-    ModelPermissionLoader.for(Event).load([pundit_user, :update, args[:event_id]])
+    ModelPermissionLoader.for(Event).load([pundit_user, :update, args[:transitional_event_id] || args[:event_id]])
   end
 
   field :can_delete_event, Boolean, null: false do
-    argument :event_id, Integer, required: true, camelize: false
+    argument :event_id,
+             Integer,
+             deprecation_reason:
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
+             required: false,
+             camelize: false
+    argument :transitional_event_id, ID, required: false, camelize: true
   end
 
   def can_delete_event(**args)
-    ModelPermissionLoader.for(Event).load([pundit_user, :destroy, args[:event_id]])
+    ModelPermissionLoader.for(Event).load([pundit_user, :destroy, args[:transitional_event_id] || args[:event_id]])
   end
 
   field :can_read_orders, Boolean, null: false
 
   def can_read_orders
-    !!(
-      convention &&
-      policy(Order.new(user_con_profile: UserConProfile.new(convention: convention))).read?
-    )
+    !!(convention && policy(Order.new(user_con_profile: UserConProfile.new(convention: convention))).read?)
   end
 
   field :can_create_orders, Boolean, null: false
 
   def can_create_orders
-    !!(
-      convention &&
-      policy(Order.new(user_con_profile: UserConProfile.new(convention: convention))).create?
-    )
+    !!(convention && policy(Order.new(user_con_profile: UserConProfile.new(convention: convention))).create?)
   end
 
   field :can_read_schedule, Boolean, null: false
@@ -203,10 +244,7 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
   field :can_manage_signups, Boolean, null: false
 
   def can_manage_signups
-    !!(
-      convention &&
-      policy(Signup.new(run: Run.new(event: Event.new(convention: convention)))).manage?
-    )
+    !!(convention && policy(Signup.new(run: Run.new(event: Event.new(convention: convention)))).manage?)
   end
 
   field :can_manage_staff_positions, Boolean, null: false
@@ -222,43 +260,71 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
   end
 
   field :can_read_admin_notes_on_event_proposal, Boolean, null: false do
-    argument :event_proposal_id, Integer, required: true, camelize: false
+    argument :event_proposal_id,
+             Integer,
+             deprecation_reason:
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
+             required: false,
+             camelize: false
+    argument :transitional_event_proposal_id, ID, required: false, camelize: true
   end
 
   def can_read_admin_notes_on_event_proposal(**args)
-    ModelPermissionLoader.for(EventProposal).load([
-      pundit_user,
-      :read_admin_notes,
-      args[:event_proposal_id]
-    ])
+    ModelPermissionLoader
+      .for(EventProposal)
+      .load([pundit_user, :read_admin_notes, args[:transitional_event_proposal_id] || args[:event_proposal_id]])
   end
 
   field :can_update_admin_notes_on_event_proposal, Boolean, null: false do
-    argument :event_proposal_id, Integer, required: true, camelize: false
+    argument :event_proposal_id,
+             Integer,
+             deprecation_reason:
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
+             required: false,
+             camelize: false
+    argument :transitional_event_proposal_id, ID, required: false, camelize: true
   end
 
   def can_update_admin_notes_on_event_proposal(**args)
-    ModelPermissionLoader.for(EventProposal).load([
-      pundit_user,
-      :update_admin_notes,
-      args[:event_proposal_id]
-    ])
+    ModelPermissionLoader
+      .for(EventProposal)
+      .load([pundit_user, :update_admin_notes, args[:transitional_event_proposal_id] || args[:event_proposal_id]])
   end
 
   field :can_update_event_proposal, Boolean, null: false do
-    argument :event_proposal_id, Integer, required: true, camelize: false
+    argument :event_proposal_id,
+             Integer,
+             deprecation_reason:
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
+             required: false,
+             camelize: false
+    argument :transitional_event_proposal_id, ID, required: false, camelize: true
   end
 
   def can_update_event_proposal(**args)
-    ModelPermissionLoader.for(EventProposal).load([pundit_user, :update, args[:event_proposal_id]])
+    ModelPermissionLoader
+      .for(EventProposal)
+      .load([pundit_user, :update, args[:transitional_event_proposal_id] || args[:event_proposal_id]])
   end
 
   field :can_delete_event_proposal, Boolean, null: false do
-    argument :event_proposal_id, Integer, required: true, camelize: false
+    argument :event_proposal_id,
+             Integer,
+             deprecation_reason:
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
+             required: false,
+             camelize: false
+    argument :transitional_event_proposal_id, ID, required: false, camelize: true
   end
 
   def can_delete_event_proposal(**args)
-    ModelPermissionLoader.for(EventProposal).load([pundit_user, :destroy, args[:event_proposal_id]])
+    ModelPermissionLoader
+      .for(EventProposal)
+      .load([pundit_user, :destroy, args[:transitional_event_proposal_id] || args[:event_proposal_id]])
   end
 
   field :can_update_orders, Boolean, null: false
@@ -274,19 +340,33 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
   end
 
   field :can_update_ticket, Boolean, null: false do
-    argument :ticket_id, Integer, required: true, camelize: false
+    argument :ticket_id,
+             Integer,
+             deprecation_reason:
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
+             required: false,
+             camelize: false
+    argument :transitional_ticket_id, ID, required: false, camelize: true
   end
 
   def can_update_ticket(**args)
-    ModelPermissionLoader.for(Ticket).load([pundit_user, :update, args[:ticket_id]])
+    ModelPermissionLoader.for(Ticket).load([pundit_user, :update, args[:transitional_ticket_id] || args[:ticket_id]])
   end
 
   field :can_delete_ticket, Boolean, null: false do
-    argument :ticket_id, Integer, required: true, camelize: false
+    argument :ticket_id,
+             Integer,
+             deprecation_reason:
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
+             required: false,
+             camelize: false
+    argument :transitional_ticket_id, ID, required: false, camelize: true
   end
 
   def can_delete_ticket(**args)
-    ModelPermissionLoader.for(Ticket).load([pundit_user, :destroy, args[:ticket_id]])
+    ModelPermissionLoader.for(Ticket).load([pundit_user, :destroy, args[:transitional_ticket_id] || args[:ticket_id]])
   end
 
   field :can_read_organizations, Boolean, null: false
@@ -302,11 +382,18 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
   end
 
   field :can_read_event_signups, Boolean, null: false do
-    argument :event_id, Integer, required: true, camelize: false
+    argument :event_id,
+             Integer,
+             deprecation_reason:
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
+             required: false,
+             camelize: false
+    argument :transitional_event_id, ID, required: false, camelize: true
   end
 
   def can_read_event_signups(**args)
-    event = context[:convention].events.find(args[:event_id])
+    event = context[:convention].events.find(args[:transitional_event_id] || args[:event_id])
     policy(Signup.new(run: Run.new(event: event))).read?
   end
 
@@ -359,21 +446,36 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
   end
 
   field :can_update_user_con_profile, Boolean, null: false do
-    argument :user_con_profile_id, Integer, required: true, camelize: false
+    argument :user_con_profile_id,
+             Integer,
+             deprecation_reason:
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
+             required: false,
+             camelize: false
+    argument :transitional_user_con_profile_id, ID, required: false, camelize: true
   end
 
   def can_update_user_con_profile(**args)
-    ModelPermissionLoader.for(UserConProfile)
-      .load([pundit_user, :update, args[:user_con_profile_id]])
+    ModelPermissionLoader
+      .for(UserConProfile)
+      .load([pundit_user, :update, args[:transitional_user_con_profile_id] || args[:user_con_profile_id]])
   end
 
   field(
-    :can_update_privileges_user_con_profile, Boolean,
+    :can_update_privileges_user_con_profile,
+    Boolean,
     null: false,
-    deprecation_reason:
-      'Privileges have been removed in favor of permissions.  This will always return false.'
+    deprecation_reason: 'Privileges have been removed in favor of permissions.  This will always return false.'
   ) do
-    argument :user_con_profile_id, Integer, required: true, camelize: false
+    argument :user_con_profile_id,
+             Integer,
+             deprecation_reason:
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
+             required: false,
+             camelize: false
+    argument :transitional_user_con_profile_id, ID, required: false, camelize: true
   end
 
   def can_update_privileges_user_con_profile(**_args)
@@ -381,30 +483,54 @@ class Types::AbilityType < Types::BaseObject # rubocop:disable Metrics/ClassLeng
   end
 
   field :can_delete_user_con_profile, Boolean, null: false do
-    argument :user_con_profile_id, Integer, required: true, camelize: false
+    argument :user_con_profile_id,
+             Integer,
+             deprecation_reason:
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
+             required: false,
+             camelize: false
+    argument :transitional_user_con_profile_id, ID, required: false, camelize: true
   end
 
   def can_delete_user_con_profile(**args)
-    ModelPermissionLoader.for(UserConProfile)
-      .load([pundit_user, :destroy, args[:user_con_profile_id]])
+    ModelPermissionLoader
+      .for(UserConProfile)
+      .load([pundit_user, :destroy, args[:transitional_user_con_profile_id] || args[:user_con_profile_id]])
   end
 
   field :can_become_user_con_profile, Boolean, null: false do
-    argument :user_con_profile_id, Integer, required: true, camelize: false
+    argument :user_con_profile_id,
+             Integer,
+             deprecation_reason:
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
+             required: false,
+             camelize: false
+    argument :transitional_user_con_profile_id, ID, required: false, camelize: true
   end
 
   def can_become_user_con_profile(**args)
-    ModelPermissionLoader.for(UserConProfile)
-      .load([pundit_user, :become, args[:user_con_profile_id]])
+    ModelPermissionLoader
+      .for(UserConProfile)
+      .load([pundit_user, :become, args[:transitional_user_con_profile_id] || args[:user_con_profile_id]])
   end
 
   field :can_withdraw_all_user_con_profile_signups, Boolean, null: false do
-    argument :user_con_profile_id, Integer, required: true, camelize: false
+    argument :user_con_profile_id,
+             Integer,
+             deprecation_reason:
+               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
+             required: false,
+             camelize: false
+    argument :transitional_user_con_profile_id, ID, required: false, camelize: true
   end
 
   def can_withdraw_all_user_con_profile_signups(**args)
-    ModelPermissionLoader.for(UserConProfile)
-      .load([pundit_user, :withdraw_all_signups, args[:user_con_profile_id]])
+    ModelPermissionLoader
+      .for(UserConProfile)
+      .load([pundit_user, :withdraw_all_signups, args[:transitional_user_con_profile_id] || args[:user_con_profile_id]])
   end
 
   private

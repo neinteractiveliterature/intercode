@@ -8,29 +8,26 @@ import {
   useConfirm,
   sortByLocaleString,
   PageLoadingIndicator,
+  useDeleteMutationWithReferenceArrayUpdater,
 } from '@neinteractiveliterature/litform';
 
 import Checkmark from './Checkmark';
 import ProvideTicketModal from './ProvideTicketModal';
-import { TeamMembersQuery } from './queries';
 import usePageTitle from '../../usePageTitle';
 import useValueUnless from '../../useValueUnless';
-import { useDeleteMutation } from '../../MutationUtils';
-import { DeleteTeamMember } from './mutations';
 import { TeamMembersQueryData, useTeamMembersQuery } from './queries.generated';
 import { DropdownMenu } from '../../UIComponents/DropdownMenu';
+import FourOhFourPage from '../../FourOhFourPage';
+import { useDeleteTeamMemberMutation } from './mutations.generated';
 
-function sortTeamMembers(teamMembers: TeamMembersQueryData['event']['team_members']) {
-  return sortByLocaleString(
-    teamMembers,
-    (teamMember) => teamMember.user_con_profile.name_inverted ?? '',
-  );
+function sortTeamMembers(teamMembers: TeamMembersQueryData['convention']['event']['team_members']) {
+  return sortByLocaleString(teamMembers, (teamMember) => teamMember.user_con_profile.name_inverted ?? '');
 }
 
 type TeamMemberActionMenuProps = {
-  event: TeamMembersQueryData['event'];
+  event: TeamMembersQueryData['convention']['event'];
   convention: NonNullable<TeamMembersQueryData['convention']>;
-  teamMember: TeamMembersQueryData['event']['team_members'][0];
+  teamMember: TeamMembersQueryData['convention']['event']['team_members'][0];
   openProvideTicketModal: () => void;
   eventPath: string;
 };
@@ -44,13 +41,12 @@ function TeamMemberActionMenu({
 }: TeamMemberActionMenuProps) {
   const { t } = useTranslation();
   const confirm = useConfirm();
-  const deleteTeamMember = useDeleteMutation(DeleteTeamMember, {
-    query: TeamMembersQuery,
-    queryVariables: { eventId: event.id },
-    variables: { input: { id: teamMember.id } },
-    idVariablePath: ['input', 'id'],
-    arrayPath: ['event', 'team_members'],
-  });
+  const [deleteTeamMember] = useDeleteMutationWithReferenceArrayUpdater(
+    useDeleteTeamMemberMutation,
+    event,
+    'team_members',
+    (teamMember) => ({ input: { transitionalId: teamMember.id } }),
+  );
 
   return (
     <DropdownMenu
@@ -70,11 +66,7 @@ function TeamMemberActionMenu({
           })}
         </Link>
         {event.event_category.can_provide_tickets && convention.ticket_mode !== 'disabled' ? (
-          <button
-            className="dropdown-item cursor-pointer"
-            onClick={openProvideTicketModal}
-            type="button"
-          >
+          <button className="dropdown-item cursor-pointer" onClick={openProvideTicketModal} type="button">
             {t('events.teamMemberAdmin.provideTicketLink', 'Provide {{ ticketName }}', {
               ticketName: convention.ticket_name,
             })}
@@ -93,7 +85,7 @@ function TeamMemberActionMenu({
                   teamMemberName: event.event_category.team_member_name,
                 },
               ),
-              action: () => deleteTeamMember({}),
+              action: () => deleteTeamMember(teamMember),
               renderError: (error) => <ErrorDisplay graphQLError={error} />,
             })
           }
@@ -108,31 +100,29 @@ function TeamMemberActionMenu({
 }
 
 export type TeamMembersIndexProps = {
-  eventId: number;
+  eventId: string;
   eventPath: string;
 };
 
-function TeamMembersIndex({ eventId, eventPath }: TeamMembersIndexProps) {
+function TeamMembersIndex({ eventId, eventPath }: TeamMembersIndexProps): JSX.Element {
   const { t } = useTranslation();
   const { data, loading, error } = useTeamMembersQuery({ variables: { eventId } });
-  const modal = useModal<{ teamMember: TeamMembersQueryData['event']['team_members'][0] }>();
+  const modal = useModal<{ teamMember: TeamMembersQueryData['convention']['event']['team_members'][0] }>();
 
   const titleizedTeamMemberName = useMemo(
     () =>
       error || loading || !data
         ? null
-        : pluralize(titleize(underscore(data.event.event_category.team_member_name))),
+        : pluralize(titleize(underscore(data.convention.event.event_category.team_member_name))),
     [error, loading, data],
   );
 
   const sortedTeamMembers = useMemo(
-    () => (error || loading || !data ? null : sortTeamMembers(data.event.team_members)),
+    () => (error || loading || !data ? null : sortTeamMembers(data.convention.event.team_members)),
     [data, error, loading],
   );
 
-  usePageTitle(
-    useValueUnless(() => `${titleizedTeamMemberName} - ${data?.event.title}`, error || loading),
-  );
+  usePageTitle(useValueUnless(() => `${titleizedTeamMemberName} - ${data?.convention.event.title}`, error || loading));
 
   if (loading) {
     return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
@@ -142,7 +132,12 @@ function TeamMembersIndex({ eventId, eventPath }: TeamMembersIndexProps) {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  const { convention, event } = data!;
+  if (!data) {
+    return <FourOhFourPage />;
+  }
+
+  const { convention } = data;
+  const { event } = convention;
 
   return (
     <>
@@ -165,22 +160,13 @@ function TeamMembersIndex({ eventId, eventPath }: TeamMembersIndexProps) {
                   })}
                 </th>
                 <th>{t('events.teamMemberAdmin.displayEmailHeader', 'Display email address')}</th>
-                <th>
-                  {t('events.teamMemberAdmin.receiveConEmailHeader', 'Receive email from con')}
-                </th>
-                <th>
-                  {t(
-                    'events.teamMemberAdmin.receiveSignupEmailHeader',
-                    'Receive email on signup or withdrawal',
-                  )}
-                </th>
-                {convention!.ticket_mode !== 'disabled' && (
+                <th>{t('events.teamMemberAdmin.receiveConEmailHeader', 'Receive email from con')}</th>
+                <th>{t('events.teamMemberAdmin.receiveSignupEmailHeader', 'Receive email on signup or withdrawal')}</th>
+                {convention.ticket_mode !== 'disabled' && (
                   <th>
-                    {t(
-                      'events.teamMemberAdmin.hasEventTicketHeader',
-                      '{{ ticketName }} from this event',
-                      { ticketName: titleize(convention!.ticket_name) },
-                    )}
+                    {t('events.teamMemberAdmin.hasEventTicketHeader', '{{ ticketName }} from this event', {
+                      ticketName: titleize(convention.ticket_name),
+                    })}
                   </th>
                 )}
                 <th />
@@ -200,7 +186,7 @@ function TeamMembersIndex({ eventId, eventPath }: TeamMembersIndexProps) {
                     <Checkmark value={teamMember.receive_con_email} />
                   </td>
                   <td>{humanize(teamMember.receive_signup_email)}</td>
-                  {convention!.ticket_mode !== 'disabled' && (
+                  {convention.ticket_mode !== 'disabled' && (
                     <td>
                       <Checkmark
                         value={event.provided_tickets.some(
@@ -212,7 +198,7 @@ function TeamMembersIndex({ eventId, eventPath }: TeamMembersIndexProps) {
                   <td>
                     <TeamMemberActionMenu
                       event={event}
-                      convention={convention!}
+                      convention={convention}
                       teamMember={teamMember}
                       openProvideTicketModal={() => modal.open({ teamMember })}
                       eventPath={eventPath}
@@ -236,7 +222,7 @@ function TeamMembersIndex({ eventId, eventPath }: TeamMembersIndexProps) {
         visible={modal.visible}
         onClose={modal.close}
         event={event}
-        convention={convention!}
+        convention={convention}
         teamMember={modal.state?.teamMember}
       />
     </>

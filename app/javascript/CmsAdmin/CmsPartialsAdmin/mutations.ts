@@ -5,7 +5,7 @@ export const CreatePartial = gql`
   mutation CreatePartial($cmsPartial: CmsPartialInput!) {
     createCmsPartial(input: { cms_partial: $cmsPartial }) {
       cms_partial {
-        id
+        id: transitionalId
         ...CmsPartialFields
       }
     }
@@ -15,10 +15,10 @@ export const CreatePartial = gql`
 `;
 
 export const UpdatePartial = gql`
-  mutation UpdatePartial($id: Int!, $cmsPartial: CmsPartialInput!) {
-    updateCmsPartial(input: { id: $id, cms_partial: $cmsPartial }) {
+  mutation UpdatePartial($id: ID!, $cmsPartial: CmsPartialInput!) {
+    updateCmsPartial(input: { transitionalId: $id, cms_partial: $cmsPartial }) {
       cms_partial {
-        id
+        id: transitionalId
         ...CmsPartialFields
       }
     }
@@ -28,8 +28,8 @@ export const UpdatePartial = gql`
 `;
 
 export const DeletePartial = gql`
-  mutation DeletePartial($id: Int!) {
-    deleteCmsPartial(input: { id: $id }) {
+  mutation DeletePartial($id: ID!) {
+    deleteCmsPartial(input: { transitionalId: $id }) {
       clientMutationId
     }
   }

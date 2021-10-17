@@ -8,7 +8,7 @@ export default function buildPageInput(page: PageFormFields): PageInput {
     slug: page.slug,
     skip_clickwrap_agreement: page.skip_clickwrap_agreement,
     hidden_from_search: page.hidden_from_search,
-    cms_layout_id: page.cms_layout?.id,
+    transitionalCmsLayoutId: page.cms_layout?.id,
     content: page.content,
   };
 }

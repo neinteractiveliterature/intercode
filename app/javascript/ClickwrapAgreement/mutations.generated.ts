@@ -7,14 +7,14 @@ const defaultOptions =  {}
 export type AcceptClickwrapAgreementMutationVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type AcceptClickwrapAgreementMutationData = { __typename: 'Mutation', acceptClickwrapAgreement?: Types.Maybe<{ __typename: 'AcceptClickwrapAgreementPayload', my_profile: { __typename: 'UserConProfile', id: number, accepted_clickwrap_agreement?: Types.Maybe<boolean> } }> };
+export type AcceptClickwrapAgreementMutationData = { __typename: 'Mutation', acceptClickwrapAgreement: { __typename: 'AcceptClickwrapAgreementPayload', my_profile: { __typename: 'UserConProfile', accepted_clickwrap_agreement?: boolean | null | undefined, id: string } } };
 
 
 export const AcceptClickwrapAgreementDocument = gql`
     mutation AcceptClickwrapAgreement {
   acceptClickwrapAgreement(input: {}) {
     my_profile {
-      id
+      id: transitionalId
       accepted_clickwrap_agreement
     }
   }

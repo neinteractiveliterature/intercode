@@ -10,37 +10,37 @@ export type CreateStaffPositionMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateStaffPositionMutationData = { __typename: 'Mutation', createStaffPosition?: Types.Maybe<{ __typename: 'CreateStaffPositionPayload', staff_position: { __typename: 'StaffPosition', id: number, name: string, email?: Types.Maybe<string>, visible?: Types.Maybe<boolean>, email_aliases: Array<string>, cc_addresses: Array<string>, user_con_profiles: Array<{ __typename: 'UserConProfile', id: number, name_without_nickname: string, gravatar_url: string, gravatar_enabled: boolean }>, permissions: Array<{ __typename: 'Permission', id: number, permission: string, model: { __typename: 'CmsContentGroup', id: number, name: string } | { __typename: 'Convention', id: number, name: string } | { __typename: 'EventCategory', id: number, name: string, default_color?: Types.Maybe<string> } }> } }> };
+export type CreateStaffPositionMutationData = { __typename: 'Mutation', createStaffPosition: { __typename: 'CreateStaffPositionPayload', staff_position: { __typename: 'StaffPosition', name: string, email?: string | null | undefined, visible?: boolean | null | undefined, email_aliases: Array<string>, cc_addresses: Array<string>, id: string, user_con_profiles: Array<{ __typename: 'UserConProfile', name_without_nickname: string, gravatar_url: string, gravatar_enabled: boolean, id: string }>, permissions: Array<{ __typename: 'Permission', permission: string, id: string, model: { __typename: 'CmsContentGroup', name: string, id: string } | { __typename: 'Convention', name: string, id: string } | { __typename: 'EventCategory', name: string, default_color?: string | null | undefined, id: string }, role: { __typename: 'OrganizationRole', name: string, id: string } | { __typename: 'StaffPosition', name: string, id: string } }> } } };
 
 export type UpdateStaffPositionMutationVariables = Types.Exact<{
   input: Types.UpdateStaffPositionInput;
 }>;
 
 
-export type UpdateStaffPositionMutationData = { __typename: 'Mutation', updateStaffPosition?: Types.Maybe<{ __typename: 'UpdateStaffPositionPayload', staff_position: { __typename: 'StaffPosition', id: number, name: string, email?: Types.Maybe<string>, visible?: Types.Maybe<boolean>, email_aliases: Array<string>, cc_addresses: Array<string>, user_con_profiles: Array<{ __typename: 'UserConProfile', id: number, name_without_nickname: string, gravatar_url: string, gravatar_enabled: boolean }>, permissions: Array<{ __typename: 'Permission', id: number, permission: string, model: { __typename: 'CmsContentGroup', id: number, name: string } | { __typename: 'Convention', id: number, name: string } | { __typename: 'EventCategory', id: number, name: string, default_color?: Types.Maybe<string> } }> } }> };
+export type UpdateStaffPositionMutationData = { __typename: 'Mutation', updateStaffPosition: { __typename: 'UpdateStaffPositionPayload', staff_position: { __typename: 'StaffPosition', name: string, email?: string | null | undefined, visible?: boolean | null | undefined, email_aliases: Array<string>, cc_addresses: Array<string>, id: string, user_con_profiles: Array<{ __typename: 'UserConProfile', name_without_nickname: string, gravatar_url: string, gravatar_enabled: boolean, id: string }>, permissions: Array<{ __typename: 'Permission', permission: string, id: string, model: { __typename: 'CmsContentGroup', name: string, id: string } | { __typename: 'Convention', name: string, id: string } | { __typename: 'EventCategory', name: string, default_color?: string | null | undefined, id: string }, role: { __typename: 'OrganizationRole', name: string, id: string } | { __typename: 'StaffPosition', name: string, id: string } }> } } };
 
 export type UpdateStaffPositionPermissionsMutationVariables = Types.Exact<{
-  staffPositionId: Types.Scalars['Int'];
+  staffPositionId: Types.Scalars['ID'];
   grantPermissions: Array<Types.PermissionInput> | Types.PermissionInput;
   revokePermissions: Array<Types.PermissionInput> | Types.PermissionInput;
 }>;
 
 
-export type UpdateStaffPositionPermissionsMutationData = { __typename: 'Mutation', updateStaffPositionPermissions?: Types.Maybe<{ __typename: 'UpdateStaffPositionPermissionsPayload', staff_position: { __typename: 'StaffPosition', id: number, name: string, email?: Types.Maybe<string>, visible?: Types.Maybe<boolean>, email_aliases: Array<string>, cc_addresses: Array<string>, user_con_profiles: Array<{ __typename: 'UserConProfile', id: number, name_without_nickname: string, gravatar_url: string, gravatar_enabled: boolean }>, permissions: Array<{ __typename: 'Permission', id: number, permission: string, model: { __typename: 'CmsContentGroup', id: number, name: string } | { __typename: 'Convention', id: number, name: string } | { __typename: 'EventCategory', id: number, name: string, default_color?: Types.Maybe<string> } }> } }> };
+export type UpdateStaffPositionPermissionsMutationData = { __typename: 'Mutation', updateStaffPositionPermissions: { __typename: 'UpdateStaffPositionPermissionsPayload', staff_position: { __typename: 'StaffPosition', name: string, email?: string | null | undefined, visible?: boolean | null | undefined, email_aliases: Array<string>, cc_addresses: Array<string>, id: string, user_con_profiles: Array<{ __typename: 'UserConProfile', name_without_nickname: string, gravatar_url: string, gravatar_enabled: boolean, id: string }>, permissions: Array<{ __typename: 'Permission', permission: string, id: string, model: { __typename: 'CmsContentGroup', name: string, id: string } | { __typename: 'Convention', name: string, id: string } | { __typename: 'EventCategory', name: string, default_color?: string | null | undefined, id: string }, role: { __typename: 'OrganizationRole', name: string, id: string } | { __typename: 'StaffPosition', name: string, id: string } }> } } };
 
 export type DeleteStaffPositionMutationVariables = Types.Exact<{
   input: Types.DeleteStaffPositionInput;
 }>;
 
 
-export type DeleteStaffPositionMutationData = { __typename: 'Mutation', deleteStaffPosition?: Types.Maybe<{ __typename: 'DeleteStaffPositionPayload', staff_position: { __typename: 'StaffPosition', id: number } }> };
+export type DeleteStaffPositionMutationData = { __typename: 'Mutation', deleteStaffPosition: { __typename: 'DeleteStaffPositionPayload', staff_position: { __typename: 'StaffPosition', id: string } } };
 
 
 export const CreateStaffPositionDocument = gql`
     mutation CreateStaffPosition($input: CreateStaffPositionInput!) {
   createStaffPosition(input: $input) {
     staff_position {
-      id
+      id: transitionalId
       ...StaffPositionFields
     }
   }
@@ -76,7 +76,7 @@ export const UpdateStaffPositionDocument = gql`
     mutation UpdateStaffPosition($input: UpdateStaffPositionInput!) {
   updateStaffPosition(input: $input) {
     staff_position {
-      id
+      id: transitionalId
       ...StaffPositionFields
     }
   }
@@ -109,12 +109,12 @@ export type UpdateStaffPositionMutationHookResult = ReturnType<typeof useUpdateS
 export type UpdateStaffPositionMutationResult = Apollo.MutationResult<UpdateStaffPositionMutationData>;
 export type UpdateStaffPositionMutationOptions = Apollo.BaseMutationOptions<UpdateStaffPositionMutationData, UpdateStaffPositionMutationVariables>;
 export const UpdateStaffPositionPermissionsDocument = gql`
-    mutation UpdateStaffPositionPermissions($staffPositionId: Int!, $grantPermissions: [PermissionInput!]!, $revokePermissions: [PermissionInput!]!) {
+    mutation UpdateStaffPositionPermissions($staffPositionId: ID!, $grantPermissions: [PermissionInput!]!, $revokePermissions: [PermissionInput!]!) {
   updateStaffPositionPermissions(
-    input: {staff_position_id: $staffPositionId, grant_permissions: $grantPermissions, revoke_permissions: $revokePermissions}
+    input: {transitionalStaffPositionId: $staffPositionId, grant_permissions: $grantPermissions, revoke_permissions: $revokePermissions}
   ) {
     staff_position {
-      id
+      id: transitionalId
       ...StaffPositionFields
     }
   }
@@ -152,7 +152,7 @@ export const DeleteStaffPositionDocument = gql`
     mutation DeleteStaffPosition($input: DeleteStaffPositionInput!) {
   deleteStaffPosition(input: $input) {
     staff_position {
-      id
+      id: transitionalId
     }
   }
 }

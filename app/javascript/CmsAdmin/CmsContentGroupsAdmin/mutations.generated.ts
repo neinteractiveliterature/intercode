@@ -11,24 +11,24 @@ export type CreateContentGroupMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateContentGroupMutationData = { __typename: 'Mutation', createCmsContentGroup?: Types.Maybe<{ __typename: 'CreateCmsContentGroupPayload', cms_content_group: { __typename: 'CmsContentGroup', id: number, name: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, contents: Array<{ __typename: 'CmsLayout', id: number, name?: Types.Maybe<string> } | { __typename: 'CmsPartial', id: number, name?: Types.Maybe<string> } | { __typename: 'Page', id: number, name?: Types.Maybe<string> }>, permissions: Array<{ __typename: 'Permission', id: number, permission: string, model: { __typename: 'CmsContentGroup', id: number, name: string } | { __typename: 'Convention', id: number, name: string } | { __typename: 'EventCategory', id: number, name: string, default_color?: Types.Maybe<string> }, role: { __typename: 'OrganizationRole', id: number, name: string } | { __typename: 'StaffPosition', id: number, name: string } }> } }> };
+export type CreateContentGroupMutationData = { __typename: 'Mutation', createCmsContentGroup: { __typename: 'CreateCmsContentGroupPayload', cms_content_group: { __typename: 'CmsContentGroup', name: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, id: string, contents: Array<{ __typename: 'CmsLayout', name?: string | null | undefined, id: string } | { __typename: 'CmsPartial', name?: string | null | undefined, id: string } | { __typename: 'Page', name?: string | null | undefined, id: string }>, permissions: Array<{ __typename: 'Permission', permission: string, id: string, model: { __typename: 'CmsContentGroup', name: string, id: string } | { __typename: 'Convention', name: string, id: string } | { __typename: 'EventCategory', name: string, default_color?: string | null | undefined, id: string }, role: { __typename: 'OrganizationRole', name: string, id: string } | { __typename: 'StaffPosition', name: string, id: string } }> } } };
 
 export type UpdateContentGroupMutationVariables = Types.Exact<{
-  id: Types.Scalars['Int'];
+  id: Types.Scalars['ID'];
   cmsContentGroup: Types.CmsContentGroupInput;
   grantPermissions?: Types.Maybe<Array<Types.PermissionInput> | Types.PermissionInput>;
   revokePermissions?: Types.Maybe<Array<Types.PermissionInput> | Types.PermissionInput>;
 }>;
 
 
-export type UpdateContentGroupMutationData = { __typename: 'Mutation', updateCmsContentGroup?: Types.Maybe<{ __typename: 'UpdateCmsContentGroupPayload', cms_content_group: { __typename: 'CmsContentGroup', id: number, name: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, contents: Array<{ __typename: 'CmsLayout', id: number, name?: Types.Maybe<string> } | { __typename: 'CmsPartial', id: number, name?: Types.Maybe<string> } | { __typename: 'Page', id: number, name?: Types.Maybe<string> }>, permissions: Array<{ __typename: 'Permission', id: number, permission: string, model: { __typename: 'CmsContentGroup', id: number, name: string } | { __typename: 'Convention', id: number, name: string } | { __typename: 'EventCategory', id: number, name: string, default_color?: Types.Maybe<string> }, role: { __typename: 'OrganizationRole', id: number, name: string } | { __typename: 'StaffPosition', id: number, name: string } }> } }> };
+export type UpdateContentGroupMutationData = { __typename: 'Mutation', updateCmsContentGroup: { __typename: 'UpdateCmsContentGroupPayload', cms_content_group: { __typename: 'CmsContentGroup', name: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, id: string, contents: Array<{ __typename: 'CmsLayout', name?: string | null | undefined, id: string } | { __typename: 'CmsPartial', name?: string | null | undefined, id: string } | { __typename: 'Page', name?: string | null | undefined, id: string }>, permissions: Array<{ __typename: 'Permission', permission: string, id: string, model: { __typename: 'CmsContentGroup', name: string, id: string } | { __typename: 'Convention', name: string, id: string } | { __typename: 'EventCategory', name: string, default_color?: string | null | undefined, id: string }, role: { __typename: 'OrganizationRole', name: string, id: string } | { __typename: 'StaffPosition', name: string, id: string } }> } } };
 
 export type DeleteContentGroupMutationVariables = Types.Exact<{
-  id: Types.Scalars['Int'];
+  id: Types.Scalars['ID'];
 }>;
 
 
-export type DeleteContentGroupMutationData = { __typename: 'Mutation', deleteCmsContentGroup?: Types.Maybe<{ __typename: 'DeleteCmsContentGroupPayload', clientMutationId?: Types.Maybe<string> }> };
+export type DeleteContentGroupMutationData = { __typename: 'Mutation', deleteCmsContentGroup: { __typename: 'DeleteCmsContentGroupPayload', clientMutationId?: string | null | undefined } };
 
 
 export const CreateContentGroupDocument = gql`
@@ -37,7 +37,7 @@ export const CreateContentGroupDocument = gql`
     input: {cms_content_group: $cmsContentGroup, permissions: $permissions}
   ) {
     cms_content_group {
-      id
+      id: transitionalId
       ...CmsContentGroupFields
     }
   }
@@ -71,12 +71,12 @@ export type CreateContentGroupMutationHookResult = ReturnType<typeof useCreateCo
 export type CreateContentGroupMutationResult = Apollo.MutationResult<CreateContentGroupMutationData>;
 export type CreateContentGroupMutationOptions = Apollo.BaseMutationOptions<CreateContentGroupMutationData, CreateContentGroupMutationVariables>;
 export const UpdateContentGroupDocument = gql`
-    mutation UpdateContentGroup($id: Int!, $cmsContentGroup: CmsContentGroupInput!, $grantPermissions: [PermissionInput!], $revokePermissions: [PermissionInput!]) {
+    mutation UpdateContentGroup($id: ID!, $cmsContentGroup: CmsContentGroupInput!, $grantPermissions: [PermissionInput!], $revokePermissions: [PermissionInput!]) {
   updateCmsContentGroup(
-    input: {id: $id, cms_content_group: $cmsContentGroup, grant_permissions: $grantPermissions, revoke_permissions: $revokePermissions}
+    input: {transitionalId: $id, cms_content_group: $cmsContentGroup, grant_permissions: $grantPermissions, revoke_permissions: $revokePermissions}
   ) {
     cms_content_group {
-      id
+      id: transitionalId
       ...CmsContentGroupFields
     }
   }
@@ -112,8 +112,8 @@ export type UpdateContentGroupMutationHookResult = ReturnType<typeof useUpdateCo
 export type UpdateContentGroupMutationResult = Apollo.MutationResult<UpdateContentGroupMutationData>;
 export type UpdateContentGroupMutationOptions = Apollo.BaseMutationOptions<UpdateContentGroupMutationData, UpdateContentGroupMutationVariables>;
 export const DeleteContentGroupDocument = gql`
-    mutation DeleteContentGroup($id: Int!) {
-  deleteCmsContentGroup(input: {id: $id}) {
+    mutation DeleteContentGroup($id: ID!) {
+  deleteCmsContentGroup(input: {transitionalId: $id}) {
     clientMutationId
   }
 }

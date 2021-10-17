@@ -14,7 +14,14 @@ export type MapboxMapProps = {
   height?: string;
 };
 
-function MapboxMap({ center, zoom, markerLocation, setCenter, setZoom, height }: MapboxMapProps) {
+function MapboxMap({
+  center,
+  zoom,
+  markerLocation,
+  setCenter,
+  setZoom,
+  height,
+}: MapboxMapProps): JSX.Element {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<Map | null>(null);
   const markerRef = useRef<Marker | null>(null);

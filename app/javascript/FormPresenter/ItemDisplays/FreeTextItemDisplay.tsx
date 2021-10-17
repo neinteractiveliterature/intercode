@@ -19,7 +19,7 @@ export type FreeTextItemDisplayProps = {
   value: FormItemValueType<FreeTextFormItem>;
 };
 
-function FreeTextItemDisplay({ formItem, value }: FreeTextItemDisplayProps) {
+function FreeTextItemDisplay({ formItem, value }: FreeTextItemDisplayProps): JSX.Element {
   if (formItem.rendered_properties.format === 'markdown') {
     return <MarkdownDisplay markdown={value} />;
   }

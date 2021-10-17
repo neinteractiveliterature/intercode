@@ -11,10 +11,10 @@ import { Department, DepartmentInput } from '../graphqlTypes.generated';
 
 export type DepartmentFormProps = {
   initialDepartment: Pick<Department, 'name' | 'proposal_description'>;
-  onSave: (departmentInput: DepartmentInput) => Promise<any>;
+  onSave: (departmentInput: DepartmentInput) => Promise<unknown>;
 };
 
-function DepartmentForm({ initialDepartment, onSave }: DepartmentFormProps) {
+function DepartmentForm({ initialDepartment, onSave }: DepartmentFormProps): JSX.Element {
   const [name, setName] = useState(initialDepartment.name);
   const [proposalDescription, setProposalDescription] = useState(
     initialDepartment.proposal_description,

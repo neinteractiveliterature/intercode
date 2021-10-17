@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class ContentCloners::ContentClonerBase
   attr_reader :source_convention, :id_maps
 
@@ -15,10 +16,8 @@ class ContentCloners::ContentClonerBase
   def clone_with_id_map(source_scope, destination_scope, &block)
     id_map = {}
     source_scope.find_each do |model|
-      cloned_model = destination_scope.new(
-        model.attributes.symbolize_keys.except(:id, :created_at, :updated_at)
-      )
-      block.call(model, cloned_model) if block
+      cloned_model = destination_scope.new(model.attributes.symbolize_keys.except(:id, :created_at, :updated_at))
+      block&.call(model, cloned_model)
       cloned_model.save!
       id_map[model.id] = cloned_model
     end
@@ -30,13 +29,14 @@ class ContentCloners::ContentClonerBase
 
     value.class.new(
       **value.attributes.symbolize_keys.merge(
-        timespans: value.timespans.map do |timespan|
-          {
-            start: timespan.start ? timespan.start + amount : nil,
-            finish: timespan.finish ? timespan.finish + amount : nil,
-            value: timespan.value
-          }
-        end
+        timespans:
+          value.timespans.map do |timespan|
+            {
+              start: timespan.start ? timespan.start + amount : nil,
+              finish: timespan.finish ? timespan.finish + amount : nil,
+              value: timespan.value
+            }
+          end
       )
     )
   end

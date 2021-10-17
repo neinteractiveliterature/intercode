@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
@@ -32,7 +33,7 @@
 #  fk_rails_...  (user_con_profile_id => user_con_profiles.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+
 class SignupRequest < ApplicationRecord
   belongs_to :user_con_profile
   belongs_to :target_run, class_name: 'Run'
@@ -43,8 +44,7 @@ class SignupRequest < ApplicationRecord
 
   validates :state, presence: true, inclusion: { in: Types::SignupRequestStateType.values.keys }
   validate :ensure_all_fields_point_at_the_same_convention
-  validates :result_signup,
-    presence: { if: ->(signup_request) { signup_request.state == 'accepted' } }
+  validates :result_signup, presence: { if: ->(signup_request) { signup_request.state == 'accepted' } }
 
   def to_liquid
     SignupRequestDrop.new(self)
@@ -57,8 +57,7 @@ class SignupRequest < ApplicationRecord
       value = public_send(field)
       next unless value && value.convention != convention
 
-      errors.add field,
-        "is in #{value.convention.name} but the attendee profile is in #{convention.name}"
+      errors.add field, "is in #{value.convention.name} but the attendee profile is in #{convention.name}"
     end
   end
 end

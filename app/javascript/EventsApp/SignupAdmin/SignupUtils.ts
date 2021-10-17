@@ -6,15 +6,12 @@ import { RegistrationPolicyBucket, Signup, SignupState } from '../../graphqlType
 export function findBucket<BucketType extends Pick<RegistrationPolicyBucket, 'key'>>(
   bucketKey: string | null | undefined,
   registrationPolicy: { buckets: BucketType[] },
-) {
+): BucketType | undefined {
   return registrationPolicy.buckets.find((bucket) => bucket.key === bucketKey);
 }
 
-export type SignupForFormatBucket = Pick<
-  Signup,
-  'bucket_key' | 'counted' | 'state' | 'requested_bucket_key'
-> & {
-  user_con_profile?: { id: number };
+export type SignupForFormatBucket = Pick<Signup, 'bucket_key' | 'counted' | 'state' | 'requested_bucket_key'> & {
+  user_con_profile?: { id: string };
 };
 
 export type EventForFormatBucket = {
@@ -27,14 +24,10 @@ export type EventForFormatBucket = {
       name?: string | null;
     }[];
   };
-  team_members: { user_con_profile?: { id: number } }[];
+  team_members: { user_con_profile?: { id: string } }[];
 };
 
-export function formatBucket(
-  signup: SignupForFormatBucket,
-  event: EventForFormatBucket,
-  t: TFunction,
-) {
+export function formatBucket(signup: SignupForFormatBucket, event: EventForFormatBucket, t: TFunction): string {
   const { bucket_key: bucketKey } = signup;
   const registrationPolicy = event.registration_policy ?? { buckets: [] };
 
@@ -45,11 +38,7 @@ export function formatBucket(
       });
     }
 
-    if (
-      event.team_members.some(
-        (teamMember) => teamMember.user_con_profile?.id === signup.user_con_profile?.id,
-      )
-    ) {
+    if (event.team_members.some((teamMember) => teamMember.user_con_profile?.id === signup.user_con_profile?.id)) {
       return t('signups.states.teamMemberNotCounted', '{{ teamMemberName }} (not counted)', {
         teamMemberName: humanize(underscore(event.event_category.team_member_name)),
       });
@@ -58,11 +47,9 @@ export function formatBucket(
     if (signup.state === 'waitlisted') {
       const requestedBucket = findBucket(signup.requested_bucket_key, registrationPolicy);
       if (requestedBucket) {
-        return t(
-          'signups.states.waitlistedWithRequestedBucket',
-          'Waitlisted (requested {{ requestedBucketName }})',
-          { requestedBucketName: requestedBucket.name },
-        );
+        return t('signups.states.waitlistedWithRequestedBucket', 'Waitlisted (requested {{ requestedBucketName }})', {
+          requestedBucketName: requestedBucket.name,
+        });
       }
 
       return t('signups.states.waitlistedNoPreference', 'Waitlisted (no preference)');
@@ -74,16 +61,14 @@ export function formatBucket(
   const bucket = findBucket(bucketKey, registrationPolicy);
   const requestedBucket = findBucket(signup.requested_bucket_key, registrationPolicy);
 
-  if (bucket && requestedBucket && bucket.name === requestedBucket.name) {
+  if (bucket && requestedBucket && bucket.name != null && bucket.name === requestedBucket.name) {
     return bucket.name;
   }
 
   if (requestedBucket) {
-    return t(
-      'signups.states.inUnrequestedBucket',
-      '{{ bucketName }} (requested {{ requestedBucketName }})',
-      { bucketName: bucket?.name ?? t('signups.states.noBucketName', 'None') },
-    );
+    return t('signups.states.inUnrequestedBucket', '{{ bucketName }} (requested {{ requestedBucketName }})', {
+      bucketName: bucket?.name ?? t('signups.states.noBucketName', 'None'),
+    });
   }
 
   if (bucket) {
@@ -95,7 +80,7 @@ export function formatBucket(
   return t('signups.states.noBucketName', 'None');
 }
 
-export function formatSignupState(state: SignupState | undefined | null, t: TFunction) {
+export function formatSignupState(state: SignupState | undefined | null, t: TFunction): string {
   if (state == null) {
     return t('signups.states.notSignedUp', 'Not signed up');
   }
@@ -109,31 +94,24 @@ export function formatSignupState(state: SignupState | undefined | null, t: TFun
       return t('signups.states.withdrawn', 'Withdrawn');
     default:
       assertNever(state, true);
+      // @ts-expect-error Deliberately unreachable code in case we get an invalid state
       return state;
   }
 }
 
-export function formatSignupStatus(
-  signup: SignupForFormatBucket,
-  event: EventForFormatBucket,
-  t: TFunction,
-) {
+export function formatSignupStatus(signup: SignupForFormatBucket, event: EventForFormatBucket, t: TFunction): string {
   if (signup.state === 'confirmed') {
     return formatBucket(signup, event, t);
   }
 
-  const requestedBucket = findBucket(
-    signup.requested_bucket_key,
-    event.registration_policy ?? { buckets: [] },
-  );
+  const requestedBucket = findBucket(signup.requested_bucket_key, event.registration_policy ?? { buckets: [] });
   const stateText = formatSignupState(signup.state, t);
 
   if (requestedBucket) {
-    return t(
-      'signups.states.stateWithRequestedBucket',
-      '{{ state }} (requested {{ requestedBucket }})',
-      { state: stateText, requestedBucket: requestedBucket.name },
-    );
+    return t('signups.states.stateWithRequestedBucket', '{{ state }} (requested {{ requestedBucket }})', {
+      state: stateText,
+      requestedBucket: requestedBucket.name,
+    });
   }
 
   return stateText;

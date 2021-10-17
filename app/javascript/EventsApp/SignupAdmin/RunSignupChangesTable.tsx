@@ -3,9 +3,7 @@ import { Column } from 'react-table';
 import { useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
 
-import useReactTableWithTheWorks, {
-  QueryDataContext,
-} from '../../Tables/useReactTableWithTheWorks';
+import useReactTableWithTheWorks, { QueryDataContext } from '../../Tables/useReactTableWithTheWorks';
 import UserConProfileWithGravatarCell from '../../Tables/UserConProfileWithGravatarCell';
 import FreeTextFilter from '../../Tables/FreeTextFilter';
 import { buildFieldFilterCodecs, FilterCodecs } from '../../Tables/FilterUtils';
@@ -24,7 +22,7 @@ const FILTER_CODECS = buildFieldFilterCodecs({
   action: FilterCodecs.stringArray,
 });
 
-type SignupChangeType = RunSignupChangesQueryData['run']['signup_changes_paginated']['entries'][0];
+type SignupChangeType = RunSignupChangesQueryData['convention']['run']['signup_changes_paginated']['entries'][0];
 
 const getPossibleColumns: (t: TFunction) => Column<SignupChangeType>[] = (t) => [
   {
@@ -59,26 +57,20 @@ const getPossibleColumns: (t: TFunction) => Column<SignupChangeType>[] = (t) => 
 ];
 
 export type RunSignupChangesTableProps = {
-  runId: number;
+  runId: string;
 };
 
 const defaultVisibleColumns = ['name', 'action', 'bucket_change', 'created_at'];
 
-function RunSignupChangesTable({ runId }: RunSignupChangesTableProps) {
+function RunSignupChangesTable({ runId }: RunSignupChangesTableProps): JSX.Element {
   const { t } = useTranslation();
   const getPossibleColumnsFunc = useMemo(() => () => getPossibleColumns(t), [t]);
-  const {
-    tableInstance,
-    loading,
-    queryData,
-    tableHeaderProps,
-    columnSelectionProps,
-  } = useReactTableWithTheWorks({
+  const { tableInstance, loading, queryData, tableHeaderProps, columnSelectionProps } = useReactTableWithTheWorks({
     decodeFilterValue: FILTER_CODECS.decodeFilterValue,
     defaultVisibleColumns,
     encodeFilterValue: FILTER_CODECS.encodeFilterValue,
-    getData: ({ data }) => data.run.signup_changes_paginated.entries,
-    getPages: ({ data }) => data.run.signup_changes_paginated.total_pages,
+    getData: ({ data }) => data.convention.run.signup_changes_paginated.entries,
+    getPages: ({ data }) => data.convention.run.signup_changes_paginated.total_pages,
     getPossibleColumns: getPossibleColumnsFunc,
     useQuery: useRunSignupChangesQuery,
     storageKeyPrefix: 'signupSpy',
@@ -89,7 +81,7 @@ function RunSignupChangesTable({ runId }: RunSignupChangesTableProps) {
     useValueUnless(
       () =>
         t('events.signupAdmin.historyPageTitle', 'Signup change history - {{ eventTitle }}', {
-          eventTitle: queryData?.run.event.title,
+          eventTitle: queryData?.convention.run.event.title,
         }),
       !queryData,
     ),

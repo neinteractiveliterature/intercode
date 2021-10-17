@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { NavLink, Switch, Route, Redirect } from 'react-router-dom';
-import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
+import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import CmsVariablesAdmin from './CmsVariablesAdmin';
 import CmsGraphqlQueriesAdmin from './CmsGraphqlQueriesAdmin';
@@ -32,17 +32,8 @@ function CmsAdminNavTab({ path, children, icon }: CmsAdminNavTabProps) {
   );
 }
 
-function CmsAdmin() {
+export default LoadQueryWrapper(useCmsAdminBaseQuery, function CmsAdmin({ data }): JSX.Element {
   const authorizationWarning = useAuthorizationRequired('can_manage_any_cms_content');
-  const { data, loading, error } = useCmsAdminBaseQuery();
-
-  if (loading) {
-    return <LoadingIndicator iconSet="bootstrap-icons" />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
 
   if (authorizationWarning) return authorizationWarning;
 
@@ -125,6 +116,4 @@ function CmsAdmin() {
       </Switch>
     </>
   );
-}
-
-export default CmsAdmin;
+});

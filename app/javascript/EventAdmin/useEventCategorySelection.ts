@@ -1,5 +1,4 @@
 import { useMemo, useState, useCallback } from 'react';
-import { parseIntOrNull } from '@neinteractiveliterature/litform';
 
 import {
   getEventFormForEventCategoryId,
@@ -12,30 +11,24 @@ import { CommonFormFieldsFragment } from '../Models/commonFormFragments.generate
 import { EventCategory } from '../graphqlTypes.generated';
 
 type EventCategorySelectorData = EventCategoryFormData & Pick<EventCategory, 'name'>;
-export type UseEventCategorySelectionOptions<
-  EventCategoryType extends EventCategorySelectorData
-> = {
+export type UseEventCategorySelectionOptions<EventCategoryType extends EventCategorySelectorData> = {
   convention: ConventionForEventCategoryForms<EventCategoryType>;
-  initialEventCategoryId?: number | null;
-  selectableCategoryIds?: number[] | null;
+  initialEventCategoryId?: string | null;
+  selectableCategoryIds?: string[] | null;
 };
 
-export type UseEventCategorySelectionResult<
-  EventCategoryType extends EventCategorySelectorData
-> = readonly [
+export type UseEventCategorySelectionResult<EventCategoryType extends EventCategorySelectorData> = readonly [
   EventCategorySelectProps,
   {
-    eventCategoryId?: number;
-    setEventCategoryId: React.Dispatch<React.SetStateAction<number | undefined>>;
+    eventCategoryId?: string;
+    setEventCategoryId: React.Dispatch<React.SetStateAction<string | undefined>>;
     eventCategory?: EventCategoryType;
     eventForm: CommonFormFieldsFragment;
     eventProposalForm: CommonFormFieldsFragment;
   },
 ];
 
-export default function useEventCategorySelection<
-  EventCategoryType extends EventCategorySelectorData
->({
+export default function useEventCategorySelection<EventCategoryType extends EventCategorySelectorData>({
   convention,
   initialEventCategoryId,
   selectableCategoryIds,
@@ -43,35 +36,27 @@ export default function useEventCategorySelection<
   const selectableCategories = useMemo(
     () =>
       selectableCategoryIds
-        ? convention.event_categories.filter((category) =>
-            selectableCategoryIds.includes(category.id),
-          )
+        ? convention.event_categories.filter((category) => selectableCategoryIds.includes(category.id))
         : convention.event_categories,
     [convention.event_categories, selectableCategoryIds],
   );
 
   const [eventCategoryId, setEventCategoryId] = useState(
-    initialEventCategoryId ||
-      (selectableCategories.length === 1 ? selectableCategories[0].id : undefined),
+    initialEventCategoryId || (selectableCategories.length === 1 ? selectableCategories[0].id : undefined),
   );
 
   const eventCategory = useMemo(
     () =>
-      eventCategoryId
-        ? convention.event_categories.find((category) => category.id === eventCategoryId)
-        : undefined,
+      eventCategoryId ? convention.event_categories.find((category) => category.id === eventCategoryId) : undefined,
     [convention.event_categories, eventCategoryId],
   );
 
-  const eventCategorySelectChanged = useCallback(
-    (e) => setEventCategoryId(parseIntOrNull(e) ?? undefined),
-    [setEventCategoryId],
-  );
+  const eventCategorySelectChanged = useCallback((e) => setEventCategoryId(e ?? undefined), [setEventCategoryId]);
 
-  const eventForm = useMemo(() => getEventFormForEventCategoryId(eventCategoryId, convention), [
-    convention,
-    eventCategoryId,
-  ]);
+  const eventForm = useMemo(
+    () => getEventFormForEventCategoryId(eventCategoryId, convention),
+    [convention, eventCategoryId],
+  );
 
   const eventProposalForm = useMemo(
     () => getProposalFormForEventCategoryId(eventCategoryId, convention),

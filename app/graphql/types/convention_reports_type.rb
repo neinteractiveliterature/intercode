@@ -1,11 +1,11 @@
+# frozen_string_literal: true
 class Types::ConventionReportsType < Types::BaseObject
   # WARNING WARNING
   # Do not use `convention` in here!  Use `object` instead.  `convention` will appear to work but
   # is subtly wrong, because the current domain's convention might not be the convention the user
   # is asking for in their query.
 
-  field :ticket_count_by_type_and_payment_amount, [Types::TicketCountByTypeAndPaymentAmountType],
-    null: false
+  field :ticket_count_by_type_and_payment_amount, [Types::TicketCountByTypeAndPaymentAmountType], null: false
   field :total_revenue, Types::MoneyType, null: false
   field :event_provided_tickets, [Types::EventProvidedTicketListType], null: false
   field :events_by_choice, [Types::EventWithChoiceCountsType], null: false
@@ -21,44 +21,36 @@ Use #object or #context_convention instead."
   end
 
   def ticket_count_by_type_and_payment_amount
-    @ticket_count_by_type_and_payment_amount ||= begin
-      grouped_count_data = object.tickets.left_joins(:order_entry).group(
-        :ticket_type_id,
-        'COALESCE(price_per_item_cents, 0)',
-        "COALESCE(price_per_item_currency, 'USD')"
-      ).count
+    @ticket_count_by_type_and_payment_amount ||=
+      begin
+        grouped_count_data =
+          object
+            .tickets
+            .left_joins(:order_entry)
+            .group(:ticket_type_id, 'COALESCE(price_per_item_cents, 0)', "COALESCE(price_per_item_currency, 'USD')")
+            .count
 
-      grouped_count_data.map do |(ticket_type_id, amount_cents, amount_currency), count|
-        {
-          ticket_type_id: ticket_type_id,
-          payment_amount: Money.new(amount_cents, amount_currency),
-          count: count
-        }
+        grouped_count_data.map do |(ticket_type_id, amount_cents, amount_currency), count|
+          { ticket_type_id: ticket_type_id, payment_amount: Money.new(amount_cents, amount_currency), count: count }
+        end
       end
-    end
   end
 
   def total_revenue
     return Money.new(0, 'USD') if ticket_count_by_type_and_payment_amount.blank?
-    ticket_count_by_type_and_payment_amount.map do |row|
-      row[:payment_amount] * row[:count]
-    end.sum
+    ticket_count_by_type_and_payment_amount.sum { |row| row[:payment_amount] * row[:count] }
   end
 
   def event_provided_tickets
-    tickets = object.tickets.joins(:provided_by_event)
-      .where(events: { status: 'active' })
-      .includes(:provided_by_event)
-    tickets.to_a.group_by(&:provided_by_event).map do |provided_by_event, event_tickets|
-      {
-        provided_by_event: provided_by_event,
-        tickets: event_tickets
-      }
-    end
+    tickets = object.tickets.joins(:provided_by_event).where(events: { status: 'active' }).includes(:provided_by_event)
+    tickets
+      .to_a
+      .group_by(&:provided_by_event)
+      .map { |provided_by_event, event_tickets| { provided_by_event: provided_by_event, tickets: event_tickets } }
   end
 
   def events_by_choice # rubocop:disable Metrics/MethodLength
-    rows = ActiveRecord::Base.connection.select_rows <<~SQL
+    rows = ActiveRecord::Base.connection.select_rows <<~SQL.squish
       SELECT event_id, state, choice, count(*) FROM (
         SELECT
           runs.event_id,
@@ -88,9 +80,10 @@ Use #object or #context_convention instead."
     object.events.active.map do |event|
       {
         event: event,
-        choice_counts: (rows_by_event_id[event.id] || []).map do |(_, state, choice, count)|
-          { choice: choice, state: state, count: count }
-        end
+        choice_counts:
+          (rows_by_event_id[event.id] || []).map do |(_, state, choice, count)|
+            { choice: choice, state: state, count: count }
+          end
       }
     end
   end

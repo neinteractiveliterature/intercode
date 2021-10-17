@@ -5,7 +5,7 @@ import EditCmsContentGroup from './EditCmsContentGroup';
 import NewCmsContentGroup from './NewCmsContentGroup';
 import ViewCmsContentGroup from './ViewCmsContentGroup';
 
-function CmsContentGroupsAdmin() {
+function CmsContentGroupsAdmin(): JSX.Element {
   return (
     <Switch>
       <Route path="/cms_content_groups/:id/edit">

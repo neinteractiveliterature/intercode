@@ -7,30 +7,30 @@ import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
 export type CreateConventionMutationVariables = Types.Exact<{
   convention: Types.ConventionInput;
-  cloneConventionId?: Types.Maybe<Types.Scalars['Int']>;
-  organizationId?: Types.Maybe<Types.Scalars['Int']>;
+  cloneConventionId?: Types.Maybe<Types.Scalars['ID']>;
+  organizationId?: Types.Maybe<Types.Scalars['ID']>;
   cmsContentSetName?: Types.Maybe<Types.Scalars['String']>;
 }>;
 
 
-export type CreateConventionMutationData = { __typename: 'Mutation', createConvention?: Types.Maybe<{ __typename: 'CreateConventionPayload', convention: { __typename: 'Convention', id: number, name: string, starts_at?: Types.Maybe<any>, ends_at?: Types.Maybe<any>, canceled: boolean, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode, domain?: Types.Maybe<string>, site_mode: Types.SiteMode, ticket_mode: Types.TicketMode, show_event_list?: Types.Maybe<Types.ShowSchedule>, show_schedule?: Types.Maybe<Types.ShowSchedule>, email_from: string, hidden: boolean, language: string, maximum_event_signups?: Types.Maybe<{ __typename: 'ScheduledValue', timespans: Array<{ __typename: 'TimespanWithValue', start?: Types.Maybe<any>, finish?: Types.Maybe<any>, value: string }> }>, organization?: Types.Maybe<{ __typename: 'Organization', id: number, name: string }> } }> };
+export type CreateConventionMutationData = { __typename: 'Mutation', createConvention: { __typename: 'CreateConventionPayload', convention: { __typename: 'Convention', name: string, starts_at?: string | null | undefined, ends_at?: string | null | undefined, canceled: boolean, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, domain?: string | null | undefined, site_mode: Types.SiteMode, ticket_mode: Types.TicketMode, show_event_list?: Types.ShowSchedule | null | undefined, show_schedule?: Types.ShowSchedule | null | undefined, email_from: string, hidden: boolean, language: string, id: string, maximum_event_signups?: { __typename: 'ScheduledValue', timespans: Array<{ __typename: 'TimespanWithValue', start?: string | null | undefined, finish?: string | null | undefined, value: string }> } | null | undefined, organization?: { __typename: 'Organization', name: string, id: string } | null | undefined } } };
 
 export type SetConventionCanceledMutationVariables = Types.Exact<{
-  id: Types.Scalars['Int'];
+  id: Types.Scalars['ID'];
   canceled: Types.Scalars['Boolean'];
 }>;
 
 
-export type SetConventionCanceledMutationData = { __typename: 'Mutation', setConventionCanceled?: Types.Maybe<{ __typename: 'SetConventionCanceledPayload', convention: { __typename: 'Convention', id: number, name: string, starts_at?: Types.Maybe<any>, ends_at?: Types.Maybe<any>, canceled: boolean, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode, domain?: Types.Maybe<string>, site_mode: Types.SiteMode, ticket_mode: Types.TicketMode, show_event_list?: Types.Maybe<Types.ShowSchedule>, show_schedule?: Types.Maybe<Types.ShowSchedule>, email_from: string, hidden: boolean, language: string, maximum_event_signups?: Types.Maybe<{ __typename: 'ScheduledValue', timespans: Array<{ __typename: 'TimespanWithValue', start?: Types.Maybe<any>, finish?: Types.Maybe<any>, value: string }> }>, organization?: Types.Maybe<{ __typename: 'Organization', id: number, name: string }> } }> };
+export type SetConventionCanceledMutationData = { __typename: 'Mutation', setConventionCanceled: { __typename: 'SetConventionCanceledPayload', convention: { __typename: 'Convention', name: string, starts_at?: string | null | undefined, ends_at?: string | null | undefined, canceled: boolean, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, domain?: string | null | undefined, site_mode: Types.SiteMode, ticket_mode: Types.TicketMode, show_event_list?: Types.ShowSchedule | null | undefined, show_schedule?: Types.ShowSchedule | null | undefined, email_from: string, hidden: boolean, language: string, id: string, maximum_event_signups?: { __typename: 'ScheduledValue', timespans: Array<{ __typename: 'TimespanWithValue', start?: string | null | undefined, finish?: string | null | undefined, value: string }> } | null | undefined, organization?: { __typename: 'Organization', name: string, id: string } | null | undefined } } };
 
 
 export const CreateConventionDocument = gql`
-    mutation CreateConvention($convention: ConventionInput!, $cloneConventionId: Int, $organizationId: Int, $cmsContentSetName: String) {
+    mutation CreateConvention($convention: ConventionInput!, $cloneConventionId: ID, $organizationId: ID, $cmsContentSetName: String) {
   createConvention(
-    input: {convention: $convention, clone_convention_id: $cloneConventionId, organization_id: $organizationId, cms_content_set_name: $cmsContentSetName}
+    input: {convention: $convention, transitionalCloneConventionId: $cloneConventionId, transitionalOrganizationId: $organizationId, cms_content_set_name: $cmsContentSetName}
   ) {
     convention {
-      id
+      id: transitionalId
       ...ConventionDisplayFields
     }
   }
@@ -66,10 +66,10 @@ export type CreateConventionMutationHookResult = ReturnType<typeof useCreateConv
 export type CreateConventionMutationResult = Apollo.MutationResult<CreateConventionMutationData>;
 export type CreateConventionMutationOptions = Apollo.BaseMutationOptions<CreateConventionMutationData, CreateConventionMutationVariables>;
 export const SetConventionCanceledDocument = gql`
-    mutation SetConventionCanceled($id: Int!, $canceled: Boolean!) {
-  setConventionCanceled(input: {id: $id, canceled: $canceled}) {
+    mutation SetConventionCanceled($id: ID!, $canceled: Boolean!) {
+  setConventionCanceled(input: {transitionalId: $id, canceled: $canceled}) {
     convention {
-      id
+      id: transitionalId
       ...ConventionDisplayFields
     }
   }

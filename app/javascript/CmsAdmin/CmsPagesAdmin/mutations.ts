@@ -5,7 +5,7 @@ export const CreatePage = gql`
   mutation CreatePage($page: PageInput!) {
     createPage(input: { page: $page }) {
       page {
-        id
+        id: transitionalId
         ...CmsPageFields
       }
     }
@@ -15,10 +15,10 @@ export const CreatePage = gql`
 `;
 
 export const UpdatePage = gql`
-  mutation UpdatePage($id: Int!, $page: PageInput!) {
-    updatePage(input: { id: $id, page: $page }) {
+  mutation UpdatePage($id: ID!, $page: PageInput!) {
+    updatePage(input: { transitionalId: $id, page: $page }) {
       page {
-        id
+        id: transitionalId
         ...CmsPageFields
       }
     }
@@ -28,8 +28,8 @@ export const UpdatePage = gql`
 `;
 
 export const DeletePage = gql`
-  mutation DeletePage($id: Int!) {
-    deletePage(input: { id: $id }) {
+  mutation DeletePage($id: ID!) {
+    deletePage(input: { transitionalId: $id }) {
       clientMutationId
     }
   }

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CancelOrderService < CivilService::Service
   class Result < CivilService::Result
     attr_accessor :refund_status
@@ -16,23 +17,19 @@ class CancelOrderService < CivilService::Service
 
   private
 
-  def inner_call
+  def inner_call # rubocop:disable Metrics/AbcSize
     refund, refund_status = refund_order
 
-    action = 'Cancelled '
-    if order.status == 'paid'
-      action << " (#{refund_status.to_s.humanize.downcase})"
-    else
-      action << 'unpaid'
-    end
+    action = "Cancelled #{order.status == 'paid' ? " (#{refund_status.to_s.humanize.downcase})" : 'unpaid'}"
 
     order.update!(
       status: 'cancelled',
-      payment_note: [
-        "#{action} by #{whodunit.name_without_nickname} \
+      payment_note:
+        [
+          "#{action} by #{whodunit.name_without_nickname}
 on #{Time.now.in_time_zone(convention.timezone).strftime('%B %-d, %Y at %l:%M%P')}",
-        order.payment_note.presence
-      ].compact.join('; ')
+          order.payment_note.presence
+        ].compact.join('; ')
     )
     order.order_entries.each { |entry| entry.tickets.destroy_all }
     Orders::CancelledNotifier.new(order: order, refund_id: refund&.id).deliver_later
@@ -41,20 +38,18 @@ on #{Time.now.in_time_zone(convention.timezone).strftime('%B %-d, %Y at %l:%M%P'
   end
 
   def refund_order
-    return [nil, :not_refunded] if skip_refund || order.charge_id.blank?
+    return nil, :not_refunded if skip_refund || order.charge_id.blank?
 
     charge = Stripe::Charge.retrieve(order.charge_id, stripe_account: convention.stripe_account_id)
 
     if charge.refunded
       [charge.refunds.first, :already_refunded]
     else
-      refund = Stripe::Refund.create(
-        {
-          charge: order.charge_id,
-          amount: order.payment_amount.fractional
-        },
-        stripe_account: convention.stripe_account_id
-      )
+      refund =
+        Stripe::Refund.create(
+          { charge: order.charge_id, amount: order.payment_amount.fractional },
+          stripe_account: convention.stripe_account_id
+        )
       [refund, :refunded]
     end
   end

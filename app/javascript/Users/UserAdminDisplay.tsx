@@ -62,8 +62,8 @@ export default LoadQueryWrapper(useLoadUserAdminData, function UserAdminDisplay(
                 Privileges
               </th>
               <td>
-                {(data.user.privileges?.length ?? 0) > 0
-                  ? data.user.privileges!.map(titleize).join(', ')
+                {data.user.privileges && data.user.privileges.length > 0
+                  ? data.user.privileges.map(titleize).join(', ')
                   : 'none'}
               </td>
             </tr>

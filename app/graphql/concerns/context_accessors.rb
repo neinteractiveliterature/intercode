@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module ContextAccessors
   %i[
     current_user
@@ -31,12 +32,20 @@ module ContextAccessors
     @cms_content_finder ||= CmsContentFinder.new(context[:convention])
   end
 
-  def cms_rendering_context(path: nil)
+  def cms_rendering_context_for_cms_parent(cms_parent, path: nil)
+    user_con_profile = nil
+    convention = nil
+    if cms_parent.is_a?(Convention)
+      convention = cms_parent
+      user_con_profile = cms_parent.user_con_profiles.find_by(user_id: context[:current_user])
+    end
+
+    cms_content_finder = CmsContentFinder.new(convention)
     cms_content_finder.cms_rendering_context(
       path: path,
       controller: context[:controller],
-      user: context[:user],
-      user_con_profile: context[:user_con_profile],
+      user: context[:current_user],
+      user_con_profile: user_con_profile,
       timezone: context[:timezone_for_request]
     )
   end

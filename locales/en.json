@@ -245,7 +245,17 @@
     "ratings": {
       "clearButton": "Clear rating",
       "favoriteButton": "Mark as favorite",
+      "helpText": "You can mark an event as a “favorite” by clicking the <1></1> icon on it, and you can hide an event from your default view by clicking the <4></4> icon. To revert to “TBD,” click the icon again. Your preferences are always private, and event runners and convention staff cannot see what you’ve favorited or hidden.",
       "hideButton": "Hide event"
+    },
+    "registrationPolicies": {
+      "disableNoPreference": "Don’t show \"no preference\" option",
+      "enableNoPreference": "Show \"no preference\" option",
+      "noPreferenceDisabled": "“No preference” option will not be available",
+      "noPreferenceEnabled": "“No preference” option will be available",
+      "noPreferenceHelpText": "For events that have more than one registration bucket with limited slots, we can display a “no preference” option for signups. Users who sign up using that option will be placed in whatever limited-slot bucket has availability, and moved between buckets to make space as necessary.",
+      "noPreferenceInapplicable": "“No preference” option is inapplicable",
+      "noPreferenceInapplicableHelpText": "This event doesn’t have more than one registration bucket with limited slots, so that option doesn’t apply."
     },
     "runCapacity": {
       "label": "Capacity",
@@ -583,6 +593,7 @@
     }
   },
   "signups": {
+    "noPreference": "No preference",
     "noSignupsAvailable": "This event does not take signups.",
     "runCardText": {
       "confirmed": "You are signed up.",

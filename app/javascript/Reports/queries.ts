@@ -3,8 +3,8 @@ import { PricingStructureFields } from '../Store/pricingStructureFields';
 
 export const ReportsMenuQuery = gql`
   query ReportsMenuQuery {
-    convention: assertConvention {
-      id
+    convention: conventionByRequestHost {
+      id: transitionalId
       ticket_mode
       ticket_name
     }
@@ -13,8 +13,8 @@ export const ReportsMenuQuery = gql`
 
 export const AttendanceByPaymentAmountQuery = gql`
   query AttendanceByPaymentAmountQuery {
-    convention: assertConvention {
-      id
+    convention: conventionByRequestHost {
+      id: transitionalId
       ticket_name
 
       reports {
@@ -22,12 +22,12 @@ export const AttendanceByPaymentAmountQuery = gql`
           count
 
           ticket_type {
-            id
+            id: transitionalId
             name
             description
 
             providing_products {
-              id
+              id: transitionalId
               pricing_structure {
                 ...PricingStructureFields
               }
@@ -53,27 +53,27 @@ export const AttendanceByPaymentAmountQuery = gql`
 
 export const EventProvidedTicketsQuery = gql`
   query EventProvidedTicketsQuery {
-    convention: assertConvention {
-      id
+    convention: conventionByRequestHost {
+      id: transitionalId
       ticket_name
 
       reports {
         event_provided_tickets {
           provided_by_event {
-            id
+            id: transitionalId
             title
           }
 
           tickets {
-            id
+            id: transitionalId
 
             user_con_profile {
-              id
+              id: transitionalId
               name_inverted
             }
 
             ticket_type {
-              id
+              id: transitionalId
               description
             }
           }
@@ -85,13 +85,13 @@ export const EventProvidedTicketsQuery = gql`
 
 export const EventsByChoiceQuery = gql`
   query EventsByChoiceQuery {
-    convention: assertConvention {
-      id
+    convention: conventionByRequestHost {
+      id: transitionalId
 
       reports {
         events_by_choice {
           event {
-            id
+            id: transitionalId
             title
           }
 
@@ -108,8 +108,8 @@ export const EventsByChoiceQuery = gql`
 
 export const SignupCountsByStateQuery = gql`
   query SignupCountsByStateQuery {
-    convention: assertConvention {
-      id
+    convention: conventionByRequestHost {
+      id: transitionalId
       signup_counts_by_state {
         state
         count
@@ -125,8 +125,8 @@ export const SignupSpySignupChangesQuery = gql`
     $perPage: Int
     $sort: [SortInput!]
   ) {
-    convention: assertConvention {
-      id
+    convention: conventionByRequestHost {
+      id: transitionalId
       timezone_name
 
       signup_changes_paginated(page: $page, per_page: $perPage, filters: $filters, sort: $sort) {
@@ -136,7 +136,7 @@ export const SignupSpySignupChangesQuery = gql`
         per_page
 
         entries {
-          id
+          id: transitionalId
           state
           counted
           bucket_key
@@ -144,26 +144,26 @@ export const SignupSpySignupChangesQuery = gql`
           created_at
 
           previous_signup_change {
-            id
+            id: transitionalId
             state
             counted
             bucket_key
           }
 
           signup {
-            id
+            id: transitionalId
             choice
           }
 
           run {
-            id
+            id: transitionalId
 
             event {
-              id
+              id: transitionalId
               title
 
               event_category {
-                id
+                id: transitionalId
                 team_member_name
               }
 
@@ -176,16 +176,16 @@ export const SignupSpySignupChangesQuery = gql`
               }
 
               team_members {
-                id
+                id: transitionalId
                 user_con_profile {
-                  id
+                  id: transitionalId
                 }
               }
             }
           }
 
           user_con_profile {
-            id
+            id: transitionalId
             name_inverted
             gravatar_enabled
             gravatar_url

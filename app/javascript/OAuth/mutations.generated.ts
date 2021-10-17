@@ -9,7 +9,7 @@ export type RevokeAuthorizedApplicationMutationVariables = Types.Exact<{
 }>;
 
 
-export type RevokeAuthorizedApplicationMutationData = { __typename: 'Mutation', revokeAuthorizedApplication?: Types.Maybe<{ __typename: 'RevokeAuthorizedApplicationPayload', clientMutationId?: Types.Maybe<string> }> };
+export type RevokeAuthorizedApplicationMutationData = { __typename: 'Mutation', revokeAuthorizedApplication: { __typename: 'RevokeAuthorizedApplicationPayload', clientMutationId?: string | null | undefined } };
 
 
 export const RevokeAuthorizedApplicationDocument = gql`

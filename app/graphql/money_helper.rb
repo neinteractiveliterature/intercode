@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module MoneyHelper
   def self.coerce_money_input(input)
     return nil unless input

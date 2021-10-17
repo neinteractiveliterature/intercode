@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'csv'
 
 class Tables::TableResultsPresenter
@@ -17,11 +18,12 @@ class Tables::TableResultsPresenter
 
         association = scope.model.reflect_on_association(association_name) if association_name
 
-        table_name_quoted = if association
-          scope.connection.quote_table_name(association.klass.table_name)
-        else
-          scope.connection.quote_table_name(scope.model.table_name)
-        end
+        table_name_quoted =
+          if association
+            scope.connection.quote_table_name(association.klass.table_name)
+          else
+            scope.connection.quote_table_name(scope.model.table_name)
+          end
         column_name_quoted = scope.connection.quote_column_name(column_name || id)
 
         joined_scope = association_name ? scope.joins(association_name) : scope
@@ -56,8 +58,10 @@ class Tables::TableResultsPresenter
 
     def invert_sort_direction(direction)
       case direction.to_s.upcase
-      when 'DESC' then 'ASC'
-      else 'DESC'
+      when 'DESC'
+        'ASC'
+      else
+        'DESC'
       end
     end
   end
@@ -83,20 +87,22 @@ class Tables::TableResultsPresenter
     end
   end
 
+  # rubocop:disable Metrics/MethodLength
   def self.build_field_class(id, csv_header, base = Tables::TableResultsPresenter::Field, &block)
-    field_class = Class.new(base) do
-      class << self
-        attr_reader :id, :csv_header
-      end
+    field_class =
+      Class.new(base) do
+        class << self
+          attr_reader :id, :csv_header
+        end
 
-      def id
-        self.class.id
-      end
+        def id
+          self.class.id
+        end
 
-      def csv_header
-        self.class.csv_header
+        def csv_header
+          self.class.csv_header
+        end
       end
-    end
 
     field_class.instance_variable_set(:@id, id.to_sym)
     field_class.instance_variable_set(:@csv_header, csv_header)
@@ -111,6 +117,8 @@ class Tables::TableResultsPresenter
 
     const_set(constant_name, field_class)
   end
+
+  # rubocop:enable Metrics/MethodLength
 
   def self.field_classes
     @field_classes ||= {}
@@ -164,39 +172,38 @@ class Tables::TableResultsPresenter
     # I'm gonna make my own find_each, with limits and offsets!
     total_records = csv_scope.count
     batch_size = 1000
-    (0..(total_records)).step(batch_size) do |offset|
-      csv_scope.limit(batch_size).offset(offset).each do |model|
-        csv_data = the_fields.map { |field| field.generate_csv_cell(model) }
-        yield CSV.generate_line(csv_data)
-      end
+    (0..total_records).step(batch_size) do |offset|
+      csv_scope
+        .limit(batch_size)
+        .offset(offset)
+        .each do |model|
+          csv_data = the_fields.map { |field| field.generate_csv_cell(model) }
+          yield CSV.generate_line(csv_data)
+        end
     end
   end
 
   private
 
   def apply_filters(scope)
-    return scope unless filters.present?
+    return scope if filters.blank?
 
-    filters.inject(scope) do |current_scope, (filter, value)|
-      fields[filter.to_sym].apply_filter(current_scope, value)
-    end
+    filters.inject(scope) { |current_scope, (filter, value)| fields[filter.to_sym].apply_filter(current_scope, value) }
   end
 
   def apply_sort(scope)
-    return scope unless sort.present?
+    return scope if sort.blank?
 
-    expanded_scope = sort.inject(scope) do |current_scope, sort_entry|
-      fields[sort_entry[:field].to_sym].expand_scope_for_sort(
-        current_scope,
-        sort_entry[:desc] ? 'DESC' : 'ASC'
-      )
-    end
+    expanded_scope =
+      sort.inject(scope) do |current_scope, sort_entry|
+        fields[sort_entry[:field].to_sym].expand_scope_for_sort(current_scope, sort_entry[:desc] ? 'DESC' : 'ASC')
+      end
 
     expanded_scope.order(
-      sort.map do |entry|
+      sort.filter_map do |entry|
         direction = entry[:desc] ? 'DESC' : 'ASC'
         fields[entry[:field].to_sym].sql_order(direction)
-      end.compact
+      end
     )
   end
 

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Models can say `serialize :field_name, ActiveModelCoder.new('ModelClass')` to make arbitrary
 # ActiveModel classes usable as serializable fields.  This will enable ActiveRecord models to embed
 # more complex business logic configuration as JSON/JSONB fields.

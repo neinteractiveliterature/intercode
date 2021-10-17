@@ -1,27 +1,28 @@
 import { useState, useCallback } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
-import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
+import { ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import buildFormStateFromData from './buildFormStateFromData';
 import UserConProfileForm from './UserConProfileForm';
 import { UserConProfileAdminQuery } from './queries';
 import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
-import {
-  useUserConProfileQuery,
-  UserConProfileQueryData,
-  UserConProfileAdminQueryData,
-} from './queries.generated';
+import { useUserConProfileQuery, UserConProfileAdminQueryData } from './queries.generated';
 import { useUpdateUserConProfileMutation } from './mutations.generated';
 
-function EditUserConProfileForm({ data }: { data: UserConProfileQueryData }) {
+function useUserConProfileQueryFromParams() {
+  const id = useParams<{ id: string }>().id;
+  return useUserConProfileQuery({ variables: { id } });
+}
+
+export default LoadQueryWrapper(useUserConProfileQueryFromParams, function EditUserConProfile({ data }) {
   const history = useHistory();
   const {
     userConProfile: initialUserConProfile,
     convention,
     form,
-  } = buildFormStateFromData(data.userConProfile, data.convention!);
+  } = buildFormStateFromData(data.convention.user_con_profile, data.convention);
 
   const [userConProfile, setUserConProfile] = useState(initialUserConProfile);
 
@@ -40,9 +41,12 @@ function EditUserConProfileForm({ data }: { data: UserConProfileQueryData }) {
           variables,
           data: {
             ...query,
-            userConProfile: {
-              ...query.userConProfile,
-              ...result.data?.updateUserConProfile?.user_con_profile,
+            convention: {
+              ...query.convention,
+              user_con_profile: {
+                ...query.convention.user_con_profile,
+                ...result.data?.updateUserConProfile?.user_con_profile,
+              },
             },
           },
         });
@@ -55,7 +59,7 @@ function EditUserConProfileForm({ data }: { data: UserConProfileQueryData }) {
       await mutate({
         variables: {
           input: {
-            id: userConProfile.id,
+            transitionalId: userConProfile.id,
             user_con_profile: {
               form_response_attrs_json: JSON.stringify(userConProfile.form_response_attrs),
             },
@@ -76,12 +80,7 @@ function EditUserConProfileForm({ data }: { data: UserConProfileQueryData }) {
         userConProfile={userConProfile}
         onChange={setUserConProfile}
         footerContent={
-          <button
-            className="btn btn-primary"
-            type="button"
-            onClick={updateUserConProfile}
-            disabled={updateInProgress}
-          >
+          <button className="btn btn-primary" type="button" onClick={updateUserConProfile} disabled={updateInProgress}>
             Save changes
           </button>
         }
@@ -91,21 +90,4 @@ function EditUserConProfileForm({ data }: { data: UserConProfileQueryData }) {
       <ErrorDisplay graphQLError={updateError as ApolloError} />
     </div>
   );
-}
-
-function EditUserConProfile() {
-  const id = Number.parseInt(useParams<{ id: string }>().id, 10);
-  const { data, loading, error } = useUserConProfileQuery({ variables: { id } });
-
-  if (loading) {
-    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
-  return <EditUserConProfileForm data={data!} />;
-}
-
-export default EditUserConProfile;
+});

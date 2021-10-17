@@ -9,14 +9,29 @@ export type AppRootQueryVariables = Types.Exact<{
 }>;
 
 
-export type AppRootQueryData = { __typename: 'Query', effectiveCmsLayout: { __typename: 'CmsLayout', id: number, content_html?: Types.Maybe<string> }, currentAbility: { __typename: 'Ability', can_read_schedule: boolean, can_read_schedule_with_counts: boolean, can_list_events: boolean, can_read_user_con_profiles: boolean, can_manage_conventions: boolean, can_update_convention: boolean, can_update_departments: boolean, can_manage_email_routes: boolean, can_update_event_categories: boolean, can_read_event_proposals: boolean, can_manage_runs: boolean, can_manage_forms: boolean, can_read_any_mailing_list: boolean, can_update_notification_templates: boolean, can_manage_oauth_applications: boolean, can_read_reports: boolean, can_manage_rooms: boolean, can_manage_signups: boolean, can_manage_any_cms_content: boolean, can_manage_staff_positions: boolean, can_read_orders: boolean, can_manage_ticket_types: boolean, can_read_user_activity_alerts: boolean, can_read_organizations: boolean, can_read_users: boolean }, currentUser?: Types.Maybe<{ __typename: 'User', id: number, name?: Types.Maybe<string> }>, currentPendingOrder?: Types.Maybe<{ __typename: 'Order', id: number, order_entries: Array<{ __typename: 'OrderEntry', id: number, quantity: number }> }>, myProfile?: Types.Maybe<{ __typename: 'UserConProfile', id: number, name: string, accepted_clickwrap_agreement?: Types.Maybe<boolean>, name_without_nickname: string, first_name: string, last_name: string, gravatar_enabled: boolean, gravatar_url: string, ticket?: Types.Maybe<{ __typename: 'Ticket', id: number }> }>, assumedIdentityFromProfile?: Types.Maybe<{ __typename: 'UserConProfile', id: number, name_without_nickname: string }>, convention?: Types.Maybe<{ __typename: 'Convention', id: number, name: string, domain?: Types.Maybe<string>, accepting_proposals?: Types.Maybe<boolean>, canceled: boolean, language: string, site_mode: Types.SiteMode, signup_mode: Types.SignupMode, starts_at?: Types.Maybe<any>, ends_at?: Types.Maybe<any>, ticket_mode: Types.TicketMode, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode, clickwrap_agreement?: Types.Maybe<string>, tickets_available_for_purchase: boolean, ticket_name: string, ticket_types: Array<{ __typename: 'TicketType', id: number, providing_products: Array<{ __typename: 'Product', id: number, available: boolean }> }> }>, rootSite: { __typename: 'RootSite', id: number, site_name: string }, cmsNavigationItems: Array<{ __typename: 'CmsNavigationItem', id: number, position?: Types.Maybe<number>, title?: Types.Maybe<string>, navigation_section?: Types.Maybe<{ __typename: 'CmsNavigationItem', id: number }>, page?: Types.Maybe<{ __typename: 'Page', id: number, slug?: Types.Maybe<string> }> }> };
+export type AppRootQueryData = { __typename: 'Query', cmsParentByRequestHost: { __typename: 'Convention', id: string, effectiveCmsLayout: { __typename: 'CmsLayout', content_html?: string | null | undefined, id: string }, cmsNavigationItems: Array<{ __typename: 'CmsNavigationItem', position?: number | null | undefined, title?: string | null | undefined, id: string, navigation_section?: { __typename: 'CmsNavigationItem', id: string } | null | undefined, page?: { __typename: 'Page', slug?: string | null | undefined, id: string } | null | undefined }> } | { __typename: 'RootSite', id: string, effectiveCmsLayout: { __typename: 'CmsLayout', content_html?: string | null | undefined, id: string }, cmsNavigationItems: Array<{ __typename: 'CmsNavigationItem', position?: number | null | undefined, title?: string | null | undefined, id: string, navigation_section?: { __typename: 'CmsNavigationItem', id: string } | null | undefined, page?: { __typename: 'Page', slug?: string | null | undefined, id: string } | null | undefined }> }, currentAbility: { __typename: 'Ability', can_read_schedule: boolean, can_read_schedule_with_counts: boolean, can_list_events: boolean, can_read_user_con_profiles: boolean, can_manage_conventions: boolean, can_update_convention: boolean, can_update_departments: boolean, can_manage_email_routes: boolean, can_update_event_categories: boolean, can_read_event_proposals: boolean, can_manage_runs: boolean, can_manage_forms: boolean, can_read_any_mailing_list: boolean, can_update_notification_templates: boolean, can_manage_oauth_applications: boolean, can_read_reports: boolean, can_manage_rooms: boolean, can_manage_signups: boolean, can_manage_any_cms_content: boolean, can_manage_staff_positions: boolean, can_read_orders: boolean, can_manage_ticket_types: boolean, can_read_user_activity_alerts: boolean, can_read_organizations: boolean, can_read_users: boolean }, currentUser?: { __typename: 'User', name?: string | null | undefined, id: string } | null | undefined, assumedIdentityFromProfile?: { __typename: 'UserConProfile', name_without_nickname: string, id: string } | null | undefined, convention?: { __typename: 'Convention', name: string, domain?: string | null | undefined, accepting_proposals?: boolean | null | undefined, canceled: boolean, language: string, site_mode: Types.SiteMode, signup_mode: Types.SignupMode, starts_at?: string | null | undefined, ends_at?: string | null | undefined, ticket_mode: Types.TicketMode, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, clickwrap_agreement?: string | null | undefined, tickets_available_for_purchase: boolean, ticket_name: string, id: string, ticket_types: Array<{ __typename: 'TicketType', id: string, providing_products: Array<{ __typename: 'Product', available: boolean, id: string }> }>, my_profile?: { __typename: 'UserConProfile', name: string, accepted_clickwrap_agreement?: boolean | null | undefined, name_without_nickname: string, first_name: string, last_name: string, gravatar_enabled: boolean, gravatar_url: string, id: string, ticket?: { __typename: 'Ticket', id: string } | null | undefined, current_pending_order?: { __typename: 'Order', id: string, order_entries: Array<{ __typename: 'OrderEntry', quantity: number, id: string }> } | null | undefined } | null | undefined } | null | undefined, rootSite: { __typename: 'RootSite', site_name: string, id: string } };
 
 
 export const AppRootQueryDocument = gql`
     query AppRootQuery($path: String!) {
-  effectiveCmsLayout(path: $path) {
-    id
-    content_html(path: $path)
+  cmsParentByRequestHost {
+    id: transitionalId
+    effectiveCmsLayout(path: $path) {
+      id: transitionalId
+      content_html(path: $path)
+    }
+    cmsNavigationItems {
+      id: transitionalId
+      position
+      title
+      navigation_section {
+        id: transitionalId
+      }
+      page {
+        id: transitionalId
+        slug
+      }
+    }
   }
   currentAbility {
     can_read_schedule
@@ -46,35 +61,15 @@ export const AppRootQueryDocument = gql`
     can_read_users
   }
   currentUser {
-    id
+    id: transitionalId
     name
-  }
-  currentPendingOrder {
-    id
-    order_entries {
-      id
-      quantity
-    }
-  }
-  myProfile {
-    id
-    name
-    accepted_clickwrap_agreement
-    name_without_nickname
-    first_name
-    last_name
-    gravatar_enabled
-    gravatar_url
-    ticket {
-      id
-    }
   }
   assumedIdentityFromProfile {
-    id
+    id: transitionalId
     name_without_nickname
   }
-  convention {
-    id
+  convention: conventionByRequestHostIfPresent {
+    id: transitionalId
     name
     domain
     accepting_proposals
@@ -91,28 +86,36 @@ export const AppRootQueryDocument = gql`
     tickets_available_for_purchase
     ticket_name
     ticket_types {
-      id
+      id: transitionalId
       providing_products {
-        id
+        id: transitionalId
         available
+      }
+    }
+    my_profile {
+      id: transitionalId
+      name
+      accepted_clickwrap_agreement
+      name_without_nickname
+      first_name
+      last_name
+      gravatar_enabled
+      gravatar_url
+      ticket {
+        id: transitionalId
+      }
+      current_pending_order {
+        id: transitionalId
+        order_entries {
+          id: transitionalId
+          quantity
+        }
       }
     }
   }
   rootSite {
-    id
+    id: transitionalId
     site_name
-  }
-  cmsNavigationItems {
-    id
-    position
-    title
-    navigation_section {
-      id
-    }
-    page {
-      id
-      slug
-    }
   }
 }
     `;

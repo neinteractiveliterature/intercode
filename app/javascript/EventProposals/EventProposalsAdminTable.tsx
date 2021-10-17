@@ -203,7 +203,7 @@ const defaultVisibleColumns = [
 ];
 const alwaysVisibleColumns = ['_extra'];
 
-function EventProposalsAdminTable() {
+function EventProposalsAdminTable(): JSX.Element {
   const history = useHistory();
   const { tableHeaderProps, queryData, tableInstance, loading } = useReactTableWithTheWorks({
     decodeFilterValue: FILTER_CODECS.decodeFilterValue,

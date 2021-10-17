@@ -1,7 +1,7 @@
 import { useLocation } from 'react-router-dom';
 import { Trans } from 'react-i18next';
 
-export default function FourOhFourPage() {
+export default function FourOhFourPage(): JSX.Element {
   const location = useLocation();
 
   return (

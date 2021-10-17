@@ -1,7 +1,14 @@
+# frozen_string_literal: true
 class Mutations::SubmitOrder < Mutations::BaseMutation
   field :order, Types::OrderType, null: false
 
-  argument :id, Integer, required: true
+  argument :id,
+           Integer,
+           deprecation_reason:
+             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
+           required: false
+  argument :transitional_id, ID, required: false, camelize: true
   argument :payment_mode, Types::PaymentModeType, required: true, camelize: false
   argument :stripe_token, String, required: false, camelize: false
   argument :payment_intent_id, String, required: false, camelize: false
@@ -9,12 +16,13 @@ class Mutations::SubmitOrder < Mutations::BaseMutation
   load_and_authorize_model_with_id Order, :id, :submit
 
   def resolve(**args)
-    service = SubmitOrderService.new(
-      order,
-      payment_mode: args[:payment_mode],
-      stripe_token: args[:stripe_token],
-      payment_intent_id: args[:payment_intent_id]
-    )
+    service =
+      SubmitOrderService.new(
+        order,
+        payment_mode: args[:payment_mode],
+        stripe_token: args[:stripe_token],
+        payment_intent_id: args[:payment_intent_id]
+      )
     result = service.call
 
     if result.failure?

@@ -17,7 +17,7 @@ function DefaultAnswerModal<FormItemType extends TypedFormItem>({
   visible,
   formItem,
   setFormItem,
-}: DefaultAnswerModalProps<FormItemType>) {
+}: DefaultAnswerModalProps<FormItemType>): JSX.Element {
   const { convention, formTypeIdentifier } = useContext(FormEditorContext);
   const { previewFormItem } = useContext(FormItemEditorContext);
   const [defaultValue, setDefaultValue] = useState<FormItemType['default_value']>(

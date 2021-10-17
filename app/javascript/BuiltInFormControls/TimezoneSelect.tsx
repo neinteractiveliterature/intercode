@@ -17,7 +17,11 @@ function isValidZone(zoneName: string): zoneName is keyof typeof timezoneSelectD
 type ZoneData = typeof timezoneSelectData['zones']['America/New_York'];
 
 interface TfIdfSearchIndexWithOverridableCreate extends TfIdfSearchIndex {
-  _createCalculateTfIdf(): Function;
+  _createCalculateTfIdf(): (
+    tokens: string[],
+    document: BoostableDocument,
+    documents: BoostableDocument[],
+  ) => number;
 }
 
 type BoostableDocument = {
@@ -29,7 +33,7 @@ class BoostableTfIdfSearchIndex
   implements TfIdfSearchIndexWithOverridableCreate
 {
   _createCalculateTfIdf() {
-    /* eslint-disable-next-line no-underscore-dangle */ /* @ts-ignore */
+    /* eslint-disable-next-line no-underscore-dangle */ /* @ts-expect-error We are doing seriously awful things to override private methods here */
     const baseTfIdf = super._createCalculateTfIdf();
     return (
       tokens: string[],
@@ -62,7 +66,7 @@ export type TimezoneSelectProps = {
   onChange: React.Dispatch<SetStateAction<string | null | undefined>>;
 };
 
-function TimezoneSelect(props: TimezoneSelectProps) {
+function TimezoneSelect(props: TimezoneSelectProps): JSX.Element {
   const searchIndex = useMemo(() => {
     const search = new Search('name');
     search.searchIndex = new BoostableTfIdfSearchIndex('name');

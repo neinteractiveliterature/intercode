@@ -1,22 +1,30 @@
 import { useCallback } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
+import { ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import TicketForm from './TicketForm';
 import usePageTitle from '../usePageTitle';
 import { useUserConProfileAdminQuery } from './queries.generated';
 import { useUpdateTicketMutation } from './mutations.generated';
 
-export default LoadQueryWrapper(useUserConProfileAdminQuery, function EditTicket({ data }) {
-  const userConProfileId = Number.parseInt(useParams<{ id: string }>().id, 10);
+function useUserConProfileAdminQueryFromParams() {
+  const userConProfileId = useParams<{ id: string }>().id;
+  return useUserConProfileAdminQuery({ variables: { id: userConProfileId } });
+}
+
+export default LoadQueryWrapper(useUserConProfileAdminQueryFromParams, function EditTicket({ data }) {
+  const userConProfileId = useParams<{ id: string }>().id;
   const history = useHistory();
   const [updateTicket] = useUpdateTicketMutation();
 
   const onSubmit = useCallback(
     async (ticketInput) => {
+      if (!data.convention.user_con_profile.ticket) {
+        throw new Error(`No ${data.convention.ticket_name} to update`);
+      }
       await updateTicket({
         variables: {
-          id: data.userConProfile.ticket!.id,
+          id: data.convention.user_con_profile.ticket.id,
           ticket: ticketInput,
         },
       });
@@ -25,9 +33,14 @@ export default LoadQueryWrapper(useUserConProfileAdminQuery, function EditTicket
     [updateTicket, history, userConProfileId, data],
   );
 
-  usePageTitle(`Editing ${data.convention.ticket_name} for ${data.userConProfile.name}`);
+  usePageTitle(`Editing ${data.convention.ticket_name} for ${data.convention.user_con_profile.name}`);
 
-  const { convention, userConProfile } = data;
+  const { convention } = data;
+  const userConProfile = convention.user_con_profile;
+
+  if (!userConProfile.ticket) {
+    return <ErrorDisplay stringError={`${userConProfile.name} has no ${data.convention.ticket_name} to edit`} />;
+  }
 
   return (
     <>
@@ -40,7 +53,7 @@ export default LoadQueryWrapper(useUserConProfileAdminQuery, function EditTicket
 
       <TicketForm
         convention={convention}
-        initialTicket={userConProfile.ticket!}
+        initialTicket={userConProfile.ticket}
         onSubmit={onSubmit}
         submitCaption={`Save ${convention.ticket_name}`}
         userConProfile={userConProfile}

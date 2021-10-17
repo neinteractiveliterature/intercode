@@ -3,8 +3,7 @@ import { NavLink, Route, Switch, Redirect, useLocation } from 'react-router-dom'
 import { humanize } from 'inflected';
 import classNames from 'classnames';
 import {
-  ErrorDisplay,
-  PageLoadingIndicator,
+  LoadQueryWrapper,
   useLitformPopperWithAutoClosing,
 } from '@neinteractiveliterature/litform';
 
@@ -27,14 +26,13 @@ const adminComponentsBySchedulingUi = {
   single_run: SingleRunEventAdminList,
 };
 
-function EventAdmin() {
+export default LoadQueryWrapper(useEventAdminEventsQuery, function EventAdmin({ data }) {
   const authorizationWarning = useAuthorizationRequired('can_manage_runs');
-  const { data, loading, error } = useEventAdminEventsQuery();
   const location = useLocation();
 
   const eventCategories = useMemo(
-    () => (loading || error || !data ? [] : sortEventCategories(data.convention.event_categories)),
-    [data, loading, error],
+    () => sortEventCategories(data.convention.event_categories),
+    [data],
   );
 
   const [menuOpen, setMenuOpen] = useState(false);
@@ -53,18 +51,10 @@ function EventAdmin() {
     setMenuOpen(false);
   }, [location.pathname]);
 
-  if (loading) {
-    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
   if (authorizationWarning) return authorizationWarning;
 
-  if (data!.convention.site_mode === 'single_event') {
-    if (data!.events.length === 0) {
+  if (data.convention.site_mode === 'single_event') {
+    if (data.convention.events.length === 0) {
       return (
         <Switch>
           <Route path="/admin_events/new">
@@ -80,7 +70,7 @@ function EventAdmin() {
         <Route path="/admin_events/:id/edit">
           <EventAdminEditEvent />
         </Route>
-        <Redirect to={`/admin_events/${data!.events[0].id}/edit`} />
+        <Redirect to={`/admin_events/${data.convention.events[0].id}/edit`} />
       </Switch>
     );
   }
@@ -147,6 +137,4 @@ function EventAdmin() {
       </Switch>
     </>
   );
-}
-
-export default EventAdmin;
+});

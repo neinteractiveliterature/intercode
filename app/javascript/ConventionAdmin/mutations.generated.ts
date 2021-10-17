@@ -10,21 +10,21 @@ export type UpdateConventionMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateConventionMutationData = { __typename: 'Mutation', updateConvention?: Types.Maybe<{ __typename: 'UpdateConventionPayload', convention: { __typename: 'Convention', id: number, accepting_proposals?: Types.Maybe<boolean>, starts_at?: Types.Maybe<any>, ends_at?: Types.Maybe<any>, canceled: boolean, name: string, domain?: Types.Maybe<string>, email_from: string, email_mode: Types.EmailMode, event_mailing_list_domain?: Types.Maybe<string>, location?: Types.Maybe<any>, language: string, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode, show_schedule?: Types.Maybe<Types.ShowSchedule>, show_event_list?: Types.Maybe<Types.ShowSchedule>, hidden: boolean, maximum_tickets?: Types.Maybe<number>, ticket_name: string, clickwrap_agreement?: Types.Maybe<string>, ticket_mode: Types.TicketMode, site_mode: Types.SiteMode, signup_mode: Types.SignupMode, signup_requests_open: boolean, stripe_account_ready_to_charge: boolean, stripe_account?: Types.Maybe<{ __typename: 'StripeAccount', id: string, email?: Types.Maybe<string>, charges_enabled: boolean, display_name?: Types.Maybe<string> }>, maximum_event_signups?: Types.Maybe<{ __typename: 'ScheduledValue', timespans: Array<{ __typename: 'TimespanWithValue', start?: Types.Maybe<any>, finish?: Types.Maybe<any>, value: string }> }>, default_layout?: Types.Maybe<{ __typename: 'CmsLayout', id: number, name?: Types.Maybe<string> }>, cms_layouts: Array<{ __typename: 'CmsLayout', id: number, name?: Types.Maybe<string> }>, root_page?: Types.Maybe<{ __typename: 'Page', id: number, name?: Types.Maybe<string> }>, pages: Array<{ __typename: 'Page', id: number, name?: Types.Maybe<string> }>, staff_positions: Array<{ __typename: 'StaffPosition', id: number, name: string }>, catch_all_staff_position?: Types.Maybe<{ __typename: 'StaffPosition', id: number, name: string }> } }> };
+export type UpdateConventionMutationData = { __typename: 'Mutation', updateConvention: { __typename: 'UpdateConventionPayload', convention: { __typename: 'Convention', accepting_proposals?: boolean | null | undefined, starts_at?: string | null | undefined, ends_at?: string | null | undefined, canceled: boolean, name: string, domain?: string | null | undefined, email_from: string, email_mode: Types.EmailMode, event_mailing_list_domain?: string | null | undefined, location?: string | null | undefined, language: string, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, show_schedule?: Types.ShowSchedule | null | undefined, show_event_list?: Types.ShowSchedule | null | undefined, hidden: boolean, maximum_tickets?: number | null | undefined, ticket_name: string, clickwrap_agreement?: string | null | undefined, ticket_mode: Types.TicketMode, site_mode: Types.SiteMode, signup_mode: Types.SignupMode, signup_requests_open: boolean, stripe_account_ready_to_charge: boolean, id: string, stripe_account?: { __typename: 'StripeAccount', id: string, email?: string | null | undefined, charges_enabled: boolean, display_name?: string | null | undefined } | null | undefined, maximum_event_signups?: { __typename: 'ScheduledValue', timespans: Array<{ __typename: 'TimespanWithValue', start?: string | null | undefined, finish?: string | null | undefined, value: string }> } | null | undefined, defaultLayout: { __typename: 'CmsLayout', name?: string | null | undefined, id: string }, cmsLayouts: Array<{ __typename: 'CmsLayout', name?: string | null | undefined, id: string }>, rootPage: { __typename: 'Page', name?: string | null | undefined, id: string }, cmsPages: Array<{ __typename: 'Page', name?: string | null | undefined, id: string }>, staff_positions: Array<{ __typename: 'StaffPosition', name: string, id: string }>, catch_all_staff_position?: { __typename: 'StaffPosition', name: string, id: string } | null | undefined } } };
 
 export type CreateConventionStripeAccountMutationVariables = Types.Exact<{
   baseUrl: Types.Scalars['String'];
 }>;
 
 
-export type CreateConventionStripeAccountMutationData = { __typename: 'Mutation', createConventionStripeAccount?: Types.Maybe<{ __typename: 'CreateConventionStripeAccountPayload', stripe_account: { __typename: 'StripeAccount', id: string, account_onboarding_link: string } }> };
+export type CreateConventionStripeAccountMutationData = { __typename: 'Mutation', createConventionStripeAccount: { __typename: 'CreateConventionStripeAccountPayload', stripe_account: { __typename: 'StripeAccount', id: string, account_onboarding_link: string } } };
 
 
 export const UpdateConventionDocument = gql`
     mutation UpdateConvention($input: UpdateConventionInput!) {
   updateConvention(input: $input) {
     convention {
-      id
+      id: transitionalId
       ...ConventionAdminConventionFields
     }
   }

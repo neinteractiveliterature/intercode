@@ -10,7 +10,7 @@ function WithdrawSignupButton({
   buttonClass,
   buttonText,
   withdrawSignup,
-}: WithdrawSignupButtonProps) {
+}: WithdrawSignupButtonProps): JSX.Element {
   const { t } = useTranslation();
 
   return (

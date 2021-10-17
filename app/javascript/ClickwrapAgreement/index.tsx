@@ -13,10 +13,8 @@ import { useClickwrapAgreementQuery } from './queries.generated';
 export default LoadQueryWrapper(useClickwrapAgreementQuery, function ClickwrapAgreement({ data }) {
   const { t } = useTranslation();
   const history = useHistory();
-  const [
-    accept,
-    { error: acceptError, loading: acceptInProgress },
-  ] = useAcceptClickwrapAgreementMutation();
+  const [accept, { error: acceptError, loading: acceptInProgress }] =
+    useAcceptClickwrapAgreementMutation();
   const { refresh } = useContext(AuthenticityTokensContext);
   const apolloClient = useApolloClient();
   const loginRequired = useLoginRequired();
@@ -36,7 +34,7 @@ export default LoadQueryWrapper(useClickwrapAgreementQuery, function ClickwrapAg
     return <></>;
   }
 
-  if (data.myProfile?.accepted_clickwrap_agreement) {
+  if (data.convention.my_profile?.accepted_clickwrap_agreement) {
     return <Redirect to="/" />;
   }
 

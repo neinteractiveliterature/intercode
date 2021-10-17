@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::JSON < Types::BaseScalar
   graphql_name 'Json' # for backwards compatibility
   description 'An arbitrary object, serialized as JSON'

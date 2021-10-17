@@ -11,16 +11,18 @@ class Intercode::Import::Procon::Tables::People < Intercode::Import::Procon::Tab
   private
 
   def build_record(row)
-    User.find_or_initialize_by(email: row[:email].downcase).tap do |user|
-      illyan_row = find_illyan_row(row)
-      if !illyan_row && !user_has_password?(user)
-        logger.warn("Skipping #{row[:email]} due to no matching Illyan record and no password")
-        return nil
-      end
+    User
+      .find_or_initialize_by(email: row[:email].downcase)
+      .tap do |user|
+        illyan_row = find_illyan_row(row)
+        if !illyan_row && !user_has_password?(user)
+          logger.warn("Skipping #{row[:email]} due to no matching Illyan record and no password")
+          return nil
+        end
 
-      set_user_name(user, row)
-      return nil unless set_user_password_if_required(user, illyan_row)
-    end
+        set_user_name(user, row)
+        return nil unless set_user_password_if_required(user, illyan_row)
+      end
   end
 
   def find_illyan_row(row)

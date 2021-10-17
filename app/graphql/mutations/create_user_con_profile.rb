@@ -1,23 +1,28 @@
+# frozen_string_literal: true
 class Mutations::CreateUserConProfile < Mutations::BaseMutation
   field :user_con_profile, Types::UserConProfileType, null: false
 
-  argument :user_id, Integer, required: true, camelize: false
+  argument :user_id,
+           Integer,
+           deprecation_reason:
+             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
+           required: false,
+           camelize: false
+  argument :transitional_user_id, ID, required: false, camelize: true
   argument :user_con_profile, Types::UserConProfileInputType, required: true, camelize: false
 
   authorize_create_convention_associated_model :user_con_profiles
 
+  # rubocop:disable Metrics/AbcSize
   def resolve(**args)
-    user = User.find(args[:user_id])
+    user = User.find(args[:transitional_user_id] || args[:user_id])
     ensure_no_existing_user_con_profile(user)
 
     user_con_profile = convention.user_con_profiles.new(user: user)
-    user_con_profile.assign_default_values_from_form_items(
-      convention.user_con_profile_form.form_items
-    )
+    user_con_profile.assign_default_values_from_form_items(convention.user_con_profile_form.form_items)
 
-    most_recent_profile = user.user_con_profiles.joins(:convention)
-      .order(Arel.sql('conventions.starts_at DESC'))
-      .first
+    most_recent_profile = user.user_con_profiles.joins(:convention).order(Arel.sql('conventions.starts_at DESC')).first
 
     if most_recent_profile
       assign_filtered_attrs(
@@ -27,13 +32,8 @@ class Mutations::CreateUserConProfile < Mutations::BaseMutation
     end
 
     user_con_profile_attrs = args[:user_con_profile].to_h.stringify_keys
-    user_con_profile_attrs.merge!(
-      JSON.parse(user_con_profile_attrs.delete('form_response_attrs_json'))
-    )
-    assign_filtered_attrs(
-      user_con_profile,
-      user_con_profile_attrs.select { |_key, value| value.present? }
-    )
+    user_con_profile_attrs.merge!(JSON.parse(user_con_profile_attrs.delete('form_response_attrs_json')))
+    assign_filtered_attrs(user_con_profile, user_con_profile_attrs.select { |_key, value| value.present? })
     user_con_profile.needs_update = true
     user_con_profile.save!
 
@@ -54,9 +54,6 @@ class Mutations::CreateUserConProfile < Mutations::BaseMutation
     existing_profile = convention.user_con_profiles.find_by(user_id: user.id)
     return unless existing_profile
 
-    raise(
-      GraphQL::ExecutionError,
-      "#{existing_profile.name} is already an attendee of #{convention.name}"
-    )
+    raise(GraphQL::ExecutionError, "#{existing_profile.name} is already an attendee of #{convention.name}")
   end
 end

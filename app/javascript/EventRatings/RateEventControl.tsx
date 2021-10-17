@@ -57,7 +57,7 @@ export type RateEventControlProps = {
   size?: number;
 };
 
-function RateEventControl({ value, onChange, size }: RateEventControlProps) {
+function RateEventControl({ value, onChange, size }: RateEventControlProps): JSX.Element {
   const { t } = useTranslation();
   const clearRating = () => {
     onChange(0);
@@ -71,9 +71,9 @@ function RateEventControl({ value, onChange, size }: RateEventControlProps) {
 
   return (
     <div className="bg-white border rounded rate-event-control" style={{ width }}>
-      {hasRating ? (
+      {hasRating && value != null ? (
         <RatingButton
-          rating={value!}
+          rating={value}
           onClick={clearRating}
           selected
           size={size}

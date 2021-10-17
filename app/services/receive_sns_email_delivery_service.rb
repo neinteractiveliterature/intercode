@@ -1,16 +1,18 @@
+# frozen_string_literal: true
 class ReceiveSnsEmailDeliveryService < CivilService::Service
   def self.kms_client
     @kms_client ||= Aws::KMS::Client.new
   end
 
   def self.s3_client
-    @s3_client ||= Aws::S3::EncryptionV2::Client.new(
-      kms_key_id: 'alias/aws/ses',
-      kms_client: kms_client,
-      key_wrap_schema: :kms_context,
-      content_encryption_schema: :aes_gcm_no_padding,
-      security_profile: :v2_and_legacy
-    )
+    @s3_client ||=
+      Aws::S3::EncryptionV2::Client.new(
+        kms_key_id: 'alias/aws/ses',
+        kms_client: kms_client,
+        key_wrap_schema: :kms_context,
+        content_encryption_schema: :aes_gcm_no_padding,
+        security_profile: :v2_and_legacy
+      )
   end
 
   def self.ses_client
@@ -27,27 +29,19 @@ class ReceiveSnsEmailDeliveryService < CivilService::Service
 
   def inner_call
     if failing_score?
-      logger.warn(
-        "Dropping message #{message_id} because it failed checks: #{score_by_verdict.to_json}"
-      )
+      logger.warn("Dropping message #{message_id} because it failed checks: #{score_by_verdict.to_json}")
       return success
     end
 
     Rollbar.scoped(context: { recipients: recipients, message_id: message_id }) do
-      ReceiveEmailService.new(
-        recipients: recipients,
-        load_email: -> { email },
-        message_id: message_id
-      ).call
+      ReceiveEmailService.new(recipients: recipients, load_email: -> { email }, message_id: message_id).call
     end
   end
 
   # Only use the actual recipient of this email according to SES.  If there are multiple recipients
   # that go to Intercode, we get separate SNS notifications for each of them.
   def recipients
-    @recipients ||= message['receipt']['recipients'].map do |recipient|
-      Mail::Address.new(recipient)
-    end
+    @recipients ||= message['receipt']['recipients'].map { |recipient| Mail::Address.new(recipient) }
   end
 
   def message_id
@@ -59,9 +53,8 @@ class ReceiveSnsEmailDeliveryService < CivilService::Service
   end
 
   def headers_hash
-    @headers_hash ||= message['mail']['headers'].each_with_object({}) do |header, hash|
-      hash[header['name'].downcase] = header['value']
-    end
+    @headers_hash ||=
+      message['mail']['headers'].each_with_object({}) { |header, hash| hash[header['name'].downcase] = header['value'] }
   end
 
   def common_header(name)
@@ -77,22 +70,27 @@ class ReceiveSnsEmailDeliveryService < CivilService::Service
   end
 
   def verdicts
-    @verdicts ||= %i[dkim dmarc spam spf virus].each_with_object({}) do |verdict_type, hash|
-      verdict_object = message['receipt']["#{verdict_type}Verdict"]
-      hash[verdict_type] = verdict_object ? verdict_object['status'] : 'MISSING'
-    end
+    @verdicts ||=
+      %i[dkim dmarc spam spf virus].each_with_object({}) do |verdict_type, hash|
+        verdict_object = message['receipt']["#{verdict_type}Verdict"]
+        hash[verdict_type] = verdict_object ? verdict_object['status'] : 'MISSING'
+      end
   end
 
   def score_by_verdict
-    @score_by_verdict ||= verdicts.each_with_object({}) do |(verdict_type, verdict), hash|
-      score = case
-      when verdict_type == :virus && verdict == 'FAIL' then 2
-      when verdict == 'FAIL' then 1
-      else 0
-      end
+    @score_by_verdict ||=
+      verdicts.each_with_object({}) do |(verdict_type, verdict), hash|
+        score =
+          if verdict_type == :virus && verdict == 'FAIL'
+            2
+          elsif verdict == 'FAIL'
+            1
+          else
+            0
+          end
 
-      hash[verdict_type] = score
-    end
+        hash[verdict_type] = score
+      end
   end
 
   def total_score
@@ -108,11 +106,7 @@ class ReceiveSnsEmailDeliveryService < CivilService::Service
     existing_user = User.find_by(email: from_addresses.first)
     return 1 unless existing_user
 
-    if existing_user.tickets.count > 1
-      2
-    else
-      1
-    end
+    existing_user.tickets.count > 1 ? 2 : 1
   end
 
   def failing_score?
@@ -120,10 +114,8 @@ class ReceiveSnsEmailDeliveryService < CivilService::Service
   end
 
   def raw_email
-    @raw_email ||= self.class.s3_client.get_object(
-      bucket: receipt_action['bucketName'],
-      key: receipt_action['objectKey']
-    ).body.read
+    @raw_email ||=
+      self.class.s3_client.get_object(bucket: receipt_action['bucketName'], key: receipt_action['objectKey']).body.read
   end
 
   def email

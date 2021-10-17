@@ -6,7 +6,7 @@ import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 
-function FormAdmin() {
+function FormAdmin(): JSX.Element {
   const authorizationWarning = useAuthorizationRequired('can_manage_forms');
   if (authorizationWarning) return authorizationWarning;
 

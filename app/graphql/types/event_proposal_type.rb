@@ -1,9 +1,16 @@
+# frozen_string_literal: true
 class Types::EventProposalType < Types::BaseObject
   include FormResponseAttrsFields
 
   authorize_record
 
-  field :id, Integer, null: false
+  field :id,
+        Integer,
+        deprecation_reason:
+          "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
+        null: false
+  field :transitional_id, ID, method: :id, null: false, camelize: true
   field :title, String, null: true
   field :status, String, null: false
   field :convention, Types::ConventionType, null: false
@@ -26,14 +33,16 @@ class Types::EventProposalType < Types::BaseObject
   field :form, Types::FormType, null: true
 
   def form
-    AssociationLoader.for(EventProposal, :event_category).load(object).then do |event_category|
-      AssociationLoader.for(EventCategory, :event_proposal_form).load(event_category)
-    end
+    AssociationLoader
+      .for(EventProposal, :event_category)
+      .load(object)
+      .then { |event_category| AssociationLoader.for(EventCategory, :event_proposal_form).load(event_category) }
   end
 
   def form_response_changes
-    AssociationLoader.for(EventProposal, :form_response_changes).load(object).then do |changes|
-      CompactingFormResponseChangesPresenter.new(changes).compacted_changes
-    end
+    AssociationLoader
+      .for(EventProposal, :form_response_changes)
+      .load(object)
+      .then { |changes| CompactingFormResponseChangesPresenter.new(changes).compacted_changes }
   end
 end

@@ -1,15 +1,23 @@
+# frozen_string_literal: true
 class Mutations::UpdateEvent < Mutations::BaseMutation
   field :event, Types::EventType, null: false
 
-  argument :id, Integer, required: false
+  argument :id,
+           Integer,
+           deprecation_reason:
+             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
+           required: false
+  argument :transitional_id, ID, required: false, camelize: true
   argument :event, Types::EventInputType, required: false
 
   load_and_authorize_convention_associated_model :events, :id, :update
 
   def resolve(**args)
-    event_attrs = args[:event].to_h.merge(
-      updated_by: user_con_profile.user
-    ).stringify_keys
+    event_attrs =
+      process_transitional_ids_in_input(args[:event].to_h, :event_category_id)
+        .merge(updated_by: user_con_profile.user)
+        .stringify_keys
     form_response_attrs = JSON.parse(event_attrs.delete('form_response_attrs_json'))
     registration_policy_attributes = form_response_attrs.delete('registration_policy')
 
@@ -29,17 +37,11 @@ class Mutations::UpdateEvent < Mutations::BaseMutation
     new_registration_policy = RegistrationPolicy.new(registration_policy_attributes)
     return {} if event.registration_policy == new_registration_policy
 
-    EventChangeRegistrationPolicyService.new(
-      event,
-      new_registration_policy,
-      user_con_profile
-    ).call!
+    EventChangeRegistrationPolicyService.new(event, new_registration_policy, user_con_profile).call!
 
     event.reload
 
-    {
-      'registration_policy' => [event.registration_policy.as_json, new_registration_policy.as_json]
-    }
+    { 'registration_policy' => [event.registration_policy.as_json, new_registration_policy.as_json] }
   end
 
   def apply_form_response_attrs(event, form_response_attrs)

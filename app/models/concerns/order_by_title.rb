@@ -1,9 +1,8 @@
+# frozen_string_literal: true
 module OrderByTitle
   extend ActiveSupport::Concern
 
-  included do
-    scope :order_by_title, ->(direction = nil) do
-      order(Arel.sql(<<~SQL))
+  included { scope :order_by_title, ->(direction = nil) { order(Arel.sql(<<~SQL.squish)) } }
         regexp_replace(
           regexp_replace(
             trim(regexp_replace(unaccent(#{table_name}.title), '[^0-9a-z ]', '', 'gi')),
@@ -16,6 +15,4 @@ module OrderByTitle
           'g'
         ) #{direction}
       SQL
-    end
-  end
 end

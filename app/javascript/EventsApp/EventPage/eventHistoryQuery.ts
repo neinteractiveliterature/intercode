@@ -1,50 +1,49 @@
-/* eslint-disable import/prefer-default-export */
 import { gql } from '@apollo/client';
 import { CommonFormFields } from '../../Models/commonFormFragments';
 
 export const EventHistoryQuery = gql`
-  query EventHistoryQuery($id: Int!) {
-    convention {
-      id
+  query EventHistoryQuery($id: ID!) {
+    convention: conventionByRequestHost {
+      id: transitionalId
       starts_at
       ends_at
       timezone_name
       timezone_mode
-    }
 
-    event(id: $id) {
-      id
-      title
+      event(transitionalId: $id) {
+        id: transitionalId
+        title
 
-      event_category {
-        id
+        event_category {
+          id: transitionalId
 
-        event_form {
-          id
-          ...CommonFormFields
+          event_form {
+            id: transitionalId
+            ...CommonFormFields
 
-          form_sections {
-            id
+            form_sections {
+              id: transitionalId
 
-            form_items {
-              id
-              admin_description
+              form_items {
+                id: transitionalId
+                admin_description
+              }
             }
           }
         }
-      }
 
-      form_response_changes {
-        user_con_profile {
-          id
-          name_without_nickname
+        form_response_changes {
+          user_con_profile {
+            id: transitionalId
+            name_without_nickname
+          }
+
+          field_identifier
+          previous_value
+          new_value
+          created_at
+          updated_at
         }
-
-        field_identifier
-        previous_value
-        new_value
-        created_at
-        updated_at
       }
     }
   }

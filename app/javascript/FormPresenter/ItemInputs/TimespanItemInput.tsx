@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { useUniqueId } from '@neinteractiveliterature/litform';
 
 import FieldRequiredFeedback from './FieldRequiredFeedback';
-import { getUnitForValue, UNITS } from '../TimespanItemUtils';
+import { getUnitForValue, isUnitName, UNITS } from '../TimespanItemUtils';
 import { CommonFormItemInputProps } from './CommonFormItemInputProps';
 import { TimespanFormItem } from '../../FormAdmin/FormItemUtils';
 import CaptionLabel from './CaptionLabel';
@@ -11,19 +11,9 @@ import { VisibilityDisclosureCard } from './PermissionDisclosures';
 
 export type TimespanItemInputProps = CommonFormItemInputProps<TimespanFormItem>;
 
-function TimespanItemInput(props: TimespanItemInputProps) {
-  const {
-    formItem,
-    formTypeIdentifier,
-    value: uncheckedValue,
-    valueInvalid,
-    onChange,
-    onInteract,
-  } = props;
-  const value = useMemo(
-    () => (typeof uncheckedValue === 'number' ? uncheckedValue : null),
-    [uncheckedValue],
-  );
+function TimespanItemInput(props: TimespanItemInputProps): JSX.Element {
+  const { formItem, formTypeIdentifier, value: uncheckedValue, valueInvalid, onChange, onInteract } = props;
+  const value = useMemo(() => uncheckedValue ?? null, [uncheckedValue]);
   const [unit, setUnit] = useState(() => getUnitForValue(value).name);
 
   const currentUnit = useMemo(() => UNITS.find((u) => unit === u.name), [unit]);
@@ -45,7 +35,10 @@ function TimespanItemInput(props: TimespanItemInputProps) {
   };
 
   const unitSelectorDidChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    setUnit(event.target.value);
+    const value = event.target.value;
+    if (isUnitName(value)) {
+      setUnit(value);
+    }
   };
 
   const inputId = useUniqueId('timespan-input-');
@@ -82,12 +75,7 @@ function TimespanItemInput(props: TimespanItemInputProps) {
             />
             <FieldRequiredFeedback valueInvalid={valueInvalid} />
           </div>
-          <select
-            className="form-select ms-2"
-            value={unit}
-            onChange={unitSelectorDidChange}
-            aria-label="Unit of time"
-          >
+          <select className="form-select ms-2" value={unit} onChange={unitSelectorDidChange} aria-label="Unit of time">
             {options}
           </select>
         </div>

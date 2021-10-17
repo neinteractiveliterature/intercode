@@ -1,10 +1,18 @@
+# frozen_string_literal: true
 class RegistrationPolicy::Bucket
   include ActiveModel::Model
   include ActiveModel::Serializers::JSON
 
   attr_reader :key
-  attr_accessor :name, :description, :minimum_slots, :preferred_slots, :total_slots,
-    :slots_limited, :anything, :not_counted, :expose_attendees
+  attr_accessor :name,
+                :description,
+                :minimum_slots,
+                :preferred_slots,
+                :total_slots,
+                :slots_limited,
+                :anything,
+                :not_counted,
+                :expose_attendees
   alias slots_limited? slots_limited
   alias anything? anything
   alias not_counted? not_counted
@@ -42,11 +50,11 @@ class RegistrationPolicy::Bucket
   end
 
   def full?(signups)
-    available_slots(signups) == 0
+    available_slots(signups)&.zero?
   end
 
   def has_available_slots?(signups)
-    slots_unlimited? || available_slots(signups) > 0
+    slots_unlimited? || available_slots(signups).positive?
   end
 
   def available_slots(signups)
@@ -75,11 +83,7 @@ class RegistrationPolicy::Bucket
   end
 
   def metadata
-    {
-      key: key,
-      name: name,
-      description: description
-    }
+    { key: key, name: name, description: description }
   end
 
   def ==(other)

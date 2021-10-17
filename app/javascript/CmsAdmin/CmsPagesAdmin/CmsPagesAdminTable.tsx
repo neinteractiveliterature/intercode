@@ -1,47 +1,30 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  ErrorDisplay,
   sortByLocaleString,
   useGraphQLConfirm,
-  PageLoadingIndicator,
+  LoadQueryWrapper,
+  useDeleteMutationWithReferenceArrayUpdater,
 } from '@neinteractiveliterature/litform';
 
-import { CmsPagesAdminQuery } from './queries';
-import { DeletePage } from './mutations';
-import { useDeleteMutation } from '../../MutationUtils';
-import useValueUnless from '../../useValueUnless';
 import usePageTitle from '../../usePageTitle';
 import { useCmsPagesAdminQuery } from './queries.generated';
+import { useDeletePageMutation } from './mutations.generated';
 
-function CmsPagesAdminTable() {
-  const { data, loading, error } = useCmsPagesAdminQuery();
+export default LoadQueryWrapper(useCmsPagesAdminQuery, function CmsPagesAdminTable({ data }) {
   const confirm = useGraphQLConfirm();
-  const deletePageMutate = useDeleteMutation(DeletePage, {
-    query: CmsPagesAdminQuery,
-    arrayPath: ['cmsPages'],
-    idVariablePath: ['id'],
-  });
+  const [deletePage] = useDeleteMutationWithReferenceArrayUpdater(
+    useDeletePageMutation,
+    data.cmsParent,
+    'cmsPages',
+    (page) => ({ id: page.id }),
+  );
 
-  usePageTitle(useValueUnless(() => 'CMS Pages', error || loading));
+  usePageTitle('CMS Pages');
 
   const pagesSorted = useMemo(() => {
-    if (error || loading || !data) {
-      return [];
-    }
-
-    return sortByLocaleString(data.cmsPages, (page) => page.name ?? '');
-  }, [data, loading, error]);
-
-  if (loading) {
-    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
-  const deletePage = (id: number) => deletePageMutate({ variables: { id } });
+    return sortByLocaleString(data.cmsParent.cmsPages, (page) => page.name ?? '');
+  }, [data]);
 
   return (
     <>
@@ -69,10 +52,7 @@ function CmsPagesAdminTable() {
                     Edit
                   </Link>
                 ) : (
-                  <Link
-                    to={`/cms_pages/${page.id}/view_source`}
-                    className="btn btn-outline-secondary btn-sm"
-                  >
+                  <Link to={`/cms_pages/${page.id}/view_source`} className="btn btn-outline-secondary btn-sm">
                     View source
                   </Link>
                 )}
@@ -82,7 +62,7 @@ function CmsPagesAdminTable() {
                     onClick={() =>
                       confirm({
                         prompt: `Are you sure you want to delete ${page.name}?`,
-                        action: () => deletePage(page.id),
+                        action: () => deletePage(page),
                       })
                     }
                     className="btn btn-danger btn-sm ms-1"
@@ -96,13 +76,11 @@ function CmsPagesAdminTable() {
         </tbody>
       </table>
 
-      {data!.currentAbility.can_create_pages && (
+      {data.currentAbility.can_create_pages && (
         <Link to="/cms_pages/new" className="btn btn-secondary">
           New Page
         </Link>
       )}
     </>
   );
-}
-
-export default CmsPagesAdminTable;
+});

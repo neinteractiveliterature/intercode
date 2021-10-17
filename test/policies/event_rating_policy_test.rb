@@ -9,8 +9,7 @@ class EventRatingPolicyTest < ActiveSupport::TestCase
     end
 
     it "allows users to #{action} their own event ratings" do
-      assert EventRatingPolicy.new(event_rating.user_con_profile.user, event_rating)
-        .send("#{action}?")
+      assert EventRatingPolicy.new(event_rating.user_con_profile.user, event_rating).send("#{action}?")
     end
 
     it "does not allow users to #{action} their own event ratings over OAuth" do
@@ -32,8 +31,10 @@ class EventRatingPolicyTest < ActiveSupport::TestCase
     end
 
     it "does not allow site admins to #{action} other people's event ratings even under assumed identities" do
-      admin_profile = create(:user_con_profile, convention: event_rating.user_con_profile.convention, user: create(:site_admin))
-      authorization_info = AuthorizationInfo.new(event_rating.user_con_profile.user, nil, assumed_identity_from_profile: admin_profile)
+      admin_profile =
+        create(:user_con_profile, convention: event_rating.user_con_profile.convention, user: create(:site_admin))
+      authorization_info =
+        AuthorizationInfo.new(event_rating.user_con_profile.user, nil, assumed_identity_from_profile: admin_profile)
       refute EventRatingPolicy.new(authorization_info, event_rating).send("#{action}?")
     end
   end

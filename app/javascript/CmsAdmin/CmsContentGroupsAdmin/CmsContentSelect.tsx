@@ -4,19 +4,22 @@ import GraphQLAsyncSelect, {
 import { SearchCmsContentQuery } from './queries';
 import { SearchCmsContentQueryData } from './queries.generated';
 
-export type CmsContentOption = SearchCmsContentQueryData['searchCmsContent'][0];
+export type CmsContentOption =
+  SearchCmsContentQueryData['cmsParent']['typeaheadSearchCmsContent'][0];
 
 export type CmsContentSelectProps<IsMulti extends boolean> = Omit<
   GraphQLAsyncSelectProps<SearchCmsContentQueryData, CmsContentOption, IsMulti>,
   'getOptions' | 'getVariables' | 'getOptionValue' | 'formatOptionLabel' | 'query'
 >;
 
-function CmsContentSelect<IsMulti extends boolean = false>(props: CmsContentSelectProps<IsMulti>) {
+function CmsContentSelect<IsMulti extends boolean = false>(
+  props: CmsContentSelectProps<IsMulti>,
+): JSX.Element {
   const { ...otherProps } = props;
 
   return (
     <GraphQLAsyncSelect<SearchCmsContentQueryData, CmsContentOption, IsMulti>
-      getOptions={(data) => data.searchCmsContent}
+      getOptions={(data) => data.cmsParent.typeaheadSearchCmsContent}
       getVariables={(inputValue) => ({ name: inputValue })}
       getOptionValue={({ id: optionId, __typename }: CmsContentOption) =>
         `${__typename}-${optionId}`

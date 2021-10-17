@@ -1,5 +1,12 @@
+# frozen_string_literal: true
 class Types::CmsVariable < Types::BaseObject
-  field :id, Int, null: false
+  field :id,
+        Int,
+        deprecation_reason:
+          "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
+        null: false
+  field :transitional_id, ID, method: :id, null: false, camelize: true
   field :key, String, null: false
   field :value_json, String, null: false, camelize: false
   field :current_ability_can_update, Boolean, null: false

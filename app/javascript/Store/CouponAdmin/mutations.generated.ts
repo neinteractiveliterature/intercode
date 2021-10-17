@@ -10,29 +10,29 @@ export type CreateCouponMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateCouponMutationData = { __typename: 'Mutation', createCoupon?: Types.Maybe<{ __typename: 'CreateCouponPayload', coupon: { __typename: 'Coupon', id: number, usage_limit?: Types.Maybe<number>, expires_at?: Types.Maybe<any>, code: string, percent_discount?: Types.Maybe<any>, fixed_amount?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, provides_product?: Types.Maybe<{ __typename: 'Product', id: number, name: string }> } }> };
+export type CreateCouponMutationData = { __typename: 'Mutation', createCoupon: { __typename: 'CreateCouponPayload', coupon: { __typename: 'Coupon', usage_limit?: number | null | undefined, expires_at?: string | null | undefined, code: string, percent_discount?: string | null | undefined, id: string, fixed_amount?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, provides_product?: { __typename: 'Product', name: string, id: string } | null | undefined } } };
 
 export type UpdateCouponMutationVariables = Types.Exact<{
-  id: Types.Scalars['Int'];
+  id: Types.Scalars['ID'];
   coupon: Types.CouponInput;
 }>;
 
 
-export type UpdateCouponMutationData = { __typename: 'Mutation', updateCoupon?: Types.Maybe<{ __typename: 'UpdateCouponPayload', coupon: { __typename: 'Coupon', id: number, usage_limit?: Types.Maybe<number>, expires_at?: Types.Maybe<any>, code: string, percent_discount?: Types.Maybe<any>, fixed_amount?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, provides_product?: Types.Maybe<{ __typename: 'Product', id: number, name: string }> } }> };
+export type UpdateCouponMutationData = { __typename: 'Mutation', updateCoupon: { __typename: 'UpdateCouponPayload', coupon: { __typename: 'Coupon', usage_limit?: number | null | undefined, expires_at?: string | null | undefined, code: string, percent_discount?: string | null | undefined, id: string, fixed_amount?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, provides_product?: { __typename: 'Product', name: string, id: string } | null | undefined } } };
 
 export type DeleteCouponMutationVariables = Types.Exact<{
-  id: Types.Scalars['Int'];
+  id: Types.Scalars['ID'];
 }>;
 
 
-export type DeleteCouponMutationData = { __typename: 'Mutation', deleteCoupon?: Types.Maybe<{ __typename: 'DeleteCouponPayload', clientMutationId?: Types.Maybe<string> }> };
+export type DeleteCouponMutationData = { __typename: 'Mutation', deleteCoupon: { __typename: 'DeleteCouponPayload', clientMutationId?: string | null | undefined } };
 
 
 export const CreateCouponDocument = gql`
     mutation CreateCoupon($coupon: CouponInput!) {
   createCoupon(input: {coupon: $coupon}) {
     coupon {
-      id
+      id: transitionalId
       ...AdminCouponFields
     }
   }
@@ -65,10 +65,10 @@ export type CreateCouponMutationHookResult = ReturnType<typeof useCreateCouponMu
 export type CreateCouponMutationResult = Apollo.MutationResult<CreateCouponMutationData>;
 export type CreateCouponMutationOptions = Apollo.BaseMutationOptions<CreateCouponMutationData, CreateCouponMutationVariables>;
 export const UpdateCouponDocument = gql`
-    mutation UpdateCoupon($id: Int!, $coupon: CouponInput!) {
-  updateCoupon(input: {id: $id, coupon: $coupon}) {
+    mutation UpdateCoupon($id: ID!, $coupon: CouponInput!) {
+  updateCoupon(input: {transitionalId: $id, coupon: $coupon}) {
     coupon {
-      id
+      id: transitionalId
       ...AdminCouponFields
     }
   }
@@ -102,8 +102,8 @@ export type UpdateCouponMutationHookResult = ReturnType<typeof useUpdateCouponMu
 export type UpdateCouponMutationResult = Apollo.MutationResult<UpdateCouponMutationData>;
 export type UpdateCouponMutationOptions = Apollo.BaseMutationOptions<UpdateCouponMutationData, UpdateCouponMutationVariables>;
 export const DeleteCouponDocument = gql`
-    mutation DeleteCoupon($id: Int!) {
-  deleteCoupon(input: {id: $id}) {
+    mutation DeleteCoupon($id: ID!) {
+  deleteCoupon(input: {transitionalId: $id}) {
     clientMutationId
   }
 }

@@ -15,15 +15,14 @@ import { LoadSingleValueFromCollectionWrapper } from '../../GraphqlLoadingWrappe
 
 export default LoadSingleValueFromCollectionWrapper(
   useCmsContentGroupsAdminQuery,
-  (data, id) => data.cmsContentGroups.find((contentGroup) => contentGroup.id.toString() === id),
+  (data, id) => data.cmsParent.cmsContentGroups.find((contentGroup) => contentGroup.id.toString() === id),
 
   function EditCmsContentGroupForm({ data: { convention }, value: initialContentGroup }) {
     const history = useHistory();
     const [updateCmsContentGroup] = useUpdateContentGroupMutation();
     const [contentGroup, setContentGroup] = useState(initialContentGroup);
-    const [permissionsChangeSet, addPermission, removePermission] = useChangeSet<
-      CmsContentGroupsAdminQueryData['cmsContentGroups'][0]['permissions'][0]
-    >();
+    const [permissionsChangeSet, addPermission, removePermission] =
+      useChangeSet<CmsContentGroupsAdminQueryData['cmsParent']['cmsContentGroups'][0]['permissions'][0]>();
     const apolloClient = useApolloClient();
 
     const formSubmitted = async (event: React.FormEvent) => {
@@ -35,7 +34,7 @@ export default LoadSingleValueFromCollectionWrapper(
           cmsContentGroup: {
             name: contentGroup.name,
             contents: contentGroup.contents.map(({ id, __typename }) => ({
-              id,
+              transitionalId: id,
               content_type: __typename as CmsContentTypeIndicator,
             })),
           },
@@ -43,9 +42,7 @@ export default LoadSingleValueFromCollectionWrapper(
           revokePermissions: permissionsChangeSet
             .getRemoveIds()
             .map((removeId) => {
-              const permission = initialContentGroup.permissions.find(
-                (perm) => perm.id === removeId,
-              );
+              const permission = initialContentGroup.permissions.find((perm) => perm.id === removeId);
               return permission ? buildPermissionInput(permission) : undefined;
             })
             .filter(notEmpty),
@@ -64,9 +61,7 @@ export default LoadSingleValueFromCollectionWrapper(
 
         <CmsContentGroupFormFields
           contentGroup={contentGroup}
-          setContentGroup={(newValue) =>
-            setContentGroup((prevValue) => ({ ...prevValue, ...newValue }))
-          }
+          setContentGroup={(newValue) => setContentGroup((prevValue) => ({ ...prevValue, ...newValue }))}
           disabled={submitInProgress}
           convention={convention}
           permissionsChangeSet={permissionsChangeSet}

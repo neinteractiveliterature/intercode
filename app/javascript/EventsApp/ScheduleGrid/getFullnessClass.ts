@@ -17,7 +17,7 @@ export default function getFullnessClass(
     SignupCountData,
     'getNotCountedConfirmedSignupCount' | 'getConfirmedLimitedSignupCount'
   >,
-) {
+): string {
   if (!event.registration_policy) {
     return 'event-fullness-no-slots';
   }

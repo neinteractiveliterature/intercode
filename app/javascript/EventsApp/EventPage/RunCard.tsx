@@ -19,7 +19,7 @@ import { PartitionedSignupOptions, SignupOption } from './buildSignupOptions';
 import { useFormatRunTimespan } from '../runTimeFormatting';
 
 function describeSignupState(
-  mySignup: EventPageQueryData['event']['runs'][0]['my_signups'][0],
+  mySignup: EventPageQueryData['convention']['event']['runs'][0]['my_signups'][0],
   t: TFunction,
 ) {
   if (mySignup.state === 'confirmed') {
@@ -36,17 +36,19 @@ function describeSignupState(
 }
 
 export type RunCardProps = {
-  run: EventPageQueryData['event']['runs'][0];
-  event: EventPageQueryData['event'];
+  run: EventPageQueryData['convention']['event']['runs'][0];
+  event: EventPageQueryData['convention']['event'];
   signupOptions: PartitionedSignupOptions;
   currentAbility: EventPageQueryData['currentAbility'];
-  myProfile?: object | null;
-  mySignup?: EventPageQueryData['event']['runs'][0]['my_signups'][0] | null;
-  myPendingSignupRequest?: EventPageQueryData['event']['runs'][0]['my_signup_requests'][0] | null;
+  myProfile?: Record<string, unknown> | null;
+  mySignup?: EventPageQueryData['convention']['event']['runs'][0]['my_signups'][0] | null;
+  myPendingSignupRequest?:
+    | EventPageQueryData['convention']['event']['runs'][0]['my_signup_requests'][0]
+    | null;
   showViewSignups?: boolean;
-  createSignup: (signupOption: SignupOption) => Promise<any>;
-  withdrawSignup: () => Promise<any>;
-  withdrawPendingSignupRequest: () => Promise<any>;
+  createSignup: (signupOption: SignupOption) => Promise<unknown>;
+  withdrawSignup: () => Promise<unknown>;
+  withdrawPendingSignupRequest: () => Promise<unknown>;
 };
 
 function RunCard({
@@ -61,7 +63,7 @@ function RunCard({
   createSignup,
   withdrawSignup,
   withdrawPendingSignupRequest,
-}: RunCardProps) {
+}: RunCardProps): JSX.Element {
   const { t } = useTranslation();
   const history = useHistory();
   const location = useLocation();

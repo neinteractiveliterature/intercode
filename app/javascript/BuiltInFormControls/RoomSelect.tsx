@@ -1,15 +1,12 @@
 import Select, { Props } from 'react-select';
 import { Room } from '../graphqlTypes.generated';
 
-export type RoomForSelect = Pick<Room, '__typename' | 'id' | 'name'>;
-export type RoomSelectProps = Omit<
-  Props<RoomForSelect>,
-  'options' | 'getOptionValue' | 'getOptionLabel' | 'styles'
-> & {
+export type RoomForSelect = Pick<Room, '__typename' | 'name'> & { id: string };
+export type RoomSelectProps = Omit<Props<RoomForSelect>, 'options' | 'getOptionValue' | 'getOptionLabel' | 'styles'> & {
   rooms: RoomForSelect[];
 };
 
-function RoomSelect({ rooms, ...otherProps }: RoomSelectProps) {
+function RoomSelect({ rooms, ...otherProps }: RoomSelectProps): JSX.Element {
   return (
     <Select
       options={rooms}

@@ -71,21 +71,17 @@ class PermissionPolicyTest < ActiveSupport::TestCase
       user = create(:user, site_admin: true)
       resolved_permissions = PermissionPolicy::Scope.new(user, Permission.all).resolve
 
-      assert_equal(
-        [organization_permission, event_category_permission].sort,
-        resolved_permissions.sort
-      )
+      assert_equal([organization_permission, event_category_permission].sort, resolved_permissions.sort)
     end
 
     it 'returns permissions for cons in which the user has update_permissions' do
       my_con_permission = create(:event_category_permission)
       convention = my_con_permission.staff_position.convention
       user = create_user_with_update_permissions_in_convention(convention)
-      user_permissions = Permission.where(
-        staff_position: StaffPosition.where(
-          id: UserConProfile.where(user_id: user.id).flat_map(&:staff_position_ids)
+      user_permissions =
+        Permission.where(
+          staff_position: StaffPosition.where(id: UserConProfile.where(user_id: user.id).flat_map(&:staff_position_ids))
         )
-      )
       create(:event_category_permission) # other_con_permission
       resolved_permissions = PermissionPolicy::Scope.new(user, Permission.all).resolve
 

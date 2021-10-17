@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-// @ts-ignore
+// @ts-expect-error inflected types don't expose capitalize
 import { capitalize, pluralize } from 'inflected';
 import { Modal } from 'react-bootstrap4-modal';
 import { ApolloError } from '@apollo/client';
@@ -15,22 +15,16 @@ import { TeamMembersQueryData, TeamMembersQueryVariables } from './queries.gener
 import { useProvideEventTicketMutation } from './mutations.generated';
 
 export type ProvideTicketModalProps = {
-  event: TeamMembersQueryData['event'];
+  event: TeamMembersQueryData['convention']['event'];
   convention: NonNullable<TeamMembersQueryData['convention']>;
   onClose: () => void;
-  teamMember?: TeamMembersQueryData['event']['team_members'][0];
+  teamMember?: TeamMembersQueryData['convention']['event']['team_members'][0];
   visible: boolean;
 };
 
-function ProvideTicketModal({
-  event,
-  convention,
-  onClose,
-  teamMember,
-  visible,
-}: ProvideTicketModalProps) {
+function ProvideTicketModal({ event, convention, onClose, teamMember, visible }: ProvideTicketModalProps): JSX.Element {
   const { t } = useTranslation();
-  const [ticketTypeId, setTicketTypeId] = useState<number>();
+  const [ticketTypeId, setTicketTypeId] = useState<string>();
   const [provideTicketMutate] = useProvideEventTicketMutation();
   const [provideTicketAsync, error, mutationInProgress] = useAsyncFunction(provideTicketMutate);
 
@@ -44,28 +38,34 @@ function ProvideTicketModal({
             variables: { eventId: event.id },
           });
           const ticket = result.data?.provideEventTicket?.ticket;
+          if (!data || !ticket) {
+            return;
+          }
 
-          store.writeQuery({
+          store.writeQuery<TeamMembersQueryData>({
             query: TeamMembersQuery,
             variables: { eventId: event.id },
             data: {
               ...data,
-              event: {
-                ...data?.event,
-                provided_tickets: [...(data?.event?.provided_tickets ?? []), ticket],
-                team_members: data?.event.team_members.map((tm) => {
-                  if (tm.id !== teamMember?.id) {
-                    return tm;
-                  }
+              convention: {
+                ...data.convention,
+                event: {
+                  ...data.convention.event,
+                  provided_tickets: [...data.convention.event.provided_tickets, ticket],
+                  team_members: data.convention.event.team_members.map((tm) => {
+                    if (tm.id !== teamMember?.id) {
+                      return tm;
+                    }
 
-                  return {
-                    ...tm,
-                    user_con_profile: {
-                      ...tm.user_con_profile,
-                      ticket,
-                    },
-                  };
-                }),
+                    return {
+                      ...tm,
+                      user_con_profile: {
+                        ...tm.user_con_profile,
+                        ticket,
+                      },
+                    };
+                  }),
+                },
               },
             },
           });
@@ -86,7 +86,7 @@ function ProvideTicketModal({
   };
 
   if (getProvidableTicketTypes(convention).length < 1) {
-    return null;
+    return <></>;
   }
 
   return (
@@ -97,15 +97,11 @@ function ProvideTicketModal({
         {teamMember ? (
           <>
             <p>
-              <TicketingStatusDescription
-                userConProfile={teamMember.user_con_profile}
-                convention={convention}
-              />
+              <TicketingStatusDescription userConProfile={teamMember.user_con_profile} convention={convention} />
             </p>
 
             {teamMember && !teamMember.user_con_profile.ticket ? (
               <ProvidableTicketTypeSelection
-                event={event}
                 convention={convention}
                 value={ticketTypeId}
                 onChange={setTicketTypeId}
@@ -125,12 +121,7 @@ function ProvideTicketModal({
           </button>
         ) : (
           <>
-            <button
-              type="button"
-              className="btn btn-secondary"
-              onClick={onClose}
-              disabled={mutationInProgress}
-            >
+            <button type="button" className="btn btn-secondary" onClick={onClose} disabled={mutationInProgress}>
               {t('buttons.cancel', 'Cancel')}
             </button>
             <button

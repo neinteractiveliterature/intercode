@@ -1,16 +1,21 @@
 import { useContext } from 'react';
 import { Link, useRouteMatch } from 'react-router-dom';
 import classnames from 'classnames';
-import { useConfirm, ButtonWithTooltip, ErrorDisplay } from '@neinteractiveliterature/litform';
+import {
+  useConfirm,
+  ButtonWithTooltip,
+  ErrorDisplay,
+  useDeleteMutationWithReferenceArrayUpdater,
+} from '@neinteractiveliterature/litform';
 import { useSortable } from '@dnd-kit/sortable';
 
 import FormItemInput from '../FormPresenter/ItemInputs/FormItemInput';
-import { FormEditorContext } from './FormEditorContexts';
-import { mutationUpdaterForFormSection, TypedFormItem, findStandardItem } from './FormItemUtils';
+import { FormEditorContext, FormEditorForm } from './FormEditorContexts';
+import { TypedFormItem, findStandardItem, StandardItem } from './FormItemUtils';
 import { useDeleteFormItemMutation } from './mutations.generated';
 import { getSortableStyle } from '../SortableUtils';
 
-function describeFormItemForDelete(formItem: TypedFormItem, standardItem: any) {
+function describeFormItemForDelete(formItem: TypedFormItem, standardItem: StandardItem | undefined) {
   if (standardItem) {
     return `the “${standardItem.description}” item`;
   }
@@ -23,21 +28,21 @@ function describeFormItemForDelete(formItem: TypedFormItem, standardItem: any) {
 }
 
 export type FormEditorItemPreviewProps = {
+  formSection: FormEditorForm['form_sections'][number];
   formItem: TypedFormItem;
 };
 
-function FormEditorItemPreview({ formItem }: FormEditorItemPreviewProps) {
+function FormEditorItemPreview({ formSection, formItem }: FormEditorItemPreviewProps): JSX.Element {
   const confirm = useConfirm();
   const match = useRouteMatch<{ id: string; sectionId: string }>();
-  const { convention, currentSection, form, formType, formTypeIdentifier, formItemsById } =
-    useContext(FormEditorContext);
-  const renderedFormItem = formItemsById.get(formItem.id)!;
-  const [deleteFormItem] = useDeleteFormItemMutation({
-    update: mutationUpdaterForFormSection(form.id, currentSection!.id, (section) => ({
-      ...section,
-      form_items: section.form_items.filter((item) => item.id !== formItem.id),
-    })),
-  });
+  const { convention, formType, formTypeIdentifier, formItemsById } = useContext(FormEditorContext);
+  const renderedFormItem = formItemsById.get(formItem.id);
+  const [deleteFormItem] = useDeleteMutationWithReferenceArrayUpdater(
+    useDeleteFormItemMutation,
+    formSection,
+    'form_items',
+    (item) => ({ id: item.id }),
+  );
 
   const { setNodeRef, isDragging, attributes, listeners, transform, transition } = useSortable({
     id: formItem.id.toString(),
@@ -48,10 +53,7 @@ function FormEditorItemPreview({ formItem }: FormEditorItemPreviewProps) {
   const style = getSortableStyle(transform, transition, isDragging);
 
   return (
-    <div
-      className={classnames('d-flex align-items-start bg-white', { 'opacity-50': isDragging })}
-      style={style}
-    >
+    <div className={classnames('d-flex align-items-start bg-white', { 'opacity-50': isDragging })} style={style}>
       <div className="me-2 mt-2" {...attributes} {...listeners} ref={setNodeRef}>
         <span className="visually-hidden">Drag to reorder</span>
         <i className="cursor-grab bi-grip-vertical" />
@@ -77,15 +79,17 @@ function FormEditorItemPreview({ formItem }: FormEditorItemPreviewProps) {
           <div className="fw-bold">Click to edit</div>
         </Link>
 
-        <FormItemInput
-          convention={convention}
-          formItem={renderedFormItem}
-          formTypeIdentifier={formTypeIdentifier}
-          onInteract={() => {}}
-          onChange={() => {}}
-          value={formItem.default_value}
-          valueInvalid={false}
-        />
+        {renderedFormItem && (
+          <FormItemInput
+            convention={convention}
+            formItem={renderedFormItem}
+            formTypeIdentifier={formTypeIdentifier}
+            onInteract={() => {}}
+            onChange={() => {}}
+            value={formItem.default_value}
+            valueInvalid={false}
+          />
+        )}
       </div>
       <div className="ms-2 mt-2">
         {standardItem && standardItem.required ? (
@@ -102,11 +106,8 @@ function FormEditorItemPreview({ formItem }: FormEditorItemPreviewProps) {
             type="button"
             onClick={() =>
               confirm({
-                prompt: `Are you sure you want to delete ${describeFormItemForDelete(
-                  formItem,
-                  standardItem,
-                )}?`,
-                action: () => deleteFormItem({ variables: { id: formItem.id } }),
+                prompt: `Are you sure you want to delete ${describeFormItemForDelete(formItem, standardItem)}?`,
+                action: () => deleteFormItem(formItem),
                 renderError: (error) => <ErrorDisplay graphQLError={error} />,
               })
             }

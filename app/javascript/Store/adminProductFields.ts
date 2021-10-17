@@ -1,11 +1,9 @@
-/* eslint-disable import/prefer-default-export */
-
 import { gql } from '@apollo/client';
 import { PricingStructureFields } from './pricingStructureFields';
 
 export const AdminProductFields = gql`
   fragment AdminProductFields on Product {
-    id
+    id: transitionalId
     name
     description
     description_html
@@ -18,7 +16,7 @@ export const AdminProductFields = gql`
     }
 
     product_variants {
-      id
+      id: transitionalId
       name
       description
       image_url
@@ -30,7 +28,7 @@ export const AdminProductFields = gql`
     }
 
     provides_ticket_type {
-      id
+      id: transitionalId
       description
     }
   }
