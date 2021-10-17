@@ -42,7 +42,7 @@ jobs:
       - if: github.actor != 'dependabot[bot]'
         run: gem install --no-document rubocop
       - if: github.actor != 'dependabot[bot]'
-        run: gem install --no-document pronto pronto-rubocop pronto-eslint rubocop-performance rubocop-rails rubocop-sequel
+        run: gem install --no-document pronto pronto-rubocop pronto-eslint rubocop-performance rubocop-rails rubocop-sequel prettier
       - if: github.actor != 'dependabot[bot]'
         run: yarn install
       - if: github.actor != 'dependabot[bot]'
