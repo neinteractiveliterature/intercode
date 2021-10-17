@@ -7528,7 +7528,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"caniuse-lite@npm:1.0.30001267, caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30000981, caniuse-lite@npm:^1.0.30001109, caniuse-lite@npm:^1.0.30001125, caniuse-lite@npm:^1.0.30001264":
+"caniuse-lite@npm:1.0.30001269":
+  version: 1.0.30001269
+  resolution: "caniuse-lite@npm:1.0.30001269"
+  checksum: 23a6bd029c4120a084056dae4eeecc552eba55c434035306e7ee4060aed1b6babed5f6d832f6ba359f13376356464a1673bc6c625c2932e376156f7f7fa1a3c0
+  languageName: node
+  linkType: hard
+
+"caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30000981, caniuse-lite@npm:^1.0.30001109, caniuse-lite@npm:^1.0.30001125, caniuse-lite@npm:^1.0.30001264":
   version: 1.0.30001267
   resolution: "caniuse-lite@npm:1.0.30001267"
   checksum: 1a84f792a17a7819d42bed24eafe2a4832ab1f58937b6d65a9f43e9cdd2a3b10308e8bc2bbb3808f1df6b60940b1770b185c42370fa9dac2c8bc5c8a0363c158
@@ -20263,7 +20270,7 @@ resolve@^2.0.0-next.3:
     buffer: 6.0.3
     bytes: 3.1.0
     cadmus-navbar-admin: 5.0.0
-    caniuse-lite: 1.0.30001267
+    caniuse-lite: 1.0.30001269
     case-sensitive-paths-webpack-plugin: 2.4.0
     classnames: 2.3.1
     compression-webpack-plugin: 8.0.1
