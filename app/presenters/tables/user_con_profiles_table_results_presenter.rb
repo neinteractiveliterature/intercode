@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'money-rails/helpers/action_view_extension'
 
 class Tables::UserConProfilesTableResultsPresenter < Tables::TableResultsPresenter
@@ -10,13 +11,7 @@ class Tables::UserConProfilesTableResultsPresenter < Tables::TableResultsPresent
   end
 
   def self.filter_ticket_type(scope, value)
-    ticket_type_ids = value.map do |id_value|
-      if id_value == 'none'
-        nil
-      else
-        id_value.to_i
-      end
-    end
+    ticket_type_ids = value.map { |id_value| id_value == 'none' ? nil : id_value.to_i }
 
     scope.left_joins(:ticket).where(tickets: { ticket_type_id: ticket_type_ids })
   end
@@ -44,8 +39,10 @@ class Tables::UserConProfilesTableResultsPresenter < Tables::TableResultsPresent
     end
 
     def sql_order(direction)
-      Arel.sql("lower(user_con_profiles.last_name) #{direction}, \
-lower(user_con_profiles.first_name) #{direction}")
+      Arel.sql(
+        "lower(user_con_profiles.last_name) #{direction}, \
+lower(user_con_profiles.first_name) #{direction}"
+      )
     end
 
     def generate_csv_cell(user_con_profile)
@@ -97,7 +94,7 @@ lower(user_con_profiles.first_name) #{direction}")
     end
 
     def expand_scope_for_sort(scope, _direction)
-      scope.left_joins(ticket: [:ticket_type, :order_entry])
+      scope.left_joins(ticket: %i[ticket_type order_entry])
     end
 
     def sql_order(direction)
@@ -128,7 +125,8 @@ lower(user_con_profiles.first_name) #{direction}")
 
     def generate_csv_cell(user_con_profile)
       Tables::UserConProfilesTableResultsPresenter.describe_ticket(
-        user_con_profile.ticket, include_payment_amount: false
+        user_con_profile.ticket,
+        include_payment_amount: false
       )
     end
   end
@@ -136,14 +134,12 @@ lower(user_con_profiles.first_name) #{direction}")
   field :payment_amount, 'Payment amount' do
     def apply_filter(scope, value)
       payment_amount_fractional = (value.to_f * 100.0).to_i
-      if payment_amount_fractional == 0
-        scope.left_joins(ticket: :order_entry).where(
-          'order_entries.price_per_item_cents = 0 OR order_entries.price_per_item_cents IS NULL'
-        )
+      if payment_amount_fractional.zero?
+        scope
+          .left_joins(ticket: :order_entry)
+          .where('order_entries.price_per_item_cents = 0 OR order_entries.price_per_item_cents IS NULL')
       else
-        scope.left_joins(ticket: :order_entry).where(
-          order_entries: { price_per_item_cents: payment_amount_fractional }
-        )
+        scope.left_joins(ticket: :order_entry).where(order_entries: { price_per_item_cents: payment_amount_fractional })
       end
     end
 
@@ -201,11 +197,7 @@ lower(user_con_profiles.first_name) #{direction}")
 
   field :privileges, 'Privileges' do
     def apply_filter(scope, value)
-      if value.include?('site_admin')
-        scope.joins(:user).where(users: { site_admin: true })
-      else
-        scope
-      end
+      value.include?('site_admin') ? scope.joins(:user).where(users: { site_admin: true }) : scope
     end
 
     def generate_csv_cell(user_con_profile)
@@ -225,30 +217,22 @@ lower(user_con_profiles.first_name) #{direction}")
   end
 
   def form_fields
-    @form_fields ||= begin
-      usable_form_items = convention.user_con_profile_form.form_items.select(&:identifier)
-      usable_form_items.each_with_object({}) do |form_item, form_fields|
-        form_fields[form_item.identifier.to_sym] = FormField.new(self, form_item)
+    @form_fields ||=
+      begin
+        usable_form_items = convention.user_con_profile_form.form_items.select(&:identifier)
+        usable_form_items.each_with_object({}) do |form_item, form_fields|
+          form_fields[form_item.identifier.to_sym] = FormField.new(self, form_item)
+        end
       end
-    end
   end
 
   private
 
   def apply_privileges_filter(scope, value)
-    if value.include?('site_admin')
-      scope.joins(:user).where(users: { site_admin: true })
-    else
-      scope
-    end
+    value.include?('site_admin') ? scope.joins(:user).where(users: { site_admin: true }) : scope
   end
 
   def csv_scope
-    scoped.includes(
-      :user,
-      :team_members,
-      ticket: :ticket_type,
-      orders: { order_entries: [:product, :product_variant] }
-    )
+    scoped.includes(:user, :team_members, ticket: :ticket_type, orders: { order_entries: %i[product product_variant] })
   end
 end

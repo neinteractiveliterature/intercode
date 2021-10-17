@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # The available slots for an event run
 class RunAvailabilityDrop < Liquid::Drop
   # @api
@@ -14,9 +15,11 @@ class RunAvailabilityDrop < Liquid::Drop
   # @!method buckets_with_not_counted_slots
   #   @return [BucketAvailabilityDrop] The bucket availabilites in this run with available
   #                                    not-counted slots
-  delegate :run, :bucket_availabilities_with_any_slots,
-    :bucket_availabilities_with_counted_slots, :bucket_availabilities_with_not_counted_slots,
-    to: :run_availability_presenter
+  delegate :run,
+           :bucket_availabilities_with_any_slots,
+           :bucket_availabilities_with_counted_slots,
+           :bucket_availabilities_with_not_counted_slots,
+           to: :run_availability_presenter
 
   # @!method event
   #   @return [EventDrop] The event this is a run of

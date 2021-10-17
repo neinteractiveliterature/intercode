@@ -12,44 +12,44 @@ export type UsersTableUsersQueryVariables = Types.Exact<{
 }>;
 
 
-export type UsersTableUsersQueryData = { __typename: 'Query', users_paginated: { __typename: 'UsersPagination', total_entries: number, total_pages: number, current_page: number, per_page: number, entries: Array<{ __typename: 'User', id: number, name_inverted?: Types.Maybe<string>, first_name?: Types.Maybe<string>, last_name?: Types.Maybe<string>, email?: Types.Maybe<string>, privileges?: Types.Maybe<Array<string>> }> }, currentAbility: { __typename: 'Ability', can_create_user_con_profiles: boolean } };
+export type UsersTableUsersQueryData = { __typename: 'Query', users_paginated: { __typename: 'UsersPagination', total_entries: number, total_pages: number, current_page: number, per_page: number, entries: Array<{ __typename: 'User', name_inverted?: string | null | undefined, first_name?: string | null | undefined, last_name?: string | null | undefined, email?: string | null | undefined, privileges?: Array<string> | null | undefined, id: string }> }, currentAbility: { __typename: 'Ability', can_create_user_con_profiles: boolean } };
 
-export type DetailedUserFieldsFragment = { __typename: 'User', id: number, name?: Types.Maybe<string>, first_name?: Types.Maybe<string>, last_name?: Types.Maybe<string>, email?: Types.Maybe<string>, privileges?: Types.Maybe<Array<string>>, user_con_profiles: Array<{ __typename: 'UserConProfile', id: number, email?: Types.Maybe<string>, ticket?: Types.Maybe<{ __typename: 'Ticket', id: number }>, signups: Array<{ __typename: 'Signup', id: number, state: Types.SignupState }>, convention: { __typename: 'Convention', id: number, name: string, domain?: Types.Maybe<string>, starts_at?: Types.Maybe<any>, ticket_name: string, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode }, staff_positions: Array<{ __typename: 'StaffPosition', id: number, name: string }> }> };
+export type DetailedUserFieldsFragment = { __typename: 'User', name?: string | null | undefined, first_name?: string | null | undefined, last_name?: string | null | undefined, email?: string | null | undefined, privileges?: Array<string> | null | undefined, id: string, user_con_profiles: Array<{ __typename: 'UserConProfile', email?: string | null | undefined, id: string, ticket?: { __typename: 'Ticket', id: string } | null | undefined, signups: Array<{ __typename: 'Signup', state: Types.SignupState, id: string }>, convention: { __typename: 'Convention', name: string, domain?: string | null | undefined, starts_at?: string | null | undefined, ticket_name: string, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, id: string }, staff_positions: Array<{ __typename: 'StaffPosition', name: string, id: string }> }> };
 
 export type UserAdminQueryVariables = Types.Exact<{
   id: Types.Scalars['Int'];
 }>;
 
 
-export type UserAdminQueryData = { __typename: 'Query', user: { __typename: 'User', id: number, name?: Types.Maybe<string>, first_name?: Types.Maybe<string>, last_name?: Types.Maybe<string>, email?: Types.Maybe<string>, privileges?: Types.Maybe<Array<string>>, user_con_profiles: Array<{ __typename: 'UserConProfile', id: number, email?: Types.Maybe<string>, ticket?: Types.Maybe<{ __typename: 'Ticket', id: number }>, signups: Array<{ __typename: 'Signup', id: number, state: Types.SignupState }>, convention: { __typename: 'Convention', id: number, name: string, domain?: Types.Maybe<string>, starts_at?: Types.Maybe<any>, ticket_name: string, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode }, staff_positions: Array<{ __typename: 'StaffPosition', id: number, name: string }> }> } };
+export type UserAdminQueryData = { __typename: 'Query', user: { __typename: 'User', name?: string | null | undefined, first_name?: string | null | undefined, last_name?: string | null | undefined, email?: string | null | undefined, privileges?: Array<string> | null | undefined, id: string, user_con_profiles: Array<{ __typename: 'UserConProfile', email?: string | null | undefined, id: string, ticket?: { __typename: 'Ticket', id: string } | null | undefined, signups: Array<{ __typename: 'Signup', state: Types.SignupState, id: string }>, convention: { __typename: 'Convention', name: string, domain?: string | null | undefined, starts_at?: string | null | undefined, ticket_name: string, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, id: string }, staff_positions: Array<{ __typename: 'StaffPosition', name: string, id: string }> }> } };
 
 export type MergeUsersModalQueryVariables = Types.Exact<{
-  ids: Array<Types.Scalars['Int']> | Types.Scalars['Int'];
+  ids: Array<Types.Scalars['ID']> | Types.Scalars['ID'];
 }>;
 
 
-export type MergeUsersModalQueryData = { __typename: 'Query', users: Array<{ __typename: 'User', id: number, name?: Types.Maybe<string>, first_name?: Types.Maybe<string>, last_name?: Types.Maybe<string>, email?: Types.Maybe<string>, privileges?: Types.Maybe<Array<string>>, user_con_profiles: Array<{ __typename: 'UserConProfile', id: number, email?: Types.Maybe<string>, ticket?: Types.Maybe<{ __typename: 'Ticket', id: number }>, signups: Array<{ __typename: 'Signup', id: number, state: Types.SignupState }>, convention: { __typename: 'Convention', id: number, name: string, domain?: Types.Maybe<string>, starts_at?: Types.Maybe<any>, ticket_name: string, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode }, staff_positions: Array<{ __typename: 'StaffPosition', id: number, name: string }> }> }> };
+export type MergeUsersModalQueryData = { __typename: 'Query', users: Array<{ __typename: 'User', name?: string | null | undefined, first_name?: string | null | undefined, last_name?: string | null | undefined, email?: string | null | undefined, privileges?: Array<string> | null | undefined, id: string, user_con_profiles: Array<{ __typename: 'UserConProfile', email?: string | null | undefined, id: string, ticket?: { __typename: 'Ticket', id: string } | null | undefined, signups: Array<{ __typename: 'Signup', state: Types.SignupState, id: string }>, convention: { __typename: 'Convention', name: string, domain?: string | null | undefined, starts_at?: string | null | undefined, ticket_name: string, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, id: string }, staff_positions: Array<{ __typename: 'StaffPosition', name: string, id: string }> }> }> };
 
 export const DetailedUserFieldsFragmentDoc = gql`
     fragment DetailedUserFields on User {
-  id
+  id: transitionalId
   name
   first_name
   last_name
   email
   privileges
   user_con_profiles {
-    id
+    id: transitionalId
     email
     ticket {
-      id
+      id: transitionalId
     }
     signups {
-      id
+      id: transitionalId
       state
     }
     convention {
-      id
+      id: transitionalId
       name
       domain
       starts_at
@@ -58,7 +58,7 @@ export const DetailedUserFieldsFragmentDoc = gql`
       timezone_mode
     }
     staff_positions {
-      id
+      id: transitionalId
       name
     }
   }
@@ -72,7 +72,7 @@ export const UsersTableUsersQueryDocument = gql`
     current_page
     per_page
     entries {
-      id
+      id: transitionalId
       name_inverted
       first_name
       last_name
@@ -119,7 +119,7 @@ export type UsersTableUsersQueryQueryResult = Apollo.QueryResult<UsersTableUsers
 export const UserAdminQueryDocument = gql`
     query UserAdminQuery($id: Int!) {
   user(id: $id) {
-    id
+    id: transitionalId
     ...DetailedUserFields
   }
 }
@@ -153,9 +153,9 @@ export type UserAdminQueryHookResult = ReturnType<typeof useUserAdminQuery>;
 export type UserAdminQueryLazyQueryHookResult = ReturnType<typeof useUserAdminQueryLazyQuery>;
 export type UserAdminQueryQueryResult = Apollo.QueryResult<UserAdminQueryData, UserAdminQueryVariables>;
 export const MergeUsersModalQueryDocument = gql`
-    query MergeUsersModalQuery($ids: [Int!]!) {
-  users(ids: $ids) {
-    id
+    query MergeUsersModalQuery($ids: [ID!]!) {
+  users(transitionalIds: $ids) {
+    id: transitionalId
     ...DetailedUserFields
   }
 }

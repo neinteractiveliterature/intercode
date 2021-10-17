@@ -46,7 +46,7 @@ function OrganizationWithIdBreadcrumbs() {
   );
 }
 
-function OrganizationAdmin() {
+function OrganizationAdmin(): JSX.Element {
   const authorizationWarning = useAuthorizationRequired('can_read_organizations');
   if (authorizationWarning) return authorizationWarning;
 

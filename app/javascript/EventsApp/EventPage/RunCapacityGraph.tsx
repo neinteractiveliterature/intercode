@@ -8,14 +8,14 @@ import { EventPageQueryData } from './queries.generated';
 
 export type RunCapacityGraphProps = {
   run: Pick<
-    EventPageQueryData['event']['runs'][0],
+    EventPageQueryData['convention']['event']['runs'][0],
     'signup_count_by_state_and_bucket_key_and_counted'
   >;
-  event: Pick<EventPageQueryData['event'], 'registration_policy'>;
+  event: Pick<EventPageQueryData['convention']['event'], 'registration_policy'>;
   signupsAvailable: boolean;
 };
 
-function RunCapacityGraph({ run, event, signupsAvailable }: RunCapacityGraphProps) {
+function RunCapacityGraph({ run, event, signupsAvailable }: RunCapacityGraphProps): JSX.Element {
   const { t } = useTranslation();
   const signupCountData = SignupCountData.fromRun(run);
 

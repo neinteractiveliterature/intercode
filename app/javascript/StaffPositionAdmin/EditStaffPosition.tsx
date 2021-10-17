@@ -13,7 +13,7 @@ import { useUpdateStaffPositionMutation } from './mutations.generated';
 
 export default LoadSingleValueFromCollectionWrapper(
   useStaffPositionsQuery,
-  (data, id) => data.convention.staff_positions.find((sp) => sp.id.toString(10) === id),
+  (data, id) => data.convention.staff_positions.find((sp) => sp.id === id),
   function EditStaffPosition({ value: initialStaffPosition }) {
     const history = useHistory();
     const [staffPosition, setStaffPosition] = useState(initialStaffPosition);
@@ -26,7 +26,7 @@ export default LoadSingleValueFromCollectionWrapper(
       await mutate({
         variables: {
           input: {
-            id: staffPosition.id,
+            transitionalId: staffPosition.id,
             staff_position: buildStaffPositionInput(staffPosition),
           },
         },
@@ -39,12 +39,7 @@ export default LoadSingleValueFromCollectionWrapper(
         <h1 className="mb-4">Editing {initialStaffPosition.name}</h1>
         <StaffPositionForm staffPosition={staffPosition} onChange={setStaffPosition} />
         <ErrorDisplay graphQLError={updateError as ApolloError} />
-        <button
-          type="button"
-          className="btn btn-primary"
-          onClick={saveClicked}
-          disabled={requestInProgress}
-        >
+        <button type="button" className="btn btn-primary" onClick={saveClicked} disabled={requestInProgress}>
           Save changes
         </button>
       </div>

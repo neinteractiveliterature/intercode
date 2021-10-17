@@ -1,26 +1,26 @@
 import { useState } from 'react';
 import { ApolloError } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
-import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
+import {
+  ErrorDisplay,
+  LoadQueryWrapper,
+  useCreateMutationWithReferenceArrayUpdater,
+} from '@neinteractiveliterature/litform';
 
 import buildEventCategoryInput from './buildEventCategoryInput';
-import { CreateEventCategory } from './mutations';
-import { EventCategoryAdminQuery } from './queries';
 import EventCategoryForm, { EventCategoryForForm } from './EventCategoryForm';
-import useAsyncFunction from '../useAsyncFunction';
-import { useCreateMutation } from '../MutationUtils';
 import usePageTitle from '../usePageTitle';
-import { useEventCategoryAdminQuery } from './queries.generated';
+import { EventCategoryFieldsFragmentDoc, useEventCategoryAdminQuery } from './queries.generated';
+import { useCreateEventCategoryMutation } from './mutations.generated';
 
-function NewEventCategory() {
+export default LoadQueryWrapper(useEventCategoryAdminQuery, function NewEventCategory({ data }): JSX.Element {
   const history = useHistory();
-  const { data, loading, error } = useEventCategoryAdminQuery();
-  const [create, createError, createInProgress] = useAsyncFunction(
-    useCreateMutation(CreateEventCategory, {
-      query: EventCategoryAdminQuery,
-      arrayPath: ['convention', 'event_categories'],
-      newObjectPath: ['createEventCategory', 'event_category'],
-    }),
+  const [create, { error: createError, loading: createInProgress }] = useCreateMutationWithReferenceArrayUpdater(
+    useCreateEventCategoryMutation,
+    data.convention,
+    'event_categories',
+    (data) => data.createEventCategory.event_category,
+    EventCategoryFieldsFragmentDoc,
   );
 
   const [eventCategory, setEventCategory] = useState<EventCategoryForForm>({
@@ -45,15 +45,7 @@ function NewEventCategory() {
 
   usePageTitle('New Event Category');
 
-  if (loading) {
-    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
-  const { forms, departments, ticket_name: ticketName, ticket_mode: ticketMode } = data!.convention;
+  const { forms, departments, ticket_name: ticketName, ticket_mode: ticketMode } = data.convention;
 
   return (
     <>
@@ -71,16 +63,9 @@ function NewEventCategory() {
 
       <ErrorDisplay graphQLError={createError as ApolloError} />
 
-      <button
-        type="button"
-        className="btn btn-primary"
-        onClick={createClicked}
-        disabled={createInProgress}
-      >
+      <button type="button" className="btn btn-primary" onClick={createClicked} disabled={createInProgress}>
         Create event category
       </button>
     </>
   );
-}
-
-export default NewEventCategory;
+});

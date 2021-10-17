@@ -1,17 +1,17 @@
+# frozen_string_literal: true
 class Notifier
   include ActionView::Helpers::SanitizeHelper
 
-  NOTIFICATIONS_CONFIG = JSON.parse(
-    File.read(File.expand_path('config/notifications.json', Rails.root))
-  )
-  NOTIFIER_CLASSES_BY_EVENT_KEY = NOTIFICATIONS_CONFIG['categories'].flat_map do |category|
-    category['events'].map do |event|
-      [
-        "#{category['key']}/#{event['key']}",
-        "#{category['key'].camelize}::#{event['key'].camelize}Notifier".safe_constantize
-      ]
-    end
-  end.to_h
+  NOTIFICATIONS_CONFIG = JSON.parse(File.read(File.expand_path('config/notifications.json', Rails.root)))
+  NOTIFIER_CLASSES_BY_EVENT_KEY =
+    NOTIFICATIONS_CONFIG['categories'].flat_map do |category|
+      category['events'].map do |event|
+        [
+          "#{category['key']}/#{event['key']}",
+          "#{category['key'].camelize}::#{event['key'].camelize}Notifier".safe_constantize
+        ]
+      end
+    end.to_h
 
   def self.current_timezone
     Thread.current['notifier_timezone']
@@ -40,9 +40,7 @@ class Notifier
         body_html: notification_template.body_html_template,
         body_text: notification_template.body_text_template,
         body_sms: notification_template.body_sms_template
-      }.transform_values do |template|
-        cadmus_renderer.render(template, :html, assigns: liquid_assigns)
-      end
+      }.transform_values { |template| cadmus_renderer.render(template, :html, assigns: liquid_assigns) }
     end
   end
 
@@ -56,9 +54,7 @@ class Notifier
 
   def deliver_later(options = {})
     mail.deliver_later(options)
-    sms_jobs.each do |job|
-      job.enqueue(options)
-    end
+    sms_jobs.each { |job| job.enqueue(options) }
   end
 
   def deliver_now
@@ -67,12 +63,15 @@ class Notifier
   end
 
   def cadmus_renderer
-    @cadmus_renderer ||= CmsRenderingContext.new(
-      cms_parent: convention,
-      controller: nil,
-      timezone: Notifier.current_timezone,
-      assigns: { 'convention' => convention }
-    ).cadmus_renderer
+    @cadmus_renderer ||=
+      CmsRenderingContext.new(
+        cms_parent: convention,
+        controller: nil,
+        timezone: Notifier.current_timezone,
+        assigns: {
+          'convention' => convention
+        }
+      ).cadmus_renderer
   end
 
   # Notifications have to explicitly opt into SMS
@@ -87,10 +86,10 @@ class Notifier
 
     content = sms_content
 
-    user_con_profiles_for_destinations(destinations).map do |user_con_profile|
+    user_con_profiles_for_destinations(destinations).filter_map do |user_con_profile|
       next nil unless user_con_profile.allow_sms?
       DeliverSmsJob.new(user_con_profile, content, ENV['TWILIO_SMS_DEBUG_DESTINATION'].present?)
-    end.compact
+    end
   end
 
   def should_deliver_sms?
@@ -103,9 +102,8 @@ class Notifier
   def sms_content
     all_content = render.transform_values(&:presence).compact
     (
-      all_content[:body_sms] ||
-      all_content[:body_text]&.strip ||
-      (all_content[:body_html] && strip_tags(all_content[:body_html]).strip.gsub(/\s+/, ' '))
+      all_content[:body_sms] || all_content[:body_text]&.strip ||
+        (all_content[:body_html] && strip_tags(all_content[:body_html]).strip.gsub(/\s+/, ' '))
     )
   end
 
@@ -131,10 +129,14 @@ class Notifier
   def emails_for_destinations(destinations)
     destinations.flat_map do |destination|
       case destination
-      when UserConProfile then email_for_user_con_profile(destination)
-      when StaffPosition then emails_for_staff_position(destination)
-      when nil then []
-      else raise InvalidArgument, "Don't know how to send email to a #{destination.class}"
+      when UserConProfile
+        email_for_user_con_profile(destination)
+      when StaffPosition
+        emails_for_staff_position(destination)
+      when nil
+        []
+      else
+        raise InvalidArgument, "Don't know how to send email to a #{destination.class}"
       end
     end
   end
@@ -142,12 +144,14 @@ class Notifier
   def user_con_profiles_for_destinations(destinations)
     destinations.flat_map do |destination|
       case destination
-      when UserConProfile then destination
-      when StaffPosition then staff_position.user_con_profiles.to_a
-      when nil then []
+      when UserConProfile
+        destination
+      when StaffPosition
+        staff_position.user_con_profiles.to_a
+      when nil
+        []
       else
-        raise InvalidArgument,
-          "Don't know how to get a user con profile from a #{destination.class}"
+        raise InvalidArgument, "Don't know how to get a user con profile from a #{destination.class}"
       end
     end
   end

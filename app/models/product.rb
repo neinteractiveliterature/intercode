@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
@@ -26,9 +27,9 @@
 #  fk_rails_...  (provides_ticket_type_id => ticket_types.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+
 class Product < ApplicationRecord
-  PAYMENT_OPTIONS = %w[stripe pay_at_convention]
+  PAYMENT_OPTIONS = %w[stripe pay_at_convention].freeze
 
   belongs_to :convention
   has_many :product_variants, dependent: :destroy

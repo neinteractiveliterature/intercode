@@ -2,12 +2,12 @@ import { gql } from '@apollo/client';
 import { EventProposalFields } from './queries';
 
 export const CreateEventProposal = gql`
-  mutation CreateEventProposal($cloneEventProposalId: Int, $eventCategoryId: Int!) {
+  mutation CreateEventProposal($cloneEventProposalId: ID, $eventCategoryId: ID!) {
     createEventProposal(
-      input: { clone_event_proposal_id: $cloneEventProposalId, event_category_id: $eventCategoryId }
+      input: { transitionalCloneEventProposalId: $cloneEventProposalId, transitionalEventCategoryId: $eventCategoryId }
     ) {
       event_proposal {
-        id
+        id: transitionalId
       }
     }
   }
@@ -17,7 +17,7 @@ export const UpdateEventProposal = gql`
   mutation UpdateEventProposal($input: UpdateEventProposalInput!) {
     updateEventProposal(input: $input) {
       event_proposal {
-        id
+        id: transitionalId
         ...EventProposalFields
       }
     }
@@ -27,8 +27,8 @@ export const UpdateEventProposal = gql`
 `;
 
 export const DeleteEventProposal = gql`
-  mutation DeleteEventProposal($id: Int!) {
-    deleteEventProposal(input: { id: $id }) {
+  mutation DeleteEventProposal($id: ID!) {
+    deleteEventProposal(input: { transitionalId: $id }) {
       clientMutationId
     }
   }
@@ -38,7 +38,7 @@ export const SubmitEventProposal = gql`
   mutation SubmitEventProposal($input: SubmitEventProposalInput!) {
     submitEventProposal(input: $input) {
       event_proposal {
-        id
+        id: transitionalId
         ...EventProposalFields
       }
     }
@@ -48,12 +48,10 @@ export const SubmitEventProposal = gql`
 `;
 
 export const TransitionEventProposal = gql`
-  mutation TransitionEventProposal($eventProposalId: Int!, $status: String!, $dropEvent: Boolean) {
-    transitionEventProposal(
-      input: { id: $eventProposalId, status: $status, drop_event: $dropEvent }
-    ) {
+  mutation TransitionEventProposal($eventProposalId: ID!, $status: String!, $dropEvent: Boolean) {
+    transitionEventProposal(input: { transitionalId: $eventProposalId, status: $status, drop_event: $dropEvent }) {
       event_proposal {
-        id
+        id: transitionalId
         ...EventProposalFields
       }
     }
@@ -63,10 +61,10 @@ export const TransitionEventProposal = gql`
 `;
 
 export const UpdateEventProposalAdminNotes = gql`
-  mutation UpdateEventProposalAdminNotes($eventProposalId: Int!, $adminNotes: String!) {
-    updateEventProposalAdminNotes(input: { id: $eventProposalId, admin_notes: $adminNotes }) {
+  mutation UpdateEventProposalAdminNotes($eventProposalId: ID!, $adminNotes: String!) {
+    updateEventProposalAdminNotes(input: { transitionalId: $eventProposalId, admin_notes: $adminNotes }) {
       event_proposal {
-        id
+        id: transitionalId
         ...EventProposalFields
       }
     }

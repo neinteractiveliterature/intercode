@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
@@ -19,7 +20,7 @@
 #  fk_rails_...  (root_page_id => pages.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+
 class RootSite < ApplicationRecord
   belongs_to :root_page, class_name: 'Page'
   belongs_to :default_layout, class_name: 'CmsLayout'
@@ -65,8 +66,6 @@ class RootSite < ApplicationRecord
   end
 
   def url
-    Rails.application.routes.url_helpers.root_url(
-      Rails.application.config.action_mailer.default_url_options
-    )
+    Rails.application.routes.url_helpers.root_url(Rails.application.config.action_mailer.default_url_options)
   end
 end

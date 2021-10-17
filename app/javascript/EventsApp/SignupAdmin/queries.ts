@@ -3,29 +3,29 @@ import { CommonConventionData } from '../queries';
 
 export const SignupFields = gql`
   fragment SignupFields on Signup {
-    id
+    id: transitionalId
     state
     counted
     bucket_key
     requested_bucket_key
 
     run {
-      id
+      id: transitionalId
       title_suffix
       starts_at
       ends_at
 
       rooms {
-        id
+        id: transitionalId
         name
       }
 
       event {
-        id
+        id: transitionalId
         title
 
         event_category {
-          id
+          id: transitionalId
           team_member_name
         }
 
@@ -38,16 +38,16 @@ export const SignupFields = gql`
         }
 
         team_members {
-          id
+          id: transitionalId
           user_con_profile {
-            id
+            id: transitionalId
           }
         }
       }
     }
 
     user_con_profile {
-      id
+      id: transitionalId
       name_without_nickname
       nickname
       birth_date
@@ -66,29 +66,29 @@ export const SignupFields = gql`
 
 export const UserConProfileSignupsFragment = gql`
   fragment UserConProfileSignupsFragment on UserConProfile {
-    id
+    id: transitionalId
     signups {
-      id
+      id: transitionalId
       state
       counted
       bucket_key
       requested_bucket_key
 
       user_con_profile {
-        id
+        id: transitionalId
       }
 
       run {
-        id
+        id: transitionalId
         starts_at
 
         event {
-          id
+          id: transitionalId
           title
           length_seconds
 
           event_category {
-            id
+            id: transitionalId
             team_member_name
           }
 
@@ -100,16 +100,16 @@ export const UserConProfileSignupsFragment = gql`
           }
 
           team_members {
-            id
+            id: transitionalId
 
             user_con_profile {
-              id
+              id: transitionalId
             }
           }
         }
 
         rooms {
-          id
+          id: transitionalId
           name
         }
       }
@@ -118,15 +118,15 @@ export const UserConProfileSignupsFragment = gql`
 `;
 
 export const SignupAdminEventQuery = gql`
-  query SignupAdminEventQuery($eventId: Int!) {
-    convention {
-      id
+  query SignupAdminEventQuery($eventId: ID!) {
+    convention: conventionByRequestHost {
+      id: transitionalId
       ...CommonConventionData
-    }
 
-    event(id: $eventId) {
-      id
-      title
+      event(transitionalId: $eventId) {
+        id: transitionalId
+        title
+      }
     }
   }
 
@@ -134,21 +134,21 @@ export const SignupAdminEventQuery = gql`
 `;
 
 export const AdminSignupQuery = gql`
-  query AdminSignupQuery($id: Int!) {
-    convention {
-      id
+  query AdminSignupQuery($id: ID!) {
+    convention: conventionByRequestHost {
+      id: transitionalId
       ...CommonConventionData
+
+      signup(transitionalId: $id) {
+        id: transitionalId
+        ...SignupFields
+      }
     }
 
     currentAbility {
-      can_update_bucket_signup(signup_id: $id)
-      can_force_confirm_signup(signup_id: $id)
-      can_update_counted_signup(signup_id: $id)
-    }
-
-    signup(id: $id) {
-      id
-      ...SignupFields
+      can_update_bucket_signup(transitionalSignupId: $id)
+      can_force_confirm_signup(transitionalSignupId: $id)
+      can_update_counted_signup(transitionalSignupId: $id)
     }
   }
 
@@ -158,72 +158,72 @@ export const AdminSignupQuery = gql`
 
 export const RunSignupsTableSignupsQuery = gql`
   query RunSignupsTableSignupsQuery(
-    $eventId: Int!
-    $runId: Int!
+    $eventId: ID!
+    $runId: ID!
     $page: Int
     $perPage: Int
     $filters: SignupFiltersInput
     $sort: [SortInput!]
   ) {
-    convention {
-      id
+    convention: conventionByRequestHost {
+      id: transitionalId
       name
-    }
 
-    event(id: $eventId) {
-      id
-      title
+      event(transitionalId: $eventId) {
+        id: transitionalId
+        title
 
-      event_category {
-        id
-        team_member_name
-      }
-
-      team_members {
-        id
-
-        user_con_profile {
-          id
+        event_category {
+          id: transitionalId
+          team_member_name
         }
-      }
 
-      registration_policy {
-        buckets {
-          key
-          name
+        team_members {
+          id: transitionalId
+
+          user_con_profile {
+            id: transitionalId
+          }
         }
-      }
 
-      run(id: $runId) {
-        id
+        registration_policy {
+          buckets {
+            key
+            name
+          }
+        }
 
-        signups_paginated(page: $page, per_page: $perPage, filters: $filters, sort: $sort) {
-          total_entries
-          total_pages
-          current_page
-          per_page
+        run(transitionalId: $runId) {
+          id: transitionalId
 
-          entries {
-            id
-            state
-            counted
-            bucket_key
-            requested_bucket_key
-            age_restrictions_check
+          signups_paginated(page: $page, per_page: $perPage, filters: $filters, sort: $sort) {
+            total_entries
+            total_pages
+            current_page
+            per_page
 
-            run {
-              id
-              starts_at
-            }
+            entries {
+              id: transitionalId
+              state
+              counted
+              bucket_key
+              requested_bucket_key
+              age_restrictions_check
 
-            user_con_profile {
-              id
-              name_inverted
-              name_without_nickname
-              gravatar_enabled
-              gravatar_url
-              email
-              birth_date
+              run {
+                id: transitionalId
+                starts_at
+              }
+
+              user_con_profile {
+                id: transitionalId
+                name_inverted
+                name_without_nickname
+                gravatar_enabled
+                gravatar_url
+                email
+                birth_date
+              }
             }
           }
         }
@@ -233,31 +233,31 @@ export const RunSignupsTableSignupsQuery = gql`
 `;
 
 export const RunHeaderRunInfoQuery = gql`
-  query RunHeaderRunInfoQuery($eventId: Int!, $runId: Int!) {
-    convention {
-      id
+  query RunHeaderRunInfoQuery($eventId: ID!, $runId: ID!) {
+    convention: conventionByRequestHost {
+      id: transitionalId
       ...CommonConventionData
-    }
 
-    event(id: $eventId) {
-      id
-      title
-      length_seconds
+      event(transitionalId: $eventId) {
+        id: transitionalId
+        title
+        length_seconds
 
-      registration_policy {
-        total_slots
-        slots_limited
-
-        buckets {
-          name
+        registration_policy {
           total_slots
-        }
-      }
+          slots_limited
 
-      run(id: $runId) {
-        id
-        starts_at
-        title_suffix
+          buckets {
+            name
+            total_slots
+          }
+        }
+
+        run(transitionalId: $runId) {
+          id: transitionalId
+          starts_at
+          title_suffix
+        }
       }
     }
   }
@@ -266,64 +266,64 @@ export const RunHeaderRunInfoQuery = gql`
 `;
 
 export const RunSignupSummaryQuery = gql`
-  query RunSignupSummaryQuery($eventId: Int!, $runId: Int!) {
-    convention {
-      id
+  query RunSignupSummaryQuery($eventId: ID!, $runId: ID!) {
+    convention: conventionByRequestHost {
+      id: transitionalId
       ...CommonConventionData
-    }
 
-    currentAbility {
-      can_read_schedule
-    }
+      event(transitionalId: $eventId) {
+        id: transitionalId
+        title
 
-    event(id: $eventId) {
-      id
-      title
-
-      event_category {
-        id
-        team_member_name
-      }
-
-      registration_policy {
-        buckets {
-          key
-          name
-          expose_attendees
+        event_category {
+          id: transitionalId
+          team_member_name
         }
-      }
 
-      team_members {
-        id
-        user_con_profile {
-          id
+        registration_policy {
+          buckets {
+            key
+            name
+            expose_attendees
+          }
         }
-      }
 
-      runs {
-        id
-        starts_at
-      }
+        team_members {
+          id: transitionalId
+          user_con_profile {
+            id: transitionalId
+          }
+        }
 
-      run(id: $runId) {
-        id
+        runs {
+          id: transitionalId
+          starts_at
+        }
 
-        signups_paginated(per_page: 1000, filters: { state: ["confirmed", "waitlisted"] }) {
-          entries {
-            id
-            state
-            bucket_key
-            waitlist_position
+        run(transitionalId: $runId) {
+          id: transitionalId
 
-            user_con_profile {
-              id
-              name_inverted
-              gravatar_enabled
-              gravatar_url
+          signups_paginated(per_page: 1000, filters: { state: ["confirmed", "waitlisted"] }) {
+            entries {
+              id: transitionalId
+              state
+              bucket_key
+              waitlist_position
+
+              user_con_profile {
+                id: transitionalId
+                name_inverted
+                gravatar_enabled
+                gravatar_url
+              }
             }
           }
         }
       }
+    }
+
+    currentAbility {
+      can_read_schedule
     }
   }
 
@@ -331,35 +331,35 @@ export const RunSignupSummaryQuery = gql`
 `;
 
 export const UserConProfileSignupsQuery = gql`
-  query UserConProfileSignupsQuery($id: Int!) {
-    convention {
-      id
+  query UserConProfileSignupsQuery($id: ID!) {
+    convention: conventionByRequestHost {
+      id: transitionalId
       ...CommonConventionData
-    }
 
-    myProfile {
-      id
-      ability {
-        can_withdraw_all_user_con_profile_signups(user_con_profile_id: $id)
-      }
-    }
-
-    userConProfile(id: $id) {
-      id
-      name_without_nickname
-      ical_secret
-
-      team_members {
-        id
-
-        event {
-          id
-          title
-          status
+      my_profile {
+        id: transitionalId
+        ability {
+          can_withdraw_all_user_con_profile_signups(transitionalUserConProfileId: $id)
         }
       }
 
-      ...UserConProfileSignupsFragment
+      user_con_profile(transitionalId: $id) {
+        id: transitionalId
+        name_without_nickname
+        ical_secret
+
+        team_members {
+          id: transitionalId
+
+          event {
+            id: transitionalId
+            title
+            status
+          }
+        }
+
+        ...UserConProfileSignupsFragment
+      }
     }
   }
 
@@ -369,79 +369,79 @@ export const UserConProfileSignupsQuery = gql`
 
 export const RunSignupChangesQuery = gql`
   query RunSignupChangesQuery(
-    $runId: Int!
+    $runId: ID!
     $filters: SignupChangeFiltersInput
     $sort: [SortInput!]
     $page: Int
     $perPage: Int
   ) {
-    convention {
-      id
+    convention: conventionByRequestHost {
+      id: transitionalId
       timezone_name
-    }
 
-    run(id: $runId) {
-      id
-      event {
-        id
-        title
-      }
+      run(transitionalId: $runId) {
+        id: transitionalId
+        event {
+          id: transitionalId
+          title
+        }
 
-      signup_changes_paginated(page: $page, per_page: $perPage, filters: $filters, sort: $sort) {
-        total_entries
-        total_pages
-        current_page
-        per_page
+        signup_changes_paginated(page: $page, per_page: $perPage, filters: $filters, sort: $sort) {
+          total_entries
+          total_pages
+          current_page
+          per_page
 
-        entries {
-          id
-          state
-          counted
-          bucket_key
-          action
-          created_at
-
-          previous_signup_change {
-            id
+          entries {
+            id: transitionalId
             state
             counted
             bucket_key
-          }
+            action
+            created_at
 
-          run {
-            id
+            previous_signup_change {
+              id: transitionalId
+              state
+              counted
+              bucket_key
+            }
 
-            event {
-              id
-              title
+            run {
+              id: transitionalId
 
-              event_category {
-                id
-                team_member_name
-              }
+              event {
+                id: transitionalId
+                title
 
-              registration_policy {
-                buckets {
-                  key
-                  name
-                  anything
+                event_category {
+                  id: transitionalId
+                  team_member_name
                 }
-              }
 
-              team_members {
-                id
-                user_con_profile {
-                  id
+                registration_policy {
+                  buckets {
+                    key
+                    name
+                    anything
+                  }
+                }
+
+                team_members {
+                  id: transitionalId
+                  user_con_profile {
+                    id: transitionalId
+                  }
                 }
               }
             }
-          }
 
-          user_con_profile {
-            id
-            name_inverted
-            gravatar_enabled
-            gravatar_url
+            user_con_profile {
+              id: transitionalId
+              name_inverted
+              gravatar_enabled
+              gravatar_url
+            }
           }
         }
       }

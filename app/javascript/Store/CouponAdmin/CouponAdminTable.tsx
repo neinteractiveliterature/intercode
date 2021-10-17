@@ -56,14 +56,14 @@ function getPossibleColumns(): Column<CouponType>[] {
   ];
 }
 
-function CouponAdminTable() {
+function CouponAdminTable(): JSX.Element {
   const newCouponModal = useModal();
   const editCouponModal = useModal<{ initialCoupon: CouponType }>();
 
   const { tableHeaderProps, columnSelectionProps, tableInstance, loading } =
     useReactTableWithTheWorks({
-      getData: ({ data }) => data!.convention.coupons_paginated.entries,
-      getPages: ({ data }) => data!.convention.coupons_paginated.total_pages,
+      getData: ({ data }) => data?.convention.coupons_paginated.entries,
+      getPages: ({ data }) => data?.convention.coupons_paginated.total_pages,
       getPossibleColumns,
       useQuery: useAdminCouponsQuery,
       storageKeyPrefix: 'coupons',

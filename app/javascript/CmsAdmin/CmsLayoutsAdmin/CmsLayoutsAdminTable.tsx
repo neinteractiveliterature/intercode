@@ -4,43 +4,28 @@ import {
   ErrorDisplay,
   useConfirm,
   sortByLocaleString,
-  PageLoadingIndicator,
+  LoadQueryWrapper,
+  useDeleteMutationWithReferenceArrayUpdater,
 } from '@neinteractiveliterature/litform';
 
-import { CmsLayoutsAdminQuery } from './queries';
-import { DeleteLayout } from './mutations';
-import { useDeleteMutation } from '../../MutationUtils';
 import usePageTitle from '../../usePageTitle';
 import { useCmsLayoutsAdminQuery } from './queries.generated';
+import { useDeleteLayoutMutation } from './mutations.generated';
 
-function CmsLayoutsAdminTable() {
-  const { data, loading, error } = useCmsLayoutsAdminQuery();
+export default LoadQueryWrapper(useCmsLayoutsAdminQuery, function CmsLayoutsAdminTable({ data }) {
   const confirm = useConfirm();
-  const deleteLayoutMutate = useDeleteMutation(DeleteLayout, {
-    query: CmsLayoutsAdminQuery,
-    arrayPath: ['cmsLayouts'],
-    idVariablePath: ['id'],
-  });
+  const [deleteLayout] = useDeleteMutationWithReferenceArrayUpdater(
+    useDeleteLayoutMutation,
+    data.cmsParent,
+    'cmsLayouts',
+    (layout) => ({ id: layout.id }),
+  );
 
   const layoutsSorted = useMemo(() => {
-    if (loading || error || !data) {
-      return [];
-    }
-
-    return sortByLocaleString(data.cmsLayouts, (layout) => layout.name ?? '');
-  }, [data, loading, error]);
+    return sortByLocaleString(data.cmsParent.cmsLayouts, (layout) => layout.name ?? '');
+  }, [data]);
 
   usePageTitle('CMS Layouts');
-
-  if (loading) {
-    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
-  const deleteLayout = (id: number) => deleteLayoutMutate({ variables: { id } });
 
   return (
     <>
@@ -63,10 +48,7 @@ function CmsLayoutsAdminTable() {
                     Edit
                   </Link>
                 ) : (
-                  <Link
-                    to={`/cms_layouts/${layout.id}/view_source`}
-                    className="btn btn-outline-secondary btn-sm"
-                  >
+                  <Link to={`/cms_layouts/${layout.id}/view_source`} className="btn btn-outline-secondary btn-sm">
                     View source
                   </Link>
                 )}
@@ -76,7 +58,7 @@ function CmsLayoutsAdminTable() {
                     onClick={() =>
                       confirm({
                         prompt: 'Are you sure you want to delete this layout?',
-                        action: () => deleteLayout(layout.id),
+                        action: () => deleteLayout(layout),
                         renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
                       })
                     }
@@ -91,13 +73,11 @@ function CmsLayoutsAdminTable() {
         </tbody>
       </table>
 
-      {data!.currentAbility.can_create_cms_layouts && (
+      {data.currentAbility.can_create_cms_layouts && (
         <Link to="/cms_layouts/new" className="btn btn-secondary">
           New layout
         </Link>
       )}
     </>
   );
-}
-
-export default CmsLayoutsAdminTable;
+});

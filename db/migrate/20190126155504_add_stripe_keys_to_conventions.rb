@@ -8,7 +8,12 @@ class AddStripeKeysToConventions < ActiveRecord::Migration[5.2]
         if Rails.configuration.respond_to?(:stripe) && Rails.configuration.stripe
           quoted_publishable_key = ActiveRecord::Base.connection.quote(Rails.configuration.stripe[:publishable_key])
           quoted_secret_key = ActiveRecord::Base.connection.quote(Rails.configuration.stripe[:secret_key])
-          execute "UPDATE conventions SET stripe_publishable_key = #{quoted_publishable_key}, stripe_secret_key = #{quoted_secret_key};"
+          execute <<~SQL
+          UPDATE conventions
+          SET
+            stripe_publishable_key = #{quoted_publishable_key},
+            stripe_secret_key = #{quoted_secret_key};
+          SQL
         end
       end
     end

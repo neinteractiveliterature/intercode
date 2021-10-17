@@ -19,9 +19,8 @@ export const LazyStripeContext = createContext<LazyStripeContextValue>({
 });
 
 function useLazyStripe() {
-  const { publishableKey, accountId, stripePromise, setStripePromise } = useContext(
-    LazyStripeContext,
-  );
+  const { publishableKey, accountId, stripePromise, setStripePromise } =
+    useContext(LazyStripeContext);
   const [loadError, setLoadError] = useState<Error>();
 
   useLayoutEffect(() => {
@@ -48,7 +47,7 @@ function useLazyStripe() {
   return [stripePromise, loadError] as const;
 }
 
-export function LazyStripeElementsContainer({ children }: { children: ReactNode }) {
+export function LazyStripeElementsContainer({ children }: { children: ReactNode }): JSX.Element {
   const [stripePromise, loadError] = useLazyStripe();
 
   if (loadError) {

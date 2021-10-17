@@ -5,7 +5,7 @@ export type AdminWarningProps = {
   children: ReactNode;
 };
 
-export default function AdminWarning({ children }: AdminWarningProps) {
+export default function AdminWarning({ children }: AdminWarningProps): JSX.Element {
   const { currentAbility } = useContext(AppRootContext);
 
   // only show warning to admins

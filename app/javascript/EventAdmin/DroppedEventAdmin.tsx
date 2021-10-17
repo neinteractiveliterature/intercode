@@ -1,39 +1,25 @@
-import { useConfirm, ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
+import { useConfirm, ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import usePageTitle from '../usePageTitle';
 import { useEventAdminEventsQuery } from './queries.generated';
 import { useRestoreDroppedEventMutation } from './mutations.generated';
 
-function DroppedEventAdmin() {
-  const { data, loading, error } = useEventAdminEventsQuery();
+export default LoadQueryWrapper(useEventAdminEventsQuery, function DroppedEventAdmin({ data }): JSX.Element {
   const [restoreDroppedEvent] = useRestoreDroppedEventMutation();
   const confirm = useConfirm();
 
   usePageTitle('Dropped Events');
 
-  if (loading) {
-    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
-  const droppedEvents = data!.events.filter((event) => {
-    const eventCategory = data!.convention.event_categories.find(
-      (c) => c.id === event.event_category.id,
-    );
+  const droppedEvents = data.convention.events.filter((event) => {
+    const eventCategory = data.convention.event_categories.find((c) => c.id === event.event_category.id);
     return event.status === 'dropped' && eventCategory?.scheduling_ui !== 'single_run';
   });
-  droppedEvents.sort((a, b) =>
-    (a.title ?? '').localeCompare(b.title ?? '', undefined, { sensitivity: 'base' }),
-  );
+  droppedEvents.sort((a, b) => (a.title ?? '').localeCompare(b.title ?? '', undefined, { sensitivity: 'base' }));
 
   if (droppedEvents.length === 0) {
     return (
       <p className="mt-2">
-        There are no dropped events to display. (Single-run events that are dropped cannot be
-        restored.)
+        There are no dropped events to display. (Single-run events that are dropped cannot be restored.)
       </p>
     );
   }
@@ -49,7 +35,7 @@ function DroppedEventAdmin() {
             confirm({
               prompt: `Are you sure you want to restore this event?  (Scheduled runs and
               previous signups will not be restored.)`,
-              action: () => restoreDroppedEvent({ variables: { input: { id: droppedEvent.id } } }),
+              action: () => restoreDroppedEvent({ variables: { input: { transitionalId: droppedEvent.id } } }),
               renderError: (restoreError) => <ErrorDisplay graphQLError={restoreError} />,
             })
           }
@@ -67,6 +53,4 @@ function DroppedEventAdmin() {
       </table>
     </div>
   );
-}
-
-export default DroppedEventAdmin;
+});

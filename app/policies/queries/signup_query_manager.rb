@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Queries::SignupQueryManager < Queries::QueryManager
   def initialize(user:)
     super(user: user)
@@ -26,9 +27,7 @@ class Queries::SignupQueryManager < Queries::QueryManager
   def my_active_signups
     return Signup.none unless user
 
-    Signup.joins(:user_con_profile)
-      .where(user_con_profiles: { user_id: user.id })
-      .where.not(state: 'withdrawn')
+    Signup.joins(:user_con_profile).where(user_con_profiles: { user_id: user.id }).where.not(state: 'withdrawn')
   end
 
   def runs_where_signed_up
@@ -41,9 +40,11 @@ class Queries::SignupQueryManager < Queries::QueryManager
 
   def user_con_profiles_in_signed_up_runs
     UserConProfile.where(
-      id: Signup.where(run_id: my_active_signups.select(:run_id))
-        .where.not(state: 'withdrawn')
-        .select(:user_con_profile_id)
+      id:
+        Signup
+          .where(run_id: my_active_signups.select(:run_id))
+          .where.not(state: 'withdrawn')
+          .select(:user_con_profile_id)
     )
   end
 

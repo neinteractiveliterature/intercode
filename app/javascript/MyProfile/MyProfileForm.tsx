@@ -1,7 +1,7 @@
 import { useState, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import isEqual from 'lodash/isEqual';
-// @ts-expect-error
+// @ts-expect-error md5.js has no type
 import MD5 from 'md5.js';
 import { useTranslation, Trans } from 'react-i18next';
 import { ApolloError } from '@apollo/client';
@@ -30,6 +30,7 @@ import { useMyProfileQuery, MyProfileQueryData } from './queries.generated';
 import { CommonFormFieldsFragment } from '../Models/commonFormFragments.generated';
 import { useUpdateUserConProfileMutation } from '../UserConProfiles/mutations.generated';
 import { WithFormResponse } from '../Models/deserializeFormResponse';
+import FourOhFourPage from '../FourOhFourPage';
 
 function parseResponseErrors(error: ApolloError) {
   const { graphQLErrors } = error;
@@ -42,7 +43,9 @@ function parseResponseErrors(error: ApolloError) {
 
 type MyProfileFormInnerProps = {
   initialSetup?: boolean;
-  initialUserConProfile: WithFormResponse<NonNullable<MyProfileQueryData['myProfile']>>;
+  initialUserConProfile: WithFormResponse<
+    NonNullable<MyProfileQueryData['convention']['my_profile']>
+  >;
   convention: NonNullable<MyProfileQueryData['convention']>;
   form: CommonFormFieldsFragment;
 };
@@ -252,11 +255,14 @@ export type MyProfileFormProps = {
   initialSetup?: boolean;
 };
 
-function MyProfileForm({ initialSetup }: MyProfileFormProps) {
+function MyProfileForm({ initialSetup }: MyProfileFormProps): JSX.Element {
   const { data, loading, error } = useMyProfileQuery();
 
   const formState = useMemo(
-    () => (loading || error ? null : buildFormStateFromData(data!.myProfile!, data!.convention!)),
+    () =>
+      loading || error || !data || !data.convention.my_profile
+        ? null
+        : buildFormStateFromData(data.convention.my_profile, data.convention),
     [loading, error, data],
   );
 
@@ -270,11 +276,15 @@ function MyProfileForm({ initialSetup }: MyProfileFormProps) {
     return <ErrorDisplay graphQLError={error} />;
   }
 
+  if (!formState) {
+    return <FourOhFourPage />;
+  }
+
   return (
     <MyProfileFormInner
-      initialUserConProfile={formState!.userConProfile}
-      convention={formState!.convention}
-      form={formState!.form}
+      initialUserConProfile={formState.userConProfile}
+      convention={formState.convention}
+      form={formState.form}
       initialSetup={initialSetup ?? false}
     />
   );

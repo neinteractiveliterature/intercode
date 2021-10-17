@@ -18,7 +18,7 @@ function CmsLayoutForm<T extends CmsLayoutFields>({
   layout,
   onChange,
   readOnly,
-}: CmsLayoutFormProps<T>) {
+}: CmsLayoutFormProps<T>): JSX.Element {
   const [setName, setAdminNotes, setNavbarClasses, setContent] = usePropertySetters(
     onChange,
     'name',

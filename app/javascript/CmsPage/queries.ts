@@ -2,64 +2,66 @@ import { gql } from '@apollo/client';
 
 export const CmsPageQuery = gql`
   query CmsPageQuery($slug: String, $rootPage: Boolean) {
-    convention {
-      id
+    convention: conventionByRequestHostIfPresent {
+      id: transitionalId
       name
       clickwrap_agreement
+
+      my_profile {
+        id: transitionalId
+        accepted_clickwrap_agreement
+      }
+    }
+
+    cmsParent: cmsParentByRequestHost {
+      id: transitionalId
+
+      cmsPage(slug: $slug, rootPage: $rootPage) {
+        id: transitionalId
+        name
+        content_html
+        current_ability_can_update
+        current_ability_can_delete
+        skip_clickwrap_agreement
+      }
     }
 
     currentAbility {
       can_manage_any_cms_content
     }
-
-    myProfile {
-      id
-      accepted_clickwrap_agreement
-    }
-
-    cmsPage(slug: $slug, rootPage: $rootPage) {
-      id
-      name
-      content_html
-      current_ability_can_update
-      current_ability_can_delete
-      skip_clickwrap_agreement
-    }
   }
 `;
 
 export const PageAdminDropdownQuery = gql`
-  query PageAdminDropdownQuery($id: Int!) {
-    cmsParent {
-      ... on Convention {
-        id
+  query PageAdminDropdownQuery($id: ID!) {
+    cmsParent: cmsParentByRequestHost {
+      id: transitionalId
 
-        default_layout {
-          id
+      cmsPage(transitionalId: $id) {
+        id: transitionalId
+        cms_layout {
+          id: transitionalId
+          name
+        }
+
+        referenced_partials {
+          id: transitionalId
+          name
+        }
+      }
+
+      ... on Convention {
+        defaultLayout {
+          id: transitionalId
           name
         }
       }
 
       ... on RootSite {
-        id
-
-        root_site_default_layout: default_layout {
-          id
+        root_site_default_layout: defaultLayout {
+          id: transitionalId
           name
         }
-      }
-    }
-
-    cmsPage(id: $id) {
-      id
-      cms_layout {
-        id
-        name
-      }
-
-      referenced_partials {
-        id
-        name
       }
     }
   }

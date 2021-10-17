@@ -2,81 +2,93 @@ import { useContext, useMemo } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
 import { ApolloError } from '@apollo/client';
 import classnames from 'classnames';
-import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
+import { ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import AppRootContext from '../../AppRootContext';
 import { EventPageQuery } from './queries';
 import { timespanFromRun } from '../../TimespanUtils';
 import useAsyncFunction from '../../useAsyncFunction';
-import { EventPageQueryData, useCreateModeratedSignupModalQuery } from './queries.generated';
+import {
+  CreateModeratedSignupModalQueryData,
+  CreateModeratedSignupModalQueryVariables,
+  EventPageQueryData,
+  useCreateModeratedSignupModalQuery,
+} from './queries.generated';
 import { SignupOption } from './buildSignupOptions';
 import { useCreateSignupRequestMutation } from './mutations.generated';
 
 export type CreateModeratedSignupModalProps = {
   visible: boolean;
   close: () => void;
-  run: EventPageQueryData['event']['runs'][0];
-  event: EventPageQueryData['event'];
+  run: EventPageQueryData['convention']['event']['runs'][0];
+  event: EventPageQueryData['convention']['event'];
   signupOption?: SignupOption;
 };
 
-function CreateModeratedSignupModal({
-  visible,
-  close,
-  run,
-  event,
-  signupOption,
-}: CreateModeratedSignupModalProps) {
-  const { conventionName, timezoneName } = useContext(AppRootContext);
-  const { data, loading, error } = useCreateModeratedSignupModalQuery();
-  const [createMutate] = useCreateSignupRequestMutation({
-    refetchQueries: () => [{ query: EventPageQuery, variables: { eventId: event.id } }],
-  });
-  const [createSignupRequest, createError, createInProgress] = useAsyncFunction(createMutate);
-  const runTimespan = useMemo(
-    () => timespanFromRun(timezoneName, event, run),
-    [timezoneName, event, run],
-  );
-
-  const conflictingSignup = useMemo(() => {
-    if (loading || error || !data) {
-      return undefined;
-    }
-
-    return ((data.myProfile || {}).signups || []).find((signup) => {
-      const timespan = timespanFromRun(timezoneName, signup.run.event, signup.run);
-
-      return (
-        !(event.can_play_concurrently || signup.run.event.can_play_concurrently) &&
-        timespan.overlapsTimespan(runTimespan) &&
-        signup.state !== 'withdrawn'
-      );
+export default LoadQueryWrapper<
+  CreateModeratedSignupModalQueryData,
+  CreateModeratedSignupModalQueryVariables,
+  CreateModeratedSignupModalProps
+>(
+  useCreateModeratedSignupModalQuery,
+  function CreateModeratedSignupModal({
+    visible,
+    close,
+    run,
+    event,
+    signupOption,
+    data,
+  }): JSX.Element {
+    const { conventionName, timezoneName } = useContext(AppRootContext);
+    const [createMutate] = useCreateSignupRequestMutation({
+      refetchQueries: () => [{ query: EventPageQuery, variables: { eventId: event.id } }],
     });
-  }, [data, error, event.can_play_concurrently, loading, runTimespan, timezoneName]);
+    const [createSignupRequest, createError, createInProgress] = useAsyncFunction(createMutate);
+    const runTimespan = useMemo(
+      () => timespanFromRun(timezoneName, event, run),
+      [timezoneName, event, run],
+    );
 
-  const confirmClicked = async () => {
-    await createSignupRequest({
-      variables: {
-        targetRunId: run.id,
-        requestedBucketKey: signupOption!.bucket?.key,
-        replaceSignupId: conflictingSignup?.id,
-      },
-    });
-    close();
-  };
+    const conflictingSignup = useMemo(() => {
+      return (data.convention.my_profile?.signups || []).find((signup) => {
+        const timespan = timespanFromRun(timezoneName, signup.run.event, signup.run);
 
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
+        return (
+          !(event.can_play_concurrently || signup.run.event.can_play_concurrently) &&
+          timespan.overlapsTimespan(runTimespan) &&
+          signup.state !== 'withdrawn'
+        );
+      });
+    }, [
+      data.convention.my_profile?.signups,
+      event.can_play_concurrently,
+      runTimespan,
+      timezoneName,
+    ]);
 
-  return (
-    <Modal visible={visible}>
-      <div className="modal-header">Signup request</div>
+    const confirmClicked = async () => {
+      if (!signupOption) {
+        Rollbar?.error('CreateModeratedSignupModal: signupOption is null!');
+        throw new Error(
+          `Signup option not found in CreateModeratedSignupModal. This is probably a bug; we've been notified automatically and will look at it as soon as possible.`,
+        );
+      }
 
-      <div className="modal-body">
-        {loading ? (
-          <LoadingIndicator iconSet="bootstrap-icons" />
-        ) : (
+      await createSignupRequest({
+        variables: {
+          targetRunId: run.id,
+          requestedBucketKey: signupOption.bucket?.key,
+          replaceSignupId: conflictingSignup?.id,
+        },
+      });
+      close();
+    };
+
+    return (
+      <Modal visible={visible}>
+        <div className="modal-header">Signup request</div>
+
+        <div className="modal-body">
           <>
             <p className={classnames({ 'm-0': !conflictingSignup })}>
               {conventionName}
@@ -92,31 +104,29 @@ function CreateModeratedSignupModal({
               </div>
             )}
           </>
-        )}
 
-        <ErrorDisplay graphQLError={createError as ApolloError} />
-      </div>
+          <ErrorDisplay graphQLError={createError as ApolloError} />
+        </div>
 
-      <div className="modal-footer">
-        <button
-          className="btn btn-secondary"
-          type="button"
-          onClick={close}
-          disabled={createInProgress}
-        >
-          Cancel
-        </button>
-        <button
-          className="btn btn-primary"
-          type="button"
-          onClick={confirmClicked}
-          disabled={createInProgress}
-        >
-          Confirm
-        </button>
-      </div>
-    </Modal>
-  );
-}
-
-export default CreateModeratedSignupModal;
+        <div className="modal-footer">
+          <button
+            className="btn btn-secondary"
+            type="button"
+            onClick={close}
+            disabled={createInProgress}
+          >
+            Cancel
+          </button>
+          <button
+            className="btn btn-primary"
+            type="button"
+            onClick={confirmClicked}
+            disabled={createInProgress}
+          >
+            Confirm
+          </button>
+        </div>
+      </Modal>
+    );
+  },
+);

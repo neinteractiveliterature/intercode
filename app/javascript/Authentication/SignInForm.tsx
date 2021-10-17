@@ -50,7 +50,7 @@ async function signIn(
   return response.url;
 }
 
-function SignInForm() {
+function SignInForm(): JSX.Element {
   const { t } = useTranslation();
   const history = useHistory();
   const {
@@ -68,8 +68,12 @@ function SignInForm() {
 
   const onSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
+    if (!authenticityToken) {
+      throw new Error('No authenticity token received from server');
+    }
+
     try {
-      const location = await signIn(authenticityToken!, email, password, rememberMe);
+      const location = await signIn(authenticityToken, email, password, rememberMe);
       await afterSessionChange(afterSignInPath || location, {
         title: 'Login',
         body: 'Logged in successfully!',

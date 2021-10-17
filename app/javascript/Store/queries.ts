@@ -4,19 +4,14 @@ import { AdminProductFields } from './adminProductFields';
 import { PricingStructureFields } from './pricingStructureFields';
 
 export const AdminOrdersQuery = gql`
-  query AdminOrdersQuery(
-    $page: Int
-    $perPage: Int
-    $filters: OrderFiltersInput
-    $sort: [SortInput!]
-  ) {
+  query AdminOrdersQuery($page: Int, $perPage: Int, $filters: OrderFiltersInput, $sort: [SortInput!]) {
     currentAbility {
       can_create_orders
       can_update_orders
     }
 
-    convention: assertConvention {
-      id
+    convention: conventionByRequestHost {
+      id: transitionalId
       timezone_name
 
       orders_paginated(page: $page, per_page: $perPage, filters: $filters, sort: $sort) {
@@ -25,7 +20,7 @@ export const AdminOrdersQuery = gql`
         total_pages
 
         entries {
-          id
+          id: transitionalId
           ...AdminOrderFieldsFragment
         }
       }
@@ -37,14 +32,14 @@ export const AdminOrdersQuery = gql`
 
 export const AdminProductsQuery = gql`
   query AdminProductsQuery {
-    convention: assertConvention {
-      id
+    convention: conventionByRequestHost {
+      id: transitionalId
       products {
-        id
+        id: transitionalId
         ...AdminProductFields
       }
       ticket_types {
-        id
+        id: transitionalId
         description
       }
     }
@@ -64,8 +59,8 @@ export const AdminStoreAbilityQuery = gql`
       can_update_orders
     }
 
-    convention: assertConvention {
-      id
+    convention: conventionByRequestHost {
+      id: transitionalId
       timezone_name
     }
   }
@@ -73,19 +68,19 @@ export const AdminStoreAbilityQuery = gql`
 
 export const CartQuery = gql`
   query CartQuery {
-    myProfile {
-      id
-      name_without_nickname
-    }
-
-    convention: assertConvention {
-      id
+    convention: conventionByRequestHost {
+      id: transitionalId
       name
-    }
 
-    currentPendingOrder {
-      id
-      ...CartOrderFields
+      my_profile {
+        id: transitionalId
+        name_without_nickname
+
+        current_pending_order {
+          id: transitionalId
+          ...CartOrderFields
+        }
+      }
     }
   }
 
@@ -94,67 +89,67 @@ export const CartQuery = gql`
 
 export const OrderHistoryQuery = gql`
   query OrderHistoryQuery {
-    convention: assertConvention {
-      id
+    convention: conventionByRequestHost {
+      id: transitionalId
       name
       timezone_name
 
       staff_positions {
-        id
+        id: transitionalId
         name
         email
       }
-    }
 
-    myProfile {
-      id
-      name_without_nickname
+      my_profile {
+        id: transitionalId
+        name_without_nickname
 
-      orders {
-        id
-        status
-        submitted_at
+        orders {
+          id: transitionalId
+          status
+          submitted_at
 
-        total_price {
-          fractional
-          currency_code
-        }
-
-        payment_amount {
-          fractional
-          currency_code
-        }
-
-        coupon_applications {
-          id
-          ...CouponApplicationFields
-        }
-
-        order_entries {
-          id
-          quantity
-
-          product {
-            id
-            name
-            image_url
-            payment_options
-          }
-
-          product_variant {
-            id
-            name
-            image_url
-          }
-
-          price_per_item {
+          total_price {
             fractional
             currency_code
           }
 
-          price {
+          payment_amount {
             fractional
             currency_code
+          }
+
+          coupon_applications {
+            id: transitionalId
+            ...CouponApplicationFields
+          }
+
+          order_entries {
+            id: transitionalId
+            quantity
+
+            product {
+              id: transitionalId
+              name
+              image_url
+              payment_options
+            }
+
+            product_variant {
+              id: transitionalId
+              name
+              image_url
+            }
+
+            price_per_item {
+              fractional
+              currency_code
+            }
+
+            price {
+              fractional
+              currency_code
+            }
           }
         }
       }
@@ -166,10 +161,10 @@ export const OrderHistoryQuery = gql`
 
 export const OrderSummaryQuery = gql`
   query OrderSummaryQuery {
-    convention: assertConvention {
-      id
+    convention: conventionByRequestHost {
+      id: transitionalId
       products {
-        id
+        id: transitionalId
         name
 
         order_quantities_by_status {
@@ -178,7 +173,7 @@ export const OrderSummaryQuery = gql`
         }
 
         product_variants {
-          id
+          id: transitionalId
           name
 
           order_quantities_by_status {
@@ -192,29 +187,32 @@ export const OrderSummaryQuery = gql`
 `;
 
 export const OrderFormProductQuery = gql`
-  query OrderFormProductQuery($productId: Int!) {
+  query OrderFormProductQuery($productId: ID!) {
     currentUser {
-      id
+      id: transitionalId
     }
 
-    product(id: $productId) {
-      id
-      image_url
-      name
-      pricing_structure {
-        ...PricingStructureFields
-      }
-      description_html
-      provides_ticket_type {
-        id
-      }
-
-      product_variants {
-        id
+    convention: conventionByRequestHost {
+      id: transitionalId
+      product(transitionalId: $productId) {
+        id: transitionalId
+        image_url
         name
-        position
-        override_pricing_structure {
+        pricing_structure {
           ...PricingStructureFields
+        }
+        description_html
+        provides_ticket_type {
+          id: transitionalId
+        }
+
+        product_variants {
+          id: transitionalId
+          name
+          position
+          override_pricing_structure {
+            ...PricingStructureFields
+          }
         }
       }
     }
@@ -225,6 +223,15 @@ export const OrderFormProductQuery = gql`
 
 export const CurrentPendingOrderPaymentIntentClientSecret = gql`
   query CurrentPendingOrderPaymentIntentClientSecretQuery {
-    currentPendingOrderPaymentIntentClientSecret
+    convention: conventionByRequestHost {
+      id: transitionalId
+      my_profile {
+        id: transitionalId
+        current_pending_order {
+          id: transitionalId
+          payment_intent_client_secret
+        }
+      }
+    }
   }
 `;

@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import * as React from 'react';
-// @ts-expect-error
+// @ts-expect-error inflected type definitions don't export capitalize
 import { pluralize, capitalize } from 'inflected';
 import { ApolloError, useApolloClient } from '@apollo/client';
 import {
@@ -32,7 +32,7 @@ function ConventionFormBillingSection({
   convention,
   setConvention,
   disabled,
-}: ConventionFormBillingSectionProps) {
+}: ConventionFormBillingSectionProps): JSX.Element {
   const [setTicketName, setMaximumTickets, setTicketMode] = usePropertySetters(
     setConvention,
     'ticket_name',

@@ -4,57 +4,52 @@ import {
   useUniqueId,
   buildOptimisticArrayForMove,
   useArrayBasicSortableHandlers,
+  useCreateMutationWithReferenceArrayUpdater,
 } from '@neinteractiveliterature/litform';
 
 import { DndContext, DragOverlay } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { FormEditorContext } from './FormEditorContexts';
-import { useCreateMutation } from '../MutationUtils';
-import { serializeParsedFormSection } from './FormItemUtils';
+import { FormEditorContext, FormEditorForm } from './FormEditorContexts';
 import FormSectionNavItem from './FormSectionNavItem';
 import useCollapse from '../NavigationBar/useCollapse';
-import {
-  useMoveFormSectionMutation,
-  CreateFormSectionDocument,
-  CreateFormSectionMutationData,
-  CreateFormSectionMutationVariables,
-} from './mutations.generated';
-import {
-  FormEditorQueryDocument,
-  FormEditorQueryData,
-  FormEditorQueryVariables,
-} from './queries.generated';
+import { useMoveFormSectionMutation, useCreateFormSectionMutation } from './mutations.generated';
+import { FormEditorFormSectionFieldsFragment, FormEditorFormSectionFieldsFragmentDoc } from './queries.generated';
 import { useSortableDndSensors } from '../SortableUtils';
 import FormSectionNavItemDragOverlay from './FormSectionNavItemDragOverlay';
+import { serializeParsedFormItem } from './serializeParsedFormItem';
 
-function FormSectionNav() {
+function serializeParsedFormSection(
+  formSection: FormEditorForm['form_sections'][number],
+): FormEditorFormSectionFieldsFragment {
+  return {
+    ...formSection,
+    form_items: formSection.form_items.map(serializeParsedFormItem),
+  };
+}
+
+function FormSectionNav(): JSX.Element {
   const collapseRef = useRef<HTMLElement>(null);
   const { collapsed, collapseProps, toggleCollapsed } = useCollapse(collapseRef);
   const { className: collapseClassName, ...otherCollapseProps } = collapseProps;
   const history = useHistory();
-  const { form } = useContext(FormEditorContext);
+  const { form, convention } = useContext(FormEditorContext);
   const [moveFormSection] = useMoveFormSectionMutation();
-  const addFormSection = useCreateMutation<
-    FormEditorQueryData,
-    FormEditorQueryVariables,
-    CreateFormSectionMutationVariables,
-    CreateFormSectionMutationData
-  >(CreateFormSectionDocument, {
-    query: FormEditorQueryDocument,
-    queryVariables: { id: form.id },
-    arrayPath: ['form', 'form_sections'],
-    newObjectPath: ['createFormSection', 'form_section'],
-  });
+  const [addFormSection] = useCreateMutationWithReferenceArrayUpdater(
+    useCreateFormSectionMutation,
+    convention.form,
+    'form_sections',
+    (data) => data.createFormSection.form_section,
+    FormEditorFormSectionFieldsFragmentDoc,
+    'FormEditorFormSectionFields',
+  );
   const navId = useUniqueId('section-nav-');
   const sensors = useSortableDndSensors();
 
   const moveSection = useCallback(
     (dragIndex: number, hoverIndex: number) => {
-      const optimisticSections = buildOptimisticArrayForMove(
-        form.form_sections,
-        dragIndex,
-        hoverIndex,
-      ).map(serializeParsedFormSection);
+      const optimisticSections = buildOptimisticArrayForMove(form.form_sections, dragIndex, hoverIndex).map(
+        serializeParsedFormSection,
+      );
 
       moveFormSection({
         variables: {
@@ -76,18 +71,16 @@ function FormSectionNav() {
     [form, moveFormSection],
   );
 
-  const { draggingItem, ...sortableHandlers } = useArrayBasicSortableHandlers(
-    form.form_sections,
-    moveSection,
-    'id',
-  );
+  const { draggingItem, ...sortableHandlers } = useArrayBasicSortableHandlers(form.form_sections, moveSection, 'id');
 
   const addSection = async () => {
     const result = await addFormSection({
       variables: { formId: form.id, formSection: { title: 'New section' } },
     });
-    const formSectionId = result.data!.createFormSection!.form_section.id;
-    history.replace(`/admin_forms/${form.id}/edit/section/${formSectionId}`);
+    const formSectionId = result.data?.createFormSection.form_section.id;
+    if (formSectionId) {
+      history.replace(`/admin_forms/${form.id}/edit/section/${formSectionId}`);
+    }
   };
 
   return (
@@ -101,12 +94,7 @@ function FormSectionNav() {
       >
         <i className={collapsed ? 'bi-caret-right' : 'bi-caret-down'} /> Sections
       </button>
-      <nav
-        id={navId}
-        className={`d-lg-block ${collapseClassName}`}
-        ref={collapseRef}
-        {...otherCollapseProps}
-      >
+      <nav id={navId} className={`d-lg-block ${collapseClassName}`} ref={collapseRef} {...otherCollapseProps}>
         <ul className="nav nav-pills flex-column">
           <SortableContext
             items={form.form_sections.map((formSection) => formSection.id.toString())}
@@ -125,9 +113,7 @@ function FormSectionNav() {
         </div>
       </nav>
 
-      <DragOverlay>
-        {draggingItem && <FormSectionNavItemDragOverlay formSection={draggingItem} />}
-      </DragOverlay>
+      <DragOverlay>{draggingItem && <FormSectionNavItemDragOverlay formSection={draggingItem} />}</DragOverlay>
     </DndContext>
   );
 }

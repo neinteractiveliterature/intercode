@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Queries::OAuthScopedDisjunction
   def self.evaluate(authorization_info)
     disjunction = new(authorization_info)
@@ -16,8 +17,8 @@ class Queries::OAuthScopedDisjunction
     @clauses << block
   end
 
-  def add(scope, &block)
-    add_clause { authorization_info.oauth_scope?(scope) && block.call }
+  def add(scope)
+    add_clause { authorization_info.oauth_scope?(scope) && yield }
   end
 
   def value

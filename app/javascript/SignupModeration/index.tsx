@@ -4,7 +4,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 import CreateSignup from './CreateSignup';
 import SignupModerationQueue from './SignupModerationQueue';
 
-function SignupModeration() {
+function SignupModeration(): JSX.Element {
   const location = useLocation();
   const history = useHistory();
   const tabProps = useTabsWithRouter(

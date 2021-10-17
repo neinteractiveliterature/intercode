@@ -16,7 +16,8 @@ module Intercode
         env['intercode.convention'] ||= Convention.find_by(domain: request.host)
         if ENV['FIND_VIRTUAL_HOST_DEBUG'].present?
           if env['intercode.convention']
-            Rails.logger.info "Intercode::FindVirtualHost: request to #{request.host} mapped to #{env['intercode.convention'].name}"
+            Rails.logger.info "Intercode::FindVirtualHost: request to #{request.host} mapped to \
+#{env['intercode.convention'].name}"
           else
             Rails.logger.info "Intercode::FindVirtualHost: request to #{request.host} mapped to root site"
           end

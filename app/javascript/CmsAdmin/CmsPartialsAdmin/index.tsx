@@ -5,7 +5,7 @@ import EditCmsPartial from './EditCmsPartial';
 import NewCmsPartial from './NewCmsPartial';
 import ViewCmsPartialSource from './ViewCmsPartialSource';
 
-function CmsPartialsAdmin() {
+function CmsPartialsAdmin(): JSX.Element {
   return (
     <Switch>
       <Route path="/cms_partials/:id/edit">

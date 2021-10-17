@@ -8,7 +8,7 @@ export type AddToCalendarDropdownProps = {
   className?: string;
 };
 
-function AddToCalendarDropdown({ icalSecret, className }: AddToCalendarDropdownProps) {
+function AddToCalendarDropdown({ icalSecret, className }: AddToCalendarDropdownProps): JSX.Element {
   const { t } = useTranslation();
   const icalUrl = new URL(
     `/calendars/user_schedule/${encodeURIComponent(icalSecret)}`,

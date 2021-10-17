@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class NotifyFormResponseChangesService < CivilService::Service
   attr_reader :scope, :send_mail
 
@@ -14,12 +15,12 @@ class NotifyFormResponseChangesService < CivilService::Service
   end
 
   def notify_compacted_pending_changes(pending_scope)
-    convention_ids_with_pending_changes = pending_scope.joins(:user_con_profile)
-      .pluck(Arel.sql('distinct user_con_profiles.convention_id'))
+    convention_ids_with_pending_changes =
+      pending_scope.joins(:user_con_profile).pluck(Arel.sql('distinct user_con_profiles.convention_id'))
 
     convention_ids_with_pending_changes.each do |convention_id|
-      all_pending_changes = pending_scope.joins(:user_con_profile)
-        .where(user_con_profiles: { convention_id: convention_id })
+      all_pending_changes =
+        pending_scope.joins(:user_con_profile).where(user_con_profiles: { convention_id: convention_id })
       response_ids = all_pending_changes.pluck(Arel.sql('distinct response_id'))
 
       response_ids.each do |response_id|

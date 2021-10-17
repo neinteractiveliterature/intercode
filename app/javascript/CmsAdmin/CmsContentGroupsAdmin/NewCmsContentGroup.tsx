@@ -2,29 +2,37 @@ import { useState } from 'react';
 import * as React from 'react';
 import { useHistory } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
-import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
+import {
+  ErrorDisplay,
+  LoadQueryWrapper,
+  useCreateMutationWithReferenceArrayUpdater,
+} from '@neinteractiveliterature/litform';
 
-import { CmsContentGroupsAdminQuery } from './queries';
-import { CreateContentGroup } from './mutations';
 import { buildPermissionInput } from '../../Permissions/PermissionUtils';
-import useAsyncFunction from '../../useAsyncFunction';
 import { useChangeSet } from '../../ChangeSet';
-import { useCreateMutation } from '../../MutationUtils';
 import usePageTitle from '../../usePageTitle';
 import CmsContentGroupFormFields from './CmsContentGroupFormFields';
-import { CmsContentGroupsAdminQueryData, useCmsContentGroupsAdminQuery } from './queries.generated';
+import {
+  CmsContentGroupFieldsFragmentDoc,
+  CmsContentGroupsAdminQueryData,
+  useCmsContentGroupsAdminQuery,
+} from './queries.generated';
+import { useCreateContentGroupMutation } from './mutations.generated';
+import { CmsContentTypeIndicator } from '../../graphqlTypes.generated';
 
-function NewCmsContentGroup() {
+export default LoadQueryWrapper(useCmsContentGroupsAdminQuery, function NewCmsContentGroup({ data }): JSX.Element {
   const history = useHistory();
-  const { data, loading, error } = useCmsContentGroupsAdminQuery();
-  const mutate = useCreateMutation(CreateContentGroup, {
-    query: CmsContentGroupsAdminQuery,
-    arrayPath: ['cmsContentGroups'],
-    newObjectPath: ['createCmsContentGroup', 'cms_content_group'],
-  });
-  const [createCmsContentGroup, createError, createInProgress] = useAsyncFunction(mutate);
+  const [createCmsContentGroup, { error: createError, loading: createInProgress }] =
+    useCreateMutationWithReferenceArrayUpdater(
+      useCreateContentGroupMutation,
+      data.cmsParent,
+      'cmsContentGroups',
+      (data) => data.createCmsContentGroup.cms_content_group,
+      CmsContentGroupFieldsFragmentDoc,
+      'CmsContentGroupFields',
+    );
   const [contentGroup, setContentGroup] = useState<
-    Omit<CmsContentGroupsAdminQueryData['cmsContentGroups'][0], 'id'>
+    Omit<CmsContentGroupsAdminQueryData['cmsParent']['cmsContentGroups'][0], 'id'>
   >({
     __typename: 'CmsContentGroup',
     name: '',
@@ -34,17 +42,9 @@ function NewCmsContentGroup() {
     current_ability_can_update: true,
   });
   const [permissionsChangeSet, addPermission, removePermission] =
-    useChangeSet<CmsContentGroupsAdminQueryData['cmsContentGroups'][0]['permissions'][0]>();
+    useChangeSet<CmsContentGroupsAdminQueryData['cmsParent']['cmsContentGroups'][0]['permissions'][0]>();
 
   usePageTitle('New Content Group');
-
-  if (loading) {
-    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
 
   const formSubmitted = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -54,8 +54,8 @@ function NewCmsContentGroup() {
         cmsContentGroup: {
           name: contentGroup.name,
           contents: contentGroup.contents.map(({ id, __typename }) => ({
-            id,
-            content_type: __typename,
+            transitionalId: id,
+            content_type: __typename as CmsContentTypeIndicator,
           })),
         },
         permissions: permissionsChangeSet.getAddValues().map(buildPermissionInput),
@@ -73,7 +73,7 @@ function NewCmsContentGroup() {
         contentGroup={contentGroup}
         setContentGroup={setContentGroup}
         disabled={createInProgress}
-        convention={data!.convention}
+        convention={data.convention}
         permissionsChangeSet={permissionsChangeSet}
         addPermission={addPermission}
         removePermission={removePermission}
@@ -90,6 +90,4 @@ function NewCmsContentGroup() {
       />
     </form>
   );
-}
-
-export default NewCmsContentGroup;
+});

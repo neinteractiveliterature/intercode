@@ -4,20 +4,20 @@ import { ConventionDisplayFields } from './queries';
 export const CreateConvention = gql`
   mutation CreateConvention(
     $convention: ConventionInput!
-    $cloneConventionId: Int
-    $organizationId: Int
+    $cloneConventionId: ID
+    $organizationId: ID
     $cmsContentSetName: String
   ) {
     createConvention(
       input: {
         convention: $convention
-        clone_convention_id: $cloneConventionId
-        organization_id: $organizationId
+        transitionalCloneConventionId: $cloneConventionId
+        transitionalOrganizationId: $organizationId
         cms_content_set_name: $cmsContentSetName
       }
     ) {
       convention {
-        id
+        id: transitionalId
         ...ConventionDisplayFields
       }
     }
@@ -27,10 +27,10 @@ export const CreateConvention = gql`
 `;
 
 export const SetConventionCanceled = gql`
-  mutation SetConventionCanceled($id: Int!, $canceled: Boolean!) {
-    setConventionCanceled(input: { id: $id, canceled: $canceled }) {
+  mutation SetConventionCanceled($id: ID!, $canceled: Boolean!) {
+    setConventionCanceled(input: { transitionalId: $id, canceled: $canceled }) {
       convention {
-        id
+        id: transitionalId
         ...ConventionDisplayFields
       }
     }

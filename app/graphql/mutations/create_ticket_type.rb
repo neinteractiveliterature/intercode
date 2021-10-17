@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::CreateTicketType < Mutations::BaseMutation
   graphql_name 'CreateTicketType'
 

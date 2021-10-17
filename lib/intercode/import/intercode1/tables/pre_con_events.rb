@@ -36,11 +36,7 @@ class Intercode::Import::Intercode1::Tables::PreConEvents < Intercode::Import::I
   end
 
   def find_unique_title(title, iteration = 1)
-    title_plus_iteration = if iteration == 1
-      title
-    else
-      "#{title} [#{iteration}]"
-    end
+    title_plus_iteration = iteration == 1 ? title : "#{title} [#{iteration}]"
 
     return title_plus_iteration if @con.events.where(title: title_plus_iteration).none?
     raise "Too many iterations on title #{title}, giving up" if iteration >= 10
@@ -52,8 +48,10 @@ class Intercode::Import::Intercode1::Tables::PreConEvents < Intercode::Import::I
     return 'active' if row[:SpecialEvent]
 
     case row[:Status]
-    when 'Accepted' then 'active'
-    when 'Dropped' then 'dropped'
+    when 'Accepted'
+      'active'
+    when 'Dropped'
+      'dropped'
     end
   end
 end

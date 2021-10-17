@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AuthorizationInfoLoader < GraphQL::Batch::Loader
   def initialize(model)
     @model = model
@@ -9,10 +10,7 @@ class AuthorizationInfoLoader < GraphQL::Batch::Loader
   def perform(keys)
     users_with_keys(keys).each do |(key, user)|
       known_user_con_profiles = model.is_a?(UserConProfile) ? [model] : []
-      fulfill(
-        key,
-        AuthorizationInfo.new(user, nil, known_user_con_profiles: known_user_con_profiles)
-      )
+      fulfill(key, AuthorizationInfo.new(user, nil, known_user_con_profiles: known_user_con_profiles))
     end
     keys.each { |key| fulfill(key, nil) unless fulfilled?(key) }
   end
@@ -20,19 +18,13 @@ class AuthorizationInfoLoader < GraphQL::Batch::Loader
   private
 
   def user_ids(keys)
-    if @model == UserConProfile
-      keys.map(&:user_id)
-    else
-      keys.map(&:id)
-    end
+    @model == UserConProfile ? keys.map(&:user_id) : keys.map(&:id)
   end
 
   def users_with_keys(keys)
     if @model == UserConProfile
       user_con_profiles_by_user_id = keys.index_by(&:user_id)
-      User.where(id: user_con_profiles_by_user_id.keys).map do |user|
-        [user_con_profiles_by_user_id[user.id], user]
-      end
+      User.where(id: user_con_profiles_by_user_id.keys).map { |user| [user_con_profiles_by_user_id[user.id], user] }
     else
       keys.map { |user| [user, user] }
     end

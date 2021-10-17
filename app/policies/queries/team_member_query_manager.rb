@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Queries::TeamMemberQueryManager < Queries::QueryManager
   def initialize(user:)
     super(user: user)
@@ -21,22 +22,14 @@ class Queries::TeamMemberQueryManager < Queries::QueryManager
     return false unless user_con_profile && user
 
     @team_member_for_user_con_profile.get(user_con_profile.id) do
-      (
+      signed_up_for_team_member_event =
         Signup
-          .where(
-            run: Run.where(
-              event: events_where_team_member
-            ),
-            user_con_profile_id: user_con_profile.id
-          )
+          .where(run: Run.where(event: events_where_team_member), user_con_profile_id: user_con_profile.id)
           .where.not(state: 'withdrawn')
           .any?
-      ) ||
-        (
-          TeamMember
-            .where(event: events_where_team_member, user_con_profile: user_con_profile.id)
-            .any?
-        )
+
+      signed_up_for_team_member_event ||
+        TeamMember.where(event: events_where_team_member, user_con_profile: user_con_profile.id).any?
     end
   end
 
@@ -52,10 +45,7 @@ class Queries::TeamMemberQueryManager < Queries::QueryManager
     return Convention.none unless user
 
     Convention.where(
-      id: TeamMember
-        .joins(:user_con_profile)
-        .where(user_con_profiles: { user_id: user.id })
-        .select(:convention_id)
+      id: TeamMember.joins(:user_con_profile).where(user_con_profiles: { user_id: user.id }).select(:convention_id)
     )
   end
 
@@ -63,9 +53,7 @@ class Queries::TeamMemberQueryManager < Queries::QueryManager
     return Event.none unless user
 
     Event.where(
-      id: TeamMember.joins(:user_con_profile)
-        .where(user_con_profiles: { user_id: user.id })
-        .select(:event_id)
+      id: TeamMember.joins(:user_con_profile).where(user_con_profiles: { user_id: user.id }).select(:event_id)
     )
   end
 end

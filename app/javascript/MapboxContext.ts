@@ -24,12 +24,12 @@ export function useMapboxContext({
   mapboxAccessToken,
 }: UseMapboxContextOptions): MapboxContextValue {
   const [mapboxgl, setMapboxgl] = useState<MapboxInterface>();
-  const loadingPromise = useRef<Promise<any>>();
+  const loadingPromise = useRef<Promise<unknown>>();
 
   const loadMapboxGL = useCallback(async () => {
     const [module] = await Promise.all([
       import(/* webpackChunkName: 'mapbox-gl' */ 'mapbox-gl'),
-      // @ts-expect-error
+      // @ts-expect-error TypeScript doesn't like dynamic imports of CSS
       import(/* webpackChunkName: 'mapbox-gl' */ 'mapbox-gl/dist/mapbox-gl.css'),
     ]);
     return module.default;

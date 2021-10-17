@@ -28,13 +28,10 @@ module Intercode
           scheduled_value = context.evaluate(value_expression).scheduled_value
           {
             maximumEventSignups: {
-              timespans: scheduled_value.timespans.map do |timespan|
-                {
-                  start: timespan.start&.iso8601,
-                  finish: timespan.finish&.iso8601,
-                  value: timespan.value
-                }
-              end,
+              timespans:
+                scheduled_value.timespans.map do |timespan|
+                  { start: timespan.start&.iso8601, finish: timespan.finish&.iso8601, value: timespan.value }
+                end,
               timezoneName: Time.zone.name
             }
           }
@@ -44,7 +41,4 @@ module Intercode
   end
 end
 
-Liquid::Template.register_tag(
-  'maximum_event_signups_preview',
-  Intercode::Liquid::Tags::MaximumEventSignupsPreview
-)
+Liquid::Template.register_tag('maximum_event_signups_preview', Intercode::Liquid::Tags::MaximumEventSignupsPreview)

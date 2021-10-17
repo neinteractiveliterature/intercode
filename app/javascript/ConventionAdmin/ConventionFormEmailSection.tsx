@@ -22,19 +22,15 @@ function ConventionFormEmailSection({
   setConvention,
   disabled,
   staffPositions,
-}: ConventionFormEmailSectionProps) {
-  const [
-    setEventMailingListDomain,
-    setEmailFrom,
-    setCatchAllStaffPosition,
-    setEmailMode,
-  ] = usePropertySetters(
-    setConvention,
-    'event_mailing_list_domain',
-    'email_from',
-    'catch_all_staff_position',
-    'email_mode',
-  );
+}: ConventionFormEmailSectionProps): JSX.Element {
+  const [setEventMailingListDomain, setEmailFrom, setCatchAllStaffPosition, setEmailMode] =
+    usePropertySetters(
+      setConvention,
+      'event_mailing_list_domain',
+      'email_from',
+      'catch_all_staff_position',
+      'email_mode',
+    );
 
   return (
     <>

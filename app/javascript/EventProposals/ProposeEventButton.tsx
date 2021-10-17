@@ -16,46 +16,43 @@ export type ProposeEventButtonProps = {
   caption: React.ReactNode;
 };
 
-export default LoadQueryWrapper<
-  ProposeEventButtonQueryData,
-  ProposeEventButtonQueryVariables,
-  ProposeEventButtonProps
->(useProposeEventButtonQuery, function ProposeEventButton({ className, caption, data }) {
-  const { t } = useTranslation();
-  const history = useHistory();
-  const buttonId = useUniqueId('propose-event-button-');
-  const modal = useModal();
+export default LoadQueryWrapper<ProposeEventButtonQueryData, ProposeEventButtonQueryVariables, ProposeEventButtonProps>(
+  useProposeEventButtonQuery,
+  function ProposeEventButton({ className, caption, data }) {
+    const { t } = useTranslation();
+    const history = useHistory();
+    const buttonId = useUniqueId('propose-event-button-');
+    const modal = useModal();
 
-  const newProposalCreated = (eventProposal: { id: number }) => {
-    history.push(`/event_proposals/${eventProposal.id}/edit`);
-  };
+    const newProposalCreated = (eventProposal: { id: string }) => {
+      history.push(`/event_proposals/${eventProposal.id}/edit`);
+    };
 
-  if (!data.myProfile) {
+    if (!data.convention.my_profile) {
+      return (
+        <SignInButton
+          afterSignInPath={window.location.href}
+          className={className}
+          caption={t('buttons.proposeEventLoggedOut', 'Log in to propose an event')}
+        />
+      );
+    }
+
     return (
-      <SignInButton
-        afterSignInPath={window.location.href}
-        className={className}
-        caption={t('buttons.proposeEventLoggedOut', 'Log in to propose an event')}
-      />
+      <div>
+        <button id={buttonId} className={className} type="button" onClick={modal.open}>
+          {caption}
+        </button>
+
+        <CreateEventProposalModal
+          onCreate={newProposalCreated}
+          cancel={modal.close}
+          visible={modal.visible}
+          userEventProposals={data.convention.my_profile.user?.event_proposals ?? []}
+          proposableEventCategories={data.convention.event_categories.filter((category) => category.proposable)}
+          departments={data.convention.departments}
+        />
+      </div>
     );
-  }
-
-  return (
-    <div>
-      <button id={buttonId} className={className} type="button" onClick={modal.open}>
-        {caption}
-      </button>
-
-      <CreateEventProposalModal
-        onCreate={newProposalCreated}
-        cancel={modal.close}
-        visible={modal.visible}
-        userEventProposals={data.myProfile.user?.event_proposals ?? []}
-        proposableEventCategories={data.convention.event_categories.filter(
-          (category) => category.proposable,
-        )}
-        departments={data.convention.departments}
-      />
-    </div>
-  );
-});
+  },
+);

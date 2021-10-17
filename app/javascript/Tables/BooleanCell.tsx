@@ -1,6 +1,8 @@
 export type BooleanCellProps = {
   value?: boolean;
 };
-const BooleanCell = ({ value }: BooleanCellProps) => <>{value ? 'yes' : 'no'}</>;
+function BooleanCell({ value }: BooleanCellProps): JSX.Element {
+  return <>{value ? 'yes' : 'no'}</>;
+}
 
 export default BooleanCell;

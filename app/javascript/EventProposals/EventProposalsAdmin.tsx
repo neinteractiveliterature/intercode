@@ -16,7 +16,7 @@ import { useEventProposalQuery, useEventProposalQueryWithOwner } from './queries
 function SingleProposalBreadcrumbs() {
   const { t } = useTranslation();
   const params = useParams<{ id: string }>();
-  const eventProposalId = Number.parseInt(params.id, 10);
+  const eventProposalId = params.id;
   const { data, loading, error } = useEventProposalQueryWithOwner({
     variables: { eventProposalId },
   });
@@ -39,7 +39,7 @@ function SingleProposalBreadcrumbs() {
         matchProps={{ path: '/admin_event_proposals/:id', exact: true }}
         to={`/admin_event_proposals/${params.id}`}
       >
-        {data?.eventProposal.title}
+        {data?.convention.event_proposal.title}
       </RouteActivatedBreadcrumbItem>
 
       <Route path="/admin_event_proposals/:id/edit">
@@ -56,14 +56,14 @@ function SingleProposalBreadcrumbs() {
 function AdminEditEventProposal() {
   const { t } = useTranslation();
   const history = useHistory();
-  const eventProposalId = Number.parseInt(useParams<{ id: string }>().id, 10);
+  const eventProposalId = useParams<{ id: string }>().id;
   const { data, loading, error } = useEventProposalQuery({ variables: { eventProposalId } });
 
   usePageTitle(
     useValueUnless(
       () =>
         t('general.pageTitles.editing', 'Editing “{{ title }}”', {
-          title: data?.eventProposal.title,
+          title: data?.convention.event_proposal.title,
         }),
       error || loading,
     ),
@@ -76,10 +76,7 @@ function AdminEditEventProposal() {
         history.push(`/admin_event_proposals/${eventProposalId}`);
       }}
       exitButton={
-        <Link
-          className="btn btn-outline-secondary me-2"
-          to={`/admin_event_proposals/${eventProposalId}`}
-        >
+        <Link className="btn btn-outline-secondary me-2" to={`/admin_event_proposals/${eventProposalId}`}>
           {t('admin.eventProposals.edit.exitButton', 'Return to proposal')}
         </Link>
       }
@@ -87,7 +84,7 @@ function AdminEditEventProposal() {
   );
 }
 
-function EventProposalsAdmin() {
+function EventProposalsAdmin(): JSX.Element {
   const { t } = useTranslation();
   const authorizationWarning = useAuthorizationRequired('can_read_event_proposals');
 

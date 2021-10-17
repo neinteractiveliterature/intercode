@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::DateType < Types::BaseScalar
   description 'Date in ISO8601 format'
 

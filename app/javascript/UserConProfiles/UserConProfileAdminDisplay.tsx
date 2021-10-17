@@ -14,25 +14,24 @@ import { useUserConProfileAdminQuery } from './queries.generated';
 import deserializeFormResponse from '../Models/deserializeFormResponse';
 import { getSortedParsedFormItems } from '../Models/Form';
 
-function UserConProfileAdminDisplay() {
-  const userConProfileId = Number.parseInt(useParams<{ id: string }>().id, 10);
+function UserConProfileAdminDisplay(): JSX.Element {
+  const userConProfileId = useParams<{ id: string }>().id;
   const history = useHistory();
   const { data, loading, error } = useUserConProfileAdminQuery({
     variables: { id: userConProfileId },
   });
   const formItems = useMemo(
-    () =>
-      loading || error ? [] : getSortedParsedFormItems(data!.convention!.user_con_profile_form),
+    () => (loading || error || !data ? [] : getSortedParsedFormItems(data.convention.user_con_profile_form)),
     [data, loading, error],
   );
   const formResponse = useMemo(
-    () => (loading || error ? null : deserializeFormResponse(data!.userConProfile)),
+    () => (loading || error || !data ? null : deserializeFormResponse(data.convention.user_con_profile)),
     [data, loading, error],
   );
   const confirm = useConfirm();
   const [deleteUserConProfile] = useDeleteUserConProfileMutation();
 
-  usePageTitle(useValueUnless(() => data!.userConProfile.name, error || loading));
+  usePageTitle(useValueUnless(() => data?.convention.user_con_profile.name, error || loading));
 
   const becomeUser = useCallback(async () => {
     await fetch(`/user_con_profiles/${userConProfileId}/become`, {
@@ -44,13 +43,18 @@ function UserConProfileAdminDisplay() {
   }, [userConProfileId]);
 
   const deleteConfirmed = async () => {
-    await deleteUserConProfile({ variables: { userConProfileId: data!.userConProfile.id } });
+    if (!data) {
+      return;
+    }
+    await deleteUserConProfile({
+      variables: { userConProfileId: data.convention.user_con_profile.id },
+    });
     history.replace('/user_con_profiles');
   };
 
   const renderFormItems = () =>
     formItems.map((item) => {
-      if (item.item_type === 'static_text' || !item.identifier || !formResponse) {
+      if (!data || item.item_type === 'static_text' || !item.identifier || !formResponse) {
         return null;
       }
 
@@ -62,7 +66,7 @@ function UserConProfileAdminDisplay() {
           <td className="col-md-9">
             <FormItemDisplay
               formItem={item}
-              convention={data!.convention!}
+              convention={data.convention}
               value={formResponse.form_response_attrs[item.identifier]}
               displayMode="admin"
             />
@@ -72,7 +76,7 @@ function UserConProfileAdminDisplay() {
     });
 
   const renderUserAdminSection = () => {
-    const { ability } = data!.myProfile!;
+    const ability = data?.convention.my_profile?.ability;
 
     return (
       <div className="card my-4 mt-lg-0">
@@ -84,11 +88,7 @@ function UserConProfileAdminDisplay() {
             </li>
           ) : null}
           <li className="list-group-item">
-            <a
-              href={`/reports/user_con_profiles/${userConProfileId}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href={`/reports/user_con_profiles/${userConProfileId}`} target="_blank" rel="noopener noreferrer">
               Printable report
             </a>
           </li>
@@ -99,9 +99,7 @@ function UserConProfileAdminDisplay() {
                 className="btn btn-link p-0"
                 onClick={() =>
                   confirm({
-                    prompt: `Are you sure you want to become ${
-                      data!.userConProfile.name
-                    } for the duration of this session?`,
+                    prompt: `Are you sure you want to become ${data?.convention.user_con_profile.name} for the duration of this session?`,
                     action: becomeUser,
                   })
                 }
@@ -117,9 +115,7 @@ function UserConProfileAdminDisplay() {
                 className="btn btn-link p-0 text-danger"
                 onClick={() =>
                   confirm({
-                    prompt: `Are you sure you want to remove ${data!.userConProfile.name} from ${
-                      data!.convention!.name
-                    }?`,
+                    prompt: `Are you sure you want to remove ${data?.convention.user_con_profile.name} from ${data?.convention.name}?`,
                     action: deleteConfirmed,
                     renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
                   })
@@ -135,11 +131,11 @@ function UserConProfileAdminDisplay() {
   };
 
   const renderSignupsSection = () => {
-    if (!data?.myProfile?.ability?.can_read_signups) {
+    if (!data?.convention.my_profile?.ability?.can_read_signups) {
       return null;
     }
 
-    return <UserConProfileSignupsCard userConProfileId={data.userConProfile.id} />;
+    return <UserConProfileSignupsCard userConProfileId={data.convention.user_con_profile.id} />;
   };
 
   if (loading) {
@@ -150,19 +146,23 @@ function UserConProfileAdminDisplay() {
     return <ErrorDisplay graphQLError={error} />;
   }
 
+  if (!data) {
+    return <ErrorDisplay stringError="No data returned for query" />;
+  }
+
   return (
     <div className="row">
       <div className="col-lg-9">
         <header className="d-flex align-items-center mb-4">
           <div className="me-2">
             <Gravatar
-              url={data!.userConProfile.gravatar_url}
-              enabled={data!.userConProfile.gravatar_enabled}
+              url={data.convention.user_con_profile.gravatar_url}
+              enabled={data.convention.user_con_profile.gravatar_enabled}
               pixelSize={40}
             />
           </div>
           <div>
-            <h1 className="mb-0">{data!.userConProfile.name}</h1>
+            <h1 className="mb-0">{data.convention.user_con_profile.name}</h1>
           </div>
         </header>
         <table className="table table-sm table-striped my-4">
@@ -171,7 +171,7 @@ function UserConProfileAdminDisplay() {
               <th scope="row" className="pe-2">
                 Email
               </th>
-              <td className="col-md-9">{data!.userConProfile.email}</td>
+              <td className="col-md-9">{data.convention.user_con_profile.email}</td>
             </tr>
 
             {renderFormItems()}
@@ -180,11 +180,8 @@ function UserConProfileAdminDisplay() {
           </tbody>
         </table>
 
-        {data!.convention!.ticket_mode !== 'disabled' && (
-          <TicketAdminSection
-            userConProfile={data!.userConProfile}
-            convention={data!.convention!}
-          />
+        {data.convention.ticket_mode !== 'disabled' && (
+          <TicketAdminSection userConProfile={data.convention.user_con_profile} convention={data.convention} />
         )}
       </div>
 

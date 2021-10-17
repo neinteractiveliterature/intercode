@@ -19,7 +19,7 @@ function AttendeesPage() {
   );
 }
 
-function UserConProfilesAdmin() {
+function UserConProfilesAdmin(): JSX.Element {
   const authorizationWarning = useAuthorizationRequired('can_read_user_con_profiles');
   if (authorizationWarning) return authorizationWarning;
 

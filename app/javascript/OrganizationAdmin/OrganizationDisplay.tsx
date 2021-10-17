@@ -7,10 +7,7 @@ import PermissionNames from '../../../config/permission_names.json';
 import usePageTitle from '../usePageTitle';
 import { DropdownMenu } from '../UIComponents/DropdownMenu';
 import { LoadSingleValueFromCollectionWrapper } from '../GraphqlLoadingWrappers';
-import {
-  OrganizationAdminOrganizationsQueryData,
-  useOrganizationAdminOrganizationsQuery,
-} from './queries.generated';
+import { OrganizationAdminOrganizationsQueryData, useOrganizationAdminOrganizationsQuery } from './queries.generated';
 import { useDeleteOrganizationRoleMutation } from './mutations.generated';
 
 const OrganizationRolePermissions =
@@ -34,7 +31,7 @@ export default LoadSingleValueFromCollectionWrapper(
       return <Redirect to="/organizations" />;
     }
 
-    const deleteOrganizationRole = (id: number) =>
+    const deleteOrganizationRole = (id: string) =>
       mutate({
         variables: { id },
         update: (proxy) => {
@@ -45,7 +42,7 @@ export default LoadSingleValueFromCollectionWrapper(
             return;
           }
 
-          proxy.writeQuery({
+          proxy.writeQuery<OrganizationAdminOrganizationsQueryData>({
             query: OrganizationAdminOrganizationsQuery,
             data: {
               ...storeData,
@@ -81,14 +78,12 @@ export default LoadSingleValueFromCollectionWrapper(
           </thead>
           <tbody>
             {organization.organization_roles.map((organizationRole) => (
-              <tr>
+              <tr key={organizationRole.id}>
                 <td>{organizationRole.name}</td>
                 <td>{organizationRole.users.map((user) => user.name).join(', ')}</td>
                 <td>
                   {organizationRole.permissions
-                    .map((permission) =>
-                      titleize(getOrganizationRolePermissionName(permission.permission) ?? ''),
-                    )
+                    .map((permission) => titleize(getOrganizationRolePermissionName(permission.permission) ?? ''))
                     .join(', ')}
                 </td>
                 <td>

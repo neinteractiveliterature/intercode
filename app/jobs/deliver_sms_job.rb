@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class DeliverSmsJob < ApplicationJob
   def perform(user_con_profile, content, debug)
     return unless twilio_client
@@ -5,11 +6,7 @@ class DeliverSmsJob < ApplicationJob
     destination = sms_destination(user_con_profile, debug)
     return unless destination
 
-    actual_content = if debug
-      "DEBUG: Message to #{user_con_profile.name_without_nickname}\n\n#{content}"
-    else
-      content
-    end
+    actual_content = debug ? "DEBUG: Message to #{user_con_profile.name_without_nickname}\n\n#{content}" : content
 
     twilio_client.messages.create(
       from: ENV['TWILIO_SMS_NUMBER'],
@@ -30,8 +27,6 @@ class DeliverSmsJob < ApplicationJob
   def twilio_client
     return unless ENV['TWILIO_ACCOUNT_SID'].present? && ENV['TWILIO_AUTH_TOKEN'].present?
 
-    @twilio_client ||= begin
-      Twilio::REST::Client.new ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_TOKEN']
-    end
+    @twilio_client ||= Twilio::REST::Client.new ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_TOKEN']
   end
 end

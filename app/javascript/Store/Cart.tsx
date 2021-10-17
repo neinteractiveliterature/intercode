@@ -2,12 +2,7 @@ import { useCallback } from 'react';
 import intersection from 'lodash/intersection';
 import { useHistory } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
-import {
-  useModal,
-  useConfirm,
-  ErrorDisplay,
-  LoadQueryWrapper,
-} from '@neinteractiveliterature/litform';
+import { useModal, useConfirm, ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import { CartQuery } from './queries';
 import OrderPaymentModal from './OrderPaymentModal';
@@ -23,7 +18,9 @@ import {
 } from './mutations.generated';
 import useLoginRequired from '../Authentication/useLoginRequired';
 
-type OrderEntryType = NonNullable<CartQueryData['currentPendingOrder']>['order_entries'][0];
+type OrderEntryType = NonNullable<
+  NonNullable<CartQueryData['convention']['my_profile']>['current_pending_order']
+>['order_entries'][0];
 
 export default LoadQueryWrapper(useCartQuery, function Cart({ data }) {
   const history = useHistory();
@@ -37,32 +34,40 @@ export default LoadQueryWrapper(useCartQuery, function Cart({ data }) {
   usePageTitle('Cart');
 
   const updateOrderEntry = useCallback(
-    (id, quantity) =>
+    (id: string, quantity: number) =>
       updateMutate({
-        variables: { input: { id, order_entry: { quantity } } },
+        variables: { input: { transitionalId: id, order_entry: { quantity } } },
       }),
     [updateMutate],
   );
 
   const deleteOrderEntry = useCallback(
-    (id) =>
+    (id: string) =>
       deleteMutate({
-        variables: { input: { id } },
+        variables: { input: { transitionalId: id } },
         update: (proxy) => {
           const storeData = proxy.readQuery<CartQueryData>({ query: CartQuery });
-          if (!storeData || !storeData.currentPendingOrder) {
+          const currentPendingOrder = storeData?.convention.my_profile?.current_pending_order;
+          if (!currentPendingOrder) {
             return;
           }
 
-          proxy.writeQuery({
+          proxy.writeQuery<CartQueryData>({
             query: CartQuery,
             data: {
               ...storeData,
-              currentPendingOrder: {
-                ...storeData.currentPendingOrder,
-                order_entries: storeData.currentPendingOrder.order_entries.filter(
-                  (entry) => entry.id !== id,
-                ),
+              convention: {
+                ...storeData.convention,
+                my_profile: storeData.convention.my_profile
+                  ? {
+                      ...storeData.convention.my_profile,
+
+                      current_pending_order: {
+                        ...currentPendingOrder,
+                        order_entries: currentPendingOrder.order_entries.filter((entry) => entry.id !== id),
+                      },
+                    }
+                  : undefined,
               },
             },
           });
@@ -73,7 +78,7 @@ export default LoadQueryWrapper(useCartQuery, function Cart({ data }) {
 
   const [changeQuantity, changeQuantityError] = useAsyncFunction(
     useCallback(
-      async (orderEntryId: number, newQuantity: number) => {
+      async (orderEntryId: string, newQuantity: number) => {
         if (newQuantity === 0) {
           await deleteOrderEntry(orderEntryId);
         } else {
@@ -86,7 +91,7 @@ export default LoadQueryWrapper(useCartQuery, function Cart({ data }) {
 
   const createCouponApplication = useCallback(
     async (couponCode) => {
-      const orderId = data.currentPendingOrder?.id;
+      const orderId = data.convention.my_profile?.current_pending_order?.id;
       if (orderId) {
         await createCouponApplicationMutate({
           variables: { orderId, couponCode },
@@ -138,9 +143,7 @@ export default LoadQueryWrapper(useCartQuery, function Cart({ data }) {
 
       <CartContents
         removeFromCart={removeFromCart}
-        changeQuantity={(entry: OrderEntryType, quantity: number) =>
-          changeQuantity(entry.id, quantity)
-        }
+        changeQuantity={(entry: OrderEntryType, quantity: number) => changeQuantity(entry.id, quantity)}
         checkOutButton={
           <button type="button" className="btn btn-primary mt-2" onClick={checkOutModal.open}>
             <i className="bi-cart-fill" /> Check out
@@ -153,16 +156,16 @@ export default LoadQueryWrapper(useCartQuery, function Cart({ data }) {
       <OrderPaymentModal
         visible={checkOutModal.visible}
         onCancel={checkOutModal.close}
-        initialName={data.myProfile?.name_without_nickname}
-        orderId={(data.currentPendingOrder || {}).id}
+        initialName={data.convention.my_profile?.name_without_nickname}
+        orderId={data.convention.my_profile?.current_pending_order?.id}
         onComplete={checkOutComplete}
         paymentOptions={intersection(
-          ...((data.currentPendingOrder || {}).order_entries || []).map(
+          ...(data.convention.my_profile?.current_pending_order?.order_entries ?? []).map(
             (entry) => entry.product.payment_options,
           ),
         )}
         totalPrice={
-          data.currentPendingOrder?.total_price ?? {
+          data.convention.my_profile?.current_pending_order?.total_price ?? {
             fractional: 0,
             __typename: 'Money',
             currency_code: 'USD',

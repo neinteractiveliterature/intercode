@@ -8,8 +8,13 @@ import usePageTitle from '../usePageTitle';
 import { UserConProfileAdminQueryData, useUserConProfileAdminQuery } from './queries.generated';
 import { useCreateTicketMutation } from './mutations.generated';
 
-export default LoadQueryWrapper(useUserConProfileAdminQuery, function NewTicket({ data }) {
-  const userConProfileId = Number.parseInt(useParams<{ id: string }>().id, 10);
+function useUserConProfileAdminQueryFromParams() {
+  const userConProfileId = useParams<{ id: string }>().id;
+  return useUserConProfileAdminQuery({ variables: { id: userConProfileId } });
+}
+
+export default LoadQueryWrapper(useUserConProfileAdminQueryFromParams, function NewTicket({ data }) {
+  const userConProfileId = useParams<{ id: string }>().id;
   const history = useHistory();
   const [createTicket] = useCreateTicketMutation({
     update: (cache, result) => {
@@ -21,14 +26,17 @@ export default LoadQueryWrapper(useUserConProfileAdminQuery, function NewTicket(
         return;
       }
 
-      cache.writeQuery({
+      cache.writeQuery<UserConProfileAdminQueryData>({
         query: UserConProfileAdminQuery,
         variables: { id: userConProfileId },
         data: {
           ...cacheData,
-          userConProfile: {
-            ...cacheData.userConProfile,
-            ticket: result.data?.createTicket?.ticket,
+          convention: {
+            ...cacheData.convention,
+            user_con_profile: {
+              ...cacheData.convention.user_con_profile,
+              ticket: result.data?.createTicket?.ticket,
+            },
           },
         },
       });
@@ -48,9 +56,10 @@ export default LoadQueryWrapper(useUserConProfileAdminQuery, function NewTicket(
     [createTicket, history, userConProfileId],
   );
 
-  usePageTitle(`New ${data.convention.ticket_name} for ${data.userConProfile.name}`);
+  usePageTitle(`New ${data.convention.ticket_name} for ${data.convention.user_con_profile.name}`);
 
-  const { convention, userConProfile } = data;
+  const { convention } = data;
+  const userConProfile = convention.user_con_profile;
 
   return (
     <>

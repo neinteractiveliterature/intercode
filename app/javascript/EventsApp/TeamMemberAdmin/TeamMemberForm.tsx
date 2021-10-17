@@ -12,13 +12,13 @@ import { ReceiveSignupEmail } from '../../graphqlTypes.generated';
 import { TeamMembersQueryData } from './queries.generated';
 
 export type TeamMemberFormProps = {
-  event: TeamMembersQueryData['event'];
+  event: TeamMembersQueryData['convention']['event'];
   disabled?: boolean;
-  value: Partial<TeamMembersQueryData['event']['team_members'][0]>;
-  onChange: React.Dispatch<Partial<TeamMembersQueryData['event']['team_members'][0]>>;
+  value: Partial<TeamMembersQueryData['convention']['event']['team_members'][0]>;
+  onChange: React.Dispatch<Partial<TeamMembersQueryData['convention']['event']['team_members'][0]>>;
 };
 
-function TeamMemberForm({ event, disabled, value, onChange }: TeamMemberFormProps) {
+function TeamMemberForm({ event, disabled, value, onChange }: TeamMemberFormProps): JSX.Element {
   const { t } = useTranslation();
   const setValue = useFunctionalStateUpdater(value, onChange);
   const [setDisplayTeamMember, setShowEmail, setReceiveConEmail, setReceiveSignupEmail] =

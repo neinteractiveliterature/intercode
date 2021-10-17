@@ -2,7 +2,7 @@ import { useCallback, useState, useMemo, ReactNode } from 'react';
 import isEqual from 'lodash/isEqual';
 import { ApolloError } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
-import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import FormPresenterApp from '../FormPresenter';
 import FormPresenter from '../FormPresenter/Layouts/FormPresenter';
@@ -12,26 +12,22 @@ import deserializeFormResponse, { WithFormResponse } from '../Models/deserialize
 import { useEventProposalQuery, EventProposalQueryData } from './queries.generated';
 import { ConventionForFormItemDisplay } from '../FormPresenter/ItemDisplays/FormItemDisplay';
 import { CommonFormFieldsFragment } from '../Models/commonFormFragments.generated';
-import {
-  useUpdateEventProposalMutation,
-  useSubmitEventProposalMutation,
-} from './mutations.generated';
+import { useUpdateEventProposalMutation, useSubmitEventProposalMutation } from './mutations.generated';
+import { LoadQueryWithVariablesWrapper } from '../GraphqlLoadingWrappers';
 
 function parseResponseErrors(error: ApolloError) {
   const { graphQLErrors } = error;
   if (!graphQLErrors) {
     return {};
   }
-  const updateError = graphQLErrors.find((graphQLError) =>
-    isEqual(graphQLError.path, ['updateEventProposal']),
-  );
+  const updateError = graphQLErrors.find((graphQLError) => isEqual(graphQLError.path, ['updateEventProposal']));
   const { validationErrors } = updateError?.extensions ?? {};
   return validationErrors;
 }
 
 type EventProposalFormInnerProps = {
   convention: ConventionForFormItemDisplay;
-  initialEventProposal: WithFormResponse<EventProposalQueryData['eventProposal']>;
+  initialEventProposal: WithFormResponse<EventProposalQueryData['convention']['event_proposal']>;
   form: CommonFormFieldsFragment;
   afterSubmit?: () => void;
   exitButton?: ReactNode;
@@ -47,7 +43,7 @@ function EventProposalFormInner({
   const { t } = useTranslation();
   const [updateMutate] = useUpdateEventProposalMutation();
   const [updateEventProposal, updateError, updateInProgress] = useAsyncFunction(updateMutate);
-  const [updatePromise, setUpdatePromise] = useState<Promise<any>>();
+  const [updatePromise, setUpdatePromise] = useState<Promise<unknown>>();
   const [submitMutate] = useSubmitEventProposalMutation();
   const [submitEventProposal, submitError, submitInProgress] = useAsyncFunction(submitMutate);
   const [eventProposal, setEventProposal] = useState(initialEventProposal);
@@ -70,7 +66,7 @@ function EventProposalFormInner({
         const promise = updateEventProposal({
           variables: {
             input: {
-              id: proposal.id,
+              transitionalId: proposal.id,
               event_proposal: {
                 form_response_attrs_json: JSON.stringify(proposal.form_response_attrs),
               },
@@ -94,7 +90,7 @@ function EventProposalFormInner({
       submitEventProposal({
         variables: {
           input: {
-            id: proposal.id,
+            transitionalId: proposal.id,
           },
         },
       }),
@@ -154,41 +150,41 @@ function EventProposalFormInner({
 }
 
 export type EventProposalFormProps = {
-  eventProposalId: number;
+  eventProposalId: string;
   afterSubmit?: () => void;
   exitButton?: ReactNode;
 };
 
-function EventProposalForm({ eventProposalId, afterSubmit, exitButton }: EventProposalFormProps) {
-  const { data, loading, error } = useEventProposalQuery({ variables: { eventProposalId } });
+export default LoadQueryWithVariablesWrapper(
+  useEventProposalQuery,
+  ({ eventProposalId }: EventProposalFormProps) => ({ eventProposalId }),
+  function EventProposalForm({ data, afterSubmit, exitButton }): JSX.Element {
+    const initialEventProposal = useMemo(
+      () => deserializeFormResponse(data.convention.event_proposal),
+      [data.convention.event_proposal],
+    );
 
-  const initialEventProposal = useMemo(
-    () => (loading || error ? undefined : deserializeFormResponse(data!.eventProposal)),
-    [loading, error, data],
-  );
+    const form = useMemo(
+      () => data.convention.event_proposal.event_category.event_proposal_form,
+      [data.convention.event_proposal.event_category.event_proposal_form],
+    );
 
-  const form = useMemo(
-    () => (loading || error ? undefined : data!.eventProposal.event_category.event_proposal_form),
-    [loading, error, data],
-  );
+    if (!form) {
+      return (
+        <ErrorDisplay
+          stringError={`Event category ${data.convention.event_proposal.event_category.name} has no proposal form`}
+        />
+      );
+    }
 
-  if (loading) {
-    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
-  return (
-    <EventProposalFormInner
-      convention={data!.convention!}
-      initialEventProposal={initialEventProposal!}
-      form={form!}
-      afterSubmit={afterSubmit}
-      exitButton={exitButton}
-    />
-  );
-}
-
-export default EventProposalForm;
+    return (
+      <EventProposalFormInner
+        convention={data.convention}
+        initialEventProposal={initialEventProposal}
+        form={form}
+        afterSubmit={afterSubmit}
+        exitButton={exitButton}
+      />
+    );
+  },
+);

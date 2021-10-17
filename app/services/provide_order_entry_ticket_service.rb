@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class ProvideOrderEntryTicketService < CivilService::Service
   class Result < CivilService::Result
     attr_accessor :ticket, :card_error
@@ -32,10 +33,7 @@ class ProvideOrderEntryTicketService < CivilService::Service
   end
 
   def create_ticket
-    user_con_profile.create_ticket!(
-      ticket_type: product.provides_ticket_type,
-      order_entry: order_entry
-    )
+    user_con_profile.create_ticket!(ticket_type: product.provides_ticket_type, order_entry: order_entry)
   end
 
   def check_existing_ticket

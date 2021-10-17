@@ -10,8 +10,12 @@ export const LiquidAssignFields = gql`
 
 export const LiquidAssignsQuery = gql`
   query LiquidAssignsQuery {
-    liquidAssigns {
-      ...LiquidAssignFields
+    cmsParent: cmsParentByRequestHost {
+      id: transitionalId
+
+      liquidAssigns {
+        ...LiquidAssignFields
+      }
     }
   }
 
@@ -20,8 +24,11 @@ export const LiquidAssignsQuery = gql`
 
 export const NotifierLiquidAssignsQuery = gql`
   query NotifierLiquidAssignsQuery($eventKey: String!) {
-    liquidAssigns: notifierLiquidAssigns(eventKey: $eventKey) {
-      ...LiquidAssignFields
+    cmsParent: conventionByRequestHost {
+      id: transitionalId
+      liquidAssigns: notifier_liquid_assigns(eventKey: $eventKey) {
+        ...LiquidAssignFields
+      }
     }
   }
 

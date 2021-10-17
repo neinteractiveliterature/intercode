@@ -1,8 +1,9 @@
+# frozen_string_literal: true
 module ReportsHelper
   def format_run_time(time)
-    if time.hour == 0 && time.min == 0
+    if time.hour.zero? && time.min.zero?
       'midnight'
-    elsif time.hour == 12 && time.min == 0
+    elsif time.hour == 12 && time.min.zero?
       'noon'
     else
       time.strftime('%l:%M%P')
@@ -10,11 +11,7 @@ module ReportsHelper
   end
 
   def format_run_time_compact_hour(time)
-    if time.min == 0
-      time.strftime('%l%P')
-    else
-      time.strftime('%l:%M%P')
-    end
+    time.min.zero? ? time.strftime('%l%P') : time.strftime('%l:%M%P')
   end
 
   def format_run_day_and_time(time)

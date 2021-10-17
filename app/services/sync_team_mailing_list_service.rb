@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class SyncTeamMailingListService < CivilService::Service
   include SkippableAdvisoryLock
 
@@ -15,9 +16,7 @@ class SyncTeamMailingListService < CivilService::Service
   private
 
   def inner_call
-    unless event.team_mailing_list_name.present? && convention.event_mailing_list_domain.present?
-      return success
-    end
+    return success unless event.team_mailing_list_name.present? && convention.event_mailing_list_domain.present?
 
     unless mailgun
       errors.add :base, 'Mailgun private key is not configured; cannot sync team mailing lists'
@@ -25,11 +24,7 @@ class SyncTeamMailingListService < CivilService::Service
     end
 
     with_advisory_lock_unless_skip_locking("sync_team_mailing_list_event_#{event.id}") do
-      if team_member_user_con_profiles.any?
-        create_or_update_route
-      else
-        delete_route_if_exists
-      end
+      team_member_user_con_profiles.any? ? create_or_update_route : delete_route_if_exists
     end
 
     success
@@ -40,22 +35,18 @@ class SyncTeamMailingListService < CivilService::Service
     # Mailgun's API
     route_body = URI.encode_www_form(route_properties)
 
-    if applicable_routes.size > 0
+    if applicable_routes.size.positive?
       keep_route, *delete_routes = applicable_routes
       mailgun.put("/routes/#{keep_route['id']}", route_body)
 
-      delete_routes.each do |route|
-        mailgun.delete("/routes/#{route['id']}")
-      end
+      delete_routes.each { |route| mailgun.delete("/routes/#{route['id']}") }
     else
       mailgun.post('routes', route_body)
     end
   end
 
   def delete_route_if_exists
-    applicable_routes.each do |route|
-      mailgun.delete("/routes/#{route['id']}")
-    end
+    applicable_routes.each { |route| mailgun.delete("/routes/#{route['id']}") }
   end
 
   def convention
@@ -63,8 +54,7 @@ class SyncTeamMailingListService < CivilService::Service
   end
 
   def team_member_user_con_profiles
-    @team_member_user_con_profiles ||= event.team_members.includes(user_con_profile: :user)
-      .map(&:user_con_profile)
+    @team_member_user_con_profiles ||= event.team_members.includes(user_con_profile: :user).map(&:user_con_profile)
   end
 
   def route_expression
@@ -72,13 +62,12 @@ class SyncTeamMailingListService < CivilService::Service
   end
 
   def route_properties
-    @route_properties ||= {
-      expression: route_expression,
-      action: team_member_user_con_profiles.map do |user_con_profile|
-        "forward(\"#{user_con_profile.email}\")"
-      end,
-      description: "#{event.title} Mailing List"
-    }
+    @route_properties ||=
+      {
+        expression: route_expression,
+        action: team_member_user_con_profiles.map { |user_con_profile| "forward(\"#{user_con_profile.email}\")" },
+        description: "#{event.title} Mailing List"
+      }
   end
 
   def recipient_email
@@ -86,28 +75,28 @@ class SyncTeamMailingListService < CivilService::Service
   end
 
   def applicable_routes
-    @applicable_routes ||= begin
-      matching_routes = all_routes.select do |route|
-        route['expression'] == route_expression
-      end
+    @applicable_routes ||=
+      begin
+        matching_routes = all_routes.select { |route| route['expression'] == route_expression }
 
-      matching_routes.sort_by { |route| route['id'] }
-    end
+        matching_routes.sort_by { |route| route['id'] }
+      end
   end
 
   def all_routes
-    @all_routes ||= begin
-      total_routes = nil
-      routes = []
+    @all_routes ||=
+      begin
+        total_routes = nil
+        routes = []
 
-      while total_routes.nil? || routes.size < total_routes
-        response = mailgun.get('/routes', skip: routes.size).to_h
-        total_routes ||= response['total_count']
-        routes.concat(response['items'])
+        while total_routes.nil? || routes.size < total_routes
+          response = mailgun.get('/routes', skip: routes.size).to_h
+          total_routes ||= response['total_count']
+          routes.concat(response['items'])
+        end
+
+        routes
       end
-
-      routes
-    end
   end
 
   def mailgun

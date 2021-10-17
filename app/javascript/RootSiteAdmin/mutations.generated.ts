@@ -2,26 +2,26 @@
 import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
-import { RootSiteFieldsFragmentDoc, PageFieldsFragmentDoc, RootSiteAdminLayoutFieldsFragmentDoc } from './queries.generated';
+import { RootSiteFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
 export type UpdateRootSiteMutationVariables = Types.Exact<{
   siteName?: Types.Maybe<Types.Scalars['String']>;
-  defaultLayoutId?: Types.Maybe<Types.Scalars['Int']>;
-  rootPageId?: Types.Maybe<Types.Scalars['Int']>;
+  defaultLayoutId?: Types.Maybe<Types.Scalars['ID']>;
+  rootPageId?: Types.Maybe<Types.Scalars['ID']>;
 }>;
 
 
-export type UpdateRootSiteMutationData = { __typename: 'Mutation', updateRootSite?: Types.Maybe<{ __typename: 'UpdateRootSitePayload', root_site: { __typename: 'RootSite', id: number, site_name: string, root_page: { __typename: 'Page', id: number, name?: Types.Maybe<string> }, default_layout: { __typename: 'CmsLayout', id: number, name?: Types.Maybe<string> } } }> };
+export type UpdateRootSiteMutationData = { __typename: 'Mutation', updateRootSite: { __typename: 'UpdateRootSitePayload', root_site: { __typename: 'RootSite', site_name: string, id: string, rootPage: { __typename: 'Page', name?: string | null | undefined, id: string }, defaultLayout: { __typename: 'CmsLayout', name?: string | null | undefined, id: string }, cmsPages: Array<{ __typename: 'Page', name?: string | null | undefined, id: string }>, cmsLayouts: Array<{ __typename: 'CmsLayout', name?: string | null | undefined, id: string }> } } };
 
 
 export const UpdateRootSiteDocument = gql`
-    mutation UpdateRootSite($siteName: String, $defaultLayoutId: Int, $rootPageId: Int) {
+    mutation UpdateRootSite($siteName: String, $defaultLayoutId: ID, $rootPageId: ID) {
   updateRootSite(
-    input: {root_site: {site_name: $siteName, default_layout_id: $defaultLayoutId, root_page_id: $rootPageId}}
+    input: {root_site: {site_name: $siteName, transitionalDefaultLayoutId: $defaultLayoutId, transitionalRootPageId: $rootPageId}}
   ) {
     root_site {
-      id
+      id: transitionalId
       ...RootSiteFields
     }
   }

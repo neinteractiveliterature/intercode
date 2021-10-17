@@ -13,7 +13,7 @@ export type RegistrationPolicyForCapacityThresholds = Pick<
 
 export default function getCapacityThresholds(
   registrationPolicy: RegistrationPolicyForCapacityThresholds,
-) {
+): Record<'total_slots' | 'preferred_slots' | 'minimum_slots', number | null | undefined> {
   if (registrationPolicy.only_uncounted) {
     return {
       total_slots: registrationPolicy.total_slots_including_not_counted,

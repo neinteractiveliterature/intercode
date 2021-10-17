@@ -2,6 +2,7 @@
 import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
+import { RoomAdminRoomFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
 export type CreateRoomMutationVariables = Types.Exact<{
@@ -9,36 +10,33 @@ export type CreateRoomMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateRoomMutationData = { __typename: 'Mutation', createRoom?: Types.Maybe<{ __typename: 'CreateRoomPayload', room: { __typename: 'Room', id: number, name?: Types.Maybe<string>, runs: Array<{ __typename: 'Run', id: number }> } }> };
+export type CreateRoomMutationData = { __typename: 'Mutation', createRoom: { __typename: 'CreateRoomPayload', room: { __typename: 'Room', name?: string | null | undefined, id: string, runs: Array<{ __typename: 'Run', id: string }> } } };
 
 export type UpdateRoomMutationVariables = Types.Exact<{
   input: Types.UpdateRoomInput;
 }>;
 
 
-export type UpdateRoomMutationData = { __typename: 'Mutation', updateRoom?: Types.Maybe<{ __typename: 'UpdateRoomPayload', room: { __typename: 'Room', id: number, name?: Types.Maybe<string>, runs: Array<{ __typename: 'Run', id: number }> } }> };
+export type UpdateRoomMutationData = { __typename: 'Mutation', updateRoom: { __typename: 'UpdateRoomPayload', room: { __typename: 'Room', name?: string | null | undefined, id: string, runs: Array<{ __typename: 'Run', id: string }> } } };
 
 export type DeleteRoomMutationVariables = Types.Exact<{
   input: Types.DeleteRoomInput;
 }>;
 
 
-export type DeleteRoomMutationData = { __typename: 'Mutation', deleteRoom?: Types.Maybe<{ __typename: 'DeleteRoomPayload', room: { __typename: 'Room', id: number } }> };
+export type DeleteRoomMutationData = { __typename: 'Mutation', deleteRoom: { __typename: 'DeleteRoomPayload', room: { __typename: 'Room', id: string } } };
 
 
 export const CreateRoomDocument = gql`
     mutation CreateRoom($input: CreateRoomInput!) {
   createRoom(input: $input) {
     room {
-      id
-      name
-      runs {
-        id
-      }
+      id: transitionalId
+      ...RoomAdminRoomFields
     }
   }
 }
-    `;
+    ${RoomAdminRoomFieldsFragmentDoc}`;
 export type CreateRoomMutationFn = Apollo.MutationFunction<CreateRoomMutationData, CreateRoomMutationVariables>;
 
 /**
@@ -69,15 +67,12 @@ export const UpdateRoomDocument = gql`
     mutation UpdateRoom($input: UpdateRoomInput!) {
   updateRoom(input: $input) {
     room {
-      id
-      name
-      runs {
-        id
-      }
+      id: transitionalId
+      ...RoomAdminRoomFields
     }
   }
 }
-    `;
+    ${RoomAdminRoomFieldsFragmentDoc}`;
 export type UpdateRoomMutationFn = Apollo.MutationFunction<UpdateRoomMutationData, UpdateRoomMutationVariables>;
 
 /**
@@ -108,7 +103,7 @@ export const DeleteRoomDocument = gql`
     mutation DeleteRoom($input: DeleteRoomInput!) {
   deleteRoom(input: $input) {
     room {
-      id
+      id: transitionalId
     }
   }
 }

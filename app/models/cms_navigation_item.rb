@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
@@ -25,7 +26,7 @@
 #  fk_rails_...  (page_id => pages.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+
 class CmsNavigationItem < ApplicationRecord
   include CadmusNavbar::NavigationItem
   cadmus_navigation_item
@@ -35,6 +36,6 @@ class CmsNavigationItem < ApplicationRecord
   private
 
   def touch_parent
-    parent.touch if parent && parent.persisted?
+    parent.touch if parent&.persisted?
   end
 end

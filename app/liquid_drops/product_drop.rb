@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # A product that can be sold through the convention's web site
 class ProductDrop < Liquid::Drop
   include Rails.application.routes.url_helpers

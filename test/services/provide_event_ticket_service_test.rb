@@ -21,9 +21,7 @@ describe ProvideEventTicketService do
   describe 'if the user already has a ticket' do
     let(:paid_ticket_type) { create(:paid_ticket_type, convention: convention) }
 
-    before do
-      user_con_profile.create_ticket!(ticket_type: paid_ticket_type)
-    end
+    before { user_con_profile.create_ticket!(ticket_type: paid_ticket_type) }
 
     it 'fails' do
       result = service.call

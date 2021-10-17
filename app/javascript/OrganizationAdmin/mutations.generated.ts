@@ -6,42 +6,42 @@ import { OrganizationRoleFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
 export type CreateOrganizationRoleMutationVariables = Types.Exact<{
-  organizationId: Types.Scalars['Int'];
+  organizationId: Types.Scalars['ID'];
   name: Types.Scalars['String'];
-  userIds: Array<Types.Scalars['Int']> | Types.Scalars['Int'];
+  userIds: Array<Types.Scalars['ID']> | Types.Scalars['ID'];
   permissions: Array<Types.PermissionInput> | Types.PermissionInput;
 }>;
 
 
-export type CreateOrganizationRoleMutationData = { __typename: 'Mutation', createOrganizationRole?: Types.Maybe<{ __typename: 'CreateOrganizationRolePayload', organization_role: { __typename: 'OrganizationRole', id: number, name: string, users: Array<{ __typename: 'User', id: number, name?: Types.Maybe<string>, email?: Types.Maybe<string> }>, permissions: Array<{ __typename: 'Permission', id: number, permission: string }> } }> };
+export type CreateOrganizationRoleMutationData = { __typename: 'Mutation', createOrganizationRole: { __typename: 'CreateOrganizationRolePayload', organization_role: { __typename: 'OrganizationRole', name: string, id: string, users: Array<{ __typename: 'User', name?: string | null | undefined, email?: string | null | undefined, id: string }>, permissions: Array<{ __typename: 'Permission', permission: string, id: string }> } } };
 
 export type UpdateOrganizationRoleMutationVariables = Types.Exact<{
-  id: Types.Scalars['Int'];
+  id: Types.Scalars['ID'];
   name?: Types.Maybe<Types.Scalars['String']>;
-  addUserIds?: Types.Maybe<Array<Types.Scalars['Int']> | Types.Scalars['Int']>;
-  removeUserIds?: Types.Maybe<Array<Types.Scalars['Int']> | Types.Scalars['Int']>;
+  addUserIds?: Types.Maybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>;
+  removeUserIds?: Types.Maybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>;
   addPermissions?: Types.Maybe<Array<Types.PermissionInput> | Types.PermissionInput>;
-  removePermissionIds?: Types.Maybe<Array<Types.Scalars['Int']> | Types.Scalars['Int']>;
+  removePermissionIds?: Types.Maybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>;
 }>;
 
 
-export type UpdateOrganizationRoleMutationData = { __typename: 'Mutation', updateOrganizationRole?: Types.Maybe<{ __typename: 'UpdateOrganizationRolePayload', organization_role: { __typename: 'OrganizationRole', id: number, name: string, users: Array<{ __typename: 'User', id: number, name?: Types.Maybe<string>, email?: Types.Maybe<string> }>, permissions: Array<{ __typename: 'Permission', id: number, permission: string }> } }> };
+export type UpdateOrganizationRoleMutationData = { __typename: 'Mutation', updateOrganizationRole: { __typename: 'UpdateOrganizationRolePayload', organization_role: { __typename: 'OrganizationRole', name: string, id: string, users: Array<{ __typename: 'User', name?: string | null | undefined, email?: string | null | undefined, id: string }>, permissions: Array<{ __typename: 'Permission', permission: string, id: string }> } } };
 
 export type DeleteOrganizationRoleMutationVariables = Types.Exact<{
-  id: Types.Scalars['Int'];
+  id: Types.Scalars['ID'];
 }>;
 
 
-export type DeleteOrganizationRoleMutationData = { __typename: 'Mutation', deleteOrganizationRole?: Types.Maybe<{ __typename: 'DeleteOrganizationRolePayload', clientMutationId?: Types.Maybe<string> }> };
+export type DeleteOrganizationRoleMutationData = { __typename: 'Mutation', deleteOrganizationRole: { __typename: 'DeleteOrganizationRolePayload', clientMutationId?: string | null | undefined } };
 
 
 export const CreateOrganizationRoleDocument = gql`
-    mutation CreateOrganizationRole($organizationId: Int!, $name: String!, $userIds: [Int!]!, $permissions: [PermissionInput!]!) {
+    mutation CreateOrganizationRole($organizationId: ID!, $name: String!, $userIds: [ID!]!, $permissions: [PermissionInput!]!) {
   createOrganizationRole(
-    input: {organization_id: $organizationId, organization_role: {name: $name}, user_ids: $userIds, permissions: $permissions}
+    input: {transitionalOrganizationId: $organizationId, organization_role: {name: $name}, transitionalUserIds: $userIds, permissions: $permissions}
   ) {
     organization_role {
-      id
+      id: transitionalId
       ...OrganizationRoleFields
     }
   }
@@ -77,12 +77,12 @@ export type CreateOrganizationRoleMutationHookResult = ReturnType<typeof useCrea
 export type CreateOrganizationRoleMutationResult = Apollo.MutationResult<CreateOrganizationRoleMutationData>;
 export type CreateOrganizationRoleMutationOptions = Apollo.BaseMutationOptions<CreateOrganizationRoleMutationData, CreateOrganizationRoleMutationVariables>;
 export const UpdateOrganizationRoleDocument = gql`
-    mutation UpdateOrganizationRole($id: Int!, $name: String, $addUserIds: [Int!], $removeUserIds: [Int!], $addPermissions: [PermissionInput!], $removePermissionIds: [Int!]) {
+    mutation UpdateOrganizationRole($id: ID!, $name: String, $addUserIds: [ID!], $removeUserIds: [ID!], $addPermissions: [PermissionInput!], $removePermissionIds: [ID!]) {
   updateOrganizationRole(
-    input: {id: $id, organization_role: {name: $name}, add_user_ids: $addUserIds, remove_user_ids: $removeUserIds, add_permissions: $addPermissions, remove_permission_ids: $removePermissionIds}
+    input: {transitionalId: $id, organization_role: {name: $name}, transitionalAddUserIds: $addUserIds, transitionalRemoveUserIds: $removeUserIds, add_permissions: $addPermissions, transitionalRemovePermissionIds: $removePermissionIds}
   ) {
     organization_role {
-      id
+      id: transitionalId
       ...OrganizationRoleFields
     }
   }
@@ -120,8 +120,8 @@ export type UpdateOrganizationRoleMutationHookResult = ReturnType<typeof useUpda
 export type UpdateOrganizationRoleMutationResult = Apollo.MutationResult<UpdateOrganizationRoleMutationData>;
 export type UpdateOrganizationRoleMutationOptions = Apollo.BaseMutationOptions<UpdateOrganizationRoleMutationData, UpdateOrganizationRoleMutationVariables>;
 export const DeleteOrganizationRoleDocument = gql`
-    mutation DeleteOrganizationRole($id: Int!) {
-  deleteOrganizationRole(input: {id: $id}) {
+    mutation DeleteOrganizationRole($id: ID!) {
+  deleteOrganizationRole(input: {transitionalId: $id}) {
     clientMutationId
   }
 }

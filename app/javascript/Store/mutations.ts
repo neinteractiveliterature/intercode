@@ -3,10 +3,10 @@ import { AdminOrderFieldsFragment, OrderEntryFields, CartOrderFields } from './o
 import { AdminProductFields } from './adminProductFields';
 
 export const MarkOrderPaid = gql`
-  mutation MarkOrderPaid($orderId: Int!) {
-    markOrderPaid(input: { id: $orderId }) {
+  mutation MarkOrderPaid($orderId: ID!) {
+    markOrderPaid(input: { transitionalId: $orderId }) {
       order {
-        id
+        id: transitionalId
         ...AdminOrderFieldsFragment
       }
     }
@@ -16,10 +16,10 @@ export const MarkOrderPaid = gql`
 `;
 
 export const CancelOrder = gql`
-  mutation CancelOrder($orderId: Int!, $skipRefund: Boolean) {
-    cancelOrder(input: { id: $orderId, skip_refund: $skipRefund }) {
+  mutation CancelOrder($orderId: ID!, $skipRefund: Boolean) {
+    cancelOrder(input: { transitionalId: $orderId, skip_refund: $skipRefund }) {
       order {
-        id
+        id: transitionalId
         ...AdminOrderFieldsFragment
       }
     }
@@ -30,21 +30,21 @@ export const CancelOrder = gql`
 
 export const CreateOrder = gql`
   mutation CreateOrder(
-    $userConProfileId: Int!
+    $userConProfileId: ID!
     $order: OrderInput!
     $status: OrderStatus!
     $orderEntries: [OrderEntryInput!]
   ) {
     createOrder(
       input: {
-        user_con_profile_id: $userConProfileId
+        transitionalUserConProfileId: $userConProfileId
         order: $order
         status: $status
         order_entries: $orderEntries
       }
     ) {
       order {
-        id
+        id: transitionalId
         ...AdminOrderFieldsFragment
       }
     }
@@ -54,10 +54,10 @@ export const CreateOrder = gql`
 `;
 
 export const AdminUpdateOrder = gql`
-  mutation AdminUpdateOrder($id: Int!, $order: OrderInput!) {
-    updateOrder(input: { id: $id, order: $order }) {
+  mutation AdminUpdateOrder($id: ID!, $order: OrderInput!) {
+    updateOrder(input: { transitionalId: $id, order: $order }) {
       order {
-        id
+        id: transitionalId
         ...AdminOrderFieldsFragment
       }
     }
@@ -70,7 +70,7 @@ export const CreateProduct = gql`
   mutation CreateProduct($product: ProductInput!) {
     createProduct(input: { product: $product }) {
       product {
-        id
+        id: transitionalId
         ...AdminProductFields
       }
     }
@@ -80,10 +80,10 @@ export const CreateProduct = gql`
 `;
 
 export const UpdateProduct = gql`
-  mutation UpdateProduct($id: Int!, $product: ProductInput!) {
-    updateProduct(input: { id: $id, product: $product }) {
+  mutation UpdateProduct($id: ID!, $product: ProductInput!) {
+    updateProduct(input: { transitionalId: $id, product: $product }) {
       product {
-        id
+        id: transitionalId
         ...AdminProductFields
       }
     }
@@ -93,10 +93,10 @@ export const UpdateProduct = gql`
 `;
 
 export const DeleteProduct = gql`
-  mutation DeleteProduct($id: Int!) {
-    deleteProduct(input: { id: $id }) {
+  mutation DeleteProduct($id: ID!) {
+    deleteProduct(input: { transitionalId: $id }) {
       product {
-        id
+        id: transitionalId
         ...AdminProductFields
       }
     }
@@ -109,11 +109,11 @@ export const AdminCreateOrderEntry = gql`
   mutation AdminCreateOrderEntry($input: CreateOrderEntryInput!) {
     createOrderEntry(input: $input) {
       order_entry {
-        id
+        id: transitionalId
         ...OrderEntryFields
 
         order {
-          id
+          id: transitionalId
           ...AdminOrderFieldsFragment
         }
       }
@@ -128,11 +128,11 @@ export const AdminUpdateOrderEntry = gql`
   mutation AdminUpdateOrderEntry($input: UpdateOrderEntryInput!) {
     updateOrderEntry(input: $input) {
       order_entry {
-        id
+        id: transitionalId
         ...OrderEntryFields
 
         order {
-          id
+          id: transitionalId
           ...AdminOrderFieldsFragment
         }
       }
@@ -147,7 +147,7 @@ export const UpdateOrderEntry = gql`
   mutation UpdateOrderEntry($input: UpdateOrderEntryInput!) {
     updateOrderEntry(input: $input) {
       order_entry {
-        id
+        id: transitionalId
         ...OrderEntryFields
       }
     }
@@ -160,7 +160,7 @@ export const DeleteOrderEntry = gql`
   mutation DeleteOrderEntry($input: DeleteOrderEntryInput!) {
     deleteOrderEntry(input: $input) {
       order_entry {
-        id
+        id: transitionalId
       }
     }
   }
@@ -170,10 +170,10 @@ export const AdminDeleteOrderEntry = gql`
   mutation AdminDeleteOrderEntry($input: DeleteOrderEntryInput!) {
     deleteOrderEntry(input: $input) {
       order_entry {
-        id
+        id: transitionalId
 
         order {
-          id
+          id: transitionalId
           ...AdminOrderFieldsFragment
         }
       }
@@ -187,7 +187,7 @@ export const SubmitOrder = gql`
   mutation SubmitOrder($input: SubmitOrderInput!) {
     submitOrder(input: $input) {
       order {
-        id
+        id: transitionalId
         status
       }
     }
@@ -195,34 +195,30 @@ export const SubmitOrder = gql`
 `;
 
 export const AddOrderEntryToCurrentPendingOrder = gql`
-  mutation AddOrderEntryToCurrentPendingOrder(
-    $productId: Int!
-    $productVariantId: Int
-    $quantity: Int!
-  ) {
+  mutation AddOrderEntryToCurrentPendingOrder($productId: ID!, $productVariantId: ID, $quantity: Int!) {
     addOrderEntryToCurrentPendingOrder(
       input: {
         order_entry: {
-          product_id: $productId
-          product_variant_id: $productVariantId
+          transitionalProductId: $productId
+          transitionalProductVariantId: $productVariantId
           quantity: $quantity
         }
       }
     ) {
       order_entry {
-        id
+        id: transitionalId
       }
     }
   }
 `;
 
 export const CreateCouponApplication = gql`
-  mutation CreateCouponApplication($orderId: Int!, $couponCode: String!) {
-    createCouponApplication(input: { order_id: $orderId, coupon_code: $couponCode }) {
+  mutation CreateCouponApplication($orderId: ID!, $couponCode: String!) {
+    createCouponApplication(input: { transitionalOrderId: $orderId, coupon_code: $couponCode }) {
       coupon_application {
-        id
+        id: transitionalId
         order {
-          id
+          id: transitionalId
           ...CartOrderFields
         }
       }
@@ -233,12 +229,12 @@ export const CreateCouponApplication = gql`
 `;
 
 export const DeleteCouponApplication = gql`
-  mutation DeleteCouponApplication($id: Int!) {
-    deleteCouponApplication(input: { id: $id }) {
+  mutation DeleteCouponApplication($id: ID!) {
+    deleteCouponApplication(input: { transitionalId: $id }) {
       coupon_application {
-        id
+        id: transitionalId
         order {
-          id
+          id: transitionalId
           ...CartOrderFields
         }
       }

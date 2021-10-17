@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class SubmitOrderService < CivilService::Service
   self.result_class = PayOrderService::Result
 
@@ -21,30 +22,14 @@ class SubmitOrderService < CivilService::Service
   private
 
   def inner_call
-    if payment_mode == 'now'
+    case payment_mode
+    when 'now'
       order.update!(submitted_at: Time.zone.now)
       PayOrderService.new(order, stripe_token).call!
-    elsif payment_mode == 'free'
+    when 'free'
       order.update!(status: 'paid', submitted_at: Time.zone.now)
-    elsif payment_mode == 'payment_intent'
-      pi = Stripe::PaymentIntent.retrieve(
-        payment_intent_id,
-        stripe_account: convention.stripe_account_id
-      )
-      if pi.status == 'succeeded'
-        charge = pi.charges.first
-        order.update!(
-          status: 'paid',
-          payment_amount: order.total_price,
-          payment_note: "Paid via Stripe on \
-#{Time.at(charge.created).in_time_zone(convention.timezone)} (Charge ID #{charge.id})",
-          charge_id: charge.id,
-          paid_at: Time.zone.at(charge.created),
-          submitted_at: Time.zone.now
-        )
-      else
-        order.update!(status: 'unpaid', submitted_at: Time.zone.now)
-      end
+    when 'payment_intent'
+      update_order_from_payment_intent
     else
       order.update!(status: 'unpaid', submitted_at: Time.zone.now)
     end
@@ -53,10 +38,26 @@ class SubmitOrderService < CivilService::Service
     success
   end
 
-  def ticket_providing_order_entries
-    @ticket_providing_order_entries ||= order.order_entries.select do |entry|
-      entry.product.provides_ticket_type
+  def update_order_from_payment_intent
+    pi = Stripe::PaymentIntent.retrieve(payment_intent_id, stripe_account: convention.stripe_account_id)
+    if pi.status == 'succeeded'
+      charge = pi.charges.first
+      order.update!(
+        status: 'paid',
+        payment_amount: order.total_price,
+        payment_note:
+          "Paid via Stripe on #{Time.at(charge.created).in_time_zone(convention.timezone)} (Charge ID #{charge.id})",
+        charge_id: charge.id,
+        paid_at: Time.zone.at(charge.created),
+        submitted_at: Time.zone.now
+      )
+    else
+      order.update!(status: 'unpaid', submitted_at: Time.zone.now)
     end
+  end
+
+  def ticket_providing_order_entries
+    @ticket_providing_order_entries ||= order.order_entries.select { |entry| entry.product.provides_ticket_type }
   end
 
   def ensure_not_buying_duplicate_ticket
@@ -73,9 +74,7 @@ class SubmitOrderService < CivilService::Service
   def ensure_coupons_usable
     order.coupons.each do |coupon|
       errors.add :base, "Coupon #{coupon.code} is expired" if coupon.expired?
-      if coupon.usage_limit_reached?
-        errors.add :base, "Coupon #{coupon.code} has been used up already"
-      end
+      errors.add :base, "Coupon #{coupon.code} has been used up already" if coupon.usage_limit_reached?
     end
   end
 
@@ -87,17 +86,14 @@ class SubmitOrderService < CivilService::Service
   def ticket_providers
     return [] if payment_mode == 'unpaid'
 
-    @ticket_providers ||= order.order_entries.flat_map do |order_entry|
-      if order_entry.product.provides_ticket_type
-        [
-          ProvideOrderEntryTicketService.new(
-            order_entry, suppress_notifications: (payment_mode == 'now')
-          )
-        ]
-      else
-        []
+    @ticket_providers ||=
+      order.order_entries.flat_map do |order_entry|
+        if order_entry.product.provides_ticket_type
+          [ProvideOrderEntryTicketService.new(order_entry, suppress_notifications: (payment_mode == 'now'))]
+        else
+          []
+        end
       end
-    end
   end
 
   def check_ticket_provider_validity

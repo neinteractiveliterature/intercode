@@ -7,25 +7,25 @@ import { AdminOrderFieldsFragmentDoc } from '../Store/orderFields.generated';
 import { AdminProductFieldsFragmentDoc } from '../Store/adminProductFields.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type UserConProfileFormDataFragment = { __typename: 'Convention', id: number, starts_at?: Types.Maybe<any>, ends_at?: Types.Maybe<any>, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode, user_con_profile_form: { __typename: 'Form', id: number, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: number, title?: Types.Maybe<string>, position: number, form_items: Array<{ __typename: 'FormItem', id: number, position: number, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> } };
+export type UserConProfileFormDataFragment = { __typename: 'Convention', starts_at?: string | null | undefined, ends_at?: string | null | undefined, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, id: string, user_con_profile_form: { __typename: 'Form', title: string, form_type: Types.FormType, id: string, form_sections: Array<{ __typename: 'FormSection', title?: string | null | undefined, position: number, id: string, form_items: Array<{ __typename: 'FormItem', position: number, identifier?: string | null | undefined, item_type: string, rendered_properties: string, default_value?: string | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole, id: string }> }> } };
 
-export type UserConProfileFieldsFragment = { __typename: 'UserConProfile', id: number, name: string, form_response_attrs_json?: Types.Maybe<any>, gravatar_enabled: boolean, gravatar_url: string };
+export type UserConProfileFieldsFragment = { __typename: 'UserConProfile', name: string, form_response_attrs_json?: string | null | undefined, gravatar_enabled: boolean, gravatar_url: string, id: string };
 
-export type UserConProfileAdminTicketFieldsFragment = { __typename: 'Ticket', id: number, created_at: any, updated_at: any, order_entry?: Types.Maybe<{ __typename: 'OrderEntry', id: number, order: { __typename: 'Order', id: number, status: Types.OrderStatus, submitted_at?: Types.Maybe<any>, charge_id?: Types.Maybe<string>, payment_note?: Types.Maybe<string>, user_con_profile: { __typename: 'UserConProfile', id: number, name_without_nickname: string }, total_price: { __typename: 'Money', fractional: number, currency_code: string }, payment_amount?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, coupon_applications: Array<{ __typename: 'CouponApplication', id: number, discount: { __typename: 'Money', fractional: number, currency_code: string }, coupon: { __typename: 'Coupon', id: number, code: string, percent_discount?: Types.Maybe<any>, fixed_amount?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, provides_product?: Types.Maybe<{ __typename: 'Product', id: number, name: string }> } }>, order_entries: Array<{ __typename: 'OrderEntry', id: number, quantity: number, describe_products: string, product: { __typename: 'Product', id: number, name: string }, product_variant?: Types.Maybe<{ __typename: 'ProductVariant', id: number, name: string }>, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } }> }, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } }>, ticket_type: { __typename: 'TicketType', id: number, description?: Types.Maybe<string>, name: string }, provided_by_event?: Types.Maybe<{ __typename: 'Event', id: number, title?: Types.Maybe<string> }> };
+export type UserConProfileAdminTicketFieldsFragment = { __typename: 'Ticket', created_at: string, updated_at: string, id: string, order_entry?: { __typename: 'OrderEntry', id: string, order: { __typename: 'Order', status: Types.OrderStatus, submitted_at?: string | null | undefined, charge_id?: string | null | undefined, payment_note?: string | null | undefined, id: string, user_con_profile: { __typename: 'UserConProfile', name_without_nickname: string, id: string }, total_price: { __typename: 'Money', fractional: number, currency_code: string }, payment_amount?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, coupon_applications: Array<{ __typename: 'CouponApplication', id: string, discount: { __typename: 'Money', fractional: number, currency_code: string }, coupon: { __typename: 'Coupon', code: string, percent_discount?: string | null | undefined, id: string, fixed_amount?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, provides_product?: { __typename: 'Product', name: string, id: string } | null | undefined } }>, order_entries: Array<{ __typename: 'OrderEntry', quantity: number, describe_products: string, id: string, product: { __typename: 'Product', name: string, id: string }, product_variant?: { __typename: 'ProductVariant', name: string, id: string } | null | undefined, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } }> }, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } } | null | undefined, ticket_type: { __typename: 'TicketType', description?: string | null | undefined, name: string, id: string }, provided_by_event?: { __typename: 'Event', title?: string | null | undefined, id: string } | null | undefined };
 
 export type UserConProfileQueryVariables = Types.Exact<{
-  id: Types.Scalars['Int'];
+  id: Types.Scalars['ID'];
 }>;
 
 
-export type UserConProfileQueryData = { __typename: 'Query', convention?: Types.Maybe<{ __typename: 'Convention', id: number, starts_at?: Types.Maybe<any>, ends_at?: Types.Maybe<any>, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode, user_con_profile_form: { __typename: 'Form', id: number, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: number, title?: Types.Maybe<string>, position: number, form_items: Array<{ __typename: 'FormItem', id: number, position: number, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> } }>, userConProfile: { __typename: 'UserConProfile', id: number, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, name: string, form_response_attrs_json?: Types.Maybe<any>, gravatar_enabled: boolean, gravatar_url: string } };
+export type UserConProfileQueryData = { __typename: 'Query', convention: { __typename: 'Convention', starts_at?: string | null | undefined, ends_at?: string | null | undefined, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, id: string, user_con_profile: { __typename: 'UserConProfile', current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, name: string, form_response_attrs_json?: string | null | undefined, gravatar_enabled: boolean, gravatar_url: string, id: string }, user_con_profile_form: { __typename: 'Form', title: string, form_type: Types.FormType, id: string, form_sections: Array<{ __typename: 'FormSection', title?: string | null | undefined, position: number, id: string, form_items: Array<{ __typename: 'FormItem', position: number, identifier?: string | null | undefined, item_type: string, rendered_properties: string, default_value?: string | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole, id: string }> }> } } };
 
 export type UserConProfileAdminQueryVariables = Types.Exact<{
-  id: Types.Scalars['Int'];
+  id: Types.Scalars['ID'];
 }>;
 
 
-export type UserConProfileAdminQueryData = { __typename: 'Query', myProfile?: Types.Maybe<{ __typename: 'UserConProfile', id: number, ability?: Types.Maybe<{ __typename: 'Ability', can_read_signups: boolean, can_update_user_con_profile: boolean, can_delete_user_con_profile: boolean, can_become_user_con_profile: boolean }> }>, convention: { __typename: 'Convention', id: number, name: string, starts_at?: Types.Maybe<any>, ends_at?: Types.Maybe<any>, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, user_con_profile_form: { __typename: 'Form', id: number, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: number, title?: Types.Maybe<string>, position: number, form_items: Array<{ __typename: 'FormItem', id: number, admin_description?: Types.Maybe<string>, position: number, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> }, ticket_types: Array<{ __typename: 'TicketType', id: number, description?: Types.Maybe<string>, name: string, maximum_event_provided_tickets: number, providing_products: Array<{ __typename: 'Product', id: number, name: string, description?: Types.Maybe<string>, description_html?: Types.Maybe<string>, image_url?: Types.Maybe<string>, available: boolean, payment_options: Array<string>, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: Types.Maybe<any>, finish?: Types.Maybe<any>, value: { __typename: 'Money', fractional: number, currency_code: string } }> } }, product_variants: Array<{ __typename: 'ProductVariant', id: number, name: string, description?: Types.Maybe<string>, image_url?: Types.Maybe<string>, position?: Types.Maybe<number>, override_pricing_structure?: Types.Maybe<{ __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: Types.Maybe<any>, finish?: Types.Maybe<any>, value: { __typename: 'Money', fractional: number, currency_code: string } }> } }> }>, provides_ticket_type?: Types.Maybe<{ __typename: 'TicketType', id: number, description?: Types.Maybe<string> }> }> }> }, userConProfile: { __typename: 'UserConProfile', id: number, email?: Types.Maybe<string>, user_id: number, name: string, name_without_nickname: string, form_response_attrs_json?: Types.Maybe<any>, gravatar_enabled: boolean, gravatar_url: string, ticket?: Types.Maybe<{ __typename: 'Ticket', id: number, created_at: any, updated_at: any, order_entry?: Types.Maybe<{ __typename: 'OrderEntry', id: number, order: { __typename: 'Order', id: number, status: Types.OrderStatus, submitted_at?: Types.Maybe<any>, charge_id?: Types.Maybe<string>, payment_note?: Types.Maybe<string>, user_con_profile: { __typename: 'UserConProfile', id: number, name_without_nickname: string }, total_price: { __typename: 'Money', fractional: number, currency_code: string }, payment_amount?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, coupon_applications: Array<{ __typename: 'CouponApplication', id: number, discount: { __typename: 'Money', fractional: number, currency_code: string }, coupon: { __typename: 'Coupon', id: number, code: string, percent_discount?: Types.Maybe<any>, fixed_amount?: Types.Maybe<{ __typename: 'Money', fractional: number, currency_code: string }>, provides_product?: Types.Maybe<{ __typename: 'Product', id: number, name: string }> } }>, order_entries: Array<{ __typename: 'OrderEntry', id: number, quantity: number, describe_products: string, product: { __typename: 'Product', id: number, name: string }, product_variant?: Types.Maybe<{ __typename: 'ProductVariant', id: number, name: string }>, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } }> }, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } }>, ticket_type: { __typename: 'TicketType', id: number, description?: Types.Maybe<string>, name: string }, provided_by_event?: Types.Maybe<{ __typename: 'Event', id: number, title?: Types.Maybe<string> }> }> } };
+export type UserConProfileAdminQueryData = { __typename: 'Query', convention: { __typename: 'Convention', name: string, starts_at?: string | null | undefined, ends_at?: string | null | undefined, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, id: string, my_profile?: { __typename: 'UserConProfile', id: string, ability?: { __typename: 'Ability', can_read_signups: boolean, can_update_user_con_profile: boolean, can_delete_user_con_profile: boolean, can_become_user_con_profile: boolean } | null | undefined } | null | undefined, user_con_profile: { __typename: 'UserConProfile', email?: string | null | undefined, user_id: number, name: string, name_without_nickname: string, form_response_attrs_json?: string | null | undefined, gravatar_enabled: boolean, gravatar_url: string, id: string, ticket?: { __typename: 'Ticket', created_at: string, updated_at: string, id: string, order_entry?: { __typename: 'OrderEntry', id: string, order: { __typename: 'Order', status: Types.OrderStatus, submitted_at?: string | null | undefined, charge_id?: string | null | undefined, payment_note?: string | null | undefined, id: string, user_con_profile: { __typename: 'UserConProfile', name_without_nickname: string, id: string }, total_price: { __typename: 'Money', fractional: number, currency_code: string }, payment_amount?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, coupon_applications: Array<{ __typename: 'CouponApplication', id: string, discount: { __typename: 'Money', fractional: number, currency_code: string }, coupon: { __typename: 'Coupon', code: string, percent_discount?: string | null | undefined, id: string, fixed_amount?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, provides_product?: { __typename: 'Product', name: string, id: string } | null | undefined } }>, order_entries: Array<{ __typename: 'OrderEntry', quantity: number, describe_products: string, id: string, product: { __typename: 'Product', name: string, id: string }, product_variant?: { __typename: 'ProductVariant', name: string, id: string } | null | undefined, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } }> }, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } } | null | undefined, ticket_type: { __typename: 'TicketType', description?: string | null | undefined, name: string, id: string }, provided_by_event?: { __typename: 'Event', title?: string | null | undefined, id: string } | null | undefined } | null | undefined }, user_con_profile_form: { __typename: 'Form', title: string, form_type: Types.FormType, id: string, form_sections: Array<{ __typename: 'FormSection', title?: string | null | undefined, position: number, id: string, form_items: Array<{ __typename: 'FormItem', admin_description?: string | null | undefined, position: number, identifier?: string | null | undefined, item_type: string, rendered_properties: string, default_value?: string | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole, id: string }> }> }, ticket_types: Array<{ __typename: 'TicketType', description?: string | null | undefined, name: string, maximum_event_provided_tickets: number, id: string, providing_products: Array<{ __typename: 'Product', name: string, description?: string | null | undefined, description_html?: string | null | undefined, image_url?: string | null | undefined, available: boolean, payment_options: Array<string>, id: string, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: string | null | undefined, finish?: string | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } }> } }, product_variants: Array<{ __typename: 'ProductVariant', name: string, description?: string | null | undefined, image_url?: string | null | undefined, position?: number | null | undefined, id: string, override_pricing_structure?: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: string | null | undefined, finish?: string | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } }> } } | null | undefined }>, provides_ticket_type?: { __typename: 'TicketType', description?: string | null | undefined, id: string } | null | undefined }> }> } };
 
 export type UserConProfilesTableUserConProfilesQueryVariables = Types.Exact<{
   page?: Types.Maybe<Types.Scalars['Int']>;
@@ -35,21 +35,21 @@ export type UserConProfilesTableUserConProfilesQueryVariables = Types.Exact<{
 }>;
 
 
-export type UserConProfilesTableUserConProfilesQueryData = { __typename: 'Query', convention?: Types.Maybe<{ __typename: 'Convention', id: number, name: string, starts_at?: Types.Maybe<any>, ends_at?: Types.Maybe<any>, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, ticket_types: Array<{ __typename: 'TicketType', id: number, name: string }>, user_con_profile_form: { __typename: 'Form', id: number, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: number, title?: Types.Maybe<string>, position: number, form_items: Array<{ __typename: 'FormItem', id: number, admin_description?: Types.Maybe<string>, position: number, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> }, user_con_profiles_paginated: { __typename: 'UserConProfilesPagination', total_entries: number, total_pages: number, current_page: number, per_page: number, entries: Array<{ __typename: 'UserConProfile', id: number, name_inverted: string, first_name: string, last_name: string, email?: Types.Maybe<string>, site_admin: boolean, form_response_attrs_json?: Types.Maybe<any>, order_summary: string, gravatar_enabled: boolean, gravatar_url: string, user_id: number, team_members: Array<{ __typename: 'TeamMember', id: number }>, ticket?: Types.Maybe<{ __typename: 'Ticket', id: number, updated_at: any, order_entry?: Types.Maybe<{ __typename: 'OrderEntry', id: number, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } }>, ticket_type: { __typename: 'TicketType', id: number, name: string } }> }> } }>, currentAbility: { __typename: 'Ability', can_create_user_con_profiles: boolean } };
+export type UserConProfilesTableUserConProfilesQueryData = { __typename: 'Query', convention: { __typename: 'Convention', name: string, starts_at?: string | null | undefined, ends_at?: string | null | undefined, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, id: string, ticket_types: Array<{ __typename: 'TicketType', name: string, id: string }>, user_con_profile_form: { __typename: 'Form', title: string, form_type: Types.FormType, id: string, form_sections: Array<{ __typename: 'FormSection', title?: string | null | undefined, position: number, id: string, form_items: Array<{ __typename: 'FormItem', admin_description?: string | null | undefined, position: number, identifier?: string | null | undefined, item_type: string, rendered_properties: string, default_value?: string | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole, id: string }> }> }, user_con_profiles_paginated: { __typename: 'UserConProfilesPagination', total_entries: number, total_pages: number, current_page: number, per_page: number, entries: Array<{ __typename: 'UserConProfile', name_inverted: string, first_name: string, last_name: string, email?: string | null | undefined, site_admin: boolean, form_response_attrs_json?: string | null | undefined, order_summary: string, gravatar_enabled: boolean, gravatar_url: string, user_id: number, id: string, team_members: Array<{ __typename: 'TeamMember', id: string }>, ticket?: { __typename: 'Ticket', updated_at: string, id: string, order_entry?: { __typename: 'OrderEntry', id: string, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } } | null | undefined, ticket_type: { __typename: 'TicketType', name: string, id: string } } | null | undefined }> } }, currentAbility: { __typename: 'Ability', can_create_user_con_profiles: boolean } };
 
 export type ConvertToEventProvidedTicketQueryVariables = Types.Exact<{
-  eventId: Types.Scalars['Int'];
+  eventId: Types.Scalars['ID'];
 }>;
 
 
-export type ConvertToEventProvidedTicketQueryData = { __typename: 'Query', convention?: Types.Maybe<{ __typename: 'Convention', id: number, ticket_name: string, ticket_types: Array<{ __typename: 'TicketType', id: number, maximum_event_provided_tickets: number, description?: Types.Maybe<string>, name: string }> }>, event: { __typename: 'Event', id: number, title?: Types.Maybe<string>, event_category: { __typename: 'EventCategory', id: number, can_provide_tickets: boolean }, provided_tickets: Array<{ __typename: 'Ticket', id: number, ticket_type: { __typename: 'TicketType', id: number, name: string } }> } };
+export type ConvertToEventProvidedTicketQueryData = { __typename: 'Query', convention: { __typename: 'Convention', ticket_name: string, id: string, event: { __typename: 'Event', title?: string | null | undefined, id: string, event_category: { __typename: 'EventCategory', can_provide_tickets: boolean, id: string }, provided_tickets: Array<{ __typename: 'Ticket', id: string, ticket_type: { __typename: 'TicketType', name: string, id: string } }> }, ticket_types: Array<{ __typename: 'TicketType', maximum_event_provided_tickets: number, description?: string | null | undefined, name: string, id: string }> } };
 
 export type AddAttendeeUsersQueryVariables = Types.Exact<{
   name?: Types.Maybe<Types.Scalars['String']>;
 }>;
 
 
-export type AddAttendeeUsersQueryData = { __typename: 'Query', users_paginated: { __typename: 'UsersPagination', entries: Array<{ __typename: 'User', id: number, name?: Types.Maybe<string>, email?: Types.Maybe<string>, first_name?: Types.Maybe<string>, last_name?: Types.Maybe<string> }> } };
+export type AddAttendeeUsersQueryData = { __typename: 'Query', users_paginated: { __typename: 'UsersPagination', entries: Array<{ __typename: 'User', name?: string | null | undefined, email?: string | null | undefined, first_name?: string | null | undefined, last_name?: string | null | undefined, id: string }> } };
 
 export type TicketAdminWithoutTicketAbilityQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
@@ -57,7 +57,7 @@ export type TicketAdminWithoutTicketAbilityQueryVariables = Types.Exact<{ [key: 
 export type TicketAdminWithoutTicketAbilityQueryData = { __typename: 'Query', currentAbility: { __typename: 'Ability', can_create_tickets: boolean } };
 
 export type TicketAdminWithTicketAbilityQueryVariables = Types.Exact<{
-  ticketId: Types.Scalars['Int'];
+  ticketId: Types.Scalars['ID'];
 }>;
 
 
@@ -65,20 +65,20 @@ export type TicketAdminWithTicketAbilityQueryData = { __typename: 'Query', curre
 
 export const UserConProfileFormDataFragmentDoc = gql`
     fragment UserConProfileFormData on Convention {
-  id
+  id: transitionalId
   starts_at
   ends_at
   timezone_name
   timezone_mode
   user_con_profile_form {
-    id
+    id: transitionalId
     ...CommonFormFields
   }
 }
     ${CommonFormFieldsFragmentDoc}`;
 export const UserConProfileFieldsFragmentDoc = gql`
     fragment UserConProfileFields on UserConProfile {
-  id
+  id: transitionalId
   name
   form_response_attrs_json
   gravatar_enabled
@@ -87,13 +87,13 @@ export const UserConProfileFieldsFragmentDoc = gql`
     `;
 export const UserConProfileAdminTicketFieldsFragmentDoc = gql`
     fragment UserConProfileAdminTicketFields on Ticket {
-  id
+  id: transitionalId
   created_at
   updated_at
   order_entry {
-    id
+    id: transitionalId
     order {
-      id
+      id: transitionalId
       ...AdminOrderFieldsFragment
     }
     price_per_item {
@@ -102,27 +102,27 @@ export const UserConProfileAdminTicketFieldsFragmentDoc = gql`
     }
   }
   ticket_type {
-    id
+    id: transitionalId
     description
     name
   }
   provided_by_event {
-    id
+    id: transitionalId
     title
   }
 }
     ${AdminOrderFieldsFragmentDoc}`;
 export const UserConProfileQueryDocument = gql`
-    query UserConProfileQuery($id: Int!) {
-  convention {
+    query UserConProfileQuery($id: ID!) {
+  convention: conventionByRequestHost {
     ...UserConProfileFormData
-    id
-  }
-  userConProfile(id: $id) {
-    id
-    current_user_form_item_viewer_role
-    current_user_form_item_writer_role
-    ...UserConProfileFields
+    id: transitionalId
+    user_con_profile(transitionalId: $id) {
+      id: transitionalId
+      current_user_form_item_viewer_role
+      current_user_form_item_writer_role
+      ...UserConProfileFields
+    }
   }
 }
     ${UserConProfileFormDataFragmentDoc}
@@ -156,18 +156,9 @@ export type UserConProfileQueryHookResult = ReturnType<typeof useUserConProfileQ
 export type UserConProfileQueryLazyQueryHookResult = ReturnType<typeof useUserConProfileQueryLazyQuery>;
 export type UserConProfileQueryQueryResult = Apollo.QueryResult<UserConProfileQueryData, UserConProfileQueryVariables>;
 export const UserConProfileAdminQueryDocument = gql`
-    query UserConProfileAdminQuery($id: Int!) {
-  myProfile {
-    id
-    ability {
-      can_read_signups
-      can_update_user_con_profile(user_con_profile_id: $id)
-      can_delete_user_con_profile(user_con_profile_id: $id)
-      can_become_user_con_profile(user_con_profile_id: $id)
-    }
-  }
-  convention: assertConvention {
-    id
+    query UserConProfileAdminQuery($id: ID!) {
+  convention: conventionByRequestHost {
+    id: transitionalId
     name
     starts_at
     ends_at
@@ -175,46 +166,55 @@ export const UserConProfileAdminQueryDocument = gql`
     timezone_mode
     ticket_name
     ticket_mode
+    my_profile {
+      id: transitionalId
+      ability {
+        can_read_signups
+        can_update_user_con_profile(transitionalUserConProfileId: $id)
+        can_delete_user_con_profile(transitionalUserConProfileId: $id)
+        can_become_user_con_profile(transitionalUserConProfileId: $id)
+      }
+    }
+    user_con_profile(transitionalId: $id) {
+      id: transitionalId
+      email
+      user_id
+      name
+      name_without_nickname
+      form_response_attrs_json
+      gravatar_enabled
+      gravatar_url
+      ticket {
+        id: transitionalId
+        ...UserConProfileAdminTicketFields
+      }
+    }
     user_con_profile_form {
-      id
+      id: transitionalId
       ...CommonFormFields
       form_sections {
-        id
+        id: transitionalId
         form_items {
-          id
+          id: transitionalId
           admin_description
         }
       }
     }
     ticket_types {
-      id
+      id: transitionalId
       description
       name
       maximum_event_provided_tickets
       providing_products {
-        id
+        id: transitionalId
         ...AdminProductFields
       }
     }
   }
-  userConProfile(id: $id) {
-    id
-    email
-    user_id
-    name
-    name_without_nickname
-    form_response_attrs_json
-    gravatar_enabled
-    gravatar_url
-    ticket {
-      id
-      ...UserConProfileAdminTicketFields
-    }
-  }
 }
-    ${CommonFormFieldsFragmentDoc}
-${AdminProductFieldsFragmentDoc}
-${UserConProfileAdminTicketFieldsFragmentDoc}`;
+    ${UserConProfileAdminTicketFieldsFragmentDoc}
+${CommonFormFieldsFragmentDoc}
+${AdminProductFieldsFragmentDoc}`;
 
 /**
  * __useUserConProfileAdminQuery__
@@ -245,8 +245,8 @@ export type UserConProfileAdminQueryLazyQueryHookResult = ReturnType<typeof useU
 export type UserConProfileAdminQueryQueryResult = Apollo.QueryResult<UserConProfileAdminQueryData, UserConProfileAdminQueryVariables>;
 export const UserConProfilesTableUserConProfilesQueryDocument = gql`
     query UserConProfilesTableUserConProfilesQuery($page: Int, $perPage: Int, $filters: UserConProfileFiltersInput, $sort: [SortInput!]) {
-  convention {
-    id
+  convention: conventionByRequestHost {
+    id: transitionalId
     name
     starts_at
     ends_at
@@ -255,16 +255,16 @@ export const UserConProfilesTableUserConProfilesQueryDocument = gql`
     ticket_name
     ticket_mode
     ticket_types {
-      id
+      id: transitionalId
       name
     }
     user_con_profile_form {
-      id
+      id: transitionalId
       ...CommonFormFields
       form_sections {
-        id
+        id: transitionalId
         form_items {
-          id
+          id: transitionalId
           admin_description
         }
       }
@@ -280,7 +280,7 @@ export const UserConProfilesTableUserConProfilesQueryDocument = gql`
       current_page
       per_page
       entries {
-        id
+        id: transitionalId
         name_inverted
         first_name
         last_name
@@ -292,20 +292,20 @@ export const UserConProfilesTableUserConProfilesQueryDocument = gql`
         gravatar_url
         user_id
         team_members {
-          id
+          id: transitionalId
         }
         ticket {
-          id
+          id: transitionalId
           updated_at
           order_entry {
-            id
+            id: transitionalId
             price_per_item {
               fractional
               currency_code
             }
           }
           ticket_type {
-            id
+            id: transitionalId
             name
           }
         }
@@ -349,30 +349,30 @@ export type UserConProfilesTableUserConProfilesQueryHookResult = ReturnType<type
 export type UserConProfilesTableUserConProfilesQueryLazyQueryHookResult = ReturnType<typeof useUserConProfilesTableUserConProfilesQueryLazyQuery>;
 export type UserConProfilesTableUserConProfilesQueryQueryResult = Apollo.QueryResult<UserConProfilesTableUserConProfilesQueryData, UserConProfilesTableUserConProfilesQueryVariables>;
 export const ConvertToEventProvidedTicketQueryDocument = gql`
-    query ConvertToEventProvidedTicketQuery($eventId: Int!) {
-  convention {
-    id
+    query ConvertToEventProvidedTicketQuery($eventId: ID!) {
+  convention: conventionByRequestHost {
+    id: transitionalId
     ticket_name
+    event(transitionalId: $eventId) {
+      id: transitionalId
+      title
+      event_category {
+        id: transitionalId
+        can_provide_tickets
+      }
+      provided_tickets {
+        id: transitionalId
+        ticket_type {
+          id: transitionalId
+          name
+        }
+      }
+    }
     ticket_types {
-      id
-      maximum_event_provided_tickets(event_id: $eventId)
+      id: transitionalId
+      maximum_event_provided_tickets(transitionalEventId: $eventId)
       description
       name
-    }
-  }
-  event(id: $eventId) {
-    id
-    title
-    event_category {
-      id
-      can_provide_tickets
-    }
-    provided_tickets {
-      id
-      ticket_type {
-        id
-        name
-      }
     }
   }
 }
@@ -409,7 +409,7 @@ export const AddAttendeeUsersQueryDocument = gql`
     query AddAttendeeUsersQuery($name: String) {
   users_paginated(filters: {name: $name}, per_page: 50) {
     entries {
-      id
+      id: transitionalId
       name
       email
       first_name
@@ -481,11 +481,11 @@ export type TicketAdminWithoutTicketAbilityQueryHookResult = ReturnType<typeof u
 export type TicketAdminWithoutTicketAbilityQueryLazyQueryHookResult = ReturnType<typeof useTicketAdminWithoutTicketAbilityQueryLazyQuery>;
 export type TicketAdminWithoutTicketAbilityQueryQueryResult = Apollo.QueryResult<TicketAdminWithoutTicketAbilityQueryData, TicketAdminWithoutTicketAbilityQueryVariables>;
 export const TicketAdminWithTicketAbilityQueryDocument = gql`
-    query TicketAdminWithTicketAbilityQuery($ticketId: Int!) {
+    query TicketAdminWithTicketAbilityQuery($ticketId: ID!) {
   currentAbility {
     can_create_tickets
-    can_update_ticket(ticket_id: $ticketId)
-    can_delete_ticket(ticket_id: $ticketId)
+    can_update_ticket(transitionalTicketId: $ticketId)
+    can_delete_ticket(transitionalTicketId: $ticketId)
   }
 }
     `;

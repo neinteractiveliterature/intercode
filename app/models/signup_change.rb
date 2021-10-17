@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
@@ -34,13 +35,13 @@
 #  fk_rails_...  (user_con_profile_id => user_con_profiles.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+
 class SignupChange < ApplicationRecord
   belongs_to :signup
   belongs_to :run
   belongs_to :user_con_profile
-  belongs_to :previous_signup_change, class_name: 'SignupChange', required: false
-  belongs_to :updated_by, class_name: 'User', required: false
+  belongs_to :previous_signup_change, class_name: 'SignupChange', optional: true
+  belongs_to :updated_by, class_name: 'User', optional: true
 
   validates :action, presence: true, inclusion: { in: Types::SignupChangeActionType.values.keys }
 end

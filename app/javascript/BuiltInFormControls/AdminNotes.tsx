@@ -1,16 +1,16 @@
 import { useState, useRef } from 'react';
-import { ApolloError, FetchResult } from '@apollo/client';
+import { ApolloError } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import PlainTextDisplay from '../PlainTextDisplay';
 import useAsyncFunction from '../useAsyncFunction';
 
 export type AdminNotesProps = {
-  mutate: (value: string) => Promise<FetchResult<any>>;
+  mutate: (value: string) => Promise<unknown>;
   value?: string;
 };
 
-function AdminNotes({ mutate, value }: AdminNotesProps) {
+function AdminNotes({ mutate, value }: AdminNotesProps): JSX.Element {
   const [editingValue, setEditingValue] = useState<string | null>(null);
   const [save, saveError, saveInProgress] = useAsyncFunction(mutate);
   const textareaElement = useRef<HTMLTextAreaElement | null>(null);

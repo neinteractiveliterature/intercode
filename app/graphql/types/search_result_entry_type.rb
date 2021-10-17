@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::SearchResultEntryType < Types::BaseObject
   field :title, String, null: true
   field :highlight, String, null: true

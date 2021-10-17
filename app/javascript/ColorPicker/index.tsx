@@ -8,7 +8,7 @@ const SyncColorPicker = lazyWithBundleHashCheck(
   () => import(/* webpackChunkName: "color-picker" */ './SyncColorPicker'),
 );
 
-function ColorPicker(props: SyncColorPickerProps) {
+function ColorPicker(props: SyncColorPickerProps): JSX.Element {
   return (
     <Suspense fallback={<LoadingIndicator iconSet="bootstrap-icons" />}>
       <SyncColorPicker {...props} />

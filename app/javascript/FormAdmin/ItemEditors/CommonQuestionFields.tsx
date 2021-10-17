@@ -30,7 +30,11 @@ export type CommonQuestionFieldsProps = FormItemEditorProps<TypedFormItem>;
 
 type CommonQuestionFieldsFormItem = CommonQuestionFieldsProps['formItem'];
 type QuestionFormItem = WithRequiredProperties<
-  ParsedFormItem<CommonQuestionProperties, any, CommonQuestionFieldsFormItem['item_type']>
+  ParsedFormItem<
+    CommonQuestionProperties,
+    CommonQuestionFieldsFormItem['default_value'],
+    CommonQuestionFieldsFormItem['item_type']
+  >
 >;
 
 function applicableRoles(
@@ -62,7 +66,7 @@ function formItemIsQuestion(formItem: CommonQuestionFieldsFormItem): formItem is
   return formItem.item_type !== 'static_text';
 }
 
-function CommonQuestionFields({ formItem, setFormItem }: CommonQuestionFieldsProps) {
+function CommonQuestionFields({ formItem, setFormItem }: CommonQuestionFieldsProps): JSX.Element {
   const { formType, formTypeIdentifier } = useContext(FormEditorContext);
   const { standardItem } = useContext(FormItemEditorContext);
   const defaultAnswerModal = useModal();
@@ -92,10 +96,11 @@ function CommonQuestionFields({ formItem, setFormItem }: CommonQuestionFieldsPro
           <BooleanInput
             caption="Response required?"
             value={!!formItem.properties.required}
-            onChange={formItemPropertyUpdater<QuestionFormItem, 'required'>(
-              'required',
-              setFormItem,
-            )}
+            onChange={formItemPropertyUpdater<
+              CommonQuestionProperties,
+              QuestionFormItem,
+              'required'
+            >('required', setFormItem)}
           />
         ))}
       <BootstrapFormInput

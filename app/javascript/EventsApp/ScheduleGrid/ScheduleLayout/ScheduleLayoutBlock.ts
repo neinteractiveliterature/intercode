@@ -9,7 +9,7 @@ import ColumnReservationSet from './ColumnReservationSet';
 const MIN_LENGTH = 30 * 60 * 1000; // 30 minutes in milliseconds
 
 export type RunDimensions = {
-  runId: number;
+  runId: string;
   timespan: FiniteTimespan;
   fullTimespan: FiniteTimespan;
   laneIndex: number;
@@ -25,27 +25,24 @@ export type ScheduleLayoutResult = {
 class ScheduleLayoutBlock {
   id: string;
 
-  runIds: number[];
+  runIds: string[];
 
   timespan: FiniteTimespan;
 
   schedule: Schedule;
 
-  hiddenEventRunIds: number[];
+  hiddenEventRunIds: string[];
 
-  hiddenEventsFakeRunId: number | undefined;
+  hiddenEventsFakeRunId: string | undefined;
 
-  constructor(id: string, timespan: FiniteTimespan, runIds: number[], schedule: Schedule) {
+  constructor(id: string, timespan: FiniteTimespan, runIds: string[], schedule: Schedule) {
     this.id = id;
     this.runIds = [];
     this.timespan = timespan;
     this.hiddenEventRunIds = [];
     this.schedule = schedule;
 
-    const sortedRunIds = sortBy(
-      runIds,
-      (runId) => schedule.getRunTimespan(runId)?.start.toMillis() ?? 0,
-    );
+    const sortedRunIds = sortBy(runIds, (runId) => schedule.getRunTimespan(runId)?.start.toMillis() ?? 0);
     sortedRunIds.forEach((runId) => {
       const runTimespan = schedule.getRunTimespan(runId);
       if (runTimespan) {
@@ -54,18 +51,31 @@ class ScheduleLayoutBlock {
     });
   }
 
-  addRun(runId: number, timespan: FiniteTimespan) {
+  addRun(runId: string, timespan: FiniteTimespan): void {
     if (!this.schedule.shouldShowRun(runId)) {
       const existingFakeRunTimespan = this.hiddenEventsFakeRunId
         ? this.schedule.getRunTimespan(this.hiddenEventsFakeRunId)
         : undefined;
-      if (existingFakeRunTimespan?.overlapsTimespan(timespan)) {
+      if (this.hiddenEventsFakeRunId && existingFakeRunTimespan?.overlapsTimespan(timespan)) {
         this.hiddenEventRunIds.push(runId);
-        const run = this.schedule.getRun(this.hiddenEventsFakeRunId!)!;
-        const event = this.schedule.getEvent(run.event_id)!;
-        event.title = `+ ${this.hiddenEventRunIds.length} not shown`;
         const expandedTimespan = existingFakeRunTimespan.expandedToFit(timespan);
-        this.schedule.runTimespansById.set(this.hiddenEventsFakeRunId!, expandedTimespan);
+        this.schedule.runTimespansById.set(this.hiddenEventsFakeRunId, expandedTimespan);
+
+        const fakeRun = this.schedule.getRun(this.hiddenEventsFakeRunId);
+        if (fakeRun == null) {
+          Rollbar?.warn(
+            `Attempted to add run ${runId} to fake run ${this.hiddenEventsFakeRunId} but the fake run wasn't in the schedule`,
+          );
+          return;
+        }
+        const fakeEvent = this.schedule.getEvent(fakeRun.event_id);
+        if (fakeEvent == null) {
+          Rollbar?.warn(
+            `Attempted to add run ${runId} to fake event ${fakeRun.event_id} but the fake event wasn't in the schedule`,
+          );
+          return;
+        }
+        fakeEvent.title = `+ ${this.hiddenEventRunIds.length} not shown`;
 
         return;
       }
@@ -80,7 +90,7 @@ class ScheduleLayoutBlock {
     }
   }
 
-  getRunCountInTimespan(event: ScheduleEvent, timespan: FiniteTimespan) {
+  getRunCountInTimespan(event: ScheduleEvent, timespan: FiniteTimespan): number {
     return event.runs.filter((run) => {
       const runTimespan = this.schedule.getRunTimespan(run.id);
       if (!runTimespan) {
@@ -91,7 +101,7 @@ class ScheduleLayoutBlock {
     }).length;
   }
 
-  getTimeSortedRunIds() {
+  getTimeSortedRunIds(): string[] {
     return [...this.runIds].sort((a, b) => {
       const aTimespan = this.schedule.getRunTimespan(a);
       const bTimespan = this.schedule.getRunTimespan(b);
@@ -127,14 +137,8 @@ class ScheduleLayoutBlock {
           return -1;
         }
 
-        const eventAOverlappingRunCount = this.getRunCountInTimespan(
-          eventA,
-          bTimespan.expand({ hours: 1 }),
-        );
-        const eventBOverlappingRunCount = this.getRunCountInTimespan(
-          eventB,
-          aTimespan.expand({ hours: 1 }),
-        );
+        const eventAOverlappingRunCount = this.getRunCountInTimespan(eventA, bTimespan.expand({ hours: 1 }));
+        const eventBOverlappingRunCount = this.getRunCountInTimespan(eventB, aTimespan.expand({ hours: 1 }));
         const runCountDiff = eventBOverlappingRunCount - eventAOverlappingRunCount;
 
         if (runCountDiff === 0) {
@@ -168,11 +172,11 @@ class ScheduleLayoutBlock {
     let maxColumns = 0;
 
     const runDimensions = this.getTimeSortedRunIds().map((runId) => {
-      const fullTimespan = this.schedule.getRunTimespan(runId)!;
-      const maxDisplayLength = Math.max(
-        MIN_LENGTH,
-        fullTimespan.getLength('milliseconds').milliseconds,
-      );
+      const fullTimespan = this.schedule.getRunTimespan(runId);
+      if (!fullTimespan) {
+        throw new Error(`Run ${runId} wasn't in the schedule when computing block layout`);
+      }
+      const maxDisplayLength = Math.max(MIN_LENGTH, fullTimespan.getLength('milliseconds').milliseconds);
       const displayTimespan = Timespan.finiteFromDateTimes(
         fullTimespan.start,
         fullTimespan.start.plus({ milliseconds: maxDisplayLength }),
@@ -192,11 +196,8 @@ class ScheduleLayoutBlock {
         fullTimespan,
         laneIndex,
         timeAxisStartPercent:
-          (displayTimespan.start.diff(this.timespan.start, 'milliseconds').milliseconds /
-            myLength) *
-          100.0,
-        timeAxisSizePercent:
-          (displayTimespan.getLength('milliseconds').milliseconds / myLength) * 100.0,
+          (displayTimespan.start.diff(this.timespan.start, 'milliseconds').milliseconds / myLength) * 100.0,
+        timeAxisSizePercent: (displayTimespan.getLength('milliseconds').milliseconds / myLength) * 100.0,
       };
     });
 

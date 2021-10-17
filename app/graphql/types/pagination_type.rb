@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::PaginationType < Types::BaseObject
   implements Types::PaginationInterface
 

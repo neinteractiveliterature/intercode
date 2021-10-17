@@ -5,7 +5,7 @@ import EditCmsGraphqlQuery from './EditCmsGraphqlQuery';
 import NewCmsGraphqlQuery from './NewCmsGraphqlQuery';
 import ViewCmsGraphqlQuerySource from './ViewCmsGraphqlQuerySource';
 
-function CmsGraphqlQueriesAdmin() {
+function CmsGraphqlQueriesAdmin(): JSX.Element {
   return (
     <Switch>
       <Route path="/cms_graphql_queries/:id/edit">

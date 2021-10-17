@@ -15,7 +15,8 @@ import {
 } from './queries.generated';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
 
-type EmailRouteType = RootSiteEmailRoutesAdminTableQueryData['email_routes_paginated']['entries'][0];
+type EmailRouteType =
+  RootSiteEmailRoutesAdminTableQueryData['email_routes_paginated']['entries'][0];
 
 const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({});
 
@@ -43,7 +44,7 @@ function getPossibleColumns(): Column<EmailRouteType>[] {
 
 const defaultVisibleColumns = ['receiver_address', 'forward_addresses'];
 
-function RootSiteEmailRoutesAdminTable() {
+function RootSiteEmailRoutesAdminTable(): JSX.Element {
   const authorizationWarning = useAuthorizationRequired('can_manage_email_routes');
 
   const newEmailRouteModal = useModal();

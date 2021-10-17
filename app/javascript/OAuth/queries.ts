@@ -3,7 +3,7 @@ import { gql } from '@apollo/client';
 export const OAuthAuthorizationPromptQuery = gql`
   query OAuthAuthorizationPromptQuery($queryParams: Json!) {
     currentUser {
-      id
+      id: transitionalId
     }
     oauthPreAuth(queryParams: $queryParams)
   }

@@ -17,11 +17,15 @@ describe('ConventionForm', () => {
   const defaultInitialConvention: ConventionFormConvention = {
     __typename: 'Convention',
     canceled: false,
-    cms_layouts: [],
+    cmsLayouts: [],
+    defaultLayout: {
+      __typename: 'CmsLayout',
+      id: '0',
+    },
     email_from: 'noreply@convention.test',
-    id: 0,
+    id: '0',
     language: 'en',
-    pages: [],
+    cmsPages: [],
     signup_requests_open: false,
     stripe_account_ready_to_charge: true,
     ticket_mode: TicketMode.RequiredForSignup,
@@ -44,6 +48,10 @@ describe('ConventionForm', () => {
     ticket_name: 'ticket',
     staff_positions: [],
     email_mode: EmailMode.Forward,
+    rootPage: {
+      __typename: 'Page',
+      id: '0',
+    },
   };
 
   const renderConventionForm = (
@@ -53,7 +61,8 @@ describe('ConventionForm', () => {
     render(
       <ConventionForm
         initialConvention={{ ...defaultInitialConvention, ...initialConventionProps }}
-        rootSite={{ __typename: 'RootSite', url: 'https://example.com', id: 123 }}
+        rootSite={{ __typename: 'RootSite', url: 'https://example.com', id: '123' }}
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
         saveConvention={async () => {}}
         cmsLayouts={[]}
         pages={[]}
@@ -87,9 +96,7 @@ describe('ConventionForm', () => {
     expect((getByLabelText('Convention starts') as HTMLInputElement).value).toEqual('2019-04-18');
     expect((getByLabelText('Convention ends') as HTMLInputElement).value).toEqual('2019-04-18');
     expect((getByLabelText('Name') as HTMLInputElement).value).toEqual('myName');
-    expect((getByLabelText('Convention domain name') as HTMLInputElement).value).toEqual(
-      'myDomain',
-    );
+    expect((getByLabelText('Convention domain name') as HTMLInputElement).value).toEqual('myDomain');
     expect(getByText('Time zone').closest('div')).toHaveTextContent(
       'Time zoneUTC+00:00 Etc/UTC (Coordinated Universal Time)',
     );
@@ -113,7 +120,7 @@ describe('ConventionForm', () => {
 
     fireEvent.click(getByText('Events'));
     expect(getMultipleChoiceInput('Accepting event proposals', 'Yes')?.checked).toBe(false);
-    fireEvent.change(getMultipleChoiceInput('Accepting event proposals', 'Yes')!, {
+    fireEvent.change(getMultipleChoiceInput('Accepting event proposals', 'Yes'), {
       target: { checked: true },
     });
     expect(getMultipleChoiceInput('Accepting event proposals', 'Yes')?.checked).toBe(true);

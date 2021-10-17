@@ -6,10 +6,10 @@ import { ErrorDisplay, useUniqueId } from '@neinteractiveliterature/litform';
 import useAsyncFunction from '../useAsyncFunction';
 
 export type ApplyCouponControlProps = {
-  createCouponApplication: (code: string) => Promise<any>;
+  createCouponApplication: (code: string) => Promise<unknown>;
 };
 
-function ApplyCouponControl({ createCouponApplication }: ApplyCouponControlProps) {
+function ApplyCouponControl({ createCouponApplication }: ApplyCouponControlProps): JSX.Element {
   const [couponCode, setCouponCode] = useState('');
   const couponCodeInputId = useUniqueId('coupon-code-');
   const [applyCoupon, applyError, applyInProgress] = useAsyncFunction(createCouponApplication);

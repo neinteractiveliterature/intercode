@@ -1,6 +1,6 @@
 import { pluralize } from 'inflected';
 
-export default (word: string, count: number, hideCount = false) => {
+export default function pluralizeWithCount(word: string, count: number, hideCount = false): string {
   if (count === 1) {
     if (hideCount) {
       return word;
@@ -14,4 +14,4 @@ export default (word: string, count: number, hideCount = false) => {
   }
 
   return `${count} ${pluralize(word)}`;
-};
+}

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CompactFormResponseChangesService < CivilService::Service
   attr_reader :scope, :send_mail
 
@@ -9,21 +10,18 @@ class CompactFormResponseChangesService < CivilService::Service
 
   def inner_call
     convention_ids_with_pending_changes.each do |convention_id|
-      all_pending_changes = scope.joins(:user_con_profile)
-        .where(user_con_profiles: { convention_id: convention_id })
+      all_pending_changes = scope.joins(:user_con_profile).where(user_con_profiles: { convention_id: convention_id })
       response_ids = all_pending_changes.pluck(Arel.sql('distinct response_id'))
 
-      response_ids.each do |response_id|
-        compact_response_id(response_id)
-      end
+      response_ids.each { |response_id| compact_response_id(response_id) }
     end
 
     success
   end
 
   def convention_ids_with_pending_changes
-    @convention_ids_with_pending_changes ||= scope.joins(:user_con_profile)
-      .pluck(Arel.sql('distinct user_con_profiles.convention_id'))
+    @convention_ids_with_pending_changes ||=
+      scope.joins(:user_con_profile).pluck(Arel.sql('distinct user_con_profiles.convention_id'))
   end
 
   def compact_response_id(response_id)
@@ -31,9 +29,7 @@ class CompactFormResponseChangesService < CivilService::Service
       raw_changes = scope.includes(:user_con_profile).where(response_id: response_id)
 
       # skip compacting responses where changes are ongoing
-      unless raw_changes.where('created_at >= ?', 1.hour.ago).any?
-        compact_changes(response_id, raw_changes.to_a)
-      end
+      compact_changes(response_id, raw_changes.to_a) unless raw_changes.where('created_at >= ?', 1.hour.ago).any?
     end
   end
 

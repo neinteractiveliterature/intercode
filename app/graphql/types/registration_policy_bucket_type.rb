@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::RegistrationPolicyBucketType < Types::BaseObject
   field :key, String, null: false
   field :name, String, null: true

@@ -10,29 +10,29 @@ export type CreateCmsFileMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateCmsFileMutationData = { __typename: 'Mutation', createCmsFile?: Types.Maybe<{ __typename: 'CreateCmsFilePayload', cms_file: { __typename: 'CmsFile', id: number, filename: string, url: string, content_type: string, size: number, current_ability_can_delete: boolean } }> };
+export type CreateCmsFileMutationData = { __typename: 'Mutation', createCmsFile: { __typename: 'CreateCmsFilePayload', cms_file: { __typename: 'CmsFile', filename: string, url: string, content_type: string, size: number, current_ability_can_delete: boolean, id: string } } };
 
 export type RenameCmsFileMutationVariables = Types.Exact<{
-  id: Types.Scalars['Int'];
+  id: Types.Scalars['ID'];
   filename: Types.Scalars['String'];
 }>;
 
 
-export type RenameCmsFileMutationData = { __typename: 'Mutation', renameCmsFile?: Types.Maybe<{ __typename: 'RenameCmsFilePayload', cms_file: { __typename: 'CmsFile', id: number, filename: string, url: string, content_type: string, size: number, current_ability_can_delete: boolean } }> };
+export type RenameCmsFileMutationData = { __typename: 'Mutation', renameCmsFile: { __typename: 'RenameCmsFilePayload', cms_file: { __typename: 'CmsFile', filename: string, url: string, content_type: string, size: number, current_ability_can_delete: boolean, id: string } } };
 
 export type DeleteCmsFileMutationVariables = Types.Exact<{
-  id: Types.Scalars['Int'];
+  id: Types.Scalars['ID'];
 }>;
 
 
-export type DeleteCmsFileMutationData = { __typename: 'Mutation', deleteCmsFile?: Types.Maybe<{ __typename: 'DeleteCmsFilePayload', clientMutationId?: Types.Maybe<string> }> };
+export type DeleteCmsFileMutationData = { __typename: 'Mutation', deleteCmsFile: { __typename: 'DeleteCmsFilePayload', clientMutationId?: string | null | undefined } };
 
 
 export const CreateCmsFileDocument = gql`
     mutation CreateCmsFile($file: Upload!) {
   createCmsFile(input: {file: $file}) {
     cms_file {
-      id
+      id: transitionalId
       ...CmsFileFields
     }
   }
@@ -65,10 +65,10 @@ export type CreateCmsFileMutationHookResult = ReturnType<typeof useCreateCmsFile
 export type CreateCmsFileMutationResult = Apollo.MutationResult<CreateCmsFileMutationData>;
 export type CreateCmsFileMutationOptions = Apollo.BaseMutationOptions<CreateCmsFileMutationData, CreateCmsFileMutationVariables>;
 export const RenameCmsFileDocument = gql`
-    mutation RenameCmsFile($id: Int!, $filename: String!) {
-  renameCmsFile(input: {id: $id, filename: $filename}) {
+    mutation RenameCmsFile($id: ID!, $filename: String!) {
+  renameCmsFile(input: {transitionalId: $id, filename: $filename}) {
     cms_file {
-      id
+      id: transitionalId
       ...CmsFileFields
     }
   }
@@ -102,8 +102,8 @@ export type RenameCmsFileMutationHookResult = ReturnType<typeof useRenameCmsFile
 export type RenameCmsFileMutationResult = Apollo.MutationResult<RenameCmsFileMutationData>;
 export type RenameCmsFileMutationOptions = Apollo.BaseMutationOptions<RenameCmsFileMutationData, RenameCmsFileMutationVariables>;
 export const DeleteCmsFileDocument = gql`
-    mutation DeleteCmsFile($id: Int!) {
-  deleteCmsFile(input: {id: $id}) {
+    mutation DeleteCmsFile($id: ID!) {
+  deleteCmsFile(input: {transitionalId: $id}) {
     clientMutationId
   }
 }

@@ -4,44 +4,44 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type ContactEmailFieldsFragment = { __typename: 'ContactEmail', email: string, formatted_address: string, name?: Types.Maybe<string>, metadata_json: any };
+export type ContactEmailFieldsFragment = { __typename: 'ContactEmail', email: string, formatted_address: string, name?: string | null | undefined, metadata_json: string };
 
-export type MailingListsResultFieldsFragment = { __typename: 'MailingListsResult', metadata_fields: Array<string>, emails: Array<{ __typename: 'ContactEmail', email: string, formatted_address: string, name?: Types.Maybe<string>, metadata_json: any }> };
+export type MailingListsResultFieldsFragment = { __typename: 'MailingListsResult', metadata_fields: Array<string>, emails: Array<{ __typename: 'ContactEmail', email: string, formatted_address: string, name?: string | null | undefined, metadata_json: string }> };
 
 export type MailingListsMenuQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type MailingListsMenuQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, ticket_mode: Types.TicketMode, ticket_name: string } };
+export type MailingListsMenuQueryData = { __typename: 'Query', convention: { __typename: 'Convention', ticket_mode: Types.TicketMode, ticket_name: string, id: string } };
 
 export type TicketedAttendeesQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type TicketedAttendeesQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, name: string, ticket_name: string, mailing_lists: { __typename: 'MailingLists', ticketed_attendees: { __typename: 'MailingListsResult', metadata_fields: Array<string>, emails: Array<{ __typename: 'ContactEmail', email: string, formatted_address: string, name?: Types.Maybe<string>, metadata_json: any }> } } } };
+export type TicketedAttendeesQueryData = { __typename: 'Query', convention: { __typename: 'Convention', name: string, ticket_name: string, id: string, mailing_lists: { __typename: 'MailingLists', ticketed_attendees: { __typename: 'MailingListsResult', metadata_fields: Array<string>, emails: Array<{ __typename: 'ContactEmail', email: string, formatted_address: string, name?: string | null | undefined, metadata_json: string }> } } } };
 
 export type EventProposersQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type EventProposersQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, name: string, mailing_lists: { __typename: 'MailingLists', event_proposers: { __typename: 'MailingListsResult', metadata_fields: Array<string>, emails: Array<{ __typename: 'ContactEmail', email: string, formatted_address: string, name?: Types.Maybe<string>, metadata_json: any }> } } } };
+export type EventProposersQueryData = { __typename: 'Query', convention: { __typename: 'Convention', name: string, id: string, mailing_lists: { __typename: 'MailingLists', event_proposers: { __typename: 'MailingListsResult', metadata_fields: Array<string>, emails: Array<{ __typename: 'ContactEmail', email: string, formatted_address: string, name?: string | null | undefined, metadata_json: string }> } } } };
 
 export type TeamMembersMailingListQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type TeamMembersMailingListQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, name: string, mailing_lists: { __typename: 'MailingLists', team_members: { __typename: 'MailingListsResult', metadata_fields: Array<string>, emails: Array<{ __typename: 'ContactEmail', email: string, formatted_address: string, name?: Types.Maybe<string>, metadata_json: any }> } } } };
+export type TeamMembersMailingListQueryData = { __typename: 'Query', convention: { __typename: 'Convention', name: string, id: string, mailing_lists: { __typename: 'MailingLists', team_members: { __typename: 'MailingListsResult', metadata_fields: Array<string>, emails: Array<{ __typename: 'ContactEmail', email: string, formatted_address: string, name?: string | null | undefined, metadata_json: string }> } } } };
 
 export type UsersWithPendingBioQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type UsersWithPendingBioQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, name: string, mailing_lists: { __typename: 'MailingLists', users_with_pending_bio: { __typename: 'MailingListsResult', metadata_fields: Array<string>, emails: Array<{ __typename: 'ContactEmail', email: string, formatted_address: string, name?: Types.Maybe<string>, metadata_json: any }> } } } };
+export type UsersWithPendingBioQueryData = { __typename: 'Query', convention: { __typename: 'Convention', name: string, id: string, mailing_lists: { __typename: 'MailingLists', users_with_pending_bio: { __typename: 'MailingListsResult', metadata_fields: Array<string>, emails: Array<{ __typename: 'ContactEmail', email: string, formatted_address: string, name?: string | null | undefined, metadata_json: string }> } } } };
 
 export type WaitlistMailingListsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type WaitlistMailingListsQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, name: string, timezone_name?: Types.Maybe<string>, mailing_lists: { __typename: 'MailingLists', waitlists: Array<{ __typename: 'MailingListsWaitlistsResult', metadata_fields: Array<string>, emails: Array<{ __typename: 'ContactEmail', email: string, formatted_address: string, name?: Types.Maybe<string>, metadata_json: any }>, run: { __typename: 'Run', id: number, starts_at: any, title_suffix?: Types.Maybe<string>, event: { __typename: 'Event', id: number, title?: Types.Maybe<string> } } }> } } };
+export type WaitlistMailingListsQueryData = { __typename: 'Query', convention: { __typename: 'Convention', name: string, timezone_name?: string | null | undefined, id: string, mailing_lists: { __typename: 'MailingLists', waitlists: Array<{ __typename: 'MailingListsWaitlistsResult', metadata_fields: Array<string>, emails: Array<{ __typename: 'ContactEmail', email: string, formatted_address: string, name?: string | null | undefined, metadata_json: string }>, run: { __typename: 'Run', starts_at: string, title_suffix?: string | null | undefined, id: string, event: { __typename: 'Event', title?: string | null | undefined, id: string } } }> } } };
 
 export type WhosFreeFormConventionQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type WhosFreeFormConventionQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, name: string, starts_at?: Types.Maybe<any>, ends_at?: Types.Maybe<any>, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode } };
+export type WhosFreeFormConventionQueryData = { __typename: 'Query', convention: { __typename: 'Convention', name: string, starts_at?: string | null | undefined, ends_at?: string | null | undefined, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, id: string } };
 
 export type WhosFreeQueryVariables = Types.Exact<{
   start: Types.Scalars['Date'];
@@ -49,7 +49,7 @@ export type WhosFreeQueryVariables = Types.Exact<{
 }>;
 
 
-export type WhosFreeQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, name: string, mailing_lists: { __typename: 'MailingLists', whos_free: { __typename: 'MailingListsResult', metadata_fields: Array<string>, emails: Array<{ __typename: 'ContactEmail', email: string, formatted_address: string, name?: Types.Maybe<string>, metadata_json: any }> } } } };
+export type WhosFreeQueryData = { __typename: 'Query', convention: { __typename: 'Convention', name: string, id: string, mailing_lists: { __typename: 'MailingLists', whos_free: { __typename: 'MailingListsResult', metadata_fields: Array<string>, emails: Array<{ __typename: 'ContactEmail', email: string, formatted_address: string, name?: string | null | undefined, metadata_json: string }> } } } };
 
 export const ContactEmailFieldsFragmentDoc = gql`
     fragment ContactEmailFields on ContactEmail {
@@ -69,8 +69,8 @@ export const MailingListsResultFieldsFragmentDoc = gql`
     ${ContactEmailFieldsFragmentDoc}`;
 export const MailingListsMenuQueryDocument = gql`
     query MailingListsMenuQuery {
-  convention: assertConvention {
-    id
+  convention: conventionByRequestHost {
+    id: transitionalId
     ticket_mode
     ticket_name
   }
@@ -105,8 +105,8 @@ export type MailingListsMenuQueryLazyQueryHookResult = ReturnType<typeof useMail
 export type MailingListsMenuQueryQueryResult = Apollo.QueryResult<MailingListsMenuQueryData, MailingListsMenuQueryVariables>;
 export const TicketedAttendeesQueryDocument = gql`
     query TicketedAttendeesQuery {
-  convention: assertConvention {
-    id
+  convention: conventionByRequestHost {
+    id: transitionalId
     name
     ticket_name
     mailing_lists {
@@ -146,8 +146,8 @@ export type TicketedAttendeesQueryLazyQueryHookResult = ReturnType<typeof useTic
 export type TicketedAttendeesQueryQueryResult = Apollo.QueryResult<TicketedAttendeesQueryData, TicketedAttendeesQueryVariables>;
 export const EventProposersQueryDocument = gql`
     query EventProposersQuery {
-  convention: assertConvention {
-    id
+  convention: conventionByRequestHost {
+    id: transitionalId
     name
     mailing_lists {
       event_proposers {
@@ -186,8 +186,8 @@ export type EventProposersQueryLazyQueryHookResult = ReturnType<typeof useEventP
 export type EventProposersQueryQueryResult = Apollo.QueryResult<EventProposersQueryData, EventProposersQueryVariables>;
 export const TeamMembersMailingListQueryDocument = gql`
     query TeamMembersMailingListQuery {
-  convention: assertConvention {
-    id
+  convention: conventionByRequestHost {
+    id: transitionalId
     name
     mailing_lists {
       team_members {
@@ -226,8 +226,8 @@ export type TeamMembersMailingListQueryLazyQueryHookResult = ReturnType<typeof u
 export type TeamMembersMailingListQueryQueryResult = Apollo.QueryResult<TeamMembersMailingListQueryData, TeamMembersMailingListQueryVariables>;
 export const UsersWithPendingBioQueryDocument = gql`
     query UsersWithPendingBioQuery {
-  convention: assertConvention {
-    id
+  convention: conventionByRequestHost {
+    id: transitionalId
     name
     mailing_lists {
       users_with_pending_bio {
@@ -266,8 +266,8 @@ export type UsersWithPendingBioQueryLazyQueryHookResult = ReturnType<typeof useU
 export type UsersWithPendingBioQueryQueryResult = Apollo.QueryResult<UsersWithPendingBioQueryData, UsersWithPendingBioQueryVariables>;
 export const WaitlistMailingListsQueryDocument = gql`
     query WaitlistMailingListsQuery {
-  convention: assertConvention {
-    id
+  convention: conventionByRequestHost {
+    id: transitionalId
     name
     timezone_name
     mailing_lists {
@@ -277,11 +277,11 @@ export const WaitlistMailingListsQueryDocument = gql`
         }
         metadata_fields
         run {
-          id
+          id: transitionalId
           starts_at
           title_suffix
           event {
-            id
+            id: transitionalId
             title
           }
         }
@@ -319,8 +319,8 @@ export type WaitlistMailingListsQueryLazyQueryHookResult = ReturnType<typeof use
 export type WaitlistMailingListsQueryQueryResult = Apollo.QueryResult<WaitlistMailingListsQueryData, WaitlistMailingListsQueryVariables>;
 export const WhosFreeFormConventionQueryDocument = gql`
     query WhosFreeFormConventionQuery {
-  convention: assertConvention {
-    id
+  convention: conventionByRequestHost {
+    id: transitionalId
     name
     starts_at
     ends_at
@@ -358,8 +358,8 @@ export type WhosFreeFormConventionQueryLazyQueryHookResult = ReturnType<typeof u
 export type WhosFreeFormConventionQueryQueryResult = Apollo.QueryResult<WhosFreeFormConventionQueryData, WhosFreeFormConventionQueryVariables>;
 export const WhosFreeQueryDocument = gql`
     query WhosFreeQuery($start: Date!, $finish: Date!) {
-  convention: assertConvention {
-    id
+  convention: conventionByRequestHost {
+    id: transitionalId
     name
     mailing_lists {
       whos_free(start: $start, finish: $finish) {

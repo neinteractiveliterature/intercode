@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Events::EventUpdatedNotifier < Notifier
   attr_reader :event, :changes
 
@@ -12,12 +13,11 @@ class Events::EventUpdatedNotifier < Notifier
   end
 
   def destinations
-    staff_positions = convention.staff_positions
-      .where(name: ['GM Coordinator', 'GM Liaison']).to_a
-    staff_positions ||= StaffPosition.where(
-      id: Permission.for_model(convention).where(permission: 'update_events')
-        .select(:staff_position_id)
-    )
+    staff_positions = convention.staff_positions.where(name: ['GM Coordinator', 'GM Liaison']).to_a
+    staff_positions ||=
+      StaffPosition.where(
+        id: Permission.for_model(convention).where(permission: 'update_events').select(:staff_position_id)
+      )
 
     staff_positions
   end

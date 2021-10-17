@@ -14,7 +14,7 @@ export type DefaultEventSelectOptionType = DO<DQ>;
 export type EventSelectProps<
   DataType,
   OptionType extends OptionTypeBase,
-  IsMulti extends boolean
+  IsMulti extends boolean,
 > = Omit<
   GraphQLAsyncSelectProps<DataType, OptionType, IsMulti>,
   'isClearable' | 'getOptions' | 'getVariables' | 'getOptionValue' | 'formatOptionLabel' | 'query'
@@ -25,12 +25,12 @@ export type EventSelectProps<
 function EventSelect<
   IsMulti extends boolean = false,
   DataType extends DQ = DQ,
-  OptionType extends DO<DataType> = DO<DQ>
->({ eventsQuery, ...otherProps }: EventSelectProps<DataType, OptionType, IsMulti>) {
+  OptionType extends DO<DataType> = DO<DQ>,
+>({ eventsQuery, ...otherProps }: EventSelectProps<DataType, OptionType, IsMulti>): JSX.Element {
   return (
     <GraphQLAsyncSelect<DataType, OptionType>
       isClearable
-      getOptions={(data) => (data.convention?.events_paginated?.entries ?? []) as OptionType[]}
+      getOptions={(data) => data.convention.events_paginated.entries as OptionType[]}
       getVariables={(inputValue) => ({ title: inputValue })}
       getOptionValue={(option: OptionType) => option.id}
       getOptionLabel={(option: OptionType) => option.title}

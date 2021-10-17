@@ -245,7 +245,17 @@
     "ratings": {
       "clearButton": "",
       "favoriteButton": "",
+      "helpText": "",
       "hideButton": ""
+    },
+    "registrationPolicies": {
+      "disableNoPreference": "",
+      "enableNoPreference": "",
+      "noPreferenceDisabled": "",
+      "noPreferenceEnabled": "",
+      "noPreferenceHelpText": "",
+      "noPreferenceInapplicable": "",
+      "noPreferenceInapplicableHelpText": ""
     },
     "runCapacity": {
       "label": "",
@@ -583,6 +593,7 @@
     }
   },
   "signups": {
+    "noPreference": "",
     "noSignupsAvailable": "",
     "runCardText": {
       "confirmed": "",

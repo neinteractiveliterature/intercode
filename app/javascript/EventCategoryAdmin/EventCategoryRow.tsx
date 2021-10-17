@@ -1,32 +1,34 @@
 import { Link } from 'react-router-dom';
-import { ErrorDisplay, useConfirm, ButtonWithTooltip } from '@neinteractiveliterature/litform';
+import {
+  ErrorDisplay,
+  useConfirm,
+  ButtonWithTooltip,
+  useDeleteMutationWithReferenceArrayUpdater,
+} from '@neinteractiveliterature/litform';
 
-import { DeleteEventCategory } from './mutations';
-import { EventCategoryAdminQuery } from './queries';
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 import pluralizeWithCount from '../pluralizeWithCount';
-import { useDeleteMutation } from '../MutationUtils';
 import { EventCategoryAdminQueryData } from './queries.generated';
+import { useDeleteEventCategoryMutation } from './mutations.generated';
 
 export type EventCategoryRowProps = {
+  convention: EventCategoryAdminQueryData['convention'];
   eventCategory: EventCategoryAdminQueryData['convention']['event_categories'][0];
 };
 
-function EventCategoryRow({ eventCategory }: EventCategoryRowProps) {
+function EventCategoryRow({ convention, eventCategory }: EventCategoryRowProps): JSX.Element {
   const confirm = useConfirm();
-  const deleteEventCategory = useDeleteMutation(DeleteEventCategory, {
-    query: EventCategoryAdminQuery,
-    idVariablePath: ['id'],
-    arrayPath: ['convention', 'event_categories'],
-  });
+  const [deleteEventCategory] = useDeleteMutationWithReferenceArrayUpdater(
+    useDeleteEventCategoryMutation,
+    convention,
+    'event_categories',
+    (category) => ({ id: category.id }),
+  );
 
   return (
     <tr>
       <td>
-        <span
-          className="rounded p-1"
-          style={getEventCategoryStyles({ eventCategory, variant: 'default' })}
-        >
+        <span className="rounded p-1" style={getEventCategoryStyles({ eventCategory, variant: 'default' })}>
           {eventCategory.name}
         </span>{' '}
         <small>({pluralizeWithCount('event', eventCategory.events_paginated.total_entries)})</small>
@@ -40,8 +42,8 @@ function EventCategoryRow({ eventCategory }: EventCategoryRowProps) {
             }}
             tooltipContent={
               <>
-                This event category cannot be deleted because there are events in it. To delete it,
-                first either drop these events or change their categories.
+                This event category cannot be deleted because there are events in it. To delete it, first either drop
+                these events or change their categories.
               </>
             }
           >
@@ -56,10 +58,7 @@ function EventCategoryRow({ eventCategory }: EventCategoryRowProps) {
               confirm({
                 prompt: 'Are you sure you want to delete this event category?',
                 renderError: (error) => <ErrorDisplay graphQLError={error} />,
-                action: () =>
-                  deleteEventCategory({
-                    variables: { id: eventCategory.id },
-                  }),
+                action: () => deleteEventCategory(eventCategory),
               })
             }
           >

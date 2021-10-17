@@ -1,7 +1,12 @@
 import { useCallback, useMemo } from 'react';
 import { Redirect, useHistory } from 'react-router-dom';
 import { useApolloClient } from '@apollo/client';
-import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
+import {
+  ErrorDisplay,
+  PageLoadingIndicator,
+  useCreateMutationWithReferenceArrayUpdater,
+  useDeleteMutationWithReferenceArrayUpdater,
+} from '@neinteractiveliterature/litform';
 
 import useEventForm, { EventForm } from '../../EventAdmin/useEventForm';
 import useMEPTOMutations from '../../BuiltInFormControls/useMEPTOMutations';
@@ -12,7 +17,7 @@ import useValueUnless from '../../useValueUnless';
 import {
   useStandaloneEditEventQuery,
   StandaloneEditEventQueryData,
-  StandaloneEditEventQueryDocument,
+  StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFieldsFragmentDoc,
 } from './queries.generated';
 import deserializeFormResponse, { WithFormResponse } from '../../Models/deserializeFormResponse';
 import { CommonFormFieldsFragment } from '../../Models/commonFormFragments.generated';
@@ -22,9 +27,10 @@ import {
   useStandaloneDeleteMaximumEventProvidedTicketsOverrideMutation,
   useStandaloneUpdateEventMutation,
 } from './mutations.generated';
+import FourOhFourPage from '../../FourOhFourPage';
 
 export type StandaloneEditEventFormProps = {
-  initialEvent: WithFormResponse<StandaloneEditEventQueryData['event']>;
+  initialEvent: WithFormResponse<StandaloneEditEventQueryData['convention']['event']>;
   eventPath: string;
   eventForm: CommonFormFieldsFragment;
   convention: NonNullable<StandaloneEditEventQueryData['convention']>;
@@ -52,7 +58,7 @@ function StandaloneEditEventForm({
     await updateEventMutate({
       variables: {
         input: {
-          id: event.id,
+          transitionalId: event.id,
           event: {
             form_response_attrs_json: JSON.stringify(event.form_response_attrs),
           },
@@ -62,68 +68,26 @@ function StandaloneEditEventForm({
     await apolloClient.resetStore();
   }, [apolloClient, event, updateEventMutate]);
 
-  const [createMutate] = useStandaloneCreateMaximumEventProvidedTicketsOverrideMutation();
+  const [createMutate] = useCreateMutationWithReferenceArrayUpdater(
+    useStandaloneCreateMaximumEventProvidedTicketsOverrideMutation,
+    initialEvent,
+    'maximum_event_provided_tickets_overrides',
+    (data) => data.createMaximumEventProvidedTicketsOverride.maximum_event_provided_tickets_override,
+    StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFieldsFragmentDoc,
+    'StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFields',
+  );
   const [updateMutate] = useStandaloneUpdateMaximumEventProvidedTicketsOverrideMutation();
-  const [deleteMutate] = useStandaloneDeleteMaximumEventProvidedTicketsOverrideMutation();
+  const [deleteMutate] = useDeleteMutationWithReferenceArrayUpdater(
+    useStandaloneDeleteMaximumEventProvidedTicketsOverrideMutation,
+    initialEvent,
+    'maximum_event_provided_tickets_overrides',
+    (mepto) => ({ input: { transitionalId: mepto.id } }),
+  );
 
   const meptoMutations = useMEPTOMutations({
     createMutate,
     updateMutate,
     deleteMutate,
-    createUpdater: useCallback(
-      (store, updatedEventId, override) => {
-        const queryOptions = { variables: { eventId: initialEvent.id } };
-        const storeData = store.readQuery<StandaloneEditEventQueryData>({
-          query: StandaloneEditEventQueryDocument,
-          ...queryOptions,
-        });
-        if (!storeData) {
-          return;
-        }
-        store.writeQuery({
-          query: StandaloneEditEventQueryDocument,
-          ...queryOptions,
-          data: {
-            ...storeData,
-            event: {
-              ...storeData.event,
-              maximum_event_provided_tickets_overrides: [
-                ...storeData.event.maximum_event_provided_tickets_overrides,
-                override,
-              ],
-            },
-          },
-        });
-      },
-      [initialEvent.id],
-    ),
-    deleteUpdater: useCallback(
-      (store, id) => {
-        const queryOptions = { variables: { eventId: initialEvent.id } };
-        const storeData = store.readQuery<StandaloneEditEventQueryData>({
-          query: StandaloneEditEventQueryDocument,
-          ...queryOptions,
-        });
-        if (!storeData) {
-          return;
-        }
-        store.writeQuery({
-          query: StandaloneEditEventQueryDocument,
-          ...queryOptions,
-          data: {
-            ...storeData,
-            event: {
-              ...storeData.event,
-              maximum_event_provided_tickets_overrides:
-                storeData.event.maximum_event_provided_tickets_overrides.filter(
-                  (override) => override.id !== id,
-                ),
-            },
-          },
-        });
-      },
-      [initialEvent.id],
-    ),
   });
 
   return (
@@ -136,31 +100,30 @@ function StandaloneEditEventForm({
       }}
     >
       <EventForm {...eventFormProps} />
-      {currentAbility.can_override_maximum_event_provided_tickets &&
-        convention.ticket_mode !== 'disabled' && (
-          <MaximumEventProvidedTicketsOverrideEditor
-            {...meptoMutations}
-            ticketName={convention.ticket_name}
-            ticketTypes={convention.ticket_types}
-            // we use initialEvent here because we want it to be controlled by the query result
-            overrides={initialEvent.maximum_event_provided_tickets_overrides}
-            eventId={initialEvent.id}
-          />
-        )}
+      {currentAbility.can_override_maximum_event_provided_tickets && convention.ticket_mode !== 'disabled' && (
+        <MaximumEventProvidedTicketsOverrideEditor
+          {...meptoMutations}
+          ticketName={convention.ticket_name}
+          ticketTypes={convention.ticket_types}
+          // we use initialEvent here because we want it to be controlled by the query result
+          overrides={initialEvent.maximum_event_provided_tickets_overrides}
+          eventId={initialEvent.id}
+        />
+      )}
     </EditEvent>
   );
 }
 
 export type StandaloneEditEventProps = {
-  eventId: number;
+  eventId: string;
   eventPath: string;
 };
 
-function StandaloneEditEvent({ eventId, eventPath }: StandaloneEditEventProps) {
+function StandaloneEditEvent({ eventId, eventPath }: StandaloneEditEventProps): JSX.Element {
   const { data, loading, error } = useStandaloneEditEventQuery({ variables: { eventId } });
 
   const initialEvent = useMemo(
-    () => (error || loading || !data ? null : deserializeFormResponse(data.event)),
+    () => (error || loading || !data ? null : deserializeFormResponse(data.convention.event)),
     [error, loading, data],
   );
 
@@ -174,17 +137,21 @@ function StandaloneEditEvent({ eventId, eventPath }: StandaloneEditEventProps) {
     return <ErrorDisplay graphQLError={error} />;
   }
 
+  if (!data || !initialEvent) {
+    return <FourOhFourPage />;
+  }
+
   if (data && !data.currentAbility.can_update_event) {
     return <Redirect to="/" />;
   }
 
   return (
     <StandaloneEditEventForm
-      initialEvent={initialEvent!}
-      eventForm={data!.event.event_category.event_form}
-      convention={data!.convention!}
+      initialEvent={initialEvent}
+      eventForm={data.convention.event.event_category.event_form}
+      convention={data.convention}
       eventPath={eventPath}
-      currentAbility={data!.currentAbility}
+      currentAbility={data.currentAbility}
     />
   );
 }

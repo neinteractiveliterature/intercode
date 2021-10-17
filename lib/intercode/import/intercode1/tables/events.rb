@@ -9,9 +9,12 @@ class Intercode::Import::Intercode1::Tables::Events < Intercode::Import::Interco
   end
 
   def dataset
-    super.left_outer_join(:Bids, EventId: :EventId).select_all(:Events)
+    super
+      .left_outer_join(:Bids, EventId: :EventId)
+      .select_all(:Events)
       .select_append(:Status)
-      .where(Status: %w[Accepted Dropped]).or(SpecialEvent: 1)
+      .where(Status: %w[Accepted Dropped])
+      .or(SpecialEvent: 1)
   end
 
   private
@@ -46,11 +49,14 @@ class Intercode::Import::Intercode1::Tables::Events < Intercode::Import::Interco
 
   def con_mail_destination(row)
     case row[:ConMailDest].presence
-    when 'GameMail' then 'event_email'
-    when 'GMs' then 'gms'
+    when 'GameMail'
+      'event_email'
+    when 'GMs'
+      'gms'
     when nil
       row[:GameEMail].present? ? 'event_email' : 'gms'
-    else raise "Unknown ConMailDest value: #{row[:ConMailDest]}"
+    else
+      raise "Unknown ConMailDest value: #{row[:ConMailDest]}"
     end
   end
 
@@ -68,11 +74,16 @@ class Intercode::Import::Intercode1::Tables::Events < Intercode::Import::Interco
 
   def event_category_for_game_type(game_type)
     case game_type
-    when 'Board Game' then 'board_game'
-    when 'Panel' then 'panel'
-    when 'Tabletop RPG' then 'tabletop_rpg'
-    when 'Other' then nil
-    else 'larp'
+    when 'Board Game'
+      'board_game'
+    when 'Panel'
+      'panel'
+    when 'Tabletop RPG'
+      'tabletop_rpg'
+    when 'Other'
+      nil
+    else
+      'larp'
     end
   end
 
@@ -80,7 +91,7 @@ class Intercode::Import::Intercode1::Tables::Events < Intercode::Import::Interco
     return unless row[:SpecialEvent] == 1
 
     INTERCON_Q_PRECON_PREFIXES.each do |prefix|
-      return [prefix, Regexp.last_match(1)] if row[:Title] =~ /\A#{prefix}\s*[:-]\s*(.*)\z/
+      return prefix, Regexp.last_match(1) if row[:Title] =~ /\A#{prefix}\s*[:-]\s*(.*)\z/
     end
 
     nil
@@ -89,19 +100,11 @@ class Intercode::Import::Intercode1::Tables::Events < Intercode::Import::Interco
   def event_title(row)
     intercon_q_precon_event = parse_intercon_q_precon_event(row)
 
-    if intercon_q_precon_event
-      find_unique_title(intercon_q_precon_event[1])
-    else
-      find_unique_title(row[:Title])
-    end
+    intercon_q_precon_event ? find_unique_title(intercon_q_precon_event[1]) : find_unique_title(row[:Title])
   end
 
   def find_unique_title(title, iteration = 1)
-    title_plus_iteration = if iteration == 1
-      title
-    else
-      "#{title} [#{iteration}]"
-    end
+    title_plus_iteration = iteration == 1 ? title : "#{title} [#{iteration}]"
 
     return title_plus_iteration if @con.events.where(title: title_plus_iteration).none?
     raise "Too many iterations on title #{title}, giving up" if iteration >= 10
@@ -113,15 +116,19 @@ class Intercode::Import::Intercode1::Tables::Events < Intercode::Import::Interco
     return 'active' if row[:SpecialEvent]
 
     case row[:Status]
-    when 'Accepted' then 'active'
-    when 'Dropped' then 'dropped'
+    when 'Accepted'
+      'active'
+    when 'Dropped'
+      'dropped'
     end
   end
 
   def registration_policy(row, category)
     case category
-    when 'larp', 'volunteer_event' then @registration_policy_factory.registration_policy(row)
-    else RegistrationPolicy.unlimited
+    when 'larp', 'volunteer_event'
+      @registration_policy_factory.registration_policy(row)
+    else
+      RegistrationPolicy.unlimited
     end
   end
 end

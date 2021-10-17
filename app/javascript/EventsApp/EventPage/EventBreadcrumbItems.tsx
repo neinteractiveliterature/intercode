@@ -3,17 +3,13 @@ import { Link, useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { DateTime } from 'luxon';
 
-import {
-  ConventionForTimespanUtils,
-  getConventionDayTimespans,
-  timespanFromConvention,
-} from '../../TimespanUtils';
+import { ConventionForTimespanUtils, getConventionDayTimespans, timespanFromConvention } from '../../TimespanUtils';
 import RouteActivatedBreadcrumbItem from '../../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import AppRootContext from '../../AppRootContext';
 import { Run } from '../../graphqlTypes.generated';
 import { useConventionDayUrlPortion } from '../ScheduleGrid/ConventionDayTabContainer';
 
-function findRunFromHash<RunType extends { id: number }>(runs: RunType[], hash?: string | null) {
+function findRunFromHash<RunType extends { id: string }>(runs: RunType[], hash?: string | null) {
   if (!hash) {
     return undefined;
   }
@@ -40,7 +36,7 @@ function getConventionDayStart(
 export type EventBreadcrumbItemsProps = {
   event: {
     title?: string | null;
-    runs: Pick<Run, 'starts_at' | 'id'>[];
+    runs: (Pick<Run, 'starts_at'> & { id: string })[];
   };
   convention: ConventionForTimespanUtils;
   currentAbility: {
@@ -54,7 +50,7 @@ function EventBreadcrumbItems({
   convention,
   currentAbility,
   eventPath,
-}: EventBreadcrumbItemsProps) {
+}: EventBreadcrumbItemsProps): JSX.Element {
   const { t } = useTranslation();
   const { timezoneName } = useContext(AppRootContext);
   const history = useHistory();

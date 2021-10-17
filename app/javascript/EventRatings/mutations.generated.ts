@@ -5,19 +5,19 @@ import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
 export type RateEventMutationVariables = Types.Exact<{
-  eventId: Types.Scalars['Int'];
+  eventId: Types.Scalars['ID'];
   rating: Types.Scalars['Int'];
 }>;
 
 
-export type RateEventMutationData = { __typename: 'Mutation', rateEvent?: Types.Maybe<{ __typename: 'RateEventPayload', event: { __typename: 'Event', id: number, my_rating?: Types.Maybe<number> } }> };
+export type RateEventMutationData = { __typename: 'Mutation', rateEvent: { __typename: 'RateEventPayload', event: { __typename: 'Event', my_rating?: number | null | undefined, id: string } } };
 
 
 export const RateEventDocument = gql`
-    mutation RateEvent($eventId: Int!, $rating: Int!) {
-  rateEvent(input: {event_id: $eventId, rating: $rating}) {
+    mutation RateEvent($eventId: ID!, $rating: Int!) {
+  rateEvent(input: {transitionalEventId: $eventId, rating: $rating}) {
     event {
-      id
+      id: transitionalId
       my_rating
     }
   }

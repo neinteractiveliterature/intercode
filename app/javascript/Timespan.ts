@@ -80,7 +80,7 @@ class Timespan {
     this.finish = finish;
   }
 
-  tz(timezoneName: string) {
+  tz(timezoneName: string): Timespan {
     return new Timespan(
       this.start != null ? this.start.setZone(timezoneName) : null,
       this.finish != null ? this.finish.setZone(timezoneName) : null,
@@ -91,34 +91,34 @@ class Timespan {
     return isFinite(this);
   }
 
-  includesTime(time: DateTime) {
+  includesTime(time: DateTime): boolean {
     return (
       (this.start == null || this.start <= time) && (this.finish == null || this.finish > time)
     );
   }
 
-  includesTimespan(other: Timespan) {
+  includesTimespan(other: Timespan): boolean {
     return (
       (this.start == null || (other.start != null && this.start <= other.start)) &&
       (this.finish == null || (other.finish != null && this.finish >= other.finish))
     );
   }
 
-  overlapsTimespan(other: Timespan) {
+  overlapsTimespan(other: Timespan): boolean {
     return (
       (this.start == null || other.finish == null || this.start < other.finish) &&
       (this.finish == null || other.start == null || other.start < this.finish)
     );
   }
 
-  isSame(other: Timespan) {
+  isSame(other: Timespan): boolean {
     return (
       timesAreSameOrBothNull(this.start, other.start) &&
       timesAreSameOrBothNull(this.finish, other.finish)
     );
   }
 
-  intersection(other: Timespan) {
+  intersection(other: Timespan): Timespan | null {
     if (!this.overlapsTimespan(other)) {
       return null;
     }
@@ -129,28 +129,28 @@ class Timespan {
     );
   }
 
-  union(other: Timespan) {
+  union(other: Timespan): Timespan {
     return new Timespan(
       chooseAmong([this.start, other.start], preferNull(compareTimesAscending), true),
       chooseAmong([this.finish, other.finish], preferNull(compareTimesDescending), true),
     );
   }
 
-  expandStart(amount: DurationLike) {
+  expandStart(amount: DurationLike): Timespan {
     return new Timespan(this.start?.minus(amount), this.finish);
   }
 
-  expandFinish(amount: DurationLike) {
+  expandFinish(amount: DurationLike): Timespan {
     return new Timespan(this.start, this.finish?.plus(amount));
   }
 
-  expand(amount: DurationLike) {
+  expand(amount: DurationLike): Timespan {
     return new Timespan(this.start?.minus(amount), this.finish?.plus(amount));
   }
 
   expandedToFit = this.union;
 
-  getLength(unit: DurationUnit = 'milliseconds') {
+  getLength(unit: DurationUnit = 'milliseconds'): Duration | null {
     if (!this.isFinite()) {
       return null;
     }
@@ -159,7 +159,7 @@ class Timespan {
   }
 
   /** @deprecated */
-  humanizeStartInTimezone(timezoneName: string, t: TFunction, format?: DateTimeFormatKey) {
+  humanizeStartInTimezone(timezoneName: string, t: TFunction, format?: DateTimeFormatKey): string {
     if (this.start == null) {
       return formatLCM(DateTime.local(), getDateTimeFormat('anytime', t));
     }
@@ -173,7 +173,7 @@ class Timespan {
   }
 
   /** @deprecated */
-  humanizeFinishInTimezone(timezoneName: string, t: TFunction, format?: DateTimeFormatKey) {
+  humanizeFinishInTimezone(timezoneName: string, t: TFunction, format?: DateTimeFormatKey): string {
     if (this.finish == null) {
       return formatLCM(DateTime.local(), getDateTimeFormat('indefinitely', t));
     }
@@ -199,7 +199,7 @@ class Timespan {
     t: TFunction,
     startFormat?: DateTimeFormatKey,
     finishFormat?: DateTimeFormatKey,
-  ) {
+  ): string {
     if (this.start == null && this.finish == null) {
       return 'always';
     }
@@ -223,7 +223,7 @@ class Timespan {
   getTimeHopsWithin(
     timezoneName: string,
     { unit, offset = undefined, duration = undefined }: TimeHopOptions,
-  ) {
+  ): DateTime[] {
     if (!this.isFinite()) {
       throw new InfiniteTimespanError('getTimeHopsWithin called on an infinite timespan');
     }
@@ -247,6 +247,7 @@ class Timespan {
     timezoneName: string,
     { unit, offset = undefined, duration = undefined }: TimeHopOptions,
   ): FiniteTimespan[] {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const thisTimespan = this;
     if (!thisTimespan.isFinite()) {
       throw new InfiniteTimespanError('getTimespansWithin called on an infinite Timespan');
@@ -280,7 +281,7 @@ class Timespan {
       .map((timespan) => timespan.tz(timezoneName));
   }
 
-  clone() {
+  clone(): Timespan {
     return new Timespan(
       this.start != null ? this.start : null,
       this.finish != null ? this.finish : null,

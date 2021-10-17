@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # A category for events in a convention.  Each event in a convention must belong to a category.
 class EventCategoryDrop < Liquid::Drop
   # @api

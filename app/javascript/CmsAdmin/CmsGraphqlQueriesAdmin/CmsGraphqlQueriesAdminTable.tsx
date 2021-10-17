@@ -1,36 +1,32 @@
 import { Link } from 'react-router-dom';
-import { ErrorDisplay, useConfirm, PageLoadingIndicator } from '@neinteractiveliterature/litform';
+import {
+  ErrorDisplay,
+  useConfirm,
+  LoadQueryWrapper,
+  useDeleteMutationWithReferenceArrayUpdater,
+} from '@neinteractiveliterature/litform';
 
-import { CmsGraphqlQueriesQuery } from './queries';
-import { DeleteCmsGraphqlQuery } from './mutations';
 import usePageTitle from '../../usePageTitle';
-import { useDeleteMutation } from '../../MutationUtils';
 import { useCmsGraphqlQueriesQuery } from './queries.generated';
+import { useDeleteCmsGraphqlQuery } from './mutations.generated';
 
-function CmsGraphqlQueriesAdminTable() {
-  const { data, loading, error } = useCmsGraphqlQueriesQuery(); // lolcry
-  const deleteCmsGraphqlQuery = useDeleteMutation(DeleteCmsGraphqlQuery, {
-    query: CmsGraphqlQueriesQuery,
-    idVariablePath: ['id'],
-    arrayPath: ['cmsGraphqlQueries'],
-  });
+export default LoadQueryWrapper(useCmsGraphqlQueriesQuery, function CmsGraphqlQueriesAdminTable({ data }): JSX.Element {
+  const [deleteCmsGraphqlQuery] = useDeleteMutationWithReferenceArrayUpdater(
+    useDeleteCmsGraphqlQuery,
+    data.cmsParent,
+    'cmsGraphqlQueries',
+    (query) => ({ id: query.id }),
+  );
+
   const confirm = useConfirm();
 
   usePageTitle('CMS GraphQL Queries');
-
-  if (loading) {
-    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
 
   return (
     <>
       <table className="table table-striped">
         <tbody>
-          {data!.cmsGraphqlQueries.map((query) => (
+          {data.cmsParent.cmsGraphqlQueries.map((query) => (
             <tr key={query.id}>
               <td>
                 <code>{query.identifier}</code>
@@ -43,10 +39,7 @@ function CmsGraphqlQueriesAdminTable() {
               </td>
               <td className="text-end">
                 {query.current_ability_can_update ? (
-                  <Link
-                    to={`/cms_graphql_queries/${query.id}/edit`}
-                    className="btn btn-sm btn-secondary me-2"
-                  >
+                  <Link to={`/cms_graphql_queries/${query.id}/edit`} className="btn btn-sm btn-secondary me-2">
                     Edit
                   </Link>
                 ) : (
@@ -64,10 +57,7 @@ function CmsGraphqlQueriesAdminTable() {
                     onClick={() =>
                       confirm({
                         prompt: `Are you sure you want to delete the query '${query.identifier}'?`,
-                        action: () =>
-                          deleteCmsGraphqlQuery({
-                            variables: { id: query.id },
-                          }),
+                        action: () => deleteCmsGraphqlQuery(query),
                         renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
                       })
                     }
@@ -80,13 +70,11 @@ function CmsGraphqlQueriesAdminTable() {
           ))}
         </tbody>
       </table>
-      {data!.currentAbility.can_create_cms_graphql_queries && (
+      {data.currentAbility.can_create_cms_graphql_queries && (
         <Link to="/cms_graphql_queries/new" className="btn btn-primary">
           New GraphQL query
         </Link>
       )}
     </>
   );
-}
-
-export default CmsGraphqlQueriesAdminTable;
+});

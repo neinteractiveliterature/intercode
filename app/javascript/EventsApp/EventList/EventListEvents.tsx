@@ -27,7 +27,7 @@ function EventListEvents({
   sortBy,
   canReadSchedule,
   fetchMoreIfNeeded,
-}: EventListEventsProps) {
+}: EventListEventsProps): JSX.Element {
   const format = useAppDateTimeFormat();
   const { timezoneName } = useContext(AppRootContext);
   let previousConventionDay: FiniteTimespan | null = null;

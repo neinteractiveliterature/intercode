@@ -15,7 +15,7 @@ export type ScheduleGridAppProps = {
   configKey: string;
 };
 
-function ScheduleGridApp({ configKey }: ScheduleGridAppProps) {
+function ScheduleGridApp({ configKey }: ScheduleGridAppProps): JSX.Element {
   const { t } = useTranslation();
   const { myProfile, timezoneName, language } = useContext(AppRootContext);
   const config = getConfig(configKey);

@@ -4,13 +4,23 @@ import { humanize } from 'inflected';
 
 import ObjectDiffDisplay from './ObjectDiffDisplay';
 import { ParsedFormResponseChange } from './FormItemChangeUtils';
-import { RegistrationPolicyFormItem } from '../../FormAdmin/FormItemUtils';
+import { FormItemValueType, RegistrationPolicyFormItem } from '../../FormAdmin/FormItemUtils';
 
 export type RegistrationPolicyItemChangeDisplayProps = {
   change: ParsedFormResponseChange<RegistrationPolicyFormItem>;
 };
 
-function RegistrationPolicyItemChangeDisplay({ change }: RegistrationPolicyItemChangeDisplayProps) {
+function isEmptyObject<T>(value: T | Record<string, never>): value is T {
+  if (typeof value === 'object' && Object.keys(value).length === 0) {
+    return false;
+  }
+
+  return true;
+}
+
+function RegistrationPolicyItemChangeDisplay({
+  change,
+}: RegistrationPolicyItemChangeDisplayProps): JSX.Element {
   const { buckets: prevBuckets, ...otherPrev } = change.previous_value || {};
   const { buckets: newBuckets, ...otherNew } = change.new_value || {};
   const combinedBucketKeys = uniq([
@@ -24,7 +34,8 @@ function RegistrationPolicyItemChangeDisplay({ change }: RegistrationPolicyItemC
         {combinedBucketKeys.map((key) => (
           <Fragment key={key}>
             <dt className="col-sm-3">
-              {(change.new_value.buckets.find((b) => b.key === key) || {}).name}
+              {(change.new_value ?? change.previous_value)?.buckets.find((b) => b.key === key)
+                ?.name ?? key}
             </dt>
             <dd className="col-sm-9">
               <ObjectDiffDisplay
@@ -37,7 +48,11 @@ function RegistrationPolicyItemChangeDisplay({ change }: RegistrationPolicyItemC
           </Fragment>
         ))}
       </dl>
-      <ObjectDiffDisplay before={otherPrev} after={otherNew} renderKey={(key) => humanize(key)} />
+      <ObjectDiffDisplay<Omit<FormItemValueType<RegistrationPolicyFormItem>, 'buckets'>>
+        before={isEmptyObject(otherPrev) ? undefined : otherPrev}
+        after={isEmptyObject(otherNew) ? undefined : otherNew}
+        renderKey={(key) => humanize(key)}
+      />
     </div>
   );
 }

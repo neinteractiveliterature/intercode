@@ -7,7 +7,7 @@ export type AgeRestrictionsDisplayProps = {
   value: AgeRestrictionsValue;
 };
 
-function AgeRestrictionsDisplay(props: AgeRestrictionsDisplayProps) {
+function AgeRestrictionsDisplay(props: AgeRestrictionsDisplayProps): JSX.Element {
   const value = props.value || {};
 
   if (props.displayMode === 'public') {

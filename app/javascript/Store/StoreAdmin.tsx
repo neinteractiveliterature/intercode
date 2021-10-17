@@ -6,7 +6,7 @@ import OrderSummary from './OrderSummary';
 import ProductAdmin from './ProductAdmin';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 
-function StoreAdmin() {
+function StoreAdmin(): JSX.Element {
   const authorizationWarning = useAuthorizationRequired('can_read_orders');
   if (authorizationWarning) return authorizationWarning;
 

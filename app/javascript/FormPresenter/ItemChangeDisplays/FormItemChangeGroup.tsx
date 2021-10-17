@@ -15,10 +15,7 @@ function describeFormItem(item: TypedFormItem | undefined | null, itemIdentifier
     return item.admin_description;
   }
 
-  if (
-    item.rendered_properties &&
-    Object.prototype.hasOwnProperty.call(item.rendered_properties, 'caption')
-  ) {
+  if (item.rendered_properties && Object.prototype.hasOwnProperty.call(item.rendered_properties, 'caption')) {
     return (item.rendered_properties as { caption: string }).caption;
   }
 
@@ -30,7 +27,7 @@ export type FormItemChangeGroupProps = {
   changeGroup: FormResponseChangeGroup;
 };
 
-function FormItemChangeGroup({ convention, changeGroup }: FormItemChangeGroupProps) {
+function FormItemChangeGroup({ convention, changeGroup }: FormItemChangeGroupProps): JSX.Element {
   const timespan = useMemo(() => getTimespanForChangeGroup(changeGroup), [changeGroup]);
   const format = useAppDateTimeFormat();
 
@@ -46,12 +43,8 @@ function FormItemChangeGroup({ convention, changeGroup }: FormItemChangeGroupPro
           <Fragment key={change.id}>
             <dt>{describeFormItem(change.formItem, change.field_identifier)}</dt>
             <dd>
-              {change.formItem ? (
-                <FormItemChangeDisplay
-                  formItem={change.formItem}
-                  change={change}
-                  convention={convention}
-                />
+              {change.formItem && change.formItem ? (
+                <FormItemChangeDisplay formItem={change.formItem} change={change} convention={convention} />
               ) : (
                 <TextDiffDisplay
                   before={(change.previous_value ?? '').toString()}

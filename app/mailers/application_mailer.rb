@@ -1,8 +1,9 @@
+# frozen_string_literal: true
 class ApplicationMailer < ActionMailer::Base
   include AbsoluteUrls
 
   default(
-    from: "intercode@#{Rails.application.config.action_mailer.default_url_options.try(:[], :host)}",
+    :from => "intercode@#{Rails.application.config.action_mailer.default_url_options.try(:[], :host)}",
     'X-SES-CONFIGURATION-SET' => 'default'
   )
 
@@ -34,40 +35,33 @@ class ApplicationMailer < ActionMailer::Base
   def emails_for_destinations(destinations)
     destinations.flat_map do |destination|
       case destination
-      when UserConProfile then email_for_user_con_profile(destination)
-      when StaffPosition then emails_for_staff_position(destination)
-      when nil then []
-      else raise InvalidArgument, "Don't know how to send email to a #{destination.class}"
+      when UserConProfile
+        email_for_user_con_profile(destination)
+      when StaffPosition
+        emails_for_staff_position(destination)
+      when nil
+        []
+      else
+        raise InvalidArgument, "Don't know how to send email to a #{destination.class}"
       end
     end
   end
 
   def default_headers_from_notifier(notifier)
-    {
-      from: notifier.convention.email_from,
-      to: emails_for_destinations(notifier.destinations)
-    }
+    { from: notifier.convention.email_from, to: emails_for_destinations(notifier.destinations) }
   end
 
   def notification_mail(notifier, options = {})
     use_convention_timezone(notifier.convention) do
       render_results = notifier.render
 
-      mail(
-        subject: render_results[:subject],
-        **default_headers_from_notifier(notifier),
-        **options
-      ) do |format|
+      mail(subject: render_results[:subject], **default_headers_from_notifier(notifier), **options) do |format|
         format.html do
           @body_html = render_results[:body_html]
           render template: 'notifications/notification'
         end
 
-        if render_results[:body_text].present?
-          format.text do
-            render plain: render_results[:body_text]
-          end
-        end
+        format.text { render plain: render_results[:body_text] } if render_results[:body_text].present?
       end
     end
   end

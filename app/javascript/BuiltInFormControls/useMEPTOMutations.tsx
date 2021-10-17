@@ -1,91 +1,56 @@
 import { useCallback } from 'react';
-import { ApolloCache, MutationUpdaterFn } from '@apollo/client';
 import { MEPTOEditorProps } from './MaximumEventProvidedTicketsOverrideEditor';
 
-export type UseMEPTOMutationsProps<OverrideType> = {
+export type UseMEPTOMutationsProps = {
   createMutate: (options: {
     variables: {
       input: {
-        event_id: number;
-        ticket_type_id: number;
+        transitionalEventId: string;
+        transitionalTicketTypeId: string;
         override_value: number;
       };
     };
-
-    update: MutationUpdaterFn<{
-      __typename: any;
-      createMaximumEventProvidedTicketsOverride: {
-        __typename: any;
-        maximum_event_provided_tickets_override: OverrideType;
-      };
-    }>;
-  }) => Promise<any>;
+  }) => Promise<unknown>;
 
   updateMutate: (options: {
     variables: {
       input: {
-        id: number;
+        transitionalId: string;
         override_value: number;
       };
     };
-  }) => Promise<any>;
+  }) => Promise<unknown>;
 
-  deleteMutate: (options: {
-    variables: {
-      input: {
-        id: number;
-      };
-    };
-    update: (store: ApolloCache<any>) => void;
-  }) => Promise<any>;
-
-  createUpdater: (store: ApolloCache<any>, eventId: number, override: OverrideType) => void;
-  deleteUpdater: (store: ApolloCache<any>, id: number) => void;
+  deleteMutate: (mepto: Parameters<MEPTOMutations['deleteOverride']>[0]) => Promise<unknown>;
 };
 
-export type MEPTOMutations = Pick<
-  MEPTOEditorProps,
-  'createOverride' | 'updateOverride' | 'deleteOverride'
->;
+export type MEPTOMutations = Pick<MEPTOEditorProps, 'createOverride' | 'updateOverride' | 'deleteOverride'>;
 
-export default function useMEPTOMutations<OverrideType>({
+export default function useMEPTOMutations({
   createMutate,
   updateMutate,
   deleteMutate,
-  createUpdater,
-  deleteUpdater,
-}: UseMEPTOMutationsProps<OverrideType>): MEPTOMutations {
+}: UseMEPTOMutationsProps): MEPTOMutations {
   const createOverride: MEPTOMutations['createOverride'] = useCallback(
     ({ eventId, ticketTypeId, overrideValue }) =>
       createMutate({
         variables: {
           input: {
-            event_id: eventId,
-            ticket_type_id: ticketTypeId,
+            transitionalEventId: eventId,
+            transitionalTicketTypeId: ticketTypeId,
             override_value: overrideValue,
           },
         },
-
-        update: (store, { data }) => {
-          if (data) {
-            createUpdater(
-              store,
-              eventId,
-              data.createMaximumEventProvidedTicketsOverride
-                .maximum_event_provided_tickets_override,
-            );
-          }
-        },
       }),
-    [createMutate, createUpdater],
+    [createMutate],
   );
 
   const updateOverride: MEPTOMutations['updateOverride'] = useCallback(
-    ({ id, overrideValue }: { id: number; overrideValue: number }) =>
+    ({ id, overrideValue }: { id: string; overrideValue: number }) =>
       updateMutate({
         variables: {
           input: {
-            id,
+            transitionalId: id,
             override_value: overrideValue,
           },
         },
@@ -93,19 +58,7 @@ export default function useMEPTOMutations<OverrideType>({
     [updateMutate],
   );
 
-  const deleteOverride: MEPTOMutations['deleteOverride'] = useCallback(
-    (id: number) =>
-      deleteMutate({
-        variables: {
-          input: {
-            id,
-          },
-        },
-
-        update: (store) => deleteUpdater(store, id),
-      }),
-    [deleteMutate, deleteUpdater],
-  );
+  const deleteOverride: MEPTOMutations['deleteOverride'] = useCallback((mepto) => deleteMutate(mepto), [deleteMutate]);
 
   return { createOverride, deleteOverride, updateOverride };
 }

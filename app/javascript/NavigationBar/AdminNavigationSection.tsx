@@ -173,7 +173,7 @@ function useRootSiteAdminNavigationItems(): GeneratedNavigationItem[] {
   return items;
 }
 
-export function useAdminNavigationItems() {
+export function useAdminNavigationItems(): GeneratedNavigationItem[] {
   const { conventionName } = useContext(AppRootContext);
   const rootSiteItems = useRootSiteAdminNavigationItems();
   const conventionItems = useConventionAdminNavigationItems();
@@ -181,7 +181,7 @@ export function useAdminNavigationItems() {
   return conventionName ? conventionItems : rootSiteItems;
 }
 
-export default function AdminNavigationSection() {
+export default function AdminNavigationSection(): JSX.Element {
   const { t } = useTranslation();
   const items = useAdminNavigationItems();
   return (

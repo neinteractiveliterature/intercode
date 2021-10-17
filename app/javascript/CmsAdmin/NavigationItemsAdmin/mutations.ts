@@ -5,7 +5,7 @@ export const CreateNavigationItem = gql`
   mutation CreateNavigationItem($navigationItem: CmsNavigationItemInput!) {
     createCmsNavigationItem(input: { cms_navigation_item: $navigationItem }) {
       cms_navigation_item {
-        id
+        id: transitionalId
         ...AdminNavigationItemFields
       }
     }
@@ -15,10 +15,10 @@ export const CreateNavigationItem = gql`
 `;
 
 export const UpdateNavigationItem = gql`
-  mutation UpdateNavigationItem($id: Int!, $navigationItem: CmsNavigationItemInput!) {
-    updateCmsNavigationItem(input: { id: $id, cms_navigation_item: $navigationItem }) {
+  mutation UpdateNavigationItem($id: ID!, $navigationItem: CmsNavigationItemInput!) {
+    updateCmsNavigationItem(input: { transitionalId: $id, cms_navigation_item: $navigationItem }) {
       cms_navigation_item {
-        id
+        id: transitionalId
         ...AdminNavigationItemFields
       }
     }
@@ -28,10 +28,10 @@ export const UpdateNavigationItem = gql`
 `;
 
 export const DeleteNavigationItem = gql`
-  mutation DeleteNavigationItem($id: Int!) {
-    deleteCmsNavigationItem(input: { id: $id }) {
+  mutation DeleteNavigationItem($id: ID!) {
+    deleteCmsNavigationItem(input: { transitionalId: $id }) {
       cms_navigation_item {
-        id
+        id: transitionalId
       }
     }
   }

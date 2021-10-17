@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::CreateRoom < Mutations::BaseMutation
   field :room, Types::RoomType, null: false
 

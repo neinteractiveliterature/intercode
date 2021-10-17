@@ -3,7 +3,7 @@ import { CommonFormFields } from '../Models/commonFormFragments';
 
 export const EventProposalFields = gql`
   fragment EventProposalFields on EventProposal {
-    id
+    id: transitionalId
     title
     status
     form_response_attrs_json
@@ -11,17 +11,17 @@ export const EventProposalFields = gql`
     current_user_form_item_writer_role
 
     event_category {
-      id
+      id: transitionalId
       name
 
       event_proposal_form {
-        id
+        id: transitionalId
         ...CommonFormFields
 
         form_sections {
-          id
+          id: transitionalId
           form_items {
-            id
+            id: transitionalId
             admin_description
           }
         }
@@ -29,7 +29,7 @@ export const EventProposalFields = gql`
     }
 
     event {
-      id
+      id: transitionalId
     }
   }
 
@@ -38,7 +38,7 @@ export const EventProposalFields = gql`
 
 export const EventProposalFormData = gql`
   fragment EventProposalFormData on Convention {
-    id
+    id: transitionalId
     starts_at
     ends_at
     timezone_name
@@ -48,19 +48,19 @@ export const EventProposalFormData = gql`
 `;
 
 export const EventProposalQuery = gql`
-  query EventProposalQuery($eventProposalId: Int!) {
+  query EventProposalQuery($eventProposalId: ID!) {
     currentAbility {
-      can_delete_event_proposal(event_proposal_id: $eventProposalId)
+      can_delete_event_proposal(transitionalEventProposalId: $eventProposalId)
     }
 
-    convention: assertConvention {
-      id
+    convention: conventionByRequestHost {
+      id: transitionalId
       ...EventProposalFormData
-    }
 
-    eventProposal(id: $eventProposalId) {
-      id
-      ...EventProposalFields
+      event_proposal(transitionalId: $eventProposalId) {
+        id: transitionalId
+        ...EventProposalFields
+      }
     }
   }
 
@@ -69,28 +69,28 @@ export const EventProposalQuery = gql`
 `;
 
 export const EventProposalQueryWithOwner = gql`
-  query EventProposalQueryWithOwner($eventProposalId: Int!) {
-    convention: assertConvention {
-      id
+  query EventProposalQueryWithOwner($eventProposalId: ID!) {
+    convention: conventionByRequestHost {
+      id: transitionalId
       ...EventProposalFormData
-    }
 
-    eventProposal(id: $eventProposalId) {
-      id
-      ...EventProposalFields
+      event_proposal(transitionalId: $eventProposalId) {
+        id: transitionalId
+        ...EventProposalFields
 
-      owner {
-        id
-        name
-        email
-        gravatar_enabled
-        gravatar_url
+        owner {
+          id: transitionalId
+          name
+          email
+          gravatar_enabled
+          gravatar_url
+        }
       }
     }
 
     currentAbility {
-      can_update_event_proposal(event_proposal_id: $eventProposalId)
-      can_read_admin_notes_on_event_proposal(event_proposal_id: $eventProposalId)
+      can_update_event_proposal(transitionalEventProposalId: $eventProposalId)
+      can_read_admin_notes_on_event_proposal(transitionalEventProposalId: $eventProposalId)
     }
   }
 
@@ -99,62 +99,65 @@ export const EventProposalQueryWithOwner = gql`
 `;
 
 export const EventProposalAdminNotesQuery = gql`
-  query EventProposalAdminNotesQuery($eventProposalId: Int!) {
-    eventProposal(id: $eventProposalId) {
-      id
-      admin_notes
+  query EventProposalAdminNotesQuery($eventProposalId: ID!) {
+    convention: conventionByRequestHost {
+      id: transitionalId
+      event_proposal(transitionalId: $eventProposalId) {
+        id: transitionalId
+        admin_notes
+      }
     }
   }
 `;
 
 export const ProposeEventButtonQuery = gql`
   query ProposeEventButtonQuery {
-    myProfile {
-      id
+    convention: conventionByRequestHost {
+      id: transitionalId
 
-      user {
-        id
+      my_profile {
+        id: transitionalId
 
-        event_proposals {
-          id
-          title
-          status
-          created_at
+        user {
+          id: transitionalId
 
-          event_category {
-            id
-            name
-          }
+          event_proposals {
+            id: transitionalId
+            title
+            status
+            created_at
 
-          convention {
-            id
-            name
+            event_category {
+              id: transitionalId
+              name
+            }
+
+            convention {
+              id: transitionalId
+              name
+            }
           }
         }
       }
-    }
-
-    convention: assertConvention {
-      id
 
       departments {
-        id
+        id: transitionalId
         name
         proposal_description
 
         event_categories {
-          id
+          id: transitionalId
         }
       }
 
       event_categories {
-        id
+        id: transitionalId
         name
         proposable
         proposal_description
 
         department {
-          id
+          id: transitionalId
         }
       }
     }
@@ -162,18 +165,13 @@ export const ProposeEventButtonQuery = gql`
 `;
 
 export const EventProposalsAdminQuery = gql`
-  query EventProposalsAdminQuery(
-    $page: Int
-    $perPage: Int
-    $filters: EventProposalFiltersInput
-    $sort: [SortInput!]
-  ) {
-    convention: assertConvention {
-      id
+  query EventProposalsAdminQuery($page: Int, $perPage: Int, $filters: EventProposalFiltersInput, $sort: [SortInput!]) {
+    convention: conventionByRequestHost {
+      id: transitionalId
       timezone_name
 
       event_categories(current_ability_can_read_event_proposals: true) {
-        id
+        id: transitionalId
         name
         default_color
       }
@@ -185,7 +183,7 @@ export const EventProposalsAdminQuery = gql`
         per_page
 
         entries {
-          id
+          id: transitionalId
           title
           length_seconds
           status
@@ -193,7 +191,7 @@ export const EventProposalsAdminQuery = gql`
           updated_at
 
           event_category {
-            id
+            id: transitionalId
             name
             default_color
           }
@@ -205,7 +203,7 @@ export const EventProposalsAdminQuery = gql`
           }
 
           owner {
-            id
+            id: transitionalId
             name_inverted
             gravatar_enabled
             gravatar_url
@@ -217,52 +215,52 @@ export const EventProposalsAdminQuery = gql`
 `;
 
 export const EventProposalHistoryQuery = gql`
-  query EventProposalHistoryQuery($id: Int!) {
-    convention: assertConvention {
-      id
+  query EventProposalHistoryQuery($id: ID!) {
+    convention: conventionByRequestHost {
+      id: transitionalId
       starts_at
       ends_at
       timezone_name
       timezone_mode
-    }
 
-    eventProposal(id: $id) {
-      id
-      title
+      event_proposal(transitionalId: $id) {
+        id: transitionalId
+        title
 
-      owner {
-        id
-      }
+        owner {
+          id: transitionalId
+        }
 
-      event_category {
-        id
+        event_category {
+          id: transitionalId
 
-        event_proposal_form {
-          id
-          ...CommonFormFields
+          event_proposal_form {
+            id: transitionalId
+            ...CommonFormFields
 
-          form_sections {
-            id
+            form_sections {
+              id: transitionalId
 
-            form_items {
-              id
-              admin_description
+              form_items {
+                id: transitionalId
+                admin_description
+              }
             }
           }
         }
-      }
 
-      form_response_changes {
-        user_con_profile {
-          id
-          name_without_nickname
+        form_response_changes {
+          user_con_profile {
+            id: transitionalId
+            name_without_nickname
+          }
+
+          field_identifier
+          previous_value
+          new_value
+          created_at
+          updated_at
         }
-
-        field_identifier
-        previous_value
-        new_value
-        created_at
-        updated_at
       }
     }
   }

@@ -22,9 +22,7 @@ class Intercode::Import::Procon::Importer
       proposed_events_table
       events_table
       attendances_table
-    ].each do |importer|
-      send(importer).import!
-    end
+    ].each { |importer| send(importer).import! }
 
     expand_conventions
   end
@@ -53,50 +51,49 @@ class Intercode::Import::Procon::Importer
   end
 
   def conventions_table
-    @conventions_table ||= Intercode::Import::Procon::Tables::Conventions.new(
-      procon_connection,
-      convention_domain_regex,
-      organization
-    )
+    @conventions_table ||=
+      Intercode::Import::Procon::Tables::Conventions.new(procon_connection, convention_domain_regex, organization)
   end
 
   def people_table
-    @people_table ||= Intercode::Import::Procon::Tables::People.new(
-      procon_connection,
-      illyan_connection
-    )
+    @people_table ||= Intercode::Import::Procon::Tables::People.new(procon_connection, illyan_connection)
   end
 
   def convention_staff_attendances_table
-    @convention_staff_attendances_table ||= Intercode::Import::Procon::Tables::ConventionStaffAttendances.new( # rubocop:disable Metrics/LineLength
-      procon_connection,
-      conventions_table.id_map,
-      people_table.id_map
-    )
+    @convention_staff_attendances_table ||=
+      Intercode::Import::Procon::Tables::ConventionStaffAttendances.new(
+        # rubocop:disable Metrics/LineLength
+        procon_connection,
+        conventions_table.id_map,
+        people_table.id_map
+      )
   end
 
   def proposed_events_table
-    @proposed_events_table ||= Intercode::Import::Procon::Tables::ProposedEvents.new(
-      procon_connection,
-      conventions_table.id_map,
-      people_table.id_map
-    )
+    @proposed_events_table ||=
+      Intercode::Import::Procon::Tables::ProposedEvents.new(
+        procon_connection,
+        conventions_table.id_map,
+        people_table.id_map
+      )
   end
 
   def events_table
-    @events_table ||= Intercode::Import::Procon::Tables::Events.new(
-      procon_connection,
-      conventions_table.id_map,
-      proposed_events_table.id_map
-    )
+    @events_table ||=
+      Intercode::Import::Procon::Tables::Events.new(
+        procon_connection,
+        conventions_table.id_map,
+        proposed_events_table.id_map
+      )
   end
 
   def attendances_table
-    @attendances_table ||= Intercode::Import::Procon::Tables::Attendances.new(
-      procon_connection,
-      conventions_table.id_map,
-      people_table.id_map,
-      events_table.id_map
-    )
+    @attendances_table ||=
+      Intercode::Import::Procon::Tables::Attendances.new(
+        procon_connection,
+        conventions_table.id_map,
+        people_table.id_map,
+        events_table.id_map
+      )
   end
 end

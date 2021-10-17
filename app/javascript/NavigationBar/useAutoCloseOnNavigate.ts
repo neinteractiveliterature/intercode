@@ -7,7 +7,7 @@ type LocationType = ReturnType<typeof useLocation>;
 export default function useAutoCloseOnNavigate(
   setOpen: (open: boolean) => void,
   shouldAutoClose?: (prevLocation: LocationType, location: LocationType) => boolean,
-) {
+): void {
   const location = useLocation();
   const { visible: authenticationModalVisible } = useContext(AuthenticationModalContext);
   const prevLocation = useRef<LocationType>();

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AuthorizationInfo
   QUERY_MANAGER_CLASSES = [
     Queries::PermissionsQueryManager,
@@ -5,7 +6,7 @@ class AuthorizationInfo
     Queries::SignupQueryManager,
     Queries::TeamMemberQueryManager,
     Queries::UserConProfileQueryManager
-  ]
+  ].freeze
 
   module QueryMethods
     METHODS = AuthorizationInfo::QUERY_MANAGER_CLASSES.flat_map(&:query_methods)
@@ -26,14 +27,10 @@ class AuthorizationInfo
     instance_variable_name = query_manager_class.name.demodulize.underscore.to_sym
     attr_reader instance_variable_name
 
-    query_manager_class.query_methods.each do |query_method|
-      delegate query_method, to: instance_variable_name
-    end
+    query_manager_class.query_methods.each { |query_method| delegate query_method, to: instance_variable_name }
   end
 
-  def initialize(
-    user, doorkeeper_token, assumed_identity_from_profile: nil, known_user_con_profiles: []
-  )
+  def initialize(user, doorkeeper_token, assumed_identity_from_profile: nil, known_user_con_profiles: [])
     @user = user
     @assumed_identity_from_profile = assumed_identity_from_profile
     @doorkeeper_token = doorkeeper_token
@@ -57,9 +54,7 @@ class AuthorizationInfo
   end
 
   def oauth_scope?(scope)
-    unless Doorkeeper.configuration.scopes.include?(scope.to_s)
-      raise ArgumentError, "Invalid scope: #{scope}"
-    end
+    raise ArgumentError, "Invalid scope: #{scope}" unless Doorkeeper.configuration.scopes.include?(scope.to_s)
 
     doorkeeper_token.nil? || doorkeeper_token.scopes.exists?(scope)
   end
@@ -69,12 +64,6 @@ class AuthorizationInfo
   end
 
   def actual_user
-    @actual_user ||= begin
-      if assumed_identity_from_profile
-        assumed_identity_from_profile.user
-      else
-        user
-      end
-    end
+    @actual_user ||= assumed_identity_from_profile ? assumed_identity_from_profile.user : user
   end
 end

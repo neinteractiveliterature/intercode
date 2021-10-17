@@ -23,7 +23,7 @@ export type TimeblockPreferenceCellProps = {
   onChange: TimeblockPreferenceCellChangeCallback;
 };
 
-function TimeblockPreferenceCell(props: TimeblockPreferenceCellProps) {
+function TimeblockPreferenceCell(props: TimeblockPreferenceCellProps): JSX.Element {
   const { start, finish, timeblock, dayStart, existingPreferences, onChange } = props;
   const format = useAppDateTimeFormat();
 

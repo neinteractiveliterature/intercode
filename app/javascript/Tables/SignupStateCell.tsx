@@ -8,7 +8,7 @@ export type SignupStateCellProps = {
   strikeThrough?: boolean | null;
 };
 
-const SignupStateCell = ({ value, strikeThrough }: SignupStateCellProps) => {
+const SignupStateCell = ({ value, strikeThrough }: SignupStateCellProps): JSX.Element => {
   const { t } = useTranslation();
 
   let text: string | null | undefined = value;

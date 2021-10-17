@@ -80,7 +80,7 @@ export type TagDocProps = BaseTagDocProps & {
   prefix?: string;
 };
 
-function TagDoc({ tag, method, prefix }: TagDocProps) {
+function TagDoc({ tag, method, prefix }: TagDocProps): JSX.Element {
   if (tag.tag_name === 'example') {
     return <ExampleTagDoc tag={tag} />;
   }

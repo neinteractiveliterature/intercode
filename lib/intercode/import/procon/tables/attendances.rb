@@ -3,16 +3,18 @@ class Intercode::Import::Procon::Tables::Attendances < Intercode::Import::Procon
 
   after_create_record do |row, signup|
     if row[:is_staff]
-      signup.run.event.team_members.find_or_create_by!(
-        user_con_profile_id: signup.user_con_profile_id
-      ) do |team_member|
-        team_member.assign_attributes(
-          display: true,
-          show_email: false,
-          receive_con_email: true,
-          receive_signup_email: 'no'
-        )
-      end
+      signup
+        .run
+        .event
+        .team_members
+        .find_or_create_by!(user_con_profile_id: signup.user_con_profile_id) do |team_member|
+          team_member.assign_attributes(
+            display: true,
+            show_email: false,
+            receive_con_email: true,
+            receive_signup_email: 'no'
+          )
+        end
     end
   end
 
@@ -67,10 +69,7 @@ class Intercode::Import::Procon::Tables::Attendances < Intercode::Import::Procon
 
     if registration_policy.bucket_with_key(target_bucket_key).full?(run.signups)
       # try to use the flex bucket, if one exists
-      (
-        registration_policy.bucket_with_key('flex') ||
-        registration_policy.bucket_with_key(target_bucket_key)
-      ).key
+      (registration_policy.bucket_with_key('flex') || registration_policy.bucket_with_key(target_bucket_key)).key
     else
       target_bucket_key
     end

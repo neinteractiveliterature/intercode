@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import FakeEventRun from './FakeEventRun';
 
-function FullnessLegend() {
+function FullnessLegend(): JSX.Element {
   const { t } = useTranslation();
 
   return (
@@ -43,12 +43,13 @@ function FullnessLegend() {
                 unlimited: true,
                 label: t('schedule.legends.eventFullness.unlimited', 'Unlimited capacity'),
               },
-            ].map(({ label, availability, unlimited }) => (
+            ].map(({ className, label, availability, unlimited }) => (
               <FakeEventRun
                 classifyEventsBy="fullness"
                 eventCategory={{}}
                 availability={availability}
                 unlimited={unlimited}
+                key={className}
               >
                 {label}
               </FakeEventRun>

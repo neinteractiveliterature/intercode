@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import { gql } from '@apollo/client';
 import { NotificationTemplateFields } from './queries';
 
@@ -11,7 +10,7 @@ export const UpdateNotificationTemplate = gql`
       input: { event_key: $eventKey, notification_template: $notificationTemplate }
     ) {
       notification_template {
-        id
+        id: transitionalId
         ...NotificationTemplateFields
       }
     }

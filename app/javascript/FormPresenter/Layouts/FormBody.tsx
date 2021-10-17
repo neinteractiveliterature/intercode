@@ -6,11 +6,7 @@ import { formResponseValueIsCompleteIfRequired } from '../../Models/FormItem';
 import { ItemInteractionTrackerContext } from '../ItemInteractionTracker';
 import FormItemDisplay, { ConventionForFormItemDisplay } from '../ItemDisplays/FormItemDisplay';
 import { CommonFormItemFieldsFragment } from '../../Models/commonFormFragments.generated';
-import {
-  formItemVisibleTo,
-  formItemWriteableBy,
-  TypedFormItem,
-} from '../../FormAdmin/FormItemUtils';
+import { formItemVisibleTo, formItemWriteableBy, TypedFormItem } from '../../FormAdmin/FormItemUtils';
 import { FormResponse } from '../useFormResponse';
 import { FormItemRole, FormType } from '../../graphqlTypes.generated';
 
@@ -21,127 +17,120 @@ export type FormBodyProps = {
   formTypeIdentifier: FormType;
   formItems: TypedFormItem[];
   response: FormResponse;
-  responseValuesChanged: (newValues: any) => void;
+  responseValuesChanged: (newValues: Record<string, unknown>) => void;
   currentUserViewerRole: FormItemRole;
   currentUserWriterRole: FormItemRole;
   errors?: { [itemIdentifier: string]: string[] };
 };
 
 export type FormBodyImperativeHandle = {
-  scrollToItem: (item: CommonFormItemFieldsFragment) => void;
+  scrollToItem: (item: Pick<CommonFormItemFieldsFragment, 'identifier'>) => void;
 };
 
-const FormBody = forwardRef<FormBodyImperativeHandle | undefined, FormBodyProps>(
-  (
-    {
-      convention,
-      formItems,
-      formTypeIdentifier,
-      currentUserViewerRole,
-      currentUserWriterRole,
-      response,
-      responseValuesChanged,
-      errors,
+export default forwardRef<FormBodyImperativeHandle | undefined, FormBodyProps>(function FormBody(
+  {
+    convention,
+    formItems,
+    formTypeIdentifier,
+    currentUserViewerRole,
+    currentUserWriterRole,
+    response,
+    responseValuesChanged,
+    errors,
+  },
+  ref,
+) {
+  const itemElements = useRef(new Map<string, HTMLDivElement>()).current;
+  const { interactWithItem, hasInteractedWithItem } = useContext(ItemInteractionTrackerContext);
+
+  const responseValueChanged = useCallback(
+    (field, value) => {
+      responseValuesChanged({ [field]: value });
     },
-    ref,
-  ) => {
-    const itemElements = useRef(new Map<string, HTMLDivElement>()).current;
-    const { interactWithItem, hasInteractedWithItem } = useContext(ItemInteractionTrackerContext);
+    [responseValuesChanged],
+  );
 
-    const responseValueChanged = useCallback(
-      (field, value) => {
-        responseValuesChanged({ [field]: value });
-      },
-      [responseValuesChanged],
-    );
+  useImperativeHandle(ref, () => ({
+    scrollToItem: (item: Pick<CommonFormItemFieldsFragment, 'identifier'>) => {
+      const { identifier } = item;
+      if (!identifier) {
+        return;
+      }
 
-    useImperativeHandle(ref, () => ({
-      scrollToItem: (item: CommonFormItemFieldsFragment) => {
-        const { identifier } = item;
-        if (!identifier) {
-          return;
+      window.requestAnimationFrame(() => {
+        const itemElement = itemElements.get(identifier);
+        if (itemElement) {
+          itemElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      });
+    },
+  }));
+
+  return (
+    <div>
+      {formItems.map((item) => {
+        const itemErrors = item.identifier ? (errors || {})[item.identifier] || [] : [];
+        const errorsForDisplay = itemErrors.length > 0 ? itemErrors.join(', ') : null;
+
+        if (!formItemVisibleTo(item, currentUserViewerRole)) {
+          return <React.Fragment key={item.id} />;
         }
 
-        window.requestAnimationFrame(() => {
-          const itemElement = itemElements.get(identifier);
-          if (itemElement) {
-            itemElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        const value = item.identifier ? response.form_response_attrs[item.identifier] : null;
+
+        if (!formItemWriteableBy(item, currentUserWriterRole)) {
+          let caption: string | undefined;
+          if ('caption' in item.rendered_properties) {
+            caption = item.rendered_properties.caption;
           }
-        });
-      },
-    }));
-
-    return (
-      <div>
-        {formItems.map((item) => {
-          const itemErrors = item.identifier ? (errors || {})[item.identifier] || [] : [];
-          const errorsForDisplay = itemErrors.length > 0 ? itemErrors.join(', ') : null;
-
-          if (!formItemVisibleTo(item, currentUserViewerRole)) {
-            return <React.Fragment key={item.id} />;
-          }
-
-          const value = item.identifier ? response.form_response_attrs[item.identifier] : null;
-
-          if (!formItemWriteableBy(item, currentUserWriterRole)) {
-            let caption: string | undefined;
-            if ('caption' in item.rendered_properties) {
-              caption = item.rendered_properties.caption;
-            }
-            return (
-              <div className="mb-3">
-                {caption && <div className="form-label">{caption}</div>}
-                <VisibilityDisclosureCard formItem={item} formTypeIdentifier={formTypeIdentifier}>
-                  <FormItemDisplay
-                    key={item.id}
-                    convention={convention}
-                    displayMode="public"
-                    formItem={item}
-                    value={value}
-                  />
-                </VisibilityDisclosureCard>
-              </div>
-            );
-          }
-
           return (
-            <div
-              key={item.id} // identifier might be null but id won't
-              ref={(element) => {
-                if (!item.identifier) {
-                  return;
-                }
-
-                if (element == null) {
-                  itemElements.delete(item.identifier);
-                } else {
-                  itemElements.set(item.identifier, element);
-                }
-              }}
-            >
-              <FormItemInput
-                formItem={item}
-                formTypeIdentifier={formTypeIdentifier}
-                convention={convention}
-                valueInvalid={
-                  !!item.identifier &&
-                  hasInteractedWithItem(item.identifier) &&
-                  !formResponseValueIsCompleteIfRequired(
-                    item,
-                    response.form_response_attrs[item.identifier],
-                  )
-                }
-                value={value}
-                onChange={responseValueChanged}
-                onInteract={interactWithItem}
-              />
-              <ErrorDisplay stringError={errorsForDisplay} />
+            <div className="mb-3">
+              {caption && <div className="form-label">{caption}</div>}
+              <VisibilityDisclosureCard formItem={item} formTypeIdentifier={formTypeIdentifier}>
+                <FormItemDisplay
+                  key={item.id}
+                  convention={convention}
+                  displayMode="public"
+                  formItem={item}
+                  value={value}
+                />
+              </VisibilityDisclosureCard>
             </div>
           );
-        })}
-      </div>
-    );
-  },
-);
+        }
 
-export default FormBody;
+        return (
+          <div
+            key={item.id} // identifier might be null but id won't
+            ref={(element) => {
+              if (!item.identifier) {
+                return;
+              }
+
+              if (element == null) {
+                itemElements.delete(item.identifier);
+              } else {
+                itemElements.set(item.identifier, element);
+              }
+            }}
+          >
+            <FormItemInput
+              formItem={item}
+              formTypeIdentifier={formTypeIdentifier}
+              convention={convention}
+              valueInvalid={
+                !!item.identifier &&
+                hasInteractedWithItem(item.identifier) &&
+                !formResponseValueIsCompleteIfRequired(item, response.form_response_attrs[item.identifier])
+              }
+              value={value}
+              onChange={responseValueChanged}
+              onInteract={interactWithItem}
+            />
+            <ErrorDisplay stringError={errorsForDisplay} />
+          </div>
+        );
+      })}
+    </div>
+  );
+});

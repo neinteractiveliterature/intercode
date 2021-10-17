@@ -1,5 +1,12 @@
+# frozen_string_literal: true
 class Types::ProductVariantType < Types::BaseObject
-  field :id, Integer, null: false
+  field :id,
+        Integer,
+        deprecation_reason:
+          "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
+        null: false
+  field :transitional_id, ID, method: :id, null: false, camelize: true
   field :product, Types::ProductType, null: false
 
   association_loaders ProductVariant, :product
@@ -19,8 +26,7 @@ class Types::ProductVariantType < Types::BaseObject
     object.image&.url
   end
 
-  field :override_price, Types::MoneyType,
-    null: true, deprecation_reason: 'Use override_pricing_structure instead'
+  field :override_price, Types::MoneyType, null: true, deprecation_reason: 'Use override_pricing_structure instead'
   field :override_pricing_structure, Types::PricingStructureType, null: true
   field :position, Integer, null: true
 

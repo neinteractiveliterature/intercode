@@ -1,17 +1,12 @@
 import { useState, useCallback } from 'react';
-import {
-  sortByLocaleString,
-  ErrorDisplay,
-  PageLoadingIndicator,
-} from '@neinteractiveliterature/litform';
+import { sortByLocaleString, LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import AddVariableRow, { AddingVariable } from './AddVariableRow';
 import ExistingVariableRow from './ExistingVariableRow';
 import usePageTitle from '../../usePageTitle';
 import { useCmsVariablesQuery } from './queries.generated';
 
-function CmsVariablesAdmin() {
-  const { data, loading, error } = useCmsVariablesQuery();
+export default LoadQueryWrapper(useCmsVariablesQuery, function CmsVariablesAdmin({ data }): JSX.Element {
   const [addingVariables, setAddingVariables] = useState<AddingVariable[]>([]);
 
   const addVariable = useCallback(
@@ -54,15 +49,7 @@ function CmsVariablesAdmin() {
 
   usePageTitle('CMS Variables');
 
-  if (loading) {
-    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
-  const { cmsVariables } = data!;
+  const cmsVariables = data.cmsParent.cmsVariables;
 
   return (
     <table className="table">
@@ -75,7 +62,7 @@ function CmsVariablesAdmin() {
       </thead>
       <tbody>
         {sortByLocaleString(cmsVariables, (variable) => variable.key).map((variable) => (
-          <ExistingVariableRow variable={variable} key={variable.key} />
+          <ExistingVariableRow cmsParent={data.cmsParent} variable={variable} key={variable.key} />
         ))}
         {addingVariables.map((variable) => (
           <AddVariableRow
@@ -94,7 +81,7 @@ function CmsVariablesAdmin() {
           </tr>
         ) : null}
       </tbody>
-      {data!.currentAbility.can_create_cms_variables && (
+      {data.currentAbility.can_create_cms_variables && (
         <tfoot>
           <tr>
             <td colSpan={3}>
@@ -107,6 +94,4 @@ function CmsVariablesAdmin() {
       )}
     </table>
   );
-}
-
-export default CmsVariablesAdmin;
+});

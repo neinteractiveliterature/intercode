@@ -4,19 +4,19 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type LiquidAssignFieldsFragment = { __typename: 'LiquidAssign', name: string, drop_class_name: string, cms_variable_value_json?: Types.Maybe<string> };
+export type LiquidAssignFieldsFragment = { __typename: 'LiquidAssign', name: string, drop_class_name: string, cms_variable_value_json?: string | null | undefined };
 
 export type LiquidAssignsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type LiquidAssignsQueryData = { __typename: 'Query', liquidAssigns: Array<{ __typename: 'LiquidAssign', name: string, drop_class_name: string, cms_variable_value_json?: Types.Maybe<string> }> };
+export type LiquidAssignsQueryData = { __typename: 'Query', cmsParent: { __typename: 'Convention', id: string, liquidAssigns: Array<{ __typename: 'LiquidAssign', name: string, drop_class_name: string, cms_variable_value_json?: string | null | undefined }> } | { __typename: 'RootSite', id: string, liquidAssigns: Array<{ __typename: 'LiquidAssign', name: string, drop_class_name: string, cms_variable_value_json?: string | null | undefined }> } };
 
 export type NotifierLiquidAssignsQueryVariables = Types.Exact<{
   eventKey: Types.Scalars['String'];
 }>;
 
 
-export type NotifierLiquidAssignsQueryData = { __typename: 'Query', liquidAssigns: Array<{ __typename: 'LiquidAssign', name: string, drop_class_name: string, cms_variable_value_json?: Types.Maybe<string> }> };
+export type NotifierLiquidAssignsQueryData = { __typename: 'Query', cmsParent: { __typename: 'Convention', id: string, liquidAssigns: Array<{ __typename: 'LiquidAssign', name: string, drop_class_name: string, cms_variable_value_json?: string | null | undefined }> } };
 
 export const LiquidAssignFieldsFragmentDoc = gql`
     fragment LiquidAssignFields on LiquidAssign {
@@ -27,8 +27,11 @@ export const LiquidAssignFieldsFragmentDoc = gql`
     `;
 export const LiquidAssignsQueryDocument = gql`
     query LiquidAssignsQuery {
-  liquidAssigns {
-    ...LiquidAssignFields
+  cmsParent: cmsParentByRequestHost {
+    id: transitionalId
+    liquidAssigns {
+      ...LiquidAssignFields
+    }
   }
 }
     ${LiquidAssignFieldsFragmentDoc}`;
@@ -61,8 +64,11 @@ export type LiquidAssignsQueryLazyQueryHookResult = ReturnType<typeof useLiquidA
 export type LiquidAssignsQueryQueryResult = Apollo.QueryResult<LiquidAssignsQueryData, LiquidAssignsQueryVariables>;
 export const NotifierLiquidAssignsQueryDocument = gql`
     query NotifierLiquidAssignsQuery($eventKey: String!) {
-  liquidAssigns: notifierLiquidAssigns(eventKey: $eventKey) {
-    ...LiquidAssignFields
+  cmsParent: conventionByRequestHost {
+    id: transitionalId
+    liquidAssigns: notifier_liquid_assigns(eventKey: $eventKey) {
+      ...LiquidAssignFields
+    }
   }
 }
     ${LiquidAssignFieldsFragmentDoc}`;

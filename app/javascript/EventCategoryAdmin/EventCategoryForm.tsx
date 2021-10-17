@@ -17,13 +17,7 @@ import ColorPicker from '../ColorPicker';
 import FakeEventRun, { FakeEventRunProps } from '../EventsApp/ScheduleGrid/FakeEventRun';
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
 import SignupStatusBadge from '../EventsApp/ScheduleGrid/SignupStatusBadge';
-import {
-  Department,
-  EventCategory,
-  Form,
-  SchedulingUi,
-  TicketMode,
-} from '../graphqlTypes.generated';
+import { Department, EventCategory, Form, SchedulingUi, TicketMode } from '../graphqlTypes.generated';
 import { SignupStatus } from '../EventsApp/ScheduleGrid/StylingUtils';
 
 export type EventCategoryForForm = Pick<
@@ -37,9 +31,9 @@ export type EventCategoryForForm = Pick<
   | 'can_provide_tickets'
 > & {
   scheduling_ui?: EventCategory['scheduling_ui'] | null;
-  department?: Pick<Department, 'id' | 'name'> | null;
-  event_form?: Pick<Form, 'id' | 'title' | 'form_type'> | null;
-  event_proposal_form?: Pick<Form, 'id' | 'title' | 'form_type'> | null;
+  department?: (Pick<Department, 'name'> & { id: string }) | null;
+  event_form?: (Pick<Form, 'title' | 'form_type'> & { id: string }) | null;
+  event_proposal_form?: (Pick<Form, 'title' | 'form_type'> & { id: string }) | null;
 };
 
 function autogenerateColors<T extends EventCategoryForForm>(eventCategory: T) {
@@ -56,29 +50,19 @@ function autogenerateColors<T extends EventCategoryForForm>(eventCategory: T) {
   return {
     ...eventCategory,
     full_color: fullColor.toRgbString(),
-    signed_up_color:
-      signedUpColor.getAlpha() === 1.0 ? signedUpColor.toHexString() : signedUpColor.toRgbString(),
+    signed_up_color: signedUpColor.getAlpha() === 1.0 ? signedUpColor.toHexString() : signedUpColor.toRgbString(),
   };
 }
 
 type EventColorPickerProps = {
   variant: 'default' | 'full' | 'signed_up';
-  eventRunProps: Omit<
-    FakeEventRunProps,
-    'withRef' | 'onClick' | 'eventCategory' | 'availability' | 'children'
-  >;
+  eventRunProps: Omit<FakeEventRunProps, 'withRef' | 'onClick' | 'eventCategory' | 'availability' | 'children'>;
   eventCategory: EventCategoryForForm;
   color: string | null | undefined;
   setColor: React.Dispatch<string>;
 };
 
-function EventColorPicker({
-  variant,
-  eventRunProps,
-  eventCategory,
-  color,
-  setColor,
-}: EventColorPickerProps) {
+function EventColorPicker({ variant, eventRunProps, eventCategory, color, setColor }: EventColorPickerProps) {
   const [dropdownButton, setDropdownButton] = useState<HTMLDivElement | null>(null);
   const [tooltip, setTooltip] = useState<HTMLDivElement | null>(null);
   const [arrow, setArrow] = useState<HTMLSpanElement | null>(null);
@@ -141,7 +125,7 @@ function EventCategoryForm<T extends EventCategoryForForm>({
   disabled,
   ticketName,
   ticketMode,
-}: EventCategoryFormProps<T>) {
+}: EventCategoryFormProps<T>): JSX.Element {
   const [
     setName,
     setTeamMemberName,
@@ -171,13 +155,7 @@ function EventCategoryForm<T extends EventCategoryForForm>({
 
   return (
     <>
-      <BootstrapFormInput
-        name="name"
-        label="Name"
-        value={value.name}
-        onTextChange={setName}
-        disabled={disabled}
-      />
+      <BootstrapFormInput name="name" label="Name" value={value.name} onTextChange={setName} disabled={disabled} />
 
       <BootstrapFormInput
         name="team_member_name"
@@ -233,26 +211,28 @@ function EventCategoryForm<T extends EventCategoryForForm>({
         <legend className="col-form-label">Colors</legend>
 
         <div className="d-flex flex-wrap">
-          {([
-            {
-              variant: 'default',
-              color: value.default_color,
-              setColor: setDefaultColor,
-              eventRunProps: {},
-            },
-            {
-              variant: 'signed_up',
-              color: value.signed_up_color,
-              setColor: setSignedUpColor,
-              eventRunProps: { signupStatus: SignupStatus.Confirmed },
-            },
-            {
-              variant: 'full',
-              color: value.full_color,
-              setColor: setFullColor,
-              eventRunProps: { runFull: true },
-            },
-          ] as const).map(({ variant, color, setColor, eventRunProps }) => (
+          {(
+            [
+              {
+                variant: 'default',
+                color: value.default_color,
+                setColor: setDefaultColor,
+                eventRunProps: {},
+              },
+              {
+                variant: 'signed_up',
+                color: value.signed_up_color,
+                setColor: setSignedUpColor,
+                eventRunProps: { signupStatus: SignupStatus.Confirmed },
+              },
+              {
+                variant: 'full',
+                color: value.full_color,
+                setColor: setFullColor,
+                eventRunProps: { runFull: true },
+              },
+            ] as const
+          ).map(({ variant, color, setColor, eventRunProps }) => (
             <EventColorPicker
               key={variant}
               variant={variant}
@@ -290,9 +270,7 @@ function EventCategoryForm<T extends EventCategoryForForm>({
         getOptionValue={(option) => option?.id.toString() ?? ''}
         getOptionLabel={(option) => option?.title ?? ''}
         value={value.event_proposal_form}
-        onChange={(newValue: T['event_proposal_form'] | null | undefined) =>
-          setEventProposalForm(newValue)
-        }
+        onChange={(newValue: T['event_proposal_form'] | null | undefined) => setEventProposalForm(newValue)}
         disabled={disabled}
         isClearable
       />

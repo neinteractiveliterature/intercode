@@ -1,10 +1,6 @@
 module Intercode::Import::Illyan::PasswordMigration
   def set_user_password_if_required(user, illyan_row)
-    if user_has_password?(user)
-      true
-    else
-      set_user_password(user, illyan_row)
-    end
+    user_has_password?(user) ? true : set_user_password(user, illyan_row)
   end
 
   def set_user_password(user, illyan_row)
@@ -25,10 +21,6 @@ module Intercode::Import::Illyan::PasswordMigration
   end
 
   def user_has_password?(user)
-    (
-      user.encrypted_password.present? ||
-      user.legacy_password_md5.present? ||
-      user.legacy_password_sha1.present?
-    )
+    (user.encrypted_password.present? || user.legacy_password_md5.present? || user.legacy_password_sha1.present?)
   end
 end

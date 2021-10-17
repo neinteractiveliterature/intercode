@@ -30,10 +30,7 @@ module Intercode
           # invalid
           return 'Invalid location' unless component_props[:center].present?
 
-          render_low_level_component_tag(
-            component_name(context),
-            merge_controller_props(context, component_props)
-          )
+          render_low_level_component_tag(component_name(context), merge_controller_props(context, component_props))
         end
 
         def component_name(_context)
@@ -44,11 +41,7 @@ module Intercode
           location = context.evaluate(value_expression)
           height = height_expression ? context.evaluate(height_expression) : nil
 
-          {
-            center: location['center'],
-            markerLocation: location['center'],
-            height: height
-          }
+          { center: location['center'], markerLocation: location['center'], height: height }
         end
       end
     end

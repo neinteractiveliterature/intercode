@@ -1,5 +1,5 @@
 import { Fragment, useMemo, useContext, ReactNode } from 'react';
-// @ts-ignore
+// @ts-expect-error inflected type definitions don't export capitalize
 import { capitalize } from 'inflected';
 import { Link } from 'react-router-dom';
 import { SortingRule } from 'react-table';
@@ -87,18 +87,16 @@ function teamIsAllAuthors(author?: string, teamMembers?: EventType['team_members
 
 export type EventCardProps = {
   event: EventType;
-  sortBy?: SortingRule<
-    NonNullable<EventListEventsQueryData['convention']>['events_paginated']['entries'][number]
-  >[];
+  sortBy?: SortingRule<NonNullable<EventListEventsQueryData['convention']>['events_paginated']['entries'][number]>[];
   canReadSchedule?: boolean;
 };
 
-const EventCard = ({ event, sortBy, canReadSchedule }: EventCardProps) => {
+function EventCard({ event, sortBy, canReadSchedule }: EventCardProps): JSX.Element {
   const { timezoneName } = useContext(AppRootContext);
   const format = useAppDateTimeFormat();
   const formatRunTime = useFormatRunTime();
   const { myProfile } = useContext(AppRootContext);
-  const formResponse = JSON.parse(event.form_response_attrs_json);
+  const formResponse = event.form_response_attrs_json ? JSON.parse(event.form_response_attrs_json) : {};
   const metadataItems: { key: string; content: ReactNode }[] = [];
   const rateEvent = useRateEvent();
 
@@ -138,11 +136,7 @@ const EventCard = ({ event, sortBy, canReadSchedule }: EventCardProps) => {
   }
 
   if (formResponse.author && !teamIsAllAuthors(formResponse.author, event.team_members)) {
-    const authorDescription = pluralizeWithCount(
-      'Author',
-      formResponse.author.split(/(,|;| and )/).length,
-      true,
-    );
+    const authorDescription = pluralizeWithCount('Author', formResponse.author.split(/(,|;| and )/).length, true);
     metadataItems.push({
       key: 'author',
       content: (
@@ -203,10 +197,7 @@ const EventCard = ({ event, sortBy, canReadSchedule }: EventCardProps) => {
               <p className="m-0">
                 <strong>
                   Added{' '}
-                  {format(
-                    DateTime.fromISO(event.created_at, { zone: timezoneName }),
-                    'longWeekdayDateTimeWithZone',
-                  )}
+                  {format(DateTime.fromISO(event.created_at, { zone: timezoneName }), 'longWeekdayDateTimeWithZone')}
                 </strong>
               </p>
             )
@@ -220,6 +211,6 @@ const EventCard = ({ event, sortBy, canReadSchedule }: EventCardProps) => {
       />
     </div>
   );
-};
+}
 
 export default EventCard;

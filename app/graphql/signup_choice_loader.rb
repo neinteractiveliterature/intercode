@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class SignupChoiceLoader < GraphQL::Batch::Loader
   def perform(keys)
     signups_by_user_con_profile_id = load_signups_by_user_con_profile_id(keys)
@@ -12,9 +13,9 @@ class SignupChoiceLoader < GraphQL::Batch::Loader
   private
 
   def load_signups_by_user_con_profile_id(keys)
-    Signup.where(
-      counted: true,
-      user_con_profile_id: keys.map(&:user_con_profile_id).uniq
-    ).group_by(&:user_con_profile_id).transform_values { |signups| signups.sort_by(&:created_at) }
+    Signup
+      .where(counted: true, user_con_profile_id: keys.map(&:user_con_profile_id).uniq)
+      .group_by(&:user_con_profile_id)
+      .transform_values { |signups| signups.sort_by(&:created_at) }
   end
 end

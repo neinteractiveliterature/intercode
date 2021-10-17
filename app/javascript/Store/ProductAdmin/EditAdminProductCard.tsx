@@ -29,30 +29,24 @@ export type EditAdminProductCardProps = {
   ticketTypes: AdminProductsQueryData['convention']['ticket_types'];
 };
 
-function EditAdminProductCard({ initialProduct, close, ticketTypes }: EditAdminProductCardProps) {
+function EditAdminProductCard({ initialProduct, close, ticketTypes }: EditAdminProductCardProps): JSX.Element {
   const { ticketName } = useContext(AppRootContext);
   const [createProduct] = useCreateProductMutation();
   const [updateProduct] = useUpdateProductMutation();
   const [product, setProduct] = useState(initialProduct);
-  const [
-    setAvailable,
-    setDescription,
-    setName,
-    setPaymentOptions,
-    setPricingStructure,
-    setProductVariants,
-  ] = usePropertySetters(
-    setProduct,
-    'available',
-    'description',
-    'name',
-    'payment_options',
-    'pricing_structure',
-    'product_variants',
-  );
+  const [setAvailable, setDescription, setName, setPaymentOptions, setPricingStructure, setProductVariants] =
+    usePropertySetters(
+      setProduct,
+      'available',
+      'description',
+      'name',
+      'payment_options',
+      'pricing_structure',
+      'product_variants',
+    );
 
   const imageChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files![0];
+    const file = (event.target.files ?? [])[0];
     if (!file) {
       return;
     }
@@ -72,7 +66,7 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }: EditAdminP
     reader.readAsDataURL(file);
   };
 
-  const deleteVariant = (variantId: number) => {
+  const deleteVariant = (variantId: string) => {
     setProduct((prevEditingProduct) => ({
       ...prevEditingProduct,
       delete_variant_ids: [...prevEditingProduct.delete_variant_ids, variantId],
@@ -212,9 +206,7 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }: EditAdminP
 
         <div className="d-lg-flex justify-content-lg-start align-items-lg-start">
           <div className="d-flex flex-column align-items-center">
-            {product.image_url && (
-              <img src={product.image_url} style={{ maxWidth: '200px' }} alt={product.name} />
-            )}
+            {product.image_url && <img src={product.image_url} style={{ maxWidth: '200px' }} alt={product.name} />}
             <div className="mt-2" style={{ width: '220px' }}>
               <label className="form-label" htmlFor={imageInputId}>
                 Choose image...

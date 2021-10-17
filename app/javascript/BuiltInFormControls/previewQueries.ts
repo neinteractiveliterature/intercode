@@ -2,18 +2,27 @@ import { gql } from '@apollo/client';
 
 export const PreviewLiquidQuery = gql`
   query PreviewLiquidQuery($liquid: String!) {
-    previewLiquid(content: $liquid)
+    cmsParent: cmsParentByRequestHost {
+      id: transitionalId
+      previewLiquid(content: $liquid)
+    }
   }
 `;
 
 export const PreviewMarkdownQuery = gql`
   query PreviewMarkdownQuery($markdown: String!) {
-    previewMarkdown(markdown: $markdown)
+    cmsParent: cmsParentByRequestHost {
+      id: transitionalId
+      previewMarkdown(markdown: $markdown)
+    }
   }
 `;
 
 export const PreviewNotifierLiquidQuery = gql`
   query PreviewNotifierLiquidQuery($eventKey: String!, $liquid: String!) {
-    previewLiquid: previewNotifierLiquid(eventKey: $eventKey, content: $liquid)
+    convention: conventionByRequestHost {
+      id: transitionalId
+      previewLiquid: preview_notifier_liquid(eventKey: $eventKey, content: $liquid)
+    }
   }
 `;

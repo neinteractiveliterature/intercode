@@ -4,11 +4,12 @@ import { Filters, SortingRule } from 'react-table';
 
 import { FieldFilterCodecs } from './FilterUtils';
 
-export type UseReactRouterReactTableOptions<RowType extends object> = Partial<FieldFilterCodecs> & {
-  defaultState?: Partial<ReactRouterReactTableState<RowType>>;
-};
+export type UseReactRouterReactTableOptions<RowType extends Record<string, unknown>> =
+  Partial<FieldFilterCodecs> & {
+    defaultState?: Partial<ReactRouterReactTableState<RowType>>;
+  };
 
-export type ReactRouterReactTableState<RowType extends object> = {
+export type ReactRouterReactTableState<RowType extends Record<string, unknown>> = {
   page: number;
   filters: Filters<RowType>;
   sortBy: SortingRule<RowType>[];
@@ -18,11 +19,16 @@ function identityCodec(field: string, value: string): string {
   return value;
 }
 
-export default function useReactRouterReactTable<RowType extends object>({
+export default function useReactRouterReactTable<RowType extends Record<string, unknown>>({
   defaultState,
   encodeFilterValue,
   decodeFilterValue,
-}: UseReactRouterReactTableOptions<RowType>) {
+}: UseReactRouterReactTableOptions<RowType>): {
+  page: number;
+  filters: Filters<RowType>;
+  sortBy: SortingRule<RowType>[];
+  updateSearch: (state: Partial<ReactRouterReactTableState<RowType>>) => void;
+} {
   const history = useHistory();
   const encode = useMemo(() => encodeFilterValue ?? identityCodec, [encodeFilterValue]);
   const decode = useMemo(() => decodeFilterValue ?? identityCodec, [decodeFilterValue]);
@@ -111,10 +117,10 @@ export default function useReactRouterReactTable<RowType extends object>({
     [decodeSearchParams, encodeSearchParams, history],
   );
 
-  const tableState = useMemo(() => decodeSearchParams(history.location.search), [
-    decodeSearchParams,
-    history.location.search,
-  ]);
+  const tableState = useMemo(
+    () => decodeSearchParams(history.location.search),
+    [decodeSearchParams, history.location.search],
+  );
 
   return useMemo(
     () => ({

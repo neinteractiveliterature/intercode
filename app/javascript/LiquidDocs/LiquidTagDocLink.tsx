@@ -8,7 +8,7 @@ export type LiquidTagDocLinkProps = {
   liquidTag: YardClass;
 };
 
-function LiquidTagDocLink({ liquidTag }: LiquidTagDocLinkProps) {
+function LiquidTagDocLink({ liquidTag }: LiquidTagDocLinkProps): JSX.Element {
   const location = useLocation();
   const liquidTagName = findLiquidTagName(liquidTag);
 

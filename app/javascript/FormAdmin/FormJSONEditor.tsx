@@ -7,18 +7,17 @@ import {
   BootstrapFormSelect,
   CodeInput,
   useStandardCodeMirror,
+  useCreateMutationWithReferenceArrayUpdater,
 } from '@neinteractiveliterature/litform';
 import { useTranslation } from 'react-i18next';
 import { json as jsonExtension } from '@codemirror/lang-json';
 
-import { CreateFormWithJSON } from './mutations';
-import { FormAdminQuery } from './queries';
 import useAsyncFunction from '../useAsyncFunction';
-import { useCreateMutation } from '../MutationUtils';
 import usePageTitle from '../usePageTitle';
-import { useFormAdminQuery } from './queries.generated';
+import { FormFieldsFragmentDoc, useFormAdminQuery } from './queries.generated';
 import { LoadSingleValueFromCollectionWrapper } from '../GraphqlLoadingWrappers';
-import { useUpdateFormWithJsonMutation } from './mutations.generated';
+import { useCreateFormWithJsonMutation, useUpdateFormWithJsonMutation } from './mutations.generated';
+import { FormType } from '../graphqlTypes.generated';
 
 type EditingFormJSONData = {
   title: string;
@@ -27,7 +26,10 @@ type EditingFormJSONData = {
 };
 
 function formDataFromJSON(json: string): EditingFormJSONData {
-  const { title, sections } = JSON.parse(json) as { title: string; sections: any };
+  const { title, sections } = JSON.parse(json) as {
+    title: string;
+    sections: unknown;
+  };
   return {
     title,
     sectionsJSON: JSON.stringify(sections, null, '  '),
@@ -36,35 +38,34 @@ function formDataFromJSON(json: string): EditingFormJSONData {
 
 export default LoadSingleValueFromCollectionWrapper(
   useFormAdminQuery,
-  (data, id) => data.convention.forms.find((form) => form.id.toString(10) === id),
-  function FormJSONEditor({ value: initialForm }) {
+  (data, id) => data.convention.forms.find((form) => form.id === id),
+  function FormJSONEditor({ value: initialForm, data }) {
     const history = useHistory();
-    const initialFormData = useMemo(
-      () => formDataFromJSON(initialForm.export_json),
-      [initialForm.export_json],
-    );
+    const initialFormData = useMemo(() => formDataFromJSON(initialForm.export_json), [initialForm.export_json]);
     const [form, setForm] = useState(initialFormData);
-    const [createForm, createError, createInProgress] = useAsyncFunction(
-      useCreateMutation(CreateFormWithJSON, {
-        query: FormAdminQuery,
-        arrayPath: ['convention', 'forms'],
-        newObjectPath: ['createFormWithJSON', 'form'],
-      }),
+    const [createForm, { error: createError, loading: createInProgress }] = useCreateMutationWithReferenceArrayUpdater(
+      useCreateFormWithJsonMutation,
+      data.convention,
+      'forms',
+      (data) => data.createFormWithJSON.form,
+      FormFieldsFragmentDoc,
     );
     const [updateMutate] = useUpdateFormWithJsonMutation();
     const [updateForm, updateError, updateInProgress] = useAsyncFunction(updateMutate);
     const { t } = useTranslation();
 
     const extensions = useMemo(() => [jsonExtension()], []);
-    const onChange = useCallback(
-      (sectionsJSON: string) => setForm((prevForm) => ({ ...prevForm, sectionsJSON })),
-      [],
-    );
+    const onChange = useCallback((sectionsJSON: string) => setForm((prevForm) => ({ ...prevForm, sectionsJSON })), []);
     const [editorRef] = useStandardCodeMirror({ extensions, value: form.sectionsJSON, onChange });
 
     usePageTitle(initialForm.id ? `Editing “${initialFormData.title}”` : 'New Form');
 
     const save = async () => {
+      const formType = form.form_type as FormType;
+      if (!formType) {
+        throw new Error('Please select a form type.');
+      }
+
       const formJSON = JSON.stringify({
         title: form.title,
         sections: JSON.parse(form.sectionsJSON),
@@ -78,7 +79,7 @@ export default LoadSingleValueFromCollectionWrapper(
           },
         });
       } else {
-        await createForm({ variables: { formJSON, formType: form.form_type } });
+        await createForm({ variables: { formJSON, formType } });
       }
       history.push('/admin_forms');
     };
@@ -98,9 +99,7 @@ export default LoadSingleValueFromCollectionWrapper(
           label="Form type"
           name="form_type"
           value={form.form_type}
-          onValueChange={(formType) =>
-            setForm((prevForm) => ({ ...prevForm, form_type: formType }))
-          }
+          onValueChange={(formType) => setForm((prevForm) => ({ ...prevForm, form_type: formType }))}
           disabled={initialForm.id != null}
         >
           <option disabled selected={form.form_type == null}>

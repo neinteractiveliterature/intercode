@@ -4,7 +4,7 @@ export type FilterDocHeaderProps = {
   filter: YardMethod;
 };
 
-function FilterDocHeader({ filter }: FilterDocHeaderProps) {
+function FilterDocHeader({ filter }: FilterDocHeaderProps): JSX.Element {
   return (
     <>
       <div>

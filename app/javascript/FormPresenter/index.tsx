@@ -11,7 +11,7 @@ export type FormPresenterAppProps = {
   children: ReactNode;
 };
 
-const FormPresenterApp = ({ form, children }: FormPresenterAppProps) => {
+export default function FormPresenterApp({ form, children }: FormPresenterAppProps): JSX.Element {
   const itemInteractionProps = useItemInteractionTracking();
 
   return (
@@ -21,6 +21,4 @@ const FormPresenterApp = ({ form, children }: FormPresenterAppProps) => {
       </ItemInteractionTrackerContext.Provider>
     </SectionTraversalProvider>
   );
-};
-
-export default FormPresenterApp;
+}

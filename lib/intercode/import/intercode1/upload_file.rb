@@ -8,9 +8,7 @@ module Intercode::Import::Intercode1::UploadFile
       return unless File.exist?(path)
 
       cms_file = convention.cms_files.new
-      File.open(path) do |f|
-        cms_file.file = f
-      end
+      File.open(path) { |f| cms_file.file = f }
 
       cms_file.save!
       cms_file

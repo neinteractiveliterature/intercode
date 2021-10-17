@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import classNames from 'classnames';
 import { Redirect } from 'react-router-dom';
-// @ts-expect-error
+// @ts-expect-error @types/inflected does not expose capitalize
 import { capitalize } from 'inflected';
 import { useTranslation } from 'react-i18next';
 import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
@@ -18,12 +18,8 @@ export default LoadQueryWrapper(useTicketPurchaseFormQuery, function TicketPurch
   const { t } = useTranslation();
   const { timezoneName } = useContext(AppRootContext);
   const availableProducts = data.convention.products;
-  const [product, setProduct] = useState<
-    TicketPurchaseFormQueryData['convention']['products'][0]
-  >();
-  const [focusedProduct, setFocusedProduct] = useState<
-    TicketPurchaseFormQueryData['convention']['products'][0]
-  >();
+  const [product, setProduct] = useState<TicketPurchaseFormQueryData['convention']['products'][0]>();
+  const [focusedProduct, setFocusedProduct] = useState<TicketPurchaseFormQueryData['convention']['products'][0]>();
 
   useEffect(() => {
     if (availableProducts.length === 1) {
@@ -39,7 +35,7 @@ export default LoadQueryWrapper(useTicketPurchaseFormQuery, function TicketPurch
     return <></>;
   }
 
-  if (data.myProfile && data.myProfile.ticket) {
+  if (data.convention.my_profile?.ticket) {
     return <Redirect to="/" />;
   }
 
@@ -53,6 +49,7 @@ export default LoadQueryWrapper(useTicketPurchaseFormQuery, function TicketPurch
         const { pricing_structure: pricingStructure, id, name: productName } = availableProduct;
         return (
           <label
+            key={availableProduct.id}
             className={classNames('form-label btn text-start btn-outline-primary', {
               active: product?.id === id,
               focus: focusedProduct?.id === id,
@@ -65,15 +62,12 @@ export default LoadQueryWrapper(useTicketPurchaseFormQuery, function TicketPurch
               checked={product?.id === id}
               onChange={() => setProduct(availableProduct)}
               onFocus={() => setFocusedProduct(availableProduct)}
-              onBlur={() =>
-                setFocusedProduct((prev) => (prev?.id === availableProduct.id ? undefined : prev))
-              }
+              onBlur={() => setFocusedProduct((prev) => (prev?.id === availableProduct.id ? undefined : prev))}
               aria-labelledby={`product-label-${id}`}
             />
             <div className="d-flex align-items-center" id={`product-label-${id}`}>
               <div className="flex-grow-1">
-                <strong>{productName}</strong> &mdash;{' '}
-                {describeUserPricingStructure(pricingStructure, timezoneName, t)}
+                <strong>{productName}</strong> &mdash; {describeUserPricingStructure(pricingStructure, timezoneName, t)}
                 {availableProduct.description_html && (
                   <div
                     className="small"
@@ -95,9 +89,7 @@ export default LoadQueryWrapper(useTicketPurchaseFormQuery, function TicketPurch
       <h1 className="mb-4">
         Buy a {data.convention.ticket_name} for {data.convention.name}
       </h1>
-      {availableProducts.length > 1 && (
-        <p className="lead">Please select a {data.convention.ticket_name} type:</p>
-      )}
+      {availableProducts.length > 1 && <p className="lead">Please select a {data.convention.ticket_name} type:</p>}
       {renderProductSelect()}
       {product && (
         <div className="mt-4">

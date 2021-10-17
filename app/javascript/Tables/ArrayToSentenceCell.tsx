@@ -1,13 +1,13 @@
-// @ts-expect-error
+// @ts-expect-error array-to-sentence has no type definitions
 import arrayToSentence from 'array-to-sentence';
 
 export type ArrayToSentenceCellProps = {
   value?: string[];
 };
 
-const ArrayToSentenceCell = ({ value }: ArrayToSentenceCellProps) => {
+function ArrayToSentenceCell({ value }: ArrayToSentenceCellProps): JSX.Element {
   const sentence: string = arrayToSentence(value ?? []);
   return <>{sentence}</>;
-};
+}
 
 export default ArrayToSentenceCell;

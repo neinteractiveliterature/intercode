@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class FormExportPresenter
   attr_reader :form
 
@@ -9,9 +10,7 @@ class FormExportPresenter
     {
       title: form.title,
       form_type: form.form_type,
-      sections: form.form_sections.order(:position).includes(:form_items).map do |section|
-        export_section(section)
-      end
+      sections: form.form_sections.order(:position).includes(:form_items).map { |section| export_section(section) }
     }
   end
 

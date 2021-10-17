@@ -102,7 +102,7 @@ function getPossibleColumns(): Column<ConventionType>[] {
 
 const defaultVisibleColumns = ['name', 'organization_name', 'starts_at'];
 
-function RootSiteConventionsAdminTable() {
+function RootSiteConventionsAdminTable(): JSX.Element {
   const newConventionModal = useModal();
   const history = useHistory();
   const { tableInstance, loading, tableHeaderProps } = useReactTableWithTheWorks({

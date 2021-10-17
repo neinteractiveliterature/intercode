@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Signups::RegistrationPolicyChangeMovedSignupsNotifier < Notifier
   include Signups::SignupNotificationsHelper
 
@@ -7,10 +8,7 @@ class Signups::RegistrationPolicyChangeMovedSignupsNotifier < Notifier
     @event = event
     @move_results = move_results
     @whodunit = whodunit
-    super(
-      convention: event.convention,
-      event_key: 'signups/registration_policy_change_moved_signups'
-    )
+    super(convention: event.convention, event_key: 'signups/registration_policy_change_moved_signups')
   end
 
   def liquid_assigns
@@ -31,8 +29,6 @@ class Signups::RegistrationPolicyChangeMovedSignupsNotifier < Notifier
   end
 
   def move_results_by_run
-    @move_results_by_run ||= move_results.group_by do |move_result|
-      signups_by_id[move_result.signup_id].run
-    end
+    @move_results_by_run ||= move_results.group_by { |move_result| signups_by_id[move_result.signup_id].run }
   end
 end

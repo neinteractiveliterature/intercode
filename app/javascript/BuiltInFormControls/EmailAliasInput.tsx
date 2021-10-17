@@ -2,10 +2,14 @@ import { InputHTMLAttributes } from 'react';
 
 export type EmailAliasInputProps = InputHTMLAttributes<HTMLInputElement> & {
   onTextChange: (value: string) => void;
-  domain: string;
+  domain?: string | null;
 };
 
-function EmailAliasInput({ onTextChange, domain, ...otherProps }: EmailAliasInputProps) {
+function EmailAliasInput({
+  onTextChange,
+  domain,
+  ...otherProps
+}: EmailAliasInputProps): JSX.Element {
   return (
     <div className="input-group">
       <input
@@ -15,7 +19,7 @@ function EmailAliasInput({ onTextChange, domain, ...otherProps }: EmailAliasInpu
         }}
         {...otherProps}
       />
-      <span className="input-group-text">@{domain}</span>
+      {domain && <span className="input-group-text">@{domain}</span>}
     </div>
   );
 }

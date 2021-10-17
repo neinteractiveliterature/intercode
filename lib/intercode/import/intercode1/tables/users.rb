@@ -16,15 +16,8 @@ class Intercode::Import::Intercode1::Tables::Users < Intercode::Import::Intercod
   }
 
   PERMISSIONS_MAP = {
-    BidChair: %w[
-      access_admin_notes
-      read_event_proposals
-      read_pending_event_proposals
-      update_event_proposals
-    ],
-    BidCom: %w[
-      read_event_proposals
-    ],
+    BidChair: %w[access_admin_notes read_event_proposals read_pending_event_proposals update_event_proposals],
+    BidCom: %w[read_event_proposals],
     ConCom: %w[
       read_orders
       read_prerelease_schedule
@@ -50,19 +43,10 @@ class Intercode::Import::Intercode1::Tables::Users < Intercode::Import::Intercod
       update_rooms
       update_runs
     ],
-    MailToAll: %w[
-      read_user_con_profiles_mailing_list
-      read_team_members_mailing_list
-    ],
-    MailToAttendees: %w[
-      read_user_con_profiles_mailing_list
-    ],
-    MailToGMs: %w[
-      read_team_members_mailing_list
-    ],
-    Outreach: %w[
-      read_signup_details
-    ],
+    MailToAll: %w[read_user_con_profiles_mailing_list read_team_members_mailing_list],
+    MailToAttendees: %w[read_user_con_profiles_mailing_list],
+    MailToGMs: %w[read_team_members_mailing_list],
+    Outreach: %w[read_signup_details],
     Scheduling: %w[
       access_admin_notes
       override_event_tickets
@@ -80,11 +64,7 @@ class Intercode::Import::Intercode1::Tables::Users < Intercode::Import::Intercod
     Staff: Permission.permission_names_for_model_type('Convention')
   }
 
-  PREFERRED_CONTACT_MAP = {
-    'EMail' => :email,
-    'DayPhone' => :day_phone,
-    'EvePhone' => :evening_phone
-  }
+  PREFERRED_CONTACT_MAP = { 'EMail' => :email, 'DayPhone' => :day_phone, 'EvePhone' => :evening_phone }
 
   attr_reader :user_con_profile_id_map
 
@@ -121,18 +101,18 @@ class Intercode::Import::Intercode1::Tables::Users < Intercode::Import::Intercod
   private
 
   def build_user(row, legacy_password_md5)
-    User.find_or_initialize_by(email: row[:EMail].downcase).tap do |user|
-      user.blank_password! unless user.encrypted_password.present?
+    User
+      .find_or_initialize_by(email: row[:EMail].downcase)
+      .tap do |user|
+        user.blank_password! unless user.encrypted_password.present?
 
-      contact_attrs = contact_attributes(row).slice(:first_name, :last_name)
-      contact_attrs.each do |key, value|
-        user.send("#{key}=", value) unless user.send(key).present?
-      end
+        contact_attrs = contact_attributes(row).slice(:first_name, :last_name)
+        contact_attrs.each { |key, value| user.send("#{key}=", value) unless user.send(key).present? }
 
-      if row[:HashedPassword].present? && !user.legacy_password_md5.present? && !user.encrypted_password.present?
-        user.legacy_password_md5 = legacy_password_md5
+        if row[:HashedPassword].present? && !user.legacy_password_md5.present? && !user.encrypted_password.present?
+          user.legacy_password_md5 = legacy_password_md5
+        end
       end
-    end
   end
 
   def build_user_con_profile(row, con, user)
@@ -140,10 +120,7 @@ class Intercode::Import::Intercode1::Tables::Users < Intercode::Import::Intercod
     existing_profile = con.user_con_profiles.find_by(user_id: user.id)
     return existing_profile if existing_profile
 
-    profile_attrs = {
-      convention: con,
-      additional_info: additional_info(row)
-    }.merge(contact_attributes(row))
+    profile_attrs = { convention: con, additional_info: additional_info(row) }.merge(contact_attributes(row))
 
     user.user_con_profiles.new(profile_attrs)
   end
@@ -152,38 +129,44 @@ class Intercode::Import::Intercode1::Tables::Users < Intercode::Import::Intercod
     PERMISSIONS_MAP.each do |permission_granting_priv, permissions|
       next unless row[permission_granting_priv]
 
-      staff_position = con.staff_positions.find_or_create_by(name: permission_granting_priv) do |sp|
-        sp.visible = false
-        sp.save!
+      staff_position =
+        con
+          .staff_positions
+          .find_or_create_by(name: permission_granting_priv) do |sp|
+            sp.visible = false
+            sp.save!
 
-        permissions.each do |permission|
-          sp.permissions.find_or_create!(convention_id: con.id, permission: permission)
-        end
-      end
+            permissions.each do |permission|
+              sp.permissions.find_or_create!(convention_id: con.id, permission: permission)
+            end
+          end
 
       staff_position.user_con_profiles << user_con_profile
     end
   end
 
   def contact_attributes(row)
-    CONTACT_FIELD_MAP.each_with_object({}) do |(new_field, old_field), attributes|
-      old_value = row[old_field]
+    CONTACT_FIELD_MAP
+      .each_with_object({}) do |(new_field, old_field), attributes|
+        old_value = row[old_field]
 
-      attributes[new_field] = case old_field
-      when :Gender then old_value.downcase
-      when :PreferredContact then PREFERRED_CONTACT_MAP[old_value]
-      when :BirthYear then Date.new(old_value, 1, 1) if old_value && old_value > 0
-      else old_value
+        attributes[new_field] =
+          case old_field
+          when :Gender
+            old_value.downcase
+          when :PreferredContact
+            PREFERRED_CONTACT_MAP[old_value]
+          when :BirthYear
+            Date.new(old_value, 1, 1) if old_value && old_value > 0
+          else
+            old_value
+          end
       end
-    end.merge(
-      address: [row[:Address1], row[:Address2]].map(&:presence).compact.join("\n").presence
-    )
+      .merge(address: [row[:Address1], row[:Address2]].map(&:presence).compact.join("\n").presence)
   end
 
   def additional_info(row)
-    {
-      how_heard: row[:HowHeard]
-    }
+    { how_heard: row[:HowHeard] }
   end
 
   def build_ticket(row, user_con_profile)

@@ -14,14 +14,14 @@ const transformColumnIdForExport = (columnId: string) => {
   return columnId;
 };
 
-export type SignupChangesTableExportButtonProps<RowType extends object> = Omit<
+export type SignupChangesTableExportButtonProps<RowType extends Record<string, unknown>> = Omit<
   ReactTableExportButtonWithColumnTransformProps<RowType>,
   'columnTransform'
 >;
 
-function SignupChangesTableExportButton<RowType extends object>(
-  { ...props }: SignupChangesTableExportButtonProps<RowType>,
-) {
+function SignupChangesTableExportButton<RowType extends Record<string, unknown>>({
+  ...props
+}: SignupChangesTableExportButtonProps<RowType>): JSX.Element {
   return (
     <ReactTableExportButtonWithColumnTransform
       {...props}

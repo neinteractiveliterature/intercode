@@ -20,9 +20,6 @@ class Intercode::Import::Illyan::Importer
   end
 
   def people_table
-    @people_table ||= Intercode::Import::Illyan::Tables::People.new(
-      connection,
-      emails
-    )
+    @people_table ||= Intercode::Import::Illyan::Tables::People.new(connection, emails)
   end
 end

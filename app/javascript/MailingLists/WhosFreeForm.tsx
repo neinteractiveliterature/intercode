@@ -29,7 +29,7 @@ export type WhosFreeFormProps = {
   onSubmit: (options: { start: DateTime; finish: DateTime }) => void;
 };
 
-function WhosFreeForm({ onSubmit }: WhosFreeFormProps) {
+function WhosFreeForm({ onSubmit }: WhosFreeFormProps): JSX.Element {
   const { data, loading, error } = useWhosFreeFormConventionQuery();
   const [start, setStart] = useState<DateTime>();
   const [finish, setFinish] = useState<DateTime>();

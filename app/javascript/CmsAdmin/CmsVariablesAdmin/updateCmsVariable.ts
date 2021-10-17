@@ -3,16 +3,17 @@ import { CmsVariablesQuery } from './queries';
 import { CmsVariablesQueryData, SetCmsVariableMutationData } from './queries.generated';
 
 export default function updateCmsVariable(
-  cache: ApolloCache<any>,
+  cache: ApolloCache<unknown>,
   result: MutationResult<SetCmsVariableMutationData>,
-) {
+): void {
   const data = cache.readQuery<CmsVariablesQueryData>({ query: CmsVariablesQuery });
   const cmsVariable = result.data?.setCmsVariable?.cms_variable;
   if (!data || !cmsVariable) {
     return;
   }
-  if (data.cmsVariables.some((variable) => variable.key === cmsVariable.key)) {
-    data.cmsVariables = data.cmsVariables.map((variable) => {
+  let newVariables: CmsVariablesQueryData['cmsParent']['cmsVariables'] = [];
+  if (data.cmsParent.cmsVariables.some((variable) => variable.key === cmsVariable.key)) {
+    newVariables = data.cmsParent.cmsVariables.map((variable) => {
       if (variable.key === cmsVariable.key) {
         return cmsVariable;
       }
@@ -20,8 +21,17 @@ export default function updateCmsVariable(
       return variable;
     });
   } else {
-    data.cmsVariables = [...data.cmsVariables, cmsVariable];
+    newVariables = [...data.cmsParent.cmsVariables, cmsVariable];
   }
 
-  cache.writeQuery({ query: CmsVariablesQuery, data });
+  cache.writeQuery<CmsVariablesQueryData>({
+    query: CmsVariablesQuery,
+    data: {
+      ...data,
+      cmsParent: {
+        ...data.cmsParent,
+        cmsVariables: newVariables,
+      },
+    },
+  });
 }

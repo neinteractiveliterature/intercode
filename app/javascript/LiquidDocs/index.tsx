@@ -20,12 +20,12 @@ function sortByName<T extends { name: string }>(items: T[]) {
 
 const LiquidDocsContext = createContext({});
 
-function LiquidDocs() {
+function LiquidDocs(): JSX.Element {
   const [{ data, loading, error }, notifierEventKey] = useLiquidAssignsQueryFromLocation();
   const location = useLocation();
 
   const sortedAssigns = useMemo(
-    () => (loading || error || !data ? [] : sortByName(data.liquidAssigns)),
+    () => (loading || error || !data ? [] : sortByName(data.cmsParent.liquidAssigns)),
     [error, data, loading],
   );
 

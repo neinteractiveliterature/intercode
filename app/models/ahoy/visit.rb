@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
@@ -36,7 +37,7 @@
 #  index_ahoy_visits_on_visit_token  (visit_token) UNIQUE
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+
 class Ahoy::Visit < ApplicationRecord
   self.table_name = 'ahoy_visits'
 

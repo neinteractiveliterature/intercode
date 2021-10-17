@@ -21,7 +21,7 @@ function ConventionBreadcrumb() {
   return <BreadcrumbItem active>{data.convention.name}</BreadcrumbItem>;
 }
 
-function RootSiteConventionsAdmin() {
+function RootSiteConventionsAdmin(): JSX.Element {
   const authorizationWarning = useAuthorizationRequired('can_manage_conventions');
   if (authorizationWarning) return authorizationWarning;
 

@@ -6,42 +6,42 @@ import { SignupModerationSignupRequestFieldsFragmentDoc } from './queries.genera
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
 export type CreateUserSignupMutationVariables = Types.Exact<{
-  runId: Types.Scalars['Int'];
-  userConProfileId: Types.Scalars['Int'];
+  runId: Types.Scalars['ID'];
+  userConProfileId: Types.Scalars['ID'];
   requestedBucketKey?: Types.Maybe<Types.Scalars['String']>;
   noRequestedBucket?: Types.Maybe<Types.Scalars['Boolean']>;
 }>;
 
 
-export type CreateUserSignupMutationData = { __typename: 'Mutation', createUserSignup?: Types.Maybe<{ __typename: 'CreateUserSignupPayload', clientMutationId?: Types.Maybe<string> }> };
+export type CreateUserSignupMutationData = { __typename: 'Mutation', createUserSignup: { __typename: 'CreateUserSignupPayload', clientMutationId?: string | null | undefined } };
 
 export type WithdrawUserSignupMutationVariables = Types.Exact<{
-  runId: Types.Scalars['Int'];
-  userConProfileId: Types.Scalars['Int'];
+  runId: Types.Scalars['ID'];
+  userConProfileId: Types.Scalars['ID'];
 }>;
 
 
-export type WithdrawUserSignupMutationData = { __typename: 'Mutation', withdrawUserSignup?: Types.Maybe<{ __typename: 'WithdrawUserSignupPayload', clientMutationId?: Types.Maybe<string> }> };
+export type WithdrawUserSignupMutationData = { __typename: 'Mutation', withdrawUserSignup: { __typename: 'WithdrawUserSignupPayload', clientMutationId?: string | null | undefined } };
 
 export type AcceptSignupRequestMutationVariables = Types.Exact<{
-  id: Types.Scalars['Int'];
+  id: Types.Scalars['ID'];
 }>;
 
 
-export type AcceptSignupRequestMutationData = { __typename: 'Mutation', acceptSignupRequest?: Types.Maybe<{ __typename: 'AcceptSignupRequestPayload', signup_request: { __typename: 'SignupRequest', id: number, state: Types.SignupRequestState, requested_bucket_key?: Types.Maybe<string>, created_at: any, user_con_profile: { __typename: 'UserConProfile', id: number, name: string, name_inverted: string, gravatar_enabled: boolean, gravatar_url: string }, replace_signup?: Types.Maybe<{ __typename: 'Signup', id: number, run: { __typename: 'Run', id: number, title_suffix?: Types.Maybe<string>, starts_at: any, signup_count_by_state_and_bucket_key_and_counted: any, event: { __typename: 'Event', id: number, title?: Types.Maybe<string>, length_seconds: number } } }>, target_run: { __typename: 'Run', id: number, title_suffix?: Types.Maybe<string>, starts_at: any, signup_count_by_state_and_bucket_key_and_counted: any, event: { __typename: 'Event', id: number, title?: Types.Maybe<string>, length_seconds: number, registration_policy?: Types.Maybe<{ __typename: 'RegistrationPolicy', prevent_no_preference_signups: boolean, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: Types.Maybe<string>, total_slots?: Types.Maybe<number>, slots_limited: boolean, anything: boolean, not_counted: boolean }> }> } }, result_signup?: Types.Maybe<{ __typename: 'Signup', id: number, state: Types.SignupState, waitlist_position?: Types.Maybe<number> }> } }> };
+export type AcceptSignupRequestMutationData = { __typename: 'Mutation', acceptSignupRequest: { __typename: 'AcceptSignupRequestPayload', signup_request: { __typename: 'SignupRequest', state: Types.SignupRequestState, requested_bucket_key?: string | null | undefined, created_at: string, id: string, user_con_profile: { __typename: 'UserConProfile', name: string, name_inverted: string, gravatar_enabled: boolean, gravatar_url: string, id: string }, replace_signup?: { __typename: 'Signup', id: string, run: { __typename: 'Run', title_suffix?: string | null | undefined, starts_at: string, signup_count_by_state_and_bucket_key_and_counted: string, id: string, event: { __typename: 'Event', title?: string | null | undefined, length_seconds: number, id: string } } } | null | undefined, target_run: { __typename: 'Run', title_suffix?: string | null | undefined, starts_at: string, signup_count_by_state_and_bucket_key_and_counted: string, id: string, event: { __typename: 'Event', title?: string | null | undefined, length_seconds: number, id: string, registration_policy?: { __typename: 'RegistrationPolicy', prevent_no_preference_signups: boolean, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null | undefined, total_slots?: number | null | undefined, slots_limited: boolean, anything: boolean, not_counted: boolean }> } | null | undefined } }, result_signup?: { __typename: 'Signup', state: Types.SignupState, waitlist_position?: number | null | undefined, id: string } | null | undefined } } };
 
 export type RejectSignupRequestMutationVariables = Types.Exact<{
-  id: Types.Scalars['Int'];
+  id: Types.Scalars['ID'];
 }>;
 
 
-export type RejectSignupRequestMutationData = { __typename: 'Mutation', rejectSignupRequest?: Types.Maybe<{ __typename: 'RejectSignupRequestPayload', signup_request: { __typename: 'SignupRequest', id: number, state: Types.SignupRequestState, requested_bucket_key?: Types.Maybe<string>, created_at: any, user_con_profile: { __typename: 'UserConProfile', id: number, name: string, name_inverted: string, gravatar_enabled: boolean, gravatar_url: string }, replace_signup?: Types.Maybe<{ __typename: 'Signup', id: number, run: { __typename: 'Run', id: number, title_suffix?: Types.Maybe<string>, starts_at: any, signup_count_by_state_and_bucket_key_and_counted: any, event: { __typename: 'Event', id: number, title?: Types.Maybe<string>, length_seconds: number } } }>, target_run: { __typename: 'Run', id: number, title_suffix?: Types.Maybe<string>, starts_at: any, signup_count_by_state_and_bucket_key_and_counted: any, event: { __typename: 'Event', id: number, title?: Types.Maybe<string>, length_seconds: number, registration_policy?: Types.Maybe<{ __typename: 'RegistrationPolicy', prevent_no_preference_signups: boolean, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: Types.Maybe<string>, total_slots?: Types.Maybe<number>, slots_limited: boolean, anything: boolean, not_counted: boolean }> }> } }, result_signup?: Types.Maybe<{ __typename: 'Signup', id: number, state: Types.SignupState, waitlist_position?: Types.Maybe<number> }> } }> };
+export type RejectSignupRequestMutationData = { __typename: 'Mutation', rejectSignupRequest: { __typename: 'RejectSignupRequestPayload', signup_request: { __typename: 'SignupRequest', state: Types.SignupRequestState, requested_bucket_key?: string | null | undefined, created_at: string, id: string, user_con_profile: { __typename: 'UserConProfile', name: string, name_inverted: string, gravatar_enabled: boolean, gravatar_url: string, id: string }, replace_signup?: { __typename: 'Signup', id: string, run: { __typename: 'Run', title_suffix?: string | null | undefined, starts_at: string, signup_count_by_state_and_bucket_key_and_counted: string, id: string, event: { __typename: 'Event', title?: string | null | undefined, length_seconds: number, id: string } } } | null | undefined, target_run: { __typename: 'Run', title_suffix?: string | null | undefined, starts_at: string, signup_count_by_state_and_bucket_key_and_counted: string, id: string, event: { __typename: 'Event', title?: string | null | undefined, length_seconds: number, id: string, registration_policy?: { __typename: 'RegistrationPolicy', prevent_no_preference_signups: boolean, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null | undefined, total_slots?: number | null | undefined, slots_limited: boolean, anything: boolean, not_counted: boolean }> } | null | undefined } }, result_signup?: { __typename: 'Signup', state: Types.SignupState, waitlist_position?: number | null | undefined, id: string } | null | undefined } } };
 
 
 export const CreateUserSignupDocument = gql`
-    mutation CreateUserSignup($runId: Int!, $userConProfileId: Int!, $requestedBucketKey: String, $noRequestedBucket: Boolean) {
+    mutation CreateUserSignup($runId: ID!, $userConProfileId: ID!, $requestedBucketKey: String, $noRequestedBucket: Boolean) {
   createUserSignup(
-    input: {run_id: $runId, user_con_profile_id: $userConProfileId, requested_bucket_key: $requestedBucketKey, no_requested_bucket: $noRequestedBucket, suppress_notifications: true}
+    input: {transitionalRunId: $runId, transitionalUserConProfileId: $userConProfileId, requested_bucket_key: $requestedBucketKey, no_requested_bucket: $noRequestedBucket, suppress_notifications: true}
   ) {
     clientMutationId
   }
@@ -77,9 +77,9 @@ export type CreateUserSignupMutationHookResult = ReturnType<typeof useCreateUser
 export type CreateUserSignupMutationResult = Apollo.MutationResult<CreateUserSignupMutationData>;
 export type CreateUserSignupMutationOptions = Apollo.BaseMutationOptions<CreateUserSignupMutationData, CreateUserSignupMutationVariables>;
 export const WithdrawUserSignupDocument = gql`
-    mutation WithdrawUserSignup($runId: Int!, $userConProfileId: Int!) {
+    mutation WithdrawUserSignup($runId: ID!, $userConProfileId: ID!) {
   withdrawUserSignup(
-    input: {run_id: $runId, user_con_profile_id: $userConProfileId, suppress_notifications: true}
+    input: {transitionalRunId: $runId, transitionalUserConProfileId: $userConProfileId, suppress_notifications: true}
   ) {
     clientMutationId
   }
@@ -113,10 +113,10 @@ export type WithdrawUserSignupMutationHookResult = ReturnType<typeof useWithdraw
 export type WithdrawUserSignupMutationResult = Apollo.MutationResult<WithdrawUserSignupMutationData>;
 export type WithdrawUserSignupMutationOptions = Apollo.BaseMutationOptions<WithdrawUserSignupMutationData, WithdrawUserSignupMutationVariables>;
 export const AcceptSignupRequestDocument = gql`
-    mutation AcceptSignupRequest($id: Int!) {
-  acceptSignupRequest(input: {id: $id}) {
+    mutation AcceptSignupRequest($id: ID!) {
+  acceptSignupRequest(input: {transitionalId: $id}) {
     signup_request {
-      id
+      id: transitionalId
       ...SignupModerationSignupRequestFields
     }
   }
@@ -149,10 +149,10 @@ export type AcceptSignupRequestMutationHookResult = ReturnType<typeof useAcceptS
 export type AcceptSignupRequestMutationResult = Apollo.MutationResult<AcceptSignupRequestMutationData>;
 export type AcceptSignupRequestMutationOptions = Apollo.BaseMutationOptions<AcceptSignupRequestMutationData, AcceptSignupRequestMutationVariables>;
 export const RejectSignupRequestDocument = gql`
-    mutation RejectSignupRequest($id: Int!) {
-  rejectSignupRequest(input: {id: $id}) {
+    mutation RejectSignupRequest($id: ID!) {
+  rejectSignupRequest(input: {transitionalId: $id}) {
     signup_request {
-      id
+      id: transitionalId
       ...SignupModerationSignupRequestFields
     }
   }

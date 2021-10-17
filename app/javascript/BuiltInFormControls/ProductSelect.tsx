@@ -5,6 +5,7 @@ import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform
 
 import { AdminProductsQuery } from '../Store/queries';
 import { AdminProductsQueryData } from '../Store/queries.generated';
+import FourOhFourPage from '../FourOhFourPage';
 
 export type ProductSelectProps<QueryType extends AdminProductsQueryData> = SelectProps<
   Pick<QueryType['convention']['products'][0], '__typename' | 'id' | 'name'>
@@ -15,7 +16,7 @@ export type ProductSelectProps<QueryType extends AdminProductsQueryData> = Selec
 function ProductSelect<QueryType extends AdminProductsQueryData>({
   productsQuery,
   ...otherProps
-}: ProductSelectProps<QueryType>) {
+}: ProductSelectProps<QueryType>): JSX.Element {
   const { data, loading, error } = useQuery<QueryType>(productsQuery ?? AdminProductsQuery);
 
   if (loading) {
@@ -26,9 +27,13 @@ function ProductSelect<QueryType extends AdminProductsQueryData>({
     return <ErrorDisplay graphQLError={error} />;
   }
 
+  if (!data) {
+    return <FourOhFourPage />;
+  }
+
   return (
     <Select
-      options={data!.convention.products}
+      options={data.convention.products}
       getOptionValue={(option) => `${option.id}`}
       getOptionLabel={(option) => option.name}
       {...otherProps}

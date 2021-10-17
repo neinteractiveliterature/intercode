@@ -1,11 +1,8 @@
-import { StaffPosition, StaffPositionInput, UserConProfile } from '../graphqlTypes.generated';
+import { StaffPosition, StaffPositionInput } from '../graphqlTypes.generated';
 
 export default function buildStaffPositionInput(
-  staffPosition: Pick<
-    StaffPosition,
-    'name' | 'email' | 'email_aliases' | 'visible' | 'cc_addresses'
-  > & {
-    user_con_profiles?: Pick<UserConProfile, 'id'>[] | null;
+  staffPosition: Pick<StaffPosition, 'name' | 'email' | 'email_aliases' | 'visible' | 'cc_addresses'> & {
+    user_con_profiles?: { id: string }[] | null;
   },
 ): StaffPositionInput {
   return {
@@ -13,9 +10,7 @@ export default function buildStaffPositionInput(
     email: staffPosition.email,
     email_aliases: staffPosition.email_aliases,
     visible: staffPosition.visible,
-    user_con_profile_ids: (staffPosition.user_con_profiles || []).map(
-      (userConProfile) => userConProfile.id,
-    ),
+    transitionalUserConProfileIds: (staffPosition.user_con_profiles || []).map((userConProfile) => userConProfile.id),
     cc_addresses: staffPosition.cc_addresses,
   };
 }

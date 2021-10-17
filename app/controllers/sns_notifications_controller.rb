@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class SnsNotificationsController < ApplicationController
   skip_forgery_protection
   before_action :verify_request_authenticity

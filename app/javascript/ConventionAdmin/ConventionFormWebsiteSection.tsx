@@ -18,8 +18,8 @@ export type ConventionFormWebsiteSectionProps = {
   setConvention: React.Dispatch<React.SetStateAction<ConventionFormConvention>>;
   disabled: boolean;
   rootSite: ConventionAdminConventionQueryData['rootSite'];
-  cmsLayouts: ConventionAdminConventionQueryData['convention']['cms_layouts'];
-  pages: ConventionAdminConventionQueryData['convention']['pages'];
+  cmsLayouts: ConventionAdminConventionQueryData['convention']['cmsLayouts'];
+  pages: ConventionAdminConventionQueryData['convention']['cmsPages'];
 };
 
 function ConventionFormWebsiteSection({
@@ -29,11 +29,11 @@ function ConventionFormWebsiteSection({
   cmsLayouts,
   pages,
   disabled,
-}: ConventionFormWebsiteSectionProps) {
+}: ConventionFormWebsiteSectionProps): JSX.Element {
   const [setDefaultLayout, setRootPage, setClickwrapAgreement, setHidden] = usePropertySetters(
     setConvention,
-    'default_layout',
-    'root_page',
+    'defaultLayout',
+    'rootPage',
     'clickwrap_agreement',
     'hidden',
   );
@@ -43,12 +43,12 @@ function ConventionFormWebsiteSection({
       <SelectWithLabel
         name="default_layout_id"
         label="Default layout for pages"
-        value={convention.default_layout}
+        value={convention.defaultLayout}
         isClearable
         getOptionValue={(option) => option?.id.toString() ?? ''}
         getOptionLabel={(option) => option?.name ?? ''}
         options={cmsLayouts}
-        onChange={(newValue: typeof convention.default_layout) => setDefaultLayout(newValue)}
+        onChange={(newValue: typeof convention.defaultLayout) => setDefaultLayout(newValue)}
         styles={selectStyles}
         disabled={disabled}
       />
@@ -56,12 +56,12 @@ function ConventionFormWebsiteSection({
       <SelectWithLabel
         name="root_page_id"
         label="Root page"
-        value={convention.root_page ?? null}
+        value={convention.rootPage ?? null}
         isClearable
         getOptionValue={(option) => option?.id.toString() ?? ''}
         getOptionLabel={(option) => option?.name ?? ''}
         options={pages}
-        onChange={(newValue: typeof convention.root_page) => setRootPage(newValue)}
+        onChange={(newValue: typeof convention.rootPage) => setRootPage(newValue)}
         styles={selectStyles}
         disabled={disabled}
       />

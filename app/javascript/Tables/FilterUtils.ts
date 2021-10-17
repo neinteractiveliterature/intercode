@@ -1,6 +1,7 @@
 import { parseIntOrNull, parseFloatOrNull } from '@neinteractiveliterature/litform';
+import { notEmpty } from '@neinteractiveliterature/litform/lib/ValueUtils';
 
-export function encodeStringArray(value?: string[] | null) {
+export function encodeStringArray(value?: string[] | null): string | null {
   const encoded = (value || []).join(',');
   if (encoded.length === 0) {
     return null;
@@ -8,7 +9,7 @@ export function encodeStringArray(value?: string[] | null) {
   return encoded;
 }
 
-export function decodeStringArray(value: string) {
+export function decodeStringArray(value: string): string[] | null {
   const decoded = (value || '').split(',').filter((decodedValue) => decodedValue.length > 0);
   if (decoded.length === 0) {
     return null;
@@ -16,7 +17,7 @@ export function decodeStringArray(value: string) {
   return decoded;
 }
 
-export function encodeIntegerArray(value?: (number | null)[] | null) {
+export function encodeIntegerArray(value?: (number | null)[] | null): string | null {
   if (!value || value.length === 0) {
     return null;
   }
@@ -24,21 +25,18 @@ export function encodeIntegerArray(value?: (number | null)[] | null) {
   return value.map((integer) => integer?.toString()).join(',');
 }
 
-export function decodeIntegerArray(value?: string | null) {
+export function decodeIntegerArray(value?: string | null): number[] | null {
   if (value == null) {
     return null;
   }
-  const decoded = value
-    .split(',')
-    .map(parseIntOrNull)
-    .filter((integer) => integer != null);
+  const decoded = value.split(',').map(parseIntOrNull).filter(notEmpty);
   if (decoded.length === 0) {
     return null;
   }
   return decoded;
 }
 
-export function encodeBooleanFilter(value?: boolean | null) {
+export function encodeBooleanFilter(value?: boolean | null): string | null {
   if (value == null) {
     return null;
   }
@@ -46,7 +44,7 @@ export function encodeBooleanFilter(value?: boolean | null) {
   return value ? 'true' : 'false';
 }
 
-export function decodeBooleanFilter(value?: 'true' | 'false' | null) {
+export function decodeBooleanFilter(value?: 'true' | 'false' | null): boolean | null {
   if (value == null) {
     return null;
   }
@@ -54,7 +52,7 @@ export function decodeBooleanFilter(value?: 'true' | 'false' | null) {
   return value === 'true';
 }
 
-export function toStringOrNull(value?: any): string | null {
+export function toStringOrNull<T extends { toString(): string }>(value?: T): string | null {
   if (value == null) {
     return null;
   }
@@ -62,7 +60,7 @@ export function toStringOrNull(value?: any): string | null {
   return value.toString();
 }
 
-export function nonEmptyString(value?: string | null) {
+export function nonEmptyString(value?: string | null): Exclude<string, ''> | null {
   if (value == null || value === '') {
     return null;
   }
@@ -110,18 +108,26 @@ export const FilterCodecs = {
 };
 
 export interface FieldFilterCodecs {
-  encodeFilterValue(field: string, value: any): string;
-  decodeFilterValue(field: string, value: string): any;
+  encodeFilterValue(field: string, value: unknown): string | null;
+  decodeFilterValue(field: string, value: string): unknown;
 }
 
-export function buildFieldFilterCodecs(fieldCodecs: { [field: string]: FilterCodec<any> }) {
+export function buildFieldFilterCodecs(fieldCodecs: {
+  [field: string]: FilterCodec<unknown>;
+}): FieldFilterCodecs {
   return {
-    encodeFilterValue: (field: string, value: any) => {
+    encodeFilterValue: (field: string, value: unknown) => {
       const codec = fieldCodecs[field];
       if (codec) {
         return codec.encode(value);
       }
-      return value;
+      if (typeof value === 'string') {
+        return value;
+      }
+      if (value == null) {
+        return null;
+      }
+      throw new Error(`No encoder for field ${field} with value ${JSON.stringify(value)}`);
     },
     decodeFilterValue: (field: string, value: string | null | undefined) => {
       const codec = fieldCodecs[field];

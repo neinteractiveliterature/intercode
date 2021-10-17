@@ -1,10 +1,6 @@
 import { useCallback } from 'react';
 import * as React from 'react';
-import {
-  BooleanInput,
-  MultipleChoiceInput,
-  usePropertySetters,
-} from '@neinteractiveliterature/litform';
+import { BooleanInput, MultipleChoiceInput, usePropertySetters } from '@neinteractiveliterature/litform';
 
 import ScheduledValueEditor, {
   scheduledValueReducer,
@@ -22,7 +18,7 @@ const buildMaximumEventSignupsInput = (
   value: MaximumEventSignupsValue | undefined,
   onChange: React.Dispatch<MaximumEventSignupsValue | undefined>,
 ) => {
-  const processChangeEvent = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const processChangeEvent = (event: React.FocusEvent<HTMLSelectElement>) => {
     const { value: newValue } = event.target;
     switch (newValue) {
       case 'not_yet':
@@ -61,7 +57,7 @@ function ConventionFormEventsSection({
   convention,
   setConvention,
   disabled,
-}: ConventionFormEventsSectionProps) {
+}: ConventionFormEventsSectionProps): JSX.Element {
   const timezoneName = timezoneNameForConvention(convention);
   const [
     setSignupMode,
@@ -98,8 +94,7 @@ function ConventionFormEventsSection({
           },
           {
             value: 'moderated',
-            label:
-              'Moderated (attendees can request signups and signup changes but con staff must approve them)',
+            label: 'Moderated (attendees can request signups and signup changes but con staff must approve them)',
           },
         ]}
         value={convention.signup_mode}

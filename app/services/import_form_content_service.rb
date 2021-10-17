@@ -1,11 +1,6 @@
+# frozen_string_literal: true
 class ImportFormContentService < CivilService::Service
-  DIRECT_PROPERTY_NAMES = %i[
-    item_type
-    identifier
-    admin_description
-    public_description
-    default_value
-  ]
+  DIRECT_PROPERTY_NAMES = %i[item_type identifier admin_description public_description default_value].freeze
 
   attr_reader :form, :content
 
@@ -22,9 +17,7 @@ class ImportFormContentService < CivilService::Service
       form.form_sections.destroy_all
 
       form.update(title: content[:title])
-      content[:sections].each_with_index do |section_attributes, i|
-        import_section(section_attributes, i + 1)
-      end
+      content[:sections].each_with_index { |section_attributes, i| import_section(section_attributes, i + 1) }
     end
 
     success
@@ -42,8 +35,6 @@ class ImportFormContentService < CivilService::Service
     logger.info "Importing #{item_attributes[:item_type]} item #{item_attributes[:identifier]}"
     direct_properties = item_attributes.slice(*DIRECT_PROPERTY_NAMES)
     other_properties = item_attributes.except(*DIRECT_PROPERTY_NAMES)
-    section.form_items.create!(
-      direct_properties.merge(properties: other_properties, position: position)
-    )
+    section.form_items.create!(direct_properties.merge(properties: other_properties, position: position))
   end
 end

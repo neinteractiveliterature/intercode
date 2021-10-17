@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
@@ -18,7 +19,7 @@
 #  index_cms_layouts_on_parent_type_and_parent_id  (parent_type,parent_id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+
 class CmsLayout < ApplicationRecord
   include Cadmus::Layout
   include CmsReferences
@@ -28,7 +29,7 @@ class CmsLayout < ApplicationRecord
   has_and_belongs_to_many :cms_files
   has_and_belongs_to_many :cms_partials
 
-  before_commit :set_performance_metadata, on: [:create, :update]
+  before_commit :set_performance_metadata, on: %i[create update]
   after_commit :touch_parent
 
   private
@@ -41,6 +42,6 @@ class CmsLayout < ApplicationRecord
   end
 
   def touch_parent
-    parent.touch if parent && parent.persisted?
+    parent.touch if parent&.persisted?
   end
 end

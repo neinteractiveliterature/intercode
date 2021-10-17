@@ -1,19 +1,21 @@
 import { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { DepartmentAdminQuery } from './queries';
-import { CreateDepartment } from './mutations';
 import usePageTitle from '../usePageTitle';
 import buildDepartmentInput from './buildDepartmentInput';
 import DepartmentForm from './DepartmentForm';
-import { useCreateMutation } from '../MutationUtils';
+import { AdminDepartmentFieldsFragmentDoc, useDepartmentAdminQuery } from './queries.generated';
+import { LoadQueryWrapper, useCreateMutationWithReferenceArrayUpdater } from '@neinteractiveliterature/litform/dist';
+import { useCreateDepartmentMutation } from './mutations.generated';
 
-function NewDepartment() {
-  const createDepartment = useCreateMutation(CreateDepartment, {
-    query: DepartmentAdminQuery,
-    arrayPath: ['convention', 'departments'],
-    newObjectPath: ['createDepartment', 'department'],
-  });
+export default LoadQueryWrapper(useDepartmentAdminQuery, function NewDepartment({ data }): JSX.Element {
+  const [createDepartment] = useCreateMutationWithReferenceArrayUpdater(
+    useCreateDepartmentMutation,
+    data.convention,
+    'departments',
+    (data) => data.createDepartment.department,
+    AdminDepartmentFieldsFragmentDoc,
+  );
   const history = useHistory();
 
   usePageTitle('New department');
@@ -37,6 +39,4 @@ function NewDepartment() {
       <DepartmentForm initialDepartment={{ name: '', proposal_description: '' }} onSave={onSave} />
     </>
   );
-}
-
-export default NewDepartment;
+});

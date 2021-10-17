@@ -2,12 +2,12 @@ import { gql } from '@apollo/client';
 
 export const AdminDepartmentFields = gql`
   fragment AdminDepartmentFields on Department {
-    id
+    id: transitionalId
     name
     proposal_description
 
     event_categories {
-      id
+      id: transitionalId
       name
     }
   }
@@ -19,11 +19,11 @@ export const DepartmentAdminQuery = gql`
       can_update_departments
     }
 
-    convention: assertConvention {
-      id
+    convention: conventionByRequestHost {
+      id: transitionalId
 
       departments {
-        id
+        id: transitionalId
         ...AdminDepartmentFields
       }
     }

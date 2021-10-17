@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::StripeAccountType < Types::BaseObject
   field :id, ID, null: false
   field :email, String, null: true
@@ -24,11 +25,8 @@ class Types::StripeAccountType < Types::BaseObject
     return_url = URI.parse(base_url)
     return_url.path = '/stripe_account/return'
 
-    Stripe::AccountLink.create({
-      account: object.id,
-      refresh_url: refresh_url.to_s,
-      return_url: return_url.to_s,
-      type: 'account_onboarding'
-    }).url
+    Stripe::AccountLink.create(
+      { account: object.id, refresh_url: refresh_url.to_s, return_url: return_url.to_s, type: 'account_onboarding' }
+    ).url
   end
 end

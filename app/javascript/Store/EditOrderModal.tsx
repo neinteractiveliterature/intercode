@@ -12,21 +12,22 @@ import {
   useCreateCouponApplicationMutation,
   useDeleteCouponApplicationMutation,
 } from './mutations.generated';
-import { Coupon, CouponApplication, Product } from '../graphqlTypes.generated';
+import { Coupon, CouponApplication, UpdateOrderEntryInput, UpdateOrderInput } from '../graphqlTypes.generated';
 
 export type EditOrderModalProps = {
   order?: AdminOrderTypeWithId & {
     order_entries: (Omit<AdminOrderEntryWithIdType, 'product'> & {
-      product: NonNullable<AdminOrderEntryWithIdType['product']> & Pick<Product, 'id'>;
+      product: NonNullable<AdminOrderEntryWithIdType['product']> & { id: string };
     })[];
-    coupon_applications: (Pick<CouponApplication, 'id' | 'discount'> & {
+    coupon_applications: (Pick<CouponApplication, 'discount'> & {
+      id: string;
       coupon: Pick<Coupon, 'code'>;
     })[];
   };
   closeModal: () => void;
 };
 
-function EditOrderModal({ order, closeModal }: EditOrderModalProps) {
+function EditOrderModal({ order, closeModal }: EditOrderModalProps): JSX.Element {
   const confirm = useConfirm();
   const [updateMutate] = useAdminUpdateOrderMutation();
   const [createOrderEntryMutate] = useAdminCreateOrderEntryMutation();
@@ -36,40 +37,54 @@ function EditOrderModal({ order, closeModal }: EditOrderModalProps) {
   const [deleteCouponApplicationMutate] = useDeleteCouponApplicationMutation();
 
   const updateOrder = useCallback(
-    (attributes) =>
-      updateMutate({
+    (attributes: UpdateOrderInput['order']) => {
+      if (!order) {
+        return;
+      }
+      return updateMutate({
         variables: {
-          id: order!.id,
+          id: order.id,
           order: attributes,
         },
-      }),
+      });
+    },
     [order, updateMutate],
   );
 
   const createOrderEntry = useCallback(
-    (orderEntry: NonNullable<EditOrderModalProps['order']>['order_entries'][0]) =>
-      createOrderEntryMutate({
+    async (orderEntry: NonNullable<EditOrderModalProps['order']>['order_entries'][0]) => {
+      if (!order) {
+        return;
+      }
+      await createOrderEntryMutate({
         variables: {
           input: {
-            order_id: order!.id,
+            transitionalOrderId: order.id,
             order_entry: {
-              product_id: orderEntry.product.id,
-              product_variant_id: orderEntry.product_variant?.id,
+              transitionalProductId: orderEntry.product.id,
+              transitionalProductVariantId: orderEntry.product_variant?.id,
               quantity: orderEntry.quantity,
-              price_per_item: orderEntry.price_per_item,
+              price_per_item: {
+                currency_code: orderEntry.price_per_item.currency_code,
+                fractional: orderEntry.price_per_item.fractional,
+              },
             },
           },
         },
-      }),
+      });
+    },
     [createOrderEntryMutate, order],
   );
 
   const updateOrderEntry = useCallback(
-    (orderEntry, attributes) =>
+    (
+      orderEntry: NonNullable<EditOrderModalProps['order']>['order_entries'][0],
+      attributes: UpdateOrderEntryInput['order_entry'],
+    ) =>
       updateOrderEntryMutate({
         variables: {
           input: {
-            id: orderEntry.id,
+            transitionalId: orderEntry.id,
             order_entry: attributes,
           },
         },
@@ -78,18 +93,23 @@ function EditOrderModal({ order, closeModal }: EditOrderModalProps) {
   );
 
   const deleteOrderEntry = useCallback(
-    (orderEntry) => deleteOrderEntryMutate({ variables: { input: { id: orderEntry.id } } }),
+    (orderEntry: NonNullable<EditOrderModalProps['order']>['order_entries'][0]) =>
+      deleteOrderEntryMutate({ variables: { input: { transitionalId: orderEntry.id } } }),
     [deleteOrderEntryMutate],
   );
 
   const createCouponApplication = useCallback(
-    (couponCode) =>
-      createCouponApplicationMutate({
+    async (couponCode: string) => {
+      if (!order) {
+        return;
+      }
+      await createCouponApplicationMutate({
         variables: {
-          orderId: order!.id,
+          orderId: order.id,
           couponCode,
         },
-      }),
+      });
+    },
     [createCouponApplicationMutate, order],
   );
 

@@ -15,7 +15,11 @@ export type EditEmailRouteModalProps = {
   initialEmailRoute?: RootSiteEmailRoutesAdminTableQueryData['email_routes_paginated']['entries'][0];
 };
 
-function EditEmailRouteModal({ visible, close, initialEmailRoute }: EditEmailRouteModalProps) {
+function EditEmailRouteModal({
+  visible,
+  close,
+  initialEmailRoute,
+}: EditEmailRouteModalProps): JSX.Element {
   const confirm = useConfirm();
   const [emailRoute, setEmailRoute] = useState(initialEmailRoute);
   const apolloClient = useApolloClient();

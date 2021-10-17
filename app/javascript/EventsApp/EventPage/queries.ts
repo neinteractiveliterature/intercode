@@ -4,7 +4,7 @@ import { CommonFormFields } from '../../Models/commonFormFragments';
 
 export const MySignupFields = gql`
   fragment MySignupFields on Signup {
-    id
+    id: transitionalId
     state
     waitlist_position
   }
@@ -12,38 +12,38 @@ export const MySignupFields = gql`
 
 export const MySignupRequestFields = gql`
   fragment MySignupRequestFields on SignupRequest {
-    id
+    id: transitionalId
     state
     target_run {
-      id
+      id: transitionalId
     }
     requested_bucket_key
     replace_signup {
-      id
+      id: transitionalId
     }
   }
 `;
 
 export const EventPageRunFields = gql`
   fragment EventPageRunFields on Run {
-    id
+    id: transitionalId
     title_suffix
     starts_at
     current_ability_can_signup_summary_run
     signup_count_by_state_and_bucket_key_and_counted
 
     rooms {
-      id
+      id: transitionalId
       name
     }
 
     my_signups {
-      id
+      id: transitionalId
       ...MySignupFields
     }
 
     my_signup_requests {
-      id
+      id: transitionalId
       ...MySignupRequestFields
     }
   }
@@ -72,73 +72,74 @@ export const RunCardRegistrationPolicyFields = gql`
 `;
 
 export const EventPageQuery = gql`
-  query EventPageQuery($eventId: Int!) {
+  query EventPageQuery($eventId: ID!) {
+    # eslint-disable-next-line @graphql-eslint/naming-convention
     __typename
 
     currentAbility {
       can_read_schedule
-      can_update_event(event_id: $eventId)
-      can_read_event_signups(event_id: $eventId)
+      can_update_event(transitionalEventId: $eventId)
+      can_read_event_signups(transitionalEventId: $eventId)
     }
 
-    convention {
-      id
+    convention: conventionByRequestHost {
+      id: transitionalId
       ...CommonConventionData
-    }
 
-    myProfile {
-      id
-    }
-
-    event(id: $eventId) {
-      id
-      title
-      length_seconds
-      private_signup_list
-      my_rating
-      can_play_concurrently
-      form_response_attrs_json_with_rendered_markdown
-
-      event_category {
-        id
-        team_member_name
+      my_profile {
+        id: transitionalId
       }
 
-      form {
-        id
-        ...CommonFormFields
+      event(transitionalId: $eventId) {
+        id: transitionalId
+        title
+        length_seconds
+        private_signup_list
+        my_rating
+        can_play_concurrently
+        form_response_attrs_json_with_rendered_markdown
 
-        form_sections {
-          id
-          ...CommonFormSectionFields
+        event_category {
+          id: transitionalId
+          team_member_name
+        }
 
-          form_items {
-            id
-            public_description
-            ...CommonFormItemFields
+        form {
+          id: transitionalId
+          ...CommonFormFields
+
+          form_sections {
+            id: transitionalId
+            ...CommonFormSectionFields
+
+            form_items {
+              id: transitionalId
+              public_description
+              ...CommonFormItemFields
+            }
           }
         }
-      }
 
-      team_members {
-        id
-        email
-        display_team_member
-        user_con_profile {
-          id
-          name_without_nickname
-          gravatar_enabled
-          gravatar_url
+        team_members {
+          id: transitionalId
+          email
+          display_team_member
+          user_con_profile {
+            id: transitionalId
+            name_without_nickname
+            gravatar_enabled
+            gravatar_url
+          }
         }
-      }
 
-      registration_policy {
-        ...RunCardRegistrationPolicyFields
-      }
+        registration_policy {
+          ...RunCardRegistrationPolicyFields
+        }
 
-      runs {
-        id
-        ...EventPageRunFields
+        runs {
+          id: transitionalId
+          ...EventPageRunFields
+        }
       }
     }
   }
@@ -151,22 +152,26 @@ export const EventPageQuery = gql`
 
 export const CreateModeratedSignupModalQuery = gql`
   query CreateModeratedSignupModalQuery {
-    myProfile {
-      id
+    convention: conventionByRequestHost {
+      id: transitionalId
 
-      signups {
-        id
-        state
+      my_profile {
+        id: transitionalId
 
-        run {
-          id
-          starts_at
+        signups {
+          id: transitionalId
+          state
 
-          event {
-            id
-            title
-            length_seconds
-            can_play_concurrently
+          run {
+            id: transitionalId
+            starts_at
+
+            event {
+              id: transitionalId
+              title
+              length_seconds
+              can_play_concurrently
+            }
           }
         }
       }

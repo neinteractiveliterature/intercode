@@ -10,12 +10,12 @@ import {
   PermissionInput,
 } from '../graphqlTypes.generated';
 
-type PolymorphicObject = { __typename?: string; id: number };
+type PolymorphicObject = { __typename?: string; id: string };
 
 function polymorphicObjectEquals(
   a: PolymorphicObject | null | undefined,
   b: PolymorphicObject | null | undefined,
-) {
+): boolean {
   return (a == null && b == null) || (a?.__typename === b?.__typename && a?.id === b?.id);
 }
 
@@ -25,23 +25,21 @@ const roleEquals = polymorphicObjectEquals;
 export { modelEquals, roleEquals };
 
 export type PolymorphicPermission = Pick<Permission, 'permission'> & {
-  role: Pick<PermissionedRole, '__typename' | 'id'>;
-  model: Pick<PermissionedModel, '__typename' | 'id'>;
+  role: Pick<PermissionedRole, '__typename'> & { id: string };
+  model: Pick<PermissionedModel, '__typename'> & { id: string };
 };
 
 export type PartialPolymorphicPermission = Pick<PolymorphicPermission, 'permission'> &
   Partial<Pick<PolymorphicPermission, 'role' | 'model'>>;
 
-export function permissionEquals(a: PartialPolymorphicPermission, b: PartialPolymorphicPermission) {
-  return (
-    modelEquals(a.model, b.model) && roleEquals(a.role, b.role) && a.permission === b.permission
-  );
+export function permissionEquals(a: PartialPolymorphicPermission, b: PartialPolymorphicPermission): boolean {
+  return modelEquals(a.model, b.model) && roleEquals(a.role, b.role) && a.permission === b.permission;
 }
 
 export function findPermission<T extends PartialPolymorphicPermission>(
   currentPermissions: T[],
   { role, model, permission }: PartialPolymorphicPermission,
-) {
+): T | undefined {
   return currentPermissions.find((currentPermission) =>
     permissionEquals(currentPermission, { role, model, permission }),
   );
@@ -74,14 +72,16 @@ function getRoleTypeIndicatorForPermission(permission: PartialPolymorphicPermiss
 export function buildPermissionInput(permission: PartialPolymorphicPermission): PermissionInput {
   return {
     model_type: getModelTypeIndicatorForPermission(permission),
-    model_id: permission.model?.id,
+    transitionalModelId: permission.model?.id,
     role_type: getRoleTypeIndicatorForPermission(permission),
-    role_id: permission.role?.id,
+    transitionalRoleId: permission.role?.id,
     permission: permission.permission,
   };
 }
 
-export function getPermissionNamesForModelType(modelType: PermissionedModelTypeIndicator) {
+export function getPermissionNamesForModelType(
+  modelType: PermissionedModelTypeIndicator,
+): { permission: string; name: string }[] {
   return flatMap(
     PermissionNames.filter((permissionNameGroup) => permissionNameGroup.model_type === modelType),
     (permissionNameGroup) => permissionNameGroup.permissions,

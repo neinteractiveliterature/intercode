@@ -12,7 +12,7 @@ import { FormItemEditorContext } from '../FormEditorContexts';
 import { FormItemEditorProps } from '../FormItemEditorProps';
 
 export type FreeTextEditorProps = FormItemEditorProps<FreeTextFormItem>;
-function FreeTextEditor({ formItem, setFormItem }: FreeTextEditorProps) {
+function FreeTextEditor({ formItem, setFormItem }: FreeTextEditorProps): JSX.Element {
   const { disabled } = useContext(FormItemEditorContext);
   const captionInputId = useUniqueId('static-text-caption-');
   const responseFormat =

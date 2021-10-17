@@ -81,11 +81,11 @@ export type RegistrationPolicyDisplayProps = {
 function RegistrationPolicyDisplay({
   presets,
   registrationPolicy,
-}: RegistrationPolicyDisplayProps) {
-  const preset = useMemo(() => findPreset(registrationPolicy, presets ?? []), [
-    presets,
-    registrationPolicy,
-  ]);
+}: RegistrationPolicyDisplayProps): JSX.Element {
+  const preset = useMemo(
+    () => findPreset(registrationPolicy, presets ?? []),
+    [presets, registrationPolicy],
+  );
   const isUnlimited = useMemo(
     () => !registrationPolicy.buckets.some((bucket) => bucket.slots_limited),
     [registrationPolicy.buckets],

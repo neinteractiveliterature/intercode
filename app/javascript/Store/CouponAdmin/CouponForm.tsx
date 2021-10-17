@@ -26,7 +26,7 @@ type DiscountMode = typeof DISCOUNT_MODES[0];
 const blankProduct: NonNullable<AdminCouponFieldsFragment['provides_product']> = {
   __typename: 'Product',
   name: '',
-  id: 0,
+  id: '',
 };
 
 const BLANK_VALUES: {
@@ -51,23 +51,17 @@ export type CouponFormProps<T extends Omit<AdminCouponFieldsFragment, 'id'>> = {
 function CouponForm<T extends Omit<AdminCouponFieldsFragment, 'id'>>({
   value,
   onChange,
-}: CouponFormProps<T>) {
-  const [
-    setCode,
-    setFixedAmount,
-    setPercentDiscount,
-    setProvidesProduct,
-    setExpiresAt,
-    setUsageLimit,
-  ] = usePropertySetters(
-    onChange,
-    'code',
-    'fixed_amount',
-    'percent_discount',
-    'provides_product',
-    'expires_at',
-    'usage_limit',
-  );
+}: CouponFormProps<T>): JSX.Element {
+  const [setCode, setFixedAmount, setPercentDiscount, setProvidesProduct, setExpiresAt, setUsageLimit] =
+    usePropertySetters(
+      onChange,
+      'code',
+      'fixed_amount',
+      'percent_discount',
+      'provides_product',
+      'expires_at',
+      'usage_limit',
+    );
   const discountMode = useMemo(() => DISCOUNT_MODES.find((mode) => value[mode] != null), [value]);
 
   const setDiscountMode = <F extends DiscountMode>(newDiscountMode: F) => {

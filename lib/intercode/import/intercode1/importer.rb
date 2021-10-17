@@ -32,10 +32,11 @@ class Intercode::Import::Intercode1::Importer
     rows = connection[:Users].select(:UserId, :HashedPassword).to_a
 
     # build users in parallel because password hashing is expensive
-    legacy_password_md5s = Parallel.map(rows, in_processes: Parallel.processor_count) do |row|
-      Intercode::Import::Intercode1.logger.debug "Hashing password for user #{row[:UserId]}"
-      [row[:UserId], BCrypt::Password.create(row[:HashedPassword])]
-    end
+    legacy_password_md5s =
+      Parallel.map(rows, in_processes: Parallel.processor_count) do |row|
+        Intercode::Import::Intercode1.logger.debug "Hashing password for user #{row[:UserId]}"
+        [row[:UserId], BCrypt::Password.create(row[:HashedPassword])]
+      end
 
     @connection = Sequel.connect(config.var(:database_url))
 
@@ -53,9 +54,7 @@ class Intercode::Import::Intercode1::Importer
     con_table.update_cms_content(@con)
     Intercode::Import::Intercode1.logger.info('Updated CMS content with con data')
 
-    %i[root_html_content text_dir_html_content].each do |importer|
-      send(importer).import!
-    end
+    %i[root_html_content text_dir_html_content].each { |importer| send(importer).import! }
 
     embedded_pdf_pages.each(&:import!)
 
@@ -75,9 +74,7 @@ class Intercode::Import::Intercode1::Importer
       runs_table
       gms_table
       signup_table
-    ].each do |importer|
-      send(importer).import!
-    end
+    ].each { |importer| send(importer).import! }
 
     import_store_content!
     import_pre_con_content!
@@ -85,13 +82,7 @@ class Intercode::Import::Intercode1::Importer
 
   def import_store_content!
     if @connection.table_exists?('StoreItems')
-      %i[
-        store_items_table
-        store_orders_table
-        store_order_entries_table
-      ].each do |importer|
-        send(importer).import!
-      end
+      %i[store_items_table store_orders_table store_order_entries_table].each { |importer| send(importer).import! }
     else
       legacy_t_shirt_importer.import!
     end
@@ -99,35 +90,32 @@ class Intercode::Import::Intercode1::Importer
 
   def import_pre_con_content!
     if @connection.table_exists?('PreConEvents')
-      %i[
-        pre_con_events_table
-        pre_con_runs_table
-      ].each do |importer|
-        send(importer).import!
-      end
+      %i[pre_con_events_table pre_con_runs_table].each { |importer| send(importer).import! }
     end
   end
 
   def con_table
-    @con_table ||= Intercode::Import::Intercode1::Tables::Con.new(
-      connection,
-      con_name: config.var(:con_name),
-      con_domain: @con_domain,
-      friday_date: config.var(:friday_date),
-      constants_file: constants_file,
-      timezone_name: 'US/Eastern',
-      thursday_enabled: config.var(:thursday_enabled),
-      maximum_tickets: config.var(:maximum_tickets)
-    )
+    @con_table ||=
+      Intercode::Import::Intercode1::Tables::Con.new(
+        connection,
+        con_name: config.var(:con_name),
+        con_domain: @con_domain,
+        friday_date: config.var(:friday_date),
+        constants_file: constants_file,
+        timezone_name: 'US/Eastern',
+        thursday_enabled: config.var(:thursday_enabled),
+        maximum_tickets: config.var(:maximum_tickets)
+      )
   end
 
   def price_schedule_table
-    @price_schedule_table ||= Intercode::Import::Intercode1::Tables::PriceSchedule.new(
-      connection,
-      @con,
-      config.var(:price_schedule),
-      config.var(:php_timezone)
-    )
+    @price_schedule_table ||=
+      Intercode::Import::Intercode1::Tables::PriceSchedule.new(
+        connection,
+        @con,
+        config.var(:price_schedule),
+        config.var(:php_timezone)
+      )
   end
 
   def events_table
@@ -140,13 +128,14 @@ class Intercode::Import::Intercode1::Importer
 
   def users_table
     return unless events_id_map
-    @users_table ||= Intercode::Import::Intercode1::Tables::Users.new(
-      connection,
-      con,
-      events_id_map,
-      registration_statuses.registration_status_map,
-      @legacy_password_md5s
-    )
+    @users_table ||=
+      Intercode::Import::Intercode1::Tables::Users.new(
+        connection,
+        con,
+        events_id_map,
+        registration_statuses.registration_status_map,
+        @legacy_password_md5s
+      )
   end
 
   def users_id_map
@@ -160,31 +149,20 @@ class Intercode::Import::Intercode1::Importer
   def away_table
     return unless user_con_profiles_id_map
 
-    @away_table ||= Intercode::Import::Intercode1::Tables::Away.new(
-      connection,
-      con,
-      user_con_profiles_id_map
-    )
+    @away_table ||= Intercode::Import::Intercode1::Tables::Away.new(connection, con, user_con_profiles_id_map)
   end
 
   def bios_table
     return unless user_con_profiles_id_map
 
-    @bios_table ||= Intercode::Import::Intercode1::Tables::Bios.new(
-      connection,
-      user_con_profiles_id_map
-    )
+    @bios_table ||= Intercode::Import::Intercode1::Tables::Bios.new(connection, user_con_profiles_id_map)
   end
 
   def bids_table
     return unless events_id_map && user_con_profiles_id_map
 
-    @bids_table ||= Intercode::Import::Intercode1::Tables::Bids.new(
-      connection,
-      con,
-      events_id_map,
-      user_con_profiles_id_map
-    )
+    @bids_table ||=
+      Intercode::Import::Intercode1::Tables::Bids.new(connection, con, events_id_map, user_con_profiles_id_map)
   end
 
   def event_proposals_id_map
@@ -194,27 +172,16 @@ class Intercode::Import::Intercode1::Importer
   def bid_times_table
     return unless event_proposals_id_map
 
-    @bid_times_table ||= Intercode::Import::Intercode1::Tables::BidTimes.new(
-      connection,
-      con,
-      event_proposals_id_map
-    )
+    @bid_times_table ||= Intercode::Import::Intercode1::Tables::BidTimes.new(connection, con, event_proposals_id_map)
   end
 
   def bid_info_table
-    @bid_info_table ||= Intercode::Import::Intercode1::Tables::BidInfo.new(
-      connection,
-      con,
-      config.constants_file
-    )
+    @bid_info_table ||= Intercode::Import::Intercode1::Tables::BidInfo.new(connection, con, config.constants_file)
   end
 
   def pre_con_events_table
-    @pre_con_events_table ||= Intercode::Import::Intercode1::Tables::PreConEvents.new(
-      connection,
-      con,
-      user_con_profiles_id_map
-    )
+    @pre_con_events_table ||=
+      Intercode::Import::Intercode1::Tables::PreConEvents.new(connection, con, user_con_profiles_id_map)
   end
 
   def pre_con_events_id_map
@@ -222,22 +189,14 @@ class Intercode::Import::Intercode1::Importer
   end
 
   def pre_con_runs_table
-    @pre_con_runs_table ||= Intercode::Import::Intercode1::Tables::PreConRuns.new(
-      connection,
-      con,
-      pre_con_events_id_map
-    )
+    @pre_con_runs_table ||=
+      Intercode::Import::Intercode1::Tables::PreConRuns.new(connection, con, pre_con_events_id_map)
   end
 
   def runs_table
     return unless events_id_map && users_id_map && rooms_id_map
-    @runs_table ||= Intercode::Import::Intercode1::Tables::Runs.new(
-      connection,
-      con,
-      events_id_map,
-      users_id_map,
-      rooms_id_map
-    )
+    @runs_table ||=
+      Intercode::Import::Intercode1::Tables::Runs.new(connection, con, events_id_map, users_id_map, rooms_id_map)
   end
 
   def run_id_map
@@ -246,22 +205,19 @@ class Intercode::Import::Intercode1::Importer
 
   def gms_table
     return unless events_id_map && users_id_map
-    @gms_table ||= Intercode::Import::Intercode1::Tables::GMs.new(
-      connection,
-      con,
-      events_id_map,
-      users_id_map,
-      user_con_profiles_id_map
-    )
+    @gms_table ||=
+      Intercode::Import::Intercode1::Tables::GMs.new(
+        connection,
+        con,
+        events_id_map,
+        users_id_map,
+        user_con_profiles_id_map
+      )
   end
 
   def legacy_t_shirt_importer
-    @legacy_t_shirt_importer ||= Intercode::Import::Intercode1::LegacyTShirtImporter.new(
-      connection,
-      con,
-      config,
-      user_con_profiles_id_map
-    )
+    @legacy_t_shirt_importer ||=
+      Intercode::Import::Intercode1::LegacyTShirtImporter.new(connection, con, config, user_con_profiles_id_map)
   end
 
   def rooms_table
@@ -273,60 +229,52 @@ class Intercode::Import::Intercode1::Importer
   end
 
   def signup_table
-    @signup_table ||= Intercode::Import::Intercode1::Tables::Signup.new(
-      connection,
-      con,
-      run_id_map,
-      users_id_map,
-      user_con_profiles_id_map
-    )
+    @signup_table ||=
+      Intercode::Import::Intercode1::Tables::Signup.new(
+        connection,
+        con,
+        run_id_map,
+        users_id_map,
+        user_con_profiles_id_map
+      )
   end
 
   def staff_position_importer
-    @staff_position_importer ||= Intercode::Import::Intercode1::StaffPositionImporter.new(
-      con,
-      config.var(:staff_positions)
-    )
+    @staff_position_importer ||=
+      Intercode::Import::Intercode1::StaffPositionImporter.new(con, config.var(:staff_positions))
   end
 
   def store_items_table
-    @store_items_table ||= Intercode::Import::Intercode1::Tables::StoreItems.new(
-      connection,
-      con,
-      File.expand_path('img', File.dirname(constants_file))
-    )
+    @store_items_table ||=
+      Intercode::Import::Intercode1::Tables::StoreItems.new(
+        connection,
+        con,
+        File.expand_path('img', File.dirname(constants_file))
+      )
   end
 
   def store_order_entries_table
-    @store_order_entries_table ||= Intercode::Import::Intercode1::Tables::StoreOrderEntries.new(
-      connection,
-      store_orders_table.id_map,
-      store_items_table.id_map
-    )
+    @store_order_entries_table ||=
+      Intercode::Import::Intercode1::Tables::StoreOrderEntries.new(
+        connection,
+        store_orders_table.id_map,
+        store_items_table.id_map
+      )
   end
 
   def store_orders_table
-    @store_orders_table ||= Intercode::Import::Intercode1::Tables::StoreOrders.new(
-      connection,
-      con,
-      user_con_profiles_id_map
-    )
+    @store_orders_table ||=
+      Intercode::Import::Intercode1::Tables::StoreOrders.new(connection, con, user_con_profiles_id_map)
   end
 
   def root_html_content
-    @root_html_content ||= Intercode::Import::Intercode1::HtmlContent.new(
-      con,
-      File.dirname(constants_file),
-      constants_file
-    )
+    @root_html_content ||=
+      Intercode::Import::Intercode1::HtmlContent.new(con, File.dirname(constants_file), constants_file)
   end
 
   def text_dir_html_content
-    @text_dir_html_content ||= Intercode::Import::Intercode1::HtmlContent.new(
-      con,
-      config.var(:text_dir),
-      constants_file
-    )
+    @text_dir_html_content ||=
+      Intercode::Import::Intercode1::HtmlContent.new(con, config.var(:text_dir), constants_file)
   end
 
   def navigation_items
@@ -334,10 +282,8 @@ class Intercode::Import::Intercode1::Importer
   end
 
   def registration_statuses
-    @registration_statuses ||= Intercode::Import::Intercode1::RegistrationStatuses.new(
-      con,
-      price_schedule_table.build_ticket_type
-    )
+    @registration_statuses ||=
+      Intercode::Import::Intercode1::RegistrationStatuses.new(con, price_schedule_table.build_ticket_type)
   end
 
   def embedded_pdf_pages
@@ -345,15 +291,13 @@ class Intercode::Import::Intercode1::Importer
     src_dir = File.dirname(@constants_file)
 
     if config.var(:show_flyer)
-      embedded_pdf_pages << Intercode::Import::Intercode1::EmbeddedPdfPage.new(
-        con, src_dir, 'InterconFlyer.pdf', 'Flyer'
-      )
+      embedded_pdf_pages <<
+        Intercode::Import::Intercode1::EmbeddedPdfPage.new(con, src_dir, 'InterconFlyer.pdf', 'Flyer')
     end
 
     if config.var(:show_program)
-      embedded_pdf_pages << Intercode::Import::Intercode1::EmbeddedPdfPage.new(
-        con, src_dir, 'program-page-order.pdf', 'Program'
-      )
+      embedded_pdf_pages <<
+        Intercode::Import::Intercode1::EmbeddedPdfPage.new(con, src_dir, 'program-page-order.pdf', 'Program')
     end
 
     embedded_pdf_pages

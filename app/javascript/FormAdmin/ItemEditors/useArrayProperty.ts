@@ -3,20 +3,31 @@ import { v4 as uuidv4 } from 'uuid';
 import { KeysOfType, useArrayBasicSortableHandlers } from '@neinteractiveliterature/litform';
 
 import usePropertyUpdater from './usePropertyUpdater';
-import { ParsedFormItem } from '../FormItemUtils';
+import { TypedFormItem } from '../FormItemUtils';
 import { WithoutGeneratedId } from '../../GeneratedIdUtils';
+
+export type UseArrayPropertyResult<ElementType extends { generatedId: string }> = [
+  addItem: () => void,
+  itemChanged: (generatedId: string, updater: (item: ElementType) => ElementType) => void,
+  deleteItem: (generatedId: string) => void,
+  draggingItem: ElementType | undefined,
+  sortableHandlers: Omit<ReturnType<typeof useArrayBasicSortableHandlers>, 'draggingItem'>,
+];
 
 export default function useArrayProperty<
   ElementType extends { generatedId: string },
-  FormItemType extends ParsedFormItem<any, any>,
-  PropertyName extends KeysOfType<FormItemType['properties'], Array<ElementType>>,
+  FormItemType extends TypedFormItem,
+  PropertyName extends KeysOfType<NonNullable<FormItemType['properties']>, Array<ElementType>>,
 >(
   array: ElementType[],
   property: PropertyName,
   onChange: React.Dispatch<React.SetStateAction<FormItemType>>,
-  generateNewItem: () => WithoutGeneratedId<FormItemType['properties'][PropertyName][0]>,
-) {
-  const updateItems = usePropertyUpdater<FormItemType, PropertyName>(onChange, property);
+  generateNewItem: () => WithoutGeneratedId<ElementType>,
+): UseArrayPropertyResult<ElementType> {
+  const updateItems: React.Dispatch<React.SetStateAction<ElementType[]>> = usePropertyUpdater<
+    FormItemType,
+    PropertyName
+  >(onChange, property);
 
   const itemChanged = useCallback(
     (generatedId: string, updater: (item: ElementType) => ElementType) => {
@@ -37,24 +48,18 @@ export default function useArrayProperty<
     () =>
       updateItems((prevItems: ElementType[]) => [
         ...prevItems,
-        { ...generateNewItem(), generatedId: uuidv4() },
+        { ...generateNewItem(), generatedId: uuidv4() } as ElementType,
       ]),
     [generateNewItem, updateItems],
   );
 
   const deleteItem = useCallback(
     (generatedId: string) => {
-      onChange((prevFormItem) => ({
-        ...prevFormItem,
-        properties: {
-          ...prevFormItem.properties,
-          [property]: prevFormItem.properties[property].filter(
-            (item: ElementType) => item.generatedId !== generatedId,
-          ),
-        },
-      }));
+      updateItems((prevItems) =>
+        prevItems.filter((item: ElementType) => item.generatedId !== generatedId),
+      );
     },
-    [onChange, property],
+    [updateItems],
   );
 
   const moveItem = useCallback(
@@ -76,5 +81,5 @@ export default function useArrayProperty<
     'generatedId',
   );
 
-  return [addItem, itemChanged, deleteItem, draggingItem, sortableHandlers] as const;
+  return [addItem, itemChanged, deleteItem, draggingItem, sortableHandlers];
 }

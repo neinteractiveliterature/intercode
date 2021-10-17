@@ -11,27 +11,55 @@ import TimespanItemInput from './TimespanItemInput';
 import AgeRestrictionsInput from './AgeRestrictionsInput';
 import { CommonFormItemInputProps } from './CommonFormItemInputProps';
 import { ConventionForFormItemDisplay } from '../ItemDisplays/FormItemDisplay';
+import {
+  AgeRestrictionsFormItem,
+  DateFormItem,
+  EventEmailFormItem,
+  FormItemValueType,
+  FreeTextFormItem,
+  MultipleChoiceFormItem,
+  RegistrationPolicyFormItem,
+  StaticTextFormItem,
+  TimeblockPreferenceFormItem,
+  TimespanFormItem,
+  TypedFormItem,
+  valueIsValidForFormItemType,
+} from '../../FormAdmin/FormItemUtils';
+import assertNever from 'assert-never';
 
-export type FormItemInputProps = Omit<CommonFormItemInputProps<any>, 'onChange'> & {
-  onChange: (identifier: string, newValue: any) => void;
+export type FormItemInputProps<FormItemType extends TypedFormItem> = Omit<
+  CommonFormItemInputProps<FormItemType>,
+  'onChange' | 'value'
+> & {
+  onChange: (
+    identifier: string,
+    newValue: FormItemValueType<FormItemType> | null | undefined,
+  ) => void;
+  value: unknown;
   convention: ConventionForFormItemDisplay;
 };
 
-function FormItemInput({
+function FormItemInput<FormItemType extends TypedFormItem>({
   formItem,
   formTypeIdentifier,
-  value,
+  value: uncheckedValue,
   onChange,
   onInteract,
   valueInvalid,
   convention,
-}: FormItemInputProps) {
+}: FormItemInputProps<FormItemType>) {
   const valueDidChange = useCallback(
-    (newValue) => onChange(formItem.identifier, newValue),
+    (newValue) => {
+      if (formItem.identifier != null) {
+        onChange(formItem.identifier, newValue);
+      }
+    },
     [formItem.identifier, onChange],
   );
 
-  const commonProps = {
+  const value = valueIsValidForFormItemType(formItem, uncheckedValue) ? uncheckedValue : undefined;
+
+  const commonProps: CommonFormItemInputProps<FormItemType> = {
     formItem,
     formTypeIdentifier,
     value,
@@ -42,24 +70,47 @@ function FormItemInput({
 
   switch (formItem.item_type) {
     case 'age_restrictions':
-      return <AgeRestrictionsInput {...commonProps} />;
+      return (
+        <AgeRestrictionsInput
+          {...(commonProps as CommonFormItemInputProps<AgeRestrictionsFormItem>)}
+        />
+      );
     case 'date':
-      return <DateItemInput {...commonProps} />;
+      return <DateItemInput {...(commonProps as CommonFormItemInputProps<DateFormItem>)} />;
     case 'event_email':
-      return <EventEmailInput {...commonProps} convention={convention} />;
+      return (
+        <EventEmailInput
+          {...(commonProps as CommonFormItemInputProps<EventEmailFormItem>)}
+          convention={convention}
+        />
+      );
     case 'free_text':
-      return <FreeTextItemInput {...commonProps} />;
+      return <FreeTextItemInput {...(commonProps as CommonFormItemInputProps<FreeTextFormItem>)} />;
     case 'multiple_choice':
-      return <MultipleChoiceItemInput {...commonProps} />;
+      return (
+        <MultipleChoiceItemInput
+          {...(commonProps as CommonFormItemInputProps<MultipleChoiceFormItem>)}
+        />
+      );
     case 'registration_policy':
-      return <RegistrationPolicyItemInput {...commonProps} />;
+      return (
+        <RegistrationPolicyItemInput
+          {...(commonProps as CommonFormItemInputProps<RegistrationPolicyFormItem>)}
+        />
+      );
     case 'static_text':
-      return <StaticTextItem {...commonProps} />;
+      return <StaticTextItem {...(commonProps as CommonFormItemInputProps<StaticTextFormItem>)} />;
     case 'timeblock_preference':
-      return <TimeblockPreferenceItemInput {...commonProps} convention={convention} />;
+      return (
+        <TimeblockPreferenceItemInput
+          {...(commonProps as CommonFormItemInputProps<TimeblockPreferenceFormItem>)}
+          convention={convention}
+        />
+      );
     case 'timespan':
-      return <TimespanItemInput {...commonProps} />;
+      return <TimespanItemInput {...(commonProps as CommonFormItemInputProps<TimespanFormItem>)} />;
     default:
+      assertNever(formItem, true);
       return (
         <div>
           <code>{formItem.identifier}</code>

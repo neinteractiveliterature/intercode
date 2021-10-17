@@ -54,9 +54,7 @@ class TeamMemberPolicyTest < ActiveSupport::TestCase
     it 'returns all team memberships in your own events but not in other events you cannot read' do
       convention.update!(show_schedule: 'no', show_event_list: 'no')
       all_team_members
-      resolved_team_members = TeamMemberPolicy::Scope.new(
-        team_member.user_con_profile.user, TeamMember.all
-      ).resolve
+      resolved_team_members = TeamMemberPolicy::Scope.new(team_member.user_con_profile.user, TeamMember.all).resolve
 
       assert_equal [team_member, other_team_member].sort, resolved_team_members.sort
     end

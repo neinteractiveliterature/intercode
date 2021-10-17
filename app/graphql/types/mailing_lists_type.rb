@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::MailingListsType < Types::BaseObject
   def self.authorized?(value, context)
     Pundit.policy(context[:pundit_user], value).read_any_mailing_list?

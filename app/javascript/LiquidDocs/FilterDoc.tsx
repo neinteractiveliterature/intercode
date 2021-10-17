@@ -7,7 +7,7 @@ export type FilterDocHeaderProps = {
   filter: YardMethod;
 };
 
-function FilterDoc({ filter }: FilterDocHeaderProps) {
+function FilterDoc({ filter }: FilterDocHeaderProps): JSX.Element {
   const location = useLocation();
 
   return (

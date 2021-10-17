@@ -13,7 +13,7 @@ type DO<QueryType extends DefaultUserConProfilesQueryData> = NonNullable<
 export type UserConProfileSelectProps<
   DataType,
   OptionType extends OptionTypeBase,
-  IsMulti extends boolean
+  IsMulti extends boolean,
 > = Omit<
   GraphQLAsyncSelectProps<DataType, OptionType, IsMulti>,
   'isClearable' | 'getOptions' | 'getVariables' | 'getOptionValue' | 'formatOptionLabel' | 'query'
@@ -24,17 +24,15 @@ export type UserConProfileSelectProps<
 function UserConProfileSelect<
   IsMulti extends boolean = false,
   DataType extends DQ = DQ,
-  OptionType extends DO<DataType> = DO<DQ>
+  OptionType extends DO<DataType> = DO<DQ>,
 >({
   userConProfilesQuery,
   ...otherProps
-}: UserConProfileSelectProps<DataType, OptionType, IsMulti>) {
+}: UserConProfileSelectProps<DataType, OptionType, IsMulti>): JSX.Element {
   return (
     <GraphQLAsyncSelect<DataType, OptionType>
       isClearable
-      getOptions={(data) =>
-        (data.convention?.user_con_profiles_paginated?.entries ?? []) as OptionType[]
-      }
+      getOptions={(data) => data.convention.user_con_profiles_paginated.entries as OptionType[]}
       getVariables={(inputValue) => ({ name: inputValue })}
       getOptionValue={(option: OptionType) => option.id}
       formatOptionLabel={(option: OptionType) => (

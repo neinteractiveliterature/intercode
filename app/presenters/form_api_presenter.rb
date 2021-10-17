@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class FormApiPresenter
   include FormMarkdown
 
@@ -20,11 +21,7 @@ class FormApiPresenter
   private
 
   def form_section_json(section)
-    {
-      id: section.id,
-      title: render_markdown(section.title),
-      position: section.position
-    }
+    { id: section.id, title: render_markdown(section.title), position: section.position }
   end
 
   def form_item_json(item)

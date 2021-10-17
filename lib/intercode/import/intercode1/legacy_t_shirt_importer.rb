@@ -51,30 +51,25 @@ class Intercode::Import::Intercode1::LegacyTShirtImporter
   def build_product_with_image_if_available(name, *image_filenames)
     if config.var(:shirt_img_available)
       path = find_existing_image_path(image_filenames)
-      if path
-        return File.open(path) do |image|
-          build_product_with_image(name, image)
-        end
-      end
+      return File.open(path) { |image| build_product_with_image(name, image) } if path
     end
 
     build_product_with_image(name, nil)
   end
 
   def build_product_with_image(name, image)
-    product = con.products.new(
-      available: true,
-      name: name,
-      description: "A shirt with the #{con.name} logo.",
-      image: image,
-      price_cents: config.var(:tshirt_dollars) * 100,
-      price_currency: 'USD',
-      payment_options: %w[stripe pay_at_convention]
-    )
+    product =
+      con.products.new(
+        available: true,
+        name: name,
+        description: "A shirt with the #{con.name} logo.",
+        image: image,
+        price_cents: config.var(:tshirt_dollars) * 100,
+        price_currency: 'USD',
+        payment_options: %w[stripe pay_at_convention]
+      )
 
-    LEGACY_SHIRT_SIZES.each_with_index do |size, i|
-      product.product_variants.new(name: size, position: i + 1)
-    end
+    LEGACY_SHIRT_SIZES.each_with_index { |size, i| product.product_variants.new(name: size, position: i + 1) }
 
     product
   end
@@ -98,10 +93,12 @@ class Intercode::Import::Intercode1::LegacyTShirtImporter
 
   def create_order_entry(order, product, variant_name, quantity)
     product_variant = product.product_variants.find { |variant| variant.name == variant_name }
-    entry = order.order_entries.find_or_initialize_by(
-      product_id: product.id,
-      product_variant_id: product_variant.id
-    ) { |new_entry| new_entry.quantity = 0 }
+    entry =
+      order
+        .order_entries
+        .find_or_initialize_by(product_id: product.id, product_variant_id: product_variant.id) do |new_entry|
+          new_entry.quantity = 0
+        end
 
     entry.quantity += quantity
     entry.save!
@@ -111,16 +108,12 @@ class Intercode::Import::Intercode1::LegacyTShirtImporter
     LEGACY_SHIRT_SIZES.each do |size|
       create_order_entry(order, @shirt1, size, row[size.to_sym]) if row[size.to_sym].to_i > 0
 
-      if two_shirts? && row[:"#{size}_2"].to_i > 0
-        create_order_entry(order, @shirt2, size, row[:"#{size}_2"])
-      end
+      create_order_entry(order, @shirt2, size, row[:"#{size}_2"]) if two_shirts? && row[:"#{size}_2"].to_i > 0
     end
   end
 
   def find_existing_image_path(filenames)
-    existing_filename = filenames.find do |filename|
-      File.exist?(image_path(filename))
-    end
+    existing_filename = filenames.find { |filename| File.exist?(image_path(filename)) }
     return unless existing_filename
     image_path(existing_filename)
   end

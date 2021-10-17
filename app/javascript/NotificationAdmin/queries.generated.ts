@@ -4,16 +4,16 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type NotificationTemplateFieldsFragment = { __typename: 'NotificationTemplate', id: number, event_key: string, subject?: Types.Maybe<string>, body_html?: Types.Maybe<string>, body_text?: Types.Maybe<string>, body_sms?: Types.Maybe<string> };
+export type NotificationTemplateFieldsFragment = { __typename: 'NotificationTemplate', event_key: string, subject?: string | null | undefined, body_html?: string | null | undefined, body_text?: string | null | undefined, body_sms?: string | null | undefined, id: string };
 
 export type NotificationAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type NotificationAdminQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, notification_templates: Array<{ __typename: 'NotificationTemplate', id: number, event_key: string, subject?: Types.Maybe<string>, body_html?: Types.Maybe<string>, body_text?: Types.Maybe<string>, body_sms?: Types.Maybe<string> }> } };
+export type NotificationAdminQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, notification_templates: Array<{ __typename: 'NotificationTemplate', event_key: string, subject?: string | null | undefined, body_html?: string | null | undefined, body_text?: string | null | undefined, body_sms?: string | null | undefined, id: string }> } };
 
 export const NotificationTemplateFieldsFragmentDoc = gql`
     fragment NotificationTemplateFields on NotificationTemplate {
-  id
+  id: transitionalId
   event_key
   subject
   body_html
@@ -23,10 +23,10 @@ export const NotificationTemplateFieldsFragmentDoc = gql`
     `;
 export const NotificationAdminQueryDocument = gql`
     query NotificationAdminQuery {
-  convention: assertConvention {
-    id
+  convention: conventionByRequestHost {
+    id: transitionalId
     notification_templates {
-      id
+      id: transitionalId
       ...NotificationTemplateFields
     }
   }

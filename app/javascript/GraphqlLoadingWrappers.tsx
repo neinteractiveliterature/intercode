@@ -1,13 +1,51 @@
-/* eslint-disable import/prefer-default-export */
-import { QueryHookOptions, QueryResult } from '@apollo/client';
+import { ApolloError, QueryHookOptions, QueryResult } from '@apollo/client';
 import * as React from 'react';
 import { useParams } from 'react-router-dom';
 import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
 import FourOhFourPage from './FourOhFourPage';
 
+export function LoadQueryWithVariablesWrapper<TData, TVariables, TProps>(
+  useLoadData: (baseOptions?: QueryHookOptions<TData, TVariables>) => QueryResult<TData>,
+  getVariables: (props: TProps) => TVariables,
+  WrappedComponent: React.ComponentType<TProps & { data: TData }>,
+): (props: TProps) => JSX.Element {
+  const Wrapper = (props: TProps) => {
+    const variables = React.useMemo(() => getVariables(props), [props]);
+    const { data, loading, error } = useLoadData({ variables });
+
+    if (loading) {
+      return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
+    }
+
+    if (error) {
+      if (
+        error instanceof ApolloError &&
+        error.graphQLErrors.some((err) => err.extensions?.code === 'NOT_FOUND')
+      ) {
+        return <FourOhFourPage />;
+      }
+
+      return <ErrorDisplay graphQLError={error} />;
+    }
+
+    if (!data) {
+      return <FourOhFourPage />;
+    }
+
+    return <WrappedComponent data={data} {...props} />;
+  };
+
+  const wrappedComponentDisplayName =
+    WrappedComponent.displayName || WrappedComponent.name || 'Component';
+
+  Wrapper.displayName = `LoadQueryWithVariablesWrapper(${wrappedComponentDisplayName})`;
+
+  return Wrapper;
+}
+
 export function LoadSingleValueFromCollectionWrapper<TData, TValue, TProps>(
-  useLoadData: (baseOptions?: QueryHookOptions<TData, {}>) => QueryResult<TData>,
+  useLoadData: (baseOptions?: QueryHookOptions<TData, unknown>) => QueryResult<TData>,
   getValue: (data: TData, id: string) => TValue | undefined,
   WrappedComponent: React.ComponentType<TProps & { value: TValue; data: TData }>,
 ): (props: TProps) => JSX.Element {
@@ -24,11 +62,11 @@ export function LoadSingleValueFromCollectionWrapper<TData, TValue, TProps>(
       return <ErrorDisplay graphQLError={error} />;
     }
 
-    if (!value) {
+    if (!data || !value) {
       return <FourOhFourPage />;
     }
 
-    return <WrappedComponent value={value} data={data!} {...props} />;
+    return <WrappedComponent value={value} data={data} {...props} />;
   };
 
   const wrappedComponentDisplayName =

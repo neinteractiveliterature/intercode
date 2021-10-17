@@ -26,7 +26,4 @@ module Intercode
   end
 end
 
-Liquid::Template.register_tag(
-  'spoiler',
-  Intercode::Liquid::Tags::Spoiler
-)
+Liquid::Template.register_tag('spoiler', Intercode::Liquid::Tags::Spoiler)

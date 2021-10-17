@@ -5,7 +5,7 @@ import EditCmsLayout from './EditCmsLayout';
 import NewCmsLayout from './NewCmsLayout';
 import ViewCmsLayoutSource from './ViewCmsLayoutSource';
 
-function CmsLayoutsAdmin() {
+function CmsLayoutsAdmin(): JSX.Element {
   return (
     <Switch>
       <Route path="/cms_layouts/:id/edit">

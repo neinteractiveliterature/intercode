@@ -2,15 +2,15 @@
 import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
-export type CommonFormItemFieldsFragment = { __typename: 'FormItem', id: number, position: number, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole };
+export type CommonFormItemFieldsFragment = { __typename: 'FormItem', position: number, identifier?: string | null | undefined, item_type: string, rendered_properties: string, default_value?: string | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole, id: string };
 
-export type CommonFormSectionFieldsFragment = { __typename: 'FormSection', id: number, title?: Types.Maybe<string>, position: number, form_items: Array<{ __typename: 'FormItem', id: number, position: number, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> };
+export type CommonFormSectionFieldsFragment = { __typename: 'FormSection', title?: string | null | undefined, position: number, id: string, form_items: Array<{ __typename: 'FormItem', position: number, identifier?: string | null | undefined, item_type: string, rendered_properties: string, default_value?: string | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole, id: string }> };
 
-export type CommonFormFieldsFragment = { __typename: 'Form', id: number, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: number, title?: Types.Maybe<string>, position: number, form_items: Array<{ __typename: 'FormItem', id: number, position: number, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> };
+export type CommonFormFieldsFragment = { __typename: 'Form', title: string, form_type: Types.FormType, id: string, form_sections: Array<{ __typename: 'FormSection', title?: string | null | undefined, position: number, id: string, form_items: Array<{ __typename: 'FormItem', position: number, identifier?: string | null | undefined, item_type: string, rendered_properties: string, default_value?: string | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole, id: string }> }> };
 
 export const CommonFormItemFieldsFragmentDoc = gql`
     fragment CommonFormItemFields on FormItem {
-  id
+  id: transitionalId
   position
   identifier
   item_type
@@ -22,22 +22,22 @@ export const CommonFormItemFieldsFragmentDoc = gql`
     `;
 export const CommonFormSectionFieldsFragmentDoc = gql`
     fragment CommonFormSectionFields on FormSection {
-  id
+  id: transitionalId
   title
   position
   form_items {
-    id
+    id: transitionalId
     ...CommonFormItemFields
   }
 }
     ${CommonFormItemFieldsFragmentDoc}`;
 export const CommonFormFieldsFragmentDoc = gql`
     fragment CommonFormFields on Form {
-  id
+  id: transitionalId
   title
   form_type
   form_sections {
-    id
+    id: transitionalId
     ...CommonFormSectionFields
   }
 }

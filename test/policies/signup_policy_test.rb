@@ -141,9 +141,7 @@ class SignupPolicyTest < ActiveSupport::TestCase
 
     it 'returns signups for events where you are a team member' do
       team_member = create(:team_member, event: signup.run.event)
-      resolved_signups = SignupPolicy::Scope.new(
-        team_member.user_con_profile.user, Signup.all
-      ).resolve
+      resolved_signups = SignupPolicy::Scope.new(team_member.user_con_profile.user, Signup.all).resolve
 
       assert_equal [signup], resolved_signups.sort
     end
@@ -155,18 +153,14 @@ class SignupPolicyTest < ActiveSupport::TestCase
 
     it 'returns signups of other attendees of the same run' do
       my_signup = create(:signup, run: signup.run)
-      resolved_signups = SignupPolicy::Scope.new(
-        my_signup.user_con_profile.user, Signup.all
-      ).resolve
+      resolved_signups = SignupPolicy::Scope.new(my_signup.user_con_profile.user, Signup.all).resolve
       assert_equal [my_signup, signup].sort, resolved_signups.sort
     end
 
     it 'does not return signups of other attendees of the same run if private_signup_list is set' do
       signup.run.event.update!(private_signup_list: true)
       my_signup = create(:signup, run: signup.run)
-      resolved_signups = SignupPolicy::Scope.new(
-        my_signup.user_con_profile.user, Signup.all
-      ).resolve
+      resolved_signups = SignupPolicy::Scope.new(my_signup.user_con_profile.user, Signup.all).resolve
       assert_equal [my_signup].sort, resolved_signups.sort
     end
 

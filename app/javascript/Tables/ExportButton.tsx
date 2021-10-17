@@ -7,11 +7,16 @@ import {
   reactTableSortToTableResultsSort,
 } from './TableUtils';
 
-type Scalar = string | number | boolean;
-type CompositeData = null | undefined | Scalar | CompositeData[] | { [key: string]: CompositeData };
+export type URLParamSerializableScalar = string | number | boolean;
+export type URLParamSerializable =
+  | null
+  | undefined
+  | URLParamSerializableScalar
+  | URLParamSerializable[]
+  | { [key: string]: URLParamSerializable };
 
 function dataToKeyPathValuePairs(
-  data: CompositeData,
+  data: URLParamSerializable,
   prependKeys: string[] = [],
 ): [string[], string][] {
   if (data == null) {
@@ -44,7 +49,7 @@ function dataToKeyPathValuePairs(
     .reduce((acc, value) => acc.concat(value), []);
 }
 
-function dataToParams(data: CompositeData) {
+function dataToParams(data: URLParamSerializable) {
   const params = new URLSearchParams();
   const keyPathValuePairs = dataToKeyPathValuePairs(data);
   keyPathValuePairs.forEach(([keyPath, value]) => {
@@ -56,7 +61,7 @@ function dataToParams(data: CompositeData) {
   return params;
 }
 
-function getExportUrl<RowType extends object>(
+function getExportUrl<RowType extends Record<string, unknown>>(
   baseUrl: string,
   {
     filters,
@@ -82,19 +87,19 @@ function getExportUrl<RowType extends object>(
   return url.toString();
 }
 
-export type ReactTableExportButtonProps<RowType extends object> = {
+export type ReactTableExportButtonProps<RowType extends Record<string, unknown>> = {
   exportUrl: string;
   filters: Filters<RowType>;
   sortBy: SortingRule<RowType>[];
   columns?: string[];
 };
 
-function ReactTableExportButton<RowType extends object>({
+function ReactTableExportButton<RowType extends Record<string, unknown>>({
   exportUrl,
   filters,
   sortBy,
   columns,
-}: ReactTableExportButtonProps<RowType>) {
+}: ReactTableExportButtonProps<RowType>): JSX.Element {
   const { t } = useTranslation();
   const href = useMemo(
     () => getExportUrl(exportUrl, { filters, sortBy, columns }),

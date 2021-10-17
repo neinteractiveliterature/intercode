@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::CreateForm < Mutations::BaseMutation
   field :form, Types::FormType, null: false
 
@@ -20,11 +21,7 @@ class Mutations::CreateForm < Mutations::BaseMutation
         properties = properties.merge('caption' => item_config['description'])
       end
 
-      section.form_items.create!(
-        identifier: identifier,
-        item_type: item_type,
-        properties: properties
-      )
+      section.form_items.create!(identifier: identifier, item_type: item_type, properties: properties)
     end
 
     { form: form }

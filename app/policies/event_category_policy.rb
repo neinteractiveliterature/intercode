@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class EventCategoryPolicy < ApplicationPolicy
   delegate :convention, to: :record
 
@@ -6,10 +7,10 @@ class EventCategoryPolicy < ApplicationPolicy
   end
 
   def manage?
-    return true if oauth_scoped_disjunction do |d|
-      d.add(:manage_conventions) do
-        has_convention_permission?(convention, 'update_event_categories')
-      end
+    if oauth_scoped_disjunction do |d|
+         d.add(:manage_conventions) { has_convention_permission?(convention, 'update_event_categories') }
+       end
+      return true
     end
 
     super

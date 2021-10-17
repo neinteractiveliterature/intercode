@@ -1,7 +1,14 @@
+# frozen_string_literal: true
 class Types::SignupChangeType < Types::BaseObject
   authorize_record
 
-  field :id, Int, null: false
+  field :id,
+        Int,
+        deprecation_reason:
+          "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
+all id fields are replaced with ones of type ID.",
+        null: false
+  field :transitional_id, ID, method: :id, null: false, camelize: true
   field :state, Types::SignupStateType, null: false
   field :counted, Boolean, null: false
   field :previous_signup_change, Types::SignupChangeType, null: true
@@ -17,19 +24,25 @@ class Types::SignupChangeType < Types::BaseObject
 
   # Ugly AF, but it gets us everything the policy wants
   def signup
-    AssociationLoader.for(SignupChange, :signup).load(object).then do |signup|
-      run_promise = AssociationLoader.for(Signup, :run).load(signup).then do |run|
-        AssociationLoader.for(Run, :event).load(run).then do |event|
-          AssociationLoader.for(Event, :convention).load(event)
-        end
-      end
+    AssociationLoader
+      .for(SignupChange, :signup)
+      .load(object)
+      .then do |signup|
+        run_promise =
+          AssociationLoader
+            .for(Signup, :run)
+            .load(signup)
+            .then do |run|
+              AssociationLoader
+                .for(Run, :event)
+                .load(run)
+                .then { |event| AssociationLoader.for(Event, :convention).load(event) }
+            end
 
-      Promise.all([
-        run_promise, AssociationLoader.for(Signup, :user_con_profile).load(signup)
-      ]).then do |_results|
-        signup
+        Promise
+          .all([run_promise, AssociationLoader.for(Signup, :user_con_profile).load(signup)])
+          .then { |_results| signup }
       end
-    end
   end
 
   def counted

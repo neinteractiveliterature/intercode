@@ -11,14 +11,24 @@ class Intercode::Import::Intercode1::Tables::Bids < Intercode::Import::Intercode
   }
 
   BID_ATTRIBUTES = {
-    Title: { form_field: 'title' },
-    Author: { form_field: 'authors' },
-    Organization: { form_field: 'organization' },
-    Homepage: { form_field: 'url' },
-    GameEMail: { form_field: 'email' },
+    Title: {
+      form_field: 'title'
+    },
+    Author: {
+      form_field: 'authors'
+    },
+    Organization: {
+      form_field: 'organization'
+    },
+    Homepage: {
+      form_field: 'url'
+    },
+    GameEMail: {
+      form_field: 'email'
+    },
     Hours: {
       form_field: 'length_seconds',
-      convert: -> (value) { value * 1.hour }
+      convert: ->(value) { value * 1.hour }
     },
     Description: {
       form_field: 'description',
@@ -28,22 +38,46 @@ class Intercode::Import::Intercode1::Tables::Bids < Intercode::Import::Intercode
       form_field: 'short_blurb',
       markdownify: true
     },
-    PlayerCommunications: { form_field: 'player_communications' },
-    Genre: { form_field: 'genre' },
+    PlayerCommunications: {
+      form_field: 'player_communications'
+    },
+    Genre: {
+      form_field: 'genre'
+    },
     OngoingCampaign: {
       form_field: 'ongoing_campaign',
       convert: YN_TO_BOOL
     },
-    RunBefore: { form_field: 'run_before' },
-    GameSystem: { form_field: 'game_system' },
-    CombatResolution: { form_field: 'combat_resolution' },
-    Premise: { form_field: 'other_committee_info' },
-    SetupTeardown: { form_field: 'setup_teardown' },
-    GMs: { form_field: 'gms' },
-    OtherGames: { form_field: 'other_games' },
-    Offensive: { form_field: 'offensive' },
-    PhysicalRestrictions: { form_field: 'physical_restrictions' },
-    AgeAppropriate: { form_field: 'age_appropriate' },
+    RunBefore: {
+      form_field: 'run_before'
+    },
+    GameSystem: {
+      form_field: 'game_system'
+    },
+    CombatResolution: {
+      form_field: 'combat_resolution'
+    },
+    Premise: {
+      form_field: 'other_committee_info'
+    },
+    SetupTeardown: {
+      form_field: 'setup_teardown'
+    },
+    GMs: {
+      form_field: 'gms'
+    },
+    OtherGames: {
+      form_field: 'other_games'
+    },
+    Offensive: {
+      form_field: 'offensive'
+    },
+    PhysicalRestrictions: {
+      form_field: 'physical_restrictions'
+    },
+    AgeAppropriate: {
+      form_field: 'age_appropriate'
+    },
     CanPlayConcurrently: {
       form_field: 'can_play_concurrently',
       convert: YN_TO_BOOL
@@ -52,14 +86,25 @@ class Intercode::Import::Intercode1::Tables::Bids < Intercode::Import::Intercode
       form_field: 'multiple_runs',
       convert: YN_TO_BOOL
     },
-    SchedulingConstraints: { form_field: 'scheduling_constraints' },
-    SpaceRequirements: { form_field: 'space_requirements' },
-
+    SchedulingConstraints: {
+      form_field: 'scheduling_constraints'
+    },
+    SpaceRequirements: {
+      form_field: 'space_requirements'
+    },
     # Fields we don't actually ask anymore
-    ShortSentence: { form_field: 'short_sentence' },
-    ShamelessPlugs: { form_field: 'shameless_plugs' },
-    GMGameAdvertising: { form_field: 'gm_game_advertising' },
-    GMConAdvertising: { form_field: 'gm_con_advertising' },
+    ShortSentence: {
+      form_field: 'short_sentence'
+    },
+    ShamelessPlugs: {
+      form_field: 'shameless_plugs'
+    },
+    GMGameAdvertising: {
+      form_field: 'gm_game_advertising'
+    },
+    GMConAdvertising: {
+      form_field: 'gm_con_advertising'
+    },
     SendFlyers: {
       form_field: 'send_flyers',
       convert: YN_TO_BOOL
@@ -86,11 +131,12 @@ class Intercode::Import::Intercode1::Tables::Bids < Intercode::Import::Intercode
   private
 
   def build_record(row)
-    record = @convention.event_proposals.new(
-      owner: @user_con_profile_id_map[row[:UserId]],
-      event: @events_id_map[row[:EventId]],
-      status: BID_STATUS_MAP[row[:Status]]
-    )
+    record =
+      @convention.event_proposals.new(
+        owner: @user_con_profile_id_map[row[:UserId]],
+        event: @events_id_map[row[:EventId]],
+        status: BID_STATUS_MAP[row[:Status]]
+      )
     record.assign_form_response_attributes(form_response_attributes(row))
     record
   end
@@ -100,17 +146,16 @@ class Intercode::Import::Intercode1::Tables::Bids < Intercode::Import::Intercode
   end
 
   def form_response_attributes(row)
-    attrs = BID_ATTRIBUTES.each_with_object({}) do |(bid_attr, options), form_response_attributes|
-      form_field = options[:form_field]
-      next unless row.key?(bid_attr)
+    attrs =
+      BID_ATTRIBUTES.each_with_object({}) do |(bid_attr, options), form_response_attributes|
+        form_field = options[:form_field]
+        next unless row.key?(bid_attr)
 
-      value = process_value(row[bid_attr], options)
-      form_response_attributes[form_field] = value
-    end
+        value = process_value(row[bid_attr], options)
+        form_response_attributes[form_field] = value
+      end
 
-    attrs.merge(
-      'registration_policy' => @registration_policy_factory.registration_policy(row)
-    )
+    attrs.merge('registration_policy' => @registration_policy_factory.registration_policy(row))
   end
 
   def process_value(value, options)

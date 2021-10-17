@@ -19,7 +19,7 @@ function AdminProductVariantEditRow({
   variant,
   updateVariant,
   deleteVariant,
-}: AdminProductVariantEditRowProps) {
+}: AdminProductVariantEditRowProps): JSX.Element {
   const { setNodeRef, transform, attributes, listeners, transition, isDragging } = useSortable({
     id: getRealOrGeneratedId(variant).toString(),
   });

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class FormResponseChangeGroupPresenter
   SCRIPT_PATH = File.expand_path('bin/renderFormResponseChangeGroup.cjs', Rails.root)
   attr_reader :changes, :convention
@@ -12,10 +13,12 @@ class FormResponseChangeGroupPresenter
 
   def html
     stdout, stderr, status = Open3.capture3(shell_command)
-    unless status == 0
+    unless status.success?
       Rollbar.error(
         "#{SCRIPT_PATH} returned error code #{status}",
-        stdout: stdout, stderr: stderr, component_props: component_props.to_json
+        stdout: stdout,
+        stderr: stderr,
+        component_props: component_props.to_json
       )
       return 'Sorry, an error occurred trying to render these changes.'
     end
@@ -81,8 +84,10 @@ class FormResponseChangeGroupPresenter
 
   def form_for_response(response)
     case response
-    when Event then response.event_category.event_form
-    when EventProposal then response.event_category.event_proposal_form
+    when Event
+      response.event_category.event_form
+    when EventProposal
+      response.event_category.event_proposal_form
     end
   end
 end

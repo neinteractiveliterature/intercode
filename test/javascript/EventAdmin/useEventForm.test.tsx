@@ -2,10 +2,7 @@ import { renderHook, act } from '@testing-library/react-hooks';
 
 import { render } from '../testUtils';
 import { convention, initialEvent, minimalForm } from './formMockData';
-import useEventForm, {
-  EventForm,
-  UseEventFormOptions,
-} from '../../../app/javascript/EventAdmin/useEventForm';
+import useEventForm, { EventForm, UseEventFormOptions } from '../../../app/javascript/EventAdmin/useEventForm';
 
 describe('useEventForm', () => {
   const renderEventFormHook = (overrides: Partial<UseEventFormOptions<typeof initialEvent>> = {}) =>
@@ -18,16 +15,12 @@ describe('useEventForm', () => {
       }),
     );
 
-  const renderEventForm = async (
-    result: ReturnType<typeof renderEventFormHook>['result'],
-    overrideProps = {},
-  ) => {
+  const renderEventForm = async (result: ReturnType<typeof renderEventFormHook>['result'], overrideProps = {}) => {
     const renderResult = await render(<EventForm {...result.current[0]} {...overrideProps} />);
 
     return {
       ...renderResult,
-      rerender: (props = {}) =>
-        renderResult.rerender(<EventForm {...result.current[0]} {...props} />),
+      rerender: (props = {}) => renderResult.rerender(<EventForm {...result.current[0]} {...props} />),
     };
   };
 
@@ -67,7 +60,7 @@ describe('useEventForm', () => {
     it('sets the event', async () => {
       const { result } = renderEventFormHook();
       const [, { setEvent }] = result.current;
-      const fakeEvent = { ...initialEvent, id: 8675309 };
+      const fakeEvent = { ...initialEvent, id: '8675309' };
 
       act(() => {
         setEvent(fakeEvent);

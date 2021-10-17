@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import { gql } from '@apollo/client';
 
 export const PricingStructureFields = gql`
@@ -11,6 +10,7 @@ export const PricingStructureFields = gql`
     }
 
     value {
+      # eslint-disable-next-line @graphql-eslint/naming-convention
       __typename
 
       ... on Money {

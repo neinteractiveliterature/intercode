@@ -14,7 +14,7 @@ import { useUpdatePartialMutation } from './mutations.generated';
 
 export default LoadSingleValueFromCollectionWrapper(
   useCmsPartialsAdminQuery,
-  (data, id) => data.cmsPartials.find((p) => id === p.id.toString()),
+  (data, id) => data.cmsParent.cmsPartials.find((p) => id === p.id.toString()),
   function EditCmsPartialForm({ value: initialPartial }) {
     const history = useHistory();
     const [partial, setPartial] = useState(initialPartial);

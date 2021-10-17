@@ -11,9 +11,7 @@ describe ClearCmsContentService do
   end
 
   describe 'successfully running' do
-    before do
-      @result = service.call
-    end
+    before { @result = service.call }
 
     it 'returns a successful result' do
       assert @result.success?

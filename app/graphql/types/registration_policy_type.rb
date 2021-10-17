@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::RegistrationPolicyType < Types::BaseObject
   field :buckets, [Types::RegistrationPolicyBucketType], null: false
   field :prevent_no_preference_signups, Boolean, null: false

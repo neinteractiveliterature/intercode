@@ -30,13 +30,10 @@ class ConventionPolicyTest < ActiveSupport::TestCase
         it "lets team members #{action}" do
           event = create(:event, convention: convention)
           team_member = create(:team_member, event: event)
-          assert ConventionPolicy.new(team_member.user_con_profile.user, convention)
-            .public_send("#{action}?")
+          assert ConventionPolicy.new(team_member.user_con_profile.user, convention).public_send("#{action}?")
         end
 
-        %w[
-          read_prerelease_schedule read_limited_prerelease_schedule update_events
-        ].each do |permission|
+        %w[read_prerelease_schedule read_limited_prerelease_schedule update_events].each do |permission|
           it "lets users with #{permission} permission in convention #{action}" do
             user = create_user_with_permission_in_convention(permission, convention)
             assert ConventionPolicy.new(user, convention).public_send("#{action}?")
@@ -73,8 +70,7 @@ class ConventionPolicyTest < ActiveSupport::TestCase
         it "does not let team members #{action}" do
           event = create(:event, convention: convention)
           team_member = create(:team_member, event: event)
-          refute ConventionPolicy.new(team_member.user_con_profile.user, convention)
-            .public_send("#{action}?")
+          refute ConventionPolicy.new(team_member.user_con_profile.user, convention).public_send("#{action}?")
         end
 
         it "does not let regular attendees #{action}" do
@@ -107,8 +103,7 @@ class ConventionPolicyTest < ActiveSupport::TestCase
         it "does not let team members #{action}" do
           event = create(:event, convention: convention)
           team_member = create(:team_member, event: event)
-          refute ConventionPolicy.new(team_member.user_con_profile.user, convention)
-            .public_send("#{action}?")
+          refute ConventionPolicy.new(team_member.user_con_profile.user, convention).public_send("#{action}?")
         end
 
         it "does not let regular attendees #{action}" do
@@ -143,9 +138,7 @@ class ConventionPolicyTest < ActiveSupport::TestCase
 
           it "#{verb} users with #{permission} in convention schedule_with_counts" do
             convention.update!(show_schedule: value)
-            user = create_user_with_permissions_in_convention(
-              [permission, 'read_schedule_with_counts'], convention
-            )
+            user = create_user_with_permissions_in_convention([permission, 'read_schedule_with_counts'], convention)
             policy_result = ConventionPolicy.new(user, convention).schedule_with_counts?
 
             if allowed
@@ -170,8 +163,7 @@ class ConventionPolicyTest < ActiveSupport::TestCase
           it 'does not let team members schedule_with_counts' do
             event = create(:event, convention: convention)
             team_member = create(:team_member, event: event)
-            refute ConventionPolicy.new(team_member.user_con_profile.user, convention)
-              .schedule_with_counts?
+            refute ConventionPolicy.new(team_member.user_con_profile.user, convention).schedule_with_counts?
           end
         end
       end
@@ -198,12 +190,8 @@ class ConventionPolicyTest < ActiveSupport::TestCase
     it 'lets users with a read_event_proposals permission in this convention view proposals' do
       event_category = create(:event_category, convention: convention)
       user_con_profile = create(:user_con_profile, convention: convention)
-      staff_position = create(
-        :staff_position, convention: convention, user_con_profiles: [user_con_profile]
-      )
-      staff_position.permissions.create!(
-        event_category: event_category, permission: 'read_event_proposals'
-      )
+      staff_position = create(:staff_position, convention: convention, user_con_profiles: [user_con_profile])
+      staff_position.permissions.create!(event_category: event_category, permission: 'read_event_proposals')
       assert ConventionPolicy.new(user_con_profile.user, convention).view_event_proposals?
     end
 

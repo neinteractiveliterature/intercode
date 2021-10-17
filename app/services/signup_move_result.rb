@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class SignupMoveResult
   include GlobalID::Identification
 
@@ -54,13 +55,7 @@ class SignupMoveResult
 
   def self.from_h(hash)
     hash = hash.symbolize_keys
-    new(
-      hash[:signup_id],
-      hash[:state],
-      hash[:bucket_key],
-      hash[:prev_state],
-      hash[:prev_bucket_key]
-    )
+    new(hash[:signup_id], hash[:state], hash[:bucket_key], hash[:prev_state], hash[:prev_bucket_key])
   end
 
   def self.from_signup(signup, prev_state, prev_bucket_key)

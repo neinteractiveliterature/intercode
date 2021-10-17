@@ -8,7 +8,7 @@ export const StandaloneDropEvent = gql`
   mutation StandaloneDropEvent($input: DropEventInput!) {
     dropEvent(input: $input) {
       event {
-        id
+        id: transitionalId
         status
       }
     }
@@ -19,7 +19,7 @@ export const StandaloneUpdateEvent = gql`
   mutation StandaloneUpdateEvent($input: UpdateEventInput!) {
     updateEvent(input: $input) {
       event {
-        id
+        id: transitionalId
         ...StandaloneEditEvent_EventFields
       }
     }
@@ -34,7 +34,7 @@ export const StandaloneCreateMaximumEventProvidedTicketsOverride = gql`
   ) {
     createMaximumEventProvidedTicketsOverride(input: $input) {
       maximum_event_provided_tickets_override {
-        id
+        id: transitionalId
         ...StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFields
       }
     }
@@ -49,7 +49,7 @@ export const StandaloneDeleteMaximumEventProvidedTicketsOverride = gql`
   ) {
     deleteMaximumEventProvidedTicketsOverride(input: $input) {
       maximum_event_provided_tickets_override {
-        id
+        id: transitionalId
         ...StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFields
       }
     }
@@ -64,7 +64,7 @@ export const StandaloneUpdateMaximumEventProvidedTicketsOverride = gql`
   ) {
     updateMaximumEventProvidedTicketsOverride(input: $input) {
       maximum_event_provided_tickets_override {
-        id
+        id: transitionalId
         ...StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFields
       }
     }

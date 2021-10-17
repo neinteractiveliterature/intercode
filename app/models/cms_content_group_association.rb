@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
@@ -20,7 +21,7 @@
 #  fk_rails_...  (cms_content_group_id => cms_content_groups.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+
 class CmsContentGroupAssociation < ApplicationRecord
   belongs_to :content, polymorphic: true
   belongs_to :cms_content_group

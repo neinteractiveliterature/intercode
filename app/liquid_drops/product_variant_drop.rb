@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # A variant of a product that can be sold at this convention
 class ProductVariantDrop < Liquid::Drop
   # @api
@@ -35,9 +36,6 @@ class ProductVariantDrop < Liquid::Drop
   #                                structure.  If it's present, this variant will use the override
   #                                pricing structure instead.
   def override_pricing_structure
-    PricingStructureDrop.new(
-      product_variant.override_pricing_structure,
-      product.convention.timezone
-    )
+    PricingStructureDrop.new(product_variant.override_pricing_structure, product.convention.timezone)
   end
 end

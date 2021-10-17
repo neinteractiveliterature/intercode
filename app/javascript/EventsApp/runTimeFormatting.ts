@@ -9,7 +9,7 @@ import { useAppDateTimeFormat } from '../TimeUtils';
 export function conventionRequiresDates(
   conventionTimespan: Timespan | undefined,
   siteMode: SiteMode | undefined,
-) {
+): boolean {
   const lengthInDays = conventionTimespan?.getLength('days')?.days;
   if (siteMode === SiteMode.EventSeries || lengthInDays == null || lengthInDays >= 7) {
     return true;
@@ -53,7 +53,7 @@ export function getRunTimeFormat(
   return includeZone ? 'longWeekdayTimeWithZone' : 'longWeekdayTime';
 }
 
-export function useFormatRunTime() {
+export function useFormatRunTime(): (time: DateTime, options: RunTimeFormatOptions) => string {
   const { conventionTimespan, siteMode } = useContext(AppRootContext);
   const format = useAppDateTimeFormat();
 
@@ -66,7 +66,10 @@ export function useFormatRunTime() {
   return formatRunTime;
 }
 
-export function useFormatRunTimespan() {
+export function useFormatRunTimespan(): (
+  timespan: FiniteTimespan,
+  options: RunTimeFormatOptions,
+) => string {
   const formatRunTime = useFormatRunTime();
   const { timezoneName } = useContext(AppRootContext);
   const formatRunTimespan = useCallback(

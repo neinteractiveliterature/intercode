@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # A page in the CMS for this convention
 class PageDrop < Liquid::Drop
   # @api

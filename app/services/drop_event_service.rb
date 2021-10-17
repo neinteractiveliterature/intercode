@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class DropEventService < CivilService::Service
   attr_reader :event
 

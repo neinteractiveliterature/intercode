@@ -7,17 +7,17 @@ import EmailRouteForm from './EmailRouteForm';
 import useAsyncFunction from '../useAsyncFunction';
 import buildEmailRouteInput from './buildEmailRouteInput';
 import { useCreateEmailRouteMutation } from './mutations.generated';
-import { EmailRoute } from '../graphqlTypes.generated';
+import { EmailRouteFieldsFragment } from './queries.generated';
 
 export type NewEmailRouteModalProps = {
   visible: boolean;
   close: () => void;
 };
 
-function NewEmailRouteModal({ visible, close }: NewEmailRouteModalProps) {
-  const [emailRoute, setEmailRoute] = useState<EmailRoute>({
+function NewEmailRouteModal({ visible, close }: NewEmailRouteModalProps): JSX.Element {
+  const [emailRoute, setEmailRoute] = useState<EmailRouteFieldsFragment>({
     __typename: 'EmailRoute',
-    id: 0,
+    id: '',
     receiver_address: '',
     forward_addresses: [],
   });
@@ -49,12 +49,7 @@ function NewEmailRouteModal({ visible, close }: NewEmailRouteModalProps) {
           Cancel
         </button>
 
-        <button
-          className="btn btn-primary"
-          type="button"
-          onClick={createClicked}
-          disabled={inProgress}
-        >
+        <button className="btn btn-primary" type="button" onClick={createClicked} disabled={inProgress}>
           Create email route
         </button>
       </div>

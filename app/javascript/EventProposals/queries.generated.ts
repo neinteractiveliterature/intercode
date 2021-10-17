@@ -5,35 +5,35 @@ import { gql } from '@apollo/client';
 import { CommonFormFieldsFragmentDoc, CommonFormSectionFieldsFragmentDoc, CommonFormItemFieldsFragmentDoc } from '../Models/commonFormFragments.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type EventProposalFieldsFragment = { __typename: 'EventProposal', id: number, title?: Types.Maybe<string>, status: string, form_response_attrs_json?: Types.Maybe<any>, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, event_category: { __typename: 'EventCategory', id: number, name: string, event_proposal_form?: Types.Maybe<{ __typename: 'Form', id: number, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: number, title?: Types.Maybe<string>, position: number, form_items: Array<{ __typename: 'FormItem', id: number, admin_description?: Types.Maybe<string>, position: number, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> }> }, event?: Types.Maybe<{ __typename: 'Event', id: number }> };
+export type EventProposalFieldsFragment = { __typename: 'EventProposal', title?: string | null | undefined, status: string, form_response_attrs_json?: string | null | undefined, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, id: string, event_category: { __typename: 'EventCategory', name: string, id: string, event_proposal_form?: { __typename: 'Form', title: string, form_type: Types.FormType, id: string, form_sections: Array<{ __typename: 'FormSection', title?: string | null | undefined, position: number, id: string, form_items: Array<{ __typename: 'FormItem', admin_description?: string | null | undefined, position: number, identifier?: string | null | undefined, item_type: string, rendered_properties: string, default_value?: string | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole, id: string }> }> } | null | undefined }, event?: { __typename: 'Event', id: string } | null | undefined };
 
-export type EventProposalFormDataFragment = { __typename: 'Convention', id: number, starts_at?: Types.Maybe<any>, ends_at?: Types.Maybe<any>, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode, event_mailing_list_domain?: Types.Maybe<string> };
+export type EventProposalFormDataFragment = { __typename: 'Convention', starts_at?: string | null | undefined, ends_at?: string | null | undefined, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, event_mailing_list_domain?: string | null | undefined, id: string };
 
 export type EventProposalQueryVariables = Types.Exact<{
-  eventProposalId: Types.Scalars['Int'];
+  eventProposalId: Types.Scalars['ID'];
 }>;
 
 
-export type EventProposalQueryData = { __typename: 'Query', currentAbility: { __typename: 'Ability', can_delete_event_proposal: boolean }, convention: { __typename: 'Convention', id: number, starts_at?: Types.Maybe<any>, ends_at?: Types.Maybe<any>, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode, event_mailing_list_domain?: Types.Maybe<string> }, eventProposal: { __typename: 'EventProposal', id: number, title?: Types.Maybe<string>, status: string, form_response_attrs_json?: Types.Maybe<any>, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, event_category: { __typename: 'EventCategory', id: number, name: string, event_proposal_form?: Types.Maybe<{ __typename: 'Form', id: number, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: number, title?: Types.Maybe<string>, position: number, form_items: Array<{ __typename: 'FormItem', id: number, admin_description?: Types.Maybe<string>, position: number, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> }> }, event?: Types.Maybe<{ __typename: 'Event', id: number }> } };
+export type EventProposalQueryData = { __typename: 'Query', currentAbility: { __typename: 'Ability', can_delete_event_proposal: boolean }, convention: { __typename: 'Convention', starts_at?: string | null | undefined, ends_at?: string | null | undefined, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, event_mailing_list_domain?: string | null | undefined, id: string, event_proposal: { __typename: 'EventProposal', title?: string | null | undefined, status: string, form_response_attrs_json?: string | null | undefined, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, id: string, event_category: { __typename: 'EventCategory', name: string, id: string, event_proposal_form?: { __typename: 'Form', title: string, form_type: Types.FormType, id: string, form_sections: Array<{ __typename: 'FormSection', title?: string | null | undefined, position: number, id: string, form_items: Array<{ __typename: 'FormItem', admin_description?: string | null | undefined, position: number, identifier?: string | null | undefined, item_type: string, rendered_properties: string, default_value?: string | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole, id: string }> }> } | null | undefined }, event?: { __typename: 'Event', id: string } | null | undefined } } };
 
 export type EventProposalQueryWithOwnerQueryVariables = Types.Exact<{
-  eventProposalId: Types.Scalars['Int'];
+  eventProposalId: Types.Scalars['ID'];
 }>;
 
 
-export type EventProposalQueryWithOwnerQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, starts_at?: Types.Maybe<any>, ends_at?: Types.Maybe<any>, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode, event_mailing_list_domain?: Types.Maybe<string> }, eventProposal: { __typename: 'EventProposal', id: number, title?: Types.Maybe<string>, status: string, form_response_attrs_json?: Types.Maybe<any>, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, owner: { __typename: 'UserConProfile', id: number, name: string, email?: Types.Maybe<string>, gravatar_enabled: boolean, gravatar_url: string }, event_category: { __typename: 'EventCategory', id: number, name: string, event_proposal_form?: Types.Maybe<{ __typename: 'Form', id: number, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: number, title?: Types.Maybe<string>, position: number, form_items: Array<{ __typename: 'FormItem', id: number, admin_description?: Types.Maybe<string>, position: number, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> }> }, event?: Types.Maybe<{ __typename: 'Event', id: number }> }, currentAbility: { __typename: 'Ability', can_update_event_proposal: boolean, can_read_admin_notes_on_event_proposal: boolean } };
+export type EventProposalQueryWithOwnerQueryData = { __typename: 'Query', convention: { __typename: 'Convention', starts_at?: string | null | undefined, ends_at?: string | null | undefined, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, event_mailing_list_domain?: string | null | undefined, id: string, event_proposal: { __typename: 'EventProposal', title?: string | null | undefined, status: string, form_response_attrs_json?: string | null | undefined, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, id: string, owner: { __typename: 'UserConProfile', name: string, email?: string | null | undefined, gravatar_enabled: boolean, gravatar_url: string, id: string }, event_category: { __typename: 'EventCategory', name: string, id: string, event_proposal_form?: { __typename: 'Form', title: string, form_type: Types.FormType, id: string, form_sections: Array<{ __typename: 'FormSection', title?: string | null | undefined, position: number, id: string, form_items: Array<{ __typename: 'FormItem', admin_description?: string | null | undefined, position: number, identifier?: string | null | undefined, item_type: string, rendered_properties: string, default_value?: string | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole, id: string }> }> } | null | undefined }, event?: { __typename: 'Event', id: string } | null | undefined } }, currentAbility: { __typename: 'Ability', can_update_event_proposal: boolean, can_read_admin_notes_on_event_proposal: boolean } };
 
 export type EventProposalAdminNotesQueryVariables = Types.Exact<{
-  eventProposalId: Types.Scalars['Int'];
+  eventProposalId: Types.Scalars['ID'];
 }>;
 
 
-export type EventProposalAdminNotesQueryData = { __typename: 'Query', eventProposal: { __typename: 'EventProposal', id: number, admin_notes?: Types.Maybe<string> } };
+export type EventProposalAdminNotesQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, event_proposal: { __typename: 'EventProposal', admin_notes?: string | null | undefined, id: string } } };
 
 export type ProposeEventButtonQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type ProposeEventButtonQueryData = { __typename: 'Query', myProfile?: Types.Maybe<{ __typename: 'UserConProfile', id: number, user?: Types.Maybe<{ __typename: 'User', id: number, event_proposals: Array<{ __typename: 'EventProposal', id: number, title?: Types.Maybe<string>, status: string, created_at: any, event_category: { __typename: 'EventCategory', id: number, name: string }, convention: { __typename: 'Convention', id: number, name: string } }> }> }>, convention: { __typename: 'Convention', id: number, departments: Array<{ __typename: 'Department', id: number, name: string, proposal_description?: Types.Maybe<string>, event_categories: Array<{ __typename: 'EventCategory', id: number }> }>, event_categories: Array<{ __typename: 'EventCategory', id: number, name: string, proposable: boolean, proposal_description?: Types.Maybe<string>, department?: Types.Maybe<{ __typename: 'Department', id: number }> }> } };
+export type ProposeEventButtonQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, my_profile?: { __typename: 'UserConProfile', id: string, user?: { __typename: 'User', id: string, event_proposals: Array<{ __typename: 'EventProposal', title?: string | null | undefined, status: string, created_at: string, id: string, event_category: { __typename: 'EventCategory', name: string, id: string }, convention: { __typename: 'Convention', name: string, id: string } }> } | null | undefined } | null | undefined, departments: Array<{ __typename: 'Department', name: string, proposal_description?: string | null | undefined, id: string, event_categories: Array<{ __typename: 'EventCategory', id: string }> }>, event_categories: Array<{ __typename: 'EventCategory', name: string, proposable: boolean, proposal_description?: string | null | undefined, id: string, department?: { __typename: 'Department', id: string } | null | undefined }> } };
 
 export type EventProposalsAdminQueryVariables = Types.Exact<{
   page?: Types.Maybe<Types.Scalars['Int']>;
@@ -43,46 +43,46 @@ export type EventProposalsAdminQueryVariables = Types.Exact<{
 }>;
 
 
-export type EventProposalsAdminQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, timezone_name?: Types.Maybe<string>, event_categories: Array<{ __typename: 'EventCategory', id: number, name: string, default_color?: Types.Maybe<string> }>, event_proposals_paginated: { __typename: 'EventProposalsPagination', total_entries: number, total_pages: number, current_page: number, per_page: number, entries: Array<{ __typename: 'EventProposal', id: number, title?: Types.Maybe<string>, length_seconds?: Types.Maybe<number>, status: string, submitted_at: any, updated_at: any, event_category: { __typename: 'EventCategory', id: number, name: string, default_color?: Types.Maybe<string> }, registration_policy?: Types.Maybe<{ __typename: 'RegistrationPolicy', minimum_slots?: Types.Maybe<number>, total_slots?: Types.Maybe<number>, slots_limited?: Types.Maybe<boolean> }>, owner: { __typename: 'UserConProfile', id: number, name_inverted: string, gravatar_enabled: boolean, gravatar_url: string } }> } } };
+export type EventProposalsAdminQueryData = { __typename: 'Query', convention: { __typename: 'Convention', timezone_name?: string | null | undefined, id: string, event_categories: Array<{ __typename: 'EventCategory', name: string, default_color?: string | null | undefined, id: string }>, event_proposals_paginated: { __typename: 'EventProposalsPagination', total_entries: number, total_pages: number, current_page: number, per_page: number, entries: Array<{ __typename: 'EventProposal', title?: string | null | undefined, length_seconds?: number | null | undefined, status: string, submitted_at: string, updated_at: string, id: string, event_category: { __typename: 'EventCategory', name: string, default_color?: string | null | undefined, id: string }, registration_policy?: { __typename: 'RegistrationPolicy', minimum_slots?: number | null | undefined, total_slots?: number | null | undefined, slots_limited?: boolean | null | undefined } | null | undefined, owner: { __typename: 'UserConProfile', name_inverted: string, gravatar_enabled: boolean, gravatar_url: string, id: string } }> } } };
 
 export type EventProposalHistoryQueryVariables = Types.Exact<{
-  id: Types.Scalars['Int'];
+  id: Types.Scalars['ID'];
 }>;
 
 
-export type EventProposalHistoryQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: number, starts_at?: Types.Maybe<any>, ends_at?: Types.Maybe<any>, timezone_name?: Types.Maybe<string>, timezone_mode: Types.TimezoneMode }, eventProposal: { __typename: 'EventProposal', id: number, title?: Types.Maybe<string>, owner: { __typename: 'UserConProfile', id: number }, event_category: { __typename: 'EventCategory', id: number, event_proposal_form?: Types.Maybe<{ __typename: 'Form', id: number, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: number, title?: Types.Maybe<string>, position: number, form_items: Array<{ __typename: 'FormItem', id: number, admin_description?: Types.Maybe<string>, position: number, identifier?: Types.Maybe<string>, item_type: string, rendered_properties?: Types.Maybe<any>, default_value?: Types.Maybe<any>, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> }> }, form_response_changes: Array<{ __typename: 'FormResponseChange', field_identifier: string, previous_value?: Types.Maybe<any>, new_value?: Types.Maybe<any>, created_at: any, updated_at: any, user_con_profile: { __typename: 'UserConProfile', id: number, name_without_nickname: string } }> } };
+export type EventProposalHistoryQueryData = { __typename: 'Query', convention: { __typename: 'Convention', starts_at?: string | null | undefined, ends_at?: string | null | undefined, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, id: string, event_proposal: { __typename: 'EventProposal', title?: string | null | undefined, id: string, owner: { __typename: 'UserConProfile', id: string }, event_category: { __typename: 'EventCategory', id: string, event_proposal_form?: { __typename: 'Form', title: string, form_type: Types.FormType, id: string, form_sections: Array<{ __typename: 'FormSection', title?: string | null | undefined, position: number, id: string, form_items: Array<{ __typename: 'FormItem', admin_description?: string | null | undefined, position: number, identifier?: string | null | undefined, item_type: string, rendered_properties: string, default_value?: string | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole, id: string }> }> } | null | undefined }, form_response_changes: Array<{ __typename: 'FormResponseChange', field_identifier: string, previous_value?: string | null | undefined, new_value?: string | null | undefined, created_at: string, updated_at: string, user_con_profile: { __typename: 'UserConProfile', name_without_nickname: string, id: string } }> } } };
 
 export const EventProposalFieldsFragmentDoc = gql`
     fragment EventProposalFields on EventProposal {
-  id
+  id: transitionalId
   title
   status
   form_response_attrs_json
   current_user_form_item_viewer_role
   current_user_form_item_writer_role
   event_category {
-    id
+    id: transitionalId
     name
     event_proposal_form {
-      id
+      id: transitionalId
       ...CommonFormFields
       form_sections {
-        id
+        id: transitionalId
         form_items {
-          id
+          id: transitionalId
           admin_description
         }
       }
     }
   }
   event {
-    id
+    id: transitionalId
   }
 }
     ${CommonFormFieldsFragmentDoc}`;
 export const EventProposalFormDataFragmentDoc = gql`
     fragment EventProposalFormData on Convention {
-  id
+  id: transitionalId
   starts_at
   ends_at
   timezone_name
@@ -91,17 +91,17 @@ export const EventProposalFormDataFragmentDoc = gql`
 }
     `;
 export const EventProposalQueryDocument = gql`
-    query EventProposalQuery($eventProposalId: Int!) {
+    query EventProposalQuery($eventProposalId: ID!) {
   currentAbility {
-    can_delete_event_proposal(event_proposal_id: $eventProposalId)
+    can_delete_event_proposal(transitionalEventProposalId: $eventProposalId)
   }
-  convention: assertConvention {
-    id
+  convention: conventionByRequestHost {
+    id: transitionalId
     ...EventProposalFormData
-  }
-  eventProposal(id: $eventProposalId) {
-    id
-    ...EventProposalFields
+    event_proposal(transitionalId: $eventProposalId) {
+      id: transitionalId
+      ...EventProposalFields
+    }
   }
 }
     ${EventProposalFormDataFragmentDoc}
@@ -135,25 +135,27 @@ export type EventProposalQueryHookResult = ReturnType<typeof useEventProposalQue
 export type EventProposalQueryLazyQueryHookResult = ReturnType<typeof useEventProposalQueryLazyQuery>;
 export type EventProposalQueryQueryResult = Apollo.QueryResult<EventProposalQueryData, EventProposalQueryVariables>;
 export const EventProposalQueryWithOwnerDocument = gql`
-    query EventProposalQueryWithOwner($eventProposalId: Int!) {
-  convention: assertConvention {
-    id
+    query EventProposalQueryWithOwner($eventProposalId: ID!) {
+  convention: conventionByRequestHost {
+    id: transitionalId
     ...EventProposalFormData
-  }
-  eventProposal(id: $eventProposalId) {
-    id
-    ...EventProposalFields
-    owner {
-      id
-      name
-      email
-      gravatar_enabled
-      gravatar_url
+    event_proposal(transitionalId: $eventProposalId) {
+      id: transitionalId
+      ...EventProposalFields
+      owner {
+        id: transitionalId
+        name
+        email
+        gravatar_enabled
+        gravatar_url
+      }
     }
   }
   currentAbility {
-    can_update_event_proposal(event_proposal_id: $eventProposalId)
-    can_read_admin_notes_on_event_proposal(event_proposal_id: $eventProposalId)
+    can_update_event_proposal(transitionalEventProposalId: $eventProposalId)
+    can_read_admin_notes_on_event_proposal(
+      transitionalEventProposalId: $eventProposalId
+    )
   }
 }
     ${EventProposalFormDataFragmentDoc}
@@ -187,10 +189,13 @@ export type EventProposalQueryWithOwnerHookResult = ReturnType<typeof useEventPr
 export type EventProposalQueryWithOwnerLazyQueryHookResult = ReturnType<typeof useEventProposalQueryWithOwnerLazyQuery>;
 export type EventProposalQueryWithOwnerQueryResult = Apollo.QueryResult<EventProposalQueryWithOwnerQueryData, EventProposalQueryWithOwnerQueryVariables>;
 export const EventProposalAdminNotesQueryDocument = gql`
-    query EventProposalAdminNotesQuery($eventProposalId: Int!) {
-  eventProposal(id: $eventProposalId) {
-    id
-    admin_notes
+    query EventProposalAdminNotesQuery($eventProposalId: ID!) {
+  convention: conventionByRequestHost {
+    id: transitionalId
+    event_proposal(transitionalId: $eventProposalId) {
+      id: transitionalId
+      admin_notes
+    }
   }
 }
     `;
@@ -224,43 +229,43 @@ export type EventProposalAdminNotesQueryLazyQueryHookResult = ReturnType<typeof 
 export type EventProposalAdminNotesQueryQueryResult = Apollo.QueryResult<EventProposalAdminNotesQueryData, EventProposalAdminNotesQueryVariables>;
 export const ProposeEventButtonQueryDocument = gql`
     query ProposeEventButtonQuery {
-  myProfile {
-    id
-    user {
-      id
-      event_proposals {
-        id
-        title
-        status
-        created_at
-        event_category {
-          id
-          name
-        }
-        convention {
-          id
-          name
+  convention: conventionByRequestHost {
+    id: transitionalId
+    my_profile {
+      id: transitionalId
+      user {
+        id: transitionalId
+        event_proposals {
+          id: transitionalId
+          title
+          status
+          created_at
+          event_category {
+            id: transitionalId
+            name
+          }
+          convention {
+            id: transitionalId
+            name
+          }
         }
       }
     }
-  }
-  convention: assertConvention {
-    id
     departments {
-      id
+      id: transitionalId
       name
       proposal_description
       event_categories {
-        id
+        id: transitionalId
       }
     }
     event_categories {
-      id
+      id: transitionalId
       name
       proposable
       proposal_description
       department {
-        id
+        id: transitionalId
       }
     }
   }
@@ -295,11 +300,11 @@ export type ProposeEventButtonQueryLazyQueryHookResult = ReturnType<typeof usePr
 export type ProposeEventButtonQueryQueryResult = Apollo.QueryResult<ProposeEventButtonQueryData, ProposeEventButtonQueryVariables>;
 export const EventProposalsAdminQueryDocument = gql`
     query EventProposalsAdminQuery($page: Int, $perPage: Int, $filters: EventProposalFiltersInput, $sort: [SortInput!]) {
-  convention: assertConvention {
-    id
+  convention: conventionByRequestHost {
+    id: transitionalId
     timezone_name
     event_categories(current_ability_can_read_event_proposals: true) {
-      id
+      id: transitionalId
       name
       default_color
     }
@@ -314,14 +319,14 @@ export const EventProposalsAdminQueryDocument = gql`
       current_page
       per_page
       entries {
-        id
+        id: transitionalId
         title
         length_seconds
         status
         submitted_at
         updated_at
         event_category {
-          id
+          id: transitionalId
           name
           default_color
         }
@@ -331,7 +336,7 @@ export const EventProposalsAdminQueryDocument = gql`
           slots_limited
         }
         owner {
-          id
+          id: transitionalId
           name_inverted
           gravatar_enabled
           gravatar_url
@@ -373,44 +378,44 @@ export type EventProposalsAdminQueryHookResult = ReturnType<typeof useEventPropo
 export type EventProposalsAdminQueryLazyQueryHookResult = ReturnType<typeof useEventProposalsAdminQueryLazyQuery>;
 export type EventProposalsAdminQueryQueryResult = Apollo.QueryResult<EventProposalsAdminQueryData, EventProposalsAdminQueryVariables>;
 export const EventProposalHistoryQueryDocument = gql`
-    query EventProposalHistoryQuery($id: Int!) {
-  convention: assertConvention {
-    id
+    query EventProposalHistoryQuery($id: ID!) {
+  convention: conventionByRequestHost {
+    id: transitionalId
     starts_at
     ends_at
     timezone_name
     timezone_mode
-  }
-  eventProposal(id: $id) {
-    id
-    title
-    owner {
-      id
-    }
-    event_category {
-      id
-      event_proposal_form {
-        id
-        ...CommonFormFields
-        form_sections {
-          id
-          form_items {
-            id
-            admin_description
+    event_proposal(transitionalId: $id) {
+      id: transitionalId
+      title
+      owner {
+        id: transitionalId
+      }
+      event_category {
+        id: transitionalId
+        event_proposal_form {
+          id: transitionalId
+          ...CommonFormFields
+          form_sections {
+            id: transitionalId
+            form_items {
+              id: transitionalId
+              admin_description
+            }
           }
         }
       }
-    }
-    form_response_changes {
-      user_con_profile {
-        id
-        name_without_nickname
+      form_response_changes {
+        user_con_profile {
+          id: transitionalId
+          name_without_nickname
+        }
+        field_identifier
+        previous_value
+        new_value
+        created_at
+        updated_at
       }
-      field_identifier
-      previous_value
-      new_value
-      created_at
-      updated_at
     }
   }
 }

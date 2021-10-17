@@ -13,15 +13,12 @@ export type SinglePageFormPresenterProps = {
   response: FormResponse;
   currentUserViewerRole: FormItemRole;
   currentUserWriterRole: FormItemRole;
-  responseValuesChanged: (newValues: any) => void;
+  responseValuesChanged: (newValues: Record<string, unknown>) => void;
   responseErrors?: FormBodyProps['errors'];
 };
 
-const SinglePageFormPresenter = forwardRef<
-  FormBodyImperativeHandle | undefined,
-  SinglePageFormPresenterProps
->(
-  (
+export default forwardRef<FormBodyImperativeHandle | undefined, SinglePageFormPresenterProps>(
+  function SinglePageFormPresenter(
     {
       form,
       currentUserViewerRole,
@@ -32,7 +29,7 @@ const SinglePageFormPresenter = forwardRef<
       responseErrors,
     },
     ref,
-  ) => {
+  ) {
     const formItems = useMemo(() => getSortedParsedFormItems(form), [form]);
 
     return (
@@ -52,5 +49,3 @@ const SinglePageFormPresenter = forwardRef<
     );
   },
 );
-
-export default SinglePageFormPresenter;

@@ -9,7 +9,7 @@ export type SignUpButtonProps = {
   initiallyOpen?: boolean;
 };
 
-function SignUpButton({ className, caption, initiallyOpen }: SignUpButtonProps) {
+function SignUpButton({ className, caption, initiallyOpen }: SignUpButtonProps): JSX.Element {
   const { open } = useContext(AuthenticationModalContext);
   useEffect(() => {
     if (initiallyOpen) {

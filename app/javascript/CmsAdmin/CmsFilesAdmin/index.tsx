@@ -2,59 +2,42 @@ import bytes from 'bytes';
 import {
   ErrorDisplay,
   useConfirm,
-  PageLoadingIndicator,
   CopyToClipboardButton,
+  useDeleteMutationWithReferenceArrayUpdater,
+  LoadQueryWrapper,
 } from '@neinteractiveliterature/litform';
 import { useTranslation } from 'react-i18next';
 
-import { CmsFilesAdminQuery } from './queries';
-import { DeleteCmsFile } from './mutations';
 import FilePreview from './FilePreview';
 import FileUploadForm from './FileUploadForm';
-import { useDeleteMutation } from '../../MutationUtils';
 import usePageTitle from '../../usePageTitle';
 import InPlaceEditor from '../../BuiltInFormControls/InPlaceEditor';
-import {
-  DeleteCmsFileMutationVariables,
-  DeleteCmsFileMutationData,
-  useRenameCmsFileMutation,
-} from './mutations.generated';
+import { useRenameCmsFileMutation, useDeleteCmsFileMutation } from './mutations.generated';
 import { useCmsFilesAdminQuery } from './queries.generated';
 
-function CmsFilesAdmin() {
-  const { data, loading, error, refetch } = useCmsFilesAdminQuery();
-  const deleteFileMutate = useDeleteMutation<
-    DeleteCmsFileMutationVariables,
-    DeleteCmsFileMutationData
-  >(DeleteCmsFile, {
-    query: CmsFilesAdminQuery,
-    arrayPath: ['cmsFiles'],
-    idVariablePath: ['id'],
-  });
+export default LoadQueryWrapper(useCmsFilesAdminQuery, function CmsFilesAdmin({ data }): JSX.Element {
+  const { refetch } = useCmsFilesAdminQuery();
+  const [deleteFile] = useDeleteMutationWithReferenceArrayUpdater(
+    useDeleteCmsFileMutation,
+    data.cmsParent,
+    'cmsFiles',
+    (file) => ({ id: file.id }),
+  );
   const [renameFileMutate] = useRenameCmsFileMutation();
   const confirm = useConfirm();
   const { t } = useTranslation();
 
   usePageTitle('CMS Files');
 
-  const deleteFile = (id: number) => deleteFileMutate({ variables: { id } });
-  const renameFile = (id: number, filename: string) =>
+  const renameFile = (id: string, filename: string) =>
     renameFileMutate({
       variables: { id, filename },
     });
 
-  if (loading) {
-    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
   return (
     <>
       <div className="cms-file-card-deck mb-4">
-        {data?.cmsFiles.map((cmsFile) => (
+        {data?.cmsParent.cmsFiles.map((cmsFile) => (
           <div className="card" key={cmsFile.id}>
             <div className="card-header">
               {cmsFile.current_ability_can_delete && (
@@ -65,7 +48,7 @@ function CmsFilesAdmin() {
                     onClick={() =>
                       confirm({
                         prompt: `Are you sure you want to delete ${cmsFile.filename}?`,
-                        action: () => deleteFile(cmsFile.id),
+                        action: () => deleteFile(cmsFile),
                         renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
                       })
                     }
@@ -75,10 +58,7 @@ function CmsFilesAdmin() {
                 </div>
               )}
               <small className="text-break fw-bold">
-                <InPlaceEditor
-                  value={cmsFile.filename}
-                  onChange={(filename) => renameFile(cmsFile.id, filename)}
-                />
+                <InPlaceEditor value={cmsFile.filename} onChange={(filename) => renameFile(cmsFile.id, filename)} />
               </small>
               <CopyToClipboardButton
                 className="btn btn-sm btn-outline-primary"
@@ -90,11 +70,7 @@ function CmsFilesAdmin() {
             </div>
             <div className="card-body text-center py-2">
               <a href={cmsFile.url}>
-                <FilePreview
-                  url={cmsFile.url}
-                  contentType={cmsFile.content_type}
-                  filename={cmsFile.filename}
-                />
+                <FilePreview url={cmsFile.url} contentType={cmsFile.content_type} filename={cmsFile.filename} />
               </a>
             </div>
             <div className="card-footer text-end">
@@ -107,9 +83,9 @@ function CmsFilesAdmin() {
         ))}
       </div>
 
-      {data?.currentAbility.can_create_cms_files && <FileUploadForm onUpload={() => refetch()} />}
+      {data?.currentAbility.can_create_cms_files && (
+        <FileUploadForm cmsParent={data.cmsParent} onUpload={() => refetch()} />
+      )}
     </>
   );
-}
-
-export default CmsFilesAdmin;
+});

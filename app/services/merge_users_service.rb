@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class MergeUsersService < CivilService::Service
   class Result < CivilService::Result
     attr_accessor :winning_user
@@ -13,7 +14,7 @@ class MergeUsersService < CivilService::Service
     { model: SignupRequest, field: :user_con_profile_id },
     { model: TeamMember, field: :user_con_profile_id },
     { model: Ticket, field: :user_con_profile_id }
-  ]
+  ].freeze
 
   RECORD_KEEPING_FIELDS = [
     { model: CmsFile, field: :uploader_id },
@@ -24,7 +25,7 @@ class MergeUsersService < CivilService::Service
     { model: Signup, field: :updated_by_id },
     { model: SignupChange, field: :updated_by_id },
     { model: UserActivityAlert, field: :user_id }
-  ]
+  ].freeze
 
   attr_reader :user_ids, :winning_user_id, :winning_user_con_profile_ids_by_convention_id
 
@@ -44,16 +45,12 @@ class MergeUsersService < CivilService::Service
   def inner_call
     winning_user.update!(site_admin: true) if users.any?(&:site_admin?)
 
-    users.each do |user|
-      merge_losing_profiles(user)
-    end
+    users.each { |user| merge_losing_profiles(user) }
 
     merge_record_keeping_fields
     merge_winning_profiles
 
-    users.each do |user|
-      user.destroy! unless user == winning_user
-    end
+    users.each { |user| user.destroy! unless user == winning_user }
 
     success(winning_user: winning_user.reload)
   end
@@ -76,9 +73,7 @@ class MergeUsersService < CivilService::Service
       model.where(field => profile.id).update_all(field => winning_profile_for_convention.id)
     end
 
-    profile.staff_positions.each do |staff_position|
-      winning_profile_for_convention.staff_positions << staff_position
-    end
+    profile.staff_positions.each { |staff_position| winning_profile_for_convention.staff_positions << staff_position }
 
     profile.destroy!
   end
@@ -92,9 +87,7 @@ class MergeUsersService < CivilService::Service
   end
 
   def merge_winning_profiles
-    UserConProfile
-      .where(id: winning_user_con_profiles.map(&:id))
-      .update_all(user_id: winning_user_id)
+    UserConProfile.where(id: winning_user_con_profiles.map(&:id)).update_all(user_id: winning_user_id)
   end
 
   def ensure_winning_user_id_is_in_user_ids
@@ -134,28 +127,29 @@ class MergeUsersService < CivilService::Service
   end
 
   def profiles_by_convention_id
-    @profiles_by_convention_id ||= conventions.index_by(&:id).transform_values do |convention|
-      users.flat_map(&:user_con_profiles).select { |p| p.convention_id == convention.id }
-    end
+    @profiles_by_convention_id ||=
+      conventions
+        .index_by(&:id)
+        .transform_values do |convention|
+          users.flat_map(&:user_con_profiles).select { |p| p.convention_id == convention.id }
+        end
   end
 
   def ambiguous_convention_ids
-    @ambiguous_convention_ids ||= profiles_by_convention_id
-      .select { |_convention_id, profiles| profiles.size > 1 }
-      .keys
+    @ambiguous_convention_ids ||= profiles_by_convention_id.select { |_convention_id, profiles| profiles.size > 1 }.keys
   end
 
   def winning_profiles_by_convention_id
-    @winning_profiles_by_convention_id ||= profiles_by_convention_id.transform_values do |profiles|
-      profiles.find do |profile|
-        profile.id == winning_user_con_profile_ids_by_convention_id[profile.convention.id]
+    @winning_profiles_by_convention_id ||=
+      profiles_by_convention_id.transform_values do |profiles|
+        profiles.find { |profile| profile.id == winning_user_con_profile_ids_by_convention_id[profile.convention.id] }
       end
-    end
   end
 
   def winning_user_con_profiles
-    @winning_user_con_profiles ||= winning_profiles_by_convention_id.map do |convention_id, profile|
-      profile || profiles_by_convention_id[convention_id].first
-    end
+    @winning_user_con_profiles ||=
+      winning_profiles_by_convention_id.map do |convention_id, profile|
+        profile || profiles_by_convention_id[convention_id].first
+      end
   end
 end

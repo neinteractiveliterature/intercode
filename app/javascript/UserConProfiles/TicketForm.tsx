@@ -1,14 +1,8 @@
 import { useState, useMemo, useCallback } from 'react';
-// @ts-expect-error
+// @ts-expect-error Inflected types don't export capitalize
 import { capitalize } from 'inflected';
 import { ApolloError } from '@apollo/client';
-import {
-  useModal,
-  BootstrapFormSelect,
-  ErrorDisplay,
-  FormGroupWithLabel,
-  parseIntOrNull,
-} from '@neinteractiveliterature/litform';
+import { useModal, BootstrapFormSelect, ErrorDisplay, FormGroupWithLabel } from '@neinteractiveliterature/litform';
 
 import EventSelect from '../BuiltInFormControls/EventSelect';
 import sortTicketTypes from '../TicketTypeAdmin/sortTicketTypes';
@@ -19,11 +13,8 @@ import AddOrderToTicketButton, { AddOrderToTicketButtonProps } from './AddOrderT
 import { UserConProfileAdminQueryData } from './queries.generated';
 import { TicketInput, UserConProfile } from '../graphqlTypes.generated';
 
-type TicketFromQuery = NonNullable<UserConProfileAdminQueryData['userConProfile']['ticket']>;
-type EditingTicket = Omit<
-  TicketFromQuery,
-  'id' | 'ticket_type' | 'created_at' | 'updated_at' | '__typename'
-> &
+type TicketFromQuery = NonNullable<UserConProfileAdminQueryData['convention']['user_con_profile']['ticket']>;
+type EditingTicket = Omit<TicketFromQuery, 'id' | 'ticket_type' | 'created_at' | 'updated_at' | '__typename'> &
   Partial<Pick<TicketFromQuery, 'ticket_type' | 'id'>>;
 
 export type TicketFormProps = {
@@ -31,7 +22,7 @@ export type TicketFormProps = {
   convention: UserConProfileAdminQueryData['convention'];
   onSubmit: (ticketInput: TicketInput) => Promise<void>;
   submitCaption: string;
-  userConProfile: Pick<UserConProfile, 'id' | 'name_without_nickname'>;
+  userConProfile: Pick<UserConProfile, 'name_without_nickname'> & { id: string };
 };
 
 function TicketForm({
@@ -40,14 +31,12 @@ function TicketForm({
   convention,
   onSubmit,
   submitCaption,
-}: TicketFormProps) {
+}: TicketFormProps): JSX.Element {
   const editOrderModal = useModal();
   const [ticketTypeId, setTicketTypeId] = useState(initialTicket.ticket_type?.id);
   const [providedByEvent, setProvidedByEvent] = useState(initialTicket.provided_by_event);
 
-  const sortedTicketTypes = useMemo(() => sortTicketTypes(convention.ticket_types), [
-    convention.ticket_types,
-  ]);
+  const sortedTicketTypes = useMemo(() => sortTicketTypes(convention.ticket_types), [convention.ticket_types]);
 
   const [submit, submitError, submitInProgress] = useAsyncFunction(onSubmit);
 
@@ -57,8 +46,8 @@ function TicketForm({
         return;
       }
       const ticketInput = {
-        ticket_type_id: ticketTypeId,
-        provided_by_event_id: providedByEvent?.id,
+        transitionalTicketTypeId: ticketTypeId,
+        transitionalProvidedByEventId: providedByEvent?.id,
       };
       event.preventDefault();
       await submit(ticketInput);
@@ -74,7 +63,7 @@ function TicketForm({
       <BootstrapFormSelect
         label={`${capitalize(convention.ticket_name)} type`}
         value={ticketTypeId ?? ''}
-        onValueChange={(newValue) => setTicketTypeId(parseIntOrNull(newValue) ?? undefined)}
+        onValueChange={(newValue) => setTicketTypeId(newValue)}
       >
         <option aria-label="Blank placeholder option" />
         {sortedTicketTypes.map(({ id, description }) => (
@@ -124,10 +113,7 @@ function TicketForm({
         </div>
       </div>
 
-      <EditOrderModal
-        order={editOrderModal.visible ? order : undefined}
-        closeModal={editOrderModal.close}
-      />
+      <EditOrderModal order={editOrderModal.visible ? order : undefined} closeModal={editOrderModal.close} />
 
       <ErrorDisplay graphQLError={submitError as ApolloError} />
 

@@ -17,7 +17,7 @@ export type RegistrationPolicyItemEditorProps = FormItemEditorProps<Registration
 function RegistrationPolicyItemEditor({
   formItem,
   setFormItem,
-}: RegistrationPolicyItemEditorProps) {
+}: RegistrationPolicyItemEditorProps): JSX.Element {
   const { disabled } = useContext(FormItemEditorContext);
 
   const generateNewPreset: () => RegistrationPolicyPreset = useCallback(

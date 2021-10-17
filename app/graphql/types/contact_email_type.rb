@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::ContactEmailType < Types::BaseObject
   field :email, String, null: false
   field :name, String, null: true

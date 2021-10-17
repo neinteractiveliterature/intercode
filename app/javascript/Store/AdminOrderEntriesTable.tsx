@@ -20,12 +20,14 @@ import {
   ProductVariant,
 } from '../graphqlTypes.generated';
 
-type ProductVariantType = Pick<ProductVariant, '__typename' | 'id' | 'name'> & {
+type ProductVariantType = Pick<ProductVariant, '__typename' | 'name'> & {
+  id: string;
   override_pricing_structure?: Pick<PricingStructure, 'price'> | null;
 };
 
 type CommonOrderEntryProps = Pick<OrderEntry, 'quantity' | 'price_per_item'> & {
-  product: Pick<Product, '__typename' | 'id' | 'name'> & {
+  product: Pick<Product, '__typename' | 'name'> & {
+    id: string;
     product_variants?: ProductVariantType[] | null;
     pricing_structure?: Pick<PricingStructure, 'price'> | null;
   };
@@ -33,7 +35,7 @@ type CommonOrderEntryProps = Pick<OrderEntry, 'quantity' | 'price_per_item'> & {
 };
 
 export type AdminOrderEntryWithIdType = CommonOrderEntryProps & {
-  id: number;
+  id: string;
 };
 
 type OrderEntryWithGeneratedIdType = CommonOrderEntryProps & {
@@ -72,11 +74,11 @@ export type AdminOrderEntriesTableProps<
     total_price?: Money;
     coupon_applications: CouponApplicationType[];
   };
-  createOrderEntry: (orderEntry: T) => Promise<any>;
-  updateOrderEntry: (orderEntry: T, attributes: Partial<T>) => Promise<any>;
-  deleteOrderEntry: (orderEntry: T) => Promise<any>;
-  createCouponApplication: (code: string) => Promise<any>;
-  deleteCouponApplication: (couponApplication: CouponApplicationType) => Promise<any>;
+  createOrderEntry: (orderEntry: T) => Promise<unknown>;
+  updateOrderEntry: (orderEntry: T, attributes: Partial<T>) => Promise<unknown>;
+  deleteOrderEntry: (orderEntry: T) => Promise<unknown>;
+  createCouponApplication: (code: string) => Promise<unknown>;
+  deleteCouponApplication: (couponApplication: CouponApplicationType) => Promise<unknown>;
 };
 
 function AdminOrderEntriesTable<
@@ -89,7 +91,7 @@ function AdminOrderEntriesTable<
   deleteOrderEntry,
   createCouponApplication,
   deleteCouponApplication,
-}: AdminOrderEntriesTableProps<T, CouponApplicationType>) {
+}: AdminOrderEntriesTableProps<T, CouponApplicationType>): JSX.Element {
   const confirm = useConfirm();
   const [addingItem, setAddingItem] = useState<AddingOrderEntry<T>>();
   const [applyingCoupon, setApplyingCoupon] = useState(false);
@@ -112,16 +114,13 @@ function AdminOrderEntriesTable<
     );
   };
 
-  const setAddingItemProductVariant: (variant: NonNullable<T['product_variant']> | null) => void = (
-    variant,
-  ) => {
+  const setAddingItemProductVariant: (variant: NonNullable<T['product_variant']> | null) => void = (variant) => {
     setAddingItem(
       (prevAddingItem) =>
         ({
           ...prevAddingItem,
           product_variant: variant,
-          price_per_item:
-            variant?.override_pricing_structure?.price ?? prevAddingItem?.price_per_item,
+          price_per_item: variant?.override_pricing_structure?.price ?? prevAddingItem?.price_per_item,
         } as T),
     );
   };
@@ -131,7 +130,17 @@ function AdminOrderEntriesTable<
       return;
     }
 
-    createOrderEntryAsync(addingItem as T);
+    createOrderEntryAsync({
+      price_per_item: addingItem.price_per_item
+        ? {
+            currency_code: addingItem.price_per_item.currency_code,
+            fractional: addingItem.price_per_item.fractional,
+          }
+        : undefined,
+      product: addingItem.product,
+      quantity: addingItem.quantity,
+      product_variant: addingItem.product_variant,
+    } as T);
     setAddingItem(undefined);
   };
 
@@ -164,7 +173,11 @@ function AdminOrderEntriesTable<
               <InPlaceMoneyEditor
                 value={orderEntry.price_per_item}
                 onChange={(value) =>
-                  updateOrderEntry(orderEntry, { price_per_item: value } as Partial<T>)
+                  updateOrderEntry(orderEntry, {
+                    price_per_item: value
+                      ? { currency_code: value.currency_code, fractional: value.fractional }
+                      : undefined,
+                  } as Partial<T>)
                 }
               >
                 {formatMoney(orderEntry.price_per_item)}
@@ -257,9 +270,7 @@ function AdminOrderEntriesTable<
             <td>
               <InPlaceMoneyEditor
                 value={addingItem.price_per_item}
-                onChange={(value) =>
-                  setAddingItem((prev) => ({ ...prev, price_per_item: value } as T))
-                }
+                onChange={(value) => setAddingItem((prev) => ({ ...prev, price_per_item: value } as T))}
                 disabled={createInProgress}
               >
                 {formatMoney(addingItem.price_per_item)}
@@ -311,11 +322,7 @@ function AdminOrderEntriesTable<
               </button>
             )}
             {!applyingCoupon && (
-              <button
-                className="btn btn-sm btn-outline-primary"
-                type="button"
-                onClick={() => setApplyingCoupon(true)}
-              >
+              <button className="btn btn-sm btn-outline-primary" type="button" onClick={() => setApplyingCoupon(true)}>
                 Add coupon
               </button>
             )}

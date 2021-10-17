@@ -3,7 +3,7 @@ import { CouponFields } from './couponFields';
 
 export const CouponApplicationFields = gql`
   fragment CouponApplicationFields on CouponApplication {
-    id
+    id: transitionalId
 
     discount {
       fractional
@@ -11,7 +11,7 @@ export const CouponApplicationFields = gql`
     }
 
     coupon {
-      id
+      id: transitionalId
       ...CouponFields
     }
   }
@@ -21,14 +21,14 @@ export const CouponApplicationFields = gql`
 
 export const AdminOrderFieldsFragment = gql`
   fragment AdminOrderFieldsFragment on Order {
-    id
+    id: transitionalId
     status
     submitted_at
     charge_id
     payment_note
 
     user_con_profile {
-      id
+      id: transitionalId
       name_without_nickname
     }
 
@@ -43,22 +43,22 @@ export const AdminOrderFieldsFragment = gql`
     }
 
     coupon_applications {
-      id
+      id: transitionalId
       ...CouponApplicationFields
     }
 
     order_entries {
-      id
+      id: transitionalId
       quantity
       describe_products
 
       product {
-        id
+        id: transitionalId
         name
       }
 
       product_variant {
-        id
+        id: transitionalId
         name
       }
 
@@ -74,20 +74,20 @@ export const AdminOrderFieldsFragment = gql`
 
 export const OrderEntryFields = gql`
   fragment OrderEntryFields on OrderEntry {
-    id
+    id: transitionalId
     quantity
 
     product {
-      id
+      id: transitionalId
       name
       payment_options
       provides_ticket_type {
-        id
+        id: transitionalId
       }
     }
 
     product_variant {
-      id
+      id: transitionalId
       name
     }
 
@@ -105,10 +105,10 @@ export const OrderEntryFields = gql`
 
 export const CartOrderFields = gql`
   fragment CartOrderFields on Order {
-    id
+    id: transitionalId
 
     coupon_applications {
-      id
+      id: transitionalId
       ...CouponApplicationFields
     }
 
@@ -123,7 +123,7 @@ export const CartOrderFields = gql`
     }
 
     order_entries {
-      id
+      id: transitionalId
       ...OrderEntryFields
     }
   }
