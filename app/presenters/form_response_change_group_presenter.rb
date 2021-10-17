@@ -13,7 +13,7 @@ class FormResponseChangeGroupPresenter
 
   def html
     stdout, stderr, status = Open3.capture3(shell_command)
-    unless status.zero?
+    unless status.success?
       Rollbar.error(
         "#{SCRIPT_PATH} returned error code #{status}",
         stdout: stdout,
