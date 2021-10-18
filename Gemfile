@@ -130,7 +130,7 @@ group :development do
   gem 'rubocop-performance'
   gem 'rubocop-rails'
   gem 'rubocop-sequel'
-  gem 'prettier', '2.0.0-rc3'
+  gem 'prettier', '2.0.0.pre.rc4'
 
   # Find missing `end` statements
   gem 'dead_end'
