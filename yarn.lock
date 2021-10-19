@@ -4458,10 +4458,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stripe/stripe-js@npm:1.20.2":
-  version: 1.20.2
-  resolution: "@stripe/stripe-js@npm:1.20.2"
-  checksum: 13fbe4a67a218e1856e552403e038565cca7a3c765f561e3405a3b180fa4e714020e90d55fc5478d847d0da41dd223091a40afb7533bc2103fa9b2494a454a42
+"@stripe/stripe-js@npm:1.20.3":
+  version: 1.20.3
+  resolution: "@stripe/stripe-js@npm:1.20.3"
+  checksum: 3bdd2e105ee7cb7bd5dabbee8535a838cf2bdc0e1a4470f2ac8c1d433ece73bb3317ebc211e20aff4bc5d214838b7256e67096e2d2f5777cdef0551873302c08
   languageName: node
   linkType: hard
 
@@ -20256,7 +20256,7 @@ resolve@^2.0.0-next.3:
     "@popperjs/core": 2.10.2
     "@prettier/plugin-ruby": ./prettier-plugin-ruby-tmp-until-next-rc-release.tgz
     "@stripe/react-stripe-js": 1.6.0
-    "@stripe/stripe-js": 1.20.2
+    "@stripe/stripe-js": 1.20.3
     "@testing-library/jest-dom": 5.14.1
     "@testing-library/react": 12.1.2
     "@testing-library/react-hooks": 7.0.2
