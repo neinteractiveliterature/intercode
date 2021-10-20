@@ -10250,9 +10250,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-import-resolver-webpack@npm:0.13.1":
-  version: 0.13.1
-  resolution: "eslint-import-resolver-webpack@npm:0.13.1"
+"eslint-import-resolver-webpack@npm:0.13.2":
+  version: 0.13.2
+  resolution: "eslint-import-resolver-webpack@npm:0.13.2"
   dependencies:
     array-find: ^1.0.0
     debug: ^3.2.7
@@ -10260,15 +10260,15 @@ __metadata:
     find-root: ^1.1.0
     has: ^1.0.3
     interpret: ^1.4.0
-    is-core-module: ^2.4.0
-    is-regex: ^1.1.3
+    is-core-module: ^2.7.0
+    is-regex: ^1.1.4
     lodash: ^4.17.21
     resolve: ^1.20.0
     semver: ^5.7.1
   peerDependencies:
     eslint-plugin-import: ">=1.4.0"
     webpack: ">=1.11.0"
-  checksum: 667862c99f78d3fbdeb6ee9b3634ce315ec43d245ca62373621e68d0122142b00c96dcd5180ebb621c80cd8502d6f0a280def542875ea87ef3963b29519181de
+  checksum: 6c40164747bf894a0e34cbc9626566193471062e8809cef7aa8be74e0346c962d03aa7b8f3579a3d348245269860c1f241eba5379ec04acc89daffa4fb6b5f17
   languageName: node
   linkType: hard
 
@@ -13302,7 +13302,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"is-core-module@npm:^2.2.0, is-core-module@npm:^2.4.0, is-core-module@npm:^2.7.0":
+"is-core-module@npm:^2.2.0, is-core-module@npm:^2.7.0":
   version: 2.7.0
   resolution: "is-core-module@npm:2.7.0"
   dependencies:
@@ -13646,7 +13646,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"is-regex@npm:^1.0.4, is-regex@npm:^1.1.3, is-regex@npm:^1.1.4":
+"is-regex@npm:^1.0.4, is-regex@npm:^1.1.4":
   version: 1.1.4
   resolution: "is-regex@npm:1.1.4"
   dependencies:
@@ -20348,7 +20348,7 @@ resolve@^2.0.0-next.3:
     eslint-config-prettier: 8.3.0
     eslint-import-resolver-node: 0.3.6
     eslint-import-resolver-typescript: 2.5.0
-    eslint-import-resolver-webpack: 0.13.1
+    eslint-import-resolver-webpack: 0.13.2
     eslint-plugin-babel: 5.3.1
     eslint-plugin-graphql: 4.0.0
     eslint-plugin-import: 2.25.2
