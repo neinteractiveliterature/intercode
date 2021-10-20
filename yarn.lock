@@ -5164,13 +5164,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-color@npm:3.0.5":
-  version: 3.0.5
-  resolution: "@types/react-color@npm:3.0.5"
+"@types/react-color@npm:3.0.6":
+  version: 3.0.6
+  resolution: "@types/react-color@npm:3.0.6"
   dependencies:
     "@types/react": "*"
     "@types/reactcss": "*"
-  checksum: c5567df4cb6f1d0ada952d72b4b042decc5284febd0904684f931d74f311b013d8dffb92882762e3d69d71424a94cc6e57cd6a497e35749aa7b51c3794e6dfa4
+  checksum: 8cd881d6eb725190be942c1d71f7917d3dd1b418417740f64fa6c03ae3ba16cb91d07c4b3b348cf5bae20071c8ca5d4aaf514c9a5318077d5e50bd782a5e8da2
   languageName: node
   linkType: hard
 
@@ -20311,7 +20311,7 @@ resolve@^2.0.0-next.3:
     "@types/punycode": 2.1.0
     "@types/react": 17.0.30
     "@types/react-click-outside-hook": 1.0.0
-    "@types/react-color": 3.0.5
+    "@types/react-color": 3.0.6
     "@types/react-dom": 17.0.10
     "@types/react-google-recaptcha": 2.1.2
     "@types/react-onclickoutside": 6.7.4

@@ -81,7 +81,7 @@
     "@types/minimist": "1.2.2",
     "@types/react": "17.0.30",
     "@types/react-click-outside-hook": "1.0.0",
-    "@types/react-color": "3.0.5",
+    "@types/react-color": "3.0.6",
     "@types/react-google-recaptcha": "2.1.2",
     "@types/react-onclickoutside": "6.7.4",
     "@types/react-router-dom": "5.3.1",
