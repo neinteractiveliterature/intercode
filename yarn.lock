@@ -10343,12 +10343,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-react-hooks@npm:4.2.0":
-  version: 4.2.0
-  resolution: "eslint-plugin-react-hooks@npm:4.2.0"
+"eslint-plugin-react-hooks@npm:4.2.1-alpha-996da67b2-20211018":
+  version: 4.2.1-alpha-996da67b2-20211018
+  resolution: "eslint-plugin-react-hooks@npm:4.2.1-alpha-996da67b2-20211018"
   peerDependencies:
-    eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0
-  checksum: ead5c5be3ded82a0cf295b064376adb1998a43e2262b605eecc0efc88283dec4e159ca39307fafb3d8e661dd08e5a4c8cdfed97eea78f923954f72bad6e20397
+    eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0
+  checksum: 00df8905404e331ae4c0808476242771a07467385d03088c91510282cee470ec9b01c2e1462d936b2882c27111d512d2233de55f31a925e4e0d4f4e4073300f7
   languageName: node
   linkType: hard
 
@@ -19875,7 +19875,7 @@ resolve@^2.0.0-next.3:
     eslint-plugin-jest: 25.2.3
     eslint-plugin-jsx-a11y: 6.4.1
     eslint-plugin-react: 7.26.1
-    eslint-plugin-react-hooks: 4.2.0
+    eslint-plugin-react-hooks: 4.2.1-alpha-996da67b2-20211018
     events: 3.3.0
     fast-diff: 1.2.0
     file-saver: 2.0.5

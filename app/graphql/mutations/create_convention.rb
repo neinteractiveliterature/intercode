@@ -4,22 +4,22 @@ class Mutations::CreateConvention < Mutations::BaseMutation
 
   field :convention, Types::ConventionType, null: false
 
-  argument :clone_convention_id,
-           Integer,
+  argument :transitional_clone_convention_id,
+           ID,
            deprecation_reason:
-             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
+             "IDs have transitioned to the ID type.  Please switch back to the cloneConventionId field so that \
+we can remove this temporary one.",
            required: false,
-           camelize: false
-  argument :transitional_clone_convention_id, ID, required: false, camelize: true
-  argument :organization_id,
-           Integer,
+           camelize: true
+  argument :clone_convention_id, ID, required: false, camelize: true
+  argument :transitional_organization_id,
+           ID,
            deprecation_reason:
-             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
+             "IDs have transitioned to the ID type.  Please switch back to the organizationId field so that \
+we can remove this temporary one.",
            required: false,
-           camelize: false
-  argument :transitional_organization_id, ID, required: false, camelize: true
+           camelize: true
+  argument :organization_id, ID, required: false, camelize: true
   argument :convention, Types::ConventionInputType, required: true
   argument :cms_content_set_name, String, required: false, camelize: false
 

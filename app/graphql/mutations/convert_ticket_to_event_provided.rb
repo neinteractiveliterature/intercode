@@ -4,30 +4,30 @@ class Mutations::ConvertTicketToEventProvided < Mutations::BaseMutation
   field :refund_status, Types::RefundStatusType, null: false
   field :ticket, Types::TicketType, 'The new ticket we just provided', null: false
 
-  argument :event_id,
-           Int,
-           deprecation_reason:
-             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
+  argument :event_id, ID, required: false, camelize: true
+  argument :transitional_event_id,
+           ID,
            required: false,
-           camelize: false
-  argument :transitional_event_id, ID, required: false, camelize: true
-  argument :ticket_type_id,
-           Int,
+           camelize: true,
            deprecation_reason:
-             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
+             "IDs have transitioned to the ID type.  Please switch back to the eventId field so that \
+we can remove this temporary one."
+  argument :ticket_type_id, ID, required: false, camelize: true
+  argument :transitional_ticket_type_id,
+           ID,
            required: false,
-           camelize: false
-  argument :transitional_ticket_type_id, ID, required: false, camelize: true
-  argument :user_con_profile_id,
-           Int,
+           camelize: true,
            deprecation_reason:
-             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
+             "IDs have transitioned to the ID type.  Please switch back to the ticketTypeId field so that \
+we can remove this temporary one."
+  argument :user_con_profile_id, ID, required: false, camelize: true
+  argument :transitional_user_con_profile_id,
+           ID,
            required: false,
-           camelize: false
-  argument :transitional_user_con_profile_id, ID, required: false, camelize: true
+           camelize: true,
+           deprecation_reason:
+             "IDs have transitioned to the ID type.  Please switch back to the userConProfileId field so that \
+we can remove this temporary one."
 
   attr_reader :event, :subject_profile
 

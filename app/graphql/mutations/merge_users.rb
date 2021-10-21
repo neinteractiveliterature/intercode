@@ -2,20 +2,22 @@
 class Mutations::MergeUsers < Mutations::BaseMutation
   field :user, Types::UserType, null: false
 
-  argument :user_ids,
-           [Integer],
+  argument :transitional_user_ids,
+           [ID],
            required: false,
            deprecation_reason:
-             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID."
-  argument :transitional_user_ids, [ID], required: false, description: 'The user IDs to merge.'
-  argument :winning_user_id,
-           Integer,
+             "IDs have transitioned to the ID type.  Please switch back to the userIds field so that \
+we can remove this temporary one.",
+           camelize: true
+  argument :user_ids, [ID], required: false, description: 'The user IDs to merge.', camelize: true
+  argument :transitional_winning_user_id,
+           ID,
            deprecation_reason:
-             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
-           required: false
-  argument :transitional_winning_user_id, ID, required: false
+             "IDs have transitioned to the ID type.  Please switch back to the winningUserId field so that \
+we can remove this temporary one.",
+           required: false,
+           camelize: true
+  argument :winning_user_id, ID, required: false, camelize: true
   argument :winning_user_con_profiles, [Types::WinningUserConProfileInputType], required: true
 
   define_authorization_check do |args|
