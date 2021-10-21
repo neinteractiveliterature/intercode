@@ -5261,12 +5261,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-transition-group@npm:*, @types/react-transition-group@npm:4.4.3":
+"@types/react-transition-group@npm:*":
   version: 4.4.3
   resolution: "@types/react-transition-group@npm:4.4.3"
   dependencies:
     "@types/react": "*"
   checksum: 7e45c6bf50cdfdc482d9ce4c302cda65134b3a44306c749d46d2f3256ca8c95cbbc1cbe28c32010b9273f5db78c8d434a8cea3688ac6e5327443b8a8d1c1caac
+  languageName: node
+  linkType: hard
+
+"@types/react-transition-group@npm:4.4.4":
+  version: 4.4.4
+  resolution: "@types/react-transition-group@npm:4.4.4"
+  dependencies:
+    "@types/react": "*"
+  checksum: 86e9ff9731798e12bc2afe0304678918769633b531dcf6397f86af81718fb7930ef8648e894eeb3718fc6eab6eb885cfb9b82a44d1d74e10951ee11ebc4643ae
   languageName: node
   linkType: hard
 
@@ -20344,7 +20353,7 @@ resolve@^2.0.0-next.3:
     "@types/react-router-dom": 5.3.1
     "@types/react-select": 4.0.18
     "@types/react-table": 7.7.7
-    "@types/react-transition-group": 4.4.3
+    "@types/react-transition-group": 4.4.4
     "@types/source-map-support": 0.5.4
     "@types/testing-library__jest-dom": 5.14.1
     "@types/tinycolor2": 1.4.3
