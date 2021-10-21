@@ -4324,12 +4324,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@prettier/plugin-ruby@file:./prettier-plugin-ruby-tmp-until-next-rc-release.tgz::locator=root-workspace-0b6124%40workspace%3A.":
-  version: 2.0.0-rc3
-  resolution: "@prettier/plugin-ruby@file:./prettier-plugin-ruby-tmp-until-next-rc-release.tgz::locator=root-workspace-0b6124%40workspace%3A."
+"@prettier/plugin-ruby@npm:2.0.0-rc4":
+  version: 2.0.0-rc4
+  resolution: "@prettier/plugin-ruby@npm:2.0.0-rc4"
   dependencies:
     prettier: ">=2.3.0"
-  checksum: 049d7984988767a82188af620a4448d0c4cb9223ad836ae1fd32a156848b63f9cfa70ef0feb63a796f80b60566d7fafff9c8de1fbdd5853ec49a7c2696276a34
+  checksum: c8161c843b85286ce68d4541b21d780da79f8dadcc74fc6cd20e200b429b73bc0d29203b8af354dd2110731ab5ca954fc00c9400ca09ee4b0598376d5d835931
   languageName: node
   linkType: hard
 
@@ -20312,7 +20312,7 @@ resolve@^2.0.0-next.3:
     "@lezer/common": 0.15.7
     "@neinteractiveliterature/litform": 0.20.3
     "@popperjs/core": 2.10.2
-    "@prettier/plugin-ruby": ./prettier-plugin-ruby-tmp-until-next-rc-release.tgz
+    "@prettier/plugin-ruby": 2.0.0-rc4
     "@stripe/react-stripe-js": 1.6.0
     "@stripe/stripe-js": 1.20.3
     "@testing-library/jest-dom": 5.14.1
