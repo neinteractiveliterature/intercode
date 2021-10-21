@@ -45,7 +45,7 @@ all id fields are replaced with ones of type ID.",
       convention_data['maximum_event_signups'] = process_scheduled_value_input(convention.maximum_event_signups)
     end
 
-    if clone_convention_id
+    if transitional_clone_convention_id || clone_convention_id
       source_convention = Convention.find(transitional_clone_convention_id || clone_convention_id)
       result =
         CloneConventionService.new(source_convention: source_convention, new_convention_attributes: convention_data)
