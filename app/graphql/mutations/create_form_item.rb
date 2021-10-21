@@ -2,14 +2,14 @@
 class Mutations::CreateFormItem < Mutations::BaseMutation
   field :form_item, Types::FormItemType, null: false
 
-  argument :form_section_id,
-           Integer,
+  argument :transitional_form_section_id,
+           ID,
            deprecation_reason:
-             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
+             "IDs have transitioned to the ID type.  Please switch back to the formSectionId field so that \
+we can remove this temporary one.",
            required: false,
-           camelize: false
-  argument :transitional_form_section_id, ID, required: false, camelize: true
+           camelize: true
+  argument :form_section_id, ID, required: false, camelize: true
   argument :form_item, Types::FormItemInputType, required: true, camelize: false
 
   attr_reader :form_item

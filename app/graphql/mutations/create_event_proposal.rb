@@ -2,22 +2,22 @@
 class Mutations::CreateEventProposal < Mutations::BaseMutation
   field :event_proposal, Types::EventProposalType, null: false
 
-  argument :event_category_id,
-           Int,
+  argument :transitional_event_category_id,
+           ID,
            deprecation_reason:
-             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
+             "IDs have transitioned to the ID type.  Please switch back to the eventCategoryId field so that \
+we can remove this temporary one.",
            required: false,
            camelize: false
-  argument :transitional_event_category_id, ID, required: false, camelize: true
-  argument :clone_event_proposal_id,
-           Int,
+  argument :event_category_id, ID, required: false, camelize: true
+  argument :transitional_clone_event_proposal_id,
+           ID,
            deprecation_reason:
-             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
+             "IDs have transitioned to the ID type.  Please switch back to the cloneEventProposalId field so that \
+we can remove this temporary one.",
            required: false,
            camelize: false
-  argument :transitional_clone_event_proposal_id, ID, required: false, camelize: true
+  argument :clone_event_proposal_id, ID, required: false, camelize: true
 
   authorize_create_convention_associated_model :event_proposals
 

@@ -2,23 +2,23 @@
 class Mutations::CreateOrganizationRole < Mutations::BaseMutation
   field :organization_role, Types::OrganizationRoleType, null: false
 
-  argument :organization_id,
-           Integer,
+  argument :transitional_organization_id,
+           ID,
            deprecation_reason:
-             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
+             "IDs have transitioned to the ID type.  Please switch back to the organizationId field so that \
+we can remove this temporary one.",
            required: false,
-           camelize: false
-  argument :transitional_organization_id, ID, required: false, camelize: true
+           camelize: true
+  argument :dorganization_id, ID, required: false, camelize: true
   argument :organization_role, Types::OrganizationRoleInputType, required: true, camelize: false
-  argument :user_ids,
-           [Integer],
+  argument :transitional_user_ids,
+           [ID],
            deprecation_reason:
-             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
+             "IDs have transitioned to the ID type.  Please switch back to the userIds field so that \
+we can remove this temporary one.",
            required: false,
-           camelize: false
-  argument :transitional_user_ids, [ID], required: false, camelize: true
+           camelize: true
+  argument :user_ids, [ID], required: false, camelize: true
   argument :permissions, [Types::PermissionInputType], required: true
 
   attr_reader :organization
