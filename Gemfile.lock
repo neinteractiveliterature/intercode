@@ -401,8 +401,8 @@ GEM
       nio4r (~> 2.0)
     pundit (2.1.1)
       activesupport (>= 3.0.0)
-    racc (1.5.2)
-    racc (1.5.2-java)
+    racc (1.6.0)
+    racc (1.6.0-java)
     rack (2.2.3)
     rack-mini-profiler (2.3.3)
       rack (>= 1.2.0)
@@ -554,7 +554,7 @@ GEM
     thor (1.1.0)
     tilt (2.0.10)
     tins (1.20.2)
-    twilio-ruby (5.59.0)
+    twilio-ruby (5.60.0)
       faraday (>= 0.9, < 2.0)
       jwt (>= 1.5, <= 2.5)
       nokogiri (>= 1.6, < 2.0)
@@ -667,7 +667,7 @@ DEPENDENCIES
   stripe
   stripe-ruby-mock (>= 3.1.0.rc3)
   term-ansicolor
-  twilio-ruby (~> 5.59.0)
+  twilio-ruby (~> 5.60.0)
   tzinfo-data
   webrick
   whenever
