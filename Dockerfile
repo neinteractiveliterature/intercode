@@ -25,7 +25,7 @@ RUN bundle config set without 'intercode1_import' \
   && rm -rf /usr/local/bundle \
   && mv /usr/local/bundle-tmp /usr/local/bundle
 
-COPY --chown=www:www package.json yarn.lock .yarnrc.yml prettier-plugin-ruby-tmp-until-next-rc-release.tgz /usr/src/intercode/
+COPY --chown=www:www package.json yarn.lock .yarnrc.yml /usr/src/intercode/
 COPY --chown=www:www doc-site/package.json /usr/src/intercode/doc-site/
 COPY --chown=www:www ./.yarn /usr/src/intercode/.yarn
 RUN yarn install
