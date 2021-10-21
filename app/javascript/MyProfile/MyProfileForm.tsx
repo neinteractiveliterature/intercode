@@ -16,7 +16,7 @@ import { useItemInteractionTracking, ItemInteractionTrackerContext } from '../Fo
 import usePageTitle from '../usePageTitle';
 import MarkdownInput from '../BuiltInFormControls/MarkdownInput';
 import Gravatar from '../Gravatar';
-import { useMyProfileQuery, MyProfileQueryData } from './queries.generated';
+import { useMyProfileQuery, MyProfileQueryData, MyProfileQueryDocument } from './queries.generated';
 import { CommonFormFieldsFragment } from '../Models/commonFormFragments.generated';
 import { useUpdateUserConProfileMutation } from '../UserConProfiles/mutations.generated';
 import { WithFormResponse } from '../Models/deserializeFormResponse';
@@ -60,6 +60,7 @@ function MyProfileFormInner({ initialSetup, initialUserConProfile, convention, f
               },
             },
           },
+          refetchQueries: [MyProfileQueryDocument],
         });
       } catch (e) {
         setResponseErrors(parseResponseErrors(e));
