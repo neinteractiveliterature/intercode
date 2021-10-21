@@ -72,15 +72,15 @@ function RegistrationPolicyEditor<
 
     const customBucketKeyNumbers = (registrationPolicy.buckets || [])
       .map((bucket) => bucket.key)
-      .filter((key) => key.match(/^custom-\d+$/))
-      .map((key) => Number.parseInt(key.replace('custom-', ''), 10));
+      .filter((key) => key.match(/^custom_\d+$/))
+      .map((key) => Number.parseInt(key.replace('custom_', ''), 10));
 
     const maxBucketKeyNumber = customBucketKeyNumbers.length > 0 ? Math.max(...customBucketKeyNumbers) : 0;
 
     const customBucketNumber = maxBucketKeyNumber + 1;
 
     onChange(
-      addRegistrationPolicyBucket(registrationPolicy, `custom-${customBucketNumber}`, {
+      addRegistrationPolicyBucket(registrationPolicy, `custom_${customBucketNumber}`, {
         name: `Custom ${customBucketNumber}`,
         anything: false,
         slots_limited: true,
