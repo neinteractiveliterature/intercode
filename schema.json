@@ -35203,19 +35203,19 @@
           "fields": null,
           "inputFields": [
             {
-              "name": "id",
+              "name": "transitionalId",
               "description": null,
               "type": {
                 "kind": "SCALAR",
-                "name": "Int",
+                "name": "ID",
                 "ofType": null
               },
               "defaultValue": null,
               "isDeprecated": true,
-              "deprecationReason": "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID."
+              "deprecationReason": "IDs have transitioned to the ID type.  Please switch back to the id field so that we can remove this temporary one."
             },
             {
-              "name": "transitionalId",
+              "name": "id",
               "description": null,
               "type": {
                 "kind": "SCALAR",
@@ -35243,7 +35243,7 @@
               "deprecationReason": null
             },
             {
-              "name": "add_user_ids",
+              "name": "transitionalAddUserIds",
               "description": null,
               "type": {
                 "kind": "LIST",
@@ -35253,17 +35253,17 @@
                   "name": null,
                   "ofType": {
                     "kind": "SCALAR",
-                    "name": "Int",
+                    "name": "ID",
                     "ofType": null
                   }
                 }
               },
               "defaultValue": null,
               "isDeprecated": true,
-              "deprecationReason": "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID."
+              "deprecationReason": "IDs have transitioned to the ID type.  Please switch back to the addUserIds field so that we can remove this temporary one."
             },
             {
-              "name": "transitionalAddUserIds",
+              "name": "addUserIds",
               "description": null,
               "type": {
                 "kind": "LIST",
@@ -35283,7 +35283,7 @@
               "deprecationReason": null
             },
             {
-              "name": "remove_user_ids",
+              "name": "transitionalRemoveUserIds",
               "description": null,
               "type": {
                 "kind": "LIST",
@@ -35293,17 +35293,17 @@
                   "name": null,
                   "ofType": {
                     "kind": "SCALAR",
-                    "name": "Int",
+                    "name": "ID",
                     "ofType": null
                   }
                 }
               },
               "defaultValue": null,
               "isDeprecated": true,
-              "deprecationReason": "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID."
+              "deprecationReason": "IDs have transitioned to the ID type.  Please switch back to the removeUserIds field so that we can remove this temporary one."
             },
             {
-              "name": "transitionalRemoveUserIds",
+              "name": "removeUserIds",
               "description": null,
               "type": {
                 "kind": "LIST",
@@ -35343,7 +35343,7 @@
               "deprecationReason": null
             },
             {
-              "name": "remove_permission_ids",
+              "name": "transitionalRemovePermissionIds",
               "description": null,
               "type": {
                 "kind": "LIST",
@@ -35353,17 +35353,17 @@
                   "name": null,
                   "ofType": {
                     "kind": "SCALAR",
-                    "name": "Int",
+                    "name": "ID",
                     "ofType": null
                   }
                 }
               },
               "defaultValue": null,
               "isDeprecated": true,
-              "deprecationReason": "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID."
+              "deprecationReason": "IDs have transitioned to the ID type.  Please switch back to the removePermissionIds field so that we can remove this temporary one."
             },
             {
-              "name": "transitionalRemovePermissionIds",
+              "name": "removePermissionIds",
               "description": null,
               "type": {
                 "kind": "LIST",
@@ -36237,19 +36237,19 @@
           "fields": null,
           "inputFields": [
             {
-              "name": "staff_position_id",
+              "name": "transitionalStaffPositionId",
               "description": null,
               "type": {
                 "kind": "SCALAR",
-                "name": "Int",
+                "name": "ID",
                 "ofType": null
               },
               "defaultValue": null,
               "isDeprecated": true,
-              "deprecationReason": "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID."
+              "deprecationReason": "IDs have transitioned to the ID type.  Please switch back to the staffPositionId field so that we can remove this temporary one."
             },
             {
-              "name": "transitionalStaffPositionId",
+              "name": "staffPositionId",
               "description": null,
               "type": {
                 "kind": "SCALAR",
@@ -36741,7 +36741,7 @@
               "deprecationReason": null
             },
             {
-              "name": "remove_notification_destination_ids",
+              "name": "transitionalRemoveNotificationDestinationIds",
               "description": null,
               "type": {
                 "kind": "LIST",
@@ -36751,17 +36751,17 @@
                   "name": null,
                   "ofType": {
                     "kind": "SCALAR",
-                    "name": "Int",
+                    "name": "ID",
                     "ofType": null
                   }
                 }
               },
               "defaultValue": null,
               "isDeprecated": true,
-              "deprecationReason": "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID."
+              "deprecationReason": "IDs have transitioned to the ID type.  Please switch back to the removeNotificationDestinationIds field so that we can remove this temporary one."
             },
             {
-              "name": "transitionalRemoveNotificationDestinationIds",
+              "name": "removeNotificationDestinationIds",
               "description": null,
               "type": {
                 "kind": "LIST",
@@ -38797,19 +38797,19 @@
           "fields": null,
           "inputFields": [
             {
-              "name": "user_con_profile_id",
+              "name": "transitionalUserConProfileId",
               "description": null,
               "type": {
                 "kind": "SCALAR",
-                "name": "Int",
+                "name": "ID",
                 "ofType": null
               },
               "defaultValue": null,
               "isDeprecated": true,
-              "deprecationReason": "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID."
+              "deprecationReason": "IDs have transitioned to the ID type.  Please switch back to the userConProfileId field so that we can remove this temporary one."
             },
             {
-              "name": "transitionalUserConProfileId",
+              "name": "userConProfileId",
               "description": null,
               "type": {
                 "kind": "SCALAR",
@@ -38883,19 +38883,19 @@
           "fields": null,
           "inputFields": [
             {
-              "name": "run_id",
+              "name": "transitionalRunId",
               "description": null,
               "type": {
                 "kind": "SCALAR",
-                "name": "Int",
+                "name": "ID",
                 "ofType": null
               },
               "defaultValue": null,
               "isDeprecated": true,
-              "deprecationReason": "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID."
+              "deprecationReason": "IDs have transitioned to the ID type.  Please switch back to the runId field so that we can remove this temporary one."
             },
             {
-              "name": "transitionalRunId",
+              "name": "runId",
               "description": null,
               "type": {
                 "kind": "SCALAR",
@@ -39055,19 +39055,19 @@
           "fields": null,
           "inputFields": [
             {
-              "name": "run_id",
+              "name": "transitionalRunId",
               "description": null,
               "type": {
                 "kind": "SCALAR",
-                "name": "Int",
+                "name": "ID",
                 "ofType": null
               },
               "defaultValue": null,
               "isDeprecated": true,
-              "deprecationReason": "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID."
+              "deprecationReason": "IDs have transitioned to the ID type.  Please switch back to the runId field so that we can remove this temporary one."
             },
             {
-              "name": "transitionalRunId",
+              "name": "runId",
               "description": null,
               "type": {
                 "kind": "SCALAR",
@@ -39079,19 +39079,19 @@
               "deprecationReason": null
             },
             {
-              "name": "user_con_profile_id",
+              "name": "transitionalUserConProfileId",
               "description": null,
               "type": {
                 "kind": "SCALAR",
-                "name": "Int",
+                "name": "ID",
                 "ofType": null
               },
               "defaultValue": null,
               "isDeprecated": true,
-              "deprecationReason": "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID."
+              "deprecationReason": "IDs have transitioned to the ID type.  Please switch back to the userConProfileId field so that we can remove this temporary one."
             },
             {
-              "name": "transitionalUserConProfileId",
+              "name": "userConProfileId",
               "description": null,
               "type": {
                 "kind": "SCALAR",
