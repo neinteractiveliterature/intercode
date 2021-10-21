@@ -5,24 +5,14 @@ import isEqual from 'lodash/isEqual';
 import MD5 from 'md5.js';
 import { useTranslation, Trans } from 'react-i18next';
 import { ApolloError } from '@apollo/client';
-import {
-  BooleanInput,
-  PageLoadingIndicator,
-  LoadingIndicator,
-  ErrorDisplay,
-} from '@neinteractiveliterature/litform';
+import { BooleanInput, PageLoadingIndicator, LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import buildFormStateFromData from '../UserConProfiles/buildFormStateFromData';
-import SinglePageFormPresenter, {
-  SinglePageFormPresenterProps,
-} from '../FormPresenter/SinglePageFormPresenter';
+import SinglePageFormPresenter, { SinglePageFormPresenterProps } from '../FormPresenter/SinglePageFormPresenter';
 import useAsyncFunction from '../useAsyncFunction';
 import useAutocommitFormResponseOnChange from '../FormPresenter/useAutocommitFormResponseOnChange';
 import useFormResponse from '../FormPresenter/useFormResponse';
-import {
-  useItemInteractionTracking,
-  ItemInteractionTrackerContext,
-} from '../FormPresenter/ItemInteractionTracker';
+import { useItemInteractionTracking, ItemInteractionTrackerContext } from '../FormPresenter/ItemInteractionTracker';
 import usePageTitle from '../usePageTitle';
 import MarkdownInput from '../BuiltInFormControls/MarkdownInput';
 import Gravatar from '../Gravatar';
@@ -34,28 +24,19 @@ import FourOhFourPage from '../FourOhFourPage';
 
 function parseResponseErrors(error: ApolloError) {
   const { graphQLErrors } = error;
-  const updateError = graphQLErrors.find((graphQLError) =>
-    isEqual(graphQLError.path, ['updateUserConProfile']),
-  );
+  const updateError = graphQLErrors.find((graphQLError) => isEqual(graphQLError.path, ['updateUserConProfile']));
   const { validationErrors } = (updateError || {}).extensions || {};
   return validationErrors;
 }
 
 type MyProfileFormInnerProps = {
   initialSetup?: boolean;
-  initialUserConProfile: WithFormResponse<
-    NonNullable<MyProfileQueryData['convention']['my_profile']>
-  >;
+  initialUserConProfile: WithFormResponse<NonNullable<MyProfileQueryData['convention']['my_profile']>>;
   convention: NonNullable<MyProfileQueryData['convention']>;
   form: CommonFormFieldsFragment;
 };
 
-function MyProfileFormInner({
-  initialSetup,
-  initialUserConProfile,
-  convention,
-  form,
-}: MyProfileFormInnerProps) {
+function MyProfileFormInner({ initialSetup, initialUserConProfile, convention, form }: MyProfileFormInnerProps) {
   const { t } = useTranslation();
   const [updateMutate] = useUpdateUserConProfileMutation();
   const [mutate, , mutationInProgress] = useAsyncFunction(updateMutate);
@@ -65,12 +46,12 @@ function MyProfileFormInner({
   const [, responseValuesChanged] = useFormResponse(userConProfile, setUserConProfile);
 
   const updateUserConProfile = useCallback(
-    async (profile) => {
+    async (profile: typeof userConProfile) => {
       try {
         await mutate({
           variables: {
             input: {
-              id: profile.id,
+              transitionalId: profile.id,
               user_con_profile: {
                 form_response_attrs_json: JSON.stringify(profile.form_response_attrs),
                 bio: profile.bio,
@@ -181,20 +162,15 @@ function MyProfileFormInner({
             caption={t('myProfile.bioNicknameLabel', 'Show nickname (if any) in bio')}
             value={userConProfile.show_nickname_in_bio ?? false}
             onChange={setShowNickname}
-            helpText={t(
-              'myProfile.bioNicknameHelpText',
-              'Your name will appear in your bio as {{ name }}.',
-              {
-                name: `${userConProfile.form_response_attrs.first_name}
+            helpText={t('myProfile.bioNicknameHelpText', 'Your name will appear in your bio as {{ name }}.', {
+              name: `${userConProfile.form_response_attrs.first_name}
                   ${
-                    userConProfile.show_nickname_in_bio &&
-                    userConProfile.form_response_attrs.nickname
+                    userConProfile.show_nickname_in_bio && userConProfile.form_response_attrs.nickname
                       ? `“${userConProfile.form_response_attrs.nickname}”`
                       : ''
                   }
                   ${userConProfile.form_response_attrs.last_name}`,
-              },
-            )}
+            })}
           />
         </>
       )}
@@ -219,8 +195,8 @@ function MyProfileFormInner({
             onChange={setGravatarEnabled}
             helpText={
               <Trans i18nKey="myProfile.gravatarEnabledHelpText">
-                Gravatar is a service that lets you create a globally-recognized avatar attached to
-                your email address. For more information or to set up a Gravatar,{' '}
+                Gravatar is a service that lets you create a globally-recognized avatar attached to your email address.
+                For more information or to set up a Gravatar,{' '}
                 <a href="https://gravatar.com" target="_blank" rel="noopener noreferrer">
                   visit gravatar.com
                 </a>
