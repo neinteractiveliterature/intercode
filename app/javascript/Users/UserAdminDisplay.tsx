@@ -15,16 +15,13 @@ function sortByConventionDate(profiles: UserAdminQueryData['user']['user_con_pro
 }
 
 function buildProfileUrl(profile: UserAdminQueryData['user']['user_con_profiles'][0]) {
-  const profileUrl = new URL(
-    `//${profile.convention.domain}/user_con_profiles/${profile.id}`,
-    window.location.href,
-  );
+  const profileUrl = new URL(`//${profile.convention.domain}/user_con_profiles/${profile.id}`, window.location.href);
   profileUrl.port = window.location.port;
   return profileUrl.toString();
 }
 
 function useLoadUserAdminData() {
-  const userId = Number.parseInt(useParams<{ id: string }>().id, 10);
+  const userId = useParams<{ id: string }>().id;
   return useUserAdminQuery({ variables: { id: userId } });
 }
 

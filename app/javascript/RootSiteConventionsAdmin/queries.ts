@@ -1,11 +1,7 @@
 import { gql } from '@apollo/client';
 
 export const RootSiteConventionsAdminTableQuery = gql`
-  query RootSiteConventionsAdminTableQuery(
-    $page: Int
-    $filters: ConventionFiltersInput
-    $sort: [SortInput!]
-  ) {
+  query RootSiteConventionsAdminTableQuery($page: Int, $filters: ConventionFiltersInput, $sort: [SortInput!]) {
     conventions_paginated(page: $page, filters: $filters, sort: $sort) {
       total_entries
       total_pages
@@ -61,8 +57,8 @@ export const ConventionDisplayFields = gql`
 `;
 
 export const ConventionDisplayQuery = gql`
-  query ConventionDisplayQuery($id: Int!) {
-    convention: conventionById(id: $id) {
+  query ConventionDisplayQuery($id: ID!) {
+    convention: conventionById(transitionalId: $id) {
       id: transitionalId
       ...ConventionDisplayFields
     }

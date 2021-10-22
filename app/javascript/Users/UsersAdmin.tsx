@@ -9,7 +9,7 @@ import useAuthorizationRequired from '../Authentication/useAuthorizationRequired
 import { useUserAdminQuery } from './queries.generated';
 
 function UserBreadcrumbItem() {
-  const id = Number.parseInt(useParams<{ id: string }>().id, 10);
+  const { id } = useParams<{ id: string }>();
   const { data, loading, error } = useUserAdminQuery({ variables: { id } });
 
   if (loading) {

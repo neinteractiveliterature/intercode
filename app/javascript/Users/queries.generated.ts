@@ -17,7 +17,7 @@ export type UsersTableUsersQueryData = { __typename: 'Query', users_paginated: {
 export type DetailedUserFieldsFragment = { __typename: 'User', name?: string | null | undefined, first_name?: string | null | undefined, last_name?: string | null | undefined, email?: string | null | undefined, privileges?: Array<string> | null | undefined, id: string, user_con_profiles: Array<{ __typename: 'UserConProfile', email?: string | null | undefined, id: string, ticket?: { __typename: 'Ticket', id: string } | null | undefined, signups: Array<{ __typename: 'Signup', state: Types.SignupState, id: string }>, convention: { __typename: 'Convention', name: string, domain?: string | null | undefined, starts_at?: string | null | undefined, ticket_name: string, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, id: string }, staff_positions: Array<{ __typename: 'StaffPosition', name: string, id: string }> }> };
 
 export type UserAdminQueryVariables = Types.Exact<{
-  id: Types.Scalars['Int'];
+  id: Types.Scalars['ID'];
 }>;
 
 
@@ -117,8 +117,8 @@ export type UsersTableUsersQueryHookResult = ReturnType<typeof useUsersTableUser
 export type UsersTableUsersQueryLazyQueryHookResult = ReturnType<typeof useUsersTableUsersQueryLazyQuery>;
 export type UsersTableUsersQueryQueryResult = Apollo.QueryResult<UsersTableUsersQueryData, UsersTableUsersQueryVariables>;
 export const UserAdminQueryDocument = gql`
-    query UserAdminQuery($id: Int!) {
-  user(id: $id) {
+    query UserAdminQuery($id: ID!) {
+  user(transitionalId: $id) {
     id: transitionalId
     ...DetailedUserFields
   }
