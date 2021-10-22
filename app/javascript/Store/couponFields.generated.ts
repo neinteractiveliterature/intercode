@@ -2,11 +2,11 @@
 import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
-export type CouponFieldsFragment = { __typename: 'Coupon', code: string, percent_discount?: string | null | undefined, id: string, fixed_amount?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, provides_product?: { __typename: 'Product', name: string, id: string } | null | undefined };
+export type CouponFieldsFragment = { __typename: 'Coupon', id: string, code: string, percent_discount?: string | null | undefined, fixed_amount?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, provides_product?: { __typename: 'Product', id: string, name: string } | null | undefined };
 
 export const CouponFieldsFragmentDoc = gql`
     fragment CouponFields on Coupon {
-  id: transitionalId
+  id
   code
   fixed_amount {
     fractional
@@ -14,7 +14,7 @@ export const CouponFieldsFragmentDoc = gql`
   }
   percent_discount
   provides_product {
-    id: transitionalId
+    id
     name
   }
 }

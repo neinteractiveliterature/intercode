@@ -12,7 +12,7 @@ export type AccountFormContentQueryData = { __typename: 'Query', accountFormCont
 export type EditUserQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type EditUserQueryData = { __typename: 'Query', convention?: { __typename: 'Convention', name: string, id: string } | null | undefined, currentUser?: { __typename: 'User', first_name?: string | null | undefined, last_name?: string | null | undefined, email?: string | null | undefined, id: string } | null | undefined };
+export type EditUserQueryData = { __typename: 'Query', convention?: { __typename: 'Convention', id: string, name: string } | null | undefined, currentUser?: { __typename: 'User', id: string, first_name?: string | null | undefined, last_name?: string | null | undefined, email?: string | null | undefined } | null | undefined };
 
 
 export const AccountFormContentQueryDocument = gql`
@@ -50,11 +50,11 @@ export type AccountFormContentQueryQueryResult = Apollo.QueryResult<AccountFormC
 export const EditUserQueryDocument = gql`
     query EditUserQuery {
   convention: conventionByRequestHostIfPresent {
-    id: transitionalId
+    id
     name
   }
   currentUser {
-    id: transitionalId
+    id
     first_name
     last_name
     email

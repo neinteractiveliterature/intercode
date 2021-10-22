@@ -5,23 +5,23 @@ import { gql } from '@apollo/client';
 import { PricingStructureFieldsFragmentDoc } from '../Store/pricingStructureFields.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type TicketTypeAdmin_TicketTypeFieldsFragment = { __typename: 'TicketType', name: string, description?: string | null | undefined, counts_towards_convention_maximum: boolean, allows_event_signups: boolean, maximum_event_provided_tickets: number, id: string, providing_products: Array<{ __typename: 'Product', name: string, available: boolean, id: string, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: string | null | undefined, finish?: string | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } }> } } }> };
+export type TicketTypeAdmin_TicketTypeFieldsFragment = { __typename: 'TicketType', id: string, name: string, description?: string | null | undefined, counts_towards_convention_maximum: boolean, allows_event_signups: boolean, maximum_event_provided_tickets: number, providing_products: Array<{ __typename: 'Product', id: string, name: string, available: boolean, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: string | null | undefined, finish?: string | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } }> } } }> };
 
 export type AdminTicketTypesQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type AdminTicketTypesQueryData = { __typename: 'Query', convention: { __typename: 'Convention', ticket_name: string, timezone_name?: string | null | undefined, id: string, ticket_types: Array<{ __typename: 'TicketType', name: string, description?: string | null | undefined, counts_towards_convention_maximum: boolean, allows_event_signups: boolean, maximum_event_provided_tickets: number, id: string, providing_products: Array<{ __typename: 'Product', name: string, available: boolean, id: string, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: string | null | undefined, finish?: string | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } }> } } }> }> } };
+export type AdminTicketTypesQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, ticket_name: string, timezone_name?: string | null | undefined, ticket_types: Array<{ __typename: 'TicketType', id: string, name: string, description?: string | null | undefined, counts_towards_convention_maximum: boolean, allows_event_signups: boolean, maximum_event_provided_tickets: number, providing_products: Array<{ __typename: 'Product', id: string, name: string, available: boolean, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: string | null | undefined, finish?: string | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } }> } } }> }> } };
 
 export const TicketTypeAdmin_TicketTypeFieldsFragmentDoc = gql`
     fragment TicketTypeAdmin_TicketTypeFields on TicketType {
-  id: transitionalId
+  id
   name
   description
   counts_towards_convention_maximum
   allows_event_signups
   maximum_event_provided_tickets
   providing_products {
-    id: transitionalId
+    id
     name
     available
     pricing_structure {
@@ -33,9 +33,9 @@ export const TicketTypeAdmin_TicketTypeFieldsFragmentDoc = gql`
 export const AdminTicketTypesQueryDocument = gql`
     query AdminTicketTypesQuery {
   convention: conventionByRequestHost {
-    id: transitionalId
+    id
     ticket_types {
-      id: transitionalId
+      id
       ...TicketTypeAdmin_TicketTypeFields
     }
     ticket_name

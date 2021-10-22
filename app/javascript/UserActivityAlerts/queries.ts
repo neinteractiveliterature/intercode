@@ -2,12 +2,12 @@ import { gql } from '@apollo/client';
 
 export const UserActivityAlertsAdminConventionFields = gql`
   fragment UserActivityAlertsAdminConventionFields on Convention {
-    id: transitionalId
+    id
     ticket_name
     ticket_mode
 
     staff_positions {
-      id: transitionalId
+      id
       name
     }
   }
@@ -15,26 +15,26 @@ export const UserActivityAlertsAdminConventionFields = gql`
 
 export const UserActivityAlertFields = gql`
   fragment UserActivityAlertFields on UserActivityAlert {
-    id: transitionalId
+    id
     email
     partial_name
     trigger_on_user_con_profile_create
     trigger_on_ticket_create
     user {
-      id: transitionalId
+      id
       name
     }
 
     notification_destinations {
-      id: transitionalId
+      id
 
       staff_position {
-        id: transitionalId
+        id
         name
       }
 
       user_con_profile {
-        id: transitionalId
+        id
         name_without_nickname
       }
     }
@@ -44,11 +44,11 @@ export const UserActivityAlertFields = gql`
 export const UserActivityAlertsAdminQuery = gql`
   query UserActivityAlertsAdminQuery {
     convention: conventionByRequestHost {
-      id: transitionalId
+      id
       ...UserActivityAlertsAdminConventionFields
 
       user_activity_alerts {
-        id: transitionalId
+        id
         ...UserActivityAlertFields
       }
     }

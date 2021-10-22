@@ -7,17 +7,17 @@ export const CmsContentFields = gql`
     __typename
 
     ... on Page {
-      id: transitionalId
+      id
       name
     }
 
     ... on CmsPartial {
-      id: transitionalId
+      id
       name
     }
 
     ... on CmsLayout {
-      id: transitionalId
+      id
       name
     }
   }
@@ -25,7 +25,7 @@ export const CmsContentFields = gql`
 
 export const CmsContentGroupFields = gql`
   fragment CmsContentGroupFields on CmsContentGroup {
-    id: transitionalId
+    id
     name
     current_ability_can_update
     current_ability_can_delete
@@ -35,7 +35,7 @@ export const CmsContentGroupFields = gql`
     }
 
     permissions {
-      id: transitionalId
+      id
       permission
 
       model {
@@ -56,19 +56,19 @@ export const CmsContentGroupFields = gql`
 export const CmsContentGroupsAdminQuery = gql`
   query CmsContentGroupsAdminQuery {
     convention: conventionByRequestHostIfPresent {
-      id: transitionalId
+      id
       name
 
       staff_positions {
-        id: transitionalId
+        id
         name
       }
     }
 
     cmsParent: cmsParentByRequestHost {
-      id: transitionalId
+      id
       cmsContentGroups {
-        id: transitionalId
+        id
         ...CmsContentGroupFields
       }
     }
@@ -84,7 +84,7 @@ export const CmsContentGroupsAdminQuery = gql`
 export const SearchCmsContentQuery = gql`
   query SearchCmsContentQuery($name: String) {
     cmsParent: cmsParentByRequestHost {
-      id: transitionalId
+      id
 
       typeaheadSearchCmsContent(name: $name) {
         ...CmsContentFields

@@ -4,7 +4,7 @@ import { PricingStructureFields } from '../Store/pricingStructureFields';
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const TicketTypeAdmin_TicketTypeFields = gql`
   fragment TicketTypeAdmin_TicketTypeFields on TicketType {
-    id: transitionalId
+    id
     name
     description
     counts_towards_convention_maximum
@@ -12,7 +12,7 @@ export const TicketTypeAdmin_TicketTypeFields = gql`
     maximum_event_provided_tickets
 
     providing_products {
-      id: transitionalId
+      id
       name
       available
 
@@ -28,9 +28,9 @@ export const TicketTypeAdmin_TicketTypeFields = gql`
 export const AdminTicketTypesQuery = gql`
   query AdminTicketTypesQuery {
     convention: conventionByRequestHost {
-      id: transitionalId
+      id
       ticket_types {
-        id: transitionalId
+        id
         ...TicketTypeAdmin_TicketTypeFields
       }
 

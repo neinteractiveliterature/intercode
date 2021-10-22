@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 
 export const NotificationTemplateFields = gql`
   fragment NotificationTemplateFields on NotificationTemplate {
-    id: transitionalId
+    id
     event_key
     subject
     body_html
@@ -14,10 +14,10 @@ export const NotificationTemplateFields = gql`
 export const NotificationAdminQuery = gql`
   query NotificationAdminQuery {
     convention: conventionByRequestHost {
-      id: transitionalId
+      id
 
       notification_templates {
-        id: transitionalId
+        id
         ...NotificationTemplateFields
       }
     }

@@ -6,22 +6,22 @@ import { CommonFormFieldsFragmentDoc, CommonFormSectionFieldsFragmentDoc, Common
 import { CommonConventionDataFragmentDoc } from '../queries.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type StandaloneEditEvent_TicketTypeFieldsFragment = { __typename: 'TicketType', description?: string | null | undefined, maximum_event_provided_tickets: number, id: string };
+export type StandaloneEditEvent_TicketTypeFieldsFragment = { __typename: 'TicketType', id: string, description?: string | null | undefined, maximum_event_provided_tickets: number };
 
-export type StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFieldsFragment = { __typename: 'MaximumEventProvidedTicketsOverride', override_value: number, id: string, ticket_type: { __typename: 'TicketType', description?: string | null | undefined, maximum_event_provided_tickets: number, id: string } };
+export type StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFieldsFragment = { __typename: 'MaximumEventProvidedTicketsOverride', id: string, override_value: number, ticket_type: { __typename: 'TicketType', id: string, description?: string | null | undefined, maximum_event_provided_tickets: number } };
 
-export type StandaloneEditEvent_EventFieldsFragment = { __typename: 'Event', title?: string | null | undefined, form_response_attrs_json?: string | null | undefined, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, id: string, event_category: { __typename: 'EventCategory', name: string, id: string, event_form: { __typename: 'Form', title: string, form_type: Types.FormType, id: string, form_sections: Array<{ __typename: 'FormSection', title?: string | null | undefined, position: number, id: string, form_items: Array<{ __typename: 'FormItem', position: number, identifier?: string | null | undefined, item_type: string, rendered_properties: string, default_value?: string | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole, id: string }> }> } }, maximum_event_provided_tickets_overrides: Array<{ __typename: 'MaximumEventProvidedTicketsOverride', override_value: number, id: string, ticket_type: { __typename: 'TicketType', description?: string | null | undefined, maximum_event_provided_tickets: number, id: string } }> };
+export type StandaloneEditEvent_EventFieldsFragment = { __typename: 'Event', id: string, title?: string | null | undefined, form_response_attrs_json?: string | null | undefined, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, event_category: { __typename: 'EventCategory', id: string, name: string, event_form: { __typename: 'Form', id: string, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: string, title?: string | null | undefined, position: number, form_items: Array<{ __typename: 'FormItem', id: string, position: number, identifier?: string | null | undefined, item_type: string, rendered_properties: string, default_value?: string | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> } }, maximum_event_provided_tickets_overrides: Array<{ __typename: 'MaximumEventProvidedTicketsOverride', id: string, override_value: number, ticket_type: { __typename: 'TicketType', id: string, description?: string | null | undefined, maximum_event_provided_tickets: number } }> };
 
 export type StandaloneEditEventQueryVariables = Types.Exact<{
   eventId: Types.Scalars['ID'];
 }>;
 
 
-export type StandaloneEditEventQueryData = { __typename: 'Query', currentAbility: { __typename: 'Ability', can_override_maximum_event_provided_tickets: boolean, can_delete_event: boolean, can_update_event: boolean }, convention: { __typename: 'Convention', ticket_name: string, event_mailing_list_domain?: string | null | undefined, name: string, starts_at?: string | null | undefined, ends_at?: string | null | undefined, site_mode: Types.SiteMode, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, ticket_mode: Types.TicketMode, id: string, ticket_types: Array<{ __typename: 'TicketType', description?: string | null | undefined, maximum_event_provided_tickets: number, id: string }>, event: { __typename: 'Event', title?: string | null | undefined, form_response_attrs_json?: string | null | undefined, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, id: string, event_category: { __typename: 'EventCategory', name: string, id: string, event_form: { __typename: 'Form', title: string, form_type: Types.FormType, id: string, form_sections: Array<{ __typename: 'FormSection', title?: string | null | undefined, position: number, id: string, form_items: Array<{ __typename: 'FormItem', position: number, identifier?: string | null | undefined, item_type: string, rendered_properties: string, default_value?: string | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole, id: string }> }> } }, maximum_event_provided_tickets_overrides: Array<{ __typename: 'MaximumEventProvidedTicketsOverride', override_value: number, id: string, ticket_type: { __typename: 'TicketType', description?: string | null | undefined, maximum_event_provided_tickets: number, id: string } }> }, event_categories: Array<{ __typename: 'EventCategory', name: string, scheduling_ui: Types.SchedulingUi, default_color?: string | null | undefined, full_color?: string | null | undefined, signed_up_color?: string | null | undefined, id: string }> } };
+export type StandaloneEditEventQueryData = { __typename: 'Query', currentAbility: { __typename: 'Ability', can_override_maximum_event_provided_tickets: boolean, can_delete_event: boolean, can_update_event: boolean }, convention: { __typename: 'Convention', id: string, ticket_name: string, event_mailing_list_domain?: string | null | undefined, name: string, starts_at?: string | null | undefined, ends_at?: string | null | undefined, site_mode: Types.SiteMode, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, ticket_mode: Types.TicketMode, ticket_types: Array<{ __typename: 'TicketType', id: string, description?: string | null | undefined, maximum_event_provided_tickets: number }>, event: { __typename: 'Event', id: string, title?: string | null | undefined, form_response_attrs_json?: string | null | undefined, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, event_category: { __typename: 'EventCategory', id: string, name: string, event_form: { __typename: 'Form', id: string, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: string, title?: string | null | undefined, position: number, form_items: Array<{ __typename: 'FormItem', id: string, position: number, identifier?: string | null | undefined, item_type: string, rendered_properties: string, default_value?: string | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> } }, maximum_event_provided_tickets_overrides: Array<{ __typename: 'MaximumEventProvidedTicketsOverride', id: string, override_value: number, ticket_type: { __typename: 'TicketType', id: string, description?: string | null | undefined, maximum_event_provided_tickets: number } }> }, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, scheduling_ui: Types.SchedulingUi, default_color?: string | null | undefined, full_color?: string | null | undefined, signed_up_color?: string | null | undefined }> } };
 
 export const StandaloneEditEvent_TicketTypeFieldsFragmentDoc = gql`
     fragment StandaloneEditEvent_TicketTypeFields on TicketType {
-  id: transitionalId
+  id
   description
   maximum_event_provided_tickets
 }
@@ -29,30 +29,30 @@ export const StandaloneEditEvent_TicketTypeFieldsFragmentDoc = gql`
 export const StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFieldsFragmentDoc = gql`
     fragment StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFields on MaximumEventProvidedTicketsOverride {
   ticket_type {
-    id: transitionalId
+    id
     ...StandaloneEditEvent_TicketTypeFields
   }
-  id: transitionalId
+  id
   override_value
 }
     ${StandaloneEditEvent_TicketTypeFieldsFragmentDoc}`;
 export const StandaloneEditEvent_EventFieldsFragmentDoc = gql`
     fragment StandaloneEditEvent_EventFields on Event {
-  id: transitionalId
+  id
   title
   form_response_attrs_json
   current_user_form_item_viewer_role
   current_user_form_item_writer_role
   event_category {
-    id: transitionalId
+    id
     name
     event_form {
-      id: transitionalId
+      id
       ...CommonFormFields
     }
   }
   maximum_event_provided_tickets_overrides {
-    id: transitionalId
+    id
     ...StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFields
   }
 }
@@ -66,14 +66,14 @@ export const StandaloneEditEventQueryDocument = gql`
     can_update_event(transitionalEventId: $eventId)
   }
   convention: conventionByRequestHost {
-    id: transitionalId
+    id
     ...CommonConventionData
     ticket_types {
-      id: transitionalId
+      id
       ...StandaloneEditEvent_TicketTypeFields
     }
     event(transitionalId: $eventId) {
-      id: transitionalId
+      id
       ...StandaloneEditEvent_EventFields
     }
     ticket_name

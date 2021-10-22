@@ -2,16 +2,16 @@ import { gql } from '@apollo/client';
 
 export const AdminNavigationItemFields = gql`
   fragment AdminNavigationItemFields on CmsNavigationItem {
-    id: transitionalId
+    id
     position
     title
 
     page {
-      id: transitionalId
+      id
     }
 
     navigation_section {
-      id: transitionalId
+      id
     }
   }
 `;
@@ -19,20 +19,20 @@ export const AdminNavigationItemFields = gql`
 export const NavigationItemsAdminQuery = gql`
   query NavigationItemsAdminQuery {
     convention: conventionByRequestHostIfPresent {
-      id: transitionalId
+      id
       name
     }
 
     cmsParent: cmsParentByRequestHost {
-      id: transitionalId
+      id
 
       cmsPages {
-        id: transitionalId
+        id
         name
       }
 
       cmsNavigationItems {
-        id: transitionalId
+        id
         ...AdminNavigationItemFields
       }
     }

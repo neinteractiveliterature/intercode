@@ -5,7 +5,7 @@ export const CreateEventCategory = gql`
   mutation CreateEventCategory($eventCategory: EventCategoryInput!) {
     createEventCategory(input: { event_category: $eventCategory }) {
       event_category {
-        id: transitionalId
+        id
         ...EventCategoryFields
       }
     }
@@ -18,7 +18,7 @@ export const UpdateEventCategory = gql`
   mutation UpdateEventCategory($id: ID!, $eventCategory: EventCategoryInput!) {
     updateEventCategory(input: { transitionalId: $id, event_category: $eventCategory }) {
       event_category {
-        id: transitionalId
+        id
         ...EventCategoryFields
       }
     }

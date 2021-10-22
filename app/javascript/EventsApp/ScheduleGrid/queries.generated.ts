@@ -6,12 +6,12 @@ import { RunBasicSignupDataFragmentDoc } from '../queries.generated';
 import { CommonConventionDataFragmentDoc } from '../queries.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type ScheduleGridEventFragment = { __typename: 'Event', title?: string | null | undefined, length_seconds: number, short_blurb_html?: string | null | undefined, my_rating?: number | null | undefined, can_play_concurrently: boolean, id: string, event_category: { __typename: 'EventCategory', name: string, default_color?: string | null | undefined, signed_up_color?: string | null | undefined, full_color?: string | null | undefined, id: string }, registration_policy?: { __typename: 'RegistrationPolicy', slots_limited?: boolean | null | undefined, only_uncounted?: boolean | null | undefined, total_slots?: number | null | undefined, total_slots_including_not_counted?: number | null | undefined, preferred_slots?: number | null | undefined, preferred_slots_including_not_counted?: number | null | undefined, minimum_slots?: number | null | undefined, minimum_slots_including_not_counted?: number | null | undefined, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, not_counted: boolean, total_slots?: number | null | undefined, slots_limited: boolean }> } | null | undefined, runs: Array<{ __typename: 'Run', starts_at: string, schedule_note?: string | null | undefined, title_suffix?: string | null | undefined, confirmed_signup_count: number, not_counted_signup_count: number, room_names: Array<string>, signup_count_by_state_and_bucket_key_and_counted: string, id: string, my_signups: Array<{ __typename: 'Signup', state: Types.SignupState, id: string }>, my_signup_requests: Array<{ __typename: 'SignupRequest', state: Types.SignupRequestState, id: string }> }> };
+export type ScheduleGridEventFragment = { __typename: 'Event', id: string, title?: string | null | undefined, length_seconds: number, short_blurb_html?: string | null | undefined, my_rating?: number | null | undefined, can_play_concurrently: boolean, event_category: { __typename: 'EventCategory', id: string, name: string, default_color?: string | null | undefined, signed_up_color?: string | null | undefined, full_color?: string | null | undefined }, registration_policy?: { __typename: 'RegistrationPolicy', slots_limited?: boolean | null | undefined, only_uncounted?: boolean | null | undefined, total_slots?: number | null | undefined, total_slots_including_not_counted?: number | null | undefined, preferred_slots?: number | null | undefined, preferred_slots_including_not_counted?: number | null | undefined, minimum_slots?: number | null | undefined, minimum_slots_including_not_counted?: number | null | undefined, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, not_counted: boolean, total_slots?: number | null | undefined, slots_limited: boolean }> } | null | undefined, runs: Array<{ __typename: 'Run', id: string, starts_at: string, schedule_note?: string | null | undefined, title_suffix?: string | null | undefined, confirmed_signup_count: number, not_counted_signup_count: number, room_names: Array<string>, signup_count_by_state_and_bucket_key_and_counted: string, my_signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: string, state: Types.SignupRequestState }> }> };
 
 export type ScheduleGridConventionDataQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type ScheduleGridConventionDataQueryData = { __typename: 'Query', convention: { __typename: 'Convention', pre_schedule_content_html?: string | null | undefined, name: string, starts_at?: string | null | undefined, ends_at?: string | null | undefined, site_mode: Types.SiteMode, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, id: string, event_categories: Array<{ __typename: 'EventCategory', name: string, scheduling_ui: Types.SchedulingUi, default_color?: string | null | undefined, full_color?: string | null | undefined, signed_up_color?: string | null | undefined, id: string }> } };
+export type ScheduleGridConventionDataQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, pre_schedule_content_html?: string | null | undefined, name: string, starts_at?: string | null | undefined, ends_at?: string | null | undefined, site_mode: Types.SiteMode, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, scheduling_ui: Types.SchedulingUi, default_color?: string | null | undefined, full_color?: string | null | undefined, signed_up_color?: string | null | undefined }> } };
 
 export type ScheduleGridEventsQueryVariables = Types.Exact<{
   start?: Types.Maybe<Types.Scalars['Date']>;
@@ -19,7 +19,7 @@ export type ScheduleGridEventsQueryVariables = Types.Exact<{
 }>;
 
 
-export type ScheduleGridEventsQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, events: Array<{ __typename: 'Event', title?: string | null | undefined, length_seconds: number, short_blurb_html?: string | null | undefined, my_rating?: number | null | undefined, can_play_concurrently: boolean, id: string, event_category: { __typename: 'EventCategory', name: string, default_color?: string | null | undefined, signed_up_color?: string | null | undefined, full_color?: string | null | undefined, id: string }, registration_policy?: { __typename: 'RegistrationPolicy', slots_limited?: boolean | null | undefined, only_uncounted?: boolean | null | undefined, total_slots?: number | null | undefined, total_slots_including_not_counted?: number | null | undefined, preferred_slots?: number | null | undefined, preferred_slots_including_not_counted?: number | null | undefined, minimum_slots?: number | null | undefined, minimum_slots_including_not_counted?: number | null | undefined, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, not_counted: boolean, total_slots?: number | null | undefined, slots_limited: boolean }> } | null | undefined, runs: Array<{ __typename: 'Run', starts_at: string, schedule_note?: string | null | undefined, title_suffix?: string | null | undefined, confirmed_signup_count: number, not_counted_signup_count: number, room_names: Array<string>, signup_count_by_state_and_bucket_key_and_counted: string, id: string, my_signups: Array<{ __typename: 'Signup', state: Types.SignupState, id: string }>, my_signup_requests: Array<{ __typename: 'SignupRequest', state: Types.SignupRequestState, id: string }> }> }> } };
+export type ScheduleGridEventsQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, events: Array<{ __typename: 'Event', id: string, title?: string | null | undefined, length_seconds: number, short_blurb_html?: string | null | undefined, my_rating?: number | null | undefined, can_play_concurrently: boolean, event_category: { __typename: 'EventCategory', id: string, name: string, default_color?: string | null | undefined, signed_up_color?: string | null | undefined, full_color?: string | null | undefined }, registration_policy?: { __typename: 'RegistrationPolicy', slots_limited?: boolean | null | undefined, only_uncounted?: boolean | null | undefined, total_slots?: number | null | undefined, total_slots_including_not_counted?: number | null | undefined, preferred_slots?: number | null | undefined, preferred_slots_including_not_counted?: number | null | undefined, minimum_slots?: number | null | undefined, minimum_slots_including_not_counted?: number | null | undefined, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, not_counted: boolean, total_slots?: number | null | undefined, slots_limited: boolean }> } | null | undefined, runs: Array<{ __typename: 'Run', id: string, starts_at: string, schedule_note?: string | null | undefined, title_suffix?: string | null | undefined, confirmed_signup_count: number, not_counted_signup_count: number, room_names: Array<string>, signup_count_by_state_and_bucket_key_and_counted: string, my_signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: string, state: Types.SignupRequestState }> }> }> } };
 
 export type ScheduleGridCombinedQueryVariables = Types.Exact<{
   start?: Types.Maybe<Types.Scalars['Date']>;
@@ -27,18 +27,18 @@ export type ScheduleGridCombinedQueryVariables = Types.Exact<{
 }>;
 
 
-export type ScheduleGridCombinedQueryData = { __typename: 'Query', convention: { __typename: 'Convention', pre_schedule_content_html?: string | null | undefined, name: string, starts_at?: string | null | undefined, ends_at?: string | null | undefined, site_mode: Types.SiteMode, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, id: string, events: Array<{ __typename: 'Event', title?: string | null | undefined, length_seconds: number, short_blurb_html?: string | null | undefined, my_rating?: number | null | undefined, can_play_concurrently: boolean, id: string, event_category: { __typename: 'EventCategory', name: string, default_color?: string | null | undefined, signed_up_color?: string | null | undefined, full_color?: string | null | undefined, id: string }, registration_policy?: { __typename: 'RegistrationPolicy', slots_limited?: boolean | null | undefined, only_uncounted?: boolean | null | undefined, total_slots?: number | null | undefined, total_slots_including_not_counted?: number | null | undefined, preferred_slots?: number | null | undefined, preferred_slots_including_not_counted?: number | null | undefined, minimum_slots?: number | null | undefined, minimum_slots_including_not_counted?: number | null | undefined, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, not_counted: boolean, total_slots?: number | null | undefined, slots_limited: boolean }> } | null | undefined, runs: Array<{ __typename: 'Run', starts_at: string, schedule_note?: string | null | undefined, title_suffix?: string | null | undefined, confirmed_signup_count: number, not_counted_signup_count: number, room_names: Array<string>, signup_count_by_state_and_bucket_key_and_counted: string, id: string, my_signups: Array<{ __typename: 'Signup', state: Types.SignupState, id: string }>, my_signup_requests: Array<{ __typename: 'SignupRequest', state: Types.SignupRequestState, id: string }> }> }>, event_categories: Array<{ __typename: 'EventCategory', name: string, scheduling_ui: Types.SchedulingUi, default_color?: string | null | undefined, full_color?: string | null | undefined, signed_up_color?: string | null | undefined, id: string }> } };
+export type ScheduleGridCombinedQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, pre_schedule_content_html?: string | null | undefined, name: string, starts_at?: string | null | undefined, ends_at?: string | null | undefined, site_mode: Types.SiteMode, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, events: Array<{ __typename: 'Event', id: string, title?: string | null | undefined, length_seconds: number, short_blurb_html?: string | null | undefined, my_rating?: number | null | undefined, can_play_concurrently: boolean, event_category: { __typename: 'EventCategory', id: string, name: string, default_color?: string | null | undefined, signed_up_color?: string | null | undefined, full_color?: string | null | undefined }, registration_policy?: { __typename: 'RegistrationPolicy', slots_limited?: boolean | null | undefined, only_uncounted?: boolean | null | undefined, total_slots?: number | null | undefined, total_slots_including_not_counted?: number | null | undefined, preferred_slots?: number | null | undefined, preferred_slots_including_not_counted?: number | null | undefined, minimum_slots?: number | null | undefined, minimum_slots_including_not_counted?: number | null | undefined, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, not_counted: boolean, total_slots?: number | null | undefined, slots_limited: boolean }> } | null | undefined, runs: Array<{ __typename: 'Run', id: string, starts_at: string, schedule_note?: string | null | undefined, title_suffix?: string | null | undefined, confirmed_signup_count: number, not_counted_signup_count: number, room_names: Array<string>, signup_count_by_state_and_bucket_key_and_counted: string, my_signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: string, state: Types.SignupRequestState }> }> }>, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, scheduling_ui: Types.SchedulingUi, default_color?: string | null | undefined, full_color?: string | null | undefined, signed_up_color?: string | null | undefined }> } };
 
 export const ScheduleGridEventFragmentDoc = gql`
     fragment ScheduleGridEventFragment on Event {
-  id: transitionalId
+  id
   title
   length_seconds
   short_blurb_html
   my_rating
   can_play_concurrently
   event_category {
-    id: transitionalId
+    id
     name
     default_color
     signed_up_color
@@ -61,7 +61,7 @@ export const ScheduleGridEventFragmentDoc = gql`
     }
   }
   runs(start: $start, finish: $finish) {
-    id: transitionalId
+    id
     starts_at
     schedule_note
     title_suffix
@@ -75,7 +75,7 @@ export const ScheduleGridEventFragmentDoc = gql`
 export const ScheduleGridConventionDataQueryDocument = gql`
     query ScheduleGridConventionDataQuery {
   convention: conventionByRequestHost {
-    id: transitionalId
+    id
     pre_schedule_content_html
     ...CommonConventionData
   }
@@ -111,9 +111,9 @@ export type ScheduleGridConventionDataQueryQueryResult = Apollo.QueryResult<Sche
 export const ScheduleGridEventsQueryDocument = gql`
     query ScheduleGridEventsQuery($start: Date, $finish: Date) {
   convention: conventionByRequestHost {
-    id: transitionalId
+    id
     events(start: $start, finish: $finish) {
-      id: transitionalId
+      id
       ...ScheduleGridEventFragment
     }
   }
@@ -151,11 +151,11 @@ export type ScheduleGridEventsQueryQueryResult = Apollo.QueryResult<ScheduleGrid
 export const ScheduleGridCombinedQueryDocument = gql`
     query ScheduleGridCombinedQuery($start: Date, $finish: Date) {
   convention: conventionByRequestHost {
-    id: transitionalId
+    id
     pre_schedule_content_html
     ...CommonConventionData
     events(start: $start, finish: $finish) {
-      id: transitionalId
+      id
       ...ScheduleGridEventFragment
     }
   }

@@ -3,7 +3,7 @@ import { PricingStructureFields } from './pricingStructureFields';
 
 export const AdminProductFields = gql`
   fragment AdminProductFields on Product {
-    id: transitionalId
+    id
     name
     description
     description_html
@@ -16,7 +16,7 @@ export const AdminProductFields = gql`
     }
 
     product_variants {
-      id: transitionalId
+      id
       name
       description
       image_url
@@ -28,7 +28,7 @@ export const AdminProductFields = gql`
     }
 
     provides_ticket_type {
-      id: transitionalId
+      id
       description
     }
   }

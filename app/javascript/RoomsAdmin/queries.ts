@@ -2,11 +2,11 @@ import { gql } from '@apollo/client';
 
 export const RoomAdminRoomFields = gql`
   fragment RoomAdminRoomFields on Room {
-    id: transitionalId
+    id
     name
 
     runs {
-      id: transitionalId
+      id
     }
   }
 `;
@@ -14,9 +14,9 @@ export const RoomAdminRoomFields = gql`
 export const RoomsAdminQuery = gql`
   query RoomsAdminQuery {
     convention: conventionByRequestHost {
-      id: transitionalId
+      id
       rooms {
-        id: transitionalId
+        id
         ...RoomAdminRoomFields
       }
     }

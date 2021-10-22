@@ -3,7 +3,7 @@ import { gql } from '@apollo/client';
 export const CmsAdminBaseQuery = gql`
   query CmsAdminBaseQuery {
     convention: conventionByRequestHostIfPresent {
-      id: transitionalId
+      id
     }
 
     currentAbility {

@@ -5,7 +5,7 @@ export const CreateEmailRoute = gql`
   mutation CreateEmailRoute($emailRoute: EmailRouteInput!) {
     createEmailRoute(input: { email_route: $emailRoute }) {
       email_route {
-        id: transitionalId
+        id
         ...EmailRouteFields
       }
     }
@@ -18,7 +18,7 @@ export const UpdateEmailRoute = gql`
   mutation UpdateEmailRoute($id: ID!, $emailRoute: EmailRouteInput!) {
     updateEmailRoute(input: { transitionalId: $id, email_route: $emailRoute }) {
       email_route {
-        id: transitionalId
+        id
         ...EmailRouteFields
       }
     }

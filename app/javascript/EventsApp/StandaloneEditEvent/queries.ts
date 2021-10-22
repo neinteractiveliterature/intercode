@@ -5,7 +5,7 @@ import { CommonFormFields } from '../../Models/commonFormFragments';
 
 export const StandaloneEditEvent_TicketTypeFields = gql`
   fragment StandaloneEditEvent_TicketTypeFields on TicketType {
-    id: transitionalId
+    id
     description
     maximum_event_provided_tickets
   }
@@ -14,11 +14,11 @@ export const StandaloneEditEvent_TicketTypeFields = gql`
 export const StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFields = gql`
   fragment StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFields on MaximumEventProvidedTicketsOverride {
     ticket_type {
-      id: transitionalId
+      id
       ...StandaloneEditEvent_TicketTypeFields
     }
 
-    id: transitionalId
+    id
     override_value
   }
 
@@ -27,23 +27,23 @@ export const StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFields = gql
 
 export const StandaloneEditEvent_EventFields = gql`
   fragment StandaloneEditEvent_EventFields on Event {
-    id: transitionalId
+    id
     title
     form_response_attrs_json
     current_user_form_item_viewer_role
     current_user_form_item_writer_role
 
     event_category {
-      id: transitionalId
+      id
       name
       event_form {
-        id: transitionalId
+        id
         ...CommonFormFields
       }
     }
 
     maximum_event_provided_tickets_overrides {
-      id: transitionalId
+      id
       ...StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFields
     }
   }
@@ -61,16 +61,16 @@ export const StandaloneEditEventQuery = gql`
     }
 
     convention: conventionByRequestHost {
-      id: transitionalId
+      id
       ...CommonConventionData
 
       ticket_types {
-        id: transitionalId
+        id
         ...StandaloneEditEvent_TicketTypeFields
       }
 
       event(transitionalId: $eventId) {
-        id: transitionalId
+        id
         ...StandaloneEditEvent_EventFields
       }
 

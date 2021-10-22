@@ -17,7 +17,7 @@ export const CreateOrganizationRole = gql`
       }
     ) {
       organization_role {
-        id: transitionalId
+        id
         ...OrganizationRoleFields
       }
     }
@@ -46,7 +46,7 @@ export const UpdateOrganizationRole = gql`
       }
     ) {
       organization_role {
-        id: transitionalId
+        id
         ...OrganizationRoleFields
       }
     }

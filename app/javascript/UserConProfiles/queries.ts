@@ -5,14 +5,14 @@ import { AdminProductFields } from '../Store/adminProductFields';
 
 export const UserConProfileFormData = gql`
   fragment UserConProfileFormData on Convention {
-    id: transitionalId
+    id
     starts_at
     ends_at
     timezone_name
     timezone_mode
 
     user_con_profile_form {
-      id: transitionalId
+      id
       ...CommonFormFields
     }
   }
@@ -22,7 +22,7 @@ export const UserConProfileFormData = gql`
 
 export const UserConProfileFields = gql`
   fragment UserConProfileFields on UserConProfile {
-    id: transitionalId
+    id
     name
     form_response_attrs_json
     gravatar_enabled
@@ -32,15 +32,15 @@ export const UserConProfileFields = gql`
 
 export const UserConProfileAdminTicketFields = gql`
   fragment UserConProfileAdminTicketFields on Ticket {
-    id: transitionalId
+    id
     created_at
     updated_at
 
     order_entry {
-      id: transitionalId
+      id
 
       order {
-        id: transitionalId
+        id
         ...AdminOrderFieldsFragment
       }
 
@@ -51,13 +51,13 @@ export const UserConProfileAdminTicketFields = gql`
     }
 
     ticket_type {
-      id: transitionalId
+      id
       description
       name
     }
 
     provided_by_event {
-      id: transitionalId
+      id
       title
     }
   }
@@ -70,10 +70,10 @@ export const UserConProfileQuery = gql`
     convention: conventionByRequestHost {
       ...UserConProfileFormData
 
-      id: transitionalId
+      id
 
       user_con_profile(transitionalId: $id) {
-        id: transitionalId
+        id
         current_user_form_item_viewer_role
         current_user_form_item_writer_role
         ...UserConProfileFields
@@ -88,7 +88,7 @@ export const UserConProfileQuery = gql`
 export const UserConProfileAdminQuery = gql`
   query UserConProfileAdminQuery($id: ID!) {
     convention: conventionByRequestHost {
-      id: transitionalId
+      id
       name
       starts_at
       ends_at
@@ -98,7 +98,7 @@ export const UserConProfileAdminQuery = gql`
       ticket_mode
 
       my_profile {
-        id: transitionalId
+        id
         ability {
           can_read_signups
           can_update_user_con_profile(transitionalUserConProfileId: $id)
@@ -108,7 +108,7 @@ export const UserConProfileAdminQuery = gql`
       }
 
       user_con_profile(transitionalId: $id) {
-        id: transitionalId
+        id
         email
         user_id
         name
@@ -118,32 +118,32 @@ export const UserConProfileAdminQuery = gql`
         gravatar_url
 
         ticket {
-          id: transitionalId
+          id
           ...UserConProfileAdminTicketFields
         }
       }
 
       user_con_profile_form {
-        id: transitionalId
+        id
         ...CommonFormFields
 
         form_sections {
-          id: transitionalId
+          id
           form_items {
-            id: transitionalId
+            id
             admin_description
           }
         }
       }
 
       ticket_types {
-        id: transitionalId
+        id
         description
         name
         maximum_event_provided_tickets
 
         providing_products {
-          id: transitionalId
+          id
           ...AdminProductFields
         }
       }
@@ -163,7 +163,7 @@ export const UserConProfilesTableUserConProfilesQuery = gql`
     $sort: [SortInput!]
   ) {
     convention: conventionByRequestHost {
-      id: transitionalId
+      id
       name
       starts_at
       ends_at
@@ -173,19 +173,19 @@ export const UserConProfilesTableUserConProfilesQuery = gql`
       ticket_mode
 
       ticket_types {
-        id: transitionalId
+        id
         name
       }
 
       user_con_profile_form {
-        id: transitionalId
+        id
         ...CommonFormFields
 
         form_sections {
-          id: transitionalId
+          id
 
           form_items {
-            id: transitionalId
+            id
             admin_description
           }
         }
@@ -198,7 +198,7 @@ export const UserConProfilesTableUserConProfilesQuery = gql`
         per_page
 
         entries {
-          id: transitionalId
+          id
           name_inverted
           first_name
           last_name
@@ -212,15 +212,15 @@ export const UserConProfilesTableUserConProfilesQuery = gql`
           user_id
 
           team_members {
-            id: transitionalId
+            id
           }
 
           ticket {
-            id: transitionalId
+            id
             updated_at
 
             order_entry {
-              id: transitionalId
+              id
               price_per_item {
                 fractional
                 currency_code
@@ -228,7 +228,7 @@ export const UserConProfilesTableUserConProfilesQuery = gql`
             }
 
             ticket_type {
-              id: transitionalId
+              id
               name
             }
           }
@@ -247,29 +247,29 @@ export const UserConProfilesTableUserConProfilesQuery = gql`
 export const ConvertToEventProvidedTicketQuery = gql`
   query ConvertToEventProvidedTicketQuery($eventId: ID!) {
     convention: conventionByRequestHost {
-      id: transitionalId
+      id
       ticket_name
 
       event(transitionalId: $eventId) {
-        id: transitionalId
+        id
         title
 
         event_category {
-          id: transitionalId
+          id
           can_provide_tickets
         }
 
         provided_tickets {
-          id: transitionalId
+          id
           ticket_type {
-            id: transitionalId
+            id
             name
           }
         }
       }
 
       ticket_types {
-        id: transitionalId
+        id
         maximum_event_provided_tickets(transitionalEventId: $eventId)
         description
         name
@@ -282,7 +282,7 @@ export const AddAttendeeUsersQuery = gql`
   query AddAttendeeUsersQuery($name: String) {
     users_paginated(filters: { name: $name }, per_page: 50) {
       entries {
-        id: transitionalId
+        id
         name
         email
         first_name

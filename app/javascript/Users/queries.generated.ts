@@ -12,44 +12,44 @@ export type UsersTableUsersQueryVariables = Types.Exact<{
 }>;
 
 
-export type UsersTableUsersQueryData = { __typename: 'Query', users_paginated: { __typename: 'UsersPagination', total_entries: number, total_pages: number, current_page: number, per_page: number, entries: Array<{ __typename: 'User', name_inverted?: string | null | undefined, first_name?: string | null | undefined, last_name?: string | null | undefined, email?: string | null | undefined, privileges?: Array<string> | null | undefined, id: string }> }, currentAbility: { __typename: 'Ability', can_create_user_con_profiles: boolean } };
+export type UsersTableUsersQueryData = { __typename: 'Query', users_paginated: { __typename: 'UsersPagination', total_entries: number, total_pages: number, current_page: number, per_page: number, entries: Array<{ __typename: 'User', id: string, name_inverted?: string | null | undefined, first_name?: string | null | undefined, last_name?: string | null | undefined, email?: string | null | undefined, privileges?: Array<string> | null | undefined }> }, currentAbility: { __typename: 'Ability', can_create_user_con_profiles: boolean } };
 
-export type DetailedUserFieldsFragment = { __typename: 'User', name?: string | null | undefined, first_name?: string | null | undefined, last_name?: string | null | undefined, email?: string | null | undefined, privileges?: Array<string> | null | undefined, id: string, user_con_profiles: Array<{ __typename: 'UserConProfile', email?: string | null | undefined, id: string, ticket?: { __typename: 'Ticket', id: string } | null | undefined, signups: Array<{ __typename: 'Signup', state: Types.SignupState, id: string }>, convention: { __typename: 'Convention', name: string, domain?: string | null | undefined, starts_at?: string | null | undefined, ticket_name: string, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, id: string }, staff_positions: Array<{ __typename: 'StaffPosition', name: string, id: string }> }> };
+export type DetailedUserFieldsFragment = { __typename: 'User', id: string, name?: string | null | undefined, first_name?: string | null | undefined, last_name?: string | null | undefined, email?: string | null | undefined, privileges?: Array<string> | null | undefined, user_con_profiles: Array<{ __typename: 'UserConProfile', id: string, email?: string | null | undefined, ticket?: { __typename: 'Ticket', id: string } | null | undefined, signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState }>, convention: { __typename: 'Convention', id: string, name: string, domain?: string | null | undefined, starts_at?: string | null | undefined, ticket_name: string, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode }, staff_positions: Array<{ __typename: 'StaffPosition', id: string, name: string }> }> };
 
 export type UserAdminQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type UserAdminQueryData = { __typename: 'Query', user: { __typename: 'User', name?: string | null | undefined, first_name?: string | null | undefined, last_name?: string | null | undefined, email?: string | null | undefined, privileges?: Array<string> | null | undefined, id: string, user_con_profiles: Array<{ __typename: 'UserConProfile', email?: string | null | undefined, id: string, ticket?: { __typename: 'Ticket', id: string } | null | undefined, signups: Array<{ __typename: 'Signup', state: Types.SignupState, id: string }>, convention: { __typename: 'Convention', name: string, domain?: string | null | undefined, starts_at?: string | null | undefined, ticket_name: string, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, id: string }, staff_positions: Array<{ __typename: 'StaffPosition', name: string, id: string }> }> } };
+export type UserAdminQueryData = { __typename: 'Query', user: { __typename: 'User', id: string, name?: string | null | undefined, first_name?: string | null | undefined, last_name?: string | null | undefined, email?: string | null | undefined, privileges?: Array<string> | null | undefined, user_con_profiles: Array<{ __typename: 'UserConProfile', id: string, email?: string | null | undefined, ticket?: { __typename: 'Ticket', id: string } | null | undefined, signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState }>, convention: { __typename: 'Convention', id: string, name: string, domain?: string | null | undefined, starts_at?: string | null | undefined, ticket_name: string, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode }, staff_positions: Array<{ __typename: 'StaffPosition', id: string, name: string }> }> } };
 
 export type MergeUsersModalQueryVariables = Types.Exact<{
   ids: Array<Types.Scalars['ID']> | Types.Scalars['ID'];
 }>;
 
 
-export type MergeUsersModalQueryData = { __typename: 'Query', users: Array<{ __typename: 'User', name?: string | null | undefined, first_name?: string | null | undefined, last_name?: string | null | undefined, email?: string | null | undefined, privileges?: Array<string> | null | undefined, id: string, user_con_profiles: Array<{ __typename: 'UserConProfile', email?: string | null | undefined, id: string, ticket?: { __typename: 'Ticket', id: string } | null | undefined, signups: Array<{ __typename: 'Signup', state: Types.SignupState, id: string }>, convention: { __typename: 'Convention', name: string, domain?: string | null | undefined, starts_at?: string | null | undefined, ticket_name: string, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, id: string }, staff_positions: Array<{ __typename: 'StaffPosition', name: string, id: string }> }> }> };
+export type MergeUsersModalQueryData = { __typename: 'Query', users: Array<{ __typename: 'User', id: string, name?: string | null | undefined, first_name?: string | null | undefined, last_name?: string | null | undefined, email?: string | null | undefined, privileges?: Array<string> | null | undefined, user_con_profiles: Array<{ __typename: 'UserConProfile', id: string, email?: string | null | undefined, ticket?: { __typename: 'Ticket', id: string } | null | undefined, signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState }>, convention: { __typename: 'Convention', id: string, name: string, domain?: string | null | undefined, starts_at?: string | null | undefined, ticket_name: string, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode }, staff_positions: Array<{ __typename: 'StaffPosition', id: string, name: string }> }> }> };
 
 export const DetailedUserFieldsFragmentDoc = gql`
     fragment DetailedUserFields on User {
-  id: transitionalId
+  id
   name
   first_name
   last_name
   email
   privileges
   user_con_profiles {
-    id: transitionalId
+    id
     email
     ticket {
-      id: transitionalId
+      id
     }
     signups {
-      id: transitionalId
+      id
       state
     }
     convention {
-      id: transitionalId
+      id
       name
       domain
       starts_at
@@ -58,7 +58,7 @@ export const DetailedUserFieldsFragmentDoc = gql`
       timezone_mode
     }
     staff_positions {
-      id: transitionalId
+      id
       name
     }
   }
@@ -72,7 +72,7 @@ export const UsersTableUsersQueryDocument = gql`
     current_page
     per_page
     entries {
-      id: transitionalId
+      id
       name_inverted
       first_name
       last_name
@@ -118,8 +118,8 @@ export type UsersTableUsersQueryLazyQueryHookResult = ReturnType<typeof useUsers
 export type UsersTableUsersQueryQueryResult = Apollo.QueryResult<UsersTableUsersQueryData, UsersTableUsersQueryVariables>;
 export const UserAdminQueryDocument = gql`
     query UserAdminQuery($id: ID!) {
-  user(transitionalId: $id) {
-    id: transitionalId
+  user(id: $id) {
+    id
     ...DetailedUserFields
   }
 }
@@ -154,8 +154,8 @@ export type UserAdminQueryLazyQueryHookResult = ReturnType<typeof useUserAdminQu
 export type UserAdminQueryQueryResult = Apollo.QueryResult<UserAdminQueryData, UserAdminQueryVariables>;
 export const MergeUsersModalQueryDocument = gql`
     query MergeUsersModalQuery($ids: [ID!]!) {
-  users(transitionalIds: $ids) {
-    id: transitionalId
+  users(ids: $ids) {
+    id
     ...DetailedUserFields
   }
 }

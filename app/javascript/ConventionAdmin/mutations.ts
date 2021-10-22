@@ -5,7 +5,7 @@ export const UpdateConvention = gql`
   mutation UpdateConvention($input: UpdateConventionInput!) {
     updateConvention(input: $input) {
       convention {
-        id: transitionalId
+        id
         ...ConventionAdminConventionFields
       }
     }

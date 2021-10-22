@@ -12,11 +12,11 @@ export const CreateMySignup = gql`
       }
     ) {
       signup {
-        id: transitionalId
+        id
         ...MySignupFields
 
         run {
-          id: transitionalId
+          id
           ...EventPageRunFields
           ...RunBasicSignupData
         }
@@ -33,11 +33,11 @@ export const WithdrawMySignup = gql`
   mutation WithdrawMySignup($runId: ID!) {
     withdrawMySignup(input: { transitionalRunId: $runId }) {
       signup {
-        id: transitionalId
+        id
         ...MySignupFields
 
         run {
-          id: transitionalId
+          id
           ...EventPageRunFields
           ...RunBasicSignupData
         }
@@ -60,7 +60,7 @@ export const CreateSignupRequest = gql`
       }
     ) {
       signup_request {
-        id: transitionalId
+        id
         ...MySignupRequestFields
       }
     }
@@ -73,7 +73,7 @@ export const WithdrawSignupRequest = gql`
   mutation WithdrawSignupRequest($id: ID!) {
     withdrawSignupRequest(input: { transitionalId: $id }) {
       signup_request {
-        id: transitionalId
+        id
         ...MySignupRequestFields
       }
     }

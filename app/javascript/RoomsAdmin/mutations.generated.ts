@@ -10,14 +10,14 @@ export type CreateRoomMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateRoomMutationData = { __typename: 'Mutation', createRoom: { __typename: 'CreateRoomPayload', room: { __typename: 'Room', name?: string | null | undefined, id: string, runs: Array<{ __typename: 'Run', id: string }> } } };
+export type CreateRoomMutationData = { __typename: 'Mutation', createRoom: { __typename: 'CreateRoomPayload', room: { __typename: 'Room', id: string, name?: string | null | undefined, runs: Array<{ __typename: 'Run', id: string }> } } };
 
 export type UpdateRoomMutationVariables = Types.Exact<{
   input: Types.UpdateRoomInput;
 }>;
 
 
-export type UpdateRoomMutationData = { __typename: 'Mutation', updateRoom: { __typename: 'UpdateRoomPayload', room: { __typename: 'Room', name?: string | null | undefined, id: string, runs: Array<{ __typename: 'Run', id: string }> } } };
+export type UpdateRoomMutationData = { __typename: 'Mutation', updateRoom: { __typename: 'UpdateRoomPayload', room: { __typename: 'Room', id: string, name?: string | null | undefined, runs: Array<{ __typename: 'Run', id: string }> } } };
 
 export type DeleteRoomMutationVariables = Types.Exact<{
   input: Types.DeleteRoomInput;
@@ -31,7 +31,7 @@ export const CreateRoomDocument = gql`
     mutation CreateRoom($input: CreateRoomInput!) {
   createRoom(input: $input) {
     room {
-      id: transitionalId
+      id
       ...RoomAdminRoomFields
     }
   }
@@ -67,7 +67,7 @@ export const UpdateRoomDocument = gql`
     mutation UpdateRoom($input: UpdateRoomInput!) {
   updateRoom(input: $input) {
     room {
-      id: transitionalId
+      id
       ...RoomAdminRoomFields
     }
   }
@@ -103,7 +103,7 @@ export const DeleteRoomDocument = gql`
     mutation DeleteRoom($input: DeleteRoomInput!) {
   deleteRoom(input: $input) {
     room {
-      id: transitionalId
+      id
     }
   }
 }

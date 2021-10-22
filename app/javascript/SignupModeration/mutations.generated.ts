@@ -28,14 +28,14 @@ export type AcceptSignupRequestMutationVariables = Types.Exact<{
 }>;
 
 
-export type AcceptSignupRequestMutationData = { __typename: 'Mutation', acceptSignupRequest: { __typename: 'AcceptSignupRequestPayload', signup_request: { __typename: 'SignupRequest', state: Types.SignupRequestState, requested_bucket_key?: string | null | undefined, created_at: string, id: string, user_con_profile: { __typename: 'UserConProfile', name: string, name_inverted: string, gravatar_enabled: boolean, gravatar_url: string, id: string }, replace_signup?: { __typename: 'Signup', id: string, run: { __typename: 'Run', title_suffix?: string | null | undefined, starts_at: string, signup_count_by_state_and_bucket_key_and_counted: string, id: string, event: { __typename: 'Event', title?: string | null | undefined, length_seconds: number, id: string } } } | null | undefined, target_run: { __typename: 'Run', title_suffix?: string | null | undefined, starts_at: string, signup_count_by_state_and_bucket_key_and_counted: string, id: string, event: { __typename: 'Event', title?: string | null | undefined, length_seconds: number, id: string, registration_policy?: { __typename: 'RegistrationPolicy', prevent_no_preference_signups: boolean, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null | undefined, total_slots?: number | null | undefined, slots_limited: boolean, anything: boolean, not_counted: boolean }> } | null | undefined } }, result_signup?: { __typename: 'Signup', state: Types.SignupState, waitlist_position?: number | null | undefined, id: string } | null | undefined } } };
+export type AcceptSignupRequestMutationData = { __typename: 'Mutation', acceptSignupRequest: { __typename: 'AcceptSignupRequestPayload', signup_request: { __typename: 'SignupRequest', id: string, state: Types.SignupRequestState, requested_bucket_key?: string | null | undefined, created_at: string, user_con_profile: { __typename: 'UserConProfile', id: string, name: string, name_inverted: string, gravatar_enabled: boolean, gravatar_url: string }, replace_signup?: { __typename: 'Signup', id: string, run: { __typename: 'Run', id: string, title_suffix?: string | null | undefined, starts_at: string, signup_count_by_state_and_bucket_key_and_counted: string, event: { __typename: 'Event', id: string, title?: string | null | undefined, length_seconds: number } } } | null | undefined, target_run: { __typename: 'Run', id: string, title_suffix?: string | null | undefined, starts_at: string, signup_count_by_state_and_bucket_key_and_counted: string, event: { __typename: 'Event', id: string, title?: string | null | undefined, length_seconds: number, registration_policy?: { __typename: 'RegistrationPolicy', prevent_no_preference_signups: boolean, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null | undefined, total_slots?: number | null | undefined, slots_limited: boolean, anything: boolean, not_counted: boolean }> } | null | undefined } }, result_signup?: { __typename: 'Signup', id: string, state: Types.SignupState, waitlist_position?: number | null | undefined } | null | undefined } } };
 
 export type RejectSignupRequestMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type RejectSignupRequestMutationData = { __typename: 'Mutation', rejectSignupRequest: { __typename: 'RejectSignupRequestPayload', signup_request: { __typename: 'SignupRequest', state: Types.SignupRequestState, requested_bucket_key?: string | null | undefined, created_at: string, id: string, user_con_profile: { __typename: 'UserConProfile', name: string, name_inverted: string, gravatar_enabled: boolean, gravatar_url: string, id: string }, replace_signup?: { __typename: 'Signup', id: string, run: { __typename: 'Run', title_suffix?: string | null | undefined, starts_at: string, signup_count_by_state_and_bucket_key_and_counted: string, id: string, event: { __typename: 'Event', title?: string | null | undefined, length_seconds: number, id: string } } } | null | undefined, target_run: { __typename: 'Run', title_suffix?: string | null | undefined, starts_at: string, signup_count_by_state_and_bucket_key_and_counted: string, id: string, event: { __typename: 'Event', title?: string | null | undefined, length_seconds: number, id: string, registration_policy?: { __typename: 'RegistrationPolicy', prevent_no_preference_signups: boolean, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null | undefined, total_slots?: number | null | undefined, slots_limited: boolean, anything: boolean, not_counted: boolean }> } | null | undefined } }, result_signup?: { __typename: 'Signup', state: Types.SignupState, waitlist_position?: number | null | undefined, id: string } | null | undefined } } };
+export type RejectSignupRequestMutationData = { __typename: 'Mutation', rejectSignupRequest: { __typename: 'RejectSignupRequestPayload', signup_request: { __typename: 'SignupRequest', id: string, state: Types.SignupRequestState, requested_bucket_key?: string | null | undefined, created_at: string, user_con_profile: { __typename: 'UserConProfile', id: string, name: string, name_inverted: string, gravatar_enabled: boolean, gravatar_url: string }, replace_signup?: { __typename: 'Signup', id: string, run: { __typename: 'Run', id: string, title_suffix?: string | null | undefined, starts_at: string, signup_count_by_state_and_bucket_key_and_counted: string, event: { __typename: 'Event', id: string, title?: string | null | undefined, length_seconds: number } } } | null | undefined, target_run: { __typename: 'Run', id: string, title_suffix?: string | null | undefined, starts_at: string, signup_count_by_state_and_bucket_key_and_counted: string, event: { __typename: 'Event', id: string, title?: string | null | undefined, length_seconds: number, registration_policy?: { __typename: 'RegistrationPolicy', prevent_no_preference_signups: boolean, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null | undefined, total_slots?: number | null | undefined, slots_limited: boolean, anything: boolean, not_counted: boolean }> } | null | undefined } }, result_signup?: { __typename: 'Signup', id: string, state: Types.SignupState, waitlist_position?: number | null | undefined } | null | undefined } } };
 
 
 export const CreateUserSignupDocument = gql`
@@ -116,7 +116,7 @@ export const AcceptSignupRequestDocument = gql`
     mutation AcceptSignupRequest($id: ID!) {
   acceptSignupRequest(input: {transitionalId: $id}) {
     signup_request {
-      id: transitionalId
+      id
       ...SignupModerationSignupRequestFields
     }
   }
@@ -152,7 +152,7 @@ export const RejectSignupRequestDocument = gql`
     mutation RejectSignupRequest($id: ID!) {
   rejectSignupRequest(input: {transitionalId: $id}) {
     signup_request {
-      id: transitionalId
+      id
       ...SignupModerationSignupRequestFields
     }
   }

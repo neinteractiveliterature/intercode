@@ -4,16 +4,16 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type EventCategoryFieldsFragment = { __typename: 'EventCategory', name: string, team_member_name: string, proposal_description?: string | null | undefined, scheduling_ui: Types.SchedulingUi, default_color?: string | null | undefined, signed_up_color?: string | null | undefined, full_color?: string | null | undefined, can_provide_tickets: boolean, id: string, events_paginated: { __typename: 'EventsPagination', total_entries: number }, department?: { __typename: 'Department', name: string, id: string } | null | undefined, event_form: { __typename: 'Form', title: string, form_type: Types.FormType, id: string }, event_proposal_form?: { __typename: 'Form', title: string, form_type: Types.FormType, id: string } | null | undefined };
+export type EventCategoryFieldsFragment = { __typename: 'EventCategory', id: string, name: string, team_member_name: string, proposal_description?: string | null | undefined, scheduling_ui: Types.SchedulingUi, default_color?: string | null | undefined, signed_up_color?: string | null | undefined, full_color?: string | null | undefined, can_provide_tickets: boolean, events_paginated: { __typename: 'EventsPagination', total_entries: number }, department?: { __typename: 'Department', id: string, name: string } | null | undefined, event_form: { __typename: 'Form', id: string, title: string, form_type: Types.FormType }, event_proposal_form?: { __typename: 'Form', id: string, title: string, form_type: Types.FormType } | null | undefined };
 
 export type EventCategoryAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type EventCategoryAdminQueryData = { __typename: 'Query', convention: { __typename: 'Convention', name: string, ticket_name: string, ticket_mode: Types.TicketMode, id: string, departments: Array<{ __typename: 'Department', name: string, id: string }>, event_categories: Array<{ __typename: 'EventCategory', name: string, team_member_name: string, proposal_description?: string | null | undefined, scheduling_ui: Types.SchedulingUi, default_color?: string | null | undefined, signed_up_color?: string | null | undefined, full_color?: string | null | undefined, can_provide_tickets: boolean, id: string, events_paginated: { __typename: 'EventsPagination', total_entries: number }, department?: { __typename: 'Department', name: string, id: string } | null | undefined, event_form: { __typename: 'Form', title: string, form_type: Types.FormType, id: string }, event_proposal_form?: { __typename: 'Form', title: string, form_type: Types.FormType, id: string } | null | undefined }>, forms: Array<{ __typename: 'Form', title: string, form_type: Types.FormType, id: string }> } };
+export type EventCategoryAdminQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, ticket_name: string, ticket_mode: Types.TicketMode, departments: Array<{ __typename: 'Department', id: string, name: string }>, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, team_member_name: string, proposal_description?: string | null | undefined, scheduling_ui: Types.SchedulingUi, default_color?: string | null | undefined, signed_up_color?: string | null | undefined, full_color?: string | null | undefined, can_provide_tickets: boolean, events_paginated: { __typename: 'EventsPagination', total_entries: number }, department?: { __typename: 'Department', id: string, name: string } | null | undefined, event_form: { __typename: 'Form', id: string, title: string, form_type: Types.FormType }, event_proposal_form?: { __typename: 'Form', id: string, title: string, form_type: Types.FormType } | null | undefined }>, forms: Array<{ __typename: 'Form', id: string, title: string, form_type: Types.FormType }> } };
 
 export const EventCategoryFieldsFragmentDoc = gql`
     fragment EventCategoryFields on EventCategory {
-  id: transitionalId
+  id
   name
   team_member_name
   proposal_description
@@ -26,16 +26,16 @@ export const EventCategoryFieldsFragmentDoc = gql`
     total_entries
   }
   department {
-    id: transitionalId
+    id
     name
   }
   event_form {
-    id: transitionalId
+    id
     title
     form_type
   }
   event_proposal_form {
-    id: transitionalId
+    id
     title
     form_type
   }
@@ -44,20 +44,20 @@ export const EventCategoryFieldsFragmentDoc = gql`
 export const EventCategoryAdminQueryDocument = gql`
     query EventCategoryAdminQuery {
   convention: conventionByRequestHost {
-    id: transitionalId
+    id
     name
     ticket_name
     ticket_mode
     departments {
-      id: transitionalId
+      id
       name
     }
     event_categories {
-      id: transitionalId
+      id
       ...EventCategoryFields
     }
     forms {
-      id: transitionalId
+      id
       title
       form_type
     }

@@ -7,7 +7,7 @@ export const RootSiteConventionsAdminTableQuery = gql`
       total_pages
 
       entries {
-        id: transitionalId
+        id
         name
         starts_at
         ends_at
@@ -15,7 +15,7 @@ export const RootSiteConventionsAdminTableQuery = gql`
         timezone_mode
 
         organization {
-          id: transitionalId
+          id
           name
         }
       }
@@ -25,7 +25,7 @@ export const RootSiteConventionsAdminTableQuery = gql`
 
 export const ConventionDisplayFields = gql`
   fragment ConventionDisplayFields on Convention {
-    id: transitionalId
+    id
     name
     starts_at
     ends_at
@@ -50,7 +50,7 @@ export const ConventionDisplayFields = gql`
     }
 
     organization {
-      id: transitionalId
+      id
       name
     }
   }
@@ -58,8 +58,8 @@ export const ConventionDisplayFields = gql`
 
 export const ConventionDisplayQuery = gql`
   query ConventionDisplayQuery($id: ID!) {
-    convention: conventionById(transitionalId: $id) {
-      id: transitionalId
+    convention: conventionById(id: $id) {
+      id
       ...ConventionDisplayFields
     }
   }
@@ -70,7 +70,7 @@ export const ConventionDisplayQuery = gql`
 export const NewConventionModalQuery = gql`
   query NewConventionModalQuery {
     organizations {
-      id: transitionalId
+      id
       name
     }
   }

@@ -2,17 +2,17 @@ import { gql } from '@apollo/client';
 
 export const OrganizationRoleFields = gql`
   fragment OrganizationRoleFields on OrganizationRole {
-    id: transitionalId
+    id
     name
 
     users {
-      id: transitionalId
+      id
       name
       email
     }
 
     permissions {
-      id: transitionalId
+      id
       permission
     }
   }
@@ -21,18 +21,18 @@ export const OrganizationRoleFields = gql`
 export const OrganizationAdminOrganizationsQuery = gql`
   query OrganizationAdminOrganizationsQuery {
     organizations {
-      id: transitionalId
+      id
       name
       current_ability_can_manage_access
 
       conventions {
-        id: transitionalId
+        id
         name
         starts_at
       }
 
       organization_roles {
-        id: transitionalId
+        id
         ...OrganizationRoleFields
       }
     }
