@@ -13,7 +13,7 @@ export type CreateConventionMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateConventionMutationData = { __typename: 'Mutation', createConvention: { __typename: 'CreateConventionPayload', convention: { __typename: 'Convention', name: string, starts_at?: string | null | undefined, ends_at?: string | null | undefined, canceled: boolean, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, domain?: string | null | undefined, site_mode: Types.SiteMode, ticket_mode: Types.TicketMode, show_event_list?: Types.ShowSchedule | null | undefined, show_schedule?: Types.ShowSchedule | null | undefined, email_from: string, hidden: boolean, language: string, id: string, maximum_event_signups?: { __typename: 'ScheduledValue', timespans: Array<{ __typename: 'TimespanWithValue', start?: string | null | undefined, finish?: string | null | undefined, value: string }> } | null | undefined, organization?: { __typename: 'Organization', name: string, id: string } | null | undefined } } };
+export type CreateConventionMutationData = { __typename: 'Mutation', createConvention: { __typename: 'CreateConventionPayload', convention: { __typename: 'Convention', id: string, name: string, starts_at?: string | null | undefined, ends_at?: string | null | undefined, canceled: boolean, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, domain?: string | null | undefined, site_mode: Types.SiteMode, ticket_mode: Types.TicketMode, show_event_list?: Types.ShowSchedule | null | undefined, show_schedule?: Types.ShowSchedule | null | undefined, email_from: string, hidden: boolean, language: string, maximum_event_signups?: { __typename: 'ScheduledValue', timespans: Array<{ __typename: 'TimespanWithValue', start?: string | null | undefined, finish?: string | null | undefined, value: string }> } | null | undefined, organization?: { __typename: 'Organization', id: string, name: string } | null | undefined } } };
 
 export type SetConventionCanceledMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -21,7 +21,7 @@ export type SetConventionCanceledMutationVariables = Types.Exact<{
 }>;
 
 
-export type SetConventionCanceledMutationData = { __typename: 'Mutation', setConventionCanceled: { __typename: 'SetConventionCanceledPayload', convention: { __typename: 'Convention', name: string, starts_at?: string | null | undefined, ends_at?: string | null | undefined, canceled: boolean, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, domain?: string | null | undefined, site_mode: Types.SiteMode, ticket_mode: Types.TicketMode, show_event_list?: Types.ShowSchedule | null | undefined, show_schedule?: Types.ShowSchedule | null | undefined, email_from: string, hidden: boolean, language: string, id: string, maximum_event_signups?: { __typename: 'ScheduledValue', timespans: Array<{ __typename: 'TimespanWithValue', start?: string | null | undefined, finish?: string | null | undefined, value: string }> } | null | undefined, organization?: { __typename: 'Organization', name: string, id: string } | null | undefined } } };
+export type SetConventionCanceledMutationData = { __typename: 'Mutation', setConventionCanceled: { __typename: 'SetConventionCanceledPayload', convention: { __typename: 'Convention', id: string, name: string, starts_at?: string | null | undefined, ends_at?: string | null | undefined, canceled: boolean, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, domain?: string | null | undefined, site_mode: Types.SiteMode, ticket_mode: Types.TicketMode, show_event_list?: Types.ShowSchedule | null | undefined, show_schedule?: Types.ShowSchedule | null | undefined, email_from: string, hidden: boolean, language: string, maximum_event_signups?: { __typename: 'ScheduledValue', timespans: Array<{ __typename: 'TimespanWithValue', start?: string | null | undefined, finish?: string | null | undefined, value: string }> } | null | undefined, organization?: { __typename: 'Organization', id: string, name: string } | null | undefined } } };
 
 
 export const CreateConventionDocument = gql`
@@ -30,7 +30,7 @@ export const CreateConventionDocument = gql`
     input: {convention: $convention, transitionalCloneConventionId: $cloneConventionId, transitionalOrganizationId: $organizationId, cms_content_set_name: $cmsContentSetName}
   ) {
     convention {
-      id: transitionalId
+      id
       ...ConventionDisplayFields
     }
   }
@@ -69,7 +69,7 @@ export const SetConventionCanceledDocument = gql`
     mutation SetConventionCanceled($id: ID!, $canceled: Boolean!) {
   setConventionCanceled(input: {transitionalId: $id, canceled: $canceled}) {
     convention {
-      id: transitionalId
+      id
       ...ConventionDisplayFields
     }
   }

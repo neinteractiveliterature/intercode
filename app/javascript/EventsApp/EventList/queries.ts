@@ -2,18 +2,13 @@ import { gql } from '@apollo/client';
 import { CommonConventionData } from '../queries';
 
 export const EventListEventsQuery = gql`
-  query EventListEventsQuery(
-    $page: Int
-    $pageSize: Int
-    $filters: EventFiltersInput
-    $sort: [SortInput!]
-  ) {
+  query EventListEventsQuery($page: Int, $pageSize: Int, $filters: EventFiltersInput, $sort: [SortInput!]) {
     currentAbility {
       can_read_schedule
     }
 
     convention: conventionByRequestHost {
-      id: transitionalId
+      id
       ...CommonConventionData
 
       events_paginated(page: $page, per_page: $pageSize, filters: $filters, sort: $sort) {
@@ -23,7 +18,7 @@ export const EventListEventsQuery = gql`
         per_page
 
         entries {
-          id: transitionalId
+          id
           title
           created_at
           short_blurb_html
@@ -31,22 +26,22 @@ export const EventListEventsQuery = gql`
           my_rating
 
           event_category {
-            id: transitionalId
+            id
             name
             team_member_name
           }
 
           runs {
-            id: transitionalId
+            id
             starts_at
           }
 
           team_members {
-            id: transitionalId
+            id
             display_team_member
 
             user_con_profile {
-              id: transitionalId
+              id
               last_name
               name_without_nickname
               gravatar_enabled

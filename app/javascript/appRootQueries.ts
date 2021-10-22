@@ -3,24 +3,24 @@ import { gql } from '@apollo/client';
 export const AppRootQuery = gql`
   query AppRootQuery($path: String!) {
     cmsParentByRequestHost {
-      id: transitionalId
+      id
 
       effectiveCmsLayout(path: $path) {
-        id: transitionalId
+        id
         content_html(path: $path)
       }
 
       cmsNavigationItems {
-        id: transitionalId
+        id
         position
         title
 
         navigation_section {
-          id: transitionalId
+          id
         }
 
         page {
-          id: transitionalId
+          id
           slug
         }
       }
@@ -55,17 +55,17 @@ export const AppRootQuery = gql`
     }
 
     currentUser {
-      id: transitionalId
+      id
       name
     }
 
     assumedIdentityFromProfile {
-      id: transitionalId
+      id
       name_without_nickname
     }
 
     convention: conventionByRequestHostIfPresent {
-      id: transitionalId
+      id
       name
       domain
       accepting_proposals
@@ -83,15 +83,15 @@ export const AppRootQuery = gql`
       ticket_name
 
       ticket_types {
-        id: transitionalId
+        id
         providing_products {
-          id: transitionalId
+          id
           available
         }
       }
 
       my_profile {
-        id: transitionalId
+        id
         name
         accepted_clickwrap_agreement
         name_without_nickname
@@ -100,13 +100,13 @@ export const AppRootQuery = gql`
         gravatar_enabled
         gravatar_url
         ticket {
-          id: transitionalId
+          id
         }
 
         current_pending_order {
-          id: transitionalId
+          id
           order_entries {
-            id: transitionalId
+            id
             quantity
           }
         }
@@ -114,7 +114,7 @@ export const AppRootQuery = gql`
     }
 
     rootSite {
-      id: transitionalId
+      id
       site_name
     }
   }

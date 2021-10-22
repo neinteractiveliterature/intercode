@@ -3,21 +3,21 @@ import { gql } from '@apollo/client';
 export const CmsPageQuery = gql`
   query CmsPageQuery($slug: String, $rootPage: Boolean) {
     convention: conventionByRequestHostIfPresent {
-      id: transitionalId
+      id
       name
       clickwrap_agreement
 
       my_profile {
-        id: transitionalId
+        id
         accepted_clickwrap_agreement
       }
     }
 
     cmsParent: cmsParentByRequestHost {
-      id: transitionalId
+      id
 
       cmsPage(slug: $slug, rootPage: $rootPage) {
-        id: transitionalId
+        id
         name
         content_html
         current_ability_can_update
@@ -35,31 +35,31 @@ export const CmsPageQuery = gql`
 export const PageAdminDropdownQuery = gql`
   query PageAdminDropdownQuery($id: ID!) {
     cmsParent: cmsParentByRequestHost {
-      id: transitionalId
+      id
 
       cmsPage(transitionalId: $id) {
-        id: transitionalId
+        id
         cms_layout {
-          id: transitionalId
+          id
           name
         }
 
         referenced_partials {
-          id: transitionalId
+          id
           name
         }
       }
 
       ... on Convention {
         defaultLayout {
-          id: transitionalId
+          id
           name
         }
       }
 
       ... on RootSite {
         root_site_default_layout: defaultLayout {
-          id: transitionalId
+          id
           name
         }
       }

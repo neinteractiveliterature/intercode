@@ -9,14 +9,14 @@ export type PreviewLiquidQueryVariables = Types.Exact<{
 }>;
 
 
-export type PreviewLiquidQueryData = { __typename: 'Query', cmsParent: { __typename: 'Convention', previewLiquid: string, id: string } | { __typename: 'RootSite', previewLiquid: string, id: string } };
+export type PreviewLiquidQueryData = { __typename: 'Query', cmsParent: { __typename: 'Convention', id: string, previewLiquid: string } | { __typename: 'RootSite', id: string, previewLiquid: string } };
 
 export type PreviewMarkdownQueryVariables = Types.Exact<{
   markdown: Types.Scalars['String'];
 }>;
 
 
-export type PreviewMarkdownQueryData = { __typename: 'Query', cmsParent: { __typename: 'Convention', previewMarkdown: string, id: string } | { __typename: 'RootSite', previewMarkdown: string, id: string } };
+export type PreviewMarkdownQueryData = { __typename: 'Query', cmsParent: { __typename: 'Convention', id: string, previewMarkdown: string } | { __typename: 'RootSite', id: string, previewMarkdown: string } };
 
 export type PreviewNotifierLiquidQueryVariables = Types.Exact<{
   eventKey: Types.Scalars['String'];
@@ -30,7 +30,7 @@ export type PreviewNotifierLiquidQueryData = { __typename: 'Query', convention: 
 export const PreviewLiquidQueryDocument = gql`
     query PreviewLiquidQuery($liquid: String!) {
   cmsParent: cmsParentByRequestHost {
-    id: transitionalId
+    id
     previewLiquid(content: $liquid)
   }
 }
@@ -66,7 +66,7 @@ export type PreviewLiquidQueryQueryResult = Apollo.QueryResult<PreviewLiquidQuer
 export const PreviewMarkdownQueryDocument = gql`
     query PreviewMarkdownQuery($markdown: String!) {
   cmsParent: cmsParentByRequestHost {
-    id: transitionalId
+    id
     previewMarkdown(markdown: $markdown)
   }
 }
@@ -102,7 +102,7 @@ export type PreviewMarkdownQueryQueryResult = Apollo.QueryResult<PreviewMarkdown
 export const PreviewNotifierLiquidQueryDocument = gql`
     query PreviewNotifierLiquidQuery($eventKey: String!, $liquid: String!) {
   convention: conventionByRequestHost {
-    id: transitionalId
+    id
     previewLiquid: preview_notifier_liquid(eventKey: $eventKey, content: $liquid)
   }
 }

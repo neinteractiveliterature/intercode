@@ -3,7 +3,7 @@ import { gql } from '@apollo/client';
 export const SiteSearchQuery = gql`
   query SiteSearchQuery($query: String!) {
     cmsParent: cmsParentByRequestHost {
-      id: transitionalId
+      id
 
       fullTextSearch(query: $query) {
         total_entries
@@ -16,22 +16,22 @@ export const SiteSearchQuery = gql`
             __typename
 
             ... on Page {
-              id: transitionalId
+              id
               slug
             }
 
             ... on Event {
-              id: transitionalId
+              id
               title
             }
 
             ... on EventProposal {
-              id: transitionalId
+              id
               title
             }
 
             ... on UserConProfile {
-              id: transitionalId
+              id
             }
           }
         }

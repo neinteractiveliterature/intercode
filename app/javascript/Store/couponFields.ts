@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 
 export const CouponFields = gql`
   fragment CouponFields on Coupon {
-    id: transitionalId
+    id
     code
     fixed_amount {
       fractional
@@ -10,7 +10,7 @@ export const CouponFields = gql`
     }
     percent_discount
     provides_product {
-      id: transitionalId
+      id
       name
     }
   }

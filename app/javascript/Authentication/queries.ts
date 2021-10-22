@@ -9,12 +9,12 @@ export const AccountFormContentQuery = gql`
 export const EditUserQuery = gql`
   query EditUserQuery {
     convention: conventionByRequestHostIfPresent {
-      id: transitionalId
+      id
       name
     }
 
     currentUser {
-      id: transitionalId
+      id
       first_name
       last_name
       email

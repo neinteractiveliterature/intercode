@@ -4,7 +4,7 @@ import { PricingStructureFields } from '../Store/pricingStructureFields';
 export const ReportsMenuQuery = gql`
   query ReportsMenuQuery {
     convention: conventionByRequestHost {
-      id: transitionalId
+      id
       ticket_mode
       ticket_name
     }
@@ -14,7 +14,7 @@ export const ReportsMenuQuery = gql`
 export const AttendanceByPaymentAmountQuery = gql`
   query AttendanceByPaymentAmountQuery {
     convention: conventionByRequestHost {
-      id: transitionalId
+      id
       ticket_name
 
       reports {
@@ -22,12 +22,12 @@ export const AttendanceByPaymentAmountQuery = gql`
           count
 
           ticket_type {
-            id: transitionalId
+            id
             name
             description
 
             providing_products {
-              id: transitionalId
+              id
               pricing_structure {
                 ...PricingStructureFields
               }
@@ -54,26 +54,26 @@ export const AttendanceByPaymentAmountQuery = gql`
 export const EventProvidedTicketsQuery = gql`
   query EventProvidedTicketsQuery {
     convention: conventionByRequestHost {
-      id: transitionalId
+      id
       ticket_name
 
       reports {
         event_provided_tickets {
           provided_by_event {
-            id: transitionalId
+            id
             title
           }
 
           tickets {
-            id: transitionalId
+            id
 
             user_con_profile {
-              id: transitionalId
+              id
               name_inverted
             }
 
             ticket_type {
-              id: transitionalId
+              id
               description
             }
           }
@@ -86,12 +86,12 @@ export const EventProvidedTicketsQuery = gql`
 export const EventsByChoiceQuery = gql`
   query EventsByChoiceQuery {
     convention: conventionByRequestHost {
-      id: transitionalId
+      id
 
       reports {
         events_by_choice {
           event {
-            id: transitionalId
+            id
             title
           }
 
@@ -109,7 +109,7 @@ export const EventsByChoiceQuery = gql`
 export const SignupCountsByStateQuery = gql`
   query SignupCountsByStateQuery {
     convention: conventionByRequestHost {
-      id: transitionalId
+      id
       signup_counts_by_state {
         state
         count
@@ -126,7 +126,7 @@ export const SignupSpySignupChangesQuery = gql`
     $sort: [SortInput!]
   ) {
     convention: conventionByRequestHost {
-      id: transitionalId
+      id
       timezone_name
 
       signup_changes_paginated(page: $page, per_page: $perPage, filters: $filters, sort: $sort) {
@@ -136,7 +136,7 @@ export const SignupSpySignupChangesQuery = gql`
         per_page
 
         entries {
-          id: transitionalId
+          id
           state
           counted
           bucket_key
@@ -144,26 +144,26 @@ export const SignupSpySignupChangesQuery = gql`
           created_at
 
           previous_signup_change {
-            id: transitionalId
+            id
             state
             counted
             bucket_key
           }
 
           signup {
-            id: transitionalId
+            id
             choice
           }
 
           run {
-            id: transitionalId
+            id
 
             event {
-              id: transitionalId
+              id
               title
 
               event_category {
-                id: transitionalId
+                id
                 team_member_name
               }
 
@@ -176,16 +176,16 @@ export const SignupSpySignupChangesQuery = gql`
               }
 
               team_members {
-                id: transitionalId
+                id
                 user_con_profile {
-                  id: transitionalId
+                  id
                 }
               }
             }
           }
 
           user_con_profile {
-            id: transitionalId
+            id
             name_inverted
             gravatar_enabled
             gravatar_url

@@ -4,7 +4,7 @@ import { CommonFormFields } from '../../Models/commonFormFragments';
 
 export const MySignupFields = gql`
   fragment MySignupFields on Signup {
-    id: transitionalId
+    id
     state
     waitlist_position
   }
@@ -12,38 +12,38 @@ export const MySignupFields = gql`
 
 export const MySignupRequestFields = gql`
   fragment MySignupRequestFields on SignupRequest {
-    id: transitionalId
+    id
     state
     target_run {
-      id: transitionalId
+      id
     }
     requested_bucket_key
     replace_signup {
-      id: transitionalId
+      id
     }
   }
 `;
 
 export const EventPageRunFields = gql`
   fragment EventPageRunFields on Run {
-    id: transitionalId
+    id
     title_suffix
     starts_at
     current_ability_can_signup_summary_run
     signup_count_by_state_and_bucket_key_and_counted
 
     rooms {
-      id: transitionalId
+      id
       name
     }
 
     my_signups {
-      id: transitionalId
+      id
       ...MySignupFields
     }
 
     my_signup_requests {
-      id: transitionalId
+      id
       ...MySignupRequestFields
     }
   }
@@ -83,15 +83,15 @@ export const EventPageQuery = gql`
     }
 
     convention: conventionByRequestHost {
-      id: transitionalId
+      id
       ...CommonConventionData
 
       my_profile {
-        id: transitionalId
+        id
       }
 
       event(transitionalId: $eventId) {
-        id: transitionalId
+        id
         title
         length_seconds
         private_signup_list
@@ -100,20 +100,20 @@ export const EventPageQuery = gql`
         form_response_attrs_json_with_rendered_markdown
 
         event_category {
-          id: transitionalId
+          id
           team_member_name
         }
 
         form {
-          id: transitionalId
+          id
           ...CommonFormFields
 
           form_sections {
-            id: transitionalId
+            id
             ...CommonFormSectionFields
 
             form_items {
-              id: transitionalId
+              id
               public_description
               ...CommonFormItemFields
             }
@@ -121,11 +121,11 @@ export const EventPageQuery = gql`
         }
 
         team_members {
-          id: transitionalId
+          id
           email
           display_team_member
           user_con_profile {
-            id: transitionalId
+            id
             name_without_nickname
             gravatar_enabled
             gravatar_url
@@ -137,7 +137,7 @@ export const EventPageQuery = gql`
         }
 
         runs {
-          id: transitionalId
+          id
           ...EventPageRunFields
         }
       }
@@ -153,21 +153,21 @@ export const EventPageQuery = gql`
 export const CreateModeratedSignupModalQuery = gql`
   query CreateModeratedSignupModalQuery {
     convention: conventionByRequestHost {
-      id: transitionalId
+      id
 
       my_profile {
-        id: transitionalId
+        id
 
         signups {
-          id: transitionalId
+          id
           state
 
           run {
-            id: transitionalId
+            id
             starts_at
 
             event {
-              id: transitionalId
+              id
               title
               length_seconds
               can_play_concurrently

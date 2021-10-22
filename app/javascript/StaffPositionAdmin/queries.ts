@@ -3,7 +3,7 @@ import { PermissionedModelFields, PermissionedRoleFields } from '../Permissions/
 
 export const StaffPositionFields = gql`
   fragment StaffPositionFields on StaffPosition {
-    id: transitionalId
+    id
     name
     email
     visible
@@ -11,14 +11,14 @@ export const StaffPositionFields = gql`
     cc_addresses
 
     user_con_profiles {
-      id: transitionalId
+      id
       name_without_nickname
       gravatar_url
       gravatar_enabled
     }
 
     permissions {
-      id: transitionalId
+      id
       permission
 
       model {
@@ -38,22 +38,22 @@ export const StaffPositionFields = gql`
 export const StaffPositionsQuery = gql`
   query StaffPositionsQuery {
     convention: conventionByRequestHost {
-      id: transitionalId
+      id
       name
 
       event_categories {
-        id: transitionalId
+        id
         name
         default_color
       }
 
       cmsContentGroups {
-        id: transitionalId
+        id
         name
       }
 
       staff_positions {
-        id: transitionalId
+        id
         ...StaffPositionFields
       }
     }

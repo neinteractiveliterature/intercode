@@ -2,12 +2,12 @@ import { gql } from '@apollo/client';
 
 export const AdminDepartmentFields = gql`
   fragment AdminDepartmentFields on Department {
-    id: transitionalId
+    id
     name
     proposal_description
 
     event_categories {
-      id: transitionalId
+      id
       name
     }
   }
@@ -20,10 +20,10 @@ export const DepartmentAdminQuery = gql`
     }
 
     convention: conventionByRequestHost {
-      id: transitionalId
+      id
 
       departments {
-        id: transitionalId
+        id
         ...AdminDepartmentFields
       }
     }

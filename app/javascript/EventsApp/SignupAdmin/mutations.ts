@@ -7,11 +7,11 @@ export const ChangeSignupBucket = gql`
   mutation ChangeSignupBucket($signupId: ID!, $bucketKey: String!) {
     updateSignupBucket(input: { transitionalId: $signupId, bucket_key: $bucketKey }) {
       signup {
-        id: transitionalId
+        id
         ...SignupFields
 
         run {
-          id: transitionalId
+          id
           ...EventPageRunFields
           ...RunBasicSignupData
         }
@@ -28,11 +28,11 @@ export const ForceConfirmSignup = gql`
   mutation ForceConfirmSignup($signupId: ID!, $bucketKey: String!) {
     forceConfirmSignup(input: { transitionalId: $signupId, bucket_key: $bucketKey }) {
       signup {
-        id: transitionalId
+        id
         ...SignupFields
 
         run {
-          id: transitionalId
+          id
           ...EventPageRunFields
           ...RunBasicSignupData
         }
@@ -49,11 +49,11 @@ export const UpdateSignupCounted = gql`
   mutation UpdateSignupCounted($signupId: ID!, $counted: Boolean!) {
     updateSignupCounted(input: { transitionalId: $signupId, counted: $counted }) {
       signup {
-        id: transitionalId
+        id
         ...SignupFields
 
         run {
-          id: transitionalId
+          id
           ...EventPageRunFields
           ...RunBasicSignupData
         }
@@ -70,7 +70,7 @@ export const WithdrawAllUserConProfileSignups = gql`
   mutation WithdrawAllUserConProfileSignups($userConProfileId: ID!) {
     withdrawAllUserConProfileSignups(input: { transitionalUserConProfileId: $userConProfileId }) {
       user_con_profile {
-        id: transitionalId
+        id
 
         ...UserConProfileSignupsFragment
       }

@@ -10,7 +10,7 @@ export type CreateCmsFileMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateCmsFileMutationData = { __typename: 'Mutation', createCmsFile: { __typename: 'CreateCmsFilePayload', cms_file: { __typename: 'CmsFile', filename: string, url: string, content_type: string, size: number, current_ability_can_delete: boolean, id: string } } };
+export type CreateCmsFileMutationData = { __typename: 'Mutation', createCmsFile: { __typename: 'CreateCmsFilePayload', cms_file: { __typename: 'CmsFile', id: string, filename: string, url: string, content_type: string, size: number, current_ability_can_delete: boolean } } };
 
 export type RenameCmsFileMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -18,7 +18,7 @@ export type RenameCmsFileMutationVariables = Types.Exact<{
 }>;
 
 
-export type RenameCmsFileMutationData = { __typename: 'Mutation', renameCmsFile: { __typename: 'RenameCmsFilePayload', cms_file: { __typename: 'CmsFile', filename: string, url: string, content_type: string, size: number, current_ability_can_delete: boolean, id: string } } };
+export type RenameCmsFileMutationData = { __typename: 'Mutation', renameCmsFile: { __typename: 'RenameCmsFilePayload', cms_file: { __typename: 'CmsFile', id: string, filename: string, url: string, content_type: string, size: number, current_ability_can_delete: boolean } } };
 
 export type DeleteCmsFileMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -32,7 +32,7 @@ export const CreateCmsFileDocument = gql`
     mutation CreateCmsFile($file: Upload!) {
   createCmsFile(input: {file: $file}) {
     cms_file {
-      id: transitionalId
+      id
       ...CmsFileFields
     }
   }
@@ -68,7 +68,7 @@ export const RenameCmsFileDocument = gql`
     mutation RenameCmsFile($id: ID!, $filename: String!) {
   renameCmsFile(input: {transitionalId: $id, filename: $filename}) {
     cms_file {
-      id: transitionalId
+      id
       ...CmsFileFields
     }
   }

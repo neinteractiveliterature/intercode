@@ -5,7 +5,7 @@ import { gql } from '@apollo/client';
 import { CouponFieldsFragmentDoc } from '../couponFields.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type AdminCouponFieldsFragment = { __typename: 'Coupon', usage_limit?: number | null | undefined, expires_at?: string | null | undefined, code: string, percent_discount?: string | null | undefined, id: string, fixed_amount?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, provides_product?: { __typename: 'Product', name: string, id: string } | null | undefined };
+export type AdminCouponFieldsFragment = { __typename: 'Coupon', id: string, usage_limit?: number | null | undefined, expires_at?: string | null | undefined, code: string, percent_discount?: string | null | undefined, fixed_amount?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, provides_product?: { __typename: 'Product', id: string, name: string } | null | undefined };
 
 export type AdminCouponsQueryVariables = Types.Exact<{
   filters?: Types.Maybe<Types.CouponFiltersInput>;
@@ -15,11 +15,11 @@ export type AdminCouponsQueryVariables = Types.Exact<{
 }>;
 
 
-export type AdminCouponsQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, coupons_paginated: { __typename: 'CouponsPagination', current_page: number, total_pages: number, entries: Array<{ __typename: 'Coupon', usage_limit?: number | null | undefined, expires_at?: string | null | undefined, code: string, percent_discount?: string | null | undefined, id: string, fixed_amount?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, provides_product?: { __typename: 'Product', name: string, id: string } | null | undefined }> } } };
+export type AdminCouponsQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, coupons_paginated: { __typename: 'CouponsPagination', current_page: number, total_pages: number, entries: Array<{ __typename: 'Coupon', id: string, usage_limit?: number | null | undefined, expires_at?: string | null | undefined, code: string, percent_discount?: string | null | undefined, fixed_amount?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, provides_product?: { __typename: 'Product', id: string, name: string } | null | undefined }> } } };
 
 export const AdminCouponFieldsFragmentDoc = gql`
     fragment AdminCouponFields on Coupon {
-  id: transitionalId
+  id
   ...CouponFields
   usage_limit
   expires_at
@@ -28,7 +28,7 @@ export const AdminCouponFieldsFragmentDoc = gql`
 export const AdminCouponsQueryDocument = gql`
     query AdminCouponsQuery($filters: CouponFiltersInput, $sort: [SortInput!], $page: Int, $per_page: Int) {
   convention: conventionByRequestHost {
-    id: transitionalId
+    id
     coupons_paginated(
       filters: $filters
       sort: $sort
@@ -38,7 +38,7 @@ export const AdminCouponsQueryDocument = gql`
       current_page
       total_pages
       entries {
-        id: transitionalId
+        id
         ...AdminCouponFields
       }
     }

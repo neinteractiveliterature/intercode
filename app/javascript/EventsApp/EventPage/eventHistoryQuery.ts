@@ -4,28 +4,28 @@ import { CommonFormFields } from '../../Models/commonFormFragments';
 export const EventHistoryQuery = gql`
   query EventHistoryQuery($id: ID!) {
     convention: conventionByRequestHost {
-      id: transitionalId
+      id
       starts_at
       ends_at
       timezone_name
       timezone_mode
 
       event(transitionalId: $id) {
-        id: transitionalId
+        id
         title
 
         event_category {
-          id: transitionalId
+          id
 
           event_form {
-            id: transitionalId
+            id
             ...CommonFormFields
 
             form_sections {
-              id: transitionalId
+              id
 
               form_items {
-                id: transitionalId
+                id
                 admin_description
               }
             }
@@ -34,7 +34,7 @@ export const EventHistoryQuery = gql`
 
         form_response_changes {
           user_con_profile {
-            id: transitionalId
+            id
             name_without_nickname
           }
 

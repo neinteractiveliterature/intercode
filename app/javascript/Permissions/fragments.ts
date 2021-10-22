@@ -6,17 +6,17 @@ export const PermissionedModelFields = gql`
     __typename
 
     ... on CmsContentGroup {
-      id: transitionalId
+      id
       name
     }
 
     ... on Convention {
-      id: transitionalId
+      id
       name
     }
 
     ... on EventCategory {
-      id: transitionalId
+      id
       name
       default_color
     }
@@ -29,12 +29,12 @@ export const PermissionedRoleFields = gql`
     __typename
 
     ... on StaffPosition {
-      id: transitionalId
+      id
       name
     }
 
     ... on OrganizationRole {
-      id: transitionalId
+      id
       name
     }
   }

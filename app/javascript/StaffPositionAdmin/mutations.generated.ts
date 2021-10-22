@@ -10,14 +10,14 @@ export type CreateStaffPositionMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateStaffPositionMutationData = { __typename: 'Mutation', createStaffPosition: { __typename: 'CreateStaffPositionPayload', staff_position: { __typename: 'StaffPosition', name: string, email?: string | null | undefined, visible?: boolean | null | undefined, email_aliases: Array<string>, cc_addresses: Array<string>, id: string, user_con_profiles: Array<{ __typename: 'UserConProfile', name_without_nickname: string, gravatar_url: string, gravatar_enabled: boolean, id: string }>, permissions: Array<{ __typename: 'Permission', permission: string, id: string, model: { __typename: 'CmsContentGroup', name: string, id: string } | { __typename: 'Convention', name: string, id: string } | { __typename: 'EventCategory', name: string, default_color?: string | null | undefined, id: string }, role: { __typename: 'OrganizationRole', name: string, id: string } | { __typename: 'StaffPosition', name: string, id: string } }> } } };
+export type CreateStaffPositionMutationData = { __typename: 'Mutation', createStaffPosition: { __typename: 'CreateStaffPositionPayload', staff_position: { __typename: 'StaffPosition', id: string, name: string, email?: string | null | undefined, visible?: boolean | null | undefined, email_aliases: Array<string>, cc_addresses: Array<string>, user_con_profiles: Array<{ __typename: 'UserConProfile', id: string, name_without_nickname: string, gravatar_url: string, gravatar_enabled: boolean }>, permissions: Array<{ __typename: 'Permission', id: string, permission: string, model: { __typename: 'CmsContentGroup', id: string, name: string } | { __typename: 'Convention', id: string, name: string } | { __typename: 'EventCategory', id: string, name: string, default_color?: string | null | undefined }, role: { __typename: 'OrganizationRole', id: string, name: string } | { __typename: 'StaffPosition', id: string, name: string } }> } } };
 
 export type UpdateStaffPositionMutationVariables = Types.Exact<{
   input: Types.UpdateStaffPositionInput;
 }>;
 
 
-export type UpdateStaffPositionMutationData = { __typename: 'Mutation', updateStaffPosition: { __typename: 'UpdateStaffPositionPayload', staff_position: { __typename: 'StaffPosition', name: string, email?: string | null | undefined, visible?: boolean | null | undefined, email_aliases: Array<string>, cc_addresses: Array<string>, id: string, user_con_profiles: Array<{ __typename: 'UserConProfile', name_without_nickname: string, gravatar_url: string, gravatar_enabled: boolean, id: string }>, permissions: Array<{ __typename: 'Permission', permission: string, id: string, model: { __typename: 'CmsContentGroup', name: string, id: string } | { __typename: 'Convention', name: string, id: string } | { __typename: 'EventCategory', name: string, default_color?: string | null | undefined, id: string }, role: { __typename: 'OrganizationRole', name: string, id: string } | { __typename: 'StaffPosition', name: string, id: string } }> } } };
+export type UpdateStaffPositionMutationData = { __typename: 'Mutation', updateStaffPosition: { __typename: 'UpdateStaffPositionPayload', staff_position: { __typename: 'StaffPosition', id: string, name: string, email?: string | null | undefined, visible?: boolean | null | undefined, email_aliases: Array<string>, cc_addresses: Array<string>, user_con_profiles: Array<{ __typename: 'UserConProfile', id: string, name_without_nickname: string, gravatar_url: string, gravatar_enabled: boolean }>, permissions: Array<{ __typename: 'Permission', id: string, permission: string, model: { __typename: 'CmsContentGroup', id: string, name: string } | { __typename: 'Convention', id: string, name: string } | { __typename: 'EventCategory', id: string, name: string, default_color?: string | null | undefined }, role: { __typename: 'OrganizationRole', id: string, name: string } | { __typename: 'StaffPosition', id: string, name: string } }> } } };
 
 export type UpdateStaffPositionPermissionsMutationVariables = Types.Exact<{
   staffPositionId: Types.Scalars['ID'];
@@ -26,7 +26,7 @@ export type UpdateStaffPositionPermissionsMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateStaffPositionPermissionsMutationData = { __typename: 'Mutation', updateStaffPositionPermissions: { __typename: 'UpdateStaffPositionPermissionsPayload', staff_position: { __typename: 'StaffPosition', name: string, email?: string | null | undefined, visible?: boolean | null | undefined, email_aliases: Array<string>, cc_addresses: Array<string>, id: string, user_con_profiles: Array<{ __typename: 'UserConProfile', name_without_nickname: string, gravatar_url: string, gravatar_enabled: boolean, id: string }>, permissions: Array<{ __typename: 'Permission', permission: string, id: string, model: { __typename: 'CmsContentGroup', name: string, id: string } | { __typename: 'Convention', name: string, id: string } | { __typename: 'EventCategory', name: string, default_color?: string | null | undefined, id: string }, role: { __typename: 'OrganizationRole', name: string, id: string } | { __typename: 'StaffPosition', name: string, id: string } }> } } };
+export type UpdateStaffPositionPermissionsMutationData = { __typename: 'Mutation', updateStaffPositionPermissions: { __typename: 'UpdateStaffPositionPermissionsPayload', staff_position: { __typename: 'StaffPosition', id: string, name: string, email?: string | null | undefined, visible?: boolean | null | undefined, email_aliases: Array<string>, cc_addresses: Array<string>, user_con_profiles: Array<{ __typename: 'UserConProfile', id: string, name_without_nickname: string, gravatar_url: string, gravatar_enabled: boolean }>, permissions: Array<{ __typename: 'Permission', id: string, permission: string, model: { __typename: 'CmsContentGroup', id: string, name: string } | { __typename: 'Convention', id: string, name: string } | { __typename: 'EventCategory', id: string, name: string, default_color?: string | null | undefined }, role: { __typename: 'OrganizationRole', id: string, name: string } | { __typename: 'StaffPosition', id: string, name: string } }> } } };
 
 export type DeleteStaffPositionMutationVariables = Types.Exact<{
   input: Types.DeleteStaffPositionInput;
@@ -40,7 +40,7 @@ export const CreateStaffPositionDocument = gql`
     mutation CreateStaffPosition($input: CreateStaffPositionInput!) {
   createStaffPosition(input: $input) {
     staff_position {
-      id: transitionalId
+      id
       ...StaffPositionFields
     }
   }
@@ -76,7 +76,7 @@ export const UpdateStaffPositionDocument = gql`
     mutation UpdateStaffPosition($input: UpdateStaffPositionInput!) {
   updateStaffPosition(input: $input) {
     staff_position {
-      id: transitionalId
+      id
       ...StaffPositionFields
     }
   }
@@ -114,7 +114,7 @@ export const UpdateStaffPositionPermissionsDocument = gql`
     input: {transitionalStaffPositionId: $staffPositionId, grant_permissions: $grantPermissions, revoke_permissions: $revokePermissions}
   ) {
     staff_position {
-      id: transitionalId
+      id
       ...StaffPositionFields
     }
   }
@@ -152,7 +152,7 @@ export const DeleteStaffPositionDocument = gql`
     mutation DeleteStaffPosition($input: DeleteStaffPositionInput!) {
   deleteStaffPosition(input: $input) {
     staff_position {
-      id: transitionalId
+      id
     }
   }
 }

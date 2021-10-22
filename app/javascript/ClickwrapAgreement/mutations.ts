@@ -4,7 +4,7 @@ export const AcceptClickwrapAgreement = gql`
   mutation AcceptClickwrapAgreement {
     acceptClickwrapAgreement(input: {}) {
       my_profile {
-        id: transitionalId
+        id
         accepted_clickwrap_agreement
       }
     }

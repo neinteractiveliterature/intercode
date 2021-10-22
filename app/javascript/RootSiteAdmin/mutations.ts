@@ -13,7 +13,7 @@ export const UpdateRootSite = gql`
       }
     ) {
       root_site {
-        id: transitionalId
+        id
         ...RootSiteFields
       }
     }

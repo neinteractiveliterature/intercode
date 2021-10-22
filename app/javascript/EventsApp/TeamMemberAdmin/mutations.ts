@@ -5,7 +5,7 @@ export const CreateTeamMember = gql`
   mutation CreateTeamMember($input: CreateTeamMemberInput!) {
     createTeamMember(input: $input) {
       team_member {
-        id: transitionalId
+        id
         ...TeamMemberFields
       }
     }
@@ -18,7 +18,7 @@ export const DeleteTeamMember = gql`
   mutation DeleteTeamMember($input: DeleteTeamMemberInput!) {
     deleteTeamMember(input: $input) {
       team_member {
-        id: transitionalId
+        id
         ...TeamMemberFieldsWithoutPersonalInfo
       }
     }
@@ -31,7 +31,7 @@ export const UpdateTeamMember = gql`
   mutation UpdateTeamMember($input: UpdateTeamMemberInput!) {
     updateTeamMember(input: $input) {
       team_member {
-        id: transitionalId
+        id
         ...TeamMemberFieldsWithoutPersonalInfo
       }
     }
@@ -50,7 +50,7 @@ export const ProvideEventTicket = gql`
       }
     ) {
       ticket {
-        id: transitionalId
+        id
         ...TeamMemberTicketFields
       }
     }

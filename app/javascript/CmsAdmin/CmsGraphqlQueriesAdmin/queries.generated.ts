@@ -4,16 +4,16 @@ import * as Types from '../../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type CmsGraphqlQueryFieldsFragment = { __typename: 'CmsGraphqlQuery', identifier: string, query: string, admin_notes?: string | null | undefined, current_ability_can_update: boolean, current_ability_can_delete: boolean, id: string };
+export type CmsGraphqlQueryFieldsFragment = { __typename: 'CmsGraphqlQuery', id: string, identifier: string, query: string, admin_notes?: string | null | undefined, current_ability_can_update: boolean, current_ability_can_delete: boolean };
 
 export type CmsGraphqlQueriesQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type CmsGraphqlQueriesQueryData = { __typename: 'Query', cmsParent: { __typename: 'Convention', id: string, cmsGraphqlQueries: Array<{ __typename: 'CmsGraphqlQuery', identifier: string, query: string, admin_notes?: string | null | undefined, current_ability_can_update: boolean, current_ability_can_delete: boolean, id: string }> } | { __typename: 'RootSite', id: string, cmsGraphqlQueries: Array<{ __typename: 'CmsGraphqlQuery', identifier: string, query: string, admin_notes?: string | null | undefined, current_ability_can_update: boolean, current_ability_can_delete: boolean, id: string }> }, currentAbility: { __typename: 'Ability', can_create_cms_graphql_queries: boolean } };
+export type CmsGraphqlQueriesQueryData = { __typename: 'Query', cmsParent: { __typename: 'Convention', id: string, cmsGraphqlQueries: Array<{ __typename: 'CmsGraphqlQuery', id: string, identifier: string, query: string, admin_notes?: string | null | undefined, current_ability_can_update: boolean, current_ability_can_delete: boolean }> } | { __typename: 'RootSite', id: string, cmsGraphqlQueries: Array<{ __typename: 'CmsGraphqlQuery', id: string, identifier: string, query: string, admin_notes?: string | null | undefined, current_ability_can_update: boolean, current_ability_can_delete: boolean }> }, currentAbility: { __typename: 'Ability', can_create_cms_graphql_queries: boolean } };
 
 export const CmsGraphqlQueryFieldsFragmentDoc = gql`
     fragment CmsGraphqlQueryFields on CmsGraphqlQuery {
-  id: transitionalId
+  id
   identifier
   query
   admin_notes
@@ -24,9 +24,9 @@ export const CmsGraphqlQueryFieldsFragmentDoc = gql`
 export const CmsGraphqlQueriesQueryDocument = gql`
     query CmsGraphqlQueriesQuery {
   cmsParent: cmsParentByRequestHost {
-    id: transitionalId
+    id
     cmsGraphqlQueries {
-      id: transitionalId
+      id
       ...CmsGraphqlQueryFields
     }
   }

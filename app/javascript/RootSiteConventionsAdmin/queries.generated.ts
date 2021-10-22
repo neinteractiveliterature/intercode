@@ -11,25 +11,25 @@ export type RootSiteConventionsAdminTableQueryVariables = Types.Exact<{
 }>;
 
 
-export type RootSiteConventionsAdminTableQueryData = { __typename: 'Query', conventions_paginated: { __typename: 'ConventionsPagination', total_entries: number, total_pages: number, entries: Array<{ __typename: 'Convention', name: string, starts_at?: string | null | undefined, ends_at?: string | null | undefined, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, id: string, organization?: { __typename: 'Organization', name: string, id: string } | null | undefined }> } };
+export type RootSiteConventionsAdminTableQueryData = { __typename: 'Query', conventions_paginated: { __typename: 'ConventionsPagination', total_entries: number, total_pages: number, entries: Array<{ __typename: 'Convention', id: string, name: string, starts_at?: string | null | undefined, ends_at?: string | null | undefined, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, organization?: { __typename: 'Organization', id: string, name: string } | null | undefined }> } };
 
-export type ConventionDisplayFieldsFragment = { __typename: 'Convention', name: string, starts_at?: string | null | undefined, ends_at?: string | null | undefined, canceled: boolean, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, domain?: string | null | undefined, site_mode: Types.SiteMode, ticket_mode: Types.TicketMode, show_event_list?: Types.ShowSchedule | null | undefined, show_schedule?: Types.ShowSchedule | null | undefined, email_from: string, hidden: boolean, language: string, id: string, maximum_event_signups?: { __typename: 'ScheduledValue', timespans: Array<{ __typename: 'TimespanWithValue', start?: string | null | undefined, finish?: string | null | undefined, value: string }> } | null | undefined, organization?: { __typename: 'Organization', name: string, id: string } | null | undefined };
+export type ConventionDisplayFieldsFragment = { __typename: 'Convention', id: string, name: string, starts_at?: string | null | undefined, ends_at?: string | null | undefined, canceled: boolean, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, domain?: string | null | undefined, site_mode: Types.SiteMode, ticket_mode: Types.TicketMode, show_event_list?: Types.ShowSchedule | null | undefined, show_schedule?: Types.ShowSchedule | null | undefined, email_from: string, hidden: boolean, language: string, maximum_event_signups?: { __typename: 'ScheduledValue', timespans: Array<{ __typename: 'TimespanWithValue', start?: string | null | undefined, finish?: string | null | undefined, value: string }> } | null | undefined, organization?: { __typename: 'Organization', id: string, name: string } | null | undefined };
 
 export type ConventionDisplayQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type ConventionDisplayQueryData = { __typename: 'Query', convention: { __typename: 'Convention', name: string, starts_at?: string | null | undefined, ends_at?: string | null | undefined, canceled: boolean, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, domain?: string | null | undefined, site_mode: Types.SiteMode, ticket_mode: Types.TicketMode, show_event_list?: Types.ShowSchedule | null | undefined, show_schedule?: Types.ShowSchedule | null | undefined, email_from: string, hidden: boolean, language: string, id: string, maximum_event_signups?: { __typename: 'ScheduledValue', timespans: Array<{ __typename: 'TimespanWithValue', start?: string | null | undefined, finish?: string | null | undefined, value: string }> } | null | undefined, organization?: { __typename: 'Organization', name: string, id: string } | null | undefined } };
+export type ConventionDisplayQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, starts_at?: string | null | undefined, ends_at?: string | null | undefined, canceled: boolean, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, domain?: string | null | undefined, site_mode: Types.SiteMode, ticket_mode: Types.TicketMode, show_event_list?: Types.ShowSchedule | null | undefined, show_schedule?: Types.ShowSchedule | null | undefined, email_from: string, hidden: boolean, language: string, maximum_event_signups?: { __typename: 'ScheduledValue', timespans: Array<{ __typename: 'TimespanWithValue', start?: string | null | undefined, finish?: string | null | undefined, value: string }> } | null | undefined, organization?: { __typename: 'Organization', id: string, name: string } | null | undefined } };
 
 export type NewConventionModalQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type NewConventionModalQueryData = { __typename: 'Query', organizations: Array<{ __typename: 'Organization', name: string, id: string }> };
+export type NewConventionModalQueryData = { __typename: 'Query', organizations: Array<{ __typename: 'Organization', id: string, name: string }> };
 
 export const ConventionDisplayFieldsFragmentDoc = gql`
     fragment ConventionDisplayFields on Convention {
-  id: transitionalId
+  id
   name
   starts_at
   ends_at
@@ -52,7 +52,7 @@ export const ConventionDisplayFieldsFragmentDoc = gql`
     }
   }
   organization {
-    id: transitionalId
+    id
     name
   }
 }
@@ -63,14 +63,14 @@ export const RootSiteConventionsAdminTableQueryDocument = gql`
     total_entries
     total_pages
     entries {
-      id: transitionalId
+      id
       name
       starts_at
       ends_at
       timezone_name
       timezone_mode
       organization {
-        id: transitionalId
+        id
         name
       }
     }
@@ -109,8 +109,8 @@ export type RootSiteConventionsAdminTableQueryLazyQueryHookResult = ReturnType<t
 export type RootSiteConventionsAdminTableQueryQueryResult = Apollo.QueryResult<RootSiteConventionsAdminTableQueryData, RootSiteConventionsAdminTableQueryVariables>;
 export const ConventionDisplayQueryDocument = gql`
     query ConventionDisplayQuery($id: ID!) {
-  convention: conventionById(transitionalId: $id) {
-    id: transitionalId
+  convention: conventionById(id: $id) {
+    id
     ...ConventionDisplayFields
   }
 }
@@ -146,7 +146,7 @@ export type ConventionDisplayQueryQueryResult = Apollo.QueryResult<ConventionDis
 export const NewConventionModalQueryDocument = gql`
     query NewConventionModalQuery {
   organizations {
-    id: transitionalId
+    id
     name
   }
 }

@@ -4,7 +4,7 @@ import { CommonFormFields } from '../Models/commonFormFragments';
 export const MyProfileQuery = gql`
   query MyProfileQuery {
     convention: conventionByRequestHost {
-      id: transitionalId
+      id
       name
       starts_at
       ends_at
@@ -12,7 +12,7 @@ export const MyProfileQuery = gql`
       timezone_mode
 
       my_profile {
-        id: transitionalId
+        id
         email
         form_response_attrs_json
         can_have_bio
@@ -27,13 +27,13 @@ export const MyProfileQuery = gql`
       }
 
       user_con_profile_form {
-        id: transitionalId
+        id
         ...CommonFormFields
 
         form_sections {
-          id: transitionalId
+          id
           form_items {
-            id: transitionalId
+            id
             admin_description
           }
         }

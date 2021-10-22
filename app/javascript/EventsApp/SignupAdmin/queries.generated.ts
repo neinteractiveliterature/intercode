@@ -5,23 +5,23 @@ import { gql } from '@apollo/client';
 import { CommonConventionDataFragmentDoc } from '../queries.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type SignupFieldsFragment = { __typename: 'Signup', state: Types.SignupState, counted: boolean, bucket_key?: string | null | undefined, requested_bucket_key?: string | null | undefined, id: string, run: { __typename: 'Run', title_suffix?: string | null | undefined, starts_at: string, ends_at: string, id: string, rooms: Array<{ __typename: 'Room', name?: string | null | undefined, id: string }>, event: { __typename: 'Event', title?: string | null | undefined, id: string, event_category: { __typename: 'EventCategory', team_member_name: string, id: string }, registration_policy?: { __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null | undefined, anything: boolean }> } | null | undefined, team_members: Array<{ __typename: 'TeamMember', id: string, user_con_profile: { __typename: 'UserConProfile', id: string } }> } }, user_con_profile: { __typename: 'UserConProfile', name_without_nickname: string, nickname?: string | null | undefined, birth_date?: string | null | undefined, email?: string | null | undefined, address?: string | null | undefined, city?: string | null | undefined, state?: string | null | undefined, zipcode?: string | null | undefined, country?: string | null | undefined, mobile_phone?: string | null | undefined, gravatar_enabled: boolean, gravatar_url: string, id: string } };
+export type SignupFieldsFragment = { __typename: 'Signup', id: string, state: Types.SignupState, counted: boolean, bucket_key?: string | null | undefined, requested_bucket_key?: string | null | undefined, run: { __typename: 'Run', id: string, title_suffix?: string | null | undefined, starts_at: string, ends_at: string, rooms: Array<{ __typename: 'Room', id: string, name?: string | null | undefined }>, event: { __typename: 'Event', id: string, title?: string | null | undefined, event_category: { __typename: 'EventCategory', id: string, team_member_name: string }, registration_policy?: { __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null | undefined, anything: boolean }> } | null | undefined, team_members: Array<{ __typename: 'TeamMember', id: string, user_con_profile: { __typename: 'UserConProfile', id: string } }> } }, user_con_profile: { __typename: 'UserConProfile', id: string, name_without_nickname: string, nickname?: string | null | undefined, birth_date?: string | null | undefined, email?: string | null | undefined, address?: string | null | undefined, city?: string | null | undefined, state?: string | null | undefined, zipcode?: string | null | undefined, country?: string | null | undefined, mobile_phone?: string | null | undefined, gravatar_enabled: boolean, gravatar_url: string } };
 
-export type UserConProfileSignupsFragment = { __typename: 'UserConProfile', id: string, signups: Array<{ __typename: 'Signup', state: Types.SignupState, counted: boolean, bucket_key?: string | null | undefined, requested_bucket_key?: string | null | undefined, id: string, user_con_profile: { __typename: 'UserConProfile', id: string }, run: { __typename: 'Run', starts_at: string, id: string, event: { __typename: 'Event', title?: string | null | undefined, length_seconds: number, id: string, event_category: { __typename: 'EventCategory', team_member_name: string, id: string }, registration_policy?: { __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null | undefined }> } | null | undefined, team_members: Array<{ __typename: 'TeamMember', id: string, user_con_profile: { __typename: 'UserConProfile', id: string } }> }, rooms: Array<{ __typename: 'Room', name?: string | null | undefined, id: string }> } }> };
+export type UserConProfileSignupsFragment = { __typename: 'UserConProfile', id: string, signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState, counted: boolean, bucket_key?: string | null | undefined, requested_bucket_key?: string | null | undefined, user_con_profile: { __typename: 'UserConProfile', id: string }, run: { __typename: 'Run', id: string, starts_at: string, event: { __typename: 'Event', id: string, title?: string | null | undefined, length_seconds: number, event_category: { __typename: 'EventCategory', id: string, team_member_name: string }, registration_policy?: { __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null | undefined }> } | null | undefined, team_members: Array<{ __typename: 'TeamMember', id: string, user_con_profile: { __typename: 'UserConProfile', id: string } }> }, rooms: Array<{ __typename: 'Room', id: string, name?: string | null | undefined }> } }> };
 
 export type SignupAdminEventQueryVariables = Types.Exact<{
   eventId: Types.Scalars['ID'];
 }>;
 
 
-export type SignupAdminEventQueryData = { __typename: 'Query', convention: { __typename: 'Convention', name: string, starts_at?: string | null | undefined, ends_at?: string | null | undefined, site_mode: Types.SiteMode, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, id: string, event: { __typename: 'Event', title?: string | null | undefined, id: string }, event_categories: Array<{ __typename: 'EventCategory', name: string, scheduling_ui: Types.SchedulingUi, default_color?: string | null | undefined, full_color?: string | null | undefined, signed_up_color?: string | null | undefined, id: string }> } };
+export type SignupAdminEventQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, starts_at?: string | null | undefined, ends_at?: string | null | undefined, site_mode: Types.SiteMode, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, event: { __typename: 'Event', id: string, title?: string | null | undefined }, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, scheduling_ui: Types.SchedulingUi, default_color?: string | null | undefined, full_color?: string | null | undefined, signed_up_color?: string | null | undefined }> } };
 
 export type AdminSignupQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type AdminSignupQueryData = { __typename: 'Query', convention: { __typename: 'Convention', name: string, starts_at?: string | null | undefined, ends_at?: string | null | undefined, site_mode: Types.SiteMode, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, id: string, signup: { __typename: 'Signup', state: Types.SignupState, counted: boolean, bucket_key?: string | null | undefined, requested_bucket_key?: string | null | undefined, id: string, run: { __typename: 'Run', title_suffix?: string | null | undefined, starts_at: string, ends_at: string, id: string, rooms: Array<{ __typename: 'Room', name?: string | null | undefined, id: string }>, event: { __typename: 'Event', title?: string | null | undefined, id: string, event_category: { __typename: 'EventCategory', team_member_name: string, id: string }, registration_policy?: { __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null | undefined, anything: boolean }> } | null | undefined, team_members: Array<{ __typename: 'TeamMember', id: string, user_con_profile: { __typename: 'UserConProfile', id: string } }> } }, user_con_profile: { __typename: 'UserConProfile', name_without_nickname: string, nickname?: string | null | undefined, birth_date?: string | null | undefined, email?: string | null | undefined, address?: string | null | undefined, city?: string | null | undefined, state?: string | null | undefined, zipcode?: string | null | undefined, country?: string | null | undefined, mobile_phone?: string | null | undefined, gravatar_enabled: boolean, gravatar_url: string, id: string } }, event_categories: Array<{ __typename: 'EventCategory', name: string, scheduling_ui: Types.SchedulingUi, default_color?: string | null | undefined, full_color?: string | null | undefined, signed_up_color?: string | null | undefined, id: string }> }, currentAbility: { __typename: 'Ability', can_update_bucket_signup: boolean, can_force_confirm_signup: boolean, can_update_counted_signup: boolean } };
+export type AdminSignupQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, starts_at?: string | null | undefined, ends_at?: string | null | undefined, site_mode: Types.SiteMode, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, signup: { __typename: 'Signup', id: string, state: Types.SignupState, counted: boolean, bucket_key?: string | null | undefined, requested_bucket_key?: string | null | undefined, run: { __typename: 'Run', id: string, title_suffix?: string | null | undefined, starts_at: string, ends_at: string, rooms: Array<{ __typename: 'Room', id: string, name?: string | null | undefined }>, event: { __typename: 'Event', id: string, title?: string | null | undefined, event_category: { __typename: 'EventCategory', id: string, team_member_name: string }, registration_policy?: { __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null | undefined, anything: boolean }> } | null | undefined, team_members: Array<{ __typename: 'TeamMember', id: string, user_con_profile: { __typename: 'UserConProfile', id: string } }> } }, user_con_profile: { __typename: 'UserConProfile', id: string, name_without_nickname: string, nickname?: string | null | undefined, birth_date?: string | null | undefined, email?: string | null | undefined, address?: string | null | undefined, city?: string | null | undefined, state?: string | null | undefined, zipcode?: string | null | undefined, country?: string | null | undefined, mobile_phone?: string | null | undefined, gravatar_enabled: boolean, gravatar_url: string } }, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, scheduling_ui: Types.SchedulingUi, default_color?: string | null | undefined, full_color?: string | null | undefined, signed_up_color?: string | null | undefined }> }, currentAbility: { __typename: 'Ability', can_update_bucket_signup: boolean, can_force_confirm_signup: boolean, can_update_counted_signup: boolean } };
 
 export type RunSignupsTableSignupsQueryVariables = Types.Exact<{
   eventId: Types.Scalars['ID'];
@@ -33,7 +33,7 @@ export type RunSignupsTableSignupsQueryVariables = Types.Exact<{
 }>;
 
 
-export type RunSignupsTableSignupsQueryData = { __typename: 'Query', convention: { __typename: 'Convention', name: string, id: string, event: { __typename: 'Event', title?: string | null | undefined, id: string, event_category: { __typename: 'EventCategory', team_member_name: string, id: string }, team_members: Array<{ __typename: 'TeamMember', id: string, user_con_profile: { __typename: 'UserConProfile', id: string } }>, registration_policy?: { __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null | undefined }> } | null | undefined, run: { __typename: 'Run', id: string, signups_paginated: { __typename: 'SignupsPagination', total_entries: number, total_pages: number, current_page: number, per_page: number, entries: Array<{ __typename: 'Signup', state: Types.SignupState, counted: boolean, bucket_key?: string | null | undefined, requested_bucket_key?: string | null | undefined, age_restrictions_check: string, id: string, run: { __typename: 'Run', starts_at: string, id: string }, user_con_profile: { __typename: 'UserConProfile', name_inverted: string, name_without_nickname: string, gravatar_enabled: boolean, gravatar_url: string, email?: string | null | undefined, birth_date?: string | null | undefined, id: string } }> } } } } };
+export type RunSignupsTableSignupsQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, event: { __typename: 'Event', id: string, title?: string | null | undefined, event_category: { __typename: 'EventCategory', id: string, team_member_name: string }, team_members: Array<{ __typename: 'TeamMember', id: string, user_con_profile: { __typename: 'UserConProfile', id: string } }>, registration_policy?: { __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null | undefined }> } | null | undefined, run: { __typename: 'Run', id: string, signups_paginated: { __typename: 'SignupsPagination', total_entries: number, total_pages: number, current_page: number, per_page: number, entries: Array<{ __typename: 'Signup', id: string, state: Types.SignupState, counted: boolean, bucket_key?: string | null | undefined, requested_bucket_key?: string | null | undefined, age_restrictions_check: string, run: { __typename: 'Run', id: string, starts_at: string }, user_con_profile: { __typename: 'UserConProfile', id: string, name_inverted: string, name_without_nickname: string, gravatar_enabled: boolean, gravatar_url: string, email?: string | null | undefined, birth_date?: string | null | undefined } }> } } } } };
 
 export type RunHeaderRunInfoQueryVariables = Types.Exact<{
   eventId: Types.Scalars['ID'];
@@ -41,7 +41,7 @@ export type RunHeaderRunInfoQueryVariables = Types.Exact<{
 }>;
 
 
-export type RunHeaderRunInfoQueryData = { __typename: 'Query', convention: { __typename: 'Convention', name: string, starts_at?: string | null | undefined, ends_at?: string | null | undefined, site_mode: Types.SiteMode, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, id: string, event: { __typename: 'Event', title?: string | null | undefined, length_seconds: number, id: string, registration_policy?: { __typename: 'RegistrationPolicy', total_slots?: number | null | undefined, slots_limited?: boolean | null | undefined, buckets: Array<{ __typename: 'RegistrationPolicyBucket', name?: string | null | undefined, total_slots?: number | null | undefined }> } | null | undefined, run: { __typename: 'Run', starts_at: string, title_suffix?: string | null | undefined, id: string } }, event_categories: Array<{ __typename: 'EventCategory', name: string, scheduling_ui: Types.SchedulingUi, default_color?: string | null | undefined, full_color?: string | null | undefined, signed_up_color?: string | null | undefined, id: string }> } };
+export type RunHeaderRunInfoQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, starts_at?: string | null | undefined, ends_at?: string | null | undefined, site_mode: Types.SiteMode, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, event: { __typename: 'Event', id: string, title?: string | null | undefined, length_seconds: number, registration_policy?: { __typename: 'RegistrationPolicy', total_slots?: number | null | undefined, slots_limited?: boolean | null | undefined, buckets: Array<{ __typename: 'RegistrationPolicyBucket', name?: string | null | undefined, total_slots?: number | null | undefined }> } | null | undefined, run: { __typename: 'Run', id: string, starts_at: string, title_suffix?: string | null | undefined } }, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, scheduling_ui: Types.SchedulingUi, default_color?: string | null | undefined, full_color?: string | null | undefined, signed_up_color?: string | null | undefined }> } };
 
 export type RunSignupSummaryQueryVariables = Types.Exact<{
   eventId: Types.Scalars['ID'];
@@ -49,14 +49,14 @@ export type RunSignupSummaryQueryVariables = Types.Exact<{
 }>;
 
 
-export type RunSignupSummaryQueryData = { __typename: 'Query', convention: { __typename: 'Convention', name: string, starts_at?: string | null | undefined, ends_at?: string | null | undefined, site_mode: Types.SiteMode, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, id: string, event: { __typename: 'Event', title?: string | null | undefined, id: string, event_category: { __typename: 'EventCategory', team_member_name: string, id: string }, registration_policy?: { __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null | undefined, expose_attendees: boolean }> } | null | undefined, team_members: Array<{ __typename: 'TeamMember', id: string, user_con_profile: { __typename: 'UserConProfile', id: string } }>, runs: Array<{ __typename: 'Run', starts_at: string, id: string }>, run: { __typename: 'Run', id: string, signups_paginated: { __typename: 'SignupsPagination', entries: Array<{ __typename: 'Signup', state: Types.SignupState, bucket_key?: string | null | undefined, waitlist_position?: number | null | undefined, id: string, user_con_profile: { __typename: 'UserConProfile', name_inverted: string, gravatar_enabled: boolean, gravatar_url: string, id: string } }> } } }, event_categories: Array<{ __typename: 'EventCategory', name: string, scheduling_ui: Types.SchedulingUi, default_color?: string | null | undefined, full_color?: string | null | undefined, signed_up_color?: string | null | undefined, id: string }> }, currentAbility: { __typename: 'Ability', can_read_schedule: boolean } };
+export type RunSignupSummaryQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, starts_at?: string | null | undefined, ends_at?: string | null | undefined, site_mode: Types.SiteMode, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, event: { __typename: 'Event', id: string, title?: string | null | undefined, event_category: { __typename: 'EventCategory', id: string, team_member_name: string }, registration_policy?: { __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null | undefined, expose_attendees: boolean }> } | null | undefined, team_members: Array<{ __typename: 'TeamMember', id: string, user_con_profile: { __typename: 'UserConProfile', id: string } }>, runs: Array<{ __typename: 'Run', id: string, starts_at: string }>, run: { __typename: 'Run', id: string, signups_paginated: { __typename: 'SignupsPagination', entries: Array<{ __typename: 'Signup', id: string, state: Types.SignupState, bucket_key?: string | null | undefined, waitlist_position?: number | null | undefined, user_con_profile: { __typename: 'UserConProfile', id: string, name_inverted: string, gravatar_enabled: boolean, gravatar_url: string } }> } } }, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, scheduling_ui: Types.SchedulingUi, default_color?: string | null | undefined, full_color?: string | null | undefined, signed_up_color?: string | null | undefined }> }, currentAbility: { __typename: 'Ability', can_read_schedule: boolean } };
 
 export type UserConProfileSignupsQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type UserConProfileSignupsQueryData = { __typename: 'Query', convention: { __typename: 'Convention', name: string, starts_at?: string | null | undefined, ends_at?: string | null | undefined, site_mode: Types.SiteMode, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, id: string, my_profile?: { __typename: 'UserConProfile', id: string, ability?: { __typename: 'Ability', can_withdraw_all_user_con_profile_signups: boolean } | null | undefined } | null | undefined, user_con_profile: { __typename: 'UserConProfile', name_without_nickname: string, ical_secret?: string | null | undefined, id: string, team_members: Array<{ __typename: 'TeamMember', id: string, event: { __typename: 'Event', title?: string | null | undefined, status?: string | null | undefined, id: string } }>, signups: Array<{ __typename: 'Signup', state: Types.SignupState, counted: boolean, bucket_key?: string | null | undefined, requested_bucket_key?: string | null | undefined, id: string, user_con_profile: { __typename: 'UserConProfile', id: string }, run: { __typename: 'Run', starts_at: string, id: string, event: { __typename: 'Event', title?: string | null | undefined, length_seconds: number, id: string, event_category: { __typename: 'EventCategory', team_member_name: string, id: string }, registration_policy?: { __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null | undefined }> } | null | undefined, team_members: Array<{ __typename: 'TeamMember', id: string, user_con_profile: { __typename: 'UserConProfile', id: string } }> }, rooms: Array<{ __typename: 'Room', name?: string | null | undefined, id: string }> } }> }, event_categories: Array<{ __typename: 'EventCategory', name: string, scheduling_ui: Types.SchedulingUi, default_color?: string | null | undefined, full_color?: string | null | undefined, signed_up_color?: string | null | undefined, id: string }> } };
+export type UserConProfileSignupsQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, starts_at?: string | null | undefined, ends_at?: string | null | undefined, site_mode: Types.SiteMode, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, my_profile?: { __typename: 'UserConProfile', id: string, ability?: { __typename: 'Ability', can_withdraw_all_user_con_profile_signups: boolean } | null | undefined } | null | undefined, user_con_profile: { __typename: 'UserConProfile', id: string, name_without_nickname: string, ical_secret?: string | null | undefined, team_members: Array<{ __typename: 'TeamMember', id: string, event: { __typename: 'Event', id: string, title?: string | null | undefined, status?: string | null | undefined } }>, signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState, counted: boolean, bucket_key?: string | null | undefined, requested_bucket_key?: string | null | undefined, user_con_profile: { __typename: 'UserConProfile', id: string }, run: { __typename: 'Run', id: string, starts_at: string, event: { __typename: 'Event', id: string, title?: string | null | undefined, length_seconds: number, event_category: { __typename: 'EventCategory', id: string, team_member_name: string }, registration_policy?: { __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null | undefined }> } | null | undefined, team_members: Array<{ __typename: 'TeamMember', id: string, user_con_profile: { __typename: 'UserConProfile', id: string } }> }, rooms: Array<{ __typename: 'Room', id: string, name?: string | null | undefined }> } }> }, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, scheduling_ui: Types.SchedulingUi, default_color?: string | null | undefined, full_color?: string | null | undefined, signed_up_color?: string | null | undefined }> } };
 
 export type RunSignupChangesQueryVariables = Types.Exact<{
   runId: Types.Scalars['ID'];
@@ -67,29 +67,29 @@ export type RunSignupChangesQueryVariables = Types.Exact<{
 }>;
 
 
-export type RunSignupChangesQueryData = { __typename: 'Query', convention: { __typename: 'Convention', timezone_name?: string | null | undefined, id: string, run: { __typename: 'Run', id: string, event: { __typename: 'Event', title?: string | null | undefined, id: string }, signup_changes_paginated: { __typename: 'SignupChangesPagination', total_entries: number, total_pages: number, current_page: number, per_page: number, entries: Array<{ __typename: 'SignupChange', state: Types.SignupState, counted: boolean, bucket_key?: string | null | undefined, action: Types.SignupChangeAction, created_at: string, id: string, previous_signup_change?: { __typename: 'SignupChange', state: Types.SignupState, counted: boolean, bucket_key?: string | null | undefined, id: string } | null | undefined, run: { __typename: 'Run', id: string, event: { __typename: 'Event', title?: string | null | undefined, id: string, event_category: { __typename: 'EventCategory', team_member_name: string, id: string }, registration_policy?: { __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null | undefined, anything: boolean }> } | null | undefined, team_members: Array<{ __typename: 'TeamMember', id: string, user_con_profile: { __typename: 'UserConProfile', id: string } }> } }, user_con_profile: { __typename: 'UserConProfile', name_inverted: string, gravatar_enabled: boolean, gravatar_url: string, id: string } }> } } } };
+export type RunSignupChangesQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, timezone_name?: string | null | undefined, run: { __typename: 'Run', id: string, event: { __typename: 'Event', id: string, title?: string | null | undefined }, signup_changes_paginated: { __typename: 'SignupChangesPagination', total_entries: number, total_pages: number, current_page: number, per_page: number, entries: Array<{ __typename: 'SignupChange', id: string, state: Types.SignupState, counted: boolean, bucket_key?: string | null | undefined, action: Types.SignupChangeAction, created_at: string, previous_signup_change?: { __typename: 'SignupChange', id: string, state: Types.SignupState, counted: boolean, bucket_key?: string | null | undefined } | null | undefined, run: { __typename: 'Run', id: string, event: { __typename: 'Event', id: string, title?: string | null | undefined, event_category: { __typename: 'EventCategory', id: string, team_member_name: string }, registration_policy?: { __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null | undefined, anything: boolean }> } | null | undefined, team_members: Array<{ __typename: 'TeamMember', id: string, user_con_profile: { __typename: 'UserConProfile', id: string } }> } }, user_con_profile: { __typename: 'UserConProfile', id: string, name_inverted: string, gravatar_enabled: boolean, gravatar_url: string } }> } } } };
 
 export const SignupFieldsFragmentDoc = gql`
     fragment SignupFields on Signup {
-  id: transitionalId
+  id
   state
   counted
   bucket_key
   requested_bucket_key
   run {
-    id: transitionalId
+    id
     title_suffix
     starts_at
     ends_at
     rooms {
-      id: transitionalId
+      id
       name
     }
     event {
-      id: transitionalId
+      id
       title
       event_category {
-        id: transitionalId
+        id
         team_member_name
       }
       registration_policy {
@@ -100,15 +100,15 @@ export const SignupFieldsFragmentDoc = gql`
         }
       }
       team_members {
-        id: transitionalId
+        id
         user_con_profile {
-          id: transitionalId
+          id
         }
       }
     }
   }
   user_con_profile {
-    id: transitionalId
+    id
     name_without_nickname
     nickname
     birth_date
@@ -126,25 +126,25 @@ export const SignupFieldsFragmentDoc = gql`
     `;
 export const UserConProfileSignupsFragmentDoc = gql`
     fragment UserConProfileSignupsFragment on UserConProfile {
-  id: transitionalId
+  id
   signups {
-    id: transitionalId
+    id
     state
     counted
     bucket_key
     requested_bucket_key
     user_con_profile {
-      id: transitionalId
+      id
     }
     run {
-      id: transitionalId
+      id
       starts_at
       event {
-        id: transitionalId
+        id
         title
         length_seconds
         event_category {
-          id: transitionalId
+          id
           team_member_name
         }
         registration_policy {
@@ -154,14 +154,14 @@ export const UserConProfileSignupsFragmentDoc = gql`
           }
         }
         team_members {
-          id: transitionalId
+          id
           user_con_profile {
-            id: transitionalId
+            id
           }
         }
       }
       rooms {
-        id: transitionalId
+        id
         name
       }
     }
@@ -171,10 +171,10 @@ export const UserConProfileSignupsFragmentDoc = gql`
 export const SignupAdminEventQueryDocument = gql`
     query SignupAdminEventQuery($eventId: ID!) {
   convention: conventionByRequestHost {
-    id: transitionalId
+    id
     ...CommonConventionData
     event(transitionalId: $eventId) {
-      id: transitionalId
+      id
       title
     }
   }
@@ -211,10 +211,10 @@ export type SignupAdminEventQueryQueryResult = Apollo.QueryResult<SignupAdminEve
 export const AdminSignupQueryDocument = gql`
     query AdminSignupQuery($id: ID!) {
   convention: conventionByRequestHost {
-    id: transitionalId
+    id
     ...CommonConventionData
     signup(transitionalId: $id) {
-      id: transitionalId
+      id
       ...SignupFields
     }
   }
@@ -257,19 +257,19 @@ export type AdminSignupQueryQueryResult = Apollo.QueryResult<AdminSignupQueryDat
 export const RunSignupsTableSignupsQueryDocument = gql`
     query RunSignupsTableSignupsQuery($eventId: ID!, $runId: ID!, $page: Int, $perPage: Int, $filters: SignupFiltersInput, $sort: [SortInput!]) {
   convention: conventionByRequestHost {
-    id: transitionalId
+    id
     name
     event(transitionalId: $eventId) {
-      id: transitionalId
+      id
       title
       event_category {
-        id: transitionalId
+        id
         team_member_name
       }
       team_members {
-        id: transitionalId
+        id
         user_con_profile {
-          id: transitionalId
+          id
         }
       }
       registration_policy {
@@ -279,7 +279,7 @@ export const RunSignupsTableSignupsQueryDocument = gql`
         }
       }
       run(transitionalId: $runId) {
-        id: transitionalId
+        id
         signups_paginated(
           page: $page
           per_page: $perPage
@@ -291,18 +291,18 @@ export const RunSignupsTableSignupsQueryDocument = gql`
           current_page
           per_page
           entries {
-            id: transitionalId
+            id
             state
             counted
             bucket_key
             requested_bucket_key
             age_restrictions_check
             run {
-              id: transitionalId
+              id
               starts_at
             }
             user_con_profile {
-              id: transitionalId
+              id
               name_inverted
               name_without_nickname
               gravatar_enabled
@@ -353,10 +353,10 @@ export type RunSignupsTableSignupsQueryQueryResult = Apollo.QueryResult<RunSignu
 export const RunHeaderRunInfoQueryDocument = gql`
     query RunHeaderRunInfoQuery($eventId: ID!, $runId: ID!) {
   convention: conventionByRequestHost {
-    id: transitionalId
+    id
     ...CommonConventionData
     event(transitionalId: $eventId) {
-      id: transitionalId
+      id
       title
       length_seconds
       registration_policy {
@@ -368,7 +368,7 @@ export const RunHeaderRunInfoQueryDocument = gql`
         }
       }
       run(transitionalId: $runId) {
-        id: transitionalId
+        id
         starts_at
         title_suffix
       }
@@ -408,13 +408,13 @@ export type RunHeaderRunInfoQueryQueryResult = Apollo.QueryResult<RunHeaderRunIn
 export const RunSignupSummaryQueryDocument = gql`
     query RunSignupSummaryQuery($eventId: ID!, $runId: ID!) {
   convention: conventionByRequestHost {
-    id: transitionalId
+    id
     ...CommonConventionData
     event(transitionalId: $eventId) {
-      id: transitionalId
+      id
       title
       event_category {
-        id: transitionalId
+        id
         team_member_name
       }
       registration_policy {
@@ -425,25 +425,25 @@ export const RunSignupSummaryQueryDocument = gql`
         }
       }
       team_members {
-        id: transitionalId
+        id
         user_con_profile {
-          id: transitionalId
+          id
         }
       }
       runs {
-        id: transitionalId
+        id
         starts_at
       }
       run(transitionalId: $runId) {
-        id: transitionalId
+        id
         signups_paginated(per_page: 1000, filters: {state: ["confirmed", "waitlisted"]}) {
           entries {
-            id: transitionalId
+            id
             state
             bucket_key
             waitlist_position
             user_con_profile {
-              id: transitionalId
+              id
               name_inverted
               gravatar_enabled
               gravatar_url
@@ -490,22 +490,22 @@ export type RunSignupSummaryQueryQueryResult = Apollo.QueryResult<RunSignupSumma
 export const UserConProfileSignupsQueryDocument = gql`
     query UserConProfileSignupsQuery($id: ID!) {
   convention: conventionByRequestHost {
-    id: transitionalId
+    id
     ...CommonConventionData
     my_profile {
-      id: transitionalId
+      id
       ability {
         can_withdraw_all_user_con_profile_signups(transitionalUserConProfileId: $id)
       }
     }
     user_con_profile(transitionalId: $id) {
-      id: transitionalId
+      id
       name_without_nickname
       ical_secret
       team_members {
-        id: transitionalId
+        id
         event {
-          id: transitionalId
+          id
           title
           status
         }
@@ -547,12 +547,12 @@ export type UserConProfileSignupsQueryQueryResult = Apollo.QueryResult<UserConPr
 export const RunSignupChangesQueryDocument = gql`
     query RunSignupChangesQuery($runId: ID!, $filters: SignupChangeFiltersInput, $sort: [SortInput!], $page: Int, $perPage: Int) {
   convention: conventionByRequestHost {
-    id: transitionalId
+    id
     timezone_name
     run(transitionalId: $runId) {
-      id: transitionalId
+      id
       event {
-        id: transitionalId
+        id
         title
       }
       signup_changes_paginated(
@@ -566,25 +566,25 @@ export const RunSignupChangesQueryDocument = gql`
         current_page
         per_page
         entries {
-          id: transitionalId
+          id
           state
           counted
           bucket_key
           action
           created_at
           previous_signup_change {
-            id: transitionalId
+            id
             state
             counted
             bucket_key
           }
           run {
-            id: transitionalId
+            id
             event {
-              id: transitionalId
+              id
               title
               event_category {
-                id: transitionalId
+                id
                 team_member_name
               }
               registration_policy {
@@ -595,15 +595,15 @@ export const RunSignupChangesQueryDocument = gql`
                 }
               }
               team_members {
-                id: transitionalId
+                id
                 user_con_profile {
-                  id: transitionalId
+                  id
                 }
               }
             }
           }
           user_con_profile {
-            id: transitionalId
+            id
             name_inverted
             gravatar_enabled
             gravatar_url

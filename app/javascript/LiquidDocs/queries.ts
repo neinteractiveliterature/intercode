@@ -11,7 +11,7 @@ export const LiquidAssignFields = gql`
 export const LiquidAssignsQuery = gql`
   query LiquidAssignsQuery {
     cmsParent: cmsParentByRequestHost {
-      id: transitionalId
+      id
 
       liquidAssigns {
         ...LiquidAssignFields
@@ -25,7 +25,7 @@ export const LiquidAssignsQuery = gql`
 export const NotifierLiquidAssignsQuery = gql`
   query NotifierLiquidAssignsQuery($eventKey: String!) {
     cmsParent: conventionByRequestHost {
-      id: transitionalId
+      id
       liquidAssigns: notifier_liquid_assigns(eventKey: $eventKey) {
         ...LiquidAssignFields
       }

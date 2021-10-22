@@ -5,7 +5,7 @@ export const CreateDepartment = gql`
   mutation CreateDepartment($department: DepartmentInput!) {
     createDepartment(input: { department: $department }) {
       department {
-        id: transitionalId
+        id
         ...AdminDepartmentFields
       }
     }
@@ -18,7 +18,7 @@ export const UpdateDepartment = gql`
   mutation UpdateDepartment($id: ID!, $department: DepartmentInput!) {
     updateDepartment(input: { transitionalId: $id, department: $department }) {
       department {
-        id: transitionalId
+        id
         ...AdminDepartmentFields
       }
     }

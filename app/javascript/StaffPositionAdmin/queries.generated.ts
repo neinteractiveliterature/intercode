@@ -5,29 +5,29 @@ import { gql } from '@apollo/client';
 import { PermissionedModelFieldsFragmentDoc, PermissionedRoleFieldsFragmentDoc } from '../Permissions/fragments.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type StaffPositionFieldsFragment = { __typename: 'StaffPosition', name: string, email?: string | null | undefined, visible?: boolean | null | undefined, email_aliases: Array<string>, cc_addresses: Array<string>, id: string, user_con_profiles: Array<{ __typename: 'UserConProfile', name_without_nickname: string, gravatar_url: string, gravatar_enabled: boolean, id: string }>, permissions: Array<{ __typename: 'Permission', permission: string, id: string, model: { __typename: 'CmsContentGroup', name: string, id: string } | { __typename: 'Convention', name: string, id: string } | { __typename: 'EventCategory', name: string, default_color?: string | null | undefined, id: string }, role: { __typename: 'OrganizationRole', name: string, id: string } | { __typename: 'StaffPosition', name: string, id: string } }> };
+export type StaffPositionFieldsFragment = { __typename: 'StaffPosition', id: string, name: string, email?: string | null | undefined, visible?: boolean | null | undefined, email_aliases: Array<string>, cc_addresses: Array<string>, user_con_profiles: Array<{ __typename: 'UserConProfile', id: string, name_without_nickname: string, gravatar_url: string, gravatar_enabled: boolean }>, permissions: Array<{ __typename: 'Permission', id: string, permission: string, model: { __typename: 'CmsContentGroup', id: string, name: string } | { __typename: 'Convention', id: string, name: string } | { __typename: 'EventCategory', id: string, name: string, default_color?: string | null | undefined }, role: { __typename: 'OrganizationRole', id: string, name: string } | { __typename: 'StaffPosition', id: string, name: string } }> };
 
 export type StaffPositionsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type StaffPositionsQueryData = { __typename: 'Query', convention: { __typename: 'Convention', name: string, id: string, event_categories: Array<{ __typename: 'EventCategory', name: string, default_color?: string | null | undefined, id: string }>, cmsContentGroups: Array<{ __typename: 'CmsContentGroup', name: string, id: string }>, staff_positions: Array<{ __typename: 'StaffPosition', name: string, email?: string | null | undefined, visible?: boolean | null | undefined, email_aliases: Array<string>, cc_addresses: Array<string>, id: string, user_con_profiles: Array<{ __typename: 'UserConProfile', name_without_nickname: string, gravatar_url: string, gravatar_enabled: boolean, id: string }>, permissions: Array<{ __typename: 'Permission', permission: string, id: string, model: { __typename: 'CmsContentGroup', name: string, id: string } | { __typename: 'Convention', name: string, id: string } | { __typename: 'EventCategory', name: string, default_color?: string | null | undefined, id: string }, role: { __typename: 'OrganizationRole', name: string, id: string } | { __typename: 'StaffPosition', name: string, id: string } }> }> } };
+export type StaffPositionsQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, default_color?: string | null | undefined }>, cmsContentGroups: Array<{ __typename: 'CmsContentGroup', id: string, name: string }>, staff_positions: Array<{ __typename: 'StaffPosition', id: string, name: string, email?: string | null | undefined, visible?: boolean | null | undefined, email_aliases: Array<string>, cc_addresses: Array<string>, user_con_profiles: Array<{ __typename: 'UserConProfile', id: string, name_without_nickname: string, gravatar_url: string, gravatar_enabled: boolean }>, permissions: Array<{ __typename: 'Permission', id: string, permission: string, model: { __typename: 'CmsContentGroup', id: string, name: string } | { __typename: 'Convention', id: string, name: string } | { __typename: 'EventCategory', id: string, name: string, default_color?: string | null | undefined }, role: { __typename: 'OrganizationRole', id: string, name: string } | { __typename: 'StaffPosition', id: string, name: string } }> }> } };
 
 export const StaffPositionFieldsFragmentDoc = gql`
     fragment StaffPositionFields on StaffPosition {
-  id: transitionalId
+  id
   name
   email
   visible
   email_aliases
   cc_addresses
   user_con_profiles {
-    id: transitionalId
+    id
     name_without_nickname
     gravatar_url
     gravatar_enabled
   }
   permissions {
-    id: transitionalId
+    id
     permission
     model {
       ...PermissionedModelFields
@@ -42,19 +42,19 @@ ${PermissionedRoleFieldsFragmentDoc}`;
 export const StaffPositionsQueryDocument = gql`
     query StaffPositionsQuery {
   convention: conventionByRequestHost {
-    id: transitionalId
+    id
     name
     event_categories {
-      id: transitionalId
+      id
       name
       default_color
     }
     cmsContentGroups {
-      id: transitionalId
+      id
       name
     }
     staff_positions {
-      id: transitionalId
+      id
       ...StaffPositionFields
     }
   }

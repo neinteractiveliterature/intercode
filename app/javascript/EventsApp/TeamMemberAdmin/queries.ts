@@ -3,19 +3,19 @@ import { CommonConventionData } from '../queries';
 
 export const TeamMemberTicketFields = gql`
   fragment TeamMemberTicketFields on Ticket {
-    id: transitionalId
+    id
 
     user_con_profile {
-      id: transitionalId
+      id
     }
 
     ticket_type {
-      id: transitionalId
+      id
       name
     }
 
     provided_by_event {
-      id: transitionalId
+      id
       title
     }
   }
@@ -23,14 +23,14 @@ export const TeamMemberTicketFields = gql`
 
 export const TeamMemberUserConProfileFields = gql`
   fragment TeamMemberUserConProfileFields on UserConProfile {
-    id: transitionalId
+    id
     name_without_nickname
     name_inverted
     email
     mobile_phone
 
     ticket {
-      id: transitionalId
+      id
       ...TeamMemberTicketFields
     }
   }
@@ -40,13 +40,13 @@ export const TeamMemberUserConProfileFields = gql`
 
 export const TeamMemberUserConProfileSearchFields = gql`
   fragment TeamMemberUserConProfileSearchFields on UserConProfile {
-    id: transitionalId
+    id
     name_without_nickname
     name_inverted
     email
 
     ticket {
-      id: transitionalId
+      id
       ...TeamMemberTicketFields
     }
   }
@@ -56,14 +56,14 @@ export const TeamMemberUserConProfileSearchFields = gql`
 
 export const TeamMemberFields = gql`
   fragment TeamMemberFields on TeamMember {
-    id: transitionalId
+    id
     display_team_member
     show_email
     receive_con_email
     receive_signup_email
 
     user_con_profile {
-      id: transitionalId
+      id
       ...TeamMemberUserConProfileFields
     }
   }
@@ -73,14 +73,14 @@ export const TeamMemberFields = gql`
 
 export const TeamMemberFieldsWithoutPersonalInfo = gql`
   fragment TeamMemberFieldsWithoutPersonalInfo on TeamMember {
-    id: transitionalId
+    id
     display_team_member
     show_email
     receive_con_email
     receive_signup_email
 
     user_con_profile {
-      id: transitionalId
+      id
       ...TeamMemberUserConProfileSearchFields
     }
   }
@@ -91,32 +91,32 @@ export const TeamMemberFieldsWithoutPersonalInfo = gql`
 export const TeamMembersQuery = gql`
   query TeamMembersQuery($eventId: ID!) {
     convention: conventionByRequestHost {
-      id: transitionalId
+      id
       ...CommonConventionData
 
       event(transitionalId: $eventId) {
-        id: transitionalId
+        id
         title
 
         event_category {
-          id: transitionalId
+          id
           can_provide_tickets
           team_member_name
         }
 
         provided_tickets {
-          id: transitionalId
+          id
           ...TeamMemberTicketFields
         }
 
         team_members {
-          id: transitionalId
+          id
           ...TeamMemberFields
         }
       }
 
       ticket_types {
-        id: transitionalId
+        id
         name
         description
         maximum_event_provided_tickets(transitionalEventId: $eventId)
@@ -134,10 +134,10 @@ export const TeamMembersQuery = gql`
 export const TeamMemberUserConProfilesQuery = gql`
   query TeamMemberUserConProfilesQuery($name: String) {
     convention: conventionByRequestHost {
-      id: transitionalId
+      id
       user_con_profiles_paginated(filters: { name: $name }, per_page: 50) {
         entries {
-          id: transitionalId
+          id
           ...TeamMemberUserConProfileSearchFields
         }
       }

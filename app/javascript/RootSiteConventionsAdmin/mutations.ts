@@ -17,7 +17,7 @@ export const CreateConvention = gql`
       }
     ) {
       convention {
-        id: transitionalId
+        id
         ...ConventionDisplayFields
       }
     }
@@ -30,7 +30,7 @@ export const SetConventionCanceled = gql`
   mutation SetConventionCanceled($id: ID!, $canceled: Boolean!) {
     setConventionCanceled(input: { transitionalId: $id, canceled: $canceled }) {
       convention {
-        id: transitionalId
+        id
         ...ConventionDisplayFields
       }
     }

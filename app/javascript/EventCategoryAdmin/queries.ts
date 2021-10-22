@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 
 export const EventCategoryFields = gql`
   fragment EventCategoryFields on EventCategory {
-    id: transitionalId
+    id
     name
     team_member_name
     proposal_description
@@ -17,18 +17,18 @@ export const EventCategoryFields = gql`
     }
 
     department {
-      id: transitionalId
+      id
       name
     }
 
     event_form {
-      id: transitionalId
+      id
       title
       form_type
     }
 
     event_proposal_form {
-      id: transitionalId
+      id
       title
       form_type
     }
@@ -38,23 +38,23 @@ export const EventCategoryFields = gql`
 export const EventCategoryAdminQuery = gql`
   query EventCategoryAdminQuery {
     convention: conventionByRequestHost {
-      id: transitionalId
+      id
       name
       ticket_name
       ticket_mode
 
       departments {
-        id: transitionalId
+        id
         name
       }
 
       event_categories {
-        id: transitionalId
+        id
         ...EventCategoryFields
       }
 
       forms {
-        id: transitionalId
+        id
         title
         form_type
       }

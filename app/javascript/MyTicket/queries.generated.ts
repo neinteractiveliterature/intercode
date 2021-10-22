@@ -8,22 +8,22 @@ const defaultOptions =  {}
 export type TicketPurchaseFormQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type TicketPurchaseFormQueryData = { __typename: 'Query', convention: { __typename: 'Convention', name: string, ticket_name: string, id: string, products: Array<{ __typename: 'Product', name: string, description_html?: string | null | undefined, id: string, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: string | null | undefined, finish?: string | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } }> } } }>, ticket_types: Array<{ __typename: 'TicketType', description?: string | null | undefined, id: string, providing_products: Array<{ __typename: 'Product', id: string }> }>, my_profile?: { __typename: 'UserConProfile', name_without_nickname: string, id: string, ticket?: { __typename: 'Ticket', id: string } | null | undefined } | null | undefined } };
+export type TicketPurchaseFormQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, ticket_name: string, products: Array<{ __typename: 'Product', id: string, name: string, description_html?: string | null | undefined, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: string | null | undefined, finish?: string | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } }> } } }>, ticket_types: Array<{ __typename: 'TicketType', id: string, description?: string | null | undefined, providing_products: Array<{ __typename: 'Product', id: string }> }>, my_profile?: { __typename: 'UserConProfile', id: string, name_without_nickname: string, ticket?: { __typename: 'Ticket', id: string } | null | undefined } | null | undefined } };
 
 export type MyTicketDisplayQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type MyTicketDisplayQueryData = { __typename: 'Query', convention: { __typename: 'Convention', name: string, ticket_name: string, timezone_name?: string | null | undefined, id: string, my_profile?: { __typename: 'UserConProfile', name_without_nickname: string, id: string, ticket?: { __typename: 'Ticket', created_at: string, updated_at: string, id: string, order_entry?: { __typename: 'OrderEntry', id: string, order: { __typename: 'Order', charge_id?: string | null | undefined, id: string }, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } } | null | undefined, ticket_type: { __typename: 'TicketType', description?: string | null | undefined, id: string }, provided_by_event?: { __typename: 'Event', title?: string | null | undefined, id: string } | null | undefined } | null | undefined } | null | undefined } };
+export type MyTicketDisplayQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, ticket_name: string, timezone_name?: string | null | undefined, my_profile?: { __typename: 'UserConProfile', id: string, name_without_nickname: string, ticket?: { __typename: 'Ticket', id: string, created_at: string, updated_at: string, order_entry?: { __typename: 'OrderEntry', id: string, order: { __typename: 'Order', id: string, charge_id?: string | null | undefined }, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } } | null | undefined, ticket_type: { __typename: 'TicketType', id: string, description?: string | null | undefined }, provided_by_event?: { __typename: 'Event', id: string, title?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined } };
 
 
 export const TicketPurchaseFormQueryDocument = gql`
     query TicketPurchaseFormQuery {
   convention: conventionByRequestHost {
-    id: transitionalId
+    id
     name
     ticket_name
     products(only_ticket_providing: true, only_available: true) {
-      id: transitionalId
+      id
       name
       description_html
       pricing_structure {
@@ -31,17 +31,17 @@ export const TicketPurchaseFormQueryDocument = gql`
       }
     }
     ticket_types {
-      id: transitionalId
+      id
       description
       providing_products {
-        id: transitionalId
+        id
       }
     }
     my_profile {
-      id: transitionalId
+      id
       name_without_nickname
       ticket {
-        id: transitionalId
+        id
       }
     }
   }
@@ -77,21 +77,21 @@ export type TicketPurchaseFormQueryQueryResult = Apollo.QueryResult<TicketPurcha
 export const MyTicketDisplayQueryDocument = gql`
     query MyTicketDisplayQuery {
   convention: conventionByRequestHost {
-    id: transitionalId
+    id
     name
     ticket_name
     timezone_name
     my_profile {
-      id: transitionalId
+      id
       name_without_nickname
       ticket {
-        id: transitionalId
+        id
         created_at
         updated_at
         order_entry {
-          id: transitionalId
+          id
           order {
-            id: transitionalId
+            id
             charge_id
           }
           price_per_item {
@@ -100,11 +100,11 @@ export const MyTicketDisplayQueryDocument = gql`
           }
         }
         ticket_type {
-          id: transitionalId
+          id
           description
         }
         provided_by_event {
-          id: transitionalId
+          id
           title
         }
       }

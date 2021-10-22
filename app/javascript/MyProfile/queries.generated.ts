@@ -8,20 +8,20 @@ const defaultOptions =  {}
 export type MyProfileQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type MyProfileQueryData = { __typename: 'Query', convention: { __typename: 'Convention', name: string, starts_at?: string | null | undefined, ends_at?: string | null | undefined, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, id: string, my_profile?: { __typename: 'UserConProfile', email?: string | null | undefined, form_response_attrs_json?: string | null | undefined, can_have_bio: boolean, gravatar_url: string, gravatar_enabled: boolean, bio?: string | null | undefined, show_nickname_in_bio?: boolean | null | undefined, bio_name?: string | null | undefined, bio_html?: string | null | undefined, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, id: string } | null | undefined, user_con_profile_form: { __typename: 'Form', title: string, form_type: Types.FormType, id: string, form_sections: Array<{ __typename: 'FormSection', title?: string | null | undefined, position: number, id: string, form_items: Array<{ __typename: 'FormItem', admin_description?: string | null | undefined, position: number, identifier?: string | null | undefined, item_type: string, rendered_properties: string, default_value?: string | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole, id: string }> }> } } };
+export type MyProfileQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, starts_at?: string | null | undefined, ends_at?: string | null | undefined, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, my_profile?: { __typename: 'UserConProfile', id: string, email?: string | null | undefined, form_response_attrs_json?: string | null | undefined, can_have_bio: boolean, gravatar_url: string, gravatar_enabled: boolean, bio?: string | null | undefined, show_nickname_in_bio?: boolean | null | undefined, bio_name?: string | null | undefined, bio_html?: string | null | undefined, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole } | null | undefined, user_con_profile_form: { __typename: 'Form', id: string, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: string, title?: string | null | undefined, position: number, form_items: Array<{ __typename: 'FormItem', id: string, admin_description?: string | null | undefined, position: number, identifier?: string | null | undefined, item_type: string, rendered_properties: string, default_value?: string | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> } } };
 
 
 export const MyProfileQueryDocument = gql`
     query MyProfileQuery {
   convention: conventionByRequestHost {
-    id: transitionalId
+    id
     name
     starts_at
     ends_at
     timezone_name
     timezone_mode
     my_profile {
-      id: transitionalId
+      id
       email
       form_response_attrs_json
       can_have_bio
@@ -35,12 +35,12 @@ export const MyProfileQueryDocument = gql`
       current_user_form_item_writer_role
     }
     user_con_profile_form {
-      id: transitionalId
+      id
       ...CommonFormFields
       form_sections {
-        id: transitionalId
+        id
         form_items {
-          id: transitionalId
+          id
           admin_description
         }
       }

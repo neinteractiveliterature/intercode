@@ -3,7 +3,7 @@ import { gql } from '@apollo/client';
 export const PreviewLiquidQuery = gql`
   query PreviewLiquidQuery($liquid: String!) {
     cmsParent: cmsParentByRequestHost {
-      id: transitionalId
+      id
       previewLiquid(content: $liquid)
     }
   }
@@ -12,7 +12,7 @@ export const PreviewLiquidQuery = gql`
 export const PreviewMarkdownQuery = gql`
   query PreviewMarkdownQuery($markdown: String!) {
     cmsParent: cmsParentByRequestHost {
-      id: transitionalId
+      id
       previewMarkdown(markdown: $markdown)
     }
   }
@@ -21,7 +21,7 @@ export const PreviewMarkdownQuery = gql`
 export const PreviewNotifierLiquidQuery = gql`
   query PreviewNotifierLiquidQuery($eventKey: String!, $liquid: String!) {
     convention: conventionByRequestHost {
-      id: transitionalId
+      id
       previewLiquid: preview_notifier_liquid(eventKey: $eventKey, content: $liquid)
     }
   }

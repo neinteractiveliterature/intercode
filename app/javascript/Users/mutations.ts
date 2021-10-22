@@ -2,11 +2,7 @@ import { gql } from '@apollo/client';
 import { DetailedUserFields } from './queries';
 
 export const MergeUsers = gql`
-  mutation MergeUsers(
-    $userIds: [ID!]!
-    $winningUserId: ID!
-    $winningUserConProfiles: [WinningUserConProfileInput!]!
-  ) {
+  mutation MergeUsers($userIds: [ID!]!, $winningUserId: ID!, $winningUserConProfiles: [WinningUserConProfileInput!]!) {
     mergeUsers(
       input: {
         transitionalUserIds: $userIds
@@ -15,7 +11,7 @@ export const MergeUsers = gql`
       }
     ) {
       user {
-        id: transitionalId
+        id
         ...DetailedUserFields
       }
     }

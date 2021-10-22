@@ -3,13 +3,13 @@ import { EventPageRunFields, RunCardRegistrationPolicyFields } from '../EventsAp
 
 export const SignupModerationRunFields = gql`
   fragment SignupModerationRunFields on Run {
-    id: transitionalId
+    id
     title_suffix
     starts_at
     signup_count_by_state_and_bucket_key_and_counted
 
     event {
-      id: transitionalId
+      id
       title
       length_seconds
     }
@@ -18,13 +18,13 @@ export const SignupModerationRunFields = gql`
 
 export const SignupModerationSignupRequestFields = gql`
   fragment SignupModerationSignupRequestFields on SignupRequest {
-    id: transitionalId
+    id
     state
     requested_bucket_key
     created_at
 
     user_con_profile {
-      id: transitionalId
+      id
       name
       name_inverted
       gravatar_enabled
@@ -32,20 +32,20 @@ export const SignupModerationSignupRequestFields = gql`
     }
 
     replace_signup {
-      id: transitionalId
+      id
 
       run {
-        id: transitionalId
+        id
         ...SignupModerationRunFields
       }
     }
 
     target_run {
-      id: transitionalId
+      id
       ...SignupModerationRunFields
 
       event {
-        id: transitionalId
+        id
         registration_policy {
           buckets {
             key
@@ -61,7 +61,7 @@ export const SignupModerationSignupRequestFields = gql`
     }
 
     result_signup {
-      id: transitionalId
+      id
       state
       waitlist_position
     }
@@ -73,21 +73,21 @@ export const SignupModerationSignupRequestFields = gql`
 export const CreateSignupEventsQuery = gql`
   query CreateSignupEventsQuery($title: String) {
     convention: conventionByRequestHost {
-      id: transitionalId
+      id
       events_paginated(filters: { title: $title }, per_page: 50) {
         entries {
-          id: transitionalId
+          id
           title
           length_seconds
           private_signup_list
 
           runs {
-            id: transitionalId
+            id
             starts_at
             title_suffix
 
             rooms {
-              id: transitionalId
+              id
               name
             }
           }
@@ -106,10 +106,10 @@ export const CreateSignupRunCardQuery = gql`
     }
 
     convention: conventionByRequestHost {
-      id: transitionalId
+      id
 
       event(transitionalId: $eventId) {
-        id: transitionalId
+        id
         title
         length_seconds
         private_signup_list
@@ -120,10 +120,10 @@ export const CreateSignupRunCardQuery = gql`
         }
 
         team_members {
-          id: transitionalId
+          id
           display_team_member
           user_con_profile {
-            id: transitionalId
+            id
             gravatar_url
             gravatar_enabled
             name_without_nickname
@@ -131,36 +131,36 @@ export const CreateSignupRunCardQuery = gql`
         }
 
         event_category {
-          id: transitionalId
+          id
           team_member_name
         }
 
         runs {
-          id: transitionalId
+          id
           ...EventPageRunFields
         }
       }
 
       user_con_profile(transitionalId: $userConProfileId) {
-        id: transitionalId
+        id
         name_without_nickname
 
         signups {
-          id: transitionalId
+          id
           state
           waitlist_position
 
           run {
-            id: transitionalId
+            id
           }
         }
 
         signup_requests {
-          id: transitionalId
+          id
           state
 
           target_run {
-            id: transitionalId
+            id
           }
         }
       }
@@ -174,7 +174,7 @@ export const CreateSignupRunCardQuery = gql`
 export const SignupModerationQueueQuery = gql`
   query SignupModerationQueueQuery($page: Int, $perPage: Int) {
     convention: conventionByRequestHost {
-      id: transitionalId
+      id
 
       signup_requests_paginated(
         sort: [{ field: "state", desc: false }, { field: "created_at", desc: false }]
@@ -184,7 +184,7 @@ export const SignupModerationQueueQuery = gql`
         total_pages
 
         entries {
-          id: transitionalId
+          id
           ...SignupModerationSignupRequestFields
         }
       }
