@@ -8,7 +8,7 @@ class Mutations::CreateCouponApplication < Mutations::BaseMutation
              "IDs have transitioned to the ID type.  Please switch back to the orderId field so that \
 we can remove this temporary one.",
            required: false,
-           camelize: false
+           camelize: true
   argument :order_id, ID, required: false, camelize: true
 
   load_and_authorize_model_with_id Order, :id, :manage_coupons, argument_name: :order_id

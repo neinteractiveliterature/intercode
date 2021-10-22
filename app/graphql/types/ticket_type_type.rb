@@ -21,14 +21,14 @@ we can remove this temporary one.",
   association_loaders TicketType, :convention, :providing_products
 
   field :maximum_event_provided_tickets, Integer, null: false do
-    argument :event_id,
-             Integer,
+    argument :transitional_event_id,
+             ID,
              deprecation_reason:
-               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
+               "IDs have transitioned to the ID type.  Please switch back to the eventId field so that \
+we can remove this temporary one.",
              required: false,
-             camelize: false
-    argument :transitional_event_id, ID, required: false, camelize: true
+             camelize: true
+    argument :event_id, ID, required: false, camelize: true
   end
 
   def maximum_event_provided_tickets(**args)

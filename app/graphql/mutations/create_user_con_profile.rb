@@ -8,7 +8,7 @@ class Mutations::CreateUserConProfile < Mutations::BaseMutation
              "IDs have transitioned to the ID type.  Please switch back to the userId field so that \
 we can remove this temporary one.",
            required: false,
-           camelize: false
+           camelize: true
   argument :user_id, ID, required: false, camelize: true
   argument :user_con_profile, Types::UserConProfileInputType, required: true, camelize: false
 

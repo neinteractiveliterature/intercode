@@ -8,7 +8,7 @@ class Mutations::CreateFormSection < Mutations::BaseMutation
              "IDs have transitioned to the ID type.  Please switch back to the id field so that \
 we can remove this temporary one.",
            required: false,
-           camelize: false
+           camelize: true
   argument :form_id, ID, required: false, camelize: true
   argument :form_section, Types::FormSectionInputType, required: true, camelize: false
 

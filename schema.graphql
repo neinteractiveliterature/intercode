@@ -1,5 +1,5 @@
 type Ability {
-  can_become_user_con_profile(transitionalUserConProfileId: ID, user_con_profile_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")): Boolean!
+  can_become_user_con_profile(transitionalUserConProfileId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the userConProfileId field so that we can remove this temporary one."), userConProfileId: ID): Boolean!
   can_create_cms_content_groups: Boolean!
   can_create_cms_files: Boolean!
   can_create_cms_graphql_queries: Boolean!
@@ -11,11 +11,11 @@ type Ability {
   can_create_pages: Boolean!
   can_create_tickets: Boolean!
   can_create_user_con_profiles: Boolean!
-  can_delete_event(event_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID."), transitionalEventId: ID): Boolean!
-  can_delete_event_proposal(event_proposal_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID."), transitionalEventProposalId: ID): Boolean!
-  can_delete_ticket(ticket_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID."), transitionalTicketId: ID): Boolean!
-  can_delete_user_con_profile(transitionalUserConProfileId: ID, user_con_profile_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")): Boolean!
-  can_force_confirm_signup(signup_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID."), transitionalSignupId: ID): Boolean!
+  can_delete_event(eventId: ID, transitionalEventId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the eventId field so that we can remove this temporary one.")): Boolean!
+  can_delete_event_proposal(eventProposalId: ID, transitionalEventProposalId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the eventProposalId field so that we can remove this temporary one.")): Boolean!
+  can_delete_ticket(ticketId: ID, transitionalTicketId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the ticketId field so that we can remove this temporary one.")): Boolean!
+  can_delete_user_con_profile(transitionalUserConProfileId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the userConProfileId field so that we can remove this temporary one."), userConProfileId: ID): Boolean!
+  can_force_confirm_signup(signupId: ID, transitionalSignupId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the signupId field so that we can remove this temporary one.")): Boolean!
   can_list_events: Boolean!
   can_manage_any_cms_content: Boolean!
   can_manage_conventions: Boolean!
@@ -28,10 +28,10 @@ type Ability {
   can_manage_staff_positions: Boolean!
   can_manage_ticket_types: Boolean!
   can_override_maximum_event_provided_tickets: Boolean!
-  can_read_admin_notes_on_event_proposal(event_proposal_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID."), transitionalEventProposalId: ID): Boolean!
+  can_read_admin_notes_on_event_proposal(eventProposalId: ID, transitionalEventProposalId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the eventProposalId field so that we can remove this temporary one.")): Boolean!
   can_read_any_mailing_list: Boolean!
   can_read_event_proposals: Boolean!
-  can_read_event_signups(event_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID."), transitionalEventId: ID): Boolean!
+  can_read_event_signups(eventId: ID, transitionalEventId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the eventId field so that we can remove this temporary one.")): Boolean!
   can_read_orders: Boolean!
   can_read_organizations: Boolean!
   can_read_reports: Boolean!
@@ -41,23 +41,23 @@ type Ability {
   can_read_user_activity_alerts: Boolean!
   can_read_user_con_profiles: Boolean!
   can_read_users: Boolean!
-  can_update_admin_notes_on_event_proposal(event_proposal_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID."), transitionalEventProposalId: ID): Boolean!
-  can_update_bucket_signup(signup_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID."), transitionalSignupId: ID): Boolean!
+  can_update_admin_notes_on_event_proposal(eventProposalId: ID, transitionalEventProposalId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the eventProposalId field so that we can remove this temporary one.")): Boolean!
+  can_update_bucket_signup(signupId: ID, transitionalSignupId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the signupId field so that we can remove this temporary one.")): Boolean!
   can_update_convention: Boolean!
-  can_update_counted_signup(signup_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID."), transitionalSignupId: ID): Boolean!
+  can_update_counted_signup(signupId: ID, transitionalSignupId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the signupId field so that we can remove this temporary one.")): Boolean!
   can_update_departments: Boolean!
-  can_update_event(event_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID."), transitionalEventId: ID): Boolean!
+  can_update_event(eventId: ID, transitionalEventId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the eventId field so that we can remove this temporary one.")): Boolean!
   can_update_event_categories: Boolean!
-  can_update_event_proposal(event_proposal_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID."), transitionalEventProposalId: ID): Boolean!
+  can_update_event_proposal(eventProposalId: ID, transitionalEventProposalId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the eventProposalId field so that we can remove this temporary one.")): Boolean!
   can_update_notification_templates: Boolean!
   can_update_orders: Boolean!
-  can_update_privileges_user_con_profile(transitionalUserConProfileId: ID, user_con_profile_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")): Boolean! @deprecated(reason: "Privileges have been removed in favor of permissions.  This will always return false.")
+  can_update_privileges_user_con_profile(transitionalUserConProfileId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the userConProfileId field so that we can remove this temporary one."), userConProfileId: ID): Boolean! @deprecated(reason: "Privileges have been removed in favor of permissions.  This will always return false.")
   can_update_products: Boolean!
-  can_update_signup(signup_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID."), transitionalSignupId: ID): Boolean!
+  can_update_signup(signupId: ID, transitionalSignupId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the signupId field so that we can remove this temporary one.")): Boolean!
   can_update_signups: Boolean!
-  can_update_ticket(ticket_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID."), transitionalTicketId: ID): Boolean!
-  can_update_user_con_profile(transitionalUserConProfileId: ID, user_con_profile_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")): Boolean!
-  can_withdraw_all_user_con_profile_signups(transitionalUserConProfileId: ID, user_con_profile_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")): Boolean!
+  can_update_ticket(ticketId: ID, transitionalTicketId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the ticketId field so that we can remove this temporary one.")): Boolean!
+  can_update_user_con_profile(transitionalUserConProfileId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the userConProfileId field so that we can remove this temporary one."), userConProfileId: ID): Boolean!
+  can_withdraw_all_user_con_profile_signups(transitionalUserConProfileId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the userConProfileId field so that we can remove this temporary one."), userConProfileId: ID): Boolean!
 }
 
 """
@@ -251,12 +251,12 @@ type CmsNavigationItem {
 }
 
 input CmsNavigationItemInput {
-  navigation_section_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
-  page_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  navigationSectionId: ID
+  pageId: ID
   position: Int
   title: String
-  transitionalNavigationSectionId: ID
-  transitionalPageId: ID
+  transitionalNavigationSectionId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the navigationSectionId field so that we can remove this temporary one.")
+  transitionalPageId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the pageId field so that we can remove this temporary one.")
 }
 
 """
@@ -610,12 +610,12 @@ type Convention implements CmsParent {
     """
     The ID of the event to find
     """
-    id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+    id: ID
 
     """
     The ID of the event to find
     """
-    transitionalId: ID
+    transitionalId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the id field so that we can remove this temporary one.")
   ): Event!
   event_categories(current_ability_can_read_event_proposals: Boolean): [EventCategory!]!
   event_mailing_list_domain: String
@@ -628,12 +628,12 @@ type Convention implements CmsParent {
     """
     The ID of the event proposal to find.
     """
-    id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+    id: ID
 
     """
     The ID of the event proposal to find.
     """
-    transitionalId: ID
+    transitionalId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the id field so that we can remove this temporary one.")
   ): EventProposal!
   event_proposals_paginated(
     """
@@ -720,12 +720,12 @@ type Convention implements CmsParent {
     """
     The ID of the form to find.
     """
-    id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+    id: ID
 
     """
     The ID of the form to find.
     """
-    transitionalId: ID
+    transitionalId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the id field so that we can remove this temporary one.")
   ): Form!
   forms: [Form!]!
 
@@ -871,12 +871,12 @@ type Convention implements CmsParent {
     """
     The ID of the product to find.
     """
-    id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+    id: ID
 
     """
     The ID of the product to find.
     """
-    transitionalId: ID
+    transitionalId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the id field so that we can remove this temporary one.")
   ): Product!
   products(only_available: Boolean, only_ticket_providing: Boolean): [Product!]!
   reports: ConventionReports!
@@ -892,12 +892,12 @@ type Convention implements CmsParent {
     """
     The ID of the run to find
     """
-    id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+    id: ID
 
     """
     The ID of the run to find
     """
-    transitionalId: ID
+    transitionalId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the id field so that we can remove this temporary one.")
   ): Run!
   show_event_list: ShowSchedule
   show_schedule: ShowSchedule
@@ -910,12 +910,12 @@ type Convention implements CmsParent {
     """
     The ID of the signup to find.
     """
-    id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+    id: ID
 
     """
     The ID of the signup to find.
     """
-    transitionalId: ID
+    transitionalId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the id field so that we can remove this temporary one.")
   ): Signup!
   signup_changes_paginated(
     """
@@ -1002,12 +1002,12 @@ type Convention implements CmsParent {
     """
     The ID of the staff position to find.
     """
-    id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+    id: ID
 
     """
     The ID of the staff position to find.
     """
-    transitionalId: ID
+    transitionalId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the id field so that we can remove this temporary one.")
   ): StaffPosition!
   staff_positions: [StaffPosition!]!
   starts_at: Date
@@ -1036,7 +1036,7 @@ type Convention implements CmsParent {
     name: String
   ): [CmsContent!]!
   updated_at: Date
-  user_activity_alert(id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID."), transitionalId: ID): UserActivityAlert!
+  user_activity_alert(id: ID, transitionalId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the id field so that we can remove this temporary one.")): UserActivityAlert!
   user_activity_alerts: [UserActivityAlert!]!
 
   """
@@ -1047,12 +1047,12 @@ type Convention implements CmsParent {
     """
     The ID of the UserConProfile to find.
     """
-    id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+    id: ID
 
     """
     The ID of the UserConProfile to find.
     """
-    transitionalId: ID
+    transitionalId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the id field so that we can remove this temporary one.")
   ): UserConProfile!
 
   """
@@ -1063,12 +1063,12 @@ type Convention implements CmsParent {
     """
     The user ID of the UserConProfile to find.
     """
-    transitionalUserId: ID
+    transitionalUserId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the userId field so that we can remove this temporary one.")
 
     """
     The user ID of the UserConProfile to find.
     """
-    userId: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+    userId: ID
   ): UserConProfile!
   user_con_profile_form: Form!
   user_con_profiles_paginated(
@@ -1104,9 +1104,9 @@ input ConventionFiltersInput {
 
 input ConventionInput {
   accepting_proposals: Boolean
-  catch_all_staff_position_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  catchAllStaffPositionId: ID
   clickwrap_agreement: String
-  default_layout_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  defaultLayoutId: ID
   domain: String
   email_from: String
   email_mode: EmailMode
@@ -1118,7 +1118,7 @@ input ConventionInput {
   maximum_event_signups: ScheduledValueInput
   maximum_tickets: Int
   name: String
-  root_page_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  rootPageId: ID
   show_event_list: ShowSchedule
   show_schedule: ShowSchedule
   signup_mode: SignupMode
@@ -1129,9 +1129,9 @@ input ConventionInput {
   ticket_name: String
   timezone_mode: TimezoneMode
   timezone_name: String
-  transitionalCatchAllStaffPositionId: ID
-  transitionalDefaultLayoutId: ID
-  transitionalRootPageId: ID
+  transitionalCatchAllStaffPositionId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the signupId field so that we can remove this temporary one.")
+  transitionalDefaultLayoutId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the defaultLayoutId field so that we can remove this temporary one.")
+  transitionalRootPageId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the rootPageId field so that we can remove this temporary one.")
 }
 
 type ConventionReports {
@@ -1230,8 +1230,8 @@ input CouponInput {
   expires_at: Date
   fixed_amount: MoneyInput
   percent_discount: BigDecimal
-  provides_product_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
-  transitionalProvidesProductId: ID
+  providesProductId: ID
+  transitionalProvidesProductId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the providesProductId field so that we can remove this temporary one.")
   usage_limit: Int
 }
 
@@ -1449,7 +1449,7 @@ input CreateCouponApplicationInput {
   clientMutationId: String
   coupon_code: String!
   orderId: ID
-  transitional_order_id: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the orderId field so that we can remove this temporary one.")
+  transitionalOrderId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the orderId field so that we can remove this temporary one.")
 }
 
 """
@@ -1583,8 +1583,8 @@ input CreateEventProposalInput {
   clientMutationId: String
   cloneEventProposalId: ID
   eventCategoryId: ID
-  transitional_clone_event_proposal_id: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the cloneEventProposalId field so that we can remove this temporary one.")
-  transitional_event_category_id: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the eventCategoryId field so that we can remove this temporary one.")
+  transitionalCloneEventProposalId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the cloneEventProposalId field so that we can remove this temporary one.")
+  transitionalEventCategoryId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the eventCategoryId field so that we can remove this temporary one.")
 }
 
 """
@@ -1678,7 +1678,7 @@ input CreateFormSectionInput {
   clientMutationId: String
   formId: ID
   form_section: FormSectionInput!
-  transitional_form_id: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the id field so that we can remove this temporary one.")
+  transitionalFormId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the id field so that we can remove this temporary one.")
 }
 
 """
@@ -1776,7 +1776,7 @@ input CreateMySignupInput {
   no_requested_bucket: Boolean
   requested_bucket_key: String
   runId: ID
-  transitionalRunId: Int @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the runId field so that we can remove this temporary one.")
+  transitionalRunId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the runId field so that we can remove this temporary one.")
 }
 
 """
@@ -1825,7 +1825,7 @@ input CreateOrderInput {
   order: OrderInput!
   order_entries: [OrderEntryInput!]
   status: OrderStatus!
-  transitional_user_con_profile_id: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the userConProfileId field so that we can remove this temporary one.")
+  transitionalUserConProfileId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the userConProfileId field so that we can remove this temporary one.")
   userConProfileId: ID
 }
 
@@ -2113,7 +2113,7 @@ input CreateUserConProfileInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  transitional_user_id: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the userId field so that we can remove this temporary one.")
+  transitionalUserId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the userId field so that we can remove this temporary one.")
   userId: ID
   user_con_profile: UserConProfileInput!
 }
@@ -2943,7 +2943,7 @@ type Event {
   private_signup_list: Boolean
   provided_tickets: [Ticket!]!
   registration_policy: RegistrationPolicy
-  run(id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID."), transitionalId: ID): Run!
+  run(id: ID, transitionalId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the id field so that we can remove this temporary one.")): Run!
   runs(excludeConflicts: Boolean, finish: Date, start: Date): [Run!]!
   short_blurb: String
   short_blurb_html: String
@@ -3002,18 +3002,18 @@ type EventCategory {
 input EventCategoryInput {
   can_provide_tickets: Boolean
   default_color: String
-  department_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
-  event_form_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
-  event_proposal_form_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  departmentId: ID
+  eventFormId: ID
+  eventProposalFormId: ID
   full_color: String
   name: String
   proposal_description: String
   scheduling_ui: SchedulingUi
   signed_up_color: String
   team_member_name: String
-  transitionalDepartmentId: ID
-  transitionalEventFormId: ID
-  transitionalEventProposalFormId: ID
+  transitionalDepartmentId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the departmentId field so that we can remove this temporary one.")
+  transitionalEventFormId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the eventFormId field so that we can remove this temporary one.")
+  transitionalEventProposalFormId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the eventProposalFormId field so that we can remove this temporary one.")
 }
 
 input EventFiltersInput {
@@ -3024,9 +3024,9 @@ input EventFiltersInput {
 }
 
 input EventInput {
-  event_category_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  eventCategoryId: ID
   form_response_attrs_json: String
-  transitionalEventCategoryId: ID
+  transitionalEventCategoryId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the eventCategoryId field so that we can remove this temporary one.")
 }
 
 type EventProposal {
@@ -3152,12 +3152,12 @@ type Form {
     """
     The ID of the form section to find.
     """
-    id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+    id: ID
 
     """
     The ID of the form section to find.
     """
-    transitionalId: ID
+    transitionalId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the id field so that we can remove this temporary one.")
   ): FormSection!
   form_sections: [FormSection!]!
   form_type: FormType!
@@ -4213,10 +4213,10 @@ type NotificationDestination {
 }
 
 input NotificationDestinationInput {
-  staff_position_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
-  transitionalStaffPositionId: ID
-  transitionalUserConProfileId: ID
-  user_con_profile_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  staffPositionId: ID
+  transitionalStaffPositionId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the staffPositionId field so that we can remove this temporary one.")
+  transitionalUserConProfileId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the userConProfileId field so that we can remove this temporary one.")
+  userConProfileId: ID
 }
 
 union NotificationSource = UserActivityAlert
@@ -4290,13 +4290,13 @@ type OrderEntry {
 
 input OrderEntryInput {
   price_per_item: MoneyInput
-  product_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
-  product_variant_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  productId: ID
+  productVariantId: ID
   quantity: Int
-  ticket_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
-  transitionalProductId: ID
-  transitionalProductVariantId: ID
-  transitionalTicketId: ID
+  ticketId: ID
+  transitionalProductId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the productId field so that we can remove this temporary one.")
+  transitionalProductVariantId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the productVariantId field so that we can remove this temporary one.")
+  transitionalTicketId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the ticketId field so that we can remove this temporary one.")
 }
 
 input OrderFiltersInput {
@@ -4446,13 +4446,13 @@ type PageInfo {
 
 input PageInput {
   admin_notes: String
-  cms_layout_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  cmsLayoutId: ID
   content: String
   hidden_from_search: Boolean
   name: String
   skip_clickwrap_agreement: Boolean
   slug: String
-  transitionalCmsLayoutId: ID
+  transitionalCmsLayoutId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the cmsLayoutId field so that we can remove this temporary one.")
 }
 
 """
@@ -4508,13 +4508,13 @@ type Permission {
 }
 
 input PermissionInput {
-  model_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  modelId: ID
   model_type: PermissionedModelTypeIndicator
   permission: String!
-  role_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  roleId: ID
   role_type: PermissionedRoleTypeIndicator
-  transitionalModelId: ID
-  transitionalRoleId: ID
+  transitionalModelId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the modelId field so that we can remove this temporary one.")
+  transitionalRoleId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the roleId field so that we can remove this temporary one.")
 }
 
 union PermissionedModel = CmsContentGroup | Convention | EventCategory
@@ -4576,16 +4576,16 @@ type Product {
 
 input ProductInput {
   available: Boolean
-  delete_variant_ids: [Int!] @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  deleteVariantIds: [ID!]
   description: String
   image: Upload
   name: String
   payment_options: [String!]
   pricing_structure: PricingStructureInput
   product_variants: [ProductVariantInput!]
-  provides_ticket_type_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
-  transitionalDeleteVariantIds: [ID!]
-  transitionalProvidesTicketTypeId: ID
+  providesTicketTypeId: ID
+  transitionalDeleteVariantIds: [ID!] @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the deleteVariantIds field so that we can remove this temporary one.")
+  transitionalProvidesTicketTypeId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the providesTicketTypeId field so that we can remove this temporary one.")
 }
 
 type ProductVariant {
@@ -4679,7 +4679,7 @@ type Query {
   """
   Finds a convention by ID. If a matching one can't be found, the request will error out.
   """
-  conventionById(id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID."), transitionalId: ID): Convention!
+  conventionById(id: ID, transitionalId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the id field so that we can remove this temporary one.")): Convention!
 
   """
   Returns the convention associated with the domain name of this HTTP request. If one is not
@@ -4809,12 +4809,12 @@ type Query {
     """
     The ID of the user to find.
     """
-    id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+    id: ID
 
     """
     The ID of the user to find.
     """
-    transitionalId: ID
+    transitionalId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the id field so that we can remove this temporary one.")
   ): User!
 
   """
@@ -4824,12 +4824,12 @@ type Query {
     """
     The IDs of the users to find.
     """
-    ids: [Int!] @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+    ids: [ID!]
 
     """
     The IDs of the users to find.
     """
-    transitionalIds: [ID!]
+    transitionalIds: [ID!] @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the ids field so that we can remove this temporary one.")
   ): [User!]!
 
   """
@@ -5209,11 +5209,11 @@ type RootSite implements CmsParent {
 }
 
 input RootSiteInput {
-  default_layout_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
-  root_page_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  defaultLayoutId: ID
+  rootPageId: ID
   site_name: String
-  transitionalDefaultLayoutId: ID
-  transitionalRootPageId: ID
+  transitionalDefaultLayoutId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the defaultLayoutId field so that we can remove this temporary one.")
+  transitionalRootPageId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the rootPageId field so that we can remove this temporary one.")
 }
 
 type Run {
@@ -5263,11 +5263,11 @@ type Run {
 }
 
 input RunInput {
-  room_ids: [Int!] @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  roomIds: [ID!]
   schedule_note: String
   starts_at: Date
   title_suffix: String
-  transitionalRoomIds: [ID!]
+  transitionalRoomIds: [ID!] @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the roomIds field so that we can remove this temporary one.")
 }
 
 type ScheduledMoneyValue {
@@ -5628,8 +5628,8 @@ input StaffPositionInput {
   email: String
   email_aliases: [String!]
   name: String
-  transitionalUserConProfileIds: [ID!]
-  user_con_profile_ids: [Int!] @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  transitionalUserConProfileIds: [ID!] @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the userConProfileIds field so that we can remove this temporary one.")
+  userConProfileIds: [ID!]
   visible: Boolean
 }
 
@@ -5732,10 +5732,10 @@ type TicketCountByTypeAndPaymentAmount {
 }
 
 input TicketInput {
-  provided_by_event_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
-  ticket_type_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
-  transitionalProvidedByEventId: ID
-  transitionalTicketTypeId: ID
+  providedByEventId: ID
+  ticketTypeId: ID
+  transitionalProvidedByEventId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the providedByEventId field so that we can remove this temporary one.")
+  transitionalTicketTypeId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the ticketTypeId field so that we can remove this temporary one.")
 }
 
 enum TicketMode {
@@ -5756,7 +5756,7 @@ type TicketType {
   counts_towards_convention_maximum: Boolean!
   description: String
   id: ID!
-  maximum_event_provided_tickets(event_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID."), transitionalEventId: ID): Int!
+  maximum_event_provided_tickets(eventId: ID, transitionalEventId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the eventId field so that we can remove this temporary one.")): Int!
   name: String!
   pricing_schedule: ScheduledMoneyValue! @deprecated(reason: "Tickets are now provided through products")
   providing_products: [Product!]!
@@ -6768,10 +6768,10 @@ type UserActivityAlert {
 input UserActivityAlertInput {
   email: String
   partial_name: String
-  transitionalUserId: ID
+  transitionalUserId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the userId field so that we can remove this temporary one.")
   trigger_on_ticket_create: Boolean
   trigger_on_user_con_profile_create: Boolean
-  user_id: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  userId: ID
 }
 
 type UserConProfile {
@@ -6921,10 +6921,10 @@ type UsersPagination implements PaginationInterface {
 }
 
 input WinningUserConProfileInput {
-  conventionId: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
-  transitionalConventionId: ID
-  transitionalUserConProfileId: ID
-  userConProfileId: Int @deprecated(reason: "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until all id fields are replaced with ones of type ID.")
+  conventionId: ID
+  transitionalConventionId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the conventionId field so that we can remove this temporary one.")
+  transitionalUserConProfileId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the userConProfileId field so that we can remove this temporary one.")
+  userConProfileId: ID
 }
 
 """

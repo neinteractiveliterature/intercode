@@ -3,7 +3,7 @@ class Mutations::CreateMySignup < Mutations::BaseMutation
   field :signup, Types::SignupType, null: false
 
   argument :transitional_run_id,
-           Int,
+           ID,
            deprecation_reason:
              "IDs have transitioned to the ID type.  Please switch back to the runId field so that \
 we can remove this temporary one.",
