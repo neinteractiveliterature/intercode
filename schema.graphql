@@ -1848,7 +1848,7 @@ input CreateOrganizationRoleInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  dorganizationId: ID
+  organizationId: ID
   organization_role: OrganizationRoleInput!
   permissions: [PermissionInput!]!
   transitionalOrganizationId: ID @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the organizationId field so that we can remove this temporary one.")

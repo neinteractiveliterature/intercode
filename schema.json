@@ -10241,7 +10241,7 @@
               "deprecationReason": "IDs have transitioned to the ID type.  Please switch back to the organizationId field so that we can remove this temporary one."
             },
             {
-              "name": "dorganizationId",
+              "name": "organizationId",
               "description": null,
               "type": {
                 "kind": "SCALAR",
