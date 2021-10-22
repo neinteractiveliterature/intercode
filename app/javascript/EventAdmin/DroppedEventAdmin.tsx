@@ -35,7 +35,7 @@ export default LoadQueryWrapper(useEventAdminEventsQuery, function DroppedEventA
             confirm({
               prompt: `Are you sure you want to restore this event?  (Scheduled runs and
               previous signups will not be restored.)`,
-              action: () => restoreDroppedEvent({ variables: { input: { transitionalId: droppedEvent.id } } }),
+              action: () => restoreDroppedEvent({ variables: { input: { id: droppedEvent.id } } }),
               renderError: (restoreError) => <ErrorDisplay graphQLError={restoreError} />,
             })
           }

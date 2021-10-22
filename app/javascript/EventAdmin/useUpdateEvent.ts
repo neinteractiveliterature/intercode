@@ -18,7 +18,7 @@ function useUpdateRegularEvent(): (options: UseUpdateRegularEventOptions) => Pro
         variables: {
           input: {
             ...buildEventInput(event),
-            transitionalId: event.id,
+            id: event.id,
           },
         },
       });
@@ -41,7 +41,7 @@ function useUpdateSingleRunEvent(): (options: UseUpdateSingleRunEventOptions) =>
 
   return useCallback(
     async ({ event, run }: UseUpdateSingleRunEventOptions) => {
-      await updateEvent({ variables: { input: { ...buildEventInput(event), transitionalId: event.id } } });
+      await updateEvent({ variables: { input: { ...buildEventInput(event), id: event.id } } });
 
       const runInput = buildRunInput(run);
 
@@ -50,7 +50,7 @@ function useUpdateSingleRunEvent(): (options: UseUpdateSingleRunEventOptions) =>
           variables: {
             input: {
               ...runInput,
-              transitionalId: run.id,
+              id: run.id,
             },
           },
         });
@@ -59,7 +59,7 @@ function useUpdateSingleRunEvent(): (options: UseUpdateSingleRunEventOptions) =>
           variables: {
             input: {
               ...runInput,
-              transitionalEventId: event.id,
+              eventId: event.id,
             },
           },
           update: (store, { data }) => {

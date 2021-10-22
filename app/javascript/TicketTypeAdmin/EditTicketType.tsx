@@ -29,7 +29,7 @@ export default LoadSingleValueFromCollectionWrapper(
         await mutate({
           variables: {
             input: {
-              transitionalId: ticketType.id,
+              id: ticketType.id,
               ticket_type: buildTicketTypeInput(ticketType),
             },
           },

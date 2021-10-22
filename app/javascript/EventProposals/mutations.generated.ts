@@ -55,7 +55,7 @@ export type UpdateEventProposalAdminNotesMutationData = { __typename: 'Mutation'
 export const CreateEventProposalDocument = gql`
     mutation CreateEventProposal($cloneEventProposalId: ID, $eventCategoryId: ID!) {
   createEventProposal(
-    input: {transitionalCloneEventProposalId: $cloneEventProposalId, transitionalEventCategoryId: $eventCategoryId}
+    input: {cloneEventProposalId: $cloneEventProposalId, eventCategoryId: $eventCategoryId}
   ) {
     event_proposal {
       id
@@ -128,7 +128,7 @@ export type UpdateEventProposalMutationResult = Apollo.MutationResult<UpdateEven
 export type UpdateEventProposalMutationOptions = Apollo.BaseMutationOptions<UpdateEventProposalMutationData, UpdateEventProposalMutationVariables>;
 export const DeleteEventProposalDocument = gql`
     mutation DeleteEventProposal($id: ID!) {
-  deleteEventProposal(input: {transitionalId: $id}) {
+  deleteEventProposal(input: {id: $id}) {
     clientMutationId
   }
 }
@@ -198,7 +198,7 @@ export type SubmitEventProposalMutationOptions = Apollo.BaseMutationOptions<Subm
 export const TransitionEventProposalDocument = gql`
     mutation TransitionEventProposal($eventProposalId: ID!, $status: String!, $dropEvent: Boolean) {
   transitionEventProposal(
-    input: {transitionalId: $eventProposalId, status: $status, drop_event: $dropEvent}
+    input: {id: $eventProposalId, status: $status, drop_event: $dropEvent}
   ) {
     event_proposal {
       id
@@ -238,7 +238,7 @@ export type TransitionEventProposalMutationOptions = Apollo.BaseMutationOptions<
 export const UpdateEventProposalAdminNotesDocument = gql`
     mutation UpdateEventProposalAdminNotes($eventProposalId: ID!, $adminNotes: String!) {
   updateEventProposalAdminNotes(
-    input: {transitionalId: $eventProposalId, admin_notes: $adminNotes}
+    input: {id: $eventProposalId, admin_notes: $adminNotes}
   ) {
     event_proposal {
       id

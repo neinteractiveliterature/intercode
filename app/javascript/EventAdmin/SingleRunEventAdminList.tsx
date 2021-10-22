@@ -65,7 +65,7 @@ export default LoadQueryWrapper<
             onClick={() =>
               confirm({
                 prompt: 'Are you sure you want to drop this event?',
-                action: () => drop({ variables: { input: { transitionalId: event.id } } }),
+                action: () => drop({ variables: { input: { id: event.id } } }),
                 renderError: (e) => <ErrorDisplay graphQLError={e} />,
               })
             }

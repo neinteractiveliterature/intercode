@@ -73,7 +73,7 @@ export type CreateContentGroupMutationOptions = Apollo.BaseMutationOptions<Creat
 export const UpdateContentGroupDocument = gql`
     mutation UpdateContentGroup($id: ID!, $cmsContentGroup: CmsContentGroupInput!, $grantPermissions: [PermissionInput!], $revokePermissions: [PermissionInput!]) {
   updateCmsContentGroup(
-    input: {transitionalId: $id, cms_content_group: $cmsContentGroup, grant_permissions: $grantPermissions, revoke_permissions: $revokePermissions}
+    input: {id: $id, cms_content_group: $cmsContentGroup, grant_permissions: $grantPermissions, revoke_permissions: $revokePermissions}
   ) {
     cms_content_group {
       id
@@ -113,7 +113,7 @@ export type UpdateContentGroupMutationResult = Apollo.MutationResult<UpdateConte
 export type UpdateContentGroupMutationOptions = Apollo.BaseMutationOptions<UpdateContentGroupMutationData, UpdateContentGroupMutationVariables>;
 export const DeleteContentGroupDocument = gql`
     mutation DeleteContentGroup($id: ID!) {
-  deleteCmsContentGroup(input: {transitionalId: $id}) {
+  deleteCmsContentGroup(input: {id: $id}) {
     clientMutationId
   }
 }

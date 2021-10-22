@@ -101,7 +101,7 @@ export const TeamMembersQueryDocument = gql`
   convention: conventionByRequestHost {
     id
     ...CommonConventionData
-    event(transitionalId: $eventId) {
+    event(id: $eventId) {
       id
       title
       event_category {
@@ -122,7 +122,7 @@ export const TeamMembersQueryDocument = gql`
       id
       name
       description
-      maximum_event_provided_tickets(transitionalEventId: $eventId)
+      maximum_event_provided_tickets(eventId: $eventId)
     }
     ticket_name
   }

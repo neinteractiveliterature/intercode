@@ -66,7 +66,7 @@ export type CreateCmsGraphqlQueryMutationResult = Apollo.MutationResult<CreateCm
 export type CreateCmsGraphqlQueryMutationOptions = Apollo.BaseMutationOptions<CreateCmsGraphqlQueryMutationData, CreateCmsGraphqlQueryMutationVariables>;
 export const UpdateCmsGraphqlQueryDocument = gql`
     mutation UpdateCmsGraphqlQuery($id: ID!, $query: CmsGraphqlQueryInput!) {
-  updateCmsGraphqlQuery(input: {transitionalId: $id, query: $query}) {
+  updateCmsGraphqlQuery(input: {id: $id, query: $query}) {
     query {
       id
       ...CmsGraphqlQueryFields
@@ -103,7 +103,7 @@ export type UpdateCmsGraphqlQueryMutationResult = Apollo.MutationResult<UpdateCm
 export type UpdateCmsGraphqlQueryMutationOptions = Apollo.BaseMutationOptions<UpdateCmsGraphqlQueryMutationData, UpdateCmsGraphqlQueryMutationVariables>;
 export const DeleteCmsGraphqlQueryDocument = gql`
     mutation DeleteCmsGraphqlQuery($id: ID!) {
-  deleteCmsGraphqlQuery(input: {transitionalId: $id}) {
+  deleteCmsGraphqlQuery(input: {id: $id}) {
     query {
       id
     }

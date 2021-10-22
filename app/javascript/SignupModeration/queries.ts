@@ -101,14 +101,14 @@ export const CreateSignupRunCardQuery = gql`
   query CreateSignupRunCardQuery($userConProfileId: ID!, $eventId: ID!) {
     currentAbility {
       can_read_schedule
-      can_read_event_signups(transitionalEventId: $eventId)
-      can_update_event(transitionalEventId: $eventId)
+      can_read_event_signups(eventId: $eventId)
+      can_update_event(eventId: $eventId)
     }
 
     convention: conventionByRequestHost {
       id
 
-      event(transitionalId: $eventId) {
+      event(id: $eventId) {
         id
         title
         length_seconds
@@ -141,7 +141,7 @@ export const CreateSignupRunCardQuery = gql`
         }
       }
 
-      user_con_profile(transitionalId: $userConProfileId) {
+      user_con_profile(id: $userConProfileId) {
         id
         name_without_nickname
 

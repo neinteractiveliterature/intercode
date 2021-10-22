@@ -54,7 +54,7 @@ export default LoadQueryWrapper(useAdminTicketTypesQuery, function TicketTypesLi
     useDeleteTicketTypeMutation,
     data.convention,
     'ticket_types',
-    (ticketType) => ({ input: { transitionalId: ticketType.id } }),
+    (ticketType) => ({ input: { id: ticketType.id } }),
   );
 
   const renderTicketTypeDisplay = (ticketType: TicketTypeType) => (

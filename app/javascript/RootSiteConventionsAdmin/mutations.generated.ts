@@ -27,7 +27,7 @@ export type SetConventionCanceledMutationData = { __typename: 'Mutation', setCon
 export const CreateConventionDocument = gql`
     mutation CreateConvention($convention: ConventionInput!, $cloneConventionId: ID, $organizationId: ID, $cmsContentSetName: String) {
   createConvention(
-    input: {convention: $convention, transitionalCloneConventionId: $cloneConventionId, transitionalOrganizationId: $organizationId, cms_content_set_name: $cmsContentSetName}
+    input: {convention: $convention, cloneConventionId: $cloneConventionId, organizationId: $organizationId, cms_content_set_name: $cmsContentSetName}
   ) {
     convention {
       id
@@ -67,7 +67,7 @@ export type CreateConventionMutationResult = Apollo.MutationResult<CreateConvent
 export type CreateConventionMutationOptions = Apollo.BaseMutationOptions<CreateConventionMutationData, CreateConventionMutationVariables>;
 export const SetConventionCanceledDocument = gql`
     mutation SetConventionCanceled($id: ID!, $canceled: Boolean!) {
-  setConventionCanceled(input: {transitionalId: $id, canceled: $canceled}) {
+  setConventionCanceled(input: {id: $id, canceled: $canceled}) {
     convention {
       id
       ...ConventionDisplayFields

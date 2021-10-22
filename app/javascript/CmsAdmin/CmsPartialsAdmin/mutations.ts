@@ -16,7 +16,7 @@ export const CreatePartial = gql`
 
 export const UpdatePartial = gql`
   mutation UpdatePartial($id: ID!, $cmsPartial: CmsPartialInput!) {
-    updateCmsPartial(input: { transitionalId: $id, cms_partial: $cmsPartial }) {
+    updateCmsPartial(input: { id: $id, cms_partial: $cmsPartial }) {
       cms_partial {
         id
         ...CmsPartialFields
@@ -29,7 +29,7 @@ export const UpdatePartial = gql`
 
 export const DeletePartial = gql`
   mutation DeletePartial($id: ID!) {
-    deleteCmsPartial(input: { transitionalId: $id }) {
+    deleteCmsPartial(input: { id: $id }) {
       clientMutationId
     }
   }

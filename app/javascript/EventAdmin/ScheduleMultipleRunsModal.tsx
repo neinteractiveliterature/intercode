@@ -123,12 +123,12 @@ function ScheduleMultipleRunsModal({
   const scheduleRuns = useCallback(async () => {
     const runs: RunInput[] = nonConflictingTimespansWithinRange.map((nonConflictingTimespan) => ({
       starts_at: nonConflictingTimespan.start.toISO(),
-      transitionalRoomIds: rooms.map((room) => room.id),
+      roomIds: rooms.map((room) => room.id),
     }));
 
     await createMultipleRuns({
       variables: {
-        input: { transitionalEventId: event.id, runs },
+        input: { eventId: event.id, runs },
       },
       update: (store, { data }) => {
         const eventsData = store.readQuery<EventAdminEventsQueryData>({

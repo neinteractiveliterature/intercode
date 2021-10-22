@@ -155,7 +155,7 @@ export const UpdateMaximumEventProvidedTicketsOverride = gql`
 
 export const UpdateEventAdminNotes = gql`
   mutation UpdateEventAdminNotes($eventId: ID!, $adminNotes: String!) {
-    updateEventAdminNotes(input: { transitionalId: $eventId, admin_notes: $adminNotes }) {
+    updateEventAdminNotes(input: { id: $eventId, admin_notes: $adminNotes }) {
       event {
         id
         ...EventFields

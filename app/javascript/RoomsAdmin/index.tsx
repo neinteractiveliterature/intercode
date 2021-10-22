@@ -33,7 +33,7 @@ export default LoadQueryWrapper(useRoomsAdminQuery, function RoomsAdmin({ data }
     useDeleteRoomMutation,
     data.convention,
     'rooms',
-    (room) => ({ input: { transitionalId: room.id } }),
+    (room) => ({ input: { id: room.id } }),
   );
   const confirm = useGraphQLConfirm();
 
@@ -45,7 +45,7 @@ export default LoadQueryWrapper(useRoomsAdminQuery, function RoomsAdmin({ data }
 
   const roomNameDidChange = (id: string, name: string) =>
     updateRoom({
-      variables: { input: { transitionalId: id, room: { name } } },
+      variables: { input: { id: id, room: { name } } },
     });
 
   const createRoomWasClicked = async (event: React.SyntheticEvent) => {

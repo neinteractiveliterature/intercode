@@ -54,8 +54,8 @@ function MergeUsersModal({ closeModal, visible, userIds }: MergeUsersModalProps)
         userIds: userIds,
         winningUserId: winningUserId,
         winningUserConProfiles: [...winningProfileIds.entries()].map(([conventionId, userConProfileId]) => ({
-          transitionalConventionId: conventionId,
-          transitionalUserConProfileId: userConProfileId,
+          conventionId: conventionId,
+          userConProfileId: userConProfileId,
         })),
       },
     });

@@ -117,7 +117,7 @@ export const UserConProfileQueryDocument = gql`
   convention: conventionByRequestHost {
     ...UserConProfileFormData
     id
-    user_con_profile(transitionalId: $id) {
+    user_con_profile(id: $id) {
       id
       current_user_form_item_viewer_role
       current_user_form_item_writer_role
@@ -170,12 +170,12 @@ export const UserConProfileAdminQueryDocument = gql`
       id
       ability {
         can_read_signups
-        can_update_user_con_profile(transitionalUserConProfileId: $id)
-        can_delete_user_con_profile(transitionalUserConProfileId: $id)
-        can_become_user_con_profile(transitionalUserConProfileId: $id)
+        can_update_user_con_profile(userConProfileId: $id)
+        can_delete_user_con_profile(userConProfileId: $id)
+        can_become_user_con_profile(userConProfileId: $id)
       }
     }
-    user_con_profile(transitionalId: $id) {
+    user_con_profile(id: $id) {
       id
       email
       user_id
@@ -353,7 +353,7 @@ export const ConvertToEventProvidedTicketQueryDocument = gql`
   convention: conventionByRequestHost {
     id
     ticket_name
-    event(transitionalId: $eventId) {
+    event(id: $eventId) {
       id
       title
       event_category {
@@ -370,7 +370,7 @@ export const ConvertToEventProvidedTicketQueryDocument = gql`
     }
     ticket_types {
       id
-      maximum_event_provided_tickets(transitionalEventId: $eventId)
+      maximum_event_provided_tickets(eventId: $eventId)
       description
       name
     }
@@ -484,8 +484,8 @@ export const TicketAdminWithTicketAbilityQueryDocument = gql`
     query TicketAdminWithTicketAbilityQuery($ticketId: ID!) {
   currentAbility {
     can_create_tickets
-    can_update_ticket(transitionalTicketId: $ticketId)
-    can_delete_ticket(transitionalTicketId: $ticketId)
+    can_update_ticket(ticketId: $ticketId)
+    can_delete_ticket(ticketId: $ticketId)
   }
 }
     `;

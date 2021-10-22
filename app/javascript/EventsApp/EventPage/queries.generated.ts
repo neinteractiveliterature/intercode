@@ -90,8 +90,8 @@ export const EventPageQueryDocument = gql`
   __typename
   currentAbility {
     can_read_schedule
-    can_update_event(transitionalEventId: $eventId)
-    can_read_event_signups(transitionalEventId: $eventId)
+    can_update_event(eventId: $eventId)
+    can_read_event_signups(eventId: $eventId)
   }
   convention: conventionByRequestHost {
     id
@@ -99,7 +99,7 @@ export const EventPageQueryDocument = gql`
     my_profile {
       id
     }
-    event(transitionalId: $eventId) {
+    event(id: $eventId) {
       id
       title
       length_seconds

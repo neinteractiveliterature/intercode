@@ -132,7 +132,7 @@ export type DeleteCouponApplicationMutationData = { __typename: 'Mutation', dele
 
 export const MarkOrderPaidDocument = gql`
     mutation MarkOrderPaid($orderId: ID!) {
-  markOrderPaid(input: {transitionalId: $orderId}) {
+  markOrderPaid(input: {id: $orderId}) {
     order {
       id
       ...AdminOrderFieldsFragment
@@ -168,7 +168,7 @@ export type MarkOrderPaidMutationResult = Apollo.MutationResult<MarkOrderPaidMut
 export type MarkOrderPaidMutationOptions = Apollo.BaseMutationOptions<MarkOrderPaidMutationData, MarkOrderPaidMutationVariables>;
 export const CancelOrderDocument = gql`
     mutation CancelOrder($orderId: ID!, $skipRefund: Boolean) {
-  cancelOrder(input: {transitionalId: $orderId, skip_refund: $skipRefund}) {
+  cancelOrder(input: {id: $orderId, skip_refund: $skipRefund}) {
     order {
       id
       ...AdminOrderFieldsFragment
@@ -206,7 +206,7 @@ export type CancelOrderMutationOptions = Apollo.BaseMutationOptions<CancelOrderM
 export const CreateOrderDocument = gql`
     mutation CreateOrder($userConProfileId: ID!, $order: OrderInput!, $status: OrderStatus!, $orderEntries: [OrderEntryInput!]) {
   createOrder(
-    input: {transitionalUserConProfileId: $userConProfileId, order: $order, status: $status, order_entries: $orderEntries}
+    input: {userConProfileId: $userConProfileId, order: $order, status: $status, order_entries: $orderEntries}
   ) {
     order {
       id
@@ -246,7 +246,7 @@ export type CreateOrderMutationResult = Apollo.MutationResult<CreateOrderMutatio
 export type CreateOrderMutationOptions = Apollo.BaseMutationOptions<CreateOrderMutationData, CreateOrderMutationVariables>;
 export const AdminUpdateOrderDocument = gql`
     mutation AdminUpdateOrder($id: ID!, $order: OrderInput!) {
-  updateOrder(input: {transitionalId: $id, order: $order}) {
+  updateOrder(input: {id: $id, order: $order}) {
     order {
       id
       ...AdminOrderFieldsFragment
@@ -319,7 +319,7 @@ export type CreateProductMutationResult = Apollo.MutationResult<CreateProductMut
 export type CreateProductMutationOptions = Apollo.BaseMutationOptions<CreateProductMutationData, CreateProductMutationVariables>;
 export const UpdateProductDocument = gql`
     mutation UpdateProduct($id: ID!, $product: ProductInput!) {
-  updateProduct(input: {transitionalId: $id, product: $product}) {
+  updateProduct(input: {id: $id, product: $product}) {
     product {
       id
       ...AdminProductFields
@@ -356,7 +356,7 @@ export type UpdateProductMutationResult = Apollo.MutationResult<UpdateProductMut
 export type UpdateProductMutationOptions = Apollo.BaseMutationOptions<UpdateProductMutationData, UpdateProductMutationVariables>;
 export const DeleteProductDocument = gql`
     mutation DeleteProduct($id: ID!) {
-  deleteProduct(input: {transitionalId: $id}) {
+  deleteProduct(input: {id: $id}) {
     product {
       id
       ...AdminProductFields
@@ -621,7 +621,7 @@ export type SubmitOrderMutationOptions = Apollo.BaseMutationOptions<SubmitOrderM
 export const AddOrderEntryToCurrentPendingOrderDocument = gql`
     mutation AddOrderEntryToCurrentPendingOrder($productId: ID!, $productVariantId: ID, $quantity: Int!) {
   addOrderEntryToCurrentPendingOrder(
-    input: {order_entry: {transitionalProductId: $productId, transitionalProductVariantId: $productVariantId, quantity: $quantity}}
+    input: {order_entry: {productId: $productId, productVariantId: $productVariantId, quantity: $quantity}}
   ) {
     order_entry {
       id
@@ -659,9 +659,7 @@ export type AddOrderEntryToCurrentPendingOrderMutationResult = Apollo.MutationRe
 export type AddOrderEntryToCurrentPendingOrderMutationOptions = Apollo.BaseMutationOptions<AddOrderEntryToCurrentPendingOrderMutationData, AddOrderEntryToCurrentPendingOrderMutationVariables>;
 export const CreateCouponApplicationDocument = gql`
     mutation CreateCouponApplication($orderId: ID!, $couponCode: String!) {
-  createCouponApplication(
-    input: {transitionalOrderId: $orderId, coupon_code: $couponCode}
-  ) {
+  createCouponApplication(input: {orderId: $orderId, coupon_code: $couponCode}) {
     coupon_application {
       id
       order {
@@ -701,7 +699,7 @@ export type CreateCouponApplicationMutationResult = Apollo.MutationResult<Create
 export type CreateCouponApplicationMutationOptions = Apollo.BaseMutationOptions<CreateCouponApplicationMutationData, CreateCouponApplicationMutationVariables>;
 export const DeleteCouponApplicationDocument = gql`
     mutation DeleteCouponApplication($id: ID!) {
-  deleteCouponApplication(input: {transitionalId: $id}) {
+  deleteCouponApplication(input: {id: $id}) {
     coupon_application {
       id
       order {

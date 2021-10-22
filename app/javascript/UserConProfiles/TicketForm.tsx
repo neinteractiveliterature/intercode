@@ -46,8 +46,8 @@ function TicketForm({
         return;
       }
       const ticketInput = {
-        transitionalTicketTypeId: ticketTypeId,
-        transitionalProvidedByEventId: providedByEvent?.id,
+        ticketTypeId: ticketTypeId,
+        providedByEventId: providedByEvent?.id,
       };
       event.preventDefault();
       await submit(ticketInput);

@@ -42,13 +42,7 @@ export const UpdateTeamMember = gql`
 
 export const ProvideEventTicket = gql`
   mutation ProvideEventTicket($eventId: ID!, $userConProfileId: ID!, $ticketTypeId: ID!) {
-    provideEventTicket(
-      input: {
-        transitionalEventId: $eventId
-        transitionalUserConProfileId: $userConProfileId
-        transitionalTicketTypeId: $ticketTypeId
-      }
-    ) {
+    provideEventTicket(input: { eventId: $eventId, userConProfileId: $userConProfileId, ticketTypeId: $ticketTypeId }) {
       ticket {
         id
         ...TeamMemberTicketFields

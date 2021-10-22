@@ -64,11 +64,11 @@ function NewTeamMember({ event, eventPath }: NewTeamMemberProps): JSX.Element {
       await createTeamMember({
         variables: {
           input: {
-            transitionalEventId: event.id,
+            eventId: event.id,
             team_member: buildTeamMemberInput(
               teamMember as TeamMembersQueryData['convention']['event']['team_members'][0],
             ),
-            transitionalUserConProfileId: teamMember.user_con_profile.id,
+            userConProfileId: teamMember.user_con_profile.id,
           },
         },
       });

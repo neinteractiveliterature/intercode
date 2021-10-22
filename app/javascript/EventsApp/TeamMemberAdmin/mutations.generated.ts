@@ -149,7 +149,7 @@ export type UpdateTeamMemberMutationOptions = Apollo.BaseMutationOptions<UpdateT
 export const ProvideEventTicketDocument = gql`
     mutation ProvideEventTicket($eventId: ID!, $userConProfileId: ID!, $ticketTypeId: ID!) {
   provideEventTicket(
-    input: {transitionalEventId: $eventId, transitionalUserConProfileId: $userConProfileId, transitionalTicketTypeId: $ticketTypeId}
+    input: {eventId: $eventId, userConProfileId: $userConProfileId, ticketTypeId: $ticketTypeId}
   ) {
     ticket {
       id

@@ -93,12 +93,12 @@ export const EventProposalFormDataFragmentDoc = gql`
 export const EventProposalQueryDocument = gql`
     query EventProposalQuery($eventProposalId: ID!) {
   currentAbility {
-    can_delete_event_proposal(transitionalEventProposalId: $eventProposalId)
+    can_delete_event_proposal(eventProposalId: $eventProposalId)
   }
   convention: conventionByRequestHost {
     id
     ...EventProposalFormData
-    event_proposal(transitionalId: $eventProposalId) {
+    event_proposal(id: $eventProposalId) {
       id
       ...EventProposalFields
     }
@@ -139,7 +139,7 @@ export const EventProposalQueryWithOwnerDocument = gql`
   convention: conventionByRequestHost {
     id
     ...EventProposalFormData
-    event_proposal(transitionalId: $eventProposalId) {
+    event_proposal(id: $eventProposalId) {
       id
       ...EventProposalFields
       owner {
@@ -152,10 +152,8 @@ export const EventProposalQueryWithOwnerDocument = gql`
     }
   }
   currentAbility {
-    can_update_event_proposal(transitionalEventProposalId: $eventProposalId)
-    can_read_admin_notes_on_event_proposal(
-      transitionalEventProposalId: $eventProposalId
-    )
+    can_update_event_proposal(eventProposalId: $eventProposalId)
+    can_read_admin_notes_on_event_proposal(eventProposalId: $eventProposalId)
   }
 }
     ${EventProposalFormDataFragmentDoc}
@@ -192,7 +190,7 @@ export const EventProposalAdminNotesQueryDocument = gql`
     query EventProposalAdminNotesQuery($eventProposalId: ID!) {
   convention: conventionByRequestHost {
     id
-    event_proposal(transitionalId: $eventProposalId) {
+    event_proposal(id: $eventProposalId) {
       id
       admin_notes
     }
@@ -385,7 +383,7 @@ export const EventProposalHistoryQueryDocument = gql`
     ends_at
     timezone_name
     timezone_mode
-    event_proposal(transitionalId: $id) {
+    event_proposal(id: $id) {
       id
       title
       owner {

@@ -4,7 +4,7 @@ import { UserConProfileFields, UserConProfileAdminTicketFields } from './queries
 
 export const CreateUserConProfile = gql`
   mutation CreateUserConProfile($user_id: ID!, $user_con_profile: UserConProfileInput!) {
-    createUserConProfile(input: { transitionalUserId: $user_id, user_con_profile: $user_con_profile }) {
+    createUserConProfile(input: { userId: $user_id, user_con_profile: $user_con_profile }) {
       user_con_profile {
         id
       }
@@ -27,7 +27,7 @@ export const UpdateUserConProfile = gql`
 
 export const DeleteUserConProfile = gql`
   mutation DeleteUserConProfile($userConProfileId: ID!) {
-    deleteUserConProfile(input: { transitionalId: $userConProfileId }) {
+    deleteUserConProfile(input: { id: $userConProfileId }) {
       user_con_profile {
         id
       }
@@ -37,7 +37,7 @@ export const DeleteUserConProfile = gql`
 
 export const CreateTicket = gql`
   mutation CreateTicket($userConProfileId: ID!, $ticket: TicketInput!) {
-    createTicket(input: { transitionalUserConProfileId: $userConProfileId, ticket: $ticket }) {
+    createTicket(input: { userConProfileId: $userConProfileId, ticket: $ticket }) {
       ticket {
         id
         ...UserConProfileAdminTicketFields
@@ -50,7 +50,7 @@ export const CreateTicket = gql`
 
 export const UpdateTicket = gql`
   mutation UpdateTicket($id: ID!, $ticket: TicketInput!) {
-    updateTicket(input: { transitionalId: $id, ticket: $ticket }) {
+    updateTicket(input: { id: $id, ticket: $ticket }) {
       ticket {
         id
         ...UserConProfileAdminTicketFields
@@ -63,7 +63,7 @@ export const UpdateTicket = gql`
 
 export const DeleteTicket = gql`
   mutation DeleteTicket($ticketId: ID!, $refund: Boolean!) {
-    deleteTicket(input: { transitionalId: $ticketId, refund: $refund }) {
+    deleteTicket(input: { id: $ticketId, refund: $refund }) {
       ticket {
         id
       }
@@ -74,11 +74,7 @@ export const DeleteTicket = gql`
 export const ConvertTicketToEventProvided = gql`
   mutation ConvertTicketToEventProvided($eventId: ID!, $ticketTypeId: ID!, $userConProfileId: ID!) {
     convertTicketToEventProvided(
-      input: {
-        transitionalEventId: $eventId
-        transitionalTicketTypeId: $ticketTypeId
-        transitionalUserConProfileId: $userConProfileId
-      }
+      input: { eventId: $eventId, ticketTypeId: $ticketTypeId, userConProfileId: $userConProfileId }
     ) {
       ticket {
         id

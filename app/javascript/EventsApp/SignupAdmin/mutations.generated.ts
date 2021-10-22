@@ -42,7 +42,7 @@ export type WithdrawAllUserConProfileSignupsMutationData = { __typename: 'Mutati
 
 export const ChangeSignupBucketDocument = gql`
     mutation ChangeSignupBucket($signupId: ID!, $bucketKey: String!) {
-  updateSignupBucket(input: {transitionalId: $signupId, bucket_key: $bucketKey}) {
+  updateSignupBucket(input: {id: $signupId, bucket_key: $bucketKey}) {
     signup {
       id
       ...SignupFields
@@ -86,7 +86,7 @@ export type ChangeSignupBucketMutationResult = Apollo.MutationResult<ChangeSignu
 export type ChangeSignupBucketMutationOptions = Apollo.BaseMutationOptions<ChangeSignupBucketMutationData, ChangeSignupBucketMutationVariables>;
 export const ForceConfirmSignupDocument = gql`
     mutation ForceConfirmSignup($signupId: ID!, $bucketKey: String!) {
-  forceConfirmSignup(input: {transitionalId: $signupId, bucket_key: $bucketKey}) {
+  forceConfirmSignup(input: {id: $signupId, bucket_key: $bucketKey}) {
     signup {
       id
       ...SignupFields
@@ -130,7 +130,7 @@ export type ForceConfirmSignupMutationResult = Apollo.MutationResult<ForceConfir
 export type ForceConfirmSignupMutationOptions = Apollo.BaseMutationOptions<ForceConfirmSignupMutationData, ForceConfirmSignupMutationVariables>;
 export const UpdateSignupCountedDocument = gql`
     mutation UpdateSignupCounted($signupId: ID!, $counted: Boolean!) {
-  updateSignupCounted(input: {transitionalId: $signupId, counted: $counted}) {
+  updateSignupCounted(input: {id: $signupId, counted: $counted}) {
     signup {
       id
       ...SignupFields
@@ -174,9 +174,7 @@ export type UpdateSignupCountedMutationResult = Apollo.MutationResult<UpdateSign
 export type UpdateSignupCountedMutationOptions = Apollo.BaseMutationOptions<UpdateSignupCountedMutationData, UpdateSignupCountedMutationVariables>;
 export const WithdrawAllUserConProfileSignupsDocument = gql`
     mutation WithdrawAllUserConProfileSignups($userConProfileId: ID!) {
-  withdrawAllUserConProfileSignups(
-    input: {transitionalUserConProfileId: $userConProfileId}
-  ) {
+  withdrawAllUserConProfileSignups(input: {userConProfileId: $userConProfileId}) {
     user_con_profile {
       id
       ...UserConProfileSignupsFragment

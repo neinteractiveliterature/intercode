@@ -150,7 +150,7 @@ export type CreateFormWithJsonMutationResult = Apollo.MutationResult<CreateFormW
 export type CreateFormWithJsonMutationOptions = Apollo.BaseMutationOptions<CreateFormWithJsonMutationData, CreateFormWithJsonMutationVariables>;
 export const UpdateFormWithJsonDocument = gql`
     mutation UpdateFormWithJSON($id: ID!, $formJSON: String!) {
-  updateFormWithJSON(input: {transitionalId: $id, form_json: $formJSON}) {
+  updateFormWithJSON(input: {id: $id, form_json: $formJSON}) {
     form {
       id
       ...FormFields
@@ -224,7 +224,7 @@ export type CreateFormMutationResult = Apollo.MutationResult<CreateFormMutationD
 export type CreateFormMutationOptions = Apollo.BaseMutationOptions<CreateFormMutationData, CreateFormMutationVariables>;
 export const UpdateFormDocument = gql`
     mutation UpdateForm($id: ID!, $form: FormInput!) {
-  updateForm(input: {transitionalId: $id, form: $form}) {
+  updateForm(input: {id: $id, form: $form}) {
     form {
       id
       ...FormEditorData
@@ -261,7 +261,7 @@ export type UpdateFormMutationResult = Apollo.MutationResult<UpdateFormMutationD
 export type UpdateFormMutationOptions = Apollo.BaseMutationOptions<UpdateFormMutationData, UpdateFormMutationVariables>;
 export const DeleteFormDocument = gql`
     mutation DeleteForm($id: ID!) {
-  deleteForm(input: {transitionalId: $id}) {
+  deleteForm(input: {id: $id}) {
     clientMutationId
   }
 }
@@ -294,9 +294,7 @@ export type DeleteFormMutationResult = Apollo.MutationResult<DeleteFormMutationD
 export type DeleteFormMutationOptions = Apollo.BaseMutationOptions<DeleteFormMutationData, DeleteFormMutationVariables>;
 export const CreateFormSectionDocument = gql`
     mutation CreateFormSection($formId: ID!, $formSection: FormSectionInput!) {
-  createFormSection(
-    input: {transitionalFormId: $formId, form_section: $formSection}
-  ) {
+  createFormSection(input: {formId: $formId, form_section: $formSection}) {
     form_section {
       id
       ...FormEditorFormSectionFields
@@ -333,7 +331,7 @@ export type CreateFormSectionMutationResult = Apollo.MutationResult<CreateFormSe
 export type CreateFormSectionMutationOptions = Apollo.BaseMutationOptions<CreateFormSectionMutationData, CreateFormSectionMutationVariables>;
 export const UpdateFormSectionDocument = gql`
     mutation UpdateFormSection($id: ID!, $formSection: FormSectionInput!) {
-  updateFormSection(input: {transitionalId: $id, form_section: $formSection}) {
+  updateFormSection(input: {id: $id, form_section: $formSection}) {
     form_section {
       id
       ...FormEditorFormSectionFields
@@ -370,7 +368,7 @@ export type UpdateFormSectionMutationResult = Apollo.MutationResult<UpdateFormSe
 export type UpdateFormSectionMutationOptions = Apollo.BaseMutationOptions<UpdateFormSectionMutationData, UpdateFormSectionMutationVariables>;
 export const DeleteFormSectionDocument = gql`
     mutation DeleteFormSection($id: ID!) {
-  deleteFormSection(input: {transitionalId: $id}) {
+  deleteFormSection(input: {id: $id}) {
     clientMutationId
   }
 }
@@ -403,9 +401,7 @@ export type DeleteFormSectionMutationResult = Apollo.MutationResult<DeleteFormSe
 export type DeleteFormSectionMutationOptions = Apollo.BaseMutationOptions<DeleteFormSectionMutationData, DeleteFormSectionMutationVariables>;
 export const MoveFormSectionDocument = gql`
     mutation MoveFormSection($id: ID!, $destinationIndex: Int!) {
-  moveFormSection(
-    input: {transitionalId: $id, destination_index: $destinationIndex}
-  ) {
+  moveFormSection(input: {id: $id, destination_index: $destinationIndex}) {
     form {
       id
       ...FormEditorData
@@ -442,9 +438,7 @@ export type MoveFormSectionMutationResult = Apollo.MutationResult<MoveFormSectio
 export type MoveFormSectionMutationOptions = Apollo.BaseMutationOptions<MoveFormSectionMutationData, MoveFormSectionMutationVariables>;
 export const CreateFormItemDocument = gql`
     mutation CreateFormItem($formSectionId: ID!, $formItem: FormItemInput!) {
-  createFormItem(
-    input: {transitionalFormSectionId: $formSectionId, form_item: $formItem}
-  ) {
+  createFormItem(input: {formSectionId: $formSectionId, form_item: $formItem}) {
     form_item {
       id
       ...FormEditorFormItemFields
@@ -481,7 +475,7 @@ export type CreateFormItemMutationResult = Apollo.MutationResult<CreateFormItemM
 export type CreateFormItemMutationOptions = Apollo.BaseMutationOptions<CreateFormItemMutationData, CreateFormItemMutationVariables>;
 export const UpdateFormItemDocument = gql`
     mutation UpdateFormItem($id: ID!, $formItem: FormItemInput!) {
-  updateFormItem(input: {transitionalId: $id, form_item: $formItem}) {
+  updateFormItem(input: {id: $id, form_item: $formItem}) {
     form_item {
       id
       ...FormEditorFormItemFields
@@ -518,7 +512,7 @@ export type UpdateFormItemMutationResult = Apollo.MutationResult<UpdateFormItemM
 export type UpdateFormItemMutationOptions = Apollo.BaseMutationOptions<UpdateFormItemMutationData, UpdateFormItemMutationVariables>;
 export const DeleteFormItemDocument = gql`
     mutation DeleteFormItem($id: ID!) {
-  deleteFormItem(input: {transitionalId: $id}) {
+  deleteFormItem(input: {id: $id}) {
     clientMutationId
   }
 }
@@ -552,7 +546,7 @@ export type DeleteFormItemMutationOptions = Apollo.BaseMutationOptions<DeleteFor
 export const MoveFormItemDocument = gql`
     mutation MoveFormItem($id: ID!, $formSectionId: ID!, $destinationIndex: Int) {
   moveFormItem(
-    input: {transitionalId: $id, transitionalFormSectionId: $formSectionId, destination_index: $destinationIndex}
+    input: {id: $id, formSectionId: $formSectionId, destination_index: $destinationIndex}
   ) {
     form_section {
       id

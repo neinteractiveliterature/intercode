@@ -66,7 +66,7 @@ export type CreatePageMutationResult = Apollo.MutationResult<CreatePageMutationD
 export type CreatePageMutationOptions = Apollo.BaseMutationOptions<CreatePageMutationData, CreatePageMutationVariables>;
 export const UpdatePageDocument = gql`
     mutation UpdatePage($id: ID!, $page: PageInput!) {
-  updatePage(input: {transitionalId: $id, page: $page}) {
+  updatePage(input: {id: $id, page: $page}) {
     page {
       id
       ...CmsPageFields
@@ -103,7 +103,7 @@ export type UpdatePageMutationResult = Apollo.MutationResult<UpdatePageMutationD
 export type UpdatePageMutationOptions = Apollo.BaseMutationOptions<UpdatePageMutationData, UpdatePageMutationVariables>;
 export const DeletePageDocument = gql`
     mutation DeletePage($id: ID!) {
-  deletePage(input: {transitionalId: $id}) {
+  deletePage(input: {id: $id}) {
     clientMutationId
   }
 }

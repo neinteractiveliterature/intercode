@@ -136,7 +136,7 @@ export const FormEditorQueryDocument = gql`
     timezone_name
     timezone_mode
     event_mailing_list_domain
-    form(transitionalId: $id) {
+    form(id: $id) {
       id
       ...FormEditorData
     }
@@ -175,9 +175,9 @@ export const PreviewFormItemQueryDocument = gql`
     query PreviewFormItemQuery($formId: ID!, $formSectionId: ID!, $formItem: FormItemInput!) {
   convention: conventionByRequestHost {
     id
-    form(transitionalId: $formId) {
+    form(id: $formId) {
       id
-      form_section(transitionalId: $formSectionId) {
+      form_section(id: $formSectionId) {
         id
         preview_form_item(formItem: $formItem) {
           id

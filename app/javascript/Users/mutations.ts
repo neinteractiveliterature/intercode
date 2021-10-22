@@ -4,11 +4,7 @@ import { DetailedUserFields } from './queries';
 export const MergeUsers = gql`
   mutation MergeUsers($userIds: [ID!]!, $winningUserId: ID!, $winningUserConProfiles: [WinningUserConProfileInput!]!) {
     mergeUsers(
-      input: {
-        transitionalUserIds: $userIds
-        transitionalWinningUserId: $winningUserId
-        winningUserConProfiles: $winningUserConProfiles
-      }
+      input: { userIds: $userIds, winningUserId: $winningUserId, winningUserConProfiles: $winningUserConProfiles }
     ) {
       user {
         id

@@ -45,10 +45,10 @@ export default LoadSingleValueFromCollectionWrapper(
           userActivityAlert: buildUserActivityAlertInput(userActivityAlert),
           addNotificationDestinations: notificationDestinationChangeSet.getAddValues().map((addValue) => {
             if (addValue.staff_position) {
-              return { transitionalStaffPositionId: addValue.staff_position.id };
+              return { staffPositionId: addValue.staff_position.id };
             }
             if (addValue.user_con_profile) {
-              return { transitionalUserConProfileId: addValue.user_con_profile.id };
+              return { userConProfileId: addValue.user_con_profile.id };
             }
             throw new Error('Notification destination must have either a staff position or user con profile');
           }),
