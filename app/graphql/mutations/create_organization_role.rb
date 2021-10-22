@@ -9,7 +9,7 @@ class Mutations::CreateOrganizationRole < Mutations::BaseMutation
 we can remove this temporary one.",
            required: false,
            camelize: true
-  argument :dorganization_id, ID, required: false, camelize: true
+  argument :organization_id, ID, required: false, camelize: true
   argument :organization_role, Types::OrganizationRoleInputType, required: true, camelize: false
   argument :transitional_user_ids,
            [ID],
