@@ -1,12 +1,7 @@
 import { gql } from '@apollo/client';
 
 export const UsersTableUsersQuery = gql`
-  query UsersTableUsersQuery(
-    $page: Int
-    $perPage: Int
-    $filters: UserFiltersInput
-    $sort: [SortInput!]
-  ) {
+  query UsersTableUsersQuery($page: Int, $perPage: Int, $filters: UserFiltersInput, $sort: [SortInput!]) {
     users_paginated(page: $page, per_page: $perPage, filters: $filters, sort: $sort) {
       total_entries
       total_pages
@@ -70,8 +65,8 @@ export const DetailedUserFields = gql`
 `;
 
 export const UserAdminQuery = gql`
-  query UserAdminQuery($id: Int!) {
-    user(id: $id) {
+  query UserAdminQuery($id: ID!) {
+    user(transitionalId: $id) {
       id: transitionalId
       ...DetailedUserFields
     }

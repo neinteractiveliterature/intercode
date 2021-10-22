@@ -4,5 +4,5 @@ import { useConventionDisplayQuery } from './queries.generated';
 
 export function useConventionQueryFromIdParam(): ReturnType<typeof useConventionDisplayQuery> {
   const { id } = useParams<{ id: string }>();
-  return useConventionDisplayQuery({ variables: { id: Number.parseInt(id, 10) } });
+  return useConventionDisplayQuery({ variables: { id } });
 }

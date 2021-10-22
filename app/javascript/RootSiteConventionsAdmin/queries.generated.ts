@@ -16,7 +16,7 @@ export type RootSiteConventionsAdminTableQueryData = { __typename: 'Query', conv
 export type ConventionDisplayFieldsFragment = { __typename: 'Convention', name: string, starts_at?: string | null | undefined, ends_at?: string | null | undefined, canceled: boolean, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, domain?: string | null | undefined, site_mode: Types.SiteMode, ticket_mode: Types.TicketMode, show_event_list?: Types.ShowSchedule | null | undefined, show_schedule?: Types.ShowSchedule | null | undefined, email_from: string, hidden: boolean, language: string, id: string, maximum_event_signups?: { __typename: 'ScheduledValue', timespans: Array<{ __typename: 'TimespanWithValue', start?: string | null | undefined, finish?: string | null | undefined, value: string }> } | null | undefined, organization?: { __typename: 'Organization', name: string, id: string } | null | undefined };
 
 export type ConventionDisplayQueryVariables = Types.Exact<{
-  id: Types.Scalars['Int'];
+  id: Types.Scalars['ID'];
 }>;
 
 
@@ -108,8 +108,8 @@ export type RootSiteConventionsAdminTableQueryHookResult = ReturnType<typeof use
 export type RootSiteConventionsAdminTableQueryLazyQueryHookResult = ReturnType<typeof useRootSiteConventionsAdminTableQueryLazyQuery>;
 export type RootSiteConventionsAdminTableQueryQueryResult = Apollo.QueryResult<RootSiteConventionsAdminTableQueryData, RootSiteConventionsAdminTableQueryVariables>;
 export const ConventionDisplayQueryDocument = gql`
-    query ConventionDisplayQuery($id: Int!) {
-  convention: conventionById(id: $id) {
+    query ConventionDisplayQuery($id: ID!) {
+  convention: conventionById(transitionalId: $id) {
     id: transitionalId
     ...ConventionDisplayFields
   }
