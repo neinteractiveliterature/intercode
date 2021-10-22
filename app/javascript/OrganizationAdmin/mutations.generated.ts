@@ -38,7 +38,7 @@ export type DeleteOrganizationRoleMutationData = { __typename: 'Mutation', delet
 export const CreateOrganizationRoleDocument = gql`
     mutation CreateOrganizationRole($organizationId: ID!, $name: String!, $userIds: [ID!]!, $permissions: [PermissionInput!]!) {
   createOrganizationRole(
-    input: {transitionalOrganizationId: $organizationId, organization_role: {name: $name}, transitionalUserIds: $userIds, permissions: $permissions}
+    input: {organizationId: $organizationId, organization_role: {name: $name}, userIds: $userIds, permissions: $permissions}
   ) {
     organization_role {
       id
@@ -79,7 +79,7 @@ export type CreateOrganizationRoleMutationOptions = Apollo.BaseMutationOptions<C
 export const UpdateOrganizationRoleDocument = gql`
     mutation UpdateOrganizationRole($id: ID!, $name: String, $addUserIds: [ID!], $removeUserIds: [ID!], $addPermissions: [PermissionInput!], $removePermissionIds: [ID!]) {
   updateOrganizationRole(
-    input: {transitionalId: $id, organization_role: {name: $name}, transitionalAddUserIds: $addUserIds, transitionalRemoveUserIds: $removeUserIds, add_permissions: $addPermissions, transitionalRemovePermissionIds: $removePermissionIds}
+    input: {id: $id, organization_role: {name: $name}, addUserIds: $addUserIds, removeUserIds: $removeUserIds, add_permissions: $addPermissions, removePermissionIds: $removePermissionIds}
   ) {
     organization_role {
       id
@@ -121,7 +121,7 @@ export type UpdateOrganizationRoleMutationResult = Apollo.MutationResult<UpdateO
 export type UpdateOrganizationRoleMutationOptions = Apollo.BaseMutationOptions<UpdateOrganizationRoleMutationData, UpdateOrganizationRoleMutationVariables>;
 export const DeleteOrganizationRoleDocument = gql`
     mutation DeleteOrganizationRole($id: ID!) {
-  deleteOrganizationRole(input: {transitionalId: $id}) {
+  deleteOrganizationRole(input: {id: $id}) {
     clientMutationId
   }
 }

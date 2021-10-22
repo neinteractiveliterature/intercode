@@ -10,9 +10,9 @@ export const CreateOrganizationRole = gql`
   ) {
     createOrganizationRole(
       input: {
-        transitionalOrganizationId: $organizationId
+        organizationId: $organizationId
         organization_role: { name: $name }
-        transitionalUserIds: $userIds
+        userIds: $userIds
         permissions: $permissions
       }
     ) {
@@ -37,12 +37,12 @@ export const UpdateOrganizationRole = gql`
   ) {
     updateOrganizationRole(
       input: {
-        transitionalId: $id
+        id: $id
         organization_role: { name: $name }
-        transitionalAddUserIds: $addUserIds
-        transitionalRemoveUserIds: $removeUserIds
+        addUserIds: $addUserIds
+        removeUserIds: $removeUserIds
         add_permissions: $addPermissions
-        transitionalRemovePermissionIds: $removePermissionIds
+        removePermissionIds: $removePermissionIds
       }
     ) {
       organization_role {
@@ -57,7 +57,7 @@ export const UpdateOrganizationRole = gql`
 
 export const DeleteOrganizationRole = gql`
   mutation DeleteOrganizationRole($id: ID!) {
-    deleteOrganizationRole(input: { transitionalId: $id }) {
+    deleteOrganizationRole(input: { id: $id }) {
       clientMutationId
     }
   }

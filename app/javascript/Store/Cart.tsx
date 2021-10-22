@@ -36,7 +36,7 @@ export default LoadQueryWrapper(useCartQuery, function Cart({ data }) {
   const updateOrderEntry = useCallback(
     (id: string, quantity: number) =>
       updateMutate({
-        variables: { input: { transitionalId: id, order_entry: { quantity } } },
+        variables: { input: { id: id, order_entry: { quantity } } },
       }),
     [updateMutate],
   );
@@ -44,7 +44,7 @@ export default LoadQueryWrapper(useCartQuery, function Cart({ data }) {
   const deleteOrderEntry = useCallback(
     (id: string) =>
       deleteMutate({
-        variables: { input: { transitionalId: id } },
+        variables: { input: { id } },
         update: (proxy) => {
           const storeData = proxy.readQuery<CartQueryData>({ query: CartQuery });
           const currentPendingOrder = storeData?.convention.my_profile?.current_pending_order;

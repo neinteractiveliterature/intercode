@@ -383,7 +383,7 @@ export const OrderFormProductQueryDocument = gql`
   }
   convention: conventionByRequestHost {
     id
-    product(transitionalId: $productId) {
+    product(id: $productId) {
       id
       image_url
       name

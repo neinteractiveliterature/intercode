@@ -66,7 +66,7 @@ export type CreateDepartmentMutationResult = Apollo.MutationResult<CreateDepartm
 export type CreateDepartmentMutationOptions = Apollo.BaseMutationOptions<CreateDepartmentMutationData, CreateDepartmentMutationVariables>;
 export const UpdateDepartmentDocument = gql`
     mutation UpdateDepartment($id: ID!, $department: DepartmentInput!) {
-  updateDepartment(input: {transitionalId: $id, department: $department}) {
+  updateDepartment(input: {id: $id, department: $department}) {
     department {
       id
       ...AdminDepartmentFields
@@ -103,7 +103,7 @@ export type UpdateDepartmentMutationResult = Apollo.MutationResult<UpdateDepartm
 export type UpdateDepartmentMutationOptions = Apollo.BaseMutationOptions<UpdateDepartmentMutationData, UpdateDepartmentMutationVariables>;
 export const DeleteDepartmentDocument = gql`
     mutation DeleteDepartment($id: ID!) {
-  deleteDepartment(input: {transitionalId: $id}) {
+  deleteDepartment(input: {id: $id}) {
     clientMutationId
   }
 }

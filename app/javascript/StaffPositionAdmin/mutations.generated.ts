@@ -111,7 +111,7 @@ export type UpdateStaffPositionMutationOptions = Apollo.BaseMutationOptions<Upda
 export const UpdateStaffPositionPermissionsDocument = gql`
     mutation UpdateStaffPositionPermissions($staffPositionId: ID!, $grantPermissions: [PermissionInput!]!, $revokePermissions: [PermissionInput!]!) {
   updateStaffPositionPermissions(
-    input: {transitionalStaffPositionId: $staffPositionId, grant_permissions: $grantPermissions, revoke_permissions: $revokePermissions}
+    input: {staffPositionId: $staffPositionId, grant_permissions: $grantPermissions, revoke_permissions: $revokePermissions}
   ) {
     staff_position {
       id

@@ -5,11 +5,7 @@ import { RunBasicSignupData } from '../queries';
 export const CreateMySignup = gql`
   mutation CreateMySignup($runId: ID!, $requestedBucketKey: String, $noRequestedBucket: Boolean) {
     createMySignup(
-      input: {
-        transitionalRunId: $runId
-        requested_bucket_key: $requestedBucketKey
-        no_requested_bucket: $noRequestedBucket
-      }
+      input: { runId: $runId, requested_bucket_key: $requestedBucketKey, no_requested_bucket: $noRequestedBucket }
     ) {
       signup {
         id
@@ -31,7 +27,7 @@ export const CreateMySignup = gql`
 
 export const WithdrawMySignup = gql`
   mutation WithdrawMySignup($runId: ID!) {
-    withdrawMySignup(input: { transitionalRunId: $runId }) {
+    withdrawMySignup(input: { runId: $runId }) {
       signup {
         id
         ...MySignupFields
@@ -53,11 +49,7 @@ export const WithdrawMySignup = gql`
 export const CreateSignupRequest = gql`
   mutation CreateSignupRequest($targetRunId: ID!, $requestedBucketKey: String, $replaceSignupId: ID) {
     createSignupRequest(
-      input: {
-        transitionalTargetRunId: $targetRunId
-        requested_bucket_key: $requestedBucketKey
-        transitionalReplaceSignupId: $replaceSignupId
-      }
+      input: { targetRunId: $targetRunId, requested_bucket_key: $requestedBucketKey, replaceSignupId: $replaceSignupId }
     ) {
       signup_request {
         id
@@ -71,7 +63,7 @@ export const CreateSignupRequest = gql`
 
 export const WithdrawSignupRequest = gql`
   mutation WithdrawSignupRequest($id: ID!) {
-    withdrawSignupRequest(input: { transitionalId: $id }) {
+    withdrawSignupRequest(input: { id: $id }) {
       signup_request {
         id
         ...MySignupRequestFields

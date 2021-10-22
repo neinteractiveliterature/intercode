@@ -94,7 +94,7 @@ export const TeamMembersQuery = gql`
       id
       ...CommonConventionData
 
-      event(transitionalId: $eventId) {
+      event(id: $eventId) {
         id
         title
 
@@ -119,7 +119,7 @@ export const TeamMembersQuery = gql`
         id
         name
         description
-        maximum_event_provided_tickets(transitionalEventId: $eventId)
+        maximum_event_provided_tickets(eventId: $eventId)
       }
 
       ticket_name

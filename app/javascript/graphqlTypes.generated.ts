@@ -1555,7 +1555,7 @@ export type CreateOrderPayload = {
 export type CreateOrganizationRoleInput = {
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']>;
-  dorganizationId?: Maybe<Scalars['ID']>;
+  organizationId?: Maybe<Scalars['ID']>;
   organization_role: OrganizationRoleInput;
   permissions: Array<PermissionInput>;
   transitionalOrganizationId?: Maybe<Scalars['ID']>;

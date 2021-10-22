@@ -114,8 +114,8 @@ class Client implements CadmusNavbarAdminClient {
     let mutate: () => Promise<FetchResult<CreateNavigationItemMutationData | UpdateNavigationItemMutationData>>;
     const navigationItemInput: CmsNavigationItemInput = {
       title: navigationItem.title,
-      transitionalNavigationSectionId: navigationItem.navigation_section_id,
-      transitionalPageId: navigationItem.page_id,
+      navigationSectionId: navigationItem.navigation_section_id,
+      pageId: navigationItem.page_id,
       position: navigationItem.position,
     };
     const navigationItemId = navigationItem.id;
@@ -172,10 +172,10 @@ class Client implements CadmusNavbarAdminClient {
 
   async sortNavigationItems(navigationItems: NavigationItemStore): Promise<void> {
     const sortItems: UpdateCmsNavigationItemInput[] = navigationItems.map((navigationItem) => ({
-      transitionalId: navigationItem.id,
+      id: navigationItem.id,
       cms_navigation_item: {
         position: navigationItem.position,
-        transitionalNavigationSectionId: navigationItem.navigation_section_id,
+        navigationSectionId: navigationItem.navigation_section_id,
       },
     }));
 

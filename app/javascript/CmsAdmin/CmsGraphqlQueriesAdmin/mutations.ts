@@ -16,7 +16,7 @@ export const CreateCmsGraphqlQuery = gql`
 
 export const UpdateCmsGraphqlQuery = gql`
   mutation UpdateCmsGraphqlQuery($id: ID!, $query: CmsGraphqlQueryInput!) {
-    updateCmsGraphqlQuery(input: { transitionalId: $id, query: $query }) {
+    updateCmsGraphqlQuery(input: { id: $id, query: $query }) {
       query {
         id
         ...CmsGraphqlQueryFields
@@ -29,7 +29,7 @@ export const UpdateCmsGraphqlQuery = gql`
 
 export const DeleteCmsGraphqlQuery = gql`
   mutation DeleteCmsGraphqlQuery($id: ID!) {
-    deleteCmsGraphqlQuery(input: { transitionalId: $id }) {
+    deleteCmsGraphqlQuery(input: { id: $id }) {
       query {
         id
       }

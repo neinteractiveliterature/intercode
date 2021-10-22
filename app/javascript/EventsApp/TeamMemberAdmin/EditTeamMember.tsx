@@ -42,7 +42,7 @@ function EditTeamMember({ event, eventPath }: EditTeamMemberProps): JSX.Element 
     await update({
       variables: {
         input: {
-          transitionalId: teamMember.id,
+          id: teamMember.id,
           team_member: buildTeamMemberInput(teamMember),
         },
       },

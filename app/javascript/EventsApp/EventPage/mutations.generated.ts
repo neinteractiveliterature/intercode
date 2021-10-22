@@ -42,7 +42,7 @@ export type WithdrawSignupRequestMutationData = { __typename: 'Mutation', withdr
 export const CreateMySignupDocument = gql`
     mutation CreateMySignup($runId: ID!, $requestedBucketKey: String, $noRequestedBucket: Boolean) {
   createMySignup(
-    input: {transitionalRunId: $runId, requested_bucket_key: $requestedBucketKey, no_requested_bucket: $noRequestedBucket}
+    input: {runId: $runId, requested_bucket_key: $requestedBucketKey, no_requested_bucket: $noRequestedBucket}
   ) {
     signup {
       id
@@ -88,7 +88,7 @@ export type CreateMySignupMutationResult = Apollo.MutationResult<CreateMySignupM
 export type CreateMySignupMutationOptions = Apollo.BaseMutationOptions<CreateMySignupMutationData, CreateMySignupMutationVariables>;
 export const WithdrawMySignupDocument = gql`
     mutation WithdrawMySignup($runId: ID!) {
-  withdrawMySignup(input: {transitionalRunId: $runId}) {
+  withdrawMySignup(input: {runId: $runId}) {
     signup {
       id
       ...MySignupFields
@@ -132,7 +132,7 @@ export type WithdrawMySignupMutationOptions = Apollo.BaseMutationOptions<Withdra
 export const CreateSignupRequestDocument = gql`
     mutation CreateSignupRequest($targetRunId: ID!, $requestedBucketKey: String, $replaceSignupId: ID) {
   createSignupRequest(
-    input: {transitionalTargetRunId: $targetRunId, requested_bucket_key: $requestedBucketKey, transitionalReplaceSignupId: $replaceSignupId}
+    input: {targetRunId: $targetRunId, requested_bucket_key: $requestedBucketKey, replaceSignupId: $replaceSignupId}
   ) {
     signup_request {
       id
@@ -171,7 +171,7 @@ export type CreateSignupRequestMutationResult = Apollo.MutationResult<CreateSign
 export type CreateSignupRequestMutationOptions = Apollo.BaseMutationOptions<CreateSignupRequestMutationData, CreateSignupRequestMutationVariables>;
 export const WithdrawSignupRequestDocument = gql`
     mutation WithdrawSignupRequest($id: ID!) {
-  withdrawSignupRequest(input: {transitionalId: $id}) {
+  withdrawSignupRequest(input: {id: $id}) {
     signup_request {
       id
       ...MySignupRequestFields

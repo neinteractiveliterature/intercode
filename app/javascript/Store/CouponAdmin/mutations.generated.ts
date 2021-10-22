@@ -66,7 +66,7 @@ export type CreateCouponMutationResult = Apollo.MutationResult<CreateCouponMutat
 export type CreateCouponMutationOptions = Apollo.BaseMutationOptions<CreateCouponMutationData, CreateCouponMutationVariables>;
 export const UpdateCouponDocument = gql`
     mutation UpdateCoupon($id: ID!, $coupon: CouponInput!) {
-  updateCoupon(input: {transitionalId: $id, coupon: $coupon}) {
+  updateCoupon(input: {id: $id, coupon: $coupon}) {
     coupon {
       id
       ...AdminCouponFields
@@ -103,7 +103,7 @@ export type UpdateCouponMutationResult = Apollo.MutationResult<UpdateCouponMutat
 export type UpdateCouponMutationOptions = Apollo.BaseMutationOptions<UpdateCouponMutationData, UpdateCouponMutationVariables>;
 export const DeleteCouponDocument = gql`
     mutation DeleteCoupon($id: ID!) {
-  deleteCoupon(input: {transitionalId: $id}) {
+  deleteCoupon(input: {id: $id}) {
     clientMutationId
   }
 }

@@ -28,10 +28,10 @@ export const UpdateUserActivityAlert = gql`
   ) {
     updateUserActivityAlert(
       input: {
-        transitionalId: $id
+        id: $id
         user_activity_alert: $userActivityAlert
         add_notification_destinations: $addNotificationDestinations
-        transitionalRemoveNotificationDestinationIds: $removeNotificationDestinationIds
+        removeNotificationDestinationIds: $removeNotificationDestinationIds
       }
     ) {
       user_activity_alert {
@@ -46,7 +46,7 @@ export const UpdateUserActivityAlert = gql`
 
 export const DeleteUserActivityAlert = gql`
   mutation DeleteUserActivityAlert($id: ID!) {
-    deleteUserActivityAlert(input: { transitionalId: $id }) {
+    deleteUserActivityAlert(input: { id: $id }) {
       user_activity_alert {
         id
         ...UserActivityAlertFields

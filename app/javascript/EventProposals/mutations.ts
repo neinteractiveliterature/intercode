@@ -3,9 +3,7 @@ import { EventProposalFields } from './queries';
 
 export const CreateEventProposal = gql`
   mutation CreateEventProposal($cloneEventProposalId: ID, $eventCategoryId: ID!) {
-    createEventProposal(
-      input: { transitionalCloneEventProposalId: $cloneEventProposalId, transitionalEventCategoryId: $eventCategoryId }
-    ) {
+    createEventProposal(input: { cloneEventProposalId: $cloneEventProposalId, eventCategoryId: $eventCategoryId }) {
       event_proposal {
         id
       }
@@ -28,7 +26,7 @@ export const UpdateEventProposal = gql`
 
 export const DeleteEventProposal = gql`
   mutation DeleteEventProposal($id: ID!) {
-    deleteEventProposal(input: { transitionalId: $id }) {
+    deleteEventProposal(input: { id: $id }) {
       clientMutationId
     }
   }
@@ -49,7 +47,7 @@ export const SubmitEventProposal = gql`
 
 export const TransitionEventProposal = gql`
   mutation TransitionEventProposal($eventProposalId: ID!, $status: String!, $dropEvent: Boolean) {
-    transitionEventProposal(input: { transitionalId: $eventProposalId, status: $status, drop_event: $dropEvent }) {
+    transitionEventProposal(input: { id: $eventProposalId, status: $status, drop_event: $dropEvent }) {
       event_proposal {
         id
         ...EventProposalFields
@@ -62,7 +60,7 @@ export const TransitionEventProposal = gql`
 
 export const UpdateEventProposalAdminNotes = gql`
   mutation UpdateEventProposalAdminNotes($eventProposalId: ID!, $adminNotes: String!) {
-    updateEventProposalAdminNotes(input: { transitionalId: $eventProposalId, admin_notes: $adminNotes }) {
+    updateEventProposalAdminNotes(input: { id: $eventProposalId, admin_notes: $adminNotes }) {
       event_proposal {
         id
         ...EventProposalFields

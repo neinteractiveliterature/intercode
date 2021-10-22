@@ -58,7 +58,7 @@ function StandaloneEditEventForm({
     await updateEventMutate({
       variables: {
         input: {
-          transitionalId: event.id,
+          id: event.id,
           event: {
             form_response_attrs_json: JSON.stringify(event.form_response_attrs),
           },
@@ -81,7 +81,7 @@ function StandaloneEditEventForm({
     useStandaloneDeleteMaximumEventProvidedTicketsOverrideMutation,
     initialEvent,
     'maximum_event_provided_tickets_overrides',
-    (mepto) => ({ input: { transitionalId: mepto.id } }),
+    (mepto) => ({ input: { id: mepto.id } }),
   );
 
   const meptoMutations = useMEPTOMutations({

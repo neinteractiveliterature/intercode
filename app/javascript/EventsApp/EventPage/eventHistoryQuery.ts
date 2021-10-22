@@ -10,7 +10,7 @@ export const EventHistoryQuery = gql`
       timezone_name
       timezone_mode
 
-      event(transitionalId: $id) {
+      event(id: $id) {
         id
         title
 

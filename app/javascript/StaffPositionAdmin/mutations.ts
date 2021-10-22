@@ -35,7 +35,7 @@ export const UpdateStaffPositionPermissions = gql`
   ) {
     updateStaffPositionPermissions(
       input: {
-        transitionalStaffPositionId: $staffPositionId
+        staffPositionId: $staffPositionId
         grant_permissions: $grantPermissions
         revoke_permissions: $revokePermissions
       }

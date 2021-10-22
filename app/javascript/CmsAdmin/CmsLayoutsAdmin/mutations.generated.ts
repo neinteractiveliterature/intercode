@@ -66,7 +66,7 @@ export type CreateLayoutMutationResult = Apollo.MutationResult<CreateLayoutMutat
 export type CreateLayoutMutationOptions = Apollo.BaseMutationOptions<CreateLayoutMutationData, CreateLayoutMutationVariables>;
 export const UpdateLayoutDocument = gql`
     mutation UpdateLayout($id: ID!, $cmsLayout: CmsLayoutInput!) {
-  updateCmsLayout(input: {transitionalId: $id, cms_layout: $cmsLayout}) {
+  updateCmsLayout(input: {id: $id, cms_layout: $cmsLayout}) {
     cms_layout {
       id
       ...CmsLayoutFields
@@ -103,7 +103,7 @@ export type UpdateLayoutMutationResult = Apollo.MutationResult<UpdateLayoutMutat
 export type UpdateLayoutMutationOptions = Apollo.BaseMutationOptions<UpdateLayoutMutationData, UpdateLayoutMutationVariables>;
 export const DeleteLayoutDocument = gql`
     mutation DeleteLayout($id: ID!) {
-  deleteCmsLayout(input: {transitionalId: $id}) {
+  deleteCmsLayout(input: {id: $id}) {
     clientMutationId
   }
 }

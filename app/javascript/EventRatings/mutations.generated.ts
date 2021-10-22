@@ -15,7 +15,7 @@ export type RateEventMutationData = { __typename: 'Mutation', rateEvent: { __typ
 
 export const RateEventDocument = gql`
     mutation RateEvent($eventId: ID!, $rating: Int!) {
-  rateEvent(input: {transitionalEventId: $eventId, rating: $rating}) {
+  rateEvent(input: {eventId: $eventId, rating: $rating}) {
     event {
       id
       my_rating

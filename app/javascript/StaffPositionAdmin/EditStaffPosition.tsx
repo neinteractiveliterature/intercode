@@ -26,7 +26,7 @@ export default LoadSingleValueFromCollectionWrapper(
       await mutate({
         variables: {
           input: {
-            transitionalId: staffPosition.id,
+            id: staffPosition.id,
             staff_position: buildStaffPositionInput(staffPosition),
           },
         },

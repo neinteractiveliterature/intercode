@@ -51,7 +51,7 @@ function MyProfileFormInner({ initialSetup, initialUserConProfile, convention, f
         await mutate({
           variables: {
             input: {
-              transitionalId: profile.id,
+              id: profile.id,
               user_con_profile: {
                 form_response_attrs_json: JSON.stringify(profile.form_response_attrs),
                 bio: profile.bio,

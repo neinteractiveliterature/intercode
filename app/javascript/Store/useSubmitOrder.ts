@@ -26,7 +26,7 @@ export default function useSubmitOrder(): (
       await mutate({
         variables: {
           input: {
-            transitionalId: orderId,
+            id: orderId,
             payment_mode: paymentMode,
             stripe_token: stripeToken,
             payment_intent_id: paymentIntentId,

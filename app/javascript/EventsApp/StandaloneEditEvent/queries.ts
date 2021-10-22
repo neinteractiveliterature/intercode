@@ -56,8 +56,8 @@ export const StandaloneEditEventQuery = gql`
   query StandaloneEditEventQuery($eventId: ID!) {
     currentAbility {
       can_override_maximum_event_provided_tickets
-      can_delete_event(transitionalEventId: $eventId)
-      can_update_event(transitionalEventId: $eventId)
+      can_delete_event(eventId: $eventId)
+      can_update_event(eventId: $eventId)
     }
 
     convention: conventionByRequestHost {
@@ -69,7 +69,7 @@ export const StandaloneEditEventQuery = gql`
         ...StandaloneEditEvent_TicketTypeFields
       }
 
-      event(transitionalId: $eventId) {
+      event(id: $eventId) {
         id
         ...StandaloneEditEvent_EventFields
       }

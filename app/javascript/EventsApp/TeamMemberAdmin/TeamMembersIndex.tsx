@@ -45,7 +45,7 @@ function TeamMemberActionMenu({
     useDeleteTeamMemberMutation,
     event,
     'team_members',
-    (teamMember) => ({ input: { transitionalId: teamMember.id } }),
+    (teamMember) => ({ input: { id: teamMember.id } }),
   );
 
   return (

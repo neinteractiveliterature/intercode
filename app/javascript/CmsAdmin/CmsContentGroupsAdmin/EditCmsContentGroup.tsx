@@ -34,7 +34,7 @@ export default LoadSingleValueFromCollectionWrapper(
           cmsContentGroup: {
             name: contentGroup.name,
             contents: contentGroup.contents.map(({ id, __typename }) => ({
-              transitionalId: id,
+              id,
               content_type: __typename as CmsContentTypeIndicator,
             })),
           },

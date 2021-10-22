@@ -66,7 +66,7 @@ export type CreatePartialMutationResult = Apollo.MutationResult<CreatePartialMut
 export type CreatePartialMutationOptions = Apollo.BaseMutationOptions<CreatePartialMutationData, CreatePartialMutationVariables>;
 export const UpdatePartialDocument = gql`
     mutation UpdatePartial($id: ID!, $cmsPartial: CmsPartialInput!) {
-  updateCmsPartial(input: {transitionalId: $id, cms_partial: $cmsPartial}) {
+  updateCmsPartial(input: {id: $id, cms_partial: $cmsPartial}) {
     cms_partial {
       id
       ...CmsPartialFields
@@ -103,7 +103,7 @@ export type UpdatePartialMutationResult = Apollo.MutationResult<UpdatePartialMut
 export type UpdatePartialMutationOptions = Apollo.BaseMutationOptions<UpdatePartialMutationData, UpdatePartialMutationVariables>;
 export const DeletePartialDocument = gql`
     mutation DeletePartial($id: ID!) {
-  deleteCmsPartial(input: {transitionalId: $id}) {
+  deleteCmsPartial(input: {id: $id}) {
     clientMutationId
   }
 }

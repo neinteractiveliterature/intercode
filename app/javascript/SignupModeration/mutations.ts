@@ -10,8 +10,8 @@ export const CreateUserSignup = gql`
   ) {
     createUserSignup(
       input: {
-        transitionalRunId: $runId
-        transitionalUserConProfileId: $userConProfileId
+        runId: $runId
+        userConProfileId: $userConProfileId
         requested_bucket_key: $requestedBucketKey
         no_requested_bucket: $noRequestedBucket
         suppress_notifications: true
@@ -24,13 +24,7 @@ export const CreateUserSignup = gql`
 
 export const WithdrawUserSignup = gql`
   mutation WithdrawUserSignup($runId: ID!, $userConProfileId: ID!) {
-    withdrawUserSignup(
-      input: {
-        transitionalRunId: $runId
-        transitionalUserConProfileId: $userConProfileId
-        suppress_notifications: true
-      }
-    ) {
+    withdrawUserSignup(input: { runId: $runId, userConProfileId: $userConProfileId, suppress_notifications: true }) {
       clientMutationId
     }
   }
@@ -38,7 +32,7 @@ export const WithdrawUserSignup = gql`
 
 export const AcceptSignupRequest = gql`
   mutation AcceptSignupRequest($id: ID!) {
-    acceptSignupRequest(input: { transitionalId: $id }) {
+    acceptSignupRequest(input: { id: $id }) {
       signup_request {
         id
         ...SignupModerationSignupRequestFields
@@ -51,7 +45,7 @@ export const AcceptSignupRequest = gql`
 
 export const RejectSignupRequest = gql`
   mutation RejectSignupRequest($id: ID!) {
-    rejectSignupRequest(input: { transitionalId: $id }) {
+    rejectSignupRequest(input: { id: $id }) {
       signup_request {
         id
         ...SignupModerationSignupRequestFields

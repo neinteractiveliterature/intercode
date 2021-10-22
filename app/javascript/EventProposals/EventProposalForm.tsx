@@ -66,7 +66,7 @@ function EventProposalFormInner({
         const promise = updateEventProposal({
           variables: {
             input: {
-              transitionalId: proposal.id,
+              id: proposal.id,
               event_proposal: {
                 form_response_attrs_json: JSON.stringify(proposal.form_response_attrs),
               },
@@ -90,7 +90,7 @@ function EventProposalFormInner({
       submitEventProposal({
         variables: {
           input: {
-            transitionalId: proposal.id,
+            id: proposal.id,
           },
         },
       }),

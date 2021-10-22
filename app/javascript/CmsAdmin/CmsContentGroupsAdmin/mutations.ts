@@ -23,7 +23,7 @@ export const UpdateContentGroup = gql`
   ) {
     updateCmsContentGroup(
       input: {
-        transitionalId: $id
+        id: $id
         cms_content_group: $cmsContentGroup
         grant_permissions: $grantPermissions
         revoke_permissions: $revokePermissions
@@ -41,7 +41,7 @@ export const UpdateContentGroup = gql`
 
 export const DeleteContentGroup = gql`
   mutation DeleteContentGroup($id: ID!) {
-    deleteCmsContentGroup(input: { transitionalId: $id }) {
+    deleteCmsContentGroup(input: { id: $id }) {
       clientMutationId
     }
   }

@@ -73,9 +73,7 @@ export type CreateNavigationItemMutationResult = Apollo.MutationResult<CreateNav
 export type CreateNavigationItemMutationOptions = Apollo.BaseMutationOptions<CreateNavigationItemMutationData, CreateNavigationItemMutationVariables>;
 export const UpdateNavigationItemDocument = gql`
     mutation UpdateNavigationItem($id: ID!, $navigationItem: CmsNavigationItemInput!) {
-  updateCmsNavigationItem(
-    input: {transitionalId: $id, cms_navigation_item: $navigationItem}
-  ) {
+  updateCmsNavigationItem(input: {id: $id, cms_navigation_item: $navigationItem}) {
     cms_navigation_item {
       id
       ...AdminNavigationItemFields
@@ -112,7 +110,7 @@ export type UpdateNavigationItemMutationResult = Apollo.MutationResult<UpdateNav
 export type UpdateNavigationItemMutationOptions = Apollo.BaseMutationOptions<UpdateNavigationItemMutationData, UpdateNavigationItemMutationVariables>;
 export const DeleteNavigationItemDocument = gql`
     mutation DeleteNavigationItem($id: ID!) {
-  deleteCmsNavigationItem(input: {transitionalId: $id}) {
+  deleteCmsNavigationItem(input: {id: $id}) {
     cms_navigation_item {
       id
     }

@@ -41,7 +41,7 @@ export type RejectSignupRequestMutationData = { __typename: 'Mutation', rejectSi
 export const CreateUserSignupDocument = gql`
     mutation CreateUserSignup($runId: ID!, $userConProfileId: ID!, $requestedBucketKey: String, $noRequestedBucket: Boolean) {
   createUserSignup(
-    input: {transitionalRunId: $runId, transitionalUserConProfileId: $userConProfileId, requested_bucket_key: $requestedBucketKey, no_requested_bucket: $noRequestedBucket, suppress_notifications: true}
+    input: {runId: $runId, userConProfileId: $userConProfileId, requested_bucket_key: $requestedBucketKey, no_requested_bucket: $noRequestedBucket, suppress_notifications: true}
   ) {
     clientMutationId
   }
@@ -79,7 +79,7 @@ export type CreateUserSignupMutationOptions = Apollo.BaseMutationOptions<CreateU
 export const WithdrawUserSignupDocument = gql`
     mutation WithdrawUserSignup($runId: ID!, $userConProfileId: ID!) {
   withdrawUserSignup(
-    input: {transitionalRunId: $runId, transitionalUserConProfileId: $userConProfileId, suppress_notifications: true}
+    input: {runId: $runId, userConProfileId: $userConProfileId, suppress_notifications: true}
   ) {
     clientMutationId
   }
@@ -114,7 +114,7 @@ export type WithdrawUserSignupMutationResult = Apollo.MutationResult<WithdrawUse
 export type WithdrawUserSignupMutationOptions = Apollo.BaseMutationOptions<WithdrawUserSignupMutationData, WithdrawUserSignupMutationVariables>;
 export const AcceptSignupRequestDocument = gql`
     mutation AcceptSignupRequest($id: ID!) {
-  acceptSignupRequest(input: {transitionalId: $id}) {
+  acceptSignupRequest(input: {id: $id}) {
     signup_request {
       id
       ...SignupModerationSignupRequestFields
@@ -150,7 +150,7 @@ export type AcceptSignupRequestMutationResult = Apollo.MutationResult<AcceptSign
 export type AcceptSignupRequestMutationOptions = Apollo.BaseMutationOptions<AcceptSignupRequestMutationData, AcceptSignupRequestMutationVariables>;
 export const RejectSignupRequestDocument = gql`
     mutation RejectSignupRequest($id: ID!) {
-  rejectSignupRequest(input: {transitionalId: $id}) {
+  rejectSignupRequest(input: {id: $id}) {
     signup_request {
       id
       ...SignupModerationSignupRequestFields

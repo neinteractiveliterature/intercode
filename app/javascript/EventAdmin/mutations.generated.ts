@@ -533,9 +533,7 @@ export type UpdateMaximumEventProvidedTicketsOverrideMutationResult = Apollo.Mut
 export type UpdateMaximumEventProvidedTicketsOverrideMutationOptions = Apollo.BaseMutationOptions<UpdateMaximumEventProvidedTicketsOverrideMutationData, UpdateMaximumEventProvidedTicketsOverrideMutationVariables>;
 export const UpdateEventAdminNotesDocument = gql`
     mutation UpdateEventAdminNotes($eventId: ID!, $adminNotes: String!) {
-  updateEventAdminNotes(
-    input: {transitionalId: $eventId, admin_notes: $adminNotes}
-  ) {
+  updateEventAdminNotes(input: {id: $eventId, admin_notes: $adminNotes}) {
     event {
       id
       ...EventFields

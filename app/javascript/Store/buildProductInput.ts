@@ -52,13 +52,13 @@ export default function buildProductInput(product: EditingProduct): ProductInput
     payment_options: product.payment_options,
     pricing_structure: buildPricingStructureInput(product.pricing_structure),
     product_variants: sortProductVariants(product.product_variants).map((variant) => ({
-      transitionalId: hasRealId(variant) ? variant.id : undefined,
+      id: hasRealId(variant) ? variant.id : undefined,
       name: variant.name,
       description: variant.description,
       override_pricing_structure: buildPricingStructureInput(variant.override_pricing_structure),
     })),
-    transitionalDeleteVariantIds: product.delete_variant_ids,
-    transitionalProvidesTicketTypeId: product.provides_ticket_type?.id || null,
+    deleteVariantIds: product.delete_variant_ids,
+    providesTicketTypeId: product.provides_ticket_type?.id || null,
     ...imageInput,
   };
 }

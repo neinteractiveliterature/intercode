@@ -66,7 +66,7 @@ export type CreateCmsFileMutationResult = Apollo.MutationResult<CreateCmsFileMut
 export type CreateCmsFileMutationOptions = Apollo.BaseMutationOptions<CreateCmsFileMutationData, CreateCmsFileMutationVariables>;
 export const RenameCmsFileDocument = gql`
     mutation RenameCmsFile($id: ID!, $filename: String!) {
-  renameCmsFile(input: {transitionalId: $id, filename: $filename}) {
+  renameCmsFile(input: {id: $id, filename: $filename}) {
     cms_file {
       id
       ...CmsFileFields
@@ -103,7 +103,7 @@ export type RenameCmsFileMutationResult = Apollo.MutationResult<RenameCmsFileMut
 export type RenameCmsFileMutationOptions = Apollo.BaseMutationOptions<RenameCmsFileMutationData, RenameCmsFileMutationVariables>;
 export const DeleteCmsFileDocument = gql`
     mutation DeleteCmsFile($id: ID!) {
-  deleteCmsFile(input: {transitionalId: $id}) {
+  deleteCmsFile(input: {id: $id}) {
     clientMutationId
   }
 }

@@ -72,9 +72,9 @@ function getRoleTypeIndicatorForPermission(permission: PartialPolymorphicPermiss
 export function buildPermissionInput(permission: PartialPolymorphicPermission): PermissionInput {
   return {
     model_type: getModelTypeIndicatorForPermission(permission),
-    transitionalModelId: permission.model?.id,
+    modelId: permission.model?.id,
     role_type: getRoleTypeIndicatorForPermission(permission),
-    transitionalRoleId: permission.role?.id,
+    roleId: permission.role?.id,
     permission: permission.permission,
   };
 }

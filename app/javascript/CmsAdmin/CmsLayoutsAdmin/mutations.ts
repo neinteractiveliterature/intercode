@@ -16,7 +16,7 @@ export const CreateLayout = gql`
 
 export const UpdateLayout = gql`
   mutation UpdateLayout($id: ID!, $cmsLayout: CmsLayoutInput!) {
-    updateCmsLayout(input: { transitionalId: $id, cms_layout: $cmsLayout }) {
+    updateCmsLayout(input: { id: $id, cms_layout: $cmsLayout }) {
       cms_layout {
         id
         ...CmsLayoutFields
@@ -29,7 +29,7 @@ export const UpdateLayout = gql`
 
 export const DeleteLayout = gql`
   mutation DeleteLayout($id: ID!) {
-    deleteCmsLayout(input: { transitionalId: $id }) {
+    deleteCmsLayout(input: { id: $id }) {
       clientMutationId
     }
   }

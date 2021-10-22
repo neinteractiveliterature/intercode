@@ -18,7 +18,7 @@ export type UpdateRootSiteMutationData = { __typename: 'Mutation', updateRootSit
 export const UpdateRootSiteDocument = gql`
     mutation UpdateRootSite($siteName: String, $defaultLayoutId: ID, $rootPageId: ID) {
   updateRootSite(
-    input: {root_site: {site_name: $siteName, transitionalDefaultLayoutId: $defaultLayoutId, transitionalRootPageId: $rootPageId}}
+    input: {root_site: {site_name: $siteName, defaultLayoutId: $defaultLayoutId, rootPageId: $rootPageId}}
   ) {
     root_site {
       id

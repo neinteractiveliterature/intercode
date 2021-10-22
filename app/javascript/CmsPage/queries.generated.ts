@@ -80,7 +80,7 @@ export const PageAdminDropdownQueryDocument = gql`
     query PageAdminDropdownQuery($id: ID!) {
   cmsParent: cmsParentByRequestHost {
     id
-    cmsPage(transitionalId: $id) {
+    cmsPage(id: $id) {
       id
       cms_layout {
         id
