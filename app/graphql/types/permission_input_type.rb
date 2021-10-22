@@ -3,23 +3,23 @@ class Types::PermissionInputType < Types::BaseInputObject
   extend TransitionalIds
 
   argument :model_type, Types::PermissionedModelTypeIndicator, required: false, camelize: false
-  argument :model_id,
-           Int,
+  argument :transitional_model_id,
+           ID,
            deprecation_reason:
-             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
+             "IDs have transitioned to the ID type.  Please switch back to the modelId field so that \
+we can remove this temporary one.",
            required: false,
-           camelize: false
-  argument :transitional_model_id, ID, required: false, camelize: true
+           camelize: true
+  argument :model_id, ID, required: false, camelize: true
   argument :role_type, Types::PermissionedRoleTypeIndicator, required: false, camelize: false
-  argument :role_id,
-           Int,
+  argument :transitional_role_id,
+           ID,
            deprecation_reason:
-             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
+             "IDs have transitioned to the ID type.  Please switch back to the roleId field so that \
+we can remove this temporary one.",
            required: false,
-           camelize: false
-  argument :transitional_role_id, ID, required: false, camelize: true
+           camelize: true
+  argument :role_id, ID, required: false, camelize: true
   argument :permission, String, required: true
 
   def self.load_permission_input_models(permission_inputs)

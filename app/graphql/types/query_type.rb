@@ -44,13 +44,14 @@ class Types::QueryType < Types::BaseObject
   end
 
   field :convention_by_id, Types::ConventionType, null: false do
-    argument :id,
-             Integer,
+    argument :transitional_id,
+             ID,
              deprecation_reason:
-               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
-             required: false
-    argument :transitional_id, ID, required: false, camelize: true
+               "IDs have transitioned to the ID type.  Please switch back to the id field so that \
+we can remove this temporary one.",
+             required: false,
+             camelize: true
+    argument :id, ID, required: false, camelize: true
     description <<~MARKDOWN
     Finds a convention by ID. If a matching one can't be found, the request will error out.
   MARKDOWN
@@ -242,14 +243,15 @@ represented as a JSON object.'
   end
 
   field :user, Types::UserType, null: false do
-    argument :id,
-             Integer,
+    argument :transitional_id,
+             ID,
              deprecation_reason:
-               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
+               "IDs have transitioned to the ID type.  Please switch back to the id field so that \
+we can remove this temporary one.",
              required: false,
-             description: 'The ID of the user to find.'
-    argument :transitional_id, ID, required: false, description: 'The ID of the user to find.', camelize: true
+             description: 'The ID of the user to find.',
+             camelize: true
+    argument :id, ID, required: false, description: 'The ID of the user to find.', camelize: true
 
     description <<~MARKDOWN
     Finds a user by ID. If there is no user with that ID, errors out.
@@ -261,14 +263,15 @@ all id fields are replaced with ones of type ID.",
   end
 
   field :users, [Types::UserType], null: false do
-    argument :ids,
-             [Integer],
+    argument :transitional_ids,
+             [ID],
              required: false,
              description: 'The IDs of the users to find.',
              deprecation_reason:
-               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID."
-    argument :transitional_ids, [ID], required: false, description: 'The IDs of the users to find.'
+               "IDs have transitioned to the ID type.  Please switch back to the ids field so that \
+we can remove this temporary one.",
+             camelize: true
+    argument :ids, [ID], required: false, description: 'The IDs of the users to find.'
 
     description <<~MARKDOWN
     Finds up to 25 users by ID. If any of the IDs don't match an existing user, errors out.

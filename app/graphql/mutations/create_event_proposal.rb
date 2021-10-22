@@ -8,7 +8,7 @@ class Mutations::CreateEventProposal < Mutations::BaseMutation
              "IDs have transitioned to the ID type.  Please switch back to the eventCategoryId field so that \
 we can remove this temporary one.",
            required: false,
-           camelize: false
+           camelize: true
   argument :event_category_id, ID, required: false, camelize: true
   argument :transitional_clone_event_proposal_id,
            ID,
@@ -16,7 +16,7 @@ we can remove this temporary one.",
              "IDs have transitioned to the ID type.  Please switch back to the cloneEventProposalId field so that \
 we can remove this temporary one.",
            required: false,
-           camelize: false
+           camelize: true
   argument :clone_event_proposal_id, ID, required: false, camelize: true
 
   authorize_create_convention_associated_model :event_proposals

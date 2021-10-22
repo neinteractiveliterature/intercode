@@ -10,7 +10,7 @@ class Mutations::CreateOrder < Mutations::BaseMutation
              "IDs have transitioned to the ID type.  Please switch back to the userConProfileId field so that \
 we can remove this temporary one.",
            required: false,
-           camelize: false
+           camelize: true
   argument :user_con_profile_id, ID, required: false, camelize: true
   argument :order, Types::OrderInputType, required: true
   argument :status, Types::OrderStatusType, required: true
