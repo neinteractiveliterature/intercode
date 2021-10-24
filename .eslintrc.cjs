@@ -88,9 +88,6 @@ module.exports = {
     ],
     '@graphql-eslint/no-operation-name-suffix': 'off',
     '@graphql-eslint/no-deprecated': 'warn',
-    // TODO turn these back on once we're done with the transitionalIds
-    '@graphql-eslint/strict-id-in-types': 'off',
-    '@graphql-eslint/avoid-typename-prefix': 'off',
     // TODO turn this back on when https://github.com/dotansimha/graphql-eslint/issues/654 is fixed
     '@graphql-eslint/known-fragment-names': 'off',
   },
@@ -131,7 +128,10 @@ module.exports = {
     {
       "files": ["schema.graphql"],
       "rules": {
-        '@graphql-eslint/executable-definitions': 'off'
+        '@graphql-eslint/executable-definitions': 'off',
+        '@graphql-eslint/avoid-typename-prefix': 'off',
+        // TODO turn this back on once we're done with the transitionalIds
+        '@graphql-eslint/strict-id-in-types': 'off'
       }
     }
   ],
