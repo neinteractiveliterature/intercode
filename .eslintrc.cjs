@@ -91,10 +91,8 @@ module.exports = {
     // TODO turn these back on once we're done with the transitionalIds
     '@graphql-eslint/strict-id-in-types': 'off',
     '@graphql-eslint/avoid-typename-prefix': 'off',
-    // I would like to enable these but we use imported fragments everywhere and there's a known
-    // false positive with that
+    // TODO turn this back on when https://github.com/dotansimha/graphql-eslint/issues/654 is fixed
     '@graphql-eslint/known-fragment-names': 'off',
-    '@graphql-eslint/no-unused-fragments': 'off'
   },
 
   overrides: [
@@ -125,6 +123,10 @@ module.exports = {
       "files": ["*.graphql"],
       "parser": "@graphql-eslint/eslint-plugin",
       "plugins": ["@graphql-eslint"],
+      "parserOptions": {
+        "operations": ["./app/javascript/**/*.graphql"],
+        "schema": "./schema.graphql"
+      }
     },
     {
       "files": ["schema.graphql"],

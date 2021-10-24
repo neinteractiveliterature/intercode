@@ -1,0 +1,41 @@
+fragment PageFields on Page {
+  id
+  name
+}
+
+fragment RootSiteAdminLayoutFields on CmsLayout {
+  id
+  name
+}
+
+fragment RootSiteFields on RootSite {
+  id
+  site_name
+
+  rootPage {
+    id
+    ...PageFields
+  }
+
+  defaultLayout {
+    id
+    ...RootSiteAdminLayoutFields
+  }
+
+  cmsPages {
+    id
+    ...PageFields
+  }
+
+  cmsLayouts {
+    id
+    ...RootSiteAdminLayoutFields
+  }
+}
+
+query RootSiteAdminQuery {
+  rootSite {
+    id
+    ...RootSiteFields
+  }
+}

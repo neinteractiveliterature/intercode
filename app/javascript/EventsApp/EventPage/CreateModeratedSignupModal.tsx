@@ -5,13 +5,13 @@ import classnames from 'classnames';
 import { ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import AppRootContext from '../../AppRootContext';
-import { EventPageQuery } from './queries';
 import { timespanFromRun } from '../../TimespanUtils';
 import useAsyncFunction from '../../useAsyncFunction';
 import {
   CreateModeratedSignupModalQueryData,
   CreateModeratedSignupModalQueryVariables,
   EventPageQueryData,
+  EventPageQueryDocument,
   useCreateModeratedSignupModalQuery,
 } from './queries.generated';
 import { SignupOption } from './buildSignupOptions';
@@ -31,23 +31,13 @@ export default LoadQueryWrapper<
   CreateModeratedSignupModalProps
 >(
   useCreateModeratedSignupModalQuery,
-  function CreateModeratedSignupModal({
-    visible,
-    close,
-    run,
-    event,
-    signupOption,
-    data,
-  }): JSX.Element {
+  function CreateModeratedSignupModal({ visible, close, run, event, signupOption, data }): JSX.Element {
     const { conventionName, timezoneName } = useContext(AppRootContext);
     const [createMutate] = useCreateSignupRequestMutation({
-      refetchQueries: () => [{ query: EventPageQuery, variables: { eventId: event.id } }],
+      refetchQueries: () => [{ query: EventPageQueryDocument, variables: { eventId: event.id } }],
     });
     const [createSignupRequest, createError, createInProgress] = useAsyncFunction(createMutate);
-    const runTimespan = useMemo(
-      () => timespanFromRun(timezoneName, event, run),
-      [timezoneName, event, run],
-    );
+    const runTimespan = useMemo(() => timespanFromRun(timezoneName, event, run), [timezoneName, event, run]);
 
     const conflictingSignup = useMemo(() => {
       return (data.convention.my_profile?.signups || []).find((signup) => {
@@ -59,12 +49,7 @@ export default LoadQueryWrapper<
           signup.state !== 'withdrawn'
         );
       });
-    }, [
-      data.convention.my_profile?.signups,
-      event.can_play_concurrently,
-      runTimespan,
-      timezoneName,
-    ]);
+    }, [data.convention.my_profile?.signups, event.can_play_concurrently, runTimespan, timezoneName]);
 
     const confirmClicked = async () => {
       if (!signupOption) {
@@ -98,9 +83,8 @@ export default LoadQueryWrapper<
 
             {conflictingSignup && (
               <div className="alert alert-warning">
-                You are currently signed up for <strong>{conflictingSignup.run.event.title}</strong>
-                . If you continue, and your signup request is approved, you’ll be automatically
-                withdrawn from this conflicting event.
+                You are currently signed up for <strong>{conflictingSignup.run.event.title}</strong>. If you continue,
+                and your signup request is approved, you’ll be automatically withdrawn from this conflicting event.
               </div>
             )}
           </>
@@ -109,20 +93,10 @@ export default LoadQueryWrapper<
         </div>
 
         <div className="modal-footer">
-          <button
-            className="btn btn-secondary"
-            type="button"
-            onClick={close}
-            disabled={createInProgress}
-          >
+          <button className="btn btn-secondary" type="button" onClick={close} disabled={createInProgress}>
             Cancel
           </button>
-          <button
-            className="btn btn-primary"
-            type="button"
-            onClick={confirmClicked}
-            disabled={createInProgress}
-          >
+          <button className="btn btn-primary" type="button" onClick={confirmClicked} disabled={createInProgress}>
             Confirm
           </button>
         </div>

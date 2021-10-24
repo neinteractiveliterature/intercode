@@ -2,10 +2,7 @@
 import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
-import { FormFieldsFragmentDoc } from './queries.generated';
-import { FormEditorDataFragmentDoc } from './queries.generated';
-import { FormEditorFormSectionFieldsFragmentDoc } from './queries.generated';
-import { FormEditorFormItemFieldsFragmentDoc } from './queries.generated';
+import { FormFieldsFragmentDoc, FormEditorDataFragmentDoc, FormEditorFormSectionFieldsFragmentDoc, FormEditorFormItemFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
 export type CreateFormWithJsonMutationVariables = Types.Exact<{

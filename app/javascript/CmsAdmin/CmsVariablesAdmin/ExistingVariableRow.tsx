@@ -3,7 +3,8 @@ import { useConfirm, ErrorDisplay, useDeleteMutationWithReferenceArrayUpdater } 
 
 import CommitableInput from '../../BuiltInFormControls/CommitableInput';
 import useAsyncFunction from '../../useAsyncFunction';
-import { CmsVariablesQueryData, useDeleteCmsVariableMutation, useSetCmsVariableMutation } from './queries.generated';
+import { useDeleteCmsVariableMutation, useSetCmsVariableMutation } from './mutations.generated';
+import { CmsVariablesQueryData } from './queries.generated';
 
 export type ExistingVariableRowProps = {
   cmsParent: CmsVariablesQueryData['cmsParent'];

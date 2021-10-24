@@ -2,7 +2,7 @@
 import * as Types from '../../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
-import { CmsPageFieldsFragmentDoc, CmsPageAdminLayoutFieldsFragmentDoc } from './queries.generated';
+import { CmsPageFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
 export type CreatePageMutationVariables = Types.Exact<{

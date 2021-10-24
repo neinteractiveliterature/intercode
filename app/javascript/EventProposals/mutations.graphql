@@ -1,0 +1,51 @@
+#import "./queries.graphql"
+
+mutation CreateEventProposal($cloneEventProposalId: ID, $eventCategoryId: ID!) {
+  createEventProposal(input: { cloneEventProposalId: $cloneEventProposalId, eventCategoryId: $eventCategoryId }) {
+    event_proposal {
+      id
+    }
+  }
+}
+
+mutation UpdateEventProposal($input: UpdateEventProposalInput!) {
+  updateEventProposal(input: $input) {
+    event_proposal {
+      id
+      ...EventProposalFields
+    }
+  }
+}
+
+mutation DeleteEventProposal($id: ID!) {
+  deleteEventProposal(input: { id: $id }) {
+    clientMutationId
+  }
+}
+
+mutation SubmitEventProposal($input: SubmitEventProposalInput!) {
+  submitEventProposal(input: $input) {
+    event_proposal {
+      id
+      ...EventProposalFields
+    }
+  }
+}
+
+mutation TransitionEventProposal($eventProposalId: ID!, $status: String!, $dropEvent: Boolean) {
+  transitionEventProposal(input: { id: $eventProposalId, status: $status, drop_event: $dropEvent }) {
+    event_proposal {
+      id
+      ...EventProposalFields
+    }
+  }
+}
+
+mutation UpdateEventProposalAdminNotes($eventProposalId: ID!, $adminNotes: String!) {
+  updateEventProposalAdminNotes(input: { id: $eventProposalId, admin_notes: $adminNotes }) {
+    event_proposal {
+      id
+      ...EventProposalFields
+    }
+  }
+}

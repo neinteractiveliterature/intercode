@@ -1,11 +1,10 @@
 import { Redirect, useHistory } from 'react-router-dom';
-import { ErrorDisplay } from '@neinteractiveliterature/litform';
+import { ErrorDisplay, useCreateMutationWithReferenceArrayUpdater } from '@neinteractiveliterature/litform';
 
-import { OrganizationAdminOrganizationsQuery } from './queries';
 import useOrganizationRoleForm, { OrganizationRoleFormState } from './useOrganizationRoleForm';
 import usePageTitle from '../usePageTitle';
 import { LoadSingleValueFromCollectionWrapper } from '../GraphqlLoadingWrappers';
-import { OrganizationAdminOrganizationsQueryData, useOrganizationAdminOrganizationsQuery } from './queries.generated';
+import { OrganizationRoleFieldsFragmentDoc, useOrganizationAdminOrganizationsQuery } from './queries.generated';
 import { useCreateOrganizationRoleMutation } from './mutations.generated';
 
 export default LoadSingleValueFromCollectionWrapper(
@@ -20,7 +19,13 @@ export default LoadSingleValueFromCollectionWrapper(
       users: [],
       permissions: [],
     });
-    const [mutate, { error: mutationError, loading: mutationInProgress }] = useCreateOrganizationRoleMutation();
+    const [mutate, { error: mutationError, loading: mutationInProgress }] = useCreateMutationWithReferenceArrayUpdater(
+      useCreateOrganizationRoleMutation,
+      organization,
+      'organization_roles',
+      (data) => data.createOrganizationRole.organization_role,
+      OrganizationRoleFieldsFragmentDoc,
+    );
 
     usePageTitle('New organization role');
 
@@ -41,32 +46,6 @@ export default LoadSingleValueFromCollectionWrapper(
           permissions: permissionsChangeSet.getAddValues().map((permission) => ({
             permission: permission.permission,
           })),
-        },
-        update: (proxy, result) => {
-          const storeData = proxy.readQuery<OrganizationAdminOrganizationsQueryData>({
-            query: OrganizationAdminOrganizationsQuery,
-          });
-          const newRole = result.data?.createOrganizationRole?.organization_role;
-          if (!storeData || !newRole) {
-            return;
-          }
-
-          proxy.writeQuery<OrganizationAdminOrganizationsQueryData>({
-            query: OrganizationAdminOrganizationsQuery,
-            data: {
-              ...storeData,
-              organizations: storeData.organizations.map((org) => {
-                if (org.id === organization.id) {
-                  return {
-                    ...org,
-                    organization_roles: [...org.organization_roles, newRole],
-                  };
-                }
-
-                return org;
-              }),
-            },
-          });
         },
       });
       history.push(`/organizations/${organization.id}`);

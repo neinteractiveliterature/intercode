@@ -12,8 +12,10 @@ import useAsyncFunction from '../useAsyncFunction';
 import useSubmitOrder from './useSubmitOrder';
 import formatMoney from '../formatMoney';
 import { Money, PaymentMode } from '../graphqlTypes.generated';
-import { CurrentPendingOrderPaymentIntentClientSecretQueryData } from './queries.generated';
-import { CurrentPendingOrderPaymentIntentClientSecret } from './queries';
+import {
+  CurrentPendingOrderPaymentIntentClientSecretQueryData,
+  CurrentPendingOrderPaymentIntentClientSecretQueryDocument,
+} from './queries.generated';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const PoweredByStripeLogo = require('../images/powered_by_stripe.svg').default as string;
@@ -60,7 +62,7 @@ function OrderPaymentModalContents({
 
       try {
         const { data } = await apolloClient.query<CurrentPendingOrderPaymentIntentClientSecretQueryData>({
-          query: CurrentPendingOrderPaymentIntentClientSecret,
+          query: CurrentPendingOrderPaymentIntentClientSecretQueryDocument,
         });
 
         const myProfile = data.convention.my_profile;

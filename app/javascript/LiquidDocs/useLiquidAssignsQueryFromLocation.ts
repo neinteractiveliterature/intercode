@@ -2,11 +2,12 @@
 import { QueryResult, useQuery } from '@apollo/client';
 import { useLocation } from 'react-router-dom';
 
-import { LiquidAssignsQuery, NotifierLiquidAssignsQuery } from './queries';
 import {
   LiquidAssignsQueryData,
+  LiquidAssignsQueryDocument,
   LiquidAssignsQueryVariables,
   NotifierLiquidAssignsQueryData,
+  NotifierLiquidAssignsQueryDocument,
   NotifierLiquidAssignsQueryVariables,
 } from './queries.generated';
 
@@ -18,21 +19,17 @@ export type LiquidAssignsQueryFromLocation = [
   string | null,
 ];
 
-export type LiquidAssignsQueryFromLocationData = NonNullable<
-  LiquidAssignsQueryFromLocation[0]['data']
->;
+export type LiquidAssignsQueryFromLocationData = NonNullable<LiquidAssignsQueryFromLocation[0]['data']>;
 
 export default function useLiquidAssignsQueryFromLocation(): LiquidAssignsQueryFromLocation {
   const location = useLocation();
-  const notifierEventKey = location.search
-    ? new URLSearchParams(location.search).get('notifier_event_key')
-    : null;
+  const notifierEventKey = location.search ? new URLSearchParams(location.search).get('notifier_event_key') : null;
 
   return [
     useQuery<
       NotifierLiquidAssignsQueryData | LiquidAssignsQueryData,
       NotifierLiquidAssignsQueryVariables | LiquidAssignsQueryVariables
-    >(notifierEventKey ? NotifierLiquidAssignsQuery : LiquidAssignsQuery, {
+    >(notifierEventKey ? NotifierLiquidAssignsQueryDocument : LiquidAssignsQueryDocument, {
       variables: notifierEventKey ? { eventKey: notifierEventKey } : {},
     }),
     notifierEventKey,

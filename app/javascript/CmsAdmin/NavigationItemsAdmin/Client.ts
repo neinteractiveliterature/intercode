@@ -3,8 +3,11 @@ import { CadmusNavbarAdminClient } from 'cadmus-navbar-admin/lib/CadmusNavbarAdm
 import { NavigationItem } from 'cadmus-navbar-admin/lib/NavigationItem';
 import { EditingNavigationItem } from 'cadmus-navbar-admin/lib/EditingNavigationItemContext';
 import NavigationItemStore from 'cadmus-navbar-admin/lib/NavigationItemStore';
-import { NavigationItemsAdminQuery } from './queries';
-import { AdminNavigationItemFieldsFragment, NavigationItemsAdminQueryData } from './queries.generated';
+import {
+  AdminNavigationItemFieldsFragment,
+  NavigationItemsAdminQueryData,
+  NavigationItemsAdminQueryDocument,
+} from './queries.generated';
 import {
   CreateNavigationItemDocument,
   CreateNavigationItemMutationData,
@@ -74,7 +77,7 @@ class Client implements CadmusNavbarAdminClient {
     this.requestsInProgress.loadingNavigationItems = true;
     try {
       const { data } = await this.apolloClient.query<NavigationItemsAdminQueryData>({
-        query: NavigationItemsAdminQuery,
+        query: NavigationItemsAdminQueryDocument,
       });
       return data.cmsParent.cmsNavigationItems.map(graphqlNavigationItemToCadmusNavbarAdminObject);
     } catch (error) {
@@ -94,7 +97,7 @@ class Client implements CadmusNavbarAdminClient {
     this.requestsInProgress.loadingPages = true;
     try {
       const { data } = await this.apolloClient.query<NavigationItemsAdminQueryData>({
-        query: NavigationItemsAdminQuery,
+        query: NavigationItemsAdminQueryDocument,
       });
       return data.cmsParent.cmsPages.map((page) => ({
         ...page,

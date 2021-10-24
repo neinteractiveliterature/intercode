@@ -3,9 +3,12 @@ import { useHistory, useParams } from 'react-router-dom';
 import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import TicketForm from './TicketForm';
-import { UserConProfileAdminQuery } from './queries';
 import usePageTitle from '../usePageTitle';
-import { UserConProfileAdminQueryData, useUserConProfileAdminQuery } from './queries.generated';
+import {
+  UserConProfileAdminQueryData,
+  UserConProfileAdminQueryDocument,
+  useUserConProfileAdminQuery,
+} from './queries.generated';
 import { useCreateTicketMutation } from './mutations.generated';
 
 function useUserConProfileAdminQueryFromParams() {
@@ -19,7 +22,7 @@ export default LoadQueryWrapper(useUserConProfileAdminQueryFromParams, function 
   const [createTicket] = useCreateTicketMutation({
     update: (cache, result) => {
       const cacheData = cache.readQuery<UserConProfileAdminQueryData>({
-        query: UserConProfileAdminQuery,
+        query: UserConProfileAdminQueryDocument,
         variables: { id: userConProfileId },
       });
       if (!cacheData) {
@@ -27,7 +30,7 @@ export default LoadQueryWrapper(useUserConProfileAdminQueryFromParams, function 
       }
 
       cache.writeQuery<UserConProfileAdminQueryData>({
-        query: UserConProfileAdminQuery,
+        query: UserConProfileAdminQueryDocument,
         variables: { id: userConProfileId },
         data: {
           ...cacheData,

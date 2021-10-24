@@ -4,12 +4,11 @@ import { useHistory } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
 import { useModal, useConfirm, ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
-import { CartQuery } from './queries';
 import OrderPaymentModal from './OrderPaymentModal';
 import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
 import CartContents from './CartContents';
-import { CartQueryData, useCartQuery } from './queries.generated';
+import { CartQueryData, CartQueryDocument, useCartQuery } from './queries.generated';
 import {
   useCreateCouponApplicationMutation,
   useDeleteCouponApplicationMutation,
@@ -46,14 +45,14 @@ export default LoadQueryWrapper(useCartQuery, function Cart({ data }) {
       deleteMutate({
         variables: { input: { id } },
         update: (proxy) => {
-          const storeData = proxy.readQuery<CartQueryData>({ query: CartQuery });
+          const storeData = proxy.readQuery<CartQueryData>({ query: CartQueryDocument });
           const currentPendingOrder = storeData?.convention.my_profile?.current_pending_order;
           if (!currentPendingOrder) {
             return;
           }
 
           proxy.writeQuery<CartQueryData>({
-            query: CartQuery,
+            query: CartQueryDocument,
             data: {
               ...storeData,
               convention: {

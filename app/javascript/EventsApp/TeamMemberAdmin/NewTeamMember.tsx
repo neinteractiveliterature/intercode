@@ -11,10 +11,13 @@ import {
 
 import buildTeamMemberInput from './buildTeamMemberInput';
 import TeamMemberForm from './TeamMemberForm';
-import { TeamMemberUserConProfilesQuery } from './queries';
 import UserConProfileSelect from '../../BuiltInFormControls/UserConProfileSelect';
 import usePageTitle from '../../usePageTitle';
-import { TeamMemberFieldsFragmentDoc, TeamMembersQueryData } from './queries.generated';
+import {
+  TeamMemberFieldsFragmentDoc,
+  TeamMembersQueryData,
+  TeamMemberUserConProfilesQueryDocument,
+} from './queries.generated';
 import { ReceiveSignupEmail } from '../../graphqlTypes.generated';
 import { useCreateTeamMemberMutation } from './mutations.generated';
 
@@ -95,7 +98,7 @@ function NewTeamMember({ event, eventPath }: NewTeamMemberProps): JSX.Element {
           value={teamMember.user_con_profile}
           onChange={userConProfileChanged}
           disabled={createInProgress}
-          userConProfilesQuery={TeamMemberUserConProfilesQuery}
+          userConProfilesQuery={TeamMemberUserConProfilesQueryDocument}
           placeholder={t(
             'events.teamMemberAdmin.userConProfilePlaceholder',
             'Type the name of the {{ teamMemberName }} you want to add',

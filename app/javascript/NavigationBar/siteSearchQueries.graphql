@@ -1,0 +1,37 @@
+query SiteSearchQuery($query: String!) {
+  cmsParent: cmsParentByRequestHost {
+    id
+
+    fullTextSearch(query: $query) {
+      total_entries
+      entries {
+        title
+        highlight
+
+        model {
+          # eslint-disable-next-line @graphql-eslint/naming-convention
+          __typename
+
+          ... on Page {
+            id
+            slug
+          }
+
+          ... on Event {
+            id
+            title
+          }
+
+          ... on EventProposal {
+            id
+            title
+          }
+
+          ... on UserConProfile {
+            id
+          }
+        }
+      }
+    }
+  }
+}

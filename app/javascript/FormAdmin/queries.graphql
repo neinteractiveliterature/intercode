@@ -1,0 +1,95 @@
+#import "../Models/commonFormFragments.graphql"
+
+fragment FormFields on Form {
+  id
+  title
+  form_type
+  export_json
+
+  event_categories {
+    id
+    name
+  }
+
+  proposal_event_categories {
+    id
+    name
+  }
+
+  user_con_profile_conventions {
+    id
+    name
+  }
+}
+
+fragment FormEditorFormItemFields on FormItem {
+  id
+  admin_description
+  public_description
+  properties
+  ...CommonFormItemFields
+}
+
+fragment FormEditorFormSectionFields on FormSection {
+  id
+  ...CommonFormSectionFields
+
+  form_items {
+    id
+    ...FormEditorFormItemFields
+  }
+}
+
+fragment FormEditorData on Form {
+  id
+  ...CommonFormFields
+
+  form_sections {
+    id
+    ...FormEditorFormSectionFields
+  }
+}
+
+query FormAdminQuery {
+  convention: conventionByRequestHost {
+    id
+    name
+
+    forms {
+      id
+      ...FormFields
+    }
+  }
+}
+
+query FormEditorQuery($id: ID!) {
+  convention: conventionByRequestHost {
+    id
+    name
+    starts_at
+    ends_at
+    timezone_name
+    timezone_mode
+    event_mailing_list_domain
+    form(id: $id) {
+      id
+      ...FormEditorData
+    }
+  }
+}
+
+query PreviewFormItemQuery($formId: ID!, $formSectionId: ID!, $formItem: FormItemInput!) {
+  convention: conventionByRequestHost {
+    id
+    form(id: $formId) {
+      id
+      form_section(id: $formSectionId) {
+        id
+        preview_form_item(formItem: $formItem) {
+          id
+          ...FormEditorFormItemFields
+        }
+      }
+    }
+  }
+}

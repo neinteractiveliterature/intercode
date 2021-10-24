@@ -1,0 +1,25 @@
+#import "./queries.graphql"
+
+mutation CreatePartial($cmsPartial: CmsPartialInput!) {
+  createCmsPartial(input: { cms_partial: $cmsPartial }) {
+    cms_partial {
+      id
+      ...CmsPartialFields
+    }
+  }
+}
+
+mutation UpdatePartial($id: ID!, $cmsPartial: CmsPartialInput!) {
+  updateCmsPartial(input: { id: $id, cms_partial: $cmsPartial }) {
+    cms_partial {
+      id
+      ...CmsPartialFields
+    }
+  }
+}
+
+mutation DeletePartial($id: ID!) {
+  deleteCmsPartial(input: { id: $id }) {
+    clientMutationId
+  }
+}

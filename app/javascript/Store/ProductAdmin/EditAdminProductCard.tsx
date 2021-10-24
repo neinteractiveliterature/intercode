@@ -10,14 +10,13 @@ import {
   usePropertySetters,
 } from '@neinteractiveliterature/litform';
 
-import { AdminProductsQuery } from '../queries';
 import AdminProductVariantsTable from './AdminProductVariantsTable';
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
 import useAsyncFunction from '../../useAsyncFunction';
 import PricingStructureInput from './PricingStructureInput';
 import buildProductInput from '../buildProductInput';
 import AppRootContext from '../../AppRootContext';
-import { AdminProductsQueryData } from '../queries.generated';
+import { AdminProductsQueryData, AdminProductsQueryDocument } from '../queries.generated';
 import { useCreateProductMutation, useUpdateProductMutation } from '../mutations.generated';
 import { EditingProduct } from './EditingProductTypes';
 import { hasRealId } from '../../GeneratedIdUtils';
@@ -84,13 +83,13 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }: EditAdminP
       await createProduct({
         variables: { product: productInput },
         update: (cache, result) => {
-          const data = cache.readQuery<AdminProductsQueryData>({ query: AdminProductsQuery });
+          const data = cache.readQuery<AdminProductsQueryData>({ query: AdminProductsQueryDocument });
           const newProduct = result.data?.createProduct?.product;
           if (!data || !newProduct) {
             return;
           }
           cache.writeQuery<AdminProductsQueryData>({
-            query: AdminProductsQuery,
+            query: AdminProductsQueryDocument,
             data: {
               ...data,
               convention: {

@@ -3,8 +3,7 @@ import Select, { Props as SelectProps } from 'react-select';
 import { DocumentNode, useQuery } from '@apollo/client';
 import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import { AdminProductsQuery } from '../Store/queries';
-import { AdminProductsQueryData } from '../Store/queries.generated';
+import { AdminProductsQueryData, AdminProductsQueryDocument } from '../Store/queries.generated';
 import FourOhFourPage from '../FourOhFourPage';
 
 export type ProductSelectProps<QueryType extends AdminProductsQueryData> = SelectProps<
@@ -17,7 +16,7 @@ function ProductSelect<QueryType extends AdminProductsQueryData>({
   productsQuery,
   ...otherProps
 }: ProductSelectProps<QueryType>): JSX.Element {
-  const { data, loading, error } = useQuery<QueryType>(productsQuery ?? AdminProductsQuery);
+  const { data, loading, error } = useQuery<QueryType>(productsQuery ?? AdminProductsQueryDocument);
 
   if (loading) {
     return <LoadingIndicator iconSet="bootstrap-icons" />;

@@ -1,0 +1,37 @@
+#import "./queries.graphql"
+
+mutation CreateContentGroup($cmsContentGroup: CmsContentGroupInput!, $permissions: [PermissionInput!]) {
+  createCmsContentGroup(input: { cms_content_group: $cmsContentGroup, permissions: $permissions }) {
+    cms_content_group {
+      id
+      ...CmsContentGroupFields
+    }
+  }
+}
+
+mutation UpdateContentGroup(
+  $id: ID!
+  $cmsContentGroup: CmsContentGroupInput!
+  $grantPermissions: [PermissionInput!]
+  $revokePermissions: [PermissionInput!]
+) {
+  updateCmsContentGroup(
+    input: {
+      id: $id
+      cms_content_group: $cmsContentGroup
+      grant_permissions: $grantPermissions
+      revoke_permissions: $revokePermissions
+    }
+  ) {
+    cms_content_group {
+      id
+      ...CmsContentGroupFields
+    }
+  }
+}
+
+mutation DeleteContentGroup($id: ID!) {
+  deleteCmsContentGroup(input: { id: $id }) {
+    clientMutationId
+  }
+}

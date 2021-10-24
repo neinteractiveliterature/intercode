@@ -1,9 +1,8 @@
 import type { OptionTypeBase } from 'react-select';
 import type { DocumentNode } from 'graphql';
 
-import { DefaultEventsQuery } from './selectDefaultQueries';
 import GraphQLAsyncSelect, { GraphQLAsyncSelectProps } from './GraphQLAsyncSelect';
-import { DefaultEventsQueryData } from './selectDefaultQueries.generated';
+import { DefaultEventsQueryData, DefaultEventsQueryDocument } from './selectDefaultQueries.generated';
 
 type DQ = DefaultEventsQueryData;
 type DO<QueryType extends DefaultEventsQueryData> = NonNullable<
@@ -11,11 +10,7 @@ type DO<QueryType extends DefaultEventsQueryData> = NonNullable<
 >['events_paginated']['entries'][0];
 export type DefaultEventSelectOptionType = DO<DQ>;
 
-export type EventSelectProps<
-  DataType,
-  OptionType extends OptionTypeBase,
-  IsMulti extends boolean,
-> = Omit<
+export type EventSelectProps<DataType, OptionType extends OptionTypeBase, IsMulti extends boolean> = Omit<
   GraphQLAsyncSelectProps<DataType, OptionType, IsMulti>,
   'isClearable' | 'getOptions' | 'getVariables' | 'getOptionValue' | 'formatOptionLabel' | 'query'
 > & {
@@ -34,7 +29,7 @@ function EventSelect<
       getVariables={(inputValue) => ({ title: inputValue })}
       getOptionValue={(option: OptionType) => option.id}
       getOptionLabel={(option: OptionType) => option.title}
-      query={eventsQuery || DefaultEventsQuery}
+      query={eventsQuery || DefaultEventsQueryDocument}
       {...otherProps}
     />
   );

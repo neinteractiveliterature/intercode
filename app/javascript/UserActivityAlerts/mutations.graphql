@@ -1,0 +1,45 @@
+#import "./queries.graphql"
+
+mutation CreateUserActivityAlert(
+  $userActivityAlert: UserActivityAlertInput!
+  $notificationDestinations: [NotificationDestinationInput!]!
+) {
+  createUserActivityAlert(
+    input: { user_activity_alert: $userActivityAlert, notification_destinations: $notificationDestinations }
+  ) {
+    user_activity_alert {
+      id
+      ...UserActivityAlertFields
+    }
+  }
+}
+
+mutation UpdateUserActivityAlert(
+  $id: ID!
+  $userActivityAlert: UserActivityAlertInput!
+  $addNotificationDestinations: [NotificationDestinationInput!]!
+  $removeNotificationDestinationIds: [ID!]!
+) {
+  updateUserActivityAlert(
+    input: {
+      id: $id
+      user_activity_alert: $userActivityAlert
+      add_notification_destinations: $addNotificationDestinations
+      removeNotificationDestinationIds: $removeNotificationDestinationIds
+    }
+  ) {
+    user_activity_alert {
+      id
+      ...UserActivityAlertFields
+    }
+  }
+}
+
+mutation DeleteUserActivityAlert($id: ID!) {
+  deleteUserActivityAlert(input: { id: $id }) {
+    user_activity_alert {
+      id
+      ...UserActivityAlertFields
+    }
+  }
+}

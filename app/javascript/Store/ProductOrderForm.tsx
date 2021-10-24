@@ -3,11 +3,10 @@ import { useHistory } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
 import { LoadingIndicator, ErrorDisplay, parseIntOrNull } from '@neinteractiveliterature/litform';
 
-import { CartQuery } from './queries';
 import formatMoney from '../formatMoney';
 import sortProductVariants from './sortProductVariants';
 import useAsyncFunction from '../useAsyncFunction';
-import { useOrderFormProductQuery } from './queries.generated';
+import { CartQueryDocument, useOrderFormProductQuery } from './queries.generated';
 import { useAddOrderEntryToCurrentPendingOrderMutation } from './mutations.generated';
 import { Money } from '../graphqlTypes.generated';
 import { LoadQueryWithVariablesWrapper } from '../GraphqlLoadingWrappers';
@@ -23,7 +22,7 @@ export default LoadQueryWithVariablesWrapper(
     const { product } = data.convention;
     const history = useHistory();
     const [addOrderEntryToCurrentPendingOrder] = useAddOrderEntryToCurrentPendingOrderMutation({
-      refetchQueries: [{ query: CartQuery }],
+      refetchQueries: [{ query: CartQueryDocument }],
     });
 
     const [productVariantId, setProductVariantId] = useState<string>();

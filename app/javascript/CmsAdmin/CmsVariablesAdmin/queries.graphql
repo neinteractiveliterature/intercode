@@ -1,0 +1,21 @@
+fragment CmsVariableFields on CmsVariable {
+  id
+  key
+  value_json
+  current_ability_can_update
+  current_ability_can_delete
+}
+
+query CmsVariablesQuery {
+  cmsParent: cmsParentByRequestHost {
+    id
+    cmsVariables {
+      id
+      ...CmsVariableFields
+    }
+  }
+
+  currentAbility {
+    can_create_cms_variables
+  }
+}

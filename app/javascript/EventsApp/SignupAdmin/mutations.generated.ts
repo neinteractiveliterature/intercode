@@ -2,10 +2,9 @@
 import * as Types from '../../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
-import { SignupFieldsFragmentDoc } from './queries.generated';
+import { SignupFieldsFragmentDoc, UserConProfileSignupsFragmentDoc } from './queries.generated';
 import { EventPageRunFieldsFragmentDoc } from '../EventPage/queries.generated';
-import { RunBasicSignupDataFragmentDoc } from '../queries.generated';
-import { UserConProfileSignupsFragmentDoc } from './queries.generated';
+import { RunBasicSignupDataFragmentDoc, CommonConventionDataFragmentDoc } from '../queries.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
 export type ChangeSignupBucketMutationVariables = Types.Exact<{

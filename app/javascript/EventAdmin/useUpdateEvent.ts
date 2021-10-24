@@ -1,9 +1,8 @@
 import { useCallback } from 'react';
 
 import { buildEventInput, buildRunInput } from './InputBuilders';
-import { EventAdminEventsQuery } from './queries';
 import { useCreateRunMutation, useUpdateEventMutation, useUpdateRunMutation } from './mutations.generated';
-import { EventAdminEventsQueryData } from './queries.generated';
+import { EventAdminEventsQueryData, EventAdminEventsQueryDocument } from './queries.generated';
 import { EventCategory, SchedulingUi } from '../graphqlTypes.generated';
 
 export type UseUpdateRegularEventOptions = {
@@ -64,7 +63,7 @@ function useUpdateSingleRunEvent(): (options: UseUpdateSingleRunEventOptions) =>
           },
           update: (store, { data }) => {
             const eventsData = store.readQuery<EventAdminEventsQueryData>({
-              query: EventAdminEventsQuery,
+              query: EventAdminEventsQueryDocument,
             });
             const newRun = data?.createRun?.run;
             if (!newRun || !eventsData) {
@@ -72,7 +71,7 @@ function useUpdateSingleRunEvent(): (options: UseUpdateSingleRunEventOptions) =>
             }
 
             store.writeQuery<EventAdminEventsQueryData>({
-              query: EventAdminEventsQuery,
+              query: EventAdminEventsQueryDocument,
               data: {
                 ...eventsData,
                 convention: {
