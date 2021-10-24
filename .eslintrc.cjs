@@ -95,7 +95,6 @@ module.exports = {
   overrides: [
     {
       files: ['**/*.ts', '**/*.tsx'],
-      processor: '@graphql-eslint/graphql',
       rules: {
         'react/prop-types': 'off',
         'react/require-default-props': 'off',
@@ -106,6 +105,11 @@ module.exports = {
             paths: [
               'graphql-tag',
               'prop-types',
+              {
+                name: '@apollo/client',
+                importNames: ['gql'],
+                message: 'Please define GraphQL operations in .graphql files and use graphql-code-generator to generate hooks',
+              },
               {
                 name: '@apollo/client',
                 importNames: ['useQuery', 'useMutation'],
