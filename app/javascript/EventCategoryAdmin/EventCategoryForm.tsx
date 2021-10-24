@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import * as React from 'react';
-import { humanize, pluralize } from 'inflected';
+import { pluralize } from 'inflected';
 import classNames from 'classnames';
 import tinycolor2 from 'tinycolor2';
 import {
@@ -19,6 +19,7 @@ import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
 import SignupStatusBadge from '../EventsApp/ScheduleGrid/SignupStatusBadge';
 import { Department, EventCategory, Form, SchedulingUi, TicketMode } from '../graphqlTypes.generated';
 import { SignupStatus } from '../EventsApp/ScheduleGrid/StylingUtils';
+import humanize from '../humanize';
 
 export type EventCategoryForForm = Pick<
   EventCategory,

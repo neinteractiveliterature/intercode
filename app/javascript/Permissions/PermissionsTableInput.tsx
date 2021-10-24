@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { titleize } from 'inflected';
+import capitalize from 'lodash/capitalize';
 import classNames from 'classnames';
 
 import PermissionsTableCell from './PermissionsTableCell';
@@ -79,7 +79,7 @@ function PermissionsTableInput<RowsType extends BaseRowType[]>(
           <th>{rowsHeader}</th>
           {permissionNames.map(({ permission, name }) => (
             <th key={permission} className="text-center">
-              {titleize(name)}
+              {capitalize(name)}
             </th>
           ))}
         </tr>

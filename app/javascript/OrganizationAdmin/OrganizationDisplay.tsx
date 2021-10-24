@@ -1,6 +1,6 @@
 import { Link, Redirect } from 'react-router-dom';
-import { titleize } from 'inflected';
 import { ErrorDisplay, useConfirm, useDeleteMutationWithReferenceArrayUpdater } from '@neinteractiveliterature/litform';
+import capitalize from 'lodash/capitalize';
 
 import PermissionNames from '../../../config/permission_names.json';
 import usePageTitle from '../usePageTitle';
@@ -57,7 +57,7 @@ export default LoadSingleValueFromCollectionWrapper(
                 <td>{organizationRole.users.map((user) => user.name).join(', ')}</td>
                 <td>
                   {organizationRole.permissions
-                    .map((permission) => titleize(getOrganizationRolePermissionName(permission.permission) ?? ''))
+                    .map((permission) => capitalize(getOrganizationRolePermissionName(permission.permission) ?? ''))
                     .join(', ')}
                 </td>
                 <td>

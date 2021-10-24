@@ -1,16 +1,11 @@
 import { useState } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
-import { humanize } from 'inflected';
-import {
-  useModal,
-  BooleanInput,
-  ErrorDisplay,
-  MultipleChoiceInput,
-} from '@neinteractiveliterature/litform';
+import { useModal, BooleanInput, ErrorDisplay, MultipleChoiceInput } from '@neinteractiveliterature/litform';
 
 import { useApolloClient } from '@apollo/client';
 import { EventProposalQueryWithOwnerQueryData } from './queries.generated';
 import { useTransitionEventProposalMutation } from './mutations.generated';
+import humanize from '../humanize';
 
 const STATUSES = [
   { key: 'proposed', transitionLabel: 'Update', buttonClass: 'btn-primary' },
@@ -39,9 +34,7 @@ export type EventProposalStatusUpdaterProps = {
   eventProposal: EventProposalQueryWithOwnerQueryData['convention']['event_proposal'];
 };
 
-function EventProposalStatusUpdater({
-  eventProposal,
-}: EventProposalStatusUpdaterProps): JSX.Element {
+function EventProposalStatusUpdater({ eventProposal }: EventProposalStatusUpdaterProps): JSX.Element {
   const [status, setStatus] = useState(eventProposal.status);
   const [dropEvent, setDropEvent] = useState(false);
   const { open: openModal, close: closeModal, visible: modalVisible } = useModal();
@@ -77,14 +70,7 @@ function EventProposalStatusUpdater({
         <div className="modal-body">
           <MultipleChoiceInput
             caption="New status"
-            choices={[
-              'proposed',
-              'reviewing',
-              'tentative_accept',
-              'accepted',
-              'rejected',
-              'withdrawn',
-            ].map((s) => ({
+            choices={['proposed', 'reviewing', 'tentative_accept', 'accepted', 'rejected', 'withdrawn'].map((s) => ({
               label: humanize(s),
               value: s,
             }))}
@@ -98,8 +84,8 @@ function EventProposalStatusUpdater({
 
           {status === 'accepted' && !eventProposal.event ? (
             <p className="text-danger">
-              This will create an event on the convention web site. It will not yet be on the
-              schedule or possible to sign up for, but it will appear in the events list.
+              This will create an event on the convention web site. It will not yet be on the schedule or possible to
+              sign up for, but it will appear in the events list.
             </p>
           ) : null}
 
@@ -116,12 +102,7 @@ function EventProposalStatusUpdater({
         </div>
 
         <div className="modal-footer">
-          <button
-            type="button"
-            className="btn btn-secondary"
-            onClick={closeModal}
-            disabled={transitionInProgress}
-          >
+          <button type="button" className="btn btn-secondary" onClick={closeModal} disabled={transitionInProgress}>
             Cancel
           </button>
 

@@ -5,6 +5,7 @@ query ReportsMenuQuery {
     id
     ticket_mode
     ticket_name
+    ticketNamePlural
   }
 }
 
@@ -12,6 +13,7 @@ query AttendanceByPaymentAmountQuery {
   convention: conventionByRequestHost {
     id
     ticket_name
+    ticketNamePlural
 
     reports {
       ticket_count_by_type_and_payment_amount {
@@ -48,6 +50,7 @@ query EventProvidedTicketsQuery {
   convention: conventionByRequestHost {
     id
     ticket_name
+    ticketNamePlural
 
     reports {
       event_provided_tickets {

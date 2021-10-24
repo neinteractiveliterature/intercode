@@ -10,7 +10,7 @@ export type TicketTypeAdmin_TicketTypeFieldsFragment = { __typename: 'TicketType
 export type AdminTicketTypesQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type AdminTicketTypesQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, ticket_name: string, timezone_name?: string | null | undefined, ticket_types: Array<{ __typename: 'TicketType', id: string, name: string, description?: string | null | undefined, counts_towards_convention_maximum: boolean, allows_event_signups: boolean, maximum_event_provided_tickets: number, providing_products: Array<{ __typename: 'Product', id: string, name: string, available: boolean, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: string | null | undefined, finish?: string | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } }> } } }> }> } };
+export type AdminTicketTypesQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, ticket_name: string, ticketNamePlural: string, timezone_name?: string | null | undefined, ticket_types: Array<{ __typename: 'TicketType', id: string, name: string, description?: string | null | undefined, counts_towards_convention_maximum: boolean, allows_event_signups: boolean, maximum_event_provided_tickets: number, providing_products: Array<{ __typename: 'Product', id: string, name: string, available: boolean, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: string | null | undefined, finish?: string | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } }> } } }> }> } };
 
 export const TicketTypeAdmin_TicketTypeFieldsFragmentDoc = gql`
     fragment TicketTypeAdmin_TicketTypeFields on TicketType {
@@ -39,6 +39,7 @@ export const AdminTicketTypesQueryDocument = gql`
       ...TicketTypeAdmin_TicketTypeFields
     }
     ticket_name
+    ticketNamePlural
     timezone_name
   }
 }

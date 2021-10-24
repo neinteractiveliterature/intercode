@@ -1,19 +1,23 @@
-import i18next, { BackendModule, i18n, ResourceKey } from 'i18next';
+import i18next, { BackendModule, i18n, InitOptions, ResourceKey } from 'i18next';
+import { DateTime } from 'luxon';
 import { initReactI18next } from 'react-i18next';
-import mapValues from 'lodash/mapValues';
-import pickBy from 'lodash/pickBy';
 import enLanguage from '../../locales/en.json'; // english is the fallback language and therefore must always be loaded
+import { DateTimeFormatKey } from './DateTimeFormats';
+import formatMoney from './formatMoney';
+import { Money } from './graphqlTypes.generated';
+import { formatLCM } from './TimeUtils';
 
-function filterEmptyStrings(obj: ResourceKey): ResourceKey {
-  return mapValues(
-    pickBy(obj, (value) => value !== ''),
-    (value) => {
-      if (typeof value === 'object' && value != null) {
-        return filterEmptyStrings(value);
-      }
+function filterEmptyStrings(obj: Exclude<ResourceKey, string>): ResourceKey {
+  return Object.fromEntries(
+    Object.entries(obj)
+      .filter(([, value]) => value !== '')
+      .map(([key, value]) => {
+        if (typeof value === 'object' && value != null) {
+          return [key, filterEmptyStrings(value)];
+        }
 
-      return value;
-    },
+        return [key, value];
+      }),
   );
 }
 
@@ -43,7 +47,7 @@ const PromiseI18nextBackend: PromiseI18NextBackendModule = {
     }
 
     loader()
-      .then((resources: ResourceKey) => callback(null, filterEmptyStrings(resources)))
+      .then((resources: Exclude<ResourceKey, string>) => callback(null, filterEmptyStrings(resources)))
       .catch((error: Error) => callback(error, false));
   },
   create() {
@@ -51,7 +55,7 @@ const PromiseI18nextBackend: PromiseI18NextBackendModule = {
   },
 };
 
-const initOptions = {
+const initOptions: InitOptions = {
   backend: {
     loaders: {
       en: {
@@ -77,6 +81,12 @@ const i18nObject = i18next
   .use(PromiseI18nextBackend);
 
 const i18nInitPromise = i18nObject.init(initOptions).then(() => {
+  i18nObject.services.formatter?.add('money', (value: Money | null | undefined) => formatMoney(value));
+  i18nObject.services.formatter?.add(
+    'datetimenamed',
+    (value: DateTime, lng: string, options: { format: DateTimeFormatKey }) =>
+      formatLCM(value, i18nObject.t(`dateTimeFormats.${options.format}`, { lng })),
+  );
   ready = true;
 });
 

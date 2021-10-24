@@ -3,7 +3,6 @@ import * as React from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 // @ts-expect-error array-to-sentence has no TypeScript declarations
 import arrayToSentence from 'array-to-sentence';
-import { humanize } from 'inflected';
 import { useTranslation } from 'react-i18next';
 import { LoadingIndicator, ErrorDisplay, useUniqueId } from '@neinteractiveliterature/litform';
 
@@ -15,12 +14,10 @@ import UserFormFields, { UserFormState } from './UserFormFields';
 import PasswordConfirmationInput from './PasswordConfirmationInput';
 import useAfterSessionChange from './useAfterSessionChange';
 import { lazyWithBundleHashCheck } from '../checkBundleHash';
+import humanize from '../humanize';
 
 const PasswordInputWithStrengthCheck = lazyWithBundleHashCheck(
-  () =>
-    import(
-      /* webpackChunkName: "password-input-with-strength-check" */ './PasswordInputWithStrengthCheck'
-    ),
+  () => import(/* webpackChunkName: "password-input-with-strength-check" */ './PasswordInputWithStrengthCheck'),
 );
 
 async function signUp(
@@ -66,11 +63,7 @@ async function signUp(
 
 function SignUpForm(): JSX.Element {
   const { t } = useTranslation();
-  const {
-    close: closeModal,
-    setCurrentView,
-    recaptchaSiteKey,
-  } = useContext(AuthenticationModalContext);
+  const { close: closeModal, setCurrentView, recaptchaSiteKey } = useContext(AuthenticationModalContext);
   const authenticityToken = useContext(AuthenticityTokensContext).signUp;
   const [formState, setFormState] = useState({});
   const [password, setPassword] = useState('');
@@ -112,11 +105,7 @@ function SignUpForm(): JSX.Element {
               {t('authentication.signUpForm.passwordLabel', 'Password')}
             </label>
             <Suspense fallback={<LoadingIndicator iconSet="bootstrap-icons" />}>
-              <PasswordInputWithStrengthCheck
-                id={passwordFieldId}
-                value={password}
-                onChange={setPassword}
-              />
+              <PasswordInputWithStrengthCheck id={passwordFieldId} value={password} onChange={setPassword} />
             </Suspense>
           </div>
           <PasswordConfirmationInput
@@ -151,12 +140,7 @@ function SignUpForm(): JSX.Element {
             </button>
           </div>
           <div>
-            <button
-              type="button"
-              className="btn btn-secondary me-2"
-              disabled={submitInProgress}
-              onClick={closeModal}
-            >
+            <button type="button" className="btn btn-secondary me-2" disabled={submitInProgress} onClick={closeModal}>
               {t('buttons.cancel', 'Cancel')}
             </button>
             <input

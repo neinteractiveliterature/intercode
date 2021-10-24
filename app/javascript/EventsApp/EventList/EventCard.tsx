@@ -1,13 +1,10 @@
 import { Fragment, useMemo, useContext, ReactNode } from 'react';
-// @ts-expect-error inflected type definitions don't export capitalize
-import { capitalize } from 'inflected';
 import { Link } from 'react-router-dom';
 import { SortingRule } from 'react-table';
 import { DateTime } from 'luxon';
 import { notEmpty } from '@neinteractiveliterature/litform';
 
 import getSortedRuns from './getSortedRuns';
-import pluralizeWithCount from '../../pluralizeWithCount';
 import buildEventUrl from '../buildEventUrl';
 import teamMembersForDisplay from '../teamMembersForDisplay';
 import AppRootContext from '../../AppRootContext';
@@ -18,6 +15,7 @@ import { arrayToSentenceReact, joinReact } from '../../RenderingUtils';
 import { EventListEventsQueryData } from './queries.generated';
 import { useAppDateTimeFormat } from '../../TimeUtils';
 import { useFormatRunTime } from '../runTimeFormatting';
+import { useTranslation } from 'react-i18next';
 
 type ConventionType = NonNullable<EventListEventsQueryData['convention']>;
 type EventType = ConventionType['events_paginated']['entries'][0];
@@ -99,6 +97,7 @@ function EventCard({ event, sortBy, canReadSchedule }: EventCardProps): JSX.Elem
   const formResponse = event.form_response_attrs_json ? JSON.parse(event.form_response_attrs_json) : {};
   const metadataItems: { key: string; content: ReactNode }[] = [];
   const rateEvent = useRateEvent();
+  const { t } = useTranslation();
 
   const displayTeamMembers = useMemo(() => teamMembersForDisplay(event), [event]);
   const teamMemberNames = displayTeamMembers.map((teamMember) => (
@@ -119,11 +118,10 @@ function EventCard({ event, sortBy, canReadSchedule }: EventCardProps): JSX.Elem
   const teamMemberList = joinReact(teamMemberNames, ', ');
 
   if (teamMemberList.length > 0) {
-    const teamMemberDescription = pluralizeWithCount(
-      capitalize(event.event_category.team_member_name),
-      displayTeamMembers.length,
-      true,
-    );
+    const teamMemberDescription =
+      displayTeamMembers.length === 1
+        ? event.event_category.team_member_name
+        : event.event_category.teamMemberNamePlural;
 
     metadataItems.push({
       key: 'team_members',
@@ -136,7 +134,9 @@ function EventCard({ event, sortBy, canReadSchedule }: EventCardProps): JSX.Elem
   }
 
   if (formResponse.author && !teamIsAllAuthors(formResponse.author, event.team_members)) {
-    const authorDescription = pluralizeWithCount('Author', formResponse.author.split(/(,|;| and )/).length, true);
+    const authorDescription = t('events.catalog.author', 'Authors', {
+      count: formResponse.author.split(/(,|;| and )/).length,
+    });
     metadataItems.push({
       key: 'author',
       content: (
@@ -152,7 +152,7 @@ function EventCard({ event, sortBy, canReadSchedule }: EventCardProps): JSX.Elem
       key: 'organization',
       content: (
         <>
-          <strong>Organization:</strong> {formResponse.organization}
+          <strong>{t('events.catalog.organization', 'Organization')}:</strong> {formResponse.organization}
         </>
       ),
     });

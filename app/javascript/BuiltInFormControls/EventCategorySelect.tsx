@@ -1,10 +1,10 @@
 import { ReactNode } from 'react';
-import { humanize } from 'inflected';
 import { useTranslation } from 'react-i18next';
 import { BootstrapFormSelect } from '@neinteractiveliterature/litform';
 import { BootstrapFormSelectProps } from '@neinteractiveliterature/litform/lib/BootstrapFormSelect';
 
 import { EventCategory } from '../graphqlTypes.generated';
+import humanize from '../humanize';
 
 export type EventCategorySelectProps = Omit<BootstrapFormSelectProps, 'label'> & {
   eventCategories: (Pick<EventCategory, 'name'> & { id: string })[];

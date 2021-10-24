@@ -1,13 +1,10 @@
 import * as React from 'react';
-import { humanize } from 'inflected';
 import { Link } from 'react-router-dom';
 import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import usePageTitle from '../usePageTitle';
-import {
-  UserActivityAlertsAdminQueryData,
-  useUserActivityAlertsAdminQuery,
-} from './queries.generated';
+import { UserActivityAlertsAdminQueryData, useUserActivityAlertsAdminQuery } from './queries.generated';
+import humanize from '../humanize';
 
 function renderCriteriaList(criteria: React.ReactNode[], defaultText: React.ReactNode) {
   if (criteria.length > 0) {
@@ -71,11 +68,7 @@ function renderAlertNotificationDestinations(
 ) {
   const destinations = userActivityAlert.notification_destinations.map((destination) => {
     if (destination.staff_position) {
-      return (
-        <li key={`staff_position_${destination.staff_position.id}`}>
-          {destination.staff_position.name}
-        </li>
-      );
+      return <li key={`staff_position_${destination.staff_position.id}`}>{destination.staff_position.name}</li>;
     }
 
     if (destination.user_con_profile) {
@@ -90,53 +83,47 @@ function renderAlertNotificationDestinations(
   return renderCriteriaList(destinations, 'No destinations');
 }
 
-export default LoadQueryWrapper(
-  useUserActivityAlertsAdminQuery,
-  function UserActivityAlertsList({ data }) {
-    usePageTitle('User activity alerts');
+export default LoadQueryWrapper(useUserActivityAlertsAdminQuery, function UserActivityAlertsList({ data }) {
+  usePageTitle('User activity alerts');
 
-    return (
-      <>
-        <h1 className="mb-4">User activity alerts</h1>
+  return (
+    <>
+      <h1 className="mb-4">User activity alerts</h1>
 
-        <table className="table table-striped">
-          <thead>
-            <tr>
-              <th>Match</th>
-              <th>Trigger on</th>
-              <th>Destinations</th>
-              <th />
+      <table className="table table-striped">
+        <thead>
+          <tr>
+            <th>Match</th>
+            <th>Trigger on</th>
+            <th>Destinations</th>
+            <th />
+          </tr>
+        </thead>
+        <tbody>
+          {data.convention.user_activity_alerts.map((userActivityAlert) => (
+            <tr key={userActivityAlert.id}>
+              <td>{renderAlertMatches(userActivityAlert)}</td>
+              <td>{renderAlertTriggers(data.convention, userActivityAlert)}</td>
+              <td>{renderAlertNotificationDestinations(userActivityAlert)}</td>
+              <td className="text-end">
+                <Link to={`/user_activity_alerts/${userActivityAlert.id}/edit`} className="btn btn-sm btn-primary">
+                  Edit
+                </Link>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {data.convention.user_activity_alerts.map((userActivityAlert) => (
-              <tr key={userActivityAlert.id}>
-                <td>{renderAlertMatches(userActivityAlert)}</td>
-                <td>{renderAlertTriggers(data.convention, userActivityAlert)}</td>
-                <td>{renderAlertNotificationDestinations(userActivityAlert)}</td>
-                <td className="text-end">
-                  <Link
-                    to={`/user_activity_alerts/${userActivityAlert.id}/edit`}
-                    className="btn btn-sm btn-primary"
-                  >
-                    Edit
-                  </Link>
-                </td>
-              </tr>
-            ))}
-            {data.convention.user_activity_alerts.length === 0 ? (
-              <tr>
-                <td colSpan={4}>
-                  <em>No alerts configured.</em>
-                </td>
-              </tr>
-            ) : null}
-          </tbody>
-        </table>
-        <Link to="/user_activity_alerts/new" className="btn btn-primary">
-          Create user activity alert
-        </Link>
-      </>
-    );
-  },
-);
+          ))}
+          {data.convention.user_activity_alerts.length === 0 ? (
+            <tr>
+              <td colSpan={4}>
+                <em>No alerts configured.</em>
+              </td>
+            </tr>
+          ) : null}
+        </tbody>
+      </table>
+      <Link to="/user_activity_alerts/new" className="btn btn-primary">
+        Create user activity alert
+      </Link>
+    </>
+  );
+});

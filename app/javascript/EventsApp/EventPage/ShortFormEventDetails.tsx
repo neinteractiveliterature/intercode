@@ -1,6 +1,7 @@
 import { Fragment, useMemo } from 'react';
-import { pluralize, humanize, underscore } from 'inflected';
+import { pluralize } from 'inflected';
 import { useTranslation } from 'react-i18next';
+import snakeCase from 'lodash/snakeCase';
 
 import EventCapacityDisplay from './EventCapacityDisplay';
 import FormItemDisplay from '../../FormPresenter/ItemDisplays/FormItemDisplay';
@@ -10,6 +11,7 @@ import Gravatar from '../../Gravatar';
 import { formResponseValueIsComplete } from '../../Models/FormItem';
 import { useEventPageQuery } from './queries.generated';
 import { LoadQueryWithVariablesWrapper } from '../../GraphqlLoadingWrappers';
+import humanize from '../../humanize';
 
 export type ShortFormEventDetailsProps = {
   eventId: string;
@@ -53,7 +55,7 @@ export default LoadQueryWithVariablesWrapper(
           ))}
         {displayTeamMembers.length > 0 ? (
           <>
-            <dt className="col-md-3">{pluralize(humanize(underscore(event.event_category.team_member_name)))}</dt>
+            <dt className="col-md-3">{pluralize(humanize(snakeCase(event.event_category.team_member_name)))}</dt>
             <dd className="col-md-9">
               <ul className="list-unstyled mb-0">
                 {displayTeamMembers.map((teamMember) => (

@@ -14,6 +14,7 @@ we can remove this temporary one.",
   field :name, String, null: false
   field :proposal_description, String, null: true
   field :team_member_name, String, null: false, camelize: false
+  field :team_member_name_plural, String, null: false, camelize: true
   field :scheduling_ui, Types::SchedulingUiType, null: false, camelize: false
   field :event_form, Types::FormType, null: false, camelize: false
   field :event_proposal_form, Types::FormType, null: true, camelize: false
@@ -36,5 +37,9 @@ we can remove this temporary one.",
         sort: sort
       )
       .paginate(page: page, per_page: per_page)
+  end
+
+  def team_member_name_plural
+    object.team_member_name.pluralize
   end
 end

@@ -6,7 +6,6 @@ import { parseIntOrNull, useConfirm, ErrorDisplay } from '@neinteractiveliteratu
 import formatMoney from '../formatMoney';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import InPlaceMoneyEditor from './InPlaceMoneyEditor';
-import pluralizeWithCount from '../pluralizeWithCount';
 import ProductSelect from '../BuiltInFormControls/ProductSelect';
 import useAsyncFunction from '../useAsyncFunction';
 import ApplyCouponControl from './ApplyCouponControl';
@@ -19,6 +18,7 @@ import {
   Product,
   ProductVariant,
 } from '../graphqlTypes.generated';
+import { useTranslation } from 'react-i18next';
 
 type ProductVariantType = Pick<ProductVariant, '__typename' | 'name'> & {
   id: string;
@@ -96,6 +96,7 @@ function AdminOrderEntriesTable<
   const [addingItem, setAddingItem] = useState<AddingOrderEntry<T>>();
   const [applyingCoupon, setApplyingCoupon] = useState(false);
   const [createOrderEntryAsync, createError, createInProgress] = useAsyncFunction(createOrderEntry);
+  const { t } = useTranslation();
 
   const applyCoupon = async (code: string) => {
     await createCouponApplication(code);
@@ -148,9 +149,9 @@ function AdminOrderEntriesTable<
     <table className="table table-sm mb-0">
       <thead>
         <tr>
-          <th>Item</th>
-          <th>Quantity</th>
-          <th>Price</th>
+          <th>{t('admin.store.orderEntries.itemColumnHeader', 'Item')}</th>
+          <th>{t('admin.store.orderEntries.quantityColumnHeader', 'Quantity')}</th>
+          <th>{t('admin.store.orderEntries.priceColumnHeader', 'Price')}</th>
           <th />
         </tr>
       </thead>
@@ -191,9 +192,11 @@ function AdminOrderEntriesTable<
                 aria-label="Delete item"
                 onClick={() =>
                   confirm({
-                    prompt: `Are you sure you want to delete
-                    ${pluralizeWithCount(orderEntry.product.name, orderEntry.quantity)} from the
-                    order?  This cannot be undone.`,
+                    prompt: t(
+                      'admin.store.orderEntries.deleteConfirmation',
+                      'Are you sure you want to delete {{ count }} {{ productName }} items from the order?  This cannot be undone.',
+                      { count: orderEntry.quantity, productName: orderEntry.product.name },
+                    ),
                     action: () => deleteOrderEntry(orderEntry),
                     renderError: (error) => <ErrorDisplay graphQLError={error} />,
                   })
@@ -207,7 +210,7 @@ function AdminOrderEntriesTable<
         {(order.coupon_applications ?? []).map((couponApplication) => (
           <tr key={couponApplication.id} className="bg-light">
             <td colSpan={2}>
-              <em>{'Coupon code: '}</em>
+              <em>{t('admin.store.orderEntries.couponCodeLabel', 'Coupon code: ')}</em>
               <code>{couponApplication.coupon.code}</code>
             </td>
             <td className="font-italic">-{formatMoney(couponApplication.discount)}</td>
@@ -215,11 +218,13 @@ function AdminOrderEntriesTable<
               <button
                 className="btn btn-outline-danger btn-sm"
                 type="button"
-                aria-label="Delete item"
+                aria-label={t('admin.store.orderEntries.deleteCouponLabel', 'Delete coupon')}
                 onClick={() =>
                   confirm({
-                    prompt: `Are you sure you want to delete this coupon from the order?  This
-                    cannot be undone.`,
+                    prompt: t(
+                      'admin.store.orderEntries.deleteCouponConfirmation',
+                      'Are you sure you want to delete this coupon from the order?  This cannot be undone.',
+                    ),
                     action: () => deleteCouponApplication(couponApplication),
                     renderError: (error) => <ErrorDisplay graphQLError={error} />,
                   })
@@ -274,7 +279,7 @@ function AdminOrderEntriesTable<
                 disabled={createInProgress}
               >
                 {formatMoney(addingItem.price_per_item)}
-                {addingItem.quantity > 1 && ' each'}
+                {addingItem.quantity > 1 && ` ${t('admin.store.orderEntries.pricePerEachSuffix', 'each')}`}
               </InPlaceMoneyEditor>
             </td>
             <td>
@@ -284,7 +289,7 @@ function AdminOrderEntriesTable<
                 onClick={saveAddingItem}
                 disabled={createInProgress}
               >
-                Add
+                {t('buttons.add', 'Add')}
               </button>
             </td>
           </tr>
@@ -323,11 +328,11 @@ function AdminOrderEntriesTable<
             )}
             {!applyingCoupon && (
               <button className="btn btn-sm btn-outline-primary" type="button" onClick={() => setApplyingCoupon(true)}>
-                Add coupon
+                {t('admin.store.orderEntries.addCouponLabel', 'Add coupon')}
               </button>
             )}
           </td>
-          <td>Total price</td>
+          <td>{t('admin.store.orderEntries.totalPrice', 'Total price')}</td>
           <td>{formatMoney(order.total_price)}</td>
           <td />
         </tr>

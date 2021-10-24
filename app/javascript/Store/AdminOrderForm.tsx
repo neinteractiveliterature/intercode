@@ -1,6 +1,5 @@
 import { useContext } from 'react';
 import * as React from 'react';
-import { humanize } from 'inflected';
 import classNames from 'classnames';
 import { DateTime } from 'luxon';
 import { useConfirm, ErrorDisplay, ChoiceSet } from '@neinteractiveliterature/litform';
@@ -13,6 +12,7 @@ import EnumTypes from '../enumTypes.json';
 import { Order, OrderStatus, UserConProfile } from '../graphqlTypes.generated';
 import { useCancelOrderMutation, useMarkOrderPaidMutation } from './mutations.generated';
 import { useAppDateTimeFormat } from '../TimeUtils';
+import humanize from '../humanize';
 
 const ORDER_STATUS_CHOICES = EnumTypes.OrderStatus.enumValues
   .map((enumValue) => ({ label: enumValue.name, value: enumValue.name }))

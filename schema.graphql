@@ -1013,6 +1013,7 @@ type Convention implements CmsParent {
   starts_at: Date
   stripe_account: StripeAccount
   stripe_account_ready_to_charge: Boolean!
+  ticketNamePlural: String!
   ticket_mode: TicketMode!
   ticket_name: String!
   ticket_types: [TicketType!]!
@@ -2995,6 +2996,7 @@ type EventCategory {
   proposal_description: String
   scheduling_ui: SchedulingUi!
   signed_up_color: String
+  teamMemberNamePlural: String!
   team_member_name: String!
   transitionalId: ID! @deprecated(reason: "IDs have transitioned to the ID type.  Please switch back to the id field so that we can remove this temporary one.")
 }

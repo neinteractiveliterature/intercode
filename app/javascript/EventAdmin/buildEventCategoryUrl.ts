@@ -1,5 +1,5 @@
-import { parameterize } from 'inflected';
 import { EventCategory } from '../graphqlTypes.generated';
+import parameterize from '../parameterize';
 
 export default function buildEventCategoryUrl(
   eventCategory?: (Pick<EventCategory, 'name'> & { id: string }) | null,

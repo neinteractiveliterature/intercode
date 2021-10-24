@@ -1,17 +1,14 @@
 import { useContext, useMemo } from 'react';
-import { titleize } from 'inflected';
 import { useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
 import { notFalse } from '@neinteractiveliterature/litform';
+import capitalize from 'lodash/capitalize';
 
 import AppRootContext from '../AppRootContext';
 import GeneratedNavigationSection, { GeneratedNavigationItem } from './GeneratedNavigationSection';
 import { Ability } from '../graphqlTypes.generated';
 
-function generateSiteContentItem(
-  currentAbility: Pick<Ability, 'can_manage_any_cms_content'>,
-  t: TFunction,
-) {
+function generateSiteContentItem(currentAbility: Pick<Ability, 'can_manage_any_cms_content'>, t: TFunction) {
   return (
     currentAbility.can_manage_any_cms_content && {
       label: t('navigation.admin.siteContent', 'Site Content'),
@@ -36,8 +33,7 @@ function generateOAuthApplicationsNavigationItem(
 
 function useConventionAdminNavigationItems(): GeneratedNavigationItem[] {
   const { t } = useTranslation();
-  const { currentAbility, signupMode, siteMode, ticketMode, ticketName } =
-    useContext(AppRootContext);
+  const { currentAbility, signupMode, siteMode, ticketMode, ticketName } = useContext(AppRootContext);
 
   const items = useMemo(
     () =>
@@ -120,7 +116,7 @@ function useConventionAdminNavigationItems(): GeneratedNavigationItem[] {
         currentAbility.can_manage_ticket_types &&
           ticketMode !== 'disabled' && {
             label: t('navigation.admin.ticketTypes', '{{ ticketName }} Types', {
-              ticketName: titleize(ticketName ?? 'ticket'),
+              ticketName: capitalize(ticketName ?? 'ticket'),
             }),
             url: '/ticket_types',
             icon: 'bi-person-badge-fill',
@@ -184,7 +180,5 @@ export function useAdminNavigationItems(): GeneratedNavigationItem[] {
 export default function AdminNavigationSection(): JSX.Element {
   const { t } = useTranslation();
   const items = useAdminNavigationItems();
-  return (
-    <GeneratedNavigationSection label={t('navigation.headers.admin', 'Admin')} items={items} />
-  );
+  return <GeneratedNavigationSection label={t('navigation.headers.admin', 'Admin')} items={items} />;
 }

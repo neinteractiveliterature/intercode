@@ -4,13 +4,13 @@ import flatMap from 'lodash/flatMap';
 import sortBy from 'lodash/sortBy';
 import uniq from 'lodash/uniq';
 import uniqBy from 'lodash/uniqBy';
-import { humanize } from 'inflected';
 import { ApolloError } from '@apollo/client';
 import { LoadingIndicator, ChoiceSet, ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import pluralizeWithCount from '../pluralizeWithCount';
 import { MergeUsersModalQueryData, useMergeUsersModalQuery } from './queries.generated';
 import { useMergeUsersMutation } from './mutations.generated';
+import humanize from '../humanize';
+import { useTranslation } from 'react-i18next';
 
 function renderIfQueryReady(render: () => JSX.Element, { loading, error }: { loading: boolean; error?: ApolloError }) {
   if (error) {
@@ -41,13 +41,14 @@ function MergeUsersModal({ closeModal, visible, userIds }: MergeUsersModalProps)
   const [winningUserId, setWinningUserId] = useState<string>();
   const [winningProfileIds, setWinningProfileIds] = useState(new Map<string, string>());
   const [mutate, { error: mutationError, loading: mutationInProgress }] = useMergeUsersMutation();
+  const { t } = useTranslation();
 
   const performMerge = async () => {
     if (!userIds) {
-      throw new Error('No userIds to merge');
+      throw new Error(t('admin.users.merge.noUsers', 'No userIds to merge'));
     }
     if (!winningUserId) {
-      throw new Error('No winningUserId for merge');
+      throw new Error(t('admin.users.merge.noWinner', 'No winningUserId for merge'));
     }
     await mutate({
       variables: {
@@ -130,10 +131,23 @@ function MergeUsersModal({ closeModal, visible, userIds }: MergeUsersModalProps)
 
           <ChoiceSet
             choices={userConProfiles.map((profile) => {
-              const ticketWording = profile.ticket ? `Has ${convention.ticket_name}` : `No ${convention.ticket_name}`;
+              const ticketWording = profile.ticket
+                ? t('admin.users.merge.hasTicket', 'Has {{ ticketName }}', { ticketName: convention.ticket_name })
+                : t('admin.users.merge.noTicket', 'No {{ ticketName }}', { ticketName: convention.ticket_name });
               const signups = profile.signups.filter((signup) => signup.state !== 'withdrawn');
+              const signupWording = t('admin.users.merge.signupCount', '{{ count }} signups', {
+                count: signups.length,
+              });
               return {
-                label: `${profile.email}’s profile [${ticketWording}, ${pluralizeWithCount('signup', signups.length)}]`,
+                label: t(
+                  'admin.users.merge.profileLabel',
+                  '{{ email }}’s profile [{{ ticketDescription }}, {{ signupsDescription }}]',
+                  {
+                    email: profile.email,
+                    ticketDescription: ticketWording,
+                    signupsDescription: signupWording,
+                  },
+                ),
                 value: profile.id.toString(),
               };
             })}

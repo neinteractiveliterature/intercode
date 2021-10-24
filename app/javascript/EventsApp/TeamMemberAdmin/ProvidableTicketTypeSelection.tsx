@@ -1,11 +1,12 @@
 import * as React from 'react';
 import sumBy from 'lodash/sumBy';
 import { useTranslation } from 'react-i18next';
-import { pluralize, humanize } from 'inflected';
+import { pluralize } from 'inflected';
 import { MultipleChoiceInput } from '@neinteractiveliterature/litform';
 
 import { getProvidableTicketTypes, getRemainingTicketCountByType } from './ProvideTicketUtils';
 import { TeamMembersQueryData } from './queries.generated';
+import humanize from '../../humanize';
 
 export type ProvidableTicketTypeSelectionProps = {
   convention: Pick<NonNullable<TeamMembersQueryData['convention']>, 'ticket_types' | 'ticket_name'> & {

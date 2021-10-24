@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { humanize, titleize, underscore } from 'inflected';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ApolloError } from '@apollo/client';
@@ -8,6 +7,7 @@ import {
   useCreateMutationWithReferenceArrayUpdater,
   useUniqueId,
 } from '@neinteractiveliterature/litform';
+import capitalize from 'lodash/capitalize';
 
 import buildTeamMemberInput from './buildTeamMemberInput';
 import TeamMemberForm from './TeamMemberForm';
@@ -83,14 +83,14 @@ function NewTeamMember({ event, eventPath }: NewTeamMemberProps): JSX.Element {
     <>
       <h1 className="mb-4">
         {t('events.teamMemberAdmin.newHeader', 'Add {{ teamMemberName }}', {
-          teamMemberName: titleize(underscore(event.event_category.team_member_name)),
+          teamMemberName: capitalize(event.event_category.team_member_name),
         })}
       </h1>
 
       <div className="mb-3">
         <label className="form-label" htmlFor={userConProfileSelectId}>
           {t('events.teamMemberAdmin.userConProfileLabel', '{{ teamMemberName }} to add', {
-            teamMemberName: humanize(underscore(event.event_category.team_member_name)),
+            teamMemberName: capitalize(event.event_category.team_member_name),
           })}
         </label>
         <UserConProfileSelect

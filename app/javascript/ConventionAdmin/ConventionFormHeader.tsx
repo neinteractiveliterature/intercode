@@ -2,26 +2,25 @@ import { memo, Fragment, useMemo } from 'react';
 import { DateTime } from 'luxon';
 
 import { findCurrentValue } from '../ScheduledValueUtils';
-import {
-  MaximumEventSignupsValue,
-  MAXIMUM_EVENT_SIGNUPS_OPTIONS,
-} from './MaximumEventSignupsPreview';
-import pluralizeWithCount from '../pluralizeWithCount';
+import { MaximumEventSignupsValue, MAXIMUM_EVENT_SIGNUPS_OPTIONS } from './MaximumEventSignupsPreview';
 import { timezoneNameForConvention } from '../TimeUtils';
 import { ShowSchedule } from '../graphqlTypes.generated';
 import { EditingScheduledValue } from '../BuiltInFormControls/ScheduledValueEditor';
 import { ConventionAdminConventionQueryData } from './queries.generated';
+import { TFunction } from 'i18next';
+import { useTranslation } from 'react-i18next';
+import assertNever from 'assert-never';
 
-function describeEventVisibility(visibility: ShowSchedule | null | undefined) {
+function describeEventVisibility(visibility: ShowSchedule | null | undefined, t: TFunction) {
   switch (visibility) {
     case 'no':
-      return 'Hidden';
+      return t('admin.convention.header.eventVisibilityHidden', 'Hidden');
     case 'priv':
-      return 'Staff only';
+      return t('admin.convention.header.eventVisibilityPriv', 'Staff only');
     case 'gms':
-      return 'Staff and event teams';
+      return t('admin.convention.header.eventVisibilityGMs', 'Staff and event teams');
     case 'yes':
-      return 'Public';
+      return t('admin.convention.header.eventVisibilityYes', 'Public');
     default:
       return visibility;
   }
@@ -29,15 +28,16 @@ function describeEventVisibility(visibility: ShowSchedule | null | undefined) {
 
 function describeMaximumEventSignups(
   scheduledValue: EditingScheduledValue<MaximumEventSignupsValue> | null | undefined,
+  t: TFunction,
 ) {
   if (!scheduledValue) {
-    return 'Signup schedule not configured yet';
+    return t('admin.convention.header.signupScheduleNotConfiguredYet', 'Signup schedule not configured yet');
   }
 
   const currentValue = findCurrentValue(scheduledValue);
 
   if (!currentValue) {
-    return 'No signups yet';
+    return t('signups.maximumSignups.notYet', 'No signups yet');
   }
 
   const currentOption = MAXIMUM_EVENT_SIGNUPS_OPTIONS.find(([option]) => currentValue === option);
@@ -45,51 +45,76 @@ function describeMaximumEventSignups(
     return currentValue;
   }
 
-  return currentOption[1];
+  switch (currentOption[0]) {
+    case 'not_yet':
+      return t('signups.maximumSignups.notYet', 'No signups yet');
+    case '1':
+    case '2':
+    case '3':
+      return t('signups.maximumSignups.limitedCount', 'Up to {{ count }} event');
+    case 'unlimited':
+      return t('signups.maximumSignups.unlimited', 'Signups fully open');
+    case 'not_now':
+      return t('signups.maximumSignups.notNow', 'Signups frozen');
+    default:
+      assertNever(currentOption[0], true);
+      // @ts-expect-error Deliberately unreachable fallback
+      return currentOption[0];
+  }
 }
 
 function describeConventionTiming(
+  conventionName: string,
   startsAt: string | null | undefined,
   endsAt: string | null | undefined,
   timezoneName: string,
   canceled: boolean,
+  t: TFunction,
 ) {
   if (canceled) {
-    return 'is canceled';
+    return t('admin.convention.header.conventionTiming.canceled', '{{ conventionName }} is canceled', {
+      conventionName,
+    });
   }
 
   const now = DateTime.fromObject({}, { zone: timezoneName }).startOf('day');
-  const conventionStart = startsAt
-    ? DateTime.fromISO(startsAt, { zone: timezoneName }).startOf('day')
-    : undefined;
-  const conventionEnd = endsAt
-    ? DateTime.fromISO(endsAt, { zone: timezoneName }).startOf('day')
-    : undefined;
+  const conventionStart = startsAt ? DateTime.fromISO(startsAt, { zone: timezoneName }).startOf('day') : undefined;
+  const conventionEnd = endsAt ? DateTime.fromISO(endsAt, { zone: timezoneName }).startOf('day') : undefined;
 
   if (!conventionStart || !conventionEnd) {
     return '';
   }
 
   if (now < conventionStart) {
-    return `starts in ${pluralizeWithCount(
-      'day',
-      Math.ceil(conventionStart.diff(now, 'days').days),
-    )}`;
+    return t('admin.convention.header.conventionTiming.future', '{{ conventionName }} starts in {{ count }} days', {
+      conventionName,
+      count: Math.ceil(conventionStart.diff(now, 'days').days),
+    });
   }
 
   if (now < conventionEnd) {
-    return `ends in ${pluralizeWithCount('day', Math.ceil(conventionEnd.diff(now, 'days').days))}`;
+    return t('admin.convention.header.conventionTiming.ongoing', '{{ conventionName }} ends in {{ count }} days', {
+      conventionName,
+      count: Math.ceil(conventionEnd.diff(now, 'days').days),
+    });
   }
 
   if (conventionEnd < now) {
-    return `ended ${pluralizeWithCount(
-      'day',
-      Math.floor(now.diff(conventionEnd, 'days').days),
-    )} ago`;
+    return t('admin.convention.header.conventionTiming.past', '{{ conventionName }} ended {{ count }} days ago', {
+      conventionName,
+      count: Math.floor(now.diff(conventionEnd, 'days').days),
+    });
   }
 
   const isMultiDay = conventionStart < conventionEnd;
-  return `${isMultiDay ? 'ends' : 'is'} today`;
+  if (isMultiDay) {
+    return t('admin.convention.header.conventionTiming.endsToday', '{{ conventionName }} ends today', {
+      conventionName,
+    });
+  }
+  return t('admin.convention.header.conventionTiming.isToday', '{{ conventionName }} is today', {
+    conventionName,
+  });
 }
 
 export type ConventionFormHeaderProps = {
@@ -112,42 +137,54 @@ export type ConventionFormHeaderProps = {
 };
 
 function ConventionFormHeader({ convention, compact }: ConventionFormHeaderProps) {
+  const { t } = useTranslation();
   const conventionTiming = useMemo(
     () =>
       describeConventionTiming(
+        convention.name,
         convention.starts_at,
         convention.ends_at,
         timezoneNameForConvention(convention),
         convention.canceled,
+        t,
       ),
-    [convention],
+    [convention, t],
   );
 
   const signupsDescription = useMemo(
     () =>
       describeMaximumEventSignups(
-        convention.maximum_event_signups as
-          | EditingScheduledValue<MaximumEventSignupsValue>
-          | null
-          | undefined,
+        convention.maximum_event_signups as EditingScheduledValue<MaximumEventSignupsValue> | null | undefined,
+        t,
       ),
-    [convention.maximum_event_signups],
+    [convention.maximum_event_signups, t],
   );
 
   const metadata = [
     ...(convention.site_mode === 'single_event'
-      ? [{ label: 'Site mode', value: 'Single event' }]
+      ? [
+          {
+            label: t('admin.convention.header.siteMode', 'Site mode'),
+            value: t('admin.convention.header.singleEventSiteMode', 'Single event'),
+          },
+        ]
       : [
-          { label: 'Event list', value: describeEventVisibility(convention.show_event_list) },
-          { label: 'Schedule', value: describeEventVisibility(convention.show_schedule) },
+          {
+            label: t('admin.convention.header.eventList', 'Event list'),
+            value: describeEventVisibility(convention.show_event_list, t),
+          },
+          {
+            label: t('admin.convention.header.schedule', 'Schedule'),
+            value: describeEventVisibility(convention.show_schedule, t),
+          },
         ]),
-    { label: 'Signups', value: signupsDescription },
+    { label: t('admin.convention.header.signups', 'Signups'), value: signupsDescription },
   ];
 
   return (
     <header>
       <h1>
-        {convention.name} <span className="h3">{conventionTiming}</span>
+        <span className="h3">{conventionTiming}</span>
       </h1>
       {compact ? (
         <div className="row">

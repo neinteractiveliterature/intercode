@@ -1,9 +1,8 @@
-import { humanize } from 'inflected';
-
 import AssignDocLink from './AssignDocLink';
 import findClass from './findClass';
 import findMethodReturnClass from './findMethodReturnClass';
 import { YardMethod, YardTag } from './DocData';
+import humanize from '../humanize';
 
 export type BaseTagDocProps = {
   tag: YardTag;
@@ -35,12 +34,7 @@ export type ReturnTagWithClassDocProps = BaseTagDocProps & {
   prefix?: string;
 };
 
-const ReturnTagWithClassDoc = ({
-  tag,
-  assignName,
-  returnClassName,
-  prefix,
-}: ReturnTagWithClassDocProps) => (
+const ReturnTagWithClassDoc = ({ tag, assignName, returnClassName, prefix }: ReturnTagWithClassDocProps) => (
   <>
     <p className="mb-1">
       <strong>Return:</strong> <em>{(tag.types ?? []).join(', ')}</em>
@@ -90,12 +84,7 @@ function TagDoc({ tag, method, prefix }: TagDocProps): JSX.Element {
 
     if (returnClassName && findClass(returnClassName)) {
       return (
-        <ReturnTagWithClassDoc
-          tag={tag}
-          assignName={assignName}
-          returnClassName={returnClassName}
-          prefix={prefix}
-        />
+        <ReturnTagWithClassDoc tag={tag} assignName={assignName} returnClassName={returnClassName} prefix={prefix} />
       );
     }
   }

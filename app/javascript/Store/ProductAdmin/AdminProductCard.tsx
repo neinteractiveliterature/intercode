@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import { humanize } from 'inflected';
 import { ErrorDisplay, useConfirm } from '@neinteractiveliterature/litform';
 
 import AdminProductVariantsTable from './AdminProductVariantsTable';
@@ -7,6 +6,8 @@ import { describeAdminPricingStructure } from '../describePricingStructure';
 import { useDeleteProductMutation } from '../mutations.generated';
 import { AdminProductsQueryData, AdminProductsQueryDocument } from '../queries.generated';
 import { EditingProductWithRealId } from './EditingProductTypes';
+import { useTranslation } from 'react-i18next';
+import { TFunction } from 'i18next';
 
 export type AdminProductCardProps = {
   currentAbility: AdminProductsQueryData['currentAbility'];
@@ -14,13 +15,30 @@ export type AdminProductCardProps = {
   product: EditingProductWithRealId;
 };
 
+function describePaymentOption(paymentOption: string, t: TFunction): string {
+  if (paymentOption === 'stripe') {
+    return t('admin.store.paymentOptions.stripe', 'Stripe');
+  }
+
+  if (paymentOption === 'pay_at_convention') {
+    return t('admin.store.paymentOptions.payAtConvention', 'Pay at convention');
+  }
+
+  return paymentOption;
+}
+
 function AdminProductCard({ currentAbility, startEditing, product }: AdminProductCardProps): JSX.Element {
   const confirm = useConfirm();
   const [deleteProduct] = useDeleteProductMutation();
+  const { t } = useTranslation();
 
   const deleteClicked = () => {
     confirm({
-      prompt: `Are you sure you want to delete the product ${product.name}?`,
+      prompt: t(
+        'admin.store.products.deleteConfirmation',
+        'Are you sure you want to delete the product {{ productName }}?',
+        { productName: product.name },
+      ),
       action: () =>
         deleteProduct({
           variables: { id: product.id },
@@ -60,14 +78,16 @@ function AdminProductCard({ currentAbility, startEditing, product }: AdminProduc
                   <li className="list-inline-item">
                     <button type="button" className="btn btn-sm btn-danger" onClick={deleteClicked}>
                       <i className="bi-trash">
-                        <span className="visually-hidden">Delete product</span>
+                        <span className="visually-hidden">
+                          {t('admin.store.products.deleteLabel', 'Delete product')}
+                        </span>
                       </i>
                     </button>
                   </li>
                 )}
                 <li className="list-inline-item">
                   <button type="button" className="btn btn-sm btn-secondary" onClick={startEditing}>
-                    Edit
+                    {t('buttons.edit', 'Edit')}
                   </button>
                 </li>
               </ul>
@@ -76,7 +96,9 @@ function AdminProductCard({ currentAbility, startEditing, product }: AdminProduc
         </div>
         <div>
           <span className={classNames('badge', product.available ? 'bg-success' : 'bg-danger')}>
-            {product.available ? 'Available for purchase' : 'Not available for purchase'}
+            {product.available
+              ? t('admin.store.products.available', 'Available for purchase')
+              : t('admin.store.products.unavailable', 'Not available for purchase')}
           </span>
           {product.payment_options.map((paymentOption) => (
             <i
@@ -85,7 +107,7 @@ function AdminProductCard({ currentAbility, startEditing, product }: AdminProduc
                 'bi-credit-card': paymentOption === 'stripe',
                 'bi-briefcase-fill': paymentOption === 'pay_at_convention',
               })}
-              title={humanize(paymentOption)}
+              title={describePaymentOption(paymentOption, t)}
             />
           ))}
         </div>
@@ -102,7 +124,7 @@ function AdminProductCard({ currentAbility, startEditing, product }: AdminProduc
 
           <div className="ml-lg-4 col-lg">
             <p>
-              <strong>Base price: {describeAdminPricingStructure(product.pricing_structure)}</strong>
+              <strong>Base price: {describeAdminPricingStructure(product.pricing_structure, t)}</strong>
             </p>
             {/* eslint-disable-next-line react/no-danger */}
             <div dangerouslySetInnerHTML={{ __html: product.description_html ?? '' }} />

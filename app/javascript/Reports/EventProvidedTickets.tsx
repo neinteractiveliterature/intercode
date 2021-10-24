@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
-// @ts-expect-error Inflected type declarations don't include capitalize
-import { pluralize, capitalize } from 'inflected';
+import capitalize from 'lodash/capitalize';
 import flatMap from 'lodash/flatMap';
 import sum from 'lodash/sum';
 import {
@@ -12,7 +11,6 @@ import {
   TabBody,
 } from '@neinteractiveliterature/litform';
 
-import pluralizeWithCount from '../pluralizeWithCount';
 import usePageTitle from '../usePageTitle';
 import { EventProvidedTicketsQueryData, useEventProvidedTicketsQuery } from './queries.generated';
 
@@ -28,14 +26,12 @@ function EventProvidedTicketsByEvent({ data }: { data: EventProvidedTicketsQuery
         <section className="mt-2" key={row.provided_by_event.id}>
           <p className="fw-bold mb-0">{row.provided_by_event.title}</p>
           <ul className="list-unstyled">
-            {sortByLocaleString(row.tickets, (ticket) => ticket.user_con_profile.name_inverted).map(
-              (ticket) => (
-                <li key={ticket.id}>
-                  {ticket.user_con_profile.name_inverted}
-                  <span className="text-muted"> ({ticket.ticket_type.description})</span>
-                </li>
-              ),
-            )}
+            {sortByLocaleString(row.tickets, (ticket) => ticket.user_con_profile.name_inverted).map((ticket) => (
+              <li key={ticket.id}>
+                {ticket.user_con_profile.name_inverted}
+                <span className="text-muted"> ({ticket.ticket_type.description})</span>
+              </li>
+            ))}
           </ul>
         </section>
       ))}
@@ -75,41 +71,42 @@ function EventProvidedTicketsByUser({ data }: { data: EventProvidedTicketsQueryD
   );
 }
 
-export default LoadQueryWrapper(
-  useEventProvidedTicketsQuery,
-  function EventProvidedTickets({ data }) {
-    const tabProps = useTabs([
-      {
-        id: 'by-event',
-        name: 'By event',
-        renderContent: () => <EventProvidedTicketsByEvent data={data} />,
-      },
-      {
-        id: 'by-user',
-        name: 'By user',
-        renderContent: () => <EventProvidedTicketsByUser data={data} />,
-      },
-    ]);
+export default LoadQueryWrapper(useEventProvidedTicketsQuery, function EventProvidedTickets({ data }) {
+  const tabProps = useTabs([
+    {
+      id: 'by-event',
+      name: 'By event',
+      renderContent: () => <EventProvidedTicketsByEvent data={data} />,
+    },
+    {
+      id: 'by-user',
+      name: 'By user',
+      renderContent: () => <EventProvidedTicketsByUser data={data} />,
+    },
+  ]);
 
-    usePageTitle(`Event-provided ${pluralize(data.convention.ticket_name)}`);
+  usePageTitle(`Event-provided ${data.convention.ticketNamePlural}`);
+  const totalCount = useMemo(
+    () => sum(data.convention.reports.event_provided_tickets.map((row) => row.tickets.length)),
+    [data.convention.reports.event_provided_tickets],
+  );
 
-    return (
-      <>
-        <h1>
-          {'Event-provided '}
-          {pluralize(data.convention.ticket_name)}
-          {' report'}
-        </h1>
-        <h3 className="mb-4">
-          {'Total: '}
-          {pluralizeWithCount(
-            `event-provided ${data.convention.ticket_name}`,
-            sum(data.convention.reports.event_provided_tickets.map((row) => row.tickets.length)),
-          )}
-        </h3>
-        <TabList {...tabProps} />
-        <TabBody {...tabProps} />
-      </>
-    );
-  },
-);
+  return (
+    <>
+      <h1>
+        {'Event-provided '}
+        {data.convention.ticketNamePlural}
+        {' report'}
+      </h1>
+      <h3 className="mb-4">
+        {'Total: '}
+        {totalCount}
+        {totalCount === 1
+          ? `event-provided ${data.convention.ticket_name}`
+          : `event-provided ${data.convention.ticketNamePlural}`}
+      </h3>
+      <TabList {...tabProps} />
+      <TabBody {...tabProps} />
+    </>
+  );
+});

@@ -1,9 +1,9 @@
 import { useContext } from 'react';
-import { humanize } from 'inflected';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import AppRootContext from '../AppRootContext';
+import humanize from '../humanize';
 
 function TicketPurchaseNavigationItem(): JSX.Element {
   const { t } = useTranslation();
@@ -17,11 +17,7 @@ function TicketPurchaseNavigationItem(): JSX.Element {
     return <></>;
   }
 
-  if (
-    !ticketTypes.some((ticketType) =>
-      ticketType.providing_products.some((product) => product.available),
-    )
-  ) {
+  if (!ticketTypes.some((ticketType) => ticketType.providing_products.some((product) => product.available))) {
     return <></>;
   }
 

@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { humanize, pluralize } from 'inflected';
+import { pluralize } from 'inflected';
 import {
   useModal,
   useConfirm,
@@ -14,6 +14,7 @@ import usePageTitle from '../usePageTitle';
 import NewFormModal from './NewFormModal';
 import { FormAdminQueryData, useFormAdminQuery } from './queries.generated';
 import { useDeleteFormMutation } from './mutations.generated';
+import humanize from '../humanize';
 
 function describeFormUsers(form: FormAdminQueryData['convention']['forms'][0]) {
   return [

@@ -1,5 +1,4 @@
 import { useMemo } from 'react';
-import { humanize, titleize } from 'inflected';
 import reverse from 'lodash/reverse';
 import sortBy from 'lodash/sortBy';
 import { useParams } from 'react-router-dom';
@@ -9,6 +8,7 @@ import usePageTitle from '../usePageTitle';
 import { UserAdminQueryData, useUserAdminQuery } from './queries.generated';
 import { timespanFromConvention } from '../TimespanUtils';
 import { useAppDateTimeFormat } from '../TimeUtils';
+import humanize from '../humanize';
 
 function sortByConventionDate(profiles: UserAdminQueryData['user']['user_con_profiles']) {
   return reverse(sortBy(profiles, (profile) => profile.convention.starts_at));
@@ -60,7 +60,7 @@ export default LoadQueryWrapper(useLoadUserAdminData, function UserAdminDisplay(
               </th>
               <td>
                 {data.user.privileges && data.user.privileges.length > 0
-                  ? data.user.privileges.map(titleize).join(', ')
+                  ? data.user.privileges.map(humanize).join(', ')
                   : 'none'}
               </td>
             </tr>
