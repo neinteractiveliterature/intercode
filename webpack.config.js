@@ -8,14 +8,14 @@ const RollbarSourceMapPlugin = require('rollbar-sourcemap-webpack-plugin');
 const webpack = require('webpack');
 
 const ASSET_PATH =
-  process.env.ASSET_PATH ||
-  (process.env.NODE_ENV === 'production' ? '/packs/' : 'https://localhost:3135/packs/');
+  process.env.ASSET_PATH || (process.env.NODE_ENV === 'production' ? '/packs/' : 'https://localhost:3135/packs/');
 
 const config = {
   mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
   devtool: process.env.NODE_ENV === 'production' ? 'source-map' : 'eval-source-map',
   entry: {
     application: './app/javascript/packs/applicationEntry.ts',
+    bootstrap: './app/javascript/packs/bootstrap.ts',
     'browser-warning': './app/javascript/displayBrowserWarning.tsx',
     ...(process.env.NODE_ENV === 'production'
       ? {}
@@ -71,11 +71,7 @@ const config = {
       },
       {
         test: /\.css$/i,
-        use: [
-          MiniCssExtractPlugin.loader,
-          require.resolve('css-loader'),
-          require.resolve('postcss-loader'),
-        ],
+        use: [MiniCssExtractPlugin.loader, require.resolve('css-loader'), require.resolve('postcss-loader')],
       },
       {
         test: /displayBrowserWarning\.[tj]sx?$/,

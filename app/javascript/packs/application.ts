@@ -1,5 +1,4 @@
 import 'regenerator-runtime/runtime';
-import 'bootstrap';
 
 import '../styles/application.scss';
 import '../inflections';
