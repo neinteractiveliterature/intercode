@@ -1,11 +1,12 @@
 import { useCallback, useContext } from 'react';
-import { pluralize, humanize, underscore } from 'inflected';
+import { pluralize } from 'inflected';
 import classNames from 'classnames';
 import { Link, useParams } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
 import { DateTime } from 'luxon';
 import { useModal, useConfirm, ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
+import snakeCase from 'lodash/snakeCase';
 
 import { ageAsOf } from '../../TimeUtils';
 import ChangeBucketModal from './ChangeBucketModal';
@@ -18,6 +19,7 @@ import AppRootContext from '../../AppRootContext';
 import { SignupFieldsFragment, useAdminSignupQuery } from './queries.generated';
 import { useUpdateSignupCountedMutation } from './mutations.generated';
 import { useFormatRunTimespan } from '../runTimeFormatting';
+import humanize from '../../humanize';
 
 function cityState(userConProfile: SignupFieldsFragment['user_con_profile']) {
   return [userConProfile.city, userConProfile.state].filter((item) => item && item.trim() !== '').join(', ');
@@ -298,7 +300,7 @@ function EditSignup({ teamMembersUrl }: EditSignupProps): JSX.Element {
           </li>
           <li className="list-group-item d-flex align-items-center">
             <div className="flex-fill">
-              {humanize(underscore(run.event.event_category.team_member_name))}:
+              {humanize(snakeCase(run.event.event_category.team_member_name))}:
               <strong>{teamMember ? ' yes' : ' no'}</strong>
             </div>
             <Link to={teamMembersUrl} className="btn btn-link">

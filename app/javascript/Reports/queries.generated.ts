@@ -8,17 +8,17 @@ const defaultOptions =  {}
 export type ReportsMenuQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type ReportsMenuQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, ticket_mode: Types.TicketMode, ticket_name: string } };
+export type ReportsMenuQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, ticket_mode: Types.TicketMode, ticket_name: string, ticketNamePlural: string } };
 
 export type AttendanceByPaymentAmountQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type AttendanceByPaymentAmountQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, ticket_name: string, reports: { __typename: 'ConventionReports', ticket_count_by_type_and_payment_amount: Array<{ __typename: 'TicketCountByTypeAndPaymentAmount', count: number, ticket_type: { __typename: 'TicketType', id: string, name: string, description?: string | null | undefined, providing_products: Array<{ __typename: 'Product', id: string, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: string | null | undefined, finish?: string | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } }> } } }> }, payment_amount: { __typename: 'Money', fractional: number, currency_code: string } }>, total_revenue: { __typename: 'Money', fractional: number, currency_code: string } } } };
+export type AttendanceByPaymentAmountQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, ticket_name: string, ticketNamePlural: string, reports: { __typename: 'ConventionReports', ticket_count_by_type_and_payment_amount: Array<{ __typename: 'TicketCountByTypeAndPaymentAmount', count: number, ticket_type: { __typename: 'TicketType', id: string, name: string, description?: string | null | undefined, providing_products: Array<{ __typename: 'Product', id: string, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: string | null | undefined, finish?: string | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } }> } } }> }, payment_amount: { __typename: 'Money', fractional: number, currency_code: string } }>, total_revenue: { __typename: 'Money', fractional: number, currency_code: string } } } };
 
 export type EventProvidedTicketsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type EventProvidedTicketsQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, ticket_name: string, reports: { __typename: 'ConventionReports', event_provided_tickets: Array<{ __typename: 'EventProvidedTicketList', provided_by_event: { __typename: 'Event', id: string, title?: string | null | undefined }, tickets: Array<{ __typename: 'Ticket', id: string, user_con_profile: { __typename: 'UserConProfile', id: string, name_inverted: string }, ticket_type: { __typename: 'TicketType', id: string, description?: string | null | undefined } }> }> } } };
+export type EventProvidedTicketsQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, ticket_name: string, ticketNamePlural: string, reports: { __typename: 'ConventionReports', event_provided_tickets: Array<{ __typename: 'EventProvidedTicketList', provided_by_event: { __typename: 'Event', id: string, title?: string | null | undefined }, tickets: Array<{ __typename: 'Ticket', id: string, user_con_profile: { __typename: 'UserConProfile', id: string, name_inverted: string }, ticket_type: { __typename: 'TicketType', id: string, description?: string | null | undefined } }> }> } } };
 
 export type EventsByChoiceQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
@@ -47,6 +47,7 @@ export const ReportsMenuQueryDocument = gql`
     id
     ticket_mode
     ticket_name
+    ticketNamePlural
   }
 }
     `;
@@ -82,6 +83,7 @@ export const AttendanceByPaymentAmountQueryDocument = gql`
   convention: conventionByRequestHost {
     id
     ticket_name
+    ticketNamePlural
     reports {
       ticket_count_by_type_and_payment_amount {
         count
@@ -141,6 +143,7 @@ export const EventProvidedTicketsQueryDocument = gql`
   convention: conventionByRequestHost {
     id
     ticket_name
+    ticketNamePlural
     reports {
       event_provided_tickets {
         provided_by_event {

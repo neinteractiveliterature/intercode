@@ -7,9 +7,9 @@ import {
 } from '@neinteractiveliterature/litform';
 
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
-import pluralizeWithCount from '../pluralizeWithCount';
 import { EventCategoryAdminQueryData } from './queries.generated';
 import { useDeleteEventCategoryMutation } from './mutations.generated';
+import { Trans, useTranslation } from 'react-i18next';
 
 export type EventCategoryRowProps = {
   convention: EventCategoryAdminQueryData['convention'];
@@ -24,6 +24,7 @@ function EventCategoryRow({ convention, eventCategory }: EventCategoryRowProps):
     'event_categories',
     (category) => ({ id: category.id }),
   );
+  const { t } = useTranslation();
 
   return (
     <tr>
@@ -31,7 +32,13 @@ function EventCategoryRow({ convention, eventCategory }: EventCategoryRowProps):
         <span className="rounded p-1" style={getEventCategoryStyles({ eventCategory, variant: 'default' })}>
           {eventCategory.name}
         </span>{' '}
-        <small>({pluralizeWithCount('event', eventCategory.events_paginated.total_entries)})</small>
+        <small>
+          (
+          {t('admin.eventCategories.eventCount', '{{ count }} events', {
+            count: eventCategory.events_paginated.total_entries,
+          })}
+          )
+        </small>
       </td>
       <td className="text-end">
         {eventCategory.events_paginated.total_entries > 0 ? (
@@ -41,14 +48,14 @@ function EventCategoryRow({ convention, eventCategory }: EventCategoryRowProps):
               disabled: true,
             }}
             tooltipContent={
-              <>
+              <Trans i18nKey="admin.eventCategories.cannotDeleteCategoryWithEvents">
                 This event category cannot be deleted because there are events in it. To delete it, first either drop
                 these events or change their categories.
-              </>
+              </Trans>
             }
           >
             <i className="bi-trash" />
-            <span className="visually-hidden">Delete event category</span>
+            <span className="visually-hidden">{t('admin.eventCategories.deleteLabel', 'Delete event category')}</span>
           </ButtonWithTooltip>
         ) : (
           <button
@@ -56,7 +63,10 @@ function EventCategoryRow({ convention, eventCategory }: EventCategoryRowProps):
             className="btn btn-outline-danger btn-sm me-2"
             onClick={() =>
               confirm({
-                prompt: 'Are you sure you want to delete this event category?',
+                prompt: t(
+                  'admin.eventCategories.deleteConfirmation',
+                  'Are you sure you want to delete this event category?',
+                ),
                 renderError: (error) => <ErrorDisplay graphQLError={error} />,
                 action: () => deleteEventCategory(eventCategory),
               })
@@ -67,7 +77,7 @@ function EventCategoryRow({ convention, eventCategory }: EventCategoryRowProps):
           </button>
         )}
         <Link to={`/event_categories/${eventCategory.id}/edit`} className="btn btn-primary btn-sm">
-          Edit
+          {t('buttons.edit', 'Edit')}
         </Link>
       </td>
     </tr>

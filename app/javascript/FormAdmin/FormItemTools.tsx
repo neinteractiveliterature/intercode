@@ -1,6 +1,6 @@
 import { useContext, useRef, useState } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
-import { humanize, pluralize } from 'inflected';
+import { pluralize } from 'inflected';
 import { ApolloError } from '@apollo/client';
 import { Modal } from 'react-bootstrap4-modal';
 import { useModal, useUniqueId, MultipleChoiceInput, ErrorDisplay } from '@neinteractiveliterature/litform';
@@ -11,6 +11,7 @@ import useCollapse from '../NavigationBar/useCollapse';
 import useAsyncFunction from '../useAsyncFunction';
 import { useMoveFormItemMutation } from './mutations.generated';
 import { FormEditorQueryDocument } from './queries.generated';
+import humanize from '../humanize';
 
 function StandardItemMetadata() {
   const { formType } = useContext(FormEditorContext);

@@ -1,8 +1,7 @@
-import { humanize } from 'inflected';
-
 import ObjectDiffDisplay from './ObjectDiffDisplay';
 import { ParsedFormResponseChange } from './FormItemChangeUtils';
 import { EventEmailFormItem } from '../../FormAdmin/FormItemUtils';
+import humanize from '../../humanize';
 
 export type EventEmailItemChangeDisplayProps = {
   change: ParsedFormResponseChange<EventEmailFormItem>;

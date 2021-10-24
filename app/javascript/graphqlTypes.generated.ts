@@ -777,6 +777,7 @@ export type Convention = CmsParent & {
   starts_at?: Maybe<Scalars['Date']>;
   stripe_account?: Maybe<StripeAccount>;
   stripe_account_ready_to_charge: Scalars['Boolean'];
+  ticketNamePlural: Scalars['String'];
   ticket_mode: TicketMode;
   ticket_name: Scalars['String'];
   ticket_types: Array<TicketType>;
@@ -2385,6 +2386,7 @@ export type EventCategory = {
   proposal_description?: Maybe<Scalars['String']>;
   scheduling_ui: SchedulingUi;
   signed_up_color?: Maybe<Scalars['String']>;
+  teamMemberNamePlural: Scalars['String'];
   team_member_name: Scalars['String'];
   /** @deprecated IDs have transitioned to the ID type.  Please switch back to the id field so that we can remove this temporary one. */
   transitionalId: Scalars['ID'];

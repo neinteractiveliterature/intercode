@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
-import { humanize, underscore } from 'inflected';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
+import snakeCase from 'lodash/snakeCase';
 
 import BreadcrumbItem from '../../Breadcrumbs/BreadcrumbItem';
 import EventBreadcrumbItems from '../EventPage/EventBreadcrumbItems';
@@ -11,6 +11,7 @@ import usePageTitle from '../../usePageTitle';
 import Gravatar from '../../Gravatar';
 import { RunSignupSummaryQueryData, useRunSignupSummaryQuery } from './queries.generated';
 import { LoadQueryWithVariablesWrapper } from '../../GraphqlLoadingWrappers';
+import humanize from '../../humanize';
 
 type EventType = RunSignupSummaryQueryData['convention']['event'];
 type SignupType = EventType['run']['signups_paginated']['entries'][0];
@@ -104,7 +105,7 @@ export default LoadQueryWithVariablesWrapper(
                 {isTeamMember(signup, teamMembers) ? (
                   <strong>
                     {' ('}
-                    {humanize(underscore(teamMemberName))})
+                    {humanize(snakeCase(teamMemberName))})
                   </strong>
                 ) : null}
               </div>

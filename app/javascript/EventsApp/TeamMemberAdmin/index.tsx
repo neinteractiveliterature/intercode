@@ -1,7 +1,8 @@
 import { useMemo } from 'react';
 import { Switch, Route, useRouteMatch } from 'react-router-dom';
-import { humanize, underscore, pluralize } from 'inflected';
+import { pluralize } from 'inflected';
 import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
+import snakeCase from 'lodash/snakeCase';
 
 import EditTeamMember from './EditTeamMember';
 import NewTeamMember from './NewTeamMember';
@@ -10,6 +11,7 @@ import BreadcrumbItem from '../../Breadcrumbs/BreadcrumbItem';
 import RouteActivatedBreadcrumbItem from '../../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import { useTeamMembersQuery } from './queries.generated';
 import FourOhFourPage from '../../FourOhFourPage';
+import humanize from '../../humanize';
 
 export type TeamMemberAdminProps = {
   eventId: string;
@@ -53,7 +55,7 @@ function TeamMemberAdmin({ eventId, eventPath }: TeamMemberAdminProps): JSX.Elem
             matchProps={{ path: `${eventPath}/team_members`, exact: true }}
             to={`${eventPath}/team_members`}
           >
-            {pluralize(humanize(underscore(event.event_category.team_member_name)))}
+            {pluralize(humanize(snakeCase(event.event_category.team_member_name)))}
           </RouteActivatedBreadcrumbItem>
           <Route path={`${eventPath}/team_members/new`}>
             <BreadcrumbItem active to={`${eventPath}/team_members/new`}>

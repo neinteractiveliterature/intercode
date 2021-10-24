@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import * as React from 'react';
-// @ts-expect-error inflected type definitions don't export capitalize
-import { pluralize, capitalize } from 'inflected';
+import { pluralize } from 'inflected';
+import capitalize from 'lodash/capitalize';
 import { ApolloError, useApolloClient } from '@apollo/client';
 import {
   BootstrapFormInput,
@@ -48,8 +48,7 @@ function ConventionFormBillingSection({
         baseUrl: window.location.href.toString(),
       },
     });
-    const onboardingLink =
-      result.data?.createConventionStripeAccount?.stripe_account.account_onboarding_link;
+    const onboardingLink = result.data?.createConventionStripeAccount?.stripe_account.account_onboarding_link;
     if (onboardingLink) {
       window.location.href = onboardingLink;
     }
@@ -71,8 +70,9 @@ function ConventionFormBillingSection({
       window.location.href = onboardingLink;
     }
   }, [apolloClient]);
-  const [startObtainOnboardingLink, obtainOnboardingLinkError, obtainOnboardinLinkInProgress] =
-    useAsyncFunction(obtainOnboardingLinkAndRedirect);
+  const [startObtainOnboardingLink, obtainOnboardingLinkError, obtainOnboardinLinkInProgress] = useAsyncFunction(
+    obtainOnboardingLinkAndRedirect,
+  );
 
   return (
     <>
@@ -85,9 +85,7 @@ function ConventionFormBillingSection({
           },
           {
             value: 'required_for_signup',
-            label: `${pluralize(
-              capitalize(convention.ticket_name),
-            )} are sold and required for event signups`,
+            label: `${pluralize(capitalize(convention.ticket_name))} are sold and required for event signups`,
           },
         ]}
         value={convention.ticket_mode}
@@ -102,8 +100,7 @@ function ConventionFormBillingSection({
 
         <div className="card-body">
           <p>
-            In order to sell {pluralize(convention.ticket_name)} and/or products, a Stripe account
-            is required.{' '}
+            In order to sell {pluralize(convention.ticket_name)} and/or products, a Stripe account is required.{' '}
             {convention.stripe_account && (
               <>
                 {convention.stripe_account.charges_enabled ? (
@@ -113,8 +110,7 @@ function ConventionFormBillingSection({
                   </>
                 ) : (
                   <>
-                    {convention.name} is connected to a Stripe account but that account is still in
-                    the setup process.
+                    {convention.name} is connected to a Stripe account but that account is still in the setup process.
                   </>
                 )}
               </>

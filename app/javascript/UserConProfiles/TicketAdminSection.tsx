@@ -1,5 +1,4 @@
 import { useContext } from 'react';
-import { humanize } from 'inflected';
 import { Link } from 'react-router-dom';
 // eslint-disable-next-line no-restricted-imports
 import { useQuery } from '@apollo/client';
@@ -21,6 +20,7 @@ import {
   UserConProfileAdminQueryDocument,
 } from './queries.generated';
 import { useAppDateTimeFormat } from '../TimeUtils';
+import humanize from '../humanize';
 
 type UserConProfileData = UserConProfileAdminQueryData['convention']['user_con_profile'];
 type TicketData = NonNullable<UserConProfileData['ticket']>;

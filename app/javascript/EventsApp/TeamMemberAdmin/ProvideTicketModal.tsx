@@ -1,10 +1,10 @@
 import { useCallback, useState } from 'react';
-// @ts-expect-error inflected types don't expose capitalize
-import { capitalize, pluralize } from 'inflected';
+import { pluralize } from 'inflected';
 import { Modal } from 'react-bootstrap4-modal';
 import { ApolloError } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
+import capitalize from 'lodash/capitalize';
 
 import { getProvidableTicketTypes } from './ProvideTicketUtils';
 import ProvidableTicketTypeSelection from './ProvidableTicketTypeSelection';

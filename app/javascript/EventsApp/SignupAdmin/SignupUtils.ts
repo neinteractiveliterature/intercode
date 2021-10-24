@@ -1,7 +1,9 @@
 import { assertNever } from 'assert-never';
 import { TFunction } from 'i18next';
-import { humanize, underscore } from 'inflected';
+import snakeCase from 'lodash/snakeCase';
+
 import { RegistrationPolicyBucket, Signup, SignupState } from '../../graphqlTypes.generated';
+import humanize from '../../humanize';
 
 export function findBucket<BucketType extends Pick<RegistrationPolicyBucket, 'key'>>(
   bucketKey: string | null | undefined,
@@ -40,7 +42,7 @@ export function formatBucket(signup: SignupForFormatBucket, event: EventForForma
 
     if (event.team_members.some((teamMember) => teamMember.user_con_profile?.id === signup.user_con_profile?.id)) {
       return t('signups.states.teamMemberNotCounted', '{{ teamMemberName }} (not counted)', {
-        teamMemberName: humanize(underscore(event.event_category.team_member_name)),
+        teamMemberName: humanize(snakeCase(event.event_category.team_member_name)),
       });
     }
 

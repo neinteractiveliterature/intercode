@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { titleize } from 'inflected';
+import capitalize from 'lodash/capitalize';
 
 import PermissionCheckBox from './PermissionCheckBox';
 import usePermissionsChangeSet, { UsePermissionsChangeSetOptions } from './usePermissionsChangeSet';
@@ -44,7 +44,7 @@ function PermissionsListRow({
       }}
     >
       <th scope="row" className="text-start fw-normal pe-4">
-        {titleize(name)}
+        {capitalize(name)}
       </th>
       <td>
         <PermissionCheckBox hasPermission={hasPermission} />

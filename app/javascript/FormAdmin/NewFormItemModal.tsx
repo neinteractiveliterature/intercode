@@ -1,7 +1,6 @@
 import { useContext, useMemo, useState } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
 import flatMap from 'lodash/flatMap';
-import { humanize } from 'inflected';
 import classNames from 'classnames';
 import { ApolloError } from '@apollo/client';
 import {
@@ -25,10 +24,9 @@ import {
   StandardItemIdentifier,
   TypedFormItem,
 } from './FormItemUtils';
+import humanize from '../humanize';
 
-const customItemTypes = Object.keys(FormItemDefaultProperties).filter(
-  (itemType) => itemType !== 'static_text',
-);
+const customItemTypes = Object.keys(FormItemDefaultProperties).filter((itemType) => itemType !== 'static_text');
 
 const NO_CAPTION_ITEM_TYPES = ['event_email', 'registration_policy'];
 
@@ -111,9 +109,7 @@ function NewFormItemModal<FormType extends FormTypeDefinition>({
       setItemType(match[1] as TypedFormItem['item_type']);
       setIdentifier(undefined);
     } else if (value in formType.standard_items) {
-      const newStandardItem = formType.standard_items[
-        value as keyof typeof formType.standard_items
-      ] as StandardItem;
+      const newStandardItem = formType.standard_items[value as keyof typeof formType.standard_items] as StandardItem;
       if (newStandardItem) {
         setStandardItem(newStandardItem);
         setItemType(newStandardItem.item_type);
@@ -171,9 +167,7 @@ function NewFormItemModal<FormType extends FormTypeDefinition>({
                       setStandardItemIdentifierOrCustomItemType(item.identifier);
                     }
                   }}
-                  disabled={existingStandardItemIdentifiers.has(
-                    item.identifier as keyof FormType['standard_items'],
-                  )}
+                  disabled={existingStandardItemIdentifiers.has(item.identifier as keyof FormType['standard_items'])}
                   className={classNames({
                     'text-muted': existingStandardItemIdentifiers.has(
                       item.identifier as keyof FormType['standard_items'],
@@ -192,9 +186,7 @@ function NewFormItemModal<FormType extends FormTypeDefinition>({
                     label={
                       <>
                         {item.description}{' '}
-                        <HelpPopover iconSet="bootstrap-icons">
-                          {item.deprecation_reason}
-                        </HelpPopover>
+                        <HelpPopover iconSet="bootstrap-icons">{item.deprecation_reason}</HelpPopover>
                       </>
                     }
                     checked={standardItemIdentifierOrCustomItemType === item.identifier}
@@ -204,9 +196,7 @@ function NewFormItemModal<FormType extends FormTypeDefinition>({
                         setStandardItemIdentifierOrCustomItemType(item.identifier);
                       }
                     }}
-                    disabled={existingStandardItemIdentifiers.has(
-                      item.identifier as keyof FormType['standard_items'],
-                    )}
+                    disabled={existingStandardItemIdentifiers.has(item.identifier as keyof FormType['standard_items'])}
                     className={classNames({
                       'text-muted': existingStandardItemIdentifiers.has(
                         item.identifier as keyof FormType['standard_items'],
@@ -237,11 +227,7 @@ function NewFormItemModal<FormType extends FormTypeDefinition>({
         </div>
 
         {itemType && !standardItem && (
-          <FormItemIdentifierInput
-            formType={formType}
-            value={identifier}
-            onChange={setIdentifier}
-          />
+          <FormItemIdentifierInput formType={formType} value={identifier} onChange={setIdentifier} />
         )}
 
         {standardItem && !standardItem.item_type && (
@@ -265,12 +251,7 @@ function NewFormItemModal<FormType extends FormTypeDefinition>({
       </div>
 
       <div className="modal-footer">
-        <button
-          className="btn btn-secondary"
-          type="button"
-          onClick={close}
-          disabled={createInProgress}
-        >
+        <button className="btn btn-secondary" type="button" onClick={close} disabled={createInProgress}>
           Cancel
         </button>
         <button

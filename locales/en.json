@@ -7,16 +7,83 @@
   },
   "admin": {
     "convention": {
+      "header": {
+        "conventionTiming": {
+          "canceled": "{{ conventionName }} is canceled",
+          "endsToday": "{{ conventionName }} ends today",
+          "future_one": "{{ conventionName }} starts in {{ count }} day",
+          "future_other": "{{ conventionName }} starts in {{ count }} days",
+          "isToday": "{{ conventionName }} is today",
+          "ongoing_one": "{{ conventionName }} ends in {{ count }} day",
+          "ongoing_other": "{{ conventionName }} ends in {{ count }} days",
+          "past_one": "{{ conventionName }} ended {{ count }} day ago",
+          "past_other": "{{ conventionName }} ended {{ count }} days ago"
+        },
+        "eventList": "Event list",
+        "eventVisibilityGMs": "Staff and event teams",
+        "eventVisibilityHidden": "Hidden",
+        "eventVisibilityPriv": "Staff only",
+        "eventVisibilityYes": "Public",
+        "schedule": "Schedule",
+        "signups": "Signups",
+        "signupScheduleNotConfiguredYet": "Signup schedule not configured yet",
+        "singleEventSiteMode": "Single event",
+        "siteMode": "Site mode"
+      },
       "language": {
         "en": "English",
         "es": "Spanish (work in progress, not ready to use yet)",
         "label": "Site language"
       }
     },
+    "eventCategories": {
+      "cannotDeleteCategoryWithEvents": "This event category cannot be deleted because there are events in it. To delete it, first either drop these events or change their categories.",
+      "deleteConfirmation": "Are you sure you want to delete this event category?",
+      "deleteLabel": "Delete event category",
+      "eventCount_one": "{{ count }} event",
+      "eventCount_other": "{{ count }} events"
+    },
     "eventProposals": {
       "edit": {
         "exitButton": "Return to proposal"
       }
+    },
+    "rooms": {
+      "addRoomLabel": "Add room",
+      "deleteConfirmation": "Are you sure you want to delete this room?",
+      "deleteLabel": "Delete room",
+      "eventRunCount_one": "{{ count }} event run",
+      "eventRunCount_other": "{{ count }} event runs",
+      "roomNameLabel": "Room name"
+    },
+    "store": {
+      "orderEntries": {
+        "addCouponLabel": "Add coupon",
+        "couponCodeLabel": "Coupon code: ",
+        "deleteConfirmation_one": "Are you sure you want to delete {{ count }} {{ productName }} item from the order?  This cannot be undone.",
+        "deleteConfirmation_other": "Are you sure you want to delete {{ count }} {{ productName }} items from the order?  This cannot be undone.",
+        "deleteCouponConfirmation": "Are you sure you want to delete this coupon from the order?  This cannot be undone.",
+        "deleteCouponLabel": "Delete coupon",
+        "itemColumnHeader": "Item",
+        "priceColumnHeader": "Price",
+        "pricePerEachSuffix": "each",
+        "quantityColumnHeader": "Quantity",
+        "totalPrice": "Total price"
+      },
+      "paymentOptions": {
+        "payAtConvention": "Pay at convention",
+        "stripe": "Stripe"
+      },
+      "products": {
+        "available": "Available for purchase",
+        "deleteConfirmation": "Are you sure you want to delete the product {{ productName }}?",
+        "deleteLabel": "Delete product",
+        "unavailable": "Not available for purchase"
+      }
+    },
+    "ticketTypes": {
+      "eventProvidedDescription_one": "events can provide up to {{ count }} {{ ticketName }}",
+      "eventProvidedDescription_other": "events can provide up to {{ count }} {{ ticketName }}"
     },
     "userConProfiles": {
       "addAttendee": {
@@ -47,6 +114,17 @@
       "ticketType": "{{ ticketName }} type",
       "userId": "User ID",
       "withdrawFromAllButton": "Withdraw from all"
+    },
+    "users": {
+      "merge": {
+        "hasTicket": "Has {{ ticketName }}",
+        "noTicket": "No {{ ticketName }}",
+        "noUsers": "No userIds to merge",
+        "noWinner": "No winningUserId for merge",
+        "profileLabel": "{{ email }}’s profile [{{ ticketDescription }}, {{ signupsDescription }}]",
+        "signupCount_one": "{{ count }} signups",
+        "signupCount_other": "{{ count }} signups"
+      }
     },
     "warnings": {
       "emptyUserConProfileForm": "<0>This convention has no user profile form set up, or the form is empty.</0><1>To create or edit the user profile form, go here.</1><2></2><3>To set it as the user profile form for this convention, go here.</3>"
@@ -229,6 +307,11 @@
       "header": "Event Admin",
       "historyLink": "View edit history"
     },
+    "catalog": {
+      "author_one": "Author",
+      "author_other": "Authors",
+      "organization": "Organization"
+    },
     "edit": {
       "dropButton": "Drop event",
       "dropPrompt": "Are you sure you want to drop {{ eventTitle }}?  Doing so will also delete any runs of this event and remove any participants signed up for those runs.",
@@ -259,9 +342,9 @@
     },
     "runCapacity": {
       "label": "Capacity",
-      "slotCount_one": "{{ count }} slots",
+      "slotCount_one": "{{ count }} slot",
       "slotCount_other": "{{ count }} slots",
-      "slotRemainingCount_one": "{{ filledCount }} of {{ count }} slots filled",
+      "slotRemainingCount_one": "{{ filledCount }} of {{ count }} slot filled",
       "slotRemainingCount_other": "{{ filledCount }} of {{ count }} slots filled",
       "unlimitedSimple": "unlimited",
       "unlimitedWithCount": "unlimited ({{ signupCount }} signed up)",
@@ -388,7 +471,7 @@
   "forms": {
     "ageRestrictions": {
       "descriptionLabel": "Publicly visible age restrictions text",
-      "minimumAgeDescription_one": "Must be {{ count }} years or older.",
+      "minimumAgeDescription_one": "Must be {{ count }} year or older.",
       "minimumAgeDescription_other": "Must be {{ count }} years or older.",
       "minimumAgeHelpText": "If specified, the signups list will warn you if someone too young to play has signed up. <2>The site does not enforce age restrictions; you must do so yourself.</2>",
       "minimumAgeLabel": "Minimum age",
@@ -431,7 +514,21 @@
     "pageTitles": {
       "editing": "Editing “{{ title }}”"
     },
-    "placeholderOptionLabel": "Blank placeholder option"
+    "placeholderOptionLabel": "Blank placeholder option",
+    "timeUnits": {
+      "hours_one": "{{ count }} hour",
+      "hours_other": "{{ count }} hours",
+      "minutes_one": "{{ count }} minute",
+      "minutes_other": "{{ count }} minutes"
+    }
+  },
+  "mailingLists": {
+    "commaSeparated": "Comma-separated",
+    "emailAddresses": "Email addresses",
+    "recipientCount_one": "{{ count }} recipient",
+    "recipientCount_other": "{{ count }} recipients",
+    "semicolonSeparated": "Semicolon-separated",
+    "tableView": "Table view"
   },
   "myProfile": {
     "bioLabel": "Bio",
@@ -547,6 +644,14 @@
       "read_signups": "Access data about your signups"
     }
   },
+  "pricingStructure": {
+    "fixedPrice": "{{ price, money }} (fixed price)",
+    "price": "{{ price, money }}",
+    "scheduledValueSummary_one": "{{ price, money }} ({{ count }} scheduled price point)",
+    "scheduledValueSummary_other": "{{ price, money }} ({{ count }} scheduled price points)",
+    "scheduledValueWithNext": "{{ price, money }} ({{ nextPrice, money }} starting {{ nextChange, dateTimeNamed(format: shortDateTime) }})",
+    "unavailable": "Currently unavailable"
+  },
   "schedule": {
     "goToEvent": "Go to event",
     "legends": {
@@ -593,6 +698,21 @@
     }
   },
   "signups": {
+    "availability": {
+      "full_one": "<0>Full</0><1> ({{count}} slot)</1>",
+      "full_other": "<0>Full</0><1> ({{count}} slots)</1>",
+      "partiallyFull_one": "{{ signupCount }} of {{ count }} slot filled",
+      "partiallyFull_other": "{{ signupCount }} of {{ count }} slots filled",
+      "unlimited": "Unlimited slots",
+      "waitlistCount_one": "<0>Waitlist:</0> {{count}}",
+      "waitlistCount_other": "<0>Waitlist:</0> {{count}}"
+    },
+    "maximumSignups": {
+      "limitedCount": "Up to {{ count }} event",
+      "notNow": "Signups frozen",
+      "notYet": "No signups yet",
+      "unlimited": "Signups fully open"
+    },
     "noPreference": "No preference",
     "noSignupsAvailable": "This event does not take signups.",
     "runCardText": {
@@ -625,6 +745,13 @@
   },
   "spoiler": {
     "hoverText": "Click to reveal"
+  },
+  "store": {
+    "coupons": {
+      "unlimitedUses": "Unlimited uses",
+      "usageLimitCount_one": "{{ count }} use",
+      "usageLimitCount_other": "{{ count }} uses"
+    }
   },
   "tables": {
     "ageRestrictionsCheck": {

@@ -12,11 +12,11 @@ import {
 
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import useAsyncFunction from '../useAsyncFunction';
-import pluralizeWithCount from '../pluralizeWithCount';
 import usePageTitle from '../usePageTitle';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import { RoomAdminRoomFieldsFragmentDoc, useRoomsAdminQuery } from './queries.generated';
 import { useCreateRoomMutation, useDeleteRoomMutation, useUpdateRoomMutation } from './mutations.generated';
+import { useTranslation } from 'react-i18next';
 
 export default LoadQueryWrapper(useRoomsAdminQuery, function RoomsAdmin({ data }) {
   const authorizationWarning = useAuthorizationRequired('can_manage_rooms');
@@ -36,10 +36,11 @@ export default LoadQueryWrapper(useRoomsAdminQuery, function RoomsAdmin({ data }
     (room) => ({ input: { id: room.id } }),
   );
   const confirm = useGraphQLConfirm();
+  const { t } = useTranslation();
 
   const [creatingRoomName, setCreatingRoomName] = useState('');
 
-  usePageTitle('Rooms');
+  usePageTitle(t('navigation.admin.rooms', 'Rooms'));
 
   if (authorizationWarning) return authorizationWarning;
 
@@ -77,15 +78,17 @@ export default LoadQueryWrapper(useRoomsAdminQuery, function RoomsAdmin({ data }
         </div>
         <div className="flex-grow-1">
           {room.runs.length > 0 ? (
-            <span className="text-muted">({pluralizeWithCount('event run', room.runs.length)})</span>
+            <span className="text-muted">
+              ({t('admin.rooms.eventRunCount', '{{ count }} event runs', { count: room.runs.length })})
+            </span>
           ) : null}
         </div>
         <button
           className="btn btn-sm btn-outline-danger ms-2"
-          title="Delete room"
+          title={t('admin.rooms.deleteLabel', 'Delete room')}
           onClick={() =>
             confirm({
-              prompt: 'Are you sure you want to delete this room?',
+              prompt: t('admin.rooms.deleteConfirmation', 'Are you sure you want to delete this room?'),
               action: () => deleteRoom(room),
             })
           }
@@ -108,12 +111,12 @@ export default LoadQueryWrapper(useRoomsAdminQuery, function RoomsAdmin({ data }
               <div className="flex-grow-1">
                 <input
                   type="text"
-                  placeholder="Room name"
+                  placeholder={t('admin.rooms.roomNameLabel', 'Room name')}
                   className="form-control"
                   value={creatingRoomName}
                   onChange={(event) => setCreatingRoomName(event.target.value)}
                   onKeyDown={keyDownInCreatingRoom}
-                  aria-label="Room name"
+                  aria-label={t('admin.rooms.roomNameLabel', 'Room name')}
                 />
               </div>
               <button
@@ -122,7 +125,7 @@ export default LoadQueryWrapper(useRoomsAdminQuery, function RoomsAdmin({ data }
                 onClick={createRoomWasClicked}
                 type="button"
               >
-                Add room
+                {t('admin.rooms.addRoomLabel', 'Add room')}
               </button>
             </div>
           </li>

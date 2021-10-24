@@ -1,11 +1,11 @@
 import { useContext } from 'react';
 import * as React from 'react';
-import { humanize } from 'inflected';
 import isEqual from 'lodash/isEqual';
 import { SortingRule } from 'react-table';
 
 import AppRootContext from '../../AppRootContext';
 import { DropdownMenu } from '../../UIComponents/DropdownMenu';
+import humanize from '../../humanize';
 
 const SORT_ORDERS = [
   { sorted: [{ id: 'title', desc: false }], caption: 'title' },
@@ -60,10 +60,7 @@ function EventListSortDropdown<D extends Record<string, unknown>>({
   ));
 
   return (
-    <DropdownMenu
-      buttonContent={`Sort by ${currentSort.caption}`}
-      buttonClassName="btn btn-link dropdown-toggle"
-    >
+    <DropdownMenu buttonContent={`Sort by ${currentSort.caption}`} buttonClassName="btn btn-link dropdown-toggle">
       {sortOptions}
     </DropdownMenu>
   );

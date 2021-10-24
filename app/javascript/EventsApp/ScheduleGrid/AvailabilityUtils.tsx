@@ -1,5 +1,6 @@
+import { TFunction } from 'i18next';
 import { ReactNode } from 'react';
-import pluralizeWithCount from '../../pluralizeWithCount';
+import { Trans } from 'react-i18next';
 import SignupCountData from '../SignupCountData';
 import { ScheduleEvent } from './Schedule';
 
@@ -18,10 +19,7 @@ export function calculateAvailability(
 ): ScheduleEventAvailability {
   let totalSlots = 0;
   let signupCount = 0;
-  if (
-    event.registration_policy?.total_slots != null &&
-    event.registration_policy?.total_slots > 0
-  ) {
+  if (event.registration_policy?.total_slots != null && event.registration_policy?.total_slots > 0) {
     signupCount = signupCountData.getConfirmedLimitedSignupCount(event);
     totalSlots = event.registration_policy?.total_slots ?? 0;
   } else if (event.registration_policy?.only_uncounted) {
@@ -39,27 +37,24 @@ export function calculateAvailability(
   };
 }
 
-export function describeAvailability(
-  event: ScheduleEvent,
-  signupCountData: SignupCountData,
-): ReactNode {
+export function describeAvailability(event: ScheduleEvent, signupCountData: SignupCountData, t: TFunction): ReactNode {
   if (signupCountData.runFull(event)) {
     return (
-      <>
+      <Trans i18nKey="signups.availability.full" count={event.registration_policy?.total_slots ?? 0}>
         <strong>Full</strong>
         <span className="text-muted">
           {' ('}
-          {event.registration_policy?.total_slots ?? 0}
+          {{ count: event.registration_policy?.total_slots ?? 0 }}
           {' slots)'}
         </span>
-      </>
+      </Trans>
     );
   }
 
   const { unlimited, totalSlots, signupCount } = calculateAvailability(event, signupCountData);
 
   if (unlimited) {
-    return 'Unlimited slots';
+    return t('signups.availability.unlimited', 'Unlimited slots');
   }
 
   if (totalSlots === 0) {
@@ -68,18 +63,18 @@ export function describeAvailability(
 
   const displayCount = signupCount > totalSlots ? totalSlots : signupCount;
 
-  return `${displayCount} of ${pluralizeWithCount('slot', totalSlots)} filled`;
+  return t('signups.availability.partiallyFull', '{{ signupCount }} of {{ count }} slots filled', {
+    signupCount: displayCount,
+    count: totalSlots,
+  });
 }
 
-export function describeWaitlist(
-  event: ScheduleEvent,
-  signupCountData: SignupCountData,
-): ReactNode {
+export function describeWaitlist(event: ScheduleEvent, signupCountData: SignupCountData): ReactNode {
   if (signupCountData.runFull(event)) {
     return (
-      <>
-        <strong>Waitlist:</strong> {signupCountData.getWaitlistCount()}
-      </>
+      <Trans i18nKey="signups.availability.waitlistCount" count={signupCountData.getWaitlistCount()}>
+        <strong>Waitlist:</strong> {{ count: signupCountData.getWaitlistCount() }}
+      </Trans>
     );
   }
 

@@ -27,6 +27,7 @@ query EventListEventsQuery($page: Int, $pageSize: Int, $filters: EventFiltersInp
           id
           name
           team_member_name
+          teamMemberNamePlural
         }
 
         runs {

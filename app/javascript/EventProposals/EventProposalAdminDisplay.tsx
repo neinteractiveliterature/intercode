@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { humanize } from 'inflected';
 import { LoadingIndicator, ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import AdminNotes from '../BuiltInFormControls/AdminNotes';
@@ -14,6 +13,7 @@ import {
   useEventProposalQueryWithOwner,
 } from './queries.generated';
 import { useUpdateEventProposalAdminNotesMutation } from './mutations.generated';
+import humanize from '../humanize';
 
 export type EventProposalAdminNotesProps = {
   eventProposalId: string;

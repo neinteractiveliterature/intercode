@@ -28,6 +28,7 @@ query AdminTicketTypesQuery {
     }
 
     ticket_name
+    ticketNamePlural
     timezone_name
   }
 }

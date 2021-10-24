@@ -7,16 +7,83 @@
   },
   "admin": {
     "convention": {
+      "header": {
+        "conventionTiming": {
+          "canceled": "",
+          "endsToday": "",
+          "future_one": "",
+          "future_other": "",
+          "isToday": "",
+          "ongoing_one": "",
+          "ongoing_other": "",
+          "past_one": "",
+          "past_other": ""
+        },
+        "eventList": "",
+        "eventVisibilityGMs": "",
+        "eventVisibilityHidden": "",
+        "eventVisibilityPriv": "",
+        "eventVisibilityYes": "",
+        "schedule": "",
+        "signups": "",
+        "signupScheduleNotConfiguredYet": "",
+        "singleEventSiteMode": "",
+        "siteMode": ""
+      },
       "language": {
         "en": "Inglés",
         "es": "Español (trabajo en progreso, no al 100%)",
         "label": "Idioma de la página"
       }
     },
+    "eventCategories": {
+      "cannotDeleteCategoryWithEvents": "",
+      "deleteConfirmation": "",
+      "deleteLabel": "",
+      "eventCount_one": "",
+      "eventCount_other": ""
+    },
     "eventProposals": {
       "edit": {
         "exitButton": "Volver a la propuesta"
       }
+    },
+    "rooms": {
+      "addRoomLabel": "",
+      "deleteConfirmation": "",
+      "deleteLabel": "",
+      "eventRunCount_one": "",
+      "eventRunCount_other": "",
+      "roomNameLabel": ""
+    },
+    "store": {
+      "orderEntries": {
+        "addCouponLabel": "",
+        "couponCodeLabel": "",
+        "deleteConfirmation_one": "",
+        "deleteConfirmation_other": "",
+        "deleteCouponConfirmation": "",
+        "deleteCouponLabel": "",
+        "itemColumnHeader": "",
+        "priceColumnHeader": "",
+        "pricePerEachSuffix": "",
+        "quantityColumnHeader": "",
+        "totalPrice": ""
+      },
+      "paymentOptions": {
+        "payAtConvention": "",
+        "stripe": ""
+      },
+      "products": {
+        "available": "",
+        "deleteConfirmation": "",
+        "deleteLabel": "",
+        "unavailable": ""
+      }
+    },
+    "ticketTypes": {
+      "eventProvidedDescription_one": "",
+      "eventProvidedDescription_other": ""
     },
     "userConProfiles": {
       "addAttendee": {
@@ -47,6 +114,17 @@
       "ticketType": "Tipo de {{ ticketName }}",
       "userId": "Identificador de usuario",
       "withdrawFromAllButton": "Retirar de todas"
+    },
+    "users": {
+      "merge": {
+        "hasTicket": "",
+        "noTicket": "",
+        "noUsers": "",
+        "noWinner": "",
+        "profileLabel": "",
+        "signupCount_one": "",
+        "signupCount_other": ""
+      }
     },
     "warnings": {
       "emptyUserConProfileForm": ""
@@ -228,6 +306,11 @@
       "editTeamMembersLink": "",
       "header": "",
       "historyLink": ""
+    },
+    "catalog": {
+      "author_one": "",
+      "author_other": "",
+      "organization": ""
     },
     "edit": {
       "dropButton": "",
@@ -431,7 +514,21 @@
     "pageTitles": {
       "editing": "Editando “{{ title }}”"
     },
-    "placeholderOptionLabel": ""
+    "placeholderOptionLabel": "",
+    "timeUnits": {
+      "hours_one": "",
+      "hours_other": "",
+      "minutes_one": "",
+      "minutes_other": ""
+    }
+  },
+  "mailingLists": {
+    "commaSeparated": "",
+    "emailAddresses": "",
+    "recipientCount_one": "",
+    "recipientCount_other": "",
+    "semicolonSeparated": "",
+    "tableView": ""
   },
   "myProfile": {
     "bioLabel": "Bio",
@@ -547,6 +644,14 @@
       "read_signups": ""
     }
   },
+  "pricingStructure": {
+    "fixedPrice": "",
+    "price": "",
+    "scheduledValueSummary_one": "",
+    "scheduledValueSummary_other": "",
+    "scheduledValueWithNext": "",
+    "unavailable": ""
+  },
   "schedule": {
     "goToEvent": "",
     "legends": {
@@ -593,6 +698,21 @@
     }
   },
   "signups": {
+    "availability": {
+      "full_one": "",
+      "full_other": "",
+      "partiallyFull_one": "",
+      "partiallyFull_other": "",
+      "unlimited": "",
+      "waitlistCount_one": "",
+      "waitlistCount_other": ""
+    },
+    "maximumSignups": {
+      "limitedCount": "",
+      "notNow": "",
+      "notYet": "",
+      "unlimited": ""
+    },
     "noPreference": "",
     "noSignupsAvailable": "",
     "runCardText": {
@@ -625,6 +745,13 @@
   },
   "spoiler": {
     "hoverText": ""
+  },
+  "store": {
+    "coupons": {
+      "unlimitedUses": "",
+      "usageLimitCount_one": "",
+      "usageLimitCount_other": ""
+    }
   },
   "tables": {
     "ageRestrictionsCheck": {

@@ -1,6 +1,5 @@
 import { useContext, useMemo } from 'react';
 import { Link, Route, useHistory } from 'react-router-dom';
-import { humanize } from 'inflected';
 import { Column, CellProps, FilterProps } from 'react-table';
 import { useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
@@ -15,9 +14,7 @@ import EmailCell from '../Tables/EmailCell';
 import formatMoney from '../formatMoney';
 import FormItemDisplay from '../FormPresenter/ItemDisplays/FormItemDisplay';
 import FreeTextFilter from '../Tables/FreeTextFilter';
-import useReactTableWithTheWorks, {
-  createQueryDataContext,
-} from '../Tables/useReactTableWithTheWorks';
+import useReactTableWithTheWorks, { createQueryDataContext } from '../Tables/useReactTableWithTheWorks';
 import TableHeader from '../Tables/TableHeader';
 import UserConProfileWithGravatarCell from '../Tables/UserConProfileWithGravatarCell';
 import {
@@ -30,13 +27,13 @@ import { getSortedParsedFormItems } from '../Models/Form';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
 import { formatLCM, getDateTimeFormat } from '../TimeUtils';
 import AppRootContext from '../AppRootContext';
+import humanize from '../humanize';
 
 type UserConProfilesTableRow = NonNullable<
   UserConProfilesTableUserConProfilesQueryData['convention']
 >['user_con_profiles_paginated']['entries'][0];
 
-const UserConProfilesTableQueryDataContext =
-  createQueryDataContext<UserConProfilesTableUserConProfilesQueryData>();
+const UserConProfilesTableQueryDataContext = createQueryDataContext<UserConProfilesTableUserConProfilesQueryData>();
 
 const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({
   ticket: FilterCodecs.stringArray,
@@ -238,18 +235,14 @@ function getPossibleColumns(
           {
             Header: (
               <>
-                {t(
-                  'admin.userConProfiles.ticketStatusChangedAt',
-                  '{{ ticketName }} status changed',
-                  { ticketName: humanize(data.convention.ticket_name || 'ticket') },
-                )}
+                {t('admin.userConProfiles.ticketStatusChangedAt', '{{ ticketName }} status changed', {
+                  ticketName: humanize(data.convention.ticket_name || 'ticket'),
+                })}
               </>
             ),
             id: 'ticket_updated_at',
             accessor: (userConProfile: UserConProfilesTableRow) =>
-              userConProfile.ticket
-                ? DateTime.fromISO(userConProfile.ticket.updated_at, { zone: timezoneName })
-                : null,
+              userConProfile.ticket ? DateTime.fromISO(userConProfile.ticket.updated_at, { zone: timezoneName }) : null,
             disableSortBy: false,
             Cell: ({ value }: { value: DateTime | null }) =>
               value ? formatLCM(value, getDateTimeFormat('shortDateTime', t)) : null,
@@ -283,19 +276,13 @@ function getPossibleColumns(
     }
 
     const FormItemCell = ({ value }: { value: FormItemValueType<TypedFormItem> }) => (
-      <FormItemDisplay
-        formItem={formItem}
-        value={value}
-        convention={data.convention}
-        displayMode="admin"
-      />
+      <FormItemDisplay formItem={formItem} value={value} convention={data.convention} displayMode="admin" />
     );
 
     columns.push({
       Header: formItem.admin_description || humanize(identifier),
       id: identifier,
-      accessor: (userConProfile) =>
-        JSON.parse(userConProfile.form_response_attrs_json ?? '{}')[identifier],
+      accessor: (userConProfile) => JSON.parse(userConProfile.form_response_attrs_json ?? '{}')[identifier],
       Cell: FormItemCell,
     });
   });
@@ -313,12 +300,7 @@ function UserConProfilesTable({ defaultVisibleColumns }: UserConProfilesTablePro
   const history = useHistory();
   const getPossibleColumnsWithTranslation = useMemo(
     () => (data: UserConProfilesTableUserConProfilesQueryData) =>
-      getPossibleColumns(
-        data,
-        t,
-        getSortedParsedFormItems(data.convention.user_con_profile_form),
-        timezoneName,
-      ),
+      getPossibleColumns(data, t, getSortedParsedFormItems(data.convention.user_con_profile_form), timezoneName),
     [t, timezoneName],
   );
   const { tableInstance, loading, tableHeaderProps, queryData } = useReactTableWithTheWorks<
@@ -345,8 +327,7 @@ function UserConProfilesTable({ defaultVisibleColumns }: UserConProfilesTablePro
           renderLeftContent={() =>
             queryData && (queryData.currentAbility || {}).can_create_user_con_profiles ? (
               <Link to="/user_con_profiles/new" className="btn btn-primary ms-2 mb-2">
-                <i className="bi-plus" />{' '}
-                {t('admin.userConProfiles.addAttendee.buttonText', 'Add attendee')}
+                <i className="bi-plus" /> {t('admin.userConProfiles.addAttendee.buttonText', 'Add attendee')}
               </Link>
             ) : null
           }

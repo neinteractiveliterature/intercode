@@ -502,6 +502,13 @@ we can remove this temporary one.",
   end
   field :ticket_mode, Types::TicketModeType, null: false
   field :ticket_name, String, null: false
+
+  field :ticket_name_plural, String, null: false, camelize: true
+
+  def ticket_name_plural
+    object.ticket_name.pluralize
+  end
+
   field :ticket_types, [Types::TicketTypeType], null: false
   field :tickets_available_for_purchase, Boolean, null: false, method: :tickets_available_for_purchase?
   field :timezone_mode, Types::TimezoneModeType, null: false
