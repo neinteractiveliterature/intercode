@@ -1,12 +1,12 @@
 import { ApolloCache, MutationResult } from '@apollo/client';
-import { CmsVariablesQuery } from './queries';
-import { CmsVariablesQueryData, SetCmsVariableMutationData } from './queries.generated';
+import { SetCmsVariableMutationData } from './mutations.generated';
+import { CmsVariablesQueryData, CmsVariablesQueryDocument } from './queries.generated';
 
 export default function updateCmsVariable(
   cache: ApolloCache<unknown>,
   result: MutationResult<SetCmsVariableMutationData>,
 ): void {
-  const data = cache.readQuery<CmsVariablesQueryData>({ query: CmsVariablesQuery });
+  const data = cache.readQuery<CmsVariablesQueryData>({ query: CmsVariablesQueryDocument });
   const cmsVariable = result.data?.setCmsVariable?.cms_variable;
   if (!data || !cmsVariable) {
     return;
@@ -25,7 +25,7 @@ export default function updateCmsVariable(
   }
 
   cache.writeQuery<CmsVariablesQueryData>({
-    query: CmsVariablesQuery,
+    query: CmsVariablesQueryDocument,
     data: {
       ...data,
       cmsParent: {

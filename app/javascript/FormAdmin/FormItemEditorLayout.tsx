@@ -14,11 +14,14 @@ import {
   TypedFormItem,
   findStandardItem,
 } from './FormItemUtils';
-import { PreviewFormItemQuery } from './queries';
 import FormItemInput from '../FormPresenter/ItemInputs/FormItemInput';
 import useAsyncFunction from '../useAsyncFunction';
 import { useUpdateFormItemMutation } from './mutations.generated';
-import { PreviewFormItemQueryData, PreviewFormItemQueryVariables } from './queries.generated';
+import {
+  PreviewFormItemQueryData,
+  PreviewFormItemQueryDocument,
+  PreviewFormItemQueryVariables,
+} from './queries.generated';
 
 function addGeneratedIdsToFormItem(formItem: TypedFormItem): FormEditorFormItem {
   return {
@@ -46,7 +49,7 @@ function FormItemEditorLayout(): JSX.Element {
       }
 
       const response = await apolloClient.query<PreviewFormItemQueryData, PreviewFormItemQueryVariables>({
-        query: PreviewFormItemQuery,
+        query: PreviewFormItemQueryDocument,
         variables: { formId: form.id, formSectionId: currentSection.id, formItem: buildFormItemInput(newFormItem) },
         fetchPolicy: 'no-cache',
       });

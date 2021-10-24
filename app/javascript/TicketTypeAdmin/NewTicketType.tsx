@@ -3,13 +3,12 @@ import { useHistory } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import { AdminTicketTypesQuery } from './queries';
 import buildTicketTypeInput from './buildTicketTypeInput';
 import TicketTypeForm, { EditingTicketType } from './TicketTypeForm';
 import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
 import { useCreateTicketTypeMutation } from './mutations.generated';
-import { AdminTicketTypesQueryData } from './queries.generated';
+import { AdminTicketTypesQueryData, AdminTicketTypesQueryDocument } from './queries.generated';
 
 export type NewTicketTypeProps = {
   ticketName: string;
@@ -32,14 +31,14 @@ function NewTicketType({ ticketName }: NewTicketTypeProps): JSX.Element {
 
   const [mutate] = useCreateTicketTypeMutation({
     update: (proxy, result) => {
-      const data = proxy.readQuery<AdminTicketTypesQueryData>({ query: AdminTicketTypesQuery });
+      const data = proxy.readQuery<AdminTicketTypesQueryData>({ query: AdminTicketTypesQueryDocument });
       const newTicketType = result.data?.createTicketType?.ticket_type;
       if (!data || !newTicketType) {
         return;
       }
 
       proxy.writeQuery<AdminTicketTypesQueryData>({
-        query: AdminTicketTypesQuery,
+        query: AdminTicketTypesQueryDocument,
         data: {
           ...data,
           convention: {

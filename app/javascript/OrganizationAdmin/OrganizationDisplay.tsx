@@ -1,13 +1,12 @@
 import { Link, Redirect } from 'react-router-dom';
 import { titleize } from 'inflected';
-import { ErrorDisplay, useConfirm } from '@neinteractiveliterature/litform';
+import { ErrorDisplay, useConfirm, useDeleteMutationWithReferenceArrayUpdater } from '@neinteractiveliterature/litform';
 
-import { OrganizationAdminOrganizationsQuery } from './queries';
 import PermissionNames from '../../../config/permission_names.json';
 import usePageTitle from '../usePageTitle';
 import { DropdownMenu } from '../UIComponents/DropdownMenu';
 import { LoadSingleValueFromCollectionWrapper } from '../GraphqlLoadingWrappers';
-import { OrganizationAdminOrganizationsQueryData, useOrganizationAdminOrganizationsQuery } from './queries.generated';
+import { useOrganizationAdminOrganizationsQuery } from './queries.generated';
 import { useDeleteOrganizationRoleMutation } from './mutations.generated';
 
 const OrganizationRolePermissions =
@@ -23,43 +22,18 @@ export default LoadSingleValueFromCollectionWrapper(
   (data, id) => data.organizations.find((org) => org.id.toString() === id),
   function OrganizationDisplay({ value: organization }) {
     const confirm = useConfirm();
-    const [mutate] = useDeleteOrganizationRoleMutation();
+    const [deleteOrganizationRole] = useDeleteMutationWithReferenceArrayUpdater(
+      useDeleteOrganizationRoleMutation,
+      organization,
+      'organization_roles',
+      (organizationRole) => ({ id: organizationRole.id }),
+    );
 
     usePageTitle(organization.name);
 
     if (!organization.current_ability_can_manage_access) {
       return <Redirect to="/organizations" />;
     }
-
-    const deleteOrganizationRole = (id: string) =>
-      mutate({
-        variables: { id },
-        update: (proxy) => {
-          const storeData = proxy.readQuery<OrganizationAdminOrganizationsQueryData>({
-            query: OrganizationAdminOrganizationsQuery,
-          });
-          if (!storeData) {
-            return;
-          }
-
-          proxy.writeQuery<OrganizationAdminOrganizationsQueryData>({
-            query: OrganizationAdminOrganizationsQuery,
-            data: {
-              ...storeData,
-              organizations: storeData.organizations.map((org) => {
-                if (org.id === organization.id) {
-                  return {
-                    ...org,
-                    organization_roles: org.organization_roles.filter((role) => role.id !== id),
-                  };
-                }
-
-                return org;
-              }),
-            },
-          });
-        },
-      });
 
     return (
       <>
@@ -109,7 +83,7 @@ export default LoadSingleValueFromCollectionWrapper(
                       onClick={() =>
                         confirm({
                           prompt: `Are you sure you want to delete the role ${organizationRole.name}?`,
-                          action: () => deleteOrganizationRole(organizationRole.id),
+                          action: () => deleteOrganizationRole(organizationRole),
                           renderError: (e) => <ErrorDisplay graphQLError={e} />,
                         })
                       }

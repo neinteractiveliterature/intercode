@@ -6,10 +6,10 @@ import { LoadingIndicator, ErrorDisplay, LoadQueryWrapper } from '@neinteractive
 import AdminNotes from '../BuiltInFormControls/AdminNotes';
 import EventProposalDisplay from './EventProposalDisplay';
 import EventProposalStatusUpdater from './EventProposalStatusUpdater';
-import { EventProposalAdminNotesQuery } from './queries';
 import usePageTitle from '../usePageTitle';
 import {
   EventProposalAdminNotesQueryData,
+  EventProposalAdminNotesQueryDocument,
   useEventProposalAdminNotesQuery,
   useEventProposalQueryWithOwner,
 } from './queries.generated';
@@ -31,14 +31,14 @@ function EventProposalAdminNotes({ eventProposalId }: EventProposalAdminNotesPro
         variables: { eventProposalId, adminNotes },
         update: (cache) => {
           const queryData = cache.readQuery<EventProposalAdminNotesQueryData>({
-            query: EventProposalAdminNotesQuery,
+            query: EventProposalAdminNotesQueryDocument,
             variables: { eventProposalId },
           });
           if (!queryData) {
             return;
           }
           cache.writeQuery<EventProposalAdminNotesQueryData>({
-            query: EventProposalAdminNotesQuery,
+            query: EventProposalAdminNotesQueryDocument,
             variables: { eventProposalId },
             data: {
               ...queryData,

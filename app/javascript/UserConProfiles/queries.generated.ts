@@ -3,7 +3,7 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import { CommonFormFieldsFragmentDoc, CommonFormSectionFieldsFragmentDoc, CommonFormItemFieldsFragmentDoc } from '../Models/commonFormFragments.generated';
-import { AdminOrderFieldsFragmentDoc } from '../Store/orderFields.generated';
+import { AdminOrderFieldsFragmentDoc, OrderEntryFieldsFragmentDoc, CartOrderFieldsFragmentDoc, CouponApplicationFieldsFragmentDoc } from '../Store/orderFields.generated';
 import { AdminProductFieldsFragmentDoc } from '../Store/adminProductFields.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}

@@ -1,0 +1,33 @@
+#import "./queries.graphql"
+
+mutation CreateNavigationItem($navigationItem: CmsNavigationItemInput!) {
+  createCmsNavigationItem(input: { cms_navigation_item: $navigationItem }) {
+    cms_navigation_item {
+      id
+      ...AdminNavigationItemFields
+    }
+  }
+}
+
+mutation UpdateNavigationItem($id: ID!, $navigationItem: CmsNavigationItemInput!) {
+  updateCmsNavigationItem(input: { id: $id, cms_navigation_item: $navigationItem }) {
+    cms_navigation_item {
+      id
+      ...AdminNavigationItemFields
+    }
+  }
+}
+
+mutation DeleteNavigationItem($id: ID!) {
+  deleteCmsNavigationItem(input: { id: $id }) {
+    cms_navigation_item {
+      id
+    }
+  }
+}
+
+mutation SortNavigationItems($sortItems: [UpdateCmsNavigationItemInput!]!) {
+  sortCmsNavigationItems(input: { sort_items: $sortItems }) {
+    clientMutationId
+  }
+}

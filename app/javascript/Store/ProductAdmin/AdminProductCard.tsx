@@ -2,11 +2,10 @@ import classNames from 'classnames';
 import { humanize } from 'inflected';
 import { ErrorDisplay, useConfirm } from '@neinteractiveliterature/litform';
 
-import { AdminProductsQuery } from '../queries';
 import AdminProductVariantsTable from './AdminProductVariantsTable';
 import { describeAdminPricingStructure } from '../describePricingStructure';
 import { useDeleteProductMutation } from '../mutations.generated';
-import { AdminProductsQueryData } from '../queries.generated';
+import { AdminProductsQueryData, AdminProductsQueryDocument } from '../queries.generated';
 import { EditingProductWithRealId } from './EditingProductTypes';
 
 export type AdminProductCardProps = {
@@ -15,11 +14,7 @@ export type AdminProductCardProps = {
   product: EditingProductWithRealId;
 };
 
-function AdminProductCard({
-  currentAbility,
-  startEditing,
-  product,
-}: AdminProductCardProps): JSX.Element {
+function AdminProductCard({ currentAbility, startEditing, product }: AdminProductCardProps): JSX.Element {
   const confirm = useConfirm();
   const [deleteProduct] = useDeleteProductMutation();
 
@@ -30,13 +25,13 @@ function AdminProductCard({
         deleteProduct({
           variables: { id: product.id },
           update: (cache) => {
-            const data = cache.readQuery<AdminProductsQueryData>({ query: AdminProductsQuery });
+            const data = cache.readQuery<AdminProductsQueryData>({ query: AdminProductsQueryDocument });
             if (!data) {
               return;
             }
 
             cache.writeQuery<AdminProductsQueryData>({
-              query: AdminProductsQuery,
+              query: AdminProductsQueryDocument,
               data: {
                 ...data,
                 convention: {
@@ -103,15 +98,11 @@ function AdminProductCard({
 
       <div className="card-body">
         <div className="d-lg-flex justify-content-lg-start align-items-lg-start">
-          {product.image_url && (
-            <img src={product.image_url} style={{ maxWidth: '200px' }} alt={product.name} />
-          )}
+          {product.image_url && <img src={product.image_url} style={{ maxWidth: '200px' }} alt={product.name} />}
 
           <div className="ml-lg-4 col-lg">
             <p>
-              <strong>
-                Base price: {describeAdminPricingStructure(product.pricing_structure)}
-              </strong>
+              <strong>Base price: {describeAdminPricingStructure(product.pricing_structure)}</strong>
             </p>
             {/* eslint-disable-next-line react/no-danger */}
             <div dangerouslySetInnerHTML={{ __html: product.description_html ?? '' }} />

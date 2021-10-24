@@ -2,8 +2,7 @@
 import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
-import { UserConProfileFieldsFragmentDoc } from './queries.generated';
-import { UserConProfileAdminTicketFieldsFragmentDoc } from './queries.generated';
+import { UserConProfileFieldsFragmentDoc, UserConProfileAdminTicketFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
 export type CreateUserConProfileMutationVariables = Types.Exact<{

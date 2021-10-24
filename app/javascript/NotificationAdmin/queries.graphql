@@ -1,0 +1,19 @@
+fragment NotificationTemplateFields on NotificationTemplate {
+  id
+  event_key
+  subject
+  body_html
+  body_text
+  body_sms
+}
+
+query NotificationAdminQuery {
+  convention: conventionByRequestHost {
+    id
+
+    notification_templates {
+      id
+      ...NotificationTemplateFields
+    }
+  }
+}

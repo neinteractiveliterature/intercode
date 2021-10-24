@@ -3,7 +3,7 @@ import * as Types from '../../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import { MySignupFieldsFragmentDoc, EventPageRunFieldsFragmentDoc, MySignupRequestFieldsFragmentDoc } from './queries.generated';
-import { RunBasicSignupDataFragmentDoc } from '../queries.generated';
+import { RunBasicSignupDataFragmentDoc, CommonConventionDataFragmentDoc } from '../queries.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
 export type CreateMySignupMutationVariables = Types.Exact<{

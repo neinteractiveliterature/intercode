@@ -1,0 +1,18 @@
+fragment RoomAdminRoomFields on Room {
+  id
+  name
+
+  runs {
+    id
+  }
+}
+
+query RoomsAdminQuery {
+  convention: conventionByRequestHost {
+    id
+    rooms {
+      id
+      ...RoomAdminRoomFields
+    }
+  }
+}

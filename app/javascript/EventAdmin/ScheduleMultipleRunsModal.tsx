@@ -8,7 +8,6 @@ import ConventionDaySelect from '../BuiltInFormControls/ConventionDaySelect';
 import TimeSelect from '../BuiltInFormControls/TimeSelect';
 import Timespan from '../Timespan';
 import { timespanFromConvention, timespanFromRun, getConventionDayTimespans } from '../TimespanUtils';
-import { EventAdminEventsQuery } from './queries';
 import useAsyncFunction from '../useAsyncFunction';
 import ProspectiveRunSchedule from './ProspectiveRunSchedule';
 import RoomSelect from '../BuiltInFormControls/RoomSelect';
@@ -19,6 +18,7 @@ import { FuzzyTime } from '../FormPresenter/TimeblockTypes';
 import {
   ConventionFieldsFragment,
   EventAdminEventsQueryData,
+  EventAdminEventsQueryDocument,
   EventFieldsFragment,
   RoomFieldsFragment,
 } from './queries.generated';
@@ -132,14 +132,14 @@ function ScheduleMultipleRunsModal({
       },
       update: (store, { data }) => {
         const eventsData = store.readQuery<EventAdminEventsQueryData>({
-          query: EventAdminEventsQuery,
+          query: EventAdminEventsQueryDocument,
         });
         const newRuns = data?.createMultipleRuns?.runs;
         if (!eventsData || !newRuns) {
           return;
         }
         store.writeQuery<EventAdminEventsQueryData>({
-          query: EventAdminEventsQuery,
+          query: EventAdminEventsQueryDocument,
           data: {
             ...eventsData,
             convention: {

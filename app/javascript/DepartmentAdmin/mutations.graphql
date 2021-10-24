@@ -1,0 +1,25 @@
+#import "./queries.graphql"
+
+mutation CreateDepartment($department: DepartmentInput!) {
+  createDepartment(input: { department: $department }) {
+    department {
+      id
+      ...AdminDepartmentFields
+    }
+  }
+}
+
+mutation UpdateDepartment($id: ID!, $department: DepartmentInput!) {
+  updateDepartment(input: { id: $id, department: $department }) {
+    department {
+      id
+      ...AdminDepartmentFields
+    }
+  }
+}
+
+mutation DeleteDepartment($id: ID!) {
+  deleteDepartment(input: { id: $id }) {
+    clientMutationId
+  }
+}

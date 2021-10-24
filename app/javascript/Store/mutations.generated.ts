@@ -2,10 +2,8 @@
 import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
-import { AdminOrderFieldsFragmentDoc } from './orderFields.generated';
+import { AdminOrderFieldsFragmentDoc, OrderEntryFieldsFragmentDoc, CartOrderFieldsFragmentDoc, CouponApplicationFieldsFragmentDoc } from './orderFields.generated';
 import { AdminProductFieldsFragmentDoc } from './adminProductFields.generated';
-import { OrderEntryFieldsFragmentDoc } from './orderFields.generated';
-import { CartOrderFieldsFragmentDoc } from './orderFields.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
 export type MarkOrderPaidMutationVariables = Types.Exact<{

@@ -1,0 +1,9 @@
+query CmsAdminBaseQuery {
+  convention: conventionByRequestHostIfPresent {
+    id
+  }
+
+  currentAbility {
+    can_create_cms_navigation_items
+  }
+}

@@ -2,9 +2,7 @@
 import * as Types from '../../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
-import { TeamMemberFieldsFragmentDoc } from './queries.generated';
-import { TeamMemberFieldsWithoutPersonalInfoFragmentDoc } from './queries.generated';
-import { TeamMemberTicketFieldsFragmentDoc } from './queries.generated';
+import { TeamMemberFieldsFragmentDoc, TeamMemberTicketFieldsFragmentDoc, TeamMemberFieldsWithoutPersonalInfoFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
 export type CreateTeamMemberMutationVariables = Types.Exact<{

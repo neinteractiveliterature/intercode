@@ -7,10 +7,10 @@ import { useModal, useUniqueId, MultipleChoiceInput, ErrorDisplay } from '@neint
 
 import { FormItemEditorContext, FormEditorContext } from './FormEditorContexts';
 import CommonQuestionFields from './ItemEditors/CommonQuestionFields';
-import { FormEditorQuery } from './queries';
 import useCollapse from '../NavigationBar/useCollapse';
 import useAsyncFunction from '../useAsyncFunction';
 import { useMoveFormItemMutation } from './mutations.generated';
+import { FormEditorQueryDocument } from './queries.generated';
 
 function StandardItemMetadata() {
   const { formType } = useContext(FormEditorContext);
@@ -92,7 +92,7 @@ function MoveFormItemModal({ visible, close }: MoveFormItemModalProps) {
         id: formItem.id,
         formSectionId: destinationSectionId,
       },
-      refetchQueries: [{ query: FormEditorQuery, variables: { id: form.id } }],
+      refetchQueries: [{ query: FormEditorQueryDocument, variables: { id: form.id } }],
     });
     history.replace(`/admin_forms/${form.id}/edit/section/${destinationSectionId}/item/${formItem.id}`);
     close();

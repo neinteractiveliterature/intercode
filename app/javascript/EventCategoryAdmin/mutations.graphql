@@ -1,0 +1,25 @@
+#import "./queries.graphql"
+
+mutation CreateEventCategory($eventCategory: EventCategoryInput!) {
+  createEventCategory(input: { event_category: $eventCategory }) {
+    event_category {
+      id
+      ...EventCategoryFields
+    }
+  }
+}
+
+mutation UpdateEventCategory($id: ID!, $eventCategory: EventCategoryInput!) {
+  updateEventCategory(input: { id: $id, event_category: $eventCategory }) {
+    event_category {
+      id
+      ...EventCategoryFields
+    }
+  }
+}
+
+mutation DeleteEventCategory($id: ID!) {
+  deleteEventCategory(input: { id: $id }) {
+    clientMutationId
+  }
+}

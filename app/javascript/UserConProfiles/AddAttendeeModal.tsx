@@ -5,11 +5,10 @@ import { ApolloError, useApolloClient } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import { AddAttendeeUsersQuery } from './queries';
 import UserSelect from '../BuiltInFormControls/UserSelect';
 import useAsyncFunction from '../useAsyncFunction';
 import { useCreateUserConProfileMutation } from './mutations.generated';
-import { AddAttendeeUsersQueryData } from './queries.generated';
+import { AddAttendeeUsersQueryData, AddAttendeeUsersQueryDocument } from './queries.generated';
 import { FormResponse } from '../FormPresenter/useFormResponse';
 
 export type AddAttendeeModalProps = {
@@ -63,9 +62,7 @@ function AddAttendeeModal({ conventionName, visible }: AddAttendeeModalProps): J
 
   return (
     <Modal visible={visible} dialogClassName="modal-lg">
-      <div className="modal-header">
-        {t('admin.userConProfiles.addAttendee.header', 'Add attendee')}
-      </div>
+      <div className="modal-header">{t('admin.userConProfiles.addAttendee.header', 'Add attendee')}</div>
 
       <div className="modal-body">
         <p>
@@ -80,7 +77,7 @@ function AddAttendeeModal({ conventionName, visible }: AddAttendeeModalProps): J
         <UserSelect<AddAttendeeUsersQueryData>
           value={user}
           onChange={userSelected}
-          usersQuery={AddAttendeeUsersQuery}
+          usersQuery={AddAttendeeUsersQueryDocument}
         />
 
         {user && (
@@ -101,12 +98,7 @@ function AddAttendeeModal({ conventionName, visible }: AddAttendeeModalProps): J
         <button className="btn btn-secondary" type="button" onClick={close} disabled={inProgress}>
           {t('buttons.cancel', 'Cancel')}
         </button>
-        <button
-          className="btn btn-primary"
-          type="button"
-          onClick={createClicked}
-          disabled={user == null || inProgress}
-        >
+        <button className="btn btn-primary" type="button" onClick={createClicked} disabled={user == null || inProgress}>
           {inProgress ? (
             <LoadingIndicator iconSet="bootstrap-icons" />
           ) : (

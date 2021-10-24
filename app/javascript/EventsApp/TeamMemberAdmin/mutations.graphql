@@ -1,0 +1,37 @@
+#import "./queries.graphql"
+
+mutation CreateTeamMember($input: CreateTeamMemberInput!) {
+  createTeamMember(input: $input) {
+    team_member {
+      id
+      ...TeamMemberFields
+    }
+  }
+}
+
+mutation DeleteTeamMember($input: DeleteTeamMemberInput!) {
+  deleteTeamMember(input: $input) {
+    team_member {
+      id
+      ...TeamMemberFieldsWithoutPersonalInfo
+    }
+  }
+}
+
+mutation UpdateTeamMember($input: UpdateTeamMemberInput!) {
+  updateTeamMember(input: $input) {
+    team_member {
+      id
+      ...TeamMemberFieldsWithoutPersonalInfo
+    }
+  }
+}
+
+mutation ProvideEventTicket($eventId: ID!, $userConProfileId: ID!, $ticketTypeId: ID!) {
+  provideEventTicket(input: { eventId: $eventId, userConProfileId: $userConProfileId, ticketTypeId: $ticketTypeId }) {
+    ticket {
+      id
+      ...TeamMemberTicketFields
+    }
+  }
+}

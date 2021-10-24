@@ -1,0 +1,17 @@
+query AccountFormContentQuery {
+  accountFormContentHtml
+}
+
+query EditUserQuery {
+  convention: conventionByRequestHostIfPresent {
+    id
+    name
+  }
+
+  currentUser {
+    id
+    first_name
+    last_name
+    email
+  }
+}

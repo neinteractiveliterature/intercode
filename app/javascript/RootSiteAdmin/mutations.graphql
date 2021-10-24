@@ -1,0 +1,12 @@
+#import "./queries.graphql"
+
+mutation UpdateRootSite($siteName: String, $defaultLayoutId: ID, $rootPageId: ID) {
+  updateRootSite(
+    input: { root_site: { site_name: $siteName, defaultLayoutId: $defaultLayoutId, rootPageId: $rootPageId } }
+  ) {
+    root_site {
+      id
+      ...RootSiteFields
+    }
+  }
+}
