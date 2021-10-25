@@ -18,6 +18,7 @@ fragment ConventionAdminConventionFields on Convention {
   hidden
   maximum_tickets
   ticket_name
+  ticketNamePlural
   clickwrap_agreement
   ticket_mode
   site_mode

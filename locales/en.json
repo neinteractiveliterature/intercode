@@ -34,19 +34,55 @@
         "en": "English",
         "es": "Spanish (work in progress, not ready to use yet)",
         "label": "Site language"
-      }
+      },
+      "maximumTicketsLabel": "Maximum {{ ticketNamePlural }}",
+      "stripeAccountActive": "{{ conventionName }} is connected to a Stripe account and is able to sell {{ ticketNamePlural }} and/or products.",
+      "stripeAccountContinue": "Continue Stripe account setup for {{ conventionName }}",
+      "stripeAccountDisplayName": "Display name",
+      "stripeAccountEmail": "Email",
+      "stripeAccountId": "Account ID",
+      "stripeAccountPending": "{{ conventionName }} is connected to a Stripe account but that account is still in the setup process.",
+      "stripeAccountRequired": "In order to sell {{ ticketNamePlural }} and/or products, a Stripe account is required.",
+      "stripeAccountSetup": "Set up a Stripe account for {{ conventionName }}",
+      "ticketModeDisabled": "Convention does not sell {{ ticketNamePlural }}",
+      "ticketModeLabel": "{{ ticketName, capitalize }} sales",
+      "ticketModeRequiredForSignup": "{{ ticketNamePlural, capitalize }} are sold and required for event signups",
+      "ticketNameLabel": "Name for “ticket” at this convention"
     },
     "eventCategories": {
+      "autogenerateColorsLabel": "Generate signed up and full colors based on default color",
       "cannotDeleteCategoryWithEvents": "This event category cannot be deleted because there are events in it. To delete it, first either drop these events or change their categories.",
+      "canProvideTicketsLabel": "Can provide {{ ticketNamePlural }}?",
+      "colorsHeader": "Colors",
       "deleteConfirmation": "Are you sure you want to delete this event category?",
       "deleteLabel": "Delete event category",
+      "departmentLabel": "Department",
       "eventCount_one": "{{ count }} event",
-      "eventCount_other": "{{ count }} events"
+      "eventCount_other": "{{ count }} events",
+      "eventFormLabel": "Event form (required)",
+      "eventProposalFormLabel": "Event proposal form (optional; if blank this event category cannot be proposed)",
+      "nameLabel": "Name",
+      "proposalDescriptionHelpText": "When attendees propose an event and select this category, the proposal dialog will show\n          the text you write here.  Use this to describe what they can expect after proposing the\n          event.  For example: ”Your proposal will go to the Board Game Proposals Committee.  You‘ll\n          hear back within a week or two.“",
+      "proposalDescriptionLabel": "Proposal dialog description",
+      "schedulingUILabel": "Scheduling UI",
+      "schedulingUIRecurring": "Recurring",
+      "schedulingUIRegular": "Regular (multi-run)",
+      "schedulingUISingleRun": "Single run",
+      "teamMemberNameHelpText": "This is the word the site will use to refer to team members of this event, e.g. “GM”, “facilitator”, etc.",
+      "teamMemberNameLabel": "Team member name"
     },
     "eventProposals": {
       "edit": {
         "exitButton": "Return to proposal"
       }
+    },
+    "events": {
+      "dropEventConfirmation": "Are you sure you want to drop this event?",
+      "durationColumn": "Duration",
+      "eventListPageTitle": "{{ categoryName, capitalize }} events",
+      "newEventLabel": "Create new {{ categoryName }} event",
+      "runsColumn": "Runs",
+      "titleColumn": "Title"
     },
     "rooms": {
       "addRoomLabel": "Add room",

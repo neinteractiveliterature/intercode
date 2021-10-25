@@ -87,6 +87,9 @@ const i18nInitPromise = i18nObject.init(initOptions).then(() => {
     (value: DateTime, lng: string, options: { format: DateTimeFormatKey }) =>
       formatLCM(value, i18nObject.t(`dateTimeFormats.${options.format}`, { lng })),
   );
+  i18nObject.services.formatter?.add('capitalize', (value: string) =>
+    value === '' ? '' : `${value[0].toUpperCase()}${value.slice(1).toLowerCase()}`,
+  );
   ready = true;
 });
 

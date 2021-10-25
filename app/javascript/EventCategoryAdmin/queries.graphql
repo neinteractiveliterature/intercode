@@ -35,7 +35,7 @@ query EventCategoryAdminQuery {
   convention: conventionByRequestHost {
     id
     name
-    ticket_name
+    ticketNamePlural
     ticket_mode
 
     departments {
