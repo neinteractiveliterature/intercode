@@ -62,13 +62,16 @@ const UnwrappedNonCMSPageComponents = {
   UsersAdmin: () => import(/* webpackChunkName: "users-admin" */ './Users/UsersAdmin'),
 };
 
-const NonCMSPageComponents = {
-  ...Object.fromEntries(
+const NonCMSPageComponents: Record<
+  keyof typeof UnwrappedNonCMSPageComponents | 'WrappedClickwrapAgreement',
+  React.ComponentType
+> = {
+  ...(Object.fromEntries(
     Object.entries(UnwrappedNonCMSPageComponents).map(([name, component]) => [
       name,
       NonCMSPageWrapper(lazyWithBundleHashCheck(component)),
     ]),
-  ),
+  ) as Record<keyof typeof UnwrappedNonCMSPageComponents, React.ComponentType>),
   WrappedClickwrapAgreement: NonCMSPageWrapper(ClickwrapAgreement),
 };
 

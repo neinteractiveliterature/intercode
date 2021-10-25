@@ -1,5 +1,4 @@
 import { ReactNode } from 'react';
-import flatMap from 'lodash/flatMap';
 
 export function joinReact(array: ReactNode[], separator: ReactNode): ReactNode[] {
   const accumulator = (prev: ReactNode[] | null, curr: ReactNode) =>
@@ -22,5 +21,5 @@ export function arrayToSentenceReact(array: ReactNode[]): ReactNode[] {
   const head = array.slice(0, -1);
   const tail = array[array.length - 1];
 
-  return [...flatMap(head, (item) => [item, ', ']), ' and ', tail];
+  return [...head.flatMap((item) => [item, ', ']), ' and ', tail];
 }

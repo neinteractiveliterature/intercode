@@ -1,5 +1,5 @@
+import { notEmpty } from '@neinteractiveliterature/litform/lib/ValueUtils';
 import { useEffect, useContext } from 'react';
-import compact from 'lodash/compact';
 
 import AppRootContext from './AppRootContext';
 
@@ -9,7 +9,7 @@ export default function usePageTitle(title?: string | null): void {
   useEffect(() => {
     if (title != null) {
       const titleParts = [title === '' ? null : title, conventionName || rootSiteName];
-      document.title = compact(titleParts).join(' - ');
+      document.title = titleParts.filter(notEmpty).join(' - ');
     }
   }, [conventionName, title, rootSiteName]);
 }
