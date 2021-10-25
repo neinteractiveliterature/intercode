@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import { pluralize } from 'inflected';
 import { ErrorDisplay, useConfirm, LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
@@ -15,6 +14,7 @@ import {
 } from './queries.generated';
 import { useDropEventMutation } from './mutations.generated';
 import { useFormatRunTimespan } from '../EventsApp/runTimeFormatting';
+import { useTranslation } from 'react-i18next';
 
 export type SingleRunEventAdminListProps = {
   eventCategoryId: string;
@@ -27,11 +27,16 @@ export default LoadQueryWrapper<
 >(useEventAdminEventsQuery, function SingleRunEventAdminList({ eventCategoryId, data }) {
   const [eventCategory, sortedEvents] = useEventAdminCategory(data, eventCategoryId);
   const formatRunTimespan = useFormatRunTimespan();
+  const { t } = useTranslation();
 
   const [drop] = useDropEventMutation();
   const confirm = useConfirm();
 
-  usePageTitle(pluralize(eventCategory?.name ?? ''));
+  usePageTitle(
+    t('admin.events.eventListPageTitle', '{{ categoryName, capitalize }} events', {
+      categoryName: eventCategory?.name,
+    }),
+  );
 
   if (!eventCategory) {
     return <></>;
@@ -57,14 +62,14 @@ export default LoadQueryWrapper<
         <td>{timespan && formatRunTimespan(timespan, { formatType: 'short' })}</td>
         <td>
           <Link className="btn btn-secondary btn-sm" to={`/admin_events/${event.id}/edit`}>
-            Edit
+            {t('buttons.edit', 'Edit')}
           </Link>{' '}
           <button
             type="button"
             className="btn btn-outline-danger btn-sm"
             onClick={() =>
               confirm({
-                prompt: 'Are you sure you want to drop this event?',
+                prompt: t('admin.events.dropEventConfirmation', 'Are you sure you want to drop this event?'),
                 action: () => drop({ variables: { input: { id: event.id } } }),
                 renderError: (e) => <ErrorDisplay graphQLError={e} />,
               })
@@ -80,8 +85,9 @@ export default LoadQueryWrapper<
   return (
     <div>
       <Link className="btn btn-primary my-4" to={`${buildEventCategoryUrl(eventCategory)}/new`}>
-        {'Create new '}
-        {eventCategory.name.toLowerCase()}
+        {t('admin.events.newEventLabel', 'Create new {{ categoryName }} event', {
+          categoryName: eventCategory?.name,
+        })}
       </Link>
       <table className="table table-striped">
         <tbody>{eventRows}</tbody>

@@ -9,7 +9,7 @@ export type EventCategoryFieldsFragment = { __typename: 'EventCategory', id: str
 export type EventCategoryAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type EventCategoryAdminQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, ticket_name: string, ticket_mode: Types.TicketMode, departments: Array<{ __typename: 'Department', id: string, name: string }>, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, team_member_name: string, proposal_description?: string | null | undefined, scheduling_ui: Types.SchedulingUi, default_color?: string | null | undefined, signed_up_color?: string | null | undefined, full_color?: string | null | undefined, can_provide_tickets: boolean, events_paginated: { __typename: 'EventsPagination', total_entries: number }, department?: { __typename: 'Department', id: string, name: string } | null | undefined, event_form: { __typename: 'Form', id: string, title: string, form_type: Types.FormType }, event_proposal_form?: { __typename: 'Form', id: string, title: string, form_type: Types.FormType } | null | undefined }>, forms: Array<{ __typename: 'Form', id: string, title: string, form_type: Types.FormType }> } };
+export type EventCategoryAdminQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, ticketNamePlural: string, ticket_mode: Types.TicketMode, departments: Array<{ __typename: 'Department', id: string, name: string }>, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, team_member_name: string, proposal_description?: string | null | undefined, scheduling_ui: Types.SchedulingUi, default_color?: string | null | undefined, signed_up_color?: string | null | undefined, full_color?: string | null | undefined, can_provide_tickets: boolean, events_paginated: { __typename: 'EventsPagination', total_entries: number }, department?: { __typename: 'Department', id: string, name: string } | null | undefined, event_form: { __typename: 'Form', id: string, title: string, form_type: Types.FormType }, event_proposal_form?: { __typename: 'Form', id: string, title: string, form_type: Types.FormType } | null | undefined }>, forms: Array<{ __typename: 'Form', id: string, title: string, form_type: Types.FormType }> } };
 
 export const EventCategoryFieldsFragmentDoc = gql`
     fragment EventCategoryFields on EventCategory {
@@ -46,7 +46,7 @@ export const EventCategoryAdminQueryDocument = gql`
   convention: conventionByRequestHost {
     id
     name
-    ticket_name
+    ticketNamePlural
     ticket_mode
     departments {
       id

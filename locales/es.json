@@ -34,19 +34,55 @@
         "en": "Inglés",
         "es": "Español (trabajo en progreso, no al 100%)",
         "label": "Idioma de la página"
-      }
+      },
+      "maximumTicketsLabel": "",
+      "stripeAccountActive": "",
+      "stripeAccountContinue": "",
+      "stripeAccountDisplayName": "",
+      "stripeAccountEmail": "",
+      "stripeAccountId": "",
+      "stripeAccountPending": "",
+      "stripeAccountRequired": "",
+      "stripeAccountSetup": "",
+      "ticketModeDisabled": "",
+      "ticketModeLabel": "",
+      "ticketModeRequiredForSignup": "",
+      "ticketNameLabel": ""
     },
     "eventCategories": {
+      "autogenerateColorsLabel": "",
       "cannotDeleteCategoryWithEvents": "",
+      "canProvideTicketsLabel": "",
+      "colorsHeader": "",
       "deleteConfirmation": "",
       "deleteLabel": "",
+      "departmentLabel": "",
       "eventCount_one": "",
-      "eventCount_other": ""
+      "eventCount_other": "",
+      "eventFormLabel": "",
+      "eventProposalFormLabel": "",
+      "nameLabel": "",
+      "proposalDescriptionHelpText": "",
+      "proposalDescriptionLabel": "",
+      "schedulingUILabel": "",
+      "schedulingUIRecurring": "",
+      "schedulingUIRegular": "",
+      "schedulingUISingleRun": "",
+      "teamMemberNameHelpText": "",
+      "teamMemberNameLabel": ""
     },
     "eventProposals": {
       "edit": {
         "exitButton": "Volver a la propuesta"
       }
+    },
+    "events": {
+      "dropEventConfirmation": "",
+      "durationColumn": "",
+      "eventListPageTitle": "",
+      "newEventLabel": "",
+      "runsColumn": "",
+      "titleColumn": ""
     },
     "rooms": {
       "addRoomLabel": "",
