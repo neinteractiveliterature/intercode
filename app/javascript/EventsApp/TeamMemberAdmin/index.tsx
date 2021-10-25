@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 import { Switch, Route, useRouteMatch } from 'react-router-dom';
-import { pluralize } from 'inflected';
 import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 import snakeCase from 'lodash/snakeCase';
 
@@ -55,7 +54,7 @@ function TeamMemberAdmin({ eventId, eventPath }: TeamMemberAdminProps): JSX.Elem
             matchProps={{ path: `${eventPath}/team_members`, exact: true }}
             to={`${eventPath}/team_members`}
           >
-            {pluralize(humanize(snakeCase(event.event_category.team_member_name)))}
+            {humanize(snakeCase(event.event_category.teamMemberNamePlural))}
           </RouteActivatedBreadcrumbItem>
           <Route path={`${eventPath}/team_members/new`}>
             <BreadcrumbItem active to={`${eventPath}/team_members/new`}>

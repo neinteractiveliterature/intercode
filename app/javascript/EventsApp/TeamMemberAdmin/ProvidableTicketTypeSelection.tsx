@@ -1,7 +1,6 @@
 import * as React from 'react';
 import sumBy from 'lodash/sumBy';
 import { useTranslation } from 'react-i18next';
-import { pluralize } from 'inflected';
 import { MultipleChoiceInput } from '@neinteractiveliterature/litform';
 
 import { getProvidableTicketTypes, getRemainingTicketCountByType } from './ProvideTicketUtils';
@@ -9,7 +8,10 @@ import { TeamMembersQueryData } from './queries.generated';
 import humanize from '../../humanize';
 
 export type ProvidableTicketTypeSelectionProps = {
-  convention: Pick<NonNullable<TeamMembersQueryData['convention']>, 'ticket_types' | 'ticket_name'> & {
+  convention: Pick<
+    NonNullable<TeamMembersQueryData['convention']>,
+    'ticket_types' | 'ticket_name' | 'ticketNamePlural'
+  > & {
     event: Pick<TeamMembersQueryData['convention']['event'], 'title'> & {
       provided_tickets: Pick<TeamMembersQueryData['convention']['event']['provided_tickets'][0], 'ticket_type'>[];
     };
@@ -36,7 +38,7 @@ function ProvidableTicketTypeSelection({
     {
       eventTitle: convention.event.title,
       count: totalRemaining,
-      ticketName: totalRemaining === 1 ? convention.ticket_name : pluralize(convention.ticket_name),
+      ticketName: totalRemaining === 1 ? convention.ticket_name : convention.ticketNamePlural,
     },
   );
 

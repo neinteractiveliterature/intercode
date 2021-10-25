@@ -17,7 +17,7 @@ export default LoadSingleValueFromCollectionWrapper(
   function EditTicketTypeForm({
     value: initialTicketType,
     data: {
-      convention: { ticket_name: ticketName },
+      convention: { ticket_name: ticketName, ticketNamePlural },
     },
   }) {
     const history = useHistory();
@@ -45,7 +45,7 @@ export default LoadSingleValueFromCollectionWrapper(
           {ticketType.name}
           &rdquo;
         </h1>
-        <TicketTypeForm ticketType={ticketType} ticketName={ticketName} onChange={setTicketType} />
+        <TicketTypeForm ticketType={ticketType} ticketNamePlural={ticketNamePlural} onChange={setTicketType} />
         <button type="button" className="btn btn-primary" onClick={saveClicked} disabled={inProgress}>
           Save changes
         </button>

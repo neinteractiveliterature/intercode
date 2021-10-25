@@ -1,11 +1,11 @@
 import { useState, useCallback } from 'react';
-import { pluralize } from 'inflected';
 import { useLocation } from 'react-router-dom';
 import { ChoiceSet } from '@neinteractiveliterature/litform';
 
 import { EventListEventsQueryData } from './queries.generated';
 import { DropdownMenu } from '../../UIComponents/DropdownMenu';
 import { locationsEqualWithSearchParamsTransform } from '../../URLUtils';
+import { useTranslation } from 'react-i18next';
 
 type ConventionType = NonNullable<EventListEventsQueryData['convention']>;
 type LocationType = ReturnType<typeof useLocation>;
@@ -30,12 +30,17 @@ function EventListCategoryDropdown({
 }: EventListCategoryDropdownProps): JSX.Element {
   const [interacted, setInteracted] = useState(false);
   const currentCategories = eventCategories.filter((category) => (value || []).includes(category.id));
+  const { t } = useTranslation();
 
-  let categoryDescription = 'All event types';
+  let categoryDescription = t('events.categoryDropdown.allCategoriesLabel', 'All event types');
   if (currentCategories.length === 1) {
-    categoryDescription = pluralize(currentCategories[0].name);
+    categoryDescription = t('events.categoryDropdown.singleCategoryLabel', '{{ categoryName }} events', {
+      categoryName: currentCategories[0].name,
+    });
   } else if (currentCategories.length > 1 && currentCategories.length < eventCategories.length) {
-    categoryDescription = `${currentCategories.length} event types`;
+    categoryDescription = t('events.categoryDropdown.multipleCategoriesLabel', '{{ count }} event types', {
+      count: currentCategories.length,
+    });
   }
 
   const onChange = useCallback(
@@ -78,10 +83,10 @@ function EventListCategoryDropdown({
           type="button"
           onClick={() => onChange(sortedCategories.map((c) => c.id))}
         >
-          Select all
+          {t('buttons.selectAll', 'Select all')}
         </button>
         <button className="btn btn-link btn-sm" type="button" onClick={() => onChange([])}>
-          Select none
+          {t('buttons.selectNone', 'Select none')}
         </button>
       </div>
     </DropdownMenu>

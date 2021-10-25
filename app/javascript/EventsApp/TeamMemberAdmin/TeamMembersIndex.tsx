@@ -1,5 +1,4 @@
 import { useMemo } from 'react';
-import { pluralize } from 'inflected';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
@@ -112,8 +111,7 @@ function TeamMembersIndex({ eventId, eventPath }: TeamMembersIndexProps): JSX.El
   const modal = useModal<{ teamMember: TeamMembersQueryData['convention']['event']['team_members'][0] }>();
 
   const titleizedTeamMemberName = useMemo(
-    () =>
-      error || loading || !data ? null : pluralize(capitalize(data.convention.event.event_category.team_member_name)),
+    () => (error || loading || !data ? null : capitalize(data.convention.event.event_category.teamMemberNamePlural)),
     [error, loading, data],
   );
 

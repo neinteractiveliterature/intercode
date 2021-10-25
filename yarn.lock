@@ -5160,13 +5160,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/inflected@npm:1.1.29":
-  version: 1.1.29
-  resolution: "@types/inflected@npm:1.1.29"
-  checksum: 72a0976aba574c14e817f9358d62ffed923e3608b828ac7fa17018f2e446f32b64f3dcf7179229af01ec4a19f98aa964896813c8f3a2d86099b777ca086763f9
-  languageName: node
-  linkType: hard
-
 "@types/istanbul-lib-coverage@npm:*, @types/istanbul-lib-coverage@npm:^2.0.0, @types/istanbul-lib-coverage@npm:^2.0.1":
   version: 2.0.3
   resolution: "@types/istanbul-lib-coverage@npm:2.0.3"
@@ -12823,13 +12816,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"inflected@npm:2.1.0":
-  version: 2.1.0
-  resolution: "inflected@npm:2.1.0"
-  checksum: 1e3fb2d24ec6c774977dd5ed884c6097b6525f66edecfdca0845ab4023d35f02af1057de50cd69cdc5829d0bd5ba69fd7fb41d4d8abdf85ee243bf2bbf65995d
-  languageName: node
-  linkType: hard
-
 "inflight@npm:^1.0.4":
   version: 1.0.6
   resolution: "inflight@npm:1.0.6"
@@ -19804,7 +19790,6 @@ resolve@^2.0.0-next.3:
     "@types/events": 3.0.0
     "@types/file-saver": 2.0.3
     "@types/history": 4.7.9
-    "@types/inflected": 1.1.29
     "@types/jest": 27.0.2
     "@types/js-search": 1.4.0
     "@types/lodash": 4.14.176
@@ -19893,7 +19878,6 @@ resolve@^2.0.0-next.3:
     hypernova: 2.5.0
     i18next: 21.3.3
     i18next-parser: 5.0.0
-    inflected: 2.1.0
     jest: 27.3.1
     jest-html-reporter: 3.4.1
     jest-prop-type-error: 1.1.0

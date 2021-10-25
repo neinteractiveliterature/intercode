@@ -1,6 +1,5 @@
 import { useContext, useRef, useState } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
-import { pluralize } from 'inflected';
 import { ApolloError } from '@apollo/client';
 import { Modal } from 'react-bootstrap4-modal';
 import { useModal, useUniqueId, MultipleChoiceInput, ErrorDisplay } from '@neinteractiveliterature/litform';
@@ -27,7 +26,7 @@ function StandardItemMetadata() {
         <i className="bi-wrench" /> <strong>{standardItem.description || humanize(standardItem.identifier)}</strong>
       </div>
       <div className="me-2">
-        <small>Standard item for {pluralize(formType.description)}</small>
+        <small>Standard item for {formType.description} forms</small>
       </div>
     </>
   );

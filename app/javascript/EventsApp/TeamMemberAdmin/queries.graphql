@@ -84,6 +84,7 @@ query TeamMembersQuery($eventId: ID!) {
         id
         can_provide_tickets
         team_member_name
+        teamMemberNamePlural
       }
 
       provided_tickets {
@@ -105,6 +106,7 @@ query TeamMembersQuery($eventId: ID!) {
     }
 
     ticket_name
+    ticketNamePlural
   }
 }
 

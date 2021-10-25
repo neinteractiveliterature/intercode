@@ -12,9 +12,10 @@ import { AdminTicketTypesQueryData, AdminTicketTypesQueryDocument } from './quer
 
 export type NewTicketTypeProps = {
   ticketName: string;
+  ticketNamePlural: string;
 };
 
-function NewTicketType({ ticketName }: NewTicketTypeProps): JSX.Element {
+function NewTicketType({ ticketName, ticketNamePlural }: NewTicketTypeProps): JSX.Element {
   const history = useHistory();
   usePageTitle(`New ${ticketName} type`);
 
@@ -66,7 +67,7 @@ function NewTicketType({ ticketName }: NewTicketTypeProps): JSX.Element {
   return (
     <div>
       <h1 className="mb-4">New {ticketName} type</h1>
-      <TicketTypeForm ticketType={ticketType} ticketName={ticketName} onChange={setTicketType} />
+      <TicketTypeForm ticketType={ticketType} ticketNamePlural={ticketNamePlural} onChange={setTicketType} />
       <button type="button" className="btn btn-primary" onClick={saveClicked} disabled={inProgress}>
         Save
       </button>
