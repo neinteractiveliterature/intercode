@@ -1,7 +1,6 @@
 import { useState, useContext } from 'react';
 import * as React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
-import flatMap from 'lodash/flatMap';
 import { BootstrapFormInput, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import AuthenticationModalContext from './AuthenticationModalContext';
@@ -14,9 +13,9 @@ function parseRailsErrorHash(errors: Record<string, string[]> | undefined) {
     return undefined;
   }
 
-  return flatMap(Object.entries(errors), ([key, keyErrors]) =>
-    keyErrors.map((keyError) => `${humanize(key)} ${keyError}`),
-  ).join(', ');
+  return Object.entries(errors)
+    .flatMap(([key, keyErrors]) => keyErrors.map((keyError) => `${humanize(key)} ${keyError}`))
+    .join(', ');
 }
 
 async function resetPassword(authenticityToken: string, email: string) {
