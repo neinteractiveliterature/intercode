@@ -2734,9 +2734,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@edno/docusaurus2-graphql-doc-generator@npm:1.5.3":
-  version: 1.5.3
-  resolution: "@edno/docusaurus2-graphql-doc-generator@npm:1.5.3"
+"@edno/docusaurus2-graphql-doc-generator@npm:1.5.4":
+  version: 1.5.4
+  resolution: "@edno/docusaurus2-graphql-doc-generator@npm:1.5.4"
   dependencies:
     "@graphql-inspector/core": ^3.0.1
     "@graphql-tools/graphql-file-loader": ^7.1.0
@@ -2745,7 +2745,7 @@ __metadata:
     graphql: ^15.6.0
     picocolors: ^1.0.0
     prettier: ^2.4.1
-  checksum: 8e34f56a262da3d0cd5892b4e6edee27415549d1908ed4247eb8163f0da7f69b8111e0fefddbe97f8b43c0a7aaf0a4ca1ac6539cfb392990e285dd551379221a
+  checksum: 7660221c00faac0506fb4fbd55cb275acae4f381c9de6ce765c2d9163c00e475c2f9911fc2e330aeddac5d22b6836167f303c3a6903610297eedb079b24578e2
   languageName: node
   linkType: hard
 
@@ -9510,7 +9510,7 @@ __metadata:
     "@docusaurus/core": 2.0.0-beta.8
     "@docusaurus/preset-classic": 2.0.0-beta.8
     "@docusaurus/types": 2.0.0-beta.8
-    "@edno/docusaurus2-graphql-doc-generator": 1.5.3
+    "@edno/docusaurus2-graphql-doc-generator": 1.5.4
     "@mdx-js/react": 1.6.22
     "@svgr/webpack": 5.5.0
     clsx: 1.1.1
