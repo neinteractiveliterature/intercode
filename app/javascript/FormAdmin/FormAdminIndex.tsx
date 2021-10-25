@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { pluralize } from 'inflected';
 import {
   useModal,
   useConfirm,
@@ -19,10 +18,8 @@ import humanize from '../humanize';
 function describeFormUsers(form: FormAdminQueryData['convention']['forms'][0]) {
   return [
     ...form.user_con_profile_conventions.map((convention) => `User profile form for ${convention.name}`).sort(),
-    ...form.event_categories.map((eventCategory) => `Event form for ${pluralize(eventCategory.name)}`).sort(),
-    ...form.proposal_event_categories
-      .map((eventCategory) => `Proposal form for ${pluralize(eventCategory.name)}`)
-      .sort(),
+    ...form.event_categories.map((eventCategory) => `Event form for ${eventCategory.name} events`).sort(),
+    ...form.proposal_event_categories.map((eventCategory) => `Proposal form for ${eventCategory.name} events`).sort(),
   ];
 }
 

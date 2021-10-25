@@ -1,5 +1,4 @@
 import { useCallback, useContext } from 'react';
-import { pluralize } from 'inflected';
 import classNames from 'classnames';
 import { Link, useParams } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
@@ -304,7 +303,7 @@ function EditSignup({ teamMembersUrl }: EditSignupProps): JSX.Element {
               <strong>{teamMember ? ' yes' : ' no'}</strong>
             </div>
             <Link to={teamMembersUrl} className="btn btn-link">
-              Go to {pluralize(run.event.event_category.team_member_name)}
+              Go to {run.event.event_category.teamMemberNamePlural}
             </Link>
           </li>
         </ul>

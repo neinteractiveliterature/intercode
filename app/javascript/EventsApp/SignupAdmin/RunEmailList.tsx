@@ -1,5 +1,4 @@
 import { useMemo, useState } from 'react';
-import { pluralize } from 'inflected';
 import { useTranslation } from 'react-i18next';
 import snakeCase from 'lodash/snakeCase';
 
@@ -83,7 +82,7 @@ export default LoadQueryWithVariablesWrapper(
             choices={[
               {
                 label: t('events.signupAdmin.emailFilters.teamMembers', 'Include {{ teamMemberName }}', {
-                  teamMemberName: pluralize(data.convention.event.event_category.team_member_name),
+                  teamMemberName: data.convention.event.event_category.teamMemberNamePlural,
                 }),
                 value: 'teamMembers',
               },
@@ -109,7 +108,7 @@ export default LoadQueryWithVariablesWrapper(
                 .sort()
                 .map((include) => {
                   if (include === 'teamMembers') {
-                    return humanize(snakeCase(pluralize(data.convention.event.event_category.team_member_name)));
+                    return humanize(snakeCase(data.convention.event.event_category.teamMemberNamePlural));
                   }
 
                   return t(`signups.states.${include}`, humanize(snakeCase(include)));

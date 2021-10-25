@@ -1,5 +1,4 @@
 import { useCallback, useState } from 'react';
-import { pluralize } from 'inflected';
 import { Modal } from 'react-bootstrap4-modal';
 import { ApolloError } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
@@ -90,7 +89,7 @@ function ProvideTicketModal({ event, convention, onClose, teamMember, visible }:
 
   return (
     <Modal visible={visible}>
-      <div className="modal-header">{capitalize(pluralize(convention.ticket_name))}</div>
+      <div className="modal-header">{capitalize(convention.ticketNamePlural)}</div>
 
       <div className="modal-body">
         {teamMember ? (

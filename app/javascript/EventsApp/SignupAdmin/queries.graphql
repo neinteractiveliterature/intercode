@@ -25,6 +25,7 @@ fragment SignupFields on Signup {
       event_category {
         id
         team_member_name
+        teamMemberNamePlural
       }
 
       registration_policy {
@@ -161,6 +162,7 @@ query RunSignupsTableSignupsQuery(
       event_category {
         id
         team_member_name
+        teamMemberNamePlural
       }
 
       team_members {

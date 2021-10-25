@@ -14,7 +14,7 @@ export default LoadQueryWrapper(useAdminTicketTypesQuery, function TicketTypeAdm
   return (
     <Switch>
       <Route path="/ticket_types/new">
-        <NewTicketType ticketName={data.convention.ticket_name} />
+        <NewTicketType ticketName={data.convention.ticket_name} ticketNamePlural={data.convention.ticketNamePlural} />
       </Route>
       <Route path="/ticket_types/:id/edit">
         <EditTicketType />

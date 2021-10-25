@@ -236,7 +236,9 @@
     "options": "Options",
     "preview": "Preview",
     "proposeEventLoggedOut": "Log in to propose an event",
-    "refresh": "Refresh"
+    "refresh": "Refresh",
+    "selectAll": "Select all",
+    "selectNone": "Select none"
   },
   "clickwrap": {
     "agreeButton": "I agree",
@@ -347,6 +349,12 @@
       "author_one": "Author",
       "author_other": "Authors",
       "organization": "Organization"
+    },
+    "categoryDropdown": {
+      "allCategoriesLabel": "All event types",
+      "multipleCategoriesLabel_one": "{{ count }} event type",
+      "multipleCategoriesLabel_other": "{{ count }} event types",
+      "singleCategoryLabel": "{{ categoryName }} events"
     },
     "edit": {
       "dropButton": "Drop event",

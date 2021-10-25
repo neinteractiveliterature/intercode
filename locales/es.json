@@ -236,7 +236,9 @@
     "options": "",
     "preview": "Previsualizar",
     "proposeEventLoggedOut": "Inicia sesión para proponer una actividad",
-    "refresh": "Actualizar"
+    "refresh": "Actualizar",
+    "selectAll": "",
+    "selectNone": ""
   },
   "clickwrap": {
     "agreeButton": "Estoy de acuerdo",
@@ -347,6 +349,12 @@
       "author_one": "",
       "author_other": "",
       "organization": ""
+    },
+    "categoryDropdown": {
+      "allCategoriesLabel": "",
+      "multipleCategoriesLabel_one": "",
+      "multipleCategoriesLabel_other": "",
+      "singleCategoryLabel": ""
     },
     "edit": {
       "dropButton": "",
