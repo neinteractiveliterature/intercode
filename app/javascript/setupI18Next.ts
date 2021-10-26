@@ -1,7 +1,6 @@
 import i18next, { BackendModule, i18n, InitOptions, ResourceKey } from 'i18next';
 import { DateTime } from 'luxon';
 import { initReactI18next } from 'react-i18next';
-import enLanguage from '../../locales/en.json'; // english is the fallback language and therefore must always be loaded
 import { DateTimeFormatKey } from './DateTimeFormats';
 import formatMoney from './formatMoney';
 import { Money } from './graphqlTypes.generated';
@@ -59,7 +58,7 @@ const initOptions: InitOptions = {
   backend: {
     loaders: {
       en: {
-        translation: async () => enLanguage,
+        translation: () => import('../../locales/en.json').then((module) => module.default),
       },
       es: {
         translation: () => import('../../locales/es.json').then((module) => module.default),

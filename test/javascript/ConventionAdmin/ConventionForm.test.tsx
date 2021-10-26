@@ -46,6 +46,7 @@ describe('ConventionForm', () => {
     },
     maximum_tickets: null,
     ticket_name: 'ticket',
+    ticketNamePlural: 'tickets',
     staff_positions: [],
     email_mode: EmailMode.Forward,
     rootPage: {
