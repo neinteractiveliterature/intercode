@@ -21,7 +21,7 @@ gem 'doorkeeper', '5.5.4'
 gem 'devise-doorkeeper'
 gem 'devise-encryptable'
 gem 'doorkeeper-jwt'
-gem 'doorkeeper-openid_connect', git: 'https://github.com/nbudin/doorkeeper-openid_connect.git', 
+gem 'doorkeeper-openid_connect', git: 'https://github.com/nbudin/doorkeeper-openid_connect.git',
 branch: 'fix_doorkeeper_52_compat'
 
 # Let's store sessions in the database, shall we?
@@ -60,7 +60,6 @@ gem 'apollo_upload_server', '2.1.0'
 gem 'graphql-rails_logger', groups: [:development, :test]
 
 # Email stuff
-gem 'mailgun-ruby'
 gem 'aws-sdk-rails'
 gem 'aws-sdk-sns'
 
