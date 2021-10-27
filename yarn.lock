@@ -12036,10 +12036,10 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"graphql@npm:15.6.1, graphql@npm:^15.3.0, graphql@npm:^15.6.0":
-  version: 15.6.1
-  resolution: "graphql@npm:15.6.1"
-  checksum: 4c6dcf385f7a87a5103fcb7640394244ae8d1d4ede521085192a1cf1e60115c4f6285d783961575d908709f7ee3e4cdd16b3f7c54eb37499c0420c6301e98968
+"graphql@npm:15.7.0":
+  version: 15.7.0
+  resolution: "graphql@npm:15.7.0"
+  checksum: e95027a63fc68444aa6079793c5f6902e9691dc0fff87ce7d5bf57a104cb100bc5763739e0d25ea08fbe5dedbb009479ebf11de1ebd3c8a0737605129bdaa2c2
   languageName: node
   linkType: hard
 
@@ -12049,6 +12049,13 @@ fsevents@^1.2.7:
   dependencies:
     iterall: ^1.2.2
   checksum: e5f4e60799421a573904f390e1ec0aa76360f751688dbbe62e9c35baa0d3727c8d59a659bfc524f126dffe3518da87fd8ecaa78c94fd5c0fe4e035c670745242
+  languageName: node
+  linkType: hard
+
+"graphql@npm:^15.3.0, graphql@npm:^15.6.0":
+  version: 15.6.1
+  resolution: "graphql@npm:15.6.1"
+  checksum: 4c6dcf385f7a87a5103fcb7640394244ae8d1d4ede521085192a1cf1e60115c4f6285d783961575d908709f7ee3e4cdd16b3f7c54eb37499c0420c6301e98968
   languageName: node
   linkType: hard
 
@@ -20337,7 +20344,7 @@ resolve@^2.0.0-next.3:
     font-awesome: 4.7.0
     glob: 7.2.0
     graphiql: 1.4.2
-    graphql: 15.6.1
+    graphql: 15.7.0
     graphql-anywhere: 4.2.7
     graphql-language-service-utils: 2.5.3
     graphql-tag: 2.12.5
