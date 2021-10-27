@@ -20399,7 +20399,7 @@ resolve@^2.0.0-next.3:
     resolve-url-loader: 4.0.0
     rollbar-sourcemap-webpack-plugin: 3.3.0
     sass: 1.43.4
-    sass-loader: 12.2.0
+    sass-loader: 12.3.0
     source-map-support: 0.5.20
     stream-browserify: 3.0.0
     style-loader: 3.3.1
@@ -20532,9 +20532,9 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"sass-loader@npm:12.2.0":
-  version: 12.2.0
-  resolution: "sass-loader@npm:12.2.0"
+"sass-loader@npm:12.3.0":
+  version: 12.3.0
+  resolution: "sass-loader@npm:12.3.0"
   dependencies:
     klona: ^2.0.4
     neo-async: ^2.6.2
@@ -20550,7 +20550,7 @@ resolve@^2.0.0-next.3:
       optional: true
     sass:
       optional: true
-  checksum: 2b2dd04ab5db65e8b9f5e6b6066735ef0bae134180ac7dc1912048065a6ce7797280f547937078c6f59bc8bd2889cbe8828240f5dd011cfb4a333b49fa628bdd
+  checksum: b755e6d5ceddb70d54334b53f70546b4afc9af5f9704cc0e2666894d0568bdaeccb2b07056bd35465c22c51c55e1d790023b32b9aa0977080403036ef6c47b29
   languageName: node
   linkType: hard
 
