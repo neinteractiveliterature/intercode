@@ -6595,7 +6595,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"autoprefixer@npm:10.3.7, autoprefixer@npm:^10.2.0, autoprefixer@npm:^10.3.5":
+"autoprefixer@npm:10.4.0":
+  version: 10.4.0
+  resolution: "autoprefixer@npm:10.4.0"
+  dependencies:
+    browserslist: ^4.17.5
+    caniuse-lite: ^1.0.30001272
+    fraction.js: ^4.1.1
+    normalize-range: ^0.1.2
+    picocolors: ^1.0.0
+    postcss-value-parser: ^4.1.0
+  peerDependencies:
+    postcss: ^8.1.0
+  bin:
+    autoprefixer: bin/autoprefixer
+  checksum: 7d511c64daeaa13c7888b40b0394cd891fab1852a1f60165330c9e49ab70ac29ad1e3386665d86361661cf2bbe90cea42b78ea73cb77b373ffe30a8f4973a955
+  languageName: node
+  linkType: hard
+
+"autoprefixer@npm:^10.2.0, autoprefixer@npm:^10.3.5":
   version: 10.3.7
   resolution: "autoprefixer@npm:10.3.7"
   dependencies:
@@ -7567,7 +7585,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"caniuse-lite@npm:1.0.30001272":
+"caniuse-lite@npm:1.0.30001272, caniuse-lite@npm:^1.0.30001272":
   version: 1.0.30001272
   resolution: "caniuse-lite@npm:1.0.30001272"
   checksum: 5a08fc35ae298acef6846111634201bde7b4710fe0ccabb69ad5681115f77971265d9b6b5cd9bb976bc44d8d6ff0119cb28d9032753e063a2c70e1e30b630ad9
@@ -20303,7 +20321,7 @@ resolve@^2.0.0-next.3:
     apollo-upload-client: 16.0.0
     array-to-sentence: 2.0.0
     assert-never: 1.2.1
-    autoprefixer: 10.3.7
+    autoprefixer: 10.4.0
     babel-core: 7.0.0-bridge.0
     babel-eslint: 10.1.0
     babel-jest: 27.3.1
