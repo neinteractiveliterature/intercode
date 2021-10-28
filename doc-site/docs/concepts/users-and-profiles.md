@@ -29,4 +29,4 @@ The user con profile typically contains a great deal more:
 - Event signups
 - Event team memberships
 - Convention staff positions
-- Any other information the convention has decided to collect via its profile form ([see Forms for more details on how this works](/concepts/forms))
+- Any other information the convention has decided to collect via its profile form ([see Forms for more details on how this works](/docs/concepts/forms))
