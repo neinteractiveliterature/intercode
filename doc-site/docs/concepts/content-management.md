@@ -1,3 +1,7 @@
+---
+sidebar_position: 2
+---
+
 # Content management
 
 Intercode comes with a built-in content management system. This CMS allows convention runners to build extremely

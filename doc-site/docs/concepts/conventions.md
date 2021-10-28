@@ -1,3 +1,7 @@
+---
+sidebar_position: 0
+---
+
 # Conventions
 
 Intercode was first designed to manage web sites for conventions. In Intercode 1, a separate

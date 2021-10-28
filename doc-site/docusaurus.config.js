@@ -23,8 +23,8 @@ const addWebpackFallbacks = (context, options) => {
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 module.exports = {
   title: 'Intercode',
-  tagline: 'The future of convention web applications',
-  url: 'https://your-docusaurus-test-site.com',
+  tagline: 'A one-stop web app for conventions',
+  url: 'https://intercode.interactiveliterature.org',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',

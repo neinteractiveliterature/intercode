@@ -4,7 +4,7 @@
  * work well for content-centric websites.
  */
 
-@import url(https://fonts.googleapis.com/css?family=Exo:400,700,700i);
+@import url('https://fonts.googleapis.com/css2?family=Exo:ital,wght@0,400;0,700;1,400;1,700&family=Rubik:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
 /* You can override the default Infima variables here. */
 :root {
@@ -16,7 +16,8 @@
   --ifm-color-primary-lighter: #b275e4;
   --ifm-color-primary-lightest: #c79aec;
   --ifm-code-font-size: 95%;
-  --ifm-heading-font-family: Exo;
+  --ifm-heading-font-family: Exo, sans-serif;
+  --ifm-font-family-base: Rubik, sans-serif;
 }
 
 .docusaurus-highlight-code-line {
