@@ -54,9 +54,7 @@ const processFormResponseValue = (key: string, value: unknown) => {
     case 'total_slots':
       return {
         total_slots: value,
-        registration_policy: buildSingleBucketRegistrationPolicy(
-          Number.parseInt(value as string, 10),
-        ),
+        registration_policy: buildSingleBucketRegistrationPolicy(Number.parseInt(value as string, 10)),
       };
     default:
       return { [key]: value };
@@ -90,8 +88,7 @@ export type UseEventFormResult<
 > = [
   EventFormProps<EventType>,
   {
-    event: EventType &
-      Pick<Event, 'current_user_form_item_viewer_role' | 'current_user_form_item_writer_role'>;
+    event: EventType & Pick<Event, 'current_user_form_item_viewer_role' | 'current_user_form_item_writer_role'>;
     setEvent: React.Dispatch<React.SetStateAction<EventType>>;
     eventForm: CommonFormFieldsFragment;
     validateForm: () => boolean;
@@ -101,11 +98,7 @@ export type UseEventFormResult<
 export default function useEventForm<
   EventType extends FormResponse &
     Pick<Event, 'current_user_form_item_viewer_role' | 'current_user_form_item_writer_role'>,
->({
-  convention,
-  initialEvent,
-  eventForm,
-}: UseEventFormOptions<EventType>): UseEventFormResult<EventType> {
+>({ convention, initialEvent, eventForm }: UseEventFormOptions<EventType>): UseEventFormResult<EventType> {
   const [event, setEvent] = useState<EventType>(() => ({
     ...initialEvent,
     form_response_attrs: {
@@ -135,10 +128,7 @@ export default function useEventForm<
 
   const formItems = useMemo(() => getSortedParsedFormItems(eventForm), [eventForm]);
 
-  const validateForm: () => boolean = useCallback(
-    () => validate(formItems, event),
-    [event, formItems, validate],
-  );
+  const validateForm: () => boolean = useCallback(() => validate(formItems, event), [event, formItems, validate]);
 
   const eventFormProps: EventFormProps<EventType> = useMemo(
     () => ({
@@ -149,14 +139,7 @@ export default function useEventForm<
       formResponseValuesChanged,
       formRef,
     }),
-    [
-      event,
-      eventForm,
-      convention,
-      itemInteractionTrackingProps,
-      formResponseValuesChanged,
-      formRef,
-    ],
+    [event, eventForm, convention, itemInteractionTrackingProps, formResponseValuesChanged, formRef],
   );
 
   return useMemo(

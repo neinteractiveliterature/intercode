@@ -272,6 +272,25 @@ export function valueIsValidForFormItemType<FormItemType extends TypedFormItem>(
   }
 }
 
+export function castValueForFormItemType<FormItemType extends TypedFormItem>(
+  formItem: FormItemType,
+  value: unknown,
+): FormItemValueType<FormItemType> | undefined {
+  if (valueIsValidForFormItemType(formItem, value)) {
+    return value;
+  }
+
+  if (formItem.item_type === 'multiple_choice' && typeof value === 'boolean') {
+    if (formItem.properties?.style === 'checkbox_horizontal' || formItem.properties?.style === 'checkbox_vertical') {
+      return [value.toString()] as FormItemValueType<FormItemType>;
+    } else {
+      return value.toString() as FormItemValueType<FormItemType>;
+    }
+  }
+
+  return undefined;
+}
+
 function formItemFragmentHasProperties(
   fragment: CommonFormItemFieldsFragment,
 ): fragment is FormEditorFormItemFieldsFragment {
