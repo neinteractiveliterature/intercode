@@ -20455,7 +20455,7 @@ resolve@^2.0.0-next.3:
     tzdata: 1.0.29
     union-value: 2.0.1
     uuid: 8.3.2
-    webpack: 5.60.0
+    webpack: 5.61.0
     webpack-assets-manifest: 5.0.6
     webpack-bundle-analyzer: 4.5.0
     webpack-cli: 4.9.1
@@ -23750,9 +23750,9 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"webpack@npm:5.60.0":
-  version: 5.60.0
-  resolution: "webpack@npm:5.60.0"
+"webpack@npm:5.61.0":
+  version: 5.61.0
+  resolution: "webpack@npm:5.61.0"
   dependencies:
     "@types/eslint-scope": ^3.7.0
     "@types/estree": ^0.0.50
@@ -23783,7 +23783,7 @@ resolve@^2.0.0-next.3:
       optional: true
   bin:
     webpack: bin/webpack.js
-  checksum: 3c37424516cfb3c7c9cefc888b359b945913f801059fb7c496380b06830666116f71f394eac135e1721b6802ff846ffa73378d3c05a9e03e3c2890a6bfa5bba1
+  checksum: 442958ec48645c9e612a2628a815c411cbc18289b5cc7b3d1b5d0f8e5b41606ed225decf4f3684edc365e6390867bded244d20387c70fbb630c0ac08443c34c8
   languageName: node
   linkType: hard
 
