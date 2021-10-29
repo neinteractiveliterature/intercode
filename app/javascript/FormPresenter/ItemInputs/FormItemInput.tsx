@@ -13,6 +13,7 @@ import { CommonFormItemInputProps } from './CommonFormItemInputProps';
 import { ConventionForFormItemDisplay } from '../ItemDisplays/FormItemDisplay';
 import {
   AgeRestrictionsFormItem,
+  castValueForFormItemType,
   DateFormItem,
   EventEmailFormItem,
   FormItemValueType,
@@ -23,7 +24,6 @@ import {
   TimeblockPreferenceFormItem,
   TimespanFormItem,
   TypedFormItem,
-  valueIsValidForFormItemType,
 } from '../../FormAdmin/FormItemUtils';
 import assertNever from 'assert-never';
 
@@ -31,10 +31,7 @@ export type FormItemInputProps<FormItemType extends TypedFormItem> = Omit<
   CommonFormItemInputProps<FormItemType>,
   'onChange' | 'value'
 > & {
-  onChange: (
-    identifier: string,
-    newValue: FormItemValueType<FormItemType> | null | undefined,
-  ) => void;
+  onChange: (identifier: string, newValue: FormItemValueType<FormItemType> | null | undefined) => void;
   value: unknown;
   convention: ConventionForFormItemDisplay;
 };
@@ -57,7 +54,7 @@ function FormItemInput<FormItemType extends TypedFormItem>({
     [formItem.identifier, onChange],
   );
 
-  const value = valueIsValidForFormItemType(formItem, uncheckedValue) ? uncheckedValue : undefined;
+  const value = castValueForFormItemType(formItem, uncheckedValue);
 
   const commonProps: CommonFormItemInputProps<FormItemType> = {
     formItem,
@@ -70,34 +67,19 @@ function FormItemInput<FormItemType extends TypedFormItem>({
 
   switch (formItem.item_type) {
     case 'age_restrictions':
-      return (
-        <AgeRestrictionsInput
-          {...(commonProps as CommonFormItemInputProps<AgeRestrictionsFormItem>)}
-        />
-      );
+      return <AgeRestrictionsInput {...(commonProps as CommonFormItemInputProps<AgeRestrictionsFormItem>)} />;
     case 'date':
       return <DateItemInput {...(commonProps as CommonFormItemInputProps<DateFormItem>)} />;
     case 'event_email':
       return (
-        <EventEmailInput
-          {...(commonProps as CommonFormItemInputProps<EventEmailFormItem>)}
-          convention={convention}
-        />
+        <EventEmailInput {...(commonProps as CommonFormItemInputProps<EventEmailFormItem>)} convention={convention} />
       );
     case 'free_text':
       return <FreeTextItemInput {...(commonProps as CommonFormItemInputProps<FreeTextFormItem>)} />;
     case 'multiple_choice':
-      return (
-        <MultipleChoiceItemInput
-          {...(commonProps as CommonFormItemInputProps<MultipleChoiceFormItem>)}
-        />
-      );
+      return <MultipleChoiceItemInput {...(commonProps as CommonFormItemInputProps<MultipleChoiceFormItem>)} />;
     case 'registration_policy':
-      return (
-        <RegistrationPolicyItemInput
-          {...(commonProps as CommonFormItemInputProps<RegistrationPolicyFormItem>)}
-        />
-      );
+      return <RegistrationPolicyItemInput {...(commonProps as CommonFormItemInputProps<RegistrationPolicyFormItem>)} />;
     case 'static_text':
       return <StaticTextItem {...(commonProps as CommonFormItemInputProps<StaticTextFormItem>)} />;
     case 'timeblock_preference':

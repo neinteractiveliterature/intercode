@@ -64,7 +64,7 @@ export default LoadSingleValueFromCollectionWrapper(
           typeof event.form_response_attrs.length_seconds === 'number' ? event.form_response_attrs.length_seconds : 0,
         current_user_form_item_viewer_role: event.current_user_form_item_viewer_role,
         current_user_form_item_writer_role: event.current_user_form_item_writer_role,
-        can_play_concurrently: false,
+        can_play_concurrently: event.can_play_concurrently ?? false,
         event_category: {
           __typename: 'EventCategory',
           id: '',
