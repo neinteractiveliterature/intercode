@@ -2878,24 +2878,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphiql/toolkit@npm:0.2.2":
-  version: 0.2.2
-  resolution: "@graphiql/toolkit@npm:0.2.2"
-  dependencies:
-    "@n1ru4l/push-pull-async-iterable-iterator": ^2.1.4
-    graphql-ws: ^4.3.2
-    meros: ^1.1.4
-    subscriptions-transport-ws: ^0.9.18
-  peerDependencies:
-    graphql: ">= v14.5.0 <= 15.5.0"
-  dependenciesMeta:
-    subscriptions-transport-ws:
-      optional: true
-  checksum: c92d8ff858566dd586dc6885141d934c6eb5b787dbfb28109d55af75ea6033414a034645cc2361f336b398aea5a29ff02f414361f6d0dc1f5a6b966a5fff9ec3
-  languageName: node
-  linkType: hard
-
-"@graphiql/toolkit@npm:^0.3.1":
+"@graphiql/toolkit@npm:0.3.1, @graphiql/toolkit@npm:^0.3.1":
   version: 0.3.1
   resolution: "@graphiql/toolkit@npm:0.3.1"
   dependencies:
@@ -4154,13 +4137,6 @@ __metadata:
   peerDependencies:
     graphql: ^15.4.0
   checksum: cc225009ef19b5e22e6d90f63d887b93241d9dcd74a8fad0f42baa3bd165a5fcadde1f209635ef194eeb238477f3e47b77027a0502d0a739a5d865d07827d54f
-  languageName: node
-  linkType: hard
-
-"@n1ru4l/push-pull-async-iterable-iterator@npm:^2.1.4":
-  version: 2.1.4
-  resolution: "@n1ru4l/push-pull-async-iterable-iterator@npm:2.1.4"
-  checksum: 52cd59b9502db34d51e591b83f3dc1a15ab7c0cd923fefc9eadc00a55b9213cc683d0216edc4ed4050ffae01b3da66a6d0b14acd0cbd483678304ecfc1e313b8
   languageName: node
   linkType: hard
 
@@ -12063,7 +12039,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"graphql-ws@npm:^4.3.2, graphql-ws@npm:^4.4.1, graphql-ws@npm:^4.9.0":
+"graphql-ws@npm:^4.4.1, graphql-ws@npm:^4.9.0":
   version: 4.9.0
   resolution: "graphql-ws@npm:4.9.0"
   peerDependencies:
@@ -20283,7 +20259,7 @@ resolve@^2.0.0-next.3:
     "@dnd-kit/sortable": 4.0.0
     "@dnd-kit/utilities": 2.0.0
     "@emotion/serialize": 1.0.2
-    "@graphiql/toolkit": 0.2.2
+    "@graphiql/toolkit": 0.3.1
     "@graphql-codegen/add": 3.1.0
     "@graphql-codegen/cli": 2.2.1
     "@graphql-codegen/fragment-matcher": 3.1.0
