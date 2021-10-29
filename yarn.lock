@@ -2878,7 +2878,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphiql/toolkit@npm:0.3.2":
+"@graphiql/toolkit@npm:0.3.2, @graphiql/toolkit@npm:^0.3.2":
   version: 0.3.2
   resolution: "@graphiql/toolkit@npm:0.3.2"
   dependencies:
@@ -2888,19 +2888,6 @@ __metadata:
   peerDependencies:
     graphql: ">= v14.5.0 <= 15.6.1"
   checksum: 3d69ba8a75047d3d5eb4226d6366e3664ac5326afddd72690f230de4a9bbec173f96d648376c1b4472219b917c7e99844a34d54d683f0bc3b25a0f119b5a338e
-  languageName: node
-  linkType: hard
-
-"@graphiql/toolkit@npm:^0.3.1":
-  version: 0.3.1
-  resolution: "@graphiql/toolkit@npm:0.3.1"
-  dependencies:
-    "@n1ru4l/push-pull-async-iterable-iterator": ^3.0.0
-    graphql-ws: ^4.9.0
-    meros: ^1.1.4
-  peerDependencies:
-    graphql: ">= v14.5.0 <= 15.6.1"
-  checksum: 603ef9350ec89eebc6837a7beb3479f5179236a1add78c890f5e523ca080915d18223ed9d39e50b83446c6d715936d7f86a36ef75b9317ad094ffee23b02ebb4
   languageName: node
   linkType: hard
 
@@ -11873,11 +11860,11 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"graphiql@npm:1.4.4":
-  version: 1.4.4
-  resolution: "graphiql@npm:1.4.4"
+"graphiql@npm:1.4.5":
+  version: 1.4.5
+  resolution: "graphiql@npm:1.4.5"
   dependencies:
-    "@graphiql/toolkit": ^0.3.1
+    "@graphiql/toolkit": ^0.3.2
     codemirror: ^5.58.2
     codemirror-graphql: ^1.0.0
     copy-to-clipboard: ^3.2.0
@@ -11889,7 +11876,7 @@ fsevents@^1.2.7:
     graphql: ">= v14.5.0 <= 15.5.0"
     react: ^16.8.0
     react-dom: ^16.8.0
-  checksum: d043b7ef3517e3f6aec958da0ef25807260b422bb2d9051552963a4f411af7f653c3c776485be583f09697c364edcf02927c694b1b25cdecafbfb644a5c92370
+  checksum: 30f86d4d54b3ca2a972206aa20dc413bc831f4314284ed0fc780d8b292b65cf75495c62101d19cf1782850637928c283270c482f7009f63fa43b2d259d5c88d6
   languageName: node
   linkType: hard
 
@@ -20377,7 +20364,7 @@ resolve@^2.0.0-next.3:
     file-saver: 2.0.5
     font-awesome: 4.7.0
     glob: 7.2.0
-    graphiql: 1.4.4
+    graphiql: 1.4.5
     graphql: 15.7.2
     graphql-anywhere: 4.2.7
     graphql-language-service-utils: 2.5.3
