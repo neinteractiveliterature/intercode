@@ -33,6 +33,7 @@ module.exports = {
   projectName: 'intercode', // Usually your repo name.
   plugins: [
     addWebpackFallbacks,
+    require.resolve('@docusaurus/plugin-ideal-image'),
     [
       require.resolve('@edno/docusaurus2-graphql-doc-generator'),
       {
