@@ -1,5 +1,5 @@
-const lightCodeTheme = require('prism-react-renderer/themes/github');
-const darkCodeTheme = require('prism-react-renderer/themes/dracula');
+const lightCodeTheme = require('prism-react-renderer/themes/nightOwlLight');
+const darkCodeTheme = require('prism-react-renderer/themes/nightOwl');
 
 /**
  * @type {@import('@docusaurus/types').PluginModule}
@@ -23,8 +23,8 @@ const addWebpackFallbacks = (context, options) => {
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 module.exports = {
   title: 'Intercode',
-  tagline: 'The future of convention web applications',
-  url: 'https://your-docusaurus-test-site.com',
+  tagline: 'A one-stop web app for conventions',
+  url: 'https://intercode.interactiveliterature.org',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -33,6 +33,7 @@ module.exports = {
   projectName: 'intercode', // Usually your repo name.
   plugins: [
     addWebpackFallbacks,
+    require.resolve('@docusaurus/plugin-ideal-image'),
     [
       require.resolve('@edno/docusaurus2-graphql-doc-generator'),
       {
@@ -151,6 +152,7 @@ module.exports = {
       prism: {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
+        additionalLanguages: ['liquid'],
       },
     }),
 };
