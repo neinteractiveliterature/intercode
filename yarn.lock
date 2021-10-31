@@ -5311,10 +5311,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:16.9.1":
+"@types/node@npm:*":
   version: 16.9.1
   resolution: "@types/node@npm:16.9.1"
   checksum: 41afcf183a22d59323a0199dd7e0f46591247f45fc08a4434edb26d56dc279ae4fdb80f37989ddd7a0f45e3857c4933e6e82057ede09c5a829f77e373e680375
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:16.11.6":
+  version: 16.11.6
+  resolution: "@types/node@npm:16.11.6"
+  checksum: 6e19634766ff589d3d2f361c2196b671f8f133cdadc5ad347a621c360d8994b6c4fbccfb2ad9c60c588c593831a96497c9c6b77d2b7e91be723384b94f6368e7
   languageName: node
   linkType: hard
 
@@ -20736,7 +20743,7 @@ resolve@^2.0.0-next.3:
     "@types/luxon": 2.0.5
     "@types/mapbox-gl": 1.13.2
     "@types/minimist": 1.2.2
-    "@types/node": 16.9.1
+    "@types/node": 16.11.6
     "@types/punycode": 2.1.0
     "@types/react": 17.0.33
     "@types/react-click-outside-hook": 1.0.0
