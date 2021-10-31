@@ -1,6 +1,6 @@
 {
   "engines": {
-    "node": "14.x"
+    "node": "16.x"
   },
   "workspaces": [
     ".",
@@ -206,7 +206,7 @@
     "@types/events": "3.0.0",
     "@types/history": "4.7.9",
     "@types/jest": "27.0.2",
-    "@types/node": "16.9.1",
+    "@types/node": "16.11.6",
     "@types/punycode": "2.1.0",
     "@types/react-dom": "17.0.10",
     "@types/react-transition-group": "4.4.4",
