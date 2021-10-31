@@ -1,0 +1,121 @@
+---
+sidebar_position: 4
+---
+
+import Image from '@theme/IdealImage';
+import KaraokeBucketsImage from './karaoke-buckets.png';
+import NoPreferenceBucketsImage from './no-preference-buckets.png';
+import GenderBucketsImage from './gender-buckets.png';
+
+# Signups
+
+Intercode allows individual event runs within a convention to accept signups. Events can specify
+a registration policy that describes how many people can sign up, whether there are different types
+of signups with different capacities, and what to do when signups overfill.
+
+This section describes the signup system in detail, piece by piece.
+
+## Signup buckets
+
+A registration policy consists of one or more buckets. For the moment, let's just consider a simple
+registration policy with a single bucket.
+
+Signup buckets can be either limited or unlimited. If a bucket is unlimited, Intercode will allow any
+number of people to sign up in that bucket. If a bucket is limited, Intercode will allow a certain
+maximum number of people to sign up in that bucket. Any further people who try to sign up in that bucket
+will be placed on the waitlist (or in the flex bucket; see below for details on that). Later, if
+other attendees drop out of the event, people on the waitlist will be pulled into the bucket of their
+choice in the order that they signed up.
+
+If a bucket is limited, it must specify a minimum, preferred, and maximum capacity. (These can all be
+the same number, but the preferred must be greater than or equal to the minimum, and the maximum must
+be greater than or equal to the preferred.) The minimum and preferred numbers aren't visible to attendees
+and don't affect signup behavior, but are visible to convention staff in the "schedule grid with counts"
+view, as a way of seeing whether events at the convention are hitting their desired attendee counts.
+
+## Events with multiple buckets
+
+Buckets let an event subdivide its signups into multiple groups, and let attendees choose the group they'd
+like when signing up. For example, a karaoke event might want to let attendes choose whether to sign up
+as a singer or an audience member. There might be different capacities for these groups.
+
+If an event has multiple buckets, it will appear with multiple signup buttons for attendees. Here's how
+the karaoke event might look:
+
+<Image img={KaraokeBucketsImage} width={239} />
+
+For this event, an unlimited number of people can sign up to watch from the audience, but there's only
+time for 10 singers, so the event runners have limited the capacity of the Singers bucket.
+
+## No-preference signups
+
+If an event has multiple _limited_ buckets, Intercode will add an additional signup button to the interface:
+"no preference." For example, in a larp about pets, the signup interface might look like this:
+
+<Image img={NoPreferenceBucketsImage} width={235} />
+
+Players with a preference for the animal species they want to play as would click one of the specific bucket
+buttons, and players who just want to play this game but don't care whether they're playing as a cat or a dog
+would click the "no preference" button. Clicking the "no preference" button will place the attendee into
+whichever bucket has capacity, more or less randomly.
+
+When someone clicks a signup button, Intercode records which button they clicked on, in addition to which
+bucket they actually ended up in. This is so that later on, it can know whether it's possible to shuffle
+people between buckets to make room as necessary.
+
+For example, let's say that the Cats bucket is full, but the Dogs bucket has room. However, 2 of the players
+in the Cats bucket actually clicked "no preference". If someone comes along and wants to sign up as a cat,
+Intercode will move one of the no-preference attendees from the Cats bucket to the Dogs bucket so that this
+can happen. If nobody can be moved to make room, the new attendee will be placed on the waitlist.
+
+## Flex buckets
+
+In some cases, events may want a special bucket that represents signup slots that can be any of the other
+limited buckets. This is called a "flex" bucket (or, in some parts of the API, an `anything` bucket, for
+historical reasons).
+
+The most common example of this is roles in a game subdivided by character gender. For example, let's say
+a larp has 6 roles written as male, 8 roles written as female, and 4 roles that aren't written as a specific
+gender and can be played as any gender. If the GMs want to allow players to select a character gender at
+signup time, they might add a flex bucket with a capacity of 4 to account for the roles that aren't written
+with a specific gender. The signup interface would then look like this:
+
+<Image img={GenderBucketsImage} width={248} />
+
+Note that there is no button to sign up for the flex bucket specifically. That's because it's an overflow
+bucket for the other limited-capacity buckets. If, for example, the female roles bucket is full, and
+someone clicks the "Sign up - female role" button, they will be placed in the flex bucket. (If the flex
+bucket is also full, they will be placed on the waitlist.)
+
+## Non-counted signups
+
+Most signups are "counted." This is the normal case for signups. However, signups can be set as
+"non-counted" in the admin UI. This has a few effects:
+
+- The signup does not count towards the capacity of the bucket it's in
+- The signup does not count towards the user's convention-wide signup limit, if one is in effect
+
+In addition to setting signups as non-counted individually, entire buckets can be set as non-counted.
+This can be useful, for example, for volunteer shifts where you don't want to penalize attendees for taking
+them on.
+
+## Concurrent events
+
+Events have an optional setting called "can play concurrently". If this setting is enabled, Intercode does
+not count this event's signups during time conflict checks.
+
+Normally, when a user signs up for an event, Intercode checks to make sure they aren't signed up for anything
+else that overlaps it in time. Turning on "can play concurrently" disables that check. Additionally, when
+signing up for additional events, the event with the "can play concurrently" setting enabled is not checked
+for conflicts with these additional events.
+
+This potentially allows signing up for an unlimited number of simultaneous events, so it's worth using this
+setting with caution.
+
+## Team member signups
+
+Team members can sign up for their own events, in order to get them onto their personal schedules. These
+signups are always non-counted.
+
+Team member signups also do not count for the purposes of concurrent events. It's possible to sign up as a
+team member for multiple simultaneous events (but we don't particularly recommend this lifestyle choice).
