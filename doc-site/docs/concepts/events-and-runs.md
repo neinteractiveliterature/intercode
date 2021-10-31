@@ -1,3 +1,7 @@
+---
+sidebar_position: 3
+---
+
 # Events and runs
 
 In Intercode, an event is a description of a session that takes place at a convention. All events
