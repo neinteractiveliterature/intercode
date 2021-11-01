@@ -163,14 +163,22 @@ header: #{email.from}"
     forward_message = transform_email_for_forwarding(original_recipient, new_recipients)
     return unless forward_message
 
-    self.class.ses_client.send_raw_email({ raw_message: { data: forward_message.to_s } })
+    begin
+      self.class.ses_client.send_raw_email({ raw_message: { data: forward_message.to_s } })
+    rescue Aws::SES::Errors::InvalidParameterValue => e
+      if e.message.include?('Message length is more')
+        send_bounce(original_recipient, bounce_type: 'MessageTooLarge')
+      else
+        send_bounce(original_recipient)
+      end
+    end
   end
 
   def mailer_host
     Rails.application.config.action_mailer.default_url_options[:host]
   end
 
-  def send_bounce(recipient)
+  def send_bounce(recipient, bounce_type: 'DoesNotExist')
     self.class.ses_client.send_bounce(
       {
         original_message_id: message_id,
@@ -179,7 +187,7 @@ header: #{email.from}"
           reporting_mta: "dns; #{mailer_host}",
           arrival_date: Time.zone.now
         },
-        bounced_recipient_info_list: [{ recipient: recipient.address, bounce_type: 'DoesNotExist' }]
+        bounced_recipient_info_list: [{ recipient: recipient.address, bounce_type: bounce_type }]
       }
     )
   end
