@@ -5485,7 +5485,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:17.0.33, @types/react@npm:>=16.9.0, @types/react@npm:^17.0":
+"@types/react@npm:*, @types/react@npm:>=16.9.0, @types/react@npm:^17.0":
   version: 17.0.33
   resolution: "@types/react@npm:17.0.33"
   dependencies:
@@ -5493,6 +5493,17 @@ __metadata:
     "@types/scheduler": "*"
     csstype: ^3.0.2
   checksum: 5f53f3dae034229ff1eccb5de1c16d046696e883f8eae81b86e95c532798e655015e4edff8a6c9ec8f1c0ef12bb60dec43622d06256ba33ba6069e67a74b8d4e
+  languageName: node
+  linkType: hard
+
+"@types/react@npm:17.0.34":
+  version: 17.0.34
+  resolution: "@types/react@npm:17.0.34"
+  dependencies:
+    "@types/prop-types": "*"
+    "@types/scheduler": "*"
+    csstype: ^3.0.2
+  checksum: 16729ad7d50922ccbf8eb93874d7781dc2f1c64edc78134b5edc7154839d41e9fe320eb1c11ad2d1c9bf28b99cb1febda344509c1fda025955a5c2b43c688c8f
   languageName: node
   linkType: hard
 
@@ -19910,7 +19921,7 @@ resolve@^2.0.0-next.3:
     "@types/minimist": 1.2.2
     "@types/node": 16.11.6
     "@types/punycode": 2.1.0
-    "@types/react": 17.0.33
+    "@types/react": 17.0.34
     "@types/react-click-outside-hook": 1.0.0
     "@types/react-color": 3.0.6
     "@types/react-dom": 17.0.10
