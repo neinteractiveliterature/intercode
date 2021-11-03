@@ -159,7 +159,7 @@
     "react-i18next": "11.13.0",
     "react-onclickoutside": "6.12.0",
     "react-popper": "2.2.5",
-    "react-router-dom": "5.3.0",
+    "react-router-dom": "6.0.0",
     "react-select": "4.3.1",
     "react-table": "7.7.0",
     "react-transition-group": "4.4.2",
