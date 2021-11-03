@@ -2174,7 +2174,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/state@npm:0.19.2, @codemirror/state@npm:^0.19.0, @codemirror/state@npm:^0.19.2":
+"@codemirror/state@npm:0.19.3":
+  version: 0.19.3
+  resolution: "@codemirror/state@npm:0.19.3"
+  dependencies:
+    "@codemirror/text": ^0.19.0
+  checksum: 96bdd78f746b66ff00d802f2df1e1981dea20df70ee3572285d54b16bf406add0e29efaf59d8be4823fd1ca4533f7ada2ee90a9cf5991f5f0bf307c4b830999c
+  languageName: node
+  linkType: hard
+
+"@codemirror/state@npm:^0.19.0, @codemirror/state@npm:^0.19.2":
   version: 0.19.2
   resolution: "@codemirror/state@npm:0.19.2"
   dependencies:
@@ -2200,16 +2209,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/view@npm:0.19.10":
-  version: 0.19.10
-  resolution: "@codemirror/view@npm:0.19.10"
+"@codemirror/view@npm:0.19.11":
+  version: 0.19.11
+  resolution: "@codemirror/view@npm:0.19.11"
   dependencies:
     "@codemirror/rangeset": ^0.19.0
     "@codemirror/state": ^0.19.2
     "@codemirror/text": ^0.19.0
     style-mod: ^4.0.0
     w3c-keyname: ^2.2.4
-  checksum: 3d112c485bd7d46686f633d3306fd5fc93db5200e3657d27a98ef500ce8dfe0c2617bcbe14ea5281b68af4e341432ad56ef824ca3594786704b793aeb63b1ab6
+  checksum: 3155801e3d4df40eca2afd59bda49c13729abfbf6d3c8ed3a2ddc569f7c6726c7b2974ec30294a90d7fd753e3a63613098e806cc0ff62cb98a57dceac23b676a
   languageName: node
   linkType: hard
 
@@ -19894,8 +19903,8 @@ resolve@^2.0.0-next.3:
     "@codemirror/lang-json": 0.19.1
     "@codemirror/lang-markdown": 0.19.2
     "@codemirror/language": 0.19.3
-    "@codemirror/state": 0.19.2
-    "@codemirror/view": 0.19.10
+    "@codemirror/state": 0.19.3
+    "@codemirror/view": 0.19.11
     "@dnd-kit/core": 3.1.1
     "@dnd-kit/sortable": 4.0.0
     "@dnd-kit/utilities": 2.0.0
