@@ -2174,7 +2174,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/state@npm:0.19.3":
+"@codemirror/state@npm:0.19.3, @codemirror/state@npm:^0.19.3":
   version: 0.19.3
   resolution: "@codemirror/state@npm:0.19.3"
   dependencies:
@@ -2209,16 +2209,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/view@npm:0.19.11":
-  version: 0.19.11
-  resolution: "@codemirror/view@npm:0.19.11"
+"@codemirror/view@npm:0.19.12":
+  version: 0.19.12
+  resolution: "@codemirror/view@npm:0.19.12"
   dependencies:
     "@codemirror/rangeset": ^0.19.0
-    "@codemirror/state": ^0.19.2
+    "@codemirror/state": ^0.19.3
     "@codemirror/text": ^0.19.0
     style-mod: ^4.0.0
     w3c-keyname: ^2.2.4
-  checksum: 3155801e3d4df40eca2afd59bda49c13729abfbf6d3c8ed3a2ddc569f7c6726c7b2974ec30294a90d7fd753e3a63613098e806cc0ff62cb98a57dceac23b676a
+  checksum: 4d8deced86c15e211e5c9051015f0448a8b5823aa57ecdb778889aee1c4ac930c137906eac421263eda9e671cd88a77b77c22f2ef7db9cda86d5cf578666638b
   languageName: node
   linkType: hard
 
@@ -19904,7 +19904,7 @@ resolve@^2.0.0-next.3:
     "@codemirror/lang-markdown": 0.19.2
     "@codemirror/language": 0.19.3
     "@codemirror/state": 0.19.3
-    "@codemirror/view": 0.19.11
+    "@codemirror/view": 0.19.12
     "@dnd-kit/core": 3.1.1
     "@dnd-kit/sortable": 4.0.0
     "@dnd-kit/utilities": 2.0.0
