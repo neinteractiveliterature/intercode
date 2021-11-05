@@ -259,18 +259,18 @@
     },
     "runCapacity": {
       "label": "",
-      "slotCount": "plaza {{ count }}",
-      "slotCount_plural": "{{ count }} plazas",
-      "slotRemainingCount": "Plaza {{ filledCount }} de {{ count }} ocupada",
-      "slotRemainingCount_plural": "{{ filledCount }} de {{ count }} plazas ocupadas",
+      "slotCount_one": "",
+      "slotCount_other": "",
+      "slotRemainingCount_one": "",
+      "slotRemainingCount_other": "",
       "unlimitedSimple": "ilimitadas",
       "unlimitedWithCount": "({{ signupCount }} inscritas (capacidad ilimitada)",
       "waitlistCount": "",
       "zeroCapacity": "plazas agotadas"
     },
     "runHeader": {
-      "maxSignups": "",
-      "maxSignups_plural": ""
+      "maxSignups_one": "",
+      "maxSignups_other": ""
     },
     "signupAdmin": {
       "addressHeader": "",
@@ -348,8 +348,8 @@
       "newPageTitle": "",
       "nonEventProvidedTicketDescription": "",
       "provideTicketButton": "",
-      "provideTicketChoice": "",
-      "provideTicketChoice_plural": "",
+      "provideTicketChoice_one": "",
+      "provideTicketChoice_other": "",
       "provideTicketLink": "",
       "receiveConEmailHeader": "",
       "receiveConEmailLabel": "",
@@ -364,8 +364,8 @@
       "removeTeamMemberPrompt": "",
       "selectUserConProfilePrompt": "",
       "showEmailLabel": "",
-      "ticketProvidability": "",
-      "ticketProvidability_plural": "",
+      "ticketProvidability_one": "",
+      "ticketProvidability_other": "",
       "unticketedWarning": "",
       "updateButton": "",
       "userConProfileLabel": "",
@@ -388,8 +388,8 @@
   "forms": {
     "ageRestrictions": {
       "descriptionLabel": "Texto público de restricción por edad",
-      "minimumAgeDescription": "Debe tener {{ count }} años o más.",
-      "minimumAgeDescription_plural": "",
+      "minimumAgeDescription_one": "",
+      "minimumAgeDescription_other": "",
       "minimumAgeHelpText": "Si se especifica, la lista de participantes inscritas mostrará si alguien demasiado joven se ha anotado a la actividad. <2>La web no impone restricciones por edad; eso debes hacerlo tú.</2>",
       "minimumAgeLabel": "Edad mínima",
       "noRestrictions": "Sin restricciones de edad."
