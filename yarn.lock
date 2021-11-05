@@ -2174,12 +2174,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/state@npm:0.19.3, @codemirror/state@npm:^0.19.3":
-  version: 0.19.3
-  resolution: "@codemirror/state@npm:0.19.3"
+"@codemirror/state@npm:0.19.4":
+  version: 0.19.4
+  resolution: "@codemirror/state@npm:0.19.4"
   dependencies:
     "@codemirror/text": ^0.19.0
-  checksum: 96bdd78f746b66ff00d802f2df1e1981dea20df70ee3572285d54b16bf406add0e29efaf59d8be4823fd1ca4533f7ada2ee90a9cf5991f5f0bf307c4b830999c
+  checksum: 2babd90a62c5f65dd4aaf7955c9c52fae4a46ad75c50a540eb95f2f31b6648873ea73c84d6c0a676d4eab335a4bce511a75fce656144758d04ca62b9a2b644c4
   languageName: node
   linkType: hard
 
@@ -2189,6 +2189,15 @@ __metadata:
   dependencies:
     "@codemirror/text": ^0.19.0
   checksum: 6460ff45d8ce20812a9abcb035a3e5f2a4adcb837c0efd00151b07c8e0bf617f6fdcf7668982b76c8e7bb447b0a83e7b8308817dac754c190c9495b49289bcaf
+  languageName: node
+  linkType: hard
+
+"@codemirror/state@npm:^0.19.3":
+  version: 0.19.3
+  resolution: "@codemirror/state@npm:0.19.3"
+  dependencies:
+    "@codemirror/text": ^0.19.0
+  checksum: 96bdd78f746b66ff00d802f2df1e1981dea20df70ee3572285d54b16bf406add0e29efaf59d8be4823fd1ca4533f7ada2ee90a9cf5991f5f0bf307c4b830999c
   languageName: node
   linkType: hard
 
@@ -19906,7 +19915,7 @@ resolve@^2.0.0-next.3:
     "@codemirror/lang-json": 0.19.1
     "@codemirror/lang-markdown": 0.19.2
     "@codemirror/language": 0.19.3
-    "@codemirror/state": 0.19.3
+    "@codemirror/state": 0.19.4
     "@codemirror/view": 0.19.12
     "@dnd-kit/core": 3.1.1
     "@dnd-kit/sortable": 4.0.0
