@@ -5,7 +5,13 @@ class OrderPolicy < ApplicationPolicy
 
   def read?
     if oauth_scoped_disjunction do |d|
-         d.add(:read_conventions) { has_convention_permission?(convention, 'read_orders') }
+         d.add(:read_conventions) do
+           has_convention_permission?(convention, 'read_orders') ||
+             (
+               record.tickets.any? &&
+                 record.tickets.any? { |ticket| TicketPolicy.new(authorization_info, ticket).read? }
+             )
+         end
          d.add(:read_profile) { user && user.id == user_con_profile.user_id }
        end
       return true
