@@ -259,18 +259,18 @@
     },
     "runCapacity": {
       "label": "Capacity",
-      "slotCount": "{{ count }} slot",
-      "slotCount_plural": "{{ count }} slots",
-      "slotRemainingCount": "{{ filledCount }} of {{ count }} slot filled",
-      "slotRemainingCount_plural": "{{ filledCount }} of {{ count }} slots filled",
+      "slotCount_one": "{{ count }} slots",
+      "slotCount_other": "{{ count }} slots",
+      "slotRemainingCount_one": "{{ filledCount }} of {{ count }} slots filled",
+      "slotRemainingCount_other": "{{ filledCount }} of {{ count }} slots filled",
       "unlimitedSimple": "unlimited",
       "unlimitedWithCount": "unlimited ({{ signupCount }} signed up)",
       "waitlistCount": "Waitlist - {{ waitlistCount }}",
       "zeroCapacity": "0 slots"
     },
     "runHeader": {
-      "maxSignups": "Max signups: {{ count }}",
-      "maxSignups_plural": "Max signups: {{ count }}"
+      "maxSignups_one": "Max signups: {{ count }}",
+      "maxSignups_other": "Max signups: {{ count }}"
     },
     "signupAdmin": {
       "addressHeader": "Address:",
@@ -348,8 +348,8 @@
       "newPageTitle": "Add {{ teamMemberName }} - {{ eventTitle }}",
       "nonEventProvidedTicketDescription": "{{ name }} has a {{ ticketType }} {{ ticketName }}.",
       "provideTicketButton": "Provide {{ ticketName }}",
-      "provideTicketChoice": "Provide {{ ticketType }} {{ ticketName }} ({{ count }} remaining)",
-      "provideTicketChoice_plural": "Provide {{ ticketType }} {{ ticketName }} ({{ count }} remaining)",
+      "provideTicketChoice_one": "Provide {{ ticketType }} {{ ticketName }} ({{ count }} remaining)",
+      "provideTicketChoice_other": "Provide {{ ticketType }} {{ ticketName }} ({{ count }} remaining)",
       "provideTicketLink": "Provide {{ ticketName }}",
       "receiveConEmailHeader": "Receive email from con",
       "receiveConEmailLabel": "Receive email from convention",
@@ -364,8 +364,8 @@
       "removeTeamMemberPrompt": "Are you sure you want to remove {{ name }} as a {{ teamMemberName }}?",
       "selectUserConProfilePrompt": "Select a person to continue.",
       "showEmailLabel": "Show individual email address on event page <2>Selecting this option will make the individual email address for this {{teamMemberName}} appear on the event page, but only for logged-in site users.</2>",
-      "ticketProvidability": "{{ eventTitle }} has {{ count }} {{ ticketName }} remaining to provide.",
-      "ticketProvidability_plural": "{{ eventTitle }} has {{ count }} {{ ticketName }} remaining to provide.",
+      "ticketProvidability_one": "{{ eventTitle }} has {{ count }} {{ ticketName }} remaining to provide.",
+      "ticketProvidability_other": "{{ eventTitle }} has {{ count }} {{ ticketName }} remaining to provide.",
       "unticketedWarning": "{{name}}<1> has no {{ticketName}} for {{conventionName}}.</1> Without a {{ticketName}}, users cannot sign up for events at the convention.",
       "updateButton": "Update {{ teamMemberName }}",
       "userConProfileLabel": "{{ teamMemberName }} to add",
@@ -388,8 +388,8 @@
   "forms": {
     "ageRestrictions": {
       "descriptionLabel": "Publicly visible age restrictions text",
-      "minimumAgeDescription": "Must be {{ count }} years or older.",
-      "minimumAgeDescription_plural": "Must be {{ count }} years or older.",
+      "minimumAgeDescription_one": "Must be {{ count }} years or older.",
+      "minimumAgeDescription_other": "Must be {{ count }} years or older.",
       "minimumAgeHelpText": "If specified, the signups list will warn you if someone too young to play has signed up. <2>The site does not enforce age restrictions; you must do so yourself.</2>",
       "minimumAgeLabel": "Minimum age",
       "noRestrictions": "No age restrictions."
@@ -601,7 +601,7 @@
       "waitlisted": "You are #{{ waitlistPosition }} on the waitlist.",
       "waitlistedUnknownPosition": "You are on the waitlist."
     },
-    "signedOutSignupButton": "<0>Log in</0> to sign up for<3></3><4>{{eventTitle}}</4>",
+    "signedOutSignupButton": "<0>Log in</0> to sign up for<2></2><3>{{eventTitle}}</3>",
     "signupButton": "Sign up",
     "signupSummaryLink": "Attendee-facing signup summary",
     "states": {

@@ -42,9 +42,7 @@ export type RunCardProps = {
   currentAbility: EventPageQueryData['currentAbility'];
   myProfile?: Record<string, unknown> | null;
   mySignup?: EventPageQueryData['convention']['event']['runs'][0]['my_signups'][0] | null;
-  myPendingSignupRequest?:
-    | EventPageQueryData['convention']['event']['runs'][0]['my_signup_requests'][0]
-    | null;
+  myPendingSignupRequest?: EventPageQueryData['convention']['event']['runs'][0]['my_signup_requests'][0] | null;
   showViewSignups?: boolean;
   createSignup: (signupOption: SignupOption) => Promise<unknown>;
   withdrawSignup: () => Promise<unknown>;
@@ -78,9 +76,7 @@ function RunCard({
   const [signupButtonClicked, signupError, mutationInProgress] = useAsyncFunction(createSignup, {
     suppressError: true,
   });
-  const { setAfterSignInPath, open: openAuthenticationModal } = useContext(
-    AuthenticationModalContext,
-  );
+  const { setAfterSignInPath, open: openAuthenticationModal } = useContext(AuthenticationModalContext);
 
   const renderMainSignupSection = () => {
     if (!myProfile) {
@@ -117,18 +113,9 @@ function RunCard({
     if (myPendingSignupRequest) {
       return (
         <>
-          <em>
-            {t(
-              'signups.runCardText.requestPending',
-              'You have requested to sign up for this event.',
-            )}
-          </em>
+          <em>{t('signups.runCardText.requestPending', 'You have requested to sign up for this event.')}</em>
           <p className="mb-0">
-            <button
-              className="btn btn-outline-danger"
-              type="button"
-              onClick={withdrawPendingSignupRequest}
-            >
+            <button className="btn btn-outline-danger" type="button" onClick={withdrawPendingSignupRequest}>
               {t('signups.withdrawSignupRequestButton', 'Withdraw signup request')}
             </button>
           </p>
@@ -196,9 +183,7 @@ function RunCard({
           ) : null}
 
           <div className="d-flex flex-wrap">
-            <div className="flex-grow-1">
-              {formatRunTimespan(runTimespan, { formatType: 'short' })}
-            </div>
+            <div className="flex-grow-1">{formatRunTimespan(runTimespan, { formatType: 'short' })}</div>
 
             <div>
               {run.rooms
@@ -218,9 +203,7 @@ function RunCard({
 
           {renderAuxiliarySignupSection()}
 
-          {showViewSignups && (
-            <ViewSignupsOptions event={event} run={run} currentAbility={currentAbility} />
-          )}
+          {showViewSignups && <ViewSignupsOptions event={event} run={run} currentAbility={currentAbility} />}
         </>
       ) : (
         <div className="card-body">
