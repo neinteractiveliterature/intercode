@@ -222,6 +222,7 @@ query ConvertToEventProvidedTicketQuery($eventId: ID!) {
   convention: conventionByRequestHost {
     id
     ticket_name
+    ticketNamePlural
 
     event(id: $eventId) {
       id

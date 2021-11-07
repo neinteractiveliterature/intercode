@@ -42,7 +42,7 @@ export type ConvertToEventProvidedTicketQueryVariables = Types.Exact<{
 }>;
 
 
-export type ConvertToEventProvidedTicketQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, ticket_name: string, event: { __typename: 'Event', id: string, title?: string | null | undefined, event_category: { __typename: 'EventCategory', id: string, can_provide_tickets: boolean }, provided_tickets: Array<{ __typename: 'Ticket', id: string, ticket_type: { __typename: 'TicketType', id: string, name: string } }> }, ticket_types: Array<{ __typename: 'TicketType', id: string, maximum_event_provided_tickets: number, description?: string | null | undefined, name: string }> } };
+export type ConvertToEventProvidedTicketQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, ticket_name: string, ticketNamePlural: string, event: { __typename: 'Event', id: string, title?: string | null | undefined, event_category: { __typename: 'EventCategory', id: string, can_provide_tickets: boolean }, provided_tickets: Array<{ __typename: 'Ticket', id: string, ticket_type: { __typename: 'TicketType', id: string, name: string } }> }, ticket_types: Array<{ __typename: 'TicketType', id: string, maximum_event_provided_tickets: number, description?: string | null | undefined, name: string }> } };
 
 export type AddAttendeeUsersQueryVariables = Types.Exact<{
   name?: Types.Maybe<Types.Scalars['String']>;
@@ -353,6 +353,7 @@ export const ConvertToEventProvidedTicketQueryDocument = gql`
   convention: conventionByRequestHost {
     id
     ticket_name
+    ticketNamePlural
     event(id: $eventId) {
       id
       title
