@@ -1,5 +1,4 @@
 import { Link, Route } from 'react-router-dom';
-import { pluralize } from 'inflected';
 import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import EditRun from './EditRun';
@@ -12,6 +11,7 @@ import {
   EventAdminEventsQueryVariables,
   useEventAdminEventsQuery,
 } from './queries.generated';
+import { useTranslation } from 'react-i18next';
 
 export type RecurringEventAdminProps = {
   eventCategoryId: string;
@@ -21,14 +21,20 @@ export default LoadQueryWrapper<EventAdminEventsQueryData, EventAdminEventsQuery
   useEventAdminEventsQuery,
   function RecurringEventAdmin({ data, eventCategoryId }): JSX.Element {
     const [eventCategory, sortedEvents] = useEventAdminCategory(data, eventCategoryId);
+    const { t } = useTranslation();
 
-    usePageTitle(pluralize(eventCategory?.name ?? ''));
+    usePageTitle(
+      t('admin.events.eventListPageTitle', '{{ categoryName, capitalize }} events', {
+        categoryName: eventCategory?.name,
+      }),
+    );
 
     return (
       <div>
         <Link className="btn btn-primary mt-4" to={`${buildEventCategoryUrl(eventCategory)}/new`}>
-          {'Create new '}
-          {eventCategory?.name.toLowerCase()}
+          {t('admin.events.newEventLabel', 'Create new {{ categoryName }} event', {
+            categoryName: eventCategory?.name,
+          })}
         </Link>
         <hr className="my-4" />
         {sortedEvents.map((event) => (

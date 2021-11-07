@@ -1,4 +1,3 @@
-import { pluralize } from 'inflected';
 import { Link } from 'react-router-dom';
 
 import { useTranslation } from 'react-i18next';
@@ -34,7 +33,7 @@ export default LoadQueryWithVariablesWrapper(
           <li className="list-group-item">
             <Link to={`${eventPath}/team_members`}>
               {t('events.adminMenu.editTeamMembersLink', 'Edit {{ teamMemberNamePlural }}', {
-                teamMemberNamePlural: pluralize(event.event_category.team_member_name),
+                teamMemberNamePlural: event.event_category.teamMemberNamePlural,
               })}
             </Link>
           </li>

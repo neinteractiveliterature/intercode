@@ -1,6 +1,5 @@
 import { useState, useMemo, useCallback } from 'react';
-// @ts-expect-error Inflected types don't export capitalize
-import { capitalize } from 'inflected';
+import capitalize from 'lodash/capitalize';
 import { ApolloError } from '@apollo/client';
 import { useModal, BootstrapFormSelect, ErrorDisplay, FormGroupWithLabel } from '@neinteractiveliterature/litform';
 
@@ -46,8 +45,8 @@ function TicketForm({
         return;
       }
       const ticketInput = {
-        transitionalTicketTypeId: ticketTypeId,
-        transitionalProvidedByEventId: providedByEvent?.id,
+        ticketTypeId: ticketTypeId,
+        providedByEventId: providedByEvent?.id,
       };
       event.preventDefault();
       await submit(ticketInput);

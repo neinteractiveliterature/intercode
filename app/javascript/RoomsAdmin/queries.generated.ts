@@ -4,28 +4,28 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type RoomAdminRoomFieldsFragment = { __typename: 'Room', name?: string | null | undefined, id: string, runs: Array<{ __typename: 'Run', id: string }> };
+export type RoomAdminRoomFieldsFragment = { __typename: 'Room', id: string, name?: string | null | undefined, runs: Array<{ __typename: 'Run', id: string }> };
 
 export type RoomsAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type RoomsAdminQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, rooms: Array<{ __typename: 'Room', name?: string | null | undefined, id: string, runs: Array<{ __typename: 'Run', id: string }> }> } };
+export type RoomsAdminQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, rooms: Array<{ __typename: 'Room', id: string, name?: string | null | undefined, runs: Array<{ __typename: 'Run', id: string }> }> } };
 
 export const RoomAdminRoomFieldsFragmentDoc = gql`
     fragment RoomAdminRoomFields on Room {
-  id: transitionalId
+  id
   name
   runs {
-    id: transitionalId
+    id
   }
 }
     `;
 export const RoomsAdminQueryDocument = gql`
     query RoomsAdminQuery {
   convention: conventionByRequestHost {
-    id: transitionalId
+    id
     rooms {
-      id: transitionalId
+      id
       ...RoomAdminRoomFields
     }
   }

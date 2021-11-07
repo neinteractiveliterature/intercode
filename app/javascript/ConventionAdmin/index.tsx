@@ -68,9 +68,9 @@ export default LoadQueryWrapper(useConventionAdminConventionQuery, function Conv
           string_value: timespan.value,
         })),
       },
-      transitionalDefaultLayoutId: convention.defaultLayout?.id.toString(),
-      transitionalRootPageId: convention.rootPage.id.toString(),
-      transitionalCatchAllStaffPositionId: convention.catch_all_staff_position?.id.toString(),
+      defaultLayoutId: convention.defaultLayout?.id.toString(),
+      rootPageId: convention.rootPage.id.toString(),
+      catchAllStaffPositionId: convention.catch_all_staff_position?.id.toString(),
     };
     await mutate({
       variables: {

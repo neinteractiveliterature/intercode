@@ -1,12 +1,23 @@
 import { useMemo } from 'react';
 
 import { breakValueIntoUnitQuantities } from '../TimespanItemUtils';
-import pluralizeWithCount from '../../pluralizeWithCount';
 import { FormItemValueType, TimespanFormItem } from '../../FormAdmin/FormItemUtils';
+import { TFunction } from 'i18next';
+import assertNever from 'assert-never';
+import { useTranslation } from 'react-i18next';
 
-export function describeTimespan(value: number): string {
+export function describeTimespan(value: number, t: TFunction): string {
   return breakValueIntoUnitQuantities(value)
-    .map(({ unit, quantity }) => pluralizeWithCount(unit.name, quantity))
+    .map(({ unit, quantity }) => {
+      switch (unit.name) {
+        case 'hour':
+          return t('general.timeUnits.hours', '{{ count }} hours', { count: quantity });
+        case 'minute':
+          return t('general.timeUnits.minutes', '{{ count }} minutes', { count: quantity });
+        default:
+          assertNever(unit.name);
+      }
+    })
     .join(' ');
 }
 
@@ -15,7 +26,8 @@ export type TimespanItemDisplayProps = {
 };
 
 function TimespanItemDisplay({ value }: TimespanItemDisplayProps): JSX.Element {
-  const description = useMemo(() => describeTimespan(value), [value]);
+  const { t } = useTranslation();
+  const description = useMemo(() => describeTimespan(value, t), [value, t]);
   return <>{description}</>;
 }
 

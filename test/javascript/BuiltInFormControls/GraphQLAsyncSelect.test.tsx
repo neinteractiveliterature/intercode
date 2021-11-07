@@ -10,10 +10,10 @@ import { UserConProfile } from '../../../app/javascript/graphqlTypes.generated';
 const FakeQuery = gql`
   query FakeQuery($name: String) {
     convention: conventionByRequestHost {
-      id: transitionalId
+      id
       user_con_profiles_paginated(filters: { name: $name }) {
         entries {
-          id: transitionalId
+          id
           name_without_nickname
         }
       }

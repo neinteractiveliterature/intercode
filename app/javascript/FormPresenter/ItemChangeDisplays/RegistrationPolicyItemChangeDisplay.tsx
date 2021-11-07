@@ -1,10 +1,10 @@
 import { Fragment } from 'react';
 import uniq from 'lodash/uniq';
-import { humanize } from 'inflected';
 
 import ObjectDiffDisplay from './ObjectDiffDisplay';
 import { ParsedFormResponseChange } from './FormItemChangeUtils';
 import { FormItemValueType, RegistrationPolicyFormItem } from '../../FormAdmin/FormItemUtils';
+import humanize from '../../humanize';
 
 export type RegistrationPolicyItemChangeDisplayProps = {
   change: ParsedFormResponseChange<RegistrationPolicyFormItem>;
@@ -18,9 +18,7 @@ function isEmptyObject<T>(value: T | Record<string, never>): value is T {
   return true;
 }
 
-function RegistrationPolicyItemChangeDisplay({
-  change,
-}: RegistrationPolicyItemChangeDisplayProps): JSX.Element {
+function RegistrationPolicyItemChangeDisplay({ change }: RegistrationPolicyItemChangeDisplayProps): JSX.Element {
   const { buckets: prevBuckets, ...otherPrev } = change.previous_value || {};
   const { buckets: newBuckets, ...otherNew } = change.new_value || {};
   const combinedBucketKeys = uniq([
@@ -34,8 +32,7 @@ function RegistrationPolicyItemChangeDisplay({
         {combinedBucketKeys.map((key) => (
           <Fragment key={key}>
             <dt className="col-sm-3">
-              {(change.new_value ?? change.previous_value)?.buckets.find((b) => b.key === key)
-                ?.name ?? key}
+              {(change.new_value ?? change.previous_value)?.buckets.find((b) => b.key === key)?.name ?? key}
             </dt>
             <dd className="col-sm-9">
               <ObjectDiffDisplay

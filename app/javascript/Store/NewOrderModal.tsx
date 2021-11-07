@@ -88,14 +88,14 @@ function NewOrderModal({ visible, close, initialOrder }: NewOrderModalProps): JS
         },
         status: order.status,
         orderEntries: order.order_entries.map((orderEntry) => ({
-          transitionalProductId: orderEntry.product.id,
-          transitionalProductVariantId: orderEntry.product_variant?.id,
+          productId: orderEntry.product.id,
+          productVariantId: orderEntry.product_variant?.id,
           quantity: orderEntry.quantity,
           price_per_item: {
             currency_code: orderEntry.price_per_item.currency_code,
             fractional: orderEntry.price_per_item.fractional,
           },
-          transitionalTicketId: orderEntry.ticket_id,
+          ticketId: orderEntry.ticket_id,
         })),
       },
     });

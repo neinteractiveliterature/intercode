@@ -4,14 +4,14 @@ class Mutations::CreateOrderEntry < Mutations::BaseMutation
 
   field :order_entry, Types::OrderEntryType, null: false
 
-  argument :order_id,
-           Integer,
+  argument :transitional_order_id,
+           ID,
            deprecation_reason:
-             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
+             "IDs have transitioned to the ID type.  Please switch back to the orderId field so that \
+we can remove this temporary one.",
            required: false,
-           camelize: false
-  argument :transitional_order_id, ID, required: false, camelize: true
+           camelize: true
+  argument :order_id, ID, required: false, camelize: true
   argument :order_entry, Types::OrderEntryInputType, required: true, camelize: false
 
   attr_reader :order_entry

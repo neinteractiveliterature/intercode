@@ -3,8 +3,11 @@ import { CadmusNavbarAdminClient } from 'cadmus-navbar-admin/lib/CadmusNavbarAdm
 import { NavigationItem } from 'cadmus-navbar-admin/lib/NavigationItem';
 import { EditingNavigationItem } from 'cadmus-navbar-admin/lib/EditingNavigationItemContext';
 import NavigationItemStore from 'cadmus-navbar-admin/lib/NavigationItemStore';
-import { NavigationItemsAdminQuery } from './queries';
-import { AdminNavigationItemFieldsFragment, NavigationItemsAdminQueryData } from './queries.generated';
+import {
+  AdminNavigationItemFieldsFragment,
+  NavigationItemsAdminQueryData,
+  NavigationItemsAdminQueryDocument,
+} from './queries.generated';
 import {
   CreateNavigationItemDocument,
   CreateNavigationItemMutationData,
@@ -74,7 +77,7 @@ class Client implements CadmusNavbarAdminClient {
     this.requestsInProgress.loadingNavigationItems = true;
     try {
       const { data } = await this.apolloClient.query<NavigationItemsAdminQueryData>({
-        query: NavigationItemsAdminQuery,
+        query: NavigationItemsAdminQueryDocument,
       });
       return data.cmsParent.cmsNavigationItems.map(graphqlNavigationItemToCadmusNavbarAdminObject);
     } catch (error) {
@@ -94,7 +97,7 @@ class Client implements CadmusNavbarAdminClient {
     this.requestsInProgress.loadingPages = true;
     try {
       const { data } = await this.apolloClient.query<NavigationItemsAdminQueryData>({
-        query: NavigationItemsAdminQuery,
+        query: NavigationItemsAdminQueryDocument,
       });
       return data.cmsParent.cmsPages.map((page) => ({
         ...page,
@@ -114,8 +117,8 @@ class Client implements CadmusNavbarAdminClient {
     let mutate: () => Promise<FetchResult<CreateNavigationItemMutationData | UpdateNavigationItemMutationData>>;
     const navigationItemInput: CmsNavigationItemInput = {
       title: navigationItem.title,
-      transitionalNavigationSectionId: navigationItem.navigation_section_id,
-      transitionalPageId: navigationItem.page_id,
+      navigationSectionId: navigationItem.navigation_section_id,
+      pageId: navigationItem.page_id,
       position: navigationItem.position,
     };
     const navigationItemId = navigationItem.id;
@@ -172,10 +175,10 @@ class Client implements CadmusNavbarAdminClient {
 
   async sortNavigationItems(navigationItems: NavigationItemStore): Promise<void> {
     const sortItems: UpdateCmsNavigationItemInput[] = navigationItems.map((navigationItem) => ({
-      transitionalId: navigationItem.id,
+      id: navigationItem.id,
       cms_navigation_item: {
         position: navigationItem.position,
-        transitionalNavigationSectionId: navigationItem.navigation_section_id,
+        navigationSectionId: navigationItem.navigation_section_id,
       },
     }));
 

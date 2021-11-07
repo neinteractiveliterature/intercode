@@ -28,7 +28,7 @@ export const LiquidAssignFieldsFragmentDoc = gql`
 export const LiquidAssignsQueryDocument = gql`
     query LiquidAssignsQuery {
   cmsParent: cmsParentByRequestHost {
-    id: transitionalId
+    id
     liquidAssigns {
       ...LiquidAssignFields
     }
@@ -65,7 +65,7 @@ export type LiquidAssignsQueryQueryResult = Apollo.QueryResult<LiquidAssignsQuer
 export const NotifierLiquidAssignsQueryDocument = gql`
     query NotifierLiquidAssignsQuery($eventKey: String!) {
   cmsParent: conventionByRequestHost {
-    id: transitionalId
+    id
     liquidAssigns: notifier_liquid_assigns(eventKey: $eventKey) {
       ...LiquidAssignFields
     }

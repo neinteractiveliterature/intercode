@@ -4,18 +4,18 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type CommonConventionDataFragment = { __typename: 'Convention', name: string, starts_at?: string | null | undefined, ends_at?: string | null | undefined, site_mode: Types.SiteMode, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, id: string, event_categories: Array<{ __typename: 'EventCategory', name: string, scheduling_ui: Types.SchedulingUi, default_color?: string | null | undefined, full_color?: string | null | undefined, signed_up_color?: string | null | undefined, id: string }> };
+export type CommonConventionDataFragment = { __typename: 'Convention', id: string, name: string, starts_at?: string | null | undefined, ends_at?: string | null | undefined, site_mode: Types.SiteMode, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, scheduling_ui: Types.SchedulingUi, default_color?: string | null | undefined, full_color?: string | null | undefined, signed_up_color?: string | null | undefined }> };
 
-export type RunBasicSignupDataFragment = { __typename: 'Run', signup_count_by_state_and_bucket_key_and_counted: string, id: string, my_signups: Array<{ __typename: 'Signup', state: Types.SignupState, id: string }>, my_signup_requests: Array<{ __typename: 'SignupRequest', state: Types.SignupRequestState, id: string }> };
+export type RunBasicSignupDataFragment = { __typename: 'Run', id: string, signup_count_by_state_and_bucket_key_and_counted: string, my_signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: string, state: Types.SignupRequestState }> };
 
 export type CommonConventionDataQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type CommonConventionDataQueryData = { __typename: 'Query', convention: { __typename: 'Convention', name: string, starts_at?: string | null | undefined, ends_at?: string | null | undefined, site_mode: Types.SiteMode, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, id: string, event_categories: Array<{ __typename: 'EventCategory', name: string, scheduling_ui: Types.SchedulingUi, default_color?: string | null | undefined, full_color?: string | null | undefined, signed_up_color?: string | null | undefined, id: string }> } };
+export type CommonConventionDataQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, starts_at?: string | null | undefined, ends_at?: string | null | undefined, site_mode: Types.SiteMode, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, scheduling_ui: Types.SchedulingUi, default_color?: string | null | undefined, full_color?: string | null | undefined, signed_up_color?: string | null | undefined }> } };
 
 export const CommonConventionDataFragmentDoc = gql`
     fragment CommonConventionData on Convention {
-  id: transitionalId
+  id
   name
   starts_at
   ends_at
@@ -25,7 +25,7 @@ export const CommonConventionDataFragmentDoc = gql`
   ticket_name
   ticket_mode
   event_categories {
-    id: transitionalId
+    id
     name
     scheduling_ui
     default_color
@@ -36,14 +36,14 @@ export const CommonConventionDataFragmentDoc = gql`
     `;
 export const RunBasicSignupDataFragmentDoc = gql`
     fragment RunBasicSignupData on Run {
-  id: transitionalId
+  id
   signup_count_by_state_and_bucket_key_and_counted
   my_signups {
-    id: transitionalId
+    id
     state
   }
   my_signup_requests {
-    id: transitionalId
+    id
     state
   }
 }
@@ -51,7 +51,7 @@ export const RunBasicSignupDataFragmentDoc = gql`
 export const CommonConventionDataQueryDocument = gql`
     query CommonConventionDataQuery {
   convention: conventionByRequestHost {
-    id: transitionalId
+    id
     ...CommonConventionData
   }
 }

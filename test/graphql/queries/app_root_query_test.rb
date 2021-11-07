@@ -7,8 +7,7 @@ class Queries::AppRootQueryTest < ActiveSupport::TestCase
   before { create(:root_site) }
 
   it 'executes on the root page' do
-    query_file = File.read(File.expand_path('app/javascript/appRootQueries.ts', Rails.root))
-    query = query_file.match(/const AppRootQuery = gql`(.*)`;/m)[1]
+    query = File.read(File.expand_path('app/javascript/appRootQueries.graphql', Rails.root))
     result = execute_graphql_query(query, user_con_profile: user_con_profile, variables: { path: '/' })
     data = result.to_h['data']
 

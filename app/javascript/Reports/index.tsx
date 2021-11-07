@@ -1,5 +1,4 @@
 import { Switch, Route, Link } from 'react-router-dom';
-import { pluralize } from 'inflected';
 import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import AttendanceByPaymentAmount from './AttendanceByPaymentAmount';
@@ -26,14 +25,10 @@ const ReportsMenu = LoadQueryWrapper(useReportsMenuQuery, function ReportsMenu({
             {data.convention.ticket_mode !== 'disabled' && (
               <>
                 <li>
-                  <Link to="/reports/attendance_by_payment_amount">
-                    Attendance by payment amount
-                  </Link>
+                  <Link to="/reports/attendance_by_payment_amount">Attendance by payment amount</Link>
                 </li>
                 <li>
-                  <Link to="/reports/event_provided_tickets">
-                    Event-provided {pluralize(data.convention.ticket_name)}
-                  </Link>
+                  <Link to="/reports/event_provided_tickets">Event-provided {data.convention.ticketNamePlural}</Link>
                 </li>
               </>
             )}

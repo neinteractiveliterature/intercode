@@ -1,0 +1,58 @@
+#import "./queries.graphql"
+#import "../EventPage/queries.graphql"
+#import "../queries.graphql"
+
+mutation ChangeSignupBucket($signupId: ID!, $bucketKey: String!) {
+  updateSignupBucket(input: { id: $signupId, bucket_key: $bucketKey }) {
+    signup {
+      id
+      ...SignupFields
+
+      run {
+        id
+        ...EventPageRunFields
+        ...RunBasicSignupData
+      }
+    }
+  }
+}
+
+mutation ForceConfirmSignup($signupId: ID!, $bucketKey: String!) {
+  forceConfirmSignup(input: { id: $signupId, bucket_key: $bucketKey }) {
+    signup {
+      id
+      ...SignupFields
+
+      run {
+        id
+        ...EventPageRunFields
+        ...RunBasicSignupData
+      }
+    }
+  }
+}
+
+mutation UpdateSignupCounted($signupId: ID!, $counted: Boolean!) {
+  updateSignupCounted(input: { id: $signupId, counted: $counted }) {
+    signup {
+      id
+      ...SignupFields
+
+      run {
+        id
+        ...EventPageRunFields
+        ...RunBasicSignupData
+      }
+    }
+  }
+}
+
+mutation WithdrawAllUserConProfileSignups($userConProfileId: ID!) {
+  withdrawAllUserConProfileSignups(input: { userConProfileId: $userConProfileId }) {
+    user_con_profile {
+      id
+
+      ...UserConProfileSignupsFragment
+    }
+  }
+}

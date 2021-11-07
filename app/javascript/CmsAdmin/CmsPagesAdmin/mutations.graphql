@@ -1,0 +1,25 @@
+#import "./queries.graphql"
+
+mutation CreatePage($page: PageInput!) {
+  createPage(input: { page: $page }) {
+    page {
+      id
+      ...CmsPageFields
+    }
+  }
+}
+
+mutation UpdatePage($id: ID!, $page: PageInput!) {
+  updatePage(input: { id: $id, page: $page }) {
+    page {
+      id
+      ...CmsPageFields
+    }
+  }
+}
+
+mutation DeletePage($id: ID!) {
+  deletePage(input: { id: $id }) {
+    clientMutationId
+  }
+}

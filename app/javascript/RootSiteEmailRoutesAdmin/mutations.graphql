@@ -1,0 +1,25 @@
+#import "./queries.graphql"
+
+mutation CreateEmailRoute($emailRoute: EmailRouteInput!) {
+  createEmailRoute(input: { email_route: $emailRoute }) {
+    email_route {
+      id
+      ...EmailRouteFields
+    }
+  }
+}
+
+mutation UpdateEmailRoute($id: ID!, $emailRoute: EmailRouteInput!) {
+  updateEmailRoute(input: { id: $id, email_route: $emailRoute }) {
+    email_route {
+      id
+      ...EmailRouteFields
+    }
+  }
+}
+
+mutation DeleteEmailRoute($id: ID!) {
+  deleteEmailRoute(input: { id: $id }) {
+    clientMutationId
+  }
+}

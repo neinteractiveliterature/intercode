@@ -12,16 +12,16 @@ export type MergeUsersMutationVariables = Types.Exact<{
 }>;
 
 
-export type MergeUsersMutationData = { __typename: 'Mutation', mergeUsers: { __typename: 'MergeUsersPayload', user: { __typename: 'User', name?: string | null | undefined, first_name?: string | null | undefined, last_name?: string | null | undefined, email?: string | null | undefined, privileges?: Array<string> | null | undefined, id: string, user_con_profiles: Array<{ __typename: 'UserConProfile', email?: string | null | undefined, id: string, ticket?: { __typename: 'Ticket', id: string } | null | undefined, signups: Array<{ __typename: 'Signup', state: Types.SignupState, id: string }>, convention: { __typename: 'Convention', name: string, domain?: string | null | undefined, starts_at?: string | null | undefined, ticket_name: string, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, id: string }, staff_positions: Array<{ __typename: 'StaffPosition', name: string, id: string }> }> } } };
+export type MergeUsersMutationData = { __typename: 'Mutation', mergeUsers: { __typename: 'MergeUsersPayload', user: { __typename: 'User', id: string, name?: string | null | undefined, first_name?: string | null | undefined, last_name?: string | null | undefined, email?: string | null | undefined, privileges?: Array<string> | null | undefined, user_con_profiles: Array<{ __typename: 'UserConProfile', id: string, email?: string | null | undefined, ticket?: { __typename: 'Ticket', id: string } | null | undefined, signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState }>, convention: { __typename: 'Convention', id: string, name: string, domain?: string | null | undefined, starts_at?: string | null | undefined, ticket_name: string, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode }, staff_positions: Array<{ __typename: 'StaffPosition', id: string, name: string }> }> } } };
 
 
 export const MergeUsersDocument = gql`
     mutation MergeUsers($userIds: [ID!]!, $winningUserId: ID!, $winningUserConProfiles: [WinningUserConProfileInput!]!) {
   mergeUsers(
-    input: {transitionalUserIds: $userIds, transitionalWinningUserId: $winningUserId, winningUserConProfiles: $winningUserConProfiles}
+    input: {userIds: $userIds, winningUserId: $winningUserId, winningUserConProfiles: $winningUserConProfiles}
   ) {
     user {
-      id: transitionalId
+      id
       ...DetailedUserFields
     }
   }

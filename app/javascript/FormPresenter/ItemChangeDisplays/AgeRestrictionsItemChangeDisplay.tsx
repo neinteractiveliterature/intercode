@@ -1,16 +1,13 @@
-import { humanize } from 'inflected';
-
 import ObjectDiffDisplay from './ObjectDiffDisplay';
 import { ParsedFormResponseChange } from './FormItemChangeUtils';
 import { AgeRestrictionsFormItem } from '../../FormAdmin/FormItemUtils';
+import humanize from '../../humanize';
 
 export type AgeRestrictionsItemChangeDisplayProps = {
   change: ParsedFormResponseChange<AgeRestrictionsFormItem>;
 };
 
-function AgeRestrictionsItemChangeDisplay({
-  change,
-}: AgeRestrictionsItemChangeDisplayProps): JSX.Element {
+function AgeRestrictionsItemChangeDisplay({ change }: AgeRestrictionsItemChangeDisplayProps): JSX.Element {
   const { previous_value: before, new_value: after } = change;
 
   return (

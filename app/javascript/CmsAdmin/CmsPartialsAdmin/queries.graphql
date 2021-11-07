@@ -1,0 +1,27 @@
+fragment CmsPartialFields on CmsPartial {
+  id
+  name
+  content
+  admin_notes
+  current_ability_can_update
+  current_ability_can_delete
+}
+
+query CmsPartialsAdminQuery {
+  convention: conventionByRequestHostIfPresent {
+    id
+    name
+  }
+
+  currentAbility {
+    can_create_cms_partials
+  }
+
+  cmsParent: cmsParentByRequestHost {
+    id
+    cmsPartials {
+      id
+      ...CmsPartialFields
+    }
+  }
+}

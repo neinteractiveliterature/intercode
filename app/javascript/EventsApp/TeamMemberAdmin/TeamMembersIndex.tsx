@@ -1,5 +1,4 @@
 import { useMemo } from 'react';
-import { humanize, pluralize, titleize, underscore } from 'inflected';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
@@ -10,6 +9,7 @@ import {
   PageLoadingIndicator,
   useDeleteMutationWithReferenceArrayUpdater,
 } from '@neinteractiveliterature/litform';
+import capitalize from 'lodash/capitalize';
 
 import Checkmark from './Checkmark';
 import ProvideTicketModal from './ProvideTicketModal';
@@ -19,6 +19,7 @@ import { TeamMembersQueryData, useTeamMembersQuery } from './queries.generated';
 import { DropdownMenu } from '../../UIComponents/DropdownMenu';
 import FourOhFourPage from '../../FourOhFourPage';
 import { useDeleteTeamMemberMutation } from './mutations.generated';
+import humanize from '../../humanize';
 
 function sortTeamMembers(teamMembers: TeamMembersQueryData['convention']['event']['team_members']) {
   return sortByLocaleString(teamMembers, (teamMember) => teamMember.user_con_profile.name_inverted ?? '');
@@ -45,7 +46,7 @@ function TeamMemberActionMenu({
     useDeleteTeamMemberMutation,
     event,
     'team_members',
-    (teamMember) => ({ input: { transitionalId: teamMember.id } }),
+    (teamMember) => ({ input: { id: teamMember.id } }),
   );
 
   return (
@@ -110,10 +111,7 @@ function TeamMembersIndex({ eventId, eventPath }: TeamMembersIndexProps): JSX.El
   const modal = useModal<{ teamMember: TeamMembersQueryData['convention']['event']['team_members'][0] }>();
 
   const titleizedTeamMemberName = useMemo(
-    () =>
-      error || loading || !data
-        ? null
-        : pluralize(titleize(underscore(data.convention.event.event_category.team_member_name))),
+    () => (error || loading || !data ? null : capitalize(data.convention.event.event_category.teamMemberNamePlural)),
     [error, loading, data],
   );
 
@@ -165,7 +163,7 @@ function TeamMembersIndex({ eventId, eventPath }: TeamMembersIndexProps): JSX.El
                 {convention.ticket_mode !== 'disabled' && (
                   <th>
                     {t('events.teamMemberAdmin.hasEventTicketHeader', '{{ ticketName }} from this event', {
-                      ticketName: titleize(convention.ticket_name),
+                      ticketName: capitalize(convention.ticket_name),
                     })}
                   </th>
                 )}

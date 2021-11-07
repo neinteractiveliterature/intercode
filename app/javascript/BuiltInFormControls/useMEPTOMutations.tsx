@@ -5,8 +5,8 @@ export type UseMEPTOMutationsProps = {
   createMutate: (options: {
     variables: {
       input: {
-        transitionalEventId: string;
-        transitionalTicketTypeId: string;
+        eventId: string;
+        ticketTypeId: string;
         override_value: number;
       };
     };
@@ -15,7 +15,7 @@ export type UseMEPTOMutationsProps = {
   updateMutate: (options: {
     variables: {
       input: {
-        transitionalId: string;
+        id: string;
         override_value: number;
       };
     };
@@ -36,8 +36,8 @@ export default function useMEPTOMutations({
       createMutate({
         variables: {
           input: {
-            transitionalEventId: eventId,
-            transitionalTicketTypeId: ticketTypeId,
+            eventId,
+            ticketTypeId,
             override_value: overrideValue,
           },
         },
@@ -50,7 +50,7 @@ export default function useMEPTOMutations({
       updateMutate({
         variables: {
           input: {
-            transitionalId: id,
+            id,
             override_value: overrideValue,
           },
         },

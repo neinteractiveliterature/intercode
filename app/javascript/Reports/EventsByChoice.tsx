@@ -5,8 +5,7 @@ import mapValues from 'lodash/mapValues';
 import groupBy from 'lodash/groupBy';
 import keyBy from 'lodash/keyBy';
 import sum from 'lodash/sum';
-// @ts-expect-error Inflected doesn't include capitalize in type declarations
-import { capitalize } from 'inflected';
+import capitalize from 'lodash/capitalize';
 import { LoadQueryWrapper, titleSort } from '@neinteractiveliterature/litform';
 
 import usePageTitle from '../usePageTitle';
@@ -49,10 +48,7 @@ export default LoadQueryWrapper(useEventsByChoiceQuery, function EventsByChoice(
     [data],
   );
 
-  const sortedRows = useMemo(
-    () => titleSort(filteredRows, (row) => row.event.title ?? ''),
-    [filteredRows],
-  );
+  const sortedRows = useMemo(() => titleSort(filteredRows, (row) => row.event.title ?? ''), [filteredRows]);
 
   // producing an array of rows where each row looks like:
   // {
@@ -88,13 +84,13 @@ export default LoadQueryWrapper(useEventsByChoiceQuery, function EventsByChoice(
       <h1 className="mb-4">Events by choice</h1>
 
       <p>
-        Numbers are presented as &ldquo;Confirmed / All Signups&rdquo;. All Signups include{' '}
-        Confirmed, Waitlisted and Withdrawn.
+        Numbers are presented as &ldquo;Confirmed / All Signups&rdquo;. All Signups include Confirmed, Waitlisted and
+        Withdrawn.
       </p>
 
       <p className="text-muted">
-        Event team members are excluded from these counts. Note that there may be some players
-        waitlisted for this game because the bucket they requested was full.
+        Event team members are excluded from these counts. Note that there may be some players waitlisted for this game
+        because the bucket they requested was full.
       </p>
 
       <table className="table table-bordered table-hover">

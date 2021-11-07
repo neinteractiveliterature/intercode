@@ -4,16 +4,16 @@ import * as Types from '../../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type CmsFileFieldsFragment = { __typename: 'CmsFile', filename: string, url: string, content_type: string, size: number, current_ability_can_delete: boolean, id: string };
+export type CmsFileFieldsFragment = { __typename: 'CmsFile', id: string, filename: string, url: string, content_type: string, size: number, current_ability_can_delete: boolean };
 
 export type CmsFilesAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type CmsFilesAdminQueryData = { __typename: 'Query', convention?: { __typename: 'Convention', name: string, id: string } | null | undefined, currentAbility: { __typename: 'Ability', can_create_cms_files: boolean }, cmsParent: { __typename: 'Convention', id: string, cmsFiles: Array<{ __typename: 'CmsFile', filename: string, url: string, content_type: string, size: number, current_ability_can_delete: boolean, id: string }> } | { __typename: 'RootSite', id: string, cmsFiles: Array<{ __typename: 'CmsFile', filename: string, url: string, content_type: string, size: number, current_ability_can_delete: boolean, id: string }> } };
+export type CmsFilesAdminQueryData = { __typename: 'Query', convention?: { __typename: 'Convention', id: string, name: string } | null | undefined, currentAbility: { __typename: 'Ability', can_create_cms_files: boolean }, cmsParent: { __typename: 'Convention', id: string, cmsFiles: Array<{ __typename: 'CmsFile', id: string, filename: string, url: string, content_type: string, size: number, current_ability_can_delete: boolean }> } | { __typename: 'RootSite', id: string, cmsFiles: Array<{ __typename: 'CmsFile', id: string, filename: string, url: string, content_type: string, size: number, current_ability_can_delete: boolean }> } };
 
 export const CmsFileFieldsFragmentDoc = gql`
     fragment CmsFileFields on CmsFile {
-  id: transitionalId
+  id
   filename
   url
   content_type
@@ -24,16 +24,16 @@ export const CmsFileFieldsFragmentDoc = gql`
 export const CmsFilesAdminQueryDocument = gql`
     query CmsFilesAdminQuery {
   convention: conventionByRequestHostIfPresent {
-    id: transitionalId
+    id
     name
   }
   currentAbility {
     can_create_cms_files
   }
   cmsParent: cmsParentByRequestHost {
-    id: transitionalId
+    id
     cmsFiles {
-      id: transitionalId
+      id
       ...CmsFileFields
     }
   }

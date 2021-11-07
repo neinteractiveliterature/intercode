@@ -59,10 +59,10 @@ function EditOrderModal({ order, closeModal }: EditOrderModalProps): JSX.Element
       await createOrderEntryMutate({
         variables: {
           input: {
-            transitionalOrderId: order.id,
+            orderId: order.id,
             order_entry: {
-              transitionalProductId: orderEntry.product.id,
-              transitionalProductVariantId: orderEntry.product_variant?.id,
+              productId: orderEntry.product.id,
+              productVariantId: orderEntry.product_variant?.id,
               quantity: orderEntry.quantity,
               price_per_item: {
                 currency_code: orderEntry.price_per_item.currency_code,
@@ -84,7 +84,7 @@ function EditOrderModal({ order, closeModal }: EditOrderModalProps): JSX.Element
       updateOrderEntryMutate({
         variables: {
           input: {
-            transitionalId: orderEntry.id,
+            id: orderEntry.id,
             order_entry: attributes,
           },
         },
@@ -94,7 +94,7 @@ function EditOrderModal({ order, closeModal }: EditOrderModalProps): JSX.Element
 
   const deleteOrderEntry = useCallback(
     (orderEntry: NonNullable<EditOrderModalProps['order']>['order_entries'][0]) =>
-      deleteOrderEntryMutate({ variables: { input: { transitionalId: orderEntry.id } } }),
+      deleteOrderEntryMutate({ variables: { input: { id: orderEntry.id } } }),
     [deleteOrderEntryMutate],
   );
 

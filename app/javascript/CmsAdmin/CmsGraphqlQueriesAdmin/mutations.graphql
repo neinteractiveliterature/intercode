@@ -1,0 +1,27 @@
+#import "./queries.graphql"
+
+mutation CreateCmsGraphqlQuery($query: CmsGraphqlQueryInput!) {
+  createCmsGraphqlQuery(input: { query: $query }) {
+    query {
+      id
+      ...CmsGraphqlQueryFields
+    }
+  }
+}
+
+mutation UpdateCmsGraphqlQuery($id: ID!, $query: CmsGraphqlQueryInput!) {
+  updateCmsGraphqlQuery(input: { id: $id, query: $query }) {
+    query {
+      id
+      ...CmsGraphqlQueryFields
+    }
+  }
+}
+
+mutation DeleteCmsGraphqlQuery($id: ID!) {
+  deleteCmsGraphqlQuery(input: { id: $id }) {
+    query {
+      id
+    }
+  }
+}

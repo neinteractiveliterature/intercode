@@ -1,19 +1,19 @@
 import { useCallback } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { humanize } from 'inflected';
 import { LoadingIndicator, ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import AdminNotes from '../BuiltInFormControls/AdminNotes';
 import EventProposalDisplay from './EventProposalDisplay';
 import EventProposalStatusUpdater from './EventProposalStatusUpdater';
-import { EventProposalAdminNotesQuery } from './queries';
 import usePageTitle from '../usePageTitle';
 import {
   EventProposalAdminNotesQueryData,
+  EventProposalAdminNotesQueryDocument,
   useEventProposalAdminNotesQuery,
   useEventProposalQueryWithOwner,
 } from './queries.generated';
 import { useUpdateEventProposalAdminNotesMutation } from './mutations.generated';
+import humanize from '../humanize';
 
 export type EventProposalAdminNotesProps = {
   eventProposalId: string;
@@ -31,14 +31,14 @@ function EventProposalAdminNotes({ eventProposalId }: EventProposalAdminNotesPro
         variables: { eventProposalId, adminNotes },
         update: (cache) => {
           const queryData = cache.readQuery<EventProposalAdminNotesQueryData>({
-            query: EventProposalAdminNotesQuery,
+            query: EventProposalAdminNotesQueryDocument,
             variables: { eventProposalId },
           });
           if (!queryData) {
             return;
           }
           cache.writeQuery<EventProposalAdminNotesQueryData>({
-            query: EventProposalAdminNotesQuery,
+            query: EventProposalAdminNotesQueryDocument,
             variables: { eventProposalId },
             data: {
               ...queryData,

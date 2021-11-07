@@ -4,45 +4,45 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type UserActivityAlertsAdminConventionFieldsFragment = { __typename: 'Convention', ticket_name: string, ticket_mode: Types.TicketMode, id: string, staff_positions: Array<{ __typename: 'StaffPosition', name: string, id: string }> };
+export type UserActivityAlertsAdminConventionFieldsFragment = { __typename: 'Convention', id: string, ticket_name: string, ticket_mode: Types.TicketMode, staff_positions: Array<{ __typename: 'StaffPosition', id: string, name: string }> };
 
-export type UserActivityAlertFieldsFragment = { __typename: 'UserActivityAlert', email?: string | null | undefined, partial_name?: string | null | undefined, trigger_on_user_con_profile_create: boolean, trigger_on_ticket_create: boolean, id: string, user?: { __typename: 'User', name?: string | null | undefined, id: string } | null | undefined, notification_destinations: Array<{ __typename: 'NotificationDestination', id: string, staff_position?: { __typename: 'StaffPosition', name: string, id: string } | null | undefined, user_con_profile?: { __typename: 'UserConProfile', name_without_nickname: string, id: string } | null | undefined }> };
+export type UserActivityAlertFieldsFragment = { __typename: 'UserActivityAlert', id: string, email?: string | null | undefined, partial_name?: string | null | undefined, trigger_on_user_con_profile_create: boolean, trigger_on_ticket_create: boolean, user?: { __typename: 'User', id: string, name?: string | null | undefined } | null | undefined, notification_destinations: Array<{ __typename: 'NotificationDestination', id: string, staff_position?: { __typename: 'StaffPosition', id: string, name: string } | null | undefined, user_con_profile?: { __typename: 'UserConProfile', id: string, name_without_nickname: string } | null | undefined }> };
 
 export type UserActivityAlertsAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type UserActivityAlertsAdminQueryData = { __typename: 'Query', convention: { __typename: 'Convention', ticket_name: string, ticket_mode: Types.TicketMode, id: string, user_activity_alerts: Array<{ __typename: 'UserActivityAlert', email?: string | null | undefined, partial_name?: string | null | undefined, trigger_on_user_con_profile_create: boolean, trigger_on_ticket_create: boolean, id: string, user?: { __typename: 'User', name?: string | null | undefined, id: string } | null | undefined, notification_destinations: Array<{ __typename: 'NotificationDestination', id: string, staff_position?: { __typename: 'StaffPosition', name: string, id: string } | null | undefined, user_con_profile?: { __typename: 'UserConProfile', name_without_nickname: string, id: string } | null | undefined }> }>, staff_positions: Array<{ __typename: 'StaffPosition', name: string, id: string }> } };
+export type UserActivityAlertsAdminQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, ticket_name: string, ticket_mode: Types.TicketMode, user_activity_alerts: Array<{ __typename: 'UserActivityAlert', id: string, email?: string | null | undefined, partial_name?: string | null | undefined, trigger_on_user_con_profile_create: boolean, trigger_on_ticket_create: boolean, user?: { __typename: 'User', id: string, name?: string | null | undefined } | null | undefined, notification_destinations: Array<{ __typename: 'NotificationDestination', id: string, staff_position?: { __typename: 'StaffPosition', id: string, name: string } | null | undefined, user_con_profile?: { __typename: 'UserConProfile', id: string, name_without_nickname: string } | null | undefined }> }>, staff_positions: Array<{ __typename: 'StaffPosition', id: string, name: string }> } };
 
 export const UserActivityAlertsAdminConventionFieldsFragmentDoc = gql`
     fragment UserActivityAlertsAdminConventionFields on Convention {
-  id: transitionalId
+  id
   ticket_name
   ticket_mode
   staff_positions {
-    id: transitionalId
+    id
     name
   }
 }
     `;
 export const UserActivityAlertFieldsFragmentDoc = gql`
     fragment UserActivityAlertFields on UserActivityAlert {
-  id: transitionalId
+  id
   email
   partial_name
   trigger_on_user_con_profile_create
   trigger_on_ticket_create
   user {
-    id: transitionalId
+    id
     name
   }
   notification_destinations {
-    id: transitionalId
+    id
     staff_position {
-      id: transitionalId
+      id
       name
     }
     user_con_profile {
-      id: transitionalId
+      id
       name_without_nickname
     }
   }
@@ -51,10 +51,10 @@ export const UserActivityAlertFieldsFragmentDoc = gql`
 export const UserActivityAlertsAdminQueryDocument = gql`
     query UserActivityAlertsAdminQuery {
   convention: conventionByRequestHost {
-    id: transitionalId
+    id
     ...UserActivityAlertsAdminConventionFields
     user_activity_alerts {
-      id: transitionalId
+      id
       ...UserActivityAlertFields
     }
   }

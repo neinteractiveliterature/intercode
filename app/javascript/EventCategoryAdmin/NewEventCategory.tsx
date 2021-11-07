@@ -45,7 +45,7 @@ export default LoadQueryWrapper(useEventCategoryAdminQuery, function NewEventCat
 
   usePageTitle('New Event Category');
 
-  const { forms, departments, ticket_name: ticketName, ticket_mode: ticketMode } = data.convention;
+  const { forms, departments, ticketNamePlural, ticket_mode: ticketMode } = data.convention;
 
   return (
     <>
@@ -55,7 +55,7 @@ export default LoadQueryWrapper(useEventCategoryAdminQuery, function NewEventCat
         value={eventCategory}
         onChange={setEventCategory}
         forms={forms}
-        ticketName={ticketName}
+        ticketNamePlural={ticketNamePlural}
         ticketMode={ticketMode}
         disabled={createInProgress}
         departments={departments}

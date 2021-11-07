@@ -44,7 +44,7 @@ export default LoadSingleValueFromCollectionWrapper(
         useDeleteMaximumEventProvidedTicketsOverrideMutation,
         serializedEvent,
         'maximum_event_provided_tickets_overrides',
-        (mepto) => ({ input: { transitionalId: mepto.id } }),
+        (mepto) => ({ input: { id: mepto.id } }),
       )[0],
     });
 
@@ -80,7 +80,7 @@ export default LoadSingleValueFromCollectionWrapper(
 
     const [dropEventMutate] = useDropEventMutation();
     const dropEvent = useCallback(
-      () => dropEventMutate({ variables: { input: { transitionalId: initialEvent.id } } }),
+      () => dropEventMutate({ variables: { input: { id: initialEvent.id } } }),
       [initialEvent, dropEventMutate],
     );
 

@@ -12,16 +12,16 @@ export type UpdateRootSiteMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateRootSiteMutationData = { __typename: 'Mutation', updateRootSite: { __typename: 'UpdateRootSitePayload', root_site: { __typename: 'RootSite', site_name: string, id: string, rootPage: { __typename: 'Page', name?: string | null | undefined, id: string }, defaultLayout: { __typename: 'CmsLayout', name?: string | null | undefined, id: string }, cmsPages: Array<{ __typename: 'Page', name?: string | null | undefined, id: string }>, cmsLayouts: Array<{ __typename: 'CmsLayout', name?: string | null | undefined, id: string }> } } };
+export type UpdateRootSiteMutationData = { __typename: 'Mutation', updateRootSite: { __typename: 'UpdateRootSitePayload', root_site: { __typename: 'RootSite', id: string, site_name: string, rootPage: { __typename: 'Page', id: string, name?: string | null | undefined }, defaultLayout: { __typename: 'CmsLayout', id: string, name?: string | null | undefined }, cmsPages: Array<{ __typename: 'Page', id: string, name?: string | null | undefined }>, cmsLayouts: Array<{ __typename: 'CmsLayout', id: string, name?: string | null | undefined }> } } };
 
 
 export const UpdateRootSiteDocument = gql`
     mutation UpdateRootSite($siteName: String, $defaultLayoutId: ID, $rootPageId: ID) {
   updateRootSite(
-    input: {root_site: {site_name: $siteName, transitionalDefaultLayoutId: $defaultLayoutId, transitionalRootPageId: $rootPageId}}
+    input: {root_site: {site_name: $siteName, defaultLayoutId: $defaultLayoutId, rootPageId: $rootPageId}}
   ) {
     root_site {
-      id: transitionalId
+      id
       ...RootSiteFields
     }
   }

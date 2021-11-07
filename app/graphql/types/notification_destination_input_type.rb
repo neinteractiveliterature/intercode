@@ -1,19 +1,19 @@
 # frozen_string_literal: true
 class Types::NotificationDestinationInputType < Types::BaseInputObject
-  argument :user_con_profile_id,
-           Int,
+  argument :transitional_user_con_profile_id,
+           ID,
            deprecation_reason:
-             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
+             "IDs have transitioned to the ID type.  Please switch back to the userConProfileId field so that \
+we can remove this temporary one.",
            required: false,
-           camelize: false
-  argument :transitional_user_con_profile_id, ID, required: false, camelize: true
-  argument :staff_position_id,
-           Int,
+           camelize: true
+  argument :user_con_profile_id, ID, required: false, camelize: true
+  argument :transitional_staff_position_id,
+           ID,
            deprecation_reason:
-             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
+             "IDs have transitioned to the ID type.  Please switch back to the staffPositionId field so that \
+we can remove this temporary one.",
            required: false,
-           camelize: false
-  argument :transitional_staff_position_id, ID, required: false, camelize: true
+           camelize: true
+  argument :staff_position_id, ID, required: false, camelize: true
 end

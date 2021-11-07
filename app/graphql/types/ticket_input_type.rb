@@ -1,19 +1,19 @@
 # frozen_string_literal: true
 class Types::TicketInputType < Types::BaseInputObject
-  argument :ticket_type_id,
-           Int,
+  argument :transitional_ticket_type_id,
+           ID,
            deprecation_reason:
-             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
+             "IDs have transitioned to the ID type.  Please switch back to the ticketTypeId field so that \
+we can remove this temporary one.",
            required: false,
-           camelize: false
-  argument :transitional_ticket_type_id, ID, required: false, camelize: true
-  argument :provided_by_event_id,
-           Int,
+           camelize: true
+  argument :ticket_type_id, ID, required: false, camelize: true
+  argument :transitional_provided_by_event_id,
+           ID,
            deprecation_reason:
-             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
+             "IDs have transitioned to the ID type.  Please switch back to the providedByEventId field so that \
+we can remove this temporary one.",
            required: false,
-           camelize: false
-  argument :transitional_provided_by_event_id, ID, required: false, camelize: true
+           camelize: true
+  argument :provided_by_event_id, ID, required: false, camelize: true
 end

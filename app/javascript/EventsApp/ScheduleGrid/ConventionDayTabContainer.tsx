@@ -5,23 +5,19 @@ import { DateTime } from 'luxon';
 
 import { getConventionDayTimespans } from '../../TimespanUtils';
 import RefreshButton from './RefreshButton';
-import { ScheduleGridCombinedQuery } from './queries';
 import AppRootContext from '../../AppRootContext';
 import Timespan, { FiniteTimespan } from '../../Timespan';
 import { useAppDateTimeFormat } from '../../TimeUtils';
 import { SiteMode } from '../../graphqlTypes.generated';
 import { DateTimeFormatKey } from '../../DateTimeFormats';
+import { ScheduleGridCombinedQueryDocument } from './queries.generated';
 
 function conventionDayUrlPortionFormat(
   siteMode: SiteMode | undefined,
   conventionTimespan: Timespan | undefined,
 ): DateTimeFormatKey {
   const conventionLengthInDays = conventionTimespan?.getLength('days');
-  if (
-    siteMode === SiteMode.Convention &&
-    conventionLengthInDays &&
-    conventionLengthInDays.days < 7
-  ) {
+  if (siteMode === SiteMode.Convention && conventionLengthInDays && conventionLengthInDays.days < 7) {
     return 'longWeekday';
   }
 
@@ -34,10 +30,7 @@ export function buildConventionDayUrlPortion(
   siteMode: SiteMode | undefined,
   conventionTimespan: Timespan | undefined,
 ): string {
-  return format(
-    dayStart,
-    conventionDayUrlPortionFormat(siteMode, conventionTimespan),
-  ).toLowerCase();
+  return format(dayStart, conventionDayUrlPortionFormat(siteMode, conventionTimespan)).toLowerCase();
 }
 
 export function useConventionDayUrlPortion(): (dayStart: DateTime) => string {
@@ -102,7 +95,7 @@ function ConventionDayTabContainer({
   const refreshData = useCallback(
     () =>
       client.query({
-        query: ScheduleGridCombinedQuery,
+        query: ScheduleGridCombinedQueryDocument,
         variables: { extendedCounts: showExtendedCounts || false },
         fetchPolicy: 'network-only',
       }),
@@ -110,17 +103,12 @@ function ConventionDayTabContainer({
   );
 
   const conventionDayTimespans = useMemo(
-    () =>
-      conventionTimespan.isFinite()
-        ? getConventionDayTimespans(conventionTimespan, timezoneName)
-        : [],
+    () => (conventionTimespan.isFinite() ? getConventionDayTimespans(conventionTimespan, timezoneName) : []),
     [conventionTimespan, timezoneName],
   );
 
   if (!conventionTimespan.isFinite()) {
-    return (
-      <div className="alert alert-warning">Convention start/end dates have not yet been set.</div>
-    );
+    return <div className="alert alert-warning">Convention start/end dates have not yet been set.</div>;
   }
 
   return (
@@ -143,10 +131,7 @@ function ConventionDayTabContainer({
       </div>
       <Switch>
         {conventionDayTimespans.map((timespan) => (
-          <Route
-            path={`${basename}/${conventionDayUrlPortion(timespan.start)}`}
-            key={timespan.start.toISO()}
-          >
+          <Route path={`${basename}/${conventionDayUrlPortion(timespan.start)}`} key={timespan.start.toISO()}>
             {children(timespan)}
           </Route>
         ))}

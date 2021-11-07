@@ -1,5 +1,5 @@
-import { sortBy } from 'lodash';
 import flatMap from 'lodash/flatMap';
+import sortBy from 'lodash/sortBy';
 import { DateTime } from 'luxon';
 import React, { useCallback, useContext, useLayoutEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';

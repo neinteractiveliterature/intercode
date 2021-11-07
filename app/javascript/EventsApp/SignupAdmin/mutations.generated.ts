@@ -2,10 +2,9 @@
 import * as Types from '../../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
-import { SignupFieldsFragmentDoc } from './queries.generated';
+import { SignupFieldsFragmentDoc, UserConProfileSignupsFragmentDoc } from './queries.generated';
 import { EventPageRunFieldsFragmentDoc } from '../EventPage/queries.generated';
-import { RunBasicSignupDataFragmentDoc } from '../queries.generated';
-import { UserConProfileSignupsFragmentDoc } from './queries.generated';
+import { RunBasicSignupDataFragmentDoc, CommonConventionDataFragmentDoc } from '../queries.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
 export type ChangeSignupBucketMutationVariables = Types.Exact<{
@@ -14,7 +13,7 @@ export type ChangeSignupBucketMutationVariables = Types.Exact<{
 }>;
 
 
-export type ChangeSignupBucketMutationData = { __typename: 'Mutation', updateSignupBucket: { __typename: 'UpdateSignupBucketPayload', signup: { __typename: 'Signup', state: Types.SignupState, counted: boolean, bucket_key?: string | null | undefined, requested_bucket_key?: string | null | undefined, id: string, run: { __typename: 'Run', title_suffix?: string | null | undefined, starts_at: string, ends_at: string, current_ability_can_signup_summary_run: boolean, signup_count_by_state_and_bucket_key_and_counted: string, id: string, rooms: Array<{ __typename: 'Room', name?: string | null | undefined, id: string }>, event: { __typename: 'Event', title?: string | null | undefined, id: string, event_category: { __typename: 'EventCategory', team_member_name: string, id: string }, registration_policy?: { __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null | undefined, anything: boolean }> } | null | undefined, team_members: Array<{ __typename: 'TeamMember', id: string, user_con_profile: { __typename: 'UserConProfile', id: string } }> }, my_signups: Array<{ __typename: 'Signup', state: Types.SignupState, waitlist_position?: number | null | undefined, id: string }>, my_signup_requests: Array<{ __typename: 'SignupRequest', state: Types.SignupRequestState, requested_bucket_key?: string | null | undefined, id: string, target_run: { __typename: 'Run', id: string }, replace_signup?: { __typename: 'Signup', id: string } | null | undefined }> }, user_con_profile: { __typename: 'UserConProfile', name_without_nickname: string, nickname?: string | null | undefined, birth_date?: string | null | undefined, email?: string | null | undefined, address?: string | null | undefined, city?: string | null | undefined, state?: string | null | undefined, zipcode?: string | null | undefined, country?: string | null | undefined, mobile_phone?: string | null | undefined, gravatar_enabled: boolean, gravatar_url: string, id: string } } } };
+export type ChangeSignupBucketMutationData = { __typename: 'Mutation', updateSignupBucket: { __typename: 'UpdateSignupBucketPayload', signup: { __typename: 'Signup', id: string, state: Types.SignupState, counted: boolean, bucket_key?: string | null | undefined, requested_bucket_key?: string | null | undefined, run: { __typename: 'Run', id: string, title_suffix?: string | null | undefined, starts_at: string, ends_at: string, current_ability_can_signup_summary_run: boolean, signup_count_by_state_and_bucket_key_and_counted: string, rooms: Array<{ __typename: 'Room', id: string, name?: string | null | undefined }>, event: { __typename: 'Event', id: string, title?: string | null | undefined, event_category: { __typename: 'EventCategory', id: string, team_member_name: string, teamMemberNamePlural: string }, registration_policy?: { __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null | undefined, anything: boolean }> } | null | undefined, team_members: Array<{ __typename: 'TeamMember', id: string, user_con_profile: { __typename: 'UserConProfile', id: string } }> }, my_signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState, waitlist_position?: number | null | undefined }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: string, state: Types.SignupRequestState, requested_bucket_key?: string | null | undefined, target_run: { __typename: 'Run', id: string }, replace_signup?: { __typename: 'Signup', id: string } | null | undefined }> }, user_con_profile: { __typename: 'UserConProfile', id: string, name_without_nickname: string, nickname?: string | null | undefined, birth_date?: string | null | undefined, email?: string | null | undefined, address?: string | null | undefined, city?: string | null | undefined, state?: string | null | undefined, zipcode?: string | null | undefined, country?: string | null | undefined, mobile_phone?: string | null | undefined, gravatar_enabled: boolean, gravatar_url: string } } } };
 
 export type ForceConfirmSignupMutationVariables = Types.Exact<{
   signupId: Types.Scalars['ID'];
@@ -22,7 +21,7 @@ export type ForceConfirmSignupMutationVariables = Types.Exact<{
 }>;
 
 
-export type ForceConfirmSignupMutationData = { __typename: 'Mutation', forceConfirmSignup: { __typename: 'ForceConfirmSignupPayload', signup: { __typename: 'Signup', state: Types.SignupState, counted: boolean, bucket_key?: string | null | undefined, requested_bucket_key?: string | null | undefined, id: string, run: { __typename: 'Run', title_suffix?: string | null | undefined, starts_at: string, ends_at: string, current_ability_can_signup_summary_run: boolean, signup_count_by_state_and_bucket_key_and_counted: string, id: string, rooms: Array<{ __typename: 'Room', name?: string | null | undefined, id: string }>, event: { __typename: 'Event', title?: string | null | undefined, id: string, event_category: { __typename: 'EventCategory', team_member_name: string, id: string }, registration_policy?: { __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null | undefined, anything: boolean }> } | null | undefined, team_members: Array<{ __typename: 'TeamMember', id: string, user_con_profile: { __typename: 'UserConProfile', id: string } }> }, my_signups: Array<{ __typename: 'Signup', state: Types.SignupState, waitlist_position?: number | null | undefined, id: string }>, my_signup_requests: Array<{ __typename: 'SignupRequest', state: Types.SignupRequestState, requested_bucket_key?: string | null | undefined, id: string, target_run: { __typename: 'Run', id: string }, replace_signup?: { __typename: 'Signup', id: string } | null | undefined }> }, user_con_profile: { __typename: 'UserConProfile', name_without_nickname: string, nickname?: string | null | undefined, birth_date?: string | null | undefined, email?: string | null | undefined, address?: string | null | undefined, city?: string | null | undefined, state?: string | null | undefined, zipcode?: string | null | undefined, country?: string | null | undefined, mobile_phone?: string | null | undefined, gravatar_enabled: boolean, gravatar_url: string, id: string } } } };
+export type ForceConfirmSignupMutationData = { __typename: 'Mutation', forceConfirmSignup: { __typename: 'ForceConfirmSignupPayload', signup: { __typename: 'Signup', id: string, state: Types.SignupState, counted: boolean, bucket_key?: string | null | undefined, requested_bucket_key?: string | null | undefined, run: { __typename: 'Run', id: string, title_suffix?: string | null | undefined, starts_at: string, ends_at: string, current_ability_can_signup_summary_run: boolean, signup_count_by_state_and_bucket_key_and_counted: string, rooms: Array<{ __typename: 'Room', id: string, name?: string | null | undefined }>, event: { __typename: 'Event', id: string, title?: string | null | undefined, event_category: { __typename: 'EventCategory', id: string, team_member_name: string, teamMemberNamePlural: string }, registration_policy?: { __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null | undefined, anything: boolean }> } | null | undefined, team_members: Array<{ __typename: 'TeamMember', id: string, user_con_profile: { __typename: 'UserConProfile', id: string } }> }, my_signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState, waitlist_position?: number | null | undefined }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: string, state: Types.SignupRequestState, requested_bucket_key?: string | null | undefined, target_run: { __typename: 'Run', id: string }, replace_signup?: { __typename: 'Signup', id: string } | null | undefined }> }, user_con_profile: { __typename: 'UserConProfile', id: string, name_without_nickname: string, nickname?: string | null | undefined, birth_date?: string | null | undefined, email?: string | null | undefined, address?: string | null | undefined, city?: string | null | undefined, state?: string | null | undefined, zipcode?: string | null | undefined, country?: string | null | undefined, mobile_phone?: string | null | undefined, gravatar_enabled: boolean, gravatar_url: string } } } };
 
 export type UpdateSignupCountedMutationVariables = Types.Exact<{
   signupId: Types.Scalars['ID'];
@@ -30,24 +29,24 @@ export type UpdateSignupCountedMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateSignupCountedMutationData = { __typename: 'Mutation', updateSignupCounted: { __typename: 'UpdateSignupCountedPayload', signup: { __typename: 'Signup', state: Types.SignupState, counted: boolean, bucket_key?: string | null | undefined, requested_bucket_key?: string | null | undefined, id: string, run: { __typename: 'Run', title_suffix?: string | null | undefined, starts_at: string, ends_at: string, current_ability_can_signup_summary_run: boolean, signup_count_by_state_and_bucket_key_and_counted: string, id: string, rooms: Array<{ __typename: 'Room', name?: string | null | undefined, id: string }>, event: { __typename: 'Event', title?: string | null | undefined, id: string, event_category: { __typename: 'EventCategory', team_member_name: string, id: string }, registration_policy?: { __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null | undefined, anything: boolean }> } | null | undefined, team_members: Array<{ __typename: 'TeamMember', id: string, user_con_profile: { __typename: 'UserConProfile', id: string } }> }, my_signups: Array<{ __typename: 'Signup', state: Types.SignupState, waitlist_position?: number | null | undefined, id: string }>, my_signup_requests: Array<{ __typename: 'SignupRequest', state: Types.SignupRequestState, requested_bucket_key?: string | null | undefined, id: string, target_run: { __typename: 'Run', id: string }, replace_signup?: { __typename: 'Signup', id: string } | null | undefined }> }, user_con_profile: { __typename: 'UserConProfile', name_without_nickname: string, nickname?: string | null | undefined, birth_date?: string | null | undefined, email?: string | null | undefined, address?: string | null | undefined, city?: string | null | undefined, state?: string | null | undefined, zipcode?: string | null | undefined, country?: string | null | undefined, mobile_phone?: string | null | undefined, gravatar_enabled: boolean, gravatar_url: string, id: string } } } };
+export type UpdateSignupCountedMutationData = { __typename: 'Mutation', updateSignupCounted: { __typename: 'UpdateSignupCountedPayload', signup: { __typename: 'Signup', id: string, state: Types.SignupState, counted: boolean, bucket_key?: string | null | undefined, requested_bucket_key?: string | null | undefined, run: { __typename: 'Run', id: string, title_suffix?: string | null | undefined, starts_at: string, ends_at: string, current_ability_can_signup_summary_run: boolean, signup_count_by_state_and_bucket_key_and_counted: string, rooms: Array<{ __typename: 'Room', id: string, name?: string | null | undefined }>, event: { __typename: 'Event', id: string, title?: string | null | undefined, event_category: { __typename: 'EventCategory', id: string, team_member_name: string, teamMemberNamePlural: string }, registration_policy?: { __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null | undefined, anything: boolean }> } | null | undefined, team_members: Array<{ __typename: 'TeamMember', id: string, user_con_profile: { __typename: 'UserConProfile', id: string } }> }, my_signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState, waitlist_position?: number | null | undefined }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: string, state: Types.SignupRequestState, requested_bucket_key?: string | null | undefined, target_run: { __typename: 'Run', id: string }, replace_signup?: { __typename: 'Signup', id: string } | null | undefined }> }, user_con_profile: { __typename: 'UserConProfile', id: string, name_without_nickname: string, nickname?: string | null | undefined, birth_date?: string | null | undefined, email?: string | null | undefined, address?: string | null | undefined, city?: string | null | undefined, state?: string | null | undefined, zipcode?: string | null | undefined, country?: string | null | undefined, mobile_phone?: string | null | undefined, gravatar_enabled: boolean, gravatar_url: string } } } };
 
 export type WithdrawAllUserConProfileSignupsMutationVariables = Types.Exact<{
   userConProfileId: Types.Scalars['ID'];
 }>;
 
 
-export type WithdrawAllUserConProfileSignupsMutationData = { __typename: 'Mutation', withdrawAllUserConProfileSignups: { __typename: 'WithdrawAllUserConProfileSignupsPayload', user_con_profile: { __typename: 'UserConProfile', id: string, signups: Array<{ __typename: 'Signup', state: Types.SignupState, counted: boolean, bucket_key?: string | null | undefined, requested_bucket_key?: string | null | undefined, id: string, user_con_profile: { __typename: 'UserConProfile', id: string }, run: { __typename: 'Run', starts_at: string, id: string, event: { __typename: 'Event', title?: string | null | undefined, length_seconds: number, id: string, event_category: { __typename: 'EventCategory', team_member_name: string, id: string }, registration_policy?: { __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null | undefined }> } | null | undefined, team_members: Array<{ __typename: 'TeamMember', id: string, user_con_profile: { __typename: 'UserConProfile', id: string } }> }, rooms: Array<{ __typename: 'Room', name?: string | null | undefined, id: string }> } }> } } };
+export type WithdrawAllUserConProfileSignupsMutationData = { __typename: 'Mutation', withdrawAllUserConProfileSignups: { __typename: 'WithdrawAllUserConProfileSignupsPayload', user_con_profile: { __typename: 'UserConProfile', id: string, signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState, counted: boolean, bucket_key?: string | null | undefined, requested_bucket_key?: string | null | undefined, user_con_profile: { __typename: 'UserConProfile', id: string }, run: { __typename: 'Run', id: string, starts_at: string, event: { __typename: 'Event', id: string, title?: string | null | undefined, length_seconds: number, event_category: { __typename: 'EventCategory', id: string, team_member_name: string }, registration_policy?: { __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null | undefined }> } | null | undefined, team_members: Array<{ __typename: 'TeamMember', id: string, user_con_profile: { __typename: 'UserConProfile', id: string } }> }, rooms: Array<{ __typename: 'Room', id: string, name?: string | null | undefined }> } }> } } };
 
 
 export const ChangeSignupBucketDocument = gql`
     mutation ChangeSignupBucket($signupId: ID!, $bucketKey: String!) {
-  updateSignupBucket(input: {transitionalId: $signupId, bucket_key: $bucketKey}) {
+  updateSignupBucket(input: {id: $signupId, bucket_key: $bucketKey}) {
     signup {
-      id: transitionalId
+      id
       ...SignupFields
       run {
-        id: transitionalId
+        id
         ...EventPageRunFields
         ...RunBasicSignupData
       }
@@ -86,12 +85,12 @@ export type ChangeSignupBucketMutationResult = Apollo.MutationResult<ChangeSignu
 export type ChangeSignupBucketMutationOptions = Apollo.BaseMutationOptions<ChangeSignupBucketMutationData, ChangeSignupBucketMutationVariables>;
 export const ForceConfirmSignupDocument = gql`
     mutation ForceConfirmSignup($signupId: ID!, $bucketKey: String!) {
-  forceConfirmSignup(input: {transitionalId: $signupId, bucket_key: $bucketKey}) {
+  forceConfirmSignup(input: {id: $signupId, bucket_key: $bucketKey}) {
     signup {
-      id: transitionalId
+      id
       ...SignupFields
       run {
-        id: transitionalId
+        id
         ...EventPageRunFields
         ...RunBasicSignupData
       }
@@ -130,12 +129,12 @@ export type ForceConfirmSignupMutationResult = Apollo.MutationResult<ForceConfir
 export type ForceConfirmSignupMutationOptions = Apollo.BaseMutationOptions<ForceConfirmSignupMutationData, ForceConfirmSignupMutationVariables>;
 export const UpdateSignupCountedDocument = gql`
     mutation UpdateSignupCounted($signupId: ID!, $counted: Boolean!) {
-  updateSignupCounted(input: {transitionalId: $signupId, counted: $counted}) {
+  updateSignupCounted(input: {id: $signupId, counted: $counted}) {
     signup {
-      id: transitionalId
+      id
       ...SignupFields
       run {
-        id: transitionalId
+        id
         ...EventPageRunFields
         ...RunBasicSignupData
       }
@@ -174,11 +173,9 @@ export type UpdateSignupCountedMutationResult = Apollo.MutationResult<UpdateSign
 export type UpdateSignupCountedMutationOptions = Apollo.BaseMutationOptions<UpdateSignupCountedMutationData, UpdateSignupCountedMutationVariables>;
 export const WithdrawAllUserConProfileSignupsDocument = gql`
     mutation WithdrawAllUserConProfileSignups($userConProfileId: ID!) {
-  withdrawAllUserConProfileSignups(
-    input: {transitionalUserConProfileId: $userConProfileId}
-  ) {
+  withdrawAllUserConProfileSignups(input: {userConProfileId: $userConProfileId}) {
     user_con_profile {
-      id: transitionalId
+      id
       ...UserConProfileSignupsFragment
     }
   }

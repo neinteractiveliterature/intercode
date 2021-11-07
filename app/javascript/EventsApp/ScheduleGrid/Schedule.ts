@@ -1,4 +1,3 @@
-import flatMap from 'lodash/flatMap';
 import { v4 as uuidv4 } from 'uuid';
 
 import ScheduleLayoutBlock from './ScheduleLayout/ScheduleLayoutBlock';
@@ -104,10 +103,10 @@ export default class Schedule {
 
     this.eventsById = new Map(events.map((event) => [event.id, event]));
     this.runsById = new Map(
-      flatMap(events, (event) => event.runs.map((run) => [run.id, { ...run, event_id: event.id }])),
+      events.flatMap((event) => event.runs.map((run) => [run.id, { ...run, event_id: event.id }])),
     );
     this.runTimespansById = new Map(
-      flatMap(events, (event) => event.runs.map((run) => [run.id, timespanFromRun(timezoneName, event, run)])),
+      events.flatMap((event) => event.runs.map((run) => [run.id, timespanFromRun(timezoneName, event, run)])),
     );
 
     this.myRatingFilter = myRatingFilter;

@@ -1,7 +1,5 @@
 import { useCallback } from 'react';
 import * as React from 'react';
-// @ts-expect-error inflected type definitions don't export capitalize
-import { pluralize, capitalize } from 'inflected';
 import { ApolloError, useApolloClient } from '@apollo/client';
 import {
   BootstrapFormInput,
@@ -21,6 +19,7 @@ import {
   StripeAccountOnboardingLinkQueryData,
   StripeAccountOnboardingLinkQueryVariables,
 } from './queries.generated';
+import { useTranslation } from 'react-i18next';
 
 export type ConventionFormBillingSectionProps = {
   convention: ConventionFormConvention;
@@ -41,6 +40,7 @@ function ConventionFormBillingSection({
   );
   const [createConventionStripeAccount] = useCreateConventionStripeAccountMutation();
   const apolloClient = useApolloClient();
+  const { t } = useTranslation();
 
   const createStripeAccountAndRedirect = useCallback(async () => {
     const result = await createConventionStripeAccount({
@@ -48,8 +48,7 @@ function ConventionFormBillingSection({
         baseUrl: window.location.href.toString(),
       },
     });
-    const onboardingLink =
-      result.data?.createConventionStripeAccount?.stripe_account.account_onboarding_link;
+    const onboardingLink = result.data?.createConventionStripeAccount?.stripe_account.account_onboarding_link;
     if (onboardingLink) {
       window.location.href = onboardingLink;
     }
@@ -71,23 +70,30 @@ function ConventionFormBillingSection({
       window.location.href = onboardingLink;
     }
   }, [apolloClient]);
-  const [startObtainOnboardingLink, obtainOnboardingLinkError, obtainOnboardinLinkInProgress] =
-    useAsyncFunction(obtainOnboardingLinkAndRedirect);
+  const [startObtainOnboardingLink, obtainOnboardingLinkError, obtainOnboardinLinkInProgress] = useAsyncFunction(
+    obtainOnboardingLinkAndRedirect,
+  );
 
   return (
     <>
       <MultipleChoiceInput
-        caption={`${capitalize(convention.ticket_name)} sales`}
+        caption={t('admin.convention.ticketModeLabel', '{{ ticketName, capitalize }} sales', {
+          ticketName: convention.ticket_name,
+        })}
         choices={[
           {
             value: 'disabled',
-            label: `Convention does not sell ${pluralize(convention.ticket_name)}`,
+            label: t('admin.convention.ticketModeDisabled', 'Convention does not sell {{ ticketNamePlural }}', {
+              ticketNamePlural: convention.ticketNamePlural,
+            }),
           },
           {
             value: 'required_for_signup',
-            label: `${pluralize(
-              capitalize(convention.ticket_name),
-            )} are sold and required for event signups`,
+            label: t(
+              'admin.convention.ticketModeRequiredForSignup',
+              '{{ ticketNamePlural, capitalize }} are sold and required for event signups',
+              { ticketNamePlural: convention.ticketNamePlural },
+            ),
           },
         ]}
         value={convention.ticket_mode}
@@ -102,19 +108,28 @@ function ConventionFormBillingSection({
 
         <div className="card-body">
           <p>
-            In order to sell {pluralize(convention.ticket_name)} and/or products, a Stripe account
-            is required.{' '}
+            {t(
+              'admin.convention.stripeAccountRequired',
+              'In order to sell {{ ticketNamePlural }} and/or products, a Stripe account is required.',
+              { ticketNamePlural: convention.ticketNamePlural },
+            )}{' '}
             {convention.stripe_account && (
               <>
                 {convention.stripe_account.charges_enabled ? (
                   <>
-                    {convention.name} is connected to a Stripe account and is able to sell{' '}
-                    {pluralize(convention.ticket_name)} and/or products.
+                    {t(
+                      'admin.convention.stripeAccountActive',
+                      '{{ conventionName }} is connected to a Stripe account and is able to sell {{ ticketNamePlural }} and/or products.',
+                      { conventionName: convention.name, ticketNamePlural: convention.ticketNamePlural },
+                    )}
                   </>
                 ) : (
                   <>
-                    {convention.name} is connected to a Stripe account but that account is still in
-                    the setup process.
+                    {t(
+                      'admin.convention.stripeAccountPending',
+                      '{{ conventionName }} is connected to a Stripe account but that account is still in the setup process.',
+                      { conventionName: convention.name },
+                    )}
                   </>
                 )}
               </>
@@ -123,13 +138,13 @@ function ConventionFormBillingSection({
           {convention.stripe_account ? (
             <>
               <dl>
-                <dt>Account ID</dt>
+                <dt>{t('admin.convention.stripeAccountId', 'Account ID')}</dt>
                 <dd>{convention.stripe_account.id}</dd>
 
-                <dt>Email</dt>
+                <dt>{t('admin.convention.stripeAccountEmail', 'Email')}</dt>
                 <dd>{convention.stripe_account.email}</dd>
 
-                <dt>Display name</dt>
+                <dt>{t('admin.convention.stripeAccountDisplayName', 'Display name')}</dt>
                 <dd>{convention.stripe_account.display_name}</dd>
               </dl>
               {!convention.stripe_account.charges_enabled && (
@@ -143,7 +158,11 @@ function ConventionFormBillingSection({
                     {obtainOnboardinLinkInProgress ? (
                       <LoadingIndicator iconSet="bootstrap-icons" />
                     ) : (
-                      `Continue Stripe account setup for ${convention.name}`
+                      t(
+                        'admin.convention.stripeAccountContinue',
+                        'Continue Stripe account setup for {{ conventionName }}',
+                        { conventionName: convention.name },
+                      )
                     )}
                   </button>
                   <ErrorDisplay graphQLError={obtainOnboardingLinkError as ApolloError} />
@@ -161,7 +180,9 @@ function ConventionFormBillingSection({
                 {createStripeAccountInProgress ? (
                   <LoadingIndicator iconSet="bootstrap-icons" />
                 ) : (
-                  `Set up a Stripe account for ${convention.name}`
+                  t('admin.convention.stripeAccountSetup', 'Set up a Stripe account for {{ conventionName }}', {
+                    conventionName: convention.name,
+                  })
                 )}
               </button>
               <ErrorDisplay graphQLError={createStripeAccountError as ApolloError} />
@@ -172,7 +193,7 @@ function ConventionFormBillingSection({
 
       <BootstrapFormInput
         name="ticket_name"
-        label={'Name for "ticket" at this convention'}
+        label={t('admin.convention.ticketNameLabel', 'Name for “ticket” at this convention')}
         type="text"
         value={convention.ticket_name ?? ''}
         onTextChange={setTicketName}
@@ -181,7 +202,9 @@ function ConventionFormBillingSection({
 
       <BootstrapFormInput
         name="maximum_tickets"
-        label={`Maximum ${pluralize(convention.ticket_name)}`}
+        label={t('admin.convention.maximumTicketsLabel', 'Maximum {{ ticketNamePlural }}', {
+          ticketNamePlural: convention.ticketNamePlural,
+        })}
         type="number"
         value={(convention.maximum_tickets ?? '').toString()}
         onTextChange={(newValue) => setMaximumTickets(parseIntOrNull(newValue))}

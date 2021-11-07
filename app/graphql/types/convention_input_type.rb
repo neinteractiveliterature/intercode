@@ -21,30 +21,30 @@ class Types::ConventionInputType < Types::BaseInputObject
   argument :site_mode, Types::SiteModeType, required: false, camelize: false
   argument :ticket_name, String, required: false, camelize: false
   argument :ticket_mode, Types::TicketModeType, required: false, camelize: false
-  argument :root_page_id,
-           Integer,
+  argument :transitional_root_page_id,
+           ID,
            deprecation_reason:
-             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
+             "IDs have transitioned to the ID type.  Please switch back to the rootPageId field so that \
+we can remove this temporary one.",
            required: false,
-           camelize: false
-  argument :transitional_root_page_id, ID, required: false, camelize: true
-  argument :default_layout_id,
-           Integer,
+           camelize: true
+  argument :root_page_id, ID, required: false, camelize: true
+  argument :transitional_default_layout_id,
+           ID,
            deprecation_reason:
-             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
+             "IDs have transitioned to the ID type.  Please switch back to the defaultLayoutId field so that \
+we can remove this temporary one.",
            required: false,
-           camelize: false
-  argument :transitional_default_layout_id, ID, required: false, camelize: true
-  argument :catch_all_staff_position_id,
-           Integer,
+           camelize: true
+  argument :default_layout_id, ID, required: false, camelize: true
+  argument :transitional_catch_all_staff_position_id,
+           ID,
            deprecation_reason:
-             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
+             "IDs have transitioned to the ID type.  Please switch back to the signupId field so that \
+we can remove this temporary one.",
            required: false,
-           camelize: false
-  argument :transitional_catch_all_staff_position_id, ID, required: false, camelize: true
+           camelize: true
+  argument :catch_all_staff_position_id, ID, required: false, camelize: true
   argument :clickwrap_agreement, String, required: false, camelize: false
   argument :maximum_event_signups, Types::ScheduledValueInputType, required: false, camelize: false
 end

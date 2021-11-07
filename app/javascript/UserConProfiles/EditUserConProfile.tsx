@@ -5,10 +5,13 @@ import { ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform
 
 import buildFormStateFromData from './buildFormStateFromData';
 import UserConProfileForm from './UserConProfileForm';
-import { UserConProfileAdminQuery } from './queries';
 import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
-import { useUserConProfileQuery, UserConProfileAdminQueryData } from './queries.generated';
+import {
+  useUserConProfileQuery,
+  UserConProfileAdminQueryData,
+  UserConProfileAdminQueryDocument,
+} from './queries.generated';
 import { useUpdateUserConProfileMutation } from './mutations.generated';
 
 function useUserConProfileQueryFromParams() {
@@ -31,13 +34,13 @@ export default LoadQueryWrapper(useUserConProfileQueryFromParams, function EditU
       const variables = { id: initialUserConProfile.id };
       let query: UserConProfileAdminQueryData | null = null;
       query = cache.readQuery<UserConProfileAdminQueryData>({
-        query: UserConProfileAdminQuery,
+        query: UserConProfileAdminQueryDocument,
         variables,
       });
 
       if (query) {
         cache.writeQuery<UserConProfileAdminQueryData>({
-          query: UserConProfileAdminQuery,
+          query: UserConProfileAdminQueryDocument,
           variables,
           data: {
             ...query,
@@ -59,7 +62,7 @@ export default LoadQueryWrapper(useUserConProfileQueryFromParams, function EditU
       await mutate({
         variables: {
           input: {
-            transitionalId: userConProfile.id,
+            id: userConProfile.id,
             user_con_profile: {
               form_response_attrs_json: JSON.stringify(userConProfile.form_response_attrs),
             },

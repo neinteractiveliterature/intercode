@@ -1,10 +1,9 @@
 import { useState, useEffect, useContext } from 'react';
 import classNames from 'classnames';
 import { Redirect } from 'react-router-dom';
-// @ts-expect-error @types/inflected does not expose capitalize
-import { capitalize } from 'inflected';
 import { useTranslation } from 'react-i18next';
 import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
+import capitalize from 'lodash/capitalize';
 
 import AppRootContext from '../AppRootContext';
 import Checkmark from '../EventsApp/TeamMemberAdmin/Checkmark';

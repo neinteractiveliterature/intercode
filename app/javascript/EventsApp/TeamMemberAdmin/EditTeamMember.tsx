@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { titleize, underscore } from 'inflected';
 import { ApolloError } from '@apollo/client';
 import { useHistory, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
+import capitalize from 'lodash/capitalize';
 
 import buildTeamMemberInput from './buildTeamMemberInput';
 import TeamMemberForm from './TeamMemberForm';
@@ -42,7 +42,7 @@ function EditTeamMember({ event, eventPath }: EditTeamMemberProps): JSX.Element 
     await update({
       variables: {
         input: {
-          transitionalId: teamMember.id,
+          id: teamMember.id,
           team_member: buildTeamMemberInput(teamMember),
         },
       },
@@ -59,7 +59,7 @@ function EditTeamMember({ event, eventPath }: EditTeamMemberProps): JSX.Element 
     <>
       <h1 className="mb-4">
         {t('events.teamMemberAdmin.editHeader', '{{ teamMemberName }} Settings for {{ name }}', {
-          teamMemberName: titleize(underscore(event.event_category.team_member_name)),
+          teamMemberName: capitalize(event.event_category.team_member_name),
           name: teamMember.user_con_profile.name_without_nickname,
         })}
       </h1>

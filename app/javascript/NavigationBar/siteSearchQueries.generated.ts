@@ -9,13 +9,13 @@ export type SiteSearchQueryVariables = Types.Exact<{
 }>;
 
 
-export type SiteSearchQueryData = { __typename: 'Query', cmsParent: { __typename: 'Convention', id: string, fullTextSearch: { __typename: 'SearchResult', total_entries: number, entries: Array<{ __typename: 'SearchResultEntry', title?: string | null | undefined, highlight?: string | null | undefined, model: { __typename: 'Event', title?: string | null | undefined, id: string } | { __typename: 'EventProposal', title?: string | null | undefined, id: string } | { __typename: 'Page', slug?: string | null | undefined, id: string } | { __typename: 'UserConProfile', id: string } }> } } | { __typename: 'RootSite', id: string, fullTextSearch: { __typename: 'SearchResult', total_entries: number, entries: Array<{ __typename: 'SearchResultEntry', title?: string | null | undefined, highlight?: string | null | undefined, model: { __typename: 'Event', title?: string | null | undefined, id: string } | { __typename: 'EventProposal', title?: string | null | undefined, id: string } | { __typename: 'Page', slug?: string | null | undefined, id: string } | { __typename: 'UserConProfile', id: string } }> } } };
+export type SiteSearchQueryData = { __typename: 'Query', cmsParent: { __typename: 'Convention', id: string, fullTextSearch: { __typename: 'SearchResult', total_entries: number, entries: Array<{ __typename: 'SearchResultEntry', title?: string | null | undefined, highlight?: string | null | undefined, model: { __typename: 'Event', id: string, title?: string | null | undefined } | { __typename: 'EventProposal', id: string, title?: string | null | undefined } | { __typename: 'Page', id: string, slug?: string | null | undefined } | { __typename: 'UserConProfile', id: string } }> } } | { __typename: 'RootSite', id: string, fullTextSearch: { __typename: 'SearchResult', total_entries: number, entries: Array<{ __typename: 'SearchResultEntry', title?: string | null | undefined, highlight?: string | null | undefined, model: { __typename: 'Event', id: string, title?: string | null | undefined } | { __typename: 'EventProposal', id: string, title?: string | null | undefined } | { __typename: 'Page', id: string, slug?: string | null | undefined } | { __typename: 'UserConProfile', id: string } }> } } };
 
 
 export const SiteSearchQueryDocument = gql`
     query SiteSearchQuery($query: String!) {
   cmsParent: cmsParentByRequestHost {
-    id: transitionalId
+    id
     fullTextSearch(query: $query) {
       total_entries
       entries {
@@ -24,19 +24,19 @@ export const SiteSearchQueryDocument = gql`
         model {
           __typename
           ... on Page {
-            id: transitionalId
+            id
             slug
           }
           ... on Event {
-            id: transitionalId
+            id
             title
           }
           ... on EventProposal {
-            id: transitionalId
+            id
             title
           }
           ... on UserConProfile {
-            id: transitionalId
+            id
           }
         }
       }

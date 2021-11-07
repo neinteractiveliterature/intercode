@@ -1,0 +1,34 @@
+#import "../Store/pricingStructureFields.graphql"
+
+fragment TicketTypeAdmin_TicketTypeFields on TicketType {
+  id
+  name
+  description
+  counts_towards_convention_maximum
+  allows_event_signups
+  maximum_event_provided_tickets
+
+  providing_products {
+    id
+    name
+    available
+
+    pricing_structure {
+      ...PricingStructureFields
+    }
+  }
+}
+
+query AdminTicketTypesQuery {
+  convention: conventionByRequestHost {
+    id
+    ticket_types {
+      id
+      ...TicketTypeAdmin_TicketTypeFields
+    }
+
+    ticket_name
+    ticketNamePlural
+    timezone_name
+  }
+}

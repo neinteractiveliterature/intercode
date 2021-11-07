@@ -3,7 +3,7 @@ import * as Types from '../../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import { MySignupFieldsFragmentDoc, EventPageRunFieldsFragmentDoc, MySignupRequestFieldsFragmentDoc } from './queries.generated';
-import { RunBasicSignupDataFragmentDoc } from '../queries.generated';
+import { RunBasicSignupDataFragmentDoc, CommonConventionDataFragmentDoc } from '../queries.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
 export type CreateMySignupMutationVariables = Types.Exact<{
@@ -13,14 +13,14 @@ export type CreateMySignupMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateMySignupMutationData = { __typename: 'Mutation', createMySignup: { __typename: 'CreateMySignupPayload', signup: { __typename: 'Signup', state: Types.SignupState, waitlist_position?: number | null | undefined, id: string, run: { __typename: 'Run', title_suffix?: string | null | undefined, starts_at: string, current_ability_can_signup_summary_run: boolean, signup_count_by_state_and_bucket_key_and_counted: string, id: string, rooms: Array<{ __typename: 'Room', name?: string | null | undefined, id: string }>, my_signups: Array<{ __typename: 'Signup', state: Types.SignupState, waitlist_position?: number | null | undefined, id: string }>, my_signup_requests: Array<{ __typename: 'SignupRequest', state: Types.SignupRequestState, requested_bucket_key?: string | null | undefined, id: string, target_run: { __typename: 'Run', id: string }, replace_signup?: { __typename: 'Signup', id: string } | null | undefined }> } } } };
+export type CreateMySignupMutationData = { __typename: 'Mutation', createMySignup: { __typename: 'CreateMySignupPayload', signup: { __typename: 'Signup', id: string, state: Types.SignupState, waitlist_position?: number | null | undefined, run: { __typename: 'Run', id: string, title_suffix?: string | null | undefined, starts_at: string, current_ability_can_signup_summary_run: boolean, signup_count_by_state_and_bucket_key_and_counted: string, rooms: Array<{ __typename: 'Room', id: string, name?: string | null | undefined }>, my_signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState, waitlist_position?: number | null | undefined }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: string, state: Types.SignupRequestState, requested_bucket_key?: string | null | undefined, target_run: { __typename: 'Run', id: string }, replace_signup?: { __typename: 'Signup', id: string } | null | undefined }> } } } };
 
 export type WithdrawMySignupMutationVariables = Types.Exact<{
   runId: Types.Scalars['ID'];
 }>;
 
 
-export type WithdrawMySignupMutationData = { __typename: 'Mutation', withdrawMySignup: { __typename: 'WithdrawMySignupPayload', signup: { __typename: 'Signup', state: Types.SignupState, waitlist_position?: number | null | undefined, id: string, run: { __typename: 'Run', title_suffix?: string | null | undefined, starts_at: string, current_ability_can_signup_summary_run: boolean, signup_count_by_state_and_bucket_key_and_counted: string, id: string, rooms: Array<{ __typename: 'Room', name?: string | null | undefined, id: string }>, my_signups: Array<{ __typename: 'Signup', state: Types.SignupState, waitlist_position?: number | null | undefined, id: string }>, my_signup_requests: Array<{ __typename: 'SignupRequest', state: Types.SignupRequestState, requested_bucket_key?: string | null | undefined, id: string, target_run: { __typename: 'Run', id: string }, replace_signup?: { __typename: 'Signup', id: string } | null | undefined }> } } } };
+export type WithdrawMySignupMutationData = { __typename: 'Mutation', withdrawMySignup: { __typename: 'WithdrawMySignupPayload', signup: { __typename: 'Signup', id: string, state: Types.SignupState, waitlist_position?: number | null | undefined, run: { __typename: 'Run', id: string, title_suffix?: string | null | undefined, starts_at: string, current_ability_can_signup_summary_run: boolean, signup_count_by_state_and_bucket_key_and_counted: string, rooms: Array<{ __typename: 'Room', id: string, name?: string | null | undefined }>, my_signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState, waitlist_position?: number | null | undefined }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: string, state: Types.SignupRequestState, requested_bucket_key?: string | null | undefined, target_run: { __typename: 'Run', id: string }, replace_signup?: { __typename: 'Signup', id: string } | null | undefined }> } } } };
 
 export type CreateSignupRequestMutationVariables = Types.Exact<{
   targetRunId: Types.Scalars['ID'];
@@ -29,26 +29,26 @@ export type CreateSignupRequestMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateSignupRequestMutationData = { __typename: 'Mutation', createSignupRequest: { __typename: 'CreateSignupRequestPayload', signup_request: { __typename: 'SignupRequest', state: Types.SignupRequestState, requested_bucket_key?: string | null | undefined, id: string, target_run: { __typename: 'Run', id: string }, replace_signup?: { __typename: 'Signup', id: string } | null | undefined } } };
+export type CreateSignupRequestMutationData = { __typename: 'Mutation', createSignupRequest: { __typename: 'CreateSignupRequestPayload', signup_request: { __typename: 'SignupRequest', id: string, state: Types.SignupRequestState, requested_bucket_key?: string | null | undefined, target_run: { __typename: 'Run', id: string }, replace_signup?: { __typename: 'Signup', id: string } | null | undefined } } };
 
 export type WithdrawSignupRequestMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type WithdrawSignupRequestMutationData = { __typename: 'Mutation', withdrawSignupRequest: { __typename: 'WithdrawSignupRequestPayload', signup_request: { __typename: 'SignupRequest', state: Types.SignupRequestState, requested_bucket_key?: string | null | undefined, id: string, target_run: { __typename: 'Run', id: string }, replace_signup?: { __typename: 'Signup', id: string } | null | undefined } } };
+export type WithdrawSignupRequestMutationData = { __typename: 'Mutation', withdrawSignupRequest: { __typename: 'WithdrawSignupRequestPayload', signup_request: { __typename: 'SignupRequest', id: string, state: Types.SignupRequestState, requested_bucket_key?: string | null | undefined, target_run: { __typename: 'Run', id: string }, replace_signup?: { __typename: 'Signup', id: string } | null | undefined } } };
 
 
 export const CreateMySignupDocument = gql`
     mutation CreateMySignup($runId: ID!, $requestedBucketKey: String, $noRequestedBucket: Boolean) {
   createMySignup(
-    input: {transitionalRunId: $runId, requested_bucket_key: $requestedBucketKey, no_requested_bucket: $noRequestedBucket}
+    input: {runId: $runId, requested_bucket_key: $requestedBucketKey, no_requested_bucket: $noRequestedBucket}
   ) {
     signup {
-      id: transitionalId
+      id
       ...MySignupFields
       run {
-        id: transitionalId
+        id
         ...EventPageRunFields
         ...RunBasicSignupData
       }
@@ -88,12 +88,12 @@ export type CreateMySignupMutationResult = Apollo.MutationResult<CreateMySignupM
 export type CreateMySignupMutationOptions = Apollo.BaseMutationOptions<CreateMySignupMutationData, CreateMySignupMutationVariables>;
 export const WithdrawMySignupDocument = gql`
     mutation WithdrawMySignup($runId: ID!) {
-  withdrawMySignup(input: {transitionalRunId: $runId}) {
+  withdrawMySignup(input: {runId: $runId}) {
     signup {
-      id: transitionalId
+      id
       ...MySignupFields
       run {
-        id: transitionalId
+        id
         ...EventPageRunFields
         ...RunBasicSignupData
       }
@@ -132,10 +132,10 @@ export type WithdrawMySignupMutationOptions = Apollo.BaseMutationOptions<Withdra
 export const CreateSignupRequestDocument = gql`
     mutation CreateSignupRequest($targetRunId: ID!, $requestedBucketKey: String, $replaceSignupId: ID) {
   createSignupRequest(
-    input: {transitionalTargetRunId: $targetRunId, requested_bucket_key: $requestedBucketKey, transitionalReplaceSignupId: $replaceSignupId}
+    input: {targetRunId: $targetRunId, requested_bucket_key: $requestedBucketKey, replaceSignupId: $replaceSignupId}
   ) {
     signup_request {
-      id: transitionalId
+      id
       ...MySignupRequestFields
     }
   }
@@ -171,9 +171,9 @@ export type CreateSignupRequestMutationResult = Apollo.MutationResult<CreateSign
 export type CreateSignupRequestMutationOptions = Apollo.BaseMutationOptions<CreateSignupRequestMutationData, CreateSignupRequestMutationVariables>;
 export const WithdrawSignupRequestDocument = gql`
     mutation WithdrawSignupRequest($id: ID!) {
-  withdrawSignupRequest(input: {transitionalId: $id}) {
+  withdrawSignupRequest(input: {id: $id}) {
     signup_request {
-      id: transitionalId
+      id
       ...MySignupRequestFields
     }
   }

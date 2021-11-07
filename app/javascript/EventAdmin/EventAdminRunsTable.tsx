@@ -1,5 +1,4 @@
 import { Route, Link } from 'react-router-dom';
-import { pluralize } from 'inflected';
 import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import EditRun from './EditRun';
@@ -12,6 +11,7 @@ import {
   EventAdminEventsQueryVariables,
   useEventAdminEventsQuery,
 } from './queries.generated';
+import { useTranslation } from 'react-i18next';
 
 export type EventAdminRunsTableProps = {
   eventCategoryId: string;
@@ -21,22 +21,28 @@ export default LoadQueryWrapper<EventAdminEventsQueryData, EventAdminEventsQuery
   useEventAdminEventsQuery,
   function EventAdminRunsTable({ eventCategoryId, data }) {
     const [eventCategory, sortedEvents] = useEventAdminCategory(data, eventCategoryId);
+    const { t } = useTranslation();
 
-    usePageTitle(pluralize(eventCategory?.name ?? ''));
+    usePageTitle(
+      t('admin.events.eventListPageTitle', '{{ categoryName, capitalize }} events', {
+        categoryName: eventCategory?.name,
+      }),
+    );
 
     return (
       <div>
         <Link to={`${buildEventCategoryUrl(eventCategory)}/new`} className="btn btn-primary mt-4 mb-2">
-          {'Create new '}
-          {eventCategory?.name.toLowerCase()}
+          {t('admin.events.newEventLabel', 'Create new {{ categoryName }} event', {
+            categoryName: eventCategory?.name,
+          })}
         </Link>
 
         <table className="table table-striped no-top-border">
           <thead>
             <tr>
-              <th style={{ minWidth: '200px' }}>Title</th>
-              <th>Duration</th>
-              <th>Runs</th>
+              <th style={{ minWidth: '200px' }}>{t('admin.events.titleColumn', 'Title')}</th>
+              <th>{t('admin.events.durationColumn', 'Duration')}</th>
+              <th>{t('admin.events.runsColumn', 'Runs')}</th>
             </tr>
           </thead>
           <tbody>

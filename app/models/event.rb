@@ -152,8 +152,6 @@ class Event < ApplicationRecord
   has_one :event_proposal, required: false
   has_many :form_response_changes, as: :response
 
-  after_commit :sync_team_mailing_list, on: %i[create update]
-
   STATUSES.each { |status| scope status, -> { where(status: status) } }
 
   scope :regular, -> { where(event_category_id: EventCategory.where(scheduling_ui: 'regular').select(:id)) }
@@ -251,10 +249,5 @@ Use EventChangeRegistrationPolicyService instead."
     errors.add :event_category,
                "is from #{event_category.convention.name} but this event is in \
 #{convention.name}"
-  end
-
-  def sync_team_mailing_list
-    return unless SyncTeamMailingListService.mailgun
-    SyncTeamMailingListJob.perform_later(self)
   end
 end

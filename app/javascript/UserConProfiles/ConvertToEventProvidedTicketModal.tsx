@@ -4,14 +4,17 @@ import { Modal } from 'react-bootstrap4-modal';
 import { ApolloError } from '@apollo/client';
 import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import { UserConProfileAdminQuery } from './queries';
 import EventSelect, { DefaultEventSelectOptionType } from '../BuiltInFormControls/EventSelect';
 import ProvidableTicketTypeSelection from '../EventsApp/TeamMemberAdmin/ProvidableTicketTypeSelection';
 import TicketingStatusDescription, {
   TicketingStatusDescriptionProps,
 } from '../EventsApp/TeamMemberAdmin/TicketingStatusDescription';
 import useAsyncFunction from '../useAsyncFunction';
-import { useConvertToEventProvidedTicketQuery, UserConProfileAdminQueryData } from './queries.generated';
+import {
+  useConvertToEventProvidedTicketQuery,
+  UserConProfileAdminQueryData,
+  UserConProfileAdminQueryDocument,
+} from './queries.generated';
 import { useConvertTicketToEventProvidedMutation } from './mutations.generated';
 import { DefaultEventsQueryData } from '../BuiltInFormControls/selectDefaultQueries.generated';
 import { Convention } from '../graphqlTypes.generated';
@@ -99,7 +102,7 @@ function ConvertToEventProvidedTicketModal({
       },
       update: (cache, result) => {
         const cachedData = cache.readQuery<UserConProfileAdminQueryData>({
-          query: UserConProfileAdminQuery,
+          query: UserConProfileAdminQueryDocument,
           variables: { id: userConProfile.id },
         });
         if (!cachedData) {
@@ -107,7 +110,7 @@ function ConvertToEventProvidedTicketModal({
         }
 
         cache.writeQuery<UserConProfileAdminQueryData>({
-          query: UserConProfileAdminQuery,
+          query: UserConProfileAdminQueryDocument,
           variables: { id: userConProfile.id },
           data: {
             ...cachedData,

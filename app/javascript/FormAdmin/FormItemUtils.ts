@@ -3,10 +3,9 @@ import { ApolloCache } from '@apollo/client';
 import { assertNever } from 'assert-never';
 import { notEmpty } from '@neinteractiveliterature/litform';
 
-import { FormEditorQuery } from './queries';
 import { FormSection, FormItemInput, RegistrationPolicy, FormItemRole, FormItem } from '../graphqlTypes.generated';
 import { CommonFormSectionFieldsFragment, CommonFormItemFieldsFragment } from '../Models/commonFormFragments.generated';
-import { FormEditorQueryData, FormEditorFormItemFieldsFragment } from './queries.generated';
+import { FormEditorQueryData, FormEditorFormItemFieldsFragment, FormEditorQueryDocument } from './queries.generated';
 import { TimeblockDefinition, TimeblockOmission, UnparsedTimeblockPreference } from '../FormPresenter/TimeblockTypes';
 import FormTypes from '../../../config/form_types.json';
 import { ArrayWithGeneratedIds, ArrayWithoutGeneratedIds } from '../GeneratedIdUtils';
@@ -446,14 +445,14 @@ export function mutationUpdaterForFormSection<ResultDataType>(
       return;
     }
     const data = proxy.readQuery<FormEditorQueryData>({
-      query: FormEditorQuery,
+      query: FormEditorQueryDocument,
       variables: { id: formId },
     });
     if (!data) {
       return;
     }
     proxy.writeQuery<FormEditorQueryData>({
-      query: FormEditorQuery,
+      query: FormEditorQueryDocument,
       variables: { id: formId },
       data: {
         ...data,

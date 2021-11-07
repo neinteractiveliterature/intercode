@@ -54,7 +54,7 @@ function EmailList({ emails, separator, renderToolbarContent }: EmailListProps):
         readOnly
         rows={textareaRows}
         value={addresses}
-        aria-label="Email addresses"
+        aria-label={t('mailingLists.emailAddresses', 'Email addresses')}
       />
     </>
   );

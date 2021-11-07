@@ -12,6 +12,7 @@ import { EditingProduct, EditingVariant } from './EditingProductTypes';
 import { getRealOrGeneratedId, hasRealId, realOrGeneratedIdsMatch } from '../../GeneratedIdUtils';
 import AdminProductVariantDragOverlayDisplay from './AdminProductVariantDragOverlayDisplay';
 import { useSortableDndSensors } from '../../SortableUtils';
+import { useTranslation } from 'react-i18next';
 
 function updateVariant(
   productVariants: EditingVariant[],
@@ -54,6 +55,7 @@ const noop = () => {};
 function AdminProductVariantsTable(props: AdminProductVariantsTableProps): JSX.Element {
   const { product, editing } = props;
   const [matchWidthRef, matchWidthStyle] = useMatchWidthStyle<HTMLTableElement>();
+  const { t } = useTranslation();
 
   const onChange = editing ? props.onChange : noop;
 
@@ -174,7 +176,7 @@ function AdminProductVariantsTable(props: AdminProductVariantsTableProps): JSX.E
         <td />
         <td>{variant.name}</td>
         <td>{variant.description}</td>
-        <td>{describeAdminPricingStructure(variant.override_pricing_structure)}</td>
+        <td>{describeAdminPricingStructure(variant.override_pricing_structure, t)}</td>
         <td />
       </tr>
     );

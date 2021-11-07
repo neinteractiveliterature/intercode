@@ -2,7 +2,6 @@ import { Column } from 'react-table';
 import { useModal } from '@neinteractiveliterature/litform';
 
 import describeCoupon from '../describeCoupon';
-import pluralizeWithCount from '../../pluralizeWithCount';
 import useReactTableWithTheWorks from '../../Tables/useReactTableWithTheWorks';
 import { SingleLineTimestampCell } from '../../Tables/TimestampCell';
 import TableHeader from '../../Tables/TableHeader';
@@ -11,6 +10,7 @@ import EditCouponModal from './EditCouponModal';
 import ReactTableExportButtonWithColumnTransform from '../../Tables/ReactTableExportButtonWithColumnTransform';
 import { AdminCouponsQueryData, useAdminCouponsQuery } from './queries.generated';
 import ReactTableWithTheWorks from '../../Tables/ReactTableWithTheWorks';
+import { useTranslation } from 'react-i18next';
 
 type CouponType = AdminCouponsQueryData['convention']['coupons_paginated']['entries'][0];
 
@@ -21,6 +21,15 @@ const transformColumnIdForExport = (columnId: string) => {
 
   return columnId;
 };
+
+function CouponUsageLimitCell({ value }: { value: CouponType['usage_limit'] }) {
+  const { t } = useTranslation();
+  return value ? (
+    <>{t('store.coupons.usageLimitCount', '{{ count }} uses', { count: value })}</>
+  ) : (
+    <em>{t('store.coupons.unlimitedUses', 'Unlimited uses')}</em>
+  );
+}
 
 function getPossibleColumns(): Column<CouponType>[] {
   return [
@@ -42,8 +51,7 @@ function getPossibleColumns(): Column<CouponType>[] {
       id: 'usage_limit',
       accessor: 'usage_limit',
       disableSortBy: false,
-      Cell: ({ value }: { value: CouponType['usage_limit'] }) =>
-        value ? `${pluralizeWithCount('use', value)}` : <em>Unlimited uses</em>,
+      Cell: CouponUsageLimitCell,
     },
     {
       Header: 'Expiration date',
@@ -60,25 +68,20 @@ function CouponAdminTable(): JSX.Element {
   const newCouponModal = useModal();
   const editCouponModal = useModal<{ initialCoupon: CouponType }>();
 
-  const { tableHeaderProps, columnSelectionProps, tableInstance, loading } =
-    useReactTableWithTheWorks({
-      getData: ({ data }) => data?.convention.coupons_paginated.entries,
-      getPages: ({ data }) => data?.convention.coupons_paginated.total_pages,
-      getPossibleColumns,
-      useQuery: useAdminCouponsQuery,
-      storageKeyPrefix: 'coupons',
-    });
+  const { tableHeaderProps, columnSelectionProps, tableInstance, loading } = useReactTableWithTheWorks({
+    getData: ({ data }) => data?.convention.coupons_paginated.entries,
+    getPages: ({ data }) => data?.convention.coupons_paginated.total_pages,
+    getPossibleColumns,
+    useQuery: useAdminCouponsQuery,
+    storageKeyPrefix: 'coupons',
+  });
 
   return (
     <>
       <TableHeader
         {...tableHeaderProps}
         renderLeftContent={() => (
-          <button
-            type="button"
-            className="btn btn-outline-primary ms-2"
-            onClick={newCouponModal.open}
-          >
+          <button type="button" className="btn btn-outline-primary ms-2" onClick={newCouponModal.open}>
             <i className="bi-plus" /> New coupon
           </button>
         )}

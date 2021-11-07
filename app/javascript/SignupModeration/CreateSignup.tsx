@@ -1,16 +1,13 @@
 import { Suspense, useState } from 'react';
 import { LoadingIndicator, FormGroupWithLabel } from '@neinteractiveliterature/litform';
 
-import { CreateSignupEventsQuery } from './queries';
 import CreateSignupRunCard from './CreateSignupRunCard';
 import EventSelect from '../BuiltInFormControls/EventSelect';
 import UserConProfileSelect from '../BuiltInFormControls/UserConProfileSelect';
-import { CreateSignupEventsQueryData } from './queries.generated';
+import { CreateSignupEventsQueryData, CreateSignupEventsQueryDocument } from './queries.generated';
 import { DefaultUserConProfilesQueryData } from '../BuiltInFormControls/selectDefaultQueries.generated';
 
-type EventType = NonNullable<
-  CreateSignupEventsQueryData['convention']
->['events_paginated']['entries'][0];
+type EventType = NonNullable<CreateSignupEventsQueryData['convention']>['events_paginated']['entries'][0];
 
 type UserConProfileType = NonNullable<
   DefaultUserConProfilesQueryData['convention']
@@ -28,7 +25,7 @@ function CreateSignup(): JSX.Element {
             id={id}
             value={event}
             onChange={(newEvent: EventType) => setEvent(newEvent)}
-            eventsQuery={CreateSignupEventsQuery}
+            eventsQuery={CreateSignupEventsQueryDocument}
           />
         )}
       </FormGroupWithLabel>
@@ -38,9 +35,7 @@ function CreateSignup(): JSX.Element {
           <UserConProfileSelect
             id={id}
             value={userConProfile}
-            onChange={(newUserConProfile: UserConProfileType) =>
-              setUserConProfile(newUserConProfile)
-            }
+            onChange={(newUserConProfile: UserConProfileType) => setUserConProfile(newUserConProfile)}
           />
         )}
       </FormGroupWithLabel>

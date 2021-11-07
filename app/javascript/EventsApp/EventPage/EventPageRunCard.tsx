@@ -3,12 +3,11 @@ import { ApolloCache, useApolloClient } from '@apollo/client';
 import { useTranslation, Trans } from 'react-i18next';
 import { useModal, useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import { EventPageQuery } from './queries';
 import RunCard from './RunCard';
 import buildSignupOptions, { SignupOption } from './buildSignupOptions';
 import AppRootContext from '../../AppRootContext';
 import CreateModeratedSignupModal from './CreateModeratedSignupModal';
-import { EventPageQueryData, EventPageQueryVariables } from './queries.generated';
+import { EventPageQueryData, EventPageQueryDocument, EventPageQueryVariables } from './queries.generated';
 import {
   useCreateMySignupMutation,
   useWithdrawMySignupMutation,
@@ -22,7 +21,7 @@ function updateCacheAfterSignup(
   signup: EventPageQueryData['convention']['event']['runs'][0]['my_signups'][0],
 ) {
   const data = cache.readQuery<EventPageQueryData, EventPageQueryVariables>({
-    query: EventPageQuery,
+    query: EventPageQueryDocument,
     variables: { eventId: event.id },
   });
   if (!data) {
@@ -30,7 +29,7 @@ function updateCacheAfterSignup(
   }
 
   cache.writeQuery<EventPageQueryData>({
-    query: EventPageQuery,
+    query: EventPageQueryDocument,
     variables: { eventId: event.id },
     data: {
       ...data,
@@ -61,24 +60,14 @@ export type EventPageRunCardProps = {
   currentAbility: EventPageQueryData['currentAbility'];
 };
 
-function EventPageRunCard({
-  event,
-  run,
-  myProfile,
-  currentAbility,
-}: EventPageRunCardProps): JSX.Element {
+function EventPageRunCard({ event, run, myProfile, currentAbility }: EventPageRunCardProps): JSX.Element {
   const { t } = useTranslation();
   const { signupMode } = useContext(AppRootContext);
-  const signupOptions = useMemo(
-    () => buildSignupOptions(event, myProfile ?? undefined),
-    [event, myProfile],
-  );
+  const signupOptions = useMemo(() => buildSignupOptions(event, myProfile ?? undefined), [event, myProfile]);
   const confirm = useConfirm();
   const createModeratedSignupModal = useModal<{ signupOption: SignupOption }>();
   const mySignup = run.my_signups.find((signup) => signup.state !== 'withdrawn');
-  const myPendingSignupRequest = run.my_signup_requests.find(
-    (signupRequest) => signupRequest.state === 'pending',
-  );
+  const myPendingSignupRequest = run.my_signup_requests.find((signupRequest) => signupRequest.state === 'pending');
   const [createMySignupMutate] = useCreateMySignupMutation();
   const [withdrawMySignupMutate] = useWithdrawMySignupMutation();
   const [withdrawSignupRequestMutate] = useWithdrawSignupRequestMutation();
@@ -129,8 +118,8 @@ function EventPageRunCard({
           <Trans i18nKey="events.withdrawPrompt.moderatedSignup">
             <p>
               <strong>
-                If you’re thinking of signing up for a different event instead, please go to that
-                event’s page and request to sign up for it.
+                If you’re thinking of signing up for a different event instead, please go to that event’s page and
+                request to sign up for it.
               </strong>{' '}
               If the request is accepted, you’ll automatically be withdrawn from this event.
             </p>

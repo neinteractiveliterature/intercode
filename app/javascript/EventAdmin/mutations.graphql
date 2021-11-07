@@ -1,0 +1,118 @@
+#import "./queries.graphql"
+
+mutation CreateEvent($input: CreateEventInput!) {
+  createEvent(input: $input) {
+    event {
+      id
+      ...EventFields
+    }
+  }
+}
+
+mutation CreateFillerEvent($input: CreateFillerEventInput!) {
+  createFillerEvent(input: $input) {
+    event {
+      id
+      ...EventFields
+    }
+  }
+}
+
+mutation DropEvent($input: DropEventInput!) {
+  dropEvent(input: $input) {
+    event {
+      id
+      status
+    }
+  }
+}
+
+mutation RestoreDroppedEvent($input: RestoreDroppedEventInput!) {
+  restoreDroppedEvent(input: $input) {
+    event {
+      id
+      status
+    }
+  }
+}
+
+mutation UpdateEvent($input: UpdateEventInput!) {
+  updateEvent(input: $input) {
+    event {
+      id
+      ...EventFields
+    }
+  }
+}
+
+mutation CreateRun($input: CreateRunInput!) {
+  createRun(input: $input) {
+    run {
+      id
+      ...RunFields
+    }
+  }
+}
+
+mutation CreateMultipleRuns($input: CreateMultipleRunsInput!) {
+  createMultipleRuns(input: $input) {
+    runs {
+      id
+      ...RunFields
+    }
+  }
+}
+
+mutation UpdateRun($input: UpdateRunInput!) {
+  updateRun(input: $input) {
+    run {
+      id
+      ...RunFields
+    }
+  }
+}
+
+mutation DeleteRun($input: DeleteRunInput!) {
+  deleteRun(input: $input) {
+    run {
+      id
+      ...RunFields
+    }
+  }
+}
+
+mutation CreateMaximumEventProvidedTicketsOverride($input: CreateMaximumEventProvidedTicketsOverrideInput!) {
+  createMaximumEventProvidedTicketsOverride(input: $input) {
+    maximum_event_provided_tickets_override {
+      id
+      ...MaximumEventProvidedTicketsOverrideFields
+    }
+  }
+}
+
+mutation DeleteMaximumEventProvidedTicketsOverride($input: DeleteMaximumEventProvidedTicketsOverrideInput!) {
+  deleteMaximumEventProvidedTicketsOverride(input: $input) {
+    maximum_event_provided_tickets_override {
+      id
+      ...MaximumEventProvidedTicketsOverrideFields
+    }
+  }
+}
+
+mutation UpdateMaximumEventProvidedTicketsOverride($input: UpdateMaximumEventProvidedTicketsOverrideInput!) {
+  updateMaximumEventProvidedTicketsOverride(input: $input) {
+    maximum_event_provided_tickets_override {
+      id
+      ...MaximumEventProvidedTicketsOverrideFields
+    }
+  }
+}
+
+mutation UpdateEventAdminNotes($eventId: ID!, $adminNotes: String!) {
+  updateEventAdminNotes(input: { id: $eventId, admin_notes: $adminNotes }) {
+    event {
+      id
+      ...EventFields
+    }
+  }
+}

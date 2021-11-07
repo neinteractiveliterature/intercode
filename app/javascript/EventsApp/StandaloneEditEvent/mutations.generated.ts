@@ -2,8 +2,7 @@
 import * as Types from '../../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
-import { StandaloneEditEvent_EventFieldsFragmentDoc } from './queries.generated';
-import { StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFieldsFragmentDoc } from './queries.generated';
+import { StandaloneEditEvent_EventFieldsFragmentDoc, StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
 export type StandaloneDropEventMutationVariables = Types.Exact<{
@@ -11,42 +10,42 @@ export type StandaloneDropEventMutationVariables = Types.Exact<{
 }>;
 
 
-export type StandaloneDropEventMutationData = { __typename: 'Mutation', dropEvent: { __typename: 'DropEventPayload', event: { __typename: 'Event', status?: string | null | undefined, id: string } } };
+export type StandaloneDropEventMutationData = { __typename: 'Mutation', dropEvent: { __typename: 'DropEventPayload', event: { __typename: 'Event', id: string, status?: string | null | undefined } } };
 
 export type StandaloneUpdateEventMutationVariables = Types.Exact<{
   input: Types.UpdateEventInput;
 }>;
 
 
-export type StandaloneUpdateEventMutationData = { __typename: 'Mutation', updateEvent: { __typename: 'UpdateEventPayload', event: { __typename: 'Event', title?: string | null | undefined, form_response_attrs_json?: string | null | undefined, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, id: string, event_category: { __typename: 'EventCategory', name: string, id: string, event_form: { __typename: 'Form', title: string, form_type: Types.FormType, id: string, form_sections: Array<{ __typename: 'FormSection', title?: string | null | undefined, position: number, id: string, form_items: Array<{ __typename: 'FormItem', position: number, identifier?: string | null | undefined, item_type: string, rendered_properties: string, default_value?: string | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole, id: string }> }> } }, maximum_event_provided_tickets_overrides: Array<{ __typename: 'MaximumEventProvidedTicketsOverride', override_value: number, id: string, ticket_type: { __typename: 'TicketType', description?: string | null | undefined, maximum_event_provided_tickets: number, id: string } }> } } };
+export type StandaloneUpdateEventMutationData = { __typename: 'Mutation', updateEvent: { __typename: 'UpdateEventPayload', event: { __typename: 'Event', id: string, title?: string | null | undefined, form_response_attrs_json?: string | null | undefined, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, event_category: { __typename: 'EventCategory', id: string, name: string, event_form: { __typename: 'Form', id: string, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: string, title?: string | null | undefined, position: number, form_items: Array<{ __typename: 'FormItem', id: string, position: number, identifier?: string | null | undefined, item_type: string, rendered_properties: string, default_value?: string | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> } }, maximum_event_provided_tickets_overrides: Array<{ __typename: 'MaximumEventProvidedTicketsOverride', id: string, override_value: number, ticket_type: { __typename: 'TicketType', id: string, description?: string | null | undefined, maximum_event_provided_tickets: number } }> } } };
 
 export type StandaloneCreateMaximumEventProvidedTicketsOverrideMutationVariables = Types.Exact<{
   input: Types.CreateMaximumEventProvidedTicketsOverrideInput;
 }>;
 
 
-export type StandaloneCreateMaximumEventProvidedTicketsOverrideMutationData = { __typename: 'Mutation', createMaximumEventProvidedTicketsOverride: { __typename: 'CreateMaximumEventProvidedTicketsOverridePayload', maximum_event_provided_tickets_override: { __typename: 'MaximumEventProvidedTicketsOverride', override_value: number, id: string, ticket_type: { __typename: 'TicketType', description?: string | null | undefined, maximum_event_provided_tickets: number, id: string } } } };
+export type StandaloneCreateMaximumEventProvidedTicketsOverrideMutationData = { __typename: 'Mutation', createMaximumEventProvidedTicketsOverride: { __typename: 'CreateMaximumEventProvidedTicketsOverridePayload', maximum_event_provided_tickets_override: { __typename: 'MaximumEventProvidedTicketsOverride', id: string, override_value: number, ticket_type: { __typename: 'TicketType', id: string, description?: string | null | undefined, maximum_event_provided_tickets: number } } } };
 
 export type StandaloneDeleteMaximumEventProvidedTicketsOverrideMutationVariables = Types.Exact<{
   input: Types.DeleteMaximumEventProvidedTicketsOverrideInput;
 }>;
 
 
-export type StandaloneDeleteMaximumEventProvidedTicketsOverrideMutationData = { __typename: 'Mutation', deleteMaximumEventProvidedTicketsOverride: { __typename: 'DeleteMaximumEventProvidedTicketsOverridePayload', maximum_event_provided_tickets_override: { __typename: 'MaximumEventProvidedTicketsOverride', override_value: number, id: string, ticket_type: { __typename: 'TicketType', description?: string | null | undefined, maximum_event_provided_tickets: number, id: string } } } };
+export type StandaloneDeleteMaximumEventProvidedTicketsOverrideMutationData = { __typename: 'Mutation', deleteMaximumEventProvidedTicketsOverride: { __typename: 'DeleteMaximumEventProvidedTicketsOverridePayload', maximum_event_provided_tickets_override: { __typename: 'MaximumEventProvidedTicketsOverride', id: string, override_value: number, ticket_type: { __typename: 'TicketType', id: string, description?: string | null | undefined, maximum_event_provided_tickets: number } } } };
 
 export type StandaloneUpdateMaximumEventProvidedTicketsOverrideMutationVariables = Types.Exact<{
   input: Types.UpdateMaximumEventProvidedTicketsOverrideInput;
 }>;
 
 
-export type StandaloneUpdateMaximumEventProvidedTicketsOverrideMutationData = { __typename: 'Mutation', updateMaximumEventProvidedTicketsOverride: { __typename: 'UpdateMaximumEventProvidedTicketsOverridePayload', maximum_event_provided_tickets_override: { __typename: 'MaximumEventProvidedTicketsOverride', override_value: number, id: string, ticket_type: { __typename: 'TicketType', description?: string | null | undefined, maximum_event_provided_tickets: number, id: string } } } };
+export type StandaloneUpdateMaximumEventProvidedTicketsOverrideMutationData = { __typename: 'Mutation', updateMaximumEventProvidedTicketsOverride: { __typename: 'UpdateMaximumEventProvidedTicketsOverridePayload', maximum_event_provided_tickets_override: { __typename: 'MaximumEventProvidedTicketsOverride', id: string, override_value: number, ticket_type: { __typename: 'TicketType', id: string, description?: string | null | undefined, maximum_event_provided_tickets: number } } } };
 
 
 export const StandaloneDropEventDocument = gql`
     mutation StandaloneDropEvent($input: DropEventInput!) {
   dropEvent(input: $input) {
     event {
-      id: transitionalId
+      id
       status
     }
   }
@@ -82,7 +81,7 @@ export const StandaloneUpdateEventDocument = gql`
     mutation StandaloneUpdateEvent($input: UpdateEventInput!) {
   updateEvent(input: $input) {
     event {
-      id: transitionalId
+      id
       ...StandaloneEditEvent_EventFields
     }
   }
@@ -118,7 +117,7 @@ export const StandaloneCreateMaximumEventProvidedTicketsOverrideDocument = gql`
     mutation StandaloneCreateMaximumEventProvidedTicketsOverride($input: CreateMaximumEventProvidedTicketsOverrideInput!) {
   createMaximumEventProvidedTicketsOverride(input: $input) {
     maximum_event_provided_tickets_override {
-      id: transitionalId
+      id
       ...StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFields
     }
   }
@@ -154,7 +153,7 @@ export const StandaloneDeleteMaximumEventProvidedTicketsOverrideDocument = gql`
     mutation StandaloneDeleteMaximumEventProvidedTicketsOverride($input: DeleteMaximumEventProvidedTicketsOverrideInput!) {
   deleteMaximumEventProvidedTicketsOverride(input: $input) {
     maximum_event_provided_tickets_override {
-      id: transitionalId
+      id
       ...StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFields
     }
   }
@@ -190,7 +189,7 @@ export const StandaloneUpdateMaximumEventProvidedTicketsOverrideDocument = gql`
     mutation StandaloneUpdateMaximumEventProvidedTicketsOverride($input: UpdateMaximumEventProvidedTicketsOverrideInput!) {
   updateMaximumEventProvidedTicketsOverride(input: $input) {
     maximum_event_provided_tickets_override {
-      id: transitionalId
+      id
       ...StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFields
     }
   }

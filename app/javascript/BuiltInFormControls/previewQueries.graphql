@@ -1,0 +1,20 @@
+query PreviewLiquidQuery($liquid: String!) {
+  cmsParent: cmsParentByRequestHost {
+    id
+    previewLiquid(content: $liquid)
+  }
+}
+
+query PreviewMarkdownQuery($markdown: String!) {
+  cmsParent: cmsParentByRequestHost {
+    id
+    previewMarkdown(markdown: $markdown)
+  }
+}
+
+query PreviewNotifierLiquidQuery($eventKey: String!, $liquid: String!) {
+  convention: conventionByRequestHost {
+    id
+    previewLiquid: preview_notifier_liquid(eventKey: $eventKey, content: $liquid)
+  }
+}

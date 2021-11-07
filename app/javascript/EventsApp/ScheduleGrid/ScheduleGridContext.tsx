@@ -5,7 +5,6 @@ import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/lit
 
 import ConventionDayTabContainer from './ConventionDayTabContainer';
 import Schedule from './Schedule';
-import { ScheduleGridEventsQuery } from './queries';
 import { timespanFromConvention, getConventionDayTimespans, ConventionForTimespanUtils } from '../../TimespanUtils';
 import useCachedLoadableValue from '../../useCachedLoadableValue';
 import ScheduleGridSkeleton from './ScheduleGridSkeleton';
@@ -14,6 +13,7 @@ import { ScheduleGridConfig } from './ScheduleGridConfig';
 import { TimezoneMode } from '../../graphqlTypes.generated';
 import {
   ScheduleGridEventFragment,
+  ScheduleGridEventsQueryDocument,
   useScheduleGridConventionDataQuery,
   useScheduleGridEventsQuery,
 } from './queries.generated';
@@ -275,7 +275,7 @@ export function ScheduleGridProvider({
   const prefetchTimespan = useCallback(
     (timespan) =>
       client.query({
-        query: ScheduleGridEventsQuery,
+        query: ScheduleGridEventsQueryDocument,
         variables: {
           ...getEventsQueryVariables(timespan, config.showExtendedCounts),
         },
