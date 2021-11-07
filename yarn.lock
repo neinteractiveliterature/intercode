@@ -4400,7 +4400,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@neinteractiveliterature/litform@npm:^0.21.0":
+"@neinteractiveliterature/litform@npm:0.21.0":
   version: 0.21.0
   resolution: "@neinteractiveliterature/litform@npm:0.21.0"
   dependencies:
@@ -19765,7 +19765,7 @@ resolve@^2.0.0-next.3:
     "@graphql-eslint/eslint-plugin": 2.4.0
     "@juggle/resize-observer": 3.3.1
     "@lezer/common": 0.15.7
-    "@neinteractiveliterature/litform": ^0.21.0
+    "@neinteractiveliterature/litform": 0.21.0
     "@popperjs/core": 2.10.2
     "@prettier/plugin-ruby": 2.0.0
     "@stripe/react-stripe-js": 1.6.0
