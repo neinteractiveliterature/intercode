@@ -1,0 +1,25 @@
+#import "./queries.graphql"
+
+mutation CreateLayout($cmsLayout: CmsLayoutInput!) {
+  createCmsLayout(input: { cms_layout: $cmsLayout }) {
+    cms_layout {
+      id
+      ...CmsLayoutFields
+    }
+  }
+}
+
+mutation UpdateLayout($id: ID!, $cmsLayout: CmsLayoutInput!) {
+  updateCmsLayout(input: { id: $id, cms_layout: $cmsLayout }) {
+    cms_layout {
+      id
+      ...CmsLayoutFields
+    }
+  }
+}
+
+mutation DeleteLayout($id: ID!) {
+  deleteCmsLayout(input: { id: $id }) {
+    clientMutationId
+  }
+}

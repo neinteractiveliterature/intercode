@@ -1,0 +1,24 @@
+fragment LiquidAssignFields on LiquidAssign {
+  name
+  drop_class_name
+  cms_variable_value_json
+}
+
+query LiquidAssignsQuery {
+  cmsParent: cmsParentByRequestHost {
+    id
+
+    liquidAssigns {
+      ...LiquidAssignFields
+    }
+  }
+}
+
+query NotifierLiquidAssignsQuery($eventKey: String!) {
+  cmsParent: conventionByRequestHost {
+    id
+    liquidAssigns: notifier_liquid_assigns(eventKey: $eventKey) {
+      ...LiquidAssignFields
+    }
+  }
+}

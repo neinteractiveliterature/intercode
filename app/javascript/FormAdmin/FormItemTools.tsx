@@ -1,16 +1,16 @@
 import { useContext, useRef, useState } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
-import { humanize, pluralize } from 'inflected';
 import { ApolloError } from '@apollo/client';
 import { Modal } from 'react-bootstrap4-modal';
 import { useModal, useUniqueId, MultipleChoiceInput, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { FormItemEditorContext, FormEditorContext } from './FormEditorContexts';
 import CommonQuestionFields from './ItemEditors/CommonQuestionFields';
-import { FormEditorQuery } from './queries';
 import useCollapse from '../NavigationBar/useCollapse';
 import useAsyncFunction from '../useAsyncFunction';
 import { useMoveFormItemMutation } from './mutations.generated';
+import { FormEditorQueryDocument } from './queries.generated';
+import humanize from '../humanize';
 
 function StandardItemMetadata() {
   const { formType } = useContext(FormEditorContext);
@@ -26,7 +26,7 @@ function StandardItemMetadata() {
         <i className="bi-wrench" /> <strong>{standardItem.description || humanize(standardItem.identifier)}</strong>
       </div>
       <div className="me-2">
-        <small>Standard item for {pluralize(formType.description)}</small>
+        <small>Standard item for {formType.description} forms</small>
       </div>
     </>
   );
@@ -92,7 +92,7 @@ function MoveFormItemModal({ visible, close }: MoveFormItemModalProps) {
         id: formItem.id,
         formSectionId: destinationSectionId,
       },
-      refetchQueries: [{ query: FormEditorQuery, variables: { id: form.id } }],
+      refetchQueries: [{ query: FormEditorQueryDocument, variables: { id: form.id } }],
     });
     history.replace(`/admin_forms/${form.id}/edit/section/${destinationSectionId}/item/${formItem.id}`);
     close();

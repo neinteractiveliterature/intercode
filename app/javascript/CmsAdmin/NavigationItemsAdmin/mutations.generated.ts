@@ -10,7 +10,7 @@ export type CreateNavigationItemMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateNavigationItemMutationData = { __typename: 'Mutation', createCmsNavigationItem: { __typename: 'CreateCmsNavigationItemPayload', cms_navigation_item: { __typename: 'CmsNavigationItem', position?: number | null | undefined, title?: string | null | undefined, id: string, page?: { __typename: 'Page', id: string } | null | undefined, navigation_section?: { __typename: 'CmsNavigationItem', id: string } | null | undefined } } };
+export type CreateNavigationItemMutationData = { __typename: 'Mutation', createCmsNavigationItem: { __typename: 'CreateCmsNavigationItemPayload', cms_navigation_item: { __typename: 'CmsNavigationItem', id: string, position?: number | null | undefined, title?: string | null | undefined, page?: { __typename: 'Page', id: string } | null | undefined, navigation_section?: { __typename: 'CmsNavigationItem', id: string } | null | undefined } } };
 
 export type UpdateNavigationItemMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -18,7 +18,7 @@ export type UpdateNavigationItemMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateNavigationItemMutationData = { __typename: 'Mutation', updateCmsNavigationItem: { __typename: 'UpdateCmsNavigationItemPayload', cms_navigation_item: { __typename: 'CmsNavigationItem', position?: number | null | undefined, title?: string | null | undefined, id: string, page?: { __typename: 'Page', id: string } | null | undefined, navigation_section?: { __typename: 'CmsNavigationItem', id: string } | null | undefined } } };
+export type UpdateNavigationItemMutationData = { __typename: 'Mutation', updateCmsNavigationItem: { __typename: 'UpdateCmsNavigationItemPayload', cms_navigation_item: { __typename: 'CmsNavigationItem', id: string, position?: number | null | undefined, title?: string | null | undefined, page?: { __typename: 'Page', id: string } | null | undefined, navigation_section?: { __typename: 'CmsNavigationItem', id: string } | null | undefined } } };
 
 export type DeleteNavigationItemMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -39,7 +39,7 @@ export const CreateNavigationItemDocument = gql`
     mutation CreateNavigationItem($navigationItem: CmsNavigationItemInput!) {
   createCmsNavigationItem(input: {cms_navigation_item: $navigationItem}) {
     cms_navigation_item {
-      id: transitionalId
+      id
       ...AdminNavigationItemFields
     }
   }
@@ -73,11 +73,9 @@ export type CreateNavigationItemMutationResult = Apollo.MutationResult<CreateNav
 export type CreateNavigationItemMutationOptions = Apollo.BaseMutationOptions<CreateNavigationItemMutationData, CreateNavigationItemMutationVariables>;
 export const UpdateNavigationItemDocument = gql`
     mutation UpdateNavigationItem($id: ID!, $navigationItem: CmsNavigationItemInput!) {
-  updateCmsNavigationItem(
-    input: {transitionalId: $id, cms_navigation_item: $navigationItem}
-  ) {
+  updateCmsNavigationItem(input: {id: $id, cms_navigation_item: $navigationItem}) {
     cms_navigation_item {
-      id: transitionalId
+      id
       ...AdminNavigationItemFields
     }
   }
@@ -112,9 +110,9 @@ export type UpdateNavigationItemMutationResult = Apollo.MutationResult<UpdateNav
 export type UpdateNavigationItemMutationOptions = Apollo.BaseMutationOptions<UpdateNavigationItemMutationData, UpdateNavigationItemMutationVariables>;
 export const DeleteNavigationItemDocument = gql`
     mutation DeleteNavigationItem($id: ID!) {
-  deleteCmsNavigationItem(input: {transitionalId: $id}) {
+  deleteCmsNavigationItem(input: {id: $id}) {
     cms_navigation_item {
-      id: transitionalId
+      id
     }
   }
 }

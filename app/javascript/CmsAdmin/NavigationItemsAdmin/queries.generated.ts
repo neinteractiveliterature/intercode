@@ -4,40 +4,40 @@ import * as Types from '../../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type AdminNavigationItemFieldsFragment = { __typename: 'CmsNavigationItem', position?: number | null | undefined, title?: string | null | undefined, id: string, page?: { __typename: 'Page', id: string } | null | undefined, navigation_section?: { __typename: 'CmsNavigationItem', id: string } | null | undefined };
+export type AdminNavigationItemFieldsFragment = { __typename: 'CmsNavigationItem', id: string, position?: number | null | undefined, title?: string | null | undefined, page?: { __typename: 'Page', id: string } | null | undefined, navigation_section?: { __typename: 'CmsNavigationItem', id: string } | null | undefined };
 
 export type NavigationItemsAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type NavigationItemsAdminQueryData = { __typename: 'Query', convention?: { __typename: 'Convention', name: string, id: string } | null | undefined, cmsParent: { __typename: 'Convention', id: string, cmsPages: Array<{ __typename: 'Page', name?: string | null | undefined, id: string }>, cmsNavigationItems: Array<{ __typename: 'CmsNavigationItem', position?: number | null | undefined, title?: string | null | undefined, id: string, page?: { __typename: 'Page', id: string } | null | undefined, navigation_section?: { __typename: 'CmsNavigationItem', id: string } | null | undefined }> } | { __typename: 'RootSite', id: string, cmsPages: Array<{ __typename: 'Page', name?: string | null | undefined, id: string }>, cmsNavigationItems: Array<{ __typename: 'CmsNavigationItem', position?: number | null | undefined, title?: string | null | undefined, id: string, page?: { __typename: 'Page', id: string } | null | undefined, navigation_section?: { __typename: 'CmsNavigationItem', id: string } | null | undefined }> } };
+export type NavigationItemsAdminQueryData = { __typename: 'Query', convention?: { __typename: 'Convention', id: string, name: string } | null | undefined, cmsParent: { __typename: 'Convention', id: string, cmsPages: Array<{ __typename: 'Page', id: string, name?: string | null | undefined }>, cmsNavigationItems: Array<{ __typename: 'CmsNavigationItem', id: string, position?: number | null | undefined, title?: string | null | undefined, page?: { __typename: 'Page', id: string } | null | undefined, navigation_section?: { __typename: 'CmsNavigationItem', id: string } | null | undefined }> } | { __typename: 'RootSite', id: string, cmsPages: Array<{ __typename: 'Page', id: string, name?: string | null | undefined }>, cmsNavigationItems: Array<{ __typename: 'CmsNavigationItem', id: string, position?: number | null | undefined, title?: string | null | undefined, page?: { __typename: 'Page', id: string } | null | undefined, navigation_section?: { __typename: 'CmsNavigationItem', id: string } | null | undefined }> } };
 
 export const AdminNavigationItemFieldsFragmentDoc = gql`
     fragment AdminNavigationItemFields on CmsNavigationItem {
-  id: transitionalId
+  id
   position
   title
   page {
-    id: transitionalId
+    id
   }
   navigation_section {
-    id: transitionalId
+    id
   }
 }
     `;
 export const NavigationItemsAdminQueryDocument = gql`
     query NavigationItemsAdminQuery {
   convention: conventionByRequestHostIfPresent {
-    id: transitionalId
+    id
     name
   }
   cmsParent: cmsParentByRequestHost {
-    id: transitionalId
+    id
     cmsPages {
-      id: transitionalId
+      id
       name
     }
     cmsNavigationItems {
-      id: transitionalId
+      id
       ...AdminNavigationItemFields
     }
   }

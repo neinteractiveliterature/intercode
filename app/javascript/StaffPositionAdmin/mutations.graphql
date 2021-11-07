@@ -1,0 +1,46 @@
+#import "./queries.graphql"
+
+mutation CreateStaffPosition($input: CreateStaffPositionInput!) {
+  createStaffPosition(input: $input) {
+    staff_position {
+      id
+      ...StaffPositionFields
+    }
+  }
+}
+
+mutation UpdateStaffPosition($input: UpdateStaffPositionInput!) {
+  updateStaffPosition(input: $input) {
+    staff_position {
+      id
+      ...StaffPositionFields
+    }
+  }
+}
+
+mutation UpdateStaffPositionPermissions(
+  $staffPositionId: ID!
+  $grantPermissions: [PermissionInput!]!
+  $revokePermissions: [PermissionInput!]!
+) {
+  updateStaffPositionPermissions(
+    input: {
+      staffPositionId: $staffPositionId
+      grant_permissions: $grantPermissions
+      revoke_permissions: $revokePermissions
+    }
+  ) {
+    staff_position {
+      id
+      ...StaffPositionFields
+    }
+  }
+}
+
+mutation DeleteStaffPosition($input: DeleteStaffPositionInput!) {
+  deleteStaffPosition(input: $input) {
+    staff_position {
+      id
+    }
+  }
+}

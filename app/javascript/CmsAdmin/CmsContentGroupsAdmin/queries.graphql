@@ -1,0 +1,79 @@
+#import "../../Permissions/fragments.graphql"
+
+fragment CmsContentFields on CmsContent {
+  # eslint-disable-next-line @graphql-eslint/naming-convention
+  __typename
+
+  ... on Page {
+    id
+    name
+  }
+
+  ... on CmsPartial {
+    id
+    name
+  }
+
+  ... on CmsLayout {
+    id
+    name
+  }
+}
+
+fragment CmsContentGroupFields on CmsContentGroup {
+  id
+  name
+  current_ability_can_update
+  current_ability_can_delete
+
+  contents {
+    ...CmsContentFields
+  }
+
+  permissions {
+    id
+    permission
+
+    model {
+      ...PermissionedModelFields
+    }
+
+    role {
+      ...PermissionedRoleFields
+    }
+  }
+}
+
+query CmsContentGroupsAdminQuery {
+  convention: conventionByRequestHostIfPresent {
+    id
+    name
+
+    staff_positions {
+      id
+      name
+    }
+  }
+
+  cmsParent: cmsParentByRequestHost {
+    id
+    cmsContentGroups {
+      id
+      ...CmsContentGroupFields
+    }
+  }
+
+  currentAbility {
+    can_create_cms_content_groups
+  }
+}
+
+query SearchCmsContentQuery($name: String) {
+  cmsParent: cmsParentByRequestHost {
+    id
+
+    typeaheadSearchCmsContent(name: $name) {
+      ...CmsContentFields
+    }
+  }
+}

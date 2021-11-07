@@ -1,5 +1,4 @@
 import { useContext } from 'react';
-import { humanize } from 'inflected';
 import { Link } from 'react-router-dom';
 // eslint-disable-next-line no-restricted-imports
 import { useQuery } from '@apollo/client';
@@ -8,11 +7,6 @@ import { useModal, useConfirm, ErrorDisplay, LoadingIndicator } from '@neinterac
 
 import ConvertToEventProvidedTicketModal from './ConvertToEventProvidedTicketModal';
 import formatMoney from '../formatMoney';
-import {
-  TicketAdminWithTicketAbilityQuery,
-  TicketAdminWithoutTicketAbilityQuery,
-  UserConProfileAdminQuery,
-} from './queries';
 import AddOrderToTicketButton, { AddOrderToTicketButtonProps } from './AddOrderToTicketButton';
 import AppRootContext from '../AppRootContext';
 import { Event } from '../graphqlTypes.generated';
@@ -21,8 +15,12 @@ import {
   UserConProfileAdminQueryData,
   TicketAdminWithTicketAbilityQueryData,
   TicketAdminWithoutTicketAbilityQueryData,
+  TicketAdminWithTicketAbilityQueryDocument,
+  TicketAdminWithoutTicketAbilityQueryDocument,
+  UserConProfileAdminQueryDocument,
 } from './queries.generated';
 import { useAppDateTimeFormat } from '../TimeUtils';
+import humanize from '../humanize';
 
 type UserConProfileData = UserConProfileAdminQueryData['convention']['user_con_profile'];
 type TicketData = NonNullable<UserConProfileData['ticket']>;
@@ -50,7 +48,9 @@ type TicketAdminControlsProps = {
 };
 
 function TicketAdminControls({ convention, userConProfile }: TicketAdminControlsProps) {
-  const query = userConProfile.ticket ? TicketAdminWithTicketAbilityQuery : TicketAdminWithoutTicketAbilityQuery;
+  const query = userConProfile.ticket
+    ? TicketAdminWithTicketAbilityQueryDocument
+    : TicketAdminWithoutTicketAbilityQueryDocument;
 
   const { data, loading, error } = useQuery<
     TicketAdminWithTicketAbilityQueryData | TicketAdminWithoutTicketAbilityQueryData
@@ -73,14 +73,14 @@ function TicketAdminControls({ convention, userConProfile }: TicketAdminControls
       update: (cache) => {
         const variables = { id: userConProfile.id };
         const cacheData = cache.readQuery<UserConProfileAdminQueryData>({
-          query: UserConProfileAdminQuery,
+          query: UserConProfileAdminQueryDocument,
           variables,
         });
         if (!cacheData) {
           return;
         }
         cache.writeQuery<UserConProfileAdminQueryData>({
-          query: UserConProfileAdminQuery,
+          query: UserConProfileAdminQueryDocument,
           variables,
           data: {
             ...cacheData,

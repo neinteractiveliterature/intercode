@@ -88,19 +88,13 @@ module.exports = {
     ],
     '@graphql-eslint/no-operation-name-suffix': 'off',
     '@graphql-eslint/no-deprecated': 'warn',
-    // TODO turn these back on once we're done with the transitionalIds
-    '@graphql-eslint/strict-id-in-types': 'off',
-    '@graphql-eslint/avoid-typename-prefix': 'off',
-    // I would like to enable these but we use imported fragments everywhere and there's a known
-    // false positive with that
+    // TODO turn this back on when https://github.com/dotansimha/graphql-eslint/issues/654 is fixed
     '@graphql-eslint/known-fragment-names': 'off',
-    '@graphql-eslint/no-unused-fragments': 'off'
   },
 
   overrides: [
     {
       files: ['**/*.ts', '**/*.tsx'],
-      processor: '@graphql-eslint/graphql',
       rules: {
         'react/prop-types': 'off',
         'react/require-default-props': 'off',
@@ -111,6 +105,11 @@ module.exports = {
             paths: [
               'graphql-tag',
               'prop-types',
+              {
+                name: '@apollo/client',
+                importNames: ['gql'],
+                message: 'Please define GraphQL operations in .graphql files and use graphql-code-generator to generate hooks',
+              },
               {
                 name: '@apollo/client',
                 importNames: ['useQuery', 'useMutation'],
@@ -125,11 +124,18 @@ module.exports = {
       "files": ["*.graphql"],
       "parser": "@graphql-eslint/eslint-plugin",
       "plugins": ["@graphql-eslint"],
+      "parserOptions": {
+        "operations": ["./app/javascript/**/*.graphql"],
+        "schema": "./schema.graphql"
+      }
     },
     {
       "files": ["schema.graphql"],
       "rules": {
-        '@graphql-eslint/executable-definitions': 'off'
+        '@graphql-eslint/executable-definitions': 'off',
+        '@graphql-eslint/avoid-typename-prefix': 'off',
+        // TODO turn this back on once we're done with the transitionalIds
+        '@graphql-eslint/strict-id-in-types': 'off'
       }
     }
   ],

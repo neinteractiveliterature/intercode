@@ -43,19 +43,14 @@ export default LoadSingleValueFromCollectionWrapper(
           onChange={setEventCategory}
           departments={convention.departments}
           forms={convention.forms}
-          ticketName={convention.ticket_name}
+          ticketNamePlural={convention.ticketNamePlural}
           ticketMode={convention.ticket_mode}
           disabled={updateInProgress}
         />
 
         <ErrorDisplay graphQLError={updateError as ApolloError} />
 
-        <button
-          type="button"
-          className="btn btn-primary"
-          onClick={updateClicked}
-          disabled={updateInProgress}
-        >
+        <button type="button" className="btn btn-primary" onClick={updateClicked} disabled={updateInProgress}>
           Save changes
         </button>
       </>

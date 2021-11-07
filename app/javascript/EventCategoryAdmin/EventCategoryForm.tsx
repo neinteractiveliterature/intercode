@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import * as React from 'react';
-import { humanize, pluralize } from 'inflected';
 import classNames from 'classnames';
 import tinycolor2 from 'tinycolor2';
 import {
@@ -19,6 +18,8 @@ import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
 import SignupStatusBadge from '../EventsApp/ScheduleGrid/SignupStatusBadge';
 import { Department, EventCategory, Form, SchedulingUi, TicketMode } from '../graphqlTypes.generated';
 import { SignupStatus } from '../EventsApp/ScheduleGrid/StylingUtils';
+import humanize from '../humanize';
+import { useTranslation } from 'react-i18next';
 
 export type EventCategoryForForm = Pick<
   EventCategory,
@@ -113,7 +114,7 @@ export type EventCategoryFormProps<T extends EventCategoryForForm> = {
   departments: NonNullable<T['department']>[];
   forms: T['event_form'][];
   disabled?: boolean;
-  ticketName: string;
+  ticketNamePlural: string;
   ticketMode: TicketMode;
 };
 
@@ -123,7 +124,7 @@ function EventCategoryForm<T extends EventCategoryForForm>({
   departments,
   forms,
   disabled,
-  ticketName,
+  ticketNamePlural,
   ticketMode,
 }: EventCategoryFormProps<T>): JSX.Element {
   const [
@@ -152,25 +153,32 @@ function EventCategoryForm<T extends EventCategoryForForm>({
     'can_provide_tickets',
     'proposal_description',
   );
+  const { t } = useTranslation();
 
   return (
     <>
-      <BootstrapFormInput name="name" label="Name" value={value.name} onTextChange={setName} disabled={disabled} />
+      <BootstrapFormInput
+        name="name"
+        label={t('admin.eventCategories.nameLabel', 'Name')}
+        value={value.name}
+        onTextChange={setName}
+        disabled={disabled}
+      />
 
       <BootstrapFormInput
         name="team_member_name"
-        label="Team member name"
+        label={t('admin.eventCategories.teamMemberNameLabel', 'Team member name')}
         value={value.team_member_name ?? ''}
         onTextChange={setTeamMemberName}
-        helpText={`
-          This is the word the site will use to refer to team members of this event, e.g.
-          "GM", "facilitator", etc.
-        `}
+        helpText={t(
+          'admin.eventCategories.teamMemberNameHelpText',
+          'This is the word the site will use to refer to team members of this event, e.g. “GM”, “facilitator”, etc.',
+        )}
         disabled={disabled}
       />
 
       <SelectWithLabel<T['department'] | null>
-        label="Department"
+        label={t('admin.eventCategories.departmentLabel', 'Department')}
         options={departments}
         getOptionValue={(option) => option?.id.toString() ?? ''}
         getOptionLabel={(option) => option?.name ?? ''}
@@ -182,33 +190,34 @@ function EventCategoryForm<T extends EventCategoryForForm>({
 
       <BootstrapFormTextarea
         name="proposal_description"
-        label="Proposal dialog description"
+        label={t('admin.eventCategories.proposalDescriptionLabel', 'Proposal dialog description')}
         value={value.proposal_description ?? ''}
         onTextChange={setProposalDescription}
-        helpText={`
-          When attendees propose an event and select this category, the proposal dialog will show
+        helpText={t(
+          'admin.eventCategories.proposalDescriptionHelpText',
+          `When attendees propose an event and select this category, the proposal dialog will show
           the text you write here.  Use this to describe what they can expect after proposing the
           event.  For example: ”Your proposal will go to the Board Game Proposals Committee.  You‘ll
-          hear back within a week or two.“
-        `}
+          hear back within a week or two.“`,
+        )}
         disabled={disabled}
       />
 
       <MultipleChoiceInput
         name="scheduling_ui"
-        caption="Scheduling UI"
+        caption={t('admin.eventCategories.schedulingUILabel', 'Scheduling UI')}
         value={value.scheduling_ui}
         onChange={(newValue: SchedulingUi) => setSchedulingUi(newValue)}
         choices={[
-          { value: 'regular', label: 'Regular (multi-run)' },
-          { value: 'single_run', label: 'Single run' },
-          { value: 'recurring', label: 'Recurring' },
+          { value: 'regular', label: t('admin.eventCategories.schedulingUIRegular', 'Regular (multi-run)') },
+          { value: 'single_run', label: t('admin.eventCategories.schedulingUISingleRun', 'Single run') },
+          { value: 'recurring', label: t('admin.eventCategories.schedulingUIRecurring', 'Recurring') },
         ]}
         disabled={disabled}
       />
 
       <fieldset className="mb-3">
-        <legend className="col-form-label">Colors</legend>
+        <legend className="col-form-label">{t('admin.eventCategories.colorsHeader', 'Colors')}</legend>
 
         <div className="d-flex flex-wrap">
           {(
@@ -250,12 +259,15 @@ function EventCategoryForm<T extends EventCategoryForForm>({
           onClick={() => onChange(autogenerateColors(value))}
           disabled={disabled}
         >
-          Generate signed up and full colors based on default color
+          {t(
+            'admin.eventCategories.autogenerateColorsLabel',
+            'Generate signed up and full colors based on default color',
+          )}
         </button>
       </fieldset>
 
       <SelectWithLabel
-        label="Event form (required)"
+        label={t('admin.eventCategories.eventFormLabel', 'Event form (required)')}
         options={forms.filter((form) => form?.form_type === 'event')}
         getOptionValue={(option) => option?.id.toString() ?? ''}
         getOptionLabel={(option) => option?.title ?? ''}
@@ -265,7 +277,10 @@ function EventCategoryForm<T extends EventCategoryForForm>({
       />
 
       <SelectWithLabel
-        label="Event proposal form (optional; if blank this event category cannot be proposed)"
+        label={t(
+          'admin.eventCategories.eventProposalFormLabel',
+          'Event proposal form (optional; if blank this event category cannot be proposed)',
+        )}
         options={forms.filter((form) => form?.form_type === 'event_proposal')}
         getOptionValue={(option) => option?.id.toString() ?? ''}
         getOptionLabel={(option) => option?.title ?? ''}
@@ -278,7 +293,9 @@ function EventCategoryForm<T extends EventCategoryForForm>({
       {ticketMode !== 'disabled' && (
         <BooleanInput
           name="can_provide_tickets"
-          caption={`Can provide ${pluralize(ticketName)}?`}
+          caption={t('admin.eventCategories.canProvideTicketsLabel', 'Can provide {{ ticketNamePlural }}?', {
+            ticketNamePlural,
+          })}
           value={value.can_provide_tickets ?? false}
           onChange={setCanProvideTickets}
         />

@@ -2,13 +2,14 @@
 class Mutations::ForceConfirmSignup < Mutations::BaseMutation
   field :signup, Types::SignupType, null: false
 
-  argument :id,
-           Integer,
+  argument :transitional_id,
+           ID,
            deprecation_reason:
-             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
-           required: false
-  argument :transitional_id, ID, required: false, camelize: true
+             "IDs have transitioned to the ID type.  Please switch back to the id field so that \
+we can remove this temporary one.",
+           required: false,
+           camelize: true
+  argument :id, ID, required: false
   argument :bucket_key, String, required: true, camelize: false
 
   load_and_authorize_convention_associated_model :signups, :id, :force_confirm

@@ -1,12 +1,13 @@
 import { useMemo, useState } from 'react';
-import { pluralize, underscore, humanize } from 'inflected';
 import { useTranslation } from 'react-i18next';
+import snakeCase from 'lodash/snakeCase';
 
 import ChoiceSetFilter from '../../Tables/ChoiceSetFilter';
 import EmailList from '../../UIComponents/EmailList';
 import usePageTitle from '../../usePageTitle';
 import { RunSignupsTableSignupsQueryData, useRunSignupsTableSignupsQuery } from './queries.generated';
 import { LoadQueryWithVariablesWrapper } from '../../GraphqlLoadingWrappers';
+import humanize from '../../humanize';
 
 function getEmails({ data, includes }: { data: RunSignupsTableSignupsQueryData; includes: string[] }) {
   const teamMemberUserConProfileIds = data.convention.event.team_members.map(
@@ -81,7 +82,7 @@ export default LoadQueryWithVariablesWrapper(
             choices={[
               {
                 label: t('events.signupAdmin.emailFilters.teamMembers', 'Include {{ teamMemberName }}', {
-                  teamMemberName: pluralize(data.convention.event.event_category.team_member_name),
+                  teamMemberName: data.convention.event.event_category.teamMemberNamePlural,
                 }),
                 value: 'teamMembers',
               },
@@ -107,10 +108,10 @@ export default LoadQueryWithVariablesWrapper(
                 .sort()
                 .map((include) => {
                   if (include === 'teamMembers') {
-                    return humanize(underscore(pluralize(data.convention.event.event_category.team_member_name)));
+                    return humanize(snakeCase(data.convention.event.event_category.teamMemberNamePlural));
                   }
 
-                  return t(`signups.states.${include}`, humanize(underscore(include)));
+                  return t(`signups.states.${include}`, humanize(snakeCase(include)));
                 })
                 .join(', ');
             }}

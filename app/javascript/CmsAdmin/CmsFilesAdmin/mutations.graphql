@@ -1,0 +1,25 @@
+#import "./queries.graphql"
+
+mutation CreateCmsFile($file: Upload!) {
+  createCmsFile(input: { file: $file }) {
+    cms_file {
+      id
+      ...CmsFileFields
+    }
+  }
+}
+
+mutation RenameCmsFile($id: ID!, $filename: String!) {
+  renameCmsFile(input: { id: $id, filename: $filename }) {
+    cms_file {
+      id
+      ...CmsFileFields
+    }
+  }
+}
+
+mutation DeleteCmsFile($id: ID!) {
+  deleteCmsFile(input: { id: $id }) {
+    clientMutationId
+  }
+}

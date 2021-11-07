@@ -13,8 +13,7 @@ import { useMemo } from 'react';
 import { Extension } from '@codemirror/state';
 
 import parsePageContent from '../parsePageContent';
-import { PreviewMarkdownQuery } from './previewQueries';
-import { PreviewMarkdownQueryData } from './previewQueries.generated';
+import { PreviewMarkdownQueryData, PreviewMarkdownQueryDocument } from './previewQueries.generated';
 
 export type MarkdownInputProps = Omit<
   CodeInputProps,
@@ -52,7 +51,7 @@ function MarkdownInput(props: MarkdownInputProps): JSX.Element {
       previewButtonText={t('buttons.preview', 'Preview')}
       getPreviewContent={async (markdownContent) => {
         const response = await client.query<PreviewMarkdownQueryData>({
-          query: PreviewMarkdownQuery,
+          query: PreviewMarkdownQueryDocument,
           variables: { markdown: markdownContent },
           fetchPolicy: 'no-cache',
         });

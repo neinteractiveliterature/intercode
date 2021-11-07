@@ -1,5 +1,3 @@
-import flatMap from 'lodash/flatMap';
-import sum from 'lodash/sum';
 import { SignupState } from '../graphqlTypes.generated';
 
 type SignupCountDataRow = {
@@ -37,27 +35,21 @@ export type EventForSignupCountData = {
 export default class SignupCountData {
   data: SignupCountDataRow[];
 
-  static fromRun(run: {
-    signup_count_by_state_and_bucket_key_and_counted: string;
-  }): SignupCountData {
+  static fromRun(run: { signup_count_by_state_and_bucket_key_and_counted: string }): SignupCountData {
     return SignupCountData.fromJSON(run.signup_count_by_state_and_bucket_key_and_counted);
   }
 
   static fromJSON(json: string): SignupCountData {
     const rawData: SignupCountsByStateAndBucketKeyAndCounted = JSON.parse(json);
-    const rows: SignupCountDataRow[] = flatMap(
-      Object.entries(rawData),
-      ([state, signupCountsByBucketKeyAndCounted]) =>
-        flatMap(
-          Object.entries(signupCountsByBucketKeyAndCounted),
-          ([bucketKey, signupCountsByCounted]) =>
-            flatMap(Object.entries(signupCountsByCounted), ([countedKey, signupCount]) => ({
-              state: state as SignupState,
-              bucket_key: bucketKey,
-              counted: countedKey === 'counted',
-              signup_count: signupCount ?? 0,
-            })),
-        ),
+    const rows: SignupCountDataRow[] = Object.entries(rawData).flatMap(([state, signupCountsByBucketKeyAndCounted]) =>
+      Object.entries(signupCountsByBucketKeyAndCounted).flatMap(([bucketKey, signupCountsByCounted]) =>
+        Object.entries(signupCountsByCounted).flatMap(([countedKey, signupCount]) => ({
+          state: state as SignupState,
+          bucket_key: bucketKey,
+          counted: countedKey === 'counted',
+          signup_count: signupCount ?? 0,
+        })),
+      ),
     );
 
     return new SignupCountData(rows);
@@ -70,9 +62,7 @@ export default class SignupCountData {
   filterRows(filters: SignupCountDataFilter): SignupCountDataRow[] {
     return Object.entries(filters).reduce((filteredData, [field, value]) => {
       if (Array.isArray(value)) {
-        return filteredData.filter((row) =>
-          (value as unknown[]).includes(row[field as keyof SignupCountDataFilter]),
-        );
+        return filteredData.filter((row) => (value as unknown[]).includes(row[field as keyof SignupCountDataFilter]));
       }
 
       return filteredData.filter((row) => value === row[field as keyof SignupCountDataFilter]);
@@ -80,7 +70,9 @@ export default class SignupCountData {
   }
 
   sumSignupCounts(filters: SignupCountDataFilter): number {
-    return sum(this.filterRows(filters).map((row) => row.signup_count));
+    return this.filterRows(filters)
+      .map((row) => row.signup_count)
+      .reduce((sum, count) => sum + count, 0);
   }
 
   getConfirmedLimitedSignupCount(event: EventForSignupCountData): number {
@@ -88,9 +80,7 @@ export default class SignupCountData {
       return 0;
     }
 
-    const limitedBuckets = event.registration_policy.buckets.filter(
-      (bucket) => bucket.slots_limited,
-    );
+    const limitedBuckets = event.registration_policy.buckets.filter((bucket) => bucket.slots_limited);
     return this.sumSignupCounts({
       state: SignupState.Confirmed,
       bucket_key: limitedBuckets.map((bucket) => bucket.key),

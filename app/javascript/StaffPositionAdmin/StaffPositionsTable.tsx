@@ -163,7 +163,7 @@ export default LoadQueryWrapper(useStaffPositionsQuery, function StaffPositionsT
     useDeleteStaffPositionMutation,
     data.convention,
     'staff_positions',
-    (staffPosition) => ({ input: { transitionalId: staffPosition.id } }),
+    (staffPosition) => ({ input: { id: staffPosition.id } }),
   );
 
   usePageTitle('Staff positions');

@@ -4400,9 +4400,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@neinteractiveliterature/litform@npm:0.20.3":
-  version: 0.20.3
-  resolution: "@neinteractiveliterature/litform@npm:0.20.3"
+"@neinteractiveliterature/litform@npm:^0.21.0":
+  version: 0.21.0
+  resolution: "@neinteractiveliterature/litform@npm:0.21.0"
   dependencies:
     "@codemirror/basic-setup": ^0.19.0
     "@codemirror/commands": ^0.19.5
@@ -4425,7 +4425,7 @@ __metadata:
     "@apollo/client": ^3.3.18
     graphql: ^15.5.0
     react: ^17.0.2
-  checksum: 34ef1cce289a7c39a12a521ce60b9f327826cd912d7a0a8e7443216ff174b11fa245601fc6d0ae41579ccce67241de169ca3e5484e089eefc7ff8283200eb3cf
+  checksum: 6c86491412abb6e442ffdb9063976b87e55ec3701a851c76eb3a88890a06c661535c3729bba964524235d5307486bc6b64103576583d8ffe74787493bd68a94d
   languageName: node
   linkType: hard
 
@@ -5157,13 +5157,6 @@ __metadata:
   dependencies:
     "@types/node": "*"
   checksum: 05b3402d75e383ae14fa1ab5088d62992d93e5c1c6d9a50b9a27e135354937367cdf30b721d49d2dafbb8325e3d65d7a4a86035a8d3598b6598124a29d6c7446
-  languageName: node
-  linkType: hard
-
-"@types/inflected@npm:1.1.29":
-  version: 1.1.29
-  resolution: "@types/inflected@npm:1.1.29"
-  checksum: 72a0976aba574c14e817f9358d62ffed923e3608b828ac7fa17018f2e446f32b64f3dcf7179229af01ec4a19f98aa964896813c8f3a2d86099b777ca086763f9
   languageName: node
   linkType: hard
 
@@ -10343,12 +10336,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-react-hooks@npm:4.2.0":
-  version: 4.2.0
-  resolution: "eslint-plugin-react-hooks@npm:4.2.0"
+"eslint-plugin-react-hooks@npm:4.2.1-alpha-fd5e01c2e-20210913":
+  version: 4.2.1-alpha-fd5e01c2e-20210913
+  resolution: "eslint-plugin-react-hooks@npm:4.2.1-alpha-fd5e01c2e-20210913"
   peerDependencies:
-    eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0
-  checksum: ead5c5be3ded82a0cf295b064376adb1998a43e2262b605eecc0efc88283dec4e159ca39307fafb3d8e661dd08e5a4c8cdfed97eea78f923954f72bad6e20397
+    eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0
+  checksum: e8a6c8d07cffb41e38888f2a7a30d7ccefe7874ff21947e60b399e3a0ef1475dc1a67e7d247fa78f331fe0d70e9f9c976dfa3ea03bc4b1ae29fae9da4907bb89
   languageName: node
   linkType: hard
 
@@ -12622,21 +12615,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:20.6.1":
-  version: 20.6.1
-  resolution: "i18next@npm:20.6.1"
+"i18next@npm:21.3.3, i18next@npm:^21.2.0":
+  version: 21.3.3
+  resolution: "i18next@npm:21.3.3"
   dependencies:
     "@babel/runtime": ^7.12.0
-  checksum: 313cd4b17f9092eaf8ca92a02bb74d099f4a8b26de6e38018f438ce6f706220e5f72d865e1f50d815e13504ec38bc77e0f6341f670ca5162689f8d11a859e564
-  languageName: node
-  linkType: hard
-
-"i18next@npm:^21.2.0":
-  version: 21.2.3
-  resolution: "i18next@npm:21.2.3"
-  dependencies:
-    "@babel/runtime": ^7.12.0
-  checksum: 94bcacaceb0d2bcc3006b669b4b50a93bc72986050fe73bbc33d46b2dc745f2810f5ba57d089192d0ae05e836c6b607b858e3adf69d152e2a3ece73745b000dd
+  checksum: 666462d8f3163b5867823b09a186b981f69be71cf5924c7b4d6749ba5b6e248eb5796e6928da1b5b19d17a0e6a51aa1922012c5aef269c90ebfe837b9d2db067
   languageName: node
   linkType: hard
 
@@ -12820,13 +12804,6 @@ __metadata:
   version: 0.2.0-alpha.34
   resolution: "infima@npm:0.2.0-alpha.34"
   checksum: 58f7854e0d05e0c3f663ed60a8666235a495af8d1aff0f31592f96d1ca41bbff1f62705a2c13e6d5036228e0f1542379f56883ca5d807c0ae54e5e07f60d7280
-  languageName: node
-  linkType: hard
-
-"inflected@npm:2.1.0":
-  version: 2.1.0
-  resolution: "inflected@npm:2.1.0"
-  checksum: 1e3fb2d24ec6c774977dd5ed884c6097b6525f66edecfdca0845ab4023d35f02af1057de50cd69cdc5829d0bd5ba69fd7fb41d4d8abdf85ee243bf2bbf65995d
   languageName: node
   linkType: hard
 
@@ -19788,7 +19765,7 @@ resolve@^2.0.0-next.3:
     "@graphql-eslint/eslint-plugin": 2.4.0
     "@juggle/resize-observer": 3.3.1
     "@lezer/common": 0.15.7
-    "@neinteractiveliterature/litform": 0.20.3
+    "@neinteractiveliterature/litform": ^0.21.0
     "@popperjs/core": 2.10.2
     "@prettier/plugin-ruby": 2.0.0
     "@stripe/react-stripe-js": 1.6.0
@@ -19804,7 +19781,6 @@ resolve@^2.0.0-next.3:
     "@types/events": 3.0.0
     "@types/file-saver": 2.0.3
     "@types/history": 4.7.9
-    "@types/inflected": 1.1.29
     "@types/jest": 27.0.2
     "@types/js-search": 1.4.0
     "@types/lodash": 4.14.176
@@ -19875,7 +19851,7 @@ resolve@^2.0.0-next.3:
     eslint-plugin-jest: 25.2.3
     eslint-plugin-jsx-a11y: 6.4.1
     eslint-plugin-react: 7.26.1
-    eslint-plugin-react-hooks: 4.2.0
+    eslint-plugin-react-hooks: 4.2.1-alpha-fd5e01c2e-20210913
     events: 3.3.0
     fast-diff: 1.2.0
     file-saver: 2.0.5
@@ -19891,9 +19867,8 @@ resolve@^2.0.0-next.3:
     html-to-react: 1.4.7
     husky: 7.0.4
     hypernova: 2.5.0
-    i18next: 20.6.1
+    i18next: 21.3.3
     i18next-parser: 5.0.0
-    inflected: 2.1.0
     jest: 27.3.1
     jest-html-reporter: 3.4.1
     jest-prop-type-error: 1.1.0

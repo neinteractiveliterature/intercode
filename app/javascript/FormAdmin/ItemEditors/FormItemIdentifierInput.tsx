@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 import * as React from 'react';
 import classNames from 'classnames';
-import { pluralize } from 'inflected';
 import { BootstrapFormInput } from '@neinteractiveliterature/litform';
 
 import { FormEditorContextValue } from '../FormEditorContexts';
@@ -31,7 +30,7 @@ function FormItemIdentifierInput({ formType, value, onChange }: FormItemIdentifi
         identifierIsReserved && (
           <>
             <i className="bi-exclamation-triangle-fill" /> “{normalizedIdentifier}” is a reserved identifier in{' '}
-            {pluralize(formType.description)}
+            {formType.description} forms
           </>
         )
       }

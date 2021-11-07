@@ -1,12 +1,12 @@
 import { useCallback } from 'react';
-import { humanize } from 'inflected';
 import { stringify as csvStringify } from 'csv-string';
 import { saveAs } from 'file-saver';
 import { useTabs, TabBody, TabList } from '@neinteractiveliterature/litform';
 
-import pluralizeWithCount from '../pluralizeWithCount';
 import EmailList from '../UIComponents/EmailList';
 import { ContactEmail } from '../graphqlTypes.generated';
+import humanize from '../humanize';
+import { useTranslation } from 'react-i18next';
 
 export type TabbedMailingListProps = {
   emails: ContactEmail[];
@@ -15,34 +15,26 @@ export type TabbedMailingListProps = {
   metadataFields?: string[];
 };
 
-function TabbedMailingList({
-  emails,
-  id,
-  metadataFields,
-  csvFilename,
-}: TabbedMailingListProps): JSX.Element {
+function TabbedMailingList({ emails, id, metadataFields, csvFilename }: TabbedMailingListProps): JSX.Element {
   const exportCSV = useCallback(() => {
     const data = [
       ['Email', 'Name', ...(metadataFields ?? []).map((fieldName) => humanize(fieldName))],
       ...emails.map((email) => {
         const metadata = JSON.parse(email.metadata_json);
-        return [
-          email.email,
-          email.name,
-          ...(metadataFields ?? []).map((fieldName) => metadata[fieldName]),
-        ];
+        return [email.email, email.name, ...(metadataFields ?? []).map((fieldName) => metadata[fieldName])];
       }),
     ];
     const blob = new Blob([csvStringify(data)], { type: 'text/csv; charset=utf-8' });
     saveAs(blob, csvFilename);
   }, [csvFilename, emails, metadataFields]);
+  const { t } = useTranslation();
 
   const idPrefix = id ? `${id}-` : '';
   const tabProps = useTabs(
     [
       {
         id: `${idPrefix}table-view`,
-        name: 'Table view',
+        name: t('mailingLists.tableView', 'Table view'),
         renderContent: () => (
           <>
             <button type="button" className="btn btn-outline-primary mt-2" onClick={exportCSV}>
@@ -81,7 +73,7 @@ function TabbedMailingList({
       },
       {
         id: `${idPrefix}comma-separated`,
-        name: 'Comma-separated',
+        name: t('mailingLists.commaSeparated', 'Comma-separated'),
         renderContent: () => (
           <div className="mt-2">
             <EmailList emails={emails} separator=", " />
@@ -90,7 +82,7 @@ function TabbedMailingList({
       },
       {
         id: `${idPrefix}semicolon-separated`,
-        name: 'Semicolon-separated',
+        name: t('mailingLists.semicolonSeparated', 'Semicolon-separated'),
         renderContent: () => (
           <div className="mt-2">
             <EmailList emails={emails} separator="; " />
@@ -103,7 +95,9 @@ function TabbedMailingList({
 
   return (
     <>
-      <p className="lead mb-4">{pluralizeWithCount('recipient', emails.length)}</p>
+      <p className="lead mb-4">
+        {t('mailingLists.recipientCount', '{{ count }} recipients', { count: emails.length })}
+      </p>
 
       <TabList {...tabProps} />
       <TabBody {...tabProps} />

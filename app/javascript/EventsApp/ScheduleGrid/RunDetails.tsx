@@ -41,23 +41,14 @@ const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(function Ru
   const formatRunTimespan = useFormatRunTimespan();
   const format = useAppDateTimeFormat();
 
-  const showDate = useMemo(
-    () => conventionRequiresDates(conventionTimespan, siteMode),
-    [conventionTimespan, siteMode],
-  );
+  const showDate = useMemo(() => conventionRequiresDates(conventionTimespan, siteMode), [conventionTimespan, siteMode]);
 
   const availabilityDescription = useMemo(
-    () => describeAvailability(event, signupCountData),
-    [event, signupCountData],
+    () => describeAvailability(event, signupCountData, t),
+    [event, signupCountData, t],
   );
-  const waitlistDescription = useMemo(
-    () => describeWaitlist(event, signupCountData),
-    [event, signupCountData],
-  );
-  const availability = useMemo(
-    () => calculateAvailability(event, signupCountData),
-    [event, signupCountData],
-  );
+  const waitlistDescription = useMemo(() => describeWaitlist(event, signupCountData), [event, signupCountData]);
+  const availability = useMemo(() => calculateAvailability(event, signupCountData), [event, signupCountData]);
   const roomsDescription = useMemo(() => [...run.room_names].sort().join(', '), [run.room_names]);
 
   const ratingChanged = async (rating: number) => {
@@ -162,10 +153,7 @@ const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(function Ru
             </tbody>
           </table>
 
-          <Link
-            to={`${buildEventUrl(event)}#run-${run.id}`}
-            className="btn btn-primary btn-sm mb-2"
-          >
+          <Link to={`${buildEventUrl(event)}#run-${run.id}`} className="btn btn-primary btn-sm mb-2">
             {t('schedule.goToEvent', 'Go to event')} &raquo;
           </Link>
 

@@ -1,0 +1,25 @@
+#import "./queries.graphql"
+
+mutation CreateCoupon($coupon: CouponInput!) {
+  createCoupon(input: { coupon: $coupon }) {
+    coupon {
+      id
+      ...AdminCouponFields
+    }
+  }
+}
+
+mutation UpdateCoupon($id: ID!, $coupon: CouponInput!) {
+  updateCoupon(input: { id: $id, coupon: $coupon }) {
+    coupon {
+      id
+      ...AdminCouponFields
+    }
+  }
+}
+
+mutation DeleteCoupon($id: ID!) {
+  deleteCoupon(input: { id: $id }) {
+    clientMutationId
+  }
+}

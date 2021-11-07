@@ -4,6 +4,7 @@ import * as React from 'react';
 import { describeAdminPricingStructure } from '../describePricingStructure';
 import { PricingStructureModalContext } from './EditPricingStructureModal';
 import { EditingPricingStructure } from './EditingProductTypes';
+import { useTranslation } from 'react-i18next';
 
 export type PricingStructureInputProps = {
   value?: EditingPricingStructure | null;
@@ -12,10 +13,11 @@ export type PricingStructureInputProps = {
 
 function PricingStructureInput({ value, onChange }: PricingStructureInputProps): JSX.Element {
   const pricingStructureModal = useContext(PricingStructureModalContext);
+  const { t } = useTranslation();
 
   return (
     <>
-      {describeAdminPricingStructure(value)}
+      {describeAdminPricingStructure(value, t)}
       <button
         type="button"
         className="btn btn-link py-0"

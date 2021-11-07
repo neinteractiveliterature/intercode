@@ -1,8 +1,7 @@
-// @ts-expect-error @types/inflected doesn't include capitalize
-import { capitalize } from 'inflected';
 import isEqual from 'lodash/isEqual';
 import flatMap from 'lodash/flatMap';
 import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
+import capitalize from 'lodash/capitalize';
 
 import formatMoney from '../formatMoney';
 import usePageTitle from '../usePageTitle';

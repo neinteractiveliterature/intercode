@@ -2,40 +2,40 @@
 class Mutations::UpdateOrganizationRole < Mutations::BaseMutation
   field :organization_role, Types::OrganizationRoleType, null: false
 
-  argument :id,
-           Integer,
+  argument :transitional_id,
+           ID,
            deprecation_reason:
-             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
+             "IDs have transitioned to the ID type.  Please switch back to the id field so that \
+we can remove this temporary one.",
            required: false,
-           camelize: false
-  argument :transitional_id, ID, required: false, camelize: true
+           camelize: true
+  argument :id, ID, required: false, camelize: true
   argument :organization_role, Types::OrganizationRoleInputType, required: true, camelize: false
-  argument :add_user_ids,
-           [Integer],
+  argument :transitional_add_user_ids,
+           [ID],
            deprecation_reason:
-             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
+             "IDs have transitioned to the ID type.  Please switch back to the addUserIds field so that \
+we can remove this temporary one.",
            required: false,
-           camelize: false
-  argument :transitional_add_user_ids, [ID], required: false, camelize: true
-  argument :remove_user_ids,
-           [Integer],
+           camelize: true
+  argument :add_user_ids, [ID], required: false, camelize: true
+  argument :transitional_remove_user_ids,
+           [ID],
            deprecation_reason:
-             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
+             "IDs have transitioned to the ID type.  Please switch back to the removeUserIds field so that \
+we can remove this temporary one.",
            required: false,
-           camelize: false
-  argument :transitional_remove_user_ids, [ID], required: false, camelize: true
+           camelize: true
+  argument :remove_user_ids, [ID], required: false, camelize: true
   argument :add_permissions, [Types::PermissionInputType], required: false, camelize: false
-  argument :remove_permission_ids,
-           [Integer],
+  argument :transitional_remove_permission_ids,
+           [ID],
            deprecation_reason:
-             "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
+             "IDs have transitioned to the ID type.  Please switch back to the removePermissionIds field so that \
+we can remove this temporary one.",
            required: false,
-           camelize: false
-  argument :transitional_remove_permission_ids, [ID], required: false, camelize: true
+           camelize: true
+  argument :remove_permission_ids, [ID], required: false, camelize: true
 
   load_and_authorize_model_with_id OrganizationRole, :id, :update
 

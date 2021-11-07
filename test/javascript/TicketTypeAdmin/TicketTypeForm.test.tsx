@@ -14,7 +14,7 @@ test('TicketTypeForm matches snapshot', async () => {
         maximum_event_provided_tickets: 0,
         counts_towards_convention_maximum: true,
       }}
-      ticketName="banana"
+      ticketNamePlural="bananas"
       onChange={() => {}}
     />,
   );

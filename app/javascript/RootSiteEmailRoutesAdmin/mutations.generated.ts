@@ -10,7 +10,7 @@ export type CreateEmailRouteMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateEmailRouteMutationData = { __typename: 'Mutation', createEmailRoute: { __typename: 'CreateEmailRoutePayload', email_route: { __typename: 'EmailRoute', receiver_address: string, forward_addresses?: Array<string> | null | undefined, id: string } } };
+export type CreateEmailRouteMutationData = { __typename: 'Mutation', createEmailRoute: { __typename: 'CreateEmailRoutePayload', email_route: { __typename: 'EmailRoute', id: string, receiver_address: string, forward_addresses?: Array<string> | null | undefined } } };
 
 export type UpdateEmailRouteMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -18,7 +18,7 @@ export type UpdateEmailRouteMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateEmailRouteMutationData = { __typename: 'Mutation', updateEmailRoute: { __typename: 'UpdateEmailRoutePayload', email_route: { __typename: 'EmailRoute', receiver_address: string, forward_addresses?: Array<string> | null | undefined, id: string } } };
+export type UpdateEmailRouteMutationData = { __typename: 'Mutation', updateEmailRoute: { __typename: 'UpdateEmailRoutePayload', email_route: { __typename: 'EmailRoute', id: string, receiver_address: string, forward_addresses?: Array<string> | null | undefined } } };
 
 export type DeleteEmailRouteMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -32,7 +32,7 @@ export const CreateEmailRouteDocument = gql`
     mutation CreateEmailRoute($emailRoute: EmailRouteInput!) {
   createEmailRoute(input: {email_route: $emailRoute}) {
     email_route {
-      id: transitionalId
+      id
       ...EmailRouteFields
     }
   }
@@ -66,9 +66,9 @@ export type CreateEmailRouteMutationResult = Apollo.MutationResult<CreateEmailRo
 export type CreateEmailRouteMutationOptions = Apollo.BaseMutationOptions<CreateEmailRouteMutationData, CreateEmailRouteMutationVariables>;
 export const UpdateEmailRouteDocument = gql`
     mutation UpdateEmailRoute($id: ID!, $emailRoute: EmailRouteInput!) {
-  updateEmailRoute(input: {transitionalId: $id, email_route: $emailRoute}) {
+  updateEmailRoute(input: {id: $id, email_route: $emailRoute}) {
     email_route {
-      id: transitionalId
+      id
       ...EmailRouteFields
     }
   }
@@ -103,7 +103,7 @@ export type UpdateEmailRouteMutationResult = Apollo.MutationResult<UpdateEmailRo
 export type UpdateEmailRouteMutationOptions = Apollo.BaseMutationOptions<UpdateEmailRouteMutationData, UpdateEmailRouteMutationVariables>;
 export const DeleteEmailRouteDocument = gql`
     mutation DeleteEmailRoute($id: ID!) {
-  deleteEmailRoute(input: {transitionalId: $id}) {
+  deleteEmailRoute(input: {id: $id}) {
     clientMutationId
   }
 }

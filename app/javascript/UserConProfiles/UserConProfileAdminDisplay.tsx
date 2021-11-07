@@ -1,5 +1,4 @@
 import { useCallback, useMemo } from 'react';
-import { humanize } from 'inflected';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { useConfirm, ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
@@ -13,6 +12,7 @@ import { useDeleteUserConProfileMutation } from './mutations.generated';
 import { useUserConProfileAdminQuery } from './queries.generated';
 import deserializeFormResponse from '../Models/deserializeFormResponse';
 import { getSortedParsedFormItems } from '../Models/Form';
+import humanize from '../humanize';
 
 function UserConProfileAdminDisplay(): JSX.Element {
   const userConProfileId = useParams<{ id: string }>().id;

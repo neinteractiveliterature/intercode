@@ -1,9 +1,8 @@
 import { useCallback } from 'react';
 
 import { buildEventInput, buildRunInput } from './InputBuilders';
-import { EventAdminEventsQuery } from './queries';
 import { useCreateRunMutation, useUpdateEventMutation, useUpdateRunMutation } from './mutations.generated';
-import { EventAdminEventsQueryData } from './queries.generated';
+import { EventAdminEventsQueryData, EventAdminEventsQueryDocument } from './queries.generated';
 import { EventCategory, SchedulingUi } from '../graphqlTypes.generated';
 
 export type UseUpdateRegularEventOptions = {
@@ -18,7 +17,7 @@ function useUpdateRegularEvent(): (options: UseUpdateRegularEventOptions) => Pro
         variables: {
           input: {
             ...buildEventInput(event),
-            transitionalId: event.id,
+            id: event.id,
           },
         },
       });
@@ -41,7 +40,7 @@ function useUpdateSingleRunEvent(): (options: UseUpdateSingleRunEventOptions) =>
 
   return useCallback(
     async ({ event, run }: UseUpdateSingleRunEventOptions) => {
-      await updateEvent({ variables: { input: { ...buildEventInput(event), transitionalId: event.id } } });
+      await updateEvent({ variables: { input: { ...buildEventInput(event), id: event.id } } });
 
       const runInput = buildRunInput(run);
 
@@ -50,7 +49,7 @@ function useUpdateSingleRunEvent(): (options: UseUpdateSingleRunEventOptions) =>
           variables: {
             input: {
               ...runInput,
-              transitionalId: run.id,
+              id: run.id,
             },
           },
         });
@@ -59,12 +58,12 @@ function useUpdateSingleRunEvent(): (options: UseUpdateSingleRunEventOptions) =>
           variables: {
             input: {
               ...runInput,
-              transitionalEventId: event.id,
+              eventId: event.id,
             },
           },
           update: (store, { data }) => {
             const eventsData = store.readQuery<EventAdminEventsQueryData>({
-              query: EventAdminEventsQuery,
+              query: EventAdminEventsQueryDocument,
             });
             const newRun = data?.createRun?.run;
             if (!newRun || !eventsData) {
@@ -72,7 +71,7 @@ function useUpdateSingleRunEvent(): (options: UseUpdateSingleRunEventOptions) =>
             }
 
             store.writeQuery<EventAdminEventsQueryData>({
-              query: EventAdminEventsQuery,
+              query: EventAdminEventsQueryDocument,
               data: {
                 ...eventsData,
                 convention: {

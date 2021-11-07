@@ -1,20 +1,20 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-// @ts-expect-error Inflected types don't include the capitalize function
-import { capitalize } from 'inflected';
 import {
   LoadQueryWrapper,
   ErrorDisplay,
   useConfirm,
   useDeleteMutationWithReferenceArrayUpdater,
 } from '@neinteractiveliterature/litform';
+import capitalize from 'lodash/capitalize';
 
-import pluralizeWithCount from '../pluralizeWithCount';
 import sortTicketTypes from './sortTicketTypes';
 import usePageTitle from '../usePageTitle';
 import { describeAdminPricingStructure } from '../Store/describePricingStructure';
 import { AdminTicketTypesQueryData, useAdminTicketTypesQuery } from './queries.generated';
 import { useDeleteTicketTypeMutation } from './mutations.generated';
+import { TFunction } from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 type TicketTypeType = AdminTicketTypesQueryData['convention']['ticket_types'][0];
 
@@ -30,13 +30,22 @@ function cardClassForTicketType(ticketType: TicketTypeType) {
   return 'bg-dark text-white';
 }
 
-function describeTicketTypeOptions(ticketType: TicketTypeType, ticketName: string) {
+function describeTicketTypeOptions(
+  ticketType: TicketTypeType,
+  ticketName: string,
+  ticketNamePlural: string,
+  t: TFunction,
+) {
   let eventProvidedDescription;
   if (ticketType.maximum_event_provided_tickets > 0) {
-    eventProvidedDescription = `events can provide up to ${pluralizeWithCount(
-      ticketName,
-      ticketType.maximum_event_provided_tickets,
-    )}`;
+    eventProvidedDescription = t(
+      'admin.ticketTypes.eventProvidedDescription',
+      'events can provide up to {{ count }} {{ ticketName }}',
+      {
+        count: ticketType.maximum_event_provided_tickets,
+        ticketName: ticketType.maximum_event_provided_tickets === 1 ? ticketName : ticketNamePlural,
+      },
+    );
   }
 
   if (eventProvidedDescription != null) {
@@ -49,12 +58,13 @@ function describeTicketTypeOptions(ticketType: TicketTypeType, ticketName: strin
 export default LoadQueryWrapper(useAdminTicketTypesQuery, function TicketTypesList({ data }) {
   usePageTitle(`${capitalize(data.convention.ticket_name)} types`);
 
+  const { t } = useTranslation();
   const confirm = useConfirm();
   const [deleteTicketType] = useDeleteMutationWithReferenceArrayUpdater(
     useDeleteTicketTypeMutation,
     data.convention,
     'ticket_types',
-    (ticketType) => ({ input: { transitionalId: ticketType.id } }),
+    (ticketType) => ({ input: { id: ticketType.id } }),
   );
 
   const renderTicketTypeDisplay = (ticketType: TicketTypeType) => (
@@ -88,7 +98,7 @@ export default LoadQueryWrapper(useAdminTicketTypesQuery, function TicketTypesLi
         </div>
 
         <div className="small font-italic">
-          {describeTicketTypeOptions(ticketType, data.convention.ticket_name)}
+          {describeTicketTypeOptions(ticketType, data.convention.ticket_name, data.convention.ticketNamePlural, t)}
           {!ticketType.counts_towards_convention_maximum && <div>Does not count towards convention maximum</div>}
           {!ticketType.allows_event_signups && <div>Does not allow event signups</div>}
         </div>
@@ -104,7 +114,7 @@ export default LoadQueryWrapper(useAdminTicketTypesQuery, function TicketTypesLi
               <li key={product.id}>
                 <Link to={`/admin_store/products#product-${product.id}`}>{product.name}</Link>{' '}
                 {product.available ? '(available for purchase)' : '(not available for purchase)'} &mdash;{' '}
-                {describeAdminPricingStructure(product.pricing_structure)}
+                {describeAdminPricingStructure(product.pricing_structure, t)}
               </li>
             ))}
           </ul>

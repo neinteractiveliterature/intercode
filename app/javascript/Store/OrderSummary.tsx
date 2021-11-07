@@ -1,10 +1,10 @@
 import flatten from 'lodash/flatten';
-import { humanize } from 'inflected';
 import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import usePageTitle from '../usePageTitle';
 import { OrderQuantityByStatus, OrderStatus } from '../graphqlTypes.generated';
 import { OrderSummaryQueryData, useOrderSummaryQuery } from './queries.generated';
+import humanize from '../humanize';
 
 const ORDER_STATUSES = [OrderStatus.Paid, OrderStatus.Unpaid, OrderStatus.Cancelled];
 

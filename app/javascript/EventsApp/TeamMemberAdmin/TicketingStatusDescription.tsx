@@ -1,6 +1,6 @@
 import { Trans, useTranslation } from 'react-i18next';
-import { humanize } from 'inflected';
 import { Convention, Event, TicketType, UserConProfile } from '../../graphqlTypes.generated';
+import humanize from '../../humanize';
 
 export type TicketingStatusDescriptionProps = {
   userConProfile: Pick<UserConProfile, 'name_without_nickname'> & {
@@ -12,10 +12,7 @@ export type TicketingStatusDescriptionProps = {
   convention: Pick<Convention, 'name' | 'ticket_name'>;
 };
 
-function TicketingStatusDescription({
-  userConProfile,
-  convention,
-}: TicketingStatusDescriptionProps): JSX.Element {
+function TicketingStatusDescription({ userConProfile, convention }: TicketingStatusDescriptionProps): JSX.Element {
   const { t } = useTranslation();
   const { ticket_name: ticketName } = convention;
 

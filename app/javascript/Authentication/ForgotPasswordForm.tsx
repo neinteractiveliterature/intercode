@@ -1,22 +1,21 @@
 import { useState, useContext } from 'react';
 import * as React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
-import { humanize } from 'inflected';
-import flatMap from 'lodash/flatMap';
 import { BootstrapFormInput, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import AuthenticationModalContext from './AuthenticationModalContext';
 import AuthenticityTokensContext from '../AuthenticityTokensContext';
 import useAsyncFunction from '../useAsyncFunction';
+import humanize from '../humanize';
 
 function parseRailsErrorHash(errors: Record<string, string[]> | undefined) {
   if (!errors) {
     return undefined;
   }
 
-  return flatMap(Object.entries(errors), ([key, keyErrors]) =>
-    keyErrors.map((keyError) => `${humanize(key)} ${keyError}`),
-  ).join(', ');
+  return Object.entries(errors)
+    .flatMap(([key, keyErrors]) => keyErrors.map((keyError) => `${humanize(key)} ${keyError}`))
+    .join(', ');
 }
 
 async function resetPassword(authenticityToken: string, email: string) {
@@ -36,9 +35,7 @@ async function resetPassword(authenticityToken: string, email: string) {
   const responseJson = await response.json();
 
   if (!response.ok) {
-    throw new Error(
-      responseJson.error ?? parseRailsErrorHash(responseJson.errors) ?? response.statusText,
-    );
+    throw new Error(responseJson.error ?? parseRailsErrorHash(responseJson.errors) ?? response.statusText);
   }
 
   return responseJson;
@@ -50,8 +47,7 @@ function ForgotPasswordForm(): JSX.Element {
   const authenticityToken = useContext(AuthenticityTokensContext).resetPassword;
   const [email, setEmail] = useState('');
   const [success, setSuccess] = useState(false);
-  const [resetPasswordAsync, resetPasswordError, resetPasswordInProgress] =
-    useAsyncFunction(resetPassword);
+  const [resetPasswordAsync, resetPasswordError, resetPasswordInProgress] = useAsyncFunction(resetPassword);
 
   const onSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
@@ -75,15 +71,11 @@ function ForgotPasswordForm(): JSX.Element {
         <div className="modal-body">
           {success ? (
             <Trans i18nKey="authentication.forgotPasswordForm.successMessage">
-              <p>
-                Please check your email. You should receive instructions on how to reset your{' '}
-                password shortly.
-              </p>
+              <p>Please check your email. You should receive instructions on how to reset your password shortly.</p>
 
               <p>
                 If you don’t receive instructions, please email{' '}
-                <a href="mailto:webmaster@interactiveliterature.org">our web team</a> for help
-                resetting your password.
+                <a href="mailto:webmaster@interactiveliterature.org">our web team</a> for help resetting your password.
               </p>
             </Trans>
           ) : (
@@ -134,14 +126,8 @@ function ForgotPasswordForm(): JSX.Element {
                 type="submit"
                 className="btn btn-primary"
                 disabled={resetPasswordInProgress}
-                value={t(
-                  'authentication.forgotPassword.sendInstructionsButton',
-                  'Send instructions',
-                ).toString()}
-                aria-label={t(
-                  'authentication.forgotPassword.sendInstructionsButton',
-                  'Send instructions',
-                )}
+                value={t('authentication.forgotPassword.sendInstructionsButton', 'Send instructions').toString()}
+                aria-label={t('authentication.forgotPassword.sendInstructionsButton', 'Send instructions')}
               />
             )}
           </div>

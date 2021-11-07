@@ -1,0 +1,25 @@
+fragment AdminDepartmentFields on Department {
+  id
+  name
+  proposal_description
+
+  event_categories {
+    id
+    name
+  }
+}
+
+query DepartmentAdminQuery {
+  currentAbility {
+    can_update_departments
+  }
+
+  convention: conventionByRequestHost {
+    id
+
+    departments {
+      id
+      ...AdminDepartmentFields
+    }
+  }
+}

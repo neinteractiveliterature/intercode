@@ -47,7 +47,7 @@ function EditRunModal({
   );
   const [updateRun] = useUpdateRunMutation();
   const [deleteMutate] = useDeleteMutationWithReferenceArrayUpdater(useDeleteRunMutation, event, 'runs', (run) => ({
-    input: { transitionalId: run.id },
+    input: { id: run.id },
   }));
   const confirm = useConfirm();
 
@@ -57,7 +57,7 @@ function EditRunModal({
         starts_at: run.starts_at,
         title_suffix: run.title_suffix,
         schedule_note: run.schedule_note,
-        transitionalRoomIds: run.rooms.map((room) => room.id),
+        roomIds: run.rooms.map((room) => room.id),
       },
     };
 
@@ -65,7 +65,7 @@ function EditRunModal({
       return updateRun({
         variables: {
           input: {
-            transitionalId: run.id,
+            id: run.id,
             ...commonProps,
           },
         },
@@ -75,7 +75,7 @@ function EditRunModal({
     return createRun({
       variables: {
         input: {
-          transitionalEventId: event.id,
+          eventId: event.id,
           ...commonProps,
         },
       },

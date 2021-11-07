@@ -4,7 +4,8 @@ import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import updateCmsVariable from './updateCmsVariable';
 import useAsyncFunction from '../../useAsyncFunction';
-import { CmsVariablesQueryData, useSetCmsVariableMutation } from './queries.generated';
+import { CmsVariablesQueryData } from './queries.generated';
+import { useSetCmsVariableMutation } from './mutations.generated';
 
 export type AddingVariable = Omit<CmsVariablesQueryData['cmsParent']['cmsVariables'][0], 'id'> & {
   generatedId: number;
@@ -17,12 +18,7 @@ export type AddVariableRowProps = {
   onCancel: (id: number) => void;
 };
 
-function AddVariableRow({
-  variable,
-  onChange,
-  onSave,
-  onCancel,
-}: AddVariableRowProps): JSX.Element {
+function AddVariableRow({ variable, onChange, onSave, onCancel }: AddVariableRowProps): JSX.Element {
   const [setCmsVariableMutate] = useSetCmsVariableMutation();
   const [setCmsVariable, setError, setInProgress] = useAsyncFunction(setCmsVariableMutate);
   const apolloClient = useApolloClient();
@@ -86,9 +82,7 @@ function AddVariableRow({
             <button
               type="button"
               className="btn btn-primary"
-              disabled={
-                variable.key.trim() === '' || variable.value_json.trim() === '' || setInProgress
-              }
+              disabled={variable.key.trim() === '' || variable.value_json.trim() === '' || setInProgress}
               onClick={save}
             >
               <i className="bi-check" />

@@ -13,7 +13,7 @@ export type EventListEventsQueryVariables = Types.Exact<{
 }>;
 
 
-export type EventListEventsQueryData = { __typename: 'Query', currentAbility: { __typename: 'Ability', can_read_schedule: boolean }, convention: { __typename: 'Convention', name: string, starts_at?: string | null | undefined, ends_at?: string | null | undefined, site_mode: Types.SiteMode, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, id: string, events_paginated: { __typename: 'EventsPagination', total_entries: number, total_pages: number, current_page: number, per_page: number, entries: Array<{ __typename: 'Event', title?: string | null | undefined, created_at?: string | null | undefined, short_blurb_html?: string | null | undefined, form_response_attrs_json?: string | null | undefined, my_rating?: number | null | undefined, id: string, event_category: { __typename: 'EventCategory', name: string, team_member_name: string, id: string }, runs: Array<{ __typename: 'Run', starts_at: string, id: string }>, team_members: Array<{ __typename: 'TeamMember', display_team_member: boolean, id: string, user_con_profile: { __typename: 'UserConProfile', last_name: string, name_without_nickname: string, gravatar_enabled: boolean, gravatar_url: string, id: string } }> }> }, event_categories: Array<{ __typename: 'EventCategory', name: string, scheduling_ui: Types.SchedulingUi, default_color?: string | null | undefined, full_color?: string | null | undefined, signed_up_color?: string | null | undefined, id: string }> } };
+export type EventListEventsQueryData = { __typename: 'Query', currentAbility: { __typename: 'Ability', can_read_schedule: boolean }, convention: { __typename: 'Convention', id: string, name: string, starts_at?: string | null | undefined, ends_at?: string | null | undefined, site_mode: Types.SiteMode, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, events_paginated: { __typename: 'EventsPagination', total_entries: number, total_pages: number, current_page: number, per_page: number, entries: Array<{ __typename: 'Event', id: string, title?: string | null | undefined, created_at?: string | null | undefined, short_blurb_html?: string | null | undefined, form_response_attrs_json?: string | null | undefined, my_rating?: number | null | undefined, event_category: { __typename: 'EventCategory', id: string, name: string, team_member_name: string, teamMemberNamePlural: string }, runs: Array<{ __typename: 'Run', id: string, starts_at: string }>, team_members: Array<{ __typename: 'TeamMember', id: string, display_team_member: boolean, user_con_profile: { __typename: 'UserConProfile', id: string, last_name: string, name_without_nickname: string, gravatar_enabled: boolean, gravatar_url: string } }> }> }, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, scheduling_ui: Types.SchedulingUi, default_color?: string | null | undefined, full_color?: string | null | undefined, signed_up_color?: string | null | undefined }> } };
 
 
 export const EventListEventsQueryDocument = gql`
@@ -22,7 +22,7 @@ export const EventListEventsQueryDocument = gql`
     can_read_schedule
   }
   convention: conventionByRequestHost {
-    id: transitionalId
+    id
     ...CommonConventionData
     events_paginated(
       page: $page
@@ -35,26 +35,27 @@ export const EventListEventsQueryDocument = gql`
       current_page
       per_page
       entries {
-        id: transitionalId
+        id
         title
         created_at
         short_blurb_html
         form_response_attrs_json
         my_rating
         event_category {
-          id: transitionalId
+          id
           name
           team_member_name
+          teamMemberNamePlural
         }
         runs {
-          id: transitionalId
+          id
           starts_at
         }
         team_members {
-          id: transitionalId
+          id
           display_team_member
           user_con_profile {
-            id: transitionalId
+            id
             last_name
             name_without_nickname
             gravatar_enabled

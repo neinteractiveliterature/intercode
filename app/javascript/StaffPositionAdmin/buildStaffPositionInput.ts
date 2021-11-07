@@ -10,7 +10,7 @@ export default function buildStaffPositionInput(
     email: staffPosition.email,
     email_aliases: staffPosition.email_aliases,
     visible: staffPosition.visible,
-    transitionalUserConProfileIds: (staffPosition.user_con_profiles || []).map((userConProfile) => userConProfile.id),
+    userConProfileIds: staffPosition.user_con_profiles?.map((userConProfile) => userConProfile.id) ?? [],
     cc_addresses: staffPosition.cc_addresses,
   };
 }

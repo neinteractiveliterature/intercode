@@ -11,7 +11,7 @@ export function buildEventInput(
 
   return {
     event: {
-      transitionalEventCategoryId: event.event_category.id,
+      eventCategoryId: event.event_category.id,
       form_response_attrs_json: JSON.stringify({
         ...defaultFormResponseAttrs,
         ...formResponseAttrs,
@@ -34,7 +34,7 @@ export function buildRunInput(
       starts_at: run.starts_at,
       schedule_note: run.schedule_note,
       title_suffix: run.title_suffix,
-      transitionalRoomIds: run.rooms?.map((room) => room.id),
+      roomIds: run.rooms?.map((room) => room.id),
     },
   };
 }

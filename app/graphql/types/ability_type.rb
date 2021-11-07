@@ -68,14 +68,14 @@ class Types::AbilityType < Types::BaseObject
   end
 
   field :can_update_signup, Boolean, null: false do
-    argument :signup_id,
-             Integer,
+    argument :transitional_signup_id,
+             ID,
              deprecation_reason:
-               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
+               "IDs have transitioned to the ID type.  Please switch back to the signupId field so that \
+we can remove this temporary one.",
              required: false,
-             camelize: false
-    argument :transitional_signup_id, ID, required: false, camelize: true
+             camelize: true
+    argument :signup_id, ID, required: false, camelize: true
   end
 
   def can_update_signup(**args)
@@ -83,14 +83,14 @@ all id fields are replaced with ones of type ID.",
   end
 
   field :can_update_counted_signup, Boolean, null: false do
-    argument :signup_id,
-             Integer,
+    argument :transitional_signup_id,
+             ID,
              deprecation_reason:
-               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
+               "IDs have transitioned to the ID type.  Please switch back to the signupId field so that \
+we can remove this temporary one.",
              required: false,
-             camelize: false
-    argument :transitional_signup_id, ID, required: false, camelize: true
+             camelize: true
+    argument :signup_id, ID, required: false, camelize: true
   end
 
   def can_update_counted_signup(**args)
@@ -100,14 +100,14 @@ all id fields are replaced with ones of type ID.",
   end
 
   field :can_force_confirm_signup, Boolean, null: false do
-    argument :signup_id,
-             Integer,
+    argument :transitional_signup_id,
+             ID,
              deprecation_reason:
-               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
+               "IDs have transitioned to the ID type.  Please switch back to the signupId field so that \
+we can remove this temporary one.",
              required: false,
-             camelize: false
-    argument :transitional_signup_id, ID, required: false, camelize: true
+             camelize: true
+    argument :signup_id, ID, required: false, camelize: true
   end
 
   def can_force_confirm_signup(**args)
@@ -117,14 +117,14 @@ all id fields are replaced with ones of type ID.",
   end
 
   field :can_update_bucket_signup, Boolean, null: false do
-    argument :signup_id,
-             Integer,
+    argument :transitional_signup_id,
+             ID,
              deprecation_reason:
-               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
+               "IDs have transitioned to the ID type.  Please switch back to the signupId field so that \
+we can remove this temporary one.",
              required: false,
-             camelize: false
-    argument :transitional_signup_id, ID, required: false, camelize: true
+             camelize: true
+    argument :signup_id, ID, required: false, camelize: true
   end
 
   def can_update_bucket_signup(**args)
@@ -140,14 +140,14 @@ all id fields are replaced with ones of type ID.",
   end
 
   field :can_update_event, Boolean, null: false do
-    argument :event_id,
-             Integer,
+    argument :transitional_event_id,
+             ID,
              deprecation_reason:
-               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
+               "IDs have transitioned to the ID type.  Please switch back to the eventId field so that \
+we can remove this temporary one.",
              required: false,
-             camelize: false
-    argument :transitional_event_id, ID, required: false, camelize: true
+             camelize: true
+    argument :event_id, ID, required: false, camelize: true
   end
 
   def can_update_event(**args)
@@ -155,14 +155,14 @@ all id fields are replaced with ones of type ID.",
   end
 
   field :can_delete_event, Boolean, null: false do
-    argument :event_id,
-             Integer,
+    argument :transitional_event_id,
+             ID,
              deprecation_reason:
-               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
+               "IDs have transitioned to the ID type.  Please switch back to the eventId field so that \
+we can remove this temporary one.",
              required: false,
-             camelize: false
-    argument :transitional_event_id, ID, required: false, camelize: true
+             camelize: true
+    argument :event_id, ID, required: false, camelize: true
   end
 
   def can_delete_event(**args)
@@ -260,14 +260,14 @@ all id fields are replaced with ones of type ID.",
   end
 
   field :can_read_admin_notes_on_event_proposal, Boolean, null: false do
-    argument :event_proposal_id,
-             Integer,
+    argument :transitional_event_proposal_id,
+             ID,
              deprecation_reason:
-               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
+               "IDs have transitioned to the ID type.  Please switch back to the eventProposalId field so that \
+we can remove this temporary one.",
              required: false,
-             camelize: false
-    argument :transitional_event_proposal_id, ID, required: false, camelize: true
+             camelize: true
+    argument :event_proposal_id, ID, required: false, camelize: true
   end
 
   def can_read_admin_notes_on_event_proposal(**args)
@@ -277,14 +277,14 @@ all id fields are replaced with ones of type ID.",
   end
 
   field :can_update_admin_notes_on_event_proposal, Boolean, null: false do
-    argument :event_proposal_id,
-             Integer,
+    argument :transitional_event_proposal_id,
+             ID,
              deprecation_reason:
-               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
+               "IDs have transitioned to the ID type.  Please switch back to the eventProposalId field so that \
+we can remove this temporary one.",
              required: false,
-             camelize: false
-    argument :transitional_event_proposal_id, ID, required: false, camelize: true
+             camelize: true
+    argument :event_proposal_id, ID, required: false, camelize: true
   end
 
   def can_update_admin_notes_on_event_proposal(**args)
@@ -294,14 +294,14 @@ all id fields are replaced with ones of type ID.",
   end
 
   field :can_update_event_proposal, Boolean, null: false do
-    argument :event_proposal_id,
-             Integer,
+    argument :transitional_event_proposal_id,
+             ID,
              deprecation_reason:
-               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
+               "IDs have transitioned to the ID type.  Please switch back to the eventProposalId field so that \
+we can remove this temporary one.",
              required: false,
-             camelize: false
-    argument :transitional_event_proposal_id, ID, required: false, camelize: true
+             camelize: true
+    argument :event_proposal_id, ID, required: false, camelize: true
   end
 
   def can_update_event_proposal(**args)
@@ -311,14 +311,14 @@ all id fields are replaced with ones of type ID.",
   end
 
   field :can_delete_event_proposal, Boolean, null: false do
-    argument :event_proposal_id,
-             Integer,
+    argument :transitional_event_proposal_id,
+             ID,
              deprecation_reason:
-               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
+               "IDs have transitioned to the ID type.  Please switch back to the eventProposalId field so that \
+we can remove this temporary one.",
              required: false,
-             camelize: false
-    argument :transitional_event_proposal_id, ID, required: false, camelize: true
+             camelize: true
+    argument :event_proposal_id, ID, required: false, camelize: true
   end
 
   def can_delete_event_proposal(**args)
@@ -340,14 +340,14 @@ all id fields are replaced with ones of type ID.",
   end
 
   field :can_update_ticket, Boolean, null: false do
-    argument :ticket_id,
-             Integer,
+    argument :transitional_ticket_id,
+             ID,
              deprecation_reason:
-               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
+               "IDs have transitioned to the ID type.  Please switch back to the ticketId field so that \
+we can remove this temporary one.",
              required: false,
-             camelize: false
-    argument :transitional_ticket_id, ID, required: false, camelize: true
+             camelize: true
+    argument :ticket_id, ID, required: false, camelize: true
   end
 
   def can_update_ticket(**args)
@@ -355,14 +355,14 @@ all id fields are replaced with ones of type ID.",
   end
 
   field :can_delete_ticket, Boolean, null: false do
-    argument :ticket_id,
-             Integer,
+    argument :transitional_ticket_id,
+             ID,
              deprecation_reason:
-               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
+               "IDs have transitioned to the ID type.  Please switch back to the ticketId field so that \
+we can remove this temporary one.",
              required: false,
-             camelize: false
-    argument :transitional_ticket_id, ID, required: false, camelize: true
+             camelize: true
+    argument :ticket_id, ID, required: false, camelize: true
   end
 
   def can_delete_ticket(**args)
@@ -382,14 +382,14 @@ all id fields are replaced with ones of type ID.",
   end
 
   field :can_read_event_signups, Boolean, null: false do
-    argument :event_id,
-             Integer,
+    argument :transitional_event_id,
+             ID,
              deprecation_reason:
-               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
+               "IDs have transitioned to the ID type.  Please switch back to the eventId field so that \
+we can remove this temporary one.",
              required: false,
-             camelize: false
-    argument :transitional_event_id, ID, required: false, camelize: true
+             camelize: true
+    argument :event_id, ID, required: false, camelize: true
   end
 
   def can_read_event_signups(**args)
@@ -446,14 +446,14 @@ all id fields are replaced with ones of type ID.",
   end
 
   field :can_update_user_con_profile, Boolean, null: false do
-    argument :user_con_profile_id,
-             Integer,
+    argument :transitional_user_con_profile_id,
+             ID,
              deprecation_reason:
-               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
+               "IDs have transitioned to the ID type.  Please switch back to the userConProfileId field so that \
+we can remove this temporary one.",
              required: false,
-             camelize: false
-    argument :transitional_user_con_profile_id, ID, required: false, camelize: true
+             camelize: true
+    argument :user_con_profile_id, ID, required: false, camelize: true
   end
 
   def can_update_user_con_profile(**args)
@@ -468,14 +468,14 @@ all id fields are replaced with ones of type ID.",
     null: false,
     deprecation_reason: 'Privileges have been removed in favor of permissions.  This will always return false.'
   ) do
-    argument :user_con_profile_id,
-             Integer,
+    argument :transitional_user_con_profile_id,
+             ID,
              deprecation_reason:
-               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
+               "IDs have transitioned to the ID type.  Please switch back to the userConProfileId field so that \
+we can remove this temporary one.",
              required: false,
-             camelize: false
-    argument :transitional_user_con_profile_id, ID, required: false, camelize: true
+             camelize: true
+    argument :user_con_profile_id, ID, required: false, camelize: true
   end
 
   def can_update_privileges_user_con_profile(**_args)
@@ -483,14 +483,14 @@ all id fields are replaced with ones of type ID.",
   end
 
   field :can_delete_user_con_profile, Boolean, null: false do
-    argument :user_con_profile_id,
-             Integer,
+    argument :transitional_user_con_profile_id,
+             ID,
              deprecation_reason:
-               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
+               "IDs have transitioned to the ID type.  Please switch back to the userConProfileId field so that \
+we can remove this temporary one.",
              required: false,
-             camelize: false
-    argument :transitional_user_con_profile_id, ID, required: false, camelize: true
+             camelize: true
+    argument :user_con_profile_id, ID, required: false, camelize: true
   end
 
   def can_delete_user_con_profile(**args)
@@ -500,14 +500,14 @@ all id fields are replaced with ones of type ID.",
   end
 
   field :can_become_user_con_profile, Boolean, null: false do
-    argument :user_con_profile_id,
-             Integer,
+    argument :transitional_user_con_profile_id,
+             ID,
              deprecation_reason:
-               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
+               "IDs have transitioned to the ID type.  Please switch back to the userConProfileId field so that \
+we can remove this temporary one.",
              required: false,
-             camelize: false
-    argument :transitional_user_con_profile_id, ID, required: false, camelize: true
+             camelize: true
+    argument :user_con_profile_id, ID, required: false, camelize: true
   end
 
   def can_become_user_con_profile(**args)
@@ -517,14 +517,14 @@ all id fields are replaced with ones of type ID.",
   end
 
   field :can_withdraw_all_user_con_profile_signups, Boolean, null: false do
-    argument :user_con_profile_id,
-             Integer,
+    argument :transitional_user_con_profile_id,
+             ID,
              deprecation_reason:
-               "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
+               "IDs have transitioned to the ID type.  Please switch back to the userConProfileId field so that \
+we can remove this temporary one.",
              required: false,
-             camelize: false
-    argument :transitional_user_con_profile_id, ID, required: false, camelize: true
+             camelize: true
+    argument :user_con_profile_id, ID, required: false, camelize: true
   end
 
   def can_withdraw_all_user_con_profile_signups(**args)

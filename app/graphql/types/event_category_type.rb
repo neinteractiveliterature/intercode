@@ -1,17 +1,20 @@
 # frozen_string_literal: true
 class Types::EventCategoryType < Types::BaseObject
-  field :id,
-        Int,
+  field :transitional_id,
+        ID,
         deprecation_reason:
-          "IDs are transitioning to the ID type.  For the moment, please use the transitionalId field until \
-all id fields are replaced with ones of type ID.",
-        null: false
-  field :transitional_id, ID, method: :id, null: false, camelize: true
+          "IDs have transitioned to the ID type.  Please switch back to the id field so that \
+we can remove this temporary one.",
+        null: false,
+        method: :id,
+        camelize: true
+  field :id, ID, null: false
   field :convention, Types::ConventionType, null: false
   field :department, Types::DepartmentType, null: true
   field :name, String, null: false
   field :proposal_description, String, null: true
   field :team_member_name, String, null: false, camelize: false
+  field :team_member_name_plural, String, null: false, camelize: true
   field :scheduling_ui, Types::SchedulingUiType, null: false, camelize: false
   field :event_form, Types::FormType, null: false, camelize: false
   field :event_proposal_form, Types::FormType, null: true, camelize: false
@@ -34,5 +37,9 @@ all id fields are replaced with ones of type ID.",
         sort: sort
       )
       .paginate(page: page, per_page: per_page)
+  end
+
+  def team_member_name_plural
+    object.team_member_name.pluralize
   end
 end

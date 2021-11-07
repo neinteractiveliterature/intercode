@@ -1,6 +1,3 @@
-import keyBy from 'lodash/keyBy';
-import flatMap from 'lodash/flatMap';
-
 import { CommonFormFieldsFragment, CommonFormItemFieldsFragment } from './commonFormFragments.generated';
 import { parseTypedFormItemArray, TypedFormItem } from '../FormAdmin/FormItemUtils';
 
@@ -21,7 +18,7 @@ export function getSortedFormSections<T extends CommonFormFieldsFragment>(form: 
 }
 
 export function getSortedFormItems<T extends CommonFormFieldsFragment>(form: T): T['form_sections'][0]['form_items'] {
-  return flatMap(getSortedFormSections(form), (section) => sortFormItems(section.form_items));
+  return getSortedFormSections(form).flatMap((section) => sortFormItems(section.form_items));
 }
 
 export function getSortedParsedFormItems(form: CommonFormFieldsFragment): TypedFormItem[] {
@@ -32,10 +29,10 @@ export function getFormItemsByIdentifier(form: CommonFormFieldsFragment): {
   [identifier: string]: CommonFormItemFieldsFragment;
 } {
   const indexedSectionItems = form.form_sections.map((formSection) =>
-    keyBy(
-      formSection.form_items.filter((formItem) => formItem.identifier != null),
-      'identifier',
-    ),
+    formSection.form_items
+      .filter((formItem) => formItem.identifier != null)
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      .reduce((indexed, formItem) => ({ ...indexed, [formItem.identifier!]: formItem }), {}),
   );
 
   return indexedSectionItems.reduce((memo, sectionItems) => ({ ...memo, ...sectionItems }), {});

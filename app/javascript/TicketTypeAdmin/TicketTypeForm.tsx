@@ -1,28 +1,19 @@
 import * as React from 'react';
-import { pluralize } from 'inflected';
-import {
-  BooleanInput,
-  BootstrapFormInput,
-  parseIntOrNull,
-  usePropertySetters,
-} from '@neinteractiveliterature/litform';
+import { BooleanInput, BootstrapFormInput, parseIntOrNull, usePropertySetters } from '@neinteractiveliterature/litform';
 
 import { TicketTypeAdmin_TicketTypeFieldsFragment } from './queries.generated';
 
-export type EditingTicketType = Omit<
-  TicketTypeAdmin_TicketTypeFieldsFragment,
-  'maximum_event_provided_tickets'
-> & {
+export type EditingTicketType = Omit<TicketTypeAdmin_TicketTypeFieldsFragment, 'maximum_event_provided_tickets'> & {
   maximum_event_provided_tickets?: number | null;
 };
 
 export type TicketTypeFormProps = {
   ticketType: EditingTicketType;
   onChange: React.Dispatch<React.SetStateAction<EditingTicketType>>;
-  ticketName: string;
+  ticketNamePlural: string;
 };
 
-function TicketTypeForm({ ticketType, ticketName, onChange }: TicketTypeFormProps): JSX.Element {
+function TicketTypeForm({ ticketType, ticketNamePlural, onChange }: TicketTypeFormProps): JSX.Element {
   const [
     setName,
     setDescription,
@@ -72,7 +63,7 @@ function TicketTypeForm({ ticketType, ticketName, onChange }: TicketTypeFormProp
       />
 
       <BootstrapFormInput
-        label={`Number of event-provided ${pluralize(ticketName)} of this type (per event)`}
+        label={`Number of event-provided ${ticketNamePlural} of this type (per event)`}
         name="maximum_event_provided_tickets"
         type="number"
         value={(ticketType.maximum_event_provided_tickets ?? '').toString()}

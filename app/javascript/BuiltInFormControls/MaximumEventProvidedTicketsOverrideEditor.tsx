@@ -1,7 +1,6 @@
 import { useState, useMemo } from 'react';
 import * as React from 'react';
-// @ts-expect-error inflected type definitions don't export capitalize
-import { capitalize } from 'inflected';
+import capitalize from 'lodash/capitalize';
 import { useTranslation } from 'react-i18next';
 import { ApolloError } from '@apollo/client';
 import { ErrorDisplay, sortByLocaleString, parseIntOrNull, useConfirm } from '@neinteractiveliterature/litform';

@@ -1,5 +1,4 @@
 import { createContext, useState, useCallback, useMemo } from 'react';
-import isEqual from 'lodash/isEqual';
 
 export type AuthenticityTokensContextValue = {
   refresh: () => Promise<void>;
@@ -34,14 +33,18 @@ export function useAuthenticityTokens(
 
     const json = await response.json();
     setTokens((prevTokens) => {
-      // perform a deep comparison to avoid breaking object equality if we get the same tokens
+      // perform a shallow comparison to avoid breaking object equality if we get the same tokens
       // back from the server
       const newTokens = { ...prevTokens, ...json };
-      if (!isEqual(newTokens, prevTokens)) {
+      if (Object.keys(newTokens).length !== Object.keys(prevTokens).length) {
         return newTokens;
       }
 
-      return prevTokens;
+      if (Object.keys(prevTokens).every((key: keyof typeof prevTokens) => newTokens[key] !== prevTokens[key])) {
+        return prevTokens;
+      }
+
+      return newTokens;
     });
   }, []);
 

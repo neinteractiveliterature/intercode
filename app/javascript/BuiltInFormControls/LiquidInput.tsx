@@ -18,12 +18,16 @@ import { CodeInputProps } from '@neinteractiveliterature/litform/lib/CodeInput';
 import { Extension } from '@codemirror/state';
 
 import { CmsFilesAdminQueryData, useCmsFilesAdminQueryLazyQuery } from '../CmsAdmin/CmsFilesAdmin/queries.generated';
-import { PreviewLiquidQuery, PreviewNotifierLiquidQuery } from './previewQueries';
 import MenuIcon from '../NavigationBar/MenuIcon';
 import FilePreview from '../CmsAdmin/CmsFilesAdmin/FilePreview';
 import SelectWithLabel from './SelectWithLabel';
 import FileUploadForm from '../CmsAdmin/CmsFilesAdmin/FileUploadForm';
-import { PreviewNotifierLiquidQueryData, PreviewLiquidQueryData } from './previewQueries.generated';
+import {
+  PreviewNotifierLiquidQueryData,
+  PreviewLiquidQueryData,
+  PreviewNotifierLiquidQueryDocument,
+  PreviewLiquidQueryDocument,
+} from './previewQueries.generated';
 import parseCmsContent from '../parseCmsContent';
 import parsePageContent from '../parsePageContent';
 
@@ -169,7 +173,7 @@ function LiquidInput(props: LiquidInputProps): JSX.Element {
     : async (liquidContent: string) => {
         if (notifierEventKey) {
           const response = await client.query<PreviewNotifierLiquidQueryData>({
-            query: PreviewNotifierLiquidQuery,
+            query: PreviewNotifierLiquidQueryDocument,
             variables: { liquid: liquidContent, eventKey: notifierEventKey },
             fetchPolicy: 'no-cache',
           });
@@ -178,7 +182,7 @@ function LiquidInput(props: LiquidInputProps): JSX.Element {
         }
 
         const response = await client.query<PreviewLiquidQueryData>({
-          query: PreviewLiquidQuery,
+          query: PreviewLiquidQueryDocument,
           variables: { liquid: liquidContent },
           fetchPolicy: 'no-cache',
         });

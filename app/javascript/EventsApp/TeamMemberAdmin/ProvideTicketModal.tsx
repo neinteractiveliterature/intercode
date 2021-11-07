@@ -1,17 +1,15 @@
 import { useCallback, useState } from 'react';
-// @ts-expect-error inflected types don't expose capitalize
-import { capitalize, pluralize } from 'inflected';
 import { Modal } from 'react-bootstrap4-modal';
 import { ApolloError } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
+import capitalize from 'lodash/capitalize';
 
 import { getProvidableTicketTypes } from './ProvideTicketUtils';
 import ProvidableTicketTypeSelection from './ProvidableTicketTypeSelection';
-import { TeamMembersQuery } from './queries';
 import TicketingStatusDescription from './TicketingStatusDescription';
 import useAsyncFunction from '../../useAsyncFunction';
-import { TeamMembersQueryData, TeamMembersQueryVariables } from './queries.generated';
+import { TeamMembersQueryData, TeamMembersQueryDocument, TeamMembersQueryVariables } from './queries.generated';
 import { useProvideEventTicketMutation } from './mutations.generated';
 
 export type ProvideTicketModalProps = {
@@ -34,7 +32,7 @@ function ProvideTicketModal({ event, convention, onClose, teamMember, visible }:
         ...args,
         update: (store, result) => {
           const data = store.readQuery<TeamMembersQueryData, TeamMembersQueryVariables>({
-            query: TeamMembersQuery,
+            query: TeamMembersQueryDocument,
             variables: { eventId: event.id },
           });
           const ticket = result.data?.provideEventTicket?.ticket;
@@ -43,7 +41,7 @@ function ProvideTicketModal({ event, convention, onClose, teamMember, visible }:
           }
 
           store.writeQuery<TeamMembersQueryData>({
-            query: TeamMembersQuery,
+            query: TeamMembersQueryDocument,
             variables: { eventId: event.id },
             data: {
               ...data,
@@ -91,7 +89,7 @@ function ProvideTicketModal({ event, convention, onClose, teamMember, visible }:
 
   return (
     <Modal visible={visible}>
-      <div className="modal-header">{capitalize(pluralize(convention.ticket_name))}</div>
+      <div className="modal-header">{capitalize(convention.ticketNamePlural)}</div>
 
       <div className="modal-body">
         {teamMember ? (

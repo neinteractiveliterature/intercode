@@ -20,7 +20,7 @@ export type OAuthAuthorizedApplicationsQueryData = { __typename: 'Query', myAuth
 export const OAuthAuthorizationPromptQueryDocument = gql`
     query OAuthAuthorizationPromptQuery($queryParams: Json!) {
   currentUser {
-    id: transitionalId
+    id
   }
   oauthPreAuth(queryParams: $queryParams)
 }

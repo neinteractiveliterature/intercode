@@ -1,5 +1,3 @@
-import flatMap from 'lodash/flatMap';
-
 import PermissionNames from '../../../config/permission_names.json';
 import {
   Permission,
@@ -72,9 +70,9 @@ function getRoleTypeIndicatorForPermission(permission: PartialPolymorphicPermiss
 export function buildPermissionInput(permission: PartialPolymorphicPermission): PermissionInput {
   return {
     model_type: getModelTypeIndicatorForPermission(permission),
-    transitionalModelId: permission.model?.id,
+    modelId: permission.model?.id,
     role_type: getRoleTypeIndicatorForPermission(permission),
-    transitionalRoleId: permission.role?.id,
+    roleId: permission.role?.id,
     permission: permission.permission,
   };
 }
@@ -82,8 +80,7 @@ export function buildPermissionInput(permission: PartialPolymorphicPermission): 
 export function getPermissionNamesForModelType(
   modelType: PermissionedModelTypeIndicator,
 ): { permission: string; name: string }[] {
-  return flatMap(
-    PermissionNames.filter((permissionNameGroup) => permissionNameGroup.model_type === modelType),
+  return PermissionNames.filter((permissionNameGroup) => permissionNameGroup.model_type === modelType).flatMap(
     (permissionNameGroup) => permissionNameGroup.permissions,
   );
 }

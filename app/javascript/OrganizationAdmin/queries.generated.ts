@@ -4,24 +4,24 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type OrganizationRoleFieldsFragment = { __typename: 'OrganizationRole', name: string, id: string, users: Array<{ __typename: 'User', name?: string | null | undefined, email?: string | null | undefined, id: string }>, permissions: Array<{ __typename: 'Permission', permission: string, id: string }> };
+export type OrganizationRoleFieldsFragment = { __typename: 'OrganizationRole', id: string, name: string, users: Array<{ __typename: 'User', id: string, name?: string | null | undefined, email?: string | null | undefined }>, permissions: Array<{ __typename: 'Permission', id: string, permission: string }> };
 
 export type OrganizationAdminOrganizationsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type OrganizationAdminOrganizationsQueryData = { __typename: 'Query', organizations: Array<{ __typename: 'Organization', name: string, current_ability_can_manage_access: boolean, id: string, conventions: Array<{ __typename: 'Convention', name: string, starts_at?: string | null | undefined, id: string }>, organization_roles: Array<{ __typename: 'OrganizationRole', name: string, id: string, users: Array<{ __typename: 'User', name?: string | null | undefined, email?: string | null | undefined, id: string }>, permissions: Array<{ __typename: 'Permission', permission: string, id: string }> }> }> };
+export type OrganizationAdminOrganizationsQueryData = { __typename: 'Query', organizations: Array<{ __typename: 'Organization', id: string, name: string, current_ability_can_manage_access: boolean, conventions: Array<{ __typename: 'Convention', id: string, name: string, starts_at?: string | null | undefined }>, organization_roles: Array<{ __typename: 'OrganizationRole', id: string, name: string, users: Array<{ __typename: 'User', id: string, name?: string | null | undefined, email?: string | null | undefined }>, permissions: Array<{ __typename: 'Permission', id: string, permission: string }> }> }> };
 
 export const OrganizationRoleFieldsFragmentDoc = gql`
     fragment OrganizationRoleFields on OrganizationRole {
-  id: transitionalId
+  id
   name
   users {
-    id: transitionalId
+    id
     name
     email
   }
   permissions {
-    id: transitionalId
+    id
     permission
   }
 }
@@ -29,16 +29,16 @@ export const OrganizationRoleFieldsFragmentDoc = gql`
 export const OrganizationAdminOrganizationsQueryDocument = gql`
     query OrganizationAdminOrganizationsQuery {
   organizations {
-    id: transitionalId
+    id
     name
     current_ability_can_manage_access
     conventions {
-      id: transitionalId
+      id
       name
       starts_at
     }
     organization_roles {
-      id: transitionalId
+      id
       ...OrganizationRoleFields
     }
   }
