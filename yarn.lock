@@ -4427,9 +4427,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@neinteractiveliterature/litform@npm:0.20.3":
-  version: 0.20.3
-  resolution: "@neinteractiveliterature/litform@npm:0.20.3"
+"@neinteractiveliterature/litform@npm:0.21.0":
+  version: 0.21.0
+  resolution: "@neinteractiveliterature/litform@npm:0.21.0"
   dependencies:
     "@codemirror/basic-setup": ^0.19.0
     "@codemirror/commands": ^0.19.5
@@ -4452,7 +4452,7 @@ __metadata:
     "@apollo/client": ^3.3.18
     graphql: ^15.5.0
     react: ^17.0.2
-  checksum: 34ef1cce289a7c39a12a521ce60b9f327826cd912d7a0a8e7443216ff174b11fa245601fc6d0ae41579ccce67241de169ca3e5484e089eefc7ff8283200eb3cf
+  checksum: 6c86491412abb6e442ffdb9063976b87e55ec3701a851c76eb3a88890a06c661535c3729bba964524235d5307486bc6b64103576583d8ffe74787493bd68a94d
   languageName: node
   linkType: hard
 
@@ -19826,7 +19826,7 @@ resolve@^2.0.0-next.3:
     "@graphql-eslint/eslint-plugin": 2.4.0
     "@juggle/resize-observer": 3.3.1
     "@lezer/common": 0.15.7
-    "@neinteractiveliterature/litform": 0.20.3
+    "@neinteractiveliterature/litform": 0.21.0
     "@popperjs/core": 2.10.2
     "@prettier/plugin-ruby": 2.0.0
     "@stripe/react-stripe-js": 1.6.0
