@@ -123,6 +123,7 @@ query CreateSignupRunCardQuery($userConProfileId: ID!, $eventId: ID!) {
       event_category {
         id
         team_member_name
+        teamMemberNamePlural
       }
 
       runs {
