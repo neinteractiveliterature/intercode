@@ -12,10 +12,12 @@ class GraphqlControllerTest < ActionDispatch::IntegrationTest
   test 'should return my profile' do
     query = <<~GRAPHQL
     query {
-      myProfile {
-        __typename
-        id
-        name
+      convention: conventionByRequestHost {
+        my_profile {
+          __typename
+          id
+          name
+        }
       }
     }
     GRAPHQL
@@ -25,8 +27,8 @@ class GraphqlControllerTest < ActionDispatch::IntegrationTest
 
     json = JSON.parse(response.body)
     refute json['errors'].present?, json['errors'].to_s
-    assert_equal 'UserConProfile', json['data']['myProfile']['__typename']
-    assert_equal user_con_profile.id, json['data']['myProfile']['id']
-    assert_equal user_con_profile.name, json['data']['myProfile']['name']
+    assert_equal 'UserConProfile', json['data']['convention']['my_profile']['__typename']
+    assert_equal user_con_profile.id.to_s, json['data']['convention']['my_profile']['id']
+    assert_equal user_con_profile.name, json['data']['convention']['my_profile']['name']
   end
 end
