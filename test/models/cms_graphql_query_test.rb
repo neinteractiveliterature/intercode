@@ -27,7 +27,7 @@ class CmsGraphqlQueryTest < ActiveSupport::TestCase
     it 'executes a query' do
       query = CmsGraphqlQuery.create!(parent: parent, query: <<~GRAPHQL)
         query {
-          convention {
+          convention: conventionByRequestHost {
             name
           }
         }
@@ -42,8 +42,10 @@ class CmsGraphqlQueryTest < ActiveSupport::TestCase
     it 'validates a valid query' do
       query = CmsGraphqlQuery.new(parent: parent, query: <<~GRAPHQL)
         query {
-          myProfile {
-            id
+          convention: conventionByRequestHost {
+            my_profile {
+              id
+            }
           }
         }
       GRAPHQL
@@ -59,7 +61,7 @@ class CmsGraphqlQueryTest < ActiveSupport::TestCase
     it 'rejects a valid mutation' do
       Rails.backtrace_cleaner.remove_silencers!
       query = CmsGraphqlQuery.new(parent: parent, query: <<~GRAPHQL)
-        mutation($id: Int!) {
+        mutation($id: ID!) {
           dropEvent(id: $id) {
             clientMutationId
           }
