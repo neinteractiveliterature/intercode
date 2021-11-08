@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 class Mutations::BaseMutation < GraphQL::Schema::RelayClassicMutation
   include ContextAccessors
-  include TransitionalIds
 
   field_class Types::UncamelizedField
   input_object_class Types::BaseInputObject
@@ -45,7 +44,7 @@ class Mutations::BaseMutation < GraphQL::Schema::RelayClassicMutation
     attr_reader field_name
 
     define_method :authorized? do |args|
-      id_value = args[:"transitional_#{argument_name || id_field}"] || args[argument_name || id_field]
+      id_value = args[argument_name || id_field]
       model = model_class.find_by!(id_field => id_value)
       instance_variable_set(:"@#{field_name}", model)
       self.class.check_authorization(policy(model), action, message: message)
@@ -64,7 +63,7 @@ class Mutations::BaseMutation < GraphQL::Schema::RelayClassicMutation
     attr_reader field_name
 
     define_method :authorized? do |args|
-      id_value = args[:"transitional_#{id_field}"] || args[id_field]
+      id_value = args[id_field]
       model = convention.public_send(association).find_by!(id_field => id_value)
       instance_variable_set(:"@#{field_name}", model)
       self.class.check_authorization(policy(model), action, message: message)
@@ -101,8 +100,7 @@ class Mutations::BaseMutation < GraphQL::Schema::RelayClassicMutation
     attr_reader field_name
 
     define_method :authorized? do |args|
-      model =
-        cms_parent.public_send(association).find_by!(id_field => args[:"transitional_#{id_field}"] || args[id_field])
+      model = cms_parent.public_send(association).find_by!(id_field => args[id_field])
       instance_variable_set(:"@#{field_name}", model)
       self.class.check_authorization(policy(model), action, message: message)
     end

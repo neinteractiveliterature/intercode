@@ -16,7 +16,7 @@ module ProductMutationHelper
 
   def create_or_update_variants(product, product_variants_fields)
     (product_variants_fields || []).each_with_index do |product_variant_fields, i|
-      product_variant_attrs = process_transitional_ids_in_input(product_variant_fields, :id).merge(position: i + 1)
+      product_variant_attrs = product_variant_fields.merge(position: i + 1)
       variant_id = product_variant_attrs.delete(:id)
       product_variant_attrs[:override_pricing_structure] =
         coerce_pricing_structure_input(product_variant_fields[:override_pricing_structure])
