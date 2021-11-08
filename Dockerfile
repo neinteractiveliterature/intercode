@@ -65,6 +65,8 @@ RUN yarn cache clean
 
 FROM neinteractiveliterature/base-ruby-production:${RUBY_VERSION} as production
 
+RUN apk add --no-cache shared-mime-info
+
 COPY --from=pre-production /usr/local/bundle /usr/local/bundle
 COPY --from=pre-production --chown=www /usr/src/intercode /usr/src/intercode
 WORKDIR /usr/src/intercode
