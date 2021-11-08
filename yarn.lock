@@ -7257,18 +7257,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"broccoli-plugin@npm:^4.0.5":
-  version: 4.0.5
-  resolution: "broccoli-plugin@npm:4.0.5"
+"broccoli-plugin@npm:^4.0.7":
+  version: 4.0.7
+  resolution: "broccoli-plugin@npm:4.0.7"
   dependencies:
     broccoli-node-api: ^1.7.0
     broccoli-output-wrapper: ^3.2.5
-    fs-merger: ^3.1.0
+    fs-merger: ^3.2.1
     promise-map-series: ^0.3.0
     quick-temp: ^0.1.8
     rimraf: ^3.0.2
     symlink-or-copy: ^1.3.1
-  checksum: 1e459b3f03929fc9515f905d2bc033ac23ab869d837fa4ca68fc47062aea61fb3c11f2e3604ad1c4bef38b22cb1e0c4d5d0d88715ae1cdc7f064f30fc11093c9
+  checksum: 49d6a55ebfe1880e73956dc8bf23104ad81c1272d4a06755823e6e1eec5255583d2913de99427b3e0a620e3b56178fdd8ea03c832b7452f0440c166044aa555c
   languageName: node
   linkType: hard
 
@@ -11243,17 +11243,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fs-merger@npm:^3.1.0":
-  version: 3.1.0
-  resolution: "fs-merger@npm:3.1.0"
+"fs-merger@npm:^3.2.1":
+  version: 3.2.1
+  resolution: "fs-merger@npm:3.2.1"
   dependencies:
     broccoli-node-api: ^1.7.0
     broccoli-node-info: ^2.1.0
     fs-extra: ^8.0.1
     fs-tree-diff: ^2.0.1
-    rimraf: ^2.6.3
-    walk-sync: ^2.0.2
-  checksum: 78e43e996cf43f0596f94fd41475e620775096e42266322b315fa5b0041beb130fd99ce4c875c7a3af9d7eb597bb3859e6a50bde09fab288d187b3c485e5051e
+    walk-sync: ^2.2.0
+  checksum: bfb93b537919407d947ab89c44f6d85f7cb58d1337aaa9115de0bd38178165b158809ad83c4f5d610d42ce0ee2f81ac7ad0ae5b573a69784b676a8a6ce506500
   languageName: node
   linkType: hard
 
@@ -12575,11 +12574,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next-parser@npm:5.0.0":
-  version: 5.0.0
-  resolution: "i18next-parser@npm:5.0.0"
+"i18next-parser@npm:5.1.0":
+  version: 5.1.0
+  resolution: "i18next-parser@npm:5.1.0"
   dependencies:
-    broccoli-plugin: ^4.0.5
+    "@babel/runtime": ^7.15.4
+    broccoli-plugin: ^4.0.7
     cheerio: ^1.0.0-rc.2
     colors: ~1.4.0
     commander: ~8.2.0
@@ -12598,7 +12598,7 @@ __metadata:
     vue-template-compiler: ^2.6.11
   bin:
     i18next: bin/cli.js
-  checksum: 8704d55e72769f2e9a1c1557397e9dea2ae4a79a58f426e9944ff95c18cb3b92cbc676c4eaa9a2ee2f899e11585259cbb0762a9f8e3b63384de479e0facf6807
+  checksum: e75396fc4c88536a0f3fc47926b881dc8be64b89c2242d83f810853049dacdcfcfde732ff199ccc7e2e8d0d4fb04d36f8ec31ed2c5603ff83f722e25211a1710
   languageName: node
   linkType: hard
 
@@ -19661,7 +19661,7 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"rimraf@npm:^2.5.4, rimraf@npm:^2.6.3":
+"rimraf@npm:^2.5.4":
   version: 2.7.1
   resolution: "rimraf@npm:2.7.1"
   dependencies:
@@ -19864,7 +19864,7 @@ resolve@^2.0.0-next.3:
     husky: 7.0.4
     hypernova: 2.5.0
     i18next: 21.4.0
-    i18next-parser: 5.0.0
+    i18next-parser: 5.1.0
     jest: 27.3.1
     jest-html-reporter: 3.4.1
     jest-prop-type-error: 1.1.0
@@ -22784,7 +22784,7 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"walk-sync@npm:^2.0.2":
+"walk-sync@npm:^2.2.0":
   version: 2.2.0
   resolution: "walk-sync@npm:2.2.0"
   dependencies:
