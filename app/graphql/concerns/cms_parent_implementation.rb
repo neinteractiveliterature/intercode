@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 module CmsParentImplementation
-  def cms_content_group(id: nil, transitional_id: nil)
-    object.cms_content_groups.find(transitional_id || id)
+  def cms_content_group(id: nil)
+    object.cms_content_groups.find(id)
   end
 
-  def cms_page(id: nil, transitional_id: nil, slug: nil, root_page: false)
+  def cms_page(id: nil, slug: nil, root_page: false)
     return object.root_page if root_page
-    return object.pages.find(transitional_id || id) if transitional_id || id
+    return object.pages.find(id) if id
     object.pages.find_by!(slug: slug)
   end
 

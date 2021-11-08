@@ -144,8 +144,6 @@ module.exports = {
         '@graphql-eslint/no-typename-prefix': 'off',
         '@graphql-eslint/naming-convention': 'off',
         '@graphql-eslint/require-description': 'off',
-        // TODO turn this back on once we're done with the transitionalIds
-        '@graphql-eslint/strict-id-in-types': 'off',
       },
     },
   ],
