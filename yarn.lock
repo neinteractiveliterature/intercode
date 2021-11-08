@@ -12602,21 +12602,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:21.4.1":
+"i18next@npm:21.4.1, i18next@npm:^21.2.0":
   version: 21.4.1
   resolution: "i18next@npm:21.4.1"
   dependencies:
     "@babel/runtime": ^7.12.0
   checksum: 0ede362ccf08a1d22b52e27f95e3f69057f929f8a5600ee85d9d8bc3045d4ab56d0b3f56b11c9a5670bd998e0a650bdfd885c31948e3c80e85cb807e28eac943
-  languageName: node
-  linkType: hard
-
-"i18next@npm:^21.2.0":
-  version: 21.3.3
-  resolution: "i18next@npm:21.3.3"
-  dependencies:
-    "@babel/runtime": ^7.12.0
-  checksum: 666462d8f3163b5867823b09a186b981f69be71cf5924c7b4d6749ba5b6e248eb5796e6928da1b5b19d17a0e6a51aa1922012c5aef269c90ebfe837b9d2db067
   languageName: node
   linkType: hard
 
