@@ -2,13 +2,6 @@
 class Mutations::SubmitOrder < Mutations::BaseMutation
   field :order, Types::OrderType, null: false
 
-  argument :transitional_id,
-           ID,
-           deprecation_reason:
-             "IDs have transitioned to the ID type.  Please switch back to the id field so that \
-we can remove this temporary one.",
-           required: false,
-           camelize: true
   argument :id, ID, required: false
   argument :payment_mode, Types::PaymentModeType, required: true, camelize: false
   argument :stripe_token, String, required: false, camelize: false

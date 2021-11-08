@@ -2,21 +2,7 @@
 class Mutations::CreateUserSignup < Mutations::BaseMutation
   field :signup, Types::SignupType, null: false
 
-  argument :transitional_run_id,
-           ID,
-           deprecation_reason:
-             "IDs have transitioned to the ID type.  Please switch back to the runId field so that \
-we can remove this temporary one.",
-           required: false,
-           camelize: true
   argument :run_id, ID, required: false, camelize: true
-  argument :transitional_user_con_profile_id,
-           ID,
-           deprecation_reason:
-             "IDs have transitioned to the ID type.  Please switch back to the userConProfileId field so that \
-we can remove this temporary one.",
-           required: false,
-           camelize: true
   argument :user_con_profile_id, ID, required: false, camelize: true
   argument :requested_bucket_key, String, required: false, camelize: false
   argument :no_requested_bucket, Boolean, required: false, camelize: false
@@ -25,9 +11,8 @@ we can remove this temporary one.",
   attr_reader :run, :signup_user_con_profile
 
   define_authorization_check do |args|
-    @run = convention.runs.find(args[:transitional_run_id] || args[:run_id])
-    @signup_user_con_profile =
-      convention.user_con_profiles.find(args[:transitional_user_con_profile_id] || args[:user_con_profile_id])
+    @run = convention.runs.find(args[:run_id])
+    @signup_user_con_profile = convention.user_con_profiles.find(args[:user_con_profile_id])
     policy(Signup.new(run: run, user_con_profile: signup_user_con_profile)).create?
   end
 
