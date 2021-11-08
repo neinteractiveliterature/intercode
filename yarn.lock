@@ -2959,7 +2959,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphiql/toolkit@npm:0.4.0":
+"@graphiql/toolkit@npm:0.4.0, @graphiql/toolkit@npm:^0.4.0":
   version: 0.4.0
   resolution: "@graphiql/toolkit@npm:0.4.0"
   dependencies:
@@ -2969,19 +2969,6 @@ __metadata:
   peerDependencies:
     graphql: ">= 15.5.0 <= 16.0.0-experimental-stream-defer.5"
   checksum: 18b82d5023dbdca63c3d16cf0a67b3e9a05d86494dea5d002f7795cb80f00f8da0cce92ddbad2daea5b262d507114fceefc1d33ebb8a3329fcc62977c678df65
-  languageName: node
-  linkType: hard
-
-"@graphiql/toolkit@npm:^0.3.2":
-  version: 0.3.2
-  resolution: "@graphiql/toolkit@npm:0.3.2"
-  dependencies:
-    "@n1ru4l/push-pull-async-iterable-iterator": ^3.0.0
-    graphql-ws: ^4.9.0
-    meros: ^1.1.4
-  peerDependencies:
-    graphql: ">= v14.5.0 <= 15.6.1"
-  checksum: 3d69ba8a75047d3d5eb4226d6366e3664ac5326afddd72690f230de4a9bbec173f96d648376c1b4472219b917c7e99844a34d54d683f0bc3b25a0f119b5a338e
   languageName: node
   linkType: hard
 
@@ -4400,7 +4387,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@neinteractiveliterature/litform@npm:^0.21.0":
+"@neinteractiveliterature/litform@npm:0.21.0":
   version: 0.21.0
   resolution: "@neinteractiveliterature/litform@npm:0.21.0"
   dependencies:
@@ -7270,18 +7257,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"broccoli-plugin@npm:^4.0.5":
-  version: 4.0.5
-  resolution: "broccoli-plugin@npm:4.0.5"
+"broccoli-plugin@npm:^4.0.7":
+  version: 4.0.7
+  resolution: "broccoli-plugin@npm:4.0.7"
   dependencies:
     broccoli-node-api: ^1.7.0
     broccoli-output-wrapper: ^3.2.5
-    fs-merger: ^3.1.0
+    fs-merger: ^3.2.1
     promise-map-series: ^0.3.0
     quick-temp: ^0.1.8
     rimraf: ^3.0.2
     symlink-or-copy: ^1.3.1
-  checksum: 1e459b3f03929fc9515f905d2bc033ac23ab869d837fa4ca68fc47062aea61fb3c11f2e3604ad1c4bef38b22cb1e0c4d5d0d88715ae1cdc7f064f30fc11093c9
+  checksum: 49d6a55ebfe1880e73956dc8bf23104ad81c1272d4a06755823e6e1eec5255583d2913de99427b3e0a620e3b56178fdd8ea03c832b7452f0440c166044aa555c
   languageName: node
   linkType: hard
 
@@ -8054,16 +8041,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"codemirror-graphql@npm:^1.0.3":
-  version: 1.0.3
-  resolution: "codemirror-graphql@npm:1.0.3"
+"codemirror-graphql@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "codemirror-graphql@npm:1.1.0"
   dependencies:
-    graphql-language-service-interface: ^2.8.2
-    graphql-language-service-parser: ^1.9.3
+    graphql-language-service-interface: ^2.9.0
+    graphql-language-service-parser: ^1.10.0
   peerDependencies:
     codemirror: ^5.58.2
-    graphql: ">= v14.5.0 <= 15.5.0"
-  checksum: 85aef940dc526acc8259e73ea6a0c118dddb614421f66525ac60d6ad827e4ee2ac2d0c7ededba45b200e7757a15254c1feac18c5f66e6ca80d3406832098e522
+    graphql: ">= 15.5.0 <= 16.0.0-experimental-stream-defer.5"
+  checksum: abfa711716d9033c0b754338aa4e46f41b584f53243cd3ec1a3e519ea9deba78739c53d1ff344e1cbec34259fe17f5115c84a4aa2af1f6e63188ece4dc625398
   languageName: node
   linkType: hard
 
@@ -10298,9 +10285,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-jest@npm:25.2.3":
-  version: 25.2.3
-  resolution: "eslint-plugin-jest@npm:25.2.3"
+"eslint-plugin-jest@npm:25.2.4":
+  version: 25.2.4
+  resolution: "eslint-plugin-jest@npm:25.2.4"
   dependencies:
     "@typescript-eslint/experimental-utils": ^5.0.0
   peerDependencies:
@@ -10311,7 +10298,7 @@ __metadata:
       optional: true
     jest:
       optional: true
-  checksum: eb6ed233348c735bfb3933947d75f982a0884825b2269518048a236bee49a913b67b7788986b8d4679687658cc4f7cd3d2ef32b128cb3d65b422ddec92c770ab
+  checksum: d263c5564e5ce573759fa06b94011855780e79b0407888a5ac0e80303af2aa249d9d089bcd2f0fc108eb58ef6f367544217b1be2b561216e92fc830e9a924a63
   languageName: node
   linkType: hard
 
@@ -11256,17 +11243,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fs-merger@npm:^3.1.0":
-  version: 3.1.0
-  resolution: "fs-merger@npm:3.1.0"
+"fs-merger@npm:^3.2.1":
+  version: 3.2.1
+  resolution: "fs-merger@npm:3.2.1"
   dependencies:
     broccoli-node-api: ^1.7.0
     broccoli-node-info: ^2.1.0
     fs-extra: ^8.0.1
     fs-tree-diff: ^2.0.1
-    rimraf: ^2.6.3
-    walk-sync: ^2.0.2
-  checksum: 78e43e996cf43f0596f94fd41475e620775096e42266322b315fa5b0041beb130fd99ce4c875c7a3af9d7eb597bb3859e6a50bde09fab288d187b3c485e5051e
+    walk-sync: ^2.2.0
+  checksum: bfb93b537919407d947ab89c44f6d85f7cb58d1337aaa9115de0bd38178165b158809ad83c4f5d610d42ce0ee2f81ac7ad0ae5b573a69784b676a8a6ce506500
   languageName: node
   linkType: hard
 
@@ -11706,24 +11692,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphiql@npm:1.4.8":
-  version: 1.4.8
-  resolution: "graphiql@npm:1.4.8"
+"graphiql@npm:1.5.0":
+  version: 1.5.0
+  resolution: "graphiql@npm:1.5.0"
   dependencies:
-    "@graphiql/toolkit": ^0.3.2
+    "@graphiql/toolkit": ^0.4.0
     codemirror: ^5.58.2
-    codemirror-graphql: ^1.0.3
+    codemirror-graphql: ^1.1.0
     copy-to-clipboard: ^3.2.0
     dset: ^3.1.0
     entities: ^2.0.0
     escape-html: ^1.0.3
-    graphql-language-service: ^3.1.6
+    graphql-language-service: ^3.2.0
     markdown-it: ^12.2.0
   peerDependencies:
-    graphql: ">= v14.5.0 <= 15.5.0"
+    graphql: ">= 15.5.0 <= 16.0.0-experimental-stream-defer.5"
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: 3d87b4174e242fae1777ac2d54b83e772e55176978998fa3beb07adb369d7ad82052a9fa0ec68d092c5de7d6ec247fd70012216aa5d0fc5509e4e3a2604eda05
+  checksum: 1cf4ade488f4eb3bb16ace91fecc791c0b4e1fdcaf73bd0901e9c4d8a13005886fc7f6c5ac9664df0ecb134d48efb186e33a1e383a2d688c2736a03ee888af8b
   languageName: node
   linkType: hard
 
@@ -11793,28 +11779,28 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-language-service-interface@npm:^2.8.2":
-  version: 2.8.2
-  resolution: "graphql-language-service-interface@npm:2.8.2"
+"graphql-language-service-interface@npm:^2.9.0":
+  version: 2.9.0
+  resolution: "graphql-language-service-interface@npm:2.9.0"
   dependencies:
-    graphql-language-service-parser: ^1.9.0
+    graphql-language-service-parser: ^1.10.0
     graphql-language-service-types: ^1.8.0
     graphql-language-service-utils: ^2.5.1
     vscode-languageserver-types: ^3.15.1
   peerDependencies:
-    graphql: ^14.0.0 || ^15.0.0
-  checksum: ea64aa3d5edc95d988ee89f30431cb0779dc9b848dcb1d18a587ba9e16ee8b9c488c564cb417ea88ab4f71fd1f886de9de4fec4bc36baf018989fa7373ab80fd
+    graphql: ">= 15.5.0 <= 16.0.0-experimental-stream-defer.5"
+  checksum: 65a5d5da5d9819273a3a1584987bf9cf427108f6d82da032138fc4f17de76eaea4fab6194daba82e490b948a3c28be824900609dfb7d5bedcf52bd6aa01bcf4a
   languageName: node
   linkType: hard
 
-"graphql-language-service-parser@npm:^1.9.0, graphql-language-service-parser@npm:^1.9.3":
-  version: 1.9.3
-  resolution: "graphql-language-service-parser@npm:1.9.3"
+"graphql-language-service-parser@npm:^1.10.0":
+  version: 1.10.0
+  resolution: "graphql-language-service-parser@npm:1.10.0"
   dependencies:
     graphql-language-service-types: ^1.8.0
   peerDependencies:
-    graphql: ">= v14.5.0 <= 15.5.0"
-  checksum: 6cfe9a6e15c50080f1fa0c38f7246ce9b04a0713ff07db542c217f80ff993024b8653e8253398750cb446bb1163d2aec868ba5473149412f762c542a77b4a769
+    graphql: ">= 15.5.0 <= 16.0.0-experimental-stream-defer.5"
+  checksum: 868679e27e9f1bfdf2f300a3373b4c2e4aa55a3434a9e4a31f648d9c501da718be52727925b2c83b02b87f81ce1e68fb2ca2471ca1b8bf7165aad3b239d6c323
   languageName: node
   linkType: hard
 
@@ -11839,19 +11825,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-language-service@npm:^3.1.6":
-  version: 3.1.6
-  resolution: "graphql-language-service@npm:3.1.6"
+"graphql-language-service@npm:^3.2.0":
+  version: 3.2.0
+  resolution: "graphql-language-service@npm:3.2.0"
   dependencies:
-    graphql-language-service-interface: ^2.8.2
-    graphql-language-service-parser: ^1.9.3
+    graphql-language-service-interface: ^2.9.0
+    graphql-language-service-parser: ^1.10.0
     graphql-language-service-types: ^1.8.2
     graphql-language-service-utils: ^2.5.3
   peerDependencies:
-    graphql: ">= v14.5.0 <= 15.5.0"
+    graphql: ">= 15.5.0 <= 16.0.0-experimental-stream-defer.5"
   bin:
     graphql: dist/temp-bin.js
-  checksum: bf8b4b4a6bbe42e4d4b2a07a98dc60eb2c83d8a891ab51b84ead01afd2e19b6c60c9cfa1a82407ed8a4d9c17a79f82d2a8a4deb50c79994bcbff16d11b35814e
+  checksum: 6117097e6d0706f1cb0949a305d2c1f08b9b807fed8d9e5b821fce686ad173a36a0b5a0385f61e199440fb83fcf3db94a875190d202f056d6a23c96f951539db
   languageName: node
   linkType: hard
 
@@ -12588,11 +12574,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next-parser@npm:5.0.0":
-  version: 5.0.0
-  resolution: "i18next-parser@npm:5.0.0"
+"i18next-parser@npm:5.1.0":
+  version: 5.1.0
+  resolution: "i18next-parser@npm:5.1.0"
   dependencies:
-    broccoli-plugin: ^4.0.5
+    "@babel/runtime": ^7.15.4
+    broccoli-plugin: ^4.0.7
     cheerio: ^1.0.0-rc.2
     colors: ~1.4.0
     commander: ~8.2.0
@@ -12611,11 +12598,20 @@ __metadata:
     vue-template-compiler: ^2.6.11
   bin:
     i18next: bin/cli.js
-  checksum: 8704d55e72769f2e9a1c1557397e9dea2ae4a79a58f426e9944ff95c18cb3b92cbc676c4eaa9a2ee2f899e11585259cbb0762a9f8e3b63384de479e0facf6807
+  checksum: e75396fc4c88536a0f3fc47926b881dc8be64b89c2242d83f810853049dacdcfcfde732ff199ccc7e2e8d0d4fb04d36f8ec31ed2c5603ff83f722e25211a1710
   languageName: node
   linkType: hard
 
-"i18next@npm:21.3.3, i18next@npm:^21.2.0":
+"i18next@npm:21.4.1":
+  version: 21.4.1
+  resolution: "i18next@npm:21.4.1"
+  dependencies:
+    "@babel/runtime": ^7.12.0
+  checksum: 0ede362ccf08a1d22b52e27f95e3f69057f929f8a5600ee85d9d8bc3045d4ab56d0b3f56b11c9a5670bd998e0a650bdfd885c31948e3c80e85cb807e28eac943
+  languageName: node
+  linkType: hard
+
+"i18next@npm:^21.2.0":
   version: 21.3.3
   resolution: "i18next@npm:21.3.3"
   dependencies:
@@ -19665,7 +19661,7 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"rimraf@npm:^2.5.4, rimraf@npm:^2.6.3":
+"rimraf@npm:^2.5.4":
   version: 2.7.1
   resolution: "rimraf@npm:2.7.1"
   dependencies:
@@ -19765,7 +19761,7 @@ resolve@^2.0.0-next.3:
     "@graphql-eslint/eslint-plugin": 2.4.0
     "@juggle/resize-observer": 3.3.1
     "@lezer/common": 0.15.7
-    "@neinteractiveliterature/litform": ^0.21.0
+    "@neinteractiveliterature/litform": 0.21.0
     "@popperjs/core": 2.10.2
     "@prettier/plugin-ruby": 2.0.0
     "@stripe/react-stripe-js": 1.6.0
@@ -19848,7 +19844,7 @@ resolve@^2.0.0-next.3:
     eslint-plugin-babel: 5.3.1
     eslint-plugin-graphql: 4.0.0
     eslint-plugin-import: 2.25.2
-    eslint-plugin-jest: 25.2.3
+    eslint-plugin-jest: 25.2.4
     eslint-plugin-jsx-a11y: 6.4.1
     eslint-plugin-react: 7.26.1
     eslint-plugin-react-hooks: 4.2.1-alpha-fd5e01c2e-20210913
@@ -19857,7 +19853,7 @@ resolve@^2.0.0-next.3:
     file-saver: 2.0.5
     font-awesome: 4.7.0
     glob: 7.2.0
-    graphiql: 1.4.8
+    graphiql: 1.5.0
     graphql: 15.7.2
     graphql-anywhere: 4.2.7
     graphql-language-service-utils: 2.5.3
@@ -19867,8 +19863,8 @@ resolve@^2.0.0-next.3:
     html-to-react: 1.4.7
     husky: 7.0.4
     hypernova: 2.5.0
-    i18next: 21.3.3
-    i18next-parser: 5.0.0
+    i18next: 21.4.1
+    i18next-parser: 5.1.0
     jest: 27.3.1
     jest-html-reporter: 3.4.1
     jest-prop-type-error: 1.1.0
@@ -22788,7 +22784,7 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"walk-sync@npm:^2.0.2":
+"walk-sync@npm:^2.2.0":
   version: 2.2.0
   resolution: "walk-sync@npm:2.2.0"
   dependencies:
