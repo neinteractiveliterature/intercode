@@ -73,4 +73,4 @@ COPY --from=pre-production --chown=www /usr/src/intercode /usr/src/intercode
 WORKDIR /usr/src/intercode
 
 USER www
-CMD bundle exec rails server -p $PORT -b 0.0.0.0
+CMD bundle exec bin/rails server -p $PORT -b 0.0.0.0
