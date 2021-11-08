@@ -2,13 +2,6 @@
 class Mutations::CreateUserConProfile < Mutations::BaseMutation
   field :user_con_profile, Types::UserConProfileType, null: false
 
-  argument :transitional_user_id,
-           ID,
-           deprecation_reason:
-             "IDs have transitioned to the ID type.  Please switch back to the userId field so that \
-we can remove this temporary one.",
-           required: false,
-           camelize: true
   argument :user_id, ID, required: false, camelize: true
   argument :user_con_profile, Types::UserConProfileInputType, required: true, camelize: false
 
@@ -16,7 +9,7 @@ we can remove this temporary one.",
 
   # rubocop:disable Metrics/AbcSize
   def resolve(**args)
-    user = User.find(args[:transitional_user_id] || args[:user_id])
+    user = User.find(args[:user_id])
     ensure_no_existing_user_con_profile(user)
 
     user_con_profile = convention.user_con_profiles.new(user: user)
