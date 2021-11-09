@@ -4,16 +4,7 @@ class Types::EventType < Types::BaseObject
 
   authorize_record
 
-  field :transitional_id,
-        ID,
-        deprecation_reason:
-          "IDs have transitioned to the ID type.  Please switch back to the id field so that \
-we can remove this temporary one.",
-        null: false,
-        method: :id,
-        camelize: true
   field :id, ID, null: false
-
   field :title, String, null: true
   field :author, String, null: true
   field :email, String, null: true
@@ -54,18 +45,11 @@ we can remove this temporary one.",
   end
 
   field :run, Types::RunType, null: false do
-    argument :transitional_id,
-             ID,
-             deprecation_reason:
-               "IDs have transitioned to the ID type.  Please switch back to the id field so that \
-we can remove this temporary one.",
-             required: false,
-             camelize: true
     argument :id, ID, required: false, camelize: true
   end
 
   def run(**args)
-    RecordLoader.for(Run).load(args[:transitional_id] || args[:id])
+    RecordLoader.for(Run).load(args[:id])
   end
 
   field :team_members, [Types::TeamMemberType], null: false
@@ -84,14 +68,6 @@ we can remove this temporary one.",
         Ticket.new(user_con_profile: UserConProfile.new(convention: context[:convention]), provided_by_event: value)
       ).read?
     end
-  end
-  field :can_provide_tickets,
-        Boolean,
-        deprecation_reason: 'Please use event_category.can_provide_tickets instead',
-        null: false
-
-  def can_provide_tickets
-    object.event_category.can_provide_tickets?
   end
 
   override_type = Types::MaximumEventProvidedTicketsOverrideType
@@ -150,17 +126,5 @@ we can remove this temporary one.",
       .for(Event, :form_response_changes)
       .load(object)
       .then { |changes| CompactingFormResponseChangesPresenter.new(changes).compacted_changes }
-  end
-
-  field :category, String, deprecation_reason: 'Please use event_category instead', null: false
-
-  def category
-    event_category.then { |category| category.name.underscore }
-  end
-
-  field :team_member_name, String, deprecation_reason: 'Please use event_category.team_member_name instead', null: false
-
-  def team_member_name
-    event_category.then(&:team_member_name)
   end
 end
