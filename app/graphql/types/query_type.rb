@@ -44,21 +44,14 @@ class Types::QueryType < Types::BaseObject
   end
 
   field :convention_by_id, Types::ConventionType, null: false do
-    argument :transitional_id,
-             ID,
-             deprecation_reason:
-               "IDs have transitioned to the ID type.  Please switch back to the id field so that \
-we can remove this temporary one.",
-             required: false,
-             camelize: true
     argument :id, ID, required: false, camelize: true
     description <<~MARKDOWN
     Finds a convention by ID. If a matching one can't be found, the request will error out.
   MARKDOWN
   end
 
-  def convention_by_id(id: nil, transitional_id: nil)
-    Convention.find(transitional_id || id)
+  def convention_by_id(id: nil)
+    Convention.find(id)
   end
 
   pagination_field :conventions_paginated,
@@ -243,14 +236,6 @@ represented as a JSON object.'
   end
 
   field :user, Types::UserType, null: false do
-    argument :transitional_id,
-             ID,
-             deprecation_reason:
-               "IDs have transitioned to the ID type.  Please switch back to the id field so that \
-we can remove this temporary one.",
-             required: false,
-             description: 'The ID of the user to find.',
-             camelize: true
     argument :id, ID, required: false, description: 'The ID of the user to find.', camelize: true
 
     description <<~MARKDOWN
@@ -258,19 +243,11 @@ we can remove this temporary one.",
   MARKDOWN
   end
 
-  def user(id: nil, transitional_id: nil)
-    User.find(transitional_id || id)
+  def user(id: nil)
+    User.find(id)
   end
 
   field :users, [Types::UserType], null: false do
-    argument :transitional_ids,
-             [ID],
-             required: false,
-             description: 'The IDs of the users to find.',
-             deprecation_reason:
-               "IDs have transitioned to the ID type.  Please switch back to the ids field so that \
-we can remove this temporary one.",
-             camelize: true
     argument :ids, [ID], required: false, description: 'The IDs of the users to find.'
 
     description <<~MARKDOWN
@@ -278,11 +255,9 @@ we can remove this temporary one.",
   MARKDOWN
   end
 
-  def users(ids: nil, transitional_ids: nil)
-    if (transitional_ids || ids).size > 25
-      raise GraphQL::ExecutionError, "Can't retrieve more than 25 users in a single query"
-    end
+  def users(ids: nil)
+    raise GraphQL::ExecutionError, "Can't retrieve more than 25 users in a single query" if ids.size > 25
 
-    User.find(transitional_ids || ids)
+    User.find(ids)
   end
 end

@@ -1,13 +1,5 @@
 # frozen_string_literal: true
 class Types::ProductType < Types::BaseObject
-  field :transitional_id,
-        ID,
-        deprecation_reason:
-          "IDs have transitioned to the ID type.  Please switch back to the id field so that \
-we can remove this temporary one.",
-        null: false,
-        method: :id,
-        camelize: true
   field :id, ID, null: false
   field :product_variants, [Types::ProductVariantType], null: false
   field :available, Boolean, null: false
@@ -29,16 +21,11 @@ we can remove this temporary one.",
     object.image&.url
   end
 
-  field :price, Types::MoneyType, null: false, deprecation_reason: 'Use pricing_structure instead'
   field :pricing_structure, Types::PricingStructureType, null: false
   field :payment_options, [String], null: false
   field :order_quantities_by_status, [Types::OrderQuantityByStatusType], null: false
 
   def order_quantities_by_status
     OrderQuantityByStatusLoader.for(Product).load(object)
-  end
-
-  def price
-    object.pricing_structure.price
   end
 end

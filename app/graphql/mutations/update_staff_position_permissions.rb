@@ -1,13 +1,6 @@
 # frozen_string_literal: true
 class Mutations::UpdateStaffPositionPermissions < Mutations::BaseMutation
   field :staff_position, Types::StaffPositionType, null: false, camelize: false
-  argument :transitional_staff_position_id,
-           ID,
-           deprecation_reason:
-             "IDs have transitioned to the ID type.  Please switch back to the staffPositionId field so that \
-we can remove this temporary one.",
-           required: false,
-           camelize: true
   argument :staff_position_id, ID, required: false, camelize: true
   argument :grant_permissions, [Types::PermissionInputType], required: true, camelize: false
   argument :revoke_permissions, [Types::PermissionInputType], required: true, camelize: false
@@ -15,7 +8,7 @@ we can remove this temporary one.",
   attr_reader :staff_position
 
   define_authorization_check do |args|
-    @staff_position = convention.staff_positions.find(args[:transitional_staff_position_id] || args[:staff_position_id])
+    @staff_position = convention.staff_positions.find(args[:staff_position_id])
     policy(Permission.new(role: staff_position)).create?
   end
 
