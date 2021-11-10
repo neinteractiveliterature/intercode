@@ -217,7 +217,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/code-frame@npm:*, @babel/code-frame@npm:^7.0.0, @babel/code-frame@npm:^7.10.4, @babel/code-frame@npm:^7.12.13, @babel/code-frame@npm:^7.14.5, @babel/code-frame@npm:^7.16.0, @babel/code-frame@npm:^7.8.3":
+"@babel/code-frame@npm:^7.0.0, @babel/code-frame@npm:^7.10.4, @babel/code-frame@npm:^7.12.13, @babel/code-frame@npm:^7.14.5, @babel/code-frame@npm:^7.16.0, @babel/code-frame@npm:^7.8.3":
   version: 7.16.0
   resolution: "@babel/code-frame@npm:7.16.0"
   dependencies:
@@ -3209,9 +3209,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-eslint/eslint-plugin@npm:2.4.0":
-  version: 2.4.0
-  resolution: "@graphql-eslint/eslint-plugin@npm:2.4.0"
+"@graphql-eslint/eslint-plugin@npm:2.4.1":
+  version: 2.4.1
+  resolution: "@graphql-eslint/eslint-plugin@npm:2.4.1"
   dependencies:
     "@graphql-tools/code-file-loader": ^7.0.2
     "@graphql-tools/graphql-tag-pluck": ^7.0.2
@@ -3221,8 +3221,8 @@ __metadata:
     graphql-depth-limit: 1.1.0
     lodash.lowercase: ^4.3.0
   peerDependencies:
-    graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0
-  checksum: 8e434c2176db4fb2aec4b50565a5227a15d126b56791edd3adfcf4beebec1db7187a8ca48f16061d507a953285951e2e80d912a79834dac7e02753cfa4079ba9
+    graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
+  checksum: 070759a7de72c410291dec2300651eeb2f3782302508f2f0521a4626ce102f6951d74ef8238273d506aed7ba7d3a791f218caaf5371b0b023dd759481d10cacf
   languageName: node
   linkType: hard
 
@@ -19911,7 +19911,7 @@ resolve@^2.0.0-next.3:
     "@graphql-codegen/typescript": 2.3.1
     "@graphql-codegen/typescript-operations": 2.2.0
     "@graphql-codegen/typescript-react-apollo": 3.2.1
-    "@graphql-eslint/eslint-plugin": 2.4.0
+    "@graphql-eslint/eslint-plugin": 2.4.1
     "@juggle/resize-observer": 3.3.1
     "@lezer/common": 0.15.7
     "@neinteractiveliterature/litform": 0.21.0
