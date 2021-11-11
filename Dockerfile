@@ -71,11 +71,14 @@ RUN rm -rf .yarn/.cache
 FROM ruby:${RUBY_VERSION}-slim as production
 ARG NODE_VERSION
 
+ENV RAILS_ENV production
+ENV NODE_ENV production
+
 USER root
 RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION} | bash -
-RUN apt-get install -y shared-mime-info nodejs && rm -rf /var/lib/apt/lists/*
-RUN useradd www
+RUN apt-get install -y shared-mime-info nodejs libpq5 && rm -rf /var/lib/apt/lists/*
+RUN useradd -ms /bin/bash www
 
 COPY --from=pre-production /usr/local/bundle /usr/local/bundle
 COPY --from=pre-production --chown=www /usr/src/intercode /usr/src/intercode
