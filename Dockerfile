@@ -1,13 +1,18 @@
 ARG RUBY_VERSION=3.0.2
+ARG NODE_VERSION=16.x
 
 ### dev
 
-FROM neinteractiveliterature/base-ruby-build:${RUBY_VERSION} as dev
+FROM ruby:${RUBY_VERSION}-slim as dev
+ARG NODE_VERSION
 
 USER root
+RUN useradd www
 WORKDIR /usr/src/intercode
 
-RUN apk add --no-cache shared-mime-info npm
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION} | bash -
+RUN apt-get install -y git build-essential shared-mime-info nodejs libpq-dev && rm -rf /var/lib/apt/lists/*
 RUN npm install -g yarn
 
 COPY --chown=www:www Gemfile Gemfile.lock .ruby-version /usr/src/intercode/
@@ -52,21 +57,25 @@ ENV RAILS_ENV test
 ENV NODE_ENV test
 
 USER root
-RUN apk add --no-cache postgresql-client
+RUN apt-get update && apt-get install -y postgresql-client && rm -rf /var/lib/apt/lists/*
 
 ### pre-production
 
 FROM build AS pre-production
 
-RUN rm -rf node_modules
 RUN yarn cache clean
+RUN rm -rf .yarn/.cache
 
 ### production
 
-FROM neinteractiveliterature/base-ruby-production:${RUBY_VERSION} as production
+FROM ruby:${RUBY_VERSION}-slim as production
+ARG NODE_VERSION
 
 USER root
-RUN apk add --no-cache shared-mime-info
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION} | bash -
+RUN apt-get install -y shared-mime-info nodejs && rm -rf /var/lib/apt/lists/*
+RUN useradd www
 
 COPY --from=pre-production /usr/local/bundle /usr/local/bundle
 COPY --from=pre-production --chown=www /usr/src/intercode /usr/src/intercode
