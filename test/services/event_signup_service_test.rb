@@ -440,6 +440,32 @@ class EventSignupServiceTest < ActiveSupport::TestCase
           assert_nil movable_signup.requested_bucket_key
         end
       end
+
+      describe 'not-counted signups in a counted bucket' do
+        it 'lets other people sign up' do
+          3.times { create_other_signup 'cats', counted: false }
+          4.times { create_other_signup 'anything' }
+
+          result = subject.call
+
+          assert result.success?
+          assert result.signup.confirmed?
+          assert_equal 'cats', result.signup.bucket_key
+        end
+
+        it 'lets people waitlist' do
+          2.times { create_other_signup 'cats', counted: false }
+          2.times { create_other_signup 'cats' }
+          4.times { create_other_signup 'anything' }
+
+          result = subject.call!
+
+          assert result.success?
+          assert result.signup.waitlisted?
+          assert_equal 'cats', result.signup.requested_bucket_key
+          assert_nil result.signup.bucket_key
+        end
+      end
     end
 
     describe 'with not-counted buckets' do
