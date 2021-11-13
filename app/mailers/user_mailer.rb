@@ -36,7 +36,8 @@ class UserMailer < Devise::Mailer
       # Awful awful shenanigans: get the last up-to-two dot-separated parts of the hostname.
       # So: localhost stays as localhost
       # www.interconlarp.org becomes interconlarp.org
-      second_level_domain = just_hostname.split('.').reverse.take(2).reverse.join('.')
+      second_level_domain =
+        DomainPrefix.registered_domain(just_hostname) || just_hostname.split('.').reverse.take(2).reverse.join('.')
 
       "webmaster@#{second_level_domain}"
     else

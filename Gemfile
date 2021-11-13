@@ -79,11 +79,12 @@ gem 'whenever'
 gem 'ahoy_matey'
 
 # Miscellany
-gem 'parallel'
-gem 'skylight'
-gem 'icalendar'
 gem 'dalli'
+gem 'domain_prefix'
+gem 'icalendar'
+gem 'parallel'
 gem 'platform-api'
+gem 'skylight'
 gem 'tzinfo-data'
 
 gem 'faker', group: 'development', require: false
