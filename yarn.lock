@@ -7701,10 +7701,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"caniuse-lite@npm:1.0.30001279":
-  version: 1.0.30001279
-  resolution: "caniuse-lite@npm:1.0.30001279"
-  checksum: c0330577718e4221caae92a1bee8131f546668001840cf66455d5aa6050797f44709865779c5cdcba7cbf32527004a743dc2879497d23f60478f8bbb203cfeeb
+"caniuse-lite@npm:1.0.30001280":
+  version: 1.0.30001280
+  resolution: "caniuse-lite@npm:1.0.30001280"
+  checksum: 5794b22f4254927f095e83c65e89ddfc63065c7ed16e6544555a3252ee3d16e48f8a7846713dc64869c52e1abe9a2a93161804b40c2097d1abc9aaa0155a0b65
   languageName: node
   linkType: hard
 
@@ -18980,16 +18980,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-i18next@npm:11.14.1":
-  version: 11.14.1
-  resolution: "react-i18next@npm:11.14.1"
+"react-i18next@npm:11.14.2":
+  version: 11.14.2
+  resolution: "react-i18next@npm:11.14.2"
   dependencies:
     "@babel/runtime": ^7.14.5
     html-parse-stringify: ^3.0.1
   peerDependencies:
     i18next: ">= 19.0.0"
     react: ">= 16.8.0"
-  checksum: 1dd52aa2b890b27be43436c3b3c27d75469c7439888689fabf69f49b3f9ccde81396b22fc43159928c63594f3a980e07ddbcd175ca96dbbc1a87be4a484fc38c
+  checksum: 336051bda04f381b309a6737044038cd9b7b90077bb080f90860c683286bf88b1d774d40f4c2655ee66c4ab03267990a6ad562169430bf4b2d436b1064963814
   languageName: node
   linkType: hard
 
@@ -20072,7 +20072,7 @@ resolve@^2.0.0-next.3:
     buffer: 6.0.3
     bytes: 3.1.0
     cadmus-navbar-admin: 5.0.0
-    caniuse-lite: 1.0.30001279
+    caniuse-lite: 1.0.30001280
     case-sensitive-paths-webpack-plugin: 2.4.0
     classnames: 2.3.1
     compression-webpack-plugin: 9.0.0
@@ -20147,7 +20147,7 @@ resolve@^2.0.0-next.3:
     react-dom: 17.0.2
     react-google-recaptcha: 2.1.0
     react-html-id: 0.1.5
-    react-i18next: 11.14.1
+    react-i18next: 11.14.2
     react-onclickoutside: 6.12.0
     react-popper: 2.2.5
     react-router-dom: 5.3.0
