@@ -11,11 +11,6 @@ module Intercode
     end
 
     def app_level_domain(host)
-      if host =~ /herokuapp\.com\z/
-        # Treat herokuapp.com as top level
-        host.split('.').reverse.take(3).reverse.join('.')
-      end
-
       DomainPrefix.registered_domain(host) || host.split('.').reverse.take(2).reverse.join('.')
     end
 
