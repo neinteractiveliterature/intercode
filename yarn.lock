@@ -172,9 +172,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/client@npm:3.4.16, @apollo/client@npm:^3.1.3":
-  version: 3.4.16
-  resolution: "@apollo/client@npm:3.4.16"
+"@apollo/client@npm:3.4.17, @apollo/client@npm:^3.1.3":
+  version: 3.4.17
+  resolution: "@apollo/client@npm:3.4.17"
   dependencies:
     "@graphql-typed-document-node/core": ^3.0.0
     "@wry/context": ^0.6.0
@@ -191,13 +191,13 @@ __metadata:
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0
     react: ^16.8.0 || ^17.0.0
-    subscriptions-transport-ws: ^0.9.0
+    subscriptions-transport-ws: ^0.9.0 || ^0.11.0
   peerDependenciesMeta:
     react:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: 919f8f1f4cf3a91024470cd48f1505e11147792445a52bac5bfae093b5acd202765db4c6beeadbb8f3d84ccae054768d0776fd066460469241e84fe51a326a6b
+  checksum: 01624eceab4e71bfcc6fa6fc53ca413c17208a2651d61ebced039c6461da8e590bfef909f994dc23b94803ac49f67d4bd72057e8e33100c37da3ef9566db76d4
   languageName: node
   linkType: hard
 
@@ -19749,7 +19749,7 @@ resolve@^2.0.0-next.3:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
-    "@apollo/client": 3.4.16
+    "@apollo/client": 3.4.17
     "@babel/core": 7.16.0
     "@babel/plugin-proposal-class-properties": 7.16.0
     "@babel/plugin-proposal-do-expressions": 7.16.0
