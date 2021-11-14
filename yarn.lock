@@ -14774,9 +14774,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lint-staged@npm:12.0.1":
-  version: 12.0.1
-  resolution: "lint-staged@npm:12.0.1"
+"lint-staged@npm:12.0.2":
+  version: 12.0.2
+  resolution: "lint-staged@npm:12.0.2"
   dependencies:
     cli-truncate: 3.1.0
     colorette: ^2.0.16
@@ -14792,7 +14792,7 @@ __metadata:
     supports-color: 9.0.2
   bin:
     lint-staged: bin/lint-staged.js
-  checksum: 0a3a0cd6b5dc57c66736baeed3eb00eab4a07ac43fac19460f94606d66079fec153bd61bb9ac384f6a8e99dae41cdd3c9a8454ea3971ce6443d7611a418cbb88
+  checksum: dd90c182c762f4172ac470b47af4810ea1e637d82c47871e1aa4b44e79570235725bc0be166c054cf7cf9db1877f11a19e5258dee89ab00b00d336b147e803fb
   languageName: node
   linkType: hard
 
@@ -19915,7 +19915,7 @@ resolve@^2.0.0-next.3:
     jest-html-reporter: 3.4.1
     jest-prop-type-error: 1.1.0
     js-search: 2.0.0
-    lint-staged: 12.0.1
+    lint-staged: 12.0.2
     lodash: 4.17.21
     luxon: 2.1.1
     mapbox-gl: 1.13.2
