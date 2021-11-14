@@ -1,7 +1,5 @@
 {
-  "extends": [
-    "config:base"
-  ],
+  "extends": ["config:base"],
   "packageRules": [
     {
       "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
@@ -15,5 +13,6 @@
       "matchPackageNames": ["mapbox-gl", "@types/mapbox-gl"],
       "allowedVersions": "< 2"
     }
-  ]
+  ],
+  "postUpdateOptions": ["yarnDedupeHighest"]
 }
