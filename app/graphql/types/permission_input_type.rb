@@ -41,7 +41,7 @@ we can remove this temporary one.",
         record_class = record_type.safe_constantize
         records_by_id = record_class.find(processed_inputs.map { |input| input[id_field] }).index_by(&:id)
         processed_inputs.map do |input|
-          { association_name => records_by_id[input[id_field]], :permission => input[:permission] }
+          { association_name => records_by_id[input[id_field].to_i], :permission => input[:permission] }
         end
       end
   end
