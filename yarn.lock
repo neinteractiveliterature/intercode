@@ -2977,9 +2977,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-codegen/cli@npm:2.2.2":
-  version: 2.2.2
-  resolution: "@graphql-codegen/cli@npm:2.2.2"
+"@graphql-codegen/cli@npm:2.3.0":
+  version: 2.3.0
+  resolution: "@graphql-codegen/cli@npm:2.3.0"
   dependencies:
     "@graphql-codegen/core": 2.3.0
     "@graphql-codegen/plugin-helpers": ^2.3.0
@@ -3004,7 +3004,7 @@ __metadata:
     detect-indent: ^6.0.0
     glob: ^7.1.6
     globby: ^11.0.4
-    graphql-config: ^4.0.1
+    graphql-config: ^4.1.0
     inquirer: ^7.3.3
     is-glob: ^4.0.1
     json-to-pretty-yaml: ^1.2.2
@@ -3022,12 +3022,12 @@ __metadata:
     yaml: ^1.10.0
     yargs: ^17.0.0
   peerDependencies:
-    graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0
+    graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
   bin:
     gql-gen: bin.js
     graphql-code-generator: bin.js
     graphql-codegen: bin.js
-  checksum: 819a3bbea4419f7269c332076184b3d7b62cf4383f45481324b4db0de31db3f3d0a2ac7e7f13a690b3b5a52a192c5d9469351afb2367b7c8b1ad2679e09a3bbc
+  checksum: cc9d6ca4c4be064c86a2302b0ecd2ebaae69bdeb2558f2ca83efc94b72fb1243b325531a010c243541546eb4ecb2f7c4cfce040a0f817c5e84cbeae9f6332612
   languageName: node
   linkType: hard
 
@@ -3145,9 +3145,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-codegen/typescript@npm:2.3.1, @graphql-codegen/typescript@npm:^2.3.0":
-  version: 2.3.1
-  resolution: "@graphql-codegen/typescript@npm:2.3.1"
+"@graphql-codegen/typescript@npm:2.4.0, @graphql-codegen/typescript@npm:^2.3.0":
+  version: 2.4.0
+  resolution: "@graphql-codegen/typescript@npm:2.4.0"
   dependencies:
     "@graphql-codegen/plugin-helpers": ^2.3.0
     "@graphql-codegen/schema-ast": ^2.4.0
@@ -3156,7 +3156,7 @@ __metadata:
     tslib: ~2.3.0
   peerDependencies:
     graphql: ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 5130f4630bf9521f05f81a013ecb9953cd32faeca0f6dc924664304d91027369bca1a5b65f5b8e8061a908bc5db1120f1bffa64168c919593bec2f1d7384810a
+  checksum: ce100a2e89fe3e7b181deb9f2e34f77c03b87fa9f30f808d8c074b4d476df6f4f060fafb752e545aa94b7fb05a1c90cb5fa33348d8051ab8d63d7173afccda2e
   languageName: node
   linkType: hard
 
@@ -11767,7 +11767,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-config@npm:4.1.0, graphql-config@npm:^4.0.1":
+"graphql-config@npm:4.1.0, graphql-config@npm:^4.1.0":
   version: 4.1.0
   resolution: "graphql-config@npm:4.1.0"
   dependencies:
@@ -19795,11 +19795,11 @@ resolve@^2.0.0-next.3:
     "@emotion/serialize": 1.0.2
     "@graphiql/toolkit": 0.4.0
     "@graphql-codegen/add": 3.1.0
-    "@graphql-codegen/cli": 2.2.2
+    "@graphql-codegen/cli": 2.3.0
     "@graphql-codegen/fragment-matcher": 3.2.0
     "@graphql-codegen/introspection": 2.1.0
     "@graphql-codegen/near-operation-file-preset": 2.2.1
-    "@graphql-codegen/typescript": 2.3.1
+    "@graphql-codegen/typescript": 2.4.0
     "@graphql-codegen/typescript-operations": 2.2.0
     "@graphql-codegen/typescript-react-apollo": 3.2.1
     "@graphql-eslint/eslint-plugin": 2.5.0
