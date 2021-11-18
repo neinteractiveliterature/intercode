@@ -180,7 +180,7 @@
     "webpack": "5.64.1",
     "webpack-assets-manifest": "5.0.6",
     "webpack-bundle-analyzer": "4.5.0",
-    "webpack-dev-middleware": "5.2.1",
+    "webpack-dev-middleware": "5.2.2",
     "webpack-manifest-plugin": "4.0.2",
     "webpack-merge": "5.8.0",
     "webpack-shell-plugin-next": "2.2.2",
