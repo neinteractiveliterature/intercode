@@ -2185,12 +2185,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/state@npm:0.19.5, @codemirror/state@npm:^0.19.0, @codemirror/state@npm:^0.19.2, @codemirror/state@npm:^0.19.3":
-  version: 0.19.5
-  resolution: "@codemirror/state@npm:0.19.5"
+"@codemirror/state@npm:0.19.6, @codemirror/state@npm:^0.19.0, @codemirror/state@npm:^0.19.2, @codemirror/state@npm:^0.19.3":
+  version: 0.19.6
+  resolution: "@codemirror/state@npm:0.19.6"
   dependencies:
     "@codemirror/text": ^0.19.0
-  checksum: ea6dbad373bdcc408f580ea47abba3c39279400d0cfec70befc79690795aaba509f887c68405041ac5aa0ce2412fc2f7bcc198ad6cf2842ec77ecf1536ab9c5a
+  checksum: 65bee46d76c0b55b10ed4818cbb77267a6c75dff3c8cc04e83056a79a1d36e79d7b8bf750d4695238ac28fe792d6329939fd725839f8314eee34146941cae344
   languageName: node
   linkType: hard
 
@@ -19763,7 +19763,7 @@ resolve@^2.0.0-next.3:
     "@codemirror/lang-json": 0.19.1
     "@codemirror/lang-markdown": 0.19.2
     "@codemirror/language": 0.19.5
-    "@codemirror/state": 0.19.5
+    "@codemirror/state": 0.19.6
     "@codemirror/view": 0.19.19
     "@dnd-kit/core": 3.1.1
     "@dnd-kit/sortable": 4.0.0
