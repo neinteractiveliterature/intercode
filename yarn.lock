@@ -2211,16 +2211,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/view@npm:0.19.19, @codemirror/view@npm:^0.19.0, @codemirror/view@npm:^0.19.9":
-  version: 0.19.19
-  resolution: "@codemirror/view@npm:0.19.19"
+"@codemirror/view@npm:0.19.20, @codemirror/view@npm:^0.19.0, @codemirror/view@npm:^0.19.9":
+  version: 0.19.20
+  resolution: "@codemirror/view@npm:0.19.20"
   dependencies:
     "@codemirror/rangeset": ^0.19.0
     "@codemirror/state": ^0.19.3
     "@codemirror/text": ^0.19.0
     style-mod: ^4.0.0
     w3c-keyname: ^2.2.4
-  checksum: 86e9d1c33cf6a6f6a4c8886f1d985264819abbe35b9e957a21964c10f8b04568f53c0525bf13aae1662308acd4a4b42102f30ecc03ffd9f8a740a012fd6bf9f3
+  checksum: 19777362de7a8281abc18aad08b5f777f25c120846ae57a6e94fef97fa383508a5fd3b80b5f66c3cc4e1964eaba4217aed8619ceea7a9a5ebbe91ad39f4b64dd
   languageName: node
   linkType: hard
 
@@ -19764,7 +19764,7 @@ resolve@^2.0.0-next.3:
     "@codemirror/lang-markdown": 0.19.2
     "@codemirror/language": 0.19.5
     "@codemirror/state": 0.19.6
-    "@codemirror/view": 0.19.19
+    "@codemirror/view": 0.19.20
     "@dnd-kit/core": 3.1.1
     "@dnd-kit/sortable": 4.0.0
     "@dnd-kit/utilities": 2.0.0
