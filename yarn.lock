@@ -19929,7 +19929,7 @@ resolve@^2.0.0-next.3:
     rollbar-sourcemap-webpack-plugin: 3.3.0
     sass: 1.43.4
     sass-loader: 12.3.0
-    source-map-support: 0.5.20
+    source-map-support: 0.5.21
     stream-browserify: 3.0.0
     style-loader: 3.3.1
     terser-webpack-plugin: 5.2.5
@@ -20689,13 +20689,13 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"source-map-support@npm:0.5.20, source-map-support@npm:^0.5.16, source-map-support@npm:^0.5.17, source-map-support@npm:^0.5.6, source-map-support@npm:~0.5.19":
-  version: 0.5.20
-  resolution: "source-map-support@npm:0.5.20"
+"source-map-support@npm:0.5.21, source-map-support@npm:^0.5.16, source-map-support@npm:^0.5.17, source-map-support@npm:^0.5.6, source-map-support@npm:~0.5.19":
+  version: 0.5.21
+  resolution: "source-map-support@npm:0.5.21"
   dependencies:
     buffer-from: ^1.0.0
     source-map: ^0.6.0
-  checksum: 43946aff452011960d16154304b11011e0185549493e65dd90da045959409fb2d266ba1c854fff3d5949f8e59382e3fcc7f7c5fa66136007a6750ad06c6c0baa
+  checksum: 43e98d700d79af1d36f859bdb7318e601dfc918c7ba2e98456118ebc4c4872b327773e5a1df09b0524e9e5063bb18f0934538eace60cca2710d1fa687645d137
   languageName: node
   linkType: hard
 
