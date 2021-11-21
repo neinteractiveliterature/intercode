@@ -8201,17 +8201,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"commander@npm:^8.1.0, commander@npm:^8.3.0":
+"commander@npm:^8.1.0, commander@npm:^8.3.0, commander@npm:~8.3.0":
   version: 8.3.0
   resolution: "commander@npm:8.3.0"
   checksum: 0f82321821fc27b83bd409510bb9deeebcfa799ff0bf5d102128b500b7af22872c0c92cb6a0ebc5a4cf19c6b550fba9cedfa7329d18c6442a625f851377bacf0
-  languageName: node
-  linkType: hard
-
-"commander@npm:~8.2.0":
-  version: 8.2.0
-  resolution: "commander@npm:8.2.0"
-  checksum: e868805bc266777f7a9c8a740e15b9e02b8148d8251f577ea9b9ef373ac0bdeb77b9b60cfc033592c9e1affea89993be08c13c623f0c619f9bf152c0e4d12cb0
   languageName: node
   linkType: hard
 
@@ -12590,15 +12583,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next-parser@npm:5.2.0":
-  version: 5.2.0
-  resolution: "i18next-parser@npm:5.2.0"
+"i18next-parser@npm:5.3.0":
+  version: 5.3.0
+  resolution: "i18next-parser@npm:5.3.0"
   dependencies:
     "@babel/runtime": ^7.15.4
     broccoli-plugin: ^4.0.7
     cheerio: ^1.0.0-rc.2
     colors: ~1.4.0
-    commander: ~8.2.0
+    commander: ~8.3.0
     concat-stream: ~2.0.0
     eol: ^0.9.1
     fs-extra: ^10.0.0
@@ -12614,7 +12607,7 @@ __metadata:
     vue-template-compiler: ^2.6.11
   bin:
     i18next: bin/cli.js
-  checksum: 7622a7903d7ba54157689696d588672a50d716d48a942593c883fa66e3151fd97a25ac2ae87e49f450b8e06439e5048293422964d1e985f0fc7af397418f0b7e
+  checksum: 8d57b1d5dfdf19d58a5ff67f6ec8277eeaa324e05f1420a18b1a0736e4d7f59ead20ff7d17aca1a250efd8d0ee55a7e13ec865f90bf635f1204ee6bc9778ce7f
   languageName: node
   linkType: hard
 
@@ -19884,7 +19877,7 @@ resolve@^2.0.0-next.3:
     husky: 7.0.4
     hypernova: 2.5.0
     i18next: 21.5.2
-    i18next-parser: 5.2.0
+    i18next-parser: 5.3.0
     jest: 27.3.1
     jest-html-reporter: 3.4.1
     jest-prop-type-error: 1.1.0
