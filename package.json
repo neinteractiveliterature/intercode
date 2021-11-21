@@ -78,7 +78,7 @@
     "@types/luxon": "2.0.7",
     "@types/mapbox-gl": "1.13.2",
     "@types/minimist": "1.2.2",
-    "@types/react": "17.0.35",
+    "@types/react": "17.0.36",
     "@types/react-click-outside-hook": "1.0.0",
     "@types/react-color": "3.0.6",
     "@types/react-google-recaptcha": "2.1.2",
