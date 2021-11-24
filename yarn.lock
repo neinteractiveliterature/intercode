@@ -11851,7 +11851,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-language-service-types@npm:^1.8.3, graphql-language-service-types@npm:^1.8.5":
+"graphql-language-service-types@npm:^1.8.5":
   version: 1.8.5
   resolution: "graphql-language-service-types@npm:1.8.5"
   peerDependencies:
@@ -11860,19 +11860,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-language-service-utils@npm:2.6.0":
-  version: 2.6.0
-  resolution: "graphql-language-service-utils@npm:2.6.0"
-  dependencies:
-    graphql-language-service-types: ^1.8.3
-    nullthrows: ^1.0.0
-  peerDependencies:
-    graphql: ">= 15.5.0 <= 16.0.0-experimental-stream-defer.5"
-  checksum: 086c3a9d619f6c52da8a6cc0f2a8f9ed3df93eadb9f7dc728d2dd82409fa9e5fa120f33adbeeee97f8fd4ef50ee23effc3ad112b748d848fca18c62fa6a3a542
-  languageName: node
-  linkType: hard
-
-"graphql-language-service-utils@npm:^2.6.2":
+"graphql-language-service-utils@npm:2.6.2, graphql-language-service-utils@npm:^2.6.2":
   version: 2.6.2
   resolution: "graphql-language-service-utils@npm:2.6.2"
   dependencies:
@@ -19926,7 +19914,7 @@ resolve@^2.0.0-next.3:
     graphiql: 1.5.4
     graphql: 15.7.2
     graphql-anywhere: 4.2.7
-    graphql-language-service-utils: 2.6.0
+    graphql-language-service-utils: 2.6.2
     graphql-tag: 2.12.6
     graphqldoc: 2.5.2
     history: 4.10.1
