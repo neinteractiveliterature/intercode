@@ -8073,16 +8073,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"codemirror-graphql@npm:^1.2.2":
-  version: 1.2.2
-  resolution: "codemirror-graphql@npm:1.2.2"
+"codemirror-graphql@npm:^1.2.3":
+  version: 1.2.3
+  resolution: "codemirror-graphql@npm:1.2.3"
   dependencies:
     "@codemirror/stream-parser": ^0.19.2
     graphql-language-service: ^3.2.3
   peerDependencies:
     codemirror: ^5.58.2
     graphql: ^15.5.0 || ^16.0.0
-  checksum: 30ba83f113d87f5a631a8bc993ac4f764f45fc95099148eb53b44284fb8fe0747457d29123e6774b40e2b892868908e85352b44e293b0683ac920c9a5f340cd4
+  checksum: aa1ed0846d30c9590fdb87e7073f9714e06bee6c09a7363c62d2dae9ecbac9b2e0a85b36b21600243301b863fd768f2d55e77bb7d803413a3e7a2a2cb5d15ce8
   languageName: node
   linkType: hard
 
@@ -11739,13 +11739,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphiql@npm:1.5.4":
-  version: 1.5.4
-  resolution: "graphiql@npm:1.5.4"
+"graphiql@npm:1.5.5":
+  version: 1.5.5
+  resolution: "graphiql@npm:1.5.5"
   dependencies:
     "@graphiql/toolkit": ^0.4.2
     codemirror: ^5.58.2
-    codemirror-graphql: ^1.2.2
+    codemirror-graphql: ^1.2.3
     copy-to-clipboard: ^3.2.0
     dset: ^3.1.0
     entities: ^2.0.0
@@ -11756,7 +11756,7 @@ __metadata:
     graphql: ^15.5.0 || ^16.0.0
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: 86c81f6a185b1cd8c732e638e71f14edd23c55913ea526e52c4b656f1abe8b9865739e392d28b5bb3f002310a1f8445f594ab8f2fea60d3399dc72cccf28bdc2
+  checksum: af30db561c9c40f6b65a0ef61892786a54cd195ae4c37c930a4364648beff29b0209b68bd80eb94ab29276a3a33d47672dd40b9f52f2061a24899f97820d4df9
   languageName: node
   linkType: hard
 
@@ -19911,7 +19911,7 @@ resolve@^2.0.0-next.3:
     file-saver: 2.0.5
     font-awesome: 4.7.0
     glob: 7.2.0
-    graphiql: 1.5.4
+    graphiql: 1.5.5
     graphql: 15.7.2
     graphql-anywhere: 4.2.7
     graphql-language-service-utils: 2.6.2
