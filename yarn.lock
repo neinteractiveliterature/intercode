@@ -18857,13 +18857,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-onclickoutside@npm:6.12.0":
-  version: 6.12.0
-  resolution: "react-onclickoutside@npm:6.12.0"
+"react-onclickoutside@npm:6.12.1":
+  version: 6.12.1
+  resolution: "react-onclickoutside@npm:6.12.1"
   peerDependencies:
     react: ^15.5.x || ^16.x || ^17.x
     react-dom: ^15.5.x || ^16.x || ^17.x
-  checksum: f3d2f2fd0aaf05baaccc572895c6381bbbb01fd748a7e228f424b0f610af957fc3df748d7fefa09a88afdaedb09ffd563de04bc0614acb7a5e4031538251084b
+  checksum: aae4c1c2e77a4c601d53ba0aa0fbb4ab295a518b3f522ea29e7712c2310c57f2a051a70bdb0bc62424ca124b804a1a007ea1c32319e8c0cfbac417c601ff0f1a
   languageName: node
   linkType: hard
 
@@ -19953,7 +19953,7 @@ resolve@^2.0.0-next.3:
     react-google-recaptcha: 2.1.0
     react-html-id: 0.1.5
     react-i18next: 11.14.3
-    react-onclickoutside: 6.12.0
+    react-onclickoutside: 6.12.1
     react-popper: 2.2.5
     react-router-dom: 5.3.0
     react-select: 4.3.1
