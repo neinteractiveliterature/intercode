@@ -2103,16 +2103,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/language@npm:0.19.5, @codemirror/language@npm:^0.19.0, @codemirror/language@npm:^0.19.3":
-  version: 0.19.5
-  resolution: "@codemirror/language@npm:0.19.5"
+"@codemirror/language@npm:0.19.6, @codemirror/language@npm:^0.19.0, @codemirror/language@npm:^0.19.3":
+  version: 0.19.6
+  resolution: "@codemirror/language@npm:0.19.6"
   dependencies:
     "@codemirror/state": ^0.19.0
     "@codemirror/text": ^0.19.0
     "@codemirror/view": ^0.19.0
     "@lezer/common": ^0.15.5
     "@lezer/lr": ^0.15.0
-  checksum: 28ce33e4685a20c1df30f61173a14795939f03fdc23c589b8dcea3c98aabdaaa8ddfc2f59368a1f8cba440907d2f2492137e445ee5604685a58cac68c2b9e969
+  checksum: d9e9f14dacd0665f286ead6dc332dd769a82ab9f7bf1ad62430a26d8836c8c5c8ef9835480bf0cc33405189aea8e1806998fd7db0879dea7d0fed2dbd8e70f7f
   languageName: node
   linkType: hard
 
@@ -2225,16 +2225,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/view@npm:0.19.20, @codemirror/view@npm:^0.19.0, @codemirror/view@npm:^0.19.9":
-  version: 0.19.20
-  resolution: "@codemirror/view@npm:0.19.20"
+"@codemirror/view@npm:0.19.21, @codemirror/view@npm:^0.19.0, @codemirror/view@npm:^0.19.9":
+  version: 0.19.21
+  resolution: "@codemirror/view@npm:0.19.21"
   dependencies:
     "@codemirror/rangeset": ^0.19.0
     "@codemirror/state": ^0.19.3
     "@codemirror/text": ^0.19.0
     style-mod: ^4.0.0
     w3c-keyname: ^2.2.4
-  checksum: 19777362de7a8281abc18aad08b5f777f25c120846ae57a6e94fef97fa383508a5fd3b80b5f66c3cc4e1964eaba4217aed8619ceea7a9a5ebbe91ad39f4b64dd
+  checksum: 54d3517ad1682fa9b5af5267407eb42168d8a48437704e00da6a252d1a75147d4c7a2f9ca8e30dec56fc457e374583586adac60c8b09ebb90ec03f4e6b11e9c4
   languageName: node
   linkType: hard
 
@@ -19750,9 +19750,9 @@ resolve@^2.0.0-next.3:
     "@codemirror/lang-html": 0.19.3
     "@codemirror/lang-json": 0.19.1
     "@codemirror/lang-markdown": 0.19.2
-    "@codemirror/language": 0.19.5
+    "@codemirror/language": 0.19.6
     "@codemirror/state": 0.19.6
-    "@codemirror/view": 0.19.20
+    "@codemirror/view": 0.19.21
     "@dnd-kit/core": 3.1.1
     "@dnd-kit/sortable": 4.0.0
     "@dnd-kit/utilities": 2.0.0
