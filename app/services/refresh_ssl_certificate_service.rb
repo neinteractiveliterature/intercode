@@ -44,6 +44,8 @@ class RefreshSslCertificateService < CivilService::Service
         Rails.logger.info "Checking #{uri} certificate"
         response = Net::HTTP.start(uri.host, uri.port, use_ssl: true)
         response.peer_cert
+      rescue StandardError
+        nil
       end
   end
 
