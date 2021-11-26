@@ -76,8 +76,8 @@ class RefreshSslCertificateService < CivilService::Service
 
   def install_acme
     Rails.logger.info 'Installing acme.sh'
-    sh 'curl -O https://raw.githubusercontent.com/acmesh-official/acme.sh/master/acme.sh'
-    sh 'sh acme.sh --install --force'
+    sh "curl https://raw.githubusercontent.com/acmesh-official/acme.sh/master/acme.sh | \
+sh -s -- --install-online --force"
   end
 
   def sni_endpoints
