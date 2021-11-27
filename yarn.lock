@@ -4498,10 +4498,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@popperjs/core@npm:2.10.2, @popperjs/core@npm:^2.10.2":
-  version: 2.10.2
-  resolution: "@popperjs/core@npm:2.10.2"
-  checksum: 43c189e3eb6d032433512d94761b54fc7cae15957ca5528008813f887a67b5760b949f30a5141b476be2ba5a6c677c91def150f603d2d3e30b5e97a5ae51474e
+"@popperjs/core@npm:2.11.0, @popperjs/core@npm:^2.10.2":
+  version: 2.11.0
+  resolution: "@popperjs/core@npm:2.11.0"
+  checksum: 84d6f197d3ddfd8a5b05c7276c3692d8404c96128a946ab0a800b25567d8fc231928319c1f97a67e0817e76ce2a1b735589ef0f38f8e8835692408660a2395a1
   languageName: node
   linkType: hard
 
@@ -19770,7 +19770,7 @@ resolve@^2.0.0-next.3:
     "@juggle/resize-observer": 3.3.1
     "@lezer/common": 0.15.9
     "@neinteractiveliterature/litform": 0.21.0
-    "@popperjs/core": 2.10.2
+    "@popperjs/core": 2.11.0
     "@prettier/plugin-ruby": 2.0.0
     "@stripe/react-stripe-js": 1.6.0
     "@stripe/stripe-js": 1.21.1
