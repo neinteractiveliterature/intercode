@@ -63,7 +63,7 @@
     "@juggle/resize-observer": "3.3.1",
     "@lezer/common": "0.15.9",
     "@neinteractiveliterature/litform": "0.21.0",
-    "@popperjs/core": "2.10.2",
+    "@popperjs/core": "2.11.0",
     "@stripe/react-stripe-js": "1.6.0",
     "@stripe/stripe-js": "1.21.1",
     "@testing-library/react": "12.1.2",
