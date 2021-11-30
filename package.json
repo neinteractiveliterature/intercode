@@ -204,7 +204,7 @@
     "@types/events": "3.0.0",
     "@types/history": "4.7.9",
     "@types/jest": "27.0.3",
-    "@types/node": "16.11.10",
+    "@types/node": "16.11.11",
     "@types/punycode": "2.1.0",
     "@types/react-dom": "17.0.11",
     "@types/react-transition-group": "4.4.4",
