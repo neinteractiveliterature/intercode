@@ -1,5 +1,3 @@
-const schemaJson = require('./schema.json');
-
 module.exports = {
   env: {
     amd: true,
@@ -13,7 +11,6 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
-    'plugin:@graphql-eslint/recommended',
     'plugin:react/recommended',
     'plugin:react/jsx-runtime',
     'plugin:react-hooks/recommended',
@@ -83,13 +80,7 @@ module.exports = {
     'import/no-named-as-default-member': 'off',
     'prefer-arrow-callback': ['error', { allowNamedFunctions: true }],
     '@typescript-eslint/no-empty-function': 'off',
-    '@typescript-eslint/no-unused-vars': [
-      'error', { ignoreRestSiblings: true }
-    ],
-    '@graphql-eslint/no-operation-name-suffix': 'off',
-    '@graphql-eslint/no-deprecated': 'warn',
-    // TODO turn this back on when https://github.com/dotansimha/graphql-eslint/issues/654 is fixed
-    '@graphql-eslint/known-fragment-names': 'off',
+    '@typescript-eslint/no-unused-vars': ['error', { ignoreRestSiblings: true }],
   },
 
   overrides: [
@@ -108,7 +99,8 @@ module.exports = {
               {
                 name: '@apollo/client',
                 importNames: ['gql'],
-                message: 'Please define GraphQL operations in .graphql files and use graphql-code-generator to generate hooks',
+                message:
+                  'Please define GraphQL operations in .graphql files and use graphql-code-generator to generate hooks',
               },
               {
                 name: '@apollo/client',
@@ -121,23 +113,41 @@ module.exports = {
       },
     },
     {
-      "files": ["*.graphql"],
-      "parser": "@graphql-eslint/eslint-plugin",
-      "plugins": ["@graphql-eslint"],
-      "parserOptions": {
-        "operations": ["./app/javascript/**/*.graphql"],
-        "schema": "./schema.graphql"
-      }
+      files: ['app/**/*.graphql', 'test/**/*.graphql'],
+      parser: '@graphql-eslint/eslint-plugin',
+      plugins: ['@graphql-eslint'],
+      parserOptions: {
+        operations: ['./app/javascript/**/*.graphql'],
+        schema: './schema.graphql',
+      },
+      extends: ['plugin:@graphql-eslint/operations-recommended'],
+      rules: {
+        '@graphql-eslint/naming-convention': 'off',
+        // TODO turn this back on when https://github.com/dotansimha/graphql-eslint/issues/654 is fixed
+        '@graphql-eslint/known-fragment-names': 'off',
+        '@graphql-eslint/selection-set-depth': [
+          'error',
+          {
+            maxDepth: 8,
+            ignore: ['pricing_structure', 'registration_policy', 'user_con_profile_form'],
+          },
+        ],
+      },
     },
     {
-      "files": ["schema.graphql"],
-      "rules": {
-        '@graphql-eslint/executable-definitions': 'off',
-        '@graphql-eslint/avoid-typename-prefix': 'off',
+      files: ['schema.graphql'],
+      extends: ['plugin:@graphql-eslint/schema-recommended'],
+      parserOptions: {
+        schema: './schema.graphql',
+      },
+      rules: {
+        '@graphql-eslint/no-typename-prefix': 'off',
+        '@graphql-eslint/naming-convention': 'off',
+        '@graphql-eslint/require-description': 'off',
         // TODO turn this back on once we're done with the transitionalIds
-        '@graphql-eslint/strict-id-in-types': 'off'
-      }
-    }
+        '@graphql-eslint/strict-id-in-types': 'off',
+      },
+    },
   ],
 
   settings: {
