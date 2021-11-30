@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - faster-docker-build
   workflow_dispatch: {}
 
 jobs:
@@ -62,10 +61,8 @@ jobs:
         push: true
         target: production
         tags: |
+          neinteractiveliterature/intercode:latest
           neinteractiveliterature/intercode:${{ github.sha }}
-        # tags: |
-        #   neinteractiveliterature/intercode:latest
-        #   neinteractiveliterature/intercode:${{ github.sha }}
         # TODO: put this back once it gets working again
         # cache-from: type=gha
         # cache-to: type=gha,mode=max
