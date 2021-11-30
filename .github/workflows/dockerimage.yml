@@ -64,7 +64,6 @@ jobs:
         context: .
         push: true
         target: production
-        file: Dockerfile.extwebpack
         tags: |
           neinteractiveliterature/intercode:${{ github.sha }}
         # tags: |
