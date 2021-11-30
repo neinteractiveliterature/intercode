@@ -39,12 +39,7 @@ module Intercode
           hash_result = result.to_h
 
           context.scopes.last[destination_variable] = hash_result['data']
-          result_errors =
-            hash_result['errors']&.reject do |err|
-              hash_result['data'].present? && err['extensions'] &&
-                %w[NOT_AUTHENTICATED NOT_AUTHORIZED].include?(err['extensions']['code'])
-            end
-          result_errors ? result_errors.map { |error| error['message'] }.join(', ') : ''.freeze
+          format_result_errors(hash_result)
         end
 
         def blank?
@@ -57,6 +52,24 @@ module Intercode
           else
             context.registers.with_indifferent_access
           end
+        end
+
+        def format_result_errors(result)
+          hash_result = result.to_h
+
+          result_errors =
+            hash_result['errors']&.reject do |err|
+              hash_result['data'].present? && err['extensions'] &&
+                %w[NOT_AUTHENTICATED NOT_AUTHORIZED].include?(err['extensions']['code'])
+            end
+          return ''.freeze if result_errors.blank?
+
+          result_errors.map { |error| format_error(error) }.uniq.join(', ')
+        end
+
+        def format_error(error)
+          path = error['path'].map { |entry| entry.is_a?(Integer) ? "[#{entry}]" : entry }.join('.').gsub(/\.\[/, '[')
+          "#{path}: #{error['message']}"
         end
       end
     end
