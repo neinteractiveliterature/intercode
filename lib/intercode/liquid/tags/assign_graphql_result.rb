@@ -39,7 +39,12 @@ module Intercode
           hash_result = result.to_h
 
           context.scopes.last[destination_variable] = hash_result['data']
-          hash_result['errors'].present? ? hash_result['errors'].map { |error| error['message'] }.join(', ') : ''.freeze
+          result_errors =
+            hash_result['errors']&.reject do |err|
+              hash_result['data'].present? && err['extensions'] &&
+                %w[NOT_AUTHENTICATED NOT_AUTHORIZED].include?(err['extensions']['code'])
+            end
+          result_errors ? result_errors.map { |error| error['message'] }.join(', ') : ''.freeze
         end
 
         def blank?
