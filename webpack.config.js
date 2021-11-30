@@ -1,6 +1,5 @@
-/* global path */
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { resolve } = require('path');
+const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
@@ -28,7 +27,7 @@ const config = {
     filename: '[name]-[chunkhash].js',
     chunkFilename: '[name]-[chunkhash].chunk.js',
     hotUpdateChunkFilename: '[id]-[fullhash].hot-update.js',
-    path: resolve('public/packs'),
+    path: path.resolve('public/packs'),
     publicPath: ASSET_PATH,
     environment: {
       arrowFunction: false,

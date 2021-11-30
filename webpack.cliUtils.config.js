@@ -1,6 +1,5 @@
-/* global path */
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { resolve } = require('path');
+const path = require('path');
 const webpack = require('webpack');
 const WebpackShellPluginNext = require('webpack-shell-plugin-next');
 const config = require('./webpack.config');
@@ -15,7 +14,7 @@ module.exports = {
   devtool: 'cheap-source-map',
   output: {
     filename: '[name].cjs',
-    path: resolve('bin'),
+    path: path.resolve('bin'),
   },
   target: 'node',
   mode: 'development', // we always want good tracebacks from the CLI utils even in prod
