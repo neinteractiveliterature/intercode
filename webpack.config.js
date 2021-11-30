@@ -1,3 +1,4 @@
+/* global path */
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { resolve } = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -53,6 +54,7 @@ const config = {
   },
   cache: {
     type: 'filesystem',
+    cacheDirectory: path.resolve(__dirname, 'build-cache/webpack-web'),
   },
   module: {
     rules: [

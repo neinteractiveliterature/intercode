@@ -1,3 +1,5 @@
+/* global path */
+/* eslint-disable @typescript-eslint/no-var-requires */
 const { resolve } = require('path');
 const webpack = require('webpack');
 const WebpackShellPluginNext = require('webpack-shell-plugin-next');
@@ -17,6 +19,10 @@ module.exports = {
   },
   target: 'node',
   mode: 'development', // we always want good tracebacks from the CLI utils even in prod
+  cache: {
+    type: 'filesystem',
+    cacheDirectory: path.resolve(__dirname, 'build-cache/webpack-cli'),
+  },
   plugins: [
     ...config.plugins,
     new webpack.BannerPlugin({

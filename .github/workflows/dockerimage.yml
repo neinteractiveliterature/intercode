@@ -20,10 +20,19 @@ jobs:
       id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
       with:
         path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-        key: ${{ runner.os }}-tsc-yarn-${{ github.ref }}-${{ hashFiles('**/yarn.lock') }}
+        key: ${{ runner.os }}-dockerimage-yarn-${{ github.ref }}-${{ hashFiles('**/yarn.lock') }}
         restore-keys: |
-          ${{ runner.os }}-tsc-yarn-${{ github.ref }}-
-          ${{ runner.os }}-tsc-yarn-
+          ${{ runner.os }}-dockerimage-yarn-${{ github.ref }}-
+          ${{ runner.os }}-dockerimage-yarn-
+    - name: Set up webpack cache
+      uses: actions/cache@v2
+      id: webpack-cache # use this to check for `cache-hit` (`steps.webpack-cache.outputs.cache-hit != 'true'`)
+      with:
+        path: build-cache
+        key: ${{ runner.os }}-dockerimage-webpack-${{ github.ref }}
+        restore-keys: |
+          ${{ runner.os }}-dockerimage-webpack-${{ github.ref }}-
+          ${{ runner.os }}-dockerimage-webpack-
     - name: install node v14
       uses: actions/setup-node@v2
       with:
