@@ -38,7 +38,6 @@ ENV NODE_ENV production
 ENV AWS_ACCESS_KEY_ID dummy
 ENV AWS_SECRET_ACCESS_KEY dummy
 
-RUN yarn run build
 RUN DATABASE_URL=postgresql://fakehost/not_a_real_database bundle exec rails assets:precompile
 
 ### test
@@ -50,13 +49,6 @@ ENV NODE_ENV test
 
 USER root
 RUN apt-get update && apt-get install -y postgresql-client && rm -rf /var/lib/apt/lists/*
-
-### pre-production
-
-FROM build AS pre-production
-
-RUN yarn cache clean
-RUN rm -rf .yarn/.cache
 
 ### production
 
@@ -72,8 +64,8 @@ RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION} | bash -
 RUN apt-get install -y shared-mime-info nodejs libpq5 && rm -rf /var/lib/apt/lists/*
 RUN useradd -ms /bin/bash www
 
-COPY --from=pre-production /usr/local/bundle /usr/local/bundle
-COPY --from=pre-production --chown=www /usr/src/intercode /usr/src/intercode
+COPY --from=build /usr/local/bundle /usr/local/bundle
+COPY --from=build --chown=www /usr/src/intercode /usr/src/intercode
 WORKDIR /usr/src/intercode
 
 USER www
