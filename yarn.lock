@@ -13881,9 +13881,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-html-reporter@npm:3.4.1":
-  version: 3.4.1
-  resolution: "jest-html-reporter@npm:3.4.1"
+"jest-html-reporter@npm:3.4.2":
+  version: 3.4.2
+  resolution: "jest-html-reporter@npm:3.4.2"
   dependencies:
     "@babel/core": ^7.9.0
     "@babel/preset-env": ^7.8.7
@@ -13899,11 +13899,11 @@ __metadata:
     dateformat: 3.0.2
     mkdirp: ^1.0.3
     sinon: ^9.0.1
-    strip-ansi: 6.0.0
+    strip-ansi: 6.0.1
     xmlbuilder: 15.0.0
   peerDependencies:
     jest: 19.x - 27.x
-  checksum: 6892de332114eb0f85cb765133e979a27c4851bf1e76f6135ccf5edcad082e4f7233c1db2f7123f38efd6262d6cd2116f97d4cf0b8983839d81b7ee9a1369b67
+  checksum: e866d8e8cd53caff76f633c788dd04b23cf253375b38d6cfbb147ae1f20dd8d9539cb626c252925a24c4b8b14e76e0e2a76525bf3a640c69c9f2563b5ee1ab01
   languageName: node
   linkType: hard
 
@@ -19872,7 +19872,7 @@ resolve@^2.0.0-next.3:
     i18next: 21.5.4
     i18next-parser: 5.3.0
     jest: 27.4.2
-    jest-html-reporter: 3.4.1
+    jest-html-reporter: 3.4.2
     jest-prop-type-error: 1.1.0
     js-search: 2.0.0
     lint-staged: 12.1.2
@@ -21041,12 +21041,12 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"strip-ansi@npm:6.0.0":
-  version: 6.0.0
-  resolution: "strip-ansi@npm:6.0.0"
+"strip-ansi@npm:6.0.1, strip-ansi@npm:^6.0.0, strip-ansi@npm:^6.0.1":
+  version: 6.0.1
+  resolution: "strip-ansi@npm:6.0.1"
   dependencies:
-    ansi-regex: ^5.0.0
-  checksum: 04c3239ede44c4d195b0e66c0ad58b932f08bec7d05290416d361ff908ad282ecdaf5d9731e322c84f151d427436bde01f05b7422c3ec26dd927586736b0e5d0
+    ansi-regex: ^5.0.1
+  checksum: f3cd25890aef3ba6e1a74e20896c21a46f482e93df4a06567cebf2b57edabb15133f1f94e57434e0a958d61186087b1008e89c94875d019910a213181a14fc8c
   languageName: node
   linkType: hard
 
@@ -21074,15 +21074,6 @@ resolve@^2.0.0-next.3:
   dependencies:
     ansi-regex: ^4.1.0
   checksum: bdb5f76ade97062bd88e7723aa019adbfacdcba42223b19ccb528ffb9fb0b89a5be442c663c4a3fb25268eaa3f6ea19c7c3fbae830bd1562d55adccae1fcec46
-  languageName: node
-  linkType: hard
-
-"strip-ansi@npm:^6.0.0, strip-ansi@npm:^6.0.1":
-  version: 6.0.1
-  resolution: "strip-ansi@npm:6.0.1"
-  dependencies:
-    ansi-regex: ^5.0.1
-  checksum: f3cd25890aef3ba6e1a74e20896c21a46f482e93df4a06567cebf2b57edabb15133f1f94e57434e0a958d61186087b1008e89c94875d019910a213181a14fc8c
   languageName: node
   linkType: hard
 
