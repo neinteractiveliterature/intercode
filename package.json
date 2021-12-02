@@ -65,7 +65,7 @@
     "@neinteractiveliterature/litform": "0.21.0",
     "@popperjs/core": "2.11.0",
     "@stripe/react-stripe-js": "1.6.0",
-    "@stripe/stripe-js": "1.21.1",
+    "@stripe/stripe-js": "1.21.2",
     "@testing-library/react": "12.1.2",
     "@types/apollo-upload-client": "14.1.0",
     "@types/bytes": "3.1.1",
