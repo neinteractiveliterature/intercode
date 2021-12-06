@@ -5137,7 +5137,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/json-schema@npm:*, @types/json-schema@npm:^7.0.4, @types/json-schema@npm:^7.0.5, @types/json-schema@npm:^7.0.8, @types/json-schema@npm:^7.0.9":
+"@types/json-schema@npm:*, @types/json-schema@npm:7.0.9, @types/json-schema@npm:^7.0.4, @types/json-schema@npm:^7.0.5, @types/json-schema@npm:^7.0.8, @types/json-schema@npm:^7.0.9":
   version: 7.0.9
   resolution: "@types/json-schema@npm:7.0.9"
   checksum: 259d0e25f11a21ba5c708f7ea47196bd396e379fddb79c76f9f4f62c945879dc21657904914313ec2754e443c5018ea8372362f323f30e0792897fdb2098a705
@@ -11834,15 +11834,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-language-service-utils@npm:2.6.3, graphql-language-service-utils@npm:^2.6.3":
-  version: 2.6.3
-  resolution: "graphql-language-service-utils@npm:2.6.3"
+"graphql-language-service-utils@npm:2.7.0, graphql-language-service-utils@npm:^2.6.3":
+  version: 2.7.0
+  resolution: "graphql-language-service-utils@npm:2.7.0"
   dependencies:
+    "@types/json-schema": 7.0.9
     graphql-language-service-types: ^1.8.6
     nullthrows: ^1.0.0
   peerDependencies:
     graphql: ^15.5.0 || ^16.0.0
-  checksum: 61cd7c1f874e1256df23a32d6133802e71521e3852dadba221af69f99910d8a0d1c6611ef51e64197432d7765d38191dcc31f2da94c8f2bbf58d36daa446c7ea
+  checksum: f68efd7c535f02c707163ee8ecbf7ab2a160f3733e6f4ff235c9e5efb2e57dd27e39eb52acdee461c8090f9e38ab4a19464f99d15d1c1ff276a1d3be183ce11c
   languageName: node
   linkType: hard
 
@@ -19843,7 +19844,7 @@ resolve@^2.0.0-next.3:
     graphiql: 1.5.8
     graphql: 15.7.2
     graphql-anywhere: 4.2.7
-    graphql-language-service-utils: 2.6.3
+    graphql-language-service-utils: 2.7.0
     graphql-tag: 2.12.6
     graphqldoc: 2.5.2
     history: 4.10.1
