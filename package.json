@@ -124,7 +124,7 @@
     "graphiql": "1.5.8",
     "graphql": "15.7.2",
     "graphql-anywhere": "4.2.7",
-    "graphql-language-service-utils": "2.6.3",
+    "graphql-language-service-utils": "2.7.0",
     "graphql-tag": "2.12.6",
     "history": "4.10.1",
     "html-to-react": "1.4.7",
