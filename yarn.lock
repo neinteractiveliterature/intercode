@@ -8198,16 +8198,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"codemirror-graphql@npm:^1.2.5":
-  version: 1.2.5
-  resolution: "codemirror-graphql@npm:1.2.5"
+"codemirror-graphql@npm:^1.2.8":
+  version: 1.2.8
+  resolution: "codemirror-graphql@npm:1.2.8"
   dependencies:
     "@codemirror/stream-parser": ^0.19.2
-    graphql-language-service: ^3.2.5
+    graphql-language-service: ^4.1.1
   peerDependencies:
     codemirror: ^5.58.2
     graphql: ^15.5.0 || ^16.0.0
-  checksum: 38126ce69ffe2a6ce9d2883b5b7767fecfddc15fac8a9e392a0feab709edfb340721a51d3812ec0b46caa889df4f2e27086d0feab6f6be26f539f6a2af31c957
+  checksum: d09e86fad834a922bd98e0fd460bde8260bdbdc8762869487b7808aa58d0a6126e654814f5e87ff247e6aae4485f561f25aa87a5d8bba921a99d5f5be49fe9e7
   languageName: node
   linkType: hard
 
@@ -11844,24 +11844,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphiql@npm:1.5.8":
-  version: 1.5.8
-  resolution: "graphiql@npm:1.5.8"
+"graphiql@npm:1.5.12":
+  version: 1.5.12
+  resolution: "graphiql@npm:1.5.12"
   dependencies:
     "@graphiql/toolkit": ^0.4.2
     codemirror: ^5.58.2
-    codemirror-graphql: ^1.2.5
+    codemirror-graphql: ^1.2.8
     copy-to-clipboard: ^3.2.0
     dset: ^3.1.0
     entities: ^2.0.0
     escape-html: ^1.0.3
-    graphql-language-service: ^3.2.5
+    graphql-language-service: ^4.1.1
     markdown-it: ^12.2.0
   peerDependencies:
     graphql: ^15.5.0 || ^16.0.0
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: 5914438ecf36c18101ddd6b60b32f1a5af9b4969acfb7553544a5209ec0432eaffc120c079c8fca3487cb9dc61b899bc89ca628f5806f8dec34d9085143b9ff5
+  checksum: 23e425e4cf64377c44e18948670a9bffb0055d9bd9cd3fe1a29300a8406b1d15dccb6e7512f6b94c9fd5a7a22ad38626a464526f517e9ec228703fecc91de3df
   languageName: node
   linkType: hard
 
@@ -11931,33 +11931,33 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-language-service-interface@npm:^2.9.5":
-  version: 2.9.5
-  resolution: "graphql-language-service-interface@npm:2.9.5"
+"graphql-language-service-interface@npm:^2.10.1":
+  version: 2.10.1
+  resolution: "graphql-language-service-interface@npm:2.10.1"
   dependencies:
     graphql-config: ^4.1.0
-    graphql-language-service-parser: ^1.10.3
-    graphql-language-service-types: ^1.8.6
-    graphql-language-service-utils: ^2.6.3
+    graphql-language-service-parser: ^1.10.4
+    graphql-language-service-types: ^1.8.7
+    graphql-language-service-utils: ^2.7.1
     vscode-languageserver-types: ^3.15.1
   peerDependencies:
     graphql: ^15.5.0 || ^16.0.0
-  checksum: 4a6c0fb7de206baebd9dc830e7a885b8fa4d29002630c260a440873ac52512e5089a58788e370b04e9fc566e09a8a962d84bcd192d74cb65078a411f3304d4c0
+  checksum: e236dbf0e4f1f84543950051f2c53b48a5249a458ab4bc0eb975ecb2aac4bb1ae7efc72636c74003c020ebf1cbf2adb773f3eb17276e44dce5991a6462b2c870
   languageName: node
   linkType: hard
 
-"graphql-language-service-parser@npm:^1.10.3":
-  version: 1.10.3
-  resolution: "graphql-language-service-parser@npm:1.10.3"
+"graphql-language-service-parser@npm:^1.10.4":
+  version: 1.10.4
+  resolution: "graphql-language-service-parser@npm:1.10.4"
   dependencies:
-    graphql-language-service-types: ^1.8.6
+    graphql-language-service-types: ^1.8.7
   peerDependencies:
     graphql: ^15.5.0 || ^16.0.0
-  checksum: 3ba68b4c6af25d31180ca637e3a3bec581b0e5558ab307404bda6f4d56e79155ed186693a04e582075b1163afd318f95dab42b8bdd18820a891cf1981ed72f0a
+  checksum: 80c8867cdd97b5dfe970280a29b56a6c913413717da6dde78091e119cc3157e79e4a3a43d73ec50f01b9280b4af18da5e6ccb083a5faabd81078278cce4143f6
   languageName: node
   linkType: hard
 
-"graphql-language-service-types@npm:^1.8.6, graphql-language-service-types@npm:^1.8.7":
+"graphql-language-service-types@npm:^1.8.7":
   version: 1.8.7
   resolution: "graphql-language-service-types@npm:1.8.7"
   dependencies:
@@ -11969,7 +11969,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-language-service-utils@npm:2.7.1, graphql-language-service-utils@npm:^2.6.3":
+"graphql-language-service-utils@npm:2.7.1, graphql-language-service-utils@npm:^2.7.1":
   version: 2.7.1
   resolution: "graphql-language-service-utils@npm:2.7.1"
   dependencies:
@@ -11982,19 +11982,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-language-service@npm:^3.2.5":
-  version: 3.2.5
-  resolution: "graphql-language-service@npm:3.2.5"
+"graphql-language-service@npm:^4.1.1":
+  version: 4.1.1
+  resolution: "graphql-language-service@npm:4.1.1"
   dependencies:
-    graphql-language-service-interface: ^2.9.5
-    graphql-language-service-parser: ^1.10.3
-    graphql-language-service-types: ^1.8.6
-    graphql-language-service-utils: ^2.6.3
+    graphql-language-service-interface: ^2.10.1
+    graphql-language-service-parser: ^1.10.4
+    graphql-language-service-types: ^1.8.7
+    graphql-language-service-utils: ^2.7.1
+    picomatch: ^2.3.0
   peerDependencies:
     graphql: ^15.5.0 || ^16.0.0
   bin:
     graphql: dist/temp-bin.js
-  checksum: bf42d5db27d12fba4a0ba7fba81ef9601e00076ad7e2ac1dd8713d98f67004529b63ecac7099767f85a7c2577c17d518aebd9de3cbb5dc316a8074aaa37be4bc
+  checksum: 66912d2356f048eab5b24b81b6f815d929cfb0e5d5f7322fb8ed002ed6d3944aabfe256806d2740008b327757b00c8b2f5e0534bc81c1dcfa661cb939444fb25
   languageName: node
   linkType: hard
 
@@ -17118,7 +17119,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"picomatch@npm:^2.0.4, picomatch@npm:^2.2.1, picomatch@npm:^2.2.3":
+"picomatch@npm:^2.0.4, picomatch@npm:^2.2.1, picomatch@npm:^2.2.3, picomatch@npm:^2.3.0":
   version: 2.3.0
   resolution: "picomatch@npm:2.3.0"
   checksum: 16818720ea7c5872b6af110760dee856c8e4cd79aed1c7a006d076b1cc09eff3ae41ca5019966694c33fbd2e1cc6ea617ab10e4adac6df06556168f13be3fca2
@@ -19976,7 +19977,7 @@ resolve@^2.0.0-next.3:
     file-saver: 2.0.5
     font-awesome: 4.7.0
     glob: 7.2.0
-    graphiql: 1.5.8
+    graphiql: 1.5.12
     graphql: 15.7.2
     graphql-anywhere: 4.2.7
     graphql-language-service-utils: 2.7.1
