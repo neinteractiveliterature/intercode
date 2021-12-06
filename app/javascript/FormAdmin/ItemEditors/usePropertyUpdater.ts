@@ -1,18 +1,14 @@
 import { useCallback } from 'react';
-import { TypedFormItem } from '../FormItemUtils';
+import { ParsedFormItem } from '../FormItemUtils';
 
-function isUpdaterFunction<T>(
-  valueOrUpdater: React.SetStateAction<T>,
-): valueOrUpdater is (prevState: T) => T {
+function isUpdaterFunction<T>(valueOrUpdater: React.SetStateAction<T>): valueOrUpdater is (prevState: T) => T {
   return typeof valueOrUpdater === 'function';
 }
 
 export default function usePropertyUpdater<
-  FormItemType extends TypedFormItem,
+  FormItemType extends ParsedFormItem<Record<string, unknown>, unknown>,
   PropertyName extends keyof PropertiesType,
-  PropertiesType extends NonNullable<FormItemType['properties']> = NonNullable<
-    FormItemType['properties']
-  >,
+  PropertiesType = NonNullable<FormItemType['properties']>,
 >(
   onChange: React.Dispatch<React.SetStateAction<FormItemType>>,
   property: PropertyName,

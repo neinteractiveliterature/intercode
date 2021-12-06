@@ -4,7 +4,7 @@ import { KeysOfType, useArrayBasicSortableHandlers } from '@neinteractiveliterat
 
 import usePropertyUpdater from './usePropertyUpdater';
 import { TypedFormItem } from '../FormItemUtils';
-import { WithoutGeneratedId } from '../../GeneratedIdUtils';
+import { GeneratedIdObject, WithoutGeneratedId } from '../../GeneratedIdUtils';
 
 export type UseArrayPropertyResult<ElementType extends { generatedId: string }> = [
   addItem: () => void,
@@ -15,19 +15,18 @@ export type UseArrayPropertyResult<ElementType extends { generatedId: string }> 
 ];
 
 export default function useArrayProperty<
-  ElementType extends { generatedId: string },
+  ElementType extends GeneratedIdObject<string>,
   FormItemType extends TypedFormItem,
-  PropertyName extends KeysOfType<NonNullable<FormItemType['properties']>, Array<ElementType>>,
+  PropertyName extends KeysOfType<NonNullable<FormItemType['properties']>, ElementType[]>,
 >(
   array: ElementType[],
   property: PropertyName,
   onChange: React.Dispatch<React.SetStateAction<FormItemType>>,
   generateNewItem: () => WithoutGeneratedId<ElementType>,
 ): UseArrayPropertyResult<ElementType> {
-  const updateItems: React.Dispatch<React.SetStateAction<ElementType[]>> = usePropertyUpdater<
-    FormItemType,
-    PropertyName
-  >(onChange, property);
+  const updateItems = usePropertyUpdater<FormItemType, PropertyName>(onChange, property) as unknown as React.Dispatch<
+    React.SetStateAction<ElementType[]>
+  >;
 
   const itemChanged = useCallback(
     (generatedId: string, updater: (item: ElementType) => ElementType) => {
@@ -55,9 +54,7 @@ export default function useArrayProperty<
 
   const deleteItem = useCallback(
     (generatedId: string) => {
-      updateItems((prevItems) =>
-        prevItems.filter((item: ElementType) => item.generatedId !== generatedId),
-      );
+      updateItems((prevItems) => prevItems.filter((item: ElementType) => item.generatedId !== generatedId));
     },
     [updateItems],
   );
@@ -75,11 +72,7 @@ export default function useArrayProperty<
     [updateItems],
   );
 
-  const { draggingItem, ...sortableHandlers } = useArrayBasicSortableHandlers(
-    array,
-    moveItem,
-    'generatedId',
-  );
+  const { draggingItem, ...sortableHandlers } = useArrayBasicSortableHandlers(array, moveItem, 'generatedId');
 
   return [addItem, itemChanged, deleteItem, draggingItem, sortableHandlers];
 }
