@@ -31,10 +31,10 @@ export type SignupCountsByStateQueryVariables = Types.Exact<{ [key: string]: nev
 export type SignupCountsByStateQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, signup_counts_by_state: Array<{ __typename: 'SignupCountByState', state: Types.SignupState, count: number }> } };
 
 export type SignupSpySignupChangesQueryVariables = Types.Exact<{
-  filters?: Types.Maybe<Types.SignupChangeFiltersInput>;
-  page?: Types.Maybe<Types.Scalars['Int']>;
-  perPage?: Types.Maybe<Types.Scalars['Int']>;
-  sort?: Types.Maybe<Array<Types.SortInput> | Types.SortInput>;
+  filters?: Types.InputMaybe<Types.SignupChangeFiltersInput>;
+  page?: Types.InputMaybe<Types.Scalars['Int']>;
+  perPage?: Types.InputMaybe<Types.Scalars['Int']>;
+  sort?: Types.InputMaybe<Array<Types.SortInput> | Types.SortInput>;
 }>;
 
 

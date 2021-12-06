@@ -8,8 +8,8 @@ const defaultOptions =  {}
 export type CreateUserSignupMutationVariables = Types.Exact<{
   runId: Types.Scalars['ID'];
   userConProfileId: Types.Scalars['ID'];
-  requestedBucketKey?: Types.Maybe<Types.Scalars['String']>;
-  noRequestedBucket?: Types.Maybe<Types.Scalars['Boolean']>;
+  requestedBucketKey?: Types.InputMaybe<Types.Scalars['String']>;
+  noRequestedBucket?: Types.InputMaybe<Types.Scalars['Boolean']>;
 }>;
 
 

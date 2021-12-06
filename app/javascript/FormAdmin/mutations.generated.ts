@@ -101,7 +101,7 @@ export type DeleteFormItemMutationData = { __typename: 'Mutation', deleteFormIte
 export type MoveFormItemMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
   formSectionId: Types.Scalars['ID'];
-  destinationIndex?: Types.Maybe<Types.Scalars['Int']>;
+  destinationIndex?: Types.InputMaybe<Types.Scalars['Int']>;
 }>;
 
 

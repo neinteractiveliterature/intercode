@@ -36,10 +36,10 @@ export type ProposeEventButtonQueryVariables = Types.Exact<{ [key: string]: neve
 export type ProposeEventButtonQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, my_profile?: { __typename: 'UserConProfile', id: string, user?: { __typename: 'User', id: string, event_proposals: Array<{ __typename: 'EventProposal', id: string, title?: string | null | undefined, status: string, created_at: string, event_category: { __typename: 'EventCategory', id: string, name: string }, convention: { __typename: 'Convention', id: string, name: string } }> } | null | undefined } | null | undefined, departments: Array<{ __typename: 'Department', id: string, name: string, proposal_description?: string | null | undefined, event_categories: Array<{ __typename: 'EventCategory', id: string }> }>, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, proposable: boolean, proposal_description?: string | null | undefined, department?: { __typename: 'Department', id: string } | null | undefined }> } };
 
 export type EventProposalsAdminQueryVariables = Types.Exact<{
-  page?: Types.Maybe<Types.Scalars['Int']>;
-  perPage?: Types.Maybe<Types.Scalars['Int']>;
-  filters?: Types.Maybe<Types.EventProposalFiltersInput>;
-  sort?: Types.Maybe<Array<Types.SortInput> | Types.SortInput>;
+  page?: Types.InputMaybe<Types.Scalars['Int']>;
+  perPage?: Types.InputMaybe<Types.Scalars['Int']>;
+  filters?: Types.InputMaybe<Types.EventProposalFiltersInput>;
+  sort?: Types.InputMaybe<Array<Types.SortInput> | Types.SortInput>;
 }>;
 
 
