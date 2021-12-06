@@ -6,9 +6,9 @@ import { RootSiteFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
 export type UpdateRootSiteMutationVariables = Types.Exact<{
-  siteName?: Types.Maybe<Types.Scalars['String']>;
-  defaultLayoutId?: Types.Maybe<Types.Scalars['ID']>;
-  rootPageId?: Types.Maybe<Types.Scalars['ID']>;
+  siteName?: Types.InputMaybe<Types.Scalars['String']>;
+  defaultLayoutId?: Types.InputMaybe<Types.Scalars['ID']>;
+  rootPageId?: Types.InputMaybe<Types.Scalars['ID']>;
 }>;
 
 

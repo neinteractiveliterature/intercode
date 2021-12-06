@@ -5,9 +5,9 @@ import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
 export type RootSiteConventionsAdminTableQueryVariables = Types.Exact<{
-  page?: Types.Maybe<Types.Scalars['Int']>;
-  filters?: Types.Maybe<Types.ConventionFiltersInput>;
-  sort?: Types.Maybe<Array<Types.SortInput> | Types.SortInput>;
+  page?: Types.InputMaybe<Types.Scalars['Int']>;
+  filters?: Types.InputMaybe<Types.ConventionFiltersInput>;
+  sort?: Types.InputMaybe<Array<Types.SortInput> | Types.SortInput>;
 }>;
 
 

@@ -7,7 +7,7 @@ import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
 export type CreateContentGroupMutationVariables = Types.Exact<{
   cmsContentGroup: Types.CmsContentGroupInput;
-  permissions?: Types.Maybe<Array<Types.PermissionInput> | Types.PermissionInput>;
+  permissions?: Types.InputMaybe<Array<Types.PermissionInput> | Types.PermissionInput>;
 }>;
 
 
@@ -16,8 +16,8 @@ export type CreateContentGroupMutationData = { __typename: 'Mutation', createCms
 export type UpdateContentGroupMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
   cmsContentGroup: Types.CmsContentGroupInput;
-  grantPermissions?: Types.Maybe<Array<Types.PermissionInput> | Types.PermissionInput>;
-  revokePermissions?: Types.Maybe<Array<Types.PermissionInput> | Types.PermissionInput>;
+  grantPermissions?: Types.InputMaybe<Array<Types.PermissionInput> | Types.PermissionInput>;
+  revokePermissions?: Types.InputMaybe<Array<Types.PermissionInput> | Types.PermissionInput>;
 }>;
 
 

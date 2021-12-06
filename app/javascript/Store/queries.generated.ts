@@ -8,10 +8,10 @@ import { PricingStructureFieldsFragmentDoc } from './pricingStructureFields.gene
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
 export type AdminOrdersQueryVariables = Types.Exact<{
-  page?: Types.Maybe<Types.Scalars['Int']>;
-  perPage?: Types.Maybe<Types.Scalars['Int']>;
-  filters?: Types.Maybe<Types.OrderFiltersInput>;
-  sort?: Types.Maybe<Array<Types.SortInput> | Types.SortInput>;
+  page?: Types.InputMaybe<Types.Scalars['Int']>;
+  perPage?: Types.InputMaybe<Types.Scalars['Int']>;
+  filters?: Types.InputMaybe<Types.OrderFiltersInput>;
+  sort?: Types.InputMaybe<Array<Types.SortInput> | Types.SortInput>;
 }>;
 
 

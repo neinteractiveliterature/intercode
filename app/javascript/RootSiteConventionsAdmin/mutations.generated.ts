@@ -7,9 +7,9 @@ import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
 export type CreateConventionMutationVariables = Types.Exact<{
   convention: Types.ConventionInput;
-  cloneConventionId?: Types.Maybe<Types.Scalars['ID']>;
-  organizationId?: Types.Maybe<Types.Scalars['ID']>;
-  cmsContentSetName?: Types.Maybe<Types.Scalars['String']>;
+  cloneConventionId?: Types.InputMaybe<Types.Scalars['ID']>;
+  organizationId?: Types.InputMaybe<Types.Scalars['ID']>;
+  cmsContentSetName?: Types.InputMaybe<Types.Scalars['String']>;
 }>;
 
 

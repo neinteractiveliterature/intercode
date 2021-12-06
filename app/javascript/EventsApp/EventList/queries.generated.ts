@@ -6,10 +6,10 @@ import { CommonConventionDataFragmentDoc } from '../queries.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
 export type EventListEventsQueryVariables = Types.Exact<{
-  page?: Types.Maybe<Types.Scalars['Int']>;
-  pageSize?: Types.Maybe<Types.Scalars['Int']>;
-  filters?: Types.Maybe<Types.EventFiltersInput>;
-  sort?: Types.Maybe<Array<Types.SortInput> | Types.SortInput>;
+  page?: Types.InputMaybe<Types.Scalars['Int']>;
+  pageSize?: Types.InputMaybe<Types.Scalars['Int']>;
+  filters?: Types.InputMaybe<Types.EventFiltersInput>;
+  sort?: Types.InputMaybe<Array<Types.SortInput> | Types.SortInput>;
 }>;
 
 

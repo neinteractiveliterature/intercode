@@ -6,7 +6,7 @@ import { EventProposalFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
 export type CreateEventProposalMutationVariables = Types.Exact<{
-  cloneEventProposalId?: Types.Maybe<Types.Scalars['ID']>;
+  cloneEventProposalId?: Types.InputMaybe<Types.Scalars['ID']>;
   eventCategoryId: Types.Scalars['ID'];
 }>;
 
@@ -37,7 +37,7 @@ export type SubmitEventProposalMutationData = { __typename: 'Mutation', submitEv
 export type TransitionEventProposalMutationVariables = Types.Exact<{
   eventProposalId: Types.Scalars['ID'];
   status: Types.Scalars['String'];
-  dropEvent?: Types.Maybe<Types.Scalars['Boolean']>;
+  dropEvent?: Types.InputMaybe<Types.Scalars['Boolean']>;
 }>;
 
 
