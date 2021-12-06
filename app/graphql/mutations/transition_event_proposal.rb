@@ -2,13 +2,6 @@
 class Mutations::TransitionEventProposal < Mutations::BaseMutation
   field :event_proposal, Types::EventProposalType, null: false, camelize: false
 
-  argument :transitional_id,
-           ID,
-           deprecation_reason:
-             "IDs have transitioned to the ID type.  Please switch back to the id field so that \
-we can remove this temporary one.",
-           required: false,
-           camelize: true
   argument :id, ID, required: false
   argument :status, String, required: true
   argument :drop_event, Boolean, required: false, camelize: false
@@ -16,7 +9,7 @@ we can remove this temporary one.",
   attr_reader :event_proposal
 
   define_authorization_check do |args|
-    @event_proposal = context[:convention].event_proposals.find(args[:transitional_id] || args[:id])
+    @event_proposal = context[:convention].event_proposals.find(args[:id])
     return false if args[:drop_event] && !policy(event_proposal.event).drop?
 
     policy(event_proposal).update?

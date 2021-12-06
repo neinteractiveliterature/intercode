@@ -15,7 +15,7 @@ export type MarkOrderPaidMutationData = { __typename: 'Mutation', markOrderPaid:
 
 export type CancelOrderMutationVariables = Types.Exact<{
   orderId: Types.Scalars['ID'];
-  skipRefund?: Types.Maybe<Types.Scalars['Boolean']>;
+  skipRefund?: Types.InputMaybe<Types.Scalars['Boolean']>;
 }>;
 
 
@@ -25,7 +25,7 @@ export type CreateOrderMutationVariables = Types.Exact<{
   userConProfileId: Types.Scalars['ID'];
   order: Types.OrderInput;
   status: Types.OrderStatus;
-  orderEntries?: Types.Maybe<Array<Types.OrderEntryInput> | Types.OrderEntryInput>;
+  orderEntries?: Types.InputMaybe<Array<Types.OrderEntryInput> | Types.OrderEntryInput>;
 }>;
 
 
@@ -105,7 +105,7 @@ export type SubmitOrderMutationData = { __typename: 'Mutation', submitOrder: { _
 
 export type AddOrderEntryToCurrentPendingOrderMutationVariables = Types.Exact<{
   productId: Types.Scalars['ID'];
-  productVariantId?: Types.Maybe<Types.Scalars['ID']>;
+  productVariantId?: Types.InputMaybe<Types.Scalars['ID']>;
   quantity: Types.Scalars['Int'];
 }>;
 

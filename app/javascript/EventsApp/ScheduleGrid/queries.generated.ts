@@ -13,16 +13,16 @@ export type ScheduleGridConventionDataQueryVariables = Types.Exact<{ [key: strin
 export type ScheduleGridConventionDataQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, pre_schedule_content_html?: string | null | undefined, name: string, starts_at?: string | null | undefined, ends_at?: string | null | undefined, site_mode: Types.SiteMode, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, scheduling_ui: Types.SchedulingUi, default_color?: string | null | undefined, full_color?: string | null | undefined, signed_up_color?: string | null | undefined }> } };
 
 export type ScheduleGridEventsQueryVariables = Types.Exact<{
-  start?: Types.Maybe<Types.Scalars['Date']>;
-  finish?: Types.Maybe<Types.Scalars['Date']>;
+  start?: Types.InputMaybe<Types.Scalars['Date']>;
+  finish?: Types.InputMaybe<Types.Scalars['Date']>;
 }>;
 
 
 export type ScheduleGridEventsQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, events: Array<{ __typename: 'Event', id: string, title?: string | null | undefined, length_seconds: number, short_blurb_html?: string | null | undefined, my_rating?: number | null | undefined, can_play_concurrently: boolean, event_category: { __typename: 'EventCategory', id: string, name: string, default_color?: string | null | undefined, signed_up_color?: string | null | undefined, full_color?: string | null | undefined }, registration_policy?: { __typename: 'RegistrationPolicy', slots_limited?: boolean | null | undefined, only_uncounted?: boolean | null | undefined, total_slots?: number | null | undefined, total_slots_including_not_counted?: number | null | undefined, preferred_slots?: number | null | undefined, preferred_slots_including_not_counted?: number | null | undefined, minimum_slots?: number | null | undefined, minimum_slots_including_not_counted?: number | null | undefined, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, not_counted: boolean, total_slots?: number | null | undefined, slots_limited: boolean }> } | null | undefined, runs: Array<{ __typename: 'Run', id: string, starts_at: string, schedule_note?: string | null | undefined, title_suffix?: string | null | undefined, confirmed_signup_count: number, not_counted_signup_count: number, room_names: Array<string>, signup_count_by_state_and_bucket_key_and_counted: string, my_signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: string, state: Types.SignupRequestState }> }> }> } };
 
 export type ScheduleGridCombinedQueryVariables = Types.Exact<{
-  start?: Types.Maybe<Types.Scalars['Date']>;
-  finish?: Types.Maybe<Types.Scalars['Date']>;
+  start?: Types.InputMaybe<Types.Scalars['Date']>;
+  finish?: Types.InputMaybe<Types.Scalars['Date']>;
 }>;
 
 

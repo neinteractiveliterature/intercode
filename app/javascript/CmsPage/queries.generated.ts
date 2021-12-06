@@ -5,8 +5,8 @@ import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
 export type CmsPageQueryVariables = Types.Exact<{
-  slug?: Types.Maybe<Types.Scalars['String']>;
-  rootPage?: Types.Maybe<Types.Scalars['Boolean']>;
+  slug?: Types.InputMaybe<Types.Scalars['String']>;
+  rootPage?: Types.InputMaybe<Types.Scalars['Boolean']>;
 }>;
 
 

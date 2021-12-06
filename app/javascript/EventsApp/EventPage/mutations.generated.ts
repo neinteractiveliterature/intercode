@@ -8,8 +8,8 @@ import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
 export type CreateMySignupMutationVariables = Types.Exact<{
   runId: Types.Scalars['ID'];
-  requestedBucketKey?: Types.Maybe<Types.Scalars['String']>;
-  noRequestedBucket?: Types.Maybe<Types.Scalars['Boolean']>;
+  requestedBucketKey?: Types.InputMaybe<Types.Scalars['String']>;
+  noRequestedBucket?: Types.InputMaybe<Types.Scalars['Boolean']>;
 }>;
 
 
@@ -24,8 +24,8 @@ export type WithdrawMySignupMutationData = { __typename: 'Mutation', withdrawMyS
 
 export type CreateSignupRequestMutationVariables = Types.Exact<{
   targetRunId: Types.Scalars['ID'];
-  requestedBucketKey?: Types.Maybe<Types.Scalars['String']>;
-  replaceSignupId?: Types.Maybe<Types.Scalars['ID']>;
+  requestedBucketKey?: Types.InputMaybe<Types.Scalars['String']>;
+  replaceSignupId?: Types.InputMaybe<Types.Scalars['ID']>;
 }>;
 
 

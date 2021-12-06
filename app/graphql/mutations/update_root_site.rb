@@ -12,7 +12,7 @@ class Mutations::UpdateRootSite < Mutations::BaseMutation
   end
 
   def resolve(root_site:)
-    root_site_instance.update!(process_transitional_ids_in_input(root_site.to_h, :root_page_id, :default_layout_id))
+    root_site_instance.update!(root_site.to_h)
     { root_site: root_site_instance }
   end
 end

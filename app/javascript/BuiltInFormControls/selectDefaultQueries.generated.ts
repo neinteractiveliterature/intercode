@@ -5,21 +5,21 @@ import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
 export type DefaultEventsQueryVariables = Types.Exact<{
-  title?: Types.Maybe<Types.Scalars['String']>;
+  title?: Types.InputMaybe<Types.Scalars['String']>;
 }>;
 
 
 export type DefaultEventsQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, events_paginated: { __typename: 'EventsPagination', entries: Array<{ __typename: 'Event', id: string, title?: string | null | undefined }> } } };
 
 export type DefaultUserConProfilesQueryVariables = Types.Exact<{
-  name?: Types.Maybe<Types.Scalars['String']>;
+  name?: Types.InputMaybe<Types.Scalars['String']>;
 }>;
 
 
 export type DefaultUserConProfilesQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, user_con_profiles_paginated: { __typename: 'UserConProfilesPagination', entries: Array<{ __typename: 'UserConProfile', id: string, name_without_nickname: string, email?: string | null | undefined }> } } };
 
 export type DefaultUsersQueryVariables = Types.Exact<{
-  name?: Types.Maybe<Types.Scalars['String']>;
+  name?: Types.InputMaybe<Types.Scalars['String']>;
 }>;
 
 

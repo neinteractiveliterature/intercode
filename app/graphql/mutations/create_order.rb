@@ -4,13 +4,6 @@ class Mutations::CreateOrder < Mutations::BaseMutation
 
   field :order, Types::OrderType, null: false
 
-  argument :transitional_user_con_profile_id,
-           ID,
-           deprecation_reason:
-             "IDs have transitioned to the ID type.  Please switch back to the userConProfileId field so that \
-we can remove this temporary one.",
-           required: false,
-           camelize: true
   argument :user_con_profile_id, ID, required: false, camelize: true
   argument :order, Types::OrderInputType, required: true
   argument :status, Types::OrderStatusType, required: true
@@ -19,7 +12,7 @@ we can remove this temporary one.",
   attr_reader :order
 
   define_method :authorized? do |args|
-    user_con_profile = UserConProfile.find(args[:transitional_user_con_profile_id] || args[:user_con_profile_id])
+    user_con_profile = UserConProfile.find(args[:user_con_profile_id])
     @order = user_con_profile.orders.new
     self.class.check_authorization(policy(@order), :create)
   end
@@ -40,12 +33,9 @@ we can remove this temporary one.",
       order_entry.assign_attributes(process_order_entry_input(order_entry_input, order_entry))
       order_entry.save!
 
-      next unless order_entry_input.transitional_ticket_id || order_entry_input.ticket_id
+      next unless order_entry_input.ticket_id
 
-      ticket =
-        Ticket
-          .where(user_con_profile_id: @order.user_con_profile.id)
-          .find(order_entry_input.transitional_ticket_id || order_entry_input.ticket_id)
+      ticket = Ticket.where(user_con_profile_id: @order.user_con_profile.id).find(order_entry_input.ticket_id)
       ticket.update!(order_entry: order_entry)
       order_entry.tickets.reload
     end

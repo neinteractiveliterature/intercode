@@ -1,13 +1,5 @@
 # frozen_string_literal: true
 class Types::NotificationDestinationType < Types::BaseObject
-  field :transitional_id,
-        ID,
-        deprecation_reason:
-          "IDs have transitioned to the ID type.  Please switch back to the id field so that \
-we can remove this temporary one.",
-        null: false,
-        method: :id,
-        camelize: true
   field :id, ID, null: false
   field :source, Types::NotificationSourceType, null: false
   field :user_con_profile, Types::UserConProfileType, null: true, camelize: false

@@ -17,11 +17,11 @@ export type CreateOrganizationRoleMutationData = { __typename: 'Mutation', creat
 
 export type UpdateOrganizationRoleMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
-  name?: Types.Maybe<Types.Scalars['String']>;
-  addUserIds?: Types.Maybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>;
-  removeUserIds?: Types.Maybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>;
-  addPermissions?: Types.Maybe<Array<Types.PermissionInput> | Types.PermissionInput>;
-  removePermissionIds?: Types.Maybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>;
+  name?: Types.InputMaybe<Types.Scalars['String']>;
+  addUserIds?: Types.InputMaybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>;
+  removeUserIds?: Types.InputMaybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>;
+  addPermissions?: Types.InputMaybe<Array<Types.PermissionInput> | Types.PermissionInput>;
+  removePermissionIds?: Types.InputMaybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>;
 }>;
 
 

@@ -8,10 +8,10 @@ const defaultOptions =  {}
 export type AdminCouponFieldsFragment = { __typename: 'Coupon', id: string, usage_limit?: number | null | undefined, expires_at?: string | null | undefined, code: string, percent_discount?: string | null | undefined, fixed_amount?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, provides_product?: { __typename: 'Product', id: string, name: string } | null | undefined };
 
 export type AdminCouponsQueryVariables = Types.Exact<{
-  filters?: Types.Maybe<Types.CouponFiltersInput>;
-  sort?: Types.Maybe<Array<Types.SortInput> | Types.SortInput>;
-  page?: Types.Maybe<Types.Scalars['Int']>;
-  per_page?: Types.Maybe<Types.Scalars['Int']>;
+  filters?: Types.InputMaybe<Types.CouponFiltersInput>;
+  sort?: Types.InputMaybe<Array<Types.SortInput> | Types.SortInput>;
+  page?: Types.InputMaybe<Types.Scalars['Int']>;
+  per_page?: Types.InputMaybe<Types.Scalars['Int']>;
 }>;
 
 
