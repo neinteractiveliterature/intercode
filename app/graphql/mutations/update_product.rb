@@ -4,13 +4,6 @@ class Mutations::UpdateProduct < Mutations::BaseMutation
 
   field :product, Types::ProductType, null: false
 
-  argument :transitional_id,
-           ID,
-           deprecation_reason:
-             "IDs have transitioned to the ID type.  Please switch back to the id field so that \
-we can remove this temporary one.",
-           required: false,
-           camelize: true
   argument :id, ID, required: false
   argument :product, Types::ProductInputType, required: true
 
@@ -19,14 +12,12 @@ we can remove this temporary one.",
   attr_reader :product
 
   define_authorization_check do |args|
-    @product = convention.products.includes(:product_variants).find(args[:transitional_id] || args[:id])
+    @product = convention.products.includes(:product_variants).find(args[:id])
     policy(product).update?
   end
 
   def resolve(**args)
-    product_fields =
-      process_transitional_ids_in_input(args[:product].to_h, :delete_variant_ids, :provides_ticket_type_id)
-        .deep_symbolize_keys
+    product_fields = args[:product].to_h.deep_symbolize_keys
     product_fields[:pricing_structure] = coerce_pricing_structure_input(product_fields[:pricing_structure])
 
     create_or_update_variants(product, product_fields.delete(:product_variants))

@@ -2,20 +2,13 @@
 class Mutations::UpdateCoupon < Mutations::BaseMutation
   field :coupon, Types::CouponType, null: false
 
-  argument :transitional_id,
-           ID,
-           deprecation_reason:
-             "IDs have transitioned to the ID type.  Please switch back to the id field so that \
-we can remove this temporary one.",
-           required: false,
-           camelize: true
   argument :id, ID, required: false
   argument :coupon, Types::CouponInputType, required: true
 
   load_and_authorize_convention_associated_model :coupons, :id, :update
 
   def resolve(**args)
-    coupon_fields = process_transitional_ids_in_input(args[:coupon].to_h, :provides_product_id)
+    coupon_fields = args[:coupon].to_h
 
     if coupon_fields[:fixed_amount].present?
       coupon_fields[:fixed_amount] = MoneyHelper.coerce_money_input(coupon_fields[:fixed_amount])

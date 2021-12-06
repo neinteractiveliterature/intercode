@@ -20,16 +20,6 @@ class Types::ConventionType < Types::BaseObject
     cadmus_renderer.render(Liquid::Template.parse(object.clickwrap_agreement), :html)
   end
 
-  field :cms_content_groups,
-        [Types::CmsContentGroupType],
-        deprecation_reason: 'Please use `cmsContentGroups` instead.',
-        null: false
-  field :cms_layouts, [Types::CmsLayoutType], deprecation_reason: 'Please use `cmsLayouts` instead.', null: false
-  field :cms_navigation_items,
-        [Types::CmsNavigationItemType],
-        deprecation_reason: 'Please use `cmsNavigationItems` instead.',
-        null: false
-
   pagination_field :coupons_paginated, Types::CouponsPaginationType, Types::CouponFiltersInputType, null: false
 
   def coupons_paginated(**args)
@@ -46,14 +36,6 @@ class Types::ConventionType < Types::BaseObject
   field :ends_at, Types::DateType, null: true
 
   field :event, Types::EventType, null: false do
-    argument :transitional_id,
-             ID,
-             deprecation_reason:
-               "IDs have transitioned to the ID type.  Please switch back to the id field so that \
-we can remove this temporary one.",
-             required: false,
-             description: 'The ID of the event to find',
-             camelize: true
     argument :id, ID, required: false, description: 'The ID of the event to find', camelize: true
 
     description <<~MARKDOWN
@@ -63,7 +45,7 @@ we can remove this temporary one.",
   end
 
   def event(**args)
-    object.events.active.find(args[:transitional_id] || args[:id])
+    object.events.active.find(args[:id])
   end
 
   field :event_categories, [Types::EventCategoryType], null: false do
@@ -92,14 +74,6 @@ we can remove this temporary one.",
   end
 
   field :event_proposal, Types::EventProposalType, null: false do
-    argument :transitional_id,
-             ID,
-             deprecation_reason:
-               "IDs have transitioned to the ID type.  Please switch back to the id field so that \
-we can remove this temporary one.",
-             required: false,
-             description: 'The ID of the event proposal to find.',
-             camelize: true
     argument :id, ID, required: false, description: 'The ID of the event proposal to find.', camelize: true
 
     description <<~MARKDOWN
@@ -109,7 +83,7 @@ we can remove this temporary one.",
   end
 
   def event_proposal(**args)
-    object.event_proposals.find(args[:transitional_id] || args[:id])
+    object.event_proposals.find(args[:id])
   end
 
   pagination_field :event_proposals_paginated, Types::EventProposalsPaginationType, Types::EventProposalFiltersInputType
@@ -131,7 +105,6 @@ we can remove this temporary one.",
       when using it.
     MARKDOWN
 
-    argument :extended_counts, Boolean, required: false, deprecation_reason: 'This no longer does anything.'
     argument :include_dropped,
              Boolean,
              required: false,
@@ -171,14 +144,6 @@ we can remove this temporary one.",
   end
 
   field :form, Types::FormType, null: false do
-    argument :transitional_id,
-             ID,
-             deprecation_reason:
-               "IDs have transitioned to the ID type.  Please switch back to the id field so that \
-we can remove this temporary one.",
-             required: false,
-             description: 'The ID of the form to find.',
-             camelize: true
     argument :id, ID, required: false, description: 'The ID of the form to find.', camelize: true
 
     description <<~MARKDOWN
@@ -188,19 +153,11 @@ we can remove this temporary one.",
   end
 
   def form(**args)
-    object.forms.find(args[:transitional_id] || args[:id])
+    object.forms.find(args[:id])
   end
 
   field :forms, [Types::FormType], null: false
   field :hidden, Boolean, null: false
-  field :transitional_id,
-        ID,
-        deprecation_reason:
-          "IDs have transitioned to the ID type.  Please switch back to the id field so that \
-we can remove this temporary one.",
-        null: false,
-        method: :id,
-        camelize: true
   field :id, ID, null: false
   field :language, String, null: false
   field :location, Types::JSON, null: true
@@ -264,23 +221,6 @@ we can remove this temporary one.",
 
   field :name, String, null: false
 
-  field :orders,
-        Types::OrdersConnectionType,
-        max_page_size: 1000,
-        null: true,
-        connection: true,
-        deprecation_reason:
-          "Deprecated for potential performance implications.  Please use \
-`orders_paginated` instead." do
-    authorize do |value, _args, context|
-      Pundit.policy(context[:pundit_user], Order.new(user_con_profile: UserConProfile.new(convention: value))).read?
-    end
-  end
-
-  def orders
-    object.orders.where.not(status: 'pending').includes(order_entries: %i[product product_variant])
-  end
-
   pagination_field :orders_paginated, Types::OrdersPaginationType, Types::OrderFiltersInputType
 
   def orders_paginated(filters: nil, sort: nil, page: nil, per_page: nil)
@@ -291,7 +231,6 @@ we can remove this temporary one.",
   end
 
   field :organization, Types::OrganizationType, null: true
-  field :pages, [Types::PageType], null: false, deprecation_reason: 'This field is being renamed to `cmsPages`.'
 
   field :pre_schedule_content_html, String, null: true
 
@@ -322,14 +261,6 @@ we can remove this temporary one.",
   end
 
   field :product, Types::ProductType, null: false do
-    argument :transitional_id,
-             ID,
-             deprecation_reason:
-               "IDs have transitioned to the ID type.  Please switch back to the id field so that \
-we can remove this temporary one.",
-             required: false,
-             description: 'The ID of the product to find.',
-             camelize: true
     argument :id, ID, required: false, description: 'The ID of the product to find.', camelize: true
 
     description <<~MARKDOWN
@@ -338,8 +269,8 @@ we can remove this temporary one.",
     MARKDOWN
   end
 
-  def product(id: nil, transitional_id: nil)
-    policy_scope(object.products).find(transitional_id || id)
+  def product(id: nil)
+    policy_scope(object.products).find(id)
   end
 
   field :products, [Types::ProductType], null: false do
@@ -367,14 +298,6 @@ we can remove this temporary one.",
   field :rooms, [Types::RoomType], null: false
 
   field :run, Types::RunType, null: false do
-    argument :transitional_id,
-             ID,
-             deprecation_reason:
-               "IDs have transitioned to the ID type.  Please switch back to the id field so that \
-we can remove this temporary one.",
-             required: false,
-             description: 'The ID of the run to find',
-             camelize: true
     argument :id, ID, required: false, description: 'The ID of the run to find', camelize: true
 
     description <<~MARKDOWN
@@ -384,7 +307,7 @@ we can remove this temporary one.",
   end
 
   def run(**args)
-    Run.where(event_id: object.events.active.select(:id)).find(args[:transitional_id] || args[:id])
+    Run.where(event_id: object.events.active.select(:id)).find(args[:id])
   end
 
   field :staff_positions, [Types::StaffPositionType], null: false
@@ -392,14 +315,6 @@ we can remove this temporary one.",
   field :show_schedule, Types::ShowScheduleType, null: true
 
   field :signup, Types::SignupType, null: false do
-    argument :transitional_id,
-             ID,
-             deprecation_reason:
-               "IDs have transitioned to the ID type.  Please switch back to the id field so that \
-we can remove this temporary one.",
-             required: false,
-             description: 'The ID of the signup to find.',
-             camelize: true
     argument :id, ID, required: false, description: 'The ID of the signup to find.', camelize: true
 
     description <<~MARKDOWN
@@ -409,7 +324,7 @@ we can remove this temporary one.",
   end
 
   def signup(**args)
-    object.signups.find(args[:transitional_id] || args[:id])
+    object.signups.find(args[:id])
   end
 
   pagination_field(
@@ -458,31 +373,9 @@ we can remove this temporary one.",
       .paginate(page: args[:page], per_page: args[:per_page])
   end
 
-  pagination_field(
-    :signup_spy_paginated,
-    Types::SignupsPaginationType,
-    Types::SignupFiltersInputType,
-    null: false,
-    deprecation_reason: 'Use signup_changes_paginated instead'
-  ) { authorize_action :view_reports }
-
-  def signup_spy_paginated(**args)
-    Tables::SignupsTableResultsPresenter
-      .signup_spy_for_convention(object, pundit_user)
-      .paginate(page: args[:page], per_page: args[:per_page])
-  end
-
   field :site_mode, Types::SiteModeType, null: false
 
   field :staff_position, Types::StaffPositionType, null: false do
-    argument :transitional_id,
-             ID,
-             deprecation_reason:
-               "IDs have transitioned to the ID type.  Please switch back to the id field so that \
-we can remove this temporary one.",
-             required: false,
-             description: 'The ID of the staff position to find.',
-             camelize: true
     argument :id, ID, required: false, description: 'The ID of the staff position to find.', camelize: true
 
     description <<~MARKDOWN
@@ -491,8 +384,8 @@ we can remove this temporary one.",
     MARKDOWN
   end
 
-  def staff_position(id: nil, transitional_id: nil)
-    convention.staff_positions.find(transitional_id || id)
+  def staff_position(id: nil)
+    convention.staff_positions.find(id)
   end
 
   field :starts_at, Types::DateType, null: true
@@ -515,30 +408,15 @@ we can remove this temporary one.",
   field :timezone_name, String, null: true
   field :updated_at, Types::DateType, null: true
   field :user_activity_alert, Types::UserActivityAlertType, null: false do
-    argument :transitional_id,
-             ID,
-             deprecation_reason:
-               "IDs have transitioned to the ID type.  Please switch back to the id field so that \
-we can remove this temporary one.",
-             required: false,
-             camelize: true
     argument :id, ID, required: false, camelize: true
   end
 
-  def user_activity_alert(id: nil, transitional_id: nil)
-    RecordLoader.for(UserActivityAlert, where: { convention_id: object.id }).load(transitional_id || id)
+  def user_activity_alert(id: nil)
+    RecordLoader.for(UserActivityAlert, where: { convention_id: object.id }).load(id)
   end
   field :user_activity_alerts, [Types::UserActivityAlertType], null: false
 
   field :user_con_profile, Types::UserConProfileType, null: false do
-    argument :transitional_id,
-             ID,
-             deprecation_reason:
-               "IDs have transitioned to the ID type.  Please switch back to the id field so that \
-we can remove this temporary one.",
-             required: false,
-             description: 'The ID of the UserConProfile to find.',
-             camelize: true
     argument :id, ID, required: false, description: 'The ID of the UserConProfile to find.', camelize: true
 
     description <<~MARKDOWN
@@ -548,18 +426,10 @@ we can remove this temporary one.",
   end
 
   def user_con_profile(**args)
-    object.user_con_profiles.find(args[:transitional_id] || args[:id])
+    object.user_con_profiles.find(args[:id])
   end
 
   field :user_con_profile_by_user_id, Types::UserConProfileType, null: false do
-    argument :transitional_user_id,
-             ID,
-             deprecation_reason:
-               "IDs have transitioned to the ID type.  Please switch back to the userId field so that \
-we can remove this temporary one.",
-             required: false,
-             description: 'The user ID of the UserConProfile to find.',
-             camelize: true
     argument :user_id, ID, required: false, description: 'The user ID of the UserConProfile to find.', camelize: true
 
     description <<~MARKDOWN
@@ -568,8 +438,8 @@ we can remove this temporary one.",
     MARKDOWN
   end
 
-  def user_con_profile_by_user_id(user_id: nil, transitional_user_id: nil)
-    object.user_con_profiles.find_by!(user_id: transitional_user_id || user_id)
+  def user_con_profile_by_user_id(user_id: nil)
+    object.user_con_profiles.find_by!(user_id: user_id)
   end
 
   field :user_con_profile_form, Types::FormType, null: false

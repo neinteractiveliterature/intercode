@@ -3,14 +3,6 @@ module Types::CmsParent
   include Types::BaseInterface
   field_class Types::BaseField
 
-  field :transitional_id,
-        ID,
-        deprecation_reason:
-          "IDs have transitioned to the ID type.  Please switch back to the id field so that \
-we can remove this temporary one.",
-        null: false,
-        method: :id,
-        camelize: true
   field :id, ID, null: false
 
   definition_methods do
@@ -42,14 +34,6 @@ we can remove this temporary one.",
 
   field :cms_content_group, Types::CmsContentGroupType, null: false do
     argument :id, ID, required: false, description: 'The ID of the CMS content group to find.'
-    argument :transitional_id,
-             ID,
-             deprecation_reason:
-               "IDs have transitioned to the ID type.  Please switch back to the id field so that \
-we can remove this temporary one.",
-             required: false,
-             description: 'The ID of the CMS content group to find.',
-             camelize: true
 
     description <<~MARKDOWN
       Finds a CMS content group by ID within the domain name of this HTTP request. If there is no
@@ -72,14 +56,6 @@ we can remove this temporary one.",
 
   field :cms_page, Types::PageType, null: false do
     argument :id, ID, required: false, description: 'The ID of the page to find.'
-    argument :transitional_id,
-             ID,
-             deprecation_reason:
-               "IDs have transitioned to the ID type.  Please switch back to the id field so that \
-we can remove this temporary one.",
-             required: false,
-             description: 'The ID of the page to find.',
-             camelize: true
     argument :slug, String, required: false, description: 'The unique slug of the page to find.'
     argument :root_page, Boolean, required: false, description: 'If true, returns the root page for this domain.'
 
@@ -122,11 +98,6 @@ we can remove this temporary one.",
   end
 
   field :default_layout, Types::CmsLayoutType, null: false
-  field :default_layout,
-        Types::CmsLayoutType,
-        null: false,
-        camelize: false,
-        deprecation_reason: 'Use `defaultLayout` instead'
 
   field :effective_cms_layout, Types::CmsLayoutType, null: false do
     argument :path, String, required: true, description: 'The path to find the effective layout for.'
@@ -182,7 +153,6 @@ we can remove this temporary one.",
   end
 
   field :root_page, Types::PageType, null: false
-  field :root_page, Types::PageType, null: false, camelize: false, deprecation_reason: 'Use `rootPage` instead'
 
   field :typeahead_search_cms_content, [Types::CmsContentType], null: false do
     argument :name,

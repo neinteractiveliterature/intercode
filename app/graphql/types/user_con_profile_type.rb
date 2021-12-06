@@ -2,12 +2,6 @@
 class Types::UserConProfileType < Types::BaseObject
   include FormResponseAttrsFields
 
-  LEGACY_PHONE_DEPRECATION_REASON = <<~TEXT.tr("\n", ' ').strip
-  Daytime phone, evening phone, best time to call, and preferred contact method fields are
-  deprecated in favor of just using the mobile phone and/or email address.  For conventions that
-  used the deprecated fields, they will remain available in form_response_attrs_json.
-  TEXT
-
   # It should be safe to request these fields but they'll return nil if you're not authorized
   def self.personal_info_field(field_name, *args, **kwargs, &block)
     field(field_name, *args, **kwargs, &block)
@@ -20,24 +14,8 @@ class Types::UserConProfileType < Types::BaseObject
 
   authorize_record
 
-  field :transitional_id,
-        ID,
-        deprecation_reason:
-          "IDs have transitioned to the ID type.  Please switch back to the id field so that \
-we can remove this temporary one.",
-        null: false,
-        method: :id,
-        camelize: true
   field :id, ID, null: false
   field :convention, Types::ConventionType, null: false
-  field :privileges,
-        [String, { null: true }],
-        null: true,
-        deprecation_reason: 'Privileges are deprecated in favor of permissions and staff positions'
-
-  def privileges
-    AssociationLoader.for(UserConProfile, :user).load(object).then(&:privileges)
-  end
 
   field :site_admin, Boolean, null: false
   def site_admin
@@ -156,10 +134,6 @@ we can remove this temporary one.",
   personal_info_field :zipcode, String, null: true
   personal_info_field :country, String, null: true
   personal_info_field :mobile_phone, String, null: true
-  personal_info_field :day_phone, String, null: true, deprecation_reason: LEGACY_PHONE_DEPRECATION_REASON
-  personal_info_field :evening_phone, String, null: true, deprecation_reason: LEGACY_PHONE_DEPRECATION_REASON
-  personal_info_field :best_call_time, String, null: true, deprecation_reason: LEGACY_PHONE_DEPRECATION_REASON
-  personal_info_field :preferred_contact, String, null: true, deprecation_reason: LEGACY_PHONE_DEPRECATION_REASON
   personal_info_field :accepted_clickwrap_agreement, Boolean, null: true
   personal_info_field :ical_secret, String, null: true
 

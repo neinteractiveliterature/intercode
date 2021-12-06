@@ -2,14 +2,6 @@
 class Types::TicketTypeType < Types::BaseObject
   include DeprecatedTicketApiCompat
 
-  field :transitional_id,
-        ID,
-        deprecation_reason:
-          "IDs have transitioned to the ID type.  Please switch back to the id field so that \
-we can remove this temporary one.",
-        null: false,
-        method: :id,
-        camelize: true
   field :id, ID, null: false
   field :name, String, null: false
   field :counts_towards_convention_maximum, Boolean, null: false
@@ -21,34 +13,14 @@ we can remove this temporary one.",
   association_loaders TicketType, :convention, :providing_products
 
   field :maximum_event_provided_tickets, Integer, null: false do
-    argument :transitional_event_id,
-             ID,
-             deprecation_reason:
-               "IDs have transitioned to the ID type.  Please switch back to the eventId field so that \
-we can remove this temporary one.",
-             required: false,
-             camelize: true
     argument :event_id, ID, required: false, camelize: true
   end
 
   def maximum_event_provided_tickets(**args)
-    if args[:transitional_event_id] || args[:event_id]
-      object.maximum_event_provided_tickets_for_event_id(args[:transitional_event_id] || args[:event_id])
+    if args[:event_id]
+      object.maximum_event_provided_tickets_for_event_id(args[:event_id])
     else
       object.maximum_event_provided_tickets
     end
-  end
-
-  field :publicly_available, Boolean, null: false, deprecation_reason: 'Tickets are now provided through products'
-  def publicly_available
-    ticket_type_publicly_available?(object)
-  end
-
-  field :pricing_schedule,
-        Types::ScheduledMoneyValueType,
-        null: false,
-        deprecation_reason: 'Tickets are now provided through products'
-  def pricing_schedule
-    pricing_schedule_for_ticket_type(object)
   end
 end

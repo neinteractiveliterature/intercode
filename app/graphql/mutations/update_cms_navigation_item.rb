@@ -2,22 +2,13 @@
 class Mutations::UpdateCmsNavigationItem < Mutations::BaseMutation
   field :cms_navigation_item, Types::CmsNavigationItemType, null: false
 
-  argument :transitional_id,
-           ID,
-           deprecation_reason:
-             "IDs have transitioned to the ID type.  Please switch back to the id field so that \
-we can remove this temporary one.",
-           required: false,
-           camelize: true
   argument :id, ID, required: false
   argument :cms_navigation_item, Types::CmsNavigationItemInputType, required: false, camelize: false
 
   load_and_authorize_cms_model :cms_navigation_items, :id, :update
 
   def resolve(**args)
-    cms_navigation_item_attrs =
-      process_transitional_ids_in_input(args[:cms_navigation_item].to_h, :navigation_section_id, :page_id)
-    cms_navigation_item.update!(cms_navigation_item_attrs)
+    cms_navigation_item.update!(args[:cms_navigation_item].to_h)
     { cms_navigation_item: cms_navigation_item }
   end
 end

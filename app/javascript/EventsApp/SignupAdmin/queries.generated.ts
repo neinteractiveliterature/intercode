@@ -26,10 +26,10 @@ export type AdminSignupQueryData = { __typename: 'Query', convention: { __typena
 export type RunSignupsTableSignupsQueryVariables = Types.Exact<{
   eventId: Types.Scalars['ID'];
   runId: Types.Scalars['ID'];
-  page?: Types.Maybe<Types.Scalars['Int']>;
-  perPage?: Types.Maybe<Types.Scalars['Int']>;
-  filters?: Types.Maybe<Types.SignupFiltersInput>;
-  sort?: Types.Maybe<Array<Types.SortInput> | Types.SortInput>;
+  page?: Types.InputMaybe<Types.Scalars['Int']>;
+  perPage?: Types.InputMaybe<Types.Scalars['Int']>;
+  filters?: Types.InputMaybe<Types.SignupFiltersInput>;
+  sort?: Types.InputMaybe<Array<Types.SortInput> | Types.SortInput>;
 }>;
 
 
@@ -60,10 +60,10 @@ export type UserConProfileSignupsQueryData = { __typename: 'Query', convention: 
 
 export type RunSignupChangesQueryVariables = Types.Exact<{
   runId: Types.Scalars['ID'];
-  filters?: Types.Maybe<Types.SignupChangeFiltersInput>;
-  sort?: Types.Maybe<Array<Types.SortInput> | Types.SortInput>;
-  page?: Types.Maybe<Types.Scalars['Int']>;
-  perPage?: Types.Maybe<Types.Scalars['Int']>;
+  filters?: Types.InputMaybe<Types.SignupChangeFiltersInput>;
+  sort?: Types.InputMaybe<Array<Types.SortInput> | Types.SortInput>;
+  page?: Types.InputMaybe<Types.Scalars['Int']>;
+  perPage?: Types.InputMaybe<Types.Scalars['Int']>;
 }>;
 
 
