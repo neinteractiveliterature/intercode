@@ -11823,27 +11823,28 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-language-service-types@npm:^1.8.6":
-  version: 1.8.6
-  resolution: "graphql-language-service-types@npm:1.8.6"
+"graphql-language-service-types@npm:^1.8.6, graphql-language-service-types@npm:^1.8.7":
+  version: 1.8.7
+  resolution: "graphql-language-service-types@npm:1.8.7"
   dependencies:
     graphql-config: ^4.1.0
+    vscode-languageserver-types: ^3.15.1
   peerDependencies:
     graphql: ^15.5.0 || ^16.0.0
-  checksum: 6a6d4160ef9033f9d0056e8b3cdb67501e0b11a72f485420d494adb9597ef3abba1311c143764b8de791822ab1d162d56deb44fdecde46ea775a25d3de17e013
+  checksum: 17d73316d52062988dfea2f737d655a47965eae0dd158d9dbfa23bddb12b1f153d2e51eb7c9c5a774ee8dcefcc92cdb6624f38ba5ed0c17777fe3ca60707a430
   languageName: node
   linkType: hard
 
-"graphql-language-service-utils@npm:2.7.0, graphql-language-service-utils@npm:^2.6.3":
-  version: 2.7.0
-  resolution: "graphql-language-service-utils@npm:2.7.0"
+"graphql-language-service-utils@npm:2.7.1, graphql-language-service-utils@npm:^2.6.3":
+  version: 2.7.1
+  resolution: "graphql-language-service-utils@npm:2.7.1"
   dependencies:
     "@types/json-schema": 7.0.9
-    graphql-language-service-types: ^1.8.6
+    graphql-language-service-types: ^1.8.7
     nullthrows: ^1.0.0
   peerDependencies:
     graphql: ^15.5.0 || ^16.0.0
-  checksum: f68efd7c535f02c707163ee8ecbf7ab2a160f3733e6f4ff235c9e5efb2e57dd27e39eb52acdee461c8090f9e38ab4a19464f99d15d1c1ff276a1d3be183ce11c
+  checksum: 36f2d5db18a514187477ee48b29280bdfa6c1fd97258bc21fcdc0ad47a07b115d24b0737be835c3e278362e0cde846d5c6fcf0a2a9f1f397a105460b01859d46
   languageName: node
   linkType: hard
 
@@ -19844,7 +19845,7 @@ resolve@^2.0.0-next.3:
     graphiql: 1.5.8
     graphql: 15.7.2
     graphql-anywhere: 4.2.7
-    graphql-language-service-utils: 2.7.0
+    graphql-language-service-utils: 2.7.1
     graphql-tag: 2.12.6
     graphqldoc: 2.5.2
     history: 4.10.1
