@@ -5519,12 +5519,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-table@npm:7.7.8":
-  version: 7.7.8
-  resolution: "@types/react-table@npm:7.7.8"
+"@types/react-table@npm:7.7.9":
+  version: 7.7.9
+  resolution: "@types/react-table@npm:7.7.9"
   dependencies:
     "@types/react": "*"
-  checksum: 8ee32341a2f20001d6b8ec80709a786391fde033e71634f8b3e5e2108532e123322bac8522583274f52b8901045085f9185b8a9e25717595589641d551bb2ce3
+  checksum: 3f6c847c8e904479875bb249af02b70e271c5480d0f8b94f7da96eb3980a83cf011d7e558e885259851e3af8defb6493deb147227242766ebca37c9cb630c306
   languageName: node
   linkType: hard
 
@@ -19911,7 +19911,7 @@ resolve@^2.0.0-next.3:
     "@types/react-onclickoutside": 6.7.4
     "@types/react-router-dom": 5.3.2
     "@types/react-select": 4.0.18
-    "@types/react-table": 7.7.8
+    "@types/react-table": 7.7.9
     "@types/react-transition-group": 4.4.4
     "@types/source-map-support": 0.5.4
     "@types/testing-library__jest-dom": 5.14.2
