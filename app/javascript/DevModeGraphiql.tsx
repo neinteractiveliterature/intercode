@@ -16,12 +16,9 @@ export type DevModeGraphiqlProps = {
   };
 };
 
-function DevModeGraphiql({
-  authenticityTokens: { graphql: authenticityToken },
-}: DevModeGraphiqlProps): JSX.Element {
+function DevModeGraphiql({ authenticityTokens: { graphql: authenticityToken } }: DevModeGraphiqlProps): JSX.Element {
   const link = useIntercodeApolloLink(authenticityToken);
 
-  // @ts-expect-error We're doing some shenanigans on the fetcher to adapt it to Apollo Link
   const fetcher: Fetcher = useCallback(
     (operation) => {
       const operationAsGraphQLRequest = operation as unknown as GraphQLRequest;
