@@ -128,6 +128,7 @@ const config = {
       events: require.resolve('events'),
       buffer: require.resolve('buffer'),
       punycode: require.resolve('punycode'),
+      path: require.resolve('path-browserify'),
     },
   },
   plugins: [
