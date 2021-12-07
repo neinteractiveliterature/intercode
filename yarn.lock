@@ -6485,15 +6485,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"apollo-upload-client@npm:16.0.0":
-  version: 16.0.0
-  resolution: "apollo-upload-client@npm:16.0.0"
+"apollo-upload-client@npm:17.0.0":
+  version: 17.0.0
+  resolution: "apollo-upload-client@npm:17.0.0"
   dependencies:
     extract-files: ^11.0.0
   peerDependencies:
     "@apollo/client": ^3.0.0
-    graphql: 14 - 15
-  checksum: 7a29f31f46000044a6d7faf0cb9a26c7b1d6e641dec38f1294529338c6f030b696e12f6d37e2c10313553e5351ad70ff6d1400097b47dcb04a3e1464071d6fd7
+    graphql: 14 - 16
+  checksum: e5aee12ae36f7d268a8bcd7f0d8c1f7cbb94b4a19f266185a5afb52f63a41c4bb9d6bc4edbdc437a953e697c5ebcac1a44cb2c8e863b96f4323df0060b976be6
   languageName: node
   linkType: hard
 
@@ -19921,7 +19921,7 @@ resolve@^2.0.0-next.3:
     "@typescript-eslint/eslint-plugin": 5.6.0
     "@typescript-eslint/parser": 5.6.0
     "@webpack-cli/serve": 1.6.0
-    apollo-upload-client: 16.0.0
+    apollo-upload-client: 17.0.0
     array-to-sentence: 2.0.0
     assert-never: 1.2.1
     autoprefixer: 10.4.0
