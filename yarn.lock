@@ -3203,21 +3203,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-eslint/eslint-plugin@npm:3.1.0":
-  version: 3.1.0
-  resolution: "@graphql-eslint/eslint-plugin@npm:3.1.0"
+"@graphql-eslint/eslint-plugin@npm:3.2.0":
+  version: 3.2.0
+  resolution: "@graphql-eslint/eslint-plugin@npm:3.2.0"
   dependencies:
     "@babel/code-frame": 7.16.0
-    "@graphql-tools/code-file-loader": 7.2.2
+    "@graphql-tools/code-file-loader": 7.2.3
     "@graphql-tools/graphql-tag-pluck": 7.1.4
-    "@graphql-tools/import": 6.6.1
-    "@graphql-tools/utils": 8.5.3
+    "@graphql-tools/import": 6.6.2
+    "@graphql-tools/utils": 8.5.4
     graphql-config: 4.1.0
     graphql-depth-limit: 1.1.0
     lodash.lowercase: 4.3.0
   peerDependencies:
     graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: f756f1b657bcce7bc7c7c3e1ff7defe5b29b09c543a79aacfbc5bd75a8ecb31dda3f45938fbbfb4d5a04c5ec6dc6e9fbf52bf73be8b77912edeb51a68ad5f5d6
+  checksum: f702ec2a8506b866739daf56704cd26d58c6d8ef16d4e7928a29bb51c733570aa5ae8154ce5e9f243ab5077a70a05b8288ea7b204b662485658d3de2fb420aee
   languageName: node
   linkType: hard
 
@@ -3276,9 +3276,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/code-file-loader@npm:7.2.2, @graphql-tools/code-file-loader@npm:^7.0.6":
-  version: 7.2.2
-  resolution: "@graphql-tools/code-file-loader@npm:7.2.2"
+"@graphql-tools/code-file-loader@npm:7.2.3, @graphql-tools/code-file-loader@npm:^7.0.6":
+  version: 7.2.3
+  resolution: "@graphql-tools/code-file-loader@npm:7.2.3"
   dependencies:
     "@graphql-tools/graphql-tag-pluck": ^7.1.3
     "@graphql-tools/utils": ^8.5.1
@@ -3287,7 +3287,7 @@ __metadata:
     unixify: ^1.0.0
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: bbaf2129ade4133519ca366615f65550dfe2ca18d5ad1f359552bb6d4fd8a2fd23fed1fa4ebee648311b0fa54970feb7d464efc16e6df78b9fe6788998918b97
+  checksum: db84573017e4859d8c15bf36b3a5a4aeee797e89a7a2928f0ff84068204d94f48f35e01031862614521af07aac3c0f240624fb60d139eea63dd8285bd7cb998b
   languageName: node
   linkType: hard
 
@@ -3397,16 +3397,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/import@npm:6.6.1, @graphql-tools/import@npm:^6.2.6, @graphql-tools/import@npm:^6.5.7":
-  version: 6.6.1
-  resolution: "@graphql-tools/import@npm:6.6.1"
+"@graphql-tools/import@npm:6.6.2, @graphql-tools/import@npm:^6.2.6, @graphql-tools/import@npm:^6.5.7":
+  version: 6.6.2
+  resolution: "@graphql-tools/import@npm:6.6.2"
   dependencies:
-    "@graphql-tools/utils": 8.5.3
+    "@graphql-tools/utils": 8.5.4
     resolve-from: 5.0.0
     tslib: ~2.3.0
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 392ce25c15875e94883ac092300ca1d1cac8d6f78e0cf0050632c3d672cc454a0fbda86a465d23ead512218ebf28d331fd3d6c68d41b524310277a8e5fa8b53b
+  checksum: 32ebcdf0de1ad137e37ec173fe64bb91b6e8f1fced98ba7228cff331c982ad65c38d82899199e087cc2a406a3115e1e10378bc834308edc426c1692aa96ed422
   languageName: node
   linkType: hard
 
@@ -3657,14 +3657,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/utils@npm:8.5.3, @graphql-tools/utils@npm:^8.1.1, @graphql-tools/utils@npm:^8.2.0, @graphql-tools/utils@npm:^8.3.0, @graphql-tools/utils@npm:^8.5.1, @graphql-tools/utils@npm:^8.5.2, @graphql-tools/utils@npm:^8.5.3":
-  version: 8.5.3
-  resolution: "@graphql-tools/utils@npm:8.5.3"
+"@graphql-tools/utils@npm:8.5.4, @graphql-tools/utils@npm:^8.1.1, @graphql-tools/utils@npm:^8.2.0, @graphql-tools/utils@npm:^8.3.0, @graphql-tools/utils@npm:^8.5.1, @graphql-tools/utils@npm:^8.5.2, @graphql-tools/utils@npm:^8.5.3":
+  version: 8.5.4
+  resolution: "@graphql-tools/utils@npm:8.5.4"
   dependencies:
     tslib: ~2.3.0
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: f5f8e82c46f205c0d48c2d6d160e28183706a86755e7ea31db6e54b32da7db9eecf988d0935538e27cc3706b5031b75798dc85532e11724fdb4578a9a1b00450
+  checksum: 9d20be6fb50ce723bd9cff79462bbb82cb490a18f04619b8e1e5e82ad92f9a5fa0365933f0b2fcef95fcd124ff204858858aa2ff49e68a4cede57c79892bc2dd
   languageName: node
   linkType: hard
 
@@ -19661,7 +19661,7 @@ resolve@^2.0.0-next.3:
     "@graphql-codegen/typescript": 2.4.1
     "@graphql-codegen/typescript-operations": 2.2.1
     "@graphql-codegen/typescript-react-apollo": 3.2.2
-    "@graphql-eslint/eslint-plugin": 3.1.0
+    "@graphql-eslint/eslint-plugin": 3.2.0
     "@juggle/resize-observer": 3.3.1
     "@lezer/common": 0.15.10
     "@neinteractiveliterature/litform": 0.21.0
