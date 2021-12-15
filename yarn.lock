@@ -18564,6 +18564,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-dom@npm:18.0.0-rc.0":
+  version: 18.0.0-rc.0
+  resolution: "react-dom@npm:18.0.0-rc.0"
+  dependencies:
+    loose-envify: ^1.1.0
+    object-assign: ^4.1.1
+    scheduler: ^0.21.0-rc.0
+  peerDependencies:
+    react: ^18.0.0-rc.0
+  checksum: 713db349fad704527d328275d43c57ca670c801a6592e5f308c5572a7559540d0dcfc0b065a878cea4764f742d27fb2ed1065092ca40589759d5b51ecce6773b
+  languageName: node
+  linkType: hard
+
 "react-error-boundary@npm:^3.1.0":
   version: 3.1.0
   resolution: "react-error-boundary@npm:3.1.0"
@@ -18885,6 +18898,16 @@ __metadata:
     loose-envify: ^1.1.0
     object-assign: ^4.1.1
   checksum: b254cc17ce3011788330f7bbf383ab653c6848902d7936a87b09d835d091e3f295f7e9dd1597c6daac5dc80f90e778c8230218ba8ad599f74adcc11e33b9d61b
+  languageName: node
+  linkType: hard
+
+"react@npm:18.0.0-rc.0":
+  version: 18.0.0-rc.0
+  resolution: "react@npm:18.0.0-rc.0"
+  dependencies:
+    loose-envify: ^1.1.0
+    object-assign: ^4.1.1
+  checksum: bb886ab411d7732ca8aace98bf0015a31f30b010bd674accdbbf4a474429b656b4463a58e677f33972bab9b820e949765e27fc6c468b13833b515e50b2d0b999
   languageName: node
   linkType: hard
 
@@ -19791,11 +19814,11 @@ resolve@^2.0.0-next.3:
     prettier: 2.5.1
     prop-types: 15.7.2
     punycode: 2.1.1
-    react: 17.0.2
+    react: 18.0.0-rc.0
     react-bootstrap4-modal: 2.0.0
     react-color: 2.19.3
     react-cookie-consent: 6.4.1
-    react-dom: 17.0.2
+    react-dom: 18.0.0-rc.0
     react-google-recaptcha: 2.1.0
     react-html-id: 0.1.5
     react-i18next: 11.15.1
@@ -19994,6 +20017,16 @@ resolve@^2.0.0-next.3:
     loose-envify: ^1.1.0
     object-assign: ^4.1.1
   checksum: c4b35cf967c8f0d3e65753252d0f260271f81a81e427241295c5a7b783abf4ea9e905f22f815ab66676f5313be0a25f47be582254db8f9241b259213e999b8fc
+  languageName: node
+  linkType: hard
+
+"scheduler@npm:^0.21.0-rc.0":
+  version: 0.21.0-rc.0-next-f2a59df48-20211208
+  resolution: "scheduler@npm:0.21.0-rc.0-next-f2a59df48-20211208"
+  dependencies:
+    loose-envify: ^1.1.0
+    object-assign: ^4.1.1
+  checksum: 77b5bea0d3c0399e1d98fceb27368312c3cff5be49becd5ac81414155b6d8d04dd6ba8552d6bc5fa038b95b351e7134f02a653b5bebc9ed1548d70e2ea26f7d7
   languageName: node
   linkType: hard
 
