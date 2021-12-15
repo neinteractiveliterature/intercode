@@ -14,9 +14,7 @@ module Intercode
 
     config.hosts << ENV['ASSETS_HOST'] if ENV['ASSETS_HOST'].present?
     config.hosts << /.*#{Regexp.escape(ENV['INTERCODE_HOST'])}/ if ENV['INTERCODE_HOST'].present?
-    config.hosts << ->(host) do
-      Convention.where(domain: host).any?
-    end
+    config.hosts << ->(host) { Convention.where(domain: host.gsub(/:\d+\z/, '')).any? }
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
@@ -38,8 +36,8 @@ module Intercode
     config.generators do |g|
       g.template_engine :erb
       g.test_framework :test_unit, fixture: false
-      g.stylesheets     false
-      g.javascripts     false
+      g.stylesheets false
+      g.javascripts false
     end
 
     config.assets.initialize_on_precompile = false
