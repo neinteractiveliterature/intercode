@@ -10,7 +10,7 @@
           "name": "rails",
           "path": ".",
           "cmd": [
-            "bin/rails s -p 5000 -b 'ssl://0.0.0.0:5000?key=dev_certificate.key&cert=dev_certificate.crt&ca=dev_ca.crt'"
+            "bin/rails s -p 5050 -b 'ssl://0.0.0.0:5050?key=dev_certificate.key&cert=dev_certificate.crt&ca=dev_ca.crt'"
           ],
           "num": 0
         }
