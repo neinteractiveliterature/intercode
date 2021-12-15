@@ -57,11 +57,11 @@ This is the classic Rails development setup, and should work for Mac and Linux u
 11. Install JavaScript packages: `yarn install`
 12. Start up the Intercode server: `bin/rails server`
 13. Start up the Webpack server: `yarn run start`
-14. You should now be able to go to <https://intercode.test:5000> and see the app running!
+14. You should now be able to go to <https://intercode.test:5050> and see the app running!
 15. Click the user icon in the upper right of the navigation bar and choose "Sign up" to sign up for
     an account in your local copy of Intercode.
-16. To make yourself a superadmin in your local copy, run `./bin/rails console`.  At the Rails
-    console prompt, type `User.first.update!(site_admin: true)`.  This will set the `site_admin`
+16. To make yourself a superadmin in your local copy, run `./bin/rails console`. At the Rails
+    console prompt, type `User.first.update!(site_admin: true)`. This will set the `site_admin`
     flag on your account in the database, giving you superadmin powers.
 
 ## Testing production builds
@@ -70,9 +70,9 @@ If you want to test how the app runs in production, but using your local develop
 
 1. Build Docker images for Intercode: `docker build --target production -t local-intercode-production .`
 2. Install the `dev-proxy` npm package: `npm install -g dev-proxy`
-3. Run `dev-proxy` to start proxying HTTPS locally: `dev-proxy -p 5001:5000`
-4. Run something like the following command, changing the asset host as necessary for your setup: `docker run -it -p 5001:3000 -e DATABASE_URL=postgresql://postgres@docker.for.mac.localhost/intercode_development -e RAILS_LOG_TO_STDOUT=true -e ASSETS_HOST=//intercont.intercode.test:5000 -e RAILS_SERVE_STATIC_FILES=true local-intercode-production bin/rails`
-5. Visit <https://some-convention-domain.intercode.test:5000>, probably using Firefox (it seems to deal better than Chrome with self-signed certificates these days).
+3. Run `dev-proxy` to start proxying HTTPS locally: `dev-proxy -p 5051:5050`
+4. Run something like the following command, changing the asset host as necessary for your setup: `docker run -it -p 5051:3000 -e DATABASE_URL=postgresql://postgres@docker.for.mac.localhost/intercode_development -e RAILS_LOG_TO_STDOUT=true -e ASSETS_HOST=//intercont.intercode.test:5050 -e RAILS_SERVE_STATIC_FILES=true local-intercode-production bin/rails`
+5. Visit <https://some-convention-domain.intercode.test:5050>, probably using Firefox (it seems to deal better than Chrome with self-signed certificates these days).
 
 # Contacting us
 
