@@ -5075,7 +5075,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/history@npm:*, @types/history@npm:4.7.9":
+"@types/history@npm:4.7.9":
   version: 4.7.9
   resolution: "@types/history@npm:4.7.9"
   checksum: 556b062adb92795839301965776b0418e9ca32798bd8a6031345a6a84d7512771107143a497b7e3ff826d0b0d4456e962c6450485dda6f55c7dd33371e840529
@@ -5365,27 +5365,6 @@ __metadata:
   dependencies:
     "@types/react": "*"
   checksum: 3350f088f97b19341bcf7b808cb679b3ca63e0e5939087d1138e37ffccb258e3537ae85782da9c7030dc47dce38dae38c2081becb01aa652f76607fa74cdbaa3
-  languageName: node
-  linkType: hard
-
-"@types/react-router-dom@npm:5.3.2":
-  version: 5.3.2
-  resolution: "@types/react-router-dom@npm:5.3.2"
-  dependencies:
-    "@types/history": "*"
-    "@types/react": "*"
-    "@types/react-router": "*"
-  checksum: 90f052dc5a43a77edaf41d2afa781c8ed2164cd7922b3cdf5daae446b02a2f279382425e6efc338260782c0a24d25a6101e3658acb41c8a053695968a351ea96
-  languageName: node
-  linkType: hard
-
-"@types/react-router@npm:*":
-  version: 5.1.8
-  resolution: "@types/react-router@npm:5.1.8"
-  dependencies:
-    "@types/history": "*"
-    "@types/react": "*"
-  checksum: 9204d43701ae96a61a97b869fa8d6ec6ff65ede7f7f729e0b9b8e8c31eeb27c12ac0584a78acf697bf7038b534cbdff9adc35869caab80bebca00ceb0ab09ce1
   languageName: node
   linkType: hard
 
@@ -12184,7 +12163,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"history@npm:4.10.1, history@npm:^4.9.0":
+"history@npm:5.1.0, history@npm:^5.1.0":
+  version: 5.1.0
+  resolution: "history@npm:5.1.0"
+  dependencies:
+    "@babel/runtime": ^7.7.6
+  checksum: c978710a188ee5ad5d2acf55721c77e27469578c891a66311e71e8920d1390d14476e39a6db07e0ab0f5f8d594f1f62eb55a1059c7549cde7795a36367df5869
+  languageName: node
+  linkType: hard
+
+"history@npm:^4.9.0":
   version: 4.10.1
   resolution: "history@npm:4.10.1"
   dependencies:
@@ -12195,15 +12183,6 @@ __metadata:
     tiny-warning: ^1.0.0
     value-equal: ^1.0.1
   checksum: addd84bc4683929bae4400419b5af132ff4e4e9b311a0d4e224579ea8e184a6b80d7f72c55927e4fa117f69076a9e47ce082d8d0b422f1a9ddac7991490ca1d0
-  languageName: node
-  linkType: hard
-
-"history@npm:^5.1.0":
-  version: 5.1.0
-  resolution: "history@npm:5.1.0"
-  dependencies:
-    "@babel/runtime": ^7.7.6
-  checksum: c978710a188ee5ad5d2acf55721c77e27469578c891a66311e71e8920d1390d14476e39a6db07e0ab0f5f8d594f1f62eb55a1059c7549cde7795a36367df5869
   languageName: node
   linkType: hard
 
@@ -19727,7 +19706,6 @@ resolve@^2.0.0-next.3:
     "@types/react-dom": 17.0.11
     "@types/react-google-recaptcha": 2.1.2
     "@types/react-onclickoutside": 6.7.4
-    "@types/react-router-dom": 5.3.2
     "@types/react-select": 4.0.18
     "@types/react-table": 7.7.9
     "@types/react-transition-group": 4.4.4
@@ -19795,7 +19773,7 @@ resolve@^2.0.0-next.3:
     graphql-language-service-utils: 2.7.1
     graphql-tag: 2.12.6
     graphqldoc: 2.5.2
-    history: 4.10.1
+    history: 5.1.0
     html-to-react: 1.4.7
     husky: 7.0.4
     hypernova: 2.5.0
