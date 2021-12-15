@@ -29,7 +29,7 @@ services:
     stdin_open: true
     ports:
       - "3135:3135"
-      - "5000:5000"
+      - "5050:5050"
     links:
       - postgres
     depends_on:
