@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 ruby File.read(File.expand_path('.ruby-version', __dir__)).strip
-gem 'rails', '6.1.4.3'
+gem 'rails', '6.1.4.4'
 
 gem 'pg'
 gem 'webrick' # we don't actually use it, but Skylight needs it on boot
