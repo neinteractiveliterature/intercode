@@ -61,7 +61,7 @@
     "@emotion/serialize": "1.0.2",
     "@graphiql/toolkit": "0.4.2",
     "@juggle/resize-observer": "3.3.1",
-    "@lezer/common": "0.15.10",
+    "@lezer/common": "0.15.11",
     "@neinteractiveliterature/litform": "0.21.0",
     "@popperjs/core": "2.11.0",
     "@stripe/react-stripe-js": "1.7.0",
