@@ -1,4 +1,4 @@
-import { Switch, Route, useParams, useRouteMatch } from 'react-router-dom';
+import { Routes, Route, useParams, useMatch } from 'react-router-dom';
 import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import EditOrganizationRole from './EditOrganizationRole';
@@ -11,9 +11,9 @@ import useAuthorizationRequired from '../Authentication/useAuthorizationRequired
 import { useOrganizationAdminOrganizationsQuery } from './queries.generated';
 
 function OrganizationWithIdBreadcrumbs() {
-  const match = useRouteMatch();
   const { id } = useParams<{ id: string }>();
   const { data, loading, error } = useOrganizationAdminOrganizationsQuery();
+  const organizationMainPageMatch = useMatch({ path: `/organizations/${id}`, end: true });
 
   if (loading) {
     return (
@@ -31,7 +31,7 @@ function OrganizationWithIdBreadcrumbs() {
 
   return (
     <>
-      <BreadcrumbItem to={`/organizations/${id}`} active={match.isExact}>
+      <BreadcrumbItem to={`/organizations/${id}`} active={organizationMainPageMatch != null}>
         {organization?.name ?? 'Organization'}
       </BreadcrumbItem>
 
@@ -53,10 +53,7 @@ function OrganizationAdmin(): JSX.Element {
   return (
     <>
       <ol className="breadcrumb">
-        <RouteActivatedBreadcrumbItem
-          matchProps={{ path: '/organizations', exact: true }}
-          to="/organizations"
-        >
+        <RouteActivatedBreadcrumbItem pattern={{ path: '/organizations', end: true }} to="/organizations">
           Organizations
         </RouteActivatedBreadcrumbItem>
 
@@ -65,7 +62,7 @@ function OrganizationAdmin(): JSX.Element {
         </Route>
       </ol>
 
-      <Switch>
+      <Routes>
         <Route path="/organizations/:id/roles/new">
           <NewOrganizationRole />
         </Route>
@@ -78,7 +75,7 @@ function OrganizationAdmin(): JSX.Element {
         <Route path="/organizations">
           <OrganizationIndex />
         </Route>
-      </Switch>
+      </Routes>
     </>
   );
 }

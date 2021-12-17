@@ -1,4 +1,4 @@
-import { Link, Switch, Route, useParams, useHistory } from 'react-router-dom';
+import { Link, Routes, Route, useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -17,6 +17,9 @@ function SingleProposalBreadcrumbs() {
   const { t } = useTranslation();
   const params = useParams<{ id: string }>();
   const eventProposalId = params.id;
+  if (eventProposalId == null) {
+    throw new Error('id not found in URL params');
+  }
   const { data, loading, error } = useEventProposalQueryWithOwner({
     variables: { eventProposalId },
   });
@@ -36,7 +39,7 @@ function SingleProposalBreadcrumbs() {
   return (
     <>
       <RouteActivatedBreadcrumbItem
-        matchProps={{ path: '/admin_event_proposals/:id', exact: true }}
+        pattern={{ path: '/admin_event_proposals/:id', end: true }}
         to={`/admin_event_proposals/${params.id}`}
       >
         {data?.convention.event_proposal.title}
@@ -55,8 +58,11 @@ function SingleProposalBreadcrumbs() {
 
 function AdminEditEventProposal() {
   const { t } = useTranslation();
-  const history = useHistory();
+  const navigate = useNavigate();
   const eventProposalId = useParams<{ id: string }>().id;
+  if (eventProposalId == null) {
+    throw new Error('id not found in URL params');
+  }
   const { data, loading, error } = useEventProposalQuery({ variables: { eventProposalId } });
 
   usePageTitle(
@@ -73,7 +79,7 @@ function AdminEditEventProposal() {
     <EventProposalForm
       eventProposalId={eventProposalId}
       afterSubmit={() => {
-        history.push(`/admin_event_proposals/${eventProposalId}`);
+        navigate(`/admin_event_proposals/${eventProposalId}`);
       }}
       exitButton={
         <Link className="btn btn-outline-secondary me-2" to={`/admin_event_proposals/${eventProposalId}`}>
@@ -95,7 +101,7 @@ function EventProposalsAdmin(): JSX.Element {
       <nav aria-label="breadcrumb">
         <ol className="breadcrumb">
           <RouteActivatedBreadcrumbItem
-            matchProps={{ path: '/admin_event_proposals', exact: true }}
+            pattern={{ path: '/admin_event_proposals', end: true }}
             to="/admin_event_proposals?sort.status=asc&sort.submitted_at=desc"
           >
             {t('navigation.admin.eventProposals', 'Event Proposals')}
@@ -107,7 +113,7 @@ function EventProposalsAdmin(): JSX.Element {
         </ol>
       </nav>
 
-      <Switch>
+      <Routes>
         <Route path="/admin_event_proposals/:id/history">
           <EventProposalHistory />
         </Route>
@@ -120,7 +126,7 @@ function EventProposalsAdmin(): JSX.Element {
         <Route path="/admin_event_proposals">
           <EventProposalsAdminTable />
         </Route>
-      </Switch>
+      </Routes>
     </>
   );
 }

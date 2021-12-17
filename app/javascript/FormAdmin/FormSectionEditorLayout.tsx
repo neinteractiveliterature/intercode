@@ -1,5 +1,5 @@
 import React, { useContext, useRef, useCallback, useMemo } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useModal, notEmpty, useCreateMutationWithReferenceArrayUpdater } from '@neinteractiveliterature/litform';
 
 import FormSectionNav from './FormSectionNav';
@@ -21,7 +21,7 @@ function FormSectionEditorAddItemBar({
   sectionBottomRef,
 }: FormSectionEditorAddItemBarProps): JSX.Element {
   const { form, formType } = useContext(FormEditorContext);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const [createFormItemMutate] = useCreateMutationWithReferenceArrayUpdater(
     useCreateFormItemMutation,
@@ -56,9 +56,9 @@ function FormSectionEditorAddItemBar({
     const response = await createFormItem(buildNewFormItem('static_text'));
     const formItemId = response.data?.createFormItem?.form_item.id;
     if (formItemId) {
-      history.push(`/admin_forms/${form.id}/edit/section/${formSectionQueryData.id}/item/${formItemId}`);
+      navigate(`/admin_forms/${form.id}/edit/section/${formSectionQueryData.id}/item/${formItemId}`);
     }
-  }, [createFormItem, formSectionQueryData.id, form.id, history]);
+  }, [createFormItem, formSectionQueryData.id, form.id, navigate]);
 
   const newFormItemModal = useModal();
 

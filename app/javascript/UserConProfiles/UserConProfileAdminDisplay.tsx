@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useConfirm, ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
 import FormItemDisplay from '../FormPresenter/ItemDisplays/FormItemDisplay';
@@ -16,7 +16,10 @@ import humanize from '../humanize';
 
 function UserConProfileAdminDisplay(): JSX.Element {
   const userConProfileId = useParams<{ id: string }>().id;
-  const history = useHistory();
+  if (userConProfileId == null) {
+    throw new Error('userConProfileId not found in params');
+  }
+  const navigate = useNavigate();
   const { data, loading, error } = useUserConProfileAdminQuery({
     variables: { id: userConProfileId },
   });
@@ -49,7 +52,7 @@ function UserConProfileAdminDisplay(): JSX.Element {
     await deleteUserConProfile({
       variables: { userConProfileId: data.convention.user_con_profile.id },
     });
-    history.replace('/user_con_profiles');
+    navigate('/user_con_profiles', { replace: true });
   };
 
   const renderFormItems = () =>

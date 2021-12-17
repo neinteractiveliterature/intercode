@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { ApolloError, useApolloClient } from '@apollo/client';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import pick from 'lodash/pick';
 import { ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
@@ -16,7 +16,7 @@ import { EditingScheduledValue } from '../BuiltInFormControls/ScheduledValueEdit
 import { MaximumEventSignupsValue } from './MaximumEventSignupsPreview';
 
 export default LoadQueryWrapper(useConventionAdminConventionQuery, function ConventionAdmin({ data }) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [updateMutate] = useUpdateConventionMutation();
   const [mutate, mutationError] = useAsyncFunction(updateMutate);
   const apolloClient = useApolloClient();
@@ -81,7 +81,7 @@ export default LoadQueryWrapper(useConventionAdminConventionQuery, function Conv
     });
 
     await apolloClient.resetStore();
-    history.push('/');
+    navigate('/');
   };
 
   return (

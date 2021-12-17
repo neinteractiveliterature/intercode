@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import TicketForm from './TicketForm';
@@ -9,12 +9,15 @@ import { useUpdateTicketMutation } from './mutations.generated';
 
 function useUserConProfileAdminQueryFromParams() {
   const userConProfileId = useParams<{ id: string }>().id;
+  if (userConProfileId == null) {
+    throw new Error('userConProfileId not found in params');
+  }
   return useUserConProfileAdminQuery({ variables: { id: userConProfileId } });
 }
 
 export default LoadQueryWrapper(useUserConProfileAdminQueryFromParams, function EditTicket({ data }) {
   const userConProfileId = useParams<{ id: string }>().id;
-  const history = useHistory();
+  const navigate = useNavigate();
   const [updateTicket] = useUpdateTicketMutation();
 
   const onSubmit = useCallback(
@@ -28,9 +31,9 @@ export default LoadQueryWrapper(useUserConProfileAdminQueryFromParams, function 
           ticket: ticketInput,
         },
       });
-      history.push(`/user_con_profiles/${userConProfileId}`);
+      navigate(`/user_con_profiles/${userConProfileId}`);
     },
-    [updateTicket, history, userConProfileId, data],
+    [updateTicket, navigate, userConProfileId, data],
   );
 
   usePageTitle(`Editing ${data.convention.ticket_name} for ${data.convention.user_con_profile.name}`);

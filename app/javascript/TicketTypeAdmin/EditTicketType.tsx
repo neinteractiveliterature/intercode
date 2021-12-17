@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -20,7 +20,7 @@ export default LoadSingleValueFromCollectionWrapper(
       convention: { ticket_name: ticketName, ticketNamePlural },
     },
   }) {
-    const history = useHistory();
+    const navigate = useNavigate();
     usePageTitle(`Editing “${initialTicketType.name}”`);
     const [ticketType, setTicketType] = useState(initialTicketType);
     const [mutate] = useUpdateTicketTypeMutation();
@@ -34,8 +34,8 @@ export default LoadSingleValueFromCollectionWrapper(
             },
           },
         });
-        history.push('/ticket_types');
-      }, [mutate, history, ticketType]),
+        navigate('/ticket_types');
+      }, [mutate, navigate, ticketType]),
     );
 
     return (

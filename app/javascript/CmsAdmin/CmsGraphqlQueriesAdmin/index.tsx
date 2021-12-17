@@ -1,4 +1,4 @@
-import { Switch, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
 import CmsGraphqlQueriesAdminTable from './CmsGraphqlQueriesAdminTable';
 import EditCmsGraphqlQuery from './EditCmsGraphqlQuery';
@@ -7,7 +7,7 @@ import ViewCmsGraphqlQuerySource from './ViewCmsGraphqlQuerySource';
 
 function CmsGraphqlQueriesAdmin(): JSX.Element {
   return (
-    <Switch>
+    <Routes>
       <Route path="/cms_graphql_queries/:id/edit">
         <EditCmsGraphqlQuery />
       </Route>
@@ -20,7 +20,7 @@ function CmsGraphqlQueriesAdmin(): JSX.Element {
       <Route path="/cms_graphql_queries">
         <CmsGraphqlQueriesAdminTable />
       </Route>
-    </Switch>
+    </Routes>
   );
 }
 

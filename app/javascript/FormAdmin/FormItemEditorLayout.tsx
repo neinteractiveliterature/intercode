@@ -1,7 +1,8 @@
 import { useContext, useMemo, useState, useCallback } from 'react';
 import { useApolloClient, ApolloError } from '@apollo/client';
-import { Prompt, useHistory, useRouteMatch } from 'react-router-dom';
-import isEqual from 'lodash/isEqual';
+import { useNavigate, useParams } from 'react-router-dom';
+// TODO: uncomment this when re-adding Prompt support below
+// import isEqual from 'lodash/isEqual';
 import { useDebouncedState, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import FormItemTools from './FormItemTools';
@@ -32,14 +33,14 @@ function addGeneratedIdsToFormItem(formItem: TypedFormItem): FormEditorFormItem 
 }
 
 function FormItemEditorLayout(): JSX.Element {
-  const match = useRouteMatch<{ itemId: string; id: string; sectionId: string }>();
-  const history = useHistory();
+  const params = useParams<{ itemId: string; id: string; sectionId: string }>();
+  const navigate = useNavigate();
   const { convention, currentSection, form, formType, formTypeIdentifier, formItemsById } =
     useContext(FormEditorContext);
   const apolloClient = useApolloClient();
   const initialFormItem = useMemo(
-    () => currentSection?.form_items.find((item) => item.id === match.params.itemId),
-    [currentSection, match.params.itemId],
+    () => currentSection?.form_items.find((item) => item.id === params.itemId),
+    [currentSection, params.itemId],
   );
   const [previewFormItem, setPreviewFormItem] = useState(() => formItemsById.get(initialFormItem?.id ?? ''));
   const refreshRenderedFormItem = useCallback(
@@ -67,13 +68,14 @@ function FormItemEditorLayout(): JSX.Element {
 
   const standardItem = findStandardItem(formType, initialFormItem?.identifier);
 
-  const hasChanges = useMemo(
-    () =>
-      formItem && initialFormItem
-        ? !isEqual(buildFormItemInput<unknown>(initialFormItem), buildFormItemInput<unknown>(formItem))
-        : false,
-    [formItem, initialFormItem],
-  );
+  // TODO: uncomment this when re-adding the Prompt support below
+  // const hasChanges = useMemo(
+  //   () =>
+  //     formItem && initialFormItem
+  //       ? !isEqual(buildFormItemInput<unknown>(initialFormItem), buildFormItemInput<unknown>(formItem))
+  //       : false,
+  //   [formItem, initialFormItem],
+  // );
 
   const [updateFormItemMutate] = useUpdateFormItemMutation();
   const [updateFormItem, updateError, updateInProgress] = useAsyncFunction(updateFormItemMutate);
@@ -90,7 +92,7 @@ function FormItemEditorLayout(): JSX.Element {
       },
     });
 
-    history.push(`/admin_forms/${match.params.id}/edit/section/${match.params.sectionId}`);
+    navigate(`/admin_forms/${params.id}/edit/section/${params.sectionId}`);
   };
 
   if (!formItem) {
@@ -107,7 +109,8 @@ function FormItemEditorLayout(): JSX.Element {
         previewFormItem,
       }}
     >
-      <Prompt message="Are you sure you want to discard changes to this item?" when={hasChanges} />
+      {/* TODO: re-add this once https://github.com/remix-run/react-router/issues/8139 is fixed */}
+      {/* <Prompt message="Are you sure you want to discard changes to this item?" when={hasChanges} /> */}
       <nav className="form-item-editor-tools bg-light p-2 border-right">
         <FormItemTools saveFormItem={saveFormItem} />
       </nav>

@@ -1,4 +1,4 @@
-import { Route, Switch, Redirect } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 import EditStaffPosition from './EditStaffPosition';
 import EditStaffPositionPermissions from './EditStaffPositionPermissions';
@@ -16,10 +16,7 @@ function StaffPositionAdmin(): JSX.Element {
     <>
       <nav aria-label="breadcrumb">
         <ol className="breadcrumb">
-          <RouteActivatedBreadcrumbItem
-            matchProps={{ path: '/staff_positions', exact: true }}
-            to="/staff_positions"
-          >
+          <RouteActivatedBreadcrumbItem pattern={{ path: '/staff_positions', end: true }} to="/staff_positions">
             Staff positions
           </RouteActivatedBreadcrumbItem>
 
@@ -37,7 +34,7 @@ function StaffPositionAdmin(): JSX.Element {
         </ol>
       </nav>
 
-      <Switch>
+      <Routes>
         <Route path="/staff_positions/new">
           <NewStaffPosition />
         </Route>
@@ -50,8 +47,7 @@ function StaffPositionAdmin(): JSX.Element {
         <Route path="/staff_positions">
           <StaffPositionsTable />
         </Route>
-        <Redirect to="/staff_positions" />
-      </Switch>
+      </Routes>
     </>
   );
 }

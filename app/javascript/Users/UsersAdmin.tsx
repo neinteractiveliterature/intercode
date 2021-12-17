@@ -1,4 +1,4 @@
-import { Switch, Route, useParams } from 'react-router-dom';
+import { Routes, Route, useParams } from 'react-router-dom';
 import { LoadingIndicator } from '@neinteractiveliterature/litform';
 
 import UsersTable from './UsersTable';
@@ -10,6 +10,9 @@ import { useUserAdminQuery } from './queries.generated';
 
 function UserBreadcrumbItem() {
   const { id } = useParams<{ id: string }>();
+  if (id == null) {
+    throw new Error('User ID not found in params');
+  }
   const { data, loading, error } = useUserAdminQuery({ variables: { id } });
 
   if (loading) {
@@ -38,7 +41,7 @@ function UsersAdmin(): JSX.Element {
   return (
     <>
       <ol className="breadcrumb">
-        <RouteActivatedBreadcrumbItem matchProps={{ path: '/users', exact: true }} to="/users">
+        <RouteActivatedBreadcrumbItem pattern={{ path: '/users', end: true }} to="/users">
           Users
         </RouteActivatedBreadcrumbItem>
 
@@ -47,14 +50,14 @@ function UsersAdmin(): JSX.Element {
         </Route>
       </ol>
 
-      <Switch>
+      <Routes>
         <Route path="/users/:id">
           <UserAdminDisplay />
         </Route>
         <Route path="/users">
           <UsersTable />
         </Route>
-      </Switch>
+      </Routes>
     </>
   );
 }

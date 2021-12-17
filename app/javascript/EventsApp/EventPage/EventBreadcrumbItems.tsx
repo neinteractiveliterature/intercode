@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { DateTime } from 'luxon';
 
@@ -53,8 +53,8 @@ function EventBreadcrumbItems({
 }: EventBreadcrumbItemsProps): JSX.Element {
   const { t } = useTranslation();
   const { timezoneName } = useContext(AppRootContext);
-  const history = useHistory();
-  const runToLink = findRunFromHash(event.runs, history.location.hash) || event.runs[0];
+  const location = useLocation();
+  const runToLink = findRunFromHash(event.runs, location.hash) || event.runs[0];
   const conventionDayStart = getConventionDayStart(runToLink, convention, timezoneName);
   const conventionDayUrlPortion = useConventionDayUrlPortion();
 
@@ -75,7 +75,7 @@ function EventBreadcrumbItems({
           <Link to="/events">{t('navigation.events.eventsList', 'List of events')}</Link>
         )}
       </li>
-      <RouteActivatedBreadcrumbItem matchProps={{ path: eventPath, exact: true }} to={eventPath}>
+      <RouteActivatedBreadcrumbItem pattern={{ path: eventPath, end: true }} to={eventPath}>
         {event.title}
       </RouteActivatedBreadcrumbItem>
     </>

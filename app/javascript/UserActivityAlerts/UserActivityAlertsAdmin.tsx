@@ -1,4 +1,4 @@
-import { Switch, Redirect, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
 import EditUserActivityAlert from './EditUserActivityAlert';
 import NewUserActivityAlert from './NewUserActivityAlert';
@@ -16,7 +16,7 @@ function UserActivityAlertsAdmin(): JSX.Element {
       <nav aria-label="breadcrumb" className="mb-4">
         <ol className="breadcrumb">
           <RouteActivatedBreadcrumbItem
-            matchProps={{ path: '/user_activity_alerts', exact: true }}
+            pattern={{ path: '/user_activity_alerts', end: true }}
             to="/user_activity_alerts"
           >
             User activity alerts
@@ -32,18 +32,17 @@ function UserActivityAlertsAdmin(): JSX.Element {
         </ol>
       </nav>
 
-      <Switch>
+      <Routes>
         <Route path="/user_activity_alerts/new">
           <NewUserActivityAlert />
         </Route>
         <Route path="/user_activity_alerts/:id/edit">
           <EditUserActivityAlert />
         </Route>
-        <Route path="/user_activity_alerts" exact>
+        <Route path="/user_activity_alerts">
           <UserActivityAlertsList />
         </Route>
-        <Redirect to="/user_activity_alerts" />
-      </Switch>
+      </Routes>
     </>
   );
 }

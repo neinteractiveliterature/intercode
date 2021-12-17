@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Switch, Route, Redirect, useParams } from 'react-router-dom';
+import { Routes, Route, Navigate, useParams } from 'react-router-dom';
 
 import AppRootContext from '../AppRootContext';
 import eventIdRegexp from './eventIdRegexp';
@@ -21,24 +21,27 @@ type RunRoutesProps = {
 
 function RunRoutes({ eventId, eventPath }: RunRoutesProps) {
   const { runId } = useParams<{ runId: string }>();
+  if (runId == null) {
+    throw new Error('runId not found in URL params');
+  }
   const runPath = `${eventPath}/runs/${runId}`;
 
   return (
-    <Switch>
+    <Routes>
       <Route path={`${runPath}/admin_signups`}>
         <SignupAdmin eventId={eventId} runId={runId} eventPath={eventPath} />
       </Route>
       <Route path={`${runPath}/signup_summary`}>
         <RunSignupSummary eventId={eventId} runId={runId} eventPath={eventPath} />
       </Route>
-    </Switch>
+    </Routes>
   );
 }
 
 function EventRoutes() {
   const { siteMode } = useContext(AppRootContext);
   const eventIdSegment = useParams<{ eventId: string }>().eventId;
-  const eventId = parseIntOrNull(eventIdSegment)?.toString();
+  const eventId = parseIntOrNull(eventIdSegment ?? '')?.toString();
   const eventPath = `/events/${eventIdSegment}`;
 
   if (!eventId) {
@@ -46,10 +49,10 @@ function EventRoutes() {
   }
 
   return (
-    <Switch>
+    <Routes>
       <Route path={`${eventPath}/edit`}>
         {siteMode === 'single_event' ? (
-          <Redirect to="/admin_events" />
+          <Navigate to="/admin_events" />
         ) : (
           <StandaloneEditEvent eventId={eventId} eventPath={eventPath} />
         )}
@@ -64,9 +67,9 @@ function EventRoutes() {
         <RunRoutes eventId={eventId} eventPath={eventPath} />
       </Route>
       <Route path={eventPath}>
-        {siteMode === 'single_event' ? <Redirect to="/" /> : <EventPage eventId={eventId} eventPath={eventPath} />}
+        {siteMode === 'single_event' ? <Navigate to="/" /> : <EventPage eventId={eventId} eventPath={eventPath} />}
       </Route>
-    </Switch>
+    </Routes>
   );
 }
 
@@ -74,17 +77,21 @@ function EventsApp(): JSX.Element {
   const { siteMode } = useContext(AppRootContext);
 
   return (
-    <Switch>
+    <Routes>
       {siteMode !== 'single_event' && [
         <Route path="/events/schedule" key="schedule">
           <ScheduleApp />
         </Route>,
-        <Route path="/events/schedule_by_room" key="scheduleByRoom">
-          <Redirect to="/events/schedule" />
-        </Route>,
-        <Route path="/events/schedule_with_counts" key="scheduleWithCounts">
-          <Redirect to="/events/schedule" />
-        </Route>,
+        <Route
+          path="/events/schedule_by_room"
+          key="scheduleByRoom"
+          element={<Navigate to="/events/schedule" replace />}
+        />,
+        <Route
+          path="/events/schedule_with_counts"
+          key="scheduleWithCounts"
+          element={<Navigate to="/events/schedule" replace />}
+        />,
       ]}
       <Route path={`/events/:eventId(${eventIdRegexp})`}>
         <EventRoutes />
@@ -94,7 +101,7 @@ function EventsApp(): JSX.Element {
           <EventList />
         </Route>
       )}
-    </Switch>
+    </Routes>
   );
 }
 

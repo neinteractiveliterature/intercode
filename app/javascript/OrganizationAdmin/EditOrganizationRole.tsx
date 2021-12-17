@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Redirect, useHistory, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { LoadQueryWrapper, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import useOrganizationRoleForm, { OrganizationRoleFormState } from './useOrganizationRoleForm';
@@ -14,7 +14,7 @@ type EditOrganizationRoleFormProps = {
 };
 
 function EditOrganizationRoleForm({ organization, initialOrganizationRole }: EditOrganizationRoleFormProps) {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const { renderForm, formState } = useOrganizationRoleForm(initialOrganizationRole);
   const [mutate, { error: mutationError, loading: mutationInProgress }] = useUpdateOrganizationRoleMutation();
@@ -34,11 +34,11 @@ function EditOrganizationRoleForm({ organization, initialOrganizationRole }: Edi
       },
     });
 
-    history.push(`/organizations/${organization.id}`);
+    navigate(`/organizations/${organization.id}`);
   };
 
   if (!organization.current_ability_can_manage_access) {
-    return <Redirect to="/organizations" />;
+    return <Navigate to="/organizations" />;
   }
 
   return (

@@ -1,6 +1,6 @@
 import { useContext, useMemo } from 'react';
 import { Column, FilterProps, CellProps } from 'react-table';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
 import { DateTime } from 'luxon';
@@ -165,7 +165,7 @@ export type RunSignupsTableProps = {
 
 function RunSignupsTable({ defaultVisibleColumns, eventId, runId, runPath }: RunSignupsTableProps): JSX.Element {
   const { t } = useTranslation();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { data, loading, error } = useSignupAdminEventQuery({ variables: { eventId } });
   const getPossibleColumnsFunc = useMemo(() => () => getPossibleColumns(t), [t]);
 
@@ -215,7 +215,7 @@ function RunSignupsTable({ defaultVisibleColumns, eventId, runId, runPath }: Run
         <ReactTableWithTheWorks
           tableInstance={tableInstance}
           loading={tableLoading}
-          onClickRow={(row) => history.push(`${runPath}/admin_signups/${row.original.id}/edit`)}
+          onClickRow={(row) => navigate(`${runPath}/admin_signups/${row.original.id}/edit`)}
         />
       </div>
     </QueryDataContext.Provider>

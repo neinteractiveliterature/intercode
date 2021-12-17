@@ -1,5 +1,5 @@
 import { useState, useContext, Suspense, useEffect, ReactNode } from 'react';
-import { Switch, Route, Redirect, useLocation, useParams } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation, useParams } from 'react-router-dom';
 import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
 import AppRootContext from './AppRootContext';
@@ -57,7 +57,7 @@ function renderCommonRoutes() {
     <Route path="/pages/:slug([a-zA-Z0-9\-/]+)" key="cmsPage">
       <CmsPageBySlug />
     </Route>,
-    <Route path="/" exact key="cmsRootPage">
+    <Route path="/" key="cmsRootPage">
       <PageComponents.CmsPage rootPage />
     </Route>,
   ];
@@ -147,9 +147,7 @@ function renderConventionModeRoutes({ signupMode }: { signupMode: SignupMode | u
     <Route path="/event_proposals/:id/edit" key="editEventProposal">
       <PageComponents.EditEventProposal />
     </Route>,
-    <Route path="/event_proposals" key="eventProposals">
-      <Redirect to="/pages/new-proposal" />
-    </Route>,
+    <Route path="/event_proposals" key="eventProposals" element={<Navigate to="/pages/new-proposal" replace />} />,
     ...renderCommonInConventionRoutes({ signupMode }),
   ];
 }
@@ -217,24 +215,19 @@ function AppRouter({ alert }: AppRouterProps): JSX.Element {
     <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
       {showAlert && (
         <div className="alert alert-danger" role="alert">
-          <button
-            type="button"
-            className="btn-close"
-            onClick={() => setShowAlert(false)}
-            aria-label="Close"
-          >
+          <button type="button" className="btn-close" onClick={() => setShowAlert(false)} aria-label="Close">
             <span aria-hidden="true">×</span>
           </button>
           {alert}
         </div>
       )}
 
-      <Switch>
+      <Routes>
         {renderRoutes()}
         <Route path="/">
           <FourOhFourPage />
         </Route>
-      </Switch>
+      </Routes>
     </Suspense>
   );
 }

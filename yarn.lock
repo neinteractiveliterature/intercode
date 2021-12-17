@@ -19812,6 +19812,7 @@ resolve@^2.0.0-next.3:
     react-i18next: 11.15.1
     react-onclickoutside: 6.12.1
     react-popper: 2.2.5
+    react-router: 6.1.1
     react-router-dom: 6.1.1
     react-select: 4.3.1
     react-table: 7.7.0

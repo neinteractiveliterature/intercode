@@ -1,5 +1,5 @@
 import { useContext, useRef, useState } from 'react';
-import { useHistory, useRouteMatch } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
 import { Modal } from 'react-bootstrap4-modal';
 import { useModal, useUniqueId, MultipleChoiceInput, ErrorDisplay } from '@neinteractiveliterature/litform';
@@ -80,7 +80,7 @@ function MoveFormItemModal({ visible, close }: MoveFormItemModalProps) {
   const [destinationSectionId, setDestinationSectionId] = useState<string>();
   const [moveFormItemMutate] = useMoveFormItemMutation();
   const [moveFormItem, error, inProgress] = useAsyncFunction(moveFormItemMutate);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const moveConfirmed = async () => {
     if (destinationSectionId == null) {
@@ -94,7 +94,7 @@ function MoveFormItemModal({ visible, close }: MoveFormItemModalProps) {
       },
       refetchQueries: [{ query: FormEditorQueryDocument, variables: { id: form.id } }],
     });
-    history.replace(`/admin_forms/${form.id}/edit/section/${destinationSectionId}/item/${formItem.id}`);
+    navigate(`/admin_forms/${form.id}/edit/section/${destinationSectionId}/item/${formItem.id}`, { replace: true });
     close();
   };
 
@@ -149,8 +149,8 @@ export type FormItemToolsProps = {
 };
 
 function FormItemTools({ saveFormItem }: FormItemToolsProps): JSX.Element {
-  const match = useRouteMatch<{ id: string; sectionId: string }>();
-  const history = useHistory();
+  const params = useParams<{ id: string; sectionId: string }>();
+  const navigate = useNavigate();
   const { disabled, formItem, setFormItem, standardItem } = useContext(FormItemEditorContext);
   const collapseRef = useRef<HTMLDivElement>(null);
   const { collapsed, collapseProps, toggleCollapsed } = useCollapse(collapseRef);
@@ -196,7 +196,7 @@ function FormItemTools({ saveFormItem }: FormItemToolsProps): JSX.Element {
           disabled={disabled}
           type="button"
           onClick={() => {
-            history.push(`/admin_forms/${match.params.id}/edit/section/${match.params.sectionId}`);
+            navigate(`/admin_forms/${params.id}/edit/section/${params.sectionId}`);
           }}
         >
           Cancel

@@ -1,4 +1,4 @@
-import { Switch, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
 import FormAdminIndex from './FormAdminIndex';
 import FormJSONEditor from './FormJSONEditor';
@@ -14,10 +14,7 @@ function FormAdmin(): JSX.Element {
     <>
       <nav aria-label="breadcrumb">
         <ol className="breadcrumb">
-          <RouteActivatedBreadcrumbItem
-            matchProps={{ path: '/admin_forms', exact: true }}
-            to="/admin_forms"
-          >
+          <RouteActivatedBreadcrumbItem pattern={{ path: '/admin_forms', end: true }} to="/admin_forms">
             Forms
           </RouteActivatedBreadcrumbItem>
 
@@ -27,14 +24,14 @@ function FormAdmin(): JSX.Element {
         </ol>
       </nav>
 
-      <Switch>
+      <Routes>
         <Route path="/admin_forms/:id/edit_advanced">
           <FormJSONEditor />
         </Route>
         <Route path="/admin_forms">
           <FormAdminIndex />
         </Route>
-      </Switch>
+      </Routes>
     </>
   );
 }

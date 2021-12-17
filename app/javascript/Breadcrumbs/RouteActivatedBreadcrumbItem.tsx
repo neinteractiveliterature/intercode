@@ -1,20 +1,17 @@
 import { ReactNode } from 'react';
-import { useRouteMatch, RouteProps } from 'react-router-dom';
+import { PathPattern } from 'react-router';
+import { useMatch } from 'react-router-dom';
 
 import BreadcrumbItem from './BreadcrumbItem';
 
 export type RouteActivatedBreadcrumbItemProps = {
   to: string;
-  matchProps: RouteProps;
+  pattern: string | PathPattern;
   children: ReactNode;
 };
 
-function RouteActivatedBreadcrumbItem({
-  to,
-  children,
-  matchProps,
-}: RouteActivatedBreadcrumbItemProps): JSX.Element {
-  const match = useRouteMatch(matchProps);
+function RouteActivatedBreadcrumbItem({ to, children, pattern }: RouteActivatedBreadcrumbItemProps): JSX.Element {
+  const match = useMatch(pattern);
 
   return (
     <BreadcrumbItem to={to} active={!!match}>

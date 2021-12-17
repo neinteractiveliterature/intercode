@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useGraphQLConfirm } from '@neinteractiveliterature/litform';
 
 import MenuIcon from '../NavigationBar/MenuIcon';
@@ -35,16 +35,16 @@ export default LoadQueryWithVariablesWrapper(
   usePageAdminDropdownQuery,
   ({ pageId }: PageAdminDropdownProps) => ({ id: pageId }),
   function PageAdminDropdown({ showEdit, showDelete, pageId, data }): JSX.Element {
-    const history = useHistory();
+    const navigate = useNavigate();
     const confirm = useGraphQLConfirm();
     const [deletePage] = useDeletePageMutation();
     const apolloClient = useApolloClient();
 
     const deleteConfirmed = useCallback(async () => {
       await deletePage({ variables: { id: pageId } });
-      history.replace('/cms_pages');
+      navigate('/cms_pages', { replace: true });
       await apolloClient.resetStore();
-    }, [deletePage, apolloClient, pageId, history]);
+    }, [deletePage, apolloClient, pageId, navigate]);
 
     const { cmsParent } = data;
     const { cmsPage } = cmsParent;

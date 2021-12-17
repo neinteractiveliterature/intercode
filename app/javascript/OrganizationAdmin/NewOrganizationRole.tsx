@@ -1,4 +1,4 @@
-import { Redirect, useHistory } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { ErrorDisplay, useCreateMutationWithReferenceArrayUpdater } from '@neinteractiveliterature/litform';
 
 import useOrganizationRoleForm, { OrganizationRoleFormState } from './useOrganizationRoleForm';
@@ -11,7 +11,7 @@ export default LoadSingleValueFromCollectionWrapper(
   useOrganizationAdminOrganizationsQuery,
   (data, id) => data.organizations.find((org) => org.id.toString() === id),
   function NewOrganizationRole({ value: organization }) {
-    const history = useHistory();
+    const navigate = useNavigate();
     const { renderForm, formState } = useOrganizationRoleForm({
       __typename: 'OrganizationRole',
       id: '',
@@ -30,7 +30,7 @@ export default LoadSingleValueFromCollectionWrapper(
     usePageTitle('New organization role');
 
     if (!organization.current_ability_can_manage_access) {
-      return <Redirect to="/organizations" />;
+      return <Navigate to="/organizations" />;
     }
 
     const createOrganizationRole = async ({
@@ -48,7 +48,7 @@ export default LoadSingleValueFromCollectionWrapper(
           })),
         },
       });
-      history.push(`/organizations/${organization.id}`);
+      navigate(`/organizations/${organization.id}`);
     };
 
     return (

@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { Column } from 'react-table';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { DateTime } from 'luxon';
 import { useTranslation } from 'react-i18next';
 import { useModal } from '@neinteractiveliterature/litform';
@@ -13,10 +13,7 @@ import { timespanFromConvention } from '../TimespanUtils';
 import TableHeader from '../Tables/TableHeader';
 import usePageTitle from '../usePageTitle';
 import NewConventionModal from './NewConventionModal';
-import {
-  RootSiteConventionsAdminTableQueryData,
-  useRootSiteConventionsAdminTableQuery,
-} from './queries.generated';
+import { RootSiteConventionsAdminTableQueryData, useRootSiteConventionsAdminTableQuery } from './queries.generated';
 import { getDateTimeFormat } from '../TimeUtils';
 
 type ConventionType = RootSiteConventionsAdminTableQueryData['conventions_paginated']['entries'][0];
@@ -50,8 +47,7 @@ function ConventionDatesCell({ value }: { value: ConventionType }) {
   if (timespan.includesTime(now)) {
     return (
       <>
-        <i className="bi-circle" aria-label="Ongoing convention" />{' '}
-        <strong>{datesDescription}</strong>
+        <i className="bi-circle" aria-label="Ongoing convention" /> <strong>{datesDescription}</strong>
       </>
     );
   }
@@ -59,8 +55,7 @@ function ConventionDatesCell({ value }: { value: ConventionType }) {
   if (timespan.isFinite() && timespan.start > now) {
     return (
       <>
-        <i className="bi-arrow-right-circle-fill" aria-label="Future convention" />{' '}
-        {datesDescription}
+        <i className="bi-arrow-right-circle-fill" aria-label="Future convention" /> {datesDescription}
       </>
     );
   }
@@ -104,7 +99,7 @@ const defaultVisibleColumns = ['name', 'organization_name', 'starts_at'];
 
 function RootSiteConventionsAdminTable(): JSX.Element {
   const newConventionModal = useModal();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { tableInstance, loading, tableHeaderProps } = useReactTableWithTheWorks({
     decodeFilterValue,
     defaultVisibleColumns,
@@ -125,11 +120,7 @@ function RootSiteConventionsAdminTable(): JSX.Element {
         {...tableHeaderProps}
         renderLeftContent={() => (
           <>
-            <button
-              type="button"
-              className="btn btn-outline-primary"
-              onClick={newConventionModal.open}
-            >
+            <button type="button" className="btn btn-outline-primary" onClick={newConventionModal.open}>
               New convention
             </button>
           </>
@@ -139,7 +130,7 @@ function RootSiteConventionsAdminTable(): JSX.Element {
       <ReactTableWithTheWorks
         tableInstance={tableInstance}
         loading={loading}
-        onClickRow={(row) => history.push(`/conventions/${row.original.id}`)}
+        onClickRow={(row) => navigate(`/conventions/${row.original.id}`)}
       />
 
       <NewConventionModal visible={newConventionModal.visible} close={newConventionModal.close} />

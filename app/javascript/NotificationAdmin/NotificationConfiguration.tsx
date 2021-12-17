@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { LoadQueryWrapper, ErrorDisplay, usePropertySetters } from '@neinteractiveliterature/litform';
 
 import NotificationsConfig from '../../../config/notifications.json';
@@ -21,7 +21,7 @@ function NotificationConfigurationForm({
   initialNotificationTemplate,
   eventKey,
 }: NotificationConfigurationFormProps) {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const [updateNotificationTemplate, { loading: updateInProgress, error: updateError }] =
     useUpdateNotificationTemplateMutation();
@@ -56,7 +56,7 @@ function NotificationConfigurationForm({
       },
     });
 
-    history.push('/admin_notifications');
+    navigate('/admin_notifications');
   };
 
   if (!notificationTemplate) {

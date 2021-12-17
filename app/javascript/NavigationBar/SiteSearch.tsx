@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState, useMemo } from 'react';
 import { components, GroupTypeBase, IndicatorProps, MenuProps } from 'react-select';
 import AsyncSelect from 'react-select/async';
 import debounce from 'debounce-promise';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useApolloClient } from '@apollo/client';
 import { CSSTransition } from 'react-transition-group';
 import { Search, ExactWordIndexStrategy, StemmingTokenizer, SimpleTokenizer } from 'js-search';
@@ -12,11 +12,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useTranslation } from 'react-i18next';
 
 import buildEventUrl from '../EventsApp/buildEventUrl';
-import {
-  SiteSearchQueryDocument,
-  SiteSearchQueryData,
-  SiteSearchQueryVariables,
-} from './siteSearchQueries.generated';
+import { SiteSearchQueryDocument, SiteSearchQueryData, SiteSearchQueryVariables } from './siteSearchQueries.generated';
 import { useAdminNavigationItems } from './AdminNavigationSection';
 import { useEventsNavigationItems } from './EventsNavigationSection';
 import { GeneratedNavigationItem } from './GeneratedNavigationSection';
@@ -79,8 +75,7 @@ function SearchMenu(props: MenuProps<SiteSearchOptionType, false>) {
       <>
         {props.children}
         <div className="bg-light small p-1 text-muted d-none d-md-block">
-          <i className="bi-lightbulb" />{' '}
-          {t('navigation.search.searchAnywhereText', 'Search anywhere:')}{' '}
+          <i className="bi-lightbulb" /> {t('navigation.search.searchAnywhereText', 'Search anywhere:')}{' '}
           <span className="bg-white font-monospace border rounded px-1">
             {t('navigation.search.searchAnywhereKeyCombo', 'Ctrl-/')}
           </span>
@@ -96,12 +91,8 @@ export type SiteSearchProps = {
   visibilityChangeComplete: (visible: boolean) => void;
 };
 
-function SiteSearch({
-  visible,
-  setVisible,
-  visibilityChangeComplete,
-}: SiteSearchProps): JSX.Element {
-  const history = useHistory();
+function SiteSearch({ visible, setVisible, visibilityChangeComplete }: SiteSearchProps): JSX.Element {
+  const navigate = useNavigate();
   const apolloClient = useApolloClient();
   const [inputValue, setInputValue] = useState('');
   const [value, setValue] = useState(null);
@@ -135,20 +126,17 @@ function SiteSearch({
             variables: { query },
             fetchPolicy: 'no-cache',
           });
-          const navigationItemsResult = (
-            navigationItemsSearchIndex.search(query) as typeof navigationItemsWithId
-          ).map((navigationItem) => ({
-            title: navigationItem.label,
-            highlight: '',
-            model: {
-              __typename: 'NavigationItem',
-              ...navigationItem,
-            },
-          }));
-          return [
-            ...navigationItemsResult,
-            ...data.cmsParent.fullTextSearch.entries,
-          ] as SiteSearchOptionType[];
+          const navigationItemsResult = (navigationItemsSearchIndex.search(query) as typeof navigationItemsWithId).map(
+            (navigationItem) => ({
+              title: navigationItem.label,
+              highlight: '',
+              model: {
+                __typename: 'NavigationItem',
+                ...navigationItem,
+              },
+            }),
+          );
+          return [...navigationItemsResult, ...data.cmsParent.fullTextSearch.entries] as SiteSearchOptionType[];
         },
         200,
         { leading: false },
@@ -184,19 +172,19 @@ function SiteSearch({
     (entry: SiteSearchOptionType) => {
       const { model } = entry;
       if (model.__typename === 'Page') {
-        history.push(`/pages/${(model as { slug: string }).slug}`);
+        navigate(`/pages/${(model as { slug: string }).slug}`);
       } else if (model.__typename === 'Event') {
-        history.push(buildEventUrl(model));
+        navigate(buildEventUrl(model));
       } else if (model.__typename === 'NavigationItem') {
-        history.push(model.url);
+        navigate(model.url);
       } else if (model.__typename === 'UserConProfile') {
-        history.push(`/user_con_profiles/${model.id}`);
+        navigate(`/user_con_profiles/${model.id}`);
       } else if (model.__typename === 'EventProposal') {
-        history.push(`/admin_event_proposals/${model.id}`);
+        navigate(`/admin_event_proposals/${model.id}`);
       }
       close();
     },
-    [close, history],
+    [close, navigate],
   );
 
   const focusSelect = useCallback(() => {
@@ -215,13 +203,7 @@ function SiteSearch({
   }, [visibilityChangeComplete]);
 
   return (
-    <CSSTransition
-      timeout={400}
-      in={visible}
-      classNames="site-search"
-      onEntered={entered}
-      onExited={exited}
-    >
+    <CSSTransition timeout={400} in={visible} classNames="site-search" onEntered={entered} onExited={exited}>
       <AsyncSelect<SiteSearchOptionType>
         ref={selectRef}
         placeholder=""

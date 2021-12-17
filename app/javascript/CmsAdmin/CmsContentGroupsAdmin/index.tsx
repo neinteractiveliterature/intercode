@@ -1,4 +1,4 @@
-import { Switch, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
 import CmsContentGroupsAdminTable from './CmsContentGroupsAdminTable';
 import EditCmsContentGroup from './EditCmsContentGroup';
@@ -7,7 +7,7 @@ import ViewCmsContentGroup from './ViewCmsContentGroup';
 
 function CmsContentGroupsAdmin(): JSX.Element {
   return (
-    <Switch>
+    <Routes>
       <Route path="/cms_content_groups/:id/edit">
         <EditCmsContentGroup />
       </Route>
@@ -20,7 +20,7 @@ function CmsContentGroupsAdmin(): JSX.Element {
       <Route path="/cms_content_groups">
         <CmsContentGroupsAdminTable />
       </Route>
-    </Switch>
+    </Routes>
   );
 }
 

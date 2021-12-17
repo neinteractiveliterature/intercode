@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import * as React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
 import {
   useCreateMutationWithReferenceArrayUpdater,
@@ -15,7 +15,7 @@ import { CmsPartialFieldsFragmentDoc, useCmsPartialsAdminQuery } from './queries
 import { useCreatePartialMutation } from './mutations.generated';
 
 export default LoadQueryWrapper(useCmsPartialsAdminQuery, function NewCmsPartial({ data }): JSX.Element {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [partial, setPartial] = useState<CmsPartialFormFields>({});
   const [createPartial, { error: createError, loading: createInProgress }] = useCreateMutationWithReferenceArrayUpdater(
     useCreatePartialMutation,
@@ -34,7 +34,7 @@ export default LoadQueryWrapper(useCmsPartialsAdminQuery, function NewCmsPartial
         cmsPartial: buildPartialInput(partial),
       },
     });
-    history.push('/cms_partials');
+    navigate('/cms_partials');
   };
 
   return (

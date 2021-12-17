@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { NavLink, useHistory, useRouteMatch } from 'react-router-dom';
+import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import { useConfirm, ErrorDisplay, useDeleteMutationWithReferenceArrayUpdater } from '@neinteractiveliterature/litform';
 
 import { useSortable } from '@dnd-kit/sortable';
@@ -14,8 +14,8 @@ export type FormSectionNavItemProps = {
 function FormSectionNavItem({ formSection }: FormSectionNavItemProps): JSX.Element {
   const { form, currentSection, convention } = useContext(FormEditorContext);
   const confirm = useConfirm();
-  const history = useHistory();
-  const match = useRouteMatch<{ id: string }>();
+  const navigate = useNavigate();
+  const params = useParams<{ id: string }>();
   const [deleteFormSection] = useDeleteMutationWithReferenceArrayUpdater(
     useDeleteFormSectionMutation,
     convention.form,
@@ -30,7 +30,7 @@ function FormSectionNavItem({ formSection }: FormSectionNavItemProps): JSX.Eleme
     }
     await deleteFormSection(unparsedFormSection);
     if (currentSection && formSection.id === currentSection.id) {
-      history.replace(`/admin_forms/${form.id}/edit`);
+      navigate(`/admin_forms/${form.id}/edit`, { replace: true });
     }
   };
 
@@ -47,7 +47,7 @@ function FormSectionNavItem({ formSection }: FormSectionNavItemProps): JSX.Eleme
           <i style={{ cursor: 'grab' }} className="bi-grip-vertical" />
         </div>
         <NavLink
-          to={`/admin_forms/${match.params.id}/edit/section/${formSection.id}`}
+          to={`/admin_forms/${params.id}/edit/section/${formSection.id}`}
           className="nav-link flex-grow-1"
           replace
         >

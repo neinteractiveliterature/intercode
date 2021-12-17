@@ -1,4 +1,4 @@
-import { Link, Switch, Route, useLocation } from 'react-router-dom';
+import { Link, Routes, Route, useLocation } from 'react-router-dom';
 
 import AssignDocHeader from './AssignDocHeader';
 import buildMemberPrefix from './buildMemberPrefix';
@@ -27,7 +27,7 @@ function AssignDoc({ assign, prefix }: AssignDocProps): JSX.Element {
   const prefixParts = (prefix || '').split('.').filter((part) => part.length > 0);
 
   return (
-    <Switch>
+    <Routes>
       {sortedMethods.map((method) => {
         const { returnClassName, assignName } = findMethodReturnClass(method);
         const returnClass = findClass(returnClassName);
@@ -35,9 +35,9 @@ function AssignDoc({ assign, prefix }: AssignDocProps): JSX.Element {
         if (returnClass && returnClassName) {
           return (
             <Route
-              path={`/liquid_docs/assigns/${escapeRegExp(prefix || '')}${
-                assign.name
-              }\\.${escapeRegExp(assignName)}(\\..*)?`}
+              path={`/liquid_docs/assigns/${escapeRegExp(prefix || '')}${assign.name}\\.${escapeRegExp(
+                assignName,
+              )}(\\..*)?`}
               key={method.name}
             >
               <AssignDoc
@@ -55,7 +55,7 @@ function AssignDoc({ assign, prefix }: AssignDocProps): JSX.Element {
         return null;
       })}
 
-      <Route path={`/liquid_docs/assigns/${escapeRegExp(prefix || '')}${assign.name}`} exact>
+      <Route path={`/liquid_docs/assigns/${escapeRegExp(prefix || '')}${assign.name}`}>
         <nav aria-label="breadcrumb mb-4">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
@@ -64,11 +64,7 @@ function AssignDoc({ assign, prefix }: AssignDocProps): JSX.Element {
             {prefixParts.map((part, i) => (
               // eslint-disable-next-line react/no-array-index-key
               <li className="breadcrumb-item text-nowrap" key={i}>
-                <Link
-                  to={`/liquid_docs/assigns/${prefixParts.slice(0, i + 1).join('.')}${
-                    location.search
-                  }`}
-                >
+                <Link to={`/liquid_docs/assigns/${prefixParts.slice(0, i + 1).join('.')}${location.search}`}>
                   {part}
                 </Link>
               </li>
@@ -93,16 +89,12 @@ function AssignDoc({ assign, prefix }: AssignDocProps): JSX.Element {
 
           <ul className="list-group list-group-flush">
             {sortedMethods.map((method) => (
-              <MethodDoc
-                method={method}
-                prefix={buildMemberPrefix(assign.name, prefix)}
-                key={method.name}
-              />
+              <MethodDoc method={method} prefix={buildMemberPrefix(assign.name, prefix)} key={method.name} />
             ))}
           </ul>
         </section>
       </Route>
-    </Switch>
+    </Routes>
   );
 }
 

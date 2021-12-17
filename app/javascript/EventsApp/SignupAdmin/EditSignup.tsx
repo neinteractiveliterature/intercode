@@ -98,6 +98,9 @@ export type EditSignupProps = {
 function EditSignup({ teamMembersUrl }: EditSignupProps): JSX.Element {
   const { timezoneName } = useContext(AppRootContext);
   const { id } = useParams<{ id: string }>();
+  if (id == null) {
+    throw new Error('id not found in URL params');
+  }
   const { data, loading, error } = useAdminSignupQuery({ variables: { id } });
   const changeBucketModal = useModal();
   const forceConfirmModal = useModal();

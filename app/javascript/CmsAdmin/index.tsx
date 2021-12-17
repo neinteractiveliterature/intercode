@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { NavLink, Switch, Route, Redirect } from 'react-router-dom';
+import { NavLink, Routes, Route, Navigate } from 'react-router-dom';
 import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import CmsVariablesAdmin from './CmsVariablesAdmin';
@@ -77,7 +77,7 @@ export default LoadQueryWrapper(useCmsAdminBaseQuery, function CmsAdmin({ data }
 
       <br />
 
-      <Switch>
+      <Routes>
         <Route path="/cms_pages">
           <CmsPagesAdmin />
         </Route>
@@ -92,9 +92,7 @@ export default LoadQueryWrapper(useCmsAdminBaseQuery, function CmsAdmin({ data }
             <NavigationItemsAdmin />
           </Route>
         ) : (
-          <Route path="/cms_navigation_items">
-            <Redirect to="/cms_pages" />
-          </Route>
+          <Route path="/cms_navigation_items" element={<Navigate to="/cms_pages" replace />} />
         )}
         <Route path="/cms_layouts">
           <CmsLayoutsAdmin />
@@ -113,7 +111,7 @@ export default LoadQueryWrapper(useCmsAdminBaseQuery, function CmsAdmin({ data }
             <RootSiteAdmin />
           </Route>
         )}
-      </Switch>
+      </Routes>
     </>
   );
 });
