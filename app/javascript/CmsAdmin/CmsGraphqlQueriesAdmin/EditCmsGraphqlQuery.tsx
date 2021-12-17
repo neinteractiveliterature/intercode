@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ApolloError, useApolloClient } from '@apollo/client';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import CmsGraphqlQueryForm from './CmsGraphqlQueryForm';
@@ -16,7 +16,7 @@ export default LoadSingleValueFromCollectionWrapper(
   useCmsGraphqlQueriesQuery,
   (data, id) => data.cmsParent.cmsGraphqlQueries.find((q) => q.id.toString() === id),
   function EditCmsGraphqlQuery({ value: initialQuery }) {
-    const history = useHistory();
+    const navigate = useNavigate();
     const [query, setQuery] = useState(initialQuery);
     const [updateMutate] = useUpdateCmsGraphqlQuery();
     const apolloClient = useApolloClient();
@@ -34,7 +34,7 @@ export default LoadSingleValueFromCollectionWrapper(
       });
 
       await apolloClient.resetStore();
-      history.push('/cms_graphql_queries');
+      navigate('/cms_graphql_queries');
     };
 
     const [save, saveError, saveInProgress] = useAsyncFunction(saveClicked);

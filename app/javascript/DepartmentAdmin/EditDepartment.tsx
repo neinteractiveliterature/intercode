@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import usePageTitle from '../usePageTitle';
 import buildDepartmentInput from './buildDepartmentInput';
@@ -13,7 +13,7 @@ export default LoadSingleValueFromCollectionWrapper(
   (data, id) => data.convention.departments.find((d) => d.id.toString() === id),
   function EditDepartment({ value: initialDepartment }) {
     const [updateDepartment] = useUpdateDepartmentMutation();
-    const history = useHistory();
+    const navigate = useNavigate();
 
     usePageTitle(`Editing “${initialDepartment?.name}”`);
 
@@ -25,9 +25,9 @@ export default LoadSingleValueFromCollectionWrapper(
             department: buildDepartmentInput(department),
           },
         });
-        history.push('/admin_departments');
+        navigate('/admin_departments');
       },
-      [history, initialDepartment, updateDepartment],
+      [navigate, initialDepartment, updateDepartment],
     );
 
     return (

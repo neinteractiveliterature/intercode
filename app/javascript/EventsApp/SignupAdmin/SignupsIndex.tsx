@@ -1,10 +1,11 @@
-import { NavLink, Switch, Route, Redirect, useRouteMatch } from 'react-router-dom';
+import { NavLink, Routes, Route, useMatch } from 'react-router-dom';
 import { useTranslation, Trans } from 'react-i18next';
 
 import RunEmailList from './RunEmailList';
 import RunHeader from './RunHeader';
 import RunSignupsTable from './RunSignupsTable';
 import RunSignupChangesTable from './RunSignupChangesTable';
+import classNames from 'classnames';
 
 export type SignupsIndexProps = {
   runId: string;
@@ -14,8 +15,8 @@ export type SignupsIndexProps = {
 
 function SignupsIndex({ runId, eventId, runPath }: SignupsIndexProps): JSX.Element {
   const { t } = useTranslation();
-  const signupsTabMatch = useRouteMatch({ path: `${runPath}/admin_signups`, exact: true });
-  const signupChangesTabMatch = useRouteMatch({ path: `${runPath}/admin_signups/signup_changes` });
+  const signupsTabMatch = useMatch({ path: `${runPath}/admin_signups`, end: true });
+  const signupChangesTabMatch = useMatch({ path: `${runPath}/admin_signups/signup_changes` });
 
   return (
     <>
@@ -24,8 +25,7 @@ function SignupsIndex({ runId, eventId, runPath }: SignupsIndexProps): JSX.Eleme
         <li className="nav-item">
           <NavLink
             to={`${runPath}/admin_signups/?filters.state=confirmed%2Cwaitlisted&sort.id=asc`}
-            isActive={() => signupsTabMatch != null}
-            className="nav-link"
+            className={({ isActive }) => classNames('nav-link', { active: isActive || signupsTabMatch })}
           >
             {t('events.signupsAdmin.title', 'Signups')}
           </NavLink>
@@ -33,8 +33,7 @@ function SignupsIndex({ runId, eventId, runPath }: SignupsIndexProps): JSX.Eleme
         <li className="nav-item">
           <NavLink
             to={`${runPath}/admin_signups/signup_changes?sort.created_at=asc`}
-            isActive={() => signupChangesTabMatch != null}
-            className="nav-link"
+            className={({ isActive }) => classNames('nav-link', { active: isActive || signupChangesTabMatch })}
           >
             {t('events.signupsAdmin.historyTitle', 'Change history')}
           </NavLink>
@@ -50,7 +49,7 @@ function SignupsIndex({ runId, eventId, runPath }: SignupsIndexProps): JSX.Eleme
           </NavLink>
         </li>
       </ul>
-      <Switch>
+      <Routes>
         <Route path={`${runPath}/admin_signups/emails/comma`}>
           <RunEmailList runId={runId} eventId={eventId} separator=", " />
         </Route>
@@ -63,10 +62,10 @@ function SignupsIndex({ runId, eventId, runPath }: SignupsIndexProps): JSX.Eleme
           </div>
           <RunEmailList runId={runId} eventId={eventId} separator="; " />
         </Route>
-        <Route path={`${runPath}/admin_signups/signup_changes`} exact>
+        <Route path={`${runPath}/admin_signups/signup_changes`}>
           <RunSignupChangesTable runId={runId} />
         </Route>
-        <Route path={`${runPath}/admin_signups`} exact>
+        <Route path={`${runPath}/admin_signups`}>
           <RunSignupsTable
             runId={runId}
             eventId={eventId}
@@ -74,8 +73,7 @@ function SignupsIndex({ runId, eventId, runPath }: SignupsIndexProps): JSX.Eleme
             defaultVisibleColumns={['id', 'state', 'name', 'bucket', 'age_restrictions_check', 'email']}
           />
         </Route>
-        <Redirect to={`${runPath}/admin_signups`} />
-      </Switch>
+      </Routes>
     </>
   );
 }

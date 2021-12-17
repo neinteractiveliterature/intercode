@@ -1,12 +1,14 @@
 import { TabList, TabBody, useTabsWithRouter } from '@neinteractiveliterature/litform';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useMemo } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 import CreateSignup from './CreateSignup';
 import SignupModerationQueue from './SignupModerationQueue';
 
 function SignupModeration(): JSX.Element {
   const location = useLocation();
-  const history = useHistory();
+  const navigate = useNavigate();
+  const fakeHistory = useMemo(() => ({ replace: navigate }), [navigate]);
   const tabProps = useTabsWithRouter(
     [
       {
@@ -18,7 +20,7 @@ function SignupModeration(): JSX.Element {
     ],
     '/signup_moderation',
     location,
-    history,
+    fakeHistory,
   );
 
   return (

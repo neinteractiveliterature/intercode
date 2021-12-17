@@ -1,4 +1,4 @@
-import { Switch, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
 import CmsPagesAdminTable from './CmsPagesAdminTable';
 import EditCmsPage from './EditCmsPage';
@@ -7,7 +7,7 @@ import ViewCmsPageSource from './ViewCmsPageSource';
 
 function CmsPagesAdmin(): JSX.Element {
   return (
-    <Switch>
+    <Routes>
       <Route path="/cms_pages/:id/edit">
         <EditCmsPage />
       </Route>
@@ -20,7 +20,7 @@ function CmsPagesAdmin(): JSX.Element {
       <Route path="/cms_pages">
         <CmsPagesAdminTable />
       </Route>
-    </Switch>
+    </Routes>
   );
 }
 

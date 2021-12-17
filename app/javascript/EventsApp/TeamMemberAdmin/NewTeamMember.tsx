@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ApolloError } from '@apollo/client';
 import {
@@ -28,7 +28,7 @@ export type NewTeamMemberProps = {
 
 function NewTeamMember({ event, eventPath }: NewTeamMemberProps): JSX.Element {
   const { t } = useTranslation();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [teamMember, setTeamMember] = useState<Partial<TeamMembersQueryData['convention']['event']['team_members'][0]>>(
     {
       user_con_profile: undefined,
@@ -75,7 +75,7 @@ function NewTeamMember({ event, eventPath }: NewTeamMemberProps): JSX.Element {
           },
         },
       });
-      history.replace(`${eventPath}/team_members`);
+      navigate(`${eventPath}/team_members`, { replace: true });
     }
   };
 

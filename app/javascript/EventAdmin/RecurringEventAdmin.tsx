@@ -42,7 +42,7 @@ export default LoadQueryWrapper<EventAdminEventsQueryData, EventAdminEventsQuery
         ))}
         <Route
           path={`${buildEventCategoryUrl(eventCategory)}/:eventId/runs/:runId/edit`}
-          render={() => <EditRun events={data.convention.events} convention={data.convention} />}
+          element={<EditRun events={data.convention.events} convention={data.convention} />}
         />
       </div>
     );

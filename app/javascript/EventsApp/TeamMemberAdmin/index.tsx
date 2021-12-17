@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Switch, Route, useRouteMatch } from 'react-router-dom';
+import { Routes, Route, useParams } from 'react-router-dom';
 import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 import snakeCase from 'lodash/snakeCase';
 
@@ -19,15 +19,15 @@ export type TeamMemberAdminProps = {
 
 function TeamMemberAdmin({ eventId, eventPath }: TeamMemberAdminProps): JSX.Element {
   const { data, loading, error } = useTeamMembersQuery({ variables: { eventId } });
-  const teamMemberMatch = useRouteMatch<{ teamMemberId: string }>(`${eventPath}/team_members/:teamMemberId(\\d+)`);
+  const teamMemberId = useParams<{ teamMemberId: string }>().teamMemberId;
 
   const teamMember = useMemo(() => {
-    if (loading || error || !teamMemberMatch || !data) {
+    if (loading || error || !teamMemberId || !data) {
       return null;
     }
 
-    return data.convention.event.team_members.find((tm) => tm.id.toString() === teamMemberMatch.params.teamMemberId);
-  }, [data, error, loading, teamMemberMatch]);
+    return data.convention.event.team_members.find((tm) => tm.id.toString() === teamMemberId);
+  }, [data, error, loading, teamMemberId]);
 
   if (loading) {
     return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
@@ -51,7 +51,7 @@ function TeamMemberAdmin({ eventId, eventPath }: TeamMemberAdminProps): JSX.Elem
             {event.title}
           </BreadcrumbItem>
           <RouteActivatedBreadcrumbItem
-            matchProps={{ path: `${eventPath}/team_members`, exact: true }}
+            pattern={{ path: `${eventPath}/team_members`, end: true }}
             to={`${eventPath}/team_members`}
           >
             {humanize(snakeCase(event.event_category.teamMemberNamePlural))}
@@ -63,13 +63,13 @@ function TeamMemberAdmin({ eventId, eventPath }: TeamMemberAdminProps): JSX.Elem
             </BreadcrumbItem>
           </Route>
           <Route path={`${eventPath}/team_members/:teamMemberId(\\d+)`}>
-            <BreadcrumbItem active to={`${eventPath}/team_members/${teamMemberMatch?.params.teamMemberId}`}>
+            <BreadcrumbItem active to={`${eventPath}/team_members/${teamMemberId}`}>
               {teamMember?.user_con_profile?.name_without_nickname || ''}
             </BreadcrumbItem>
           </Route>
         </ol>
       </nav>
-      <Switch>
+      <Routes>
         <Route path={`${eventPath}/team_members/new`}>
           <NewTeamMember event={event} eventPath={eventPath} />
         </Route>
@@ -79,7 +79,7 @@ function TeamMemberAdmin({ eventId, eventPath }: TeamMemberAdminProps): JSX.Elem
         <Route path={`${eventPath}/team_members`}>
           <TeamMembersIndex eventId={eventId} eventPath={eventPath} />
         </Route>
-      </Switch>
+      </Routes>
     </>
   );
 }

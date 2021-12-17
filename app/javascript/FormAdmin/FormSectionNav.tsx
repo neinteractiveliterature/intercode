@@ -1,5 +1,5 @@
 import { useContext, useCallback, useRef } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   useUniqueId,
   buildOptimisticArrayForMove,
@@ -31,7 +31,7 @@ function FormSectionNav(): JSX.Element {
   const collapseRef = useRef<HTMLElement>(null);
   const { collapsed, collapseProps, toggleCollapsed } = useCollapse(collapseRef);
   const { className: collapseClassName, ...otherCollapseProps } = collapseProps;
-  const history = useHistory();
+  const navigate = useNavigate();
   const { form, convention } = useContext(FormEditorContext);
   const [moveFormSection] = useMoveFormSectionMutation();
   const [addFormSection] = useCreateMutationWithReferenceArrayUpdater(
@@ -79,7 +79,7 @@ function FormSectionNav(): JSX.Element {
     });
     const formSectionId = result.data?.createFormSection.form_section.id;
     if (formSectionId) {
-      history.replace(`/admin_forms/${form.id}/edit/section/${formSectionId}`);
+      navigate(`/admin_forms/${form.id}/edit/section/${formSectionId}`, { replace: true });
     }
   };
 

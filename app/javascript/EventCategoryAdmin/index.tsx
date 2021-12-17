@@ -1,4 +1,4 @@
-import { Switch, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
 import EditEventCategory from './EditEventCategory';
 import EventCategoryIndex from './EventCategoryIndex';
@@ -15,10 +15,7 @@ function EventCategoryAdmin(): JSX.Element {
   return (
     <>
       <ol className="breadcrumb">
-        <RouteActivatedBreadcrumbItem
-          matchProps={{ path: '/event_categories', exact: true }}
-          to="/event_categories"
-        >
+        <RouteActivatedBreadcrumbItem pattern={{ path: '/event_categories', end: true }} to="/event_categories">
           Event categories
         </RouteActivatedBreadcrumbItem>
 
@@ -35,7 +32,7 @@ function EventCategoryAdmin(): JSX.Element {
         </Route>
       </ol>
 
-      <Switch>
+      <Routes>
         <Route path="/event_categories/new">
           <NewEventCategory />
         </Route>
@@ -45,7 +42,7 @@ function EventCategoryAdmin(): JSX.Element {
         <Route path="/event_categories">
           <EventCategoryIndex />
         </Route>
-      </Switch>
+      </Routes>
     </>
   );
 }

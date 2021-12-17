@@ -1,4 +1,4 @@
-import { NavLink, Redirect, Route, Switch } from 'react-router-dom';
+import { Navigate, NavLink, Route, Routes } from 'react-router-dom';
 
 import CouponAdminTable from './CouponAdmin/CouponAdminTable';
 import OrderAdmin from './OrderAdmin';
@@ -36,7 +36,7 @@ function StoreAdmin(): JSX.Element {
         </li>
       </ul>
 
-      <Switch>
+      <Routes>
         <Route path="/admin_store/products">
           <ProductAdmin />
         </Route>
@@ -49,8 +49,8 @@ function StoreAdmin(): JSX.Element {
         <Route path="/admin_store/order_summary">
           <OrderSummary />
         </Route>
-        <Redirect to="/admin_store/products" />
-      </Switch>
+        <Route path="/admin_store" element={<Navigate to="/admin_store/products" replace />} />
+      </Routes>
     </>
   );
 }

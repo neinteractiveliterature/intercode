@@ -1,5 +1,5 @@
 import { useMemo, useEffect, Suspense } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 import usePageTitle from '../usePageTitle';
 import { lazyWithBundleHashCheck } from '../checkBundleHash';
@@ -20,7 +20,7 @@ export default LoadQueryWithVariablesWrapper(
   useCmsPageQuery,
   ({ slug, rootPage }: CmsPageProps) => ({ slug, rootPage }),
   function CmsPage({ data }): JSX.Element {
-    const history = useHistory();
+    const navigate = useNavigate();
     const location = useLocation();
     const content = useMemo(
       () => parseCmsContent(data.cmsParent.cmsPage.content_html).bodyComponents,
@@ -34,9 +34,9 @@ export default LoadQueryWithVariablesWrapper(
         !data.convention.my_profile.accepted_clickwrap_agreement &&
         !data.cmsParent.cmsPage.skip_clickwrap_agreement
       ) {
-        history.replace('/clickwrap_agreement');
+        navigate('/clickwrap_agreement', { replace: true });
       }
-    }, [data, history, location]);
+    }, [data, navigate, location]);
 
     usePageTitle(location.pathname === '/' ? '' : data.cmsParent?.cmsPage.name);
 

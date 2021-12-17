@@ -1,4 +1,4 @@
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { LoadingIndicator } from '@neinteractiveliterature/litform';
 
 import RootSiteConventionsAdminTable from './RootSiteConventionsAdminTable';
@@ -30,7 +30,7 @@ function RootSiteConventionsAdmin(): JSX.Element {
       <ol className="breadcrumb">
         <RouteActivatedBreadcrumbItem
           to="/conventions?sort.starts_at=desc"
-          matchProps={{ path: '/conventions', exact: true }}
+          pattern={{ path: '/conventions', end: true }}
         >
           Conventions
         </RouteActivatedBreadcrumbItem>
@@ -40,15 +40,14 @@ function RootSiteConventionsAdmin(): JSX.Element {
         </Route>
       </ol>
 
-      <Switch>
+      <Routes>
         <Route path="/conventions/:id">
           <ConventionDisplay />
         </Route>
-        <Route path="/conventions" exact>
+        <Route path="/conventions">
           <RootSiteConventionsAdminTable />
         </Route>
-        <Redirect to="/conventions?sort.starts_at=desc" />
-      </Switch>
+      </Routes>
     </>
   );
 }

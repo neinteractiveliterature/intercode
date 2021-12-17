@@ -19,10 +19,7 @@ export function LoadQueryWithVariablesWrapper<TData, TVariables, TProps>(
     }
 
     if (error) {
-      if (
-        error instanceof ApolloError &&
-        error.graphQLErrors.some((err) => err.extensions?.code === 'NOT_FOUND')
-      ) {
+      if (error instanceof ApolloError && error.graphQLErrors.some((err) => err.extensions?.code === 'NOT_FOUND')) {
         return <FourOhFourPage />;
       }
 
@@ -36,8 +33,7 @@ export function LoadQueryWithVariablesWrapper<TData, TVariables, TProps>(
     return <WrappedComponent data={data} {...props} />;
   };
 
-  const wrappedComponentDisplayName =
-    WrappedComponent.displayName || WrappedComponent.name || 'Component';
+  const wrappedComponentDisplayName = WrappedComponent.displayName || WrappedComponent.name || 'Component';
 
   Wrapper.displayName = `LoadQueryWithVariablesWrapper(${wrappedComponentDisplayName})`;
 
@@ -51,6 +47,9 @@ export function LoadSingleValueFromCollectionWrapper<TData, TValue, TProps>(
 ): (props: TProps) => JSX.Element {
   const Wrapper = (props: TProps) => {
     const { id } = useParams<{ id: string }>();
+    if (id == null) {
+      throw new Error('id not found in URL params');
+    }
     const { data, loading, error } = useLoadData();
     const value = error || loading || !data ? undefined : getValue(data, id);
 
@@ -69,8 +68,7 @@ export function LoadSingleValueFromCollectionWrapper<TData, TValue, TProps>(
     return <WrappedComponent value={value} data={data} {...props} />;
   };
 
-  const wrappedComponentDisplayName =
-    WrappedComponent.displayName || WrappedComponent.name || 'Component';
+  const wrappedComponentDisplayName = WrappedComponent.displayName || WrappedComponent.name || 'Component';
 
   Wrapper.displayName = `LoadSingleValueFromCollectionWrapper(${wrappedComponentDisplayName})`;
 

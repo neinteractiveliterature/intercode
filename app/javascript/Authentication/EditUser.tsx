@@ -9,7 +9,7 @@ import {
   LoadQueryWrapper,
 } from '@neinteractiveliterature/litform';
 
-import { Redirect } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import PasswordConfirmationInput from './PasswordConfirmationInput';
 import AuthenticityTokensContext from '../AuthenticityTokensContext';
 import useAsyncFunction from '../useAsyncFunction';
@@ -79,7 +79,7 @@ export default LoadQueryWrapper(useEditUserQuery, function EditUserForm({ data: 
   usePageTitle('Update Your Account');
 
   if (!formState) {
-    return <Redirect to="/" />;
+    return <Navigate to="/" replace />;
   }
 
   const onSubmit = async (event: React.SyntheticEvent) => {

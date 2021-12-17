@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
 import {
   ErrorDisplay,
@@ -14,7 +14,7 @@ import { useCreateStaffPositionMutation } from './mutations.generated';
 import { StaffPositionFieldsFragmentDoc, useStaffPositionsQuery } from './queries.generated';
 
 export default LoadQueryWrapper(useStaffPositionsQuery, function NewStaffPosition({ data }): JSX.Element {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [createMutate, { error, loading: inProgress }] = useCreateMutationWithReferenceArrayUpdater(
     useCreateStaffPositionMutation,
     data.convention,
@@ -44,9 +44,11 @@ export default LoadQueryWrapper(useStaffPositionsQuery, function NewStaffPositio
       },
     });
     if (response?.data) {
-      history.replace(`/staff_positions/${response.data.createStaffPosition.staff_position.id}/edit_permissions`);
+      navigate(`/staff_positions/${response.data.createStaffPosition.staff_position.id}/edit_permissions`, {
+        replace: true,
+      });
     }
-  }, [history, createMutate, staffPosition]);
+  }, [navigate, createMutate, staffPosition]);
 
   usePageTitle('New staff position');
 

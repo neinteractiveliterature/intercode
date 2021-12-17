@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -16,7 +16,7 @@ export type NewTicketTypeProps = {
 };
 
 function NewTicketType({ ticketName, ticketNamePlural }: NewTicketTypeProps): JSX.Element {
-  const history = useHistory();
+  const navigate = useNavigate();
   usePageTitle(`New ${ticketName} type`);
 
   const [ticketType, setTicketType] = useState<EditingTicketType>({
@@ -60,8 +60,8 @@ function NewTicketType({ ticketName, ticketNamePlural }: NewTicketTypeProps): JS
           },
         },
       });
-      history.replace('/ticket_types');
-    }, [mutate, ticketType, history]),
+      navigate('/ticket_types', { replace: true });
+    }, [mutate, ticketType, navigate]),
   );
 
   return (

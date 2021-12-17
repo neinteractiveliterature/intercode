@@ -1,4 +1,4 @@
-import { Route, Switch, useLocation } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import BreadcrumbItem from '../../Breadcrumbs/BreadcrumbItem';
@@ -40,14 +40,14 @@ export default LoadQueryWithVariablesWrapper(
           </ol>
         </nav>
 
-        <Switch>
+        <Routes>
           <Route path={`${runPath}/admin_signups/:id/edit`}>
             <EditSignup teamMembersUrl={`${eventPath}/team_members`} />
           </Route>
           <Route path={`${runPath}/admin_signups`}>
             <SignupsIndex runId={runId} eventId={eventId} runPath={runPath} />
           </Route>
-        </Switch>
+        </Routes>
       </div>
     );
   },

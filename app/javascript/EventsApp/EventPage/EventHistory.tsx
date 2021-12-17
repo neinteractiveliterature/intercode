@@ -40,7 +40,7 @@ export default LoadQueryWithVariablesWrapper(
               {data.convention.event.title}
             </BreadcrumbItem>
             <RouteActivatedBreadcrumbItem
-              matchProps={{ path: `${eventPath}/history`, exact: true }}
+              pattern={{ path: `${eventPath}/history`, end: true }}
               to={`${eventPath}/history`}
             >
               {t('events.history.title', 'History')}

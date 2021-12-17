@@ -1,4 +1,4 @@
-import { Switch, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
 import EditTicket from './EditTicket';
 import EditUserConProfile from './EditUserConProfile';
@@ -24,7 +24,7 @@ function UserConProfilesAdmin(): JSX.Element {
   if (authorizationWarning) return authorizationWarning;
 
   return (
-    <Switch>
+    <Routes>
       <Route path="/user_con_profiles/new">
         <AttendeesPage />
       </Route>
@@ -43,7 +43,7 @@ function UserConProfilesAdmin(): JSX.Element {
       <Route>
         <AttendeesPage />
       </Route>
-    </Switch>
+    </Routes>
   );
 }
 

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
 import {
   ErrorDisplay,
@@ -15,7 +15,7 @@ import { CmsGraphqlQueryFieldsFragmentDoc, useCmsGraphqlQueriesQuery } from './q
 import { useCreateCmsGraphqlQuery } from './mutations.generated';
 
 export default LoadQueryWrapper(useCmsGraphqlQueriesQuery, function NewCmsGraphqlQuery({ data }): JSX.Element {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [query, setQuery] = useState({ identifier: '', admin_notes: '', query: '' });
   const [create, { error: createError, loading: createInProgress }] = useCreateMutationWithReferenceArrayUpdater(
     useCreateCmsGraphqlQuery,
@@ -38,7 +38,7 @@ export default LoadQueryWrapper(useCmsGraphqlQueriesQuery, function NewCmsGraphq
       },
     });
 
-    history.push('/cms_graphql_queries');
+    navigate('/cms_graphql_queries');
   };
 
   return (

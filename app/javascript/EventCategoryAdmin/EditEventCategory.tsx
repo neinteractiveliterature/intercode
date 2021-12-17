@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -15,7 +15,7 @@ export default LoadSingleValueFromCollectionWrapper(
   useEventCategoryAdminQuery,
   (data, id) => data.convention.event_categories.find((c) => c.id.toString() === id),
   function EditEventCategoryForm({ value: initialEventCategory, data: { convention } }) {
-    const history = useHistory();
+    const navigate = useNavigate();
     const [updateMutate] = useUpdateEventCategoryMutation();
     const [update, updateError, updateInProgress] = useAsyncFunction(updateMutate);
 
@@ -31,7 +31,7 @@ export default LoadSingleValueFromCollectionWrapper(
         },
       });
 
-      history.push('/event_categories');
+      navigate('/event_categories');
     };
 
     return (

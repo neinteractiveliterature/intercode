@@ -1,13 +1,9 @@
 import { useMemo } from 'react';
-import { NavLink, Switch, Route, Redirect } from 'react-router-dom';
+import { NavLink, Routes, Route, Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import FormItemChangeGroup from './FormItemChangeGroup';
-import {
-  buildChangeGroups,
-  getTimespanForChangeGroup,
-  ParseableFormResponseChange,
-} from './FormItemChangeUtils';
+import { buildChangeGroups, getTimespanForChangeGroup, ParseableFormResponseChange } from './FormItemChangeUtils';
 import { ConventionForFormItemChangeDisplay } from './FormItemChangeDisplay';
 import { CommonFormFieldsFragment } from '../../Models/commonFormFragments.generated';
 import { useAppDateTimeFormat } from '../../TimeUtils';
@@ -58,14 +54,14 @@ function FormResponseChangeHistory({
         </ul>
       </nav>
       <div className="col-md-9">
-        <Switch>
+        <Routes>
           {changeGroups.map((changeGroup) => (
             <Route key={changeGroup.id} path={`${basePath}/${changeGroup.id}`}>
               <FormItemChangeGroup convention={convention} changeGroup={changeGroup} />
             </Route>
           ))}
-          <Redirect to={`${basePath}/${changeGroups[0].id}`} />
-        </Switch>
+          <Route path={basePath} element={<Navigate to={`${basePath}/${changeGroups[0].id}`} replace />} />
+        </Routes>
       </div>
     </div>
   );

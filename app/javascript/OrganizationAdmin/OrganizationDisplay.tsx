@@ -1,4 +1,4 @@
-import { Link, Redirect } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { ErrorDisplay, useConfirm, useDeleteMutationWithReferenceArrayUpdater } from '@neinteractiveliterature/litform';
 import capitalize from 'lodash/capitalize';
 
@@ -32,7 +32,7 @@ export default LoadSingleValueFromCollectionWrapper(
     usePageTitle(organization.name);
 
     if (!organization.current_ability_can_manage_access) {
-      return <Redirect to="/organizations" />;
+      return <Navigate to="/organizations" />;
     }
 
     return (

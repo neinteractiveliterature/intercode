@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
 import { LoadingIndicator, ErrorDisplay, parseIntOrNull } from '@neinteractiveliterature/litform';
 
@@ -20,7 +20,7 @@ export default LoadQueryWithVariablesWrapper(
   ({ productId }: ProductOrderFormProps) => ({ productId }),
   function ProductOrderForm({ data }) {
     const { product } = data.convention;
-    const history = useHistory();
+    const navigate = useNavigate();
     const [addOrderEntryToCurrentPendingOrder] = useAddOrderEntryToCurrentPendingOrderMutation({
       refetchQueries: [{ query: CartQueryDocument }],
     });
@@ -40,7 +40,7 @@ export default LoadQueryWithVariablesWrapper(
       await addOrderEntryToCurrentPendingOrder({
         variables: { productId: product.id, productVariantId, quantity },
       });
-      history.push('/cart');
+      navigate('/cart');
     });
 
     const renderVariantSelect = () => {

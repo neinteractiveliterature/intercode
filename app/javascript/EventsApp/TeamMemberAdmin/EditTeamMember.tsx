@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ApolloError } from '@apollo/client';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 import capitalize from 'lodash/capitalize';
@@ -21,7 +21,7 @@ export type EditTeamMemberProps = {
 function EditTeamMember({ event, eventPath }: EditTeamMemberProps): JSX.Element {
   const { t } = useTranslation();
   const { teamMemberId } = useParams<{ teamMemberId: string }>();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [teamMember, setTeamMember] = useState(event.team_members.find((tm) => tm.id === teamMemberId));
   const [updateMutate] = useUpdateTeamMemberMutation();
   const [update, updateError, updateInProgress] = useAsyncFunction(updateMutate);
@@ -48,7 +48,7 @@ function EditTeamMember({ event, eventPath }: EditTeamMemberProps): JSX.Element 
       },
     });
 
-    history.replace(`${eventPath}/team_members`);
+    navigate(`${eventPath}/team_members`, { replace: true });
   };
 
   if (!teamMember) {

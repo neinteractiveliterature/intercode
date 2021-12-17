@@ -1,4 +1,4 @@
-import { Switch, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
 import DepartmentAdminIndex from './DepartmentAdminIndex';
 import EditDepartment from './EditDepartment';
@@ -11,7 +11,7 @@ function DepartmentAdmin(): JSX.Element {
   if (authorizationWarning) return authorizationWarning;
 
   return (
-    <Switch>
+    <Routes>
       <Route path="/admin_departments/:id/edit">
         <EditDepartment />
       </Route>
@@ -21,7 +21,7 @@ function DepartmentAdmin(): JSX.Element {
       <Route path="/admin_departments">
         <DepartmentAdminIndex />
       </Route>
-    </Switch>
+    </Routes>
   );
 }
 

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import * as React from 'react';
 import { useApolloClient, ApolloError } from '@apollo/client';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ErrorDisplay, notEmpty } from '@neinteractiveliterature/litform';
 
 import { buildPermissionInput } from '../../Permissions/PermissionUtils';
@@ -18,7 +18,7 @@ export default LoadSingleValueFromCollectionWrapper(
   (data, id) => data.cmsParent.cmsContentGroups.find((contentGroup) => contentGroup.id.toString() === id),
 
   function EditCmsContentGroupForm({ data: { convention }, value: initialContentGroup }) {
-    const history = useHistory();
+    const navigate = useNavigate();
     const [updateCmsContentGroup] = useUpdateContentGroupMutation();
     const [contentGroup, setContentGroup] = useState(initialContentGroup);
     const [permissionsChangeSet, addPermission, removePermission] =
@@ -50,7 +50,7 @@ export default LoadSingleValueFromCollectionWrapper(
       });
 
       await apolloClient.resetStore();
-      history.push('/cms_content_groups');
+      navigate('/cms_content_groups');
     };
 
     const [submit, submitError, submitInProgress] = useAsyncFunction(formSubmitted);

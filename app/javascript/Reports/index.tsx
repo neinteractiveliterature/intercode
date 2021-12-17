@@ -1,4 +1,4 @@
-import { Switch, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link } from 'react-router-dom';
 import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import AttendanceByPaymentAmount from './AttendanceByPaymentAmount';
@@ -83,7 +83,7 @@ function Reports(): JSX.Element {
   if (authorizationWarning) return authorizationWarning;
 
   return (
-    <Switch>
+    <Routes>
       <Route path="/reports/attendance_by_payment_amount">
         <AttendanceByPaymentAmount />
       </Route>
@@ -99,7 +99,7 @@ function Reports(): JSX.Element {
       <Route path="/reports">
         <ReportsMenu />
       </Route>
-    </Switch>
+    </Routes>
   );
 }
 

@@ -1,5 +1,5 @@
 import { createContext, useMemo } from 'react';
-import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import AssignDoc from './AssignDoc';
@@ -13,16 +13,13 @@ import LiquidTagDocLink from './LiquidTagDocLink';
 import useLiquidAssignsQueryFromLocation from './useLiquidAssignsQueryFromLocation';
 
 function sortByName<T extends { name: string }>(items: T[]) {
-  return [...items].sort((a, b) =>
-    a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }),
-  );
+  return [...items].sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
 }
 
 const LiquidDocsContext = createContext({});
 
 function LiquidDocs(): JSX.Element {
   const [{ data, loading, error }, notifierEventKey] = useLiquidAssignsQueryFromLocation();
-  const location = useLocation();
 
   const sortedAssigns = useMemo(
     () => (loading || error || !data ? [] : sortByName(data.cmsParent.liquidAssigns)),
@@ -32,12 +29,7 @@ function LiquidDocs(): JSX.Element {
   const sortedFilters = useMemo(() => sortByName(DocData.filter_methods), []);
 
   const sortedTags = useMemo(
-    () =>
-      sortByName(
-        DocData.classes.filter((klass) =>
-          klass.tags.some((tag) => tag.tag_name === 'liquid_tag_name'),
-        ),
-      ),
+    () => sortByName(DocData.classes.filter((klass) => klass.tags.some((tag) => tag.tag_name === 'liquid_tag_name'))),
     [],
   );
 
@@ -51,7 +43,7 @@ function LiquidDocs(): JSX.Element {
 
   return (
     <LiquidDocsContext.Provider value={{ notifierEventKey }}>
-      <Switch>
+      <Routes>
         {sortedAssigns.map((assign) => (
           <Route path={`/liquid_docs/assigns/${assign.name}(\\..*)?`} key={`route-${assign.name}`}>
             <AssignDoc assign={assign} />
@@ -63,15 +55,12 @@ function LiquidDocs(): JSX.Element {
           </Route>
         ))}
         {sortedTags.map((liquidTag) => (
-          <Route
-            path={`/liquid_docs/tags/${findLiquidTagName(liquidTag)}(\\..*)?`}
-            key={`route-${liquidTag.name}`}
-          >
+          <Route path={`/liquid_docs/tags/${findLiquidTagName(liquidTag)}(\\..*)?`} key={`route-${liquidTag.name}`}>
             <LiquidTagDoc liquidTag={liquidTag} />
           </Route>
         ))}
 
-        <Route path="/liquid_docs" exact>
+        <Route path="/liquid_docs">
           <>
             <nav aria-label="breadcrumb mb-4">
               <ol className="breadcrumb">
@@ -107,9 +96,7 @@ function LiquidDocs(): JSX.Element {
             </section>
           </>
         </Route>
-
-        <Redirect to={`/liquid_docs${location.search}`} />
-      </Switch>
+      </Routes>
     </LiquidDocsContext.Provider>
   );
 }

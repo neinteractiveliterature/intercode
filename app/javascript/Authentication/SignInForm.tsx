@@ -3,25 +3,16 @@
 import { useState, useContext } from 'react';
 
 import * as React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import {
-  BootstrapFormInput,
-  BootstrapFormCheckbox,
-  ErrorDisplay,
-} from '@neinteractiveliterature/litform';
+import { BootstrapFormInput, BootstrapFormCheckbox, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import AuthenticationModalContext from './AuthenticationModalContext';
 import AuthenticityTokensContext from '../AuthenticityTokensContext';
 import useAsyncFunction from '../useAsyncFunction';
 import useAfterSessionChange from './useAfterSessionChange';
 
-async function signIn(
-  authenticityToken: string,
-  email: string,
-  password: string,
-  rememberMe: boolean,
-) {
+async function signIn(authenticityToken: string, email: string, password: string, rememberMe: boolean) {
   const formData = new FormData();
   formData.append('user[email]', email);
   formData.append('user[password]', password);
@@ -52,7 +43,7 @@ async function signIn(
 
 function SignInForm(): JSX.Element {
   const { t } = useTranslation();
-  const history = useHistory();
+  const navigate = useNavigate();
   const {
     close: closeModal,
     setCurrentView,
@@ -95,7 +86,7 @@ function SignInForm(): JSX.Element {
   const onCancel = (event: React.SyntheticEvent) => {
     event.preventDefault();
     if (unauthenticatedError) {
-      history.push('/');
+      navigate('/');
       closeModal();
       setUnauthenticatedError(false);
     } else {
@@ -164,12 +155,7 @@ function SignInForm(): JSX.Element {
             </button>
           </div>
           <div>
-            <button
-              type="button"
-              className="btn btn-secondary me-2"
-              disabled={submitInProgress}
-              onClick={onCancel}
-            >
+            <button type="button" className="btn btn-secondary me-2" disabled={submitInProgress} onClick={onCancel}>
               {t('buttons.cancel', 'Cancel')}
             </button>
             <input

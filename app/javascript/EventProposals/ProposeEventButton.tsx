@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useModal, useUniqueId, LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
@@ -20,12 +20,12 @@ export default LoadQueryWrapper<ProposeEventButtonQueryData, ProposeEventButtonQ
   useProposeEventButtonQuery,
   function ProposeEventButton({ className, caption, data }) {
     const { t } = useTranslation();
-    const history = useHistory();
+    const navigate = useNavigate();
     const buttonId = useUniqueId('propose-event-button-');
     const modal = useModal();
 
     const newProposalCreated = (eventProposal: { id: string }) => {
-      history.push(`/event_proposals/${eventProposal.id}/edit`);
+      navigate(`/event_proposals/${eventProposal.id}/edit`);
     };
 
     if (!data.convention.my_profile) {

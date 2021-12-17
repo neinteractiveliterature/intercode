@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useHistory, useRouteMatch } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 
 import EditRunModal, { EditingRun } from './EditRunModal';
 import buildEventCategoryUrl from './buildEventCategoryUrl';
@@ -11,22 +11,23 @@ export type EditRunProps = {
 };
 
 function EditRun({ convention, events }: EditRunProps): JSX.Element {
-  const match = useRouteMatch<{ eventId: string; runId: string }>();
-  const history = useHistory();
+  const params = useParams<{ eventId: string; runId: string }>();
+  const location = useLocation();
+  const navigate = useNavigate();
   const event = useMemo(() => {
-    if (!match) {
+    if (params.eventId == null) {
       return undefined;
     }
 
-    return events.find((e) => e.id.toString() === match.params.eventId);
-  }, [match, events]);
+    return events.find((e) => e.id.toString() === params.eventId);
+  }, [params.eventId, events]);
 
   const initialRun: EditingRun | undefined = useMemo(() => {
     if (!event) {
       return undefined;
     }
 
-    if (match.path.endsWith('/new')) {
+    if (location.pathname.endsWith('/new')) {
       return {
         __typename: 'Run',
         id: '',
@@ -43,8 +44,8 @@ function EditRun({ convention, events }: EditRunProps): JSX.Element {
       };
     }
 
-    return event.runs.find((r) => r.id === match.params.runId);
-  }, [match.path, match.params.runId, event]);
+    return event.runs.find((r) => r.id === params.runId);
+  }, [location.pathname, params.runId, event]);
 
   const cancelEditing = () => {
     if (!event) {
@@ -54,7 +55,7 @@ function EditRun({ convention, events }: EditRunProps): JSX.Element {
       convention.event_categories.find((c) => c.id === event.event_category.id),
     );
     if (eventCategoryUrl) {
-      history.replace(eventCategoryUrl);
+      navigate(eventCategoryUrl, { replace: true });
     }
   };
 
@@ -63,7 +64,7 @@ function EditRun({ convention, events }: EditRunProps): JSX.Element {
   useEffect(() => {
     // navigation happened, reset the run state
     setRun(initialRun);
-  }, [match.path, initialRun]);
+  }, [location.pathname, initialRun]);
 
   if (!event || !run) {
     return <></>;

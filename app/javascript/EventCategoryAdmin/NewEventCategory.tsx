@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ApolloError } from '@apollo/client';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   ErrorDisplay,
   LoadQueryWrapper,
@@ -14,7 +14,7 @@ import { EventCategoryFieldsFragmentDoc, useEventCategoryAdminQuery } from './qu
 import { useCreateEventCategoryMutation } from './mutations.generated';
 
 export default LoadQueryWrapper(useEventCategoryAdminQuery, function NewEventCategory({ data }): JSX.Element {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [create, { error: createError, loading: createInProgress }] = useCreateMutationWithReferenceArrayUpdater(
     useCreateEventCategoryMutation,
     data.convention,
@@ -40,7 +40,7 @@ export default LoadQueryWrapper(useEventCategoryAdminQuery, function NewEventCat
       },
     });
 
-    history.push('/event_categories');
+    navigate('/event_categories');
   };
 
   usePageTitle('New Event Category');

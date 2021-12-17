@@ -1,5 +1,5 @@
 import { useContext, useMemo } from 'react';
-import { Link, Route, useHistory } from 'react-router-dom';
+import { Link, useMatch, useNavigate } from 'react-router-dom';
 import { Column, CellProps, FilterProps } from 'react-table';
 import { useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
@@ -297,7 +297,8 @@ export type UserConProfilesTableProps = {
 function UserConProfilesTable({ defaultVisibleColumns }: UserConProfilesTableProps): JSX.Element {
   const { timezoneName } = useContext(AppRootContext);
   const { t } = useTranslation();
-  const history = useHistory();
+  const navigate = useNavigate();
+  const newProfileMatch = useMatch('/user_con_profiles/new');
   const getPossibleColumnsWithTranslation = useMemo(
     () => (data: UserConProfilesTableUserConProfilesQueryData) =>
       getPossibleColumns(data, t, getSortedParsedFormItems(data.convention.user_con_profile_form), timezoneName),
@@ -337,18 +338,11 @@ function UserConProfilesTable({ defaultVisibleColumns }: UserConProfilesTablePro
           tableInstance={tableInstance}
           loading={loading}
           onClickRow={(row) => {
-            history.push(`/user_con_profiles/${row.original.id}`);
+            navigate(`/user_con_profiles/${row.original.id}`);
           }}
         />
 
-        <Route path="/user_con_profiles/new">
-          {({ match }) => (
-            <AddAttendeeModal
-              conventionName={(queryData && (queryData.convention || {}).name) || ''}
-              visible={match != null}
-            />
-          )}
-        </Route>
+        <AddAttendeeModal conventionName={queryData?.convention.name ?? ''} visible={newProfileMatch != null} />
       </div>
     </UserConProfilesTableQueryDataContext.Provider>
   );

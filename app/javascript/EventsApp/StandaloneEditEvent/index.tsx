@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react';
-import { Redirect, useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useApolloClient } from '@apollo/client';
 import {
   ErrorDisplay,
@@ -28,6 +28,8 @@ import {
   useStandaloneUpdateEventMutation,
 } from './mutations.generated';
 import FourOhFourPage from '../../FourOhFourPage';
+import useLoginRequired from '../../Authentication/useLoginRequired';
+import { AuthorizationError } from '../../Authentication/useAuthorizationRequired';
 
 export type StandaloneEditEventFormProps = {
   initialEvent: WithFormResponse<StandaloneEditEventQueryData['convention']['event']>;
@@ -44,7 +46,7 @@ function StandaloneEditEventForm({
   convention,
   currentAbility,
 }: StandaloneEditEventFormProps) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const apolloClient = useApolloClient();
 
   const [eventFormProps, { event, validateForm }] = useEventForm({
@@ -96,7 +98,7 @@ function StandaloneEditEventForm({
       validateForm={validateForm}
       updateEvent={updateEvent}
       onSave={() => {
-        history.push(eventPath);
+        navigate(eventPath);
       }}
     >
       <EventForm {...eventFormProps} />
@@ -120,6 +122,7 @@ export type StandaloneEditEventProps = {
 };
 
 function StandaloneEditEvent({ eventId, eventPath }: StandaloneEditEventProps): JSX.Element {
+  const loginRequired = useLoginRequired();
   const { data, loading, error } = useStandaloneEditEventQuery({ variables: { eventId } });
 
   const initialEvent = useMemo(
@@ -128,6 +131,10 @@ function StandaloneEditEvent({ eventId, eventPath }: StandaloneEditEventProps): 
   );
 
   usePageTitle(useValueUnless(() => `Editing “${initialEvent?.title}”`, error || loading));
+
+  if (loginRequired) {
+    return <></>;
+  }
 
   if (loading) {
     return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
@@ -141,8 +148,8 @@ function StandaloneEditEvent({ eventId, eventPath }: StandaloneEditEventProps): 
     return <FourOhFourPage />;
   }
 
-  if (data && !data.currentAbility.can_update_event) {
-    return <Redirect to="/" />;
+  if (!data.currentAbility.can_update_event) {
+    return <AuthorizationError />;
   }
 
   return (
