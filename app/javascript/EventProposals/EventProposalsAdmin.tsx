@@ -114,18 +114,10 @@ function EventProposalsAdmin(): JSX.Element {
       </nav>
 
       <Routes>
-        <Route path="/admin_event_proposals/:id/history">
-          <EventProposalHistory />
-        </Route>
-        <Route path="/admin_event_proposals/:id/edit">
-          <AdminEditEventProposal />
-        </Route>
-        <Route path="/admin_event_proposals/:id">
-          <EventProposalAdminDisplay />
-        </Route>
-        <Route path="/admin_event_proposals">
-          <EventProposalsAdminTable />
-        </Route>
+        <Route path="/admin_event_proposals/:id/history" element={<EventProposalHistory />} />
+        <Route path="/admin_event_proposals/:id/edit" element={<AdminEditEventProposal />} />
+        <Route path="/admin_event_proposals/:id" element={<EventProposalAdminDisplay />} />
+        <Route path="/admin_event_proposals" element={<EventProposalsAdminTable />} />
       </Routes>
     </>
   );

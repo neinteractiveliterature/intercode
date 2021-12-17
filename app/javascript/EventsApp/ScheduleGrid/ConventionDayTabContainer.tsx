@@ -131,12 +131,14 @@ function ConventionDayTabContainer({
       </div>
       <Routes>
         {conventionDayTimespans.map((timespan) => (
-          <Route path={`${basename}/${conventionDayUrlPortion(timespan.start)}`} key={timespan.start.toISO()}>
-            {children(timespan)}
-          </Route>
+          <Route
+            path={`${basename}/${conventionDayUrlPortion(timespan.start)}`}
+            key={timespan.start.toISO()}
+            element={children(timespan)}
+          />
         ))}
         <Route
-          path={basename}
+          path="*"
           element={<Navigate to={`${basename}/${conventionDayUrlPortion(conventionDayTimespans[0].start)}`} replace />}
         />
       </Routes>

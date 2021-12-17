@@ -35,18 +35,10 @@ function StaffPositionAdmin(): JSX.Element {
       </nav>
 
       <Routes>
-        <Route path="/staff_positions/new">
-          <NewStaffPosition />
-        </Route>
-        <Route path="/staff_positions/:id/edit">
-          <EditStaffPosition />
-        </Route>
-        <Route path="/staff_positions/:id/edit_permissions">
-          <EditStaffPositionPermissions />
-        </Route>
-        <Route path="/staff_positions">
-          <StaffPositionsTable />
-        </Route>
+        <Route path="/staff_positions/new" element={<NewStaffPosition />} />
+        <Route path="/staff_positions/:id/edit" element={<EditStaffPosition />} />
+        <Route path="/staff_positions/:id/edit_permissions" element={<EditStaffPositionPermissions />} />
+        <Route path="/staff_positions" element={<StaffPositionsTable />} />
       </Routes>
     </>
   );

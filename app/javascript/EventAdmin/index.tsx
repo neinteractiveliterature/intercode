@@ -48,19 +48,15 @@ export default LoadQueryWrapper(useEventAdminEventsQuery, function EventAdmin({ 
     if (data.convention.events.length === 0) {
       return (
         <Routes>
-          <Route path="/admin_events/new">
-            <NewEvent />
-          </Route>
-          <Route path="/admin_events" element={<Navigate to="/admin_events/new" replace />} />
+          <Route path="/admin_events/new" element={<NewEvent />} />
+          <Route path="*" element={<Navigate to="/admin_events/new" replace />} />
         </Routes>
       );
     }
 
     return (
       <Routes>
-        <Route path="/admin_events/:id/edit">
-          <EventAdminEditEvent />
-        </Route>
+        <Route path="/admin_events/:id/edit" element={<EventAdminEditEvent />} />
         <Route
           path="/admin_events"
           element={<Navigate to={`/admin_events/${data.convention.events[0].id}/edit`} replace />}
@@ -108,24 +104,20 @@ export default LoadQueryWrapper(useEventAdminEventsQuery, function EventAdmin({ 
       </ul>
 
       <Routes>
-        <Route path={`/admin_events/:eventCategoryId(${eventCategoryIdRegexp})/new`}>
-          <NewEvent />
-        </Route>
+        <Route path={`/admin_events/:eventCategoryId(${eventCategoryIdRegexp})/new`} element={<NewEvent />} />
         {eventCategories.map((eventCategory) => {
           const AdminComponent = adminComponentsBySchedulingUi[eventCategory.scheduling_ui];
 
           return (
-            <Route key={eventCategory.id} path={buildEventCategoryUrl(eventCategory)}>
-              <AdminComponent eventCategoryId={eventCategory.id} />
-            </Route>
+            <Route
+              key={eventCategory.id}
+              path={buildEventCategoryUrl(eventCategory)}
+              element={<AdminComponent eventCategoryId={eventCategory.id} />}
+            />
           );
         })}
-        <Route path="/admin_events/:id/edit">
-          <EventAdminEditEvent />
-        </Route>
-        <Route path="/admin_events/dropped_events">
-          <DroppedEventAdmin />
-        </Route>
+        <Route path="/admin_events/:id/edit" element={<EventAdminEditEvent />} />
+        <Route path="/admin_events/dropped_events" element={<DroppedEventAdmin />} />
         {eventCategories.length > 0 && (
           <Route path="/admin_events" element={<Navigate to={buildEventCategoryUrl(eventCategories[0])} replace />} />
         )}

@@ -33,15 +33,9 @@ function EventCategoryAdmin(): JSX.Element {
       </ol>
 
       <Routes>
-        <Route path="/event_categories/new">
-          <NewEventCategory />
-        </Route>
-        <Route path="/event_categories/:id/edit">
-          <EditEventCategory />
-        </Route>
-        <Route path="/event_categories">
-          <EventCategoryIndex />
-        </Route>
+        <Route path="/event_categories/new" element={<NewEventCategory />} />
+        <Route path="/event_categories/:id/edit" element={<EditEventCategory />} />
+        <Route path="/event_categories" element={<EventCategoryIndex />} />
       </Routes>
     </>
   );

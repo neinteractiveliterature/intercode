@@ -56,9 +56,11 @@ function FormResponseChangeHistory({
       <div className="col-md-9">
         <Routes>
           {changeGroups.map((changeGroup) => (
-            <Route key={changeGroup.id} path={`${basePath}/${changeGroup.id}`}>
-              <FormItemChangeGroup convention={convention} changeGroup={changeGroup} />
-            </Route>
+            <Route
+              key={changeGroup.id}
+              path={`${basePath}/${changeGroup.id}`}
+              element={<FormItemChangeGroup convention={convention} changeGroup={changeGroup} />}
+            />
           ))}
           <Route path={basePath} element={<Navigate to={`${basePath}/${changeGroups[0].id}`} replace />} />
         </Routes>

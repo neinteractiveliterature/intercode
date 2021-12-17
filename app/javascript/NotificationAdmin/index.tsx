@@ -10,12 +10,8 @@ function NotificationAdmin(): JSX.Element {
 
   return (
     <Routes>
-      <Route path="/admin_notifications/:category/:event">
-        <NotificationConfiguration />
-      </Route>
-      <Route path="/admin_notifications">
-        <NotificationAdminIndex />
-      </Route>
+      <Route path="/admin_notifications/:category/:event" element={<NotificationConfiguration />} />
+      <Route path="/admin_notifications" element={<NotificationAdminIndex />} />
     </Routes>
   );
 }

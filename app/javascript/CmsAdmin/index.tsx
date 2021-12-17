@@ -78,39 +78,19 @@ export default LoadQueryWrapper(useCmsAdminBaseQuery, function CmsAdmin({ data }
       <br />
 
       <Routes>
-        <Route path="/cms_pages">
-          <CmsPagesAdmin />
-        </Route>
-        <Route path="/cms_partials">
-          <CmsPartialsAdmin />
-        </Route>
-        <Route path="/cms_files">
-          <CmsFilesAdmin />
-        </Route>
+        <Route path="/cms_pages" element={<CmsPagesAdmin />} />
+        <Route path="/cms_partials" element={<CmsPartialsAdmin />} />
+        <Route path="/cms_files" element={<CmsFilesAdmin />} />
         {data?.currentAbility.can_create_cms_navigation_items ? (
-          <Route path="/cms_navigation_items">
-            <NavigationItemsAdmin />
-          </Route>
+          <Route path="/cms_navigation_items" element={<NavigationItemsAdmin />} />
         ) : (
-          <Route path="/cms_navigation_items" element={<Navigate to="/cms_pages" replace />} />
+          <Route path="/cms_navigation_items" element={<Navigate to="/cms_pages" />} />
         )}
-        <Route path="/cms_layouts">
-          <CmsLayoutsAdmin />
-        </Route>
-        <Route path="/cms_variables">
-          <CmsVariablesAdmin />
-        </Route>
-        <Route path="/cms_graphql_queries">
-          <CmsGraphqlQueriesAdmin />
-        </Route>
-        <Route path="/cms_content_groups">
-          <CmsContentGroupsAdmin />
-        </Route>
-        {data && !data.convention && (
-          <Route path="/root_site">
-            <RootSiteAdmin />
-          </Route>
-        )}
+        <Route path="/cms_layouts" element={<CmsLayoutsAdmin />} />
+        <Route path="/cms_variables" element={<CmsVariablesAdmin />} />
+        <Route path="/cms_graphql_queries" element={<CmsGraphqlQueriesAdmin />} />
+        <Route path="/cms_content_groups" element={<CmsContentGroupsAdmin />} />
+        {data && !data.convention && <Route path="/root_site" element={<RootSiteAdmin />} />}
       </Routes>
     </>
   );

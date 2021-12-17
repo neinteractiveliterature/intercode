@@ -63,18 +63,13 @@ function OrganizationAdmin(): JSX.Element {
       </ol>
 
       <Routes>
-        <Route path="/organizations/:id/roles/new">
-          <NewOrganizationRole />
-        </Route>
-        <Route path="/organizations/:organizationId/roles/:organizationRoleId/edit">
-          <EditOrganizationRole />
-        </Route>
-        <Route path="/organizations/:id">
-          <OrganizationDisplay />
-        </Route>
-        <Route path="/organizations">
-          <OrganizationIndex />
-        </Route>
+        <Route path="/organizations/:id/roles/new" element={<NewOrganizationRole />} />
+        <Route
+          path="/organizations/:organizationId/roles/:organizationRoleId/edit"
+          element={<EditOrganizationRole />}
+        />
+        <Route path="/organizations/:id" element={<OrganizationDisplay />} />
+        <Route path="/organizations" element={<OrganizationIndex />} />
       </Routes>
     </>
   );

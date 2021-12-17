@@ -41,12 +41,8 @@ function RootSiteConventionsAdmin(): JSX.Element {
       </ol>
 
       <Routes>
-        <Route path="/conventions/:id">
-          <ConventionDisplay />
-        </Route>
-        <Route path="/conventions">
-          <RootSiteConventionsAdminTable />
-        </Route>
+        <Route path="/conventions/:id" element={<ConventionDisplay />} />
+        <Route path="/conventions" element={<RootSiteConventionsAdminTable />} />
       </Routes>
     </>
   );

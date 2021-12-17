@@ -25,24 +25,12 @@ function UserConProfilesAdmin(): JSX.Element {
 
   return (
     <Routes>
-      <Route path="/user_con_profiles/new">
-        <AttendeesPage />
-      </Route>
-      <Route path="/user_con_profiles/:id/admin_ticket/new">
-        <NewTicket />
-      </Route>
-      <Route path="/user_con_profiles/:id/admin_ticket/edit">
-        <EditTicket />
-      </Route>
-      <Route path="/user_con_profiles/:id/edit">
-        <EditUserConProfile />
-      </Route>
-      <Route path="/user_con_profiles/:id">
-        <UserConProfileAdminDisplay />
-      </Route>
-      <Route>
-        <AttendeesPage />
-      </Route>
+      <Route path="/user_con_profiles/new" element={<AttendeesPage />} />
+      <Route path="/user_con_profiles/:id/admin_ticket/new" element={<NewTicket />} />
+      <Route path="/user_con_profiles/:id/admin_ticket/edit" element={<EditTicket />} />
+      <Route path="/user_con_profiles/:id/edit" element={<EditUserConProfile />} />
+      <Route path="/user_con_profiles/:id" element={<UserConProfileAdminDisplay />} />
+      <Route path="/user_con_profiles" element={<AttendeesPage />} />
     </Routes>
   );
 }

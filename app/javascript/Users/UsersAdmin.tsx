@@ -51,12 +51,8 @@ function UsersAdmin(): JSX.Element {
       </ol>
 
       <Routes>
-        <Route path="/users/:id">
-          <UserAdminDisplay />
-        </Route>
-        <Route path="/users">
-          <UsersTable />
-        </Route>
+        <Route path="/users/:id" element={<UserAdminDisplay />} />
+        <Route path="/users" element={<UsersTable />} />
       </Routes>
     </>
   );
