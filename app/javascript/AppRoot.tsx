@@ -141,18 +141,15 @@ function AppRoot(): JSX.Element {
   return (
     <AppRootContext.Provider value={appRootContextValue}>
       <Routes>
-        <Route path="/admin_forms/:id/edit/section/:sectionId/item/:itemId">
-          <PageComponents.FormEditor />
-        </Route>
-        <Route path="/admin_forms/:id/edit/section/:sectionId">
-          <PageComponents.FormEditor />
-        </Route>
-        <Route path="/admin_forms/:id/edit">
-          <PageComponents.FormEditor />
-        </Route>
-        <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
-          {cachedBodyComponents}
-        </Suspense>
+        <Route path="/admin_forms/:id/edit/*" element={<PageComponents.FormEditor />} />
+        <Route
+          path="*"
+          element={
+            <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
+              {cachedBodyComponents}
+            </Suspense>
+          }
+        />
       </Routes>
     </AppRootContext.Provider>
   );

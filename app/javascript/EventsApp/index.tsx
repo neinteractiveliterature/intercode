@@ -28,12 +28,14 @@ function RunRoutes({ eventId, eventPath }: RunRoutesProps) {
 
   return (
     <Routes>
-      <Route path={`${runPath}/admin_signups`}>
-        <SignupAdmin eventId={eventId} runId={runId} eventPath={eventPath} />
-      </Route>
-      <Route path={`${runPath}/signup_summary`}>
-        <RunSignupSummary eventId={eventId} runId={runId} eventPath={eventPath} />
-      </Route>
+      <Route
+        path={`${runPath}/admin_signups`}
+        element={<SignupAdmin eventId={eventId} runId={runId} eventPath={eventPath} />}
+      />
+      <Route
+        path={`${runPath}/signup_summary`}
+        element={<RunSignupSummary eventId={eventId} runId={runId} eventPath={eventPath} />}
+      />
     </Routes>
   );
 }
@@ -50,25 +52,25 @@ function EventRoutes() {
 
   return (
     <Routes>
-      <Route path={`${eventPath}/edit`}>
-        {siteMode === 'single_event' ? (
-          <Navigate to="/admin_events" />
-        ) : (
-          <StandaloneEditEvent eventId={eventId} eventPath={eventPath} />
-        )}
-      </Route>
-      <Route path={`${eventPath}/team_members`}>
-        <TeamMemberAdmin eventId={eventId} eventPath={eventPath} />
-      </Route>
-      <Route path={`${eventPath}/history`}>
-        <EventHistory eventId={eventId} eventPath={eventPath} />
-      </Route>
-      <Route path={`${eventPath}/runs/:runId`}>
-        <RunRoutes eventId={eventId} eventPath={eventPath} />
-      </Route>
-      <Route path={eventPath}>
-        {siteMode === 'single_event' ? <Navigate to="/" /> : <EventPage eventId={eventId} eventPath={eventPath} />}
-      </Route>
+      <Route
+        path={`${eventPath}/edit`}
+        element={
+          siteMode === 'single_event' ? (
+            <Navigate to="/admin_events" />
+          ) : (
+            <StandaloneEditEvent eventId={eventId} eventPath={eventPath} />
+          )
+        }
+      />
+      <Route path={`${eventPath}/team_members`} element={<TeamMemberAdmin eventId={eventId} eventPath={eventPath} />} />
+      <Route path={`${eventPath}/history`} element={<EventHistory eventId={eventId} eventPath={eventPath} />} />
+      <Route path={`${eventPath}/runs/:runId`} element={<RunRoutes eventId={eventId} eventPath={eventPath} />} />
+      <Route
+        path={eventPath}
+        element={
+          siteMode === 'single_event' ? <Navigate to="/" /> : <EventPage eventId={eventId} eventPath={eventPath} />
+        }
+      />
     </Routes>
   );
 }
@@ -78,29 +80,25 @@ function EventsApp(): JSX.Element {
 
   return (
     <Routes>
-      {siteMode !== 'single_event' && [
-        <Route path="/events/schedule" key="schedule">
-          <ScheduleApp />
-        </Route>,
-        <Route
-          path="/events/schedule_by_room"
-          key="scheduleByRoom"
-          element={<Navigate to="/events/schedule" replace />}
-        />,
-        <Route
-          path="/events/schedule_with_counts"
-          key="scheduleWithCounts"
-          element={<Navigate to="/events/schedule" replace />}
-        />,
+      {[
+        ...(siteMode !== 'single_event'
+          ? [
+              <Route path="/events/schedule" key="schedule" element={<ScheduleApp />} />,
+              <Route
+                path="/events/schedule_by_room"
+                key="scheduleByRoom"
+                element={<Navigate to="/events/schedule" replace />}
+              />,
+              <Route
+                path="/events/schedule_with_counts"
+                key="scheduleWithCounts"
+                element={<Navigate to="/events/schedule" replace />}
+              />,
+            ]
+          : []),
+        <Route key="specificEventRoutes" path={`/events/:eventId(${eventIdRegexp})`} element={<EventRoutes />} />,
+        ...(siteMode !== 'single_event' ? [<Route key="eventList" path="/events" element={<EventList />} />] : []),
       ]}
-      <Route path={`/events/:eventId(${eventIdRegexp})`}>
-        <EventRoutes />
-      </Route>
-      {siteMode !== 'single_event' && (
-        <Route path="/events">
-          <EventList />
-        </Route>
-      )}
     </Routes>
   );
 }

@@ -41,12 +41,14 @@ export default LoadQueryWithVariablesWrapper(
         </nav>
 
         <Routes>
-          <Route path={`${runPath}/admin_signups/:id/edit`}>
-            <EditSignup teamMembersUrl={`${eventPath}/team_members`} />
-          </Route>
-          <Route path={`${runPath}/admin_signups`}>
-            <SignupsIndex runId={runId} eventId={eventId} runPath={runPath} />
-          </Route>
+          <Route
+            path={`${runPath}/admin_signups/:id/edit`}
+            element={<EditSignup teamMembersUrl={`${eventPath}/team_members`} />}
+          />
+          <Route
+            path={`${runPath}/admin_signups`}
+            element={<SignupsIndex runId={runId} eventId={eventId} runPath={runPath} />}
+          />
         </Routes>
       </div>
     );

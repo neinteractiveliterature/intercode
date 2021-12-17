@@ -25,12 +25,8 @@ function FormAdmin(): JSX.Element {
       </nav>
 
       <Routes>
-        <Route path="/admin_forms/:id/edit_advanced">
-          <FormJSONEditor />
-        </Route>
-        <Route path="/admin_forms">
-          <FormAdminIndex />
-        </Route>
+        <Route path="/admin_forms/:id/edit_advanced" element={<FormJSONEditor />} />
+        <Route path="/admin_forms" element={<FormAdminIndex />} />
       </Routes>
     </>
   );

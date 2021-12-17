@@ -33,15 +33,9 @@ function UserActivityAlertsAdmin(): JSX.Element {
       </nav>
 
       <Routes>
-        <Route path="/user_activity_alerts/new">
-          <NewUserActivityAlert />
-        </Route>
-        <Route path="/user_activity_alerts/:id/edit">
-          <EditUserActivityAlert />
-        </Route>
-        <Route path="/user_activity_alerts">
-          <UserActivityAlertsList />
-        </Route>
+        <Route path="/user_activity_alerts/new" element={<NewUserActivityAlert />} />
+        <Route path="/user_activity_alerts/:id/edit" element={<EditUserActivityAlert />} />
+        <Route path="/user_activity_alerts" element={<UserActivityAlertsList />} />
       </Routes>
     </>
   );

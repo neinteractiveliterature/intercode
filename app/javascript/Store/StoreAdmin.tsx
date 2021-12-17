@@ -37,18 +37,10 @@ function StoreAdmin(): JSX.Element {
       </ul>
 
       <Routes>
-        <Route path="/admin_store/products">
-          <ProductAdmin />
-        </Route>
-        <Route path="/admin_store/coupons">
-          <CouponAdminTable />
-        </Route>
-        <Route path="/admin_store/orders">
-          <OrderAdmin />
-        </Route>
-        <Route path="/admin_store/order_summary">
-          <OrderSummary />
-        </Route>
+        <Route path="/admin_store/products" element={<ProductAdmin />} />
+        <Route path="/admin_store/coupons" element={<CouponAdminTable />} />
+        <Route path="/admin_store/orders" element={<OrderAdmin />} />
+        <Route path="/admin_store/order_summary" element={<OrderSummary />} />
         <Route path="/admin_store" element={<Navigate to="/admin_store/products" replace />} />
       </Routes>
     </>

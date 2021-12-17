@@ -70,15 +70,15 @@ function TeamMemberAdmin({ eventId, eventPath }: TeamMemberAdminProps): JSX.Elem
         </ol>
       </nav>
       <Routes>
-        <Route path={`${eventPath}/team_members/new`}>
-          <NewTeamMember event={event} eventPath={eventPath} />
-        </Route>
-        <Route path={`${eventPath}/team_members/:teamMemberId(\\d+)`}>
-          <EditTeamMember event={event} eventPath={eventPath} />
-        </Route>
-        <Route path={`${eventPath}/team_members`}>
-          <TeamMembersIndex eventId={eventId} eventPath={eventPath} />
-        </Route>
+        <Route path={`${eventPath}/team_members/new`} element={<NewTeamMember event={event} eventPath={eventPath} />} />
+        <Route
+          path={`${eventPath}/team_members/:teamMemberId(\\d+)`}
+          element={<EditTeamMember event={event} eventPath={eventPath} />}
+        />
+        <Route
+          path={`${eventPath}/team_members`}
+          element={<TeamMembersIndex eventId={eventId} eventPath={eventPath} />}
+        />
       </Routes>
     </>
   );

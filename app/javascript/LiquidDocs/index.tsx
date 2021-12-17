@@ -45,57 +45,66 @@ function LiquidDocs(): JSX.Element {
     <LiquidDocsContext.Provider value={{ notifierEventKey }}>
       <Routes>
         {sortedAssigns.map((assign) => (
-          <Route path={`/liquid_docs/assigns/${assign.name}(\\..*)?`} key={`route-${assign.name}`}>
-            <AssignDoc assign={assign} />
-          </Route>
+          <Route
+            path={`/liquid_docs/assigns/${assign.name}(\\..*)?`}
+            key={`route-${assign.name}`}
+            element={<AssignDoc assign={assign} />}
+          />
         ))}
         {sortedFilters.map((filter) => (
-          <Route path={`/liquid_docs/filters/${filter.name}(\\..*)?`} key={`route-${filter.name}`}>
-            <FilterDoc filter={filter} />
-          </Route>
+          <Route
+            path={`/liquid_docs/filters/${filter.name}(\\..*)?`}
+            key={`route-${filter.name}`}
+            element={<FilterDoc filter={filter} />}
+          />
         ))}
         {sortedTags.map((liquidTag) => (
-          <Route path={`/liquid_docs/tags/${findLiquidTagName(liquidTag)}(\\..*)?`} key={`route-${liquidTag.name}`}>
-            <LiquidTagDoc liquidTag={liquidTag} />
-          </Route>
+          <Route
+            path={`/liquid_docs/tags/${findLiquidTagName(liquidTag)}(\\..*)?`}
+            key={`route-${liquidTag.name}`}
+            element={<LiquidTagDoc liquidTag={liquidTag} />}
+          />
         ))}
 
-        <Route path="/liquid_docs">
-          <>
-            <nav aria-label="breadcrumb mb-4">
-              <ol className="breadcrumb">
-                <li className="breadcrumb-item active" aria-current="page">
-                  Documentation home
-                </li>
-              </ol>
-            </nav>
+        <Route
+          path="/liquid_docs"
+          element={
+            <>
+              <nav aria-label="breadcrumb mb-4">
+                <ol className="breadcrumb">
+                  <li className="breadcrumb-item active" aria-current="page">
+                    Documentation home
+                  </li>
+                </ol>
+              </nav>
 
-            <section className="mb-4">
-              <h2 className="mb-2">Assigns</h2>
+              <section className="mb-4">
+                <h2 className="mb-2">Assigns</h2>
 
-              {sortedAssigns.map((assign) => (
-                <AssignDocLink compact assign={assign} key={assign.name} />
-              ))}
-            </section>
-
-            <section className="mb-4">
-              <h2 className="mb-2">Filters</h2>
-              <ul className="list-group">
-                {sortedFilters.map((filter) => (
-                  <FilterDocLink filter={filter} key={filter.name} />
+                {sortedAssigns.map((assign) => (
+                  <AssignDocLink compact assign={assign} key={assign.name} />
                 ))}
-              </ul>
-            </section>
+              </section>
 
-            <section>
-              <h2 className="mb-2">Tags</h2>
+              <section className="mb-4">
+                <h2 className="mb-2">Filters</h2>
+                <ul className="list-group">
+                  {sortedFilters.map((filter) => (
+                    <FilterDocLink filter={filter} key={filter.name} />
+                  ))}
+                </ul>
+              </section>
 
-              {sortedTags.map((liquidTag) => (
-                <LiquidTagDocLink liquidTag={liquidTag} key={liquidTag.name} />
-              ))}
-            </section>
-          </>
-        </Route>
+              <section>
+                <h2 className="mb-2">Tags</h2>
+
+                {sortedTags.map((liquidTag) => (
+                  <LiquidTagDocLink liquidTag={liquidTag} key={liquidTag.name} />
+                ))}
+              </section>
+            </>
+          }
+        />
       </Routes>
     </LiquidDocsContext.Provider>
   );

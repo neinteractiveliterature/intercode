@@ -116,12 +116,8 @@ function FormEditor(): JSX.Element {
         }}
       >
         <Routes>
-          <Route path="/admin_forms/:id/edit/section/:sectionId/item/:itemId">
-            <FormItemEditorLayout />
-          </Route>
-          <Route path="/admin_forms/:id/edit/section/:sectionId">
-            <FormSectionEditorLayout />
-          </Route>
+          <Route path="/admin_forms/:id/edit/section/:sectionId/item/:itemId" element={<FormItemEditorLayout />} />
+          <Route path="/admin_forms/:id/edit/section/:sectionId" element={<FormSectionEditorLayout />} />
         </Routes>
       </FormEditorContext.Provider>
     </div>
