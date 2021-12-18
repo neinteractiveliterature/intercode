@@ -17,6 +17,7 @@ import useValueUnless from '../../useValueUnless';
 import SignupChangesTableExportButton from '../../Tables/SignupChangesTableExportButton';
 import { RunSignupChangesQueryData, useRunSignupChangesQuery } from './queries.generated';
 import ReactTableWithTheWorks from '../../Tables/ReactTableWithTheWorks';
+import { useParams } from 'react-router';
 
 const FILTER_CODECS = buildFieldFilterCodecs({
   action: FilterCodecs.stringArray,
@@ -56,14 +57,11 @@ const getPossibleColumns: (t: TFunction) => Column<SignupChangeType>[] = (t) => 
   },
 ];
 
-export type RunSignupChangesTableProps = {
-  runId: string;
-};
-
 const defaultVisibleColumns = ['name', 'action', 'bucket_change', 'created_at'];
 
-function RunSignupChangesTable({ runId }: RunSignupChangesTableProps): JSX.Element {
+function RunSignupChangesTable(): JSX.Element {
   const { t } = useTranslation();
+  const { runId } = useParams();
   const getPossibleColumnsFunc = useMemo(() => () => getPossibleColumns(t), [t]);
   const { tableInstance, loading, queryData, tableHeaderProps, columnSelectionProps } = useReactTableWithTheWorks({
     decodeFilterValue: FILTER_CODECS.decodeFilterValue,
@@ -74,7 +72,7 @@ function RunSignupChangesTable({ runId }: RunSignupChangesTableProps): JSX.Eleme
     getPossibleColumns: getPossibleColumnsFunc,
     useQuery: useRunSignupChangesQuery,
     storageKeyPrefix: 'signupSpy',
-    variables: { runId },
+    variables: { runId: runId ?? '' },
   });
 
   usePageTitle(

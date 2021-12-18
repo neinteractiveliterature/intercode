@@ -13,10 +13,10 @@ function MyProfile(): JSX.Element {
 
   return (
     <Routes>
-      <Route path="/my_profile/edit_bio" element={<Navigate to="/my_profile/edit" replace />} />
-      <Route path="/my_profile/edit" element={<MyProfileForm />} />
-      <Route path="/my_profile/setup" element={<MyProfileForm initialSetup />} />
-      <Route path="/my_profile" element={<MyProfileDisplay />} />
+      <Route path="edit_bio" element={<Navigate to="./edit" replace />} />
+      <Route path="edit" element={<MyProfileForm />} />
+      <Route path="setup" element={<MyProfileForm initialSetup />} />
+      <Route path="" element={<MyProfileDisplay />} />
     </Routes>
   );
 }

@@ -1,10 +1,10 @@
 import { useContext, useMemo } from 'react';
 import { Column, FilterProps, CellProps } from 'react-table';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
 import { DateTime } from 'luxon';
-import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
+import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import { ageAsOf } from '../../TimeUtils';
 import ChoiceSetFilter from '../../Tables/ChoiceSetFilter';
@@ -17,14 +17,16 @@ import TableHeader from '../../Tables/TableHeader';
 import ReactTableWithTheWorks from '../../Tables/ReactTableWithTheWorks';
 import useReactTableWithTheWorks, { QueryDataContext } from '../../Tables/useReactTableWithTheWorks';
 import usePageTitle from '../../usePageTitle';
-import useValueUnless from '../../useValueUnless';
 import UserConProfileWithGravatarCell from '../../Tables/UserConProfileWithGravatarCell';
 import {
   RunSignupsTableSignupsQueryData,
   RunSignupsTableSignupsQueryVariables,
+  SignupAdminEventQueryData,
+  SignupAdminEventQueryVariables,
   useRunSignupsTableSignupsQuery,
-  useSignupAdminEventQuery,
 } from './queries.generated';
+import { useSignupAdminEventQueryFromParams } from './useSignupAdminEventQueryFromParams';
+import buildEventUrl from '../buildEventUrl';
 
 const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({
   state: FilterCodecs.stringArray,
@@ -158,68 +160,56 @@ function getPossibleColumns(t: TFunction): Column<SignupType>[] {
 
 export type RunSignupsTableProps = {
   defaultVisibleColumns: string[];
-  eventId: string;
-  runId: string;
-  runPath: string;
 };
 
-function RunSignupsTable({ defaultVisibleColumns, eventId, runId, runPath }: RunSignupsTableProps): JSX.Element {
-  const { t } = useTranslation();
-  const navigate = useNavigate();
-  const { data, loading, error } = useSignupAdminEventQuery({ variables: { eventId } });
-  const getPossibleColumnsFunc = useMemo(() => () => getPossibleColumns(t), [t]);
+export default LoadQueryWrapper<SignupAdminEventQueryData, SignupAdminEventQueryVariables, RunSignupsTableProps>(
+  useSignupAdminEventQueryFromParams,
+  function RunSignupsTable({ data, defaultVisibleColumns }): JSX.Element {
+    const { runId } = useParams();
+    const { t } = useTranslation();
+    const navigate = useNavigate();
+    const getPossibleColumnsFunc = useMemo(() => () => getPossibleColumns(t), [t]);
 
-  const {
-    tableInstance,
-    loading: tableLoading,
-    tableHeaderProps,
-    queryData,
-  } = useReactTableWithTheWorks<
-    RunSignupsTableSignupsQueryData,
-    RunSignupsTableSignupsQueryData['convention']['event']['run']['signups_paginated']['entries'][number],
-    RunSignupsTableSignupsQueryVariables
-  >({
-    decodeFilterValue,
-    defaultVisibleColumns,
-    encodeFilterValue,
-    getData: ({ data: tableData }) => tableData.convention.event.run.signups_paginated.entries,
-    getPages: ({ data: tableData }) => tableData.convention.event.run.signups_paginated.total_pages,
-    getPossibleColumns: getPossibleColumnsFunc,
-    useQuery: useRunSignupsTableSignupsQuery,
-    storageKeyPrefix: 'adminSignups',
-    variables: { eventId, runId },
-  });
+    const {
+      tableInstance,
+      loading: tableLoading,
+      tableHeaderProps,
+      queryData,
+    } = useReactTableWithTheWorks<
+      RunSignupsTableSignupsQueryData,
+      RunSignupsTableSignupsQueryData['convention']['event']['run']['signups_paginated']['entries'][number],
+      RunSignupsTableSignupsQueryVariables
+    >({
+      decodeFilterValue,
+      defaultVisibleColumns,
+      encodeFilterValue,
+      getData: ({ data: tableData }) => tableData.convention.event.run.signups_paginated.entries,
+      getPages: ({ data: tableData }) => tableData.convention.event.run.signups_paginated.total_pages,
+      getPossibleColumns: getPossibleColumnsFunc,
+      useQuery: useRunSignupsTableSignupsQuery,
+      storageKeyPrefix: 'adminSignups',
+      variables: { eventId: data.convention.event.id, runId: runId ?? '' },
+    });
 
-  usePageTitle(
-    useValueUnless(
-      () =>
-        t('events.signupAdmin.indexPageTitle', 'Signups - {{ eventTitle }}', {
-          eventTitle: data?.convention.event.title,
-        }),
-      error || loading,
-    ),
-  );
+    usePageTitle(
+      t('events.signupAdmin.indexPageTitle', 'Signups - {{ eventTitle }}', {
+        eventTitle: data?.convention.event.title,
+      }),
+    );
 
-  if (loading) {
-    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
-  return (
-    <QueryDataContext.Provider value={queryData ?? {}}>
-      <div className="mb-4">
-        <TableHeader {...tableHeaderProps} exportUrl={`/csv_exports/run_signups?run_id=${runId}`} />
-        <ReactTableWithTheWorks
-          tableInstance={tableInstance}
-          loading={tableLoading}
-          onClickRow={(row) => navigate(`${runPath}/admin_signups/${row.original.id}/edit`)}
-        />
-      </div>
-    </QueryDataContext.Provider>
-  );
-}
-
-export default RunSignupsTable;
+    return (
+      <QueryDataContext.Provider value={queryData ?? {}}>
+        <div className="mb-4">
+          <TableHeader {...tableHeaderProps} exportUrl={`/csv_exports/run_signups?run_id=${runId}`} />
+          <ReactTableWithTheWorks
+            tableInstance={tableInstance}
+            loading={tableLoading}
+            onClickRow={(row) =>
+              navigate(`${buildEventUrl(data.convention.event)}/runs/${runId}/admin_signups/${row.original.id}/edit`)
+            }
+          />
+        </div>
+      </QueryDataContext.Provider>
+    );
+  },
+);

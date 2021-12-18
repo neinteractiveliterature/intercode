@@ -1,8 +1,6 @@
-import { Routes, Route, useParams } from 'react-router-dom';
+import { useParams, useMatch, Outlet } from 'react-router-dom';
 import { LoadingIndicator } from '@neinteractiveliterature/litform';
 
-import UsersTable from './UsersTable';
-import UserAdminDisplay from './UserAdminDisplay';
 import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
@@ -36,6 +34,7 @@ function UserBreadcrumbItem() {
 
 function UsersAdmin(): JSX.Element {
   const authorizationWarning = useAuthorizationRequired('can_read_users');
+  const userMatch = useMatch('/users/:id');
   if (authorizationWarning) return authorizationWarning;
 
   return (
@@ -45,15 +44,10 @@ function UsersAdmin(): JSX.Element {
           Users
         </RouteActivatedBreadcrumbItem>
 
-        <Route path="/users/:id">
-          <UserBreadcrumbItem />
-        </Route>
+        {userMatch && <UserBreadcrumbItem />}
       </ol>
 
-      <Routes>
-        <Route path="/users/:id" element={<UserAdminDisplay />} />
-        <Route path="/users" element={<UsersTable />} />
-      </Routes>
+      <Outlet />
     </>
   );
 }

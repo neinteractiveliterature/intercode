@@ -8,10 +8,10 @@ import ViewCmsPartialSource from './ViewCmsPartialSource';
 function CmsPartialsAdmin(): JSX.Element {
   return (
     <Routes>
-      <Route path="/cms_partials/:id/edit" element={<EditCmsPartial />} />
-      <Route path="/cms_partials/:id/view_source" element={<ViewCmsPartialSource />} />
-      <Route path="/cms_partials/new" element={<NewCmsPartial />} />
-      <Route path="/cms_partials" element={<CmsPartialsAdminTable />} />
+      <Route path=":id/edit" element={<EditCmsPartial />} />
+      <Route path=":id/view_source" element={<ViewCmsPartialSource />} />
+      <Route path="new" element={<NewCmsPartial />} />
+      <Route path="" element={<CmsPartialsAdminTable />} />
     </Routes>
   );
 }

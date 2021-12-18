@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { ApolloError } from '@apollo/client';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ErrorDisplay } from '@neinteractiveliterature/litform';
+import { ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform';
 import capitalize from 'lodash/capitalize';
 
 import buildTeamMemberInput from './buildTeamMemberInput';
@@ -12,13 +12,11 @@ import usePageTitle from '../../usePageTitle';
 import { TeamMembersQueryData } from './queries.generated';
 import { useUpdateTeamMemberMutation } from './mutations.generated';
 import FourOhFourPage from '../../FourOhFourPage';
+import useTeamMembersQueryFromParams from './useTeamMembersQueryFromParams';
+import buildEventUrl from '../buildEventUrl';
 
-export type EditTeamMemberProps = {
-  event: TeamMembersQueryData['convention']['event'];
-  eventPath: string;
-};
-
-function EditTeamMember({ event, eventPath }: EditTeamMemberProps): JSX.Element {
+export default LoadQueryWrapper(useTeamMembersQueryFromParams, function EditTeamMember({ data }): JSX.Element {
+  const event = data.convention.event;
   const { t } = useTranslation();
   const { teamMemberId } = useParams<{ teamMemberId: string }>();
   const navigate = useNavigate();
@@ -48,7 +46,7 @@ function EditTeamMember({ event, eventPath }: EditTeamMemberProps): JSX.Element 
       },
     });
 
-    navigate(`${eventPath}/team_members`, { replace: true });
+    navigate(`${buildEventUrl(event)}/team_members`, { replace: true });
   };
 
   if (!teamMember) {
@@ -98,6 +96,4 @@ function EditTeamMember({ event, eventPath }: EditTeamMemberProps): JSX.Element 
       </ul>
     </>
   );
-}
-
-export default EditTeamMember;
+});

@@ -9,17 +9,17 @@ import { CommonFormFieldsFragment } from '../../Models/commonFormFragments.gener
 import { useAppDateTimeFormat } from '../../TimeUtils';
 
 export type FormResponseChangeHistoryProps = {
-  basePath: string;
   changes: ParseableFormResponseChange[];
   convention: ConventionForFormItemChangeDisplay;
   form: CommonFormFieldsFragment;
+  basePath: string;
 };
 
 function FormResponseChangeHistory({
-  basePath,
   changes,
   convention,
   form,
+  basePath,
 }: FormResponseChangeHistoryProps): JSX.Element {
   const { t } = useTranslation();
   const changeGroups = useMemo(() => buildChangeGroups(changes, form), [changes, form]);
@@ -58,11 +58,11 @@ function FormResponseChangeHistory({
           {changeGroups.map((changeGroup) => (
             <Route
               key={changeGroup.id}
-              path={`${basePath}/${changeGroup.id}`}
+              path={changeGroup.id}
               element={<FormItemChangeGroup convention={convention} changeGroup={changeGroup} />}
             />
           ))}
-          <Route path={basePath} element={<Navigate to={`${basePath}/${changeGroups[0].id}`} replace />} />
+          <Route path="" element={<Navigate to={`${basePath}/${changeGroups[0].id}`} replace />} />
         </Routes>
       </div>
     </div>

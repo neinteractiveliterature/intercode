@@ -35,7 +35,7 @@ export default LoadQueryWrapper(useTicketPurchaseFormQuery, function TicketPurch
   }
 
   if (data.convention.my_profile?.ticket) {
-    return <Navigate to="/" />;
+    return <Navigate to="/ticket" replace />;
   }
 
   const renderProductSelect = () => (

@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useApolloClient } from '@apollo/client';
 import {
   ErrorDisplay,
@@ -30,6 +30,7 @@ import {
 import FourOhFourPage from '../../FourOhFourPage';
 import useLoginRequired from '../../Authentication/useLoginRequired';
 import { AuthorizationError } from '../../Authentication/useAuthorizationRequired';
+import buildEventUrl from '../buildEventUrl';
 
 export type StandaloneEditEventFormProps = {
   initialEvent: WithFormResponse<StandaloneEditEventQueryData['convention']['event']>;
@@ -116,14 +117,10 @@ function StandaloneEditEventForm({
   );
 }
 
-export type StandaloneEditEventProps = {
-  eventId: string;
-  eventPath: string;
-};
-
-function StandaloneEditEvent({ eventId, eventPath }: StandaloneEditEventProps): JSX.Element {
+function StandaloneEditEvent(): JSX.Element {
+  const eventId = useParams<{ eventId: string }>().eventId;
   const loginRequired = useLoginRequired();
-  const { data, loading, error } = useStandaloneEditEventQuery({ variables: { eventId } });
+  const { data, loading, error } = useStandaloneEditEventQuery({ variables: { eventId: eventId ?? '' } });
 
   const initialEvent = useMemo(
     () => (error || loading || !data ? null : deserializeFormResponse(data.convention.event)),
@@ -157,7 +154,7 @@ function StandaloneEditEvent({ eventId, eventPath }: StandaloneEditEventProps): 
       initialEvent={initialEvent}
       eventForm={data.convention.event.event_category.event_form}
       convention={data.convention}
-      eventPath={eventPath}
+      eventPath={buildEventUrl(data.convention.event)}
       currentAbility={data.currentAbility}
     />
   );

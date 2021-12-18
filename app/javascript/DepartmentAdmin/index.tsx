@@ -12,9 +12,9 @@ function DepartmentAdmin(): JSX.Element {
 
   return (
     <Routes>
-      <Route path="/admin_departments/:id/edit" element={<EditDepartment />} />
-      <Route path="/admin_departments/new" element={<NewDepartment />} />
-      <Route path="/admin_departments" element={<DepartmentAdminIndex />} />
+      <Route path=":id/edit" element={<EditDepartment />} />
+      <Route path="new" element={<NewDepartment />} />
+      <Route path="" element={<DepartmentAdminIndex />} />
     </Routes>
   );
 }

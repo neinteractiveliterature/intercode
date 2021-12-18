@@ -141,7 +141,10 @@ function AppRoot(): JSX.Element {
   return (
     <AppRootContext.Provider value={appRootContextValue}>
       <Routes>
-        <Route path="/admin_forms/:id/edit/*" element={<PageComponents.FormEditor />} />
+        <Route path="/admin_forms/:id/edit/*" element={<PageComponents.FormEditor />}>
+          <Route path="section/:sectionId/item/:itemId" element={<PageComponents.FormItemEditorLayout />} />
+          <Route path="section/:sectionId" element={<PageComponents.FormSectionEditorLayout />} />
+        </Route>
         <Route
           path="*"
           element={

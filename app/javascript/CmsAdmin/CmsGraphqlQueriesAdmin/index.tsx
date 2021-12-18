@@ -8,10 +8,10 @@ import ViewCmsGraphqlQuerySource from './ViewCmsGraphqlQuerySource';
 function CmsGraphqlQueriesAdmin(): JSX.Element {
   return (
     <Routes>
-      <Route path="/cms_graphql_queries/:id/edit" element={<EditCmsGraphqlQuery />} />
-      <Route path="/cms_graphql_queries/:id/view_source" element={<ViewCmsGraphqlQuerySource />} />
-      <Route path="/cms_graphql_queries/new" element={<NewCmsGraphqlQuery />} />
-      <Route path="/cms_graphql_queries" element={<CmsGraphqlQueriesAdminTable />} />
+      <Route path=":id/edit" element={<EditCmsGraphqlQuery />} />
+      <Route path=":id/view_source" element={<ViewCmsGraphqlQuerySource />} />
+      <Route path="new" element={<NewCmsGraphqlQuery />} />
+      <Route path="" element={<CmsGraphqlQueriesAdminTable />} />
     </Routes>
   );
 }

@@ -8,10 +8,20 @@ export type RouteActivatedBreadcrumbItemProps = {
   to: string;
   pattern: string | PathPattern;
   children: ReactNode;
+  hideUnlessMatch?: boolean;
 };
 
-function RouteActivatedBreadcrumbItem({ to, children, pattern }: RouteActivatedBreadcrumbItemProps): JSX.Element {
+function RouteActivatedBreadcrumbItem({
+  to,
+  children,
+  pattern,
+  hideUnlessMatch,
+}: RouteActivatedBreadcrumbItemProps): JSX.Element {
   const match = useMatch(pattern);
+
+  if (hideUnlessMatch && !match) {
+    return <></>;
+  }
 
   return (
     <BreadcrumbItem to={to} active={!!match}>
