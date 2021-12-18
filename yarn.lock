@@ -5341,7 +5341,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:*, @types/react-dom@npm:17.0.11, @types/react-dom@npm:>=16.9.0":
+"@types/react-dom@npm:17.0.11, @types/react-dom@npm:>=16.9.0":
   version: 17.0.11
   resolution: "@types/react-dom@npm:17.0.11"
   dependencies:
@@ -5368,15 +5368,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-select@npm:4.0.18":
-  version: 4.0.18
-  resolution: "@types/react-select@npm:4.0.18"
+"@types/react-select@npm:5.0.0":
+  version: 5.0.0
+  resolution: "@types/react-select@npm:5.0.0"
   dependencies:
-    "@emotion/serialize": ^1.0.0
-    "@types/react": "*"
-    "@types/react-dom": "*"
-    "@types/react-transition-group": "*"
-  checksum: c247c7fe45cc1d1db1fb0e5a569e288037081ed05d17f377376de82a58a5d334bb7282922ee5eaf3c30957437b028097235be81cb0bed905b3b73f9a5b8c7b58
+    react-select: "*"
+  checksum: ed4fac9d000f8c92257f28741c55105248f68247dfdff853406ef5c30e2cc293716835b47caac7317e56525b1138a1733dba808af5764c37aa0d135ea0770ffc
   languageName: node
   linkType: hard
 
@@ -5398,7 +5395,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-transition-group@npm:*, @types/react-transition-group@npm:4.4.4":
+"@types/react-transition-group@npm:4.4.4, @types/react-transition-group@npm:^4.4.0":
   version: 4.4.4
   resolution: "@types/react-transition-group@npm:4.4.4"
   dependencies:
@@ -18183,7 +18180,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:15.7.2, prop-types@npm:^15.0.0, prop-types@npm:^15.5.0, prop-types@npm:^15.5.10, prop-types@npm:^15.5.8, prop-types@npm:^15.6.0, prop-types@npm:^15.6.2, prop-types@npm:^15.7.2":
+"prop-types@npm:15.7.2, prop-types@npm:^15.0.0, prop-types@npm:^15.5.0, prop-types@npm:^15.5.10, prop-types@npm:^15.6.0, prop-types@npm:^15.6.2, prop-types@npm:^15.7.2":
   version: 15.7.2
   resolution: "prop-types@npm:15.7.2"
   dependencies:
@@ -18633,17 +18630,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-input-autosize@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "react-input-autosize@npm:3.0.0"
-  dependencies:
-    prop-types: ^15.5.8
-  peerDependencies:
-    react: ^16.3.0 || ^17.0.0
-  checksum: cc3309ddc87446ade742c7d0e88ef089dd8b6981f21506a2bb27daf01a8803ac697f64157c4ffc7e81dfcf3892b54a4072dbc3652fd9addcf6d22dd0b87ab723
-  languageName: node
-  linkType: hard
-
 "react-is@npm:^16.12.0 || ^17.0.0, react-is@npm:^17.0.1, react-is@npm:^17.0.2":
   version: 17.0.2
   resolution: "react-is@npm:17.0.2"
@@ -18788,21 +18774,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-select@npm:4.3.1":
-  version: 4.3.1
-  resolution: "react-select@npm:4.3.1"
+"react-select@npm:*, react-select@npm:5.2.1":
+  version: 5.2.1
+  resolution: "react-select@npm:5.2.1"
   dependencies:
     "@babel/runtime": ^7.12.0
     "@emotion/cache": ^11.4.0
     "@emotion/react": ^11.1.1
+    "@types/react-transition-group": ^4.4.0
     memoize-one: ^5.0.0
     prop-types: ^15.6.0
-    react-input-autosize: ^3.0.0
     react-transition-group: ^4.3.0
   peerDependencies:
     react: ^16.8.0 || ^17.0.0
     react-dom: ^16.8.0 || ^17.0.0
-  checksum: e87e0b42a662ddce7957a69a3029ea769b22264c197cbd1d8bde1ce631e49c5c5f42414773364674a7a6a8431340e1ede49220583bf1dcd966b63e9bd25cfc12
+  checksum: 014cde5d23ca466795bd7f02455769efda74522c41f11109ec2d6f0e3c77f401ea91ae23cdccce997efb653aa6ea88688a16f40e59bfdef2a2414d0cfd10f374
   languageName: node
   linkType: hard
 
@@ -19715,7 +19701,7 @@ resolve@^2.0.0-next.3:
     "@types/react-dom": 17.0.11
     "@types/react-google-recaptcha": 2.1.2
     "@types/react-onclickoutside": 6.7.4
-    "@types/react-select": 4.0.18
+    "@types/react-select": 5.0.0
     "@types/react-table": 7.7.9
     "@types/react-transition-group": 4.4.4
     "@types/source-map-support": 0.5.4
@@ -19823,7 +19809,7 @@ resolve@^2.0.0-next.3:
     react-popper: 2.2.5
     react-router: 6.2.1
     react-router-dom: 6.2.1
-    react-select: 4.3.1
+    react-select: 5.2.1
     react-table: 7.7.0
     react-test-renderer: 17.0.2
     react-transition-group: 4.4.2
