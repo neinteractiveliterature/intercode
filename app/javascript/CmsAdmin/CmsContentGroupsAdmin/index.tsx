@@ -8,10 +8,10 @@ import ViewCmsContentGroup from './ViewCmsContentGroup';
 function CmsContentGroupsAdmin(): JSX.Element {
   return (
     <Routes>
-      <Route path="/cms_content_groups/:id/edit" element={<EditCmsContentGroup />} />
-      <Route path="/cms_content_groups/new" element={<NewCmsContentGroup />} />
-      <Route path="/cms_content_groups/:id" element={<ViewCmsContentGroup />} />
-      <Route path="/cms_content_groups" element={<CmsContentGroupsAdminTable />} />
+      <Route path=":id/edit" element={<EditCmsContentGroup />} />
+      <Route path="new" element={<NewCmsContentGroup />} />
+      <Route path=":id" element={<ViewCmsContentGroup />} />
+      <Route path="" element={<CmsContentGroupsAdminTable />} />
     </Routes>
   );
 }

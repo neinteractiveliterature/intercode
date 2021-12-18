@@ -20,7 +20,7 @@ export default LoadQueryWrapper(useMyTicketDisplayQuery, function MyTicketDispla
   const paymentAmount = ticket?.order_entry?.price_per_item;
 
   if (!ticket) {
-    return <Navigate to="/new" />;
+    return <Navigate to="/ticket/new" replace />;
   }
 
   return (

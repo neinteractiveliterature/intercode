@@ -14,13 +14,13 @@ export default LoadQueryWrapper(useAdminTicketTypesQuery, function TicketTypeAdm
   return (
     <Routes>
       <Route
-        path="/ticket_types/new"
+        path="new"
         element={
           <NewTicketType ticketName={data.convention.ticket_name} ticketNamePlural={data.convention.ticketNamePlural} />
         }
       />
-      <Route path="/ticket_types/:id/edit" element={<EditTicketType />} />
-      <Route path="/ticket_types" element={<TicketTypesList />} />
+      <Route path=":id/edit" element={<EditTicketType />} />
+      <Route path="" element={<TicketTypesList />} />
     </Routes>
   );
 });

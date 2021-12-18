@@ -9,13 +9,11 @@ import EventAdminRunsTable from './EventAdminRunsTable';
 import NewEvent from './NewEvent';
 import RecurringEventAdmin from './RecurringEventAdmin';
 import sortEventCategories from './sortEventCategories';
-import buildEventCategoryUrl from './buildEventCategoryUrl';
+import buildEventCategoryUrl, { buildEventCategoryUrlPortion } from './buildEventCategoryUrl';
 import SingleRunEventAdminList from './SingleRunEventAdminList';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import { useEventAdminEventsQuery } from './queries.generated';
 import humanize from '../humanize';
-
-const eventCategoryIdRegexp = '[0-9a-z\\-]+';
 
 const adminComponentsBySchedulingUi = {
   regular: EventAdminRunsTable,
@@ -48,19 +46,16 @@ export default LoadQueryWrapper(useEventAdminEventsQuery, function EventAdmin({ 
     if (data.convention.events.length === 0) {
       return (
         <Routes>
-          <Route path="/admin_events/new" element={<NewEvent />} />
-          <Route path="*" element={<Navigate to="/admin_events/new" replace />} />
+          <Route path="new" element={<NewEvent />} />
+          <Route path="" element={<Navigate to="./new" replace />} />
         </Routes>
       );
     }
 
     return (
       <Routes>
-        <Route path="/admin_events/:id/edit" element={<EventAdminEditEvent />} />
-        <Route
-          path="/admin_events"
-          element={<Navigate to={`/admin_events/${data.convention.events[0].id}/edit`} replace />}
-        />
+        <Route path=":id/edit" element={<EventAdminEditEvent />} />
+        <Route path="" element={<Navigate to={`./${data.convention.events[0].id}/edit`} replace />} />
       </Routes>
     );
   }
@@ -104,22 +99,22 @@ export default LoadQueryWrapper(useEventAdminEventsQuery, function EventAdmin({ 
       </ul>
 
       <Routes>
-        <Route path={`/admin_events/:eventCategoryId(${eventCategoryIdRegexp})/new`} element={<NewEvent />} />
+        <Route path={`:eventCategoryId/new`} element={<NewEvent />} />
         {eventCategories.map((eventCategory) => {
           const AdminComponent = adminComponentsBySchedulingUi[eventCategory.scheduling_ui];
 
           return (
             <Route
               key={eventCategory.id}
-              path={buildEventCategoryUrl(eventCategory)}
+              path={`${buildEventCategoryUrlPortion(eventCategory)}/*`}
               element={<AdminComponent eventCategoryId={eventCategory.id} />}
             />
           );
         })}
-        <Route path="/admin_events/:id/edit" element={<EventAdminEditEvent />} />
-        <Route path="/admin_events/dropped_events" element={<DroppedEventAdmin />} />
+        <Route path=":id/edit" element={<EventAdminEditEvent />} />
+        <Route path="dropped_events" element={<DroppedEventAdmin />} />
         {eventCategories.length > 0 && (
-          <Route path="/admin_events" element={<Navigate to={buildEventCategoryUrl(eventCategories[0])} replace />} />
+          <Route path="" element={<Navigate to={buildEventCategoryUrl(eventCategories[0])} replace />} />
         )}
       </Routes>
     </>

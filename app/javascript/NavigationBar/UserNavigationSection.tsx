@@ -25,10 +25,7 @@ function CurrentPendingOrderButton() {
     return null;
   }
 
-  const totalQuantity = currentPendingOrder.order_entries.reduce(
-    (total, entry) => total + entry.quantity,
-    0,
-  );
+  const totalQuantity = currentPendingOrder.order_entries.reduce((total, entry) => total + entry.quantity, 0);
   if (totalQuantity < 1) {
     return null;
   }
@@ -41,14 +38,8 @@ function CurrentPendingOrderButton() {
         popperOptions={{ placement: 'bottom-end' }}
         buttonContent={
           <>
-            <i
-              className="bi-cart-fill"
-              title={t('navigation.myShoppingCart.buttonText', 'My shopping cart')}
-            />
-            <div
-              className="badge rounded-pill bg-danger"
-              style={{ position: 'absolute', right: '-7px', top: '0' }}
-            >
+            <i className="bi-cart-fill" title={t('navigation.myShoppingCart.buttonText', 'My shopping cart')} />
+            <div className="badge rounded-pill bg-danger" style={{ position: 'absolute', right: '-7px', top: '0' }}>
               {totalQuantity}
             </div>
           </>
@@ -87,14 +78,8 @@ const LoggedInDropdownTarget = forwardRef<HTMLButtonElement, LoggedInDropdownTar
 
     if (assumedIdentityFromProfile) {
       return (
-        <button
-          className="btn btn-warning dropdown-toggle"
-          onClick={toggle}
-          ref={ref}
-          type="button"
-        >
-          <i className="bi-person-bounding-box" />
-
+        <button className="btn btn-warning dropdown-toggle" onClick={toggle} ref={ref} type="button">
+          <i className="bi-person-bounding-box" />{' '}
           <span className="d-inline d-md-none d-lg-inline">{myProfile?.name_without_nickname}</span>
           <span className="d-none d-md-inline d-lg-none">
             {(myProfile?.first_name ?? '')[0]}
@@ -179,11 +164,7 @@ function UserNavigationSection(): JSX.Element {
       <li className="nav-item">
         <div className="btn-group" role="group">
           <div className="btn-group" role="group">
-            <LoggedInDropdownTarget
-              ref={setReferenceElement}
-              toggle={toggle}
-              visible={dropdownOpen}
-            />
+            <LoggedInDropdownTarget ref={setReferenceElement} toggle={toggle} visible={dropdownOpen} />
             <div
               className={classNames('dropdown-menu m-0', { show: dropdownOpen })}
               ref={setDropdownMenu}

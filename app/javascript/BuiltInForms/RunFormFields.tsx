@@ -64,11 +64,11 @@ function RunFormFields<RunType extends RunForRunFormFields>({
       : undefined,
   );
   const [hour, setHour] = useState<number | undefined>(() =>
-    startsAt && day ? startsAt.diff(day.startOf('day'), 'hours').hours : undefined,
+    startsAt && day ? Math.floor(startsAt.diff(day.startOf('day'), 'hours').hours) : undefined,
   );
   const [minute, setMinute] = useState<number | undefined>(() =>
     startsAt && hour != null && day != null
-      ? startsAt.diff(day.startOf('day').plus({ hours: hour }), 'minutes').minutes
+      ? Math.floor(startsAt.diff(day.startOf('day').plus({ hours: hour }), 'minutes').minutes)
       : undefined,
   );
   const startTime = useMemo(() => {

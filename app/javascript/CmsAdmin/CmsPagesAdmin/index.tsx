@@ -8,10 +8,10 @@ import ViewCmsPageSource from './ViewCmsPageSource';
 function CmsPagesAdmin(): JSX.Element {
   return (
     <Routes>
-      <Route path="/cms_pages/:id/edit" element={<EditCmsPage />} />
-      <Route path="/cms_pages/:id/view_source" element={<ViewCmsPageSource />} />
-      <Route path="/cms_pages/new" element={<NewCmsPage />} />
-      <Route path="/cms_pages" element={<CmsPagesAdminTable />} />
+      <Route path=":id/edit" element={<EditCmsPage />} />
+      <Route path=":id/view_source" element={<ViewCmsPageSource />} />
+      <Route path="new" element={<NewCmsPage />} />
+      <Route path="" element={<CmsPagesAdminTable />} />
     </Routes>
   );
 }

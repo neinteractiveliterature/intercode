@@ -48,13 +48,13 @@ const MailingListsMenuWrapper = LoadQueryWrapper(useMailingListsMenuQuery, funct
 function MailingLists(): JSX.Element {
   return (
     <Routes>
-      <Route path="/mailing_lists/ticketed_attendees" element={<TicketedAttendees />} />
-      <Route path="/mailing_lists/event_proposers" element={<EventProposers />} />
-      <Route path="/mailing_lists/team_members" element={<TeamMembers />} />
-      <Route path="/mailing_lists/users_with_pending_bio" element={<UsersWithPendingBio />} />
-      <Route path="/mailing_lists/waitlists" element={<WaitlistMailingLists />} />
-      <Route path="/mailing_lists/whos_free" element={<WhosFree />} />
-      <Route path="/mailing_lists/" element={<MailingListsMenuWrapper />} />
+      <Route path="ticketed_attendees" element={<TicketedAttendees />} />
+      <Route path="event_proposers" element={<EventProposers />} />
+      <Route path="team_members" element={<TeamMembers />} />
+      <Route path="users_with_pending_bio" element={<UsersWithPendingBio />} />
+      <Route path="waitlists" element={<WaitlistMailingLists />} />
+      <Route path="whos_free" element={<WhosFree />} />
+      <Route path="" element={<MailingListsMenuWrapper />} />
     </Routes>
   );
 }

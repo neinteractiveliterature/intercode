@@ -1,11 +1,16 @@
-import { Route, Routes, useLocation } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import { Route, Routes, useLocation, useParams } from 'react-router-dom';
+import { Trans, useTranslation } from 'react-i18next';
 
 import BreadcrumbItem from '../../Breadcrumbs/BreadcrumbItem';
 import EditSignup from './EditSignup';
 import SignupsIndex from './SignupsIndex';
-import { useSignupAdminEventQuery } from './queries.generated';
-import { LoadQueryWithVariablesWrapper } from '../../GraphqlLoadingWrappers';
+import { LoadQueryWrapper } from '@neinteractiveliterature/litform/dist';
+import buildEventUrl from '../buildEventUrl';
+import LeafBreadcrumbItem from '../../Breadcrumbs/LeafBreadcrumbItem';
+import { useSignupAdminEventQueryFromParams } from './useSignupAdminEventQueryFromParams';
+import RunEmailList from './RunEmailList';
+import RunSignupChangesTable from './RunSignupChangesTable';
+import RunSignupsTable from './RunSignupsTable';
 
 export type SignupAdminProps = {
   runId: string;
@@ -13,44 +18,59 @@ export type SignupAdminProps = {
   eventPath: string;
 };
 
-export default LoadQueryWithVariablesWrapper(
-  useSignupAdminEventQuery,
-  ({ eventId }: SignupAdminProps) => ({ eventId }),
-  function SignupAdmin({ data, runId, eventId, eventPath }) {
-    const { t } = useTranslation();
-    const location = useLocation();
-    const runPath = `${eventPath}/runs/${runId}`;
+export default LoadQueryWrapper(useSignupAdminEventQueryFromParams, function SignupAdmin({ data }) {
+  const { runId } = useParams();
+  const { t } = useTranslation();
+  const location = useLocation();
+  const eventPath = buildEventUrl(data.convention.event);
+  const runPath = `${eventPath}/runs/${runId}`;
 
-    return (
-      <div>
-        <nav aria-label="breadcrumb">
-          <ol className="breadcrumb">
-            <BreadcrumbItem to={eventPath}>{data.convention.event.title}</BreadcrumbItem>
-            <BreadcrumbItem
-              active={!location.pathname.endsWith('edit')}
-              to={`${runPath}/admin_signups?filters.state=confirmed%2Cwaitlisted&sort.id=asc`}
-            >
-              {t('events.signupAdmin.title', 'Signups')}
-            </BreadcrumbItem>
-            <Route path={`${runPath}/admin_signups/:id/edit`}>
-              <BreadcrumbItem active to={`${runPath}/admin_signups/:id/edit`}>
-                {t('events.signupAdmin.editTitle', 'Edit signup')}
-              </BreadcrumbItem>
-            </Route>
-          </ol>
-        </nav>
+  return (
+    <div>
+      <nav aria-label="breadcrumb">
+        <ol className="breadcrumb">
+          <BreadcrumbItem to={eventPath}>{data.convention.event.title}</BreadcrumbItem>
+          <BreadcrumbItem
+            active={!location.pathname.endsWith('edit')}
+            to={`${runPath}/admin_signups?filters.state=confirmed%2Cwaitlisted&sort.id=asc`}
+          >
+            {t('events.signupAdmin.title', 'Signups')}
+          </BreadcrumbItem>
+          <LeafBreadcrumbItem path={`${runPath}/admin_signups/:id/edit`}>
+            {t('events.signupAdmin.editTitle', 'Edit signup')}
+          </LeafBreadcrumbItem>
+        </ol>
+      </nav>
 
-        <Routes>
+      <Routes>
+        <Route path=":id/edit" element={<EditSignup teamMembersUrl={`${eventPath}/team_members`} />} />
+        <Route element={<SignupsIndex runPath={runPath} />}>
+          <Route path="emails/comma" element={<RunEmailList separator=", " />} />
           <Route
-            path={`${runPath}/admin_signups/:id/edit`}
-            element={<EditSignup teamMembersUrl={`${eventPath}/team_members`} />}
+            path="emails/semicolon"
+            element={
+              <>
+                <div className="alert alert-warning mb-2">
+                  <Trans i18nKey="events.signupsAdmin.emailsSemicolonWarning">
+                    <strong>Note:</strong> Most email apps use comma-separated address lists. Only Outlook uses
+                    semicolon-separated address lists. If you’re not using Outlook, try comma-separated first.
+                  </Trans>
+                </div>
+                <RunEmailList separator="; " />
+              </>
+            }
           />
+          <Route path="signup_changes" element={<RunSignupChangesTable />} />
           <Route
-            path={`${runPath}/admin_signups`}
-            element={<SignupsIndex runId={runId} eventId={eventId} runPath={runPath} />}
+            path=""
+            element={
+              <RunSignupsTable
+                defaultVisibleColumns={['id', 'state', 'name', 'bucket', 'age_restrictions_check', 'email']}
+              />
+            }
           />
-        </Routes>
-      </div>
-    );
-  },
-);
+        </Route>
+      </Routes>
+    </div>
+  );
+});

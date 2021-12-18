@@ -109,7 +109,7 @@ export default function useReactRouterReactTable<RowType extends Record<string, 
       const oldState = decodeSearchParams(searchParams);
       const newSearch = encodeSearchParams({ ...oldState, ...newState }, searchParams);
       if (newSearch.toString() !== searchParams.toString()) {
-        setSearchParams(newSearch);
+        setSearchParams(newSearch, { replace: true });
       }
     },
     [decodeSearchParams, encodeSearchParams, searchParams, setSearchParams],

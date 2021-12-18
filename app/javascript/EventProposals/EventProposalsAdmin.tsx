@@ -1,4 +1,4 @@
-import { Link, Routes, Route, useParams, useNavigate } from 'react-router-dom';
+import { Link, Routes, Route, useParams, useNavigate, useMatch } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -12,11 +12,12 @@ import EventProposalHistory from './EventProposalHistory';
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import { useEventProposalQuery, useEventProposalQueryWithOwner } from './queries.generated';
+import LeafBreadcrumbItem from '../Breadcrumbs/LeafBreadcrumbItem';
 
 function SingleProposalBreadcrumbs() {
   const { t } = useTranslation();
-  const params = useParams<{ id: string }>();
-  const eventProposalId = params.id;
+  const match = useMatch({ path: '/admin_event_proposals/:id', end: false });
+  const eventProposalId = match?.params.id;
   if (eventProposalId == null) {
     throw new Error('id not found in URL params');
   }
@@ -40,18 +41,22 @@ function SingleProposalBreadcrumbs() {
     <>
       <RouteActivatedBreadcrumbItem
         pattern={{ path: '/admin_event_proposals/:id', end: true }}
-        to={`/admin_event_proposals/${params.id}`}
+        to={`/admin_event_proposals/${eventProposalId}`}
       >
         {data?.convention.event_proposal.title}
       </RouteActivatedBreadcrumbItem>
 
-      <Route path="/admin_event_proposals/:id/edit">
-        <BreadcrumbItem active>{t('navigation.general.edit', 'Edit')}</BreadcrumbItem>
-      </Route>
+      <LeafBreadcrumbItem path="/admin_event_proposals/:id/edit">
+        {t('navigation.general.edit', 'Edit')}
+      </LeafBreadcrumbItem>
 
-      <Route path="/admin_event_proposals/:id/history">
-        <BreadcrumbItem active>{t('navigation.general.history', 'History')}</BreadcrumbItem>
-      </Route>
+      <RouteActivatedBreadcrumbItem
+        pattern="/admin_event_proposals/:id/history/*"
+        to={`/admin_event_proposals/${eventProposalId}/history`}
+        hideUnlessMatch
+      >
+        {t('navigation.general.history', 'History')}
+      </RouteActivatedBreadcrumbItem>
     </>
   );
 }
@@ -92,6 +97,7 @@ function AdminEditEventProposal() {
 
 function EventProposalsAdmin(): JSX.Element {
   const { t } = useTranslation();
+  const singleProposalMatch = useMatch({ path: '/admin_event_proposals/:id', end: false });
   const authorizationWarning = useAuthorizationRequired('can_read_event_proposals');
 
   if (authorizationWarning) return authorizationWarning;
@@ -107,17 +113,15 @@ function EventProposalsAdmin(): JSX.Element {
             {t('navigation.admin.eventProposals', 'Event Proposals')}
           </RouteActivatedBreadcrumbItem>
 
-          <Route path="/admin_event_proposals/:id">
-            <SingleProposalBreadcrumbs />
-          </Route>
+          {singleProposalMatch && <SingleProposalBreadcrumbs />}
         </ol>
       </nav>
 
       <Routes>
-        <Route path="/admin_event_proposals/:id/history" element={<EventProposalHistory />} />
-        <Route path="/admin_event_proposals/:id/edit" element={<AdminEditEventProposal />} />
-        <Route path="/admin_event_proposals/:id" element={<EventProposalAdminDisplay />} />
-        <Route path="/admin_event_proposals" element={<EventProposalsAdminTable />} />
+        <Route path=":id/history/*" element={<EventProposalHistory />} />
+        <Route path=":id/edit" element={<AdminEditEventProposal />} />
+        <Route path=":id" element={<EventProposalAdminDisplay />} />
+        <Route path="" element={<EventProposalsAdminTable />} />
       </Routes>
     </>
   );

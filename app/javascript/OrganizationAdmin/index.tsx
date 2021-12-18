@@ -1,10 +1,6 @@
-import { Routes, Route, useParams, useMatch } from 'react-router-dom';
+import { useParams, useMatch, Outlet } from 'react-router-dom';
 import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import EditOrganizationRole from './EditOrganizationRole';
-import NewOrganizationRole from './NewOrganizationRole';
-import OrganizationDisplay from './OrganizationDisplay';
-import OrganizationIndex from './OrganizationIndex';
 import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
@@ -35,19 +31,20 @@ function OrganizationWithIdBreadcrumbs() {
         {organization?.name ?? 'Organization'}
       </BreadcrumbItem>
 
-      <Route path="/organizations/:id/roles/new">
-        <BreadcrumbItem active>New organization role</BreadcrumbItem>
-      </Route>
+      <RouteActivatedBreadcrumbItem pattern="/organizations/:id/roles/new" to="." hideUnlessMatch>
+        New organization role
+      </RouteActivatedBreadcrumbItem>
 
-      <Route path="/organizations/:id/roles/:roleId/edit">
-        <BreadcrumbItem active>Edit organization role</BreadcrumbItem>
-      </Route>
+      <RouteActivatedBreadcrumbItem pattern="/organizations/:id/roles/:roleId/edit" to="." hideUnlessMatch>
+        Edit organization role
+      </RouteActivatedBreadcrumbItem>
     </>
   );
 }
 
 function OrganizationAdmin(): JSX.Element {
   const authorizationWarning = useAuthorizationRequired('can_read_organizations');
+  const specificOrganizationMatch = useMatch('/organizations/:id');
   if (authorizationWarning) return authorizationWarning;
 
   return (
@@ -57,20 +54,10 @@ function OrganizationAdmin(): JSX.Element {
           Organizations
         </RouteActivatedBreadcrumbItem>
 
-        <Route path="/organizations/:id">
-          <OrganizationWithIdBreadcrumbs />
-        </Route>
+        {specificOrganizationMatch && <OrganizationWithIdBreadcrumbs />}
       </ol>
 
-      <Routes>
-        <Route path="/organizations/:id/roles/new" element={<NewOrganizationRole />} />
-        <Route
-          path="/organizations/:organizationId/roles/:organizationRoleId/edit"
-          element={<EditOrganizationRole />}
-        />
-        <Route path="/organizations/:id" element={<OrganizationDisplay />} />
-        <Route path="/organizations" element={<OrganizationIndex />} />
-      </Routes>
+      <Outlet />
     </>
   );
 }

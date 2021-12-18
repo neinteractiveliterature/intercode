@@ -6,8 +6,8 @@ import TicketPurchaseForm from './TicketPurchaseForm';
 function MyTicket(): JSX.Element {
   return (
     <Routes>
-      <Route path="/ticket/new" element={<TicketPurchaseForm />} />
-      <Route path="/ticket" element={<MyTicketDisplay />} />
+      <Route path="new" element={<TicketPurchaseForm />} />
+      <Route path="" element={<MyTicketDisplay />} />
     </Routes>
   );
 }

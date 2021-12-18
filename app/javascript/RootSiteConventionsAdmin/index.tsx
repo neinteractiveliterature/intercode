@@ -1,9 +1,7 @@
-import { Routes, Route } from 'react-router-dom';
+import { useMatch, Outlet } from 'react-router-dom';
 import { LoadingIndicator } from '@neinteractiveliterature/litform';
 
-import RootSiteConventionsAdminTable from './RootSiteConventionsAdminTable';
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
-import ConventionDisplay from './ConventionDisplay';
 import { useConventionQueryFromIdParam } from './conventionQueryHooks';
 import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
@@ -23,6 +21,7 @@ function ConventionBreadcrumb() {
 
 function RootSiteConventionsAdmin(): JSX.Element {
   const authorizationWarning = useAuthorizationRequired('can_manage_conventions');
+  const conventionMatch = useMatch('/conventions/:id');
   if (authorizationWarning) return authorizationWarning;
 
   return (
@@ -35,15 +34,10 @@ function RootSiteConventionsAdmin(): JSX.Element {
           Conventions
         </RouteActivatedBreadcrumbItem>
 
-        <Route path="/conventions/:id">
-          <ConventionBreadcrumb />
-        </Route>
+        {conventionMatch && <ConventionBreadcrumb />}
       </ol>
 
-      <Routes>
-        <Route path="/conventions/:id" element={<ConventionDisplay />} />
-        <Route path="/conventions" element={<RootSiteConventionsAdminTable />} />
-      </Routes>
+      <Outlet />
     </>
   );
 }

@@ -39,7 +39,7 @@ export default LoadQueryWrapper(useEventAdminEventsQuery, function NewEvent({ da
   const navigate = useNavigate();
   const { eventCategoryId: eventCategoryIdParam } = useParams<{ eventCategoryId: string }>();
   const initialEventCategory = useMemo(
-    () => convention.event_categories.find((c) => c.id === eventCategoryIdParam),
+    () => convention.event_categories.find((c) => c.id === eventCategoryIdParam?.replace(/-.*$/, '')),
     [convention, eventCategoryIdParam],
   );
   const [createMutate, createError] = useAsyncFunction<unknown, [CreateEventOptions]>(useCreateEvent(convention));

@@ -1,36 +1,28 @@
-import { TabList, TabBody, useTabsWithRouter } from '@neinteractiveliterature/litform';
-import { useMemo } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { BootstrapNavLink } from '../UIComponents/BootstrapNavLink';
 
 import CreateSignup from './CreateSignup';
 import SignupModerationQueue from './SignupModerationQueue';
 
 function SignupModeration(): JSX.Element {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const fakeHistory = useMemo(() => ({ replace: navigate }), [navigate]);
-  const tabProps = useTabsWithRouter(
-    [
-      {
-        id: 'moderation-queue',
-        name: 'Moderation queue',
-        renderContent: () => <SignupModerationQueue />,
-      },
-      { id: 'create-signups', name: 'Create signups', renderContent: () => <CreateSignup /> },
-    ],
-    '/signup_moderation',
-    location,
-    fakeHistory,
-  );
-
   return (
     <>
       <h1 className="mb-4">Signup moderation</h1>
 
-      <TabList {...tabProps} />
-      <div className="mt-2">
-        <TabBody {...tabProps} />
-      </div>
+      <ul className="nav nav-tabs mb-3" role="tablist">
+        <BootstrapNavLink path="/signup_moderation/queue" icon="bi-list-check">
+          Moderation queue
+        </BootstrapNavLink>
+        <BootstrapNavLink path="/signup_moderation/create_signups" icon="bi-plus-circle">
+          Create signups
+        </BootstrapNavLink>
+      </ul>
+
+      <Routes>
+        <Route path="queue" element={<SignupModerationQueue />} />
+        <Route path="create_signups" element={<CreateSignup />} />
+        <Route path="" element={<Navigate to="/signup_moderation/queue" replace />} />
+      </Routes>
     </>
   );
 }

@@ -8,10 +8,10 @@ import ViewCmsLayoutSource from './ViewCmsLayoutSource';
 function CmsLayoutsAdmin(): JSX.Element {
   return (
     <Routes>
-      <Route path="/cms_layouts/:id/edit" element={<EditCmsLayout />} />
-      <Route path="/cms_layouts/:id/view_source" element={<ViewCmsLayoutSource />} />
-      <Route path="/cms_layouts/new" element={<NewCmsLayout />} />
-      <Route path="/cms_layouts" element={<CmsLayoutsAdminTable />} />
+      <Route path=":id/edit" element={<EditCmsLayout />} />
+      <Route path=":id/view_source" element={<ViewCmsLayoutSource />} />
+      <Route path="new" element={<NewCmsLayout />} />
+      <Route path="" element={<CmsLayoutsAdminTable />} />
     </Routes>
   );
 }

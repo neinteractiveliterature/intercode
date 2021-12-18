@@ -84,11 +84,11 @@ function Reports(): JSX.Element {
 
   return (
     <Routes>
-      <Route path="/reports/attendance_by_payment_amount" element={<AttendanceByPaymentAmount />} />
-      <Route path="/reports/event_provided_tickets" element={<EventProvidedTickets />} />
-      <Route path="/reports/events_by_choice" element={<EventsByChoice />} />
-      <Route path="/reports/signup_spy" element={<SignupSpy />} />
-      <Route path="/reports" element={<ReportsMenu />} />
+      <Route path="attendance_by_payment_amount" element={<AttendanceByPaymentAmount />} />
+      <Route path="event_provided_tickets" element={<EventProvidedTickets />} />
+      <Route path="events_by_choice" element={<EventsByChoice />} />
+      <Route path="signup_spy" element={<SignupSpy />} />
+      <Route path="" element={<ReportsMenu />} />
     </Routes>
   );
 }

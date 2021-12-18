@@ -132,7 +132,7 @@ function ConventionDayTabContainer({
       <Routes>
         {conventionDayTimespans.map((timespan) => (
           <Route
-            path={`${basename}/${conventionDayUrlPortion(timespan.start)}`}
+            path={conventionDayUrlPortion(timespan.start)}
             key={timespan.start.toISO()}
             element={children(timespan)}
           />
