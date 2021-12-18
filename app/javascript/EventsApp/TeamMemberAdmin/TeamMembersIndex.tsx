@@ -6,20 +6,20 @@ import {
   ErrorDisplay,
   useConfirm,
   sortByLocaleString,
-  PageLoadingIndicator,
   useDeleteMutationWithReferenceArrayUpdater,
+  LoadQueryWrapper,
 } from '@neinteractiveliterature/litform';
 import capitalize from 'lodash/capitalize';
 
 import Checkmark from './Checkmark';
 import ProvideTicketModal from './ProvideTicketModal';
 import usePageTitle from '../../usePageTitle';
-import useValueUnless from '../../useValueUnless';
-import { TeamMembersQueryData, useTeamMembersQuery } from './queries.generated';
+import { TeamMembersQueryData } from './queries.generated';
 import { DropdownMenu } from '../../UIComponents/DropdownMenu';
-import FourOhFourPage from '../../FourOhFourPage';
 import { useDeleteTeamMemberMutation } from './mutations.generated';
 import humanize from '../../humanize';
+import useTeamMembersQueryFromParams from './useTeamMembersQueryFromParams';
+import buildEventUrl from '../buildEventUrl';
 
 function sortTeamMembers(teamMembers: TeamMembersQueryData['convention']['event']['team_members']) {
   return sortByLocaleString(teamMembers, (teamMember) => teamMember.user_con_profile.name_inverted ?? '');
@@ -100,39 +100,21 @@ function TeamMemberActionMenu({
   );
 }
 
-export type TeamMembersIndexProps = {
-  eventId: string;
-  eventPath: string;
-};
-
-function TeamMembersIndex({ eventId, eventPath }: TeamMembersIndexProps): JSX.Element {
+export default LoadQueryWrapper(useTeamMembersQueryFromParams, function TeamMembersIndex({ data }): JSX.Element {
   const { t } = useTranslation();
-  const { data, loading, error } = useTeamMembersQuery({ variables: { eventId } });
   const modal = useModal<{ teamMember: TeamMembersQueryData['convention']['event']['team_members'][0] }>();
 
   const titleizedTeamMemberName = useMemo(
-    () => (error || loading || !data ? null : capitalize(data.convention.event.event_category.teamMemberNamePlural)),
-    [error, loading, data],
+    () => capitalize(data.convention.event.event_category.teamMemberNamePlural),
+    [data.convention.event.event_category.teamMemberNamePlural],
   );
 
   const sortedTeamMembers = useMemo(
-    () => (error || loading || !data ? null : sortTeamMembers(data.convention.event.team_members)),
-    [data, error, loading],
+    () => sortTeamMembers(data.convention.event.team_members),
+    [data.convention.event.team_members],
   );
 
-  usePageTitle(useValueUnless(() => `${titleizedTeamMemberName} - ${data?.convention.event.title}`, error || loading));
-
-  if (loading) {
-    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
-  if (!data) {
-    return <FourOhFourPage />;
-  }
+  usePageTitle(`${titleizedTeamMemberName} - ${data.convention.event.title}`);
 
   const { convention } = data;
   const { event } = convention;
@@ -199,7 +181,7 @@ function TeamMembersIndex({ eventId, eventPath }: TeamMembersIndexProps): JSX.El
                       convention={convention}
                       teamMember={teamMember}
                       openProvideTicketModal={() => modal.open({ teamMember })}
-                      eventPath={eventPath}
+                      eventPath={buildEventUrl(event)}
                     />
                   </td>
                 </tr>
@@ -209,7 +191,7 @@ function TeamMembersIndex({ eventId, eventPath }: TeamMembersIndexProps): JSX.El
         </div>
       ) : null}
       <p>
-        <Link to={`${eventPath}/team_members/new`} className="btn btn-primary">
+        <Link to={`${buildEventUrl(event)}/team_members/new`} className="btn btn-primary">
           {t('events.teamMemberAdmin.addTeamMemberButton', 'Add {{ teamMemberName }}', {
             teamMemberName: event.event_category.team_member_name,
           })}
@@ -225,6 +207,4 @@ function TeamMembersIndex({ eventId, eventPath }: TeamMembersIndexProps): JSX.El
       />
     </>
   );
-}
-
-export default TeamMembersIndex;
+});

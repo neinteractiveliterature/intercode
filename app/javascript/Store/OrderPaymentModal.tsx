@@ -17,8 +17,7 @@ import {
   CurrentPendingOrderPaymentIntentClientSecretQueryDocument,
 } from './queries.generated';
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const PoweredByStripeLogo = require('../images/powered_by_stripe.svg').default as string;
+import PoweredByStripeLogo from '../images/powered_by_stripe.svg';
 
 type OrderPaymentModalContentsProps = {
   onCancel: () => void;

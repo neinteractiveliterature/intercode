@@ -3,7 +3,7 @@ import sortBy from 'lodash/sortBy';
 import { DateTime } from 'luxon';
 import React, { useCallback, useContext, useLayoutEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useHistory, useRouteMatch } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Waypoint } from 'react-waypoint';
 import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
@@ -38,10 +38,11 @@ export default LoadQueryWrapper(useScheduleGridCombinedQuery, function RunList({
     showPersonalFilters: true,
     signedIn: myProfile != null,
   });
-  const history = useHistory();
+  const navigate = useNavigate();
   const conventionDayUrlPortion = useConventionDayUrlPortion();
   const conventionDayHeaders = useRef(new Map<string, HTMLElement>());
-  const routeMatch = useRouteMatch<{ conventionDay: string }>('/events/schedule/:conventionDay');
+  const location = useLocation();
+  const conventionDay = useParams<{ conventionDay: string }>().conventionDay;
   const { t } = useTranslation();
 
   usePageTitle(
@@ -49,14 +50,14 @@ export default LoadQueryWrapper(useScheduleGridCombinedQuery, function RunList({
   );
 
   useLayoutEffect(() => {
-    if (routeMatch?.params.conventionDay) {
-      const header = conventionDayHeaders.current.get(routeMatch.params.conventionDay);
+    if (conventionDay) {
+      const header = conventionDayHeaders.current.get(conventionDay);
       if (header && !isElementInViewport(header)) {
         header.scrollIntoView(true);
         window.scrollBy(0, -100);
       }
     }
-  }, [routeMatch?.params.conventionDay]);
+  }, [conventionDay]);
 
   const eventsByRunId = useMemo(() => {
     const eventMap = new Map<string, typeof data['convention']['events'][number]>();
@@ -146,9 +147,9 @@ export default LoadQueryWrapper(useScheduleGridCombinedQuery, function RunList({
 
   const enteredRunGroup = useCallback(
     (runGroup: RunGroup) => {
-      history.replace(`/events/schedule/${conventionDayUrlPortion(runGroup.dayStart)}${history.location.search}`);
+      navigate(`/events/schedule/${conventionDayUrlPortion(runGroup.dayStart)}${location.search}`);
     },
-    [history, conventionDayUrlPortion],
+    [navigate, location.search, conventionDayUrlPortion],
   );
 
   return (

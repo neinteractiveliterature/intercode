@@ -26,7 +26,7 @@ function TestWrapper({ apolloMocks, stripePublishableKey, i18nInstance, children
     [stripePublishableKey, stripePromise, setStripePromise],
   );
   return (
-    <Router history={history}>
+    <Router location={history.location} navigator={history}>
       <MockedProvider mocks={apolloMocks}>
         <LazyStripeContext.Provider value={lazyStripeProviderValue}>
           <Confirm>

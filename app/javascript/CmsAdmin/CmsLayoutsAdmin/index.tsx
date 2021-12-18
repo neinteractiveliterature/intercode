@@ -1,4 +1,4 @@
-import { Switch, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
 import CmsLayoutsAdminTable from './CmsLayoutsAdminTable';
 import EditCmsLayout from './EditCmsLayout';
@@ -7,20 +7,12 @@ import ViewCmsLayoutSource from './ViewCmsLayoutSource';
 
 function CmsLayoutsAdmin(): JSX.Element {
   return (
-    <Switch>
-      <Route path="/cms_layouts/:id/edit">
-        <EditCmsLayout />
-      </Route>
-      <Route path="/cms_layouts/:id/view_source">
-        <ViewCmsLayoutSource />
-      </Route>
-      <Route path="/cms_layouts/new">
-        <NewCmsLayout />
-      </Route>
-      <Route path="/cms_layouts">
-        <CmsLayoutsAdminTable />
-      </Route>
-    </Switch>
+    <Routes>
+      <Route path=":id/edit" element={<EditCmsLayout />} />
+      <Route path=":id/view_source" element={<ViewCmsLayoutSource />} />
+      <Route path="new" element={<NewCmsLayout />} />
+      <Route path="" element={<CmsLayoutsAdminTable />} />
+    </Routes>
   );
 }
 

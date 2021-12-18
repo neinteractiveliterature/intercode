@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import usePageTitle from '../usePageTitle';
 import buildDepartmentInput from './buildDepartmentInput';
@@ -16,7 +16,7 @@ export default LoadQueryWrapper(useDepartmentAdminQuery, function NewDepartment(
     (data) => data.createDepartment.department,
     AdminDepartmentFieldsFragmentDoc,
   );
-  const history = useHistory();
+  const navigate = useNavigate();
 
   usePageTitle('New department');
 
@@ -27,9 +27,9 @@ export default LoadQueryWrapper(useDepartmentAdminQuery, function NewDepartment(
           department: buildDepartmentInput(department),
         },
       });
-      history.push('/admin_departments');
+      navigate('/admin_departments');
     },
-    [createDepartment, history],
+    [createDepartment, navigate],
   );
 
   return (

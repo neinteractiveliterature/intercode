@@ -1,10 +1,10 @@
-import { Switch, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
 import FormAdminIndex from './FormAdminIndex';
 import FormJSONEditor from './FormJSONEditor';
-import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
+import LeafBreadcrumbItem from '../Breadcrumbs/LeafBreadcrumbItem';
 
 function FormAdmin(): JSX.Element {
   const authorizationWarning = useAuthorizationRequired('can_manage_forms');
@@ -14,27 +14,18 @@ function FormAdmin(): JSX.Element {
     <>
       <nav aria-label="breadcrumb">
         <ol className="breadcrumb">
-          <RouteActivatedBreadcrumbItem
-            matchProps={{ path: '/admin_forms', exact: true }}
-            to="/admin_forms"
-          >
+          <RouteActivatedBreadcrumbItem pattern={{ path: '/admin_forms', end: true }} to="/admin_forms">
             Forms
           </RouteActivatedBreadcrumbItem>
 
-          <Route path="/admin_forms/:id/edit_advanced">
-            <BreadcrumbItem active>Edit form (advanced)</BreadcrumbItem>
-          </Route>
+          <LeafBreadcrumbItem path="/admin_forms/:id/edit_advanced">Edit form (advanced)</LeafBreadcrumbItem>
         </ol>
       </nav>
 
-      <Switch>
-        <Route path="/admin_forms/:id/edit_advanced">
-          <FormJSONEditor />
-        </Route>
-        <Route path="/admin_forms">
-          <FormAdminIndex />
-        </Route>
-      </Switch>
+      <Routes>
+        <Route path=":id/edit_advanced" element={<FormJSONEditor />} />
+        <Route path="" element={<FormAdminIndex />} />
+      </Routes>
     </>
   );
 }

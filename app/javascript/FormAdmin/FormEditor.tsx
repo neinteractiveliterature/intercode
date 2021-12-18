@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Link, Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
+import { Link, Navigate, Route, Routes, useParams } from 'react-router-dom';
 import sortBy from 'lodash/sortBy';
 import flatMap from 'lodash/flatMap';
 import { notEmpty, ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
@@ -17,10 +17,13 @@ import { useUpdateFormMutation } from './mutations.generated';
 import FourOhFourPage from '../FourOhFourPage';
 
 function FormEditor(): JSX.Element {
-  const match = useRouteMatch<{ id: string; sectionId?: string; itemId?: string }>();
+  const params = useParams<{ id: string; sectionId?: string; itemId?: string }>();
+  if (params.id == null) {
+    throw new Error('id not found in URL params');
+  }
   const { data, error, loading } = useFormEditorQuery({
     variables: {
-      id: match.params.id,
+      id: params.id,
     },
   });
   const [updateForm] = useUpdateFormMutation();
@@ -71,13 +74,13 @@ function FormEditor(): JSX.Element {
 
   let currentSection: FormEditorForm['form_sections'][0] | undefined;
 
-  if (!match.params.sectionId) {
+  if (!params.sectionId) {
     const firstSection = form.form_sections[0];
     if (firstSection) {
-      return <Redirect to={`/admin_forms/${match.params.id}/edit/section/${firstSection.id}`} />;
+      return <Navigate to={`/admin_forms/${params.id}/edit/section/${firstSection.id}`} />;
     }
   } else {
-    currentSection = form.form_sections.find((formSection) => formSection.id.toString() === match.params.sectionId);
+    currentSection = form.form_sections.find((formSection) => formSection.id.toString() === params.sectionId);
   }
 
   const { convention } = data;
@@ -86,7 +89,7 @@ function FormEditor(): JSX.Element {
   return (
     <div className="form-editor">
       <div className="form-editor-top-navbar px-2 navbar navbar-light bg-warning-light">
-        {match.params.itemId && currentSection ? (
+        {params.itemId && currentSection ? (
           <Link to={`/admin_forms/${form.id}/edit/section/${currentSection.id}`} className="btn btn-secondary">
             <i className="bi-chevron-left" /> Back to section
           </Link>
@@ -112,14 +115,10 @@ function FormEditor(): JSX.Element {
           formItemsById,
         }}
       >
-        <Switch>
-          <Route path="/admin_forms/:id/edit/section/:sectionId/item/:itemId">
-            <FormItemEditorLayout />
-          </Route>
-          <Route path="/admin_forms/:id/edit/section/:sectionId">
-            <FormSectionEditorLayout />
-          </Route>
-        </Switch>
+        <Routes>
+          <Route path="section/:sectionId/item/:itemId" element={<FormItemEditorLayout />} />
+          <Route path="section/:sectionId" element={<FormSectionEditorLayout />} />
+        </Routes>
       </FormEditorContext.Provider>
     </div>
   );

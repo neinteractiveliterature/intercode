@@ -5,21 +5,24 @@ import { useTranslation } from 'react-i18next';
 import AppRootContext, { AppRootContextValue } from '../AppRootContext';
 import useLoginRequired from './useLoginRequired';
 
+export function AuthorizationError() {
+  const { t } = useTranslation();
+
+  return (
+    <div className="alert alert-danger">
+      {t('errors.unauthorized', 'Sorry, your account is not authorized to view this page.')}
+    </div>
+  );
+}
+
 type AbilityType = AppRootContextValue['currentAbility'];
 type AbilityName = keyof AbilityType;
 
-export function useAuthorizationRequiredWithoutLogin(
-  ...abilities: AbilityName[]
-): JSX.Element | false {
-  const { t } = useTranslation();
+export function useAuthorizationRequiredWithoutLogin(...abilities: AbilityName[]): JSX.Element | false {
   const { currentAbility } = useContext(AppRootContext);
 
   if (!abilities.every((ability) => currentAbility[ability])) {
-    return (
-      <div className="alert alert-danger">
-        {t('errors.unauthorized', 'Sorry, your account is not authorized to view this page.')}
-      </div>
-    );
+    return <AuthorizationError />;
   }
 
   return false;
@@ -43,10 +46,7 @@ export type AuthorizationWrapperProps = {
   children: React.ReactNode;
 };
 
-export function AuthorizationWrapper({
-  abilities,
-  children,
-}: AuthorizationWrapperProps): JSX.Element {
+export function AuthorizationWrapper({ abilities, children }: AuthorizationWrapperProps): JSX.Element {
   const authorizationRequired = useAuthorizationRequired(...abilities);
 
   if (authorizationRequired) {
@@ -56,10 +56,7 @@ export function AuthorizationWrapper({
   return <>{children}</>;
 }
 
-export function NoLoginAuthorizationWrapper({
-  abilities,
-  children,
-}: AuthorizationWrapperProps): JSX.Element {
+export function NoLoginAuthorizationWrapper({ abilities, children }: AuthorizationWrapperProps): JSX.Element {
   const authorizationRequired = useAuthorizationRequiredWithoutLogin(...abilities);
 
   if (authorizationRequired) {

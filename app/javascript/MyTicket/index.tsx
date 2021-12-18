@@ -1,18 +1,14 @@
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 import MyTicketDisplay from './MyTicketDisplay';
 import TicketPurchaseForm from './TicketPurchaseForm';
 
 function MyTicket(): JSX.Element {
   return (
-    <Switch>
-      <Route path="/ticket/new">
-        <TicketPurchaseForm />
-      </Route>
-      <Route path="/ticket">
-        <MyTicketDisplay />
-      </Route>
-    </Switch>
+    <Routes>
+      <Route path="new" element={<TicketPurchaseForm />} />
+      <Route path="" element={<MyTicketDisplay />} />
+    </Routes>
   );
 }
 

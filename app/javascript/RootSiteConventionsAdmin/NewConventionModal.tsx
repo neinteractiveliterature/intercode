@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
 import { ApolloError } from '@apollo/client';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { DateTime } from 'luxon';
 import {
   BootstrapFormInput,
@@ -60,7 +60,7 @@ export type NewConventionModalProps = {
 export default LoadQueryWrapper<NewConventionModalQueryData, NewConventionModalQueryVariables, NewConventionModalProps>(
   useNewConventionModalQuery,
   function NewConventionModal({ visible, close, cloneConvention, data }) {
-    const history = useHistory();
+    const navigate = useNavigate();
     const [createConvention] = useCreateConventionMutation();
     const [convention, setConvention] = useState<CreatingConvention>(() =>
       cloneConvention
@@ -139,7 +139,7 @@ export default LoadQueryWrapper<NewConventionModalQueryData, NewConventionModalQ
       });
 
       if (result.data) {
-        history.push(`/conventions/${result.data.createConvention.convention.id}`);
+        navigate(`/conventions/${result.data.createConvention.convention.id}`);
       }
     };
 

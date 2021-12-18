@@ -102,8 +102,8 @@ export default LoadQueryWrapper(useEventProvidedTicketsQuery, function EventProv
         {'Total: '}
         {totalCount}
         {totalCount === 1
-          ? `event-provided ${data.convention.ticket_name}`
-          : `event-provided ${data.convention.ticketNamePlural}`}
+          ? ` event-provided ${data.convention.ticket_name}`
+          : ` event-provided ${data.convention.ticketNamePlural}`}
       </h3>
       <TabList {...tabProps} />
       <TabBody {...tabProps} />

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import * as React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
 import {
   ErrorDisplay,
@@ -16,7 +16,7 @@ import { CreateLayoutMutationData, useCreateLayoutMutation } from './mutations.g
 import { CmsLayoutFieldsFragmentDoc, useCmsLayoutsAdminQuery } from './queries.generated';
 
 export default LoadQueryWrapper(useCmsLayoutsAdminQuery, function NewCmsLayout({ data }): JSX.Element {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [layout, setLayout] = useState<Pick<CmsLayout, 'name' | 'admin_notes' | 'navbar_classes' | 'content'>>({});
   const [createLayout, { error: createError, loading: createInProgress }] = useCreateMutationWithReferenceArrayUpdater(
     useCreateLayoutMutation,
@@ -35,7 +35,7 @@ export default LoadQueryWrapper(useCmsLayoutsAdminQuery, function NewCmsLayout({
         cmsLayout: buildLayoutInput(layout),
       },
     });
-    history.push('/cms_layouts');
+    navigate('/cms_layouts');
   };
 
   return (

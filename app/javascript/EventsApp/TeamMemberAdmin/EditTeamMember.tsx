@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { ApolloError } from '@apollo/client';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ErrorDisplay } from '@neinteractiveliterature/litform';
+import { ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform';
 import capitalize from 'lodash/capitalize';
 
 import buildTeamMemberInput from './buildTeamMemberInput';
@@ -12,16 +12,14 @@ import usePageTitle from '../../usePageTitle';
 import { TeamMembersQueryData } from './queries.generated';
 import { useUpdateTeamMemberMutation } from './mutations.generated';
 import FourOhFourPage from '../../FourOhFourPage';
+import useTeamMembersQueryFromParams from './useTeamMembersQueryFromParams';
+import buildEventUrl from '../buildEventUrl';
 
-export type EditTeamMemberProps = {
-  event: TeamMembersQueryData['convention']['event'];
-  eventPath: string;
-};
-
-function EditTeamMember({ event, eventPath }: EditTeamMemberProps): JSX.Element {
+export default LoadQueryWrapper(useTeamMembersQueryFromParams, function EditTeamMember({ data }): JSX.Element {
+  const event = data.convention.event;
   const { t } = useTranslation();
   const { teamMemberId } = useParams<{ teamMemberId: string }>();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [teamMember, setTeamMember] = useState(event.team_members.find((tm) => tm.id === teamMemberId));
   const [updateMutate] = useUpdateTeamMemberMutation();
   const [update, updateError, updateInProgress] = useAsyncFunction(updateMutate);
@@ -48,7 +46,7 @@ function EditTeamMember({ event, eventPath }: EditTeamMemberProps): JSX.Element 
       },
     });
 
-    history.replace(`${eventPath}/team_members`);
+    navigate(`${buildEventUrl(event)}/team_members`, { replace: true });
   };
 
   if (!teamMember) {
@@ -98,6 +96,4 @@ function EditTeamMember({ event, eventPath }: EditTeamMemberProps): JSX.Element 
       </ul>
     </>
   );
-}
-
-export default EditTeamMember;
+});

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ApolloError } from '@apollo/client';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useTabs, TabList, TabBody, notEmpty, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
@@ -23,7 +23,7 @@ export default LoadSingleValueFromCollectionWrapper(
   useStaffPositionsQuery,
   (data, id) => data.convention.staff_positions.find((sp) => sp.id === id),
   function EditStaffPositionPermissions({ value: staffPosition, data: { convention } }) {
-    const history = useHistory();
+    const navigate = useNavigate();
     const [changeSet, add, remove] = useChangeSet<PermissionWithId>();
     const [error, setError] = useState<ApolloError>();
     const [mutationInProgress, setMutationInProgress] = useState(false);
@@ -106,7 +106,7 @@ export default LoadSingleValueFromCollectionWrapper(
           },
         });
 
-        history.push('/staff_positions');
+        navigate('/staff_positions');
       } catch (newError) {
         setError(newError);
         setMutationInProgress(false);

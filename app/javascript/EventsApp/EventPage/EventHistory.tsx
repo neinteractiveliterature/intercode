@@ -5,7 +5,9 @@ import FormResponseChangeHistory from '../../FormPresenter/ItemChangeDisplays/Fo
 import RouteActivatedBreadcrumbItem from '../../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import BreadcrumbItem from '../../Breadcrumbs/BreadcrumbItem';
 import { useEventHistoryQuery } from './eventHistoryQuery.generated';
-import { LoadQueryWithVariablesWrapper } from '../../GraphqlLoadingWrappers';
+import { useParams } from 'react-router';
+import { LoadQueryWrapper } from '@neinteractiveliterature/litform/dist';
+import buildEventUrl from '../buildEventUrl';
 
 const EXCLUDE_FIELDS = new Set([
   'minimum_age',
@@ -15,46 +17,42 @@ const EXCLUDE_FIELDS = new Set([
   'team_mailing_list_name',
 ]);
 
-export type EventHistoryProps = {
-  eventId: string;
-  eventPath: string;
-};
+function useEventHistoryQueryFromParams() {
+  const { eventId } = useParams<{ eventId: string }>();
+  return useEventHistoryQuery({ variables: { id: eventId ?? '' } });
+}
 
-export default LoadQueryWithVariablesWrapper(
-  useEventHistoryQuery,
-  ({ eventId }: EventHistoryProps) => ({ id: eventId }),
-  function EventHistory({ data, eventPath }) {
-    const { t } = useTranslation();
+export default LoadQueryWrapper(useEventHistoryQueryFromParams, function EventHistory({ data }) {
+  const { t } = useTranslation();
+  const eventPath = buildEventUrl(data.convention.event);
 
-    const changes = useMemo(
-      () =>
-        data.convention.event.form_response_changes.filter((change) => !EXCLUDE_FIELDS.has(change.field_identifier)),
-      [data],
-    );
+  const changes = useMemo(
+    () => data.convention.event.form_response_changes.filter((change) => !EXCLUDE_FIELDS.has(change.field_identifier)),
+    [data],
+  );
 
-    return (
-      <>
-        <nav aria-label="breadcrumb">
-          <ol className="breadcrumb">
-            <BreadcrumbItem to={eventPath} active={false}>
-              {data.convention.event.title}
-            </BreadcrumbItem>
-            <RouteActivatedBreadcrumbItem
-              matchProps={{ path: `${eventPath}/history`, exact: true }}
-              to={`${eventPath}/history`}
-            >
-              {t('events.history.title', 'History')}
-            </RouteActivatedBreadcrumbItem>
-          </ol>
-        </nav>
+  return (
+    <>
+      <nav aria-label="breadcrumb">
+        <ol className="breadcrumb">
+          <BreadcrumbItem to={eventPath} active={false}>
+            {data.convention.event.title}
+          </BreadcrumbItem>
+          <RouteActivatedBreadcrumbItem
+            pattern={{ path: `${eventPath}/history`, end: true }}
+            to={`${eventPath}/history`}
+          >
+            {t('events.history.title', 'History')}
+          </RouteActivatedBreadcrumbItem>
+        </ol>
+      </nav>
 
-        <FormResponseChangeHistory
-          changes={changes}
-          convention={data.convention}
-          basePath={`${eventPath}/history`}
-          form={data.convention.event.event_category.event_form}
-        />
-      </>
-    );
-  },
-);
+      <FormResponseChangeHistory
+        changes={changes}
+        convention={data.convention}
+        form={data.convention.event.event_category.event_form}
+        basePath={`${buildEventUrl(data.convention.event)}/history`}
+      />
+    </>
+  );
+});

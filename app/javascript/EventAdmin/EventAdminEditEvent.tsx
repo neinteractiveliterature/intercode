@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import useMEPTOMutations from '../BuiltInFormControls/useMEPTOMutations';
 import useEventFormWithCategorySelection, { EventFormWithCategorySelection } from './useEventFormWithCategorySelection';
@@ -27,7 +27,7 @@ export default LoadSingleValueFromCollectionWrapper(
   useEventAdminEventsQuery,
   (data, id) => data.convention.events.find((e) => e.id.toString() === id),
   function EventAdminEditEventForm({ data, value: serializedEvent }) {
-    const history = useHistory();
+    const navigate = useNavigate();
     const initialEvent = useMemo(() => deserializeFormResponse(serializedEvent), [serializedEvent]);
 
     const meptoMutations = useMEPTOMutations({
@@ -102,10 +102,10 @@ export default LoadSingleValueFromCollectionWrapper(
           }
         }}
         onSave={() => {
-          history.push(donePath);
+          navigate(donePath);
         }}
         onDrop={() => {
-          history.push(donePath);
+          navigate(donePath);
         }}
       >
         <EventFormWithCategorySelection {...eventFormWithCategorySelectionProps} />

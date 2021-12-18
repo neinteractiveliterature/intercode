@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { DateTime } from 'luxon';
 import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
@@ -20,7 +20,7 @@ export default LoadQueryWrapper(useMyTicketDisplayQuery, function MyTicketDispla
   const paymentAmount = ticket?.order_entry?.price_per_item;
 
   if (!ticket) {
-    return <Redirect to="/new" />;
+    return <Navigate to="/ticket/new" replace />;
   }
 
   return (
@@ -35,9 +35,7 @@ export default LoadQueryWrapper(useMyTicketDisplayQuery, function MyTicketDispla
         <div className="card-header">
           <div className="d-flex">
             <div className="lead flex-grow-1">{convention.my_profile?.name_without_nickname}</div>
-            <div className="lead fw-bold">
-              {paymentAmount && paymentAmount.fractional > 0 ? 'Paid' : 'Comp'}
-            </div>
+            <div className="lead fw-bold">{paymentAmount && paymentAmount.fractional > 0 ? 'Paid' : 'Comp'}</div>
           </div>
         </div>
         <div className="card-body">
@@ -58,17 +56,11 @@ export default LoadQueryWrapper(useMyTicketDisplayQuery, function MyTicketDispla
             )}
             <dt className="col-md-3">Created</dt>
             <dd className="col-md-9">
-              {format(
-                DateTime.fromISO(ticket.created_at, { zone: timezoneName }),
-                'longWeekdayDateTimeWithZone',
-              )}
+              {format(DateTime.fromISO(ticket.created_at, { zone: timezoneName }), 'longWeekdayDateTimeWithZone')}
             </dd>
             <dt className="col-md-3">Last updated</dt>
             <dd className="col-md-9">
-              {format(
-                DateTime.fromISO(ticket.updated_at, { zone: timezoneName }),
-                'longWeekdayDateTimeWithZone',
-              )}
+              {format(DateTime.fromISO(ticket.updated_at, { zone: timezoneName }), 'longWeekdayDateTimeWithZone')}
             </dd>
           </dl>
         </div>

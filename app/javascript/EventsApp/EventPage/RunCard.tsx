@@ -1,6 +1,6 @@
 import { useContext, useRef, useEffect } from 'react';
 import classNames from 'classnames';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 import { ApolloError } from '@apollo/client';
 import { TFunction } from 'i18next';
@@ -63,16 +63,15 @@ function RunCard({
   withdrawPendingSignupRequest,
 }: RunCardProps): JSX.Element {
   const { t } = useTranslation();
-  const history = useHistory();
   const location = useLocation();
   const formatRunTimespan = useFormatRunTimespan();
   const { siteMode, timezoneName } = useContext(AppRootContext);
   const cardRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    if (history.location.hash === `#run-${run.id}`) {
+    if (location.hash === `#run-${run.id}`) {
       cardRef.current?.scrollIntoView(false);
     }
-  }, [history.location.hash, run.id]);
+  }, [location.hash, run.id]);
   const [signupButtonClicked, signupError, mutationInProgress] = useAsyncFunction(createSignup, {
     suppressError: true,
   });
@@ -170,7 +169,7 @@ function RunCard({
     <div
       ref={cardRef}
       className={classNames('card run-card', {
-        'glow-success': history.location.hash === `#run-${run.id}`,
+        'glow-success': location.hash === `#run-${run.id}`,
       })}
       id={`run-${run.id}`}
     >

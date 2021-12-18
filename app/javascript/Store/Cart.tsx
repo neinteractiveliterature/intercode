@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import intersection from 'lodash/intersection';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
 import { useModal, useConfirm, ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
@@ -22,7 +22,7 @@ type OrderEntryType = NonNullable<
 >['order_entries'][0];
 
 export default LoadQueryWrapper(useCartQuery, function Cart({ data }) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [updateMutate] = useUpdateOrderEntryMutation();
   const [deleteMutate] = useDeleteOrderEntryMutation();
   const [createCouponApplicationMutate] = useCreateCouponApplicationMutation();
@@ -125,7 +125,7 @@ export default LoadQueryWrapper(useCartQuery, function Cart({ data }) {
   );
 
   const checkOutComplete = () => {
-    history.push('/order_history');
+    navigate('/order_history');
   };
 
   const loginRequired = useLoginRequired();

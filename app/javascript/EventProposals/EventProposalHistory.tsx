@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useRouteMatch } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import FormResponseChangeHistory from '../FormPresenter/ItemChangeDisplays/FormResponseChangeHistory';
@@ -15,9 +15,12 @@ const EXCLUDE_FIELDS = new Set([
 ]);
 
 function useEventProposalHistoryQueryFromParams() {
-  const match = useRouteMatch<{ id: string }>();
+  const params = useParams<{ id: string }>();
+  if (params.id == null) {
+    throw new Error('id not found in URL params');
+  }
   return useEventProposalHistoryQuery({
-    variables: { id: match.params.id },
+    variables: { id: params.id },
   });
 }
 

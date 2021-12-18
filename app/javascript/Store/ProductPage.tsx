@@ -13,6 +13,9 @@ import { useOrderFormProductQuery } from './queries.generated';
 
 function useLoadProduct() {
   const { id } = useParams<{ id: string }>();
+  if (id == null) {
+    throw new Error('id not found in parameters');
+  }
   return useOrderFormProductQuery({
     variables: { productId: id },
   });

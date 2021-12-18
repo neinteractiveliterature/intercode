@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
 import {
   LoadQueryWrapper,
@@ -19,7 +19,7 @@ import {
 import { useCreateUserActivityAlertMutation } from './mutations.generated';
 
 export default LoadQueryWrapper(useUserActivityAlertsAdminQuery, function NewUserActivityAlert({ data }) {
-  const history = useHistory();
+  const navigate = useNavigate();
   usePageTitle('New user activity alert');
 
   const [userActivityAlert, setUserActivityAlert] = useState<
@@ -69,7 +69,7 @@ export default LoadQueryWrapper(useUserActivityAlertsAdminQuery, function NewUse
       },
     });
 
-    history.push('/user_activity_alerts');
+    navigate('/user_activity_alerts');
   };
 
   return (

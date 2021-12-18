@@ -16,8 +16,8 @@ class Mutations::CreateOrganizationRole < Mutations::BaseMutation
 
   def resolve(**args)
     new_role = organization.organization_roles.create!(args[:organization_role].to_h)
-    new_role.update!(user_ids: processed_args[:user_ids])
-    processed_args[:permissions].each { |permission| new_role.permissions.create!(permission) }
+    new_role.update!(user_ids: args[:user_ids])
+    args[:permissions].each { |permission| new_role.permissions.create!(permission) }
 
     # not sure why, but if I don't do this it seems like permissions get returned twice
     new_role.reload

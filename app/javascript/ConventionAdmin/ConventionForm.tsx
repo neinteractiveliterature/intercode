@@ -1,13 +1,8 @@
-import { useCallback, useState } from 'react';
-import {
-  TabList,
-  TabBody,
-  useTabsWithRouter,
-  ErrorDisplay,
-} from '@neinteractiveliterature/litform';
+import { useCallback, useMemo, useState } from 'react';
+import { TabList, TabBody, useTabsWithRouter, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { ApolloError } from '@apollo/client';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import ConventionFormGeneralSection from './ConventionFormGeneralSection';
 import ConventionFormWebsiteSection from './ConventionFormWebsiteSection';
 import ConventionFormBillingSection from './ConventionFormBillingSection';
@@ -63,22 +58,14 @@ function ConventionForm({
       id: 'website',
       name: 'Website',
       renderContent: () => (
-        <ConventionFormWebsiteSection
-          {...commonProps}
-          cmsLayouts={cmsLayouts}
-          pages={pages}
-          rootSite={rootSite}
-        />
+        <ConventionFormWebsiteSection {...commonProps} cmsLayouts={cmsLayouts} pages={pages} rootSite={rootSite} />
       ),
     },
     {
       id: 'email',
       name: 'Email',
       renderContent: () => (
-        <ConventionFormEmailSection
-          {...commonProps}
-          staffPositions={initialConvention.staff_positions}
-        />
+        <ConventionFormEmailSection {...commonProps} staffPositions={initialConvention.staff_positions} />
       ),
     },
     {
@@ -94,8 +81,9 @@ function ConventionForm({
   ];
 
   const location = useLocation();
-  const history = useHistory();
-  const tabProps = useTabsWithRouter(tabs, '/convention/edit', location, history);
+  const navigate = useNavigate();
+  const fakeHistory = useMemo(() => ({ replace: navigate }), [navigate]);
+  const tabProps = useTabsWithRouter(tabs, '/convention/edit', location, fakeHistory);
 
   return (
     <form>

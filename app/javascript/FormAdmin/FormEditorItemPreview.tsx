@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Link, useRouteMatch } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import classnames from 'classnames';
 import {
   useConfirm,
@@ -34,7 +34,7 @@ export type FormEditorItemPreviewProps = {
 
 function FormEditorItemPreview({ formSection, formItem }: FormEditorItemPreviewProps): JSX.Element {
   const confirm = useConfirm();
-  const match = useRouteMatch<{ id: string; sectionId: string }>();
+  const params = useParams<{ id: string; sectionId: string }>();
   const { convention, formType, formTypeIdentifier, formItemsById } = useContext(FormEditorContext);
   const renderedFormItem = formItemsById.get(formItem.id);
   const [deleteFormItem] = useDeleteMutationWithReferenceArrayUpdater(
@@ -61,7 +61,7 @@ function FormEditorItemPreview({ formSection, formItem }: FormEditorItemPreviewP
       <div className="form-editor-item flex-grow-1">
         <Link
           className="form-editor-item-overlay"
-          to={`/admin_forms/${match.params.id}/edit/section/${match.params.sectionId}/item/${formItem.id}`}
+          to={`/admin_forms/${params.id}/edit/section/${params.sectionId}/item/${formItem.id}`}
         >
           {formItem.identifier && (
             <div className="form-editor-item-identifier">

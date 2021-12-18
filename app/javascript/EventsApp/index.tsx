@@ -1,8 +1,7 @@
 import { useContext } from 'react';
-import { Switch, Route, Redirect, useParams } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
 import AppRootContext from '../AppRootContext';
-import eventIdRegexp from './eventIdRegexp';
 import EventList from './EventList';
 import EventPage from './EventPage';
 import RunSignupSummary from './SignupAdmin/RunSignupSummary';
@@ -11,90 +10,53 @@ import StandaloneEditEvent from './StandaloneEditEvent';
 import TeamMemberAdmin from './TeamMemberAdmin';
 import EventHistory from './EventPage/EventHistory';
 import ScheduleApp from './ScheduleApp';
-import { parseIntOrNull } from '@neinteractiveliterature/litform/lib/ValueUtils';
 import FourOhFourPage from '../FourOhFourPage';
-
-type RunRoutesProps = {
-  eventId: string;
-  eventPath: string;
-};
-
-function RunRoutes({ eventId, eventPath }: RunRoutesProps) {
-  const { runId } = useParams<{ runId: string }>();
-  const runPath = `${eventPath}/runs/${runId}`;
-
-  return (
-    <Switch>
-      <Route path={`${runPath}/admin_signups`}>
-        <SignupAdmin eventId={eventId} runId={runId} eventPath={eventPath} />
-      </Route>
-      <Route path={`${runPath}/signup_summary`}>
-        <RunSignupSummary eventId={eventId} runId={runId} eventPath={eventPath} />
-      </Route>
-    </Switch>
-  );
-}
-
-function EventRoutes() {
-  const { siteMode } = useContext(AppRootContext);
-  const eventIdSegment = useParams<{ eventId: string }>().eventId;
-  const eventId = parseIntOrNull(eventIdSegment)?.toString();
-  const eventPath = `/events/${eventIdSegment}`;
-
-  if (!eventId) {
-    return <FourOhFourPage />;
-  }
-
-  return (
-    <Switch>
-      <Route path={`${eventPath}/edit`}>
-        {siteMode === 'single_event' ? (
-          <Redirect to="/admin_events" />
-        ) : (
-          <StandaloneEditEvent eventId={eventId} eventPath={eventPath} />
-        )}
-      </Route>
-      <Route path={`${eventPath}/team_members`}>
-        <TeamMemberAdmin eventId={eventId} eventPath={eventPath} />
-      </Route>
-      <Route path={`${eventPath}/history`}>
-        <EventHistory eventId={eventId} eventPath={eventPath} />
-      </Route>
-      <Route path={`${eventPath}/runs/:runId`}>
-        <RunRoutes eventId={eventId} eventPath={eventPath} />
-      </Route>
-      <Route path={eventPath}>
-        {siteMode === 'single_event' ? <Redirect to="/" /> : <EventPage eventId={eventId} eventPath={eventPath} />}
-      </Route>
-    </Switch>
-  );
-}
+import NewTeamMember from './TeamMemberAdmin/NewTeamMember';
+import EditTeamMember from './TeamMemberAdmin/EditTeamMember';
+import TeamMembersIndex from './TeamMemberAdmin/TeamMembersIndex';
 
 function EventsApp(): JSX.Element {
   const { siteMode } = useContext(AppRootContext);
 
   return (
-    <Switch>
-      {siteMode !== 'single_event' && [
-        <Route path="/events/schedule" key="schedule">
-          <ScheduleApp />
+    <Routes>
+      {[
+        ...(siteMode !== 'single_event'
+          ? [
+              <Route path="schedule/*" key="schedule" element={<ScheduleApp />} />,
+              <Route
+                path="schedule_by_room/*"
+                key="scheduleByRoom"
+                element={<Navigate to="/events/schedule" replace />}
+              />,
+              <Route
+                path="schedule_with_counts/*"
+                key="scheduleWithCounts"
+                element={<Navigate to="/events/schedule" replace />}
+              />,
+            ]
+          : []),
+        <Route key="specificEventRoutes" path=":eventId">
+          <Route
+            path="edit"
+            element={siteMode === 'single_event' ? <Navigate to="/admin_events" /> : <StandaloneEditEvent />}
+          />
+          <Route path="team_members/*" element={<TeamMemberAdmin />}>
+            <Route path="new" element={<NewTeamMember />} />
+            <Route path=":teamMemberId" element={<EditTeamMember />} />
+            <Route path="" element={<TeamMembersIndex />} />
+          </Route>
+          <Route path="history/*" element={<EventHistory />} />
+          <Route path="runs/:runId">
+            <Route path="admin_signups/*" element={<SignupAdmin />} />
+            <Route path="signup_summary" element={<RunSignupSummary />} />
+          </Route>
+          <Route path="" element={siteMode === 'single_event' ? <Navigate to="/" /> : <EventPage />} />
         </Route>,
-        <Route path="/events/schedule_by_room" key="scheduleByRoom">
-          <Redirect to="/events/schedule" />
-        </Route>,
-        <Route path="/events/schedule_with_counts" key="scheduleWithCounts">
-          <Redirect to="/events/schedule" />
-        </Route>,
+        ...(siteMode !== 'single_event' ? [<Route key="eventList" path="" element={<EventList />} />] : []),
+        <Route key="404" path="*" element={<FourOhFourPage />} />,
       ]}
-      <Route path={`/events/:eventId(${eventIdRegexp})`}>
-        <EventRoutes />
-      </Route>
-      {siteMode !== 'single_event' && (
-        <Route path="/events">
-          <EventList />
-        </Route>
-      )}
-    </Switch>
+    </Routes>
   );
 }
 

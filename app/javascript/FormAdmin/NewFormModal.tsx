@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
 import {
   BootstrapFormInput,
@@ -22,7 +22,7 @@ export type NewFormModalProps = {
 };
 
 function NewFormModal({ convention, visible, close }: NewFormModalProps): JSX.Element {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [title, setTitle] = useState('');
   const [formType, setFormType] = useState('');
   const [createFormMutate] = useCreateMutationWithReferenceArrayUpdater(
@@ -40,10 +40,10 @@ function NewFormModal({ convention, visible, close }: NewFormModalProps): JSX.El
       });
       const form = data?.createForm?.form;
       if (form) {
-        history.push(`/admin_forms/${form.id}/edit`);
+        navigate(`/admin_forms/${form.id}/edit`);
       }
     },
-    [createFormMutate, history],
+    [createFormMutate, navigate],
   );
   const [createFormClicked, error, inProgress] = useAsyncFunction(createForm);
 

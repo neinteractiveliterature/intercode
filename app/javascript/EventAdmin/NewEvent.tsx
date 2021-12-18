@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Link, useParams, useHistory } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
 import { ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
@@ -36,10 +36,10 @@ function runIsCreatable(run: RunForRunFormFields): run is Omit<RunForRunFormFiel
 
 export default LoadQueryWrapper(useEventAdminEventsQuery, function NewEvent({ data }) {
   const convention = data.convention;
-  const history = useHistory();
+  const navigate = useNavigate();
   const { eventCategoryId: eventCategoryIdParam } = useParams<{ eventCategoryId: string }>();
   const initialEventCategory = useMemo(
-    () => convention.event_categories.find((c) => c.id === eventCategoryIdParam),
+    () => convention.event_categories.find((c) => c.id === eventCategoryIdParam?.replace(/-.*$/, '')),
     [convention, eventCategoryIdParam],
   );
   const [createMutate, createError] = useAsyncFunction<unknown, [CreateEventOptions]>(useCreateEvent(convention));
@@ -93,7 +93,7 @@ export default LoadQueryWrapper(useEventAdminEventsQuery, function NewEvent({ da
         eventCategory,
       });
     }
-    history.push(donePath);
+    navigate(donePath);
   };
 
   const warningMessage =

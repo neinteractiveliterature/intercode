@@ -1,4 +1,4 @@
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Column } from 'react-table';
 import { useModal } from '@neinteractiveliterature/litform';
 
@@ -64,7 +64,7 @@ function getPossibleColumns(): Column<UserType>[] {
 const defaultVisibleColumns = ['id', 'first_name', 'last_name', 'email'];
 
 function UsersTable(): JSX.Element {
-  const history = useHistory();
+  const navigate = useNavigate();
   const mergeModal = useModal<{ userIds: string[] }>();
   usePageTitle('Users');
 
@@ -105,7 +105,7 @@ function UsersTable(): JSX.Element {
         tableInstance={tableInstance}
         loading={loading}
         onClickRow={(row) => {
-          history.push(`/users/${row.original.id}`);
+          navigate(`/users/${row.original.id}`);
         }}
       />
 
