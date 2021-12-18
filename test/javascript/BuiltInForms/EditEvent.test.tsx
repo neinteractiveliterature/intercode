@@ -1,5 +1,3 @@
-import { BrowserRouter } from 'react-router-dom';
-
 import * as formMockData from '../EventAdmin/formMockData';
 import EditEvent from '../../../app/javascript/BuiltInForms/EditEvent';
 import useEventForm, { EventForm } from '../../../app/javascript/EventAdmin/useEventForm';
@@ -22,11 +20,9 @@ function EditEventTester({
     eventForm: eventForm || formMockData.minimalForm,
   });
   return (
-    <BrowserRouter basename="/">
-      <EditEvent event={event} validateForm={validateForm} {...defaultProps} {...props}>
-        <EventForm {...formProps} />
-      </EditEvent>
-    </BrowserRouter>
+    <EditEvent event={event} validateForm={validateForm} {...defaultProps} {...props}>
+      <EventForm {...formProps} />
+    </EditEvent>
   );
 }
 
