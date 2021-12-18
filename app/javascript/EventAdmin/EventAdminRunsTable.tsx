@@ -1,4 +1,4 @@
-import { Route, Link } from 'react-router-dom';
+import { Route, Link, Routes } from 'react-router-dom';
 import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import EditRun from './EditRun';
@@ -52,12 +52,16 @@ export default LoadQueryWrapper<EventAdminEventsQueryData, EventAdminEventsQuery
           </tbody>
         </table>
 
-        <Route path={`${buildEventCategoryUrl(eventCategory)}/:eventId/runs/:runId/edit`}>
-          <EditRun events={data.convention.events} convention={data.convention} />
-        </Route>
-        <Route path={`${buildEventCategoryUrl(eventCategory)}/:eventId/runs/new`}>
-          <EditRun events={data.convention.events} convention={data.convention} />
-        </Route>
+        <Routes>
+          <Route
+            path={`:eventId/runs/:runId/edit`}
+            element={<EditRun events={data.convention.events} convention={data.convention} />}
+          />
+          <Route
+            path={`:eventId/runs/new`}
+            element={<EditRun events={data.convention.events} convention={data.convention} />}
+          />
+        </Routes>
       </div>
     );
   },

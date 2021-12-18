@@ -1,4 +1,4 @@
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
 import MyProfileDisplay from './MyProfileDisplay';
 import MyProfileForm from './MyProfileForm';
@@ -12,20 +12,12 @@ function MyProfile(): JSX.Element {
   }
 
   return (
-    <Switch>
-      <Route path="/my_profile/edit_bio">
-        <Redirect to="/my_profile/edit" />
-      </Route>
-      <Route path="/my_profile/edit">
-        <MyProfileForm />
-      </Route>
-      <Route path="/my_profile/setup">
-        <MyProfileForm initialSetup />
-      </Route>
-      <Route path="/my_profile">
-        <MyProfileDisplay />
-      </Route>
-    </Switch>
+    <Routes>
+      <Route path="edit_bio" element={<Navigate to="./edit" replace />} />
+      <Route path="edit" element={<MyProfileForm />} />
+      <Route path="setup" element={<MyProfileForm initialSetup />} />
+      <Route path="" element={<MyProfileDisplay />} />
+    </Routes>
   );
 }
 

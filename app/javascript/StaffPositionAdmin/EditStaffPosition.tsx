@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -15,7 +15,7 @@ export default LoadSingleValueFromCollectionWrapper(
   useStaffPositionsQuery,
   (data, id) => data.convention.staff_positions.find((sp) => sp.id === id),
   function EditStaffPosition({ value: initialStaffPosition }) {
-    const history = useHistory();
+    const navigate = useNavigate();
     const [staffPosition, setStaffPosition] = useState(initialStaffPosition);
     const [updateMutate] = useUpdateStaffPositionMutation();
     const [mutate, updateError, requestInProgress] = useAsyncFunction(updateMutate);
@@ -31,8 +31,8 @@ export default LoadSingleValueFromCollectionWrapper(
           },
         },
       });
-      history.push('/staff_positions');
-    }, [mutate, staffPosition, history]);
+      navigate('/staff_positions');
+    }, [mutate, staffPosition, navigate]);
 
     return (
       <div>

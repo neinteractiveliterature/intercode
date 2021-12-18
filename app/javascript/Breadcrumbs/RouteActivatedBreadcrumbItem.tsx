@@ -1,20 +1,27 @@
 import { ReactNode } from 'react';
-import { useRouteMatch, RouteProps } from 'react-router-dom';
+import { PathPattern } from 'react-router';
+import { useMatch } from 'react-router-dom';
 
 import BreadcrumbItem from './BreadcrumbItem';
 
 export type RouteActivatedBreadcrumbItemProps = {
   to: string;
-  matchProps: RouteProps;
+  pattern: string | PathPattern;
   children: ReactNode;
+  hideUnlessMatch?: boolean;
 };
 
 function RouteActivatedBreadcrumbItem({
   to,
   children,
-  matchProps,
+  pattern,
+  hideUnlessMatch,
 }: RouteActivatedBreadcrumbItemProps): JSX.Element {
-  const match = useRouteMatch(matchProps);
+  const match = useMatch(pattern);
+
+  if (hideUnlessMatch && !match) {
+    return <></>;
+  }
 
   return (
     <BreadcrumbItem to={to} active={!!match}>

@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ApolloError } from '@apollo/client';
 import {
   ErrorDisplay,
+  LoadQueryWrapper,
   useCreateMutationWithReferenceArrayUpdater,
   useUniqueId,
 } from '@neinteractiveliterature/litform';
@@ -20,15 +21,13 @@ import {
 } from './queries.generated';
 import { ReceiveSignupEmail } from '../../graphqlTypes.generated';
 import { useCreateTeamMemberMutation } from './mutations.generated';
+import useTeamMembersQueryFromParams from './useTeamMembersQueryFromParams';
+import buildEventUrl from '../buildEventUrl';
 
-export type NewTeamMemberProps = {
-  event: TeamMembersQueryData['convention']['event'];
-  eventPath: string;
-};
-
-function NewTeamMember({ event, eventPath }: NewTeamMemberProps): JSX.Element {
+export default LoadQueryWrapper(useTeamMembersQueryFromParams, function NewTeamMember({ data }): JSX.Element {
+  const event = data.convention.event;
   const { t } = useTranslation();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [teamMember, setTeamMember] = useState<Partial<TeamMembersQueryData['convention']['event']['team_members'][0]>>(
     {
       user_con_profile: undefined,
@@ -75,7 +74,7 @@ function NewTeamMember({ event, eventPath }: NewTeamMemberProps): JSX.Element {
           },
         },
       });
-      history.replace(`${eventPath}/team_members`);
+      navigate(`${buildEventUrl(event)}/team_members`, { replace: true });
     }
   };
 
@@ -128,6 +127,4 @@ function NewTeamMember({ event, eventPath }: NewTeamMemberProps): JSX.Element {
       )}
     </>
   );
-}
-
-export default NewTeamMember;
+});

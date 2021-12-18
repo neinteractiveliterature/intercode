@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
 import { useConfirm, ErrorDisplay, useDeleteMutationWithReferenceArrayUpdater } from '@neinteractiveliterature/litform';
 
@@ -17,7 +17,7 @@ export default LoadSingleValueFromCollectionWrapper(
   (data, id) => data.convention.user_activity_alerts.find((alert) => alert.id === id),
   function EditUserActivityAlertForm({ data, value: initialUserActivityAlert }) {
     usePageTitle('Editing user activity alert');
-    const history = useHistory();
+    const navigate = useNavigate();
     const [userActivityAlert, setUserActivityAlert] = useState(initialUserActivityAlert);
     const [notificationDestinationChangeSet, addNotificationDestination, removeNotificationDestination] =
       useChangeSet<typeof userActivityAlert['notification_destinations'][0]>();
@@ -56,12 +56,12 @@ export default LoadSingleValueFromCollectionWrapper(
         },
       });
 
-      history.push('/user_activity_alerts');
+      navigate('/user_activity_alerts');
     };
 
     const deleteClicked = async () => {
       await deleteAlert(userActivityAlert);
-      history.push('/user_activity_alerts');
+      navigate('/user_activity_alerts');
     };
 
     return (

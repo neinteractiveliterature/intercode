@@ -1,4 +1,4 @@
-import { Switch, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
 import NotificationAdminIndex from './NotificationAdminIndex';
 import NotificationConfiguration from './NotificationConfiguration';
@@ -9,14 +9,10 @@ function NotificationAdmin(): JSX.Element {
   if (authorizationWarning) return authorizationWarning;
 
   return (
-    <Switch>
-      <Route path="/admin_notifications/:category/:event">
-        <NotificationConfiguration />
-      </Route>
-      <Route path="/admin_notifications">
-        <NotificationAdminIndex />
-      </Route>
-    </Switch>
+    <Routes>
+      <Route path=":category/:event" element={<NotificationConfiguration />} />
+      <Route path="" element={<NotificationAdminIndex />} />
+    </Routes>
   );
 }
 

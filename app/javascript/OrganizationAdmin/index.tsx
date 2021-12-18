@@ -1,19 +1,15 @@
-import { Switch, Route, useParams, useRouteMatch } from 'react-router-dom';
+import { useParams, useMatch, Outlet } from 'react-router-dom';
 import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import EditOrganizationRole from './EditOrganizationRole';
-import NewOrganizationRole from './NewOrganizationRole';
-import OrganizationDisplay from './OrganizationDisplay';
-import OrganizationIndex from './OrganizationIndex';
 import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import { useOrganizationAdminOrganizationsQuery } from './queries.generated';
 
 function OrganizationWithIdBreadcrumbs() {
-  const match = useRouteMatch();
   const { id } = useParams<{ id: string }>();
   const { data, loading, error } = useOrganizationAdminOrganizationsQuery();
+  const organizationMainPageMatch = useMatch({ path: `/organizations/${id}`, end: true });
 
   if (loading) {
     return (
@@ -31,54 +27,37 @@ function OrganizationWithIdBreadcrumbs() {
 
   return (
     <>
-      <BreadcrumbItem to={`/organizations/${id}`} active={match.isExact}>
+      <BreadcrumbItem to={`/organizations/${id}`} active={organizationMainPageMatch != null}>
         {organization?.name ?? 'Organization'}
       </BreadcrumbItem>
 
-      <Route path="/organizations/:id/roles/new">
-        <BreadcrumbItem active>New organization role</BreadcrumbItem>
-      </Route>
+      <RouteActivatedBreadcrumbItem pattern="/organizations/:id/roles/new" to="." hideUnlessMatch>
+        New organization role
+      </RouteActivatedBreadcrumbItem>
 
-      <Route path="/organizations/:id/roles/:roleId/edit">
-        <BreadcrumbItem active>Edit organization role</BreadcrumbItem>
-      </Route>
+      <RouteActivatedBreadcrumbItem pattern="/organizations/:id/roles/:roleId/edit" to="." hideUnlessMatch>
+        Edit organization role
+      </RouteActivatedBreadcrumbItem>
     </>
   );
 }
 
 function OrganizationAdmin(): JSX.Element {
   const authorizationWarning = useAuthorizationRequired('can_read_organizations');
+  const specificOrganizationMatch = useMatch('/organizations/:id');
   if (authorizationWarning) return authorizationWarning;
 
   return (
     <>
       <ol className="breadcrumb">
-        <RouteActivatedBreadcrumbItem
-          matchProps={{ path: '/organizations', exact: true }}
-          to="/organizations"
-        >
+        <RouteActivatedBreadcrumbItem pattern={{ path: '/organizations', end: true }} to="/organizations">
           Organizations
         </RouteActivatedBreadcrumbItem>
 
-        <Route path="/organizations/:id">
-          <OrganizationWithIdBreadcrumbs />
-        </Route>
+        {specificOrganizationMatch && <OrganizationWithIdBreadcrumbs />}
       </ol>
 
-      <Switch>
-        <Route path="/organizations/:id/roles/new">
-          <NewOrganizationRole />
-        </Route>
-        <Route path="/organizations/:organizationId/roles/:organizationRoleId/edit">
-          <EditOrganizationRole />
-        </Route>
-        <Route path="/organizations/:id">
-          <OrganizationDisplay />
-        </Route>
-        <Route path="/organizations">
-          <OrganizationIndex />
-        </Route>
-      </Switch>
+      <Outlet />
     </>
   );
 }

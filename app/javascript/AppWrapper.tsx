@@ -7,7 +7,8 @@ import { I18nextProvider } from 'react-i18next';
 import type { Stripe } from '@stripe/stripe-js';
 import {
   Confirm,
-  useConfirm,
+  // TODO bring this back when we re-add prompting
+  // useConfirm,
   PageLoadingIndicator,
   AlertProvider,
   ErrorBoundary,
@@ -66,7 +67,8 @@ function AppWrapper<P>(WrappedComponent: React.ComponentType<P>): React.Componen
       stripePublishableKey,
       ...otherProps
     } = props;
-    const confirm = useConfirm();
+    // TODO bring this back when we re-add prompting
+    // const confirm = useConfirm();
     const authenticityTokensProviderValue = useAuthenticityTokens(authenticityTokens);
     const { graphql: authenticityToken, refresh } = authenticityTokensProviderValue;
     const authenticationModalContextValue = useAuthenticationModalProvider(recaptchaSiteKey);
@@ -87,16 +89,17 @@ function AppWrapper<P>(WrappedComponent: React.ComponentType<P>): React.Componen
     const apolloClient = useIntercodeApolloClient(authenticityToken, onUnauthenticatedRef);
     const [stripePromise, setStripePromise] = useState<Promise<Stripe | null> | null>(null);
 
-    const getUserConfirmation = useCallback(
-      (message: ReactNode, callback: (confirmed: boolean) => void) => {
-        confirm({
-          prompt: message,
-          action: () => callback(true),
-          onCancel: () => callback(false),
-        });
-      },
-      [confirm],
-    );
+    // TODO bring this back when we re-add prompting
+    // const getUserConfirmation = useCallback(
+    //   (message: ReactNode, callback: (confirmed: boolean) => void) => {
+    //     confirm({
+    //       prompt: message,
+    //       action: () => callback(true),
+    //       onCancel: () => callback(false),
+    //     });
+    //   },
+    //   [confirm],
+    // );
 
     const mapboxContextValue = useMapboxContext({ mapboxAccessToken });
 
@@ -107,7 +110,9 @@ function AppWrapper<P>(WrappedComponent: React.ComponentType<P>): React.Componen
 
     return (
       <React.StrictMode>
-        <BrowserRouter basename="/" getUserConfirmation={getUserConfirmation}>
+        <BrowserRouter basename="/">
+          {' '}
+          {/* TODO bring this back when we re-add prompting getUserConfirmation={getUserConfirmation}> */}
           <LazyStripeContext.Provider
             value={{
               publishableKey: stripePublishableKey,
@@ -122,9 +127,7 @@ function AppWrapper<P>(WrappedComponent: React.ComponentType<P>): React.Componen
                   <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
                     <>
                       {!unauthenticatedError && (
-                        <Suspense
-                          fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}
-                        >
+                        <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
                           <I18NextWrapper>
                             {(i18nInstance) => (
                               <AlertProvider okText={i18nInstance.t('buttons.ok', 'OK')}>
@@ -150,8 +153,7 @@ function AppWrapper<P>(WrappedComponent: React.ComponentType<P>): React.Componen
     );
   }
 
-  const wrappedComponentDisplayName =
-    WrappedComponent.displayName || WrappedComponent.name || 'Component';
+  const wrappedComponentDisplayName = WrappedComponent.displayName || WrappedComponent.name || 'Component';
 
   Wrapper.displayName = `AppWrapper(${wrappedComponentDisplayName})`;
 

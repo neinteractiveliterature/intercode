@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import classNames from 'classnames';
-import { Redirect } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
 import capitalize from 'lodash/capitalize';
@@ -35,7 +35,7 @@ export default LoadQueryWrapper(useTicketPurchaseFormQuery, function TicketPurch
   }
 
   if (data.convention.my_profile?.ticket) {
-    return <Redirect to="/" />;
+    return <Navigate to="/ticket" replace />;
   }
 
   const renderProductSelect = () => (

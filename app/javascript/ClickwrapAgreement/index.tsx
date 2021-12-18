@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { useApolloClient } from '@apollo/client';
-import { useHistory, Redirect } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { LoadQueryWrapper, ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -12,9 +12,8 @@ import { useClickwrapAgreementQuery } from './queries.generated';
 
 export default LoadQueryWrapper(useClickwrapAgreementQuery, function ClickwrapAgreement({ data }) {
   const { t } = useTranslation();
-  const history = useHistory();
-  const [accept, { error: acceptError, loading: acceptInProgress }] =
-    useAcceptClickwrapAgreementMutation();
+  const navigate = useNavigate();
+  const [accept, { error: acceptError, loading: acceptInProgress }] = useAcceptClickwrapAgreementMutation();
   const { refresh } = useContext(AuthenticityTokensContext);
   const apolloClient = useApolloClient();
   const loginRequired = useLoginRequired();
@@ -22,7 +21,7 @@ export default LoadQueryWrapper(useClickwrapAgreementQuery, function ClickwrapAg
   const acceptClicked = async () => {
     try {
       await accept();
-      history.push('/my_profile/setup');
+      navigate('/my_profile/setup');
     } catch (err) {
       await refresh();
       await apolloClient.resetStore();
@@ -35,7 +34,7 @@ export default LoadQueryWrapper(useClickwrapAgreementQuery, function ClickwrapAg
   }
 
   if (data.convention.my_profile?.accepted_clickwrap_agreement) {
-    return <Redirect to="/" />;
+    return <Navigate to="/" replace />;
   }
 
   const { convention } = data;
@@ -63,12 +62,7 @@ export default LoadQueryWrapper(useClickwrapAgreementQuery, function ClickwrapAg
             <ErrorDisplay graphQLError={acceptError} />
           </div>
           <div className="card-footer text-end">
-            <button
-              className="btn btn-primary"
-              type="button"
-              onClick={acceptClicked}
-              disabled={acceptInProgress}
-            >
+            <button className="btn btn-primary" type="button" onClick={acceptClicked} disabled={acceptInProgress}>
               {t('clickwrap.agreeButton', 'I agree')}
             </button>
           </div>

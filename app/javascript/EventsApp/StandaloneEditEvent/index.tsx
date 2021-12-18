@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react';
-import { Redirect, useHistory } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useApolloClient } from '@apollo/client';
 import {
   ErrorDisplay,
@@ -28,6 +28,9 @@ import {
   useStandaloneUpdateEventMutation,
 } from './mutations.generated';
 import FourOhFourPage from '../../FourOhFourPage';
+import useLoginRequired from '../../Authentication/useLoginRequired';
+import { AuthorizationError } from '../../Authentication/useAuthorizationRequired';
+import buildEventUrl from '../buildEventUrl';
 
 export type StandaloneEditEventFormProps = {
   initialEvent: WithFormResponse<StandaloneEditEventQueryData['convention']['event']>;
@@ -44,7 +47,7 @@ function StandaloneEditEventForm({
   convention,
   currentAbility,
 }: StandaloneEditEventFormProps) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const apolloClient = useApolloClient();
 
   const [eventFormProps, { event, validateForm }] = useEventForm({
@@ -96,7 +99,7 @@ function StandaloneEditEventForm({
       validateForm={validateForm}
       updateEvent={updateEvent}
       onSave={() => {
-        history.push(eventPath);
+        navigate(eventPath);
       }}
     >
       <EventForm {...eventFormProps} />
@@ -114,13 +117,10 @@ function StandaloneEditEventForm({
   );
 }
 
-export type StandaloneEditEventProps = {
-  eventId: string;
-  eventPath: string;
-};
-
-function StandaloneEditEvent({ eventId, eventPath }: StandaloneEditEventProps): JSX.Element {
-  const { data, loading, error } = useStandaloneEditEventQuery({ variables: { eventId } });
+function StandaloneEditEvent(): JSX.Element {
+  const eventId = useParams<{ eventId: string }>().eventId;
+  const loginRequired = useLoginRequired();
+  const { data, loading, error } = useStandaloneEditEventQuery({ variables: { eventId: eventId ?? '' } });
 
   const initialEvent = useMemo(
     () => (error || loading || !data ? null : deserializeFormResponse(data.convention.event)),
@@ -128,6 +128,10 @@ function StandaloneEditEvent({ eventId, eventPath }: StandaloneEditEventProps): 
   );
 
   usePageTitle(useValueUnless(() => `Editing “${initialEvent?.title}”`, error || loading));
+
+  if (loginRequired) {
+    return <></>;
+  }
 
   if (loading) {
     return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
@@ -141,8 +145,8 @@ function StandaloneEditEvent({ eventId, eventPath }: StandaloneEditEventProps): 
     return <FourOhFourPage />;
   }
 
-  if (data && !data.currentAbility.can_update_event) {
-    return <Redirect to="/" />;
+  if (!data.currentAbility.can_update_event) {
+    return <AuthorizationError />;
   }
 
   return (
@@ -150,7 +154,7 @@ function StandaloneEditEvent({ eventId, eventPath }: StandaloneEditEventProps): 
       initialEvent={initialEvent}
       eventForm={data.convention.event.event_category.event_form}
       convention={data.convention}
-      eventPath={eventPath}
+      eventPath={buildEventUrl(data.convention.event)}
       currentAbility={data.currentAbility}
     />
   );

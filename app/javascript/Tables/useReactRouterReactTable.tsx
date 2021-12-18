@@ -1,13 +1,12 @@
 import { useCallback, useMemo } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { Filters, SortingRule } from 'react-table';
 
 import { FieldFilterCodecs } from './FilterUtils';
 
-export type UseReactRouterReactTableOptions<RowType extends Record<string, unknown>> =
-  Partial<FieldFilterCodecs> & {
-    defaultState?: Partial<ReactRouterReactTableState<RowType>>;
-  };
+export type UseReactRouterReactTableOptions<RowType extends Record<string, unknown>> = Partial<FieldFilterCodecs> & {
+  defaultState?: Partial<ReactRouterReactTableState<RowType>>;
+};
 
 export type ReactRouterReactTableState<RowType extends Record<string, unknown>> = {
   page: number;
@@ -29,13 +28,12 @@ export default function useReactRouterReactTable<RowType extends Record<string, 
   sortBy: SortingRule<RowType>[];
   updateSearch: (state: Partial<ReactRouterReactTableState<RowType>>) => void;
 } {
-  const history = useHistory();
+  const [searchParams, setSearchParams] = useSearchParams();
   const encode = useMemo(() => encodeFilterValue ?? identityCodec, [encodeFilterValue]);
   const decode = useMemo(() => decodeFilterValue ?? identityCodec, [decodeFilterValue]);
 
   const decodeSearchParams = useCallback(
-    (search: string) => {
-      const params = new URLSearchParams(search);
+    (params: URLSearchParams) => {
       let page: number | undefined;
       const filters: Filters<RowType> = [];
       const sortBy: SortingRule<RowType>[] = [];
@@ -74,8 +72,8 @@ export default function useReactRouterReactTable<RowType extends Record<string, 
   );
 
   const encodeSearchParams = useCallback(
-    ({ page, filters, sortBy }: ReactRouterReactTableState<RowType>, existingQuery: string) => {
-      const params = new URLSearchParams(existingQuery);
+    ({ page, filters, sortBy }: ReactRouterReactTableState<RowType>, existingParams: URLSearchParams) => {
+      const params = new URLSearchParams(existingParams);
 
       if (page != null) {
         params.set('page', (page + 1).toString());
@@ -101,26 +99,23 @@ export default function useReactRouterReactTable<RowType extends Record<string, 
         params.set(`sort.${id}`, desc ? 'desc' : 'asc');
       });
 
-      return params.toString();
+      return params;
     },
     [encode],
   );
 
   const updateSearch = useCallback(
     (newState: Partial<ReactRouterReactTableState<RowType>>) => {
-      const oldState = decodeSearchParams(history.location.search);
-      const newSearch = encodeSearchParams({ ...oldState, ...newState }, history.location.search);
-      if (newSearch !== history.location.search.replace(/^\?/, '')) {
-        history.replace(`${history.location.pathname}?${newSearch}${history.location.hash}`);
+      const oldState = decodeSearchParams(searchParams);
+      const newSearch = encodeSearchParams({ ...oldState, ...newState }, searchParams);
+      if (newSearch.toString() !== searchParams.toString()) {
+        setSearchParams(newSearch, { replace: true });
       }
     },
-    [decodeSearchParams, encodeSearchParams, history],
+    [decodeSearchParams, encodeSearchParams, searchParams, setSearchParams],
   );
 
-  const tableState = useMemo(
-    () => decodeSearchParams(history.location.search),
-    [decodeSearchParams, history.location.search],
-  );
+  const tableState = useMemo(() => decodeSearchParams(searchParams), [decodeSearchParams, searchParams]);
 
   return useMemo(
     () => ({

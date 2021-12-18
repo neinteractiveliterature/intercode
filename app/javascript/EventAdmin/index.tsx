@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { NavLink, Route, Switch, Redirect, useLocation } from 'react-router-dom';
+import { NavLink, Route, Routes, Navigate, useLocation } from 'react-router-dom';
 import classNames from 'classnames';
 import { LoadQueryWrapper, useLitformPopperWithAutoClosing } from '@neinteractiveliterature/litform';
 
@@ -9,13 +9,11 @@ import EventAdminRunsTable from './EventAdminRunsTable';
 import NewEvent from './NewEvent';
 import RecurringEventAdmin from './RecurringEventAdmin';
 import sortEventCategories from './sortEventCategories';
-import buildEventCategoryUrl from './buildEventCategoryUrl';
+import buildEventCategoryUrl, { buildEventCategoryUrlPortion } from './buildEventCategoryUrl';
 import SingleRunEventAdminList from './SingleRunEventAdminList';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import { useEventAdminEventsQuery } from './queries.generated';
 import humanize from '../humanize';
-
-const eventCategoryIdRegexp = '[0-9a-z\\-]+';
 
 const adminComponentsBySchedulingUi = {
   regular: EventAdminRunsTable,
@@ -47,22 +45,18 @@ export default LoadQueryWrapper(useEventAdminEventsQuery, function EventAdmin({ 
   if (data.convention.site_mode === 'single_event') {
     if (data.convention.events.length === 0) {
       return (
-        <Switch>
-          <Route path="/admin_events/new">
-            <NewEvent />
-          </Route>
-          <Redirect to="/admin_events/new" />
-        </Switch>
+        <Routes>
+          <Route path="new" element={<NewEvent />} />
+          <Route path="" element={<Navigate to="./new" replace />} />
+        </Routes>
       );
     }
 
     return (
-      <Switch>
-        <Route path="/admin_events/:id/edit">
-          <EventAdminEditEvent />
-        </Route>
-        <Redirect to={`/admin_events/${data.convention.events[0].id}/edit`} />
-      </Switch>
+      <Routes>
+        <Route path=":id/edit" element={<EventAdminEditEvent />} />
+        <Route path="" element={<Navigate to={`./${data.convention.events[0].id}/edit`} replace />} />
+      </Routes>
     );
   }
 
@@ -104,27 +98,25 @@ export default LoadQueryWrapper(useEventAdminEventsQuery, function EventAdmin({ 
         </li>
       </ul>
 
-      <Switch>
-        <Route path={`/admin_events/:eventCategoryId(${eventCategoryIdRegexp})/new`}>
-          <NewEvent />
-        </Route>
+      <Routes>
+        <Route path={`:eventCategoryId/new`} element={<NewEvent />} />
         {eventCategories.map((eventCategory) => {
           const AdminComponent = adminComponentsBySchedulingUi[eventCategory.scheduling_ui];
 
           return (
-            <Route key={eventCategory.id} path={buildEventCategoryUrl(eventCategory)}>
-              <AdminComponent eventCategoryId={eventCategory.id} />
-            </Route>
+            <Route
+              key={eventCategory.id}
+              path={`${buildEventCategoryUrlPortion(eventCategory)}/*`}
+              element={<AdminComponent eventCategoryId={eventCategory.id} />}
+            />
           );
         })}
-        <Route path="/admin_events/:id/edit">
-          <EventAdminEditEvent />
-        </Route>
-        <Route path="/admin_events/dropped_events">
-          <DroppedEventAdmin />
-        </Route>
-        <Redirect to={buildEventCategoryUrl(eventCategories[0]) ?? '/admin_events'} />
-      </Switch>
+        <Route path=":id/edit" element={<EventAdminEditEvent />} />
+        <Route path="dropped_events" element={<DroppedEventAdmin />} />
+        {eventCategories.length > 0 && (
+          <Route path="" element={<Navigate to={buildEventCategoryUrl(eventCategories[0])} replace />} />
+        )}
+      </Routes>
     </>
   );
 });

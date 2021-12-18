@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import * as React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
 import {
   ErrorDisplay,
@@ -21,7 +21,7 @@ import { useCreateContentGroupMutation } from './mutations.generated';
 import { CmsContentTypeIndicator } from '../../graphqlTypes.generated';
 
 export default LoadQueryWrapper(useCmsContentGroupsAdminQuery, function NewCmsContentGroup({ data }): JSX.Element {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [createCmsContentGroup, { error: createError, loading: createInProgress }] =
     useCreateMutationWithReferenceArrayUpdater(
       useCreateContentGroupMutation,
@@ -62,7 +62,7 @@ export default LoadQueryWrapper(useCmsContentGroupsAdminQuery, function NewCmsCo
       },
     });
 
-    history.push('/cms_content_groups');
+    navigate('/cms_content_groups');
   };
 
   return (

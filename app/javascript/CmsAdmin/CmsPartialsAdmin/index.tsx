@@ -1,4 +1,4 @@
-import { Switch, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
 import CmsPartialsAdminTable from './CmsPartialsAdminTable';
 import EditCmsPartial from './EditCmsPartial';
@@ -7,20 +7,12 @@ import ViewCmsPartialSource from './ViewCmsPartialSource';
 
 function CmsPartialsAdmin(): JSX.Element {
   return (
-    <Switch>
-      <Route path="/cms_partials/:id/edit">
-        <EditCmsPartial />
-      </Route>
-      <Route path="/cms_partials/:id/view_source">
-        <ViewCmsPartialSource />
-      </Route>
-      <Route path="/cms_partials/new">
-        <NewCmsPartial />
-      </Route>
-      <Route path="/cms_partials">
-        <CmsPartialsAdminTable />
-      </Route>
-    </Switch>
+    <Routes>
+      <Route path=":id/edit" element={<EditCmsPartial />} />
+      <Route path=":id/view_source" element={<ViewCmsPartialSource />} />
+      <Route path="new" element={<NewCmsPartial />} />
+      <Route path="" element={<CmsPartialsAdminTable />} />
+    </Routes>
   );
 }
 

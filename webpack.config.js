@@ -50,6 +50,7 @@ const config = {
     },
     webSocketServer: 'ws',
     allowedHosts: 'all',
+    hot: false,
   },
   cache: {
     type: 'filesystem',

@@ -1,5 +1,5 @@
 import { Suspense, useMemo, useState, useEffect } from 'react';
-import { Switch, Route, useLocation, useHistory } from 'react-router-dom';
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { Settings } from 'luxon';
 import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
@@ -33,7 +33,7 @@ function normalizePathForLayout(path: string) {
 
 function AppRoot(): JSX.Element {
   const location = useLocation();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { data, loading, error } = useAppRootQuery({
     variables: { path: normalizePathForLayout(location.pathname) },
   });
@@ -108,9 +108,9 @@ function AppRoot(): JSX.Element {
       location.pathname !== '/' &&
       !location.pathname.startsWith('/pages')
     ) {
-      history.replace('/clickwrap_agreement');
+      navigate('/clickwrap_agreement', { replace: true });
     }
-  }, [data, error, history, loading, location]);
+  }, [data, error, navigate, loading, location]);
 
   useEffect(() => {
     if (appRootContextValue?.language) {
@@ -140,20 +140,20 @@ function AppRoot(): JSX.Element {
 
   return (
     <AppRootContext.Provider value={appRootContextValue}>
-      <Switch>
-        <Route path="/admin_forms/:id/edit/section/:sectionId/item/:itemId">
-          <PageComponents.FormEditor />
+      <Routes>
+        <Route path="/admin_forms/:id/edit/*" element={<PageComponents.FormEditor />}>
+          <Route path="section/:sectionId/item/:itemId" element={<PageComponents.FormItemEditorLayout />} />
+          <Route path="section/:sectionId" element={<PageComponents.FormSectionEditorLayout />} />
         </Route>
-        <Route path="/admin_forms/:id/edit/section/:sectionId">
-          <PageComponents.FormEditor />
-        </Route>
-        <Route path="/admin_forms/:id/edit">
-          <PageComponents.FormEditor />
-        </Route>
-        <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
-          {cachedBodyComponents}
-        </Suspense>
-      </Switch>
+        <Route
+          path="*"
+          element={
+            <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
+              {cachedBodyComponents}
+            </Suspense>
+          }
+        />
+      </Routes>
     </AppRootContext.Provider>
   );
 }

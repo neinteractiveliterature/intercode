@@ -7,22 +7,8 @@ import TimeSelect, { TimeValues } from '../BuiltInFormControls/TimeSelect';
 import Timespan from '../Timespan';
 import { useWhosFreeFormConventionQuery } from './queries.generated';
 
-const dateTimeToTimeValues = (momentValue?: DateTime | null) => {
-  if (momentValue == null) {
-    return {
-      hour: undefined,
-      minute: undefined,
-    };
-  }
-
-  return {
-    hour: momentValue.hour,
-    minute: momentValue.minute,
-  };
-};
-
-function makeTimeOfDay(prevTime: DateTime | null | undefined, day: DateTime, newTime: TimeValues) {
-  return (prevTime || day).set(newTime);
+function makeTimeOfDay(day: DateTime, newTime: TimeValues) {
+  return day.set(newTime);
 }
 
 export type WhosFreeFormProps = {
@@ -31,8 +17,14 @@ export type WhosFreeFormProps = {
 
 function WhosFreeForm({ onSubmit }: WhosFreeFormProps): JSX.Element {
   const { data, loading, error } = useWhosFreeFormConventionQuery();
-  const [start, setStart] = useState<DateTime>();
-  const [finish, setFinish] = useState<DateTime>();
+  const [start, setStart] = useState<TimeValues>({
+    hour: undefined,
+    minute: undefined,
+  });
+  const [finish, setFinish] = useState<TimeValues>({
+    hour: undefined,
+    minute: undefined,
+  });
   const [day, setDay] = useState<DateTime>();
 
   const renderTimeSelects = useCallback(() => {
@@ -41,25 +33,17 @@ function WhosFreeForm({ onSubmit }: WhosFreeFormProps): JSX.Element {
     }
 
     const startTimespan = Timespan.finiteFromDateTimes(day, day.plus({ days: 1 }));
-    const finishTimespan = Timespan.finiteFromDateTimes(start ?? day, startTimespan.finish);
+    const finishTimespan = Timespan.finiteFromDateTimes(makeTimeOfDay(day, start), startTimespan.finish);
 
     return (
       <div className="d-flex mb-4">
         <div className="me-4">
           from
-          <TimeSelect
-            timespan={startTimespan}
-            value={dateTimeToTimeValues(start)}
-            onChange={(newTime) => setStart(makeTimeOfDay(start, day, newTime))}
-          />
+          <TimeSelect timespan={startTimespan} value={start} onChange={(newTime) => setStart(newTime)} />
         </div>
         <div>
           until
-          <TimeSelect
-            timespan={finishTimespan}
-            value={dateTimeToTimeValues(finish)}
-            onChange={(newTime) => setFinish(makeTimeOfDay(finish, day, newTime))}
-          />
+          <TimeSelect timespan={finishTimespan} value={finish} onChange={(newTime) => setFinish(newTime)} />
         </div>
       </div>
     );
@@ -67,18 +51,24 @@ function WhosFreeForm({ onSubmit }: WhosFreeFormProps): JSX.Element {
 
   const dayChanged = useCallback((newDay) => {
     setDay(newDay);
-    setStart(undefined);
-    setFinish(undefined);
+    setStart({
+      hour: undefined,
+      minute: undefined,
+    });
+    setFinish({
+      hour: undefined,
+      minute: undefined,
+    });
   }, []);
 
   const search = useCallback(
     (event) => {
       event.preventDefault();
-      if (start && finish) {
-        onSubmit({ start, finish });
+      if (day && start && finish) {
+        onSubmit({ start: makeTimeOfDay(day, start), finish: makeTimeOfDay(day, finish) });
       }
     },
-    [onSubmit, start, finish],
+    [onSubmit, day, start, finish],
   );
 
   if (loading) {
@@ -101,12 +91,7 @@ function WhosFreeForm({ onSubmit }: WhosFreeFormProps): JSX.Element {
         {renderTimeSelects()}
 
         <p className="mb-0">
-          <button
-            type="button"
-            className="btn btn-primary"
-            disabled={!(start && finish)}
-            onClick={search}
-          >
+          <button type="button" className="btn btn-primary" disabled={!(start && finish)} onClick={search}>
             Search
           </button>
         </p>

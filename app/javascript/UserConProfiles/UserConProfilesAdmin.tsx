@@ -1,4 +1,4 @@
-import { Switch, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
 import EditTicket from './EditTicket';
 import EditUserConProfile from './EditUserConProfile';
@@ -24,26 +24,14 @@ function UserConProfilesAdmin(): JSX.Element {
   if (authorizationWarning) return authorizationWarning;
 
   return (
-    <Switch>
-      <Route path="/user_con_profiles/new">
-        <AttendeesPage />
-      </Route>
-      <Route path="/user_con_profiles/:id/admin_ticket/new">
-        <NewTicket />
-      </Route>
-      <Route path="/user_con_profiles/:id/admin_ticket/edit">
-        <EditTicket />
-      </Route>
-      <Route path="/user_con_profiles/:id/edit">
-        <EditUserConProfile />
-      </Route>
-      <Route path="/user_con_profiles/:id">
-        <UserConProfileAdminDisplay />
-      </Route>
-      <Route>
-        <AttendeesPage />
-      </Route>
-    </Switch>
+    <Routes>
+      <Route path="new" element={<AttendeesPage />} />
+      <Route path=":id/admin_ticket/new" element={<NewTicket />} />
+      <Route path=":id/admin_ticket/edit" element={<EditTicket />} />
+      <Route path=":id/edit" element={<EditUserConProfile />} />
+      <Route path=":id" element={<UserConProfileAdminDisplay />} />
+      <Route path="" element={<AttendeesPage />} />
+    </Routes>
   );
 }
 

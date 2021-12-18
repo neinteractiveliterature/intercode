@@ -1,4 +1,4 @@
-import { Route, Switch, Redirect } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import EditTicketType from './EditTicketType';
@@ -12,17 +12,15 @@ export default LoadQueryWrapper(useAdminTicketTypesQuery, function TicketTypeAdm
   if (authorizationWarning) return authorizationWarning;
 
   return (
-    <Switch>
-      <Route path="/ticket_types/new">
-        <NewTicketType ticketName={data.convention.ticket_name} ticketNamePlural={data.convention.ticketNamePlural} />
-      </Route>
-      <Route path="/ticket_types/:id/edit">
-        <EditTicketType />
-      </Route>
-      <Route path="/ticket_types">
-        <TicketTypesList />
-      </Route>
-      <Redirect to="/ticket_types" />
-    </Switch>
+    <Routes>
+      <Route
+        path="new"
+        element={
+          <NewTicketType ticketName={data.convention.ticket_name} ticketNamePlural={data.convention.ticketNamePlural} />
+        }
+      />
+      <Route path=":id/edit" element={<EditTicketType />} />
+      <Route path="" element={<TicketTypesList />} />
+    </Routes>
   );
 });

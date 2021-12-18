@@ -1,9 +1,7 @@
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { useMatch, Outlet } from 'react-router-dom';
 import { LoadingIndicator } from '@neinteractiveliterature/litform';
 
-import RootSiteConventionsAdminTable from './RootSiteConventionsAdminTable';
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
-import ConventionDisplay from './ConventionDisplay';
 import { useConventionQueryFromIdParam } from './conventionQueryHooks';
 import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
@@ -23,6 +21,7 @@ function ConventionBreadcrumb() {
 
 function RootSiteConventionsAdmin(): JSX.Element {
   const authorizationWarning = useAuthorizationRequired('can_manage_conventions');
+  const conventionMatch = useMatch('/conventions/:id');
   if (authorizationWarning) return authorizationWarning;
 
   return (
@@ -30,25 +29,15 @@ function RootSiteConventionsAdmin(): JSX.Element {
       <ol className="breadcrumb">
         <RouteActivatedBreadcrumbItem
           to="/conventions?sort.starts_at=desc"
-          matchProps={{ path: '/conventions', exact: true }}
+          pattern={{ path: '/conventions', end: true }}
         >
           Conventions
         </RouteActivatedBreadcrumbItem>
 
-        <Route path="/conventions/:id">
-          <ConventionBreadcrumb />
-        </Route>
+        {conventionMatch && <ConventionBreadcrumb />}
       </ol>
 
-      <Switch>
-        <Route path="/conventions/:id">
-          <ConventionDisplay />
-        </Route>
-        <Route path="/conventions" exact>
-          <RootSiteConventionsAdminTable />
-        </Route>
-        <Redirect to="/conventions?sort.starts_at=desc" />
-      </Switch>
+      <Outlet />
     </>
   );
 }

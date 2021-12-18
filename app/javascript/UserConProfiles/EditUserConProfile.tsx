@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
 import { ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
@@ -16,11 +16,14 @@ import { useUpdateUserConProfileMutation } from './mutations.generated';
 
 function useUserConProfileQueryFromParams() {
   const id = useParams<{ id: string }>().id;
+  if (id == null) {
+    throw new Error('id not found in params');
+  }
   return useUserConProfileQuery({ variables: { id } });
 }
 
 export default LoadQueryWrapper(useUserConProfileQueryFromParams, function EditUserConProfile({ data }) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const {
     userConProfile: initialUserConProfile,
     convention,
@@ -70,8 +73,8 @@ export default LoadQueryWrapper(useUserConProfileQueryFromParams, function EditU
         },
       });
 
-      history.push(`/user_con_profiles/${userConProfile.id}`);
-    }, [mutate, history, userConProfile]),
+      navigate(`/user_con_profiles/${userConProfile.id}`);
+    }, [mutate, navigate, userConProfile]),
   );
 
   usePageTitle(`Editing “${initialUserConProfile.name}”`);

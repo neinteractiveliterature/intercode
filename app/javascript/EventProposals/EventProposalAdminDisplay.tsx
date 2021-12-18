@@ -69,6 +69,9 @@ function EventProposalAdminNotes({ eventProposalId }: EventProposalAdminNotesPro
 
 function useLoadEventProposal() {
   const eventProposalId = useParams<{ id: string }>().id;
+  if (eventProposalId == null) {
+    throw new Error('id not found in URL params');
+  }
   return useEventProposalQueryWithOwner({ variables: { eventProposalId } });
 }
 

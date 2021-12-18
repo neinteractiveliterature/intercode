@@ -22,6 +22,9 @@ function buildProfileUrl(profile: UserAdminQueryData['user']['user_con_profiles'
 
 function useLoadUserAdminData() {
   const userId = useParams<{ id: string }>().id;
+  if (userId == null) {
+    throw new Error('User ID not found in path');
+  }
   return useUserAdminQuery({ variables: { id: userId } });
 }
 

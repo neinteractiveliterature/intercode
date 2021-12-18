@@ -1,5 +1,5 @@
 import { useApolloClient } from '@apollo/client';
-import { Redirect, useHistory, useParams, Link } from 'react-router-dom';
+import { Navigate, useNavigate, useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { LoadQueryWrapper, ErrorDisplay, useConfirm } from '@neinteractiveliterature/litform';
 
@@ -10,12 +10,15 @@ import { useEventProposalQuery } from './queries.generated';
 
 function useLoadEventProposal() {
   const eventProposalId = useParams<{ id: string }>().id;
+  if (eventProposalId == null) {
+    throw new Error('id not found in URL params');
+  }
   return useEventProposalQuery({ variables: { eventProposalId } });
 }
 
 export default LoadQueryWrapper(useLoadEventProposal, function EditEventProposal({ data }) {
   const { t } = useTranslation();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [deleteProposal] = useDeleteEventProposalMutation();
   const confirm = useConfirm();
   const apolloClient = useApolloClient();
@@ -27,7 +30,7 @@ export default LoadQueryWrapper(useLoadEventProposal, function EditEventProposal
   );
 
   if (data.convention.event_proposal.event) {
-    return <Redirect to={`/events/${data.convention.event_proposal.event.id}/edit`} />;
+    return <Navigate to={`/events/${data.convention.event_proposal.event.id}/edit`} replace />;
   }
 
   const eventProposalId = data.convention.event_proposal.id;
@@ -45,7 +48,7 @@ export default LoadQueryWrapper(useLoadEventProposal, function EditEventProposal
         action: async () => {
           await deleteProposal({ variables: { id: eventProposalId } });
           await apolloClient.clearStore();
-          history.replace('/pages/new-proposal');
+          navigate('/pages/new-proposal', { replace: true });
         },
         renderError: (e) => <ErrorDisplay graphQLError={e} />,
       }),
@@ -74,7 +77,7 @@ export default LoadQueryWrapper(useLoadEventProposal, function EditEventProposal
       </div>
       <EventProposalForm
         eventProposalId={eventProposalId}
-        afterSubmit={() => history.push('/pages/new-proposal')}
+        afterSubmit={() => navigate('/pages/new-proposal')}
         exitButton={
           <Link className="btn btn-outline-secondary me-2" to="/pages/new-proposal">
             {t('eventProposals.edit.exitButton', 'Return to proposals page')}

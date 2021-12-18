@@ -1,5 +1,5 @@
 import { useMemo, useContext } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Column, FilterProps, CellProps } from 'react-table';
 
 import { breakValueIntoUnitQuantities } from '../FormPresenter/TimespanItemUtils';
@@ -15,8 +15,7 @@ import UserConProfileWithGravatarCell from '../Tables/UserConProfileWithGravatar
 import { SingleLineTimestampCell } from '../Tables/TimestampCell';
 import { EventProposalsAdminQueryData, useEventProposalsAdminQuery } from './queries.generated';
 
-type EventProposalType =
-  EventProposalsAdminQueryData['convention']['event_proposals_paginated']['entries'][0];
+type EventProposalType = EventProposalsAdminQueryData['convention']['event_proposals_paginated']['entries'][0];
 
 const FILTER_CODECS = buildFieldFilterCodecs({
   status: FilterCodecs.stringArray,
@@ -46,10 +45,7 @@ const STATUS_OPTIONS = [
 
 function EventCategoryCell({ value }: { value: EventProposalType['event_category'] }) {
   return (
-    <span
-      className="p-1 small rounded"
-      style={getEventCategoryStyles({ eventCategory: value, variant: 'default' })}
-    >
+    <span className="p-1 small rounded" style={getEventCategoryStyles({ eventCategory: value, variant: 'default' })}>
       {value.name}
     </span>
   );
@@ -64,9 +60,7 @@ function DurationCell({ value }: { value: NonNullable<EventProposalType['length_
   const hours = (unitQuantities.find(({ unit }) => unit.name === 'hour') || {}).quantity || 0;
   const minutes = (unitQuantities.find(({ unit }) => unit.name === 'minute') || {}).quantity || 0;
 
-  return (
-    <div className="text-nowrap text-end">{`${hours}:${minutes.toString().padStart(2, '0')}`}</div>
-  );
+  return <div className="text-nowrap text-end">{`${hours}:${minutes.toString().padStart(2, '0')}`}</div>;
 }
 
 function StatusFilter(props: FilterProps<EventProposalType>) {
@@ -204,7 +198,7 @@ const defaultVisibleColumns = [
 const alwaysVisibleColumns = ['_extra'];
 
 function EventProposalsAdminTable(): JSX.Element {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { tableHeaderProps, queryData, tableInstance, loading } = useReactTableWithTheWorks({
     decodeFilterValue: FILTER_CODECS.decodeFilterValue,
     defaultVisibleColumns,
@@ -228,7 +222,7 @@ function EventProposalsAdminTable(): JSX.Element {
         <ReactTableWithTheWorks
           tableInstance={tableInstance}
           loading={loading}
-          onClickRow={(row) => history.push(`/admin_event_proposals/${row.original.id}`)}
+          onClickRow={(row) => navigate(`/admin_event_proposals/${row.original.id}`)}
         />
       </div>
     </QueryDataContext.Provider>

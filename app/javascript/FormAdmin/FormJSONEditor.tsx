@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
 import {
   BootstrapFormInput,
@@ -26,13 +26,15 @@ type EditingFormJSONData = {
 };
 
 function formDataFromJSON(json: string): EditingFormJSONData {
-  const { title, sections } = JSON.parse(json) as {
+  const { title, sections, form_type } = JSON.parse(json) as {
     title: string;
     sections: unknown;
+    form_type?: string;
   };
   return {
     title,
     sectionsJSON: JSON.stringify(sections, null, '  '),
+    form_type,
   };
 }
 
@@ -40,7 +42,7 @@ export default LoadSingleValueFromCollectionWrapper(
   useFormAdminQuery,
   (data, id) => data.convention.forms.find((form) => form.id === id),
   function FormJSONEditor({ value: initialForm, data }) {
-    const history = useHistory();
+    const navigate = useNavigate();
     const initialFormData = useMemo(() => formDataFromJSON(initialForm.export_json), [initialForm.export_json]);
     const [form, setForm] = useState(initialFormData);
     const [createForm, { error: createError, loading: createInProgress }] = useCreateMutationWithReferenceArrayUpdater(
@@ -81,7 +83,7 @@ export default LoadSingleValueFromCollectionWrapper(
       } else {
         await createForm({ variables: { formJSON, formType } });
       }
-      history.push('/admin_forms');
+      navigate('/admin_forms');
     };
 
     return (

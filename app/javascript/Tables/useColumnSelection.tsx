@@ -1,7 +1,7 @@
 import { useMemo, useCallback } from 'react';
 import { Column } from 'react-table';
 import uniq from 'lodash/uniq';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import { notEmpty } from '@neinteractiveliterature/litform';
 
 export type UseColumnSelectionOptions<RowType extends Record<string, unknown>> = {
@@ -23,8 +23,8 @@ export default function useColumnSelection<RowType extends Record<string, unknow
   defaultVisibleColumns,
   possibleColumns,
 }: UseColumnSelectionOptions<RowType>): UseColumnSelectionResult<RowType> {
-  const history = useHistory();
   const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const visibleColumnIds = useMemo(() => {
     const params = new URLSearchParams(location.search);
@@ -41,18 +41,17 @@ export default function useColumnSelection<RowType extends Record<string, unknow
   }, [defaultVisibleColumns, alwaysVisibleColumns, location.search, possibleColumns]);
 
   const visibleColumns: Column<RowType>[] = useMemo(
-    () =>
-      possibleColumns.filter((column) => column.id != null && visibleColumnIds.includes(column.id)),
+    () => possibleColumns.filter((column) => column.id != null && visibleColumnIds.includes(column.id)),
     [possibleColumns, visibleColumnIds],
   );
 
   const setVisibleColumnIds = useCallback(
     (columnIds: string[]) => {
-      const params = new URLSearchParams(history.location.search);
+      const params = new URLSearchParams(searchParams);
       params.set('columns', columnIds.join(','));
-      history.replace(`${history.location.pathname}?${params.toString()}`);
+      setSearchParams(params);
     },
-    [history],
+    [searchParams, setSearchParams],
   );
 
   const result = useMemo(

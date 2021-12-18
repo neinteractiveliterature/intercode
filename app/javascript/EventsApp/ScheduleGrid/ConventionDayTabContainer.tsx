@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useContext } from 'react';
-import { NavLink, Switch, Redirect, Route, useLocation } from 'react-router-dom';
+import { NavLink, Routes, Navigate, Route, useLocation } from 'react-router-dom';
 import { useApolloClient } from '@apollo/client';
 import { DateTime } from 'luxon';
 
@@ -129,14 +129,19 @@ function ConventionDayTabContainer({
           <RefreshButton refreshData={refreshData} />
         </div>
       </div>
-      <Switch>
+      <Routes>
         {conventionDayTimespans.map((timespan) => (
-          <Route path={`${basename}/${conventionDayUrlPortion(timespan.start)}`} key={timespan.start.toISO()}>
-            {children(timespan)}
-          </Route>
+          <Route
+            path={conventionDayUrlPortion(timespan.start)}
+            key={timespan.start.toISO()}
+            element={children(timespan)}
+          />
         ))}
-        <Redirect to={`${basename}/${conventionDayUrlPortion(conventionDayTimespans[0].start)}`} />
-      </Switch>
+        <Route
+          path="*"
+          element={<Navigate to={`${basename}/${conventionDayUrlPortion(conventionDayTimespans[0].start)}`} replace />}
+        />
+      </Routes>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import * as React from 'react';
 import { ApolloError } from '@apollo/client';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   ErrorDisplay,
   LoadQueryWrapper,
@@ -15,7 +15,7 @@ import { CmsPageFieldsFragmentDoc, useCmsPagesAdminQuery } from './queries.gener
 import { CreatePageMutationData, useCreatePageMutation } from './mutations.generated';
 
 export default LoadQueryWrapper(useCmsPagesAdminQuery, function NewCmsPage({ data }) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [page, setPage] = useState<PageFormFields>({
     hidden_from_search: false,
   });
@@ -37,7 +37,7 @@ export default LoadQueryWrapper(useCmsPagesAdminQuery, function NewCmsPage({ dat
         page: buildPageInput(page),
       },
     });
-    history.push('/cms_pages');
+    navigate('/cms_pages');
   };
 
   return (

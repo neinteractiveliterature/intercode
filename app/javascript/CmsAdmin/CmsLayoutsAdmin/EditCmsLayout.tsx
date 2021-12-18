@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import * as React from 'react';
 import { ApolloError, useApolloClient } from '@apollo/client';
-import { useHistory } from 'react-router-dom';
+import { useNavigate, useNavigationType } from 'react-router-dom';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import buildLayoutInput from './buildLayoutInput';
@@ -11,12 +11,14 @@ import usePageTitle from '../../usePageTitle';
 import { useCmsLayoutsAdminQuery } from './queries.generated';
 import { LoadSingleValueFromCollectionWrapper } from '../../GraphqlLoadingWrappers';
 import { useUpdateLayoutMutation } from './mutations.generated';
+import { Action } from 'history';
 
 export default LoadSingleValueFromCollectionWrapper(
   useCmsLayoutsAdminQuery,
   (data, id) => data.cmsParent.cmsLayouts.find((layout) => id === layout.id.toString()),
   function EditCmsLayout({ value: initialLayout }) {
-    const history = useHistory();
+    const navigate = useNavigate();
+    const navigationType = useNavigationType();
     const [layout, setLayout] = useState(initialLayout);
     const [updateMutate] = useUpdateLayoutMutation();
     const [updateLayout, updateError, updateInProgress] = useAsyncFunction(updateMutate);
@@ -33,10 +35,10 @@ export default LoadSingleValueFromCollectionWrapper(
         },
       });
       await apolloClient.resetStore();
-      if (history.length > 1) {
-        history.goBack();
+      if (navigationType === Action.Push) {
+        navigate(-1);
       } else {
-        history.push('/cms_layouts');
+        navigate('/cms_layouts');
       }
     };
 

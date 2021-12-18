@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ApolloError, useApolloClient } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
@@ -20,7 +20,7 @@ type UserType = AddAttendeeUsersQueryData['users_paginated']['entries'][0];
 
 function AddAttendeeModal({ conventionName, visible }: AddAttendeeModalProps): JSX.Element {
   const { t } = useTranslation();
-  const history = useHistory();
+  const navigate = useNavigate();
   const apolloClient = useApolloClient();
   const [user, setUser] = useState<UserType>();
   const [userConProfile, setUserConProfile] = useState<FormResponse>();
@@ -30,7 +30,7 @@ function AddAttendeeModal({ conventionName, visible }: AddAttendeeModalProps): J
   const close = () => {
     setUser(undefined);
     setUserConProfile(undefined);
-    history.replace('/user_con_profiles');
+    navigate('/user_con_profiles', { replace: true });
   };
 
   const userSelected = (newUser: UserType) => {
