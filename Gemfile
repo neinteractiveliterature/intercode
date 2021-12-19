@@ -120,7 +120,7 @@ group :development do
   gem 'solargraph-rails', '0.2.1.1'
 
   # Automatic annotation for models
-  gem 'annotate'
+  gem 'annotate', github: 'dabit/annotate_models', branch: 'rails-7'
 
   # Debugging
   gem 'debug'
