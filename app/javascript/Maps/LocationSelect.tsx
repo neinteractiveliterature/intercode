@@ -1,5 +1,6 @@
 import { useContext } from 'react';
-import AsyncSelect, { Props } from 'react-select/async';
+import { GroupBase } from 'react-select';
+import AsyncSelect, { AsyncProps } from 'react-select/async';
 
 import MapboxContext from '../MapboxContext';
 
@@ -7,11 +8,12 @@ type MapboxAPIFeature = {
   id: string;
   place_type: string[];
   place_name: string;
+  center: [number, number];
   text: string;
 };
 
 export type LocationSelectProps = Omit<
-  Props<MapboxAPIFeature, false>,
+  AsyncProps<MapboxAPIFeature, false, GroupBase<MapboxAPIFeature>>,
   'loadOptions' | 'formatOptionLabel' | 'getOptionValue'
 >;
 
@@ -37,9 +39,7 @@ function LocationSelect({ ...props }: LocationSelectProps): JSX.Element {
         return (
           <>
             {option.text}{' '}
-            <small className="text-muted">
-              {option.place_name.replace(option.text, '').replace(/^,/, '').trim()}
-            </small>
+            <small className="text-muted">{option.place_name.replace(option.text, '').replace(/^,/, '').trim()}</small>
           </>
         );
       }}

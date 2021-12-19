@@ -237,12 +237,13 @@ function ScheduleMultipleRunsModal({
             {(id) => (
               <RoomSelect
                 id={id}
-                label="Room(s)"
                 name="room_ids"
                 rooms={convention.rooms}
                 isMulti
                 value={rooms}
-                onChange={setRooms}
+                onChange={(newRooms) => {
+                  setRooms([...newRooms]);
+                }}
               />
             )}
           </FormGroupWithLabel>

@@ -45,12 +45,7 @@ function StaffPositionForm({ staffPosition, onChange }: StaffPositionFormProps):
 
   return (
     <div>
-      <BootstrapFormInput
-        name="name"
-        label="Position name"
-        value={staffPosition.name ?? ''}
-        onTextChange={setName}
-      />
+      <BootstrapFormInput name="name" label="Position name" value={staffPosition.name ?? ''} onTextChange={setName} />
 
       <BootstrapFormInput
         name="email"
@@ -79,9 +74,7 @@ function StaffPositionForm({ staffPosition, onChange }: StaffPositionFormProps):
           </>
         )}
         getDeleteButtonLabel={(value) => `Delete alias ${value}@${conventionDomain}`}
-        getDeletePrompt={(value) =>
-          `Are you sure you want to delete the email alias ${value}@${conventionDomain}?`
-        }
+        getDeletePrompt={(value) => `Are you sure you want to delete the email alias ${value}@${conventionDomain}?`}
         renderAddValueInput={({ value, onChange: onAddValueChange, onKeyDown }) => (
           <EmailAliasInput
             value={value}
@@ -108,7 +101,7 @@ function StaffPositionForm({ staffPosition, onChange }: StaffPositionFormProps):
             id={id}
             isMulti
             value={staffPosition.user_con_profiles}
-            onChange={setUserConProfiles}
+            onChange={(newValue) => setUserConProfiles([...newValue])}
           />
         )}
       </FormGroupWithLabel>

@@ -6,16 +6,17 @@ import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform
 import { AdminProductsQueryData, AdminProductsQueryDocument } from '../Store/queries.generated';
 import FourOhFourPage from '../FourOhFourPage';
 
-export type ProductSelectProps<QueryType extends AdminProductsQueryData> = SelectProps<
-  Pick<QueryType['convention']['products'][0], '__typename' | 'id' | 'name'>
-> & {
+export type ProductSelectProps<
+  QueryType extends AdminProductsQueryData,
+  IsMulti extends boolean = boolean,
+> = SelectProps<Pick<QueryType['convention']['products'][0], '__typename' | 'id' | 'name'>, IsMulti> & {
   productsQuery?: DocumentNode;
 };
 
-function ProductSelect<QueryType extends AdminProductsQueryData>({
+function ProductSelect<QueryType extends AdminProductsQueryData, IsMulti extends boolean = boolean>({
   productsQuery,
   ...otherProps
-}: ProductSelectProps<QueryType>): JSX.Element {
+}: ProductSelectProps<QueryType, IsMulti>): JSX.Element {
   const { data, loading, error } = useQuery<QueryType>(productsQuery ?? AdminProductsQueryDocument);
 
   if (loading) {

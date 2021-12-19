@@ -96,7 +96,12 @@ function UserActivityAlertForm({
             <label className="form-label" htmlFor={userSelectId}>
               User account
             </label>
-            <UserSelect inputId={userSelectId} value={userActivityAlert.user} onChange={setUser} disabled={disabled} />
+            <UserSelect
+              inputId={userSelectId}
+              value={userActivityAlert.user}
+              onChange={setUser}
+              isDisabled={disabled}
+            />
             <small className="form-text text-muted">Matches across all conventions using this server.</small>
           </div>
         </div>
@@ -185,12 +190,12 @@ function UserActivityAlertForm({
                 getOptionLabel={(option) => option.name}
                 value={null}
                 onChange={addStaffPositionDestination}
-                disabled={disabled}
+                isDisabled={disabled}
               />
             )}
 
             {addDestinationType === 'user_con_profile' && (
-              <UserConProfileSelect value={null} onChange={addUserConProfileDestination} disabled={disabled} />
+              <UserConProfileSelect value={null} onChange={addUserConProfileDestination} isDisabled={disabled} />
             )}
           </li>
         </ul>

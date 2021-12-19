@@ -34,7 +34,7 @@ type CreatingConvention = Pick<
   Convention,
   'name' | 'domain' | 'email_from' | 'language' | 'starts_at' | 'ends_at' | 'timezone_mode' | 'timezone_name'
 > & {
-  organization?: { id: string } | null;
+  organization?: { id: string; name: string } | null;
 };
 
 const DEFAULT_PROPS: CreatingConvention = {

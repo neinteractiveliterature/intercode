@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState, useMemo } from 'react';
-import { components, GroupTypeBase, IndicatorProps, MenuProps } from 'react-select';
+import { components, DropdownIndicatorProps, GroupBase, MenuProps } from 'react-select';
 import AsyncSelect from 'react-select/async';
 import debounce from 'debounce-promise';
 import { useNavigate } from 'react-router-dom';
@@ -16,6 +16,7 @@ import { SiteSearchQueryDocument, SiteSearchQueryData, SiteSearchQueryVariables 
 import { useAdminNavigationItems } from './AdminNavigationSection';
 import { useEventsNavigationItems } from './EventsNavigationSection';
 import { GeneratedNavigationItem } from './GeneratedNavigationSection';
+import Select from 'react-select/dist/declarations/src/Select';
 
 type NavigationItemSearchDocument = GeneratedNavigationItem & {
   id: string;
@@ -58,7 +59,7 @@ function getSearchableModelIcon(model: { __typename: string; icon?: string }) {
 }
 
 function SearchDropdownIndicator(
-  props: IndicatorProps<SiteSearchOptionType, false, GroupTypeBase<SiteSearchOptionType>>,
+  props: DropdownIndicatorProps<SiteSearchOptionType, false, GroupBase<SiteSearchOptionType>>,
 ) {
   return (
     <components.DropdownIndicator {...props}>
@@ -144,7 +145,7 @@ function SiteSearch({ visible, setVisible, visibilityChangeComplete }: SiteSearc
     [apolloClient, navigationItemsSearchIndex],
   );
 
-  const selectRef = useRef<AsyncSelect<SiteSearchOptionType>>(null);
+  const selectRef = useRef<Select<SiteSearchOptionType>>(null);
 
   const keyDownListener = useCallback(
     (event) => {

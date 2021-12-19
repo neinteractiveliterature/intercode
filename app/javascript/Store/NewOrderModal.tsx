@@ -25,7 +25,7 @@ export type CreatingOrder = Omit<OrderInput, 'payment_amount'> & {
   order_entries: (Pick<OrderEntry, 'price_per_item' | 'quantity'> & {
     ticket_id: string;
     product: Pick<Product, '__typename' | 'name'> & { id: string };
-    product_variant?: (Pick<ProductVariant, '__typename' | 'name'> & { id: string }) | null;
+    product_variant?: Pick<ProductVariant, 'id' | '__typename' | 'name'> | null;
     generatedId: string;
   })[];
   coupon_applications: (Partial<Pick<CouponApplication, 'id' | 'discount'>> & {
@@ -33,7 +33,7 @@ export type CreatingOrder = Omit<OrderInput, 'payment_amount'> & {
       code: string;
     };
   })[];
-  user_con_profile?: Pick<UserConProfile, 'name_without_nickname'> & { id: string };
+  user_con_profile?: Pick<UserConProfile, 'id' | '__typename' | 'name_without_nickname'>;
 };
 
 type OrderEntryType = CreatingOrder['order_entries'][0];
