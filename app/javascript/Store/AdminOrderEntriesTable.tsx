@@ -244,17 +244,17 @@ function AdminOrderEntriesTable<
                 value={addingItem.product}
                 onChange={setAddingItemProduct}
                 isClearable
-                disabled={createInProgress}
+                isDisabled={createInProgress}
               />
               {(addingItem.product?.product_variants?.length ?? 0) > 0 && (
                 <Select
                   options={addingItem.product?.product_variants ?? []}
                   value={addingItem.product_variant}
                   onChange={setAddingItemProductVariant}
-                  getOptionValue={(variant) => variant.id?.toString() ?? ''}
-                  getOptionLabel={(variant) => variant.name}
+                  getOptionValue={(variant) => variant?.id?.toString() ?? ''}
+                  getOptionLabel={(variant) => variant?.name ?? ''}
                   isClearable
-                  disabled={createInProgress}
+                  isDisabled={createInProgress}
                 />
               )}
             </td>

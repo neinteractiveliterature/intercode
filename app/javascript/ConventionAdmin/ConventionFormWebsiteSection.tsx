@@ -50,7 +50,7 @@ function ConventionFormWebsiteSection({
         options={cmsLayouts}
         onChange={(newValue: typeof convention.defaultLayout) => setDefaultLayout(newValue)}
         styles={selectStyles}
-        disabled={disabled}
+        isDisabled={disabled}
       />
 
       <SelectWithLabel
@@ -63,7 +63,7 @@ function ConventionFormWebsiteSection({
         options={pages}
         onChange={(newValue: typeof convention.rootPage) => setRootPage(newValue)}
         styles={selectStyles}
-        disabled={disabled}
+        isDisabled={disabled}
       />
 
       <BooleanInput
@@ -82,8 +82,7 @@ function ConventionFormWebsiteSection({
 
       <fieldset className="mb-4">
         <legend className="col-form-label">
-          Clickwrap agreement (if present, all users will be prompted to accept this agreement
-          before using the site)
+          Clickwrap agreement (if present, all users will be prompted to accept this agreement before using the site)
         </legend>
         <LiquidInput
           value={convention.clickwrap_agreement ?? ''}

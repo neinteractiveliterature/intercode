@@ -5,7 +5,6 @@ import { render, fireEvent, act, waitFor } from '../testUtils';
 import GraphQLAsyncSelect, {
   GraphQLAsyncSelectProps,
 } from '../../../app/javascript/BuiltInFormControls/GraphQLAsyncSelect';
-import { UserConProfile } from '../../../app/javascript/graphqlTypes.generated';
 
 const FakeQuery = gql`
   query FakeQuery($name: String) {
@@ -40,7 +39,7 @@ describe('GraphQLAsyncSelect', () => {
               entries: [
                 {
                   __typename: 'UserConProfile',
-                  id: 1,
+                  id: '1',
                   name_without_nickname: 'Gabriel Knight',
                 },
               ],
@@ -59,11 +58,11 @@ describe('GraphQLAsyncSelect', () => {
     mocks?: MockedResponse[],
   ) =>
     render(
-      <GraphQLAsyncSelect
+      <GraphQLAsyncSelect<DataType, OptionType>
         query={FakeQuery}
-        getOptions={(data) => data.convention.user_con_profiles_paginated.entries}
-        getOptionLabel={(option: UserConProfile) => option.name_without_nickname}
-        getOptionValue={(option: UserConProfile) => option.id}
+        getOptions={(data) => data.convention.user_con_profiles_paginated.entries as OptionType[]}
+        getOptionLabel={(option) => option.name_without_nickname}
+        getOptionValue={(option) => option.id}
         getVariables={(input) => ({ name: input })}
         {...props}
       />,
@@ -72,7 +71,7 @@ describe('GraphQLAsyncSelect', () => {
 
   test('loads options', async () => {
     const { getByRole, queryAllByText } = await renderUserConProfileSelect();
-    const selectInput = getByRole('textbox');
+    const selectInput = getByRole('combobox');
     await act(async () => {
       fireEvent.change(selectInput, { target: { value: 'gab' } });
       await waitFor(() => expect(queryAllByText('Gabriel Knight')).toHaveLength(1));

@@ -141,7 +141,6 @@ function RunFormFields<RunType extends RunForRunFormFields>({
         {(id) => (
           <RoomSelect
             id={id}
-            label={t('events.edit.roomsLabel', 'Room(s)')}
             name="room_ids"
             rooms={data?.convention.rooms ?? []}
             isMulti

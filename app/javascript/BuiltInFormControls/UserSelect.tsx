@@ -1,12 +1,11 @@
 import { ReactNode } from 'react';
-import { components, OptionTypeBase } from 'react-select';
+import { components, MultiValueGenericProps } from 'react-select';
 import type { DocumentNode } from 'graphql';
-import { MultiValueGenericProps } from 'react-select/src/components/MultiValue';
 
 import GraphQLAsyncSelect, { GraphQLAsyncSelectProps } from './GraphQLAsyncSelect';
 import { DefaultUsersQueryData, DefaultUsersQueryDocument } from './selectDefaultQueries.generated';
 
-type UserNameLabelProps<OptionType> = MultiValueGenericProps<OptionType> & {
+type UserNameLabelProps<OptionType, IsMulti extends boolean> = MultiValueGenericProps<OptionType, IsMulti> & {
   data: {
     name?: string;
   };
@@ -14,40 +13,30 @@ type UserNameLabelProps<OptionType> = MultiValueGenericProps<OptionType> & {
   [x: string]: unknown;
 };
 
-function UserNameLabel<OptionType>({ children, ...otherProps }: UserNameLabelProps<OptionType>) {
-  return (
-    <components.MultiValueLabel {...otherProps}>{otherProps.data.name}</components.MultiValueLabel>
-  );
+function UserNameLabel<OptionType, IsMulti extends boolean>({
+  children,
+  ...otherProps
+}: UserNameLabelProps<OptionType, IsMulti>) {
+  return <components.MultiValueLabel {...otherProps}>{otherProps.data.name}</components.MultiValueLabel>;
 }
 
 type DQ = DefaultUsersQueryData;
-type DO<QueryType extends DefaultUsersQueryData> = NonNullable<
-  QueryType['users_paginated']
->['entries'][0];
+type DO<QueryType extends DefaultUsersQueryData> = NonNullable<QueryType['users_paginated']>['entries'][0];
 
-export type UserSelectProps<
-  DataType,
-  OptionType extends OptionTypeBase,
-  IsMulti extends boolean = false,
-> = Omit<
+export type UserSelectProps<DataType, OptionType, IsMulti extends boolean = false> = Omit<
   GraphQLAsyncSelectProps<DataType, OptionType, IsMulti>,
-  | 'isClearable'
-  | 'getOptions'
-  | 'getVariables'
-  | 'getOptionValue'
-  | 'formatOptionLabel'
-  | 'query'
-  | 'components'
+  'isClearable' | 'getOptions' | 'getVariables' | 'getOptionValue' | 'formatOptionLabel' | 'query' | 'components'
 > & {
-  eventsQuery?: DocumentNode;
+  usersQuery?: DocumentNode;
 };
 
-function UserSelect<DataType extends DQ = DQ, OptionType extends DO<DataType> = DO<DQ>>({
-  usersQuery,
-  ...otherProps
-}: UserSelectProps<DataType, OptionType>): JSX.Element {
+function UserSelect<
+  DataType extends DQ = DQ,
+  OptionType extends DO<DataType> = DO<DQ>,
+  IsMulti extends boolean = false,
+>({ usersQuery, ...otherProps }: UserSelectProps<DataType, OptionType, IsMulti>): JSX.Element {
   return (
-    <GraphQLAsyncSelect<DataType, OptionType>
+    <GraphQLAsyncSelect<DataType, OptionType, IsMulti>
       isClearable
       getOptions={(data) => data.users_paginated.entries as OptionType[]}
       getVariables={(inputValue) => ({ name: inputValue })}

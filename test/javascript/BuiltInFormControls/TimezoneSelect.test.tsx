@@ -12,7 +12,7 @@ describe('TimezoneSelect', () => {
 
   test('option filtering', async () => {
     const { getByRole, getByText } = await renderComponent();
-    const input = getByRole('textbox');
+    const input = getByRole('combobox');
 
     fireEvent.change(input, { target: { value: 'coordinated' } });
     await waitFor(() => expect(getByText(/Etc\/UTC/)).toBeTruthy());

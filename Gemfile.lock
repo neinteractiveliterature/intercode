@@ -1,4 +1,13 @@
 GIT
+  remote: https://github.com/dabit/annotate_models.git
+  revision: f38741d005052045e4d4c2c26b009d3ade0864f3
+  branch: rails-7
+  specs:
+    annotate (3.1.1)
+      activerecord (>= 3.2, < 7.1)
+      rake (>= 10.4, < 14.0)
+
+GIT
   remote: https://github.com/nbudin/doorkeeper-openid_connect.git
   revision: 17245d74b43c058f51d3bdfbe3fdb01bf0325f36
   branch: fix_doorkeeper_52_compat
@@ -85,9 +94,6 @@ GEM
       device_detector
       geocoder (>= 1.4.5)
       safely_block (>= 0.2.1)
-    annotate (3.1.1)
-      activerecord (>= 3.2, < 7.0)
-      rake (>= 10.4, < 14.0)
     ansi (1.5.0)
     apollo_upload_server (2.1.0)
       actionpack (>= 4.2)
@@ -582,7 +588,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord-session_store
   ahoy_matey
-  annotate
+  annotate!
   apollo_upload_server (= 2.1.0)
   aws-sdk-rails
   aws-sdk-s3
