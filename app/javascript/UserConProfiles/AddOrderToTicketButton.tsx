@@ -3,28 +3,24 @@ import { useModal } from '@neinteractiveliterature/litform';
 
 import NewOrderModal from '../Store/NewOrderModal';
 import AppRootContext from '../AppRootContext';
-import { Money, OrderStatus, Product, UserConProfile } from '../graphqlTypes.generated';
+import { Money, OrderStatus, Product, Ticket, TicketType, UserConProfile } from '../graphqlTypes.generated';
 
 export type AddOrderToTicketButtonProps = {
   className?: string;
-  ticket: {
-    id: string;
-    ticket_type: {
-      id: string;
-    };
+  ticket: Pick<Ticket, 'id'> & {
+    ticket_type: Pick<TicketType, 'id'>;
   };
   convention: {
     ticket_types: {
       id: string;
-      providing_products: (Pick<Product, 'name' | '__typename'> & {
-        id: string;
+      providing_products: (Pick<Product, 'id' | 'name' | '__typename'> & {
         pricing_structure?: null | {
           price?: Money | null;
         };
       })[];
     }[];
   };
-  userConProfile: Pick<UserConProfile, 'name_without_nickname'> & { id: string };
+  userConProfile: Pick<UserConProfile, 'id' | '__typename' | 'name_without_nickname'>;
 };
 
 function AddOrderToTicketButton({

@@ -1,4 +1,3 @@
-import type { OptionTypeBase } from 'react-select';
 import type { DocumentNode } from 'graphql';
 
 import GraphQLAsyncSelect, { GraphQLAsyncSelectProps } from './GraphQLAsyncSelect';
@@ -10,7 +9,7 @@ type DO<QueryType extends DefaultEventsQueryData> = NonNullable<
 >['events_paginated']['entries'][0];
 export type DefaultEventSelectOptionType = DO<DQ>;
 
-export type EventSelectProps<DataType, OptionType extends OptionTypeBase, IsMulti extends boolean> = Omit<
+export type EventSelectProps<DataType, OptionType, IsMulti extends boolean> = Omit<
   GraphQLAsyncSelectProps<DataType, OptionType, IsMulti>,
   'isClearable' | 'getOptions' | 'getVariables' | 'getOptionValue' | 'formatOptionLabel' | 'query'
 > & {
@@ -23,12 +22,12 @@ function EventSelect<
   OptionType extends DO<DataType> = DO<DQ>,
 >({ eventsQuery, ...otherProps }: EventSelectProps<DataType, OptionType, IsMulti>): JSX.Element {
   return (
-    <GraphQLAsyncSelect<DataType, OptionType>
+    <GraphQLAsyncSelect<DataType, OptionType, IsMulti>
       isClearable
       getOptions={(data) => data.convention.events_paginated.entries as OptionType[]}
       getVariables={(inputValue) => ({ title: inputValue })}
-      getOptionValue={(option: OptionType) => option.id}
-      getOptionLabel={(option: OptionType) => option.title}
+      getOptionValue={(option) => option.id}
+      getOptionLabel={(option) => option.title ?? ''}
       query={eventsQuery || DefaultEventsQueryDocument}
       {...otherProps}
     />

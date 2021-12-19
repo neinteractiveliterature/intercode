@@ -124,7 +124,7 @@ function CmsPageForm<T extends PageFormFields>({
         options={cmsLayoutOptions}
         onChange={setCmsLayout}
         placeholder={cmsLayoutSelectPlaceholder}
-        disabled={readOnly}
+        isDisabled={readOnly}
       />
 
       <div className="mb-3">

@@ -121,7 +121,8 @@ function CouponForm<T extends Omit<AdminCouponFieldsFragment, 'id'>>({
               isClearable
               id={id}
               value={value.provides_product}
-              onChange={(newProduct: typeof value.provides_product) => {
+              isMulti={false}
+              onChange={(newProduct) => {
                 setProvidesProduct(newProduct ?? BLANK_VALUES.provides_product);
               }}
             />

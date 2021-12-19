@@ -126,11 +126,7 @@ function ConventionFormGeneralSection({
         disabled={disabled}
       />
 
-      <ConventionLanguageInput
-        value={convention.language}
-        onChange={setLanguage}
-        disabled={disabled}
-      />
+      <ConventionLanguageInput value={convention.language} onChange={setLanguage} disabled={disabled} />
 
       <BootstrapFormInput
         name="domain"
@@ -159,27 +155,22 @@ function ConventionFormGeneralSection({
                 <LocationSelect
                   inputId={id}
                   value={conventionLocation}
-                  onChange={locationSelectChanged}
-                  disabled={disabled}
+                  onChange={(value) => {
+                    locationSelectChanged(value ?? undefined);
+                  }}
+                  isDisabled={disabled}
                   isClearable
                 />
                 {conventionLocation && (
                   <div className="mt-2">
-                    <MapboxMap
-                      center={conventionLocation.center}
-                      markerLocation={conventionLocation.center}
-                    />
+                    <MapboxMap center={conventionLocation.center} markerLocation={conventionLocation.center} />
                   </div>
                 )}
               </>
             )}
           </FormGroupWithLabel>
 
-          <TimezoneSelect
-            label="Time zone"
-            value={convention.timezone_name}
-            onChange={setTimezoneName}
-          />
+          <TimezoneSelect label="Time zone" value={convention.timezone_name} onChange={setTimezoneName} />
         </>
       )}
 

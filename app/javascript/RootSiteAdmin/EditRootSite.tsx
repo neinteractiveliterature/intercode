@@ -1,11 +1,7 @@
 import { useState } from 'react';
 import * as React from 'react';
 import { ApolloError } from '@apollo/client';
-import {
-  BootstrapFormInput,
-  ErrorDisplay,
-  LoadQueryWrapper,
-} from '@neinteractiveliterature/litform';
+import { BootstrapFormInput, ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
 import useAsyncFunction from '../useAsyncFunction';
@@ -74,10 +70,8 @@ export default LoadQueryWrapper(useRootSiteAdminQuery, function EditRootSite({ d
         getOptionValue={(option) => option.id.toString()}
         getOptionLabel={(option) => option.name ?? ''}
         options={data.rootSite.cmsLayouts}
-        onChange={(newValue: typeof data['rootSite']['cmsLayouts'][0]) =>
-          setDefaultLayout(newValue)
-        }
-        disabled={updateInProgress}
+        onChange={(newValue: typeof data['rootSite']['cmsLayouts'][0]) => setDefaultLayout(newValue)}
+        isDisabled={updateInProgress}
       />
 
       <SelectWithLabel
@@ -89,17 +83,12 @@ export default LoadQueryWrapper(useRootSiteAdminQuery, function EditRootSite({ d
         getOptionLabel={(option) => option.name ?? ''}
         options={data.rootSite.cmsPages}
         onChange={(newValue: typeof data['rootSite']['rootPage']) => setRootPage(newValue)}
-        disabled={updateInProgress}
+        isDisabled={updateInProgress}
       />
 
       <ErrorDisplay graphQLError={updateError as ApolloError} />
 
-      <button
-        className="btn btn-primary"
-        type="button"
-        disabled={!edited || updateInProgress}
-        onClick={saveClicked}
-      >
+      <button className="btn btn-primary" type="button" disabled={!edited || updateInProgress} onClick={saveClicked}>
         Save changes
       </button>
 

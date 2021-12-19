@@ -95,8 +95,8 @@ export default LoadQueryWrapper(useTeamMembersQueryFromParams, function NewTeamM
         <UserConProfileSelect
           inputId={userConProfileSelectId}
           value={teamMember.user_con_profile}
-          onChange={userConProfileChanged}
-          disabled={createInProgress}
+          onChange={(newValue) => userConProfileChanged(newValue ?? undefined)}
+          isDisabled={createInProgress}
           userConProfilesQuery={TeamMemberUserConProfilesQueryDocument}
           placeholder={t(
             'events.teamMemberAdmin.userConProfilePlaceholder',
