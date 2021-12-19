@@ -19,7 +19,7 @@ const ORDER_STATUS_CHOICES = EnumTypes.OrderStatus.enumValues
   .filter((choice) => choice.value !== 'pending');
 
 export type AdminOrderType = Pick<Order, 'status' | 'charge_id' | 'paid_at' | 'payment_amount' | 'payment_note'> & {
-  user_con_profile?: Pick<UserConProfile, 'name_without_nickname'>;
+  user_con_profile?: Pick<UserConProfile, 'id' | '__typename' | 'name_without_nickname'>;
 };
 
 export type AdminOrderTypeWithId = AdminOrderType & { id: string };
@@ -154,7 +154,7 @@ function AdminOrderForm<T extends AdminOrderType>({ order, updateOrder }: AdminO
           ) : (
             <UserConProfileSelect
               value={order.user_con_profile}
-              onChange={(value: T['user_con_profile']) => updateOrder({ user_con_profile: value } as Partial<T>)}
+              onChange={(value) => updateOrder({ user_con_profile: value } as Partial<T>)}
             />
           )}
         </dd>

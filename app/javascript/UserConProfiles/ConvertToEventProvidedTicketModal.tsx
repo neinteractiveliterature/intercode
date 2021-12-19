@@ -156,7 +156,7 @@ function ConvertToEventProvidedTicketModal({
             setTicketTypeId(undefined);
           }}
           placeholder="Select event..."
-          disabled={inProgress}
+          isDisabled={inProgress}
         />
 
         {event && (

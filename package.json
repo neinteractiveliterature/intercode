@@ -83,7 +83,6 @@
     "@types/react-color": "3.0.6",
     "@types/react-google-recaptcha": "2.1.2",
     "@types/react-onclickoutside": "6.7.4",
-    "@types/react-select": "5.0.0",
     "@types/react-table": "7.7.9",
     "@types/source-map-support": "0.5.4",
     "@types/tinycolor2": "1.4.3",

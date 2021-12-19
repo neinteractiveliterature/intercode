@@ -184,7 +184,7 @@ function EventCategoryForm<T extends EventCategoryForForm>({
         getOptionLabel={(option) => option?.name ?? ''}
         value={value.department}
         onChange={(newValue: T['department'] | null | undefined) => setDepartment(newValue)}
-        disabled={disabled}
+        isDisabled={disabled}
         isClearable
       />
 
@@ -273,7 +273,7 @@ function EventCategoryForm<T extends EventCategoryForForm>({
         getOptionLabel={(option) => option?.title ?? ''}
         value={value.event_form}
         onChange={(newValue: T['event_form']) => setEventForm(newValue)}
-        disabled={disabled}
+        isDisabled={disabled}
       />
 
       <SelectWithLabel
@@ -286,7 +286,7 @@ function EventCategoryForm<T extends EventCategoryForForm>({
         getOptionLabel={(option) => option?.title ?? ''}
         value={value.event_proposal_form}
         onChange={(newValue: T['event_proposal_form'] | null | undefined) => setEventProposalForm(newValue)}
-        disabled={disabled}
+        isDisabled={disabled}
         isClearable
       />
 
