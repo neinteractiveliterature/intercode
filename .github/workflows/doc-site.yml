@@ -22,6 +22,14 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-doc-site-yarn-${{ github.ref }}-
           ${{ runner.os }}-doc-site-yarn-
+    - name: Set up docusaurus cache
+      uses: actions/cache@v2
+      with:
+        path: doc-site/.yarn/.cache/webpack
+        key: ${{ runner.os }}-doc-site-docusaurus-${{ github.ref }}
+        restore-keys: |
+          ${{ runner.os }}-doc-site-docusaurus-${{ github.ref }}
+          ${{ runner.os }}-doc-site-docusaurus-
     - name: install node v14
       uses: actions/setup-node@v2
       with:
