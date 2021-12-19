@@ -13,8 +13,8 @@ module Intercode
     config.load_defaults 6.0
 
     config.hosts << ENV['ASSETS_HOST'] if ENV['ASSETS_HOST'].present?
-    config.hosts << /.*#{Regexp.escape(ENV['INTERCODE_HOST'])}(:\d+)?/ if ENV['INTERCODE_HOST'].present?
-    config.hosts << ->(host) { Convention.where(domain: host.gsub(/:\d+\z/, '')).any? }
+    config.hosts << /.*#{Regexp.escape(ENV['INTERCODE_HOST'])}/ if ENV['INTERCODE_HOST'].present?
+    config.hosts << ->(host) { Convention.where(domain: host).any? }
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
