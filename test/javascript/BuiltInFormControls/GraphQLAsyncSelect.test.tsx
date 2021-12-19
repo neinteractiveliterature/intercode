@@ -71,7 +71,7 @@ describe('GraphQLAsyncSelect', () => {
 
   test('loads options', async () => {
     const { getByRole, queryAllByText } = await renderUserConProfileSelect();
-    const selectInput = getByRole('textbox');
+    const selectInput = getByRole('combobox');
     await act(async () => {
       fireEvent.change(selectInput, { target: { value: 'gab' } });
       await waitFor(() => expect(queryAllByText('Gabriel Knight')).toHaveLength(1));
