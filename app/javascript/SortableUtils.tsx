@@ -14,7 +14,7 @@ export function useSortableDndSensors(): ReturnType<typeof useSensors> {
 
 export function getSortableStyle(
   transform: Transform | null,
-  transition: string | null,
+  transition: string | undefined,
   isDragging: boolean,
 ): CSSProperties {
   return {
