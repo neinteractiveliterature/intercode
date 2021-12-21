@@ -2278,7 +2278,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@dnd-kit/core@npm:3.1.1, @dnd-kit/core@npm:^3.1.1":
+"@dnd-kit/core@npm:4.0.3":
+  version: 4.0.3
+  resolution: "@dnd-kit/core@npm:4.0.3"
+  dependencies:
+    "@dnd-kit/accessibility": ^3.0.0
+    "@dnd-kit/utilities": ^3.0.1
+    tslib: ^2.0.0
+  peerDependencies:
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+  checksum: 828609317504f32bf37238840e5d2ae545efaaa779d696fdad1606d2ae22ae5668a43466db007efde89c8c1ef04ca66b2c61b6e98465f9487ec37c8e3d11a1b2
+  languageName: node
+  linkType: hard
+
+"@dnd-kit/core@npm:^3.1.1":
   version: 3.1.1
   resolution: "@dnd-kit/core@npm:3.1.1"
   dependencies:
@@ -2292,7 +2306,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@dnd-kit/sortable@npm:4.0.0, @dnd-kit/sortable@npm:^4.0.0":
+"@dnd-kit/sortable@npm:5.1.0":
+  version: 5.1.0
+  resolution: "@dnd-kit/sortable@npm:5.1.0"
+  dependencies:
+    "@dnd-kit/utilities": ^3.0.0
+    tslib: ^2.0.0
+  peerDependencies:
+    "@dnd-kit/core": ^4.0.2
+    react: ">=16.8.0"
+  checksum: f2f687a70dc52894e569d6377d7cb2e5e1761f0164cf08a1d0c8c3df43d6e88fd2858e0f5dfc8a5670fac8f6ce9a2ed91b0aeb8837f44d067acf21d1baf6a55e
+  languageName: node
+  linkType: hard
+
+"@dnd-kit/sortable@npm:^4.0.0":
   version: 4.0.0
   resolution: "@dnd-kit/sortable@npm:4.0.0"
   dependencies:
@@ -2305,7 +2332,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@dnd-kit/utilities@npm:2.0.0, @dnd-kit/utilities@npm:^2.0.0":
+"@dnd-kit/utilities@npm:3.0.2, @dnd-kit/utilities@npm:^3.0.0, @dnd-kit/utilities@npm:^3.0.1":
+  version: 3.0.2
+  resolution: "@dnd-kit/utilities@npm:3.0.2"
+  dependencies:
+    tslib: ^2.0.0
+  peerDependencies:
+    react: ">=16.8.0"
+  checksum: 929be05e28cd61bd802f84e50ec7e4fa3fc66e25062b7dafd578c31810608f067a85fbb2b193c323723e51202b6afcd07e10e09f2172678fa0d7d257bc95e2b0
+  languageName: node
+  linkType: hard
+
+"@dnd-kit/utilities@npm:^2.0.0":
   version: 2.0.0
   resolution: "@dnd-kit/utilities@npm:2.0.0"
   dependencies:
@@ -19681,9 +19719,9 @@ resolve@^2.0.0-next.3:
     "@codemirror/language": 0.19.7
     "@codemirror/state": 0.19.6
     "@codemirror/view": 0.19.35
-    "@dnd-kit/core": 3.1.1
-    "@dnd-kit/sortable": 4.0.0
-    "@dnd-kit/utilities": 2.0.0
+    "@dnd-kit/core": 4.0.3
+    "@dnd-kit/sortable": 5.1.0
+    "@dnd-kit/utilities": 3.0.2
     "@emotion/serialize": 1.0.2
     "@graphiql/toolkit": 0.4.2
     "@graphql-codegen/add": 3.1.0
