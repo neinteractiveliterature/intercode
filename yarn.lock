@@ -2278,7 +2278,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@dnd-kit/core@npm:3.1.1, @dnd-kit/core@npm:^3.1.1":
+"@dnd-kit/core@npm:3.1.1":
   version: 3.1.1
   resolution: "@dnd-kit/core@npm:3.1.1"
   dependencies:
@@ -2292,7 +2292,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@dnd-kit/sortable@npm:4.0.0, @dnd-kit/sortable@npm:^4.0.0":
+"@dnd-kit/core@npm:^4.0.3":
+  version: 4.0.3
+  resolution: "@dnd-kit/core@npm:4.0.3"
+  dependencies:
+    "@dnd-kit/accessibility": ^3.0.0
+    "@dnd-kit/utilities": ^3.0.1
+    tslib: ^2.0.0
+  peerDependencies:
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+  checksum: 828609317504f32bf37238840e5d2ae545efaaa779d696fdad1606d2ae22ae5668a43466db007efde89c8c1ef04ca66b2c61b6e98465f9487ec37c8e3d11a1b2
+  languageName: node
+  linkType: hard
+
+"@dnd-kit/sortable@npm:4.0.0":
   version: 4.0.0
   resolution: "@dnd-kit/sortable@npm:4.0.0"
   dependencies:
@@ -2305,12 +2319,36 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@dnd-kit/sortable@npm:^5.1.0":
+  version: 5.1.0
+  resolution: "@dnd-kit/sortable@npm:5.1.0"
+  dependencies:
+    "@dnd-kit/utilities": ^3.0.0
+    tslib: ^2.0.0
+  peerDependencies:
+    "@dnd-kit/core": ^4.0.2
+    react: ">=16.8.0"
+  checksum: f2f687a70dc52894e569d6377d7cb2e5e1761f0164cf08a1d0c8c3df43d6e88fd2858e0f5dfc8a5670fac8f6ce9a2ed91b0aeb8837f44d067acf21d1baf6a55e
+  languageName: node
+  linkType: hard
+
 "@dnd-kit/utilities@npm:2.0.0, @dnd-kit/utilities@npm:^2.0.0":
   version: 2.0.0
   resolution: "@dnd-kit/utilities@npm:2.0.0"
   dependencies:
     tslib: ^2.0.0
   checksum: 10173fc8d6fa8e46394ac2b739e443a3254e31854cbdbe810782bb7b6f4b4dd948752c3114479827c0da757e6616dd44a70394b6e8524d807514db0be192b18d
+  languageName: node
+  linkType: hard
+
+"@dnd-kit/utilities@npm:^3.0.0, @dnd-kit/utilities@npm:^3.0.1, @dnd-kit/utilities@npm:^3.0.2":
+  version: 3.0.2
+  resolution: "@dnd-kit/utilities@npm:3.0.2"
+  dependencies:
+    tslib: ^2.0.0
+  peerDependencies:
+    react: ">=16.8.0"
+  checksum: 929be05e28cd61bd802f84e50ec7e4fa3fc66e25062b7dafd578c31810608f067a85fbb2b193c323723e51202b6afcd07e10e09f2172678fa0d7d257bc95e2b0
   languageName: node
   linkType: hard
 
@@ -7534,19 +7572,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cadmus-navbar-admin@npm:5.0.0":
-  version: 5.0.0
-  resolution: "cadmus-navbar-admin@npm:5.0.0"
+"cadmus-navbar-admin@npm:6.0.0":
+  version: 6.0.0
+  resolution: "cadmus-navbar-admin@npm:6.0.0"
   dependencies:
-    "@dnd-kit/core": ^3.1.1
-    "@dnd-kit/sortable": ^4.0.0
-    "@dnd-kit/utilities": ^2.0.0
+    "@dnd-kit/core": ^4.0.3
+    "@dnd-kit/sortable": ^5.1.0
+    "@dnd-kit/utilities": ^3.0.2
     classnames: ^2.3.1
     lodash: ^4.17.21
     react-bootstrap4-modal: ^2.0.0
   peerDependencies:
     react: ^17.0.0
-  checksum: e5d6c0a57eadb5ce875b0e235831075d4445b973aece1d421ec5d058d201117f861afb46fdaae3a76f4ea0a8441cccde91d38615c9040009eee149bc02c80b3b
+  checksum: 9a71178a37833e3222027f46803727344dd4c3c313cffff7aa0badc7d663a6ad83c6d172463e4fa304a02517735bbbfb45da470a94729fce742f70a4cbc2c57e
   languageName: node
   linkType: hard
 
@@ -19752,7 +19790,7 @@ resolve@^2.0.0-next.3:
     bootstrap-icons: 1.7.2
     buffer: 6.0.3
     bytes: 3.1.1
-    cadmus-navbar-admin: 5.0.0
+    cadmus-navbar-admin: 6.0.0
     caniuse-lite: 1.0.30001291
     case-sensitive-paths-webpack-plugin: 2.4.0
     classnames: 2.3.1

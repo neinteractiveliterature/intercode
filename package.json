@@ -100,7 +100,7 @@
     "bootstrap-icons": "1.7.2",
     "buffer": "6.0.3",
     "bytes": "3.1.1",
-    "cadmus-navbar-admin": "5.0.0",
+    "cadmus-navbar-admin": "6.0.0",
     "caniuse-lite": "1.0.30001291",
     "case-sensitive-paths-webpack-plugin": "2.4.0",
     "classnames": "2.3.1",
