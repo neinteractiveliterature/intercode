@@ -20,7 +20,7 @@ class Types::UserType < Types::BaseObject
       .load(object)
       .then do |event_proposals|
         # avoid n+1 in the policy check
-        ::ActiveRecord::Associations::Preloader.new.preload(event_proposals, :owner)
+        ::ActiveRecord::Associations::Preloader.new(records: event_proposals, associations: :owner).call
         event_proposals
       end
   end

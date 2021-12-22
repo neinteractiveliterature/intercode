@@ -8,6 +8,7 @@ gem 'webrick' # we don't actually use it, but Skylight needs it on boot
 gem 'puma'
 
 gem 'minipack'
+gem 'sprockets-rails'
 
 gem 'dotenv-rails', require: 'dotenv/rails-now'
 
@@ -28,7 +29,7 @@ branch: 'fix_doorkeeper_52_compat'
 gem 'activerecord-session_store'
 
 # Lightweight open-source CMS (written by Nat for Gively Inc.)
-gem 'cadmus', '~> 0.7.0'
+gem 'cadmus', '~> 0.7.1'
 gem 'cadmus_files', '~> 0.2.0'
 gem 'cadmus_navbar', '~> 0.1.0'
 gem 'liquid-md5'
