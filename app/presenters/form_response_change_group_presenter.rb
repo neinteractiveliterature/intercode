@@ -7,8 +7,8 @@ class FormResponseChangeGroupPresenter
     @changes = changes
     @convention = convention
 
-    ::ActiveRecord::Associations::Preloader.new.preload(changes, :user_con_profile)
-    ::ActiveRecord::Associations::Preloader.new.preload(changes, :response)
+    ::ActiveRecord::Associations::Preloader.new(records: changes, associations: :user_con_profile).call
+    ::ActiveRecord::Associations::Preloader.new(records: changes, associations: :response).call
   end
 
   def html
