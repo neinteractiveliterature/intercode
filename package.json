@@ -144,7 +144,7 @@
     "postcss-import": "14.0.2",
     "postcss-loader": "6.2.1",
     "precss": "4.0.0",
-    "prop-types": "15.7.2",
+    "prop-types": "15.8.0",
     "punycode": "2.1.1",
     "react": "17.0.2",
     "react-bootstrap4-modal": "2.0.0",
