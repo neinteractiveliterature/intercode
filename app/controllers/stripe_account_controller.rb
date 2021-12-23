@@ -20,7 +20,7 @@ class StripeAccountController < ApplicationController
         }
       )
 
-    redirect_to account_link.url
+    redirect_to account_link.url, allow_other_host: true
   end
 
   private
