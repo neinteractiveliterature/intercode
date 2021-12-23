@@ -70,10 +70,10 @@ Rails.application.config.active_record.verify_foreign_keys_for_fixtures = true
 # Disable partial inserts.
 # This default means that all columns will be referenced in INSERT queries
 # regardless of whether they have a default or not.
-# Rails.application.config.active_record.partial_inserts = false
-#
+Rails.application.config.active_record.partial_inserts = false
+
 # Protect from open redirect attacks in `redirect_back_or_to` and `redirect_to`.
-# Rails.application.config.action_controller.raise_on_open_redirects = true
+Rails.application.config.action_controller.raise_on_open_redirects = true
 
 # Change the variant processor for Active Storage.
 # Changing this default means updating all places in your code that
