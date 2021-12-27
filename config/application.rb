@@ -10,7 +10,7 @@ Bundler.require(*Rails.groups)
 
 module Intercode
   class Application < Rails::Application
-    config.load_defaults 6.0
+    config.load_defaults 7.0
 
     config.hosts << ENV['ASSETS_HOST'] if ENV['ASSETS_HOST'].present?
     config.hosts << /.*#{Regexp.escape(ENV['INTERCODE_HOST'])}/ if ENV['INTERCODE_HOST'].present?
