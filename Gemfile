@@ -32,7 +32,7 @@ gem 'activerecord-session_store'
 gem 'cadmus', '~> 0.7.1'
 gem 'cadmus_files', '~> 0.2.0'
 gem 'cadmus_navbar', '~> 0.1.0'
-gem 'liquid-md5'
+gem 'liquid'
 
 # Extracted from this app!  Values that change over time based on a schedule
 gem 'scheduled_value', '~> 1.4.0'
