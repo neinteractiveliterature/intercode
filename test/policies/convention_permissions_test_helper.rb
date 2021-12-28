@@ -27,6 +27,26 @@ module ConventionPermissionsTestHelper
     create_user_with_permissions_in_model(permissions, convention, convention)
   end
 
+  def create_identity_assumer(user, convention)
+    real_profile = create(:user_con_profile, convention: convention)
+    AuthorizationInfo.new(user, nil, assumed_identity_from_profile: real_profile)
+  end
+
+  def create_identity_assumer_from_other_convention(user)
+    other_convention = create(:convention)
+    create_identity_assumer(user, other_convention)
+  end
+
+  def assert_policy_allows(policy_class, user, record, action, convention)
+    action_desc = "#{action} #{record.class.name}"
+    assert policy_class.new(user, record).public_send(action),
+           "#{policy_class.name} should allow user to #{action_desc}, but doesn't"
+    assert policy_class.new(create_identity_assumer(user, convention), record).public_send(action),
+           "#{policy_class.name} should allow same-convention identity assumer to #{action_desc}, but doesn't"
+    refute policy_class.new(create_identity_assumer_from_other_convention(user), record).public_send(action),
+           "#{policy_class.name} should not allow cross-convention identity assumer to #{action_desc}, but does"
+  end
+
   def create_user_with_permission_in_cms_content_group(permission, cms_content_group)
     create_user_with_permission_in_model(permission, cms_content_group, cms_content_group.parent)
   end

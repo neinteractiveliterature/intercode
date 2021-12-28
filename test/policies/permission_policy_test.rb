@@ -8,10 +8,11 @@ class PermissionPolicyTest < ActiveSupport::TestCase
     it 'lets site admins read any permissions' do
       organization_permission = create(:organization_permission)
       event_category_permission = create(:event_category_permission)
+      convention = event_category_permission.event_category.convention
       user = create(:user, site_admin: true)
 
       assert PermissionPolicy.new(user, organization_permission).read?
-      assert PermissionPolicy.new(user, event_category_permission).read?
+      assert_policy_allows PermissionPolicy, user, event_category_permission, :read?, convention
     end
 
     it 'lets users with update_permissions read permissions in their con' do
@@ -20,7 +21,7 @@ class PermissionPolicyTest < ActiveSupport::TestCase
       user = create_user_with_update_permissions_in_convention(convention)
       other_con_permission = create(:event_category_permission)
 
-      assert PermissionPolicy.new(user, my_con_permission).read?
+      assert_policy_allows PermissionPolicy, user, my_con_permission, :read?, convention
       refute PermissionPolicy.new(user, other_con_permission).read?
     end
 
@@ -38,10 +39,11 @@ class PermissionPolicyTest < ActiveSupport::TestCase
     it 'lets site admins manage any permissions' do
       organization_permission = create(:organization_permission)
       event_category_permission = create(:event_category_permission)
+      convention = event_category_permission.event_category.convention
       user = create(:user, site_admin: true)
 
       assert PermissionPolicy.new(user, organization_permission).manage?
-      assert PermissionPolicy.new(user, event_category_permission).manage?
+      assert_policy_allows PermissionPolicy, user, event_category_permission, :manage?, convention
     end
 
     it 'lets users with update_permissions manage permissions in their con' do
@@ -50,7 +52,7 @@ class PermissionPolicyTest < ActiveSupport::TestCase
       user = create_user_with_update_permissions_in_convention(convention)
       other_con_permission = create(:event_category_permission)
 
-      assert PermissionPolicy.new(user, my_con_permission).manage?
+      assert_policy_allows PermissionPolicy, user, my_con_permission, :manage?, convention
       refute PermissionPolicy.new(user, other_con_permission).manage?
     end
 
@@ -70,8 +72,11 @@ class PermissionPolicyTest < ActiveSupport::TestCase
       event_category_permission = create(:event_category_permission)
       user = create(:user, site_admin: true)
       resolved_permissions = PermissionPolicy::Scope.new(user, Permission.all).resolve
+      identity_assumer_resolved_permissions =
+        PermissionPolicy::Scope.new(create_identity_assumer_from_other_convention(user), Permission.all).resolve
 
       assert_equal([organization_permission, event_category_permission].sort, resolved_permissions.sort)
+      assert_equal([].sort, identity_assumer_resolved_permissions.sort)
     end
 
     it 'returns permissions for cons in which the user has update_permissions' do
@@ -84,8 +89,11 @@ class PermissionPolicyTest < ActiveSupport::TestCase
         )
       create(:event_category_permission) # other_con_permission
       resolved_permissions = PermissionPolicy::Scope.new(user, Permission.all).resolve
+      identity_assumer_resolved_permissions =
+        PermissionPolicy::Scope.new(create_identity_assumer_from_other_convention(user), Permission.all).resolve
 
       assert_equal [my_con_permission, *user_permissions], resolved_permissions.sort
+      assert_equal([].sort, identity_assumer_resolved_permissions.sort)
     end
 
     it 'does not return permissions to regular users' do

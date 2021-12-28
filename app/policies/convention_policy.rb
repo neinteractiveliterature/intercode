@@ -5,6 +5,8 @@ class ConventionPolicy < ApplicationPolicy
   end
 
   def schedule?
+    return false if assumed_identity_from_profile && assumed_identity_from_profile.convention != record
+
     if oauth_scoped_disjunction do |d|
          d.add_clause { record.show_schedule == 'yes' }
          d.add(:read_conventions) { has_schedule_release_permissions?(record, record.show_schedule) }
@@ -16,6 +18,8 @@ class ConventionPolicy < ApplicationPolicy
   end
 
   def list_events?
+    return false if assumed_identity_from_profile && assumed_identity_from_profile.convention != record
+
     if oauth_scoped_disjunction do |d|
          d.add_clause { record.show_event_list == 'yes' }
          d.add(:read_conventions) { has_schedule_release_permissions?(record, record.show_event_list) }
@@ -55,6 +59,8 @@ class ConventionPolicy < ApplicationPolicy
   end
 
   def view_event_proposals?
+    return false if assumed_identity_from_profile && assumed_identity_from_profile.convention != record
+
     if oauth_scoped_disjunction do |d|
          d.add(:read_events) do
            # this is a weird one: does the user have _any_ permission called read_event_proposal

@@ -39,8 +39,12 @@ FactoryBot.define do
   end
 
   factory :event_category_permission, class: Permission do
-    association :staff_position
-    association :model, factory: :event_category
     permission { 'update_events' }
+
+    before(:create) do |permission|
+      convention = permission.staff_position&.convention || permission.model&.convention || create(:convention)
+      permission.model ||= create(:event_category, convention: convention)
+      permission.staff_position ||= create(:staff_position, convention: convention)
+    end
   end
 end

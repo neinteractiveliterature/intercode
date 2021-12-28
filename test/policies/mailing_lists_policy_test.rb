@@ -12,19 +12,18 @@ class MailingListsPolicyTest < ActiveSupport::TestCase
   MAIL_PERMISSION_NAMES.each do |permission_name|
     describe "users with #{permission_name}" do
       let(:user) { create_user_with_permission_in_convention(permission_name, convention) }
-      let(:policy) { MailingListsPolicy.new(user, mailing_lists_presenter) }
 
       it "lets #{permission_name} users read_any_mailing_list" do
-        assert policy.read_any_mailing_list?
+        assert_policy_allows MailingListsPolicy, user, mailing_lists_presenter, :read_any_mailing_list?, convention
       end
 
       it "lets #{permission_name} users #{permission_name}" do
-        assert policy.public_send("#{permission_name}?")
+        assert_policy_allows MailingListsPolicy, user, mailing_lists_presenter, "#{permission_name}?", convention
       end
 
       (MAIL_PERMISSION_NAMES - [permission_name]).each do |other_permission_name|
         it "does not let #{permission_name} users #{other_permission_name}" do
-          refute policy.public_send("#{other_permission_name}?")
+          refute MailingListsPolicy.new(user, mailing_lists_presenter).public_send("#{other_permission_name}?")
         end
       end
     end

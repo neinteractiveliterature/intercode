@@ -1,6 +1,9 @@
 require 'test_helper'
+require_relative 'convention_permissions_test_helper'
 
 class RootSitePolicyTest < ActiveSupport::TestCase
+  include ConventionPermissionsTestHelper
+
   let(:root_site) { create(:root_site) }
 
   describe '#read?' do
@@ -13,6 +16,7 @@ class RootSitePolicyTest < ActiveSupport::TestCase
     it 'lets site admins manage the root site' do
       user = create(:user, site_admin: true)
       assert RootSitePolicy.new(user, root_site).manage?
+      refute RootSitePolicy.new(create_identity_assumer(user, create(:convention)), root_site).manage?
     end
 
     it 'does not let non-admins manage the root site' do

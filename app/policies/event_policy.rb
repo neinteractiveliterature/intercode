@@ -97,12 +97,7 @@ class EventPolicy < ApplicationPolicy
     # The slow-but-painfully-correct path
     def resolve_global
       disjunctive_where do |dw|
-        if user
-          dw.add(
-            id: TeamMember.where(user_con_profile: UserConProfile.where(user_id: user.id)).select(:event_id),
-            status: 'active'
-          )
-        end
+        dw.add(team_member_event_conditions) if user
 
         dw.add(convention: Convention.where(site_mode: 'single_event'))
 
@@ -124,15 +119,26 @@ class EventPolicy < ApplicationPolicy
       return scope.where(status: 'active') if has_schedule_release_permissions?(convention, convention.show_event_list)
 
       disjunctive_where do |dw|
-        if user
-          dw.add(
-            id: TeamMember.where(user_con_profile: UserConProfile.where(user_id: user.id)).select(:event_id),
-            status: 'active'
-          )
-        end
+        dw.add(team_member_event_conditions) if user
 
         dw.add(event_category_id: event_category_ids_with_permission_in_convention(convention, 'update_events'))
       end
+    end
+
+    def team_member_event_conditions
+      team_member_event_conditions = {
+        id: TeamMember.where(user_con_profile: UserConProfile.where(user_id: user.id)).select(:event_id),
+        status: 'active'
+      }
+
+      if assumed_identity_from_profile
+        team_member_event_conditions[:id] =
+          team_member_event_conditions[:id]
+            .joins(:event)
+            .where(events: { convention_id: assumed_identity_from_profile.convention_id })
+      end
+
+      team_member_event_conditions
     end
   end
 end

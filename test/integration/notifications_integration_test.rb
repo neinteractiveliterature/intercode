@@ -17,7 +17,7 @@ class NotificationsIntegrationTest < ActiveSupport::TestCase
         )
       end
       the_run = create(:run, event: event)
-      create(:signup, run: the_run)
+      create(:signup, run: the_run, user_con_profile: user_con_profile)
       create(:signup_request, target_run: the_run)
       create(:ticket, user_con_profile: user_con_profile)
     end

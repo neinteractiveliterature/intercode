@@ -30,13 +30,15 @@
 # rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 FactoryBot.define do
   factory :signup do
-    run
-    user_con_profile
     state { 'confirmed' }
     counted { true }
     updated_by { nil }
 
-    after(:build) do |signup|
+    before(:create) do |signup|
+      convention = signup.user_con_profile&.convention || signup.run&.event&.convention || create(:convention)
+      event = signup.run&.event || create(:event, convention: convention)
+      signup.user_con_profile ||= create(:user_con_profile, convention: convention)
+      signup.run ||= create(:run, event: event)
       signup.bucket_key ||= signup.run.event.registration_policy.buckets.first.key if signup.confirmed?
     end
   end

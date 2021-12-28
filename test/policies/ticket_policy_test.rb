@@ -10,7 +10,7 @@ class TicketPolicyTest < ActiveSupport::TestCase
 
   describe '#read?' do
     it 'lets me read my own ticket' do
-      assert TicketPolicy.new(ticket_user, ticket).read?
+      assert_policy_allows TicketPolicy, ticket_user, ticket, :read?, convention
     end
 
     it "does not let me read other people's tickets" do
@@ -20,12 +20,12 @@ class TicketPolicyTest < ActiveSupport::TestCase
     it 'lets event team members read my ticket' do
       event = create(:event, convention: convention)
       team_member = create(:team_member, event: event)
-      assert TicketPolicy.new(team_member.user_con_profile.user, ticket).read?
+      assert_policy_allows TicketPolicy, team_member.user_con_profile.user, ticket, :read?, convention
     end
 
     it 'lets users with read_tickets in convention read my ticket' do
       user = create_user_with_read_tickets_in_convention(convention)
-      assert TicketPolicy.new(user, ticket).read?
+      assert_policy_allows TicketPolicy, user, ticket, :read?, convention
     end
   end
 
@@ -35,7 +35,7 @@ class TicketPolicyTest < ActiveSupport::TestCase
       user = create_user_with_update_tickets_in_convention(event.convention)
       recipient = create(:user_con_profile, convention: event.convention)
       ticket = build(:ticket, user_con_profile: recipient, provided_by_event: event)
-      assert TicketPolicy.new(user, ticket).provide?
+      assert_policy_allows TicketPolicy, user, ticket, :provide?, event.convention
     end
 
     it 'lets event team members provide tickets to their own event' do
@@ -43,7 +43,7 @@ class TicketPolicyTest < ActiveSupport::TestCase
       team_member = create(:team_member, event: event)
       recipient = create(:user_con_profile, convention: event.convention)
       ticket = build(:ticket, user_con_profile: recipient, provided_by_event: event)
-      assert TicketPolicy.new(team_member.user_con_profile.user, ticket).provide?
+      assert_policy_allows TicketPolicy, team_member.user_con_profile.user, ticket, :provide?, event.convention
     end
 
     it 'does not let event team members provide tickets to other events' do
@@ -70,7 +70,7 @@ class TicketPolicyTest < ActiveSupport::TestCase
 
     it 'lets users with update_tickets manage my ticket' do
       user = create_user_with_update_tickets_in_convention(convention)
-      assert TicketPolicy.new(user, ticket).manage?
+      assert_policy_allows TicketPolicy, user, ticket, :manage?, convention
     end
   end
 
@@ -81,8 +81,11 @@ class TicketPolicyTest < ActiveSupport::TestCase
       other_profiles = create_list(:user_con_profile, 3, convention: me.convention)
       other_profiles.each { |p| create(:ticket, user_con_profile: p) }
       resolved_tickets = TicketPolicy::Scope.new(me.user, Ticket.all).resolve.to_a
+      identity_assumer_resolved_tickets =
+        TicketPolicy::Scope.new(create_identity_assumer_from_other_convention(me.user), Ticket.all).resolve.to_a
 
       assert_equal [my_ticket], resolved_tickets
+      assert_equal [], identity_assumer_resolved_tickets
     end
 
     it 'lets users with read_tickets permission see all the tickets in the con' do
@@ -93,8 +96,11 @@ class TicketPolicyTest < ActiveSupport::TestCase
       someones_ticket = create(:ticket, user_con_profile: someone)
       create_list(:ticket, 3)
       resolved_tickets = TicketPolicy::Scope.new(me, Ticket.all).resolve.to_a
+      identity_assumer_resolved_tickets =
+        TicketPolicy::Scope.new(create_identity_assumer_from_other_convention(me), Ticket.all).resolve.to_a
 
       assert_equal [my_ticket, someones_ticket].sort, resolved_tickets.sort
+      assert_equal [], identity_assumer_resolved_tickets
     end
 
     it 'lets event team members see all the tickets in the con' do
@@ -105,8 +111,11 @@ class TicketPolicyTest < ActiveSupport::TestCase
       someones_ticket = create(:ticket, user_con_profile: someone)
       create_list(:ticket, 3)
       resolved_tickets = TicketPolicy::Scope.new(me.user, Ticket.all).resolve.to_a
+      identity_assumer_resolved_tickets =
+        TicketPolicy::Scope.new(create_identity_assumer_from_other_convention(me.user), Ticket.all).resolve.to_a
 
       assert_equal [my_ticket, someones_ticket].sort, resolved_tickets.sort
+      assert_equal [], identity_assumer_resolved_tickets
     end
   end
 end

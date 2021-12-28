@@ -14,7 +14,7 @@ class SignupRequestPolicyTest < ActiveSupport::TestCase
       convention.update!(signup_mode: 'moderated')
       user = create_user_with_update_signups_in_convention(convention)
 
-      assert SignupRequestPolicy.new(user, signup_request).read?
+      assert_policy_allows SignupRequestPolicy, user, signup_request, :read?, convention
     end
 
     it 'does not let users with update_signups read signup requests in a self-service signup convention' do
@@ -25,7 +25,7 @@ class SignupRequestPolicyTest < ActiveSupport::TestCase
     end
 
     it 'lets users read their own signup requests' do
-      assert SignupRequestPolicy.new(signup_request.user_con_profile.user, signup_request).read?
+      assert_policy_allows SignupRequestPolicy, signup_request.user_con_profile.user, signup_request, :read?, convention
     end
 
     it "does not let users read other people's signup requests" do
@@ -39,7 +39,7 @@ class SignupRequestPolicyTest < ActiveSupport::TestCase
         convention.update!(signup_mode: 'moderated')
         user = create_user_with_update_signups_in_convention(convention)
 
-        assert SignupRequestPolicy.new(user, signup_request).public_send("#{action}?")
+        assert_policy_allows SignupRequestPolicy, user, signup_request, "#{action}?", convention
       end
 
       it "does not let users with update_signups #{action} signup requests in a self-service signup convention" do
@@ -64,7 +64,7 @@ class SignupRequestPolicyTest < ActiveSupport::TestCase
       user_con_profile = create(:user_con_profile, convention: convention)
       convention.update!(signup_mode: 'moderated')
       new_signup_request = SignupRequest.new(target_run: signup_request.target_run, user_con_profile: user_con_profile)
-      assert SignupRequestPolicy.new(user_con_profile.user, new_signup_request).create?
+      assert_policy_allows SignupRequestPolicy, user_con_profile.user, new_signup_request, :create?, convention
     end
 
     it 'does not let users create signup requests in a self-service signup convention' do
@@ -88,7 +88,11 @@ class SignupRequestPolicyTest < ActiveSupport::TestCase
 
   describe '#withdraw?' do
     it 'lets users withdraw their own pending signup requests' do
-      assert SignupRequestPolicy.new(signup_request.user_con_profile.user, signup_request).withdraw?
+      assert_policy_allows SignupRequestPolicy,
+                           signup_request.user_con_profile.user,
+                           signup_request,
+                           :withdraw?,
+                           convention
     end
 
     it 'does not let users withdraw their own rejected signup requests' do
@@ -111,8 +115,11 @@ class SignupRequestPolicyTest < ActiveSupport::TestCase
       convention.update!(signup_mode: 'moderated')
       user = create_user_with_update_signups_in_convention(convention)
       resolved_signup_requests = SignupRequestPolicy::Scope.new(user, SignupRequest.all).resolve
+      identity_assumer_resolved_signup_requests =
+        SignupRequestPolicy::Scope.new(create_identity_assumer_from_other_convention(user), SignupRequest.all).resolve
 
       assert_equal [signup_request], resolved_signup_requests.sort
+      assert_equal [], identity_assumer_resolved_signup_requests.sort
     end
 
     it "returns a regular user's own signup requests" do
@@ -120,8 +127,14 @@ class SignupRequestPolicyTest < ActiveSupport::TestCase
       create(:signup_request, target_run: signup_request.target_run)
       resolved_signup_requests =
         SignupRequestPolicy::Scope.new(signup_request.user_con_profile.user, SignupRequest.all).resolve
+      identity_assumer_resolved_signup_requests =
+        SignupRequestPolicy::Scope.new(
+          create_identity_assumer_from_other_convention(signup_request.user_con_profile.user),
+          SignupRequest.all
+        ).resolve
 
       assert_equal [signup_request], resolved_signup_requests.sort
+      assert_equal [], identity_assumer_resolved_signup_requests.sort
     end
   end
 end

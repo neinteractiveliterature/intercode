@@ -5,6 +5,8 @@ class SignupPolicy < ApplicationPolicy
   delegate :convention, to: :event
 
   def read?
+    return false if assumed_identity_from_profile && assumed_identity_from_profile.convention != convention
+
     if oauth_scoped_disjunction do |d|
          d.add(:read_signups) { user && record.user_con_profile&.user_id == user.id }
          d.add(:read_events) { signed_up_for_run?(run) && !event.private_signup_list? }
@@ -17,6 +19,8 @@ class SignupPolicy < ApplicationPolicy
   end
 
   def read_requested_bucket_key?
+    return false if assumed_identity_from_profile && assumed_identity_from_profile.convention != convention
+
     if oauth_scoped_disjunction do |d|
          d.add(:read_signups) { user && record.user_con_profile&.user_id == user.id }
          d.add(:read_conventions) { has_convention_permission?(convention, 'read_signup_details') }
@@ -41,10 +45,12 @@ class SignupPolicy < ApplicationPolicy
   end
 
   def create?
+    return false if assumed_identity_from_profile && assumed_identity_from_profile.convention != convention
     oauth_scope?(:manage_signups) && user
   end
 
   def withdraw?
+    return false if assumed_identity_from_profile && assumed_identity_from_profile.convention != convention
     oauth_scope?(:manage_signups) && user && record.user_con_profile.user_id == user.id ? true : manage?
   end
 
@@ -65,17 +71,26 @@ class SignupPolicy < ApplicationPolicy
     def resolve
       return super if site_admin?
 
-      disjunctive_where do |dw|
-        dw.add(user_con_profile: UserConProfile.where(user_id: user.id)) if user && oauth_scope?(:read_signups)
+      signups_scope =
+        disjunctive_where do |dw|
+          dw.add(user_con_profile: UserConProfile.where(user_id: user.id)) if user && oauth_scope?(:read_signups)
 
-        if oauth_scope?(:read_events)
-          dw.add(run: Run.where(event: events_where_team_member))
-          dw.add(run: Run.where(id: runs_where_signed_up, event: Event.where(private_signup_list: false)))
+          if oauth_scope?(:read_events)
+            dw.add(run: Run.where(event: events_where_team_member))
+            dw.add(run: Run.where(id: runs_where_signed_up, event: Event.where(private_signup_list: false)))
+          end
+
+          if oauth_scope?(:read_conventions)
+            dw.add(run: Run.where(event: Event.where(convention: conventions_with_permission('read_signup_details'))))
+          end
         end
 
-        if oauth_scope?(:read_conventions)
-          dw.add(run: Run.where(event: Event.where(convention: conventions_with_permission('read_signup_details'))))
-        end
+      if assumed_identity_from_profile
+        signups_scope.where(
+          run: Run.where(event: Event.where(convention_id: assumed_identity_from_profile.convention.id))
+        )
+      else
+        signups_scope
       end
     end
   end

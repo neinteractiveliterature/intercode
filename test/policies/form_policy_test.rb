@@ -15,7 +15,7 @@ class FormPolicyTest < ActiveSupport::TestCase
     it 'lets users with update_forms manage forms' do
       form = create(:event_form)
       user = create_user_with_update_forms_in_convention(form.convention)
-      assert FormPolicy.new(user, form).manage?
+      assert_policy_allows FormPolicy, user, form, :manage?, form.convention
     end
 
     it 'does not let users without update_forms manage forms' do

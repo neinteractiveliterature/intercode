@@ -15,7 +15,7 @@ class TicketTypePolicyTest < ActiveSupport::TestCase
     it 'lets users with update_ticket_types manage ticket types' do
       ticket_type = create(:free_ticket_type)
       user = create_user_with_update_ticket_types_in_convention(ticket_type.convention)
-      assert TicketTypePolicy.new(user, ticket_type).manage?
+      assert_policy_allows TicketTypePolicy, user, ticket_type, :manage?, ticket_type.convention
     end
 
     it 'does not let users without update_ticket_types manage ticket types' do

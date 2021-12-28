@@ -44,6 +44,7 @@ class Signup < ApplicationRecord
   validates :state, inclusion: { in: STATES }
   validates :bucket_key, presence: { if: ->(signup) { signup.counted? && signup.confirmed? } }
   validate :must_be_in_existing_bucket
+  validate :user_con_profile_and_run_must_be_in_same_convention
 
   STATES.each do |state_name|
     define_method "#{state_name}?" do
@@ -113,6 +114,12 @@ class Signup < ApplicationRecord
 
     errors.add(:bucket_key, bucket_validity_error_message) if invalid_bucket?
     errors.add(:requested_bucket_key, bucket_validity_error_message) if invalid_requested_bucket?
+  end
+
+  def user_con_profile_and_run_must_be_in_same_convention
+    return if user_con_profile.convention_id == event.convention_id
+
+    errors.add(:base, 'User con profile and run must be in the same convention')
   end
 
   def can_have_invalid_buckets?
