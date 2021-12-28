@@ -15,7 +15,7 @@ class ProductPolicyTest < ActiveSupport::TestCase
     it 'lets users with update_products manage products' do
       product = create(:product)
       user = create_user_with_update_products_in_convention(product.convention)
-      assert ProductPolicy.new(user, product).manage?
+      assert_policy_allows ProductPolicy, user, product, :manage?, product.convention
     end
 
     it 'does not let users without update_products manage products' do
@@ -26,7 +26,7 @@ class ProductPolicyTest < ActiveSupport::TestCase
   end
 
   describe 'Scope' do
-    it 'always returns all forms' do
+    it 'always returns all products' do
       create_list(:product, 3)
       assert_equal 3, ProductPolicy::Scope.new(nil, Product.all).resolve.count
     end

@@ -54,10 +54,12 @@ class EventProposalPolicy < ApplicationPolicy
   end
 
   def destroy?
+    return false if assumed_identity_from_profile && assumed_identity_from_profile.convention != record.convention
     oauth_scope?(:manage_events) && record.status == 'draft' && user && record.owner.user_id == user.id
   end
 
   def submit?
+    return false if assumed_identity_from_profile && assumed_identity_from_profile.convention != record.convention
     oauth_scope?(:manage_events) && user && record.owner.user_id == user.id
   end
 
@@ -70,6 +72,7 @@ class EventProposalPolicy < ApplicationPolicy
   end
 
   def form_item_viewer_role
+    return :normal if assumed_identity_from_profile && assumed_identity_from_profile.convention != record.convention
     FormItem.highest_level_role(
       team_member: user_is_owner?,
       admin:
@@ -92,6 +95,7 @@ class EventProposalPolicy < ApplicationPolicy
   end
 
   def user_is_owner?
+    return false if assumed_identity_from_profile && assumed_identity_from_profile.convention != record.convention
     user && record.owner && record.owner.user_id == user.id
   end
 
@@ -100,6 +104,10 @@ class EventProposalPolicy < ApplicationPolicy
   end
 
   class Scope < Scope
+    def scope
+      assumed_identity_from_profile ? @scope.where(convention_id: assumed_identity_from_profile.convention.id) : @scope
+    end
+
     def resolve
       return scope.all if oauth_scope?(:read_events) && site_admin?
 

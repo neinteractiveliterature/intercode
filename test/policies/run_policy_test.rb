@@ -23,13 +23,13 @@ class RunPolicyTest < ActiveSupport::TestCase
       it 'lets team members read' do
         event = create(:event, convention: convention)
         team_member = create(:team_member, event: event)
-        assert RunPolicy.new(team_member.user_con_profile.user, the_run).read?
+        assert_policy_allows RunPolicy, team_member.user_con_profile.user, the_run, :read?, convention
       end
 
       %w[read_prerelease_schedule read_limited_prerelease_schedule update_events].each do |permission|
         it "lets people with #{permission} permission in convention read runs" do
           user = create_user_with_permission_in_convention(permission, convention)
-          assert RunPolicy.new(user, the_run).read?
+          assert_policy_allows RunPolicy, user, the_run, :read?, convention
         end
       end
 
@@ -49,7 +49,7 @@ class RunPolicyTest < ActiveSupport::TestCase
       %w[read_limited_prerelease_schedule update_events].each do |permission|
         it "lets people with #{permission} permission in convention read runs" do
           user = create_user_with_permission_in_convention(permission, convention)
-          assert RunPolicy.new(user, the_run).read?
+          assert_policy_allows RunPolicy, user, the_run, :read?, convention
         end
       end
 
@@ -82,7 +82,7 @@ class RunPolicyTest < ActiveSupport::TestCase
       %w[update_events].each do |permission|
         it "lets people with #{permission} permission in convention read runs" do
           user = create_user_with_permission_in_convention(permission, convention)
-          assert RunPolicy.new(user, the_run).read?
+          assert_policy_allows RunPolicy, user, the_run, :read?, convention
         end
       end
 
@@ -123,7 +123,7 @@ class RunPolicyTest < ActiveSupport::TestCase
   describe '#signup_summary?' do
     it 'lets users read signup summaries of runs they are signed up for' do
       signup = create(:signup, run: the_run)
-      assert RunPolicy.new(signup.user_con_profile.user, the_run).signup_summary?
+      assert_policy_allows RunPolicy, signup.user_con_profile.user, the_run, :signup_summary?, convention
     end
 
     it 'hides signup summaries if private_signup_list is true' do
@@ -136,7 +136,7 @@ class RunPolicyTest < ActiveSupport::TestCase
   describe '#manage?' do
     it 'lets users with update_runs manage runs' do
       user = create_user_with_update_runs_in_convention(convention)
-      assert RunPolicy.new(user, the_run).manage?
+      assert_policy_allows RunPolicy, user, the_run, :manage?, convention
     end
 
     it 'does not let team members manage runs' do
@@ -168,16 +168,25 @@ class RunPolicyTest < ActiveSupport::TestCase
         event = create(:event, convention: convention)
         team_member = create(:team_member, event: event)
         resolved_runs = RunPolicy::Scope.new(team_member.user_con_profile.user, Run.all).resolve
+        identity_assumer_resolved_runs =
+          RunPolicy::Scope.new(
+            create_identity_assumer_from_other_convention(team_member.user_con_profile.user),
+            Run.all
+          ).resolve
 
         assert_equal [the_run].sort, resolved_runs.sort
+        assert_equal [].sort, identity_assumer_resolved_runs.sort
       end
 
       %w[read_prerelease_schedule read_limited_prerelease_schedule update_events].each do |permission|
         it "returns all runs to users with #{permission} permission in convention" do
           user = create_user_with_permission_in_convention(permission, convention)
           resolved_runs = RunPolicy::Scope.new(user, Run.all).resolve
+          identity_assumer_resolved_runs =
+            RunPolicy::Scope.new(create_identity_assumer_from_other_convention(user), Run.all).resolve
 
           assert_equal [the_run].sort, resolved_runs.sort
+          assert_equal [].sort, identity_assumer_resolved_runs.sort
         end
       end
 
@@ -202,8 +211,11 @@ class RunPolicyTest < ActiveSupport::TestCase
         it "returns all runs to users with #{permission} permission in convention" do
           user = create_user_with_permission_in_convention(permission, convention)
           resolved_runs = RunPolicy::Scope.new(user, Run.all).resolve
+          identity_assumer_resolved_runs =
+            RunPolicy::Scope.new(create_identity_assumer_from_other_convention(user), Run.all).resolve
 
           assert_equal [the_run].sort, resolved_runs.sort
+          assert_equal [].sort, identity_assumer_resolved_runs.sort
         end
       end
 
@@ -245,8 +257,11 @@ class RunPolicyTest < ActiveSupport::TestCase
         it "returns all runs to users with #{permission} permission in convention" do
           user = create_user_with_permission_in_convention(permission, convention)
           resolved_runs = RunPolicy::Scope.new(user, Run.all).resolve
+          identity_assumer_resolved_runs =
+            RunPolicy::Scope.new(create_identity_assumer_from_other_convention(user), Run.all).resolve
 
           assert_equal [the_run].sort, resolved_runs.sort
+          assert_equal [].sort, identity_assumer_resolved_runs.sort
         end
       end
 

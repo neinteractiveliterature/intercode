@@ -11,17 +11,21 @@ class MaximumEventProvidedTicketsOverridePolicyTest < ActiveSupport::TestCase
   describe '#read?' do
     it 'lets users with the convention-level override_event_tickets permission read MEPTOs' do
       user = create_user_with_override_event_tickets_in_convention(convention)
-      assert MaximumEventProvidedTicketsOverridePolicy.new(user, mepto).read?
+      assert_policy_allows MaximumEventProvidedTicketsOverridePolicy, user, mepto, :read?, convention
     end
 
     it 'lets users with the override_event_tickets permission read MEPTOs' do
       user = create_user_with_override_event_tickets_in_event_category(event.event_category)
-      assert MaximumEventProvidedTicketsOverridePolicy.new(user, mepto).read?
+      assert_policy_allows MaximumEventProvidedTicketsOverridePolicy, user, mepto, :read?, convention
     end
 
     it 'lets event team members read MEPTOs' do
       team_member = create(:team_member, event: event)
-      assert MaximumEventProvidedTicketsOverridePolicy.new(team_member.user_con_profile.user, mepto).read?
+      assert_policy_allows MaximumEventProvidedTicketsOverridePolicy,
+                           team_member.user_con_profile.user,
+                           mepto,
+                           :read?,
+                           convention
     end
 
     it 'does not let regular attendees read MEPTOs' do
@@ -33,12 +37,12 @@ class MaximumEventProvidedTicketsOverridePolicyTest < ActiveSupport::TestCase
   describe '#manage?' do
     it 'lets users with the convention-level override_event_tickets permission manage MEPTOs' do
       user = create_user_with_override_event_tickets_in_convention(convention)
-      assert MaximumEventProvidedTicketsOverridePolicy.new(user, mepto).manage?
+      assert_policy_allows MaximumEventProvidedTicketsOverridePolicy, user, mepto, :manage?, convention
     end
 
     it 'lets users with the override_event_tickets permission manage MEPTOs' do
       user = create_user_with_override_event_tickets_in_event_category(event.event_category)
-      assert MaximumEventProvidedTicketsOverridePolicy.new(user, mepto).manage?
+      assert_policy_allows MaximumEventProvidedTicketsOverridePolicy, user, mepto, :manage?, convention
     end
 
     it 'does not let event team members manage MEPTOs' do
@@ -61,16 +65,28 @@ class MaximumEventProvidedTicketsOverridePolicyTest < ActiveSupport::TestCase
       user = create_user_with_override_event_tickets_in_convention(convention)
       resolved_meptos =
         MaximumEventProvidedTicketsOverridePolicy::Scope.new(user, MaximumEventProvidedTicketsOverride.all).resolve
+      identity_assumer_resolved_meptos =
+        MaximumEventProvidedTicketsOverridePolicy::Scope.new(
+          create_identity_assumer_from_other_convention(user),
+          MaximumEventProvidedTicketsOverride.all
+        ).resolve
 
       assert_equal meptos.sort, resolved_meptos.sort
+      assert_equal [], identity_assumer_resolved_meptos.sort
     end
 
     it('returns all the MEPTOs in an event category for users with override_event_tickets permission') do
       user = create_user_with_override_event_tickets_in_event_category(event_category)
       resolved_meptos =
         MaximumEventProvidedTicketsOverridePolicy::Scope.new(user, MaximumEventProvidedTicketsOverride.all).resolve
+      identity_assumer_resolved_meptos =
+        MaximumEventProvidedTicketsOverridePolicy::Scope.new(
+          create_identity_assumer_from_other_convention(user),
+          MaximumEventProvidedTicketsOverride.all
+        ).resolve
 
       assert_equal meptos.sort, resolved_meptos.sort
+      assert_equal [], identity_assumer_resolved_meptos.sort
     end
 
     it 'returns all the MEPTOs for events in which the user is a team member' do
@@ -82,8 +98,14 @@ class MaximumEventProvidedTicketsOverridePolicyTest < ActiveSupport::TestCase
           user_con_profile.user,
           MaximumEventProvidedTicketsOverride.all
         ).resolve
+      identity_assumer_resolved_meptos =
+        MaximumEventProvidedTicketsOverridePolicy::Scope.new(
+          create_identity_assumer_from_other_convention(user_con_profile.user),
+          MaximumEventProvidedTicketsOverride.all
+        ).resolve
 
       assert_equal meptos.sort, resolved_meptos.sort
+      assert_equal [], identity_assumer_resolved_meptos.sort
     end
 
     it 'returns no MEPTOs for regular attendees' do

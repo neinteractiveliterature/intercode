@@ -10,12 +10,12 @@ class OrderPolicyTest < ActiveSupport::TestCase
 
   describe '#read?' do
     it 'lets me read orders I made' do
-      assert OrderPolicy.new(order_user, order).read?
+      assert_policy_allows OrderPolicy, order_user, order, :read?, convention
     end
 
     it 'lets users with read_orders permission read orders I made' do
       user = create_user_with_read_orders_in_convention(order.user_con_profile.convention)
-      assert OrderPolicy.new(user, order).read?
+      assert_policy_allows OrderPolicy, user, order, :read?, convention
     end
 
     it 'does not let me read orders other people made' do
@@ -27,7 +27,7 @@ class OrderPolicyTest < ActiveSupport::TestCase
     %w[pending unpaid].each do |status|
       it "lets me submit my own #{status} orders" do
         order.update!(status: status)
-        assert OrderPolicy.new(order_user, order).submit?
+        assert_policy_allows OrderPolicy, order_user, order, :submit?, convention
       end
 
       it "does not let me submit other people's #{status} orders" do
@@ -58,7 +58,7 @@ class OrderPolicyTest < ActiveSupport::TestCase
 
       it "lets users with update_orders #{action} attendees' orders" do
         user = create_user_with_update_orders_in_convention(convention)
-        assert OrderPolicy.new(user, order).public_send("#{action}?")
+        assert_policy_allows OrderPolicy, user, order, "#{action}?", convention
       end
 
       it "does not let user with update_orders in other conventions #{action} attendees' orders" do
@@ -74,8 +74,11 @@ class OrderPolicyTest < ActiveSupport::TestCase
       my_orders = create_list(:order, 3, user_con_profile: me)
       create_list(:order, 3)
       resolved_orders = OrderPolicy::Scope.new(me.user, Order.all).resolve.to_a
+      identity_assumer_resolved_orders =
+        OrderPolicy::Scope.new(create_identity_assumer_from_other_convention(me.user), Order.all).resolve.to_a
 
       assert_equal my_orders.sort, resolved_orders.sort
+      assert_equal [], identity_assumer_resolved_orders.sort
     end
 
     it 'lets users with read_orders permission see all the orders in the con' do
@@ -86,8 +89,11 @@ class OrderPolicyTest < ActiveSupport::TestCase
       someones_orders = create_list(:order, 3, user_con_profile: someone)
       create_list(:order, 3)
       resolved_orders = OrderPolicy::Scope.new(me, Order.all).resolve.to_a
+      identity_assumer_resolved_orders =
+        OrderPolicy::Scope.new(create_identity_assumer_from_other_convention(me), Order.all).resolve.to_a
 
       assert_equal (my_orders + someones_orders).sort, resolved_orders.sort
+      assert_equal [], identity_assumer_resolved_orders.sort
     end
   end
 end

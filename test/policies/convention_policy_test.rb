@@ -30,13 +30,13 @@ class ConventionPolicyTest < ActiveSupport::TestCase
         it "lets team members #{action}" do
           event = create(:event, convention: convention)
           team_member = create(:team_member, event: event)
-          assert ConventionPolicy.new(team_member.user_con_profile.user, convention).public_send("#{action}?")
+          assert_policy_allows ConventionPolicy, team_member.user_con_profile.user, convention, "#{action}?", convention
         end
 
         %w[read_prerelease_schedule read_limited_prerelease_schedule update_events].each do |permission|
           it "lets users with #{permission} permission in convention #{action}" do
             user = create_user_with_permission_in_convention(permission, convention)
-            assert ConventionPolicy.new(user, convention).public_send("#{action}?")
+            assert_policy_allows ConventionPolicy, user, convention, "#{action}?", convention
           end
         end
 
@@ -56,7 +56,7 @@ class ConventionPolicyTest < ActiveSupport::TestCase
         %w[read_limited_prerelease_schedule update_events].each do |permission|
           it "lets users with #{permission} permission in convention #{action}" do
             user = create_user_with_permission_in_convention(permission, convention)
-            assert ConventionPolicy.new(user, convention).public_send("#{action}?")
+            assert_policy_allows ConventionPolicy, user, convention, "#{action}?", convention
           end
         end
 
@@ -89,7 +89,7 @@ class ConventionPolicyTest < ActiveSupport::TestCase
         %w[update_events].each do |permission|
           it "lets users with #{permission} permission in convention #{action}" do
             user = create_user_with_permission_in_convention(permission, convention)
-            assert ConventionPolicy.new(user, convention).public_send("#{action}?")
+            assert_policy_allows ConventionPolicy, user, convention, "#{action}?", convention
           end
         end
 
@@ -117,7 +117,7 @@ class ConventionPolicyTest < ActiveSupport::TestCase
 
         it "lets site_admin users #{action}" do
           user = create(:user, site_admin: true)
-          assert ConventionPolicy.new(user, convention).public_send("#{action}?")
+          assert_policy_allows ConventionPolicy, user, convention, "#{action}?", convention
         end
       end
     end
@@ -139,12 +139,11 @@ class ConventionPolicyTest < ActiveSupport::TestCase
           it "#{verb} users with #{permission} in convention schedule_with_counts" do
             convention.update!(show_schedule: value)
             user = create_user_with_permissions_in_convention([permission, 'read_schedule_with_counts'], convention)
-            policy_result = ConventionPolicy.new(user, convention).schedule_with_counts?
 
             if allowed
-              assert policy_result
+              assert_policy_allows ConventionPolicy, user, convention, :schedule_with_counts?, convention
             else
-              refute policy_result
+              refute ConventionPolicy.new(user, convention).schedule_with_counts?
             end
 
             user_without_counts = create_user_with_permission_in_convention(permission, convention)
@@ -182,7 +181,7 @@ class ConventionPolicyTest < ActiveSupport::TestCase
   describe '#view_reports?' do
     it 'lets users with the read_reports permission view reports' do
       user = create_user_with_read_reports_in_convention(convention)
-      assert ConventionPolicy.new(user, convention).view_reports?
+      assert_policy_allows ConventionPolicy, user, convention, :view_reports?, convention
     end
   end
 
@@ -192,18 +191,18 @@ class ConventionPolicyTest < ActiveSupport::TestCase
       user_con_profile = create(:user_con_profile, convention: convention)
       staff_position = create(:staff_position, convention: convention, user_con_profiles: [user_con_profile])
       staff_position.permissions.create!(event_category: event_category, permission: 'read_event_proposals')
-      assert ConventionPolicy.new(user_con_profile.user, convention).view_event_proposals?
+      assert_policy_allows ConventionPolicy, user_con_profile.user, convention, :view_event_proposals?, convention
     end
 
     it 'lets users with convention-level read_event_proposals permission view proposals' do
       user = create_user_with_read_event_proposals_in_convention(convention)
-      assert ConventionPolicy.new(user, convention).view_event_proposals?
+      assert_policy_allows ConventionPolicy, user, convention, :view_event_proposals?, convention
     end
 
     it 'lets users with a read_event_proposals permission in this convention view proposals' do
       event_category = create(:event_category, convention: convention)
       user = create_user_with_read_event_proposals_in_event_category(event_category)
-      assert ConventionPolicy.new(user, convention).view_event_proposals?
+      assert_policy_allows ConventionPolicy, user, convention, :view_event_proposals?, convention
     end
 
     it 'does not let regular attendees view event proposals' do
@@ -215,7 +214,7 @@ class ConventionPolicyTest < ActiveSupport::TestCase
   describe '#update?' do
     it 'lets users with update_convention update' do
       user = create_user_with_update_convention_in_convention(convention)
-      assert ConventionPolicy.new(user, convention).update?
+      assert_policy_allows ConventionPolicy, user, convention, :update?, convention
     end
 
     it 'does not let regular attendees update' do

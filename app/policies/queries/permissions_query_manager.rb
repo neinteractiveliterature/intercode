@@ -1,13 +1,18 @@
 # frozen_string_literal: true
 class Queries::PermissionsQueryManager < Queries::QueryManager
-  def initialize(user:)
+  def initialize(user:, authorization_info:)
     super(user: user)
+    @authorization_info = authorization_info
     @all_model_permissions_in_convention = Queries::NilSafeCache.new
     @has_organization_permission = Queries::NilSafeCache.new
   end
 
   def all_model_permissions_in_convention(convention)
     return {} unless convention && user
+    if @authorization_info.assumed_identity_from_profile &&
+         @authorization_info.assumed_identity_from_profile.convention != convention
+      return {}
+    end
 
     @all_model_permissions_in_convention.get(convention.id) { load_all_model_permissions_in_convention(convention) }
   end
@@ -28,11 +33,32 @@ class Queries::PermissionsQueryManager < Queries::QueryManager
     model_type = association_name.to_sym
 
     define_method "#{association_name.pluralize}_with_permission" do |*permissions|
-      model_class.where(id: user_permission_scope.where(permission: permissions).select(:"#{association_name}_id"))
+      scope =
+        model_class.where(id: user_permission_scope.where(permission: permissions).select(:"#{association_name}_id"))
+
+      if @authorization_info.assumed_identity_from_profile
+        scope =
+          if model_class == Convention
+            scope.where(id: @authorization_info.assumed_identity_from_profile.convention_id)
+          elsif model_class == CmsContentGroup
+            scope.where(
+              parent_type: 'Convention',
+              parent_id: @authorization_info.assumed_identity_from_profile.convention_id
+            )
+          else
+            scope.where(convention_id: @authorization_info.assumed_identity_from_profile.convention_id)
+          end
+      end
+
+      scope
     end
 
     ids_with_permission_in_convention_name = "#{association_name}_ids_with_permission_in_convention"
     define_method ids_with_permission_in_convention_name do |convention, *permissions|
+      if @authorization_info.assumed_identity_from_profile &&
+           @authorization_info.assumed_identity_from_profile.convention != convention
+        return []
+      end
       permission_sets = all_model_permissions_in_convention_for_model_type(convention, model_type)
       return [] if permission_sets.blank?
 

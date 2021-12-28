@@ -15,7 +15,7 @@ class EventCategoryPolicyTest < ActiveSupport::TestCase
     it 'lets users with update_event_categories manage event categories' do
       event_category = create(:event_category)
       user = create_user_with_update_event_categories_in_convention(event_category.convention)
-      assert EventCategoryPolicy.new(user, event_category).manage?
+      assert_policy_allows EventCategoryPolicy, user, event_category, :manage?, event_category.convention
     end
 
     it 'does not let regular users manage event categories' do

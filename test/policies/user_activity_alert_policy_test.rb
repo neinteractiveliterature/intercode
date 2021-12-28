@@ -11,7 +11,7 @@ class UserActivityAlertPolicyTest < ActiveSupport::TestCase
     describe "##{action}?" do
       it "lets users with update_user_activity_alerts #{action} user activity alerts" do
         user = create_user_with_update_user_activity_alerts_in_convention(convention)
-        assert UserActivityAlertPolicy.new(user, user_activity_alert).read?
+        assert_policy_allows UserActivityAlertPolicy, user, user_activity_alert, :read?, convention
       end
 
       it "does not let users with update_user_activity_alerts #{action} user activity alerts \
@@ -31,8 +31,12 @@ from other conventions" do
     it 'returns all user activity alerts to users with update_user_activity_alerts' do
       user = create_user_with_update_user_activity_alerts_in_convention(convention)
       resolved_alerts = UserActivityAlertPolicy::Scope.new(user, UserActivityAlert.all).resolve
+      identity_assumer_resolved_alerts =
+        UserActivityAlertPolicy::Scope.new(create_identity_assumer_from_other_convention(user), UserActivityAlert.all)
+          .resolve
 
       assert_equal [user_activity_alert], resolved_alerts.sort
+      assert_equal [], identity_assumer_resolved_alerts
     end
 
     it 'does not return user activity alerts to staff of other conventions' do

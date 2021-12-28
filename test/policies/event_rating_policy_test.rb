@@ -1,6 +1,9 @@
 require 'test_helper'
+require_relative 'convention_permissions_test_helper'
 
 class EventRatingPolicyTest < ActiveSupport::TestCase
+  include ConventionPermissionsTestHelper
+
   let(:event_rating) { create(:event_rating) }
 
   %w[read manage].each do |action|
@@ -10,6 +13,17 @@ class EventRatingPolicyTest < ActiveSupport::TestCase
 
     it "allows users to #{action} their own event ratings" do
       assert EventRatingPolicy.new(event_rating.user_con_profile.user, event_rating).send("#{action}?")
+
+      # Event ratings are secret from identity assumers
+      refute EventRatingPolicy
+               .new(
+                 create_identity_assumer(event_rating.user_con_profile.user, event_rating.user_con_profile.convention),
+                 event_rating
+               )
+               .send("#{action}?")
+      refute EventRatingPolicy
+               .new(create_identity_assumer_from_other_convention(event_rating.user_con_profile.user), event_rating)
+               .send("#{action}?")
     end
 
     it "does not allow users to #{action} their own event ratings over OAuth" do

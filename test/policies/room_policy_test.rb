@@ -16,7 +16,7 @@ class RoomPolicyTest < ActiveSupport::TestCase
   describe '#manage?' do
     it 'lets people with update_rooms manage rooms' do
       user = create_user_with_update_rooms_in_convention(convention)
-      assert RoomPolicy.new(user, room).manage?
+      assert_policy_allows RoomPolicy, user, room, :manage?, convention
     end
 
     it 'does not let regular users manage rooms' do

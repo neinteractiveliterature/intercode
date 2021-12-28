@@ -13,13 +13,13 @@ class EventProposalPolicyTest < ActiveSupport::TestCase
     it 'lets users with read_pending_event_proposals read event proposals in the proposed phase' do
       user = create_user_with_read_pending_event_proposals_in_event_category(event_category)
       event_proposal.update!(status: 'proposed')
-      assert EventProposalPolicy.new(user, event_proposal).read?
+      assert_policy_allows EventProposalPolicy, user, event_proposal, :read?, convention
     end
 
     it 'lets users with read_event_proposals read event proposals past the proposed phase' do
       user = create_user_with_read_event_proposals_in_event_category(event_category)
       event_proposal.update!(status: 'reviewing')
-      assert EventProposalPolicy.new(user, event_proposal).read?
+      assert_policy_allows EventProposalPolicy, user, event_proposal, :read?, convention
     end
 
     it 'does not let read_event_proposals users read event proposals past the proposed phase' do
@@ -29,7 +29,7 @@ class EventProposalPolicyTest < ActiveSupport::TestCase
     end
 
     it 'lets users read their own proposals' do
-      assert EventProposalPolicy.new(event_proposal.owner.user, event_proposal).read?
+      assert_policy_allows EventProposalPolicy, event_proposal.owner.user, event_proposal, :read?, convention
     end
 
     it "does not let randos read other users' proposals" do
@@ -40,12 +40,12 @@ class EventProposalPolicyTest < ActiveSupport::TestCase
   describe '#read_admin_notes?' do
     it 'lets users with convention-level access_admin_notes read admin notes on proposals' do
       user = create_user_with_access_admin_notes_in_convention(convention)
-      assert EventProposalPolicy.new(user, event_proposal).read_admin_notes?
+      assert_policy_allows EventProposalPolicy, user, event_proposal, :read_admin_notes?, convention
     end
 
-    it 'lets users with access_admin_notes read admin notes on proposals' do
+    it 'lets users with category-level access_admin_notes read admin notes on proposals' do
       user = create_user_with_access_admin_notes_in_event_category(event_category)
-      assert EventProposalPolicy.new(user, event_proposal).read_admin_notes?
+      assert_policy_allows EventProposalPolicy, user, event_proposal, :read_admin_notes?, convention
     end
 
     it 'does not let users read admin notes on their own proposals' do
@@ -55,7 +55,7 @@ class EventProposalPolicyTest < ActiveSupport::TestCase
 
   describe '#create?' do
     it 'lets authenticated users create proposals' do
-      assert EventProposalPolicy.new(rando.user, event_proposal).create?
+      assert_policy_allows EventProposalPolicy, rando.user, event_proposal, :create?, convention
     end
 
     it 'does not let anonymous users create proposals' do
@@ -68,20 +68,20 @@ class EventProposalPolicyTest < ActiveSupport::TestCase
       it "lets users with convention-level update_event_proposals update #{status} proposals" do
         event_proposal.update!(status: status)
         user = create_user_with_update_event_proposals_in_convention(convention)
-        assert EventProposalPolicy.new(user, event_proposal).update?
+        assert_policy_allows EventProposalPolicy, user, event_proposal, :update?, convention
       end
 
       it "lets users with update_event_proposals update #{status} proposals" do
         event_proposal.update!(status: status)
         user = create_user_with_update_event_proposals_in_event_category(event_category)
-        assert EventProposalPolicy.new(user, event_proposal).update?
+        assert_policy_allows EventProposalPolicy, user, event_proposal, :update?, convention
       end
     end
 
     %w[draft proposed reviewing tentative_accept].each do |status|
       it "lets users update their own #{status} proposals" do
         event_proposal.update!(status: status)
-        assert EventProposalPolicy.new(event_proposal.owner.user, event_proposal).update?
+        assert_policy_allows EventProposalPolicy, event_proposal.owner.user, event_proposal, :update?, convention
       end
     end
 
@@ -95,7 +95,7 @@ class EventProposalPolicyTest < ActiveSupport::TestCase
     it 'lets event team members update proposals' do
       AcceptEventProposalService.new(event_proposal: event_proposal).call!
       team_member = create(:team_member, event: event_proposal.event)
-      assert EventProposalPolicy.new(team_member.user_con_profile.user, event_proposal).update?
+      assert_policy_allows EventProposalPolicy, team_member.user_con_profile.user, event_proposal, :update?, convention
     end
 
     it 'does not let randos update event proposals' do
@@ -106,12 +106,12 @@ class EventProposalPolicyTest < ActiveSupport::TestCase
   describe '#update_admin_notes?' do
     it 'lets users with convention-level access_admin_notes update admin notes on proposals' do
       user = create_user_with_access_admin_notes_in_convention(convention)
-      assert EventProposalPolicy.new(user, event_proposal).update_admin_notes?
+      assert_policy_allows EventProposalPolicy, user, event_proposal, :update_admin_notes?, convention
     end
 
     it 'lets users with access_admin_notes update admin notes on proposals' do
       user = create_user_with_access_admin_notes_in_event_category(event_category)
-      assert EventProposalPolicy.new(user, event_proposal).update_admin_notes?
+      assert_policy_allows EventProposalPolicy, user, event_proposal, :update_admin_notes?, convention
     end
 
     it 'does not let users update admin notes on their own proposals' do
@@ -127,7 +127,7 @@ class EventProposalPolicyTest < ActiveSupport::TestCase
 
     it 'lets users destroy their own draft proposals' do
       event_proposal.update!(status: 'draft')
-      assert EventProposalPolicy.new(event_proposal.owner.user, event_proposal).destroy?
+      assert_policy_allows EventProposalPolicy, event_proposal.owner.user, event_proposal, :destroy?, convention
     end
 
     (EventProposal::STATUSES - ['draft']).each do |status|
@@ -145,7 +145,7 @@ class EventProposalPolicyTest < ActiveSupport::TestCase
     end
 
     it 'lets users submit their own proposals' do
-      assert EventProposalPolicy.new(event_proposal.owner.user, event_proposal).submit?
+      assert_policy_allows EventProposalPolicy, event_proposal.owner.user, event_proposal, :submit?, convention
     end
 
     it "does not let randos submit other users' proposals" do
@@ -176,21 +176,33 @@ class EventProposalPolicyTest < ActiveSupport::TestCase
     it 'returns proposals past the proposed phase to users with read_event_proposals' do
       user = create_user_with_read_event_proposals_in_event_category(event_category)
       resolved_event_proposals = EventProposalPolicy::Scope.new(user, EventProposal.all).resolve
+      identity_assumer_resolved_event_proposals =
+        EventProposalPolicy::Scope.new(create_identity_assumer_from_other_convention(user), EventProposal.all).resolve
 
       assert_equal([reviewing_proposal].sort, resolved_event_proposals.sort)
+      assert_equal([].sort, identity_assumer_resolved_event_proposals.sort)
     end
 
     it 'returns proposals past the draft phase to users with read_pending_event_proposals' do
       user = create_user_with_read_pending_event_proposals_in_event_category(event_category)
       resolved_event_proposals = EventProposalPolicy::Scope.new(user, EventProposal.all).resolve
+      identity_assumer_resolved_event_proposals =
+        EventProposalPolicy::Scope.new(create_identity_assumer_from_other_convention(user), EventProposal.all).resolve
 
       assert_equal([event_proposal, reviewing_proposal, proposed_proposal].sort, resolved_event_proposals.sort)
+      assert_equal([].sort, identity_assumer_resolved_event_proposals.sort)
     end
 
     it 'returns all your own proposals' do
       resolved_event_proposals = EventProposalPolicy::Scope.new(draft_proposal.owner.user, EventProposal.all).resolve
+      identity_assumer_resolved_event_proposals =
+        EventProposalPolicy::Scope.new(
+          create_identity_assumer_from_other_convention(draft_proposal.owner.user),
+          EventProposal.all
+        ).resolve
 
       assert_equal([draft_proposal].sort, resolved_event_proposals.sort)
+      assert_equal([].sort, identity_assumer_resolved_event_proposals.sort)
     end
   end
 end

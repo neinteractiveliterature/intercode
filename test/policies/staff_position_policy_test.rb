@@ -15,7 +15,7 @@ class StaffPositionPolicyTest < ActiveSupport::TestCase
     it 'lets users with update_staff_positions manage staff positions' do
       staff_position = create(:staff_position)
       user = create_user_with_update_staff_positions_in_convention(staff_position.convention)
-      assert StaffPositionPolicy.new(user, staff_position).manage?
+      assert_policy_allows StaffPositionPolicy, user, staff_position, :manage?, staff_position.convention
     end
 
     it 'does not let users without update_staff_positions manage staff_positions' do

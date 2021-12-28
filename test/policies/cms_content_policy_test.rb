@@ -32,7 +32,7 @@ class CmsContentPolicyTest < ActiveSupport::TestCase
         it "lets users with update_cms_content manage #{cms_model_name.to_s.pluralize}" do
           model = create(cms_model_name)
           user = create_user_with_update_cms_content_in_convention(model.parent)
-          assert policy_class.new(user, model).manage?
+          assert_policy_allows policy_class, user, model, :manage?, model.parent
         end
 
         it "does not let users without update_cms_content manage #{cms_model_name.to_s.pluralize}" do
@@ -77,6 +77,7 @@ class CmsContentPolicyTest < ActiveSupport::TestCase
       content_group.cms_content_group_associations.create!(content: model)
       user = create_user_with_update_content_in_cms_content_group(content_group)
       assert policy_class.new(user, model).manage?
+      refute policy_class.new(create_identity_assumer_from_other_convention(user), model).manage?
     end
 
     describe 'ManageScope' do
@@ -86,6 +87,11 @@ class CmsContentPolicyTest < ActiveSupport::TestCase
         content_group.cms_content_group_associations.create!(content: model)
         user = create_user_with_update_content_in_cms_content_group(content_group)
         assert_equal [model], manage_scope_class.new(user, model_class.all).resolve.to_a
+        assert_equal [],
+                     manage_scope_class
+                       .new(create_identity_assumer_from_other_convention(user), model_class.all)
+                       .resolve
+                       .to_a
       end
     end
   end

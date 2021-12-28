@@ -11,12 +11,12 @@ class OrderEntryPolicyTest < ActiveSupport::TestCase
 
   describe '#read?' do
     it 'lets me read order entries I made' do
-      assert OrderEntryPolicy.new(order_user, order_entry).read?
+      assert_policy_allows OrderEntryPolicy, order_user, order_entry, :read?, convention
     end
 
     it 'lets users with read_orders permission read order entries I made' do
       user = create_user_with_read_orders_in_convention(convention)
-      assert OrderEntryPolicy.new(user, order_entry).read?
+      assert_policy_allows OrderEntryPolicy, user, order_entry, :read?, convention
     end
 
     it 'does not let me read order entries other people made' do
@@ -28,7 +28,7 @@ class OrderEntryPolicyTest < ActiveSupport::TestCase
     %w[pending].each do |status|
       it "lets me manage entries in my own #{status} orders" do
         order.update!(status: status)
-        assert OrderEntryPolicy.new(order_user, order_entry).manage?
+        assert_policy_allows OrderEntryPolicy, order_user, order_entry, :manage?, convention
       end
 
       it "does not let me manage entries in other people's #{status} orders" do
@@ -58,8 +58,11 @@ class OrderEntryPolicyTest < ActiveSupport::TestCase
       other_orders = create_list(:order, 3)
       other_orders.map { |order| create(:order_entry, order: order) }
       resolved_order_entries = OrderEntryPolicy::Scope.new(me.user, OrderEntry.all).resolve.to_a
+      identity_assumer_resolved_order_entries =
+        OrderEntryPolicy::Scope.new(create_identity_assumer_from_other_convention(me.user), OrderEntry.all).resolve.to_a
 
       assert_equal my_order_entries.sort, resolved_order_entries.sort
+      assert_equal [], identity_assumer_resolved_order_entries.sort
     end
 
     %w[read_orders update_orders].each do |permission|
@@ -74,8 +77,11 @@ class OrderEntryPolicyTest < ActiveSupport::TestCase
         other_orders = create_list(:order, 3)
         other_orders.map { |order| create(:order_entry, order: order) }
         resolved_order_entries = OrderEntryPolicy::Scope.new(me, OrderEntry.all).resolve.to_a
+        identity_assumer_resolved_order_entries =
+          OrderEntryPolicy::Scope.new(create_identity_assumer_from_other_convention(me), OrderEntry.all).resolve.to_a
 
         assert_equal (my_order_entries + someones_order_entries).sort, resolved_order_entries.sort
+        assert_equal [], identity_assumer_resolved_order_entries.sort
       end
     end
   end
