@@ -5633,6 +5633,27 @@
               ]
             }
           ]
+        },
+        {
+          "name": "graphql_context",
+          "docstring": "",
+          "tags": [
+
+          ]
+        },
+        {
+          "name": "format_result_errors",
+          "docstring": "",
+          "tags": [
+
+          ]
+        },
+        {
+          "name": "format_error",
+          "docstring": "",
+          "tags": [
+
+          ]
         }
       ]
     },
@@ -6300,7 +6321,7 @@
         "CmsVariable",
         "ApplicationRecord"
       ],
-      "docstring": "rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective\n== Schema Information\n\nTable name: cms_variables\n\n id          :bigint           not null, primary key\n key         :string(100)      not null\n parent_type :string\n value       :jsonb\n created_at  :datetime         not null\n updated_at  :datetime         not null\n parent_id   :bigint\n\nIndexes\n\n index_cms_variables_on_parent_id          (parent_id)\n index_cms_variables_on_parent_id_and_key  (parent_id,key) UNIQUE\n\nrubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective\nrubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective",
+      "docstring": "rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective\n== Schema Information\n\nTable name: cms_variables\n\n id          :bigint           not null, primary key\n key         :string(100)      not null\n parent_type :string\n value       :jsonb\n created_at  :datetime         not null\n updated_at  :datetime         not null\n parent_id   :bigint\n\nIndexes\n\n index_cms_variables_on_parent_id          (parent_id)\n index_cms_variables_on_parent_id_and_key  (parent_id,key) UNIQUE\n\nrubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective",
       "tags": [
 
       ],
@@ -6493,6 +6514,13 @@
     {
       "name": "condense_whitespace",
       "docstring": "Converts all whitespace in a string to single spaces, and strips whitespace off the\nbeginning and end.",
+      "tags": [
+
+      ]
+    },
+    {
+      "name": "md5",
+      "docstring": "Computes the MD5 hash of the input string (not including leading/trailing whitespace) and\noutputs it in hex format.",
       "tags": [
 
       ]
