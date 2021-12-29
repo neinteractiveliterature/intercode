@@ -1,13 +1,14 @@
 source 'https://rubygems.org'
 
 ruby File.read(File.expand_path('.ruby-version', __dir__)).strip
-gem 'rails', '6.1.4.4'
+gem 'rails', '7.0.0'
 
 gem 'pg'
 gem 'webrick' # we don't actually use it, but Skylight needs it on boot
 gem 'puma'
 
 gem 'minipack'
+gem 'sprockets-rails'
 
 gem 'dotenv-rails', require: 'dotenv/rails-now'
 
@@ -28,10 +29,10 @@ branch: 'fix_doorkeeper_52_compat'
 gem 'activerecord-session_store'
 
 # Lightweight open-source CMS (written by Nat for Gively Inc.)
-gem 'cadmus', '~> 0.7.0'
+gem 'cadmus', '~> 0.7.1'
 gem 'cadmus_files', '~> 0.2.0'
 gem 'cadmus_navbar', '~> 0.1.0'
-gem 'liquid-md5'
+gem 'liquid'
 
 # Extracted from this app!  Values that change over time based on a schedule
 gem 'scheduled_value', '~> 1.4.0'

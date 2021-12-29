@@ -23,6 +23,8 @@ class ActiveSupport::TestCase
   include FactoryBot::Syntax::Methods
   include ActionMailer::TestCase::ClearTestDeliveries
 
+  parallelize(workers: :number_of_processors)
+
   class TestGraphqlContext
     def self.with_user_con_profile(user_con_profile, **attrs)
       rendering_context =
