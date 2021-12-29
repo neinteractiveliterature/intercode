@@ -1,5 +1,7 @@
-require 'intercode/liquid/tags'
-require 'intercode/liquid/filters'
+Rails.application.config.to_prepare do
+  require 'intercode/liquid/tags'
+  require 'intercode/liquid/filters'
+end
 
 # In development and test mode, expose the actual exception to developers if there is one
 if Rails.env.development? || Rails.env.test?

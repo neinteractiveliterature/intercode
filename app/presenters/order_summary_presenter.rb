@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 class OrderSummaryPresenter
   def self.preload_associations(user_con_profiles)
-    ::ActiveRecord::Associations::Preloader.new.preload(
-      user_con_profiles,
-      orders: {
-        order_entries: %i[product product_variant]
+    ::ActiveRecord::Associations::Preloader.new(
+      records: user_con_profiles,
+      associations: {
+        orders: {
+          order_entries: %i[product product_variant]
+        }
       }
-    )
+    ).call
   end
 
   attr_reader :user_con_profile

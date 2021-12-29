@@ -41,7 +41,7 @@ class Order < ApplicationRecord
 
   def total_price_before_discounts
     return Money.new(0, 'USD') if order_entries.blank?
-    order_entries.sum(&:price)
+    order_entries.sum(Money.new(0, 'USD'), &:price)
   end
 
   def total_price

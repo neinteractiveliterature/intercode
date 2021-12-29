@@ -1,3 +1,5 @@
+require 'digest/md5'
+
 module Intercode
   module Liquid
     module Filters
@@ -92,6 +94,12 @@ module Intercode
       def condense_whitespace(input)
         return nil unless input
         input.strip.gsub(/\s+/, ' ')
+      end
+
+      # Computes the MD5 hash of the input string (not including leading/trailing whitespace) and
+      # outputs it in hex format.
+      def md5(input)
+        Digest::MD5.hexdigest input.strip
       end
 
       # Given a time object, format it in the given timezone, translating to the user's local

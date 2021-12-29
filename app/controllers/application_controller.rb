@@ -186,6 +186,7 @@ class ApplicationController < ActionController::Base
     domain << ":#{request.port}"
 
     redirect_to "#{request.protocol}#{domain}#{request.path}",
+                allow_other_host: true,
                 alert:
                   "You used “become user” \
 on the #{assumed_identity_from_profile.convention.name} site to assume the identity of \
