@@ -70,6 +70,7 @@ export function formatBucket(signup: SignupForFormatBucket, event: EventForForma
   if (requestedBucket) {
     return t('signups.states.inUnrequestedBucket', '{{ bucketName }} (requested {{ requestedBucketName }})', {
       bucketName: bucket?.name ?? t('signups.states.noBucketName', 'None'),
+      requestedBucketName: requestedBucket.name,
     });
   }
 
