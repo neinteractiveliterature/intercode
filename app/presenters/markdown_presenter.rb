@@ -9,9 +9,10 @@ class MarkdownPresenter
     end
   end
 
-  ALLOWED_LIQUID_NODE_CLASSES = [String, Intercode::Liquid::Tags::Spoiler, Intercode::Liquid::Tags::Youtube].freeze
+  # ALLOWED_LIQUID_NODE_CLASSES = [String, Intercode::Liquid::Tags::Spoiler, Intercode::Liquid::Tags::Youtube].freeze
 
   include ActionView::Helpers::SanitizeHelper
+  include ActionView::Helpers::TagHelper
   include ActionView::Helpers::TextHelper
 
   def self.markdown_processor
@@ -42,12 +43,12 @@ class MarkdownPresenter
     @cadmus_renderer = cadmus_renderer
   end
 
-  def render(markdown, sanitize_content: true, strip_single_p: true, whitelist_liquid_tags: true)
+  def render(markdown, sanitize_content: true, strip_single_p: true, filter_liquid_tags: true)
     pipeline =
       build_pipeline(
         sanitize_content: sanitize_content,
         strip_single_p: strip_single_p,
-        whitelist_liquid_tags: whitelist_liquid_tags
+        filter_liquid_tags: filter_liquid_tags
       )
 
     pipeline.inject(markdown) { |acc, elem| elem.call(acc) }
@@ -55,17 +56,17 @@ class MarkdownPresenter
 
   private
 
-  def build_pipeline_core(sanitize_content:, whitelist_liquid_tags:)
+  def build_pipeline_core(sanitize_content:, filter_liquid_tags:)
     markdown_renderer = (->(content) { MarkdownPresenter.markdown_processor.render(content || '') })
     sanitizer = (->(content) { sanitize_html(content, sanitize_content: sanitize_content) })
-    liquid_renderer = (->(content) { render_liquid(content, whitelist_liquid_tags: whitelist_liquid_tags) })
+    liquid_renderer = (->(content) { render_liquid(content, filter_liquid_tags: filter_liquid_tags) })
 
     sanitize_content ? [markdown_renderer, sanitizer, liquid_renderer] : [liquid_renderer, markdown_renderer, sanitizer]
   end
 
-  def build_pipeline(sanitize_content:, strip_single_p:, whitelist_liquid_tags:)
+  def build_pipeline(sanitize_content:, strip_single_p:, filter_liquid_tags:)
     [
-      *build_pipeline_core(sanitize_content: sanitize_content, whitelist_liquid_tags: whitelist_liquid_tags),
+      *build_pipeline_core(sanitize_content: sanitize_content, filter_liquid_tags: filter_liquid_tags),
       ->(content) { content.presence || (default_content.present? ? "<p><em>#{default_content}</em></p>" : '') },
       strip_single_p ? ->(content) { MarkdownPresenter.strip_single_p(content) } : nil
     ].compact
@@ -80,14 +81,27 @@ class MarkdownPresenter
     end
   end
 
-  def render_liquid(liquid, whitelist_liquid_tags: true)
-    template = Liquid::Template.parse(liquid)
+  def render_liquid(liquid, filter_liquid_tags: true)
+    if filter_liquid_tags
+      # TODO: undo hax if I can figure out a better way to do a node allowlist
+      # this used to work before Liquid started freezing everything
+      # template.root.nodelist.select! { |node| ALLOWED_LIQUID_NODE_CLASSES.any? { |klass| node.is_a?(klass) } }
 
-    if whitelist_liquid_tags
-      template.root.nodelist.select! { |node| ALLOWED_LIQUID_NODE_CLASSES.any? { |klass| node.is_a?(klass) } }
+      liquid
+        .gsub(/\{%\s*youtube\s+([^ %]+)\s*%\}/) do |match|
+          # this can't have inner content, so it's fine to run it through a liquid parser
+          Liquid::Template.parse(match).render.html_safe
+        end
+        .gsub(/\{%\s*spoiler\s*%\}(.*)\{%\s*endspoiler\s*%\}/) do |_match|
+          # Not going to attempt to replicate what AppComponentRenderer actually does here
+          tag.div(nil, 'data-react-class' => 'Spoiler', 
+'data-react-props' => { content: Regexp.last_match(1) }.to_json)
+        end
+        .html_safe
+    else
+      template = Liquid::Template.parse(liquid)
+      cadmus_renderer ? cadmus_renderer.render(template, :html) : template.render.html_safe
     end
-
-    cadmus_renderer ? cadmus_renderer.render(template, :html) : template.render.html_safe
   rescue StandardError => e
     %(<div class="alert alert-danger">#{e.message}</div>\n#{liquid}).html_safe
   end

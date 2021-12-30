@@ -1,4 +1,4 @@
-import MarkdownDisplay from './MarkdownDisplay';
+import { UnrenderedMarkdownDisplay } from './MarkdownDisplay';
 import { FormItemDisplayMode } from './FormItemDisplayMode';
 import { AgeRestrictionsValue } from '../../FormAdmin/FormItemUtils';
 
@@ -11,7 +11,7 @@ function AgeRestrictionsDisplay(props: AgeRestrictionsDisplayProps): JSX.Element
   const value = props.value || {};
 
   if (props.displayMode === 'public') {
-    return <MarkdownDisplay markdown={value.age_restrictions_description} />;
+    return <UnrenderedMarkdownDisplay markdown={value.age_restrictions_description} />;
   }
 
   return (
@@ -21,8 +21,7 @@ function AgeRestrictionsDisplay(props: AgeRestrictionsDisplayProps): JSX.Element
       </li>
 
       <li>
-        <strong>Public description:</strong>{' '}
-        <MarkdownDisplay markdown={value.age_restrictions_description} />
+        <strong>Public description:</strong> <UnrenderedMarkdownDisplay markdown={value.age_restrictions_description} />
       </li>
     </ul>
   );
