@@ -1,15 +1,22 @@
 import { usePreviewMarkdownQuery } from '../../BuiltInFormControls/previewQueries.generated';
 import { LoadQueryWithVariablesWrapper } from '../../GraphqlLoadingWrappers';
+import parsePageContent from '../../parsePageContent';
+import Spoiler from '../../Spoiler';
 
 export type MarkdownDisplayProps = {
+  renderedMarkdown?: string | null;
+};
+
+export default function MarkdownDisplay({ renderedMarkdown }: MarkdownDisplayProps): JSX.Element {
+  return <>{parsePageContent(renderedMarkdown ?? '', { Spoiler }).bodyComponents}</>;
+}
+
+export type UnrenderedMarkdownDisplayProps = {
   markdown?: string | null;
 };
 
-export default LoadQueryWithVariablesWrapper(
+export const UnrenderedMarkdownDisplay = LoadQueryWithVariablesWrapper(
   usePreviewMarkdownQuery,
-  ({ markdown }: MarkdownDisplayProps) => ({ markdown: markdown ?? '' }),
-  function MarkdownDisplay({ data }): JSX.Element {
-    // eslint-disable-next-line react/no-danger
-    return <span dangerouslySetInnerHTML={{ __html: data?.cmsParent.previewMarkdown ?? '' }} />;
-  },
+  ({ markdown }: UnrenderedMarkdownDisplayProps) => ({ markdown }),
+  ({ data }) => <MarkdownDisplay renderedMarkdown={data.cmsParent.previewMarkdown} />,
 );

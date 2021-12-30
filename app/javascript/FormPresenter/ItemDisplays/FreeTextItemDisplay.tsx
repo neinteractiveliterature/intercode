@@ -21,7 +21,7 @@ export type FreeTextItemDisplayProps = {
 
 function FreeTextItemDisplay({ formItem, value }: FreeTextItemDisplayProps): JSX.Element {
   if (formItem.rendered_properties.format === 'markdown') {
-    return <MarkdownDisplay markdown={value} />;
+    return <MarkdownDisplay renderedMarkdown={value} />;
   }
 
   if (formItem.rendered_properties.free_text_type === 'url') {
