@@ -56,7 +56,9 @@ export default LoadQueryWithVariablesWrapper(
     );
 
     const renderEventLink = (event: Parameters<typeof buildEventUrl>[0]) => (
-      <Link to={buildEventUrl(event)}>{event.title}</Link>
+      <Link to={buildEventUrl(event)} key={event.id}>
+        {event.title}
+      </Link>
     );
 
     const renderSignup = (signup: UserConProfileSignupsQueryData['convention']['user_con_profile']['signups'][0]) => (
