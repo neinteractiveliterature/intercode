@@ -1,10 +1,8 @@
 import { useState, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import isEqual from 'lodash/isEqual';
 // @ts-expect-error md5.js has no type
 import MD5 from 'md5.js';
 import { useTranslation, Trans } from 'react-i18next';
-import { ApolloError } from '@apollo/client';
 import { BooleanInput, PageLoadingIndicator, LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import buildFormStateFromData from '../UserConProfiles/buildFormStateFromData';
@@ -21,13 +19,7 @@ import { CommonFormFieldsFragment } from '../Models/commonFormFragments.generate
 import { useUpdateUserConProfileMutation } from '../UserConProfiles/mutations.generated';
 import { WithFormResponse } from '../Models/deserializeFormResponse';
 import FourOhFourPage from '../FourOhFourPage';
-
-function parseResponseErrors(error: ApolloError) {
-  const { graphQLErrors } = error;
-  const updateError = graphQLErrors.find((graphQLError) => isEqual(graphQLError.path, ['updateUserConProfile']));
-  const { validationErrors } = (updateError || {}).extensions || {};
-  return validationErrors;
-}
+import { parseResponseErrors } from '../parseResponseErrors';
 
 type MyProfileFormInnerProps = {
   initialSetup?: boolean;
@@ -40,7 +32,7 @@ function MyProfileFormInner({ initialSetup, initialUserConProfile, convention, f
   const { t } = useTranslation();
   const [updateMutate] = useUpdateUserConProfileMutation();
   const [mutate, , mutationInProgress] = useAsyncFunction(updateMutate);
-  const [responseErrors, setResponseErrors] = useState({});
+  const [responseErrors, setResponseErrors] = useState<Record<string, string[]>>({});
 
   const [userConProfile, setUserConProfile] = useState(initialUserConProfile);
   const [, responseValuesChanged] = useFormResponse(userConProfile, setUserConProfile);
@@ -63,7 +55,7 @@ function MyProfileFormInner({ initialSetup, initialUserConProfile, convention, f
           refetchQueries: [MyProfileQueryDocument],
         });
       } catch (e) {
-        setResponseErrors(parseResponseErrors(e));
+        setResponseErrors(parseResponseErrors(e, ['updateUserConProfile']));
       }
     },
     [mutate],
