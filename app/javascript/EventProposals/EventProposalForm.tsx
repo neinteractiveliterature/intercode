@@ -1,5 +1,4 @@
 import { useCallback, useState, useMemo, ReactNode } from 'react';
-import isEqual from 'lodash/isEqual';
 import { ApolloError } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
@@ -14,16 +13,7 @@ import { ConventionForFormItemDisplay } from '../FormPresenter/ItemDisplays/Form
 import { CommonFormFieldsFragment } from '../Models/commonFormFragments.generated';
 import { useUpdateEventProposalMutation, useSubmitEventProposalMutation } from './mutations.generated';
 import { LoadQueryWithVariablesWrapper } from '../GraphqlLoadingWrappers';
-
-function parseResponseErrors(error: ApolloError) {
-  const { graphQLErrors } = error;
-  if (!graphQLErrors) {
-    return {};
-  }
-  const updateError = graphQLErrors.find((graphQLError) => isEqual(graphQLError.path, ['updateEventProposal']));
-  const { validationErrors } = updateError?.extensions ?? {};
-  return validationErrors;
-}
+import { parseResponseErrors } from '../parseResponseErrors';
 
 type EventProposalFormInnerProps = {
   convention: ConventionForFormItemDisplay;
@@ -76,7 +66,7 @@ function EventProposalFormInner({
         setUpdatePromise(promise);
         await promise;
       } catch (e) {
-        setResponseErrors(parseResponseErrors(e));
+        setResponseErrors(parseResponseErrors(e, ['updateEventProposal']));
       } finally {
         setUpdatePromise(undefined);
       }
@@ -115,7 +105,7 @@ function EventProposalFormInner({
       await submitResponse(eventProposal);
       formSubmitted();
     } catch (e) {
-      setResponseErrors(parseResponseErrors(e));
+      setResponseErrors(parseResponseErrors(e, ['updateEventProposal']));
     }
   }, [eventProposal, formSubmitted, submitResponse, updatePromise]);
 
