@@ -1,4 +1,4 @@
-import { Suspense, CSSProperties, ReactNode } from 'react';
+import { Suspense, CSSProperties, ReactNode, useEffect } from 'react';
 import * as React from 'react';
 import camelCase from 'lodash/camelCase';
 // @ts-expect-error html-to-react has no type declarations
@@ -6,7 +6,7 @@ import IsValidNodeDefinitions from 'html-to-react/lib/is-valid-node-definitions'
 // @ts-expect-error html-to-react has no type declarations
 import camelCaseAttrMap from 'html-to-react/lib/camel-case-attribute-names';
 import { Link } from 'react-router-dom';
-import { ErrorBoundary } from '@neinteractiveliterature/litform';
+import { ErrorBoundary, useUniqueId } from '@neinteractiveliterature/litform';
 
 import SignInButton from './Authentication/SignInButton';
 import SignOutButton from './Authentication/SignOutButton';
@@ -33,6 +33,40 @@ export type ProcessingInstruction<T> = {
 
 function nodeIsElement(node: Node): node is Element {
   return node.nodeType === Node.ELEMENT_NODE;
+}
+
+type ScriptTagProps = {
+  url: string | null;
+  content: string | null;
+};
+
+function ScriptTag({ url, content }: ScriptTagProps) {
+  const uniqueId = useUniqueId('script-');
+  const ref = React.useRef<HTMLSpanElement>(null);
+  useEffect(() => {
+    if (!ref.current) {
+      return;
+    }
+
+    const script = document.createElement('script');
+
+    if (url != null) {
+      script.src = url;
+      script.async = true;
+    }
+
+    if (content != null) {
+      script.textContent = content;
+    }
+
+    ref.current.appendChild(script);
+
+    return () => {
+      script.remove();
+    };
+  }, [url, content]);
+
+  return <span key={uniqueId} ref={ref} />;
 }
 
 // adapted from html-to-react library
@@ -142,6 +176,10 @@ function processDefaultNode(node: Node, children: ReactNode[], index: number) {
     // "&lt;!--  This is a comment  --&gt;"
     // return '<!-- ' + node.data + ' -->';
     return false;
+  }
+
+  if (nodeIsElement(node) && node.tagName.toLowerCase() === 'script') {
+    return <ScriptTag url={node.getAttribute('src')} content={node.textContent} />;
   }
 
   if (voidElementTags.includes(node.nodeName)) {
