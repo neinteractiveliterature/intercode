@@ -709,7 +709,9 @@ export type Convention = CmsParent & {
   staff_positions: Array<StaffPosition>;
   starts_at?: Maybe<Scalars['Date']>;
   stripe_account?: Maybe<StripeAccount>;
+  stripe_account_id?: Maybe<Scalars['String']>;
   stripe_account_ready_to_charge: Scalars['Boolean'];
+  stripe_publishable_key?: Maybe<Scalars['String']>;
   ticketNamePlural: Scalars['String'];
   ticket_mode: TicketMode;
   ticket_name: Scalars['String'];

@@ -329,7 +329,6 @@ Rails/FilePath:
   Exclude:
     - 'config/environments/development.rb'
     - 'config/initializers/active_record_log_subscriber.rb'
-    - 'config/initializers/minipack.rb'
 
 # Offense count: 12
 # Configuration parameters: Include.

@@ -1,2 +1,5 @@
 import './setPublicPath';
-import './application';
+import './applicationStyles';
+
+import(/* webpackChunkName: 'bootstrap-js' */ 'bootstrap');
+import(/* webpackChunkName: "application-main" */ './application');

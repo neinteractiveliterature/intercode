@@ -58,6 +58,10 @@ Rails.application.configure do
   # number of complex assets.
   config.assets.debug = true
 
+  # Enable serving of images, stylesheets, and JavaScripts from an asset server.
+  asset_hostname = ENV['ASSETS_HOST'] || config.action_mailer.default_url_options[:host]
+  config.action_controller.asset_host = "//#{asset_hostname}"
+
   # Suppress logger output for asset requests.
   config.assets.quiet = true
 

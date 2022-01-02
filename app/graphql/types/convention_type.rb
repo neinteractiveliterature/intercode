@@ -394,6 +394,13 @@ class Types::ConventionType < Types::BaseObject
   field :stripe_account, Types::StripeAccountType, null: true do
     authorize_action :update
   end
+  field :stripe_account_id, String, null: true
+  field :stripe_publishable_key, String, null: true
+
+  def stripe_publishable_key
+    Rails.configuration.stripe[:publishable_key]
+  end
+
   field :ticket_mode, Types::TicketModeType, null: false
   field :ticket_name, String, null: false
 

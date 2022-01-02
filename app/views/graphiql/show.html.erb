@@ -1,1 +1,4 @@
-<div data-react-class="DevModeGraphiql" data-react-props="<%= app_component_props.to_json %>" ></div>
+<div
+  data-react-class="DevModeGraphiql"
+  data-react-props="<%= app_component_props.deep_merge(authenticityTokens: { graphql: graphql_authenticity_token }).to_json %>"
+></div>
