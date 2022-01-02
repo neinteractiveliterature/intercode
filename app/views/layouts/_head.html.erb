@@ -1,26 +1,10 @@
 <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
-<title>
-  <%= page_title %>
-</title>
+<title><%= page_title %></title>
 <% if ENV['ASSETS_HOST'].present? -%>
   <script type="application/javascript">
     window.intercodeAssetsHost = <%=raw ENV['ASSETS_HOST'].to_json %>;
   </script>
 <% end -%>
-<%= stylesheet_bundle_tag 'application', media: 'all' %>
-<%= javascript_bundle_tag 'browser-warning', defer: true %>
-<%= javascript_bundle_tag 'application', defer: true, type: 'module' %>
-<%= javascript_bundle_tag 'bootstrap', defer: true, type: 'module' %>
-<script type="application/javascript">
-  if (typeof(Rollbar) !== 'undefined') {
-    Rollbar.configure({
-      payload: {
-        person: {
-          id: <%= current_user&.id.to_json.html_safe %>
-        }
-      }
-    });
-  }
-</script>
-<%= csrf_meta_tags %>
+<%= javascript_include_tag url_with_possible_host('/packs/browser-warning.js', ENV['ASSETS_HOST']), defer: true %>
+<%= javascript_include_tag url_with_possible_host('/packs/application.js', ENV['ASSETS_HOST']), defer: true, type: 'module' %>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>

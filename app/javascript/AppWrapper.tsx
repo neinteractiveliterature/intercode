@@ -4,7 +4,6 @@ import { ApolloProvider } from '@apollo/client';
 import { BrowserRouter } from 'react-router-dom';
 import { i18n } from 'i18next';
 import { I18nextProvider } from 'react-i18next';
-import type { Stripe } from '@stripe/stripe-js';
 import {
   Confirm,
   // TODO bring this back when we re-add prompting
@@ -15,11 +14,11 @@ import {
   ErrorDisplay,
   ToastProvider,
 } from '@neinteractiveliterature/litform';
+import { HelmetProvider } from 'react-helmet-async';
 
 import AuthenticationModalContext, {
   useAuthenticationModalProvider,
 } from './Authentication/AuthenticationModalContext';
-import { LazyStripeContext } from './LazyStripe';
 import AuthenticationModal from './Authentication/AuthenticationModal';
 import AuthenticityTokensContext, { useAuthenticityTokens } from './AuthenticityTokensContext';
 import useIntercodeApolloClient from './useIntercodeApolloClient';
@@ -53,20 +52,12 @@ export type AppWrapperProps = {
   };
   mapboxAccessToken: string;
   recaptchaSiteKey: string;
-  stripeAccountId?: string;
   stripePublishableKey: string;
 };
 
 function AppWrapper<P>(WrappedComponent: React.ComponentType<P>): React.ComponentType<P> {
   function Wrapper(props: P & AppWrapperProps) {
-    const {
-      authenticityTokens,
-      mapboxAccessToken,
-      recaptchaSiteKey,
-      stripeAccountId,
-      stripePublishableKey,
-      ...otherProps
-    } = props;
+    const { authenticityTokens, mapboxAccessToken, recaptchaSiteKey, stripePublishableKey, ...otherProps } = props;
     // TODO bring this back when we re-add prompting
     // const confirm = useConfirm();
     const authenticityTokensProviderValue = useAuthenticityTokens(authenticityTokens);
@@ -87,7 +78,6 @@ function AppWrapper<P>(WrappedComponent: React.ComponentType<P>): React.Componen
       onUnauthenticatedRef.current = openSignIn;
     }, [openSignIn]);
     const apolloClient = useIntercodeApolloClient(authenticityToken, onUnauthenticatedRef);
-    const [stripePromise, setStripePromise] = useState<Promise<Stripe | null> | null>(null);
 
     // TODO bring this back when we re-add prompting
     // const getUserConfirmation = useCallback(
@@ -110,17 +100,10 @@ function AppWrapper<P>(WrappedComponent: React.ComponentType<P>): React.Componen
 
     return (
       <React.StrictMode>
-        <BrowserRouter basename="/">
-          {' '}
-          {/* TODO bring this back when we re-add prompting getUserConfirmation={getUserConfirmation}> */}
-          <LazyStripeContext.Provider
-            value={{
-              publishableKey: stripePublishableKey,
-              accountId: stripeAccountId,
-              stripePromise,
-              setStripePromise,
-            }}
-          >
+        <HelmetProvider>
+          <BrowserRouter basename="/">
+            {' '}
+            {/* TODO bring this back when we re-add prompting getUserConfirmation={getUserConfirmation}> */}
             <AuthenticityTokensContext.Provider value={authenticityTokensProviderValue}>
               <MapboxContext.Provider value={mapboxContextValue}>
                 <ApolloProvider client={apolloClient}>
@@ -147,8 +130,8 @@ function AppWrapper<P>(WrappedComponent: React.ComponentType<P>): React.Componen
                 </ApolloProvider>
               </MapboxContext.Provider>
             </AuthenticityTokensContext.Provider>
-          </LazyStripeContext.Provider>
-        </BrowserRouter>
+          </BrowserRouter>
+        </HelmetProvider>
       </React.StrictMode>
     );
   }

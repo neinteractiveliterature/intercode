@@ -13,6 +13,9 @@ import { timezoneNameForConvention } from './TimeUtils';
 import getI18n from './setupI18Next';
 import { lazyWithBundleHashCheck } from './checkBundleHash';
 import { timespanFromConvention } from './TimespanUtils';
+import { LazyStripeContext } from './LazyStripe';
+import { Stripe } from '@stripe/stripe-js';
+import { Helmet } from 'react-helmet-async';
 
 const NavigationBar = lazyWithBundleHashCheck(() => import(/* webpackChunkName: 'navigation-bar' */ './NavigationBar'));
 
@@ -40,8 +43,9 @@ function AppRoot(): JSX.Element {
 
   const [cachedCmsLayoutId, setCachedCmsLayoutId] = useState<string>();
   const [layoutChanged, setLayoutChanged] = useState(false);
+  const [stripePromise, setStripePromise] = useState<Promise<Stripe | null> | null>(null);
 
-  const bodyComponents = useMemo(() => {
+  const parsedCmsContent = useMemo(() => {
     if (error || loading || !data) {
       return null;
     }
@@ -50,10 +54,22 @@ function AppRoot(): JSX.Element {
       ...CMS_COMPONENT_MAP,
       AppRouter,
       NavigationBar,
-    }).bodyComponents;
+    });
   }, [data, error, loading]);
 
-  const cachedBodyComponents = useCachedLoadableValue(loading, error, () => bodyComponents, [bodyComponents]);
+  useEffect(() => {
+    if (typeof Rollbar !== 'undefined') {
+      Rollbar.configure({
+        payload: {
+          person: {
+            id: data?.currentUser?.id,
+          },
+        },
+      });
+    }
+  }, [data?.currentUser?.id]);
+
+  const cachedCmsContent = useCachedLoadableValue(loading, error, () => parsedCmsContent, [parsedCmsContent]);
   const appRootContextValue = useCachedLoadableValue(
     loading,
     error,
@@ -125,7 +141,7 @@ function AppRoot(): JSX.Element {
     return <></>;
   }
 
-  if (loading && !cachedBodyComponents) {
+  if (loading && !cachedCmsContent?.bodyComponents) {
     return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
   }
 
@@ -140,6 +156,7 @@ function AppRoot(): JSX.Element {
 
   return (
     <AppRootContext.Provider value={appRootContextValue}>
+      <Helmet>{cachedCmsContent?.headComponents}</Helmet>
       <Routes>
         <Route path="/admin_forms/:id/edit/*" element={<PageComponents.FormEditor />}>
           <Route path="section/:sectionId/item/:itemId" element={<PageComponents.FormItemEditorLayout />} />
@@ -148,9 +165,18 @@ function AppRoot(): JSX.Element {
         <Route
           path="*"
           element={
-            <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
-              {cachedBodyComponents}
-            </Suspense>
+            <LazyStripeContext.Provider
+              value={{
+                publishableKey: data?.convention?.stripe_publishable_key ?? undefined,
+                accountId: data?.convention?.stripe_account_id ?? undefined,
+                stripePromise,
+                setStripePromise,
+              }}
+            >
+              <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
+                {cachedCmsContent?.bodyComponents}
+              </Suspense>
+            </LazyStripeContext.Provider>
           }
         />
       </Routes>

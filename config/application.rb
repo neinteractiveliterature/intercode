@@ -1,8 +1,8 @@
 require_relative 'boot'
 
 require 'rails/all'
-require File.expand_path('../../lib/intercode/dynamic_cookie_domain', __FILE__)
-require File.expand_path('../../lib/intercode/virtual_host_constraint', __FILE__)
+require File.expand_path('lib/intercode/dynamic_cookie_domain', Rails.root)
+require File.expand_path('lib/intercode/virtual_host_constraint', Rails.root)
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.

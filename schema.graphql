@@ -888,7 +888,9 @@ type Convention implements CmsParent {
   staff_positions: [StaffPosition!]!
   starts_at: Date
   stripe_account: StripeAccount
+  stripe_account_id: String
   stripe_account_ready_to_charge: Boolean!
+  stripe_publishable_key: String
   ticketNamePlural: String!
   ticket_mode: TicketMode!
   ticket_name: String!

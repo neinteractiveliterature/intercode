@@ -84,8 +84,7 @@ function createStyleJsonFromString(style: string) {
 }
 
 function jsxAttributeKeyForHtmlKey(htmlKey: string) {
-  const key =
-    (camelCaseAttrMap as { [key: string]: string })[htmlKey.replace(/[-:]/, '')] || htmlKey;
+  const key = (camelCaseAttrMap as { [key: string]: string })[htmlKey.replace(/[-:]/, '')] || htmlKey;
 
   if (key === 'class') {
     return 'className';
@@ -98,19 +97,31 @@ function jsxAttributeKeyForHtmlKey(htmlKey: string) {
   return key;
 }
 
-function jsxAttributesFromHTMLAttributes(attributes: Attr[]) {
+function jsxAttributesFromHTMLAttributes(node: Element, attributes: Attr[]) {
+  const testingNode = document.createElement(node.tagName);
+
   return attributes.reduce((result: { [key: string]: string }, attribute: Attr) => {
     const key = jsxAttributeKeyForHtmlKey(attribute.name);
     if (key === 'style') {
       return { ...result, [key]: createStyleJsonFromString(attribute.value) };
     }
 
-    return { ...result, [key]: attribute.value || attribute.name };
+    try {
+      testingNode.setAttribute(key, attribute.value ?? attribute.name);
+    } catch (error) {
+      if (typeof Rollbar !== 'undefined') {
+        Rollbar.warn(`Invalid attribute ${key} for ${node.tagName} while parsing CMS content`);
+      }
+
+      return result;
+    }
+
+    return { ...result, [key]: attribute.value ?? attribute.name };
   }, {});
 }
 
 function createElement(node: Element, index: number, data?: ReactNode, children?: ReactNode[]) {
-  const attributeProps = jsxAttributesFromHTMLAttributes([...node.attributes]);
+  const attributeProps = jsxAttributesFromHTMLAttributes(node, [...node.attributes]);
 
   const elementProps = {
     key: index,
@@ -155,45 +166,32 @@ const AUTHENTICATION_LINK_REPLACEMENTS = {
     />
   ),
   '/users/sign_out': (node: Element) => (
-    <SignOutButton
-      className={node.attributes.getNamedItem('class')?.value}
-      caption={node.textContent}
-    />
+    <SignOutButton className={node.attributes.getNamedItem('class')?.value} caption={node.textContent} />
   ),
 };
 
-const AUTHENTICATION_LINK_PROCESSING_INSTRUCTIONS: ProcessingInstruction<Element>[] =
-  Object.entries(AUTHENTICATION_LINK_REPLACEMENTS).map(([path, processNode]) => ({
-    shouldProcessNode: (node: Node) =>
-      nodeIsElement(node) &&
-      node.nodeName.toLowerCase() === 'a' &&
-      ((node.attributes.getNamedItem('href') || {}).value || '').endsWith(path),
-    processNode,
-  }));
+const AUTHENTICATION_LINK_PROCESSING_INSTRUCTIONS: ProcessingInstruction<Element>[] = Object.entries(
+  AUTHENTICATION_LINK_REPLACEMENTS,
+).map(([path, processNode]) => ({
+  shouldProcessNode: (node: Node) =>
+    nodeIsElement(node) &&
+    node.nodeName.toLowerCase() === 'a' &&
+    ((node.attributes.getNamedItem('href') || {}).value || '').endsWith(path),
+  processNode,
+}));
 
-function processReactComponentNode(
-  node: Element,
-  children: ReactNode[],
-  index: number,
-  componentMap: ComponentMap,
-) {
+function processReactComponentNode(node: Element, children: ReactNode[], index: number, componentMap: ComponentMap) {
   const componentClass = node.attributes.getNamedItem('data-react-class')?.value;
   const component = componentMap[componentClass ?? ''];
   if (!component) {
     return processDefaultNode(node, children, index);
   }
 
-  const props = JSON.parse(
-    (node.attributes.getNamedItem('data-react-props') || { value: '{}' }).value,
-  );
+  const props = JSON.parse((node.attributes.getNamedItem('data-react-props') || { value: '{}' }).value);
   return React.createElement(
     Suspense,
     { fallback: <></>, key: index },
-    React.createElement(
-      ErrorBoundary,
-      { errorType: 'graphql' },
-      React.createElement(component, props),
-    ),
+    React.createElement(ErrorBoundary, { errorType: 'graphql' }, React.createElement(component, props)),
   );
 }
 
@@ -207,17 +205,13 @@ function getURLOrigin(href: string) {
 
 function processCmsLinkNode(node: Element, children: ReactNode[], index: number) {
   const attributesArray = [...node.attributes];
-  const hrefAttribute = attributesArray.find(
-    (attribute) => (attribute.name || '').toLowerCase() === 'href',
-  );
-  const otherAttributes = attributesArray.filter(
-    (attribute) => (attribute.name || '').toLowerCase() !== 'href',
-  );
+  const hrefAttribute = attributesArray.find((attribute) => (attribute.name || '').toLowerCase() === 'href');
+  const otherAttributes = attributesArray.filter((attribute) => (attribute.name || '').toLowerCase() !== 'href');
   const href = (hrefAttribute || {}).value;
 
   if (href && !href.startsWith('#') && getURLOrigin(href) === window.location.origin) {
     return (
-      <Link to={href} key={index} {...jsxAttributesFromHTMLAttributes(otherAttributes)}>
+      <Link to={href} key={index} {...jsxAttributesFromHTMLAttributes(node, otherAttributes)}>
         {children}
       </Link>
     );
@@ -233,9 +227,7 @@ function traverseDom(
   index: number,
 ): ReactNode | false {
   if (isValidNode(node)) {
-    const processingInstruction = processingInstructions.find((instruction) =>
-      instruction.shouldProcessNode(node),
-    );
+    const processingInstruction = processingInstructions.find((instruction) => instruction.shouldProcessNode(node));
 
     if (processingInstruction != null) {
       const traversedChildren = [...node.childNodes].map((child, i) =>
@@ -244,9 +236,7 @@ function traverseDom(
       const children = traversedChildren.filter((x) => x != null && x !== false);
 
       if (processingInstruction.replaceChildren) {
-        return createElement(node as Element, index, null, [
-          processingInstruction.processNode(node, children, index),
-        ]);
+        return createElement(node as Element, index, null, [processingInstruction.processNode(node, children, index)]);
       }
       return processingInstruction.processNode(node, children, index);
     }
@@ -276,8 +266,7 @@ function buildProcessingInstructions(componentMap: ComponentMap): ProcessingInst
       processNode: processCmsLinkNode,
     },
     {
-      shouldProcessNode: (node) =>
-        nodeIsElement(node) && node.attributes.getNamedItem('data-react-class') != null,
+      shouldProcessNode: (node) => nodeIsElement(node) && node.attributes.getNamedItem('data-react-class') != null,
       processNode: (node: Element, children: Node[], index: number) =>
         processReactComponentNode(node, children, index, componentMap),
     },

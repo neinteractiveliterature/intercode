@@ -5,8 +5,7 @@
     <title>
       <%= page_title %>
     </title>
-    <%= stylesheet_bundle_tag 'application', media: 'all' %>
-    <%= csrf_meta_tags %>
+    <%= javascript_include_tag url_with_possible_host('/packs/application-styles.js', ENV['ASSETS_HOST']) %>
     <meta content="width=device-width, initial-scale=1" name="viewport"/>
   </head>
   <body>

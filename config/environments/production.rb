@@ -1,5 +1,6 @@
 # TODO: Figure out a way to use EnvironmentBasedUploader in here without this
 require_relative '../../app/uploaders/environment_based_uploader'
+require File.expand_path('lib/intercode/disable_caching_for_specific_assets', Rails.root)
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
@@ -14,7 +15,7 @@ Rails.application.configure do
   config.eager_load = true
 
   # Full error reports are disabled and caching is turned on.
-  config.consider_all_requests_local       = false
+  config.consider_all_requests_local = false
   config.action_controller.perform_caching = true
 
   # Ensures that a master key has been made available in either ENV["RAILS_MASTER_KEY"]
@@ -58,12 +59,10 @@ Rails.application.configure do
 
   # Use a different cache store in production.
   if ENV['MEMCACHEDCLOUD_SERVERS']
-    config.cache_store = :mem_cache_store,
-                         ENV['MEMCACHEDCLOUD_SERVERS'].split(','),
-                         {
-                           username: ENV['MEMCACHEDCLOUD_USERNAME'],
-                           password: ENV['MEMCACHEDCLOUD_PASSWORD']
-                         }
+    config.cache_store =
+      :mem_cache_store,
+      ENV['MEMCACHEDCLOUD_SERVERS'].split(','),
+      { username: ENV['MEMCACHEDCLOUD_USERNAME'], password: ENV['MEMCACHEDCLOUD_PASSWORD'] }
   end
 
   # Use a real queuing backend for Active Job (and separate queues per environment)
@@ -77,10 +76,7 @@ Rails.application.configure do
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false
 
-  config.action_mailer.default_url_options = {
-    host: ENV['INTERCODE_HOST'] || 'neilhosting.net',
-    protocol: 'https'
-  }
+  config.action_mailer.default_url_options = { host: ENV['INTERCODE_HOST'] || 'neilhosting.net', protocol: 'https' }
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   asset_hostname = ENV['ASSETS_HOST'] || config.action_mailer.default_url_options[:host]
@@ -91,6 +87,12 @@ Rails.application.configure do
     'Cache-Control' => 'public, max-age=15552000',
     'Expires' => "#{1.year.from_now.to_formatted_s(:rfc822)}"
   }
+
+  if ENV['RAILS_SERVE_STATIC_FILES'].present?
+    config.middleware.insert_before ActionDispatch::Static,
+                                    Intercode::DisableCachingForSpecificAssets,
+                                    %w[/packs/application.js /packs/application-styles.js /packs/browser-warning.js]
+  end
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
@@ -107,9 +109,9 @@ Rails.application.configure do
   # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new 'app-name')
 
   if ENV['RAILS_LOG_TO_STDOUT'].present?
-    logger           = ActiveSupport::Logger.new(STDOUT)
+    logger = ActiveSupport::Logger.new(STDOUT)
     logger.formatter = config.log_formatter
-    config.logger    = ActiveSupport::TaggedLogging.new(logger)
+    config.logger = ActiveSupport::TaggedLogging.new(logger)
   end
 
   # Do not dump schema after migrations.
