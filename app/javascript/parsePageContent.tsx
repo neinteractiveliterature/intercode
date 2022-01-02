@@ -1,4 +1,4 @@
-import { Suspense, CSSProperties, ReactNode, useEffect } from 'react';
+import { Suspense, CSSProperties, ReactNode, useLayoutEffect } from 'react';
 import * as React from 'react';
 import camelCase from 'lodash/camelCase';
 // @ts-expect-error html-to-react has no type declarations
@@ -43,7 +43,7 @@ type ScriptTagProps = {
 function ScriptTag({ url, content }: ScriptTagProps) {
   const uniqueId = useUniqueId('script-');
   const ref = React.useRef<HTMLSpanElement>(null);
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!ref.current) {
       return;
     }
@@ -59,10 +59,11 @@ function ScriptTag({ url, content }: ScriptTagProps) {
       script.textContent = content;
     }
 
+    const originalSpan = ref.current;
     ref.current.replaceWith(script);
 
     return () => {
-      script.remove();
+      script.replaceWith(originalSpan);
     };
   }, [url, content]);
 
