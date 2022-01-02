@@ -59,7 +59,7 @@ function ScriptTag({ url, content }: ScriptTagProps) {
       script.textContent = content;
     }
 
-    ref.current.appendChild(script);
+    ref.current.replaceWith(script);
 
     return () => {
       script.remove();
