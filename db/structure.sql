@@ -1012,7 +1012,9 @@ CREATE TABLE public.conventions (
     hidden boolean DEFAULT false NOT NULL,
     language character varying NOT NULL,
     stripe_account_id text,
-    stripe_account_ready_to_charge boolean DEFAULT false NOT NULL
+    stripe_account_ready_to_charge boolean DEFAULT false NOT NULL,
+    open_graph_image text,
+    favicon text
 );
 
 
@@ -5323,6 +5325,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210915155339'),
 ('20211005145053'),
 ('20211011191912'),
-('20211227171633');
+('20211227171633'),
+('20220102231745');
 
 

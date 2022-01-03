@@ -4294,6 +4294,18 @@
               "deprecationReason": null
             },
             {
+              "name": "favicon_url",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "form",
               "description": "Finds a form by ID in this convention. If there is no form with that ID in this convention,\nerrors out.\n",
               "args": [
@@ -4616,6 +4628,18 @@
                     }
                   }
                 }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "open_graph_image_url",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -5814,11 +5838,11 @@
               "deprecationReason": null
             },
             {
-              "name": "starts_at",
+              "name": "catchAllStaffPositionId",
               "description": null,
               "type": {
                 "kind": "SCALAR",
-                "name": "Date",
+                "name": "ID",
                 "ofType": null
               },
               "defaultValue": null,
@@ -5826,23 +5850,23 @@
               "deprecationReason": null
             },
             {
-              "name": "ends_at",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Date",
-                "ofType": null
-              },
-              "defaultValue": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "name",
+              "name": "clickwrap_agreement",
               "description": null,
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "defaultLayoutId",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
                 "ofType": null
               },
               "defaultValue": null,
@@ -5855,6 +5879,18 @@
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "ends_at",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Date",
                 "ofType": null
               },
               "defaultValue": null,
@@ -5898,6 +5934,30 @@
               "deprecationReason": null
             },
             {
+              "name": "favicon",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Upload",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "hidden",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "language",
               "description": null,
               "type": {
@@ -5922,7 +5982,31 @@
               "deprecationReason": null
             },
             {
-              "name": "timezone_name",
+              "name": "maximum_event_signups",
+              "description": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "ScheduledValueInput",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "maximum_tickets",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "name",
               "description": null,
               "type": {
                 "kind": "SCALAR",
@@ -5934,11 +6018,11 @@
               "deprecationReason": null
             },
             {
-              "name": "timezone_mode",
+              "name": "openGraphImage",
               "description": null,
               "type": {
-                "kind": "ENUM",
-                "name": "TimezoneMode",
+                "kind": "SCALAR",
+                "name": "Upload",
                 "ofType": null
               },
               "defaultValue": null,
@@ -5946,11 +6030,11 @@
               "deprecationReason": null
             },
             {
-              "name": "hidden",
+              "name": "rootPageId",
               "description": null,
               "type": {
                 "kind": "SCALAR",
-                "name": "Boolean",
+                "name": "ID",
                 "ofType": null
               },
               "defaultValue": null,
@@ -5975,18 +6059,6 @@
               "type": {
                 "kind": "ENUM",
                 "name": "ShowSchedule",
-                "ofType": null
-              },
-              "defaultValue": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "maximum_tickets",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Int",
                 "ofType": null
               },
               "defaultValue": null,
@@ -6030,6 +6102,18 @@
               "deprecationReason": null
             },
             {
+              "name": "starts_at",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Date",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "ticket_name",
               "description": null,
               "type": {
@@ -6054,43 +6138,7 @@
               "deprecationReason": null
             },
             {
-              "name": "rootPageId",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "ID",
-                "ofType": null
-              },
-              "defaultValue": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "defaultLayoutId",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "ID",
-                "ofType": null
-              },
-              "defaultValue": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "catchAllStaffPositionId",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "ID",
-                "ofType": null
-              },
-              "defaultValue": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "clickwrap_agreement",
+              "name": "timezone_name",
               "description": null,
               "type": {
                 "kind": "SCALAR",
@@ -6102,11 +6150,11 @@
               "deprecationReason": null
             },
             {
-              "name": "maximum_event_signups",
+              "name": "timezone_mode",
               "description": null,
               "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ScheduledValueInput",
+                "kind": "ENUM",
+                "name": "TimezoneMode",
                 "ofType": null
               },
               "defaultValue": null,

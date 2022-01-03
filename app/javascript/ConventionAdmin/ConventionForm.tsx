@@ -22,7 +22,11 @@ export type ConventionFormConvention = Omit<
 
 export type ConventionFormProps = {
   initialConvention: ConventionFormConvention;
-  saveConvention: (convention: ConventionFormConvention) => Promise<void>;
+  saveConvention: (
+    convention: ConventionFormConvention,
+    openGraphImage: File | null | undefined,
+    favicon: File | null | undefined,
+  ) => Promise<void>;
   cmsLayouts: ConventionAdminConventionQueryData['convention']['cmsLayouts'];
   pages: ConventionAdminConventionQueryData['convention']['cmsPages'];
   rootSite: ConventionAdminConventionQueryData['rootSite'];
@@ -37,13 +41,15 @@ function ConventionForm({
 }: ConventionFormProps): JSX.Element {
   const [convention, setConvention] = useState(initialConvention);
   const [save, saveError, saveInProgress] = useAsyncFunction(saveConvention);
+  const [openGraphImage, setOpenGraphImage] = useState<File | null | undefined>();
+  const [favicon, setFavicon] = useState<File | null | undefined>();
 
   const onClickSave = useCallback(
     (event) => {
       event.preventDefault();
-      save(convention);
+      save(convention, openGraphImage, favicon);
     },
-    [convention, save],
+    [convention, save, openGraphImage, favicon],
   );
 
   const commonProps = { convention, setConvention, disabled: saveInProgress };
@@ -58,7 +64,16 @@ function ConventionForm({
       id: 'website',
       name: 'Website',
       renderContent: () => (
-        <ConventionFormWebsiteSection {...commonProps} cmsLayouts={cmsLayouts} pages={pages} rootSite={rootSite} />
+        <ConventionFormWebsiteSection
+          {...commonProps}
+          cmsLayouts={cmsLayouts}
+          pages={pages}
+          rootSite={rootSite}
+          openGraphImage={openGraphImage}
+          setOpenGraphImage={setOpenGraphImage}
+          favicon={favicon}
+          setFavicon={setFavicon}
+        />
       ),
     },
     {
