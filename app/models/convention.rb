@@ -13,12 +13,14 @@
 #  email_mode                     :string           default("forward"), not null
 #  ends_at                        :datetime
 #  event_mailing_list_domain      :text
+#  favicon                        :text
 #  hidden                         :boolean          default(FALSE), not null
 #  language                       :string           not null
 #  location                       :jsonb
 #  maximum_event_signups          :jsonb
 #  maximum_tickets                :integer
 #  name                           :string
+#  open_graph_image               :text
 #  show_event_list                :string           default("no"), not null
 #  show_schedule                  :string           default("no"), not null
 #  signup_mode                    :string           default("self_service"), not null
@@ -66,6 +68,9 @@ class Convention < ApplicationRecord
   SIGNUP_MODES = %w[self_service moderated].freeze
   EMAIL_MODES = %w[forward staff_emails_to_catch_all].freeze
   TIMEZONE_MODES = %w[convention_local user_local].freeze
+
+  mount_uploader :favicon, FaviconUploader
+  mount_uploader :open_graph_image, OpenGraphImageUploader
 
   before_destroy :nullify_associated_content
 

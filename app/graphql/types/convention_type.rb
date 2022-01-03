@@ -144,6 +144,12 @@ class Types::ConventionType < Types::BaseObject
       .paginate(page: args[:page], per_page: args[:per_page])
   end
 
+  field :favicon_url, String, null: true
+
+  def favicon_url
+    object.favicon.url
+  end
+
   field :form, Types::FormType, null: false do
     argument :id, ID, required: false, description: 'The ID of the form to find.', camelize: true
 
@@ -221,6 +227,11 @@ class Types::ConventionType < Types::BaseObject
   end
 
   field :name, String, null: false
+  field :open_graph_image_url, String, null: true
+
+  def open_graph_image_url
+    object.open_graph_image.url
+  end
 
   pagination_field :orders_paginated, Types::OrdersPaginationType, Types::OrderFiltersInputType
 

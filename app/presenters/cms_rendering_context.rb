@@ -61,7 +61,6 @@ class CmsRenderingContext
   # We do this so that the doc that gets rendered will end up with the right stuff in <head>, but
   # not have its body content duplicated
   def render_app_root_content(cms_layout, assigns)
-    # layout_html = render_layout_content(cms_layout, assigns)
     doc = Nokogiri::HTML.parse("<!DOCTYPE html><html><head>#{assigns['content_for_head']}</head><body></body></html>")
     doc.xpath('//body/*').remove
     doc.xpath('//body').first.inner_html =

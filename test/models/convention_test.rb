@@ -12,12 +12,14 @@
 #  email_mode                     :string           default("forward"), not null
 #  ends_at                        :datetime
 #  event_mailing_list_domain      :text
+#  favicon                        :text
 #  hidden                         :boolean          default(FALSE), not null
 #  language                       :string           not null
 #  location                       :jsonb
 #  maximum_event_signups          :jsonb
 #  maximum_tickets                :integer
 #  name                           :string
+#  open_graph_image               :text
 #  show_event_list                :string           default("no"), not null
 #  show_schedule                  :string           default("no"), not null
 #  signup_mode                    :string           default("self_service"), not null
@@ -58,7 +60,6 @@
 #  fk_rails_...  (user_con_profile_form_id => forms.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 require 'test_helper'
 
 class ConventionTest < ActiveSupport::TestCase

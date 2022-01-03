@@ -35,7 +35,11 @@ export default LoadQueryWrapper(useConventionAdminConventionQuery, function Conv
 
   if (authorizationWarning) return authorizationWarning;
 
-  const saveConvention = async (convention: ConventionFormConvention) => {
+  const saveConvention = async (
+    convention: ConventionFormConvention,
+    openGraphImage: File | null | undefined,
+    favicon: File | null | undefined,
+  ) => {
     const conventionInput: ConventionInput = {
       ...pick(convention, [
         'accepting_proposals',
@@ -71,6 +75,8 @@ export default LoadQueryWrapper(useConventionAdminConventionQuery, function Conv
       defaultLayoutId: convention.defaultLayout?.id.toString(),
       rootPageId: convention.rootPage.id.toString(),
       catchAllStaffPositionId: convention.catch_all_staff_position?.id.toString(),
+      ...(typeof favicon === 'undefined' ? {} : { favicon }),
+      ...(typeof openGraphImage === 'undefined' ? {} : { openGraphImage }),
     };
     await mutate({
       variables: {

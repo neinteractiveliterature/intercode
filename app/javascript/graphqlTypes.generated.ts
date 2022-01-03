@@ -623,6 +623,7 @@ export type Convention = CmsParent & {
    */
   events: Array<Event>;
   events_paginated: EventsPagination;
+  favicon_url?: Maybe<Scalars['String']>;
   /**
    * Finds a form by ID in this convention. If there is no form with that ID in this convention,
    * errors out.
@@ -662,6 +663,7 @@ export type Convention = CmsParent & {
    * to that notification event, and convention-specific user-defined CMS variables.
    */
   notifier_liquid_assigns: Array<LiquidAssign>;
+  open_graph_image_url?: Maybe<Scalars['String']>;
   orders_paginated: OrdersPagination;
   organization?: Maybe<Organization>;
   pre_schedule_content_html?: Maybe<Scalars['String']>;
@@ -931,12 +933,14 @@ export type ConventionInput = {
   email_mode?: InputMaybe<EmailMode>;
   ends_at?: InputMaybe<Scalars['Date']>;
   event_mailing_list_domain?: InputMaybe<Scalars['String']>;
+  favicon?: InputMaybe<Scalars['Upload']>;
   hidden?: InputMaybe<Scalars['Boolean']>;
   language?: InputMaybe<Scalars['String']>;
   location?: InputMaybe<Scalars['Json']>;
   maximum_event_signups?: InputMaybe<ScheduledValueInput>;
   maximum_tickets?: InputMaybe<Scalars['Int']>;
   name?: InputMaybe<Scalars['String']>;
+  openGraphImage?: InputMaybe<Scalars['Upload']>;
   rootPageId?: InputMaybe<Scalars['ID']>;
   show_event_list?: InputMaybe<ShowSchedule>;
   show_schedule?: InputMaybe<ShowSchedule>;
