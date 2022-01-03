@@ -75,6 +75,11 @@ const config = {
     webSocketServer: 'ws',
     allowedHosts: 'all',
     hot: false,
+    watchFiles: {
+      options: {
+        ignored: [path.resolve(__dirname, 'public/product_images'), path.resolve(__dirname, 'public/uploads')],
+      },
+    },
   },
   cache: {
     type: 'filesystem',
