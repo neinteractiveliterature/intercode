@@ -135,6 +135,6 @@ describe('ConventionForm', () => {
       fireEvent.click(getByText('Save settings'), { selector: 'button' });
       await waitFor(() => expect(saveConvention).toHaveBeenCalledTimes(1));
     });
-    expect(saveConvention).toHaveBeenCalledWith(defaultInitialConvention);
+    expect(saveConvention).toHaveBeenCalledWith(defaultInitialConvention, undefined, undefined);
   });
 });
