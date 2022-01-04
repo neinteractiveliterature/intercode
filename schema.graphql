@@ -659,6 +659,7 @@ type Convention implements CmsParent {
     """
     sort: [SortInput!]
   ): EventsPagination!
+  favicon_url: String
 
   """
   Finds a form by ID in this convention. If there is no form with that ID in this convention,
@@ -721,6 +722,7 @@ type Convention implements CmsParent {
     """
     eventKey: String!
   ): [LiquidAssign!]!
+  open_graph_image_url: String
   orders_paginated(
     """
     Filters to restrict what items will appear in the result set.
@@ -888,7 +890,9 @@ type Convention implements CmsParent {
   staff_positions: [StaffPosition!]!
   starts_at: Date
   stripe_account: StripeAccount
+  stripe_account_id: String
   stripe_account_ready_to_charge: Boolean!
+  stripe_publishable_key: String
   ticketNamePlural: String!
   ticket_mode: TicketMode!
   ticket_name: String!
@@ -978,12 +982,14 @@ input ConventionInput {
   email_mode: EmailMode
   ends_at: Date
   event_mailing_list_domain: String
+  favicon: Upload
   hidden: Boolean
   language: String
   location: Json
   maximum_event_signups: ScheduledValueInput
   maximum_tickets: Int
   name: String
+  openGraphImage: Upload
   rootPageId: ID
   show_event_list: ShowSchedule
   show_schedule: ShowSchedule

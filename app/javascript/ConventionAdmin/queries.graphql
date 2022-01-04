@@ -25,6 +25,8 @@ fragment ConventionAdminConventionFields on Convention {
   signup_mode
   signup_requests_open
   stripe_account_ready_to_charge
+  favicon_url
+  open_graph_image_url
 
   stripe_account {
     id

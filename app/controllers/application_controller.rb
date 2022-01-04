@@ -49,29 +49,9 @@ class ApplicationController < ActionController::Base
   helper_method :graphql_authenticity_token
 
   def app_component_props
-    {
-      authenticityTokens: authenticity_token_props,
-      recaptchaSiteKey: Recaptcha.configuration.site_key,
-      stripePublishableKey: Rails.configuration.stripe[:publishable_key],
-      stripeAccountId: convention&.stripe_account_id,
-      mapboxAccessToken: ENV['MAPBOX_ACCESS_TOKEN']
-    }
+    { recaptchaSiteKey: Recaptcha.configuration.site_key, mapboxAccessToken: ENV['MAPBOX_ACCESS_TOKEN'] }
   end
   helper_method :app_component_props
-
-  def authenticity_token_props
-    {
-      graphql: graphql_authenticity_token,
-      changePassword: form_authenticity_token(form_options: { action: user_password_path, method: 'PUT' }),
-      denyAuthorization: form_authenticity_token(form_options: { action: oauth_authorization_path, method: 'DELETE' }),
-      grantAuthorization: form_authenticity_token(form_options: { action: oauth_authorization_path, method: 'POST' }),
-      resetPassword: form_authenticity_token(form_options: { action: user_password_path, method: 'POST' }),
-      signIn: form_authenticity_token(form_options: { action: user_session_path, method: 'POST' }),
-      signOut: form_authenticity_token(form_options: { action: destroy_user_session_path, method: 'DELETE' }),
-      signUp: form_authenticity_token(form_options: { action: user_registration_path, method: 'POST' }),
-      updateUser: form_authenticity_token(form_options: { action: user_registration_path, method: 'PATCH' })
-    }
-  end
 
   protected
 

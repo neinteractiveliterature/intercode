@@ -1,4 +1,4 @@
-import { createContext, useState, useCallback, useMemo } from 'react';
+import { createContext, useState, useCallback, useMemo, useEffect } from 'react';
 
 export type AuthenticityTokensContextValue = {
   refresh: () => Promise<void>;
@@ -36,7 +36,7 @@ export function useAuthenticityTokens(
       // perform a shallow comparison to avoid breaking object equality if we get the same tokens
       // back from the server
       const newTokens = { ...prevTokens, ...json };
-      if (Object.keys(newTokens).length !== Object.keys(prevTokens).length) {
+      if (Object.keys(newTokens).length !== Object.keys(prevTokens ?? {}).length) {
         return newTokens;
       }
 
@@ -47,6 +47,10 @@ export function useAuthenticityTokens(
       return newTokens;
     });
   }, []);
+
+  useEffect(() => {
+    refresh();
+  }, [refresh]);
 
   const value = useMemo(() => ({ ...tokens, refresh }), [refresh, tokens]);
 
