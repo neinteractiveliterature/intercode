@@ -8,20 +8,23 @@
 <%= javascript_include_tag url_with_possible_host('/packs/browser-warning.js', ENV['ASSETS_HOST']), defer: true %>
 <%= javascript_include_tag url_with_possible_host('/packs/application.js', ENV['ASSETS_HOST']), defer: true, type: 'module' %>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
-<% if convention&.open_graph_image -%>
-  <meta property="og:image" content="<%= convention.open_graph_image.url %>"/>
+<meta property="og:url" content="<%= request.url %>">
+<% if convention&.open_graph_image&.url.present? -%>
+  <meta property="og:image" content="<%= convention.open_graph_image.url %>">
 <% end -%>
 <% if @event -%>
   <meta property="og:title" content="<%= @event.title %>"
   <meta property="og:description" content="<%= strip_tags @event.short_blurb %>">
 <% elsif @page -%>
   <% if @page == convention&.root_page -%>
-    <meta property="og:title" content="<%= @convention.name %>"/>
+    <meta property="og:title" content="<%= @convention.name %>">
   <% else -%>
-    <meta property="og:title" content="<%= @page.name %>"/>
+    <meta property="og:title" content="<%= @page.name %>">
   <% end -%>
+  <meta property="og:description" content="<%= strip_tags(cms_rendering_context.render_page_content(@page)).gsub(/\s+/, ' ').strip.truncate(100) %>">
 <% else -%>
-  <meta property="og:title" content="<%= page_title %>"/>
+  <meta property="og:title" content="<%= page_title %>">
+  <meta property="og:description" content="">
 <% end -%>
 <meta property="og:type" content="website"/>
 <% if convention&.favicon -%>
