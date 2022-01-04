@@ -1,11 +1,13 @@
 import { CSSObject } from '@emotion/serialize';
 import * as React from 'react';
-import { BooleanInput, usePropertySetters } from '@neinteractiveliterature/litform';
+import { BooleanInput, HelpText, usePropertySetters } from '@neinteractiveliterature/litform';
 
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
 import LiquidInput from '../BuiltInFormControls/LiquidInput';
 import type { ConventionFormConvention } from './ConventionForm';
 import { ConventionAdminConventionQueryData } from './queries.generated';
+import FileInputWithPreview from '../CmsAdmin/CmsFilesAdmin/FileInputWithPreview';
+import { useTranslation } from 'react-i18next';
 
 // Since our selects come right above a CodeMirror, we need to override the z-index on the
 // dropdown menu so that the text in the CodeMirror doesn't cover it
@@ -20,6 +22,10 @@ export type ConventionFormWebsiteSectionProps = {
   rootSite: ConventionAdminConventionQueryData['rootSite'];
   cmsLayouts: ConventionAdminConventionQueryData['convention']['cmsLayouts'];
   pages: ConventionAdminConventionQueryData['convention']['cmsPages'];
+  openGraphImage: File | null | undefined;
+  setOpenGraphImage: React.Dispatch<File | null | undefined>;
+  favicon: File | null | undefined;
+  setFavicon: React.Dispatch<File | null | undefined>;
 };
 
 function ConventionFormWebsiteSection({
@@ -29,6 +35,10 @@ function ConventionFormWebsiteSection({
   cmsLayouts,
   pages,
   disabled,
+  openGraphImage,
+  setOpenGraphImage,
+  favicon,
+  setFavicon,
 }: ConventionFormWebsiteSectionProps): JSX.Element {
   const [setDefaultLayout, setRootPage, setClickwrapAgreement, setHidden] = usePropertySetters(
     setConvention,
@@ -37,6 +47,7 @@ function ConventionFormWebsiteSection({
     'clickwrap_agreement',
     'hidden',
   );
+  const { t } = useTranslation();
 
   return (
     <>
@@ -87,6 +98,38 @@ function ConventionFormWebsiteSection({
         <LiquidInput
           value={convention.clickwrap_agreement ?? ''}
           onChange={setClickwrapAgreement}
+          disabled={disabled}
+        />
+      </fieldset>
+
+      <fieldset className="mb-4">
+        <legend className="col-form-label">{t('admin.convention.openGraphImageLabel', 'OpenGraph image')}</legend>
+        <HelpText>
+          {t(
+            'admin.convention.openGraphImageHelpText',
+            'Used by social media sites for previewing links to this site. 1200x630 pixels is recommended for Facebook.',
+          )}
+        </HelpText>
+        <FileInputWithPreview
+          existingFileUrl={convention.open_graph_image_url}
+          file={openGraphImage}
+          onChange={setOpenGraphImage}
+          disabled={disabled}
+        />
+      </fieldset>
+
+      <fieldset className="mb-4">
+        <legend className="col-form-label">{t('admin.convention.faviconLabel', 'Favicon')}</legend>
+        <HelpText>
+          {t(
+            'admin.convention.faviconHelpText',
+            'Used by browsers for the icon in tabs for this site.  180x180 pixels is recommended.',
+          )}
+        </HelpText>
+        <FileInputWithPreview
+          existingFileUrl={convention.favicon_url}
+          file={favicon}
+          onChange={setFavicon}
           disabled={disabled}
         />
       </fieldset>

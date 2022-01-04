@@ -16,4 +16,10 @@ module ApplicationHelper
 
     parts.join(' - ')
   end
+
+  def url_with_possible_host(path, host)
+    return path if host.blank?
+
+    "#{request.scheme}://#{host}#{path}"
+  end
 end

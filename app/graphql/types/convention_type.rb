@@ -144,6 +144,12 @@ class Types::ConventionType < Types::BaseObject
       .paginate(page: args[:page], per_page: args[:per_page])
   end
 
+  field :favicon_url, String, null: true
+
+  def favicon_url
+    object.favicon.url
+  end
+
   field :form, Types::FormType, null: false do
     argument :id, ID, required: false, description: 'The ID of the form to find.', camelize: true
 
@@ -221,6 +227,11 @@ class Types::ConventionType < Types::BaseObject
   end
 
   field :name, String, null: false
+  field :open_graph_image_url, String, null: true
+
+  def open_graph_image_url
+    object.open_graph_image.url
+  end
 
   pagination_field :orders_paginated, Types::OrdersPaginationType, Types::OrderFiltersInputType
 
@@ -394,6 +405,13 @@ class Types::ConventionType < Types::BaseObject
   field :stripe_account, Types::StripeAccountType, null: true do
     authorize_action :update
   end
+  field :stripe_account_id, String, null: true
+  field :stripe_publishable_key, String, null: true
+
+  def stripe_publishable_key
+    Rails.configuration.stripe[:publishable_key]
+  end
+
   field :ticket_mode, Types::TicketModeType, null: false
   field :ticket_name, String, null: false
 

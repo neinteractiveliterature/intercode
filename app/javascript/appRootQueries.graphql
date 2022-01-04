@@ -71,6 +71,8 @@ query AppRootQuery($path: String!) {
     site_mode
     signup_mode
     starts_at
+    stripe_account_id
+    stripe_publishable_key
     ends_at
     ticket_mode
     timezone_name

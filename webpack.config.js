@@ -1,11 +1,27 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
-const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const RollbarSourceMapPlugin = require('rollbar-sourcemap-webpack-plugin');
 const webpack = require('webpack');
+
+// Taken from https://webpack.js.org/loaders/style-loader/#insert
+function insertAtTop(element) {
+  var parent = document.querySelector('head');
+  // eslint-disable-next-line no-underscore-dangle
+  var lastInsertedElement = window._lastElementInsertedByStyleLoader;
+
+  if (!lastInsertedElement) {
+    parent.insertBefore(element, parent.firstChild);
+  } else if (lastInsertedElement.nextSibling) {
+    parent.insertBefore(element, lastInsertedElement.nextSibling);
+  } else {
+    parent.appendChild(element);
+  }
+
+  // eslint-disable-next-line no-underscore-dangle
+  window._lastElementInsertedByStyleLoader = element;
+}
 
 const ASSET_PATH =
   process.env.ASSET_PATH || (process.env.NODE_ENV === 'production' ? '/packs/' : 'https://localhost:3135/packs/');
@@ -14,8 +30,13 @@ const config = {
   mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
   devtool: process.env.NODE_ENV === 'production' ? 'source-map' : 'eval-source-map',
   entry: {
+    /// !!!!!! IMPORTANT !!!!!!
+    /// When adding new production entry points, make sure to add them to production.rb's list of assets to exclude
+    /// from caching!  Otherwise, subsequent deploys will still have old versions of entry points.
+    /// !!!!!! IMPORTANT !!!!!!
+
     application: './app/javascript/packs/applicationEntry.ts',
-    bootstrap: './app/javascript/packs/bootstrap.ts',
+    'application-styles': './app/javascript/packs/applicationStyles.ts',
     'browser-warning': './app/javascript/displayBrowserWarning.tsx',
     ...(process.env.NODE_ENV === 'production'
       ? {}
@@ -24,8 +45,8 @@ const config = {
         }),
   },
   output: {
-    filename: '[name]-[chunkhash].js',
-    chunkFilename: '[name]-[chunkhash].chunk.js',
+    filename: '[name].js',
+    chunkFilename: '[id]-[chunkhash].chunk.js',
     hotUpdateChunkFilename: '[id]-[fullhash].hot-update.js',
     path: path.resolve('public/packs'),
     publicPath: ASSET_PATH,
@@ -43,14 +64,22 @@ const config = {
       'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
       'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
     },
-    https: {
-      key: './dev_certificate.key',
-      cert: './dev_certificate.crt',
-      cacert: './dev_ca.crt',
+    server: {
+      type: 'https',
+      options: {
+        key: './dev_certificate.key',
+        cert: './dev_certificate.crt',
+        ca: './dev_ca.crt',
+      },
     },
     webSocketServer: 'ws',
     allowedHosts: 'all',
     hot: false,
+    watchFiles: {
+      options: {
+        ignored: [path.resolve(__dirname, 'public/product_images'), path.resolve(__dirname, 'public/uploads')],
+      },
+    },
   },
   cache: {
     type: 'filesystem',
@@ -65,7 +94,10 @@ const config = {
       {
         test: /\.s[ac]ss$/i,
         use: [
-          MiniCssExtractPlugin.loader,
+          {
+            loader: require.resolve('style-loader'),
+            options: { insert: insertAtTop },
+          },
           require.resolve('css-loader'),
           require.resolve('postcss-loader'),
           require.resolve('sass-loader'),
@@ -73,7 +105,14 @@ const config = {
       },
       {
         test: /\.css$/i,
-        use: [MiniCssExtractPlugin.loader, require.resolve('css-loader'), require.resolve('postcss-loader')],
+        use: [
+          {
+            loader: require.resolve('style-loader'),
+            options: { insert: insertAtTop },
+          },
+          require.resolve('css-loader'),
+          require.resolve('postcss-loader'),
+        ],
       },
       {
         test: /displayBrowserWarning\.[tj]sx?$/,
@@ -139,13 +178,6 @@ const config = {
       'process.env.ASSET_PATH': JSON.stringify(ASSET_PATH),
     }),
     new CaseSensitivePathsPlugin(),
-    new MiniCssExtractPlugin({
-      filename: '[name]-[contenthash:8].css',
-      chunkFilename: '[name]-[contenthash:8].chunk.css',
-    }),
-    new WebpackManifestPlugin({
-      fileName: 'assets-manifest.json',
-    }),
   ],
 };
 

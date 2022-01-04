@@ -2,7 +2,6 @@
 class CmsRenderingContext
   include Cadmus::RenderingHelper
   include Cadmus::Renderable
-  include Minipack::Helper
   include ApplicationHelper
   include ActionView::Helpers::TagHelper
   include ActionView::Helpers::AssetTagHelper
@@ -62,8 +61,7 @@ class CmsRenderingContext
   # We do this so that the doc that gets rendered will end up with the right stuff in <head>, but
   # not have its body content duplicated
   def render_app_root_content(cms_layout, assigns)
-    layout_html = render_layout_content(cms_layout, assigns)
-    doc = Nokogiri::HTML.parse(layout_html)
+    doc = Nokogiri::HTML.parse("<!DOCTYPE html><html><head>#{assigns['content_for_head']}</head><body></body></html>")
     doc.xpath('//body/*').remove
     doc.xpath('//body').first.inner_html =
       NOSCRIPT_WARNING +
@@ -117,8 +115,9 @@ class CmsRenderingContext
   end
 
   def liquid_assigns_for_placeholder_template
+    styles_url = url_with_possible_host('/packs/application-styles.js', ENV['ASSETS_HOST'])
     liquid_assigns.merge(
-      'content_for_head' => "#{stylesheet_bundle_tag 'application', media: 'all'}{{ content_for_head }}",
+      'content_for_head' => "#{javascript_include_tag styles_url}{{ content_for_head }}",
       'content_for_navbar' => '{{ content_for_navbar }}',
       'content_for_layout' => '{{ content_for_layout }}'
     )

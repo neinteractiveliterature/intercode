@@ -2,8 +2,8 @@
 <html>
   <head>
     <title>GraphiQL</title>
-    <%= stylesheet_bundle_tag 'dev-mode-graphiql', media: 'all' %>
-    <%= javascript_bundle_tag 'dev-mode-graphiql', defer: true %>
+    <%= stylesheet_link_tag url_with_possible_host('/packs/dev-mode-graphiql.css', ENV['ASSETS_HOST']), media: :all %>
+    <%= javascript_include_tag url_with_possible_host('/packs/dev-mode-graphiql.js', ENV['ASSETS_HOST']), defer: true %>
   </head>
   <body>
     <%= yield %>
