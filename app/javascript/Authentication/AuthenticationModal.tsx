@@ -2,15 +2,15 @@ import { Suspense, useContext } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
 
 import AuthenticationModalContext from './AuthenticationModalContext';
-import { lazyWithBundleHashCheck } from '../checkBundleHash';
+import { lazyWithAppEntrypointHeadersCheck } from '../checkAppEntrypointHeadersMatch';
 
-const ForgotPasswordForm = lazyWithBundleHashCheck(
+const ForgotPasswordForm = lazyWithAppEntrypointHeadersCheck(
   () => import(/* webpackChunkName: "authentication-forms" */ './ForgotPasswordForm'),
 );
-const SignInForm = lazyWithBundleHashCheck(
+const SignInForm = lazyWithAppEntrypointHeadersCheck(
   () => import(/* webpackChunkName: "authentication-forms" */ './SignInForm'),
 );
-const SignUpForm = lazyWithBundleHashCheck(
+const SignUpForm = lazyWithAppEntrypointHeadersCheck(
   () => import(/* webpackChunkName: "authentication-forms" */ './SignUpForm'),
 );
 

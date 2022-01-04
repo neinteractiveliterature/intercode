@@ -1,10 +1,10 @@
 import { Suspense } from 'react';
 import { LoadingIndicator } from '@neinteractiveliterature/litform';
 
-import { lazyWithBundleHashCheck } from '../checkBundleHash';
+import { lazyWithAppEntrypointHeadersCheck } from '../checkAppEntrypointHeadersMatch';
 import type { SyncColorPickerProps } from './SyncColorPicker';
 
-const SyncColorPicker = lazyWithBundleHashCheck(
+const SyncColorPicker = lazyWithAppEntrypointHeadersCheck(
   () => import(/* webpackChunkName: "color-picker" */ './SyncColorPicker'),
 );
 

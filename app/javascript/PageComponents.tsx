@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import ClickwrapAgreement from './ClickwrapAgreement';
 import CmsPage from './CmsPage';
-import { lazyWithBundleHashCheck } from './checkBundleHash';
+import { lazyWithAppEntrypointHeadersCheck } from './checkAppEntrypointHeadersMatch';
 
 function getDisplayName(WrappedComponent: React.ComponentType) {
   return WrappedComponent.displayName || WrappedComponent.name || 'Component';
@@ -104,7 +104,7 @@ const NonCMSPageComponents: Record<
   ...(Object.fromEntries(
     Object.entries(UnwrappedNonCMSPageComponents).map(([name, component]) => [
       name,
-      NonCMSPageWrapper(lazyWithBundleHashCheck(component)),
+      NonCMSPageWrapper(lazyWithAppEntrypointHeadersCheck(component)),
     ]),
   ) as Record<keyof typeof UnwrappedNonCMSPageComponents, React.ComponentType>),
   WrappedClickwrapAgreement: NonCMSPageWrapper(ClickwrapAgreement),

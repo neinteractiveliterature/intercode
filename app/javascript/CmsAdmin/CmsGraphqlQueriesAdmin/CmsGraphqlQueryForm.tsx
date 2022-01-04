@@ -10,13 +10,11 @@ import {
   LoadingIndicator,
 } from '@neinteractiveliterature/litform';
 
-import { lazyWithBundleHashCheck } from '../../checkBundleHash';
+import { lazyWithAppEntrypointHeadersCheck } from '../../checkAppEntrypointHeadersMatch';
 import { useIntercodeApolloLink } from '../../useIntercodeApolloClient';
 import AuthenticityTokensContext from '../../AuthenticityTokensContext';
 
-const GraphiQL = lazyWithBundleHashCheck(
-  () => import(/* webpackChunkName: 'graphiql' */ 'graphiql'),
-);
+const GraphiQL = lazyWithAppEntrypointHeadersCheck(() => import(/* webpackChunkName: 'graphiql' */ 'graphiql'));
 
 type CmsGraphqlQueryFormFields = {
   identifier: string;
@@ -36,12 +34,7 @@ function CmsGraphqlQueryForm<T extends CmsGraphqlQueryFormFields>({
   readOnly,
 }: CmsGraphqlQueryFormProps<T>): JSX.Element {
   const { graphql: authenticityToken } = useContext(AuthenticityTokensContext);
-  const [setIdentifier, setAdminNotes, setQuery] = usePropertySetters(
-    onChange,
-    'identifier',
-    'admin_notes',
-    'query',
-  );
+  const [setIdentifier, setAdminNotes, setQuery] = usePropertySetters(onChange, 'identifier', 'admin_notes', 'query');
   const link = useIntercodeApolloLink(authenticityToken);
 
   // Serious shenanigans going on in here, we have to majorly circumvent type checking

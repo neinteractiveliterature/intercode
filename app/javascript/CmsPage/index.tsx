@@ -2,12 +2,12 @@ import { useMemo, useEffect, Suspense } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 import usePageTitle from '../usePageTitle';
-import { lazyWithBundleHashCheck } from '../checkBundleHash';
+import { lazyWithAppEntrypointHeadersCheck } from '../checkAppEntrypointHeadersMatch';
 import parseCmsContent from '../parseCmsContent';
 import { useCmsPageQuery } from './queries.generated';
 import { LoadQueryWithVariablesWrapper } from '../GraphqlLoadingWrappers';
 
-const PageAdminDropdown = lazyWithBundleHashCheck(
+const PageAdminDropdown = lazyWithAppEntrypointHeadersCheck(
   () => import(/* webpackChunkName: "page-admin-dropdown" */ './PageAdminDropdown'),
 );
 

@@ -1,41 +1,33 @@
-import { lazyWithBundleHashCheck } from './checkBundleHash';
+import { lazyWithAppEntrypointHeadersCheck } from './checkAppEntrypointHeadersMatch';
 import parsePageContent, { DEFAULT_COMPONENT_MAP, ComponentMap } from './parsePageContent';
 import CookieConsent from './UIComponents/CookieConsent';
 
-const AddToCalendarDropdown = lazyWithBundleHashCheck(
-  () =>
-    import(/* webpackChunkName: "my-profile" */ './EventsApp/SignupAdmin/AddToCalendarDropdown'),
+const AddToCalendarDropdown = lazyWithAppEntrypointHeadersCheck(
+  () => import(/* webpackChunkName: "my-profile" */ './EventsApp/SignupAdmin/AddToCalendarDropdown'),
 );
-const EventAdminMenu = lazyWithBundleHashCheck(
+const EventAdminMenu = lazyWithAppEntrypointHeadersCheck(
   () => import(/* webpackChunkName: "events-app" */ './EventsApp/EventPage/EventAdminMenu'),
 );
-const LongFormEventDetails = lazyWithBundleHashCheck(
+const LongFormEventDetails = lazyWithAppEntrypointHeadersCheck(
   () => import(/* webpackChunkName: "events-app" */ './EventsApp/EventPage/LongFormEventDetails'),
 );
-const MapboxMap = lazyWithBundleHashCheck(
+const MapboxMap = lazyWithAppEntrypointHeadersCheck(
   () => import(/* webpackChunkName: "mapbox-map" */ './Maps/MapboxMap'),
 );
-const MaximumEventSignupsPreview = lazyWithBundleHashCheck(
-  () =>
-    import(
-      /* webpackChunkName: 'scheduled-value-preview' */ './ConventionAdmin/MaximumEventSignupsPreview'
-    ),
+const MaximumEventSignupsPreview = lazyWithAppEntrypointHeadersCheck(
+  () => import(/* webpackChunkName: 'scheduled-value-preview' */ './ConventionAdmin/MaximumEventSignupsPreview'),
 );
-const ProposeEventButton = lazyWithBundleHashCheck(
-  () =>
-    import(/* webpackChunkName: 'propose-event-button' */ './EventProposals/ProposeEventButton'),
+const ProposeEventButton = lazyWithAppEntrypointHeadersCheck(
+  () => import(/* webpackChunkName: 'propose-event-button' */ './EventProposals/ProposeEventButton'),
 );
-const RunsSection = lazyWithBundleHashCheck(
+const RunsSection = lazyWithAppEntrypointHeadersCheck(
   () => import(/* webpackChunkName: "events-app" */ './EventsApp/EventPage/RunsSection'),
 );
-const ShortFormEventDetails = lazyWithBundleHashCheck(
+const ShortFormEventDetails = lazyWithAppEntrypointHeadersCheck(
   () => import(/* webpackChunkName: "events-app" */ './EventsApp/EventPage/ShortFormEventDetails'),
 );
-const WithdrawMySignupButton = lazyWithBundleHashCheck(
-  () =>
-    import(
-      /* webpackChunkName: 'withdraw-my-signup-button' */ './EventsApp/EventPage/WithdrawMySignupButton'
-    ),
+const WithdrawMySignupButton = lazyWithAppEntrypointHeadersCheck(
+  () => import(/* webpackChunkName: 'withdraw-my-signup-button' */ './EventsApp/EventPage/WithdrawMySignupButton'),
 );
 
 export const CMS_COMPONENT_MAP: ComponentMap = {

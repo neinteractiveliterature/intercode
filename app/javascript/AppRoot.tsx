@@ -11,13 +11,15 @@ import PageComponents from './PageComponents';
 import parseCmsContent, { CMS_COMPONENT_MAP } from './parseCmsContent';
 import { timezoneNameForConvention } from './TimeUtils';
 import getI18n from './setupI18Next';
-import { lazyWithBundleHashCheck } from './checkBundleHash';
+import { lazyWithAppEntrypointHeadersCheck } from './checkAppEntrypointHeadersMatch';
 import { timespanFromConvention } from './TimespanUtils';
 import { LazyStripeContext } from './LazyStripe';
 import { Stripe } from '@stripe/stripe-js';
 import { Helmet } from 'react-helmet-async';
 
-const NavigationBar = lazyWithBundleHashCheck(() => import(/* webpackChunkName: 'navigation-bar' */ './NavigationBar'));
+const NavigationBar = lazyWithAppEntrypointHeadersCheck(
+  () => import(/* webpackChunkName: 'navigation-bar' */ './NavigationBar'),
+);
 
 // Avoid unnecessary layout checks when moving between pages that can't change layout
 function normalizePathForLayout(path: string) {

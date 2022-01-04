@@ -10,29 +10,21 @@ Intercode::Application.routes.draw do
   get '/graphiql' => 'graphiql#show' if Rails.env.development?
 
   post '/graphql', to: 'graphql#execute'
-  devise_for :users, controllers: {
-    passwords: 'passwords',
-    registrations: 'registrations',
-    sessions: 'sessions'
-  }
+  devise_for :users, controllers: { passwords: 'passwords', registrations: 'registrations', sessions: 'sessions' }
   get '/authenticity_tokens', to: 'authenticity_tokens#show'
   post '/sns_notifications', to: 'sns_notifications#create'
   post '/stripe_webhook/account', to: 'stripe_webhooks#account'
   post '/stripe_webhook/connect', to: 'stripe_webhooks#connect'
 
   # CMS stuff
-  get 'liquid_docs/(*extra)' => 'liquid_docs#show', as: :liquid_docs
+  get 'liquid_docs/(*extra)' => 'liquid_docs#show', :as => :liquid_docs
 
   # All of these pages must be within the virtual host
   constraints(Intercode::VirtualHostConstraint.new) do
     resources :user_con_profiles, only: [] do
-      collection do
-        post :revert_become
-      end
+      collection { post :revert_become }
 
-      member do
-        post :become
-      end
+      member { post :become }
     end
 
     namespace :reports do
@@ -44,7 +36,7 @@ Intercode::Application.routes.draw do
       get :volunteer_events
     end
 
-    get 'calendars/user_schedule/:id' => 'calendars#user_schedule', as: :user_schedule
+    get 'calendars/user_schedule/:id' => 'calendars#user_schedule', :as => :user_schedule
 
     namespace :csv_exports do
       get :coupons
@@ -56,14 +48,11 @@ Intercode::Application.routes.draw do
       get :user_con_profiles
     end
 
-    get 'stripe_account/return' => 'stripe_account#return', as: :stripe_account_return
-    get 'stripe_account/refresh' => 'stripe_account#refresh', as: :stripe_account_refresh
+    get 'stripe_account/return' => 'stripe_account#return', :as => :stripe_account_return
+    get 'stripe_account/refresh' => 'stripe_account#refresh', :as => :stripe_account_refresh
   end
 
   get 'csv_exports/users' => 'csv_exports#users'
-  get 'bundle_hash' => 'bundle_hash#show'
 
-  get '/(*extra)' => 'single_page_app#root', as: :root, constraints: {
-    extra: %r{(?!(uploads|packs|assets)/).*}
-  }
+  get '/(*extra)' => 'single_page_app#root', :as => :root, :constraints => { extra: %r{(?!(uploads|packs|assets)/).*} }
 end
