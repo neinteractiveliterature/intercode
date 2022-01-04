@@ -5017,7 +5017,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/bootstrap@npm:^5.1.8":
+"@types/bootstrap@npm:5.1.8":
   version: 5.1.8
   resolution: "@types/bootstrap@npm:5.1.8"
   dependencies:
@@ -5062,7 +5062,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/cssnano@npm:^5":
+"@types/cssnano@npm:5.0.0":
   version: 5.0.0
   resolution: "@types/cssnano@npm:5.0.0"
   dependencies:
@@ -9040,7 +9040,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cssnano@npm:^5.0.14, cssnano@npm:^5.0.6, cssnano@npm:^5.0.8":
+"cssnano@npm:5.0.14, cssnano@npm:^5.0.6, cssnano@npm:^5.0.8":
   version: 5.0.14
   resolution: "cssnano@npm:5.0.14"
   dependencies:
@@ -18549,7 +18549,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-helmet-async@npm:^1.2.2":
+"react-helmet-async@npm:1.2.2":
   version: 1.2.2
   resolution: "react-helmet-async@npm:1.2.2"
   dependencies:
@@ -19627,10 +19627,10 @@ resolve@^2.0.0-next.3:
     "@testing-library/react": 12.1.2
     "@testing-library/react-hooks": 7.0.2
     "@types/apollo-upload-client": 14.1.0
-    "@types/bootstrap": ^5.1.8
+    "@types/bootstrap": 5.1.8
     "@types/bytes": 3.1.1
     "@types/classnames": 2.3.1
-    "@types/cssnano": ^5
+    "@types/cssnano": 5.0.0
     "@types/debounce-promise": 3.1.4
     "@types/diff": 5.0.2
     "@types/events": 3.0.0
@@ -19685,7 +19685,7 @@ resolve@^2.0.0-next.3:
     crypto-browserify: 3.12.0
     css-loader: 6.5.1
     css-minimizer-webpack-plugin: 3.3.1
-    cssnano: ^5.0.14
+    cssnano: 5.0.14
     csv-string: 4.0.1
     custom-event-polyfill: 1.0.7
     debounce-promise: 3.1.2
@@ -19708,7 +19708,7 @@ resolve@^2.0.0-next.3:
     eslint-plugin-react-hooks: 4.3.0
     events: 3.3.0
     fast-diff: 1.2.0
-    file-loader: ^6.2.0
+    file-loader: 6.2.0
     file-saver: 2.0.5
     font-awesome: 4.7.0
     glob: 7.2.0
@@ -19752,7 +19752,7 @@ resolve@^2.0.0-next.3:
     react-cookie-consent: 7.2.1
     react-dom: 17.0.2
     react-google-recaptcha: 2.1.0
-    react-helmet-async: ^1.2.2
+    react-helmet-async: 1.2.2
     react-html-id: 0.1.5
     react-i18next: 11.15.3
     react-onclickoutside: 6.12.1
