@@ -16,11 +16,11 @@ import useAsyncFunction from '../useAsyncFunction';
 import AccountFormContent from './AccountFormContent';
 import UserFormFields, { UserFormState } from './UserFormFields';
 import usePageTitle from '../usePageTitle';
-import { lazyWithBundleHashCheck } from '../checkBundleHash';
+import { lazyWithAppEntrypointHeadersCheck } from '../checkAppEntrypointHeadersMatch';
 import { useEditUserQuery } from './queries.generated';
 import humanize from '../humanize';
 
-const PasswordInputWithStrengthCheck = lazyWithBundleHashCheck(
+const PasswordInputWithStrengthCheck = lazyWithAppEntrypointHeadersCheck(
   () => import(/* webpackChunkName: "password-input-with-strength-check" */ './PasswordInputWithStrengthCheck'),
 );
 

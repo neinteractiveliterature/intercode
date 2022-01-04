@@ -4,7 +4,7 @@ import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
 import AppRootContext from './AppRootContext';
 import PageComponents from './PageComponents';
-import { reloadOnBundleHashMismatch } from './checkBundleHash';
+import { reloadOnAppEntrypointHeadersMismatch } from './checkAppEntrypointHeadersMatch';
 import FourOhFourPage from './FourOhFourPage';
 import { SignupMode } from './graphqlTypes.generated';
 
@@ -134,7 +134,7 @@ function AppRouter({ alert }: AppRouterProps): JSX.Element {
   const [showAlert, setShowAlert] = useState(alert != null);
 
   useEffect(() => {
-    reloadOnBundleHashMismatch();
+    reloadOnAppEntrypointHeadersMismatch();
   }, [location.pathname]);
 
   const renderRoutes = () => {

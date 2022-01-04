@@ -13,10 +13,10 @@ import AccountFormContent from './AccountFormContent';
 import UserFormFields, { UserFormState } from './UserFormFields';
 import PasswordConfirmationInput from './PasswordConfirmationInput';
 import useAfterSessionChange from './useAfterSessionChange';
-import { lazyWithBundleHashCheck } from '../checkBundleHash';
+import { lazyWithAppEntrypointHeadersCheck } from '../checkAppEntrypointHeadersMatch';
 import humanize from '../humanize';
 
-const PasswordInputWithStrengthCheck = lazyWithBundleHashCheck(
+const PasswordInputWithStrengthCheck = lazyWithAppEntrypointHeadersCheck(
   () => import(/* webpackChunkName: "password-input-with-strength-check" */ './PasswordInputWithStrengthCheck'),
 );
 

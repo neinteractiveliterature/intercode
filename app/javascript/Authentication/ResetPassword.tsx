@@ -7,13 +7,10 @@ import { LoadingIndicator, ErrorDisplay, useUniqueId } from '@neinteractiveliter
 import PasswordConfirmationInput from './PasswordConfirmationInput';
 import AuthenticityTokensContext from '../AuthenticityTokensContext';
 import useAsyncFunction from '../useAsyncFunction';
-import { lazyWithBundleHashCheck } from '../checkBundleHash';
+import { lazyWithAppEntrypointHeadersCheck } from '../checkAppEntrypointHeadersMatch';
 
-const PasswordInputWithStrengthCheck = lazyWithBundleHashCheck(
-  () =>
-    import(
-      /* webpackChunkName: "password-input-with-strength-check" */ './PasswordInputWithStrengthCheck'
-    ),
+const PasswordInputWithStrengthCheck = lazyWithAppEntrypointHeadersCheck(
+  () => import(/* webpackChunkName: "password-input-with-strength-check" */ './PasswordInputWithStrengthCheck'),
 );
 
 async function changePassword(
@@ -61,12 +58,7 @@ function ResetPassword(): JSX.Element {
       throw new Error('No authenticity token received from server');
     }
 
-    await changePasswordAsync(
-      authenticityToken,
-      resetPasswordToken,
-      password,
-      passwordConfirmation,
-    );
+    await changePasswordAsync(authenticityToken, resetPasswordToken, password, passwordConfirmation);
     window.location.href = '/';
   };
 
@@ -82,11 +74,7 @@ function ResetPassword(): JSX.Element {
                 {t('authentication.resetPassword.passwordLabel', 'Password')}
               </label>
               <Suspense fallback={<LoadingIndicator iconSet="bootstrap-icons" />}>
-                <PasswordInputWithStrengthCheck
-                  value={password}
-                  onChange={setPassword}
-                  id={passwordId}
-                />
+                <PasswordInputWithStrengthCheck value={password} onChange={setPassword} id={passwordId} />
               </Suspense>
             </div>
             <PasswordConfirmationInput
