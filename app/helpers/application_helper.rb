@@ -17,6 +17,14 @@ module ApplicationHelper
     parts.join(' - ')
   end
 
+  def open_graph_description_for_page(page)
+    Rails
+      .cache
+      .fetch(['open_graph_description', page], expires_in: 1.day) do
+        strip_tags(cms_rendering_context.render_page_content(@page)).gsub(/\s+/, ' ').strip.truncate(200)
+      end
+  end
+
   def url_with_possible_host(path, host)
     return path if host.blank?
 

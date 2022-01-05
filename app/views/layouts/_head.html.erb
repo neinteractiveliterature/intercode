@@ -21,7 +21,7 @@
   <% else -%>
     <meta property="og:title" content="<%= @page.name %>">
   <% end -%>
-  <meta property="og:description" content="<%= strip_tags(cms_rendering_context.render_page_content(@page)).gsub(/\s+/, ' ').strip.truncate(100) %>">
+  <meta property="og:description" content="<%= open_graph_description_for_page(@page) %>">
 <% else -%>
   <meta property="og:title" content="<%= page_title %>">
   <meta property="og:description" content="">
