@@ -16,6 +16,8 @@ import { timespanFromConvention } from './TimespanUtils';
 import { LazyStripeContext } from './LazyStripe';
 import { Stripe } from '@stripe/stripe-js';
 import { Helmet } from 'react-helmet-async';
+import React from 'react';
+import { ScriptTag } from './parsePageContent';
 
 const NavigationBar = lazyWithAppEntrypointHeadersCheck(
   () => import(/* webpackChunkName: 'navigation-bar' */ './NavigationBar'),
@@ -72,6 +74,24 @@ function AppRoot(): JSX.Element {
   }, [data?.currentUser?.id]);
 
   const cachedCmsContent = useCachedLoadableValue(loading, error, () => parsedCmsContent, [parsedCmsContent]);
+  const [headComponentsWithoutScriptTags, headScriptTags] = useMemo(() => {
+    if (parsedCmsContent?.headComponents == null) {
+      return [[], []];
+    }
+
+    const nonScriptTags: React.ReactNode[] = [];
+    const scriptTags: React.ReactNode[] = [];
+
+    React.Children.forEach(parsedCmsContent.headComponents, (child) => {
+      if (React.isValidElement(child) && child.type === ScriptTag) {
+        scriptTags.push(child);
+      } else {
+        nonScriptTags.push(child);
+      }
+    });
+
+    return [nonScriptTags, scriptTags];
+  }, [parsedCmsContent?.headComponents]);
   const appRootContextValue = useCachedLoadableValue(
     loading,
     error,
@@ -158,7 +178,8 @@ function AppRoot(): JSX.Element {
 
   return (
     <AppRootContext.Provider value={appRootContextValue}>
-      <Helmet>{cachedCmsContent?.headComponents}</Helmet>
+      <Helmet>{headComponentsWithoutScriptTags}</Helmet>
+      {headScriptTags}
       <Routes>
         <Route path="/admin_forms/:id/edit/*" element={<PageComponents.FormEditor />}>
           <Route path="section/:sectionId/item/:itemId" element={<PageComponents.FormItemEditorLayout />} />
