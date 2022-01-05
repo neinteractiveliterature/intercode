@@ -35,12 +35,12 @@ function nodeIsElement(node: Node): node is Element {
   return node.nodeType === Node.ELEMENT_NODE;
 }
 
-type ScriptTagProps = {
+export type ScriptTagProps = {
   url: string | null;
   content: string | null;
 };
 
-function ScriptTag({ url, content }: ScriptTagProps) {
+export function ScriptTag({ url, content }: ScriptTagProps) {
   const uniqueId = useUniqueId('script-');
   const ref = React.useRef<HTMLSpanElement>(null);
   useLayoutEffect(() => {
