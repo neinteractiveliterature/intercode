@@ -37,7 +37,6 @@ const config = {
 
     application: './app/javascript/packs/applicationEntry.ts',
     'application-styles': './app/javascript/packs/applicationStyles.ts',
-    'browser-warning': './app/javascript/displayBrowserWarning.tsx',
     ...(process.env.NODE_ENV === 'production'
       ? {}
       : {
@@ -112,26 +111,6 @@ const config = {
           },
           require.resolve('css-loader'),
           require.resolve('postcss-loader'),
-        ],
-      },
-      {
-        test: /displayBrowserWarning\.[tj]sx?$/,
-        use: [
-          {
-            loader: require.resolve('babel-loader'),
-            options: {
-              presets: [
-                [
-                  '@babel/env',
-                  {
-                    targets: {
-                      browsers: ['> 1%', 'last 2 versions', 'ie 8'],
-                    },
-                  },
-                ],
-              ],
-            },
-          },
         ],
       },
       {
