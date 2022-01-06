@@ -7,7 +7,7 @@ class CmsRenderingContext
   include ActionView::Helpers::AssetTagHelper
   attr_reader :cms_parent, :controller, :assigns, :cached_partials, :cached_files, :timezone
 
-  NOSCRIPT_WARNING = <<~HTML
+  NOSCRIPT_WARNING = <<~HTML.html_safe
   <noscript id="no-javascript-warning">
     <div class="container">
       <div class="alert alert-danger">
@@ -64,7 +64,7 @@ class CmsRenderingContext
     doc = Nokogiri::HTML.parse("<!DOCTYPE html><html><head>#{assigns['content_for_head']}</head><body></body></html>")
     doc.xpath('//body/*').remove
     doc.xpath('//body').first.inner_html =
-      NOSCRIPT_WARNING +
+      (assigns['browser_warning'] || '') + NOSCRIPT_WARNING +
         tag.div(
           '',
           'data-react-class' => 'AppRoot',
