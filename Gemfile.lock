@@ -146,6 +146,7 @@ GEM
     bindata (2.4.10)
     bootsnap (1.9.3)
       msgpack (~> 1.0)
+    browser (5.3.1)
     builder (3.2.4)
     cadmus (0.7.1)
       liquid
@@ -590,6 +591,7 @@ DEPENDENCIES
   aws-sdk-sns
   aws-sdk-sqs
   bootsnap (>= 1.1.0)
+  browser
   cadmus (~> 0.7.1)
   cadmus_files (~> 0.2.0)
   cadmus_navbar (~> 0.1.0)

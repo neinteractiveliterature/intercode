@@ -85,6 +85,7 @@ gem 'parallel'
 gem 'platform-api'
 gem 'skylight'
 gem 'tzinfo-data'
+gem 'browser'
 
 gem 'faker', group: 'development', require: false
 
