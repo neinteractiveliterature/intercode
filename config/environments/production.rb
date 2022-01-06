@@ -91,7 +91,7 @@ Rails.application.configure do
   if ENV['RAILS_SERVE_STATIC_FILES'].present?
     config.middleware.insert_before ActionDispatch::Static,
                                     Intercode::DisableCachingForSpecificAssets,
-                                    %w[/packs/application.js /packs/application-styles.js /packs/browser-warning.js]
+                                    %w[/packs/application.js /packs/application-styles.js]
   end
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
