@@ -172,7 +172,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/client@npm:3.5.6, @apollo/client@npm:^3.1.3":
+"@apollo/client@npm:3.5.6, @apollo/client@npm:^3.0.0":
   version: 3.5.6
   resolution: "@apollo/client@npm:3.5.6"
   dependencies:
@@ -4939,14 +4939,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/apollo-upload-client@npm:14.1.0":
-  version: 14.1.0
-  resolution: "@types/apollo-upload-client@npm:14.1.0"
+"@types/apollo-upload-client@npm:17.0.0":
+  version: 17.0.0
+  resolution: "@types/apollo-upload-client@npm:17.0.0"
   dependencies:
-    "@apollo/client": ^3.1.3
+    "@apollo/client": ^3.0.0
     "@types/extract-files": "*"
-    graphql: ^15.3.0
-  checksum: a5b8fa32774c00b3a80a19aeb37d27ff66496049aa3e64fffbc9f440620623cfe8100e8cedaeafc51985bec2b00a3d554c3c7f2e301570fd6aeca06eb52d03f3
+    graphql: 14 - 16
+  checksum: 9ee692cee758b480f31d2228103b246dcad6be35ea3c4a62ef07e8a8c47c9b646ea8716dbe70462bc95f4f2789400c2f35b9eb978fb2cf98e3d0d59438e4a05a
   languageName: node
   linkType: hard
 
@@ -11892,17 +11892,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql@npm:16.2.0":
+"graphql@npm:14 - 16, graphql@npm:16.2.0":
   version: 16.2.0
   resolution: "graphql@npm:16.2.0"
   checksum: 204b5c9991b82561651a28b13dbb2e0e67514171a6a8c045ca4a527b944087344a14519d0426d661b49f2305584b390591abadc82b942f7b65e64e05cb31a584
-  languageName: node
-  linkType: hard
-
-"graphql@npm:^15.3.0":
-  version: 15.8.0
-  resolution: "graphql@npm:15.8.0"
-  checksum: 423325271db8858428641b9aca01699283d1fe5b40ef6d4ac622569ecca927019fce8196208b91dd1d8eb8114f00263fe661d241d0eb40c10e5bfd650f86ec5e
   languageName: node
   linkType: hard
 
@@ -19606,7 +19599,7 @@ resolve@^2.0.0-next.3:
     "@testing-library/jest-dom": 5.16.1
     "@testing-library/react": 12.1.2
     "@testing-library/react-hooks": 7.0.2
-    "@types/apollo-upload-client": 14.1.0
+    "@types/apollo-upload-client": 17.0.0
     "@types/bootstrap": 5.1.8
     "@types/bytes": 3.1.1
     "@types/classnames": 2.3.1
