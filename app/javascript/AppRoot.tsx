@@ -75,14 +75,14 @@ function AppRoot(): JSX.Element {
 
   const cachedCmsContent = useCachedLoadableValue(loading, error, () => parsedCmsContent, [parsedCmsContent]);
   const [headComponentsWithoutScriptTags, headScriptTags] = useMemo(() => {
-    if (parsedCmsContent?.headComponents == null) {
+    if (cachedCmsContent?.headComponents == null) {
       return [[], []];
     }
 
     const nonScriptTags: React.ReactNode[] = [];
     const scriptTags: React.ReactNode[] = [];
 
-    React.Children.forEach(parsedCmsContent.headComponents, (child) => {
+    React.Children.forEach(cachedCmsContent.headComponents, (child) => {
       if (React.isValidElement(child) && child.type === ScriptTag) {
         scriptTags.push(child);
       } else {
@@ -91,7 +91,7 @@ function AppRoot(): JSX.Element {
     });
 
     return [nonScriptTags, scriptTags];
-  }, [parsedCmsContent?.headComponents]);
+  }, [cachedCmsContent?.headComponents]);
   const appRootContextValue = useCachedLoadableValue(
     loading,
     error,
