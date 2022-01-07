@@ -6,7 +6,7 @@ import IsValidNodeDefinitions from 'html-to-react/lib/is-valid-node-definitions'
 // @ts-expect-error html-to-react has no type declarations
 import camelCaseAttrMap from 'html-to-react/lib/camel-case-attribute-names';
 import { Link } from 'react-router-dom';
-import { ErrorBoundary, useUniqueId } from '@neinteractiveliterature/litform';
+import { ErrorBoundary } from '@neinteractiveliterature/litform';
 
 import SignInButton from './Authentication/SignInButton';
 import SignOutButton from './Authentication/SignOutButton';
@@ -41,7 +41,6 @@ export type ScriptTagProps = {
 };
 
 export function ScriptTag({ url, content }: ScriptTagProps) {
-  const uniqueId = useUniqueId('script-');
   const ref = React.useRef<HTMLSpanElement>(null);
   useLayoutEffect(() => {
     if (!ref.current) {
@@ -67,7 +66,7 @@ export function ScriptTag({ url, content }: ScriptTagProps) {
     };
   }, [url, content]);
 
-  return <span key={uniqueId} ref={ref} />;
+  return <span ref={ref} />;
 }
 
 // adapted from html-to-react library
@@ -180,7 +179,7 @@ function processDefaultNode(node: Node, children: ReactNode[], index: number) {
   }
 
   if (nodeIsElement(node) && node.tagName.toLowerCase() === 'script') {
-    return <ScriptTag url={node.getAttribute('src')} content={node.textContent} />;
+    return <ScriptTag key={index} url={node.getAttribute('src')} content={node.textContent} />;
   }
 
   if (voidElementTags.includes(node.nodeName)) {
