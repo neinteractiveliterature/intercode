@@ -1,3 +1,5 @@
+require 'open3'
+
 # frozen_string_literal: true
 class FormResponseChangeGroupPresenter
   SCRIPT_PATH = File.expand_path('bin/renderFormResponseChangeGroup.cjs', Rails.root)
