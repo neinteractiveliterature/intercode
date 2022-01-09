@@ -74,7 +74,7 @@
     "@types/file-saver": "2.0.4",
     "@types/js-search": "1.4.0",
     "@types/lodash": "4.14.178",
-    "@types/luxon": "2.0.8",
+    "@types/luxon": "2.0.9",
     "@types/mapbox-gl": "1.13.2",
     "@types/minimist": "1.2.2",
     "@types/react": "17.0.38",
