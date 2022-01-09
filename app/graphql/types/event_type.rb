@@ -63,10 +63,10 @@ class Types::EventType < Types::BaseObject
 
   field :provided_tickets, [Types::TicketType], null: false do
     authorize do |value, _args, context|
-      Pundit.policy(
-        context[:pundit_user],
-        Ticket.new(user_con_profile: UserConProfile.new(convention: context[:convention]), provided_by_event: value)
-      ).read?
+      fake_ticket = value.provided_tickets.new(user_con_profile: UserConProfile.new(convention: context[:convention]))
+      authorized = Pundit.policy(context[:pundit_user], fake_ticket).read?
+      value.provided_tickets.delete(fake_ticket)
+      authorized
     end
   end
 
