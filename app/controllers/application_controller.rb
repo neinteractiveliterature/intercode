@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class ApplicationController < ActionController::Base
+  ASSUMED_IDENTITY_SESSION_LOGGING_OMIT_HEADERS = Set.new(%w[Cookie X-Csrf-Token])
+
   include Pundit
   include CmsContentHelpers
   include ProfileSetupWorkflow
@@ -15,6 +17,9 @@ class ApplicationController < ActionController::Base
 
   # If we're in a convention, use the convention's timezone.
   around_action :use_convention_timezone
+
+  # Log requests from assumed identity sessions
+  before_action :log_assumed_identity_request
 
   # Make sure assumed identities stay on the domain they're supposed to be on
   before_action :ensure_assumed_identity_matches_convention
@@ -84,6 +89,11 @@ class ApplicationController < ActionController::Base
     @assumed_identity_from_profile ||= UserConProfile.find(session[:assumed_identity_from_profile_id])
   end
   helper_method :assumed_identity_from_profile
+
+  def assumed_identity_session
+    return unless session[:assumed_identity_session_id]
+    @assumed_identity_session ||= AssumedIdentitySession.find(session[:assumed_identity_session_id])
+  end
 
   def current_pending_order
     return unless user_con_profile
@@ -156,6 +166,29 @@ class ApplicationController < ActionController::Base
     else
       root_path
     end
+  end
+
+  def log_assumed_identity_request
+    return unless current_user && assumed_identity_session
+
+    assumed_identity_session.assumed_identity_request_logs.create!(assumed_identity_request_log_attributes)
+  end
+
+  def assumed_identity_request_log_attributes
+    {
+      controller_name: request.controller_class.name,
+      action_name: action_name,
+      http_method: request.method,
+      url: request.url,
+      ip_address: request.ip,
+      http_headers:
+        request
+          .env
+          .select { |k, _v| k.start_with? 'HTTP_' }
+          .transform_keys { |k| k.sub(/^HTTP_/, '').split('_').map(&:capitalize).join('-') }
+          .reject { |k, _v| ASSUMED_IDENTITY_SESSION_LOGGING_OMIT_HEADERS.include?(k) },
+      http_body: request.raw_post
+    }
   end
 
   def ensure_assumed_identity_matches_convention
