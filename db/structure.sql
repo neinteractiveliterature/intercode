@@ -657,6 +657,82 @@ CREATE TABLE public.ar_internal_metadata (
 
 
 --
+-- Name: assumed_identity_request_logs; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.assumed_identity_request_logs (
+    id bigint NOT NULL,
+    assumed_identity_session_id bigint NOT NULL,
+    controller_name text NOT NULL,
+    action_name text NOT NULL,
+    http_method text NOT NULL,
+    url text NOT NULL,
+    ip_address inet NOT NULL,
+    http_headers jsonb NOT NULL,
+    http_body text,
+    graphql_operation_name text,
+    graphql_document text,
+    graphql_variables jsonb,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: assumed_identity_request_logs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.assumed_identity_request_logs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: assumed_identity_request_logs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.assumed_identity_request_logs_id_seq OWNED BY public.assumed_identity_request_logs.id;
+
+
+--
+-- Name: assumed_identity_sessions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.assumed_identity_sessions (
+    id bigint NOT NULL,
+    assumed_profile_id bigint NOT NULL,
+    assumer_profile_id bigint NOT NULL,
+    justification text NOT NULL,
+    started_at timestamp without time zone NOT NULL,
+    finished_at timestamp without time zone,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: assumed_identity_sessions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.assumed_identity_sessions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: assumed_identity_sessions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.assumed_identity_sessions_id_seq OWNED BY public.assumed_identity_sessions.id;
+
+
+--
 -- Name: cms_content_group_associations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2677,6 +2753,20 @@ ALTER TABLE ONLY public.ahoy_visits ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
+-- Name: assumed_identity_request_logs id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.assumed_identity_request_logs ALTER COLUMN id SET DEFAULT nextval('public.assumed_identity_request_logs_id_seq'::regclass);
+
+
+--
+-- Name: assumed_identity_sessions id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.assumed_identity_sessions ALTER COLUMN id SET DEFAULT nextval('public.assumed_identity_sessions_id_seq'::regclass);
+
+
+--
 -- Name: cms_content_group_associations id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -3062,6 +3152,22 @@ ALTER TABLE ONLY public.ahoy_visits
 
 ALTER TABLE ONLY public.ar_internal_metadata
     ADD CONSTRAINT ar_internal_metadata_pkey PRIMARY KEY (key);
+
+
+--
+-- Name: assumed_identity_request_logs assumed_identity_request_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.assumed_identity_request_logs
+    ADD CONSTRAINT assumed_identity_request_logs_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: assumed_identity_sessions assumed_identity_sessions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.assumed_identity_sessions
+    ADD CONSTRAINT assumed_identity_sessions_pkey PRIMARY KEY (id);
 
 
 --
@@ -3496,6 +3602,13 @@ CREATE UNIQUE INDEX coupon_codes_unique_per_convention_idx ON public.coupons USI
 
 
 --
+-- Name: idx_assumed_identity_request_logs_on_session_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_assumed_identity_request_logs_on_session_id ON public.assumed_identity_request_logs USING btree (assumed_identity_session_id);
+
+
+--
 -- Name: idx_max_event_provided_tickets_on_event_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3556,6 +3669,27 @@ CREATE INDEX index_ahoy_visits_on_user_id ON public.ahoy_visits USING btree (use
 --
 
 CREATE UNIQUE INDEX index_ahoy_visits_on_visit_token ON public.ahoy_visits USING btree (visit_token);
+
+
+--
+-- Name: index_assumed_identity_request_logs_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_assumed_identity_request_logs_on_created_at ON public.assumed_identity_request_logs USING btree (created_at);
+
+
+--
+-- Name: index_assumed_identity_sessions_on_assumed_profile_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_assumed_identity_sessions_on_assumed_profile_id ON public.assumed_identity_sessions USING btree (assumed_profile_id);
+
+
+--
+-- Name: index_assumed_identity_sessions_on_assumer_profile_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_assumed_identity_sessions_on_assumer_profile_id ON public.assumed_identity_sessions USING btree (assumer_profile_id);
 
 
 --
@@ -4451,6 +4585,14 @@ ALTER TABLE ONLY public.runs
 
 
 --
+-- Name: assumed_identity_request_logs fk_rails_072c03953e; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.assumed_identity_request_logs
+    ADD CONSTRAINT fk_rails_072c03953e FOREIGN KEY (assumed_identity_session_id) REFERENCES public.assumed_identity_sessions(id);
+
+
+--
 -- Name: coupon_applications fk_rails_090dd3a726; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -4464,6 +4606,14 @@ ALTER TABLE ONLY public.coupon_applications
 
 ALTER TABLE ONLY public.pages
     ADD CONSTRAINT fk_rails_0bbdd8c678 FOREIGN KEY (cms_layout_id) REFERENCES public.cms_layouts(id);
+
+
+--
+-- Name: assumed_identity_sessions fk_rails_10d0f33244; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.assumed_identity_sessions
+    ADD CONSTRAINT fk_rails_10d0f33244 FOREIGN KEY (assumed_profile_id) REFERENCES public.user_con_profiles(id);
 
 
 --
@@ -5019,6 +5169,14 @@ ALTER TABLE ONLY public.products
 
 
 --
+-- Name: assumed_identity_sessions fk_rails_ed60cedab3; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.assumed_identity_sessions
+    ADD CONSTRAINT fk_rails_ed60cedab3 FOREIGN KEY (assumer_profile_id) REFERENCES public.user_con_profiles(id);
+
+
+--
 -- Name: permissions fk_rails_ef14717c62; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5326,6 +5484,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20211005145053'),
 ('20211011191912'),
 ('20211227171633'),
-('20220102231745');
+('20220102231745'),
+('20220109172815'),
+('20220109173235');
 
 

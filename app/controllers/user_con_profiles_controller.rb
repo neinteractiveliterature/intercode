@@ -14,8 +14,23 @@ class UserConProfilesController < ApplicationController
     identity_assumer = assumed_identity_from_profile || user_con_profile
     subject_profile = convention.user_con_profiles.find(params[:id])
     authorize subject_profile, :become?
+
+    new_session =
+      AssumedIdentitySession.new(
+        assumed_profile: subject_profile,
+        assumer_profile: identity_assumer,
+        justification: params[:justification],
+        started_at: Time.now
+      )
+
+    unless new_session.save
+      respond_to { |format| format.json { render json: { errors: new_session.errors }, status: :unprocessable_entity } }
+      return
+    end
+
     sign_in subject_profile.user
     session[:assumed_identity_from_profile_id] = identity_assumer.id
+    session[:assumed_identity_session_id] = new_session.id
     redirect_to root_url
   end
 
@@ -31,9 +46,13 @@ back to your normal identity (since you already are your normal identity)."
       )
     end
 
+    current_session = assumed_identity_session
+
     regular_user_con_profile = assumed_identity_from_profile
     sign_in regular_user_con_profile.user
     session.delete(:assumed_identity_from_profile_id)
+    session.delete(:assumed_identity_session_id)
+    current_session&.update!(finished_at: Time.now) if current_session
     redirect_to root_url
   end
 
