@@ -25,6 +25,10 @@ AllCops:
     - public/uploads/**/*.rb
     - script/rails
 
+Sequel:
+  Enabled: false
+  Include: lib/intercode/import/**/*.rb
+
 Style/BeginBlock:
   Description: 'Avoid the use of BEGIN blocks.'
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#no-BEGIN-blocks'
