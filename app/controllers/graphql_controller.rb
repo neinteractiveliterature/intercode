@@ -62,7 +62,6 @@ class GraphqlController < ApplicationController
   private
 
   def execute_from_params(params)
-    variables = ensure_hash(params[:variables])
     query = params[:query]
     operation_name = params[:operationName]
 
@@ -82,6 +81,10 @@ class GraphqlController < ApplicationController
     )
   end
 
+  def variables
+    @variables ||= ensure_hash(params[:variables])
+  end
+
   # Handle form data, JSON body, or a blank value
   def ensure_hash(ambiguous_param)
     case ambiguous_param
@@ -94,5 +97,11 @@ class GraphqlController < ApplicationController
     else
       raise ArgumentError, "Unexpected parameter: #{ambiguous_param}"
     end
+  end
+
+  def assumed_identity_request_log_attributes
+    super.merge(
+      { graphql_operation_name: params[:operationName], graphql_document: params[:query], graphql_variables: variables }
+    )
   end
 end

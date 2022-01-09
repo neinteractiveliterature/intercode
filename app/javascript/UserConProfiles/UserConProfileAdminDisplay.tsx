@@ -1,6 +1,13 @@
-import { useCallback, useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { useConfirm, ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
+import {
+  useConfirm,
+  useModal,
+  ErrorDisplay,
+  PageLoadingIndicator,
+  BootstrapFormTextarea,
+} from '@neinteractiveliterature/litform';
+import upperFirst from 'lodash/upperFirst';
 
 import FormItemDisplay from '../FormPresenter/ItemDisplays/FormItemDisplay';
 import TicketAdminSection from './TicketAdminSection';
@@ -13,6 +20,88 @@ import { useUserConProfileAdminQuery } from './queries.generated';
 import deserializeFormResponse from '../Models/deserializeFormResponse';
 import { getSortedParsedFormItems } from '../Models/Form';
 import humanize from '../humanize';
+import Modal from 'react-bootstrap4-modal';
+import useAsyncFunction from '../useAsyncFunction';
+
+async function becomeUser(userConProfileId: string, justification: string) {
+  const formData = new FormData();
+  formData.append('justification', justification);
+
+  const response = await fetch(`/user_con_profiles/${userConProfileId}/become`, {
+    method: 'POST',
+    credentials: 'include',
+    headers: {
+      Accept: 'application/json',
+    },
+    body: formData,
+  });
+
+  if (!response.ok) {
+    const json = await response.json();
+    throw new Error(
+      Object.entries(json.errors)
+        .map(([key, error]) => `${upperFirst(key)} ${error}`)
+        .join(', '),
+    );
+  }
+
+  window.location.href = '/';
+}
+
+type BecomeUserModalProps = {
+  visible: boolean;
+  close: () => void;
+  userConProfileId?: string;
+  userConProfileName?: string;
+};
+
+function BecomeUserModal({ userConProfileId, userConProfileName, visible, close }: BecomeUserModalProps): JSX.Element {
+  const [justification, setJustification] = useState('');
+  const [becomeAsync, error, inProgress] = useAsyncFunction(becomeUser);
+
+  const becomeClicked = async () => {
+    if (userConProfileId == null) {
+      return;
+    }
+
+    await becomeAsync(userConProfileId, justification);
+    close();
+  };
+
+  return (
+    <Modal visible={visible}>
+      <div className="modal-header">Become user</div>
+      <div className="modal-body">
+        <p>
+          Are you sure you want to become {userConProfileName} for the duration of this session?{' '}
+          <strong>
+            Your actions while acting as this user will be logged, and the web site administrators may review this log
+            for audit purposes.
+          </strong>
+        </p>
+
+        <BootstrapFormTextarea
+          label="Justification"
+          helpText="Please enter the reason why you’re temporarily becoming this user.  For example: user requested signup assistance, troubleshooting, etc."
+          value={justification}
+          onTextChange={setJustification}
+        />
+
+        <ErrorDisplay stringError={error?.message} />
+      </div>
+      <div className="modal-footer">
+        <button disabled={inProgress} onClick={close} type="button" className="btn btn-secondary">
+          Cancel
+        </button>
+        {userConProfileId && (
+          <button disabled={inProgress} onClick={becomeClicked} type="button" className="btn btn-primary">
+            Become user
+          </button>
+        )}
+      </div>
+    </Modal>
+  );
+}
 
 function UserConProfileAdminDisplay(): JSX.Element {
   const userConProfileId = useParams<{ id: string }>().id;
@@ -33,17 +122,9 @@ function UserConProfileAdminDisplay(): JSX.Element {
   );
   const confirm = useConfirm();
   const [deleteUserConProfile] = useDeleteUserConProfileMutation();
+  const becomeUserModal = useModal<{ userConProfileId: string; userConProfileName: string }>();
 
   usePageTitle(useValueUnless(() => data?.convention.user_con_profile.name, error || loading));
-
-  const becomeUser = useCallback(async () => {
-    await fetch(`/user_con_profiles/${userConProfileId}/become`, {
-      method: 'POST',
-      credentials: 'include',
-    });
-
-    window.location.href = '/';
-  }, [userConProfileId]);
 
   const deleteConfirmed = async () => {
     if (!data) {
@@ -101,9 +182,9 @@ function UserConProfileAdminDisplay(): JSX.Element {
                 type="button"
                 className="btn btn-link p-0"
                 onClick={() =>
-                  confirm({
-                    prompt: `Are you sure you want to become ${data?.convention.user_con_profile.name} for the duration of this session?`,
-                    action: becomeUser,
+                  becomeUserModal.open({
+                    userConProfileId,
+                    userConProfileName: data?.convention.user_con_profile.name ?? 'this user',
                   })
                 }
               >
@@ -129,6 +210,13 @@ function UserConProfileAdminDisplay(): JSX.Element {
             </li>
           ) : null}
         </ul>
+
+        <BecomeUserModal
+          visible={becomeUserModal.visible}
+          close={becomeUserModal.close}
+          userConProfileId={becomeUserModal.state?.userConProfileId}
+          userConProfileName={becomeUserModal.state?.userConProfileName}
+        />
       </div>
     );
   };
