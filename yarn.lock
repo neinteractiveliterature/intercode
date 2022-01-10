@@ -2309,14 +2309,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@dnd-kit/utilities@npm:3.0.2, @dnd-kit/utilities@npm:^3.0.0, @dnd-kit/utilities@npm:^3.0.1, @dnd-kit/utilities@npm:^3.0.2":
-  version: 3.0.2
-  resolution: "@dnd-kit/utilities@npm:3.0.2"
+"@dnd-kit/utilities@npm:3.1.0, @dnd-kit/utilities@npm:^3.0.0, @dnd-kit/utilities@npm:^3.0.1, @dnd-kit/utilities@npm:^3.0.2":
+  version: 3.1.0
+  resolution: "@dnd-kit/utilities@npm:3.1.0"
   dependencies:
     tslib: ^2.0.0
   peerDependencies:
     react: ">=16.8.0"
-  checksum: 929be05e28cd61bd802f84e50ec7e4fa3fc66e25062b7dafd578c31810608f067a85fbb2b193c323723e51202b6afcd07e10e09f2172678fa0d7d257bc95e2b0
+  checksum: b9cb87dd4a26389aeb667d6b11e3854e00479e4f2842f36d9abc4dfee67fd06e0f75525ab9475462d57b055094a7723169c95362affdd84b0e656b96424c0f8c
   languageName: node
   linkType: hard
 
@@ -19577,7 +19577,7 @@ resolve@^2.0.0-next.3:
     "@codemirror/view": 0.19.39
     "@dnd-kit/core": 4.0.3
     "@dnd-kit/sortable": 5.1.0
-    "@dnd-kit/utilities": 3.0.2
+    "@dnd-kit/utilities": 3.1.0
     "@emotion/serialize": 1.0.2
     "@graphiql/toolkit": 0.4.2
     "@graphql-codegen/add": 3.1.1
