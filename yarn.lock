@@ -5188,10 +5188,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/history@npm:4.7.9":
-  version: 4.7.9
-  resolution: "@types/history@npm:4.7.9"
-  checksum: 556b062adb92795839301965776b0418e9ca32798bd8a6031345a6a84d7512771107143a497b7e3ff826d0b0d4456e962c6450485dda6f55c7dd33371e840529
+"@types/history@npm:4.7.10":
+  version: 4.7.10
+  resolution: "@types/history@npm:4.7.10"
+  checksum: 6cd70136a086cac4e1e7832769b1d3952ac3adb73a1b34d7adc0dce87ea7a2707a86b855fac5b74dfa02b17251a79320402c3e079f7a03c24d65e0460fdeba64
   languageName: node
   linkType: hard
 
@@ -19620,7 +19620,7 @@ resolve@^2.0.0-next.3:
     "@types/diff": 5.0.2
     "@types/events": 3.0.0
     "@types/file-saver": 2.0.4
-    "@types/history": 4.7.9
+    "@types/history": 4.7.10
     "@types/jest": 27.4.0
     "@types/js-search": 1.4.0
     "@types/lodash": 4.14.178
