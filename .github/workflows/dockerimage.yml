@@ -76,7 +76,7 @@ jobs:
       run: echo "$HEROKU_API_TOKEN" | docker login --username=_ --password-stdin registry.heroku.com
     - name: Tag production image as "web"
       if: github.event_name == 'push' && github.event.ref == 'refs/heads/main'
-      run: docker tag local-production registry.heroku.com/intercode/web
+      run: docker tag neinteractiveliterature/intercode:${{ github.sha }} registry.heroku.com/intercode/web
     - name: Push "web" image to Heroku Container Registry
       if: github.event_name == 'push' && github.event.ref == 'refs/heads/main'
       run: docker push registry.heroku.com/intercode/web
