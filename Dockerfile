@@ -60,8 +60,8 @@ ENV NODE_ENV production
 
 USER root
 RUN useradd -ms /bin/bash www
-RUN apt-get update && apt-get install -y --no-install-recommends libjemalloc2 shared-mime-info nodejs libpq5 && rm -rf /var/lib/apt/lists/*
-RUN ruby -e 'require "net/http" ; puts Net::HTTP.get(URI.parse("https://deb.nodesource.com/setup_${NODE_VERSION}"))' | bash -
+RUN apt-get update && apt-get install -y --no-install-recommends curl libjemalloc2 shared-mime-info nodejs libpq5 && rm -rf /var/lib/apt/lists/*
+RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION} | bash -
 
 COPY --from=build /usr/local/bundle /usr/local/bundle
 COPY --from=build --chown=www /usr/src/intercode /usr/src/intercode
