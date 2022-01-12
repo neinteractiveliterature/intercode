@@ -5156,10 +5156,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/file-saver@npm:2.0.4":
-  version: 2.0.4
-  resolution: "@types/file-saver@npm:2.0.4"
-  checksum: 508865c5088771b3f07fcc2ca6f496b59593c7d16830914313ef94c81ca259570c77e39c385d2c8c5febe525cbd0d1938fb6adb7278246df24b556375678966e
+"@types/file-saver@npm:2.0.5":
+  version: 2.0.5
+  resolution: "@types/file-saver@npm:2.0.5"
+  checksum: a31d6ee2abf99598647139f8f35b37b6e1bacf6c7ddf05c66651b9b0e6e53381aa0e8ed13f37faa6e496e0eb1da87c97e6c70fd589d5b83b0c95c57cb64ce92a
   languageName: node
   linkType: hard
 
@@ -19619,7 +19619,7 @@ resolve@^2.0.0-next.3:
     "@types/debounce-promise": 3.1.4
     "@types/diff": 5.0.2
     "@types/events": 3.0.0
-    "@types/file-saver": 2.0.4
+    "@types/file-saver": 2.0.5
     "@types/history": 4.7.10
     "@types/jest": 27.4.0
     "@types/js-search": 1.4.0
