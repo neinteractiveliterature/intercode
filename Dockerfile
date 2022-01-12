@@ -1,5 +1,5 @@
 ARG RUBY_VERSION=3.1.0
-ARG NODE_VERSION=16.x
+ARG NODE_VERSION=16.13.2
 
 ### dev
 
@@ -60,8 +60,8 @@ ENV NODE_ENV production
 
 USER root
 RUN useradd -ms /bin/bash www
-RUN apt-get update && apt-get install -y --no-install-recommends curl libjemalloc2 shared-mime-info nodejs libpq5 && rm -rf /var/lib/apt/lists/*
-RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION} | bash -
+RUN apt-get update && apt-get install -y --no-install-recommends curl xz-utils libjemalloc2 shared-mime-info nodejs libpq5 && rm -rf /var/lib/apt/lists/*
+RUN mkdir /opt/node && curl https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz | tar xJ --strip-components=1
 
 COPY --from=build /usr/local/bundle /usr/local/bundle
 COPY --from=build --chown=www /usr/src/intercode /usr/src/intercode
@@ -69,4 +69,5 @@ WORKDIR /usr/src/intercode
 
 USER www
 ENV LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libjemalloc.so.2
+ENV PATH=/opt/node/bin:$PATH
 CMD bundle exec bin/rails server -p $PORT -b 0.0.0.0
