@@ -60,7 +60,7 @@ ENV NODE_ENV production
 
 USER root
 RUN useradd -ms /bin/bash www
-RUN apt-get update && apt-get install -y --no-install-recommends curl xz-utils libjemalloc2 shared-mime-info nodejs libpq5 && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends curl xz-utils libjemalloc2 shared-mime-info libpq5 && rm -rf /var/lib/apt/lists/*
 RUN mkdir /opt/node && curl https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz | tar xJ --strip-components=1
 
 COPY --from=build /usr/local/bundle /usr/local/bundle
