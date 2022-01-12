@@ -13,7 +13,7 @@ WORKDIR /usr/src/intercode
 RUN apt-get update && apt-get install -y git build-essential shared-mime-info libpq-dev && rm -rf /var/lib/apt/lists/*
 
 COPY --chown=www:www Gemfile Gemfile.lock .ruby-version /usr/src/intercode/
-RUN bundle config set without 'intercode1_import' \
+RUN bundle config set without 'development test intercode1_import' \
   && bundle install -j4 \
   && echo 'Running bundle clean --force' \
   && bundle clean --force \
@@ -39,16 +39,7 @@ ENV AWS_ACCESS_KEY_ID dummy
 ENV AWS_SECRET_ACCESS_KEY dummy
 
 RUN DATABASE_URL=postgresql://fakehost/not_a_real_database bundle exec rails assets:precompile
-
-### test
-
-FROM build AS test
-
-ENV RAILS_ENV test
-ENV NODE_ENV test
-
-USER root
-RUN apt-get update && apt-get install -y postgresql-client && rm -rf /var/lib/apt/lists/*
+RUN rm -r doc-site
 
 ### production
 
