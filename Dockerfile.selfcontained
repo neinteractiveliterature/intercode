@@ -16,7 +16,7 @@ RUN apt-get install -y git build-essential shared-mime-info nodejs libpq-dev && 
 RUN npm install -g yarn
 
 COPY --chown=www:www Gemfile Gemfile.lock .ruby-version /usr/src/intercode/
-RUN bundle config set without 'intercode1_import' \
+RUN bundle config set without 'development test intercode1_import' \
   && bundle install -j4 \
   && echo 'Running bundle clean --force' \
   && bundle clean --force \
@@ -64,7 +64,7 @@ RUN apt-get update && apt-get install -y postgresql-client && rm -rf /var/lib/ap
 FROM build AS pre-production
 
 RUN yarn cache clean
-RUN rm -rf .yarn/.cache
+RUN rm -rf .yarn/.cache doc-site
 
 ### production
 
