@@ -2851,20 +2851,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@edno/docusaurus2-graphql-doc-generator@npm:1.8.0":
-  version: 1.8.0
-  resolution: "@edno/docusaurus2-graphql-doc-generator@npm:1.8.0"
+"@edno/docusaurus2-graphql-doc-generator@npm:1.7.0":
+  version: 1.7.0
+  resolution: "@edno/docusaurus2-graphql-doc-generator@npm:1.7.0"
   dependencies:
-    "@graphql-inspector/core": ^3.0.2
-    "@graphql-tools/graphql-file-loader": ^7.3.3
-    "@graphql-tools/load": ^7.5.1
+    "@graphql-inspector/core": ^3.0.1
+    "@graphql-tools/graphql-file-loader": ^7.1.0
+    "@graphql-tools/load": ^7.3.2
+    picocolors: ^1.0.0
+    prettier: ^2.4.1
   peerDependencies:
-    graphql: ^14.0 || ^15.0 || ^16.0
-    prettier: ^2.0
-  peerDependenciesMeta:
-    prettier:
-      optional: true
-  checksum: 8f85afc2ffdf0f435287bddd1d12636f10ff7cc14fcecbb7a2ab8990fe1ff4e15008ce3a5bcc9c42bede01ef730b6c43af872675eb7f73191a8c5855990609c7
+    graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
+  checksum: 37d932b4d1baf0f945f6d05a41ad2683823650cdf15185b0070892d0a79c51e4672a93d122ec27b13c243b7f5be5829225f7446da605f535ca123648a0af411c
   languageName: node
   linkType: hard
 
@@ -3254,7 +3252,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-inspector/core@npm:^3.0.2":
+"@graphql-inspector/core@npm:^3.0.1":
   version: 3.0.2
   resolution: "@graphql-inspector/core@npm:3.0.2"
   dependencies:
@@ -3400,7 +3398,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/graphql-file-loader@npm:^7.0.5, @graphql-tools/graphql-file-loader@npm:^7.3.2, @graphql-tools/graphql-file-loader@npm:^7.3.3":
+"@graphql-tools/graphql-file-loader@npm:^7.0.5, @graphql-tools/graphql-file-loader@npm:^7.1.0, @graphql-tools/graphql-file-loader@npm:^7.3.2":
   version: 7.3.3
   resolution: "@graphql-tools/graphql-file-loader@npm:7.3.3"
   dependencies:
@@ -3488,7 +3486,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/load@npm:^7.3.0, @graphql-tools/load@npm:^7.4.1, @graphql-tools/load@npm:^7.5.1":
+"@graphql-tools/load@npm:^7.3.0, @graphql-tools/load@npm:^7.3.2, @graphql-tools/load@npm:^7.4.1":
   version: 7.5.1
   resolution: "@graphql-tools/load@npm:7.5.1"
   dependencies:
@@ -9576,7 +9574,7 @@ __metadata:
     "@docusaurus/plugin-ideal-image": 2.0.0-beta.14
     "@docusaurus/preset-classic": 2.0.0-beta.14
     "@docusaurus/types": 2.0.0-beta.14
-    "@edno/docusaurus2-graphql-doc-generator": 1.8.0
+    "@edno/docusaurus2-graphql-doc-generator": 1.7.0
     "@mdx-js/react": 1.6.22
     "@svgr/webpack": 6.2.0
     clsx: 1.1.1
@@ -17986,7 +17984,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:2.5.1, prettier@npm:>=2.3.0":
+"prettier@npm:2.5.1, prettier@npm:>=2.3.0, prettier@npm:^2.4.1":
   version: 2.5.1
   resolution: "prettier@npm:2.5.1"
   bin:
