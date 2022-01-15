@@ -2851,18 +2851,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@edno/docusaurus2-graphql-doc-generator@npm:1.7.0":
-  version: 1.7.0
-  resolution: "@edno/docusaurus2-graphql-doc-generator@npm:1.7.0"
+"@edno/docusaurus2-graphql-doc-generator@npm:1.8.0":
+  version: 1.8.0
+  resolution: "@edno/docusaurus2-graphql-doc-generator@npm:1.8.0"
   dependencies:
-    "@graphql-inspector/core": ^3.0.1
-    "@graphql-tools/graphql-file-loader": ^7.1.0
-    "@graphql-tools/load": ^7.3.2
-    picocolors: ^1.0.0
-    prettier: ^2.4.1
+    "@graphql-inspector/core": ^3.0.2
+    "@graphql-tools/graphql-file-loader": ^7.3.3
+    "@graphql-tools/load": ^7.5.1
   peerDependencies:
-    graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 37d932b4d1baf0f945f6d05a41ad2683823650cdf15185b0070892d0a79c51e4672a93d122ec27b13c243b7f5be5829225f7446da605f535ca123648a0af411c
+    graphql: ^14.0 || ^15.0 || ^16.0
+    prettier: ^2.0
+  peerDependenciesMeta:
+    prettier:
+      optional: true
+  checksum: 8f85afc2ffdf0f435287bddd1d12636f10ff7cc14fcecbb7a2ab8990fe1ff4e15008ce3a5bcc9c42bede01ef730b6c43af872675eb7f73191a8c5855990609c7
   languageName: node
   linkType: hard
 
@@ -3252,16 +3254,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-inspector/core@npm:^3.0.1":
-  version: 3.0.1
-  resolution: "@graphql-inspector/core@npm:3.0.1"
+"@graphql-inspector/core@npm:^3.0.2":
+  version: 3.0.2
+  resolution: "@graphql-inspector/core@npm:3.0.2"
   dependencies:
     dependency-graph: 0.11.0
     object-inspect: 1.10.3
     tslib: ^2.0.0
   peerDependencies:
     graphql: ^0.13.0 || ^14.0.0 || ^15.0.0
-  checksum: 077fc2e5575e32a419598a062b71e992e707e94a0ed7c624a56d1ff902e9e67e42733bdc58338594de9d1ef2fade1dfdaa66e03afbf12db68622ebe28ae3a7a8
+  checksum: f5f9bc0f27600b35022f34d5d7e24e0e8f37512bea912a250b3289aa12dedc995e75fe079130dcf1946a257297b5275f36a4136e4d98457b1d3be2bdb678b90f
   languageName: node
   linkType: hard
 
@@ -3398,7 +3400,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/graphql-file-loader@npm:^7.0.5, @graphql-tools/graphql-file-loader@npm:^7.1.0, @graphql-tools/graphql-file-loader@npm:^7.3.2":
+"@graphql-tools/graphql-file-loader@npm:^7.0.5, @graphql-tools/graphql-file-loader@npm:^7.3.2, @graphql-tools/graphql-file-loader@npm:^7.3.3":
   version: 7.3.3
   resolution: "@graphql-tools/graphql-file-loader@npm:7.3.3"
   dependencies:
@@ -3486,17 +3488,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/load@npm:^7.3.0, @graphql-tools/load@npm:^7.3.2, @graphql-tools/load@npm:^7.4.1":
-  version: 7.4.1
-  resolution: "@graphql-tools/load@npm:7.4.1"
+"@graphql-tools/load@npm:^7.3.0, @graphql-tools/load@npm:^7.4.1, @graphql-tools/load@npm:^7.5.1":
+  version: 7.5.1
+  resolution: "@graphql-tools/load@npm:7.5.1"
   dependencies:
     "@graphql-tools/schema": 8.3.1
-    "@graphql-tools/utils": ^8.5.1
+    "@graphql-tools/utils": ^8.6.0
     p-limit: 3.1.0
     tslib: ~2.3.0
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 0299b65db517df5d815ba812f267c69514e141a39e01164efefd65e700f26facd379d41763ab9d0b615a8a6fb63678591a84262fc2d405acd3a7d9b29a5bdf3e
+  checksum: cc3568436eea4e14e4ddf759c4965202ca00caa4cb24d51391eb262ba3d99d6ef202300819e1d3fe77f2bdfcf867521b5b39b0029413e9c70b3ed8497b007b05
   languageName: node
   linkType: hard
 
@@ -3699,7 +3701,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/utils@npm:8.5.5, @graphql-tools/utils@npm:^8.1.1, @graphql-tools/utils@npm:^8.2.0, @graphql-tools/utils@npm:^8.3.0, @graphql-tools/utils@npm:^8.5.1, @graphql-tools/utils@npm:^8.5.2, @graphql-tools/utils@npm:^8.5.3":
+"@graphql-tools/utils@npm:8.5.5":
   version: 8.5.5
   resolution: "@graphql-tools/utils@npm:8.5.5"
   dependencies:
@@ -3720,6 +3722,17 @@ __metadata:
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0
   checksum: e40c29608d3380f589f756977f6afd1cc2b96dd08eaa392a412ee320dce98af32e62138ceae752e3db5561776370e3b7766a859eed0b52f8c1e35d0e8fabc6db
+  languageName: node
+  linkType: hard
+
+"@graphql-tools/utils@npm:^8.1.1, @graphql-tools/utils@npm:^8.2.0, @graphql-tools/utils@npm:^8.3.0, @graphql-tools/utils@npm:^8.5.1, @graphql-tools/utils@npm:^8.5.2, @graphql-tools/utils@npm:^8.5.3, @graphql-tools/utils@npm:^8.6.0":
+  version: 8.6.1
+  resolution: "@graphql-tools/utils@npm:8.6.1"
+  dependencies:
+    tslib: ~2.3.0
+  peerDependencies:
+    graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
+  checksum: 1286a2a6160f32038aff4b6cb9da1c844fc2762eec4e6e224238583cf890f335586dccd82cba4bd4e6f50678a6acd678c7043c1bb0d63c4c05c7fd5aa0e177ec
   languageName: node
   linkType: hard
 
@@ -9563,7 +9576,7 @@ __metadata:
     "@docusaurus/plugin-ideal-image": 2.0.0-beta.14
     "@docusaurus/preset-classic": 2.0.0-beta.14
     "@docusaurus/types": 2.0.0-beta.14
-    "@edno/docusaurus2-graphql-doc-generator": 1.7.0
+    "@edno/docusaurus2-graphql-doc-generator": 1.8.0
     "@mdx-js/react": 1.6.22
     "@svgr/webpack": 6.2.0
     clsx: 1.1.1
@@ -17973,7 +17986,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:2.5.1, prettier@npm:>=2.3.0, prettier@npm:^2.4.1":
+"prettier@npm:2.5.1, prettier@npm:>=2.3.0":
   version: 2.5.1
   resolution: "prettier@npm:2.5.1"
   bin:
