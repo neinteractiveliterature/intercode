@@ -12,8 +12,8 @@ class CmsContentLoaders::CmsLayouts < CmsContentLoaders::Base
     success
   end
 
-  def persister
-    @persister ||= CmsContentPersisters::CmsLayouts.new(cms_parent, content_set)
+  def storage_adapter
+    @storage_adapter ||= CmsContentStorageAdapters::CmsLayouts.new(cms_parent, content_set)
   end
 
   def taken_special_identifiers

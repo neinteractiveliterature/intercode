@@ -1,14 +1,14 @@
-class CmsContentPersisters::NotificationTemplates < CmsContentPersisters::Base
+class CmsContentStorageAdapters::CmsPartials < CmsContentStorageAdapters::Base
   def subdir
-    'notification_templates'
+    'partials'
   end
 
   def cms_parent_association
-    cms_parent.notification_templates
+    cms_parent.cms_partials
   end
 
   def identifier_attribute
-    'event_key'
+    'name'
   end
 
   def filename_pattern
@@ -20,6 +20,6 @@ class CmsContentPersisters::NotificationTemplates < CmsContentPersisters::Base
   end
 
   def read_item_attrs(item)
-    read_item_with_frontmatter(item, :body_html)
+    read_item_with_frontmatter(item, :content)
   end
 end

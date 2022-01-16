@@ -18,15 +18,15 @@ class CmsContentLoaders::Base < CivilService::Service
     success
   end
 
-  def persister
-    raise NotImplementedError, 'CmsContentLoaders::Base subclasses must implement #persister'
+  def storage_adapter
+    raise NotImplementedError, 'CmsContentLoaders::Base subclasses must implement #storage_adapter'
   end
 
   def load_content(&block)
-    persister.all_items.each do |item|
+    storage_adapter.all_items_from_disk.each do |item|
       next if content_identifiers.present? && content_identifiers.exclude?(item.identifier)
 
-      attrs = persister.read_item_attrs(item)
+      attrs = storage_adapter.read_item_attrs(item)
       model = load_item(item, attrs)
       next if model == :skip
 
@@ -45,7 +45,7 @@ class CmsContentLoaders::Base < CivilService::Service
   end
 
   def create_item(item, attrs)
-    persister.cms_parent_association.create!(persister.identifier_attribute => item.identifier, **attrs)
+    storage_adapter.cms_parent_association.create!(storage_adapter.identifier_attribute => item.identifier, **attrs)
   end
 
   def taken_special_identifiers
@@ -53,14 +53,15 @@ class CmsContentLoaders::Base < CivilService::Service
   end
 
   def existing_content_identifiers
-    @existing_content_identifiers ||= Set.new(persister.cms_parent_association.pluck(persister.identifier_attribute))
+    @existing_content_identifiers ||=
+      Set.new(storage_adapter.cms_parent_association.pluck(storage_adapter.identifier_attribute))
   end
 
   def ensure_no_conflicting_content
     return unless conflict_policy == :error
 
-    persister
-      .all_items
+    storage_adapter
+      .all_items_from_disk
       .map(&:identifier)
       .each do |identifier|
         if taken_special_identifiers[identifier]
@@ -68,7 +69,10 @@ class CmsContentLoaders::Base < CivilService::Service
         end
 
         next unless existing_content_identifiers.include?(identifier)
-        errors.add(:base, "A #{persister.subdir.singularize} named #{identifier} already exists in #{cms_parent.name}")
+        errors.add(
+          :base,
+          "A #{storage_adapter.subdir.singularize} named #{identifier} already exists in #{cms_parent.name}"
+        )
       end
   end
 end

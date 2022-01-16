@@ -13,8 +13,9 @@ class CmsContentSet
   def user_con_profile_form
     @user_con_profile_form ||=
       begin
-        persister = CmsContentPersisters::Forms.new(nil, self)
-        items_with_attrs = persister.all_items.map { |item| [item, persister.read_item_attrs(item)] }
+        storage_adapter = CmsContentStorageAdapters::Forms.new(nil, self)
+        items_with_attrs =
+          storage_adapter.all_items_from_disk.map { |item| [item, storage_adapter.read_item_attrs(item)] }
         user_con_profile_forms = items_with_attrs.select { |(_item, attrs)| attrs['form_type'] == 'user_con_profile' }
         raise 'Content set contains multiple user_con_profile forms' if user_con_profile_forms.size > 1
         user_con_profile_forms.first&.first

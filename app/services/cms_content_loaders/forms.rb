@@ -2,8 +2,8 @@
 class CmsContentLoaders::Forms < CmsContentLoaders::Base
   private
 
-  def persister
-    @persister ||= CmsContentPersisters::Forms.new(cms_parent, content_set)
+  def storage_adapter
+    @storage_adapter ||= CmsContentStorageAdapters::Forms.new(cms_parent, content_set)
   end
 
   def load_content(&block)

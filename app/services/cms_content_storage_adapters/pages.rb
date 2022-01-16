@@ -1,4 +1,4 @@
-class CmsContentPersisters::Pages < CmsContentPersisters::Base
+class CmsContentStorageAdapters::Pages < CmsContentStorageAdapters::Base
   def subdir
     'pages'
   end

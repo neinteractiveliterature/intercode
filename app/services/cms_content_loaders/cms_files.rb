@@ -2,8 +2,8 @@
 class CmsContentLoaders::CmsFiles < CmsContentLoaders::Base
   private
 
-  def persister
-    @persister ||= CmsContentPersisters::CmsFiles.new(cms_parent, content_set)
+  def storage_adapter
+    @storage_adapter ||= CmsContentStorageAdapters::CmsFiles.new(cms_parent, content_set)
   end
 
   def create_item(_identifier, attrs)

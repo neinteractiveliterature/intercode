@@ -2,7 +2,7 @@
 class CmsContentLoaders::CmsPartials < CmsContentLoaders::Base
   private
 
-  def persister
-    @persister ||= CmsContentPersisters::CmsPartials.new(cms_parent, content_set)
+  def storage_adapter
+    @storage_adapter ||= CmsContentStorageAdapters::CmsPartials.new(cms_parent, content_set)
   end
 end
