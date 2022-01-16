@@ -53,6 +53,7 @@ Intercode::Application.routes.draw do
   end
 
   get 'csv_exports/users' => 'csv_exports#users'
+  get '/sitemap.xml' => 'sitemaps#show'
 
   get '/(*extra)' => 'single_page_app#root', :as => :root, :constraints => { extra: %r{(?!(uploads|packs|assets)/).*} }
 end
