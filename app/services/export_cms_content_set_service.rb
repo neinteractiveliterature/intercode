@@ -25,6 +25,7 @@ class ExportCmsContentSetService < CivilService::Service
       CmsContentStorageAdapters::CmsPartials,
       CmsContentStorageAdapters::NotificationTemplates,
       CmsContentStorageAdapters::CmsFiles,
+      CmsContentStorageAdapters::CmsGraphqlQueries,
       CmsContentStorageAdapters::Forms
     ].each { |adapter_class| export_content_from_adapter(adapter_class.new(convention, content_set)) }
 

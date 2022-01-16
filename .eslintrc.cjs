@@ -113,7 +113,7 @@ module.exports = {
       },
     },
     {
-      files: ['app/**/*.graphql', 'cms_content_sets/**/*.graphql', 'test/**/*.graphql'],
+      files: ['app/**/*.graphql', 'test/**/*.graphql'],
       parser: '@graphql-eslint/eslint-plugin',
       plugins: ['@graphql-eslint'],
       parserOptions: {

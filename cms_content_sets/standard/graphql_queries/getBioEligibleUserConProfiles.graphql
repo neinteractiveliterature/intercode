@@ -1,3 +1,7 @@
+---
+identifier: getBioEligibleUserConProfiles
+admin_notes: ''
+---
 query getBioEligibleUserConProfiles {
   convention: conventionByRequestHost {
     id
