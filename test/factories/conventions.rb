@@ -86,8 +86,8 @@ FactoryBot.define do
     trait :with_notification_templates do
       after(:create) do |convention|
         content_set = CmsContentSet.new(name: 'standard')
-        CmsContentLoaders::CmsPartials.new(convention: convention, content_set: content_set).call!
-        CmsContentLoaders::NotificationTemplates.new(convention: convention, content_set: content_set).call!
+        CmsContentLoaders::CmsPartials.new(cms_parent: convention, content_set: content_set).call!
+        CmsContentLoaders::NotificationTemplates.new(cms_parent: convention, content_set: content_set).call!
       end
     end
 

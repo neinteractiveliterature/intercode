@@ -98,7 +98,7 @@ jobs:
     - name: build
       run: yarn run build
   minitest:
-    name: test
+    name: minitest
     runs-on: ubuntu-latest
     env:
       TEST_DATABASE_URL: postgres://postgres:postgres@localhost/intercode_test
