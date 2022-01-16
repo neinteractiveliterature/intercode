@@ -1,10 +1,10 @@
-class CmsContentPersisters::CmsPartials < CmsContentPersisters::Base
+class CmsContentStorageAdapters::CmsLayouts < CmsContentStorageAdapters::Base
   def subdir
-    'partials'
+    'layouts'
   end
 
   def cms_parent_association
-    cms_parent.cms_partials
+    cms_parent.cms_layouts
   end
 
   def identifier_attribute

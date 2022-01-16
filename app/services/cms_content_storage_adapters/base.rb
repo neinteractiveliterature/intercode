@@ -1,4 +1,4 @@
-class CmsContentPersisters::Base
+class CmsContentStorageAdapters::Base
   class ItemInfo
     attr_reader :content_set, :path, :identifier
 
@@ -17,47 +17,47 @@ class CmsContentPersisters::Base
   end
 
   def subdir
-    raise NotImplementedError, 'CmsContentPersisters::Base subclasses must implement #subdir'
+    raise NotImplementedError, 'CmsContentStorageAdapters::Base subclasses must implement #subdir'
   end
 
   def identifier_attribute
-    raise NotImplementedError, 'CmsContentPersisters::Base subclasses must implement #identifier_attribute'
+    raise NotImplementedError, 'CmsContentStorageAdapters::Base subclasses must implement #identifier_attribute'
   end
 
   def cms_parent_association
-    raise NotImplementedError, 'CmsContentPersisters::Base subclasses must implement #cms_parent_association'
+    raise NotImplementedError, 'CmsContentStorageAdapters::Base subclasses must implement #cms_parent_association'
   end
 
   def identifier_for_path(_content_set, _path)
-    raise NotImplementedError, 'CmsContentPersisters::Base subclasses must implement #identifier_for_path'
+    raise NotImplementedError, 'CmsContentStorageAdapters::Base subclasses must implement #identifier_for_path'
   end
 
   def read_item_attrs(_item)
-    raise NotImplementedError, 'CmsContentPersisters::Base subclasses must implement #read_item_attrs'
+    raise NotImplementedError, 'CmsContentStorageAdapters::Base subclasses must implement #read_item_attrs'
   end
 
   def filename_pattern
     '*'
   end
 
-  def own_paths_for_cms_content_set(content_set)
+  def own_paths_from_disk_for_cms_content_set(content_set)
     Dir[content_set.content_path(subdir, '**', filename_pattern)]
   end
 
-  def own_items_for_cms_content_set(content_set)
-    own_paths_for_cms_content_set(content_set).map do |path|
+  def own_items_from_disk_for_cms_content_set(content_set)
+    own_paths_from_disk_for_cms_content_set(content_set).map do |path|
       ItemInfo.new(content_set: content_set, path: path, identifier: identifier_for_path(content_set, path))
     end
   end
 
-  def own_items
-    own_items_for_cms_content_set(cms_content_set)
+  def own_items_from_disk
+    own_items_from_disk_for_cms_content_set(cms_content_set)
   end
 
-  def all_items
+  def all_items_from_disk
     item_lists =
       (cms_content_set.inherit_content_sets + [cms_content_set]).map do |content_set|
-        own_items_for_cms_content_set(content_set)
+        own_items_from_disk_for_cms_content_set(content_set)
       end
     merge_items(item_lists)
   end

@@ -2,7 +2,7 @@
 class CmsContentLoaders::NotificationTemplates < CmsContentLoaders::Base
   private
 
-  def persister
-    @persister ||= CmsContentPersisters::NotificationTemplates.new(cms_parent, content_set)
+  def storage_adapter
+    @storage_adapter ||= CmsContentStorageAdapters::NotificationTemplates.new(cms_parent, content_set)
   end
 end

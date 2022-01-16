@@ -1,4 +1,4 @@
-class CmsContentPersisters::CmsGraphqlQueries < CmsContentPersisters::Base
+class CmsContentStorageAdapters::CmsGraphqlQueries < CmsContentStorageAdapters::Base
   def subdir
     'graphql_queries'
   end
