@@ -18,4 +18,16 @@ class CmsContentStorageAdapters::CmsFiles < CmsContentStorageAdapters::Base
   def identifier_for_path(_content_set, path)
     basename_without_extension(path, '')
   end
+
+  def identifier_for_model(model)
+    model.file.identifier
+  end
+
+  def path_for_identifier(content_set, identifier)
+    content_set.content_path(File.join('files', identifier))
+  end
+
+  def serialize_item(item, io)
+    io.write(item.model.file.read)
+  end
 end
