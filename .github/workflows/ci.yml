@@ -124,7 +124,7 @@ jobs:
       - name: Database setup
         run: bundle exec rails db:create db:migrate
       - name: Run tests
-        run: bundle exec rails test
+        run: TERM=xterm-color bundle exec rails test
   docker-build:
     runs-on: ubuntu-latest
     steps:
