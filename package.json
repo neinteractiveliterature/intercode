@@ -206,7 +206,7 @@
     "@types/bootstrap": "5.1.8",
     "@types/cssnano": "5.0.0",
     "@types/events": "3.0.0",
-    "@types/history": "4.7.10",
+    "@types/history": "4.7.11",
     "@types/jest": "27.4.0",
     "@types/node": "16.11.19",
     "@types/punycode": "2.1.0",
