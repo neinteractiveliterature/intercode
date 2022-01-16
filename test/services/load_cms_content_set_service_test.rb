@@ -10,7 +10,7 @@ describe LoadCmsContentSetService do
   end
 
   describe 'successfully loading content' do
-    before { @result = service.call }
+    before { @result = service.call! }
 
     it 'returns a success result' do
       assert @result.success?
@@ -34,6 +34,14 @@ describe LoadCmsContentSetService do
 
     it 'loads user con profile form' do
       assert convention.user_con_profile_form, 'user_con_profile_form is missing'
+    end
+
+    it 'loads other forms' do
+      assert convention.forms.length > 1, 'did not load expected forms'
+    end
+
+    it 'loads graphql queries' do
+      assert convention.cms_graphql_queries.find_by(identifier: 'getBioEligibleUserConProfiles')
     end
   end
 
@@ -85,6 +93,20 @@ describe LoadCmsContentSetService do
 
     assert result.failure?
     assert_match(/layout named Default already exists/, result.errors.full_messages.join("\n"))
+  end
+
+  it 'is invalid if a graphql query with the same name exists' do
+    convention.cms_graphql_queries.create!(
+      identifier: 'getBioEligibleUserConProfiles',
+      query: 'query { conventionByRequestHost { name } }'
+    )
+    result = service.call
+
+    assert result.failure?
+    assert_match(
+      /graphql_query named getBioEligibleUserConProfiles already exists/,
+      result.errors.full_messages.join("\n")
+    )
   end
 
   it 'is invalid if user_con_profile_form already exists' do

@@ -6,28 +6,23 @@ class CmsContentLoaders::Pages < CmsContentLoaders::Base
     super
 
     return success unless content_set.metadata[:root_page_slug]
-    convention.update!(root_page: convention.pages.find_by(slug: content_set.metadata[:root_page_slug]))
+    cms_parent.update!(root_page: cms_parent.pages.find_by!(slug: content_set.metadata[:root_page_slug]))
 
     success
   end
 
-  def subdir
-    'pages'
+  def create_item(item, attrs)
+    layout_name = attrs.delete('layout_name')
+    layout = layout_name ? cms_parent.cms_layouts.find_by!(name: layout_name) : nil
+
+    super(item, attrs.merge('cms_layout' => layout))
   end
 
-  def convention_association
-    convention.pages
-  end
-
-  def identifier_attribute
-    'slug'
-  end
-
-  def content_attribute
-    'content'
+  def storage_adapter
+    @storage_adapter ||= CmsContentStorageAdapters::Pages.new(cms_parent, content_set)
   end
 
   def taken_special_identifiers
-    convention.root_page ? { 'root' => 'root page' } : {}
+    cms_parent.root_page ? { 'root' => 'root page' } : {}
   end
 end
