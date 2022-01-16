@@ -36,7 +36,7 @@ gem 'liquid'
 gem 'scheduled_value', '~> 1.4.0'
 
 # Also extracted from this app!  Service objects for Rails apps
-gem 'civil_service', '~> 2.3.0'
+gem 'civil_service', github: 'neinteractiveliterature/civil_service', branch: 'no-double-validate'
 
 # File uploading
 gem 'carrierwave', '~> 2.2.2'

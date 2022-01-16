@@ -2,19 +2,7 @@
 class CmsContentLoaders::NotificationTemplates < CmsContentLoaders::Base
   private
 
-  def subdir
-    'notification_templates'
-  end
-
-  def convention_association
-    convention.notification_templates
-  end
-
-  def identifier_attribute
-    'event_key'
-  end
-
-  def content_attribute
-    'body_html'
+  def persister
+    @persister ||= CmsContentPersisters::NotificationTemplates.new(cms_parent, content_set)
   end
 end

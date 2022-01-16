@@ -19,35 +19,16 @@ class LoadCmsContentSetService < CivilService::Service
       CmsContentLoaders::CmsLayouts,
       CmsContentLoaders::Pages,
       CmsContentLoaders::CmsPartials,
-      CmsContentLoaders::NotificationTemplates
-    ].each { |loader_class| loader_class.new(convention: convention, content_set: content_set).call! }
+      CmsContentLoaders::NotificationTemplates,
+      CmsContentLoaders::CmsGraphqlQueries,
+      CmsContentLoaders::Forms,
+      CmsContentLoaders::CmsFiles
+    ].each { |loader_class| loader_class.new(cms_parent: convention, content_set: content_set).call! }
 
-    load_form_content
     load_navigation_items
-    load_files
     load_variables
 
     success
-  end
-
-  def load_form_content
-    content_set.all_form_contents_by_name.each_value do |content|
-      form =
-        case content['form_type']
-        when 'user_con_profile'
-          convention.create_user_con_profile_form!(convention: convention, form_type: content['form_type'])
-        else
-          convention.forms.create!(convention: convention, form_type: content['form_type'])
-        end
-
-      ImportFormContentService.new(form: form, content: content).call!
-    end
-
-    convention.save!
-  end
-
-  def load_files
-    content_set.all_file_paths.each { |path| File.open(path, 'rb') { |file| convention.cms_files.create!(file: file) } }
   end
 
   def load_navigation_items
