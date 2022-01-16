@@ -1,11 +1,12 @@
 class CmsContentStorageAdapters::Base
   class ItemInfo
-    attr_reader :content_set, :path, :identifier
+    attr_reader :content_set, :path, :identifier, :model
 
-    def initialize(content_set:, path:, identifier:)
+    def initialize(content_set:, path:, identifier:, model:)
       @content_set = content_set
       @path = path
       @identifier = identifier
+      @model = model
     end
   end
 
@@ -32,8 +33,20 @@ class CmsContentStorageAdapters::Base
     raise NotImplementedError, 'CmsContentStorageAdapters::Base subclasses must implement #identifier_for_path'
   end
 
+  def path_for_identifier(_content_set, _path)
+    raise NotImplementedError, 'CmsContentStorageAdapters::Base subclasses must implement #path_for_identifier'
+  end
+
+  def identifier_for_model(model)
+    model.public_send(identifier_attribute)
+  end
+
   def read_item_attrs(_item)
     raise NotImplementedError, 'CmsContentStorageAdapters::Base subclasses must implement #read_item_attrs'
+  end
+
+  def serialize_item(_item, _io)
+    raise NotImplementedError, 'CmsContentStorageAdapters::Base subclasses must implement #serialize_item'
   end
 
   def filename_pattern
@@ -46,7 +59,7 @@ class CmsContentStorageAdapters::Base
 
   def own_items_from_disk_for_cms_content_set(content_set)
     own_paths_from_disk_for_cms_content_set(content_set).map do |path|
-      ItemInfo.new(content_set: content_set, path: path, identifier: identifier_for_path(content_set, path))
+      ItemInfo.new(content_set: content_set, path: path, identifier: identifier_for_path(content_set, path), model: nil)
     end
   end
 
@@ -60,6 +73,24 @@ class CmsContentStorageAdapters::Base
         own_items_from_disk_for_cms_content_set(content_set)
       end
     merge_items(item_lists)
+  end
+
+  def inherited_items_from_disk
+    item_lists =
+      cms_content_set.inherit_content_sets.map { |content_set| own_items_from_disk_for_cms_content_set(content_set) }
+    merge_items(item_lists)
+  end
+
+  def all_items_from_database
+    cms_parent_association.map do |model|
+      identifier = identifier_for_model(model)
+      ItemInfo.new(
+        content_set: cms_content_set,
+        path: path_for_identifier(cms_content_set, identifier),
+        identifier: identifier,
+        model: model
+      )
+    end
   end
 
   def merge_items(item_lists)
@@ -87,5 +118,14 @@ class CmsContentStorageAdapters::Base
     raw = File.read(item.path)
     content, metadata = parse_content_with_yaml_frontmatter(raw)
     { content_attribute.to_sym => content, **metadata }
+  end
+
+  def write_content_with_yaml_frontmatter(content, metadata, io)
+    if metadata.present?
+      io.write(YAML.dump(metadata))
+      io.write("---\n")
+    end
+
+    io.write(content)
   end
 end

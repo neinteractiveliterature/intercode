@@ -19,7 +19,19 @@ class CmsContentStorageAdapters::NotificationTemplates < CmsContentStorageAdapte
     basename_without_extension(path, '.liquid')
   end
 
+  def path_for_identifier(content_set, identifier)
+    content_set.content_path(File.join('notification_templates', "#{identifier}.liquid"))
+  end
+
   def read_item_attrs(item)
     read_item_with_frontmatter(item, :body_html)
+  end
+
+  def serialize_item(item, io)
+    write_content_with_yaml_frontmatter(
+      item.model.body_html.gsub("\r\n", "\n"),
+      item.model.attributes.except('body_html', 'id', 'convention_id', 'created_at', 'updated_at').compact,
+      io
+    )
   end
 end
