@@ -16,6 +16,14 @@ GIT
       doorkeeper (>= 5.0)
       json-jwt (~> 1.6)
 
+GIT
+  remote: https://github.com/neinteractiveliterature/civil_service.git
+  revision: bba59c4a91c3ca61386cfca2f723031ba097da93
+  branch: no-double-validate
+  specs:
+    civil_service (2.3.0)
+      activemodel (>= 3.0.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -175,8 +183,6 @@ GEM
       mini_mime (>= 0.1.3)
       ssrf_filter (~> 1.0)
     chronic (0.10.2)
-    civil_service (2.3.0)
-      activemodel (>= 3.0.0)
     coderay (1.1.3)
     concurrent-ruby (1.1.9)
     crass (1.0.6)
@@ -626,7 +632,7 @@ DEPENDENCIES
   cadmus_files (~> 0.2.0)
   cadmus_navbar (~> 0.1.0)
   carrierwave (~> 2.2.2)
-  civil_service (~> 2.3.0)
+  civil_service!
   dalli
   dead_end
   debug
