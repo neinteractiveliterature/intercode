@@ -75,6 +75,12 @@ jobs:
       run: yarn install
     - name: build
       run: yarn run test
+    - name: Archive HTML test reports
+      uses: actions/upload-artifact@v2
+      if: always()
+      with:
+        name: test-reports
+        path: test/html_reports
   webpack:
     name: webpack
     runs-on: ubuntu-latest
@@ -98,7 +104,7 @@ jobs:
     - name: build
       run: yarn run build
   minitest:
-    name: test
+    name: minitest
     runs-on: ubuntu-latest
     env:
       TEST_DATABASE_URL: postgres://postgres:postgres@localhost/intercode_test
@@ -124,7 +130,13 @@ jobs:
       - name: Database setup
         run: bundle exec rails db:create db:migrate
       - name: Run tests
-        run: bundle exec rails test
+        run: TERM=xterm-color bundle exec rails test
+      - name: Archive HTML test reports
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: test-reports
+          path: test/html_reports
   docker-build:
     runs-on: ubuntu-latest
     steps:
@@ -195,6 +207,7 @@ jobs:
         mv /tmp/.buildx-cache-new /tmp/.buildx-cache
   docker-release:
     runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.event.ref == 'refs/heads/main'
     needs:
       - graphql-codegen
       - tsc
@@ -231,7 +244,6 @@ jobs:
         --push
         .
     - name: Build and push "shoryuken" image
-      if: github.event_name == 'push' && github.event.ref == 'refs/heads/main'
       run: docker buildx build -t registry.heroku.com/intercode/shoryuken
         --build-arg INTERCODE_TAG=${{ github.sha }}
         -f Dockerfile.shoryuken

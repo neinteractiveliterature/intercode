@@ -5,5 +5,6 @@ node_modules/*
 public/*
 /jest.config.js
 /doc-site
+/cms_content_sets
 /.yarn
 **/*.generated.ts

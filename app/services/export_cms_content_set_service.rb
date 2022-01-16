@@ -18,14 +18,43 @@ class ExportCmsContentSetService < CivilService::Service
     Dir.mkdir(content_set.root_path)
 
     export_metadata
-    export_content_for_subdir('layouts', convention.cms_layouts, 'name', 'content')
-    export_content_for_subdir('pages', convention.pages, 'slug', 'content')
-    export_content_for_subdir('partials', convention.cms_partials, 'name', 'content')
-    export_content_for_subdir('notification_templates', convention.notification_templates, 'event_key', 'body_html')
-    export_files
-    export_form_content
+
+    [
+      CmsContentStorageAdapters::CmsLayouts,
+      CmsContentStorageAdapters::Pages,
+      CmsContentStorageAdapters::CmsPartials,
+      CmsContentStorageAdapters::NotificationTemplates,
+      CmsContentStorageAdapters::CmsFiles,
+      CmsContentStorageAdapters::CmsGraphqlQueries,
+      CmsContentStorageAdapters::Forms
+    ].each { |adapter_class| export_content_from_adapter(adapter_class.new(convention, content_set)) }
 
     success
+  end
+
+  def export_content_from_adapter(storage_adapter)
+    inherited_items =
+      storage_adapter
+        .merge_items(
+          inherited_content_sets.map do |inherited_content_set|
+            storage_adapter.class.new(storage_adapter.cms_parent, inherited_content_set).all_items_from_disk
+          end
+        )
+        .index_by(&:identifier)
+
+    storage_adapter.all_items_from_database.each do |item|
+      inherited_item = inherited_items[item.identifier]
+
+      if inherited_item
+        own_content = StringIO.new.tap { |io| storage_adapter.serialize_item(item, io) }.string
+        inherited_content = File.read(inherited_item.path)
+        next if own_content == inherited_content
+
+        export_item(item) { |io| io.write(own_content) }
+      else
+        export_item(item) { |io| storage_adapter.serialize_item(item, io) }
+      end
+    end
   end
 
   def export_metadata
@@ -42,75 +71,9 @@ class ExportCmsContentSetService < CivilService::Service
     end
   end
 
-  def export_form_content
-    Dir.mkdir(File.expand_path('forms', content_set.root_path))
-
-    convention.forms.each do |form|
-      filename = form.title.underscore
-
-      content = FormExportPresenter.new(form).as_json
-      inherited_content = inherited_form_content_for(filename)
-      next if JSON.pretty_generate(content) == JSON.pretty_generate(inherited_content)
-
-      path = File.expand_path("forms/#{filename}.json", content_set.root_path)
-      File.open(path, 'w') { |f| f.write(JSON.pretty_generate(content)) }
-    end
-  end
-
-  def export_content_for_subdir(subdir, content, filename_attribute, content_attribute)
-    Dir.mkdir(File.expand_path(subdir, content_set.root_path))
-
-    content.each do |model|
-      filename = model.public_send(filename_attribute)
-      path = File.expand_path("#{subdir}/#{filename}.liquid", content_set.root_path)
-      frontmatter_attrs = frontmatter_for_content(model)
-      inherited_content = inherited_template_content_for(subdir, model.public_send(filename_attribute))
-      content = model.public_send(content_attribute)
-      next if inherited_content == [content, frontmatter_attrs]
-
-      write_template_content(content, frontmatter_attrs, path)
-    end
-  end
-
-  def write_template_content(content, frontmatter_attrs, path)
-    FileUtils.mkdir_p(File.dirname(path))
-    File.open(path, 'w') do |f|
-      if frontmatter_attrs.present?
-        f.write(YAML.dump(frontmatter_attrs))
-        f.write("---\n")
-      end
-
-      f.write(content.gsub("\r\n", "\n"))
-    end
-  end
-
-  def frontmatter_for_content(model)
-    model
-      .attributes
-      .except(
-        'content',
-        'body_html',
-        'event_key',
-        'id',
-        'slug',
-        'parent_id',
-        'parent_type',
-        'cms_layout_id',
-        'convention_id',
-        'created_at',
-        'updated_at'
-      )
-      .compact
-  end
-
-  def export_files
-    Dir.mkdir(File.expand_path('files', content_set.root_path))
-
-    convention.cms_files.find_each do |cms_file|
-      File.open(File.expand_path("files/#{cms_file.filename}", content_set.root_path), 'wb') do |f|
-        f.write(cms_file.file.read)
-      end
-    end
+  def export_item(item, &block)
+    FileUtils.mkdir_p(File.dirname(item.path))
+    File.open(item.path, 'wb', &block)
   end
 
   def serialize_root_navigation_items
@@ -134,28 +97,6 @@ class ExportCmsContentSetService < CivilService::Service
 
   def inherited_content_sets
     @inherit_content_sets ||= inherit.map { |content_set_name| CmsContentSet.new(name: content_set_name) }
-  end
-
-  def inherited_form_content_for(name)
-    content_set =
-      inherited_content_sets.find do |cs|
-        target_path = cs.content_path('forms', "#{name}.json")
-        cs.own_form_paths.include?(target_path)
-      end
-    return unless content_set
-
-    JSON.parse(File.read(content_set.content_path('forms', "#{name}.json")))
-  end
-
-  def inherited_template_content_for(subdir, name)
-    content_set =
-      inherited_content_sets.find do |cs|
-        target_path = cs.content_path(subdir, "#{name}.liquid")
-        cs.own_template_paths(subdir).include?(target_path)
-      end
-    return unless content_set
-
-    content_set.template_content(content_set.content_path(subdir, "#{name}.liquid"))
   end
 
   def ensure_no_conflicting_folder

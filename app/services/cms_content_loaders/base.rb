@@ -2,13 +2,13 @@
 class CmsContentLoaders::Base < CivilService::Service
   validate :ensure_no_conflicting_content
 
-  attr_reader :convention, :content_set, :content_names, :conflict_policy
+  attr_reader :cms_parent, :content_set, :content_identifiers, :conflict_policy
 
-  def initialize(convention:, content_set:, content_names: nil, conflict_policy: :error)
-    @convention = convention
+  def initialize(cms_parent:, content_set:, content_identifiers: nil, conflict_policy: :error)
+    @cms_parent = cms_parent
     @content_set = content_set
     @conflict_policy = conflict_policy
-    @content_names = content_names
+    @content_identifiers = content_identifiers
   end
 
   private
@@ -18,44 +18,34 @@ class CmsContentLoaders::Base < CivilService::Service
     success
   end
 
-  def load_content(&block)
-    content_set
-      .all_template_paths_with_names(subdir)
-      .each do |path, name|
-        next if content_names.present? && content_names.exclude?(name)
-
-        content, attrs = content_set.template_content(path)
-        model = load_item(name, content, attrs)
-        next if model == :skip
-
-        yield(model) if block
-      end
+  def storage_adapter
+    raise NotImplementedError, 'CmsContentLoaders::Base subclasses must implement #storage_adapter'
   end
 
-  def load_item(name, content, attrs)
-    if existing_content_identifiers.include?(name)
+  def load_content(&block)
+    storage_adapter.all_items_from_disk.each do |item|
+      next if content_identifiers.present? && content_identifiers.exclude?(item.identifier)
+
+      attrs = storage_adapter.read_item_attrs(item)
+      model = load_item(item, attrs)
+      next if model == :skip
+
+      yield(model) if block
+    end
+  end
+
+  def load_item(item, attrs)
+    if existing_content_identifiers.include?(item.identifier)
       return :skip if conflict_policy == :skip
 
-      convention_association.where(identifier_attribute => name).destroy_all if conflict_policy == :overwrite
+      cms_parent_association.where(identifier_attribute => item.identifier).destroy_all if conflict_policy == :overwrite
     end
 
-    convention_association.create!(identifier_attribute => name, content_attribute => content, **attrs)
+    create_item(item, attrs)
   end
 
-  def subdir
-    raise NotImplementedError, 'CmsContentLoaders::Base subclasses must implement #subdir'
-  end
-
-  def identifier_attribute
-    raise NotImplementedError, 'CmsContentLoaders::Base subclasses must implement #identifier_attribute'
-  end
-
-  def content_attribute
-    raise NotImplementedError, 'CmsContentLoaders::Base subclasses must implement #content_attribute'
-  end
-
-  def convention_association
-    raise NotImplementedError, 'CmsContentLoaders::Base subclasses must implement #convention_associationd'
+  def create_item(item, attrs)
+    storage_adapter.cms_parent_association.create!(storage_adapter.identifier_attribute => item.identifier, **attrs)
   end
 
   def taken_special_identifiers
@@ -63,24 +53,25 @@ class CmsContentLoaders::Base < CivilService::Service
   end
 
   def existing_content_identifiers
-    @existing_content_identifiers ||= Set.new(convention_association.pluck(identifier_attribute))
+    @existing_content_identifiers ||=
+      Set.new(storage_adapter.cms_parent_association.pluck(storage_adapter.identifier_attribute))
   end
 
   def ensure_no_conflicting_content
     return unless conflict_policy == :error
 
-    content_set
-      .all_template_names(subdir)
-      .each do |name|
-        if taken_special_identifiers[name]
-          errors.add(:base, "#{convention.name} already has a #{taken_special_identifiers[name]}")
+    storage_adapter
+      .all_items_from_disk
+      .map(&:identifier)
+      .each do |identifier|
+        if taken_special_identifiers[identifier]
+          errors.add(:base, "#{cms_parent.name} already has a #{taken_special_identifiers[identifier]}")
         end
 
-        next unless existing_content_identifiers.include?(name)
+        next unless existing_content_identifiers.include?(identifier)
         errors.add(
           :base,
-          "A #{subdir.singularize} named #{name} already exists in \
-        #{convention.name}"
+          "A #{storage_adapter.subdir.singularize} named #{identifier} already exists in #{cms_parent.name}"
         )
       end
   end
