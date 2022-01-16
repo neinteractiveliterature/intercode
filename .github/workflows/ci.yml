@@ -195,6 +195,7 @@ jobs:
         mv /tmp/.buildx-cache-new /tmp/.buildx-cache
   docker-release:
     runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.event.ref == 'refs/heads/main'
     needs:
       - graphql-codegen
       - tsc
@@ -231,7 +232,6 @@ jobs:
         --push
         .
     - name: Build and push "shoryuken" image
-      if: github.event_name == 'push' && github.event.ref == 'refs/heads/main'
       run: docker buildx build -t registry.heroku.com/intercode/shoryuken
         --build-arg INTERCODE_TAG=${{ github.sha }}
         -f Dockerfile.shoryuken
