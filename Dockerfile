@@ -10,7 +10,7 @@ USER root
 RUN useradd www
 WORKDIR /usr/src/intercode
 
-RUN apt-get update && apt-get install -y git build-essential shared-mime-info libpq-dev && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y libvips42 git build-essential shared-mime-info libpq-dev && rm -rf /var/lib/apt/lists/*
 
 COPY --chown=www:www Gemfile Gemfile.lock .ruby-version /usr/src/intercode/
 RUN bundle config set without 'development test intercode1_import' \
@@ -51,7 +51,7 @@ ENV NODE_ENV production
 
 USER root
 RUN useradd -ms /bin/bash www
-RUN apt-get update && apt-get install -y --no-install-recommends curl xz-utils libjemalloc2 shared-mime-info libpq5 && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends libvips42 curl xz-utils libjemalloc2 shared-mime-info libpq5 && rm -rf /var/lib/apt/lists/*
 RUN mkdir /opt/node && curl https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz | tar xJ --strip-components=1
 
 COPY --from=build /usr/local/bundle /usr/local/bundle

@@ -123,6 +123,8 @@ jobs:
           - 5432:5432
     steps:
       - uses: actions/checkout@v2
+      - name: Install libvips42
+        run: apt-get update && apt-get install libvips42
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:

@@ -30,6 +30,8 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-doc-site-docusaurus-${{ github.ref }}
           ${{ runner.os }}-doc-site-docusaurus-
+    - name: Install libvips42
+      run: apt-get update && apt-get install libvips42
     - name: install node v14
       uses: actions/setup-node@v2
       with:
