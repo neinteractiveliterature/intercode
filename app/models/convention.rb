@@ -144,7 +144,7 @@ class Convention < ApplicationRecord
   def sync_favicon
     picture = favicon
     picture.cache_stored_file!
-    file = picture.sanitized_file.to_file
+    file = StringIO.new(picture.sanitized_file.read)
     content_type = picture.content_type
     as_favicon.attach(io: file, content_type: content_type, filename: attributes['favicon'])
     as_favicon.attachment.save!
@@ -160,7 +160,7 @@ class Convention < ApplicationRecord
   def sync_open_graph_image
     picture = open_graph_image
     picture.cache_stored_file!
-    file = picture.sanitized_file.to_file
+    file = StringIO.new(picture.sanitized_file.read)
     content_type = picture.content_type
     as_open_graph_image.attach(io: file, content_type: content_type, filename: attributes['open_graph_image'])
     as_open_graph_image.attachment.save!
