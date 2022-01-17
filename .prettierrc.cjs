@@ -5,7 +5,7 @@ module.exports = {
   plugins: [require.resolve('@prettier/plugin-ruby')],
   overrides: [
     {
-      files: '*.rb',
+      files: ['*.rb', '*.rake'],
       options: {
         parser: 'ruby',
         trailingComma: 'none',

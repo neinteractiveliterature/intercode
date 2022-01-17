@@ -30,9 +30,28 @@ class CmsFile < ApplicationRecord
   has_and_belongs_to_many :pages
   belongs_to :uploader, class_name: 'User', optional: true
   mount_uploader :file, CmsFileUploader
+  has_one_attached :as_file
 
   cadmus_file :file
   validate :validate_file_name_is_unique
+
+  after_commit { update_active_storage if previous_changes.key?('file') }
+
+  def update_active_storage
+    as_file.purge if as_file.attached?
+    sync_file if file.present?
+  rescue StandardError => e
+    Log.error(e)
+  end
+
+  def sync_file
+    picture = file
+    picture.cache_stored_file!
+    file = picture.sanitized_file.to_file
+    content_type = picture.content_type
+    as_file.attach(io: file, content_type: content_type, filename: attributes['file'])
+    as_file.attachment.save!
+  end
 
   def rename_file(filename)
     new_path = File.join(File.dirname(file.path), filename)
