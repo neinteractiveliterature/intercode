@@ -43,7 +43,7 @@ class ProductVariant < ApplicationRecord
   def sync_image
     picture = image
     picture.cache_stored_file!
-    file = picture.sanitized_file.to_file
+    file = StringIO.new(picture.sanitized_file.read)
     content_type = picture.content_type
     as_image.attach(io: file, content_type: content_type, filename: attributes['image'])
     as_image.save!

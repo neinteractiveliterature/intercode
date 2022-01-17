@@ -47,7 +47,7 @@ class CmsFile < ApplicationRecord
   def sync_file
     picture = file
     picture.cache_stored_file!
-    file = picture.sanitized_file.to_file
+    file = StringIO.new(picture.sanitized_file.read)
     content_type = picture.content_type
     as_file.attach(io: file, content_type: content_type, filename: attributes['file'])
     as_file.attachment.save!
