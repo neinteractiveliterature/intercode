@@ -11,7 +11,7 @@ import { SignupMode } from './graphqlTypes.generated';
 function CmsPageBySlug() {
   // react-router 6 doesn't allow slashes in params, so we're going to do our own parsing here
   const location = useLocation();
-  const slug = location.pathname.replace(/^\/pages\//, '');
+  const slug = location.pathname.replace(/^\/pages\//, '').replace(/\/$/, '');
   return <PageComponents.CmsPage slug={slug} />;
 }
 
