@@ -124,7 +124,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Install libvips42
-        run: apt-get update && apt-get install libvips42
+        run: sudo apt-get update && sudo apt-get install libvips42
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
