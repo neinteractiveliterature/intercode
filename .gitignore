@@ -49,6 +49,7 @@
 
 public/uploads
 public/product_images
+/storage
 .rbenv-version
 .idea
 

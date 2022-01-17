@@ -39,9 +39,9 @@ tool 'setup_tls' do
 
       ca_cert.sign ca_key, OpenSSL::Digest::SHA256.new
 
-      File.open('dev_ca.key', 'wb') { |f| f.write(ca_key.to_pem) }
+      File.binwrite('dev_ca.key', ca_key.to_pem)
       File.chmod(0600, 'dev_ca.key')
-      File.open('dev_ca.crt', 'wb') { |f| f.write(ca_cert.to_pem) }
+      File.binwrite('dev_ca.crt', ca_cert.to_pem)
 
       puts 'Wrote dev_ca.key and dev_ca.crt'
 
@@ -89,9 +89,9 @@ tool 'setup_tls' do
 
     cert.sign ca_key, OpenSSL::Digest::SHA256.new
 
-    File.open('dev_certificate.key', 'wb') { |f| f.write(key.to_pem) }
+    File.binwrite('dev_certificate.key', key.to_pem)
     File.chmod(0600, 'dev_certificate.key')
-    File.open('dev_certificate.crt', 'wb') { |f| f.write(cert.to_pem) }
+    File.binwrite('dev_certificate.crt', cert.to_pem)
 
     puts 'Wrote dev_certificate.key and dev_certificate.crt'
   end
@@ -189,17 +189,25 @@ tool 'pull_uploads' do
   def run
     require_relative 'config/environment'
 
-    CmsFile.find_each do |cms_file|
-      file = cms_file.file
+    pull_file = ->(file) do
       dest_path = file.path
+      next unless dest_path
       next if File.exist?(dest_path)
 
       path = "/#{file.store_path}#{URI.encode_www_form_component file.identifier}"
       prod_url = URI("https://uploads.neilhosting.net#{path}")
       puts "Downloading #{prod_url}"
       FileUtils.mkdir_p(File.dirname(dest_path))
-      File.open(dest_path, 'wb') { |outfile| outfile.write(Net::HTTP.get(prod_url)) }
+      File.binwrite(dest_path, Net::HTTP.get(prod_url))
     end
+
+    CmsFile.find_each { |cms_file| pull_file.call(cms_file.file) }
+    Convention.find_each do |convention|
+      pull_file.call(convention.favicon)
+      pull_file.call(convention.open_graph_image)
+    end
+    Product.find_each { |product| pull_file.call(product.image) }
+    ProductVariant.find_each { |product_variant| pull_file.call(product_variant.image) }
   end
 end
 
@@ -259,7 +267,7 @@ tool 'update_liquid_doc_json' do
       YARD.parse(path)
     end
 
-    File.open('liquid_doc.json', 'w') { |file| file.write(JSON.pretty_generate(serialize_registry)) }
+    File.write('liquid_doc.json', JSON.pretty_generate(serialize_registry))
   end
 end
 
@@ -273,6 +281,6 @@ tool 'download_email' do
     ENV['AWS_PROFILE'] = 'neil'
     ENV['AWS_REGION'] = 'us-east-1'
     message = ReceiveSnsEmailDeliveryService.s3_client.get_object(bucket: 'intercode-inbox', key: message_id).body.read
-    File.open("#{message_id}.eml", 'w') { |file| file.write message }
+    File.write("#{message_id}.eml", message)
   end
 end
