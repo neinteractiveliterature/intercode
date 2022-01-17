@@ -686,6 +686,7 @@ DEPENDENCIES
   rubocop-performance
   rubocop-rails
   rubocop-sequel
+  ruby-vips
   scheduled_value (~> 1.4.0)
   sequel
   shoryuken

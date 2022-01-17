@@ -42,6 +42,7 @@ gem 'civil_service', github: 'neinteractiveliterature/civil_service', branch: 'n
 gem 'carrierwave', '~> 2.2.2'
 gem 'fog-aws'
 gem 'aws-sdk-s3'
+gem 'ruby-vips'
 
 # Filthy lucre
 gem 'money-rails'
