@@ -2,11 +2,39 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://intercode.interactiveliterature.org/blog</id>
     <title>Intercode Blog</title>
-    <updated>2020-03-15T00:00:00.000Z</updated>
+    <updated>2022-01-18T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://intercode.interactiveliterature.org/blog"/>
     <subtitle>Intercode Blog</subtitle>
     <icon>https://intercode.interactiveliterature.org/img/neilSquare.png</icon>
+    <entry>
+        <title type="html"><![CDATA[GraphQL Cross-Domain Security Issue Disclosure]]></title>
+        <id>/2022/01/18/graphql-cross-domain-security-issue-disclosure</id>
+        <link href="https://intercode.interactiveliterature.org/blog/2022/01/18/graphql-cross-domain-security-issue-disclosure"/>
+        <updated>2022-01-18T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Hey all. This thing happened we should tell you about.]]></summary>
+        <content type="html"><![CDATA[<p>Hey all. This thing happened we should tell you about.</p><p>While performing platform upgrades, we found a bug in Intercode, the website code used by conventions such as Intercon. It has since been fixed.</p><p>This bug created an exploit where people with leadership access to one Intercode convention could use certain permissions on any convention. As a reminder, not even admins have access to your passwords or financial information.</p><p>Due to the technical complexity of accessing the exploit and the small number of people who had the permissions required to take advantage of this, we don’t think it was used, but can’t prove it.</p><h2>What Happened?</h2><p>It’s technically possible con leadership from one convention looked at or modified information for conventions they should not have had access to. We don’t think anyone did, and it’s since been fixed, but here’s the low down.</p><p>There’s a function called “Become user” which certain people on the convention team have permissions for. Just like it sounds, it lets people see the convention website as if they were logged in as the selected user. It’s used for things like running the convention, debugging, and accessing the website on behalf of a user at their request. It does not allow access to anyone’s passwords or payment information.</p><p>This permission is fairly restricted and convention specific. That being said, if you had Become user permissions on one convention using Intercode, it turns out there was a way to then Become user on any Intercode convention. It would involve coding and would not be easy, but it was possible. For example, someone with admin access to Intercon S could have accessed admin functions on Be-Con 2019, including viewing and modifying event and attendee data.</p><h2>What Are We Doing About This?</h2><p>The bug has been fixed and the exploit is gone. We’ve also reviewed the list of people who have Become user permissions on any Intercode site. Considering the difficulty of finding the exploit, the technical expertise required to use it, and the limited set of people who have the necessary permissions, we think it’s really unlikely anyone did so. That being said, we can’t prove a negative.</p><p>A post-mortem was held to document the exploit, which you can find at: <a href="https://docs.google.com/document/d/1Ov8jFIpExWn-elUBXtRd22BwoIQGSbWMFio_iTL9IRM/edit?usp=sharing">https://docs.google.com/document/d/1Ov8jFIpExWn-elUBXtRd22BwoIQGSbWMFio_iTL9IRM/edit?usp=sharing</a>. It includes timelines and technical details for the interested.</p><p>And of course, we’re now telling you about it. We take the safety and security of our community very seriously, which means owning up to our mistakes. We apologize this happened at all, and we&#x27;re even more sorry it took us so long to notice it.</p><p>Thanks for your faith in us.</p><p>The Intercode Team<br/>
+Nat Budin (he/him)<br/>
+Dave Kapell (he/him)<br/>
+Jae Hartwin (they/them)<br/>
+Marleigh Norton (she/her)</p>]]></content>
+        <author>
+            <name>Marleigh Norton</name>
+            <uri>https://github.com/marleighnorton</uri>
+        </author>
+        <author>
+            <name>Nat Budin</name>
+            <uri>https://github.com/nbudin</uri>
+        </author>
+        <author>
+            <name>Dave Kapell</name>
+            <uri>https://github.com/dkapell</uri>
+        </author>
+        <author>
+            <name>Jae Hartwin</name>
+            <uri>https://github.com/jhartwin</uri>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Email forwarding]]></title>
         <id>/2020/03/15/email-forwarding</id>
