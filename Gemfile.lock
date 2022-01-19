@@ -165,11 +165,6 @@ GEM
     cadmus (0.7.1)
       liquid
       rails (>= 5.0.0)
-    cadmus_files (0.2.0)
-      cadmus
-      carrierwave
-      liquid
-      rails (>= 4.0.0)
     cadmus_navbar (0.1.0)
       acts_as_list
       cadmus
@@ -629,7 +624,6 @@ DEPENDENCIES
   bootsnap (>= 1.1.0)
   browser
   cadmus (~> 0.7.1)
-  cadmus_files (~> 0.2.0)
   cadmus_navbar (~> 0.1.0)
   carrierwave (~> 2.2.2)
   civil_service!

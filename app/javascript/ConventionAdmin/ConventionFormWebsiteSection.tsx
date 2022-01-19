@@ -111,7 +111,7 @@ function ConventionFormWebsiteSection({
           )}
         </HelpText>
         <FileInputWithPreview
-          existingFileUrl={convention.open_graph_image_url}
+          existingFileUrl={convention.open_graph_image?.url}
           file={openGraphImage}
           onChange={setOpenGraphImage}
           disabled={disabled}
@@ -127,7 +127,7 @@ function ConventionFormWebsiteSection({
           )}
         </HelpText>
         <FileInputWithPreview
-          existingFileUrl={convention.favicon_url}
+          existingFileUrl={convention.favicon?.url}
           file={favicon}
           onChange={setFavicon}
           disabled={disabled}

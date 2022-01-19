@@ -9,7 +9,7 @@
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
 <meta property="og:url" content="<%= request.url %>">
 <% if convention&.open_graph_image&.url.present? -%>
-  <meta property="og:image" content="<%= convention.open_graph_image.url %>">
+  <meta property="og:image" content="<%= rails_representation_url(convention.as_open_graph_image) %>">
 <% end -%>
 <% if @event -%>
   <meta property="og:title" content="<%= @event.title %>"
@@ -26,6 +26,6 @@
   <meta property="og:description" content="">
 <% end -%>
 <meta property="og:type" content="website"/>
-<% if convention&.favicon -%>
-  <link rel="icon" type="<%= convention.favicon.content_type %>" href="<%= convention.favicon.url %>">
+<% if convention&.as_favicon&.attachment -%>
+  <link rel="icon" type="<%= convention.as_favicon.content_type %>" href="<%= rails_representation_url(convention.as_favicon) %>">
 <% end -%>

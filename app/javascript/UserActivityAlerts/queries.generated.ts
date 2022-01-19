@@ -3,7 +3,7 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type UserActivityAlertsAdminConventionFieldsFragment = { __typename: 'Convention', id: string, ticket_name: string, ticket_mode: Types.TicketMode, staff_positions: Array<{ __typename: 'StaffPosition', id: string, name: string }> };
 
 export type UserActivityAlertFieldsFragment = { __typename: 'UserActivityAlert', id: string, email?: string | null | undefined, partial_name?: string | null | undefined, trigger_on_user_con_profile_create: boolean, trigger_on_ticket_create: boolean, user?: { __typename: 'User', id: string, name?: string | null | undefined } | null | undefined, notification_destinations: Array<{ __typename: 'NotificationDestination', id: string, staff_position?: { __typename: 'StaffPosition', id: string, name: string } | null | undefined, user_con_profile?: { __typename: 'UserConProfile', id: string, name_without_nickname: string } | null | undefined }> };

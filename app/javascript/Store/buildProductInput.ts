@@ -44,7 +44,7 @@ function buildPricingStructureInput(
 }
 
 export default function buildProductInput(product: EditingProduct): ProductInput {
-  const imageInput = product.image ? { image: product.image } : {};
+  const imageInput = product.imageFile ? { image: product.imageFile } : {};
   return {
     name: product.name,
     available: product.available,

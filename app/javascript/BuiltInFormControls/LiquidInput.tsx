@@ -69,8 +69,8 @@ function AddFileModal({ visible, fileChosen, close }: AddFileModalProps) {
             <SelectWithLabel<SelectableCmsFile>
               label={t('cms.addFileModal.chooseExistingFileLabel', 'Choose existing file')}
               options={data?.cmsParent.cmsFiles ?? []}
-              getOptionLabel={(f) => f.filename}
-              getOptionValue={(f) => f.filename}
+              getOptionLabel={(f) => f.file.filename}
+              getOptionValue={(f) => f.file.filename}
               value={file}
               onChange={(newValue) => {
                 setFile(newValue as SelectableCmsFile | null);
@@ -78,9 +78,9 @@ function AddFileModal({ visible, fileChosen, close }: AddFileModalProps) {
               formatOptionLabel={(f) => (
                 <div className="d-flex align-items-center">
                   <div className="me-2">
-                    <FilePreview url={f.url} contentType={f.content_type} size="2em" />
+                    <FilePreview url={f.file.url} contentType={f.file.content_type} size="2em" />
                   </div>
-                  <div>{f.filename}</div>
+                  <div>{f.file.filename}</div>
                 </div>
               )}
               styles={{
@@ -96,7 +96,7 @@ function AddFileModal({ visible, fileChosen, close }: AddFileModalProps) {
               <div className="card mt-2">
                 <div className="card-header">{t('cms.addFileModal.filePreview.title', 'Preview')}</div>
                 <div className="card-body">
-                  <FilePreview url={file.url} contentType={file.content_type} filename={file.filename} />
+                  <FilePreview url={file.file.url} contentType={file.file.content_type} filename={file.file.filename} />
                 </div>
               </div>
             )}
@@ -191,7 +191,7 @@ function LiquidInput(props: LiquidInputProps): JSX.Element {
       };
 
   const addFile = (file: SelectableCmsFile) => {
-    editorView.dispatch(editorView.state.replaceSelection(`{% file_url ${file.filename} %}`));
+    editorView.dispatch(editorView.state.replaceSelection(`{% file_url ${file.file.filename} %}`));
     editorView.focus();
   };
 

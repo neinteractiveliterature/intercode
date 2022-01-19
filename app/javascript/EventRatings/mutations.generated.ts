@@ -3,7 +3,7 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type RateEventMutationVariables = Types.Exact<{
   eventId: Types.Scalars['ID'];
   rating: Types.Scalars['Int'];

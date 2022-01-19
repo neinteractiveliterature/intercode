@@ -4,7 +4,7 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import { PermissionedModelFieldsFragmentDoc, PermissionedRoleFieldsFragmentDoc } from '../Permissions/fragments.generated';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type StaffPositionFieldsFragment = { __typename: 'StaffPosition', id: string, name: string, email?: string | null | undefined, visible?: boolean | null | undefined, email_aliases: Array<string>, cc_addresses: Array<string>, user_con_profiles: Array<{ __typename: 'UserConProfile', id: string, name_without_nickname: string, gravatar_url: string, gravatar_enabled: boolean }>, permissions: Array<{ __typename: 'Permission', id: string, permission: string, model: { __typename: 'CmsContentGroup', id: string, name: string } | { __typename: 'Convention', id: string, name: string } | { __typename: 'EventCategory', id: string, name: string, default_color?: string | null | undefined }, role: { __typename: 'OrganizationRole', id: string, name: string } | { __typename: 'StaffPosition', id: string, name: string } }> };
 
 export type StaffPositionsQueryVariables = Types.Exact<{ [key: string]: never; }>;

@@ -8,7 +8,7 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - name: Install libvips42
-        run: apt-get update && apt-get install libvips42
+        run: sudo apt-get update && sudo apt-get install libvips42
       - run: git fetch --prune --unshallow
       - if: github.actor != 'dependabot[bot]'
         uses: ruby/setup-ruby@v1

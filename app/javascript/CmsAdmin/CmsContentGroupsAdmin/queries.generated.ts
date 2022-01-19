@@ -4,7 +4,7 @@ import * as Types from '../../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import { PermissionedModelFieldsFragmentDoc, PermissionedRoleFieldsFragmentDoc } from '../../Permissions/fragments.generated';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type CmsContentFields_CmsLayout_Fragment = { __typename: 'CmsLayout', id: string, name?: string | null | undefined };
 
 export type CmsContentFields_CmsPartial_Fragment = { __typename: 'CmsPartial', id: string, name?: string | null | undefined };

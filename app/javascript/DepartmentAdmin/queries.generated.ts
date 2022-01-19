@@ -3,7 +3,7 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type AdminDepartmentFieldsFragment = { __typename: 'Department', id: string, name: string, proposal_description?: string | null | undefined, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string }> };
 
 export type DepartmentAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;

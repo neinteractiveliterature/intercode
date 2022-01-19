@@ -4,7 +4,7 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import { CommonFormItemFieldsFragmentDoc, CommonFormSectionFieldsFragmentDoc, CommonFormFieldsFragmentDoc } from '../Models/commonFormFragments.generated';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type FormFieldsFragment = { __typename: 'Form', id: string, title: string, form_type: Types.FormType, export_json: string, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string }>, proposal_event_categories: Array<{ __typename: 'EventCategory', id: string, name: string }>, user_con_profile_conventions: Array<{ __typename: 'Convention', id: string, name: string }> };
 
 export type FormEditorFormItemFieldsFragment = { __typename: 'FormItem', id: string, admin_description?: string | null | undefined, public_description?: string | null | undefined, properties: string, position: number, identifier?: string | null | undefined, item_type: string, rendered_properties: string, default_value?: string | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole };

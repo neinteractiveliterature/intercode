@@ -47,7 +47,7 @@ export default LoadQueryWrapper(useCmsFilesAdminQuery, function CmsFilesAdmin({ 
                     className="btn btn-outline-danger px-2 py-1"
                     onClick={() =>
                       confirm({
-                        prompt: `Are you sure you want to delete ${cmsFile.filename}?`,
+                        prompt: `Are you sure you want to delete ${cmsFile.file.filename}?`,
                         action: () => deleteFile(cmsFile),
                         renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
                       })
@@ -58,25 +58,32 @@ export default LoadQueryWrapper(useCmsFilesAdminQuery, function CmsFilesAdmin({ 
                 </div>
               )}
               <small className="text-break fw-bold">
-                <InPlaceEditor value={cmsFile.filename} onChange={(filename) => renameFile(cmsFile.id, filename)} />
+                <InPlaceEditor
+                  value={cmsFile.file.filename}
+                  onChange={(filename) => renameFile(cmsFile.id, filename)}
+                />
               </small>
               <CopyToClipboardButton
                 className="btn btn-sm btn-outline-primary"
                 defaultText={t('cms.files.copyEmbedCode', 'Copy CMS embed code')}
                 copiedText={t('copyToClipboard.defaultSuccess', 'Copied!')}
-                text={`{% file_url ${cmsFile.filename} %}`}
+                text={`{% file_url ${cmsFile.file.filename} %}`}
                 iconSet="bootstrap-icons"
               />
             </div>
             <div className="card-body text-center py-2">
-              <a href={cmsFile.url}>
-                <FilePreview url={cmsFile.url} contentType={cmsFile.content_type} filename={cmsFile.filename} />
+              <a href={cmsFile.file.url}>
+                <FilePreview
+                  url={cmsFile.file.thumbnailUrl}
+                  contentType={cmsFile.file.content_type}
+                  filename={cmsFile.file.filename}
+                />
               </a>
             </div>
             <div className="card-footer text-end">
               <small>
                 {'Size: '}
-                {bytes.format(cmsFile.size)}
+                {bytes.format(cmsFile.file.byte_size)}
               </small>
             </div>
           </div>

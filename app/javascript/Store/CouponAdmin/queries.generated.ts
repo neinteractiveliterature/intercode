@@ -4,7 +4,7 @@ import * as Types from '../../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import { CouponFieldsFragmentDoc } from '../couponFields.generated';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type AdminCouponFieldsFragment = { __typename: 'Coupon', id: string, usage_limit?: number | null | undefined, expires_at?: string | null | undefined, code: string, percent_discount?: string | null | undefined, fixed_amount?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, provides_product?: { __typename: 'Product', id: string, name: string } | null | undefined };
 
 export type AdminCouponsQueryVariables = Types.Exact<{

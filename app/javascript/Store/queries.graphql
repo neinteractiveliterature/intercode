@@ -115,14 +115,22 @@ query OrderHistoryQuery {
           product {
             id
             name
-            image_url
             payment_options
+
+            image {
+              id
+              url
+            }
           }
 
           product_variant {
             id
             name
-            image_url
+
+            image {
+              id
+              url
+            }
           }
 
           price_per_item {
@@ -174,7 +182,6 @@ query OrderFormProductQuery($productId: ID!) {
     id
     product(id: $productId) {
       id
-      image_url
       name
       pricing_structure {
         ...PricingStructureFields
@@ -182,6 +189,10 @@ query OrderFormProductQuery($productId: ID!) {
       description_html
       provides_ticket_type {
         id
+      }
+      image {
+        id
+        url
       }
 
       product_variants {

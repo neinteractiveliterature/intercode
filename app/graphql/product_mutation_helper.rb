@@ -22,7 +22,7 @@ module ProductMutationHelper
         coerce_pricing_structure_input(product_variant_fields[:override_pricing_structure])
 
       if variant_id
-        variant = product.product_variants.find { |v| v.id == variant_id }
+        variant = product.product_variants.find { |v| v.id.to_s == variant_id }
         variant.update!(product_variant_attrs)
       else
         product.product_variants.create!(product_variant_attrs)

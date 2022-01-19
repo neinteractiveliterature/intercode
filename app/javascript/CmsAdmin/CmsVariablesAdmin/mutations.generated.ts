@@ -4,7 +4,7 @@ import * as Types from '../../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import { CmsVariableFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type SetCmsVariableMutationVariables = Types.Exact<{
   key: Types.Scalars['String'];
   value_json: Types.Scalars['String'];

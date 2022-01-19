@@ -7,9 +7,12 @@ fragment AdminProductFields on Product {
   name
   description
   description_html
-  image_url
   available
   payment_options
+
+  image {
+    url
+  }
 
   pricing_structure {
     ...PricingStructureFields
@@ -19,8 +22,12 @@ fragment AdminProductFields on Product {
     id
     name
     description
-    image_url
     position
+
+    image {
+      id
+      url
+    }
 
     override_pricing_structure {
       ...PricingStructureFields

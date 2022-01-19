@@ -4,7 +4,7 @@ import * as Types from '../../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import { CommonConventionDataFragmentDoc } from '../queries.generated';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type EventListEventsQueryVariables = Types.Exact<{
   page?: Types.InputMaybe<Types.Scalars['Int']>;
   pageSize?: Types.InputMaybe<Types.Scalars['Int']>;

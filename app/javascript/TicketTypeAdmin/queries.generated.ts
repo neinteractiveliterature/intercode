@@ -4,7 +4,7 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import { PricingStructureFieldsFragmentDoc } from '../Store/pricingStructureFields.generated';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type TicketTypeAdmin_TicketTypeFieldsFragment = { __typename: 'TicketType', id: string, name: string, description?: string | null | undefined, counts_towards_convention_maximum: boolean, allows_event_signups: boolean, maximum_event_provided_tickets: number, providing_products: Array<{ __typename: 'Product', id: string, name: string, available: boolean, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: string | null | undefined, finish?: string | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } }> } } }> };
 
 export type AdminTicketTypesQueryVariables = Types.Exact<{ [key: string]: never; }>;

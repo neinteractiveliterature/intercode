@@ -49,7 +49,7 @@ module CmsReferences
   end
 
   def referenced_file_names
-    each_liquid_node.select { |node| node.is_a?(CadmusFiles::FileUrlTag) }.map(&:filename)
+    each_liquid_node.select { |node| node.is_a?(Intercode::Liquid::Tags::FileUrlTag) }.map(&:filename)
   end
 
   def referenced_files_recursive

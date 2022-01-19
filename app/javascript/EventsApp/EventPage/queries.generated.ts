@@ -5,7 +5,7 @@ import { gql } from '@apollo/client';
 import { CommonConventionDataFragmentDoc } from '../queries.generated';
 import { CommonFormFieldsFragmentDoc, CommonFormSectionFieldsFragmentDoc, CommonFormItemFieldsFragmentDoc } from '../../Models/commonFormFragments.generated';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type MySignupFieldsFragment = { __typename: 'Signup', id: string, state: Types.SignupState, waitlist_position?: number | null | undefined };
 
 export type MySignupRequestFieldsFragment = { __typename: 'SignupRequest', id: string, state: Types.SignupRequestState, requested_bucket_key?: string | null | undefined, target_run: { __typename: 'Run', id: string }, replace_signup?: { __typename: 'Signup', id: string } | null | undefined };
