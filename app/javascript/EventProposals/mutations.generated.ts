@@ -4,7 +4,7 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import { EventProposalFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type CreateEventProposalMutationVariables = Types.Exact<{
   cloneEventProposalId?: Types.InputMaybe<Types.Scalars['ID']>;
   eventCategoryId: Types.Scalars['ID'];

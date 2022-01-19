@@ -82,7 +82,13 @@ class CmsRenderingContext
     cached_partials.update(
       CmsPartial.joins(:pages).where(pages: { id: page_ids }).index_by(&:name).transform_values(&:liquid_template)
     )
-    cached_files.update(CmsFile.joins(:pages).where(pages: { id: page_ids }).index_by(&:filename))
+    cached_files.update(
+      CmsFile
+        .joins(:pages)
+        .where(pages: { id: page_ids })
+        .includes(as_file_attachment: :blob)
+        .index_by { |cms_file| cms_file.as_file.filename }
+    )
   end
 
   def preload_cms_layout_content(cms_layout = nil)
@@ -91,7 +97,9 @@ class CmsRenderingContext
 
     cached_partials.update(cms_layout.cms_partials.index_by(&:name).transform_values(&:liquid_template))
 
-    cached_files.update(cms_layout.cms_files.index_by(&:filename))
+    cached_files.update(
+      cms_layout.cms_files.includes(as_file_attachment: :blob).index_by { |cms_file| cms_file.as_file.filename }
+    )
   end
 
   def liquid_assigns_for_single_page_app(cms_layout)

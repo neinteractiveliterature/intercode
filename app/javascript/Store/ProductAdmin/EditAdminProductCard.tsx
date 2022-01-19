@@ -52,7 +52,7 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }: EditAdminP
 
     setProduct((prevEditingProduct) => ({
       ...prevEditingProduct,
-      image: file,
+      imageFile: file,
     }));
 
     const reader = new FileReader();
@@ -205,7 +205,7 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }: EditAdminP
 
         <div className="d-lg-flex justify-content-lg-start align-items-lg-start">
           <div className="d-flex flex-column align-items-center">
-            {product.image_url && <img src={product.image_url} style={{ maxWidth: '200px' }} alt={product.name} />}
+            {product.image && <img src={product.image.url} style={{ maxWidth: '200px' }} alt={product.name} />}
             <div className="mt-2" style={{ width: '220px' }}>
               <label className="form-label" htmlFor={imageInputId}>
                 Choose image...

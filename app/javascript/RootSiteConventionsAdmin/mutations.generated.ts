@@ -4,7 +4,7 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import { ConventionDisplayFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type CreateConventionMutationVariables = Types.Exact<{
   convention: Types.ConventionInput;
   cloneConventionId?: Types.InputMaybe<Types.Scalars['ID']>;

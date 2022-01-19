@@ -3,7 +3,7 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type CommonConventionDataFragment = { __typename: 'Convention', id: string, name: string, starts_at?: string | null | undefined, ends_at?: string | null | undefined, site_mode: Types.SiteMode, timezone_name?: string | null | undefined, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, scheduling_ui: Types.SchedulingUi, default_color?: string | null | undefined, full_color?: string | null | undefined, signed_up_color?: string | null | undefined }> };
 
 export type RunBasicSignupDataFragment = { __typename: 'Run', id: string, signup_count_by_state_and_bucket_key_and_counted: string, my_signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: string, state: Types.SignupRequestState }> };

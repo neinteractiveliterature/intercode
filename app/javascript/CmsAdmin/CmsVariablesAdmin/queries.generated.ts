@@ -3,7 +3,7 @@ import * as Types from '../../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type CmsVariableFieldsFragment = { __typename: 'CmsVariable', id: string, key: string, value_json: string, current_ability_can_update: boolean, current_ability_can_delete: boolean };
 
 export type CmsVariablesQueryVariables = Types.Exact<{ [key: string]: never; }>;

@@ -4,7 +4,7 @@ import * as Types from '../../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import { StandaloneEditEvent_EventFieldsFragmentDoc, StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type StandaloneDropEventMutationVariables = Types.Exact<{
   input: Types.DropEventInput;
 }>;

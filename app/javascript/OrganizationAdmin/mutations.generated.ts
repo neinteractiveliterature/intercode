@@ -4,7 +4,7 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import { OrganizationRoleFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type CreateOrganizationRoleMutationVariables = Types.Exact<{
   organizationId: Types.Scalars['ID'];
   name: Types.Scalars['String'];

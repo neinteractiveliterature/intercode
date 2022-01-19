@@ -14,7 +14,13 @@ class Types::ProductVariantType < Types::BaseObject
     context[:cadmus_renderer].render(object.description, :html)
   end
 
-  field :image_url, String, null: true
+  field :image, Types::ActiveStorageAttachmentType, null: true
+
+  def image
+    ActiveStorageAttachmentLoader.for(ProductVariant, :as_image).load(object)
+  end
+
+  field :image_url, String, null: true, deprecation_reason: 'Please use the image field instead.'
 
   def image_url
     object.image&.url

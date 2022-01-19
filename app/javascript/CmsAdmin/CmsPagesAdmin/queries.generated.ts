@@ -3,7 +3,7 @@ import * as Types from '../../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type CmsPageAdminLayoutFieldsFragment = { __typename: 'CmsLayout', id: string, name?: string | null | undefined };
 
 export type CmsPageFieldsFragment = { __typename: 'Page', id: string, name?: string | null | undefined, slug?: string | null | undefined, content?: string | null | undefined, admin_notes?: string | null | undefined, skip_clickwrap_agreement?: boolean | null | undefined, hidden_from_search: boolean, current_ability_can_update: boolean, current_ability_can_delete: boolean, cms_layout?: { __typename: 'CmsLayout', id: string, name?: string | null | undefined } | null | undefined };

@@ -6,7 +6,7 @@ import { SignupFieldsFragmentDoc, UserConProfileSignupsFragmentDoc } from './que
 import { EventPageRunFieldsFragmentDoc } from '../EventPage/queries.generated';
 import { RunBasicSignupDataFragmentDoc, CommonConventionDataFragmentDoc } from '../queries.generated';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type ChangeSignupBucketMutationVariables = Types.Exact<{
   signupId: Types.Scalars['ID'];
   bucketKey: Types.Scalars['String'];

@@ -3,7 +3,7 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type ContactEmailFieldsFragment = { __typename: 'ContactEmail', email: string, formatted_address: string, name?: string | null | undefined, metadata_json: string };
 
 export type MailingListsResultFieldsFragment = { __typename: 'MailingListsResult', metadata_fields: Array<string>, emails: Array<{ __typename: 'ContactEmail', email: string, formatted_address: string, name?: string | null | undefined, metadata_json: string }> };

@@ -4,7 +4,7 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import { SignupModerationSignupRequestFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type CreateUserSignupMutationVariables = Types.Exact<{
   runId: Types.Scalars['ID'];
   userConProfileId: Types.Scalars['ID'];
