@@ -24,7 +24,7 @@ type OrderHistoryOrderEntryProps = {
 function OrderHistoryOrderEntry({ orderEntry }: OrderHistoryOrderEntryProps) {
   const productVariant = orderEntry.product_variant;
   const name = orderEntry.product.name + (productVariant?.name ? ` (${productVariant.name})` : '');
-  const imageUrl = productVariant?.image_url ?? orderEntry.product.image_url;
+  const imageUrl = productVariant?.image?.url ?? orderEntry.product.image?.url;
 
   return (
     <tr>

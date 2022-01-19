@@ -34,8 +34,8 @@ class ProductDrop < Liquid::Drop
 
   # @return [String] The URL of the product image, if present
   def image_url
-    return unless product.image
-    product.image.url
+    return unless product.as_image
+    @context.registers['controller'].rails_representation_url(product.as_image)
   end
 
   # @return [String] The base price for the product

@@ -7,7 +7,7 @@ export type EditingVariant = WithRealOrGeneratedId<QueryProduct['product_variant
 
 export type EditingProductBase = Omit<QueryProduct, 'product_variants' | 'pricing_structure'> & {
   delete_variant_ids: string[];
-  image?: File;
+  imageFile?: File;
   product_variants: EditingVariant[];
   pricing_structure?: QueryProduct['pricing_structure'];
 };

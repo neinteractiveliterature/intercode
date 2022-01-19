@@ -120,7 +120,7 @@ function AdminProductCard({ currentAbility, startEditing, product }: AdminProduc
 
       <div className="card-body">
         <div className="d-lg-flex justify-content-lg-start align-items-lg-start">
-          {product.image_url && <img src={product.image_url} style={{ maxWidth: '200px' }} alt={product.name} />}
+          {product.image && <img src={product.image.url} style={{ maxWidth: '200px' }} alt={product.name} />}
 
           <div className="ml-lg-4 col-lg">
             <p>

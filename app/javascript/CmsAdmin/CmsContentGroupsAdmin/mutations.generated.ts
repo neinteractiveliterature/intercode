@@ -4,7 +4,7 @@ import * as Types from '../../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import { CmsContentGroupFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type CreateContentGroupMutationVariables = Types.Exact<{
   cmsContentGroup: Types.CmsContentGroupInput;
   permissions?: Types.InputMaybe<Array<Types.PermissionInput> | Types.PermissionInput>;

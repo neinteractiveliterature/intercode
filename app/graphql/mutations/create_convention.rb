@@ -11,7 +11,7 @@ class Mutations::CreateConvention < Mutations::BaseMutation
 
   define_authorization_check { |_args| policy(Convention.new).create? }
 
-    def resolve(convention:, clone_convention_id: nil, cms_content_set_name: nil, organization_id: nil)
+  def resolve(convention:, clone_convention_id: nil, cms_content_set_name: nil, organization_id: nil)
     convention_data = convention.to_h.merge('organization_id' => organization_id, 'updated_by' => current_user)
     if convention.maximum_event_signups
       convention_data['maximum_event_signups'] = process_scheduled_value_input(convention.maximum_event_signups)
@@ -31,4 +31,4 @@ class Mutations::CreateConvention < Mutations::BaseMutation
 
     { convention: new_convention }
   end
-  end
+end

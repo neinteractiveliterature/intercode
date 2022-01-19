@@ -186,28 +186,35 @@ tool 'pull_uploads' do
   desc 'Pull uploaded files down from production'
   include :bundler
 
+  required_arg :base64_blob_verifier_secret,
+               desc:
+                 "The base64-encoded version of the production blob verifier secret.  To get this, run in a production \
+console: Base64.encode64(ActiveStorage::Blob.signed_id_verifier.instance_variable_get(:@secret))"
+
   def run
     require_relative 'config/environment'
 
-    pull_file = ->(file) do
-      dest_path = file.path
-      next unless dest_path
-      next if File.exist?(dest_path)
+    verifier = ActiveSupport::MessageVerifier.new Base64.decode64(base64_blob_verifier_secret)
 
-      path = "/#{file.store_path}#{URI.encode_www_form_component file.identifier}"
-      prod_url = URI("https://uploads.neilhosting.net#{path}")
-      puts "Downloading #{prod_url}"
-      FileUtils.mkdir_p(File.dirname(dest_path))
-      File.binwrite(dest_path, Net::HTTP.get(prod_url))
+    scope = ActiveStorage::Attachment.joins(:blob).where(blob: { service_name: 'amazon' })
+    total_count = scope.count
+    scope.find_each.each_with_index do |attachment, index|
+      puts "[#{index + 1}/#{total_count}] Downloading #{attachment.blob.filename} (#{attachment.blob.key})"
+      download_attachment(attachment, verifier)
     end
+  end
 
-    CmsFile.find_each { |cms_file| pull_file.call(cms_file.file) }
-    Convention.find_each do |convention|
-      pull_file.call(convention.favicon)
-      pull_file.call(convention.open_graph_image)
-    end
-    Product.find_each { |product| pull_file.call(product.image) }
-    ProductVariant.find_each { |product_variant| pull_file.call(product_variant.image) }
+  def download_attachment(attachment, verifier)
+    prod_url =
+      "https://www.neilhosting.net/rails/active_storage/blobs/redirect/#{verifier.generate(attachment.blob.id, 
+purpose: :blob_id)}/#{Rack::Utils.escape attachment.blob.filename}"
+    actual_url = Net::HTTP.get_response(URI.parse(prod_url))['location']
+    content = Net::HTTP.get(URI.parse(actual_url))
+
+    attachment
+      .record
+      .public_send(attachment.name)
+      .attach(io: StringIO.new(content), filename: attachment.blob.filename, content_type: attachment.blob.content_type)
   end
 end
 

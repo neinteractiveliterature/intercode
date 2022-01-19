@@ -4,7 +4,7 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import { NotificationTemplateFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type UpdateNotificationTemplateMutationVariables = Types.Exact<{
   eventKey: Types.Scalars['String'];
   notificationTemplate: Types.NotificationTemplateInput;

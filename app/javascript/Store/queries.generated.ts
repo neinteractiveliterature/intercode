@@ -6,7 +6,7 @@ import { AdminOrderFieldsFragmentDoc, OrderEntryFieldsFragmentDoc, CartOrderFiel
 import { AdminProductFieldsFragmentDoc } from './adminProductFields.generated';
 import { PricingStructureFieldsFragmentDoc } from './pricingStructureFields.generated';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type AdminOrdersQueryVariables = Types.Exact<{
   page?: Types.InputMaybe<Types.Scalars['Int']>;
   perPage?: Types.InputMaybe<Types.Scalars['Int']>;
@@ -20,7 +20,7 @@ export type AdminOrdersQueryData = { __typename: 'Query', currentAbility: { __ty
 export type AdminProductsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type AdminProductsQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, products: Array<{ __typename: 'Product', id: string, name: string, description?: string | null | undefined, description_html?: string | null | undefined, image_url?: string | null | undefined, available: boolean, payment_options: Array<string>, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: string | null | undefined, finish?: string | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } }> } }, product_variants: Array<{ __typename: 'ProductVariant', id: string, name: string, description?: string | null | undefined, image_url?: string | null | undefined, position?: number | null | undefined, override_pricing_structure?: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: string | null | undefined, finish?: string | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } }> } } | null | undefined }>, provides_ticket_type?: { __typename: 'TicketType', id: string, description?: string | null | undefined } | null | undefined }>, ticket_types: Array<{ __typename: 'TicketType', id: string, description?: string | null | undefined }> }, currentAbility: { __typename: 'Ability', can_update_products: boolean } };
+export type AdminProductsQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, products: Array<{ __typename: 'Product', id: string, name: string, description?: string | null | undefined, description_html?: string | null | undefined, available: boolean, payment_options: Array<string>, image?: { __typename: 'ActiveStorageAttachment', url: string } | null | undefined, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: string | null | undefined, finish?: string | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } }> } }, product_variants: Array<{ __typename: 'ProductVariant', id: string, name: string, description?: string | null | undefined, position?: number | null | undefined, image?: { __typename: 'ActiveStorageAttachment', id: string, url: string } | null | undefined, override_pricing_structure?: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: string | null | undefined, finish?: string | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } }> } } | null | undefined }>, provides_ticket_type?: { __typename: 'TicketType', id: string, description?: string | null | undefined } | null | undefined }>, ticket_types: Array<{ __typename: 'TicketType', id: string, description?: string | null | undefined }> }, currentAbility: { __typename: 'Ability', can_update_products: boolean } };
 
 export type AdminStoreAbilityQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
@@ -35,7 +35,7 @@ export type CartQueryData = { __typename: 'Query', convention: { __typename: 'Co
 export type OrderHistoryQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type OrderHistoryQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, timezone_name?: string | null | undefined, staff_positions: Array<{ __typename: 'StaffPosition', id: string, name: string, email?: string | null | undefined }>, my_profile?: { __typename: 'UserConProfile', id: string, name_without_nickname: string, orders: Array<{ __typename: 'Order', id: string, status: Types.OrderStatus, submitted_at?: string | null | undefined, total_price: { __typename: 'Money', fractional: number, currency_code: string }, payment_amount?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, coupon_applications: Array<{ __typename: 'CouponApplication', id: string, discount: { __typename: 'Money', fractional: number, currency_code: string }, coupon: { __typename: 'Coupon', id: string, code: string, percent_discount?: string | null | undefined, fixed_amount?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, provides_product?: { __typename: 'Product', id: string, name: string } | null | undefined } }>, order_entries: Array<{ __typename: 'OrderEntry', id: string, quantity: number, product: { __typename: 'Product', id: string, name: string, image_url?: string | null | undefined, payment_options: Array<string> }, product_variant?: { __typename: 'ProductVariant', id: string, name: string, image_url?: string | null | undefined } | null | undefined, price_per_item: { __typename: 'Money', fractional: number, currency_code: string }, price: { __typename: 'Money', fractional: number, currency_code: string } }> }> } | null | undefined } };
+export type OrderHistoryQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, timezone_name?: string | null | undefined, staff_positions: Array<{ __typename: 'StaffPosition', id: string, name: string, email?: string | null | undefined }>, my_profile?: { __typename: 'UserConProfile', id: string, name_without_nickname: string, orders: Array<{ __typename: 'Order', id: string, status: Types.OrderStatus, submitted_at?: string | null | undefined, total_price: { __typename: 'Money', fractional: number, currency_code: string }, payment_amount?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, coupon_applications: Array<{ __typename: 'CouponApplication', id: string, discount: { __typename: 'Money', fractional: number, currency_code: string }, coupon: { __typename: 'Coupon', id: string, code: string, percent_discount?: string | null | undefined, fixed_amount?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, provides_product?: { __typename: 'Product', id: string, name: string } | null | undefined } }>, order_entries: Array<{ __typename: 'OrderEntry', id: string, quantity: number, product: { __typename: 'Product', id: string, name: string, payment_options: Array<string>, image?: { __typename: 'ActiveStorageAttachment', id: string, url: string } | null | undefined }, product_variant?: { __typename: 'ProductVariant', id: string, name: string, image?: { __typename: 'ActiveStorageAttachment', id: string, url: string } | null | undefined } | null | undefined, price_per_item: { __typename: 'Money', fractional: number, currency_code: string }, price: { __typename: 'Money', fractional: number, currency_code: string } }> }> } | null | undefined } };
 
 export type OrderSummaryQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
@@ -47,7 +47,7 @@ export type OrderFormProductQueryVariables = Types.Exact<{
 }>;
 
 
-export type OrderFormProductQueryData = { __typename: 'Query', currentUser?: { __typename: 'User', id: string } | null | undefined, convention: { __typename: 'Convention', id: string, product: { __typename: 'Product', id: string, image_url?: string | null | undefined, name: string, description_html?: string | null | undefined, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: string | null | undefined, finish?: string | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } }> } }, provides_ticket_type?: { __typename: 'TicketType', id: string } | null | undefined, product_variants: Array<{ __typename: 'ProductVariant', id: string, name: string, position?: number | null | undefined, override_pricing_structure?: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: string | null | undefined, finish?: string | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } }> } } | null | undefined }> } } };
+export type OrderFormProductQueryData = { __typename: 'Query', currentUser?: { __typename: 'User', id: string } | null | undefined, convention: { __typename: 'Convention', id: string, product: { __typename: 'Product', id: string, name: string, description_html?: string | null | undefined, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: string | null | undefined, finish?: string | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } }> } }, provides_ticket_type?: { __typename: 'TicketType', id: string } | null | undefined, image?: { __typename: 'ActiveStorageAttachment', id: string, url: string } | null | undefined, product_variants: Array<{ __typename: 'ProductVariant', id: string, name: string, position?: number | null | undefined, override_pricing_structure?: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: string | null | undefined, finish?: string | null | undefined, value: { __typename: 'Money', fractional: number, currency_code: string } }> } } | null | undefined }> } } };
 
 export type CurrentPendingOrderPaymentIntentClientSecretQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
@@ -275,13 +275,19 @@ export const OrderHistoryQueryDocument = gql`
           product {
             id
             name
-            image_url
             payment_options
+            image {
+              id
+              url
+            }
           }
           product_variant {
             id
             name
-            image_url
+            image {
+              id
+              url
+            }
           }
           price_per_item {
             fractional
@@ -383,7 +389,6 @@ export const OrderFormProductQueryDocument = gql`
     id
     product(id: $productId) {
       id
-      image_url
       name
       pricing_structure {
         ...PricingStructureFields
@@ -391,6 +396,10 @@ export const OrderFormProductQueryDocument = gql`
       description_html
       provides_ticket_type {
         id
+      }
+      image {
+        id
+        url
       }
       product_variants {
         id

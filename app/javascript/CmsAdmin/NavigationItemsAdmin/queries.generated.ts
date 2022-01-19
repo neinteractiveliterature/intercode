@@ -3,7 +3,7 @@ import * as Types from '../../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type AdminNavigationItemFieldsFragment = { __typename: 'CmsNavigationItem', id: string, position?: number | null | undefined, title?: string | null | undefined, page?: { __typename: 'Page', id: string } | null | undefined, navigation_section?: { __typename: 'CmsNavigationItem', id: string } | null | undefined };
 
 export type NavigationItemsAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
