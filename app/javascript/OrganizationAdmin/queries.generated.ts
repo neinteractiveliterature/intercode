@@ -3,7 +3,7 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type OrganizationRoleFieldsFragment = { __typename: 'OrganizationRole', id: string, name: string, users: Array<{ __typename: 'User', id: string, name?: string | null | undefined, email?: string | null | undefined }>, permissions: Array<{ __typename: 'Permission', id: string, permission: string }> };
 
 export type OrganizationAdminOrganizationsQueryVariables = Types.Exact<{ [key: string]: never; }>;

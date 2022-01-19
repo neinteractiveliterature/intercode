@@ -3,7 +3,7 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type EmailRouteFieldsFragment = { __typename: 'EmailRoute', id: string, receiver_address: string, forward_addresses?: Array<string> | null | undefined };
 
 export type RootSiteEmailRoutesAdminTableQueryVariables = Types.Exact<{

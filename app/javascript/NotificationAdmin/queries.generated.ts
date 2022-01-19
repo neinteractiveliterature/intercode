@@ -3,7 +3,7 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type NotificationTemplateFieldsFragment = { __typename: 'NotificationTemplate', id: string, event_key: string, subject?: string | null | undefined, body_html?: string | null | undefined, body_text?: string | null | undefined, body_sms?: string | null | undefined };
 
 export type NotificationAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;

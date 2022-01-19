@@ -3,22 +3,26 @@ import * as Types from '../../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
-export type CmsFileFieldsFragment = { __typename: 'CmsFile', id: string, filename: string, url: string, content_type: string, size: number, current_ability_can_delete: boolean };
+const defaultOptions = {} as const;
+export type CmsFileFieldsFragment = { __typename: 'CmsFile', id: string, current_ability_can_delete: boolean, file: { __typename: 'ActiveStorageAttachment', id: string, filename: string, url: string, content_type: string, byte_size: number, thumbnailUrl: string } };
 
 export type CmsFilesAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type CmsFilesAdminQueryData = { __typename: 'Query', convention?: { __typename: 'Convention', id: string, name: string } | null | undefined, currentAbility: { __typename: 'Ability', can_create_cms_files: boolean }, cmsParent: { __typename: 'Convention', id: string, cmsFiles: Array<{ __typename: 'CmsFile', id: string, filename: string, url: string, content_type: string, size: number, current_ability_can_delete: boolean }> } | { __typename: 'RootSite', id: string, cmsFiles: Array<{ __typename: 'CmsFile', id: string, filename: string, url: string, content_type: string, size: number, current_ability_can_delete: boolean }> } };
+export type CmsFilesAdminQueryData = { __typename: 'Query', convention?: { __typename: 'Convention', id: string, name: string } | null | undefined, currentAbility: { __typename: 'Ability', can_create_cms_files: boolean }, cmsParent: { __typename: 'Convention', id: string, cmsFiles: Array<{ __typename: 'CmsFile', id: string, current_ability_can_delete: boolean, file: { __typename: 'ActiveStorageAttachment', id: string, filename: string, url: string, content_type: string, byte_size: number, thumbnailUrl: string } }> } | { __typename: 'RootSite', id: string, cmsFiles: Array<{ __typename: 'CmsFile', id: string, current_ability_can_delete: boolean, file: { __typename: 'ActiveStorageAttachment', id: string, filename: string, url: string, content_type: string, byte_size: number, thumbnailUrl: string } }> } };
 
 export const CmsFileFieldsFragmentDoc = gql`
     fragment CmsFileFields on CmsFile {
   id
-  filename
-  url
-  content_type
-  size
   current_ability_can_delete
+  file {
+    id
+    filename
+    url
+    content_type
+    byte_size
+    thumbnailUrl: resized_url(maxWidth: 100, maxHeight: 100)
+  }
 }
     `;
 export const CmsFilesAdminQueryDocument = gql`

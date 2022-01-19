@@ -27,8 +27,8 @@ class ProductVariantDrop < Liquid::Drop
 
   # @return [String] The URL of this variant's image, if present
   def image_url
-    return unless product_variant.image
-    product_variant.image.url
+    return unless product.as_image
+    @context.registers['controller'].rails_representation_url(product.as_image)
   end
 
   # @return [PricingStructureDrop] The pricing structure override for this variant, if present.  If

@@ -5,7 +5,7 @@ import { gql } from '@apollo/client';
 import { MySignupFieldsFragmentDoc, EventPageRunFieldsFragmentDoc, MySignupRequestFieldsFragmentDoc } from './queries.generated';
 import { RunBasicSignupDataFragmentDoc, CommonConventionDataFragmentDoc } from '../queries.generated';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type CreateMySignupMutationVariables = Types.Exact<{
   runId: Types.Scalars['ID'];
   requestedBucketKey?: Types.InputMaybe<Types.Scalars['String']>;

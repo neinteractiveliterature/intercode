@@ -144,7 +144,13 @@ class Types::ConventionType < Types::BaseObject
       .paginate(page: args[:page], per_page: args[:per_page])
   end
 
-  field :favicon_url, String, null: true
+  field :favicon, Types::ActiveStorageAttachmentType, null: true
+
+  def favicon
+    ActiveStorageAttachmentLoader.for(Convention, :as_favicon).load(object)
+  end
+
+  field :favicon_url, String, null: true, deprecation_reason: 'Please use the favicon field instead.'
 
   def favicon_url
     object.favicon.url
@@ -227,7 +233,13 @@ class Types::ConventionType < Types::BaseObject
   end
 
   field :name, String, null: false
-  field :open_graph_image_url, String, null: true
+  field :open_graph_image, Types::ActiveStorageAttachmentType, null: true
+
+  def open_graph_image
+    ActiveStorageAttachmentLoader.for(Convention, :as_open_graph_image).load(object)
+  end
+
+  field :open_graph_image_url, String, null: true, deprecation_reason: 'Please use the open_graph_image field instead.'
 
   def open_graph_image_url
     object.open_graph_image.url

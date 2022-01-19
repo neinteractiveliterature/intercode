@@ -4,7 +4,7 @@ import * as Types from '../../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import { AdminNavigationItemFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type CreateNavigationItemMutationVariables = Types.Exact<{
   navigationItem: Types.CmsNavigationItemInput;
 }>;

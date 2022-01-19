@@ -3,7 +3,7 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type PageFieldsFragment = { __typename: 'Page', id: string, name?: string | null | undefined };
 
 export type RootSiteAdminLayoutFieldsFragment = { __typename: 'CmsLayout', id: string, name?: string | null | undefined };

@@ -36,9 +36,9 @@ export default LoadQueryWrapper(
 
     return (
       <>
-        {product.image_url && (
+        {product.image && (
           <div className="float-end d-none d-lg-block ms-4" style={{ maxWidth: '50%' }}>
-            <img style={{ maxWidth: '100%' }} src={product.image_url} alt={product.name} />
+            <img style={{ maxWidth: '100%' }} src={product.image.url} alt={product.name} />
           </div>
         )}
 
@@ -47,7 +47,7 @@ export default LoadQueryWrapper(
           <div className="lead">{describeUserPricingStructure(product.pricing_structure, timezoneName, t)}</div>
         </div>
 
-        {product.image_url && <img className="d-lg-none w-100" src={product.image_url} alt={product.name} />}
+        {product.image && <img className="d-lg-none w-100" src={product.image.url} alt={product.name} />}
 
         {product.description_html && (
           <div className="mb-4">{parseCmsContent(product.description_html).bodyComponents}</div>

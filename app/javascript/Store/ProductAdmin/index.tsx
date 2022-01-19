@@ -22,7 +22,6 @@ function generateBlankProduct(): EditingProduct {
     generatedId: uuidv4(),
     name: '',
     description: '',
-    image_url: null,
     product_variants: [],
     available: true,
   };

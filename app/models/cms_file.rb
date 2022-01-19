@@ -25,14 +25,14 @@
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
 
 class CmsFile < ApplicationRecord
-  include CadmusFiles::File
+  include Cadmus::Concerns::ModelWithParent
 
+  model_with_parent
   has_and_belongs_to_many :pages
   belongs_to :uploader, class_name: 'User', optional: true
   mount_uploader :file, CmsFileUploader
   has_one_attached :as_file
 
-  cadmus_file :file
   validate :validate_file_name_is_unique
 
   after_commit { update_active_storage if previous_changes.key?('file') }
@@ -53,7 +53,12 @@ class CmsFile < ApplicationRecord
     as_file.attachment.save!
   end
 
+  def to_param
+    "#{id}-#{as_file.filename.to_param}"
+  end
+
   def rename_file(filename)
+    # TODO delete all this once Carrierwave is gone
     new_path = File.join(File.dirname(file.path), filename)
 
     if EnvironmentBasedUploader.use_fog?
@@ -67,5 +72,22 @@ class CmsFile < ApplicationRecord
 
     update_column('file', filename)
     reload
+
+    # --- End of section to delete
+
+    as_file.blob.update!(filename: filename)
+  end
+
+  def validate_file_name_is_unique
+    the_filename = as_file.filename.to_s
+
+    scope = parent ? CmsFile.where(parent: parent) : CmsFile.global
+    duplicates =
+      ActiveStorage::Attachment
+        .where(record: scope)
+        .joins(:blob)
+        .where.not(record_id: id)
+        .where('lower(active_storage_blobs.filename) = ?', the_filename.downcase)
+    errors.add file_field, "'#{the_filename}' already exists" if duplicates.any?
   end
 end

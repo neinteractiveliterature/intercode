@@ -28,7 +28,6 @@ gem 'activerecord-session_store'
 
 # Lightweight open-source CMS (written by Nat for Gively Inc.)
 gem 'cadmus', '~> 0.7.1'
-gem 'cadmus_files', '~> 0.2.0'
 gem 'cadmus_navbar', '~> 0.1.0'
 gem 'liquid'
 

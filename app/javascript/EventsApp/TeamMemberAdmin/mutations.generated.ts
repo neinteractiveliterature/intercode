@@ -4,7 +4,7 @@ import * as Types from '../../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import { TeamMemberFieldsFragmentDoc, TeamMemberTicketFieldsFragmentDoc, TeamMemberFieldsWithoutPersonalInfoFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type CreateTeamMemberMutationVariables = Types.Exact<{
   input: Types.CreateTeamMemberInput;
 }>;

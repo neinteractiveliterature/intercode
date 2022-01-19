@@ -4,7 +4,7 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import { UserActivityAlertFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type CreateUserActivityAlertMutationVariables = Types.Exact<{
   userActivityAlert: Types.UserActivityAlertInput;
   notificationDestinations: Array<Types.NotificationDestinationInput> | Types.NotificationDestinationInput;
