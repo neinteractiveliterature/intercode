@@ -22,7 +22,8 @@ class SitemapsController < ApplicationController
   private
 
   def generate_convention_sitemap(xml)
-    events_updated = [convention.events.active.maximum(:updated_at), convention.runs.maximum(:updated_at)].max
+    events_updated = [convention.events.active.maximum(:updated_at), convention.runs.maximum(:updated_at)].compact.max
+    return unless events_updated
 
     xml.url do
       xml.loc(root_url(extra: 'events'))
@@ -34,6 +35,10 @@ class SitemapsController < ApplicationController
       xml.lastmod(events_updated.xmlschema)
     end
 
+    generate_convention_event_pages_sitemap(xml)
+  end
+
+  def generate_convention_event_pages_sitemap(xml)
     convention.events.active.each do |event|
       xml.url do
         xml.loc(root_url(extra: "events/#{event.to_param}"))
