@@ -19757,7 +19757,7 @@ resolve@^2.0.0-next.3:
     union-value: 2.0.1
     uuid: 8.3.2
     webpack: 5.66.0
-    webpack-assets-manifest: 5.0.6
+    webpack-assets-manifest: 5.1.0
     webpack-bundle-analyzer: 4.5.0
     webpack-cli: 4.9.1
     webpack-dev-middleware: 5.3.0
@@ -22630,9 +22630,9 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"webpack-assets-manifest@npm:5.0.6":
-  version: 5.0.6
-  resolution: "webpack-assets-manifest@npm:5.0.6"
+"webpack-assets-manifest@npm:5.1.0":
+  version: 5.1.0
+  resolution: "webpack-assets-manifest@npm:5.1.0"
   dependencies:
     chalk: ^4.0
     deepmerge: ^4.0
@@ -22643,7 +22643,7 @@ resolve@^2.0.0-next.3:
     tapable: ^2.0
   peerDependencies:
     webpack: ^5.2.0
-  checksum: cf8d71527cc45d6c252a5a576f956a8d385fed24fcbfe800c68bed77d69f4359c2fbf85f2fa9e3ca6070d895cc8d66d46eeab2cdebd48a0e9ca8024d3289f9d0
+  checksum: 30b0929f6a81900801d075f81236181a9034a89e2871a214d9f4c905fcc2ae35464e7722b4f2ac6f9993ac24432e5209d805681181502a19a27dcc455a7d16ca
   languageName: node
   linkType: hard
 
