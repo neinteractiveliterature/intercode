@@ -203,7 +203,7 @@
     "@prettier/plugin-ruby": "2.0.0",
     "@testing-library/jest-dom": "5.16.1",
     "@testing-library/react-hooks": "7.0.2",
-    "@types/bootstrap": "5.1.8",
+    "@types/bootstrap": "5.1.9",
     "@types/cssnano": "5.0.0",
     "@types/events": "3.0.0",
     "@types/history": "4.7.11",
