@@ -156,7 +156,7 @@ GEM
     backport (1.2.0)
     bcrypt (3.1.16)
     bcrypt (3.1.16-java)
-    benchmark (0.1.1)
+    benchmark (0.2.0)
     bindata (2.4.10)
     bootsnap (1.9.3)
       msgpack (~> 1.0)
@@ -200,7 +200,7 @@ GEM
       rails
     devise-encryptable (0.2.0)
       devise (>= 2.1.0)
-    diff-lcs (1.4.4)
+    diff-lcs (1.5.0)
     digest (3.1.0)
     digest (3.1.0-java)
     docile (1.3.4)
@@ -386,10 +386,10 @@ GEM
       timeout
     nio4r (2.5.8)
     nio4r (2.5.8-java)
-    nokogiri (1.13.0)
+    nokogiri (1.13.1)
       mini_portile2 (~> 2.7.0)
       racc (~> 1.4)
-    nokogiri (1.13.0-java)
+    nokogiri (1.13.1-java)
       racc (~> 1.4)
     oj (3.13.4)
     orm_adapter (0.5.0)
@@ -480,7 +480,7 @@ GEM
     responders (3.0.1)
       actionpack (>= 5.0)
       railties (>= 5.0)
-    reverse_markdown (2.0.0)
+    reverse_markdown (2.1.1)
       nokogiri
     rexml (3.2.5)
     rollbar (3.2.0)
@@ -535,7 +535,7 @@ GEM
     skylight (5.1.1)
       activesupport (>= 5.2.0)
     slop (3.6.0)
-    solargraph (0.43.0)
+    solargraph (0.44.2)
       backport (~> 1.2)
       benchmark
       bundler (>= 1.17.2)
@@ -550,7 +550,8 @@ GEM
       thor (~> 1.0)
       tilt (~> 2.0)
       yard (~> 0.9, >= 0.9.24)
-    solargraph-rails (0.2.1.1)
+    solargraph-rails (0.3.0)
+      activesupport
       solargraph (>= 0.41.1)
     sorted_set (1.0.3)
       rbtree
@@ -605,7 +606,8 @@ GEM
     will_paginate (3.3.1)
     with_advisory_lock (4.6.0)
       activerecord (>= 4.2)
-    yard (0.9.26)
+    yard (0.9.27)
+      webrick (~> 1.7.0)
     zeitwerk (2.5.3)
 
 PLATFORMS
@@ -687,7 +689,7 @@ DEPENDENCIES
   simplecov
   skylight
   solargraph
-  solargraph-rails (= 0.2.1.1)
+  solargraph-rails (= 0.3.0)
   sprockets-rails
   stackprof
   stripe
