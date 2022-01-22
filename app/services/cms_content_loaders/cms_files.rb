@@ -7,6 +7,8 @@ class CmsContentLoaders::CmsFiles < CmsContentLoaders::Base
   end
 
   def create_item(_identifier, attrs)
-    File.open(attrs[:path], 'rb') { |file| cms_parent.cms_files.create!(file: file) }
+    File.open(attrs[:path], 'rb') do |file|
+      cms_parent.cms_files.create!(file: { io: file, filename: File.basename(attrs[:path]) })
+    end
   end
 end
