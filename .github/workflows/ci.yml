@@ -182,19 +182,8 @@ jobs:
         target: production
         tags: |
           neinteractiveliterature/intercode:${{ github.sha }}
-        # TODO: put this back once it gets working again
-        # cache-from: type=gha
-        # cache-to: type=gha,mode=max
-        cache-from: type=local,src=/tmp/.buildx-cache
-        cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
-    -
-      # Temp fix
-      # https://github.com/docker/build-push-action/issues/252
-      # https://github.com/moby/buildkit/issues/1896
-      name: Move cache
-      run: |
-        rm -rf /tmp/.buildx-cache
-        mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+        cache-from: type=gha,scope=${{ github.workflow }}
+        cache-to: type=gha,scope=${{ github.workflow }}
   docker-release:
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.event.ref == 'refs/heads/main'
