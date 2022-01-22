@@ -1,5 +1,3 @@
-# TODO: Figure out a way to use EnvironmentBasedUploader in here without this
-require_relative '../../app/uploaders/environment_based_uploader'
 require File.expand_path('lib/intercode/disable_caching_for_specific_assets', Rails.root)
 
 Rails.application.configure do
@@ -40,7 +38,7 @@ Rails.application.configure do
   # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for NGINX
 
   # Store uploaded files on Amazon S3.
-  config.active_storage.service = EnvironmentBasedUploader.use_fog? ? :amazon : :local
+  config.active_storage.service = :amazon
 
   # Mount Action Cable outside main process or domain
   # config.action_cable.mount_path = nil

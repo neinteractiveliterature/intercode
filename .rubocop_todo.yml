@@ -448,13 +448,6 @@ Rails/TimeZone:
   Enabled: false
 
 # Offense count: 1
-# Configuration parameters: Environments.
-# Environments: development, test, production
-Rails/UnknownEnv:
-  Exclude:
-    - 'app/uploaders/environment_based_uploader.rb'
-
-# Offense count: 1
 # Cop supports --auto-correct.
 # Configuration parameters: AutoCorrect.
 Security/JSONLoad:
