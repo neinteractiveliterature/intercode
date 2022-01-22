@@ -69,10 +69,8 @@ class Convention < ApplicationRecord
   EMAIL_MODES = %w[forward staff_emails_to_catch_all].freeze
   TIMEZONE_MODES = %w[convention_local user_local].freeze
 
-  mount_uploader :favicon, FaviconUploader
-  mount_uploader :open_graph_image, OpenGraphImageUploader
-  has_one_attached :as_favicon
-  has_one_attached :as_open_graph_image
+  has_one_attached :favicon
+  has_one_attached :open_graph_image
 
   before_destroy :nullify_associated_content
 
@@ -130,41 +128,6 @@ class Convention < ApplicationRecord
   validate :timezone_name_must_be_valid
   validate :site_mode_must_be_possible
   validate :show_event_list_must_be_at_least_as_permissive_as_show_schedule
-
-  after_commit { update_active_storage_favicon if previous_changes.key?('favicon') }
-  after_commit { update_active_storage_open_graph_image if previous_changes.key?('open_graph_image') }
-
-  def update_active_storage_favicon
-    as_favicon.purge if as_favicon.attached?
-    sync_favicon if favicon.present?
-  rescue StandardError => e
-    Log.error(e)
-  end
-
-  def sync_favicon
-    picture = favicon
-    picture.cache_stored_file!
-    file = StringIO.new(picture.sanitized_file.read)
-    content_type = picture.content_type
-    as_favicon.attach(io: file, content_type: content_type, filename: attributes['favicon'])
-    as_favicon.attachment.save!
-  end
-
-  def update_active_storage_open_graph_image
-    as_open_graph_image.purge if as_open_graph_image.attached?
-    sync_open_graph_image if open_graph_image.present?
-  rescue StandardError => e
-    Log.error(e)
-  end
-
-  def sync_open_graph_image
-    picture = open_graph_image
-    picture.cache_stored_file!
-    file = StringIO.new(picture.sanitized_file.read)
-    content_type = picture.content_type
-    as_open_graph_image.attach(io: file, content_type: content_type, filename: attributes['open_graph_image'])
-    as_open_graph_image.attachment.save!
-  end
 
   def started?
     starts_at && starts_at <= Time.zone.now

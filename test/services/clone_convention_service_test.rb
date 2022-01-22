@@ -47,7 +47,7 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
 
   it 'clones CMS content' do
     ClearCmsContentService.new(convention: convention).call!
-    File.open(__FILE__) { |f| convention.cms_files.create!(file: f) }
+    File.open(__FILE__) { |f| convention.cms_files.create!(file: { io: f, filename: File.basename(__FILE__) }) }
     LoadCmsContentSetService.new(convention: convention, content_set_name: 'standard').call!
     result = service.call
     assert result.success?

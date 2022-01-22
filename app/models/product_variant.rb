@@ -27,27 +27,8 @@
 class ProductVariant < ApplicationRecord
   belongs_to :product
 
-  mount_uploader :image, ProductImageUploader
-  has_one_attached :as_image
+  has_one_attached :image
   serialize :override_pricing_structure, ActiveModelCoder.new('PricingStructure', allow_nil: true)
-
-  after_commit { update_active_storage if previous_changes.key?('image') }
-
-  def update_active_storage
-    as_image.purge if as_image.attached?
-    sync_image if image.present?
-  rescue StandardError => e
-    Log.error(e)
-  end
-
-  def sync_image
-    picture = image
-    picture.cache_stored_file!
-    file = StringIO.new(picture.sanitized_file.read)
-    content_type = picture.content_type
-    as_image.attach(io: file, content_type: content_type, filename: attributes['image'])
-    as_image.save!
-  end
 
   def to_liquid
     ProductVariantDrop.new(self)

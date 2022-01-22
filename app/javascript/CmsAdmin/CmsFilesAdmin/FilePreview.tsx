@@ -7,6 +7,10 @@ function iconForContentType(contentType: string) {
     return 'file-earmark-play';
   }
 
+  if (contentType.match(/^image\//)) {
+    return 'file-earmark-image';
+  }
+
   switch (contentType) {
     case 'application/pdf':
       return 'file-earmark-pdf';
@@ -40,11 +44,7 @@ export type FilePreviewProps = {
 function FilePreview({ url, contentType, filename, size }: FilePreviewProps): JSX.Element {
   const effectiveSize = size ?? '100px';
 
-  if (contentType?.startsWith('image/')) {
-    if (url == null) {
-      return <></>;
-    }
-
+  if (url != null) {
     return (
       <img
         src={url}

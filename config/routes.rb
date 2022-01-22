@@ -19,6 +19,24 @@ Intercode::Application.routes.draw do
   # CMS stuff
   get 'liquid_docs/(*extra)' => 'liquid_docs#show', :as => :liquid_docs
 
+  direct :cdn_upload do |model, options|
+    if model.respond_to?(:signed_id)
+      route_for(:rails_service_blob_proxy, model.signed_id, model.filename, options.merge(host: ENV['UPLOADS_HOST']))
+    else
+      signed_blob_id = model.blob.signed_id
+      variation_key = model.variation.key
+      filename = model.blob.filename
+
+      route_for(
+        :rails_blob_representation_proxy,
+        signed_blob_id,
+        variation_key,
+        filename,
+        options.merge(host: ENV['UPLOADS_HOST'])
+      )
+    end
+  end
+
   # All of these pages must be within the virtual host
   constraints(Intercode::VirtualHostConstraint.new) do
     resources :user_con_profiles, only: [] do

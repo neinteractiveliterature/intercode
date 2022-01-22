@@ -12,7 +12,7 @@ class Types::CmsFileType < Types::BaseObject
   field :file, Types::ActiveStorageAttachmentType, null: false
 
   def file
-    ActiveStorageAttachmentLoader.for(CmsFile, :as_file).load(object)
+    ActiveStorageAttachmentLoader.for(CmsFile, :file).load(object)
   end
 
   def current_ability_can_delete
@@ -20,14 +20,14 @@ class Types::CmsFileType < Types::BaseObject
   end
 
   def url
-    context[:controller].rails_representation_url(object.as_file)
+    context[:controller].cdn_upload_url(object.file)
   end
 
   def content_type
-    object.as_file.content_type
+    object.file.content_type
   end
 
   def size
-    object.as_file.byte_size
+    object.file.byte_size
   end
 end
