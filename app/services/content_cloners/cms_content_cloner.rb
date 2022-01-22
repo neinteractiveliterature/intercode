@@ -53,15 +53,10 @@ class ContentCloners::CmsContentCloner < ContentCloners::ContentClonerBase
 
   def clone_cms_files(convention)
     Rails.logger.info('Cloning files')
-    clonable_files =
-      source_convention.cms_files.select do |cms_file|
-        cms_file.file.cache_stored_file!
-        cms_file.file.cached?
-      end
 
     @id_maps[:cms_files] =
-      clone_with_id_map(CmsFile.where(id: clonable_files.map(&:id)), convention.cms_files) do |file, cloned_file|
-        cloned_file.file = file.file
+      clone_with_id_map(source_convention.cms_files, convention.cms_files) do |file, cloned_file|
+        cloned_file.file.attach(file.file.blob)
       end
   end
 

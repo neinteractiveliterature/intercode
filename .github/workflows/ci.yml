@@ -75,6 +75,11 @@ jobs:
       run: yarn install
     - name: build
       run: yarn run test
+    - name: Publish Test Report
+      uses: mikepenz/action-junit-report@v2
+      if: always() # always run even if the previous step fails
+      with:
+        report_paths: 'test/reports/TEST-*.xml'
     - name: Archive HTML test reports
       uses: actions/upload-artifact@v2
       if: always()
@@ -133,6 +138,11 @@ jobs:
         run: bundle exec rails db:create db:migrate
       - name: Run tests
         run: TERM=xterm-color bundle exec rails test
+      - name: Publish Test Report
+        uses: mikepenz/action-junit-report@v2
+        if: always() # always run even if the previous step fails
+        with:
+          report_paths: 'test/reports/TEST-*.xml'
       - name: Archive HTML test reports
         uses: actions/upload-artifact@v2
         if: always()

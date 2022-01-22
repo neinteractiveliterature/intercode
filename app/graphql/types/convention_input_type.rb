@@ -9,14 +9,24 @@ class Types::ConventionInputType < Types::BaseInputObject
   argument :event_mailing_list_domain, String, required: false, camelize: false
   argument :email_from, String, required: false, camelize: false
   argument :email_mode, Types::EmailModeType, required: false, camelize: false
-  argument :favicon, ApolloUploadServer::Upload, required: false
+  argument :favicon,
+           ApolloUploadServer::Upload,
+           required: false,
+           prepare: ->(upload, _) {
+             upload&.__getobj__ # Unwrap value for ActiveStorage
+           }
   argument :hidden, Boolean, required: false
   argument :language, String, required: false
   argument :location, Types::JSON, required: false
   argument :maximum_event_signups, Types::ScheduledValueInputType, required: false, camelize: false
   argument :maximum_tickets, Integer, required: false, camelize: false
   argument :name, String, required: false
-  argument :open_graph_image, ApolloUploadServer::Upload, required: false
+  argument :open_graph_image,
+           ApolloUploadServer::Upload,
+           required: false,
+           prepare: ->(upload, _) {
+             upload&.__getobj__ # Unwrap value for ActiveStorage
+           }
   argument :root_page_id, ID, required: false, camelize: true
   argument :show_schedule, Types::ShowScheduleType, required: false, camelize: false
   argument :show_event_list, Types::ShowScheduleType, required: false, camelize: false

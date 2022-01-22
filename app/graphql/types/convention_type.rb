@@ -147,7 +147,7 @@ class Types::ConventionType < Types::BaseObject
   field :favicon, Types::ActiveStorageAttachmentType, null: true
 
   def favicon
-    ActiveStorageAttachmentLoader.for(Convention, :as_favicon).load(object)
+    ActiveStorageAttachmentLoader.for(Convention, :favicon).load(object)
   end
 
   field :favicon_url, String, null: true, deprecation_reason: 'Please use the favicon field instead.'
@@ -236,7 +236,7 @@ class Types::ConventionType < Types::BaseObject
   field :open_graph_image, Types::ActiveStorageAttachmentType, null: true
 
   def open_graph_image
-    ActiveStorageAttachmentLoader.for(Convention, :as_open_graph_image).load(object)
+    ActiveStorageAttachmentLoader.for(Convention, :open_graph_image).load(object)
   end
 
   field :open_graph_image_url, String, null: true, deprecation_reason: 'Please use the open_graph_image field instead.'

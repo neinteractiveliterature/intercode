@@ -38,8 +38,6 @@ gem 'scheduled_value', '~> 1.4.0'
 gem 'civil_service', github: 'neinteractiveliterature/civil_service', branch: 'no-double-validate'
 
 # File uploading
-gem 'carrierwave', '~> 2.2.2'
-gem 'fog-aws'
 gem 'aws-sdk-s3'
 gem 'ruby-vips'
 
