@@ -86,28 +86,6 @@ jobs:
       with:
         name: test-reports
         path: test/html_reports
-  webpack:
-    name: webpack
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: Set up yarn cache
-      uses: actions/cache@v2
-      id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
-      with:
-        path: .yarn/cache
-        key: ${{ runner.os }}-tsc-yarn-${{ github.ref }}-${{ hashFiles('**/yarn.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-tsc-yarn-${{ github.ref }}-
-          ${{ runner.os }}-tsc-yarn-
-    - name: install node v14
-      uses: actions/setup-node@v2
-      with:
-        node-version: 14
-    - name: yarn install
-      run: yarn install
-    - name: build
-      run: yarn run build
   minitest:
     name: minitest
     runs-on: ubuntu-latest
@@ -224,7 +202,6 @@ jobs:
       - graphql-codegen
       - tsc
       - jest
-      - webpack
       - minitest
       - docker-build
     steps:
