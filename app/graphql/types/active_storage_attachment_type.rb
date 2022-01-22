@@ -4,7 +4,7 @@ class Types::ActiveStorageAttachmentType < Types::BaseObject
   field :url, String, null: false
   field :content_type, String, null: false
   field :byte_size, Int, null: false
-  field :resized_url, String, null: false do
+  field :resized_url, String, null: true do
     argument :max_width, Int, required: true
     argument :max_height, Int, required: true
   end
@@ -14,7 +14,7 @@ class Types::ActiveStorageAttachmentType < Types::BaseObject
   end
 
   def resized_url(max_width:, max_height:)
-    return url unless object.representable?
+    return nil unless object.representable?
 
     context[:controller].cdn_upload_url(object.representation(resize_to_limit: [max_width, max_height]))
   end
