@@ -178,7 +178,7 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         context: .
-        push: true
+        push: ${{ github.event_name == 'push' && github.event.ref == 'refs/heads/main' }}
         target: production
         tags: |
           neinteractiveliterature/intercode:${{ github.sha }}
