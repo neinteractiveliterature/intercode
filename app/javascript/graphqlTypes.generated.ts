@@ -202,7 +202,7 @@ export type ActiveStorageAttachment = {
   content_type: Scalars['String'];
   filename: Scalars['String'];
   id: Scalars['ID'];
-  resized_url: Scalars['String'];
+  resized_url?: Maybe<Scalars['String']>;
   url: Scalars['String'];
 };
 
@@ -287,17 +287,9 @@ export enum CmsContentTypeIndicator {
 
 export type CmsFile = {
   __typename: 'CmsFile';
-  /** @deprecated File attachment fields are migrating to ActiveStorage.  Please use the subfields under `file` instead. */
-  content_type: Scalars['String'];
   current_ability_can_delete: Scalars['Boolean'];
   file: ActiveStorageAttachment;
-  /** @deprecated File attachment fields are migrating to ActiveStorage.  Please use the subfields under `file` instead. */
-  filename: Scalars['String'];
   id: Scalars['ID'];
-  /** @deprecated File attachment fields are migrating to ActiveStorage.  Please use the subfields under `file` instead. */
-  size: Scalars['Int'];
-  /** @deprecated File attachment fields are migrating to ActiveStorage.  Please use the subfields under `file` instead. */
-  url: Scalars['String'];
 };
 
 export type CmsGraphqlQuery = {

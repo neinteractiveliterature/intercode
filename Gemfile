@@ -40,6 +40,7 @@ gem 'civil_service', github: 'neinteractiveliterature/civil_service', branch: 'n
 # File uploading
 gem 'aws-sdk-s3'
 gem 'ruby-vips'
+gem 'image_processing', '~> 1.2'
 
 # Filthy lucre
 gem 'money-rails'

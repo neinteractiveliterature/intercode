@@ -1428,13 +1428,9 @@
                 }
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -2037,22 +2033,6 @@
           "description": null,
           "fields": [
             {
-              "name": "content_type",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": true,
-              "deprecationReason": "File attachment fields are migrating to ActiveStorage.  Please use the subfields under `file` instead."
-            },
-            {
               "name": "current_ability_can_delete",
               "description": null,
               "args": [],
@@ -2085,22 +2065,6 @@
               "deprecationReason": null
             },
             {
-              "name": "filename",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": true,
-              "deprecationReason": "File attachment fields are migrating to ActiveStorage.  Please use the subfields under `file` instead."
-            },
-            {
               "name": "id",
               "description": null,
               "args": [],
@@ -2115,38 +2079,6 @@
               },
               "isDeprecated": false,
               "deprecationReason": null
-            },
-            {
-              "name": "size",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": true,
-              "deprecationReason": "File attachment fields are migrating to ActiveStorage.  Please use the subfields under `file` instead."
-            },
-            {
-              "name": "url",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": true,
-              "deprecationReason": "File attachment fields are migrating to ActiveStorage.  Please use the subfields under `file` instead."
             }
           ],
           "inputFields": null,

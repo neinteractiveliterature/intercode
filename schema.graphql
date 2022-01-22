@@ -108,7 +108,7 @@ type ActiveStorageAttachment {
   content_type: String!
   filename: String!
   id: ID!
-  resized_url(maxHeight: Int!, maxWidth: Int!): String!
+  resized_url(maxHeight: Int!, maxWidth: Int!): String
   url: String!
 }
 
@@ -199,13 +199,9 @@ enum CmsContentTypeIndicator {
 }
 
 type CmsFile {
-  content_type: String! @deprecated(reason: "File attachment fields are migrating to ActiveStorage.  Please use the subfields under `file` instead.")
   current_ability_can_delete: Boolean!
   file: ActiveStorageAttachment!
-  filename: String! @deprecated(reason: "File attachment fields are migrating to ActiveStorage.  Please use the subfields under `file` instead.")
   id: ID!
-  size: Int! @deprecated(reason: "File attachment fields are migrating to ActiveStorage.  Please use the subfields under `file` instead.")
-  url: String! @deprecated(reason: "File attachment fields are migrating to ActiveStorage.  Please use the subfields under `file` instead.")
 }
 
 type CmsGraphqlQuery {

@@ -35,10 +35,10 @@ function iconForContentType(contentType: string) {
 }
 
 export type FilePreviewProps = {
-  url?: string;
-  contentType?: string;
-  filename?: string;
-  size?: string;
+  url?: string | null;
+  contentType?: string | null;
+  filename?: string | null;
+  size?: string | null;
 };
 
 function FilePreview({ url, contentType, filename, size }: FilePreviewProps): JSX.Element {
@@ -50,7 +50,7 @@ function FilePreview({ url, contentType, filename, size }: FilePreviewProps): JS
         src={url}
         className="img-responsive"
         style={{ maxWidth: effectiveSize, maxHeight: effectiveSize }}
-        alt={filename}
+        alt={filename ?? undefined}
       />
     );
   }
