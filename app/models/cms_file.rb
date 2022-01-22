@@ -5,7 +5,6 @@
 # Table name: cms_files
 #
 #  id          :integer          not null, primary key
-#  file        :string           not null
 #  parent_type :string
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
@@ -14,9 +13,8 @@
 #
 # Indexes
 #
-#  index_cms_files_on_parent_id           (parent_id)
-#  index_cms_files_on_parent_id_and_file  (parent_id,file) UNIQUE
-#  index_cms_files_on_uploader_id         (uploader_id)
+#  index_cms_files_on_parent_id    (parent_id)
+#  index_cms_files_on_uploader_id  (uploader_id)
 #
 # Foreign Keys
 #
@@ -30,56 +28,20 @@ class CmsFile < ApplicationRecord
   model_with_parent
   has_and_belongs_to_many :pages
   belongs_to :uploader, class_name: 'User', optional: true
-  mount_uploader :file, CmsFileUploader
-  has_one_attached :as_file
+  has_one_attached :file
 
   validate :validate_file_name_is_unique
 
-  after_commit { update_active_storage if previous_changes.key?('file') }
-
-  def update_active_storage
-    as_file.purge if as_file.attached?
-    sync_file if file.present?
-  rescue StandardError => e
-    Log.error(e)
-  end
-
-  def sync_file
-    picture = file
-    picture.cache_stored_file!
-    file = StringIO.new(picture.sanitized_file.read)
-    content_type = picture.content_type
-    as_file.attach(io: file, content_type: content_type, filename: attributes['file'])
-    as_file.attachment.save!
-  end
-
   def to_param
-    "#{id}-#{as_file.filename.to_param}"
+    "#{id}-#{file.filename.to_param}"
   end
 
   def rename_file(filename)
-    # TODO delete all this once Carrierwave is gone
-    new_path = File.join(File.dirname(file.path), filename)
-
-    if EnvironmentBasedUploader.use_fog?
-      resource = Aws::S3::Resource.new
-      bucket = resource.bucket(CmsFileUploader.fog_directory)
-      object = bucket.object(file.path)
-      object.move_to({ bucket: bucket.name, key: new_path }, { acl: 'public-read' })
-    else
-      File.rename(file.path, new_path)
-    end
-
-    update_column('file', filename)
-    reload
-
-    # --- End of section to delete
-
-    as_file.blob.update!(filename: filename)
+    file.blob.update!(filename: filename)
   end
 
   def validate_file_name_is_unique
-    the_filename = as_file.filename.to_s
+    the_filename = file.filename.to_s
 
     scope = parent ? CmsFile.where(parent: parent) : CmsFile.global
     duplicates =

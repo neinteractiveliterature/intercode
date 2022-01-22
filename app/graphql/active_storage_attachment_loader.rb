@@ -44,6 +44,6 @@ class ActiveStorageAttachmentLoader < GraphQL::Batch::Loader
   end
 
   def association_loaded?(record)
-    record.association(@association_name).loaded? && record.public_send(@attachment_name).association(:blob).loaded?
+    record.association(@association_name).loaded? && record.public_send(@attachment_name)&.association(:blob)&.loaded?
   end
 end

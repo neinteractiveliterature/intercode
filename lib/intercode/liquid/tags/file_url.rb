@@ -13,7 +13,7 @@ module Intercode
           cache = context.registers[:cached_files] || {}
           cms_file = cache[filename]
           if cms_file
-            attachment = cms_file.as_file
+            attachment = cms_file.file
           else
             parent = context.registers['parent']
             attachment =
@@ -24,7 +24,7 @@ module Intercode
             return "Error: file #{filename} not found" unless attachment
           end
 
-          context.registers['controller'].rails_representation_url(attachment)
+          context.registers['controller'].cdn_upload_url(attachment)
         end
       end
     end
