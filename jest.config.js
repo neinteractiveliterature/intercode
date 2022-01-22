@@ -17,6 +17,13 @@ const config = {
         pageTitle: 'Test Report',
       },
     ],
+    [
+      require.resolve('jest-junit'),
+      {
+        outputDirectory: './test/reports',
+        outputName: 'TEST-jest.xml',
+      },
+    ],
   ],
   setupFiles: ['regenerator-runtime/runtime'],
   setupFilesAfterEnv: ['./test/javascript/setupTests.ts'],
