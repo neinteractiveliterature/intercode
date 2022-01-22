@@ -14,6 +14,8 @@ class Types::ActiveStorageAttachmentType < Types::BaseObject
   end
 
   def resized_url(max_width:, max_height:)
+    return url unless object.representable?
+
     context[:controller].cdn_upload_url(object.representation(resize_to_limit: [max_width, max_height]))
   end
 end
