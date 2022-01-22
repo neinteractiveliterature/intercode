@@ -8,8 +8,8 @@
 <%= javascript_include_tag url_with_possible_host('/packs/application.js', ENV['ASSETS_HOST']), defer: true, type: 'module' %>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
 <meta property="og:url" content="<%= request.url %>">
-<% if convention&.open_graph_image&.url.present? -%>
-  <meta property="og:image" content="<%= rails_representation_url(convention.as_open_graph_image) %>">
+<% if convention&.open_graph_image&.attachment -%>
+  <meta property="og:image" content="<%= cdn_upload_url(convention.open_graph_image) %>">
 <% end -%>
 <% if @event -%>
   <meta property="og:title" content="<%= @event.title %>"
@@ -26,6 +26,6 @@
   <meta property="og:description" content="">
 <% end -%>
 <meta property="og:type" content="website"/>
-<% if convention&.as_favicon&.attachment -%>
-  <link rel="icon" type="<%= convention.as_favicon.content_type %>" href="<%= rails_representation_url(convention.as_favicon) %>">
+<% if convention&.favicon&.attachment -%>
+  <link rel="icon" type="<%= convention.favicon.content_type %>" href="<%= cdn_upload_url(convention.favicon) %>">
 <% end -%>

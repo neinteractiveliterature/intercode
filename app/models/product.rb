@@ -36,8 +36,7 @@ class Product < ApplicationRecord
   has_many :order_entries, dependent: :destroy
   belongs_to :provides_ticket_type, class_name: 'TicketType', optional: true
 
-  mount_uploader :image, ProductImageUploader
-  has_one_attached :as_image
+  has_one_attached :image
   serialize :pricing_structure, ActiveModelCoder.new('PricingStructure')
 
   validate :ensure_valid_payment_options
@@ -45,24 +44,6 @@ class Product < ApplicationRecord
 
   scope :available, -> { where(available: true) }
   scope :ticket_providing, -> { where.not(provides_ticket_type_id: nil) }
-
-  after_commit { update_active_storage if previous_changes.key?('image') }
-
-  def update_active_storage
-    as_image.purge if as_image.attached?
-    sync_image if image.present?
-  rescue StandardError => e
-    Log.error(e)
-  end
-
-  def sync_image
-    picture = image
-    picture.cache_stored_file!
-    file = StringIO.new(picture.sanitized_file.read)
-    content_type = picture.content_type
-    as_image.attach(io: file, content_type: content_type, filename: attributes['image'])
-    as_image.save!
-  end
 
   def to_param
     "#{id}-#{name.parameterize}"

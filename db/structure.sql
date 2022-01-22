@@ -905,7 +905,6 @@ CREATE TABLE public.cms_files (
     id integer NOT NULL,
     parent_id integer,
     uploader_id integer,
-    file character varying NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     parent_type character varying
@@ -3893,13 +3892,6 @@ CREATE INDEX index_cms_files_on_parent_id ON public.cms_files USING btree (paren
 
 
 --
--- Name: index_cms_files_on_parent_id_and_file; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_cms_files_on_parent_id_and_file ON public.cms_files USING btree (parent_id, file);
-
-
---
 -- Name: index_cms_files_on_uploader_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -5675,6 +5667,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220102231745'),
 ('20220109172815'),
 ('20220109173235'),
-('20220117183908');
+('20220117183908'),
+('20220122172525');
 
 

@@ -10,10 +10,10 @@ class Types::ActiveStorageAttachmentType < Types::BaseObject
   end
 
   def url
-    context[:controller].rails_representation_url(object)
+    context[:controller].cdn_upload_url(object)
   end
 
   def resized_url(max_width:, max_height:)
-    context[:controller].rails_representation_url(object.representation(resize_to_limit: [max_width, max_height]))
+    context[:controller].cdn_upload_url(object.representation(resize_to_limit: [max_width, max_height]))
   end
 end
