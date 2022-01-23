@@ -36,6 +36,10 @@ if ENV['CLOUDWATCH_LOG_GROUP']
   # rubocop:enable Naming/ClassAndModuleCamelCase
   # rubocop:enable Lint/SuppressedException
 
+  Ahoy.logger = nil
+
+  Shoryuken.sqs_client = Aws::SQS::Client.new(logger: :debug)
+
   # Adapted from https://github.com/liefery-it-legacy/loggery-gem
   class ShoryukenJSONLogging
     class << self
