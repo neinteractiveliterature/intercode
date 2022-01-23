@@ -76,6 +76,10 @@ gem 'whenever'
 # Privacy-respecting metrics
 gem 'ahoy_matey'
 
+# Logging
+gem 'cloudwatchlogger'
+gem 'lograge'
+
 # Miscellany
 gem 'dalli'
 gem 'domain_prefix'
@@ -85,7 +89,6 @@ gem 'platform-api'
 gem 'skylight'
 gem 'tzinfo-data'
 gem 'browser'
-gem 'cloudwatchlogger'
 
 gem 'faker', group: 'development', require: false
 
