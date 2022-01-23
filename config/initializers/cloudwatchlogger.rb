@@ -66,6 +66,9 @@ if ENV['CLOUDWATCH_LOG_GROUP']
     private
 
     def build_metadata(queue, body)
+      dyno_id = ENV['DYNO']
+      dyno_type = dyno_id ? dyno_id.split('.').first : nil
+
       {
         jid: body['job_id'],
         thread_id: Thread.current.object_id.to_s(36),
@@ -111,7 +114,7 @@ if ENV['CLOUDWATCH_LOG_GROUP']
 
   ::Shoryuken.configure_server do |config|
     config.server_middleware { |chain| chain.add ShoryukenJSONLogging }
-    config.sqs_client = Aws::SQS::Client.new(log_level: :debug)
+    config.sqs_client = Aws::SQS::Client.new(logger: nil)
   end
 
   Rails.application.configure do
