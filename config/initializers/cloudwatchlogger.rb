@@ -7,8 +7,8 @@ if ENV['CLOUDWATCH_LOG_GROUP']
       class AWS_SDK
         class DeliveryThread < Thread
           def connect!(opts = {})
-            # This is the only actually changed line: I added log_level: :warn
-            args = { http_open_timeout: opts[:open_timeout], http_read_timeout: opts[:read_timeout], log_level: :warn }
+            # This is the only actually changed line: I added logger: nil
+            args = { http_open_timeout: opts[:open_timeout], http_read_timeout: opts[:read_timeout], logger: nil }
             args[:region] = @opts[:region] if @opts[:region]
             args.merge(
               if @credentials.key?(:access_key_id)
