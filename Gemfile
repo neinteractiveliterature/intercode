@@ -85,6 +85,7 @@ gem 'platform-api'
 gem 'skylight'
 gem 'tzinfo-data'
 gem 'browser'
+gem 'cloudwatchlogger'
 
 gem 'faker', group: 'development', require: false
 
