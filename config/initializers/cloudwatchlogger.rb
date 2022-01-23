@@ -40,6 +40,9 @@ if ENV['CLOUDWATCH_LOG_GROUP']
 
   Shoryuken.sqs_client = Aws::SQS::Client.new(logger: :debug)
 
+  dyno_id = ENV['DYNO']
+  dyno_type = dyno_id ? dyno_id.split('.').first : nil
+
   # Adapted from https://github.com/liefery-it-legacy/loggery-gem
   class ShoryukenJSONLogging
     class << self
@@ -65,9 +68,6 @@ if ENV['CLOUDWATCH_LOG_GROUP']
     private
 
     def build_metadata(queue, body)
-      dyno_id = ENV['DYNO']
-      dyno_type = dyno_id ? dyno_id.split('.').first : nil
-
       {
         jid: body['job_id'],
         thread_id: Thread.current.object_id.to_s(36),
@@ -128,9 +128,6 @@ if ENV['CLOUDWATCH_LOG_GROUP']
 
     config.lograge.custom_options =
       lambda do |event|
-        dyno_id = ENV['DYNO']
-        dyno_type = dyno_id ? dyno_id.split('.').first : nil
-
         {
           request_time: Time.now,
           application: Rails.application.class.name.delete_suffix('::Application'),
@@ -155,7 +152,7 @@ if ENV['CLOUDWATCH_LOG_GROUP']
     CloudWatchLogger.new(
       {},
       ENV['CLOUDWATCH_LOG_GROUP'],
-      ENV['CLOUDWATCH_LOG_STREAM_NAME'] || 'intercode',
+      dyno_type || ENV['CLOUDWATCH_LOG_STREAM_NAME'] || 'intercode',
       { format: :json }
     )
   Rails.application.config.logger.extend(ActiveSupport::Logger.broadcast(cloudwatch_logger))
