@@ -1,4 +1,4 @@
-Shoryuken.configure_server do |config|
+Shoryuken.configure_server do |_config|
   # Replace Rails logger so messages are logged wherever Shoryuken is logging
   # Note: this entire block is only run by the processor, so we don't overwrite
   #       the logger when the app is running as usual.
@@ -12,7 +12,7 @@ Shoryuken.configure_server do |config|
   Shoryuken.sqs_client_receive_message_opts[:ahoy] = { wait_time_seconds: 20 }
 
   # Don't spam the logs
-  config.sqs_client = Aws::SQS::Client.new(log_level: :info)
+  # config.sqs_client = Aws::SQS::Client.new(log_level: :info)
 
   # config.server_middleware do |chain|
   #  chain.add Shoryuken::MyMiddleware

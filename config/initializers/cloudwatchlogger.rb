@@ -38,8 +38,6 @@ if ENV['CLOUDWATCH_LOG_GROUP']
 
   Ahoy.logger = nil
 
-  Shoryuken.sqs_client = Aws::SQS::Client.new(logger: :debug)
-
   dyno_id = ENV['DYNO']
   dyno_type = dyno_id ? dyno_id.split('.').first : nil
 
@@ -111,7 +109,10 @@ if ENV['CLOUDWATCH_LOG_GROUP']
     end
   end
 
-  ::Shoryuken.configure_server { |config| config.server_middleware { |chain| chain.add ShoryukenJSONLogging } }
+  ::Shoryuken.configure_server do |config|
+    config.server_middleware { |chain| chain.add ShoryukenJSONLogging }
+    config.sqs_client = Aws::SQS::Client.new(log_level: :debug)
+  end
 
   Rails.application.configure do
     config.lograge.formatter = Lograge::Formatters::Json.new
