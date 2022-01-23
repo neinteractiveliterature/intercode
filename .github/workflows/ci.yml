@@ -176,8 +176,8 @@ jobs:
         target: production
         tags: |
           neinteractiveliterature/intercode:${{ github.sha }}
-        cache-from: type=gha,scope="${{ github.workflow }}"
-        cache-to: type=gha,mode=max,scope="${{ github.workflow }}"
+        cache-from: type=gha,scope=${{ github.workflow }}
+        cache-to: type=gha,mode=max,scope=${{ github.workflow }}
   docker-release:
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.event.ref == 'refs/heads/main'
