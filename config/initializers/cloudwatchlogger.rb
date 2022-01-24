@@ -126,7 +126,11 @@ if ENV['CLOUDWATCH_LOG_GROUP']
         host: controller.request.host,
         current_user_id: controller.current_user&.id,
         assumed_identity_from_profile_id:
-          controller.respond_to?(:assumed_identity_from_profile) ? controller.assumed_identity_from_profile&.id : nil
+          controller.respond_to?(:assumed_identity_from_profile) ? controller.assumed_identity_from_profile&.id : nil,
+        remote_ip: controller.request.remote_ip,
+        ip: controller.request.ip,
+        x_forwarded_for: controller.request.headers['X-Forwarded-For'],
+        user_agent: controller.request.headers['User-Agent']
       }
     end
 
@@ -138,6 +142,7 @@ if ENV['CLOUDWATCH_LOG_GROUP']
           process_id: Process.pid,
           host: event.payload[:host],
           remote_ip: event.payload[:remote_ip],
+          user_agent: event.payload[:user_agent],
           ip: event.payload[:ip],
           x_forwarded_for: event.payload[:x_forwarded_for],
           params: event.payload[:params],
