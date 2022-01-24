@@ -172,9 +172,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/client@npm:3.5.7, @apollo/client@npm:^3.0.0":
-  version: 3.5.7
-  resolution: "@apollo/client@npm:3.5.7"
+"@apollo/client@npm:3.5.8, @apollo/client@npm:^3.0.0":
+  version: 3.5.8
+  resolution: "@apollo/client@npm:3.5.8"
   dependencies:
     "@graphql-typed-document-node/core": ^3.0.0
     "@wry/context": ^0.6.0
@@ -197,7 +197,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: ddecf62b4bf402948892bf993d58933432fc743b6859ef557fcd137e9b9398c081279dce75e037396f9b22fd54bf578cb88819b4b55bd5e2c30428f100c519b6
+  checksum: c896153784ae7b3adbf378e087c2a3150966fd5f5ea029907965dc5987f4751f2058c55142fe0a8e53f6c38124421b0e7f955f7fa5a4c28840be23c53b3a7e64
   languageName: node
   linkType: hard
 
@@ -19498,7 +19498,7 @@ resolve@^2.0.0-next.3:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
-    "@apollo/client": 3.5.7
+    "@apollo/client": 3.5.8
     "@babel/core": 7.16.12
     "@babel/plugin-proposal-class-properties": 7.16.7
     "@babel/plugin-proposal-do-expressions": 7.16.7
