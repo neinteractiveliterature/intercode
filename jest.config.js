@@ -30,7 +30,7 @@ const config = {
   testEnvironment: 'jsdom',
   testPathIgnorePatterns: ['<rootDir>/node_modules', '<rootDir>/config'],
   transform: {
-    '^.+\\.(js|ts)x?$': './test/javascript/transform.js',
+    '^.+\\.(js|ts)x?$': '@swc/jest',
   },
   transformIgnorePatterns: [
     '/(node_modules|.yarn/.cache)/(?!(lodash-es|@juggle/resize-observer|react-dnd-multi-backend|@neinteractiveliterature/litform|react-bootstrap4-modal|@apollo/client/link|@apollo/client/utilities|ts-invariant)/)',

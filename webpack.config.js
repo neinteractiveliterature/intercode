@@ -119,16 +119,16 @@ const config = {
         type: 'javascript/auto',
         use: [
           {
-            loader: require.resolve('babel-loader'),
+            loader: require.resolve('swc-loader'),
           },
         ],
       },
       {
-        test: /\.(mjs|js|jsx|ts|tsx)?(\.erb)?$/,
+        test: /\.(mjs|js|jsx|ts|tsx)$/,
         exclude: [/node_modules/, /\.yalc/],
         use: [
           {
-            loader: require.resolve('babel-loader'),
+            loader: require.resolve('swc-loader'),
           },
         ],
       },
