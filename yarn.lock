@@ -3866,6 +3866,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@jest/create-cache-key-function@npm:^27.4.2":
+  version: 27.4.2
+  resolution: "@jest/create-cache-key-function@npm:27.4.2"
+  dependencies:
+    "@jest/types": ^27.4.2
+  checksum: 46eeb4460798c6bba9da5bba6d07030012a9290ee6d2e3537e49110e57e6bcb118d9075a942ec3c1b1a2eebb50746d231bc9b15749980dd3817c41db3179c27a
+  languageName: node
+  linkType: hard
+
 "@jest/environment@npm:^27.4.6":
   version: 27.4.6
   resolution: "@jest/environment@npm:27.4.6"
@@ -4783,6 +4792,156 @@ __metadata:
     "@svgr/plugin-jsx": ^6.2.0
     "@svgr/plugin-svgo": ^6.2.0
   checksum: 4fae0ee56c0674a72d896bd3d0ad7f188eb7320f060db1467953f323055c7f75e2f3b827dcf1670a2888209fa4ef30f42c1d4f89db37ff90e3c1622e9b04bf3b
+  languageName: node
+  linkType: hard
+
+"@swc/core-android-arm-eabi@npm:1.2.133":
+  version: 1.2.133
+  resolution: "@swc/core-android-arm-eabi@npm:1.2.133"
+  conditions: os=android & cpu=arm
+  languageName: node
+  linkType: hard
+
+"@swc/core-android-arm64@npm:1.2.133":
+  version: 1.2.133
+  resolution: "@swc/core-android-arm64@npm:1.2.133"
+  conditions: os=android & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@swc/core-darwin-arm64@npm:1.2.133":
+  version: 1.2.133
+  resolution: "@swc/core-darwin-arm64@npm:1.2.133"
+  conditions: os=darwin & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@swc/core-darwin-x64@npm:1.2.133":
+  version: 1.2.133
+  resolution: "@swc/core-darwin-x64@npm:1.2.133"
+  conditions: os=darwin & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@swc/core-freebsd-x64@npm:1.2.133":
+  version: 1.2.133
+  resolution: "@swc/core-freebsd-x64@npm:1.2.133"
+  conditions: os=freebsd & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@swc/core-linux-arm-gnueabihf@npm:1.2.133":
+  version: 1.2.133
+  resolution: "@swc/core-linux-arm-gnueabihf@npm:1.2.133"
+  conditions: os=linux & cpu=arm
+  languageName: node
+  linkType: hard
+
+"@swc/core-linux-arm64-gnu@npm:1.2.133":
+  version: 1.2.133
+  resolution: "@swc/core-linux-arm64-gnu@npm:1.2.133"
+  conditions: os=linux & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@swc/core-linux-arm64-musl@npm:1.2.133":
+  version: 1.2.133
+  resolution: "@swc/core-linux-arm64-musl@npm:1.2.133"
+  conditions: os=linux & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@swc/core-linux-x64-gnu@npm:1.2.133":
+  version: 1.2.133
+  resolution: "@swc/core-linux-x64-gnu@npm:1.2.133"
+  conditions: os=linux & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@swc/core-linux-x64-musl@npm:1.2.133":
+  version: 1.2.133
+  resolution: "@swc/core-linux-x64-musl@npm:1.2.133"
+  conditions: os=linux & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@swc/core-win32-arm64-msvc@npm:1.2.133":
+  version: 1.2.133
+  resolution: "@swc/core-win32-arm64-msvc@npm:1.2.133"
+  conditions: os=win32 & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@swc/core-win32-ia32-msvc@npm:1.2.133":
+  version: 1.2.133
+  resolution: "@swc/core-win32-ia32-msvc@npm:1.2.133"
+  conditions: os=win32 & cpu=ia32
+  languageName: node
+  linkType: hard
+
+"@swc/core-win32-x64-msvc@npm:1.2.133":
+  version: 1.2.133
+  resolution: "@swc/core-win32-x64-msvc@npm:1.2.133"
+  conditions: os=win32 & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@swc/core@npm:^1.2.133":
+  version: 1.2.133
+  resolution: "@swc/core@npm:1.2.133"
+  dependencies:
+    "@swc/core-android-arm-eabi": 1.2.133
+    "@swc/core-android-arm64": 1.2.133
+    "@swc/core-darwin-arm64": 1.2.133
+    "@swc/core-darwin-x64": 1.2.133
+    "@swc/core-freebsd-x64": 1.2.133
+    "@swc/core-linux-arm-gnueabihf": 1.2.133
+    "@swc/core-linux-arm64-gnu": 1.2.133
+    "@swc/core-linux-arm64-musl": 1.2.133
+    "@swc/core-linux-x64-gnu": 1.2.133
+    "@swc/core-linux-x64-musl": 1.2.133
+    "@swc/core-win32-arm64-msvc": 1.2.133
+    "@swc/core-win32-ia32-msvc": 1.2.133
+    "@swc/core-win32-x64-msvc": 1.2.133
+  dependenciesMeta:
+    "@swc/core-android-arm-eabi":
+      optional: true
+    "@swc/core-android-arm64":
+      optional: true
+    "@swc/core-darwin-arm64":
+      optional: true
+    "@swc/core-darwin-x64":
+      optional: true
+    "@swc/core-freebsd-x64":
+      optional: true
+    "@swc/core-linux-arm-gnueabihf":
+      optional: true
+    "@swc/core-linux-arm64-gnu":
+      optional: true
+    "@swc/core-linux-arm64-musl":
+      optional: true
+    "@swc/core-linux-x64-gnu":
+      optional: true
+    "@swc/core-linux-x64-musl":
+      optional: true
+    "@swc/core-win32-arm64-msvc":
+      optional: true
+    "@swc/core-win32-ia32-msvc":
+      optional: true
+    "@swc/core-win32-x64-msvc":
+      optional: true
+  checksum: cc2f28ce7f70e7d94491fef9ed75f3db564f0f00c54d6230e8acac466ec0301481a2bbde8c85daa03bbf9f796cabf11e57b27524495e8db6daa62cdd9bb3ad9b
+  languageName: node
+  linkType: hard
+
+"@swc/jest@npm:^0.2.17":
+  version: 0.2.17
+  resolution: "@swc/jest@npm:0.2.17"
+  dependencies:
+    "@jest/create-cache-key-function": ^27.4.2
+  peerDependencies:
+    "@swc/core": "*"
+  checksum: 33e08c71adaa3d46f47b888b954c8f61513804a1b3ee24fdc13ccbbb89ca6c96b474eef4002b96edcd6090a308a1aafd313073ae4bcd6339fcc3a22e2f29f1b7
   languageName: node
   linkType: hard
 
@@ -19552,6 +19711,8 @@ resolve@^2.0.0-next.3:
     "@prettier/plugin-ruby": 2.0.0
     "@stripe/react-stripe-js": 1.7.0
     "@stripe/stripe-js": 1.22.0
+    "@swc/core": ^1.2.133
+    "@swc/jest": ^0.2.17
     "@testing-library/jest-dom": 5.16.1
     "@testing-library/react": 12.1.2
     "@testing-library/react-hooks": 7.0.2
@@ -19703,6 +19864,7 @@ resolve@^2.0.0-next.3:
     source-map-support: 0.5.21
     stream-browserify: 3.0.0
     style-loader: 3.3.1
+    swc-loader: ^0.1.15
     terser-webpack-plugin: 5.3.0
     thread-loader: 3.0.4
     tinycolor2: 1.4.2
@@ -21086,6 +21248,18 @@ resolve@^2.0.0-next.3:
   dependencies:
     tslib: ^2.0.3
   checksum: 6e21c9e1b3cd5735eb2af679a99ec3efc78a14e3d4d5e3fd594e254b91cfd37185b3d1c6e41b22f53a2cdf5d1b963ce30c0fe8b78337e3fd43d0137084670a5f
+  languageName: node
+  linkType: hard
+
+"swc-loader@npm:^0.1.15":
+  version: 0.1.15
+  resolution: "swc-loader@npm:0.1.15"
+  dependencies:
+    loader-utils: ^2.0.0
+  peerDependencies:
+    "@swc/core": ^1.2.52
+    webpack: ">=2"
+  checksum: dd3b5893cc04abba85f7f3abbd97f4e810da5df24fe87123d4c0b4ac8559df37b59b3b044e88661e9ae52cbb111e0eb6eff02c96e243f984f26cba651eb90f15
   languageName: node
   linkType: hard
 
