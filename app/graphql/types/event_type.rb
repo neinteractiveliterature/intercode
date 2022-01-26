@@ -95,13 +95,29 @@ class Types::EventType < Types::BaseObject
   field :short_blurb_html, String, null: true
 
   def short_blurb_html
-    MarkdownLoader.for('event', 'No information provided').load([[object, 'short_blurb_html'], object.short_blurb])
+    MarkdownLoader
+      .for('event', 'No information provided', context[:controller])
+      .load(
+        [
+          [object, 'short_blurb_html'],
+          object.short_blurb,
+          object.images.includes(:blob).index_by { |image| image.filename.to_s }
+        ]
+      )
   end
 
   field :description_html, String, null: true
 
   def description_html
-    MarkdownLoader.for('event', 'No information provided').load([[object, 'description_html'], object.description])
+    MarkdownLoader
+      .for('event', 'No information provided', context[:controller])
+      .load(
+        [
+          [object, 'description_html'],
+          object.description,
+          object.images.includes(:blob).index_by { |image| image.filename.to_s }
+        ]
+      )
   end
 
   field :admin_notes, String, null: true do

@@ -4,8 +4,32 @@ class MarkdownPresenter
     include Redcarpet::Render::SmartyPants
     include ActionView::Helpers::AssetTagHelper
 
+    def initialize(local_images: {}, controller: nil, **args)
+      super(**args)
+
+      @local_images = local_images.stringify_keys.transform_keys { |key| key.downcase.strip }
+      @controller = controller
+    end
+
     def image(link, title, alt_text)
+      uri = URI.parse(link)
+      is_absolute = uri.host || uri.path.start_with?('/')
+      local_image = is_absolute ? nil : @local_images[link.downcase.strip]
+
+      if local_image && @controller
+        image_tag(
+          @controller.rails_representation_url(local_image),
+          title: title,
+          alt_text: alt_text,
+          class: 'img-fluid'
+        )
+      else
+        image_tag(link, title: title, alt_text: alt_text, class: 'img-fluid')
+      end
+    rescue URI::InvalidURIError
       image_tag(link, title: title, alt_text: alt_text, class: 'img-fluid')
+    rescue StandardError => e
+      "#{e.class.name}: #{e.message}"
     end
   end
 
@@ -14,16 +38,6 @@ class MarkdownPresenter
   include ActionView::Helpers::SanitizeHelper
   include ActionView::Helpers::TagHelper
   include ActionView::Helpers::TextHelper
-
-  def self.markdown_processor
-    @markdown_processor ||=
-      Redcarpet::Markdown.new(
-        MarkdownRenderer.new(link_attributes: { target: '_blank', rel: 'noreferrer' }),
-        no_intra_emphasis: true,
-        autolink: true,
-        footnotes: true
-      )
-  end
 
   def self.strip_single_p(html)
     fragment = Nokogiri::HTML::DocumentFragment.parse(html)
@@ -36,37 +50,60 @@ class MarkdownPresenter
     end
   end
 
-  attr_reader :default_content, :cadmus_renderer
+  attr_reader :default_content, :cadmus_renderer, :controller
 
-  def initialize(default_content, cadmus_renderer: nil)
+  def initialize(default_content, cadmus_renderer: nil, controller: nil)
     @default_content = default_content
     @cadmus_renderer = cadmus_renderer
+    @controller = controller
   end
 
-  def render(markdown, sanitize_content: true, strip_single_p: true, filter_liquid_tags: true)
+  def render(markdown, sanitize_content: true, strip_single_p: true, filter_liquid_tags: true, local_images: {})
     pipeline =
       build_pipeline(
         sanitize_content: sanitize_content,
         strip_single_p: strip_single_p,
-        filter_liquid_tags: filter_liquid_tags
+        filter_liquid_tags: filter_liquid_tags,
+        local_images: local_images
       )
 
     pipeline.inject(markdown) { |acc, elem| elem.call(acc) }
   end
 
+  def markdown_processor(local_images: {})
+    @markdown_processor ||=
+      Redcarpet::Markdown.new(
+        MarkdownRenderer.new(
+          controller: controller,
+          link_attributes: {
+            target: '_blank',
+            rel: 'noreferrer'
+          },
+          local_images: local_images
+        ),
+        no_intra_emphasis: true,
+        autolink: true,
+        footnotes: true
+      )
+  end
+
   private
 
-  def build_pipeline_core(sanitize_content:, filter_liquid_tags:)
-    markdown_renderer = (->(content) { MarkdownPresenter.markdown_processor.render(content || '') })
+  def build_pipeline_core(sanitize_content:, filter_liquid_tags:, local_images:)
+    markdown_renderer = (->(content) { markdown_processor(local_images: local_images).render(content || '') })
     sanitizer = (->(content) { sanitize_html(content, sanitize_content: sanitize_content) })
     liquid_renderer = (->(content) { render_liquid(content, filter_liquid_tags: filter_liquid_tags) })
 
     sanitize_content ? [markdown_renderer, sanitizer, liquid_renderer] : [liquid_renderer, markdown_renderer, sanitizer]
   end
 
-  def build_pipeline(sanitize_content:, strip_single_p:, filter_liquid_tags:)
+  def build_pipeline(sanitize_content:, strip_single_p:, filter_liquid_tags:, local_images:)
     [
-      *build_pipeline_core(sanitize_content: sanitize_content, filter_liquid_tags: filter_liquid_tags),
+      *build_pipeline_core(
+        sanitize_content: sanitize_content,
+        filter_liquid_tags: filter_liquid_tags,
+        local_images: local_images
+      ),
       ->(content) { content.presence || (default_content.present? ? "<p><em>#{default_content}</em></p>" : '') },
       strip_single_p ? ->(content) { MarkdownPresenter.strip_single_p(content) } : nil
     ].compact
@@ -94,8 +131,7 @@ class MarkdownPresenter
         end
         .gsub(/\{%\s*spoiler\s*%\}(.*)\{%\s*endspoiler\s*%\}/) do |_match|
           # Not going to attempt to replicate what AppComponentRenderer actually does here
-          tag.div(nil, 'data-react-class' => 'Spoiler', 
-'data-react-props' => { content: Regexp.last_match(1) }.to_json)
+          tag.div(nil, 'data-react-class' => 'Spoiler', 'data-react-props' => { content: Regexp.last_match(1) }.to_json)
         end
         .html_safe
     else

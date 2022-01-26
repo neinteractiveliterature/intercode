@@ -26,7 +26,8 @@ module ProfileSetupWorkflow
     this_convention_profile_fields = convention.user_con_profile_form.form_items.pluck(:identifier)
 
     profiles_by_recency.each do |profile|
-      profile_attrs = FormResponsePresenter.new(profile.convention.user_con_profile_form, profile).as_json
+      profile_attrs =
+        FormResponsePresenter.new(profile.convention.user_con_profile_form, profile, controller: self).as_json
       destination_profile.assign_form_response_attributes(profile_attrs.slice(*this_convention_profile_fields))
       destination_profile.assign_attributes(gravatar_enabled: profile.gravatar_enabled)
     end

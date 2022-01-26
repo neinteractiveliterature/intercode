@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 class FormResponsePresenter
-  attr_reader :form, :response, :viewer_role, :team_member_name
+  attr_reader :form, :response, :viewer_role, :team_member_name, :controller
 
-  def initialize(form, response, team_member_name: nil, viewer_role: nil)
+  def initialize(form, response, team_member_name: nil, viewer_role: nil, controller: nil)
     @form = form
     @response = response
     @viewer_role = viewer_role&.to_s
     @team_member_name = team_member_name
+    @controller = controller
   end
 
   def as_json(replacement_content_format: 'text')
@@ -62,7 +63,17 @@ class FormResponsePresenter
   end
 
   def render_markdown_for_field(field, value, group_cache_key, object_cache_key, default_content)
-    loader = MarkdownLoader.for(group_cache_key, default_content)
-    loader.load([[object_cache_key, field], value])
+    loader = MarkdownLoader.for(group_cache_key, default_content, controller)
+    loader.load([[object_cache_key, field], value, local_images])
+  end
+
+  def local_images
+    @local_images ||=
+      case response
+      when Event, EventProposal
+        response.images.includes(:blob).index_by { |image| image.filename.to_s }
+      else
+        {}
+      end
   end
 end

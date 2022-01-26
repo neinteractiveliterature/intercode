@@ -120,6 +120,8 @@ class Event < ApplicationRecord
 
   has_many :event_ratings, dependent: :destroy
 
+  has_many_attached :images
+
   # Status specifies the status of the event.  It must be one of
   # "active" or "dropped".
   validates :status, inclusion: { in: STATUSES }
