@@ -9,8 +9,8 @@ $breadcrumb-padding-y: 0.75rem;
 $breadcrumb-border-radius: 0.25rem;
 
 $custom-colors: (
-  "intercode-blue": #3b5998,
-  "medium-light": #E0E1E2,
+  'intercode-blue': #3b5998,
+  'medium-light': #e0e1e2,
 );
 
 .bg-intercode-blue {
@@ -38,12 +38,13 @@ $custom-colors: (
 $info: #17a2b8;
 
 // Reset and dependencies
-@import '~bootstrap/scss/bootstrap';
+@import '~bootstrap/scss/bootstrap.scss';
 
 $theme-colors: map-merge($theme-colors, $custom-colors);
 
 // Port Bootstrap 4 link behavior to Bootstrap 5
-a, .btn-link {
+a,
+.btn-link {
   text-decoration: none;
 
   &:hover {
