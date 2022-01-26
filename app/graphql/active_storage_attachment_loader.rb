@@ -8,7 +8,11 @@ class ActiveStorageAttachmentLoader < GraphQL::Batch::Loader
   def initialize(model, attachment_name)
     @model = model
     @attachment_name = attachment_name
-    @association_name = :"#{attachment_name}_attachment"
+    @association_name = if model.reflect_on_attachment(attachment_name).macro == :has_many_attached
+      :"#{attachment_name}_attachments"
+    else
+      :"#{attachment_name}_attachment"
+                        end
     validate
   end
 

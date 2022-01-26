@@ -69,6 +69,8 @@ class EventProposal < ApplicationRecord
   belongs_to :event, optional: true
   belongs_to :event_category
 
+  has_many_attached :images
+
   STATUSES.each { |status| scope status, -> { where(status: status) } }
 
   scope :submitted, -> { where.not(status: 'draft') }

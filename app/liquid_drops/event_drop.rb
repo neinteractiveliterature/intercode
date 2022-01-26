@@ -81,7 +81,9 @@ class EventDrop < Liquid::Drop
     define_method field do
       markdown = event.public_send(field)
       return nil unless markdown
-      MarkdownPresenter.new('').render(markdown)
+      MarkdownPresenter
+        .new('')
+        .render(markdown, local_images: event.images.includes(:blob).index_by { |image| image.filename.to_s })
     end
   end
 
@@ -89,10 +91,14 @@ class EventDrop < Liquid::Drop
   #                event category.  This only includes publicly-visible fields; fields not
   #                visible to the public will be replaced with a "this is hidden" message.
   def form_response
-    FormResponsePresenter.new(
-      event.event_category.event_form,
-      event,
-      team_member_name: event.event_category.team_member_name
-    ).as_json_with_rendered_markdown('event', event, '').sync
+    FormResponsePresenter
+      .new(
+        event.event_category.event_form,
+        event,
+        team_member_name: event.event_category.team_member_name,
+        controller: @context.registers['controller']
+      )
+      .as_json_with_rendered_markdown('event', event, '')
+      .sync
   end
 end
