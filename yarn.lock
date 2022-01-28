@@ -2048,9 +2048,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/lang-markdown@npm:0.19.4":
-  version: 0.19.4
-  resolution: "@codemirror/lang-markdown@npm:0.19.4"
+"@codemirror/lang-markdown@npm:0.19.5":
+  version: 0.19.5
+  resolution: "@codemirror/lang-markdown@npm:0.19.5"
   dependencies:
     "@codemirror/highlight": ^0.19.0
     "@codemirror/lang-html": ^0.19.0
@@ -2059,7 +2059,7 @@ __metadata:
     "@codemirror/view": ^0.19.0
     "@lezer/common": ^0.15.0
     "@lezer/markdown": ^0.15.0
-  checksum: 588924e231b65e72970e5692db4203b9646ca8cfef98f81dbe91e7574f241fe6ecebc6154618a33c1a30146927ac64e8e025df476cd86ec0abf00ec34305bb19
+  checksum: 931b1721245b25d0098da279094fe9c3e23e5a9adfa47801665e09bb7ac6bdcb58f5d226726f35932d4a2d280951b237c030647958f14a3bd20e72ef05c8e882
   languageName: node
   linkType: hard
 
@@ -19527,7 +19527,7 @@ resolve@^2.0.0-next.3:
     "@codemirror/highlight": 0.19.7
     "@codemirror/lang-html": 0.19.4
     "@codemirror/lang-json": 0.19.1
-    "@codemirror/lang-markdown": 0.19.4
+    "@codemirror/lang-markdown": 0.19.5
     "@codemirror/language": 0.19.7
     "@codemirror/state": 0.19.6
     "@codemirror/view": 0.19.40
