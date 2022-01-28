@@ -7536,10 +7536,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bytes@npm:3.1.1":
-  version: 3.1.1
-  resolution: "bytes@npm:3.1.1"
-  checksum: 949ab99a385d6acf4d2c69f1afc618615dc905936e0b0b9aa94a9e94d722baaba44d6a0851536585a0892ae4d462b5a270ccb1b04c774640742cbde5538ca328
+"bytes@npm:3.1.2":
+  version: 3.1.2
+  resolution: "bytes@npm:3.1.2"
+  checksum: e4bcd3948d289c5127591fbedf10c0b639ccbf00243504e4e127374a15c3bc8eed0d28d4aaab08ff6f1cf2abc0cce6ba3085ed32f4f90e82a5683ce0014e1b6e
   languageName: node
   linkType: hard
 
@@ -19603,7 +19603,7 @@ resolve@^2.0.0-next.3:
     bootstrap: 5.1.3
     bootstrap-icons: 1.7.2
     buffer: 6.0.3
-    bytes: 3.1.1
+    bytes: 3.1.2
     cadmus-navbar-admin: 6.0.0
     caniuse-lite: 1.0.30001303
     case-sensitive-paths-webpack-plugin: 2.4.0
