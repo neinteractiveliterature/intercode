@@ -50,7 +50,7 @@
     "@codemirror/highlight": "0.19.7",
     "@codemirror/lang-html": "0.19.4",
     "@codemirror/lang-json": "0.19.1",
-    "@codemirror/lang-markdown": "0.19.4",
+    "@codemirror/lang-markdown": "0.19.5",
     "@codemirror/language": "0.19.7",
     "@codemirror/state": "0.19.6",
     "@codemirror/view": "0.19.40",
