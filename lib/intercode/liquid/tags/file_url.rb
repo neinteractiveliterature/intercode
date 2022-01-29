@@ -16,6 +16,7 @@ module Intercode
             attachment = cms_file.file
           else
             parent = context.registers['parent']
+            parent = nil if parent.is_a?(RootSite)
             attachment =
               ActiveStorage::Attachment
                 .joins(:blob)
