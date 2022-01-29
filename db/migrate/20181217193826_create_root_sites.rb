@@ -46,7 +46,7 @@ class CreateRootSites < ActiveRecord::Migration[5.2]
 
           default_layout_path = File.expand_path('cms_content_sets/standard/layouts/Default.liquid', Rails.root)
 
-          default_layout_content = File.open(default_layout_path, 'r') { |f| f.read }
+          default_layout_content = File.read(default_layout_path)
 
           default_layout =
             CmsLayout.find_or_create_by!(parent_id: nil, parent_type: nil, name: 'Default') do |layout|
