@@ -38,7 +38,7 @@ ENV NODE_ENV production
 ENV AWS_ACCESS_KEY_ID dummy
 ENV AWS_SECRET_ACCESS_KEY dummy
 
-RUN DATABASE_URL=postgresql://fakehost/not_a_real_database bundle exec rails assets:precompile
+RUN DATABASE_URL=postgresql://fakehost/not_a_real_database AWS_S3_BUCKET=fakebucket bundle exec rails assets:precompile
 RUN rm -r doc-site
 
 ### production
