@@ -5451,6 +5451,7 @@ ALTER TABLE ONLY public.user_con_profiles
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('0'),
 ('20120604131744'),
 ('20120604142637'),
 ('20120604143822'),
