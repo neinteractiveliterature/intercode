@@ -22,7 +22,7 @@ class Types::PermissionInputType < Types::BaseInputObject
       .group_by { |input| input[type_field] }
       .flat_map do |record_type, inputs|
         record_class = record_type.safe_constantize
-        records_by_id = record_class.find(inputs.map { |input| input[id_field] }).index_by(&:id)
+        records_by_id = record_class.find(inputs.map { |input| input[id_field] }).index_by { |record| record.id.to_s }
         inputs.map { |input| { association_name => records_by_id[input[id_field]], :permission => input[:permission] } }
       end
   end

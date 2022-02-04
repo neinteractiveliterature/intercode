@@ -25,10 +25,8 @@ export default LoadSingleValueFromCollectionWrapper(
   function EditStaffPositionPermissions({ value: staffPosition, data: { convention } }) {
     const navigate = useNavigate();
     const [conventionChangeSet, conventionAdd, conventionRemove, conventionReset] = useChangeSet<PermissionWithId>();
-    const [eventCategoriesChangeSet, eventCategoriesAdd, eventCategoriesRemove, eventCategoriesReset] =
-      useChangeSet<PermissionWithId>();
-    const [contentGroupsChangeSet, contentGroupsAdd, contentGroupsRemove, contentGroupsReset] =
-      useChangeSet<PermissionWithId>();
+    const [eventCategoriesChangeSet, eventCategoriesAdd, eventCategoriesRemove] = useChangeSet<PermissionWithId>();
+    const [contentGroupsChangeSet, contentGroupsAdd, contentGroupsRemove] = useChangeSet<PermissionWithId>();
 
     const [error, setError] = useState<ApolloError>();
     const [mutationInProgress, setMutationInProgress] = useState(false);
@@ -41,6 +39,7 @@ export default LoadSingleValueFromCollectionWrapper(
           <PermissionsListInput
             permissionNames={ConventionPermissionNames}
             initialPermissions={staffPosition.permissions}
+            role={staffPosition}
             model={convention}
             changeSet={conventionChangeSet}
             add={conventionAdd}
