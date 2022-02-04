@@ -1,7 +1,7 @@
 #import "./queries.graphql"
 
-mutation CreateCmsFile($file: Upload!) {
-  createCmsFile(input: { file: $file }) {
+mutation CreateCmsFile($signedBlobId: ID!) {
+  createCmsFile(input: { signedBlobId: $signedBlobId }) {
     cms_file {
       id
       ...CmsFileFields

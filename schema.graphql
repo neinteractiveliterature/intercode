@@ -385,6 +385,16 @@ interface CmsParent {
   """
   previewMarkdown(
     """
+    The event ID that this Markdown will apply to, if applicable.
+    """
+    eventId: ID
+
+    """
+    The event proposal ID that this Markdown will apply to, if applicable.
+    """
+    eventProposalId: ID
+
+    """
     The Markdown content to render.
     """
     markdown: String!
@@ -773,6 +783,16 @@ type Convention implements CmsParent {
   """
   previewMarkdown(
     """
+    The event ID that this Markdown will apply to, if applicable.
+    """
+    eventId: ID
+
+    """
+    The event proposal ID that this Markdown will apply to, if applicable.
+    """
+    eventProposalId: ID
+
+    """
     The Markdown content to render.
     """
     markdown: String!
@@ -1160,7 +1180,8 @@ input CreateCmsFileInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  file: Upload!
+  file: Upload @deprecated(reason: "Migrating to ActiveStorage direct uploads; please use signed_blob_id instead")
+  signedBlobId: ID
 }
 
 """
@@ -2832,8 +2853,10 @@ input EventFiltersInput {
 }
 
 input EventInput {
+  addImageBlobIds: [ID!]
   eventCategoryId: ID
   form_response_attrs_json: String
+  removeImageBlobIds: [ID!]
 }
 
 type EventProposal {
@@ -2866,7 +2889,9 @@ input EventProposalFiltersInput {
 }
 
 input EventProposalInput {
+  addImageBlobIds: [ID!]
   form_response_attrs_json: String
+  removeImageBlobIds: [ID!]
 }
 
 type EventProposalsPagination implements PaginationInterface {
@@ -4859,6 +4884,16 @@ type RootSite implements CmsParent {
   Given a Markdown text string, renders it to HTML and returns the result.
   """
   previewMarkdown(
+    """
+    The event ID that this Markdown will apply to, if applicable.
+    """
+    eventId: ID
+
+    """
+    The event proposal ID that this Markdown will apply to, if applicable.
+    """
+    eventProposalId: ID
+
     """
     The Markdown content to render.
     """

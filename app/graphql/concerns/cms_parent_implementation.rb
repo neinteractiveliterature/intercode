@@ -26,13 +26,15 @@ module CmsParentImplementation
   def preview_markdown(markdown:, event_id: nil, event_proposal_id: nil)
     local_images = {}
     if event_id
-      local_images = Event.find(event_id).images.includes(:blob).index_by { |image| image.filename.to_s }
+      local_images = object.events.find(event_id).images.includes(:blob).index_by { |image| image.filename.to_s }
     elsif event_proposal_id
       local_images =
-        EventProposal.find(event_proposal_id).images.includes(:blob).index_by { |image| image.filename.to_s }
+        object.event_proposals.find(event_proposal_id).images.includes(:blob).index_by { |image| image.filename.to_s }
     end
 
-    MarkdownPresenter.new('', cadmus_renderer: cadmus_renderer).render(markdown, local_images: local_images)
+    MarkdownPresenter
+      .new('', cadmus_renderer: cadmus_renderer, controller: context[:controller])
+      .render(markdown, local_images: local_images)
   end
 
   def preview_liquid(content:)

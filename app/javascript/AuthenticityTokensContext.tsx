@@ -6,6 +6,7 @@ export type AuthenticityTokensContextValue = {
   changePassword?: string;
   denyAuthorization?: string;
   grantAuthorization?: string;
+  railsDirectUploads?: string;
   resetPassword?: string;
   signIn?: string;
   signOut?: string;

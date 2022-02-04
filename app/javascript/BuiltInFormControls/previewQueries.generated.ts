@@ -13,6 +13,8 @@ export type PreviewLiquidQueryData = { __typename: 'Query', cmsParent: { __typen
 
 export type PreviewMarkdownQueryVariables = Types.Exact<{
   markdown: Types.Scalars['String'];
+  eventId?: Types.InputMaybe<Types.Scalars['ID']>;
+  eventProposalId?: Types.InputMaybe<Types.Scalars['ID']>;
 }>;
 
 
@@ -64,10 +66,14 @@ export type PreviewLiquidQueryHookResult = ReturnType<typeof usePreviewLiquidQue
 export type PreviewLiquidQueryLazyQueryHookResult = ReturnType<typeof usePreviewLiquidQueryLazyQuery>;
 export type PreviewLiquidQueryQueryResult = Apollo.QueryResult<PreviewLiquidQueryData, PreviewLiquidQueryVariables>;
 export const PreviewMarkdownQueryDocument = gql`
-    query PreviewMarkdownQuery($markdown: String!) {
+    query PreviewMarkdownQuery($markdown: String!, $eventId: ID, $eventProposalId: ID) {
   cmsParent: cmsParentByRequestHost {
     id
-    previewMarkdown(markdown: $markdown)
+    previewMarkdown(
+      markdown: $markdown
+      eventId: $eventId
+      eventProposalId: $eventProposalId
+    )
   }
 }
     `;
@@ -85,6 +91,8 @@ export const PreviewMarkdownQueryDocument = gql`
  * const { data, loading, error } = usePreviewMarkdownQuery({
  *   variables: {
  *      markdown: // value for 'markdown'
+ *      eventId: // value for 'eventId'
+ *      eventProposalId: // value for 'eventProposalId'
  *   },
  * });
  */

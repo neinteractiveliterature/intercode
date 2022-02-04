@@ -1,6 +1,8 @@
 import React, { useCallback } from 'react';
 
 export type FormResponse<AttrsType extends Record<string, unknown> = Record<string, unknown>> = {
+  __typename: string;
+  id: string;
   form_response_attrs: AttrsType;
 };
 

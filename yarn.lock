@@ -4528,6 +4528,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@rails/activestorage@npm:^7.0.1":
+  version: 7.0.1
+  resolution: "@rails/activestorage@npm:7.0.1"
+  dependencies:
+    spark-md5: ^3.0.1
+  checksum: 3e386e668bc87b9f1b36fc744801aee13c91e7fe59989124d45013110b70c6f898f14fb329387425b4795c2d9ea590f4388e9429e2a472b33a2b6ba2e510acdf
+  languageName: node
+  linkType: hard
+
 "@samverschueren/stream-to-observable@npm:^0.3.0":
   version: 0.3.1
   resolution: "@samverschueren/stream-to-observable@npm:0.3.1"
@@ -5451,6 +5460,13 @@ __metadata:
   version: 6.9.7
   resolution: "@types/qs@npm:6.9.7"
   checksum: 7fd6f9c25053e9b5bb6bc9f9f76c1d89e6c04f7707a7ba0e44cc01f17ef5284adb82f230f542c2d5557d69407c9a40f0f3515e8319afd14e1e16b5543ac6cdba
+  languageName: node
+  linkType: hard
+
+"@types/rails__activestorage@npm:^7.0.0":
+  version: 7.0.0
+  resolution: "@types/rails__activestorage@npm:7.0.0"
+  checksum: a2dd20a8edf24babb0610afebc3a5da7dc5f89a08c29dd7fd2a8705dc9902ab5b28c4b861d9ec4bb58fced9cd2d1f07bd1753070880d7ebcad03d62c6e2d4e23
   languageName: node
   linkType: hard
 
@@ -19579,6 +19595,7 @@ resolve@^2.0.0-next.3:
     "@neinteractiveliterature/litform": 0.21.0
     "@popperjs/core": 2.11.2
     "@prettier/plugin-ruby": 2.0.0
+    "@rails/activestorage": ^7.0.1
     "@stripe/react-stripe-js": 1.7.0
     "@stripe/stripe-js": 1.22.0
     "@testing-library/jest-dom": 5.16.2
@@ -19602,6 +19619,7 @@ resolve@^2.0.0-next.3:
     "@types/minimist": 1.2.2
     "@types/node": 16.11.24
     "@types/punycode": 2.1.0
+    "@types/rails__activestorage": ^7.0.0
     "@types/react": 17.0.39
     "@types/react-click-outside-hook": 1.0.0
     "@types/react-color": 3.0.6
@@ -20533,6 +20551,13 @@ resolve@^2.0.0-next.3:
   version: 1.1.5
   resolution: "space-separated-tokens@npm:1.1.5"
   checksum: 8ef68f1cfa8ccad316b7f8d0df0919d0f1f6d32101e8faeee34ea3a923ce8509c1ad562f57388585ee4951e92d27afa211ed0a077d3d5995b5ba9180331be708
+  languageName: node
+  linkType: hard
+
+"spark-md5@npm:^3.0.1":
+  version: 3.0.2
+  resolution: "spark-md5@npm:3.0.2"
+  checksum: 5feebff0bfabcecf56ba03af3e38fdb068272ed41fbf0a94ff9ef65b9bb9cb1dd69be3684db6542e62497b1eac3ae324c07ac4dcb606465dc36ca048177077bf
   languageName: node
   linkType: hard
 
