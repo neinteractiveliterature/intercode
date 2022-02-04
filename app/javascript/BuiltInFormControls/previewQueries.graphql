@@ -5,10 +5,10 @@ query PreviewLiquidQuery($liquid: String!) {
   }
 }
 
-query PreviewMarkdownQuery($markdown: String!) {
+query PreviewMarkdownQuery($markdown: String!, $eventId: ID, $eventProposalId: ID) {
   cmsParent: cmsParentByRequestHost {
     id
-    previewMarkdown(markdown: $markdown)
+    previewMarkdown(markdown: $markdown, eventId: $eventId, eventProposalId: $eventProposalId)
   }
 }
 

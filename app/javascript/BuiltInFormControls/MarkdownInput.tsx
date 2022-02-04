@@ -5,6 +5,7 @@ import {
   UseStandardCodeMirrorExtensionsOptions,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   liquid,
+  LoadQueryWrapper,
 } from '@neinteractiveliterature/litform';
 import type { CodeInputProps } from '@neinteractiveliterature/litform/lib/CodeInput';
 import { useTranslation } from 'react-i18next';
@@ -14,6 +15,41 @@ import { Extension } from '@codemirror/state';
 
 import parsePageContent from '../parsePageContent';
 import { PreviewMarkdownQueryData, PreviewMarkdownQueryDocument } from './previewQueries.generated';
+import { ActiveStorageAttachment } from '../graphqlTypes.generated';
+import AddFileModal from './AddFileModal';
+
+type AttachImageModalProps = {
+  visible: boolean;
+  close: () => void;
+  fileChosen: (file: ActiveStorageAttachment) => void;
+  existingImages: ActiveStorageAttachment[];
+};
+
+function AttachImageModal({ existingImages, addImage, removeImage, visible, close, fileChosen }: AttachImageModalProps) {
+  const [createCmsFile] = useCreateCmsFileMutation();
+  const uploadFile = useCallback(
+    async (file: File) => {
+      const result = await createCmsFile({ variables: { file } });
+      const attachment = result.data?.createCmsFile.cms_file.file;
+      if (!attachment) {
+        throw new Error('Result did not include an ActiveStorage attachment');
+      }
+
+      return attachment;
+    },
+    [createCmsFile],
+  );
+
+  return (
+    <AddFileModal
+      existingFiles={existingImages}
+      uploadFile={uploadFile}
+      visible={visible}
+      close={close}
+      fileChosen={fileChosen}
+    />
+  );
+}
 
 export type MarkdownInputProps = Omit<
   CodeInputProps,
@@ -21,17 +57,14 @@ export type MarkdownInputProps = Omit<
 > &
   Pick<UseStandardCodeMirrorExtensionsOptions, 'onChange'> & {
     extensions?: Extension[];
+    eventId?: string;
+    eventProposalId?: string;
   };
 
-function MarkdownInput(props: MarkdownInputProps): JSX.Element {
+function MarkdownInput({ eventId, eventProposalId, ...props }: MarkdownInputProps): JSX.Element {
   const client = useApolloClient();
   const { t } = useTranslation();
-  const languageExtension = useMemo(
-    // TODO: once parseMixed is more stable, use the Liquid mode
-    // () => liquid({ baseLanguage: markdown().language }),
-    () => markdown(),
-    [],
-  );
+  const languageExtension = useMemo(() => markdown(), []);
   const extensions = useMemo(
     () => [languageExtension, ...(props.extensions ?? [])],
     [props.extensions, languageExtension],
@@ -52,7 +85,7 @@ function MarkdownInput(props: MarkdownInputProps): JSX.Element {
       getPreviewContent={async (markdownContent) => {
         const response = await client.query<PreviewMarkdownQueryData>({
           query: PreviewMarkdownQueryDocument,
-          variables: { markdown: markdownContent },
+          variables: { markdown: markdownContent, eventId, eventProposalId },
           fetchPolicy: 'no-cache',
         });
 

@@ -6,7 +6,7 @@ import { CmsFileFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type CreateCmsFileMutationVariables = Types.Exact<{
-  file: Types.Scalars['Upload'];
+  signedBlobId: Types.Scalars['ID'];
 }>;
 
 
@@ -29,8 +29,8 @@ export type DeleteCmsFileMutationData = { __typename: 'Mutation', deleteCmsFile:
 
 
 export const CreateCmsFileDocument = gql`
-    mutation CreateCmsFile($file: Upload!) {
-  createCmsFile(input: {file: $file}) {
+    mutation CreateCmsFile($signedBlobId: ID!) {
+  createCmsFile(input: {signedBlobId: $signedBlobId}) {
     cms_file {
       id
       ...CmsFileFields
@@ -53,7 +53,7 @@ export type CreateCmsFileMutationFn = Apollo.MutationFunction<CreateCmsFileMutat
  * @example
  * const [createCmsFileMutation, { data, loading, error }] = useCreateCmsFileMutation({
  *   variables: {
- *      file: // value for 'file'
+ *      signedBlobId: // value for 'signedBlobId'
  *   },
  * });
  */

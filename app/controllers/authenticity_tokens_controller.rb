@@ -11,6 +11,8 @@ class AuthenticityTokensController < ApplicationController
                form_authenticity_token(form_options: { action: oauth_authorization_path, method: 'DELETE' }),
              grantAuthorization:
                form_authenticity_token(form_options: { action: oauth_authorization_path, method: 'POST' }),
+             railsDirectUploads:
+               form_authenticity_token(form_options: { action: rails_direct_uploads_path, method: 'POST' }),
              resetPassword: form_authenticity_token(form_options: { action: user_password_path, method: 'POST' }),
              signIn: form_authenticity_token(form_options: { action: user_session_path, method: 'POST' }),
              signOut: form_authenticity_token(form_options: { action: destroy_user_session_path, method: 'DELETE' }),

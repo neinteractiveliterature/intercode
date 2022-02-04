@@ -29,16 +29,9 @@ type AdvisoryLimitDisplayProps = {
   advisoryCharacterLimit?: number;
 };
 
-function AdvisoryLimitDisplay({
-  content,
-  advisoryCharacterLimit,
-  advisoryWordLimit,
-}: AdvisoryLimitDisplayProps) {
+function AdvisoryLimitDisplay({ content, advisoryCharacterLimit, advisoryWordLimit }: AdvisoryLimitDisplayProps) {
   const characterCount = content.length;
-  const wordCount = useMemo(
-    () => content.split(/\s+/).filter((word) => word.length > 0).length,
-    [content],
-  );
+  const wordCount = useMemo(() => content.split(/\s+/).filter((word) => word.length > 0).length, [content]);
   const showLabels = advisoryCharacterLimit != null && advisoryWordLimit != null;
 
   return (
@@ -69,6 +62,7 @@ export type FreeTextItemInputProps = CommonFormItemInputProps<FreeTextFormItem>;
 function FreeTextItemInput(props: FreeTextItemInputProps): JSX.Element {
   const {
     formItem,
+    formResponseReference,
     formTypeIdentifier,
     onChange,
     onInteract,
@@ -78,10 +72,7 @@ function FreeTextItemInput(props: FreeTextItemInputProps): JSX.Element {
   const domId = useUniqueId(`${formItem.identifier}-`);
   const value = uncheckedValue ?? '';
 
-  const userInteracted = useCallback(
-    () => onInteract(formItem.identifier),
-    [onInteract, formItem.identifier],
-  );
+  const userInteracted = useCallback(() => onInteract(formItem.identifier), [onInteract, formItem.identifier]);
 
   const extensions = useMemo(
     () => [
@@ -110,6 +101,8 @@ function FreeTextItemInput(props: FreeTextItemInputProps): JSX.Element {
             extensions={extensions}
             lines={formItem.rendered_properties.lines}
             formControlClassName={classNames({ 'is-invalid': valueInvalid })}
+            eventId={formResponseReference?.type === 'Event' ? formResponseReference.id : undefined}
+            eventProposalId={formResponseReference?.type === 'EventProposal' ? formResponseReference.id : undefined}
           >
             <FieldRequiredFeedback valueInvalid={valueInvalid} />
           </MarkdownInput>

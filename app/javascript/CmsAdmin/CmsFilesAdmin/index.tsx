@@ -3,17 +3,19 @@ import {
   ErrorDisplay,
   useConfirm,
   CopyToClipboardButton,
+  useCreateMutationWithReferenceArrayUpdater,
   useDeleteMutationWithReferenceArrayUpdater,
   LoadQueryWrapper,
 } from '@neinteractiveliterature/litform';
 import { useTranslation } from 'react-i18next';
 
 import FilePreview from './FilePreview';
-import FileUploadForm from './FileUploadForm';
 import usePageTitle from '../../usePageTitle';
 import InPlaceEditor from '../../BuiltInFormControls/InPlaceEditor';
-import { useRenameCmsFileMutation, useDeleteCmsFileMutation } from './mutations.generated';
-import { useCmsFilesAdminQuery } from './queries.generated';
+import { useRenameCmsFileMutation, useDeleteCmsFileMutation, useCreateCmsFileMutation } from './mutations.generated';
+import { CmsFileFieldsFragmentDoc, useCmsFilesAdminQuery } from './queries.generated';
+import { useCallback } from 'react';
+import FileUploadForm from '../../BuiltInForms/FileUploadForm';
 
 export default LoadQueryWrapper(useCmsFilesAdminQuery, function CmsFilesAdmin({ data }): JSX.Element {
   const { refetch } = useCmsFilesAdminQuery();
@@ -33,6 +35,27 @@ export default LoadQueryWrapper(useCmsFilesAdminQuery, function CmsFilesAdmin({ 
     renameFileMutate({
       variables: { id, filename },
     });
+
+  const [createFile] = useCreateMutationWithReferenceArrayUpdater(
+    useCreateCmsFileMutation,
+    data.cmsParent,
+    'cmsFiles',
+    (data) => data.createCmsFile.cms_file,
+    CmsFileFieldsFragmentDoc,
+  );
+
+  const uploadFile = useCallback(
+    async (file: File) => {
+      const result = await createFile({ variables: { file } });
+      const attachment = result.data?.createCmsFile.cms_file.file;
+      if (!attachment) {
+        throw new Error('Result did not include an ActiveStorage attachment');
+      }
+
+      return attachment;
+    },
+    [createFile],
+  );
 
   return (
     <>
@@ -91,7 +114,7 @@ export default LoadQueryWrapper(useCmsFilesAdminQuery, function CmsFilesAdmin({ 
       </div>
 
       {data?.currentAbility.can_create_cms_files && (
-        <FileUploadForm cmsParent={data.cmsParent} onUpload={() => refetch()} />
+        <FileUploadForm uploadFile={uploadFile} onUpload={() => refetch()} />
       )}
     </>
   );

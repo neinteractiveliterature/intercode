@@ -1,4 +1,4 @@
-import { Suspense, useCallback, useRef, useEffect, ReactNode, useState } from 'react';
+import { Suspense, useCallback, useRef, useEffect, ReactNode, useState, useMemo } from 'react';
 import * as React from 'react';
 import { ApolloProvider } from '@apollo/client';
 import { BrowserRouter } from 'react-router-dom';
@@ -24,6 +24,7 @@ import AuthenticityTokensContext, { useAuthenticityTokens } from './Authenticity
 import useIntercodeApolloClient from './useIntercodeApolloClient';
 import MapboxContext, { useMapboxContext } from './MapboxContext';
 import getI18n from './setupI18Next';
+import RailsDirectUploadsContext from './RailsDirectUploadsContext';
 
 function I18NextWrapper({ children }: { children: (i18nInstance: i18n) => ReactNode }) {
   const [i18nInstance, seti18nInstance] = useState<i18n>();
@@ -51,6 +52,8 @@ export type AppWrapperProps = {
     graphql: string;
   };
   mapboxAccessToken: string;
+  railsDefaultActiveStorageServiceName: string;
+  railsDirectUploadsUrl: string;
   recaptchaSiteKey: string;
   stripePublishableKey: string;
 };
@@ -78,6 +81,13 @@ function AppWrapper<P>(WrappedComponent: React.ComponentType<P>): React.Componen
       onUnauthenticatedRef.current = openSignIn;
     }, [openSignIn]);
     const apolloClient = useIntercodeApolloClient(authenticityToken, onUnauthenticatedRef);
+    const railsDirectUploadsContextValue = useMemo(
+      () => ({
+        railsDirectUploadsUrl: props.railsDirectUploadsUrl,
+        railsDefaultActiveStorageServiceName: props.railsDefaultActiveStorageServiceName,
+      }),
+      [props.railsDirectUploadsUrl, props.railsDefaultActiveStorageServiceName],
+    );
 
     // TODO bring this back when we re-add prompting
     // const getUserConfirmation = useCallback(
@@ -104,32 +114,34 @@ function AppWrapper<P>(WrappedComponent: React.ComponentType<P>): React.Componen
           <BrowserRouter basename="/">
             {' '}
             {/* TODO bring this back when we re-add prompting getUserConfirmation={getUserConfirmation}> */}
-            <AuthenticityTokensContext.Provider value={authenticityTokensProviderValue}>
-              <MapboxContext.Provider value={mapboxContextValue}>
-                <ApolloProvider client={apolloClient}>
-                  <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
-                    <>
-                      {!unauthenticatedError && (
-                        <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
-                          <I18NextWrapper>
-                            {(i18nInstance) => (
-                              <AlertProvider okText={i18nInstance.t('buttons.ok', 'OK')}>
-                                <ToastProvider>
-                                  <ErrorBoundary placement="replace" errorType="plain">
-                                    <WrappedComponent {...(otherProps as unknown as P)} />{' '}
-                                  </ErrorBoundary>
-                                </ToastProvider>
-                              </AlertProvider>
-                            )}
-                          </I18NextWrapper>
-                        </Suspense>
-                      )}
-                      <AuthenticationModal />
-                    </>
-                  </AuthenticationModalContext.Provider>
-                </ApolloProvider>
-              </MapboxContext.Provider>
-            </AuthenticityTokensContext.Provider>
+            <RailsDirectUploadsContext.Provider value={railsDirectUploadsContextValue}>
+              <AuthenticityTokensContext.Provider value={authenticityTokensProviderValue}>
+                <MapboxContext.Provider value={mapboxContextValue}>
+                  <ApolloProvider client={apolloClient}>
+                    <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
+                      <>
+                        {!unauthenticatedError && (
+                          <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
+                            <I18NextWrapper>
+                              {(i18nInstance) => (
+                                <AlertProvider okText={i18nInstance.t('buttons.ok', 'OK')}>
+                                  <ToastProvider>
+                                    <ErrorBoundary placement="replace" errorType="plain">
+                                      <WrappedComponent {...(otherProps as unknown as P)} />{' '}
+                                    </ErrorBoundary>
+                                  </ToastProvider>
+                                </AlertProvider>
+                              )}
+                            </I18NextWrapper>
+                          </Suspense>
+                        )}
+                        <AuthenticationModal />
+                      </>
+                    </AuthenticationModalContext.Provider>
+                  </ApolloProvider>
+                </MapboxContext.Provider>
+              </AuthenticityTokensContext.Provider>
+            </RailsDirectUploadsContext.Provider>
           </BrowserRouter>
         </HelmetProvider>
       </React.StrictMode>

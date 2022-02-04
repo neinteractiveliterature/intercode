@@ -9,7 +9,7 @@ import StaticTextItem from '../StaticTextItem';
 import TimeblockPreferenceItemInput from './TimeblockPreferenceItemInput';
 import TimespanItemInput from './TimespanItemInput';
 import AgeRestrictionsInput from './AgeRestrictionsInput';
-import { CommonFormItemInputProps } from './CommonFormItemInputProps';
+import { CommonFormItemInputProps, FormResponseReference } from './CommonFormItemInputProps';
 import { ConventionForFormItemDisplay } from '../ItemDisplays/FormItemDisplay';
 import {
   AgeRestrictionsFormItem,
@@ -34,6 +34,7 @@ export type FormItemInputProps<FormItemType extends TypedFormItem> = Omit<
   onChange: (identifier: string, newValue: FormItemValueType<FormItemType> | null | undefined) => void;
   value: unknown;
   convention: ConventionForFormItemDisplay;
+  formResponseReference?: FormResponseReference;
 };
 
 function FormItemInput<FormItemType extends TypedFormItem>({
@@ -44,6 +45,7 @@ function FormItemInput<FormItemType extends TypedFormItem>({
   onInteract,
   valueInvalid,
   convention,
+  formResponseReference,
 }: FormItemInputProps<FormItemType>) {
   const valueDidChange = useCallback(
     (newValue) => {
@@ -63,6 +65,7 @@ function FormItemInput<FormItemType extends TypedFormItem>({
     onInteract,
     valueInvalid,
     onChange: valueDidChange,
+    formResponseReference,
   };
 
   switch (formItem.item_type) {

@@ -54,7 +54,12 @@ class ApplicationController < ActionController::Base
   helper_method :graphql_authenticity_token
 
   def app_component_props
-    { recaptchaSiteKey: Recaptcha.configuration.site_key, mapboxAccessToken: ENV['MAPBOX_ACCESS_TOKEN'] }
+    {
+      recaptchaSiteKey: Recaptcha.configuration.site_key,
+      mapboxAccessToken: ENV['MAPBOX_ACCESS_TOKEN'],
+      railsDirectUploadsUrl: rails_direct_uploads_url,
+      railsDefaultActiveStorageServiceName: Rails.application.config.active_storage.service.to_s
+    }
   end
   helper_method :app_component_props
 

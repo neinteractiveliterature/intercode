@@ -1,4 +1,4 @@
-import React, { forwardRef, useRef, useCallback, useContext, useImperativeHandle } from 'react';
+import React, { forwardRef, useRef, useCallback, useContext, useImperativeHandle, useMemo } from 'react';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import FormItemInput from '../ItemInputs/FormItemInput';
@@ -11,6 +11,7 @@ import { FormResponse } from '../useFormResponse';
 import { FormItemRole, FormType } from '../../graphqlTypes.generated';
 
 import { VisibilityDisclosureCard } from '../ItemInputs/PermissionDisclosures';
+import { FormResponseReference } from '../ItemInputs/CommonFormItemInputProps';
 
 export type FormBodyProps = {
   convention: ConventionForFormItemDisplay;
@@ -42,6 +43,14 @@ export default forwardRef<FormBodyImperativeHandle | undefined, FormBodyProps>(f
 ) {
   const itemElements = useRef(new Map<string, HTMLDivElement>()).current;
   const { interactWithItem, hasInteractedWithItem } = useContext(ItemInteractionTrackerContext);
+
+  const formResponseReference = useMemo<FormResponseReference | undefined>(() => {
+    if (response.__typename === 'Event') {
+      return { type: 'Event', id: response.id };
+    } else if (response.__typename === 'EventProposal') {
+      return { type: 'EventProposal', id: response.id };
+    }
+  }, [response.__typename, response.id]);
 
   const responseValueChanged = useCallback(
     (field, value) => {
@@ -126,6 +135,7 @@ export default forwardRef<FormBodyImperativeHandle | undefined, FormBodyProps>(f
               value={value}
               onChange={responseValueChanged}
               onInteract={interactWithItem}
+              formResponseReference={formResponseReference}
             />
             <ErrorDisplay stringError={errorsForDisplay} />
           </div>
