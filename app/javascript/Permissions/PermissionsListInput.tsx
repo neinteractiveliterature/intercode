@@ -1,12 +1,12 @@
-import * as React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import capitalize from 'lodash/capitalize';
+import { useUniqueId } from '@neinteractiveliterature/litform';
 
-import PermissionCheckBox from './PermissionCheckBox';
 import usePermissionsChangeSet, { UsePermissionsChangeSetOptions } from './usePermissionsChangeSet';
 import usePermissionToggle, { UsePermissionToggleOptions } from './usePermissionToggle';
-import { PolymorphicPermission } from './PermissionUtils';
+import { permissionEquals, PolymorphicPermission } from './PermissionUtils';
 
-type PermissionsListRowProps = Omit<UsePermissionToggleOptions, 'role'> & {
+type PermissionsListRowProps = UsePermissionToggleOptions & {
   name: string;
 };
 
@@ -14,40 +14,61 @@ function PermissionsListRow({
   grantPermission,
   revokePermission,
   model,
+  role,
   permission,
   name,
   initialPermissions,
   changeSet,
   currentPermissions,
   readOnly,
-}: PermissionsListRowProps): JSX.Element {
-  const { toggle, hasPermission, className } = usePermissionToggle({
+}: PermissionsListRowProps) {
+  const { toggle, hasPermission, className, granted, revoked } = usePermissionToggle({
     grantPermission,
     revokePermission,
     model,
+    role,
     permission,
     initialPermissions,
     changeSet,
     currentPermissions,
     readOnly,
   });
+  const checkboxId = useUniqueId(`${permission}-`);
 
   return (
-    <tr
-      className={`${className} cursor-pointer`}
-      tabIndex={0}
-      onClick={toggle}
-      onKeyDown={(event) => {
-        if (event.keyCode === 32 || event.keyCode === 13) {
-          toggle();
-        }
-      }}
-    >
+    <tr className={className}>
       <th scope="row" className="text-start fw-normal pe-4">
-        {capitalize(name)}
+        <label className="form-label" htmlFor={checkboxId}>
+          {capitalize(name)}
+        </label>
       </th>
       <td>
-        <PermissionCheckBox hasPermission={hasPermission} />
+        <div className="d-flex justify-content-end">
+          <div className="form-check form-switch">
+            <input
+              className="form-check-input"
+              type="checkbox"
+              id={checkboxId}
+              checked={hasPermission}
+              aria-label="Permitted"
+              onChange={toggle}
+            />
+          </div>
+        </div>
+      </td>
+      <td>
+        {granted && (
+          <>
+            <i className="bi-plus-square" />
+            <span className="visually-hidden">Permission added</span>
+          </>
+        )}
+        {revoked && (
+          <>
+            <i className="bi-dash-square" />
+            <span className="visually-hidden">Permission removed</span>
+          </>
+        )}
       </td>
     </tr>
   );
@@ -55,7 +76,9 @@ function PermissionsListRow({
 
 export type PermissionsListInputProps = UsePermissionsChangeSetOptions & {
   model: PolymorphicPermission['model'];
+  role: PolymorphicPermission['role'];
   permissionNames: { permission: string; name: string }[];
+  reset: () => void;
   header?: React.ReactNode;
   readOnly?: boolean;
 };
@@ -64,9 +87,11 @@ function PermissionsListInput({
   permissionNames,
   initialPermissions,
   model,
+  role,
   changeSet,
   add,
   remove,
+  reset,
   header,
   readOnly,
 }: PermissionsListInputProps): JSX.Element {
@@ -77,11 +102,70 @@ function PermissionsListInput({
     remove,
   });
 
+  const setAllPermitted = useCallback(
+    (permitted) => {
+      permissionNames.forEach(({ permission }) => {
+        if (permitted) {
+          grantPermission({ permission, model, role });
+        } else {
+          revokePermission({ permission, model, role });
+        }
+      });
+    },
+    [permissionNames, grantPermission, revokePermission, model, role],
+  );
+
+  const allPermitted = useMemo(
+    () =>
+      permissionNames.every(({ permission }) =>
+        currentPermissions.some((currentPermission) =>
+          permissionEquals(currentPermission, { permission, model, role }),
+        ),
+      ),
+    [permissionNames, currentPermissions, model, role],
+  );
+
+  const nonePermitted = useMemo(
+    () =>
+      !permissionNames.some(({ permission }) =>
+        currentPermissions.some((currentPermission) =>
+          permissionEquals(currentPermission, { permission, model, role }),
+        ),
+      ),
+    [permissionNames, currentPermissions, model, role],
+  );
+
   return (
     <table className="table table-hover table-sm table-striped w-auto" role="grid">
       <thead>
         <tr>
-          <th colSpan={2}>{header}</th>
+          <th>{header}</th>
+          <td colSpan={2}>
+            <button
+              className="btn btn-sm btn-outline-success"
+              type="button"
+              disabled={allPermitted}
+              onClick={() => setAllPermitted(true)}
+            >
+              <i className="bi-hand-thumbs-up-fill" /> Grant all
+            </button>{' '}
+            <button
+              className="btn btn-sm btn-outline-danger"
+              type="button"
+              disabled={nonePermitted}
+              onClick={() => setAllPermitted(false)}
+            >
+              <i className="bi-hand-thumbs-down-fill" /> Revoke all
+            </button>{' '}
+            <button
+              className="btn btn-sm btn-outline-info"
+              type="button"
+              disabled={changeSet?.changes.length === 0}
+              onClick={reset}
+            >
+              <i className="bi-arrow-repeat" /> Reset
+            </button>
+          </td>
         </tr>
       </thead>
 
@@ -93,6 +177,7 @@ function PermissionsListInput({
             currentPermissions={currentPermissions}
             changeSet={changeSet}
             model={model}
+            role={role}
             permission={permission}
             name={name}
             grantPermission={grantPermission}
