@@ -6,7 +6,7 @@ import usePermissionsChangeSet, { UsePermissionsChangeSetOptions } from './usePe
 import usePermissionToggle, { UsePermissionToggleOptions } from './usePermissionToggle';
 import { permissionEquals, PolymorphicPermission } from './PermissionUtils';
 
-type PermissionsListRowProps = Omit<UsePermissionToggleOptions, 'role'> & {
+type PermissionsListRowProps = UsePermissionToggleOptions & {
   name: string;
 };
 
@@ -14,6 +14,7 @@ function PermissionsListRow({
   grantPermission,
   revokePermission,
   model,
+  role,
   permission,
   name,
   initialPermissions,
@@ -25,6 +26,7 @@ function PermissionsListRow({
     grantPermission,
     revokePermission,
     model,
+    role,
     permission,
     initialPermissions,
     changeSet,
@@ -74,6 +76,7 @@ function PermissionsListRow({
 
 export type PermissionsListInputProps = UsePermissionsChangeSetOptions & {
   model: PolymorphicPermission['model'];
+  role: PolymorphicPermission['role'];
   permissionNames: { permission: string; name: string }[];
   reset: () => void;
   header?: React.ReactNode;
@@ -84,6 +87,7 @@ function PermissionsListInput({
   permissionNames,
   initialPermissions,
   model,
+  role,
   changeSet,
   add,
   remove,
@@ -102,29 +106,33 @@ function PermissionsListInput({
     (permitted) => {
       permissionNames.forEach(({ permission }) => {
         if (permitted) {
-          grantPermission({ permission, model });
+          grantPermission({ permission, model, role });
         } else {
-          revokePermission({ permission, model });
+          revokePermission({ permission, model, role });
         }
       });
     },
-    [permissionNames, grantPermission, revokePermission, model],
+    [permissionNames, grantPermission, revokePermission, model, role],
   );
 
   const allPermitted = useMemo(
     () =>
       permissionNames.every(({ permission }) =>
-        currentPermissions.some((currentPermission) => permissionEquals(currentPermission, { permission, model })),
+        currentPermissions.some((currentPermission) =>
+          permissionEquals(currentPermission, { permission, model, role }),
+        ),
       ),
-    [permissionNames, currentPermissions, model],
+    [permissionNames, currentPermissions, model, role],
   );
 
   const nonePermitted = useMemo(
     () =>
       !permissionNames.some(({ permission }) =>
-        currentPermissions.some((currentPermission) => permissionEquals(currentPermission, { permission, model })),
+        currentPermissions.some((currentPermission) =>
+          permissionEquals(currentPermission, { permission, model, role }),
+        ),
       ),
-    [permissionNames, currentPermissions, model],
+    [permissionNames, currentPermissions, model, role],
   );
 
   return (
@@ -169,6 +177,7 @@ function PermissionsListInput({
             currentPermissions={currentPermissions}
             changeSet={changeSet}
             model={model}
+            role={role}
             permission={permission}
             name={name}
             grantPermission={grantPermission}
