@@ -6,7 +6,7 @@ import { useTabs, TabList, TabBody, notEmpty, ErrorDisplay } from '@neinteractiv
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 import PermissionsListInput from '../Permissions/PermissionsListInput';
 import PermissionsTableInput from '../Permissions/PermissionsTableInput';
-import { useChangeSet } from '../ChangeSet';
+import ChangeSet, { useChangeSet } from '../ChangeSet';
 import usePageTitle from '../usePageTitle';
 import { getPermissionNamesForModelType, buildPermissionInput } from '../Permissions/PermissionUtils';
 import { PermissionedModelTypeIndicator } from '../graphqlTypes.generated';
@@ -24,7 +24,10 @@ export default LoadSingleValueFromCollectionWrapper(
   (data, id) => data.convention.staff_positions.find((sp) => sp.id === id),
   function EditStaffPositionPermissions({ value: staffPosition, data: { convention } }) {
     const navigate = useNavigate();
-    const [changeSet, add, remove] = useChangeSet<PermissionWithId>();
+    const [conventionChangeSet, conventionAdd, conventionRemove, conventionReset] = useChangeSet<PermissionWithId>();
+    const [eventCategoriesChangeSet, eventCategoriesAdd, eventCategoriesRemove] = useChangeSet<PermissionWithId>();
+    const [contentGroupsChangeSet, contentGroupsAdd, contentGroupsRemove] = useChangeSet<PermissionWithId>();
+
     const [error, setError] = useState<ApolloError>();
     const [mutationInProgress, setMutationInProgress] = useState(false);
     const [mutate] = useUpdateStaffPositionPermissionsMutation();
@@ -36,10 +39,12 @@ export default LoadSingleValueFromCollectionWrapper(
           <PermissionsListInput
             permissionNames={ConventionPermissionNames}
             initialPermissions={staffPosition.permissions}
+            role={staffPosition}
             model={convention}
-            changeSet={changeSet}
-            add={add}
-            remove={remove}
+            changeSet={conventionChangeSet}
+            add={conventionAdd}
+            remove={conventionRemove}
+            reset={conventionReset}
             header={convention.name}
           />
         ),
@@ -52,11 +57,11 @@ export default LoadSingleValueFromCollectionWrapper(
             permissionNames={EventCategoryPermissionNames}
             initialPermissions={staffPosition.permissions}
             rowType="model"
-            rows={convention.event_categories}
             role={staffPosition}
-            changeSet={changeSet}
-            add={add}
-            remove={remove}
+            rows={convention.event_categories}
+            changeSet={eventCategoriesChangeSet}
+            add={eventCategoriesAdd}
+            remove={eventCategoriesRemove}
             rowsHeader="Event Category"
             formatRowHeader={(eventCategory) => (
               <span className="p-1 rounded" style={getEventCategoryStyles({ eventCategory, variant: 'default' })}>
@@ -74,11 +79,11 @@ export default LoadSingleValueFromCollectionWrapper(
             permissionNames={CmsContentGroupPermissionNames}
             initialPermissions={staffPosition.permissions}
             rowType="model"
-            rows={convention.cmsContentGroups}
             role={staffPosition}
-            changeSet={changeSet}
-            add={add}
-            remove={remove}
+            rows={convention.cmsContentGroups}
+            changeSet={contentGroupsChangeSet}
+            add={contentGroupsAdd}
+            remove={contentGroupsRemove}
             rowsHeader="CMS Content Group"
             formatRowHeader={(contentGroup) => contentGroup.name}
           />
@@ -89,13 +94,18 @@ export default LoadSingleValueFromCollectionWrapper(
     usePageTitle(`Editing permissions for “${staffPosition.name}”`);
 
     const saveChangesClicked = async () => {
+      const combinedChangeSet = new ChangeSet([
+        ...conventionChangeSet.changes,
+        ...eventCategoriesChangeSet.changes,
+        ...contentGroupsChangeSet.changes,
+      ]);
       setMutationInProgress(true);
       try {
         await mutate({
           variables: {
             staffPositionId: staffPosition.id,
-            grantPermissions: changeSet.getAddValues().map(buildPermissionInput),
-            revokePermissions: changeSet
+            grantPermissions: combinedChangeSet.getAddValues().map(buildPermissionInput),
+            revokePermissions: combinedChangeSet
               .getRemoveIds()
               .map((removeId) => {
                 const existingPermission = staffPosition.permissions.find((p) => p.id === removeId);

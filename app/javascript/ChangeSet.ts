@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { ActionMeta } from 'react-select';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -86,21 +86,23 @@ class ChangeSet<T extends ChangeTrackable> {
 
 export default ChangeSet;
 
-export function useChangeSet<T extends ChangeTrackable>(): [
+export function useChangeSet<T extends ChangeTrackable>(): readonly [
   changeSet: ChangeSet<T>,
   add: (...addArgs: Parameters<ChangeSet<T>['add']>) => void,
   remove: (...removeArgs: Parameters<ChangeSet<T>['remove']>) => void,
+  reset: () => void,
 ] {
   const [changeSet, setChangeSet] = useState(new ChangeSet<T>());
 
-  const add = (...addArgs: Parameters<ChangeSet<T>['add']>) => {
-    setChangeSet(changeSet.add(...addArgs));
-  };
-  const remove = (...removeArgs: Parameters<ChangeSet<T>['remove']>) => {
-    setChangeSet(changeSet.remove(...removeArgs));
-  };
+  const add = useCallback((...addArgs: Parameters<ChangeSet<T>['add']>) => {
+    setChangeSet((prevChangeSet) => prevChangeSet.add(...addArgs));
+  }, []);
+  const remove = useCallback((...removeArgs: Parameters<ChangeSet<T>['remove']>) => {
+    setChangeSet((prevChangeSet) => prevChangeSet.remove(...removeArgs));
+  }, []);
+  const reset = useCallback(() => setChangeSet(new ChangeSet<T>()), []);
 
-  return [changeSet, add, remove];
+  return [changeSet, add, remove, reset] as const;
 }
 
 export function useChangeSetWithSelect<T extends ChangeTrackable>(): [

@@ -14,6 +14,8 @@ export type UsePermissionToggleResult = {
   hasPermission: boolean;
   toggle: () => void;
   className: string;
+  granted: boolean;
+  revoked: boolean;
 };
 
 export default function usePermissionToggle({
@@ -41,22 +43,34 @@ export default function usePermissionToggle({
 
   const toggle = () => setPermission(!hasPermission);
 
+  const granted = useMemo(
+    () =>
+      (changeSet &&
+        changeSet.changes.some(
+          (change) => change.changeType === 'add' && permissionEquals(change.value, { role, model, permission }),
+        )) ??
+      false,
+    [changeSet, model, permission, role],
+  );
+
+  const revoked = useMemo(
+    () =>
+      (existingPermission &&
+        changeSet &&
+        changeSet.changes.some((change) => change.changeType === 'remove' && existingPermission.id === change.id)) ??
+      false,
+    [existingPermission, changeSet],
+  );
+
   const className = useMemo(
     () =>
       classNames('text-center align-middle', {
         'cursor-pointer': !readOnly,
-        'table-success':
-          changeSet &&
-          changeSet.changes.some(
-            (change) => change.changeType === 'add' && permissionEquals(change.value, { role, model, permission }),
-          ),
-        'table-danger':
-          existingPermission &&
-          changeSet &&
-          changeSet.changes.some((change) => change.changeType === 'remove' && existingPermission.id === change.id),
+        'table-success': granted,
+        'table-danger': revoked,
       }),
-    [changeSet, readOnly, existingPermission, role, model, permission],
+    [readOnly, granted, revoked],
   );
 
-  return { hasPermission, toggle, className };
+  return { hasPermission, toggle, className, granted, revoked };
 }
