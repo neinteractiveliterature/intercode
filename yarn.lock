@@ -3008,9 +3008,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-codegen/cli@npm:2.5.0":
-  version: 2.5.0
-  resolution: "@graphql-codegen/cli@npm:2.5.0"
+"@graphql-codegen/cli@npm:2.6.0":
+  version: 2.6.0
+  resolution: "@graphql-codegen/cli@npm:2.6.0"
   dependencies:
     "@graphql-codegen/core": 2.5.0
     "@graphql-codegen/plugin-helpers": ^2.4.0
@@ -3058,7 +3058,7 @@ __metadata:
     gql-gen: bin.js
     graphql-code-generator: bin.js
     graphql-codegen: bin.js
-  checksum: c136d7ad75f1d0544d9521e252a589944d23a0260ac72c2154eb2d7296653897ca01c7810c320394fbf65d46862a87b44a8587522348d479c66541cbfc3cba88
+  checksum: aec7efba7e4c61f4e723c37b21f5f884cf9d7df9f986e0a436b35f0396d5fbd845b6022e5ff80961a5c080ae8f26c4800318281f394a841081e35afe39bce677
   languageName: node
   linkType: hard
 
@@ -3145,9 +3145,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-codegen/typescript-operations@npm:2.2.4":
-  version: 2.2.4
-  resolution: "@graphql-codegen/typescript-operations@npm:2.2.4"
+"@graphql-codegen/typescript-operations@npm:2.3.0":
+  version: 2.3.0
+  resolution: "@graphql-codegen/typescript-operations@npm:2.3.0"
   dependencies:
     "@graphql-codegen/plugin-helpers": ^2.4.0
     "@graphql-codegen/typescript": ^2.4.3
@@ -3156,7 +3156,7 @@ __metadata:
     tslib: ~2.3.0
   peerDependencies:
     graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 78765b16c08b0a21ee1919970af960399ad0570761c24e622599d61874f93f45eccea5b1838936ab834edc3de3e6fe517263baada3ca3aa2445bf3194b6e0ad8
+  checksum: e7be72740f113b69a1b7f0c570fc2b02df57fb37470ae2b1e0c999dc1635b00785cc57f5bfbfb31bd778b6ecc9a140274e4453dab0fffbe138bcba640c92fe88
   languageName: node
   linkType: hard
 
@@ -19566,12 +19566,12 @@ resolve@^2.0.0-next.3:
     "@emotion/serialize": 1.0.2
     "@graphiql/toolkit": 0.4.2
     "@graphql-codegen/add": 3.1.1
-    "@graphql-codegen/cli": 2.5.0
+    "@graphql-codegen/cli": 2.6.0
     "@graphql-codegen/fragment-matcher": 3.2.1
     "@graphql-codegen/introspection": 2.1.1
     "@graphql-codegen/near-operation-file-preset": 2.2.4
     "@graphql-codegen/typescript": 2.4.3
-    "@graphql-codegen/typescript-operations": 2.2.4
+    "@graphql-codegen/typescript-operations": 2.3.0
     "@graphql-codegen/typescript-react-apollo": 3.2.5
     "@graphql-eslint/eslint-plugin": 3.8.0
     "@juggle/resize-observer": 3.3.1
