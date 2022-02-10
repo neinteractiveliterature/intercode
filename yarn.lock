@@ -18397,15 +18397,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-cookie-consent@npm:7.3.0":
-  version: 7.3.0
-  resolution: "react-cookie-consent@npm:7.3.0"
+"react-cookie-consent@npm:7.3.1":
+  version: 7.3.1
+  resolution: "react-cookie-consent@npm:7.3.1"
   dependencies:
     js-cookie: ^2.2.1
     prop-types: ^15.7.2
   peerDependencies:
     react: ^16.13.1 || ^17.0.0
-  checksum: 4bad68978279fbaee7c275d2880bb571e631abf2ee37acdb9147168530b04d9423af9d8505c5cb23f0fa6647d6c1dc888a1a4ae0eada62fdab95ab6155a9ac53
+  checksum: a87839f8e8f1a6010456fc1a57bd504c8e76487464ac527085febae71ccb080acae368c1fa90f038335e984796f07ca731e7180d6c1e4ec6c9750ab56655e412
   languageName: node
   linkType: hard
 
@@ -19708,7 +19708,7 @@ resolve@^2.0.0-next.3:
     react: 17.0.2
     react-bootstrap4-modal: 2.0.0
     react-color: 2.19.3
-    react-cookie-consent: 7.3.0
+    react-cookie-consent: 7.3.1
     react-dom: 17.0.2
     react-google-recaptcha: 2.1.0
     react-helmet-async: 1.2.2
