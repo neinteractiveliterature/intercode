@@ -29,12 +29,12 @@ class AcceptEventProposalService < CivilService::Service
 
     event.save!
     event_proposal.update!(event: event)
-    add_proposer_as_team_member
+    add_proposer_as_team_member(event)
 
     success(event: event)
   end
 
-  def add_proposer_as_team_member
+  def add_proposer_as_team_member(event)
     return unless event_proposal.owner
 
     event.team_members.create!(
