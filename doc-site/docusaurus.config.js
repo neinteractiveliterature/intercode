@@ -152,7 +152,8 @@ module.exports = {
       prism: {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
-        additionalLanguages: ['liquid'],
+        // this seems broken in docusaurus 2.0.0-beta.15
+        // additionalLanguages: ['liquid'],
       },
     }),
 };
