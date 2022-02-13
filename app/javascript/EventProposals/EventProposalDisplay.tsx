@@ -6,7 +6,6 @@ import Gravatar from '../Gravatar';
 import { useEventProposalQueryWithOwner } from './queries.generated';
 import { getSortedFormItems } from '../Models/Form';
 import { parseTypedFormItemArray } from '../FormAdmin/FormItemUtils';
-import deserializeFormResponse from '../Models/deserializeFormResponse';
 import { LoadQueryWithVariablesWrapper } from '../GraphqlLoadingWrappers';
 
 export type EventProposalDisplayProps = {
@@ -25,7 +24,10 @@ export default LoadQueryWithVariablesWrapper(
       return parseTypedFormItemArray(getSortedFormItems(form));
     }, [data]);
 
-    const formResponse = useMemo(() => deserializeFormResponse(data.convention.event_proposal), [data]);
+    const formResponse = useMemo(
+      () => JSON.parse(data.convention.event_proposal.form_response_attrs_json_with_rendered_markdown ?? '{}'),
+      [data.convention.event_proposal.form_response_attrs_json_with_rendered_markdown],
+    );
 
     const renderFormItems = () => {
       if (formResponse == null) {
@@ -52,7 +54,7 @@ export default LoadQueryWithVariablesWrapper(
                 <FormItemDisplay
                   formItem={item}
                   convention={data.convention}
-                  value={formResponse.form_response_attrs[item.identifier]}
+                  value={formResponse[item.identifier]}
                   displayMode="admin"
                 />
               </div>
