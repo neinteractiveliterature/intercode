@@ -8,6 +8,14 @@ fragment EventProposalFields on EventProposal {
   current_user_form_item_viewer_role
   current_user_form_item_writer_role
 
+  images {
+    id
+    filename
+    url
+    content_type
+    byte_size
+  }
+
   event_category {
     id
     name

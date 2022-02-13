@@ -12,6 +12,7 @@ import { FormItemRole, FormType } from '../../graphqlTypes.generated';
 
 import { VisibilityDisclosureCard } from '../ItemInputs/PermissionDisclosures';
 import { FormResponseReference } from '../ItemInputs/CommonFormItemInputProps';
+import { ImageAttachmentConfig } from '../../BuiltInFormControls/MarkdownInput';
 
 export type FormBodyProps = {
   convention: ConventionForFormItemDisplay;
@@ -22,6 +23,7 @@ export type FormBodyProps = {
   currentUserViewerRole: FormItemRole;
   currentUserWriterRole: FormItemRole;
   errors?: { [itemIdentifier: string]: string[] };
+  imageAttachmentConfig?: ImageAttachmentConfig;
 };
 
 export type FormBodyImperativeHandle = {
@@ -38,6 +40,7 @@ export default forwardRef<FormBodyImperativeHandle | undefined, FormBodyProps>(f
     response,
     responseValuesChanged,
     errors,
+    imageAttachmentConfig,
   },
   ref,
 ) {
@@ -136,6 +139,7 @@ export default forwardRef<FormBodyImperativeHandle | undefined, FormBodyProps>(f
               onChange={responseValueChanged}
               onInteract={interactWithItem}
               formResponseReference={formResponseReference}
+              imageAttachmentConfig={imageAttachmentConfig}
             />
             <ErrorDisplay stringError={errorsForDisplay} />
           </div>

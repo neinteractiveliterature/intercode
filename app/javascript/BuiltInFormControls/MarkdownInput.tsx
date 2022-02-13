@@ -5,7 +5,7 @@ import {
   UseStandardCodeMirrorExtensionsOptions,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   liquid,
-  LoadQueryWrapper,
+  useModal,
 } from '@neinteractiveliterature/litform';
 import type { CodeInputProps } from '@neinteractiveliterature/litform/lib/CodeInput';
 import { useTranslation } from 'react-i18next';
@@ -17,39 +17,33 @@ import parsePageContent from '../parsePageContent';
 import { PreviewMarkdownQueryData, PreviewMarkdownQueryDocument } from './previewQueries.generated';
 import { ActiveStorageAttachment } from '../graphqlTypes.generated';
 import AddFileModal from './AddFileModal';
+import { Blob } from '@rails/activestorage';
+import MenuIcon from '../NavigationBar/MenuIcon';
 
 type AttachImageModalProps = {
   visible: boolean;
   close: () => void;
   fileChosen: (file: ActiveStorageAttachment) => void;
   existingImages: ActiveStorageAttachment[];
+  addBlob: (blob: Blob) => unknown;
 };
 
-function AttachImageModal({ existingImages, addImage, removeImage, visible, close, fileChosen }: AttachImageModalProps) {
-  const [createCmsFile] = useCreateCmsFileMutation();
-  const uploadFile = useCallback(
-    async (file: File) => {
-      const result = await createCmsFile({ variables: { file } });
-      const attachment = result.data?.createCmsFile.cms_file.file;
-      if (!attachment) {
-        throw new Error('Result did not include an ActiveStorage attachment');
-      }
-
-      return attachment;
-    },
-    [createCmsFile],
-  );
-
+function AttachImageModal({ existingImages, addBlob, visible, close, fileChosen }: AttachImageModalProps) {
   return (
     <AddFileModal
       existingFiles={existingImages}
-      uploadFile={uploadFile}
+      addBlob={addBlob}
       visible={visible}
       close={close}
       fileChosen={fileChosen}
     />
   );
 }
+
+export type ImageAttachmentConfig = {
+  existingImages: ActiveStorageAttachment[];
+  addBlob: (blob: Blob) => void;
+};
 
 export type MarkdownInputProps = Omit<
   CodeInputProps,
@@ -59,9 +53,10 @@ export type MarkdownInputProps = Omit<
     extensions?: Extension[];
     eventId?: string;
     eventProposalId?: string;
+    imageAttachmentConfig?: ImageAttachmentConfig;
   };
 
-function MarkdownInput({ eventId, eventProposalId, ...props }: MarkdownInputProps): JSX.Element {
+function MarkdownInput({ eventId, eventProposalId, imageAttachmentConfig, ...props }: MarkdownInputProps): JSX.Element {
   const client = useApolloClient();
   const { t } = useTranslation();
   const languageExtension = useMemo(() => markdown(), []);
@@ -69,29 +64,58 @@ function MarkdownInput({ eventId, eventProposalId, ...props }: MarkdownInputProp
     () => [languageExtension, ...(props.extensions ?? [])],
     [props.extensions, languageExtension],
   );
-  const [editorRef] = useStandardCodeMirror({
+  const [editorRef, editorView] = useStandardCodeMirror({
     extensions,
     value: props.value,
     onChange: props.onChange,
   });
+  const attachImageModal = useModal();
+
+  const addFile = (file: ActiveStorageAttachment) => {
+    editorView.dispatch(editorView.state.replaceSelection(`![${file.filename}](${file.filename})`));
+    editorView.focus();
+  };
 
   return (
-    <CodeInput
-      {...props}
-      editorRef={editorRef}
-      value={props.value}
-      editButtonText={t('buttons.edit', 'Edit')}
-      previewButtonText={t('buttons.preview', 'Preview')}
-      getPreviewContent={async (markdownContent) => {
-        const response = await client.query<PreviewMarkdownQueryData>({
-          query: PreviewMarkdownQueryDocument,
-          variables: { markdown: markdownContent, eventId, eventProposalId },
-          fetchPolicy: 'no-cache',
-        });
+    <>
+      <CodeInput
+        {...props}
+        editorRef={editorRef}
+        value={props.value}
+        editButtonText={t('buttons.edit', 'Edit')}
+        previewButtonText={t('buttons.preview', 'Preview')}
+        getPreviewContent={async (markdownContent) => {
+          const response = await client.query<PreviewMarkdownQueryData>({
+            query: PreviewMarkdownQueryDocument,
+            variables: { markdown: markdownContent, eventId, eventProposalId },
+            fetchPolicy: 'no-cache',
+          });
 
-        return parsePageContent(response.data?.cmsParent.previewMarkdown ?? '').bodyComponents;
-      }}
-    />
+          return parsePageContent(response.data?.cmsParent.previewMarkdown ?? '').bodyComponents;
+        }}
+        extraNavControls={
+          <>
+            {imageAttachmentConfig && (
+              <li className="nav-item">
+                <button type="button" className="btn btn-link nav-link px-2 py-0" onClick={attachImageModal.open}>
+                  <MenuIcon icon="bi-file-earmark-image" colorClass="" />
+                  {t('buttons.attachImage', 'Attach image…')}
+                </button>
+              </li>
+            )}
+          </>
+        }
+      />
+      {imageAttachmentConfig && (
+        <AttachImageModal
+          visible={attachImageModal.visible}
+          addBlob={imageAttachmentConfig.addBlob}
+          close={attachImageModal.close}
+          existingImages={imageAttachmentConfig.existingImages}
+          fileChosen={addFile}
+        />
+      )}
+    </>
   );
 }
 

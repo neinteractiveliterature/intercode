@@ -63,7 +63,6 @@ const CreateCmsFileModal = LoadQueryWrapper<
       visible={visible}
       close={close}
       fileChosen={fileChosen}
-      attachmentName="file"
     />
   );
 });

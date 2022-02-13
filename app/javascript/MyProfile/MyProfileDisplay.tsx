@@ -60,9 +60,7 @@ function MyProfileDisplay(): JSX.Element {
 
           <Link to="/admin_forms">To create or edit the user profile form, go here.</Link>
           <br />
-          <Link to="/convention/edit">
-            To set it as the user profile form for this convention, go here.
-          </Link>
+          <Link to="/convention/edit">To set it as the user profile form for this convention, go here.</Link>
         </Trans>
       </AdminWarning>
     );
@@ -93,11 +91,7 @@ function MyProfileDisplay(): JSX.Element {
             <dd className="col-md-9 mb-2">
               <div className="d-flex align-items-center">
                 <div className="me-2">
-                  <Gravatar
-                    url={myProfile.gravatar_url}
-                    enabled={myProfile.gravatar_enabled}
-                    pixelSize={32}
-                  />
+                  <Gravatar url={myProfile.gravatar_url} enabled={myProfile.gravatar_enabled} pixelSize={32} />
                 </div>
                 <div className="font-italic">
                   {myProfile.gravatar_enabled

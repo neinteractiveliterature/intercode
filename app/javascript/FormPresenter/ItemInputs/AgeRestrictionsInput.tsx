@@ -26,7 +26,15 @@ export type AgeRestrictionsInputProps = CommonFormItemInputProps<AgeRestrictions
 
 function AgeRestrictionsInput(props: AgeRestrictionsInputProps): JSX.Element {
   const { t } = useTranslation();
-  const { formItem, onChange, onInteract, valueInvalid, formTypeIdentifier, formResponseReference } = props;
+  const {
+    formItem,
+    onChange,
+    onInteract,
+    valueInvalid,
+    formTypeIdentifier,
+    formResponseReference,
+    imageAttachmentConfig,
+  } = props;
   const value = useMemo(() => props.value ?? {}, [props.value]);
 
   const descriptionId = useUniqueId(`${formItem.identifier}-description-`);
@@ -97,6 +105,7 @@ function AgeRestrictionsInput(props: AgeRestrictionsInputProps): JSX.Element {
             formControlClassName={classNames({ 'is-invalid': valueInvalid })}
             eventId={formResponseReference?.type === 'Event' ? formResponseReference.id : undefined}
             eventProposalId={formResponseReference?.type === 'EventProposal' ? formResponseReference.id : undefined}
+            imageAttachmentConfig={imageAttachmentConfig}
           >
             <FieldRequiredFeedback valueInvalid={valueInvalid} />
           </MarkdownInput>

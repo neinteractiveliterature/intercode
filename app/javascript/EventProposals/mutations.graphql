@@ -17,6 +17,18 @@ mutation UpdateEventProposal($input: UpdateEventProposalInput!) {
   }
 }
 
+mutation AttachImageToEventProposal($id: ID!, $signedBlobId: ID!) {
+  attachImageToEventProposal(input: { id: $id, signedBlobId: $signedBlobId }) {
+    attachment {
+      id
+      filename
+      url
+      content_type
+      byte_size
+    }
+  }
+}
+
 mutation DeleteEventProposal($id: ID!) {
   deleteEventProposal(input: { id: $id }) {
     clientMutationId

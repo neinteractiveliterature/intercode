@@ -4,12 +4,12 @@ import * as Types from '../../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
-export type CmsLayoutFieldsFragment = { __typename: 'CmsLayout', id: string, name?: string | null | undefined, content?: string | null | undefined, navbar_classes?: string | null | undefined, admin_notes?: string | null | undefined, current_ability_can_update: boolean, current_ability_can_delete: boolean };
+export type CmsLayoutFieldsFragment = { __typename: 'CmsLayout', id: string, name?: string | null, content?: string | null, navbar_classes?: string | null, admin_notes?: string | null, current_ability_can_update: boolean, current_ability_can_delete: boolean };
 
 export type CmsLayoutsAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type CmsLayoutsAdminQueryData = { __typename: 'Query', convention?: { __typename: 'Convention', id: string, name: string } | null | undefined, currentAbility: { __typename: 'Ability', can_create_cms_layouts: boolean }, cmsParent: { __typename: 'Convention', id: string, cmsLayouts: Array<{ __typename: 'CmsLayout', id: string, name?: string | null | undefined, content?: string | null | undefined, navbar_classes?: string | null | undefined, admin_notes?: string | null | undefined, current_ability_can_update: boolean, current_ability_can_delete: boolean }> } | { __typename: 'RootSite', id: string, cmsLayouts: Array<{ __typename: 'CmsLayout', id: string, name?: string | null | undefined, content?: string | null | undefined, navbar_classes?: string | null | undefined, admin_notes?: string | null | undefined, current_ability_can_update: boolean, current_ability_can_delete: boolean }> } };
+export type CmsLayoutsAdminQueryData = { __typename: 'Query', convention?: { __typename: 'Convention', id: string, name: string } | null, currentAbility: { __typename: 'Ability', can_create_cms_layouts: boolean }, cmsParent: { __typename: 'Convention', id: string, cmsLayouts: Array<{ __typename: 'CmsLayout', id: string, name?: string | null, content?: string | null, navbar_classes?: string | null, admin_notes?: string | null, current_ability_can_update: boolean, current_ability_can_delete: boolean }> } | { __typename: 'RootSite', id: string, cmsLayouts: Array<{ __typename: 'CmsLayout', id: string, name?: string | null, content?: string | null, navbar_classes?: string | null, admin_notes?: string | null, current_ability_can_update: boolean, current_ability_can_delete: boolean }> } };
 
 export const CmsLayoutFieldsFragmentDoc = gql`
     fragment CmsLayoutFields on CmsLayout {

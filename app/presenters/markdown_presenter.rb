@@ -12,8 +12,14 @@ class MarkdownPresenter
     end
 
     def image(link, title, alt_text)
-      uri = URI.parse(link)
-      is_absolute = uri.host || uri.path.start_with?('/')
+      uri =
+        begin
+          URI.parse(link)
+        rescue URI::InvalidURIError
+          nil
+        end
+
+      is_absolute = uri&.host || uri&.path&.start_with?('/')
       local_image = is_absolute ? nil : @local_images[link.downcase.strip]
 
       if local_image && @controller
@@ -26,8 +32,6 @@ class MarkdownPresenter
       else
         image_tag(link, title: title, alt_text: alt_text, class: 'img-fluid')
       end
-    rescue URI::InvalidURIError
-      image_tag(link, title: title, alt_text: alt_text, class: 'img-fluid')
     rescue StandardError => e
       "#{e.class.name}: #{e.message}"
     end

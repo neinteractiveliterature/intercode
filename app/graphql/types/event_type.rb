@@ -143,4 +143,9 @@ class Types::EventType < Types::BaseObject
       .load(object)
       .then { |changes| CompactingFormResponseChangesPresenter.new(changes).compacted_changes }
   end
+
+  field :images, [Types::ActiveStorageAttachmentType], null: false
+  def images
+    ActiveStorageAttachmentLoader.for(Event, :images).load(object)
+  end
 end

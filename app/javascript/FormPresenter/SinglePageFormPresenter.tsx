@@ -6,6 +6,7 @@ import { CommonFormFieldsFragment } from '../Models/commonFormFragments.generate
 import { ConventionForFormItemDisplay } from './ItemDisplays/FormItemDisplay';
 import { FormResponse } from './useFormResponse';
 import { FormItemRole } from '../graphqlTypes.generated';
+import { ImageAttachmentConfig } from '../BuiltInFormControls/MarkdownInput';
 
 export type SinglePageFormPresenterProps = {
   form: CommonFormFieldsFragment;
@@ -15,6 +16,7 @@ export type SinglePageFormPresenterProps = {
   currentUserWriterRole: FormItemRole;
   responseValuesChanged: (newValues: Record<string, unknown>) => void;
   responseErrors?: FormBodyProps['errors'];
+  imageAttachmentConfig?: ImageAttachmentConfig;
 };
 
 export default forwardRef<FormBodyImperativeHandle | undefined, SinglePageFormPresenterProps>(
@@ -27,6 +29,7 @@ export default forwardRef<FormBodyImperativeHandle | undefined, SinglePageFormPr
       response,
       responseValuesChanged,
       responseErrors,
+      imageAttachmentConfig,
     },
     ref,
   ) {
@@ -44,6 +47,7 @@ export default forwardRef<FormBodyImperativeHandle | undefined, SinglePageFormPr
           errors={responseErrors}
           response={response}
           responseValuesChanged={responseValuesChanged}
+          imageAttachmentConfig={imageAttachmentConfig}
         />
       </>
     );

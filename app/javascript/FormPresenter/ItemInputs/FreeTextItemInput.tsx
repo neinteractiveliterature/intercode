@@ -64,6 +64,7 @@ function FreeTextItemInput(props: FreeTextItemInputProps): JSX.Element {
     formItem,
     formResponseReference,
     formTypeIdentifier,
+    imageAttachmentConfig,
     onChange,
     onInteract,
     value: uncheckedValue,
@@ -103,6 +104,7 @@ function FreeTextItemInput(props: FreeTextItemInputProps): JSX.Element {
             formControlClassName={classNames({ 'is-invalid': valueInvalid })}
             eventId={formResponseReference?.type === 'Event' ? formResponseReference.id : undefined}
             eventProposalId={formResponseReference?.type === 'EventProposal' ? formResponseReference.id : undefined}
+            imageAttachmentConfig={imageAttachmentConfig}
           >
             <FieldRequiredFeedback valueInvalid={valueInvalid} />
           </MarkdownInput>

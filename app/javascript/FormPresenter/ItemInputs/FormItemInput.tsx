@@ -26,6 +26,7 @@ import {
   TypedFormItem,
 } from '../../FormAdmin/FormItemUtils';
 import assertNever from 'assert-never';
+import { ImageAttachmentConfig } from '../../BuiltInFormControls/MarkdownInput';
 
 export type FormItemInputProps<FormItemType extends TypedFormItem> = Omit<
   CommonFormItemInputProps<FormItemType>,
@@ -35,6 +36,7 @@ export type FormItemInputProps<FormItemType extends TypedFormItem> = Omit<
   value: unknown;
   convention: ConventionForFormItemDisplay;
   formResponseReference?: FormResponseReference;
+  imageAttachmentConfig?: ImageAttachmentConfig;
 };
 
 function FormItemInput<FormItemType extends TypedFormItem>({
@@ -46,6 +48,7 @@ function FormItemInput<FormItemType extends TypedFormItem>({
   valueInvalid,
   convention,
   formResponseReference,
+  imageAttachmentConfig,
 }: FormItemInputProps<FormItemType>) {
   const valueDidChange = useCallback(
     (newValue) => {
@@ -66,6 +69,7 @@ function FormItemInput<FormItemType extends TypedFormItem>({
     valueInvalid,
     onChange: valueDidChange,
     formResponseReference,
+    imageAttachmentConfig,
   };
 
   switch (formItem.item_type) {

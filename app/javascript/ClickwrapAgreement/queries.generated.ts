@@ -7,7 +7,7 @@ const defaultOptions = {} as const;
 export type ClickwrapAgreementQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type ClickwrapAgreementQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, clickwrap_agreement_html?: string | null | undefined, my_profile?: { __typename: 'UserConProfile', id: string, accepted_clickwrap_agreement?: boolean | null | undefined } | null | undefined } };
+export type ClickwrapAgreementQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, clickwrap_agreement_html?: string | null, my_profile?: { __typename: 'UserConProfile', id: string, accepted_clickwrap_agreement?: boolean | null } | null } };
 
 
 export const ClickwrapAgreementQueryDocument = gql`
