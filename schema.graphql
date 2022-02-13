@@ -1499,6 +1499,7 @@ input CreateEventInput {
   """
   clientMutationId: String
   event: EventInput!
+  signedImageBlobIds: [ID!]
 }
 
 """
@@ -1545,6 +1546,7 @@ input CreateFillerEventInput {
   clientMutationId: String
   event: EventInput!
   run: RunInput
+  signedImageBlobIds: [ID!]
 }
 
 """

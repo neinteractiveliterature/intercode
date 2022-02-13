@@ -20,7 +20,10 @@ export type CreateRegularEventResult = ReturnType<
 
 export function useCreateRegularEvent(
   convention: EventAdminEventsQueryData['convention'],
-): (options: { event: Parameters<typeof buildEventInput>[0] }) => CreateRegularEventResult {
+): (options: {
+  event: Parameters<typeof buildEventInput>[0];
+  signedImageBlobIds?: string[];
+}) => CreateRegularEventResult {
   const [mutate] = useCreateMutationWithReferenceArrayUpdater(
     useCreateEventMutation,
     convention,
@@ -31,10 +34,10 @@ export function useCreateRegularEvent(
   );
 
   const createEvent = useCallback(
-    ({ event }: { event: Parameters<typeof buildEventInput>[0] }) =>
+    ({ event, signedImageBlobIds }: { event: Parameters<typeof buildEventInput>[0]; signedImageBlobIds?: string[] }) =>
       mutate({
         variables: {
-          input: buildEventInput(event),
+          input: { ...buildEventInput(event), signedImageBlobIds },
         },
       }),
     [mutate],
@@ -52,6 +55,7 @@ export function useCreateSingleRunEvent(
 ): (options: {
   event: Parameters<typeof buildEventInput>[0];
   run: Parameters<typeof buildRunInput>[0];
+  signedImageBlobIds?: string[];
 }) => CreateSingleRunEventResult {
   const [mutate] = useCreateMutationWithReferenceArrayUpdater(
     useCreateFillerEventMutation,
@@ -63,7 +67,15 @@ export function useCreateSingleRunEvent(
   );
 
   return useCallback(
-    ({ event, run }: { event: Parameters<typeof buildEventInput>[0]; run: Parameters<typeof buildRunInput>[0] }) =>
+    ({
+      event,
+      run,
+      signedImageBlobIds,
+    }: {
+      event: Parameters<typeof buildEventInput>[0];
+      run: Parameters<typeof buildRunInput>[0];
+      signedImageBlobIds?: string[];
+    }) =>
       mutate({
         variables: {
           input: {
@@ -73,6 +85,7 @@ export function useCreateSingleRunEvent(
               author: '{{ convention.name }} Staff',
             }),
             ...buildRunInput(run),
+            signedImageBlobIds,
           },
         },
       }),
@@ -84,6 +97,7 @@ export type CreateEventOptions = {
   event: Parameters<typeof buildEventInput>[0];
   eventCategory: { scheduling_ui: SchedulingUi };
   run?: Parameters<typeof buildRunInput>[0];
+  signedImageBlobIds?: string[];
 };
 
 export type CreateEventResult = CreateRegularEventResult | CreateSingleRunEventResult;
@@ -99,19 +113,21 @@ export default function useCreateEvent(
       event,
       eventCategory,
       run,
+      signedImageBlobIds,
     }: {
       event: Parameters<typeof buildEventInput>[0];
       eventCategory: { scheduling_ui: SchedulingUi };
       run?: Parameters<typeof buildRunInput>[0];
+      signedImageBlobIds?: string[];
     }) => {
       if (eventCategory.scheduling_ui === SchedulingUi.SingleRun) {
         if (!run) {
           throw new Error('When creating a single-run event, the run must be provided');
         }
-        return createSingleRunEvent({ event, run });
+        return createSingleRunEvent({ event, run, signedImageBlobIds });
       }
 
-      return createRegularEvent({ event });
+      return createRegularEvent({ event, signedImageBlobIds });
     },
     [createRegularEvent, createSingleRunEvent],
   );

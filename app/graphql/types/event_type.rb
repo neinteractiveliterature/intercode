@@ -101,7 +101,7 @@ class Types::EventType < Types::BaseObject
         [
           [object, 'short_blurb_html'],
           object.short_blurb,
-          object.images.includes(:blob).index_by { |image| image.filename.to_s }
+          object.images_attachments.includes(:blob).index_by { |att| att.filename.to_s }
         ]
       )
   end
@@ -115,7 +115,7 @@ class Types::EventType < Types::BaseObject
         [
           [object, 'description_html'],
           object.description,
-          object.images.includes(:blob).index_by { |image| image.filename.to_s }
+          object.images_attachments.includes(:blob).index_by { |att| att.filename.to_s }
         ]
       )
   end
