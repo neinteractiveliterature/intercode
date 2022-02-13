@@ -84,6 +84,7 @@ class Types::MutationType < Types::BaseObject
 
   ### Event
 
+  field :attachImageToEvent, null: false, mutation: Mutations::AttachImageToEvent
   field :createEvent, null: false, mutation: Mutations::CreateEvent
   field :createFillerEvent, null: false, mutation: Mutations::CreateFillerEvent
   field :dropEvent, null: false, mutation: Mutations::DropEvent
@@ -102,6 +103,7 @@ class Types::MutationType < Types::BaseObject
 
   field :createEventProposal, null: false, mutation: Mutations::CreateEventProposal
   field :updateEventProposal, null: false, mutation: Mutations::UpdateEventProposal
+  field :attachImageToEventProposal, null: false, mutation: Mutations::AttachImageToEventProposal
   field :deleteEventProposal, null: false, mutation: Mutations::DeleteEventProposal
   field :submitEventProposal, null: false, mutation: Mutations::SubmitEventProposal
   field :transitionEventProposal, null: false, mutation: Mutations::TransitionEventProposal

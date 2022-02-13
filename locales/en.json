@@ -7,6 +7,8 @@
   },
   "admin": {
     "convention": {
+      "faviconHelpText": "Used by browsers for the icon in tabs for this site.  180x180 pixels is recommended.",
+      "faviconLabel": "Favicon",
       "header": {
         "conventionTiming": {
           "canceled": "{{ conventionName }} is canceled",
@@ -36,6 +38,8 @@
         "label": "Site language"
       },
       "maximumTicketsLabel": "Maximum {{ ticketNamePlural }}",
+      "openGraphImageHelpText": "Used by social media sites for previewing links to this site. 1200x630 pixels is recommended for Facebook.",
+      "openGraphImageLabel": "OpenGraph image",
       "stripeAccountActive": "{{ conventionName }} is connected to a Stripe account and is able to sell {{ ticketNamePlural }} and/or products.",
       "stripeAccountContinue": "Continue Stripe account setup for {{ conventionName }}",
       "stripeAccountDisplayName": "Display name",
@@ -225,6 +229,7 @@
   },
   "buttons": {
     "add": "Add",
+    "attachImage": "Attach image…",
     "cancel": "Cancel",
     "close": "Close",
     "collapse": "Collapse",

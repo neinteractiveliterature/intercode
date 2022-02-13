@@ -7,16 +7,21 @@
   },
   "admin": {
     "convention": {
+      "faviconHelpText": "",
+      "faviconLabel": "",
       "header": {
         "conventionTiming": {
           "canceled": "",
           "endsToday": "",
           "future_one": "",
+          "future_many": "",
           "future_other": "",
           "isToday": "",
           "ongoing_one": "",
+          "ongoing_many": "",
           "ongoing_other": "",
           "past_one": "",
+          "past_many": "",
           "past_other": ""
         },
         "eventList": "",
@@ -36,6 +41,8 @@
         "label": "Idioma de la página"
       },
       "maximumTicketsLabel": "",
+      "openGraphImageHelpText": "",
+      "openGraphImageLabel": "",
       "stripeAccountActive": "",
       "stripeAccountContinue": "",
       "stripeAccountDisplayName": "",
@@ -58,6 +65,7 @@
       "deleteLabel": "",
       "departmentLabel": "",
       "eventCount_one": "",
+      "eventCount_many": "",
       "eventCount_other": "",
       "eventFormLabel": "",
       "eventProposalFormLabel": "",
@@ -89,6 +97,7 @@
       "deleteConfirmation": "",
       "deleteLabel": "",
       "eventRunCount_one": "",
+      "eventRunCount_many": "",
       "eventRunCount_other": "",
       "roomNameLabel": ""
     },
@@ -97,6 +106,7 @@
         "addCouponLabel": "",
         "couponCodeLabel": "",
         "deleteConfirmation_one": "",
+        "deleteConfirmation_many": "",
         "deleteConfirmation_other": "",
         "deleteCouponConfirmation": "",
         "deleteCouponLabel": "",
@@ -119,6 +129,7 @@
     },
     "ticketTypes": {
       "eventProvidedDescription_one": "",
+      "eventProvidedDescription_many": "",
       "eventProvidedDescription_other": ""
     },
     "userConProfiles": {
@@ -159,6 +170,7 @@
         "noWinner": "",
         "profileLabel": "",
         "signupCount_one": "",
+        "signupCount_many": "",
         "signupCount_other": ""
       }
     },
@@ -225,6 +237,7 @@
   },
   "buttons": {
     "add": "Añadir",
+    "attachImage": "",
     "cancel": "Cancelar",
     "close": "Cerrar",
     "collapse": "",
@@ -347,12 +360,14 @@
     },
     "catalog": {
       "author_one": "",
+      "author_many": "",
       "author_other": "",
       "organization": ""
     },
     "categoryDropdown": {
       "allCategoriesLabel": "",
       "multipleCategoriesLabel_one": "",
+      "multipleCategoriesLabel_many": "",
       "multipleCategoriesLabel_other": "",
       "singleCategoryLabel": ""
     },
@@ -387,8 +402,10 @@
     "runCapacity": {
       "label": "",
       "slotCount_one": "",
+      "slotCount_many": "",
       "slotCount_other": "",
       "slotRemainingCount_one": "",
+      "slotRemainingCount_many": "",
       "slotRemainingCount_other": "",
       "unlimitedSimple": "ilimitadas",
       "unlimitedWithCount": "({{ signupCount }} inscritas (capacidad ilimitada)",
@@ -397,6 +414,7 @@
     },
     "runHeader": {
       "maxSignups_one": "",
+      "maxSignups_many": "",
       "maxSignups_other": ""
     },
     "signupAdmin": {
@@ -476,6 +494,7 @@
       "nonEventProvidedTicketDescription": "",
       "provideTicketButton": "",
       "provideTicketChoice_one": "",
+      "provideTicketChoice_many": "",
       "provideTicketChoice_other": "",
       "provideTicketLink": "",
       "receiveConEmailHeader": "",
@@ -492,6 +511,7 @@
       "selectUserConProfilePrompt": "",
       "showEmailLabel": "",
       "ticketProvidability_one": "",
+      "ticketProvidability_many": "",
       "ticketProvidability_other": "",
       "unticketedWarning": "",
       "updateButton": "",
@@ -516,6 +536,7 @@
     "ageRestrictions": {
       "descriptionLabel": "Texto público de restricción por edad",
       "minimumAgeDescription_one": "",
+      "minimumAgeDescription_many": "",
       "minimumAgeDescription_other": "",
       "minimumAgeHelpText": "Si se especifica, la lista de participantes inscritas mostrará si alguien demasiado joven se ha anotado a la actividad. <2>La web no impone restricciones por edad; eso debes hacerlo tú.</2>",
       "minimumAgeLabel": "Edad mínima",
@@ -561,8 +582,10 @@
     "placeholderOptionLabel": "",
     "timeUnits": {
       "hours_one": "",
+      "hours_many": "",
       "hours_other": "",
       "minutes_one": "",
+      "minutes_many": "",
       "minutes_other": ""
     }
   },
@@ -570,6 +593,7 @@
     "commaSeparated": "",
     "emailAddresses": "",
     "recipientCount_one": "",
+    "recipientCount_many": "",
     "recipientCount_other": "",
     "semicolonSeparated": "",
     "tableView": ""
@@ -692,6 +716,7 @@
     "fixedPrice": "",
     "price": "",
     "scheduledValueSummary_one": "",
+    "scheduledValueSummary_many": "",
     "scheduledValueSummary_other": "",
     "scheduledValueWithNext": "",
     "unavailable": ""
@@ -744,11 +769,14 @@
   "signups": {
     "availability": {
       "full_one": "",
+      "full_many": "",
       "full_other": "",
       "partiallyFull_one": "",
+      "partiallyFull_many": "",
       "partiallyFull_other": "",
       "unlimited": "",
       "waitlistCount_one": "",
+      "waitlistCount_many": "",
       "waitlistCount_other": ""
     },
     "maximumSignups": {
@@ -794,6 +822,7 @@
     "coupons": {
       "unlimitedUses": "",
       "usageLimitCount_one": "",
+      "usageLimitCount_many": "",
       "usageLimitCount_other": ""
     }
   },

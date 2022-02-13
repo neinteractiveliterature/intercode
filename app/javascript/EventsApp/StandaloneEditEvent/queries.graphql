@@ -24,6 +24,14 @@ fragment StandaloneEditEvent_EventFields on Event {
   current_user_form_item_viewer_role
   current_user_form_item_writer_role
 
+  images {
+    id
+    byte_size
+    content_type
+    filename
+    url
+  }
+
   event_category {
     id
     name

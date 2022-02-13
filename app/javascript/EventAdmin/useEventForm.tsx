@@ -13,6 +13,7 @@ import { ConventionForFormItemDisplay } from '../FormPresenter/ItemDisplays/Form
 import { CommonFormFieldsFragment } from '../Models/commonFormFragments.generated';
 import { FormBodyImperativeHandle } from '../FormPresenter/Layouts/FormBody';
 import { getSortedParsedFormItems } from '../Models/Form';
+import { ImageAttachmentConfig } from '../BuiltInFormControls/MarkdownInput';
 
 function buildSingleBucketRegistrationPolicy(totalSlots?: number | null): RegistrationPolicy {
   return {
@@ -68,6 +69,7 @@ export type UseEventFormOptions<
   convention: ConventionForFormItemDisplay;
   initialEvent: EventType;
   eventForm: CommonFormFieldsFragment;
+  imageAttachmentConfig?: ImageAttachmentConfig;
 };
 
 export type EventFormProps<
@@ -80,6 +82,7 @@ export type EventFormProps<
   event: EventType;
   formResponseValuesChanged: (newResponseValues: unknown) => void;
   formRef: React.Ref<FormBodyImperativeHandle | undefined>;
+  imageAttachmentConfig?: ImageAttachmentConfig;
 };
 
 export type UseEventFormResult<
@@ -98,7 +101,12 @@ export type UseEventFormResult<
 export default function useEventForm<
   EventType extends FormResponse &
     Pick<Event, 'current_user_form_item_viewer_role' | 'current_user_form_item_writer_role'>,
->({ convention, initialEvent, eventForm }: UseEventFormOptions<EventType>): UseEventFormResult<EventType> {
+>({
+  convention,
+  initialEvent,
+  eventForm,
+  imageAttachmentConfig,
+}: UseEventFormOptions<EventType>): UseEventFormResult<EventType> {
   const [event, setEvent] = useState<EventType>(() => ({
     ...initialEvent,
     form_response_attrs: {
@@ -138,8 +146,17 @@ export default function useEventForm<
       itemInteractionTrackingProps,
       formResponseValuesChanged,
       formRef,
+      imageAttachmentConfig,
     }),
-    [event, eventForm, convention, itemInteractionTrackingProps, formResponseValuesChanged, formRef],
+    [
+      event,
+      eventForm,
+      convention,
+      itemInteractionTrackingProps,
+      formResponseValuesChanged,
+      formRef,
+      imageAttachmentConfig,
+    ],
   );
 
   return useMemo(
@@ -166,6 +183,7 @@ export function EventForm<
   event,
   formResponseValuesChanged,
   formRef,
+  imageAttachmentConfig,
 }: EventFormProps<EventType>): JSX.Element {
   return (
     <ItemInteractionTrackerContext.Provider value={itemInteractionTrackingProps}>
@@ -177,6 +195,7 @@ export function EventForm<
         response={event}
         responseValuesChanged={formResponseValuesChanged}
         ref={formRef}
+        imageAttachmentConfig={imageAttachmentConfig}
       />
     </ItemInteractionTrackerContext.Provider>
   );

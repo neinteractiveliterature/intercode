@@ -25,20 +25,25 @@ class AcceptEventProposalService < CivilService::Service
     event.con_mail_destination ||= 'gms'
     event.title ||= event_proposal.title # in case the form doesn't include it
     event.length_seconds ||= event_proposal.length_seconds # same deal as title
+    event_proposal.images.blobs.each { |blob| event.images.attach(blob) }
+
     event.save!
     event_proposal.update!(event: event)
-
-    if event_proposal.owner
-      event.team_members.create!(
-        display: true,
-        show_email: false,
-        receive_con_email: true,
-        receive_signup_email: 'non_waitlist_signups',
-        user_con_profile: event_proposal.owner
-      )
-    end
+    add_proposer_as_team_member(event)
 
     success(event: event)
+  end
+
+  def add_proposer_as_team_member(event)
+    return unless event_proposal.owner
+
+    event.team_members.create!(
+      display: true,
+      show_email: false,
+      receive_con_email: true,
+      receive_signup_email: 'non_waitlist_signups',
+      user_con_profile: event_proposal.owner
+    )
   end
 
   def event_attributes

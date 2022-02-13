@@ -4,19 +4,19 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
-export type LiquidAssignFieldsFragment = { __typename: 'LiquidAssign', name: string, drop_class_name: string, cms_variable_value_json?: string | null | undefined };
+export type LiquidAssignFieldsFragment = { __typename: 'LiquidAssign', name: string, drop_class_name: string, cms_variable_value_json?: string | null };
 
 export type LiquidAssignsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type LiquidAssignsQueryData = { __typename: 'Query', cmsParent: { __typename: 'Convention', id: string, liquidAssigns: Array<{ __typename: 'LiquidAssign', name: string, drop_class_name: string, cms_variable_value_json?: string | null | undefined }> } | { __typename: 'RootSite', id: string, liquidAssigns: Array<{ __typename: 'LiquidAssign', name: string, drop_class_name: string, cms_variable_value_json?: string | null | undefined }> } };
+export type LiquidAssignsQueryData = { __typename: 'Query', cmsParent: { __typename: 'Convention', id: string, liquidAssigns: Array<{ __typename: 'LiquidAssign', name: string, drop_class_name: string, cms_variable_value_json?: string | null }> } | { __typename: 'RootSite', id: string, liquidAssigns: Array<{ __typename: 'LiquidAssign', name: string, drop_class_name: string, cms_variable_value_json?: string | null }> } };
 
 export type NotifierLiquidAssignsQueryVariables = Types.Exact<{
   eventKey: Types.Scalars['String'];
 }>;
 
 
-export type NotifierLiquidAssignsQueryData = { __typename: 'Query', cmsParent: { __typename: 'Convention', id: string, liquidAssigns: Array<{ __typename: 'LiquidAssign', name: string, drop_class_name: string, cms_variable_value_json?: string | null | undefined }> } };
+export type NotifierLiquidAssignsQueryData = { __typename: 'Query', cmsParent: { __typename: 'Convention', id: string, liquidAssigns: Array<{ __typename: 'LiquidAssign', name: string, drop_class_name: string, cms_variable_value_json?: string | null }> } };
 
 export const LiquidAssignFieldsFragmentDoc = gql`
     fragment LiquidAssignFields on LiquidAssign {

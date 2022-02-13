@@ -11,7 +11,8 @@ import useCreateEvent, { CreateEventOptions } from './useCreateEvent';
 import usePageTitle from '../usePageTitle';
 import { useEventAdminEventsQuery, EventAdminEventsQueryData } from './queries.generated';
 import { buildEventInput } from './InputBuilders';
-import { FormItemRole, SchedulingUi } from '../graphqlTypes.generated';
+import { Event, FormItemRole, SchedulingUi } from '../graphqlTypes.generated';
+import { ImageAttachmentConfig } from '../BuiltInFormControls/MarkdownInput';
 
 type NewEventFormResponseAttrs = {
   length_seconds?: number | null;
@@ -21,7 +22,7 @@ type NewEventFormResponseAttrs = {
 
 type EventCategoryType = NonNullable<EventAdminEventsQueryData['convention']>['event_categories'][0];
 
-type NewEventFormEvent = {
+type NewEventFormEvent = Pick<Event, 'id' | '__typename'> & {
   event_category?: EventCategoryType | null;
   form_response_attrs: NewEventFormResponseAttrs;
   current_user_form_item_viewer_role: FormItemRole;
@@ -45,6 +46,8 @@ export default LoadQueryWrapper(useEventAdminEventsQuery, function NewEvent({ da
   const [createMutate, createError] = useAsyncFunction<unknown, [CreateEventOptions]>(useCreateEvent(convention));
   const initialEvent = useMemo<NewEventFormEvent>(
     () => ({
+      __typename: 'Event',
+      id: 'not-created-yet',
       form_response_attrs: {},
       event_category: initialEventCategory,
       // if you're on the event admin app, you're an admin for events by definition
@@ -53,6 +56,14 @@ export default LoadQueryWrapper(useEventAdminEventsQuery, function NewEvent({ da
     }),
     [initialEventCategory],
   );
+  const [signedBlobIds, setSignedBlobIds] = useState<string[]>([]);
+  const imageAttachmentConfig = useMemo<ImageAttachmentConfig>(
+    () => ({
+      addBlob: (blob) => setSignedBlobIds((prevSignedBlobIds) => [...prevSignedBlobIds, blob.signed_id]),
+      existingImages: [],
+    }),
+    [],
+  );
   const [formProps, { event, eventCategory, eventCategoryId, validateForm }] = useEventFormWithCategorySelection<
     EventCategoryType,
     NewEventFormEvent
@@ -60,6 +71,7 @@ export default LoadQueryWrapper(useEventAdminEventsQuery, function NewEvent({ da
     convention,
     schedulingUi: initialEventCategory ? initialEventCategory.scheduling_ui : null,
     initialEvent,
+    imageAttachmentConfig,
   });
   const [run, setRun] = useState<RunForRunFormFields>({
     __typename: 'Run',
@@ -86,11 +98,13 @@ export default LoadQueryWrapper(useEventAdminEventsQuery, function NewEvent({ da
         event: eventForBuildEventInput,
         eventCategory,
         run,
+        signedImageBlobIds: signedBlobIds,
       });
     } else {
       await createMutate({
         event: eventForBuildEventInput,
         eventCategory,
+        signedImageBlobIds: signedBlobIds,
       });
     }
     navigate(donePath);
@@ -121,6 +135,7 @@ export default LoadQueryWrapper(useEventAdminEventsQuery, function NewEvent({ da
             event_category: eventCategory,
             maximum_event_provided_tickets_overrides: [],
             runs: [],
+            images: [],
           }}
           onChange={setRun}
         />

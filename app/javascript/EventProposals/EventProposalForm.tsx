@@ -11,9 +11,15 @@ import deserializeFormResponse, { WithFormResponse } from '../Models/deserialize
 import { useEventProposalQuery, EventProposalQueryData } from './queries.generated';
 import { ConventionForFormItemDisplay } from '../FormPresenter/ItemDisplays/FormItemDisplay';
 import { CommonFormFieldsFragment } from '../Models/commonFormFragments.generated';
-import { useUpdateEventProposalMutation, useSubmitEventProposalMutation } from './mutations.generated';
+import {
+  useUpdateEventProposalMutation,
+  useSubmitEventProposalMutation,
+  useAttachImageToEventProposalMutation,
+} from './mutations.generated';
 import { LoadQueryWithVariablesWrapper } from '../GraphqlLoadingWrappers';
 import { parseResponseErrors } from '../parseResponseErrors';
+import { ImageAttachmentConfig } from '../BuiltInFormControls/MarkdownInput';
+import { Blob } from '@rails/activestorage';
 
 type EventProposalFormInnerProps = {
   convention: ConventionForFormItemDisplay;
@@ -34,10 +40,19 @@ function EventProposalFormInner({
   const [updateMutate] = useUpdateEventProposalMutation();
   const [updateEventProposal, updateError, updateInProgress] = useAsyncFunction(updateMutate);
   const [updatePromise, setUpdatePromise] = useState<Promise<unknown>>();
+  const [attachImage] = useAttachImageToEventProposalMutation();
   const [submitMutate] = useSubmitEventProposalMutation();
   const [submitEventProposal, submitError, submitInProgress] = useAsyncFunction(submitMutate);
   const [eventProposal, setEventProposal] = useState(initialEventProposal);
   const [responseErrors, setResponseErrors] = useState({});
+
+  const imageAttachmentConfig = useMemo<ImageAttachmentConfig>(
+    () => ({
+      addBlob: (blob: Blob) => attachImage({ variables: { id: eventProposal.id, signedBlobId: blob.signed_id } }),
+      existingImages: eventProposal.images,
+    }),
+    [eventProposal.id, eventProposal.images, attachImage],
+  );
 
   const responseValuesChanged = useCallback((newResponseValues) => {
     setEventProposal((prevEventProposal) => ({
@@ -132,6 +147,7 @@ function EventProposalFormInner({
               </small>
             </div>
           }
+          imageAttachmentConfig={imageAttachmentConfig}
         />
         <ErrorDisplay graphQLError={(updateError || submitError) as ApolloError | null} />
       </div>

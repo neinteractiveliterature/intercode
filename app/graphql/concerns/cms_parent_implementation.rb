@@ -23,8 +23,18 @@ module CmsParentImplementation
     LiquidAssignGraphqlPresenter.from_hash(cadmus_renderer.default_assigns)
   end
 
-  def preview_markdown(markdown:)
-    MarkdownPresenter.new('').render(markdown)
+  def preview_markdown(markdown:, event_id: nil, event_proposal_id: nil)
+    local_images = {}
+    if event_id
+      local_images = object.events.find(event_id).images.includes(:blob).index_by { |image| image.filename.to_s }
+    elsif event_proposal_id
+      local_images =
+        object.event_proposals.find(event_proposal_id).images.includes(:blob).index_by { |image| image.filename.to_s }
+    end
+
+    MarkdownPresenter
+      .new('', cadmus_renderer: cadmus_renderer, controller: context[:controller])
+      .render(markdown, local_images: local_images)
   end
 
   def preview_liquid(content:)

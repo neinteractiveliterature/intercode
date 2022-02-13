@@ -1,4 +1,4 @@
-import React, { forwardRef, useRef, useCallback, useContext, useImperativeHandle } from 'react';
+import React, { forwardRef, useRef, useCallback, useContext, useImperativeHandle, useMemo } from 'react';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import FormItemInput from '../ItemInputs/FormItemInput';
@@ -11,6 +11,8 @@ import { FormResponse } from '../useFormResponse';
 import { FormItemRole, FormType } from '../../graphqlTypes.generated';
 
 import { VisibilityDisclosureCard } from '../ItemInputs/PermissionDisclosures';
+import { FormResponseReference } from '../ItemInputs/CommonFormItemInputProps';
+import { ImageAttachmentConfig } from '../../BuiltInFormControls/MarkdownInput';
 
 export type FormBodyProps = {
   convention: ConventionForFormItemDisplay;
@@ -21,6 +23,7 @@ export type FormBodyProps = {
   currentUserViewerRole: FormItemRole;
   currentUserWriterRole: FormItemRole;
   errors?: { [itemIdentifier: string]: string[] };
+  imageAttachmentConfig?: ImageAttachmentConfig;
 };
 
 export type FormBodyImperativeHandle = {
@@ -37,11 +40,20 @@ export default forwardRef<FormBodyImperativeHandle | undefined, FormBodyProps>(f
     response,
     responseValuesChanged,
     errors,
+    imageAttachmentConfig,
   },
   ref,
 ) {
   const itemElements = useRef(new Map<string, HTMLDivElement>()).current;
   const { interactWithItem, hasInteractedWithItem } = useContext(ItemInteractionTrackerContext);
+
+  const formResponseReference = useMemo<FormResponseReference | undefined>(() => {
+    if (response.__typename === 'Event') {
+      return { type: 'Event', id: response.id };
+    } else if (response.__typename === 'EventProposal') {
+      return { type: 'EventProposal', id: response.id };
+    }
+  }, [response.__typename, response.id]);
 
   const responseValueChanged = useCallback(
     (field, value) => {
@@ -126,6 +138,8 @@ export default forwardRef<FormBodyImperativeHandle | undefined, FormBodyProps>(f
               value={value}
               onChange={responseValueChanged}
               onInteract={interactWithItem}
+              formResponseReference={formResponseReference}
+              imageAttachmentConfig={imageAttachmentConfig}
             />
             <ErrorDisplay stringError={errorsForDisplay} />
           </div>

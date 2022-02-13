@@ -26,11 +26,13 @@ import {
   useStandaloneUpdateMaximumEventProvidedTicketsOverrideMutation,
   useStandaloneDeleteMaximumEventProvidedTicketsOverrideMutation,
   useStandaloneUpdateEventMutation,
+  useStandaloneAttachImageToEventMutation,
 } from './mutations.generated';
 import FourOhFourPage from '../../FourOhFourPage';
 import useLoginRequired from '../../Authentication/useLoginRequired';
 import { AuthorizationError } from '../../Authentication/useAuthorizationRequired';
 import buildEventUrl from '../buildEventUrl';
+import { ImageAttachmentConfig } from '../../BuiltInFormControls/MarkdownInput';
 
 export type StandaloneEditEventFormProps = {
   initialEvent: WithFormResponse<StandaloneEditEventQueryData['convention']['event']>;
@@ -49,11 +51,20 @@ function StandaloneEditEventForm({
 }: StandaloneEditEventFormProps) {
   const navigate = useNavigate();
   const apolloClient = useApolloClient();
+  const [attachImageToEvent] = useStandaloneAttachImageToEventMutation();
+  const imageAttachmentConfig = useMemo<ImageAttachmentConfig>(
+    () => ({
+      addBlob: (blob) => attachImageToEvent({ variables: { id: initialEvent.id, signedBlobId: blob.signed_id } }),
+      existingImages: initialEvent.images,
+    }),
+    [attachImageToEvent, initialEvent.images, initialEvent.id],
+  );
 
   const [eventFormProps, { event, validateForm }] = useEventForm({
     convention,
     initialEvent,
     eventForm,
+    imageAttachmentConfig,
   });
 
   const [updateEventMutate] = useStandaloneUpdateEventMutation();

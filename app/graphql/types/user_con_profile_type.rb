@@ -47,7 +47,9 @@ class Types::UserConProfileType < Types::BaseObject
   field :user_id, Integer, null: false
 
   def bio_html
-    MarkdownLoader.for('user_con_profile', 'No bio provided').load([[object, 'bio_html'], object.bio])
+    MarkdownLoader
+      .for('user_con_profile', 'No bio provided', context[:controller])
+      .load([[object, 'bio_html'], object.bio, {}])
   end
 
   def form_response_attrs_json

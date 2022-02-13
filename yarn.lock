@@ -1627,6 +1627,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/plugin-transform-typescript@npm:^7.16.8":
+  version: 7.16.8
+  resolution: "@babel/plugin-transform-typescript@npm:7.16.8"
+  dependencies:
+    "@babel/helper-create-class-features-plugin": ^7.16.7
+    "@babel/helper-plugin-utils": ^7.16.7
+    "@babel/plugin-syntax-typescript": ^7.16.7
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  checksum: a76d0afcbd550208cf2e7cdedb4f2d3ca3fa287640a4858a5ee0a28270b784d7d20d5a51b5997dc84514e066a5ebef9e0a0f74ed9fffae09e73984786dd08036
+  languageName: node
+  linkType: hard
+
 "@babel/plugin-transform-unicode-escapes@npm:^7.16.7":
   version: 7.16.7
   resolution: "@babel/plugin-transform-unicode-escapes@npm:7.16.7"
@@ -4528,6 +4541,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@rails/activestorage@npm:7.0.2-2":
+  version: 7.0.2-2
+  resolution: "@rails/activestorage@npm:7.0.2-2"
+  dependencies:
+    spark-md5: ^3.0.1
+  checksum: 544ce28a69280bf078e764ddd2dd8f6d9147af7660db6137fc14e33456c1f7f99441bbb83381396563b617675f911eb9f0a1fd754fd5c4e923863714db905422
+  languageName: node
+  linkType: hard
+
 "@samverschueren/stream-to-observable@npm:^0.3.0":
   version: 0.3.1
   resolution: "@samverschueren/stream-to-observable@npm:0.3.1"
@@ -5451,6 +5473,13 @@ __metadata:
   version: 6.9.7
   resolution: "@types/qs@npm:6.9.7"
   checksum: 7fd6f9c25053e9b5bb6bc9f9f76c1d89e6c04f7707a7ba0e44cc01f17ef5284adb82f230f542c2d5557d69407c9a40f0f3515e8319afd14e1e16b5543ac6cdba
+  languageName: node
+  linkType: hard
+
+"@types/rails__activestorage@npm:6.0.0":
+  version: 6.0.0
+  resolution: "@types/rails__activestorage@npm:6.0.0"
+  checksum: d288d0bb27362bcbda828ccb0bbb0912bd4a6f12804f84e2f690a7fd0e6067e99809d5149612c9a6e659d29f7ae5c47bcc66adf88966eac93b2e70fa9cf0cffe
   languageName: node
   linkType: hard
 
@@ -19546,6 +19575,7 @@ resolve@^2.0.0-next.3:
     "@babel/plugin-syntax-dynamic-import": 7.8.3
     "@babel/plugin-syntax-import-meta": 7.10.4
     "@babel/plugin-transform-regenerator": 7.16.7
+    "@babel/plugin-transform-typescript": ^7.16.8
     "@babel/polyfill": 7.12.1
     "@babel/preset-env": 7.16.11
     "@babel/preset-flow": 7.16.7
@@ -19579,6 +19609,7 @@ resolve@^2.0.0-next.3:
     "@neinteractiveliterature/litform": 0.21.0
     "@popperjs/core": 2.11.2
     "@prettier/plugin-ruby": 2.0.0
+    "@rails/activestorage": 7.0.2-2
     "@stripe/react-stripe-js": 1.7.0
     "@stripe/stripe-js": 1.22.0
     "@testing-library/jest-dom": 5.16.2
@@ -19602,6 +19633,7 @@ resolve@^2.0.0-next.3:
     "@types/minimist": 1.2.2
     "@types/node": 16.11.24
     "@types/punycode": 2.1.0
+    "@types/rails__activestorage": 6.0.0
     "@types/react": 17.0.39
     "@types/react-click-outside-hook": 1.0.0
     "@types/react-color": 3.0.6
@@ -20533,6 +20565,13 @@ resolve@^2.0.0-next.3:
   version: 1.1.5
   resolution: "space-separated-tokens@npm:1.1.5"
   checksum: 8ef68f1cfa8ccad316b7f8d0df0919d0f1f6d32101e8faeee34ea3a923ce8509c1ad562f57388585ee4951e92d27afa211ed0a077d3d5995b5ba9180331be708
+  languageName: node
+  linkType: hard
+
+"spark-md5@npm:^3.0.1":
+  version: 3.0.2
+  resolution: "spark-md5@npm:3.0.2"
+  checksum: 5feebff0bfabcecf56ba03af3e38fdb068272ed41fbf0a94ff9ef65b9bb9cb1dd69be3684db6542e62497b1eac3ae324c07ac4dcb606465dc36ca048177077bf
   languageName: node
   linkType: hard
 

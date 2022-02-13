@@ -10,7 +10,7 @@ export type CreateCouponMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateCouponMutationData = { __typename: 'Mutation', createCoupon: { __typename: 'CreateCouponPayload', coupon: { __typename: 'Coupon', id: string, usage_limit?: number | null | undefined, expires_at?: string | null | undefined, code: string, percent_discount?: string | null | undefined, fixed_amount?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, provides_product?: { __typename: 'Product', id: string, name: string } | null | undefined } } };
+export type CreateCouponMutationData = { __typename: 'Mutation', createCoupon: { __typename: 'CreateCouponPayload', coupon: { __typename: 'Coupon', id: string, usage_limit?: number | null, expires_at?: string | null, code: string, percent_discount?: string | null, fixed_amount?: { __typename: 'Money', fractional: number, currency_code: string } | null, provides_product?: { __typename: 'Product', id: string, name: string } | null } } };
 
 export type UpdateCouponMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -18,14 +18,14 @@ export type UpdateCouponMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateCouponMutationData = { __typename: 'Mutation', updateCoupon: { __typename: 'UpdateCouponPayload', coupon: { __typename: 'Coupon', id: string, usage_limit?: number | null | undefined, expires_at?: string | null | undefined, code: string, percent_discount?: string | null | undefined, fixed_amount?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, provides_product?: { __typename: 'Product', id: string, name: string } | null | undefined } } };
+export type UpdateCouponMutationData = { __typename: 'Mutation', updateCoupon: { __typename: 'UpdateCouponPayload', coupon: { __typename: 'Coupon', id: string, usage_limit?: number | null, expires_at?: string | null, code: string, percent_discount?: string | null, fixed_amount?: { __typename: 'Money', fractional: number, currency_code: string } | null, provides_product?: { __typename: 'Product', id: string, name: string } | null } } };
 
 export type DeleteCouponMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type DeleteCouponMutationData = { __typename: 'Mutation', deleteCoupon: { __typename: 'DeleteCouponPayload', clientMutationId?: string | null | undefined } };
+export type DeleteCouponMutationData = { __typename: 'Mutation', deleteCoupon: { __typename: 'DeleteCouponPayload', clientMutationId?: string | null } };
 
 
 export const CreateCouponDocument = gql`

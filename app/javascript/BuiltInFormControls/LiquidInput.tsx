@@ -1,27 +1,22 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import * as React from 'react';
 import classNames from 'classnames';
 import { useApolloClient } from '@apollo/client';
-import { Modal } from 'react-bootstrap4-modal';
 import { useTranslation } from 'react-i18next';
 import { html } from '@codemirror/lang-html';
 import {
   useModal,
   CodeInput,
-  ErrorDisplay,
   useStandardCodeMirror,
   UseStandardCodeMirrorExtensionsOptions,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   liquid,
+  LoadQueryWrapper,
 } from '@neinteractiveliterature/litform';
 import { CodeInputProps } from '@neinteractiveliterature/litform/lib/CodeInput';
 import { Extension } from '@codemirror/state';
 
-import { CmsFilesAdminQueryData, useCmsFilesAdminQueryLazyQuery } from '../CmsAdmin/CmsFilesAdmin/queries.generated';
 import MenuIcon from '../NavigationBar/MenuIcon';
-import FilePreview from '../CmsAdmin/CmsFilesAdmin/FilePreview';
-import SelectWithLabel from './SelectWithLabel';
-import FileUploadForm from '../CmsAdmin/CmsFilesAdmin/FileUploadForm';
 import {
   PreviewNotifierLiquidQueryData,
   PreviewLiquidQueryData,
@@ -30,102 +25,47 @@ import {
 } from './previewQueries.generated';
 import parseCmsContent from '../parseCmsContent';
 import parsePageContent from '../parsePageContent';
+import AddFileModal from './AddFileModal';
+import { ActiveStorageAttachment } from '../graphqlTypes.generated';
+import {
+  CmsFilesAdminQueryData,
+  CmsFilesAdminQueryVariables,
+  useCmsFilesAdminQuery,
+} from '../CmsAdmin/CmsFilesAdmin/queries.generated';
+import { useCreateCmsFileMutation } from '../CmsAdmin/CmsFilesAdmin/mutations.generated';
+import { Blob } from '@rails/activestorage';
 
-type SelectableCmsFile = CmsFilesAdminQueryData['cmsParent']['cmsFiles'][number];
-
-type AddFileModalProps = {
+type CreateCmsFileModalProps = {
   visible: boolean;
-  fileChosen: (file: SelectableCmsFile) => void;
   close: () => void;
+  fileChosen: (file: ActiveStorageAttachment) => void;
 };
 
-function AddFileModal({ visible, fileChosen, close }: AddFileModalProps) {
-  const { t } = useTranslation();
-  const [loadData, { called, data, loading, error }] = useCmsFilesAdminQueryLazyQuery();
-  const [file, setFile] = useState<SelectableCmsFile | null>(null);
-
-  const uploadedFile = (newFile: SelectableCmsFile) => {
-    setFile(newFile);
-  };
-
-  useEffect(() => {
-    if (visible && !called) {
-      loadData();
-    }
-  }, [visible, called, loadData]);
-
-  if (!called || loading) {
-    return <></>;
-  }
+const CreateCmsFileModal = LoadQueryWrapper<
+  CmsFilesAdminQueryData,
+  CmsFilesAdminQueryVariables,
+  CreateCmsFileModalProps
+>(useCmsFilesAdminQuery, function CreateCmsFileModal({ data, visible, close, fileChosen }) {
+  const attachments = useMemo(
+    () => data.cmsParent.cmsFiles.map((cmsFile) => ({ ...cmsFile.file, resized_url: cmsFile.file.thumbnailUrl })),
+    [data.cmsParent.cmsFiles],
+  );
+  const [createCmsFile] = useCreateCmsFileMutation();
+  const addBlob = useCallback(
+    (blob: Blob) => createCmsFile({ variables: { signedBlobId: blob.signed_id } }),
+    [createCmsFile],
+  );
 
   return (
-    <Modal visible={visible} dialogClassName="modal-lg">
-      <div className="modal-header">{t('cms.addFileModal.title', 'Add file')}</div>
-      <div className="modal-body">
-        {error ? (
-          <ErrorDisplay graphQLError={error} />
-        ) : (
-          <>
-            <SelectWithLabel<SelectableCmsFile>
-              label={t('cms.addFileModal.chooseExistingFileLabel', 'Choose existing file')}
-              options={data?.cmsParent.cmsFiles ?? []}
-              getOptionLabel={(f) => f.file.filename}
-              getOptionValue={(f) => f.file.filename}
-              value={file}
-              onChange={(newValue) => {
-                setFile(newValue as SelectableCmsFile | null);
-              }}
-              formatOptionLabel={(f) => (
-                <div className="d-flex align-items-center">
-                  <div className="me-2">
-                    <FilePreview url={f.file.url} contentType={f.file.content_type} size="2em" />
-                  </div>
-                  <div>{f.file.filename}</div>
-                </div>
-              )}
-              styles={{
-                menu: (provided) => ({ ...provided, zIndex: 25 }),
-              }}
-            />
-            {data?.currentAbility.can_create_cms_files && (
-              <div className="card mt-2">
-                <FileUploadForm onUpload={uploadedFile} cmsParent={data.cmsParent} />
-              </div>
-            )}
-            {file && (
-              <div className="card mt-2">
-                <div className="card-header">{t('cms.addFileModal.filePreview.title', 'Preview')}</div>
-                <div className="card-body">
-                  <FilePreview url={file.file.url} contentType={file.file.content_type} filename={file.file.filename} />
-                </div>
-              </div>
-            )}
-          </>
-        )}
-      </div>
-      <div className="modal-footer">
-        <button className="btn btn-secondary" type="button" onClick={close}>
-          {t('buttons.cancel', 'Cancel')}
-        </button>
-        <button
-          type="button"
-          className="btn btn-primary"
-          disabled={file == null}
-          onClick={() => {
-            if (file == null) {
-              return;
-            }
-
-            fileChosen(file);
-            close();
-          }}
-        >
-          {t('buttons.add', 'Add')}
-        </button>
-      </div>
-    </Modal>
+    <AddFileModal
+      existingFiles={attachments}
+      addBlob={addBlob}
+      visible={visible}
+      close={close}
+      fileChosen={fileChosen}
+    />
   );
-}
+});
 
 export type LiquidInputProps = Omit<
   CodeInputProps,
@@ -145,12 +85,7 @@ function LiquidInput(props: LiquidInputProps): JSX.Element {
   const { notifierEventKey } = props;
   const addFileModal = useModal();
 
-  const languageExtension = useMemo(
-    // Once we stop getting weird errors from parseMixed we can use the Liquid grammar
-    () => liquid({ baseLanguage: html({ matchClosingTags: false }).language }),
-    // () => html({ matchClosingTags: false }),
-    [],
-  );
+  const languageExtension = useMemo(() => liquid({ baseLanguage: html({ matchClosingTags: false }).language }), []);
 
   const extensions = useMemo(
     () => [languageExtension, ...(props.extensions ?? [])],
@@ -190,8 +125,8 @@ function LiquidInput(props: LiquidInputProps): JSX.Element {
         return parseCmsContent(response.data?.cmsParent.previewLiquid ?? '').bodyComponents;
       };
 
-  const addFile = (file: SelectableCmsFile) => {
-    editorView.dispatch(editorView.state.replaceSelection(`{% file_url ${file.file.filename} %}`));
+  const addFile = (file: ActiveStorageAttachment) => {
+    editorView.dispatch(editorView.state.replaceSelection(`{% file_url ${file.filename} %}`));
     editorView.focus();
   };
 
@@ -287,7 +222,7 @@ function LiquidInput(props: LiquidInputProps): JSX.Element {
       >
         {renderDocs()}
       </CodeInput>
-      <AddFileModal visible={addFileModal.visible} close={addFileModal.close} fileChosen={addFile} />
+      <CreateCmsFileModal visible={addFileModal.visible} close={addFileModal.close} fileChosen={addFile} />
     </>
   );
 }

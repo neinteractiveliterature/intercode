@@ -4,12 +4,12 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
-export type NotificationTemplateFieldsFragment = { __typename: 'NotificationTemplate', id: string, event_key: string, subject?: string | null | undefined, body_html?: string | null | undefined, body_text?: string | null | undefined, body_sms?: string | null | undefined };
+export type NotificationTemplateFieldsFragment = { __typename: 'NotificationTemplate', id: string, event_key: string, subject?: string | null, body_html?: string | null, body_text?: string | null, body_sms?: string | null };
 
 export type NotificationAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type NotificationAdminQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, notification_templates: Array<{ __typename: 'NotificationTemplate', id: string, event_key: string, subject?: string | null | undefined, body_html?: string | null | undefined, body_text?: string | null | undefined, body_sms?: string | null | undefined }> } };
+export type NotificationAdminQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, notification_templates: Array<{ __typename: 'NotificationTemplate', id: string, event_key: string, subject?: string | null, body_html?: string | null, body_text?: string | null, body_sms?: string | null }> } };
 
 export const NotificationTemplateFieldsFragmentDoc = gql`
     fragment NotificationTemplateFields on NotificationTemplate {

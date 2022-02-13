@@ -4,10 +4,12 @@ class Mutations::CreateFillerEvent < Mutations::BaseMutation
 
   argument :event, Types::EventInputType, required: true
   argument :run, Types::RunInputType, required: false
+  argument :signed_image_blob_ids, [ID], required: false
 
   authorize_create_convention_associated_model :events
 
-  def resolve(**args)
+  # rubocop:disable Metrics/AbcSize
+  def resolve(signed_image_blob_ids: nil, **args)
     event_attrs = args[:event].to_h.merge(updated_by: user_con_profile.user).stringify_keys
     form_response_attrs = JSON.parse(event_attrs.delete('form_response_attrs_json'))
 
@@ -19,6 +21,10 @@ class Mutations::CreateFillerEvent < Mutations::BaseMutation
         context[:pundit_user]
       )
     )
+    (signed_image_blob_ids || []).each do |signed_blob_id|
+      blob = ActiveStorage::Blob.find_signed!(signed_blob_id)
+      event.images.attach(blob)
+    end
 
     event.runs.new(args[:run].to_h.merge(updated_by: user_con_profile.user)) if args[:run]
 
@@ -26,4 +32,5 @@ class Mutations::CreateFillerEvent < Mutations::BaseMutation
 
     { event: event }
   end
+  # rubocop:enable Metrics/AbcSize
 end
