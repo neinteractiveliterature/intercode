@@ -12,6 +12,7 @@ import usePageTitle from '../usePageTitle';
 import { useEventAdminEventsQuery, EventAdminEventsQueryData } from './queries.generated';
 import { buildEventInput } from './InputBuilders';
 import { Event, FormItemRole, SchedulingUi } from '../graphqlTypes.generated';
+import { ImageAttachmentConfig } from '../BuiltInFormControls/MarkdownInput';
 
 type NewEventFormResponseAttrs = {
   length_seconds?: number | null;
@@ -55,6 +56,14 @@ export default LoadQueryWrapper(useEventAdminEventsQuery, function NewEvent({ da
     }),
     [initialEventCategory],
   );
+  const [signedBlobIds, setSignedBlobIds] = useState<string[]>([]);
+  const imageAttachmentConfig = useMemo<ImageAttachmentConfig>(
+    () => ({
+      addBlob: (blob) => setSignedBlobIds((prevSignedBlobIds) => [...prevSignedBlobIds, blob.signed_id]),
+      existingImages: [],
+    }),
+    [],
+  );
   const [formProps, { event, eventCategory, eventCategoryId, validateForm }] = useEventFormWithCategorySelection<
     EventCategoryType,
     NewEventFormEvent
@@ -62,6 +71,7 @@ export default LoadQueryWrapper(useEventAdminEventsQuery, function NewEvent({ da
     convention,
     schedulingUi: initialEventCategory ? initialEventCategory.scheduling_ui : null,
     initialEvent,
+    imageAttachmentConfig,
   });
   const [run, setRun] = useState<RunForRunFormFields>({
     __typename: 'Run',
@@ -88,11 +98,13 @@ export default LoadQueryWrapper(useEventAdminEventsQuery, function NewEvent({ da
         event: eventForBuildEventInput,
         eventCategory,
         run,
+        signedImageBlobIds: signedBlobIds,
       });
     } else {
       await createMutate({
         event: eventForBuildEventInput,
         eventCategory,
+        signedImageBlobIds: signedBlobIds,
       });
     }
     navigate(donePath);
@@ -123,6 +135,7 @@ export default LoadQueryWrapper(useEventAdminEventsQuery, function NewEvent({ da
             event_category: eventCategory,
             maximum_event_provided_tickets_overrides: [],
             runs: [],
+            images: [],
           }}
           onChange={setRun}
         />
