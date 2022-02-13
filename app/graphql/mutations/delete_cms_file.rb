@@ -7,7 +7,7 @@ class Mutations::DeleteCmsFile < Mutations::BaseMutation
   load_and_authorize_cms_model :cms_files, :id, :destroy
 
   def resolve(**_args)
-    cms_file.file.remove!
+    cms_file.file.purge_later
     cms_file.destroy!
     { cms_file: cms_file }
   end
