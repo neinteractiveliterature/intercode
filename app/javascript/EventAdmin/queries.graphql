@@ -150,6 +150,14 @@ fragment EventFields on Event {
     id
     ...MaximumEventProvidedTicketsOverrideFields
   }
+
+  images {
+    id
+    byte_size
+    content_type
+    filename
+    url
+  }
 }
 
 query EventAdminEventsQuery {

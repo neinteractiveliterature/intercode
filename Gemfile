@@ -138,6 +138,9 @@ group :development do
 
   # Find missing `end` statements
   gem 'dead_end'
+
+  # Type profiling for IDEs
+  gem 'typeprof'
 end
 
 group :development, :test do

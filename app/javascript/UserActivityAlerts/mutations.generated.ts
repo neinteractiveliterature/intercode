@@ -11,7 +11,7 @@ export type CreateUserActivityAlertMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateUserActivityAlertMutationData = { __typename: 'Mutation', createUserActivityAlert: { __typename: 'CreateUserActivityAlertPayload', user_activity_alert: { __typename: 'UserActivityAlert', id: string, email?: string | null | undefined, partial_name?: string | null | undefined, trigger_on_user_con_profile_create: boolean, trigger_on_ticket_create: boolean, user?: { __typename: 'User', id: string, name?: string | null | undefined } | null | undefined, notification_destinations: Array<{ __typename: 'NotificationDestination', id: string, staff_position?: { __typename: 'StaffPosition', id: string, name: string } | null | undefined, user_con_profile?: { __typename: 'UserConProfile', id: string, name_without_nickname: string } | null | undefined }> } } };
+export type CreateUserActivityAlertMutationData = { __typename: 'Mutation', createUserActivityAlert: { __typename: 'CreateUserActivityAlertPayload', user_activity_alert: { __typename: 'UserActivityAlert', id: string, email?: string | null, partial_name?: string | null, trigger_on_user_con_profile_create: boolean, trigger_on_ticket_create: boolean, user?: { __typename: 'User', id: string, name?: string | null } | null, notification_destinations: Array<{ __typename: 'NotificationDestination', id: string, staff_position?: { __typename: 'StaffPosition', id: string, name: string } | null, user_con_profile?: { __typename: 'UserConProfile', id: string, name_without_nickname: string } | null }> } } };
 
 export type UpdateUserActivityAlertMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -21,14 +21,14 @@ export type UpdateUserActivityAlertMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateUserActivityAlertMutationData = { __typename: 'Mutation', updateUserActivityAlert: { __typename: 'UpdateUserActivityAlertPayload', user_activity_alert: { __typename: 'UserActivityAlert', id: string, email?: string | null | undefined, partial_name?: string | null | undefined, trigger_on_user_con_profile_create: boolean, trigger_on_ticket_create: boolean, user?: { __typename: 'User', id: string, name?: string | null | undefined } | null | undefined, notification_destinations: Array<{ __typename: 'NotificationDestination', id: string, staff_position?: { __typename: 'StaffPosition', id: string, name: string } | null | undefined, user_con_profile?: { __typename: 'UserConProfile', id: string, name_without_nickname: string } | null | undefined }> } } };
+export type UpdateUserActivityAlertMutationData = { __typename: 'Mutation', updateUserActivityAlert: { __typename: 'UpdateUserActivityAlertPayload', user_activity_alert: { __typename: 'UserActivityAlert', id: string, email?: string | null, partial_name?: string | null, trigger_on_user_con_profile_create: boolean, trigger_on_ticket_create: boolean, user?: { __typename: 'User', id: string, name?: string | null } | null, notification_destinations: Array<{ __typename: 'NotificationDestination', id: string, staff_position?: { __typename: 'StaffPosition', id: string, name: string } | null, user_con_profile?: { __typename: 'UserConProfile', id: string, name_without_nickname: string } | null }> } } };
 
 export type DeleteUserActivityAlertMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type DeleteUserActivityAlertMutationData = { __typename: 'Mutation', deleteUserActivityAlert: { __typename: 'DeleteUserActivityAlertPayload', user_activity_alert: { __typename: 'UserActivityAlert', id: string, email?: string | null | undefined, partial_name?: string | null | undefined, trigger_on_user_con_profile_create: boolean, trigger_on_ticket_create: boolean, user?: { __typename: 'User', id: string, name?: string | null | undefined } | null | undefined, notification_destinations: Array<{ __typename: 'NotificationDestination', id: string, staff_position?: { __typename: 'StaffPosition', id: string, name: string } | null | undefined, user_con_profile?: { __typename: 'UserConProfile', id: string, name_without_nickname: string } | null | undefined }> } } };
+export type DeleteUserActivityAlertMutationData = { __typename: 'Mutation', deleteUserActivityAlert: { __typename: 'DeleteUserActivityAlertPayload', user_activity_alert: { __typename: 'UserActivityAlert', id: string, email?: string | null, partial_name?: string | null, trigger_on_user_con_profile_create: boolean, trigger_on_ticket_create: boolean, user?: { __typename: 'User', id: string, name?: string | null } | null, notification_destinations: Array<{ __typename: 'NotificationDestination', id: string, staff_position?: { __typename: 'StaffPosition', id: string, name: string } | null, user_con_profile?: { __typename: 'UserConProfile', id: string, name_without_nickname: string } | null }> } } };
 
 
 export const CreateUserActivityAlertDocument = gql`

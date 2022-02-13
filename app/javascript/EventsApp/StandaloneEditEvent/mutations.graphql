@@ -18,6 +18,15 @@ mutation StandaloneUpdateEvent($input: UpdateEventInput!) {
   }
 }
 
+mutation StandaloneAttachImageToEvent($id: ID!, $signedBlobId: ID!) {
+  attachImageToEvent(input: { id: $id, signedBlobId: $signedBlobId }) {
+    event {
+      id
+      ...StandaloneEditEvent_EventFields
+    }
+  }
+}
+
 mutation StandaloneCreateMaximumEventProvidedTicketsOverride($input: CreateMaximumEventProvidedTicketsOverrideInput!) {
   createMaximumEventProvidedTicketsOverride(input: $input) {
     maximum_event_provided_tickets_override {

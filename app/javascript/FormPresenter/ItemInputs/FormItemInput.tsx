@@ -9,7 +9,7 @@ import StaticTextItem from '../StaticTextItem';
 import TimeblockPreferenceItemInput from './TimeblockPreferenceItemInput';
 import TimespanItemInput from './TimespanItemInput';
 import AgeRestrictionsInput from './AgeRestrictionsInput';
-import { CommonFormItemInputProps } from './CommonFormItemInputProps';
+import { CommonFormItemInputProps, FormResponseReference } from './CommonFormItemInputProps';
 import { ConventionForFormItemDisplay } from '../ItemDisplays/FormItemDisplay';
 import {
   AgeRestrictionsFormItem,
@@ -26,6 +26,7 @@ import {
   TypedFormItem,
 } from '../../FormAdmin/FormItemUtils';
 import assertNever from 'assert-never';
+import { ImageAttachmentConfig } from '../../BuiltInFormControls/MarkdownInput';
 
 export type FormItemInputProps<FormItemType extends TypedFormItem> = Omit<
   CommonFormItemInputProps<FormItemType>,
@@ -34,6 +35,8 @@ export type FormItemInputProps<FormItemType extends TypedFormItem> = Omit<
   onChange: (identifier: string, newValue: FormItemValueType<FormItemType> | null | undefined) => void;
   value: unknown;
   convention: ConventionForFormItemDisplay;
+  formResponseReference?: FormResponseReference;
+  imageAttachmentConfig?: ImageAttachmentConfig;
 };
 
 function FormItemInput<FormItemType extends TypedFormItem>({
@@ -44,6 +47,8 @@ function FormItemInput<FormItemType extends TypedFormItem>({
   onInteract,
   valueInvalid,
   convention,
+  formResponseReference,
+  imageAttachmentConfig,
 }: FormItemInputProps<FormItemType>) {
   const valueDidChange = useCallback(
     (newValue) => {
@@ -63,6 +68,8 @@ function FormItemInput<FormItemType extends TypedFormItem>({
     onInteract,
     valueInvalid,
     onChange: valueDidChange,
+    formResponseReference,
+    imageAttachmentConfig,
   };
 
   switch (formItem.item_type) {

@@ -16,12 +16,14 @@ import {
   useCreateMaximumEventProvidedTicketsOverrideMutation,
   useUpdateMaximumEventProvidedTicketsOverrideMutation,
   useDeleteMaximumEventProvidedTicketsOverrideMutation,
+  useAttachImageToEventMutation,
 } from './mutations.generated';
 import { LoadSingleValueFromCollectionWrapper } from '../GraphqlLoadingWrappers';
 import {
   useCreateMutationWithReferenceArrayUpdater,
   useDeleteMutationWithReferenceArrayUpdater,
 } from '@neinteractiveliterature/litform/dist';
+import { ImageAttachmentConfig } from '../BuiltInFormControls/MarkdownInput';
 
 export default LoadSingleValueFromCollectionWrapper(
   useEventAdminEventsQuery,
@@ -49,11 +51,21 @@ export default LoadSingleValueFromCollectionWrapper(
     });
 
     const [run, setRun] = useState(initialEvent?.runs[0] || {});
+    const [attachImageToEvent] = useAttachImageToEventMutation();
+
+    const imageAttachmentConfig = useMemo<ImageAttachmentConfig>(
+      () => ({
+        addBlob: (blob) => attachImageToEvent({ variables: { id: serializedEvent.id, signedBlobId: blob.signed_id } }),
+        existingImages: serializedEvent.images,
+      }),
+      [attachImageToEvent, serializedEvent.id, serializedEvent.images],
+    );
 
     const [eventFormWithCategorySelectionProps, { event, eventCategory, validateForm }] =
       useEventFormWithCategorySelection({
         convention: data.convention,
         initialEvent,
+        imageAttachmentConfig,
       });
 
     const eventForRunFormFields: RunFormFieldsProps<typeof run>['event'] = useMemo(
@@ -72,6 +84,7 @@ export default LoadSingleValueFromCollectionWrapper(
         },
         maximum_event_provided_tickets_overrides: [],
         runs: [run],
+        images: event.images,
       }),
       [run, event],
     );

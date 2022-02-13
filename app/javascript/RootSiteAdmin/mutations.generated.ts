@@ -12,7 +12,7 @@ export type UpdateRootSiteMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateRootSiteMutationData = { __typename: 'Mutation', updateRootSite: { __typename: 'UpdateRootSitePayload', root_site: { __typename: 'RootSite', id: string, site_name: string, rootPage: { __typename: 'Page', id: string, name?: string | null | undefined }, defaultLayout: { __typename: 'CmsLayout', id: string, name?: string | null | undefined }, cmsPages: Array<{ __typename: 'Page', id: string, name?: string | null | undefined }>, cmsLayouts: Array<{ __typename: 'CmsLayout', id: string, name?: string | null | undefined }> } } };
+export type UpdateRootSiteMutationData = { __typename: 'Mutation', updateRootSite: { __typename: 'UpdateRootSitePayload', root_site: { __typename: 'RootSite', id: string, site_name: string, rootPage: { __typename: 'Page', id: string, name?: string | null }, defaultLayout: { __typename: 'CmsLayout', id: string, name?: string | null }, cmsPages: Array<{ __typename: 'Page', id: string, name?: string | null }>, cmsLayouts: Array<{ __typename: 'CmsLayout', id: string, name?: string | null }> } } };
 
 
 export const UpdateRootSiteDocument = gql`

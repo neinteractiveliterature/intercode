@@ -10,7 +10,7 @@ export type CreatePartialMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreatePartialMutationData = { __typename: 'Mutation', createCmsPartial: { __typename: 'CreateCmsPartialPayload', cms_partial: { __typename: 'CmsPartial', id: string, name?: string | null | undefined, content?: string | null | undefined, admin_notes?: string | null | undefined, current_ability_can_update: boolean, current_ability_can_delete: boolean } } };
+export type CreatePartialMutationData = { __typename: 'Mutation', createCmsPartial: { __typename: 'CreateCmsPartialPayload', cms_partial: { __typename: 'CmsPartial', id: string, name?: string | null, content?: string | null, admin_notes?: string | null, current_ability_can_update: boolean, current_ability_can_delete: boolean } } };
 
 export type UpdatePartialMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -18,14 +18,14 @@ export type UpdatePartialMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdatePartialMutationData = { __typename: 'Mutation', updateCmsPartial: { __typename: 'UpdateCmsPartialPayload', cms_partial: { __typename: 'CmsPartial', id: string, name?: string | null | undefined, content?: string | null | undefined, admin_notes?: string | null | undefined, current_ability_can_update: boolean, current_ability_can_delete: boolean } } };
+export type UpdatePartialMutationData = { __typename: 'Mutation', updateCmsPartial: { __typename: 'UpdateCmsPartialPayload', cms_partial: { __typename: 'CmsPartial', id: string, name?: string | null, content?: string | null, admin_notes?: string | null, current_ability_can_update: boolean, current_ability_can_delete: boolean } } };
 
 export type DeletePartialMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type DeletePartialMutationData = { __typename: 'Mutation', deleteCmsPartial: { __typename: 'DeleteCmsPartialPayload', clientMutationId?: string | null | undefined } };
+export type DeletePartialMutationData = { __typename: 'Mutation', deleteCmsPartial: { __typename: 'DeleteCmsPartialPayload', clientMutationId?: string | null } };
 
 
 export const CreatePartialDocument = gql`

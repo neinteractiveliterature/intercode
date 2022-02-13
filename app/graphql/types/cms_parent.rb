@@ -127,6 +127,14 @@ module Types::CmsParent
 
   field :preview_markdown, String, null: false do
     argument :markdown, String, required: true, description: 'The Markdown content to render.'
+    argument :event_id,
+             ID,
+             required: false,
+             description: 'The event ID that this Markdown will apply to, if applicable.'
+    argument :event_proposal_id,
+             ID,
+             required: false,
+             description: 'The event proposal ID that this Markdown will apply to, if applicable.'
 
     description <<~MARKDOWN
     Given a Markdown text string, renders it to HTML and returns the result.

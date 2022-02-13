@@ -95,13 +95,29 @@ class Types::EventType < Types::BaseObject
   field :short_blurb_html, String, null: true
 
   def short_blurb_html
-    MarkdownLoader.for('event', 'No information provided').load([[object, 'short_blurb_html'], object.short_blurb])
+    MarkdownLoader
+      .for('event', 'No information provided', context[:controller])
+      .load(
+        [
+          [object, 'short_blurb_html'],
+          object.short_blurb,
+          object.images_attachments.includes(:blob).index_by { |att| att.filename.to_s }
+        ]
+      )
   end
 
   field :description_html, String, null: true
 
   def description_html
-    MarkdownLoader.for('event', 'No information provided').load([[object, 'description_html'], object.description])
+    MarkdownLoader
+      .for('event', 'No information provided', context[:controller])
+      .load(
+        [
+          [object, 'description_html'],
+          object.description,
+          object.images_attachments.includes(:blob).index_by { |att| att.filename.to_s }
+        ]
+      )
   end
 
   field :admin_notes, String, null: true do
@@ -126,5 +142,10 @@ class Types::EventType < Types::BaseObject
       .for(Event, :form_response_changes)
       .load(object)
       .then { |changes| CompactingFormResponseChangesPresenter.new(changes).compacted_changes }
+  end
+
+  field :images, [Types::ActiveStorageAttachmentType], null: false
+  def images
+    ActiveStorageAttachmentLoader.for(Event, :images).load(object)
   end
 end

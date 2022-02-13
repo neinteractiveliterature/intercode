@@ -10,7 +10,7 @@ export type CreateDepartmentMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateDepartmentMutationData = { __typename: 'Mutation', createDepartment: { __typename: 'CreateDepartmentPayload', department: { __typename: 'Department', id: string, name: string, proposal_description?: string | null | undefined, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string }> } } };
+export type CreateDepartmentMutationData = { __typename: 'Mutation', createDepartment: { __typename: 'CreateDepartmentPayload', department: { __typename: 'Department', id: string, name: string, proposal_description?: string | null, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string }> } } };
 
 export type UpdateDepartmentMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -18,14 +18,14 @@ export type UpdateDepartmentMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateDepartmentMutationData = { __typename: 'Mutation', updateDepartment: { __typename: 'UpdateDepartmentPayload', department: { __typename: 'Department', id: string, name: string, proposal_description?: string | null | undefined, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string }> } } };
+export type UpdateDepartmentMutationData = { __typename: 'Mutation', updateDepartment: { __typename: 'UpdateDepartmentPayload', department: { __typename: 'Department', id: string, name: string, proposal_description?: string | null, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string }> } } };
 
 export type DeleteDepartmentMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type DeleteDepartmentMutationData = { __typename: 'Mutation', deleteDepartment: { __typename: 'DeleteDepartmentPayload', clientMutationId?: string | null | undefined } };
+export type DeleteDepartmentMutationData = { __typename: 'Mutation', deleteDepartment: { __typename: 'DeleteDepartmentPayload', clientMutationId?: string | null } };
 
 
 export const CreateDepartmentDocument = gql`

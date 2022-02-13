@@ -10,7 +10,7 @@ export type CreateEmailRouteMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateEmailRouteMutationData = { __typename: 'Mutation', createEmailRoute: { __typename: 'CreateEmailRoutePayload', email_route: { __typename: 'EmailRoute', id: string, receiver_address: string, forward_addresses?: Array<string> | null | undefined } } };
+export type CreateEmailRouteMutationData = { __typename: 'Mutation', createEmailRoute: { __typename: 'CreateEmailRoutePayload', email_route: { __typename: 'EmailRoute', id: string, receiver_address: string, forward_addresses?: Array<string> | null } } };
 
 export type UpdateEmailRouteMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -18,14 +18,14 @@ export type UpdateEmailRouteMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateEmailRouteMutationData = { __typename: 'Mutation', updateEmailRoute: { __typename: 'UpdateEmailRoutePayload', email_route: { __typename: 'EmailRoute', id: string, receiver_address: string, forward_addresses?: Array<string> | null | undefined } } };
+export type UpdateEmailRouteMutationData = { __typename: 'Mutation', updateEmailRoute: { __typename: 'UpdateEmailRoutePayload', email_route: { __typename: 'EmailRoute', id: string, receiver_address: string, forward_addresses?: Array<string> | null } } };
 
 export type DeleteEmailRouteMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type DeleteEmailRouteMutationData = { __typename: 'Mutation', deleteEmailRoute: { __typename: 'DeleteEmailRoutePayload', clientMutationId?: string | null | undefined } };
+export type DeleteEmailRouteMutationData = { __typename: 'Mutation', deleteEmailRoute: { __typename: 'DeleteEmailRoutePayload', clientMutationId?: string | null } };
 
 
 export const CreateEmailRouteDocument = gql`

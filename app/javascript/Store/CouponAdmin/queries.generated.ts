@@ -5,7 +5,7 @@ import { gql } from '@apollo/client';
 import { CouponFieldsFragmentDoc } from '../couponFields.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
-export type AdminCouponFieldsFragment = { __typename: 'Coupon', id: string, usage_limit?: number | null | undefined, expires_at?: string | null | undefined, code: string, percent_discount?: string | null | undefined, fixed_amount?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, provides_product?: { __typename: 'Product', id: string, name: string } | null | undefined };
+export type AdminCouponFieldsFragment = { __typename: 'Coupon', id: string, usage_limit?: number | null, expires_at?: string | null, code: string, percent_discount?: string | null, fixed_amount?: { __typename: 'Money', fractional: number, currency_code: string } | null, provides_product?: { __typename: 'Product', id: string, name: string } | null };
 
 export type AdminCouponsQueryVariables = Types.Exact<{
   filters?: Types.InputMaybe<Types.CouponFiltersInput>;
@@ -15,7 +15,7 @@ export type AdminCouponsQueryVariables = Types.Exact<{
 }>;
 
 
-export type AdminCouponsQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, coupons_paginated: { __typename: 'CouponsPagination', current_page: number, total_pages: number, entries: Array<{ __typename: 'Coupon', id: string, usage_limit?: number | null | undefined, expires_at?: string | null | undefined, code: string, percent_discount?: string | null | undefined, fixed_amount?: { __typename: 'Money', fractional: number, currency_code: string } | null | undefined, provides_product?: { __typename: 'Product', id: string, name: string } | null | undefined }> } } };
+export type AdminCouponsQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, coupons_paginated: { __typename: 'CouponsPagination', current_page: number, total_pages: number, entries: Array<{ __typename: 'Coupon', id: string, usage_limit?: number | null, expires_at?: string | null, code: string, percent_discount?: string | null, fixed_amount?: { __typename: 'Money', fractional: number, currency_code: string } | null, provides_product?: { __typename: 'Product', id: string, name: string } | null }> } } };
 
 export const AdminCouponFieldsFragmentDoc = gql`
     fragment AdminCouponFields on Coupon {

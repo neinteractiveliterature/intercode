@@ -7,6 +7,7 @@ import { ConventionForEventCategoryForms, EventCategoryFormData } from './getFor
 import { Event, EventCategory } from '../graphqlTypes.generated';
 import { FormResponse } from '../FormPresenter/useFormResponse';
 import { ConventionForFormItemDisplay } from '../FormPresenter/ItemDisplays/FormItemDisplay';
+import { ImageAttachmentConfig } from '../BuiltInFormControls/MarkdownInput';
 
 type EventCategoryForEventFormWithCategorySelection<EventCategoryType extends EventCategoryFormData> =
   ConventionForEventCategoryForms<EventCategoryType>['event_categories'][0] &
@@ -25,6 +26,7 @@ export type UseEventFormWithCategorySelectionOptions<
   convention: ConventionForEventFormWithCategorySelection<EventCategoryType>;
   initialEvent: EventType;
   schedulingUi?: string | null;
+  imageAttachmentConfig?: ImageAttachmentConfig;
 };
 
 export type UseEventFormWithCategorySelectionResult<
@@ -55,6 +57,7 @@ export default function useEventFormWithCategorySelection<
   convention,
   initialEvent,
   schedulingUi,
+  imageAttachmentConfig,
 }: UseEventFormWithCategorySelectionOptions<EventCategoryType, EventType>): UseEventFormWithCategorySelectionResult<
   EventType,
   EventCategoryType
@@ -79,6 +82,7 @@ export default function useEventFormWithCategorySelection<
     convention,
     initialEvent,
     eventForm,
+    imageAttachmentConfig,
   });
   const { setEvent } = eventFormHandles;
 

@@ -11,7 +11,7 @@ export type CreateContentGroupMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateContentGroupMutationData = { __typename: 'Mutation', createCmsContentGroup: { __typename: 'CreateCmsContentGroupPayload', cms_content_group: { __typename: 'CmsContentGroup', id: string, name: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, contents: Array<{ __typename: 'CmsLayout', id: string, name?: string | null | undefined } | { __typename: 'CmsPartial', id: string, name?: string | null | undefined } | { __typename: 'Page', id: string, name?: string | null | undefined }>, permissions: Array<{ __typename: 'Permission', id: string, permission: string, model: { __typename: 'CmsContentGroup', id: string, name: string } | { __typename: 'Convention', id: string, name: string } | { __typename: 'EventCategory', id: string, name: string, default_color?: string | null | undefined }, role: { __typename: 'OrganizationRole', id: string, name: string } | { __typename: 'StaffPosition', id: string, name: string } }> } } };
+export type CreateContentGroupMutationData = { __typename: 'Mutation', createCmsContentGroup: { __typename: 'CreateCmsContentGroupPayload', cms_content_group: { __typename: 'CmsContentGroup', id: string, name: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, contents: Array<{ __typename: 'CmsLayout', id: string, name?: string | null } | { __typename: 'CmsPartial', id: string, name?: string | null } | { __typename: 'Page', id: string, name?: string | null }>, permissions: Array<{ __typename: 'Permission', id: string, permission: string, model: { __typename: 'CmsContentGroup', id: string, name: string } | { __typename: 'Convention', id: string, name: string } | { __typename: 'EventCategory', id: string, name: string, default_color?: string | null }, role: { __typename: 'OrganizationRole', id: string, name: string } | { __typename: 'StaffPosition', id: string, name: string } }> } } };
 
 export type UpdateContentGroupMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -21,14 +21,14 @@ export type UpdateContentGroupMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateContentGroupMutationData = { __typename: 'Mutation', updateCmsContentGroup: { __typename: 'UpdateCmsContentGroupPayload', cms_content_group: { __typename: 'CmsContentGroup', id: string, name: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, contents: Array<{ __typename: 'CmsLayout', id: string, name?: string | null | undefined } | { __typename: 'CmsPartial', id: string, name?: string | null | undefined } | { __typename: 'Page', id: string, name?: string | null | undefined }>, permissions: Array<{ __typename: 'Permission', id: string, permission: string, model: { __typename: 'CmsContentGroup', id: string, name: string } | { __typename: 'Convention', id: string, name: string } | { __typename: 'EventCategory', id: string, name: string, default_color?: string | null | undefined }, role: { __typename: 'OrganizationRole', id: string, name: string } | { __typename: 'StaffPosition', id: string, name: string } }> } } };
+export type UpdateContentGroupMutationData = { __typename: 'Mutation', updateCmsContentGroup: { __typename: 'UpdateCmsContentGroupPayload', cms_content_group: { __typename: 'CmsContentGroup', id: string, name: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, contents: Array<{ __typename: 'CmsLayout', id: string, name?: string | null } | { __typename: 'CmsPartial', id: string, name?: string | null } | { __typename: 'Page', id: string, name?: string | null }>, permissions: Array<{ __typename: 'Permission', id: string, permission: string, model: { __typename: 'CmsContentGroup', id: string, name: string } | { __typename: 'Convention', id: string, name: string } | { __typename: 'EventCategory', id: string, name: string, default_color?: string | null }, role: { __typename: 'OrganizationRole', id: string, name: string } | { __typename: 'StaffPosition', id: string, name: string } }> } } };
 
 export type DeleteContentGroupMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type DeleteContentGroupMutationData = { __typename: 'Mutation', deleteCmsContentGroup: { __typename: 'DeleteCmsContentGroupPayload', clientMutationId?: string | null | undefined } };
+export type DeleteContentGroupMutationData = { __typename: 'Mutation', deleteCmsContentGroup: { __typename: 'DeleteCmsContentGroupPayload', clientMutationId?: string | null } };
 
 
 export const CreateContentGroupDocument = gql`

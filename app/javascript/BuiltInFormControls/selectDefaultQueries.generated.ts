@@ -9,21 +9,21 @@ export type DefaultEventsQueryVariables = Types.Exact<{
 }>;
 
 
-export type DefaultEventsQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, events_paginated: { __typename: 'EventsPagination', entries: Array<{ __typename: 'Event', id: string, title?: string | null | undefined }> } } };
+export type DefaultEventsQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, events_paginated: { __typename: 'EventsPagination', entries: Array<{ __typename: 'Event', id: string, title?: string | null }> } } };
 
 export type DefaultUserConProfilesQueryVariables = Types.Exact<{
   name?: Types.InputMaybe<Types.Scalars['String']>;
 }>;
 
 
-export type DefaultUserConProfilesQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, user_con_profiles_paginated: { __typename: 'UserConProfilesPagination', entries: Array<{ __typename: 'UserConProfile', id: string, name_without_nickname: string, email?: string | null | undefined }> } } };
+export type DefaultUserConProfilesQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, user_con_profiles_paginated: { __typename: 'UserConProfilesPagination', entries: Array<{ __typename: 'UserConProfile', id: string, name_without_nickname: string, email?: string | null }> } } };
 
 export type DefaultUsersQueryVariables = Types.Exact<{
   name?: Types.InputMaybe<Types.Scalars['String']>;
 }>;
 
 
-export type DefaultUsersQueryData = { __typename: 'Query', users_paginated: { __typename: 'UsersPagination', entries: Array<{ __typename: 'User', id: string, name?: string | null | undefined, email?: string | null | undefined }> } };
+export type DefaultUsersQueryData = { __typename: 'Query', users_paginated: { __typename: 'UsersPagination', entries: Array<{ __typename: 'User', id: string, name?: string | null, email?: string | null }> } };
 
 
 export const DefaultEventsQueryDocument = gql`

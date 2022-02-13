@@ -26,15 +26,20 @@ export type AgeRestrictionsInputProps = CommonFormItemInputProps<AgeRestrictions
 
 function AgeRestrictionsInput(props: AgeRestrictionsInputProps): JSX.Element {
   const { t } = useTranslation();
-  const { formItem, onChange, onInteract, valueInvalid, formTypeIdentifier } = props;
+  const {
+    formItem,
+    onChange,
+    onInteract,
+    valueInvalid,
+    formTypeIdentifier,
+    formResponseReference,
+    imageAttachmentConfig,
+  } = props;
   const value = useMemo(() => props.value ?? {}, [props.value]);
 
   const descriptionId = useUniqueId(`${formItem.identifier}-description-`);
 
-  const userInteracted = useCallback(
-    () => onInteract(formItem.identifier),
-    [onInteract, formItem.identifier],
-  );
+  const userInteracted = useCallback(() => onInteract(formItem.identifier), [onInteract, formItem.identifier]);
 
   const extensions = useMemo(
     () => [
@@ -60,8 +65,7 @@ function AgeRestrictionsInput(props: AgeRestrictionsInputProps): JSX.Element {
       if (
         !value.age_restrictions_description ||
         value.age_restrictions_description.trim() === '' ||
-        value.age_restrictions_description ===
-          getDefaultAgeRestrictionsDescription(value.minimum_age, t)
+        value.age_restrictions_description === getDefaultAgeRestrictionsDescription(value.minimum_age, t)
       ) {
         onChange({
           ...value,
@@ -99,6 +103,9 @@ function AgeRestrictionsInput(props: AgeRestrictionsInputProps): JSX.Element {
             extensions={extensions}
             lines={1}
             formControlClassName={classNames({ 'is-invalid': valueInvalid })}
+            eventId={formResponseReference?.type === 'Event' ? formResponseReference.id : undefined}
+            eventProposalId={formResponseReference?.type === 'EventProposal' ? formResponseReference.id : undefined}
+            imageAttachmentConfig={imageAttachmentConfig}
           >
             <FieldRequiredFeedback valueInvalid={valueInvalid} />
           </MarkdownInput>
@@ -112,8 +119,7 @@ function AgeRestrictionsInput(props: AgeRestrictionsInputProps): JSX.Element {
           label={t('forms.ageRestrictions.minimumAgeLabel', 'Minimum age')}
           helpText={
             <Trans i18nKey="forms.ageRestrictions.minimumAgeHelpText">
-              If specified, the signups list will warn you if someone too young to play has signed
-              up.{' '}
+              If specified, the signups list will warn you if someone too young to play has signed up.{' '}
               <strong>The site does not enforce age restrictions; you must do so yourself.</strong>
             </Trans>
           }
