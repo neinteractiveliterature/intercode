@@ -24,7 +24,9 @@ class ActiveSupport::TestCase
   include FactoryBot::Syntax::Methods
   include ActionMailer::TestCase::ClearTestDeliveries
 
-  parallelize(workers: :number_of_processors)
+  # Minitest is broken with parallelization on Ruby 3.1 - it's expecting methods to be methods but Rails is
+  # deserializing them as strings, so you can't actually see the unexpected error output
+  # parallelize(workers: :number_of_processors)
 
   class TestGraphqlContext
     def self.with_user_con_profile(user_con_profile, **attrs)
