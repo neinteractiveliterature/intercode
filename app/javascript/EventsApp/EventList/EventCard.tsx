@@ -16,6 +16,7 @@ import { EventListEventsQueryData } from './queries.generated';
 import { useAppDateTimeFormat } from '../../TimeUtils';
 import { useFormatRunTime } from '../runTimeFormatting';
 import { useTranslation } from 'react-i18next';
+import upperFirst from 'lodash/upperFirst';
 
 type ConventionType = NonNullable<EventListEventsQueryData['convention']>;
 type EventType = ConventionType['events_paginated']['entries'][0];
@@ -120,8 +121,8 @@ function EventCard({ event, sortBy, canReadSchedule }: EventCardProps): JSX.Elem
   if (teamMemberList.length > 0) {
     const teamMemberDescription =
       displayTeamMembers.length === 1
-        ? event.event_category.team_member_name
-        : event.event_category.teamMemberNamePlural;
+        ? upperFirst(event.event_category.team_member_name)
+        : upperFirst(event.event_category.teamMemberNamePlural);
 
     metadataItems.push({
       key: 'team_members',
