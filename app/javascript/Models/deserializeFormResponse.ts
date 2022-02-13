@@ -1,6 +1,10 @@
 import { FormResponse } from '../FormPresenter/useFormResponse';
 
-export type SerializedFormResponseContainer = { form_response_attrs_json?: string | null };
+export type SerializedFormResponseContainer = {
+  __typename: string;
+  id: string;
+  form_response_attrs_json?: string | null;
+};
 export type WithFormResponse<T extends SerializedFormResponseContainer> = FormResponse & T;
 
 export default function deserializeFormResponse<T extends SerializedFormResponseContainer>(

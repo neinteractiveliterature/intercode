@@ -12,7 +12,7 @@ describe('FormBody', () => {
     formItems: getSortedParsedFormItems(minimalForm),
     formTypeIdentifier: minimalForm.form_type,
     convention,
-    response: { form_response_attrs: { title: 'A title' } },
+    response: { __typename: 'Event', id: '123', form_response_attrs: { title: 'A title' } },
     responseValuesChanged: () => {},
     errors: {},
   };
@@ -49,12 +49,17 @@ describe('FormBody', () => {
 
   describe('incomplete item errors', () => {
     it('does not show incomplete item errors on non-interacted items', async () => {
-      const { getByLabelText } = await renderFormBody({ response: { form_response_attrs: {} } });
+      const { getByLabelText } = await renderFormBody({
+        response: { __typename: 'Event', id: '123', form_response_attrs: {} },
+      });
       expect(getByLabelText('Title*')).not.toHaveClass('is-invalid');
     });
 
     it('shows errors on interacted items', async () => {
-      const { getByLabelText } = await renderFormBody({ response: { form_response_attrs: {} } }, ['title']);
+      const { getByLabelText } = await renderFormBody(
+        { response: { __typename: 'Event', id: '123', form_response_attrs: {} } },
+        ['title'],
+      );
       expect(getByLabelText('Title*')).toHaveClass('is-invalid');
     });
   });

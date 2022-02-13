@@ -32,7 +32,8 @@ export const convention: ConventionForFormItemDisplay = {
 };
 
 export const initialEvent: FormResponse &
-  Pick<Event, 'current_user_form_item_viewer_role' | 'current_user_form_item_writer_role'> & { id: string } = {
+  Pick<Event, 'current_user_form_item_viewer_role' | 'current_user_form_item_writer_role'> = {
+  __typename: 'Event',
   id: '123',
   form_response_attrs: DEFAULT_EVENT_FORM_RESPONSE_ATTRS,
   current_user_form_item_viewer_role: FormItemRole.Normal,

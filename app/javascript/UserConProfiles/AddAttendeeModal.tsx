@@ -36,6 +36,8 @@ function AddAttendeeModal({ conventionName, visible }: AddAttendeeModalProps): J
   const userSelected = (newUser: UserType) => {
     setUser(newUser);
     setUserConProfile({
+      __typename: 'UserConProfile',
+      id: 'not-created-yet',
       form_response_attrs: {
         first_name: newUser.first_name,
         last_name: newUser.last_name,
