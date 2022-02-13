@@ -71,6 +71,7 @@ query EventProposalQueryWithOwner($eventProposalId: ID!) {
 
     event_proposal(id: $eventProposalId) {
       id
+      form_response_attrs_json_with_rendered_markdown
       ...EventProposalFields
 
       owner {

@@ -199,20 +199,27 @@ console: Base64.encode64(ActiveStorage::Blob.signed_id_verifier.instance_variabl
     scope = ActiveStorage::Attachment.joins(:blob).where(blob: { service_name: 'amazon' })
     total_count = scope.count
     scope.find_each.each_with_index do |attachment, index|
-      puts "[#{index + 1}/#{total_count}] Downloading #{attachment.blob.filename} (#{attachment.blob.key})"
-      download_attachment(attachment, verifier)
+      if attachment.blob
+        puts "[#{index + 1}/#{total_count}] Downloading #{attachment.blob.filename} (#{attachment.blob.key})"
+        download_attachment(attachment, verifier)
+      else
+        puts "[#{index + 1}/#{total_count}] Skipping attachment #{attachment.id} because it has no blob"
+      end
     end
   end
 
   def download_attachment(attachment, verifier)
     prod_url =
-      "https://www.neilhosting.net/rails/active_storage/blobs/redirect/#{verifier.generate(attachment.blob.id, 
-purpose: :blob_id)}/#{Rack::Utils.escape attachment.blob.filename}"
+      "https://www.neilhosting.net/rails/active_storage/blobs/redirect/#{
+        verifier.generate(attachment.blob.id, purpose: :blob_id)
+      }/#{Rack::Utils.escape attachment.blob.filename}"
     actual_url = Net::HTTP.get_response(URI.parse(prod_url))['location']
     content = Net::HTTP.get(URI.parse(actual_url))
 
-    attachment
-      .record
+    record = attachment.record
+    return unless record
+
+    record
       .public_send(attachment.name)
       .attach(io: StringIO.new(content), filename: attachment.blob.filename, content_type: attachment.blob.content_type)
   end
