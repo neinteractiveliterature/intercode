@@ -23,12 +23,7 @@ class MarkdownPresenter
       local_image = is_absolute ? nil : @local_images[link.downcase.strip]
 
       if local_image && @controller
-        image_tag(
-          @controller.rails_representation_url(local_image),
-          title: title,
-          alt_text: alt_text,
-          class: 'img-fluid'
-        )
+        image_tag(@controller.cdn_upload_url(local_image), title: title, alt_text: alt_text, class: 'img-fluid')
       else
         image_tag(link, title: title, alt_text: alt_text, class: 'img-fluid')
       end
