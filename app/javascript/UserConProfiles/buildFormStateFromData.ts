@@ -3,8 +3,8 @@ import { CommonFormFieldsFragment } from '../Models/commonFormFragments.generate
 import deserializeFormResponse, { WithFormResponse } from '../Models/deserializeFormResponse';
 
 function buildStateFromData<
-  UserConProfileType extends Pick<UserConProfile, 'form_response_attrs_json'>,
-  ConventionType extends { user_con_profile_form: CommonFormFieldsFragment }
+  UserConProfileType extends Pick<UserConProfile, '__typename' | 'id' | 'form_response_attrs_json'>,
+  ConventionType extends { user_con_profile_form: CommonFormFieldsFragment },
 >(
   userConProfileData: UserConProfileType,
   conventionData: ConventionType,
