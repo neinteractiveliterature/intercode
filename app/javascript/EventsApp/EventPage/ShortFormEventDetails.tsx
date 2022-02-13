@@ -9,6 +9,7 @@ import Gravatar from '../../Gravatar';
 import { formResponseValueIsComplete } from '../../Models/FormItem';
 import { useEventPageQuery } from './queries.generated';
 import { LoadQueryWithVariablesWrapper } from '../../GraphqlLoadingWrappers';
+import upperFirst from 'lodash/upperFirst';
 
 export type ShortFormEventDetailsProps = {
   eventId: string;
@@ -52,7 +53,7 @@ export default LoadQueryWithVariablesWrapper(
           ))}
         {displayTeamMembers.length > 0 ? (
           <>
-            <dt className="col-md-3">{event.event_category.teamMemberNamePlural}</dt>
+            <dt className="col-md-3">{upperFirst(event.event_category.teamMemberNamePlural)}</dt>
             <dd className="col-md-9">
               <ul className="list-unstyled mb-0">
                 {displayTeamMembers.map((teamMember) => (
