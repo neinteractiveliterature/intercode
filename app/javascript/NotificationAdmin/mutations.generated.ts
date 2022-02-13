@@ -11,7 +11,7 @@ export type UpdateNotificationTemplateMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateNotificationTemplateMutationData = { __typename: 'Mutation', updateNotificationTemplate: { __typename: 'UpdateNotificationTemplatePayload', notification_template: { __typename: 'NotificationTemplate', id: string, event_key: string, subject?: string | null | undefined, body_html?: string | null | undefined, body_text?: string | null | undefined, body_sms?: string | null | undefined } } };
+export type UpdateNotificationTemplateMutationData = { __typename: 'Mutation', updateNotificationTemplate: { __typename: 'UpdateNotificationTemplatePayload', notification_template: { __typename: 'NotificationTemplate', id: string, event_key: string, subject?: string | null, body_html?: string | null, body_text?: string | null, body_sms?: string | null } } };
 
 
 export const UpdateNotificationTemplateDocument = gql`

@@ -4,16 +4,16 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
-export type PageFieldsFragment = { __typename: 'Page', id: string, name?: string | null | undefined };
+export type PageFieldsFragment = { __typename: 'Page', id: string, name?: string | null };
 
-export type RootSiteAdminLayoutFieldsFragment = { __typename: 'CmsLayout', id: string, name?: string | null | undefined };
+export type RootSiteAdminLayoutFieldsFragment = { __typename: 'CmsLayout', id: string, name?: string | null };
 
-export type RootSiteFieldsFragment = { __typename: 'RootSite', id: string, site_name: string, rootPage: { __typename: 'Page', id: string, name?: string | null | undefined }, defaultLayout: { __typename: 'CmsLayout', id: string, name?: string | null | undefined }, cmsPages: Array<{ __typename: 'Page', id: string, name?: string | null | undefined }>, cmsLayouts: Array<{ __typename: 'CmsLayout', id: string, name?: string | null | undefined }> };
+export type RootSiteFieldsFragment = { __typename: 'RootSite', id: string, site_name: string, rootPage: { __typename: 'Page', id: string, name?: string | null }, defaultLayout: { __typename: 'CmsLayout', id: string, name?: string | null }, cmsPages: Array<{ __typename: 'Page', id: string, name?: string | null }>, cmsLayouts: Array<{ __typename: 'CmsLayout', id: string, name?: string | null }> };
 
 export type RootSiteAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type RootSiteAdminQueryData = { __typename: 'Query', rootSite: { __typename: 'RootSite', id: string, site_name: string, rootPage: { __typename: 'Page', id: string, name?: string | null | undefined }, defaultLayout: { __typename: 'CmsLayout', id: string, name?: string | null | undefined }, cmsPages: Array<{ __typename: 'Page', id: string, name?: string | null | undefined }>, cmsLayouts: Array<{ __typename: 'CmsLayout', id: string, name?: string | null | undefined }> } };
+export type RootSiteAdminQueryData = { __typename: 'Query', rootSite: { __typename: 'RootSite', id: string, site_name: string, rootPage: { __typename: 'Page', id: string, name?: string | null }, defaultLayout: { __typename: 'CmsLayout', id: string, name?: string | null }, cmsPages: Array<{ __typename: 'Page', id: string, name?: string | null }>, cmsLayouts: Array<{ __typename: 'CmsLayout', id: string, name?: string | null }> } };
 
 export const PageFieldsFragmentDoc = gql`
     fragment PageFields on Page {

@@ -21,6 +21,7 @@ class Types::EventProposalType < Types::BaseObject
   field :event, Types::EventType, null: true
   field :event_category, Types::EventCategoryType, null: false
   field :form_response_changes, [Types::FormResponseChangeType], null: false
+  field :images, [Types::ActiveStorageAttachmentType], null: false
 
   association_loaders EventProposal, :convention, :owner, :event, :event_category
 
@@ -38,5 +39,9 @@ class Types::EventProposalType < Types::BaseObject
       .for(EventProposal, :form_response_changes)
       .load(object)
       .then { |changes| CompactingFormResponseChangesPresenter.new(changes).compacted_changes }
+  end
+
+  def images
+    ActiveStorageAttachmentLoader.for(EventProposal, :images).load(object)
   end
 end

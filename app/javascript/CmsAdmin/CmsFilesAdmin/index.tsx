@@ -16,9 +16,9 @@ import { useRenameCmsFileMutation, useDeleteCmsFileMutation, useCreateCmsFileMut
 import { CmsFileFieldsFragmentDoc, useCmsFilesAdminQuery } from './queries.generated';
 import { useCallback } from 'react';
 import FileUploadForm from '../../BuiltInForms/FileUploadForm';
+import { Blob } from '@rails/activestorage';
 
 export default LoadQueryWrapper(useCmsFilesAdminQuery, function CmsFilesAdmin({ data }): JSX.Element {
-  const { refetch } = useCmsFilesAdminQuery();
   const [deleteFile] = useDeleteMutationWithReferenceArrayUpdater(
     useDeleteCmsFileMutation,
     data.cmsParent,
@@ -44,9 +44,9 @@ export default LoadQueryWrapper(useCmsFilesAdminQuery, function CmsFilesAdmin({ 
     CmsFileFieldsFragmentDoc,
   );
 
-  const uploadFile = useCallback(
-    async (file: File) => {
-      const result = await createFile({ variables: { file } });
+  const onUpload = useCallback(
+    async (blob: Blob) => {
+      const result = await createFile({ variables: { signedBlobId: blob.signed_id } });
       const attachment = result.data?.createCmsFile.cms_file.file;
       if (!attachment) {
         throw new Error('Result did not include an ActiveStorage attachment');
@@ -113,9 +113,7 @@ export default LoadQueryWrapper(useCmsFilesAdminQuery, function CmsFilesAdmin({ 
         ))}
       </div>
 
-      {data?.currentAbility.can_create_cms_files && (
-        <FileUploadForm uploadFile={uploadFile} onUpload={() => refetch()} />
-      )}
+      {data?.currentAbility.can_create_cms_files && <FileUploadForm onUpload={onUpload} />}
     </>
   );
 });

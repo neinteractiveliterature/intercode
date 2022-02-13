@@ -10,35 +10,43 @@ export type StandaloneDropEventMutationVariables = Types.Exact<{
 }>;
 
 
-export type StandaloneDropEventMutationData = { __typename: 'Mutation', dropEvent: { __typename: 'DropEventPayload', event: { __typename: 'Event', id: string, status?: string | null | undefined } } };
+export type StandaloneDropEventMutationData = { __typename: 'Mutation', dropEvent: { __typename: 'DropEventPayload', event: { __typename: 'Event', id: string, status?: string | null } } };
 
 export type StandaloneUpdateEventMutationVariables = Types.Exact<{
   input: Types.UpdateEventInput;
 }>;
 
 
-export type StandaloneUpdateEventMutationData = { __typename: 'Mutation', updateEvent: { __typename: 'UpdateEventPayload', event: { __typename: 'Event', id: string, title?: string | null | undefined, form_response_attrs_json?: string | null | undefined, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, event_category: { __typename: 'EventCategory', id: string, name: string, event_form: { __typename: 'Form', id: string, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: string, title?: string | null | undefined, position: number, form_items: Array<{ __typename: 'FormItem', id: string, position: number, identifier?: string | null | undefined, item_type: string, rendered_properties: string, default_value?: string | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> } }, maximum_event_provided_tickets_overrides: Array<{ __typename: 'MaximumEventProvidedTicketsOverride', id: string, override_value: number, ticket_type: { __typename: 'TicketType', id: string, description?: string | null | undefined, maximum_event_provided_tickets: number } }> } } };
+export type StandaloneUpdateEventMutationData = { __typename: 'Mutation', updateEvent: { __typename: 'UpdateEventPayload', event: { __typename: 'Event', id: string, title?: string | null, form_response_attrs_json?: string | null, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, images: Array<{ __typename: 'ActiveStorageAttachment', id: string, byte_size: number, content_type: string, filename: string, url: string }>, event_category: { __typename: 'EventCategory', id: string, name: string, event_form: { __typename: 'Form', id: string, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: string, title?: string | null, position: number, form_items: Array<{ __typename: 'FormItem', id: string, position: number, identifier?: string | null, item_type: string, rendered_properties: string, default_value?: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> } }, maximum_event_provided_tickets_overrides: Array<{ __typename: 'MaximumEventProvidedTicketsOverride', id: string, override_value: number, ticket_type: { __typename: 'TicketType', id: string, description?: string | null, maximum_event_provided_tickets: number } }> } } };
+
+export type StandaloneAttachImageToEventMutationVariables = Types.Exact<{
+  id: Types.Scalars['ID'];
+  signedBlobId: Types.Scalars['ID'];
+}>;
+
+
+export type StandaloneAttachImageToEventMutationData = { __typename: 'Mutation', attachImageToEvent: { __typename: 'AttachImageToEventPayload', event: { __typename: 'Event', id: string, title?: string | null, form_response_attrs_json?: string | null, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, images: Array<{ __typename: 'ActiveStorageAttachment', id: string, byte_size: number, content_type: string, filename: string, url: string }>, event_category: { __typename: 'EventCategory', id: string, name: string, event_form: { __typename: 'Form', id: string, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: string, title?: string | null, position: number, form_items: Array<{ __typename: 'FormItem', id: string, position: number, identifier?: string | null, item_type: string, rendered_properties: string, default_value?: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> } }, maximum_event_provided_tickets_overrides: Array<{ __typename: 'MaximumEventProvidedTicketsOverride', id: string, override_value: number, ticket_type: { __typename: 'TicketType', id: string, description?: string | null, maximum_event_provided_tickets: number } }> } } };
 
 export type StandaloneCreateMaximumEventProvidedTicketsOverrideMutationVariables = Types.Exact<{
   input: Types.CreateMaximumEventProvidedTicketsOverrideInput;
 }>;
 
 
-export type StandaloneCreateMaximumEventProvidedTicketsOverrideMutationData = { __typename: 'Mutation', createMaximumEventProvidedTicketsOverride: { __typename: 'CreateMaximumEventProvidedTicketsOverridePayload', maximum_event_provided_tickets_override: { __typename: 'MaximumEventProvidedTicketsOverride', id: string, override_value: number, ticket_type: { __typename: 'TicketType', id: string, description?: string | null | undefined, maximum_event_provided_tickets: number } } } };
+export type StandaloneCreateMaximumEventProvidedTicketsOverrideMutationData = { __typename: 'Mutation', createMaximumEventProvidedTicketsOverride: { __typename: 'CreateMaximumEventProvidedTicketsOverridePayload', maximum_event_provided_tickets_override: { __typename: 'MaximumEventProvidedTicketsOverride', id: string, override_value: number, ticket_type: { __typename: 'TicketType', id: string, description?: string | null, maximum_event_provided_tickets: number } } } };
 
 export type StandaloneDeleteMaximumEventProvidedTicketsOverrideMutationVariables = Types.Exact<{
   input: Types.DeleteMaximumEventProvidedTicketsOverrideInput;
 }>;
 
 
-export type StandaloneDeleteMaximumEventProvidedTicketsOverrideMutationData = { __typename: 'Mutation', deleteMaximumEventProvidedTicketsOverride: { __typename: 'DeleteMaximumEventProvidedTicketsOverridePayload', maximum_event_provided_tickets_override: { __typename: 'MaximumEventProvidedTicketsOverride', id: string, override_value: number, ticket_type: { __typename: 'TicketType', id: string, description?: string | null | undefined, maximum_event_provided_tickets: number } } } };
+export type StandaloneDeleteMaximumEventProvidedTicketsOverrideMutationData = { __typename: 'Mutation', deleteMaximumEventProvidedTicketsOverride: { __typename: 'DeleteMaximumEventProvidedTicketsOverridePayload', maximum_event_provided_tickets_override: { __typename: 'MaximumEventProvidedTicketsOverride', id: string, override_value: number, ticket_type: { __typename: 'TicketType', id: string, description?: string | null, maximum_event_provided_tickets: number } } } };
 
 export type StandaloneUpdateMaximumEventProvidedTicketsOverrideMutationVariables = Types.Exact<{
   input: Types.UpdateMaximumEventProvidedTicketsOverrideInput;
 }>;
 
 
-export type StandaloneUpdateMaximumEventProvidedTicketsOverrideMutationData = { __typename: 'Mutation', updateMaximumEventProvidedTicketsOverride: { __typename: 'UpdateMaximumEventProvidedTicketsOverridePayload', maximum_event_provided_tickets_override: { __typename: 'MaximumEventProvidedTicketsOverride', id: string, override_value: number, ticket_type: { __typename: 'TicketType', id: string, description?: string | null | undefined, maximum_event_provided_tickets: number } } } };
+export type StandaloneUpdateMaximumEventProvidedTicketsOverrideMutationData = { __typename: 'Mutation', updateMaximumEventProvidedTicketsOverride: { __typename: 'UpdateMaximumEventProvidedTicketsOverridePayload', maximum_event_provided_tickets_override: { __typename: 'MaximumEventProvidedTicketsOverride', id: string, override_value: number, ticket_type: { __typename: 'TicketType', id: string, description?: string | null, maximum_event_provided_tickets: number } } } };
 
 
 export const StandaloneDropEventDocument = gql`
@@ -113,6 +121,43 @@ export function useStandaloneUpdateEventMutation(baseOptions?: Apollo.MutationHo
 export type StandaloneUpdateEventMutationHookResult = ReturnType<typeof useStandaloneUpdateEventMutation>;
 export type StandaloneUpdateEventMutationResult = Apollo.MutationResult<StandaloneUpdateEventMutationData>;
 export type StandaloneUpdateEventMutationOptions = Apollo.BaseMutationOptions<StandaloneUpdateEventMutationData, StandaloneUpdateEventMutationVariables>;
+export const StandaloneAttachImageToEventDocument = gql`
+    mutation StandaloneAttachImageToEvent($id: ID!, $signedBlobId: ID!) {
+  attachImageToEvent(input: {id: $id, signedBlobId: $signedBlobId}) {
+    event {
+      id
+      ...StandaloneEditEvent_EventFields
+    }
+  }
+}
+    ${StandaloneEditEvent_EventFieldsFragmentDoc}`;
+export type StandaloneAttachImageToEventMutationFn = Apollo.MutationFunction<StandaloneAttachImageToEventMutationData, StandaloneAttachImageToEventMutationVariables>;
+
+/**
+ * __useStandaloneAttachImageToEventMutation__
+ *
+ * To run a mutation, you first call `useStandaloneAttachImageToEventMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useStandaloneAttachImageToEventMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [standaloneAttachImageToEventMutation, { data, loading, error }] = useStandaloneAttachImageToEventMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      signedBlobId: // value for 'signedBlobId'
+ *   },
+ * });
+ */
+export function useStandaloneAttachImageToEventMutation(baseOptions?: Apollo.MutationHookOptions<StandaloneAttachImageToEventMutationData, StandaloneAttachImageToEventMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<StandaloneAttachImageToEventMutationData, StandaloneAttachImageToEventMutationVariables>(StandaloneAttachImageToEventDocument, options);
+      }
+export type StandaloneAttachImageToEventMutationHookResult = ReturnType<typeof useStandaloneAttachImageToEventMutation>;
+export type StandaloneAttachImageToEventMutationResult = Apollo.MutationResult<StandaloneAttachImageToEventMutationData>;
+export type StandaloneAttachImageToEventMutationOptions = Apollo.BaseMutationOptions<StandaloneAttachImageToEventMutationData, StandaloneAttachImageToEventMutationVariables>;
 export const StandaloneCreateMaximumEventProvidedTicketsOverrideDocument = gql`
     mutation StandaloneCreateMaximumEventProvidedTicketsOverride($input: CreateMaximumEventProvidedTicketsOverrideInput!) {
   createMaximumEventProvidedTicketsOverride(input: $input) {

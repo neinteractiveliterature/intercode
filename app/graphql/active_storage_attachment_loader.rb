@@ -8,11 +8,8 @@ class ActiveStorageAttachmentLoader < GraphQL::Batch::Loader
   def initialize(model, attachment_name)
     @model = model
     @attachment_name = attachment_name
-    @association_name = if model.reflect_on_attachment(attachment_name).macro == :has_many_attached
-      :"#{attachment_name}_attachments"
-    else
-      :"#{attachment_name}_attachment"
-                        end
+    @multiple = model.reflect_on_attachment(attachment_name).macro == :has_many_attached
+    @association_name = @multiple ? :"#{attachment_name}_attachments" : :"#{attachment_name}_attachment"
     validate
   end
 
@@ -44,10 +41,17 @@ class ActiveStorageAttachmentLoader < GraphQL::Batch::Loader
   end
 
   def read_association(record)
-    record.public_send(@attachment_name).attachment
+    association_value = record.public_send(@attachment_name)
+    @multiple ? association_value.attachments : association_value.attachment
   end
 
   def association_loaded?(record)
-    record.association(@association_name).loaded? && record.public_send(@attachment_name)&.association(:blob)&.loaded?
+    return false unless record.association(@association_name).loaded?
+
+    if @multiple
+      record.public_send(@attachment_name).all? { |attachment| attachment.association(:blob)&.loaded? }
+    else
+      record.public_send(@attachment_name)&.association(:blob)&.loaded?
+    end
   end
 end

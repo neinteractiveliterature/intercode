@@ -18,21 +18,29 @@ export type UpdateEventProposalMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateEventProposalMutationData = { __typename: 'Mutation', updateEventProposal: { __typename: 'UpdateEventProposalPayload', event_proposal: { __typename: 'EventProposal', id: string, title?: string | null | undefined, status: string, form_response_attrs_json?: string | null | undefined, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, event_category: { __typename: 'EventCategory', id: string, name: string, event_proposal_form?: { __typename: 'Form', id: string, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: string, title?: string | null | undefined, position: number, form_items: Array<{ __typename: 'FormItem', id: string, admin_description?: string | null | undefined, position: number, identifier?: string | null | undefined, item_type: string, rendered_properties: string, default_value?: string | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> } | null | undefined }, event?: { __typename: 'Event', id: string } | null | undefined } } };
+export type UpdateEventProposalMutationData = { __typename: 'Mutation', updateEventProposal: { __typename: 'UpdateEventProposalPayload', event_proposal: { __typename: 'EventProposal', id: string, title?: string | null, status: string, form_response_attrs_json?: string | null, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, images: Array<{ __typename: 'ActiveStorageAttachment', id: string, filename: string, url: string, content_type: string, byte_size: number }>, event_category: { __typename: 'EventCategory', id: string, name: string, event_proposal_form?: { __typename: 'Form', id: string, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: string, title?: string | null, position: number, form_items: Array<{ __typename: 'FormItem', id: string, admin_description?: string | null, position: number, identifier?: string | null, item_type: string, rendered_properties: string, default_value?: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> } | null }, event?: { __typename: 'Event', id: string } | null } } };
+
+export type AttachImageToEventProposalMutationVariables = Types.Exact<{
+  id: Types.Scalars['ID'];
+  signedBlobId: Types.Scalars['ID'];
+}>;
+
+
+export type AttachImageToEventProposalMutationData = { __typename: 'Mutation', attachImageToEventProposal: { __typename: 'AttachImageToEventProposalPayload', attachment: { __typename: 'ActiveStorageAttachment', id: string, filename: string, url: string, content_type: string, byte_size: number } } };
 
 export type DeleteEventProposalMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type DeleteEventProposalMutationData = { __typename: 'Mutation', deleteEventProposal: { __typename: 'DeleteEventProposalPayload', clientMutationId?: string | null | undefined } };
+export type DeleteEventProposalMutationData = { __typename: 'Mutation', deleteEventProposal: { __typename: 'DeleteEventProposalPayload', clientMutationId?: string | null } };
 
 export type SubmitEventProposalMutationVariables = Types.Exact<{
   input: Types.SubmitEventProposalInput;
 }>;
 
 
-export type SubmitEventProposalMutationData = { __typename: 'Mutation', submitEventProposal: { __typename: 'SubmitEventProposalPayload', event_proposal: { __typename: 'EventProposal', id: string, title?: string | null | undefined, status: string, form_response_attrs_json?: string | null | undefined, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, event_category: { __typename: 'EventCategory', id: string, name: string, event_proposal_form?: { __typename: 'Form', id: string, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: string, title?: string | null | undefined, position: number, form_items: Array<{ __typename: 'FormItem', id: string, admin_description?: string | null | undefined, position: number, identifier?: string | null | undefined, item_type: string, rendered_properties: string, default_value?: string | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> } | null | undefined }, event?: { __typename: 'Event', id: string } | null | undefined } } };
+export type SubmitEventProposalMutationData = { __typename: 'Mutation', submitEventProposal: { __typename: 'SubmitEventProposalPayload', event_proposal: { __typename: 'EventProposal', id: string, title?: string | null, status: string, form_response_attrs_json?: string | null, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, images: Array<{ __typename: 'ActiveStorageAttachment', id: string, filename: string, url: string, content_type: string, byte_size: number }>, event_category: { __typename: 'EventCategory', id: string, name: string, event_proposal_form?: { __typename: 'Form', id: string, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: string, title?: string | null, position: number, form_items: Array<{ __typename: 'FormItem', id: string, admin_description?: string | null, position: number, identifier?: string | null, item_type: string, rendered_properties: string, default_value?: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> } | null }, event?: { __typename: 'Event', id: string } | null } } };
 
 export type TransitionEventProposalMutationVariables = Types.Exact<{
   eventProposalId: Types.Scalars['ID'];
@@ -41,7 +49,7 @@ export type TransitionEventProposalMutationVariables = Types.Exact<{
 }>;
 
 
-export type TransitionEventProposalMutationData = { __typename: 'Mutation', transitionEventProposal: { __typename: 'TransitionEventProposalPayload', event_proposal: { __typename: 'EventProposal', id: string, title?: string | null | undefined, status: string, form_response_attrs_json?: string | null | undefined, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, event_category: { __typename: 'EventCategory', id: string, name: string, event_proposal_form?: { __typename: 'Form', id: string, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: string, title?: string | null | undefined, position: number, form_items: Array<{ __typename: 'FormItem', id: string, admin_description?: string | null | undefined, position: number, identifier?: string | null | undefined, item_type: string, rendered_properties: string, default_value?: string | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> } | null | undefined }, event?: { __typename: 'Event', id: string } | null | undefined } } };
+export type TransitionEventProposalMutationData = { __typename: 'Mutation', transitionEventProposal: { __typename: 'TransitionEventProposalPayload', event_proposal: { __typename: 'EventProposal', id: string, title?: string | null, status: string, form_response_attrs_json?: string | null, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, images: Array<{ __typename: 'ActiveStorageAttachment', id: string, filename: string, url: string, content_type: string, byte_size: number }>, event_category: { __typename: 'EventCategory', id: string, name: string, event_proposal_form?: { __typename: 'Form', id: string, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: string, title?: string | null, position: number, form_items: Array<{ __typename: 'FormItem', id: string, admin_description?: string | null, position: number, identifier?: string | null, item_type: string, rendered_properties: string, default_value?: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> } | null }, event?: { __typename: 'Event', id: string } | null } } };
 
 export type UpdateEventProposalAdminNotesMutationVariables = Types.Exact<{
   eventProposalId: Types.Scalars['ID'];
@@ -49,7 +57,7 @@ export type UpdateEventProposalAdminNotesMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateEventProposalAdminNotesMutationData = { __typename: 'Mutation', updateEventProposalAdminNotes: { __typename: 'UpdateEventProposalAdminNotesPayload', event_proposal: { __typename: 'EventProposal', id: string, title?: string | null | undefined, status: string, form_response_attrs_json?: string | null | undefined, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, event_category: { __typename: 'EventCategory', id: string, name: string, event_proposal_form?: { __typename: 'Form', id: string, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: string, title?: string | null | undefined, position: number, form_items: Array<{ __typename: 'FormItem', id: string, admin_description?: string | null | undefined, position: number, identifier?: string | null | undefined, item_type: string, rendered_properties: string, default_value?: string | null | undefined, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> } | null | undefined }, event?: { __typename: 'Event', id: string } | null | undefined } } };
+export type UpdateEventProposalAdminNotesMutationData = { __typename: 'Mutation', updateEventProposalAdminNotes: { __typename: 'UpdateEventProposalAdminNotesPayload', event_proposal: { __typename: 'EventProposal', id: string, title?: string | null, status: string, form_response_attrs_json?: string | null, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, images: Array<{ __typename: 'ActiveStorageAttachment', id: string, filename: string, url: string, content_type: string, byte_size: number }>, event_category: { __typename: 'EventCategory', id: string, name: string, event_proposal_form?: { __typename: 'Form', id: string, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: string, title?: string | null, position: number, form_items: Array<{ __typename: 'FormItem', id: string, admin_description?: string | null, position: number, identifier?: string | null, item_type: string, rendered_properties: string, default_value?: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> } | null }, event?: { __typename: 'Event', id: string } | null } } };
 
 
 export const CreateEventProposalDocument = gql`
@@ -126,6 +134,46 @@ export function useUpdateEventProposalMutation(baseOptions?: Apollo.MutationHook
 export type UpdateEventProposalMutationHookResult = ReturnType<typeof useUpdateEventProposalMutation>;
 export type UpdateEventProposalMutationResult = Apollo.MutationResult<UpdateEventProposalMutationData>;
 export type UpdateEventProposalMutationOptions = Apollo.BaseMutationOptions<UpdateEventProposalMutationData, UpdateEventProposalMutationVariables>;
+export const AttachImageToEventProposalDocument = gql`
+    mutation AttachImageToEventProposal($id: ID!, $signedBlobId: ID!) {
+  attachImageToEventProposal(input: {id: $id, signedBlobId: $signedBlobId}) {
+    attachment {
+      id
+      filename
+      url
+      content_type
+      byte_size
+    }
+  }
+}
+    `;
+export type AttachImageToEventProposalMutationFn = Apollo.MutationFunction<AttachImageToEventProposalMutationData, AttachImageToEventProposalMutationVariables>;
+
+/**
+ * __useAttachImageToEventProposalMutation__
+ *
+ * To run a mutation, you first call `useAttachImageToEventProposalMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAttachImageToEventProposalMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [attachImageToEventProposalMutation, { data, loading, error }] = useAttachImageToEventProposalMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      signedBlobId: // value for 'signedBlobId'
+ *   },
+ * });
+ */
+export function useAttachImageToEventProposalMutation(baseOptions?: Apollo.MutationHookOptions<AttachImageToEventProposalMutationData, AttachImageToEventProposalMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AttachImageToEventProposalMutationData, AttachImageToEventProposalMutationVariables>(AttachImageToEventProposalDocument, options);
+      }
+export type AttachImageToEventProposalMutationHookResult = ReturnType<typeof useAttachImageToEventProposalMutation>;
+export type AttachImageToEventProposalMutationResult = Apollo.MutationResult<AttachImageToEventProposalMutationData>;
+export type AttachImageToEventProposalMutationOptions = Apollo.BaseMutationOptions<AttachImageToEventProposalMutationData, AttachImageToEventProposalMutationVariables>;
 export const DeleteEventProposalDocument = gql`
     mutation DeleteEventProposal($id: ID!) {
   deleteEventProposal(input: {id: $id}) {

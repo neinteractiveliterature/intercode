@@ -13,7 +13,7 @@ export type CreateOrganizationRoleMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateOrganizationRoleMutationData = { __typename: 'Mutation', createOrganizationRole: { __typename: 'CreateOrganizationRolePayload', organization_role: { __typename: 'OrganizationRole', id: string, name: string, users: Array<{ __typename: 'User', id: string, name?: string | null | undefined, email?: string | null | undefined }>, permissions: Array<{ __typename: 'Permission', id: string, permission: string }> } } };
+export type CreateOrganizationRoleMutationData = { __typename: 'Mutation', createOrganizationRole: { __typename: 'CreateOrganizationRolePayload', organization_role: { __typename: 'OrganizationRole', id: string, name: string, users: Array<{ __typename: 'User', id: string, name?: string | null, email?: string | null }>, permissions: Array<{ __typename: 'Permission', id: string, permission: string }> } } };
 
 export type UpdateOrganizationRoleMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -25,14 +25,14 @@ export type UpdateOrganizationRoleMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateOrganizationRoleMutationData = { __typename: 'Mutation', updateOrganizationRole: { __typename: 'UpdateOrganizationRolePayload', organization_role: { __typename: 'OrganizationRole', id: string, name: string, users: Array<{ __typename: 'User', id: string, name?: string | null | undefined, email?: string | null | undefined }>, permissions: Array<{ __typename: 'Permission', id: string, permission: string }> } } };
+export type UpdateOrganizationRoleMutationData = { __typename: 'Mutation', updateOrganizationRole: { __typename: 'UpdateOrganizationRolePayload', organization_role: { __typename: 'OrganizationRole', id: string, name: string, users: Array<{ __typename: 'User', id: string, name?: string | null, email?: string | null }>, permissions: Array<{ __typename: 'Permission', id: string, permission: string }> } } };
 
 export type DeleteOrganizationRoleMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type DeleteOrganizationRoleMutationData = { __typename: 'Mutation', deleteOrganizationRole: { __typename: 'DeleteOrganizationRolePayload', clientMutationId?: string | null | undefined } };
+export type DeleteOrganizationRoleMutationData = { __typename: 'Mutation', deleteOrganizationRole: { __typename: 'DeleteOrganizationRolePayload', clientMutationId?: string | null } };
 
 
 export const CreateOrganizationRoleDocument = gql`

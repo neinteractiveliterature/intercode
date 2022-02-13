@@ -15,25 +15,15 @@ export type AddFileModalProps = {
   addBlob: (blob: Blob) => unknown;
   fileChosen: (file: ActiveStorageAttachment) => void;
   close: () => void;
-  serviceName?: string;
-  attachmentName: string;
 };
 
-export default function AddFileModal({
-  visible,
-  existingFiles,
-  addBlob,
-  fileChosen,
-  close,
-  serviceName,
-  attachmentName,
-}: AddFileModalProps) {
+export default function AddFileModal({ visible, existingFiles, addBlob, fileChosen, close }: AddFileModalProps) {
   const { t } = useTranslation();
   const [loadData, { called, data, loading, error }] = useCmsFilesAdminQueryLazyQuery();
   const [file, setFile] = useState<ActiveStorageAttachment | null>(null);
 
-  const uploadedFile = (blob: Blob, newFile: File) => {
-    addBlob(blob);
+  const uploadedFile = async (blob: Blob, newFile: File) => {
+    await addBlob(blob);
 
     // construct a fake attachment with data URLs just for preview purposes
     const reader = new FileReader();
@@ -92,7 +82,7 @@ export default function AddFileModal({
             />
             {data?.currentAbility.can_create_cms_files && (
               <div className="card mt-2">
-                <FileUploadForm onUpload={uploadedFile} serviceName={serviceName} attachmentName={attachmentName} />
+                <FileUploadForm onUpload={uploadedFile} />
               </div>
             )}
             {file && (

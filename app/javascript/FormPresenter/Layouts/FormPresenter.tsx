@@ -24,6 +24,7 @@ export type FormPresenterProps = {
   submitButton: FormFooterProps['submitButton'];
   submitForm: FormFooterProps['submitForm'];
   footerContent: FormFooterProps['children'];
+  imageAttachmentConfig?: FormSectionProps['imageAttachmentConfig'];
 };
 
 function FormPresenter({
@@ -40,6 +41,7 @@ function FormPresenter({
   submitButton,
   submitForm,
   footerContent,
+  imageAttachmentConfig,
 }: FormPresenterProps): JSX.Element {
   const { currentSection } = useContext(SectionTraversalContext);
 
@@ -62,11 +64,7 @@ function FormPresenter({
 
   return (
     <div className="card mb-4">
-      <FormHeader
-        isUpdatingResponse={isUpdatingResponse}
-        isSubmittingResponse={isSubmittingResponse}
-        ref={headerRef}
-      />
+      <FormHeader isUpdatingResponse={isUpdatingResponse} isSubmittingResponse={isSubmittingResponse} ref={headerRef} />
 
       <FormProgress form={form} />
 
@@ -81,6 +79,7 @@ function FormPresenter({
           response={response}
           errors={responseErrors}
           responseValuesChanged={responseValuesChanged}
+          imageAttachmentConfig={imageAttachmentConfig}
         />
       </div>
 

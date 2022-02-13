@@ -1,3 +1,4 @@
+import { ImageAttachmentConfig } from '../../BuiltInFormControls/MarkdownInput';
 import { FormItemValueType, TypedFormItem } from '../../FormAdmin/FormItemUtils';
 import { FormType } from '../../graphqlTypes.generated';
 
@@ -14,4 +15,5 @@ export type CommonFormItemInputProps<FormItemType extends TypedFormItem> = {
   onInteract: (identifier: string) => void;
   onChange: (value: FormItemValueType<FormItemType> | null | undefined) => void;
   formResponseReference?: FormResponseReference;
+  imageAttachmentConfig?: ImageAttachmentConfig;
 };

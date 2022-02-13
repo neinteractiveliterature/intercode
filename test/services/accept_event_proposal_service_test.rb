@@ -71,4 +71,16 @@ class AcceptEventProposalServiceTest < ActiveSupport::TestCase
     assert_equal 'test@example.com', event.email
     assert_equal 'event_email', event.con_mail_destination
   end
+
+  it 'copies attached images' do
+    File.open(__FILE__) do |f|
+      event_proposal.images.attach({ io: f, filename: 'testfile', content_type: 'application/octet-stream' })
+    end
+    event_proposal.save!
+
+    event = AcceptEventProposalService.new(event_proposal: event_proposal).call!.event
+    assert_equal 1, event.images.attachments.size
+    assert_equal event_proposal.images.blobs.first, event.images.blobs.first
+    refute_equal event_proposal.images.attachments.first, event.images.attachments.first
+  end
 end

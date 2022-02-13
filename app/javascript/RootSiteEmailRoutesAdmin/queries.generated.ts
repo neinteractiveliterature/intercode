@@ -4,7 +4,7 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
-export type EmailRouteFieldsFragment = { __typename: 'EmailRoute', id: string, receiver_address: string, forward_addresses?: Array<string> | null | undefined };
+export type EmailRouteFieldsFragment = { __typename: 'EmailRoute', id: string, receiver_address: string, forward_addresses?: Array<string> | null };
 
 export type RootSiteEmailRoutesAdminTableQueryVariables = Types.Exact<{
   page?: Types.InputMaybe<Types.Scalars['Int']>;
@@ -13,7 +13,7 @@ export type RootSiteEmailRoutesAdminTableQueryVariables = Types.Exact<{
 }>;
 
 
-export type RootSiteEmailRoutesAdminTableQueryData = { __typename: 'Query', email_routes_paginated: { __typename: 'EmailRoutesPagination', total_entries: number, total_pages: number, entries: Array<{ __typename: 'EmailRoute', id: string, receiver_address: string, forward_addresses?: Array<string> | null | undefined }> } };
+export type RootSiteEmailRoutesAdminTableQueryData = { __typename: 'Query', email_routes_paginated: { __typename: 'EmailRoutesPagination', total_entries: number, total_pages: number, entries: Array<{ __typename: 'EmailRoute', id: string, receiver_address: string, forward_addresses?: Array<string> | null }> } };
 
 export const EmailRouteFieldsFragmentDoc = gql`
     fragment EmailRouteFields on EmailRoute {

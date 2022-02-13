@@ -10,21 +10,21 @@ export type CreateTeamMemberMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateTeamMemberMutationData = { __typename: 'Mutation', createTeamMember: { __typename: 'CreateTeamMemberPayload', team_member: { __typename: 'TeamMember', id: string, display_team_member: boolean, show_email: boolean, receive_con_email: boolean, receive_signup_email: Types.ReceiveSignupEmail, user_con_profile: { __typename: 'UserConProfile', id: string, name_without_nickname: string, name_inverted: string, email?: string | null | undefined, mobile_phone?: string | null | undefined, ticket?: { __typename: 'Ticket', id: string, user_con_profile: { __typename: 'UserConProfile', id: string }, ticket_type: { __typename: 'TicketType', id: string, name: string }, provided_by_event?: { __typename: 'Event', id: string, title?: string | null | undefined } | null | undefined } | null | undefined } } } };
+export type CreateTeamMemberMutationData = { __typename: 'Mutation', createTeamMember: { __typename: 'CreateTeamMemberPayload', team_member: { __typename: 'TeamMember', id: string, display_team_member: boolean, show_email: boolean, receive_con_email: boolean, receive_signup_email: Types.ReceiveSignupEmail, user_con_profile: { __typename: 'UserConProfile', id: string, name_without_nickname: string, name_inverted: string, email?: string | null, mobile_phone?: string | null, ticket?: { __typename: 'Ticket', id: string, user_con_profile: { __typename: 'UserConProfile', id: string }, ticket_type: { __typename: 'TicketType', id: string, name: string }, provided_by_event?: { __typename: 'Event', id: string, title?: string | null } | null } | null } } } };
 
 export type DeleteTeamMemberMutationVariables = Types.Exact<{
   input: Types.DeleteTeamMemberInput;
 }>;
 
 
-export type DeleteTeamMemberMutationData = { __typename: 'Mutation', deleteTeamMember: { __typename: 'DeleteTeamMemberPayload', team_member: { __typename: 'TeamMember', id: string, display_team_member: boolean, show_email: boolean, receive_con_email: boolean, receive_signup_email: Types.ReceiveSignupEmail, user_con_profile: { __typename: 'UserConProfile', id: string, name_without_nickname: string, name_inverted: string, email?: string | null | undefined, ticket?: { __typename: 'Ticket', id: string, user_con_profile: { __typename: 'UserConProfile', id: string }, ticket_type: { __typename: 'TicketType', id: string, name: string }, provided_by_event?: { __typename: 'Event', id: string, title?: string | null | undefined } | null | undefined } | null | undefined } } } };
+export type DeleteTeamMemberMutationData = { __typename: 'Mutation', deleteTeamMember: { __typename: 'DeleteTeamMemberPayload', team_member: { __typename: 'TeamMember', id: string, display_team_member: boolean, show_email: boolean, receive_con_email: boolean, receive_signup_email: Types.ReceiveSignupEmail, user_con_profile: { __typename: 'UserConProfile', id: string, name_without_nickname: string, name_inverted: string, email?: string | null, ticket?: { __typename: 'Ticket', id: string, user_con_profile: { __typename: 'UserConProfile', id: string }, ticket_type: { __typename: 'TicketType', id: string, name: string }, provided_by_event?: { __typename: 'Event', id: string, title?: string | null } | null } | null } } } };
 
 export type UpdateTeamMemberMutationVariables = Types.Exact<{
   input: Types.UpdateTeamMemberInput;
 }>;
 
 
-export type UpdateTeamMemberMutationData = { __typename: 'Mutation', updateTeamMember: { __typename: 'UpdateTeamMemberPayload', team_member: { __typename: 'TeamMember', id: string, display_team_member: boolean, show_email: boolean, receive_con_email: boolean, receive_signup_email: Types.ReceiveSignupEmail, user_con_profile: { __typename: 'UserConProfile', id: string, name_without_nickname: string, name_inverted: string, email?: string | null | undefined, ticket?: { __typename: 'Ticket', id: string, user_con_profile: { __typename: 'UserConProfile', id: string }, ticket_type: { __typename: 'TicketType', id: string, name: string }, provided_by_event?: { __typename: 'Event', id: string, title?: string | null | undefined } | null | undefined } | null | undefined } } } };
+export type UpdateTeamMemberMutationData = { __typename: 'Mutation', updateTeamMember: { __typename: 'UpdateTeamMemberPayload', team_member: { __typename: 'TeamMember', id: string, display_team_member: boolean, show_email: boolean, receive_con_email: boolean, receive_signup_email: Types.ReceiveSignupEmail, user_con_profile: { __typename: 'UserConProfile', id: string, name_without_nickname: string, name_inverted: string, email?: string | null, ticket?: { __typename: 'Ticket', id: string, user_con_profile: { __typename: 'UserConProfile', id: string }, ticket_type: { __typename: 'TicketType', id: string, name: string }, provided_by_event?: { __typename: 'Event', id: string, title?: string | null } | null } | null } } } };
 
 export type ProvideEventTicketMutationVariables = Types.Exact<{
   eventId: Types.Scalars['ID'];
@@ -33,7 +33,7 @@ export type ProvideEventTicketMutationVariables = Types.Exact<{
 }>;
 
 
-export type ProvideEventTicketMutationData = { __typename: 'Mutation', provideEventTicket: { __typename: 'ProvideEventTicketPayload', ticket: { __typename: 'Ticket', id: string, user_con_profile: { __typename: 'UserConProfile', id: string }, ticket_type: { __typename: 'TicketType', id: string, name: string }, provided_by_event?: { __typename: 'Event', id: string, title?: string | null | undefined } | null | undefined } } };
+export type ProvideEventTicketMutationData = { __typename: 'Mutation', provideEventTicket: { __typename: 'ProvideEventTicketPayload', ticket: { __typename: 'Ticket', id: string, user_con_profile: { __typename: 'UserConProfile', id: string }, ticket_type: { __typename: 'TicketType', id: string, name: string }, provided_by_event?: { __typename: 'Event', id: string, title?: string | null } | null } } };
 
 
 export const CreateTeamMemberDocument = gql`

@@ -11,13 +11,7 @@ import classNames from 'classnames';
 import AuthenticityTokensContext from '../AuthenticityTokensContext';
 import { Helmet } from 'react-helmet-async';
 
-function uploadFile(
-  file: File,
-  directUploadURL: string,
-  serviceName: string,
-  attachmentName: string,
-  onProgress?: (event: ProgressEvent<XMLHttpRequest>) => void,
-) {
+function uploadFile(file: File, directUploadURL: string, onProgress?: (event: ProgressEvent<XMLHttpRequest>) => void) {
   return new Promise<Blob>((resolve, reject) => {
     const delegate: DirectUploadDelegate = {
       directUploadWillStoreFileWithXHR: (xhr) => {
@@ -27,7 +21,7 @@ function uploadFile(
       },
     };
 
-    const upload = new DirectUpload(file, directUploadURL, serviceName, attachmentName, delegate);
+    const upload = new DirectUpload(file, directUploadURL, delegate);
     upload.create((error, blob) => {
       if (error) {
         reject(error);
@@ -39,18 +33,16 @@ function uploadFile(
 }
 
 export type FileUploadFormProps = {
-  onUpload?: (blob: Blob, file: File) => void;
-  serviceName?: string;
-  attachmentName: string;
+  onUpload?: (blob: Blob, file: File) => unknown;
 };
 
-function FileUploadForm({ onUpload, serviceName, attachmentName }: FileUploadFormProps): JSX.Element {
+function FileUploadForm({ onUpload }: FileUploadFormProps): JSX.Element {
   const { t } = useTranslation();
   const [file, setFile] = useState<File | null | undefined>();
   const [uploadAsync, error, uploading] = useAsyncFunction(uploadFile);
   const [progressPercent, setProgressPercent] = useState<number>(0);
   const [progressIndeterminate, setProgressIndeterminate] = useState(false);
-  const { railsDefaultActiveStorageServiceName, railsDirectUploadsUrl } = useContext(RailsDirectUploadsContext);
+  const { railsDirectUploadsUrl } = useContext(RailsDirectUploadsContext);
   const { railsDirectUploads: directUploadsAuthenticityToken } = useContext(AuthenticityTokensContext);
 
   const onProgress = useCallback((event: ProgressEvent<XMLHttpRequest>) => {
@@ -67,16 +59,10 @@ function FileUploadForm({ onUpload, serviceName, attachmentName }: FileUploadFor
       return;
     }
 
-    const blob = await uploadAsync(
-      file,
-      railsDirectUploadsUrl,
-      serviceName ?? railsDefaultActiveStorageServiceName,
-      attachmentName,
-      onProgress,
-    );
+    const blob = await uploadAsync(file, railsDirectUploadsUrl, onProgress);
 
     if (blob && onUpload) {
-      onUpload(blob, file);
+      await onUpload(blob, file);
     }
 
     setFile(null);
