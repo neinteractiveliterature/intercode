@@ -52,7 +52,7 @@
     "@codemirror/lang-json": "0.19.1",
     "@codemirror/lang-markdown": "0.19.6",
     "@codemirror/language": "0.19.7",
-    "@codemirror/state": "0.19.7",
+    "@codemirror/state": "0.19.8",
     "@codemirror/view": "0.19.42",
     "@dnd-kit/core": "5.0.1",
     "@dnd-kit/sortable": "6.0.0",
