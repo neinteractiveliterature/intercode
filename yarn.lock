@@ -172,14 +172,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ampproject/remapping@npm:^2.0.0":
-  version: 2.0.1
-  resolution: "@ampproject/remapping@npm:2.0.1"
+"@ampproject/remapping@npm:^2.1.0":
+  version: 2.1.1
+  resolution: "@ampproject/remapping@npm:2.1.1"
   dependencies:
-    "@jridgewell/resolve-uri": ^3.0.3
-    "@jridgewell/trace-mapping": ^0.2.2
-    sourcemap-codec: 1.4.8
-  checksum: b4282efe7d3b411966c738762ff4394e0347f2456a39e77f780301132931eae61da6c2186f1ed689559d4220d37f3a89c6f24272269794ee45129d9803c3ad0e
+    "@jridgewell/trace-mapping": ^0.3.0
+  checksum: cc5cf29833e2b8bdf420821a6e027a35cf6a48605df64ae5095b55cb722581b236554fc8f920138e6da3f7a99ec99273b07ebe2e2bb98b6a4a8d8e33648cac77
   languageName: node
   linkType: hard
 
@@ -230,10 +228,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/compat-data@npm:^7.13.11, @babel/compat-data@npm:^7.16.4, @babel/compat-data@npm:^7.16.8":
-  version: 7.16.8
-  resolution: "@babel/compat-data@npm:7.16.8"
-  checksum: 10da2dac5ea9589c251412b00920889910e476c1ab24cd7095577635bc3a27c785151c89db4e26285fd39f509510ec29ab9d7e721f4fc16e4aec221cacde784b
+"@babel/compat-data@npm:^7.13.11, @babel/compat-data@npm:^7.16.4, @babel/compat-data@npm:^7.16.8, @babel/compat-data@npm:^7.17.0":
+  version: 7.17.0
+  resolution: "@babel/compat-data@npm:7.17.0"
+  checksum: fe5afaf529d107a223cd5937dace248464b6df1e9f4ea4031a5723e9571b46a4db1c4ff226bac6351148b1bc02ba1b39cb142662cd235aa99c1dda77882f8c9d
   languageName: node
   linkType: hard
 
@@ -261,37 +259,37 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@npm:7.17.2, @babel/core@npm:^7.0.0, @babel/core@npm:^7.1.0, @babel/core@npm:^7.12.3, @babel/core@npm:^7.15.5, @babel/core@npm:^7.16.0, @babel/core@npm:^7.7.2, @babel/core@npm:^7.8.0, @babel/core@npm:^7.9.0":
-  version: 7.17.2
-  resolution: "@babel/core@npm:7.17.2"
+"@babel/core@npm:7.17.3, @babel/core@npm:^7.0.0, @babel/core@npm:^7.1.0, @babel/core@npm:^7.12.3, @babel/core@npm:^7.15.5, @babel/core@npm:^7.16.0, @babel/core@npm:^7.7.2, @babel/core@npm:^7.8.0, @babel/core@npm:^7.9.0":
+  version: 7.17.3
+  resolution: "@babel/core@npm:7.17.3"
   dependencies:
-    "@ampproject/remapping": ^2.0.0
+    "@ampproject/remapping": ^2.1.0
     "@babel/code-frame": ^7.16.7
-    "@babel/generator": ^7.17.0
+    "@babel/generator": ^7.17.3
     "@babel/helper-compilation-targets": ^7.16.7
     "@babel/helper-module-transforms": ^7.16.7
     "@babel/helpers": ^7.17.2
-    "@babel/parser": ^7.17.0
+    "@babel/parser": ^7.17.3
     "@babel/template": ^7.16.7
-    "@babel/traverse": ^7.17.0
+    "@babel/traverse": ^7.17.3
     "@babel/types": ^7.17.0
     convert-source-map: ^1.7.0
     debug: ^4.1.0
     gensync: ^1.0.0-beta.2
     json5: ^2.1.2
     semver: ^6.3.0
-  checksum: 68ab3459f41b41feb5cb263937f15e418e1c46998d482d1b6dfe34f78064765466cfd5b10205c22fb16b69dbd1d46e7a3c26c067884ca4eb514b3dac1e09a57f
+  checksum: 5a5680888a30db2d5075eb376e25facdd3c2357fe882e6e8b2098a0bf09550bdd1895fa29064af1d4bdd8b6d0964c3bdc08f28c4e1429a5b3597e010a234d15e
   languageName: node
   linkType: hard
 
-"@babel/generator@npm:^7.12.5, @babel/generator@npm:^7.16.0, @babel/generator@npm:^7.17.0, @babel/generator@npm:^7.5.0, @babel/generator@npm:^7.7.2":
-  version: 7.17.0
-  resolution: "@babel/generator@npm:7.17.0"
+"@babel/generator@npm:^7.12.5, @babel/generator@npm:^7.16.0, @babel/generator@npm:^7.17.3, @babel/generator@npm:^7.5.0, @babel/generator@npm:^7.7.2":
+  version: 7.17.3
+  resolution: "@babel/generator@npm:7.17.3"
   dependencies:
     "@babel/types": ^7.17.0
     jsesc: ^2.5.1
     source-map: ^0.5.0
-  checksum: 2987dbebb484727a227f1ce3db90810320986cfb3ffd23e6d1d87f75bbd8e7871b5bc44252822d4d5f048a2d872a5702b2a9bf7bab7e07f087d7f306f0ea6c0a
+  checksum: ddf70e3489976018dfc2da8b9f43ec8c582cac2da681ed4a6227c53b26a9626223e4dca90098b3d3afe43bc67f20160856240e826c56b48e577f34a5a7e22b9f
   languageName: node
   linkType: hard
 
@@ -578,12 +576,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/parser@npm:^7.0.0, @babel/parser@npm:^7.1.0, @babel/parser@npm:^7.1.6, @babel/parser@npm:^7.12.7, @babel/parser@npm:^7.14.7, @babel/parser@npm:^7.16.4, @babel/parser@npm:^7.16.7, @babel/parser@npm:^7.16.8, @babel/parser@npm:^7.17.0, @babel/parser@npm:^7.3.2, @babel/parser@npm:^7.7.0":
-  version: 7.17.0
-  resolution: "@babel/parser@npm:7.17.0"
+"@babel/parser@npm:^7.0.0, @babel/parser@npm:^7.1.0, @babel/parser@npm:^7.1.6, @babel/parser@npm:^7.12.7, @babel/parser@npm:^7.14.7, @babel/parser@npm:^7.16.4, @babel/parser@npm:^7.16.7, @babel/parser@npm:^7.16.8, @babel/parser@npm:^7.17.3, @babel/parser@npm:^7.3.2, @babel/parser@npm:^7.7.0":
+  version: 7.17.3
+  resolution: "@babel/parser@npm:7.17.3"
   bin:
     parser: ./bin/babel-parser.js
-  checksum: d0ac5ffba0b234dde516f867edf5da5d92d6f841592b370ae3244cd7c8f27a7f5e3e3d4e90ca9c15ea58bc46823f1643f3f75b6eb9a9f676ae16e8b2365e922a
+  checksum: 311869baef97c7630ac3b3c4600da18229b95aa2785b2daab2044384745fe0653070916ade28749fb003f7369a081111ada53e37284ba48d6b5858cbb9e411d1
   languageName: node
   linkType: hard
 
@@ -783,18 +781,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-proposal-object-rest-spread@npm:7.16.7, @babel/plugin-proposal-object-rest-spread@npm:^7.0.0, @babel/plugin-proposal-object-rest-spread@npm:^7.16.7":
-  version: 7.16.7
-  resolution: "@babel/plugin-proposal-object-rest-spread@npm:7.16.7"
+"@babel/plugin-proposal-object-rest-spread@npm:7.17.3, @babel/plugin-proposal-object-rest-spread@npm:^7.0.0, @babel/plugin-proposal-object-rest-spread@npm:^7.16.7":
+  version: 7.17.3
+  resolution: "@babel/plugin-proposal-object-rest-spread@npm:7.17.3"
   dependencies:
-    "@babel/compat-data": ^7.16.4
+    "@babel/compat-data": ^7.17.0
     "@babel/helper-compilation-targets": ^7.16.7
     "@babel/helper-plugin-utils": ^7.16.7
     "@babel/plugin-syntax-object-rest-spread": ^7.8.3
     "@babel/plugin-transform-parameters": ^7.16.7
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: 2d3740e4df6d3f51d57862100c45c000104571aa98b7f798fdfc05ae0c12b9e7cc9b55f4a28612d626e29f3369a1481a0ee8a0241b23508b9d3da00c55f99d41
+  checksum: 02810f158db4aaf6883131621b5d2c7d901ea3c034df2c2b78663f8b26813795d78a346c37e56770a720c54773732fd1d7fe40947dbf11d1d8de0e9a38e856d3
   languageName: node
   linkType: hard
 
@@ -1846,21 +1844,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/traverse@npm:^7.0.0, @babel/traverse@npm:^7.1.6, @babel/traverse@npm:^7.12.9, @babel/traverse@npm:^7.13.0, @babel/traverse@npm:^7.16.3, @babel/traverse@npm:^7.16.7, @babel/traverse@npm:^7.16.8, @babel/traverse@npm:^7.17.0, @babel/traverse@npm:^7.7.0, @babel/traverse@npm:^7.7.2":
-  version: 7.17.0
-  resolution: "@babel/traverse@npm:7.17.0"
+"@babel/traverse@npm:^7.0.0, @babel/traverse@npm:^7.1.6, @babel/traverse@npm:^7.12.9, @babel/traverse@npm:^7.13.0, @babel/traverse@npm:^7.16.3, @babel/traverse@npm:^7.16.7, @babel/traverse@npm:^7.16.8, @babel/traverse@npm:^7.17.0, @babel/traverse@npm:^7.17.3, @babel/traverse@npm:^7.7.0, @babel/traverse@npm:^7.7.2":
+  version: 7.17.3
+  resolution: "@babel/traverse@npm:7.17.3"
   dependencies:
     "@babel/code-frame": ^7.16.7
-    "@babel/generator": ^7.17.0
+    "@babel/generator": ^7.17.3
     "@babel/helper-environment-visitor": ^7.16.7
     "@babel/helper-function-name": ^7.16.7
     "@babel/helper-hoist-variables": ^7.16.7
     "@babel/helper-split-export-declaration": ^7.16.7
-    "@babel/parser": ^7.17.0
+    "@babel/parser": ^7.17.3
     "@babel/types": ^7.17.0
     debug: ^4.1.0
     globals: ^11.1.0
-  checksum: 9b7de053d8a29453fd7b9614a028d8dc811817f02948eaee02093274b67927a1cfb0513b521bc4a9328c9b6e5b021fd343b358c3526bbb6ee61ec078d4110c0c
+  checksum: 780d7ecf711758174989794891af08d378f81febdb8932056c0d9979524bf0298e28f8e7708a872d7781151506c28f56c85c63ea3f1f654662c2fcb8a3eb9fdc
   languageName: node
   linkType: hard
 
@@ -4226,13 +4224,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jridgewell/trace-mapping@npm:^0.2.2":
-  version: 0.2.2
-  resolution: "@jridgewell/trace-mapping@npm:0.2.2"
+"@jridgewell/sourcemap-codec@npm:^1.4.10":
+  version: 1.4.11
+  resolution: "@jridgewell/sourcemap-codec@npm:1.4.11"
+  checksum: 3b2afaf8400fb07a36db60e901fcce6a746cdec587310ee9035939d89878e57b2dec8173b0b8f63176f647efa352294049a53c49739098eb907ff81fec2547c8
+  languageName: node
+  linkType: hard
+
+"@jridgewell/trace-mapping@npm:^0.3.0":
+  version: 0.3.4
+  resolution: "@jridgewell/trace-mapping@npm:0.3.4"
   dependencies:
     "@jridgewell/resolve-uri": ^3.0.3
-    sourcemap-codec: 1.4.8
-  checksum: 09bdcf9b724cc56a44a555a2cc14a4f4463c6628984461fa7b032609eb79198e0508e98380c61b98deca36e54028bf8ed90264b383b4762ace9132065df4341a
+    "@jridgewell/sourcemap-codec": ^1.4.10
+  checksum: ab8bce84bbbc8c34f3ba8325ed926f8f2d3098983c10442a80c55764c4eb6e47d5b92d8ff20a0dd868c3e76a3535651fd8a0138182c290dbfc8396195685c37b
   languageName: node
   linkType: hard
 
@@ -19575,7 +19580,7 @@ resolve@^2.0.0-next.3:
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
     "@apollo/client": 3.5.8
-    "@babel/core": 7.17.2
+    "@babel/core": 7.17.3
     "@babel/plugin-proposal-class-properties": 7.16.7
     "@babel/plugin-proposal-do-expressions": 7.16.7
     "@babel/plugin-proposal-export-default-from": 7.16.7
@@ -19586,7 +19591,7 @@ resolve@^2.0.0-next.3:
     "@babel/plugin-proposal-logical-assignment-operators": 7.16.7
     "@babel/plugin-proposal-nullish-coalescing-operator": 7.16.7
     "@babel/plugin-proposal-numeric-separator": 7.16.7
-    "@babel/plugin-proposal-object-rest-spread": 7.16.7
+    "@babel/plugin-proposal-object-rest-spread": 7.17.3
     "@babel/plugin-proposal-optional-chaining": 7.16.7
     "@babel/plugin-proposal-pipeline-operator": 7.16.7
     "@babel/plugin-proposal-throw-expressions": 7.16.7
@@ -20582,7 +20587,7 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"sourcemap-codec@npm:1.4.8, sourcemap-codec@npm:^1.4.4":
+"sourcemap-codec@npm:^1.4.4":
   version: 1.4.8
   resolution: "sourcemap-codec@npm:1.4.8"
   checksum: b57981c05611afef31605732b598ccf65124a9fcb03b833532659ac4d29ac0f7bfacbc0d6c5a28a03e84c7510e7e556d758d0bb57786e214660016fb94279316
