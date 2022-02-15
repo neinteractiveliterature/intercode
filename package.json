@@ -49,7 +49,7 @@
     "@babel/register": "7.17.0",
     "@codemirror/highlight": "0.19.7",
     "@codemirror/lang-html": "0.19.4",
-    "@codemirror/lang-json": "0.19.1",
+    "@codemirror/lang-json": "0.19.2",
     "@codemirror/lang-markdown": "0.19.6",
     "@codemirror/language": "0.19.7",
     "@codemirror/state": "0.19.8",
