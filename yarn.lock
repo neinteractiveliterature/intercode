@@ -2048,14 +2048,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/lang-json@npm:0.19.1":
-  version: 0.19.1
-  resolution: "@codemirror/lang-json@npm:0.19.1"
+"@codemirror/lang-json@npm:0.19.2":
+  version: 0.19.2
+  resolution: "@codemirror/lang-json@npm:0.19.2"
   dependencies:
     "@codemirror/highlight": ^0.19.0
     "@codemirror/language": ^0.19.0
     "@lezer/json": ^0.15.0
-  checksum: d67b82389e94db7b98c8b57e0b947f15d8c7e3cedf24bdb8d47431330ddf1740febc1a5d93b878968b25f251ce94f17279abae61ba43c18686d1dc0701223658
+  checksum: 1346e22e7f1048205371469720c5d2d0a09c60220a121b192dfefd9f400f5cb3c04eebe8e8ce32bdca6b99ae174605a0f96c3e1891188b650c4ba16c893f6b89
   languageName: node
   linkType: hard
 
@@ -19603,7 +19603,7 @@ resolve@^2.0.0-next.3:
     "@babel/runtime": 7.17.2
     "@codemirror/highlight": 0.19.7
     "@codemirror/lang-html": 0.19.4
-    "@codemirror/lang-json": 0.19.1
+    "@codemirror/lang-json": 0.19.2
     "@codemirror/lang-markdown": 0.19.6
     "@codemirror/language": 0.19.7
     "@codemirror/state": 0.19.8
