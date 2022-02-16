@@ -4693,10 +4693,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stripe/stripe-js@npm:1.22.0":
-  version: 1.22.0
-  resolution: "@stripe/stripe-js@npm:1.22.0"
-  checksum: 29a294ac85681e2d3f64fc2a04d12e001931526cd60debb6075d3ccf133331599d8f8f155423223b410f03019120ba0e2769fe81111c84245e572b2ec86db4c2
+"@stripe/stripe-js@npm:1.23.0":
+  version: 1.23.0
+  resolution: "@stripe/stripe-js@npm:1.23.0"
+  checksum: bda2def5490298bab73e4488a4a2612a42b89965744beffa4aa07180665edadea5261903c00a02cb318de664ec73c957e7addf70c9fc022367b4d2658b6ff1ac
   languageName: node
   linkType: hard
 
@@ -19635,7 +19635,7 @@ resolve@^2.0.0-next.3:
     "@prettier/plugin-ruby": 2.0.0
     "@rails/activestorage": 7.0.2-2
     "@stripe/react-stripe-js": 1.7.0
-    "@stripe/stripe-js": 1.22.0
+    "@stripe/stripe-js": 1.23.0
     "@testing-library/jest-dom": 5.16.2
     "@testing-library/react": 12.1.3
     "@testing-library/react-hooks": 7.0.2
