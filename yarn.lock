@@ -3124,19 +3124,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-codegen/near-operation-file-preset@npm:2.2.4":
-  version: 2.2.4
-  resolution: "@graphql-codegen/near-operation-file-preset@npm:2.2.4"
+"@graphql-codegen/near-operation-file-preset@npm:2.2.5":
+  version: 2.2.5
+  resolution: "@graphql-codegen/near-operation-file-preset@npm:2.2.5"
   dependencies:
     "@graphql-codegen/add": ^3.1.1
     "@graphql-codegen/plugin-helpers": ^2.4.0
-    "@graphql-codegen/visitor-plugin-common": 2.6.0
+    "@graphql-codegen/visitor-plugin-common": 2.7.0
     "@graphql-tools/utils": ^8.5.2
     parse-filepath: ^1.0.2
     tslib: ~2.3.0
   peerDependencies:
     graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: f2486c982f138075851c442d04650239c6d524964b6bd1138564db886134ce91137e4c58a737cbe3261c9061cff0f495153b6933b6af8939cbeaaa8854cb13b8
+  checksum: 0b78e835f06f48a52b88709c9c28c7d104b6d0d98c6ad492fa1a95e45d502db2522da68ac0700fbe7499a6ff11ed76ab2263b0cd04eaaeed4adbbeb67c0c0ac8
   languageName: node
   linkType: hard
 
@@ -3232,6 +3232,26 @@ __metadata:
   peerDependencies:
     graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
   checksum: ade3c1321f34950d841e43ed2df9873446b88ac81a8144a4dd8216f364365b9e1b4dbffdad2464e6cc3e83262cad37761bcfcdf3aaaed3b4066ab0f92ca36a5d
+  languageName: node
+  linkType: hard
+
+"@graphql-codegen/visitor-plugin-common@npm:2.7.0":
+  version: 2.7.0
+  resolution: "@graphql-codegen/visitor-plugin-common@npm:2.7.0"
+  dependencies:
+    "@graphql-codegen/plugin-helpers": ^2.4.0
+    "@graphql-tools/optimize": ^1.0.1
+    "@graphql-tools/relay-operation-optimizer": ^6.3.7
+    "@graphql-tools/utils": ^8.3.0
+    auto-bind: ~4.0.0
+    change-case-all: 1.0.14
+    dependency-graph: ^0.11.0
+    graphql-tag: ^2.11.0
+    parse-filepath: ^1.0.2
+    tslib: ~2.3.0
+  peerDependencies:
+    graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
+  checksum: 959eb3e8c837075901741187e10f17a6e91af16cbef0b71c1f1cec05874d06dd4046e02b70442283b99f3e7ed04723ef7bf2357dde597eba9ec4a04dd54cd31c
   languageName: node
   linkType: hard
 
@@ -19623,7 +19643,7 @@ resolve@^2.0.0-next.3:
     "@graphql-codegen/cli": 2.6.1
     "@graphql-codegen/fragment-matcher": 3.2.1
     "@graphql-codegen/introspection": 2.1.1
-    "@graphql-codegen/near-operation-file-preset": 2.2.4
+    "@graphql-codegen/near-operation-file-preset": 2.2.5
     "@graphql-codegen/typescript": 2.4.3
     "@graphql-codegen/typescript-operations": 2.3.0
     "@graphql-codegen/typescript-react-apollo": 3.2.6
