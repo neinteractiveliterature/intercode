@@ -2850,20 +2850,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@edno/docusaurus2-graphql-doc-generator@npm:1.8.2":
-  version: 1.8.2
-  resolution: "@edno/docusaurus2-graphql-doc-generator@npm:1.8.2"
+"@edno/docusaurus2-graphql-doc-generator@npm:1.8.3":
+  version: 1.8.3
+  resolution: "@edno/docusaurus2-graphql-doc-generator@npm:1.8.3"
   dependencies:
-    "@graphql-inspector/core": ^3.0.2
+    "@graphql-inspector/core": ^3.1.1
     "@graphql-tools/graphql-file-loader": ^7.3.3
     "@graphql-tools/load": ^7.5.1
   peerDependencies:
     graphql: ^14.0 || ^15.0 || ^16.0
-    prettier: ^2.0
+    prettier: ^2.5
   peerDependenciesMeta:
     prettier:
       optional: true
-  checksum: 7b4df38f323e9a7676a6b308ff34238b8f20c2f07376d1ddb4fd7210c45962e075b66b49ad0683bf9e0a99ed74e369b060a6675f1b20009403fb609d42ce878f
+  checksum: ff156db6ff62d8cb22cf06d7b643943bfcb098783fd9b57669b30c74e27d7f4eac44f26a12fa4d1970b97ce21190cb7861704bfa19a8984f0ed6210f7af9d63b
   languageName: node
   linkType: hard
 
@@ -3253,16 +3253,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-inspector/core@npm:^3.0.2":
-  version: 3.0.2
-  resolution: "@graphql-inspector/core@npm:3.0.2"
+"@graphql-inspector/core@npm:^3.1.1":
+  version: 3.1.1
+  resolution: "@graphql-inspector/core@npm:3.1.1"
   dependencies:
     dependency-graph: 0.11.0
     object-inspect: 1.10.3
     tslib: ^2.0.0
   peerDependencies:
-    graphql: ^0.13.0 || ^14.0.0 || ^15.0.0
-  checksum: f5f9bc0f27600b35022f34d5d7e24e0e8f37512bea912a250b3289aa12dedc995e75fe079130dcf1946a257297b5275f36a4136e4d98457b1d3be2bdb678b90f
+    graphql: ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
+  checksum: 80d6e3c8dc448ee70ec7dea85baae9544215842c74245aefcd2ce64a002b2fc9eb9660771daa41945e50ce0561aa92d47f65328597b54a4b9ca64710de67c567
   languageName: node
   linkType: hard
 
@@ -9594,7 +9594,7 @@ __metadata:
     "@docusaurus/plugin-ideal-image": 2.0.0-beta.15
     "@docusaurus/preset-classic": 2.0.0-beta.15
     "@docusaurus/types": 2.0.0-beta.15
-    "@edno/docusaurus2-graphql-doc-generator": 1.8.2
+    "@edno/docusaurus2-graphql-doc-generator": 1.8.3
     "@mdx-js/react": 1.6.22
     "@svgr/webpack": 6.2.1
     clsx: 1.1.1
