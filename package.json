@@ -53,7 +53,7 @@
     "@codemirror/lang-markdown": "0.19.6",
     "@codemirror/language": "0.19.7",
     "@codemirror/state": "0.19.9",
-    "@codemirror/view": "0.19.43",
+    "@codemirror/view": "0.19.44",
     "@dnd-kit/core": "5.0.1",
     "@dnd-kit/sortable": "6.0.0",
     "@dnd-kit/utilities": "3.1.0",
