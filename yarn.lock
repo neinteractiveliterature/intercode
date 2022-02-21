@@ -9137,10 +9137,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"csv-string@npm:4.0.1":
-  version: 4.0.1
-  resolution: "csv-string@npm:4.0.1"
-  checksum: 2ecb03327b09bb131eb9d9cda4c035f6bde1d3acc860940137e47e8167c568173dffbefdac4cc2c0fb076329b6a07630b4acf98b16fb34c527edd8996afd51c3
+"csv-string@npm:4.1.0":
+  version: 4.1.0
+  resolution: "csv-string@npm:4.1.0"
+  checksum: 3efb56db7c9a5a2d92576615ed6cf9041f2b0016b0da15ce89414de1b6dac7049d9058eb8ae78f3cf39a70340551b8a423b3370c9698d75e8a095c41553abe92
   languageName: node
   linkType: hard
 
@@ -19709,7 +19709,7 @@ resolve@^2.0.0-next.3:
     css-loader: 6.6.0
     css-minimizer-webpack-plugin: 3.4.1
     cssnano: 5.0.17
-    csv-string: 4.0.1
+    csv-string: 4.1.0
     custom-event-polyfill: 1.0.7
     debounce-promise: 3.1.2
     detect-browser: 5.3.0
