@@ -270,5 +270,5 @@
   "cacheDirectories": [
     ".yarn/cache"
   ],
-  "packageManager": "yarn@3.2.0-rc.16"
+  "packageManager": "yarn@3.2.0"
 }
