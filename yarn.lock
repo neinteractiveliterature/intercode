@@ -821,15 +821,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-proposal-pipeline-operator@npm:7.16.7":
-  version: 7.16.7
-  resolution: "@babel/plugin-proposal-pipeline-operator@npm:7.16.7"
+"@babel/plugin-proposal-pipeline-operator@npm:7.17.6":
+  version: 7.17.6
+  resolution: "@babel/plugin-proposal-pipeline-operator@npm:7.17.6"
   dependencies:
     "@babel/helper-plugin-utils": ^7.16.7
-    "@babel/plugin-syntax-pipeline-operator": ^7.16.7
+    "@babel/plugin-syntax-pipeline-operator": ^7.17.0
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: b9eb876cf036a722c8539e9cb54781ebf91dcac1f6f7f0c0b4bbd88845a8444244d8fdcbae7cc33cbb56c195a059a223ea083f3ad8224c9a7d81f26242e57288
+  checksum: ca13409a0f4d79644350b6aba7efc85638f6b3003c599f0edf060e68139b286c88c05c29bdfa28ce6bf28c6606782511eac3c9ab8a275624a0cc7652e6f46c4c
   languageName: node
   linkType: hard
 
@@ -1114,14 +1114,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-syntax-pipeline-operator@npm:^7.16.7":
-  version: 7.16.7
-  resolution: "@babel/plugin-syntax-pipeline-operator@npm:7.16.7"
+"@babel/plugin-syntax-pipeline-operator@npm:^7.17.0":
+  version: 7.17.0
+  resolution: "@babel/plugin-syntax-pipeline-operator@npm:7.17.0"
   dependencies:
     "@babel/helper-plugin-utils": ^7.16.7
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: 7b73075b6de5a3b56adfaa1f74e6c7f96e79f1c1e04b431b0ca9d873e4a0ba7be83658ebceccfe57e8ec4bc2295906e1f5de3c5e99ad55655168e38c776388ed
+  checksum: c3b4b230e4e5fc997baf1f0494d1bcffc568dbdbfa8a2cbf7e4d726bba5282f871473dcd46c8b70ccc3c2087cbfe68d7f322c75794cca69c0be9f29847a42286
   languageName: node
   linkType: hard
 
@@ -19603,7 +19603,7 @@ resolve@^2.0.0-next.3:
     "@babel/plugin-proposal-numeric-separator": 7.16.7
     "@babel/plugin-proposal-object-rest-spread": 7.17.3
     "@babel/plugin-proposal-optional-chaining": 7.16.7
-    "@babel/plugin-proposal-pipeline-operator": 7.16.7
+    "@babel/plugin-proposal-pipeline-operator": 7.17.6
     "@babel/plugin-proposal-throw-expressions": 7.16.7
     "@babel/plugin-syntax-dynamic-import": 7.8.3
     "@babel/plugin-syntax-import-meta": 7.10.4
