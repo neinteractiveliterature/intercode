@@ -167,6 +167,12 @@ jobs:
     - name: Set up Docker Buildx
       id: buildx
       uses: docker/setup-buildx-action@master
+    - name: Read .ruby-version
+      id: ruby-version
+      run: echo "::set output name=ruby-version::${cat .ruby-version}"
+    - name: Read .node-version
+      id: node-version
+      run: echo "::set output name=node-version::${cat .node-version}"
     - name: Build and push to Docker Hub
       id: docker_build
       uses: docker/build-push-action@v2
@@ -176,6 +182,9 @@ jobs:
         target: production
         tags: |
           neinteractiveliterature/intercode:${{ github.sha }}
+        build-args: |
+          RUBY_VERSION=${{ steps.ruby-version.outputs.ruby-version }}
+          NODE_VERSION=${{ steps.node-version.outputs.node-version }}
         cache-from: type=gha,scope=${{ github.workflow }}
         cache-to: type=gha,mode=max,scope=${{ github.workflow }}
   docker-release:
