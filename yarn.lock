@@ -12219,12 +12219,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"history@npm:5.2.0, history@npm:^5.2.0":
-  version: 5.2.0
-  resolution: "history@npm:5.2.0"
+"history@npm:5.3.0, history@npm:^5.2.0":
+  version: 5.3.0
+  resolution: "history@npm:5.3.0"
   dependencies:
     "@babel/runtime": ^7.7.6
-  checksum: 2c6a05aa86793e0a0857013457f34474c17f81a012c6bdb00bf30862389ac6a8c2df113d82176f67af2fd534ea9dc4e1218470c5526355b6fc1aefcc971f2eb2
+  checksum: d73c35df49d19ac172f9547d30a21a26793e83f16a78386d99583b5bf1429cc980799fcf1827eb215d31816a6600684fba9686ce78104e23bd89ec239e7c726f
   languageName: node
   linkType: hard
 
@@ -19740,7 +19740,7 @@ resolve@^2.0.0-next.3:
     graphql-anywhere: 4.2.7
     graphql-language-service-utils: 2.7.1
     graphql-tag: 2.12.6
-    history: 5.2.0
+    history: 5.3.0
     html-to-react: 1.4.8
     husky: 7.0.4
     hypernova: 2.5.0
