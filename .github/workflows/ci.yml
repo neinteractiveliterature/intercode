@@ -169,10 +169,10 @@ jobs:
       uses: docker/setup-buildx-action@master
     - name: Read .ruby-version
       id: ruby-version
-      run: echo "::set output name=ruby-version::${cat .ruby-version}"
+      run: echo "::set output name=ruby-version::$(cat .ruby-version | sed 's/ *$//g')"
     - name: Read .node-version
       id: node-version
-      run: echo "::set output name=node-version::${cat .node-version}"
+      run: echo "::set output name=node-version::$(cat .node-version | sed 's/ *$//g')"
     - name: Build and push to Docker Hub
       id: docker_build
       uses: docker/build-push-action@v2
