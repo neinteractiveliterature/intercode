@@ -231,7 +231,7 @@ GEM
       railties (>= 5.0.0)
     faker (2.19.0)
       i18n (>= 1.6, < 2)
-    faraday (1.9.3)
+    faraday (1.10.0)
       faraday-em_http (~> 1.0)
       faraday-em_synchrony (~> 1.0)
       faraday-excon (~> 1.1)
@@ -570,7 +570,7 @@ GEM
     tilt (2.0.10)
     timeout (0.2.0)
     tins (1.20.2)
-    twilio-ruby (5.64.0)
+    twilio-ruby (5.65.0)
       faraday (>= 0.9, < 2.0)
       jwt (>= 1.5, <= 2.5)
       nokogiri (>= 1.6, < 2.0)
@@ -691,7 +691,7 @@ DEPENDENCIES
   stripe
   stripe-ruby-mock (>= 3.1.0.rc3)
   term-ansicolor
-  twilio-ruby (~> 5.64.0)
+  twilio-ruby (~> 5.65.0)
   typeprof
   tzinfo-data
   webrick
@@ -701,7 +701,7 @@ DEPENDENCIES
   yard
 
 RUBY VERSION
-   ruby 3.1.0p0
+   ruby 3.1.1p18
 
 BUNDLED WITH
    2.3.4
