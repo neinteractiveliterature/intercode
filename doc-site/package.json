@@ -18,7 +18,7 @@
     "@docusaurus/plugin-ideal-image": "2.0.0-beta.15",
     "@docusaurus/preset-classic": "2.0.0-beta.15",
     "@docusaurus/types": "2.0.0-beta.15",
-    "@edno/docusaurus2-graphql-doc-generator": "1.8.4",
+    "@edno/docusaurus2-graphql-doc-generator": "1.8.5",
     "@mdx-js/react": "1.6.22",
     "@svgr/webpack": "6.2.1",
     "clsx": "1.1.1",
