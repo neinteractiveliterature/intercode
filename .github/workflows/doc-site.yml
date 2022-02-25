@@ -33,7 +33,7 @@ jobs:
     - name: Install libvips42
       run: sudo apt-get update && sudo apt-get install libvips42
     - name: install node v14
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         node-version: 14
     - name: Set up Ruby
