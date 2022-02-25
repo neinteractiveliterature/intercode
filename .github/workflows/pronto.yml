@@ -13,7 +13,7 @@ jobs:
       - if: github.actor != 'dependabot[bot]'
         uses: ruby/setup-ruby@v1
       - if: github.actor != 'dependabot[bot]'
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: '14.16.1'
       - name: Set up gem cache
