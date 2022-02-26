@@ -7,10 +7,11 @@ class Types::TicketTypeType < Types::BaseObject
   field :counts_towards_convention_maximum, Boolean, null: false
   field :allows_event_signups, Boolean, null: false
   field :description, String, null: true
-  field :convention, Types::ConventionType, null: false
+  field :convention, Types::ConventionType, null: true
+  field :event, Types::EventType, null: true
   field :providing_products, [Types::ProductType], null: false
 
-  association_loaders TicketType, :convention, :providing_products
+  association_loaders TicketType, :convention, :event, :providing_products
 
   field :maximum_event_provided_tickets, Integer, null: false do
     argument :event_id, ID, required: false, camelize: true
@@ -22,5 +23,12 @@ class Types::TicketTypeType < Types::BaseObject
     else
       object.maximum_event_provided_tickets
     end
+  end
+
+  field :parent, Types::TicketTypeParentType, null: false
+
+  # Force convention and parent loaders to resolve before calling `parent`, effectively emulating an eager load
+  def parent
+    convention.then { |_convention| event.then { |_event| object.parent } }
   end
 end
