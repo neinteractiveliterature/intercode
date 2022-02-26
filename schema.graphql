@@ -5476,6 +5476,7 @@ input TeamMemberInput {
 type Ticket {
   convention: Convention!
   created_at: Date!
+  event: Event
   id: ID!
   order_entry: OrderEntry
   provided_by_event: Event
@@ -5509,12 +5510,14 @@ enum TicketMode {
 
 type TicketType {
   allows_event_signups: Boolean!
-  convention: Convention!
+  convention: Convention
   counts_towards_convention_maximum: Boolean!
   description: String
+  event: Event
   id: ID!
   maximum_event_provided_tickets(eventId: ID): Int!
   name: String!
+  parent: TicketTypeParent!
   providing_products: [Product!]!
 }
 
@@ -5527,6 +5530,8 @@ input TicketTypeInput {
   pricing_schedule: ScheduledMoneyValueInput
   publicly_available: Boolean
 }
+
+union TicketTypeParent = Convention | Event
 
 type TimespanWithMoneyValue {
   finish: Date

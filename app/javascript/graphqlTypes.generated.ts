@@ -4551,6 +4551,7 @@ export type Ticket = {
   __typename: 'Ticket';
   convention: Convention;
   created_at: Scalars['Date'];
+  event?: Maybe<Event>;
   id: Scalars['ID'];
   order_entry?: Maybe<OrderEntry>;
   provided_by_event?: Maybe<Event>;
@@ -4581,12 +4582,14 @@ export enum TicketMode {
 export type TicketType = {
   __typename: 'TicketType';
   allows_event_signups: Scalars['Boolean'];
-  convention: Convention;
+  convention?: Maybe<Convention>;
   counts_towards_convention_maximum: Scalars['Boolean'];
   description?: Maybe<Scalars['String']>;
+  event?: Maybe<Event>;
   id: Scalars['ID'];
   maximum_event_provided_tickets: Scalars['Int'];
   name: Scalars['String'];
+  parent: TicketTypeParent;
   providing_products: Array<Product>;
 };
 
@@ -4604,6 +4607,8 @@ export type TicketTypeInput = {
   pricing_schedule?: InputMaybe<ScheduledMoneyValueInput>;
   publicly_available?: InputMaybe<Scalars['Boolean']>;
 };
+
+export type TicketTypeParent = Convention | Event;
 
 export type TimespanWithMoneyValue = {
   __typename: 'TimespanWithMoneyValue';
