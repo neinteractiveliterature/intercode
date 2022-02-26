@@ -12,17 +12,19 @@
 #  created_at                        :datetime         not null
 #  updated_at                        :datetime         not null
 #  convention_id                     :integer
+#  event_id                          :bigint
 #
 # Indexes
 #
 #  index_ticket_types_on_convention_id  (convention_id)
+#  index_ticket_types_on_event_id       (event_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (convention_id => conventions.id)
+#  fk_rails_...  (event_id => events.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 require 'test_helper'
 
 class TicketTypeTest < ActiveSupport::TestCase

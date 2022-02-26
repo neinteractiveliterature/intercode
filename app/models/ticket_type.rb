@@ -13,23 +13,31 @@
 #  created_at                        :datetime         not null
 #  updated_at                        :datetime         not null
 #  convention_id                     :integer
+#  event_id                          :bigint
 #
 # Indexes
 #
 #  index_ticket_types_on_convention_id  (convention_id)
+#  index_ticket_types_on_event_id       (event_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (convention_id => conventions.id)
+#  fk_rails_...  (event_id => events.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
 
 class TicketType < ApplicationRecord
-  belongs_to :convention
+  include ExclusiveArc
+
+  belongs_to :convention, optional: true
+  belongs_to :event, optional: true
 
   has_many :tickets
   has_many :maximum_event_provided_tickets_overrides
   has_many :providing_products, class_name: 'Product', foreign_key: 'provides_ticket_type_id', dependent: :nullify
+
+  exclusive_arc :parent, [Convention, Event]
 
   # Only allow letters, numbers, and underscores
   validates :name, format: { with: /\A\w+\z/, allow_blank: false }
