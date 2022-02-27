@@ -26,7 +26,7 @@ function cardClassForTicketType(ticketType: TicketTypeType) {
   }
 
   if (ticketType.maximum_event_provided_tickets > 0) {
-    return 'bg-success text-white';
+    return 'bg-info-light';
   }
 
   return 'bg-dark text-white';
