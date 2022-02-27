@@ -14,9 +14,11 @@ test('TicketTypeForm matches snapshot', async () => {
         maximum_event_provided_tickets: 0,
         counts_towards_convention_maximum: true,
       }}
-      ticketNamePlural="bananas"
       onChange={() => {}}
     />,
+    {
+      appRootContextValue: { ticketName: 'banana', ticketNamePlural: 'bananas' },
+    },
   );
 
   expect(asFragment()).toMatchSnapshot();
