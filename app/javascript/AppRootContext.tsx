@@ -12,9 +12,7 @@ export type AppRootContextValue = {
   conventionName?: string | null;
   conventionTimespan?: Timespan;
   currentAbility: AppRootQueryData['currentAbility'];
-  currentPendingOrder?: NonNullable<
-    NonNullable<AppRootQueryData['convention']>['my_profile']
-  >['current_pending_order'];
+  currentPendingOrder?: NonNullable<NonNullable<AppRootQueryData['convention']>['my_profile']>['current_pending_order'];
   currentUser?: AppRootQueryData['currentUser'];
   language: string;
   myProfile?: NonNullable<AppRootQueryData['convention']>['my_profile'];
@@ -24,6 +22,7 @@ export type AppRootContextValue = {
   ticketsAvailableForPurchase?: boolean | null;
   ticketMode?: TicketMode | null;
   ticketName?: string;
+  ticketNamePlural?: string;
   ticketTypes?: NonNullable<AppRootQueryData['convention']>['ticket_types'];
   timezoneName: string;
 };
@@ -73,6 +72,7 @@ export const appRootContextDefaultValue: AppRootContextValue = {
   ticketsAvailableForPurchase: null,
   ticketMode: null,
   ticketName: 'ticket',
+  ticketNamePlural: 'tickets',
   ticketTypes: [],
   timezoneName: 'Etc/UTC',
 };

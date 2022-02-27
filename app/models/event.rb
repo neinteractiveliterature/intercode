@@ -117,6 +117,7 @@ class Event < ApplicationRecord
 
   has_many :maximum_event_provided_tickets_overrides, dependent: :destroy
   has_many :provided_tickets, class_name: 'Ticket', inverse_of: 'provided_by_event', foreign_key: 'provided_by_event_id'
+  has_many :ticket_types, dependent: :destroy
 
   has_many :event_ratings, dependent: :destroy
 
