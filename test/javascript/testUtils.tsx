@@ -10,33 +10,48 @@ import { Confirm } from '@neinteractiveliterature/litform';
 
 import getI18n from '../../app/javascript/setupI18Next';
 import { LazyStripeContext } from '../../app/javascript/LazyStripe';
+import AppRootContext, { appRootContextDefaultValue, AppRootContextValue } from '../../app/javascript/AppRootContext';
 
 export type TestWrapperProps = {
   apolloMocks?: MockedProviderProps['mocks'];
   children?: React.ReactNode;
   stripePublishableKey?: string;
   i18nInstance: i18n;
+  appRootContextValue?: Partial<AppRootContextValue>;
 };
 
-function TestWrapper({ apolloMocks, stripePublishableKey, i18nInstance, children }: TestWrapperProps) {
+function TestWrapper({
+  apolloMocks,
+  stripePublishableKey,
+  i18nInstance,
+  appRootContextValue,
+  children,
+}: TestWrapperProps) {
   const history = useMemo(() => createMemoryHistory(), []);
   const [stripePromise, setStripePromise] = useState<Promise<Stripe | null> | null>(null);
   const lazyStripeProviderValue = useMemo(
     () => ({ publishableKey: stripePublishableKey, stripePromise, setStripePromise }),
     [stripePublishableKey, stripePromise, setStripePromise],
   );
+  const effectiveAppRootContextValue = useMemo(
+    () => ({ ...appRootContextDefaultValue, ...appRootContextValue }),
+    [appRootContextValue],
+  );
+
   return (
-    <Router location={history.location} navigator={history}>
-      <MockedProvider mocks={apolloMocks}>
-        <LazyStripeContext.Provider value={lazyStripeProviderValue}>
-          <Confirm>
-            <I18nextProvider i18n={i18nInstance}>
-              <Suspense fallback={<div data-testid="test-wrapper-suspense-fallback" />}>{children}</Suspense>
-            </I18nextProvider>
-          </Confirm>
-        </LazyStripeContext.Provider>
-      </MockedProvider>
-    </Router>
+    <AppRootContext.Provider value={effectiveAppRootContextValue}>
+      <Router location={history.location} navigator={history}>
+        <MockedProvider mocks={apolloMocks}>
+          <LazyStripeContext.Provider value={lazyStripeProviderValue}>
+            <Confirm>
+              <I18nextProvider i18n={i18nInstance}>
+                <Suspense fallback={<div data-testid="test-wrapper-suspense-fallback" />}>{children}</Suspense>
+              </I18nextProvider>
+            </Confirm>
+          </LazyStripeContext.Provider>
+        </MockedProvider>
+      </Router>
+    </AppRootContext.Provider>
   );
 }
 
@@ -67,7 +82,7 @@ async function customRender<Q extends Queries = Queries>(
   ui: JSX.Element,
   options: Omit<TestWrapperProps, 'children' | 'i18nInstance'> & RenderOptions<Q> = {},
 ): Promise<RenderResult<typeof queries & Q & CustomQueries>> {
-  const { apolloMocks, stripePublishableKey, queries: providedQueries, ...otherOptions } = options;
+  const { apolloMocks, stripePublishableKey, queries: providedQueries, appRootContextValue, ...otherOptions } = options;
   const combinedQueries: typeof queries & Q & CustomQueries = {
     ...queries,
     ...customQueries,
@@ -80,6 +95,7 @@ async function customRender<Q extends Queries = Queries>(
         apolloMocks={apolloMocks}
         stripePublishableKey={stripePublishableKey}
         i18nInstance={i18nInstance}
+        appRootContextValue={appRootContextValue}
         {...wrapperProps}
       />
     ),
