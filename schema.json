@@ -29974,6 +29974,12 @@
               "description": "A valid ticket is required to sign up for events in this convention",
               "isDeprecated": false,
               "deprecationReason": null
+            },
+            {
+              "name": "ticket_per_event",
+              "description": "Each event in this convention sells tickets separately",
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "possibleTypes": null

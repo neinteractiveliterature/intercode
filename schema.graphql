@@ -5506,6 +5506,11 @@ enum TicketMode {
   A valid ticket is required to sign up for events in this convention
   """
   required_for_signup
+
+  """
+  Each event in this convention sells tickets separately
+  """
+  ticket_per_event
 }
 
 type TicketType {
