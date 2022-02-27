@@ -4576,7 +4576,9 @@ export enum TicketMode {
   /** Tickets are neither sold nor required in this convention */
   Disabled = 'disabled',
   /** A valid ticket is required to sign up for events in this convention */
-  RequiredForSignup = 'required_for_signup'
+  RequiredForSignup = 'required_for_signup',
+  /** Each event in this convention sells tickets separately */
+  TicketPerEvent = 'ticket_per_event'
 }
 
 export type TicketType = {
