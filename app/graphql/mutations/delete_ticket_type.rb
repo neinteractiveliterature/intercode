@@ -6,7 +6,7 @@ class Mutations::DeleteTicketType < Mutations::BaseMutation
 
   argument :id, ID, required: false
 
-  load_and_authorize_convention_associated_model :ticket_types, :id, :destroy
+  load_and_authorize_model_with_id TicketType, :id, :destroy
 
   def resolve(**_args)
     if ticket_type.tickets.any?

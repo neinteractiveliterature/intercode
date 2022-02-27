@@ -1646,6 +1646,7 @@ export type CreateTicketPayload = {
 export type CreateTicketTypeInput = {
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  eventId?: InputMaybe<Scalars['ID']>;
   ticket_type: TicketTypeInput;
 };
 
@@ -2242,6 +2243,7 @@ export type Event = {
   slots_limited?: Maybe<Scalars['Boolean']>;
   status?: Maybe<Scalars['String']>;
   team_members: Array<TeamMember>;
+  ticket_types: Array<TicketType>;
   title?: Maybe<Scalars['String']>;
   total_slots?: Maybe<Scalars['Int']>;
   url?: Maybe<Scalars['String']>;

@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useContext, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import {
   LoadQueryWrapper,
@@ -11,10 +11,12 @@ import capitalize from 'lodash/capitalize';
 import sortTicketTypes from './sortTicketTypes';
 import usePageTitle from '../usePageTitle';
 import { describeAdminPricingStructure } from '../Store/describePricingStructure';
-import { AdminTicketTypesQueryData, useAdminTicketTypesQuery } from './queries.generated';
+import { AdminTicketTypesQueryData } from './queries.generated';
 import { useDeleteTicketTypeMutation } from './mutations.generated';
 import { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
+import AppRootContext from '../AppRootContext';
+import { useTicketTypesQueryFromRoute } from './useTicketTypesQueryFromRoute';
 
 type TicketTypeType = AdminTicketTypesQueryData['convention']['ticket_types'][0];
 
@@ -55,14 +57,16 @@ function describeTicketTypeOptions(
   return null;
 }
 
-export default LoadQueryWrapper(useAdminTicketTypesQuery, function TicketTypesList({ data }) {
-  usePageTitle(`${capitalize(data.convention.ticket_name)} types`);
+export default LoadQueryWrapper(useTicketTypesQueryFromRoute, function TicketTypesList({ data }) {
+  const { ticketName, ticketNamePlural } = useContext(AppRootContext);
+
+  usePageTitle(`${capitalize(ticketName)} types`);
 
   const { t } = useTranslation();
   const confirm = useConfirm();
   const [deleteTicketType] = useDeleteMutationWithReferenceArrayUpdater(
     useDeleteTicketTypeMutation,
-    data.convention,
+    'ticket_types' in data.convention ? data.convention : data.convention.event,
     'ticket_types',
     (ticketType) => ({ input: { id: ticketType.id } }),
   );
@@ -90,7 +94,7 @@ export default LoadQueryWrapper(useAdminTicketTypesQuery, function TicketTypesLi
               <i className="bi-trash me-1" />
               Delete
             </button>
-            <Link to={`/ticket_types/${ticketType.id}/edit`} className="btn btn-secondary btn-sm mx-1">
+            <Link to={`${ticketType.id}/edit`} className="btn btn-secondary btn-sm mx-1">
               <i className="bi-pencil-square me-1" />
               Edit
             </Link>
@@ -98,7 +102,7 @@ export default LoadQueryWrapper(useAdminTicketTypesQuery, function TicketTypesLi
         </div>
 
         <div className="small font-italic">
-          {describeTicketTypeOptions(ticketType, data.convention.ticket_name, data.convention.ticketNamePlural, t)}
+          {describeTicketTypeOptions(ticketType, ticketName ?? 'ticket', ticketNamePlural ?? 'tickets', t)}
           {!ticketType.counts_towards_convention_maximum && <div>Does not count towards convention maximum</div>}
           {!ticketType.allows_event_signups && <div>Does not allow event signups</div>}
         </div>
@@ -119,25 +123,28 @@ export default LoadQueryWrapper(useAdminTicketTypesQuery, function TicketTypesLi
             ))}
           </ul>
         ) : (
-          `No products provide this ${data.convention.ticket_name} type`
+          `No products provide this ${ticketName} type`
         )}
       </div>
     </div>
   );
 
   const sortedTicketTypes = useMemo(
-    () => sortTicketTypes(data.convention.ticket_types),
-    [data.convention.ticket_types],
+    () =>
+      'ticket_types' in data.convention
+        ? sortTicketTypes(data.convention.ticket_types)
+        : sortTicketTypes(data.convention.event.ticket_types),
+    [data.convention],
   );
 
   return (
     <div>
-      <h1 className="mb-4">{capitalize(data.convention.ticket_name)} types</h1>
+      <h1 className="mb-4">{capitalize(ticketName)} types</h1>
 
       {sortedTicketTypes.map(renderTicketTypeDisplay)}
 
-      <Link to="/ticket_types/new" className="btn btn-primary">
-        New {data.convention.ticket_name} type
+      <Link to="new" className="btn btn-primary">
+        New {ticketName} type
       </Link>
     </div>
   );

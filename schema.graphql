@@ -1990,6 +1990,7 @@ input CreateTicketTypeInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
+  eventId: ID
   ticket_type: TicketTypeInput!
 }
 
@@ -2837,6 +2838,7 @@ type Event {
   slots_limited: Boolean
   status: String
   team_members: [TeamMember!]!
+  ticket_types: [TicketType!]!
   title: String
   total_slots: Int
   url: String

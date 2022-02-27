@@ -26,9 +26,20 @@ query AdminTicketTypesQuery {
       id
       ...TicketTypeAdmin_TicketTypeFields
     }
+  }
+}
 
-    ticket_name
-    ticketNamePlural
-    timezone_name
+query EventTicketTypesQuery($id: ID!) {
+  convention: conventionByRequestHost {
+    id
+
+    event(id: $id) {
+      id
+
+      ticket_types {
+        id
+        ...TicketTypeAdmin_TicketTypeFields
+      }
+    }
   }
 }
