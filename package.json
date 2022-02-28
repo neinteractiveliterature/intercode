@@ -76,7 +76,7 @@
     "@types/js-search": "1.4.0",
     "@types/lodash": "4.14.179",
     "@types/luxon": "2.0.9",
-    "@types/mapbox-gl": "1.13.2",
+    "@types/mapbox-gl": "1.13.3",
     "@types/minimist": "1.2.2",
     "@types/react": "17.0.39",
     "@types/react-click-outside-hook": "1.0.0",
