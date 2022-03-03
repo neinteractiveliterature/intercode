@@ -59,8 +59,9 @@ function describeTicketTypeOptions(
 
 export default LoadQueryWrapper(useTicketTypesQueryFromRoute, function TicketTypesList({ data }) {
   const { ticketName, ticketNamePlural } = useContext(AppRootContext);
+  const event = 'event' in data.convention ? data.convention.event : undefined;
 
-  usePageTitle(`${capitalize(ticketName)} types`);
+  usePageTitle(`${capitalize(ticketName)} types${event ? ` - ${event.title}` : ''}`);
 
   const { t } = useTranslation();
   const confirm = useConfirm();
@@ -139,7 +140,7 @@ export default LoadQueryWrapper(useTicketTypesQueryFromRoute, function TicketTyp
 
   return (
     <div>
-      <h1 className="mb-4">{capitalize(ticketName)} types</h1>
+      <h1 className="mb-4">{event ? `${event.title} ${ticketName}` : capitalize(ticketName)} types</h1>
 
       {sortedTicketTypes.map(renderTicketTypeDisplay)}
 

@@ -17,7 +17,7 @@ export type EventTicketTypesQueryVariables = Types.Exact<{
 }>;
 
 
-export type EventTicketTypesQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, event: { __typename: 'Event', id: string, ticket_types: Array<{ __typename: 'TicketType', id: string, name: string, description?: string | null, counts_towards_convention_maximum: boolean, allows_event_signups: boolean, maximum_event_provided_tickets: number, providing_products: Array<{ __typename: 'Product', id: string, name: string, available: boolean, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: { __typename: 'Money', fractional: number, currency_code: string } | null, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: string | null, finish?: string | null, value: { __typename: 'Money', fractional: number, currency_code: string } }> } } }> }> } } };
+export type EventTicketTypesQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, event: { __typename: 'Event', id: string, title?: string | null, ticket_types: Array<{ __typename: 'TicketType', id: string, name: string, description?: string | null, counts_towards_convention_maximum: boolean, allows_event_signups: boolean, maximum_event_provided_tickets: number, providing_products: Array<{ __typename: 'Product', id: string, name: string, available: boolean, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: { __typename: 'Money', fractional: number, currency_code: string } | null, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: string | null, finish?: string | null, value: { __typename: 'Money', fractional: number, currency_code: string } }> } } }> }> } } };
 
 export const TicketTypeAdmin_TicketTypeFieldsFragmentDoc = gql`
     fragment TicketTypeAdmin_TicketTypeFields on TicketType {
@@ -81,6 +81,7 @@ export const EventTicketTypesQueryDocument = gql`
     id
     event(id: $id) {
       id
+      title
       ticket_types {
         id
         ...TicketTypeAdmin_TicketTypeFields
