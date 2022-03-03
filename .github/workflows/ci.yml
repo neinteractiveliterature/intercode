@@ -82,7 +82,7 @@ jobs:
         check_name: 'Jest Report'
         report_paths: 'test/reports/TEST-*.xml'
     - name: Archive HTML test reports
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       if: always()
       with:
         name: test-reports
@@ -124,7 +124,7 @@ jobs:
           check_name: 'Minitest Report'
           report_paths: 'test/reports/TEST-*.xml'
       - name: Archive HTML test reports
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: always()
         with:
           name: test-reports
