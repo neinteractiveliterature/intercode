@@ -35,6 +35,7 @@ query EventTicketTypesQuery($id: ID!) {
 
     event(id: $id) {
       id
+      title
 
       ticket_types {
         id
