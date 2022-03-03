@@ -19,8 +19,8 @@ class Mutations::MergeUsers < Mutations::BaseMutation
 
     result =
       MergeUsersService.new(
-        user_ids: user_ids,
-        winning_user_id: winning_user_id,
+        user_ids: user_ids&.map(&:to_i),
+        winning_user_id: winning_user_id&.to_i,
         winning_user_con_profile_ids_by_convention_id: winning_profile_ids_by_convention_id
       ).call!
 
