@@ -22,7 +22,7 @@ jobs:
           ${{ runner.os }}-tsc-yarn-${{ github.ref }}-
           ${{ runner.os }}-tsc-yarn-
     - name: install node v14
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         node-version: 14
     - name: yarn install
@@ -46,7 +46,7 @@ jobs:
           ${{ runner.os }}-tsc-yarn-${{ github.ref }}-
           ${{ runner.os }}-tsc-yarn-
     - name: install node v14
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         node-version: 14
     - name: yarn install
@@ -68,7 +68,7 @@ jobs:
           ${{ runner.os }}-tsc-yarn-${{ github.ref }}-
           ${{ runner.os }}-tsc-yarn-
     - name: install node v14
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         node-version: 14
     - name: yarn install
@@ -152,7 +152,7 @@ jobs:
           ${{ runner.os }}-dockerimage-webpack-${{ github.ref }}-
           ${{ runner.os }}-dockerimage-webpack-
     - name: install node v14
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         node-version: 14
     - name: yarn install
