@@ -23,7 +23,7 @@ class Mutations::UpdateProduct < Mutations::BaseMutation
     create_or_update_variants(product, product_fields.delete(:product_variants))
 
     (product_fields.delete(:delete_variant_ids) || []).each do |variant_id|
-      product.product_variants.find { |v| v.id == variant_id }.destroy!
+      product.product_variants.find { |v| v.id.to_s == variant_id.to_s }.destroy!
     end
     product.product_variants.reload
 
