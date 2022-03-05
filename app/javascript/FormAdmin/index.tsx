@@ -14,11 +14,16 @@ function FormAdmin(): JSX.Element {
     <>
       <nav aria-label="breadcrumb">
         <ol className="breadcrumb">
-          <RouteActivatedBreadcrumbItem pattern={{ path: '/admin_forms', end: true }} to="/admin_forms">
+          <RouteActivatedBreadcrumbItem to="/admin_forms" end>
             Forms
           </RouteActivatedBreadcrumbItem>
 
-          <LeafBreadcrumbItem path="/admin_forms/:id/edit_advanced">Edit form (advanced)</LeafBreadcrumbItem>
+          <Routes>
+            <Route
+              path=":id/edit_advanced"
+              element={<LeafBreadcrumbItem path="">Edit form (advanced)</LeafBreadcrumbItem>}
+            />
+          </Routes>
         </ol>
       </nav>
 

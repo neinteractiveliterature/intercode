@@ -6,7 +6,7 @@ import capitalize from 'lodash/capitalize';
 
 import AppRootContext from '../AppRootContext';
 import GeneratedNavigationSection, { GeneratedNavigationItem } from './GeneratedNavigationSection';
-import { Ability } from '../graphqlTypes.generated';
+import { Ability, SiteMode, TicketMode } from '../graphqlTypes.generated';
 
 function generateSiteContentItem(currentAbility: Pick<Ability, 'can_manage_any_cms_content'>, t: TFunction) {
   return (
@@ -54,13 +54,13 @@ function useConventionAdminNavigationItems(): GeneratedNavigationItem[] {
           icon: 'bi-megaphone-fill',
         },
         currentAbility.can_update_event_categories &&
-          siteMode !== 'single_event' && {
+          siteMode !== SiteMode.SingleEvent && {
             label: t('navigation.admin.eventCategories', 'Event Categories'),
             url: '/event_categories',
             icon: 'bi-tags-fill',
           },
         currentAbility.can_read_event_proposals &&
-          siteMode !== 'single_event' && {
+          siteMode !== SiteMode.SingleEvent && {
             label: t('navigation.admin.eventProposals', 'Event Proposals'),
             url: '/admin_event_proposals?sort.status=asc&sort.submitted_at=desc',
             icon: 'bi-gift-fill',
@@ -114,7 +114,8 @@ function useConventionAdminNavigationItems(): GeneratedNavigationItem[] {
           icon: 'bi-cart-fill',
         },
         currentAbility.can_manage_ticket_types &&
-          ticketMode !== 'disabled' && {
+          ticketMode !== TicketMode.Disabled &&
+          ticketMode !== TicketMode.TicketPerEvent && {
             label: t('navigation.admin.ticketTypes', '{{ ticketName }} Types', {
               ticketName: capitalize(ticketName ?? 'ticket'),
             }),

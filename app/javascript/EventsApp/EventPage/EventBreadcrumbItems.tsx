@@ -75,7 +75,7 @@ function EventBreadcrumbItems({
           <Link to="/events">{t('navigation.events.eventsList', 'List of events')}</Link>
         )}
       </li>
-      <RouteActivatedBreadcrumbItem pattern={{ path: eventPath, end: true }} to={eventPath}>
+      <RouteActivatedBreadcrumbItem to={eventPath} end>
         {event.title}
       </RouteActivatedBreadcrumbItem>
     </>

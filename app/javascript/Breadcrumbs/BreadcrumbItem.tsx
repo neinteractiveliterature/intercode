@@ -1,10 +1,10 @@
 import { ReactNode } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, To } from 'react-router-dom';
 
 type BreadcrumbItemRegularProps = {
   active?: boolean;
   children: ReactNode;
-  to: string;
+  to: To;
 };
 
 type BreadcrumbItemAlwaysActiveProps = {

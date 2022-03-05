@@ -1,9 +1,52 @@
 import { ApolloError, QueryHookOptions, QueryResult } from '@apollo/client';
 import * as React from 'react';
-import { useParams } from 'react-router-dom';
+import { Params, useParams } from 'react-router-dom';
 import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
 import FourOhFourPage from './FourOhFourPage';
+
+export function LoadQueryFromParamsWrapper<
+  ParamsOrKey extends string | Record<string, string | undefined>,
+  TData,
+  TVariables,
+  TProps,
+>(
+  useLoadData: (baseOptions?: QueryHookOptions<TData, TVariables>) => QueryResult<TData>,
+  getVariables: (
+    params: Readonly<[ParamsOrKey] extends [string] ? Params<ParamsOrKey> : Partial<ParamsOrKey>>,
+  ) => TVariables,
+  WrappedComponent: React.ComponentType<TProps & { data: TData }>,
+) {
+  const Wrapper = (props: TProps) => {
+    const params = useParams<ParamsOrKey>();
+    const variables = React.useMemo(() => getVariables(params), [params]);
+    const { data, loading, error } = useLoadData({ variables });
+
+    if (loading) {
+      return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
+    }
+
+    if (error) {
+      if (error instanceof ApolloError && error.graphQLErrors.some((err) => err.extensions?.code === 'NOT_FOUND')) {
+        return <FourOhFourPage />;
+      }
+
+      return <ErrorDisplay graphQLError={error} />;
+    }
+
+    if (!data) {
+      return <FourOhFourPage />;
+    }
+
+    return <WrappedComponent data={data} {...props} />;
+  };
+
+  const wrappedComponentDisplayName = WrappedComponent.displayName || WrappedComponent.name || 'Component';
+
+  Wrapper.displayName = `LoadQueryFromParamsWrapper(${wrappedComponentDisplayName})`;
+
+  return Wrapper;
+}
 
 export function LoadQueryWithVariablesWrapper<TData, TVariables, TProps>(
   useLoadData: (baseOptions?: QueryHookOptions<TData, TVariables>) => QueryResult<TData>,

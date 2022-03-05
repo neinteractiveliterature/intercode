@@ -1,7 +1,8 @@
-import * as React from 'react';
+import React, { useContext } from 'react';
 import { BooleanInput, BootstrapFormInput, parseIntOrNull, usePropertySetters } from '@neinteractiveliterature/litform';
 
 import { TicketTypeAdmin_TicketTypeFieldsFragment } from './queries.generated';
+import AppRootContext from '../AppRootContext';
 
 export type EditingTicketType = Omit<TicketTypeAdmin_TicketTypeFieldsFragment, 'maximum_event_provided_tickets'> & {
   maximum_event_provided_tickets?: number | null;
@@ -10,10 +11,11 @@ export type EditingTicketType = Omit<TicketTypeAdmin_TicketTypeFieldsFragment, '
 export type TicketTypeFormProps = {
   ticketType: EditingTicketType;
   onChange: React.Dispatch<React.SetStateAction<EditingTicketType>>;
-  ticketNamePlural: string;
 };
 
-function TicketTypeForm({ ticketType, ticketNamePlural, onChange }: TicketTypeFormProps): JSX.Element {
+function TicketTypeForm({ ticketType, onChange }: TicketTypeFormProps): JSX.Element {
+  const { ticketNamePlural } = useContext(AppRootContext);
+
   const [
     setName,
     setDescription,

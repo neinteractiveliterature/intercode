@@ -80,6 +80,7 @@ query AppRootQuery($path: String!) {
     clickwrap_agreement
     tickets_available_for_purchase
     ticket_name
+    ticketNamePlural
 
     ticket_types {
       id

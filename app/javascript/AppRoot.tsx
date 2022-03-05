@@ -115,6 +115,7 @@ function AppRoot(): JSX.Element {
             signupMode: data.convention?.signup_mode,
             ticketMode: data.convention?.ticket_mode,
             ticketName: data.convention?.ticket_name,
+            ticketNamePlural: data.convention?.ticketNamePlural,
             ticketTypes: data.convention?.ticket_types,
             ticketsAvailableForPurchase: data.convention?.tickets_available_for_purchase,
             timezoneName: timezoneNameForConvention(data.convention),

@@ -22,10 +22,11 @@ class Types::EventType < Types::BaseObject
   field :private_signup_list, Boolean, null: true
   field :form, Types::FormType, null: true
   field :created_at, Types::DateType, null: true
+  field :ticket_types, [Types::TicketTypeType], null: false
 
   field :event_category, Types::EventCategoryType, null: false
 
-  association_loaders Event, :event_category, :team_members
+  association_loaders Event, :event_category, :team_members, :ticket_types
 
   def form
     AssociationLoader

@@ -1990,6 +1990,7 @@ input CreateTicketTypeInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
+  eventId: ID
   ticket_type: TicketTypeInput!
 }
 
@@ -2837,6 +2838,7 @@ type Event {
   slots_limited: Boolean
   status: String
   team_members: [TeamMember!]!
+  ticket_types: [TicketType!]!
   title: String
   total_slots: Int
   url: String
@@ -5476,6 +5478,7 @@ input TeamMemberInput {
 type Ticket {
   convention: Convention!
   created_at: Date!
+  event: Event
   id: ID!
   order_entry: OrderEntry
   provided_by_event: Event
@@ -5505,16 +5508,23 @@ enum TicketMode {
   A valid ticket is required to sign up for events in this convention
   """
   required_for_signup
+
+  """
+  Each event in this convention sells tickets separately
+  """
+  ticket_per_event
 }
 
 type TicketType {
   allows_event_signups: Boolean!
-  convention: Convention!
+  convention: Convention
   counts_towards_convention_maximum: Boolean!
   description: String
+  event: Event
   id: ID!
   maximum_event_provided_tickets(eventId: ID): Int!
   name: String!
+  parent: TicketTypeParent!
   providing_products: [Product!]!
 }
 
@@ -5527,6 +5537,8 @@ input TicketTypeInput {
   pricing_schedule: ScheduledMoneyValueInput
   publicly_available: Boolean
 }
+
+union TicketTypeParent = Convention | Event
 
 type TimespanWithMoneyValue {
   finish: Date

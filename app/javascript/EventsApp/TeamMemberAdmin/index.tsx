@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useParams, Outlet } from 'react-router-dom';
+import { useParams, Outlet, Routes, Route } from 'react-router-dom';
 import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import BreadcrumbItem from '../../Breadcrumbs/BreadcrumbItem';
@@ -29,19 +29,23 @@ export default LoadQueryWrapper(useTeamMembersQueryFromParams, function TeamMemb
           <BreadcrumbItem active={false} to={eventPath}>
             {event.title}
           </BreadcrumbItem>
-          <RouteActivatedBreadcrumbItem
-            pattern={{ path: `${eventPath}/team_members`, end: true }}
-            to={`${eventPath}/team_members`}
-          >
+          <RouteActivatedBreadcrumbItem to={``} end>
             {event.event_category.teamMemberNamePlural}
           </RouteActivatedBreadcrumbItem>
-          <LeafBreadcrumbItem path={`${eventPath}/team_members/new`}>
+          <LeafBreadcrumbItem path={`new`}>
             {'Add '}
             {event.event_category.team_member_name}
           </LeafBreadcrumbItem>
-          <LeafBreadcrumbItem path={`${eventPath}/team_members/:teamMemberId`}>
-            {teamMember?.user_con_profile?.name_without_nickname || ''}
-          </LeafBreadcrumbItem>
+          <Routes>
+            <Route
+              path=":teamMemberId"
+              element={
+                <LeafBreadcrumbItem path="">
+                  {teamMember?.user_con_profile?.name_without_nickname || ''}
+                </LeafBreadcrumbItem>
+              }
+            />
+          </Routes>
         </ol>
       </nav>
 

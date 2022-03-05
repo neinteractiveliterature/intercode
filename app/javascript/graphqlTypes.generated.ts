@@ -1646,6 +1646,7 @@ export type CreateTicketPayload = {
 export type CreateTicketTypeInput = {
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  eventId?: InputMaybe<Scalars['ID']>;
   ticket_type: TicketTypeInput;
 };
 
@@ -2242,6 +2243,7 @@ export type Event = {
   slots_limited?: Maybe<Scalars['Boolean']>;
   status?: Maybe<Scalars['String']>;
   team_members: Array<TeamMember>;
+  ticket_types: Array<TicketType>;
   title?: Maybe<Scalars['String']>;
   total_slots?: Maybe<Scalars['Int']>;
   url?: Maybe<Scalars['String']>;
@@ -4551,6 +4553,7 @@ export type Ticket = {
   __typename: 'Ticket';
   convention: Convention;
   created_at: Scalars['Date'];
+  event?: Maybe<Event>;
   id: Scalars['ID'];
   order_entry?: Maybe<OrderEntry>;
   provided_by_event?: Maybe<Event>;
@@ -4575,18 +4578,22 @@ export enum TicketMode {
   /** Tickets are neither sold nor required in this convention */
   Disabled = 'disabled',
   /** A valid ticket is required to sign up for events in this convention */
-  RequiredForSignup = 'required_for_signup'
+  RequiredForSignup = 'required_for_signup',
+  /** Each event in this convention sells tickets separately */
+  TicketPerEvent = 'ticket_per_event'
 }
 
 export type TicketType = {
   __typename: 'TicketType';
   allows_event_signups: Scalars['Boolean'];
-  convention: Convention;
+  convention?: Maybe<Convention>;
   counts_towards_convention_maximum: Scalars['Boolean'];
   description?: Maybe<Scalars['String']>;
+  event?: Maybe<Event>;
   id: Scalars['ID'];
   maximum_event_provided_tickets: Scalars['Int'];
   name: Scalars['String'];
+  parent: TicketTypeParent;
   providing_products: Array<Product>;
 };
 
@@ -4604,6 +4611,8 @@ export type TicketTypeInput = {
   pricing_schedule?: InputMaybe<ScheduledMoneyValueInput>;
   publicly_available?: InputMaybe<Scalars['Boolean']>;
 };
+
+export type TicketTypeParent = Convention | Event;
 
 export type TimespanWithMoneyValue = {
   __typename: 'TimespanWithMoneyValue';
