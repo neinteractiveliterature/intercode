@@ -1,4 +1,4 @@
-import { Link, Routes, Route, useParams, useNavigate, useMatch } from 'react-router-dom';
+import { Link, Routes, Route, useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -16,13 +16,12 @@ import LeafBreadcrumbItem from '../Breadcrumbs/LeafBreadcrumbItem';
 
 function SingleProposalBreadcrumbs() {
   const { t } = useTranslation();
-  const match = useMatch({ path: '/admin_event_proposals/:id', end: false });
-  const eventProposalId = match?.params.id;
-  if (eventProposalId == null) {
+  const { id } = useParams<'id'>();
+  if (id == null) {
     throw new Error('id not found in URL params');
   }
   const { data, loading, error } = useEventProposalQueryWithOwner({
-    variables: { eventProposalId },
+    variables: { eventProposalId: id },
   });
 
   if (loading) {
@@ -39,22 +38,13 @@ function SingleProposalBreadcrumbs() {
 
   return (
     <>
-      <RouteActivatedBreadcrumbItem
-        pattern={{ path: '/admin_event_proposals/:id', end: true }}
-        to={`/admin_event_proposals/${eventProposalId}`}
-      >
+      <RouteActivatedBreadcrumbItem to="" end>
         {data?.convention.event_proposal.title}
       </RouteActivatedBreadcrumbItem>
 
-      <LeafBreadcrumbItem path="/admin_event_proposals/:id/edit">
-        {t('navigation.general.edit', 'Edit')}
-      </LeafBreadcrumbItem>
+      <LeafBreadcrumbItem path="edit">{t('navigation.general.edit', 'Edit')}</LeafBreadcrumbItem>
 
-      <RouteActivatedBreadcrumbItem
-        pattern="/admin_event_proposals/:id/history/*"
-        to={`/admin_event_proposals/${eventProposalId}/history`}
-        hideUnlessMatch
-      >
+      <RouteActivatedBreadcrumbItem to="history" hideUnlessMatch>
         {t('navigation.general.history', 'History')}
       </RouteActivatedBreadcrumbItem>
     </>
@@ -97,7 +87,6 @@ function AdminEditEventProposal() {
 
 function EventProposalsAdmin(): JSX.Element {
   const { t } = useTranslation();
-  const singleProposalMatch = useMatch({ path: '/admin_event_proposals/:id', end: false });
   const authorizationWarning = useAuthorizationRequired('can_read_event_proposals');
 
   if (authorizationWarning) return authorizationWarning;
@@ -106,14 +95,13 @@ function EventProposalsAdmin(): JSX.Element {
     <>
       <nav aria-label="breadcrumb">
         <ol className="breadcrumb">
-          <RouteActivatedBreadcrumbItem
-            pattern={{ path: '/admin_event_proposals', end: true }}
-            to="/admin_event_proposals?sort.status=asc&sort.submitted_at=desc"
-          >
+          <RouteActivatedBreadcrumbItem to=".?sort.status=asc&sort.submitted_at=desc" end>
             {t('navigation.admin.eventProposals', 'Event Proposals')}
           </RouteActivatedBreadcrumbItem>
 
-          {singleProposalMatch && <SingleProposalBreadcrumbs />}
+          <Routes>
+            <Route path=":id/*" element={<SingleProposalBreadcrumbs />} />
+          </Routes>
         </ol>
       </nav>
 

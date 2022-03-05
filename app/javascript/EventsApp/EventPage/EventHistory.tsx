@@ -24,7 +24,6 @@ function useEventHistoryQueryFromParams() {
 
 export default LoadQueryWrapper(useEventHistoryQueryFromParams, function EventHistory({ data }) {
   const { t } = useTranslation();
-  const eventPath = buildEventUrl(data.convention.event);
 
   const changes = useMemo(
     () => data.convention.event.form_response_changes.filter((change) => !EXCLUDE_FIELDS.has(change.field_identifier)),
@@ -35,15 +34,10 @@ export default LoadQueryWrapper(useEventHistoryQueryFromParams, function EventHi
     <>
       <nav aria-label="breadcrumb">
         <ol className="breadcrumb">
-          <BreadcrumbItem to={eventPath} active={false}>
+          <BreadcrumbItem to=".." active={false}>
             {data.convention.event.title}
           </BreadcrumbItem>
-          <RouteActivatedBreadcrumbItem
-            pattern={{ path: `${eventPath}/history`, end: true }}
-            to={`${eventPath}/history`}
-          >
-            {t('events.history.title', 'History')}
-          </RouteActivatedBreadcrumbItem>
+          <RouteActivatedBreadcrumbItem to="">{t('events.history.title', 'History')}</RouteActivatedBreadcrumbItem>
         </ol>
       </nav>
 

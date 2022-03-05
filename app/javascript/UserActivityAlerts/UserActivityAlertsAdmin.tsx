@@ -15,15 +15,15 @@ function UserActivityAlertsAdmin(): JSX.Element {
     <>
       <nav aria-label="breadcrumb" className="mb-4">
         <ol className="breadcrumb">
-          <RouteActivatedBreadcrumbItem
-            pattern={{ path: '/user_activity_alerts', end: true }}
-            to="/user_activity_alerts"
-          >
+          <RouteActivatedBreadcrumbItem to="" end>
             User activity alerts
           </RouteActivatedBreadcrumbItem>
 
-          <LeafBreadcrumbItem path="/user_activity_alerts/new">Create</LeafBreadcrumbItem>
-          <LeafBreadcrumbItem path="/user_activity_alerts/:id/edit">Edit</LeafBreadcrumbItem>
+          <LeafBreadcrumbItem path="new">Create</LeafBreadcrumbItem>
+
+          <Routes>
+            <Route path=":id/edit" element={<LeafBreadcrumbItem path="">Edit</LeafBreadcrumbItem>} />
+          </Routes>
         </ol>
       </nav>
 
