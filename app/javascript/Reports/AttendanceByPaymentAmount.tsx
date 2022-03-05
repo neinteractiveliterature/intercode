@@ -1,11 +1,10 @@
-import isEqual from 'lodash/isEqual';
-import flatMap from 'lodash/flatMap';
 import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
 import capitalize from 'lodash/capitalize';
 
 import formatMoney from '../formatMoney';
 import usePageTitle from '../usePageTitle';
 import { AttendanceByPaymentAmountQueryData, useAttendanceByPaymentAmountQuery } from './queries.generated';
+import { Money } from '../graphqlTypes.generated';
 
 type RowType =
   AttendanceByPaymentAmountQueryData['convention']['reports']['ticket_count_by_type_and_payment_amount'][0];
@@ -19,14 +18,26 @@ function describeRow(ticketType: RowType['ticket_type'], paymentAmount: RowType[
 }
 
 function descriptionCell(ticketType: RowType['ticket_type'], paymentAmount: RowType['payment_amount']) {
-  const allPrices = flatMap(ticketType.providing_products, (product) => {
-    if (product.pricing_structure.value.__typename === 'Money') {
-      return product.pricing_structure.value;
-    }
-    return product.pricing_structure.value.timespans.map((timespan) => timespan.value);
-  });
+  const priceIsPossibleForProduct: (price: Money) => boolean = ticketType.providing_products.reduce(
+    (otherwisePossible: (price: Money) => boolean, product) => {
+      const value = product.pricing_structure.value;
+      if (value.__typename === 'Money') {
+        return (price) => otherwisePossible(price) || value.fractional === price.fractional;
+      }
+      if (value.__typename === 'PayWhatYouWantValue') {
+        return (price) =>
+          otherwisePossible(price) ||
+          ((value.minimum_amount == null || price.fractional >= value.minimum_amount.fractional) &&
+            (value.maximum_amount == null || price.fractional <= value.maximum_amount.fractional));
+      }
 
-  if (allPrices.some((price) => isEqual(price, paymentAmount))) {
+      return (price) =>
+        otherwisePossible(price) || value.timespans.some((timespan) => timespan.value.fractional == price.fractional);
+    },
+    () => false,
+  );
+
+  if (priceIsPossibleForProduct(paymentAmount)) {
     return <td>{describeRow(ticketType, paymentAmount)}</td>;
   }
 

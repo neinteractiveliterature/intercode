@@ -28,4 +28,10 @@ class PricingStructureDrop < Liquid::Drop
     return unless pricing_strategy == 'scheduled_value'
     ScheduledValueDrop.new(pricing_structure.value, timezone)
   end
+
+  # @return [PayWhatYouWantValueDrop] The pay-what-you-want value associated with this pricing structure, if any
+  def pay_what_you_want_value
+    return unless pricing_strategy == 'pay_what_you_want'
+    PayWhatYouWantValueDrop.new(pricing_structure.value)
+  end
 end

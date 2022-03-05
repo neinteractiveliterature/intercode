@@ -3625,6 +3625,19 @@ export type PaginationInterface = {
   total_pages: Scalars['Int'];
 };
 
+export type PayWhatYouWantInput = {
+  maximumAmount?: InputMaybe<MoneyInput>;
+  minimumAmount?: InputMaybe<MoneyInput>;
+  suggestedAmount?: InputMaybe<MoneyInput>;
+};
+
+export type PayWhatYouWantValue = {
+  __typename: 'PayWhatYouWantValue';
+  maximum_amount?: Maybe<Money>;
+  minimum_amount?: Maybe<Money>;
+  suggested_amount?: Maybe<Money>;
+};
+
 export enum PaymentMode {
   Free = 'free',
   Later = 'later',
@@ -3666,6 +3679,8 @@ export enum PermissionedRoleTypeIndicator {
 export enum PricingStrategy {
   /** Fixed price */
   Fixed = 'fixed',
+  /** Pay-what-you-want price */
+  PayWhatYouWant = 'pay_what_you_want',
   /** Price that changes over time */
   ScheduledValue = 'scheduled_value'
 }
@@ -3684,11 +3699,12 @@ export type PricingStructurePriceArgs = {
 
 export type PricingStructureInput = {
   fixed_value?: InputMaybe<MoneyInput>;
+  pay_what_you_want_value?: InputMaybe<PayWhatYouWantInput>;
   pricing_strategy: PricingStrategy;
   scheduled_value?: InputMaybe<ScheduledMoneyValueInput>;
 };
 
-export type PricingStructureValue = Money | ScheduledMoneyValue;
+export type PricingStructureValue = Money | PayWhatYouWantValue | ScheduledMoneyValue;
 
 export type Product = {
   __typename: 'Product';

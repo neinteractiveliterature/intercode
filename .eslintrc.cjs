@@ -163,6 +163,7 @@ module.exports = {
                 'Money',
                 'Mutation',
                 'OrderQuantityByStatus',
+                'PayWhatYouWantValue',
                 'PricingStructure',
                 'Query',
                 'RegistrationPolicy',
