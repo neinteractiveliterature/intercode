@@ -12,7 +12,7 @@ function EventCategoryAdmin(): JSX.Element {
   return (
     <>
       <ol className="breadcrumb">
-        <RouteActivatedBreadcrumbItem pattern={{ path: '/event_categories', end: true }} to="/event_categories">
+        <RouteActivatedBreadcrumbItem to="/event_categories" end>
           Event categories
         </RouteActivatedBreadcrumbItem>
 

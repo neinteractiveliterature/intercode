@@ -16,13 +16,23 @@ function StaffPositionAdmin(): JSX.Element {
     <>
       <nav aria-label="breadcrumb">
         <ol className="breadcrumb">
-          <RouteActivatedBreadcrumbItem pattern={{ path: '/staff_positions', end: true }} to="/staff_positions">
+          <RouteActivatedBreadcrumbItem to="" end>
             Staff positions
           </RouteActivatedBreadcrumbItem>
 
-          <LeafBreadcrumbItem path="/staff_positions/new">New staff position</LeafBreadcrumbItem>
-          <LeafBreadcrumbItem path="/staff_positions/:id/edit">Edit settings</LeafBreadcrumbItem>
-          <LeafBreadcrumbItem path="/staff_positions/:id/edit_permissions">Edit permissions</LeafBreadcrumbItem>
+          <LeafBreadcrumbItem path="new">New staff position</LeafBreadcrumbItem>
+
+          <Routes>
+            <Route
+              path=":id/*"
+              element={
+                <>
+                  <LeafBreadcrumbItem path="edit">Edit settings</LeafBreadcrumbItem>
+                  <LeafBreadcrumbItem path="edit_permissions">Edit permissions</LeafBreadcrumbItem>
+                </>
+              }
+            />
+          </Routes>
         </ol>
       </nav>
 

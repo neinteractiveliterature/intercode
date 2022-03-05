@@ -1,14 +1,15 @@
 import { ReactNode } from 'react';
-import { PathPattern } from 'react-router';
-import { useMatch } from 'react-router-dom';
+import { To, useLocation, useResolvedPath } from 'react-router';
 
 import BreadcrumbItem from './BreadcrumbItem';
 
 export type RouteActivatedBreadcrumbItemProps = {
-  to: string;
-  pattern: string | PathPattern;
+  to: To;
+  pattern?: To;
   children: ReactNode;
   hideUnlessMatch?: boolean;
+  caseSensitive?: boolean;
+  end?: boolean;
 };
 
 function RouteActivatedBreadcrumbItem({
@@ -16,15 +17,29 @@ function RouteActivatedBreadcrumbItem({
   children,
   pattern,
   hideUnlessMatch,
+  caseSensitive,
+  end,
 }: RouteActivatedBreadcrumbItemProps): JSX.Element {
-  const match = useMatch(pattern);
+  const location = useLocation();
+  const path = useResolvedPath(pattern ?? to);
 
-  if (hideUnlessMatch && !match) {
+  let locationPathname = location.pathname;
+  let toPathname = path.pathname;
+  if (!caseSensitive) {
+    locationPathname = locationPathname.toLowerCase();
+    toPathname = toPathname.toLowerCase();
+  }
+
+  const isActive =
+    locationPathname === toPathname ||
+    (!end && locationPathname.startsWith(toPathname) && locationPathname.charAt(toPathname.length) === '/');
+
+  if (hideUnlessMatch && !isActive) {
     return <></>;
   }
 
   return (
-    <BreadcrumbItem to={to} active={!!match}>
+    <BreadcrumbItem to={to} active={!!isActive}>
       {children}
     </BreadcrumbItem>
   );

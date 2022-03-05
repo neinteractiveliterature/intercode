@@ -1,21 +1,24 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
-import { ErrorDisplay } from '@neinteractiveliterature/litform';
+import {
+  ErrorDisplay,
+  LoadQueryWrapper,
+  useCreateMutationWithReferenceArrayUpdater,
+} from '@neinteractiveliterature/litform';
 
 import buildTicketTypeInput from './buildTicketTypeInput';
 import TicketTypeForm, { EditingTicketType } from './TicketTypeForm';
 import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
 import { useCreateTicketTypeMutation } from './mutations.generated';
-import { AdminTicketTypesQueryData, AdminTicketTypesQueryDocument } from './queries.generated';
+import { TicketTypeAdmin_TicketTypeFieldsFragmentDoc } from './queries.generated';
+import AppRootContext from '../AppRootContext';
+import { useTicketTypesQueryFromRoute } from './useTicketTypesQueryFromRoute';
 
-export type NewTicketTypeProps = {
-  ticketName: string;
-  ticketNamePlural: string;
-};
+export default LoadQueryWrapper(useTicketTypesQueryFromRoute, function NewTicketType({ data }) {
+  const { ticketName } = useContext(AppRootContext);
 
-function NewTicketType({ ticketName, ticketNamePlural }: NewTicketTypeProps): JSX.Element {
   const navigate = useNavigate();
   usePageTitle(`New ${ticketName} type`);
 
@@ -30,26 +33,14 @@ function NewTicketType({ ticketName, ticketNamePlural }: NewTicketTypeProps): JS
     counts_towards_convention_maximum: true,
   });
 
-  const [mutate] = useCreateTicketTypeMutation({
-    update: (proxy, result) => {
-      const data = proxy.readQuery<AdminTicketTypesQueryData>({ query: AdminTicketTypesQueryDocument });
-      const newTicketType = result.data?.createTicketType?.ticket_type;
-      if (!data || !newTicketType) {
-        return;
-      }
-
-      proxy.writeQuery<AdminTicketTypesQueryData>({
-        query: AdminTicketTypesQueryDocument,
-        data: {
-          ...data,
-          convention: {
-            ...data.convention,
-            ticket_types: [...data.convention.ticket_types, newTicketType],
-          },
-        },
-      });
-    },
-  });
+  const [mutate] = useCreateMutationWithReferenceArrayUpdater(
+    useCreateTicketTypeMutation,
+    'event' in data.convention ? data.convention.event : data.convention,
+    'ticket_types',
+    (data) => data.createTicketType.ticket_type,
+    TicketTypeAdmin_TicketTypeFieldsFragmentDoc,
+    'TicketTypeAdmin_TicketTypeFields',
+  );
 
   const [saveClicked, error, inProgress] = useAsyncFunction(
     useCallback(async () => {
@@ -57,23 +48,22 @@ function NewTicketType({ ticketName, ticketNamePlural }: NewTicketTypeProps): JS
         variables: {
           input: {
             ticket_type: buildTicketTypeInput(ticketType),
+            eventId: 'event' in data.convention ? data.convention.event.id : undefined,
           },
         },
       });
-      navigate('/ticket_types', { replace: true });
-    }, [mutate, ticketType, navigate]),
+      navigate('..', { replace: true });
+    }, [mutate, ticketType, navigate, data.convention]),
   );
 
   return (
     <div>
       <h1 className="mb-4">New {ticketName} type</h1>
-      <TicketTypeForm ticketType={ticketType} ticketNamePlural={ticketNamePlural} onChange={setTicketType} />
+      <TicketTypeForm ticketType={ticketType} onChange={setTicketType} />
       <button type="button" className="btn btn-primary" onClick={saveClicked} disabled={inProgress}>
         Save
       </button>
       <ErrorDisplay graphQLError={error as ApolloError} />
     </div>
   );
-}
-
-export default NewTicketType;
+});

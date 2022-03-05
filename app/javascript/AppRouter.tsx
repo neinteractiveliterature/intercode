@@ -6,7 +6,7 @@ import AppRootContext from './AppRootContext';
 import PageComponents from './PageComponents';
 import { reloadOnAppEntrypointHeadersMismatch } from './checkAppEntrypointHeadersMatch';
 import FourOhFourPage from './FourOhFourPage';
-import { SignupMode } from './graphqlTypes.generated';
+import { SignupMode, TicketMode } from './graphqlTypes.generated';
 
 function CmsPageBySlug() {
   // react-router 6 doesn't allow slashes in params, so we're going to do our own parsing here
@@ -41,7 +41,13 @@ function renderCommonRoutes() {
   ];
 }
 
-function renderCommonInConventionRoutes({ signupMode }: { signupMode: SignupMode | undefined }) {
+function renderCommonInConventionRoutes({
+  signupMode,
+  ticketMode,
+}: {
+  signupMode: SignupMode | undefined;
+  ticketMode: TicketMode | undefined | null;
+}) {
   return [
     <Route path="/admin_departments/*" key="adminDepartments" element={<PageComponents.DepartmentAdmin />} />,
     <Route path="/admin_events/*" key="adminEvents" element={<PageComponents.EventAdmin />} />,
@@ -67,7 +73,9 @@ function renderCommonInConventionRoutes({ signupMode }: { signupMode: SignupMode
       : []),
     <Route path="/staff_positions/*" key="staffPositions" element={<PageComponents.StaffPositionAdmin />} />,
     <Route path="/ticket/*" key="myTicket" element={<PageComponents.MyTicket />} />,
-    <Route path="/ticket_types/*" key="ticketTypes" element={<PageComponents.TicketTypeAdmin />} />,
+    ...(ticketMode === 'required_for_signup'
+      ? [<Route path="/ticket_types/*" key="ticketTypes" element={<PageComponents.TicketTypeAdmin />} />]
+      : []),
     <Route
       path="/user_activity_alerts/*"
       key="userActivityAlerts"
@@ -78,7 +86,13 @@ function renderCommonInConventionRoutes({ signupMode }: { signupMode: SignupMode
   ];
 }
 
-function renderConventionModeRoutes({ signupMode }: { signupMode: SignupMode | undefined }) {
+function renderConventionModeRoutes({
+  signupMode,
+  ticketMode,
+}: {
+  signupMode: SignupMode | undefined;
+  ticketMode: TicketMode | undefined | null;
+}) {
   return [
     <Route
       path="/admin_event_proposals/*"
@@ -92,12 +106,18 @@ function renderConventionModeRoutes({ signupMode }: { signupMode: SignupMode | u
     </Route>,
     <Route path="/event_proposals/:id/edit" key="editEventProposal" element={<PageComponents.EditEventProposal />} />,
     <Route path="/event_proposals" key="eventProposals" element={<Navigate to="/pages/new-proposal" replace />} />,
-    ...renderCommonInConventionRoutes({ signupMode }),
+    ...renderCommonInConventionRoutes({ signupMode, ticketMode }),
   ];
 }
 
-function renderSingleEventModeRoutes({ signupMode }: { signupMode: SignupMode | undefined }) {
-  return [...renderCommonInConventionRoutes({ signupMode })];
+function renderSingleEventModeRoutes({
+  signupMode,
+  ticketMode,
+}: {
+  signupMode: SignupMode | undefined;
+  ticketMode: TicketMode | undefined | null;
+}) {
+  return [...renderCommonInConventionRoutes({ signupMode, ticketMode })];
 }
 
 function renderRootSiteRoutes() {
@@ -130,7 +150,7 @@ export type AppRouterProps = {
 
 function AppRouter({ alert }: AppRouterProps): JSX.Element {
   const location = useLocation();
-  const { conventionName, signupMode, siteMode } = useContext(AppRootContext);
+  const { conventionName, signupMode, siteMode, ticketMode } = useContext(AppRootContext);
   const [showAlert, setShowAlert] = useState(alert != null);
 
   useEffect(() => {
@@ -143,10 +163,10 @@ function AppRouter({ alert }: AppRouterProps): JSX.Element {
     }
 
     if (siteMode === 'single_event') {
-      return renderSingleEventModeRoutes({ signupMode });
+      return renderSingleEventModeRoutes({ signupMode, ticketMode });
     }
 
-    return renderConventionModeRoutes({ signupMode });
+    return renderConventionModeRoutes({ signupMode, ticketMode });
   };
 
   return (

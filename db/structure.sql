@@ -2641,7 +2641,9 @@ CREATE TABLE public.ticket_types (
     updated_at timestamp without time zone NOT NULL,
     counts_towards_convention_maximum boolean DEFAULT true NOT NULL,
     maximum_event_provided_tickets integer DEFAULT 0 NOT NULL,
-    allows_event_signups boolean DEFAULT true NOT NULL
+    allows_event_signups boolean DEFAULT true NOT NULL,
+    event_id bigint,
+    CONSTRAINT ticket_types_parent_exclusive_arc CHECK (((((convention_id IS NOT NULL))::integer + ((event_id IS NOT NULL))::integer) = 1))
 );
 
 
@@ -2675,7 +2677,8 @@ CREATE TABLE public.tickets (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     provided_by_event_id integer,
-    order_entry_id bigint
+    order_entry_id bigint,
+    event_id bigint
 );
 
 
@@ -4634,6 +4637,20 @@ CREATE INDEX index_ticket_types_on_convention_id ON public.ticket_types USING bt
 
 
 --
+-- Name: index_ticket_types_on_event_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ticket_types_on_event_id ON public.ticket_types USING btree (event_id);
+
+
+--
+-- Name: index_tickets_on_event_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_tickets_on_event_id ON public.tickets USING btree (event_id);
+
+
+--
 -- Name: index_tickets_on_order_entry_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4877,6 +4894,14 @@ ALTER TABLE ONLY public.event_categories
 
 
 --
+-- Name: ticket_types fk_rails_3f5bd3dab9; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ticket_types
+    ADD CONSTRAINT fk_rails_3f5bd3dab9 FOREIGN KEY (event_id) REFERENCES public.events(id);
+
+
+--
 -- Name: signup_requests fk_rails_4018e13a21; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -4930,6 +4955,14 @@ ALTER TABLE ONLY public.signups
 
 ALTER TABLE ONLY public.signup_requests
     ADD CONSTRAINT fk_rails_4d7ce061ee FOREIGN KEY (target_run_id) REFERENCES public.runs(id);
+
+
+--
+-- Name: tickets fk_rails_4def87ea62; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tickets
+    ADD CONSTRAINT fk_rails_4def87ea62 FOREIGN KEY (event_id) REFERENCES public.events(id);
 
 
 --
@@ -5670,6 +5703,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220109173235'),
 ('20220117183908'),
 ('20220122172525'),
-('20220122174528');
+('20220122174528'),
+('20220226170101'),
+('20220226170448');
 
 

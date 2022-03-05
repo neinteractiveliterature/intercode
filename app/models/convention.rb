@@ -63,11 +63,11 @@
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
 
 class Convention < ApplicationRecord
-  TICKET_MODES = %w[disabled required_for_signup].freeze
-  SITE_MODES = %w[convention single_event event_series].freeze
-  SIGNUP_MODES = %w[self_service moderated].freeze
-  EMAIL_MODES = %w[forward staff_emails_to_catch_all].freeze
-  TIMEZONE_MODES = %w[convention_local user_local].freeze
+  TICKET_MODES = Types::TicketModeType.values.values.map(&:value).freeze
+  SITE_MODES = Types::SiteModeType.values.values.map(&:value).freeze
+  SIGNUP_MODES = Types::SignupModeType.values.values.map(&:value).freeze
+  EMAIL_MODES = Types::EmailModeType.values.values.map(&:value).freeze
+  TIMEZONE_MODES = Types::TimezoneModeType.values.values.map(&:value).freeze
 
   has_one_attached :favicon
   has_one_attached :open_graph_image
@@ -204,16 +204,16 @@ class Convention < ApplicationRecord
   end
 
   def site_mode_must_be_possible
-    case site_mode
-    when 'single_event'
-      errors.add(:base, 'Single-event sites cannot sell tickets (yet)') unless ticket_mode == 'disabled'
-
-      if events.count > 1
-        errors.add(:site_mode, 'single_event is not valid because this convention has multiple events already')
-      end
-    when 'event_series'
-      errors.add(:base, 'Event series sites cannot sell tickets (yet)') unless ticket_mode == 'disabled'
+    if ticket_mode == 'required_for_signup' && site_mode != 'convention'
+      errors.add(
+        :base,
+        "The required_for_signup ticket mode only applies to sites in the \"convention\" mode.  To sell tickets for \
+other types of site, use the ticket_per_event mode."
+      )
     end
+
+    return unless site_mode == 'single_event' && events.count > 1
+    errors.add(:site_mode, 'single_event is not valid because this convention has multiple events already')
   end
 
   SCHEDULE_RELEASE_PERMISSIVITY_ORDER = %w[no priv gms yes].freeze
