@@ -1,5 +1,5 @@
-import { useContext } from 'react';
-import { Outlet, useMatch } from 'react-router-dom';
+import { useContext, useMemo } from 'react';
+import { Outlet, Route, Routes, useParams } from 'react-router-dom';
 import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
@@ -8,37 +8,44 @@ import LeafBreadcrumbItem from '../Breadcrumbs/LeafBreadcrumbItem';
 import { useTicketTypesQueryFromRoute } from '../TicketTypeAdmin/useTicketTypesQueryFromRoute';
 import AppRootContext from '../AppRootContext';
 import capitalize from 'lodash/capitalize';
-import buildEventUrl from './buildEventUrl';
+import { EventTicketTypesQueryData } from '../TicketTypeAdmin/queries.generated';
+
+function SpecificTicketTypeBreadcrumbItem({ event }: { event: EventTicketTypesQueryData['convention']['event'] }) {
+  const params = useParams<'id'>();
+  const ticketType = useMemo(
+    () => event.ticket_types.find((ticketType) => ticketType.id === params.id),
+    [event.ticket_types, params.id],
+  );
+
+  return <LeafBreadcrumbItem path="">{ticketType?.name}</LeafBreadcrumbItem>;
+}
 
 export default LoadQueryWrapper(useTicketTypesQueryFromRoute, function EventTicketTypesWrapper({ data }): JSX.Element {
   const { ticketName } = useContext(AppRootContext);
-  const specificTicketTypeMatch = useMatch('/events/:eventId/ticket_types/:id/edit');
 
   const event = 'event' in data.convention ? data.convention.event : undefined;
   if (!event) {
     return <Outlet />;
   }
 
-  const eventPath = buildEventUrl(event);
-
   return (
     <>
       <nav aria-label="breadcrumb">
         <ol className="breadcrumb">
-          <BreadcrumbItem active={false} to={eventPath}>
+          <BreadcrumbItem active={false} to="..">
             {event.title}
           </BreadcrumbItem>
-          <RouteActivatedBreadcrumbItem pattern={{ path: `${eventPath}/ticket_types`, end: true }} to={``}>
+          <RouteActivatedBreadcrumbItem to="" end>
             {capitalize(ticketName)} types
           </RouteActivatedBreadcrumbItem>
-          <LeafBreadcrumbItem path={`${eventPath}/ticket_types/new`}>
+          <LeafBreadcrumbItem path="new">
             {'Add '}
             {ticketName}
             {' type'}
           </LeafBreadcrumbItem>
-          <LeafBreadcrumbItem path={`${eventPath}/ticket_types/:id/edit`}>
-            {event.ticket_types.find((ticketType) => ticketType.id === specificTicketTypeMatch?.params.id)?.name}
-          </LeafBreadcrumbItem>
+          <Routes>
+            <Route path=":id/edit" element={<SpecificTicketTypeBreadcrumbItem event={event} />}></Route>
+          </Routes>
         </ol>
       </nav>
 

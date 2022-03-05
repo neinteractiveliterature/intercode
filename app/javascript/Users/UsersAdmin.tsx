@@ -1,4 +1,4 @@
-import { useParams, useMatch, Outlet } from 'react-router-dom';
+import { useParams, Outlet, Route, Routes } from 'react-router-dom';
 import { LoadingIndicator } from '@neinteractiveliterature/litform';
 
 import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
@@ -15,7 +15,7 @@ function UserBreadcrumbItem() {
 
   if (loading) {
     return (
-      <BreadcrumbItem active to={`/users/${id}`}>
+      <BreadcrumbItem active to={''}>
         <LoadingIndicator iconSet="bootstrap-icons" />
       </BreadcrumbItem>
     );
@@ -26,7 +26,7 @@ function UserBreadcrumbItem() {
   }
 
   return (
-    <BreadcrumbItem active to={`/users/${id}`}>
+    <BreadcrumbItem active to={''}>
       {data.user.name}
     </BreadcrumbItem>
   );
@@ -34,17 +34,18 @@ function UserBreadcrumbItem() {
 
 function UsersAdmin(): JSX.Element {
   const authorizationWarning = useAuthorizationRequired('can_read_users');
-  const userMatch = useMatch('/users/:id');
   if (authorizationWarning) return authorizationWarning;
 
   return (
     <>
       <ol className="breadcrumb">
-        <RouteActivatedBreadcrumbItem pattern={{ path: '/users', end: true }} to="/users">
+        <RouteActivatedBreadcrumbItem to="" end>
           Users
         </RouteActivatedBreadcrumbItem>
 
-        {userMatch && <UserBreadcrumbItem />}
+        <Routes>
+          <Route path=":id" element={<UserBreadcrumbItem />} />
+        </Routes>
       </ol>
 
       <Outlet />
