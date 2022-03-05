@@ -4300,6 +4300,18 @@ interface PaginationInterface {
   total_pages: Int!
 }
 
+input PayWhatYouWantInput {
+  maximumAmount: MoneyInput
+  minimumAmount: MoneyInput
+  suggestedAmount: MoneyInput
+}
+
+type PayWhatYouWantValue {
+  maximum_amount: Money
+  minimum_amount: Money
+  suggested_amount: Money
+}
+
 enum PaymentMode {
   free
   later
@@ -4344,6 +4356,11 @@ enum PricingStrategy {
   fixed
 
   """
+  Pay-what-you-want price
+  """
+  pay_what_you_want
+
+  """
   Price that changes over time
   """
   scheduled_value
@@ -4357,11 +4374,12 @@ type PricingStructure {
 
 input PricingStructureInput {
   fixed_value: MoneyInput
+  pay_what_you_want_value: PayWhatYouWantInput
   pricing_strategy: PricingStrategy!
   scheduled_value: ScheduledMoneyValueInput
 }
 
-union PricingStructureValue = Money | ScheduledMoneyValue
+union PricingStructureValue = Money | PayWhatYouWantValue | ScheduledMoneyValue
 
 type Product {
   available: Boolean!
