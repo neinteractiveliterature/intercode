@@ -173,7 +173,7 @@ jobs:
     - name: Read .node-version
       id: node-version
       run: echo "::set-output name=node-version::$(cat .node-version)"
-    - name: Build and push to Docker Hub
+    - name: Build (and push to Docker Hub, if on main)
       id: docker_build
       uses: docker/build-push-action@v2
       with:
