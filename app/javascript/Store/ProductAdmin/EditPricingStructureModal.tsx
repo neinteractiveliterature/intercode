@@ -6,16 +6,16 @@ import { ModalData } from '@neinteractiveliterature/litform/lib/useModal';
 
 import EnumTypes from '../../enumTypes.json';
 import MoneyInput from '../MoneyInput';
-import ScheduledValueEditor, {
-  scheduledValueReducer,
-} from '../../BuiltInFormControls/ScheduledValueEditor';
+import ScheduledValueEditor, { scheduledValueReducer } from '../../BuiltInFormControls/ScheduledValueEditor';
 import AppRootContext from '../../AppRootContext';
 import {
   Money,
+  PayWhatYouWantValue,
   PricingStrategy,
   PricingStructure,
   ScheduledMoneyValue,
 } from '../../graphqlTypes.generated';
+import assertNever from 'assert-never';
 
 const PRICING_STRATEGIES = EnumTypes.PricingStrategy.enumValues.map(({ name, description }) => ({
   value: name,
@@ -42,21 +42,13 @@ export const PricingStructureModalContext = React.createContext<PricingStructure
   setState: () => {},
 });
 
-const buildScheduledMoneyValueInput = (
-  value: Money | null | undefined,
-  onChange: React.Dispatch<Money>,
-) => <MoneyInput value={value} onChange={onChange} />;
+const buildScheduledMoneyValueInput = (value: Money | null | undefined, onChange: React.Dispatch<Money>) => (
+  <MoneyInput value={value} onChange={onChange} />
+);
 
-export type EditPricingStructureModalProps = Pick<
-  PricingStructureModalContextValue,
-  'visible' | 'state' | 'close'
->;
+export type EditPricingStructureModalProps = Pick<PricingStructureModalContextValue, 'visible' | 'state' | 'close'>;
 
-function EditPricingStructureModal({
-  visible,
-  state,
-  close,
-}: EditPricingStructureModalProps): JSX.Element {
+function EditPricingStructureModal({ visible, state, close }: EditPricingStructureModalProps): JSX.Element {
   const { timezoneName } = useContext(AppRootContext);
   const [pricingStructure, setPricingStructure] = useState(state?.value);
 
@@ -108,7 +100,9 @@ function EditPricingStructureModal({
           }
         />
 
-        {pricingStructure?.pricing_strategy === 'fixed' && (
+        {!pricingStructure?.pricing_strategy ? (
+          <></>
+        ) : pricingStructure.pricing_strategy === PricingStrategy.Fixed ? (
           <FormGroupWithLabel label="Price">
             {(id) => (
               <MoneyInput
@@ -118,17 +112,38 @@ function EditPricingStructureModal({
               />
             )}
           </FormGroupWithLabel>
-        )}
-
-        {pricingStructure?.pricing_strategy === 'scheduled_value' && (
+        ) : pricingStructure.pricing_strategy === PricingStrategy.ScheduledValue ? (
           <ScheduledValueEditor
             timezone={timezoneName}
-            scheduledValue={
-              (pricingStructure.value as ScheduledMoneyValue | undefined) ?? { timespans: [] }
-            }
+            scheduledValue={(pricingStructure.value as ScheduledMoneyValue | undefined) ?? { timespans: [] }}
             dispatch={dispatchScheduledValue}
             buildValueInput={buildScheduledMoneyValueInput}
           />
+        ) : pricingStructure.pricing_strategy === PricingStrategy.PayWhatYouWant ? (
+          (
+            [
+              ['minimum_amount', { label: 'Minimum amount' }],
+              ['suggested_amount', { label: 'Suggested amount' }],
+              ['maximum_amount', { label: 'Maximum amount' }],
+            ] as const
+          ).map(([fieldName, formGroupProps]) => (
+            <FormGroupWithLabel key={fieldName} {...formGroupProps}>
+              {(id) => (
+                <MoneyInput
+                  id={id}
+                  value={((pricingStructure.value as PayWhatYouWantValue | undefined) ?? {})[fieldName]}
+                  onChange={(newValue) =>
+                    setPricingStructure((prev) => ({
+                      ...prev,
+                      value: { ...prev?.value, __typename: 'PayWhatYouWantValue', [fieldName]: newValue },
+                    }))
+                  }
+                />
+              )}
+            </FormGroupWithLabel>
+          ))
+        ) : (
+          assertNever(pricingStructure.pricing_strategy)
         )}
       </div>
 

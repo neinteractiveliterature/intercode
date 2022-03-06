@@ -2,12 +2,35 @@
 class PayWhatYouWantValue
   include ActiveModel::Model
 
+  validates :minimum_amount, numericality: { greater_than: 0, allow_nil: true }
+  validates :suggested_amount,
+            numericality: {
+              less_than_or_equal_to: ->(value) { value.maximum_amount || 999_999_99 },
+              greater_than_or_equal_to: ->(value) { value.minimum_amount || 0 },
+              allow_nil: true,
+              message: 'must be between minimum and maximum amount'
+            }
+  validates :maximum_amount,
+            numericality: {
+              greater_than_or_equal_to: ->(value) { value.minimum_amount || 0 },
+              allow_nil: true,
+              message: 'must be greater than minimum amount'
+            }
+
   attr_reader :minimum_amount, :maximum_amount, :suggested_amount
 
   %i[minimum_amount maximum_amount suggested_amount].each do |field|
     define_method :"#{field}=" do |value|
-      instance_variable_set(field, MoneyCoder.load(value))
+      instance_variable_set(:"@#{field}", MoneyCoder.load(value))
     end
+  end
+
+  def attributes
+    %i[minimum_amount maximum_amount suggested_amount].index_with { |attr_name| public_send(attr_name) }
+  end
+
+  def as_json
+    attributes
   end
 
   def amount_errors(amount)

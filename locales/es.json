@@ -712,8 +712,16 @@
       "read_signups": ""
     }
   },
+  "payWhatYouWant": {
+    "maxOnly": "",
+    "minAndMax": "",
+    "minOnly": "",
+    "noBounds": "",
+    "rangeWithSuggestedAmount": ""
+  },
   "pricingStructure": {
     "fixedPrice": "",
+    "payWhatYouWantSummary": "",
     "price": "",
     "scheduledValueSummary_one": "",
     "scheduledValueSummary_many": "",

@@ -12525,6 +12525,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"i18next-intervalplural-postprocessor@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "i18next-intervalplural-postprocessor@npm:3.0.0"
+  checksum: 5faeb8c5284a7c97cd0675d9d81601373a88f5dd35952ad70ad03956f84c5d08e055a7209df4e0986828430f17f9abb5c9563afcb7253808ac003415d3db2cb6
+  languageName: node
+  linkType: hard
+
 "i18next-parser@npm:5.4.0":
   version: 5.4.0
   resolution: "i18next-parser@npm:5.4.0"
@@ -19659,6 +19666,7 @@ resolve@^2.0.0-next.3:
     husky: 7.0.4
     hypernova: 2.5.0
     i18next: 21.6.14
+    i18next-intervalplural-postprocessor: ^3.0.0
     i18next-parser: 5.4.0
     jest: 27.5.1
     jest-html-reporter: 3.4.2

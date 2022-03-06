@@ -2,7 +2,8 @@ import { DateTime } from 'luxon';
 import { TFunction } from 'i18next';
 
 import { findCurrentValue, findCurrentTimespanIndex } from '../ScheduledValueUtils';
-import { PricingStructure, ScheduledMoneyValue } from '../graphqlTypes.generated';
+import { PayWhatYouWantValue, PricingStrategy, PricingStructure, ScheduledMoneyValue } from '../graphqlTypes.generated';
+import assertNever from 'assert-never';
 
 export function describeAdminPricingStructure(
   pricingStructure: Pick<PricingStructure, 'pricing_strategy' | 'value'> | null | undefined,
@@ -25,6 +26,14 @@ export function describeAdminPricingStructure(
       count: pricePointCount,
     });
   }
+
+  if (pricingStructure.pricing_strategy === PricingStrategy.PayWhatYouWant) {
+    return t('pricingStructure.payWhatYouWantSummary', 'Pay what you want ({{ value, payWhatYouWantValue }})', {
+      value: pricingStructure.value as PayWhatYouWantValue,
+    });
+  }
+
+  assertNever(pricingStructure.pricing_strategy, true);
 
   return null;
 }
@@ -67,6 +76,14 @@ export function describeUserPricingStructure(
     return t('pricingStructure.price', '{{ price, money }}', { price: currentValue });
   }
 
+  if (pricingStructure.pricing_strategy === PricingStrategy.PayWhatYouWant) {
+    return t('pricingStructure.payWhatYouWantSummary', 'Pay what you want ({{ value, payWhatYouWantValue }})', {
+      value: pricingStructure.value as PayWhatYouWantValue,
+    });
+  }
+
+  assertNever(pricingStructure.pricing_strategy, true);
+
   return null;
 }
 
@@ -90,6 +107,14 @@ export function describeCurrentPrice(
 
     return t('pricingStructure.price', '{{ price, money }}', { price: currentValue });
   }
+
+  if (pricingStructure.pricing_strategy === PricingStrategy.PayWhatYouWant) {
+    return t('pricingStructure.payWhatYouWantSummary', 'Pay what you want ({{ value, payWhatYouWantValue }})', {
+      value: pricingStructure.value as PayWhatYouWantValue,
+    });
+  }
+
+  assertNever(pricingStructure.pricing_strategy, true);
 
   return null;
 }
