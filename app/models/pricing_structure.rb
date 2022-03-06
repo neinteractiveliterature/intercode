@@ -13,6 +13,7 @@ class PricingStructure
   validates :pricing_strategy, presence: true, inclusion: { in: PRICING_STRATEGIES }
   validates :value, presence: true
   validate :ensure_value_type_is_correct
+  validate :ensure_value_is_valid
 
   def value
     # Lazily deserialize value, because we might get a mass assignment with no intention to actually
@@ -80,5 +81,12 @@ class PricingStructure
     errors.add :value,
                "should be a #{expected_class.name} object (because pricing strategy is \
 #{pricing_strategy.inspect}) but is a #{value.class.name} object instead"
+  end
+
+  def ensure_value_is_valid
+    return nil unless value.is_a?(PayWhatYouWantValue)
+    return if value.valid?
+
+    value.errors.each { |error| errors.add(error.attribute, error.message) }
   end
 end

@@ -1,16 +1,15 @@
 # frozen_string_literal: true
 module ProductMutationHelper
+  VALUE_FIELD_BY_PRICING_STRATEGY = {
+    'fixed' => :fixed_value,
+    'scheduled_value' => :scheduled_value,
+    'pay_what_you_want' => :pay_what_you_want_value
+  }
+
   def coerce_pricing_structure_input(input)
     return nil unless input
 
-    value_field =
-      case input[:pricing_strategy]
-      when 'fixed'
-        :fixed_value
-      when 'scheduled_value'
-        :scheduled_value
-      end
-
+    value_field = VALUE_FIELD_BY_PRICING_STRATEGY.fetch(input[:pricing_strategy])
     PricingStructure.new(pricing_strategy: input[:pricing_strategy], value: input[value_field])
   end
 

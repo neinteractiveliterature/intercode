@@ -693,8 +693,16 @@
       "read_signups": "Access data about your signups"
     }
   },
+  "payWhatYouWant": {
+    "maxOnly": "up to {{ maximumAmount, money }}",
+    "minAndMax": "{{ minimumAmount, money }} to {{ maximumAmount, money }}",
+    "minOnly": "at least {{ minimumAmount, money }}",
+    "noBounds": "any amount",
+    "rangeWithSuggestedAmount": "{{ range }}, suggested amount {{ suggestedAmount, money }}"
+  },
   "pricingStructure": {
     "fixedPrice": "{{ price, money }} (fixed price)",
+    "payWhatYouWantSummary": "Pay what you want ({{ value, payWhatYouWantValue }})",
     "price": "{{ price, money }}",
     "scheduledValueSummary_one": "{{ price, money }} ({{ count }} scheduled price point)",
     "scheduledValueSummary_other": "{{ price, money }} ({{ count }} scheduled price points)",

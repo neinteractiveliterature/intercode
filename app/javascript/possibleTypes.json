@@ -35,6 +35,7 @@
   ],
   "PricingStructureValue": [
     "Money",
+    "PayWhatYouWantValue",
     "ScheduledMoneyValue"
   ],
   "SearchableModel": [
@@ -42,5 +43,9 @@
     "EventProposal",
     "Page",
     "UserConProfile"
+  ],
+  "TicketTypeParent": [
+    "Convention",
+    "Event"
   ]
 }
