@@ -120,28 +120,34 @@ function EditPricingStructureModal({ visible, state, close }: EditPricingStructu
             buildValueInput={buildScheduledMoneyValueInput}
           />
         ) : pricingStructure.pricing_strategy === PricingStrategy.PayWhatYouWant ? (
-          (
-            [
-              ['minimum_amount', { label: 'Minimum amount' }],
-              ['suggested_amount', { label: 'Suggested amount' }],
-              ['maximum_amount', { label: 'Maximum amount' }],
-            ] as const
-          ).map(([fieldName, formGroupProps]) => (
-            <FormGroupWithLabel key={fieldName} {...formGroupProps}>
-              {(id) => (
-                <MoneyInput
-                  id={id}
-                  value={((pricingStructure.value as PayWhatYouWantValue | undefined) ?? {})[fieldName]}
-                  onChange={(newValue) =>
-                    setPricingStructure((prev) => ({
-                      ...prev,
-                      value: { ...prev?.value, __typename: 'PayWhatYouWantValue', [fieldName]: newValue },
-                    }))
-                  }
-                />
-              )}
-            </FormGroupWithLabel>
-          ))
+          <div className="d-flex flex-column flex-md-row">
+            {(
+              [
+                ['minimum_amount', { label: 'Minimum amount', helpText: 'Optional, will default to $0' }],
+                ['suggested_amount', { label: 'Suggested amount', helpText: 'Optional' }],
+                ['maximum_amount', { label: 'Maximum amount', helpText: 'Optional' }],
+              ] as const
+            ).map(([fieldName, formGroupProps]) => (
+              <FormGroupWithLabel
+                key={fieldName}
+                wrapperDivClassName="me-0 me-md-2 mb-3 mb-md-0 flex-grow-1"
+                {...formGroupProps}
+              >
+                {(id) => (
+                  <MoneyInput
+                    id={id}
+                    value={((pricingStructure.value as PayWhatYouWantValue | undefined) ?? {})[fieldName]}
+                    onChange={(newValue) =>
+                      setPricingStructure((prev) => ({
+                        ...prev,
+                        value: { ...prev?.value, __typename: 'PayWhatYouWantValue', [fieldName]: newValue },
+                      }))
+                    }
+                  />
+                )}
+              </FormGroupWithLabel>
+            ))}
+          </div>
         ) : (
           assertNever(pricingStructure.pricing_strategy)
         )}

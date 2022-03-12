@@ -3,7 +3,7 @@ import { DateTime } from 'luxon';
 import { initReactI18next } from 'react-i18next';
 import { DateTimeFormatKey } from './DateTimeFormats';
 import formatMoney from './formatMoney';
-import { Money, PayWhatYouWantValue } from './graphqlTypes.generated';
+import { Money } from './graphqlTypes.generated';
 import { formatLCM } from './TimeUtils';
 
 function filterEmptyStrings(obj: Exclude<ResourceKey, string>): ResourceKey {
@@ -89,40 +89,6 @@ const i18nInitPromise = i18nObject.init(initOptions).then(() => {
   i18nObject.services.formatter?.add('capitalize', (value: string) =>
     value === '' ? '' : `${value[0].toUpperCase()}${value.slice(1).toLowerCase()}`,
   );
-  i18nObject.services.formatter?.add('paywhatyouwantvalue', (value: PayWhatYouWantValue | null | undefined) => {
-    if (!value) {
-      return '';
-    }
-
-    const { t } = i18nObject;
-    let rangeDescription = '';
-    if (value.minimum_amount && value.maximum_amount) {
-      rangeDescription = t('payWhatYouWant.minAndMax', '{{ minimumAmount, money }} to {{ maximumAmount, money }}', {
-        minimumAmount: value.minimum_amount,
-        maximumAmount: value.maximum_amount,
-      });
-    } else if (value.minimum_amount) {
-      rangeDescription = t('payWhatYouWant.minOnly', 'at least {{ minimumAmount, money }}', {
-        minimumAmount: value.minimum_amount,
-      });
-    } else if (value.maximum_amount) {
-      rangeDescription = t('payWhatYouWant.maxOnly', 'up to {{ maximumAmount, money }}', {
-        maximumAmount: value.maximum_amount,
-      });
-    } else {
-      rangeDescription = t('payWhatYouWant.noBounds', 'any amount');
-    }
-
-    if (value.suggested_amount) {
-      return t(
-        'payWhatYouWant.rangeWithSuggestedAmount',
-        '{{ range }}, suggested amount {{ suggestedAmount, money }}',
-        { suggestedAmount: value.suggested_amount, range: rangeDescription },
-      );
-    } else {
-      return rangeDescription;
-    }
-  });
   ready = true;
 });
 
