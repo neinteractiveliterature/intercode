@@ -11,6 +11,7 @@ fragment AdminProductFields on Product {
   payment_options
 
   image {
+    id
     url
   }
 

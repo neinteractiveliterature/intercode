@@ -20,7 +20,7 @@ function ApplyCouponControl({ createCouponApplication }: ApplyCouponControlProps
   };
 
   const keyDownInCodeInput = (event: React.KeyboardEvent) => {
-    if (event.keyCode === 13 || event.keyCode === 32) {
+    if (event.key === 'Enter') {
       event.preventDefault();
       applyClicked();
     }
@@ -29,28 +29,33 @@ function ApplyCouponControl({ createCouponApplication }: ApplyCouponControlProps
   return (
     <>
       <label className="form-label" htmlFor={couponCodeInputId}>
-        Apply coupon:
+        Apply coupon
       </label>
-      <input
-        type="text"
-        className="form-control form-control-sm col-4 d-inline-block ms-2"
-        value={couponCode}
-        id={couponCodeInputId}
-        onChange={(event) => {
-          setCouponCode(event.target.value);
-        }}
-        onKeyDown={keyDownInCodeInput}
-        disabled={applyInProgress}
-        aria-label="Coupon code"
-      />
-      <button
-        className="btn btn-sm btn-outline-primary ms-2"
-        type="button"
-        onClick={applyClicked}
-        disabled={applyInProgress}
-      >
-        Apply
-      </button>
+      <div className="input-group mb-2">
+        <label className="input-group-text" htmlFor={couponCodeInputId}>
+          Code:
+        </label>
+        <input
+          type="text"
+          className="form-control form-control-sm"
+          value={couponCode}
+          id={couponCodeInputId}
+          onChange={(event) => {
+            setCouponCode(event.target.value);
+          }}
+          onKeyDown={keyDownInCodeInput}
+          disabled={applyInProgress}
+          aria-label="Coupon code"
+        />
+        <button
+          className="btn btn-sm btn-outline-primary"
+          type="button"
+          onClick={applyClicked}
+          disabled={applyInProgress}
+        >
+          Apply
+        </button>
+      </div>
       <ErrorDisplay graphQLError={applyError as ApolloError} />
     </>
   );

@@ -712,13 +712,21 @@
       "read_signups": ""
     }
   },
+  "payWhatYouWant": {
+    "maxOnly": "",
+    "minAndMax": "",
+    "minOnly": "",
+    "noBounds": "",
+    "suggestedAmount": "",
+    "useSuggestedAmount": ""
+  },
   "pricingStructure": {
     "fixedPrice": "",
+    "payWhatYouWant": "",
     "price": "",
-    "scheduledValueSummary_one": "",
-    "scheduledValueSummary_many": "",
-    "scheduledValueSummary_other": "",
+    "scheduledValueSummary": "",
     "scheduledValueWithNext": "",
+    "selectAmount": "",
     "unavailable": ""
   },
   "schedule": {
@@ -824,7 +832,9 @@
       "usageLimitCount_one": "",
       "usageLimitCount_many": "",
       "usageLimitCount_other": ""
-    }
+    },
+    "selectProductLabel": "",
+    "totalPrice": ""
   },
   "tables": {
     "ageRestrictionsCheck": {

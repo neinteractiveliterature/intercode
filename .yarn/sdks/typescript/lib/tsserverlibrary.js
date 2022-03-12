@@ -18,6 +18,7 @@ const moduleWrapper = (tsserver) => {
   const pnpApi = require(`pnpapi`);
 
   const isVirtual = (str) => str.match(/\/(\$\$virtual|__virtual__)\//);
+  const isPortal = (str) => str.startsWith('portal:/');
   const normalize = (str) => str.replace(/\\/g, `/`).replace(/^\/?/, `/`);
 
   const dependencyTreeRoots = new Set(
@@ -46,7 +47,10 @@ const moduleWrapper = (tsserver) => {
       const resolved = isVirtual(str) ? pnpApi.resolveVirtual(str) : str;
       if (resolved) {
         const locator = pnpApi.findPackageLocator(resolved);
-        if (locator && dependencyTreeRoots.has(`${locator.name}@${locator.reference}`)) {
+        if (
+          locator &&
+          (dependencyTreeRoots.has(`${locator.name}@${locator.reference}`) || isPortal(locator.reference))
+        ) {
           str = resolved;
         }
       }
@@ -94,7 +98,7 @@ const moduleWrapper = (tsserver) => {
           case `neovim`:
             {
               str = normalize(resolved).replace(/\.zip\//, `.zip::`);
-              str = `zipfile:${str}`;
+              str = `zipfile://${str}`;
             }
             break;
 
@@ -113,13 +117,20 @@ const moduleWrapper = (tsserver) => {
   function fromEditorPath(str) {
     switch (hostInfo) {
       case `coc-nvim`:
-      case `neovim`:
         {
           str = str.replace(/\.zip::/, `.zip/`);
           // The path for coc-nvim is in format of /<pwd>/zipfile:/<pwd>/.yarn/...
           // So in order to convert it back, we use .* to match all the thing
           // before `zipfile:`
           return process.platform === `win32` ? str.replace(/^.*zipfile:\//, ``) : str.replace(/^.*zipfile:/, ``);
+        }
+        break;
+
+      case `neovim`:
+        {
+          str = str.replace(/\.zip::/, `.zip/`);
+          // The path for neovim is in format of zipfile:///<pwd>/.yarn/...
+          return str.replace(/^zipfile:\/\//, ``);
         }
         break;
 
@@ -157,8 +168,9 @@ const moduleWrapper = (tsserver) => {
   let hostInfo = `unknown`;
 
   Object.assign(Session.prototype, {
-    onMessage(/** @type {string} */ message) {
-      const parsedMessage = JSON.parse(message);
+    onMessage(/** @type {string | object} */ message) {
+      const isStringMessage = typeof message === 'string';
+      const parsedMessage = isStringMessage ? JSON.parse(message) : message;
 
       if (
         parsedMessage != null &&
@@ -170,18 +182,17 @@ const moduleWrapper = (tsserver) => {
         if (
           hostInfo === `vscode` &&
           process.env.VSCODE_IPC_HOOK &&
-          process.env.VSCODE_IPC_HOOK.match(/Code\/1\.[1-5][0-9]\./)
+          process.env.VSCODE_IPC_HOOK.match(/Code\/1\.([1-5][0-9]|60)\./)
         ) {
           hostInfo += ` <1.61`;
         }
       }
 
-      return originalOnMessage.call(
-        this,
-        JSON.stringify(parsedMessage, (key, value) => {
-          return typeof value === `string` ? fromEditorPath(value) : value;
-        }),
-      );
+      const processedMessageJSON = JSON.stringify(parsedMessage, (key, value) => {
+        return typeof value === 'string' ? fromEditorPath(value) : value;
+      });
+
+      return originalOnMessage.call(this, isStringMessage ? processedMessageJSON : JSON.parse(processedMessageJSON));
     },
 
     send(/** @type {any} */ msg) {

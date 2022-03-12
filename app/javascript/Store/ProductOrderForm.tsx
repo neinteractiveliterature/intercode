@@ -1,15 +1,19 @@
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
-import { LoadingIndicator, ErrorDisplay, parseIntOrNull } from '@neinteractiveliterature/litform';
+import { LoadingIndicator, ErrorDisplay, parseIntOrNull, FormGroupWithLabel } from '@neinteractiveliterature/litform';
 
 import formatMoney from '../formatMoney';
 import sortProductVariants from './sortProductVariants';
 import useAsyncFunction from '../useAsyncFunction';
 import { CartQueryDocument, useOrderFormProductQuery } from './queries.generated';
 import { useAddOrderEntryToCurrentPendingOrderMutation } from './mutations.generated';
-import { Money } from '../graphqlTypes.generated';
+import { Money, PricingStrategy } from '../graphqlTypes.generated';
 import { LoadQueryWithVariablesWrapper } from '../GraphqlLoadingWrappers';
+import { describePayWhatYouWantRange } from './describePricingStructure';
+import { Trans, useTranslation } from 'react-i18next';
+import MoneyInput from './MoneyInput';
+import buildMoneyInput from './buildMoneyInput';
 
 export type ProductOrderFormProps = {
   productId: string;
@@ -24,21 +28,37 @@ export default LoadQueryWithVariablesWrapper(
     const [addOrderEntryToCurrentPendingOrder] = useAddOrderEntryToCurrentPendingOrderMutation({
       refetchQueries: [{ query: CartQueryDocument }],
     });
+    const { t } = useTranslation();
 
     const [productVariantId, setProductVariantId] = useState<string>();
     const [quantity, setQuantity] = useState(1);
+    const [payWhatYouWantAmount, setPayWhatYouWantAmount] = useState<Money>();
+    const [payWhatYouWantAmountForcedKey, setPayWhatYouWantAmountForcedKey] = useState<number>();
+    const payWhatYouWantValue =
+      product.pricing_structure.value.__typename === 'PayWhatYouWantValue'
+        ? product.pricing_structure.value
+        : undefined;
 
     const dataComplete = useMemo(
       () =>
         product.product_variants != null &&
         (product.product_variants.length < 1 || productVariantId != null) &&
+        (product.pricing_structure.value.__typename !== 'PayWhatYouWantValue' || payWhatYouWantAmount != null) &&
         quantity > 0,
-      [product, productVariantId, quantity],
+      [product, productVariantId, quantity, payWhatYouWantAmount],
     );
 
     const [addToCartClicked, addToCartError, addToCartInProgress] = useAsyncFunction(async () => {
       await addOrderEntryToCurrentPendingOrder({
-        variables: { productId: product.id, productVariantId, quantity },
+        variables: {
+          productId: product.id,
+          productVariantId,
+          quantity,
+          payWhatYouWantAmount:
+            product.pricing_structure.pricing_strategy === PricingStrategy.PayWhatYouWant
+              ? buildMoneyInput(payWhatYouWantAmount)
+              : undefined,
+        },
       });
       navigate('/cart');
     });
@@ -106,6 +126,32 @@ export default LoadQueryWithVariablesWrapper(
     );
 
     const renderTotalAmount = () => {
+      if (product.pricing_structure.value.__typename === 'PayWhatYouWantValue') {
+        return (
+          <>
+            <FormGroupWithLabel
+              label={
+                <>
+                  {t('pricingStructure.selectAmount', 'Amount')} (
+                  {describePayWhatYouWantRange(product.pricing_structure.value, t)})
+                </>
+              }
+            >
+              {(id) => (
+                <div className="d-flex">
+                  <MoneyInput
+                    id={id}
+                    value={payWhatYouWantAmount}
+                    onChange={setPayWhatYouWantAmount}
+                    key={payWhatYouWantAmountForcedKey}
+                  />
+                </div>
+              )}
+            </FormGroupWithLabel>
+          </>
+        );
+      }
+
       if (!dataComplete || product.pricing_structure.price == null) {
         return null;
       }
@@ -125,7 +171,11 @@ export default LoadQueryWithVariablesWrapper(
         currency_code: product.pricing_structure.price.currency_code,
       };
 
-      return <strong>Total: {formatMoney(totalPrice)}</strong>;
+      return (
+        <p>
+          <strong>{t('store.totalPrice', 'Total: {{ totalPrice, money }}', { totalPrice })}</strong>
+        </p>
+      );
     };
 
     return (
@@ -133,23 +183,39 @@ export default LoadQueryWithVariablesWrapper(
         <div className="card-body">
           {renderVariantSelect()}
           {!product.provides_ticket_type && renderQuantity()}
-          <div className="row align-items-baseline">
-            <div className="col-6">{renderTotalAmount()}</div>
-            <div className="col-6 mb-2">
+          <div>{renderTotalAmount()}</div>
+          <div className="mb-2 d-flex">
+            {payWhatYouWantValue?.suggested_amount && (
               <button
                 type="button"
-                className="w-100 btn btn-primary"
-                disabled={!dataComplete || addToCartInProgress}
-                onClick={addToCartClicked}
+                className="btn btn-outline-primary me-2"
+                onClick={() => {
+                  setPayWhatYouWantAmount(payWhatYouWantValue.suggested_amount ?? undefined);
+                  // force a re-render on the MoneyInput because it uses an internal string state for the input
+                  setPayWhatYouWantAmountForcedKey(new Date().getTime());
+                }}
               >
-                {addToCartInProgress ? (
-                  <LoadingIndicator iconSet="bootstrap-icons" />
-                ) : (
-                  <i className="bi-cart-plus-fill" />
-                )}{' '}
-                Add to cart
+                <Trans
+                  i18nKey="payWhatYouWant.useSuggestedAmount"
+                  defaults="Use suggested amount (<bold>{{ amount, money }}</bold>)"
+                  values={{ amount: payWhatYouWantValue.suggested_amount }}
+                  components={{ bold: <strong /> }}
+                />
               </button>
-            </div>
+            )}
+            <button
+              type="button"
+              className="w-100 btn btn-primary"
+              disabled={!dataComplete || addToCartInProgress}
+              onClick={addToCartClicked}
+            >
+              {addToCartInProgress ? (
+                <LoadingIndicator iconSet="bootstrap-icons" />
+              ) : (
+                <i className="bi-cart-plus-fill" />
+              )}{' '}
+              Add to cart
+            </button>
           </div>
           <ErrorDisplay graphQLError={addToCartError as ApolloError} />
         </div>

@@ -8,7 +8,10 @@ module MoneyCoder
       value
     when Hash
       symbolized_value = value.symbolize_keys
-      Money.new(symbolized_value[:fractional], symbolized_value[:currency_code])
+      Money.new(
+        symbolized_value[:fractional] || symbolized_value[:cents],
+        symbolized_value[:currency_code] || symbolized_value[:currency_iso]
+      )
     else
       raise TypeError, "Can't convert #{value.inspect} to Money value"
     end

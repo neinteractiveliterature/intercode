@@ -1480,6 +1480,18 @@
               "deprecationReason": null
             },
             {
+              "name": "pay_what_you_want_amount",
+              "description": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "MoneyInput",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "clientMutationId",
               "description": "A unique identifier for the client performing the mutation.",
               "type": {
@@ -23311,6 +23323,100 @@
           ]
         },
         {
+          "kind": "INPUT_OBJECT",
+          "name": "PayWhatYouWantInput",
+          "description": null,
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "minimumAmount",
+              "description": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "MoneyInput",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "maximumAmount",
+              "description": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "MoneyInput",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "suggestedAmount",
+              "description": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "MoneyInput",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "PayWhatYouWantValue",
+          "description": null,
+          "fields": [
+            {
+              "name": "maximum_amount",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "Money",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "minimum_amount",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "Money",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "suggested_amount",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "Money",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
           "kind": "ENUM",
           "name": "PaymentMode",
           "description": null,
@@ -23613,6 +23719,12 @@
               "description": "Price that changes over time",
               "isDeprecated": false,
               "deprecationReason": null
+            },
+            {
+              "name": "pay_what_you_want",
+              "description": "Pay-what-you-want price",
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "possibleTypes": null
@@ -23730,6 +23842,18 @@
               "defaultValue": null,
               "isDeprecated": false,
               "deprecationReason": null
+            },
+            {
+              "name": "pay_what_you_want_value",
+              "description": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "PayWhatYouWantInput",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "interfaces": null,
@@ -23748,6 +23872,11 @@
             {
               "kind": "OBJECT",
               "name": "Money",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "PayWhatYouWantValue",
               "ofType": null
             },
             {

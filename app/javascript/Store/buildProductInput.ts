@@ -2,6 +2,7 @@ import sortProductVariants from './sortProductVariants';
 import buildMoneyInput from './buildMoneyInput';
 import {
   Money,
+  PayWhatYouWantValue,
   PricingStructure,
   PricingStructureInput,
   ProductInput,
@@ -17,7 +18,7 @@ function buildPricingStructureInput(
     return null;
   }
 
-  let valueFields = {};
+  let valueFields: Partial<PricingStructureInput> = {};
 
   if (pricingStructure.pricing_strategy === 'fixed') {
     valueFields = {
@@ -33,6 +34,16 @@ function buildPricingStructureInput(
           finish: timespan.finish,
           value: buildMoneyInput(timespan.value),
         })),
+      },
+    };
+  }
+
+  if (pricingStructure.pricing_strategy === 'pay_what_you_want') {
+    valueFields = {
+      pay_what_you_want_value: {
+        minimumAmount: buildMoneyInput((pricingStructure.value as PayWhatYouWantValue).minimum_amount),
+        maximumAmount: buildMoneyInput((pricingStructure.value as PayWhatYouWantValue).maximum_amount),
+        suggestedAmount: buildMoneyInput((pricingStructure.value as PayWhatYouWantValue).suggested_amount),
       },
     };
   }

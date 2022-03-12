@@ -40,61 +40,77 @@ export default LoadQueryWrapper(useTicketPurchaseFormQuery, function TicketPurch
 
   const renderProductSelect = () => (
     <div
-      className="btn-group-vertical btn-group-toggle w-100"
+      className={classNames('row g-4 btn-group-toggle justify-content-center', {
+        'row-cols-1': availableProducts.length === 1,
+        'row-cols-1 row-cols-md-2': availableProducts.length > 1,
+      })}
       role="group"
       aria-label={`${capitalize(data.convention.ticket_name)} type`}
     >
       {availableProducts.map((availableProduct) => {
         const { pricing_structure: pricingStructure, id, name: productName } = availableProduct;
         return (
-          <label
-            key={availableProduct.id}
-            className={classNames('form-label btn text-start btn-outline-primary', {
-              active: product?.id === id,
-              focus: focusedProduct?.id === id,
-            })}
-          >
-            <input
-              type="radio"
-              name="product"
-              className="visually-hidden"
-              checked={product?.id === id}
-              onChange={() => setProduct(availableProduct)}
-              onFocus={() => setFocusedProduct(availableProduct)}
-              onBlur={() => setFocusedProduct((prev) => (prev?.id === availableProduct.id ? undefined : prev))}
-              aria-labelledby={`product-label-${id}`}
-            />
-            <div className="d-flex align-items-center" id={`product-label-${id}`}>
-              <div className="flex-grow-1">
-                <strong>{productName}</strong> &mdash; {describeUserPricingStructure(pricingStructure, timezoneName, t)}
+          <div className="col" key={availableProduct.id}>
+            <div className={classNames('card h-100', { 'border-primary': product?.id === id })}>
+              <div className="card-header" id={`product-label-${id}`}>
+                <strong>{productName}</strong>
+              </div>
+              <div className="card-body">
+                <p>{describeUserPricingStructure(pricingStructure, timezoneName, t)}</p>
                 {availableProduct.description_html && (
-                  <div
+                  <p
                     className="small"
                     // eslint-disable-next-line react/no-danger
                     dangerouslySetInnerHTML={{ __html: availableProduct.description_html }}
                   />
                 )}
               </div>
-              <Checkmark value={(product || {}).id === id} className="ms-2" />
+              {availableProducts.length > 1 && (
+                <div className="card-footer bg-body border-0">
+                  <label
+                    className={classNames('form-label btn d-block btn-outline-primary mb-0', {
+                      active: product?.id === id,
+                      focus: focusedProduct?.id === id,
+                    })}
+                  >
+                    <input
+                      type="radio"
+                      name="product"
+                      className="visually-hidden"
+                      checked={product?.id === id}
+                      onChange={() => setProduct(availableProduct)}
+                      onFocus={() => setFocusedProduct(availableProduct)}
+                      onBlur={() => setFocusedProduct((prev) => (prev?.id === availableProduct.id ? undefined : prev))}
+                      aria-labelledby={`product-label-${id}`}
+                    />
+                    <div className="d-flex">
+                      <div className="flex-grow-1">{t('store.selectProductLabel', 'Select')}</div>
+                      <Checkmark value={product?.id === id} className="ms-2" />
+                    </div>
+                  </label>
+                </div>
+              )}
             </div>
-          </label>
+          </div>
         );
       })}
     </div>
   );
 
   return (
-    <>
-      <h1 className="mb-4">
-        Buy a {data.convention.ticket_name} for {data.convention.name}
-      </h1>
-      {availableProducts.length > 1 && <p className="lead">Please select a {data.convention.ticket_name} type:</p>}
-      {renderProductSelect()}
-      {product && (
-        <div className="mt-4">
-          <ProductOrderForm productId={product.id} />
-        </div>
-      )}
-    </>
+    <div className="container-max-md mt-4">
+      <div className="card-body">
+        <h1 className="mb-4">
+          Buy a {data.convention.ticket_name} for {data.convention.name}
+        </h1>
+        {availableProducts.length > 1 && <p className="lead">Please select a {data.convention.ticket_name} type:</p>}
+        {renderProductSelect()}
+        {product && (
+          <div className="mt-4">
+            <ProductOrderForm productId={product.id} />
+          </div>
+        )}
+      </div>
+    </div>
   );
 });
