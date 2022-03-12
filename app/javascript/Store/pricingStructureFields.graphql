@@ -27,5 +27,20 @@ fragment PricingStructureFields on PricingStructure {
         }
       }
     }
+
+    ... on PayWhatYouWantValue {
+      maximum_amount {
+        currency_code
+        fractional
+      }
+      minimum_amount {
+        currency_code
+        fractional
+      }
+      suggested_amount {
+        currency_code
+        fractional
+      }
+    }
   }
 }

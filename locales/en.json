@@ -693,12 +693,22 @@
       "read_signups": "Access data about your signups"
     }
   },
+  "payWhatYouWant": {
+    "maxOnly": "up to <bold>{{ maximumAmount, money }}</bold>",
+    "minAndMax": "<bold>{{ minimumAmount, money }}</bold> to <bold>{{ maximumAmount, money }}</bold>",
+    "minOnly": "at least <bold>{{ minimumAmount, money }}</bold>",
+    "noBounds": "any amount",
+    "suggestedAmount": "Suggested amount: <bold>{{ suggestedAmount, money }}</bold>",
+    "useSuggestedAmount": "Use suggested amount (<bold>{{ amount, money }}</bold>)"
+  },
   "pricingStructure": {
-    "fixedPrice": "{{ price, money }} (fixed price)",
-    "price": "{{ price, money }}",
-    "scheduledValueSummary_one": "{{ price, money }} ({{ count }} scheduled price point)",
-    "scheduledValueSummary_other": "{{ price, money }} ({{ count }} scheduled price points)",
-    "scheduledValueWithNext": "{{ price, money }} ({{ nextPrice, money }} starting {{ nextChange, dateTimeNamed(format: shortDateTime) }})",
+    "fixedPrice": "<bold>{{ price, money }}</bold> (fixed price)",
+    "payWhatYouWant": "Pay what you want",
+    "price": "<bold>{{ price, money }}</bold>",
+    "scheduledValueSummary_one": "<bold>{{ price, money }}</bold> ({{ count }} scheduled price point)",
+    "scheduledValueSummary_other": "<bold>{{ price, money }}</bold> ({{ count }} scheduled price points)",
+    "scheduledValueWithNext": "<bold>{{ price, money }}</bold><break/><sm>(<bold>{{ nextPrice, money }}</bold> starting {{ nextChange, dateTimeNamed(format: shortDateTime) }})</sm>",
+    "selectAmount": "Amount",
     "unavailable": "Currently unavailable"
   },
   "schedule": {
@@ -800,7 +810,9 @@
       "unlimitedUses": "Unlimited uses",
       "usageLimitCount_one": "{{ count }} use",
       "usageLimitCount_other": "{{ count }} uses"
-    }
+    },
+    "selectProductLabel": "Select",
+    "totalPrice": "Total: {{ totalPrice, money }}"
   },
   "tables": {
     "ageRestrictionsCheck": {

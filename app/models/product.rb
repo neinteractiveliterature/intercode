@@ -41,6 +41,7 @@ class Product < ApplicationRecord
 
   validate :ensure_valid_payment_options
   validate :ensure_ticket_providing_products_cannot_have_variants
+  validate :ensure_pricing_structure_is_valid
 
   scope :available, -> { where(available: true) }
   scope :ticket_providing, -> { where.not(provides_ticket_type_id: nil) }
@@ -81,5 +82,12 @@ class Product < ApplicationRecord
 
     ticket_name = convention&.ticket_name&.capitalize || 'Ticket'
     errors.add :base, "#{ticket_name}-providing products cannot have variants"
+  end
+
+  def ensure_pricing_structure_is_valid
+    return unless pricing_structure
+    return if pricing_structure.valid?
+
+    pricing_structure.errors.each { |error| errors.add(error.attribute, error.message) }
   end
 end
