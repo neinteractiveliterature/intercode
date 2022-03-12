@@ -222,7 +222,7 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }: EditAdminP
           </div>
 
           <div className="ml-lg-4 col-lg">
-            <div className="d-flex">
+            <div>
               <strong className="me-1">Base price:</strong>
               <PricingStructureInput
                 value={

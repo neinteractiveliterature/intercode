@@ -694,19 +694,21 @@
     }
   },
   "payWhatYouWant": {
-    "maxOnly": "up to {{ maximumAmount, money }}",
-    "minAndMax": "{{ minimumAmount, money }} to {{ maximumAmount, money }}",
-    "minOnly": "at least {{ minimumAmount, money }}",
+    "maxOnly": "up to <bold>{{ maximumAmount, money }}</bold>",
+    "minAndMax": "<bold>{{ minimumAmount, money }}</bold> to <bold>{{ maximumAmount, money }}</bold>",
+    "minOnly": "at least <bold>{{ minimumAmount, money }}</bold>",
     "noBounds": "any amount",
-    "rangeWithSuggestedAmount": "{{ range }}, suggested amount {{ suggestedAmount, money }}"
+    "suggestedAmount": "Suggested amount: <bold>{{ suggestedAmount, money }}</bold>",
+    "useSuggestedAmount": "Use suggested amount (<bold>{{ amount, money }}</bold>)"
   },
   "pricingStructure": {
-    "fixedPrice": "{{ price, money }} (fixed price)",
-    "payWhatYouWantSummary": "Pay what you want ({{ value, payWhatYouWantValue }})",
-    "price": "{{ price, money }}",
-    "scheduledValueSummary_one": "{{ price, money }} ({{ count }} scheduled price point)",
-    "scheduledValueSummary_other": "{{ price, money }} ({{ count }} scheduled price points)",
-    "scheduledValueWithNext": "{{ price, money }} ({{ nextPrice, money }} starting {{ nextChange, dateTimeNamed(format: shortDateTime) }})",
+    "fixedPrice": "<bold>{{ price, money }}</bold> (fixed price)",
+    "payWhatYouWant": "Pay what you want",
+    "price": "<bold>{{ price, money }}</bold>",
+    "scheduledValueSummary_one": "<bold>{{ price, money }}</bold> ({{ count }} scheduled price point)",
+    "scheduledValueSummary_other": "<bold>{{ price, money }}</bold> ({{ count }} scheduled price points)",
+    "scheduledValueWithNext": "<bold>{{ price, money }}</bold><break/><sm>(<bold>{{ nextPrice, money }}</bold> starting {{ nextChange, dateTimeNamed(format: shortDateTime) }})</sm>",
+    "selectAmount": "Amount",
     "unavailable": "Currently unavailable"
   },
   "schedule": {
@@ -808,7 +810,9 @@
       "unlimitedUses": "Unlimited uses",
       "usageLimitCount_one": "{{ count }} use",
       "usageLimitCount_other": "{{ count }} uses"
-    }
+    },
+    "selectProductLabel": "Select",
+    "totalPrice": "Total: {{ totalPrice, money }}"
   },
   "tables": {
     "ageRestrictionsCheck": {

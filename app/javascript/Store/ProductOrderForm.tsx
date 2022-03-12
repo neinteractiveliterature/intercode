@@ -1,4 +1,4 @@
-import { useContext, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
 import { LoadingIndicator, ErrorDisplay, parseIntOrNull, FormGroupWithLabel } from '@neinteractiveliterature/litform';
@@ -10,9 +10,8 @@ import { CartQueryDocument, useOrderFormProductQuery } from './queries.generated
 import { useAddOrderEntryToCurrentPendingOrderMutation } from './mutations.generated';
 import { Money, PricingStrategy } from '../graphqlTypes.generated';
 import { LoadQueryWithVariablesWrapper } from '../GraphqlLoadingWrappers';
-import { describeUserPricingStructure } from './describePricingStructure';
-import AppRootContext from '../AppRootContext';
-import { useTranslation } from 'react-i18next';
+import { describePayWhatYouWantRange } from './describePricingStructure';
+import { Trans, useTranslation } from 'react-i18next';
 import MoneyInput from './MoneyInput';
 import buildMoneyInput from './buildMoneyInput';
 
@@ -25,7 +24,6 @@ export default LoadQueryWithVariablesWrapper(
   ({ productId }: ProductOrderFormProps) => ({ productId }),
   function ProductOrderForm({ data }) {
     const { product } = data.convention;
-    const { timezoneName } = useContext(AppRootContext);
     const navigate = useNavigate();
     const [addOrderEntryToCurrentPendingOrder] = useAddOrderEntryToCurrentPendingOrderMutation({
       refetchQueries: [{ query: CartQueryDocument }],
@@ -36,6 +34,10 @@ export default LoadQueryWithVariablesWrapper(
     const [quantity, setQuantity] = useState(1);
     const [payWhatYouWantAmount, setPayWhatYouWantAmount] = useState<Money>();
     const [payWhatYouWantAmountForcedKey, setPayWhatYouWantAmountForcedKey] = useState<number>();
+    const payWhatYouWantValue =
+      product.pricing_structure.value.__typename === 'PayWhatYouWantValue'
+        ? product.pricing_structure.value
+        : undefined;
 
     const dataComplete = useMemo(
       () =>
@@ -125,11 +127,16 @@ export default LoadQueryWithVariablesWrapper(
 
     const renderTotalAmount = () => {
       if (product.pricing_structure.value.__typename === 'PayWhatYouWantValue') {
-        const payWhatYouWantValue = product.pricing_structure.value;
-
         return (
           <>
-            <FormGroupWithLabel label={describeUserPricingStructure(product.pricing_structure, timezoneName, t)}>
+            <FormGroupWithLabel
+              label={
+                <>
+                  {t('pricingStructure.selectAmount', 'Amount')} (
+                  {describePayWhatYouWantRange(product.pricing_structure.value, t)})
+                </>
+              }
+            >
               {(id) => (
                 <div className="d-flex">
                   <MoneyInput
@@ -138,19 +145,6 @@ export default LoadQueryWithVariablesWrapper(
                     onChange={setPayWhatYouWantAmount}
                     key={payWhatYouWantAmountForcedKey}
                   />
-                  {payWhatYouWantValue.suggested_amount && (
-                    <button
-                      type="button"
-                      className="btn btn-outline-primary ms-2"
-                      onClick={() => {
-                        setPayWhatYouWantAmount(payWhatYouWantValue.suggested_amount ?? undefined);
-                        // force a re-render on the MoneyInput because it uses an internal string state for the input
-                        setPayWhatYouWantAmountForcedKey(new Date().getTime());
-                      }}
-                    >
-                      Select suggested amount ({formatMoney(payWhatYouWantValue.suggested_amount)})
-                    </button>
-                  )}
                 </div>
               )}
             </FormGroupWithLabel>
@@ -177,7 +171,11 @@ export default LoadQueryWithVariablesWrapper(
         currency_code: product.pricing_structure.price.currency_code,
       };
 
-      return <strong>Total: {formatMoney(totalPrice)}</strong>;
+      return (
+        <p>
+          <strong>{t('store.totalPrice', 'Total: {{ totalPrice, money }}', { totalPrice })}</strong>
+        </p>
+      );
     };
 
     return (
@@ -185,23 +183,39 @@ export default LoadQueryWithVariablesWrapper(
         <div className="card-body">
           {renderVariantSelect()}
           {!product.provides_ticket_type && renderQuantity()}
-          <div className="row align-items-baseline">
-            <div className="col-6">{renderTotalAmount()}</div>
-            <div className="col-6 mb-2">
+          <div>{renderTotalAmount()}</div>
+          <div className="mb-2 d-flex">
+            {payWhatYouWantValue?.suggested_amount && (
               <button
                 type="button"
-                className="w-100 btn btn-primary"
-                disabled={!dataComplete || addToCartInProgress}
-                onClick={addToCartClicked}
+                className="btn btn-outline-primary me-2"
+                onClick={() => {
+                  setPayWhatYouWantAmount(payWhatYouWantValue.suggested_amount ?? undefined);
+                  // force a re-render on the MoneyInput because it uses an internal string state for the input
+                  setPayWhatYouWantAmountForcedKey(new Date().getTime());
+                }}
               >
-                {addToCartInProgress ? (
-                  <LoadingIndicator iconSet="bootstrap-icons" />
-                ) : (
-                  <i className="bi-cart-plus-fill" />
-                )}{' '}
-                Add to cart
+                <Trans
+                  i18nKey="payWhatYouWant.useSuggestedAmount"
+                  defaults="Use suggested amount (<bold>{{ amount, money }}</bold>)"
+                  values={{ amount: payWhatYouWantValue.suggested_amount }}
+                  components={{ bold: <strong /> }}
+                />
               </button>
-            </div>
+            )}
+            <button
+              type="button"
+              className="w-100 btn btn-primary"
+              disabled={!dataComplete || addToCartInProgress}
+              onClick={addToCartClicked}
+            >
+              {addToCartInProgress ? (
+                <LoadingIndicator iconSet="bootstrap-icons" />
+              ) : (
+                <i className="bi-cart-plus-fill" />
+              )}{' '}
+              Add to cart
+            </button>
           </div>
           <ErrorDisplay graphQLError={addToCartError as ApolloError} />
         </div>
