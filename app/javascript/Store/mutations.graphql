@@ -138,9 +138,17 @@ mutation SubmitOrder($input: SubmitOrderInput!) {
   }
 }
 
-mutation AddOrderEntryToCurrentPendingOrder($productId: ID!, $productVariantId: ID, $quantity: Int!) {
+mutation AddOrderEntryToCurrentPendingOrder(
+  $productId: ID!
+  $productVariantId: ID
+  $quantity: Int!
+  $payWhatYouWantAmount: MoneyInput
+) {
   addOrderEntryToCurrentPendingOrder(
-    input: { order_entry: { productId: $productId, productVariantId: $productVariantId, quantity: $quantity } }
+    input: {
+      order_entry: { productId: $productId, productVariantId: $productVariantId, quantity: $quantity }
+      pay_what_you_want_amount: $payWhatYouWantAmount
+    }
   ) {
     order_entry {
       id

@@ -1,15 +1,20 @@
-import { useMemo, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
-import { LoadingIndicator, ErrorDisplay, parseIntOrNull } from '@neinteractiveliterature/litform';
+import { LoadingIndicator, ErrorDisplay, parseIntOrNull, FormGroupWithLabel } from '@neinteractiveliterature/litform';
 
 import formatMoney from '../formatMoney';
 import sortProductVariants from './sortProductVariants';
 import useAsyncFunction from '../useAsyncFunction';
 import { CartQueryDocument, useOrderFormProductQuery } from './queries.generated';
 import { useAddOrderEntryToCurrentPendingOrderMutation } from './mutations.generated';
-import { Money } from '../graphqlTypes.generated';
+import { Money, PricingStrategy } from '../graphqlTypes.generated';
 import { LoadQueryWithVariablesWrapper } from '../GraphqlLoadingWrappers';
+import { describeUserPricingStructure } from './describePricingStructure';
+import AppRootContext from '../AppRootContext';
+import { useTranslation } from 'react-i18next';
+import MoneyInput from './MoneyInput';
+import buildMoneyInput from './buildMoneyInput';
 
 export type ProductOrderFormProps = {
   productId: string;
@@ -20,25 +25,38 @@ export default LoadQueryWithVariablesWrapper(
   ({ productId }: ProductOrderFormProps) => ({ productId }),
   function ProductOrderForm({ data }) {
     const { product } = data.convention;
+    const { timezoneName } = useContext(AppRootContext);
     const navigate = useNavigate();
     const [addOrderEntryToCurrentPendingOrder] = useAddOrderEntryToCurrentPendingOrderMutation({
       refetchQueries: [{ query: CartQueryDocument }],
     });
+    const { t } = useTranslation();
 
     const [productVariantId, setProductVariantId] = useState<string>();
     const [quantity, setQuantity] = useState(1);
+    const [payWhatYouWantAmount, setPayWhatYouWantAmount] = useState<Money>();
+    const [payWhatYouWantAmountForcedKey, setPayWhatYouWantAmountForcedKey] = useState<number>();
 
     const dataComplete = useMemo(
       () =>
         product.product_variants != null &&
         (product.product_variants.length < 1 || productVariantId != null) &&
+        (product.pricing_structure.value.__typename !== 'PayWhatYouWantValue' || payWhatYouWantAmount != null) &&
         quantity > 0,
-      [product, productVariantId, quantity],
+      [product, productVariantId, quantity, payWhatYouWantAmount],
     );
 
     const [addToCartClicked, addToCartError, addToCartInProgress] = useAsyncFunction(async () => {
       await addOrderEntryToCurrentPendingOrder({
-        variables: { productId: product.id, productVariantId, quantity },
+        variables: {
+          productId: product.id,
+          productVariantId,
+          quantity,
+          payWhatYouWantAmount:
+            product.pricing_structure.pricing_strategy === PricingStrategy.PayWhatYouWant
+              ? buildMoneyInput(payWhatYouWantAmount)
+              : undefined,
+        },
       });
       navigate('/cart');
     });
@@ -106,6 +124,40 @@ export default LoadQueryWithVariablesWrapper(
     );
 
     const renderTotalAmount = () => {
+      if (product.pricing_structure.value.__typename === 'PayWhatYouWantValue') {
+        const payWhatYouWantValue = product.pricing_structure.value;
+
+        return (
+          <>
+            <FormGroupWithLabel label={describeUserPricingStructure(product.pricing_structure, timezoneName, t)}>
+              {(id) => (
+                <div className="d-flex">
+                  <MoneyInput
+                    id={id}
+                    value={payWhatYouWantAmount}
+                    onChange={setPayWhatYouWantAmount}
+                    key={payWhatYouWantAmountForcedKey}
+                  />
+                  {payWhatYouWantValue.suggested_amount && (
+                    <button
+                      type="button"
+                      className="btn btn-outline-primary ms-2"
+                      onClick={() => {
+                        setPayWhatYouWantAmount(payWhatYouWantValue.suggested_amount ?? undefined);
+                        // force a re-render on the MoneyInput because it uses an internal string state for the input
+                        setPayWhatYouWantAmountForcedKey(new Date().getTime());
+                      }}
+                    >
+                      Select suggested amount ({formatMoney(payWhatYouWantValue.suggested_amount)})
+                    </button>
+                  )}
+                </div>
+              )}
+            </FormGroupWithLabel>
+          </>
+        );
+      }
+
       if (!dataComplete || product.pricing_structure.price == null) {
         return null;
       }

@@ -121,6 +121,7 @@ input AddOrderEntryToCurrentPendingOrderInput {
   """
   clientMutationId: String
   order_entry: OrderEntryInput!
+  pay_what_you_want_amount: MoneyInput
 }
 
 """

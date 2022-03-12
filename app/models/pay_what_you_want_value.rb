@@ -2,7 +2,7 @@
 class PayWhatYouWantValue
   include ActiveModel::Model
 
-  validates :minimum_amount, numericality: { greater_than: 0, allow_nil: true }
+  validates :minimum_amount, numericality: { greater_than_or_equal_to: 0, allow_nil: true }
   validates :suggested_amount,
             numericality: {
               less_than_or_equal_to: ->(value) { value.maximum_amount || 999_999_99 },
