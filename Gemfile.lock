@@ -119,6 +119,9 @@ GEM
     aws-partitions (1.495.0)
     aws-record (2.6.0)
       aws-sdk-dynamodb (~> 1.18)
+    aws-sdk-cloudwatchevents (1.51.0)
+      aws-sdk-core (~> 3, >= 3.120.0)
+      aws-sigv4 (~> 1.1)
     aws-sdk-cloudwatchlogs (1.45.0)
       aws-sdk-core (~> 3, >= 3.120.0)
       aws-sigv4 (~> 1.1)
@@ -175,6 +178,11 @@ GEM
       cadmus
       rails (>= 5.0.0)
     chronic (0.10.2)
+    cloudwatch_scheduler (1.1.0)
+      aws-sdk-cloudwatchevents (~> 1.13)
+      aws-sdk-sqs (~> 1.10)
+      rails (>= 4.2.0)
+      shoryuken (>= 2.0)
     cloudwatchlogger (0.3.0)
       aws-sdk-cloudwatchlogs (~> 1)
       multi_json (~> 1)
@@ -623,6 +631,7 @@ DEPENDENCIES
   cadmus (~> 0.7.1)
   cadmus_navbar (~> 0.1.0)
   civil_service!
+  cloudwatch_scheduler
   cloudwatchlogger
   dalli
   dead_end

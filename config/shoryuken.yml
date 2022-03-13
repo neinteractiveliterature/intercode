@@ -11,4 +11,8 @@ groups:
     concurrency: 5
     queues:
       - ahoy
+  cloudwatch_scheduler:
+    concurrency: 1
+    queues:
+      - cloudwatch_scheduler
 timeout: 2

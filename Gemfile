@@ -73,6 +73,7 @@ gem 'phonelib'
 gem 'shoryuken'
 gem 'aws-sdk-sqs'
 gem 'whenever'
+gem 'cloudwatch_scheduler', require: false
 
 # Privacy-respecting metrics
 gem 'ahoy_matey'

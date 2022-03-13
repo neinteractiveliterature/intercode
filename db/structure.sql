@@ -2522,7 +2522,8 @@ CREATE TABLE public.signups (
     user_con_profile_id integer NOT NULL,
     state character varying DEFAULT 'confirmed'::character varying NOT NULL,
     counted boolean,
-    requested_bucket_key character varying
+    requested_bucket_key character varying,
+    expires_at timestamp without time zone
 );
 
 
@@ -4588,6 +4589,13 @@ CREATE INDEX index_signup_requests_on_user_con_profile_id ON public.signup_reque
 
 
 --
+-- Name: index_signups_on_expires_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_signups_on_expires_at ON public.signups USING btree (expires_at);
+
+
+--
 -- Name: index_signups_on_run_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -5705,6 +5713,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220122172525'),
 ('20220122174528'),
 ('20220226170101'),
-('20220226170448');
+('20220226170448'),
+('20220313171517');
 
 
