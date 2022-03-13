@@ -724,7 +724,9 @@
     "fixedPrice": "",
     "payWhatYouWant": "",
     "price": "",
-    "scheduledValueSummary": "",
+    "scheduledValueSummary_one": "",
+    "scheduledValueSummary_many": "",
+    "scheduledValueSummary_other": "",
     "scheduledValueWithNext": "",
     "selectAmount": "",
     "unavailable": ""

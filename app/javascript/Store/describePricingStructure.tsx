@@ -103,6 +103,7 @@ export function describeAdminPricingStructure(
         defaults="<bold>{{ price, money }}</bold> ({{ count }} scheduled price points)"
         values={{ price: currentValue, count: pricePointCount }}
         components={{ bold: <strong /> }}
+        count={pricePointCount}
       />
     );
   }
