@@ -45,8 +45,8 @@ const config = {
   },
   output: {
     filename: '[name].js',
-    chunkFilename: '[id]-[chunkhash].chunk.js',
-    hotUpdateChunkFilename: '[id]-[fullhash].hot-update.js',
+    chunkFilename: '[name]-[chunkhash].chunk.js',
+    hotUpdateChunkFilename: '[name]-[fullhash].hot-update.js',
     path: path.resolve('public/packs'),
     publicPath: ASSET_PATH,
     environment: {
