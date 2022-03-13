@@ -12532,9 +12532,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next-parser@npm:5.4.0":
-  version: 5.4.0
-  resolution: "i18next-parser@npm:5.4.0"
+"i18next-parser@npm:6.0.0":
+  version: 6.0.0
+  resolution: "i18next-parser@npm:6.0.0"
   dependencies:
     "@babel/runtime": ^7.15.4
     broccoli-plugin: ^4.0.7
@@ -12548,7 +12548,7 @@ __metadata:
     i18next: ^21.2.0
     js-yaml: 4.1.0
     rsvp: ^4.8.2
-    sort-keys: ^4.2.0
+    sort-keys: ^5.0.0
     through2: ~4.0.2
     typescript: ^4.2.4
     vinyl: ~2.2.1
@@ -12556,7 +12556,7 @@ __metadata:
     vue-template-compiler: ^2.6.11
   bin:
     i18next: bin/cli.js
-  checksum: c6539f12eecdaf29f68e5732049f37a310a49824b98b9278754d58fe8f02b80e3e52c559c98f383424f467add32de41d917724923ac8d45e9640e32441580169
+  checksum: d26d055c53d3986f6bb0e7a57e1743deab709952dd0fae3bbba25c28ff9fb291e8b6c44ad1e2dccd6b18f12ef7279e0b18cdf20558832bfb1ac0782b403ef76c
   languageName: node
   linkType: hard
 
@@ -13237,6 +13237,13 @@ __metadata:
   version: 3.0.0
   resolution: "is-plain-obj@npm:3.0.0"
   checksum: a6ebdf8e12ab73f33530641972a72a4b8aed6df04f762070d823808303e4f76d87d5ea5bd76f96a7bbe83d93f04ac7764429c29413bd9049853a69cb630fb21c
+  languageName: node
+  linkType: hard
+
+"is-plain-obj@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "is-plain-obj@npm:4.0.0"
+  checksum: a6bb55a90636345a64c6153b74d85a9b6440f9975f4dcc57eed596c280b7ba228c71c406355a3147ed0488330d2743d5756e052c9492b1aa4f7dcd281f08c4b6
   languageName: node
   linkType: hard
 
@@ -19667,7 +19674,7 @@ resolve@^2.0.0-next.3:
     hypernova: 2.5.0
     i18next: 21.6.14
     i18next-intervalplural-postprocessor: 3.0.0
-    i18next-parser: 5.4.0
+    i18next-parser: 6.0.0
     jest: 27.5.1
     jest-html-reporter: 3.4.2
     jest-junit: 13.0.0
@@ -20435,12 +20442,12 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"sort-keys@npm:^4.2.0":
-  version: 4.2.0
-  resolution: "sort-keys@npm:4.2.0"
+"sort-keys@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "sort-keys@npm:5.0.0"
   dependencies:
-    is-plain-obj: ^2.0.0
-  checksum: 1535ffd5a789259fc55107d5c3cec09b3e47803a9407fcaae37e1b9e0b813762c47dfee35b6e71e20ca7a69798d0a4791b2058a07f6cab5ef17b2dae83cedbda
+    is-plain-obj: ^4.0.0
+  checksum: 9c0b7a468312075be03770b260b2cc0e5d55149025e564edaed41c9ff619199698aad6712a6fe4bbc75c541efb081276ac6bbd4cf2723d742f272f7a8fe354f5
   languageName: node
   linkType: hard
 
