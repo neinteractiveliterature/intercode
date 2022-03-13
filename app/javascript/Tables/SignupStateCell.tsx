@@ -18,17 +18,15 @@ const SignupStateCell = ({ value, strikeThrough }: SignupStateCellProps): JSX.El
     text = t('signups.states.waitlisted', 'Waitlisted');
   } else if (value === 'withdrawn') {
     text = t('signups.states.withdrawn', 'Withdrawn');
+  } else if (value === 'ticket_purchase_hold') {
+    text = t('signups.states.ticketPurchaseHold', 'Held temporarily while awaiting payment');
   } else if (value == null) {
     text = t('signups.states.notSignedUp', 'Not signed up');
   } else {
     assertNever(value, true);
   }
 
-  return (
-    <div className={`badge bg-signup-state-color-${value}`}>
-      {strikeThrough ? <s>{text}</s> : text}
-    </div>
-  );
+  return <div className={`badge bg-signup-state-color-${value}`}>{strikeThrough ? <s>{text}</s> : text}</div>;
 };
 
 export default SignupStateCell;
