@@ -5317,8 +5317,24 @@ type SignupRequestsPagination implements PaginationInterface {
 }
 
 enum SignupState {
+  """
+  Attendee's spot is confirmed
+  """
   confirmed
+
+  """
+  Attendee's spot is held temporarily while the attendee finishes paying for their ticket
+  """
+  ticket_purchase_hold
+
+  """
+  Attendee is on the waitlist for this event and may be pulled in automatically
+  """
   waitlisted
+
+  """
+  Attendee has withdrawn from this event (and this signup is no longer valid)
+  """
   withdrawn
 }
 

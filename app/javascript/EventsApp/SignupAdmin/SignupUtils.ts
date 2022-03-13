@@ -89,6 +89,8 @@ export function formatSignupState(state: SignupState | undefined | null, t: TFun
   }
 
   switch (state) {
+    case SignupState.TicketPurchaseHold:
+      return t('signups.states.ticketPurchaseHold', 'Held temporarily while awaiting payment');
     case SignupState.Confirmed:
       return t('signups.states.confirmed', 'Confirmed');
     case SignupState.Waitlisted:
