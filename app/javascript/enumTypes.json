@@ -514,20 +514,26 @@
     "interfaces": null,
     "enumValues": [
       {
+        "name": "ticket_purchase_hold",
+        "description": "Attendee's spot is held temporarily while the attendee finishes paying for their ticket",
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
         "name": "confirmed",
-        "description": null,
+        "description": "Attendee's spot is confirmed",
         "isDeprecated": false,
         "deprecationReason": null
       },
       {
         "name": "waitlisted",
-        "description": null,
+        "description": "Attendee is on the waitlist for this event and may be pulled in automatically",
         "isDeprecated": false,
         "deprecationReason": null
       },
       {
         "name": "withdrawn",
-        "description": null,
+        "description": "Attendee has withdrawn from this event (and this signup is no longer valid)",
         "isDeprecated": false,
         "deprecationReason": null
       }
