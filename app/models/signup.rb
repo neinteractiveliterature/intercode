@@ -7,6 +7,7 @@
 #  id                   :integer          not null, primary key
 #  bucket_key           :string
 #  counted              :boolean
+#  expires_at           :datetime
 #  requested_bucket_key :string
 #  state                :string           default("confirmed"), not null
 #  created_at           :datetime         not null
@@ -17,6 +18,7 @@
 #
 # Indexes
 #
+#  index_signups_on_expires_at           (expires_at)
 #  index_signups_on_run_id               (run_id)
 #  index_signups_on_updated_by_id        (updated_by_id)
 #  index_signups_on_user_con_profile_id  (user_con_profile_id)
@@ -30,7 +32,7 @@
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
 
 class Signup < ApplicationRecord
-  STATES = %w[confirmed waitlisted withdrawn].freeze
+  STATES = Types::SignupStateType.values.values.map(&:value).freeze
 
   belongs_to :user_con_profile
   has_one :user, through: :user_con_profile
@@ -56,6 +58,8 @@ class Signup < ApplicationRecord
 
   scope :counted, -> { where(counted: true) }
   scope :not_counted, -> { where.not(counted: true) }
+  scope :expired, -> { where('expires_at < ?', Time.now) }
+  scope :not_expired, -> { where('expires_at >= ? or expires_at is null', Time.now) }
 
   def bucket
     run.registration_policy.bucket_with_key(bucket_key)

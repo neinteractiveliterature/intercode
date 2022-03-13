@@ -4423,8 +4423,13 @@ export type SignupRequestsPagination = PaginationInterface & {
 };
 
 export enum SignupState {
+  /** Attendee's spot is confirmed */
   Confirmed = 'confirmed',
+  /** Attendee's spot is held temporarily while the attendee finishes paying for their ticket */
+  TicketPurchaseHold = 'ticket_purchase_hold',
+  /** Attendee is on the waitlist for this event and may be pulled in automatically */
   Waitlisted = 'waitlisted',
+  /** Attendee has withdrawn from this event (and this signup is no longer valid) */
   Withdrawn = 'withdrawn'
 }
 
