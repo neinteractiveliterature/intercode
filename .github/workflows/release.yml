@@ -26,17 +26,12 @@ jobs:
     - uses: actions/checkout@v3
     - name: Install Heroku CLI
       run: curl https://cli-assets.heroku.com/install.sh | sh
-    - name: Log into Heroku CLI
-      run: |
-        echo "machine: api.heroku.com" >> ~/.netrc
-        echo "  login ${{ secrets.HerokuApiEmail }}" >> ~/.netrc
-        echo "  password ${{ secrets.HerokuApiToken }}" >> ~/.netrc
     - name: Pull built image
       run: docker pull neinteractiveliterature/intercode:${{ github.sha }}
     - name: Log into Heroku Container Registry
       env:
-        HEROKU_API_TOKEN: ${{ secrets.HerokuApiToken }}
-      run: echo "$HEROKU_API_TOKEN" | docker login --username=_ --password-stdin registry.heroku.com
+        HEROKU_API_KEY: ${{ secrets.HerokuApiToken }}
+      run: heroku container:login
     - name: Tag production image as "web"
       run: docker tag neinteractiveliterature/intercode:${{ github.sha }} registry.heroku.com/intercode/web
     - name: Push "web" image to Heroku Container Registry
@@ -55,6 +50,8 @@ jobs:
         --push
         .
     - name: Release app to Heroku
+      env:
+        HEROKU_API_KEY: ${{ secrets.HerokuApiToken }}
       run: heroku container:release -a ${{ secrets.HerokuAppName }} web release shoryuken
   doc-site-build:
     uses: ./.github/workflows/build-doc-site.yml
