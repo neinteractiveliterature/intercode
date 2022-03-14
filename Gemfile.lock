@@ -8,6 +8,17 @@ GIT
       rake (>= 10.4, < 14.0)
 
 GIT
+  remote: https://github.com/nbudin/cloudwatch_scheduler.git
+  revision: c6bebec1c3da678dca1bd7a3b7d9c42063dea4a4
+  branch: ruby3_rails7_compat
+  specs:
+    cloudwatch_scheduler (1.1.1)
+      aws-sdk-cloudwatchevents (~> 1.13)
+      aws-sdk-sqs (~> 1.10)
+      rails (>= 5.2.0)
+      shoryuken (>= 2.0)
+
+GIT
   remote: https://github.com/nbudin/doorkeeper-openid_connect.git
   revision: 17245d74b43c058f51d3bdfbe3fdb01bf0325f36
   branch: fix_doorkeeper_52_compat
@@ -178,11 +189,6 @@ GEM
       cadmus
       rails (>= 5.0.0)
     chronic (0.10.2)
-    cloudwatch_scheduler (1.1.0)
-      aws-sdk-cloudwatchevents (~> 1.13)
-      aws-sdk-sqs (~> 1.10)
-      rails (>= 4.2.0)
-      shoryuken (>= 2.0)
     cloudwatchlogger (0.3.0)
       aws-sdk-cloudwatchlogs (~> 1)
       multi_json (~> 1)
@@ -631,7 +637,7 @@ DEPENDENCIES
   cadmus (~> 0.7.1)
   cadmus_navbar (~> 0.1.0)
   civil_service!
-  cloudwatch_scheduler
+  cloudwatch_scheduler!
   cloudwatchlogger
   dalli
   dead_end

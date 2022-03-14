@@ -49,9 +49,7 @@ function ScheduledValuePreviewTooltipContent<ValueType>({
     <>
       <strong>{date.toLocaleString(DateTime.DATE_FULL)}</strong>
       <br />
-      {value !== nextValue && nextChange && (
-        <em>Before {format(nextChange, 'shortDateTimeWithZone')}</em>
-      )}
+      {value !== nextValue && nextChange && <em>Before {format(nextChange, 'shortDateTimeWithZone')}</em>}
       <br />
       {getDescriptionForValue(value)}
       {value !== nextValue && nextChange && (
@@ -66,12 +64,11 @@ function ScheduledValuePreviewTooltipContent<ValueType>({
   );
 }
 
-type ScheduledValuePreviewDateCellProps<ValueType> =
-  ScheduledValuePreviewTooltipContentProps<ValueType> & {
-    focusDate: (date: DateTime) => void;
-    blurDate: (date: DateTime) => void;
-    dateElementMapRef: RefObject<Map<number, HTMLElement>>;
-  };
+type ScheduledValuePreviewDateCellProps<ValueType> = ScheduledValuePreviewTooltipContentProps<ValueType> & {
+  focusDate: (date: DateTime) => void;
+  blurDate: (date: DateTime) => void;
+  dateElementMapRef: RefObject<Map<number, HTMLElement>>;
+};
 
 function ScheduledValuePreviewDateCell<ValueType>({
   date,
@@ -186,10 +183,7 @@ function ScheduledValuePreviewCalendar<ValueType>({
       const value = findValueAt(scheduledValue, now);
       const nextValue = findValueAt(scheduledValue, tomorrow);
       currentWeek.push(
-        <td
-          key={now.toISO()}
-          className={`text-center p-0 ${getClassNameForValue(value, nextValue)}`}
-        >
+        <td key={now.toISO()} className={`text-center p-0 ${getClassNameForValue(value, nextValue)}`}>
           <ScheduledValuePreviewDateCell
             date={now}
             focusDate={focusDate}
@@ -247,9 +241,7 @@ function ScheduledValuePreview<ValueType>({
   const [arrow, setArrow] = useState<HTMLDivElement | null>(null);
   const dateElementMapRef = useRef(new Map<number, HTMLElement>());
 
-  const focusedDateElement = focusedDate
-    ? dateElementMapRef.current.get(focusedDate.valueOf()) ?? null
-    : null;
+  const focusedDateElement = focusedDate ? dateElementMapRef.current.get(focusedDate.valueOf()) ?? null : null;
 
   const { styles, attributes, state } = useLitformPopper(tooltip, focusedDateElement, arrow);
 

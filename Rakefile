@@ -7,5 +7,3 @@ require File.expand_path('../config/application', __FILE__)
 Intercode::Application.load_tasks
 
 Doorkeeper::Rake.load_tasks
-
-load 'cloudwatch_scheduler/tasks/setup.rake'
