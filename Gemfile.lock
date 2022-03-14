@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/nbudin/cloudwatch_scheduler.git
-  revision: c6bebec1c3da678dca1bd7a3b7d9c42063dea4a4
+  revision: 7482682e5de6dea84600f366a54ca696fcffabb2
   branch: ruby3_rails7_compat
   specs:
     cloudwatch_scheduler (1.1.1)
@@ -127,18 +127,18 @@ GEM
       graphql (>= 1.8)
     ast (2.4.2)
     aws-eventstream (1.2.0)
-    aws-partitions (1.495.0)
+    aws-partitions (1.566.0)
     aws-record (2.6.0)
       aws-sdk-dynamodb (~> 1.18)
-    aws-sdk-cloudwatchevents (1.51.0)
-      aws-sdk-core (~> 3, >= 3.120.0)
+    aws-sdk-cloudwatchevents (1.57.0)
+      aws-sdk-core (~> 3, >= 3.127.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-cloudwatchlogs (1.45.0)
       aws-sdk-core (~> 3, >= 3.120.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-core (3.121.0)
+    aws-sdk-core (3.130.0)
       aws-eventstream (~> 1, >= 1.0.2)
-      aws-partitions (~> 1, >= 1.239.0)
+      aws-partitions (~> 1, >= 1.525.0)
       aws-sigv4 (~> 1.1)
       jmespath (~> 1.0)
     aws-sdk-dynamodb (1.60.0)
@@ -164,8 +164,8 @@ GEM
     aws-sdk-sns (1.45.0)
       aws-sdk-core (~> 3, >= 3.120.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-sqs (1.44.0)
-      aws-sdk-core (~> 3, >= 3.120.0)
+    aws-sdk-sqs (1.51.0)
+      aws-sdk-core (~> 3, >= 3.127.0)
       aws-sigv4 (~> 1.1)
     aws-sessionstore-dynamodb (2.0.1)
       aws-sdk-dynamodb (~> 1)
@@ -303,7 +303,7 @@ GEM
       reline (>= 0.2.7)
     jaro_winkler (1.5.4)
     jaro_winkler (1.5.4-java)
-    jmespath (1.4.0)
+    jmespath (1.6.1)
     json (2.5.1)
     json (2.5.1-java)
     json-jwt (1.11.0)
@@ -524,7 +524,7 @@ GEM
       sorted_set (~> 1.0)
     sequel (5.48.0)
     set (1.0.2)
-    shoryuken (5.2.3)
+    shoryuken (5.3.0)
       aws-sdk-core (>= 2)
       concurrent-ruby
       thor
