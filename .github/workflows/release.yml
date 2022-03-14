@@ -1,7 +1,8 @@
 name: Release
 
 on:
-  release: {}
+  release:
+    types: [released]
 
 jobs:
   docker-release:

@@ -153,3 +153,14 @@ jobs:
         cache-to: type=gha,mode=max,scope=${{ github.workflow }}
   doc-site:
     uses: ./.github/workflows/build-doc-site.yml
+  update-release-draft:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.event.ref == 'refs/heads/main'
+    steps:
+      - uses: release-drafter/release-drafter@v5
+        # (Optional) specify config name to use, relative to .github/. Default: release-drafter.yml
+        # with:
+        #   config-name: my-config.yml
+        #   disable-autolabeler: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
