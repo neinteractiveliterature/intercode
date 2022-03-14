@@ -82,6 +82,19 @@ jobs:
       uses: slackapi/slack-github-action@v1.16.0
       with:
         channel-id: ${{ secrets.SlackReleaseNotificationChannelID }}
+        payload: |
+          {
+            "text": "Intercode ${{ github.event.release.name }} released to production",
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": ${{ toJSON(github.event.release.body) }}
+                }
+              }
+            ]
+          }
         slack-message: |
           Just released Intercode ${{ github.event.release.name }} to production!  Release notes:
 
