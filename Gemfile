@@ -72,7 +72,6 @@ gem 'phonelib'
 # Background workers and scheduling
 gem 'shoryuken'
 gem 'aws-sdk-sqs'
-gem 'whenever'
 gem 'cloudwatch_scheduler', github: 'nbudin/cloudwatch_scheduler', branch: 'ruby3_rails7_compat'
 
 # Privacy-respecting metrics

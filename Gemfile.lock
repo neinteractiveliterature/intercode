@@ -188,7 +188,6 @@ GEM
       acts_as_list
       cadmus
       rails (>= 5.0.0)
-    chronic (0.10.2)
     cloudwatchlogger (0.3.0)
       aws-sdk-cloudwatchlogs (~> 1)
       multi_json (~> 1)
@@ -609,8 +608,6 @@ GEM
     websocket-driver (0.7.5-java)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
-    whenever (1.0.0)
-      chronic (>= 0.6.3)
     will_paginate (3.3.1)
     with_advisory_lock (4.6.0)
       activerecord (>= 4.2)
@@ -710,7 +707,6 @@ DEPENDENCIES
   typeprof
   tzinfo-data
   webrick
-  whenever
   will_paginate
   with_advisory_lock
   yard
