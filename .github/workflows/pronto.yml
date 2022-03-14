@@ -4,20 +4,18 @@ on: [pull_request]
 jobs:
   pronto:
     runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]'
 
     steps:
       - uses: actions/checkout@master
       - name: Install libvips42
         run: sudo apt-get update && sudo apt-get install libvips42
       - run: git fetch --prune --unshallow
-      - if: github.actor != 'dependabot[bot]'
-        uses: ruby/setup-ruby@v1
-      - if: github.actor != 'dependabot[bot]'
-        uses: actions/setup-node@v3
+      - uses: ruby/setup-ruby@v1
+      - uses: actions/setup-node@v3
         with:
-          node-version: '14.16.1'
+          cache: yarn
       - name: Set up gem cache
-        if: github.actor != 'dependabot[bot]'
         uses: actions/cache@v2
         with:
           path: /home/runner/.rubies/ruby-2.7.3/lib/ruby/gems/2.7.0
@@ -25,30 +23,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pronto-gems-${{ github.ref }}-
             ${{ runner.os }}-pronto-gems-
-      - name: Get yarn cache directory path
-        if: github.actor != 'dependabot[bot]'
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Set up yarn cache
-        uses: actions/cache@v2
-        if: github.actor != 'dependabot[bot]'
-        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-pronto-yarn-${{ github.ref }}-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-pronto-yarn-${{ github.ref }}-
-            ${{ runner.os }}-pronto-yarn-
-      - if: github.actor != 'dependabot[bot]'
-        run: gem install --no-document unicode-display_width -v 1.6.1
-      - if: github.actor != 'dependabot[bot]'
-        run: gem install --no-document rubocop
-      - if: github.actor != 'dependabot[bot]'
-        run: gem install --no-document pronto pronto-rubocop pronto-eslint rubocop-performance rubocop-rails rubocop-sequel prettier
-      - if: github.actor != 'dependabot[bot]'
-        run: yarn install
-      - if: github.actor != 'dependabot[bot]'
-        env:
+      - run: gem install --no-document unicode-display_width -v 1.6.1
+      - run: gem install --no-document rubocop
+      - run: gem install --no-document pronto pronto-rubocop pronto-eslint rubocop-performance rubocop-rails rubocop-sequel prettier
+      - run: yarn install
+      - env:
           PRONTO_PULL_REQUEST_ID: ${{ github.event.pull_request.number }}
           PRONTO_GITHUB_ACCESS_TOKEN: "${{ github.token }}"
         run: pronto run -f github_status_combined github_pr_review -c origin/${{ github.base_ref }}
