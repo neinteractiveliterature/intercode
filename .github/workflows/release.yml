@@ -24,6 +24,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    - name: Install Heroku CLI
+      run: curl https://cli-assets.heroku.com/install.sh | sh
+    - name: Log into Heroku CLI
+      run: |
+        echo "machine: api.heroku.com" >> ~/.netrc
+        echo "  login ${{ secrets.HerokuApiEmail }}" >> ~/.netrc
+        echo "  password ${{ secrets.HerokuApiToken }}" >> ~/.netrc
     - name: Pull built image
       run: docker pull neinteractiveliterature/intercode:${{ github.sha }}
     - name: Log into Heroku Container Registry
@@ -47,6 +54,8 @@ jobs:
         -f Dockerfile.shoryuken
         --push
         .
+    - name: Release app to Heroku
+      run: heroku container:release web release shoryuken
   doc-site-build:
     uses: ./.github/workflows/build-doc-site.yml
   doc-site-release:
@@ -60,7 +69,6 @@ jobs:
         name: doc-site
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
-      if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./doc-site/build
