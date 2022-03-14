@@ -149,8 +149,12 @@ jobs:
       - minitest
       - docker-build
       - doc-site
+    outputs:
+      name: ${{ steps.release-drafter.outputs.name }}
+      html_url: ${{ steps.release-drafter.outputs.html_url }}
     steps:
       - uses: release-drafter/release-drafter@v5
+        id: release-drafter
         with:
           config-name: release-drafter.yml
         env:
@@ -166,6 +170,6 @@ jobs:
       with:
         channel-id: ${{ secrets.SlackCISuccessNotificationChannelID }}
         slack-message: |
-          Draft release ${{ needs.update-release-draft-outputs.name }} updated.  To release Intercode to production, visit: ${{ needs.update-release-draft.outputs.html_url }}
+          Draft release ${{ needs.update-release-draft.outputs.name }} updated.  To release Intercode to production, visit: ${{ needs.update-release-draft.outputs.html_url }}
       env:
         SLACK_BOT_TOKEN: ${{ secrets.SlackToken }}
