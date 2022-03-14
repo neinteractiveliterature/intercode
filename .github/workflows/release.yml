@@ -53,30 +53,6 @@ jobs:
       env:
         HEROKU_API_KEY: ${{ secrets.HerokuApiToken }}
       run: heroku container:release -a ${{ secrets.HerokuAppName }} web release shoryuken
-  doc-site-build:
-    uses: ./.github/workflows/build-doc-site.yml
-    with:
-      store_artifact: true
-  doc-site-release:
-    runs-on: ubuntu-latest
-    needs:
-      - doc-site-build
-    steps:
-    - name: Download built doc site
-      uses: actions/download-artifact@v3
-      with:
-        name: doc-site
-    - name: Deploy
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./doc-site/build
-        cname: intercode.interactiveliterature.org
-  notify-slack:
-    runs-on: ubuntu-latest
-    needs:
-      - heroku-release
-    steps:
     - name: Post about release to Slack
       id: slack
       uses: slackapi/slack-github-action@v1.16.0
@@ -101,3 +77,22 @@ jobs:
           ${{ github.event.release.body }}
       env:
         SLACK_BOT_TOKEN: ${{ secrets.SlackToken }}
+  doc-site-build:
+    uses: ./.github/workflows/build-doc-site.yml
+    with:
+      store_artifact: true
+  doc-site-release:
+    runs-on: ubuntu-latest
+    needs:
+      - doc-site-build
+    steps:
+    - name: Download built doc site
+      uses: actions/download-artifact@v3
+      with:
+        name: doc-site
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./doc-site/build
+        cname: intercode.interactiveliterature.org
