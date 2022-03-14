@@ -7,7 +7,7 @@ on:
   pull_request: {}
 
 jobs:
-  graphql-codegen:
+  graphql-codegen-tsc:
     name: graphql-codegen-tsc
     runs-on: ubuntu-latest
     steps:
