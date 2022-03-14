@@ -55,7 +55,7 @@ jobs:
         --push
         .
     - name: Release app to Heroku
-      run: heroku container:release web release shoryuken
+      run: heroku container:release -a ${{ secrets.HerokuAppName }} web release shoryuken
   doc-site-build:
     uses: ./.github/workflows/build-doc-site.yml
     with:
