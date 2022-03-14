@@ -58,6 +58,8 @@ jobs:
       run: heroku container:release web release shoryuken
   doc-site-build:
     uses: ./.github/workflows/build-doc-site.yml
+    with:
+      store_artifact: true
   doc-site-release:
     runs-on: ubuntu-latest
     needs:
