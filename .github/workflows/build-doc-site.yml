@@ -1,7 +1,12 @@
 name: Build doc site
 
 on:
-  workflow_call: {}
+  workflow_call:
+    inputs:
+      store_artifact:
+        default: false
+        type: boolean
+        required: false
 
 jobs:
   build-doc-site:
@@ -34,6 +39,7 @@ jobs:
     - name: Build doc site
       run: cd doc-site && yarn run docusaurus graphql-to-doc -f && yarn run build
     - name: Store built site
+      if: inputs.store_artifact
       uses: actions/upload-artifact@v3
       with:
         name: doc-site
