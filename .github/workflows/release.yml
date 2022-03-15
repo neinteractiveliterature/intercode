@@ -53,6 +53,11 @@ jobs:
       env:
         HEROKU_API_KEY: ${{ secrets.HerokuApiToken }}
       run: heroku container:release -a ${{ secrets.HerokuAppName }} web release shoryuken
+    - name: Format release notes for Slack
+      id: format-release-notes
+      uses: LoveToKnow/slackify-markdown-action@v1.0.0
+      with:
+        text: ${{ github.event.release.body }}
     - name: Post about release to Slack
       id: slack
       uses: slackapi/slack-github-action@v1.16.0
@@ -61,12 +66,21 @@ jobs:
         payload: |
           {
             "text": "Intercode ${{ github.event.release.name }} released to production",
+            "unfurl_links": false,
             "blocks": [
+              {
+                "type": "header",
+                "text": {
+                  "type": "plain_text",
+                  "text": "Intercode ${{ github.event.release.name }} released to production"
+                }
+              },
+              { "type": "divider" },
               {
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
-                  "text": ${{ toJSON(github.event.release.body) }}
+                  "text": ${{ toJSON(steps.format-release-notes.outputs.text) }}
                 }
               }
             ]
