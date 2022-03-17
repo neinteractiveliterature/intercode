@@ -165,6 +165,10 @@ jobs:
         with:
           channel-id: ${{ secrets.SlackCISuccessNotificationChannelID }}
           slack-message: |
-            Draft release ${{ steps.release-drafter.outputs.name }} updated.  To release Intercode to production, visit: ${{ steps.release-drafter.outputs.html_url }}
+            Draft release ${{ steps.release-drafter.outputs.name }} updated:
+
+            - ${{ join(github.event.commits.*.message_headline, "\n- ") }}
+
+            To release Intercode to production, visit: ${{ steps.release-drafter.outputs.html_url }}
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SlackToken }}
