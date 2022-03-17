@@ -167,7 +167,7 @@ jobs:
           slack-message: |
             Draft release ${{ steps.release-drafter.outputs.name }} updated:
 
-            - ${{ join(github.event.commits.*.message_headline, "%0A- ") }}
+            - ${{ join(github.event.commits.*.message_headline, '%0A- ') }}
 
             To release Intercode to production, visit: ${{ steps.release-drafter.outputs.html_url }}
         env:
