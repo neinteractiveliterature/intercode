@@ -10,6 +10,7 @@ Shoryuken.configure_server do |_config|
   Shoryuken.sqs_client_receive_message_opts[:default] = { wait_time_seconds: 20 }
   Shoryuken.sqs_client_receive_message_opts[:mailers] = { wait_time_seconds: 20 }
   Shoryuken.sqs_client_receive_message_opts[:ahoy] = { wait_time_seconds: 20 }
+  Shoryuken.sqs_client_receive_message_opts[:cloudwatch_scheduler] = { wait_time_seconds: 20 }
 
   # Don't spam the logs
   # config.sqs_client = Aws::SQS::Client.new(log_level: :info)
