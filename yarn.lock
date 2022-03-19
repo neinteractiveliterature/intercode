@@ -5613,14 +5613,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:17.0.40, @types/react@npm:>=16.9.0, @types/react@npm:^17.0":
-  version: 17.0.40
-  resolution: "@types/react@npm:17.0.40"
+"@types/react@npm:*, @types/react@npm:17.0.41, @types/react@npm:>=16.9.0, @types/react@npm:^17.0":
+  version: 17.0.41
+  resolution: "@types/react@npm:17.0.41"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: 24d1b210b5bf3c7d49f9a7fe5490db02e005a1d989045a2d67528347557dd0bcb0d7bcf96088152697e97521ac4c9506d1357ee48a2b7d4e701c70d838dc7284
+  checksum: 1b086ec0ea5d666f05e19e0724e41278d27a2ca29a2cd71b9d9ab3fe27dba233806eb728d744e092c9fe9637ac738d8c5a05983cde84d215342949b47ecba2ef
   languageName: node
   linkType: hard
 
@@ -19609,7 +19609,7 @@ resolve@^2.0.0-next.3:
     "@types/node": 16.11.26
     "@types/punycode": 2.1.0
     "@types/rails__activestorage": 6.0.1
-    "@types/react": 17.0.40
+    "@types/react": 17.0.41
     "@types/react-click-outside-hook": 1.0.0
     "@types/react-color": 3.0.6
     "@types/react-dom": 17.0.13
