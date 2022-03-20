@@ -15,11 +15,13 @@ jobs:
         username: ${{ secrets.DockerHubUsername }}
         password: ${{ secrets.DockerHubPassword }}
     - name: Pull built image
-      run: docker pull neinteractiveliterature/intercode:${{ github.sha }}
+      run: docker pull ghcr.io/neinteractiveliterature/intercode:${{ github.sha }}
+    - name: Tag image with version Tag
+      run: docker tag ghcr.io/neinteractiveliterature/intercode:${{ github.sha }} neinteractiveliterature/intercode:${{ github.event.release.name }}
     - name: Tag image as latest
-      run: docker tag neinteractiveliterature/intercode:${{ github.sha }} neinteractiveliterature/intercode:latest
+      run: docker tag ghcr.io/neinteractiveliterature/intercode:${{ github.sha }} neinteractiveliterature/intercode:latest
     - name: Push to Docker Hub
-      run: docker push neinteractiveliterature/intercode:latest
+      run: docker push neinteractiveliterature/intercode:latest && docker push neinteractiveliterature/intercode:${{ github.event.release.name }}
   heroku-release:
     runs-on: ubuntu-latest
     steps:
