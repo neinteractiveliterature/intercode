@@ -3363,7 +3363,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/graphql-tag-pluck@npm:7.1.5, @graphql-tools/graphql-tag-pluck@npm:^7.1.0, @graphql-tools/graphql-tag-pluck@npm:^7.1.3":
+"@graphql-tools/graphql-tag-pluck@npm:7.1.5":
   version: 7.1.5
   resolution: "@graphql-tools/graphql-tag-pluck@npm:7.1.5"
   dependencies:
@@ -3378,7 +3378,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/graphql-tag-pluck@npm:7.1.7":
+"@graphql-tools/graphql-tag-pluck@npm:7.1.7, @graphql-tools/graphql-tag-pluck@npm:^7.1.0, @graphql-tools/graphql-tag-pluck@npm:^7.1.3":
   version: 7.1.7
   resolution: "@graphql-tools/graphql-tag-pluck@npm:7.1.7"
   dependencies:
@@ -3434,7 +3434,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/merge@npm:8.2.4":
+"@graphql-tools/merge@npm:8.2.4, @graphql-tools/merge@npm:^8.2.1, @graphql-tools/merge@npm:^8.2.3":
   version: 8.2.4
   resolution: "@graphql-tools/merge@npm:8.2.4"
   dependencies:
@@ -3443,18 +3443,6 @@ __metadata:
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
   checksum: aa5aac531289aedc88e3bc6d369846d1918abd1627a2cd2676a3eb55ef8c7c1208a287897b7360fb30535bca8fb631794a0c321bee360058b5ed49404a3163de
-  languageName: node
-  linkType: hard
-
-"@graphql-tools/merge@npm:^8.2.1, @graphql-tools/merge@npm:^8.2.3":
-  version: 8.2.3
-  resolution: "@graphql-tools/merge@npm:8.2.3"
-  dependencies:
-    "@graphql-tools/utils": ^8.6.2
-    tslib: ~2.3.0
-  peerDependencies:
-    graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 4aa8bd140ccc0b5693b87ac239aa67a03e13f77ffcbd29c6a67e0a3955f883bcb030f03f8405a0303c0e4c54f92534b4acce7377ec0752c4491a5172e7e59721
   languageName: node
   linkType: hard
 
@@ -3512,7 +3500,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/schema@npm:8.3.2, @graphql-tools/schema@npm:^8.1.2":
+"@graphql-tools/schema@npm:8.3.2":
   version: 8.3.2
   resolution: "@graphql-tools/schema@npm:8.3.2"
   dependencies:
@@ -3526,7 +3514,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/schema@npm:8.3.3":
+"@graphql-tools/schema@npm:8.3.3, @graphql-tools/schema@npm:^8.1.2":
   version: 8.3.3
   resolution: "@graphql-tools/schema@npm:8.3.3"
   dependencies:
@@ -3579,7 +3567,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/utils@npm:8.6.2, @graphql-tools/utils@npm:^8.1.1, @graphql-tools/utils@npm:^8.2.0, @graphql-tools/utils@npm:^8.3.0, @graphql-tools/utils@npm:^8.5.1, @graphql-tools/utils@npm:^8.5.2, @graphql-tools/utils@npm:^8.6.2":
+"@graphql-tools/utils@npm:8.6.2":
   version: 8.6.2
   resolution: "@graphql-tools/utils@npm:8.6.2"
   dependencies:
@@ -3590,7 +3578,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/utils@npm:8.6.3":
+"@graphql-tools/utils@npm:8.6.3, @graphql-tools/utils@npm:^8.1.1, @graphql-tools/utils@npm:^8.2.0, @graphql-tools/utils@npm:^8.3.0, @graphql-tools/utils@npm:^8.5.1, @graphql-tools/utils@npm:^8.5.2, @graphql-tools/utils@npm:^8.6.2":
   version: 8.6.3
   resolution: "@graphql-tools/utils@npm:8.6.3"
   dependencies:
@@ -9881,9 +9869,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-airbnb-typescript@npm:16.1.3":
-  version: 16.1.3
-  resolution: "eslint-config-airbnb-typescript@npm:16.1.3"
+"eslint-config-airbnb-typescript@npm:16.1.4":
+  version: 16.1.4
+  resolution: "eslint-config-airbnb-typescript@npm:16.1.4"
   dependencies:
     eslint-config-airbnb-base: ^15.0.0
   peerDependencies:
@@ -9891,7 +9879,7 @@ __metadata:
     "@typescript-eslint/parser": ^5.0.0
     eslint: ^7.32.0 || ^8.2.0
     eslint-plugin-import: ^2.25.3
-  checksum: 50ded56ee3629df24a9d87aa8acc5b2759d8dfa4da371cfb8c6d37d470425c69dc40f1c394f40df0072170dd089950e9a41599fc4ec2bc01f9e93a99671a757b
+  checksum: 86556b82eccd3a7c5f84c05d6b36b776172a700e2b0ea13552ee7ff2765de68a91dbf399af2ad213f432943b383054ce23df112cd4a243acc6a34add00f6900a
   languageName: node
   linkType: hard
 
@@ -18545,7 +18533,7 @@ resolve@^2.0.0-next.3:
     eslint: 8.11.0
     eslint-config-airbnb: 19.0.4
     eslint-config-airbnb-base: 15.0.0
-    eslint-config-airbnb-typescript: 16.1.3
+    eslint-config-airbnb-typescript: 16.1.4
     eslint-config-prettier: 8.5.0
     eslint-import-resolver-node: 0.3.6
     eslint-import-resolver-typescript: 2.5.0
@@ -21843,7 +21831,7 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"ws@npm:^8.3.0":
+"ws@npm:^8.3.0, ws@npm:^8.4.2":
   version: 8.5.0
   resolution: "ws@npm:8.5.0"
   peerDependencies:
@@ -21855,21 +21843,6 @@ resolve@^2.0.0-next.3:
     utf-8-validate:
       optional: true
   checksum: 76f2f90e40344bf18fd544194e7067812fb1372b2a37865678d8f12afe4b478ff2ebc0c7c0aff82cd5e6b66fc43d889eec0f1865c2365d8f7a66d92da7744a77
-  languageName: node
-  linkType: hard
-
-"ws@npm:^8.4.2":
-  version: 8.4.2
-  resolution: "ws@npm:8.4.2"
-  peerDependencies:
-    bufferutil: ^4.0.1
-    utf-8-validate: ^5.0.2
-  peerDependenciesMeta:
-    bufferutil:
-      optional: true
-    utf-8-validate:
-      optional: true
-  checksum: 4369caaac8d1092a73871f5cf1d87fcbb995dc4183a1bc48e4f451bc2d02d0a8bf7c17edf1da18e2be3c773b09262275356b256d1c55bc7ca096154293ba2a8c
   languageName: node
   linkType: hard
 
