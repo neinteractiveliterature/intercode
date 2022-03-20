@@ -52,7 +52,8 @@ class UserConProfile < ApplicationRecord
 
   belongs_to :convention
   belongs_to :user
-  has_one :ticket, dependent: :destroy
+  has_one :ticket, -> { where(event_id: nil) }, dependent: :destroy
+  has_many :event_tickets, -> { where.not(event_id: nil) }, dependent: :destroy
   has_many :team_members, dependent: :destroy
   has_many :signups, dependent: :destroy
   has_many :signup_requests, dependent: :destroy

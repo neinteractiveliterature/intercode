@@ -40,7 +40,7 @@ FactoryBot.define do
       event = signup.run&.event || create(:event, convention: convention)
       signup.user_con_profile ||= create(:user_con_profile, convention: convention)
       signup.run ||= create(:run, event: event)
-      signup.bucket_key ||= signup.run.event.registration_policy.buckets.first.key if signup.confirmed?
+      signup.bucket_key ||= signup.run.event.registration_policy.buckets.first.key if signup.occupying_slot?
     end
   end
 end

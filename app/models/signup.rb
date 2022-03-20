@@ -33,6 +33,7 @@
 
 class Signup < ApplicationRecord
   STATES = Types::SignupStateType.values.values.map(&:value).freeze
+  SLOT_OCCUPYING_STATES = %w[confirmed ticket_purchase_hold]
 
   belongs_to :user_con_profile
   has_one :user, through: :user_con_profile
@@ -44,7 +45,7 @@ class Signup < ApplicationRecord
   has_many :signup_changes, dependent: :destroy
 
   validates :state, inclusion: { in: STATES }
-  validates :bucket_key, presence: { if: ->(signup) { signup.counted? && signup.confirmed? } }
+  validates :bucket_key, presence: { if: ->(signup) { signup.counted? && signup.occupying_slot? } }
   validate :must_be_in_existing_bucket
   validate :user_con_profile_and_run_must_be_in_same_convention
 
@@ -55,6 +56,11 @@ class Signup < ApplicationRecord
 
     scope state_name, -> { where(state: state_name) }
   end
+
+  def occupying_slot?
+    SLOT_OCCUPYING_STATES.include?(state)
+  end
+  scope :occupying_slot, -> { where(state: SLOT_OCCUPYING_STATES) }
 
   scope :counted, -> { where(counted: true) }
   scope :not_counted, -> { where.not(counted: true) }

@@ -39,16 +39,33 @@ class EventVacancyFillService < CivilService::Service
     return unless signup_to_move
 
     bucket = event.registration_policy.bucket_with_key(bucket_key)
-    moving_confirmed_signup = signup_to_move.confirmed?
+    creating_vacancy = signup_to_move.occupying_slot?
     prev_bucket_key = signup_to_move.bucket_key
     prev_state = signup_to_move.state
-    signup_to_move.update!(state: "confirmed", bucket_key: bucket_key, counted: bucket.counted?)
+    signup_to_move.update!(
+      bucket_key: bucket_key,
+      counted: bucket.counted?,
+      **status_attributes_for_newly_moved_signup(signup_to_move)
+    )
     signup_to_move.log_signup_change!(action: "vacancy_fill")
     move_results << SignupMoveResult.from_signup(signup_to_move, prev_state, prev_bucket_key)
 
     # We left a vacancy by moving a confirmed signup out of its bucket, so recursively try to fill
     # that vacancy
-    fill_bucket_vacancy(prev_bucket_key) if moving_confirmed_signup
+    fill_bucket_vacancy(prev_bucket_key) if creating_vacancy
+  end
+
+  def status_attributes_for_newly_moved_signup(signup_to_move)
+    new_state =
+      if convention.ticket_mode == "ticket_per_event" &&
+           event.tickets.where(user_con_profile_id: signup_to_move.user_con_profile_id).none?
+        "ticket_purchase_hold"
+      else
+        "confirmed"
+      end
+    new_expires_at = new_state == "ticket_purchase_hold" ? 2.days.from_now : signup_to_move.expires_at
+
+    { state: new_state, expires_at: new_expires_at }
   end
 
   def best_signup_to_fill_bucket_vacancy(bucket_key)
@@ -65,7 +82,7 @@ class EventVacancyFillService < CivilService::Service
   end
 
   def signup_already_in_best_slot?(signup)
-    return false unless signup.confirmed?
+    return false unless signup.occupying_slot?
 
     (signup.requested_bucket_key == signup.bucket_key)
     # TODO: figure out how to do something like the next line.  We'd rather not move a no-pref
@@ -112,11 +129,11 @@ class EventVacancyFillService < CivilService::Service
   def signup_priority_key(signup)
     [
       # Move waitlisted signups first
-      signup.confirmed? ? 1 : 0,
+      signup.occupying_slot? ? 1 : 0,
       # don't move confirmed no-preference signups unless necessary
-      signup.no_preference? && signup.confirmed? ? 1 : 0,
+      signup.no_preference? && signup.occupying_slot? ? 1 : 0,
       # When moving confirmed signups, try to keep the earlier signups stable
-      signup.created_at.to_i * (signup.confirmed? ? -1 : 1)
+      signup.created_at.to_i * (signup.occupying_slot? ? -1 : 1)
     ]
   end
 
