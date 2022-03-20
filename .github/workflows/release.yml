@@ -39,7 +39,7 @@ jobs:
         HEROKU_API_KEY: ${{ secrets.HerokuApiToken }}
       run: heroku container:login
     - name: Tag production image as "web"
-      run: docker tag neinteractiveliterature/intercode:${{ github.sha }} registry.heroku.com/intercode/web
+      run: docker tag ghcr.io/neinteractiveliterature/intercode:${{ github.sha }} registry.heroku.com/intercode/web
     - name: Push "web" image to Heroku Container Registry
       run: docker push registry.heroku.com/intercode/web
     - name: Build "release" image
