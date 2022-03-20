@@ -2839,9 +2839,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@edno/docusaurus2-graphql-doc-generator@npm:1.9.0":
-  version: 1.9.0
-  resolution: "@edno/docusaurus2-graphql-doc-generator@npm:1.9.0"
+"@edno/docusaurus2-graphql-doc-generator@npm:1.9.1":
+  version: 1.9.1
+  resolution: "@edno/docusaurus2-graphql-doc-generator@npm:1.9.1"
   dependencies:
     "@graphql-inspector/core": ^3.1.1
     "@graphql-tools/graphql-file-loader": ^7.3.4
@@ -2852,7 +2852,7 @@ __metadata:
   peerDependenciesMeta:
     prettier:
       optional: true
-  checksum: 15d342236abce511465b6deadeca81a2d6b343d6eb517416e9ed3d30f0929fca4a227dc4d72a74379809cc7cfbb4743e97b8691671a05c6ae346fb3b551d7b1c
+  checksum: caa4c9295f52fc4aac801650eecd3d897dd5c49bddcba6ead08d911b423759a476f7d152fad1d4fbaa30f0f41f8fde726aa482fe9c945ccc341bee356545f7e4
   languageName: node
   linkType: hard
 
@@ -9270,7 +9270,7 @@ __metadata:
     "@docusaurus/plugin-ideal-image": 2.0.0-beta.17
     "@docusaurus/preset-classic": 2.0.0-beta.17
     "@docusaurus/types": 2.0.0-beta.17
-    "@edno/docusaurus2-graphql-doc-generator": 1.9.0
+    "@edno/docusaurus2-graphql-doc-generator": 1.9.1
     "@mdx-js/react": 1.6.22
     "@svgr/webpack": 6.2.1
     clsx: 1.1.1
