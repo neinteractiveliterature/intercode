@@ -8724,46 +8724,46 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cssnano-preset-default@npm:^*, cssnano-preset-default@npm:^5.1.12":
-  version: 5.2.4
-  resolution: "cssnano-preset-default@npm:5.2.4"
+"cssnano-preset-default@npm:^5.1.12, cssnano-preset-default@npm:^5.2.5":
+  version: 5.2.5
+  resolution: "cssnano-preset-default@npm:5.2.5"
   dependencies:
     css-declaration-sorter: ^6.0.3
-    cssnano-utils: ^*
+    cssnano-utils: ^3.1.0
     postcss-calc: ^8.2.3
-    postcss-colormin: ^*
-    postcss-convert-values: ^*
-    postcss-discard-comments: ^*
-    postcss-discard-duplicates: ^*
-    postcss-discard-empty: ^*
-    postcss-discard-overridden: ^*
-    postcss-merge-longhand: ^*
-    postcss-merge-rules: ^*
-    postcss-minify-font-values: ^*
-    postcss-minify-gradients: ^*
-    postcss-minify-params: ^*
-    postcss-minify-selectors: ^*
-    postcss-normalize-charset: ^*
-    postcss-normalize-display-values: ^*
-    postcss-normalize-positions: ^*
-    postcss-normalize-repeat-style: ^*
-    postcss-normalize-string: ^*
-    postcss-normalize-timing-functions: ^*
-    postcss-normalize-unicode: ^*
-    postcss-normalize-url: ^*
-    postcss-normalize-whitespace: ^*
-    postcss-ordered-values: ^*
-    postcss-reduce-initial: ^*
-    postcss-reduce-transforms: ^*
-    postcss-svgo: ^*
-    postcss-unique-selectors: ^*
+    postcss-colormin: ^5.3.0
+    postcss-convert-values: ^5.1.0
+    postcss-discard-comments: ^5.1.1
+    postcss-discard-duplicates: ^5.1.0
+    postcss-discard-empty: ^5.1.1
+    postcss-discard-overridden: ^5.1.0
+    postcss-merge-longhand: ^5.1.3
+    postcss-merge-rules: ^5.1.1
+    postcss-minify-font-values: ^5.1.0
+    postcss-minify-gradients: ^5.1.1
+    postcss-minify-params: ^5.1.2
+    postcss-minify-selectors: ^5.2.0
+    postcss-normalize-charset: ^5.1.0
+    postcss-normalize-display-values: ^5.1.0
+    postcss-normalize-positions: ^5.1.0
+    postcss-normalize-repeat-style: ^5.1.0
+    postcss-normalize-string: ^5.1.0
+    postcss-normalize-timing-functions: ^5.1.0
+    postcss-normalize-unicode: ^5.1.0
+    postcss-normalize-url: ^5.1.0
+    postcss-normalize-whitespace: ^5.1.1
+    postcss-ordered-values: ^5.1.1
+    postcss-reduce-initial: ^5.1.0
+    postcss-reduce-transforms: ^5.1.0
+    postcss-svgo: ^5.1.0
+    postcss-unique-selectors: ^5.1.1
   peerDependencies:
     postcss: ^8.2.15
-  checksum: b6daeedaf89f969f5548e976c62580ed798f8b1cd4954ec001ff52f0b889b4cba6e7e9b7c50b9e7e255ba355c1755e765f03761b743f2e97c18b89eae248248c
+  checksum: cb743cf2c2a29edb019caeee7a3c9853fadafe54ebe66fb899665fb50d9fe2c79f918180cf39c218dda0195cf704e15bd3a8a5c2d639b2388cddf512d0795f6c
   languageName: node
   linkType: hard
 
-"cssnano-utils@npm:^*, cssnano-utils@npm:^3.0.2, cssnano-utils@npm:^3.1.0":
+"cssnano-utils@npm:^3.0.2, cssnano-utils@npm:^3.1.0":
   version: 3.1.0
   resolution: "cssnano-utils@npm:3.1.0"
   peerDependencies:
@@ -8772,16 +8772,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cssnano@npm:5.1.4, cssnano@npm:^5.0.17, cssnano@npm:^5.0.6":
-  version: 5.1.4
-  resolution: "cssnano@npm:5.1.4"
+"cssnano@npm:5.1.5, cssnano@npm:^5.0.17, cssnano@npm:^5.0.6":
+  version: 5.1.5
+  resolution: "cssnano@npm:5.1.5"
   dependencies:
-    cssnano-preset-default: ^*
+    cssnano-preset-default: ^5.2.5
     lilconfig: ^2.0.3
     yaml: ^1.10.2
   peerDependencies:
     postcss: ^8.2.15
-  checksum: bdc8227f5ff5971b956b1f8a5f3384ec550ca79e24452ed836ecb7216e5c87aba8c9f315b5964891af7e533a9d8a44efebefc43c0c397dd19340232e0c53d888
+  checksum: 7fec29799355f1ccefa370b249bb3b3fb498fb4c6ccd7c7a39e9c6af0632bfffd71b7c93baa19da67d04dcf56de71365b9f8bec9198daa29e8e5847a9f3ec881
   languageName: node
   linkType: hard
 
@@ -16396,7 +16396,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-colormin@npm:^*":
+"postcss-colormin@npm:^5.3.0":
   version: 5.3.0
   resolution: "postcss-colormin@npm:5.3.0"
   dependencies:
@@ -16410,7 +16410,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-convert-values@npm:^*":
+"postcss-convert-values@npm:^5.1.0":
   version: 5.1.0
   resolution: "postcss-convert-values@npm:5.1.0"
   dependencies:
@@ -16421,7 +16421,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-discard-comments@npm:^*":
+"postcss-discard-comments@npm:^5.1.1":
   version: 5.1.1
   resolution: "postcss-discard-comments@npm:5.1.1"
   peerDependencies:
@@ -16430,7 +16430,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-discard-duplicates@npm:^*":
+"postcss-discard-duplicates@npm:^5.1.0":
   version: 5.1.0
   resolution: "postcss-discard-duplicates@npm:5.1.0"
   peerDependencies:
@@ -16439,7 +16439,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-discard-empty@npm:^*":
+"postcss-discard-empty@npm:^5.1.1":
   version: 5.1.1
   resolution: "postcss-discard-empty@npm:5.1.1"
   peerDependencies:
@@ -16448,7 +16448,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-discard-overridden@npm:^*":
+"postcss-discard-overridden@npm:^5.1.0":
   version: 5.1.0
   resolution: "postcss-discard-overridden@npm:5.1.0"
   peerDependencies:
@@ -16507,21 +16507,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-merge-longhand@npm:^*":
-  version: 5.1.2
-  resolution: "postcss-merge-longhand@npm:5.1.2"
+"postcss-merge-longhand@npm:^5.1.3":
+  version: 5.1.3
+  resolution: "postcss-merge-longhand@npm:5.1.3"
   dependencies:
     postcss-value-parser: ^4.2.0
-    stylehacks: ^*
+    stylehacks: ^5.1.0
   peerDependencies:
     postcss: ^8.2.15
-  checksum: 1b417a3faf87156ae6bbc5dd9353f89944aec2094ce5d799a61c3d6c4ce4dd60821148da9015f84d4df704c9ecfce04787b397fbfd86c40138b35586967062c0
+  checksum: fc5ed3510b281cf545c167913af8ca22c250c88c10f28dfb669acc09c6bccfba977f6855eb6e0dd5e3caee63ac45c53e3575d02a7f6d0079ca87c139852c95ff
   languageName: node
   linkType: hard
 
-"postcss-merge-rules@npm:^*":
-  version: 5.1.0
-  resolution: "postcss-merge-rules@npm:5.1.0"
+"postcss-merge-rules@npm:^5.1.1":
+  version: 5.1.1
+  resolution: "postcss-merge-rules@npm:5.1.1"
   dependencies:
     browserslist: ^4.16.6
     caniuse-api: ^3.0.0
@@ -16529,11 +16529,11 @@ __metadata:
     postcss-selector-parser: ^6.0.5
   peerDependencies:
     postcss: ^8.2.15
-  checksum: 797c6f17c4ab495f180617752e9f195536e1d15d3854ccd847c2fe57003f95093ef2e22491d14639762ad8b95dd2bcd98e540e8668d4873f008d81388ef832d1
+  checksum: 163cba5b688346b6bd142b677439257ada6f910dd32dbcffa2a7a58719a609bb9859f597da382bbd8be14a259bea26248aefd99aa890e8fd3753424dfedbde6e
   languageName: node
   linkType: hard
 
-"postcss-minify-font-values@npm:^*":
+"postcss-minify-font-values@npm:^5.1.0":
   version: 5.1.0
   resolution: "postcss-minify-font-values@npm:5.1.0"
   dependencies:
@@ -16544,33 +16544,33 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-minify-gradients@npm:^*":
-  version: 5.1.0
-  resolution: "postcss-minify-gradients@npm:5.1.0"
+"postcss-minify-gradients@npm:^5.1.1":
+  version: 5.1.1
+  resolution: "postcss-minify-gradients@npm:5.1.1"
   dependencies:
     colord: ^2.9.1
     cssnano-utils: ^3.1.0
     postcss-value-parser: ^4.2.0
   peerDependencies:
     postcss: ^8.2.15
-  checksum: 6010d500bc47303be97d3ee28773604f0da9924608b554a589ef6e1056541c4043f79199f45e2546bca0efa7900b6d4b60f18ececafe6b9a31bbf488f916af1b
+  checksum: 27354072a07c5e6dab36731103b94ca2354d4ed3c5bc6aacfdf2ede5a55fa324679d8fee5450800bc50888dbb5e9ed67569c0012040c2be128143d0cebb36d67
   languageName: node
   linkType: hard
 
-"postcss-minify-params@npm:^*":
-  version: 5.1.1
-  resolution: "postcss-minify-params@npm:5.1.1"
+"postcss-minify-params@npm:^5.1.2":
+  version: 5.1.2
+  resolution: "postcss-minify-params@npm:5.1.2"
   dependencies:
     browserslist: ^4.16.6
     cssnano-utils: ^3.1.0
     postcss-value-parser: ^4.2.0
   peerDependencies:
     postcss: ^8.2.15
-  checksum: 5b584683c993a514b17fed2e21d5860f20cf5b260c45352581c1075a17a31717538a5f7960e44b4f80800c7eea8a9f72b90c6431773172e17f1104d507caa738
+  checksum: 3d769b2792564d42bae3ada2f09bd19f358d75dddfb29048160e3e68415ea7f8ed5e6eea20fa8367d08ef8b7e28505b5185049639928dd34cdd258e660440285
   languageName: node
   linkType: hard
 
-"postcss-minify-selectors@npm:^*":
+"postcss-minify-selectors@npm:^5.2.0":
   version: 5.2.0
   resolution: "postcss-minify-selectors@npm:5.2.0"
   dependencies:
@@ -16625,7 +16625,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-normalize-charset@npm:^*":
+"postcss-normalize-charset@npm:^5.1.0":
   version: 5.1.0
   resolution: "postcss-normalize-charset@npm:5.1.0"
   peerDependencies:
@@ -16634,7 +16634,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-normalize-display-values@npm:^*":
+"postcss-normalize-display-values@npm:^5.1.0":
   version: 5.1.0
   resolution: "postcss-normalize-display-values@npm:5.1.0"
   dependencies:
@@ -16645,7 +16645,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-normalize-positions@npm:^*":
+"postcss-normalize-positions@npm:^5.1.0":
   version: 5.1.0
   resolution: "postcss-normalize-positions@npm:5.1.0"
   dependencies:
@@ -16656,7 +16656,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-normalize-repeat-style@npm:^*":
+"postcss-normalize-repeat-style@npm:^5.1.0":
   version: 5.1.0
   resolution: "postcss-normalize-repeat-style@npm:5.1.0"
   dependencies:
@@ -16667,7 +16667,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-normalize-string@npm:^*":
+"postcss-normalize-string@npm:^5.1.0":
   version: 5.1.0
   resolution: "postcss-normalize-string@npm:5.1.0"
   dependencies:
@@ -16678,7 +16678,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-normalize-timing-functions@npm:^*":
+"postcss-normalize-timing-functions@npm:^5.1.0":
   version: 5.1.0
   resolution: "postcss-normalize-timing-functions@npm:5.1.0"
   dependencies:
@@ -16689,7 +16689,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-normalize-unicode@npm:^*":
+"postcss-normalize-unicode@npm:^5.1.0":
   version: 5.1.0
   resolution: "postcss-normalize-unicode@npm:5.1.0"
   dependencies:
@@ -16701,7 +16701,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-normalize-url@npm:^*":
+"postcss-normalize-url@npm:^5.1.0":
   version: 5.1.0
   resolution: "postcss-normalize-url@npm:5.1.0"
   dependencies:
@@ -16713,7 +16713,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-normalize-whitespace@npm:^*":
+"postcss-normalize-whitespace@npm:^5.1.1":
   version: 5.1.1
   resolution: "postcss-normalize-whitespace@npm:5.1.1"
   dependencies:
@@ -16724,15 +16724,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-ordered-values@npm:^*":
-  version: 5.1.0
-  resolution: "postcss-ordered-values@npm:5.1.0"
+"postcss-ordered-values@npm:^5.1.1":
+  version: 5.1.1
+  resolution: "postcss-ordered-values@npm:5.1.1"
   dependencies:
     cssnano-utils: ^3.1.0
     postcss-value-parser: ^4.2.0
   peerDependencies:
     postcss: ^8.2.15
-  checksum: 5f418c9a108946c384f93fa21b80b289484cc997bec6801541bc65abac07804603b58ab48d7a9d39b50af6ac3d9c7cee2ef207585a97f57e441eb3d2ff0e5a95
+  checksum: d56825ef03225ccaeff9704b86008d012b91b0ace4b219f6d443aca628b7f0a1da922abc4a3fb8ca802baf09320abaa983f278ac416e1caf2658d119491686a4
   languageName: node
   linkType: hard
 
@@ -16747,7 +16747,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-reduce-initial@npm:^*":
+"postcss-reduce-initial@npm:^5.1.0":
   version: 5.1.0
   resolution: "postcss-reduce-initial@npm:5.1.0"
   dependencies:
@@ -16759,7 +16759,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-reduce-transforms@npm:^*":
+"postcss-reduce-transforms@npm:^5.1.0":
   version: 5.1.0
   resolution: "postcss-reduce-transforms@npm:5.1.0"
   dependencies:
@@ -16791,7 +16791,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-svgo@npm:^*":
+"postcss-svgo@npm:^5.1.0":
   version: 5.1.0
   resolution: "postcss-svgo@npm:5.1.0"
   dependencies:
@@ -16803,7 +16803,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-unique-selectors@npm:^*":
+"postcss-unique-selectors@npm:^5.1.1":
   version: 5.1.1
   resolution: "postcss-unique-selectors@npm:5.1.1"
   dependencies:
@@ -18524,7 +18524,7 @@ resolve@^2.0.0-next.3:
     crypto-browserify: 3.12.0
     css-loader: 6.7.1
     css-minimizer-webpack-plugin: 3.4.1
-    cssnano: 5.1.4
+    cssnano: 5.1.5
     csv-string: 4.1.0
     custom-event-polyfill: 1.0.7
     debounce-promise: 3.1.2
@@ -19786,7 +19786,7 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"stylehacks@npm:^*":
+"stylehacks@npm:^5.1.0":
   version: 5.1.0
   resolution: "stylehacks@npm:5.1.0"
   dependencies:
