@@ -145,7 +145,7 @@
     "popper.js": "1.16.1",
     "porter-stemmer": "0.9.1",
     "postcss": "8.4.12",
-    "postcss-import": "14.0.2",
+    "postcss-import": "14.1.0",
     "postcss-loader": "6.2.1",
     "prop-types": "15.8.1",
     "punycode": "2.1.1",
