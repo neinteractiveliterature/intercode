@@ -11150,9 +11150,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphiql@npm:1.7.2":
-  version: 1.7.2
-  resolution: "graphiql@npm:1.7.2"
+"graphiql@npm:1.8.0":
+  version: 1.8.0
+  resolution: "graphiql@npm:1.8.0"
   dependencies:
     "@graphiql/toolkit": ^0.4.2
     codemirror: ^5.58.2
@@ -11167,7 +11167,7 @@ __metadata:
     graphql: ^15.5.0 || ^16.0.0
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: 3f7a82fff17bc57d4b2466ce431411f8fe05412e03d5144edfa66ad8cb7dff67a19e03d029bdccbc062a40d8ddbc0b84c2e72d4c74ff1493dd339b7123bc183c
+  checksum: 6df43a4c5a76745c1184b112c6c8485ad96be57eca66f5b128a3c3d4c4b6984bf62c852d6acb524923736842eaf5a4ad252695f90eb115ab65acc68089546087
   languageName: node
   linkType: hard
 
@@ -18210,7 +18210,7 @@ resolve@^2.0.0-next.3:
     file-saver: 2.0.5
     font-awesome: 4.7.0
     glob: 7.2.0
-    graphiql: 1.7.2
+    graphiql: 1.8.0
     graphql: 16.3.0
     graphql-anywhere: 4.2.7
     graphql-language-service-utils: 2.7.1
