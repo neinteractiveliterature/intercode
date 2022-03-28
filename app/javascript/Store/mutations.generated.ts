@@ -111,7 +111,7 @@ export type AddOrderEntryToCurrentPendingOrderMutationVariables = Types.Exact<{
 }>;
 
 
-export type AddOrderEntryToCurrentPendingOrderMutationData = { __typename: 'Mutation', addOrderEntryToCurrentPendingOrder: { __typename: 'AddOrderEntryToCurrentPendingOrderPayload', order_entry: { __typename: 'OrderEntry', id: string } } };
+export type AddOrderEntryToCurrentPendingOrderMutationData = { __typename: 'Mutation', addOrderEntryToCurrentPendingOrder: { __typename: 'AddOrderEntryToCurrentPendingOrderPayload', order_entry: { __typename: 'OrderEntry', id: string, order: { __typename: 'Order', id: string, total_price: { __typename: 'Money', currency_code: string, fractional: number }, order_entries: Array<{ __typename: 'OrderEntry', id: string, product: { __typename: 'Product', id: string, payment_options: Array<string> } }> } } } };
 
 export type CreateCouponApplicationMutationVariables = Types.Exact<{
   orderId: Types.Scalars['ID']['input'];
@@ -624,6 +624,21 @@ export const AddOrderEntryToCurrentPendingOrderDocument = gql`
   ) {
     order_entry {
       id
+      order {
+        id
+        total_price {
+          __typename
+          currency_code
+          fractional
+        }
+        order_entries {
+          id
+          product {
+            id
+            payment_options
+          }
+        }
+      }
     }
   }
 }

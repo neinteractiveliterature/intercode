@@ -3154,6 +3154,13 @@ enum FormType {
   user_con_profile
 }
 
+type GroupedSignupCount {
+  bucket_key: String
+  count: Int!
+  counted: Boolean!
+  state: SignupState!
+}
+
 """
 Represents untyped JSON
 """
@@ -5054,6 +5061,7 @@ type Run {
   current_ability_can_signup_summary_run: Boolean!
   ends_at: Date!
   event: Event!
+  grouped_signup_counts: [GroupedSignupCount!]!
   id: ID!
   my_signup_requests: [SignupRequest!]!
   my_signups: [Signup!]!
@@ -5086,7 +5094,7 @@ type Run {
     """
     sort: [SortInput!]
   ): SignupChangesPagination!
-  signup_count_by_state_and_bucket_key_and_counted: Json!
+  signup_count_by_state_and_bucket_key_and_counted: Json! @deprecated(reason: "Please use grouped_signup_counts instead")
   signups_paginated(filters: SignupFiltersInput, page: Int, per_page: Int, sort: [SortInput]): SignupsPagination!
   starts_at: Date!
   title_suffix: String
@@ -5225,6 +5233,7 @@ type Signup {
   choice: Int
   counted: Boolean!
   created_at: Date!
+  expires_at: Date
   id: ID!
   requested_bucket_key: String
   run: Run!

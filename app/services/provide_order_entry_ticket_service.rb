@@ -33,7 +33,22 @@ class ProvideOrderEntryTicketService < CivilService::Service
   end
 
   def create_ticket
-    user_con_profile.create_ticket!(ticket_type: product.provides_ticket_type, order_entry: order_entry)
+    if product.provides_ticket_type.event
+      product.provides_ticket_type.tickets.create!(
+        event: product.provides_ticket_type.event,
+        order_entry: order_entry,
+        user_con_profile: user_con_profile
+      )
+
+      user_con_profile
+        .signups
+        .ticket_purchase_hold
+        .joins(:run)
+        .where(run: { event_id: product.provides_ticket_type.event_id })
+        .find_each { |signup| signup.update!(state: 'confirmed') }
+    else
+      user_con_profile.create_ticket!(ticket_type: product.provides_ticket_type, order_entry: order_entry)
+    end
   end
 
   def check_existing_ticket
@@ -44,6 +59,7 @@ class ProvideOrderEntryTicketService < CivilService::Service
 
   def check_same_convention
     return if user_con_profile.convention == product.provides_ticket_type.convention
+    return if user_con_profile.convention == product.provides_ticket_type.event&.convention
 
     errors.add :base, 'User profile and ticket type are not from the same convention'
   end

@@ -39,7 +39,7 @@ class Ticket < ApplicationRecord
   belongs_to :event, optional: true
 
   validates :user_con_profile, :ticket_type, presence: true
-  validates :user_con_profile, uniqueness: true
+  validates :user_con_profile, uniqueness: { scope: :event_id }
   validate :ticket_type_must_be_valid_for_convention
   validate :provided_by_event_must_be_part_of_convention, on: :create
 
@@ -61,6 +61,7 @@ class Ticket < ApplicationRecord
   def ticket_type_must_be_valid_for_convention
     return unless ticket_type
     return if convention.ticket_types.include?(ticket_type)
+    return if event&.ticket_types&.include?(ticket_type)
 
     errors.add(:ticket_type, "is not a valid #{convention.ticket_name} type for #{convention.name}")
   end

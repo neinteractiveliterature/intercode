@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 import { ApolloError } from '@apollo/client';
 import { TFunction } from 'i18next';
-import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
+import { LoadingIndicator, ErrorDisplay, useModal } from '@neinteractiveliterature/litform';
 
 import RunCapacityGraph from './RunCapacityGraph';
 import SignupButtons from './SignupButtons';
@@ -17,10 +17,13 @@ import AuthenticationModalContext from '../../Authentication/AuthenticationModal
 import { EventPageQueryData } from './queries.generated';
 import { PartitionedSignupOptions, SignupOption } from './buildSignupOptions';
 import { useFormatRunTimespan } from '../runTimeFormatting';
+import { SignupState } from '../../graphqlTypes.generated';
+import EventTicketPurchaseModal from './EventTicketPurchaseModal';
 
 function describeSignupState(
   mySignup: EventPageQueryData['convention']['event']['runs'][0]['my_signups'][0],
   t: TFunction,
+  ticketName: string,
 ) {
   if (mySignup.state === 'confirmed') {
     return t('signups.runCardText.confirmed', 'You are signed up.');
@@ -30,6 +33,14 @@ function describeSignupState(
     return t('signups.runCardText.waitlisted', 'You are #{{ waitlistPosition }} on the waitlist.', {
       waitlistPosition: mySignup.waitlist_position,
     });
+  }
+
+  if (mySignup.state === SignupState.TicketPurchaseHold) {
+    return t(
+      'signups.runCardText.ticketPurchaseHold',
+      'Your spot is being held while you purchase your {{ ticketName }}.',
+      { ticketName },
+    );
   }
 
   return t('signups.runCardText.waitlistedUnknownPosition', 'You are on the waitlist.');
@@ -65,7 +76,7 @@ function RunCard({
   const { t } = useTranslation();
   const location = useLocation();
   const formatRunTimespan = useFormatRunTimespan();
-  const { siteMode, timezoneName } = useContext(AppRootContext);
+  const { siteMode, timezoneName, ticketName } = useContext(AppRootContext);
   const cardRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (location.hash === `#run-${run.id}`) {
@@ -76,6 +87,7 @@ function RunCard({
     suppressError: true,
   });
   const { setAfterSignInPath, open: openAuthenticationModal } = useContext(AuthenticationModalContext);
+  const eventTicketPurchaseModal = useModal();
 
   const renderMainSignupSection = () => {
     if (!myProfile) {
@@ -101,8 +113,17 @@ function RunCard({
     if (mySignup) {
       return (
         <>
-          <em>{describeSignupState(mySignup, t)}</em>
+          <em>{describeSignupState(mySignup, t, ticketName ?? 'ticket')}</em>
           <p className="mb-0">
+            {mySignup.state === SignupState.TicketPurchaseHold && (
+              <button
+                className="btn btn-outline-success me-2"
+                type="button"
+                onClick={() => eventTicketPurchaseModal.open()}
+              >
+                {t('signups.eventTicketPurchase.cta', 'Buy your {{ ticketName }}', { ticketName })}
+              </button>
+            )}
             <WithdrawSignupButton withdrawSignup={withdrawSignup} />
           </p>
         </>
@@ -166,50 +187,59 @@ function RunCard({
         event.registration_policy.total_slots_including_not_counted > 0));
 
   return (
-    <div
-      ref={cardRef}
-      className={classNames('card run-card', {
-        'glow-success': location.hash === `#run-${run.id}`,
-      })}
-      id={`run-${run.id}`}
-    >
-      {(siteMode !== 'single_event' || event.runs.length !== 1) && (
-        <div className="card-header">
-          {run.title_suffix ? (
-            <p>
-              <strong>{run.title_suffix}</strong>
-            </p>
-          ) : null}
+    <>
+      <div
+        ref={cardRef}
+        className={classNames('card run-card', {
+          'glow-success': location.hash === `#run-${run.id}`,
+        })}
+        id={`run-${run.id}`}
+      >
+        {(siteMode !== 'single_event' || event.runs.length !== 1) && (
+          <div className="card-header">
+            {run.title_suffix ? (
+              <p>
+                <strong>{run.title_suffix}</strong>
+              </p>
+            ) : null}
 
-          <div className="d-flex flex-wrap">
-            <div className="flex-grow-1">{formatRunTimespan(runTimespan, { formatType: 'short' })}</div>
+            <div className="d-flex flex-wrap">
+              <div className="flex-grow-1">{formatRunTimespan(runTimespan, { formatType: 'short' })}</div>
 
-            <div>
-              {run.rooms
-                .map((room) => room.name)
-                .sort()
-                .join(', ')}
+              <div>
+                {run.rooms
+                  .map((room) => room.name)
+                  .sort()
+                  .join(', ')}
+              </div>
             </div>
           </div>
-        </div>
-      )}
-      {acceptsSignups ? (
-        <>
-          <div className="card-body text-center">
-            <RunCapacityGraph run={run} event={event} signupsAvailable />
-            {renderMainSignupSection()}
+        )}
+        {acceptsSignups ? (
+          <>
+            <div className="card-body text-center">
+              <RunCapacityGraph run={run} event={event} signupsAvailable />
+              {renderMainSignupSection()}
+            </div>
+
+            {renderAuxiliarySignupSection()}
+
+            {showViewSignups && <ViewSignupsOptions event={event} run={run} currentAbility={currentAbility} />}
+          </>
+        ) : (
+          <div className="card-body">
+            <small>{t('signups.noSignupsAvailable', 'This event does not take signups.')}</small>
           </div>
+        )}
+      </div>
 
-          {renderAuxiliarySignupSection()}
-
-          {showViewSignups && <ViewSignupsOptions event={event} run={run} currentAbility={currentAbility} />}
-        </>
-      ) : (
-        <div className="card-body">
-          <small>{t('signups.noSignupsAvailable', 'This event does not take signups.')}</small>
-        </div>
-      )}
-    </div>
+      <EventTicketPurchaseModal
+        visible={eventTicketPurchaseModal.visible}
+        close={eventTicketPurchaseModal.close}
+        eventTitle={event.title ?? ''}
+        availableProducts={event.ticket_types.flatMap((ticketType) => ticketType.providing_products)}
+      />
+    </>
   );
 }
 

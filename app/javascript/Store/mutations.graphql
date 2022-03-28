@@ -152,6 +152,24 @@ mutation AddOrderEntryToCurrentPendingOrder(
   ) {
     order_entry {
       id
+
+      order {
+        id
+
+        total_price {
+          __typename
+          currency_code
+          fractional
+        }
+
+        order_entries {
+          id
+          product {
+            id
+            payment_options
+          }
+        }
+      }
     }
   }
 }

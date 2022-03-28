@@ -143,7 +143,7 @@ export type ProspectiveRunScheduleProps = {
   day?: DateTime;
   runs: Omit<
     RunFieldsFragment,
-    | 'signup_count_by_state_and_bucket_key_and_counted'
+    | 'grouped_signup_counts'
     | 'confirmed_signup_count'
     | 'not_counted_signup_count'
     | 'room_names'
@@ -173,7 +173,7 @@ export default LoadQueryWrapper<EventAdminEventsQueryData, EventAdminEventsQuery
           prospectiveRun: true,
           confirmed_signup_count: 0,
           not_counted_signup_count: 0,
-          signup_count_by_state_and_bucket_key_and_counted: '{}',
+          grouped_signup_counts: [],
           room_names: (run.rooms ?? []).map((room) => room.name).filter(notEmpty),
           my_signups: [],
           my_signup_requests: [],

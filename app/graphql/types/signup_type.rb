@@ -17,6 +17,7 @@ class Types::SignupType < Types::BaseObject
     authorize { |_value, _args, context| Pundit.policy(context[:pundit_user], context[:convention]).view_reports? }
   end
   field :waitlist_position, Int, null: true, camelize: false
+  field :expires_at, Types::DateType, null: true
 
   field :created_at, Types::DateType, null: false, camelize: false
   field :updated_at, Types::DateType, null: false, camelize: false

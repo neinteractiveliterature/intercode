@@ -1,42 +1,32 @@
 import { useState, useEffect, useContext } from 'react';
 import classNames from 'classnames';
-import { Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
 import capitalize from 'lodash/capitalize';
 
 import AppRootContext from '../AppRootContext';
 import Checkmark from '../EventsApp/TeamMemberAdmin/Checkmark';
-import usePageTitle from '../usePageTitle';
 import { describeUserPricingStructure } from '../Store/describePricingStructure';
-import ProductOrderForm from '../Store/ProductOrderForm';
-import { TicketPurchaseFormQueryData, useTicketPurchaseFormQuery } from './queries.generated';
-import useLoginRequired from '../Authentication/useLoginRequired';
+import ProductOrderForm, { ProductOrderFormProps } from '../Store/ProductOrderForm';
+import { PricingStructure, Product } from '../graphqlTypes.generated';
 
-export default LoadQueryWrapper(useTicketPurchaseFormQuery, function TicketPurchaseForm({ data }) {
+export type TicketPurchaseFormProps = {
+  availableProducts: (Pick<Product, 'id' | 'name' | 'description_html'> & {
+    pricing_structure: Pick<PricingStructure, 'pricing_strategy' | 'value'>;
+  })[];
+  onAddedToCart: ProductOrderFormProps['onAddedToCart'];
+};
+
+export default function TicketPurchaseForm({ availableProducts, onAddedToCart }: TicketPurchaseFormProps) {
   const { t } = useTranslation();
-  const { timezoneName } = useContext(AppRootContext);
-  const availableProducts = data.convention.products;
-  const [product, setProduct] = useState<TicketPurchaseFormQueryData['convention']['products'][0]>();
-  const [focusedProduct, setFocusedProduct] = useState<TicketPurchaseFormQueryData['convention']['products'][0]>();
+  const { timezoneName, ticketName } = useContext(AppRootContext);
+  const [product, setProduct] = useState<TicketPurchaseFormProps['availableProducts'][number]>();
+  const [focusedProduct, setFocusedProduct] = useState<TicketPurchaseFormProps['availableProducts'][number]>();
 
   useEffect(() => {
     if (availableProducts.length === 1) {
       setProduct(availableProducts[0]);
     }
   }, [availableProducts]);
-
-  usePageTitle(`Buy a ${data.convention.ticket_name}`);
-
-  const loginRequired = useLoginRequired();
-
-  if (loginRequired) {
-    return <></>;
-  }
-
-  if (data.convention.my_profile?.ticket) {
-    return <Navigate to="/ticket" replace />;
-  }
 
   const renderProductSelect = () => (
     <div
@@ -45,7 +35,7 @@ export default LoadQueryWrapper(useTicketPurchaseFormQuery, function TicketPurch
         'row-cols-1 row-cols-md-2': availableProducts.length > 1,
       })}
       role="group"
-      aria-label={`${capitalize(data.convention.ticket_name)} type`}
+      aria-label={`${capitalize(ticketName)} type`}
     >
       {availableProducts.map((availableProduct) => {
         const { pricing_structure: pricingStructure, id, name: productName } = availableProduct;
@@ -98,19 +88,14 @@ export default LoadQueryWrapper(useTicketPurchaseFormQuery, function TicketPurch
   );
 
   return (
-    <div className="container-max-md mt-4">
-      <div className="card-body">
-        <h1 className="mb-4">
-          Buy a {data.convention.ticket_name} for {data.convention.name}
-        </h1>
-        {availableProducts.length > 1 && <p className="lead">Please select a {data.convention.ticket_name} type:</p>}
-        {renderProductSelect()}
-        {product && (
-          <div className="mt-4">
-            <ProductOrderForm productId={product.id} />
-          </div>
-        )}
-      </div>
-    </div>
+    <>
+      {availableProducts.length > 1 && <p className="lead">Please select a {ticketName} type:</p>}
+      {renderProductSelect()}
+      {product && (
+        <div className="mt-4">
+          <ProductOrderForm productId={product.id} onAddedToCart={onAddedToCart} />
+        </div>
+      )}
+    </>
   );
-});
+}

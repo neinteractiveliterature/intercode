@@ -2558,6 +2558,14 @@ export enum FormType {
   UserConProfile = 'user_con_profile'
 }
 
+export type GroupedSignupCount = {
+  __typename: 'GroupedSignupCount';
+  bucket_key?: Maybe<Scalars['String']['output']>;
+  count: Scalars['Int']['output'];
+  counted: Scalars['Boolean']['output'];
+  state: SignupState;
+};
+
 export type LiquidAssign = {
   __typename: 'LiquidAssign';
   cms_variable_value_json?: Maybe<Scalars['String']['output']>;
@@ -4231,6 +4239,7 @@ export type Run = {
   current_ability_can_signup_summary_run: Scalars['Boolean']['output'];
   ends_at: Scalars['Date']['output'];
   event: Event;
+  grouped_signup_counts: Array<GroupedSignupCount>;
   id: Scalars['ID']['output'];
   my_signup_requests: Array<SignupRequest>;
   my_signups: Array<Signup>;
@@ -4240,6 +4249,7 @@ export type Run = {
   rooms: Array<Room>;
   schedule_note?: Maybe<Scalars['String']['output']>;
   signup_changes_paginated: SignupChangesPagination;
+  /** @deprecated Please use grouped_signup_counts instead */
   signup_count_by_state_and_bucket_key_and_counted: Scalars['Json']['output'];
   signups_paginated: SignupsPagination;
   starts_at: Scalars['Date']['output'];
@@ -4379,6 +4389,7 @@ export type Signup = {
   choice?: Maybe<Scalars['Int']['output']>;
   counted: Scalars['Boolean']['output'];
   created_at: Scalars['Date']['output'];
+  expires_at?: Maybe<Scalars['Date']['output']>;
   id: Scalars['ID']['output'];
   requested_bucket_key?: Maybe<Scalars['String']['output']>;
   run: Run;

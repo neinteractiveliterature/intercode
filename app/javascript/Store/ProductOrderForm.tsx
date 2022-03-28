@@ -1,5 +1,4 @@
 import { useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
 import { LoadingIndicator, ErrorDisplay, parseIntOrNull, FormGroupWithLabel } from '@neinteractiveliterature/litform';
 
@@ -7,7 +6,10 @@ import formatMoney from '../formatMoney';
 import sortProductVariants from './sortProductVariants';
 import useAsyncFunction from '../useAsyncFunction';
 import { CartQueryDocument, useOrderFormProductQuery } from './queries.generated';
-import { useAddOrderEntryToCurrentPendingOrderMutation } from './mutations.generated';
+import {
+  AddOrderEntryToCurrentPendingOrderMutationData,
+  useAddOrderEntryToCurrentPendingOrderMutation,
+} from './mutations.generated';
 import { Money, PricingStrategy } from '../graphqlTypes.generated';
 import { LoadQueryWithVariablesWrapper } from '../GraphqlLoadingWrappers';
 import { describePayWhatYouWantRange } from './describePricingStructure';
@@ -17,14 +19,16 @@ import buildMoneyInput from './buildMoneyInput';
 
 export type ProductOrderFormProps = {
   productId: string;
+  onAddedToCart: (
+    orderEntry: AddOrderEntryToCurrentPendingOrderMutationData['addOrderEntryToCurrentPendingOrder']['order_entry'],
+  ) => void;
 };
 
 export default LoadQueryWithVariablesWrapper(
   useOrderFormProductQuery,
   ({ productId }: ProductOrderFormProps) => ({ productId }),
-  function ProductOrderForm({ data }) {
+  function ProductOrderForm({ data, onAddedToCart }) {
     const { product } = data.convention;
-    const navigate = useNavigate();
     const [addOrderEntryToCurrentPendingOrder] = useAddOrderEntryToCurrentPendingOrderMutation({
       refetchQueries: [{ query: CartQueryDocument }],
     });
@@ -49,7 +53,7 @@ export default LoadQueryWithVariablesWrapper(
     );
 
     const [addToCartClicked, addToCartError, addToCartInProgress] = useAsyncFunction(async () => {
-      await addOrderEntryToCurrentPendingOrder({
+      const result = await addOrderEntryToCurrentPendingOrder({
         variables: {
           productId: product.id,
           productVariantId,
@@ -60,7 +64,11 @@ export default LoadQueryWithVariablesWrapper(
               : undefined,
         },
       });
-      navigate('/cart');
+      const orderEntry = result.data?.addOrderEntryToCurrentPendingOrder.order_entry;
+      if (orderEntry) {
+        onAddedToCart(orderEntry);
+      }
+      // navigate('/cart');
     });
 
     const renderVariantSelect = () => {

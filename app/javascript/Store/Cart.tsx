@@ -1,5 +1,4 @@
 import { useCallback } from 'react';
-import intersection from 'lodash/intersection';
 import { useNavigate } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
 import { useModal, useConfirm, ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform';
@@ -159,21 +158,8 @@ export default LoadQueryWrapper(useCartQuery, function Cart({ data }) {
       <OrderPaymentModal
         visible={checkOutModal.visible}
         onCancel={checkOutModal.close}
-        initialName={data.convention.my_profile?.name_without_nickname}
-        orderId={data.convention.my_profile?.current_pending_order?.id}
+        order={data.convention.my_profile?.current_pending_order ?? undefined}
         onComplete={checkOutComplete}
-        paymentOptions={intersection(
-          ...(data.convention.my_profile?.current_pending_order?.order_entries ?? []).map(
-            (entry) => entry.product.payment_options,
-          ),
-        )}
-        totalPrice={
-          data.convention.my_profile?.current_pending_order?.total_price ?? {
-            fractional: 0,
-            __typename: 'Money',
-            currency_code: 'USD',
-          }
-        }
       />
     </div>
   );
