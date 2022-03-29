@@ -11120,24 +11120,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphiql@npm:1.8.0":
-  version: 1.8.0
-  resolution: "graphiql@npm:1.8.0"
+"graphiql@npm:1.8.1":
+  version: 1.8.1
+  resolution: "graphiql@npm:1.8.1"
   dependencies:
     "@graphiql/toolkit": ^0.4.2
     codemirror: ^5.58.2
     codemirror-graphql: ^1.2.14
     copy-to-clipboard: ^3.2.0
-    dset: ^3.1.0
     entities: ^2.0.0
     escape-html: ^1.0.3
     graphql-language-service: ^5.0.1
     markdown-it: ^12.2.0
+    set-value: ^4.1.0
   peerDependencies:
     graphql: ^15.5.0 || ^16.0.0
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: 6df43a4c5a76745c1184b112c6c8485ad96be57eca66f5b128a3c3d4c4b6984bf62c852d6acb524923736842eaf5a4ad252695f90eb115ab65acc68089546087
+  checksum: cbf321f6fb41fd20017695b45e582da536663577e0094d266e6e175d09ffe0813f95fb5fc7fc7237143bd9e10eee961212a9104d6e7e2979557c7dfe7b1bea53
   languageName: node
   linkType: hard
 
@@ -12570,6 +12570,13 @@ __metadata:
   version: 1.0.1
   resolution: "is-potential-custom-element-name@npm:1.0.1"
   checksum: ced7bbbb6433a5b684af581872afe0e1767e2d1146b2207ca0068a648fb5cab9d898495d1ac0583524faaf24ca98176a7d9876363097c2d14fee6dd324f3a1ab
+  languageName: node
+  linkType: hard
+
+"is-primitive@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "is-primitive@npm:3.0.1"
+  checksum: c4da6a6e6d487f31d85b9259b67695fffcc75dca6c9612b0a002e3050c734227b9911be09b877539ec6309710229c19f4edd0f9e26ed2a67924ee0916baf0bed
   languageName: node
   linkType: hard
 
@@ -18180,7 +18187,7 @@ resolve@^2.0.0-next.3:
     file-saver: 2.0.5
     font-awesome: 4.7.0
     glob: 7.2.0
-    graphiql: 1.8.0
+    graphiql: 1.8.1
     graphql: 16.3.0
     graphql-anywhere: 4.2.7
     graphql-language-service-utils: 2.7.1
@@ -18634,6 +18641,16 @@ resolve@^2.0.0-next.3:
   version: 2.0.0
   resolution: "set-blocking@npm:2.0.0"
   checksum: 6e65a05f7cf7ebdf8b7c75b101e18c0b7e3dff4940d480efed8aad3a36a4005140b660fa1d804cb8bce911cac290441dc728084a30504d3516ac2ff7ad607b02
+  languageName: node
+  linkType: hard
+
+"set-value@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "set-value@npm:4.1.0"
+  dependencies:
+    is-plain-object: ^2.0.4
+    is-primitive: ^3.0.1
+  checksum: 2b4f0f222538ae4c1f4171a5014c113649631c86ed81d1ac0c2df406d0a974d8006412ce1d7844c531268f1c66eb912f7eae7245ab3114e34357f1ff9d6dc697
   languageName: node
   linkType: hard
 
