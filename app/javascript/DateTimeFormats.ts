@@ -22,7 +22,9 @@ const DateTimeFormatGenerators = {
   longWeekdayTime: (t: TFunction) => t('dateTimeFormats.longWeekdayTime', 'cccc h:mmaaa'),
   longWeekdayTimeWithZone: (t: TFunction) => t('dateTimeFormats.longWeekdayTimeWithZone', 'cccc h:mmaaa ZZZZ'),
   midnight: (t: TFunction) => t('dateTimeFormats.midnight', "'midnight'"),
+  midnightWithZone: (t: TFunction) => t('dateTimeFormats.midnightWithZone', "'midnight' ZZZZ"),
   noon: (t: TFunction) => t('dateTimeFormats.noon', "'noon'"),
+  noonWithZone: (t: TFunction) => t('dateTimeFormats.noonWithZone', "'noon' ZZZZ"),
   shortDateTime: (t: TFunction) => t('dateTimeFormats.shortDateTime', 'MMM d, yyyy h:mmaaa'),
   shortDateTimeWithZone: (t: TFunction) => t('dateTimeFormats.shortDateTimeWithZone', 'MMM d, yyyy h:mmaaa ZZZZ'),
   shortHour: (t: TFunction) => t('dateTimeFormats.shortHour', 'haaa'),
@@ -34,7 +36,9 @@ const DateTimeFormatGenerators = {
   shortWeekdayTime: (t: TFunction) => t('dateTimeFormats.shortWeekdayTime', 'ccc h:mmaaa'),
   shortWeekdayTimeWithZone: (t: TFunction) => t('dateTimeFormats.shortWeekdayTimeWithZone', 'ccc h:mmaaa ZZZZ'),
   weekdayMidnight: (t: TFunction) => t('dateTimeFormats.weekdayMidnight', "ccc 'midnight'"),
+  weekdayMidnightWithZone: (t: TFunction) => t('dateTimeFormats.weekdayMidnightWithZone', "ccc 'midnight' ZZZZ"),
   weekdayNoon: (t: TFunction) => t('dateTimeFormats.weekdayNoon', "ccc 'noon'"),
+  weekdayNoonWithZone: (t: TFunction) => t('dateTimeFormats.weekdayNoonWithZone', "ccc 'noon' ZZZZ"),
   year: (t: TFunction) => t('dateTimeFormats.year', 'yyyy'),
 };
 

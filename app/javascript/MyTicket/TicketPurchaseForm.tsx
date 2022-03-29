@@ -7,16 +7,17 @@ import AppRootContext from '../AppRootContext';
 import Checkmark from '../EventsApp/TeamMemberAdmin/Checkmark';
 import { describeUserPricingStructure } from '../Store/describePricingStructure';
 import ProductOrderForm, { ProductOrderFormProps } from '../Store/ProductOrderForm';
-import { PricingStructure, Product } from '../graphqlTypes.generated';
+import { PricingStructure, Product, Run } from '../graphqlTypes.generated';
 
 export type TicketPurchaseFormProps = {
   availableProducts: (Pick<Product, 'id' | 'name' | 'description_html'> & {
     pricing_structure: Pick<PricingStructure, 'pricing_strategy' | 'value'>;
   })[];
+  run?: Pick<Run, 'id'>;
   onAddedToCart: ProductOrderFormProps['onAddedToCart'];
 };
 
-export default function TicketPurchaseForm({ availableProducts, onAddedToCart }: TicketPurchaseFormProps) {
+export default function TicketPurchaseForm({ availableProducts, onAddedToCart, run }: TicketPurchaseFormProps) {
   const { t } = useTranslation();
   const { timezoneName, ticketName } = useContext(AppRootContext);
   const [product, setProduct] = useState<TicketPurchaseFormProps['availableProducts'][number]>();
@@ -93,7 +94,7 @@ export default function TicketPurchaseForm({ availableProducts, onAddedToCart }:
       {renderProductSelect()}
       {product && (
         <div className="mt-4">
-          <ProductOrderForm productId={product.id} onAddedToCart={onAddedToCart} />
+          <ProductOrderForm runId={run?.id} productId={product.id} onAddedToCart={onAddedToCart} />
         </div>
       )}
     </>

@@ -1,4 +1,5 @@
 #import "../EventsApp/EventPage/queries.graphql"
+#import "../Store/pricingStructureFields.graphql"
 
 fragment SignupModerationRunFields on Run {
   id
@@ -135,6 +136,21 @@ query CreateSignupRunCardQuery($userConProfileId: ID!, $eventId: ID!) {
       runs {
         id
         ...EventPageRunFields
+      }
+
+      ticket_types {
+        id
+
+        providing_products {
+          id
+          description_html
+          name
+          available
+
+          pricing_structure {
+            ...PricingStructureFields
+          }
+        }
       }
     }
 

@@ -13,18 +13,21 @@
 #  order_id                :bigint           not null
 #  product_id              :bigint           not null
 #  product_variant_id      :bigint
+#  run_id                  :bigint
 #
 # Indexes
 #
 #  index_order_entries_on_order_id            (order_id)
 #  index_order_entries_on_product_id          (product_id)
 #  index_order_entries_on_product_variant_id  (product_variant_id)
+#  index_order_entries_on_run_id              (run_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (order_id => orders.id)
 #  fk_rails_...  (product_id => products.id)
 #  fk_rails_...  (product_variant_id => product_variants.id)
+#  fk_rails_...  (run_id => runs.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
 
@@ -32,6 +35,7 @@ class OrderEntry < ApplicationRecord
   belongs_to :order
   belongs_to :product
   belongs_to :product_variant, optional: true
+  belongs_to :run, optional: true
   has_many :tickets, dependent: :nullify
 
   monetize :price_per_item_cents, with_model_currency: :price_per_item_currency, allow_nil: true

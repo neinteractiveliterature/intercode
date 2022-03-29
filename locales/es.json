@@ -313,7 +313,9 @@
     "longWeekdayTime": "",
     "longWeekdayTimeWithZone": "",
     "midnight": "",
+    "midnightWithZone": "",
     "noon": "",
+    "noonWithZone": "",
     "shortDateTime": "",
     "shortDateTimeWithZone": "",
     "shortHour": "",
@@ -325,7 +327,9 @@
     "shortWeekdayTime": "",
     "shortWeekdayTimeWithZone": "",
     "weekdayMidnight": "",
+    "weekdayMidnightWithZone": "",
     "weekdayNoon": "",
+    "weekdayNoonWithZone": "",
     "year": ""
   },
   "errors": {
@@ -789,6 +793,11 @@
       "waitlistCount_many": "",
       "waitlistCount_other": ""
     },
+    "eventTicketPurchase": {
+      "cta": "",
+      "spotHeldUntil": "",
+      "title": ""
+    },
     "maximumSignups": {
       "limitedCount": "",
       "notNow": "",
@@ -800,6 +809,7 @@
     "runCardText": {
       "confirmed": "",
       "requestPending": "",
+      "ticketPurchaseHold": "",
       "waitlisted": "",
       "waitlistedUnknownPosition": ""
     },

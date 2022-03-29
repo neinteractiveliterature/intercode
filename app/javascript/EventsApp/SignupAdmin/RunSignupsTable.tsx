@@ -12,7 +12,7 @@ import EmailCell from '../../Tables/EmailCell';
 import { buildFieldFilterCodecs, FilterCodecs } from '../../Tables/FilterUtils';
 import { formatBucket } from './SignupUtils';
 import FreeTextFilter from '../../Tables/FreeTextFilter';
-import SignupStateCell from '../../Tables/SignupStateCell';
+import SignupStateCell, { getSignupStateLabel } from '../../Tables/SignupStateCell';
 import TableHeader from '../../Tables/TableHeader';
 import ReactTableWithTheWorks from '../../Tables/ReactTableWithTheWorks';
 import useReactTableWithTheWorks, { QueryDataContext } from '../../Tables/useReactTableWithTheWorks';
@@ -27,6 +27,9 @@ import {
 } from './queries.generated';
 import { useSignupAdminEventQueryFromParams } from './useSignupAdminEventQueryFromParams';
 import buildEventUrl from '../buildEventUrl';
+import { SignupState } from '../../graphqlTypes.generated';
+import EnumTypes from '../../enumTypes.json';
+import AppRootContext from '../../AppRootContext';
 
 const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({
   state: FilterCodecs.stringArray,
@@ -37,17 +40,17 @@ type SignupType = RunSignupsTableSignupsQueryData['convention']['event']['run'][
 
 const SignupStateFilter = (props: FilterProps<SignupType>) => {
   const { t } = useTranslation();
-  return (
-    <ChoiceSetFilter
-      {...props}
-      multiple
-      choices={[
-        { value: 'confirmed', label: t('signups.states.confirmed', 'Confirmed') },
-        { value: 'waitlisted', label: t('signups.states.waitlisted', 'Waitlisted') },
-        { value: 'withdrawn', label: t('signups.states.withdrawn', 'Withdrawn') },
-      ]}
-    />
+  const { ticketName } = useContext(AppRootContext);
+  const choices = useMemo(
+    () =>
+      EnumTypes.SignupState.enumValues.map((value) => ({
+        value: value.name,
+        label: getSignupStateLabel(value.name as SignupState, t, ticketName),
+      })),
+    [ticketName, t],
   );
+
+  return <ChoiceSetFilter {...props} multiple choices={choices} />;
 };
 
 const AgeRestrictionsCheckCell = ({ value }: CellProps<SignupType, string>) => {

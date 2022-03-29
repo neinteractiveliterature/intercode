@@ -1,5 +1,4 @@
 import { useContext } from 'react';
-import intersection from 'lodash/intersection';
 import { DateTime } from 'luxon';
 import { useModal, LoadQueryWrapper } from '@neinteractiveliterature/litform';
 import { ModalData } from '@neinteractiveliterature/litform/lib/useModal';
@@ -188,23 +187,8 @@ export default LoadQueryWrapper(useOrderHistoryQuery, function OrderHistory({ da
           <OrderPaymentModal
             visible={paymentModal.visible}
             onCancel={paymentModal.close}
-            initialName={data.convention.my_profile?.name_without_nickname}
-            orderId={paymentModal.state?.order?.id ?? ''}
+            order={paymentModal.state?.order}
             onComplete={paymentModal.close}
-            paymentOptions={
-              paymentModal.state
-                ? intersection(
-                    ...paymentModal.state.order.order_entries.map((entry) => entry.product.payment_options),
-                  ).filter((paymentOption) => paymentOption !== 'pay_at_convention')
-                : []
-            }
-            totalPrice={
-              paymentModal.state?.order?.total_price ?? {
-                currency_code: 'USD',
-                fractional: 0,
-                __typename: 'Money',
-              }
-            }
           />
         </ul>
       </>

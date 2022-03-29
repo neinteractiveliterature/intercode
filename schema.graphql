@@ -4185,6 +4185,7 @@ type OrderEntry {
   product: Product!
   product_variant: ProductVariant
   quantity: Int!
+  run: Run
 }
 
 input OrderEntryInput {
@@ -4192,6 +4193,7 @@ input OrderEntryInput {
   productId: ID
   productVariantId: ID
   quantity: Int
+  runId: ID
   ticketId: ID
 }
 
@@ -5588,10 +5590,10 @@ input TeamMemberInput {
 type Ticket {
   convention: Convention!
   created_at: Date!
-  event: Event
   id: ID!
   order_entry: OrderEntry
   provided_by_event: Event
+  run: Run
   ticket_type: TicketType!
   updated_at: Date!
   user_con_profile: UserConProfile!

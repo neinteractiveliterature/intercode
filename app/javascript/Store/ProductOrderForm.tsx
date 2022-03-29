@@ -22,12 +22,13 @@ export type ProductOrderFormProps = {
   onAddedToCart: (
     orderEntry: AddOrderEntryToCurrentPendingOrderMutationData['addOrderEntryToCurrentPendingOrder']['order_entry'],
   ) => void;
+  runId?: string;
 };
 
 export default LoadQueryWithVariablesWrapper(
   useOrderFormProductQuery,
   ({ productId }: ProductOrderFormProps) => ({ productId }),
-  function ProductOrderForm({ data, onAddedToCart }) {
+  function ProductOrderForm({ data, onAddedToCart, runId }) {
     const { product } = data.convention;
     const [addOrderEntryToCurrentPendingOrder] = useAddOrderEntryToCurrentPendingOrderMutation({
       refetchQueries: [{ query: CartQueryDocument }],
@@ -62,6 +63,7 @@ export default LoadQueryWithVariablesWrapper(
             product.pricing_structure.pricing_strategy === PricingStrategy.PayWhatYouWant
               ? buildMoneyInput(payWhatYouWantAmount)
               : undefined,
+          runId,
         },
       });
       const orderEntry = result.data?.addOrderEntryToCurrentPendingOrder.order_entry;

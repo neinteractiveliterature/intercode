@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
@@ -31,6 +31,7 @@ export default LoadQueryWrapper(
   }) {
     const { t } = useTranslation();
     const { timezoneName } = useContext(AppRootContext);
+    const navigate = useNavigate();
 
     usePageTitle(product.name);
 
@@ -54,7 +55,7 @@ export default LoadQueryWrapper(
         )}
 
         {currentUser ? (
-          <ProductOrderForm productId={product.id} />
+          <ProductOrderForm productId={product.id} onAddedToCart={() => navigate('/cart')} />
         ) : (
           <SignInButton caption="Log in to order" className="btn btn-primary" afterSignInPath={window.location.href} />
         )}

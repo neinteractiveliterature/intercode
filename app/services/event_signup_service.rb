@@ -182,7 +182,7 @@ sign up for events."
     if !team_member? && !actual_bucket
       "waitlisted"
     elsif convention.ticket_mode == "ticket_per_event" &&
-          event.tickets.where(user_con_profile_id: user_con_profile.id).none?
+          run.tickets.where(user_con_profile_id: user_con_profile.id).none?
       "ticket_purchase_hold"
     else
       "confirmed"

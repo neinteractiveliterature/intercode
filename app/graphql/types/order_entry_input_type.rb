@@ -5,4 +5,5 @@ class Types::OrderEntryInputType < Types::BaseInputObject
   argument :quantity, Integer, required: false
   argument :price_per_item, Types::MoneyInputType, required: false, camelize: false
   argument :ticket_id, ID, required: false, camelize: true
+  argument :run_id, ID, required: false, camelize: true
 end

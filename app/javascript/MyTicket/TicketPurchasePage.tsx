@@ -1,6 +1,6 @@
 import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
 import { useContext } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import AppRootContext from '../AppRootContext';
 import useLoginRequired from '../Authentication/useLoginRequired';
 import usePageTitle from '../usePageTitle';
@@ -9,6 +9,7 @@ import TicketPurchaseForm from './TicketPurchaseForm';
 
 export default LoadQueryWrapper(useTicketPurchaseFormQuery, function TicketPurchasePage({ data }) {
   const { ticketName } = useContext(AppRootContext);
+  const navigate = useNavigate();
 
   usePageTitle(`Buy a ${ticketName}`);
 
@@ -29,7 +30,7 @@ export default LoadQueryWrapper(useTicketPurchaseFormQuery, function TicketPurch
           Buy a {ticketName} for {data.convention.name}
         </h1>
 
-        <TicketPurchaseForm availableProducts={data.convention.products} />
+        <TicketPurchaseForm availableProducts={data.convention.products} onAddedToCart={() => navigate('/cart')} />
       </div>
     </div>
   );

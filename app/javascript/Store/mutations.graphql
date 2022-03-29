@@ -143,10 +143,11 @@ mutation AddOrderEntryToCurrentPendingOrder(
   $productVariantId: ID
   $quantity: Int!
   $payWhatYouWantAmount: MoneyInput
+  $runId: ID
 ) {
   addOrderEntryToCurrentPendingOrder(
     input: {
-      order_entry: { productId: $productId, productVariantId: $productVariantId, quantity: $quantity }
+      order_entry: { productId: $productId, productVariantId: $productVariantId, quantity: $quantity, runId: $runId }
       pay_what_you_want_amount: $payWhatYouWantAmount
     }
   ) {

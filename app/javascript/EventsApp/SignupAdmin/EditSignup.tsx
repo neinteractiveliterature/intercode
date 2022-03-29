@@ -19,6 +19,7 @@ import { AdminSignupQueryData, SignupFieldsFragment, useAdminSignupQuery } from 
 import { useUpdateSignupCountedMutation } from './mutations.generated';
 import { useFormatRunTimespan } from '../runTimeFormatting';
 import humanize from '../../humanize';
+import { getSignupStateLabel } from '../../Tables/SignupStateCell';
 
 function cityState(userConProfile: SignupFieldsFragment['user_con_profile']) {
   return [userConProfile.city, userConProfile.state].filter((item) => item && item.trim() !== '').join(', ');
@@ -96,7 +97,7 @@ export type EditSignupProps = {
 };
 
 function EditSignup({ teamMembersUrl }: EditSignupProps): JSX.Element {
-  const { timezoneName } = useContext(AppRootContext);
+  const { timezoneName, ticketName } = useContext(AppRootContext);
   const { id } = useParams<{ id: string }>();
   if (id == null) {
     throw new Error('id not found in URL params');
@@ -278,7 +279,7 @@ function EditSignup({ teamMembersUrl }: EditSignupProps): JSX.Element {
           <li className="list-group-item d-flex align-items-center">
             <div className="flex-fill">
               Signup state:
-              <strong> {signup.state}</strong>
+              <strong> {getSignupStateLabel(signup.state, t, ticketName)}</strong>
             </div>
             {renderForceConfirmButton()}
           </li>

@@ -87,7 +87,7 @@ function RunCard({
     suppressError: true,
   });
   const { setAfterSignInPath, open: openAuthenticationModal } = useContext(AuthenticationModalContext);
-  const eventTicketPurchaseModal = useModal();
+  const eventTicketPurchaseModal = useModal<{ run: NonNullable<typeof run>; signup: NonNullable<typeof mySignup> }>();
 
   const renderMainSignupSection = () => {
     if (!myProfile) {
@@ -119,7 +119,7 @@ function RunCard({
               <button
                 className="btn btn-outline-success me-2"
                 type="button"
-                onClick={() => eventTicketPurchaseModal.open()}
+                onClick={() => eventTicketPurchaseModal.open({ run, signup: mySignup })}
               >
                 {t('signups.eventTicketPurchase.cta', 'Buy your {{ ticketName }}', { ticketName })}
               </button>
@@ -238,6 +238,8 @@ function RunCard({
         close={eventTicketPurchaseModal.close}
         eventTitle={event.title ?? ''}
         availableProducts={event.ticket_types.flatMap((ticketType) => ticketType.providing_products)}
+        run={eventTicketPurchaseModal.state?.run}
+        signup={eventTicketPurchaseModal.state?.signup}
       />
     </>
   );

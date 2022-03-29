@@ -305,7 +305,9 @@
     "longWeekdayTime": "cccc h:mmaaa",
     "longWeekdayTimeWithZone": "cccc h:mmaaa ZZZZ",
     "midnight": "'midnight'",
+    "midnightWithZone": "'midnight' ZZZZ",
     "noon": "'noon'",
+    "noonWithZone": "'noon' ZZZZ",
     "shortDateTime": "MMM d, yyyy h:mmaaa",
     "shortDateTimeWithZone": "h:mmaaa ZZZZ",
     "shortHour": "haaa",
@@ -317,7 +319,9 @@
     "shortWeekdayTime": "ccc h:mmaaa",
     "shortWeekdayTimeWithZone": "ccc h:mmaaa ZZZZ",
     "weekdayMidnight": "ccc 'midnight'",
+    "weekdayMidnightWithZone": "ccc 'midnight' ZZZZ",
     "weekdayNoon": "ccc 'noon'",
+    "weekdayNoonWithZone": "ccc 'noon' ZZZZ",
     "year": "yyyy"
   },
   "errors": {
@@ -766,6 +770,11 @@
       "waitlistCount_one": "<0>Waitlist:</0> {{count}}",
       "waitlistCount_other": "<0>Waitlist:</0> {{count}}"
     },
+    "eventTicketPurchase": {
+      "cta": "Buy your {{ ticketName }}",
+      "spotHeldUntil": "Your spot is being held.  You have until {{ expiresAt }} to purchase a {{ ticketName }}.",
+      "title": "Your {{ ticketName }} for {{ eventTitle }}"
+    },
     "maximumSignups": {
       "limitedCount": "Up to {{ count }} event",
       "notNow": "Signups frozen",
@@ -777,6 +786,7 @@
     "runCardText": {
       "confirmed": "You are signed up.",
       "requestPending": "You have requested to sign up for this event.",
+      "ticketPurchaseHold": "Your spot is being held while you purchase your {{ ticketName }}.",
       "waitlisted": "You are #{{ waitlistPosition }} on the waitlist.",
       "waitlistedUnknownPosition": "You are on the waitlist."
     },
@@ -793,7 +803,7 @@
       "notSignedUp": "Not signed up",
       "stateWithRequestedBucket": "{{ state }} (requested {{ requestedBucket }})",
       "teamMemberNotCounted": "{{ teamMemberName }} (not counted)",
-      "ticketPurchaseHold": "Held temporarily while awaiting payment",
+      "ticketPurchaseHold": "Held pending {{ ticketName }} purchase",
       "waitlisted": "Waitlisted",
       "waitlistedNoPreference": "Waitlisted (no preference)",
       "waitlistedWithRequestedBucket": "Waitlisted (requested {{ requestedBucketName }})",

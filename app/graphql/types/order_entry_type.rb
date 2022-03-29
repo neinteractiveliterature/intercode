@@ -8,6 +8,7 @@ class Types::OrderEntryType < Types::BaseObject
   field :price_per_item, Types::MoneyType, null: false
   field :price, Types::MoneyType, null: false
   field :describe_products, String, null: false
+  field :run, Types::RunType, null: true
 
-  association_loaders OrderEntry, :order, :product, :product_variant
+  association_loaders OrderEntry, :order, :product, :product_variant, :run
 end

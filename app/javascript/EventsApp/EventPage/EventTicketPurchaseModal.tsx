@@ -4,10 +4,12 @@ import { useContext, useState } from 'react';
 import Modal from 'react-bootstrap4-modal';
 import { useTranslation } from 'react-i18next';
 import AppRootContext from '../../AppRootContext';
+import { Run, Signup } from '../../graphqlTypes.generated';
 import { LazyStripeElementsContainer } from '../../LazyStripe';
 import TicketPurchaseForm, { TicketPurchaseFormProps } from '../../MyTicket/TicketPurchaseForm';
 import { useDeleteOrderEntryMutation } from '../../Store/mutations.generated';
 import { OrderPaymentModalContents, OrderPaymentModalContentsProps } from '../../Store/OrderPaymentModal';
+import { useHumanizeTime, useISODateTimeInAppZone } from '../../TimeUtils';
 import useAsyncFunction from '../../useAsyncFunction';
 
 export type EventTicketPurchaseModalProps = {
@@ -15,6 +17,8 @@ export type EventTicketPurchaseModalProps = {
   close: () => void;
   availableProducts: TicketPurchaseFormProps['availableProducts'];
   eventTitle: string;
+  run?: Pick<Run, 'id'>;
+  signup?: Pick<Signup, 'expires_at'>;
 };
 
 export default function EventTicketPurchaseModal({
@@ -22,12 +26,16 @@ export default function EventTicketPurchaseModal({
   close,
   availableProducts,
   eventTitle,
+  run,
+  signup,
 }: EventTicketPurchaseModalProps) {
   const { t } = useTranslation();
   const { ticketName } = useContext(AppRootContext);
   const [orderEntry, setOrderEntry] = useState<{ id: string; order: OrderPaymentModalContentsProps['order'] }>();
   const [deleteOrderEntry] = useDeleteOrderEntryMutation();
   const apolloClient = useApolloClient();
+  const humanizeTime = useHumanizeTime();
+  const expiresAt = useISODateTimeInAppZone(signup?.expires_at ?? '');
 
   const cancel = async () => {
     if (orderEntry) {
@@ -53,12 +61,21 @@ export default function EventTicketPurchaseModal({
         })}
       </div>
       <div className="modal-body">
+        {signup?.expires_at && (
+          <div className="alert alert-info">
+            {t(
+              'signups.eventTicketPurchase.spotHeldUntil',
+              'Your spot is being held.  You have until {{ expiresAt }} to purchase a {{ ticketName }}.',
+              { ticketName, expiresAt: humanizeTime(expiresAt) },
+            )}
+          </div>
+        )}
         {orderEntry ? (
           <LazyStripeElementsContainer>
             <OrderPaymentModalContents onCancel={cancelAsync} onComplete={complete} order={orderEntry.order} />
           </LazyStripeElementsContainer>
         ) : (
-          <TicketPurchaseForm availableProducts={availableProducts} onAddedToCart={setOrderEntry} />
+          <TicketPurchaseForm run={run} availableProducts={availableProducts} onAddedToCart={setOrderEntry} />
         )}
       </div>
       <div className="modal-footer">

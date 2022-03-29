@@ -2,7 +2,7 @@
 class Types::TicketType < Types::BaseObject
   field :id, ID, null: false
   field :convention, Types::ConventionType, null: false
-  field :event, Types::EventType, null: true
+  field :run, Types::RunType, null: true
   field :user_con_profile, Types::UserConProfileType, null: false
   field :ticket_type, Types::TicketTypeType, null: false
   field :provided_by_event, Types::EventType, null: true
@@ -10,7 +10,7 @@ class Types::TicketType < Types::BaseObject
   field :created_at, Types::DateType, null: false
   field :updated_at, Types::DateType, null: false
 
-  association_loaders Ticket, :ticket_type, :event, :order_entry, :provided_by_event, :user_con_profile
+  association_loaders Ticket, :ticket_type, :run, :order_entry, :provided_by_event, :user_con_profile
 
   authorize_record
 end

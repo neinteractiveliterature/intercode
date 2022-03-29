@@ -11,7 +11,7 @@ class ProvideOrderEntryTicketService < CivilService::Service
   validate :check_convention_maximum
 
   attr_reader :order_entry, :suppress_notifications
-  delegate :product, :order, to: :order_entry
+  delegate :product, :order, :run, to: :order_entry
   delegate :user_con_profile, to: :order
   delegate :convention, to: :user_con_profile
 
@@ -35,17 +35,13 @@ class ProvideOrderEntryTicketService < CivilService::Service
   def create_ticket
     if product.provides_ticket_type.event
       product.provides_ticket_type.tickets.create!(
-        event: product.provides_ticket_type.event,
+        run: run,
         order_entry: order_entry,
         user_con_profile: user_con_profile
       )
 
-      user_con_profile
-        .signups
-        .ticket_purchase_hold
-        .joins(:run)
-        .where(run: { event_id: product.provides_ticket_type.event_id })
-        .find_each { |signup| signup.update!(state: 'confirmed') }
+      held_signup = user_con_profile.signups.ticket_purchase_hold.joins(:run).where(run_id: run.id).first
+      held_signup.update!(state: 'confirmed')
     else
       user_con_profile.create_ticket!(ticket_type: product.provides_ticket_type, order_entry: order_entry)
     end

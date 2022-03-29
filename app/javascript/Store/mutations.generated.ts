@@ -108,6 +108,7 @@ export type AddOrderEntryToCurrentPendingOrderMutationVariables = Types.Exact<{
   productVariantId?: Types.InputMaybe<Types.Scalars['ID']['input']>;
   quantity: Types.Scalars['Int']['input'];
   payWhatYouWantAmount?: Types.InputMaybe<Types.MoneyInput>;
+  runId?: Types.InputMaybe<Types.Scalars['ID']['input']>;
 }>;
 
 
@@ -618,9 +619,9 @@ export type SubmitOrderMutationHookResult = ReturnType<typeof useSubmitOrderMuta
 export type SubmitOrderMutationResult = Apollo.MutationResult<SubmitOrderMutationData>;
 export type SubmitOrderMutationOptions = Apollo.BaseMutationOptions<SubmitOrderMutationData, SubmitOrderMutationVariables>;
 export const AddOrderEntryToCurrentPendingOrderDocument = gql`
-    mutation AddOrderEntryToCurrentPendingOrder($productId: ID!, $productVariantId: ID, $quantity: Int!, $payWhatYouWantAmount: MoneyInput) {
+    mutation AddOrderEntryToCurrentPendingOrder($productId: ID!, $productVariantId: ID, $quantity: Int!, $payWhatYouWantAmount: MoneyInput, $runId: ID) {
   addOrderEntryToCurrentPendingOrder(
-    input: {order_entry: {productId: $productId, productVariantId: $productVariantId, quantity: $quantity}, pay_what_you_want_amount: $payWhatYouWantAmount}
+    input: {order_entry: {productId: $productId, productVariantId: $productVariantId, quantity: $quantity, runId: $runId}, pay_what_you_want_amount: $payWhatYouWantAmount}
   ) {
     order_entry {
       id
@@ -662,6 +663,7 @@ export type AddOrderEntryToCurrentPendingOrderMutationFn = Apollo.MutationFuncti
  *      productVariantId: // value for 'productVariantId'
  *      quantity: // value for 'quantity'
  *      payWhatYouWantAmount: // value for 'payWhatYouWantAmount'
+ *      runId: // value for 'runId'
  *   },
  * });
  */
