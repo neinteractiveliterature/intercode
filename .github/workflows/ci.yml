@@ -112,6 +112,8 @@ jobs:
       run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
     - name: Build webpack bundle
       run: yarn run build
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v1
     - name: Set up Docker Buildx
       id: buildx
       uses: docker/setup-buildx-action@master
@@ -127,6 +129,7 @@ jobs:
       with:
         context: .
         push: ${{ github.event_name == 'push' && github.event.ref == 'refs/heads/main' }}
+        platforms: linux/amd64,linux/arm64
         target: production
         tags: |
           ghcr.io/neinteractiveliterature/intercode:${{ github.sha }}
