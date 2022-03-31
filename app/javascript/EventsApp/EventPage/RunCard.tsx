@@ -1,4 +1,4 @@
-import { useContext, useRef, useEffect } from 'react';
+import { useContext, useRef, useEffect, useCallback } from 'react';
 import classNames from 'classnames';
 import { useLocation } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
@@ -17,7 +17,7 @@ import AuthenticationModalContext from '../../Authentication/AuthenticationModal
 import { EventPageQueryData } from './queries.generated';
 import { PartitionedSignupOptions, SignupOption } from './buildSignupOptions';
 import { useFormatRunTimespan } from '../runTimeFormatting';
-import { SignupState } from '../../graphqlTypes.generated';
+import { Signup, SignupState } from '../../graphqlTypes.generated';
 import EventTicketPurchaseModal from './EventTicketPurchaseModal';
 
 function describeSignupState(
@@ -55,7 +55,9 @@ export type RunCardProps = {
   mySignup?: EventPageQueryData['convention']['event']['runs'][0]['my_signups'][0] | null;
   myPendingSignupRequest?: EventPageQueryData['convention']['event']['runs'][0]['my_signup_requests'][0] | null;
   showViewSignups?: boolean;
-  createSignup: (signupOption: SignupOption) => Promise<unknown>;
+  createSignup: (
+    signupOption: SignupOption,
+  ) => Promise<undefined | null | Pick<Signup, '__typename' | 'id' | 'state' | 'expires_at'>>;
   withdrawSignup: () => Promise<unknown>;
   withdrawPendingSignupRequest: () => Promise<unknown>;
 };
@@ -83,11 +85,21 @@ function RunCard({
       cardRef.current?.scrollIntoView(false);
     }
   }, [location.hash, run.id]);
-  const [signupButtonClicked, signupError, mutationInProgress] = useAsyncFunction(createSignup, {
+  const eventTicketPurchaseModal = useModal<{ run: NonNullable<typeof run>; signup: NonNullable<typeof mySignup> }>();
+
+  const performSignup = useCallback(
+    async (signupOption: SignupOption) => {
+      const signup = await createSignup(signupOption);
+      if (signup?.state === SignupState.TicketPurchaseHold) {
+        eventTicketPurchaseModal.open({ run, signup });
+      }
+    },
+    [createSignup, eventTicketPurchaseModal, run],
+  );
+  const [signupButtonClicked, signupError, mutationInProgress] = useAsyncFunction(performSignup, {
     suppressError: true,
   });
   const { setAfterSignInPath, open: openAuthenticationModal } = useContext(AuthenticationModalContext);
-  const eventTicketPurchaseModal = useModal<{ run: NonNullable<typeof run>; signup: NonNullable<typeof mySignup> }>();
 
   const renderMainSignupSection = () => {
     if (!myProfile) {

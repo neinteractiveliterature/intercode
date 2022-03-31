@@ -34,6 +34,9 @@ export default LoadQueryWithVariablesWrapper(
       });
 
       await apolloClient.resetStore();
+
+      // we never actually want to pop the ticket purchase dialog for this
+      return undefined;
     };
 
     const [withdrawSignupMutate] = useWithdrawUserSignupMutation();
