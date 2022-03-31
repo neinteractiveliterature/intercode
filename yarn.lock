@@ -3224,9 +3224,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-eslint/eslint-plugin@npm:3.10.0":
-  version: 3.10.0
-  resolution: "@graphql-eslint/eslint-plugin@npm:3.10.0"
+"@graphql-eslint/eslint-plugin@npm:3.10.1":
+  version: 3.10.1
+  resolution: "@graphql-eslint/eslint-plugin@npm:3.10.1"
   dependencies:
     "@babel/code-frame": 7.16.7
     "@graphql-tools/code-file-loader": ^7.2.8
@@ -3240,7 +3240,7 @@ __metadata:
     lodash.lowercase: 4.3.0
   peerDependencies:
     graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 94dfcbb5815787a8cf72ab74011836b0d056dcd33052ccb5f6ecba984d7fd24b2e1e2b82c983559375ab3f5cde6e7b2213781e98dd640c836130cf84f89bfd8d
+  checksum: 3986d9662fc7ed3dfbf5ff454a6a4c32b0baffa5b946f2b4f13a282158e821207987ec22d48e78bc487a2809483cda44f703400fd4a3e02165087f8f299d440b
   languageName: node
   linkType: hard
 
@@ -18089,7 +18089,7 @@ resolve@^2.0.0-next.3:
     "@graphql-codegen/typescript": 2.4.8
     "@graphql-codegen/typescript-operations": 2.3.5
     "@graphql-codegen/typescript-react-apollo": 3.2.11
-    "@graphql-eslint/eslint-plugin": 3.10.0
+    "@graphql-eslint/eslint-plugin": 3.10.1
     "@juggle/resize-observer": 3.3.1
     "@lezer/common": 0.15.12
     "@neinteractiveliterature/litform": 0.21.0
