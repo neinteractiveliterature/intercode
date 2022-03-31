@@ -94,7 +94,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Set up webpack cache
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       id: webpack-cache # use this to check for `cache-hit` (`steps.webpack-cache.outputs.cache-hit != 'true'`)
       with:
         path: build-cache
@@ -144,7 +144,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Set up docusaurus cache
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: doc-site/.yarn/.cache/webpack
         key: ${{ runner.os }}-doc-site-docusaurus-${{ github.ref }}
