@@ -2066,16 +2066,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/language@npm:0.19.9, @codemirror/language@npm:^0.19.0, @codemirror/language@npm:^0.19.3":
-  version: 0.19.9
-  resolution: "@codemirror/language@npm:0.19.9"
+"@codemirror/language@npm:0.19.10, @codemirror/language@npm:^0.19.0, @codemirror/language@npm:^0.19.3":
+  version: 0.19.10
+  resolution: "@codemirror/language@npm:0.19.10"
   dependencies:
     "@codemirror/state": ^0.19.0
     "@codemirror/text": ^0.19.0
     "@codemirror/view": ^0.19.0
     "@lezer/common": ^0.15.5
     "@lezer/lr": ^0.15.0
-  checksum: 2c5cf882072e340ddfdb48516ce4ad12c77c498584cd9014d0e9d5605cb1bd5d5d0a70ee29086d14ac9af8378c549df459ef12d34f3cac09ab64d36adc2ef7f7
+  checksum: 8499bec836911efd70192d908419bc5616397fc3379ecca8d8d05704d2a2ac9b22203fe6d2ddffe842d20724f2dab27c6997838c8695bebab4cef1be5a1bcad2
   languageName: node
   linkType: hard
 
@@ -18073,7 +18073,7 @@ resolve@^2.0.0-next.3:
     "@codemirror/lang-html": 0.19.4
     "@codemirror/lang-json": 0.19.2
     "@codemirror/lang-markdown": 0.19.6
-    "@codemirror/language": 0.19.9
+    "@codemirror/language": 0.19.10
     "@codemirror/state": 0.19.9
     "@codemirror/view": 0.19.48
     "@dnd-kit/core": 5.0.3
