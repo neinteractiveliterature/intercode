@@ -41,10 +41,19 @@ ENV AWS_SECRET_ACCESS_KEY dummy
 RUN DATABASE_URL=postgresql://fakehost/not_a_real_database AWS_S3_BUCKET=fakebucket bundle exec rails assets:precompile
 RUN rm -r doc-site
 
+### ld_preload trickery
+
+FROM ruby:${RUBY_VERSION}-slim as amd64_jemalloc
+ENV LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libjemalloc.so.2
+
+FROM ruby:${RUBY_VERSION}-slim as arm64_jemalloc
+ENV LD_PRELOAD=/usr/lib/aarch64-linux-gnu/libjemalloc.so.2
+
 ### production
 
-FROM ruby:${RUBY_VERSION}-slim as production
+FROM ${TARGETARCH}_jemalloc as production
 ARG NODE_VERSION
+ARG TARGETARCH
 
 ENV RAILS_ENV production
 ENV NODE_ENV production
@@ -53,13 +62,12 @@ USER root
 RUN useradd -ms /bin/bash www
 RUN apt-get update && apt-get install -y --no-install-recommends libvips42 poppler-utils curl xz-utils libjemalloc2 shared-mime-info libpq5 && rm -rf /var/lib/apt/lists/*
 RUN mkdir /opt/node && \
-  curl https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-$(uname -m | sed 's/x86_64/x64/' | sed 's/aarch64/arm64/').tar.xz | tar xJ --strip-components=1
+  curl https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-$(echo ${TARGETARCH} | sed 's/amd64/x64/').tar.xz | tar xJ --strip-components=1
 
 COPY --from=build /usr/local/bundle /usr/local/bundle
 COPY --from=build --chown=www /usr/src/intercode /usr/src/intercode
 WORKDIR /usr/src/intercode
 
 USER www
-ENV LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libjemalloc.so.2
 ENV PATH=/opt/node/bin:$PATH
 CMD bundle exec bin/rails server -p $PORT -b 0.0.0.0
