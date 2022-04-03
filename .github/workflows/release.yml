@@ -102,6 +102,7 @@ jobs:
         workflow: ci.yml
         commit: ${{ github.sha }}
         name: doc-site
+        path: ./doc-site/build
         github_token: ${{ secrets.GITHUB_TOKEN }}
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
