@@ -13159,15 +13159,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-junit@npm:13.0.0":
-  version: 13.0.0
-  resolution: "jest-junit@npm:13.0.0"
+"jest-junit@npm:13.1.0":
+  version: 13.1.0
+  resolution: "jest-junit@npm:13.1.0"
   dependencies:
     mkdirp: ^1.0.4
     strip-ansi: ^6.0.1
     uuid: ^8.3.2
     xml: ^1.0.1
-  checksum: d3a1bf6e98250837d1a9939cd54f29a7bd4fb835af30e92d0d544300fbe634eb86d2b018c79a7a35b123d933bf3e6c96ba13c0161cdefbf66fc3ab771707572e
+  checksum: a12ec522012cf9d0e97d4c665d8ca05b97dc3d25ef3cd0dbba2b095da4b68e1cabac9751a2718a9593b55c620a2b980e0b6c7dd7d33dfc4b73193bc67b9c9ae0
   languageName: node
   linkType: hard
 
@@ -18199,7 +18199,7 @@ resolve@^2.0.0-next.3:
     i18next-parser: 6.3.0
     jest: 27.5.1
     jest-html-reporter: 3.4.2
-    jest-junit: 13.0.0
+    jest-junit: 13.1.0
     jest-prop-type-error: 1.1.0
     js-search: 2.0.0
     lint-staged: 12.3.7
