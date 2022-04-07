@@ -2986,16 +2986,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphiql/toolkit@npm:0.4.2, @graphiql/toolkit@npm:^0.4.2":
-  version: 0.4.2
-  resolution: "@graphiql/toolkit@npm:0.4.2"
+"@graphiql/toolkit@npm:0.4.3, @graphiql/toolkit@npm:^0.4.2":
+  version: 0.4.3
+  resolution: "@graphiql/toolkit@npm:0.4.3"
   dependencies:
     "@n1ru4l/push-pull-async-iterable-iterator": ^3.1.0
     meros: ^1.1.4
   peerDependencies:
     graphql: ^15.5.0 || ^16.0.0
     graphql-ws: ">= 4.5.0"
-  checksum: e00e458f04d8ac34b74668321ed00bab32d522356462c73455fb9050495aeb3646c00103fe4f4a7e010f33f7b63171ba0dcc17b604b8a196b4995bd2fc5d53ec
+  checksum: a450dae38d3a5765316d4d3ef135473582f933d2b1892ebb6d40eb138313ad9b157af638ea96073be500e8c19b048c60e1e6ea06481fe59dd8b139a390ffcaf8
   languageName: node
   linkType: hard
 
@@ -18001,7 +18001,7 @@ resolve@^2.0.0-next.3:
     "@dnd-kit/sortable": 6.0.1
     "@dnd-kit/utilities": 3.1.0
     "@emotion/serialize": 1.0.3
-    "@graphiql/toolkit": 0.4.2
+    "@graphiql/toolkit": 0.4.3
     "@graphql-codegen/add": 3.1.1
     "@graphql-codegen/cli": 2.6.2
     "@graphql-codegen/fragment-matcher": 3.2.1
