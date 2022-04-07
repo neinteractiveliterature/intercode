@@ -2986,7 +2986,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphiql/toolkit@npm:0.4.3, @graphiql/toolkit@npm:^0.4.2":
+"@graphiql/toolkit@npm:0.4.3, @graphiql/toolkit@npm:^0.4.3":
   version: 0.4.3
   resolution: "@graphiql/toolkit@npm:0.4.3"
   dependencies:
@@ -11075,11 +11075,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphiql@npm:1.8.3":
-  version: 1.8.3
-  resolution: "graphiql@npm:1.8.3"
+"graphiql@npm:1.8.4":
+  version: 1.8.4
+  resolution: "graphiql@npm:1.8.4"
   dependencies:
-    "@graphiql/toolkit": ^0.4.2
+    "@graphiql/toolkit": ^0.4.3
     codemirror: ^5.58.2
     codemirror-graphql: ^1.2.15
     copy-to-clipboard: ^3.2.0
@@ -11092,7 +11092,7 @@ __metadata:
     graphql: ^15.5.0 || ^16.0.0
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: 6027a6daa65500cd89aedacffaa811f240538fde08b1edbe2031d209b55a6d90fa6debe89eb1c64081930c7dd4b57320795620179d5c16a510fd18846822b6d7
+  checksum: dbc92f6fb5f4bbc0a25b728d4a160f304bdbe0015b84167491a08828b9c39a2628ebc1861cf07395d28f8280d780531fbf9e513b5092393b14a80983423bca7b
   languageName: node
   linkType: hard
 
@@ -18108,7 +18108,7 @@ resolve@^2.0.0-next.3:
     file-saver: 2.0.5
     font-awesome: 4.7.0
     glob: 7.2.0
-    graphiql: 1.8.3
+    graphiql: 1.8.4
     graphql: 16.3.0
     graphql-anywhere: 4.2.7
     graphql-language-service-utils: 2.7.1
