@@ -124,8 +124,14 @@
         "available": "",
         "deleteConfirmation": "",
         "deleteLabel": "",
+        "descriptionLabel": "",
+        "editProduct": "",
+        "newProduct": "",
         "unavailable": ""
       }
+    },
+    "tickets": {
+      "createProduct": ""
     },
     "ticketTypes": {
       "eventProvidedDescription_one": "",

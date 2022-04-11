@@ -112,14 +112,20 @@
       },
       "paymentOptions": {
         "payAtConvention": "Pay at convention",
-        "stripe": "Stripe"
+        "stripe": "Card payment via Stripe"
       },
       "products": {
         "available": "Available for purchase",
         "deleteConfirmation": "Are you sure you want to delete the product {{ productName }}?",
         "deleteLabel": "Delete product",
+        "descriptionLabel": "Product description",
+        "editProduct": "Edit product",
+        "newProduct": "New product",
         "unavailable": "Not available for purchase"
       }
+    },
+    "tickets": {
+      "createProduct": "Create product"
     },
     "ticketTypes": {
       "eventProvidedDescription_one": "events can provide up to {{ count }} {{ ticketName }}",
