@@ -4586,17 +4586,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/react@npm:12.1.4":
-  version: 12.1.4
-  resolution: "@testing-library/react@npm:12.1.4"
+"@testing-library/react@npm:12.1.5":
+  version: 12.1.5
+  resolution: "@testing-library/react@npm:12.1.5"
   dependencies:
     "@babel/runtime": ^7.12.5
     "@testing-library/dom": ^8.0.0
-    "@types/react-dom": "*"
+    "@types/react-dom": <18.0.0
   peerDependencies:
-    react: "*"
-    react-dom: "*"
-  checksum: 944c5f8d4abb22c0650c25c7ae499651828c37c0e741ff67a4635d4cd99b307d486dabec05b372aba638bd359d29cd2af97393b5055ea294a201d80b4bc384b8
+    react: <18.0.0
+    react-dom: <18.0.0
+  checksum: 4abd0490405e709a7df584a0db604e508a4612398bb1326e8fa32dd9393b15badc826dcf6d2f7525437886d507871f719f127b9860ed69ddd204d1fa834f576a
   languageName: node
   linkType: hard
 
@@ -5187,12 +5187,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:*, @types/react-dom@npm:18.0.0":
+"@types/react-dom@npm:18.0.0":
   version: 18.0.0
   resolution: "@types/react-dom@npm:18.0.0"
   dependencies:
     "@types/react": "*"
   checksum: 0d8c9cb3e72aefe0dd2b58a49845a200369f01ae92f3f11f642e04efc95dfd1c9380b6592d4273dd6113fb8707947d15b66d56c75c41f39f28bd897f0c08dfa9
+  languageName: node
+  linkType: hard
+
+"@types/react-dom@npm:<18.0.0":
+  version: 17.0.15
+  resolution: "@types/react-dom@npm:17.0.15"
+  dependencies:
+    "@types/react": ^17
+  checksum: 7b90372bd7207d3860e1043ebfe10fd21fbd9ec3417a29593ca14359774830c888ba4ebb25cf0510628607496f8d35b09d23d329ea709b9311f5866185c5fd67
   languageName: node
   linkType: hard
 
@@ -5264,7 +5273,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:17.0.44, @types/react@npm:^17.0":
+"@types/react@npm:*, @types/react@npm:17.0.44, @types/react@npm:^17, @types/react@npm:^17.0":
   version: 17.0.44
   resolution: "@types/react@npm:17.0.44"
   dependencies:
@@ -18010,7 +18019,7 @@ resolve@^2.0.0-next.3:
     "@stripe/react-stripe-js": 1.7.1
     "@stripe/stripe-js": 1.27.0
     "@testing-library/jest-dom": 5.16.4
-    "@testing-library/react": 12.1.4
+    "@testing-library/react": 12.1.5
     "@testing-library/react-hooks": 8.0.0
     "@types/apollo-upload-client": 17.0.0
     "@types/bootstrap": 5.1.9
