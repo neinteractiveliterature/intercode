@@ -16,7 +16,7 @@ jobs:
         with:
           cache: yarn
       - name: Set up gem cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: /home/runner/.rubies/ruby-2.7.3/lib/ruby/gems/2.7.0
           key: ${{ runner.os }}-pronto-gems-${{ github.ref }}-${{ github.sha }}
