@@ -97,7 +97,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Download built doc site
-      uses: dawidd6/action-download-artifact@v2.17.0
+      uses: dawidd6/action-download-artifact@v2.18.0
       with:
         workflow: ci.yml
         commit: ${{ github.sha }}
