@@ -7164,7 +7164,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"browserslist@npm:^4.0.0, browserslist@npm:^4.14.5, browserslist@npm:^4.16.6, browserslist@npm:^4.17.5, browserslist@npm:^4.18.1, browserslist@npm:^4.19.1, browserslist@npm:^4.20.2":
+"browserslist@npm:^4.0.0, browserslist@npm:^4.14.5, browserslist@npm:^4.16.6, browserslist@npm:^4.17.5, browserslist@npm:^4.18.1, browserslist@npm:^4.20.2":
   version: 4.20.2
   resolution: "browserslist@npm:4.20.2"
   dependencies:
@@ -8234,13 +8234,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js-compat@npm:3.21.1, core-js-compat@npm:^3.20.0, core-js-compat@npm:^3.20.2":
-  version: 3.21.1
-  resolution: "core-js-compat@npm:3.21.1"
+"core-js-compat@npm:3.22.0, core-js-compat@npm:^3.20.0, core-js-compat@npm:^3.20.2":
+  version: 3.22.0
+  resolution: "core-js-compat@npm:3.22.0"
   dependencies:
-    browserslist: ^4.19.1
+    browserslist: ^4.20.2
     semver: 7.0.0
-  checksum: 6af1bcbc94ede50b109e54bf3f5a9ca28b8a303124e07c2bf76c2257a8a94a0b550cf4a318f6ec0594b351b6f9a5453fd4516e3681560b6d984b95d1988baf13
+  checksum: ad204cfbe203803d2d86f7bb95f60525b1f9e3701b92d68d08e575932a5d8ea2ec31e121350a328a4035d8f0ef8793392efd74b1fede2702c26c80865b49597c
   languageName: node
   linkType: hard
 
@@ -18146,7 +18146,7 @@ resolve@^2.0.0-next.3:
     classnames: 2.3.1
     compression-webpack-plugin: 9.2.0
     core-js: 3.22.0
-    core-js-compat: 3.21.1
+    core-js-compat: 3.22.0
     crypto-browserify: 3.12.0
     css-loader: 6.7.1
     css-minimizer-webpack-plugin: 3.4.1
