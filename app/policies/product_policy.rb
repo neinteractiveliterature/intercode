@@ -9,6 +9,9 @@ class ProductPolicy < ApplicationPolicy
   def manage?
     if oauth_scoped_disjunction do |d|
          d.add(:manage_conventions) { has_convention_permission?(convention, 'update_products') }
+         d.add(:manage_events) do
+           record.provides_ticket_type&.event && team_member_for_event?(record.provides_ticket_type&.event)
+         end
        end
       return true
     end

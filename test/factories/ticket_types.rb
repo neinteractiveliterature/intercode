@@ -54,4 +54,10 @@ FactoryBot.define do
     description { 'Comp ticket for event' }
     maximum_event_provided_tickets { 2 }
   end
+
+  factory :event_specific_ticket_type, class: TicketType do
+    event
+    name { 'event_ticket' }
+    description { 'Event-specific ticket' }
+  end
 end
