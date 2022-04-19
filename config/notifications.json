@@ -52,6 +52,11 @@
           "name": "Your signup status changed",
           "destination_description": "Signed up attendee",
           "sends_sms": true
+        },
+        {
+          "key": "hold_expired",
+          "name": "Signup hold expired",
+          "destination_description": "Attendee"
         }
       ]
     },

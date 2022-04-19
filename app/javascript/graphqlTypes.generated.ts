@@ -4420,6 +4420,7 @@ export enum SignupChangeAction {
   AcceptSignupRequest = 'accept_signup_request',
   AdminCreateSignup = 'admin_create_signup',
   ChangeRegistrationPolicy = 'change_registration_policy',
+  HoldExpired = 'hold_expired',
   SelfServiceSignup = 'self_service_signup',
   Unknown = 'unknown',
   VacancyFill = 'vacancy_fill',

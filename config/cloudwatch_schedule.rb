@@ -15,6 +15,10 @@ CloudwatchScheduler() do |_config|
     AutoscaleServersService.new.call!
   end
 
+  task "drop_expired_signups", cron: "0/10 * * * ? *" do
+    DropExpiredSignupsJob.perform_later
+  end
+
   if ENV["HEROKU_API_TOKEN"].present? && ENV["HEROKU_APP_NAME"].present?
     task "refresh_certs", cron: "30 5 * * ? *" do
       RefreshSslCertificateService.new(

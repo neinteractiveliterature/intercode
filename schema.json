@@ -28682,6 +28682,12 @@
               "deprecationReason": null
             },
             {
+              "name": "hold_expired",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "vacancy_fill",
               "description": null,
               "isDeprecated": false,

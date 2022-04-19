@@ -4,6 +4,7 @@ class Types::SignupChangeActionType < Types::BaseEnum
   value 'admin_create_signup'
   value 'accept_signup_request'
   value 'change_registration_policy'
+  value 'hold_expired'
   value 'vacancy_fill'
   value 'withdraw'
   value 'unknown'

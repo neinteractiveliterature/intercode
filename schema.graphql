@@ -5263,6 +5263,7 @@ enum SignupChangeAction {
   accept_signup_request
   admin_create_signup
   change_registration_policy
+  hold_expired
   self_service_signup
   unknown
   vacancy_fill

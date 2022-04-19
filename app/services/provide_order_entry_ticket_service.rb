@@ -41,7 +41,7 @@ class ProvideOrderEntryTicketService < CivilService::Service
       )
 
       held_signup = user_con_profile.signups.ticket_purchase_hold.joins(:run).where(run_id: run.id).first
-      held_signup.update!(state: 'confirmed')
+      held_signup.update!(state: 'confirmed', expires_at: nil)
     else
       user_con_profile.create_ticket!(ticket_type: product.provides_ticket_type, order_entry: order_entry)
     end
