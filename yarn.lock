@@ -5148,10 +5148,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:16.11.27":
-  version: 16.11.27
-  resolution: "@types/node@npm:16.11.27"
-  checksum: 6ed0c8c4d29a549d0cfd607d19edf9a4668fbd39087701d923b4a04cd760564e47ad27f9403968cb9c11ee006f0ea6ab698b2491b4b2d2dec3f4a53d0fc22df7
+"@types/node@npm:16.11.29":
+  version: 16.11.29
+  resolution: "@types/node@npm:16.11.29"
+  checksum: efb3a716a638baa7bf8f281d8f91102a7df452804f4cfbdd3a0f36d581cddc56446eac6b1ed041e27841f316de5d858080f98516ccf306fda9d6f8c3c68c2e17
   languageName: node
   linkType: hard
 
@@ -18117,7 +18117,7 @@ resolve@^2.0.0-next.3:
     "@types/luxon": 2.3.1
     "@types/mapbox-gl": 1.13.3
     "@types/minimist": 1.2.2
-    "@types/node": 16.11.27
+    "@types/node": 16.11.29
     "@types/punycode": 2.1.0
     "@types/rails__activestorage": 7.0.1
     "@types/react": 17.0.44
