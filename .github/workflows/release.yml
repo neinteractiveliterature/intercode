@@ -71,6 +71,12 @@ jobs:
       env:
         HEROKU_API_KEY: ${{ secrets.HerokuApiToken }}
       run: heroku container:release -a ${{ secrets.HerokuAppName }} web release shoryuken
+  notify-slack:
+    runs-on: ubuntu-latest
+    needs:
+      - heroku-release
+      - render-release
+    steps:
     - name: Format release notes for Slack
       id: format-release-notes
       uses: LoveToKnow/slackify-markdown-action@v1.0.0
