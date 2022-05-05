@@ -24,6 +24,18 @@ jobs:
       run: docker tag ghcr.io/neinteractiveliterature/intercode:${{ github.sha }} neinteractiveliterature/intercode:latest
     - name: Push to Docker Hub
       run: docker push neinteractiveliterature/intercode:latest && docker push neinteractiveliterature/intercode:${{ github.event.release.name }}
+  render-release:
+    runs-on: ubuntu-latest
+    needs:
+      - docker-release
+    steps:
+    - name: Release app to Render
+      uses: peter-evans/repository-dispatch@v2
+      with:
+        token: ${{ secrets.NEILHOSTING_RENDER_ACCESS_TOKEN }}
+        repository: neinteractiveliterature/neilhosting-render
+        event-type: intercode-release
+        client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}", "tag": "${{ github.event.release.name }}"}'
   heroku-release:
     runs-on: ubuntu-latest
     steps:
