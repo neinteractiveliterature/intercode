@@ -4,11 +4,11 @@
 #
 # Table name: rooms
 #
-#  id            :integer          not null, primary key
+#  id            :bigint           not null, primary key
 #  name          :string
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
-#  convention_id :integer
+#  convention_id :bigint
 #
 # Indexes
 #

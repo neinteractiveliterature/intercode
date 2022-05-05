@@ -4,7 +4,7 @@
 #
 # Table name: staff_positions
 #
-#  id            :integer          not null, primary key
+#  id            :bigint           not null, primary key
 #  cc_addresses  :text             default([]), not null, is an Array
 #  email         :text
 #  email_aliases :text             default([]), not null, is an Array
@@ -12,7 +12,7 @@
 #  visible       :boolean
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
-#  convention_id :integer
+#  convention_id :bigint
 #
 # Indexes
 #

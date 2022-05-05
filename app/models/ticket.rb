@@ -9,9 +9,9 @@
 #  updated_at           :datetime         not null
 #  event_id             :bigint
 #  order_entry_id       :bigint
-#  provided_by_event_id :integer
-#  ticket_type_id       :integer
-#  user_con_profile_id  :integer
+#  provided_by_event_id :bigint
+#  ticket_type_id       :bigint
+#  user_con_profile_id  :bigint
 #
 # Indexes
 #
