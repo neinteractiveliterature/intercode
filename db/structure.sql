@@ -904,7 +904,7 @@ ALTER SEQUENCE public.cms_content_groups_id_seq OWNED BY public.cms_content_grou
 CREATE TABLE public.cms_files (
     id integer NOT NULL,
     parent_id integer,
-    uploader_id integer,
+    uploader_id bigint,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     parent_type character varying
@@ -1152,15 +1152,15 @@ ALTER SEQUENCE public.cms_variables_id_seq OWNED BY public.cms_variables.id;
 --
 
 CREATE TABLE public.conventions (
-    id integer NOT NULL,
+    id bigint NOT NULL,
     show_schedule character varying DEFAULT 'no'::character varying NOT NULL,
     accepting_proposals boolean,
-    updated_by_id integer,
+    updated_by_id bigint,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     starts_at timestamp without time zone,
     ends_at timestamp without time zone,
-    root_page_id integer,
+    root_page_id bigint,
     name character varying,
     domain character varying NOT NULL,
     timezone_name character varying,
@@ -1510,7 +1510,7 @@ ALTER SEQUENCE public.event_ratings_id_seq OWNED BY public.event_ratings.id;
 --
 
 CREATE TABLE public.events (
-    id integer NOT NULL,
+    id bigint NOT NULL,
     title character varying NOT NULL,
     author character varying,
     email character varying,
@@ -1521,11 +1521,11 @@ CREATE TABLE public.events (
     con_mail_destination character varying,
     description text,
     short_blurb text,
-    updated_by_id integer,
+    updated_by_id bigint,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    convention_id integer,
-    owner_id integer,
+    convention_id bigint,
+    owner_id bigint,
     status character varying DEFAULT 'active'::character varying NOT NULL,
     registration_policy jsonb,
     participant_communications text,
@@ -2098,7 +2098,7 @@ ALTER SEQUENCE public.organizations_id_seq OWNED BY public.organizations.id;
 --
 
 CREATE TABLE public.pages (
-    id integer NOT NULL,
+    id bigint NOT NULL,
     name text,
     slug character varying,
     content text,
@@ -2286,8 +2286,8 @@ ALTER SEQUENCE public.products_id_seq OWNED BY public.products.id;
 --
 
 CREATE TABLE public.rooms (
-    id integer NOT NULL,
-    convention_id integer,
+    id bigint NOT NULL,
+    convention_id bigint,
     name character varying,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
@@ -2318,8 +2318,8 @@ ALTER SEQUENCE public.rooms_id_seq OWNED BY public.rooms.id;
 --
 
 CREATE TABLE public.rooms_runs (
-    room_id integer NOT NULL,
-    run_id integer NOT NULL
+    room_id bigint NOT NULL,
+    run_id bigint NOT NULL
 );
 
 
@@ -2359,12 +2359,12 @@ ALTER SEQUENCE public.root_sites_id_seq OWNED BY public.root_sites.id;
 --
 
 CREATE TABLE public.runs (
-    id integer NOT NULL,
-    event_id integer,
+    id bigint NOT NULL,
+    event_id bigint,
     starts_at timestamp without time zone,
     title_suffix character varying,
     schedule_note text,
-    updated_by_id integer,
+    updated_by_id bigint,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     timespan_tsrange tsrange NOT NULL
@@ -2513,13 +2513,13 @@ ALTER SEQUENCE public.signup_requests_id_seq OWNED BY public.signup_requests.id;
 --
 
 CREATE TABLE public.signups (
-    id integer NOT NULL,
-    run_id integer,
+    id bigint NOT NULL,
+    run_id bigint,
     bucket_key character varying,
-    updated_by_id integer,
+    updated_by_id bigint,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    user_con_profile_id integer NOT NULL,
+    user_con_profile_id bigint NOT NULL,
     state character varying DEFAULT 'confirmed'::character varying NOT NULL,
     counted boolean,
     requested_bucket_key character varying,
@@ -2551,8 +2551,8 @@ ALTER SEQUENCE public.signups_id_seq OWNED BY public.signups.id;
 --
 
 CREATE TABLE public.staff_positions (
-    id integer NOT NULL,
-    convention_id integer,
+    id bigint NOT NULL,
+    convention_id bigint,
     name text,
     email text,
     created_at timestamp without time zone NOT NULL,
@@ -2598,14 +2598,14 @@ CREATE TABLE public.staff_positions_user_con_profiles (
 
 CREATE TABLE public.team_members (
     id integer NOT NULL,
-    event_id integer,
+    event_id bigint,
     updated_at timestamp without time zone,
     updated_by_id integer,
     display boolean,
     show_email boolean,
     receive_con_email boolean,
     created_at timestamp without time zone,
-    user_con_profile_id integer NOT NULL,
+    user_con_profile_id bigint NOT NULL,
     receive_signup_email character varying DEFAULT 'no'::character varying NOT NULL
 );
 
@@ -2634,8 +2634,8 @@ ALTER SEQUENCE public.team_members_id_seq OWNED BY public.team_members.id;
 --
 
 CREATE TABLE public.ticket_types (
-    id integer NOT NULL,
-    convention_id integer,
+    id bigint NOT NULL,
+    convention_id bigint,
     name text NOT NULL,
     description text,
     created_at timestamp without time zone NOT NULL,
@@ -2673,11 +2673,11 @@ ALTER SEQUENCE public.ticket_types_id_seq OWNED BY public.ticket_types.id;
 
 CREATE TABLE public.tickets (
     id integer NOT NULL,
-    user_con_profile_id integer,
-    ticket_type_id integer,
+    user_con_profile_id bigint,
+    ticket_type_id bigint,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    provided_by_event_id integer,
+    provided_by_event_id bigint,
     order_entry_id bigint,
     event_id bigint
 );
@@ -2743,9 +2743,9 @@ ALTER SEQUENCE public.user_activity_alerts_id_seq OWNED BY public.user_activity_
 --
 
 CREATE TABLE public.user_con_profiles (
-    id integer NOT NULL,
-    user_id integer NOT NULL,
-    convention_id integer NOT NULL,
+    id bigint NOT NULL,
+    user_id bigint NOT NULL,
+    convention_id bigint NOT NULL,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     first_name character varying NOT NULL,
@@ -2799,7 +2799,7 @@ ALTER SEQUENCE public.user_con_profiles_id_seq OWNED BY public.user_con_profiles
 --
 
 CREATE TABLE public.users (
-    id integer NOT NULL,
+    id bigint NOT NULL,
     first_name character varying NOT NULL,
     last_name character varying NOT NULL,
     site_admin boolean,
@@ -3334,6 +3334,22 @@ ALTER TABLE ONLY public.cms_content_groups
 
 
 --
+-- Name: cms_files_layouts cms_files_layouts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_files_layouts
+    ADD CONSTRAINT cms_files_layouts_pkey PRIMARY KEY (cms_file_id, cms_layout_id);
+
+
+--
+-- Name: cms_files_pages cms_files_pages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_files_pages
+    ADD CONSTRAINT cms_files_pages_pkey PRIMARY KEY (cms_file_id, page_id);
+
+
+--
 -- Name: cms_files cms_files_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3350,6 +3366,14 @@ ALTER TABLE ONLY public.cms_graphql_queries
 
 
 --
+-- Name: cms_layouts_partials cms_layouts_partials_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_layouts_partials
+    ADD CONSTRAINT cms_layouts_partials_pkey PRIMARY KEY (cms_layout_id, cms_partial_id);
+
+
+--
 -- Name: cms_layouts cms_layouts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3363,6 +3387,14 @@ ALTER TABLE ONLY public.cms_layouts
 
 ALTER TABLE ONLY public.cms_navigation_items
     ADD CONSTRAINT cms_navigation_items_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cms_partials_pages cms_partials_pages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_partials_pages
+    ADD CONSTRAINT cms_partials_pages_pkey PRIMARY KEY (cms_partial_id, page_id);
 
 
 --
@@ -3574,6 +3606,14 @@ ALTER TABLE ONLY public.organization_roles
 
 
 --
+-- Name: organization_roles_users organization_roles_users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.organization_roles_users
+    ADD CONSTRAINT organization_roles_users_pkey PRIMARY KEY (organization_role_id, user_id);
+
+
+--
 -- Name: organizations organizations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3627,6 +3667,14 @@ ALTER TABLE ONLY public.products
 
 ALTER TABLE ONLY public.rooms
     ADD CONSTRAINT rooms_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: rooms_runs rooms_runs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.rooms_runs
+    ADD CONSTRAINT rooms_runs_pkey PRIMARY KEY (room_id, run_id);
 
 
 --
@@ -3691,6 +3739,14 @@ ALTER TABLE ONLY public.signups
 
 ALTER TABLE ONLY public.staff_positions
     ADD CONSTRAINT staff_positions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: staff_positions_user_con_profiles staff_positions_user_con_profiles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.staff_positions_user_con_profiles
+    ADD CONSTRAINT staff_positions_user_con_profiles_pkey PRIMARY KEY (staff_position_id, user_con_profile_id);
 
 
 --
@@ -5714,6 +5770,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220122174528'),
 ('20220226170101'),
 ('20220226170448'),
-('20220313171517');
+('20220313171517'),
+('20220502182655'),
+('20220503164309');
 
 

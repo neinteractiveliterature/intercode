@@ -11,9 +11,9 @@
 #  show_email           :boolean
 #  created_at           :datetime
 #  updated_at           :datetime
-#  event_id             :integer
+#  event_id             :bigint
 #  updated_by_id        :integer
-#  user_con_profile_id  :integer          not null
+#  user_con_profile_id  :bigint           not null
 #
 # Indexes
 #

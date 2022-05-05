@@ -3,7 +3,7 @@
 #
 # Table name: users
 #
-#  id                        :integer          not null, primary key
+#  id                        :bigint           not null, primary key
 #  current_sign_in_at        :datetime
 #  current_sign_in_ip        :string
 #  email                     :string           default(""), not null
@@ -29,7 +29,6 @@
 #  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 FactoryBot.define do
   factory :user do
     sequence(:first_name) { |n| "Firstname#{n}" }

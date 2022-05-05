@@ -4,7 +4,7 @@
 #
 # Table name: events
 #
-#  id                           :integer          not null, primary key
+#  id                           :bigint           not null, primary key
 #  additional_info              :jsonb
 #  admin_notes                  :text
 #  age_restrictions_description :text
@@ -28,10 +28,10 @@
 #  url                          :text
 #  created_at                   :datetime
 #  updated_at                   :datetime
-#  convention_id                :integer
+#  convention_id                :bigint
 #  event_category_id            :bigint           not null
-#  owner_id                     :integer
-#  updated_by_id                :integer
+#  owner_id                     :bigint
+#  updated_by_id                :bigint
 #
 # Indexes
 #
