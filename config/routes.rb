@@ -16,12 +16,15 @@ Intercode::Application.routes.draw do
   post '/stripe_webhook/account', to: 'stripe_webhooks#account'
   post '/stripe_webhook/connect', to: 'stripe_webhooks#connect'
 
+  get '/healthz' => 'health#healthz'
+
   # CMS stuff
   get 'liquid_docs/(*extra)' => 'liquid_docs#show', :as => :liquid_docs
 
   direct :cdn_upload do |model, options|
     if model.respond_to?(:signed_id)
-      route_for(:rails_service_blob_proxy, model.signed_id, model.filename, options.merge(host: ENV['UPLOADS_HOST']))
+      route_for(:rails_service_blob_proxy, model.signed_id, model.filename, 
+options.merge(host: ENV.fetch('UPLOADS_HOST', nil)))
     else
       signed_blob_id = model.blob.signed_id
       variation_key = model.variation.key
@@ -32,7 +35,7 @@ Intercode::Application.routes.draw do
         signed_blob_id,
         variation_key,
         filename,
-        options.merge(host: ENV['UPLOADS_HOST'])
+        options.merge(host: ENV.fetch('UPLOADS_HOST', nil))
       )
     end
   end
