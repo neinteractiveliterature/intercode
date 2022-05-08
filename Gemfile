@@ -87,10 +87,6 @@ gem 'icalendar'
 gem 'tzinfo-data'
 gem 'browser'
 
-# Production profiling
-# gem 'skylight'
-# gem 'webrick' # we don't actually use it, but Skylight needs it on boot
-
 gem 'faker', group: 'development', require: false
 
 gem 'rollbar'
@@ -99,6 +95,12 @@ gem 'oj', '~> 3.13.4'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
+
+# Production profiling
+group :skylight do
+  gem 'skylight'
+  gem 'webrick' # we don't actually use it, but Skylight needs it on boot
+end
 
 group :development do
   gem 'rack-mini-profiler', require: false
