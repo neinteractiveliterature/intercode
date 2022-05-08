@@ -176,6 +176,7 @@ GEM
     bcrypt (3.1.16)
     bcrypt (3.1.16-java)
     benchmark (0.2.0)
+    benchmark-ips (2.10.0)
     bindata (2.4.10)
     bootsnap (1.9.3)
       msgpack (~> 1.0)
@@ -201,6 +202,18 @@ GEM
     debug (1.1.0)
       irb
       reline (>= 0.2.7)
+    derailed_benchmarks (2.1.1)
+      benchmark-ips (~> 2)
+      dead_end
+      get_process_mem (~> 0)
+      heapy (~> 0)
+      memory_profiler (>= 0, < 2)
+      mini_histogram (>= 0.3.0)
+      rack (>= 1)
+      rack-test
+      rake (> 10, < 14)
+      ruby-statistics (>= 2.1)
+      thor (>= 0.19, < 2)
     device_detector (1.0.5)
     devise (4.8.1)
       bcrypt (~> 3.0)
@@ -232,11 +245,9 @@ GEM
     e2mmap (0.1.0)
     errbase (0.2.1)
     erubi (1.10.0)
-    erubis (2.7.0)
     eu_central_bank (1.6.1)
       money (~> 6.13, >= 6.13.6)
       nokogiri (~> 1.9)
-    excon (0.85.0)
     factory_bot (6.2.0)
       activesupport (>= 5.0.0)
     factory_bot_rails (6.2.0)
@@ -271,6 +282,8 @@ GEM
     ffi (1.15.5-java)
     flamegraph (0.9.5)
     geocoder (1.6.5)
+    get_process_mem (0.2.7)
+      ffi (~> 1.0)
     globalid (1.0.0)
       activesupport (>= 5.0)
     graphql (1.12.16)
@@ -282,11 +295,8 @@ GEM
       activesupport (> 5.0)
       railties (> 5.0)
       rouge (~> 3.0)
-    heroics (0.1.1)
-      erubis (~> 2.0)
-      excon
-      moneta
-      multi_json (>= 1.9.2)
+    heapy (0.2.0)
+      thor
     i18n (1.10.0)
       concurrent-ruby (~> 1.0)
     icalendar (2.7.1)
@@ -340,6 +350,7 @@ GEM
     marcel (1.0.2)
     memory_profiler (1.0.0)
     method_source (1.0.0)
+    mini_histogram (0.3.1)
     mini_magick (4.11.0)
     mini_mime (1.1.2)
     mini_portile2 (2.8.0)
@@ -354,7 +365,6 @@ GEM
     minitest-spec-rails (6.0.4)
       minitest (>= 5.0)
       railties (>= 4.1)
-    moneta (1.0.0)
     monetize (1.9.4)
       money (~> 6.12)
     money (6.13.8)
@@ -402,10 +412,6 @@ GEM
       activerecord (>= 5.2)
       activesupport (>= 5.2)
     phonelib (0.6.53)
-    platform-api (3.3.0)
-      heroics (~> 0.1.1)
-      moneta (~> 1.0.0)
-      rate_throttle_client (~> 0.1.0)
     prettier (2.1.0)
     promise.rb (0.7.4)
     pry (0.14.1)
@@ -466,7 +472,6 @@ GEM
       zeitwerk (~> 2.5)
     rainbow (3.1.1)
     rake (13.0.6)
-    rate_throttle_client (0.1.2)
     rb-fsevent (0.11.0)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
@@ -514,6 +519,7 @@ GEM
     rubocop-sequel (0.3.3)
       rubocop (~> 1.0)
     ruby-progressbar (1.11.0)
+    ruby-statistics (3.0.0)
     ruby-vips (2.1.4)
       ffi (~> 1.12)
     ruby2_keywords (0.0.5)
@@ -535,8 +541,6 @@ GEM
     simplecov_json_formatter (0.1.2)
     simpleidn (0.2.1)
       unf (~> 0.1.4)
-    skylight (5.1.1)
-      activesupport (>= 5.2.0)
     slop (3.6.0)
     solargraph (0.44.3)
       backport (~> 1.2)
@@ -639,6 +643,7 @@ DEPENDENCIES
   dalli
   dead_end
   debug
+  derailed_benchmarks
   devise
   devise-doorkeeper
   devise-encryptable
@@ -672,7 +677,6 @@ DEPENDENCIES
   pg
   pg_search
   phonelib
-  platform-api
   prettier (= 2.1.0)
   pry-rails
   pry-remote
@@ -695,7 +699,6 @@ DEPENDENCIES
   sequel
   shoryuken
   simplecov
-  skylight
   solargraph
   solargraph-rails (= 0.3.1)
   sprockets-rails
@@ -706,7 +709,6 @@ DEPENDENCIES
   twilio-ruby (~> 5.66.0)
   typeprof
   tzinfo-data
-  webrick
   will_paginate
   with_advisory_lock
   yard
