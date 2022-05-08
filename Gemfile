@@ -96,6 +96,8 @@ gem 'oj', '~> 3.13.4'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
 
+gem 'parallel', groups: [:development, :intercode1_import]
+
 # Production profiling
 group :skylight do
   gem 'skylight'
@@ -158,7 +160,6 @@ group :intercode1_import do
   gem 'term-ansicolor'
   gem 'reverse_markdown'
   gem 'mysql2', '~> 0.5.3'
-  gem 'parallel'
 end
 
 group :test do
