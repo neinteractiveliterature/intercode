@@ -4,7 +4,6 @@ ruby File.read(File.expand_path('.ruby-version', __dir__)).strip
 gem 'rails', '7.0.2.3'
 
 gem 'pg'
-gem 'webrick' # we don't actually use it, but Skylight needs it on boot
 gem 'puma'
 
 gem 'sprockets-rails'
@@ -85,11 +84,12 @@ gem 'lograge'
 gem 'dalli'
 gem 'domain_prefix'
 gem 'icalendar'
-gem 'parallel'
-gem 'platform-api'
-gem 'skylight'
 gem 'tzinfo-data'
 gem 'browser'
+
+# Production profiling
+# gem 'skylight'
+# gem 'webrick' # we don't actually use it, but Skylight needs it on boot
 
 gem 'faker', group: 'development', require: false
 
@@ -109,6 +109,9 @@ group :development do
   # For call-stack profiling flamegraphs (requires Ruby MRI 2.0.0+)
   gem 'flamegraph'
   gem 'stackprof'
+
+  # Rails-specific benchmarking
+  gem 'derailed_benchmarks'
 
   # Email testing/debugging
   gem 'letter_opener'
@@ -153,6 +156,7 @@ group :intercode1_import do
   gem 'term-ansicolor'
   gem 'reverse_markdown'
   gem 'mysql2', '~> 0.5.3'
+  gem 'parallel'
 end
 
 group :test do
