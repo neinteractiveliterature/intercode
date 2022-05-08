@@ -12,8 +12,8 @@ module Intercode
   class Application < Rails::Application
     config.load_defaults 7.0
 
-    config.hosts << ENV['ASSETS_HOST'] if ENV['ASSETS_HOST'].present?
-    config.hosts << /.*#{Regexp.escape(ENV['INTERCODE_HOST'])}/ if ENV['INTERCODE_HOST'].present?
+    config.hosts << ENV.fetch('ASSETS_HOST', nil) if ENV['ASSETS_HOST'].present?
+    config.hosts << /.*#{Regexp.escape(ENV.fetch('INTERCODE_HOST', nil))}/ if ENV['INTERCODE_HOST'].present?
     config.hosts << ->(host) { Convention.where(domain: host).any? }
 
     # Settings in config/environments/* take precedence over those specified here.
@@ -28,7 +28,7 @@ module Intercode
     config.middleware.use Intercode::FindVirtualHost
     config.middleware.use Rack::Deflater
 
-    config.skylight.probes += %w[active_job graphql]
+    config.skylight.probes += %w[active_job graphql] if config.respond_to?(:skylight)
 
     # To enable tsvectors and triggers; hopefully can get rid of this at some point :(
     config.active_record.schema_format = :sql
