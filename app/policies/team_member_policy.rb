@@ -8,7 +8,10 @@ class TeamMemberPolicy < ApplicationPolicy
 
     if oauth_scoped_disjunction do |d|
          d.add(:read_events) { EventPolicy.new(authorization_info, event).read? }
-         d.add(:read_conventions) { has_convention_permission?(convention, 'update_event_team_members') }
+         d.add(:read_conventions) do
+           EventPolicy.new(authorization_info, event).read? &&
+             has_convention_permission?(convention, 'update_event_team_members')
+         end
        end
       return true
     end
