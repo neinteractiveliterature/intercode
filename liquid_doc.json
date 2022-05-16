@@ -4197,6 +4197,20 @@
               ]
             }
           ]
+        },
+        {
+          "name": "pay_what_you_want_value",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The pay-what-you-want value associated with this pricing structure, if any",
+              "types": [
+                "PayWhatYouWantValueDrop"
+              ]
+            }
+          ]
         }
       ]
     },
@@ -4746,6 +4760,45 @@
       ]
     },
     {
+      "name": "PayWhatYouWantValueDrop",
+      "superclasses": [
+        "PayWhatYouWantValueDrop",
+        "Liquid::Drop"
+      ],
+      "docstring": "A set of rules for a pay-what-you-want pricing structure",
+      "tags": [
+
+      ],
+      "methods": [
+        {
+          "name": "value",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
+        },
+        {
+          "name": "initialize",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "a new instance of PayWhatYouWantValueDrop",
+              "types": [
+                "PayWhatYouWantValueDrop"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name": "ScheduledValue::TimespanDrop",
       "superclasses": [
         "ScheduledValue::TimespanDrop",
@@ -5240,6 +5293,47 @@
               "text": "a new instance of Youtube",
               "types": [
                 "Youtube"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "render",
+          "docstring": "",
+          "tags": [
+
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Intercode::Liquid::Tags::FileUrlTag",
+      "superclasses": [
+        "Intercode::Liquid::Tags::FileUrlTag",
+        "Liquid::Tag"
+      ],
+      "docstring": "",
+      "tags": [
+
+      ],
+      "methods": [
+        {
+          "name": "filename",
+          "docstring": "Returns the value of attribute filename.",
+          "tags": [
+
+          ]
+        },
+        {
+          "name": "initialize",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "a new instance of FileUrlTag",
+              "types": [
+                "FileUrlTag"
               ]
             }
           ]
@@ -6108,7 +6202,7 @@
         {
           "tag_name": "example",
           "name": "Customizing the button text and the CSS class",
-          "text": "{% withdraw_user_signup_button \"Withdraw my signup\" btn-warning %}",
+          "text": "{% withdraw_user_signup_button signup \"Withdraw my signup\" btn-warning %}",
           "types": null
         },
         {
