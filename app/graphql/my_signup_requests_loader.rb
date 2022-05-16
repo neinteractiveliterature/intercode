@@ -8,7 +8,7 @@ class MySignupRequestsLoader < GraphQL::Batch::Loader
 
   def perform(keys)
     signup_request_scope = user_con_profile.signup_requests.where(target_run_id: keys.map(&:id))
-    signup_requests_by_run_id = signup_request_scope.to_a.group_by(&:run_id)
-    keys.each { |run| fulfill(run, signup_requests_by_run_id[run.id] || []) }
+    signup_requests_by_target_run_id = signup_request_scope.to_a.group_by(&:target_run_id)
+    keys.each { |run| fulfill(run, signup_requests_by_target_run_id[run.id] || []) }
   end
 end
