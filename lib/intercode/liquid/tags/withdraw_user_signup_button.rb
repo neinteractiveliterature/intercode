@@ -10,7 +10,7 @@ module Intercode
       # @example Customizing the button text
       #   {% withdraw_user_signup_button signup "Withdraw my signup" %}
       # @example Customizing the button text and the CSS class
-      #   {% withdraw_user_signup_button "Withdraw my signup" btn-warning %}
+      #   {% withdraw_user_signup_button signup "Withdraw my signup" btn-warning %}
       class WithdrawUserSignupButton < ::Liquid::Tag
         include AppComponentRenderer
 
