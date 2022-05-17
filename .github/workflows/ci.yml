@@ -124,7 +124,6 @@ jobs:
       id: node-version
       run: echo "::set-output name=node-version::$(cat .node-version)"
     - name: Build (and push to Docker Hub, if on main)
-      id: docker_build
       uses: docker/build-push-action@v2
       with:
         context: .
@@ -139,7 +138,6 @@ jobs:
         cache-from: type=gha,scope=${{ github.workflow }}
         cache-to: type=gha,mode=max,scope=${{ github.workflow }}
     - name: Build assets only (and push to Docker Hub, if on main)
-      id: docker_build
       uses: docker/build-push-action@v2
       with:
         context: .
