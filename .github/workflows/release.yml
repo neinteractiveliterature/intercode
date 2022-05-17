@@ -24,6 +24,15 @@ jobs:
       run: docker tag ghcr.io/neinteractiveliterature/intercode:${{ github.sha }} neinteractiveliterature/intercode:latest
     - name: Push to Docker Hub
       run: docker push neinteractiveliterature/intercode:latest && docker push neinteractiveliterature/intercode:${{ github.event.release.name }}
+    # Now do the same for the assets
+    - name: Pull built image
+      run: docker pull ghcr.io/neinteractiveliterature/intercode-assets:${{ github.sha }}
+    - name: Tag image with version Tag
+      run: docker tag ghcr.io/neinteractiveliterature/intercode-assets:${{ github.sha }} neinteractiveliterature/intercode-assets:${{ github.event.release.name }}
+    - name: Tag image as latest
+      run: docker tag ghcr.io/neinteractiveliterature/intercode-assets:${{ github.sha }} neinteractiveliterature/intercode-assets:latest
+    - name: Push to Docker Hub
+      run: docker push neinteractiveliterature/intercode-assets:latest && docker push neinteractiveliterature/intercode:${{ github.event.release.name }}
   render-release:
     runs-on: ubuntu-latest
     needs:
