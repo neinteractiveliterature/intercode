@@ -144,7 +144,6 @@ jobs:
         file: Dockerfile.assets
         push: ${{ github.event_name == 'push' && github.event.ref == 'refs/heads/main' }}
         platforms: linux/amd64,linux/arm64
-        target: production
         tags: |
           ghcr.io/neinteractiveliterature/intercode-assets:${{ github.sha }}
         build-args: |
