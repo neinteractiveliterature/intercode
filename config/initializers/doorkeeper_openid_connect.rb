@@ -3,7 +3,7 @@ Doorkeeper::OpenidConnect.configure do
     "#{Rails.env.production? ? 'https' : 'http'}://#{Rails.application.config.action_mailer.default_url_options[:host]}"
   )
 
-  signing_key ENV['OPENID_CONNECT_SIGNING_KEY']
+  signing_key ENV.fetch('OPENID_CONNECT_SIGNING_KEY', nil)&.gsub('\n', "\n")
 
   subject_types_supported [:public]
 
