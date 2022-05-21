@@ -242,7 +242,7 @@ Doorkeeper::JWT.configure do
 
   # Set the encryption secret. This would be shared with any other applications
   # that should be able to read the payload of the token. Defaults to "secret".
-  secret_key ENV['OPENID_CONNECT_SIGNING_KEY']
+  secret_key ENV.fetch('OPENID_CONNECT_SIGNING_KEY', nil)&.gsub('\n', "\n")
 
   # Specify encryption type (https://github.com/progrium/ruby-jwt). Defaults to
   # `nil`.
