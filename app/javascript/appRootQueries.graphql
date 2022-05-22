@@ -1,4 +1,6 @@
 query AppRootQuery($path: String!) {
+  hasOauthApplications
+
   cmsParentByRequestHost {
     id
 
