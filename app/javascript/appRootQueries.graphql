@@ -1,4 +1,6 @@
 query AppRootQuery($path: String!) {
+  hasOauthApplications
+
   cmsParentByRequestHost {
     id
 
@@ -93,6 +95,8 @@ query AppRootQuery($path: String!) {
     my_profile {
       id
       name
+      email
+      mobile_phone
       accepted_clickwrap_agreement
       name_without_nickname
       first_name

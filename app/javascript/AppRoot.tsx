@@ -108,6 +108,7 @@ function AppRoot(): JSX.Element {
             currentAbility: data.currentAbility,
             currentPendingOrder: data.convention?.my_profile?.current_pending_order,
             currentUser: data.currentUser,
+            hasOAuthApplications: data.hasOauthApplications,
             language: data.convention?.language ?? 'en',
             myProfile: data.convention?.my_profile,
             rootSiteName: data.rootSite?.site_name,

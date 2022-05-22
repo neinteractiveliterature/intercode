@@ -170,6 +170,17 @@ class Types::QueryType < Types::BaseObject
     context[:cadmus_renderer].render(Liquid::Template.parse(partial.content), :html)
   end
 
+  field :has_oauth_applications, Boolean, null: false do
+    description <<~MARKDOWN
+      Returns whether or not this instance of Intercode has any third-party OAuth2 applications
+      set up. If not, the UI will not show the "Authorized Applications" menu item to users.
+    MARKDOWN
+  end
+
+  def has_oauth_applications # rubocop:disable Naming/PredicateName
+    Doorkeeper::Application.any?
+  end
+
   field :oauth_pre_auth, Types::JSON, null: false do
     argument :query_params,
              Types::JSON,
