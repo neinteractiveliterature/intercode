@@ -76,14 +76,9 @@ jobs:
         -f Dockerfile.shoryuken
         --push
         .
-    - name: Release app to Heroku
-      env:
-        HEROKU_API_KEY: ${{ secrets.HerokuApiToken }}
-      run: heroku container:release -a ${{ secrets.HerokuAppName }} web release shoryuken
   notify-slack:
     runs-on: ubuntu-latest
     needs:
-      - heroku-release
       - render-release
     steps:
     - name: Format release notes for Slack
