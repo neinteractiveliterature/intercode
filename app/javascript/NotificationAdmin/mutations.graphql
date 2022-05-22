@@ -8,3 +8,9 @@ mutation UpdateNotificationTemplate($eventKey: String!, $notificationTemplate: N
     }
   }
 }
+
+mutation SendNotificationPreview($eventKey: String!, $email: Boolean!, $sms: Boolean!) {
+  sendNotificationPreview(input: { event_key: $eventKey, email: $email, sms: $sms }) {
+    clientMutationId
+  }
+}
