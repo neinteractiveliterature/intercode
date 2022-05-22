@@ -3841,6 +3841,11 @@ export type Query = {
    */
   email_routes_paginated: EmailRoutesPagination;
   /**
+   * Returns whether or not this instance of Intercode has any third-party OAuth2 applications
+   * set up. If not, the UI will not show the "Authorized Applications" menu item to users.
+   */
+  hasOauthApplications: Scalars['Boolean'];
+  /**
    * Returns the authorized OAuth applications for the current user. If no user is signed in,
    * returns null.
    */

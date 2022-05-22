@@ -24936,6 +24936,22 @@
               "deprecationReason": null
             },
             {
+              "name": "hasOauthApplications",
+              "description": "Returns whether or not this instance of Intercode has any third-party OAuth2 applications\nset up. If not, the UI will not show the \"Authorized Applications\" menu item to users.\n",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "myAuthorizedApplications",
               "description": "Returns the authorized OAuth applications for the current user. If no user is signed in,\nreturns null.\n",
               "args": [],

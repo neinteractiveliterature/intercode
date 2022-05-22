@@ -14,6 +14,7 @@ export type AppRootContextValue = {
   currentAbility: AppRootQueryData['currentAbility'];
   currentPendingOrder?: NonNullable<NonNullable<AppRootQueryData['convention']>['my_profile']>['current_pending_order'];
   currentUser?: AppRootQueryData['currentUser'];
+  hasOAuthApplications: boolean;
   language: string;
   myProfile?: NonNullable<AppRootQueryData['convention']>['my_profile'];
   rootSiteName?: string | null;
@@ -64,6 +65,7 @@ export const appRootContextDefaultValue: AppRootContextValue = {
   },
   currentPendingOrder: null,
   currentUser: null,
+  hasOAuthApplications: false,
   language: 'en',
   myProfile: null,
   rootSiteName: null,

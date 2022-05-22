@@ -138,7 +138,7 @@ function RevertAssumedIdentityButton() {
 
 function UserNavigationSection(): JSX.Element {
   const { t } = useTranslation();
-  const { conventionName, currentUser, myProfile } = useContext(AppRootContext);
+  const { conventionName, currentUser, myProfile, hasOAuthApplications } = useContext(AppRootContext);
 
   const [referenceElement, setReferenceElement] = useState<HTMLButtonElement | null>(null);
   const [dropdownMenu, setDropdownMenu] = useState<HTMLDivElement | null>(null);
@@ -200,7 +200,7 @@ function UserNavigationSection(): JSX.Element {
                   icon="bi-bag-fill"
                 />
               )}
-              {currentUser && (
+              {currentUser && hasOAuthApplications && (
                 <NavigationItem
                   inSection
                   label={t('navigation.user.authorizedApplications', 'Authorized Applications')}
