@@ -62,6 +62,11 @@ class Notifier
     sms_jobs.each(&:perform_now)
   end
 
+  def deliver_preview(user_con_profile:, email: false, sms: false)
+    mail(preview_user_con_profile: user_con_profile).deliver_now if email
+    sms_jobs(preview_user_con_profile: user_con_profile).each(&:perform_now) if sms
+  end
+
   def cadmus_renderer
     @cadmus_renderer ||=
       CmsRenderingContext.new(
@@ -81,12 +86,15 @@ class Notifier
 
   private
 
-  def sms_jobs
-    return [] unless should_deliver_sms?
+  def sms_jobs(preview_user_con_profile: nil)
+    return [] unless should_deliver_sms? || preview_user_con_profile
 
     content = sms_content
 
-    user_con_profiles_for_destinations(destinations).filter_map do |user_con_profile|
+    user_con_profiles =
+      preview_user_con_profile ? [preview_user_con_profile] : user_con_profiles_for_destinations(destinations)
+
+    user_con_profiles.filter_map do |user_con_profile|
       next nil unless user_con_profile.allow_sms?
       DeliverSmsJob.new(user_con_profile, content, ENV['TWILIO_SMS_DEBUG_DESTINATION'].present?)
     end
@@ -107,11 +115,16 @@ class Notifier
     )
   end
 
-  def mail
+  def mail(preview_user_con_profile: nil)
     NotificationsMailer.notification(
       **render.slice(:subject, :body_html, :body_text),
       convention: convention,
-      to: emails_for_destinations(destinations)
+      to:
+        if preview_user_con_profile
+          email_for_user_con_profile(preview_user_con_profile)
+        else
+          emails_for_destinations(destinations)
+        end
     )
   end
 

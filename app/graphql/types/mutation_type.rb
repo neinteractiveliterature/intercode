@@ -146,6 +146,7 @@ class Types::MutationType < Types::BaseObject
   ### NotificationTemplate
 
   field :updateNotificationTemplate, null: false, mutation: Mutations::UpdateNotificationTemplate
+  field :sendNotificationPreview, null: false, mutation: Mutations::SendNotificationPreview
 
   ### OrderEntry
 
