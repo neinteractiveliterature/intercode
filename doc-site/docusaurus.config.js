@@ -116,6 +116,10 @@ module.exports = {
                 label: 'GraphQL Schema Reference',
                 to: '/docs/graphql',
               },
+              {
+                label: 'Liquid Reference',
+                to: '/docs/liquid/blocks/spoiler',
+              },
             ],
           },
           // {
