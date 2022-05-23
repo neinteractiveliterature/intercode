@@ -1,6 +1,9 @@
 module Intercode
   module Liquid
     module Tags
+      # Given the filename of an uploaded file, outputs a URL for viewing or downloading that file.
+      #
+      # @liquid_tag_name FileUrlTag
       class FileUrlTag < ::Liquid::Tag
         attr_reader :filename
 

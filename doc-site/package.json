@@ -40,5 +40,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/lodash": "^4",
+    "entities": "^4.3.0",
+    "lodash": "^4.17.21",
+    "ts-node": "^10.8.0"
   }
 }

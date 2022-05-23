@@ -3,8 +3,9 @@
 # Dependencies
 /node_modules
 
-# GraphQL docs (auto-generated)
+# GraphQL and Liquid docs (auto-generated)
 /docs/graphql
+/docs/liquid
 
 # Production
 /build
