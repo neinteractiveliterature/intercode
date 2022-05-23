@@ -82,12 +82,12 @@ class UserConProfileDrop < Liquid::Drop
     user_con_profile.privileges.map(&:titleize)
   end
 
-  # @return [Array<StaffPosition>] All the staff positions this user holds at this convention
+  # @return [Array<StaffPositionDrop>] All the staff positions this user holds at this convention
   def staff_positions
     user_con_profile.staff_positions.to_a
   end
 
-  # @return [Array<StaffPosition>] All the event proposals this user submitted for this convention
+  # @return [Array<EventProposalDrop>] All the event proposals this user submitted for this convention
   def event_proposals
     user_con_profile.event_proposals.to_a
   end
