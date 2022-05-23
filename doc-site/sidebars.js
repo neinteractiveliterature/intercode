@@ -30,5 +30,10 @@ module.exports = {
       label: 'GraphQL Schema Reference',
       items: require('./docs/graphql/sidebar-schema.js').schemaSidebar,
     },
+    {
+      type: 'category',
+      label: 'Liquid Reference',
+      items: require('./docs/liquid/sidebar-schema.js').schemaSidebar,
+    },
   ],
 };

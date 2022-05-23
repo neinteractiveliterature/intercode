@@ -16,7 +16,7 @@ module Intercode
       #                                     is 1.
       # @param plural [String] Optional.  If input is a number, this will be the result if input is
       #                                   not 1.
-      # @return String
+      # @return [String] The pluralized string or phrase
       # @example Pluralizing a noun unconditionally
       #   {{ "goose" | pluralize }} => "geese"
       # @example Pluralizing a count
@@ -33,7 +33,7 @@ module Intercode
       # way to link to email addresses.
       #
       # @param input [String] An email address
-      # @return String A spammer-safe HTML representation of the email address
+      # @return [String] A spammer-safe HTML representation of the email address
       # @example When logged in
       #   {{ "test@example.com" | email_link }}
       #   => <a href="mailto:test@example.com">test@example.com</a>
@@ -49,7 +49,7 @@ module Intercode
       # Given an array of strings, outputs an English representation of that array.
       #
       # @param input [Array<String>] An array of strings
-      # @return String
+      # @return [String] The strings formatted as an English phrase
       # @example One string
       #   {{ ["one fish"] | to_sentence }} => one fish
       # @example Two strings
@@ -112,7 +112,7 @@ module Intercode
       # @param timezone_name [String] An IANA timezone name to use for the default format.  If
       #                               not given, this filter will try to use the convention's
       #                               local timezone (if one exists).
-      # @return String
+      # @return [String]
       # @example Formatting a time using an explicit time zone, while the user is in that zone
       #   {{ convention.starts_at | date_with_local_time: "%l:%M%P %Z", "America/New_York" }} =>
       #     "7:00pm EDT"
@@ -146,7 +146,7 @@ module Intercode
       # @param timezone_name [String] An IANA timezone name to use for the default format.  If
       #                               not given, this filter will try to use the convention's
       #                               local timezone (if one exists).
-      # @return String
+      # @return [String]
       # @example Formatting a timespan using an explicit time zone, while the user is in that zone
       #   {{ convention.timespan
       #     | timespan_with_local_time: "%A, %B %e from %l:%M%P %Z", "America/New_York" }} =>
