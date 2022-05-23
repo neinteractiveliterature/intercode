@@ -3,6 +3,8 @@ module Intercode
     module Tags
       # Runs a given GraphQL query (defined in the CMS tab "GraphQL queries") and assigns the
       # result to a variable.
+      #
+      # @liquid_tag_name assign_graphql_result
       class AssignGraphqlResult < ::Liquid::Tag
         Syntax = /(#{::Liquid::VariableSignature}+)\s*=\s*(\w+)(\((\w+: #{::Liquid::VariableSignature}+,?)*\))?\s*/om
 

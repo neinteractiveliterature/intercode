@@ -88,6 +88,12 @@ module.exports = {
             position: 'left',
             label: 'GraphQL Reference',
           },
+          {
+            type: 'doc',
+            docId: 'liquid/blocks/spoiler',
+            position: 'left',
+            label: 'Liquid Reference',
+          },
           { to: '/blog', label: 'Blog', position: 'left' },
           {
             href: 'https://github.com/neinteractiveliterature/intercode',
@@ -109,6 +115,10 @@ module.exports = {
               {
                 label: 'GraphQL Schema Reference',
                 to: '/docs/graphql',
+              },
+              {
+                label: 'Liquid Reference',
+                to: '/docs/liquid/blocks/spoiler',
               },
             ],
           },

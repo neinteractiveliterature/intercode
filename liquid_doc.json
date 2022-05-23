@@ -4026,7 +4026,7 @@
               "name": null,
               "text": "All the staff positions this user holds at this convention",
               "types": [
-                "Array<StaffPosition>"
+                "Array<StaffPositionDrop>"
               ]
             }
           ]
@@ -4040,7 +4040,7 @@
               "name": null,
               "text": "All the event proposals this user submitted for this convention",
               "types": [
-                "Array<StaffPosition>"
+                "Array<EventProposalDrop>"
               ]
             }
           ]
@@ -5312,9 +5312,14 @@
         "Intercode::Liquid::Tags::FileUrlTag",
         "Liquid::Tag"
       ],
-      "docstring": "",
+      "docstring": "Given the filename of an uploaded file, outputs a URL for viewing or downloading that file.",
       "tags": [
-
+        {
+          "tag_name": "liquid_tag_name",
+          "name": null,
+          "text": "FileUrlTag",
+          "types": null
+        }
       ],
       "methods": [
         {
@@ -5661,7 +5666,12 @@
       ],
       "docstring": "Runs a given GraphQL query (defined in the CMS tab \"GraphQL queries\") and assigns the\nresult to a variable.",
       "tags": [
-
+        {
+          "tag_name": "liquid_tag_name",
+          "name": null,
+          "text": "assign_graphql_result",
+          "types": null
+        }
       ],
       "methods": [
         {
@@ -6487,8 +6497,10 @@
         {
           "tag_name": "return",
           "name": null,
-          "text": "String",
-          "types": null
+          "text": "The pluralized string or phrase",
+          "types": [
+            "String"
+          ]
         }
       ]
     },
@@ -6519,8 +6531,10 @@
         {
           "tag_name": "return",
           "name": null,
-          "text": "String A spammer-safe HTML representation of the email address",
-          "types": null
+          "text": "A spammer-safe HTML representation of the email address",
+          "types": [
+            "String"
+          ]
         }
       ]
     },
@@ -6557,8 +6571,10 @@
         {
           "tag_name": "return",
           "name": null,
-          "text": "String",
-          "types": null
+          "text": "The strings formatted as an English phrase",
+          "types": [
+            "String"
+          ]
         }
       ]
     },
@@ -6668,8 +6684,10 @@
         {
           "tag_name": "return",
           "name": null,
-          "text": "String",
-          "types": null
+          "text": "",
+          "types": [
+            "String"
+          ]
         }
       ]
     },
@@ -6722,8 +6740,10 @@
         {
           "tag_name": "return",
           "name": null,
-          "text": "String",
-          "types": null
+          "text": "",
+          "types": [
+            "String"
+          ]
         }
       ]
     }
