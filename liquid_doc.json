@@ -2027,8 +2027,10 @@
             {
               "tag_name": "return",
               "name": null,
-              "text": "String The root URL for this convention",
-              "types": null
+              "text": "The root URL for this convention",
+              "types": [
+                "String"
+              ]
             }
           ]
         },
