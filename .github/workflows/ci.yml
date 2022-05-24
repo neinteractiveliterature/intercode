@@ -175,7 +175,7 @@ jobs:
       with:
         bundler-cache: true
     - name: Install dependencies for generating Liquid doc JSON
-      run: gem install yard toys --no-doc
+      run: gem install yard toys pry --no-doc
     - name: yarn install
       run: yarn install
     - name: Generate GraphQL schema
