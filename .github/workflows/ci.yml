@@ -128,7 +128,7 @@ jobs:
       with:
         context: .
         push: ${{ github.event_name == 'push' && github.event.ref == 'refs/heads/main' }}
-        platforms: linux/amd64,linux/arm64
+        platforms: linux/amd64
         target: production
         tags: |
           ghcr.io/neinteractiveliterature/intercode:${{ github.sha }}
