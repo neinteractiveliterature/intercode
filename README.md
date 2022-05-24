@@ -19,7 +19,7 @@ Intercode 2 is a ground-up rewrite of Intercode, making it more robust, more fle
 - **Frontend**: React and Apollo-based single-page JavaScript app
 - **Database engine**: PostgreSQL
 - **Background queue system**: Amazon SQS + Shoryuken (this might change in the future)
-- **Production infrastructure**: For [New England Interactive Literature](http://interactiveliterature.org)'s installation of Intercode, we're hosting it on [Heroku](https://heroku.com) and running it as Docker containers (as opposed to using buildpacks). However, since we removed libgraphql-parser from the build, Heroku buildpacks may also work (but we haven't tested it since removing the library).
+- **Production infrastructure**: For [New England Interactive Literature](http://interactiveliterature.org)'s installation of Intercode, we're hosting it on [Render](https://render.com) and running it via Docker containers.
 
 # Getting Started with Developing Intercode
 

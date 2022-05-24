@@ -24,8 +24,8 @@ For pricing and other details, please see NEIL Hosting's [host with us page](htt
 
 Intercode is open source and can be self-hosted. To do this, we strongly recommend using a setup similar to the one NEIL Hosting uses, since that's the setup we test with ourselves and therefore the best-supported one. Specifically, NEIL Hosting uses:
 
-- [Heroku](https://heroku.com) for backend servers
-- [PostgreSQL](https://postgresql.org) for a database (we use AWS RDS for this, but Heroku's PostgreSQL product will also work)
+- [Render](https://render.com) for backend servers
+- [PostgreSQL](https://postgresql.org) for a database (we use AWS RDS for this, but any hosted PostgreSQL product will work)
 - [Amazon S3](https://aws.amazon.com/s3/) for file hosting
 - [Amazon Simple Email Service](https://aws.amazon.com/ses/) for sending and receiving email
 - [Amazon Simple Queue Service](https://aws.amazon.com/sqs/) for background job queues
