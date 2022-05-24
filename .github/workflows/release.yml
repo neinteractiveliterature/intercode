@@ -45,37 +45,6 @@ jobs:
         repository: neinteractiveliterature/neilhosting-render
         event-type: intercode-release
         client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}", "tag": "${{ github.event.release.name }}"}'
-  heroku-release:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    - name: Install Heroku CLI
-      run: curl https://cli-assets.heroku.com/install.sh | sh
-    - name: Log in to registry
-      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-    - name: Pull built image
-      run: docker pull ghcr.io/neinteractiveliterature/intercode:${{ github.sha }}
-    - name: Log into Heroku Container Registry
-      env:
-        HEROKU_API_KEY: ${{ secrets.HerokuApiToken }}
-      run: heroku container:login
-    - name: Tag production image as "web"
-      run: docker tag ghcr.io/neinteractiveliterature/intercode:${{ github.sha }} registry.heroku.com/intercode/web
-    - name: Push "web" image to Heroku Container Registry
-      run: docker push registry.heroku.com/intercode/web
-    - name: Build "release" image
-      run: docker buildx build -t registry.heroku.com/intercode/release
-        --build-arg INTERCODE_TAG=${{ github.sha }}
-        --build-arg REVISION=${{ github.sha }}
-        -f Dockerfile.release
-        --push
-        .
-    - name: Build and push "shoryuken" image
-      run: docker buildx build -t registry.heroku.com/intercode/shoryuken
-        --build-arg INTERCODE_TAG=${{ github.sha }}
-        -f Dockerfile.shoryuken
-        --push
-        .
   notify-slack:
     runs-on: ubuntu-latest
     needs:
