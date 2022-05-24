@@ -184,3 +184,7 @@ You could then use it from a CMS page like this:
 
 <p>The name of this convention is {{ convention_name_result.convention.name }}.</p>
 ```
+
+## Want more?
+
+For more information about what's possible with Liquid templates, please see the [Liquid reference docs](/docs/liquid).
