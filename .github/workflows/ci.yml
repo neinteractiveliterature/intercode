@@ -174,8 +174,8 @@ jobs:
       uses: ruby/setup-ruby@v1
       with:
         bundler-cache: true
-    - name: Install Toys
-      run: gem install toys --no-doc
+    - name: Install dependencies for generating Liquid doc JSON
+      run: gem install yard toys --no-doc
     - name: yarn install
       run: yarn install
     - name: Generate GraphQL schema
