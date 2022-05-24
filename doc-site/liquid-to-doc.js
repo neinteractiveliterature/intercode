@@ -7,7 +7,7 @@ const LiquidDocs = JSON.parse(fs.readFileSync('../liquid_doc.json'));
 const allItems = new Map();
 
 function formatExampleTag(example) {
-  return `\`\`\`liquid title="${example.name}"
+  return `\`\`\`liquid ${example.name ? `title="${example.name}"` : ''}
 ${example.text}
 \`\`\``;
 }
@@ -16,6 +16,10 @@ function formatParamTag(tag) {
   return `#### \`${tag.name}\` ${tag?.types ? `(${tag.types.map(formatTypeName).join(', ')})` : ''}
 
 ${tag?.text ?? ''}`;
+}
+
+function formatSeeTag(tag) {
+  return `* ${tag.text}: ${tag.name}`;
 }
 
 function formatParamTags(tags) {
@@ -42,13 +46,16 @@ function formatTypeName(typeName) {
 
 function formatMethodDoc(method) {
   const returnTag = method.tags.find((tag) => tag.tag_name === 'return');
+  const seeTags = method.tags.filter((tag) => tag.tag_name === 'see');
   const exampleTags = method.tags.filter((tag) => tag.tag_name === 'example');
 
   return `#### \`${method.name}\` ${returnTag?.types ? `(${returnTag.types.map(formatTypeName).join(', ')})` : ''}
 
 ${returnTag?.text ?? ''}
 
-${exampleTags.map(formatExampleTag).join('\n\n')}`;
+${exampleTags.map(formatExampleTag).join('\n\n')}
+
+${seeTags.length > 0 ? `### See also\n${seeTags.map(formatSeeTag).join('\n')}` : ''}`;
 }
 
 function formatMethodDocs(klass) {
@@ -89,6 +96,7 @@ function formatFilterMethod(id, name, filterMethod) {
   const params = filterMethod.tags.filter((tag) => tag.tag_name === 'param');
   const returnTag = filterMethod.tags.find((tag) => tag.tag_name === 'return');
   const examples = filterMethod.tags.filter((tag) => tag.tag_name === 'example');
+  const seeTags = filterMethod.tags.filter((tag) => tag.tag_name === 'see');
 
   return `${formatFrontmatter(id, name)}
 
@@ -104,7 +112,9 @@ ${
 }
 
 ${examples.length > 0 ? '### Examples' : ''}
-${examples.map(formatExampleTag).join('\n\n')}`;
+${examples.map(formatExampleTag).join('\n\n')}
+
+${seeTags.length > 0 ? `### See also\n${seeTags.map(formatSeeTag).join('\n')}` : ''}`;
 }
 
 class DocItem {
@@ -206,6 +216,11 @@ fs.writeFileSync(
   ],
 };`,
 );
+
+console.log('Copying static content...');
+['liquid-homepage.md', 'liquid-variables.md'].forEach((filename) => {
+  fs.writeFileSync(`./docs/liquid/${filename}`, fs.readFileSync(`./${filename}`));
+});
 
 console.log('Writing docs...');
 allItems.forEach((item) => {

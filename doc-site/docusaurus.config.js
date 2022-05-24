@@ -90,7 +90,7 @@ module.exports = {
           },
           {
             type: 'doc',
-            docId: 'liquid/blocks/spoiler',
+            docId: 'liquid/intro',
             position: 'left',
             label: 'Liquid Reference',
           },
@@ -118,7 +118,7 @@ module.exports = {
               },
               {
                 label: 'Liquid Reference',
-                to: '/docs/liquid/blocks/spoiler',
+                to: '/docs/liquid',
               },
             ],
           },
