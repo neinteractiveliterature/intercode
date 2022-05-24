@@ -7,7 +7,7 @@ const LiquidDocs = JSON.parse(fs.readFileSync('../liquid_doc.json'));
 const allItems = new Map();
 
 function formatExampleTag(example) {
-  return `\`\`\`liquid title="${example.name}"
+  return `\`\`\`liquid ${example.name ? `title="${example.name}"` : ''}
 ${example.text}
 \`\`\``;
 }
@@ -216,6 +216,11 @@ fs.writeFileSync(
   ],
 };`,
 );
+
+console.log('Copying static content...');
+['liquid-homepage.md', 'liquid-variables.md'].forEach((filename) => {
+  fs.writeFileSync(`./docs/liquid/${filename}`, fs.readFileSync(`./${filename}`));
+});
 
 console.log('Writing docs...');
 allItems.forEach((item) => {
