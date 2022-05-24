@@ -18,6 +18,10 @@ function formatParamTag(tag) {
 ${tag?.text ?? ''}`;
 }
 
+function formatSeeTag(tag) {
+  return `* ${tag.text}: ${tag.name}`;
+}
+
 function formatParamTags(tags) {
   const sortedParams = _.sortBy(tags, (tag) => tag.name);
   return sortedParams.map((tag) => formatParamTag(tag)).join('\n\n');
@@ -42,13 +46,16 @@ function formatTypeName(typeName) {
 
 function formatMethodDoc(method) {
   const returnTag = method.tags.find((tag) => tag.tag_name === 'return');
+  const seeTags = method.tags.filter((tag) => tag.tag_name === 'see');
   const exampleTags = method.tags.filter((tag) => tag.tag_name === 'example');
 
   return `#### \`${method.name}\` ${returnTag?.types ? `(${returnTag.types.map(formatTypeName).join(', ')})` : ''}
 
 ${returnTag?.text ?? ''}
 
-${exampleTags.map(formatExampleTag).join('\n\n')}`;
+${exampleTags.map(formatExampleTag).join('\n\n')}
+
+${seeTags.length > 0 ? `### See also\n${seeTags.map(formatSeeTag).join('\n')}` : ''}`;
 }
 
 function formatMethodDocs(klass) {
@@ -89,6 +96,7 @@ function formatFilterMethod(id, name, filterMethod) {
   const params = filterMethod.tags.filter((tag) => tag.tag_name === 'param');
   const returnTag = filterMethod.tags.find((tag) => tag.tag_name === 'return');
   const examples = filterMethod.tags.filter((tag) => tag.tag_name === 'example');
+  const seeTags = filterMethod.tags.filter((tag) => tag.tag_name === 'see');
 
   return `${formatFrontmatter(id, name)}
 
@@ -104,7 +112,9 @@ ${
 }
 
 ${examples.length > 0 ? '### Examples' : ''}
-${examples.map(formatExampleTag).join('\n\n')}`;
+${examples.map(formatExampleTag).join('\n\n')}
+
+${seeTags.length > 0 ? `### See also\n${seeTags.map(formatSeeTag).join('\n')}` : ''}`;
 }
 
 class DocItem {
