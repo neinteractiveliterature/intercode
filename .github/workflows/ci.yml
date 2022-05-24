@@ -174,10 +174,14 @@ jobs:
       uses: ruby/setup-ruby@v1
       with:
         bundler-cache: true
+    - name: Install Toys
+      run: gem install toys --no-doc
     - name: yarn install
       run: yarn install
     - name: Generate GraphQL schema
       run: bin/rails graphql:schema:dump
+    - name: Generate Liquid doc JSON
+      run: toys update_liquid_doc_json
     - name: Build doc site
       run: cd doc-site && yarn run docusaurus graphql-to-doc -f && yarn node liquid-to-doc.js && yarn run build
     - name: Store built site
