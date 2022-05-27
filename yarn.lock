@@ -9565,9 +9565,9 @@ __metadata:
   linkType: hard
 
 "dset@npm:^3.1.0":
-  version: 3.1.0
-  resolution: "dset@npm:3.1.0"
-  checksum: 4999be2b3a64c58e401fd156fc46cbc08c42022befe3ceca2dd7b38f7010b262b871f61b4ccfc99b3d21fb770d4af8797002b64f1bfa41c0961e61867f82fe2d
+  version: 3.1.2
+  resolution: "dset@npm:3.1.2"
+  checksum: 4f8066f517aa0a70af688c66e9a0a5590f0aada76f6edc7ba9ddb309e27d3a6d65c0a2e31ab2a84005d4c791e5327773cdde59b8ab169050330a0dc283663e87
   languageName: node
   linkType: hard
 
