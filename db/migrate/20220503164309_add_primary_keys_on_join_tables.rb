@@ -18,14 +18,38 @@ class AddPrimaryKeysOnJoinTables < ActiveRecord::Migration[7.0]
     AND  T1.user_con_profile_id = T2.user_con_profile_id;
     SQL
 
-    JOIN_TABLES.each { |table, columns| execute <<~SQL }
-      ALTER TABLE #{table} ADD PRIMARY KEY (#{columns.join(', ')});
+    %w[cms_files_layouts cms_files_pages].each { |file_table| execute <<~SQL }
+      DELETE FROM #{file_table}
+      WHERE #{file_table}.cms_file_id NOT IN (SELECT id FROM cms_files)
       SQL
+
+    execute <<~SQL
+      DELETE FROM cms_files_pages
+      WHERE cms_files_pages.page_id NOT IN (SELECT id FROM pages)
+    SQL
+
+    execute <<~SQL
+      DELETE FROM cms_layouts_partials
+      WHERE cms_layouts_partials.cms_partial_id NOT IN (SELECT id FROM cms_partials)
+    SQL
+
+    execute <<~SQL
+      DELETE FROM cms_partials_pages
+      WHERE cms_partials_pages.cms_partial_id NOT IN (SELECT id FROM cms_partials)
+    SQL
+
+    JOIN_TABLES.each do |table, columns|
+      execute <<~SQL
+        ALTER TABLE #{table} ADD PRIMARY KEY (#{columns.join(', ')});
+      SQL
+
+      columns.each { |column| add_foreign_key table, column.delete_suffix('_id').pluralize, if_not_exists: true }
+    end
   end
 
   def down
     JOIN_TABLES.each { |table, _columns| execute <<~SQL }
-      ALTER TABLE #{table} DROP PRIMARY KEY;
-      SQL
+      ALTER TABLE #{table} DROP CONSTRAINT #{table}_pkey;
+    SQL
   end
 end
