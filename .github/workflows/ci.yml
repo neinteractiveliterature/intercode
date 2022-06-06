@@ -128,6 +128,7 @@ jobs:
       with:
         context: .
         push: ${{ github.event_name == 'push' && github.event.ref == 'refs/heads/main' }}
+        load: ${{ github.event_name != 'push' || github.event.ref != 'refs/heads/main' }}
         platforms: linux/amd64
         target: production
         tags: |
