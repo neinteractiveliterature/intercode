@@ -4878,6 +4878,14 @@ ALTER TABLE ONLY public.signup_requests
 
 
 --
+-- Name: staff_positions_user_con_profiles fk_rails_1a2987d136; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.staff_positions_user_con_profiles
+    ADD CONSTRAINT fk_rails_1a2987d136 FOREIGN KEY (user_con_profile_id) REFERENCES public.user_con_profiles(id);
+
+
+--
 -- Name: permissions fk_rails_1c6be1bb15; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -4926,6 +4934,22 @@ ALTER TABLE ONLY public.conventions
 
 
 --
+-- Name: cms_files_pages fk_rails_28864918c8; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_files_pages
+    ADD CONSTRAINT fk_rails_28864918c8 FOREIGN KEY (cms_file_id) REFERENCES public.cms_files(id);
+
+
+--
+-- Name: cms_files_layouts fk_rails_2925d59485; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_files_layouts
+    ADD CONSTRAINT fk_rails_2925d59485 FOREIGN KEY (cms_file_id) REFERENCES public.cms_files(id);
+
+
+--
 -- Name: events fk_rails_2e7e36b62c; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -4947,6 +4971,14 @@ ALTER TABLE ONLY public.user_activity_alerts
 
 ALTER TABLE ONLY public.form_sections
     ADD CONSTRAINT fk_rails_364c041eca FOREIGN KEY (form_id) REFERENCES public.forms(id);
+
+
+--
+-- Name: cms_layouts_partials fk_rails_3692f2130f; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_layouts_partials
+    ADD CONSTRAINT fk_rails_3692f2130f FOREIGN KEY (cms_partial_id) REFERENCES public.cms_partials(id);
 
 
 --
@@ -5003,6 +5035,14 @@ ALTER TABLE ONLY public.conventions
 
 ALTER TABLE ONLY public.permissions
     ADD CONSTRAINT fk_rails_47812e3d12 FOREIGN KEY (staff_position_id) REFERENCES public.staff_positions(id);
+
+
+--
+-- Name: cms_partials_pages fk_rails_48ce1f3044; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_partials_pages
+    ADD CONSTRAINT fk_rails_48ce1f3044 FOREIGN KEY (cms_partial_id) REFERENCES public.cms_partials(id);
 
 
 --
@@ -5070,6 +5110,22 @@ ALTER TABLE ONLY public.signups
 
 
 --
+-- Name: organization_roles_users fk_rails_711b0b09bb; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.organization_roles_users
+    ADD CONSTRAINT fk_rails_711b0b09bb FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
+-- Name: cms_layouts_partials fk_rails_7255733b32; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_layouts_partials
+    ADD CONSTRAINT fk_rails_7255733b32 FOREIGN KEY (cms_layout_id) REFERENCES public.cms_layouts(id);
+
+
+--
 -- Name: oauth_access_tokens fk_rails_732cb83ab7; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5107,6 +5163,14 @@ ALTER TABLE ONLY public.signups
 
 ALTER TABLE ONLY public.signup_changes
     ADD CONSTRAINT fk_rails_79e46f1342 FOREIGN KEY (user_con_profile_id) REFERENCES public.user_con_profiles(id);
+
+
+--
+-- Name: cms_files_layouts fk_rails_82c2fb2f5b; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_files_layouts
+    ADD CONSTRAINT fk_rails_82c2fb2f5b FOREIGN KEY (cms_layout_id) REFERENCES public.cms_layouts(id);
 
 
 --
@@ -5358,6 +5422,14 @@ ALTER TABLE ONLY public.conventions
 
 
 --
+-- Name: cms_partials_pages fk_rails_c0ad4edcf1; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_partials_pages
+    ADD CONSTRAINT fk_rails_c0ad4edcf1 FOREIGN KEY (page_id) REFERENCES public.pages(id);
+
+
+--
 -- Name: event_categories fk_rails_c3b33a1b7c; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5379,6 +5451,14 @@ ALTER TABLE ONLY public.active_storage_attachments
 
 ALTER TABLE ONLY public.permissions
     ADD CONSTRAINT fk_rails_c526e10020 FOREIGN KEY (cms_content_group_id) REFERENCES public.cms_content_groups(id);
+
+
+--
+-- Name: staff_positions_user_con_profiles fk_rails_c6eecee531; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.staff_positions_user_con_profiles
+    ADD CONSTRAINT fk_rails_c6eecee531 FOREIGN KEY (staff_position_id) REFERENCES public.staff_positions(id);
 
 
 --
@@ -5470,6 +5550,14 @@ ALTER TABLE ONLY public.signup_requests
 
 
 --
+-- Name: organization_roles_users fk_rails_f00629add2; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.organization_roles_users
+    ADD CONSTRAINT fk_rails_f00629add2 FOREIGN KEY (organization_role_id) REFERENCES public.organization_roles(id);
+
+
+--
 -- Name: tickets fk_rails_f029f4cf01; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5539,6 +5627,14 @@ ALTER TABLE ONLY public.tickets
 
 ALTER TABLE ONLY public.user_con_profiles
     ADD CONSTRAINT fk_rails_f7ac429ed7 FOREIGN KEY (convention_id) REFERENCES public.conventions(id);
+
+
+--
+-- Name: cms_files_pages fk_rails_fa2194f40d; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cms_files_pages
+    ADD CONSTRAINT fk_rails_fa2194f40d FOREIGN KEY (page_id) REFERENCES public.pages(id);
 
 
 --
