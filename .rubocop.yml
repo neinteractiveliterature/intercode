@@ -62,3 +62,7 @@ Metrics/MethodLength:
   Max: 20 # default is 10
   Exclude:
     - db/migrate/**/*.rb
+
+# prettier and rubocop are fighting about this one, let prettier win
+Style/StringLiteralsInInterpolation:
+  Enabled: false

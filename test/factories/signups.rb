@@ -3,7 +3,7 @@
 #
 # Table name: signups
 #
-#  id                   :integer          not null, primary key
+#  id                   :bigint           not null, primary key
 #  bucket_key           :string
 #  counted              :boolean
 #  expires_at           :datetime
@@ -11,9 +11,9 @@
 #  state                :string           default("confirmed"), not null
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
-#  run_id               :integer
-#  updated_by_id        :integer
-#  user_con_profile_id  :integer          not null
+#  run_id               :bigint
+#  updated_by_id        :bigint
+#  user_con_profile_id  :bigint           not null
 #
 # Indexes
 #

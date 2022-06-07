@@ -3,7 +3,7 @@
 #
 # Table name: staff_positions
 #
-#  id            :integer          not null, primary key
+#  id            :bigint           not null, primary key
 #  cc_addresses  :text             default([]), not null, is an Array
 #  email         :text
 #  email_aliases :text             default([]), not null, is an Array
@@ -11,7 +11,7 @@
 #  visible       :boolean
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
-#  convention_id :integer
+#  convention_id :bigint
 #
 # Indexes
 #
@@ -23,7 +23,6 @@
 #  fk_rails_...  (convention_id => conventions.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 FactoryBot.define do
   factory :staff_position do
     convention
