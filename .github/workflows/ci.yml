@@ -132,7 +132,7 @@ jobs:
         load: ${{ github.event_name != 'push' || github.event.ref != 'refs/heads/main' }}
         platforms: linux/amd64
         target: production
-        tags: "${{ github.event_name == 'push' && github.event.ref == 'refs/heads/main' ? \"ghcr.io/neinteractiveliterature/intercode:${{ github.sha }}\" : 'tmp-pr-image' }}"
+        tags: "${{ github.event_name == 'push' && github.event.ref == 'refs/heads/main' && \"ghcr.io/neinteractiveliterature/intercode:${{ github.sha }}\" || 'tmp-pr-image' }}"
         build-args: |
           RUBY_VERSION=${{ steps.ruby-version.outputs.ruby-version }}
           NODE_VERSION=${{ steps.node-version.outputs.node-version }}
