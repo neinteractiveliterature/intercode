@@ -1,7 +1,6 @@
-ARG SHA1
 ARG BASEIMAGE
 
-FROM ${BASEIMAGE}:${SHA1} as code
+FROM ${BASEIMAGE} as code
 # Make assets readable
 USER root
 RUN chown root.root -R /usr/src/intercode/public
