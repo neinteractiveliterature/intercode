@@ -149,7 +149,7 @@ jobs:
         tags: |
           ghcr.io/neinteractiveliterature/intercode-assets:${{ github.sha }}
         build-args: |
-          BASEIMAGE=${{ steps.main-container-build.outputs.metadata["image.name"] }}
+          BASEIMAGE=${{ steps.main-container-build.outputs.metadata[image.name] }}
         cache-from: type=gha,scope=${{ github.workflow }}
         cache-to: type=gha,mode=max,scope=${{ github.workflow }}
   doc-site:
