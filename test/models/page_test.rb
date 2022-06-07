@@ -3,7 +3,7 @@
 #
 # Table name: pages
 #
-#  id                       :integer          not null, primary key
+#  id                       :bigint           not null, primary key
 #  admin_notes              :text
 #  content                  :text
 #  hidden_from_search       :boolean          default(FALSE), not null
@@ -27,7 +27,6 @@
 #  fk_rails_...  (cms_layout_id => cms_layouts.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 require 'test_helper'
 
 class PageTest < ActiveSupport::TestCase

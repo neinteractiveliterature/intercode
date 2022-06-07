@@ -4,7 +4,7 @@
 #
 # Table name: ticket_types
 #
-#  id                                :integer          not null, primary key
+#  id                                :bigint           not null, primary key
 #  allows_event_signups              :boolean          default(TRUE), not null
 #  counts_towards_convention_maximum :boolean          default(TRUE), not null
 #  description                       :text
@@ -12,7 +12,7 @@
 #  name                              :text             not null
 #  created_at                        :datetime         not null
 #  updated_at                        :datetime         not null
-#  convention_id                     :integer
+#  convention_id                     :bigint
 #  event_id                          :bigint
 #
 # Indexes

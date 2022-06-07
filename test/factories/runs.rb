@@ -3,15 +3,15 @@
 #
 # Table name: runs
 #
-#  id               :integer          not null, primary key
+#  id               :bigint           not null, primary key
 #  schedule_note    :text
 #  starts_at        :datetime
 #  timespan_tsrange :tsrange          not null
 #  title_suffix     :string
 #  created_at       :datetime
 #  updated_at       :datetime
-#  event_id         :integer
-#  updated_by_id    :integer
+#  event_id         :bigint
+#  updated_by_id    :bigint
 #
 # Indexes
 #
@@ -25,7 +25,6 @@
 #  fk_rails_...  (updated_by_id => users.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 FactoryBot.define do
   factory :run do
     event

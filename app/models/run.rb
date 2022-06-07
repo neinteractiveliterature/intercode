@@ -4,15 +4,15 @@
 #
 # Table name: runs
 #
-#  id               :integer          not null, primary key
+#  id               :bigint           not null, primary key
 #  schedule_note    :text
 #  starts_at        :datetime
 #  timespan_tsrange :tsrange          not null
 #  title_suffix     :string
 #  created_at       :datetime
 #  updated_at       :datetime
-#  event_id         :integer
-#  updated_by_id    :integer
+#  event_id         :bigint
+#  updated_by_id    :bigint
 #
 # Indexes
 #

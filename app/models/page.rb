@@ -4,7 +4,7 @@
 #
 # Table name: pages
 #
-#  id                       :integer          not null, primary key
+#  id                       :bigint           not null, primary key
 #  admin_notes              :text
 #  content                  :text
 #  hidden_from_search       :boolean          default(FALSE), not null

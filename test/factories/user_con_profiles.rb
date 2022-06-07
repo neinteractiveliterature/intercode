@@ -3,7 +3,7 @@
 #
 # Table name: user_con_profiles
 #
-#  id                           :integer          not null, primary key
+#  id                           :bigint           not null, primary key
 #  accepted_clickwrap_agreement :boolean          default(FALSE), not null
 #  additional_info              :jsonb
 #  address                      :text
@@ -30,8 +30,8 @@
 #  zipcode                      :string
 #  created_at                   :datetime
 #  updated_at                   :datetime
-#  convention_id                :integer          not null
-#  user_id                      :integer          not null
+#  convention_id                :bigint           not null
+#  user_id                      :bigint           not null
 #
 # Indexes
 #
@@ -43,7 +43,6 @@
 #  fk_rails_...  (user_id => users.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 FactoryBot.define do
   factory :user_con_profile do
     user

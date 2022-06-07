@@ -9,7 +9,7 @@
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  parent_id   :integer
-#  uploader_id :integer
+#  uploader_id :bigint
 #
 # Indexes
 #

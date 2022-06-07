@@ -4,7 +4,7 @@
 #
 # Table name: conventions
 #
-#  id                             :integer          not null, primary key
+#  id                             :bigint           not null, primary key
 #  accepting_proposals            :boolean
 #  canceled                       :boolean          default(FALSE), not null
 #  clickwrap_agreement            :text
@@ -37,9 +37,9 @@
 #  catch_all_staff_position_id    :bigint
 #  default_layout_id              :bigint
 #  organization_id                :bigint
-#  root_page_id                   :integer
+#  root_page_id                   :bigint
 #  stripe_account_id              :text
-#  updated_by_id                  :integer
+#  updated_by_id                  :bigint
 #  user_con_profile_form_id       :bigint
 #
 # Indexes
