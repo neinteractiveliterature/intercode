@@ -5043,13 +5043,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/bootstrap@npm:5.1.10":
-  version: 5.1.10
-  resolution: "@types/bootstrap@npm:5.1.10"
+"@types/bootstrap@npm:5.1.12":
+  version: 5.1.12
+  resolution: "@types/bootstrap@npm:5.1.12"
   dependencies:
     "@popperjs/core": ^2.9.2
-    "@types/jquery": "*"
-  checksum: ada4c68cd8a6dbfee75eca58deabf3f2ae82706a8dd9d97a233eb303a787462f120940002ac3f58cf42c4732280c68a9f67a58cd7c4bf39112024cafe70d3028
+  checksum: 87e7b093c2d4cf9fe8b24b5d045b75ebee6ae39b321c407361df985bfa6be9de4c1194042ba1c19d97c8d547d077ab3e80c421a2d64380c25b17618c9aad874e
   languageName: node
   linkType: hard
 
@@ -5289,15 +5288,6 @@ __metadata:
     jest-diff: ^25.2.1
     pretty-format: ^25.2.1
   checksum: 97ad03069320f2f34e3c6e7ebe9104eb37f83622e6a89f51b34e365d42ca00c4059bee767e42e5c2b340d5776d94973fb1beb43c06ae933d4b3ec584c74238e0
-  languageName: node
-  linkType: hard
-
-"@types/jquery@npm:*":
-  version: 3.5.11
-  resolution: "@types/jquery@npm:3.5.11"
-  dependencies:
-    "@types/sizzle": "*"
-  checksum: bad7c4495ade39e712462af534169790115d07874bb1a8c43a597676bd4e4d62caaf961353836f1e9f67309cac3a224b8743da07bad4cb2ff853b93f1856014b
   languageName: node
   linkType: hard
 
@@ -5671,13 +5661,6 @@ __metadata:
   version: 7.5.2
   resolution: "@types/sinon@npm:7.5.2"
   checksum: 6493964780f7547ad1295f1b5fb3eaaa66a1ffcec6e891facbf58a304d50a7f1819819522ab43c75be53105cd87d3160a196a25595b3cc394f0776a208652fee
-  languageName: node
-  linkType: hard
-
-"@types/sizzle@npm:*":
-  version: 2.3.3
-  resolution: "@types/sizzle@npm:2.3.3"
-  checksum: 586a9fb1f6ff3e325e0f2cc1596a460615f0bc8a28f6e276ac9b509401039dd242fa8b34496d3a30c52f5b495873922d09a9e76c50c2ab2bcc70ba3fb9c4e160
   languageName: node
   linkType: hard
 
@@ -18214,7 +18197,7 @@ resolve@^2.0.0-next.3:
     "@testing-library/react": 12.1.5
     "@testing-library/react-hooks": 8.0.0
     "@types/apollo-upload-client": 17.0.0
-    "@types/bootstrap": 5.1.10
+    "@types/bootstrap": 5.1.12
     "@types/bytes": 3.1.1
     "@types/classnames": 2.3.1
     "@types/cssnano": 5.0.0
