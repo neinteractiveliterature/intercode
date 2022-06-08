@@ -200,7 +200,7 @@
     "@graphql-codegen/typescript": "2.4.8",
     "@graphql-codegen/typescript-operations": "2.3.5",
     "@graphql-codegen/typescript-react-apollo": "3.2.11",
-    "@graphql-eslint/eslint-plugin": "3.10.3",
+    "@graphql-eslint/eslint-plugin": "3.10.4",
     "@prettier/plugin-ruby": "2.1.0",
     "@testing-library/jest-dom": "5.16.4",
     "@testing-library/react-hooks": "8.0.0",
