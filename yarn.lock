@@ -5500,12 +5500,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:18.0.2":
-  version: 18.0.2
-  resolution: "@types/react-dom@npm:18.0.2"
+"@types/react-dom@npm:18.0.5":
+  version: 18.0.5
+  resolution: "@types/react-dom@npm:18.0.5"
   dependencies:
     "@types/react": "*"
-  checksum: 2b0b138d8634ccfd8a86b17cb5414b122ee0cb6f650377d772f6008761a27e4c2531c08e3cab71aaa19b6893af6a508c664aa314db3ebcff5b8179173c9c9307
+  checksum: cd48b81950f499b52a3f0c08261f00046f9b7c96699fa249c9664e257e820daf6ecac815cd1028cebc9d105094adc39d047d1efd79214394b8b2d515574c0787
   languageName: node
   linkType: hard
 
@@ -18218,7 +18218,7 @@ resolve@^2.0.0-next.3:
     "@types/react": 17.0.45
     "@types/react-click-outside-hook": 1.0.0
     "@types/react-color": 3.0.6
-    "@types/react-dom": 18.0.2
+    "@types/react-dom": 18.0.5
     "@types/react-google-recaptcha": 2.1.5
     "@types/react-onclickoutside": 6.7.4
     "@types/react-table": 7.7.11
