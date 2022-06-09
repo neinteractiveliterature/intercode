@@ -3,11 +3,11 @@
 #
 # Table name: cms_files
 #
-#  id          :integer          not null, primary key
+#  id          :bigint           not null, primary key
 #  parent_type :string
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
-#  parent_id   :integer
+#  parent_id   :bigint
 #  uploader_id :bigint
 #
 # Indexes
