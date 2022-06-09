@@ -902,8 +902,8 @@ ALTER SEQUENCE public.cms_content_groups_id_seq OWNED BY public.cms_content_grou
 --
 
 CREATE TABLE public.cms_files (
-    id integer NOT NULL,
-    parent_id integer,
+    id bigint NOT NULL,
+    parent_id bigint,
     uploader_id bigint,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
@@ -1072,8 +1072,8 @@ ALTER SEQUENCE public.cms_navigation_items_id_seq OWNED BY public.cms_navigation
 --
 
 CREATE TABLE public.cms_partials (
-    id integer NOT NULL,
-    parent_id integer,
+    id bigint NOT NULL,
+    parent_id bigint,
     name character varying NOT NULL,
     content text,
     created_at timestamp without time zone NOT NULL,
@@ -1813,7 +1813,7 @@ ALTER SEQUENCE public.notification_templates_id_seq OWNED BY public.notification
 
 CREATE TABLE public.oauth_access_grants (
     id bigint NOT NULL,
-    resource_owner_id integer NOT NULL,
+    resource_owner_id bigint NOT NULL,
     application_id bigint NOT NULL,
     token character varying NOT NULL,
     expires_in integer NOT NULL,
@@ -1849,7 +1849,7 @@ ALTER SEQUENCE public.oauth_access_grants_id_seq OWNED BY public.oauth_access_gr
 
 CREATE TABLE public.oauth_access_tokens (
     id bigint NOT NULL,
-    resource_owner_id integer,
+    resource_owner_id bigint,
     application_id bigint,
     token character varying NOT NULL,
     refresh_token character varying,
@@ -2102,7 +2102,7 @@ CREATE TABLE public.pages (
     name text,
     slug character varying,
     content text,
-    parent_id integer,
+    parent_id bigint,
     parent_type character varying,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
@@ -2404,7 +2404,7 @@ CREATE TABLE public.schema_migrations (
 --
 
 CREATE TABLE public.sessions (
-    id integer NOT NULL,
+    id bigint NOT NULL,
     session_id character varying NOT NULL,
     data text,
     created_at timestamp without time zone,
@@ -2597,10 +2597,10 @@ CREATE TABLE public.staff_positions_user_con_profiles (
 --
 
 CREATE TABLE public.team_members (
-    id integer NOT NULL,
+    id bigint NOT NULL,
     event_id bigint,
     updated_at timestamp without time zone,
-    updated_by_id integer,
+    updated_by_id bigint,
     display boolean,
     show_email boolean,
     receive_con_email boolean,
@@ -2672,7 +2672,7 @@ ALTER SEQUENCE public.ticket_types_id_seq OWNED BY public.ticket_types.id;
 --
 
 CREATE TABLE public.tickets (
-    id integer NOT NULL,
+    id bigint NOT NULL,
     user_con_profile_id bigint,
     ticket_type_id bigint,
     created_at timestamp without time zone NOT NULL,
@@ -5868,6 +5868,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220226170448'),
 ('20220313171517'),
 ('20220502182655'),
-('20220503164309');
+('20220503164309'),
+('20220609161816');
 
 
