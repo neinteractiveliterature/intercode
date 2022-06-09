@@ -4,7 +4,7 @@
 #
 # Table name: cms_partials
 #
-#  id          :integer          not null, primary key
+#  id          :bigint           not null, primary key
 #  admin_notes :text
 #  content     :text
 #  invariant   :boolean          default(FALSE), not null
@@ -12,7 +12,7 @@
 #  parent_type :string
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
-#  parent_id   :integer
+#  parent_id   :bigint
 #
 # Indexes
 #

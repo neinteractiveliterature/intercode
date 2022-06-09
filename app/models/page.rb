@@ -16,7 +16,7 @@
 #  created_at               :datetime
 #  updated_at               :datetime
 #  cms_layout_id            :bigint
-#  parent_id                :integer
+#  parent_id                :bigint
 #
 # Indexes
 #
