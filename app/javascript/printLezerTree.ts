@@ -1,4 +1,4 @@
-import { Input, NodeProp, NodeType, SyntaxNode, Tree, TreeCursor } from '@lezer/common';
+import { Input, IterMode, NodeProp, NodeType, SyntaxNode, Tree, TreeCursor } from '@lezer/common';
 
 class StringInput implements Input {
   constructor(readonly string: string) {}
@@ -41,14 +41,19 @@ function focusedNode(cursor: TreeCursor): {
 }
 
 export function printTree(
-  initialCursor: TreeCursor | Tree | SyntaxNode,
+  initialCursor: TreeCursor | Tree | SyntaxNode | ((mode?: IterMode) => TreeCursor),
   initialInput: Input | string,
   options: { from?: number; to?: number; start?: number; includeParents?: boolean } = {},
 ): string {
-  let cursor = initialCursor;
+  const cursor: TreeCursor =
+    initialCursor instanceof TreeCursor
+      ? initialCursor
+      : typeof initialCursor === 'function'
+      ? initialCursor()
+      : initialCursor instanceof Tree
+      ? initialCursor.cursor()
+      : initialCursor.cursor();
   let input = initialInput;
-  if (!(cursor instanceof TreeCursor))
-    cursor = cursor instanceof Tree ? cursor.cursor() : cursor.cursor;
   if (typeof input === 'string') input = new StringInput(input);
   const { from = -Infinity, to = Infinity, start = 0, includeParents = false } = options;
   let output = '';
@@ -61,8 +66,7 @@ export function printTree(
     }
     let leave = false;
     if (node.from <= to && node.to >= from) {
-      const enter =
-        !node.type.isAnonymous && (includeParents || (node.from >= from && node.to <= to));
+      const enter = !node.type.isAnonymous && (includeParents || (node.from >= from && node.to <= to));
       if (enter) {
         leave = true;
         const isTop = output === '';
@@ -84,10 +88,7 @@ export function printTree(
         const hasRange = node.from !== node.to;
         output += ` ${
           hasRange
-            ? `[${colorize(start + node.from, Color.Blue)}..${colorize(
-                start + node.to,
-                Color.Blue,
-              )}]`
+            ? `[${colorize(start + node.from, Color.Blue)}..${colorize(start + node.to, Color.Blue)}]`
             : colorize(start + node.from, Color.Blue)
         }`;
         if (hasRange && isLeaf) {
