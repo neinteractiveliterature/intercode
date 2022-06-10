@@ -8452,23 +8452,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js-compat@npm:3.22.2":
-  version: 3.22.2
-  resolution: "core-js-compat@npm:3.22.2"
-  dependencies:
-    browserslist: ^4.20.2
-    semver: 7.0.0
-  checksum: 4460d99c1e618a543976ebcc329c5e063254d746bf1eeda5e2ab7b43589071e8627b950c10e6189d8d231982788969203dbcdc264a5bb6dcea6ddfb32cce0214
-  languageName: node
-  linkType: hard
-
-"core-js-compat@npm:^3.20.0, core-js-compat@npm:^3.20.2, core-js-compat@npm:^3.22.1":
-  version: 3.22.7
-  resolution: "core-js-compat@npm:3.22.7"
+"core-js-compat@npm:3.22.8, core-js-compat@npm:^3.20.0, core-js-compat@npm:^3.20.2, core-js-compat@npm:^3.22.1":
+  version: 3.22.8
+  resolution: "core-js-compat@npm:3.22.8"
   dependencies:
     browserslist: ^4.20.3
     semver: 7.0.0
-  checksum: 036148c150ae6dec864cf175100d56ba0fa2ee9e43b94e6e3d9605d39d53c367aa2409aa1affc485a3135fd73bcab7a4f5f3ab2707420923f7f144ac1997eccf
+  checksum: 0c82d9110dcb267c2f5547c61b62f8043793d203523048169176b8badf0b73f3792624342b85d9c923df8eb8971b4aa468b160abb81a023d183c5951e4f05a66
   languageName: node
   linkType: hard
 
@@ -18220,7 +18210,7 @@ resolve@^2.0.0-next.3:
     classnames: 2.3.1
     compression-webpack-plugin: 9.2.0
     core-js: 3.22.8
-    core-js-compat: 3.22.2
+    core-js-compat: 3.22.8
     crypto-browserify: 3.12.0
     css-loader: 6.7.1
     css-minimizer-webpack-plugin: 3.4.1
