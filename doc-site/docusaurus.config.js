@@ -165,5 +165,10 @@ module.exports = {
         // this seems broken in docusaurus 2.0.0-beta.15
         // additionalLanguages: ['liquid'],
       },
+      algolia: {
+        appId: 'S6GLWS6G10',
+        apiKey: '721c7470499a967fdab9cdd803e6713c',
+        indexName: 'intercode',
+      },
     }),
 };
