@@ -182,7 +182,7 @@
     "webpack": "5.72.0",
     "webpack-assets-manifest": "5.1.0",
     "webpack-bundle-analyzer": "4.5.0",
-    "webpack-dev-middleware": "5.3.1",
+    "webpack-dev-middleware": "5.3.3",
     "webpack-manifest-plugin": "5.0.0",
     "webpack-merge": "5.8.0",
     "webpack-shell-plugin-next": "2.2.2",
