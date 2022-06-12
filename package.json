@@ -222,7 +222,7 @@
     "babel-eslint": "10.1.0",
     "babel-jest": "27.5.1",
     "core-js-compat": "3.22.8",
-    "eslint": "8.14.0",
+    "eslint": "8.17.0",
     "eslint-config-airbnb": "19.0.4",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-config-airbnb-typescript": "17.0.0",
