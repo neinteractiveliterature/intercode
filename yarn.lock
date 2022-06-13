@@ -5832,15 +5832,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@webpack-cli/serve@npm:1.6.1, @webpack-cli/serve@npm:^1.6.1":
-  version: 1.6.1
-  resolution: "@webpack-cli/serve@npm:1.6.1"
+"@webpack-cli/serve@npm:1.7.0, @webpack-cli/serve@npm:^1.6.1":
+  version: 1.7.0
+  resolution: "@webpack-cli/serve@npm:1.7.0"
   peerDependencies:
     webpack-cli: 4.x.x
   peerDependenciesMeta:
     webpack-dev-server:
       optional: true
-  checksum: 8b273f906aeffa60c7d5700ae25f98d4b66b7e922cad38acb9575d55ff83872cd20b9894aacfa81c4d54e5b51b16253ae0e70c5e9e0608dc8768276e15c74536
+  checksum: d475e8effa23eb7ff9a48b14d4de425989fd82f906ce71c210921cc3852327c22873be00c35e181a25a6bd03d424ae2b83e7f3b3f410ac7ee31b128ab4ac7713
   languageName: node
   linkType: hard
 
@@ -18079,7 +18079,7 @@ resolve@^2.0.0-next.3:
     "@types/zxcvbn": 4.4.1
     "@typescript-eslint/eslint-plugin": 5.21.0
     "@typescript-eslint/parser": 5.21.0
-    "@webpack-cli/serve": 1.6.1
+    "@webpack-cli/serve": 1.7.0
     apollo-upload-client: 17.0.0
     array-to-sentence: 2.0.0
     assert-never: 1.2.1
