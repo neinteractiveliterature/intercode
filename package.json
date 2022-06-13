@@ -24,7 +24,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@apollo/client": "3.6.7",
+    "@apollo/client": "3.6.8",
     "@babel/core": "7.18.2",
     "@babel/plugin-proposal-class-properties": "7.17.12",
     "@babel/plugin-proposal-do-expressions": "7.16.7",
