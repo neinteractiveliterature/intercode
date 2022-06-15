@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 class ReceiveSnsEmailDeliveryService < CivilService::Service
+  def self.aws_region
+    ENV.fetch('AWS_EMAIL_RECEIVING_REGION', nil) || ENV.fetch('AWS_REGION')
+  end
+
   def self.kms_client
-    @kms_client ||= Aws::KMS::Client.new
+    @kms_client ||= Aws::KMS::Client.new(region: aws_region)
   end
 
   def self.s3_client
@@ -13,10 +17,6 @@ class ReceiveSnsEmailDeliveryService < CivilService::Service
         content_encryption_schema: :aes_gcm_no_padding,
         security_profile: :v2_and_legacy
       )
-  end
-
-  def self.ses_client
-    @ses_client ||= Aws::SES::Client.new
   end
 
   attr_reader :message
