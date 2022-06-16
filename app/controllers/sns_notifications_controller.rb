@@ -4,7 +4,7 @@ class SnsNotificationsController < ApplicationController
   before_action :verify_request_authenticity
 
   def self.sns_client
-    @sns_client ||= Aws::SNS::Client.new
+    @sns_client ||= Aws::SNS::Client.new(region: ReceiveSnsEmailDeliveryService.aws_region)
   end
 
   def create
