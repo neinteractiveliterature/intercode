@@ -5423,12 +5423,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/testing-library__jest-dom@npm:5.14.3, @types/testing-library__jest-dom@npm:^5.9.1":
-  version: 5.14.3
-  resolution: "@types/testing-library__jest-dom@npm:5.14.3"
+"@types/testing-library__jest-dom@npm:5.14.4, @types/testing-library__jest-dom@npm:^5.9.1":
+  version: 5.14.4
+  resolution: "@types/testing-library__jest-dom@npm:5.14.4"
   dependencies:
     "@types/jest": "*"
-  checksum: 203443d0e7e5929fbc9e441146f92d85efa033b4697e427ed0164df1c40b720b6bb9bbd96a3171ea5fd8d9301b538fd0f49d4f35594d142afd0f6d2ecac25785
+  checksum: 1d67a421757e5e6c32f232f848418b79658dc32d202f5b5f89e79dc49e6e8f24f0415db0f9fafe38c43c843d7f532cac53aa401f0129ae4b45c8d57e5974fbe3
   languageName: node
   linkType: hard
 
@@ -17990,7 +17990,7 @@ resolve@^2.0.0-next.3:
     "@types/react-table": 7.7.11
     "@types/react-transition-group": 4.4.4
     "@types/source-map-support": 0.5.4
-    "@types/testing-library__jest-dom": 5.14.3
+    "@types/testing-library__jest-dom": 5.14.4
     "@types/tinycolor2": 1.4.3
     "@types/uuid": 8.3.4
     "@types/zxcvbn": 4.4.1
