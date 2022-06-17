@@ -42,6 +42,11 @@ class SignupChange < ApplicationRecord
   belongs_to :user_con_profile
   belongs_to :previous_signup_change, class_name: 'SignupChange', optional: true
   belongs_to :updated_by, class_name: 'User', optional: true
+  has_one :next_signup_change,
+          class_name: 'SignupChange',
+          foreign_key: :previous_signup_change_id,
+          dependent: :destroy,
+          inverse_of: :previous_signup_change
 
   validates :action, presence: true, inclusion: { in: Types::SignupChangeActionType.values.keys }
 end
