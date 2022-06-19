@@ -5295,12 +5295,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-table@npm:7.7.11":
-  version: 7.7.11
-  resolution: "@types/react-table@npm:7.7.11"
+"@types/react-table@npm:7.7.12":
+  version: 7.7.12
+  resolution: "@types/react-table@npm:7.7.12"
   dependencies:
     "@types/react": "*"
-  checksum: d0f1399480e9779d011b9b7d3608c267640a42453d29116a7c0200fca91a5e1d4940e2dec4337a35007ba5d35d4580dd4d875fdbfabf2597886aefaf723fccc0
+  checksum: 287ea68e75b56c2e70e6d6491cd172348c7302b032789047eb2dca1b25b240684e48a60f58140575828b790f95724b9f3ec4d3adce82fc1c05d994def1449009
   languageName: node
   linkType: hard
 
@@ -17133,12 +17133,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-table@npm:7.7.0":
-  version: 7.7.0
-  resolution: "react-table@npm:7.7.0"
+"react-table@npm:7.8.0":
+  version: 7.8.0
+  resolution: "react-table@npm:7.8.0"
   peerDependencies:
-    react: ^16.8.3 || ^17.0.0-0
-  checksum: a679edecc76d3e51311b095528395b38ac85a1ffa371716bea01559a5fdc75af9a6abb9bb907c63190c8e77da22b11f7b05065b3a45d190d8f43cb83e4366206
+    react: ^16.8.3 || ^17.0.0-0 || ^18.0.0
+  checksum: 44ca0fb848c6869cd793cede8dc33072b38ebb8f8d2833565afe7cf3eac5d1fa455ac5fb9d06838b16fab0523d5d03e3e82f7645032f71245096e67b892313b9
   languageName: node
   linkType: hard
 
@@ -17936,7 +17936,7 @@ resolve@^2.0.0-next.3:
     "@types/react-dom": 18.0.5
     "@types/react-google-recaptcha": 2.1.5
     "@types/react-onclickoutside": 6.7.4
-    "@types/react-table": 7.7.11
+    "@types/react-table": 7.7.12
     "@types/react-transition-group": 4.4.4
     "@types/source-map-support": 0.5.4
     "@types/testing-library__jest-dom": 5.14.4
@@ -18045,7 +18045,7 @@ resolve@^2.0.0-next.3:
     react-router: 6.3.0
     react-router-dom: 6.3.0
     react-select: 5.3.2
-    react-table: 7.7.0
+    react-table: 7.8.0
     react-test-renderer: 17.0.2
     react-transition-group: 4.4.2
     react-waypoint: 10.1.0
