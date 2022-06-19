@@ -16972,6 +16972,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-is@npm:^17.0.1 || ^18.0.0":
+  version: 18.2.0
+  resolution: "react-is@npm:18.2.0"
+  checksum: e72d0ba81b5922759e4aff17e0252bd29988f9642ed817f56b25a3e217e13eea8a7f2322af99a06edb779da12d5d636e9fda473d620df9a3da0df2a74141d53e
+  languageName: node
+  linkType: hard
+
 "react-json-view@npm:^1.21.3":
   version: 1.21.3
   resolution: "react-json-view@npm:1.21.3"
@@ -17184,17 +17191,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-waypoint@npm:10.1.0, react-waypoint@npm:^10.1.0":
-  version: 10.1.0
-  resolution: "react-waypoint@npm:10.1.0"
+"react-waypoint@npm:10.3.0, react-waypoint@npm:^10.1.0":
+  version: 10.3.0
+  resolution: "react-waypoint@npm:10.3.0"
   dependencies:
     "@babel/runtime": ^7.12.5
     consolidated-events: ^1.1.0 || ^2.0.0
     prop-types: ^15.0.0
-    react-is: ^17.0.1
+    react-is: ^17.0.1 || ^18.0.0
   peerDependencies:
-    react: ^15.3.0 || ^16.0.0 || ^17.0.0
-  checksum: 70d7e753eba909a2cd3519cee33e25725a89ad883c94fbc8cf7e5705c94c47d909f5ebcb58a7e0018d8c9ecaaf39c831524bf9e15100a03863173c752cf54db1
+    react: ^15.3.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
+  checksum: 5a476432cd4a55ae022b33f82610a1addae92912ec88111cf33c17ef473bbbfc2c695714cb3bd60911259c92c5b6349f80033b022bf1e59e1a4be9b198a70a7a
   languageName: node
   linkType: hard
 
@@ -18048,7 +18055,7 @@ resolve@^2.0.0-next.3:
     react-table: 7.8.0
     react-test-renderer: 17.0.2
     react-transition-group: 4.4.2
-    react-waypoint: 10.1.0
+    react-waypoint: 10.3.0
     regenerator-runtime: 0.13.9
     require-from-string: 2.0.2
     resolve-url-loader: 5.0.0
