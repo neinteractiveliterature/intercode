@@ -17016,20 +17016,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-popper@npm:2.2.5":
-  version: 2.2.5
-  resolution: "react-popper@npm:2.2.5"
-  dependencies:
-    react-fast-compare: ^3.0.1
-    warning: ^4.0.2
-  peerDependencies:
-    "@popperjs/core": ^2.0.0
-    react: ^16.8.0 || ^17
-  checksum: 915fcf08e1da4fd48a200074fcdd936f601ee2173f1e730cfed8a54fd47716aa8bf9cce2392463e3bcbe64a096d0baf463809ed2874b94d3a9d430ae6d817b5d
-  languageName: node
-  linkType: hard
-
-"react-popper@npm:^2.3.0":
+"react-popper@npm:2.3.0, react-popper@npm:^2.3.0":
   version: 2.3.0
   resolution: "react-popper@npm:2.3.0"
   dependencies:
@@ -18054,7 +18041,7 @@ resolve@^2.0.0-next.3:
     react-html-id: 0.1.5
     react-i18next: 11.17.2
     react-onclickoutside: 6.12.2
-    react-popper: 2.2.5
+    react-popper: 2.3.0
     react-router: 6.3.0
     react-router-dom: 6.3.0
     react-select: 5.3.2
