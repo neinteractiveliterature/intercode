@@ -255,29 +255,10 @@ GEM
       railties (>= 5.0.0)
     faker (2.19.0)
       i18n (>= 1.6, < 2)
-    faraday (1.10.0)
-      faraday-em_http (~> 1.0)
-      faraday-em_synchrony (~> 1.0)
-      faraday-excon (~> 1.1)
-      faraday-httpclient (~> 1.0)
-      faraday-multipart (~> 1.0)
-      faraday-net_http (~> 1.0)
-      faraday-net_http_persistent (~> 1.0)
-      faraday-patron (~> 1.0)
-      faraday-rack (~> 1.0)
-      faraday-retry (~> 1.0)
+    faraday (2.3.0)
+      faraday-net_http (~> 2.0)
       ruby2_keywords (>= 0.0.4)
-    faraday-em_http (1.0.0)
-    faraday-em_synchrony (1.0.0)
-    faraday-excon (1.1.0)
-    faraday-httpclient (1.0.1)
-    faraday-multipart (1.0.3)
-      multipart-post (>= 1.2, < 3)
-    faraday-net_http (1.0.1)
-    faraday-net_http_persistent (1.2.0)
-    faraday-patron (1.0.0)
-    faraday-rack (1.0.0)
-    faraday-retry (1.0.3)
+    faraday-net_http (2.0.3)
     ffi (1.15.5)
     ffi (1.15.5-java)
     flamegraph (0.9.5)
@@ -318,7 +299,7 @@ GEM
       activesupport (>= 4.2)
       aes_key_wrap
       bindata
-    jwt (2.3.0)
+    jwt (2.4.1)
     kramdown (2.3.1)
       rexml
     kramdown-parser-gfm (1.1.0)
@@ -376,7 +357,6 @@ GEM
     msgpack (1.4.2)
     msgpack (1.4.2-java)
     multi_json (1.15.0)
-    multipart-post (2.1.1)
     mysql2 (0.5.3)
     net-imap (0.2.3)
       digest
@@ -588,8 +568,8 @@ GEM
     tilt (2.0.10)
     timeout (0.3.0)
     tins (1.20.2)
-    twilio-ruby (5.66.0)
-      faraday (>= 0.9, < 2.0)
+    twilio-ruby (5.67.3)
+      faraday (>= 0.9, < 3.0)
       jwt (>= 1.5, <= 2.5)
       nokogiri (>= 1.6, < 2.0)
     typeprof (0.21.2)
@@ -708,7 +688,7 @@ DEPENDENCIES
   stripe
   stripe-ruby-mock (>= 3.1.0.rc3)
   term-ansicolor
-  twilio-ruby (~> 5.66.0)
+  twilio-ruby (~> 5.67.0)
   typeprof
   tzinfo-data
   webrick
