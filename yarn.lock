@@ -6893,12 +6893,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bootstrap@npm:5.1.3":
-  version: 5.1.3
-  resolution: "bootstrap@npm:5.1.3"
+"bootstrap@npm:5.2.0-beta1":
+  version: 5.2.0-beta1
+  resolution: "bootstrap@npm:5.2.0-beta1"
   peerDependencies:
-    "@popperjs/core": ^2.10.2
-  checksum: 301b5ed872efba061104cf22ac93568e3837867fb5527ab9326a51510fb752bd4883e1d488225c8be72f86d9d3a55ef5b166aa7fa62c2fdd077c3f05b65752f8
+    "@popperjs/core": ^2.11.5
+  checksum: 742892b60e6004fdc8b82d4f72eda4409bde7b7f0974b703d85144e77285fb950add0f08dbb35f244e3bfa6e0ecdcb674ee84c2f7610135220af947da4fe2c12
   languageName: node
   linkType: hard
 
@@ -11242,6 +11242,15 @@ __metadata:
   peerDependencies:
     graphql: ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
   checksum: b15162a3d62f17b9b79302445b9ee330e041582f1c7faca74b9dec5daa74272c906ec1c34e1c50592bb6215e5c3eba80a309103f6ba9e4c1cddc350c46f010df
+  languageName: node
+  linkType: hard
+
+"graphql-ws@npm:5.9.0":
+  version: 5.9.0
+  resolution: "graphql-ws@npm:5.9.0"
+  peerDependencies:
+    graphql: ">=0.11 <=16"
+  checksum: b13abfc4094314940f7ffd1e5c9fa34b6b1a64d477d3f1728740d04edd36e1191c83dcec3c2d7f3d6653995b1ba32edeb75f92921710d716b4cc7fc349d1f276
   languageName: node
   linkType: hard
 
@@ -17948,7 +17957,7 @@ resolve@^2.0.0-next.3:
     babel-plugin-dynamic-import-node: 2.3.3
     babel-plugin-graphql-tag: 3.3.0
     babel-plugin-lodash: 3.3.4
-    bootstrap: 5.1.3
+    bootstrap: 5.2.0-beta1
     bootstrap-icons: 1.8.3
     buffer: 6.0.3
     bytes: 3.1.2
@@ -17993,6 +18002,7 @@ resolve@^2.0.0-next.3:
     graphql-anywhere: 4.2.7
     graphql-language-service-utils: 2.7.1
     graphql-tag: 2.12.6
+    graphql-ws: 5.9.0
     history: 5.3.0
     html-to-react: 1.4.8
     husky: 7.0.4
