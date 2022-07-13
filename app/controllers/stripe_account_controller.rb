@@ -15,7 +15,7 @@ class StripeAccountController < ApplicationController
         {
           account: convention.stripe_account_id,
           refresh_url: stripe_account_refresh_url,
-          return_url: stripe_accont_return_url,
+          return_url: stripe_account_return_url,
           type: 'account_onboarding'
         }
       )
