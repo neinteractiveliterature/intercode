@@ -11876,12 +11876,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"husky@npm:7.0.4":
-  version: 7.0.4
-  resolution: "husky@npm:7.0.4"
+"husky@npm:8.0.1":
+  version: 8.0.1
+  resolution: "husky@npm:8.0.1"
   bin:
     husky: lib/bin.js
-  checksum: c6ec4af63da2c9522da8674a20ad9b48362cc92704896cc8a58c6a2a39d797feb2b806f93fbd83a6d653fbdceb2c3b6e0b602c6b2e8565206ffc2882ef7db9e9
+  checksum: 943a73a13d0201318fd30e83d299bb81d866bd245b69e6277804c3b462638dc1921694cb94c2b8c920a4a187060f7d6058d3365152865406352e934c5fff70dc
   languageName: node
   linkType: hard
 
@@ -18016,7 +18016,7 @@ resolve@^2.0.0-next.3:
     graphql-ws: 5.9.0
     history: 5.3.0
     html-to-react: 1.4.8
-    husky: 7.0.4
+    husky: 8.0.1
     i18next: 21.8.10
     i18next-intervalplural-postprocessor: 3.0.0
     i18next-parser: 6.5.0
