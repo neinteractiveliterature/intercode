@@ -1958,9 +1958,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/lang-html@npm:6.0.0, @codemirror/lang-html@npm:^6.0, @codemirror/lang-html@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "@codemirror/lang-html@npm:6.0.0"
+"@codemirror/lang-html@npm:6.1.0, @codemirror/lang-html@npm:^6.0, @codemirror/lang-html@npm:^6.0.0":
+  version: 6.1.0
+  resolution: "@codemirror/lang-html@npm:6.1.0"
   dependencies:
     "@codemirror/autocomplete": ^6.0.0
     "@codemirror/lang-css": ^6.0.0
@@ -1969,7 +1969,7 @@ __metadata:
     "@codemirror/state": ^6.0.0
     "@lezer/common": ^1.0.0
     "@lezer/html": ^1.0.0
-  checksum: 1cb0aa2ed481d2ef644a23afc8a706f745201c67a22da6f214cdaff1b2c7173e8933dfb9f3b60522b777cdcdd74cb5f88786ef4df61e6a640439eb155cc1c777
+  checksum: 7a526c9b626d034d6b340d1dfe44061e5e3af87c875709a69de830ed102ce32b71ed733ba0ff02b78388371497907970e163ec84f0ae90a58a807122a17348e0
   languageName: node
   linkType: hard
 
@@ -2012,9 +2012,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/language@npm:6.0.0, @codemirror/language@npm:^6.0, @codemirror/language@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "@codemirror/language@npm:6.0.0"
+"@codemirror/language@npm:6.2.0, @codemirror/language@npm:^6.0, @codemirror/language@npm:^6.0.0":
+  version: 6.2.0
+  resolution: "@codemirror/language@npm:6.2.0"
   dependencies:
     "@codemirror/state": ^6.0.0
     "@codemirror/view": ^6.0.0
@@ -2022,7 +2022,7 @@ __metadata:
     "@lezer/highlight": ^1.0.0
     "@lezer/lr": ^1.0.0
     style-mod: ^4.0.0
-  checksum: b98844f221ef5a1f8fb4ef1c74891056b7a4c063d1373a45cfb4ac0add080decc4f5a90650fad0112fe91f969f535008351b1d6c440826e80ccee0c7aaeeb0f8
+  checksum: c1ab29c7c14cfa005edf01561f7103995f838432e22abf476b2197091a613588d2ed7c46d47443251fde267b3a423bd3e44bfd53997a632ebf9d74e8b25ba31d
   languageName: node
   linkType: hard
 
@@ -2070,10 +2070,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/state@npm:6.0.1, @codemirror/state@npm:^6.0, @codemirror/state@npm:^6.0.0":
-  version: 6.0.1
-  resolution: "@codemirror/state@npm:6.0.1"
-  checksum: fcb5aa5e1ce455ed1261616beb6cdb9e855f9cf11618a1ef7f61142622a0aba4551605356d381d2fa96f021f932b71323808369bf8edadfa69d745252b7e6ccd
+"@codemirror/state@npm:6.1.0, @codemirror/state@npm:^6.0, @codemirror/state@npm:^6.0.0":
+  version: 6.1.0
+  resolution: "@codemirror/state@npm:6.1.0"
+  checksum: 5185df31f2ee0f178b74a2a5420d78a84a31fc9f245c1b6a01fcf037fcad06770c9611ef9fce905a8f7bb0a42f42a241721dd9042255cbd848ceadd2ee0d0d39
   languageName: node
   linkType: hard
 
@@ -2093,14 +2093,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/view@npm:6.0.1, @codemirror/view@npm:^6.0, @codemirror/view@npm:^6.0.0":
-  version: 6.0.1
-  resolution: "@codemirror/view@npm:6.0.1"
+"@codemirror/view@npm:6.0.3, @codemirror/view@npm:^6.0, @codemirror/view@npm:^6.0.0":
+  version: 6.0.3
+  resolution: "@codemirror/view@npm:6.0.3"
   dependencies:
     "@codemirror/state": ^6.0.0
     style-mod: ^4.0.0
     w3c-keyname: ^2.2.4
-  checksum: 92205f35bde328a84705e0afc1fb9c0b4eb06eb99f08a2d2bc9526a499c980b46ce3312f7b311a1c301bb17b96aa0a7d8c79fbeeea65a27ed9ae4842cc67bfa2
+  checksum: 30b56d2afabc4b5e3332a32180d4e6a6f1a2085f3d966bd9cb49db6ddf3ebbeff6efec14a143cb6bee05e293738da56f7ac5f1929ef3b4d5d9d3ef963f1c7981
   languageName: node
   linkType: hard
 
@@ -17655,12 +17655,12 @@ resolve@^2.0.0-next.3:
     "@babel/register": 7.18.6
     "@babel/runtime": 7.18.6
     "@codemirror/highlight": 0.19.8
-    "@codemirror/lang-html": 6.0.0
+    "@codemirror/lang-html": 6.1.0
     "@codemirror/lang-json": 6.0.0
     "@codemirror/lang-markdown": 6.0.0
-    "@codemirror/language": 6.0.0
-    "@codemirror/state": 6.0.1
-    "@codemirror/view": 6.0.1
+    "@codemirror/language": 6.2.0
+    "@codemirror/state": 6.1.0
+    "@codemirror/view": 6.0.3
     "@dnd-kit/core": 5.0.3
     "@dnd-kit/sortable": 6.0.1
     "@dnd-kit/utilities": 3.2.0
