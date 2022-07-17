@@ -7979,15 +7979,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"compression-webpack-plugin@npm:9.2.0":
-  version: 9.2.0
-  resolution: "compression-webpack-plugin@npm:9.2.0"
+"compression-webpack-plugin@npm:10.0.0":
+  version: 10.0.0
+  resolution: "compression-webpack-plugin@npm:10.0.0"
   dependencies:
     schema-utils: ^4.0.0
     serialize-javascript: ^6.0.0
   peerDependencies:
     webpack: ^5.1.0
-  checksum: 50ef78d0973f87ed8d7c30fdb31b009d409c288a77ee842d9b3b5b2348048f55148f510d3a0bd30b5c954e6701ed9fc08c3616ce46ad1eec8e0954b336a5f4b9
+  checksum: 2ac9079b7ab87141639c62ddbb2820a06f105198e27ef4c3860da3186bdbefc00d1e206969833ce7a4b7b26161ddbec7b8d20d30f9f9c1d494818b9b86f0d5cc
   languageName: node
   linkType: hard
 
@@ -17777,7 +17777,7 @@ resolve@^2.0.0-next.3:
     caniuse-lite: 1.0.30001367
     case-sensitive-paths-webpack-plugin: 2.4.0
     classnames: 2.3.1
-    compression-webpack-plugin: 9.2.0
+    compression-webpack-plugin: 10.0.0
     core-js: 3.23.5
     core-js-compat: 3.23.4
     crypto-browserify: 3.12.0
