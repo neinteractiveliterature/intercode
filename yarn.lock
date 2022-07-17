@@ -14096,10 +14096,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"luxon@npm:2.4.0, luxon@npm:^2.4.0":
-  version: 2.4.0
-  resolution: "luxon@npm:2.4.0"
-  checksum: 6071028d65cc3d3bdab5e6a3995dd97411c92bb3b3163a02deb7b7014318ad3a6fd750ae77131c42141b717c14aef8880d3130f265281d500ef2365f7265b3f3
+"luxon@npm:2.5.0, luxon@npm:^2.4.0":
+  version: 2.5.0
+  resolution: "luxon@npm:2.5.0"
+  checksum: 2fccce6bbdfc8f13c5a8c148ff045ab3b10f4f80cac28dd92575588fffce9b2d7197096d7fedcc61a6245b59f4233507797f530e63f22b9ae4c425dff2909ae3
   languageName: node
   linkType: hard
 
@@ -17829,7 +17829,7 @@ resolve@^2.0.0-next.3:
     js-search: 2.0.0
     lint-staged: 13.0.3
     lodash: 4.17.21
-    luxon: 2.4.0
+    luxon: 2.5.0
     mapbox-gl: 1.13.2
     md5.js: 1.3.5
     mini-css-extract-plugin: 2.6.1
