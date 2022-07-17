@@ -9143,7 +9143,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"domhandler@npm:^4.0, domhandler@npm:^4.0.0, domhandler@npm:^4.2.0, domhandler@npm:^4.2.2":
+"domhandler@npm:^4.0.0, domhandler@npm:^4.2.0":
   version: 4.2.2
   resolution: "domhandler@npm:4.2.2"
   dependencies:
@@ -9152,7 +9152,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"domhandler@npm:^5.0.1, domhandler@npm:^5.0.2, domhandler@npm:^5.0.3":
+"domhandler@npm:^5.0, domhandler@npm:^5.0.1, domhandler@npm:^5.0.2, domhandler@npm:^5.0.3":
   version: 5.0.3
   resolution: "domhandler@npm:5.0.3"
   dependencies:
@@ -9161,7 +9161,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"domutils@npm:^2.5.2, domutils@npm:^2.6.0, domutils@npm:^2.8.0":
+"domutils@npm:^2.5.2, domutils@npm:^2.6.0":
   version: 2.8.0
   resolution: "domutils@npm:2.8.0"
   dependencies:
@@ -11583,17 +11583,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"html-to-react@npm:1.4.8":
-  version: 1.4.8
-  resolution: "html-to-react@npm:1.4.8"
+"html-to-react@npm:1.5.0":
+  version: 1.5.0
+  resolution: "html-to-react@npm:1.5.0"
   dependencies:
-    domhandler: ^4.0
-    htmlparser2: ^7.0
+    domhandler: ^5.0
+    htmlparser2: ^8.0
     lodash.camelcase: ^4.3.0
-    ramda: ^0.28.0
-  peerDependencies:
-    react: ^16.0 || ^17.0
-  checksum: 5a587dc8c485b4323b99e3d312ec754c11d88451e6cde60f8493dd0b04e44bc60140ebaca8fed3f4aaf30ddac015a3f1feeef91c64205694f95ccb876faf2d4e
+  checksum: ed1d8219101e352448833d7a53bbcbedf216a738e857e24f3f85c6818abbae84237a728afdd3a91bc33b615c9f17367a1bcdfa00037479b95887a1b23966976f
   languageName: node
   linkType: hard
 
@@ -11631,19 +11628,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"htmlparser2@npm:^7.0":
-  version: 7.1.2
-  resolution: "htmlparser2@npm:7.1.2"
-  dependencies:
-    domelementtype: ^2.0.1
-    domhandler: ^4.2.2
-    domutils: ^2.8.0
-    entities: ^3.0.1
-  checksum: 80374dce981d94ff03155733cda289534878e2d05cb435cc9eddc64716e617abf720938d813f18a16878254c8eb5873c7d9e2964bf240202f0a5b71b8e06069f
-  languageName: node
-  linkType: hard
-
-"htmlparser2@npm:^8.0.1":
+"htmlparser2@npm:^8.0, htmlparser2@npm:^8.0.1":
   version: 8.0.1
   resolution: "htmlparser2@npm:8.0.1"
   dependencies:
@@ -16540,13 +16525,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ramda@npm:^0.28.0":
-  version: 0.28.0
-  resolution: "ramda@npm:0.28.0"
-  checksum: 44ea6e5010bba70151b6a92d8114a91915e8b5a16105cce65fae58c9d7386b812c429645e35f21141d7087568550ce383bc10ee1a65cdec951f4b69ea457e6a4
-  languageName: node
-  linkType: hard
-
 "randombytes@npm:^2.0.0, randombytes@npm:^2.0.1, randombytes@npm:^2.0.5, randombytes@npm:^2.1.0":
   version: 2.1.0
   resolution: "randombytes@npm:2.1.0"
@@ -17835,7 +17813,7 @@ resolve@^2.0.0-next.3:
     graphql-tag: 2.12.6
     graphql-ws: 5.9.1
     history: 5.3.0
-    html-to-react: 1.4.8
+    html-to-react: 1.5.0
     husky: 8.0.1
     i18next: 21.8.14
     i18next-intervalplural-postprocessor: 3.0.0
