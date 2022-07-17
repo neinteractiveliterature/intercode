@@ -6926,10 +6926,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bootstrap-icons@npm:1.9.0":
-  version: 1.9.0
-  resolution: "bootstrap-icons@npm:1.9.0"
-  checksum: 2ef2c3aff8a114e5a8c5dea1714d804c4407583f603550c3e545d298a20a69ffdedcc2e80a7d1bcf13b93452135fff52ed2a78d473fd4772710a7f0808b45525
+"bootstrap-icons@npm:1.9.1":
+  version: 1.9.1
+  resolution: "bootstrap-icons@npm:1.9.1"
+  checksum: b388264719b5d2526809df509b83aa7e696d467f3b976d79faefb6fc7f07cee5427a894331af90b00b1ceb8d28a99fc398f1ca0553afaa53eb77a7749bb73ea5
   languageName: node
   linkType: hard
 
@@ -17788,7 +17788,7 @@ resolve@^2.0.0-next.3:
     babel-plugin-graphql-tag: 3.3.0
     babel-plugin-lodash: 3.3.4
     bootstrap: 5.2.0-beta1
-    bootstrap-icons: 1.9.0
+    bootstrap-icons: 1.9.1
     buffer: 6.0.3
     bytes: 3.1.2
     cadmus-navbar-admin: 6.0.0
