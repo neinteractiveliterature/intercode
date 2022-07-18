@@ -569,7 +569,7 @@ GEM
     tilt (2.0.10)
     timeout (0.3.0)
     tins (1.20.2)
-    twilio-ruby (5.67.3)
+    twilio-ruby (5.69.0)
       faraday (>= 0.9, < 3.0)
       jwt (>= 1.5, <= 2.5)
       nokogiri (>= 1.6, < 2.0)
@@ -689,7 +689,7 @@ DEPENDENCIES
   stripe
   stripe-ruby-mock (>= 3.1.0.rc3)
   term-ansicolor
-  twilio-ruby (~> 5.67.0)
+  twilio-ruby (~> 5.69.0)
   typeprof
   tzinfo-data
   webrick
