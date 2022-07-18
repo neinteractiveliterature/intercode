@@ -45,6 +45,6 @@
     "@types/lodash": "^4",
     "entities": "4.3.1",
     "lodash": "^4.17.21",
-    "ts-node": "10.8.1"
+    "ts-node": "10.9.1"
   }
 }
