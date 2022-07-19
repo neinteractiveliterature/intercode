@@ -2093,14 +2093,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/view@npm:6.0.3, @codemirror/view@npm:^6.0, @codemirror/view@npm:^6.0.0":
-  version: 6.0.3
-  resolution: "@codemirror/view@npm:6.0.3"
+"@codemirror/view@npm:6.1.0, @codemirror/view@npm:^6.0, @codemirror/view@npm:^6.0.0":
+  version: 6.1.0
+  resolution: "@codemirror/view@npm:6.1.0"
   dependencies:
     "@codemirror/state": ^6.0.0
     style-mod: ^4.0.0
     w3c-keyname: ^2.2.4
-  checksum: 30b56d2afabc4b5e3332a32180d4e6a6f1a2085f3d966bd9cb49db6ddf3ebbeff6efec14a143cb6bee05e293738da56f7ac5f1929ef3b4d5d9d3ef963f1c7981
+  checksum: d5892064d8bccaf0a10f864267b7e1c3349070bd96d8dd207988b48dbe7fef50322a00c4cb3f0b68439e4a9f32734cece019534ee0cb3a81dd61b1566cf500c6
   languageName: node
   linkType: hard
 
@@ -17367,7 +17367,7 @@ resolve@^2.0.0-next.3:
     "@codemirror/lang-markdown": 6.0.0
     "@codemirror/language": 6.2.0
     "@codemirror/state": 6.1.0
-    "@codemirror/view": 6.0.3
+    "@codemirror/view": 6.1.0
     "@dnd-kit/core": 5.0.3
     "@dnd-kit/sortable": 6.0.1
     "@dnd-kit/utilities": 3.2.0
