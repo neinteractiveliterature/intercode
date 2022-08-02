@@ -116,6 +116,7 @@ class EventProposal < ApplicationRecord
   private
 
   def length_fits_in_convention
+    return unless convention.starts_at && convention.ends_at
     return unless length_seconds && length_seconds > convention.length_seconds
     errors.add :length_seconds, "Event cannot be longer than #{convention.name}"
   end
