@@ -1,9 +1,12 @@
 import { Fragment } from 'react';
 
 function PlainTextDisplay({ value }: { value: string }): JSX.Element {
-  let stringValue = value || '';
+  let stringValue = value ?? '';
   if (Array.isArray(value)) {
     stringValue = value.join(', ');
+  }
+  if (typeof stringValue !== 'string') {
+    stringValue = `${stringValue}`;
   }
 
   return (
