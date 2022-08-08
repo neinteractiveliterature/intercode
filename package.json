@@ -109,7 +109,7 @@
     "core-js": "3.23.5",
     "crypto-browserify": "3.12.0",
     "css-loader": "6.7.1",
-    "css-minimizer-webpack-plugin": "3.4.1",
+    "css-minimizer-webpack-plugin": "4.0.0",
     "cssnano": "5.1.12",
     "csv-string": "4.1.0",
     "custom-event-polyfill": "1.0.7",
