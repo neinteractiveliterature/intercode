@@ -1118,6 +1118,7 @@ export type CreateCmsContentGroupPayload = {
 export type CreateCmsFileInput = {
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  /** @deprecated Migrating to ActiveStorage direct uploads; please use signed_blob_id instead */
   file?: InputMaybe<Scalars['Upload']>;
   signedBlobId?: InputMaybe<Scalars['ID']>;
 };
