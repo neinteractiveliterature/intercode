@@ -72,5 +72,7 @@ no autoscaling needed"
       Rails.logger.info "Autoscaling to #{scaling_target} instances"
       adapter.update_instance_count(scaling_target)
     end
+
+    success
   end
 end
