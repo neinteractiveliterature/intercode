@@ -142,6 +142,10 @@ group :development do
   gem 'rubocop-rails'
   gem 'rubocop-sequel'
   gem 'prettier', '2.1.0'
+  gem 'prettier_print'
+  gem 'syntax_tree'
+  gem 'syntax_tree-haml'
+  gem 'syntax_tree-rbs'
 
   # Find missing `end` statements
   gem 'dead_end'
