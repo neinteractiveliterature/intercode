@@ -66,3 +66,7 @@ Metrics/MethodLength:
 # prettier and rubocop are fighting about this one, let prettier win
 Style/StringLiteralsInInterpolation:
   Enabled: false
+
+# Not sure why Prettier isn't disabling this but apparently we have to
+Style/StringLiterals:
+  Enabled: false
