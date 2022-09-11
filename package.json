@@ -64,7 +64,7 @@
     "@lezer/common": "1.0.1",
     "@neinteractiveliterature/litform": "0.23.0",
     "@popperjs/core": "2.11.6",
-    "@rails/activestorage": "7.0.3",
+    "@rails/activestorage": "7.0.4",
     "@stripe/react-stripe-js": "1.9.0",
     "@stripe/stripe-js": "1.32.0",
     "@testing-library/react": "12.1.5",
