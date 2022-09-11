@@ -4362,12 +4362,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rails/activestorage@npm:7.0.3":
-  version: 7.0.3
-  resolution: "@rails/activestorage@npm:7.0.3"
+"@rails/activestorage@npm:7.0.4":
+  version: 7.0.4
+  resolution: "@rails/activestorage@npm:7.0.4"
   dependencies:
     spark-md5: ^3.0.1
-  checksum: 0b087b115a3c3513041601f48c105bf4784701a57a13b356718e32ec72f11d38c26fb7780cecc42d8f5b813025e04f4b0fdd78081dfab41a67054d09748a106f
+  checksum: f99eaf856782babbf54a79fdf22e797592ad2a90e83b35125cd2c546c56b9f1c2ee8fc9e9b73098356fbfbca05ea2ba832207d455d3ed6e57513ba33ccb74ea2
   languageName: node
   linkType: hard
 
@@ -17497,7 +17497,7 @@ resolve@^2.0.0-next.3:
     "@neinteractiveliterature/litform": 0.23.0
     "@popperjs/core": 2.11.6
     "@prettier/plugin-ruby": 3.1.2
-    "@rails/activestorage": 7.0.3
+    "@rails/activestorage": 7.0.4
     "@stripe/react-stripe-js": 1.9.0
     "@stripe/stripe-js": 1.32.0
     "@testing-library/jest-dom": 5.16.5
