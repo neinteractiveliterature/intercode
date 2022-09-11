@@ -3992,10 +3992,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lezer/common@npm:1.0.0, @lezer/common@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@lezer/common@npm:1.0.0"
-  checksum: 0ba652b39f9ff073a6a8a3376a74279f2c2d2ccdd4d2bb57c7b607341dbdbf64baf9c23a196314f09349d175623bc73a6a0b6a0eeb2cc63f3a1190fd631f7c31
+"@lezer/common@npm:1.0.1, @lezer/common@npm:^1.0.0":
+  version: 1.0.1
+  resolution: "@lezer/common@npm:1.0.1"
+  checksum: 05bda2b0b90713a511502e1e0c67842996cb86415cd701c46eb49f8fa117552229a4bc7244f1e8e0025e3563294a52911eebd70d06a4bc987280fca5d148c34b
   languageName: node
   linkType: hard
 
@@ -17493,7 +17493,7 @@ resolve@^2.0.0-next.3:
     "@graphql-codegen/typescript-react-apollo": 3.3.3
     "@graphql-eslint/eslint-plugin": 3.10.7
     "@juggle/resize-observer": 3.3.1
-    "@lezer/common": 1.0.0
+    "@lezer/common": 1.0.1
     "@neinteractiveliterature/litform": 0.23.0
     "@popperjs/core": 2.11.5
     "@prettier/plugin-ruby": 3.1.2
