@@ -8242,10 +8242,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:3.23.5, core-js@npm:^3.23.3":
-  version: 3.23.5
-  resolution: "core-js@npm:3.23.5"
-  checksum: 0277d46b151126c5d90411e8e6b0d338abe2aaa695a132c360203a3772c620f849622c4fab8bfd7a46eec6933d5fe90f32f7167779d419bda699ff7808605757
+"core-js@npm:3.25.1, core-js@npm:^3.23.3":
+  version: 3.25.1
+  resolution: "core-js@npm:3.25.1"
+  checksum: bfacb078e790913841e2d5008b9b6705ae56ed23f83c7f0ae08d330d874561012611089d53b71520105234ed0abba36f28d91b391514a16541a8c8d98c464239
   languageName: node
   linkType: hard
 
@@ -17613,7 +17613,7 @@ resolve@^2.0.0-next.3:
     case-sensitive-paths-webpack-plugin: 2.4.0
     classnames: 2.3.2
     compression-webpack-plugin: 10.0.0
-    core-js: 3.23.5
+    core-js: 3.25.1
     core-js-compat: 3.23.5
     crypto-browserify: 3.12.0
     css-loader: 6.7.1
