@@ -7185,7 +7185,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"browserslist@npm:^4.0.0, browserslist@npm:^4.14.5, browserslist@npm:^4.16.6, browserslist@npm:^4.18.1, browserslist@npm:^4.20.3, browserslist@npm:^4.21.2, browserslist@npm:^4.21.3":
+"browserslist@npm:^4.0.0, browserslist@npm:^4.14.5, browserslist@npm:^4.16.6, browserslist@npm:^4.18.1, browserslist@npm:^4.20.3, browserslist@npm:^4.21.3":
   version: 4.21.3
   resolution: "browserslist@npm:4.21.3"
   dependencies:
@@ -8216,17 +8216,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js-compat@npm:3.23.5":
-  version: 3.23.5
-  resolution: "core-js-compat@npm:3.23.5"
-  dependencies:
-    browserslist: ^4.21.2
-    semver: 7.0.0
-  checksum: c2398a39239a782ba1b9531a80b25f8d9fb8d98de8bf980f32140e9be3d2852afb797517afdf3a15f9319bcd25d594b3d3d2a500dce7c338532532565c9e83cb
-  languageName: node
-  linkType: hard
-
-"core-js-compat@npm:^3.21.0, core-js-compat@npm:^3.25.1":
+"core-js-compat@npm:3.25.1, core-js-compat@npm:^3.21.0, core-js-compat@npm:^3.25.1":
   version: 3.25.1
   resolution: "core-js-compat@npm:3.25.1"
   dependencies:
@@ -17614,7 +17604,7 @@ resolve@^2.0.0-next.3:
     classnames: 2.3.2
     compression-webpack-plugin: 10.0.0
     core-js: 3.25.1
-    core-js-compat: 3.23.5
+    core-js-compat: 3.25.1
     crypto-browserify: 3.12.0
     css-loader: 6.7.1
     css-minimizer-webpack-plugin: 4.0.0
@@ -17960,15 +17950,6 @@ resolve@^2.0.0-next.3:
   dependencies:
     semver: ^6.3.0
   checksum: 8bbe5a5d7add2d5e51b72314a9215cd294d71f41cdc2bf6bd59ee76411f3610b576172896f1d191d0d7294cb9f2f847438d2ee158adacc0c224dca79052812fe
-  languageName: node
-  linkType: hard
-
-"semver@npm:7.0.0":
-  version: 7.0.0
-  resolution: "semver@npm:7.0.0"
-  bin:
-    semver: bin/semver.js
-  checksum: 272c11bf8d083274ef79fe40a81c55c184dff84dd58e3c325299d0927ba48cece1f020793d138382b85f89bab5002a35a5ba59a3a68a7eebbb597eb733838778
   languageName: node
   linkType: hard
 
