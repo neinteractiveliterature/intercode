@@ -2998,11 +2998,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphiql/react@npm:^0.5.2":
-  version: 0.5.2
-  resolution: "@graphiql/react@npm:0.5.2"
+"@graphiql/react@npm:^0.10.0":
+  version: 0.10.0
+  resolution: "@graphiql/react@npm:0.10.0"
   dependencies:
-    "@graphiql/toolkit": ^0.6.0
+    "@graphiql/toolkit": ^0.6.1
     codemirror: ^5.65.3
     codemirror-graphql: ^1.3.2
     copy-to-clipboard: ^3.2.0
@@ -3014,7 +3014,7 @@ __metadata:
     graphql: ^15.5.0 || ^16.0.0
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: ffb1c19c1da2e8e7f664d44b029e88b1815ee3db0f3a346fdb3bcf9d97cd31bf6a67e34641fe834be9ec0cfd8906f7adea75537dd0c5dd4349fc5eef8a6ab63f
+  checksum: 1c473f6dbacba617ea6f9c272abbe22aa61643a0ce059835b40bfd368c211bccec806bca24600ba42cf356f02649f062622802cd8afba3bfdd5aae2783935e37
   languageName: node
   linkType: hard
 
@@ -3034,7 +3034,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphiql/toolkit@npm:^0.6.0":
+"@graphiql/toolkit@npm:^0.6.1":
   version: 0.6.1
   resolution: "@graphiql/toolkit@npm:0.6.1"
   dependencies:
@@ -11058,12 +11058,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphiql@npm:1.9.13":
-  version: 1.9.13
-  resolution: "graphiql@npm:1.9.13"
+"graphiql@npm:1.11.5":
+  version: 1.11.5
+  resolution: "graphiql@npm:1.11.5"
   dependencies:
-    "@graphiql/react": ^0.5.2
-    "@graphiql/toolkit": ^0.6.0
+    "@graphiql/react": ^0.10.0
+    "@graphiql/toolkit": ^0.6.1
     entities: ^2.0.0
     graphql-language-service: ^5.0.6
     markdown-it: ^12.2.0
@@ -11071,7 +11071,7 @@ __metadata:
     graphql: ^15.5.0 || ^16.0.0
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: 7abb8e001bd848b3b41c02ea40f697d53eb97792b18e27847a121b9c039cb1a13ed3b97945a62e8fb42c4e4a586706e6e34c00dd4454e6ecf6744414a598d82b
+  checksum: 0bad3d056ba1185aae1020277bb08a5ee75c352f8c659ca092f0cb4f2126a1c176015e7f58ff8fd5f8de8709a8bc3ff9d1b765ca9d2fcc412d67e23d45c862f6
   languageName: node
   linkType: hard
 
@@ -17668,7 +17668,7 @@ resolve@^2.0.0-next.3:
     file-saver: 2.0.5
     font-awesome: 4.7.0
     glob: 8.0.3
-    graphiql: 1.9.13
+    graphiql: 1.11.5
     graphql: 16.5.0
     graphql-anywhere: 4.2.7
     graphql-language-service-utils: 2.7.1
