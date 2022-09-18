@@ -6,6 +6,7 @@ import type Timespan from './Timespan';
 export type AppRootContextValue = {
   assumedIdentityFromProfile?: AppRootQueryData['assumedIdentityFromProfile'];
   cmsNavigationItems: AppRootQueryData['cmsParentByRequestHost']['cmsNavigationItems'];
+  convention: AppRootQueryData['convention'];
   conventionAcceptingProposals?: boolean | null;
   conventionCanceled?: boolean | null;
   conventionDomain?: string | null;
@@ -31,6 +32,7 @@ export type AppRootContextValue = {
 export const appRootContextDefaultValue: AppRootContextValue = {
   assumedIdentityFromProfile: null,
   cmsNavigationItems: [],
+  convention: null,
   conventionAcceptingProposals: null,
   conventionCanceled: false,
   conventionName: null,

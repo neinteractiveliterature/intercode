@@ -261,7 +261,7 @@
     "*.{js,jsx,ts,tsx,gql,graphql}": "eslint --cache --fix",
     "*.{js,jsx,ts,tsx,css,scss,md}": "prettier --write",
     "*.{rb,rake}": [
-      "prettier --write",
+      "bundle exec stree write --print-width=120",
       "bundle exec rubocop -a"
     ]
   },

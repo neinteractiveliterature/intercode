@@ -3,7 +3,14 @@ import { ApolloCache } from '@apollo/client';
 import { assertNever } from 'assert-never';
 import { notEmpty } from '@neinteractiveliterature/litform';
 
-import { FormSection, FormItemInput, RegistrationPolicy, FormItemRole, FormItem } from '../graphqlTypes.generated';
+import {
+  FormSection,
+  FormItemInput,
+  RegistrationPolicy,
+  FormItemRole,
+  FormItem,
+  FormItemExposeIn,
+} from '../graphqlTypes.generated';
 import { CommonFormSectionFieldsFragment, CommonFormItemFieldsFragment } from '../Models/commonFormFragments.generated';
 import { FormEditorQueryData, FormEditorFormItemFieldsFragment, FormEditorQueryDocument } from './queries.generated';
 import { TimeblockDefinition, TimeblockOmission, UnparsedTimeblockPreference } from '../FormPresenter/TimeblockTypes';
@@ -33,6 +40,7 @@ export type ParsedFormItem<PropertiesType, ValueType, ItemType = string> = Omit<
   rendered_properties: PropertiesType;
   visibility: FormItemRole;
   writeability: FormItemRole;
+  expose_in?: FormItemExposeIn[] | null;
 };
 
 export type FormItemPropertiesType<FormItemType> = FormItemType extends ParsedFormItem<
@@ -411,6 +419,7 @@ export function buildFormItemInput<PropertiesType>(
     properties: JSON.stringify(removeGeneratedIds<PropertiesType>(formItem.properties)),
     visibility: formItem.visibility,
     writeability: formItem.writeability,
+    expose_in: formItem.expose_in,
   };
 }
 

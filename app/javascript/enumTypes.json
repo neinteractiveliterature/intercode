@@ -51,6 +51,29 @@
     ],
     "possibleTypes": null
   },
+  "FormItemExposeIn": {
+    "kind": "ENUM",
+    "name": "FormItemExposeIn",
+    "description": null,
+    "fields": null,
+    "inputFields": null,
+    "interfaces": null,
+    "enumValues": [
+      {
+        "name": "schedule_popup",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "event_catalog",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      }
+    ],
+    "possibleTypes": null
+  },
   "FormItemRole": {
     "kind": "ENUM",
     "name": "FormItemRole",

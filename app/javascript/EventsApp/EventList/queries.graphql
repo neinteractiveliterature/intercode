@@ -1,4 +1,5 @@
 #import "../queries.graphql"
+#import "../../Models/commonFormFragments.graphql"
 
 query EventListEventsQuery($page: Int, $pageSize: Int, $filters: EventFiltersInput, $sort: [SortInput!]) {
   currentAbility {
@@ -20,7 +21,7 @@ query EventListEventsQuery($page: Int, $pageSize: Int, $filters: EventFiltersInp
         title
         created_at
         short_blurb_html
-        form_response_attrs_json
+        form_response_attrs_json_with_rendered_markdown
         my_rating
 
         event_category {
@@ -28,6 +29,19 @@ query EventListEventsQuery($page: Int, $pageSize: Int, $filters: EventFiltersInp
           name
           team_member_name
           teamMemberNamePlural
+
+          event_form {
+            id
+            form_sections {
+              id
+              form_items {
+                id
+                public_description
+                default_value
+                ...CommonFormItemFields
+              }
+            }
+          }
         }
 
         runs {

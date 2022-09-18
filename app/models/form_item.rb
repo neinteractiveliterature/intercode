@@ -7,6 +7,7 @@
 #  id                 :bigint           not null, primary key
 #  admin_description  :text
 #  default_value      :jsonb
+#  expose_in          :text             is an Array
 #  identifier         :text
 #  item_type          :text
 #  position           :integer          not null
@@ -29,7 +30,7 @@
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
 class FormItem < ApplicationRecord
   DEFAULT_PROPERTIES_CONFIG =
-    JSON.parse(File.read(File.expand_path('config/form_item_default_properties.json', Rails.root)))
+    JSON.parse(File.read(File.expand_path("config/form_item_default_properties.json", Rails.root)))
 
   PROPERTIES_SCHEMA = {
     age_restrictions: {
@@ -94,6 +95,8 @@ class FormItem < ApplicationRecord
   # Must be updated in sync with FORM_ITEM_ROLES in FormItemUtils.ts
   ROLE_VALUES = %w[normal confirmed_attendee team_member all_profiles_basic_access admin].freeze
 
+  EXPOSE_IN_VALUES = %w[schedule_popup event_catalog].freeze
+
   belongs_to :form_section
   has_one :form, through: :form_section
   acts_as_list scope: :form_section
@@ -105,16 +108,17 @@ class FormItem < ApplicationRecord
             uniqueness: {
               allow_nil: true,
               conditions: -> { joins(:form_section) },
-              scope: 'form_sections.form_id'
+              scope: "form_sections.form_id"
             }
   validate :ensure_properties_match_schema
   validates :visibility, inclusion: { in: ROLE_VALUES }
   validates :writeability, inclusion: { in: ROLE_VALUES }
+  validate :ensure_valid_expose_in_values
 
   def self.highest_level_role(**role_hash)
     roles = Set.new(role_hash.select { |_, v| v }.keys.map(&:to_s))
     highest_explicit_role = ROLE_VALUES.reverse.find { |role| roles.include?(role) }
-    highest_explicit_role || 'normal'
+    highest_explicit_role || "normal"
   end
 
   def self.role_is_at_least?(a, b)
@@ -164,6 +168,15 @@ class FormItem < ApplicationRecord
     other_identifiers = other_identifiers_scope.pluck(:identifier)
 
     return unless other_identifiers.include?(identifier)
-    errors.add :identifier, 'is already taken'
+    errors.add :identifier, "is already taken"
+  end
+
+  def ensure_valid_expose_in_values
+    return if expose_in.blank?
+
+    expose_in.each do |value|
+      next if EXPOSE_IN_VALUES.include?(value)
+      errors.add :expose_in, "includes unknown value #{value}"
+    end
   end
 end

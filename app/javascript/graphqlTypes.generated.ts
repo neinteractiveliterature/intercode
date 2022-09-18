@@ -2436,6 +2436,7 @@ export type FormItem = {
   __typename: 'FormItem';
   admin_description?: Maybe<Scalars['String']>;
   default_value?: Maybe<Scalars['Json']>;
+  expose_in?: Maybe<Array<FormItemExposeIn>>;
   form_section: FormSection;
   id: Scalars['ID'];
   identifier?: Maybe<Scalars['String']>;
@@ -2448,9 +2449,15 @@ export type FormItem = {
   writeability: FormItemRole;
 };
 
+export enum FormItemExposeIn {
+  EventCatalog = 'event_catalog',
+  SchedulePopup = 'schedule_popup'
+}
+
 export type FormItemInput = {
   admin_description?: InputMaybe<Scalars['String']>;
   default_value?: InputMaybe<Scalars['Json']>;
+  expose_in?: InputMaybe<Array<FormItemExposeIn>>;
   identifier?: InputMaybe<Scalars['String']>;
   item_type?: InputMaybe<Scalars['String']>;
   properties?: InputMaybe<Scalars['Json']>;

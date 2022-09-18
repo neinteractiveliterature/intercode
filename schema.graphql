@@ -3055,6 +3055,7 @@ input FormInput {
 type FormItem {
   admin_description: String
   default_value: Json
+  expose_in: [FormItemExposeIn!]
   form_section: FormSection!
   id: ID!
   identifier: String
@@ -3067,9 +3068,15 @@ type FormItem {
   writeability: FormItemRole!
 }
 
+enum FormItemExposeIn {
+  event_catalog
+  schedule_popup
+}
+
 input FormItemInput {
   admin_description: String
   default_value: Json
+  expose_in: [FormItemExposeIn!]
   identifier: String
   item_type: String
   properties: Json

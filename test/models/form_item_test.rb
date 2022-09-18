@@ -6,6 +6,7 @@
 #  id                 :bigint           not null, primary key
 #  admin_description  :text
 #  default_value      :jsonb
+#  expose_in          :text             is an Array
 #  identifier         :text
 #  item_type          :text
 #  position           :integer          not null
@@ -26,7 +27,7 @@
 #  fk_rails_...  (form_section_id => form_sections.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-require 'test_helper'
+require "test_helper"
 
 class FormItemTest < ActiveSupport::TestCase
   # test "the truth" do

@@ -17,6 +17,9 @@ import { useAppDateTimeFormat } from '../../TimeUtils';
 import { useFormatRunTime } from '../runTimeFormatting';
 import { useTranslation } from 'react-i18next';
 import upperFirst from 'lodash/upperFirst';
+import { FormItemExposeIn } from '../../graphqlTypes.generated';
+import FormItemDisplay from '../../FormPresenter/ItemDisplays/FormItemDisplay';
+import { parseTypedFormItemArray } from '../../FormAdmin/FormItemUtils';
 
 type ConventionType = NonNullable<EventListEventsQueryData['convention']>;
 type EventType = ConventionType['events_paginated']['entries'][0];
@@ -85,20 +88,36 @@ function teamIsAllAuthors(author?: string, teamMembers?: EventType['team_members
 }
 
 export type EventCardProps = {
+  convention: ConventionType;
   event: EventType;
   sortBy?: SortingRule<NonNullable<EventListEventsQueryData['convention']>['events_paginated']['entries'][number]>[];
   canReadSchedule?: boolean;
 };
 
-function EventCard({ event, sortBy, canReadSchedule }: EventCardProps): JSX.Element {
+function EventCard({ convention, event, sortBy, canReadSchedule }: EventCardProps): JSX.Element {
   const { timezoneName } = useContext(AppRootContext);
   const format = useAppDateTimeFormat();
   const formatRunTime = useFormatRunTime();
   const { myProfile } = useContext(AppRootContext);
-  const formResponse = event.form_response_attrs_json ? JSON.parse(event.form_response_attrs_json) : {};
+  const formResponse = useMemo(
+    () =>
+      event.form_response_attrs_json_with_rendered_markdown
+        ? JSON.parse(event.form_response_attrs_json_with_rendered_markdown)
+        : {},
+    [event.form_response_attrs_json_with_rendered_markdown],
+  );
   const metadataItems: { key: string; content: ReactNode }[] = [];
   const rateEvent = useRateEvent();
   const { t } = useTranslation();
+  const exposedFormItems = useMemo(
+    () =>
+      event.event_category.event_form.form_sections.flatMap((section) =>
+        parseTypedFormItemArray(
+          section.form_items.filter((item) => item.expose_in?.includes(FormItemExposeIn.EventCatalog)),
+        ),
+      ),
+    [event.event_category.event_form],
+  );
 
   const displayTeamMembers = useMemo(() => teamMembersForDisplay(event), [event]);
   const teamMemberNames = displayTeamMembers.map((teamMember) => (
@@ -158,6 +177,21 @@ function EventCard({ event, sortBy, canReadSchedule }: EventCardProps): JSX.Elem
       ),
     });
   }
+
+  exposedFormItems.forEach((item) => {
+    const value = formResponse[item.identifier ?? ''];
+    if (value) {
+      metadataItems.push({
+        key: `item${item.id}`,
+        content: (
+          <>
+            <strong>{item.public_description}:</strong>{' '}
+            <FormItemDisplay convention={convention} displayMode="public" formItem={item} value={value} />
+          </>
+        ),
+      });
+    }
+  });
 
   return (
     <div className="card mb-4" key={event.id}>

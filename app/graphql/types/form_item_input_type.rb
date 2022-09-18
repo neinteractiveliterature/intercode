@@ -8,4 +8,5 @@ class Types::FormItemInputType < Types::BaseInputObject
   argument :properties, Types::JSON, required: false
   argument :visibility, Types::FormItemRoleType, required: false
   argument :writeability, Types::FormItemRoleType, required: false
+  argument :expose_in, [Types::FormItemExposeInType], required: false, camelize: false
 end
