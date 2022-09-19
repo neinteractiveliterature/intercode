@@ -81,6 +81,11 @@ export default LoadSingleValueFromCollectionWrapper(
           __typename: 'EventCategory',
           id: '',
           name: 'fake category for single-run event UI',
+          event_form: {
+            __typename: 'Form',
+            form_sections: [],
+            id: '',
+          },
         },
         maximum_event_provided_tickets_overrides: [],
         runs: [run],

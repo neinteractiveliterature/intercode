@@ -12,6 +12,7 @@ class Types::FormItemType < Types::BaseObject
   field :form_section, Types::FormSectionType, null: false, camelize: false
   field :visibility, Types::FormItemRoleType, null: false
   field :writeability, Types::FormItemRoleType, null: false
+  field :expose_in, [Types::FormItemExposeInType], null: true
 
   association_loaders FormItem, :form_section
 

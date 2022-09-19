@@ -14,9 +14,7 @@ import { useAppDateTimeFormat } from '../../TimeUtils';
 export type EventListEventsProps = {
   convention: NonNullable<EventListEventsQueryData['convention']>;
   eventsPaginated: NonNullable<EventListEventsQueryData['convention']>['events_paginated'];
-  sortBy?: SortingRule<
-    NonNullable<EventListEventsQueryData['convention']>['events_paginated']['entries'][number]
-  >[];
+  sortBy?: SortingRule<NonNullable<EventListEventsQueryData['convention']>['events_paginated']['entries'][number]>[];
   canReadSchedule: boolean;
   fetchMoreIfNeeded: () => void;
 };
@@ -47,10 +45,7 @@ function EventListEvents({
             const conventionDay = conventionDayTimespans.find((timespan) =>
               timespan.includesTime(DateTime.fromISO(runs[0].starts_at, { zone: timezoneName })),
             );
-            if (
-              conventionDay &&
-              (previousConventionDay == null || !previousConventionDay.isSame(conventionDay))
-            ) {
+            if (conventionDay && (previousConventionDay == null || !previousConventionDay.isSame(conventionDay))) {
               preamble = <h3 className="mt-4">{format(conventionDay.start, 'longWeekdayDate')}</h3>;
               previousConventionDay = conventionDay;
             }
@@ -60,7 +55,7 @@ function EventListEvents({
         const eventContent = (
           <Fragment key={event.id}>
             {preamble}
-            <EventCard event={event} sortBy={sortBy} canReadSchedule={canReadSchedule} />
+            <EventCard convention={convention} event={event} sortBy={sortBy} canReadSchedule={canReadSchedule} />
           </Fragment>
         );
 

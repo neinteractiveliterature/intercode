@@ -15,6 +15,7 @@ generates:
         BigDecimal: string
         Date: string
         Json: string
+        JSON: unknown
         Upload: File
   app/javascript/:
     preset: near-operation-file
@@ -40,4 +41,5 @@ generates:
         BigDecimal: string
         Date: string
         Json: string
+        JSON: unknown
         Upload: File

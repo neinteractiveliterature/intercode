@@ -35,7 +35,7 @@ export type UpdateFormMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateFormMutationData = { __typename: 'Mutation', updateForm: { __typename: 'UpdateFormPayload', form: { __typename: 'Form', id: string, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: string, title?: string | null, position: number, form_items: Array<{ __typename: 'FormItem', id: string, admin_description?: string | null, public_description?: string | null, properties: string, position: number, identifier?: string | null, item_type: string, rendered_properties: string, default_value?: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> } } };
+export type UpdateFormMutationData = { __typename: 'Mutation', updateForm: { __typename: 'UpdateFormPayload', form: { __typename: 'Form', id: string, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: string, title?: string | null, position: number, form_items: Array<{ __typename: 'FormItem', id: string, admin_description?: string | null, public_description?: string | null, properties: string, position: number, identifier?: string | null, item_type: string, rendered_properties: string, default_value?: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in?: Array<Types.FormItemExposeIn> | null }> }> } } };
 
 export type DeleteFormMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -50,7 +50,7 @@ export type CreateFormSectionMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateFormSectionMutationData = { __typename: 'Mutation', createFormSection: { __typename: 'CreateFormSectionPayload', form_section: { __typename: 'FormSection', id: string, title?: string | null, position: number, form_items: Array<{ __typename: 'FormItem', id: string, admin_description?: string | null, public_description?: string | null, properties: string, position: number, identifier?: string | null, item_type: string, rendered_properties: string, default_value?: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> } } };
+export type CreateFormSectionMutationData = { __typename: 'Mutation', createFormSection: { __typename: 'CreateFormSectionPayload', form_section: { __typename: 'FormSection', id: string, title?: string | null, position: number, form_items: Array<{ __typename: 'FormItem', id: string, admin_description?: string | null, public_description?: string | null, properties: string, position: number, identifier?: string | null, item_type: string, rendered_properties: string, default_value?: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in?: Array<Types.FormItemExposeIn> | null }> } } };
 
 export type UpdateFormSectionMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -58,7 +58,7 @@ export type UpdateFormSectionMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateFormSectionMutationData = { __typename: 'Mutation', updateFormSection: { __typename: 'UpdateFormSectionPayload', form_section: { __typename: 'FormSection', id: string, title?: string | null, position: number, form_items: Array<{ __typename: 'FormItem', id: string, admin_description?: string | null, public_description?: string | null, properties: string, position: number, identifier?: string | null, item_type: string, rendered_properties: string, default_value?: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> } } };
+export type UpdateFormSectionMutationData = { __typename: 'Mutation', updateFormSection: { __typename: 'UpdateFormSectionPayload', form_section: { __typename: 'FormSection', id: string, title?: string | null, position: number, form_items: Array<{ __typename: 'FormItem', id: string, admin_description?: string | null, public_description?: string | null, properties: string, position: number, identifier?: string | null, item_type: string, rendered_properties: string, default_value?: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in?: Array<Types.FormItemExposeIn> | null }> } } };
 
 export type DeleteFormSectionMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -73,7 +73,7 @@ export type MoveFormSectionMutationVariables = Types.Exact<{
 }>;
 
 
-export type MoveFormSectionMutationData = { __typename: 'Mutation', moveFormSection: { __typename: 'MoveFormSectionPayload', form: { __typename: 'Form', id: string, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: string, title?: string | null, position: number, form_items: Array<{ __typename: 'FormItem', id: string, admin_description?: string | null, public_description?: string | null, properties: string, position: number, identifier?: string | null, item_type: string, rendered_properties: string, default_value?: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> }> } } };
+export type MoveFormSectionMutationData = { __typename: 'Mutation', moveFormSection: { __typename: 'MoveFormSectionPayload', form: { __typename: 'Form', id: string, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: string, title?: string | null, position: number, form_items: Array<{ __typename: 'FormItem', id: string, admin_description?: string | null, public_description?: string | null, properties: string, position: number, identifier?: string | null, item_type: string, rendered_properties: string, default_value?: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in?: Array<Types.FormItemExposeIn> | null }> }> } } };
 
 export type CreateFormItemMutationVariables = Types.Exact<{
   formSectionId: Types.Scalars['ID'];
@@ -81,7 +81,7 @@ export type CreateFormItemMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateFormItemMutationData = { __typename: 'Mutation', createFormItem: { __typename: 'CreateFormItemPayload', form_item: { __typename: 'FormItem', id: string, admin_description?: string | null, public_description?: string | null, properties: string, position: number, identifier?: string | null, item_type: string, rendered_properties: string, default_value?: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole } } };
+export type CreateFormItemMutationData = { __typename: 'Mutation', createFormItem: { __typename: 'CreateFormItemPayload', form_item: { __typename: 'FormItem', id: string, admin_description?: string | null, public_description?: string | null, properties: string, position: number, identifier?: string | null, item_type: string, rendered_properties: string, default_value?: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in?: Array<Types.FormItemExposeIn> | null } } };
 
 export type UpdateFormItemMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -89,7 +89,7 @@ export type UpdateFormItemMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateFormItemMutationData = { __typename: 'Mutation', updateFormItem: { __typename: 'UpdateFormItemPayload', form_item: { __typename: 'FormItem', id: string, admin_description?: string | null, public_description?: string | null, properties: string, position: number, identifier?: string | null, item_type: string, rendered_properties: string, default_value?: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole } } };
+export type UpdateFormItemMutationData = { __typename: 'Mutation', updateFormItem: { __typename: 'UpdateFormItemPayload', form_item: { __typename: 'FormItem', id: string, admin_description?: string | null, public_description?: string | null, properties: string, position: number, identifier?: string | null, item_type: string, rendered_properties: string, default_value?: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in?: Array<Types.FormItemExposeIn> | null } } };
 
 export type DeleteFormItemMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -105,7 +105,7 @@ export type MoveFormItemMutationVariables = Types.Exact<{
 }>;
 
 
-export type MoveFormItemMutationData = { __typename: 'Mutation', moveFormItem: { __typename: 'MoveFormItemPayload', form_section: { __typename: 'FormSection', id: string, form_items: Array<{ __typename: 'FormItem', id: string, admin_description?: string | null, public_description?: string | null, properties: string, position: number, identifier?: string | null, item_type: string, rendered_properties: string, default_value?: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole }> } } };
+export type MoveFormItemMutationData = { __typename: 'Mutation', moveFormItem: { __typename: 'MoveFormItemPayload', form_section: { __typename: 'FormSection', id: string, form_items: Array<{ __typename: 'FormItem', id: string, admin_description?: string | null, public_description?: string | null, properties: string, position: number, identifier?: string | null, item_type: string, rendered_properties: string, default_value?: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in?: Array<Types.FormItemExposeIn> | null }> } } };
 
 
 export const CreateFormWithJsonDocument = gql`

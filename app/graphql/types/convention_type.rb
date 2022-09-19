@@ -23,9 +23,12 @@ class Types::ConventionType < Types::BaseObject
   pagination_field :coupons_paginated, Types::CouponsPaginationType, Types::CouponFiltersInputType, null: false
 
   def coupons_paginated(**args)
-    Tables::CouponsTableResultsPresenter
-      .for_convention(convention: object, pundit_user: pundit_user, filters: args[:filters].to_h, sort: args[:sort])
-      .paginate(page: args[:page], per_page: args[:per_page])
+    Tables::CouponsTableResultsPresenter.for_convention(
+      convention: object,
+      pundit_user: pundit_user,
+      filters: args[:filters].to_h,
+      sort: args[:sort]
+    ).paginate(page: args[:page], per_page: args[:per_page])
   end
 
   field :created_at, Types::DateType, null: true
@@ -36,7 +39,7 @@ class Types::ConventionType < Types::BaseObject
   field :ends_at, Types::DateType, null: true
 
   field :event, Types::EventType, null: false do
-    argument :id, ID, required: false, description: 'The ID of the event to find', camelize: true
+    argument :id, ID, required: false, description: "The ID of the event to find", camelize: true
 
     description <<~MARKDOWN
       Finds an active event by ID in this convention. If there is no event with that ID in this
@@ -58,7 +61,7 @@ class Types::ConventionType < Types::BaseObject
     if args[:current_ability_can_read_event_proposals]
       promise.then do |event_categories|
         event_categories.select do |category|
-          policy(EventProposal.new(event_category: category, convention: convention, status: 'proposed')).read?
+          policy(EventProposal.new(event_category: category, convention: convention, status: "proposed")).read?
         end
       end
     else
@@ -67,15 +70,17 @@ class Types::ConventionType < Types::BaseObject
         .load(object)
         .then do |event_categories|
           # reading #proposable? will attempt to n+1 these if we don't do this
-          ::ActiveRecord::Associations::Preloader.new(records: event_categories, associations: :event_proposal_form)
-            .call
+          ::ActiveRecord::Associations::Preloader.new(
+            records: event_categories,
+            associations: :event_proposal_form
+          ).call
           event_categories
         end
     end
   end
 
   field :event_proposal, Types::EventProposalType, null: false do
-    argument :id, ID, required: false, description: 'The ID of the event proposal to find.', camelize: true
+    argument :id, ID, required: false, description: "The ID of the event proposal to find.", camelize: true
 
     description <<~MARKDOWN
       Finds an event proposal by ID in this convention. If there is no event proposal with that ID
@@ -90,9 +95,12 @@ class Types::ConventionType < Types::BaseObject
   pagination_field :event_proposals_paginated, Types::EventProposalsPaginationType, Types::EventProposalFiltersInputType
 
   def event_proposals_paginated(**args)
-    Tables::EventProposalsTableResultsPresenter
-      .for_convention(object, pundit_user, args[:filters].to_h, args[:sort])
-      .paginate(page: args[:page], per_page: args[:per_page])
+    Tables::EventProposalsTableResultsPresenter.for_convention(
+      object,
+      pundit_user,
+      args[:filters].to_h,
+      args[:sort]
+    ).paginate(page: args[:page], per_page: args[:per_page])
   end
 
   field :event_mailing_list_domain, String, null: true
@@ -109,7 +117,7 @@ class Types::ConventionType < Types::BaseObject
     argument :include_dropped,
              Boolean,
              required: false,
-             description: 'If true, includes dropped events in addition to active events.'
+             description: "If true, includes dropped events in addition to active events."
     argument :start,
              Types::DateType,
              required: false,
@@ -122,26 +130,41 @@ class Types::ConventionType < Types::BaseObject
              description:
                "If present, only returns events that occur earlier than this time \
 (non-inclusive.) These events may end after this time, but start before it."
+    argument :filters,
+             Types::EventFiltersInputType,
+             required: false,
+             description: "If present, filters the returned events."
   end
 
-  def events(include_dropped: false, start: nil, finish: nil, **_args)
+  def events(include_dropped: false, start: nil, finish: nil, filters: nil, **_args)
     events = object.events
     events = events.active unless include_dropped
 
-    if start || finish
-      return Event.none unless policy(Run.new(event: Event.new(convention: object))).read?
-      events.with_runs_between(convention, start, finish)
-    else
-      events
-    end
+    events =
+      if start || finish
+        return Event.none unless policy(Run.new(event: Event.new(convention: object))).read?
+        events.with_runs_between(convention, start, finish)
+      else
+        events
+      end
+
+    Tables::EventsTableResultsPresenter.new(
+      base_scope: events,
+      convention: convention,
+      pundit_user: pundit_user,
+      filters: filters&.to_h
+    ).scoped
   end
 
   pagination_field :events_paginated, Types::EventsPaginationType, Types::EventFiltersInputType
 
   def events_paginated(**args)
-    Tables::EventsTableResultsPresenter
-      .for_convention(convention: object, pundit_user: pundit_user, filters: args[:filters].to_h, sort: args[:sort])
-      .paginate(page: args[:page], per_page: args[:per_page])
+    Tables::EventsTableResultsPresenter.for_convention(
+      convention: object,
+      pundit_user: pundit_user,
+      filters: args[:filters].to_h,
+      sort: args[:sort]
+    ).paginate(page: args[:page], per_page: args[:per_page])
   end
 
   field :favicon, Types::ActiveStorageAttachmentType, null: true
@@ -150,14 +173,14 @@ class Types::ConventionType < Types::BaseObject
     ActiveStorageAttachmentLoader.for(Convention, :favicon).load(object)
   end
 
-  field :favicon_url, String, null: true, deprecation_reason: 'Please use the favicon field instead.'
+  field :favicon_url, String, null: true, deprecation_reason: "Please use the favicon field instead."
 
   def favicon_url
     object.favicon.url
   end
 
   field :form, Types::FormType, null: false do
-    argument :id, ID, required: false, description: 'The ID of the form to find.', camelize: true
+    argument :id, ID, required: false, description: "The ID of the form to find.", camelize: true
 
     description <<~MARKDOWN
       Finds a form by ID in this convention. If there is no form with that ID in this convention,
@@ -218,7 +241,7 @@ class Types::ConventionType < Types::BaseObject
     argument :event_key,
              String,
              required: true,
-             description: 'The key of the notification event to use for generating assigns.'
+             description: "The key of the notification event to use for generating assigns."
 
     description <<~MARKDOWN
       Returns all the Liquid assigns for rendering a particular notification event in this
@@ -239,7 +262,7 @@ class Types::ConventionType < Types::BaseObject
     ActiveStorageAttachmentLoader.for(Convention, :open_graph_image).load(object)
   end
 
-  field :open_graph_image_url, String, null: true, deprecation_reason: 'Please use the open_graph_image field instead.'
+  field :open_graph_image_url, String, null: true, deprecation_reason: "Please use the open_graph_image field instead."
 
   def open_graph_image_url
     object.open_graph_image.url
@@ -249,7 +272,7 @@ class Types::ConventionType < Types::BaseObject
 
   def orders_paginated(filters: nil, sort: nil, page: nil, per_page: nil)
     scope =
-      policy_scope(object.orders.where.not(status: 'pending').includes(order_entries: %i[product product_variant]))
+      policy_scope(object.orders.where.not(status: "pending").includes(order_entries: %i[product product_variant]))
 
     Tables::OrdersTableResultsPresenter.new(scope, filters.to_h, sort).paginate(page: page, per_page: per_page)
   end
@@ -259,7 +282,7 @@ class Types::ConventionType < Types::BaseObject
   field :pre_schedule_content_html, String, null: true
 
   def pre_schedule_content_html
-    partial = object.cms_partials.find_by(name: 'pre_schedule_text')
+    partial = object.cms_partials.find_by(name: "pre_schedule_text")
     return nil unless partial
     context[:cadmus_renderer].render(Liquid::Template.parse(partial.content), :html)
   end
@@ -268,8 +291,8 @@ class Types::ConventionType < Types::BaseObject
     argument :event_key,
              String,
              required: true,
-             description: 'The key of the notification event to use for generating the preview.'
-    argument :content, String, required: true, description: 'The Liquid content to render.'
+             description: "The key of the notification event to use for generating the preview."
+    argument :content, String, required: true, description: "The Liquid content to render."
 
     description <<~MARKDOWN
       Given a Liquid text string and a notification event, renders the Liquid to HTML using the
@@ -285,7 +308,7 @@ class Types::ConventionType < Types::BaseObject
   end
 
   field :product, Types::ProductType, null: false do
-    argument :id, ID, required: false, description: 'The ID of the product to find.', camelize: true
+    argument :id, ID, required: false, description: "The ID of the product to find.", camelize: true
 
     description <<~MARKDOWN
       Finds a product by ID in this convention. If there is no product with that ID in this
@@ -322,7 +345,7 @@ class Types::ConventionType < Types::BaseObject
   field :rooms, [Types::RoomType], null: false
 
   field :run, Types::RunType, null: false do
-    argument :id, ID, required: false, description: 'The ID of the run to find', camelize: true
+    argument :id, ID, required: false, description: "The ID of the run to find", camelize: true
 
     description <<~MARKDOWN
       Finds an active run by ID in this convention. If there is no run with that ID in this
@@ -339,7 +362,7 @@ class Types::ConventionType < Types::BaseObject
   field :show_schedule, Types::ShowScheduleType, null: true
 
   field :signup, Types::SignupType, null: false do
-    argument :id, ID, required: false, description: 'The ID of the signup to find.', camelize: true
+    argument :id, ID, required: false, description: "The ID of the signup to find.", camelize: true
 
     description <<~MARKDOWN
       Finds a signup by ID in this convention. If there is no signup with that ID in this
@@ -370,9 +393,10 @@ class Types::ConventionType < Types::BaseObject
         )
       ).resolve
 
-    Tables::SignupChangesTableResultsPresenter
-      .new(scope, args[:filters].to_h, args[:sort])
-      .paginate(page: args[:page], per_page: args[:per_page])
+    Tables::SignupChangesTableResultsPresenter.new(scope, args[:filters].to_h, args[:sort]).paginate(
+      page: args[:page],
+      per_page: args[:per_page]
+    )
   end
 
   field :signup_counts_by_state, [Types::SignupCountByStateType], null: false do
@@ -392,15 +416,18 @@ class Types::ConventionType < Types::BaseObject
                    null: false
 
   def signup_requests_paginated(**args)
-    Tables::SignupRequestsTableResultsPresenter
-      .for_convention(convention: object, pundit_user: pundit_user, filters: args[:filters].to_h, sort: args[:sort])
-      .paginate(page: args[:page], per_page: args[:per_page])
+    Tables::SignupRequestsTableResultsPresenter.for_convention(
+      convention: object,
+      pundit_user: pundit_user,
+      filters: args[:filters].to_h,
+      sort: args[:sort]
+    ).paginate(page: args[:page], per_page: args[:per_page])
   end
 
   field :site_mode, Types::SiteModeType, null: false
 
   field :staff_position, Types::StaffPositionType, null: false do
-    argument :id, ID, required: false, description: 'The ID of the staff position to find.', camelize: true
+    argument :id, ID, required: false, description: "The ID of the staff position to find.", camelize: true
 
     description <<~MARKDOWN
       Finds a staff position by ID in this convention. If there is no staff position with that ID
@@ -448,7 +475,7 @@ class Types::ConventionType < Types::BaseObject
   field :user_activity_alerts, [Types::UserActivityAlertType], null: false
 
   field :user_con_profile, Types::UserConProfileType, null: false do
-    argument :id, ID, required: false, description: 'The ID of the UserConProfile to find.', camelize: true
+    argument :id, ID, required: false, description: "The ID of the UserConProfile to find.", camelize: true
 
     description <<~MARKDOWN
       Finds a UserConProfile by ID in the convention associated with this convention. If there is
@@ -461,7 +488,7 @@ class Types::ConventionType < Types::BaseObject
   end
 
   field :user_con_profile_by_user_id, Types::UserConProfileType, null: false do
-    argument :user_id, ID, required: false, description: 'The user ID of the UserConProfile to find.', camelize: true
+    argument :user_id, ID, required: false, description: "The user ID of the UserConProfile to find.", camelize: true
 
     description <<~MARKDOWN
       Finds a UserConProfile by user ID in the convention associated with this convention. If
@@ -480,9 +507,12 @@ class Types::ConventionType < Types::BaseObject
                    Types::UserConProfileFiltersInputType
 
   def user_con_profiles_paginated(**args)
-    Tables::UserConProfilesTableResultsPresenter
-      .for_convention(object, pundit_user, args[:filters].to_h, args[:sort])
-      .paginate(page: args[:page], per_page: args[:per_page])
+    Tables::UserConProfilesTableResultsPresenter.for_convention(
+      object,
+      pundit_user,
+      args[:filters].to_h,
+      args[:sort]
+    ).paginate(page: args[:page], per_page: args[:per_page])
   end
 
   association_loaders(

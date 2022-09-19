@@ -100,6 +100,7 @@ function AppRoot(): JSX.Element {
         ? {
             assumedIdentityFromProfile: data.assumedIdentityFromProfile,
             cmsNavigationItems: data.cmsParentByRequestHost.cmsNavigationItems,
+            convention: data.convention,
             conventionAcceptingProposals: data.convention?.accepting_proposals,
             conventionCanceled: data.convention?.canceled,
             conventionName: data.convention?.name,

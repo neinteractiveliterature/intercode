@@ -4,4 +4,5 @@ class Types::EventFiltersInputType < Types::BaseInputObject
   argument :title, String, required: false
   argument :title_prefix, String, required: false, camelize: false
   argument :my_rating, [Integer], required: false, camelize: false
+  argument :form_items, GraphQL::Types::JSON, required: false, camelize: false
 end

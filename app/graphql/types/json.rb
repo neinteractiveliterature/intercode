@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class Types::JSON < Types::BaseScalar
-  graphql_name 'Json' # for backwards compatibility
-  description 'An arbitrary object, serialized as JSON'
+  graphql_name "Json" # for backwards compatibility
+  description "An arbitrary object, serialized as JSON"
 
   def self.coerce_input(input_value, _context)
     return nil if input_value.nil?

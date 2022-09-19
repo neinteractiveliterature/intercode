@@ -10,12 +10,16 @@ import { ScheduleGridProvider } from './ScheduleGridContext';
 import AppRootContext from '../../AppRootContext';
 import { useAppDateTimeFormat } from '../../TimeUtils';
 import { usePersonalScheduleFilters } from './PersonalScheduleFiltersBar';
+import { ScheduleGridConventionDataQueryData } from './queries.generated';
+import { EventFiltersInput } from '../../graphqlTypes.generated';
 
 export type ScheduleGridAppProps = {
   configKey: string;
+  convention: ScheduleGridConventionDataQueryData['convention'];
+  filters?: EventFiltersInput;
 };
 
-function ScheduleGridApp({ configKey }: ScheduleGridAppProps): JSX.Element {
+function ScheduleGridApp({ configKey, convention, filters }: ScheduleGridAppProps): JSX.Element {
   const { t } = useTranslation();
   const { myProfile, timezoneName, language } = useContext(AppRootContext);
   const config = getConfig(configKey);
@@ -32,9 +36,11 @@ function ScheduleGridApp({ configKey }: ScheduleGridAppProps): JSX.Element {
   return (
     <div className="mt-2">
       <ScheduleGridProvider
+        convention={convention}
         config={config}
         myRatingFilter={myProfile ? ratingFilter : undefined}
         hideConflicts={myProfile ? hideConflicts : false}
+        filters={filters}
       >
         {(timespan) => (
           <div className="mb-4">

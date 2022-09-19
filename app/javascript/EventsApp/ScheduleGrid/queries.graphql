@@ -7,6 +7,7 @@ fragment ScheduleGridEventFragment on Event {
   short_blurb_html
   my_rating
   can_play_concurrently
+  form_response_attrs_json_with_rendered_markdown
 
   event_category {
     id
@@ -14,6 +15,19 @@ fragment ScheduleGridEventFragment on Event {
     default_color
     signed_up_color
     full_color
+
+    event_form {
+      id
+      form_sections {
+        id
+        form_items {
+          id
+          public_description
+          default_value
+          ...CommonFormItemFields
+        }
+      }
+    }
   }
 
   registration_policy {
@@ -56,23 +70,10 @@ query ScheduleGridConventionDataQuery {
   }
 }
 
-query ScheduleGridEventsQuery($start: Date, $finish: Date) {
+query ScheduleGridEventsQuery($start: Date, $finish: Date, $filters: EventFiltersInput) {
   convention: conventionByRequestHost {
     id
-    events(start: $start, finish: $finish) {
-      id
-      ...ScheduleGridEventFragment
-    }
-  }
-}
-
-query ScheduleGridCombinedQuery($start: Date, $finish: Date) {
-  convention: conventionByRequestHost {
-    id
-    pre_schedule_content_html
-    ...CommonConventionData
-
-    events(start: $start, finish: $finish) {
+    events(start: $start, finish: $finish, filters: $filters) {
       id
       ...ScheduleGridEventFragment
     }

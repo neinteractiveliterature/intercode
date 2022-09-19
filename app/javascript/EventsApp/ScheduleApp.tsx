@@ -8,12 +8,21 @@ import MenuIcon from '../NavigationBar/MenuIcon';
 import { DropdownMenu } from '../UIComponents/DropdownMenu';
 import RunList from './RunList';
 import ScheduleGridApp from './ScheduleGrid';
-import PersonalScheduleFiltersBar, {
-  usePersonalScheduleFilters,
-} from './ScheduleGrid/PersonalScheduleFiltersBar';
+import PersonalScheduleFiltersBar, { usePersonalScheduleFilters } from './ScheduleGrid/PersonalScheduleFiltersBar';
 import { useAuthorizationRequiredWithoutLogin } from '../Authentication/useAuthorizationRequired';
 import { ScheduleGridConfig, allConfigs } from './ScheduleGrid/ScheduleGridConfig';
 import { conventionRequiresDates } from './runTimeFormatting';
+import { LoadQueryWrapper } from '@neinteractiveliterature/litform/dist';
+import { useScheduleGridConventionDataQuery } from './ScheduleGrid/queries.generated';
+import useFilterableFormItems from './useFilterableFormItems';
+import EventListFilterableFormItemDropdown from './EventList/EventListFilterableFormItemDropdown';
+import useReactRouterReactTable from '../Tables/useReactRouterReactTable';
+import { buildFieldFilterCodecs, FilterCodecs } from '../Tables/FilterUtils';
+import { reactTableFiltersToTableResultsFilters } from '../Tables/TableUtils';
+
+const filterCodecs = buildFieldFilterCodecs({
+  form_items: FilterCodecs.json,
+});
 
 const SCHEDULE_VIEWS = ['list', ...allConfigs.map((config) => config.key)];
 
@@ -68,24 +77,22 @@ function ScheduleViewDropdown({ viewSelected, scheduleView, configs }: ScheduleV
       // hack to get the menu to "close" when switching views
       key={scheduleView}
     >
-      {[['list', 'bi-list-ul'], ...configs.map((config) => [config.key, config.icon])].map(
-        ([view, iconName]) => (
-          <button
-            className={classNames('dropdown-item btn btn-link', { active: view === scheduleView })}
-            type="button"
-            onClick={() => viewSelected(view)}
-            key={view}
-          >
-            <MenuIcon icon={iconName ?? 'bi-calendar3'} />
-            {getScheduleViewLabel(view, t)}
-          </button>
-        ),
-      )}
+      {[['list', 'bi-list-ul'], ...configs.map((config) => [config.key, config.icon])].map(([view, iconName]) => (
+        <button
+          className={classNames('dropdown-item btn btn-link', { active: view === scheduleView })}
+          type="button"
+          onClick={() => viewSelected(view)}
+          key={view}
+        >
+          <MenuIcon icon={iconName ?? 'bi-calendar3'} />
+          {getScheduleViewLabel(view, t)}
+        </button>
+      ))}
     </DropdownMenu>
   );
 }
 
-export default function ScheduleApp(): JSX.Element {
+const ScheduleApp = LoadQueryWrapper(useScheduleGridConventionDataQuery, function ScheduleApp({ data }): JSX.Element {
   const { myProfile, currentAbility, conventionTimespan, siteMode } = useContext(AppRootContext);
   const { t } = useTranslation();
   const { choiceSetValue, choiceSetChanged } = usePersonalScheduleFilters({
@@ -119,10 +126,7 @@ export default function ScheduleApp(): JSX.Element {
     return getDefaultScheduleView(configs);
   });
 
-  const scheduleGridConfig = useMemo(
-    () => configs.find((c) => c.key === scheduleView),
-    [scheduleView, configs],
-  );
+  const scheduleGridConfig = useMemo(() => configs.find((c) => c.key === scheduleView), [scheduleView, configs]);
 
   const authorizationRequired = useAuthorizationRequiredWithoutLogin(
     scheduleGridConfig?.showExtendedCounts ? 'can_read_schedule_with_counts' : 'can_read_schedule',
@@ -133,13 +137,24 @@ export default function ScheduleApp(): JSX.Element {
     setScheduleView(view);
   }, []);
 
+  const { filters, updateSearch } = useReactRouterReactTable({ ...filterCodecs });
+  const effectiveFilters = useMemo(
+    () =>
+      reactTableFiltersToTableResultsFilters(filters.filter(({ id }) => id !== 'my_rating' && id !== 'hide_conflicts')),
+    [filters],
+  );
+
+  const filterableFormItems = useFilterableFormItems(data.convention);
+
   const renderSchedule = () => {
     if (scheduleView === 'list') {
       return <RunList />;
     }
 
     if (scheduleGridConfig) {
-      return <ScheduleGridApp configKey={scheduleGridConfig.key} />;
+      return (
+        <ScheduleGridApp configKey={scheduleGridConfig.key} convention={data.convention} filters={effectiveFilters} />
+      );
     }
 
     return <div>Unknown view: {scheduleView}</div>;
@@ -170,23 +185,38 @@ export default function ScheduleApp(): JSX.Element {
         </ol>
       </nav>
 
-      <div className="schedule-grid-navigation-bar">
+      <div className="schedule-grid-navigation-bar mb-3">
         <div className="bg-light p-1 d-flex">
-          <div className="flex-grow-1">
+          <div className="flex-grow-1 d-flex">
             {configs.length > 0 && (
-              <ScheduleViewDropdown
-                viewSelected={viewSelected}
-                scheduleView={scheduleView}
-                configs={configs}
-              />
+              <ScheduleViewDropdown viewSelected={viewSelected} scheduleView={scheduleView} configs={configs} />
             )}
+
+            {filterableFormItems.map((item) => (
+              <div key={item.id}>
+                <EventListFilterableFormItemDropdown
+                  convention={data.convention}
+                  formItem={item}
+                  value={filters.find(({ id }) => id === 'form_items')?.value[item.identifier ?? ''] ?? []}
+                  onChange={(newValue) => {
+                    const prevValue = filters.find(({ id }) => id === 'form_items');
+                    updateSearch({
+                      filters: [
+                        ...filters.filter(({ id }) => id !== 'form_items'),
+                        {
+                          id: 'form_items',
+                          value: { ...prevValue?.value, [item.identifier ?? '']: newValue },
+                        },
+                      ],
+                    });
+                  }}
+                />
+              </div>
+            ))}
           </div>
           {(scheduleGridConfig == null || scheduleGridConfig.showPersonalFilters) && (
             <div>
-              <PersonalScheduleFiltersBar
-                choiceSetValue={choiceSetValue}
-                choiceSetChanged={choiceSetChanged}
-              />
+              <PersonalScheduleFiltersBar choiceSetValue={choiceSetValue} choiceSetChanged={choiceSetChanged} />
             </div>
           )}
         </div>
@@ -195,4 +225,6 @@ export default function ScheduleApp(): JSX.Element {
       {renderSchedule()}
     </>
   );
-}
+});
+
+export default ScheduleApp;

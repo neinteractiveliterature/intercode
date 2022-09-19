@@ -1,3 +1,5 @@
+#import "../Models/commonFormFragments.graphql"
+
 fragment CommonConventionData on Convention {
   id
   name
@@ -16,6 +18,19 @@ fragment CommonConventionData on Convention {
     default_color
     full_color
     signed_up_color
+
+    event_form {
+      id
+      form_sections {
+        id
+        form_items {
+          id
+          public_description
+          default_value
+          ...CommonFormItemFields
+        }
+      }
+    }
   }
 }
 

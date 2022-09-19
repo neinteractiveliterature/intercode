@@ -3,24 +3,19 @@ import { useCallback, useMemo, useState } from 'react';
 
 import { FiniteTimespan } from '../../Timespan';
 import { useAppDateTimeFormat } from '../../TimeUtils';
-import { ScheduleGridCombinedQueryData } from '../ScheduleGrid/queries.generated';
+import { ScheduleGridEventsQueryData } from '../ScheduleGrid/queries.generated';
 import RunDetails from '../ScheduleGrid/RunDetails';
 import RunDisplay from '../ScheduleGrid/RunDisplay';
 import SignupCountData from '../SignupCountData';
 
 export type RunListEventRunProps = {
-  event: ScheduleGridCombinedQueryData['convention']['events'][number];
-  run: ScheduleGridCombinedQueryData['convention']['events'][number]['runs'][number];
+  event: ScheduleGridEventsQueryData['convention']['events'][number];
+  run: ScheduleGridEventsQueryData['convention']['events'][number]['runs'][number];
   timespan: FiniteTimespan;
   signupCountData: SignupCountData;
 };
 
-export default function RunListEventRun({
-  event,
-  run,
-  timespan,
-  signupCountData,
-}: RunListEventRunProps): JSX.Element {
+export default function RunListEventRun({ event, run, timespan, signupCountData }: RunListEventRunProps): JSX.Element {
   const format = useAppDateTimeFormat();
   const [detailsVisible, setDetailsVisible] = useState(false);
   const toggle = useCallback(() => setDetailsVisible((prevVisible) => !prevVisible), []);

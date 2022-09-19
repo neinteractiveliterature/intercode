@@ -2,7 +2,7 @@
 import * as Types from '../../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
-import { CommonConventionDataFragmentDoc } from '../queries.generated';
+import { CommonFormItemFieldsFragmentDoc, CommonFormFieldsFragmentDoc, CommonFormSectionFieldsFragmentDoc } from '../../Models/commonFormFragments.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type EventListEventsQueryVariables = Types.Exact<{
@@ -13,7 +13,7 @@ export type EventListEventsQueryVariables = Types.Exact<{
 }>;
 
 
-export type EventListEventsQueryData = { __typename: 'Query', currentAbility: { __typename: 'Ability', can_read_schedule: boolean }, convention: { __typename: 'Convention', id: string, name: string, starts_at?: string | null, ends_at?: string | null, site_mode: Types.SiteMode, timezone_name?: string | null, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, events_paginated: { __typename: 'EventsPagination', total_entries: number, total_pages: number, current_page: number, per_page: number, entries: Array<{ __typename: 'Event', id: string, title?: string | null, created_at?: string | null, short_blurb_html?: string | null, form_response_attrs_json?: string | null, my_rating?: number | null, event_category: { __typename: 'EventCategory', id: string, name: string, team_member_name: string, teamMemberNamePlural: string }, runs: Array<{ __typename: 'Run', id: string, starts_at: string }>, team_members: Array<{ __typename: 'TeamMember', id: string, display_team_member: boolean, user_con_profile: { __typename: 'UserConProfile', id: string, last_name: string, name_without_nickname: string, gravatar_enabled: boolean, gravatar_url: string } }> }> }, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, scheduling_ui: Types.SchedulingUi, default_color?: string | null, full_color?: string | null, signed_up_color?: string | null }> } };
+export type EventListEventsQueryData = { __typename: 'Query', currentAbility: { __typename: 'Ability', can_read_schedule: boolean }, convention: { __typename: 'Convention', id: string, timezone_mode: Types.TimezoneMode, events_paginated: { __typename: 'EventsPagination', total_entries: number, total_pages: number, current_page: number, per_page: number, entries: Array<{ __typename: 'Event', id: string, title?: string | null, created_at?: string | null, short_blurb_html?: string | null, form_response_attrs_json_with_rendered_markdown?: string | null, my_rating?: number | null, event_category: { __typename: 'EventCategory', id: string, name: string, team_member_name: string, teamMemberNamePlural: string, event_form: { __typename: 'Form', id: string, form_sections: Array<{ __typename: 'FormSection', id: string, form_items: Array<{ __typename: 'FormItem', id: string, public_description?: string | null, default_value?: string | null, position: number, identifier?: string | null, item_type: string, rendered_properties: string, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in?: Array<Types.FormItemExposeIn> | null }> }> } }, runs: Array<{ __typename: 'Run', id: string, starts_at: string }>, team_members: Array<{ __typename: 'TeamMember', id: string, display_team_member: boolean, user_con_profile: { __typename: 'UserConProfile', id: string, last_name: string, name_without_nickname: string, gravatar_enabled: boolean, gravatar_url: string } }> }> } } };
 
 
 export const EventListEventsQueryDocument = gql`
@@ -23,7 +23,7 @@ export const EventListEventsQueryDocument = gql`
   }
   convention: conventionByRequestHost {
     id
-    ...CommonConventionData
+    timezone_mode
     events_paginated(
       page: $page
       per_page: $pageSize
@@ -39,13 +39,25 @@ export const EventListEventsQueryDocument = gql`
         title
         created_at
         short_blurb_html
-        form_response_attrs_json
+        form_response_attrs_json_with_rendered_markdown
         my_rating
         event_category {
           id
           name
           team_member_name
           teamMemberNamePlural
+          event_form {
+            id
+            form_sections {
+              id
+              form_items {
+                id
+                public_description
+                default_value
+                ...CommonFormItemFields
+              }
+            }
+          }
         }
         runs {
           id
@@ -66,7 +78,7 @@ export const EventListEventsQueryDocument = gql`
     }
   }
 }
-    ${CommonConventionDataFragmentDoc}`;
+    ${CommonFormItemFieldsFragmentDoc}`;
 
 /**
  * __useEventListEventsQuery__

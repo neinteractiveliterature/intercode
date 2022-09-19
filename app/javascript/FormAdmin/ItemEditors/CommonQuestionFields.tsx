@@ -1,10 +1,5 @@
 import { useContext } from 'react';
-import {
-  BootstrapFormInput,
-  BooleanInput,
-  useModal,
-  MultipleChoiceInput,
-} from '@neinteractiveliterature/litform';
+import { BootstrapFormInput, BooleanInput, useModal, MultipleChoiceInput } from '@neinteractiveliterature/litform';
 import { useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
 
@@ -16,14 +11,10 @@ import {
   ParsedFormItem,
 } from '../FormItemUtils';
 import DefaultAnswerModal from './DefaultAnswerModal';
-import {
-  FormEditorContext,
-  FormEditorContextValue,
-  FormItemEditorContext,
-} from '../FormEditorContexts';
+import { FormEditorContext, FormEditorContextValue, FormItemEditorContext } from '../FormEditorContexts';
 import FormItemIdentifierInput from './FormItemIdentifierInput';
 import { FormItemEditorProps } from '../FormItemEditorProps';
-import { FormItemRole } from '../../graphqlTypes.generated';
+import { FormItemExposeIn, FormItemRole } from '../../graphqlTypes.generated';
 import { describeFormItemRole } from '../../FormPresenter/ItemInputs/PermissionDisclosures';
 
 export type CommonQuestionFieldsProps = FormItemEditorProps<TypedFormItem>;
@@ -83,9 +74,7 @@ function CommonQuestionFields({ formItem, setFormItem }: CommonQuestionFieldsPro
       {formItemIsQuestion(formItem) && !standardItem && (
         <FormItemIdentifierInput
           value={formItem.identifier ?? undefined}
-          onChange={(identifier) =>
-            setFormItem((prevFormItem) => ({ ...prevFormItem, identifier }))
-          }
+          onChange={(identifier) => setFormItem((prevFormItem) => ({ ...prevFormItem, identifier }))}
           formType={formType}
         />
       )}
@@ -96,11 +85,10 @@ function CommonQuestionFields({ formItem, setFormItem }: CommonQuestionFieldsPro
           <BooleanInput
             caption="Response required?"
             value={!!formItem.properties.required}
-            onChange={formItemPropertyUpdater<
-              CommonQuestionProperties,
-              QuestionFormItem,
-              'required'
-            >('required', setFormItem)}
+            onChange={formItemPropertyUpdater<CommonQuestionProperties, QuestionFormItem, 'required'>(
+              'required',
+              setFormItem,
+            )}
           />
         ))}
       <BootstrapFormInput
@@ -148,6 +136,20 @@ function CommonQuestionFields({ formItem, setFormItem }: CommonQuestionFieldsPro
         }}
         choices={getRoleOptionsForFormTypeIdentifier('writeability', formTypeIdentifier, t)}
       />
+      {formTypeIdentifier === 'event' && (
+        <MultipleChoiceInput
+          caption="Expose in"
+          value={formItem.expose_in}
+          multiple
+          onChange={(value) =>
+            setFormItem((prevFormItem) => ({ ...prevFormItem, expose_in: value as FormItemExposeIn[] }))
+          }
+          choices={[
+            { label: 'Event catalog', value: 'event_catalog' },
+            { label: 'Schedule popup', value: 'schedule_popup' },
+          ]}
+        />
+      )}
       <button type="button" className="btn btn-secondary" onClick={defaultAnswerModal.open}>
         {formItem.default_value ? 'Edit default answer' : 'Add default answer'}
       </button>

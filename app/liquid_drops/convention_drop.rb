@@ -85,7 +85,7 @@ class ConventionDrop < Liquid::Drop
       .select do |_run_id, presenter|
         buckets = presenter.run.event.registration_policy.buckets.select(&:slots_limited?)
         limited_signup_count =
-          buckets.sum { |bucket| presenter.signup_count(state: 'confirmed', bucket_key: bucket.key) }
+          buckets.sum { |bucket| presenter.signup_count(state: "confirmed", bucket_key: bucket.key) }
         limited_signup_count < buckets.sum(&:total_slots)
       end
       .values
@@ -96,7 +96,7 @@ class ConventionDrop < Liquid::Drop
   # @return [Array<RunDrop>] Runs of non-volunteer events in this convention that have any available
   #                          slots in limited buckets
   def non_volunteer_runs_with_openings
-    runs_with_openings.reject { |run| run.event.event_category.name == 'Volunteer event' }
+    runs_with_openings.reject { |run| run.event.event_category.name == "Volunteer event" }
   end
 
   # @return [Array<EventDrop>] Events at the convention
@@ -150,7 +150,7 @@ class ConventionDrop < Liquid::Drop
   # @example Retrieving the vendor liaison email address for a convention
   #   {{ convention.staff_positions_by_name.vendor_liaison.email }}
   def staff_positions_by_name
-    convention.staff_positions.index_by { |staff_position| staff_position.name.gsub(/\W/, '_').downcase }
+    convention.staff_positions.index_by { |staff_position| staff_position.name.gsub(/\W/, "_").downcase }
   end
 
   # @return [Array<TicketTypeDrop>] All ticket types for this convention
@@ -170,7 +170,7 @@ class ConventionDrop < Liquid::Drop
       .each_with_object({}) do |ticket_type, hash|
         hash[ticket_type.name] = ticket_counts_by_type_id[ticket_type.id] || 0
       end
-      .merge('total' => ticket_counts_by_type_id.values.sum)
+      .merge("total" => ticket_counts_by_type_id.values.sum)
   end
 
   # @return [ScheduledValueDrop] The schedule of maximum event signups for this convention
@@ -195,10 +195,10 @@ class ConventionDrop < Liquid::Drop
 
   # @return [String] The root URL for this convention
   def url
-    protocol = Rails.application.config.action_mailer.default_url_options[:protocol] || 'http'
+    protocol = Rails.application.config.action_mailer.default_url_options[:protocol] || "http"
     port = Rails.application.config.action_mailer.default_url_options[:port]
 
-    default_port = protocol == 'https' ? 443 : 80
+    default_port = protocol == "https" ? 443 : 80
     hostname = convention.domain
     hostname << ":#{port}" if port && port != default_port
 
@@ -210,6 +210,33 @@ class ConventionDrop < Liquid::Drop
   def location
     return nil unless convention.location
     convention.location
+  end
+
+  # @return [AttendanceByPaymentAmountDrop] Retrieve an attendance-by-payment-amount report
+  def attendance_by_payment_amount
+    # TODO deduplicate this with the one in ConventionReportsType
+    @data ||=
+      begin
+        grouped_count_data =
+          convention
+            .tickets
+            .left_joins(:order_entry)
+            .group(:ticket_type_id, "COALESCE(price_per_item_cents, 0)", "COALESCE(price_per_item_currency, 'USD')")
+            .count
+
+        ticket_types =
+          TicketType.find(grouped_count_data.map { |(ticket_type_id, _, _), _| ticket_type_id }).index_by(&:id)
+
+        grouped_count_data.map do |(ticket_type_id, amount_cents, amount_currency), count|
+          payment_amount = Money.new(amount_cents, amount_currency)
+          {
+            "ticket_type" => TicketTypeDrop.new(ticket_types[ticket_type_id]),
+            "payment_amount" => MoneyDrop.new(payment_amount),
+            "count" => count,
+            "total_amount" => MoneyDrop.new(payment_amount * count)
+          }
+        end
+      end
   end
 
   private

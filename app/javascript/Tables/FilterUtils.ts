@@ -97,6 +97,20 @@ const nonEmptyStringCodec: FilterCodec<string> = {
   encode: nonEmptyString,
   decode: (value?: string | null) => value ?? null,
 };
+const jsonCodec: FilterCodec<unknown> = {
+  encode: JSON.stringify,
+  decode: (value?: string | null) => {
+    if (value == null) {
+      return null;
+    }
+
+    try {
+      return JSON.parse(value);
+    } catch (err) {
+      return null;
+    }
+  },
+};
 
 export const FilterCodecs = {
   stringArray,
@@ -105,6 +119,7 @@ export const FilterCodecs = {
   float: floatCodec,
   integer: integerCodec,
   nonEmptyString: nonEmptyStringCodec,
+  json: jsonCodec,
 };
 
 export interface FieldFilterCodecs {
@@ -112,9 +127,7 @@ export interface FieldFilterCodecs {
   decodeFilterValue(field: string, value: string): unknown;
 }
 
-export function buildFieldFilterCodecs(fieldCodecs: {
-  [field: string]: FilterCodec<unknown>;
-}): FieldFilterCodecs {
+export function buildFieldFilterCodecs(fieldCodecs: { [field: string]: FilterCodec<unknown> }): FieldFilterCodecs {
   return {
     encodeFilterValue: (field: string, value: unknown) => {
       const codec = fieldCodecs[field];

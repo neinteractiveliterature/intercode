@@ -1,4 +1,4 @@
-require 'digest/md5'
+require "digest/md5"
 
 module Intercode
   module Liquid
@@ -43,7 +43,7 @@ module Intercode
       def email_link(input)
         return unless input
 
-        @context['user'] ? "<a href=\"mailto:#{input}\">#{input}</a>" : ApplicationHelper.obfuscated_email(input)
+        @context["user"] ? "<a href=\"mailto:#{input}\">#{input}</a>" : ApplicationHelper.obfuscated_email(input)
       end
 
       # Given an array of strings, outputs an English representation of that array.
@@ -85,15 +85,15 @@ module Intercode
       # Given a relative URL, turns it into an absolute URL for the current convention.
       # Given an absolute URL, changes the hostname to the current convention host.
       def absolute_url(path)
-        return path unless @context.registers['convention']
-        url_with_convention_host(path, @context.registers['convention'])
+        return path unless @context.registers["convention"]
+        url_with_convention_host(path, @context.registers["convention"])
       end
 
       # Converts all whitespace in a string to single spaces, and strips whitespace off the
       # beginning and end.
       def condense_whitespace(input)
         return nil unless input
-        input.strip.gsub(/\s+/, ' ')
+        input.strip.gsub(/\s+/, " ")
       end
 
       # Computes the MD5 hash of the input string (not including leading/trailing whitespace) and
@@ -168,25 +168,30 @@ module Intercode
           timespan_in_zone.strip
         else
           timespan_in_user_zone = describe_timespan(input, format, @context.registers[:timezone])
-          _, deduped_user = remove_common_middle(timespan_in_zone, timespan_in_user_zone, ' ')
+          _, deduped_user = remove_common_middle(timespan_in_zone, timespan_in_user_zone, " ")
           "#{timespan_in_zone.strip} (#{deduped_user.strip})"
         end
+      end
+
+      # Interprets the input as a Money value.
+      def money(input)
+        MoneyDrop.new(input.to_money)
       end
 
       private
 
       def find_effective_timezone(timezone_name = nil)
-        effective_timezone_name = (timezone_name.presence || @context.registers['convention'].timezone_name)
+        effective_timezone_name = (timezone_name.presence || @context.registers["convention"].timezone_name)
         ActiveSupport::TimeZone[effective_timezone_name]
       end
 
       def timezones_match?(a, b)
         now = Time.zone.now
-        zone_strings = [a, b].map { |zone| now.in_time_zone(zone).strftime('%Z') }
+        zone_strings = [a, b].map { |zone| now.in_time_zone(zone).strftime("%Z") }
         zone_strings[0] == zone_strings[1]
       end
 
-      def common_prefix(a, b, delimiter = '')
+      def common_prefix(a, b, delimiter = "")
         i = 0
         prefix = []
         a_arr = a.split(delimiter)
@@ -202,26 +207,26 @@ module Intercode
         prefix.join(delimiter)
       end
 
-      def common_suffix(a, b, delimiter = '')
+      def common_suffix(a, b, delimiter = "")
         common_prefix(a.reverse, b.reverse, delimiter).reverse
       end
 
-      def remove_common_middle(a, b, delimiter = '')
+      def remove_common_middle(a, b, delimiter = "")
         prefix = common_prefix(a, b, delimiter)
         suffix = common_suffix(a, b, delimiter)
         prefix_regex = /\A#{Regexp.escape(prefix)}/
         suffix_regex = /#{Regexp.escape(suffix)}\z/
 
-        [a.sub(suffix_regex, '').strip, b.sub(prefix_regex, '').strip]
+        [a.sub(suffix_regex, "").strip, b.sub(prefix_regex, "").strip]
       end
 
       def describe_timespan(timespan, format, timezone)
-        start = timespan.start ? timespan.start.in_time_zone(timezone).strftime(format) : 'anytime'
+        start = timespan.start ? timespan.start.in_time_zone(timezone).strftime(format) : "anytime"
 
-        finish = timespan.finish ? timespan.finish.in_time_zone(timezone).strftime(format) : 'indefinitely'
+        finish = timespan.finish ? timespan.finish.in_time_zone(timezone).strftime(format) : "indefinitely"
 
-        deduped_start, deduped_finish = remove_common_middle(start, finish, ' ')
-        [deduped_start, deduped_finish].join(timespan.finish ? ' to ' : ' ')
+        deduped_start, deduped_finish = remove_common_middle(start, finish, " ")
+        [deduped_start, deduped_finish].join(timespan.finish ? " to " : " ")
       end
     end
   end

@@ -17,6 +17,9 @@ import SignupCountData from '../SignupCountData';
 import { FiniteTimespan } from '../../Timespan';
 import { conventionRequiresDates, useFormatRunTimespan } from '../runTimeFormatting';
 import { useAppDateTimeFormat } from '../../TimeUtils';
+import { FormItemExposeIn } from '../../graphqlTypes.generated';
+import FormItemDisplay from '../../FormPresenter/ItemDisplays/FormItemDisplay';
+import { parseTypedFormItemArray } from '../../FormAdmin/FormItemUtils';
 
 export type RunDetailsProps = {
   placement?: Placement;
@@ -35,7 +38,7 @@ const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(function Ru
   ref,
 ) {
   const { t } = useTranslation();
-  const { myProfile, conventionTimespan, siteMode } = useContext(AppRootContext);
+  const { myProfile, conventionTimespan, siteMode, convention } = useContext(AppRootContext);
   const rateEvent = useRateEvent();
   const apolloClient = useApolloClient();
   const formatRunTimespan = useFormatRunTimespan();
@@ -50,6 +53,37 @@ const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(function Ru
   const waitlistDescription = useMemo(() => describeWaitlist(event, signupCountData), [event, signupCountData]);
   const availability = useMemo(() => calculateAvailability(event, signupCountData), [event, signupCountData]);
   const roomsDescription = useMemo(() => [...run.room_names].sort().join(', '), [run.room_names]);
+  const additionalExposedFields = useMemo(() => {
+    if (convention == null) {
+      return [];
+    }
+
+    const exposedFormItems = event.event_category.event_form.form_sections.flatMap((section) =>
+      parseTypedFormItemArray(
+        section.form_items.filter((item) => item.expose_in?.includes(FormItemExposeIn.SchedulePopup)),
+      ),
+    );
+
+    if (exposedFormItems.length === 0) {
+      return [];
+    }
+    const formResponse = JSON.parse(event.form_response_attrs_json_with_rendered_markdown ?? '{}');
+    return exposedFormItems.map((item) => (
+      <tr key={item.id}>
+        <td className="text-center pe-1">
+          <i className="bi-caret-right-fill" />
+        </td>
+        <td>
+          <FormItemDisplay
+            convention={convention}
+            displayMode="public"
+            formItem={item}
+            value={formResponse[item.identifier ?? '']}
+          />
+        </td>
+      </tr>
+    ));
+  }, [event.form_response_attrs_json_with_rendered_markdown, convention, event.event_category.event_form]);
 
   const ratingChanged = async (rating: number) => {
     await rateEvent(event.id, rating);
@@ -114,6 +148,7 @@ const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(function Ru
                   <td>{roomsDescription}</td>
                 </tr>
               ) : null}
+              {additionalExposedFields}
               {availabilityDescription ? (
                 <tr>
                   <td className="text-center pe-1 align-top">

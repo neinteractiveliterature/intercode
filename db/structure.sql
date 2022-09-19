@@ -17,10 +17,24 @@ CREATE EXTENSION IF NOT EXISTS pg_trgm WITH SCHEMA public;
 
 
 --
+-- Name: EXTENSION pg_trgm; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION pg_trgm IS 'text similarity measurement and index searching based on trigrams';
+
+
+--
 -- Name: unaccent; Type: EXTENSION; Schema: -; Owner: -
 --
 
 CREATE EXTENSION IF NOT EXISTS unaccent WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION unaccent; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION unaccent IS 'text search dictionary that removes accents';
 
 
 --
@@ -1577,7 +1591,8 @@ CREATE TABLE public.form_items (
     default_value jsonb,
     public_description text,
     visibility character varying DEFAULT 'normal'::character varying NOT NULL,
-    writeability character varying DEFAULT 'normal'::character varying NOT NULL
+    writeability character varying DEFAULT 'normal'::character varying NOT NULL,
+    expose_in text[]
 );
 
 
@@ -5869,6 +5884,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220313171517'),
 ('20220502182655'),
 ('20220503164309'),
-('20220609161816');
+('20220609161816'),
+('20220918173739');
 
 

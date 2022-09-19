@@ -72,7 +72,12 @@ export default function useArrayProperty<
     [updateItems],
   );
 
-  const { draggingItem, ...sortableHandlers } = useArrayBasicSortableHandlers(array, moveItem, 'generatedId');
+  const { draggingItem, ...sortableHandlers } = useArrayBasicSortableHandlers<
+    ElementType['generatedId'],
+    // @ts-expect-error I don't know why this isn't working and I am going to ignore it for the moment to cut a release
+    ElementType,
+    KeysOfType<ElementType, ElementType['generatedId']>
+  >(array, moveItem, 'generatedId');
 
   return [addItem, itemChanged, deleteItem, draggingItem, sortableHandlers];
 }
