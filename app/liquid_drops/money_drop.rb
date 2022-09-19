@@ -10,6 +10,7 @@ class MoneyDrop < Liquid::Drop
 
   delegate :format, :fractional, :currency, :symbol, :decimal_mark, to: :money
 
+  # @api
   def to_number
     money.to_d
   end

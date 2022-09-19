@@ -732,6 +732,18 @@
               ]
             }
           ]
+        },
+        {
+          "name": "to_number",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
         }
       ]
     },
@@ -2044,6 +2056,20 @@
               "text": "A hash value representing this convention's location, suitable for passing\nto the {% map %} tag",
               "types": [
                 "Hash"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "attendance_by_payment_amount",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "An attendance-by-payment-amount report.  Each item in the report has\nvalues at the keys \"ticket_type\", \"payment_amount\", \"count\", and \"total_amount\".\nThe report is grouped by \"ticket_type\" and \"payment_amount\".  For convenience,\n\"total_amount\" is provided and is the \"payment_amount\" multiplied by the \"count\"\nfor this row.",
+              "types": [
+                "Array<Hash>"
               ]
             }
           ]
@@ -6747,6 +6773,13 @@
             "String"
           ]
         }
+      ]
+    },
+    {
+      "name": "money",
+      "docstring": "Interprets the input as a Money value.",
+      "tags": [
+
       ]
     }
   ]

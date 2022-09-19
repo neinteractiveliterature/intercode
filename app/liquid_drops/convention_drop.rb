@@ -212,7 +212,11 @@ class ConventionDrop < Liquid::Drop
     convention.location
   end
 
-  # @return [AttendanceByPaymentAmountDrop] Retrieve an attendance-by-payment-amount report
+  # @return [Array<Hash>] An attendance-by-payment-amount report.  Each item in the report has
+  #                       values at the keys "ticket_type", "payment_amount", "count", and "total_amount".
+  #                       The report is grouped by "ticket_type" and "payment_amount".  For convenience,
+  #                       "total_amount" is provided and is the "payment_amount" multiplied by the "count"
+  #                       for this row.
   def attendance_by_payment_amount
     # TODO deduplicate this with the one in ConventionReportsType
     @data ||=
