@@ -4389,12 +4389,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@prettier/plugin-ruby@npm:3.2.0":
-  version: 3.2.0
-  resolution: "@prettier/plugin-ruby@npm:3.2.0"
+"@prettier/plugin-ruby@npm:3.2.1":
+  version: 3.2.1
+  resolution: "@prettier/plugin-ruby@npm:3.2.1"
   dependencies:
     prettier: ">=2.3.0"
-  checksum: 517d234c8b298d15e0054a3cb3af9912f1af9d67fc30dd3c782b9443f91688fc31c202aac8a0635fdbf739062f5d4b991a8c16174179c7f25a0882b3d7be67c4
+  checksum: 025cd294872c62467dc93a9bcded2e29c3758fafa3188124197a2b3d94754e5e74044eb61a2a6a063e022e4f52d89972bcabede5e7487d3e0910f409d5981a96
   languageName: node
   linkType: hard
 
@@ -17519,7 +17519,7 @@ resolve@^2.0.0-next.3:
     "@lezer/common": 1.0.1
     "@neinteractiveliterature/litform": 0.23.0
     "@popperjs/core": 2.11.6
-    "@prettier/plugin-ruby": 3.2.0
+    "@prettier/plugin-ruby": 3.2.1
     "@rails/activestorage": 7.0.4
     "@stripe/react-stripe-js": 1.10.0
     "@stripe/stripe-js": 1.36.0
