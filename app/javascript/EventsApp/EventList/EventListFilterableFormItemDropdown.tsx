@@ -42,7 +42,7 @@ function EventListFilterableFormItemDropdown({
     <DropdownMenu
       buttonContent={
         <>
-          {value.length > 0 && (
+          {value?.length > 0 && (
             <>
               <i className="bi-funnel-fill" />{' '}
             </>
