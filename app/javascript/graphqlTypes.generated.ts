@@ -14,6 +14,8 @@ export type Scalars = {
   BigDecimal: string;
   /** Date in ISO8601 format */
   Date: string;
+  /** Represents untyped JSON */
+  JSON: unknown;
   /** An arbitrary object, serialized as JSON */
   Json: string;
   Upload: File;
@@ -850,6 +852,7 @@ export type ConventionEvent_Proposals_PaginatedArgs = {
 
 
 export type ConventionEventsArgs = {
+  filters?: InputMaybe<EventFiltersInput>;
   finish?: InputMaybe<Scalars['Date']>;
   includeDropped?: InputMaybe<Scalars['Boolean']>;
   start?: InputMaybe<Scalars['Date']>;
@@ -2307,6 +2310,7 @@ export type EventCategoryInput = {
 
 export type EventFiltersInput = {
   category?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  form_items?: InputMaybe<Scalars['JSON']>;
   my_rating?: InputMaybe<Array<Scalars['Int']>>;
   title?: InputMaybe<Scalars['String']>;
   title_prefix?: InputMaybe<Scalars['String']>;

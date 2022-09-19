@@ -10,7 +10,7 @@ import Timespan, { FiniteTimespan } from '../../Timespan';
 import { useAppDateTimeFormat } from '../../TimeUtils';
 import { SiteMode } from '../../graphqlTypes.generated';
 import { DateTimeFormatKey } from '../../DateTimeFormats';
-import { ScheduleGridCombinedQueryDocument } from './queries.generated';
+import { ScheduleGridEventsQueryDocument } from './queries.generated';
 
 function conventionDayUrlPortionFormat(
   siteMode: SiteMode | undefined,
@@ -95,7 +95,7 @@ function ConventionDayTabContainer({
   const refreshData = useCallback(
     () =>
       client.query({
-        query: ScheduleGridCombinedQueryDocument,
+        query: ScheduleGridEventsQueryDocument,
         variables: { extendedCounts: showExtendedCounts || false },
         fetchPolicy: 'network-only',
       }),

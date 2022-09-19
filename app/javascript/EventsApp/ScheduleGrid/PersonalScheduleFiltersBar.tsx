@@ -39,10 +39,8 @@ function loadPersonalFilters() {
 }
 
 function parseFilters(filters: Filters<PersonalScheduleFilter>) {
-  const ratingFilter: number[] | undefined = (filters.find((f) => f.id === 'my_rating') || {})
-    .value;
-  const hideConflicts: boolean | undefined = (filters.find((f) => f.id === 'hide_conflicts') || {})
-    .value;
+  const ratingFilter: number[] | undefined = (filters.find((f) => f.id === 'my_rating') || {}).value;
+  const hideConflicts: boolean | undefined = (filters.find((f) => f.id === 'hide_conflicts') || {}).value;
 
   const choiceSetValue: string[] = [
     ...(ratingFilter || []).map((integer: number) => integer.toString()),
@@ -70,6 +68,10 @@ export function usePersonalScheduleFilters({
   const { filters, updateSearch } = useReactRouterReactTable<PersonalScheduleFilter>({
     ...filterCodecs,
   });
+  const otherFilters = useMemo(
+    () => filters.filter(({ id }) => id !== 'my_rating' && id !== 'hide_conflicts'),
+    [filters],
+  );
   const location = useLocation();
 
   useEffect(() => {
@@ -94,7 +96,7 @@ export function usePersonalScheduleFilters({
               { id: 'hide_conflicts', value: !newValue.includes('conflicts') },
             ];
 
-      updateSearch({ filters: newFilters });
+      updateSearch({ filters: [...otherFilters, ...newFilters] });
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(newFilters));
     };
 
@@ -104,7 +106,7 @@ export function usePersonalScheduleFilters({
       ratingFilter: ratingFilter ?? [...DEFAULT_PERSONAL_FILTERS[0].value],
       hideConflicts: hideConflicts ?? DEFAULT_PERSONAL_FILTERS[1].value,
     };
-  }, [filters, showPersonalFilters, updateSearch]);
+  }, [filters, showPersonalFilters, updateSearch, otherFilters]);
 }
 
 const filterOptions = [...RATING_OPTIONS, { label: 'Conflicts', value: 'conflicts' }];

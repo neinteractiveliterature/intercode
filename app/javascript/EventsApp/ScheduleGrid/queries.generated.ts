@@ -2,7 +2,7 @@
 import * as Types from '../../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
-import { CommonFormItemFieldsFragmentDoc, CommonFormSectionFieldsFragmentDoc, CommonFormFieldsFragmentDoc } from '../../Models/commonFormFragments.generated';
+import { CommonFormItemFieldsFragmentDoc, CommonFormFieldsFragmentDoc, CommonFormSectionFieldsFragmentDoc } from '../../Models/commonFormFragments.generated';
 import { RunBasicSignupDataFragmentDoc, CommonConventionDataFragmentDoc } from '../queries.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
@@ -11,23 +11,16 @@ export type ScheduleGridEventFragment = { __typename: 'Event', id: string, title
 export type ScheduleGridConventionDataQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type ScheduleGridConventionDataQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, pre_schedule_content_html?: string | null, name: string, starts_at?: string | null, ends_at?: string | null, site_mode: Types.SiteMode, timezone_name?: string | null, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, scheduling_ui: Types.SchedulingUi, default_color?: string | null, full_color?: string | null, signed_up_color?: string | null }> } };
+export type ScheduleGridConventionDataQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, pre_schedule_content_html?: string | null, name: string, starts_at?: string | null, ends_at?: string | null, site_mode: Types.SiteMode, timezone_name?: string | null, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, scheduling_ui: Types.SchedulingUi, default_color?: string | null, full_color?: string | null, signed_up_color?: string | null, event_form: { __typename: 'Form', id: string, form_sections: Array<{ __typename: 'FormSection', id: string, form_items: Array<{ __typename: 'FormItem', id: string, public_description?: string | null, default_value?: string | null, position: number, identifier?: string | null, item_type: string, rendered_properties: string, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in?: Array<Types.FormItemExposeIn> | null }> }> } }> } };
 
 export type ScheduleGridEventsQueryVariables = Types.Exact<{
   start?: Types.InputMaybe<Types.Scalars['Date']>;
   finish?: Types.InputMaybe<Types.Scalars['Date']>;
+  filters?: Types.InputMaybe<Types.EventFiltersInput>;
 }>;
 
 
 export type ScheduleGridEventsQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, events: Array<{ __typename: 'Event', id: string, title?: string | null, length_seconds: number, short_blurb_html?: string | null, my_rating?: number | null, can_play_concurrently: boolean, form_response_attrs_json_with_rendered_markdown?: string | null, event_category: { __typename: 'EventCategory', id: string, name: string, default_color?: string | null, signed_up_color?: string | null, full_color?: string | null, event_form: { __typename: 'Form', id: string, form_sections: Array<{ __typename: 'FormSection', id: string, form_items: Array<{ __typename: 'FormItem', id: string, public_description?: string | null, default_value?: string | null, position: number, identifier?: string | null, item_type: string, rendered_properties: string, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in?: Array<Types.FormItemExposeIn> | null }> }> } }, registration_policy?: { __typename: 'RegistrationPolicy', slots_limited?: boolean | null, only_uncounted?: boolean | null, total_slots?: number | null, total_slots_including_not_counted?: number | null, preferred_slots?: number | null, preferred_slots_including_not_counted?: number | null, minimum_slots?: number | null, minimum_slots_including_not_counted?: number | null, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, not_counted: boolean, total_slots?: number | null, slots_limited: boolean }> } | null, runs: Array<{ __typename: 'Run', id: string, starts_at: string, schedule_note?: string | null, title_suffix?: string | null, confirmed_signup_count: number, not_counted_signup_count: number, room_names: Array<string>, signup_count_by_state_and_bucket_key_and_counted: string, my_signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: string, state: Types.SignupRequestState }> }> }> } };
-
-export type ScheduleGridCombinedQueryVariables = Types.Exact<{
-  start?: Types.InputMaybe<Types.Scalars['Date']>;
-  finish?: Types.InputMaybe<Types.Scalars['Date']>;
-}>;
-
-
-export type ScheduleGridCombinedQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, pre_schedule_content_html?: string | null, name: string, starts_at?: string | null, ends_at?: string | null, site_mode: Types.SiteMode, timezone_name?: string | null, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, events: Array<{ __typename: 'Event', id: string, title?: string | null, length_seconds: number, short_blurb_html?: string | null, my_rating?: number | null, can_play_concurrently: boolean, form_response_attrs_json_with_rendered_markdown?: string | null, event_category: { __typename: 'EventCategory', id: string, name: string, default_color?: string | null, signed_up_color?: string | null, full_color?: string | null, event_form: { __typename: 'Form', id: string, form_sections: Array<{ __typename: 'FormSection', id: string, form_items: Array<{ __typename: 'FormItem', id: string, public_description?: string | null, default_value?: string | null, position: number, identifier?: string | null, item_type: string, rendered_properties: string, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in?: Array<Types.FormItemExposeIn> | null }> }> } }, registration_policy?: { __typename: 'RegistrationPolicy', slots_limited?: boolean | null, only_uncounted?: boolean | null, total_slots?: number | null, total_slots_including_not_counted?: number | null, preferred_slots?: number | null, preferred_slots_including_not_counted?: number | null, minimum_slots?: number | null, minimum_slots_including_not_counted?: number | null, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, not_counted: boolean, total_slots?: number | null, slots_limited: boolean }> } | null, runs: Array<{ __typename: 'Run', id: string, starts_at: string, schedule_note?: string | null, title_suffix?: string | null, confirmed_signup_count: number, not_counted_signup_count: number, room_names: Array<string>, signup_count_by_state_and_bucket_key_and_counted: string, my_signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: string, state: Types.SignupRequestState }> }> }>, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, scheduling_ui: Types.SchedulingUi, default_color?: string | null, full_color?: string | null, signed_up_color?: string | null }> } };
 
 export const ScheduleGridEventFragmentDoc = gql`
     fragment ScheduleGridEventFragment on Event {
@@ -123,10 +116,10 @@ export type ScheduleGridConventionDataQueryHookResult = ReturnType<typeof useSch
 export type ScheduleGridConventionDataQueryLazyQueryHookResult = ReturnType<typeof useScheduleGridConventionDataQueryLazyQuery>;
 export type ScheduleGridConventionDataQueryQueryResult = Apollo.QueryResult<ScheduleGridConventionDataQueryData, ScheduleGridConventionDataQueryVariables>;
 export const ScheduleGridEventsQueryDocument = gql`
-    query ScheduleGridEventsQuery($start: Date, $finish: Date) {
+    query ScheduleGridEventsQuery($start: Date, $finish: Date, $filters: EventFiltersInput) {
   convention: conventionByRequestHost {
     id
-    events(start: $start, finish: $finish) {
+    events(start: $start, finish: $finish, filters: $filters) {
       id
       ...ScheduleGridEventFragment
     }
@@ -148,6 +141,7 @@ export const ScheduleGridEventsQueryDocument = gql`
  *   variables: {
  *      start: // value for 'start'
  *      finish: // value for 'finish'
+ *      filters: // value for 'filters'
  *   },
  * });
  */
@@ -162,46 +156,3 @@ export function useScheduleGridEventsQueryLazyQuery(baseOptions?: Apollo.LazyQue
 export type ScheduleGridEventsQueryHookResult = ReturnType<typeof useScheduleGridEventsQuery>;
 export type ScheduleGridEventsQueryLazyQueryHookResult = ReturnType<typeof useScheduleGridEventsQueryLazyQuery>;
 export type ScheduleGridEventsQueryQueryResult = Apollo.QueryResult<ScheduleGridEventsQueryData, ScheduleGridEventsQueryVariables>;
-export const ScheduleGridCombinedQueryDocument = gql`
-    query ScheduleGridCombinedQuery($start: Date, $finish: Date) {
-  convention: conventionByRequestHost {
-    id
-    pre_schedule_content_html
-    ...CommonConventionData
-    events(start: $start, finish: $finish) {
-      id
-      ...ScheduleGridEventFragment
-    }
-  }
-}
-    ${CommonConventionDataFragmentDoc}
-${ScheduleGridEventFragmentDoc}`;
-
-/**
- * __useScheduleGridCombinedQuery__
- *
- * To run a query within a React component, call `useScheduleGridCombinedQuery` and pass it any options that fit your needs.
- * When your component renders, `useScheduleGridCombinedQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useScheduleGridCombinedQuery({
- *   variables: {
- *      start: // value for 'start'
- *      finish: // value for 'finish'
- *   },
- * });
- */
-export function useScheduleGridCombinedQuery(baseOptions?: Apollo.QueryHookOptions<ScheduleGridCombinedQueryData, ScheduleGridCombinedQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ScheduleGridCombinedQueryData, ScheduleGridCombinedQueryVariables>(ScheduleGridCombinedQueryDocument, options);
-      }
-export function useScheduleGridCombinedQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ScheduleGridCombinedQueryData, ScheduleGridCombinedQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ScheduleGridCombinedQueryData, ScheduleGridCombinedQueryVariables>(ScheduleGridCombinedQueryDocument, options);
-        }
-export type ScheduleGridCombinedQueryHookResult = ReturnType<typeof useScheduleGridCombinedQuery>;
-export type ScheduleGridCombinedQueryLazyQueryHookResult = ReturnType<typeof useScheduleGridCombinedQueryLazyQuery>;
-export type ScheduleGridCombinedQueryQueryResult = Apollo.QueryResult<ScheduleGridCombinedQueryData, ScheduleGridCombinedQueryVariables>;

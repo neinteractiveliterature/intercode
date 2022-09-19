@@ -2,7 +2,7 @@
 import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
-import { CommonFormFieldsFragmentDoc, CommonFormSectionFieldsFragmentDoc, CommonFormItemFieldsFragmentDoc } from '../Models/commonFormFragments.generated';
+import { CommonFormFieldsFragmentDoc } from '../Models/commonFormFragments.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type TicketTypeFieldsFragment = { __typename: 'TicketType', id: string, description?: string | null, maximum_event_provided_tickets: number };

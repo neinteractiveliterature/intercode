@@ -8,7 +8,6 @@ query EventListEventsQuery($page: Int, $pageSize: Int, $filters: EventFiltersInp
 
   convention: conventionByRequestHost {
     id
-    ...CommonConventionData
 
     events_paginated(page: $page, per_page: $pageSize, filters: $filters, sort: $sort) {
       total_entries

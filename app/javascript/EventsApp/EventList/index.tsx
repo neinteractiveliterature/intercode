@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useContext } from 'react';
+import { useState, useCallback, useContext } from 'react';
 import { ApolloError } from '@apollo/client';
 import { Filters } from 'react-table';
 import { useTranslation } from 'react-i18next';
@@ -7,6 +7,7 @@ import {
   ErrorDisplay,
   PageLoadingIndicator,
   SearchInput,
+  LoadQueryWrapper,
 } from '@neinteractiveliterature/litform';
 
 import { buildFieldFilterCodecs, FilterCodecs } from '../../Tables/FilterUtils';
@@ -14,28 +15,28 @@ import EventListCategoryDropdown from './EventListCategoryDropdown';
 import EventListEvents from './EventListEvents';
 import EventListSortDropdown from './EventListSortDropdown';
 import useReactRouterReactTable from '../../Tables/useReactRouterReactTable';
-import {
-  reactTableFiltersToTableResultsFilters,
-  reactTableSortToTableResultsSort,
-} from '../../Tables/TableUtils';
+import { reactTableFiltersToTableResultsFilters, reactTableSortToTableResultsSort } from '../../Tables/TableUtils';
 import usePageTitle from '../../usePageTitle';
 import AppRootContext from '../../AppRootContext';
 import EventListMyRatingSelector from './EventListMyRatingSelector';
 import useAsyncFunction from '../../useAsyncFunction';
 import { EventListEventsQueryData, useEventListEventsQuery } from './queries.generated';
+import { TypedFormItem } from '../../FormAdmin/FormItemUtils';
+import EventListFilterableFormItemDropdown from './EventListFilterableFormItemDropdown';
+import { CommonConventionDataQueryData, useCommonConventionDataQuery } from '../queries.generated';
+import useFilterableFormItems from '../useFilterableFormItems';
 
 const PAGE_SIZE = 20;
+
+type FetchMoreFunction = ReturnType<typeof useEventListEventsQuery>['fetchMore'];
+type EventType = NonNullable<EventListEventsQueryData['convention']>['events_paginated']['entries'][number];
 
 const filterCodecs = buildFieldFilterCodecs({
   category: FilterCodecs.integerArray,
   my_rating: FilterCodecs.integerArray,
   title_prefix: FilterCodecs.nonEmptyString,
+  form_items: FilterCodecs.json,
 });
-
-type FetchMoreFunction = ReturnType<typeof useEventListEventsQuery>['fetchMore'];
-type EventType = NonNullable<
-  EventListEventsQueryData['convention']
->['events_paginated']['entries'][number];
 
 const fetchMoreEvents = async (fetchMore: FetchMoreFunction, page: number) => {
   try {
@@ -63,7 +64,12 @@ const fetchMoreEvents = async (fetchMore: FetchMoreFunction, page: number) => {
   }
 };
 
-function EventList(): JSX.Element {
+type EventListProps = {
+  convention: CommonConventionDataQueryData['convention'];
+  filterableFormItems: TypedFormItem[];
+};
+
+function EventList({ filterableFormItems, convention }: EventListProps): JSX.Element {
   const { sortBy, filters, updateSearch } = useReactRouterReactTable({
     ...filterCodecs,
   });
@@ -75,9 +81,6 @@ function EventList(): JSX.Element {
         { id: 'title', desc: false },
       ]
     : [{ id: 'title', desc: false }];
-  const [cachedConventionName, setCachedConventionName] = useState<string>();
-  const [cachedEventCategories, setCachedEventCategories] =
-    useState<NonNullable<EventListEventsQueryData['convention']>['event_categories']>();
   const [cachedPageCount, setCachedPageCount] = useState<number>();
   const defaultFiltered = myProfile
     ? [
@@ -86,8 +89,7 @@ function EventList(): JSX.Element {
       ]
     : [{ id: 'category', value: [] }];
   const effectiveSortBy = sortBy && sortBy.length > 0 ? sortBy : defaultSort;
-  const effectiveFilters: Filters<EventType> =
-    filters && filters.length > 0 ? filters : defaultFiltered;
+  const effectiveFilters: Filters<EventType> = filters && filters.length > 0 ? filters : defaultFiltered;
 
   const { data, loading, error, fetchMore } = useEventListEventsQuery({
     variables: {
@@ -97,13 +99,10 @@ function EventList(): JSX.Element {
       filters: reactTableFiltersToTableResultsFilters(effectiveFilters),
     },
   });
-  const [fetchMoreEventsAsync, fetchMoreError, fetchMoreInProgress] =
-    useAsyncFunction(fetchMoreEvents);
+  const [fetchMoreEventsAsync, fetchMoreError, fetchMoreInProgress] = useAsyncFunction(fetchMoreEvents);
 
-  const loadedEntries: number =
-    loading || error || !data ? 0 : data.convention?.events_paginated.entries.length ?? 0;
-  const totalEntries: number =
-    loading || error || !data ? 0 : data.convention?.events_paginated.total_entries ?? 0;
+  const loadedEntries: number = loading || error || !data ? 0 : data.convention?.events_paginated.entries.length ?? 0;
+  const totalEntries: number = loading || error || !data ? 0 : data.convention?.events_paginated.total_entries ?? 0;
 
   const fetchMoreIfNeeded = useCallback(() => {
     if (loadedEntries === 0) {
@@ -124,39 +123,16 @@ function EventList(): JSX.Element {
     [updateSearch, filters],
   );
 
-  const categoryChanged = useCallback(
-    (value) => changeFilterValue('category', value),
-    [changeFilterValue],
-  );
+  const categoryChanged = useCallback((value) => changeFilterValue('category', value), [changeFilterValue]);
 
-  const myRatingFilterChanged = useCallback(
-    (value) => changeFilterValue('my_rating', value),
-    [changeFilterValue],
-  );
+  const myRatingFilterChanged = useCallback((value) => changeFilterValue('my_rating', value), [changeFilterValue]);
 
-  const titlePrefixChanged = useCallback(
-    (value) => changeFilterValue('title_prefix', value),
-    [changeFilterValue],
-  );
-
-  useEffect(() => {
-    if (!loading && !error && data) {
-      setCachedConventionName(data.convention?.name);
-      setCachedEventCategories(data.convention?.event_categories ?? []);
-    }
-  }, [data, loading, error]);
+  const titlePrefixChanged = useCallback((value) => changeFilterValue('title_prefix', value), [changeFilterValue]);
 
   usePageTitle(t('navigation.events.eventCatalog', 'Event Catalog'));
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
-  }
-
-  if (cachedEventCategories == null) {
-    // we haven't had the first load yet, don't render the dropdowns because they will get positioned
-    // wrong
-
-    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
   }
 
   const eventsPaginated = (loading || !data ? undefined : data.convention?.events_paginated) ?? {
@@ -174,22 +150,17 @@ function EventList(): JSX.Element {
 
   return (
     <>
-      <h1>
-        Events
-        {cachedConventionName && ` at ${cachedConventionName}`}
-      </h1>
+      <h1>Events at {convention.name}</h1>
 
       <div className="mb-2">
         <div className="d-flex flex-column flex-sm-row mt-4">
           <div className="d-flex flex-row">
             <div>
-              {cachedEventCategories && (
-                <EventListCategoryDropdown
-                  eventCategories={cachedEventCategories}
-                  value={(effectiveFilters.find(({ id }) => id === 'category') || {}).value}
-                  onChange={categoryChanged}
-                />
-              )}
+              <EventListCategoryDropdown
+                eventCategories={convention.event_categories}
+                value={effectiveFilters.find(({ id }) => id === 'category')?.value}
+                onChange={categoryChanged}
+              />
             </div>
 
             <div>
@@ -201,6 +172,20 @@ function EventList(): JSX.Element {
                 }}
               />
             </div>
+
+            {filterableFormItems.map((item) => (
+              <div key={item.id}>
+                <EventListFilterableFormItemDropdown
+                  convention={convention}
+                  formItem={item}
+                  value={effectiveFilters.find(({ id }) => id === 'form_items')?.value[item.identifier ?? '']}
+                  onChange={(newValue) => {
+                    const prevValue = effectiveFilters.find(({ id }) => id === 'form_items');
+                    changeFilterValue('form_items', { ...prevValue?.value, [item.identifier ?? '']: newValue });
+                  }}
+                />
+              </div>
+            ))}
           </div>
 
           <div className="ms-2 flex-grow-1">
@@ -235,8 +220,7 @@ function EventList(): JSX.Element {
           />
           {fetchMoreInProgress && (
             <div>
-              <LoadingIndicator iconSet="bootstrap-icons" />{' '}
-              <em className="text-muted">Loading more events...</em>
+              <LoadingIndicator iconSet="bootstrap-icons" /> <em className="text-muted">Loading more events...</em>
             </div>
           )}
           <ErrorDisplay graphQLError={fetchMoreError as ApolloError} />
@@ -246,4 +230,9 @@ function EventList(): JSX.Element {
   );
 }
 
-export default EventList;
+const EventListWrapper = LoadQueryWrapper(useCommonConventionDataQuery, ({ data }) => {
+  const filterableFormItems = useFilterableFormItems(data.convention);
+  return <EventList convention={data.convention} filterableFormItems={filterableFormItems} />;
+});
+
+export default EventListWrapper;

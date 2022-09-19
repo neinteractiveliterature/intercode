@@ -2,7 +2,7 @@
 import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
-import { CommonFormFieldsFragmentDoc, CommonFormSectionFieldsFragmentDoc, CommonFormItemFieldsFragmentDoc } from '../Models/commonFormFragments.generated';
+import { CommonFormFieldsFragmentDoc } from '../Models/commonFormFragments.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type EventProposalFieldsFragment = { __typename: 'EventProposal', id: string, title?: string | null, status: string, form_response_attrs_json?: string | null, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, images: Array<{ __typename: 'ActiveStorageAttachment', id: string, filename: string, url: string, content_type: string, byte_size: number }>, event_category: { __typename: 'EventCategory', id: string, name: string, event_proposal_form?: { __typename: 'Form', id: string, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: string, title?: string | null, position: number, form_items: Array<{ __typename: 'FormItem', id: string, admin_description?: string | null, position: number, identifier?: string | null, item_type: string, rendered_properties: string, default_value?: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in?: Array<Types.FormItemExposeIn> | null }> }> } | null }, event?: { __typename: 'Event', id: string } | null };

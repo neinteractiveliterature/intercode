@@ -70,23 +70,10 @@ query ScheduleGridConventionDataQuery {
   }
 }
 
-query ScheduleGridEventsQuery($start: Date, $finish: Date) {
+query ScheduleGridEventsQuery($start: Date, $finish: Date, $filters: EventFiltersInput) {
   convention: conventionByRequestHost {
     id
-    events(start: $start, finish: $finish) {
-      id
-      ...ScheduleGridEventFragment
-    }
-  }
-}
-
-query ScheduleGridCombinedQuery($start: Date, $finish: Date) {
-  convention: conventionByRequestHost {
-    id
-    pre_schedule_content_html
-    ...CommonConventionData
-
-    events(start: $start, finish: $finish) {
+    events(start: $start, finish: $finish, filters: $filters) {
       id
       ...ScheduleGridEventFragment
     }

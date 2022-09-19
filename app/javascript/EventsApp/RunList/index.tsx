@@ -15,7 +15,7 @@ import usePageTitle from '../../usePageTitle';
 import { useConventionDayUrlPortion } from '../ScheduleGrid/ConventionDayTabContainer';
 import { PIXELS_PER_LANE } from '../ScheduleGrid/LayoutConstants';
 import { usePersonalScheduleFilters } from '../ScheduleGrid/PersonalScheduleFiltersBar';
-import { useScheduleGridCombinedQuery } from '../ScheduleGrid/queries.generated';
+import { useScheduleGridEventsQuery } from '../ScheduleGrid/queries.generated';
 import { findConflictingRuns } from '../ScheduleGrid/Schedule';
 import SignupCountData from '../SignupCountData';
 import RunListEventRun from './RunListEventRun';
@@ -31,7 +31,7 @@ function isElementInViewport(el: HTMLElement) {
   );
 }
 
-export default LoadQueryWrapper(useScheduleGridCombinedQuery, function RunList({ data }) {
+export default LoadQueryWrapper(useScheduleGridEventsQuery, function RunList({ data }) {
   const { timezoneName, myProfile } = useContext(AppRootContext);
   const format = useAppDateTimeFormat();
   const { ratingFilter, hideConflicts } = usePersonalScheduleFilters({

@@ -10,15 +10,14 @@ import useCachedLoadableValue from '../../useCachedLoadableValue';
 import ScheduleGridSkeleton from './ScheduleGridSkeleton';
 import AppRootContext from '../../AppRootContext';
 import { ScheduleGridConfig } from './ScheduleGridConfig';
-import { TimezoneMode } from '../../graphqlTypes.generated';
+import { EventFiltersInput, TimezoneMode } from '../../graphqlTypes.generated';
 import {
+  ScheduleGridConventionDataQueryData,
   ScheduleGridEventFragment,
   ScheduleGridEventsQueryDocument,
-  useScheduleGridConventionDataQuery,
   useScheduleGridEventsQuery,
 } from './queries.generated';
 import { FiniteTimespan } from '../../Timespan';
-import FourOhFourPage from '../../FourOhFourPage';
 
 const IS_MOBILE = ['iOS', 'Android OS'].includes(detect()?.os ?? '');
 
@@ -195,11 +194,12 @@ function LoadingOverlay({ loading }: LoadingOverlayProps) {
   );
 }
 
-function getEventsQueryVariables(timespan: FiniteTimespan, showExtendedCounts?: boolean) {
+function getEventsQueryVariables(timespan: FiniteTimespan, showExtendedCounts?: boolean, filters?: EventFiltersInput) {
   return {
     start: timespan.start.toISO(),
     finish: timespan.finish.toISO(),
     extendedCounts: showExtendedCounts || false,
+    filters,
   };
 }
 
@@ -209,6 +209,7 @@ type ScheduleGridProviderTabContentProps = {
   children: (timespan: FiniteTimespan) => ReactNode;
   timespan: FiniteTimespan;
   afterLoaded: () => void;
+  filters?: EventFiltersInput;
 };
 
 function ScheduleGridProviderTabContent({
@@ -217,11 +218,12 @@ function ScheduleGridProviderTabContent({
   children,
   timespan,
   afterLoaded,
+  filters,
 }: ScheduleGridProviderTabContentProps) {
   const { myRatingFilter, hideConflicts } = useContext(ScheduleGridFiltersContext);
   const { data, error, loading } = useScheduleGridEventsQuery({
     variables: {
-      ...getEventsQueryVariables(timespan, config.showExtendedCounts),
+      ...getEventsQueryVariables(timespan, config.showExtendedCounts, filters),
     },
   });
   const cachedData = useCachedLoadableValue(loading, error, () => data, [data]);
@@ -255,9 +257,11 @@ function ScheduleGridProviderTabContent({
 
 export type ScheduleGridProviderProps = {
   config: ScheduleGridConfig;
+  convention: ScheduleGridConventionDataQueryData['convention'];
   children: ScheduleGridProviderTabContentProps['children'];
   myRatingFilter?: number[];
   hideConflicts: boolean;
+  filters?: EventFiltersInput;
 };
 
 export function ScheduleGridProvider({
@@ -265,11 +269,12 @@ export function ScheduleGridProvider({
   children,
   myRatingFilter,
   hideConflicts,
+  convention,
+  filters,
 }: ScheduleGridProviderProps): JSX.Element {
   const { timezoneName } = useContext(AppRootContext);
   const filtersContextValue = { myRatingFilter, hideConflicts };
   const prefetchAll = IS_MOBILE;
-  const { data, loading, error } = useScheduleGridConventionDataQuery();
   const client = useApolloClient();
 
   const prefetchTimespan = useCallback(
@@ -277,25 +282,17 @@ export function ScheduleGridProvider({
       client.query({
         query: ScheduleGridEventsQueryDocument,
         variables: {
-          ...getEventsQueryVariables(timespan, config.showExtendedCounts),
+          ...getEventsQueryVariables(timespan, config.showExtendedCounts, filters),
         },
       }),
-    [client, config.showExtendedCounts],
+    [client, config.showExtendedCounts, filters],
   );
 
-  const conventionOrNull = loading || error || !data ? null : data.convention;
-
-  const conventionTimespan = useMemo(
-    () => (conventionOrNull ? timespanFromConvention(conventionOrNull) : null),
-    [conventionOrNull],
-  );
+  const conventionTimespan = useMemo(() => timespanFromConvention(convention), [convention]);
 
   const conventionDayTimespans = useMemo(
-    () =>
-      conventionOrNull && conventionTimespan?.isFinite()
-        ? getConventionDayTimespans(conventionTimespan, timezoneName)
-        : [],
-    [conventionOrNull, conventionTimespan, timezoneName],
+    () => (conventionTimespan.isFinite() ? getConventionDayTimespans(conventionTimespan, timezoneName) : []),
+    [conventionTimespan, timezoneName],
   );
 
   const afterTabLoaded = useCallback(() => {
@@ -303,20 +300,6 @@ export function ScheduleGridProvider({
       conventionDayTimespans.forEach(prefetchTimespan);
     }
   }, [conventionDayTimespans, prefetchAll, prefetchTimespan]);
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
-  if (loading) {
-    return <ScheduleGridSkeleton />;
-  }
-
-  if (!conventionOrNull) {
-    return <FourOhFourPage />;
-  }
-
-  const convention = conventionOrNull;
 
   return (
     <ScheduleGridFiltersContext.Provider value={filtersContextValue}>
@@ -336,6 +319,7 @@ export function ScheduleGridProvider({
               convention={convention}
               timespan={timespan}
               afterLoaded={afterTabLoaded}
+              filters={filters}
             >
               {children}
             </ScheduleGridProviderTabContent>

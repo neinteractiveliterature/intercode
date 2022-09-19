@@ -686,6 +686,11 @@ type Convention implements CmsParent {
   """
   events(
     """
+    If present, filters the returned events.
+    """
+    filters: EventFiltersInput
+
+    """
     If present, only returns events that occur earlier than this time
     (non-inclusive.) These events may end after this time, but start before it.
     """
@@ -2903,6 +2908,7 @@ input EventCategoryInput {
 
 input EventFiltersInput {
   category: [Int]
+  form_items: JSON
   my_rating: [Int!]
   title: String
   title_prefix: String
@@ -3145,6 +3151,11 @@ enum FormType {
   """
   user_con_profile
 }
+
+"""
+Represents untyped JSON
+"""
+scalar JSON
 
 """
 An arbitrary object, serialized as JSON

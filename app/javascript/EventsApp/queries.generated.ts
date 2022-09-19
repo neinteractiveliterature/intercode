@@ -2,16 +2,17 @@
 import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
+import { CommonFormItemFieldsFragmentDoc, CommonFormFieldsFragmentDoc, CommonFormSectionFieldsFragmentDoc } from '../Models/commonFormFragments.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
-export type CommonConventionDataFragment = { __typename: 'Convention', id: string, name: string, starts_at?: string | null, ends_at?: string | null, site_mode: Types.SiteMode, timezone_name?: string | null, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, scheduling_ui: Types.SchedulingUi, default_color?: string | null, full_color?: string | null, signed_up_color?: string | null }> };
+export type CommonConventionDataFragment = { __typename: 'Convention', id: string, name: string, starts_at?: string | null, ends_at?: string | null, site_mode: Types.SiteMode, timezone_name?: string | null, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, scheduling_ui: Types.SchedulingUi, default_color?: string | null, full_color?: string | null, signed_up_color?: string | null, event_form: { __typename: 'Form', id: string, form_sections: Array<{ __typename: 'FormSection', id: string, form_items: Array<{ __typename: 'FormItem', id: string, public_description?: string | null, default_value?: string | null, position: number, identifier?: string | null, item_type: string, rendered_properties: string, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in?: Array<Types.FormItemExposeIn> | null }> }> } }> };
 
 export type RunBasicSignupDataFragment = { __typename: 'Run', id: string, signup_count_by_state_and_bucket_key_and_counted: string, my_signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: string, state: Types.SignupRequestState }> };
 
 export type CommonConventionDataQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type CommonConventionDataQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, starts_at?: string | null, ends_at?: string | null, site_mode: Types.SiteMode, timezone_name?: string | null, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, scheduling_ui: Types.SchedulingUi, default_color?: string | null, full_color?: string | null, signed_up_color?: string | null }> } };
+export type CommonConventionDataQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, starts_at?: string | null, ends_at?: string | null, site_mode: Types.SiteMode, timezone_name?: string | null, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, scheduling_ui: Types.SchedulingUi, default_color?: string | null, full_color?: string | null, signed_up_color?: string | null, event_form: { __typename: 'Form', id: string, form_sections: Array<{ __typename: 'FormSection', id: string, form_items: Array<{ __typename: 'FormItem', id: string, public_description?: string | null, default_value?: string | null, position: number, identifier?: string | null, item_type: string, rendered_properties: string, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in?: Array<Types.FormItemExposeIn> | null }> }> } }> } };
 
 export const CommonConventionDataFragmentDoc = gql`
     fragment CommonConventionData on Convention {
@@ -31,9 +32,21 @@ export const CommonConventionDataFragmentDoc = gql`
     default_color
     full_color
     signed_up_color
+    event_form {
+      id
+      form_sections {
+        id
+        form_items {
+          id
+          public_description
+          default_value
+          ...CommonFormItemFields
+        }
+      }
+    }
   }
 }
-    `;
+    ${CommonFormItemFieldsFragmentDoc}`;
 export const RunBasicSignupDataFragmentDoc = gql`
     fragment RunBasicSignupData on Run {
   id

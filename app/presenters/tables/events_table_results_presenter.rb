@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class Tables::EventsTableResultsPresenter < Tables::TableResultsPresenter
   def self.for_convention(convention:, pundit_user:, filters: {}, sort: nil, visible_field_ids: nil)
-    scope = Pundit.policy_scope(pundit_user, convention.events.where(status: 'active').includes(:convention))
+    scope = Pundit.policy_scope(pundit_user, convention.events.where(status: "active").includes(:convention))
     new(
       base_scope: scope,
       convention: convention,
@@ -12,13 +12,13 @@ class Tables::EventsTableResultsPresenter < Tables::TableResultsPresenter
     )
   end
 
-  field :category, 'Category' do
+  field :category, "Category" do
     column_filter :event_category_id
   end
 
-  field :title, 'Title' do
+  field :title, "Title" do
     def apply_filter(scope, value)
-      Names.string_search(scope, value, ['title'])
+      Names.string_search(scope, value, ["title"])
     end
 
     # Weird hax: we're handling the actual sorting in expand_scope_for_sort
@@ -31,13 +31,13 @@ class Tables::EventsTableResultsPresenter < Tables::TableResultsPresenter
     end
   end
 
-  field :title_prefix, 'Title prefix' do
+  field :title_prefix, "Title prefix" do
     def apply_filter(scope, value)
       value.present? ? scope.title_prefix(value) : scope
     end
   end
 
-  field :my_rating, 'My rating' do
+  field :my_rating, "My rating" do
     delegate :user_con_profile, :pundit_user, to: :presenter
 
     def apply_filter(scope, value)
@@ -59,7 +59,7 @@ class Tables::EventsTableResultsPresenter < Tables::TableResultsPresenter
     end
   end
 
-  field :first_scheduled_run_start, 'First scheduled run' do
+  field :first_scheduled_run_start, "First scheduled run" do
     delegate :pundit_user, :convention, to: :presenter
 
     def expand_scope_for_sort(scope, _direction)
@@ -79,7 +79,7 @@ class Tables::EventsTableResultsPresenter < Tables::TableResultsPresenter
     end
   end
 
-  field :owner, 'Owner' do
+  field :owner, "Owner" do
     def expand_scope_for_sort(scope, _direction)
       scope.joins(:owner)
     end
@@ -89,7 +89,21 @@ class Tables::EventsTableResultsPresenter < Tables::TableResultsPresenter
     end
   end
 
-  field :created_at, 'Created at'
+  field :created_at, "Created at"
+
+  field :form_items, "Convention-specific form items" do
+    def apply_filter(scope, value)
+      value
+        .each
+        .inject(scope) do |acc_scope, (identifier, values)|
+          if values.present?
+            acc_scope.where(%("events"."additional_info"->>? IN (?)), identifier, Array(values))
+          else
+            acc_scope
+          end
+        end
+    end
+  end
 
   attr_reader :pundit_user, :convention
 
