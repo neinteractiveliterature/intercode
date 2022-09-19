@@ -138,8 +138,6 @@ const config = {
     extensions: ['.js', '.jsx', '.ts', '.tsx', '.png', '.svg', '.gif', '.jpeg', '.jpg'],
     alias: {
       'lodash.isequal': 'lodash-es/isEqual',
-      'react/jsx-dev-runtime': 'react/jsx-dev-runtime.js',
-      'react/jsx-runtime': 'react/jsx-runtime.js',
     },
     fallback: {
       stream: require.resolve('stream-browserify'),
