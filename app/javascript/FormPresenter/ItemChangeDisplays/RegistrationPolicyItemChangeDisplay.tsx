@@ -10,7 +10,7 @@ export type RegistrationPolicyItemChangeDisplayProps = {
   change: ParsedFormResponseChange<RegistrationPolicyFormItem>;
 };
 
-function isEmptyObject<T>(value: T | Record<string, never>): value is T {
+function isEmptyObject<T extends Record<string, unknown>>(value: T | Record<string, never>): value is T {
   if (typeof value === 'object' && Object.keys(value).length === 0) {
     return false;
   }

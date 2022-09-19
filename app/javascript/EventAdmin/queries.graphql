@@ -123,6 +123,17 @@ fragment EventFields on Event {
   event_category {
     id
     name
+
+    event_form {
+      id
+      form_sections {
+        id
+        form_items {
+          id
+          ...CommonFormItemFields
+        }
+      }
+    }
   }
 
   registration_policy {

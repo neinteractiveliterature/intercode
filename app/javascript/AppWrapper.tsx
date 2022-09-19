@@ -58,7 +58,9 @@ export type AppWrapperProps = {
   stripePublishableKey: string;
 };
 
-function AppWrapper<P>(WrappedComponent: React.ComponentType<P>): React.ComponentType<P> {
+function AppWrapper<P extends JSX.IntrinsicAttributes>(
+  WrappedComponent: React.ComponentType<P>,
+): React.ComponentType<P> {
   function Wrapper(props: P & AppWrapperProps) {
     const { authenticityTokens, mapboxAccessToken, recaptchaSiteKey, stripePublishableKey, ...otherProps } = props;
     // TODO bring this back when we re-add prompting

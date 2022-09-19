@@ -343,6 +343,11 @@ export default class Schedule {
         name: 'Fake events',
         default_color: 'rgba(0, 0, 0, 0.1)',
         signed_up_color: 'transparent',
+        event_form: {
+          __typename: 'Form',
+          form_sections: [],
+          id: '',
+        },
       },
       registration_policy: {
         __typename: 'RegistrationPolicy',

@@ -2,12 +2,12 @@ import { useState, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import { ChoiceSet } from '@neinteractiveliterature/litform';
 
-import { EventListEventsQueryData } from './queries.generated';
 import { DropdownMenu } from '../../UIComponents/DropdownMenu';
 import { locationsEqualWithSearchParamsTransform } from '../../URLUtils';
 import { useTranslation } from 'react-i18next';
+import { CommonConventionDataQueryData } from '../queries.generated';
 
-type ConventionType = NonNullable<EventListEventsQueryData['convention']>;
+type ConventionType = NonNullable<CommonConventionDataQueryData['convention']>;
 type LocationType = ReturnType<typeof useLocation>;
 
 function shouldAutoCloseOnNavigate(prevLocation: LocationType, location: LocationType) {

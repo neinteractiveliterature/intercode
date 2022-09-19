@@ -8,7 +8,9 @@ function getDisplayName(WrappedComponent: React.ComponentType) {
   return WrappedComponent.displayName || WrappedComponent.name || 'Component';
 }
 
-function NonCMSPageWrapper<TProps>(WrappedComponent: React.ComponentType<TProps>): React.FunctionComponent {
+function NonCMSPageWrapper<TProps extends JSX.IntrinsicAttributes>(
+  WrappedComponent: React.ComponentType<TProps>,
+): React.FunctionComponent<TProps> {
   const wrapper = (props: TProps) => (
     <div className="non-cms-page">
       <WrappedComponent {...props} />

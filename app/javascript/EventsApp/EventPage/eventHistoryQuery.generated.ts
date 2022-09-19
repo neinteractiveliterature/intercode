@@ -2,7 +2,7 @@
 import * as Types from '../../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
-import { CommonFormFieldsFragmentDoc } from '../../Models/commonFormFragments.generated';
+import { CommonFormFieldsFragmentDoc, CommonFormItemFieldsFragmentDoc } from '../../Models/commonFormFragments.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type EventHistoryQueryVariables = Types.Exact<{
