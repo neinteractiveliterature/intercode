@@ -6547,12 +6547,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"autoprefixer@npm:10.4.11, autoprefixer@npm:^10.3.7, autoprefixer@npm:^10.4.7":
-  version: 10.4.11
-  resolution: "autoprefixer@npm:10.4.11"
+"autoprefixer@npm:10.4.12, autoprefixer@npm:^10.3.7, autoprefixer@npm:^10.4.7":
+  version: 10.4.12
+  resolution: "autoprefixer@npm:10.4.12"
   dependencies:
-    browserslist: ^4.21.3
-    caniuse-lite: ^1.0.30001399
+    browserslist: ^4.21.4
+    caniuse-lite: ^1.0.30001407
     fraction.js: ^4.2.0
     normalize-range: ^0.1.2
     picocolors: ^1.0.0
@@ -6561,7 +6561,7 @@ __metadata:
     postcss: ^8.1.0
   bin:
     autoprefixer: bin/autoprefixer
-  checksum: fb8b2abbb0ce5e3c6bc957ffb714b84aa2e6a9f24cf9c139bcfec33ba5e3334f61a132c606a621e04097d026c1f653fe1bda2d1c3dc47b87c9f6b00d90732daa
+  checksum: 6ae79cbacd31fb3d464ec64eb6ad2600f4f689c3080bbe62c5536d539b41b472083a2e941ef99d14aa11142370d6c16e8b05a62f077374933ed991aceb5943d2
   languageName: node
   linkType: hard
 
@@ -7405,10 +7405,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"caniuse-lite@npm:1.0.30001406, caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30001399, caniuse-lite@npm:^1.0.30001400":
+"caniuse-lite@npm:1.0.30001406":
   version: 1.0.30001406
   resolution: "caniuse-lite@npm:1.0.30001406"
   checksum: 1ae9701f0c58462f93add1236ed88f51ce3d7939f57afcde720763d1b18f78aa9afb0bfda620d47a32f5e14661e506037835e441ca4437cb821f4bba7bd7bcf8
+  languageName: node
+  linkType: hard
+
+"caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30001400, caniuse-lite@npm:^1.0.30001407":
+  version: 1.0.30001409
+  resolution: "caniuse-lite@npm:1.0.30001409"
+  checksum: d8581693491295ad8716db7ad6dccf74de970fc3ef4723b38bbc03b972862d363a9710c2a7582abcb741e1619164ddceca1df4dcf3d53d550e74829a9cb5ca82
   languageName: node
   linkType: hard
 
@@ -17562,7 +17569,7 @@ resolve@^2.0.0-next.3:
     apollo-upload-client: 17.0.0
     array-to-sentence: 2.0.0
     assert-never: 1.2.1
-    autoprefixer: 10.4.11
+    autoprefixer: 10.4.12
     babel-core: 7.0.0-bridge.0
     babel-eslint: 10.1.0
     babel-jest: 29.0.3
