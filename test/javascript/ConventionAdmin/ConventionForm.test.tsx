@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon';
-import { act, waitFor, render, fireEvent } from '../testUtils';
+import { waitFor, render, fireEvent } from '../testUtils';
 import ConventionForm, {
   ConventionFormConvention,
   ConventionFormProps,
@@ -131,10 +131,8 @@ describe('ConventionForm', () => {
     const saveConvention = jest.fn();
     const { getByText } = await renderConventionForm({ saveConvention });
 
-    await act(async () => {
-      fireEvent.click(getByText('Save settings'), { selector: 'button' });
-      await waitFor(() => expect(saveConvention).toHaveBeenCalledTimes(1));
-    });
+    fireEvent.click(getByText('Save settings'), { selector: 'button' });
+    await waitFor(() => expect(saveConvention).toHaveBeenCalledTimes(1));
     expect(saveConvention).toHaveBeenCalledWith(defaultInitialConvention, undefined, undefined);
   });
 });

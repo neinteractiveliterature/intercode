@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 import { MockedResponse } from '@apollo/client/testing';
 
-import { render, fireEvent, act, waitFor } from '../testUtils';
+import { render, fireEvent, waitFor } from '../testUtils';
 import GraphQLAsyncSelect, {
   GraphQLAsyncSelectProps,
 } from '../../../app/javascript/BuiltInFormControls/GraphQLAsyncSelect';
@@ -72,9 +72,7 @@ describe('GraphQLAsyncSelect', () => {
   test('loads options', async () => {
     const { getByRole, queryAllByText } = await renderUserConProfileSelect();
     const selectInput = getByRole('combobox');
-    await act(async () => {
-      fireEvent.change(selectInput, { target: { value: 'gab' } });
-      await waitFor(() => expect(queryAllByText('Gabriel Knight')).toHaveLength(1));
-    });
+    fireEvent.change(selectInput, { target: { value: 'gab' } });
+    await waitFor(() => expect(queryAllByText('Gabriel Knight')).toHaveLength(1));
   });
 });
