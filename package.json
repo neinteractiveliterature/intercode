@@ -67,7 +67,7 @@
     "@rails/activestorage": "7.0.4",
     "@stripe/react-stripe-js": "1.11.0",
     "@stripe/stripe-js": "1.37.0",
-    "@testing-library/react": "12.1.5",
+    "@testing-library/react": "13.4.0",
     "@types/apollo-upload-client": "17.0.1",
     "@types/bytes": "3.1.1",
     "@types/classnames": "2.3.1",
