@@ -1,8 +1,7 @@
-import { useContext, useMemo } from 'react';
+import { useContext, useId, useMemo } from 'react';
 import {
   BootstrapFormInput,
   MultipleChoiceInput,
-  useUniqueId,
   BootstrapFormCheckbox,
   useMatchWidthStyle,
 } from '@neinteractiveliterature/litform';
@@ -23,23 +22,19 @@ type FormItemType = MultipleChoiceEditorProps['formItem'];
 type ChoiceType = FormItemType['properties']['choices'][0];
 function MultipleChoiceEditor({ formItem, setFormItem }: MultipleChoiceEditorProps): JSX.Element {
   const { disabled } = useContext(FormItemEditorContext);
-  const captionInputId = useUniqueId('multiple-choice-caption-');
+  const captionInputId = useId();
   const generateNewChoice = () => ({ caption: '', value: '' });
   const [matchWidthRef, matchWidthStyle] = useMatchWidthStyle<HTMLTableElement>();
 
   const sensors = useSortableDndSensors();
-  const [addChoice, choiceChanged, deleteChoice, draggingChoice, sortableHandlers] =
-    useArrayProperty<ChoiceType, FormItemType, 'choices'>(
-      formItem.properties.choices,
-      'choices',
-      setFormItem,
-      generateNewChoice,
-    );
+  const [addChoice, choiceChanged, deleteChoice, draggingChoice, sortableHandlers] = useArrayProperty<
+    ChoiceType,
+    FormItemType,
+    'choices'
+  >(formItem.properties.choices, 'choices', setFormItem, generateNewChoice);
 
   const nonUniqueDraggingChoice = useMemo(
-    () =>
-      draggingChoice &&
-      formItem.properties.choices.filter((c) => c.value === draggingChoice.value).length > 1,
+    () => draggingChoice && formItem.properties.choices.filter((c) => c.value === draggingChoice.value).length > 1,
     [draggingChoice, formItem.properties.choices],
   );
 
@@ -90,9 +85,7 @@ function MultipleChoiceEditor({ formItem, setFormItem }: MultipleChoiceEditorPro
                   choice={choice}
                   deleteChoice={deleteChoice}
                   choiceChanged={choiceChanged}
-                  nonUnique={
-                    formItem.properties.choices.filter((c) => c.value === choice.value).length > 1
-                  }
+                  nonUnique={formItem.properties.choices.filter((c) => c.value === choice.value).length > 1}
                 />
               ))}
             </SortableContext>
@@ -124,11 +117,7 @@ function MultipleChoiceEditor({ formItem, setFormItem }: MultipleChoiceEditorPro
             <tr>
               <td />
               <td colSpan={3}>
-                <button
-                  type="button"
-                  className="btn btn-outline-primary btn-sm"
-                  onClick={addChoice}
-                >
+                <button type="button" className="btn btn-outline-primary btn-sm" onClick={addChoice}>
                   <i className="bi-plus" /> Add option
                 </button>
               </td>

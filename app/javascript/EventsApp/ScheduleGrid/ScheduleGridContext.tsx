@@ -278,7 +278,7 @@ export function ScheduleGridProvider({
   const client = useApolloClient();
 
   const prefetchTimespan = useCallback(
-    (timespan) =>
+    (timespan: FiniteTimespan) =>
       client.query({
         query: ScheduleGridEventsQueryDocument,
         variables: {

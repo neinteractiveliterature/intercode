@@ -2,10 +2,7 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Filters, SortingRule } from 'react-table';
 
-import {
-  reactTableFiltersToTableResultsFilters,
-  reactTableSortToTableResultsSort,
-} from './TableUtils';
+import { reactTableFiltersToTableResultsFilters, reactTableSortToTableResultsSort } from './TableUtils';
 
 export type URLParamSerializableScalar = string | number | boolean;
 export type URLParamSerializable =
@@ -15,10 +12,7 @@ export type URLParamSerializable =
   | URLParamSerializable[]
   | { [key: string]: URLParamSerializable };
 
-function dataToKeyPathValuePairs(
-  data: URLParamSerializable,
-  prependKeys: string[] = [],
-): [string[], string][] {
+function dataToKeyPathValuePairs(data: URLParamSerializable, prependKeys: string[] = []): [string[], string][] {
   if (data == null) {
     return [];
   }
@@ -108,7 +102,9 @@ function ReactTableExportButton<RowType extends Record<string, unknown>>({
 
   return (
     <a className="btn btn-outline-primary" href={href}>
-      <i className="bi-file-earmark-spreadsheet" /> {t('tables.exportCSV.buttonText', 'Export CSV')}
+      <>
+        <i className="bi-file-earmark-spreadsheet" /> {t('tables.exportCSV.buttonText', 'Export CSV')}
+      </>
     </a>
   );
 }

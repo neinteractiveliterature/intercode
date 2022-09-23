@@ -305,7 +305,7 @@ function buildProcessingInstructions(componentMap: ComponentMap): ProcessingInst
     },
     {
       shouldProcessNode: (node) => nodeIsElement(node) && node.attributes.getNamedItem('data-react-class') != null,
-      processNode: (node: Element, children: Node[], index: number) =>
+      processNode: (node: Element, children: ReactNode[], index: number) =>
         processReactComponentNode(node, children, index, componentMap),
     },
     {

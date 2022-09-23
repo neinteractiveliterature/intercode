@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import * as React from 'react';
 import Select from 'react-select';
 import {
@@ -6,7 +6,6 @@ import {
   BootstrapFormCheckbox,
   useConfirm,
   MultipleChoiceInput,
-  useUniqueId,
   usePropertySetters,
 } from '@neinteractiveliterature/litform';
 
@@ -34,7 +33,7 @@ function UserActivityAlertForm({
   convention,
   disabled,
 }: UserActivityAlertFormProps): JSX.Element {
-  const userSelectId = useUniqueId('user-');
+  const userSelectId = useId();
   const confirm = useConfirm();
   const [addDestinationType, setAddDestinationType] = useState<string | null>(null);
   const addStaffPositionDestination = (staffPosition: typeof convention['staff_positions'][0]) => {

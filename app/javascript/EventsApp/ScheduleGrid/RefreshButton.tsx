@@ -12,14 +12,11 @@ function RefreshButton({ refreshData }: RefreshButtonProps): JSX.Element {
   const [refreshAsync, , refreshInProgress] = useAsyncFunction(refreshData);
 
   return (
-    <button
-      className="btn btn-link"
-      type="button"
-      disabled={refreshInProgress}
-      onClick={refreshAsync}
-    >
+    <button className="btn btn-link" type="button" disabled={refreshInProgress} onClick={refreshAsync}>
       <i className={classNames('bi-arrow-clockwise', { spin: refreshInProgress })} />
-      <span className="d-none d-md-inline"> {t('buttons.refresh', 'Refresh')}</span>
+      <span className="d-none d-md-inline">
+        <> {t('buttons.refresh', 'Refresh')}</>
+      </span>
     </button>
   );
 }

@@ -1,5 +1,5 @@
 export type BooleanCellProps = {
-  value?: boolean;
+  value?: boolean | null;
 };
 function BooleanCell({ value }: BooleanCellProps): JSX.Element {
   return <>{value ? 'yes' : 'no'}</>;

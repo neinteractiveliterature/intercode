@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { SyntheticEvent, useCallback, useState } from 'react';
 import { DateTime } from 'luxon';
 import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -49,7 +49,7 @@ function WhosFreeForm({ onSubmit }: WhosFreeFormProps): JSX.Element {
     );
   }, [day, start, finish]);
 
-  const dayChanged = useCallback((newDay) => {
+  const dayChanged = useCallback((newDay: DateTime | undefined) => {
     setDay(newDay);
     setStart({
       hour: undefined,
@@ -62,7 +62,7 @@ function WhosFreeForm({ onSubmit }: WhosFreeFormProps): JSX.Element {
   }, []);
 
   const search = useCallback(
-    (event) => {
+    (event: SyntheticEvent) => {
       event.preventDefault();
       if (day && start && finish) {
         onSubmit({ start: makeTimeOfDay(day, start), finish: makeTimeOfDay(day, finish) });

@@ -1,10 +1,9 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useId } from 'react';
 import * as React from 'react';
 import { ApolloError } from '@apollo/client';
 import {
   ErrorDisplay,
   MultipleChoiceInput,
-  useUniqueId,
   BooleanInput,
   BootstrapFormSelect,
   usePropertySetters,
@@ -126,7 +125,7 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }: EditAdminP
     },
   ];
 
-  const imageInputId = useUniqueId('image-input-');
+  const imageInputId = useId();
 
   return (
     <div className="mb-4 card bg-light border-dark glow-dark">

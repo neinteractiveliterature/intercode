@@ -1,11 +1,11 @@
-import { useUniqueId } from '@neinteractiveliterature/litform';
+import { useId } from 'react';
 
 export type PermissionCheckBoxProps = {
   hasPermission: boolean;
 };
 
 function PermissionCheckBox({ hasPermission }: PermissionCheckBoxProps): JSX.Element {
-  const checkboxId = useUniqueId('permitted-');
+  const checkboxId = useId();
 
   return (
     <div className="form-check form-switch d-inline-block">

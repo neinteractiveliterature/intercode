@@ -1,5 +1,5 @@
-import { Fragment, useCallback, useContext } from 'react';
-import { BooleanInput, useMatchWidthStyle, useUniqueId } from '@neinteractiveliterature/litform';
+import { Fragment, useCallback, useContext, useId } from 'react';
+import { BooleanInput, useMatchWidthStyle } from '@neinteractiveliterature/litform';
 import { DndContext, DragOverlay } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 
@@ -14,23 +14,18 @@ import { useSortableDndSensors } from '../../SortableUtils';
 import TimeblockPreferenceEditorTimeblockRowDragOverlay from './TimeblockPreferenceEditorTimeblockRowDragOverlay';
 
 export type TimeblockPreferenceEditorProps = FormItemEditorProps<TimeblockPreferenceFormItem>;
-function TimeblockPreferenceEditor({
-  formItem,
-  setFormItem,
-}: TimeblockPreferenceEditorProps): JSX.Element {
+function TimeblockPreferenceEditor({ formItem, setFormItem }: TimeblockPreferenceEditorProps): JSX.Element {
   const { disabled } = useContext(FormItemEditorContext);
-  const captionInputId = useUniqueId('timeblock-preference-');
+  const captionInputId = useId();
   const generateNewTimeblock = useCallback(() => ({ label: '', start: {}, finish: {} }), []);
   const [matchWidthRef, matchWidthStyle] = useMatchWidthStyle<HTMLTableElement>();
 
   const sensors = useSortableDndSensors();
-  const [addTimeblock, timeblockChanged, deleteTimeblock, draggingTimeblock, sortableHandlers] =
-    useArrayProperty<typeof formItem['properties']['timeblocks'][0], typeof formItem, 'timeblocks'>(
-      formItem.properties.timeblocks,
-      'timeblocks',
-      setFormItem,
-      generateNewTimeblock,
-    );
+  const [addTimeblock, timeblockChanged, deleteTimeblock, draggingTimeblock, sortableHandlers] = useArrayProperty<
+    typeof formItem['properties']['timeblocks'][0],
+    typeof formItem,
+    'timeblocks'
+  >(formItem.properties.timeblocks, 'timeblocks', setFormItem, generateNewTimeblock);
 
   return (
     <DndContext sensors={sensors} {...sortableHandlers}>

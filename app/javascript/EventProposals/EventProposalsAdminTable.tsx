@@ -55,7 +55,10 @@ function CapacityCell({ value }: { value: NonNullable<EventProposalType['registr
   return <div className="text-nowrap text-end">{formatCapacity(value)}</div>;
 }
 
-function DurationCell({ value }: { value: NonNullable<EventProposalType['length_seconds']> }) {
+function DurationCell({ value }: { value: EventProposalType['length_seconds'] }) {
+  if (value == null) {
+    return <></>;
+  }
   const unitQuantities = breakValueIntoUnitQuantities(value);
   const hours = (unitQuantities.find(({ unit }) => unit.name === 'hour') || {}).quantity || 0;
   const minutes = (unitQuantities.find(({ unit }) => unit.name === 'minute') || {}).quantity || 0;

@@ -7,10 +7,7 @@ import BucketAvailabilityDisplay from './BucketAvailabilityDisplay';
 import { EventPageQueryData } from './queries.generated';
 
 export type RunCapacityGraphProps = {
-  run: Pick<
-    EventPageQueryData['convention']['event']['runs'][0],
-    'signup_count_by_state_and_bucket_key_and_counted'
-  >;
+  run: Pick<EventPageQueryData['convention']['event']['runs'][0], 'signup_count_by_state_and_bucket_key_and_counted'>;
   event: Pick<EventPageQueryData['convention']['event'], 'registration_policy'>;
   signupsAvailable: boolean;
 };
@@ -31,14 +28,16 @@ function RunCapacityGraph({ run, event, signupsAvailable }: RunCapacityGraphProp
         />
       ))}
       <div className="bucket-capacity">
-        {t('events.runCapacity.waitlistCount', 'Waitlist - {{ waitlistCount }}', {
-          waitlistCount: signupCountData.getWaitlistCount(),
-        })}
-        <BucketAvailabilityDisplay
-          className="text-secondary"
-          signupCount={signupCountData.getWaitlistCount()}
-          remainingCapacity={0}
-        />
+        <>
+          {t('events.runCapacity.waitlistCount', 'Waitlist - {{ waitlistCount }}', {
+            waitlistCount: signupCountData.getWaitlistCount(),
+          })}
+          <BucketAvailabilityDisplay
+            className="text-secondary"
+            signupCount={signupCountData.getWaitlistCount()}
+            remainingCapacity={0}
+          />
+        </>
       </div>
     </div>
   );

@@ -7,18 +7,15 @@ import { MultipleChoiceFormItem } from '../FormItemUtils';
 import { WithGeneratedId } from '../../GeneratedIdUtils';
 import { getSortableStyle } from '../../SortableUtils';
 
-type Choice = WithGeneratedId<
-  NonNullable<MultipleChoiceFormItem['properties']>['choices'][0],
-  string
->;
+type Choice = WithGeneratedId<NonNullable<MultipleChoiceFormItem['properties']>['choices'][0], string>;
 
-function useChoicePropertyUpdater(
+function useChoicePropertyUpdater<PropertyName extends keyof Choice>(
   choiceChanged: (generatedId: string, choice: (prevChoice: Choice) => Choice) => void,
   generatedId: string,
-  property: keyof Choice,
+  property: PropertyName,
 ) {
   return useCallback(
-    (value) => choiceChanged(generatedId, (prevChoice) => ({ ...prevChoice, [property]: value })),
+    (value: Choice[PropertyName]) => choiceChanged(generatedId, (prevChoice) => ({ ...prevChoice, [property]: value })),
     [choiceChanged, generatedId, property],
   );
 }
@@ -72,9 +69,7 @@ function MultipleChoiceOptionRow({
           onChange={(event) => valueChanged(event.target.value)}
         />
         {missingValue && <div className="invalid-feedback">Options must have an output value</div>}
-        {nonUnique && (
-          <div className="invalid-feedback">Options should not have the same output value</div>
-        )}
+        {nonUnique && <div className="invalid-feedback">Options should not have the same output value</div>}
       </td>
       <td>
         <button

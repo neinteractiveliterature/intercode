@@ -14,40 +14,39 @@ export type InPlaceEditorInputProps<T> = {
   cancelEditing: React.EventHandler<React.SyntheticEvent<unknown, Event>>;
 };
 
-const DefaultInPlaceEditorInput = React.forwardRef<
-  HTMLInputElement,
-  InPlaceEditorInputProps<string>
->(function DefaultInPlaceEditorInput(
-  { inputProps: { value, onChange, committing, disabled, ...inputProps }, buttons },
-  ref,
-) {
-  return (
-    <>
-      <input
-        type="text"
-        className="form-control form-control-sm me-1"
-        value={value || ''}
-        {...inputProps}
-        ref={ref}
-        onChange={(event) => {
-          onChange(event.target.value);
-        }}
-        disabled={disabled || committing}
-      />
-      {buttons}
-    </>
-  );
-});
+const DefaultInPlaceEditorInput = React.forwardRef<HTMLInputElement, InPlaceEditorInputProps<string>>(
+  function DefaultInPlaceEditorInput(
+    { inputProps: { value, onChange, committing, disabled, ...inputProps }, buttons },
+    ref,
+  ) {
+    return (
+      <>
+        <input
+          type="text"
+          className="form-control form-control-sm me-1"
+          value={value || ''}
+          {...inputProps}
+          ref={ref}
+          onChange={(event) => {
+            onChange(event.target.value);
+          }}
+          disabled={disabled || committing}
+        />
+        {buttons}
+      </>
+    );
+  },
+);
 
 export type InPlaceEditorInputWrapperProps<T> = {
   initialValue: T;
   commit: ((value: T) => Promise<void>) | ((value: T) => void);
   cancel: React.EventHandler<React.SyntheticEvent<unknown, Event>>;
   inputRef: RefObject<unknown>;
-  renderInput: (props: InPlaceEditorInputProps<T>) => JSX.Element;
+  renderInput: (props: InPlaceEditorInputProps<T>) => ReactNode;
 };
 
-function InPlaceEditorInputWrapper<T>(props: InPlaceEditorInputWrapperProps<T>) {
+function InPlaceEditorInputWrapper<T>(props: InPlaceEditorInputWrapperProps<T>): JSX.Element {
   const { initialValue, commit, cancel, inputRef, renderInput } = props;
   const [value, setValue] = useState(initialValue);
   const [committing, setCommitting] = useState(false);
@@ -117,12 +116,10 @@ function InPlaceEditorInputWrapper<T>(props: InPlaceEditorInputWrapperProps<T>) 
     buttons,
   };
 
-  return renderInput(wrappedComponentProps);
+  return <>{renderInput(wrappedComponentProps)}</>;
 }
 
-function DefaultInPlaceEditorInputWrapper(
-  props: Omit<InPlaceEditorInputWrapperProps<string>, 'renderInput'>,
-) {
+function DefaultInPlaceEditorInputWrapper(props: Omit<InPlaceEditorInputWrapperProps<string>, 'renderInput'>) {
   return (
     <InPlaceEditorInputWrapper
       {...props}
@@ -133,21 +130,26 @@ function DefaultInPlaceEditorInputWrapper(
   );
 }
 
-export type InPlaceEditorProps<T> = {
+export type CommonInPlaceEditorProps<T> = {
   value: T;
   onChange: (value: T) => void | Promise<unknown>;
   children?: ReactNode;
-  renderInput?: (props: InPlaceEditorInputProps<T>) => JSX.Element;
   className?: string;
 };
 
-function InPlaceEditor<T, InputType extends HTMLElement = HTMLElement>({
-  children,
-  className,
-  onChange,
-  renderInput,
-  value,
-}: InPlaceEditorProps<T>): JSX.Element {
+export type InPlaceEditorPropsWithoutRenderer<T> = CommonInPlaceEditorProps<T>;
+export type InPlaceEditorPropsWithRenderer<T> = CommonInPlaceEditorProps<T> & {
+  renderInput: (props: InPlaceEditorInputProps<T>) => ReactNode;
+};
+
+export type InPlaceEditorProps<T> = InPlaceEditorPropsWithRenderer<T> | InPlaceEditorPropsWithoutRenderer<T>;
+
+function propsHasRenderer<T>(props: InPlaceEditorProps<T>): props is InPlaceEditorPropsWithRenderer<T> {
+  return 'renderInput' in props && typeof props['renderInput'] === 'function';
+}
+
+function InPlaceEditor<T, InputType extends HTMLElement = HTMLElement>(props: InPlaceEditorProps<T>): JSX.Element {
+  const { children, className, onChange, value } = props;
   const [editing, setEditing] = useState(false);
   const inputRef = useRef<InputType>();
 
@@ -157,12 +159,12 @@ function InPlaceEditor<T, InputType extends HTMLElement = HTMLElement>({
     }
   }, [editing]);
 
-  const beginEditing = useCallback((event) => {
+  const beginEditing = useCallback((event: React.SyntheticEvent) => {
     event.preventDefault();
     setEditing(true);
   }, []);
 
-  const cancelEditing = useCallback((event) => {
+  const cancelEditing = useCallback((event: React.SyntheticEvent) => {
     event.preventDefault();
     setEditing(false);
   }, []);
@@ -184,13 +186,13 @@ function InPlaceEditor<T, InputType extends HTMLElement = HTMLElement>({
   if (editing) {
     return (
       <div className={className || 'form-inline align-items-start'}>
-        {renderInput ? (
+        {propsHasRenderer(props) ? (
           <InPlaceEditorInputWrapper
             commit={commitEditing}
             cancel={cancelEditing}
             initialValue={value}
             inputRef={inputRef}
-            renderInput={renderInput}
+            renderInput={props.renderInput}
           />
         ) : (
           <DefaultInPlaceEditorInputWrapper
@@ -206,13 +208,10 @@ function InPlaceEditor<T, InputType extends HTMLElement = HTMLElement>({
 
   return (
     <div className="d-flex">
-      <div>{children || value}</div>
-      <button
-        type="button"
-        className="btn btn-link btn-sm"
-        onClick={beginEditing}
-        aria-label="Edit"
-      >
+      <div>
+        <>{children || value}</>
+      </div>
+      <button type="button" className="btn btn-link btn-sm" onClick={beginEditing} aria-label="Edit">
         <i className="bi-pencil-fill" />
       </button>
     </div>

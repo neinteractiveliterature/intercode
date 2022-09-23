@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ApolloError } from '@apollo/client';
@@ -6,7 +6,6 @@ import {
   ErrorDisplay,
   LoadQueryWrapper,
   useCreateMutationWithReferenceArrayUpdater,
-  useUniqueId,
 } from '@neinteractiveliterature/litform';
 import capitalize from 'lodash/capitalize';
 
@@ -37,7 +36,7 @@ export default LoadQueryWrapper(useTeamMembersQueryFromParams, function NewTeamM
       receive_signup_email: ReceiveSignupEmail.NonWaitlistSignups,
     },
   );
-  const userConProfileSelectId = useUniqueId('user-con-profile-');
+  const userConProfileSelectId = useId();
   const [createTeamMember, { error: createError, loading: createInProgress }] =
     useCreateMutationWithReferenceArrayUpdater(
       useCreateTeamMemberMutation,

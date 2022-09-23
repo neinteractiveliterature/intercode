@@ -1,10 +1,10 @@
-import { useContext, useState, Suspense } from 'react';
+import { useContext, useState, Suspense, useId } from 'react';
 import * as React from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 // @ts-expect-error array-to-sentence has no TypeScript declarations
 import arrayToSentence from 'array-to-sentence';
 import { useTranslation } from 'react-i18next';
-import { LoadingIndicator, ErrorDisplay, useUniqueId } from '@neinteractiveliterature/litform';
+import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import useAsyncFunction from '../useAsyncFunction';
 import AuthenticityTokensContext from '../AuthenticityTokensContext';
@@ -69,7 +69,7 @@ function SignUpForm(): JSX.Element {
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [captchaValue, setCaptchaValue] = useState<string | null>(null);
-  const passwordFieldId = useUniqueId('password-');
+  const passwordFieldId = useId();
   const afterSessionChange = useAfterSessionChange();
 
   const onSubmit = async (event: React.SyntheticEvent) => {

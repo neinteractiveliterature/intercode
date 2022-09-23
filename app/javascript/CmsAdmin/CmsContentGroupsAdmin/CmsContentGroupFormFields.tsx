@@ -76,7 +76,7 @@ function CmsContentGroupFormFields({
         readOnly={readOnly}
       />
 
-      <FormGroupWithLabel label="Contents" name="contents">
+      <FormGroupWithLabel label="Contents">
         {(id) => (
           <CmsContentSelect
             isMulti

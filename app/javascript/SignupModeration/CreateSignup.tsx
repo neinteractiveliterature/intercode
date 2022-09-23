@@ -19,7 +19,7 @@ function CreateSignup(): JSX.Element {
 
   return (
     <>
-      <FormGroupWithLabel label="Event" name="event">
+      <FormGroupWithLabel label="Event">
         {(id) => (
           <EventSelect
             id={id}
@@ -30,7 +30,7 @@ function CreateSignup(): JSX.Element {
         )}
       </FormGroupWithLabel>
 
-      <FormGroupWithLabel label="Attendee" name="userConProfile">
+      <FormGroupWithLabel label="Attendee">
         {(id) => (
           <UserConProfileSelect
             id={id}

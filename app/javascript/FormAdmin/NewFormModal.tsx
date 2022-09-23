@@ -14,6 +14,7 @@ import FormTypes from '../../../config/form_types.json';
 import useAsyncFunction from '../useAsyncFunction';
 import { FormAdminQueryData, FormFieldsFragmentDoc } from './queries.generated';
 import { useCreateFormMutation } from './mutations.generated';
+import { CreateFormInput, FormType } from '../graphqlTypes.generated';
 
 export type NewFormModalProps = {
   convention: FormAdminQueryData['convention'];
@@ -24,7 +25,7 @@ export type NewFormModalProps = {
 function NewFormModal({ convention, visible, close }: NewFormModalProps): JSX.Element {
   const navigate = useNavigate();
   const [title, setTitle] = useState('');
-  const [formType, setFormType] = useState('');
+  const [formType, setFormType] = useState<FormType>();
   const [createFormMutate] = useCreateMutationWithReferenceArrayUpdater(
     useCreateFormMutation,
     convention,
@@ -34,7 +35,13 @@ function NewFormModal({ convention, visible, close }: NewFormModalProps): JSX.El
   );
 
   const createForm = useCallback(
-    async ({ title: t, formType: ft }) => {
+    async ({
+      title: t,
+      formType: ft,
+    }: {
+      title: CreateFormInput['form']['title'];
+      formType: CreateFormInput['form_type'];
+    }) => {
       const { data } = await createFormMutate({
         variables: { form: { title: t }, formType: ft },
       });
@@ -58,7 +65,7 @@ function NewFormModal({ convention, visible, close }: NewFormModalProps): JSX.El
           label="Form type"
           name="form_type"
           value={formType}
-          onValueChange={setFormType}
+          onValueChange={(newValue) => setFormType(newValue as FormType)}
           disabled={inProgress}
         >
           <option disabled value="">
@@ -82,7 +89,11 @@ function NewFormModal({ convention, visible, close }: NewFormModalProps): JSX.El
           type="button"
           disabled={!formType || !title || inProgress}
           className="btn btn-primary"
-          onClick={() => createFormClicked({ title, formType })}
+          onClick={() => {
+            if (formType) {
+              createFormClicked({ title, formType });
+            }
+          }}
         >
           Create form
         </button>

@@ -22,7 +22,7 @@ function FormSectionEditorContent(): JSX.Element {
 
   const sensors = useSortableDndSensors();
 
-  const updateSectionTitle = async (title: string) => {
+  const updateSectionTitle = async (title: string | null | undefined) => {
     if (currentSection) {
       await updateFormSection({
         variables: { id: currentSection.id, formSection: { title } },
@@ -31,7 +31,7 @@ function FormSectionEditorContent(): JSX.Element {
   };
 
   const moveItem = useCallback(
-    (dragIndex, hoverIndex) => {
+    (dragIndex: number, hoverIndex: number) => {
       if (!currentSection) {
         return;
       }

@@ -509,7 +509,10 @@
       "removeTeamMemberLink": "",
       "removeTeamMemberPrompt": "",
       "selectUserConProfilePrompt": "",
-      "showEmailLabel": "",
+      "showEmail": {
+        "helpPopover": "",
+        "label": ""
+      },
       "ticketProvidability_one": "",
       "ticketProvidability_many": "",
       "ticketProvidability_other": "",
@@ -816,6 +819,7 @@
       "notSignedUp": "No inscrita",
       "stateWithRequestedBucket": "",
       "teamMemberNotCounted": "",
+      "ticketPurchaseHold": "",
       "waitlisted": "En lista de espera",
       "waitlistedNoPreference": "",
       "waitlistedWithRequestedBucket": "",

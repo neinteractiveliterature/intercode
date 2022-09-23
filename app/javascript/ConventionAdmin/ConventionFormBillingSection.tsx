@@ -108,32 +108,34 @@ function ConventionFormBillingSection({
 
         <div className="card-body">
           <p>
-            {t(
-              'admin.convention.stripeAccountRequired',
-              'In order to sell {{ ticketNamePlural }} and/or products, a Stripe account is required.',
-              { ticketNamePlural: convention.ticketNamePlural },
-            )}{' '}
-            {convention.stripe_account && (
-              <>
-                {convention.stripe_account.charges_enabled ? (
-                  <>
-                    {t(
-                      'admin.convention.stripeAccountActive',
-                      '{{ conventionName }} is connected to a Stripe account and is able to sell {{ ticketNamePlural }} and/or products.',
-                      { conventionName: convention.name, ticketNamePlural: convention.ticketNamePlural },
-                    )}
-                  </>
-                ) : (
-                  <>
-                    {t(
-                      'admin.convention.stripeAccountPending',
-                      '{{ conventionName }} is connected to a Stripe account but that account is still in the setup process.',
-                      { conventionName: convention.name },
-                    )}
-                  </>
-                )}
-              </>
-            )}
+            <>
+              {t(
+                'admin.convention.stripeAccountRequired',
+                'In order to sell {{ ticketNamePlural }} and/or products, a Stripe account is required.',
+                { ticketNamePlural: convention.ticketNamePlural },
+              )}{' '}
+              {convention.stripe_account && (
+                <>
+                  {convention.stripe_account.charges_enabled ? (
+                    <>
+                      {t(
+                        'admin.convention.stripeAccountActive',
+                        '{{ conventionName }} is connected to a Stripe account and is able to sell {{ ticketNamePlural }} and/or products.',
+                        { conventionName: convention.name, ticketNamePlural: convention.ticketNamePlural },
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      {t(
+                        'admin.convention.stripeAccountPending',
+                        '{{ conventionName }} is connected to a Stripe account but that account is still in the setup process.',
+                        { conventionName: convention.name },
+                      )}
+                    </>
+                  )}
+                </>
+              )}
+            </>
           </p>
           {convention.stripe_account ? (
             <>

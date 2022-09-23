@@ -1,13 +1,7 @@
-import { useState, useContext, Suspense } from 'react';
+import { useState, useContext, Suspense, useId } from 'react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  BootstrapFormInput,
-  LoadingIndicator,
-  useUniqueId,
-  ErrorDisplay,
-  LoadQueryWrapper,
-} from '@neinteractiveliterature/litform';
+import { BootstrapFormInput, LoadingIndicator, ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import { Navigate } from 'react-router-dom';
 import PasswordConfirmationInput from './PasswordConfirmationInput';
@@ -75,7 +69,7 @@ export default LoadQueryWrapper(useEditUserQuery, function EditUserForm({ data: 
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [currentPassword, setCurrentPassword] = useState('');
   const [updateUserAsync, updateUserError, updateUserInProgress] = useAsyncFunction(updateUser);
-  const passwordFieldId = useUniqueId('password-');
+  const passwordFieldId = useId();
   usePageTitle('Update Your Account');
 
   if (!formState) {

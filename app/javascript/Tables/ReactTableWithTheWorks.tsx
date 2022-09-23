@@ -1,7 +1,7 @@
-import React, { useState, useCallback, useEffect, HTMLAttributes } from 'react';
+import React, { useState, useCallback, useEffect, HTMLAttributes, useId } from 'react';
 import classNames from 'classnames';
 import { ColumnInstance, Row, UseRowSelectRowProps } from 'react-table';
-import { parseIntOrNull, useUniqueId } from '@neinteractiveliterature/litform';
+import { parseIntOrNull } from '@neinteractiveliterature/litform';
 
 import { UseReactTableWithTheWorksResult } from './useReactTableWithTheWorks';
 import { GraphQLReactTableVariables } from './useGraphQLReactTable';
@@ -56,7 +56,7 @@ function ReactTableWithTheWorks<
   } = tableInstance;
 
   const [pageInputValue, setPageInputValue] = useState<string>(() => (pageIndex + 1).toString());
-  const pageInputId = useUniqueId('page-');
+  const pageInputId = useId();
 
   const pageInputChanged = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {

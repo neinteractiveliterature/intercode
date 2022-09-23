@@ -48,7 +48,7 @@ type TicketStatusCellProps = {
   value: UserConProfilesTableRow['ticket'];
 };
 
-function TicketStatusCell({ value }: TicketStatusCellProps) {
+function TicketStatusCell({ value }: TicketStatusCellProps): JSX.Element {
   const { t } = useTranslation();
 
   if (!value) {
@@ -62,7 +62,7 @@ type TicketPaymentAmountCellProps = {
   value: UserConProfilesTableRow['ticket'];
 };
 
-function TicketPaymentAmountCell({ value }: TicketPaymentAmountCellProps) {
+function TicketPaymentAmountCell({ value }: TicketPaymentAmountCellProps): JSX.Element {
   return <>{formatMoney(value?.order_entry?.price_per_item)}</>;
 }
 
@@ -70,7 +70,7 @@ type TicketStatusWithPaymentAmountCellProps = {
   value: UserConProfilesTableRow['ticket'];
 };
 
-function TicketStatusWithPaymentAmountCell({ value }: TicketStatusWithPaymentAmountCellProps) {
+function TicketStatusWithPaymentAmountCell({ value }: TicketStatusWithPaymentAmountCellProps): JSX.Element {
   return (
     <>
       <TicketStatusCell value={value} /> <TicketPaymentAmountCell value={value} />
@@ -78,7 +78,12 @@ function TicketStatusWithPaymentAmountCell({ value }: TicketStatusWithPaymentAmo
   );
 }
 
-const TicketTypeFilter = (props: FilterProps<UserConProfilesTableRow>) => {
+function TicketStatusChangeCell({ value }: { value: DateTime | null }): JSX.Element {
+  const { t } = useTranslation();
+  return <>{value ? formatLCM(value, getDateTimeFormat('shortDateTime', t)) : null}</>;
+}
+
+const TicketTypeFilter = (props: FilterProps<UserConProfilesTableRow>): JSX.Element => {
   const { t } = useTranslation();
   const data = useContext(UserConProfilesTableQueryDataContext);
   const choices = useMemo(
@@ -128,7 +133,7 @@ function getPossibleColumns(
     {
       Header: <>{t('admin.userConProfiles.id', 'ID')}</>,
       id: 'id',
-      accessor: 'id',
+      accessor: (userConProfile) => userConProfile.id,
       width: 70,
     },
     {
@@ -149,7 +154,7 @@ function getPossibleColumns(
     {
       Header: <>{t('admin.userConProfiles.firstName', 'First name')}</>,
       id: 'first_name',
-      accessor: 'first_name',
+      accessor: (userConProfile) => userConProfile.first_name,
       disableFilters: false,
       disableSortBy: false,
       Filter: FreeTextFilter,
@@ -157,7 +162,7 @@ function getPossibleColumns(
     {
       Header: <>{t('admin.userConProfiles.lastName', 'Last name')}</>,
       id: 'last_name',
-      accessor: 'last_name',
+      accessor: (userConProfile) => userConProfile.last_name,
       disableFilters: false,
       disableSortBy: false,
       Filter: FreeTextFilter,
@@ -165,56 +170,60 @@ function getPossibleColumns(
     {
       Header: <>{t('admin.userConProfiles.email', 'Email')}</>,
       id: 'email',
-      accessor: 'email',
+      accessor: (userConProfile) => userConProfile.email,
       disableFilters: false,
       disableSortBy: false,
       Cell: EmailCell,
       Filter: FreeTextFilter,
     },
-    ...(data.convention.ticket_mode === 'disabled'
-      ? []
-      : [
-          {
-            Header: <>{humanize(data.convention.ticket_name || 'ticket')}</>,
-            id: 'ticket',
-            accessor: 'ticket' as const,
-            width: 150,
-            disableFilters: false,
-            disableSortBy: false,
-            Cell: TicketStatusWithPaymentAmountCell,
-            Filter: TicketTypeFilter,
-          },
-          {
-            Header: (
-              <>
-                {t('admin.userConProfiles.ticketType', '{{ ticketName }} type', {
-                  ticketName: humanize(data.convention.ticket_name || 'ticket'),
-                })}
-              </>
-            ),
-            id: 'ticket_type',
-            accessor: 'ticket' as const,
-            width: 150,
-            disableFilters: false,
-            disableSortBy: false,
-            Cell: TicketStatusCell,
-            Filter: TicketTypeFilter,
-          },
-          {
-            Header: <>{t('admin.userConProfiles.paymentAmount', 'Payment amount')}</>,
-            id: 'payment_amount',
-            accessor: 'ticket' as const,
-            width: 150,
-            disableFilters: false,
-            disableSortBy: false,
-            Cell: TicketPaymentAmountCell,
-            Filter: FreeTextFilter,
-          },
-        ]),
+  ];
+
+  if (data.convention.ticket_mode !== 'disabled') {
+    columns.push(
+      {
+        Header: <>{humanize(data.convention.ticket_name || 'ticket')}</>,
+        id: 'ticket',
+        accessor: (userConProfile) => userConProfile.ticket,
+        width: 150,
+        disableFilters: false,
+        disableSortBy: false,
+        Cell: TicketStatusWithPaymentAmountCell,
+        Filter: TicketTypeFilter,
+      },
+      {
+        Header: (
+          <>
+            {t('admin.userConProfiles.ticketType', '{{ ticketName }} type', {
+              ticketName: humanize(data.convention.ticket_name || 'ticket'),
+            })}
+          </>
+        ),
+        id: 'ticket_type',
+        accessor: (userConProfile) => userConProfile.ticket,
+        width: 150,
+        disableFilters: false,
+        disableSortBy: false,
+        Cell: TicketStatusCell,
+        Filter: TicketTypeFilter,
+      },
+      {
+        Header: <>{t('admin.userConProfiles.paymentAmount', 'Payment amount')}</>,
+        id: 'payment_amount',
+        accessor: (userConProfile) => userConProfile.ticket,
+        width: 150,
+        disableFilters: false,
+        disableSortBy: false,
+        Cell: TicketPaymentAmountCell,
+        Filter: FreeTextFilter,
+      },
+    );
+  }
+
+  columns.push(
     {
       Header: <>{t('admin.userConProfiles.isTeamMember', 'Event team member?')}</>,
       id: 'is_team_member',
-      accessor: (userConProfile: UserConProfilesTableRow) => userConProfile.team_members.length > 0,
+      accessor: (userConProfile) => userConProfile.team_members.length > 0,
       width: 150,
       disableFilters: false,
       Cell: BooleanCell,
@@ -223,35 +232,36 @@ function getPossibleColumns(
     {
       Header: <>{t('admin.userConProfiles.isAttending', 'Attending?')}</>,
       id: 'attending',
-      accessor: 'ticket',
+      accessor: (userConProfile) => userConProfile.ticket != null,
       width: 150,
       disableFilters: false,
       Cell: BooleanCell,
       Filter: BooleanChoiceSetFilter,
     },
-    ...(data.convention.ticket_mode === 'disabled'
-      ? []
-      : [
-          {
-            Header: (
-              <>
-                {t('admin.userConProfiles.ticketStatusChangedAt', '{{ ticketName }} status changed', {
-                  ticketName: humanize(data.convention.ticket_name || 'ticket'),
-                })}
-              </>
-            ),
-            id: 'ticket_updated_at',
-            accessor: (userConProfile: UserConProfilesTableRow) =>
-              userConProfile.ticket ? DateTime.fromISO(userConProfile.ticket.updated_at, { zone: timezoneName }) : null,
-            disableSortBy: false,
-            Cell: ({ value }: { value: DateTime | null }) =>
-              value ? formatLCM(value, getDateTimeFormat('shortDateTime', t)) : null,
-          },
-        ]),
+  );
+
+  if (data.convention.ticket_mode !== 'disabled') {
+    columns.push({
+      Header: (
+        <>
+          {t('admin.userConProfiles.ticketStatusChangedAt', '{{ ticketName }} status changed', {
+            ticketName: humanize(data.convention.ticket_name || 'ticket'),
+          })}
+        </>
+      ),
+      id: 'ticket_updated_at',
+      accessor: (userConProfile) =>
+        userConProfile.ticket ? DateTime.fromISO(userConProfile.ticket.updated_at, { zone: timezoneName }) : null,
+      disableSortBy: false,
+      Cell: TicketStatusChangeCell,
+    });
+  }
+
+  columns.push(
     {
       Header: <>{t('admin.userConProfiles.privileges', 'Privileges')}</>,
       id: 'privileges',
-      accessor: (row: UserConProfilesTableRow) => row,
+      accessor: (row) => row,
       disableFilters: false,
       disableSortBy: false,
       Cell: PrivilegesCell,
@@ -262,7 +272,7 @@ function getPossibleColumns(
       id: 'order_summary',
       accessor: 'order_summary',
     },
-  ];
+  );
 
   formItems.forEach((formItem) => {
     const { identifier } = formItem;
@@ -328,7 +338,9 @@ function UserConProfilesTable({ defaultVisibleColumns }: UserConProfilesTablePro
           renderLeftContent={() =>
             queryData && (queryData.currentAbility || {}).can_create_user_con_profiles ? (
               <Link to="/user_con_profiles/new" className="btn btn-primary ms-2 mb-2">
-                <i className="bi-plus" /> {t('admin.userConProfiles.addAttendee.buttonText', 'Add attendee')}
+                <>
+                  <i className="bi-plus" /> {t('admin.userConProfiles.addAttendee.buttonText', 'Add attendee')}
+                </>
               </Link>
             ) : null
           }

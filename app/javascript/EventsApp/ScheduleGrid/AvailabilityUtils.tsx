@@ -54,7 +54,7 @@ export function describeAvailability(event: ScheduleEvent, signupCountData: Sign
   const { unlimited, totalSlots, signupCount } = calculateAvailability(event, signupCountData);
 
   if (unlimited) {
-    return t('signups.availability.unlimited', 'Unlimited slots');
+    return <>{t('signups.availability.unlimited', 'Unlimited slots')}</>;
   }
 
   if (totalSlots === 0) {
@@ -63,10 +63,14 @@ export function describeAvailability(event: ScheduleEvent, signupCountData: Sign
 
   const displayCount = signupCount > totalSlots ? totalSlots : signupCount;
 
-  return t('signups.availability.partiallyFull', '{{ signupCount }} of {{ count }} slots filled', {
-    signupCount: displayCount,
-    count: totalSlots,
-  });
+  return (
+    <>
+      {t('signups.availability.partiallyFull', '{{ signupCount }} of {{ count }} slots filled', {
+        signupCount: displayCount,
+        count: totalSlots,
+      })}
+    </>
+  );
 }
 
 export function describeWaitlist(event: ScheduleEvent, signupCountData: SignupCountData): ReactNode {

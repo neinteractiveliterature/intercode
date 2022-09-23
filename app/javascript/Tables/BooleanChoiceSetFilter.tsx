@@ -13,7 +13,7 @@ function getBooleanFilterValue(filterValue: boolean | null | undefined) {
 }
 
 function BooleanChoiceSetFilter<RowType extends Record<string, unknown>>(
-  props: ChoiceSetFilterSingleProps<RowType>,
+  props: Omit<ChoiceSetFilterSingleProps<RowType>, 'choices' | 'multiple'>,
 ): JSX.Element {
   return (
     <ChoiceSetFilter

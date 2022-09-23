@@ -18,20 +18,10 @@ import {
   useRowSelect,
 } from 'react-table';
 
-import useColumnSelection, {
-  UseColumnSelectionOptions,
-  UseColumnSelectionResult,
-} from './useColumnSelection';
-import useGraphQLReactTable, {
-  GraphQLReactTableVariables,
-  UseGraphQLReactTableOptions,
-} from './useGraphQLReactTable';
-import useLocalStorageReactTable, {
-  UseLocalStorageReactTableOptions,
-} from './useLocalStorageReactTable';
-import useReactRouterReactTable, {
-  UseReactRouterReactTableOptions,
-} from './useReactRouterReactTable';
+import useColumnSelection, { UseColumnSelectionOptions, UseColumnSelectionResult } from './useColumnSelection';
+import useGraphQLReactTable, { GraphQLReactTableVariables, UseGraphQLReactTableOptions } from './useGraphQLReactTable';
+import useLocalStorageReactTable, { UseLocalStorageReactTableOptions } from './useLocalStorageReactTable';
+import useReactRouterReactTable, { UseReactRouterReactTableOptions } from './useReactRouterReactTable';
 import useCachedLoadableValue from '../useCachedLoadableValue';
 import type { TableHeaderProps } from './TableHeader';
 
@@ -105,22 +95,18 @@ export default function useReactTableWithTheWorks<
   rowSelect,
   storageKeyPrefix,
   variables,
-}: UseReactTableWithTheWorksOptions<
-  RowType,
+}: UseReactTableWithTheWorksOptions<RowType, QueryData, Variables>): UseReactTableWithTheWorksResult<
   QueryData,
+  RowType,
   Variables
->): UseReactTableWithTheWorksResult<QueryData, RowType, Variables> {
+> {
   const { pageSize, setAndStorePageSize } = useLocalStorageReactTable(storageKeyPrefix);
   const { page, filters, sortBy, updateSearch } = useReactRouterReactTable({
     defaultState,
     decodeFilterValue,
     encodeFilterValue,
   });
-  const { data, pages, loading, error, refetch, queryData } = useGraphQLReactTable<
-    RowType,
-    QueryData,
-    Variables
-  >({
+  const { data, pages, loading, error, refetch, queryData } = useGraphQLReactTable<RowType, QueryData, Variables>({
     getData,
     getPages,
     useQuery,
@@ -179,12 +165,10 @@ export default function useReactTableWithTheWorks<
     (hooks: Hooks<RowType>) => {
       if (rowSelect) {
         hooks.visibleColumns.push((columns) => {
-          const selectedColumnRenderer: Renderer<CellProps<RowType>> = ({
-            row,
-          }: {
-            row: Row<RowType> & UseRowSelectRowProps<RowType>;
-          }) => {
-            const { toggleRowSelected, isSelected } = row;
+          const selectedColumnRenderer: Renderer<CellProps<RowType>> = ({ row }: { row: Row<RowType> }) => {
+            // I can't figure out how to get typescript to infer this properly
+            const rowAsUseRowSelectRowProps = row as unknown as UseRowSelectRowProps<Record<string, unknown>>;
+            const { toggleRowSelected, isSelected, getToggleRowSelectedProps } = rowAsUseRowSelectRowProps;
             const toggle = (event: React.SyntheticEvent) => {
               event.stopPropagation();
               toggleRowSelected(!isSelected);
@@ -192,7 +176,7 @@ export default function useReactTableWithTheWorks<
 
             // The cell can use the individual row's getToggleRowSelectedProps method
             // to the render a checkbox
-            return <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} onChange={toggle} />;
+            return <IndeterminateCheckbox {...getToggleRowSelectedProps()} onChange={toggle} />;
           };
 
           const selectedColumn: Column<RowType> = {
@@ -217,12 +201,7 @@ export default function useReactTableWithTheWorks<
       sortBy: tableInstance.state.sortBy,
       page: tableInstance.state.pageIndex,
     });
-  }, [
-    updateSearch,
-    tableInstance.state.filters,
-    tableInstance.state.sortBy,
-    tableInstance.state.pageIndex,
-  ]);
+  }, [updateSearch, tableInstance.state.filters, tableInstance.state.sortBy, tableInstance.state.pageIndex]);
 
   useEffect(() => {
     setAndStorePageSize(tableInstance.state.pageSize);

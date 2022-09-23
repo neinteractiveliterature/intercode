@@ -1,5 +1,5 @@
-import { useContext } from 'react';
-import { BootstrapFormSelect, useUniqueId } from '@neinteractiveliterature/litform';
+import { useContext, useId } from 'react';
+import { BootstrapFormSelect } from '@neinteractiveliterature/litform';
 
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
 import { formItemPropertyUpdater, StaticTextFormItem } from '../FormItemUtils';
@@ -9,7 +9,7 @@ import { FormItemEditorProps } from '../FormItemEditorProps';
 export type StaticTextEditorProps = FormItemEditorProps<StaticTextFormItem>;
 function StaticTextEditor({ formItem, setFormItem }: StaticTextEditorProps): JSX.Element {
   const { disabled } = useContext(FormItemEditorContext);
-  const contentInputId = useUniqueId('static-text-content-');
+  const contentInputId = useId();
 
   return (
     <>

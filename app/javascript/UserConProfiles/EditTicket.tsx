@@ -6,6 +6,7 @@ import TicketForm from './TicketForm';
 import usePageTitle from '../usePageTitle';
 import { useUserConProfileAdminQuery } from './queries.generated';
 import { useUpdateTicketMutation } from './mutations.generated';
+import { TicketInput } from '../graphqlTypes.generated';
 
 function useUserConProfileAdminQueryFromParams() {
   const userConProfileId = useParams<{ id: string }>().id;
@@ -21,7 +22,7 @@ export default LoadQueryWrapper(useUserConProfileAdminQueryFromParams, function 
   const [updateTicket] = useUpdateTicketMutation();
 
   const onSubmit = useCallback(
-    async (ticketInput) => {
+    async (ticketInput: TicketInput) => {
       if (!data.convention.user_con_profile.ticket) {
         throw new Error(`No ${data.convention.ticket_name} to update`);
       }

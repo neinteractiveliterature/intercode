@@ -60,7 +60,9 @@ const SignupChangeCell = ({ value }: SignupChangeCellProps): JSX.Element => {
         </>
       ) : (
         value.action === 'unknown' && (
-          <span className="text-muted">{t('tables.signupChange.unknownState', 'unknown')} → </span>
+          <span className="text-muted">
+            <>{t('tables.signupChange.unknownState', 'unknown')} → </>
+          </span>
         )
       )}
       <SignupStateCell value={value.state} />

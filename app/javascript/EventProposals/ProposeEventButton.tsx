@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useModal, useUniqueId, LoadQueryWrapper } from '@neinteractiveliterature/litform';
+import { useModal, LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import CreateEventProposalModal from './CreateEventProposalModal';
 import SignInButton from '../Authentication/SignInButton';
@@ -21,7 +21,7 @@ export default LoadQueryWrapper<ProposeEventButtonQueryData, ProposeEventButtonQ
   function ProposeEventButton({ className, caption, data }) {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const buttonId = useUniqueId('propose-event-button-');
+    const buttonId = React.useId();
     const modal = useModal();
 
     const newProposalCreated = (eventProposal: { id: string }) => {

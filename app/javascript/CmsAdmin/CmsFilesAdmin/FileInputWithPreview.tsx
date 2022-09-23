@@ -1,7 +1,6 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useId } from 'react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useUniqueId } from '@neinteractiveliterature/litform';
 import FilePreview from './FilePreview';
 
 export type FileInputWithPreviewProps = {
@@ -12,7 +11,7 @@ export type FileInputWithPreviewProps = {
 };
 
 export default function FileInputWithPreview({ existingFileUrl, file, onChange, disabled }: FileInputWithPreviewProps) {
-  const fileInputId = useUniqueId('file-');
+  const fileInputId = useId();
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const { t } = useTranslation();
 

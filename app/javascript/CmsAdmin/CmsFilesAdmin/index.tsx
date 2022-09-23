@@ -83,7 +83,7 @@ export default LoadQueryWrapper(useCmsFilesAdminQuery, function CmsFilesAdmin({ 
               <small className="text-break fw-bold">
                 <InPlaceEditor
                   value={cmsFile.file.filename}
-                  onChange={(filename) => renameFile(cmsFile.id, filename)}
+                  onChange={(filename: string) => renameFile(cmsFile.id, filename)}
                 />
               </small>
               <CopyToClipboardButton

@@ -89,7 +89,7 @@ export default LoadQueryWrapper(useCartQuery, function Cart({ data }) {
   );
 
   const createCouponApplication = useCallback(
-    async (couponCode) => {
+    async (couponCode: string) => {
       const orderId = data.convention.my_profile?.current_pending_order?.id;
       if (orderId) {
         await createCouponApplicationMutate({
@@ -101,7 +101,11 @@ export default LoadQueryWrapper(useCartQuery, function Cart({ data }) {
   );
 
   const deleteCouponApplication = useCallback(
-    (couponApplication) =>
+    (
+      couponApplication: NonNullable<
+        NonNullable<CartQueryData['convention']['my_profile']>['current_pending_order']
+      >['coupon_applications'][number],
+    ) =>
       deleteCouponApplicationMutate({
         variables: { id: couponApplication.id },
       }),

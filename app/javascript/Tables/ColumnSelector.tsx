@@ -55,9 +55,7 @@ function ColumnSelector<RowType extends Record<string, unknown>>({
         multiple
         choices={possibleColumns
           .filter((column) => column.id != null && !alwaysVisibleColumns.includes(column.id))
-          .map((column) =>
-            column.id != null ? { label: column.Header, value: column.id } : undefined,
-          )
+          .map((column) => (column.id != null ? { label: <>{column.Header}</>, value: column.id } : undefined))
           .filter(notEmpty)}
         value={visibleColumnIds}
         onChange={setVisibleColumnIds}

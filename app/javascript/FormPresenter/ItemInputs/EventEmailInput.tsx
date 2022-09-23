@@ -1,11 +1,7 @@
 import { useState, useCallback } from 'react';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import {
-  BootstrapFormInput,
-  ChoiceSet,
-  FormGroupWithLabel,
-} from '@neinteractiveliterature/litform';
+import { BootstrapFormInput, ChoiceSet, FormGroupWithLabel } from '@neinteractiveliterature/litform';
 
 import RequiredIndicator from './RequiredIndicator';
 import EmailAliasInput from '../../BuiltInFormControls/EmailAliasInput';
@@ -18,9 +14,7 @@ export type EventEmailInputProps = CommonFormItemInputProps<EventEmailFormItem> 
   convention: ConventionForFormItemDisplay;
 };
 
-type EventEmailBehavior = NonNullable<
-  'team_mailing_list' | EventEmailValue['con_mail_destination']
->;
+type EventEmailBehavior = NonNullable<'team_mailing_list' | EventEmailValue['con_mail_destination']>;
 
 function EventEmailInput({
   convention,
@@ -39,10 +33,7 @@ function EventEmailInput({
       ? 'team_mailing_list'
       : value.con_mail_destination;
   });
-  const userDidInteract = useCallback(
-    () => onInteract(formItem.identifier),
-    [formItem.identifier, onInteract],
-  );
+  const userDidInteract = useCallback(() => onInteract(formItem.identifier), [formItem.identifier, onInteract]);
 
   const updateValue = useCallback(
     (newValue: EventEmailValue) => {
@@ -92,7 +83,6 @@ function EventEmailInput({
     if (emailBehavior === 'team_mailing_list') {
       return (
         <FormGroupWithLabel
-          name="team-mailing-list-name"
           label={
             <>
               {t('forms.eventEmail.mailingListAddressLabel', 'Mailing list address')}
@@ -105,10 +95,7 @@ function EventEmailInput({
               value={(value || {}).team_mailing_list_name}
               onTextChange={(newName) => updateValue({ ...value, team_mailing_list_name: newName })}
               id={id}
-              aria-label={t(
-                'forms.eventEmail.mailingListAliasLabel',
-                'Mailing list address (portion before @ sign)',
-              )}
+              aria-label={t('forms.eventEmail.mailingListAliasLabel', 'Mailing list address (portion before @ sign)')}
               domain={convention.event_mailing_list_domain ?? ''}
             />
           )}
@@ -143,10 +130,7 @@ function EventEmailInput({
         >
           <legend className="col-form-label">
             <span>
-              {t(
-                'forms.eventEmail.formGroupLegend',
-                'How would you like to receive email about this event?',
-              )}
+              {t('forms.eventEmail.formGroupLegend', 'How would you like to receive email about this event?')}
             </span>
             <RequiredIndicator formItem={formItem} />
           </legend>
@@ -181,9 +165,7 @@ function EventEmailInput({
           />
           <div className="mt-4">{renderEmailInput()}</div>
           {valueInvalid ? (
-            <span className="text-danger">
-              {t('forms.general.fieldRequiredError', 'This field is required.')}
-            </span>
+            <span className="text-danger">{t('forms.general.fieldRequiredError', 'This field is required.')}</span>
           ) : null}
         </div>
       </VisibilityDisclosureCard>

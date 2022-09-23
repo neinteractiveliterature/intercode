@@ -10,7 +10,7 @@ import ProvidableTicketTypeSelection from './ProvidableTicketTypeSelection';
 import TicketingStatusDescription from './TicketingStatusDescription';
 import useAsyncFunction from '../../useAsyncFunction';
 import { TeamMembersQueryData, TeamMembersQueryDocument, TeamMembersQueryVariables } from './queries.generated';
-import { useProvideEventTicketMutation } from './mutations.generated';
+import { ProvideEventTicketMutationVariables, useProvideEventTicketMutation } from './mutations.generated';
 
 export type ProvideTicketModalProps = {
   event: TeamMembersQueryData['convention']['event'];
@@ -27,7 +27,7 @@ function ProvideTicketModal({ event, convention, onClose, teamMember, visible }:
   const [provideTicketAsync, error, mutationInProgress] = useAsyncFunction(provideTicketMutate);
 
   const provideTicket = useCallback(
-    (args) =>
+    (args: { variables: ProvideEventTicketMutationVariables }) =>
       provideTicketAsync({
         ...args,
         update: (store, result) => {
@@ -73,10 +73,14 @@ function ProvideTicketModal({ event, convention, onClose, teamMember, visible }:
   );
 
   const provideTicketClicked = async () => {
+    if (!teamMember || !ticketTypeId) {
+      return;
+    }
+
     await provideTicket({
       variables: {
         eventId: event.id,
-        userConProfileId: teamMember?.user_con_profile.id,
+        userConProfileId: teamMember.user_con_profile.id,
         ticketTypeId,
       },
     });

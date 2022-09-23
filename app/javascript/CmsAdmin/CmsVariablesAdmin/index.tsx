@@ -26,7 +26,7 @@ export default LoadQueryWrapper(useCmsVariablesQuery, function CmsVariablesAdmin
   );
 
   const addVariableChanged = useCallback(
-    (generatedId, value) =>
+    (generatedId: number, value: AddingVariable) =>
       setAddingVariables((prevAddingVariables) =>
         prevAddingVariables.map((variable) => {
           if (variable.generatedId === generatedId) {
@@ -40,7 +40,7 @@ export default LoadQueryWrapper(useCmsVariablesQuery, function CmsVariablesAdmin
   );
 
   const removeAddVariable = useCallback(
-    (generatedId) =>
+    (generatedId: number) =>
       setAddingVariables((prevAddingVariables) =>
         prevAddingVariables.filter((variable) => variable.generatedId !== generatedId),
       ),

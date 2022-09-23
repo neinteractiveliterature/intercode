@@ -115,7 +115,7 @@ function EventList({ filterableFormItems, convention }: EventListProps): JSX.Ele
   }, [fetchMore, fetchMoreEventsAsync, loadedEntries, totalEntries]);
 
   const changeFilterValue = useCallback(
-    (fieldId, value) => {
+    (fieldId: string, value: unknown) => {
       updateSearch({
         filters: [...filters.filter(({ id }) => id !== fieldId), { id: fieldId, value }],
       });
@@ -123,11 +123,17 @@ function EventList({ filterableFormItems, convention }: EventListProps): JSX.Ele
     [updateSearch, filters],
   );
 
-  const categoryChanged = useCallback((value) => changeFilterValue('category', value), [changeFilterValue]);
+  const categoryChanged = useCallback((value: unknown) => changeFilterValue('category', value), [changeFilterValue]);
 
-  const myRatingFilterChanged = useCallback((value) => changeFilterValue('my_rating', value), [changeFilterValue]);
+  const myRatingFilterChanged = useCallback(
+    (value: unknown) => changeFilterValue('my_rating', value),
+    [changeFilterValue],
+  );
 
-  const titlePrefixChanged = useCallback((value) => changeFilterValue('title_prefix', value), [changeFilterValue]);
+  const titlePrefixChanged = useCallback(
+    (value: unknown) => changeFilterValue('title_prefix', value),
+    [changeFilterValue],
+  );
 
   usePageTitle(t('navigation.events.eventCatalog', 'Event Catalog'));
 

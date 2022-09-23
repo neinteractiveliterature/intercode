@@ -1,4 +1,4 @@
-import { Column } from 'react-table';
+import { CellProps, Column, Renderer } from 'react-table';
 import { useModal } from '@neinteractiveliterature/litform';
 
 import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
@@ -9,16 +9,18 @@ import usePageTitle from '../usePageTitle';
 import NewEmailRouteModal from './NewEmailRouteModal';
 import EditEmailRouteModal from './EditEmailRouteModal';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
-import {
-  RootSiteEmailRoutesAdminTableQueryData,
-  useRootSiteEmailRoutesAdminTableQuery,
-} from './queries.generated';
+import { RootSiteEmailRoutesAdminTableQueryData, useRootSiteEmailRoutesAdminTableQuery } from './queries.generated';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
 
-type EmailRouteType =
-  RootSiteEmailRoutesAdminTableQueryData['email_routes_paginated']['entries'][0];
+type EmailRouteType = RootSiteEmailRoutesAdminTableQueryData['email_routes_paginated']['entries'][0];
 
 const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({});
+
+const ForwardAddressesCell: Renderer<CellProps<EmailRouteType>> = ({
+  value,
+}: {
+  value: EmailRouteType['forward_addresses'];
+}) => <>{value?.join(', ')}</>;
 
 function getPossibleColumns(): Column<EmailRouteType>[] {
   return [
@@ -35,7 +37,7 @@ function getPossibleColumns(): Column<EmailRouteType>[] {
       id: 'forward_addresses',
       accessor: 'forward_addresses',
       Filter: FreeTextFilter,
-      Cell: ({ value }: { value: EmailRouteType['forward_addresses'] }) => value?.join(', '),
+      Cell: ForwardAddressesCell,
       disableFilters: false,
       disableSortBy: false,
     },
@@ -71,11 +73,7 @@ function RootSiteEmailRoutesAdminTable(): JSX.Element {
         {...tableHeaderProps}
         renderLeftContent={() => (
           <>
-            <button
-              type="button"
-              className="btn btn-outline-primary"
-              onClick={newEmailRouteModal.open}
-            >
+            <button type="button" className="btn btn-outline-primary" onClick={newEmailRouteModal.open}>
               New email route
             </button>
           </>

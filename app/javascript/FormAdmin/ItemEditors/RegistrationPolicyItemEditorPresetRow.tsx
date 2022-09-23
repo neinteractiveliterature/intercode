@@ -10,13 +10,13 @@ import { getSortableStyle } from '../../SortableUtils';
 
 type PresetWithId = WithGeneratedId<RegistrationPolicyPreset, string>;
 
-function usePresetPropertyUpdater(
+function usePresetPropertyUpdater<PropertyName extends keyof RegistrationPolicyPreset>(
   onChange: (generatedId: string, preset: React.SetStateAction<PresetWithId>) => void,
   generatedId: string,
-  property: keyof RegistrationPolicyPreset,
+  property: PropertyName,
 ) {
   return useCallback(
-    (value) =>
+    (value: PresetWithId[PropertyName]) =>
       onChange(generatedId, (prevPreset) => ({
         ...prevPreset,
         [property]: value,
@@ -43,7 +43,7 @@ function RegistrationPolicyItemEditorPresetRow({
   });
 
   const presetChanged = useCallback(
-    (newPreset) => onChange(preset.generatedId, () => newPreset),
+    (newPreset: PresetWithId) => onChange(preset.generatedId, () => newPreset),
     [onChange, preset.generatedId],
   );
   const presetNameChanged = usePresetPropertyUpdater(onChange, preset.generatedId, 'name');
@@ -72,11 +72,7 @@ function RegistrationPolicyItemEditorPresetRow({
           close={modal.close}
           onChange={presetChanged}
         />
-        <button
-          type="button"
-          className="btn btn-sm btn-outline-secondary me-2"
-          onClick={modal.open}
-        >
+        <button type="button" className="btn btn-sm btn-outline-secondary me-2" onClick={modal.open}>
           Edit
         </button>
         <button

@@ -51,7 +51,10 @@ export default function useEventCategorySelection<EventCategoryType extends Even
     [convention.event_categories, eventCategoryId],
   );
 
-  const eventCategorySelectChanged = useCallback((e) => setEventCategoryId(e ?? undefined), [setEventCategoryId]);
+  const eventCategorySelectChanged = useCallback(
+    (e?: string) => setEventCategoryId(e ?? undefined),
+    [setEventCategoryId],
+  );
 
   const eventForm = useMemo(
     () => getEventFormForEventCategoryId(eventCategoryId, convention),

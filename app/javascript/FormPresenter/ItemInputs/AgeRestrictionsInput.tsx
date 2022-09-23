@@ -1,7 +1,7 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useId, useMemo } from 'react';
 import classNames from 'classnames';
 import { TFunction } from 'i18next';
-import { BootstrapFormInput, useUniqueId, parseIntOrNull } from '@neinteractiveliterature/litform';
+import { BootstrapFormInput, parseIntOrNull } from '@neinteractiveliterature/litform';
 
 import { useTranslation, Trans } from 'react-i18next';
 import { EditorView } from '@codemirror/view';
@@ -37,7 +37,7 @@ function AgeRestrictionsInput(props: AgeRestrictionsInputProps): JSX.Element {
   } = props;
   const value = useMemo(() => props.value ?? {}, [props.value]);
 
-  const descriptionId = useUniqueId(`${formItem.identifier}-description-`);
+  const descriptionId = useId();
 
   const userInteracted = useCallback(() => onInteract(formItem.identifier), [onInteract, formItem.identifier]);
 
@@ -51,7 +51,7 @@ function AgeRestrictionsInput(props: AgeRestrictionsInputProps): JSX.Element {
   );
 
   const descriptionChanged = useCallback(
-    (newDescription) => {
+    (newDescription: string) => {
       onChange({ ...value, age_restrictions_description: newDescription });
       userInteracted();
     },
@@ -59,7 +59,7 @@ function AgeRestrictionsInput(props: AgeRestrictionsInputProps): JSX.Element {
   );
 
   const minimumAgeChanged = useCallback(
-    (newMinimumAgeString) => {
+    (newMinimumAgeString: string) => {
       const newMinimumAge = parseIntOrNull(newMinimumAgeString);
 
       if (
@@ -94,8 +94,10 @@ function AgeRestrictionsInput(props: AgeRestrictionsInputProps): JSX.Element {
       <div className="card-body pb-1">
         <div className="mb-3">
           <label className="form-label" htmlFor={descriptionId}>
-            {t('forms.ageRestrictions.descriptionLabel', 'Publicly visible age restrictions text')}
-            <RequiredIndicator formItem={formItem} />
+            <>
+              {t('forms.ageRestrictions.descriptionLabel', 'Publicly visible age restrictions text')}
+              <RequiredIndicator formItem={formItem} />
+            </>
           </label>
           <MarkdownInput
             value={value.age_restrictions_description || ''}

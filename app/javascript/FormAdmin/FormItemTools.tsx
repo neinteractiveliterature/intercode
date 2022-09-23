@@ -1,8 +1,8 @@
-import { useContext, useRef, useState } from 'react';
+import { useContext, useId, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
 import { Modal } from 'react-bootstrap4-modal';
-import { useModal, useUniqueId, MultipleChoiceInput, ErrorDisplay } from '@neinteractiveliterature/litform';
+import { useModal, MultipleChoiceInput, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { FormItemEditorContext, FormEditorContext } from './FormEditorContexts';
 import CommonQuestionFields from './ItemEditors/CommonQuestionFields';
@@ -155,7 +155,7 @@ function FormItemTools({ saveFormItem }: FormItemToolsProps): JSX.Element {
   const collapseRef = useRef<HTMLDivElement>(null);
   const { collapsed, collapseProps, toggleCollapsed } = useCollapse(collapseRef);
   const { className: collapseClassName, ...otherCollapseProps } = collapseProps;
-  const collapseId = useUniqueId('collapse-');
+  const collapseId = useId();
   const moveModal = useModal();
 
   const renderItemMetadata = () => {

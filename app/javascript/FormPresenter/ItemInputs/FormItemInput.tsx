@@ -51,7 +51,7 @@ function FormItemInput<FormItemType extends TypedFormItem>({
   imageAttachmentConfig,
 }: FormItemInputProps<FormItemType>) {
   const valueDidChange = useCallback(
-    (newValue) => {
+    (newValue: FormItemValueType<FormItemType> | null | undefined) => {
       if (formItem.identifier != null) {
         onChange(formItem.identifier, newValue);
       }

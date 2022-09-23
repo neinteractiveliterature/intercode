@@ -1,8 +1,8 @@
-import { useState, useContext, useMemo, Suspense } from 'react';
+import { useState, useContext, useMemo, Suspense, useId } from 'react';
 import * as React from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { LoadingIndicator, ErrorDisplay, useUniqueId } from '@neinteractiveliterature/litform';
+import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import PasswordConfirmationInput from './PasswordConfirmationInput';
 import AuthenticityTokensContext from '../AuthenticityTokensContext';
@@ -49,7 +49,7 @@ function ResetPassword(): JSX.Element {
   const authenticityToken = useContext(AuthenticityTokensContext).changePassword;
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
-  const passwordId = useUniqueId('password-');
+  const passwordId = useId();
   const [changePasswordAsync, changePasswordError] = useAsyncFunction(changePassword);
 
   const onSubmit = async (event: React.SyntheticEvent) => {

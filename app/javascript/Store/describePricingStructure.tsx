@@ -146,7 +146,7 @@ export function describeUserPricingStructure(
     const scheduledValue = pricingStructure.value as ScheduledMoneyValue;
     const currentTimespanIndex = findCurrentTimespanIndex(scheduledValue);
     if (currentTimespanIndex === -1) {
-      return t('pricingStructure.unavailable', 'Currently unavailable');
+      return <>{t('pricingStructure.unavailable', 'Currently unavailable')}</>;
     }
 
     const currentValue = scheduledValue.timespans[currentTimespanIndex].value;
@@ -204,7 +204,7 @@ export function describeCurrentPrice(
   if (pricingStructure.pricing_strategy === 'scheduled_value') {
     const currentValue = findCurrentValue(pricingStructure.value as ScheduledMoneyValue);
     if (currentValue == null) {
-      return t('pricingStructure.unavailable', 'Currently unavailable');
+      return <>{t('pricingStructure.unavailable', 'Currently unavailable')}</>;
     }
 
     return (

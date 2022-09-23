@@ -7,7 +7,7 @@ export default function useAfterSessionChange(): (
 ) => Promise<void> {
   const toastOnNextPageLoad = useToastOnNextPageLoad();
   const afterSessionChange = useCallback(
-    async (destPath, toastMessage?: Parameters<typeof toastOnNextPageLoad>[0]) => {
+    async (destPath: string | null | undefined, toastMessage?: Parameters<typeof toastOnNextPageLoad>[0]) => {
       let destUrl = new URL(destPath || window.location.href, window.location.href);
 
       if (destUrl.host === window.location.host && destUrl.pathname === '/users/sign_in') {

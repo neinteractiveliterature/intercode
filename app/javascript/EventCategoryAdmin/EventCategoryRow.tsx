@@ -33,11 +33,13 @@ function EventCategoryRow({ convention, eventCategory }: EventCategoryRowProps):
           {eventCategory.name}
         </span>{' '}
         <small>
-          (
-          {t('admin.eventCategories.eventCount', '{{ count }} events', {
-            count: eventCategory.events_paginated.total_entries,
-          })}
-          )
+          <>
+            (
+            {t('admin.eventCategories.eventCount', '{{ count }} events', {
+              count: eventCategory.events_paginated.total_entries,
+            })}
+            )
+          </>
         </small>
       </td>
       <td className="text-end">

@@ -2094,7 +2094,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/state@npm:6.1.2, @codemirror/state@npm:^6.0, @codemirror/state@npm:^6.0.0":
+"@codemirror/state@npm:6.1.2":
   version: 6.1.2
   resolution: "@codemirror/state@npm:6.1.2"
   checksum: 7eda4b3eb6a777fecaa5a62e95a162aa163ccff01913d21a88d1157247390d9b57e6bcf54738be0b98aff8ba3a6ec3cb7aeb3b9714b019cb6c05242da9d9fdfe
@@ -2107,6 +2107,13 @@ __metadata:
   dependencies:
     "@codemirror/text": ^0.19.0
   checksum: 5d20c80e51eab6f82be28edadd9e774c864c48e4ba15c23b39277bcb3948f5b716ba07fdefcda556324dbfba19de8f91defa7e338390a714f9deb1e92f5d21bf
+  languageName: node
+  linkType: hard
+
+"@codemirror/state@npm:^6.0, @codemirror/state@npm:^6.0.0":
+  version: 6.1.1
+  resolution: "@codemirror/state@npm:6.1.1"
+  checksum: 26b767af3a3385479d9bb6a31b5d4fb7d2485d4f502c3056aa3117c12ba0b4e80bbbf358d81e81a03d147e404b7ef65cc1449058b2f869f698882d1969b74996
   languageName: node
   linkType: hard
 
@@ -4251,9 +4258,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@neinteractiveliterature/litform@npm:0.23.0":
-  version: 0.23.0
-  resolution: "@neinteractiveliterature/litform@npm:0.23.0"
+"@neinteractiveliterature/litform@npm:^0.27.0":
+  version: 0.27.0
+  resolution: "@neinteractiveliterature/litform@npm:0.27.0"
   dependencies:
     "@codemirror/commands": ^6.0
     "@codemirror/lang-html": ^6.0
@@ -4276,8 +4283,8 @@ __metadata:
   peerDependencies:
     "@apollo/client": ^3.3.18
     graphql: ^15.5.0
-    react: "*"
-  checksum: 4c03422b3f876a95711333fb55a77ee6f369c834df21de4fbf5514078d214382e1a9989315d071c14d43e5b78795cd6891ebcc182b2ba86357d5bb107012410e
+    react: ">= 18"
+  checksum: 015bd981e1fbac3aff3aa3e38773c042f79f62e873842978fd1109b330ce10e7896dcb3d808e4f8e56b7ede2f6eb28c76bdcd403089bbec2e46900adec7cc640
   languageName: node
   linkType: hard
 
@@ -5407,7 +5414,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:17.0.50, @types/react@npm:^17, @types/react@npm:^17.0":
+"@types/react@npm:*":
+  version: 18.0.20
+  resolution: "@types/react@npm:18.0.20"
+  dependencies:
+    "@types/prop-types": "*"
+    "@types/scheduler": "*"
+    csstype: ^3.0.2
+  checksum: f67f5b16efd89e237bf0e40d133218c398cf2a2f81166ce1e9fa32d0df6b869106740983396c51df9708a1b79b2a9d725eda1230cc3064c92d86d9ea6a4b714c
+  languageName: node
+  linkType: hard
+
+"@types/react@npm:^17, @types/react@npm:^17.0":
   version: 17.0.50
   resolution: "@types/react@npm:17.0.50"
   dependencies:
@@ -5415,6 +5433,17 @@ __metadata:
     "@types/scheduler": "*"
     csstype: ^3.0.2
   checksum: b5629dff7c2f3e9fcba95a19b2b3bfd78d7cacc33ba5fc26413dba653d34afcac3b93ddabe563e8062382688a1eac7db68e93739bb8e712d27637a03aaafbbb8
+  languageName: node
+  linkType: hard
+
+"@types/react@npm:^18.0.21":
+  version: 18.0.21
+  resolution: "@types/react@npm:18.0.21"
+  dependencies:
+    "@types/prop-types": "*"
+    "@types/scheduler": "*"
+    csstype: ^3.0.2
+  checksum: 36c1a7c9d507e81e2e629c1ad3db51d7b84d8b010c2d5008da411874286c6a5ccc711ae1d4c470efc0bdc77153cc8804a40e927e929e5164c669ca41b84b846d
   languageName: node
   linkType: hard
 
@@ -11756,7 +11785,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next-parser@npm:6.5.0":
+"i18next-parser@npm:^6.5.0":
   version: 6.5.0
   resolution: "i18next-parser@npm:6.5.0"
   dependencies:
@@ -17512,7 +17541,7 @@ resolve@^2.0.0-next.3:
     "@graphql-eslint/eslint-plugin": 3.10.7
     "@juggle/resize-observer": 3.4.0
     "@lezer/common": 1.0.1
-    "@neinteractiveliterature/litform": 0.23.0
+    "@neinteractiveliterature/litform": ^0.27.0
     "@popperjs/core": 2.11.6
     "@prettier/plugin-ruby": 3.2.2
     "@rails/activestorage": 7.0.4
@@ -17540,7 +17569,7 @@ resolve@^2.0.0-next.3:
     "@types/node": 16.11.59
     "@types/punycode": 2.1.0
     "@types/rails__activestorage": 7.0.1
-    "@types/react": 17.0.50
+    "@types/react": ^18.0.21
     "@types/react-click-outside-hook": 1.0.0
     "@types/react-color": 3.0.6
     "@types/react-dom": 18.0.6
@@ -17618,7 +17647,7 @@ resolve@^2.0.0-next.3:
     husky: 8.0.1
     i18next: 21.9.2
     i18next-intervalplural-postprocessor: 3.0.0
-    i18next-parser: 6.5.0
+    i18next-parser: ^6.5.0
     jest: 29.0.3
     jest-environment-jsdom: 29.0.3
     jest-html-reporter: 3.7.0

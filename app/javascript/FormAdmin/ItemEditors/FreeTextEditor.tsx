@@ -1,10 +1,5 @@
-import { useContext } from 'react';
-import {
-  BootstrapFormInput,
-  BootstrapFormSelect,
-  useUniqueId,
-  parseIntOrNull,
-} from '@neinteractiveliterature/litform';
+import { useContext, useId } from 'react';
+import { BootstrapFormInput, BootstrapFormSelect, parseIntOrNull } from '@neinteractiveliterature/litform';
 
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
 import { formItemPropertyUpdater, FreeTextFormItem } from '../FormItemUtils';
@@ -14,11 +9,9 @@ import { FormItemEditorProps } from '../FormItemEditorProps';
 export type FreeTextEditorProps = FormItemEditorProps<FreeTextFormItem>;
 function FreeTextEditor({ formItem, setFormItem }: FreeTextEditorProps): JSX.Element {
   const { disabled } = useContext(FormItemEditorContext);
-  const captionInputId = useUniqueId('static-text-caption-');
+  const captionInputId = useId();
   const responseFormat =
-    formItem.properties.format === 'markdown'
-      ? 'markdown'
-      : formItem.properties.free_text_type || 'text';
+    formItem.properties.format === 'markdown' ? 'markdown' : formItem.properties.free_text_type || 'text';
   const setResponseFormat = (newResponseFormat: typeof responseFormat) => {
     setFormItem((prevFormItem) => ({
       ...prevFormItem,
@@ -46,9 +39,7 @@ function FreeTextEditor({ formItem, setFormItem }: FreeTextEditorProps): JSX.Ele
       <BootstrapFormInput
         disabled={disabled}
         value={(formItem.properties.lines || '').toString()}
-        onTextChange={(value) =>
-          formItemPropertyUpdater('lines', setFormItem)(parseIntOrNull(value))
-        }
+        onTextChange={(value) => formItemPropertyUpdater('lines', setFormItem)(parseIntOrNull(value))}
         type="number"
         min="1"
         label="Lines"
@@ -58,9 +49,8 @@ function FreeTextEditor({ formItem, setFormItem }: FreeTextEditorProps): JSX.Ele
         <div className="card-header">
           <legend className="col-form-label pt-0">Advisory limits</legend>
           <small className="helptext">
-            You can specify an advisory character or word limit for this field. These limits won’t
-            be enforced, but will appear when filling out the form along with a word or character
-            counter.
+            You can specify an advisory character or word limit for this field. These limits won’t be enforced, but will
+            appear when filling out the form along with a word or character counter.
           </small>
         </div>
 
@@ -71,10 +61,7 @@ function FreeTextEditor({ formItem, setFormItem }: FreeTextEditorProps): JSX.Ele
                 disabled={disabled}
                 value={(formItem.properties.advisory_character_limit || '').toString()}
                 onTextChange={(value) =>
-                  formItemPropertyUpdater(
-                    'advisory_character_limit',
-                    setFormItem,
-                  )(parseIntOrNull(value))
+                  formItemPropertyUpdater('advisory_character_limit', setFormItem)(parseIntOrNull(value))
                 }
                 type="number"
                 min="1"
