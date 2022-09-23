@@ -15,7 +15,7 @@ import useValueUnless from '../../useValueUnless';
 import usePageTitle from '../../usePageTitle';
 import Gravatar from '../../Gravatar';
 import AppRootContext from '../../AppRootContext';
-import { SignupFieldsFragment, useAdminSignupQuery } from './queries.generated';
+import { AdminSignupQueryData, SignupFieldsFragment, useAdminSignupQuery } from './queries.generated';
 import { useUpdateSignupCountedMutation } from './mutations.generated';
 import { useFormatRunTimespan } from '../runTimeFormatting';
 import humanize from '../../humanize';
@@ -121,7 +121,7 @@ function EditSignup({ teamMembersUrl }: EditSignupProps): JSX.Element {
   );
 
   const toggleCounted = useCallback(
-    (signup) =>
+    (signup: AdminSignupQueryData['convention']['signup']) =>
       updateCountedMutate({
         variables: {
           signupId: signup.id,
@@ -157,26 +157,34 @@ function EditSignup({ teamMembersUrl }: EditSignupProps): JSX.Element {
         </div>
         <ul className="list-group list-group-flush">
           <li className="list-group-item">
-            {t('events.signupAdmin.nicknameHeader', 'Nickname:')} {userConProfile.nickname}
+            <>
+              {t('events.signupAdmin.nicknameHeader', 'Nickname:')} {userConProfile.nickname}
+            </>
           </li>
           <li className="list-group-item">
-            {t('events.signupAdmin.ageHeader', 'Age at {{ eventTitle }}:', {
-              eventTitle: signup.run.event.title,
-            })}{' '}
-            {ageAsOf(
-              userConProfile.birth_date
-                ? DateTime.fromISO(userConProfile.birth_date, { zone: timezoneName })
-                : undefined,
-              DateTime.fromISO(signup.run.starts_at, { zone: timezoneName }),
-            )}
+            <>
+              {t('events.signupAdmin.ageHeader', 'Age at {{ eventTitle }}:', {
+                eventTitle: signup.run.event.title,
+              })}{' '}
+              {ageAsOf(
+                userConProfile.birth_date
+                  ? DateTime.fromISO(userConProfile.birth_date, { zone: timezoneName })
+                  : undefined,
+                DateTime.fromISO(signup.run.starts_at, { zone: timezoneName }),
+              )}
+            </>
           </li>
           <li className={classNames('list-group-item')}>
-            {t('events.signupAdmin.emailHeader', 'Email:')}{' '}
-            <a href={`mailto:${userConProfile.email}`}>{userConProfile.email}</a>
+            <>
+              {t('events.signupAdmin.emailHeader', 'Email:')}{' '}
+              <a href={`mailto:${userConProfile.email}`}>{userConProfile.email}</a>
+            </>
           </li>
           <li className="list-group-item">
-            {t('events.signupAdmin.phoneHeader', 'Phone:')}{' '}
-            <a href={`tel:${userConProfile.mobile_phone}`}>{userConProfile.mobile_phone}</a>
+            <>
+              {t('events.signupAdmin.phoneHeader', 'Phone:')}{' '}
+              <a href={`tel:${userConProfile.mobile_phone}`}>{userConProfile.mobile_phone}</a>
+            </>
           </li>
           <li className="list-group-item">{renderAddressItem(userConProfile, t)}</li>
         </ul>

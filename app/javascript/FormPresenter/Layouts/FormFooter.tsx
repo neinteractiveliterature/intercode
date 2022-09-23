@@ -16,7 +16,9 @@ function BackButton({ goToPreviousSection }: BackButtonProps) {
   const { t } = useTranslation();
   return (
     <button className="btn btn-secondary" onClick={goToPreviousSection} type="button">
-      <i className="bi-chevron-left" /> {t('forms.general.backButton', 'Back')}
+      <>
+        <i className="bi-chevron-left" /> {t('forms.general.backButton', 'Back')}
+      </>
     </button>
   );
 }
@@ -29,7 +31,9 @@ function ContinueButton({ tryNextSection }: ContinueButtonProps) {
   const { t } = useTranslation();
   return (
     <button className="btn btn-primary" onClick={tryNextSection} type="button">
-      {t('forms.general.continueButton', 'Continue')} <i className="bi-chevron-right" />
+      <>
+        {t('forms.general.continueButton', 'Continue')} <i className="bi-chevron-right" />
+      </>
     </button>
   );
 }
@@ -44,12 +48,7 @@ type SubmitButtonProps = {
 
 function SubmitButton({ submitButton, trySubmitForm, isSubmittingResponse }: SubmitButtonProps) {
   return (
-    <button
-      className="btn btn-success"
-      onClick={trySubmitForm}
-      disabled={isSubmittingResponse}
-      type="button"
-    >
+    <button className="btn btn-success" onClick={trySubmitForm} disabled={isSubmittingResponse} type="button">
       {submitButton.caption}
     </button>
   );
@@ -83,10 +82,7 @@ function FormFooter({
     [currentSection?.form_items],
   );
 
-  const validateContinue = useCallback(
-    () => validate(sectionItems, response),
-    [sectionItems, response, validate],
-  );
+  const validateContinue = useCallback(() => validate(sectionItems, response), [sectionItems, response, validate]);
 
   const goToPreviousSection = useCallback(() => {
     previousSection();
@@ -127,12 +123,7 @@ function FormFooter({
     );
   }
 
-  if (
-    backButton == null &&
-    continueButton == null &&
-    exitButton == null &&
-    submitButtonComponent == null
-  ) {
+  if (backButton == null && continueButton == null && exitButton == null && submitButtonComponent == null) {
     return <div />;
   }
 

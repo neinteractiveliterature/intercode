@@ -65,7 +65,7 @@ function MyProfileFormInner({ initialSetup, initialUserConProfile, convention, f
   const debouncedCommit = useAutocommitFormResponseOnChange(updateUserConProfile, userConProfile);
 
   const setBio = useCallback(
-    (bio) => {
+    (bio: string) => {
       setUserConProfile((prevUserConProfile) => ({ ...prevUserConProfile, bio }));
       debouncedCommit({ ...userConProfile, bio });
     },
@@ -73,7 +73,7 @@ function MyProfileFormInner({ initialSetup, initialUserConProfile, convention, f
   );
 
   const setShowNickname = useCallback(
-    (showNickname) => {
+    (showNickname: boolean) => {
       setUserConProfile((prevUserConProfile) => ({
         ...prevUserConProfile,
         show_nickname_in_bio: showNickname,
@@ -87,7 +87,7 @@ function MyProfileFormInner({ initialSetup, initialUserConProfile, convention, f
   );
 
   const setGravatarEnabled = useCallback(
-    (gravatarEnabled) => {
+    (gravatarEnabled: boolean) => {
       setUserConProfile((prevUserConProfile) => ({
         ...prevUserConProfile,
         gravatar_enabled: gravatarEnabled,

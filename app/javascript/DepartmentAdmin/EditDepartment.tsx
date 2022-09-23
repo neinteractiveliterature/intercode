@@ -18,7 +18,7 @@ export default LoadSingleValueFromCollectionWrapper(
     usePageTitle(`Editing “${initialDepartment?.name}”`);
 
     const onSave = useCallback(
-      async (department) => {
+      async (department: typeof initialDepartment) => {
         await updateDepartment({
           variables: {
             id: initialDepartment.id,

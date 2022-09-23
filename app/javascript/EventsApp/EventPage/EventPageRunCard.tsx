@@ -74,7 +74,7 @@ function EventPageRunCard({ event, run, myProfile, currentAbility }: EventPageRu
   const apolloClient = useApolloClient();
 
   const selfServiceSignup = useCallback(
-    async (signupOption) => {
+    async (signupOption: SignupOption) => {
       await createMySignupMutate({
         variables: {
           runId: run.id,
@@ -123,10 +123,7 @@ function EventPageRunCard({ event, run, myProfile, currentAbility }: EventPageRu
               </strong>{' '}
               If the request is accepted, you’ll automatically be withdrawn from this event.
             </p>
-            <p className="mb-0">
-              Are you sure you want to withdraw from {{ eventTitle: event.title }}
-              {'? '}
-            </p>
+            <p className="mb-0">Are you sure you want to withdraw from {{ eventTitle: event.title }}?</p>
           </Trans>
         ),
         action: () => withdrawMySignupMutate({ variables: { runId: run.id } }),

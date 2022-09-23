@@ -6,9 +6,7 @@ export type ItemInteractionTrackerContextValue = {
   interactedItemIds: Set<string>;
 };
 
-export const ItemInteractionTrackerContext = createContext<
-  ItemInteractionTrackerContextValue
->({
+export const ItemInteractionTrackerContext = createContext<ItemInteractionTrackerContextValue>({
   interactWithItem: () => {},
   hasInteractedWithItem: () => false,
   interactedItemIds: new Set(),
@@ -18,7 +16,7 @@ export function useItemInteractionTracking(): ItemInteractionTrackerContextValue
   const [interactedItemIds, setInteractedItemIds] = useState(new Set<string>());
 
   const interactWithItem = useCallback(
-    (itemId) =>
+    (itemId: string) =>
       setInteractedItemIds((prevSet) => {
         const newInteractedItemIds = new Set(prevSet);
         newInteractedItemIds.add(itemId);
@@ -27,13 +25,10 @@ export function useItemInteractionTracking(): ItemInteractionTrackerContextValue
     [],
   );
 
-  const hasInteractedWithItem = useCallback((itemId) => interactedItemIds.has(itemId), [
-    interactedItemIds,
-  ]);
+  const hasInteractedWithItem = useCallback((itemId: string) => interactedItemIds.has(itemId), [interactedItemIds]);
 
-  return useMemo(() => ({ interactWithItem, hasInteractedWithItem, interactedItemIds }), [
-    interactWithItem,
-    hasInteractedWithItem,
-    interactedItemIds,
-  ]);
+  return useMemo(
+    () => ({ interactWithItem, hasInteractedWithItem, interactedItemIds }),
+    [interactWithItem, hasInteractedWithItem, interactedItemIds],
+  );
 }

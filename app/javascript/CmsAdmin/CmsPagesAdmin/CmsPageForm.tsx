@@ -1,10 +1,9 @@
-import { useMemo } from 'react';
+import { useId, useMemo } from 'react';
 import * as React from 'react';
 import {
   BooleanInput,
   BootstrapFormInput,
   usePropertySetters,
-  useUniqueId,
   sortByLocaleString,
 } from '@neinteractiveliterature/litform';
 import { EditorView } from '@codemirror/view';
@@ -48,7 +47,7 @@ function CmsPageForm<T extends PageFormFields>({
 
   const extensions = React.useMemo(() => [EditorView.editable.of(!readOnly)], [readOnly]);
 
-  const slugInputId = useUniqueId('slug-');
+  const slugInputId = useId();
   const defaultLayout =
     cmsParent.__typename === 'RootSite' ? cmsParent.root_site_default_layout : cmsParent.defaultLayout;
 

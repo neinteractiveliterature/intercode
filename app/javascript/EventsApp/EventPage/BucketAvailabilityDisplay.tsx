@@ -22,7 +22,7 @@ function BucketAvailabilityDisplay({
   const resizeObserverRef = useRef<ResizeObserver>();
 
   // https://reactjs.org/docs/hooks-faq.html#how-can-i-measure-a-dom-node
-  const measuredRef = useCallback((element) => {
+  const measuredRef = useCallback((element: HTMLDivElement) => {
     if (element !== null) {
       setContainerWidth(element.getBoundingClientRect().width);
 
@@ -56,10 +56,7 @@ function BucketAvailabilityDisplay({
     return cellWidthRem * remWidth + 2; // 2px margins
   }, [compact]);
 
-  const maxCellsPerLine = useMemo(
-    () => Math.floor(containerWidth / cellWidth),
-    [cellWidth, containerWidth],
-  );
+  const maxCellsPerLine = useMemo(() => Math.floor(containerWidth / cellWidth), [cellWidth, containerWidth]);
   let lineWidth = totalCells;
   let numLines = 1;
   if (lineWidth > maxCellsPerLine) {

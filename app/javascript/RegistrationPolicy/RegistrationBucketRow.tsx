@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useId } from 'react';
 import classNames from 'classnames';
 import {
   BootstrapFormInput,
@@ -6,7 +6,6 @@ import {
   HelpPopover,
   parseIntOrNull,
   BootstrapFormTextarea,
-  useUniqueId,
   useFunctionalStateUpdater,
   usePropertySetters,
 } from '@neinteractiveliterature/litform';
@@ -77,12 +76,12 @@ function RegistrationBucketRow<T extends EditingRegistrationBucket>({
 
   const confirm = useConfirm();
 
-  const unlimitedId = useUniqueId('unlimited-');
-  const countedId = useUniqueId('counted-');
-  const exposeAttendeesId = useUniqueId('expose-attendees-');
-  const minId = useUniqueId('min-');
-  const preferredId = useUniqueId('preferred-');
-  const maxId = useUniqueId('max-');
+  const unlimitedId = useId();
+  const countedId = useId();
+  const exposeAttendeesId = useId();
+  const minId = useId();
+  const preferredId = useId();
+  const maxId = useId();
 
   const countValidationErrors = checkBucketFieldMinimums(registrationBucket);
 

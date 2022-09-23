@@ -1,6 +1,5 @@
-import { useState, useMemo, ChangeEvent } from 'react';
+import { useState, useMemo, ChangeEvent, useId } from 'react';
 import classNames from 'classnames';
-import { useUniqueId } from '@neinteractiveliterature/litform';
 
 import FieldRequiredFeedback from './FieldRequiredFeedback';
 import { getUnitForValue, isUnitName, UNITS } from '../TimespanItemUtils';
@@ -41,7 +40,7 @@ function TimespanItemInput(props: TimespanItemInputProps): JSX.Element {
     }
   };
 
-  const inputId = useUniqueId('timespan-input-');
+  const inputId = useId();
 
   const options = UNITS.map((u) => (
     <option key={u.name} value={u.name}>

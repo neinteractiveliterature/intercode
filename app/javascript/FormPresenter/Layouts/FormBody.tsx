@@ -56,7 +56,7 @@ export default forwardRef<FormBodyImperativeHandle | undefined, FormBodyProps>(f
   }, [response.__typename, response.id]);
 
   const responseValueChanged = useCallback(
-    (field, value) => {
+    (field: string, value: unknown) => {
       responseValuesChanged({ [field]: value });
     },
     [responseValuesChanged],
@@ -96,16 +96,10 @@ export default forwardRef<FormBodyImperativeHandle | undefined, FormBodyProps>(f
             caption = item.rendered_properties.caption;
           }
           return (
-            <div className="mb-3">
+            <div className="mb-3" key={item.id}>
               {caption && <div className="form-label">{caption}</div>}
               <VisibilityDisclosureCard formItem={item} formTypeIdentifier={formTypeIdentifier}>
-                <FormItemDisplay
-                  key={item.id}
-                  convention={convention}
-                  displayMode="public"
-                  formItem={item}
-                  value={value}
-                />
+                <FormItemDisplay convention={convention} displayMode="public" formItem={item} value={value} />
               </VisibilityDisclosureCard>
             </div>
           );

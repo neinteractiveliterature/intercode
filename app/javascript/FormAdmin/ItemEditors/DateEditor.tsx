@@ -1,5 +1,4 @@
-import { useContext } from 'react';
-import { useUniqueId } from '@neinteractiveliterature/litform';
+import { useContext, useId } from 'react';
 
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
 import { formItemPropertyUpdater, DateFormItem } from '../FormItemUtils';
@@ -9,7 +8,7 @@ import { FormItemEditorProps } from '../FormItemEditorProps';
 export type DateEditorProps = FormItemEditorProps<DateFormItem>;
 function DateEditor({ formItem, setFormItem }: DateEditorProps): JSX.Element {
   const { disabled } = useContext(FormItemEditorContext);
-  const captionInputId = useUniqueId('date-caption-');
+  const captionInputId = useId();
 
   return (
     <>

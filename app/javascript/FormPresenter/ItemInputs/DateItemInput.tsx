@@ -1,6 +1,5 @@
-import { useCallback, ChangeEvent } from 'react';
+import { useCallback, ChangeEvent, useId } from 'react';
 import classNames from 'classnames';
-import { useUniqueId } from '@neinteractiveliterature/litform';
 
 import FieldRequiredFeedback from './FieldRequiredFeedback';
 import { CommonFormItemInputProps } from './CommonFormItemInputProps';
@@ -11,15 +10,8 @@ import { VisibilityDisclosureCard } from './PermissionDisclosures';
 export type DateItemInputProps = CommonFormItemInputProps<DateFormItem>;
 
 function DateItemInput(props: DateItemInputProps): JSX.Element {
-  const {
-    formItem,
-    formTypeIdentifier,
-    onInteract,
-    onChange,
-    value: uncheckedValue,
-    valueInvalid,
-  } = props;
-  const domId = useUniqueId(`${formItem.identifier}-`);
+  const { formItem, formTypeIdentifier, onInteract, onChange, value: uncheckedValue, valueInvalid } = props;
+  const domId = useId();
 
   const userDidInteract = useCallback(() => {
     onInteract(formItem.identifier);

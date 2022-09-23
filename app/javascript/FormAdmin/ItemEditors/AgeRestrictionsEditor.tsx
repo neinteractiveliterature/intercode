@@ -1,5 +1,4 @@
-import { useContext } from 'react';
-import { useUniqueId } from '@neinteractiveliterature/litform';
+import { useContext, useId } from 'react';
 
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
 import { formItemPropertyUpdater, AgeRestrictionsFormItem } from '../FormItemUtils';
@@ -9,7 +8,7 @@ import { FormItemEditorProps } from '../FormItemEditorProps';
 export type AgeRestrictionsEditorProps = FormItemEditorProps<AgeRestrictionsFormItem>;
 function AgeRestrictionsEditor({ formItem, setFormItem }: AgeRestrictionsEditorProps): JSX.Element {
   const { disabled } = useContext(FormItemEditorContext);
-  const captionInputId = useUniqueId('age-restrictions-caption-');
+  const captionInputId = useId();
 
   return (
     <>

@@ -1,6 +1,5 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useId, useMemo } from 'react';
 import capitalize from 'lodash/capitalize';
-import { useUniqueId } from '@neinteractiveliterature/litform';
 
 import usePermissionsChangeSet, { UsePermissionsChangeSetOptions } from './usePermissionsChangeSet';
 import usePermissionToggle, { UsePermissionToggleOptions } from './usePermissionToggle';
@@ -33,7 +32,7 @@ function PermissionsListRow({
     currentPermissions,
     readOnly,
   });
-  const checkboxId = useUniqueId(`${permission}-`);
+  const checkboxId = useId();
 
   return (
     <tr className={className}>
@@ -103,7 +102,7 @@ function PermissionsListInput({
   });
 
   const setAllPermitted = useCallback(
-    (permitted) => {
+    (permitted: boolean) => {
       permissionNames.forEach(({ permission }) => {
         if (permitted) {
           grantPermission({ permission, model, role });

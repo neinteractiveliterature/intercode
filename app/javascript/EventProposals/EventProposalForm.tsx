@@ -54,7 +54,7 @@ function EventProposalFormInner({
     [eventProposal.id, eventProposal.images, attachImage],
   );
 
-  const responseValuesChanged = useCallback((newResponseValues) => {
+  const responseValuesChanged = useCallback((newResponseValues: typeof initialEventProposal['form_response_attrs']) => {
     setEventProposal((prevEventProposal) => ({
       ...prevEventProposal,
       form_response_attrs: {

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import usePageTitle from '../usePageTitle';
 import buildDepartmentInput from './buildDepartmentInput';
-import DepartmentForm from './DepartmentForm';
+import DepartmentForm, { DepartmentFormProps } from './DepartmentForm';
 import { AdminDepartmentFieldsFragmentDoc, useDepartmentAdminQuery } from './queries.generated';
 import { LoadQueryWrapper, useCreateMutationWithReferenceArrayUpdater } from '@neinteractiveliterature/litform/dist';
 import { useCreateDepartmentMutation } from './mutations.generated';
@@ -21,7 +21,7 @@ export default LoadQueryWrapper(useDepartmentAdminQuery, function NewDepartment(
   usePageTitle('New department');
 
   const onSave = useCallback(
-    async (department) => {
+    async (department: DepartmentFormProps['initialDepartment']) => {
       await createDepartment({
         variables: {
           department: buildDepartmentInput(department),

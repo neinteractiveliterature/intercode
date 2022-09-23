@@ -1,9 +1,8 @@
-import { useContext, useMemo } from 'react';
+import { useContext, useId, useMemo } from 'react';
 import * as React from 'react';
 import {
   BootstrapFormInput,
   FormGroupWithLabel,
-  useUniqueId,
   MultipleChoiceInput,
   usePropertySetters,
 } from '@neinteractiveliterature/litform';
@@ -54,8 +53,8 @@ function ConventionFormGeneralSection({
     'language',
   );
 
-  const startId = useUniqueId('starts-at-');
-  const endId = useUniqueId('ends-at-');
+  const startId = useId();
+  const endId = useId();
 
   const startEndFields = (
     [

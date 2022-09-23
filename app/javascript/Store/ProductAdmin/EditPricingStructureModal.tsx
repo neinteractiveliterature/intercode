@@ -6,7 +6,10 @@ import { ModalData } from '@neinteractiveliterature/litform/lib/useModal';
 
 import EnumTypes from '../../enumTypes.json';
 import MoneyInput from '../MoneyInput';
-import ScheduledValueEditor, { scheduledValueReducer } from '../../BuiltInFormControls/ScheduledValueEditor';
+import ScheduledValueEditor, {
+  scheduledValueReducer,
+  ScheduledValueReducerAction,
+} from '../../BuiltInFormControls/ScheduledValueEditor';
 import AppRootContext from '../../AppRootContext';
 import {
   Money,
@@ -57,7 +60,7 @@ function EditPricingStructureModal({ visible, state, close }: EditPricingStructu
   }, [state?.value]);
 
   const dispatchScheduledValue = useCallback(
-    (action) => {
+    (action: ScheduledValueReducerAction<unknown>) => {
       if (!pricingStructure) {
         return;
       }

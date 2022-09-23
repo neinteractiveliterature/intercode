@@ -172,7 +172,10 @@ function EventCard({ convention, event, sortBy, canReadSchedule }: EventCardProp
       key: 'organization',
       content: (
         <>
-          <strong>{t('events.catalog.organization', 'Organization')}:</strong> {formResponse.organization}
+          <strong>
+            <>{t('events.catalog.organization', 'Organization')}:</>
+          </strong>{' '}
+          {formResponse.organization}
         </>
       ),
     });

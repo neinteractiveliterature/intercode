@@ -95,7 +95,7 @@ function StaffPositionForm({ staffPosition, onChange }: StaffPositionFormProps):
         onChange={setVisible}
       />
 
-      <FormGroupWithLabel label="People" name="user-con-profiles">
+      <FormGroupWithLabel label="People">
         {(id) => (
           <UserConProfileSelect
             id={id}

@@ -97,20 +97,22 @@ export default LoadQueryWithVariablesWrapper(
 
       return (
         <li className="list-group-item list-group-item-warning">
-          {userConProfile.id === myProfile?.id
-            ? t(
-                'admin.userConProfiles.signupsCard.unSignedUpYou',
-                'You are a team member for the following events, but are not signed up for them:',
-              )
-            : t(
-                'admin.userConProfiles.signupsCard.unSignedUpOther',
-                '{{ name }} is a team member for the following events, but is not signed up for them:',
-                { name: userConProfile.name_without_nickname },
-              )}{' '}
-          {joinReact(
-            unSignedUpEvents.map((event) => renderEventLink(event)),
-            ', ',
-          )}
+          <>
+            {userConProfile.id === myProfile?.id
+              ? t(
+                  'admin.userConProfiles.signupsCard.unSignedUpYou',
+                  'You are a team member for the following events, but are not signed up for them:',
+                )
+              : t(
+                  'admin.userConProfiles.signupsCard.unSignedUpOther',
+                  '{{ name }} is a team member for the following events, but is not signed up for them:',
+                  { name: userConProfile.name_without_nickname },
+                )}{' '}
+            {joinReact(
+              unSignedUpEvents.map((event) => renderEventLink(event)),
+              ', ',
+            )}
+          </>
         </li>
       );
     };
@@ -122,15 +124,17 @@ export default LoadQueryWithVariablesWrapper(
     return (
       <div className="card">
         <div className="card-header">
-          {userConProfile.ical_secret && (
-            <div className="float-end">
-              <AddToCalendarDropdown
-                icalSecret={userConProfile.ical_secret}
-                className="btn btn-outline-secondary btn-sm"
-              />
-            </div>
-          )}
-          {t('admin.userConProfiles.signupsCard.header', 'Signups')}
+          <>
+            {userConProfile.ical_secret && (
+              <div className="float-end">
+                <AddToCalendarDropdown
+                  icalSecret={userConProfile.ical_secret}
+                  className="btn btn-outline-secondary btn-sm"
+                />
+              </div>
+            )}
+            {t('admin.userConProfiles.signupsCard.header', 'Signups')}
+          </>
         </div>
         <ul className="list-group list-group-flush">
           {signups.length === 0 ? (

@@ -43,7 +43,7 @@ export function SectionTraversalProvider({ form, children }: SectionTraversalPro
   );
 
   const setCurrentSectionIndex = useCallback(
-    (newSectionIndex) => {
+    (newSectionIndex: number) => {
       setCurrentSectionId(sortedFormSections[newSectionIndex].id);
     },
     [sortedFormSections],

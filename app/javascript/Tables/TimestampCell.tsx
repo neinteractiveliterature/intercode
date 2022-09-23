@@ -3,11 +3,11 @@ import { DateTime } from 'luxon';
 import { useAppDateTimeFormat, useISODateTimeInAppZone } from '../TimeUtils';
 
 export type SingleLineTimestampCellProps = {
-  value: string;
+  value: string | null | undefined;
 };
 
 export function SingleLineTimestampCell({ value }: SingleLineTimestampCellProps): JSX.Element {
-  const timestamp = useISODateTimeInAppZone(value);
+  const timestamp = useISODateTimeInAppZone(value ?? '');
   const format = useAppDateTimeFormat();
 
   if (!timestamp.isValid) {

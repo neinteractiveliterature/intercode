@@ -4,11 +4,7 @@ import { Modifier } from 'react-popper';
 import { useTranslation } from 'react-i18next';
 import { FilterProps } from 'react-table';
 import max from 'lodash/max';
-import {
-  ChoiceSet,
-  useLitformPopperWithAutoClosing,
-  useToggleOpen,
-} from '@neinteractiveliterature/litform';
+import { ChoiceSet, useLitformPopperWithAutoClosing, useToggleOpen } from '@neinteractiveliterature/litform';
 
 import { FilterCodec } from './FilterUtils';
 
@@ -36,11 +32,10 @@ type LenientFilterProps<RowType extends Record<string, unknown>> = {
   column: Pick<FilterProps<RowType>['column'], 'filterValue' | 'setFilter'>;
 };
 
-type ChoiceSetFilterCommonProps<RowType extends Record<string, unknown>> =
-  LenientFilterProps<RowType> & {
-    choices: readonly ChoiceSetFilterChoice[];
-    filterCodec?: FilterCodec<ChoiceSetFilterValue>;
-  };
+type ChoiceSetFilterCommonProps<RowType extends Record<string, unknown>> = LenientFilterProps<RowType> & {
+  choices: readonly ChoiceSetFilterChoice[];
+  filterCodec?: FilterCodec<ChoiceSetFilterValue>;
+};
 
 export type ChoiceSetFilterSingleProps<RowType extends Record<string, unknown>> =
   ChoiceSetFilterCommonProps<RowType> & {
@@ -59,9 +54,7 @@ export type ChoiceSetFilterProps<RowType extends Record<string, unknown>> =
   | ChoiceSetFilterSingleProps<RowType>
   | ChoiceSetFilterMultipleProps<RowType>;
 
-function ChoiceSetFilter<RowType extends Record<string, unknown>>(
-  props: ChoiceSetFilterProps<RowType>,
-): JSX.Element {
+function ChoiceSetFilter<RowType extends Record<string, unknown>>(props: ChoiceSetFilterProps<RowType>): JSX.Element {
   const {
     choices: rawChoices,
     column: { filterValue: filterValueFromColumn, setFilter },
@@ -117,9 +110,7 @@ function ChoiceSetFilter<RowType extends Record<string, unknown>>(
     const filterCodec = props.filterCodec;
     if (filterCodec) {
       if (props.multiple) {
-        return rawFilterValue.map((singleValue: string) =>
-          filterCodec.encode(singleValue)?.toString(),
-        );
+        return rawFilterValue.map((singleValue: string) => filterCodec.encode(singleValue)?.toString());
       }
       return filterCodec.encode(rawFilterValue)?.toString();
     }
@@ -192,11 +183,7 @@ function ChoiceSetFilter<RowType extends Record<string, unknown>>(
       <div className="flex-grow-1 d-flex flex-wrap" style={{ overflow: 'hidden' }}>
         {renderHeaderCaptionWithChoices()}
       </div>
-      <button
-        type="button"
-        className="btn btn-outline-secondary btn-sm py-0 align-self-start"
-        onClick={toggleOpen}
-      >
+      <button type="button" className="btn btn-outline-secondary btn-sm py-0 align-self-start" onClick={toggleOpen}>
         <i
           className={classNames({
             'bi-caret-down': !dropdownOpen,
@@ -243,11 +230,7 @@ function ChoiceSetFilter<RowType extends Record<string, unknown>>(
             </button>
 
             {!props.hideSelectNone && (
-              <button
-                type="button"
-                className="btn btn-link btn-sm"
-                onClick={() => valueChanged([])}
-              >
+              <button type="button" className="btn btn-link btn-sm" onClick={() => valueChanged([])}>
                 Select none
               </button>
             )}

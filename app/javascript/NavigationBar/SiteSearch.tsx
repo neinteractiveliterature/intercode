@@ -76,10 +76,12 @@ function SearchMenu(props: MenuProps<SiteSearchOptionType, false>) {
       <>
         {props.children}
         <div className="bg-light small p-1 text-muted d-none d-md-block">
-          <i className="bi-lightbulb" /> {t('navigation.search.searchAnywhereText', 'Search anywhere:')}{' '}
-          <span className="bg-white font-monospace border rounded px-1">
-            {t('navigation.search.searchAnywhereKeyCombo', 'Ctrl-/')}
-          </span>
+          <>
+            <i className="bi-lightbulb" /> {t('navigation.search.searchAnywhereText', 'Search anywhere:')}{' '}
+            <span className="bg-white font-monospace border rounded px-1">
+              {t('navigation.search.searchAnywhereKeyCombo', 'Ctrl-/')}
+            </span>
+          </>
         </div>
       </>
     </components.Menu>
@@ -148,7 +150,7 @@ function SiteSearch({ visible, setVisible, visibilityChangeComplete }: SiteSearc
   const selectRef = useRef<Select<SiteSearchOptionType>>(null);
 
   const keyDownListener = useCallback(
-    (event) => {
+    (event: KeyboardEvent) => {
       if (event.key === '/' && event.ctrlKey) {
         event.stopPropagation();
         event.preventDefault();

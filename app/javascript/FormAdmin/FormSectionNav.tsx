@@ -1,7 +1,6 @@
-import { useContext, useCallback, useRef } from 'react';
+import { useContext, useCallback, useRef, useId } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  useUniqueId,
   buildOptimisticArrayForMove,
   useArrayBasicSortableHandlers,
   useCreateMutationWithReferenceArrayUpdater,
@@ -42,7 +41,7 @@ function FormSectionNav(): JSX.Element {
     FormEditorFormSectionFieldsFragmentDoc,
     'FormEditorFormSectionFields',
   );
-  const navId = useUniqueId('section-nav-');
+  const navId = useId();
   const sensors = useSortableDndSensors();
 
   const moveSection = useCallback(

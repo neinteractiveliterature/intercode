@@ -26,7 +26,7 @@ function EventProposalAdminNotes({ eventProposalId }: EventProposalAdminNotesPro
 
   const [updateAdminNotesMutate] = useUpdateEventProposalAdminNotesMutation();
   const updateAdminNotes = useCallback(
-    (adminNotes) =>
+    (adminNotes: string) =>
       updateAdminNotesMutate({
         variables: { eventProposalId, adminNotes },
         update: (cache) => {

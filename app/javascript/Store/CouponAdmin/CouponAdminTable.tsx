@@ -31,6 +31,8 @@ function CouponUsageLimitCell({ value }: { value: CouponType['usage_limit'] }) {
   );
 }
 
+const CouponEffectCell = ({ value }: { value: CouponType }) => <>{describeCoupon(value)}</>;
+
 function getPossibleColumns(): Column<CouponType>[] {
   return [
     {
@@ -44,7 +46,7 @@ function getPossibleColumns(): Column<CouponType>[] {
       Header: 'Effect',
       id: 'effect',
       accessor: (coupon: CouponType) => coupon,
-      Cell: ({ value }: { value: CouponType }) => describeCoupon(value),
+      Cell: CouponEffectCell,
     },
     {
       Header: 'Usage limit',

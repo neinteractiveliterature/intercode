@@ -1,12 +1,11 @@
 /* eslint-disable jsx-a11y/label-has-for */
 
-import { useState, useMemo, ReactNode, SetStateAction } from 'react';
+import { useState, useMemo, ReactNode, SetStateAction, useId } from 'react';
 
 import * as React from 'react';
 import Select from 'react-select';
 import { IANAZone } from 'luxon';
 import { Search, TfIdfSearchIndex } from 'js-search';
-import { useUniqueId } from '@neinteractiveliterature/litform';
 
 import timezoneSelectData from './timezoneSelectData.json';
 
@@ -17,29 +16,19 @@ function isValidZone(zoneName: string): zoneName is keyof typeof timezoneSelectD
 type ZoneData = typeof timezoneSelectData['zones']['America/New_York'];
 
 interface TfIdfSearchIndexWithOverridableCreate extends TfIdfSearchIndex {
-  _createCalculateTfIdf(): (
-    tokens: string[],
-    document: BoostableDocument,
-    documents: BoostableDocument[],
-  ) => number;
+  _createCalculateTfIdf(): (tokens: string[], document: BoostableDocument, documents: BoostableDocument[]) => number;
 }
 
 type BoostableDocument = {
   $boost?: number;
 };
 
-class BoostableTfIdfSearchIndex
-  extends TfIdfSearchIndex
-  implements TfIdfSearchIndexWithOverridableCreate
-{
+class BoostableTfIdfSearchIndex extends TfIdfSearchIndex implements TfIdfSearchIndexWithOverridableCreate {
   _createCalculateTfIdf() {
     /* eslint-disable-next-line no-underscore-dangle */ /* @ts-expect-error We are doing seriously awful things to override private methods here */
     const baseTfIdf = super._createCalculateTfIdf();
-    return (
-      tokens: string[],
-      document: BoostableDocument,
-      documents: BoostableDocument[],
-    ): number => baseTfIdf(tokens, document, documents) * (document.$boost ?? 1.0);
+    return (tokens: string[], document: BoostableDocument, documents: BoostableDocument[]): number =>
+      baseTfIdf(tokens, document, documents) * (document.$boost ?? 1.0);
   }
 }
 
@@ -55,9 +44,7 @@ function getFormattedOffset(zoneName: string) {
   const offsetSign = offset < 0 ? '-' : '+';
   const offsetHours = Math.floor(Math.abs(offset / 60));
   const offsetMinutes = Math.round(Math.abs(offset % 60));
-  return `UTC${offsetSign}${offsetHours.toString().padStart(2, '0')}:${offsetMinutes
-    .toString()
-    .padStart(2, '0')}`;
+  return `UTC${offsetSign}${offsetHours.toString().padStart(2, '0')}:${offsetMinutes.toString().padStart(2, '0')}`;
 }
 
 export type TimezoneSelectProps = {
@@ -93,7 +80,7 @@ function TimezoneSelect(props: TimezoneSelectProps): JSX.Element {
   };
 
   const { label, value, onChange, ...otherProps } = props;
-  const selectId = useUniqueId('timezone-select-');
+  const selectId = useId();
 
   return (
     <div className="mb-3">

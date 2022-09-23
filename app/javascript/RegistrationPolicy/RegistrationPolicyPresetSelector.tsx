@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useUniqueId } from '@neinteractiveliterature/litform';
 
 import { RegistrationPolicyPreset } from '../FormAdmin/FormItemUtils';
 
@@ -18,7 +17,7 @@ function RegistrationPolicyPresetSelector({
   allowCustom,
   custom,
 }: RegistrationPolicyPresetSelectorProps): JSX.Element {
-  const presetSelectorId = useUniqueId('preset-');
+  const presetSelectorId = React.useId();
 
   if (!presets) {
     return <></>;

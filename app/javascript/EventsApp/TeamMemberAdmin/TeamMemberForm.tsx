@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import {
   usePropertySetters,
   useFunctionalStateUpdater,
@@ -21,14 +21,13 @@ export type TeamMemberFormProps = {
 function TeamMemberForm({ event, disabled, value, onChange }: TeamMemberFormProps): JSX.Element {
   const { t } = useTranslation();
   const setValue = useFunctionalStateUpdater(value, onChange);
-  const [setDisplayTeamMember, setShowEmail, setReceiveConEmail, setReceiveSignupEmail] =
-    usePropertySetters(
-      setValue,
-      'display_team_member',
-      'show_email',
-      'receive_con_email',
-      'receive_signup_email',
-    );
+  const [setDisplayTeamMember, setShowEmail, setReceiveConEmail, setReceiveSignupEmail] = usePropertySetters(
+    setValue,
+    'display_team_member',
+    'show_email',
+    'receive_con_email',
+    'receive_signup_email',
+  );
 
   const teamMemberName = event.event_category.team_member_name;
   const checkboxProperties = [
@@ -43,13 +42,15 @@ function TeamMemberForm({ event, disabled, value, onChange }: TeamMemberFormProp
     {
       name: 'show_email',
       label: (
-        <Trans i18nKey="events.teamMemberAdmin.showEmailLabel">
-          Show individual email address on event page{' '}
+        <>
+          {t('events.teamMemberAdmin.showEmail.label', 'Show individual email address on event page')}{' '}
           <HelpPopover iconSet="bootstrap-icons">
-            Selecting this option will make the individual email address for this{' '}
-            {{ teamMemberName }} appear on the event page, but only for logged-in site users.
+            {t(
+              'events.teamMemberAdmin.showEmail.helpPopover',
+              'Selecting this option will make the individual email address for this {{ teamMemberName }} appear on the event page, but only for logged-in site users.',
+            )}
           </HelpPopover>
-        </Trans>
+        </>
       ),
       value: value.show_email,
       onChange: setShowEmail,
@@ -77,16 +78,10 @@ function TeamMemberForm({ event, disabled, value, onChange }: TeamMemberFormProp
       ))}
 
       <MultipleChoiceInput
-        caption={t(
-          'events.teamMemberAdmin.receiveSignupEmailLabel',
-          'Receive email on signup and withdrawal',
-        )}
+        caption={t('events.teamMemberAdmin.receiveSignupEmailLabel', 'Receive email on signup and withdrawal')}
         choices={[
           {
-            label: t(
-              'events.teamMemberAdmin.receiveSignupEmail.allSignups',
-              'Yes, all signup activity',
-            ),
+            label: t('events.teamMemberAdmin.receiveSignupEmail.allSignups', 'Yes, all signup activity'),
             value: 'ALL_SIGNUPS',
           },
           {

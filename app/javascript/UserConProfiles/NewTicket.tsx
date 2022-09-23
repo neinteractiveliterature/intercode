@@ -10,6 +10,7 @@ import {
   useUserConProfileAdminQuery,
 } from './queries.generated';
 import { useCreateTicketMutation } from './mutations.generated';
+import { TicketInput } from '../graphqlTypes.generated';
 
 function useUserConProfileAdminQueryFromParams() {
   const userConProfileId = useParams<{ id: string }>().id;
@@ -50,7 +51,7 @@ export default LoadQueryWrapper(useUserConProfileAdminQueryFromParams, function 
   });
 
   const onSubmit = useCallback(
-    async (ticketInput) => {
+    async (ticketInput: TicketInput) => {
       if (userConProfileId == null) {
         throw new Error('userConProfileId not found in params');
       }

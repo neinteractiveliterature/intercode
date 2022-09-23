@@ -120,7 +120,7 @@ export default function useEventForm<
   const { formRef, validate, itemInteractionTrackingProps } = useValidatableForm();
 
   const formResponseValuesChanged = useCallback(
-    (newResponseValues) => {
+    (newResponseValues: EventType['form_response_attrs']) => {
       const processedResponseValues = Object.entries(newResponseValues).reduce(
         (processed, [key, value]) => ({
           ...processed,

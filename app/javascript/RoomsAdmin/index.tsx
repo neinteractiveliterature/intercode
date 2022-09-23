@@ -79,7 +79,7 @@ export default LoadQueryWrapper(useRoomsAdminQuery, function RoomsAdmin({ data }
         <div className="flex-grow-1">
           {room.runs.length > 0 ? (
             <span className="text-muted">
-              ({t('admin.rooms.eventRunCount', '{{ count }} event runs', { count: room.runs.length })})
+              <>({t('admin.rooms.eventRunCount', '{{ count }} event runs', { count: room.runs.length })})</>
             </span>
           ) : null}
         </div>

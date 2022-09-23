@@ -11,10 +11,9 @@ import { FormItemEditorProps } from '../FormItemEditorProps';
 import { TimeblockPreferenceFormItem } from '../FormItemUtils';
 import { useAppDateTimeFormat } from '../../TimeUtils';
 
-export type TimeblockPreferenceEditorOmissionsRowProps =
-  FormItemEditorProps<TimeblockPreferenceFormItem> & {
-    timeblock: TimeblockDefinition;
-  };
+export type TimeblockPreferenceEditorOmissionsRowProps = FormItemEditorProps<TimeblockPreferenceFormItem> & {
+  timeblock: TimeblockDefinition;
+};
 function TimeblockPreferenceEditorOmissionsRow({
   formItem,
   setFormItem,
@@ -57,10 +56,7 @@ function TimeblockPreferenceEditorOmissionsRow({
     [setFormItem, timeblock.label],
   );
 
-  const columns = useMemo(
-    () => getValidTimeblockColumns(convention, formItem),
-    [convention, formItem],
-  );
+  const columns = useMemo(() => getValidTimeblockColumns(convention, formItem), [convention, formItem]);
 
   const choices = useMemo(
     () =>
@@ -94,17 +90,13 @@ function TimeblockPreferenceEditorOmissionsRow({
 
   const inclusionDates = useMemo(
     () =>
-      choices
-        .filter(({ value, disabled }) => !disabled && !omissionDates.includes(value))
-        .map(({ value }) => value),
+      choices.filter(({ value, disabled }) => !disabled && !omissionDates.includes(value)).map(({ value }) => value),
     [choices, omissionDates],
   );
 
   const inclusionDatesChanged = useCallback(
-    (newInclusionDates) => {
-      omissionDatesChanged(
-        choices.filter(({ value }) => !newInclusionDates.includes(value)).map(({ value }) => value),
-      );
+    (newInclusionDates: string[]) => {
+      omissionDatesChanged(choices.filter(({ value }) => !newInclusionDates.includes(value)).map(({ value }) => value));
     },
     [choices, omissionDatesChanged],
   );

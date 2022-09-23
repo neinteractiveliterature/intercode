@@ -199,8 +199,10 @@ function LiquidInput(props: LiquidInputProps): JSX.Element {
           <>
             <li className="nav-item">
               <button type="button" className="btn btn-link nav-link px-2 py-0" onClick={addFileModal.open}>
-                <MenuIcon icon="bi-file-earmark-image" colorClass="" />
-                {t('cms.liquidInput.addFileButton', 'Add file…')}
+                <>
+                  <MenuIcon icon="bi-file-earmark-image" colorClass="" />
+                  {t('cms.liquidInput.addFileButton', 'Add file…')}
+                </>
               </button>
             </li>
             <li className="flex-grow-1 d-flex justify-content-end">
@@ -213,7 +215,9 @@ function LiquidInput(props: LiquidInputProps): JSX.Element {
                     setShowingDocs(true);
                   }}
                 >
-                  <i className="bi-question-circle-fill" /> {t('buttons.help', 'Help')}
+                  <>
+                    <i className="bi-question-circle-fill" /> {t('buttons.help', 'Help')}
+                  </>
                 </button>
               </div>
             </li>

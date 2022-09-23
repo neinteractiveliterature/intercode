@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, SyntheticEvent } from 'react';
 import capitalize from 'lodash/capitalize';
 import { ApolloError } from '@apollo/client';
 import { useModal, BootstrapFormSelect, ErrorDisplay, FormGroupWithLabel } from '@neinteractiveliterature/litform';
@@ -40,7 +40,7 @@ function TicketForm({
   const [submit, submitError, submitInProgress] = useAsyncFunction(onSubmit);
 
   const submitForm = useCallback(
-    async (event) => {
+    async (event: SyntheticEvent) => {
       if (!ticketTypeId) {
         return;
       }

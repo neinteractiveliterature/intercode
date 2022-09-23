@@ -145,7 +145,7 @@ function MaximumEventProvidedTicketsOverrideEditor({
       <td>
         <InPlaceEditor
           value={override.override_value.toString(10)}
-          onChange={(newValue) => {
+          onChange={(newValue: string) => {
             existingOverrideValueDidChange(override.id, newValue);
           }}
         />

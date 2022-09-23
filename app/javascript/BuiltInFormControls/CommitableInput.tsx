@@ -40,7 +40,7 @@ function CommitableInput({
   }, [value]);
 
   const cancelEditing = useCallback(
-    (event) => {
+    (event: React.SyntheticEvent) => {
       event.preventDefault();
       setEditing(false);
       setEditingValue(undefined);

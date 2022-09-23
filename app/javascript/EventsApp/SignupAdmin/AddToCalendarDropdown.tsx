@@ -10,14 +10,9 @@ export type AddToCalendarDropdownProps = {
 
 function AddToCalendarDropdown({ icalSecret, className }: AddToCalendarDropdownProps): JSX.Element {
   const { t } = useTranslation();
-  const icalUrl = new URL(
-    `/calendars/user_schedule/${encodeURIComponent(icalSecret)}`,
-    window.location.href,
-  );
+  const icalUrl = new URL(`/calendars/user_schedule/${encodeURIComponent(icalSecret)}`, window.location.href);
   icalUrl.protocol = 'webcal';
-  const googleCalendarUrl = `https://calendar.google.com/calendar/r?cid=${encodeURIComponent(
-    icalUrl.toString(),
-  )}`;
+  const googleCalendarUrl = `https://calendar.google.com/calendar/r?cid=${encodeURIComponent(icalUrl.toString())}`;
 
   return (
     <DropdownMenu
@@ -25,25 +20,21 @@ function AddToCalendarDropdown({ icalSecret, className }: AddToCalendarDropdownP
       buttonContent={
         <>
           <i className="bi-calendar3" aria-hidden />
-          <span className="visually-hidden">
-            {t('addToCalendarDropdown.title', 'Add to calendar')}
-          </span>
+          <span className="visually-hidden">{t('addToCalendarDropdown.title', 'Add to calendar')}</span>
         </>
       }
       popperOptions={{ placement: 'bottom-end' }}
     >
-      <a
-        className="dropdown-item"
-        href={googleCalendarUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <i className="bi-google" aria-hidden />{' '}
-        {t('addToCalendarDropdown.subscribeGoogle', 'Subscribe on Google Calendar')}
+      <a className="dropdown-item" href={googleCalendarUrl} target="_blank" rel="noopener noreferrer">
+        <>
+          <i className="bi-google" aria-hidden />{' '}
+          {t('addToCalendarDropdown.subscribeGoogle', 'Subscribe on Google Calendar')}
+        </>
       </a>
       <a className="dropdown-item" href={icalUrl.toString()}>
-        <i className="bi-calendar3" aria-hidden />{' '}
-        {t('addToCalendarDropdown.subscribeICal', 'Subscribe via iCal')}
+        <>
+          <i className="bi-calendar3" aria-hidden /> {t('addToCalendarDropdown.subscribeICal', 'Subscribe via iCal')}
+        </>
       </a>
       <CopyToClipboardButton
         className="dropdown-item"

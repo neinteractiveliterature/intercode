@@ -67,7 +67,7 @@ function ScheduleViewDropdown({ viewSelected, scheduleView, configs }: ScheduleV
       buttonContent={
         <>
           <strong className="d-none d-md-inline">
-            {t('schedule.views.scheduleViewSelectorHeader', 'View type:')}{' '}
+            <>{t('schedule.views.scheduleViewSelectorHeader', 'View type:')} </>
           </strong>
           {getScheduleViewLabel(scheduleView, t)}
         </>

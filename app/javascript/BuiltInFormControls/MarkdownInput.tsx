@@ -98,8 +98,10 @@ function MarkdownInput({ eventId, eventProposalId, imageAttachmentConfig, ...pro
             {imageAttachmentConfig && (
               <li className="nav-item">
                 <button type="button" className="btn btn-link nav-link px-2 py-0" onClick={attachImageModal.open}>
-                  <MenuIcon icon="bi-file-earmark-image" colorClass="" />
-                  {t('buttons.attachImage', 'Attach image…')}
+                  <>
+                    <MenuIcon icon="bi-file-earmark-image" colorClass="" />
+                    {t('buttons.attachImage', 'Attach image…')}
+                  </>
                 </button>
               </li>
             )}

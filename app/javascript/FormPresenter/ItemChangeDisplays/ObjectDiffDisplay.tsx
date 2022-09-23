@@ -26,14 +26,11 @@ function ObjectDiffDisplay<T extends Record<string, { toString(): string } | und
 }: ObjectDiffDisplayProps<T>): JSX.Element {
   const combinedKeys = uniq([...Object.keys(before || {}), ...Object.keys(after || {})]).sort();
 
-  const keyRenderer = renderKey ?? ((key) => key);
+  const keyRenderer = renderKey ?? ((key: ReactNode) => key);
   const valueRenderer: ObjectDiffRenderFunction<T> =
     renderValue ??
     ((key, beforeValue, afterValue) => (
-      <TextDiffDisplay
-        before={(beforeValue ?? '').toString()}
-        after={(afterValue ?? '').toString()}
-      />
+      <TextDiffDisplay before={(beforeValue ?? '').toString()} after={(afterValue ?? '').toString()} />
     ));
 
   return (
@@ -48,7 +45,7 @@ function ObjectDiffDisplay<T extends Record<string, { toString(): string } | und
 
         return (
           <Fragment key={key.toString()}>
-            <dt className="col-sm-3">{keyRenderer(key, beforeValue, afterValue)}</dt>
+            <dt className="col-sm-3">{keyRenderer(key.toString(), beforeValue, afterValue)}</dt>
             <dd className="col-sm-9">{valueRenderer(key, beforeValue, afterValue)}</dd>
           </Fragment>
         );

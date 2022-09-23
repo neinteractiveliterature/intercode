@@ -14,6 +14,7 @@ import {
   parseTypedFormItemObject,
   TypedFormItem,
   findStandardItem,
+  ParsedFormItem,
 } from './FormItemUtils';
 import FormItemInput from '../FormPresenter/ItemInputs/FormItemInput';
 import useAsyncFunction from '../useAsyncFunction';
@@ -44,14 +45,18 @@ function FormItemEditorLayout(): JSX.Element {
   );
   const [previewFormItem, setPreviewFormItem] = useState(() => formItemsById.get(initialFormItem?.id ?? ''));
   const refreshRenderedFormItem = useCallback(
-    async (newFormItem) => {
+    async (newFormItem: FormEditorFormItem) => {
       if (!currentSection?.id) {
         return;
       }
 
       const response = await apolloClient.query<PreviewFormItemQueryData, PreviewFormItemQueryVariables>({
         query: PreviewFormItemQueryDocument,
-        variables: { formId: form.id, formSectionId: currentSection.id, formItem: buildFormItemInput(newFormItem) },
+        variables: {
+          formId: form.id,
+          formSectionId: currentSection.id,
+          formItem: buildFormItemInput(newFormItem as ParsedFormItem<Record<string, unknown>, unknown>),
+        },
         fetchPolicy: 'no-cache',
       });
       const responseFormItem = parseTypedFormItemObject(response.data.convention.form.form_section.preview_form_item);

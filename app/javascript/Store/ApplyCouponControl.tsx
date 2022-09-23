@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import * as React from 'react';
 import { ApolloError } from '@apollo/client';
-import { ErrorDisplay, useUniqueId } from '@neinteractiveliterature/litform';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import useAsyncFunction from '../useAsyncFunction';
 
@@ -11,7 +11,7 @@ export type ApplyCouponControlProps = {
 
 function ApplyCouponControl({ createCouponApplication }: ApplyCouponControlProps): JSX.Element {
   const [couponCode, setCouponCode] = useState('');
-  const couponCodeInputId = useUniqueId('coupon-code-');
+  const couponCodeInputId = useId();
   const [applyCoupon, applyError, applyInProgress] = useAsyncFunction(createCouponApplication);
 
   const applyClicked = async () => {

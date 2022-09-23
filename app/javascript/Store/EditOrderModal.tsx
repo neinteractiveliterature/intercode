@@ -114,7 +114,7 @@ function EditOrderModal({ order, closeModal }: EditOrderModalProps): JSX.Element
   );
 
   const deleteCouponApplication = useCallback(
-    (couponApplication) =>
+    (couponApplication: NonNullable<EditOrderModalProps['order']>['coupon_applications'][number]) =>
       deleteCouponApplicationMutate({
         variables: { id: couponApplication.id },
       }),

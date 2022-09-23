@@ -1,6 +1,5 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useId, useMemo } from 'react';
 import classNames from 'classnames';
-import { useUniqueId } from '@neinteractiveliterature/litform';
 import { EditorView } from '@codemirror/view';
 
 import FieldRequiredFeedback from './FieldRequiredFeedback';
@@ -70,7 +69,7 @@ function FreeTextItemInput(props: FreeTextItemInputProps): JSX.Element {
     value: uncheckedValue,
     valueInvalid,
   } = props;
-  const domId = useUniqueId(`${formItem.identifier}-`);
+  const domId = useId();
   const value = uncheckedValue ?? '';
 
   const userInteracted = useCallback(() => onInteract(formItem.identifier), [onInteract, formItem.identifier]);
@@ -85,7 +84,7 @@ function FreeTextItemInput(props: FreeTextItemInputProps): JSX.Element {
   );
 
   const valueChanged = useCallback(
-    (newValue) => {
+    (newValue: string) => {
       onChange(newValue);
       userInteracted();
     },

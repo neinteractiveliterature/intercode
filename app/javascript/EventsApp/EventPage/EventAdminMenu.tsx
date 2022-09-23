@@ -35,31 +35,39 @@ export default LoadQueryWithVariablesWrapper(
         <ul className="list-group list-group-flush">
           <li className="list-group-item">
             <Link to={`${eventPath}/edit`}>
-              <MenuIcon icon="bi-pencil-square" colorClass="" /> {t('events.adminMenu.editLink', 'Edit event')}
+              <>
+                <MenuIcon icon="bi-pencil-square" colorClass="" /> {t('events.adminMenu.editLink', 'Edit event')}
+              </>
             </Link>
           </li>
           <li className="list-group-item">
             <Link to={`${eventPath}/team_members`}>
-              <MenuIcon icon="bi-megaphone-fill" colorClass="" />{' '}
-              {t('events.adminMenu.editTeamMembersLink', 'Edit {{ teamMemberNamePlural }}', {
-                teamMemberNamePlural: event.event_category.teamMemberNamePlural,
-              })}
+              <>
+                <MenuIcon icon="bi-megaphone-fill" colorClass="" />{' '}
+                {t('events.adminMenu.editTeamMembersLink', 'Edit {{ teamMemberNamePlural }}', {
+                  teamMemberNamePlural: event.event_category.teamMemberNamePlural,
+                })}
+              </>
             </Link>
           </li>
           {ticketMode === TicketMode.TicketPerEvent && (
             <li className="list-group-item">
               <Link to={`${eventPath}/ticket_types`}>
-                <MenuIcon icon="bi-person-badge-fill" colorClass="" />{' '}
-                {t('navigation.admin.ticketTypes', '{{ ticketName }} Types', {
-                  ticketName: capitalize(ticketName ?? 'ticket'),
-                })}
+                <>
+                  <MenuIcon icon="bi-person-badge-fill" colorClass="" />{' '}
+                  {t('navigation.admin.ticketTypes', '{{ ticketName }} Types', {
+                    ticketName: capitalize(ticketName ?? 'ticket'),
+                  })}
+                </>
               </Link>
             </li>
           )}
           <li className="list-group-item">
             <Link to={`${eventPath}/history`}>
-              <MenuIcon icon="bi-hourglass-split" colorClass="" />{' '}
-              {t('events.adminMenu.historyLink', 'View edit history')}
+              <>
+                <MenuIcon icon="bi-hourglass-split" colorClass="" />{' '}
+                {t('events.adminMenu.historyLink', 'View edit history')}
+              </>
             </Link>
           </li>
         </ul>

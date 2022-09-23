@@ -495,7 +495,10 @@
       "removeTeamMemberLink": "Remove {{ teamMemberName }}",
       "removeTeamMemberPrompt": "Are you sure you want to remove {{ name }} as a {{ teamMemberName }}?",
       "selectUserConProfilePrompt": "Select a person to continue.",
-      "showEmailLabel": "Show individual email address on event page <2>Selecting this option will make the individual email address for this {{teamMemberName}} appear on the event page, but only for logged-in site users.</2>",
+      "showEmail": {
+        "helpPopover": "Selecting this option will make the individual email address for this {{ teamMemberName }} appear on the event page, but only for logged-in site users.",
+        "label": "Show individual email address on event page"
+      },
       "ticketProvidability_one": "{{ eventTitle }} has {{ count }} {{ ticketName }} remaining to provide.",
       "ticketProvidability_other": "{{ eventTitle }} has {{ count }} {{ ticketName }} remaining to provide.",
       "unticketedWarning": "{{name}}<1> has no {{ticketName}} for {{conventionName}}.</1> Without a {{ticketName}}, users cannot sign up for events at the convention.",
@@ -512,7 +515,7 @@
       "ticketTypeHeader": "{{ ticketName }} type"
     },
     "withdrawPrompt": {
-      "moderatedSignup": "<0><0>If you’re thinking of signing up for a different event instead, please go to that event’s page and request to sign up for it.</0> If the request is accepted, you’ll automatically be withdrawn from this event.</0><1>Are you sure you want to withdraw from {{eventTitle}}? </1>",
+      "moderatedSignup": "<0><0>If you’re thinking of signing up for a different event instead, please go to that event’s page and request to sign up for it.</0> If the request is accepted, you’ll automatically be withdrawn from this event.</0><1>Are you sure you want to withdraw from {{eventTitle}}?</1>",
       "selfServiceSignup": "Are you sure you want to withdraw from {{ eventTitle }}?",
       "signupRequest": "Are you sure you want to withdraw your request to sign up for {{ eventTitle }}?"
     }
@@ -793,6 +796,7 @@
       "notSignedUp": "Not signed up",
       "stateWithRequestedBucket": "{{ state }} (requested {{ requestedBucket }})",
       "teamMemberNotCounted": "{{ teamMemberName }} (not counted)",
+      "ticketPurchaseHold": "Held temporarily while awaiting payment",
       "waitlisted": "Waitlisted",
       "waitlistedNoPreference": "Waitlisted (no preference)",
       "waitlistedWithRequestedBucket": "Waitlisted (requested {{ requestedBucketName }})",

@@ -12,13 +12,13 @@ import { WithGeneratedId } from '../../GeneratedIdUtils';
 import { getTimeblockTimespanForDisplay } from '../../FormPresenter/TimeblockUtils';
 import { getSortableStyle } from '../../SortableUtils';
 
-function useTimeblockPropertyUpdater(
+function useTimeblockPropertyUpdater<PropertyName extends keyof TimeblockDefinition>(
   onChange: (generatedId: string, updater: React.SetStateAction<TimeblockDefinition>) => void,
   generatedId: string,
-  property: keyof TimeblockDefinition,
+  property: PropertyName,
 ) {
   return useCallback(
-    (value) =>
+    (value: TimeblockDefinition[PropertyName]) =>
       onChange(generatedId, (prevTimeblock) => ({
         ...prevTimeblock,
         [property]: value,
@@ -80,11 +80,7 @@ function TimeblockPreferenceEditorTimeblockRow({
         <i className="bi-grip-vertical" />
       </td>
       <td>
-        <TimeSelect
-          value={timeblock.start}
-          onChange={(value) => startChanged(value)}
-          timespan={selectTimespan}
-        />
+        <TimeSelect value={timeblock.start} onChange={(value) => startChanged(value)} timespan={selectTimespan} />
         {timespanError && (
           <div className="small text-danger mt-1">
             <i className="bi-exclamation-triangle-fill" /> {timespanError}
@@ -92,11 +88,7 @@ function TimeblockPreferenceEditorTimeblockRow({
         )}
       </td>
       <td>
-        <TimeSelect
-          value={timeblock.finish}
-          onChange={(value) => finishChanged(value)}
-          timespan={selectTimespan}
-        />
+        <TimeSelect value={timeblock.finish} onChange={(value) => finishChanged(value)} timespan={selectTimespan} />
       </td>
       <td>
         <input

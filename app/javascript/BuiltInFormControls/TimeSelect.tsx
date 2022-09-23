@@ -1,6 +1,5 @@
-import { ReactNode, useMemo } from 'react';
+import { ReactNode, useMemo, useId } from 'react';
 import * as React from 'react';
-import { useUniqueId } from '@neinteractiveliterature/litform';
 
 import { getMemoizationKeyForTimespan } from '../TimespanUtils';
 import { FiniteTimespan } from '../Timespan';
@@ -72,8 +71,8 @@ function TimeSelect({ value, timespan, onChange, children }: TimeSelectProps): J
     </option>
   ));
 
-  const hourInputId = useUniqueId('hour-');
-  const minuteInputId = useUniqueId('minute-');
+  const hourInputId = useId();
+  const minuteInputId = useId();
 
   const [hourSelect, minuteSelect] = (
     [

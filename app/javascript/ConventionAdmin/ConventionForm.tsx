@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { TabList, TabBody, useTabsWithRouter, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { ApolloError } from '@apollo/client';
@@ -45,7 +45,7 @@ function ConventionForm({
   const [favicon, setFavicon] = useState<File | null | undefined>();
 
   const onClickSave = useCallback(
-    (event) => {
+    (event: React.MouseEvent) => {
       event.preventDefault();
       save(convention, openGraphImage, favicon);
     },
