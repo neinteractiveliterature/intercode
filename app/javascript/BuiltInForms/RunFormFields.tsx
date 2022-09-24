@@ -61,7 +61,7 @@ function RunFormFields<RunType extends RunForRunFormFields>({
   const [day, setDay] = useState<DateTime | undefined>(() =>
     startsAt && conventionDayTimespans
       ? conventionDayTimespans.find((timespan) => timespan.includesTime(startsAt))?.start
-      : undefined,
+      : startsAt?.startOf('day'),
   );
   const [hour, setHour] = useState<number | undefined>(() =>
     startsAt && day ? Math.floor(startsAt.diff(day.startOf('day'), 'hours').hours) : undefined,
