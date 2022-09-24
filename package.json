@@ -62,7 +62,7 @@
     "@graphiql/toolkit": "0.8.0",
     "@juggle/resize-observer": "3.4.0",
     "@lezer/common": "1.0.1",
-    "@neinteractiveliterature/litform": "0.27.0",
+    "@neinteractiveliterature/litform": "^0.28.0",
     "@popperjs/core": "2.11.6",
     "@rails/activestorage": "7.0.4",
     "@stripe/react-stripe-js": "1.11.0",
