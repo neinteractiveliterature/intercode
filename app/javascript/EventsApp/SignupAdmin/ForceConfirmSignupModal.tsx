@@ -15,11 +15,7 @@ export type ForceConfirmSignupModalProps = {
   onCancel: () => void;
 };
 
-function ForceConfirmSignupModal({
-  signup,
-  onComplete,
-  onCancel,
-}: ForceConfirmSignupModalProps): JSX.Element {
+function ForceConfirmSignupModal({ signup, onComplete, onCancel }: ForceConfirmSignupModalProps): JSX.Element {
   const [bucketKey, setBucketKey] = useState<string | null>();
   const [forceConfirmMutate] = useForceConfirmSignupMutation();
   const [forceConfirm, error, inProgress] = useAsyncFunction(forceConfirmMutate);
@@ -71,9 +67,7 @@ function ForceConfirmSignupModal({
 
   return (
     <Modal visible={signup != null}>
-      <div className="modal-header">
-        {t('events.signupAdmin.forceConfirmSignup.header', 'Force signup into run')}
-      </div>
+      <div className="modal-header">{t('events.signupAdmin.forceConfirmSignup.header', 'Force signup into run')}</div>
       <div className="modal-body">{renderBody()}</div>
       <div className="modal-footer">
         <button type="button" className="btn btn-secondary" onClick={onCancel}>

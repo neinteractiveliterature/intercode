@@ -13,15 +13,11 @@ export type ScheduleGridCategoryGroupConfig = {
   flexGrow?: boolean;
 };
 
-export function isCatchAllMatchRule(
-  rule: ScheduleGridMatchRule,
-): rule is ScheduleGridCatchAllMatchRule {
+export function isCatchAllMatchRule(rule: ScheduleGridMatchRule): rule is ScheduleGridCatchAllMatchRule {
   return 'allRemaining' in rule;
 }
 
-export function isCategoryMatchRule(
-  rule: ScheduleGridMatchRule,
-): rule is ScheduleGridCategoryMatchRule {
+export function isCategoryMatchRule(rule: ScheduleGridMatchRule): rule is ScheduleGridCategoryMatchRule {
   return 'categoryName' in rule;
 }
 

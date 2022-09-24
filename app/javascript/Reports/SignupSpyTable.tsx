@@ -13,13 +13,9 @@ import BucketChangeCell from '../Tables/BucketChangeCell';
 import TableHeader from '../Tables/TableHeader';
 import SignupChangesTableExportButton from '../Tables/SignupChangesTableExportButton';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
-import {
-  SignupSpySignupChangesQueryData,
-  useSignupSpySignupChangesQuery,
-} from './queries.generated';
+import { SignupSpySignupChangesQueryData, useSignupSpySignupChangesQuery } from './queries.generated';
 
-type SignupChangeType =
-  SignupSpySignupChangesQueryData['convention']['signup_changes_paginated']['entries'][0];
+type SignupChangeType = SignupSpySignupChangesQueryData['convention']['signup_changes_paginated']['entries'][0];
 
 const FILTER_CODECS = buildFieldFilterCodecs({
   action: FilterCodecs.stringArray,
@@ -72,14 +68,7 @@ const columns: Column<SignupChangeType>[] = [
   },
 ];
 
-const defaultVisibleColumns = [
-  'name',
-  'event_title',
-  'action',
-  'bucket_change',
-  'created_at',
-  'choice',
-];
+const defaultVisibleColumns = ['name', 'event_title', 'action', 'bucket_change', 'created_at', 'choice'];
 
 const defaultState = {
   sortBy: [{ id: 'created_at', desc: true }],

@@ -37,9 +37,7 @@ function WhosFree(): JSX.Element {
   return (
     <>
       <h1 className="mb-4">Who&rsquo;s free?</h1>
-      <WhosFreeForm
-        onSubmit={({ start, finish }) => setTimespan(Timespan.finiteFromDateTimes(start, finish))}
-      />
+      <WhosFreeForm onSubmit={({ start, finish }) => setTimespan(Timespan.finiteFromDateTimes(start, finish))} />
       {timespan && <WhosFreeResults timespan={timespan} />}
     </>
   );

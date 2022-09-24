@@ -13,10 +13,7 @@ export default function useAutoCloseOnNavigate(
   const prevLocation = useRef<LocationType>();
 
   useEffect(() => {
-    if (
-      shouldAutoClose == null ||
-      (prevLocation.current && shouldAutoClose(prevLocation.current, location))
-    ) {
+    if (shouldAutoClose == null || (prevLocation.current && shouldAutoClose(prevLocation.current, location))) {
       setOpen(false);
     }
     prevLocation.current = location;

@@ -13,23 +13,14 @@ export type AssignDocLinkProps = {
   preAssignNameContent?: React.ReactNode;
 };
 
-function AssignDocLink({
-  assign,
-  compact = false,
-  prefix,
-  preAssignNameContent,
-}: AssignDocLinkProps): JSX.Element {
+function AssignDocLink({ assign, compact = false, prefix, preAssignNameContent }: AssignDocLinkProps): JSX.Element {
   const location = useLocation();
 
   const renderCard = () => (
     <div className="card mb-2">
       <div className="card-header">
         {compact ? (
-          <CompactAssignDocHeader
-            assign={assign}
-            prefix={prefix}
-            preAssignNameContent={preAssignNameContent}
-          />
+          <CompactAssignDocHeader assign={assign} prefix={prefix} preAssignNameContent={preAssignNameContent} />
         ) : (
           <AssignDocHeader assign={assign} prefix={prefix} />
         )}

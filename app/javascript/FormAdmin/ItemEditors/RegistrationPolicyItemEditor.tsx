@@ -14,10 +14,7 @@ import { useSortableDndSensors } from '../../SortableUtils';
 import RegistrationPolicyItemEditorPresetRowDragOverlay from './RegistrationPolicyItemEditorPresetRowDragOverlay';
 
 export type RegistrationPolicyItemEditorProps = FormItemEditorProps<RegistrationPolicyFormItem>;
-function RegistrationPolicyItemEditor({
-  formItem,
-  setFormItem,
-}: RegistrationPolicyItemEditorProps): JSX.Element {
+function RegistrationPolicyItemEditor({ formItem, setFormItem }: RegistrationPolicyItemEditorProps): JSX.Element {
   const { disabled } = useContext(FormItemEditorContext);
 
   const generateNewPreset: () => RegistrationPolicyPreset = useCallback(
@@ -36,13 +33,11 @@ function RegistrationPolicyItemEditor({
 
   const [matchWidthRef, matchWidthStyle] = useMatchWidthStyle<HTMLTableElement>();
   const sensors = useSortableDndSensors();
-  const [addPreset, presetChanged, deletePreset, draggingPreset, sortableHandlers] =
-    useArrayProperty<WithGeneratedId<RegistrationPolicyPreset, string>, typeof formItem, 'presets'>(
-      formItem.properties.presets,
-      'presets',
-      setFormItem,
-      generateNewPreset,
-    );
+  const [addPreset, presetChanged, deletePreset, draggingPreset, sortableHandlers] = useArrayProperty<
+    WithGeneratedId<RegistrationPolicyPreset, string>,
+    typeof formItem,
+    'presets'
+  >(formItem.properties.presets, 'presets', setFormItem, generateNewPreset);
 
   return (
     <DndContext sensors={sensors} {...sortableHandlers}>
@@ -87,12 +82,7 @@ function RegistrationPolicyItemEditor({
           <tr>
             <td />
             <td colSpan={4}>
-              <button
-                type="button"
-                className="btn btn-outline-primary btn-sm"
-                onClick={addPreset}
-                disabled={disabled}
-              >
+              <button type="button" className="btn btn-outline-primary btn-sm" onClick={addPreset} disabled={disabled}>
                 <i className="bi-plus" /> Add policy preset
               </button>
             </td>

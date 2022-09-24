@@ -17,9 +17,7 @@ function ViewSignupsOptions({ event, run, currentAbility }: ViewSignupsOptionsPr
   if (currentAbility.can_read_event_signups) {
     return (
       <div className="card-footer text-center">
-        <Link
-          to={`${eventPath}/runs/${run.id}/admin_signups?filters.state=confirmed,waitlisted&sort.id=asc`}
-        >
+        <Link to={`${eventPath}/runs/${run.id}/admin_signups?filters.state=confirmed,waitlisted&sort.id=asc`}>
           {t('signups.viewSignupsLink', 'View signups')}
         </Link>
         {run.current_ability_can_signup_summary_run && !event.private_signup_list ? (
@@ -37,9 +35,7 @@ function ViewSignupsOptions({ event, run, currentAbility }: ViewSignupsOptionsPr
   if (run.current_ability_can_signup_summary_run) {
     return (
       <div className="card-footer text-center">
-        <Link to={`${eventPath}/runs/${run.id}/signup_summary`}>
-          {t('signups.viewSignupsLink', 'View signups')}
-        </Link>
+        <Link to={`${eventPath}/runs/${run.id}/signup_summary`}>{t('signups.viewSignupsLink', 'View signups')}</Link>
       </div>
     );
   }

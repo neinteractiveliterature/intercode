@@ -66,10 +66,7 @@ export function useFormatRunTime(): (time: DateTime, options: RunTimeFormatOptio
   return formatRunTime;
 }
 
-export function useFormatRunTimespan(): (
-  timespan: FiniteTimespan,
-  options: RunTimeFormatOptions,
-) => string {
+export function useFormatRunTimespan(): (timespan: FiniteTimespan, options: RunTimeFormatOptions) => string {
   const formatRunTime = useFormatRunTime();
   const { timezoneName } = useContext(AppRootContext);
   const formatRunTimespan = useCallback(

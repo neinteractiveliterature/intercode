@@ -15,12 +15,7 @@ function SignupButtons({ signupOptions, onClick, disabled }: SignupButtonsProps)
   return (
     <div className="d-flex flex-wrap justify-content-center">
       {signupOptions.map((signupOption) => (
-        <SignupButtonDisplay
-          key={signupOption.key}
-          signupOption={signupOption}
-          onClick={onClick}
-          disabled={disabled}
-        />
+        <SignupButtonDisplay key={signupOption.key} signupOption={signupOption} onClick={onClick} disabled={disabled} />
       ))}
     </div>
   );

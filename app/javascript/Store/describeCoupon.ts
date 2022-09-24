@@ -11,9 +11,7 @@ export default function describeCoupon(
   if (coupon.provides_product) {
     return `1 free ${coupon.provides_product.name}`;
   }
-  const percentDiscount = coupon.percent_discount
-    ? parseFloatOrNull(coupon.percent_discount)
-    : undefined;
+  const percentDiscount = coupon.percent_discount ? parseFloatOrNull(coupon.percent_discount) : undefined;
   if (percentDiscount) {
     if (percentDiscount % 1.0 === 0.0) {
       return `${Math.floor(percentDiscount)}% off order`;

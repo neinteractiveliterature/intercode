@@ -29,11 +29,7 @@ export function userSignupStatus(run: {
     return SignupStatus.Waitlisted;
   }
 
-  if (
-    run.my_signup_requests.some(
-      (signupRequest) => signupRequest.state === SignupRequestState.Pending,
-    )
-  ) {
+  if (run.my_signup_requests.some((signupRequest) => signupRequest.state === SignupRequestState.Pending)) {
     return SignupStatus.RequestPending;
   }
 
@@ -74,13 +70,8 @@ export function getRunClassName({
     config.classifyEventsBy === 'fullness' ? getFullnessClass(event, signupCountData) : null,
     {
       'signed-up': config.showSignedUp && signupStatus != null,
-      'zero-capacity':
-        event.registration_policy &&
-        event.registration_policy.total_slots_including_not_counted === 0,
-      full:
-        config.classifyEventsBy !== 'fullness' &&
-        signupCountData.runFull(event) &&
-        signupStatus == null,
+      'zero-capacity': event.registration_policy && event.registration_policy.total_slots_including_not_counted === 0,
+      full: config.classifyEventsBy !== 'fullness' && signupCountData.runFull(event) && signupStatus == null,
       fake: event.fake,
       unlimited,
       'truncated-start': runDimensions.fullTimespan.start < runDimensions.timespan.start,
@@ -139,9 +130,7 @@ function getColorVariant(
 export function getEventCategoryStyles({
   eventCategory,
   variant,
-}: GetEventCategoryStylesOptions): Partial<
-  Pick<CSSStyleDeclaration, 'backgroundColor' | 'borderColor'>
-> {
+}: GetEventCategoryStylesOptions): Partial<Pick<CSSStyleDeclaration, 'backgroundColor' | 'borderColor'>> {
   const color = getColorVariant(eventCategory, variant);
 
   if (color) {

@@ -5,10 +5,7 @@ import { parseFloatOrNull } from '@neinteractiveliterature/litform';
 import formatMoney from '../formatMoney';
 import { Money } from '../graphqlTypes.generated';
 
-export type MoneyInputProps = Omit<
-  React.InputHTMLAttributes<HTMLInputElement>,
-  'type' | 'value' | 'onChange'
-> & {
+export type MoneyInputProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type' | 'value' | 'onChange'> & {
   value?: Money | null;
   onChange: React.Dispatch<Money | undefined>;
   appendContent?: ReactNode;

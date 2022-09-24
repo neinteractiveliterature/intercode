@@ -2,9 +2,7 @@ export type FieldRequiredFeedbackProps = {
   valueInvalid: boolean;
 };
 
-export default function FieldRequiredFeedback({
-  valueInvalid,
-}: FieldRequiredFeedbackProps): JSX.Element {
+export default function FieldRequiredFeedback({ valueInvalid }: FieldRequiredFeedbackProps): JSX.Element {
   if (!valueInvalid) {
     return <></>;
   }

@@ -31,9 +31,7 @@ const AuthenticationModalContext = React.createContext<AuthenticationModalContex
   setUnauthenticatedError: () => {},
 });
 
-export function useAuthenticationModalProvider(
-  recaptchaSiteKey?: string,
-): AuthenticationModalContextData {
+export function useAuthenticationModalProvider(recaptchaSiteKey?: string): AuthenticationModalContextData {
   const { state, setState, ...otherModalData } = useModal<AuthenticationModalState>();
   const [afterSignInPath, setAfterSignInPath] = useState<string>();
   const [unauthenticatedError, setUnauthenticatedError] = useState(false);
@@ -51,15 +49,7 @@ export function useAuthenticationModalProvider(
       unauthenticatedError,
       setUnauthenticatedError,
     }),
-    [
-      afterSignInPath,
-      recaptchaSiteKey,
-      setState,
-      setUnauthenticatedError,
-      state,
-      unauthenticatedError,
-      otherModalData,
-    ],
+    [afterSignInPath, recaptchaSiteKey, setState, setUnauthenticatedError, state, unauthenticatedError, otherModalData],
   );
 
   return contextValue;

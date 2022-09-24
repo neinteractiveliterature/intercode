@@ -6,11 +6,7 @@ export type WithdrawSignupButtonProps = {
   withdrawSignup: () => void;
 };
 
-function WithdrawSignupButton({
-  buttonClass,
-  buttonText,
-  withdrawSignup,
-}: WithdrawSignupButtonProps): JSX.Element {
+function WithdrawSignupButton({ buttonClass, buttonText, withdrawSignup }: WithdrawSignupButtonProps): JSX.Element {
   const { t } = useTranslation();
 
   return (

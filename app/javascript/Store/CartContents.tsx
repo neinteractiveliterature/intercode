@@ -1,10 +1,5 @@
 import * as React from 'react';
-import {
-  LoadQueryWrapper,
-  ErrorDisplay,
-  useConfirm,
-  parseIntOrNull,
-} from '@neinteractiveliterature/litform';
+import { LoadQueryWrapper, ErrorDisplay, useConfirm, parseIntOrNull } from '@neinteractiveliterature/litform';
 
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import formatMoney from '../formatMoney';
@@ -12,9 +7,7 @@ import describeCoupon from './describeCoupon';
 import ApplyCouponControl from './ApplyCouponControl';
 import { CartQueryData, CartQueryVariables, useCartQuery } from './queries.generated';
 
-type OrderType = NonNullable<
-  NonNullable<CartQueryData['convention']['my_profile']>['current_pending_order']
->;
+type OrderType = NonNullable<NonNullable<CartQueryData['convention']['my_profile']>['current_pending_order']>;
 type OrderEntryType = OrderType['order_entries'][0];
 
 export type CartContentsProps = {
@@ -144,9 +137,7 @@ export default LoadQueryWrapper<CartQueryData, CartQueryVariables, CartContentsP
             )}
             <tr className="bg-warning-light">
               <td colSpan={2}>
-                <strong>
-                  {currentPendingOrder.coupon_applications.length > 0 ? 'Grand total' : 'Total'}
-                </strong>
+                <strong>{currentPendingOrder.coupon_applications.length > 0 ? 'Grand total' : 'Total'}</strong>
               </td>
               <td colSpan={2}>
                 <strong>{formatMoney(currentPendingOrder.total_price)}</strong>

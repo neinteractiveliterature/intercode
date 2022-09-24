@@ -22,11 +22,9 @@ function WithdrawMySignupButton({
   const confirm = useConfirm();
   const withdrawSignup = () =>
     confirm({
-      prompt: t(
-        'events.withdrawPrompt.selfServiceSignup',
-        'Are you sure you want to withdraw from {{ eventTitle }}?',
-        { eventTitle: event.title },
-      ),
+      prompt: t('events.withdrawPrompt.selfServiceSignup', 'Are you sure you want to withdraw from {{ eventTitle }}?', {
+        eventTitle: event.title,
+      }),
       action: async () => {
         await withdrawMutate({ variables: { runId: run.id } });
         if (reloadOnSuccess) {

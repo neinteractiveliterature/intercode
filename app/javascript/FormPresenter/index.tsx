@@ -1,9 +1,6 @@
 import { ReactNode } from 'react';
 import { SectionTraversalProvider } from './SectionTraversalContext';
-import {
-  useItemInteractionTracking,
-  ItemInteractionTrackerContext,
-} from './ItemInteractionTracker';
+import { useItemInteractionTracking, ItemInteractionTrackerContext } from './ItemInteractionTracker';
 import { CommonFormFieldsFragment } from '../Models/commonFormFragments.generated';
 
 export type FormPresenterAppProps = {

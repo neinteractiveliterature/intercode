@@ -60,19 +60,14 @@ export type PasswordInputWithStrengthCheckProps = {
   onChange: React.Dispatch<string>;
 };
 
-function PasswordInputWithStrengthCheck({
-  id,
-  value,
-  onChange,
-}: PasswordInputWithStrengthCheckProps): JSX.Element {
+function PasswordInputWithStrengthCheck({ id, value, onChange }: PasswordInputWithStrengthCheckProps): JSX.Element {
   const { t } = useTranslation();
   const passwordStrengthResult = useMemo(() => zxcvbn(value), [value]);
   const hasFeedback = useMemo(
     () =>
       passwordStrengthResult &&
       passwordStrengthResult.feedback &&
-      (passwordStrengthResult.feedback.warning ||
-        passwordStrengthResult.feedback.suggestions.length > 0),
+      (passwordStrengthResult.feedback.warning || passwordStrengthResult.feedback.suggestions.length > 0),
     [passwordStrengthResult],
   );
 
@@ -122,10 +117,7 @@ function PasswordInputWithStrengthCheck({
           onChange={(event) => onChange(event.target.value)}
           aria-label={t('authentication.passwordInput.label', 'Password')}
         />
-        <div
-          style={{ right: 0, top: 0, position: 'absolute' }}
-          className={classNames('me-2', 'mt-2')}
-        >
+        <div style={{ right: 0, top: 0, position: 'absolute' }} className={classNames('me-2', 'mt-2')}>
           <button
             type="button"
             className={classNames('btn btn-link p-0', scoreTextClasses)}

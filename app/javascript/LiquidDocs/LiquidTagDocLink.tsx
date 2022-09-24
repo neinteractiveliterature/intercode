@@ -13,10 +13,7 @@ function LiquidTagDocLink({ liquidTag }: LiquidTagDocLinkProps): JSX.Element {
   const liquidTagName = findLiquidTagName(liquidTag);
 
   return (
-    <Link
-      to={`/liquid_docs/tags/${liquidTagName}${location.search}`}
-      className="card-link m-0 text-body"
-    >
+    <Link to={`/liquid_docs/tags/${liquidTagName}${location.search}`} className="card-link m-0 text-body">
       <div className="card mb-2">
         <div className="card-header">
           <LiquidTagDocHeader liquidTag={liquidTag} />

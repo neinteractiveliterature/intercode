@@ -1,10 +1,6 @@
 import { useMemo } from 'react';
 
-import {
-  bucketSortCompare,
-  findPreset,
-  isPreventNoPreferenceSignupsApplicable,
-} from './RegistrationPolicyUtils';
+import { bucketSortCompare, findPreset, isPreventNoPreferenceSignupsApplicable } from './RegistrationPolicyUtils';
 import NoPreferenceHelpPopover from './NoPreferenceHelpPopover';
 import {
   BucketForRegistrationPolicyUtils,
@@ -24,10 +20,7 @@ function renderPresetName(preset: RegistrationPolicyPreset | undefined) {
   return 'Custom registration policy';
 }
 
-function renderBucketOptions(
-  bucket: BucketForRegistrationPolicyUtils,
-  preset: RegistrationPolicyPreset | undefined,
-) {
+function renderBucketOptions(bucket: BucketForRegistrationPolicyUtils, preset: RegistrationPolicyPreset | undefined) {
   if (preset) {
     return null;
   }
@@ -53,10 +46,7 @@ type RegistrationPolicyDisplayBucketRowProps = {
   preset?: RegistrationPolicyPreset;
 };
 
-function RegistrationPolicyDisplayBucketRow({
-  bucket,
-  preset,
-}: RegistrationPolicyDisplayBucketRowProps) {
+function RegistrationPolicyDisplayBucketRow({ bucket, preset }: RegistrationPolicyDisplayBucketRowProps) {
   return (
     <tr>
       <td>{bucket.name}</td>
@@ -78,14 +68,8 @@ export type RegistrationPolicyDisplayProps = {
   registrationPolicy: RegistrationPolicyForRegistrationPolicyUtils;
 };
 
-function RegistrationPolicyDisplay({
-  presets,
-  registrationPolicy,
-}: RegistrationPolicyDisplayProps): JSX.Element {
-  const preset = useMemo(
-    () => findPreset(registrationPolicy, presets ?? []),
-    [presets, registrationPolicy],
-  );
+function RegistrationPolicyDisplay({ presets, registrationPolicy }: RegistrationPolicyDisplayProps): JSX.Element {
+  const preset = useMemo(() => findPreset(registrationPolicy, presets ?? []), [presets, registrationPolicy]);
   const isUnlimited = useMemo(
     () => !registrationPolicy.buckets.some((bucket) => bucket.slots_limited),
     [registrationPolicy.buckets],

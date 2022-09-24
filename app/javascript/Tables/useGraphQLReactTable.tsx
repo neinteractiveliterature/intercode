@@ -2,10 +2,7 @@ import { useMemo } from 'react';
 import { QueryResult, QueryHookOptions, ApolloQueryResult, ApolloError } from '@apollo/client';
 import { Filters, SortingRule } from 'react-table';
 
-import {
-  reactTableFiltersToTableResultsFilters,
-  reactTableSortToTableResultsSort,
-} from './TableUtils';
+import { reactTableFiltersToTableResultsFilters, reactTableSortToTableResultsSort } from './TableUtils';
 import useCachedLoadableValue from '../useCachedLoadableValue';
 import { SortInput } from '../graphqlTypes.generated';
 
@@ -83,9 +80,7 @@ export default function useGraphQLReactTable<
     () => (queryResultHasData(queryResult) ? getPages(queryResult) : null),
     [queryResult.data],
   );
-  const queryData = useCachedLoadableValue(loading, error, () => queryResult.data, [
-    queryResult.data,
-  ]);
+  const queryData = useCachedLoadableValue(loading, error, () => queryResult.data, [queryResult.data]);
   const tableData = useCachedLoadableValue(
     loading,
     error,

@@ -17,12 +17,7 @@ function RegistrationPolicyItemEditorPresetRowDragOverlay({
         <i className="bi-grip-vertical" />
       </td>
       <td>
-        <input
-          aria-label="Preset name"
-          className="form-control"
-          value={preset.name}
-          onChange={() => {}}
-        />
+        <input aria-label="Preset name" className="form-control" value={preset.name} onChange={() => {}} />
       </td>
       <td>{preset.policy.buckets.map((bucket) => bucket.name).join(', ') || 'None'}</td>
       <td>

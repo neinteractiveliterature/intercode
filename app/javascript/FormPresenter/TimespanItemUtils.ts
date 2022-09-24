@@ -20,9 +20,7 @@ export function getUnitForValue(value: unknown): TimeUnit {
   return UNITS[0];
 }
 
-export function breakValueIntoUnitQuantities(
-  value: number,
-): { unit: TimeUnit; quantity: number }[] {
+export function breakValueIntoUnitQuantities(value: number): { unit: TimeUnit; quantity: number }[] {
   let accumulatedSeconds = 0;
   return UNITS.map((unit) => {
     const workingValue = value - accumulatedSeconds;

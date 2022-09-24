@@ -33,16 +33,9 @@ function AdminNotes({ mutate, value }: AdminNotesProps): JSX.Element {
 
   if (editingValue == null) {
     return (
-      <div
-        className="input-group bg-warning-light border-warning border-1 w-100"
-        style={{ maxWidth: '40em' }}
-      >
+      <div className="input-group bg-warning-light border-warning border-1 w-100" style={{ maxWidth: '40em' }}>
         <div className="flex-grow-1 p-1">
-          {value ? (
-            <PlainTextDisplay value={value} />
-          ) : (
-            <small className="text-muted">Admin notes</small>
-          )}
+          {value ? <PlainTextDisplay value={value} /> : <small className="text-muted">Admin notes</small>}
         </div>
         <button className="btn btn-secondary btn-sm" type="button" onClick={startEditing}>
           Edit
@@ -67,20 +60,10 @@ function AdminNotes({ mutate, value }: AdminNotesProps): JSX.Element {
         <ErrorDisplay graphQLError={saveError as ApolloError} />
       </div>
       <div className="card-footer text-end">
-        <button
-          className="btn btn-secondary btn-sm"
-          type="button"
-          onClick={cancelEditing}
-          disabled={saveInProgress}
-        >
+        <button className="btn btn-secondary btn-sm" type="button" onClick={cancelEditing} disabled={saveInProgress}>
           Cancel
         </button>
-        <button
-          className="btn btn-primary btn-sm ms-2"
-          type="button"
-          onClick={saveClicked}
-          disabled={saveInProgress}
-        >
+        <button className="btn btn-primary btn-sm ms-2" type="button" onClick={saveClicked} disabled={saveInProgress}>
           Save
         </button>
       </div>

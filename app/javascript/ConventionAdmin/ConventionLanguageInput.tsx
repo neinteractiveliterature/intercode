@@ -8,11 +8,7 @@ export type ConventionLanguageInputProps = {
   disabled?: boolean;
 };
 
-function ConventionLanguageInput({
-  value,
-  onChange,
-  disabled,
-}: ConventionLanguageInputProps): JSX.Element {
+function ConventionLanguageInput({ value, onChange, disabled }: ConventionLanguageInputProps): JSX.Element {
   const { t } = useTranslation();
 
   return (

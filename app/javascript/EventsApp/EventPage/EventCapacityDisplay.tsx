@@ -4,10 +4,7 @@ import { TFunction } from 'i18next';
 import sortBuckets from './sortBuckets';
 import { EventPageQueryData, RunCardRegistrationPolicyFieldsFragment } from './queries.generated';
 
-function describeBucketCapacity(
-  bucket: RunCardRegistrationPolicyFieldsFragment['buckets'][0],
-  t: TFunction,
-) {
+function describeBucketCapacity(bucket: RunCardRegistrationPolicyFieldsFragment['buckets'][0], t: TFunction) {
   if (!bucket.slots_limited) {
     return t('events.runCapacity.unlimitedSimple', 'unlimited');
   }

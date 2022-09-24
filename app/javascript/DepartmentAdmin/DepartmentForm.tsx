@@ -1,10 +1,6 @@
 import { useState } from 'react';
 import { ApolloError } from '@apollo/client';
-import {
-  BootstrapFormInput,
-  BootstrapFormTextarea,
-  ErrorDisplay,
-} from '@neinteractiveliterature/litform';
+import { BootstrapFormInput, BootstrapFormTextarea, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import useAsyncFunction from '../useAsyncFunction';
 import { Department, DepartmentInput } from '../graphqlTypes.generated';
@@ -16,9 +12,7 @@ export type DepartmentFormProps = {
 
 function DepartmentForm({ initialDepartment, onSave }: DepartmentFormProps): JSX.Element {
   const [name, setName] = useState(initialDepartment.name);
-  const [proposalDescription, setProposalDescription] = useState(
-    initialDepartment.proposal_description,
-  );
+  const [proposalDescription, setProposalDescription] = useState(initialDepartment.proposal_description);
   const [save, saveError, saveInProgress] = useAsyncFunction(onSave);
 
   const saveClicked = () =>
@@ -29,12 +23,7 @@ function DepartmentForm({ initialDepartment, onSave }: DepartmentFormProps): JSX
 
   return (
     <>
-      <BootstrapFormInput
-        label="Name"
-        value={name || ''}
-        onTextChange={setName}
-        disabled={saveInProgress}
-      />
+      <BootstrapFormInput label="Name" value={name || ''} onTextChange={setName} disabled={saveInProgress} />
 
       <BootstrapFormTextarea
         label="Description for proposal dialog"
@@ -45,12 +34,7 @@ function DepartmentForm({ initialDepartment, onSave }: DepartmentFormProps): JSX
 
       <ErrorDisplay graphQLError={saveError as ApolloError} />
 
-      <button
-        type="button"
-        className="btn btn-primary"
-        onClick={saveClicked}
-        disabled={saveInProgress}
-      >
+      <button type="button" className="btn btn-primary" onClick={saveClicked} disabled={saveInProgress}>
         Save department
       </button>
     </>

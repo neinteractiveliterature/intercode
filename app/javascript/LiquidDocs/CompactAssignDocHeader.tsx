@@ -10,11 +10,7 @@ export type CompactAssignDocHeaderProps = {
   preAssignNameContent?: React.ReactNode;
 };
 
-function CompactAssignDocHeader({
-  assign,
-  prefix,
-  preAssignNameContent,
-}: CompactAssignDocHeaderProps): JSX.Element {
+function CompactAssignDocHeader({ assign, prefix, preAssignNameContent }: CompactAssignDocHeaderProps): JSX.Element {
   const assignClass = findClass(assign.drop_class_name);
 
   return (

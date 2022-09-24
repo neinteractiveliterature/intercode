@@ -8,9 +8,7 @@ export type NoPreferenceHelpPopoverProps = {
   registrationPolicy: RegistrationPolicyForRegistrationPolicyUtils;
 };
 
-function NoPreferenceHelpPopover({
-  registrationPolicy,
-}: NoPreferenceHelpPopoverProps): JSX.Element {
+function NoPreferenceHelpPopover({ registrationPolicy }: NoPreferenceHelpPopoverProps): JSX.Element {
   const { t } = useTranslation();
   const noPreferenceHelpText = t(
     'events.registrationPolicies.noPreferenceHelpText',

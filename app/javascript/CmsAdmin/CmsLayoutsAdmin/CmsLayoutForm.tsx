@@ -14,11 +14,7 @@ export type CmsLayoutFormProps<T extends CmsLayoutFields> = {
   readOnly?: boolean;
 };
 
-function CmsLayoutForm<T extends CmsLayoutFields>({
-  layout,
-  onChange,
-  readOnly,
-}: CmsLayoutFormProps<T>): JSX.Element {
+function CmsLayoutForm<T extends CmsLayoutFields>({ layout, onChange, readOnly }: CmsLayoutFormProps<T>): JSX.Element {
   const [setName, setAdminNotes, setNavbarClasses, setContent] = usePropertySetters(
     onChange,
     'name',
@@ -31,12 +27,7 @@ function CmsLayoutForm<T extends CmsLayoutFields>({
 
   return (
     <>
-      <BootstrapFormInput
-        label="Name"
-        value={layout.name ?? ''}
-        onTextChange={setName}
-        readOnly={readOnly}
-      />
+      <BootstrapFormInput label="Name" value={layout.name ?? ''} onTextChange={setName} readOnly={readOnly} />
 
       <BootstrapFormInput
         label="Admin notes"
@@ -54,8 +45,7 @@ function CmsLayoutForm<T extends CmsLayoutFields>({
           <Trans
             i18nKey="cms.layoutForm.navbarClassesHelpText"
             values={{
-              defaultClasses:
-                'navbar-fixed-top navbar-expand-md mb-4 navbar-dark bg-intercode-blue',
+              defaultClasses: 'navbar-fixed-top navbar-expand-md mb-4 navbar-dark bg-intercode-blue',
             }}
           >
             Overrides the default CSS classes for the Bootstrap navigation bar

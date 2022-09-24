@@ -21,8 +21,7 @@ function CookieConsent({ cookiePolicyUrl }: CookieConsentProps): JSX.Element {
     >
       <div className="container">
         <Trans i18nKey="cookieConsent.text">
-          This web site uses cookies to enhance the user experience. For more information, please
-          see{' '}
+          This web site uses cookies to enhance the user experience. For more information, please see{' '}
           <a href={cookiePolicyUrl} target="_blank" rel="noreferrer" className="text-warning">
             our cookie policy
           </a>

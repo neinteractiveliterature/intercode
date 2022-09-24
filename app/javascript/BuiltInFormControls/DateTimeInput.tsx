@@ -109,9 +109,7 @@ function DateTimeInput({
   );
   const userTimezoneName = DateTime.local().zoneName;
   const showZone =
-    alwaysShowTimezone ||
-    effectiveTimezoneName !== appTimezoneName ||
-    effectiveTimezoneName !== userTimezoneName;
+    alwaysShowTimezone || effectiveTimezoneName !== appTimezoneName || effectiveTimezoneName !== userTimezoneName;
 
   useEffect(() => {
     if (dateTime.isValid) {
@@ -142,8 +140,7 @@ function DateTimeInput({
       <TimeInput value={time} onChange={timeChanged} {...otherProps} />
       {showZone && (
         <span className="ms-2">
-          {dateTime.offsetNameShort ??
-            DateTime.fromObject({}, { zone: effectiveTimezoneName }).offsetNameShort}
+          {dateTime.offsetNameShort ?? DateTime.fromObject({}, { zone: effectiveTimezoneName }).offsetNameShort}
         </span>
       )}
     </div>

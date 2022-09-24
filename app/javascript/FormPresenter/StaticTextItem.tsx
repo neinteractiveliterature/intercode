@@ -7,12 +7,7 @@ export type StaticTextItemProps = {
 export default function StaticTextItem({ formItem }: StaticTextItemProps): JSX.Element {
   switch (formItem.rendered_properties.style) {
     case 'subhead':
-      return (
-        <div
-          className="lead mb-3"
-          dangerouslySetInnerHTML={{ __html: formItem.rendered_properties.content }}
-        />
-      );
+      return <div className="lead mb-3" dangerouslySetInnerHTML={{ __html: formItem.rendered_properties.content }} />;
     default:
       return <div dangerouslySetInnerHTML={{ __html: formItem.rendered_properties.content }} />;
   }

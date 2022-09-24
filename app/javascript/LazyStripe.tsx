@@ -19,17 +19,14 @@ export const LazyStripeContext = createContext<LazyStripeContextValue>({
 });
 
 function useLazyStripe() {
-  const { publishableKey, accountId, stripePromise, setStripePromise } =
-    useContext(LazyStripeContext);
+  const { publishableKey, accountId, stripePromise, setStripePromise } = useContext(LazyStripeContext);
   const [loadError, setLoadError] = useState<Error>();
 
   useLayoutEffect(() => {
     const initiateLoad = () => {
       if (publishableKey == null || accountId == null) {
         return Promise.reject(
-          new Error(
-            'Stripe is not configured for this convention.  Please set it up in Convention Settings.',
-          ),
+          new Error('Stripe is not configured for this convention.  Please set it up in Convention Settings.'),
         );
       }
 

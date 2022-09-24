@@ -22,15 +22,13 @@ const MAXIMUM_EVENT_SIGNUPS_CLASSNAMES = {
 } as const;
 
 function getMaximumEventSignupsClassName(value: string | undefined, nextValue: string | undefined) {
-  const valueClassName =
-    MAXIMUM_EVENT_SIGNUPS_CLASSNAMES[(value ?? 'not_yet') as MaximumEventSignupsValue] ?? '';
+  const valueClassName = MAXIMUM_EVENT_SIGNUPS_CLASSNAMES[(value ?? 'not_yet') as MaximumEventSignupsValue] ?? '';
 
   if (value === nextValue || !nextValue) {
     return valueClassName;
   }
 
-  const nextValueClassName =
-    MAXIMUM_EVENT_SIGNUPS_CLASSNAMES[nextValue as MaximumEventSignupsValue] ?? '';
+  const nextValueClassName = MAXIMUM_EVENT_SIGNUPS_CLASSNAMES[nextValue as MaximumEventSignupsValue] ?? '';
 
   return `${valueClassName} ${nextValueClassName}-transition`;
 }

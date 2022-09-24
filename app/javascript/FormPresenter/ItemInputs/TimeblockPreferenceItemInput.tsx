@@ -15,19 +15,16 @@ import {
   ParsedTimeblockPreference,
   TimeblockPreferenceOrdinality,
 } from '../TimeblockTypes';
-import TimeblockPreferenceCell, {
-  TimeblockPreferenceCellChangeCallback,
-} from './TimeblockPreferenceCell';
+import TimeblockPreferenceCell, { TimeblockPreferenceCellChangeCallback } from './TimeblockPreferenceCell';
 import { CommonFormItemInputProps } from './CommonFormItemInputProps';
 import { TimeblockPreferenceFormItem } from '../../FormAdmin/FormItemUtils';
 import { ConventionForTimespanUtils } from '../../TimespanUtils';
 import { useAppDateTimeFormat } from '../../TimeUtils';
 import { VisibilityDisclosureCard } from './PermissionDisclosures';
 
-export type TimeblockPreferenceItemInputProps =
-  CommonFormItemInputProps<TimeblockPreferenceFormItem> & {
-    convention: ConventionForTimespanUtils;
-  };
+export type TimeblockPreferenceItemInputProps = CommonFormItemInputProps<TimeblockPreferenceFormItem> & {
+  convention: ConventionForTimespanUtils;
+};
 
 function TimeblockPreferenceItemInput({
   convention,
@@ -49,10 +46,7 @@ function TimeblockPreferenceItemInput({
     [onChange],
   );
 
-  const preferenceDidChange: TimeblockPreferenceCellChangeCallback = (
-    newOrdinality,
-    hypotheticalPreference,
-  ) => {
+  const preferenceDidChange: TimeblockPreferenceCellChangeCallback = (newOrdinality, hypotheticalPreference) => {
     const existingPreference = preferences.find((p) => preferencesMatch(p, hypotheticalPreference));
 
     if (newOrdinality === '') {
@@ -78,10 +72,7 @@ function TimeblockPreferenceItemInput({
     }
   };
 
-  const columns = useMemo(
-    () => getValidTimeblockColumns(convention, formItem),
-    [convention, formItem],
-  );
+  const columns = useMemo(() => getValidTimeblockColumns(convention, formItem), [convention, formItem]);
   const rows = useMemo(() => rotateTimeblockColumnsToRows(formItem, columns), [columns, formItem]);
 
   return (

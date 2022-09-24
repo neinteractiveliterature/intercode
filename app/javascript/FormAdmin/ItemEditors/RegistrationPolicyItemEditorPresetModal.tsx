@@ -39,11 +39,7 @@ function RegistrationPolicyItemEditorPresetModal({
       <div className="modal-header">Edit “{preset.name}”</div>
 
       <div className="modal-body">
-        <RegistrationPolicyEditor
-          registrationPolicy={preset.policy}
-          onChange={policyChanged}
-          lockCounts
-        />
+        <RegistrationPolicyEditor registrationPolicy={preset.policy} onChange={policyChanged} lockCounts />
       </div>
 
       <div className="modal-footer">

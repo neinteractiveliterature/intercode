@@ -22,12 +22,7 @@ export type SignupChangesTableExportButtonProps<RowType extends Record<string, u
 function SignupChangesTableExportButton<RowType extends Record<string, unknown>>({
   ...props
 }: SignupChangesTableExportButtonProps<RowType>): JSX.Element {
-  return (
-    <ReactTableExportButtonWithColumnTransform
-      {...props}
-      columnTransform={transformColumnIdForExport}
-    />
-  );
+  return <ReactTableExportButtonWithColumnTransform {...props} columnTransform={transformColumnIdForExport} />;
 }
 
 export default SignupChangesTableExportButton;

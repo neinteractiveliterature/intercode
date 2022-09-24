@@ -13,11 +13,7 @@ export default LoadSingleValueFromCollectionWrapper(
       <>
         <h3 className="mb-4">{contentGroup.name}</h3>
 
-        <CmsContentGroupFormFields
-          contentGroup={contentGroup}
-          convention={data.convention}
-          readOnly
-        />
+        <CmsContentGroupFormFields contentGroup={contentGroup} convention={data.convention} readOnly />
       </>
     );
   },

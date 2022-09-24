@@ -9,11 +9,7 @@ export type EventEmailDisplayProps = {
   displayMode: FormItemDisplayMode;
 };
 
-function EventEmailDisplay({
-  convention,
-  value,
-  displayMode,
-}: EventEmailDisplayProps): JSX.Element {
+function EventEmailDisplay({ convention, value, displayMode }: EventEmailDisplayProps): JSX.Element {
   const address = useMemo(() => {
     if (convention.event_mailing_list_domain && value.team_mailing_list_name) {
       return `${value.team_mailing_list_name}@${convention.event_mailing_list_domain}`;

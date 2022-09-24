@@ -1,8 +1,5 @@
 import { MutableRefObject, useRef } from 'react';
-import {
-  ItemInteractionTrackerContextValue,
-  useItemInteractionTracking,
-} from './ItemInteractionTracker';
+import { ItemInteractionTrackerContextValue, useItemInteractionTracking } from './ItemInteractionTracker';
 import useFormValidation from './useFormValidation';
 import { FormBodyImperativeHandle } from './Layouts/FormBody';
 import { TypedFormItem } from '../FormAdmin/FormItemUtils';

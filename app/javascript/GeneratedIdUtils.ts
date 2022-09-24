@@ -21,9 +21,7 @@ export type ArrayWithoutGeneratedIds<T, IdType> = T extends GeneratedIdObject<Id
   ? WithRealId<T[0], IdType>[]
   : never;
 
-export type WithRealOrGeneratedId<T extends RealIdObject<IdType>, IdType> =
-  | T
-  | WithGeneratedId<T, IdType>;
+export type WithRealOrGeneratedId<T extends RealIdObject<IdType>, IdType> = T | WithGeneratedId<T, IdType>;
 
 export function hasGeneratedId<T extends RealIdObject<IdType>, IdType>(
   value: WithRealOrGeneratedId<T, IdType>,
@@ -31,9 +29,7 @@ export function hasGeneratedId<T extends RealIdObject<IdType>, IdType>(
   return 'generatedId' in value && value.generatedId != null;
 }
 
-export function hasRealId<T extends RealIdObject<IdType>, IdType>(
-  value: WithRealOrGeneratedId<T, IdType>,
-): value is T {
+export function hasRealId<T extends RealIdObject<IdType>, IdType>(value: WithRealOrGeneratedId<T, IdType>): value is T {
   return 'id' in value && value.id != null;
 }
 

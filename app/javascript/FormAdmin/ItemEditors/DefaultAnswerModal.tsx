@@ -6,11 +6,10 @@ import { FormItemEditorContext, FormEditorContext } from '../FormEditorContexts'
 import { FormItemEditorProps } from '../FormItemEditorProps';
 import { TypedFormItem } from '../FormItemUtils';
 
-export type DefaultAnswerModalProps<FormItemType extends TypedFormItem> =
-  FormItemEditorProps<FormItemType> & {
-    close: () => void;
-    visible: boolean;
-  };
+export type DefaultAnswerModalProps<FormItemType extends TypedFormItem> = FormItemEditorProps<FormItemType> & {
+  close: () => void;
+  visible: boolean;
+};
 
 function DefaultAnswerModal<FormItemType extends TypedFormItem>({
   close,
@@ -20,11 +19,8 @@ function DefaultAnswerModal<FormItemType extends TypedFormItem>({
 }: DefaultAnswerModalProps<FormItemType>): JSX.Element {
   const { convention, formTypeIdentifier } = useContext(FormEditorContext);
   const { previewFormItem } = useContext(FormItemEditorContext);
-  const [defaultValue, setDefaultValue] = useState<FormItemType['default_value']>(
-    formItem.default_value,
-  );
-  const inputChanged = (identifier: string, newValue: typeof defaultValue) =>
-    setDefaultValue(newValue);
+  const [defaultValue, setDefaultValue] = useState<FormItemType['default_value']>(formItem.default_value);
+  const inputChanged = (identifier: string, newValue: typeof defaultValue) => setDefaultValue(newValue);
 
   const setDefaultAnswer = () => {
     setFormItem({ ...formItem, default_value: defaultValue });

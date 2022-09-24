@@ -44,14 +44,11 @@ $bucket-availability-compact-font-size: $progress-font-size * 0.8;
 }
 
 .bucket-availability-open-slot {
-  clip-path: ellipse(
-    ($bucket-availability-font-size * 0.44) ($bucket-availability-font-size * 0.2) at center
-  );
+  clip-path: ellipse(($bucket-availability-font-size * 0.44) ($bucket-availability-font-size * 0.2) at center);
 
   .bucket-availability-display-compact & {
     clip-path: ellipse(
-      ($bucket-availability-compact-font-size * 0.44) ($bucket-availability-compact-font-size * 0.2)
-        at center
+      ($bucket-availability-compact-font-size * 0.44) ($bucket-availability-compact-font-size * 0.2) at center
     );
   }
 }

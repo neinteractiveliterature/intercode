@@ -1,7 +1,5 @@
 import SignupCountData, { EventForSignupCountData } from '../SignupCountData';
-import getCapacityThresholds, {
-  RegistrationPolicyForCapacityThresholds,
-} from './getCapacityThresholds';
+import getCapacityThresholds, { RegistrationPolicyForCapacityThresholds } from './getCapacityThresholds';
 
 export default function getFullnessClass(
   event: {
@@ -13,10 +11,7 @@ export default function getFullnessClass(
             only_uncounted?: null | boolean;
           });
   },
-  signupCountData: Pick<
-    SignupCountData,
-    'getNotCountedConfirmedSignupCount' | 'getConfirmedLimitedSignupCount'
-  >,
+  signupCountData: Pick<SignupCountData, 'getNotCountedConfirmedSignupCount' | 'getConfirmedLimitedSignupCount'>,
 ): string {
   if (!event.registration_policy) {
     return 'event-fullness-no-slots';

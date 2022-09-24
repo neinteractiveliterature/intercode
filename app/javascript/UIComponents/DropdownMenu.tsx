@@ -36,10 +36,7 @@ export function DropdownMenu({
     setDropdownOpen,
     {
       placement: 'bottom-start',
-      modifiers: [
-        { name: 'offset', options: { offset: [0, 2] } },
-        ...(popperOptions?.modifiers ?? []),
-      ],
+      modifiers: [{ name: 'offset', options: { offset: [0, 2] } }, ...(popperOptions?.modifiers ?? [])],
       ...popperOptions,
     },
   );

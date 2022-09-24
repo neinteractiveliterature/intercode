@@ -12,10 +12,7 @@ import {
   SignupModerationSignupRequestFieldsFragment,
   useSignupModerationQueueQuery,
 } from './queries.generated';
-import {
-  useAcceptSignupRequestMutation,
-  useRejectSignupRequestMutation,
-} from './mutations.generated';
+import { useAcceptSignupRequestMutation, useRejectSignupRequestMutation } from './mutations.generated';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
 import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
 import UserConProfileWithGravatarCell from '../Tables/UserConProfileWithGravatarCell';
@@ -66,11 +63,7 @@ type SignupModerationRunDetailsProps = {
   requestedBucketKey?: string;
 };
 
-function SignupModerationRunDetails({
-  run,
-  showRequestedBucket,
-  requestedBucketKey,
-}: SignupModerationRunDetailsProps) {
+function SignupModerationRunDetails({ run, showRequestedBucket, requestedBucketKey }: SignupModerationRunDetailsProps) {
   const { timezoneName } = useContext(AppRootContext);
   const runTimespan = timespanFromRun(timezoneName, run.event, run);
   const formatRunTimespan = useFormatRunTimespan();
@@ -84,11 +77,8 @@ function SignupModerationRunDetails({
         <>
           <small>
             <strong>Bucket:</strong>{' '}
-            {(
-              run.event.registration_policy?.buckets.find(
-                (bucket) => bucket.key === requestedBucketKey,
-              ) || {}
-            ).name || 'No preference'}
+            {(run.event.registration_policy?.buckets.find((bucket) => bucket.key === requestedBucketKey) || {}).name ||
+              'No preference'}
           </small>
         </>
       )}
@@ -106,9 +96,7 @@ function SignupRequestCell({ value }: { value: SignupModerationSignupRequestFiel
           <SignupModerationRunDetails run={value.replace_signup.run} />
         </p>
       )}
-      <strong className="text-success">
-        {value.replace_signup ? 'And sign up for' : 'Sign up for'}
-      </strong>{' '}
+      <strong className="text-success">{value.replace_signup ? 'And sign up for' : 'Sign up for'}</strong>{' '}
       <SignupModerationRunDetails run={value.target_run} />
       <br />
       <small>
@@ -122,40 +110,24 @@ function SignupRequestStateCell({ value }: { value: SignupRequestState }) {
   return <div className={`badge ${signupRequestStateBadgeClass(value)}`}>{value}</div>;
 }
 
-function SignupRequestActionsCell({
-  value,
-}: {
-  value: SignupModerationSignupRequestFieldsFragment;
-}) {
+function SignupRequestActionsCell({ value }: { value: SignupModerationSignupRequestFieldsFragment }) {
   const { acceptClicked, rejectClicked } = useContext(SignupModerationContext);
 
   return (
     <>
       {value.state === 'pending' && (
         <>
-          <button
-            className="btn btn-sm btn-danger me-2"
-            type="button"
-            onClick={() => rejectClicked(value)}
-          >
+          <button className="btn btn-sm btn-danger me-2" type="button" onClick={() => rejectClicked(value)}>
             Reject
           </button>
 
-          <button
-            className="btn btn-sm btn-success"
-            type="button"
-            onClick={() => acceptClicked(value)}
-          >
+          <button className="btn btn-sm btn-success" type="button" onClick={() => acceptClicked(value)}>
             Accept
           </button>
         </>
       )}
       {value.state === 'rejected' && (
-        <button
-          className="btn btn-sm btn-warning"
-          type="button"
-          onClick={() => acceptClicked(value)}
-        >
+        <button className="btn btn-sm btn-warning" type="button" onClick={() => acceptClicked(value)}>
           Accept after all
         </button>
       )}
@@ -228,9 +200,8 @@ function SignupModerationQueue(): JSX.Element {
                 {' up for '}
                 {signupRequest.target_run.event.title}
                 {' as '}
-                {describeRequestedBucket(signupRequest)}. If there is no space in the requested
-                bucket, the attendee will either be signed up in a flex bucket, if possible, or
-                waitlisted.
+                {describeRequestedBucket(signupRequest)}. If there is no space in the requested bucket, the attendee
+                will either be signed up in a flex bucket, if possible, or waitlisted.
               </p>
 
               <div className="mb-2">
@@ -243,8 +214,7 @@ function SignupModerationQueue(): JSX.Element {
               </div>
 
               <p className="mb-0">
-                This will automatically email both the attendee and the event team to let them know
-                about the signup.
+                This will automatically email both the attendee and the event team to let them know about the signup.
               </p>
             </>
           ),
@@ -259,9 +229,8 @@ function SignupModerationQueue(): JSX.Element {
         confirm({
           prompt: (
             <p className="mb-0">
-              Please confirm you want to reject this signup request. This will <strong>not</strong>{' '}
-              automatically email anyone. After doing this, you may wish to email the attendee to
-              let them know.
+              Please confirm you want to reject this signup request. This will <strong>not</strong> automatically email
+              anyone. After doing this, you may wish to email the attendee to let them know.
             </p>
           ),
           action: () => rejectSignupRequest({ variables: { id: signupRequest.id } }),

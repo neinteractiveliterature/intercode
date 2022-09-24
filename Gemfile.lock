@@ -393,7 +393,10 @@ GEM
       activerecord (>= 5.2)
       activesupport (>= 5.2)
     phonelib (0.6.53)
-    prettier (2.1.0)
+    prettier (3.2.2)
+      syntax_tree (>= 2.7.1)
+      syntax_tree-haml (>= 1.1.0)
+      syntax_tree-rbs (>= 0.2.0)
     prettier_print (0.1.0)
     promise.rb (0.7.4)
     pry (0.14.1)
@@ -674,7 +677,7 @@ DEPENDENCIES
   pg
   pg_search
   phonelib
-  prettier (= 2.1.0)
+  prettier (= 3.2.2)
   prettier_print
   pry-rails
   pry-remote

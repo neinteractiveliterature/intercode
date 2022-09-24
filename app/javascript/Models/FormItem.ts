@@ -86,10 +86,7 @@ function timespanValueIsComplete(value?: any) {
   return typeof value === 'number';
 }
 
-export function formResponseValueIsComplete(
-  formItem: TypedFormItem,
-  value: any | null | undefined,
-): boolean {
+export function formResponseValueIsComplete(formItem: TypedFormItem, value: any | null | undefined): boolean {
   switch (formItem.item_type) {
     case 'age_restrictions':
       return ageRestrictionsValueIsComplete(value);
@@ -115,10 +112,7 @@ export function formResponseValueIsComplete(
   }
 }
 
-export function formResponseValueIsCompleteIfRequired(
-  formItem: TypedFormItem,
-  value: any | null | undefined,
-): boolean {
+export function formResponseValueIsCompleteIfRequired(formItem: TypedFormItem, value: any | null | undefined): boolean {
   if (formItem.item_type === 'static_text') {
     return true;
   }

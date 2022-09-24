@@ -56,10 +56,7 @@ function AdminProductVariantEditRow({
         />
       </td>
       <td>
-        <PricingStructureInput
-          value={variant.override_pricing_structure}
-          onChange={setOverridePricingStructure}
-        />
+        <PricingStructureInput value={variant.override_pricing_structure} onChange={setOverridePricingStructure} />
       </td>
       <td>
         <button type="button" className="btn btn-sm btn-danger" onClick={deleteVariant}>

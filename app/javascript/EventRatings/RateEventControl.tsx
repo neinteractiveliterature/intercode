@@ -13,14 +13,7 @@ type RatingButtonProps = {
   padding?: number;
 };
 
-function RatingButton({
-  rating,
-  selected,
-  onClick,
-  padding,
-  size,
-  tooltipContent,
-}: RatingButtonProps) {
+function RatingButton({ rating, selected, onClick, padding, size, tooltipContent }: RatingButtonProps) {
   const defaultPadding = (size ?? 1.0) * 0.5;
   const actualPadding = padding ?? defaultPadding;
   const paddingStyle = {
@@ -39,13 +32,7 @@ function RatingButton({
       tooltipContent={tooltipContent}
     >
       <div style={paddingStyle}>
-        <EventRatingIcon
-          size={size}
-          rating={rating}
-          selected={selected}
-          useColors
-          overrideElementSize
-        />
+        <EventRatingIcon size={size} rating={rating} selected={selected} useColors overrideElementSize />
       </div>
     </ButtonWithTooltip>
   );

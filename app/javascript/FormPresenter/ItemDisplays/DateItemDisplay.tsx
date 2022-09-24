@@ -19,10 +19,7 @@ export type DateItemDisplayProps = {
 function DateItemDisplay({ value }: DateItemDisplayProps): JSX.Element {
   const { timezoneName } = useContext(AppRootContext);
   const format = useAppDateTimeFormat();
-  const formattedDate = useMemo(
-    () => describeDate(value, timezoneName, format),
-    [timezoneName, value, format],
-  );
+  const formattedDate = useMemo(() => describeDate(value, timezoneName, format), [timezoneName, value, format]);
 
   return <>{formattedDate}</>;
 }

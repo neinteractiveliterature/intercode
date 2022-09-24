@@ -141,7 +141,7 @@ group :development do
   gem 'rubocop-performance'
   gem 'rubocop-rails'
   gem 'rubocop-sequel'
-  gem 'prettier', '2.1.0'
+  gem 'prettier', '3.2.2'
   gem 'prettier_print'
   gem 'syntax_tree'
   gem 'syntax_tree-haml'
