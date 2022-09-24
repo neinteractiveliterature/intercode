@@ -28,9 +28,6 @@
         "description": "Can sign up for simultaneous events",
         "required": true
       },
-      "con_mail_destination": {
-        "description": "Convention mail destination"
-      },
       "description": {
         "description": "Full description",
         "required": true

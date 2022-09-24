@@ -115,6 +115,10 @@ class FormItem < ApplicationRecord
   validates :writeability, inclusion: { in: ROLE_VALUES }
   validate :ensure_valid_expose_in_values
 
+  # Event email items are special, in that they expand out to multiple actual fields in the database.  It doesn't
+  # work to serialize them to custom fields.
+  validates :identifier, inclusion: { in: ["event_email"] }, if: ->(item) { item.item_type == "event_email" }
+
   def self.highest_level_role(**role_hash)
     roles = Set.new(role_hash.select { |_, v| v }.keys.map(&:to_s))
     highest_explicit_role = ROLE_VALUES.reverse.find { |role| roles.include?(role) }
