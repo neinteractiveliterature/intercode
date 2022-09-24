@@ -16,16 +16,16 @@ class IntercodeSchema < GraphQL::Schema
       if current_user
         super
       else
-        'Not logged in'
+        "Not logged in"
       end
     end
 
     def code
-      current_user ? 'NOT_AUTHORIZED' : 'NOT_AUTHENTICATED'
+      current_user ? "NOT_AUTHORIZED" : "NOT_AUTHENTICATED"
     end
 
     def to_h
-      super.merge('extensions' => { 'code' => code, 'current_user_id' => current_user&.id })
+      super.merge("extensions" => { "code" => code, "current_user_id" => current_user&.id })
     end
   end
 
@@ -96,10 +96,10 @@ class IntercodeSchema < GraphQL::Schema
   rescue_from ActiveRecord::RecordInvalid do |err, _obj, _args, _ctx, _field|
     raise GraphQL::ExecutionError.new(
             "Validation failed for #{err.record.class.name}: \
-#{err.record.errors.full_messages.join(', ')}",
+#{err.record.errors.full_messages.join(", ")}",
             extensions: {
               validationErrors: err.record.errors.as_json,
-              code: 'RECORD_INVALID'
+              code: "RECORD_INVALID"
             }
           )
   end
@@ -107,16 +107,16 @@ class IntercodeSchema < GraphQL::Schema
   rescue_from ActiveRecord::RecordNotFound do |_err, _obj, _args, _ctx, field|
     type_name = field.type.unwrap.graphql_name
 
-    if type_name == 'Boolean'
+    if type_name == "Boolean"
       raise GraphQL::ExecutionError.new(
               "Record not found while evaluating #{field.name}",
               extensions: {
-                code: 'NOT_FOUND'
+                code: "NOT_FOUND"
               }
             )
     end
 
-    raise GraphQL::ExecutionError.new("#{field.type.unwrap.graphql_name} not found", extensions: { code: 'NOT_FOUND' })
+    raise GraphQL::ExecutionError.new("#{field.type.unwrap.graphql_name} not found", extensions: { code: "NOT_FOUND" })
   end
 
   rescue_from Liquid::SyntaxError do |err, _obj, _args, _ctx, _field|
@@ -128,7 +128,7 @@ class IntercodeSchema < GraphQL::Schema
     Rollbar.error(err)
     IntercodeSchema.log_error(err)
     raise GraphQL::ExecutionError.new(
-            err.result.errors.full_messages.join(', '),
+            err.result.errors.full_messages.join(", "),
             extensions: {
               backtrace: err.backtrace
             }
@@ -168,7 +168,7 @@ class IntercodeSchema < GraphQL::Schema
 
   def self.unauthorized_field(error)
     # It should be safe to query for admin_notes even if you can't see them
-    return nil if error.field.graphql_name == 'admin_notes'
+    return nil if error.field.graphql_name == "admin_notes"
 
     # Add a top-level error to the response instead of returning nil:
     raise NotAuthorizedError.from_error(
@@ -178,5 +178,3 @@ was hidden due to permissions"
           )
   end
 end
-
-IntercodeSchema.graphql_definition

@@ -33,10 +33,10 @@ class CmsGraphqlQuery < ApplicationRecord
   private
 
   def ensure_valid_query
-    parsed_query = GraphQL::Query.new(IntercodeSchema.to_graphql, query)
+    parsed_query = GraphQL::Query.new(IntercodeSchema, query)
     (parsed_query.static_errors + parsed_query.analysis_errors).each { |error| errors.add :query, error.message }
 
     return if parsed_query.query?
-    errors.add :query, 'must be a GraphQL query (not a mutation or subscription)'
+    errors.add :query, "must be a GraphQL query (not a mutation or subscription)"
   end
 end
