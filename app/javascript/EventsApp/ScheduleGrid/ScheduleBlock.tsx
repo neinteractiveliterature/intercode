@@ -1,26 +1,16 @@
 import { Fragment, ReactNode, useMemo } from 'react';
 
 import { PIXELS_PER_LANE, PIXELS_PER_HOUR } from './LayoutConstants';
-import ScheduleLayoutBlock, {
-  ScheduleLayoutResult,
-  RunDimensions,
-} from './ScheduleLayout/ScheduleLayoutBlock';
+import ScheduleLayoutBlock, { ScheduleLayoutResult, RunDimensions } from './ScheduleLayout/ScheduleLayoutBlock';
 import ScheduleGridRowHeader from './ScheduleGridRowHeader';
 
 export type ScheduleBlockProps = {
   layoutBlock: ScheduleLayoutBlock;
   rowHeader: ReactNode;
-  renderEventRun: (options: {
-    layoutResult: ScheduleLayoutResult;
-    runDimensions: RunDimensions;
-  }) => JSX.Element;
+  renderEventRun: (options: { layoutResult: ScheduleLayoutResult; runDimensions: RunDimensions }) => JSX.Element;
 };
 
-function ScheduleBlock({
-  layoutBlock,
-  rowHeader,
-  renderEventRun,
-}: ScheduleBlockProps): JSX.Element {
+function ScheduleBlock({ layoutBlock, rowHeader, renderEventRun }: ScheduleBlockProps): JSX.Element {
   const layoutResult = useMemo(() => layoutBlock.computeLayout(), [layoutBlock]);
 
   const blockContentStyle = {
@@ -35,9 +25,7 @@ function ScheduleBlock({
       <div className="schedule-grid-block">
         <div style={blockContentStyle}>
           {layoutResult.runDimensions.map((runDimensions) => (
-            <Fragment key={runDimensions.runId}>
-              {renderEventRun({ layoutResult, runDimensions })}
-            </Fragment>
+            <Fragment key={runDimensions.runId}>{renderEventRun({ layoutResult, runDimensions })}</Fragment>
           ))}
         </div>
       </div>

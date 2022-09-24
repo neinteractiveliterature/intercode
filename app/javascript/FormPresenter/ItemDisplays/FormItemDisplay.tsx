@@ -34,39 +34,23 @@ export type FormItemDisplayProps = {
   displayMode: FormItemDisplayMode;
 };
 
-function FormItemDisplay({
-  formItem,
-  value,
-  convention,
-  displayMode,
-}: FormItemDisplayProps): JSX.Element {
+function FormItemDisplay({ formItem, value, convention, displayMode }: FormItemDisplayProps): JSX.Element {
   if (value == null) {
     return <></>;
   }
 
   switch (formItem.item_type) {
     case 'age_restrictions':
-      return (
-        <AgeRestrictionsDisplay displayMode={displayMode} value={value as AgeRestrictionsValue} />
-      );
+      return <AgeRestrictionsDisplay displayMode={displayMode} value={value as AgeRestrictionsValue} />;
     case 'date':
       return <DateItemDisplay value={value as string} />;
     case 'event_email':
-      return (
-        <EventEmailDisplay
-          convention={convention}
-          value={value as EventEmailValue}
-          displayMode={displayMode}
-        />
-      );
+      return <EventEmailDisplay convention={convention} value={value as EventEmailValue} displayMode={displayMode} />;
     case 'free_text':
       return <FreeTextItemDisplay formItem={formItem} value={value as string} />;
     case 'multiple_choice':
       return (
-        <MultipleChoiceItemDisplay
-          formItem={formItem}
-          value={value as FormItemValueType<MultipleChoiceFormItem>}
-        />
+        <MultipleChoiceItemDisplay formItem={formItem} value={value as FormItemValueType<MultipleChoiceFormItem>} />
       );
     case 'registration_policy':
       return (

@@ -64,10 +64,7 @@ function TimeblockPreferenceItemDisplay({
     );
   };
 
-  const columns = useMemo(
-    () => getValidTimeblockColumns(convention, formItem),
-    [convention, formItem],
-  );
+  const columns = useMemo(() => getValidTimeblockColumns(convention, formItem), [convention, formItem]);
   const rows = useMemo(() => rotateTimeblockColumnsToRows(formItem, columns), [columns, formItem]);
 
   return (

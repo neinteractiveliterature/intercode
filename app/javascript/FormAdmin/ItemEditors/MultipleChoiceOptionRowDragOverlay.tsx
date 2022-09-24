@@ -3,10 +3,7 @@ import classnames from 'classnames';
 import { MultipleChoiceFormItem } from '../FormItemUtils';
 import { WithGeneratedId } from '../../GeneratedIdUtils';
 
-type Choice = WithGeneratedId<
-  NonNullable<MultipleChoiceFormItem['properties']>['choices'][0],
-  string
->;
+type Choice = WithGeneratedId<NonNullable<MultipleChoiceFormItem['properties']>['choices'][0], string>;
 
 export type MultipleChoiceOptionRowDragOverlayProps = {
   choice: Choice;
@@ -44,9 +41,7 @@ function MultipleChoiceOptionRowDragOverlay({
           onChange={() => {}}
         />
         {missingValue && <div className="invalid-feedback">Options must have an output value</div>}
-        {nonUnique && (
-          <div className="invalid-feedback">Options should not have the same output value</div>
-        )}
+        {nonUnique && <div className="invalid-feedback">Options should not have the same output value</div>}
       </td>
       <td>
         <button type="button" className="btn btn-outline-danger btn-sm" onClick={() => {}}>

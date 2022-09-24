@@ -75,8 +75,7 @@ export const compareTimesAscending = (a: DateTime, b: DateTime): number => {
   return 0;
 };
 
-export const compareTimesDescending = (a: DateTime, b: DateTime): number =>
-  compareTimesAscending(b, a);
+export const compareTimesDescending = (a: DateTime, b: DateTime): number => compareTimesAscending(b, a);
 
 export function ageAsOf(birthDate?: DateTime | null, date?: DateTime | null): number | null {
   if (!birthDate || !date || !birthDate.isValid || !date.isValid) {
@@ -101,10 +100,7 @@ export function timezoneNameForConvention(
 
 export function useISODateTimeInAppZone(isoValue: string): DateTime {
   const { timezoneName } = useContext(AppRootContext);
-  const timestamp = useMemo(
-    () => DateTime.fromISO(isoValue).setZone(timezoneName),
-    [isoValue, timezoneName],
-  );
+  const timestamp = useMemo(() => DateTime.fromISO(isoValue).setZone(timezoneName), [isoValue, timezoneName]);
 
   return timestamp;
 }

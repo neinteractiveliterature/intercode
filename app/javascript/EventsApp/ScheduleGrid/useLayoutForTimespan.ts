@@ -28,10 +28,7 @@ export default function useLayoutForTimespan(
   }, [timespanKey]);
 
   const layout = useMemo(
-    () =>
-      minTimespan && timespan
-        ? schedule.buildLayoutForTimespanRange(minTimespan, timespan)
-        : undefined,
+    () => (minTimespan && timespan ? schedule.buildLayoutForTimespanRange(minTimespan, timespan) : undefined),
     [minTimespan, schedule, timespanKey],
   );
 

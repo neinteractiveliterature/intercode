@@ -24,9 +24,7 @@ export default forwardRef<HTMLDivElement, FormHeaderProps>(function FormHeader(
           })}
           role="status"
         >
-          {(isUpdatingResponse || isSubmittingResponse) && (
-            <span className="visually-hidden">Saving...</span>
-          )}
+          {(isUpdatingResponse || isSubmittingResponse) && <span className="visually-hidden">Saving...</span>}
         </div>
       </div>
     </div>

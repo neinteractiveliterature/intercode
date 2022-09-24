@@ -10,16 +10,11 @@ export type PasswordConfirmationInputProps = {
   password: string;
 };
 
-function PasswordConfirmationInput({
-  value,
-  onChange,
-  password,
-}: PasswordConfirmationInputProps): JSX.Element {
+function PasswordConfirmationInput({ value, onChange, password }: PasswordConfirmationInputProps): JSX.Element {
   const { t } = useTranslation();
   const [interactedWithConfirmation, setInteractedWithConfirmation] = useState(false);
 
-  const confirmationInvalid =
-    (interactedWithConfirmation || value.length >= password.length) && value !== password;
+  const confirmationInvalid = (interactedWithConfirmation || value.length >= password.length) && value !== password;
 
   return (
     <BootstrapFormInput

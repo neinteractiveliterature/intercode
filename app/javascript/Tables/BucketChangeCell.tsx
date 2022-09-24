@@ -1,10 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-import {
-  EventForFormatBucket,
-  formatBucket,
-  SignupForFormatBucket,
-} from '../EventsApp/SignupAdmin/SignupUtils';
+import { EventForFormatBucket, formatBucket, SignupForFormatBucket } from '../EventsApp/SignupAdmin/SignupUtils';
 
 export type BucketChangeCellProps = {
   value: SignupForFormatBucket & {

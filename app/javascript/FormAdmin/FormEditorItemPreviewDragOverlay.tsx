@@ -10,9 +10,7 @@ export type FormEditorItemPreviewDragOverlayProps = {
   formItem: TypedFormItem;
 };
 
-function FormEditorItemPreviewDragOverlay({
-  formItem,
-}: FormEditorItemPreviewDragOverlayProps): JSX.Element {
+function FormEditorItemPreviewDragOverlay({ formItem }: FormEditorItemPreviewDragOverlayProps): JSX.Element {
   const { convention, formType, formTypeIdentifier, formItemsById } = useContext(FormEditorContext);
   const renderedFormItem = formItemsById.get(formItem.id);
 

@@ -5,10 +5,7 @@ import { ScheduleGridContext } from './ScheduleGridContext';
 import SignupCountData from '../SignupCountData';
 import RunDetails from './RunDetails';
 import RunDisplay from './RunDisplay';
-import ScheduleLayoutBlock, {
-  RunDimensions,
-  ScheduleLayoutResult,
-} from './ScheduleLayout/ScheduleLayoutBlock';
+import ScheduleLayoutBlock, { RunDimensions, ScheduleLayoutResult } from './ScheduleLayout/ScheduleLayoutBlock';
 
 export type ScheduleGridEventRunProps = {
   runDimensions: RunDimensions;
@@ -21,11 +18,9 @@ function ScheduleGridEventRun({
   layoutResult,
   scheduleLayoutBlock,
 }: ScheduleGridEventRunProps): JSX.Element {
-  const { schedule, toggleRunDetailsVisibility, isRunDetailsVisible, config } =
-    useContext(ScheduleGridContext);
+  const { schedule, toggleRunDetailsVisibility, isRunDetailsVisible, config } = useContext(ScheduleGridContext);
   const detailsVisible = useMemo(
-    () =>
-      isRunDetailsVisible({ runId: runDimensions.runId, scheduleBlockId: scheduleLayoutBlock.id }),
+    () => isRunDetailsVisible({ runId: runDimensions.runId, scheduleBlockId: scheduleLayoutBlock.id }),
     [isRunDetailsVisible, runDimensions.runId, scheduleLayoutBlock.id],
   );
 
@@ -33,17 +28,10 @@ function ScheduleGridEventRun({
   const [runDetailsElement, setRunDetailsElement] = useState<HTMLDivElement | null>(null);
   const [arrow, setArrow] = useState<HTMLSpanElement | null>(null);
 
-  const { styles, attributes, state, update } = useLitformPopper(
-    runDetailsElement,
-    runDisplayElement,
-    arrow,
-  );
+  const { styles, attributes, state, update } = useLitformPopper(runDetailsElement, runDisplayElement, arrow);
 
   const run = useMemo(() => schedule.getRun(runDimensions.runId), [schedule, runDimensions.runId]);
-  const event = useMemo(
-    () => schedule.getEventForRun(runDimensions.runId),
-    [schedule, runDimensions.runId],
-  );
+  const event = useMemo(() => schedule.getEventForRun(runDimensions.runId), [schedule, runDimensions.runId]);
 
   const signupCountData = useMemo(() => {
     if (!run) {

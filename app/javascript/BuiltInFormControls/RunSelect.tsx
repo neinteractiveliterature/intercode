@@ -38,10 +38,7 @@ function RunSelect({ event, ...otherProps }: RunSelectProps): JSX.Element {
       formatOptionLabel={(r: RunForRunSelectProps) => {
         const timespan = timespanFromRun(timezoneName, event, r);
         const timeDescription = formatRunTimespan(timespan, { formatType: 'short' });
-        const roomsDescription = sortByLocaleString(
-          r.rooms || [],
-          (room: RoomForRunSelectProps) => room.name,
-        )
+        const roomsDescription = sortByLocaleString(r.rooms || [], (room: RoomForRunSelectProps) => room.name)
           .map((room) => room.name)
           .join(', ');
 

@@ -80,10 +80,7 @@ export type VisibilityDisclosureTextProps = {
   formTypeIdentifier: FormType;
 };
 
-export function VisibilityDisclosureText({
-  formItem,
-  formTypeIdentifier,
-}: VisibilityDisclosureTextProps): JSX.Element {
+export function VisibilityDisclosureText({ formItem, formTypeIdentifier }: VisibilityDisclosureTextProps): JSX.Element {
   const { t } = useTranslation();
 
   if (formItem.visibility === FormItemRole.Normal) {

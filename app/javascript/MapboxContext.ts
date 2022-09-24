@@ -20,9 +20,7 @@ export type UseMapboxContextOptions = {
   mapboxAccessToken?: string;
 };
 
-export function useMapboxContext({
-  mapboxAccessToken,
-}: UseMapboxContextOptions): MapboxContextValue {
+export function useMapboxContext({ mapboxAccessToken }: UseMapboxContextOptions): MapboxContextValue {
   const [mapboxgl, setMapboxgl] = useState<MapboxInterface>();
   const loadingPromise = useRef<Promise<unknown>>();
 

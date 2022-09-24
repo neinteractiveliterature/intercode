@@ -3,9 +3,7 @@ import { FormItemValueType, MultipleChoiceFormItem } from '../../FormAdmin/FormI
 type SingleCastedValue = string | null;
 type CastedValue = SingleCastedValue | CastedValue[];
 
-function castValue(
-  value: FormItemValueType<MultipleChoiceFormItem> | null | undefined,
-): CastedValue {
+function castValue(value: FormItemValueType<MultipleChoiceFormItem> | null | undefined): CastedValue {
   if (value == null) {
     return null;
   }
@@ -22,13 +20,9 @@ export type MultipleChoiceItemDisplayProps = {
   value: FormItemValueType<MultipleChoiceFormItem>;
 };
 
-function MultipleChoiceItemDisplay({
-  formItem,
-  value: uncastValue,
-}: MultipleChoiceItemDisplayProps): JSX.Element {
+function MultipleChoiceItemDisplay({ formItem, value: uncastValue }: MultipleChoiceItemDisplayProps): JSX.Element {
   const value = castValue(uncastValue);
-  const isValueOther = (v: string) =>
-    !formItem.rendered_properties.choices.some((choice) => choice.value === v);
+  const isValueOther = (v: string) => !formItem.rendered_properties.choices.some((choice) => choice.value === v);
 
   if (Array.isArray(value)) {
     const selectedChoiceLabels = formItem.rendered_properties.choices
@@ -46,9 +40,7 @@ function MultipleChoiceItemDisplay({
     return <>{[...selectedChoiceLabels, ...otherChoiceLabels].join(', ')}</>;
   }
 
-  const selectedChoice = formItem.rendered_properties.choices.find(
-    (choice) => value === choice.value,
-  );
+  const selectedChoice = formItem.rendered_properties.choices.find((choice) => value === choice.value);
 
   if (selectedChoice) {
     return <>{selectedChoice.caption}</>;

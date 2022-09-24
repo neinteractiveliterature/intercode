@@ -74,12 +74,7 @@ function EditCouponModal({ initialCoupon, visible, close }: EditCouponModalProps
         <button type="button" className="btn btn-secondary" onClick={close} disabled={inProgress}>
           Cancel
         </button>
-        <button
-          type="button"
-          className="btn btn-primary"
-          onClick={saveClicked}
-          disabled={inProgress}
-        >
+        <button type="button" className="btn btn-primary" onClick={saveClicked} disabled={inProgress}>
           Save
         </button>
       </div>

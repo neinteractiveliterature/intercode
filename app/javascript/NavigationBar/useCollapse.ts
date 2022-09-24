@@ -10,9 +10,7 @@ export type UseCollapseResult = {
   collapseProps: HTMLAttributes<HTMLElement>;
 };
 
-export default function useCollapse<T extends HTMLElement>(
-  elementRef: React.RefObject<T>,
-): UseCollapseResult {
+export default function useCollapse<T extends HTMLElement>(elementRef: React.RefObject<T>): UseCollapseResult {
   const [collapsed, setCollapsed] = useState(true);
   const [prevCollapsed, setPrevCollapsed] = useState(true);
   const [collapsing, setCollapsing] = useState(false);

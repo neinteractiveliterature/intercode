@@ -4,9 +4,7 @@ import maxBy from 'lodash/maxBy';
 import sortBy from 'lodash/sortBy';
 import { DateTime } from 'luxon';
 
-import ScheduledValueTimespanRow, {
-  scheduledValueTimespanIsValid,
-} from './ScheduledValueTimespanRow';
+import ScheduledValueTimespanRow, { scheduledValueTimespanIsValid } from './ScheduledValueTimespanRow';
 
 export type EditingTimespan<ValueType> = {
   start?: string | null;
@@ -18,9 +16,7 @@ export type EditingScheduledValue<ValueType> = {
   timespans: EditingTimespan<ValueType>[];
 };
 
-export function scheduledValueIsValid(
-  scheduledValue: Partial<EditingScheduledValue<unknown>>,
-): boolean {
+export function scheduledValueIsValid(scheduledValue: Partial<EditingScheduledValue<unknown>>): boolean {
   if (!scheduledValue.timespans || scheduledValue.timespans.length < 1) {
     return false;
   }
@@ -34,10 +30,9 @@ export function scheduledValueIsValid(
   });
 }
 
-function addTimespanToScheduledValue<
-  ValueType,
-  ScheduledValueType extends EditingScheduledValue<ValueType>,
->(scheduledValue: ScheduledValueType) {
+function addTimespanToScheduledValue<ValueType, ScheduledValueType extends EditingScheduledValue<ValueType>>(
+  scheduledValue: ScheduledValueType,
+) {
   const newTimespans = [...(scheduledValue.timespans || [])];
   const lastTimespan = maxBy(newTimespans, (timespan) =>
     timespan.finish ? DateTime.fromISO(timespan.finish).toMillis() : 0,
@@ -54,9 +49,7 @@ function addTimespanToScheduledValue<
   return { ...scheduledValue, timespans: newTimespans };
 }
 
-function recalculateTimespans<ValueType>(
-  timespans: EditingTimespan<ValueType>[],
-): EditingTimespan<ValueType>[] {
+function recalculateTimespans<ValueType>(timespans: EditingTimespan<ValueType>[]): EditingTimespan<ValueType>[] {
   const sortedNewTimespans = sortBy(timespans, (timespan) => {
     if (timespan.finish) {
       return DateTime.fromISO(timespan.finish).toMillis();
@@ -119,10 +112,10 @@ export type ScheduledValueReducerAction<ValueType> =
   | UpdateTimespanValueAction<ValueType>
   | UpdateTimespanFinishAction;
 
-export function scheduledValueReducer<
-  ValueType,
-  ScheduledValueType extends EditingScheduledValue<ValueType>,
->(state: ScheduledValueType, action: ScheduledValueReducerAction<ValueType>): ScheduledValueType {
+export function scheduledValueReducer<ValueType, ScheduledValueType extends EditingScheduledValue<ValueType>>(
+  state: ScheduledValueType,
+  action: ScheduledValueReducerAction<ValueType>,
+): ScheduledValueType {
   switch (action.type) {
     case 'addTimespan':
       return addTimespanToScheduledValue(state);
@@ -158,10 +151,7 @@ export type ScheduledValueEditorProps<ValueType> = {
   scheduledValue: EditingScheduledValue<ValueType>;
   timezone: string;
   dispatch: (action: ScheduledValueReducerAction<ValueType>) => void;
-  buildValueInput: (
-    value: ValueType | undefined,
-    onChange: React.Dispatch<ValueType | undefined>,
-  ) => JSX.Element;
+  buildValueInput: (value: ValueType | undefined, onChange: React.Dispatch<ValueType | undefined>) => JSX.Element;
 };
 
 function ScheduledValueEditor<ValueType>({
@@ -180,14 +170,12 @@ function ScheduledValueEditor<ValueType>({
   };
 
   const timespanFinishDidChange = useCallback(
-    (index: number, finish: string | undefined) =>
-      dispatch({ type: 'updateTimespanFinish', index, finish }),
+    (index: number, finish: string | undefined) => dispatch({ type: 'updateTimespanFinish', index, finish }),
     [dispatch],
   );
 
   const valueDidChange = useCallback(
-    (index: number, value: ValueType | undefined) =>
-      dispatch({ type: 'updateTimespanValue', index, value }),
+    (index: number, value: ValueType | undefined) => dispatch({ type: 'updateTimespanValue', index, value }),
     [dispatch],
   );
 

@@ -15,10 +15,7 @@ export function scheduledValueTimespanIsValid(timespan: EditingTimespan<unknown>
 }
 
 export type ScheduledValueTimespanRowProps<ValueType> = {
-  buildInput: (
-    value: ValueType | undefined,
-    onChange: React.Dispatch<ValueType | undefined>,
-  ) => JSX.Element;
+  buildInput: (value: ValueType | undefined, onChange: React.Dispatch<ValueType | undefined>) => JSX.Element;
   rowIdentifier: number;
   timespan: EditingTimespan<ValueType>;
   timezone: string;
@@ -60,9 +57,7 @@ function ScheduledValueTimespanRow<ValueType>({
       <td className="w-75">
         <div className="d-flex flex-row align-items-center justify-content-stretch">
           {timespan.start
-            ? `from ${DateTime.fromISO(timespan.start, { zone: timezone }).toLocaleString(
-                DateTime.DATETIME_FULL,
-              )}`
+            ? `from ${DateTime.fromISO(timespan.start, { zone: timezone }).toLocaleString(DateTime.DATETIME_FULL)}`
             : 'anytime'}
           &nbsp;
           {isLastTimespan ? (
@@ -71,11 +66,7 @@ function ScheduledValueTimespanRow<ValueType>({
             <>
               up to&nbsp;
               <div className="d-flex">
-                <DateTimeInput
-                  value={timespan.finish}
-                  timezoneName={timezone}
-                  onChange={rowFinishDidChange}
-                />
+                <DateTimeInput value={timespan.finish} timezoneName={timezone} onChange={rowFinishDidChange} />
               </div>
             </>
           )}

@@ -28,13 +28,8 @@ type NavigationBarContentProps = {
 function NavigationBarContent({ navbarClasses, rootItems }: NavigationBarContentProps) {
   const { t } = useTranslation();
   const location = useLocation();
-  const {
-    conventionName,
-    conventionCanceled,
-    rootSiteName,
-    siteMode,
-    ticketsAvailableForPurchase,
-  } = useContext(AppRootContext);
+  const { conventionName, conventionCanceled, rootSiteName, siteMode, ticketsAvailableForPurchase } =
+    useContext(AppRootContext);
   const collapseRef = useRef<HTMLDivElement>(null);
   const { collapsed, collapseProps, setCollapsed, toggleCollapsed } = useCollapse(collapseRef);
   const { className: collapseClassName, ...otherCollapseProps } = collapseProps;
@@ -54,10 +49,7 @@ function NavigationBarContent({ navbarClasses, rootItems }: NavigationBarContent
         hideNavItems,
       }}
     >
-      <nav
-        className={classNames('navbar', 'd-block', navbarClasses, { 'pb-0': conventionCanceled })}
-        role="navigation"
-      >
+      <nav className={classNames('navbar', 'd-block', navbarClasses, { 'pb-0': conventionCanceled })} role="navigation">
         <div className="container">
           <NavigationBrand item={{ label: conventionName || rootSiteName }} />
           <div
@@ -67,9 +59,7 @@ function NavigationBarContent({ navbarClasses, rootItems }: NavigationBarContent
             {...otherCollapseProps}
           >
             <ul className={classNames('navbar-nav', { 'd-md-none': hideNavItems })}>
-              {ticketsAvailableForPurchase && siteMode !== 'single_event' && (
-                <TicketPurchaseNavigationItem />
-              )}
+              {ticketsAvailableForPurchase && siteMode !== 'single_event' && <TicketPurchaseNavigationItem />}
               {conventionName && siteMode !== 'single_event' && <EventsNavigationSection />}
               {rootItems.map((rootItem) => {
                 if (rootItem.sectionItems && rootItem.sectionItems.length > 0) {
@@ -148,9 +138,7 @@ function NavigationBar({ navbarClasses }: NavigationBarProps): JSX.Element {
 
     return rootItems.map((rootItem) => {
       const sectionItems = sortBy(
-        cmsNavigationItems.filter(
-          (item) => item.navigation_section && item.navigation_section.id === rootItem.id,
-        ),
+        cmsNavigationItems.filter((item) => item.navigation_section && item.navigation_section.id === rootItem.id),
         (item) => item.position,
       );
 
@@ -158,9 +146,7 @@ function NavigationBar({ navbarClasses }: NavigationBarProps): JSX.Element {
     });
   }, [cmsNavigationItems]);
 
-  return (
-    <MemoizedNavigationBarContent rootItems={rootNavigationItems} navbarClasses={navbarClasses} />
-  );
+  return <MemoizedNavigationBarContent rootItems={rootNavigationItems} navbarClasses={navbarClasses} />;
 }
 
 export default NavigationBar;

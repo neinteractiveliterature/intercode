@@ -6,7 +6,8 @@ import { useSignupCountsByStateQuery } from './queries.generated';
 import { SignupState } from '../graphqlTypes.generated';
 
 export default LoadQueryWrapper(useSignupCountsByStateQuery, function SignupSpy({ data }) {
-  const getSignupCount = (state: SignupState) => (
+  const getSignupCount = (state: SignupState) =>
+    (
       data.convention.signup_counts_by_state.find((record) => record.state === state) || {
         count: 0,
       }

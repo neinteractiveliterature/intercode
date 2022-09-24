@@ -11,10 +11,7 @@ export type TypedScheduledValue<ValueType> = {
   timespans: TypedScheduledValueTimespan<ValueType>[];
 };
 
-export function findTimespanIndexAt(
-  scheduledValue: TypedScheduledValue<unknown>,
-  time: DateTime,
-): number {
+export function findTimespanIndexAt(scheduledValue: TypedScheduledValue<unknown>, time: DateTime): number {
   return scheduledValue.timespans.findIndex((timespanObj) => {
     const timespan = Timespan.fromStrings(timespanObj.start, timespanObj.finish);
     return timespan.includesTime(time);
@@ -40,9 +37,7 @@ export function findValueAt<ValueType>(
   return timespan?.value;
 }
 
-export function findCurrentTimespanIndex<ValueType>(
-  scheduledValue: TypedScheduledValue<ValueType>,
-): number {
+export function findCurrentTimespanIndex<ValueType>(scheduledValue: TypedScheduledValue<ValueType>): number {
   return findTimespanIndexAt(scheduledValue, DateTime.local());
 }
 
@@ -52,8 +47,6 @@ export function findCurrentTimespan<ValueType>(
   return findTimespanAt(scheduledValue, DateTime.local());
 }
 
-export function findCurrentValue<ValueType>(
-  scheduledValue: TypedScheduledValue<ValueType>,
-): ValueType | undefined {
+export function findCurrentValue<ValueType>(scheduledValue: TypedScheduledValue<ValueType>): ValueType | undefined {
   return findValueAt(scheduledValue, DateTime.local());
 }

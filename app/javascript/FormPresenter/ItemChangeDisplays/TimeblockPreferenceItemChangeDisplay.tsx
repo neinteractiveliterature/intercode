@@ -1,11 +1,7 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import {
-  preferencesMatch,
-  ParsedTimeblockPreference,
-  UnparsedTimeblockPreference,
-} from '../TimeblockTypes';
+import { preferencesMatch, ParsedTimeblockPreference, UnparsedTimeblockPreference } from '../TimeblockTypes';
 import {
   describeOrdinality,
   describeTimeblock,
@@ -63,10 +59,7 @@ function TimeblockPreferenceItemChangeDisplay({
     );
   };
 
-  const columns = useMemo(
-    () => getValidTimeblockColumns(convention, formItem),
-    [convention, formItem],
-  );
+  const columns = useMemo(() => getValidTimeblockColumns(convention, formItem), [convention, formItem]);
   const rows = useMemo(() => rotateTimeblockColumnsToRows(formItem, columns), [columns, formItem]);
 
   return (

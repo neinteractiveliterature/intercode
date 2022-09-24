@@ -5,15 +5,10 @@ import Timespan, { FiniteTimespan } from './Timespan';
 import { timezoneNameForConvention } from './TimeUtils';
 import { Convention, Event, Run } from './graphqlTypes.generated';
 
-export type ConventionForTimespanUtils = Pick<
-  Convention,
-  'starts_at' | 'ends_at' | 'timezone_name' | 'timezone_mode'
->;
+export type ConventionForTimespanUtils = Pick<Convention, 'starts_at' | 'ends_at' | 'timezone_name' | 'timezone_mode'>;
 
 export function timespanFromConvention(convention: ConventionForTimespanUtils): Timespan {
-  return Timespan.fromStrings(convention.starts_at, convention.ends_at).tz(
-    timezoneNameForConvention(convention),
-  );
+  return Timespan.fromStrings(convention.starts_at, convention.ends_at).tz(timezoneNameForConvention(convention));
 }
 
 export function timespanFromRun(
@@ -27,10 +22,7 @@ export function timespanFromRun(
   return Timespan.finiteFromDateTimes(start, finish);
 }
 
-export function getConventionDayTimespans(
-  conventionTimespan: FiniteTimespan,
-  timezoneName: string,
-): FiniteTimespan[] {
+export function getConventionDayTimespans(conventionTimespan: FiniteTimespan, timezoneName: string): FiniteTimespan[] {
   return conventionTimespan.getTimespansWithin(timezoneName, {
     unit: 'day',
     offset: Duration.fromObject({ hours: 6 }), // start convention days at 6:00am
@@ -42,10 +34,7 @@ export function getMemoizationKeyForTimespan(timespan?: Timespan): string {
     return '';
   }
 
-  return [
-    timespan.start ? timespan.start.toISO() : '',
-    timespan.finish ? timespan.finish.toISO() : '',
-  ].join('/');
+  return [timespan.start ? timespan.start.toISO() : '', timespan.finish ? timespan.finish.toISO() : ''].join('/');
 }
 
 export function describeInterval(
@@ -55,9 +44,7 @@ export function describeInterval(
 ): string {
   const start = timespan.start ? formatDateTime(timespan.start.setZone(timeZone)) : 'anytime';
 
-  const finish = timespan.finish
-    ? formatDateTime(timespan.finish.setZone(timeZone))
-    : 'indefinitely';
+  const finish = timespan.finish ? formatDateTime(timespan.finish.setZone(timeZone)) : 'indefinitely';
 
   const [dedupedStart, dedupedFinish] = removeCommonStringMiddle(start, finish);
   return [dedupedStart, dedupedFinish].join(timespan.finish ? ' to ' : ' ');

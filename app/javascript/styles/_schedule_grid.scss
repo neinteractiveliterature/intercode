@@ -47,13 +47,7 @@ $signed-up-event-background-color: rgba(0, 0, 0, 0.4);
   flex-grow: 1;
   min-width: min-content;
   min-height: 300px;
-  background-image: linear-gradient(
-    90deg,
-    rgba(0, 0, 0, 0.1) 0%,
-    rgba(0, 0, 0, 0.1) 1%,
-    transparent 2%,
-    transparent
-  );
+  background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.1) 1%, transparent 2%, transparent);
 }
 
 .schedule-grid-block {

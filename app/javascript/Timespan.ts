@@ -92,9 +92,7 @@ class Timespan {
   }
 
   includesTime(time: DateTime): boolean {
-    return (
-      (this.start == null || this.start <= time) && (this.finish == null || this.finish > time)
-    );
+    return (this.start == null || this.start <= time) && (this.finish == null || this.finish > time);
   }
 
   includesTimespan(other: Timespan): boolean {
@@ -112,10 +110,7 @@ class Timespan {
   }
 
   isSame(other: Timespan): boolean {
-    return (
-      timesAreSameOrBothNull(this.start, other.start) &&
-      timesAreSameOrBothNull(this.finish, other.finish)
-    );
+    return timesAreSameOrBothNull(this.start, other.start) && timesAreSameOrBothNull(this.finish, other.finish);
   }
 
   intersection(other: Timespan): Timespan | null {
@@ -260,9 +255,7 @@ class Timespan {
       .map((timeHop, i) => {
         const effectiveStart = i === 0 && expandStart ? thisTimespan.start : timeHop;
         if (i < timeHops.length - 1) {
-          return Timespan.finiteFromDateTimes(effectiveStart, timeHops[i + 1]).intersection(
-            thisTimespan,
-          );
+          return Timespan.finiteFromDateTimes(effectiveStart, timeHops[i + 1]).intersection(thisTimespan);
         }
 
         if (offset) {
@@ -272,20 +265,14 @@ class Timespan {
           ).intersection(thisTimespan);
         }
 
-        return Timespan.finiteFromDateTimes(
-          effectiveStart,
-          timeHop.plus(stepDuration),
-        ).intersection(thisTimespan);
+        return Timespan.finiteFromDateTimes(effectiveStart, timeHop.plus(stepDuration)).intersection(thisTimespan);
       })
       .filter(notEmpty)
       .map((timespan) => timespan.tz(timezoneName));
   }
 
   clone(): Timespan {
-    return new Timespan(
-      this.start != null ? this.start : null,
-      this.finish != null ? this.finish : null,
-    );
+    return new Timespan(this.start != null ? this.start : null, this.finish != null ? this.finish : null);
   }
 }
 

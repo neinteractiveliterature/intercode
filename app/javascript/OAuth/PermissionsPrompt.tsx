@@ -50,20 +50,14 @@ function getScopeDescription(scopeName: string, t: TFunction) {
     case 'read_signups':
       return t('oauth.permissions.read_signups', 'Access data about your signups');
     case 'read_events':
-      return t(
-        'oauth.permissions.read_events',
-        'Access data about the events and event proposals you manage',
-      );
+      return t('oauth.permissions.read_events', 'Access data about the events and event proposals you manage');
     case 'read_conventions':
       return t(
         'oauth.permissions.read_conventions',
         'Access privileged data about the conventions you manage (e.g. user profiles)',
       );
     case 'read_organizations':
-      return t(
-        'oauth.permissions.read_organizations',
-        'Access privileged data about organizations on the site',
-      );
+      return t('oauth.permissions.read_organizations', 'Access privileged data about organizations on the site');
     case 'read_email_routing':
       return t('oauth.permissions.read_email_routing', 'Read sitewide email routing rules');
     case 'manage_profile':
@@ -75,10 +69,7 @@ function getScopeDescription(scopeName: string, t: TFunction) {
     case 'manage_conventions':
       return t('oauth.permissions.manage_conventions', 'Update conventions you manage');
     case 'manage_organizations':
-      return t(
-        'oauth.permissions.manage_organizations',
-        'Update privileged data about organizations on the site',
-      );
+      return t('oauth.permissions.manage_organizations', 'Update privileged data about organizations on the site');
     case 'manage_email_routing':
       return t('oauth.permissions.manage_email_routing', 'Update sitewide email routing rules');
     default:
@@ -113,10 +104,7 @@ function PermissionsPrompt({ scopeNames }: PermissionsPromptProps): JSX.Element 
         }
 
         return (
-          <section
-            key={scopeGroup}
-            className={`card mb-4 ${CLASS_NAMES_BY_SCOPE_GROUP[scopeGroup]}`}
-          >
+          <section key={scopeGroup} className={`card mb-4 ${CLASS_NAMES_BY_SCOPE_GROUP[scopeGroup]}`}>
             <div className="card-header">
               <button
                 type="button"

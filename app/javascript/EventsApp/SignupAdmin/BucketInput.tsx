@@ -5,9 +5,7 @@ import { MultipleChoiceInputProps } from '@neinteractiveliterature/litform/lib/M
 
 import { SignupFieldsFragment } from './queries.generated';
 
-type BucketType = NonNullable<
-  SignupFieldsFragment['run']['event']['registration_policy']
->['buckets'][0];
+type BucketType = NonNullable<SignupFieldsFragment['run']['event']['registration_policy']>['buckets'][0];
 
 function getLabelForBucketChoice(signup: SignupFieldsFragment, bucket: BucketType, t: TFunction) {
   const addenda = [];
@@ -26,10 +24,7 @@ function shouldBucketChoiceBeDisabled(signup: SignupFieldsFragment, bucket: Buck
   return bucket.key === signup.bucket_key || (bucket.anything && signup.bucket_key != null);
 }
 
-export type BucketInputProps = Omit<
-  MultipleChoiceInputProps,
-  'choices' | 'value' | 'onChange' | 'multiple'
-> & {
+export type BucketInputProps = Omit<MultipleChoiceInputProps, 'choices' | 'value' | 'onChange' | 'multiple'> & {
   signup: SignupFieldsFragment;
   value: string | null | undefined;
   onChange: (newValue: string | null | undefined) => void;

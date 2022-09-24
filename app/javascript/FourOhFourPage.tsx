@@ -9,9 +9,7 @@ export default function FourOhFourPage(): JSX.Element {
       <Trans i18nKey="errors.404">
         <h1>Oops!</h1>
 
-        <p className="mb-0">
-          We couldn’t find a page at the location {{ pathname: location.pathname }}.
-        </p>
+        <p className="mb-0">We couldn’t find a page at the location {{ pathname: location.pathname }}.</p>
       </Trans>
     </div>
   );

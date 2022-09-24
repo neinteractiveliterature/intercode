@@ -10,15 +10,13 @@ export function presetMatchesPolicy(
   preset: RegistrationPolicyPreset,
 ): boolean {
   if (
-    Boolean(registrationPolicy.prevent_no_preference_signups) !==
-    Boolean(preset.policy.prevent_no_preference_signups)
+    Boolean(registrationPolicy.prevent_no_preference_signups) !== Boolean(preset.policy.prevent_no_preference_signups)
   ) {
     return false;
   }
 
   const allKeysMatch = preset.policy.buckets.every(
-    (bucket) =>
-      typeof bucket.key === 'string' && getRegistrationPolicyBucket(registrationPolicy, bucket.key),
+    (bucket) => typeof bucket.key === 'string' && getRegistrationPolicyBucket(registrationPolicy, bucket.key),
   );
   if (!allKeysMatch) {
     return false;
@@ -55,10 +53,7 @@ export function findPreset(
   return presets.find((preset) => presetMatchesPolicy(registrationPolicy, preset));
 }
 
-export function bucketSortCompare(
-  a: BucketForRegistrationPolicyUtils,
-  b: BucketForRegistrationPolicyUtils,
-): number {
+export function bucketSortCompare(a: BucketForRegistrationPolicyUtils, b: BucketForRegistrationPolicyUtils): number {
   if (a.anything && !b.anything) {
     return 1;
   }

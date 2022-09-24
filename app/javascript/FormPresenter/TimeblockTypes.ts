@@ -39,9 +39,7 @@ export type TimeblockPreferenceForComparison = Pick<
   'start' | 'finish'
 >;
 
-export function parseTimeblockPreference(
-  unparsedPreference: UnparsedTimeblockPreference,
-): ParsedTimeblockPreference {
+export function parseTimeblockPreference(unparsedPreference: UnparsedTimeblockPreference): ParsedTimeblockPreference {
   return {
     start: DateTime.fromISO(unparsedPreference.start),
     finish: DateTime.fromISO(unparsedPreference.finish),
@@ -50,9 +48,7 @@ export function parseTimeblockPreference(
   };
 }
 
-export function serializeTimeblockPreference(
-  preference: ParsedTimeblockPreference,
-): UnparsedTimeblockPreference {
+export function serializeTimeblockPreference(preference: ParsedTimeblockPreference): UnparsedTimeblockPreference {
   return {
     start: preference.start.toISO(),
     finish: preference.finish.toISO(),
@@ -69,10 +65,7 @@ function coerceDateLike(dateLike: string | DateTime): DateTime {
   return dateLike;
 }
 
-export function preferencesMatch(
-  a: TimeblockPreferenceForComparison,
-  b: TimeblockPreferenceForComparison,
-): boolean {
+export function preferencesMatch(a: TimeblockPreferenceForComparison, b: TimeblockPreferenceForComparison): boolean {
   return (
     coerceDateLike(a.start).toMillis() === coerceDateLike(b.start).toMillis() &&
     coerceDateLike(a.finish).toMillis() === coerceDateLike(b.finish).toMillis()

@@ -14,14 +14,7 @@ export type MapboxMapProps = {
   height?: string;
 };
 
-function MapboxMap({
-  center,
-  zoom,
-  markerLocation,
-  setCenter,
-  setZoom,
-  height,
-}: MapboxMapProps): JSX.Element {
+function MapboxMap({ center, zoom, markerLocation, setCenter, setZoom, height }: MapboxMapProps): JSX.Element {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<Map | null>(null);
   const markerRef = useRef<Marker | null>(null);
@@ -90,9 +83,9 @@ function MapboxMap({
         <PageLoadingIndicator visible iconSet="bootstrap-icons" />
       ) : (
         <div className="alert alert-warning">
-          Cannot load Mapbox without an access token. To set up Intercode with a Mapbox access
-          token, add a <code>MAPBOX_ACCESS_TOKEN</code> environment variable in{' '}
-          <code>.env.local.development</code> and restart the Rails server.
+          Cannot load Mapbox without an access token. To set up Intercode with a Mapbox access token, add a{' '}
+          <code>MAPBOX_ACCESS_TOKEN</code> environment variable in <code>.env.local.development</code> and restart the
+          Rails server.
         </div>
       )}
     </div>

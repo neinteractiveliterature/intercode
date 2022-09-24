@@ -1,11 +1,7 @@
 import { useCallback, useMemo, useContext } from 'react';
 import { DateTime } from 'luxon';
 
-import {
-  timespanFromConvention,
-  getConventionDayTimespans,
-  ConventionForTimespanUtils,
-} from '../TimespanUtils';
+import { timespanFromConvention, getConventionDayTimespans, ConventionForTimespanUtils } from '../TimespanUtils';
 import AppRootContext from '../AppRootContext';
 import { useAppDateTimeFormat } from '../TimeUtils';
 import { conventionRequiresDates } from '../EventsApp/runTimeFormatting';
@@ -17,11 +13,7 @@ export type ConventionDaySelectProps = {
   onChange: React.Dispatch<DateTime>;
 };
 
-function ConventionDaySelect({
-  convention,
-  value,
-  onChange,
-}: ConventionDaySelectProps): JSX.Element {
+function ConventionDaySelect({ convention, value, onChange }: ConventionDaySelectProps): JSX.Element {
   const { timezoneName, siteMode } = useContext(AppRootContext);
   const format = useAppDateTimeFormat();
   const conventionTimespan = useMemo(() => timespanFromConvention(convention), [convention]);
@@ -32,9 +24,7 @@ function ConventionDaySelect({
   const conventionDays = useMemo(
     () =>
       conventionTimespan.isFinite()
-        ? getConventionDayTimespans(conventionTimespan, timezoneName).map(
-            (timespan) => timespan.start,
-          )
+        ? getConventionDayTimespans(conventionTimespan, timezoneName).map((timespan) => timespan.start)
         : [],
     [conventionTimespan, timezoneName],
   );

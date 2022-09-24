@@ -8,10 +8,7 @@ export type GravatarProps = {
 function Gravatar({ url, enabled, pixelSize, imgClassName }: GravatarProps): JSX.Element {
   if (!url || !(enabled ?? true)) {
     return (
-      <span
-        className="d-inline-block"
-        style={{ width: `${pixelSize}px`, height: `${pixelSize}px` }}
-      >
+      <span className="d-inline-block" style={{ width: `${pixelSize}px`, height: `${pixelSize}px` }}>
         <i className="bi-person-circle" style={{ fontSize: `${pixelSize}px` }} />
       </span>
     );

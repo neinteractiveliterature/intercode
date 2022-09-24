@@ -64,11 +64,7 @@ const RunDisplay = forwardRef<HTMLDivElement, RunDisplayProps>(function RunDispl
     }
 
     return (
-      <AvailabilityBar
-        availabilityFraction={availabilityFraction}
-        unlimited={unlimited ?? false}
-        runStyle={runStyle}
-      />
+      <AvailabilityBar availabilityFraction={availabilityFraction} unlimited={unlimited ?? false} runStyle={runStyle} />
     );
   };
 
@@ -96,9 +92,7 @@ const RunDisplay = forwardRef<HTMLDivElement, RunDisplayProps>(function RunDispl
       return null;
     }
 
-    return (
-      <SignupStatusBadge signupStatus={signupStatus} myRating={event.my_rating ?? undefined} />
-    );
+    return <SignupStatusBadge signupStatus={signupStatus} myRating={event.my_rating ?? undefined} />;
   };
 
   return (

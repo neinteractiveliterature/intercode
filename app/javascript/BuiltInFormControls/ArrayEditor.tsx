@@ -100,10 +100,7 @@ export type StringArrayEditorProps = Omit<
   ) => ReactNode;
 };
 
-export function StringArrayEditor({
-  renderAddValueInput,
-  ...otherProps
-}: StringArrayEditorProps): JSX.Element {
+export function StringArrayEditor({ renderAddValueInput, ...otherProps }: StringArrayEditorProps): JSX.Element {
   return (
     <ArrayEditor
       initialAddValue=""

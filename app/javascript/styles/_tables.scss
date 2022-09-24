@@ -44,37 +44,37 @@
   &.table-bordered {
     border: $table-border-width solid $table-border-color;
 
-    [role=columnheader],
-    [role=cell] {
+    [role='columnheader'],
+    [role='cell'] {
       border: $table-border-width solid $table-border-color;
     }
 
     .thead {
-      [role=columnheader],
-      [role=cell] {
+      [role='columnheader'],
+      [role='cell'] {
         border-bottom-width: 2 * $table-border-width;
       }
     }
   }
 
   &.table-borderless {
-    [role=columnheader],
-    [role=cell],
-    .thead [role=columnheader],
-    [role=rowgroup] + [role=rowgroup] {
+    [role='columnheader'],
+    [role='cell'],
+    .thead [role='columnheader'],
+    [role='rowgroup'] + [role='rowgroup'] {
       border: 0;
     }
   }
 
   &.table-striped {
-    [role=rowgroup] [role=row]:nth-of-type(#{$table-striped-order}) {
+    [role='rowgroup'] [role='row']:nth-of-type(#{$table-striped-order}) {
       --#{$variable-prefix}table-accent-bg: var(--#{$variable-prefix}table-striped-bg);
       color: var(--#{$variable-prefix}table-striped-color);
     }
   }
 
   &.table-hover {
-    [role=rowgroup] [role=row] {
+    [role='rowgroup'] [role='row'] {
       &:hover {
         --#{$variable-prefix}table-accent-bg: var(--#{$variable-prefix}table-hover-bg);
         color: var(--#{$variable-prefix}table-hover-color);
@@ -93,11 +93,11 @@
     top: 0;
     z-index: 1;
     /* prevents from scrolling while dragging on touch devices */
-    touch-action:none;
+    touch-action: none;
     opacity: 50%;
-    &:hover, &.isResizing {
+    &:hover,
+    &.isResizing {
       opacity: 100%;
     }
   }
 }
-

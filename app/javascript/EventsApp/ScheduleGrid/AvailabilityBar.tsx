@@ -7,11 +7,7 @@ export type AvailabilityBarProps = {
   runStyle?: CSSProperties;
 };
 
-function AvailabilityBar({
-  availabilityFraction,
-  unlimited,
-  runStyle,
-}: AvailabilityBarProps): JSX.Element {
+function AvailabilityBar({ availabilityFraction, unlimited, runStyle }: AvailabilityBarProps): JSX.Element {
   const unavailableBarWidth = unlimited ? 100.0 : 100.0 - availabilityFraction * 100.0;
 
   return (

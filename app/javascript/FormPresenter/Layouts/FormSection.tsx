@@ -10,10 +10,7 @@ export type FormSectionProps = Omit<FormBodyProps, 'formItems'> & {
   section: CommonFormSectionFieldsFragment;
 };
 
-export default forwardRef<FormBodyImperativeHandle, FormSectionProps>(function FormSection(
-  { section, ...props },
-  ref,
-) {
+export default forwardRef<FormBodyImperativeHandle, FormSectionProps>(function FormSection({ section, ...props }, ref) {
   const items = useMemo(
     () => sortFormItems(section.form_items).map(parseTypedFormItemObject).filter(notEmpty),
     [section],

@@ -10,9 +10,7 @@ import assertNever from 'assert-never';
 
 const OTHER_VALUE = '_OTHER_VALUE';
 
-function castSingleValue(
-  value: FormItemValueType<MultipleChoiceFormItem> | null | undefined,
-): string | null {
+function castSingleValue(value: FormItemValueType<MultipleChoiceFormItem> | null | undefined): string | null {
   if (value == null) {
     return null;
   }
@@ -28,9 +26,7 @@ function castSingleValue(
   assertNever(value);
 }
 
-function castMultipleValue(
-  value: FormItemValueType<MultipleChoiceFormItem> | null | undefined,
-): string[] {
+function castMultipleValue(value: FormItemValueType<MultipleChoiceFormItem> | null | undefined): string[] {
   let arrayValue: string[];
 
   if (Array.isArray(value)) {
@@ -79,9 +75,7 @@ function MultipleChoiceItemInput({
     if (otherIsSelected) {
       if (isMultiple) {
         const choiceValues = formItem.rendered_properties.choices.map((choice) => choice.value);
-        return castMultipleValue(value).find(
-          (selectedChoiceValue) => !choiceValues.includes(selectedChoiceValue),
-        );
+        return castMultipleValue(value).find((selectedChoiceValue) => !choiceValues.includes(selectedChoiceValue));
       }
       return castSingleValue(value);
     }
@@ -129,10 +123,7 @@ function MultipleChoiceItemInput({
     return castSingleValue(value);
   }, [otherIsSelected, value]);
 
-  const userDidInteract = useCallback(
-    () => onInteract(formItem.identifier),
-    [formItem.identifier, onInteract],
-  );
+  const userDidInteract = useCallback(() => onInteract(formItem.identifier), [formItem.identifier, onInteract]);
 
   const valueDidChangeMultiple = (newValue: string[] | null) => {
     userDidInteract();
@@ -193,9 +184,7 @@ function MultipleChoiceItemInput({
   };
 
   const choiceClassName = classNames({
-    'form-check-inline': ['radio_horizontal', 'checkbox_horizontal'].includes(
-      formItem.rendered_properties.style,
-    ),
+    'form-check-inline': ['radio_horizontal', 'checkbox_horizontal'].includes(formItem.rendered_properties.style),
   });
 
   return (

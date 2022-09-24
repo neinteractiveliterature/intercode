@@ -5,11 +5,7 @@ export type EmailAliasInputProps = InputHTMLAttributes<HTMLInputElement> & {
   domain?: string | null;
 };
 
-function EmailAliasInput({
-  onTextChange,
-  domain,
-  ...otherProps
-}: EmailAliasInputProps): JSX.Element {
+function EmailAliasInput({ onTextChange, domain, ...otherProps }: EmailAliasInputProps): JSX.Element {
   return (
     <div className="input-group">
       <input

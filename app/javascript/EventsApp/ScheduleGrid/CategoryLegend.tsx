@@ -11,14 +11,8 @@ import { SignupStatus } from './StylingUtils';
 export default LoadQueryWrapper(useCommonConventionDataQuery, function CategoryLegend({ data }) {
   const { t } = useTranslation();
   const sortedEventCategories = useMemo(() => {
-    const nameSortedEventCategories = sortByLocaleString(
-      data.convention.event_categories,
-      (c) => c.name,
-    );
-    const eventCategoriesByDefaultColor = groupBy(
-      nameSortedEventCategories,
-      (c) => c.default_color ?? '_undefined',
-    );
+    const nameSortedEventCategories = sortByLocaleString(data.convention.event_categories, (c) => c.name);
+    const eventCategoriesByDefaultColor = groupBy(nameSortedEventCategories, (c) => c.default_color ?? '_undefined');
     const seenColorGroups = new Set<string>();
     const sortedCategories: typeof nameSortedEventCategories = [];
 
@@ -40,9 +34,7 @@ export default LoadQueryWrapper(useCommonConventionDataQuery, function CategoryL
     <div className="d-flex flex-wrap">
       <div className="col-md-6 col-lg-4 mb-4 pe-3">
         <div className="card bg-light">
-          <div className="card-header">
-            {t('schedule.legends.eventCategories.title', 'Event categories')}
-          </div>
+          <div className="card-header">{t('schedule.legends.eventCategories.title', 'Event categories')}</div>
 
           <div className="card-body">
             {sortedEventCategories.map((category) => (
@@ -56,9 +48,7 @@ export default LoadQueryWrapper(useCommonConventionDataQuery, function CategoryL
 
       <div className="col-md-6 col-lg-4 mb-4 pe-3">
         <div className="card bg-light">
-          <div className="card-header">
-            {t('schedule.legends.slotAvailability.title', 'Slot availability')}
-          </div>
+          <div className="card-header">{t('schedule.legends.slotAvailability.title', 'Slot availability')}</div>
 
           <div className="card-body">
             <FakeEventRun eventCategory={defaultCategory} availability={1}>
@@ -82,9 +72,7 @@ export default LoadQueryWrapper(useCommonConventionDataQuery, function CategoryL
 
       <div className="col-md-6 col-lg-4 mb-4 pe-3">
         <div className="card bg-light">
-          <div className="card-header">
-            {t('schedule.legends.signupStatus.title', 'Signup status')}
-          </div>
+          <div className="card-header">{t('schedule.legends.signupStatus.title', 'Signup status')}</div>
 
           <div className="card-body">
             <FakeEventRun eventCategory={defaultCategory} signupStatus={SignupStatus.Confirmed}>

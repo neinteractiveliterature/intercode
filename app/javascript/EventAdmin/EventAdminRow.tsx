@@ -7,11 +7,7 @@ import AdminNotes from '../BuiltInFormControls/AdminNotes';
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 import buildEventCategoryUrl from './buildEventCategoryUrl';
 import AppRootContext from '../AppRootContext';
-import {
-  ConventionFieldsFragment,
-  EventFieldsFragment,
-  RunFieldsFragment,
-} from './queries.generated';
+import { ConventionFieldsFragment, EventFieldsFragment, RunFieldsFragment } from './queries.generated';
 import { useUpdateEventAdminNotesMutation } from './mutations.generated';
 import { timespanFromRun } from '../TimespanUtils';
 import getSortedRuns from '../EventsApp/EventList/getSortedRuns';
@@ -30,10 +26,7 @@ function EventAdminRow({ event, convention }: EventAdminRowProps): JSX.Element {
   const [expanded, setExpanded] = useState(false);
   const formatRunTimespan = useFormatRunTimespan();
 
-  const length = useMemo(
-    () => Duration.fromObject({ seconds: event.length_seconds }),
-    [event.length_seconds],
-  );
+  const length = useMemo(() => Duration.fromObject({ seconds: event.length_seconds }), [event.length_seconds]);
   const eventCategory = useMemo(
     () => convention.event_categories.find((c) => c.id === event.event_category.id),
     [convention.event_categories, event.event_category],
@@ -124,9 +117,7 @@ function EventAdminRow({ event, convention }: EventAdminRowProps): JSX.Element {
         <div className="mt-2">
           <AdminNotes
             value={event.admin_notes ?? undefined}
-            mutate={(adminNotes) =>
-              updateEventAdminNotes({ variables: { eventId: event.id, adminNotes } })
-            }
+            mutate={(adminNotes) => updateEventAdminNotes({ variables: { eventId: event.id, adminNotes } })}
           />
         </div>
       </td>

@@ -6,12 +6,7 @@ import { notEmpty } from '@neinteractiveliterature/litform';
 
 import Timespan, { FiniteTimespan } from '../Timespan';
 import { timespanFromConvention, ConventionForTimespanUtils } from '../TimespanUtils';
-import {
-  formatLCM,
-  getDateTimeFormat,
-  timezoneNameForConvention,
-  useAppDateTimeFormat,
-} from '../TimeUtils';
+import { formatLCM, getDateTimeFormat, timezoneNameForConvention, useAppDateTimeFormat } from '../TimeUtils';
 import { TimeblockDefinition, TimeblockPreferenceOrdinality } from './TimeblockTypes';
 import { TimeblockPreferenceFormItem } from '../FormAdmin/FormItemUtils';
 
@@ -59,10 +54,7 @@ export function describeOrdinality(ordinality?: TimeblockPreferenceOrdinality | 
 }
 
 function getDayStarts(convention: ConventionForTimespanUtils) {
-  return timespanFromConvention(convention).getTimeHopsWithin(
-    timezoneNameForConvention(convention),
-    { unit: 'day' },
-  );
+  return timespanFromConvention(convention).getTimeHopsWithin(timezoneNameForConvention(convention), { unit: 'day' });
 }
 
 export type ConcreteTimeblock = {
@@ -72,10 +64,7 @@ export type ConcreteTimeblock = {
   timespan: FiniteTimespan;
 };
 
-function getAllPossibleTimeblocks(
-  convention: ConventionForTimespanUtils,
-  formItem: TimeblockPreferenceFormItem,
-) {
+function getAllPossibleTimeblocks(convention: ConventionForTimespanUtils, formItem: TimeblockPreferenceFormItem) {
   return flatMap(getDayStarts(convention), (dayStart) =>
     formItem.rendered_properties.timeblocks
       .map((timeblock) => {
@@ -189,9 +178,6 @@ export function rotateTimeblockColumnsToRows(
     .filter(notEmpty);
 }
 
-export function getColumnHeader(
-  column: TimeblockColumn,
-  format: ReturnType<typeof useAppDateTimeFormat>,
-): string {
+export function getColumnHeader(column: TimeblockColumn, format: ReturnType<typeof useAppDateTimeFormat>): string {
   return format(column.dayStart, 'longWeekday');
 }

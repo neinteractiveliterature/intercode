@@ -114,6 +114,5 @@ declare module 'react-table' {
   > = UseGroupByCellProps<D>;
   // UseRowStateCellProps<D> {}
 
-  export type Row<D extends Record<string, unknown> = Record<string, unknown>> =
-    UseRowSelectRowProps<D>;
+  export type Row<D extends Record<string, unknown> = Record<string, unknown>> = UseRowSelectRowProps<D>;
 }

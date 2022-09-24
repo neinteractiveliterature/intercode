@@ -8,9 +8,7 @@ function FullnessLegend(): JSX.Element {
     <div className="d-flex flex-wrap">
       <div className="col-md-6 col-lg-4 mb-4 pe-3">
         <div className="card bg-light">
-          <div className="card-header">
-            {t('schedule.legends.eventFullness.title', 'Event fullness colors')}
-          </div>
+          <div className="card-header">{t('schedule.legends.eventFullness.title', 'Event fullness colors')}</div>
 
           <div className="card-body">
             {[
@@ -60,9 +58,7 @@ function FullnessLegend(): JSX.Element {
 
       <div className="col-md-6 col-lg-4 mb-4 pe-3">
         <div className="card bg-light">
-          <div className="card-header">
-            {t('schedule.legends.attendeeCounts.title', 'Attendee counts')}
-          </div>
+          <div className="card-header">{t('schedule.legends.attendeeCounts.title', 'Attendee counts')}</div>
 
           <div className="card-body">
             <small className="text-muted">
@@ -77,10 +73,7 @@ function FullnessLegend(): JSX.Element {
                 /
                 <abbr
                   className="text-info"
-                  title={t(
-                    'schedule.legends.attendeeCounts.nocount',
-                    'non-counted signups (usually staff or NPCs)',
-                  )}
+                  title={t('schedule.legends.attendeeCounts.nocount', 'non-counted signups (usually staff or NPCs)')}
                 >
                   {t('schedule.legends.attendeeCounts.nocountAbbreviation', 'nocount')}
                 </abbr>
@@ -92,9 +85,7 @@ function FullnessLegend(): JSX.Element {
                   {t('schedule.legends.attendeeCounts.waitlistedAbbreviation', 'waitlist')}
                 </abbr>
               </div>
-              <div>
-                {t('schedule.legends.attendeeCounts.totals', 'Total: [total of above 3 numbers]')}
-              </div>
+              <div>{t('schedule.legends.attendeeCounts.totals', 'Total: [total of above 3 numbers]')}</div>
             </small>
           </div>
         </div>

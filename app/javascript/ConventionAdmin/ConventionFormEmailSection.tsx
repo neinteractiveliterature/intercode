@@ -1,9 +1,5 @@
 import * as React from 'react';
-import {
-  BootstrapFormInput,
-  MultipleChoiceInput,
-  usePropertySetters,
-} from '@neinteractiveliterature/litform';
+import { BootstrapFormInput, MultipleChoiceInput, usePropertySetters } from '@neinteractiveliterature/litform';
 
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
 import type { ConventionFormConvention } from './ConventionForm';
@@ -23,14 +19,13 @@ function ConventionFormEmailSection({
   disabled,
   staffPositions,
 }: ConventionFormEmailSectionProps): JSX.Element {
-  const [setEventMailingListDomain, setEmailFrom, setCatchAllStaffPosition, setEmailMode] =
-    usePropertySetters(
-      setConvention,
-      'event_mailing_list_domain',
-      'email_from',
-      'catch_all_staff_position',
-      'email_mode',
-    );
+  const [setEventMailingListDomain, setEmailFrom, setCatchAllStaffPosition, setEmailMode] = usePropertySetters(
+    setConvention,
+    'event_mailing_list_domain',
+    'email_from',
+    'catch_all_staff_position',
+    'email_mode',
+  );
 
   return (
     <>
@@ -61,9 +56,7 @@ function ConventionFormEmailSection({
         getOptionValue={(staffPosition) => staffPosition?.id.toString() ?? ''}
         value={convention.catch_all_staff_position}
         isClearable
-        onChange={(newValue: typeof convention.catch_all_staff_position) =>
-          setCatchAllStaffPosition(newValue)
-        }
+        onChange={(newValue: typeof convention.catch_all_staff_position) => setCatchAllStaffPosition(newValue)}
       />
 
       <MultipleChoiceInput

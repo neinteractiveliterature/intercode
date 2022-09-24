@@ -25,25 +25,17 @@ type RecurringEventSectionBodyProps = {
   startSchedulingRuns: () => void;
 };
 
-function RecurringEventSectionBody({
-  event,
-  convention,
-  startSchedulingRuns,
-}: RecurringEventSectionBodyProps) {
+function RecurringEventSectionBody({ event, convention, startSchedulingRuns }: RecurringEventSectionBodyProps) {
   const format = useAppDateTimeFormat();
   const { timezoneName } = useContext(AppRootContext);
   const conventionDays = useMemo(() => {
     const conventionTimespan = timespanFromConvention(convention);
-    return conventionTimespan.isFinite()
-      ? getConventionDayTimespans(conventionTimespan, timezoneName)
-      : [];
+    return conventionTimespan.isFinite() ? getConventionDayTimespans(conventionTimespan, timezoneName) : [];
   }, [convention, timezoneName]);
 
   const runLists = conventionDays.map((conventionDay) => {
     const dayRuns = sortBy(
-      event.runs.filter((run) =>
-        conventionDay.includesTime(DateTime.fromISO(run.starts_at, { zone: timezoneName })),
-      ),
+      event.runs.filter((run) => conventionDay.includesTime(DateTime.fromISO(run.starts_at, { zone: timezoneName }))),
       (run) => DateTime.fromISO(run.starts_at).toMillis(),
     );
 
@@ -53,9 +45,7 @@ function RecurringEventSectionBody({
       if (runStart.weekday !== conventionDay.start.weekday) {
         formatKey = 'shortWeekdayTime';
       }
-      const eventCategory = convention.event_categories.find(
-        (c) => c.id === event.event_category.id,
-      );
+      const eventCategory = convention.event_categories.find((c) => c.id === event.event_category.id);
 
       return (
         <li key={run.id} className="my-2">
@@ -118,12 +108,7 @@ function RecurringEventSection({ event, convention }: RecurringEventSectionProps
     <section className="my-4">
       <div className="d-flex">
         <div className="flex-grow-1">
-          <button
-            type="button"
-            onClick={toggleExpanded}
-            className="hidden-button"
-            aria-expanded={expanded}
-          >
+          <button type="button" onClick={toggleExpanded} className="hidden-button" aria-expanded={expanded}>
             <h4>
               <DisclosureTriangle expanded={expanded} /> {event.title}{' '}
               <small>
@@ -141,11 +126,7 @@ function RecurringEventSection({ event, convention }: RecurringEventSectionProps
       </div>
 
       {expanded && (
-        <RecurringEventSectionBody
-          event={event}
-          convention={convention}
-          startSchedulingRuns={scheduleRunsModal.open}
-        />
+        <RecurringEventSectionBody event={event} convention={convention} startSchedulingRuns={scheduleRunsModal.open} />
       )}
 
       <ScheduleMultipleRunsModal

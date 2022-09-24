@@ -10,11 +10,7 @@ type CapacityField = 'minimum_slots' | 'preferred_slots' | 'total_slots';
 
 type BucketType = Pick<RegistrationPolicyBucket, CapacityField>;
 
-function checkFieldMinimums(
-  object: BucketType,
-  targetField: CapacityField,
-  sourceFields: CapacityField[],
-): string[] {
+function checkFieldMinimums(object: BucketType, targetField: CapacityField, sourceFields: CapacityField[]): string[] {
   const currentValue = object[targetField];
 
   const errorField = sourceFields.find((sourceField) => {
