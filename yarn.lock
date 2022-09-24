@@ -4243,7 +4243,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@neinteractiveliterature/litform@npm:^0.28.0":
+"@neinteractiveliterature/litform@npm:0.28.0":
   version: 0.28.0
   resolution: "@neinteractiveliterature/litform@npm:0.28.0"
   dependencies:
@@ -17843,7 +17843,7 @@ resolve@^2.0.0-next.3:
     "@graphql-eslint/eslint-plugin": 3.11.0
     "@juggle/resize-observer": 3.4.0
     "@lezer/common": 1.0.1
-    "@neinteractiveliterature/litform": ^0.28.0
+    "@neinteractiveliterature/litform": 0.28.0
     "@popperjs/core": 2.11.6
     "@prettier/plugin-ruby": 3.2.2
     "@rails/activestorage": 7.0.4
