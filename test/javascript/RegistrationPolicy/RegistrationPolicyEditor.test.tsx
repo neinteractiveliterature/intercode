@@ -1,6 +1,4 @@
-import { RenderResult } from '@testing-library/react';
-
-import { act, render, fireEvent, waitFor } from '../testUtils';
+import { render, fireEvent, waitFor } from '../testUtils';
 import defaultPresets from './defaultPresets';
 import RegistrationPolicyEditor, {
   EditingRegistrationPolicy,
@@ -34,28 +32,20 @@ describe('RegistrationPolicyEditor', () => {
     buckets: RegistrationPolicyBucket[] = [defaultRegistrationPolicyBucket],
     preventNoPreferenceSignups = false,
   ) => {
-    let result: RenderResult;
-
-    await act(async () => {
-      result = await render(
-        <RegistrationPolicyEditor
-          registrationPolicy={{
-            buckets,
-            prevent_no_preference_signups: preventNoPreferenceSignups,
-          }}
-          onChange={onChange}
-          lockNameAndDescription={false}
-          lockLimitedBuckets={[]}
-          lockDeleteBuckets={[]}
-          allowCustom
-          {...props}
-        />,
-      );
-      await waitFor(() => {}); // TODO: figure out a better way
-    });
-
-    // @ts-expect-error This is actually going to get assigned during the act call
-    return result;
+    return await render(
+      <RegistrationPolicyEditor
+        registrationPolicy={{
+          buckets,
+          prevent_no_preference_signups: preventNoPreferenceSignups,
+        }}
+        onChange={onChange}
+        lockNameAndDescription={false}
+        lockLimitedBuckets={[]}
+        lockDeleteBuckets={[]}
+        allowCustom
+        {...props}
+      />,
+    );
   };
 
   test('basic layout', async () => {
@@ -110,10 +100,8 @@ describe('RegistrationPolicyEditor', () => {
   test('delete bucket', async () => {
     const { getByText } = await renderRegistrationPolicyEditor();
     fireEvent.click(getByText('Delete bucket'));
-    await act(async () => {
-      fireEvent.click(getByText('OK'));
-      await waitFor(() => {}); // TODO figure out a way to use waitForElementToBeRemoved here
-    });
+    fireEvent.click(getByText('OK'));
+    await waitFor(() => {}); // TODO figure out a way to use waitForElementToBeRemoved here
     const newPolicy = onChange.mock.calls[0][0];
     expect(newPolicy.buckets.length).toEqual(0);
   });

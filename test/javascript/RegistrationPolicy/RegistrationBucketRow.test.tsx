@@ -1,7 +1,5 @@
-import { RenderResult } from '@testing-library/react';
-
 import RegistrationBucketRow from '../../../app/javascript/RegistrationPolicy/RegistrationBucketRow';
-import { render, act, fireEvent, waitFor } from '../testUtils';
+import { render, fireEvent, waitFor } from '../testUtils';
 
 describe('RegistrationBucketRow', () => {
   let onChange: jest.Mock;
@@ -24,33 +22,24 @@ describe('RegistrationBucketRow', () => {
   });
 
   const renderRegistrationBucketRow = async (props = {}, registrationBucketProps = {}) => {
-    let result: RenderResult;
-
-    await act(async () => {
-      result = await render(
-        <table>
-          <tbody>
-            <RegistrationBucketRow
-              registrationBucket={{
-                ...defaultRegistrationBucketProps,
-                ...registrationBucketProps,
-              }}
-              onChange={onChange}
-              onDelete={onDelete}
-              lockNameAndDescription={false}
-              lockLimited={false}
-              lockDelete={false}
-              {...props}
-            />
-          </tbody>
-        </table>,
-      );
-
-      await waitFor(() => {}); // TODO: figure out a better way
-    });
-
-    // @ts-expect-error This is going to get assigned during the act call
-    return result;
+    return await render(
+      <table>
+        <tbody>
+          <RegistrationBucketRow
+            registrationBucket={{
+              ...defaultRegistrationBucketProps,
+              ...registrationBucketProps,
+            }}
+            onChange={onChange}
+            onDelete={onDelete}
+            lockNameAndDescription={false}
+            lockLimited={false}
+            lockDelete={false}
+            {...props}
+          />
+        </tbody>
+      </table>,
+    );
   };
 
   test('it renders the correct field values', async () => {
@@ -142,23 +131,19 @@ describe('RegistrationBucketRow', () => {
 
   test('deleting', async () => {
     const { getByText } = await renderRegistrationBucketRow();
-    await act(async () => {
-      fireEvent.click(getByText('Delete bucket'));
-      await waitFor(() => expect(getByText('OK')).toBeVisible());
-      fireEvent.click(getByText('OK'));
-      await waitFor(() => expect(getByText('OK')).not.toBeVisible());
-    });
+    fireEvent.click(getByText('Delete bucket'));
+    await waitFor(() => expect(getByText('OK')).toBeVisible());
+    fireEvent.click(getByText('OK'));
+    await waitFor(() => expect(getByText('OK')).not.toBeVisible());
     expect(onDelete.mock.calls[0][0]).toEqual('testBucket');
   });
 
   test('canceling delete', async () => {
     const { getByText } = await renderRegistrationBucketRow();
-    await act(async () => {
-      fireEvent.click(getByText('Delete bucket'));
-      await waitFor(() => expect(getByText('Cancel')).toBeVisible());
-      fireEvent.click(getByText('Cancel'));
-      await waitFor(() => expect(getByText('Cancel')).not.toBeVisible());
-    });
+    fireEvent.click(getByText('Delete bucket'));
+    await waitFor(() => expect(getByText('Cancel')).toBeVisible());
+    fireEvent.click(getByText('Cancel'));
+    await waitFor(() => expect(getByText('Cancel')).not.toBeVisible());
     expect(onDelete.mock.calls).toHaveLength(0);
   });
 });

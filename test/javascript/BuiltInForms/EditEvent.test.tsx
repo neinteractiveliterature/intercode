@@ -1,7 +1,7 @@
 import * as formMockData from '../EventAdmin/formMockData';
 import EditEvent from '../../../app/javascript/BuiltInForms/EditEvent';
 import useEventForm, { EventForm } from '../../../app/javascript/EventAdmin/useEventForm';
-import { render, fireEvent, waitFor, act } from '../testUtils';
+import { render, fireEvent, waitFor } from '../testUtils';
 
 const defaultProps = {
   updateEvent: async () => {},
@@ -48,10 +48,8 @@ describe('EditEvent', () => {
       const updateEvent = jest.fn();
       const onSave = jest.fn();
       const { getByText, getByLabelText } = await renderEditEvent({ updateEvent, onSave });
-      await act(async () => {
-        fireEvent.click(getByText('Save event'));
-        await waitFor(() => expect(getByLabelText('Title*')).toHaveClass('is-invalid'));
-      });
+      fireEvent.click(getByText('Save event'));
+      await waitFor(() => expect(getByLabelText('Title*')).toHaveClass('is-invalid'));
       expect(updateEvent).not.toHaveBeenCalled();
       expect(onSave).not.toHaveBeenCalled();
     });
@@ -67,11 +65,9 @@ describe('EditEvent', () => {
           form_response_attrs: { title: 'An event' },
         },
       });
-      await act(async () => {
-        fireEvent.click(getByText('Save event'));
-        await waitFor(() => expect(updateEvent).toHaveBeenCalled());
-      });
-      expect(onSave).toHaveBeenCalled();
+      fireEvent.click(getByText('Save event'));
+      await waitFor(() => expect(onSave).toHaveBeenCalled());
+      expect(updateEvent).toHaveBeenCalled();
     });
 
     test('if the save fails, it displays the error and does not call onSave', async () => {
@@ -87,10 +83,8 @@ describe('EditEvent', () => {
           form_response_attrs: { title: 'An event' },
         },
       });
-      await act(async () => {
-        fireEvent.click(getByText('Save event'));
-        await waitFor(() => expect(getByText('blahhhh')).toBeVisible());
-      });
+      fireEvent.click(getByText('Save event'));
+      await waitFor(() => expect(getByText('blahhhh')).toBeVisible());
       expect(updateEvent).toHaveBeenCalled();
       expect(onSave).not.toHaveBeenCalled();
     });
@@ -127,12 +121,10 @@ describe('EditEvent', () => {
       const dropEvent = jest.fn();
       const onDrop = jest.fn();
       const { getByText } = await renderEditEvent({ showDropButton: true, dropEvent, onDrop });
-      await act(async () => {
-        fireEvent.click(getByText('Drop event'));
-        await waitFor(() => expect(getByText('OK')).toBeVisible());
-        fireEvent.click(getByText('OK'));
-        await waitFor(() => expect(getByText('OK')).not.toBeVisible());
-      });
+      fireEvent.click(getByText('Drop event'));
+      await waitFor(() => expect(getByText('OK')).toBeVisible());
+      fireEvent.click(getByText('OK'));
+      await waitFor(() => expect(getByText('OK')).not.toBeVisible());
       expect(dropEvent).toHaveBeenCalled();
       expect(onDrop).toHaveBeenCalled();
     });
@@ -141,29 +133,23 @@ describe('EditEvent', () => {
       const dropEvent = jest.fn();
       const onDrop = jest.fn();
       const { getByText } = await renderEditEvent({ showDropButton: true, dropEvent, onDrop });
-      await act(async () => {
-        fireEvent.click(getByText('Drop event'));
-        await waitFor(() => expect(getByText('Cancel')).toBeVisible());
-        fireEvent.click(getByText('Cancel'));
-        await waitFor(() => expect(getByText('Cancel')).not.toBeVisible());
-      });
+      fireEvent.click(getByText('Drop event'));
+      await waitFor(() => expect(getByText('Cancel')).toBeVisible());
+      fireEvent.click(getByText('Cancel'));
+      await waitFor(() => expect(getByText('Cancel')).not.toBeVisible());
       expect(dropEvent).not.toHaveBeenCalled();
       expect(onDrop).not.toHaveBeenCalled();
     });
 
     test('if the drop fails, it displays the error and does not call onDrop', async () => {
-      const dropEvent = jest.fn(() => {
-        throw new Error('fooey');
-      });
+      const dropEvent = jest.fn().mockRejectedValue(new Error('fooey'));
       const onDrop = jest.fn();
       const { getByText } = await renderEditEvent({ showDropButton: true, dropEvent, onDrop });
-      await act(async () => {
-        fireEvent.click(getByText('Drop event'));
-        await waitFor(() => expect(getByText('OK')).toBeVisible());
-        fireEvent.click(getByText('OK'));
-        await waitFor(() => expect(dropEvent).toHaveBeenCalled());
-      });
-      expect(getByText('fooey')).toBeVisible();
+      fireEvent.click(getByText('Drop event'));
+      await waitFor(() => expect(getByText('OK')).toBeInTheDocument());
+      fireEvent.click(getByText('OK'));
+      await waitFor(() => expect(getByText('fooey')).toBeInTheDocument());
+      expect(dropEvent).toHaveBeenCalled();
       expect(onDrop).not.toHaveBeenCalled();
     });
   });
