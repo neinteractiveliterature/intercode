@@ -19,15 +19,6 @@ GIT
       shoryuken (>= 2.0)
 
 GIT
-  remote: https://github.com/nbudin/doorkeeper-openid_connect.git
-  revision: 17245d74b43c058f51d3bdfbe3fdb01bf0325f36
-  branch: fix_doorkeeper_52_compat
-  specs:
-    doorkeeper-openid_connect (1.6.2)
-      doorkeeper (>= 5.0)
-      json-jwt (~> 1.6)
-
-GIT
   remote: https://github.com/neinteractiveliterature/civil_service.git
   revision: bba59c4a91c3ca61386cfca2f723031ba097da93
   branch: no-double-validate
@@ -115,7 +106,7 @@ GEM
       activerecord (>= 3.0)
     addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
-    aes_key_wrap (1.0.1)
+    aes_key_wrap (1.1.0)
     ahoy_matey (3.2.0)
       activesupport (>= 5)
       device_detector
@@ -177,7 +168,7 @@ GEM
     bcrypt (3.1.16-java)
     benchmark (0.2.0)
     benchmark-ips (2.10.0)
-    bindata (2.4.10)
+    bindata (2.4.11)
     bootsnap (1.9.3)
       msgpack (~> 1.0)
     browser (5.3.1)
@@ -238,6 +229,9 @@ GEM
       railties (>= 5)
     doorkeeper-jwt (0.4.0)
       jwt (~> 2.1)
+    doorkeeper-openid_connect (1.8.2)
+      doorkeeper (>= 5.5, < 5.7)
+      json-jwt (>= 1.11.0)
     dotenv (2.7.6)
     dotenv-rails (2.7.6)
       dotenv (= 2.7.6)
@@ -281,6 +275,7 @@ GEM
       tilt
     heapy (0.2.0)
       thor
+    httpclient (2.8.3)
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
     icalendar (2.7.1)
@@ -298,10 +293,11 @@ GEM
     jmespath (1.6.1)
     json (2.6.2)
     json (2.6.2-java)
-    json-jwt (1.11.0)
+    json-jwt (1.15.3)
       activesupport (>= 4.2)
       aes_key_wrap
       bindata
+      httpclient
     jwt (2.5.0)
     kramdown (2.4.0)
       rexml
@@ -650,7 +646,7 @@ DEPENDENCIES
   domain_prefix
   doorkeeper (= 5.6.0)
   doorkeeper-jwt
-  doorkeeper-openid_connect!
+  doorkeeper-openid_connect
   dotenv-rails
   eu_central_bank
   factory_bot
