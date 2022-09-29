@@ -5327,13 +5327,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:*, @types/jest@npm:29.0.3":
-  version: 29.0.3
-  resolution: "@types/jest@npm:29.0.3"
+"@types/jest@npm:*, @types/jest@npm:29.1.0":
+  version: 29.1.0
+  resolution: "@types/jest@npm:29.1.0"
   dependencies:
     expect: ^29.0.0
     pretty-format: ^29.0.0
-  checksum: 14a8ec1954540ec59f4072c3c4dbc6b5d5ff616556c98671aca26606bdf9d49616a3f269f3e488c80cd481ee19880351575c1f6895827628818e193600c121e0
+  checksum: 36def399d8d2a2e8b855b02bd83bc983ed57079cc8c80bcf2dd6b3e543f7ffca8e28034e4bef63f46efbf7a8e2c73a921be6b80f89bfec84e9c1088d4a16384d
   languageName: node
   linkType: hard
 
@@ -17867,7 +17867,7 @@ resolve@^2.0.0-next.3:
     "@types/events": 3.0.0
     "@types/file-saver": 2.0.5
     "@types/history": 4.7.11
-    "@types/jest": 29.0.3
+    "@types/jest": 29.1.0
     "@types/js-search": 1.4.0
     "@types/lodash": 4.14.186
     "@types/luxon": 3.0.1
