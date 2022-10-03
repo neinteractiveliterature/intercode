@@ -66,9 +66,9 @@ class Event < ApplicationRecord
     against: :title,
     using: {
       tsearch: {
-        dictionary: 'simple_unaccent',
+        dictionary: "simple_unaccent",
         prefix: true,
-        tsvector_column: 'title_vector'
+        tsvector_column: "title_vector"
       }
     }
   )
@@ -79,7 +79,7 @@ class Event < ApplicationRecord
   multisearchable(
     against: %i[title author organization team_members_for_search description_for_search short_blurb_for_search],
     additional_attributes: ->(event) do
-      { convention_id: event.convention_id, hidden_from_search: event.status == 'dropped' }
+      { convention_id: event.convention_id, hidden_from_search: event.status == "dropped" }
     end
   )
 
@@ -104,19 +104,19 @@ class Event < ApplicationRecord
 
   # Most events belong to the user who proposes it.  Some (like ConSuite or
   # Ops) are owned by the department head
-  belongs_to :owner, class_name: 'User', optional: true
+  belongs_to :owner, class_name: "User", optional: true
 
   # LARPs have GMs and Panels have Panelists
   has_many :team_members, dependent: :destroy
 
   # The user who last updated the event.  Used for tracking
-  belongs_to :updated_by, class_name: 'User', optional: true
+  belongs_to :updated_by, class_name: "User", optional: true
 
   belongs_to :convention
   belongs_to :event_category
 
   has_many :maximum_event_provided_tickets_overrides, dependent: :destroy
-  has_many :provided_tickets, class_name: 'Ticket', inverse_of: 'provided_by_event', foreign_key: 'provided_by_event_id'
+  has_many :provided_tickets, class_name: "Ticket", inverse_of: "provided_by_event", foreign_key: "provided_by_event_id"
   has_many :ticket_types, dependent: :destroy
 
   has_many :event_ratings, dependent: :destroy
@@ -127,12 +127,12 @@ class Event < ApplicationRecord
   # "active" or "dropped".
   validates :status, inclusion: { in: STATUSES }
 
-  validates :con_mail_destination, inclusion: { in: CON_MAIL_DESTINATIONS }
+  validates :con_mail_destination, inclusion: { in: CON_MAIL_DESTINATIONS, allow_nil: true }
 
   # All events for a Convention must have a unique title.  Ignore any events
   # that have a status of "Dropped".  If they have a duplicate title we don't
   # care.
-  validates :title, presence: true, uniqueness: { scope: :convention, conditions: -> { where.not(status: 'dropped') } }
+  validates :title, presence: true, uniqueness: { scope: :convention, conditions: -> { where.not(status: "dropped") } }
 
   # The event's registration policy must also be valid.
   validate :validate_registration_policy
@@ -157,7 +157,7 @@ class Event < ApplicationRecord
 
   STATUSES.each { |status| scope status, -> { where(status: status) } }
 
-  scope :regular, -> { where(event_category_id: EventCategory.where(scheduling_ui: 'regular').select(:id)) }
+  scope :regular, -> { where(event_category_id: EventCategory.where(scheduling_ui: "regular").select(:id)) }
 
   scope :joins_rating_for_user_con_profile, ->(user_con_profile) { user_con_profile ? joins(<<~SQL.squish) : self }
         LEFT JOIN event_ratings ON (
@@ -171,7 +171,7 @@ class Event < ApplicationRecord
           if user_con_profile
             rating_array = rating.is_a?(Array) ? rating : [rating]
             joins_rating_for_user_con_profile(user_con_profile).where(
-              'COALESCE(event_ratings.rating, 0) IN (?)',
+              "COALESCE(event_ratings.rating, 0) IN (?)",
               rating_array
             )
           else
@@ -183,7 +183,7 @@ class Event < ApplicationRecord
         ->(user_con_profile, direction = nil) {
           if user_con_profile
             joins_rating_for_user_con_profile(user_con_profile).order(
-              Arel.sql("COALESCE(event_ratings.rating, 0) #{direction || 'DESC'}")
+              Arel.sql("COALESCE(event_ratings.rating, 0) #{direction || "DESC"}")
             )
           else
             self
@@ -193,7 +193,7 @@ class Event < ApplicationRecord
   scope :with_runs_between,
         ->(convention, start, finish) { where(id: convention.runs.between(start, finish).select(:event_id)) }
 
-  serialize :registration_policy, ActiveModelCoder.new('RegistrationPolicy')
+  serialize :registration_policy, ActiveModelCoder.new("RegistrationPolicy")
 
   attr_accessor :bypass_single_event_run_check, :allow_registration_policy_change
 
@@ -228,7 +228,7 @@ class Event < ApplicationRecord
   end
 
   def single_run_events_must_have_no_more_than_one_run
-    return unless event_category.single_run? && status == 'active'
+    return unless event_category.single_run? && status == "active"
     return if runs.size <= 1
 
     errors.add(:base, "#{event_category.name} events must have no more than one run")
@@ -238,7 +238,7 @@ class Event < ApplicationRecord
     return if new_record?
     return unless registration_policy_changed?
 
-    before, after = changes['registration_policy']
+    before, after = changes["registration_policy"]
     return if before == after # ActiveRecord is being overzealous about change detection
 
     errors.add :registration_policy,
