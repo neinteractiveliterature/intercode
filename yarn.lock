@@ -5121,12 +5121,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/bootstrap@npm:5.2.4":
-  version: 5.2.4
-  resolution: "@types/bootstrap@npm:5.2.4"
+"@types/bootstrap@npm:5.2.5":
+  version: 5.2.5
+  resolution: "@types/bootstrap@npm:5.2.5"
   dependencies:
     "@popperjs/core": ^2.9.2
-  checksum: e58bf9eab229967c1c4e9c53045efaec37f8058a23020934097363d265b62c5f4ae06b6be2627434d7211b141896e3f8950e94e9d21982529818bf01d5ab4cf2
+  checksum: f60c97f0b8c2a445901b23f18e584bc795572bbba174c7f1482adc7ad66e4a33bebd9587997cf8fa44c7bed880f95cbaa3ab3168c054d5a77475a06eea9318a5
   languageName: node
   linkType: hard
 
@@ -7251,12 +7251,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bootstrap@npm:5.2.1":
-  version: 5.2.1
-  resolution: "bootstrap@npm:5.2.1"
+"bootstrap@npm:5.2.2":
+  version: 5.2.2
+  resolution: "bootstrap@npm:5.2.2"
   peerDependencies:
     "@popperjs/core": ^2.11.6
-  checksum: f7d733ae5d27177d813adb2ac2158f08069a558d8f664b3db8857aba0ab07423d83b4276dba6123dde52309e707bb06ec13e040fb905eaa293c53453110bb802
+  checksum: 14e6df28feb975dc10702cac0a6c2a21132a6e4e5562e31cdae1db3970e287ed29001020066b61d96b2cea2a45ecf44c08c8c26bc84a31cdeabec0a9be6b9389
   languageName: node
   linkType: hard
 
@@ -17882,7 +17882,7 @@ resolve@^2.0.0-next.3:
     "@testing-library/react": 13.4.0
     "@testing-library/react-hooks": 8.0.1
     "@types/apollo-upload-client": 17.0.1
-    "@types/bootstrap": 5.2.4
+    "@types/bootstrap": 5.2.5
     "@types/bytes": 3.1.1
     "@types/classnames": 2.3.1
     "@types/cssnano": 5.0.0
@@ -17927,7 +17927,7 @@ resolve@^2.0.0-next.3:
     babel-plugin-dynamic-import-node: 2.3.3
     babel-plugin-graphql-tag: 3.3.0
     babel-plugin-lodash: 3.3.4
-    bootstrap: 5.2.1
+    bootstrap: 5.2.2
     bootstrap-icons: 1.9.1
     buffer: 6.0.3
     bytes: 3.1.2
