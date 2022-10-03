@@ -3055,9 +3055,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-codegen/cli@npm:2.13.1":
-  version: 2.13.1
-  resolution: "@graphql-codegen/cli@npm:2.13.1"
+"@graphql-codegen/cli@npm:2.13.2":
+  version: 2.13.2
+  resolution: "@graphql-codegen/cli@npm:2.13.2"
   dependencies:
     "@babel/generator": ^7.18.13
     "@babel/template": ^7.18.10
@@ -3101,7 +3101,7 @@ __metadata:
     graphql-code-generator: cjs/bin.js
     graphql-codegen: cjs/bin.js
     graphql-codegen-esm: esm/bin.js
-  checksum: 750c2a5f598def903842b8b91bbc4a4493703c1f0a2a2300af88b35cffce21128ccb4896e10a789dcdc9ed8076b89144a463da4772ccecf72d44645fc0ab67fe
+  checksum: 732e8e82d57619b6bd3365c3ccd21bca0425425d81ad80dee4d23c02af4b8e12a2dc5df82c21cfb4fa252104982f8d0b46599878689478089a442255d0f80806
   languageName: node
   linkType: hard
 
@@ -17862,7 +17862,7 @@ resolve@^2.0.0-next.3:
     "@emotion/serialize": 1.1.0
     "@graphiql/toolkit": 0.8.0
     "@graphql-codegen/add": 3.2.1
-    "@graphql-codegen/cli": 2.13.1
+    "@graphql-codegen/cli": 2.13.2
     "@graphql-codegen/fragment-matcher": 3.3.1
     "@graphql-codegen/introspection": 2.2.1
     "@graphql-codegen/near-operation-file-preset": 2.4.1
