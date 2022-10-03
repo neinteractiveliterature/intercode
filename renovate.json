@@ -16,7 +16,7 @@
     },
     {
       "matchPackageNames": ["typescript"],
-      "allowedVersions": "!4.8.4"
+      "allowedVersions": "!/4.8.4/"
     }
   ],
   "postUpdateOptions": ["yarnDedupeHighest"]
