@@ -3055,9 +3055,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-codegen/cli@npm:2.13.4":
-  version: 2.13.4
-  resolution: "@graphql-codegen/cli@npm:2.13.4"
+"@graphql-codegen/cli@npm:2.13.5":
+  version: 2.13.5
+  resolution: "@graphql-codegen/cli@npm:2.13.5"
   dependencies:
     "@babel/generator": ^7.18.13
     "@babel/template": ^7.18.10
@@ -3082,7 +3082,7 @@ __metadata:
     cosmiconfig-typescript-loader: 4.1.1
     debounce: ^1.2.0
     detect-indent: ^6.0.0
-    graphql-config: ^4.3.5
+    graphql-config: 4.3.6
     inquirer: ^8.0.0
     is-glob: ^4.0.1
     json-to-pretty-yaml: ^1.2.2
@@ -3101,7 +3101,7 @@ __metadata:
     graphql-code-generator: cjs/bin.js
     graphql-codegen: cjs/bin.js
     graphql-codegen-esm: esm/bin.js
-  checksum: 13adfc29b04480c743d0fdce61518dec56591e56b9f4371a75a242aac5e469f05071e64eff3deb306bbefb039e63f2e46cabd93d69f3288bedf2d9ae4a71aa9c
+  checksum: aa80a4440657bad9ebc3dce6c7b22f843bff97b78c4b37808b6605bf7e2f3d7a227afa66d641284ffb914554147d07aab61ca27eec4551308a3909360191500b
   languageName: node
   linkType: hard
 
@@ -11353,9 +11353,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-config@npm:^4.1.0, graphql-config@npm:^4.3.0, graphql-config@npm:^4.3.5":
-  version: 4.3.5
-  resolution: "graphql-config@npm:4.3.5"
+"graphql-config@npm:4.3.6, graphql-config@npm:^4.1.0, graphql-config@npm:^4.3.0":
+  version: 4.3.6
+  resolution: "graphql-config@npm:4.3.6"
   dependencies:
     "@graphql-tools/graphql-file-loader": ^7.3.7
     "@graphql-tools/json-file-loader": ^7.3.7
@@ -11372,7 +11372,7 @@ __metadata:
     tslib: ^2.4.0
   peerDependencies:
     graphql: ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 0b8ca47263b12b228db72d9abb663ab8e02e01c677d9ffe08f7be651617fdc93ff2ff6c342465544df43dc4d507293a66b8fc2b8237c2628ebdbc5c74311b1d8
+  checksum: 528f69c2c3620b51fe3d609e65d13861bdc11ccfdfcb75d476f758dc6e3047c78117a260f69b5e7efa5f0b66da1980c352a8b4053532ffb3018377f784331e21
   languageName: node
   linkType: hard
 
@@ -17883,7 +17883,7 @@ resolve@^2.0.0-next.3:
     "@emotion/serialize": 1.1.0
     "@graphiql/toolkit": 0.8.0
     "@graphql-codegen/add": 3.2.1
-    "@graphql-codegen/cli": 2.13.4
+    "@graphql-codegen/cli": 2.13.5
     "@graphql-codegen/fragment-matcher": 3.3.1
     "@graphql-codegen/introspection": 2.2.1
     "@graphql-codegen/near-operation-file-preset": 2.4.1
