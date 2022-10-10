@@ -2026,9 +2026,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/lang-markdown@npm:6.0.1":
-  version: 6.0.1
-  resolution: "@codemirror/lang-markdown@npm:6.0.1"
+"@codemirror/lang-markdown@npm:6.0.2":
+  version: 6.0.2
+  resolution: "@codemirror/lang-markdown@npm:6.0.2"
   dependencies:
     "@codemirror/lang-html": ^6.0.0
     "@codemirror/language": ^6.0.0
@@ -2036,7 +2036,7 @@ __metadata:
     "@codemirror/view": ^6.0.0
     "@lezer/common": ^1.0.0
     "@lezer/markdown": ^1.0.0
-  checksum: fe87976f7e07fa54fdd1de5929351cd82914f5b0755537c92a3340a6e190439aca61242d62b9e7e4b472035f72a1b9c7d5bd1544178b8f824289ecbaf106da7b
+  checksum: 7969e1a2a13c262614a02d70d88480e80d3098589ce0506a14fe4c3e15bc8d1c379e4254b6246bdc2866d56bd994c3eae8806ee1067cd23e49c10eb42dc7d3b4
   languageName: node
   linkType: hard
 
@@ -2121,14 +2121,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/view@npm:6.3.0, @codemirror/view@npm:^6.0, @codemirror/view@npm:^6.0.0, @codemirror/view@npm:^6.2.2":
-  version: 6.3.0
-  resolution: "@codemirror/view@npm:6.3.0"
+"@codemirror/view@npm:6.3.1, @codemirror/view@npm:^6.0, @codemirror/view@npm:^6.0.0, @codemirror/view@npm:^6.2.2":
+  version: 6.3.1
+  resolution: "@codemirror/view@npm:6.3.1"
   dependencies:
     "@codemirror/state": ^6.0.0
     style-mod: ^4.0.0
     w3c-keyname: ^2.2.4
-  checksum: 8fe39a1c47799b9bca8b815d7fd5c33bcde06cc8b98c26c87729ccca6d5afbc005671c8b00d8678209bcfc079f6894f4e61f26618d8b8133a79befa0828c789f
+  checksum: bebc71ec4697e9b3c27670f8658ad398036e3bf027491785712fde27703e560b5cb1e1496af79362d6f6895e6dde2ab1022342c8273b8ce3319c09b0941a0f6e
   languageName: node
   linkType: hard
 
@@ -17865,10 +17865,10 @@ resolve@^2.0.0-next.3:
     "@codemirror/highlight": 0.19.8
     "@codemirror/lang-html": 6.1.2
     "@codemirror/lang-json": 6.0.0
-    "@codemirror/lang-markdown": 6.0.1
+    "@codemirror/lang-markdown": 6.0.2
     "@codemirror/language": 6.2.1
     "@codemirror/state": 6.1.2
-    "@codemirror/view": 6.3.0
+    "@codemirror/view": 6.3.1
     "@dnd-kit/core": 6.0.5
     "@dnd-kit/sortable": 7.0.1
     "@dnd-kit/utilities": 3.2.0
