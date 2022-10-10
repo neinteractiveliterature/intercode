@@ -16,11 +16,12 @@ class Mutations::ProvideEventTicket < Mutations::BaseMutation
     self.class.return_true_or_not_authorized_error(
       policy(TeamMember.new(event: event)).update?,
       current_user,
-      message: 'You are not authorized to update team members in this event.'
+      message: "You are not authorized to update team members in this event."
     )
     self.class.return_true_or_not_authorized_error(
-      policy(Ticket.new(ticket_type: ticket_type, user_con_profile: subject_profile, provided_by_event: event))
-        .provide?,
+      policy(
+        Ticket.new(ticket_type: ticket_type, user_con_profile: subject_profile, provided_by_event: event)
+      ).provide?,
       current_user,
       message:
         "You are not authorized to provide #{ticket_type.description} \
@@ -29,7 +30,7 @@ class Mutations::ProvideEventTicket < Mutations::BaseMutation
   end
 
   def resolve(**_args)
-    result = ProvideEventTicketService.new(event, subject_profile, ticket_type).call!
+    result = ProvideEventTicketService.new(event.reload, subject_profile, ticket_type).call!
 
     { ticket: result.ticket }
   end
