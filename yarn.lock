@@ -17364,10 +17364,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"regenerator-runtime@npm:0.13.9, regenerator-runtime@npm:^0.13.4":
-  version: 0.13.9
-  resolution: "regenerator-runtime@npm:0.13.9"
-  checksum: 65ed455fe5afd799e2897baf691ca21c2772e1a969d19bb0c4695757c2d96249eb74ee3553ea34a91062b2a676beedf630b4c1551cc6299afb937be1426ec55e
+"regenerator-runtime@npm:0.13.10, regenerator-runtime@npm:^0.13.4":
+  version: 0.13.10
+  resolution: "regenerator-runtime@npm:0.13.10"
+  checksum: 09893f5a9e82932642d9a999716b6c626dc53ef2a01307c952ebbf8e011802360163a37c304c18a6c358548be5a72b448e37209954a18696f21e438c81cbb4b9
   languageName: node
   linkType: hard
 
@@ -18069,7 +18069,7 @@ resolve@^2.0.0-next.3:
     react-test-renderer: 18.2.0
     react-transition-group: 4.4.5
     react-waypoint: 10.3.0
-    regenerator-runtime: 0.13.9
+    regenerator-runtime: 0.13.10
     require-from-string: 2.0.2
     resolve-url-loader: 5.0.0
     rollbar-sourcemap-webpack-plugin: 3.3.0
