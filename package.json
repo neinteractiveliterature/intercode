@@ -178,7 +178,7 @@
     "terser-webpack-plugin": "5.3.6",
     "thread-loader": "3.0.4",
     "tinycolor2": "1.4.2",
-    "tzdata": "1.0.33",
+    "tzdata": "1.0.34",
     "uuid": "9.0.0",
     "webpack": "5.74.0",
     "webpack-assets-manifest": "5.1.0",
