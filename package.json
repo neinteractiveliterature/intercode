@@ -210,7 +210,7 @@
     "@types/events": "3.0.0",
     "@types/history": "4.7.11",
     "@types/jest": "29.1.2",
-    "@types/node": "16.11.65",
+    "@types/node": "16.11.66",
     "@types/punycode": "2.1.0",
     "@types/rails__activestorage": "7.0.1",
     "@types/react-dom": "18.0.6",
