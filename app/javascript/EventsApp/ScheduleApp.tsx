@@ -148,7 +148,7 @@ const ScheduleApp = LoadQueryWrapper(useScheduleGridConventionDataQuery, functio
 
   const renderSchedule = () => {
     if (scheduleView === 'list') {
-      return <RunList />;
+      return <RunList filters={effectiveFilters} />;
     }
 
     if (scheduleGridConfig) {
