@@ -1,10 +1,10 @@
 class HostingServiceAdapters::Render < HostingServiceAdapters::Base
   def applicable?
-    ENV["RENDER_API_KEY"].present? && ENV["RENDER_SERVICE_ID"].present?
+    ENV["RENDER_API_KEY"].present? && ENV["RENDER_AUTOSCALE_SERVICE_ID"].present?
   end
 
   def fetch_instance_count
-    url = URI("https://api.render.com/v1/services/#{ENV.fetch("RENDER_SERVICE_ID")}")
+    url = URI("https://api.render.com/v1/services/#{ENV.fetch("RENDER_AUTOSCALE_SERVICE_ID")}")
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
 
@@ -20,7 +20,7 @@ class HostingServiceAdapters::Render < HostingServiceAdapters::Base
   end
 
   def update_instance_count(instance_count)
-    url = URI("https://api.render.com/v1/services/#{ENV.fetch("RENDER_SERVICE_ID")}/scale")
+    url = URI("https://api.render.com/v1/services/#{ENV.fetch("RENDER_AUTOSCALE_SERVICE_ID")}/scale")
 
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
@@ -40,7 +40,7 @@ class HostingServiceAdapters::Render < HostingServiceAdapters::Base
   private
 
   def deploy_service
-    url = URI("https://api.render.com/v1/services/#{ENV.fetch("RENDER_SERVICE_ID")}/deploys")
+    url = URI("https://api.render.com/v1/services/#{ENV.fetch("RENDER_AUTOSCALE_SERVICE_ID")}/deploys")
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
 
