@@ -124,7 +124,7 @@
     "glob": "8.0.3",
     "graphiql": "2.0.9",
     "graphql": "16.6.0",
-    "graphql-anywhere": "4.2.7",
+    "graphql-anywhere": "4.2.8",
     "graphql-language-service-utils": "2.7.1",
     "graphql-tag": "2.12.6",
     "graphql-ws": "5.11.2",
