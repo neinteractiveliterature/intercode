@@ -3018,9 +3018,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphiql/react@npm:^0.13.3":
-  version: 0.13.3
-  resolution: "@graphiql/react@npm:0.13.3"
+"@graphiql/react@npm:^0.13.4":
+  version: 0.13.4
+  resolution: "@graphiql/react@npm:0.13.4"
   dependencies:
     "@graphiql/toolkit": ^0.8.0
     "@reach/combobox": ^0.17.0
@@ -3039,7 +3039,7 @@ __metadata:
     graphql: ^15.5.0 || ^16.0.0
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: f758911d80cc17f306c383a2496048dd72f2b93638107f993a524c251fa003a8ce2f7af2d5974c63cea5f8db3d6c7d2720420d9cd84d17f9126e8edd18a74766
+  checksum: 41c43364669ae3aeb0d90dce203598eb9ee81639bbb6742e44c06772f33d5d79a361ed876d57e2224ba7d4ed65dd7a8990f20de051fda286f2d531d2fbf94e8c
   languageName: node
   linkType: hard
 
@@ -11357,11 +11357,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphiql@npm:2.0.9":
-  version: 2.0.9
-  resolution: "graphiql@npm:2.0.9"
+"graphiql@npm:2.0.10":
+  version: 2.0.10
+  resolution: "graphiql@npm:2.0.10"
   dependencies:
-    "@graphiql/react": ^0.13.3
+    "@graphiql/react": ^0.13.4
     "@graphiql/toolkit": ^0.8.0
     entities: ^2.0.0
     graphql-language-service: ^5.1.0
@@ -11370,7 +11370,7 @@ __metadata:
     graphql: ^15.5.0 || ^16.0.0
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: 3808e06c50747ed5c5ecbff2e15c88e29e87790602333439e8447310626c5faa350a10b1ef1088ad80dffce0a9fe54c720405359a2ca57d4cc127279e8d2ffa0
+  checksum: 69ff7ded166edfc2a1ad5d93df54ab9f399034c8648547b4c70e600e681fb39689678f09b6926b6efa5708c42b42177b4f20f00b1caf27c8be7185a63f01adc1
   languageName: node
   linkType: hard
 
@@ -18029,7 +18029,7 @@ resolve@^2.0.0-next.3:
     file-saver: 2.0.5
     font-awesome: 4.7.0
     glob: 8.0.3
-    graphiql: 2.0.9
+    graphiql: 2.0.10
     graphql: 16.6.0
     graphql-anywhere: 4.2.8
     graphql-language-service-utils: 2.7.1
