@@ -188,7 +188,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/client@npm:3.7.1, @apollo/client@npm:^3.6.6":
+"@apollo/client@npm:3.7.1, @apollo/client@npm:^3.7.0":
   version: 3.7.1
   resolution: "@apollo/client@npm:3.7.1"
   dependencies:
@@ -5068,14 +5068,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/apollo-upload-client@npm:17.0.1":
-  version: 17.0.1
-  resolution: "@types/apollo-upload-client@npm:17.0.1"
+"@types/apollo-upload-client@npm:17.0.2":
+  version: 17.0.2
+  resolution: "@types/apollo-upload-client@npm:17.0.2"
   dependencies:
-    "@apollo/client": ^3.6.6
+    "@apollo/client": ^3.7.0
     "@types/extract-files": "*"
     graphql: 14 - 16
-  checksum: 07266f90fb0b3b0784e15bcd3f2cd567079a95f0362084e85b2d7c7fb10731cfbfa33d2015d295521e75e067b6f689b312acec8f29bbcff9fe88c70e9f545912
+  checksum: 77860397bc5e1749e6f69d70a3c6c9bd6eed4c5a6fd80cceb109c1badf03a100f4c7204c276e0cbbe170cea58a2a1a07701c3806813cb7a071009a1d1eeae80e
   languageName: node
   linkType: hard
 
@@ -17943,7 +17943,7 @@ resolve@^2.0.0-next.3:
     "@testing-library/jest-dom": 5.16.5
     "@testing-library/react": 13.4.0
     "@testing-library/react-hooks": 8.0.1
-    "@types/apollo-upload-client": 17.0.1
+    "@types/apollo-upload-client": 17.0.2
     "@types/bootstrap": 5.2.5
     "@types/bytes": 3.1.1
     "@types/classnames": 2.3.1
