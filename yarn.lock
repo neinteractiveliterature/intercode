@@ -17143,9 +17143,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-select@npm:5.5.6":
-  version: 5.5.6
-  resolution: "react-select@npm:5.5.6"
+"react-select@npm:5.5.7":
+  version: 5.5.7
+  resolution: "react-select@npm:5.5.7"
   dependencies:
     "@babel/runtime": ^7.12.0
     "@emotion/cache": ^11.4.0
@@ -17159,7 +17159,7 @@ __metadata:
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: f5adc55b3e6d5de0a73fd10e57705f8d5ff94e97c6296fedce974d17949b56626bcb172eddab84fb9b76d22bdf06201b71dd5aac871e90fbd867debf98d8b4d2
+  checksum: c6b1752c8c5b89c9dc5c27ba985dce693049891c0942a19ec516658fecbba535a4e3b5fa7c815a326617704eeba8ae65f395ef68dd7dfa618acd1dc234774b01
   languageName: node
   linkType: hard
 
@@ -18078,7 +18078,7 @@ resolve@^2.0.0-next.3:
     react-popper: 2.3.0
     react-router: 6.4.2
     react-router-dom: 6.4.2
-    react-select: 5.5.6
+    react-select: 5.5.7
     react-table: 7.8.0
     react-test-renderer: 18.2.0
     react-transition-group: 4.4.5
