@@ -190,9 +190,9 @@
     "zxcvbn": "4.4.2"
   },
   "devDependencies": {
-    "@babel/plugin-transform-typescript": "7.19.3",
+    "@babel/plugin-transform-typescript": "7.20.0",
     "@babel/preset-typescript": "7.18.6",
-    "@babel/runtime": "7.19.4",
+    "@babel/runtime": "7.20.0",
     "@graphql-codegen/add": "3.2.1",
     "@graphql-codegen/cli": "2.13.8",
     "@graphql-codegen/fragment-matcher": "3.3.1",
