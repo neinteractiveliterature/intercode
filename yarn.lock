@@ -18111,7 +18111,7 @@ resolve@^2.0.0-next.3:
     tinycolor2: 1.4.2
     ts-node: 10.9.1
     typescript: 4.8.3
-    tzdata: 1.0.34
+    tzdata: 1.0.35
     uuid: 9.0.0
     webpack: 5.74.0
     webpack-assets-manifest: 5.1.0
@@ -19975,10 +19975,10 @@ typescript@^4.2.4:
   languageName: node
   linkType: hard
 
-"tzdata@npm:1.0.34":
-  version: 1.0.34
-  resolution: "tzdata@npm:1.0.34"
-  checksum: 1f7279dd947d25e09f29a0f136c00d49446472964eb7fba0692eca33618ff6a3e6d253122eea77ee7de21e790b0f568164da314c26a3e5e9602a9d7ed035e957
+"tzdata@npm:1.0.35":
+  version: 1.0.35
+  resolution: "tzdata@npm:1.0.35"
+  checksum: 509189dea6bacbacfe4cc32b7b4883c594ce720074f17a8b737a7ea4238c08f47e6c73cdca0757e360b1fe93ad01a9e05fa0fe9de0ee907dc9002cecbb23d3d7
   languageName: node
   linkType: hard
 
