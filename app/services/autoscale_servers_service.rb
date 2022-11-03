@@ -1,3 +1,19 @@
+# Script to generate graph:
+# require 'csv'
+# Time.zone = 'America/New_York'
+# time = Time.local(2022, 10, 31)
+# data = []
+# while time < Time.local(2022, 11, 4)
+#   data << [time, AutoscaleServersService.scaling_target_for(time)]
+#   time += 15.minutes
+# end
+# CSV.open('scaling-graph.csv', 'w') do |csv|
+#   csv << ['Time', 'Servers']
+#   data.each do |row|
+#     csv << row
+#   end
+# end
+
 class AutoscaleServersService < CivilService::Service
   USERS_PER_INSTANCE = 22
   MIN_INSTANCES = 1
