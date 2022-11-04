@@ -17,7 +17,7 @@ module FormResponseAttrsFields
     form.then do |form|
       items_promise =
         if item_identifiers
-          FormItemsLoader.for(form).load_many(item_identifiers)
+          FormItemsLoader.for.load_many(item_identifiers.map { |item_identifier| [form.id, item_identifier] })
         else
           AssociationLoader.for(Form, :form_items).load(form)
         end
@@ -39,7 +39,7 @@ module FormResponseAttrsFields
     form.then do |form|
       items_promise =
         if item_identifiers
-          FormItemsLoader.for(form).load_many(item_identifiers)
+          FormItemsLoader.for.load_many(item_identifiers.map { |item_identifier| [form.id, item_identifier] })
         else
           AssociationLoader.for(Form, :form_items).load(form)
         end

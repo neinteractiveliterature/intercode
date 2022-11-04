@@ -96,29 +96,45 @@ class Types::EventType < Types::BaseObject
   field :short_blurb_html, String, null: true
 
   def short_blurb_html
-    MarkdownLoader
-      .for('event', 'No information provided', context[:controller])
-      .load(
-        [
-          [object, 'short_blurb_html'],
-          object.short_blurb,
-          object.images_attachments.includes(:blob).index_by { |att| att.filename.to_s }
-        ]
-      )
+    AssociationLoader
+      .for(Event, :images_attachments)
+      .load(object)
+      .then do |attachments|
+        AssociationLoader
+          .for(ActiveStorage::Attachment, :blob)
+          .load_many(attachments)
+          .then do |_blobs|
+            MarkdownLoader.for("event", "No information provided", context[:controller]).load(
+              [
+                [object, "short_blurb_html"],
+                object.short_blurb,
+                object.images_attachments.index_by { |att| att.filename.to_s }
+              ]
+            )
+          end
+      end
   end
 
   field :description_html, String, null: true
 
   def description_html
-    MarkdownLoader
-      .for('event', 'No information provided', context[:controller])
-      .load(
-        [
-          [object, 'description_html'],
-          object.description,
-          object.images_attachments.includes(:blob).index_by { |att| att.filename.to_s }
-        ]
-      )
+    AssociationLoader
+      .for(Event, :images_attachments)
+      .load(object)
+      .then do |attachments|
+        AssociationLoader
+          .for(ActiveStorage::Attachment, :blob)
+          .load_many(attachments)
+          .then do |_blobs|
+            MarkdownLoader.for("event", "No information provided", context[:controller]).load(
+              [
+                [object, "description_html"],
+                object.description,
+                object.images_attachments.index_by { |att| att.filename.to_s }
+              ]
+            )
+          end
+      end
   end
 
   field :admin_notes, String, null: true do
