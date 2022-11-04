@@ -135,8 +135,6 @@ jobs:
         build-args: |
           RUBY_VERSION=${{ steps.ruby-version.outputs.ruby-version }}
           NODE_VERSION=${{ steps.node-version.outputs.node-version }}
-        cache-from: type=gha,scope=${{ github.workflow }}
-        cache-to: type=gha,mode=max,scope=${{ github.workflow }}
     - name: Build assets only (and push to Docker Hub, if on main)
       uses: docker/build-push-action@v3
       if: github.event_name == 'push' && github.event.ref == 'refs/heads/main'
@@ -149,8 +147,6 @@ jobs:
           ghcr.io/neinteractiveliterature/intercode-assets:${{ github.sha }}
         build-args: |
           BASEIMAGE=ghcr.io/neinteractiveliterature/intercode:${{ github.sha }}
-        cache-from: type=gha,scope=${{ github.workflow }}
-        cache-to: type=gha,mode=max,scope=${{ github.workflow }}
   doc-site:
     name: Build doc site
     runs-on: ubuntu-latest
