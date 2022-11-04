@@ -70,4 +70,4 @@ WORKDIR /usr/src/intercode
 
 USER www
 ENV PATH=/opt/node/bin:$PATH
-CMD bundle exec bin/rails server -p $PORT -b 0.0.0.0
+CMD bundle exec bin/rails server -p $PORT -b 0.0.0.0 --yjit-exec-mem-size=16
