@@ -13,7 +13,7 @@ WORKDIR /usr/src/intercode
 RUN apt-get update && apt-get install -y libvips42 git build-essential shared-mime-info libpq-dev && rm -rf /var/lib/apt/lists/*
 
 COPY --chown=www:www Gemfile Gemfile.lock .ruby-version /usr/src/intercode/
-RUN bundle config set without 'development test intercode1_import skylight' \
+RUN bundle config set without 'development test intercode1_import' \
   && bundle install -j4 \
   && echo 'Running bundle clean --force' \
   && bundle clean --force \
