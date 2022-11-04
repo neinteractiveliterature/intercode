@@ -8,10 +8,15 @@ class HostingServiceAdapters::Heroku < HostingServiceAdapters::Base
   end
 
   def update_instance_count(instance_count)
-    client.formation.update(
+    instance_size = instance_count == 1 ? "hobby" : "standard-1X"
+    client.formation.batch_update(
       ENV["HEROKU_APP_NAME"],
-      "web",
-      { size: instance_count == 1 ? "hobby" : "standard-1X", quantity: instance_count }
+      {
+        updates: [
+          { type: "shoryuken", size: instance_size },
+          { type: "web", size: instance_size, quantity: instance_count }
+        ]
+      }
     )
   end
 
