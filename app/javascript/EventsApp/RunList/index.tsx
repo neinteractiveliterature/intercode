@@ -14,12 +14,13 @@ import usePageTitle from '../../usePageTitle';
 import { useConventionDayUrlPortion } from '../ScheduleGrid/ConventionDayTabContainer';
 import { PIXELS_PER_LANE } from '../ScheduleGrid/LayoutConstants';
 import { usePersonalScheduleFilters } from '../ScheduleGrid/PersonalScheduleFiltersBar';
-import { useScheduleGridEventsQuery } from '../ScheduleGrid/queries.generated';
+import { ScheduleGridConventionDataQueryData, useScheduleGridEventsQuery } from '../ScheduleGrid/queries.generated';
 import { findConflictingRuns } from '../ScheduleGrid/Schedule';
 import SignupCountData from '../SignupCountData';
 import RunListEventRun from './RunListEventRun';
 import { LoadQueryWithVariablesWrapper } from '../../GraphqlLoadingWrappers';
 import { EventFiltersInput } from '../../graphqlTypes.generated';
+import useMergeCategoriesIntoEvents from '../useMergeCategoriesIntoEvents';
 
 // http://stackoverflow.com/questions/123999/how-to-tell-if-a-dom-element-is-visible-in-the-current-viewport
 function isElementInViewport(el: HTMLElement) {
@@ -33,13 +34,15 @@ function isElementInViewport(el: HTMLElement) {
 }
 
 export type RunListProps = {
+  convention: ScheduleGridConventionDataQueryData['convention'];
+  fetchFormItemIdentifiers: string[];
   filters?: EventFiltersInput;
 };
 
 export default LoadQueryWithVariablesWrapper(
   useScheduleGridEventsQuery,
-  ({ filters }: RunListProps) => ({ filters }),
-  function RunList({ data }) {
+  ({ fetchFormItemIdentifiers, filters }: RunListProps) => ({ fetchFormItemIdentifiers, filters }),
+  function RunList({ data, convention }) {
     const { timezoneName, myProfile } = useContext(AppRootContext);
     const format = useAppDateTimeFormat();
     const { ratingFilter, hideConflicts } = usePersonalScheduleFilters({
@@ -67,15 +70,25 @@ export default LoadQueryWithVariablesWrapper(
       }
     }, [conventionDay]);
 
+    const eventsWithCategories = useMergeCategoriesIntoEvents(
+      convention?.event_categories ?? [],
+      data.convention.events,
+    );
+
     const eventsByRunId = useMemo(() => {
-      const eventMap = new Map<string, typeof data['convention']['events'][number]>();
-      data.convention.events.forEach((event) => {
+      const eventMap = new Map<
+        string,
+        typeof data['convention']['events'][number] & {
+          event_category: ScheduleGridConventionDataQueryData['convention']['event_categories'][number];
+        }
+      >();
+      eventsWithCategories.forEach((event) => {
         event.runs.forEach((run) => {
           eventMap.set(run.id, event);
         });
       });
       return eventMap;
-    }, [data.convention.events]);
+    }, [eventsWithCategories]);
 
     const sortedRuns = useMemo(
       () =>

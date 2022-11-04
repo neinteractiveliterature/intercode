@@ -15,11 +15,17 @@ import { EventFiltersInput } from '../../graphqlTypes.generated';
 
 export type ScheduleGridAppProps = {
   configKey: string;
+  fetchFormItemIdentifiers: string[];
   convention: ScheduleGridConventionDataQueryData['convention'];
   filters?: EventFiltersInput;
 };
 
-function ScheduleGridApp({ configKey, convention, filters }: ScheduleGridAppProps): JSX.Element {
+function ScheduleGridApp({
+  configKey,
+  convention,
+  fetchFormItemIdentifiers,
+  filters,
+}: ScheduleGridAppProps): JSX.Element {
   const { t } = useTranslation();
   const { myProfile, timezoneName, language } = useContext(AppRootContext);
   const config = getConfig(configKey);
@@ -38,6 +44,7 @@ function ScheduleGridApp({ configKey, convention, filters }: ScheduleGridAppProp
       <ScheduleGridProvider
         convention={convention}
         config={config}
+        fetchFormItemIdentifiers={fetchFormItemIdentifiers}
         myRatingFilter={myProfile ? ratingFilter : undefined}
         hideConflicts={myProfile ? hideConflicts : false}
         filters={filters}

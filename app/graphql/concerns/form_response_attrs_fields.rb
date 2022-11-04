@@ -5,42 +5,46 @@ module FormResponseAttrsFields
   included do
     field :current_user_form_item_viewer_role, Types::FormItemRoleType, null: false
     field :current_user_form_item_writer_role, Types::FormItemRoleType, null: false
-    field :form_response_attrs_json, Types::JSON, null: true
-    field :form_response_attrs_json_with_rendered_markdown, Types::JSON, null: true
+    field :form_response_attrs_json, Types::JSON, null: true do
+      argument :item_identifiers, [String], required: false
+    end
+    field :form_response_attrs_json_with_rendered_markdown, Types::JSON, null: true do
+      argument :item_identifiers, [String], required: false
+    end
   end
 
-  def form_response_attrs_json
+  def form_response_attrs_json(item_identifiers: nil)
     form.then do |form|
-      AssociationLoader
-        .for(Form, :form_items)
-        .load(form)
-        .then do |_form_items|
+      FormItemsLoader
+        .for(form)
+        .load_many(item_identifiers)
+        .then do |form_items|
           FormResponsePresenter.new(
             form,
             object,
             viewer_role: current_user_form_item_viewer_role,
             team_member_name: respond_to?(:event_category) ? event_category&.team_member_name : nil,
-            controller: context[:controller]
-          ).as_json
+            controller: context[:controller],
+            preloaded_form_items: form_items
+          ).as_json(only_items: item_identifiers)
         end
     end
   end
 
-  def form_response_attrs_json_with_rendered_markdown
+  def form_response_attrs_json_with_rendered_markdown(item_identifiers: nil)
     form.then do |form|
-      AssociationLoader
-        .for(Form, :form_items)
-        .load(form)
-        .then do |_form_items|
-          FormResponsePresenter
-            .new(
-              form,
-              object,
-              viewer_role: current_user_form_item_viewer_role,
-              team_member_name: respond_to?(:event_category) ? event_category&.team_member_name : nil,
-              controller: context[:controller]
-            )
-            .as_json_with_rendered_markdown('event', object, '')
+      FormItemsLoader
+        .for(form)
+        .load_many(item_identifiers)
+        .then do |form_items|
+          FormResponsePresenter.new(
+            form,
+            object,
+            viewer_role: current_user_form_item_viewer_role,
+            team_member_name: respond_to?(:event_category) ? event_category&.team_member_name : nil,
+            controller: context[:controller],
+            preloaded_form_items: form_items
+          ).as_json_with_rendered_markdown("event", object, "", only_items: item_identifiers)
         end
     end
   end

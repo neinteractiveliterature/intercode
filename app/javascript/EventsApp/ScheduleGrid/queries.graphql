@@ -7,27 +7,10 @@ fragment ScheduleGridEventFragment on Event {
   short_blurb_html
   my_rating
   can_play_concurrently
-  form_response_attrs_json_with_rendered_markdown
+  form_response_attrs_json_with_rendered_markdown(itemIdentifiers: $fetchFormItemIdentifiers)
 
   event_category {
     id
-    name
-    default_color
-    signed_up_color
-    full_color
-
-    event_form {
-      id
-      form_sections {
-        id
-        form_items {
-          id
-          public_description
-          default_value
-          ...CommonFormItemFields
-        }
-      }
-    }
   }
 
   registration_policy {
@@ -67,10 +50,37 @@ query ScheduleGridConventionDataQuery {
     id
     pre_schedule_content_html
     ...CommonConventionData
+
+    event_categories {
+      id
+      name
+      scheduling_ui
+      default_color
+      signed_up_color
+      full_color
+
+      event_form {
+        id
+        form_sections {
+          id
+          form_items {
+            id
+            public_description
+            default_value
+            ...CommonFormItemFields
+          }
+        }
+      }
+    }
   }
 }
 
-query ScheduleGridEventsQuery($start: Date, $finish: Date, $filters: EventFiltersInput) {
+query ScheduleGridEventsQuery(
+  $start: Date
+  $finish: Date
+  $filters: EventFiltersInput
+  $fetchFormItemIdentifiers: [String!]
+) {
   convention: conventionByRequestHost {
     id
     events(start: $start, finish: $finish, filters: $filters) {
