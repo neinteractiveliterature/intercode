@@ -239,9 +239,11 @@ GEM
     e2mmap (0.1.0)
     errbase (0.2.1)
     erubi (1.11.0)
+    erubis (2.7.0)
     eu_central_bank (1.6.1)
       money (~> 6.13, >= 6.13.6)
       nokogiri (~> 1.9)
+    excon (0.93.1)
     factory_bot (6.2.0)
       activesupport (>= 5.0.0)
     factory_bot_rails (6.2.0)
@@ -275,6 +277,12 @@ GEM
       tilt
     heapy (0.2.0)
       thor
+    heroics (0.1.2)
+      erubis (~> 2.0)
+      excon
+      moneta
+      multi_json (>= 1.9.2)
+      webrick
     httpclient (2.8.3)
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
@@ -344,6 +352,7 @@ GEM
     minitest-spec-rails (6.0.4)
       minitest (>= 5.0)
       railties (>= 4.1)
+    moneta (1.0.0)
     monetize (1.9.4)
       money (~> 6.12)
     money (6.13.8)
@@ -389,6 +398,10 @@ GEM
       activerecord (>= 5.2)
       activesupport (>= 5.2)
     phonelib (0.6.53)
+    platform-api (3.5.0)
+      heroics (~> 0.1.1)
+      moneta (~> 1.0.0)
+      rate_throttle_client (~> 0.1.0)
     prettier (3.2.2)
       syntax_tree (>= 2.7.1)
       syntax_tree-haml (>= 1.1.0)
@@ -453,6 +466,7 @@ GEM
       zeitwerk (~> 2.5)
     rainbow (3.1.1)
     rake (13.0.6)
+    rate_throttle_client (0.1.2)
     rb-fsevent (0.11.0)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
@@ -673,6 +687,7 @@ DEPENDENCIES
   pg
   pg_search
   phonelib
+  platform-api
   prettier (= 3.2.2)
   prettier_print
   pry-rails
