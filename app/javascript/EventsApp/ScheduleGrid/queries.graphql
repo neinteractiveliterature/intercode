@@ -50,28 +50,6 @@ query ScheduleGridConventionDataQuery {
     id
     pre_schedule_content_html
     ...CommonConventionData
-
-    event_categories {
-      id
-      name
-      scheduling_ui
-      default_color
-      signed_up_color
-      full_color
-
-      event_form {
-        id
-        form_sections {
-          id
-          form_items {
-            id
-            public_description
-            default_value
-            ...CommonFormItemFields
-          }
-        }
-      }
-    }
   }
 }
 

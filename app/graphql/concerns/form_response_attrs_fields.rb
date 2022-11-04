@@ -15,37 +15,45 @@ module FormResponseAttrsFields
 
   def form_response_attrs_json(item_identifiers: nil)
     form.then do |form|
-      FormItemsLoader
-        .for(form)
-        .load_many(item_identifiers)
-        .then do |form_items|
-          FormResponsePresenter.new(
-            form,
-            object,
-            viewer_role: current_user_form_item_viewer_role,
-            team_member_name: respond_to?(:event_category) ? event_category&.team_member_name : nil,
-            controller: context[:controller],
-            preloaded_form_items: form_items
-          ).as_json(only_items: item_identifiers)
+      items_promise =
+        if item_identifiers
+          FormItemsLoader.for(form).load_many(item_identifiers)
+        else
+          AssociationLoader.for(Form, :form_items).load(form)
         end
+
+      items_promise.then do |form_items|
+        FormResponsePresenter.new(
+          form,
+          object,
+          viewer_role: current_user_form_item_viewer_role,
+          team_member_name: respond_to?(:event_category) ? event_category&.team_member_name : nil,
+          controller: context[:controller],
+          preloaded_form_items: form_items
+        ).as_json(only_items: item_identifiers)
+      end
     end
   end
 
   def form_response_attrs_json_with_rendered_markdown(item_identifiers: nil)
     form.then do |form|
-      FormItemsLoader
-        .for(form)
-        .load_many(item_identifiers)
-        .then do |form_items|
-          FormResponsePresenter.new(
-            form,
-            object,
-            viewer_role: current_user_form_item_viewer_role,
-            team_member_name: respond_to?(:event_category) ? event_category&.team_member_name : nil,
-            controller: context[:controller],
-            preloaded_form_items: form_items
-          ).as_json_with_rendered_markdown("event", object, "", only_items: item_identifiers)
+      items_promise =
+        if item_identifiers
+          FormItemsLoader.for(form).load_many(item_identifiers)
+        else
+          AssociationLoader.for(Form, :form_items).load(form)
         end
+
+      items_promise.then do |form_items|
+        FormResponsePresenter.new(
+          form,
+          object,
+          viewer_role: current_user_form_item_viewer_role,
+          team_member_name: respond_to?(:event_category) ? event_category&.team_member_name : nil,
+          controller: context[:controller],
+          preloaded_form_items: form_items
+        ).as_json_with_rendered_markdown("event", object, "", only_items: item_identifiers)
+      end
     end
   end
 

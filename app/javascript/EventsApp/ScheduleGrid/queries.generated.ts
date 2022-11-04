@@ -3,7 +3,6 @@ import * as Types from '../../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import { RunBasicSignupDataFragmentDoc, CommonConventionDataFragmentDoc } from '../queries.generated';
-import { CommonFormItemFieldsFragmentDoc, CommonFormFieldsFragmentDoc, CommonFormSectionFieldsFragmentDoc } from '../../Models/commonFormFragments.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type ScheduleGridEventFragment = { __typename: 'Event', id: string, title?: string | null, length_seconds: number, short_blurb_html?: string | null, my_rating?: number | null, can_play_concurrently: boolean, form_response_attrs_json_with_rendered_markdown?: string | null, event_category: { __typename: 'EventCategory', id: string }, registration_policy?: { __typename: 'RegistrationPolicy', slots_limited?: boolean | null, only_uncounted?: boolean | null, total_slots?: number | null, total_slots_including_not_counted?: number | null, preferred_slots?: number | null, preferred_slots_including_not_counted?: number | null, minimum_slots?: number | null, minimum_slots_including_not_counted?: number | null, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, not_counted: boolean, total_slots?: number | null, slots_limited: boolean }> } | null, runs: Array<{ __typename: 'Run', id: string, starts_at: string, schedule_note?: string | null, title_suffix?: string | null, confirmed_signup_count: number, not_counted_signup_count: number, room_names: Array<string>, signup_count_by_state_and_bucket_key_and_counted: string, my_signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: string, state: Types.SignupRequestState }> }> };
@@ -11,7 +10,7 @@ export type ScheduleGridEventFragment = { __typename: 'Event', id: string, title
 export type ScheduleGridConventionDataQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type ScheduleGridConventionDataQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, pre_schedule_content_html?: string | null, name: string, starts_at?: string | null, ends_at?: string | null, site_mode: Types.SiteMode, timezone_name?: string | null, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, scheduling_ui: Types.SchedulingUi, default_color?: string | null, signed_up_color?: string | null, full_color?: string | null, event_form: { __typename: 'Form', id: string, form_sections: Array<{ __typename: 'FormSection', id: string, form_items: Array<{ __typename: 'FormItem', id: string, public_description?: string | null, default_value?: string | null, position: number, identifier?: string | null, item_type: string, rendered_properties: string, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in?: Array<Types.FormItemExposeIn> | null }> }> } }> } };
+export type ScheduleGridConventionDataQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, pre_schedule_content_html?: string | null, name: string, starts_at?: string | null, ends_at?: string | null, site_mode: Types.SiteMode, timezone_name?: string | null, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, scheduling_ui: Types.SchedulingUi, default_color?: string | null, full_color?: string | null, signed_up_color?: string | null, team_member_name: string, teamMemberNamePlural: string, event_form: { __typename: 'Form', id: string, form_sections: Array<{ __typename: 'FormSection', id: string, form_items: Array<{ __typename: 'FormItem', id: string, public_description?: string | null, default_value?: string | null, position: number, identifier?: string | null, item_type: string, rendered_properties: string, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in?: Array<Types.FormItemExposeIn> | null }> }> } }> } };
 
 export type ScheduleGridEventsQueryVariables = Types.Exact<{
   start?: Types.InputMaybe<Types.Scalars['Date']>;
@@ -71,30 +70,9 @@ export const ScheduleGridConventionDataQueryDocument = gql`
     id
     pre_schedule_content_html
     ...CommonConventionData
-    event_categories {
-      id
-      name
-      scheduling_ui
-      default_color
-      signed_up_color
-      full_color
-      event_form {
-        id
-        form_sections {
-          id
-          form_items {
-            id
-            public_description
-            default_value
-            ...CommonFormItemFields
-          }
-        }
-      }
-    }
   }
 }
-    ${CommonConventionDataFragmentDoc}
-${CommonFormItemFieldsFragmentDoc}`;
+    ${CommonConventionDataFragmentDoc}`;
 
 /**
  * __useScheduleGridConventionDataQuery__

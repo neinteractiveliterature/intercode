@@ -1,7 +1,13 @@
 #import "../queries.graphql"
 #import "../../Models/commonFormFragments.graphql"
 
-query EventListEventsQuery($page: Int, $pageSize: Int, $filters: EventFiltersInput, $sort: [SortInput!]) {
+query EventListEventsQuery(
+  $page: Int
+  $pageSize: Int
+  $filters: EventFiltersInput
+  $sort: [SortInput!]
+  $fetchFormItemIdentifiers: [String!]
+) {
   currentAbility {
     can_read_schedule
   }
@@ -21,27 +27,11 @@ query EventListEventsQuery($page: Int, $pageSize: Int, $filters: EventFiltersInp
         title
         created_at
         short_blurb_html
-        form_response_attrs_json_with_rendered_markdown
+        form_response_attrs_json_with_rendered_markdown(itemIdentifiers: $fetchFormItemIdentifiers)
         my_rating
 
         event_category {
           id
-          name
-          team_member_name
-          teamMemberNamePlural
-
-          event_form {
-            id
-            form_sections {
-              id
-              form_items {
-                id
-                public_description
-                default_value
-                ...CommonFormItemFields
-              }
-            }
-          }
         }
 
         runs {
