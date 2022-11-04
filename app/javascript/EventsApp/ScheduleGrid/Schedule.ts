@@ -351,6 +351,8 @@ export default class Schedule {
           form_sections: [],
           id: '',
         },
+        team_member_name: 'team member',
+        teamMemberNamePlural: 'team members',
       },
       registration_policy: {
         __typename: 'RegistrationPolicy',

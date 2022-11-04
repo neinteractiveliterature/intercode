@@ -20,9 +20,12 @@ import upperFirst from 'lodash/upperFirst';
 import { FormItemExposeIn } from '../../graphqlTypes.generated';
 import FormItemDisplay from '../../FormPresenter/ItemDisplays/FormItemDisplay';
 import { parseTypedFormItemArray } from '../../FormAdmin/FormItemUtils';
+import { CommonConventionDataFragment } from '../queries.generated';
 
 type ConventionType = NonNullable<EventListEventsQueryData['convention']>;
-type EventType = ConventionType['events_paginated']['entries'][0];
+type EventType = ConventionType['events_paginated']['entries'][0] & {
+  event_category: CommonConventionDataFragment['event_categories'][number];
+};
 
 function renderFirstRunTime(
   event: EventType,
