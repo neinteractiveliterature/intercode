@@ -10,10 +10,15 @@ import AppRootContext from '../../AppRootContext';
 import { EventListEventsQueryData } from './queries.generated';
 import { FiniteTimespan } from '../../Timespan';
 import { useAppDateTimeFormat } from '../../TimeUtils';
+import { CommonConventionDataFragment } from '../queries.generated';
 
 export type EventListEventsProps = {
   convention: NonNullable<EventListEventsQueryData['convention']>;
-  eventsPaginated: NonNullable<EventListEventsQueryData['convention']>['events_paginated'];
+  eventsPaginated: Omit<NonNullable<EventListEventsQueryData['convention']>['events_paginated'], 'entries'> & {
+    entries: (EventListEventsQueryData['convention']['events_paginated']['entries'][number] & {
+      event_category: CommonConventionDataFragment['event_categories'][number];
+    })[];
+  };
   sortBy?: SortingRule<NonNullable<EventListEventsQueryData['convention']>['events_paginated']['entries'][number]>[];
   canReadSchedule: boolean;
   fetchMoreIfNeeded: () => void;

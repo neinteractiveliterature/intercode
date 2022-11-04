@@ -2,7 +2,6 @@
 import * as Types from '../../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
-import { CommonFormItemFieldsFragmentDoc, CommonFormFieldsFragmentDoc, CommonFormSectionFieldsFragmentDoc } from '../../Models/commonFormFragments.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type EventListEventsQueryVariables = Types.Exact<{
@@ -10,14 +9,15 @@ export type EventListEventsQueryVariables = Types.Exact<{
   pageSize?: Types.InputMaybe<Types.Scalars['Int']>;
   filters?: Types.InputMaybe<Types.EventFiltersInput>;
   sort?: Types.InputMaybe<Array<Types.SortInput> | Types.SortInput>;
+  fetchFormItemIdentifiers?: Types.InputMaybe<Array<Types.Scalars['String']> | Types.Scalars['String']>;
 }>;
 
 
-export type EventListEventsQueryData = { __typename: 'Query', currentAbility: { __typename: 'Ability', can_read_schedule: boolean }, convention: { __typename: 'Convention', id: string, timezone_mode: Types.TimezoneMode, events_paginated: { __typename: 'EventsPagination', total_entries: number, total_pages: number, current_page: number, per_page: number, entries: Array<{ __typename: 'Event', id: string, title?: string | null, created_at?: string | null, short_blurb_html?: string | null, form_response_attrs_json_with_rendered_markdown?: string | null, my_rating?: number | null, event_category: { __typename: 'EventCategory', id: string, name: string, team_member_name: string, teamMemberNamePlural: string, event_form: { __typename: 'Form', id: string, form_sections: Array<{ __typename: 'FormSection', id: string, form_items: Array<{ __typename: 'FormItem', id: string, public_description?: string | null, default_value?: string | null, position: number, identifier?: string | null, item_type: string, rendered_properties: string, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in?: Array<Types.FormItemExposeIn> | null }> }> } }, runs: Array<{ __typename: 'Run', id: string, starts_at: string }>, team_members: Array<{ __typename: 'TeamMember', id: string, display_team_member: boolean, user_con_profile: { __typename: 'UserConProfile', id: string, last_name: string, name_without_nickname: string, gravatar_enabled: boolean, gravatar_url: string } }> }> } } };
+export type EventListEventsQueryData = { __typename: 'Query', currentAbility: { __typename: 'Ability', can_read_schedule: boolean }, convention: { __typename: 'Convention', id: string, timezone_mode: Types.TimezoneMode, events_paginated: { __typename: 'EventsPagination', total_entries: number, total_pages: number, current_page: number, per_page: number, entries: Array<{ __typename: 'Event', id: string, title?: string | null, created_at?: string | null, short_blurb_html?: string | null, form_response_attrs_json_with_rendered_markdown?: string | null, my_rating?: number | null, event_category: { __typename: 'EventCategory', id: string }, runs: Array<{ __typename: 'Run', id: string, starts_at: string }>, team_members: Array<{ __typename: 'TeamMember', id: string, display_team_member: boolean, user_con_profile: { __typename: 'UserConProfile', id: string, last_name: string, name_without_nickname: string, gravatar_enabled: boolean, gravatar_url: string } }> }> } } };
 
 
 export const EventListEventsQueryDocument = gql`
-    query EventListEventsQuery($page: Int, $pageSize: Int, $filters: EventFiltersInput, $sort: [SortInput!]) {
+    query EventListEventsQuery($page: Int, $pageSize: Int, $filters: EventFiltersInput, $sort: [SortInput!], $fetchFormItemIdentifiers: [String!]) {
   currentAbility {
     can_read_schedule
   }
@@ -39,25 +39,12 @@ export const EventListEventsQueryDocument = gql`
         title
         created_at
         short_blurb_html
-        form_response_attrs_json_with_rendered_markdown
+        form_response_attrs_json_with_rendered_markdown(
+          itemIdentifiers: $fetchFormItemIdentifiers
+        )
         my_rating
         event_category {
           id
-          name
-          team_member_name
-          teamMemberNamePlural
-          event_form {
-            id
-            form_sections {
-              id
-              form_items {
-                id
-                public_description
-                default_value
-                ...CommonFormItemFields
-              }
-            }
-          }
         }
         runs {
           id
@@ -78,7 +65,7 @@ export const EventListEventsQueryDocument = gql`
     }
   }
 }
-    ${CommonFormItemFieldsFragmentDoc}`;
+    `;
 
 /**
  * __useEventListEventsQuery__
@@ -96,6 +83,7 @@ export const EventListEventsQueryDocument = gql`
  *      pageSize: // value for 'pageSize'
  *      filters: // value for 'filters'
  *      sort: // value for 'sort'
+ *      fetchFormItemIdentifiers: // value for 'fetchFormItemIdentifiers'
  *   },
  * });
  */

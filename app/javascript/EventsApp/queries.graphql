@@ -18,6 +18,8 @@ fragment CommonConventionData on Convention {
     default_color
     full_color
     signed_up_color
+    team_member_name
+    teamMemberNamePlural
 
     event_form {
       id

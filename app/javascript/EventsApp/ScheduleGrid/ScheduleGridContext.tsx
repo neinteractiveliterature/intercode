@@ -18,6 +18,7 @@ import {
   useScheduleGridEventsQuery,
 } from './queries.generated';
 import { FiniteTimespan } from '../../Timespan';
+import useMergeCategoriesIntoEvents from '../useMergeCategoriesIntoEvents';
 
 const IS_MOBILE = ['iOS', 'Android OS'].includes(detect()?.os ?? '');
 
@@ -93,7 +94,7 @@ function checkRunDetailsVisibity(
 
 export function useScheduleGridProvider(
   config: ScheduleGridConfig | undefined,
-  convention: ConventionForTimespanUtils | undefined,
+  convention: ScheduleGridConventionDataQueryData['convention'] | undefined,
   events: ScheduleGridEventFragment[] | undefined,
   myRatingFilter?: number[],
   hideConflicts?: boolean,
@@ -106,11 +107,13 @@ export function useScheduleGridProvider(
     [visibleRunDetails],
   );
 
+  const eventsWithCategories = useMergeCategoriesIntoEvents(convention?.event_categories ?? [], events ?? []);
+
   const schedule = useMemo(() => {
     if (config && convention && events) {
       return new Schedule({
         config,
-        events,
+        events: eventsWithCategories,
         myRatingFilter,
         hideConflicts: hideConflicts ?? false,
         timezoneName,
@@ -118,7 +121,7 @@ export function useScheduleGridProvider(
     }
 
     return skeletonSchedule;
-  }, [config, convention, events, hideConflicts, myRatingFilter, timezoneName]);
+  }, [config, convention, events, eventsWithCategories, hideConflicts, myRatingFilter, timezoneName]);
 
   const toggleRunDetailsVisibility = useCallback(
     (visibilitySpec: RunDetailsVisibilitySpec) => {
@@ -194,10 +197,16 @@ function LoadingOverlay({ loading }: LoadingOverlayProps) {
   );
 }
 
-function getEventsQueryVariables(timespan: FiniteTimespan, showExtendedCounts?: boolean, filters?: EventFiltersInput) {
+function getEventsQueryVariables(
+  timespan: FiniteTimespan,
+  fetchFormItemIdentifiers: string[],
+  showExtendedCounts?: boolean,
+  filters?: EventFiltersInput,
+) {
   return {
     start: timespan.start.toISO(),
     finish: timespan.finish.toISO(),
+    fetchFormItemIdentifiers,
     extendedCounts: showExtendedCounts || false,
     filters,
   };
@@ -205,11 +214,12 @@ function getEventsQueryVariables(timespan: FiniteTimespan, showExtendedCounts?: 
 
 type ScheduleGridProviderTabContentProps = {
   config: ScheduleGridConfig;
-  convention: ConventionForTimespanUtils;
+  convention: ScheduleGridConventionDataQueryData['convention'];
   children: (timespan: FiniteTimespan) => ReactNode;
   timespan: FiniteTimespan;
   afterLoaded: () => void;
   filters?: EventFiltersInput;
+  fetchFormItemIdentifiers: string[];
 };
 
 function ScheduleGridProviderTabContent({
@@ -219,11 +229,12 @@ function ScheduleGridProviderTabContent({
   timespan,
   afterLoaded,
   filters,
+  fetchFormItemIdentifiers,
 }: ScheduleGridProviderTabContentProps) {
   const { myRatingFilter, hideConflicts } = useContext(ScheduleGridFiltersContext);
   const { data, error, loading } = useScheduleGridEventsQuery({
     variables: {
-      ...getEventsQueryVariables(timespan, config.showExtendedCounts, filters),
+      ...getEventsQueryVariables(timespan, fetchFormItemIdentifiers, config.showExtendedCounts, filters),
     },
   });
   const cachedData = useCachedLoadableValue(loading, error, () => data, [data]);
@@ -259,6 +270,7 @@ export type ScheduleGridProviderProps = {
   config: ScheduleGridConfig;
   convention: ScheduleGridConventionDataQueryData['convention'];
   children: ScheduleGridProviderTabContentProps['children'];
+  fetchFormItemIdentifiers: string[];
   myRatingFilter?: number[];
   hideConflicts: boolean;
   filters?: EventFiltersInput;
@@ -267,6 +279,7 @@ export type ScheduleGridProviderProps = {
 export function ScheduleGridProvider({
   config,
   children,
+  fetchFormItemIdentifiers,
   myRatingFilter,
   hideConflicts,
   convention,
@@ -282,10 +295,10 @@ export function ScheduleGridProvider({
       client.query({
         query: ScheduleGridEventsQueryDocument,
         variables: {
-          ...getEventsQueryVariables(timespan, config.showExtendedCounts, filters),
+          ...getEventsQueryVariables(timespan, fetchFormItemIdentifiers, config.showExtendedCounts, filters),
         },
       }),
-    [client, config.showExtendedCounts, filters],
+    [client, fetchFormItemIdentifiers, config.showExtendedCounts, filters],
   );
 
   const conventionTimespan = useMemo(() => timespanFromConvention(convention), [convention]);
@@ -317,6 +330,7 @@ export function ScheduleGridProvider({
             <ScheduleGridProviderTabContent
               config={config}
               convention={convention}
+              fetchFormItemIdentifiers={fetchFormItemIdentifiers}
               timespan={timespan}
               afterLoaded={afterTabLoaded}
               filters={filters}

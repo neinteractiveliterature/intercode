@@ -9,9 +9,10 @@ import {
   isCatchAllMatchRule,
   buildCategoryMatchRules,
 } from './ScheduleGridConfig';
-import { ScheduleGridEventFragment } from './queries.generated';
+import { ScheduleGridConventionDataQueryData, ScheduleGridEventFragment } from './queries.generated';
 import { timespanFromRun } from '../../TimespanUtils';
 import { timeIsOnTheHour } from '../../TimeUtils';
+import { SchedulingUi } from '../../graphqlTypes.generated';
 
 function expandTimespanToNearestHour(timespan: FiniteTimespan) {
   const start = timespan.start.set({ minute: 0, second: 0, millisecond: 0 });
@@ -53,6 +54,7 @@ export function findConflictingRuns<T extends EventForConflictingRuns>(events: T
 export type ScheduleEvent = ScheduleGridEventFragment & {
   displayTitle?: string;
   fake?: boolean;
+  event_category: ScheduleGridConventionDataQueryData['convention']['event_categories'][number];
 };
 
 export type ScheduleRun = ScheduleEvent['runs'][0] & {
@@ -343,11 +345,14 @@ export default class Schedule {
         name: 'Fake events',
         default_color: 'rgba(0, 0, 0, 0.1)',
         signed_up_color: 'transparent',
+        scheduling_ui: SchedulingUi.Regular,
         event_form: {
           __typename: 'Form',
           form_sections: [],
           id: '',
         },
+        team_member_name: 'team member',
+        teamMemberNamePlural: 'team members',
       },
       registration_policy: {
         __typename: 'RegistrationPolicy',

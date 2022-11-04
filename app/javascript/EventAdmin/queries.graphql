@@ -28,6 +28,8 @@ fragment EventPageEventCategoryFields on EventCategory {
   default_color
   full_color
   signed_up_color
+  teamMemberNamePlural
+  team_member_name
 
   event_form {
     id

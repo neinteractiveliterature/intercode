@@ -12,7 +12,7 @@ import PersonalScheduleFiltersBar, { usePersonalScheduleFilters } from './Schedu
 import { useAuthorizationRequiredWithoutLogin } from '../Authentication/useAuthorizationRequired';
 import { ScheduleGridConfig, allConfigs } from './ScheduleGrid/ScheduleGridConfig';
 import { conventionRequiresDates } from './runTimeFormatting';
-import { LoadQueryWrapper } from '@neinteractiveliterature/litform/dist';
+import { LoadQueryWrapper, notEmpty } from '@neinteractiveliterature/litform/dist';
 import { useScheduleGridConventionDataQuery } from './ScheduleGrid/queries.generated';
 import useFilterableFormItems from './useFilterableFormItems';
 import EventListFilterableFormItemDropdown from './EventList/EventListFilterableFormItemDropdown';
@@ -145,15 +145,30 @@ const ScheduleApp = LoadQueryWrapper(useScheduleGridConventionDataQuery, functio
   );
 
   const filterableFormItems = useFilterableFormItems(data.convention);
+  const fetchFormItemIdentifiers = useMemo(
+    () => filterableFormItems.map((item) => item.identifier).filter(notEmpty),
+    [filterableFormItems],
+  );
 
   const renderSchedule = () => {
     if (scheduleView === 'list') {
-      return <RunList filters={effectiveFilters} />;
+      return (
+        <RunList
+          fetchFormItemIdentifiers={fetchFormItemIdentifiers}
+          convention={data.convention}
+          filters={effectiveFilters}
+        />
+      );
     }
 
     if (scheduleGridConfig) {
       return (
-        <ScheduleGridApp configKey={scheduleGridConfig.key} convention={data.convention} filters={effectiveFilters} />
+        <ScheduleGridApp
+          fetchFormItemIdentifiers={fetchFormItemIdentifiers}
+          configKey={scheduleGridConfig.key}
+          convention={data.convention}
+          filters={effectiveFilters}
+        />
       );
     }
 

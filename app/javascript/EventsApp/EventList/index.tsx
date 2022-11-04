@@ -1,4 +1,4 @@
-import { useState, useCallback, useContext } from 'react';
+import { useState, useCallback, useContext, useMemo } from 'react';
 import { ApolloError } from '@apollo/client';
 import { Filters } from 'react-table';
 import { useTranslation } from 'react-i18next';
@@ -8,6 +8,7 @@ import {
   PageLoadingIndicator,
   SearchInput,
   LoadQueryWrapper,
+  notEmpty,
 } from '@neinteractiveliterature/litform';
 
 import { buildFieldFilterCodecs, FilterCodecs } from '../../Tables/FilterUtils';
@@ -25,6 +26,7 @@ import { TypedFormItem } from '../../FormAdmin/FormItemUtils';
 import EventListFilterableFormItemDropdown from './EventListFilterableFormItemDropdown';
 import { CommonConventionDataQueryData, useCommonConventionDataQuery } from '../queries.generated';
 import useFilterableFormItems from '../useFilterableFormItems';
+import useMergeCategoriesIntoEvents from '../useMergeCategoriesIntoEvents';
 
 const PAGE_SIZE = 20;
 
@@ -90,6 +92,10 @@ function EventList({ filterableFormItems, convention }: EventListProps): JSX.Ele
     : [{ id: 'category', value: [] }];
   const effectiveSortBy = sortBy && sortBy.length > 0 ? sortBy : defaultSort;
   const effectiveFilters: Filters<EventType> = filters && filters.length > 0 ? filters : defaultFiltered;
+  const filterableFormItemIdentifiers = useMemo(
+    () => filterableFormItems.map((item) => item.identifier).filter(notEmpty),
+    [filterableFormItems],
+  );
 
   const { data, loading, error, fetchMore } = useEventListEventsQuery({
     variables: {
@@ -97,6 +103,7 @@ function EventList({ filterableFormItems, convention }: EventListProps): JSX.Ele
       pageSize: PAGE_SIZE,
       sort: reactTableSortToTableResultsSort(effectiveSortBy),
       filters: reactTableFiltersToTableResultsFilters(effectiveFilters),
+      fetchFormItemIdentifiers: filterableFormItemIdentifiers,
     },
   });
   const [fetchMoreEventsAsync, fetchMoreError, fetchMoreInProgress] = useAsyncFunction(fetchMoreEvents);
@@ -135,13 +142,20 @@ function EventList({ filterableFormItems, convention }: EventListProps): JSX.Ele
     [changeFilterValue],
   );
 
+  const eventsWithCategories = useMergeCategoriesIntoEvents(
+    convention.event_categories,
+    data?.convention.events_paginated.entries ?? [],
+  );
+
   usePageTitle(t('navigation.events.eventCatalog', 'Event Catalog'));
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  const eventsPaginated = (loading || !data ? undefined : data.convention?.events_paginated) ?? {
+  const eventsPaginated = (loading || !data
+    ? undefined
+    : { ...data.convention?.events_paginated, entries: eventsWithCategories }) ?? {
     __typename: 'EventsPagination',
     entries: [],
     current_page: 1,

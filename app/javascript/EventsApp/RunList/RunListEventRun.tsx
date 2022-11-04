@@ -6,10 +6,11 @@ import { useAppDateTimeFormat } from '../../TimeUtils';
 import { ScheduleGridEventsQueryData } from '../ScheduleGrid/queries.generated';
 import RunDetails from '../ScheduleGrid/RunDetails';
 import RunDisplay from '../ScheduleGrid/RunDisplay';
+import { ScheduleEvent } from '../ScheduleGrid/Schedule';
 import SignupCountData from '../SignupCountData';
 
 export type RunListEventRunProps = {
-  event: ScheduleGridEventsQueryData['convention']['events'][number];
+  event: ScheduleEvent;
   run: ScheduleGridEventsQueryData['convention']['events'][number]['runs'][number];
   timespan: FiniteTimespan;
   signupCountData: SignupCountData;
