@@ -18140,7 +18140,7 @@ resolve@^2.0.0-next.3:
     webpack-dev-server: 4.11.1
     webpack-manifest-plugin: 5.0.0
     webpack-merge: 5.8.0
-    webpack-shell-plugin-next: 2.2.2
+    webpack-shell-plugin-next: 2.3.1
     zxcvbn: 4.4.2
   languageName: unknown
   linkType: soft
@@ -20977,12 +20977,12 @@ typescript@^4.2.4:
   languageName: node
   linkType: hard
 
-"webpack-shell-plugin-next@npm:2.2.2":
-  version: 2.2.2
-  resolution: "webpack-shell-plugin-next@npm:2.2.2"
+"webpack-shell-plugin-next@npm:2.3.1":
+  version: 2.3.1
+  resolution: "webpack-shell-plugin-next@npm:2.3.1"
   peerDependencies:
     webpack: ^5.18.0
-  checksum: 617bf2e0f73ab5c96c84f11a889f7bb47d53c7aa9b3310a201e96f169ee7efbfd1ceb86cce77d0c7dfee71930c7f94c08a75e069af044a155906c81eddf99125
+  checksum: a5976d01281ba68e9f86ad8e48c70fe5088c1e69638a97e4ed215f5dd5f50372ca4735f92ac295ad1973612f6fd98df7829adf4afbbee669529e7c9c36b99207
   languageName: node
   linkType: hard
 
