@@ -99,7 +99,7 @@ const config = {
           },
           require.resolve('css-loader'),
           require.resolve('postcss-loader'),
-          require.resolve('sass-loader'),
+          { loader: require.resolve('sass-loader'), options: { sassOptions: {quietDeps: true} } }
         ],
       },
       {

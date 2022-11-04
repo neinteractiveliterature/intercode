@@ -1,6 +1,8 @@
 class HostingServiceAdapters::Base
+  ADAPTER_CLASSES = [HostingServiceAdapters::Heroku, HostingServiceAdapters::Render]
+
   def self.find_adapter
-    [HostingServiceAdapters::Render].map(&:new).find(&:applicable?)
+    ADAPTER_CLASSES.map(&:new).find(&:applicable?)
   end
 
   def applicable?
