@@ -1,28 +1,28 @@
 # frozen_string_literal: true
 class ReceiveSnsEmailDeliveryService < CivilService::Service
   def self.aws_region
-    ENV.fetch('AWS_EMAIL_RECEIVING_REGION', nil) || ENV.fetch('AWS_REGION')
-  end
-
-  def self.kms_client
-    @kms_client ||= Aws::KMS::Client.new(region: aws_region)
-  end
-
-  def self.s3_client
-    @s3_client ||=
-      Aws::S3::EncryptionV2::Client.new(
-        kms_key_id: 'alias/aws/ses',
-        kms_client: kms_client,
-        key_wrap_schema: :kms_context,
-        content_encryption_schema: :aes_gcm_no_padding,
-        security_profile: :v2_and_legacy
-      )
+    ENV.fetch("AWS_EMAIL_RECEIVING_REGION", nil) || ENV.fetch("AWS_REGION")
   end
 
   attr_reader :message
 
   def initialize(message:)
     @message = message
+  end
+
+  def kms_client
+    @kms_client ||= Aws::KMS::Client.new(region: aws_region)
+  end
+
+  def s3_client
+    @s3_client ||=
+      Aws::S3::EncryptionV2::Client.new(
+        kms_key_id: "alias/aws/ses",
+        kms_client: kms_client,
+        key_wrap_schema: :kms_context,
+        content_encryption_schema: :aes_gcm_no_padding,
+        security_profile: :v2_and_legacy
+      )
   end
 
   private
@@ -41,11 +41,11 @@ class ReceiveSnsEmailDeliveryService < CivilService::Service
   # Only use the actual recipient of this email according to SES.  If there are multiple recipients
   # that go to Intercode, we get separate SNS notifications for each of them.
   def recipients
-    @recipients ||= message['receipt']['recipients'].map { |recipient| Mail::Address.new(recipient) }
+    @recipients ||= message["receipt"]["recipients"].map { |recipient| Mail::Address.new(recipient) }
   end
 
   def message_id
-    message['mail']['messageId']
+    message["mail"]["messageId"]
   end
 
   def header(name)
@@ -54,7 +54,7 @@ class ReceiveSnsEmailDeliveryService < CivilService::Service
 
   def headers_hash
     @headers_hash ||=
-      message['mail']['headers'].each_with_object({}) { |header, hash| hash[header['name'].downcase] = header['value'] }
+      message["mail"]["headers"].each_with_object({}) { |header, hash| hash[header["name"].downcase] = header["value"] }
   end
 
   def common_header(name)
@@ -62,18 +62,18 @@ class ReceiveSnsEmailDeliveryService < CivilService::Service
   end
 
   def common_headers_hash
-    message['mail']['commonHeaders']
+    message["mail"]["commonHeaders"]
   end
 
   def receipt_action
-    message['receipt']['action']
+    message["receipt"]["action"]
   end
 
   def verdicts
     @verdicts ||=
       %i[dkim dmarc spam spf virus].each_with_object({}) do |verdict_type, hash|
-        verdict_object = message['receipt']["#{verdict_type}Verdict"]
-        hash[verdict_type] = verdict_object ? verdict_object['status'] : 'MISSING'
+        verdict_object = message["receipt"]["#{verdict_type}Verdict"]
+        hash[verdict_type] = verdict_object ? verdict_object["status"] : "MISSING"
       end
   end
 
@@ -81,9 +81,9 @@ class ReceiveSnsEmailDeliveryService < CivilService::Service
     @score_by_verdict ||=
       verdicts.each_with_object({}) do |(verdict_type, verdict), hash|
         score =
-          if verdict_type == :virus && verdict == 'FAIL'
+          if verdict_type == :virus && verdict == "FAIL"
             2
-          elsif verdict == 'FAIL'
+          elsif verdict == "FAIL"
             1
           else
             0
@@ -98,7 +98,7 @@ class ReceiveSnsEmailDeliveryService < CivilService::Service
   end
 
   def from_addresses
-    @from_addresses ||= common_header('From').map { |addr| EmailRoute.normalize_address(addr) }
+    @from_addresses ||= common_header("From").map { |addr| EmailRoute.normalize_address(addr) }
   end
 
   def score_threshold
@@ -115,7 +115,7 @@ class ReceiveSnsEmailDeliveryService < CivilService::Service
 
   def raw_email
     @raw_email ||=
-      self.class.s3_client.get_object(bucket: receipt_action['bucketName'], key: receipt_action['objectKey']).body.read
+      s3_client.get_object(bucket: receipt_action["bucketName"], key: receipt_action["objectKey"]).body.read
   end
 
   def email
