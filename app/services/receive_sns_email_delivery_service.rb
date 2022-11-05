@@ -11,7 +11,7 @@ class ReceiveSnsEmailDeliveryService < CivilService::Service
   end
 
   def kms_client
-    @kms_client ||= Aws::KMS::Client.new(region: aws_region)
+    @kms_client ||= Aws::KMS::Client.new(region: self.class.aws_region)
   end
 
   def s3_client
