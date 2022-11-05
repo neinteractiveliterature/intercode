@@ -136,6 +136,7 @@ if ENV["CLOUDWATCH_LOG_GROUP"]
 
     config.lograge.custom_options =
       lambda do |event|
+        gc_stat = GC.stat
         {
           request_time: Time.now,
           application: Rails.application.class.name.delete_suffix("::Application"),
@@ -152,7 +153,9 @@ if ENV["CLOUDWATCH_LOG_GROUP"]
           current_user_id: event.payload[:current_user_id],
           assumed_identity_from_profile_id: event.payload[:assumed_identity_from_profile_id],
           dyno_type: dyno_type,
-          dyno_id: dyno_id
+          dyno_id: dyno_id,
+          heap_allocated_pages: gc_stat[:heap_allocated_pages],
+          heap_available_slots: gs_stat[:heap_available_slots]
         }.compact
       end
   end
