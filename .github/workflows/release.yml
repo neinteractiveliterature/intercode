@@ -116,8 +116,10 @@ jobs:
         workflow: ci.yml
         commit: ${{ github.sha }}
         name: doc-site
-        path: ./doc-site/build
+        path: ./doc-site.tar.gz
         github_token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Decompress built site
+      run: tar xvf doc-site.tar.gz
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
       with:
