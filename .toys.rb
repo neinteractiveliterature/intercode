@@ -294,7 +294,8 @@ tool "download_email" do
 
     ENV["AWS_PROFILE"] = "neil"
     ENV["AWS_REGION"] = "us-east-1"
-    message = ReceiveSnsEmailDeliveryService.s3_client.get_object(bucket: "intercode-inbox", key: message_id).body.read
+    message =
+      ReceiveSnsEmailDeliveryService.new.s3_client.get_object(bucket: "intercode-inbox", key: message_id).body.read
     File.write("#{message_id}.eml", message)
   end
 end
