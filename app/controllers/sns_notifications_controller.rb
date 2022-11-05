@@ -8,11 +8,11 @@ class SnsNotificationsController < ApplicationController
   end
 
   def create
-    case message_body['Type']
-    when 'SubscriptionConfirmation'
+    case message_body["Type"]
+    when "SubscriptionConfirmation"
       confirm_subscription ? (head :ok) : (head :bad_request)
-    when 'Notification'
-      message = JSON.parse(message_body['Message'])
+    when "Notification"
+      message = JSON.parse(message_body["Message"])
       handle_message(message)
       head :ok
     end
@@ -21,11 +21,11 @@ class SnsNotificationsController < ApplicationController
   private
 
   def handle_message(message)
-    case message['notificationType']
-    when 'Received'
-      ReceiveSnsEmailDeliveryService.new(message: message).call!
+    case message["notificationType"]
+    when "Received"
+      ReceiveSnsEmailDeliveryJob.perform_later(message)
     else
-      warning_message = "Unhandled SNS notificationType: #{message['notificationType']}"
+      warning_message = "Unhandled SNS notificationType: #{message["notificationType"]}"
       Rails.logger.warn(warning_message)
       Rollbar.warn(warning_message, message: message)
     end
@@ -49,8 +49,8 @@ class SnsNotificationsController < ApplicationController
 
   def confirm_subscription
     SnsNotificationsController.sns_client.confirm_subscription(
-      topic_arn: message_body['TopicArn'],
-      token: message_body['Token']
+      topic_arn: message_body["TopicArn"],
+      token: message_body["Token"]
     )
     true
   rescue Aws::SNS::Errors::ServiceError => e
