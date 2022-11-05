@@ -155,7 +155,7 @@ if ENV["CLOUDWATCH_LOG_GROUP"]
           dyno_type: dyno_type,
           dyno_id: dyno_id,
           heap_allocated_pages: gc_stat[:heap_allocated_pages],
-          heap_available_slots: gs_stat[:heap_available_slots]
+          heap_available_slots: gc_stat[:heap_available_slots]
         }.compact
       end
   end
