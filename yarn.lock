@@ -3269,14 +3269,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-eslint/eslint-plugin@npm:3.13.0":
-  version: 3.13.0
-  resolution: "@graphql-eslint/eslint-plugin@npm:3.13.0"
+"@graphql-eslint/eslint-plugin@npm:3.13.1":
+  version: 3.13.1
+  resolution: "@graphql-eslint/eslint-plugin@npm:3.13.1"
   dependencies:
     "@babel/code-frame": ^7.18.6
     "@graphql-tools/code-file-loader": ^7.3.6
     "@graphql-tools/graphql-tag-pluck": ^7.3.6
-    "@graphql-tools/utils": ^8.12.0
+    "@graphql-tools/utils": ^9.0.0
     chalk: ^4.1.2
     debug: ^4.3.4
     fast-glob: ^3.2.12
@@ -3285,7 +3285,7 @@ __metadata:
     lodash.lowercase: ^4.3.0
   peerDependencies:
     graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 8b3acb6ec3a4aaa9f0b9846aaa0b226184b1c3200d9046808cc3498158262a7d01a74c60ddcdcf483e24992eb556424d436386f821d9e3daf8948942e455d91b
+  checksum: 851e84dc158b4dcac31a84c4b9cbc0069d1f8141d88e6ca190688c1ba6e3e7df498dfedba2eea1db5fe8814284c29ec64db461cc1978d43e0aaf812ff6689099
   languageName: node
   linkType: hard
 
@@ -3608,7 +3608,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/utils@npm:8.12.0, @graphql-tools/utils@npm:^8.12.0, @graphql-tools/utils@npm:^8.6.5, @graphql-tools/utils@npm:^8.8.0, @graphql-tools/utils@npm:^8.9.0":
+"@graphql-tools/utils@npm:8.12.0, @graphql-tools/utils@npm:^8.6.5, @graphql-tools/utils@npm:^8.8.0, @graphql-tools/utils@npm:^8.9.0":
   version: 8.12.0
   resolution: "@graphql-tools/utils@npm:8.12.0"
   dependencies:
@@ -3649,6 +3649,17 @@ __metadata:
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
   checksum: 8da22b13e0cfceac20f2ee08c45f360d0bd1390fa0edd8496ea75a0ca7d10ab3bbafca6b4b0dbc3f233a05cd53096e3063b9208f727c72db00e461751164afbd
+  languageName: node
+  linkType: hard
+
+"@graphql-tools/utils@npm:^9.0.0":
+  version: 9.0.1
+  resolution: "@graphql-tools/utils@npm:9.0.1"
+  dependencies:
+    tslib: ^2.4.0
+  peerDependencies:
+    graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
+  checksum: a41221d8568bfaafa76526eaa89550d67965c43e0cd1ff94979f61c117d0caf880938799b351c4b637ce26309ba5d2ef8c4a657298f5d46702f43759b89bfa05
   languageName: node
   linkType: hard
 
@@ -17961,7 +17972,7 @@ resolve@^2.0.0-next.3:
     "@graphql-codegen/typescript": 2.8.1
     "@graphql-codegen/typescript-operations": 2.5.6
     "@graphql-codegen/typescript-react-apollo": 3.3.6
-    "@graphql-eslint/eslint-plugin": 3.13.0
+    "@graphql-eslint/eslint-plugin": 3.13.1
     "@juggle/resize-observer": 3.4.0
     "@lezer/common": 1.0.1
     "@neinteractiveliterature/litform": 0.28.0
