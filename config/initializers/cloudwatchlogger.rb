@@ -154,8 +154,7 @@ if ENV["CLOUDWATCH_LOG_GROUP"]
           assumed_identity_from_profile_id: event.payload[:assumed_identity_from_profile_id],
           dyno_type: dyno_type,
           dyno_id: dyno_id,
-          heap_allocated_pages: gc_stat[:heap_allocated_pages],
-          heap_available_slots: gc_stat[:heap_available_slots]
+          gc: gc_stat
         }.compact
       end
   end
