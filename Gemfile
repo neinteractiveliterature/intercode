@@ -103,6 +103,7 @@ gem "parallel", groups: %i[development intercode1_import]
 group :skylight do
   gem "skylight"
   gem "webrick" # we don't actually use it, but Skylight needs it on boot
+  gem "rbtrace"
 end
 
 group :development do
