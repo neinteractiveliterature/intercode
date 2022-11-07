@@ -10,13 +10,19 @@ import {
 
 import RunFormFields from '../BuiltInForms/RunFormFields';
 import { useCreateRunMutation, useDeleteRunMutation, useUpdateRunMutation } from './mutations.generated';
-import { EventFieldsFragment, RunFieldsFragment, RunFieldsFragmentDoc } from './queries.generated';
+import {
+  EventAdminEventsQueryData,
+  EventFieldsFragment,
+  RunFieldsFragment,
+  RunFieldsFragmentDoc,
+} from './queries.generated';
 
 export type EditingRun = Omit<RunFieldsFragment, 'starts_at'> & {
   starts_at?: RunFieldsFragment['starts_at'];
 };
 
 export type EditRunModalProps = {
+  convention: EventAdminEventsQueryData['convention'];
   run: EditingRun;
   event: EventFieldsFragment;
   editingRunChanged: React.Dispatch<RunFieldsFragment>;
@@ -28,6 +34,7 @@ export type EditRunModalProps = {
 };
 
 function EditRunModal({
+  convention,
   run,
   event,
   editingRunChanged,
@@ -118,7 +125,7 @@ function EditRunModal({
         </div>
         {run && (
           <div className="modal-body">
-            <RunFormFields run={run} event={event} onChange={editingRunChanged} />
+            <RunFormFields convention={convention} run={run} event={event} onChange={editingRunChanged} />
           </div>
         )}
         <div className="modal-footer">

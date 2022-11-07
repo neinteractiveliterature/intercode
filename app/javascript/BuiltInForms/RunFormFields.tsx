@@ -11,7 +11,7 @@ import {
 
 import ConventionDaySelect from '../BuiltInFormControls/ConventionDaySelect';
 import TimeSelect from '../BuiltInFormControls/TimeSelect';
-import { timespanFromConvention, getConventionDayTimespans } from '../TimespanUtils';
+import { timespanFromConvention, getConventionDayTimespans, ConventionForTimespanUtils } from '../TimespanUtils';
 import ProspectiveRunSchedule from '../EventAdmin/ProspectiveRunSchedule';
 import RoomSelect, { RoomForSelect } from '../BuiltInFormControls/RoomSelect';
 import AppRootContext from '../AppRootContext';
@@ -32,6 +32,7 @@ type WithStartsAt<RunType extends RunForRunFormFields> = Omit<RunType, 'starts_a
 
 export type RunFormFieldsProps<RunType extends RunForRunFormFields> = {
   run: RunType;
+  convention: EventAdminEventsQueryData['convention'];
   event: EventAdminEventsQueryData['convention']['events'][0];
   onChange: React.Dispatch<React.SetStateAction<RunType>>;
 };
@@ -39,21 +40,18 @@ export type RunFormFieldsProps<RunType extends RunForRunFormFields> = {
 function RunFormFields<RunType extends RunForRunFormFields>({
   run,
   event,
+  convention,
   onChange,
 }: RunFormFieldsProps<RunType>): JSX.Element {
   const { t } = useTranslation();
   const { timezoneName } = useContext(AppRootContext);
   const format = useAppDateTimeFormat();
-  const { data, loading, error } = useEventAdminEventsQuery();
 
   const startsAt = useMemo(
-    () => (!error && !loading && run && run.starts_at ? DateTime.fromISO(run.starts_at, { zone: timezoneName }) : null),
-    [timezoneName, error, loading, run],
+    () => (run && run.starts_at ? DateTime.fromISO(run.starts_at, { zone: timezoneName }) : null),
+    [timezoneName, run],
   );
-  const conventionTimespan = useMemo(
-    () => (error || loading || !data ? null : timespanFromConvention(data.convention)),
-    [error, loading, data],
-  );
+  const conventionTimespan = useMemo(() => timespanFromConvention(convention), [convention]);
   const conventionDayTimespans = useMemo(
     () => (conventionTimespan?.isFinite() ? getConventionDayTimespans(conventionTimespan, timezoneName) : null),
     [conventionTimespan, timezoneName],
@@ -97,14 +95,6 @@ function RunFormFields<RunType extends RunForRunFormFields>({
     [event],
   );
 
-  if (loading) {
-    return <LoadingIndicator iconSet="bootstrap-icons" />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
   const timeInputChanged = ({ hour: newHour, minute: newMinute }: { hour?: number; minute?: number }) => {
     setHour(newHour);
     setMinute(newMinute);
@@ -134,7 +124,7 @@ function RunFormFields<RunType extends RunForRunFormFields>({
 
   return (
     <div>
-      {data && <ConventionDaySelect convention={data.convention} value={day} onChange={setDay} />}
+      {<ConventionDaySelect convention={convention} value={day} onChange={setDay} />}
       {renderTimeSelect()}
 
       <FormGroupWithLabel label={t('events.edit.roomsLabel', 'Room(s)')}>
@@ -142,7 +132,7 @@ function RunFormFields<RunType extends RunForRunFormFields>({
           <RoomSelect
             id={id}
             name="room_ids"
-            rooms={data?.convention.rooms ?? []}
+            rooms={convention.rooms ?? []}
             isMulti
             value={run.rooms}
             onChange={(rooms: RoomForSelect[]) => onChange((prevRun) => ({ ...prevRun, rooms }))}

@@ -54,7 +54,10 @@ export default LoadQueryWrapper(useEventAdminEventsQuery, function EventAdmin({ 
 
     return (
       <Routes>
-        <Route path=":id/edit" element={<EventAdminEditEvent />} />
+        <Route
+          path=":id/edit"
+          element={<EventAdminEditEvent convention={data.convention} currentAbility={data.currentAbility} />}
+        />
         <Route path="" element={<Navigate to={`./${data.convention.events[0].id}/edit`} replace />} />
       </Routes>
     );
@@ -111,7 +114,10 @@ export default LoadQueryWrapper(useEventAdminEventsQuery, function EventAdmin({ 
             />
           );
         })}
-        <Route path=":id/edit" element={<EventAdminEditEvent />} />
+        <Route
+          path=":id/edit"
+          element={<EventAdminEditEvent convention={data.convention} currentAbility={data.currentAbility} />}
+        />
         <Route path="dropped_events" element={<DroppedEventAdmin />} />
         {eventCategories.length > 0 && (
           <Route path="" element={<Navigate to={buildEventCategoryUrl(eventCategories[0])} replace />} />

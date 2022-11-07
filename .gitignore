@@ -69,6 +69,9 @@ cookbooks
 # Don't check in secrets
 /.env.*.local
 
+# Ignore local fake production env
+/.env.production
+
 # Dear god, don't look at node_modules
 /node_modules
 /public/packs

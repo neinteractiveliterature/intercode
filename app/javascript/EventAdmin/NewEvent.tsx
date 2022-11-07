@@ -122,6 +122,7 @@ export default LoadQueryWrapper(useEventAdminEventsQuery, function NewEvent({ da
 
       {eventCategory && eventCategory.scheduling_ui === 'single_run' && event.form_response_attrs.length_seconds && (
         <RunFormFields
+          convention={convention}
           run={run}
           event={{
             __typename: 'Event',

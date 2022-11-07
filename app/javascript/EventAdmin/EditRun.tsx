@@ -3,10 +3,10 @@ import { useNavigate, useParams, useLocation } from 'react-router-dom';
 
 import EditRunModal, { EditingRun } from './EditRunModal';
 import buildEventCategoryUrl from './buildEventCategoryUrl';
-import { ConventionFieldsFragment, EventFieldsFragment } from './queries.generated';
+import { ConventionFieldsFragment, EventAdminEventsQueryData, EventFieldsFragment } from './queries.generated';
 
 export type EditRunProps = {
-  convention: ConventionFieldsFragment;
+  convention: EventAdminEventsQueryData['convention'];
   events: EventFieldsFragment[];
 };
 
@@ -72,6 +72,7 @@ function EditRun({ convention, events }: EditRunProps): JSX.Element {
 
   return (
     <EditRunModal
+      convention={convention}
       editingRunChanged={setRun}
       event={event}
       onCancel={cancelEditing}

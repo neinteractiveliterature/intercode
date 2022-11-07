@@ -160,6 +160,16 @@ fragment EventFields on Event {
   }
 }
 
+query EventAdminSingleEventQuery($eventId: ID!) {
+  conventionByRequestHost {
+    event(id: $eventId) {
+      id
+      form_response_attrs_json
+      ...EventFields
+    }
+  }
+}
+
 query EventAdminEventsQuery {
   currentAbility {
     can_override_maximum_event_provided_tickets

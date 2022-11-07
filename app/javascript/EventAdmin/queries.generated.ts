@@ -19,6 +19,13 @@ export type RunFieldsFragment = { __typename: 'Run', id: string, starts_at: stri
 
 export type EventFieldsFragment = { __typename: 'Event', id: string, title?: string | null, author?: string | null, description?: string | null, organization?: string | null, url?: string | null, con_mail_destination?: string | null, can_play_concurrently: boolean, short_blurb?: string | null, participant_communications?: string | null, age_restrictions?: string | null, content_warnings?: string | null, email?: string | null, length_seconds: number, status?: string | null, description_html?: string | null, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, admin_notes?: string | null, event_category: { __typename: 'EventCategory', id: string }, registration_policy?: { __typename: 'RegistrationPolicy', slots_limited?: boolean | null, prevent_no_preference_signups: boolean, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null, description?: string | null, minimum_slots?: number | null, preferred_slots?: number | null, total_slots?: number | null, slots_limited: boolean, anything: boolean, not_counted: boolean }> } | null, runs: Array<{ __typename: 'Run', id: string, starts_at: string, schedule_note?: string | null, title_suffix?: string | null, room_names: Array<string>, confirmed_signup_count: number, not_counted_signup_count: number, signup_count_by_state_and_bucket_key_and_counted: string, rooms: Array<{ __typename: 'Room', id: string, name?: string | null }>, my_signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: string, state: Types.SignupRequestState }> }>, maximum_event_provided_tickets_overrides: Array<{ __typename: 'MaximumEventProvidedTicketsOverride', id: string, override_value: number, ticket_type: { __typename: 'TicketType', id: string, description?: string | null, maximum_event_provided_tickets: number } }>, images: Array<{ __typename: 'ActiveStorageAttachment', id: string, byte_size: number, content_type: string, filename: string, url: string }> };
 
+export type EventAdminSingleEventQueryVariables = Types.Exact<{
+  eventId: Types.Scalars['ID'];
+}>;
+
+
+export type EventAdminSingleEventQueryData = { __typename: 'Query', conventionByRequestHost: { __typename: 'Convention', event: { __typename: 'Event', id: string, form_response_attrs_json?: string | null, title?: string | null, author?: string | null, description?: string | null, organization?: string | null, url?: string | null, con_mail_destination?: string | null, can_play_concurrently: boolean, short_blurb?: string | null, participant_communications?: string | null, age_restrictions?: string | null, content_warnings?: string | null, email?: string | null, length_seconds: number, status?: string | null, description_html?: string | null, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, admin_notes?: string | null, event_category: { __typename: 'EventCategory', id: string }, registration_policy?: { __typename: 'RegistrationPolicy', slots_limited?: boolean | null, prevent_no_preference_signups: boolean, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null, description?: string | null, minimum_slots?: number | null, preferred_slots?: number | null, total_slots?: number | null, slots_limited: boolean, anything: boolean, not_counted: boolean }> } | null, runs: Array<{ __typename: 'Run', id: string, starts_at: string, schedule_note?: string | null, title_suffix?: string | null, room_names: Array<string>, confirmed_signup_count: number, not_counted_signup_count: number, signup_count_by_state_and_bucket_key_and_counted: string, rooms: Array<{ __typename: 'Room', id: string, name?: string | null }>, my_signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: string, state: Types.SignupRequestState }> }>, maximum_event_provided_tickets_overrides: Array<{ __typename: 'MaximumEventProvidedTicketsOverride', id: string, override_value: number, ticket_type: { __typename: 'TicketType', id: string, description?: string | null, maximum_event_provided_tickets: number } }>, images: Array<{ __typename: 'ActiveStorageAttachment', id: string, byte_size: number, content_type: string, filename: string, url: string }> } } };
+
 export type EventAdminEventsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
@@ -179,6 +186,45 @@ export const EventFieldsFragmentDoc = gql`
 }
     ${RunFieldsFragmentDoc}
 ${MaximumEventProvidedTicketsOverrideFieldsFragmentDoc}`;
+export const EventAdminSingleEventQueryDocument = gql`
+    query EventAdminSingleEventQuery($eventId: ID!) {
+  conventionByRequestHost {
+    event(id: $eventId) {
+      id
+      form_response_attrs_json
+      ...EventFields
+    }
+  }
+}
+    ${EventFieldsFragmentDoc}`;
+
+/**
+ * __useEventAdminSingleEventQuery__
+ *
+ * To run a query within a React component, call `useEventAdminSingleEventQuery` and pass it any options that fit your needs.
+ * When your component renders, `useEventAdminSingleEventQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useEventAdminSingleEventQuery({
+ *   variables: {
+ *      eventId: // value for 'eventId'
+ *   },
+ * });
+ */
+export function useEventAdminSingleEventQuery(baseOptions: Apollo.QueryHookOptions<EventAdminSingleEventQueryData, EventAdminSingleEventQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<EventAdminSingleEventQueryData, EventAdminSingleEventQueryVariables>(EventAdminSingleEventQueryDocument, options);
+      }
+export function useEventAdminSingleEventQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EventAdminSingleEventQueryData, EventAdminSingleEventQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<EventAdminSingleEventQueryData, EventAdminSingleEventQueryVariables>(EventAdminSingleEventQueryDocument, options);
+        }
+export type EventAdminSingleEventQueryHookResult = ReturnType<typeof useEventAdminSingleEventQuery>;
+export type EventAdminSingleEventQueryLazyQueryHookResult = ReturnType<typeof useEventAdminSingleEventQueryLazyQuery>;
+export type EventAdminSingleEventQueryQueryResult = Apollo.QueryResult<EventAdminSingleEventQueryData, EventAdminSingleEventQueryVariables>;
 export const EventAdminEventsQueryDocument = gql`
     query EventAdminEventsQuery {
   currentAbility {

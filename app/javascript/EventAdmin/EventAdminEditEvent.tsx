@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import useMEPTOMutations from '../BuiltInFormControls/useMEPTOMutations';
 import useEventFormWithCategorySelection, { EventFormWithCategorySelection } from './useEventFormWithCategorySelection';
@@ -10,7 +10,14 @@ import useUpdateEvent from './useUpdateEvent';
 import RunFormFields, { RunFormFieldsProps } from '../BuiltInForms/RunFormFields';
 import buildEventCategoryUrl from './buildEventCategoryUrl';
 import deserializeFormResponse from '../Models/deserializeFormResponse';
-import { useEventAdminEventsQuery, MaximumEventProvidedTicketsOverrideFieldsFragmentDoc } from './queries.generated';
+import {
+  useEventAdminEventsQuery,
+  MaximumEventProvidedTicketsOverrideFieldsFragmentDoc,
+  useEventAdminSingleEventQuery,
+  EventAdminEventsQueryData,
+  EventAdminSingleEventQueryData,
+  EventAdminSingleEventQueryVariables,
+} from './queries.generated';
 import {
   useDropEventMutation,
   useCreateMaximumEventProvidedTicketsOverrideMutation,
@@ -18,17 +25,37 @@ import {
   useDeleteMaximumEventProvidedTicketsOverrideMutation,
   useAttachImageToEventMutation,
 } from './mutations.generated';
-import { LoadSingleValueFromCollectionWrapper } from '../GraphqlLoadingWrappers';
+import { LoadQueryWithVariablesWrapper, LoadSingleValueFromCollectionWrapper } from '../GraphqlLoadingWrappers';
 import {
+  LoadQueryWrapper,
   useCreateMutationWithReferenceArrayUpdater,
   useDeleteMutationWithReferenceArrayUpdater,
 } from '@neinteractiveliterature/litform/dist';
 import { ImageAttachmentConfig } from '../BuiltInFormControls/MarkdownInput';
 
-export default LoadSingleValueFromCollectionWrapper(
-  useEventAdminEventsQuery,
-  (data, id) => data.convention.events.find((e) => e.id.toString() === id),
-  function EventAdminEditEventForm({ data, value: serializedEvent }) {
+export type EventAdminEditEventProps = {
+  convention: EventAdminEventsQueryData['convention'];
+  currentAbility: EventAdminEventsQueryData['currentAbility'];
+};
+
+function useEventAdminSingleEventQueryFromParams() {
+  const params = useParams();
+  return useEventAdminSingleEventQuery({ variables: { eventId: params.id ?? '' } });
+}
+
+export default LoadQueryWrapper<
+  EventAdminSingleEventQueryData,
+  EventAdminSingleEventQueryVariables,
+  EventAdminEditEventProps
+>(
+  useEventAdminSingleEventQueryFromParams,
+  function EventAdminEditEventForm({
+    data: {
+      conventionByRequestHost: { event: serializedEvent },
+    },
+    convention,
+    currentAbility,
+  }) {
     const navigate = useNavigate();
     const initialEvent = useMemo(() => deserializeFormResponse(serializedEvent), [serializedEvent]);
 
@@ -63,7 +90,7 @@ export default LoadSingleValueFromCollectionWrapper(
 
     const [eventFormWithCategorySelectionProps, { event, eventCategory, validateForm }] =
       useEventFormWithCategorySelection({
-        convention: data.convention,
+        convention: convention,
         initialEvent,
         imageAttachmentConfig,
       });
@@ -105,12 +132,12 @@ export default LoadSingleValueFromCollectionWrapper(
     usePageTitle(`Editing “${initialEvent?.title}”`);
 
     const donePath =
-      data.convention?.site_mode === 'single_event' ? '/' : buildEventCategoryUrl(eventCategory) ?? '/admin_events';
+      convention?.site_mode === 'single_event' ? '/' : buildEventCategoryUrl(eventCategory) ?? '/admin_events';
 
     return (
       <EditEvent
         cancelPath={donePath}
-        showDropButton={data.convention?.site_mode !== 'single_event'}
+        showDropButton={convention?.site_mode !== 'single_event'}
         event={event}
         dropEvent={dropEvent}
         validateForm={validateForm}
@@ -128,20 +155,20 @@ export default LoadSingleValueFromCollectionWrapper(
       >
         <>
           <EventFormWithCategorySelection {...eventFormWithCategorySelectionProps} />
-          {data.currentAbility.can_override_maximum_event_provided_tickets &&
-            data.convention?.ticket_mode !== 'disabled' &&
-            data.convention?.site_mode === 'convention' && (
+          {currentAbility.can_override_maximum_event_provided_tickets &&
+            convention?.ticket_mode !== 'disabled' &&
+            convention?.site_mode === 'convention' && (
               <MaximumEventProvidedTicketsOverrideEditor
                 {...meptoMutations}
-                ticketTypes={data.convention.ticket_types}
-                ticketName={data.convention.ticket_name}
+                ticketTypes={convention.ticket_types}
+                ticketName={convention.ticket_name}
                 overrides={initialEvent.maximum_event_provided_tickets_overrides}
                 eventId={initialEvent.id}
               />
             )}
 
           {eventCategory?.scheduling_ui === 'single_run' && event.form_response_attrs.length_seconds && (
-            <RunFormFields run={run} event={eventForRunFormFields} onChange={setRun} />
+            <RunFormFields convention={convention} run={run} event={eventForRunFormFields} onChange={setRun} />
           )}
         </>
       </EditEvent>
