@@ -5,6 +5,7 @@ class Queries::PermissionsQueryManager < Queries::QueryManager
     @authorization_info = authorization_info
     @all_model_permissions_in_convention = Queries::NilSafeCache.new
     @has_organization_permission = Queries::NilSafeCache.new
+    @conventions_by_id = Queries::NilSafeCache.new
   end
 
   def all_model_permissions_in_convention(convention)
@@ -42,7 +43,7 @@ class Queries::PermissionsQueryManager < Queries::QueryManager
             scope.where(id: @authorization_info.assumed_identity_from_profile.convention_id)
           elsif model_class == CmsContentGroup
             scope.where(
-              parent_type: 'Convention',
+              parent_type: "Convention",
               parent_id: @authorization_info.assumed_identity_from_profile.convention_id
             )
           else
@@ -62,9 +63,11 @@ class Queries::PermissionsQueryManager < Queries::QueryManager
       permission_sets = all_model_permissions_in_convention_for_model_type(convention, model_type)
       return [] if permission_sets.blank?
 
-      permission_sets.select do |_model_id, permission_set|
-        permissions.any? { |permission| permission_set.include?(permission.to_s) }
-      end.keys
+      permission_sets
+        .select do |_model_id, permission_set|
+          permissions.any? { |permission| permission_set.include?(permission.to_s) }
+        end
+        .keys
     end
 
     define_method "#{association_name}_permissions" do |model|
@@ -178,6 +181,11 @@ class Queries::PermissionsQueryManager < Queries::QueryManager
 
   def convention_for_model(model_type, model)
     return model if model_type == :convention
-    model.convention
+
+    if model.respond_to?(:convention_id)
+      @conventions_by_id.get(model.convention_id) { model.convention }
+    else
+      model.convention
+    end
   end
 end

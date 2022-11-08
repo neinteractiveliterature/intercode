@@ -137,7 +137,7 @@ class Types::ConventionType < Types::BaseObject
   end
 
   def events(include_dropped: false, start: nil, finish: nil, filters: nil, **_args)
-    events = object.events
+    events = object.events.includes(:event_category)
     events = events.active unless include_dropped
 
     events =
