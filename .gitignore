@@ -93,3 +93,6 @@ cookbooks
 
 # Emails I downloaded for debugging
 /*.eml
+
+# Ruby heap dumps
+/*.dump
