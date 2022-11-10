@@ -1,16 +1,16 @@
 # Script to generate graph:
-require "csv"
-Time.zone = "America/New_York"
-time = Time.local(2022, 10, 31)
-data = []
-while time < Time.local(2022, 11, 4)
-  data << [time, AutoscaleServersService.scaling_target_for(time)]
-  time += 15.minutes
-end
-CSV.open("scaling-graph.csv", "w") do |csv|
-  csv << %w[Time Servers]
-  data.each { |row| csv << row }
-end
+# require "csv"
+# Time.zone = "America/New_York"
+# time = Time.local(2022, 10, 31)
+# data = []
+# while time < Time.local(2022, 11, 4)
+#   data << [time, AutoscaleServersService.scaling_target_for(time)]
+#   time += 15.minutes
+# end
+# CSV.open("scaling-graph.csv", "w") do |csv|
+#   csv << %w[Time Servers]
+#   data.each { |row| csv << row }
+# end
 
 class AutoscaleServersService < CivilService::Service
   USERS_PER_INSTANCE = 40
