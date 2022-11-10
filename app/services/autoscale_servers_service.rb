@@ -1,21 +1,19 @@
 # Script to generate graph:
-# require 'csv'
-# Time.zone = 'America/New_York'
-# time = Time.local(2022, 10, 31)
-# data = []
-# while time < Time.local(2022, 11, 4)
-#   data << [time, AutoscaleServersService.scaling_target_for(time)]
-#   time += 15.minutes
-# end
-# CSV.open('scaling-graph.csv', 'w') do |csv|
-#   csv << ['Time', 'Servers']
-#   data.each do |row|
-#     csv << row
-#   end
-# end
+require "csv"
+Time.zone = "America/New_York"
+time = Time.local(2022, 10, 31)
+data = []
+while time < Time.local(2022, 11, 4)
+  data << [time, AutoscaleServersService.scaling_target_for(time)]
+  time += 15.minutes
+end
+CSV.open("scaling-graph.csv", "w") do |csv|
+  csv << %w[Time Servers]
+  data.each { |row| csv << row }
+end
 
 class AutoscaleServersService < CivilService::Service
-  USERS_PER_INSTANCE = 22
+  USERS_PER_INSTANCE = 40
   MIN_INSTANCES = 1
   MIN_INSTANCES_FOR_SIGNUP_OPENING = 2
   MAX_INSTANCES = 8
@@ -23,6 +21,7 @@ class AutoscaleServersService < CivilService::Service
   SIGNUP_OPENING_RAMP_UP_LOOKAHEAD_TIME = 2.hours
   SIGNUP_OPENING_FULL_THROTTLE_LOOKAHEAD_TIME = 1.hour
   SIGNUP_OPENING_DECAY_TIME = 1.hour
+  SIGNUP_OPENING_LOOKBACK_TIME = 6.hours
 
   def self.scaling_target_for_signup_opening(convention)
     user_count =
@@ -62,8 +61,12 @@ class AutoscaleServersService < CivilService::Service
         MIN_INSTANCES_FOR_SIGNUP_OPENING
       end
     else
-      decay_amount = (time - start_time) / SIGNUP_OPENING_DECAY_TIME
-      smooth_decay(decay_amount, target, MIN_INSTANCES)
+      if time >= start_time + SIGNUP_OPENING_DECAY_TIME
+        MIN_INSTANCES_FOR_SIGNUP_OPENING
+      else
+        decay_amount = (time - start_time) / SIGNUP_OPENING_DECAY_TIME
+        smooth_decay(decay_amount, target, MIN_INSTANCES_FOR_SIGNUP_OPENING)
+      end
     end
   end
 
@@ -72,7 +75,7 @@ class AutoscaleServersService < CivilService::Service
       select id, timespans.*
       from conventions,
         jsonb_to_recordset(maximum_event_signups->'timespans') timespans(start timestamptz, value text)
-      where start between #{Convention.connection.quote time - SIGNUP_OPENING_DECAY_TIME}
+      where start between #{Convention.connection.quote time - SIGNUP_OPENING_LOOKBACK_TIME}
       and #{Convention.connection.quote time + SIGNUP_OPENING_LOOKAHEAD_TIME}
       and value not in ('not_now', 'not_yet')
       and signup_mode = 'self_service';
