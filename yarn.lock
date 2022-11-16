@@ -1982,9 +1982,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/lang-html@npm:6.1.4, @codemirror/lang-html@npm:^6.0, @codemirror/lang-html@npm:^6.0.0":
-  version: 6.1.4
-  resolution: "@codemirror/lang-html@npm:6.1.4"
+"@codemirror/lang-html@npm:6.2.0, @codemirror/lang-html@npm:^6.0, @codemirror/lang-html@npm:^6.0.0":
+  version: 6.2.0
+  resolution: "@codemirror/lang-html@npm:6.2.0"
   dependencies:
     "@codemirror/autocomplete": ^6.0.0
     "@codemirror/lang-css": ^6.0.0
@@ -1993,8 +1993,8 @@ __metadata:
     "@codemirror/state": ^6.0.0
     "@codemirror/view": ^6.2.2
     "@lezer/common": ^1.0.0
-    "@lezer/html": ^1.0.1
-  checksum: 7a9eb987acb68d37a37746271db8c6a7df1e36b5cbe917fad2258111ef327f7f0f624bc6799968c2b08978fd23128c84d6c49e126dffa814c0c3231612620660
+    "@lezer/html": ^1.1.0
+  checksum: bd4c4dc4bd260db4ac3d0dbdb0617593ed2c2243085419269ceeda2aada327fde3f756cebae77641ad338220356d2d357c5217b778b20060f08846987dd32b7d
   languageName: node
   linkType: hard
 
@@ -4126,14 +4126,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lezer/html@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "@lezer/html@npm:1.0.1"
+"@lezer/html@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@lezer/html@npm:1.1.0"
   dependencies:
     "@lezer/common": ^1.0.0
     "@lezer/highlight": ^1.0.0
     "@lezer/lr": ^1.0.0
-  checksum: 3672c6a6658eaec0c22495374769da7e7940516a7fcbb6646613ec6e05aa9293aef4c13384aa91ede043aedab2824461c55b49a7b4654236220e76dc270be303
+  checksum: 4d30ff3579435d441216eaca653c9fc12a0537c01b1195ebd2de8c9c3bbfdfad5ff18e85c165b8cc70b28755d4c70cccc78a94ec9092c52cba1096949120409d
   languageName: node
   linkType: hard
 
@@ -18218,7 +18218,7 @@ resolve@^2.0.0-next.3:
     "@babel/register": 7.18.9
     "@babel/runtime": 7.20.1
     "@codemirror/highlight": 0.19.8
-    "@codemirror/lang-html": 6.1.4
+    "@codemirror/lang-html": 6.2.0
     "@codemirror/lang-json": 6.0.1
     "@codemirror/lang-markdown": 6.0.5
     "@codemirror/language": 6.3.1
