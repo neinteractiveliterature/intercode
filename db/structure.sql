@@ -5149,6 +5149,14 @@ ALTER TABLE ONLY public.oauth_access_tokens
 
 
 --
+-- Name: event_ratings fk_rails_748bde5cd4; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.event_ratings
+    ADD CONSTRAINT fk_rails_748bde5cd4 FOREIGN KEY (event_id) REFERENCES public.events(id);
+
+
+--
 -- Name: oauth_openid_requests fk_rails_77114b3b09; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5314,6 +5322,14 @@ ALTER TABLE ONLY public.active_storage_variant_records
 
 ALTER TABLE ONLY public.events
     ADD CONSTRAINT fk_rails_a0b385fce3 FOREIGN KEY (event_category_id) REFERENCES public.event_categories(id);
+
+
+--
+-- Name: event_ratings fk_rails_a22a77f4d9; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.event_ratings
+    ADD CONSTRAINT fk_rails_a22a77f4d9 FOREIGN KEY (user_con_profile_id) REFERENCES public.user_con_profiles(id);
 
 
 --
@@ -5886,6 +5902,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220503164309'),
 ('20220609161816'),
 ('20220918173739'),
-('20220924204825');
+('20220924204825'),
+('20221120175702');
 
 

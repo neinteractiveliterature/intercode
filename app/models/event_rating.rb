@@ -17,6 +17,11 @@
 #  index_event_ratings_on_user_con_profile_id               (user_con_profile_id)
 #  index_event_ratings_on_user_con_profile_id_and_event_id  (user_con_profile_id,event_id) UNIQUE
 #
+# Foreign Keys
+#
+#  fk_rails_...  (event_id => events.id)
+#  fk_rails_...  (user_con_profile_id => user_con_profiles.id)
+#
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
 
 class EventRating < ApplicationRecord
