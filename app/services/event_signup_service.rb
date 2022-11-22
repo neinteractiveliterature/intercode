@@ -35,7 +35,7 @@ class EventSignupService < CivilService::Service
     skip_locking: false,
     suppress_notifications: false,
     allow_non_self_service_signups: false,
-    action: 'self_service_signup'
+    action: "self_service_signup"
   )
     @user_con_profile = user_con_profile
     @run = run
@@ -76,7 +76,7 @@ class EventSignupService < CivilService::Service
 
   def convention_must_allow_self_service_signups
     return if allow_non_self_service_signups
-    return if convention.signup_mode == 'self_service'
+    return if convention.signup_mode == "self_service"
     return if team_member?
 
     errors.add :base, "#{convention.name} does not allow self-service signups."
@@ -90,22 +90,22 @@ class EventSignupService < CivilService::Service
     return unless signup_count_check_required?
 
     case max_signups_allowed
-    when 'not_now'
+    when "not_now"
       nil # ConventionRegistrationFreeze will take care of this
-    when 'not_yet'
-      errors.add :base, 'Signups are not allowed at this time.'
+    when "not_yet"
+      errors.add :base, "Signups are not allowed at this time."
     else
       unless signup_count_allowed?(user_signup_count + 1)
         errors.add :base,
                    "You are already signed up for #{user_signup_count} \
-#{'event'.pluralize(user_signup_count)}, which is the maximum allowed at this time."
+#{"event".pluralize(user_signup_count)}, which is the maximum allowed at this time."
       end
     end
   end
 
   def signup_count_check_required?
     return false if team_member?
-    return false if signup_state == 'confirmed' && !counts_towards_total?
+    return false if signup_state == "confirmed" && !counts_towards_total?
 
     true
   end
@@ -113,7 +113,7 @@ class EventSignupService < CivilService::Service
   def must_not_have_conflicting_signups
     return unless !event.can_play_concurrently? && conflicting_signups.any?
 
-    verb = conflicting_signups.size > 1 ? 'conflict' : 'conflicts'
+    verb = conflicting_signups.size > 1 ? "conflict" : "conflicts"
     errors.add :base, "You are already #{conflict_descriptions}, which #{verb} with #{event.title}."
   end
 
@@ -123,11 +123,11 @@ class EventSignupService < CivilService::Service
     [
       confirmed_titles.any? ? "signed up for #{confirmed_titles.to_sentence}" : nil,
       waitlisted_titles.any? ? "waitlisted for #{waitlisted_titles.to_sentence}" : nil
-    ].compact.join(' and ')
+    ].compact.join(" and ")
   end
 
   def must_have_ticket_if_required
-    return unless convention.ticket_mode == 'required_for_signup'
+    return unless convention.ticket_mode == "required_for_signup"
 
     ticket = user_con_profile.ticket
     return if ticket&.allows_event_signups?
@@ -160,14 +160,14 @@ sign up for events."
     return if requested_bucket && !requested_bucket.anything?
 
     non_anything_buckets = run.registration_policy.buckets.reject(&:anything?)
-    errors.add :base, "Please choose one of the following buckets: #{non_anything_buckets.map(&:name).join(', ')}."
+    errors.add :base, "Please choose one of the following buckets: #{non_anything_buckets.map(&:name).join(", ")}."
   end
 
   def require_no_bucket_for_team_member
     return unless team_member?
     return unless requested_bucket_key
 
-    errors.add :base, 'Team members must sign up as non-counted'
+    errors.add :base, "Team members must sign up as non-counted"
   end
 
   def counts_towards_total?
@@ -175,24 +175,23 @@ sign up for events."
   end
 
   def signup_state
-    !team_member? && !actual_bucket ? 'waitlisted' : 'confirmed'
+    !team_member? && !actual_bucket ? "waitlisted" : "confirmed"
   end
 
   def other_signups_including_not_counted
     @other_signups_including_not_counted ||=
-      user_con_profile.signups.includes(run: :event).where.not(run_id: run.id).where.not(state: 'withdrawn').to_a
+      user_con_profile.signups.includes(run: :event).where.not(run_id: run.id).where.not(state: "withdrawn").to_a
   end
 
   def other_signups
     @other_signups ||=
       other_signups_including_not_counted.select do |signup|
-        signup.counted? || (signup.state == 'waitlisted' && !signup.requested_bucket&.not_counted?)
+        signup.counted? || (signup.state == "waitlisted" && !signup.requested_bucket&.not_counted?)
       end
   end
 
   def bucket_finder
-    @bucket_finder ||=
-      SignupBucketFinder.new(run.registration_policy, requested_bucket_key, run.signups.counted.confirmed.to_a)
+    @bucket_finder ||= SignupBucketFinder.new(run.registration_policy, requested_bucket_key, run.signups.to_a)
   end
 
   def actual_bucket
@@ -211,9 +210,9 @@ sign up for events."
 
   def signup_count_allowed?(signup_count)
     case max_signups_allowed
-    when 'unlimited'
+    when "unlimited"
       true
-    when 'not_yet'
+    when "not_yet"
       false
     else
       signup_count <= max_signups_allowed.to_i
