@@ -61,7 +61,7 @@
     "@emotion/serialize": "1.1.1",
     "@graphiql/toolkit": "0.8.0",
     "@juggle/resize-observer": "3.4.0",
-    "@lezer/common": "1.0.1",
+    "@lezer/common": "1.0.2",
     "@neinteractiveliterature/litform": "0.28.0",
     "@popperjs/core": "2.11.6",
     "@rails/activestorage": "7.0.4",
