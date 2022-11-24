@@ -200,7 +200,7 @@
     "@graphql-codegen/near-operation-file-preset": "2.4.4",
     "@graphql-codegen/typescript": "2.8.2",
     "@graphql-codegen/typescript-operations": "2.5.7",
-    "@graphql-codegen/typescript-react-apollo": "3.3.6",
+    "@graphql-codegen/typescript-react-apollo": "3.3.7",
     "@graphql-eslint/eslint-plugin": "3.13.1",
     "@prettier/plugin-ruby": "3.2.2",
     "@testing-library/jest-dom": "5.16.5",
