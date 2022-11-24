@@ -1,7 +1,8 @@
 import { assertNever } from 'assert-never';
 import classNames from 'classnames';
+import { TFunction } from 'i18next';
 import React from 'react';
-import { TFunction, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import { TypedFormItem } from '../../FormAdmin/FormItemUtils';
 import { FormItemRole, FormType } from '../../graphqlTypes.generated';
