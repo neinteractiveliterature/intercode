@@ -193,6 +193,9 @@ jobs:
       run: toys update_liquid_doc_json
     - name: Build doc site
       run: cd doc-site && yarn run docusaurus graphql-to-doc -f && yarn node liquid-to-doc.js && yarn run build
+      env:
+        # docusaurus breaks on Node 17+ if we don't do this
+        NODE_OPTIONS: --openssl-legacy-provider
     - name: Compress built site
       if: github.event_name == 'push' && github.event.ref == 'refs/heads/main'
       run: tar cfz doc-site.tar.gz ./doc-site/build
