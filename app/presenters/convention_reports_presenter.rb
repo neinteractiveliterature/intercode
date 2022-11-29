@@ -20,14 +20,20 @@ class ConventionReportsPresenter
               "COALESCE(price_per_item_cents, 0)",
               "COALESCE(price_per_item_currency, 'USD')"
             )
-            .count
+            .pluck(
+              :product_id,
+              :status,
+              Arel.sql("COALESCE(price_per_item_cents, 0)"),
+              Arel.sql("COALESCE(price_per_item_currency, 'USD')"),
+              Arel.sql("SUM(quantity) sum_quantity")
+            )
 
-        grouped_count_data.map do |(product_id, status, amount_cents, amount_currency), count|
+        grouped_count_data.map do |product_id, status, amount_cents, amount_currency, sum_quantity|
           {
             product_id: product_id,
             status: status,
             payment_amount: Money.new(amount_cents, amount_currency),
-            count: count
+            count: sum_quantity
           }
         end
       end
