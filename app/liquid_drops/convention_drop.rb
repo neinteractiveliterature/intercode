@@ -233,7 +233,7 @@ class ConventionDrop < Liquid::Drop
   #                       be sure to filter them out in your template.
   def sales_by_payment_amount
     rows = reports_presenter.sales_count_by_product_and_payment_amount
-    products_by_id = Product.find(rows.map { |row| row[:product_id] }).index_by(&:id)
+    products_by_id = Product.find(rows.pluck(:product_id)).index_by(&:id)
     rows.map do |row|
       row.stringify_keys.merge(
         "total_amount" => row[:payment_amount] * row[:count],

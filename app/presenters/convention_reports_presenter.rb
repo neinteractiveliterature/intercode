@@ -5,6 +5,7 @@ class ConventionReportsPresenter
     @convention = convention
   end
 
+  # rubocop:disable Metrics/MethodLength
   def sales_count_by_product_and_payment_amount
     @sales_count_by_product_and_payment_amount ||=
       begin
@@ -31,6 +32,7 @@ class ConventionReportsPresenter
         end
       end
   end
+  # rubocop:enable Metrics/MethodLength
 
   def ticket_count_by_type_and_payment_amount
     @ticket_count_by_type_and_payment_amount ||=

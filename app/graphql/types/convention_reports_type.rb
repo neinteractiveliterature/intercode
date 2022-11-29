@@ -10,7 +10,8 @@ class Types::ConventionReportsType < Types::BaseObject
         [Types::TicketCountByTypeAndPaymentAmountType],
         null: false,
         deprecation_reason:
-          "This only takes ticket sales into account.  Please use the sales_count_by_product_and_payment_amount field instead."
+          "This only takes ticket sales into account.  Please use the sales_count_by_product_and_payment_amount field \
+instead."
   field :total_revenue,
         Types::MoneyType,
         null: false,
