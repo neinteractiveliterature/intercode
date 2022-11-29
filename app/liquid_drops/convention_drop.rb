@@ -218,29 +218,28 @@ class ConventionDrop < Liquid::Drop
   #                       "total_amount" is provided and is the "payment_amount" multiplied by the "count"
   #                       for this row.
   def attendance_by_payment_amount
-    # TODO deduplicate this with the one in ConventionReportsType
-    @data ||=
-      begin
-        grouped_count_data =
-          convention
-            .tickets
-            .left_joins(:order_entry)
-            .group(:ticket_type_id, "COALESCE(price_per_item_cents, 0)", "COALESCE(price_per_item_currency, 'USD')")
-            .count
+    reports_presenter.ticket_count_by_type_and_payment_amount.map do |row|
+      row.stringify_keys.merge("total_amount" => row[:payment_amount] * row[:count])
+    end
+  end
 
-        ticket_types =
-          TicketType.find(grouped_count_data.map { |(ticket_type_id, _, _), _| ticket_type_id }).index_by(&:id)
-
-        grouped_count_data.map do |(ticket_type_id, amount_cents, amount_currency), count|
-          payment_amount = Money.new(amount_cents, amount_currency)
-          {
-            "ticket_type" => TicketTypeDrop.new(ticket_types[ticket_type_id]),
-            "payment_amount" => MoneyDrop.new(payment_amount),
-            "count" => count,
-            "total_amount" => MoneyDrop.new(payment_amount * count)
-          }
-        end
-      end
+  # @return [Array<Hash>] A sales-by-payment-amount report.  Each item in the report has
+  #                       values at the keys "product", "status", "payment_amount", "count", and "total_amount".
+  #                       The report is grouped by "product", "status" and "payment_amount".  For convenience,
+  #                       "total_amount" is provided and is the "payment_amount" multiplied by the "count"
+  #                       for this row.
+  #
+  #                       Please note that this potentially includes booked-but-unpaid sales.  If you don't want those,
+  #                       be sure to filter them out in your template.
+  def sales_by_payment_amount
+    rows = reports_presenter.sales_count_by_product_and_payment_amount
+    products_by_id = Product.find(rows.map { |row| row[:product_id] }).index_by(&:id)
+    rows.map do |row|
+      row.stringify_keys.merge(
+        "total_amount" => row[:payment_amount] * row[:count],
+        "product" => products_by_id[row[:product_id]]
+      )
+    end
   end
 
   private
@@ -248,5 +247,9 @@ class ConventionDrop < Liquid::Drop
   # @api
   def effective_timezone
     (@context&.registers || {})[:timezone] || Time.zone
+  end
+
+  def reports_presenter
+    @reports_presenter ||= ConventionReportsPresenter.new(convention)
   end
 end

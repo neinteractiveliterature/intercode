@@ -5,8 +5,20 @@ class Types::ConventionReportsType < Types::BaseObject
   # is subtly wrong, because the current domain's convention might not be the convention the user
   # is asking for in their query.
 
-  field :ticket_count_by_type_and_payment_amount, [Types::TicketCountByTypeAndPaymentAmountType], null: false
-  field :total_revenue, Types::MoneyType, null: false
+  field :sales_count_by_product_and_payment_amount, [Types::SalesCountByProductAndPaymentAmountType], null: false
+  field :ticket_count_by_type_and_payment_amount,
+        [Types::TicketCountByTypeAndPaymentAmountType],
+        null: false,
+        deprecation_reason:
+          "This only takes ticket sales into account.  Please use the sales_count_by_product_and_payment_amount field instead."
+  field :total_revenue,
+        Types::MoneyType,
+        null: false,
+        deprecation_reason: "This only takes ticket sales into account.  Please use the sum_revenue field instead."
+  field :sum_revenue, Types::MoneyType, null: false do
+    argument :product_ids, [ID], required: false
+    argument :order_statuses, [Types::OrderStatusType], required: false
+  end
   field :event_provided_tickets, [Types::EventProvidedTicketListType], null: false
   field :events_by_choice, [Types::EventWithChoiceCountsType], null: false
 
@@ -20,71 +32,9 @@ class Types::ConventionReportsType < Types::BaseObject
 Use #object or #context_convention instead."
   end
 
-  def ticket_count_by_type_and_payment_amount
-    @ticket_count_by_type_and_payment_amount ||=
-      begin
-        grouped_count_data =
-          object
-            .tickets
-            .left_joins(:order_entry)
-            .group(:ticket_type_id, 'COALESCE(price_per_item_cents, 0)', "COALESCE(price_per_item_currency, 'USD')")
-            .count
-
-        grouped_count_data.map do |(ticket_type_id, amount_cents, amount_currency), count|
-          { ticket_type_id: ticket_type_id, payment_amount: Money.new(amount_cents, amount_currency), count: count }
-        end
-      end
-  end
-
+  # Deprecated and misleading: this is only total _ticket sales_ revenue.
   def total_revenue
-    return Money.new(0, 'USD') if ticket_count_by_type_and_payment_amount.blank?
-    ticket_count_by_type_and_payment_amount.sum { |row| row[:payment_amount] * row[:count] }
-  end
-
-  def event_provided_tickets
-    tickets = object.tickets.joins(:provided_by_event).where(events: { status: 'active' }).includes(:provided_by_event)
-    tickets
-      .to_a
-      .group_by(&:provided_by_event)
-      .map { |provided_by_event, event_tickets| { provided_by_event: provided_by_event, tickets: event_tickets } }
-  end
-
-  def events_by_choice # rubocop:disable Metrics/MethodLength
-    rows = ActiveRecord::Base.connection.select_rows <<~SQL.squish
-      SELECT event_id, state, choice, count(*) FROM (
-        SELECT
-          runs.event_id,
-          signups.state,
-          signups.user_con_profile_id,
-          row_number() OVER (
-            PARTITION BY signups.user_con_profile_id
-            ORDER BY signups.created_at
-          ) AS choice
-        FROM signups
-        INNER JOIN runs ON runs.id = signups.run_id
-        INNER JOIN events ON events.id = runs.event_id
-        LEFT JOIN team_members ON (
-          team_members.event_id = events.id
-          AND team_members.user_con_profile_id = signups.user_con_profile_id
-        )
-        WHERE
-          events.convention_id = #{object.id}
-          AND signups.counted = 't'
-          AND team_members.id IS NULL
-          AND events.status = 'active'
-      ) ranked_signups
-      GROUP BY event_id, state, choice
-    SQL
-    rows_by_event_id = rows.group_by { |(event_id, _, _, _)| event_id }
-
-    object.events.active.map do |event|
-      {
-        event: event,
-        choice_counts:
-          (rows_by_event_id[event.id] || []).map do |(_, state, choice, count)|
-            { choice: choice, state: state, count: count }
-          end
-      }
-    end
+    return Money.new(0, "USD") if object.ticket_count_by_type_and_payment_amount.blank?
+    object.ticket_count_by_type_and_payment_amount.sum { |row| row[:payment_amount] * row[:count] }
   end
 end
