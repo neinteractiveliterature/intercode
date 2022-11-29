@@ -339,7 +339,7 @@ class Types::ConventionType < Types::BaseObject
   end
 
   def reports
-    object
+    ConventionReportsPresenter.new(object)
   end
 
   field :rooms, [Types::RoomType], null: false
