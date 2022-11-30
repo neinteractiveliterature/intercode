@@ -27,7 +27,7 @@ function getEmails({ data, includes }: { data: RunSignupsTableSignupsQueryData; 
   const signups = data.convention.event.run.signups_paginated.entries.filter((signup) => {
     const isTeamMember = teamMemberUserConProfileIds.includes(signup.user_con_profile.id);
 
-    if (!includesObject.confirmed && !isTeamMember && signup.state === 'confirmed') {
+    if (!isTeamMember && signup.state === 'confirmed' && !includesObject[signup.bucket_key ?? '']) {
       return false;
     }
 
@@ -73,7 +73,7 @@ export default LoadQueryWrapper<
   RunEmailListProps
 >(useRunSignupsTableSignupsQueryFromParams, function RunEmailList({ data, separator }) {
   const { t } = useTranslation();
-  const [includes, setIncludes] = useState(['teamMembers', 'confirmed']);
+  const [includes, setIncludes] = useState(() => ['teamMembers', ...(data.convention.event.registration_policy?.buckets ?? []).map((bucket) => bucket.key)]);
 
   const mainTitle = useMemo(() => {
     separator === '; '
@@ -97,10 +97,12 @@ export default LoadQueryWrapper<
               }),
               value: 'teamMembers',
             },
-            {
-              label: t('events.signupAdmin.emailFilters.confirmed', 'Include confirmed'),
-              value: 'confirmed',
-            },
+            ...(data.convention.event.registration_policy?.buckets ?? []).map((bucket) => ({
+              label: t('events.signupAdmin.emailFilters.confirmedBucket', 'Include {{ bucketName }} (confirmed)', {
+                bucketName: bucket.name ?? bucket.key
+              }),
+              value: bucket.key
+            })),
             {
               label: t('events.signupAdmin.emailFilters.waitlisted', 'Include waitlisted'),
               value: 'waitlisted',
