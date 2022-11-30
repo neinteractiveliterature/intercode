@@ -131,11 +131,11 @@ class UserConProfile < ApplicationRecord
   end
 
   def city_state_zip
-    [city_state, zipcode].reject(&:blank?).join(' ')
+    [city_state, zipcode].reject(&:blank?).join(" ")
   end
 
   def city_state
-    [city, state].reject(&:blank?).join(', ')
+    [city, state].reject(&:blank?).join(", ")
   end
 
   # @deprecated
@@ -162,12 +162,12 @@ class UserConProfile < ApplicationRecord
 
   def preferred_contact_humanized
     case preferred_contact
-    when 'day_phone'
-      'Daytime phone'
-    when 'evening_phone'
-      'Evening phone'
-    when 'email'
-      'Email'
+    when "day_phone"
+      "Daytime phone"
+    when "evening_phone"
+      "Evening phone"
+    when "email"
+      "Email"
     else
       preferred_contact.try(:humanize)
     end
@@ -178,22 +178,32 @@ class UserConProfile < ApplicationRecord
   end
 
   def name_without_nickname
-    [first_name, last_name].compact.join(' ')
+    name_parts_without_nickname.join(" ")
+  end
+
+  def name_parts_without_nickname
+    [first_name, last_name].map(&:presence).compact.presence || ["\"#{nickname}\""]
+  end
+
+  def name_inverted
+    name_parts_without_nickname.reverse.join(", ")
   end
 
   def name_parts
-    [first_name, nickname.present? ? "\"#{nickname}\"" : nil, last_name]
+    [first_name, nickname.present? ? "\"#{nickname}\"" : nil, last_name].map(&:presence).compact
   end
 
   def bio_name
-    [first_name, show_nickname_in_bio && nickname.present? ? "\"#{nickname}\"" : nil, last_name].compact.join(' ')
+    [first_name, show_nickname_in_bio && nickname.present? ? "\"#{nickname}\"" : nil, last_name].map(&:presence)
+      .compact
+      .join(" ")
   end
 
   def gravatar_url
     if gravatar_enabled?
       "https://gravatar.com/avatar/#{Digest::MD5.hexdigest(email.strip.downcase)}"
     else
-      "https://gravatar.com/avatar/#{Digest::MD5.hexdigest('badrequest')}"
+      "https://gravatar.com/avatar/#{Digest::MD5.hexdigest("badrequest")}"
     end
   end
 
@@ -225,7 +235,7 @@ class UserConProfile < ApplicationRecord
   private
 
   def send_user_activity_alerts
-    SendUserActivityAlertsJob.perform_later(self, 'user_con_profile_create')
+    SendUserActivityAlertsJob.perform_later(self, "user_con_profile_create")
   end
 
   def generate_ical_secret

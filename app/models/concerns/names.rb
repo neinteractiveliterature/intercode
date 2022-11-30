@@ -2,7 +2,7 @@
 module Names
   def self.string_search(scope, search_string, columns)
     model = scope.is_a?(ActiveRecord::Relation) ? scope.model : scope
-    query = columns.map { |column| "lower(#{model.table_name}.#{column}) like :term" }.join(' OR ')
+    query = columns.map { |column| "lower(#{model.table_name}.#{column}) like :term" }.join(" OR ")
 
     search_string
       .split(/\s+/)
@@ -14,16 +14,16 @@ module Names
 
   # Return the user's name.
   def name
-    name_parts.compact.join(' ')
+    name_parts.join(" ")
   end
 
   # Return the user's name in last, first format.
   def name_inverted
-    [last_name, first_name].compact.join(', ')
+    name_parts.reverse.join(", ")
   end
 
   def name_parts
-    [first_name, last_name]
+    [first_name, last_name].map(&:presence).compact
   end
 
   included do
