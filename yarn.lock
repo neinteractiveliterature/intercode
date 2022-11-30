@@ -5458,10 +5458,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash@npm:4.14.190":
-  version: 4.14.190
-  resolution: "@types/lodash@npm:4.14.190"
-  checksum: 353a55a1222a57224ead8bd3379fabb2e3e3f6685f599c48b1b66f099d8e9e015e6c6352c6e2275954004c3bb510377804c63117233c6f187700b6ab78adfa02
+"@types/lodash@npm:4.14.191":
+  version: 4.14.191
+  resolution: "@types/lodash@npm:4.14.191"
+  checksum: ba0d5434e10690869f32d5ea49095250157cae502f10d57de0a723fd72229ce6c6a4979576f0f13e0aa9fbe3ce2457bfb9fa7d4ec3d6daba56730a51906d1491
   languageName: node
   linkType: hard
 
@@ -9411,7 +9411,7 @@ __metadata:
     "@edno/docusaurus2-graphql-doc-generator": 1.13.1
     "@mdx-js/react": 1.6.22
     "@svgr/webpack": 6.5.1
-    "@types/lodash": 4.14.190
+    "@types/lodash": 4.14.191
     clsx: 1.2.1
     entities: 4.4.0
     file-loader: 6.2.0
@@ -18295,7 +18295,7 @@ resolve@^2.0.0-next.3:
     "@types/history": 4.7.11
     "@types/jest": 29.2.3
     "@types/js-search": 1.4.0
-    "@types/lodash": 4.14.190
+    "@types/lodash": 4.14.191
     "@types/luxon": 3.1.0
     "@types/mapbox-gl": 1.13.4
     "@types/minimist": 1.2.2
