@@ -2,26 +2,28 @@
 class Notifier
   include ActionView::Helpers::SanitizeHelper
 
-  NOTIFICATIONS_CONFIG = JSON.parse(File.read(File.expand_path('config/notifications.json', Rails.root)))
+  NOTIFICATIONS_CONFIG = JSON.parse(File.read(File.expand_path("config/notifications.json", Rails.root)))
   NOTIFIER_CLASSES_BY_EVENT_KEY =
-    NOTIFICATIONS_CONFIG['categories'].flat_map do |category|
-      category['events'].map do |event|
-        [
-          "#{category['key']}/#{event['key']}",
-          "#{category['key'].camelize}::#{event['key'].camelize}Notifier".safe_constantize
-        ]
+    NOTIFICATIONS_CONFIG["categories"]
+      .flat_map do |category|
+        category["events"].map do |event|
+          [
+            "#{category["key"]}/#{event["key"]}",
+            "#{category["key"].camelize}::#{event["key"].camelize}Notifier".safe_constantize
+          ]
+        end
       end
-    end.to_h
+      .to_h
 
   def self.current_timezone
-    Thread.current['notifier_timezone']
+    Thread.current["notifier_timezone"]
   end
 
   def self.use_timezone(timezone)
-    Thread.current['notifier_timezone'] = timezone
+    Thread.current["notifier_timezone"] = timezone
     yield
   ensure
-    Thread.current['notifier_timezone'] = nil
+    Thread.current["notifier_timezone"] = nil
   end
 
   attr_reader :event_key, :convention
@@ -49,7 +51,7 @@ class Notifier
   end
 
   def destinations
-    raise NotImplementedError, 'Notifier subclasses must implement #destinations'
+    raise NotImplementedError, "Notifier subclasses must implement #destinations"
   end
 
   def deliver_later(options = {})
@@ -74,7 +76,7 @@ class Notifier
         controller: nil,
         timezone: Notifier.current_timezone,
         assigns: {
-          'convention' => convention
+          "convention" => convention
         }
       ).cadmus_renderer
   end
@@ -96,13 +98,14 @@ class Notifier
 
     user_con_profiles.filter_map do |user_con_profile|
       next nil unless user_con_profile.allow_sms?
-      DeliverSmsJob.new(user_con_profile, content, ENV['TWILIO_SMS_DEBUG_DESTINATION'].present?)
+      DeliverSmsJob.new(user_con_profile, content, ENV["TWILIO_SMS_DEBUG_DESTINATION"].present?)
     end
   end
 
   def should_deliver_sms?
     return false unless sends_sms?
-    return true if ENV['TWILIO_SMS_DEBUG_DESTINATION'].present?
+    return true if ENV["TWILIO_SMS_DEBUG_DESTINATION"].present?
+    return false unless convention.starts_at && convention.ends_at
 
     (convention.starts_at - 24.hours) <= Time.zone.now && (convention.ends_at > Time.zone.now)
   end
@@ -111,7 +114,7 @@ class Notifier
     all_content = render.transform_values(&:presence).compact
     (
       all_content[:body_sms] || all_content[:body_text]&.strip ||
-        (all_content[:body_html] && strip_tags(all_content[:body_html]).strip.gsub(/\s+/, ' '))
+        (all_content[:body_html] && strip_tags(all_content[:body_html]).strip.gsub(/\s+/, " "))
     )
   end
 
