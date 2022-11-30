@@ -23,7 +23,7 @@ module Names
   end
 
   def name_parts
-    [first_name, last_name].map(&:presence).compact
+    [first_name, last_name].filter_map(&:presence)
   end
 
   included do

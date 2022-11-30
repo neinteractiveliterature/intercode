@@ -127,15 +127,15 @@ class UserConProfile < ApplicationRecord
   end
 
   def full_address
-    [address, city_state_zip, country].reject(&:blank?).join("\n")
+    [address, city_state_zip, country].compact_blank.join("\n")
   end
 
   def city_state_zip
-    [city_state, zipcode].reject(&:blank?).join(" ")
+    [city_state, zipcode].compact_blank.join(" ")
   end
 
   def city_state
-    [city, state].reject(&:blank?).join(", ")
+    [city, state].compact_blank.join(", ")
   end
 
   # @deprecated
@@ -182,7 +182,7 @@ class UserConProfile < ApplicationRecord
   end
 
   def name_parts_without_nickname
-    [first_name, last_name].map(&:presence).compact.presence || ["\"#{nickname}\""]
+    [first_name, last_name].filter_map(&:presence).presence || ["\"#{nickname}\""]
   end
 
   def name_inverted
@@ -190,13 +190,13 @@ class UserConProfile < ApplicationRecord
   end
 
   def name_parts
-    [first_name, nickname.present? ? "\"#{nickname}\"" : nil, last_name].map(&:presence).compact
+    [first_name, nickname.present? ? "\"#{nickname}\"" : nil, last_name].filter_map(&:presence)
   end
 
   def bio_name
-    [first_name, show_nickname_in_bio && nickname.present? ? "\"#{nickname}\"" : nil, last_name].map(&:presence)
-      .compact
-      .join(" ")
+    [first_name, show_nickname_in_bio && nickname.present? ? "\"#{nickname}\"" : nil, last_name].filter_map(
+      &:presence
+    ).join(" ")
   end
 
   def gravatar_url
