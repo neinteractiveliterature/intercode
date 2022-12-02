@@ -130,7 +130,7 @@ group :development do
 
   # Ruby language server for LSP-compatible editors
   gem "solargraph"
-  gem "solargraph-rails", "1.0.1"
+  gem "solargraph-rails", "1.1.0"
 
   # Automatic annotation for models
   gem "annotate", github: "dabit/annotate_models", branch: "rails-7"
