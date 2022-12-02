@@ -2075,6 +2075,20 @@
           ]
         },
         {
+          "name": "sales_by_payment_amount",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "A sales-by-payment-amount report.  Each item in the report has\nvalues at the keys \"product\", \"status\", \"payment_amount\", \"count\", and \"total_amount\".\nThe report is grouped by \"product\", \"status\" and \"payment_amount\".  For convenience,\n\"total_amount\" is provided and is the \"payment_amount\" multiplied by the \"count\"\nfor this row.\n\nPlease note that this potentially includes booked-but-unpaid sales.  If you don't want those,\nbe sure to filter them out in your template.",
+              "types": [
+                "Array<Hash>"
+              ]
+            }
+          ]
+        },
+        {
           "name": "effective_timezone",
           "docstring": "",
           "tags": [
@@ -2084,6 +2098,13 @@
               "text": "",
               "types": null
             }
+          ]
+        },
+        {
+          "name": "reports_presenter",
+          "docstring": "",
+          "tags": [
+
           ]
         }
       ]
