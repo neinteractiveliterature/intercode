@@ -5,7 +5,7 @@ class FixOneOffSyntaxErrors < ActiveRecord::Migration[7.0]
     ['\\{% if show_games_with_openings\' %\\}', "{% if show_games_with_openings %}"],
     ['user_con_profile.privileges contains \'Con Com\'\\) %}', 'user_con_profile.privileges contains \'Con Com\' %}'],
     [
-      '\\{%\\s*assign_graphql_result\\s+(\\w+)\\s*=\\s*(\\w+)\\s*\\(([^\\)]*)\\)\\s*%}',
+      '\\{%\\s*assign_graphql_result\\s*(\\w+)\\s*=\\s*(\\w+)\\s*\\(([^\\)]*)\\)\\s*%}',
       '{% assign_graphql_result \\1 = \\2 \\3 %}'
     ],
     [
