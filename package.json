@@ -244,7 +244,7 @@
     "jest-html-reporter": "3.7.0",
     "jest-junit": "15.0.0",
     "jest-prop-type-error": "1.1.0",
-    "lint-staged": "13.0.4",
+    "lint-staged": "13.1.0",
     "prettier": "2.8.0",
     "react-test-renderer": "18.2.0",
     "ts-node": "10.9.1",
