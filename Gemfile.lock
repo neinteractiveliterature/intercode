@@ -251,10 +251,10 @@ GEM
       railties (>= 5.0.0)
     faker (2.19.0)
       i18n (>= 1.6, < 2)
-    faraday (2.6.0)
+    faraday (2.7.2)
       faraday-net_http (>= 2.0, < 3.1)
       ruby2_keywords (>= 0.0.4)
-    faraday-net_http (3.0.1)
+    faraday-net_http (3.0.2)
     ffi (1.15.5)
     ffi (1.15.5-java)
     flamegraph (0.9.5)
@@ -602,7 +602,7 @@ GEM
     tilt (2.0.11)
     timeout (0.3.0)
     tins (1.20.2)
-    twilio-ruby (5.73.0)
+    twilio-ruby (5.74.0)
       faraday (>= 0.9, < 3.0)
       jwt (>= 1.5, <= 2.5)
       nokogiri (>= 1.6, < 2.0)
@@ -728,7 +728,7 @@ DEPENDENCIES
   syntax_tree-haml
   syntax_tree-rbs
   term-ansicolor
-  twilio-ruby (~> 5.73.0)
+  twilio-ruby (~> 5.74.0)
   typeprof
   tzinfo-data
   webrick
