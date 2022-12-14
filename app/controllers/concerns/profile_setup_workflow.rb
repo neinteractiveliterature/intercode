@@ -28,7 +28,15 @@ module ProfileSetupWorkflow
     profiles_by_recency.each do |profile|
       profile_attrs =
         FormResponsePresenter.new(profile.convention.user_con_profile_form, profile, controller: self).as_json
-      destination_profile.assign_form_response_attributes(profile_attrs.slice(*this_convention_profile_fields))
+
+      destination_profile.assign_form_response_attributes(
+        destination_profile.filter_form_response_attributes_for_assignment(
+          profile_attrs.slice(*this_convention_profile_fields),
+          convention.user_con_profile_form.form_items,
+          AuthorizationInfo.cast(destination_profile.user)
+        )
+      )
+
       destination_profile.assign_attributes(gravatar_enabled: profile.gravatar_enabled)
     end
   end
