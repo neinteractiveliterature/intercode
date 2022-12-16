@@ -2038,9 +2038,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/language@npm:6.3.1, @codemirror/language@npm:^6.0, @codemirror/language@npm:^6.0.0, @codemirror/language@npm:^6.3.0":
-  version: 6.3.1
-  resolution: "@codemirror/language@npm:6.3.1"
+"@codemirror/language@npm:6.3.2, @codemirror/language@npm:^6.0, @codemirror/language@npm:^6.0.0, @codemirror/language@npm:^6.3.0":
+  version: 6.3.2
+  resolution: "@codemirror/language@npm:6.3.2"
   dependencies:
     "@codemirror/state": ^6.0.0
     "@codemirror/view": ^6.0.0
@@ -2048,7 +2048,7 @@ __metadata:
     "@lezer/highlight": ^1.0.0
     "@lezer/lr": ^1.0.0
     style-mod: ^4.0.0
-  checksum: 349b9806e1e2ce5d99ba1f5815cc4772e6032f68c95718594e8335196ef0686bc6378db7cdd5f0fda57ba068eebf0ee413bb336e32cc1ff958a743190a0266da
+  checksum: b70ed9b85d0bea79181c86e88a1f5c0bada30680ee1fe6a68efc01bc037c3d14f94a83602fc46cc4b4393589605ef7e986ed5174443502f3365dd61f883894fa
   languageName: node
   linkType: hard
 
@@ -18272,7 +18272,7 @@ resolve@^2.0.0-next.3:
     "@codemirror/lang-html": 6.4.0
     "@codemirror/lang-json": 6.0.1
     "@codemirror/lang-markdown": 6.0.5
-    "@codemirror/language": 6.3.1
+    "@codemirror/language": 6.3.2
     "@codemirror/state": 6.1.4
     "@codemirror/view": 6.7.1
     "@dnd-kit/core": 6.0.6
