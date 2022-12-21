@@ -25,6 +25,7 @@ class MergeUsersService < CivilService::Service
     { model: Run, field: :updated_by_id },
     { model: Signup, field: :updated_by_id },
     { model: SignupChange, field: :updated_by_id },
+    { model: SignupRequest, field: :updated_by_id },
     { model: UserActivityAlert, field: :user_id }
   ].freeze
 
@@ -93,7 +94,7 @@ class MergeUsersService < CivilService::Service
 
   def ensure_winning_user_id_is_in_user_ids
     return if user_ids.include?(winning_user_id)
-    errors.add :base, 'Winning user ID is not included in user IDs'
+    errors.add :base, "Winning user ID is not included in user IDs"
   end
 
   def ensure_all_winning_user_con_profiles_exist
