@@ -18451,7 +18451,7 @@ resolve@^2.0.0-next.3:
     style-loader: 3.3.1
     terser-webpack-plugin: 5.3.6
     thread-loader: 3.0.4
-    tinycolor2: 1.5.0
+    tinycolor2: 1.5.1
     ts-node: 10.9.1
     typescript: 4.9.4
     tzdata: 1.0.36
@@ -19941,10 +19941,10 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"tinycolor2@npm:1.5.0, tinycolor2@npm:^1.4.1":
-  version: 1.5.0
-  resolution: "tinycolor2@npm:1.5.0"
-  checksum: eb130ee27254c5c1379c4c86cfdce11f4971f5bb796267ed96fab72ea99916fc6f220684a09408b67fef03b3b7a3c6f9bafd98ad4a4fe6f154bf8fe625466188
+"tinycolor2@npm:1.5.1, tinycolor2@npm:^1.4.1":
+  version: 1.5.1
+  resolution: "tinycolor2@npm:1.5.1"
+  checksum: 0fffbe217217f819e0ef79524fda8813c20dac89b647bfc0f1bc0c7d5a80884dad0d74a414b865d2ce867d76d2303f251f7527eaebfe2838251e195fc4b0287c
   languageName: node
   linkType: hard
 
