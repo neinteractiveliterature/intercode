@@ -3460,9 +3460,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-eslint/eslint-plugin@npm:3.14.0":
-  version: 3.14.0
-  resolution: "@graphql-eslint/eslint-plugin@npm:3.14.0"
+"@graphql-eslint/eslint-plugin@npm:3.14.1":
+  version: 3.14.1
+  resolution: "@graphql-eslint/eslint-plugin@npm:3.14.1"
   dependencies:
     "@babel/code-frame": ^7.18.6
     "@graphql-tools/code-file-loader": ^7.3.6
@@ -3474,9 +3474,10 @@ __metadata:
     graphql-config: ^4.4.0
     graphql-depth-limit: ^1.1.0
     lodash.lowercase: ^4.3.0
+    tslib: ^2.4.1
   peerDependencies:
     graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 9b16ed12862e12ccdc2311709297b08d9364ab3bd707edeb2be52695cd3845efca41d8245656a3e319d78c79827ba8421062ca3efaab963349c2e1ee7080d9f3
+  checksum: 99c647a22df2436ac6f49f261b1eb81a5e0bbaa068efddf6a79c5e519038d0449f35c6dd21f0811366a0a6abf3d98386df7fcb368e3e09f384dcc370a6c2b7ea
   languageName: node
   linkType: hard
 
@@ -18333,7 +18334,7 @@ resolve@^2.0.0-next.3:
     "@graphql-codegen/typescript": 2.8.5
     "@graphql-codegen/typescript-operations": 2.5.10
     "@graphql-codegen/typescript-react-apollo": 3.3.7
-    "@graphql-eslint/eslint-plugin": 3.14.0
+    "@graphql-eslint/eslint-plugin": 3.14.1
     "@juggle/resize-observer": 3.4.0
     "@lezer/common": 1.0.2
     "@neinteractiveliterature/litform": 0.28.0
@@ -20228,10 +20229,10 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"tslib@npm:*, tslib@npm:^2.0.0, tslib@npm:^2.0.3, tslib@npm:^2.1.0, tslib@npm:^2.3.0, tslib@npm:^2.4.0, tslib@npm:~2.4.0":
-  version: 2.4.0
-  resolution: "tslib@npm:2.4.0"
-  checksum: 8c4aa6a3c5a754bf76aefc38026134180c053b7bd2f81338cb5e5ebf96fefa0f417bff221592bf801077f5bf990562f6264fecbc42cd3309b33872cb6fc3b113
+"tslib@npm:*, tslib@npm:^2.0.0, tslib@npm:^2.0.3, tslib@npm:^2.1.0, tslib@npm:^2.3.0, tslib@npm:^2.4.0, tslib@npm:^2.4.1, tslib@npm:~2.4.0":
+  version: 2.4.1
+  resolution: "tslib@npm:2.4.1"
+  checksum: 19480d6e0313292bd6505d4efe096a6b31c70e21cf08b5febf4da62e95c265c8f571f7b36fcc3d1a17e068032f59c269fab3459d6cd3ed6949eafecf64315fca
   languageName: node
   linkType: hard
 
