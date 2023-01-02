@@ -12534,12 +12534,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:22.4.6, i18next@npm:^22.0.4":
-  version: 22.4.6
-  resolution: "i18next@npm:22.4.6"
+"i18next@npm:22.4.7, i18next@npm:^22.0.4":
+  version: 22.4.7
+  resolution: "i18next@npm:22.4.7"
   dependencies:
     "@babel/runtime": ^7.20.6
-  checksum: 1b7cffc65fec5612986a749f7f11bd4923ce05b9c79fe8c47b71142baadcc7eadddaceba7cca1ad8ff569f0d14d23fd4c2da04155d4708a1865ec4cf5ca88966
+  checksum: 527720386e8f3f8e0c7816b870f1a528331280c49c767af811230dae93e470a51d5f2d08e9f5c88d8fb08b7c443c34a55ffae31679f9a2215c137bd99ec09e5c
   languageName: node
   linkType: hard
 
@@ -18467,7 +18467,7 @@ resolve@^2.0.0-next.3:
     history: 5.3.0
     html-to-react: 1.5.0
     husky: 8.0.2
-    i18next: 22.4.6
+    i18next: 22.4.7
     i18next-intervalplural-postprocessor: 3.0.0
     i18next-parser: 7.1.0
     jest: 29.3.1
