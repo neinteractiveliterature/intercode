@@ -2179,9 +2179,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@dnd-kit/core@npm:6.0.6":
-  version: 6.0.6
-  resolution: "@dnd-kit/core@npm:6.0.6"
+"@dnd-kit/core@npm:6.0.7":
+  version: 6.0.7
+  resolution: "@dnd-kit/core@npm:6.0.7"
   dependencies:
     "@dnd-kit/accessibility": ^3.0.0
     "@dnd-kit/utilities": ^3.2.1
@@ -2189,7 +2189,7 @@ __metadata:
   peerDependencies:
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
-  checksum: 2945bd5438630748fa3c11390afd9919eb9836cb64bf4c4c3afae0ccb99d32e1df56a387e59cb16800ec0ae047222fb9e40ecb9363ec4cca375c2b81d4e9784d
+  checksum: f7abe49519da5d60f69bd36ab632ecdedc0372653763065c00b1899f3ed2c1954b5f6ab0bed14790afe11da636b405f8839dc2cad805ef61a3885141f62f9cb1
   languageName: node
   linkType: hard
 
@@ -2207,16 +2207,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@dnd-kit/sortable@npm:7.0.1":
-  version: 7.0.1
-  resolution: "@dnd-kit/sortable@npm:7.0.1"
+"@dnd-kit/sortable@npm:7.0.2":
+  version: 7.0.2
+  resolution: "@dnd-kit/sortable@npm:7.0.2"
   dependencies:
     "@dnd-kit/utilities": ^3.2.0
     tslib: ^2.0.0
   peerDependencies:
-    "@dnd-kit/core": ^6.0.4
+    "@dnd-kit/core": ^6.0.7
     react: ">=16.8.0"
-  checksum: b8b5ae504d57d6afb847c3ac8a865a3623c5915f4f0dd767017a17e6d1d36e144b74f6f90a17c07d5f8ddc83395a2db8bb90c420f017aee15bd88538b6f3f226
+  checksum: 4ce705aceb15766a0deefe25a9d95a87e9413c3fb9088ea3eb0962e57f844895000117fcec7c0944a0d4ae4e1e889cfa69e3d3778164d4d23115fb1edb218283
   languageName: node
   linkType: hard
 
@@ -18358,8 +18358,8 @@ resolve@^2.0.0-next.3:
     "@codemirror/language": 6.3.2
     "@codemirror/state": 6.2.0
     "@codemirror/view": 6.7.2
-    "@dnd-kit/core": 6.0.6
-    "@dnd-kit/sortable": 7.0.1
+    "@dnd-kit/core": 6.0.7
+    "@dnd-kit/sortable": 7.0.2
     "@dnd-kit/utilities": 3.2.1
     "@emotion/serialize": 1.1.1
     "@graphiql/toolkit": 0.8.0
