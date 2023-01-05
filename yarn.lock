@@ -3314,9 +3314,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-codegen/near-operation-file-preset@npm:2.4.4":
-  version: 2.4.4
-  resolution: "@graphql-codegen/near-operation-file-preset@npm:2.4.4"
+"@graphql-codegen/near-operation-file-preset@npm:2.5.0":
+  version: 2.5.0
+  resolution: "@graphql-codegen/near-operation-file-preset@npm:2.5.0"
   dependencies:
     "@graphql-codegen/add": ^3.2.1
     "@graphql-codegen/plugin-helpers": ^2.7.2
@@ -3326,7 +3326,7 @@ __metadata:
     tslib: ~2.4.0
   peerDependencies:
     graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 224cf036b67abb3b7c5b288b6d289cd3fdcda51806b09d9022574b4e81bb8bec0f49875bb12a2e4cf289ad46d8f33f5c41676dc9edafb680c829df29e02fb85e
+  checksum: 4d66e1e3df6530d561b5bc1eb2a9341f96c1c77b3247fb4bb03e2694e2da73d64ec97249a9c3c47416e1eaca2f15b189ec108e19a599076b27f2088fcbf4daf8
   languageName: node
   linkType: hard
 
@@ -18368,7 +18368,7 @@ resolve@^2.0.0-next.3:
     "@graphql-codegen/cli": 2.16.3
     "@graphql-codegen/fragment-matcher": 3.3.3
     "@graphql-codegen/introspection": 2.2.3
-    "@graphql-codegen/near-operation-file-preset": 2.4.4
+    "@graphql-codegen/near-operation-file-preset": 2.5.0
     "@graphql-codegen/typescript": 2.8.7
     "@graphql-codegen/typescript-operations": 2.5.12
     "@graphql-codegen/typescript-react-apollo": 3.3.7
