@@ -17151,10 +17151,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"punycode@npm:2.1.1, punycode@npm:^2.1.0, punycode@npm:^2.1.1":
-  version: 2.1.1
-  resolution: "punycode@npm:2.1.1"
-  checksum: 823bf443c6dd14f669984dea25757b37993f67e8d94698996064035edd43bed8a5a17a9f12e439c2b35df1078c6bec05a6c86e336209eb1061e8025c481168e8
+"punycode@npm:2.2.0, punycode@npm:^2.1.0, punycode@npm:^2.1.1":
+  version: 2.2.0
+  resolution: "punycode@npm:2.2.0"
+  checksum: 32f291c1b1e8bef8a7d351a369579565bc17530ee5224d2f2b5c37b2647aa0ec7f1972294e2de1b632812f90c8080a7c0c5645c14758aadc0f27b35dd4906d89
   languageName: node
   linkType: hard
 
@@ -18652,7 +18652,7 @@ resolve@^2.0.0-next.3:
     postcss-loader: 7.0.2
     prettier: 2.8.2
     prop-types: 15.8.1
-    punycode: 2.1.1
+    punycode: 2.2.0
     react: 18.2.0
     react-bootstrap4-modal: 2.0.0
     react-color: 2.19.3
