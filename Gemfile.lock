@@ -529,7 +529,7 @@ GEM
     scheduled_value (1.4.0)
       sorted_set (~> 1.0)
     sequel (5.48.0)
-    set (1.0.2)
+    set (1.0.3)
     shoryuken (5.3.0)
       aws-sdk-core (>= 2)
       concurrent-ruby
