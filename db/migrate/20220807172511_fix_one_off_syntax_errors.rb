@@ -11,7 +11,13 @@ class FixOneOffSyntaxErrors < ActiveRecord::Migration[7.0]
     [
       '\\{%\\s*withdraw_user_signup_button\\s+(\\w+)\\s+("\\w+")\\s+([^%]*)\\s*%}',
       '{% withdraw_user_signup_button \\1 \\2 "\\3" %}'
-    ]
+    ],
+    [
+      '\\{% if convention.starts_at \\| date: "%m" == convention.ends_at\\|date: "%m" %\\}',
+      '{% if (convention.starts_at | date: "%m") == (convention.ends_at | date: "%m") %}'
+    ],
+    ['\{% else if run.length_seconds = 3600 %\}', "{% elsif run.length_seconds == 3600 %}"],
+    ["\\|join ','", "|join: ','"]
   ]
 
   def up
