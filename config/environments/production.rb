@@ -1,4 +1,4 @@
-require File.expand_path('lib/intercode/disable_caching_for_specific_assets', Rails.root)
+require File.expand_path("lib/intercode/disable_caching_for_specific_assets", Rails.root)
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
@@ -22,7 +22,7 @@ Rails.application.configure do
 
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
-  config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
+  config.public_file_server.enabled = ENV["RAILS_SERVE_STATIC_FILES"].present?
 
   # Compress JavaScripts and CSS.
   # config.assets.js_compressor = :uglifier
@@ -56,11 +56,11 @@ Rails.application.configure do
   config.log_tags = [:request_id]
 
   # Use a different cache store in production.
-  if ENV['MEMCACHEDCLOUD_SERVERS']
+  if ENV["MEMCACHEDCLOUD_SERVERS"]
     config.cache_store =
       :mem_cache_store,
-      ENV['MEMCACHEDCLOUD_SERVERS'].split(','),
-      { username: ENV['MEMCACHEDCLOUD_USERNAME'], password: ENV['MEMCACHEDCLOUD_PASSWORD'] }
+      ENV["MEMCACHEDCLOUD_SERVERS"].split(","),
+      { username: ENV["MEMCACHEDCLOUD_USERNAME"], password: ENV["MEMCACHEDCLOUD_PASSWORD"] }
   end
 
   # Use a real queuing backend for Active Job (and separate queues per environment)
@@ -74,22 +74,22 @@ Rails.application.configure do
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false
 
-  config.action_mailer.default_url_options = { host: ENV['INTERCODE_HOST'] || 'neilhosting.net', protocol: 'https' }
+  config.action_mailer.default_url_options = { host: ENV["INTERCODE_HOST"] || "neilhosting.net", protocol: "https" }
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
-  asset_hostname = ENV['ASSETS_HOST'] || config.action_mailer.default_url_options[:host]
+  asset_hostname = ENV["ASSETS_HOST"] || config.action_mailer.default_url_options[:host]
   config.action_controller.asset_host = "//#{asset_hostname}"
 
   config.public_file_server.headers = {
-    'Access-Control-Allow-Origin' => '*',
-    'Cache-Control' => 'public, max-age=15552000',
-    'Expires' => "#{1.year.from_now.to_formatted_s(:rfc822)}"
+    "Access-Control-Allow-Origin" => "*",
+    "Cache-Control" => "public, max-age=15552000",
+    "Expires" => "#{1.year.from_now.to_formatted_s(:rfc822)}"
   }
 
-  if ENV['RAILS_SERVE_STATIC_FILES'].present?
+  if ENV["RAILS_SERVE_STATIC_FILES"].present?
     config.middleware.insert_before ActionDispatch::Static,
                                     Intercode::DisableCachingForSpecificAssets,
-                                    %w[/packs/application.js /packs/application-styles.js]
+                                    JSON.parse(File.read(File.expand_path("config/nocache-files.json", Rails.root)))
   end
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
@@ -106,7 +106,7 @@ Rails.application.configure do
   # require 'syslog/logger'
   # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new 'app-name')
 
-  if ENV['RAILS_LOG_TO_STDOUT'].present?
+  if ENV["RAILS_LOG_TO_STDOUT"].present?
     logger = ActiveSupport::Logger.new(STDOUT)
     logger.formatter = config.log_formatter
     config.logger = ActiveSupport::TaggedLogging.new(logger)
