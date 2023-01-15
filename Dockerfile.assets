@@ -5,12 +5,17 @@ FROM ${BASEIMAGE} as code
 USER root
 RUN chown root.root -R /usr/src/intercode/public
 
-# Copy into http server
+# Create an nginx snippet here, to keep final image
+# as small as possible.
+RUN node script/genNginxNocache.js > /usr/src/intercode/public/cache.conf
+
+ # Copy into http server
 FROM nginx
 RUN  rm /usr/share/nginx/html/index.*
 COPY --from=code /usr/src/intercode/public /usr/share/nginx/html
 RUN  touch /usr/share/nginx/html/index.html && \
      chmod 644 /usr/share/nginx/html/index.html && \
      chown www-data.root -R /usr/share/nginx/html && \
+     mv  /usr/share/nginx/html/cache.conf /etc/nginx/ && \
      mkdir -p /var/run/nginx
 COPY nginx-assets.conf /etc/nginx/conf.d/default.conf
