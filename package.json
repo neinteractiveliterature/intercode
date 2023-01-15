@@ -121,7 +121,7 @@
     "file-loader": "6.2.0",
     "file-saver": "2.0.5",
     "font-awesome": "4.7.0",
-    "glob": "8.0.3",
+    "glob": "8.1.0",
     "graphiql": "2.2.0",
     "graphql": "16.6.0",
     "graphql-anywhere": "4.2.8",
