@@ -23,6 +23,7 @@ function useLoadEventPageQueryFromParams() {
 }
 
 export default LoadQueryWrapper(useLoadEventPageQueryFromParams, function EventPage({ data }): JSX.Element {
+  const params = useParams<{ eventId: string }>();
   const { myProfile } = useContext(AppRootContext);
   const rateEvent = useRateEvent();
   const { secretFormItems, formResponse } = useSectionizedFormItems(data.convention.event);
@@ -49,7 +50,7 @@ export default LoadQueryWrapper(useLoadEventPageQueryFromParams, function EventP
         <div className="col-md-9">
           <h1>{event.title}</h1>
 
-          <ShortFormEventDetails eventId={event.id} />
+          <ShortFormEventDetails eventId={params.eventId ?? event.id} />
         </div>
 
         <div className="col-md-3">
@@ -59,7 +60,7 @@ export default LoadQueryWrapper(useLoadEventPageQueryFromParams, function EventP
             </div>
           )}
 
-          <EventAdminMenu eventId={event.id} />
+          <EventAdminMenu eventId={params.eventId ?? event.id} />
 
           {secretFormItems.map(
             (item) =>
@@ -88,10 +89,10 @@ export default LoadQueryWrapper(useLoadEventPageQueryFromParams, function EventP
       </div>
 
       <section className="my-4">
-        <RunsSection eventId={event.id} />
+        <RunsSection eventId={params.eventId ?? event.id} />
       </section>
 
-      <LongFormEventDetails eventId={event.id} />
+      <LongFormEventDetails eventId={params.eventId ?? event.id} />
     </>
   );
 });
