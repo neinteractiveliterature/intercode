@@ -1090,8 +1090,10 @@ input ConventionInput {
 type ConventionReports {
   event_provided_tickets: [EventProvidedTicketList!]!
   events_by_choice: [EventWithChoiceCounts!]!
-  ticket_count_by_type_and_payment_amount: [TicketCountByTypeAndPaymentAmount!]!
-  total_revenue: Money!
+  sales_count_by_product_and_payment_amount: [SalesCountByProductAndPaymentAmount!]!
+  sum_revenue(orderStatuses: [OrderStatus!], productIds: [ID!]): Money!
+  ticket_count_by_type_and_payment_amount: [TicketCountByTypeAndPaymentAmount!]! @deprecated(reason: "This only takes ticket sales into account.  Please use the sales_count_by_product_and_payment_amount field instead.")
+  total_revenue: Money! @deprecated(reason: "This only takes ticket sales into account.  Please use the sum_revenue field instead.")
 }
 
 type ConventionsPagination implements PaginationInterface {
@@ -5096,6 +5098,13 @@ input RunInput {
   schedule_note: String
   starts_at: Date
   title_suffix: String
+}
+
+type SalesCountByProductAndPaymentAmount {
+  count: Int!
+  payment_amount: Money!
+  product: Product!
+  status: OrderStatus!
 }
 
 type ScheduledMoneyValue {
