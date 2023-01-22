@@ -218,7 +218,7 @@ Doorkeeper::JWT.configure do
 
     {
       iat: Time.current.utc.to_i,
-      exp: (Time.current + opts[:expires_in].seconds).utc.to_i,
+      exp: (Time.current + (opts[:expires_in]&.seconds || 24.hours)).utc.to_i,
       # @see JWT reserved claims - https://tools.ietf.org/html/draft-jones-json-web-token-07#page-7
       jti: SecureRandom.uuid,
       user: {
