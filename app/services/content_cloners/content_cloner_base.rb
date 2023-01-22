@@ -8,7 +8,7 @@ class ContentCloners::ContentClonerBase
   end
 
   def clone(_convention)
-    raise NotImplementedError, 'Subclasses must implement #clone'
+    raise NotImplementedError, "Subclasses must implement #clone"
   end
 
   private
@@ -16,7 +16,8 @@ class ContentCloners::ContentClonerBase
   def clone_with_id_map(source_scope, destination_scope, &block)
     id_map = {}
     source_scope.find_each do |model|
-      cloned_model = destination_scope.new(model.attributes.symbolize_keys.except(:id, :created_at, :updated_at))
+      cloned_model =
+        destination_scope.new(model.attributes.symbolize_keys.except(:id, :created_at, :updated_at, :image))
       block&.call(model, cloned_model)
       cloned_model.save!
       id_map[model.id] = cloned_model
