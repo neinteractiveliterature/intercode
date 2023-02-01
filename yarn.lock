@@ -12028,6 +12028,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"graphql-ws@npm:5.11.3":
+  version: 5.11.3
+  resolution: "graphql-ws@npm:5.11.3"
+  peerDependencies:
+    graphql: ">=0.11 <=16"
+  checksum: 75ea80702fa027b8d4ff1faba9824b11184fef0946560c535040b79f0f7f56ac7ce42873ea3b34083373ddf3a439cda1e7b7bfae20939ab739330456f4e7776b
+  languageName: node
+  linkType: hard
+
 "graphql@npm:14 - 16, graphql@npm:16.6.0":
   version: 16.6.0
   resolution: "graphql@npm:16.6.0"
@@ -18615,7 +18624,7 @@ __metadata:
     graphql-anywhere: 4.2.8
     graphql-language-service-utils: 2.7.1
     graphql-tag: 2.12.6
-    graphql-ws: 5.11.2
+    graphql-ws: 5.11.3
     history: 5.3.0
     html-to-react: 1.5.0
     husky: 8.0.3
