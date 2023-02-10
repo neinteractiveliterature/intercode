@@ -49,7 +49,7 @@
     "@babel/preset-react": "7.18.6",
     "@babel/register": "7.18.9",
     "@codemirror/highlight": "0.19.8",
-    "@codemirror/lang-html": "6.4.1",
+    "@codemirror/lang-html": "6.4.2",
     "@codemirror/lang-json": "6.0.1",
     "@codemirror/lang-markdown": "6.0.5",
     "@codemirror/language": "6.5.0",
