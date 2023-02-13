@@ -16,20 +16,20 @@ jobs:
       with:
         check-bot: true
     - uses: actions/checkout@v3
-      if: steps.check-user-permission.outputs.check-bot == false
+      if: steps.check-user-permission.outputs.check-bot == 'false'
     - name: Install libvips42
-      if: steps.check-user-permission.outputs.check-bot == false
+      if: steps.check-user-permission.outputs.check-bot == 'false'
       run: sudo apt-get update && sudo apt-get install libvips42
     - name: Set up Ruby
-      if: steps.check-user-permission.outputs.check-bot == false
+      if: steps.check-user-permission.outputs.check-bot == 'false'
       uses: ruby/setup-ruby@v1
       with:
         bundler-cache: true
     - name: Generate GraphQL schema file
-      if: steps.check-user-permission.outputs.check-bot == false
+      if: steps.check-user-permission.outputs.check-bot == 'false'
       run: bin/rails graphql:schema:dump
     - uses: kamilkisiela/graphql-inspector@master
-      if: steps.check-user-permission.outputs.check-bot == false
+      if: steps.check-user-permission.outputs.check-bot == 'false'
       with:
         schema: 'main:schema.graphql'
         approve-label: major
