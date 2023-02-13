@@ -7,7 +7,7 @@ class AcceptEventProposalService < CivilService::Service
 
   # Attributes that are differently named between the event and event_proposal schemas
   # (Attributes that have the same name will be mapped automatically.)
-  EVENT_ATTRIBUTE_MAP = { author: 'authors', participant_communications: 'player_communications' }.freeze
+  EVENT_ATTRIBUTE_MAP = { author: "authors", participant_communications: "player_communications" }.freeze
 
   attr_reader :event_proposal, :event_category
 
@@ -19,10 +19,10 @@ class AcceptEventProposalService < CivilService::Service
   private
 
   def inner_call
-    event = convention.events.new(event_category: event_category, status: 'active')
+    event = convention.events.new(event_category: event_category, status: "active")
     event.assign_default_values_from_form_items(event_form.form_items)
     event.assign_form_response_attributes(event_attributes)
-    event.con_mail_destination ||= 'gms'
+    event.con_mail_destination ||= "gms"
     event.title ||= event_proposal.title # in case the form doesn't include it
     event.length_seconds ||= event_proposal.length_seconds # same deal as title
     event_proposal.images.blobs.each { |blob| event.images.attach(blob) }
@@ -41,7 +41,7 @@ class AcceptEventProposalService < CivilService::Service
       display: true,
       show_email: false,
       receive_con_email: true,
-      receive_signup_email: 'non_waitlist_signups',
+      receive_signup_email: "non_waitlist_signups",
       user_con_profile: event_proposal.owner
     )
   end
@@ -69,7 +69,7 @@ class AcceptEventProposalService < CivilService::Service
   end
 
   def event_form_item_identifiers
-    @event_form_item_identifiers ||= event_form.form_items.pluck(:identifier)
+    @event_form_item_identifiers ||= event_form.form_items.pluck(:identifier).compact
   end
 
   def proposal_form_item_identifiers

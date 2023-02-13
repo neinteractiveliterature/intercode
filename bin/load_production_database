@@ -24,7 +24,7 @@ echo "UPDATE conventions SET domain = regexp_replace(lower(name), '[^a-z0-9]', '
 # echo "UPDATE conventions SET stripe_publishable_key = 'pk_test_uD3hl7sRFOjcbdSG6KaH9olQ', stripe_secret_key = 'sk_test_VRD1WlpRoaPdwhmzRTIoqRrr';" | psql $PG_OPTIONS -U postgres -w intercode_production_tmp
 
 echo 'Dropping intercode_development database'
-dropdb --if-exists $PG_OPTIONS -U postgres -w intercode_development
+dropdb --if-exists $PG_OPTIONS -f -U postgres -w intercode_development
 
 echo 'Recreating intercode_development from production data'
 createdb $PG_OPTIONS -U postgres -w -T intercode_production_tmp intercode_development
