@@ -17,6 +17,11 @@
     {
       "matchPackageNames": ["typescript"],
       "allowedVersions": "!/4.8.4/"
+    },
+    {
+      "matchPackageNames": ["postgres"],
+      "matchManagers": ["dockerfile"],
+      "enabled": false
     }
   ],
   "postUpdateOptions": ["yarnDedupeHighest"]
