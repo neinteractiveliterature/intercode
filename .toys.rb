@@ -131,13 +131,19 @@ tool "pull_production_db" do
   required_arg :database_url
   flag :docker_compose
   flag :include_form_response_changes
+  flag :include_ahoy_data
 
   def run
     puts "Pulling production data"
-    pull_options = (include_form_response_changes ? "" : '--exclude-table-data="form_response_changes"')
-    sh "docker run -i -t --mount type=bind,source=\"#{Dir.pwd}\",target=/out postgres:14 \
-pg_dump --exclude-table-data=\"sessions\" #{pull_options} -v -x --no-owner -Fp \"#{database_url}\" \
+    pull_options = ["--exclude-table-data=sessions"]
+    pull_options << "--exclude-table-data=form_response_changes" unless include_form_response_changes
+    pull_options << "--exclude-table-data=ahoy_events --exclude-table-data=ahoy_visits" unless include_ahoy_data
+    cmd =
+      "docker run -i -t --mount type=bind,source=\"#{Dir.pwd}\",target=/out postgres:14 \
+pg_dump #{pull_options.join(" ")} -v -x --no-owner -Fp \"#{database_url}\" \
 -f /out/intercode_production.sql"
+    puts cmd
+    sh cmd
 
     exec_tool("load_production_db #{docker_compose ? "--docker-compose" : ""}")
   end
