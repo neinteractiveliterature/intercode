@@ -2180,9 +2180,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@dnd-kit/core@npm:6.0.7":
-  version: 6.0.7
-  resolution: "@dnd-kit/core@npm:6.0.7"
+"@dnd-kit/core@npm:6.0.8":
+  version: 6.0.8
+  resolution: "@dnd-kit/core@npm:6.0.8"
   dependencies:
     "@dnd-kit/accessibility": ^3.0.0
     "@dnd-kit/utilities": ^3.2.1
@@ -2190,7 +2190,7 @@ __metadata:
   peerDependencies:
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
-  checksum: f7abe49519da5d60f69bd36ab632ecdedc0372653763065c00b1899f3ed2c1954b5f6ab0bed14790afe11da636b405f8839dc2cad805ef61a3885141f62f9cb1
+  checksum: abe48ff7395f84fd8c15e6c8b13da4df153dc1f1076096d783acd0c25539516c77e4854ea59be6621dde55739cb0df1d62924ad069df3267fe05ad90ef729b2f
   languageName: node
   linkType: hard
 
@@ -18563,7 +18563,7 @@ __metadata:
     "@codemirror/language": 6.6.0
     "@codemirror/state": 6.2.0
     "@codemirror/view": 6.9.1
-    "@dnd-kit/core": 6.0.7
+    "@dnd-kit/core": 6.0.8
     "@dnd-kit/sortable": 7.0.2
     "@dnd-kit/utilities": 3.2.1
     "@emotion/serialize": 1.1.1
