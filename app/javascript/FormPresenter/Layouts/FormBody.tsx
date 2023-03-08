@@ -97,7 +97,7 @@ export default forwardRef<FormBodyImperativeHandle | undefined, FormBodyProps>(f
           }
           return (
             <div className="mb-3" key={item.id}>
-              {caption && <div className="form-label">{caption}</div>}
+              {caption && <div className="form-label" dangerouslySetInnerHTML={{ __html: caption }} />}
               <VisibilityDisclosureCard formItem={item} formTypeIdentifier={formTypeIdentifier}>
                 <FormItemDisplay convention={convention} displayMode="public" formItem={item} value={value} />
               </VisibilityDisclosureCard>
