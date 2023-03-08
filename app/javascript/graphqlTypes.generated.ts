@@ -1017,8 +1017,18 @@ export type ConventionReports = {
   __typename: 'ConventionReports';
   event_provided_tickets: Array<EventProvidedTicketList>;
   events_by_choice: Array<EventWithChoiceCounts>;
+  sales_count_by_product_and_payment_amount: Array<SalesCountByProductAndPaymentAmount>;
+  sum_revenue: Money;
+  /** @deprecated This only takes ticket sales into account.  Please use the sales_count_by_product_and_payment_amount field instead. */
   ticket_count_by_type_and_payment_amount: Array<TicketCountByTypeAndPaymentAmount>;
+  /** @deprecated This only takes ticket sales into account.  Please use the sum_revenue field instead. */
   total_revenue: Money;
+};
+
+
+export type ConventionReportsSum_RevenueArgs = {
+  orderStatuses?: InputMaybe<Array<OrderStatus>>;
+  productIds?: InputMaybe<Array<Scalars['ID']>>;
 };
 
 export type ConventionsPagination = PaginationInterface & {
@@ -4254,6 +4264,14 @@ export type RunInput = {
   schedule_note?: InputMaybe<Scalars['String']>;
   starts_at?: InputMaybe<Scalars['Date']>;
   title_suffix?: InputMaybe<Scalars['String']>;
+};
+
+export type SalesCountByProductAndPaymentAmount = {
+  __typename: 'SalesCountByProductAndPaymentAmount';
+  count: Scalars['Int'];
+  payment_amount: Money;
+  product: Product;
+  status: OrderStatus;
 };
 
 export type ScheduledMoneyValue = {

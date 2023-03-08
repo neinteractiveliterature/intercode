@@ -1,6 +1,14 @@
 # frozen_string_literal: true
 class ImportFormContentService < CivilService::Service
-  DIRECT_PROPERTY_NAMES = %i[item_type identifier admin_description public_description default_value].freeze
+  DIRECT_PROPERTY_NAMES = %i[
+    item_type
+    identifier
+    admin_description
+    public_description
+    default_value
+    visibility
+    writeability
+  ].freeze
 
   attr_reader :form, :content
 
@@ -13,7 +21,7 @@ class ImportFormContentService < CivilService::Service
 
   def inner_call
     ActiveRecord::Base.transaction do
-      logger.info 'Clearing any existing content'
+      logger.info "Clearing any existing content"
       form.form_sections.destroy_all
 
       form.update(title: content[:title])
