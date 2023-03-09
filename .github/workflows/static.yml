@@ -28,6 +28,7 @@ jobs:
         with:
           cache: yarn
       - run: yarn install
+      - run: shopt -s expand_aliases && alias eslint="yarn run eslint"
       - uses: reviewdog/action-eslint@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
