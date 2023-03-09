@@ -28,11 +28,11 @@ jobs:
         with:
           cache: yarn
       - run: yarn install
-      - run: mkdir -p /home/runner/.local/bin && echo "#!/bin/sh\nyarn run eslint $@" > /home/runner/.local/bin/eslint && chmod +x /home/runner/.local/bin/eslint
       - uses: reviewdog/action-eslint@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           eslint_flags: 'src/'
+          tool_name: 'yarn run eslint'
   # pronto:
   #   runs-on: ubuntu-latest
   #   if: github.actor != 'dependabot[bot]'
