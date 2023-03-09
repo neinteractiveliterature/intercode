@@ -1,0 +1,40 @@
+name: Static analysis
+on: [pull_request]
+
+jobs:
+  rubocop:
+    runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]'
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v1
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.0.0
+      - name: rubocop
+        uses: reviewdog/action-rubocop@v2
+        with:
+          rubocop_version: gemfile
+          rubocop_extensions: rubocop-rails:gemfile rubocop-sequel:gemfile rubocop-performance:gemfile prettier:gemfile
+  eslint:
+    name: eslint
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v3
+        with:
+          cache: yarn
+      - run: yarn install
+      - run: mkdir -p /home/runner/.local/bin
+      - run: echo "#!/bin/sh" > /home/runner/.local/bin/eslint
+      - run: echo "yarn run eslint \$@" >> /home/runner/.local/bin/eslint
+      - run: cat /home/runner/.local/bin/eslint
+      - run: chmod +x /home/runner/.local/bin/eslint
+      - run: eslint --version
+      - uses: reviewdog/action-eslint@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          eslint_flags: 'app/javascript test/javascript schema.graphql --ext .js,.jsx,.ts,.tsx,.gql,.graphql'
