@@ -388,7 +388,7 @@ GEM
     orm_adapter (0.5.0)
     ox (2.14.4)
     parallel (1.22.1)
-    parser (3.2.1.0)
+    parser (3.2.1.1)
       ast (~> 2.4.1)
     pg (1.4.5)
     pg_search (2.3.5)
@@ -494,7 +494,7 @@ GEM
       rollbar (>= 2.21, <= 4.0, < 4.0)
       shoryuken (>= 4.0, <= 5.3)
     rouge (3.26.0)
-    rubocop (1.46.0)
+    rubocop (1.48.0)
       json (~> 2.3)
       parallel (~> 1.10)
       parser (>= 3.2.0.0)
@@ -504,7 +504,7 @@ GEM
       rubocop-ast (>= 1.26.0, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 2.4.0, < 3.0)
-    rubocop-ast (1.26.0)
+    rubocop-ast (1.27.0)
       parser (>= 3.2.1.0)
     rubocop-performance (1.11.5)
       rubocop (>= 1.7.0, < 2.0)
@@ -515,7 +515,7 @@ GEM
       rubocop (>= 1.7.0, < 2.0)
     rubocop-sequel (0.3.3)
       rubocop (~> 1.0)
-    ruby-progressbar (1.11.0)
+    ruby-progressbar (1.13.0)
     ruby-statistics (3.0.0)
     ruby-vips (2.1.4)
       ffi (~> 1.12)
@@ -704,7 +704,7 @@ DEPENDENCIES
   reverse_markdown
   rollbar
   rollbar-shoryuken
-  rubocop (= 1.46.0)
+  rubocop (= 1.48.0)
   rubocop-performance
   rubocop-rails
   rubocop-sequel
