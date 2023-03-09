@@ -30,7 +30,7 @@ jobs:
       - run: yarn install
       - run: mkdir -p /home/runner/.local/bin
       - run: echo "#!/bin/sh" > /home/runner/.local/bin/eslint
-      - run: echo "yarn run eslint $@" >> /home/runner/.local/bin/eslint
+      - run: echo "yarn run eslint \\$@" >> /home/runner/.local/bin/eslint
       - run: cat /home/runner/.local/bin/eslint
       - run: chmod +x /home/runner/.local/bin/eslint
       - run: eslint --version
