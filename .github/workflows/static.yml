@@ -15,15 +15,19 @@ jobs:
         uses: reviewdog/action-rubocop@v2
         with:
           rubocop_version: gemfile
-          rubocop_extensions: rubocop-rails:gemfile rubocop-sequel:gemfile rubocop-performance:gemfile
+          rubocop_extensions: rubocop-rails:gemfile rubocop-sequel:gemfile rubocop-performance:gemfile prettier:gemfile
   eslint:
-    name: runner / eslint
+    name: eslint
     runs-on: ubuntu-latest
     permissions:
       contents: read
       pull-requests: write
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-node@v3
+        with:
+          cache: yarn
+      - run: yarn install
       - uses: reviewdog/action-eslint@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
