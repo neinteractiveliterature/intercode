@@ -31,6 +31,7 @@ jobs:
       - run: mkdir -p /home/runner/.local/bin
       - run: echo "#!/bin/sh\nyarn run eslint $@" > /home/runner/.local/bin/eslint
       - run: chmod +x /home/runner/.local/bin/eslint
+      - run: eslint --version
       - uses: reviewdog/action-eslint@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
