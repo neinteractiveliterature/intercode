@@ -28,7 +28,7 @@ jobs:
         with:
           cache: yarn
       - run: yarn install
-      - run: echo $PATH
+      - run: echo "#!/bin/sh\nyarn run eslint $@" > /home/runner/.local/bin/eslint && chmod +x /home/runner/.local/bin/eslint
       - uses: reviewdog/action-eslint@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
