@@ -1,0 +1,59 @@
+name: Static analysis
+on: [pull_request]
+
+jobs:
+  rubocop:
+    runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]'
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v1
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.0.0
+      - name: rubocop
+        uses: reviewdog/action-rubocop@v2
+        with:
+          rubocop_version: gemfile
+          rubocop_extensions: rubocop-rails:gemfile rubocop-sequel:gemfile rubocop-performance:gemfile
+  eslint:
+    name: runner / eslint
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v2
+      - uses: reviewdog/action-eslint@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          eslint_flags: 'src/'
+  # pronto:
+  #   runs-on: ubuntu-latest
+  #   if: github.actor != 'dependabot[bot]'
+
+  #   steps:
+  #     - uses: actions/checkout@master
+  #     - name: Install libvips42
+  #       run: sudo apt-get update && sudo apt-get install libvips42
+  #     - run: git fetch --prune --unshallow
+  #     - uses: ruby/setup-ruby@v1
+  #     - uses: actions/setup-node@v3
+  #       with:
+  #         cache: yarn
+  #     - name: Set up gem cache
+  #       uses: actions/cache@v3
+  #       with:
+  #         path: /home/runner/.rubies/ruby-2.7.3/lib/ruby/gems/2.7.0
+  #         key: ${{ runner.os }}-pronto-gems-${{ github.ref }}-${{ github.sha }}
+  #         restore-keys: |
+  #           ${{ runner.os }}-pronto-gems-${{ github.ref }}-
+  #           ${{ runner.os }}-pronto-gems-
+  #     - run: gem install --no-document unicode-display_width -v 1.6.1
+  #     - run: gem install --no-document rubocop
+  #     - run: gem install --no-document pronto pronto-rubocop pronto-eslint rubocop-performance rubocop-rails rubocop-sequel prettier
+  #     - run: yarn install
+  #     - env:
+  #         PRONTO_PULL_REQUEST_ID: ${{ github.event.pull_request.number }}
+  #         PRONTO_GITHUB_ACCESS_TOKEN: "${{ github.token }}"
+  #       run: pronto run -f github_status_combined github_pr_review -c origin/${{ github.base_ref }}
