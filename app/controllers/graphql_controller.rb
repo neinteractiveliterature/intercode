@@ -19,6 +19,13 @@ class GraphqlController < ApplicationController
       @values = values
     end
 
+    def key?(key)
+      key = key.to_sym
+      return true if key == :controller
+      return true if METHODS.key?(key)
+      @values.key?(key)
+    end
+
     def [](key)
       key = key.to_sym
       if key == :controller
@@ -55,7 +62,7 @@ class GraphqlController < ApplicationController
       result = clean_backtraces(execute_from_params(params))
       render json: result
 
-      raise ActiveRecord::Rollback if result['errors'].present?
+      raise ActiveRecord::Rollback if result["errors"].present?
     end
   end
 
@@ -69,14 +76,14 @@ class GraphqlController < ApplicationController
   end
 
   def clean_backtraces(result)
-    return result if result['errors'].blank?
+    return result if result["errors"].blank?
     return result if Rails.configuration.consider_all_requests_local
 
     result.merge(
-      'errors' =>
-        result['errors'].map do |error|
-          next error if error['extensions'].blank?
-          error.merge('extensions' => error['extensions'].except('backtrace'))
+      "errors" =>
+        result["errors"].map do |error|
+          next error if error["extensions"].blank?
+          error.merge("extensions" => error["extensions"].except("backtrace"))
         end
     )
   end
