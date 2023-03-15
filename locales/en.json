@@ -420,7 +420,7 @@
       "editPageTitle": "Editing signup for “{{ name }}” - {{ eventTitle }}",
       "editTitle": "Edit signup",
       "emailFilters": {
-        "confirmed": "Include confirmed",
+        "confirmedBucket": "Include {{ bucketName }} (confirmed)",
         "nobody": "Nobody",
         "teamMembers": "Include {{ teamMemberName }}",
         "waitlisted": "Include waitlisted"
