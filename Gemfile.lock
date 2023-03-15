@@ -395,7 +395,7 @@ GEM
       syntax_tree (>= 2.7.1)
       syntax_tree-haml (>= 1.1.0)
       syntax_tree-rbs (>= 0.2.0)
-    prettier_print (0.1.0)
+    prettier_print (1.2.1)
     promise.rb (0.7.4)
     pry (0.14.1)
       coderay (~> 1.1)
@@ -459,7 +459,7 @@ GEM
     rb-fsevent (0.11.0)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
-    rbs (2.0.0)
+    rbs (3.0.4)
     rbtrace (0.4.14)
       ffi (>= 1.0.6)
       msgpack (>= 0.4.3)
@@ -572,13 +572,13 @@ GEM
       stripe (> 5, < 6)
     strscan (3.0.6)
     strscan (3.0.6-java)
-    syntax_tree (3.3.0)
-      prettier_print
+    syntax_tree (6.0.2)
+      prettier_print (>= 1.2.0)
     syntax_tree-haml (1.3.1)
       haml (>= 5.2)
       prettier_print
       syntax_tree (>= 2.0.1)
-    syntax_tree-rbs (0.5.0)
+    syntax_tree-rbs (1.0.0)
       prettier_print
       rbs
       syntax_tree (>= 2.0.1)
