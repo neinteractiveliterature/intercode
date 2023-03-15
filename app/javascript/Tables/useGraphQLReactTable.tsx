@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { QueryResult, QueryHookOptions, ApolloQueryResult, ApolloError } from '@apollo/client';
+import { QueryResult, QueryHookOptions, ApolloQueryResult, ApolloError, OperationVariables } from '@apollo/client';
 import { Filters, SortingRule } from 'react-table';
 
 import { reactTableFiltersToTableResultsFilters, reactTableSortToTableResultsSort } from './TableUtils';
@@ -13,11 +13,14 @@ export type GraphQLReactTableVariables = {
   sort?: SortInput | SortInput[] | null;
 };
 
-type QueryResultWithData<QueryData, Variables> = Omit<QueryResult<QueryData, Variables>, 'data'> & {
+type QueryResultWithData<QueryData, Variables extends OperationVariables> = Omit<
+  QueryResult<QueryData, Variables>,
+  'data'
+> & {
   data: NonNullable<QueryResult<QueryData, Variables>['data']>;
 };
 
-function queryResultHasData<QueryData, Variables>(
+function queryResultHasData<QueryData, Variables extends OperationVariables>(
   queryResult: QueryResult<QueryData, Variables>,
 ): queryResult is QueryResultWithData<QueryData, Variables> {
   return queryResult.data != null;
