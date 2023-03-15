@@ -1,4 +1,4 @@
-import { ApolloError, QueryHookOptions, QueryResult } from '@apollo/client';
+import { ApolloError, OperationVariables, QueryHookOptions, QueryResult } from '@apollo/client';
 import * as React from 'react';
 import { Params, useParams } from 'react-router-dom';
 import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
@@ -8,7 +8,7 @@ import FourOhFourPage from './FourOhFourPage';
 export function LoadQueryFromParamsWrapper<
   ParamsOrKey extends string | Record<string, string | undefined>,
   TData,
-  TVariables,
+  TVariables extends OperationVariables,
   TProps,
 >(
   useLoadData: (baseOptions?: QueryHookOptions<TData, TVariables>) => QueryResult<TData>,
@@ -48,7 +48,7 @@ export function LoadQueryFromParamsWrapper<
   return Wrapper;
 }
 
-export function LoadQueryWithVariablesWrapper<TData, TVariables, TProps>(
+export function LoadQueryWithVariablesWrapper<TData, TVariables extends OperationVariables, TProps>(
   useLoadData: (baseOptions?: QueryHookOptions<TData, TVariables>) => QueryResult<TData>,
   getVariables: (props: TProps) => TVariables,
   WrappedComponent: React.ComponentType<TProps & { data: TData }>,
@@ -83,8 +83,8 @@ export function LoadQueryWithVariablesWrapper<TData, TVariables, TProps>(
   return Wrapper;
 }
 
-export function LoadSingleValueFromCollectionWrapper<TData, TValue, TProps>(
-  useLoadData: (baseOptions?: QueryHookOptions<TData, unknown>) => QueryResult<TData>,
+export function LoadSingleValueFromCollectionWrapper<TData, TVariables extends OperationVariables, TValue, TProps>(
+  useLoadData: (baseOptions?: QueryHookOptions<TData, TVariables>) => QueryResult<TData, TVariables>,
   getValue: (data: TData, id: string) => TValue | undefined,
   WrappedComponent: React.ComponentType<TProps & { value: TValue; data: TData }>,
 ): (props: TProps) => JSX.Element {
