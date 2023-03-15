@@ -1,16 +1,16 @@
-ENV['RAILS_ENV'] = 'test'
-require 'simplecov'
+ENV["RAILS_ENV"] = "test"
+require "simplecov"
 SimpleCov.start
 
-require File.expand_path('../../config/environment', __FILE__)
-require 'rails/test_help'
+require File.expand_path("../../config/environment", __FILE__)
+require "rails/test_help"
 
-require 'minitest/reporters'
-if ENV['CI'].present?
+require "minitest/reporters"
+if ENV["CI"].present?
   Minitest::Reporters.use!(
     [
       Minitest::Reporters::DefaultReporter.new,
-      Minitest::Reporters::HtmlReporter.new(output_filename: 'minitest-report.html'),
+      Minitest::Reporters::HtmlReporter.new(output_filename: "minitest-report.html"),
       Minitest::Reporters::JUnitReporter.new
     ],
     ENV,
@@ -34,7 +34,7 @@ class ActiveSupport::TestCase
         CmsRenderingContext.new(
           cms_parent: user_con_profile&.convention,
           controller: nil,
-          timezone: ActiveSupport::TimeZone['UTC']
+          timezone: ActiveSupport::TimeZone["UTC"]
         )
 
       new(
@@ -45,13 +45,13 @@ class ActiveSupport::TestCase
         cms_rendering_context: rendering_context,
         cadmus_renderer: rendering_context.cadmus_renderer,
         verified_request: true,
-        timezone_for_request: ActiveSupport::TimeZone['UTC'],
+        timezone_for_request: ActiveSupport::TimeZone["UTC"],
         **attrs
       )
     end
 
     attr_reader :attrs
-    delegate :[], :[]=, :fetch, :delete, to: :attrs
+    delegate :[], :[]=, :key?, :fetch, :delete, to: :attrs
 
     def initialize(**attrs)
       @attrs = attrs.with_indifferent_access
@@ -69,22 +69,22 @@ class ActiveSupport::TestCase
 
     def initialize(result)
       @result = result
-      @errors = result['errors']
-      super(errors.map { |error| error['message'] }.join(', '))
+      @errors = result["errors"]
+      super(errors.map { |error| error["message"] }.join(", "))
     end
 
     def backtrace
-      error_with_backtrace = errors.find { |error| error['extensions'] && error['extensions']['backtrace'].present? }
+      error_with_backtrace = errors.find { |error| error["extensions"] && error["extensions"]["backtrace"].present? }
       return super unless error_with_backtrace
 
-      error_with_backtrace['extensions']['backtrace']
+      error_with_backtrace["extensions"]["backtrace"]
     end
   end
 
   def execute_graphql_query(query, user_con_profile: nil, context_attrs: {}, **options)
     context = TestGraphqlContext.with_user_con_profile(user_con_profile, **context_attrs)
     result = IntercodeSchema.execute(query, context: context, **options)
-    raise GraphqlTestExecutionError.new(result) if result['errors'].present?
+    raise GraphqlTestExecutionError.new(result) if result["errors"].present?
     result
   end
 end
@@ -94,7 +94,7 @@ class ActionController::TestCase
 
   def set_convention(convention) # rubocop:disable Naming/AccessorMethodName
     @request.host = convention.domain
-    @controller.request.env['intercode.convention'] = convention
+    @controller.request.env["intercode.convention"] = convention
   end
 end
 
