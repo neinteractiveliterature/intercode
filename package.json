@@ -210,7 +210,7 @@
     "@types/cssnano": "5.0.0",
     "@types/events": "3.0.0",
     "@types/history": "4.7.11",
-    "@types/jest": "29.4.2",
+    "@types/jest": "29.4.3",
     "@types/node": "18.15.3",
     "@types/punycode": "2.1.0",
     "@types/rails__activestorage": "7.0.1",
