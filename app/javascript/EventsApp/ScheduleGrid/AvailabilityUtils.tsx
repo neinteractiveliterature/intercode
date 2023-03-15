@@ -4,6 +4,9 @@ import { Trans } from 'react-i18next';
 import SignupCountData from '../SignupCountData';
 import { ScheduleEvent } from './Schedule';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type TI = any;
+
 export type ScheduleEventAvailability = {
   totalSlots: number;
   signupCount: number;
@@ -44,7 +47,7 @@ export function describeAvailability(event: ScheduleEvent, signupCountData: Sign
         <strong>Full</strong>
         <span className="text-muted">
           {' ('}
-          {{ count: event.registration_policy?.total_slots ?? 0 }}
+          {{ count: event.registration_policy?.total_slots ?? 0 } as TI}
           {' slots)'}
         </span>
       </Trans>

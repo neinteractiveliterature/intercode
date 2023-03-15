@@ -14,6 +14,9 @@ import {
   useWithdrawSignupRequestMutation,
 } from './mutations.generated';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type TI = any;
+
 function updateCacheAfterSignup(
   cache: ApolloCache<unknown>,
   event: EventPageQueryData['convention']['event'],
@@ -123,7 +126,7 @@ function EventPageRunCard({ event, run, myProfile, currentAbility }: EventPageRu
               </strong>{' '}
               If the request is accepted, you’ll automatically be withdrawn from this event.
             </p>
-            <p className="mb-0">Are you sure you want to withdraw from {{ eventTitle: event.title }}?</p>
+            <p className="mb-0">Are you sure you want to withdraw from {{ eventTitle: event.title } as TI}?</p>
           </Trans>
         ),
         action: () => withdrawMySignupMutate({ variables: { runId: run.id } }),

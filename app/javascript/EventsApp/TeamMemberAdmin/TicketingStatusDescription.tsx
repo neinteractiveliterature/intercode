@@ -2,6 +2,9 @@ import { Trans, useTranslation } from 'react-i18next';
 import { Convention, Event, TicketType, UserConProfile } from '../../graphqlTypes.generated';
 import humanize from '../../humanize';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type TI = any;
+
 export type TicketingStatusDescriptionProps = {
   userConProfile: Pick<UserConProfile, 'name_without_nickname'> & {
     ticket?: null | {
@@ -55,7 +58,7 @@ function TicketingStatusDescription({ userConProfile, convention }: TicketingSta
         {{ name: userConProfile.name_without_nickname }}
         <span className="text-danger">
           {' '}
-          has no {{ ticketName }} for {{ conventionName: convention.name }}.
+          has no {{ ticketName } as TI} for {{ conventionName: convention.name } as TI}.
         </span>{' '}
         Without a {{ ticketName }}, users cannot sign up for events at the convention.
       </Trans>
