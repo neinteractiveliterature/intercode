@@ -433,7 +433,7 @@
       "editPageTitle": "",
       "editTitle": "",
       "emailFilters": {
-        "confirmed": "",
+        "confirmedBucket": "Include {{ bucketName }} (confirmed)",
         "nobody": "",
         "teamMembers": "",
         "waitlisted": ""
