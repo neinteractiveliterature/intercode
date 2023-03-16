@@ -1,45 +1,8 @@
 if ENV["CLOUDWATCH_LOG_GROUP"]
-  # rubocop:disable Naming/ClassAndModuleCamelCase
-  # rubocop:disable Lint/SuppressedException
-  # Patch the CloudWatchLogger deliverer to not log messages about itself logging messages
-  module CloudWatchLogger
-    module Client
-      class AWS_SDK
-        class DeliveryThread < Thread
-          def connect!(opts = {})
-            # This is the only actually changed line: I added logger: nil
-            args = { http_open_timeout: opts[:open_timeout], http_read_timeout: opts[:read_timeout], logger: nil }
-            args[:region] = @opts[:region] if @opts[:region]
-            args.merge(
-              if @credentials.key?(:access_key_id)
-                { access_key_id: @credentials[:access_key_id], secret_access_key: @credentials[:secret_access_key] }
-              else
-                {}
-              end
-            )
-
-            @client = Aws::CloudWatchLogs::Client.new(args)
-            begin
-              @client.create_log_stream(log_group_name: @log_group_name, log_stream_name: @log_stream_name)
-            rescue Aws::CloudWatchLogs::Errors::ResourceNotFoundException
-              @client.create_log_group(log_group_name: @log_group_name)
-              retry
-            rescue Aws::CloudWatchLogs::Errors::ResourceAlreadyExistsException,
-                   Aws::CloudWatchLogs::Errors::AccessDeniedException
-            end
-          end
-        end
-      end
-    end
-  end
-
-  # rubocop:enable Naming/ClassAndModuleCamelCase
-  # rubocop:enable Lint/SuppressedException
-
   Ahoy.logger = nil
 
-  dyno_id = ENV["DYNO"]
-  dyno_type = dyno_id ? dyno_id.split(".").first : nil
+  dyno_id = ENV.fetch("DYNO", nil)
+  dyno_type = dyno_id&.split(".")&.first
 
   # Adapted from https://github.com/liefery-it-legacy/loggery-gem
   class ShoryukenJSONLogging
@@ -66,8 +29,8 @@ if ENV["CLOUDWATCH_LOG_GROUP"]
     private
 
     def build_metadata(queue, body)
-      dyno_id = ENV["DYNO"]
-      dyno_type = dyno_id ? dyno_id.split(".").first : nil
+      dyno_id = ENV.fetch("DYNO", nil)
+      dyno_type = dyno_id&.split(".")&.first
 
       {
         jid: body["job_id"],
@@ -164,7 +127,7 @@ if ENV["CLOUDWATCH_LOG_GROUP"]
       {},
       ENV["CLOUDWATCH_LOG_GROUP"],
       dyno_type || ENV["CLOUDWATCH_LOG_STREAM_NAME"] || "intercode",
-      { format: :json }
+      { format: :json, logger: nil }
     )
   Rails.application.config.logger.extend(ActiveSupport::Logger.broadcast(cloudwatch_logger))
 end
