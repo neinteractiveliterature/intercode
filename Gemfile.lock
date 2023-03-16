@@ -186,7 +186,7 @@ GEM
     crass (1.0.6)
     dalli (3.2.4)
     dante (0.2.0)
-    dead_end (1.1.7)
+    dead_end (4.0.0)
     debug (1.1.0)
       irb
       reline (>= 0.2.7)
