@@ -568,7 +568,7 @@ GEM
       activesupport (>= 5.2)
       sprockets (>= 3.0.0)
     stackprof (0.2.17)
-    stripe (5.38.0)
+    stripe (5.55.0)
     stripe-ruby-mock (3.1.0.rc3)
       dante (>= 0.2.0)
       multi_json (~> 1.0)
