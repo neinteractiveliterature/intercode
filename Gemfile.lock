@@ -241,7 +241,7 @@ GEM
     errbase (0.2.2)
     erubi (1.12.0)
     erubis (2.7.0)
-    eu_central_bank (1.6.1)
+    eu_central_bank (1.7.0)
       money (~> 6.13, >= 6.13.6)
       nokogiri (~> 1.9)
     excon (0.93.1)
