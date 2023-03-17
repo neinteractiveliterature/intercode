@@ -483,7 +483,7 @@ GEM
     reverse_markdown (2.1.1)
       nokogiri
     rexml (3.2.5)
-    rollbar (3.2.0)
+    rollbar (3.4.0)
     rollbar-shoryuken (1.1.0)
       aws-sdk-sqs (~> 1.20, <= 2.0)
       ox (~> 2.14)
