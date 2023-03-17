@@ -107,6 +107,8 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
+      - name: Upgrade postgres
+        run: sudo sh /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh && sudo apt update && sudo apt install postgresql-15
       - name: Database setup
         run: bundle exec rails db:create db:migrate
       - name: Run tests
