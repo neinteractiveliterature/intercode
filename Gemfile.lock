@@ -168,7 +168,7 @@ GEM
     backport (1.2.0)
     bcrypt (3.1.18)
     bcrypt (3.1.18-java)
-    benchmark (0.2.0)
+    benchmark (0.2.1)
     benchmark-ips (2.10.0)
     bootsnap (1.16.0)
       msgpack (~> 1.2)
@@ -537,7 +537,7 @@ GEM
     skylight (5.3.4)
       activesupport (>= 5.2.0)
     slop (3.6.0)
-    solargraph (0.47.2)
+    solargraph (0.48.0)
       backport (~> 1.2)
       benchmark
       bundler (>= 1.17.2)
