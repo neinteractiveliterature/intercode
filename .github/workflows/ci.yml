@@ -101,14 +101,16 @@ jobs:
           - 5432:5432
     steps:
       - uses: actions/checkout@v3
+      - name: Enable PGDG postgres apt source
+        run: yes | sudo sh /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh
+      - name: Upgrade postgres
+        run: sudo apt update && sudo apt install postgresql-15
       - name: Install libvips42
-        run: sudo apt-get update && sudo apt-get install libvips42
+        run: sudo apt install libvips42
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-      - name: Upgrade postgres
-        run: sudo sh /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh && sudo apt update && sudo apt install postgresql-15
       - name: Database setup
         run: bundle exec rails db:create db:migrate
       - name: Run tests
