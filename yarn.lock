@@ -13922,9 +13922,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-html-reporter@npm:3.7.0":
-  version: 3.7.0
-  resolution: "jest-html-reporter@npm:3.7.0"
+"jest-html-reporter@npm:3.7.1":
+  version: 3.7.1
+  resolution: "jest-html-reporter@npm:3.7.1"
   dependencies:
     "@babel/core": ^7.9.0
     "@babel/preset-env": ^7.8.7
@@ -13939,8 +13939,8 @@ __metadata:
     xmlbuilder: 15.0.0
   peerDependencies:
     jest: 19.x - 29.x
-    typescript: ^3.7.x || ^4.3.x
-  checksum: 4e9e03e93cd757a8cb263acfe90616a68ffc45155fdd92d4512414f995fe6cda4adb418c38df47406df2e772195e8d5b56f64b3be2b077dadc49b917e83d61e1
+    typescript: ^3.7.x || ^4.3.x || ^5.x
+  checksum: c12193bfec3ae3bacf7dd7ab20b57b999bd535c0c2c277cc3a918f4e9e6220ac0e7c2b546271a14203f3bb28e4629eabb2d3ef443c4d9e4a77b846c8b5b88e5b
   languageName: node
   linkType: hard
 
@@ -18831,7 +18831,7 @@ __metadata:
     i18next-parser: 7.7.0
     jest: 29.5.0
     jest-environment-jsdom: 29.5.0
-    jest-html-reporter: 3.7.0
+    jest-html-reporter: 3.7.1
     jest-junit: 15.0.0
     jest-prop-type-error: 1.1.0
     js-search: 2.0.0
