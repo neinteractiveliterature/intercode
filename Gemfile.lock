@@ -305,7 +305,7 @@ GEM
     jmespath (1.6.2)
     json (2.6.3)
     json (2.6.3-java)
-    jwt (2.5.0)
+    jwt (2.7.0)
     kramdown (2.4.0)
       rexml
     kramdown-parser-gfm (1.1.0)
@@ -594,9 +594,9 @@ GEM
     tilt (2.1.0)
     timeout (0.3.2)
     tins (1.20.2)
-    twilio-ruby (5.74.5)
+    twilio-ruby (5.75.0)
       faraday (>= 0.9, < 3.0)
-      jwt (>= 1.5, <= 2.6)
+      jwt (>= 1.5, < 3.0)
       nokogiri (>= 1.6, < 2.0)
     typeprof (0.21.7)
       rbs (>= 1.8.1)
@@ -720,7 +720,7 @@ DEPENDENCIES
   syntax_tree-haml
   syntax_tree-rbs
   term-ansicolor
-  twilio-ruby (~> 5.74.0)
+  twilio-ruby (~> 5.75.0)
   typeprof
   tzinfo-data
   webrick
