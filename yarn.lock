@@ -3234,11 +3234,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphiql/react@npm:^0.17.0":
-  version: 0.17.0
-  resolution: "@graphiql/react@npm:0.17.0"
+"@graphiql/react@npm:^0.17.1":
+  version: 0.17.1
+  resolution: "@graphiql/react@npm:0.17.1"
   dependencies:
-    "@graphiql/toolkit": ^0.8.2
+    "@graphiql/toolkit": ^0.8.3
     "@reach/combobox": ^0.17.0
     "@reach/dialog": ^0.17.0
     "@reach/listbox": ^0.17.0
@@ -3247,20 +3247,20 @@ __metadata:
     "@reach/visually-hidden": ^0.17.0
     clsx: ^1.2.1
     codemirror: ^5.65.3
-    codemirror-graphql: ^2.0.4
+    codemirror-graphql: ^2.0.5
     copy-to-clipboard: ^3.2.0
-    graphql-language-service: ^5.1.2
+    graphql-language-service: ^5.1.3
     markdown-it: ^12.2.0
     set-value: ^4.1.0
   peerDependencies:
     graphql: ^15.5.0 || ^16.0.0
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: 2c9eeb864f7cf910a271babe226eaeba691888576c53fa11dd593ede9c7442143543f9e40e2a890e8cf38731571f1e7a3f61b933a9827322fa98541fdaccf547
+  checksum: 6fc64ed719af7e58991ab1bca73d1e6684d75299d9de1099b96b2834755656421fb81d70f6cda931abe045f4bad0392f70089ed04362b33c6722d52d029cd3ee
   languageName: node
   linkType: hard
 
-"@graphiql/toolkit@npm:0.8.3, @graphiql/toolkit@npm:^0.8.2":
+"@graphiql/toolkit@npm:0.8.3, @graphiql/toolkit@npm:^0.8.3":
   version: 0.8.3
   resolution: "@graphiql/toolkit@npm:0.8.3"
   dependencies:
@@ -8613,16 +8613,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"codemirror-graphql@npm:^2.0.4":
-  version: 2.0.4
-  resolution: "codemirror-graphql@npm:2.0.4"
+"codemirror-graphql@npm:^2.0.5":
+  version: 2.0.5
+  resolution: "codemirror-graphql@npm:2.0.5"
   dependencies:
-    graphql-language-service: 5.1.2
+    graphql-language-service: 5.1.3
   peerDependencies:
     "@codemirror/language": 6.0.0
     codemirror: ^5.65.3
     graphql: ^15.5.0 || ^16.0.0
-  checksum: 56bf443cab375abbb00dfaff3c7378a3dcded442463b9c48fb7368c3b9cacf5773939f8b6b261581f63e1ff6029278df603d7bb4a938d5b346f85f6c9bbe20b6
+  checksum: c4ecb481ae36c1f938f63cea4292da0c7f2e61f0159bb2ce31e1fc193b17c49ab652a3922ac02f1fd5d316aadaf68f6a39f6cda8c386c043bb7960ae22e4acae
   languageName: node
   linkType: hard
 
@@ -12017,20 +12017,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphiql@npm:2.4.0":
-  version: 2.4.0
-  resolution: "graphiql@npm:2.4.0"
+"graphiql@npm:2.4.1":
+  version: 2.4.1
+  resolution: "graphiql@npm:2.4.1"
   dependencies:
-    "@graphiql/react": ^0.17.0
-    "@graphiql/toolkit": ^0.8.2
-    entities: ^2.0.0
-    graphql-language-service: ^5.1.2
+    "@graphiql/react": ^0.17.1
+    "@graphiql/toolkit": ^0.8.3
+    graphql-language-service: ^5.1.3
     markdown-it: ^12.2.0
   peerDependencies:
     graphql: ^15.5.0 || ^16.0.0
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: b6427ce6788aa714f6ab1fd6262c89a2f3b151dc9e8337fbf288ab1adbfb6fce25c8e311fbe4ea1c086114660523738dcce5c9b38719f0c34e1ad9ed5a482185
+  checksum: 92a72cfb18c0ee44e364e9fcb1223d8f553bfa1d616b727bc17b4d596cd4cd90d4a8288d7e6e6a9ae3321a5c536a97e2627a06e3a98e0bc66be379540fbd8d95
   languageName: node
   linkType: hard
 
@@ -12108,9 +12107,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-language-service@npm:5.1.2, graphql-language-service@npm:^5.1.2":
-  version: 5.1.2
-  resolution: "graphql-language-service@npm:5.1.2"
+"graphql-language-service@npm:5.1.3, graphql-language-service@npm:^5.1.3":
+  version: 5.1.3
+  resolution: "graphql-language-service@npm:5.1.3"
   dependencies:
     nullthrows: ^1.0.0
     vscode-languageserver-types: ^3.17.1
@@ -12118,7 +12117,7 @@ __metadata:
     graphql: ^15.5.0 || ^16.0.0
   bin:
     graphql: dist/temp-bin.js
-  checksum: 23551077017db9f57f17e73472145931db48b091d44ceeaa789bd69845b2ed48b1e9b8604319564b755788e6870eca93732a597bcd70ffcaf273f7970dfc7e68
+  checksum: 6112d39f7d7eebfe3ac631adf61f87613ec204edb3e5289a66b463f5f1225ace1be135a7faa2f335c28f874c3178e801c5b384a9a93e6a3c3c6a936a09061136
   languageName: node
   linkType: hard
 
@@ -18818,7 +18817,7 @@ __metadata:
     file-saver: 2.0.5
     font-awesome: 4.7.0
     glob: 9.3.2
-    graphiql: 2.4.0
+    graphiql: 2.4.1
     graphql: 16.6.0
     graphql-anywhere: 4.2.8
     graphql-language-service-utils: 2.7.1
