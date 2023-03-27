@@ -2002,9 +2002,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/lang-html@npm:6.4.2, @codemirror/lang-html@npm:^6.0, @codemirror/lang-html@npm:^6.0.0":
-  version: 6.4.2
-  resolution: "@codemirror/lang-html@npm:6.4.2"
+"@codemirror/lang-html@npm:6.4.3, @codemirror/lang-html@npm:^6.0, @codemirror/lang-html@npm:^6.0.0":
+  version: 6.4.3
+  resolution: "@codemirror/lang-html@npm:6.4.3"
   dependencies:
     "@codemirror/autocomplete": ^6.0.0
     "@codemirror/lang-css": ^6.0.0
@@ -2015,7 +2015,7 @@ __metadata:
     "@lezer/common": ^1.0.0
     "@lezer/css": ^1.1.0
     "@lezer/html": ^1.3.0
-  checksum: 10eebf44f275867c9916639f55610214c305d27a8a8545c3fa2d9495cbac33eb9f8751fc6b78e83d957c49a4b446bbee959bdf3eb497e88a05796aca02ed773b
+  checksum: 6177d19147580964ecd6910ae951201929a96e63f4f0e624c3138e2805fa87ec6d6d952a3a888c5a52af78b6dd6d04d7d8c76c6a9cd65b1921dc467b5dbaea72
   languageName: node
   linkType: hard
 
@@ -18701,7 +18701,7 @@ __metadata:
     "@babel/register": 7.21.0
     "@babel/runtime": 7.21.0
     "@codemirror/highlight": 0.19.8
-    "@codemirror/lang-html": 6.4.2
+    "@codemirror/lang-html": 6.4.3
     "@codemirror/lang-json": 6.0.1
     "@codemirror/lang-markdown": 6.1.0
     "@codemirror/language": 6.6.0
