@@ -250,7 +250,7 @@
     "ts-node": "10.9.1",
     "typescript": "5.0.3",
     "webpack-cli": "5.0.1",
-    "webpack-dev-server": "4.13.1"
+    "webpack-dev-server": "4.13.2"
   },
   "resolutions": {
     "@typescript-eslint/parser": "5.57.0"
