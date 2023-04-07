@@ -12548,14 +12548,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"html-to-react@npm:1.5.0":
-  version: 1.5.0
-  resolution: "html-to-react@npm:1.5.0"
+"html-to-react@npm:1.5.1":
+  version: 1.5.1
+  resolution: "html-to-react@npm:1.5.1"
   dependencies:
     domhandler: ^5.0
     htmlparser2: ^8.0
     lodash.camelcase: ^4.3.0
-  checksum: ed1d8219101e352448833d7a53bbcbedf216a738e857e24f3f85c6818abbae84237a728afdd3a91bc33b615c9f17367a1bcdfa00037479b95887a1b23966976f
+    react: ^18.0
+  checksum: 8fc6f4c0355be2e5cbd11a39de7795657e3cf9be45cdd7d35ace03ceffe62b884ce246e4831df9a7cfe1bdef93242d728ded2b7165b37d7f4393f0e4158f2f04
   languageName: node
   linkType: hard
 
@@ -18067,7 +18068,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:18.2.0":
+"react@npm:18.2.0, react@npm:^18.0":
   version: 18.2.0
   resolution: "react@npm:18.2.0"
   dependencies:
@@ -18839,7 +18840,7 @@ __metadata:
     graphql-tag: 2.12.6
     graphql-ws: 5.12.1
     history: 5.3.0
-    html-to-react: 1.5.0
+    html-to-react: 1.5.1
     husky: 8.0.3
     i18next: 22.4.14
     i18next-intervalplural-postprocessor: 3.0.0
