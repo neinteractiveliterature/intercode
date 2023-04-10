@@ -11,7 +11,7 @@ type Ability {
   can_create_pages: Boolean!
   can_create_tickets: Boolean!
   can_create_user_con_profiles: Boolean!
-  can_delete_event(eventId: ID): Boolean!
+  can_delete_event(eventId: ID): Boolean! @deprecated(reason: "Deleting events is never allowed; this always returns false")
   can_delete_event_proposal(eventProposalId: ID): Boolean!
   can_delete_ticket(ticketId: ID): Boolean!
   can_delete_user_con_profile(userConProfileId: ID): Boolean!

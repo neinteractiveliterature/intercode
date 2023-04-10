@@ -35,6 +35,7 @@ export type Ability = {
   can_create_pages: Scalars['Boolean'];
   can_create_tickets: Scalars['Boolean'];
   can_create_user_con_profiles: Scalars['Boolean'];
+  /** @deprecated Deleting events is never allowed; this always returns false */
   can_delete_event: Scalars['Boolean'];
   can_delete_event_proposal: Scalars['Boolean'];
   can_delete_ticket: Scalars['Boolean'];

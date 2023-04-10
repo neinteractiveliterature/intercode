@@ -113,7 +113,10 @@ class Types::AbilityType < Types::BaseObject
     ModelPermissionLoader.for(Event).load([pundit_user, :update, args[:event_id]])
   end
 
-  field :can_delete_event, Boolean, null: false do
+  field :can_delete_event,
+        Boolean,
+        null: false,
+        deprecation_reason: "Deleting events is never allowed; this always returns false" do
     argument :event_id, ID, required: false, camelize: true
   end
 
