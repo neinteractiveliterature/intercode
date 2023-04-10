@@ -50,7 +50,6 @@ fragment StandaloneEditEvent_EventFields on Event {
 query StandaloneEditEventQuery($eventId: ID!) {
   currentAbility {
     can_override_maximum_event_provided_tickets
-    can_delete_event(eventId: $eventId)
     can_update_event(eventId: $eventId)
   }
 
