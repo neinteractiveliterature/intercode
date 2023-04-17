@@ -26,6 +26,16 @@ GIT
     civil_service (2.3.0)
       activemodel (>= 3.0.0)
 
+GIT
+  remote: https://github.com/neinteractiveliterature/cloudwatchlogger.git
+  revision: a04f38b215c5ffceaee297cdc522d090418905b1
+  branch: pass-logger-to-client
+  specs:
+    cloudwatchlogger (1.0.1)
+      aws-sdk-cloudwatchlogs (~> 1)
+      multi_json (~> 1)
+      uuid (~> 2)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -181,10 +191,6 @@ GEM
       acts_as_list
       cadmus
       rails (>= 5.0.0)
-    cloudwatchlogger (1.0.1)
-      aws-sdk-cloudwatchlogs (~> 1)
-      multi_json (~> 1)
-      uuid (~> 2)
     coderay (1.1.3)
     concurrent-ruby (1.2.2)
     crass (1.0.6)
@@ -645,7 +651,7 @@ DEPENDENCIES
   cadmus_navbar (~> 0.1.0)
   civil_service!
   cloudwatch_scheduler!
-  cloudwatchlogger
+  cloudwatchlogger!
   dalli
   dead_end
   debug
