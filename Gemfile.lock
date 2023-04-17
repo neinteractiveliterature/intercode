@@ -475,7 +475,7 @@ GEM
       msgpack (>= 0.4.3)
       optimist (>= 3.0.0)
     rbtree (0.4.6)
-    recaptcha (5.13.0)
+    recaptcha (5.13.1)
       json
     redcarpet (3.6.0)
     regexp_parser (2.8.0)
