@@ -380,10 +380,10 @@ GEM
       net-protocol
     nio4r (2.5.8)
     nio4r (2.5.8-java)
-    nokogiri (1.14.2)
+    nokogiri (1.14.3)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
-    nokogiri (1.14.2-java)
+    nokogiri (1.14.3-java)
       racc (~> 1.4)
     oj (3.14.3)
     optimist (3.0.1)
@@ -478,7 +478,7 @@ GEM
     recaptcha (5.13.0)
       json
     redcarpet (3.6.0)
-    regexp_parser (2.7.0)
+    regexp_parser (2.8.0)
     reline (0.3.3)
       io-console (~> 0.5)
     request_store (1.5.1)
