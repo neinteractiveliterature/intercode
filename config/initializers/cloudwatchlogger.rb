@@ -122,12 +122,16 @@ if ENV["CLOUDWATCH_LOG_GROUP"]
       end
   end
 
+  # Don't log about every log message attempt
+  logger_logger = Logger.new($stderr)
+  logger_logger.level = Logger::WARN
+
   cloudwatch_logger =
     CloudWatchLogger.new(
       {},
       ENV["CLOUDWATCH_LOG_GROUP"],
       dyno_type || ENV["CLOUDWATCH_LOG_STREAM_NAME"] || "intercode",
-      { format: :json, logger: nil }
+      { format: :json, logger: logger_logger }
     )
   Rails.application.config.logger.extend(ActiveSupport::Logger.broadcast(cloudwatch_logger))
 end
