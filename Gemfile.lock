@@ -378,8 +378,8 @@ GEM
       timeout
     net-smtp (0.3.3)
       net-protocol
-    nio4r (2.5.8)
-    nio4r (2.5.8-java)
+    nio4r (2.5.9)
+    nio4r (2.5.9-java)
     nokogiri (1.14.3)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
@@ -420,9 +420,9 @@ GEM
       pry (~> 0.9)
       slop (~> 3.0)
     public_suffix (4.0.7)
-    puma (6.2.1)
+    puma (6.2.2)
       nio4r (~> 2.0)
-    puma (6.2.1-java)
+    puma (6.2.2-java)
       nio4r (~> 2.0)
     pundit (2.3.0)
       activesupport (>= 3.0.0)
