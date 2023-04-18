@@ -176,7 +176,7 @@
     "stream-browserify": "3.0.0",
     "style-loader": "3.3.2",
     "terser-webpack-plugin": "5.3.7",
-    "thread-loader": "3.0.4",
+    "thread-loader": "4.0.0",
     "tinycolor2": "1.6.0",
     "tzdata": "1.0.38",
     "uuid": "9.0.0",
