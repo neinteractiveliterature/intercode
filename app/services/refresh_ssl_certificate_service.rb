@@ -123,7 +123,7 @@ sh -s -- --install-online --force"
   end
 
   def install_certificate
-    certs_dir = File.expand_path(".acme.sh/#{root_domain}", Dir.home)
+    certs_dir = File.expand_path(".acme.sh/#{root_domain}_ecc", Dir.home)
     body = {
       certificate_chain: File.read(File.expand_path("fullchain.cer", certs_dir)),
       private_key: File.read(File.expand_path("#{root_domain}.key", certs_dir))
