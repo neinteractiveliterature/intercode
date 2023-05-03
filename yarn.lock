@@ -3245,11 +3245,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphiql/react@npm:^0.17.1":
-  version: 0.17.1
-  resolution: "@graphiql/react@npm:0.17.1"
+"@graphiql/react@npm:^0.17.2":
+  version: 0.17.2
+  resolution: "@graphiql/react@npm:0.17.2"
   dependencies:
-    "@graphiql/toolkit": ^0.8.3
+    "@graphiql/toolkit": ^0.8.4
     "@reach/combobox": ^0.17.0
     "@reach/dialog": ^0.17.0
     "@reach/listbox": ^0.17.0
@@ -3258,20 +3258,20 @@ __metadata:
     "@reach/visually-hidden": ^0.17.0
     clsx: ^1.2.1
     codemirror: ^5.65.3
-    codemirror-graphql: ^2.0.5
+    codemirror-graphql: ^2.0.6
     copy-to-clipboard: ^3.2.0
-    graphql-language-service: ^5.1.3
+    graphql-language-service: ^5.1.4
     markdown-it: ^12.2.0
     set-value: ^4.1.0
   peerDependencies:
     graphql: ^15.5.0 || ^16.0.0
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: 6fc64ed719af7e58991ab1bca73d1e6684d75299d9de1099b96b2834755656421fb81d70f6cda931abe045f4bad0392f70089ed04362b33c6722d52d029cd3ee
+  checksum: 7aa8c80a5bfff382d5cc15599dc93c53912000fa0084e8b9dae6a5d8b679ccdee945850bb3fca9b412850ce9ea9971220a1bf362d6d48f701fbdd252c2ae3fad
   languageName: node
   linkType: hard
 
-"@graphiql/toolkit@npm:0.8.4, @graphiql/toolkit@npm:^0.8.3":
+"@graphiql/toolkit@npm:0.8.4, @graphiql/toolkit@npm:^0.8.4":
   version: 0.8.4
   resolution: "@graphiql/toolkit@npm:0.8.4"
   dependencies:
@@ -8757,16 +8757,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"codemirror-graphql@npm:^2.0.5":
-  version: 2.0.5
-  resolution: "codemirror-graphql@npm:2.0.5"
+"codemirror-graphql@npm:^2.0.6":
+  version: 2.0.6
+  resolution: "codemirror-graphql@npm:2.0.6"
   dependencies:
-    graphql-language-service: 5.1.3
+    graphql-language-service: 5.1.4
   peerDependencies:
     "@codemirror/language": 6.0.0
     codemirror: ^5.65.3
     graphql: ^15.5.0 || ^16.0.0
-  checksum: c4ecb481ae36c1f938f63cea4292da0c7f2e61f0159bb2ce31e1fc193b17c49ab652a3922ac02f1fd5d316aadaf68f6a39f6cda8c386c043bb7960ae22e4acae
+  checksum: 9b1fb17df17ffa6cbb6028d4354f7bb0f7b8adc7b41bd93f1c9520d5c72ad70b719a42ca9b8fcb86bf881ce812817df330b22f375fa9040960d3df4d883fef62
   languageName: node
   linkType: hard
 
@@ -12286,19 +12286,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphiql@npm:2.4.1":
-  version: 2.4.1
-  resolution: "graphiql@npm:2.4.1"
+"graphiql@npm:2.4.2":
+  version: 2.4.2
+  resolution: "graphiql@npm:2.4.2"
   dependencies:
-    "@graphiql/react": ^0.17.1
-    "@graphiql/toolkit": ^0.8.3
-    graphql-language-service: ^5.1.3
+    "@graphiql/react": ^0.17.2
+    "@graphiql/toolkit": ^0.8.4
+    graphql-language-service: ^5.1.4
     markdown-it: ^12.2.0
   peerDependencies:
     graphql: ^15.5.0 || ^16.0.0
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: 92a72cfb18c0ee44e364e9fcb1223d8f553bfa1d616b727bc17b4d596cd4cd90d4a8288d7e6e6a9ae3321a5c536a97e2627a06e3a98e0bc66be379540fbd8d95
+  checksum: 783db3c8097af459e843f33673818dae2e6bf85f5c070b607b163bed0a267993be839553f0cb090fb29354e2cd94df66aae1ee26683b9b800e69e0a068201e0c
   languageName: node
   linkType: hard
 
@@ -12376,9 +12376,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-language-service@npm:5.1.3, graphql-language-service@npm:^5.1.3":
-  version: 5.1.3
-  resolution: "graphql-language-service@npm:5.1.3"
+"graphql-language-service@npm:5.1.4, graphql-language-service@npm:^5.1.4":
+  version: 5.1.4
+  resolution: "graphql-language-service@npm:5.1.4"
   dependencies:
     nullthrows: ^1.0.0
     vscode-languageserver-types: ^3.17.1
@@ -12386,7 +12386,7 @@ __metadata:
     graphql: ^15.5.0 || ^16.0.0
   bin:
     graphql: dist/temp-bin.js
-  checksum: 6112d39f7d7eebfe3ac631adf61f87613ec204edb3e5289a66b463f5f1225ace1be135a7faa2f335c28f874c3178e801c5b384a9a93e6a3c3c6a936a09061136
+  checksum: 6f6872580772295f357347ec2c761b3f1e522e0ccd4f1fa2f0426357243034469954f7c7d1c5c2a531112dd29cc5443f35693e596a996f16339688107179c9e8
   languageName: node
   linkType: hard
 
@@ -19412,7 +19412,7 @@ __metadata:
     file-saver: 2.0.5
     font-awesome: 4.7.0
     glob: 10.2.2
-    graphiql: 2.4.1
+    graphiql: 2.4.2
     graphql: 16.6.0
     graphql-anywhere: 4.2.8
     graphql-language-service-utils: 2.7.1
