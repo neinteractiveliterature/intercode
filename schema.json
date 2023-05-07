@@ -13549,8 +13549,8 @@
                 "name": "String",
                 "ofType": null
               },
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "Has not worked correctly in a long time.  Please use form_response_attrs or form_response_attrs_json."
             },
             {
               "name": "author",

@@ -2226,6 +2226,7 @@ export type EmailRoutesPagination = PaginationInterface & {
 export type Event = {
   __typename: 'Event';
   admin_notes?: Maybe<Scalars['String']>;
+  /** @deprecated Has not worked correctly in a long time.  Please use form_response_attrs or form_response_attrs_json. */
   age_restrictions?: Maybe<Scalars['String']>;
   author?: Maybe<Scalars['String']>;
   can_play_concurrently: Scalars['Boolean'];

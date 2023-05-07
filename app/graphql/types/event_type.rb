@@ -11,7 +11,11 @@ class Types::EventType < Types::BaseObject
   field :organization, String, null: true
   field :url, String, null: true
   field :participant_communications, String, null: true
-  field :age_restrictions, String, null: true
+  field :age_restrictions,
+        String,
+        null: true,
+        deprecation_reason:
+          "Has not worked correctly in a long time.  Please use form_response_attrs or form_response_attrs_json."
   field :content_warnings, String, null: true
   field :length_seconds, Integer, null: false
   field :can_play_concurrently, Boolean, null: false

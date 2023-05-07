@@ -111,7 +111,6 @@ fragment EventFields on Event {
   can_play_concurrently
   short_blurb
   participant_communications
-  age_restrictions
   content_warnings
   email
   length_seconds
@@ -162,6 +161,7 @@ fragment EventFields on Event {
 
 query EventAdminSingleEventQuery($eventId: ID!) {
   conventionByRequestHost {
+    id
     event(id: $eventId) {
       id
       form_response_attrs_json

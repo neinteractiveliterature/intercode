@@ -2813,7 +2813,7 @@ type EmailRoutesPagination implements PaginationInterface {
 
 type Event {
   admin_notes: String
-  age_restrictions: String
+  age_restrictions: String @deprecated(reason: "Has not worked correctly in a long time.  Please use form_response_attrs or form_response_attrs_json.")
   author: String
   can_play_concurrently: Boolean!
   con_mail_destination: String
