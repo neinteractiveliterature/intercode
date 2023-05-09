@@ -204,6 +204,7 @@
     "@graphql-codegen/typescript-react-apollo": "3.3.7",
     "@graphql-eslint/eslint-plugin": "3.18.0",
     "@prettier/plugin-ruby": "3.2.2",
+    "@rspack/cli": "^0.1.9",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react-hooks": "8.0.1",
     "@types/bootstrap": "5.2.6",

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path');
-const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
+// const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const RollbarSourceMapPlugin = require('rollbar-sourcemap-webpack-plugin');
 const webpack = require('webpack');
@@ -46,12 +46,12 @@ const config = {
   output: {
     filename: '[name].js',
     chunkFilename: '[name]-[chunkhash].chunk.js',
-    hotUpdateChunkFilename: '[name]-[fullhash].hot-update.js',
+    // hotUpdateChunkFilename: '[name]-[fullhash].hot-update.js',
     path: path.resolve('public/packs'),
     publicPath: ASSET_PATH,
-    environment: {
-      arrowFunction: false,
-    },
+    // environment: {
+    //   arrowFunction: false,
+    // },
   },
   devServer: {
     port: 3135,
@@ -81,10 +81,11 @@ const config = {
       },
     },
   },
-  cache: {
-    type: 'filesystem',
-    cacheDirectory: path.resolve(__dirname, 'build-cache/webpack-web'),
-  },
+  cache: true,
+  // cache: {
+  //   type: 'filesystem',
+  //   cacheDirectory: path.resolve(__dirname, 'build-cache/webpack-web'),
+  // },
   module: {
     rules: [
       {
@@ -93,45 +94,12 @@ const config = {
       },
       {
         test: /\.s[ac]ss$/i,
-        use: [
-          {
-            loader: require.resolve('style-loader'),
-            options: { insert: insertAtTop },
-          },
-          require.resolve('css-loader'),
-          require.resolve('postcss-loader'),
-          { loader: require.resolve('sass-loader'), options: { sassOptions: {quietDeps: true} } }
-        ],
+        use: [{ loader: require.resolve('sass-loader'), options: { sassOptions: { quietDeps: true } } }],
+        type: 'css',
       },
       {
         test: /\.css$/i,
-        use: [
-          {
-            loader: require.resolve('style-loader'),
-            options: { insert: insertAtTop },
-          },
-          require.resolve('css-loader'),
-          require.resolve('postcss-loader'),
-        ],
-      },
-      {
-        test: /\.(jsx)$/,
-        include: [/node_modules\/cadmus-navbar-admin/],
-        type: 'javascript/auto',
-        use: [
-          {
-            loader: require.resolve('babel-loader'),
-          },
-        ],
-      },
-      {
-        test: /\.(mjs|js|jsx|ts|tsx)?(\.erb)?$/,
-        exclude: [/node_modules/, /\.yalc/],
-        use: [
-          {
-            loader: require.resolve('babel-loader'),
-          },
-        ],
+        type: 'css',
       },
     ],
   },
@@ -149,14 +117,21 @@ const config = {
       path: require.resolve('path-browserify'),
     },
   },
-  plugins: [
-    new webpack.DefinePlugin({
+  builtins: {
+    define: {
       __DEV__: JSON.stringify(process.env.NODE_ENV !== 'production'),
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV ?? 'development'),
       'process.env.ASSET_PATH': JSON.stringify(ASSET_PATH),
-    }),
-    new CaseSensitivePathsPlugin(),
-  ],
+    },
+  },
+  // plugins: [
+  //   new webpack.DefinePlugin({
+  //     __DEV__: JSON.stringify(process.env.NODE_ENV !== 'production'),
+  //     'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV ?? 'development'),
+  //     'process.env.ASSET_PATH': JSON.stringify(ASSET_PATH),
+  //   }),
+  //   new CaseSensitivePathsPlugin(),
+  // ],
 };
 
 if (process.env.ANALYZE_BUNDLE_SIZE) {
