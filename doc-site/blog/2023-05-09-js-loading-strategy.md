@@ -4,9 +4,9 @@ tags: ['tech']
 authors: ['nbudin']
 ---
 
-Intercode is a Ruby on Rails application with a (mostly) single-page app frontend. Virtually all "pages" in the web
-application are resolved and rendered on the frontend using [react-router](https://reactrouter.com/). These pages then
-load the data they need using Intercode's GraphQL API, which is implemented on the Rails server side using
+Intercode is an open source Ruby on Rails application with a (mostly) single-page app frontend. Virtually all "pages" in
+the web application are resolved and rendered on the frontend using [react-router](https://reactrouter.com/). These
+pages then load the data they need using Intercode's GraphQL API, which is implemented on the Rails server side using
 [graphql-ruby](https://graphql-ruby.org).
 
 Intercode doesn't follow the recommended strategy for JavaScript loading in Rails applications. This blog post is an
@@ -219,10 +219,11 @@ This code reads a list of paths to disable caching on from `config/nocache-files
 ```
 
 (The reason we split out the list of entry points into a separate JSON file is to support a workflow used by the
-Consequences team, who runs a separate nginx container to serve assets. That workflow needs to dynamically generate an
-nginx config file that says which paths to send the `Cache-Control: no-cache` header on. We want to make sure that the
-Rails app and the nginx container stay in sync with one another, so we use the JSON file as a single source of truth
-for both of them.)
+Consequences team to support the [Consequences larp conventions](https://www.consequences.org.uk/) as well as other
+UK-based larp events. This team runs a separate nginx container to serve assets. That workflow needs to dynamically
+generate an nginx config file that says which paths to send the `Cache-Control: no-cache` header on. We want to make
+sure that the Rails app and the nginx container stay in sync with one another, so we use the JSON file as a single
+source of truth for both of them.)
 
 ### Client auto-reload
 
