@@ -1,5 +1,6 @@
-const lightCodeTheme = require('prism-react-renderer/themes/nightOwlLight');
-const darkCodeTheme = require('prism-react-renderer/themes/nightOwl');
+const prismReactRenderer = require('prism-react-renderer');
+const lightCodeTheme = prismReactRenderer.themes.nightOwlLight;
+const darkCodeTheme = prismReactRenderer.themes.nightOwl;
 
 /**
  * @type {@import('@docusaurus/types').PluginModule}
@@ -162,8 +163,8 @@ module.exports = {
       prism: {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
-        // this seems broken in docusaurus 2.0.0-beta.15
-        // additionalLanguages: ['liquid'],
+        // I tried a lot to get this to work and I still can't :'(
+        // additionalLanguages: ['ruby', 'liquid', 'erb'],
       },
       algolia: {
         appId: 'S6GLWS6G10',
