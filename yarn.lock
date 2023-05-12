@@ -14570,10 +14570,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-search@npm:2.0.0":
-  version: 2.0.0
-  resolution: "js-search@npm:2.0.0"
-  checksum: 2dc0ff4c63843fdeef76f8642d98f0be20231e78e75c5e106410836c26ca35860ea56e257804ecabd7026c096fd6abf1f3a78931f875afc4f81ab164c32738b0
+"js-search@npm:2.0.1":
+  version: 2.0.1
+  resolution: "js-search@npm:2.0.1"
+  checksum: 09bd837b83adaa5d29a1fd80d2324b1af4117b4d4d97013e6be6f043ea636b2c5e6f271e634ec68e7d9411b8b76f625b55c4b41ae66fb19d7164a43c47899ca3
   languageName: node
   linkType: hard
 
@@ -19448,7 +19448,7 @@ __metadata:
     jest-html-reporter: 3.9.0
     jest-junit: 16.0.0
     jest-prop-type-error: 1.1.0
-    js-search: 2.0.0
+    js-search: 2.0.1
     lint-staged: 13.2.2
     lodash: 4.17.21
     luxon: 3.3.0
