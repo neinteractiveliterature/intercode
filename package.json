@@ -108,7 +108,7 @@
     "compression-webpack-plugin": "10.0.0",
     "core-js": "3.30.2",
     "crypto-browserify": "3.12.0",
-    "css-loader": "6.7.3",
+    "css-loader": "6.7.4",
     "css-minimizer-webpack-plugin": "5.0.0",
     "cssnano": "6.0.1",
     "csv-string": "4.1.1",
