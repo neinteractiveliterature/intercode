@@ -4,13 +4,13 @@ class HostingServiceAdapters::Heroku < HostingServiceAdapters::Base
   end
 
   def fetch_instance_count
-    client.formation.info(ENV["HEROKU_APP_NAME"], "web").fetch("quantity")
+    client.formation.info(ENV.fetch("HEROKU_APP_NAME"), "web").fetch("quantity")
   end
 
   def update_instance_count(instance_count)
-    instance_size = instance_count == 1 ? "hobby" : "standard-1X"
+    instance_size = instance_count == 1 ? "basic" : "standard-1X"
     client.formation.batch_update(
-      ENV["HEROKU_APP_NAME"],
+      ENV.fetch("HEROKU_APP_NAME"),
       {
         updates: [
           { type: "shoryuken", size: instance_size },
@@ -23,6 +23,6 @@ class HostingServiceAdapters::Heroku < HostingServiceAdapters::Base
   private
 
   def client
-    @client ||= PlatformAPI.connect_oauth(ENV["HEROKU_API_TOKEN"])
+    @client ||= PlatformAPI.connect_oauth(ENV.fetch("HEROKU_API_TOKEN"))
   end
 end
