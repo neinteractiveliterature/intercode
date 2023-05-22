@@ -19501,7 +19501,7 @@ __metadata:
     stream-browserify: 3.0.0
     style-loader: 3.3.3
     terser-webpack-plugin: 5.3.9
-    thread-loader: 4.0.1
+    thread-loader: 4.0.2
     tinycolor2: 1.6.0
     ts-node: 10.9.1
     typescript: 5.0.4
@@ -20945,9 +20945,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"thread-loader@npm:4.0.1":
-  version: 4.0.1
-  resolution: "thread-loader@npm:4.0.1"
+"thread-loader@npm:4.0.2":
+  version: 4.0.2
+  resolution: "thread-loader@npm:4.0.2"
   dependencies:
     json-parse-better-errors: ^1.0.2
     loader-runner: ^4.1.0
@@ -20955,7 +20955,7 @@ __metadata:
     schema-utils: ^4.0.1
   peerDependencies:
     webpack: ^5.0.0
-  checksum: b380d7fd7561b572ef1685a4c77ae2bd8da868c55b0b4908cd07abbb1e538a38453c715b9b5fcdab27f3dadf518ccbe88cae6fdc4dc46ea9d08b40247eec2c68
+  checksum: 1b1bd4cf4320b63e2a8c52d6ff64c4cf7fbc5e6099f41aae5fa35c4714134becff5b91cd6b00d707f60d18003aba0ae112a719dfbd92fbcdeb875beba76b1146
   languageName: node
   linkType: hard
 
