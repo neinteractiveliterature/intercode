@@ -62,20 +62,49 @@ class GraphqlController < ApplicationController
       result = clean_backtraces(execute_from_params(params))
       render json: result
 
-      raise ActiveRecord::Rollback if result["errors"].present?
+      is_error =
+        case result
+        when Array
+          result.any? { |query_result| query_result["errors"].present? }
+        else
+          result["errors"].present?
+        end
+
+      raise ActiveRecord::Rollback if is_error
     end
   end
 
   private
 
   def execute_from_params(params)
-    query = params[:query]
-    operation_name = params[:operationName]
+    context = Context.new(self)
 
-    IntercodeSchema.execute(query, variables: variables, context: Context.new(self), operation_name: operation_name)
+    # Apollo sends the queries in an array when batching is enabled. The data ends up in the _json field of the params
+    # variable.  See the Apollo Documentation about query batching:
+    # https://www.apollographql.com/docs/react/api/link/apollo-link-batch-http/
+    if params[:_json]
+      queries =
+        params[:_json].map do |param|
+          {
+            query: param[:query],
+            operation_name: param[:operationName],
+            variables: ensure_hash(param[:variables]),
+            context: context
+          }
+        end
+      IntercodeSchema.multiplex(queries)
+    else
+      IntercodeSchema.execute(
+        params[:query],
+        operation_name: params[:operationName],
+        variables: variables,
+        context: context
+      )
+    end
   end
 
   def clean_backtraces(result)
+    return result.map { |query_result| clean_backtraces(query_result) } if result.is_a?(Array)
     return result if result["errors"].blank?
     return result if Rails.configuration.consider_all_requests_local
 

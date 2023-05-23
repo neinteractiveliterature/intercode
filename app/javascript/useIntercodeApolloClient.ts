@@ -1,10 +1,30 @@
 import { useMemo, RefObject } from 'react';
-import { ApolloClient, ApolloLink, Operation, NextLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client';
+import {
+  ApolloClient,
+  ApolloLink,
+  Operation,
+  NextLink,
+  InMemoryCache,
+  NormalizedCacheObject,
+  split,
+} from '@apollo/client';
+import { BatchHttpLink } from '@apollo/client/link/batch-http';
 import { useAuthHeadersLink, useErrorHandlerLink } from '@neinteractiveliterature/litform';
 import { createUploadLink } from 'apollo-upload-client';
 import { DateTime } from 'luxon';
 
 import possibleTypes from './possibleTypes.json';
+
+// adapted from https://github.com/jaydenseric/apollo-upload-client/issues/63#issuecomment-392501449
+function isFile(value: unknown): value is Blob | File {
+  return (
+    (typeof File !== 'undefined' && value instanceof File) || (typeof Blob !== 'undefined' && value instanceof Blob)
+  );
+}
+
+function isUpload({ variables }: Operation) {
+  return Object.values(variables).some(isFile);
+}
 
 export function useIntercodeApolloLink(
   authenticityToken: string,
@@ -32,9 +52,19 @@ export function useIntercodeApolloLink(
 
   const ErrorHandlerLink = useErrorHandlerLink(onUnauthenticatedRef);
 
+  // adapted from https://github.com/jaydenseric/apollo-upload-client/issues/63#issuecomment-392501449
+  const TerminatingLink = split(
+    isUpload,
+    createUploadLink({ uri: '/graphql', fetch }),
+    new BatchHttpLink({
+      uri: '/graphql',
+      fetch,
+    }),
+  );
+
   const link = useMemo(
-    () => ApolloLink.from([AuthLink, AddTimezoneLink, ErrorHandlerLink, createUploadLink({ uri: '/graphql', fetch })]),
-    [AuthLink, AddTimezoneLink, ErrorHandlerLink],
+    () => ApolloLink.from([AuthLink, AddTimezoneLink, ErrorHandlerLink, TerminatingLink]),
+    [AuthLink, AddTimezoneLink, ErrorHandlerLink, TerminatingLink],
   );
 
   return link;
