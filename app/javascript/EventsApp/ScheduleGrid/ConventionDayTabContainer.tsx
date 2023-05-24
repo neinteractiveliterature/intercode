@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useContext } from 'react';
-import { NavLink, Routes, Navigate, Route, useLocation } from 'react-router-dom';
+import { NavLink, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { useApolloClient } from '@apollo/client';
 import { DateTime } from 'luxon';
 
@@ -139,11 +139,29 @@ function ConventionDayTabContainer({
         ))}
         <Route
           path="*"
-          element={<Navigate to={`${basename}/${conventionDayUrlPortion(conventionDayTimespans[0].start)}`} replace />}
+          element={<RedirectToFirstDay basename={basename} conventionDayTimespans={conventionDayTimespans} />}
         />
       </Routes>
     </div>
   );
+}
+
+type RedirectToFirstDayProps = {
+  basename: string;
+  conventionDayTimespans: FiniteTimespan[];
+};
+
+function RedirectToFirstDay({ basename, conventionDayTimespans }: RedirectToFirstDayProps) {
+  const conventionDayUrlPortion = useConventionDayUrlPortion();
+  const navigate = useNavigate();
+
+  // This deliberately gets called on every render of this component.  We have another URL-changing thing on this page
+  // that can fight with it (usePersonalScheduleFilters, which potentially sets the query portion of the URL).  If we
+  // don't call this on every render, and usePersonalScheduleFilters goes second, a logged-in user can wind up in a
+  // state where they're not on any tab.
+  navigate(`${basename}/${conventionDayUrlPortion(conventionDayTimespans[0].start)}`, { replace: true });
+
+  return <></>;
 }
 
 export default ConventionDayTabContainer;
