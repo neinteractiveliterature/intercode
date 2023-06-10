@@ -432,6 +432,7 @@
       "editPageHeader": "",
       "editPageTitle": "",
       "editTitle": "",
+      "emailsCommaTitle": "",
       "emailFilters": {
         "confirmedBucket": "Include {{ bucketName }} (confirmed)",
         "nobody": "",
@@ -440,6 +441,8 @@
       },
       "emailHeader": "",
       "emailTableHeader": "",
+      "emailsSemicolonTitle": "",
+      "emailsSemicolonWarning": "",
       "forceConfirmSignup": {
         "bucketInputCaption": "",
         "header": "",
@@ -452,6 +455,7 @@
         "timestampHeader": ""
       },
       "historyPageTitle": "",
+      "historyTitle": "",
       "indexPageTitle": "",
       "makeCountedConfirmPrompt": "",
       "makeNotCountedConfirmPrompt": "",
@@ -460,13 +464,6 @@
       "phoneHeader": "",
       "sequenceHeader": "",
       "stateHeader": "",
-      "title": ""
-    },
-    "signupsAdmin": {
-      "emailsCommaTitle": "",
-      "emailsSemicolonTitle": "",
-      "emailsSemicolonWarning": "",
-      "historyTitle": "",
       "title": ""
     },
     "signupSummary": {

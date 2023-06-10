@@ -419,6 +419,7 @@
       "editPageHeader": "Edit signup for {{ eventTitle }}",
       "editPageTitle": "Editing signup for “{{ name }}” - {{ eventTitle }}",
       "editTitle": "Edit signup",
+      "emailsCommaTitle": "Emails (comma-separated)",
       "emailFilters": {
         "confirmedBucket": "Include {{ bucketName }} (confirmed)",
         "nobody": "Nobody",
@@ -427,6 +428,8 @@
       },
       "emailHeader": "Email",
       "emailTableHeader": "Email",
+      "emailsSemicolonTitle": "Emails (semicolon-separated)",
+      "emailsSemicolonWarning": "<0>Note:</0> Most email apps use comma-separated address lists.  Only Outlook uses semicolon-separated address lists.  If you’re not using Outlook, try comma-separated first.",
       "forceConfirmSignup": {
         "bucketInputCaption": "Please choose a signup bucket for {{ name }}.",
         "header": "Force signup into run",
@@ -439,6 +442,7 @@
         "timestampHeader": "Timestamp"
       },
       "historyPageTitle": "Signup change history - {{ eventTitle }}",
+      "historyTitle": "Change history",
       "indexPageTitle": "Signups - {{ eventTitle }}",
       "makeCountedConfirmPrompt": "<0>Are you sure? This will make {{ name }}’s signup count towards attendee totals for {{ eventTitle }}. {{ eventTitle }} will also count towards {{ name }}’s signup limit if there is a signup cap in place.</0><1>Caution: this operation does not check whether the signup buckets are already full, and therefore may result in overfilling a bucket.</1>",
       "makeNotCountedConfirmPrompt": "<0>Are you sure? This will make {{ name }}’s signup not count towards attendee totals for {{ eventTitle }}. It will also allow {{ name }} to sign up for an additional event if there is a signup cap in place.</0><1>Caution: this operation will pull additional attendees into the space freed up by making this signup not count.</1>",
@@ -447,13 +451,6 @@
       "phoneHeader": "Phone:",
       "sequenceHeader": "Seq",
       "stateHeader": "State",
-      "title": "Signups"
-    },
-    "signupsAdmin": {
-      "emailsCommaTitle": "Emails (comma-separated)",
-      "emailsSemicolonTitle": "Emails (semicolon-separated)",
-      "emailsSemicolonWarning": "<0>Note:</0> Most email apps use comma-separated address lists.  Only Outlook uses semicolon-separated address lists.  If you’re not using Outlook, try comma-separated first.",
-      "historyTitle": "Change history",
       "title": "Signups"
     },
     "signupSummary": {

@@ -51,7 +51,7 @@ export default LoadQueryWrapper(useSignupAdminEventQueryFromParams, function Sig
             element={
               <>
                 <div className="alert alert-warning mb-2">
-                  <Trans i18nKey="events.signupsAdmin.emailsSemicolonWarning">
+                  <Trans i18nKey="events.signupAdmin.emailsSemicolonWarning">
                     <strong>Note:</strong> Most email apps use comma-separated address lists. Only Outlook uses
                     semicolon-separated address lists. If you’re not using Outlook, try comma-separated first.
                   </Trans>

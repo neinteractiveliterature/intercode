@@ -77,8 +77,8 @@ export default LoadQueryWrapper<
 
   const mainTitle = useMemo(() => {
     separator === '; '
-      ? t('events.signupsAdmin.emailsSemicolonTitle', 'Emails (semicolon-separated)')
-      : t('events.signupsAdmin.emailsCommaTitle', 'Emails (comma-separated)');
+      ? t('events.signupAdmin.emailsSemicolonTitle', 'Emails (semicolon-separated)')
+      : t('events.signupAdmin.emailsCommaTitle', 'Emails (comma-separated)');
   }, [separator, t]);
 
   usePageTitle(`${mainTitle} - ${data.convention.event.title}`);
