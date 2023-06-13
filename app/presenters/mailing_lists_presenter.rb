@@ -30,7 +30,7 @@ class MailingListsPresenter
 
   def event_proposers
     event_proposals =
-      convention.event_proposals.where.not(status: %i[draft rejected dropped]).includes(owner: :user).order_by_title
+      convention.event_proposals.where.not(status: %i[draft rejected withdrawn]).includes(owner: :user).order_by_title
 
     Result.new(
       event_proposals.map do |event_proposal|
