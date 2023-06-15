@@ -36,6 +36,11 @@ GIT
       multi_json (~> 1)
       uuid (~> 2)
 
+PATH
+  remote: intercode_warp_core
+  specs:
+    intercode_warp_core (0.1.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -673,6 +678,7 @@ DEPENDENCIES
   graphql-rails_logger
   icalendar
   image_processing (~> 1.2)
+  intercode_warp_core!
   letter_opener
   liquid
   listen

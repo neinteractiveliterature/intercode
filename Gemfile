@@ -12,6 +12,8 @@ gem "dotenv-rails", require: "dotenv/rails-now"
 
 gem "with_advisory_lock"
 
+gem "intercode_warp_core", path: "./intercode_warp_core"
+
 # Devise for authentication, pundit for authorization, doorkeeper for OAuth providership
 gem "devise"
 gem "pundit"

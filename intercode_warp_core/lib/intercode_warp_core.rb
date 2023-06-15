@@ -5,5 +5,4 @@ require_relative "intercode_warp_core/intercode_warp_core"
 
 module IntercodeWarpCore
   class Error < StandardError; end
-  # Your code goes here...
 end

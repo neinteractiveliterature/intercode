@@ -30,19 +30,19 @@ class Types::RunType < Types::BaseObject
   field :confirmed_signup_count, Integer, null: false
 
   def confirmed_signup_count
-    SignupCountLoader.for.load(object).then { |presenter| presenter.counted_signups_by_state('confirmed') }
+    SignupCountLoader.for.load(object.id).then { |presenter| presenter.counted_signups_by_state('confirmed') }
   end
 
   field :confirmed_limited_signup_count, Integer, null: false
 
   def confirmed_limited_signup_count
-    SignupCountLoader.for.load(object).then(&:confirmed_limited_count)
+    SignupCountLoader.for.load(object.id).then(&:confirmed_limited_count)
   end
 
   field :waitlisted_signup_count, Integer, null: false
 
   def waitlisted_signup_count
-    SignupCountLoader.for.load(object).then(&:waitlist_count)
+    SignupCountLoader.for.load(object.id).then(&:waitlist_count)
   end
 
   field :not_counted_signup_count, Integer, null: false
@@ -50,7 +50,7 @@ class Types::RunType < Types::BaseObject
   def not_counted_signup_count
     SignupCountLoader
       .for
-      .load(object)
+      .load(object.id)
       .then do |presenter|
         (presenter.not_counted_signups_by_state('confirmed') + presenter.not_counted_signups_by_state('waitlisted'))
       end
@@ -59,13 +59,13 @@ class Types::RunType < Types::BaseObject
   field :not_counted_confirmed_signup_count, Integer, null: false
 
   def not_counted_confirmed_signup_count
-    SignupCountLoader.for.load(object).then { |presenter| presenter.not_counted_signups_by_state('confirmed') }
+    SignupCountLoader.for.load(object.id).then { |presenter| presenter.not_counted_signups_by_state('confirmed') }
   end
 
   field :signup_count_by_state_and_bucket_key_and_counted, Types::JSON, null: false
 
   def signup_count_by_state_and_bucket_key_and_counted
-    SignupCountLoader.for.load(object).then(&:signup_count_by_state_and_bucket_key_and_counted)
+    SignupCountLoader.for.load(object.id).then(&:signup_count_by_state_and_bucket_key_and_counted)
   end
 
   field :my_signups, [Types::SignupType], null: false
