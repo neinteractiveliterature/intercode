@@ -52,7 +52,7 @@
     .thead {
       [role='columnheader'],
       [role='cell'] {
-        border-bottom-width: 2 * $table-border-width;
+        border-bottom-width: calc(2 * $table-border-width);
       }
     }
   }
