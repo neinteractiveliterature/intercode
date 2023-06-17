@@ -81,17 +81,17 @@ class ConventionDrop < Liquid::Drop
   #                          limited buckets
   def runs_with_openings
     runs_by_id = convention.runs.includes(:event).index_by(&:id)
-    presenters = SignupCountPresenter.for_run_ids(runs_by_id.keys)
+    presenters = IntercodeWarpCore.load_signup_count_data_for_run_ids(runs_by_id.keys)
     presenters
       .select do |run_id, presenter|
         run = runs_by_id.fetch(run_id)
         buckets = run.event.registration_policy.buckets.select(&:slots_limited?)
         limited_signup_count =
-          buckets.sum { |bucket| presenter.signup_count(state: "confirmed", bucket_key: bucket.key) }
+          buckets.sum { |bucket| presenter.confirmed_count_for_bucket_including_not_counted(bucket.key) }
         limited_signup_count < buckets.sum(&:total_slots)
       end
-      .values
-      .map(&:run)
+      .keys
+      .map { |run_id| runs_by_id.fetch(run_id) }
   end
 
   # @deprecated

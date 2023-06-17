@@ -33,11 +33,11 @@ class RunAvailabilityPresenter
 
   def self.for_runs(runs)
     runs_by_id = runs.index_by(&:id)
-    SignupCountPresenter
-      .for_run_ids(runs)
+    IntercodeWarpCore
+      .load_signup_count_data_for_run_ids(runs_by_id.keys)
       .each_with_object({}) do |(run_id, presenter), hash|
         run = runs_by_id.fetch(run_id)
-        hash[run] = new(run, signup_count_presenter: presenter)
+        hash[run_id] = new(run, signup_count_presenter: presenter)
       end
   end
 
@@ -47,7 +47,10 @@ class RunAvailabilityPresenter
 
   def initialize(run, signup_count_presenter: nil)
     @run = run
-    @signup_count_presenter = signup_count_presenter || SignupCountPresenter.new(run)
+    @signup_count_presenter = (
+      signup_count_presenter ||
+      IntercodeWarpCore.load_signup_count_data_for_run_ids([run.id]).fetch(run.id)
+    )
   end
 
   def availability_by_bucket

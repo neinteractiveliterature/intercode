@@ -92,5 +92,16 @@ fn init() -> Result<(), Error> {
         "not_counted_signups_by_state",
         method!(RunSignupCounts::not_counted_signups_by_state, 1),
     )?;
+    rsc.define_method(
+        "confirmed_count_for_bucket_including_not_counted",
+        method!(
+            RunSignupCounts::confirmed_count_for_bucket_including_not_counted,
+            1
+        ),
+    )?;
+    rsc.define_method(
+        "all_bucket_descriptions_for_state",
+        method!(RunSignupCounts::all_bucket_descriptions_for_state, 1),
+    )?;
     Ok(())
 }

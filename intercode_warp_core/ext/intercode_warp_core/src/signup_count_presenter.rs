@@ -1,4 +1,4 @@
-use std::{borrow::Cow, collections::HashMap, hash::Hash};
+use std::{collections::HashMap, hash::Hash};
 
 use futures::try_join;
 use magnus::{ExceptionClass, RHash, Symbol, TryConvert};
@@ -131,6 +131,18 @@ impl RunSignupCounts {
             .collect()
     }
 
+    pub fn confirmed_count_for_bucket_including_not_counted(&self, bucket_key: String) -> i64 {
+        self.count_by_state_and_bucket_key_and_counted_internal(
+            "confirmed",
+            Some(&bucket_key),
+            &SignupCountDataCountedStatus::Counted,
+        ) + self.count_by_state_and_bucket_key_and_counted_internal(
+            "confirmed",
+            Some(&bucket_key),
+            &SignupCountDataCountedStatus::NotCounted,
+        )
+    }
+
     pub fn counted_signups_by_state(&self, state: String) -> i64 {
         self.registration_policy
             .all_buckets()
@@ -186,12 +198,12 @@ impl RunSignupCounts {
         }
     }
 
-    pub fn all_bucket_descriptions_for_state(&self, state: &str) -> String {
+    pub fn all_bucket_descriptions_for_state(&self, state: String) -> String {
         let buckets = self.registration_policy.all_buckets().collect::<Vec<_>>();
         let mut bucket_texts = Vec::<String>::with_capacity(buckets.len() + 1);
 
         for bucket in buckets {
-            bucket_texts.push(self.bucket_description_for_state(&bucket.key, state));
+            bucket_texts.push(self.bucket_description_for_state(&bucket.key, &state));
         }
 
         let no_preference_waitlist_count = self.count_by_state_and_bucket_key_and_counted_internal(
@@ -222,8 +234,8 @@ pub async fn load_signup_count_data_for_run_ids<I: Iterator<Item = i64>>(
         ).bind(run_ids.clone()).map(|row| {
             (
                 row.get::<i64, &str>("run_id"),
-                serde_json::from_value::<RegistrationPolicy>(row.get("registration_policy"))
-                    .unwrap(),
+                row.try_get("registration_policy").ok().and_then(|json| serde_json::from_value::<RegistrationPolicy>(json).ok())
+                    .unwrap_or_default(),
             )
         }).fetch_all(db.clone()),
         sqlx::query(
