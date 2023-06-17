@@ -68,7 +68,6 @@ RUN mkdir /opt/node && \
 COPY --from=build /usr/local/bundle /usr/local/bundle
 COPY --from=build --chown=www /usr/src/intercode /usr/src/intercode
 ADD ./.profile.d /app/.profile.d
-RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 WORKDIR /usr/src/intercode
 
 USER www
