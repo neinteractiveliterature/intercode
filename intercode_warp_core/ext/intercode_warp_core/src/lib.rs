@@ -81,7 +81,7 @@ fn init() -> Result<(), Error> {
         "signup_count_by_state_and_bucket_key_and_counted",
         method!(
             RunSignupCounts::signup_count_by_state_and_bucket_key_and_counted,
-            3
+            0
         ),
     )?;
     rsc.define_method(

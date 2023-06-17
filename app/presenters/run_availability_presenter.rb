@@ -32,10 +32,12 @@ class RunAvailabilityPresenter
   end
 
   def self.for_runs(runs)
+    runs_by_id = runs.index_by(&:id)
     SignupCountPresenter
-      .for_runs(runs)
-      .transform_values do |signup_count_presenter|
-        new(signup_count_presenter.run, signup_count_presenter: signup_count_presenter)
+      .for_run_ids(runs)
+      .each_with_object({}) do |(run_id, presenter), hash|
+        run = runs_by_id.fetch(run_id)
+        hash[run] = new(run, signup_count_presenter: presenter)
       end
   end
 

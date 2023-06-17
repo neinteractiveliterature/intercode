@@ -80,10 +80,12 @@ class ConventionDrop < Liquid::Drop
   # @return [Array<RunDrop>] Runs of events in this convention that have any available slots in
   #                          limited buckets
   def runs_with_openings
-    presenters = SignupCountPresenter.for_runs(convention.runs.includes(:event))
+    runs_by_id = convention.runs.includes(:event).index_by(&:id)
+    presenters = SignupCountPresenter.for_run_ids(runs_by_id.keys)
     presenters
-      .select do |_run_id, presenter|
-        buckets = presenter.run.event.registration_policy.buckets.select(&:slots_limited?)
+      .select do |run_id, presenter|
+        run = runs_by_id.fetch(run_id)
+        buckets = run.event.registration_policy.buckets.select(&:slots_limited?)
         limited_signup_count =
           buckets.sum { |bucket| presenter.signup_count(state: "confirmed", bucket_key: bucket.key) }
         limited_signup_count < buckets.sum(&:total_slots)

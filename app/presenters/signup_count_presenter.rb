@@ -36,9 +36,9 @@ class SignupCountPresenter
     signup_count_hash
   end
 
-  def self.signup_count_data_for_runs(runs)
+  def self.signup_count_data_for_run_ids(run_ids)
     data_with_run_ids =
-      Signup.where(run_id: runs.map(&:id)).group(:run_id, :state, :bucket_key, :requested_bucket_key, :counted).count
+      Signup.where(run_id: run_ids).group(:run_id, :state, :bucket_key, :requested_bucket_key, :counted).count
 
     data_with_run_ids
       .to_a
@@ -48,9 +48,10 @@ class SignupCountPresenter
       end
   end
 
-  def self.for_runs(runs)
-    data_by_run_id = signup_count_data_for_runs(runs)
-    runs.each_with_object({}) { |run, hash| hash[run.id] = new(run, count_data: data_by_run_id[run.id] || []) }
+  def self.for_run_ids(run_ids)
+    data_by_run_id = signup_count_data_for_run_ids(run_ids)
+    runs_by_id = Run.where(id: run_ids).includes(:event).index_by(&:id)
+    run_ids.each_with_object({}) { |run_id, hash| hash[run_id] = new(runs_by_id.fetch(run_id), count_data: data_by_run_id[run_id] || []) }
   end
 
   def initialize(run, count_data: nil)

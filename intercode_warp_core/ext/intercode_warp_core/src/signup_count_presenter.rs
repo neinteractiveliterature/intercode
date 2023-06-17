@@ -1,12 +1,12 @@
 use std::{borrow::Cow, collections::HashMap, hash::Hash};
 
 use futures::try_join;
-use magnus::{ExceptionClass, TryConvert};
+use magnus::{ExceptionClass, RHash, Symbol, TryConvert};
 use sqlx::{Executor, Postgres, Row};
 
 use crate::registration_policy::RegistrationPolicy;
 
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum SignupCountDataCountedStatus {
     Counted,
     NotCounted,
@@ -32,6 +32,15 @@ impl From<bool> for SignupCountDataCountedStatus {
         match counted {
             true => Self::Counted,
             false => Self::NotCounted,
+        }
+    }
+}
+
+impl From<SignupCountDataCountedStatus> for Symbol {
+    fn from(value: SignupCountDataCountedStatus) -> Self {
+        match value {
+            SignupCountDataCountedStatus::Counted => Symbol::new("counted"),
+            SignupCountDataCountedStatus::NotCounted => Symbol::new("not_counted"),
         }
     }
 }
@@ -98,15 +107,28 @@ impl RunSignupCounts {
 
     pub fn signup_count_by_state_and_bucket_key_and_counted(
         &self,
-        state: String,
-        bucket_key: Option<String>,
-        counted: SignupCountDataCountedStatus,
-    ) -> i64 {
-        self.count_by_state_and_bucket_key_and_counted_internal(
-            &state,
-            bucket_key.as_deref(),
-            &counted,
-        )
+    ) -> HashMap<String, HashMap<String, RHash>> {
+        self.count_by_state_and_bucket_key_and_counted
+            .iter()
+            .map(|(state, bucket_key_map)| {
+                (
+                    state.clone(),
+                    bucket_key_map
+                        .iter()
+                        .map(|(bucket_key, counted_map)| {
+                            (
+                                bucket_key.clone(),
+                                RHash::from_iter(
+                                    counted_map
+                                        .iter()
+                                        .map(|(counted, count)| (Symbol::from(*counted), *count)),
+                                ),
+                            )
+                        })
+                        .collect(),
+                )
+            })
+            .collect()
     }
 
     pub fn counted_signups_by_state(&self, state: String) -> i64 {
@@ -133,7 +155,7 @@ impl RunSignupCounts {
             })
     }
 
-    pub fn counted_key_for_state(&self, state: &str) -> SignupCountDataCountedStatus {
+    fn counted_key_for_state(&self, state: &str) -> SignupCountDataCountedStatus {
         if state != "confirmed" || self.registration_policy.only_uncounted() {
             SignupCountDataCountedStatus::NotCounted
         } else {
@@ -141,7 +163,7 @@ impl RunSignupCounts {
         }
     }
 
-    pub fn bucket_description_for_state(&self, bucket_key: &str, state: &str) -> String {
+    fn bucket_description_for_state(&self, bucket_key: &str, state: &str) -> String {
         let Some(bucket) = self.registration_policy.bucket_with_key(bucket_key) else {
       return "".to_string();
     };
@@ -209,7 +231,7 @@ pub async fn load_signup_count_data_for_run_ids<I: Iterator<Item = i64>>(
           FROM signups \
           WHERE run_id = ANY($1) \
           GROUP BY run_id, state, bucket_key, requested_bucket_key, counted"
-        ).bind(run_ids).map(|row| SignupCountDataRow {
+        ).bind(run_ids.clone()).map(|row| SignupCountDataRow {
             run_id: row.get("run_id"),
             state: row.get("state"),
             bucket_key: row.get("bucket_key"),
@@ -223,7 +245,7 @@ pub async fn load_signup_count_data_for_run_ids<I: Iterator<Item = i64>>(
         .into_iter()
         .collect::<HashMap<_, _>>();
 
-    Ok(count_data.iter().fold(Default::default(), |mut acc, row| {
+    let mut data_by_run_id = count_data.iter().fold(HashMap::default(), |mut acc, row| {
         let entry = acc.entry(row.run_id);
         let run_counts = entry.or_insert_with(|| RunSignupCounts {
             registration_policy: registration_policy_by_run_id
@@ -246,5 +268,12 @@ pub async fn load_signup_count_data_for_run_ids<I: Iterator<Item = i64>>(
         );
 
         acc
-    }))
+    });
+
+    for run_id in run_ids {
+        let entry = data_by_run_id.entry(run_id);
+        entry.or_default();
+    }
+
+    Ok(data_by_run_id)
 }
