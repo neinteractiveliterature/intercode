@@ -60,15 +60,15 @@ ENV RAILS_ENV production
 ENV NODE_ENV production
 
 USER root
-RUN useradd -ms /bin/bash www
-RUN apt-get update && apt-get install -y --no-install-recommends openssh-server iproute2 bash curl python3 libvips42 poppler-utils curl xz-utils libjemalloc2 shared-mime-info libpq5 && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends openssh-server iproute2 curl python3 libvips42 poppler-utils curl xz-utils libjemalloc2 shared-mime-info libpq5 && rm -rf /var/lib/apt/lists/*
+RUN useradd -ms $(which bash) www
 RUN mkdir /opt/node && \
+  cd /opt/node && \
   curl https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-$(echo ${TARGETARCH} | sed 's/amd64/x64/').tar.xz | tar xJ --strip-components=1
 
 COPY --from=build /usr/local/bundle /usr/local/bundle
 COPY --from=build --chown=www /usr/src/intercode /usr/src/intercode
 ADD ./.profile.d /app/.profile.d
-RUN ln -s /bin/bash /bin/sh
 WORKDIR /usr/src/intercode
 
 USER www
