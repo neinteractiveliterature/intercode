@@ -316,6 +316,7 @@ GEM
       rexml
     kramdown-parser-gfm (1.1.0)
       kramdown (~> 2.0)
+    language_server-protocol (3.17.0.3)
     launchy (2.5.2)
       addressable (~> 2.8)
     letter_opener (1.8.1)
@@ -390,8 +391,9 @@ GEM
     orm_adapter (0.5.0)
     ox (2.14.4)
     parallel (1.23.0)
-    parser (3.2.2.1)
+    parser (3.2.2.3)
       ast (~> 2.4.1)
+      racc
     pg (1.5.3)
     pg_search (2.3.6)
       activerecord (>= 5.2)
@@ -478,7 +480,7 @@ GEM
     rbtree (0.4.6)
     recaptcha (5.14.0)
     redcarpet (3.6.0)
-    regexp_parser (2.8.0)
+    regexp_parser (2.8.1)
     reline (0.3.3)
       io-console (~> 0.5)
     request_store (1.5.1)
@@ -496,17 +498,18 @@ GEM
       rollbar (>= 2.21, <= 4.0, < 4.0)
       shoryuken (>= 4.0, <= 5.3)
     rouge (3.26.1)
-    rubocop (1.51.0)
+    rubocop (1.53.1)
       json (~> 2.3)
+      language_server-protocol (>= 3.17.0)
       parallel (~> 1.10)
-      parser (>= 3.2.0.0)
+      parser (>= 3.2.2.3)
       rainbow (>= 2.2.2, < 4.0)
       regexp_parser (>= 1.8, < 3.0)
       rexml (>= 3.2.5, < 4.0)
       rubocop-ast (>= 1.28.0, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 2.4.0, < 3.0)
-    rubocop-ast (1.28.1)
+    rubocop-ast (1.29.0)
       parser (>= 3.2.1.0)
     rubocop-performance (1.18.0)
       rubocop (>= 1.7.0, < 2.0)
@@ -705,7 +708,7 @@ DEPENDENCIES
   reverse_markdown
   rollbar
   rollbar-shoryuken
-  rubocop (= 1.51.0)
+  rubocop (= 1.53.1)
   rubocop-performance
   rubocop-rails
   rubocop-sequel
