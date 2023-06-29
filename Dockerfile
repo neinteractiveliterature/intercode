@@ -60,7 +60,7 @@ ENV RAILS_ENV production
 ENV NODE_ENV production
 
 USER root
-RUN apt-get update && apt-get install -y --no-install-recommends openssh-server iproute2 curl python3 libvips42 poppler-utils curl xz-utils libjemalloc2 shared-mime-info libpq5 && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends openssh-server iproute2 curl python3 libvips42 poppler-utils xz-utils libjemalloc2 shared-mime-info libpq5 && rm -rf /var/lib/apt/lists/*
 RUN useradd -ms $(which bash) www
 RUN mkdir /opt/node && \
   cd /opt/node && \
@@ -68,7 +68,11 @@ RUN mkdir /opt/node && \
 
 COPY --from=build /usr/local/bundle /usr/local/bundle
 COPY --from=build --chown=www /usr/src/intercode /usr/src/intercode
+
+# The following two lines are to enable heroku exec support: https://devcenter.heroku.com/articles/exec#using-with-docker
 ADD ./.profile.d /app/.profile.d
+RUN rm /bin/sh && ln -s /bin/bash /bin/sh
+
 WORKDIR /usr/src/intercode
 
 USER www
