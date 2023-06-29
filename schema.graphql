@@ -5379,6 +5379,11 @@ enum SignupMode {
   moderated
 
   """
+  Attendees make a ranked list of choices and the site attempts to give everyone what they want
+  """
+  ranked_choice
+
+  """
   Attendees can sign themselves up for events
   """
   self_service
