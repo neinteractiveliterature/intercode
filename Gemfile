@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 ruby File.read(File.expand_path(".ruby-version", __dir__)).strip
-gem "rails", "7.0.5.1"
+gem "rails", "7.0.6"
 
 gem "pg"
 gem "puma"
