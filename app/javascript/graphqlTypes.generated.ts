@@ -4506,6 +4506,8 @@ export type SignupFiltersInput = {
 export enum SignupMode {
   /** Attendees can request signups and signup changes but con staff must approve them */
   Moderated = 'moderated',
+  /** Attendees make a ranked list of choices and the site attempts to give everyone what they want */
+  RankedChoice = 'ranked_choice',
   /** Attendees can sign themselves up for events */
   SelfService = 'self_service'
 }

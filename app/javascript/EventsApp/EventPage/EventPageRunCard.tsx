@@ -13,6 +13,7 @@ import {
   useWithdrawMySignupMutation,
   useWithdrawSignupRequestMutation,
 } from './mutations.generated';
+import { SignupMode } from '../../graphqlTypes.generated';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type TI = any;
@@ -137,12 +138,13 @@ function EventPageRunCard({ event, run, myProfile, currentAbility }: EventPageRu
   );
 
   const createSignup = (signupOption: SignupOption) => {
-    if (signupMode === 'self_service' || signupOption.teamMember) {
+    if (signupMode === SignupMode.SelfService || signupOption.teamMember) {
       return selfServiceSignup(signupOption);
     }
 
-    if (signupMode === 'moderated') {
+    if (signupMode === SignupMode.Moderated) {
       createModeratedSignupModal.open({ signupOption });
+      return Promise.resolve(undefined);
     }
 
     return Promise.reject(new Error(`Invalid signup mode: ${signupMode}`));

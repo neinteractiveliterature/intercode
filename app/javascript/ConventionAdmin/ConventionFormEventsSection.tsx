@@ -96,6 +96,11 @@ function ConventionFormEventsSection({
             value: 'moderated',
             label: 'Moderated (attendees can request signups and signup changes but con staff must approve them)',
           },
+          {
+            value: 'ranked_choice',
+            label:
+              'Ranked choice (attendees make a ranked list of choices and the site attempts to give everyone what they want)',
+          },
         ]}
         value={convention.signup_mode}
         onChange={(newValue: string) => setSignupMode(newValue as SignupMode)}
