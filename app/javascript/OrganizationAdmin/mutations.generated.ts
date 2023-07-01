@@ -6,9 +6,9 @@ import { OrganizationRoleFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type CreateOrganizationRoleMutationVariables = Types.Exact<{
-  organizationId: Types.Scalars['ID'];
-  name: Types.Scalars['String'];
-  userIds: Array<Types.Scalars['ID']> | Types.Scalars['ID'];
+  organizationId: Types.Scalars['ID']['input'];
+  name: Types.Scalars['String']['input'];
+  userIds: Array<Types.Scalars['ID']['input']> | Types.Scalars['ID']['input'];
   permissions: Array<Types.PermissionInput> | Types.PermissionInput;
 }>;
 
@@ -16,19 +16,19 @@ export type CreateOrganizationRoleMutationVariables = Types.Exact<{
 export type CreateOrganizationRoleMutationData = { __typename: 'Mutation', createOrganizationRole: { __typename: 'CreateOrganizationRolePayload', organization_role: { __typename: 'OrganizationRole', id: string, name: string, users: Array<{ __typename: 'User', id: string, name?: string | null, email?: string | null }>, permissions: Array<{ __typename: 'Permission', id: string, permission: string }> } } };
 
 export type UpdateOrganizationRoleMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
-  name?: Types.InputMaybe<Types.Scalars['String']>;
-  addUserIds?: Types.InputMaybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>;
-  removeUserIds?: Types.InputMaybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>;
+  id: Types.Scalars['ID']['input'];
+  name?: Types.InputMaybe<Types.Scalars['String']['input']>;
+  addUserIds?: Types.InputMaybe<Array<Types.Scalars['ID']['input']> | Types.Scalars['ID']['input']>;
+  removeUserIds?: Types.InputMaybe<Array<Types.Scalars['ID']['input']> | Types.Scalars['ID']['input']>;
   addPermissions?: Types.InputMaybe<Array<Types.PermissionInput> | Types.PermissionInput>;
-  removePermissionIds?: Types.InputMaybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>;
+  removePermissionIds?: Types.InputMaybe<Array<Types.Scalars['ID']['input']> | Types.Scalars['ID']['input']>;
 }>;
 
 
 export type UpdateOrganizationRoleMutationData = { __typename: 'Mutation', updateOrganizationRole: { __typename: 'UpdateOrganizationRolePayload', organization_role: { __typename: 'OrganizationRole', id: string, name: string, users: Array<{ __typename: 'User', id: string, name?: string | null, email?: string | null }>, permissions: Array<{ __typename: 'Permission', id: string, permission: string }> } } };
 
 export type DeleteOrganizationRoleMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
+  id: Types.Scalars['ID']['input'];
 }>;
 
 

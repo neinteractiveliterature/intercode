@@ -6,7 +6,7 @@ import { CommonFormFieldsFragmentDoc } from '../../Models/commonFormFragments.ge
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type EventHistoryQueryVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
+  id: Types.Scalars['ID']['input'];
 }>;
 
 

@@ -13,7 +13,7 @@ export type CreateLayoutMutationVariables = Types.Exact<{
 export type CreateLayoutMutationData = { __typename: 'Mutation', createCmsLayout: { __typename: 'CreateCmsLayoutPayload', cms_layout: { __typename: 'CmsLayout', id: string, name?: string | null, content?: string | null, navbar_classes?: string | null, admin_notes?: string | null, current_ability_can_update: boolean, current_ability_can_delete: boolean } } };
 
 export type UpdateLayoutMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
+  id: Types.Scalars['ID']['input'];
   cmsLayout: Types.CmsLayoutInput;
 }>;
 
@@ -21,7 +21,7 @@ export type UpdateLayoutMutationVariables = Types.Exact<{
 export type UpdateLayoutMutationData = { __typename: 'Mutation', updateCmsLayout: { __typename: 'UpdateCmsLayoutPayload', cms_layout: { __typename: 'CmsLayout', id: string, name?: string | null, content?: string | null, navbar_classes?: string | null, admin_notes?: string | null, current_ability_can_update: boolean, current_ability_can_delete: boolean } } };
 
 export type DeleteLayoutMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
+  id: Types.Scalars['ID']['input'];
 }>;
 
 

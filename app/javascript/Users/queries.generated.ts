@@ -5,8 +5,8 @@ import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type UsersTableUsersQueryVariables = Types.Exact<{
-  page?: Types.InputMaybe<Types.Scalars['Int']>;
-  perPage?: Types.InputMaybe<Types.Scalars['Int']>;
+  page?: Types.InputMaybe<Types.Scalars['Int']['input']>;
+  perPage?: Types.InputMaybe<Types.Scalars['Int']['input']>;
   filters?: Types.InputMaybe<Types.UserFiltersInput>;
   sort?: Types.InputMaybe<Array<Types.SortInput> | Types.SortInput>;
 }>;
@@ -17,14 +17,14 @@ export type UsersTableUsersQueryData = { __typename: 'Query', users_paginated: {
 export type DetailedUserFieldsFragment = { __typename: 'User', id: string, name?: string | null, first_name?: string | null, last_name?: string | null, email?: string | null, privileges?: Array<string> | null, user_con_profiles: Array<{ __typename: 'UserConProfile', id: string, email?: string | null, ticket?: { __typename: 'Ticket', id: string } | null, signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState }>, convention: { __typename: 'Convention', id: string, name: string, domain?: string | null, starts_at?: string | null, ticket_name: string, timezone_name?: string | null, timezone_mode: Types.TimezoneMode }, staff_positions: Array<{ __typename: 'StaffPosition', id: string, name: string }> }> };
 
 export type UserAdminQueryVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
+  id: Types.Scalars['ID']['input'];
 }>;
 
 
 export type UserAdminQueryData = { __typename: 'Query', user: { __typename: 'User', id: string, name?: string | null, first_name?: string | null, last_name?: string | null, email?: string | null, privileges?: Array<string> | null, user_con_profiles: Array<{ __typename: 'UserConProfile', id: string, email?: string | null, ticket?: { __typename: 'Ticket', id: string } | null, signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState }>, convention: { __typename: 'Convention', id: string, name: string, domain?: string | null, starts_at?: string | null, ticket_name: string, timezone_name?: string | null, timezone_mode: Types.TimezoneMode }, staff_positions: Array<{ __typename: 'StaffPosition', id: string, name: string }> }> } };
 
 export type MergeUsersModalQueryVariables = Types.Exact<{
-  ids: Array<Types.Scalars['ID']> | Types.Scalars['ID'];
+  ids: Array<Types.Scalars['ID']['input']> | Types.Scalars['ID']['input'];
 }>;
 
 

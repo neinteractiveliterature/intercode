@@ -34,8 +34,8 @@ export type RestoreDroppedEventMutationVariables = Types.Exact<{
 export type RestoreDroppedEventMutationData = { __typename: 'Mutation', restoreDroppedEvent: { __typename: 'RestoreDroppedEventPayload', event: { __typename: 'Event', id: string, status?: string | null } } };
 
 export type AttachImageToEventMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
-  signedBlobId: Types.Scalars['ID'];
+  id: Types.Scalars['ID']['input'];
+  signedBlobId: Types.Scalars['ID']['input'];
 }>;
 
 
@@ -98,8 +98,8 @@ export type UpdateMaximumEventProvidedTicketsOverrideMutationVariables = Types.E
 export type UpdateMaximumEventProvidedTicketsOverrideMutationData = { __typename: 'Mutation', updateMaximumEventProvidedTicketsOverride: { __typename: 'UpdateMaximumEventProvidedTicketsOverridePayload', maximum_event_provided_tickets_override: { __typename: 'MaximumEventProvidedTicketsOverride', id: string, override_value: number, ticket_type: { __typename: 'TicketType', id: string, description?: string | null, maximum_event_provided_tickets: number } } } };
 
 export type UpdateEventAdminNotesMutationVariables = Types.Exact<{
-  eventId: Types.Scalars['ID'];
-  adminNotes: Types.Scalars['String'];
+  eventId: Types.Scalars['ID']['input'];
+  adminNotes: Types.Scalars['String']['input'];
 }>;
 
 

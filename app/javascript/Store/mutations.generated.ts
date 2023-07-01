@@ -7,22 +7,22 @@ import { AdminProductFieldsFragmentDoc } from './adminProductFields.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type MarkOrderPaidMutationVariables = Types.Exact<{
-  orderId: Types.Scalars['ID'];
+  orderId: Types.Scalars['ID']['input'];
 }>;
 
 
 export type MarkOrderPaidMutationData = { __typename: 'Mutation', markOrderPaid: { __typename: 'MarkOrderPaidPayload', order: { __typename: 'Order', id: string, status: Types.OrderStatus, submitted_at?: string | null, charge_id?: string | null, payment_note?: string | null, user_con_profile: { __typename: 'UserConProfile', id: string, name_without_nickname: string }, total_price: { __typename: 'Money', fractional: number, currency_code: string }, payment_amount?: { __typename: 'Money', fractional: number, currency_code: string } | null, coupon_applications: Array<{ __typename: 'CouponApplication', id: string, discount: { __typename: 'Money', fractional: number, currency_code: string }, coupon: { __typename: 'Coupon', id: string, code: string, percent_discount?: string | null, fixed_amount?: { __typename: 'Money', fractional: number, currency_code: string } | null, provides_product?: { __typename: 'Product', id: string, name: string } | null } }>, order_entries: Array<{ __typename: 'OrderEntry', id: string, quantity: number, describe_products: string, product: { __typename: 'Product', id: string, name: string }, product_variant?: { __typename: 'ProductVariant', id: string, name: string } | null, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } }> } } };
 
 export type CancelOrderMutationVariables = Types.Exact<{
-  orderId: Types.Scalars['ID'];
-  skipRefund?: Types.InputMaybe<Types.Scalars['Boolean']>;
+  orderId: Types.Scalars['ID']['input'];
+  skipRefund?: Types.InputMaybe<Types.Scalars['Boolean']['input']>;
 }>;
 
 
 export type CancelOrderMutationData = { __typename: 'Mutation', cancelOrder: { __typename: 'CancelOrderPayload', order: { __typename: 'Order', id: string, status: Types.OrderStatus, submitted_at?: string | null, charge_id?: string | null, payment_note?: string | null, user_con_profile: { __typename: 'UserConProfile', id: string, name_without_nickname: string }, total_price: { __typename: 'Money', fractional: number, currency_code: string }, payment_amount?: { __typename: 'Money', fractional: number, currency_code: string } | null, coupon_applications: Array<{ __typename: 'CouponApplication', id: string, discount: { __typename: 'Money', fractional: number, currency_code: string }, coupon: { __typename: 'Coupon', id: string, code: string, percent_discount?: string | null, fixed_amount?: { __typename: 'Money', fractional: number, currency_code: string } | null, provides_product?: { __typename: 'Product', id: string, name: string } | null } }>, order_entries: Array<{ __typename: 'OrderEntry', id: string, quantity: number, describe_products: string, product: { __typename: 'Product', id: string, name: string }, product_variant?: { __typename: 'ProductVariant', id: string, name: string } | null, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } }> } } };
 
 export type CreateOrderMutationVariables = Types.Exact<{
-  userConProfileId: Types.Scalars['ID'];
+  userConProfileId: Types.Scalars['ID']['input'];
   order: Types.OrderInput;
   status: Types.OrderStatus;
   orderEntries?: Types.InputMaybe<Array<Types.OrderEntryInput> | Types.OrderEntryInput>;
@@ -32,7 +32,7 @@ export type CreateOrderMutationVariables = Types.Exact<{
 export type CreateOrderMutationData = { __typename: 'Mutation', createOrder: { __typename: 'CreateOrderPayload', order: { __typename: 'Order', id: string, status: Types.OrderStatus, submitted_at?: string | null, charge_id?: string | null, payment_note?: string | null, user_con_profile: { __typename: 'UserConProfile', id: string, name_without_nickname: string }, total_price: { __typename: 'Money', fractional: number, currency_code: string }, payment_amount?: { __typename: 'Money', fractional: number, currency_code: string } | null, coupon_applications: Array<{ __typename: 'CouponApplication', id: string, discount: { __typename: 'Money', fractional: number, currency_code: string }, coupon: { __typename: 'Coupon', id: string, code: string, percent_discount?: string | null, fixed_amount?: { __typename: 'Money', fractional: number, currency_code: string } | null, provides_product?: { __typename: 'Product', id: string, name: string } | null } }>, order_entries: Array<{ __typename: 'OrderEntry', id: string, quantity: number, describe_products: string, product: { __typename: 'Product', id: string, name: string }, product_variant?: { __typename: 'ProductVariant', id: string, name: string } | null, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } }> } } };
 
 export type AdminUpdateOrderMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
+  id: Types.Scalars['ID']['input'];
   order: Types.OrderInput;
 }>;
 
@@ -47,7 +47,7 @@ export type CreateProductMutationVariables = Types.Exact<{
 export type CreateProductMutationData = { __typename: 'Mutation', createProduct: { __typename: 'CreateProductPayload', product: { __typename: 'Product', id: string, name: string, description?: string | null, description_html?: string | null, available: boolean, payment_options: Array<string>, image?: { __typename: 'ActiveStorageAttachment', id: string, url: string } | null, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: { __typename: 'Money', fractional: number, currency_code: string } | null, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'PayWhatYouWantValue', maximum_amount?: { __typename: 'Money', currency_code: string, fractional: number } | null, minimum_amount?: { __typename: 'Money', currency_code: string, fractional: number } | null, suggested_amount?: { __typename: 'Money', currency_code: string, fractional: number } | null } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: string | null, finish?: string | null, value: { __typename: 'Money', fractional: number, currency_code: string } }> } }, product_variants: Array<{ __typename: 'ProductVariant', id: string, name: string, description?: string | null, position?: number | null, image?: { __typename: 'ActiveStorageAttachment', id: string, url: string } | null, override_pricing_structure?: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: { __typename: 'Money', fractional: number, currency_code: string } | null, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'PayWhatYouWantValue', maximum_amount?: { __typename: 'Money', currency_code: string, fractional: number } | null, minimum_amount?: { __typename: 'Money', currency_code: string, fractional: number } | null, suggested_amount?: { __typename: 'Money', currency_code: string, fractional: number } | null } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: string | null, finish?: string | null, value: { __typename: 'Money', fractional: number, currency_code: string } }> } } | null }>, provides_ticket_type?: { __typename: 'TicketType', id: string, description?: string | null } | null } } };
 
 export type UpdateProductMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
+  id: Types.Scalars['ID']['input'];
   product: Types.ProductInput;
 }>;
 
@@ -55,7 +55,7 @@ export type UpdateProductMutationVariables = Types.Exact<{
 export type UpdateProductMutationData = { __typename: 'Mutation', updateProduct: { __typename: 'UpdateProductPayload', product: { __typename: 'Product', id: string, name: string, description?: string | null, description_html?: string | null, available: boolean, payment_options: Array<string>, image?: { __typename: 'ActiveStorageAttachment', id: string, url: string } | null, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: { __typename: 'Money', fractional: number, currency_code: string } | null, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'PayWhatYouWantValue', maximum_amount?: { __typename: 'Money', currency_code: string, fractional: number } | null, minimum_amount?: { __typename: 'Money', currency_code: string, fractional: number } | null, suggested_amount?: { __typename: 'Money', currency_code: string, fractional: number } | null } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: string | null, finish?: string | null, value: { __typename: 'Money', fractional: number, currency_code: string } }> } }, product_variants: Array<{ __typename: 'ProductVariant', id: string, name: string, description?: string | null, position?: number | null, image?: { __typename: 'ActiveStorageAttachment', id: string, url: string } | null, override_pricing_structure?: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: { __typename: 'Money', fractional: number, currency_code: string } | null, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'PayWhatYouWantValue', maximum_amount?: { __typename: 'Money', currency_code: string, fractional: number } | null, minimum_amount?: { __typename: 'Money', currency_code: string, fractional: number } | null, suggested_amount?: { __typename: 'Money', currency_code: string, fractional: number } | null } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: string | null, finish?: string | null, value: { __typename: 'Money', fractional: number, currency_code: string } }> } } | null }>, provides_ticket_type?: { __typename: 'TicketType', id: string, description?: string | null } | null } } };
 
 export type DeleteProductMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
+  id: Types.Scalars['ID']['input'];
 }>;
 
 
@@ -104,9 +104,9 @@ export type SubmitOrderMutationVariables = Types.Exact<{
 export type SubmitOrderMutationData = { __typename: 'Mutation', submitOrder: { __typename: 'SubmitOrderPayload', order: { __typename: 'Order', id: string, status: Types.OrderStatus } } };
 
 export type AddOrderEntryToCurrentPendingOrderMutationVariables = Types.Exact<{
-  productId: Types.Scalars['ID'];
-  productVariantId?: Types.InputMaybe<Types.Scalars['ID']>;
-  quantity: Types.Scalars['Int'];
+  productId: Types.Scalars['ID']['input'];
+  productVariantId?: Types.InputMaybe<Types.Scalars['ID']['input']>;
+  quantity: Types.Scalars['Int']['input'];
   payWhatYouWantAmount?: Types.InputMaybe<Types.MoneyInput>;
 }>;
 
@@ -114,15 +114,15 @@ export type AddOrderEntryToCurrentPendingOrderMutationVariables = Types.Exact<{
 export type AddOrderEntryToCurrentPendingOrderMutationData = { __typename: 'Mutation', addOrderEntryToCurrentPendingOrder: { __typename: 'AddOrderEntryToCurrentPendingOrderPayload', order_entry: { __typename: 'OrderEntry', id: string } } };
 
 export type CreateCouponApplicationMutationVariables = Types.Exact<{
-  orderId: Types.Scalars['ID'];
-  couponCode: Types.Scalars['String'];
+  orderId: Types.Scalars['ID']['input'];
+  couponCode: Types.Scalars['String']['input'];
 }>;
 
 
 export type CreateCouponApplicationMutationData = { __typename: 'Mutation', createCouponApplication: { __typename: 'CreateCouponApplicationPayload', coupon_application: { __typename: 'CouponApplication', id: string, order: { __typename: 'Order', id: string, coupon_applications: Array<{ __typename: 'CouponApplication', id: string, discount: { __typename: 'Money', fractional: number, currency_code: string }, coupon: { __typename: 'Coupon', id: string, code: string, percent_discount?: string | null, fixed_amount?: { __typename: 'Money', fractional: number, currency_code: string } | null, provides_product?: { __typename: 'Product', id: string, name: string } | null } }>, total_price_before_discounts: { __typename: 'Money', fractional: number, currency_code: string }, total_price: { __typename: 'Money', fractional: number, currency_code: string }, order_entries: Array<{ __typename: 'OrderEntry', id: string, quantity: number, product: { __typename: 'Product', id: string, name: string, payment_options: Array<string>, provides_ticket_type?: { __typename: 'TicketType', id: string } | null }, product_variant?: { __typename: 'ProductVariant', id: string, name: string } | null, price: { __typename: 'Money', fractional: number, currency_code: string }, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } }> } } } };
 
 export type DeleteCouponApplicationMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
+  id: Types.Scalars['ID']['input'];
 }>;
 
 

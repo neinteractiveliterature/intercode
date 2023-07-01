@@ -13,7 +13,7 @@ export type CreateCmsGraphqlQueryMutationVariables = Types.Exact<{
 export type CreateCmsGraphqlQueryMutationData = { __typename: 'Mutation', createCmsGraphqlQuery: { __typename: 'CreateCmsGraphqlQueryPayload', query: { __typename: 'CmsGraphqlQuery', id: string, identifier: string, query: string, admin_notes?: string | null, current_ability_can_update: boolean, current_ability_can_delete: boolean } } };
 
 export type UpdateCmsGraphqlQueryMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
+  id: Types.Scalars['ID']['input'];
   query: Types.CmsGraphqlQueryInput;
 }>;
 
@@ -21,7 +21,7 @@ export type UpdateCmsGraphqlQueryMutationVariables = Types.Exact<{
 export type UpdateCmsGraphqlQueryMutationData = { __typename: 'Mutation', updateCmsGraphqlQuery: { __typename: 'UpdateCmsGraphqlQueryPayload', query: { __typename: 'CmsGraphqlQuery', id: string, identifier: string, query: string, admin_notes?: string | null, current_ability_can_update: boolean, current_ability_can_delete: boolean } } };
 
 export type DeleteCmsGraphqlQueryMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
+  id: Types.Scalars['ID']['input'];
 }>;
 
 

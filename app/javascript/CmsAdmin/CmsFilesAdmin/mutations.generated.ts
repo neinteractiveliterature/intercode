@@ -6,22 +6,22 @@ import { CmsFileFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type CreateCmsFileMutationVariables = Types.Exact<{
-  signedBlobId: Types.Scalars['ID'];
+  signedBlobId: Types.Scalars['ID']['input'];
 }>;
 
 
 export type CreateCmsFileMutationData = { __typename: 'Mutation', createCmsFile: { __typename: 'CreateCmsFilePayload', cms_file: { __typename: 'CmsFile', id: string, current_ability_can_delete: boolean, file: { __typename: 'ActiveStorageAttachment', id: string, filename: string, url: string, content_type: string, byte_size: number, thumbnailUrl?: string | null } } } };
 
 export type RenameCmsFileMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
-  filename: Types.Scalars['String'];
+  id: Types.Scalars['ID']['input'];
+  filename: Types.Scalars['String']['input'];
 }>;
 
 
 export type RenameCmsFileMutationData = { __typename: 'Mutation', renameCmsFile: { __typename: 'RenameCmsFilePayload', cms_file: { __typename: 'CmsFile', id: string, current_ability_can_delete: boolean, file: { __typename: 'ActiveStorageAttachment', id: string, filename: string, url: string, content_type: string, byte_size: number, thumbnailUrl?: string | null } } } };
 
 export type DeleteCmsFileMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
+  id: Types.Scalars['ID']['input'];
 }>;
 
 

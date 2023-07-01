@@ -6,8 +6,8 @@ import { DetailedUserFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type MergeUsersMutationVariables = Types.Exact<{
-  userIds: Array<Types.Scalars['ID']> | Types.Scalars['ID'];
-  winningUserId: Types.Scalars['ID'];
+  userIds: Array<Types.Scalars['ID']['input']> | Types.Scalars['ID']['input'];
+  winningUserId: Types.Scalars['ID']['input'];
   winningUserConProfiles: Array<Types.WinningUserConProfileInput> | Types.WinningUserConProfileInput;
 }>;
 

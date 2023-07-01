@@ -7,32 +7,32 @@ import { RunBasicSignupDataFragmentDoc, CommonConventionDataFragmentDoc } from '
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type CreateMySignupMutationVariables = Types.Exact<{
-  runId: Types.Scalars['ID'];
-  requestedBucketKey?: Types.InputMaybe<Types.Scalars['String']>;
-  noRequestedBucket?: Types.InputMaybe<Types.Scalars['Boolean']>;
+  runId: Types.Scalars['ID']['input'];
+  requestedBucketKey?: Types.InputMaybe<Types.Scalars['String']['input']>;
+  noRequestedBucket?: Types.InputMaybe<Types.Scalars['Boolean']['input']>;
 }>;
 
 
 export type CreateMySignupMutationData = { __typename: 'Mutation', createMySignup: { __typename: 'CreateMySignupPayload', signup: { __typename: 'Signup', id: string, state: Types.SignupState, waitlist_position?: number | null, run: { __typename: 'Run', id: string, title_suffix?: string | null, starts_at: string, current_ability_can_signup_summary_run: boolean, signup_count_by_state_and_bucket_key_and_counted: string, rooms: Array<{ __typename: 'Room', id: string, name?: string | null }>, my_signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState, waitlist_position?: number | null }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: string, state: Types.SignupRequestState, requested_bucket_key?: string | null, target_run: { __typename: 'Run', id: string }, replace_signup?: { __typename: 'Signup', id: string } | null }> } } } };
 
 export type WithdrawMySignupMutationVariables = Types.Exact<{
-  runId: Types.Scalars['ID'];
+  runId: Types.Scalars['ID']['input'];
 }>;
 
 
 export type WithdrawMySignupMutationData = { __typename: 'Mutation', withdrawMySignup: { __typename: 'WithdrawMySignupPayload', signup: { __typename: 'Signup', id: string, state: Types.SignupState, waitlist_position?: number | null, run: { __typename: 'Run', id: string, title_suffix?: string | null, starts_at: string, current_ability_can_signup_summary_run: boolean, signup_count_by_state_and_bucket_key_and_counted: string, rooms: Array<{ __typename: 'Room', id: string, name?: string | null }>, my_signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState, waitlist_position?: number | null }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: string, state: Types.SignupRequestState, requested_bucket_key?: string | null, target_run: { __typename: 'Run', id: string }, replace_signup?: { __typename: 'Signup', id: string } | null }> } } } };
 
 export type CreateSignupRequestMutationVariables = Types.Exact<{
-  targetRunId: Types.Scalars['ID'];
-  requestedBucketKey?: Types.InputMaybe<Types.Scalars['String']>;
-  replaceSignupId?: Types.InputMaybe<Types.Scalars['ID']>;
+  targetRunId: Types.Scalars['ID']['input'];
+  requestedBucketKey?: Types.InputMaybe<Types.Scalars['String']['input']>;
+  replaceSignupId?: Types.InputMaybe<Types.Scalars['ID']['input']>;
 }>;
 
 
 export type CreateSignupRequestMutationData = { __typename: 'Mutation', createSignupRequest: { __typename: 'CreateSignupRequestPayload', signup_request: { __typename: 'SignupRequest', id: string, state: Types.SignupRequestState, requested_bucket_key?: string | null, target_run: { __typename: 'Run', id: string }, replace_signup?: { __typename: 'Signup', id: string } | null } } };
 
 export type WithdrawSignupRequestMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
+  id: Types.Scalars['ID']['input'];
 }>;
 
 

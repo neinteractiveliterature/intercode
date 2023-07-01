@@ -6,7 +6,7 @@ import { UserConProfileFieldsFragmentDoc, UserConProfileAdminTicketFieldsFragmen
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type CreateUserConProfileMutationVariables = Types.Exact<{
-  user_id: Types.Scalars['ID'];
+  user_id: Types.Scalars['ID']['input'];
   user_con_profile: Types.UserConProfileInput;
 }>;
 
@@ -21,14 +21,14 @@ export type UpdateUserConProfileMutationVariables = Types.Exact<{
 export type UpdateUserConProfileMutationData = { __typename: 'Mutation', updateUserConProfile: { __typename: 'UpdateUserConProfilePayload', user_con_profile: { __typename: 'UserConProfile', id: string, name: string, form_response_attrs_json?: string | null, gravatar_enabled: boolean, gravatar_url: string } } };
 
 export type DeleteUserConProfileMutationVariables = Types.Exact<{
-  userConProfileId: Types.Scalars['ID'];
+  userConProfileId: Types.Scalars['ID']['input'];
 }>;
 
 
 export type DeleteUserConProfileMutationData = { __typename: 'Mutation', deleteUserConProfile: { __typename: 'DeleteUserConProfilePayload', user_con_profile: { __typename: 'UserConProfile', id: string } } };
 
 export type CreateTicketMutationVariables = Types.Exact<{
-  userConProfileId: Types.Scalars['ID'];
+  userConProfileId: Types.Scalars['ID']['input'];
   ticket: Types.TicketInput;
 }>;
 
@@ -36,7 +36,7 @@ export type CreateTicketMutationVariables = Types.Exact<{
 export type CreateTicketMutationData = { __typename: 'Mutation', createTicket: { __typename: 'CreateTicketPayload', ticket: { __typename: 'Ticket', id: string, created_at: string, updated_at: string, order_entry?: { __typename: 'OrderEntry', id: string, order: { __typename: 'Order', id: string, status: Types.OrderStatus, submitted_at?: string | null, charge_id?: string | null, payment_note?: string | null, user_con_profile: { __typename: 'UserConProfile', id: string, name_without_nickname: string }, total_price: { __typename: 'Money', fractional: number, currency_code: string }, payment_amount?: { __typename: 'Money', fractional: number, currency_code: string } | null, coupon_applications: Array<{ __typename: 'CouponApplication', id: string, discount: { __typename: 'Money', fractional: number, currency_code: string }, coupon: { __typename: 'Coupon', id: string, code: string, percent_discount?: string | null, fixed_amount?: { __typename: 'Money', fractional: number, currency_code: string } | null, provides_product?: { __typename: 'Product', id: string, name: string } | null } }>, order_entries: Array<{ __typename: 'OrderEntry', id: string, quantity: number, describe_products: string, product: { __typename: 'Product', id: string, name: string }, product_variant?: { __typename: 'ProductVariant', id: string, name: string } | null, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } }> }, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } } | null, ticket_type: { __typename: 'TicketType', id: string, description?: string | null, name: string }, provided_by_event?: { __typename: 'Event', id: string, title?: string | null } | null } } };
 
 export type UpdateTicketMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
+  id: Types.Scalars['ID']['input'];
   ticket: Types.TicketInput;
 }>;
 
@@ -44,17 +44,17 @@ export type UpdateTicketMutationVariables = Types.Exact<{
 export type UpdateTicketMutationData = { __typename: 'Mutation', updateTicket: { __typename: 'UpdateTicketPayload', ticket: { __typename: 'Ticket', id: string, created_at: string, updated_at: string, order_entry?: { __typename: 'OrderEntry', id: string, order: { __typename: 'Order', id: string, status: Types.OrderStatus, submitted_at?: string | null, charge_id?: string | null, payment_note?: string | null, user_con_profile: { __typename: 'UserConProfile', id: string, name_without_nickname: string }, total_price: { __typename: 'Money', fractional: number, currency_code: string }, payment_amount?: { __typename: 'Money', fractional: number, currency_code: string } | null, coupon_applications: Array<{ __typename: 'CouponApplication', id: string, discount: { __typename: 'Money', fractional: number, currency_code: string }, coupon: { __typename: 'Coupon', id: string, code: string, percent_discount?: string | null, fixed_amount?: { __typename: 'Money', fractional: number, currency_code: string } | null, provides_product?: { __typename: 'Product', id: string, name: string } | null } }>, order_entries: Array<{ __typename: 'OrderEntry', id: string, quantity: number, describe_products: string, product: { __typename: 'Product', id: string, name: string }, product_variant?: { __typename: 'ProductVariant', id: string, name: string } | null, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } }> }, price_per_item: { __typename: 'Money', fractional: number, currency_code: string } } | null, ticket_type: { __typename: 'TicketType', id: string, description?: string | null, name: string }, provided_by_event?: { __typename: 'Event', id: string, title?: string | null } | null } } };
 
 export type DeleteTicketMutationVariables = Types.Exact<{
-  ticketId: Types.Scalars['ID'];
-  refund: Types.Scalars['Boolean'];
+  ticketId: Types.Scalars['ID']['input'];
+  refund: Types.Scalars['Boolean']['input'];
 }>;
 
 
 export type DeleteTicketMutationData = { __typename: 'Mutation', deleteTicket: { __typename: 'DeleteTicketPayload', ticket: { __typename: 'Ticket', id: string } } };
 
 export type ConvertTicketToEventProvidedMutationVariables = Types.Exact<{
-  eventId: Types.Scalars['ID'];
-  ticketTypeId: Types.Scalars['ID'];
-  userConProfileId: Types.Scalars['ID'];
+  eventId: Types.Scalars['ID']['input'];
+  ticketTypeId: Types.Scalars['ID']['input'];
+  userConProfileId: Types.Scalars['ID']['input'];
 }>;
 
 

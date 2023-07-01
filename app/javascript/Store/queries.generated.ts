@@ -8,8 +8,8 @@ import { PricingStructureFieldsFragmentDoc } from './pricingStructureFields.gene
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type AdminOrdersQueryVariables = Types.Exact<{
-  page?: Types.InputMaybe<Types.Scalars['Int']>;
-  perPage?: Types.InputMaybe<Types.Scalars['Int']>;
+  page?: Types.InputMaybe<Types.Scalars['Int']['input']>;
+  perPage?: Types.InputMaybe<Types.Scalars['Int']['input']>;
   filters?: Types.InputMaybe<Types.OrderFiltersInput>;
   sort?: Types.InputMaybe<Array<Types.SortInput> | Types.SortInput>;
 }>;
@@ -43,7 +43,7 @@ export type OrderSummaryQueryVariables = Types.Exact<{ [key: string]: never; }>;
 export type OrderSummaryQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, products: Array<{ __typename: 'Product', id: string, name: string, order_quantities_by_status: Array<{ __typename: 'OrderQuantityByStatus', status: string, quantity: number }>, product_variants: Array<{ __typename: 'ProductVariant', id: string, name: string, order_quantities_by_status: Array<{ __typename: 'OrderQuantityByStatus', status: string, quantity: number }> }> }> } };
 
 export type OrderFormProductQueryVariables = Types.Exact<{
-  productId: Types.Scalars['ID'];
+  productId: Types.Scalars['ID']['input'];
 }>;
 
 

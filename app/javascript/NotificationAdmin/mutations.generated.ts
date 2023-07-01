@@ -6,7 +6,7 @@ import { NotificationTemplateFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type UpdateNotificationTemplateMutationVariables = Types.Exact<{
-  eventKey: Types.Scalars['String'];
+  eventKey: Types.Scalars['String']['input'];
   notificationTemplate: Types.NotificationTemplateInput;
 }>;
 
@@ -14,9 +14,9 @@ export type UpdateNotificationTemplateMutationVariables = Types.Exact<{
 export type UpdateNotificationTemplateMutationData = { __typename: 'Mutation', updateNotificationTemplate: { __typename: 'UpdateNotificationTemplatePayload', notification_template: { __typename: 'NotificationTemplate', id: string, event_key: string, subject?: string | null, body_html?: string | null, body_text?: string | null, body_sms?: string | null } } };
 
 export type SendNotificationPreviewMutationVariables = Types.Exact<{
-  eventKey: Types.Scalars['String'];
-  email: Types.Scalars['Boolean'];
-  sms: Types.Scalars['Boolean'];
+  eventKey: Types.Scalars['String']['input'];
+  email: Types.Scalars['Boolean']['input'];
+  sms: Types.Scalars['Boolean']['input'];
 }>;
 
 

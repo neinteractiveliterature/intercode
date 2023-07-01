@@ -13,7 +13,7 @@ export type StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFieldsFragmen
 export type StandaloneEditEvent_EventFieldsFragment = { __typename: 'Event', id: string, title?: string | null, form_response_attrs_json?: string | null, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, images: Array<{ __typename: 'ActiveStorageAttachment', id: string, byte_size: number, content_type: string, filename: string, url: string }>, event_category: { __typename: 'EventCategory', id: string, name: string, event_form: { __typename: 'Form', id: string, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: string, title?: string | null, position: number, form_items: Array<{ __typename: 'FormItem', id: string, position: number, identifier?: string | null, item_type: string, rendered_properties: string, default_value?: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in?: Array<Types.FormItemExposeIn> | null }> }> } }, maximum_event_provided_tickets_overrides: Array<{ __typename: 'MaximumEventProvidedTicketsOverride', id: string, override_value: number, ticket_type: { __typename: 'TicketType', id: string, description?: string | null, maximum_event_provided_tickets: number } }> };
 
 export type StandaloneEditEventQueryVariables = Types.Exact<{
-  eventId: Types.Scalars['ID'];
+  eventId: Types.Scalars['ID']['input'];
 }>;
 
 

@@ -8,31 +8,31 @@ import { RunBasicSignupDataFragmentDoc, CommonConventionDataFragmentDoc } from '
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type ChangeSignupBucketMutationVariables = Types.Exact<{
-  signupId: Types.Scalars['ID'];
-  bucketKey: Types.Scalars['String'];
+  signupId: Types.Scalars['ID']['input'];
+  bucketKey: Types.Scalars['String']['input'];
 }>;
 
 
 export type ChangeSignupBucketMutationData = { __typename: 'Mutation', updateSignupBucket: { __typename: 'UpdateSignupBucketPayload', signup: { __typename: 'Signup', id: string, state: Types.SignupState, counted: boolean, bucket_key?: string | null, requested_bucket_key?: string | null, run: { __typename: 'Run', id: string, title_suffix?: string | null, starts_at: string, ends_at: string, current_ability_can_signup_summary_run: boolean, signup_count_by_state_and_bucket_key_and_counted: string, rooms: Array<{ __typename: 'Room', id: string, name?: string | null }>, event: { __typename: 'Event', id: string, title?: string | null, event_category: { __typename: 'EventCategory', id: string, team_member_name: string, teamMemberNamePlural: string }, registration_policy?: { __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null, anything: boolean }> } | null, team_members: Array<{ __typename: 'TeamMember', id: string, user_con_profile: { __typename: 'UserConProfile', id: string } }> }, my_signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState, waitlist_position?: number | null }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: string, state: Types.SignupRequestState, requested_bucket_key?: string | null, target_run: { __typename: 'Run', id: string }, replace_signup?: { __typename: 'Signup', id: string } | null }> }, user_con_profile: { __typename: 'UserConProfile', id: string, name_without_nickname: string, nickname?: string | null, birth_date?: string | null, email?: string | null, address?: string | null, city?: string | null, state?: string | null, zipcode?: string | null, country?: string | null, mobile_phone?: string | null, gravatar_enabled: boolean, gravatar_url: string } } } };
 
 export type ForceConfirmSignupMutationVariables = Types.Exact<{
-  signupId: Types.Scalars['ID'];
-  bucketKey: Types.Scalars['String'];
+  signupId: Types.Scalars['ID']['input'];
+  bucketKey: Types.Scalars['String']['input'];
 }>;
 
 
 export type ForceConfirmSignupMutationData = { __typename: 'Mutation', forceConfirmSignup: { __typename: 'ForceConfirmSignupPayload', signup: { __typename: 'Signup', id: string, state: Types.SignupState, counted: boolean, bucket_key?: string | null, requested_bucket_key?: string | null, run: { __typename: 'Run', id: string, title_suffix?: string | null, starts_at: string, ends_at: string, current_ability_can_signup_summary_run: boolean, signup_count_by_state_and_bucket_key_and_counted: string, rooms: Array<{ __typename: 'Room', id: string, name?: string | null }>, event: { __typename: 'Event', id: string, title?: string | null, event_category: { __typename: 'EventCategory', id: string, team_member_name: string, teamMemberNamePlural: string }, registration_policy?: { __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null, anything: boolean }> } | null, team_members: Array<{ __typename: 'TeamMember', id: string, user_con_profile: { __typename: 'UserConProfile', id: string } }> }, my_signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState, waitlist_position?: number | null }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: string, state: Types.SignupRequestState, requested_bucket_key?: string | null, target_run: { __typename: 'Run', id: string }, replace_signup?: { __typename: 'Signup', id: string } | null }> }, user_con_profile: { __typename: 'UserConProfile', id: string, name_without_nickname: string, nickname?: string | null, birth_date?: string | null, email?: string | null, address?: string | null, city?: string | null, state?: string | null, zipcode?: string | null, country?: string | null, mobile_phone?: string | null, gravatar_enabled: boolean, gravatar_url: string } } } };
 
 export type UpdateSignupCountedMutationVariables = Types.Exact<{
-  signupId: Types.Scalars['ID'];
-  counted: Types.Scalars['Boolean'];
+  signupId: Types.Scalars['ID']['input'];
+  counted: Types.Scalars['Boolean']['input'];
 }>;
 
 
 export type UpdateSignupCountedMutationData = { __typename: 'Mutation', updateSignupCounted: { __typename: 'UpdateSignupCountedPayload', signup: { __typename: 'Signup', id: string, state: Types.SignupState, counted: boolean, bucket_key?: string | null, requested_bucket_key?: string | null, run: { __typename: 'Run', id: string, title_suffix?: string | null, starts_at: string, ends_at: string, current_ability_can_signup_summary_run: boolean, signup_count_by_state_and_bucket_key_and_counted: string, rooms: Array<{ __typename: 'Room', id: string, name?: string | null }>, event: { __typename: 'Event', id: string, title?: string | null, event_category: { __typename: 'EventCategory', id: string, team_member_name: string, teamMemberNamePlural: string }, registration_policy?: { __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null, anything: boolean }> } | null, team_members: Array<{ __typename: 'TeamMember', id: string, user_con_profile: { __typename: 'UserConProfile', id: string } }> }, my_signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState, waitlist_position?: number | null }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: string, state: Types.SignupRequestState, requested_bucket_key?: string | null, target_run: { __typename: 'Run', id: string }, replace_signup?: { __typename: 'Signup', id: string } | null }> }, user_con_profile: { __typename: 'UserConProfile', id: string, name_without_nickname: string, nickname?: string | null, birth_date?: string | null, email?: string | null, address?: string | null, city?: string | null, state?: string | null, zipcode?: string | null, country?: string | null, mobile_phone?: string | null, gravatar_enabled: boolean, gravatar_url: string } } } };
 
 export type WithdrawAllUserConProfileSignupsMutationVariables = Types.Exact<{
-  userConProfileId: Types.Scalars['ID'];
+  userConProfileId: Types.Scalars['ID']['input'];
 }>;
 
 

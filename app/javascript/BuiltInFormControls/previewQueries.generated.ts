@@ -5,24 +5,24 @@ import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type PreviewLiquidQueryVariables = Types.Exact<{
-  liquid: Types.Scalars['String'];
+  liquid: Types.Scalars['String']['input'];
 }>;
 
 
 export type PreviewLiquidQueryData = { __typename: 'Query', cmsParent: { __typename: 'Convention', id: string, previewLiquid: string } | { __typename: 'RootSite', id: string, previewLiquid: string } };
 
 export type PreviewMarkdownQueryVariables = Types.Exact<{
-  markdown: Types.Scalars['String'];
-  eventId?: Types.InputMaybe<Types.Scalars['ID']>;
-  eventProposalId?: Types.InputMaybe<Types.Scalars['ID']>;
+  markdown: Types.Scalars['String']['input'];
+  eventId?: Types.InputMaybe<Types.Scalars['ID']['input']>;
+  eventProposalId?: Types.InputMaybe<Types.Scalars['ID']['input']>;
 }>;
 
 
 export type PreviewMarkdownQueryData = { __typename: 'Query', cmsParent: { __typename: 'Convention', id: string, previewMarkdown: string } | { __typename: 'RootSite', id: string, previewMarkdown: string } };
 
 export type PreviewNotifierLiquidQueryVariables = Types.Exact<{
-  eventKey: Types.Scalars['String'];
-  liquid: Types.Scalars['String'];
+  eventKey: Types.Scalars['String']['input'];
+  liquid: Types.Scalars['String']['input'];
 }>;
 
 

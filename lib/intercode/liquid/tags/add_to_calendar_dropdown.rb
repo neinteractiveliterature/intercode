@@ -15,7 +15,7 @@ module Intercode
 
         def initialize(tag_name, args, _options)
           super
-          return unless args && args =~ /([^\s]+)(\s+(\w.*))?/
+          return unless args && args =~ /([^\s]+)(\s+["']?(\w[^"']*))?/
 
           @ical_secret_expression = ::Liquid::Expression.parse(Regexp.last_match(1))
           @button_class = Regexp.last_match(3)

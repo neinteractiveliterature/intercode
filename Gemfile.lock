@@ -8,6 +8,15 @@ GIT
       rake (>= 10.4, < 14.0)
 
 GIT
+  remote: https://github.com/gively/cadmus.git
+  revision: 0c44601c3e74323e37eaf55d47412d3f3e292b78
+  branch: syntax_conformance
+  specs:
+    cadmus (0.7.1)
+      liquid
+      rails (>= 5.0.0)
+
+GIT
   remote: https://github.com/nbudin/cloudwatch_scheduler.git
   revision: 3c4a06c3bf6596663f45d05f524ddddafc09e542
   branch: ruby3_rails7_compat
@@ -184,9 +193,6 @@ GEM
       msgpack (~> 1.2)
     browser (5.3.1)
     builder (3.2.4)
-    cadmus (0.7.1)
-      liquid
-      rails (>= 5.0.0)
     cadmus_navbar (0.1.0)
       acts_as_list
       cadmus
@@ -650,7 +656,7 @@ DEPENDENCIES
   aws-sdk-sqs
   bootsnap (>= 1.1.0)
   browser
-  cadmus (~> 0.7.1)
+  cadmus!
   cadmus_navbar (~> 0.1.0)
   civil_service!
   cloudwatch_scheduler!

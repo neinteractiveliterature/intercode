@@ -5,7 +5,7 @@ import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type SiteSearchQueryVariables = Types.Exact<{
-  query: Types.Scalars['String'];
+  query: Types.Scalars['String']['input'];
 }>;
 
 
