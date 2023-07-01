@@ -50,7 +50,7 @@ class CmsRenderingContext
 
   def render_page_content(page)
     preload_page_content(page)
-    cadmus_renderer.render(page.liquid_template, :html, assigns: { 'page' => page })
+    cadmus_renderer.render(page.liquid_template, :html, assigns: { "page" => page })
   end
 
   def render_layout_content(cms_layout, assigns)
@@ -62,14 +62,17 @@ class CmsRenderingContext
   # not have its body content duplicated
   def render_app_root_content(cms_layout, assigns)
     graphql_presend_presenter = GraphqlPresendPresenter.new(controller: controller, cms_parent: cms_parent)
-    doc = Nokogiri::HTML.parse("<!DOCTYPE html><html><head>#{assigns['content_for_head']}</head><body></body></html>")
-    doc.xpath('//body/*').remove
-    doc.xpath('//body').first.inner_html =
-      (assigns['browser_warning'] || '') + NOSCRIPT_WARNING +
+    doc = Nokogiri::HTML.parse("<!DOCTYPE html><html><head>#{assigns["content_for_head"]}</head><body></body></html>")
+    doc.xpath("//body/*").remove
+    doc.xpath("//body").first.inner_html =
+      (assigns["browser_warning"] || "") + NOSCRIPT_WARNING +
         tag.div(
-          '',
-          'data-react-class' => 'AppRoot',
-          'data-react-props' => (controller&.app_component_props || {}).merge(queryData: graphql_presend_presenter.graphql_presend_data).to_json
+          "",
+          "data-react-class" => "AppRoot",
+          "data-react-props" =>
+            (controller&.app_component_props || {}).merge(
+              queryData: graphql_presend_presenter.graphql_presend_data
+            ).to_json
         )
     doc.to_s.html_safe
   rescue StandardError => e
@@ -105,42 +108,40 @@ class CmsRenderingContext
 
   def liquid_assigns_for_single_page_app(cms_layout)
     liquid_assigns.merge(
-      'content_for_head' => '',
-      'content_for_navbar' =>
+      "content_for_head" => "",
+      "content_for_navbar" =>
         tag.div(
-          '',
-          'data-react-class' => 'NavigationBar',
-          'data-react-props' => {
+          "",
+          "data-react-class" => "NavigationBar",
+          "data-react-props" => {
             navbarClasses: cms_layout.navbar_classes || ApplicationHelper::DEFAULT_NAVBAR_CLASSES
           }.to_json
         ),
-      'content_for_layout' =>
+      "content_for_layout" =>
         tag.div(
-          '',
-          'data-react-class' => 'AppRouter',
-          'data-react-props' => { alert: controller&.flash&.alert }.to_json
+          "",
+          "data-react-class" => "AppRouter",
+          "data-react-props" => { alert: controller&.flash&.alert }.to_json
         )
     )
   end
 
   def liquid_assigns_for_placeholder_template
-    styles_url = url_with_possible_host('/packs/application-styles.js', ENV['ASSETS_HOST'])
+    styles_url = url_with_possible_host("/packs/application-styles.js", ENV["ASSETS_HOST"])
     liquid_assigns.merge(
-      'content_for_head' => "#{javascript_include_tag styles_url}{{ content_for_head }}",
-      'content_for_navbar' => '{{ content_for_navbar }}',
-      'content_for_layout' => '{{ content_for_layout }}'
+      "content_for_head" => "#{javascript_include_tag styles_url}{{ content_for_head }}",
+      "content_for_navbar" => "{{ content_for_navbar }}",
+      "content_for_layout" => "{{ content_for_layout }}"
     )
   end
 
   # These variables will automatically be made available to Cadmus CMS content.  For
   # example, you'll be able to do {% for convention in conventions %} in a page template.
   def liquid_assigns
-    cms_variables
-      .merge(
-        'conventions' => -> { Convention.where(hidden: false).to_a },
-        'organizations' => -> { Organization.all.to_a }
-      )
-      .merge(assigns)
+    cms_variables.merge(
+      "conventions" => -> { Convention.where(hidden: false).to_a },
+      "organizations" => -> { Organization.all.to_a }
+    ).merge(assigns)
   end
 
   # These variables aren't available from Cadmus CMS templates, but are available to
@@ -148,8 +149,8 @@ class CmsRenderingContext
   # controller is useful for generating URLs in templates.
   def liquid_registers
     liquid_assigns.merge(
-      'controller' => controller,
-      'parent' => cms_parent,
+      "controller" => controller,
+      "parent" => cms_parent,
       :cached_partials => cached_partials,
       :cached_files => cached_files,
       :file_system => Cadmus::PartialFileSystem.new(convention),
