@@ -47,6 +47,10 @@ class GraphqlPresendPresenter
         **result
       }
     end
+  rescue StandardError => e
+    # errors in GraphQL pre-sending aren't fatal, but we want to know they happened
+    Rollbar.warn(e)
+    []
   end
 
   private

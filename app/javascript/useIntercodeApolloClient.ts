@@ -118,7 +118,7 @@ function useIntercodeApolloClient(
       }),
     });
 
-    if (queryData) {
+    if (queryData && Array.isArray(queryData)) {
       for (const query of queryData) {
         client.writeQuery(query);
       }
