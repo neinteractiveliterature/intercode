@@ -26,7 +26,7 @@ gem "doorkeeper-openid_connect"
 gem "activerecord-session_store"
 
 # Lightweight open-source CMS (written by Nat for Gively Inc.)
-gem "cadmus", "~> 0.7.1"
+gem "cadmus", github: "gively/cadmus", branch: "syntax_conformance"
 gem "cadmus_navbar", "~> 0.1.0"
 gem "liquid"
 

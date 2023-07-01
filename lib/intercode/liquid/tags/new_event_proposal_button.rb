@@ -17,7 +17,7 @@ module Intercode
 
         def initialize(tag_name, args, _options)
           super
-          return unless args && args =~ /\"([^\"]+)\"(\s+(\w.*))?/
+          return unless args && args =~ /\"([^\"]+)\"(\s+[\"\']?(\w[^\"\']*))?/
 
           @button_text = Regexp.last_match(1)
           @button_class = Regexp.last_match(3)
