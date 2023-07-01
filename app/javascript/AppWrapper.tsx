@@ -1,6 +1,6 @@
 import { Suspense, useCallback, useRef, useEffect, ReactNode, useState, useMemo } from 'react';
 import * as React from 'react';
-import { ApolloProvider } from '@apollo/client';
+import { ApolloProvider, DataProxy } from '@apollo/client';
 import { BrowserRouter } from 'react-router-dom';
 import { i18n } from 'i18next';
 import { I18nextProvider } from 'react-i18next';
@@ -52,6 +52,7 @@ export type AppWrapperProps = {
     graphql: string;
   };
   mapboxAccessToken: string;
+  queryData?: DataProxy.WriteQueryOptions<unknown, unknown>[];
   railsDefaultActiveStorageServiceName: string;
   railsDirectUploadsUrl: string;
   recaptchaSiteKey: string;
@@ -62,7 +63,8 @@ function AppWrapper<P extends JSX.IntrinsicAttributes>(
   WrappedComponent: React.ComponentType<P>,
 ): React.ComponentType<P> {
   function Wrapper(props: P & AppWrapperProps) {
-    const { authenticityTokens, mapboxAccessToken, recaptchaSiteKey, stripePublishableKey, ...otherProps } = props;
+    const { authenticityTokens, mapboxAccessToken, recaptchaSiteKey, stripePublishableKey, queryData, ...otherProps } =
+      props;
     // TODO bring this back when we re-add prompting
     // const confirm = useConfirm();
     const authenticityTokensProviderValue = useAuthenticityTokens(authenticityTokens);
@@ -82,7 +84,7 @@ function AppWrapper<P extends JSX.IntrinsicAttributes>(
     useEffect(() => {
       onUnauthenticatedRef.current = openSignIn;
     }, [openSignIn]);
-    const apolloClient = useIntercodeApolloClient(authenticityToken, onUnauthenticatedRef);
+    const apolloClient = useIntercodeApolloClient(authenticityToken, onUnauthenticatedRef, queryData);
     const railsDirectUploadsContextValue = useMemo(
       () => ({
         railsDirectUploadsUrl: props.railsDirectUploadsUrl,

@@ -20,7 +20,7 @@ export type UpdateStaffPositionMutationVariables = Types.Exact<{
 export type UpdateStaffPositionMutationData = { __typename: 'Mutation', updateStaffPosition: { __typename: 'UpdateStaffPositionPayload', staff_position: { __typename: 'StaffPosition', id: string, name: string, email?: string | null, visible?: boolean | null, email_aliases: Array<string>, cc_addresses: Array<string>, user_con_profiles: Array<{ __typename: 'UserConProfile', id: string, name_without_nickname: string, gravatar_url: string, gravatar_enabled: boolean }>, permissions: Array<{ __typename: 'Permission', id: string, permission: string, model: { __typename: 'CmsContentGroup', id: string, name: string } | { __typename: 'Convention', id: string, name: string } | { __typename: 'EventCategory', id: string, name: string, default_color?: string | null }, role: { __typename: 'OrganizationRole', id: string, name: string } | { __typename: 'StaffPosition', id: string, name: string } }> } } };
 
 export type UpdateStaffPositionPermissionsMutationVariables = Types.Exact<{
-  staffPositionId: Types.Scalars['ID'];
+  staffPositionId: Types.Scalars['ID']['input'];
   grantPermissions: Array<Types.PermissionInput> | Types.PermissionInput;
   revokePermissions: Array<Types.PermissionInput> | Types.PermissionInput;
 }>;

@@ -6,32 +6,32 @@ import { SignupModerationSignupRequestFieldsFragmentDoc } from './queries.genera
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type CreateUserSignupMutationVariables = Types.Exact<{
-  runId: Types.Scalars['ID'];
-  userConProfileId: Types.Scalars['ID'];
-  requestedBucketKey?: Types.InputMaybe<Types.Scalars['String']>;
-  noRequestedBucket?: Types.InputMaybe<Types.Scalars['Boolean']>;
+  runId: Types.Scalars['ID']['input'];
+  userConProfileId: Types.Scalars['ID']['input'];
+  requestedBucketKey?: Types.InputMaybe<Types.Scalars['String']['input']>;
+  noRequestedBucket?: Types.InputMaybe<Types.Scalars['Boolean']['input']>;
 }>;
 
 
 export type CreateUserSignupMutationData = { __typename: 'Mutation', createUserSignup: { __typename: 'CreateUserSignupPayload', clientMutationId?: string | null } };
 
 export type WithdrawUserSignupMutationVariables = Types.Exact<{
-  runId: Types.Scalars['ID'];
-  userConProfileId: Types.Scalars['ID'];
+  runId: Types.Scalars['ID']['input'];
+  userConProfileId: Types.Scalars['ID']['input'];
 }>;
 
 
 export type WithdrawUserSignupMutationData = { __typename: 'Mutation', withdrawUserSignup: { __typename: 'WithdrawUserSignupPayload', clientMutationId?: string | null } };
 
 export type AcceptSignupRequestMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
+  id: Types.Scalars['ID']['input'];
 }>;
 
 
 export type AcceptSignupRequestMutationData = { __typename: 'Mutation', acceptSignupRequest: { __typename: 'AcceptSignupRequestPayload', signup_request: { __typename: 'SignupRequest', id: string, state: Types.SignupRequestState, requested_bucket_key?: string | null, created_at: string, user_con_profile: { __typename: 'UserConProfile', id: string, name: string, name_inverted: string, gravatar_enabled: boolean, gravatar_url: string }, replace_signup?: { __typename: 'Signup', id: string, run: { __typename: 'Run', id: string, title_suffix?: string | null, starts_at: string, signup_count_by_state_and_bucket_key_and_counted: string, event: { __typename: 'Event', id: string, title?: string | null, length_seconds: number } } } | null, target_run: { __typename: 'Run', id: string, title_suffix?: string | null, starts_at: string, signup_count_by_state_and_bucket_key_and_counted: string, event: { __typename: 'Event', id: string, title?: string | null, length_seconds: number, registration_policy?: { __typename: 'RegistrationPolicy', prevent_no_preference_signups: boolean, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null, total_slots?: number | null, slots_limited: boolean, anything: boolean, not_counted: boolean }> } | null } }, result_signup?: { __typename: 'Signup', id: string, state: Types.SignupState, waitlist_position?: number | null } | null } } };
 
 export type RejectSignupRequestMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
+  id: Types.Scalars['ID']['input'];
 }>;
 
 

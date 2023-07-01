@@ -10,8 +10,8 @@ export type AdminCouponFieldsFragment = { __typename: 'Coupon', id: string, usag
 export type AdminCouponsQueryVariables = Types.Exact<{
   filters?: Types.InputMaybe<Types.CouponFiltersInput>;
   sort?: Types.InputMaybe<Array<Types.SortInput> | Types.SortInput>;
-  page?: Types.InputMaybe<Types.Scalars['Int']>;
-  per_page?: Types.InputMaybe<Types.Scalars['Int']>;
+  page?: Types.InputMaybe<Types.Scalars['Int']['input']>;
+  per_page?: Types.InputMaybe<Types.Scalars['Int']['input']>;
 }>;
 
 

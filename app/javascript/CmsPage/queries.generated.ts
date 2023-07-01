@@ -5,15 +5,15 @@ import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type CmsPageQueryVariables = Types.Exact<{
-  slug?: Types.InputMaybe<Types.Scalars['String']>;
-  rootPage?: Types.InputMaybe<Types.Scalars['Boolean']>;
+  slug?: Types.InputMaybe<Types.Scalars['String']['input']>;
+  rootPage?: Types.InputMaybe<Types.Scalars['Boolean']['input']>;
 }>;
 
 
 export type CmsPageQueryData = { __typename: 'Query', convention?: { __typename: 'Convention', id: string, name: string, clickwrap_agreement?: string | null, my_profile?: { __typename: 'UserConProfile', id: string, accepted_clickwrap_agreement?: boolean | null } | null } | null, cmsParent: { __typename: 'Convention', id: string, cmsPage: { __typename: 'Page', id: string, name?: string | null, content_html: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, skip_clickwrap_agreement?: boolean | null } } | { __typename: 'RootSite', id: string, cmsPage: { __typename: 'Page', id: string, name?: string | null, content_html: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, skip_clickwrap_agreement?: boolean | null } }, currentAbility: { __typename: 'Ability', can_manage_any_cms_content: boolean } };
 
 export type PageAdminDropdownQueryVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
+  id: Types.Scalars['ID']['input'];
 }>;
 
 

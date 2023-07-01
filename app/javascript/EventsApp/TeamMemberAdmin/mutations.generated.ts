@@ -27,9 +27,9 @@ export type UpdateTeamMemberMutationVariables = Types.Exact<{
 export type UpdateTeamMemberMutationData = { __typename: 'Mutation', updateTeamMember: { __typename: 'UpdateTeamMemberPayload', team_member: { __typename: 'TeamMember', id: string, display_team_member: boolean, show_email: boolean, receive_con_email: boolean, receive_signup_email: Types.ReceiveSignupEmail, user_con_profile: { __typename: 'UserConProfile', id: string, name_without_nickname: string, name_inverted: string, email?: string | null, ticket?: { __typename: 'Ticket', id: string, user_con_profile: { __typename: 'UserConProfile', id: string }, ticket_type: { __typename: 'TicketType', id: string, name: string }, provided_by_event?: { __typename: 'Event', id: string, title?: string | null } | null } | null } } } };
 
 export type ProvideEventTicketMutationVariables = Types.Exact<{
-  eventId: Types.Scalars['ID'];
-  userConProfileId: Types.Scalars['ID'];
-  ticketTypeId: Types.Scalars['ID'];
+  eventId: Types.Scalars['ID']['input'];
+  userConProfileId: Types.Scalars['ID']['input'];
+  ticketTypeId: Types.Scalars['ID']['input'];
 }>;
 
 

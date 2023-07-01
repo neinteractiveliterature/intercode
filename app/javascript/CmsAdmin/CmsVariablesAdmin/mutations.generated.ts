@@ -6,15 +6,15 @@ import { CmsVariableFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type SetCmsVariableMutationVariables = Types.Exact<{
-  key: Types.Scalars['String'];
-  value_json: Types.Scalars['String'];
+  key: Types.Scalars['String']['input'];
+  value_json: Types.Scalars['String']['input'];
 }>;
 
 
 export type SetCmsVariableMutationData = { __typename: 'Mutation', setCmsVariable: { __typename: 'SetCmsVariablePayload', cms_variable: { __typename: 'CmsVariable', id: string, key: string, value_json: string, current_ability_can_update: boolean, current_ability_can_delete: boolean } } };
 
 export type DeleteCmsVariableMutationVariables = Types.Exact<{
-  key: Types.Scalars['String'];
+  key: Types.Scalars['String']['input'];
 }>;
 
 

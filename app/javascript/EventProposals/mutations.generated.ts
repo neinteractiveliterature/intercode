@@ -6,8 +6,8 @@ import { EventProposalFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type CreateEventProposalMutationVariables = Types.Exact<{
-  cloneEventProposalId?: Types.InputMaybe<Types.Scalars['ID']>;
-  eventCategoryId: Types.Scalars['ID'];
+  cloneEventProposalId?: Types.InputMaybe<Types.Scalars['ID']['input']>;
+  eventCategoryId: Types.Scalars['ID']['input'];
 }>;
 
 
@@ -21,15 +21,15 @@ export type UpdateEventProposalMutationVariables = Types.Exact<{
 export type UpdateEventProposalMutationData = { __typename: 'Mutation', updateEventProposal: { __typename: 'UpdateEventProposalPayload', event_proposal: { __typename: 'EventProposal', id: string, title?: string | null, status: string, form_response_attrs_json?: string | null, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, images: Array<{ __typename: 'ActiveStorageAttachment', id: string, filename: string, url: string, content_type: string, byte_size: number }>, event_category: { __typename: 'EventCategory', id: string, name: string, event_proposal_form?: { __typename: 'Form', id: string, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: string, title?: string | null, position: number, form_items: Array<{ __typename: 'FormItem', id: string, admin_description?: string | null, position: number, identifier?: string | null, item_type: string, rendered_properties: string, default_value?: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in?: Array<Types.FormItemExposeIn> | null }> }> } | null }, event?: { __typename: 'Event', id: string } | null } } };
 
 export type AttachImageToEventProposalMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
-  signedBlobId: Types.Scalars['ID'];
+  id: Types.Scalars['ID']['input'];
+  signedBlobId: Types.Scalars['ID']['input'];
 }>;
 
 
 export type AttachImageToEventProposalMutationData = { __typename: 'Mutation', attachImageToEventProposal: { __typename: 'AttachImageToEventProposalPayload', attachment: { __typename: 'ActiveStorageAttachment', id: string, filename: string, url: string, content_type: string, byte_size: number } } };
 
 export type DeleteEventProposalMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
+  id: Types.Scalars['ID']['input'];
 }>;
 
 
@@ -43,17 +43,17 @@ export type SubmitEventProposalMutationVariables = Types.Exact<{
 export type SubmitEventProposalMutationData = { __typename: 'Mutation', submitEventProposal: { __typename: 'SubmitEventProposalPayload', event_proposal: { __typename: 'EventProposal', id: string, title?: string | null, status: string, form_response_attrs_json?: string | null, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, images: Array<{ __typename: 'ActiveStorageAttachment', id: string, filename: string, url: string, content_type: string, byte_size: number }>, event_category: { __typename: 'EventCategory', id: string, name: string, event_proposal_form?: { __typename: 'Form', id: string, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: string, title?: string | null, position: number, form_items: Array<{ __typename: 'FormItem', id: string, admin_description?: string | null, position: number, identifier?: string | null, item_type: string, rendered_properties: string, default_value?: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in?: Array<Types.FormItemExposeIn> | null }> }> } | null }, event?: { __typename: 'Event', id: string } | null } } };
 
 export type TransitionEventProposalMutationVariables = Types.Exact<{
-  eventProposalId: Types.Scalars['ID'];
-  status: Types.Scalars['String'];
-  dropEvent?: Types.InputMaybe<Types.Scalars['Boolean']>;
+  eventProposalId: Types.Scalars['ID']['input'];
+  status: Types.Scalars['String']['input'];
+  dropEvent?: Types.InputMaybe<Types.Scalars['Boolean']['input']>;
 }>;
 
 
 export type TransitionEventProposalMutationData = { __typename: 'Mutation', transitionEventProposal: { __typename: 'TransitionEventProposalPayload', event_proposal: { __typename: 'EventProposal', id: string, title?: string | null, status: string, form_response_attrs_json?: string | null, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, images: Array<{ __typename: 'ActiveStorageAttachment', id: string, filename: string, url: string, content_type: string, byte_size: number }>, event_category: { __typename: 'EventCategory', id: string, name: string, event_proposal_form?: { __typename: 'Form', id: string, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: string, title?: string | null, position: number, form_items: Array<{ __typename: 'FormItem', id: string, admin_description?: string | null, position: number, identifier?: string | null, item_type: string, rendered_properties: string, default_value?: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in?: Array<Types.FormItemExposeIn> | null }> }> } | null }, event?: { __typename: 'Event', id: string } | null } } };
 
 export type UpdateEventProposalAdminNotesMutationVariables = Types.Exact<{
-  eventProposalId: Types.Scalars['ID'];
-  adminNotes: Types.Scalars['String'];
+  eventProposalId: Types.Scalars['ID']['input'];
+  adminNotes: Types.Scalars['String']['input'];
 }>;
 
 

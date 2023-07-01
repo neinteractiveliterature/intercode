@@ -43,3 +43,7 @@ generates:
         Json: string
         JSON: unknown
         Upload: File
+  app/graphql/graphql_operations_generated.json:
+    plugins:
+      - "./graphQLOperationsJSON.js"
+

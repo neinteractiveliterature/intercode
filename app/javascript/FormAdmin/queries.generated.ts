@@ -19,15 +19,15 @@ export type FormAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 export type FormAdminQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, forms: Array<{ __typename: 'Form', id: string, title: string, form_type: Types.FormType, export_json: string, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string }>, proposal_event_categories: Array<{ __typename: 'EventCategory', id: string, name: string }>, user_con_profile_conventions: Array<{ __typename: 'Convention', id: string, name: string }> }> } };
 
 export type FormEditorQueryVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
+  id: Types.Scalars['ID']['input'];
 }>;
 
 
 export type FormEditorQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, starts_at?: string | null, ends_at?: string | null, timezone_name?: string | null, timezone_mode: Types.TimezoneMode, event_mailing_list_domain?: string | null, form: { __typename: 'Form', id: string, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: string, title?: string | null, position: number, form_items: Array<{ __typename: 'FormItem', id: string, admin_description?: string | null, public_description?: string | null, properties: string, position: number, identifier?: string | null, item_type: string, rendered_properties: string, default_value?: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in?: Array<Types.FormItemExposeIn> | null }> }> } } };
 
 export type PreviewFormItemQueryVariables = Types.Exact<{
-  formId: Types.Scalars['ID'];
-  formSectionId: Types.Scalars['ID'];
+  formId: Types.Scalars['ID']['input'];
+  formSectionId: Types.Scalars['ID']['input'];
   formItem: Types.FormItemInput;
 }>;
 

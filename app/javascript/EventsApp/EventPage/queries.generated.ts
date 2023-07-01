@@ -15,7 +15,7 @@ export type EventPageRunFieldsFragment = { __typename: 'Run', id: string, title_
 export type RunCardRegistrationPolicyFieldsFragment = { __typename: 'RegistrationPolicy', slots_limited?: boolean | null, prevent_no_preference_signups: boolean, total_slots_including_not_counted?: number | null, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null, description?: string | null, not_counted: boolean, slots_limited: boolean, anything: boolean, minimum_slots?: number | null, total_slots?: number | null }> };
 
 export type EventPageQueryVariables = Types.Exact<{
-  eventId: Types.Scalars['ID'];
+  eventId: Types.Scalars['ID']['input'];
 }>;
 
 

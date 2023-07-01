@@ -7,7 +7,7 @@ const defaultOptions = {} as const;
 export type EmailRouteFieldsFragment = { __typename: 'EmailRoute', id: string, receiver_address: string, forward_addresses?: Array<string> | null };
 
 export type RootSiteEmailRoutesAdminTableQueryVariables = Types.Exact<{
-  page?: Types.InputMaybe<Types.Scalars['Int']>;
+  page?: Types.InputMaybe<Types.Scalars['Int']['input']>;
   filters?: Types.InputMaybe<Types.EmailRouteFiltersInput>;
   sort?: Types.InputMaybe<Array<Types.SortInput> | Types.SortInput>;
 }>;

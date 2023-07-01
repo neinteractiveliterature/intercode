@@ -14,7 +14,7 @@ export type CreateContentGroupMutationVariables = Types.Exact<{
 export type CreateContentGroupMutationData = { __typename: 'Mutation', createCmsContentGroup: { __typename: 'CreateCmsContentGroupPayload', cms_content_group: { __typename: 'CmsContentGroup', id: string, name: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, contents: Array<{ __typename: 'CmsLayout', id: string, name?: string | null } | { __typename: 'CmsPartial', id: string, name?: string | null } | { __typename: 'Page', id: string, name?: string | null }>, permissions: Array<{ __typename: 'Permission', id: string, permission: string, model: { __typename: 'CmsContentGroup', id: string, name: string } | { __typename: 'Convention', id: string, name: string } | { __typename: 'EventCategory', id: string, name: string, default_color?: string | null }, role: { __typename: 'OrganizationRole', id: string, name: string } | { __typename: 'StaffPosition', id: string, name: string } }> } } };
 
 export type UpdateContentGroupMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
+  id: Types.Scalars['ID']['input'];
   cmsContentGroup: Types.CmsContentGroupInput;
   grantPermissions?: Types.InputMaybe<Array<Types.PermissionInput> | Types.PermissionInput>;
   revokePermissions?: Types.InputMaybe<Array<Types.PermissionInput> | Types.PermissionInput>;
@@ -24,7 +24,7 @@ export type UpdateContentGroupMutationVariables = Types.Exact<{
 export type UpdateContentGroupMutationData = { __typename: 'Mutation', updateCmsContentGroup: { __typename: 'UpdateCmsContentGroupPayload', cms_content_group: { __typename: 'CmsContentGroup', id: string, name: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, contents: Array<{ __typename: 'CmsLayout', id: string, name?: string | null } | { __typename: 'CmsPartial', id: string, name?: string | null } | { __typename: 'Page', id: string, name?: string | null }>, permissions: Array<{ __typename: 'Permission', id: string, permission: string, model: { __typename: 'CmsContentGroup', id: string, name: string } | { __typename: 'Convention', id: string, name: string } | { __typename: 'EventCategory', id: string, name: string, default_color?: string | null }, role: { __typename: 'OrganizationRole', id: string, name: string } | { __typename: 'StaffPosition', id: string, name: string } }> } } };
 
 export type DeleteContentGroupMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
+  id: Types.Scalars['ID']['input'];
 }>;
 
 

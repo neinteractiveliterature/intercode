@@ -13,7 +13,7 @@ export type CreateCouponMutationVariables = Types.Exact<{
 export type CreateCouponMutationData = { __typename: 'Mutation', createCoupon: { __typename: 'CreateCouponPayload', coupon: { __typename: 'Coupon', id: string, usage_limit?: number | null, expires_at?: string | null, code: string, percent_discount?: string | null, fixed_amount?: { __typename: 'Money', fractional: number, currency_code: string } | null, provides_product?: { __typename: 'Product', id: string, name: string } | null } } };
 
 export type UpdateCouponMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
+  id: Types.Scalars['ID']['input'];
   coupon: Types.CouponInput;
 }>;
 
@@ -21,7 +21,7 @@ export type UpdateCouponMutationVariables = Types.Exact<{
 export type UpdateCouponMutationData = { __typename: 'Mutation', updateCoupon: { __typename: 'UpdateCouponPayload', coupon: { __typename: 'Coupon', id: string, usage_limit?: number | null, expires_at?: string | null, code: string, percent_discount?: string | null, fixed_amount?: { __typename: 'Money', fractional: number, currency_code: string } | null, provides_product?: { __typename: 'Product', id: string, name: string } | null } } };
 
 export type DeleteCouponMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
+  id: Types.Scalars['ID']['input'];
 }>;
 
 

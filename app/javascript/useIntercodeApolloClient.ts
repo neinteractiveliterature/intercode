@@ -7,6 +7,8 @@ import {
   InMemoryCache,
   NormalizedCacheObject,
   split,
+  DataProxy,
+  DocumentNode,
 } from '@apollo/client';
 import { BatchHttpLink } from '@apollo/client/link/batch-http';
 import { useAuthHeadersLink, useErrorHandlerLink } from '@neinteractiveliterature/litform';
@@ -73,50 +75,57 @@ export function useIntercodeApolloLink(
 function useIntercodeApolloClient(
   authenticityToken: string,
   onUnauthenticatedRef: RefObject<() => void>,
+  queryData?: DataProxy.WriteQueryOptions<unknown, unknown>[],
 ): ApolloClient<NormalizedCacheObject> {
   const link = useIntercodeApolloLink(authenticityToken, onUnauthenticatedRef);
 
-  const client = useMemo(
-    () =>
-      new ApolloClient({
-        link,
-        cache: new InMemoryCache({
-          addTypename: true,
-          possibleTypes,
-          typePolicies: {
-            Convention: {
-              fields: {
-                reports: {
-                  merge: (existing, incoming) => ({ ...existing, ...incoming }),
-                },
-              },
-            },
-            Event: {
-              fields: {
-                registrationPolicy: {
-                  merge: (existing, incoming) => incoming,
-                },
-              },
-            },
-            Query: {
-              fields: {
-                currentAbility: {
-                  merge: (existing, incoming) => ({ ...existing, ...incoming }),
-                },
-              },
-            },
-            UserConProfile: {
-              fields: {
-                ability: {
-                  merge: (existing, incoming) => ({ ...existing, ...incoming }),
-                },
+  const client = useMemo(() => {
+    const client = new ApolloClient({
+      link,
+      cache: new InMemoryCache({
+        addTypename: true,
+        possibleTypes,
+        typePolicies: {
+          Convention: {
+            fields: {
+              reports: {
+                merge: (existing, incoming) => ({ ...existing, ...incoming }),
               },
             },
           },
-        }),
+          Event: {
+            fields: {
+              registrationPolicy: {
+                merge: (existing, incoming) => incoming,
+              },
+            },
+          },
+          Query: {
+            fields: {
+              currentAbility: {
+                merge: (existing, incoming) => ({ ...existing, ...incoming }),
+              },
+            },
+          },
+          UserConProfile: {
+            fields: {
+              ability: {
+                merge: (existing, incoming) => ({ ...existing, ...incoming }),
+              },
+            },
+          },
+        },
       }),
-    [link],
-  );
+    });
+
+    if (queryData) {
+      for (const query of queryData) {
+        client.writeQuery(query);
+      }
+    }
+
+    return client;
+  }, [link]);
 
   return client;
 }

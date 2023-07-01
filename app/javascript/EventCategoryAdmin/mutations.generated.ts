@@ -13,7 +13,7 @@ export type CreateEventCategoryMutationVariables = Types.Exact<{
 export type CreateEventCategoryMutationData = { __typename: 'Mutation', createEventCategory: { __typename: 'CreateEventCategoryPayload', event_category: { __typename: 'EventCategory', id: string, name: string, team_member_name: string, proposal_description?: string | null, scheduling_ui: Types.SchedulingUi, default_color?: string | null, signed_up_color?: string | null, full_color?: string | null, can_provide_tickets: boolean, events_paginated: { __typename: 'EventsPagination', total_entries: number }, department?: { __typename: 'Department', id: string, name: string } | null, event_form: { __typename: 'Form', id: string, title: string, form_type: Types.FormType }, event_proposal_form?: { __typename: 'Form', id: string, title: string, form_type: Types.FormType } | null } } };
 
 export type UpdateEventCategoryMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
+  id: Types.Scalars['ID']['input'];
   eventCategory: Types.EventCategoryInput;
 }>;
 
@@ -21,7 +21,7 @@ export type UpdateEventCategoryMutationVariables = Types.Exact<{
 export type UpdateEventCategoryMutationData = { __typename: 'Mutation', updateEventCategory: { __typename: 'UpdateEventCategoryPayload', event_category: { __typename: 'EventCategory', id: string, name: string, team_member_name: string, proposal_description?: string | null, scheduling_ui: Types.SchedulingUi, default_color?: string | null, signed_up_color?: string | null, full_color?: string | null, can_provide_tickets: boolean, events_paginated: { __typename: 'EventsPagination', total_entries: number }, department?: { __typename: 'Department', id: string, name: string } | null, event_form: { __typename: 'Form', id: string, title: string, form_type: Types.FormType }, event_proposal_form?: { __typename: 'Form', id: string, title: string, form_type: Types.FormType } | null } } };
 
 export type DeleteEventCategoryMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
+  id: Types.Scalars['ID']['input'];
 }>;
 
 

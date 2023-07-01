@@ -44,8 +44,8 @@ export type WhosFreeFormConventionQueryVariables = Types.Exact<{ [key: string]: 
 export type WhosFreeFormConventionQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, starts_at?: string | null, ends_at?: string | null, timezone_name?: string | null, timezone_mode: Types.TimezoneMode } };
 
 export type WhosFreeQueryVariables = Types.Exact<{
-  start: Types.Scalars['Date'];
-  finish: Types.Scalars['Date'];
+  start: Types.Scalars['Date']['input'];
+  finish: Types.Scalars['Date']['input'];
 }>;
 
 

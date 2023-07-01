@@ -5,8 +5,8 @@ import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type RateEventMutationVariables = Types.Exact<{
-  eventId: Types.Scalars['ID'];
-  rating: Types.Scalars['Int'];
+  eventId: Types.Scalars['ID']['input'];
+  rating: Types.Scalars['Int']['input'];
 }>;
 
 

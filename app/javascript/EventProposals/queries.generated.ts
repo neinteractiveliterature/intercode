@@ -10,21 +10,21 @@ export type EventProposalFieldsFragment = { __typename: 'EventProposal', id: str
 export type EventProposalFormDataFragment = { __typename: 'Convention', id: string, starts_at?: string | null, ends_at?: string | null, timezone_name?: string | null, timezone_mode: Types.TimezoneMode, event_mailing_list_domain?: string | null };
 
 export type EventProposalQueryVariables = Types.Exact<{
-  eventProposalId: Types.Scalars['ID'];
+  eventProposalId: Types.Scalars['ID']['input'];
 }>;
 
 
 export type EventProposalQueryData = { __typename: 'Query', currentAbility: { __typename: 'Ability', can_delete_event_proposal: boolean }, convention: { __typename: 'Convention', id: string, starts_at?: string | null, ends_at?: string | null, timezone_name?: string | null, timezone_mode: Types.TimezoneMode, event_mailing_list_domain?: string | null, event_proposal: { __typename: 'EventProposal', id: string, title?: string | null, status: string, form_response_attrs_json?: string | null, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, images: Array<{ __typename: 'ActiveStorageAttachment', id: string, filename: string, url: string, content_type: string, byte_size: number }>, event_category: { __typename: 'EventCategory', id: string, name: string, event_proposal_form?: { __typename: 'Form', id: string, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: string, title?: string | null, position: number, form_items: Array<{ __typename: 'FormItem', id: string, admin_description?: string | null, position: number, identifier?: string | null, item_type: string, rendered_properties: string, default_value?: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in?: Array<Types.FormItemExposeIn> | null }> }> } | null }, event?: { __typename: 'Event', id: string } | null } } };
 
 export type EventProposalQueryWithOwnerQueryVariables = Types.Exact<{
-  eventProposalId: Types.Scalars['ID'];
+  eventProposalId: Types.Scalars['ID']['input'];
 }>;
 
 
 export type EventProposalQueryWithOwnerQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, starts_at?: string | null, ends_at?: string | null, timezone_name?: string | null, timezone_mode: Types.TimezoneMode, event_mailing_list_domain?: string | null, event_proposal: { __typename: 'EventProposal', id: string, form_response_attrs_json_with_rendered_markdown?: string | null, title?: string | null, status: string, form_response_attrs_json?: string | null, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, owner: { __typename: 'UserConProfile', id: string, name: string, email?: string | null, gravatar_enabled: boolean, gravatar_url: string }, images: Array<{ __typename: 'ActiveStorageAttachment', id: string, filename: string, url: string, content_type: string, byte_size: number }>, event_category: { __typename: 'EventCategory', id: string, name: string, event_proposal_form?: { __typename: 'Form', id: string, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: string, title?: string | null, position: number, form_items: Array<{ __typename: 'FormItem', id: string, admin_description?: string | null, position: number, identifier?: string | null, item_type: string, rendered_properties: string, default_value?: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in?: Array<Types.FormItemExposeIn> | null }> }> } | null }, event?: { __typename: 'Event', id: string } | null } }, currentAbility: { __typename: 'Ability', can_update_event_proposal: boolean, can_read_admin_notes_on_event_proposal: boolean } };
 
 export type EventProposalAdminNotesQueryVariables = Types.Exact<{
-  eventProposalId: Types.Scalars['ID'];
+  eventProposalId: Types.Scalars['ID']['input'];
 }>;
 
 
@@ -36,8 +36,8 @@ export type ProposeEventButtonQueryVariables = Types.Exact<{ [key: string]: neve
 export type ProposeEventButtonQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, my_profile?: { __typename: 'UserConProfile', id: string, user?: { __typename: 'User', id: string, event_proposals: Array<{ __typename: 'EventProposal', id: string, title?: string | null, status: string, created_at: string, event_category: { __typename: 'EventCategory', id: string, name: string }, convention: { __typename: 'Convention', id: string, name: string } }> } | null } | null, departments: Array<{ __typename: 'Department', id: string, name: string, proposal_description?: string | null, event_categories: Array<{ __typename: 'EventCategory', id: string }> }>, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, proposable: boolean, proposal_description?: string | null, department?: { __typename: 'Department', id: string } | null }> } };
 
 export type EventProposalsAdminQueryVariables = Types.Exact<{
-  page?: Types.InputMaybe<Types.Scalars['Int']>;
-  perPage?: Types.InputMaybe<Types.Scalars['Int']>;
+  page?: Types.InputMaybe<Types.Scalars['Int']['input']>;
+  perPage?: Types.InputMaybe<Types.Scalars['Int']['input']>;
   filters?: Types.InputMaybe<Types.EventProposalFiltersInput>;
   sort?: Types.InputMaybe<Array<Types.SortInput> | Types.SortInput>;
 }>;
@@ -46,7 +46,7 @@ export type EventProposalsAdminQueryVariables = Types.Exact<{
 export type EventProposalsAdminQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, timezone_name?: string | null, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, default_color?: string | null }>, event_proposals_paginated: { __typename: 'EventProposalsPagination', total_entries: number, total_pages: number, current_page: number, per_page: number, entries: Array<{ __typename: 'EventProposal', id: string, title?: string | null, length_seconds?: number | null, status: string, submitted_at: string, updated_at: string, event_category: { __typename: 'EventCategory', id: string, name: string, default_color?: string | null }, registration_policy?: { __typename: 'RegistrationPolicy', minimum_slots?: number | null, total_slots?: number | null, slots_limited?: boolean | null } | null, owner: { __typename: 'UserConProfile', id: string, name_inverted: string, gravatar_enabled: boolean, gravatar_url: string } }> } } };
 
 export type EventProposalHistoryQueryVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
+  id: Types.Scalars['ID']['input'];
 }>;
 
 

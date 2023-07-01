@@ -32,8 +32,8 @@ export type SignupCountsByStateQueryData = { __typename: 'Query', convention: { 
 
 export type SignupSpySignupChangesQueryVariables = Types.Exact<{
   filters?: Types.InputMaybe<Types.SignupChangeFiltersInput>;
-  page?: Types.InputMaybe<Types.Scalars['Int']>;
-  perPage?: Types.InputMaybe<Types.Scalars['Int']>;
+  page?: Types.InputMaybe<Types.Scalars['Int']['input']>;
+  perPage?: Types.InputMaybe<Types.Scalars['Int']['input']>;
   sort?: Types.InputMaybe<Array<Types.SortInput> | Types.SortInput>;
 }>;
 

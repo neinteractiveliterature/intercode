@@ -13,7 +13,7 @@ export type CreatePageMutationVariables = Types.Exact<{
 export type CreatePageMutationData = { __typename: 'Mutation', createPage: { __typename: 'CreatePagePayload', page: { __typename: 'Page', id: string, name?: string | null, slug?: string | null, content?: string | null, admin_notes?: string | null, skip_clickwrap_agreement?: boolean | null, hidden_from_search: boolean, current_ability_can_update: boolean, current_ability_can_delete: boolean, cms_layout?: { __typename: 'CmsLayout', id: string, name?: string | null } | null } } };
 
 export type UpdatePageMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
+  id: Types.Scalars['ID']['input'];
   page: Types.PageInput;
 }>;
 
@@ -21,7 +21,7 @@ export type UpdatePageMutationVariables = Types.Exact<{
 export type UpdatePageMutationData = { __typename: 'Mutation', updatePage: { __typename: 'UpdatePagePayload', page: { __typename: 'Page', id: string, name?: string | null, slug?: string | null, content?: string | null, admin_notes?: string | null, skip_clickwrap_agreement?: boolean | null, hidden_from_search: boolean, current_ability_can_update: boolean, current_ability_can_delete: boolean, cms_layout?: { __typename: 'CmsLayout', id: string, name?: string | null } | null } } };
 
 export type DeletePageMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
+  id: Types.Scalars['ID']['input'];
 }>;
 
 
