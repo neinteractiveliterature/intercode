@@ -42,7 +42,10 @@ class Types::EventType < Types::BaseObject
   field :runs, [Types::RunType], null: false do
     argument :start, Types::DateType, required: false
     argument :finish, Types::DateType, required: false
-    argument :exclude_conflicts, Boolean, required: false
+    argument :exclude_conflicts,
+             Boolean,
+             required: false,
+             deprecation_reason: "This parameter hasn't actually worked for a long time"
   end
 
   def runs(**args)
