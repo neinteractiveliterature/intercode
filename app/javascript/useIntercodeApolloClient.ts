@@ -8,7 +8,6 @@ import {
   NormalizedCacheObject,
   split,
   DataProxy,
-  DocumentNode,
 } from '@apollo/client';
 import { BatchHttpLink } from '@apollo/client/link/batch-http';
 import { useAuthHeadersLink, useErrorHandlerLink } from '@neinteractiveliterature/litform';
@@ -125,7 +124,7 @@ function useIntercodeApolloClient(
     }
 
     return client;
-  }, [link]);
+  }, [link, queryData]);
 
   return client;
 }
