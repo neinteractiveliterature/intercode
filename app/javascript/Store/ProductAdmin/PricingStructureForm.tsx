@@ -2,7 +2,10 @@ import { useCallback, useContext } from 'react';
 import * as React from 'react';
 import { MultipleChoiceInput, FormGroupWithLabel } from '@neinteractiveliterature/litform';
 import MoneyInput from '../MoneyInput';
-import ScheduledValueEditor, { scheduledValueReducer } from '../../BuiltInFormControls/ScheduledValueEditor';
+import ScheduledValueEditor, {
+  ScheduledValueReducerAction,
+  scheduledValueReducer,
+} from '../../BuiltInFormControls/ScheduledValueEditor';
 import AppRootContext from '../../AppRootContext';
 import {
   Money,
@@ -25,7 +28,7 @@ export default function PricingStructureForm({ pricingStructure, setPricingStruc
   const { timezoneName } = useContext(AppRootContext);
 
   const dispatchScheduledValue = useCallback(
-    (action) => {
+    (action: ScheduledValueReducerAction<unknown>) => {
       if (!pricingStructure) {
         return;
       }

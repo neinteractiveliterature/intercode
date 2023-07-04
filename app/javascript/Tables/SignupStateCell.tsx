@@ -1,4 +1,5 @@
-import { TFunction, useTranslation } from 'react-i18next';
+import { TFunction } from 'i18next';
+import { useTranslation } from 'react-i18next';
 import { assertNever } from 'assert-never';
 
 import { SignupState } from '../graphqlTypes.generated';
