@@ -2,7 +2,6 @@ import { useMemo } from 'react';
 import sortBy from 'lodash/sortBy';
 import { DateTime } from 'luxon';
 
-import buildBlankSignupCountsFromRegistrationPolicy from './buildBlankSignupCountsFromRegistrationPolicy';
 import RunCapacityGraph from './RunCapacityGraph';
 import EventPageRunCard from './EventPageRunCard';
 import { EventPageQueryData, useEventPageQuery } from './queries.generated';
@@ -17,22 +16,9 @@ function FakeRun({ event }: FakeRunProps) {
     return <></>;
   }
 
-  const blankSignupCountsByBucketKeyAndCounted = buildBlankSignupCountsFromRegistrationPolicy(
-    event.registration_policy,
-  );
-
   return (
     <div className="run-card col-lg-4 col-md-6 col-sm-12">
-      <RunCapacityGraph
-        event={event}
-        run={{
-          signup_count_by_state_and_bucket_key_and_counted: JSON.stringify({
-            confirmed: blankSignupCountsByBucketKeyAndCounted,
-            waitlisted: blankSignupCountsByBucketKeyAndCounted,
-          }),
-        }}
-        signupsAvailable={false}
-      />
+      <RunCapacityGraph event={event} run={{ grouped_signup_counts: [] }} signupsAvailable={false} />
     </div>
   );
 }

@@ -970,6 +970,20 @@
           ]
         },
         {
+          "name": "expires_at",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "When this signup will expire, if it's being held tempoarily",
+              "types": [
+                "DateTime"
+              ]
+            }
+          ]
+        },
+        {
           "name": "team_member",
           "docstring": "",
           "tags": [

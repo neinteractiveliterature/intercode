@@ -200,57 +200,59 @@ function EventCard({ convention, event, sortBy, canReadSchedule }: EventCardProp
   });
 
   return (
-    <div className="card mb-4" key={event.id}>
-      <div className="card-header">
-        <div className="event-card-header">
-          <div className="float-end text-end ms-1">
-            <div className="lead">
-              {canReadSchedule ? renderFirstRunTime(event, timezoneName, formatRunTime) : null}
+    <>
+      <div className="card mb-4" key={event.id}>
+        <div className="card-header">
+          <div className="event-card-header">
+            <div className="float-end text-end ms-1">
+              <div className="lead">
+                {canReadSchedule ? renderFirstRunTime(event, timezoneName, formatRunTime) : null}
+              </div>
+              <div className="mt-1 d-flex align-items-end justify-content-end">
+                {myProfile && (
+                  <RateEventControl
+                    value={event.my_rating}
+                    onChange={(rating) => rateEvent(event.id, rating)}
+                    size={1.2}
+                  />
+                )}
+              </div>
             </div>
-            <div className="mt-1 d-flex align-items-end justify-content-end">
-              {myProfile && (
-                <RateEventControl
-                  value={event.my_rating}
-                  onChange={(rating) => rateEvent(event.id, rating)}
-                  size={1.2}
-                />
-              )}
+
+            <div>
+              <h4 className="m-0 d-inline event-card-event-title">
+                <Link to={buildEventUrl(event)}>{event.title}</Link>
+              </h4>{' '}
+              <span className="lead text-muted">{event.event_category.name}</span>
+              <div className="d-flex flex-wrap mt-1">
+                {metadataItems.map((metadataItem) => (
+                  <div className="flex-shrink-1 me-4" key={metadataItem.key}>
+                    {metadataItem.content}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 
-          <div>
-            <h4 className="m-0 d-inline event-card-event-title">
-              <Link to={buildEventUrl(event)}>{event.title}</Link>
-            </h4>{' '}
-            <span className="lead text-muted">{event.event_category.name}</span>
-            <div className="d-flex flex-wrap mt-1">
-              {metadataItems.map((metadataItem) => (
-                <div className="flex-shrink-1 me-4" key={metadataItem.key}>
-                  {metadataItem.content}
-                </div>
-              ))}
-            </div>
-          </div>
+          {sortBy?.some((sort) => sort.id === 'created_at')
+            ? event.created_at && (
+                <p className="m-0">
+                  <strong>
+                    Added{' '}
+                    {format(DateTime.fromISO(event.created_at, { zone: timezoneName }), 'longWeekdayDateTimeWithZone')}
+                  </strong>
+                </p>
+              )
+            : null}
         </div>
 
-        {sortBy?.some((sort) => sort.id === 'created_at')
-          ? event.created_at && (
-              <p className="m-0">
-                <strong>
-                  Added{' '}
-                  {format(DateTime.fromISO(event.created_at, { zone: timezoneName }), 'longWeekdayDateTimeWithZone')}
-                </strong>
-              </p>
-            )
-          : null}
+        <div
+          className="card-body"
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{ __html: event.short_blurb_html ?? '' }}
+        />
       </div>
-
-      <div
-        className="card-body"
-        // eslint-disable-next-line react/no-danger
-        dangerouslySetInnerHTML={{ __html: event.short_blurb_html ?? '' }}
-      />
-    </div>
+    </>
   );
 }
 

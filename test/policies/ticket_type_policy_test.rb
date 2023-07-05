@@ -25,10 +25,10 @@ class TicketTypePolicyTest < ActiveSupport::TestCase
     end
 
     it 'lets team members manage event ticket types' do
-      team_member = create(:team_member)
-      ticket_type = create(:free_ticket_type, convention: nil, event: team_member.event)
+      ticket_type = create(:event_specific_ticket_type)
+      team_member = create(:team_member, event: ticket_type.event)
       user = team_member.user_con_profile.user
-      assert_policy_allows TicketTypePolicy, user, ticket_type, :manage?, team_member.event.convention
+      assert_policy_allows TicketTypePolicy, user, ticket_type, :manage?, ticket_type.event.convention
     end
 
     it 'does not let non-team members manage event ticket types' do

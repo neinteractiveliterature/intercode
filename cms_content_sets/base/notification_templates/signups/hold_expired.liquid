@@ -1,0 +1,28 @@
+---
+subject: |
+  [{{ convention.name }}: {{ signup.event.title }}] Signup hold expired
+body_text: |-
+  {%- assign run = signup.run -%}
+  {{ signup.user_con_profile.name_without_nickname }}: your signup hold for {% include 'run_description' %} has expired
+
+  Hi {{ signup.user_con_profile.name_without_nickname }}, your signup hold for {% include 'run_description' %} has
+  expired without purchasing a {{ convention.ticket_name }}.  If you want to purchase a {{ convention.ticket_name }}
+  and get your spot back, you will need to sign up again.
+
+  If you want to sign up again, please visit: {{ signup.event.url | absolute_url }}
+---
+{% assign run = signup.run %}
+<h1>
+  {{ signup.user_con_profile.name_without_nickname }}: your signup hold for {% include 'run_description' %} has expired
+</h1>
+
+<p>
+  Hi {{ signup.user_con_profile.name_without_nickname }}, your signup hold for {% include 'run_description' %} has
+  expired without purchasing a {{ convention.ticket_name }}.  If you want to purchase a {{ convention.ticket_name }}
+  and get your spot back, you will need to sign up again.
+</p>
+
+<p>
+  If you want to sign up again, please visit:
+  <a href="{{ signup.event.url | absolute_url }}">{{ signup.event.url | absolute_url }}</a>
+</p>

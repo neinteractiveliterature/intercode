@@ -1,11 +1,4 @@
-import { SignupState } from '../graphqlTypes.generated';
-
-type SignupCountDataRow = {
-  state: SignupState;
-  bucket_key: string;
-  counted: boolean;
-  signup_count: number;
-};
+import { GroupedSignupCount, SignupState } from '../graphqlTypes.generated';
 
 export type SignupCountDataFilter = {
   state?: SignupState | SignupState[];
@@ -20,10 +13,6 @@ export type SignupCountsByBucketKeyAndCounted = {
   };
 };
 
-type SignupCountsByStateAndBucketKeyAndCounted = {
-  [S in SignupState]: SignupCountsByBucketKeyAndCounted;
-};
-
 export type EventForSignupCountData = {
   registration_policy?: null | {
     buckets: { key: string; slots_limited: boolean }[];
@@ -33,33 +22,21 @@ export type EventForSignupCountData = {
 };
 
 export default class SignupCountData {
-  data: SignupCountDataRow[];
+  data: GroupedSignupCount[];
 
-  static fromRun(run: { signup_count_by_state_and_bucket_key_and_counted: string }): SignupCountData {
-    return SignupCountData.fromJSON(run.signup_count_by_state_and_bucket_key_and_counted);
+  static fromRun(run: { grouped_signup_counts: GroupedSignupCount[] }): SignupCountData {
+    return SignupCountData.fromGroupedCounts(run.grouped_signup_counts);
   }
 
-  static fromJSON(json: string): SignupCountData {
-    const rawData: SignupCountsByStateAndBucketKeyAndCounted = JSON.parse(json);
-    const rows: SignupCountDataRow[] = Object.entries(rawData).flatMap(([state, signupCountsByBucketKeyAndCounted]) =>
-      Object.entries(signupCountsByBucketKeyAndCounted).flatMap(([bucketKey, signupCountsByCounted]) =>
-        Object.entries(signupCountsByCounted).flatMap(([countedKey, signupCount]) => ({
-          state: state as SignupState,
-          bucket_key: bucketKey,
-          counted: countedKey === 'counted',
-          signup_count: signupCount ?? 0,
-        })),
-      ),
-    );
-
-    return new SignupCountData(rows);
+  static fromGroupedCounts(groupedCounts: GroupedSignupCount[]): SignupCountData {
+    return new SignupCountData(groupedCounts);
   }
 
-  constructor(data: SignupCountDataRow[]) {
+  constructor(data: GroupedSignupCount[]) {
     this.data = data;
   }
 
-  filterRows(filters: SignupCountDataFilter): SignupCountDataRow[] {
+  filterRows(filters: SignupCountDataFilter): GroupedSignupCount[] {
     return Object.entries(filters).reduce((filteredData, [field, value]) => {
       if (Array.isArray(value)) {
         return filteredData.filter((row) => (value as unknown[]).includes(row[field as keyof SignupCountDataFilter]));
@@ -71,7 +48,7 @@ export default class SignupCountData {
 
   sumSignupCounts(filters: SignupCountDataFilter): number {
     return this.filterRows(filters)
-      .map((row) => row.signup_count)
+      .map((row) => row.count)
       .reduce((sum, count) => sum + count, 0);
   }
 

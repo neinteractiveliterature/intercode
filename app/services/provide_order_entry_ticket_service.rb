@@ -11,7 +11,7 @@ class ProvideOrderEntryTicketService < CivilService::Service
   validate :check_convention_maximum
 
   attr_reader :order_entry, :suppress_notifications
-  delegate :product, :order, to: :order_entry
+  delegate :product, :order, :run, to: :order_entry
   delegate :user_con_profile, to: :order
   delegate :convention, to: :user_con_profile
 
@@ -33,7 +33,19 @@ class ProvideOrderEntryTicketService < CivilService::Service
   end
 
   def create_ticket
-    user_con_profile.create_ticket!(ticket_type: product.provides_ticket_type, order_entry: order_entry)
+    if product.provides_ticket_type.event
+      product.provides_ticket_type.tickets.create!(
+        run: run,
+        order_entry: order_entry,
+        user_con_profile: user_con_profile
+      )
+
+      held_signup = user_con_profile.signups.ticket_purchase_hold.joins(:run).where(run_id: run.id).first
+      held_signup.update!(state: "confirmed", expires_at: nil)
+      held_signup.log_signup_change!(action: "ticket_purchase")
+    else
+      user_con_profile.create_ticket!(ticket_type: product.provides_ticket_type, order_entry: order_entry)
+    end
   end
 
   def check_existing_ticket
@@ -44,11 +56,13 @@ class ProvideOrderEntryTicketService < CivilService::Service
 
   def check_same_convention
     return if user_con_profile.convention == product.provides_ticket_type.convention
+    return if user_con_profile.convention == product.provides_ticket_type.event&.convention
 
-    errors.add :base, 'User profile and ticket type are not from the same convention'
+    errors.add :base, "User profile and ticket type are not from the same convention"
   end
 
   def check_convention_is_not_over
+    return unless convention.ends_at
     return if Time.zone.now < convention.ends_at
 
     errors.add :base, "#{convention.name} is over and is no longer selling tickets."

@@ -40,7 +40,7 @@ function EditRun({ convention, events }: EditRunProps): JSX.Element {
         room_names: [],
         confirmed_signup_count: 0,
         not_counted_signup_count: 0,
-        signup_count_by_state_and_bucket_key_and_counted: '{}',
+        grouped_signup_counts: [],
       };
     }
 

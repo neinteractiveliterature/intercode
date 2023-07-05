@@ -3154,6 +3154,13 @@ enum FormType {
   user_con_profile
 }
 
+type GroupedSignupCount {
+  bucket_key: String
+  count: Int!
+  counted: Boolean!
+  state: SignupState!
+}
+
 """
 Represents untyped JSON
 """
@@ -4178,6 +4185,7 @@ type OrderEntry {
   product: Product!
   product_variant: ProductVariant
   quantity: Int!
+  run: Run
 }
 
 input OrderEntryInput {
@@ -4185,6 +4193,7 @@ input OrderEntryInput {
   productId: ID
   productVariantId: ID
   quantity: Int
+  runId: ID
   ticketId: ID
 }
 
@@ -5054,6 +5063,7 @@ type Run {
   current_ability_can_signup_summary_run: Boolean!
   ends_at: Date!
   event: Event!
+  grouped_signup_counts: [GroupedSignupCount!]!
   id: ID!
   my_signup_requests: [SignupRequest!]!
   my_signups: [Signup!]!
@@ -5086,7 +5096,7 @@ type Run {
     """
     sort: [SortInput!]
   ): SignupChangesPagination!
-  signup_count_by_state_and_bucket_key_and_counted: Json!
+  signup_count_by_state_and_bucket_key_and_counted: Json! @deprecated(reason: "Please use grouped_signup_counts instead")
   signups_paginated(filters: SignupFiltersInput, page: Int, per_page: Int, sort: [SortInput]): SignupsPagination!
   starts_at: Date!
   title_suffix: String
@@ -5225,6 +5235,7 @@ type Signup {
   choice: Int
   counted: Boolean!
   created_at: Date!
+  expires_at: Date
   id: ID!
   requested_bucket_key: String
   run: Run!
@@ -5252,7 +5263,9 @@ enum SignupChangeAction {
   accept_signup_request
   admin_create_signup
   change_registration_policy
+  hold_expired
   self_service_signup
+  ticket_purchase
   unknown
   vacancy_fill
   withdraw
@@ -5579,10 +5592,10 @@ input TeamMemberInput {
 type Ticket {
   convention: Convention!
   created_at: Date!
-  event: Event
   id: ID!
   order_entry: OrderEntry
   provided_by_event: Event
+  run: Run
   ticket_type: TicketType!
   updated_at: Date!
   user_con_profile: UserConProfile!

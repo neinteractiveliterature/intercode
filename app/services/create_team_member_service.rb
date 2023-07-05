@@ -56,7 +56,7 @@ class CreateTeamMemberService < CivilService::Service
   end
 
   def convert_signup(signup)
-    creates_vacancy = signup.counted? && signup.confirmed?
+    creates_vacancy = signup.counted? && signup.occupying_slot?
 
     with_advisory_lock_unless_skip_locking("run_#{signup.run.id}_signups") do
       prior_bucket_key = signup.bucket_key

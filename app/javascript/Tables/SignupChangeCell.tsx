@@ -22,6 +22,14 @@ export function describeAction(action: SignupChangeAction, t: TFunction): string
     return t('tables.signupChange.actions.changeRegistrationPolicy', 'registration policy change');
   }
 
+  if (action === 'hold_expired') {
+    return t('tables.signupChange.actions.holdExpired', 'hold expired');
+  }
+
+  if (action === 'ticket_purchase') {
+    return t('tables.signupChange.actions.ticketPurchase', 'ticket purchase');
+  }
+
   if (action === 'vacancy_fill') {
     return t('tables.signupChange.actions.vacancyFill', 'vacancy fill');
   }

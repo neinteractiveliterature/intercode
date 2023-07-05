@@ -62,7 +62,16 @@ class Types::RunType < Types::BaseObject
     SignupCountLoader.for.load(object).then { |presenter| presenter.not_counted_signups_by_state('confirmed') }
   end
 
-  field :signup_count_by_state_and_bucket_key_and_counted, Types::JSON, null: false
+  field :grouped_signup_counts, [Types::GroupedSignupCountType], null: false
+
+  def grouped_signup_counts
+    SignupCountLoader.for.load(object).then(&:grouped_signup_counts)
+  end
+
+  field :signup_count_by_state_and_bucket_key_and_counted,
+        Types::JSON,
+        null: false,
+        deprecation_reason: 'Please use grouped_signup_counts instead'
 
   def signup_count_by_state_and_bucket_key_and_counted
     SignupCountLoader.for.load(object).then(&:signup_count_by_state_and_bucket_key_and_counted)

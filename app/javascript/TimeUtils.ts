@@ -15,18 +15,51 @@ export function getDateTimeFormat(key: DateTimeFormatKey, t: TFunction): string 
 export const timeIsOnTheHour = (time: DateTime): boolean =>
   time.millisecond === 0 && time.second === 0 && time.minute === 0;
 
+export const timeIsDifferentDate = (a: DateTime, b: DateTime): boolean =>
+  !a.setZone(b.zone).startOf('day').equals(b.startOf('day'));
+
 export const humanTimeFormat = (time: DateTime, t: TFunction, includeDay?: boolean): string => {
+  const differentDate = timeIsDifferentDate(time, DateTime.now());
+  const differentZone = DateTime.local().zoneName !== time.zoneName;
+
   if (timeIsOnTheHour(time)) {
     if (time.hour === 0) {
-      return getDateTimeFormat(includeDay ? 'weekdayMidnight' : 'midnight', t);
+      return getDateTimeFormat(
+        includeDay || differentDate
+          ? differentZone
+            ? 'weekdayMidnightWithZone'
+            : 'weekdayMidnight'
+          : differentZone
+          ? 'midnight'
+          : 'midnightWithZone',
+        t,
+      );
     }
 
     if (time.hour === 12) {
-      return getDateTimeFormat(includeDay ? 'weekdayMidnight' : 'noon', t);
+      return getDateTimeFormat(
+        includeDay || differentDate
+          ? differentZone
+            ? 'weekdayNoonWithZone'
+            : 'weekdayNoon'
+          : differentZone
+          ? 'noonWithZone'
+          : 'noon',
+        t,
+      );
     }
   }
 
-  return getDateTimeFormat(includeDay ? 'shortWeekdayTime' : 'shortTime', t);
+  return getDateTimeFormat(
+    includeDay || differentDate
+      ? differentZone
+        ? 'shortWeekdayTimeWithZone'
+        : 'shortWeekdayTime'
+      : differentZone
+      ? 'shortTimeWithZone'
+      : 'shortTime',
+    t,
+  );
 };
 
 // this is just DateTime.toFormat patched with a hack for lowercasing the meridiem
@@ -54,6 +87,16 @@ export function useAppDateTimeFormat(): typeof formatLCM {
 
 export const humanizeTime = (time: DateTime, t: TFunction, includeDay?: boolean): string =>
   formatLCM(time, humanTimeFormat(time, t, includeDay));
+
+export function useHumanizeTime(): (dateTime: DateTime, includeDay?: boolean, options?: LocaleOptions) => string {
+  const { t } = useTranslation();
+  const format = useCallback(
+    (dateTime: DateTime, includeDay?: boolean, options?: LocaleOptions) =>
+      formatLCM(dateTime, humanTimeFormat(dateTime, t, includeDay), options),
+    [t],
+  );
+  return format;
+}
 
 export const timesAreSameOrBothNull = (a?: DateTime | null, b?: DateTime | null): boolean => {
   if (onlyOneIsNull(a, b)) {

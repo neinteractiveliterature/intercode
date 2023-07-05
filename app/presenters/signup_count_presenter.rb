@@ -20,6 +20,22 @@ class SignupCountPresenter
     bucket_key
   end
 
+  def self.group_signup_count_data(data)
+    grouped_data = {}
+
+    data.each do |(state, bucket_key, requested_bucket_key, counted), count|
+      group_key = {
+        state: state,
+        bucket_key: effective_bucket_key(state, bucket_key, requested_bucket_key),
+        counted: counted
+      }
+      grouped_data[group_key] ||= 0
+      grouped_data[group_key] += count
+    end
+
+    grouped_data.map { |group_key, count| group_key.merge(count: count) }
+  end
+
   def self.process_signup_count_data(buckets, data)
     default_value = { counted: 0, not_counted: 0 }
     signup_count_hash = empty_signups_hash(default_value, buckets)
@@ -55,10 +71,11 @@ class SignupCountPresenter
 
   def initialize(run, count_data: nil)
     @run = run
+    @count_data = count_data
+  end
 
-    return unless count_data
-    @signup_count_by_state_and_bucket_key_and_counted =
-      SignupCountPresenter.process_signup_count_data(buckets, count_data)
+  def count_data
+    @count_data ||= Signup.where(run_id: run.id).group(:state, :bucket_key, :requested_bucket_key, :counted).count
   end
 
   def signups_description
@@ -158,10 +175,11 @@ class SignupCountPresenter
 
   def signup_count_by_state_and_bucket_key_and_counted
     @signup_count_by_state_and_bucket_key_and_counted ||=
-      begin
-        data = Signup.where(run_id: run.id).group(:state, :bucket_key, :requested_bucket_key, :counted).count
-        SignupCountPresenter.process_signup_count_data(buckets, data)
-      end
+      SignupCountPresenter.process_signup_count_data(buckets, count_data)
+  end
+
+  def grouped_signup_counts
+    @grouped_signup_counts ||= SignupCountPresenter.group_signup_count_data(count_data)
   end
 
   # WARNING: This method allocates a LOT of objects; don't use it unless you really need the actual

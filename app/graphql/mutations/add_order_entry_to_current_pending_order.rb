@@ -19,9 +19,11 @@ class Mutations::AddOrderEntryToCurrentPendingOrder < Mutations::BaseMutation
     new_order_entry =
       order
         .order_entries
-        .find_or_initialize_by(product: product, product_variant_id: order_entry.product_variant_id) do |entry|
-          entry.quantity = 0
-        end
+        .find_or_initialize_by(
+          product: product,
+          product_variant_id: order_entry.product_variant_id,
+          run_id: order_entry.run_id
+        ) { |entry| entry.quantity = 0 }
 
     new_order_entry.quantity += order_entry.quantity
     if product.pricing_structure.pricing_strategy == 'pay_what_you_want'

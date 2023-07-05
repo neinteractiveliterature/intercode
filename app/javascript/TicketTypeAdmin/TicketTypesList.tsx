@@ -5,18 +5,27 @@ import {
   ErrorDisplay,
   useConfirm,
   useDeleteMutationWithReferenceArrayUpdater,
+  useModal,
 } from '@neinteractiveliterature/litform';
 import capitalize from 'lodash/capitalize';
+import { v4 as uuidv4 } from 'uuid';
 
 import sortTicketTypes from './sortTicketTypes';
 import usePageTitle from '../usePageTitle';
 import { describeAdminPricingStructure } from '../Store/describePricingStructure';
-import { AdminTicketTypesQueryData } from './queries.generated';
+import { AdminTicketTypesQueryData, EventTicketTypesQueryData } from './queries.generated';
 import { useDeleteTicketTypeMutation } from './mutations.generated';
 import { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 import AppRootContext from '../AppRootContext';
 import { useTicketTypesQueryFromRoute } from './useTicketTypesQueryFromRoute';
+import { useDeleteProductMutation } from '../Store/mutations.generated';
+import { PricingStrategy } from '../graphqlTypes.generated';
+import { ModalData } from '@neinteractiveliterature/litform/dist/useModal';
+import NewTicketProvidingProductModal from './NewTicketProvidingProductModal';
+import EditTicketProvidingProductModal, {
+  EditTicketProvidingProductModalProps,
+} from './EditTicketProvidingProductModal';
 
 type TicketTypeType = AdminTicketTypesQueryData['convention']['ticket_types'][0];
 
@@ -57,22 +66,51 @@ function describeTicketTypeOptions(
   return null;
 }
 
-export default LoadQueryWrapper(useTicketTypesQueryFromRoute, function TicketTypesList({ data }) {
+export function buildBlankProduct() {
+  return {
+    __typename: 'Product' as const,
+    available: true,
+    delete_variant_ids: [],
+    generatedId: uuidv4(),
+    name: '',
+    payment_options: ['stripe'],
+    product_variants: [],
+    pricing_structure: {
+      __typename: 'PricingStructure' as const,
+      pricing_strategy: PricingStrategy.Fixed,
+      value: { __typename: 'Money' as const, currency_code: 'USD', fractional: 0 },
+    },
+  };
+}
+
+function TicketTypeDisplay({
+  parent,
+  ticketType,
+  newProductModal,
+  editProductModal,
+}: {
+  parent: EventTicketTypesQueryData['convention']['event'] | AdminTicketTypesQueryData['convention'];
+  ticketType: TicketTypeType;
+  newProductModal: ModalData<{ ticketType: TicketTypeType }>;
+  editProductModal: ModalData<EditTicketProvidingProductModalProps['state']>;
+}) {
   const { ticketName, ticketNamePlural } = useContext(AppRootContext);
-  const event = 'event' in data.convention ? data.convention.event : undefined;
-
-  usePageTitle(`${capitalize(ticketName)} types${event ? ` - ${event.title}` : ''}`);
-
   const { t } = useTranslation();
   const confirm = useConfirm();
   const [deleteTicketType] = useDeleteMutationWithReferenceArrayUpdater(
     useDeleteTicketTypeMutation,
-    'ticket_types' in data.convention ? data.convention : data.convention.event,
+    parent,
     'ticket_types',
     (ticketType) => ({ input: { id: ticketType.id } }),
   );
+  const [deleteProduct] = useDeleteMutationWithReferenceArrayUpdater(
+    useDeleteProductMutation,
+    ticketType,
+    'providing_products',
+    (product) => ({ id: product.id }),
+  );
 
-  const renderTicketTypeDisplay = (ticketType: TicketTypeType) => (
+  return (
     <div className={`card my-4 overflow-hidden ${cardClassForTicketType(ticketType)}`} key={ticketType.id}>
       <div className="card-header">
         <div className="row">
@@ -114,21 +152,75 @@ export default LoadQueryWrapper(useTicketTypesQueryFromRoute, function TicketTyp
           <strong>Providing products:</strong>
         </p>
         {ticketType.providing_products.length > 0 ? (
-          <ul className="list-unstyled mb-0">
-            {ticketType.providing_products.map((product) => (
-              <li key={product.id}>
-                <Link to={`/admin_store/products#product-${product.id}`}>{product.name}</Link>{' '}
-                {product.available ? '(available for purchase)' : '(not available for purchase)'} &mdash;{' '}
-                {describeAdminPricingStructure(product.pricing_structure, t)}
-              </li>
-            ))}
-          </ul>
+          <table className="table table-striped">
+            <tbody>
+              {ticketType.providing_products.map((product) => (
+                <tr key={product.id}>
+                  <td>{product.name}</td>
+                  <td>
+                    {product.available ? (
+                      <div className="badge bg-success">
+                        <i className="bi-check-lg" /> Available for purchase
+                      </div>
+                    ) : (
+                      <div className="badge bg-secondary">
+                        <i className="bi-x-lg" /> Not available for purchase
+                      </div>
+                    )}
+                  </td>
+                  <td>{describeAdminPricingStructure(product.pricing_structure, t)}</td>
+                  <td className="text-end">
+                    <button
+                      className="btn btn-sm btn-outline-danger me-2"
+                      onClick={() =>
+                        confirm({
+                          prompt: `Are you sure you want to delete the product “${product.name}”?`,
+                          action: () => deleteProduct(product),
+                          renderError: (error) => <ErrorDisplay graphQLError={error} />,
+                        })
+                      }
+                    >
+                      <i className="bi-trash" />
+                      <span className="visually-hidden">{t('buttons.delete', 'Delete')}</span>
+                    </button>
+                    <button
+                      className="btn btn-sm btn-outline-primary"
+                      onClick={() =>
+                        editProductModal.open({ ticketType, initialProduct: { ...buildBlankProduct(), ...product } })
+                      }
+                    >
+                      Edit
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         ) : (
           `No products provide this ${ticketName} type`
         )}
+        <div>
+          <button
+            type="button"
+            className="btn btn-outline-primary"
+            onClick={() => newProductModal.open({ ticketType })}
+          >
+            {t('admin.tickets.createProduct', 'Create product')}
+          </button>
+        </div>
       </div>
     </div>
   );
+}
+
+export default LoadQueryWrapper(useTicketTypesQueryFromRoute, function TicketTypesList({ data }) {
+  const { ticketName } = useContext(AppRootContext);
+  const event = 'event' in data.convention ? data.convention.event : undefined;
+
+  usePageTitle(`${capitalize(ticketName)} types${event ? ` - ${event.title}` : ''}`);
+
+  const newProductModal = useModal<{ ticketType: TicketTypeType }>();
+  const editProductModal = useModal<EditTicketProvidingProductModalProps['state']>();
 
   const sortedTicketTypes = useMemo(
     () =>
@@ -142,11 +234,31 @@ export default LoadQueryWrapper(useTicketTypesQueryFromRoute, function TicketTyp
     <div>
       <h1 className="mb-4">{event ? `${event.title} ${ticketName}` : capitalize(ticketName)} types</h1>
 
-      {sortedTicketTypes.map(renderTicketTypeDisplay)}
+      {sortedTicketTypes.map((ticketType) => (
+        <TicketTypeDisplay
+          key={ticketType.id}
+          parent={'ticket_types' in data.convention ? data.convention : data.convention.event}
+          newProductModal={newProductModal}
+          editProductModal={editProductModal}
+          ticketType={ticketType}
+        />
+      ))}
 
       <Link to="new" className="btn btn-primary">
         New {ticketName} type
       </Link>
+
+      <NewTicketProvidingProductModal
+        visible={newProductModal.visible}
+        close={newProductModal.close}
+        ticketType={newProductModal.state?.ticketType}
+      />
+
+      <EditTicketProvidingProductModal
+        visible={editProductModal.visible}
+        close={editProductModal.close}
+        state={editProductModal.state}
+      />
     </div>
   );
 });

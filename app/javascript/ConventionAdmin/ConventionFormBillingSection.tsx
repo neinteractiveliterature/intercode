@@ -95,6 +95,14 @@ function ConventionFormBillingSection({
               { ticketNamePlural: convention.ticketNamePlural },
             ),
           },
+          {
+            value: 'ticket_per_event',
+            label: t(
+              'admin.convention.ticketModeTicketPerEvent',
+              'Each event in this convention sells {{ ticketNamePlural }} separately',
+              { ticketNamePlural: convention.ticketNamePlural },
+            ),
+          },
         ]}
         value={convention.ticket_mode}
         onChange={(newValue: string) => {

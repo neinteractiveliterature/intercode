@@ -25,9 +25,9 @@ class EventChangeRegistrationPolicyService < CivilService::Service
     end
 
     def simulate_signups(signups)
-      # Signups that are confirmed with no bucket can't possibly be affected by a registration
+      # Signups that are occupying a slot with no bucket can't possibly be affected by a registration
       # policy change; just put them right into the signup list without simulating anything
-      to_keep, to_place = signups.partition { |signup| signup.confirmed? && !signup.bucket_key }
+      to_keep, to_place = signups.partition { |signup| signup.occupying_slot? && !signup.bucket_key }
 
       to_keep.each { |signup| new_signups_by_signup_id[signup.id] = signup }
 
@@ -57,7 +57,7 @@ class EventChangeRegistrationPolicyService < CivilService::Service
 
       if destination_bucket
         place_signup signup, bucket_finder, destination_bucket
-      elsif signup.confirmed?
+      elsif signup.occupying_slot?
         immovable_signups << signup
         log_immovable_signup(signup)
       end
@@ -255,7 +255,7 @@ class EventChangeRegistrationPolicyService < CivilService::Service
     @signups_by_run_id ||=
       all_signups
         .group_by(&:run_id)
-        .transform_values { |signups| signups.sort_by { |signup| [signup.confirmed? ? 0 : 1, signup.created_at] } }
+        .transform_values { |signups| signups.sort_by { |signup| [signup.occupying_slot? ? 0 : 1, signup.created_at] } }
   end
 
   def lock_all_runs(&block)

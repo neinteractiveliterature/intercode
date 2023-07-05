@@ -12,7 +12,8 @@ class EventWithdrawService < CivilService::Service
               :move_results,
               :prev_bucket_key,
               :prev_state,
-              :prev_counted
+              :prev_counted,
+              :action
   delegate :run, to: :signup
   delegate :event, to: :run
   delegate :convention, to: :event
@@ -20,11 +21,12 @@ class EventWithdrawService < CivilService::Service
   include SkippableAdvisoryLock
   include ConventionRegistrationFreeze
 
-  def initialize(signup, whodunit, skip_locking: false, suppress_notifications: false)
+  def initialize(signup, whodunit, skip_locking: false, suppress_notifications: false, action: 'withdraw')
     @signup = signup
     @whodunit = whodunit
     @skip_locking = skip_locking
     @suppress_notifications = suppress_notifications
+    @action = action
     @move_results = []
     @prev_state = signup.state
     @prev_bucket_key = signup.bucket_key
@@ -36,7 +38,7 @@ class EventWithdrawService < CivilService::Service
   def inner_call
     with_advisory_lock_unless_skip_locking("run_#{run.id}_signups") do
       signup.update!(state: 'withdrawn', bucket_key: nil, counted: false, updated_by: whodunit)
-      signup.log_signup_change!(action: 'withdraw')
+      signup.log_signup_change!(action: action)
 
       move_result = move_signups(prev_state, prev_bucket_key, prev_counted)
       return move_result if move_result.failure?

@@ -64,6 +64,7 @@ class EventSignupService < CivilService::Service
           user_con_profile: user_con_profile,
           counted: counts_towards_total?,
           state: signup_state,
+          expires_at: signup_state == "ticket_purchase_hold" ? 30.minutes.from_now : nil,
           updated_by: whodunit
         )
 
@@ -105,7 +106,7 @@ class EventSignupService < CivilService::Service
 
   def signup_count_check_required?
     return false if team_member?
-    return false if signup_state == "confirmed" && !counts_towards_total?
+    return false if Signup::SLOT_OCCUPYING_STATES.include?(signup_state) && !counts_towards_total?
 
     true
   end
@@ -119,9 +120,12 @@ class EventSignupService < CivilService::Service
 
   def conflict_descriptions
     confirmed_titles = conflicting_signups.select(&:confirmed?).map { |signup| signup.event.title }
+    ticket_purchase_hold_titles =
+      conflicting_signups.select(&:ticket_purchase_hold?).map { |signup| signup.event.title }
     waitlisted_titles = conflicting_signups.select(&:waitlisted?).map { |signup| signup.event.title }
     [
       confirmed_titles.any? ? "signed up for #{confirmed_titles.to_sentence}" : nil,
+      ticket_purchase_hold_titles.any? ? "holding a spot for #{ticket_purchase_hold_titles.to_sentence}" : nil,
       waitlisted_titles.any? ? "waitlisted for #{waitlisted_titles.to_sentence}" : nil
     ].compact.join(" and ")
   end
@@ -175,7 +179,14 @@ sign up for events."
   end
 
   def signup_state
-    !team_member? && !actual_bucket ? "waitlisted" : "confirmed"
+    if !team_member? && !actual_bucket
+      "waitlisted"
+    elsif convention.ticket_mode == "ticket_per_event" &&
+          run.tickets.where(user_con_profile_id: user_con_profile.id).none?
+      "ticket_purchase_hold"
+    else
+      "confirmed"
+    end
   end
 
   def other_signups_including_not_counted
@@ -191,7 +202,8 @@ sign up for events."
   end
 
   def bucket_finder
-    @bucket_finder ||= SignupBucketFinder.new(run.registration_policy, requested_bucket_key, run.signups.to_a)
+    @bucket_finder ||=
+      SignupBucketFinder.new(run.registration_policy, requested_bucket_key, run.signups.counted.occupying_slot.to_a)
   end
 
   def actual_bucket

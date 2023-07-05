@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useMemo, useContext } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
 import { ApolloError, useApolloClient } from '@apollo/client';
 import { PaymentRequestButtonElement, useStripe } from '@stripe/react-stripe-js';
@@ -11,35 +11,39 @@ import { LazyStripeElementsContainer } from '../LazyStripe';
 import useAsyncFunction from '../useAsyncFunction';
 import useSubmitOrder from './useSubmitOrder';
 import formatMoney from '../formatMoney';
-import { Money, PaymentMode } from '../graphqlTypes.generated';
+import { Order, PaymentMode, Product } from '../graphqlTypes.generated';
 import {
   CurrentPendingOrderPaymentIntentClientSecretQueryData,
   CurrentPendingOrderPaymentIntentClientSecretQueryDocument,
 } from './queries.generated';
 
 import PoweredByStripeLogo from '../images/powered_by_stripe.svg';
+import intersection from 'lodash/intersection';
+import AppRootContext from '../AppRootContext';
 
-type OrderPaymentModalContentsProps = {
+export type OrderPaymentModalContentsProps = {
   onCancel: () => void;
   onComplete: () => void;
-  initialName?: string;
-  orderId: string;
-  paymentOptions: string[];
-  totalPrice: Money;
+  order: Pick<Order, 'id' | 'total_price'> & {
+    order_entries: {
+      product: Pick<Product, 'payment_options'>;
+    }[];
+  };
 };
 
-function OrderPaymentModalContents({
-  onCancel,
-  onComplete,
-  initialName,
-  orderId,
-  paymentOptions,
-  totalPrice,
-}: OrderPaymentModalContentsProps) {
+export function OrderPaymentModalContents({ onCancel, onComplete, order }: OrderPaymentModalContentsProps) {
+  const { myProfile } = useContext(AppRootContext);
+  const totalPrice = useMemo(() => order.total_price, [order.total_price]);
+  const paymentOptions = useMemo(
+    () => intersection(...(order.order_entries ?? []).map((entry) => entry.product.payment_options)),
+    [order.order_entries],
+  );
   const [paymentMode, setPaymentMode] = useState<PaymentMode | undefined>(
     paymentOptions.includes('pay_at_convention') ? undefined : PaymentMode.Now,
   );
-  const [paymentDetails, setPaymentDetails] = useState<PaymentDetails>({ name: initialName ?? '' });
+  const [paymentDetails, setPaymentDetails] = useState<PaymentDetails>({
+    name: myProfile?.name_without_nickname ?? '',
+  });
   const stripe = useStripe();
   const [paymentRequest, setPaymentRequest] = useState<PaymentRequest>();
   const [awaitingPaymentRequestResult, setAwaitingPaymentRequestResult] = useState(false);
@@ -95,16 +99,16 @@ function OrderPaymentModalContents({
           if (error) {
             throw new Error(error.message);
           } else {
-            await submitOrder(orderId, PaymentMode.PaymentIntent, detailsFromEvent, paymentIntent);
+            await submitOrder(order.id, PaymentMode.PaymentIntent, detailsFromEvent, paymentIntent);
             onComplete();
           }
         } else {
-          await submitOrder(orderId, PaymentMode.PaymentIntent, detailsFromEvent, paymentIntent);
+          await submitOrder(order.id, PaymentMode.PaymentIntent, detailsFromEvent, paymentIntent);
           onComplete();
         }
       }
     },
-    [apolloClient, onComplete, orderId, stripe, submitOrder],
+    [apolloClient, onComplete, order.id, stripe, submitOrder],
   );
 
   useEffect(() => {
@@ -147,9 +151,9 @@ function OrderPaymentModalContents({
         throw new Error('Could not determine payment mode to use');
       }
 
-      await submitOrder(orderId, actualPaymentMode, paymentDetails);
+      await submitOrder(order.id, actualPaymentMode, paymentDetails);
       onComplete();
-    }, [onComplete, paymentMode, submitOrder, orderId, paymentDetails, totalPrice]),
+    }, [onComplete, paymentMode, submitOrder, order.id, paymentDetails, totalPrice]),
     { suppressError: true },
   );
 
@@ -237,32 +241,17 @@ function OrderPaymentModalContents({
   );
 }
 
-export type OrderPaymentModalProps = Omit<OrderPaymentModalContentsProps, 'orderId'> & {
+export type OrderPaymentModalProps = Omit<OrderPaymentModalContentsProps, 'order'> & {
   visible: boolean;
-  orderId?: OrderPaymentModalContentsProps['orderId'];
+  order?: OrderPaymentModalContentsProps['order'];
 };
 
-function OrderPaymentModal({
-  visible,
-  onCancel,
-  onComplete,
-  initialName,
-  orderId,
-  paymentOptions,
-  totalPrice,
-}: OrderPaymentModalProps): JSX.Element {
+function OrderPaymentModal({ visible, onCancel, onComplete, order }: OrderPaymentModalProps): JSX.Element {
   return (
-    <Modal visible={visible && orderId != null} dialogClassName="modal-lg">
-      {visible && orderId != null && (
+    <Modal visible={visible && order != null} dialogClassName="modal-lg">
+      {visible && order != null && (
         <LazyStripeElementsContainer>
-          <OrderPaymentModalContents
-            onCancel={onCancel}
-            onComplete={onComplete}
-            initialName={initialName}
-            orderId={orderId}
-            paymentOptions={paymentOptions}
-            totalPrice={totalPrice}
-          />
+          <OrderPaymentModalContents onCancel={onCancel} onComplete={onComplete} order={order} />
         </LazyStripeElementsContainer>
       )}
     </Modal>

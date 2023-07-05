@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 
-import buildBlankSignupCountsFromRegistrationPolicy from '../EventsApp/EventPage/buildBlankSignupCountsFromRegistrationPolicy';
 import buildSignupOptions from '../EventsApp/EventPage/buildSignupOptions';
 import RunCapacityGraph from '../EventsApp/EventPage/RunCapacityGraph';
 import SignupButtons from '../EventsApp/EventPage/SignupButtons';
@@ -11,7 +10,6 @@ export type RegistrationPolicyPreviewProps = {
 };
 
 function RegistrationPolicyPreview({ registrationPolicy }: RegistrationPolicyPreviewProps): JSX.Element {
-  const blankSignupCounts = buildBlankSignupCountsFromRegistrationPolicy(registrationPolicy);
   const registrationPolicyForDisplay = useMemo(() => {
     const { buckets, ...otherProps } = registrationPolicy;
     return {
@@ -56,12 +54,7 @@ function RegistrationPolicyPreview({ registrationPolicy }: RegistrationPolicyPre
               event={{
                 registration_policy: registrationPolicyForDisplay,
               }}
-              run={{
-                signup_count_by_state_and_bucket_key_and_counted: JSON.stringify({
-                  confirmed: blankSignupCounts,
-                  waitlisted: blankSignupCounts,
-                }),
-              }}
+              run={{ grouped_signup_counts: [] }}
               signupsAvailable
             />
             <SignupButtons signupOptions={signupOptions.mainPreference} />

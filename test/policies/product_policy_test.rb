@@ -23,6 +23,23 @@ class ProductPolicyTest < ActiveSupport::TestCase
       user_con_profile = create(:user_con_profile, convention: product.convention)
       refute ProductPolicy.new(user_con_profile.user, product).manage?
     end
+
+    it 'lets team members manage products attached to event-specific ticket types' do
+      ticket_type = create(:event_specific_ticket_type)
+      product = create(:product, provides_ticket_type: ticket_type, convention: ticket_type.event.convention)
+      team_member = create(:team_member, event: ticket_type.event)
+
+      assert_policy_allows ProductPolicy, team_member.user_con_profile.user, product, :manage?, product.convention
+    end
+
+    it 'does not let regular users manage products attached to event-specific ticket types' do
+      ticket_type = create(:event_specific_ticket_type)
+      product = create(:product, provides_ticket_type: ticket_type, convention: ticket_type.event.convention)
+      run = create(:run, event: ticket_type.event)
+      signup = create(:signup, run: run)
+
+      refute ProductPolicy.new(signup.user_con_profile.user, product).manage?
+    end
   end
 
   describe 'Scope' do

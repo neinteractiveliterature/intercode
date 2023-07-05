@@ -324,11 +324,7 @@ export default class Schedule {
       starts_at: timespan.start.toISO(),
       confirmed_signup_count: 0,
       not_counted_signup_count: 0,
-      signup_count_by_state_and_bucket_key_and_counted: JSON.stringify({
-        confirmed: {},
-        waitlisted: {},
-        withdrawn: {},
-      }),
+      grouped_signup_counts: [],
     };
 
     const fakeEvent: ScheduleEvent = {

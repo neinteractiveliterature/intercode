@@ -158,6 +158,7 @@ module.exports = {
                 'EventProvidedTicketList',
                 'EventWithChoiceCounts',
                 'FormResponseChange',
+                'GroupedSignupCount',
                 'LiquidAssign',
                 'MailingLists',
                 'Money',

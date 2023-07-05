@@ -1,10 +1,10 @@
-import { useContext, useRef, useEffect } from 'react';
+import { useContext, useRef, useEffect, useCallback } from 'react';
 import classNames from 'classnames';
 import { useLocation } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 import { ApolloError } from '@apollo/client';
 import { TFunction } from 'i18next';
-import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
+import { LoadingIndicator, ErrorDisplay, useModal } from '@neinteractiveliterature/litform';
 
 import RunCapacityGraph from './RunCapacityGraph';
 import SignupButtons from './SignupButtons';
@@ -17,10 +17,13 @@ import AuthenticationModalContext from '../../Authentication/AuthenticationModal
 import { EventPageQueryData } from './queries.generated';
 import { PartitionedSignupOptions, SignupOption } from './buildSignupOptions';
 import { useFormatRunTimespan } from '../runTimeFormatting';
+import { Signup, SignupState } from '../../graphqlTypes.generated';
+import EventTicketPurchaseModal from './EventTicketPurchaseModal';
 
 function describeSignupState(
   mySignup: EventPageQueryData['convention']['event']['runs'][0]['my_signups'][0],
   t: TFunction,
+  ticketName: string,
 ) {
   if (mySignup.state === 'confirmed') {
     return t('signups.runCardText.confirmed', 'You are signed up.');
@@ -30,6 +33,14 @@ function describeSignupState(
     return t('signups.runCardText.waitlisted', 'You are #{{ waitlistPosition }} on the waitlist.', {
       waitlistPosition: mySignup.waitlist_position,
     });
+  }
+
+  if (mySignup.state === SignupState.TicketPurchaseHold) {
+    return t(
+      'signups.runCardText.ticketPurchaseHold',
+      'Your spot is being held while you purchase your {{ ticketName }}.',
+      { ticketName },
+    );
   }
 
   return t('signups.runCardText.waitlistedUnknownPosition', 'You are on the waitlist.');
@@ -44,7 +55,9 @@ export type RunCardProps = {
   mySignup?: EventPageQueryData['convention']['event']['runs'][0]['my_signups'][0] | null;
   myPendingSignupRequest?: EventPageQueryData['convention']['event']['runs'][0]['my_signup_requests'][0] | null;
   showViewSignups?: boolean;
-  createSignup: (signupOption: SignupOption) => Promise<unknown>;
+  createSignup: (
+    signupOption: SignupOption,
+  ) => Promise<undefined | null | Pick<Signup, '__typename' | 'id' | 'state' | 'expires_at'>>;
   withdrawSignup: () => Promise<unknown>;
   withdrawPendingSignupRequest: () => Promise<unknown>;
 };
@@ -65,14 +78,25 @@ function RunCard({
   const { t } = useTranslation();
   const location = useLocation();
   const formatRunTimespan = useFormatRunTimespan();
-  const { siteMode, timezoneName } = useContext(AppRootContext);
+  const { siteMode, timezoneName, ticketName } = useContext(AppRootContext);
   const cardRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (location.hash === `#run-${run.id}`) {
       cardRef.current?.scrollIntoView(false);
     }
   }, [location.hash, run.id]);
-  const [signupButtonClicked, signupError, mutationInProgress] = useAsyncFunction(createSignup, {
+  const eventTicketPurchaseModal = useModal<{ run: NonNullable<typeof run>; signup: NonNullable<typeof mySignup> }>();
+
+  const performSignup = useCallback(
+    async (signupOption: SignupOption) => {
+      const signup = await createSignup(signupOption);
+      if (signup?.state === SignupState.TicketPurchaseHold) {
+        eventTicketPurchaseModal.open({ run, signup });
+      }
+    },
+    [createSignup, eventTicketPurchaseModal, run],
+  );
+  const [signupButtonClicked, signupError, mutationInProgress] = useAsyncFunction(performSignup, {
     suppressError: true,
   });
   const { setAfterSignInPath, open: openAuthenticationModal } = useContext(AuthenticationModalContext);
@@ -101,8 +125,17 @@ function RunCard({
     if (mySignup) {
       return (
         <>
-          <em>{describeSignupState(mySignup, t)}</em>
+          <em>{describeSignupState(mySignup, t, ticketName ?? 'ticket')}</em>
           <p className="mb-0">
+            {mySignup.state === SignupState.TicketPurchaseHold && (
+              <button
+                className="btn btn-outline-success me-2"
+                type="button"
+                onClick={() => eventTicketPurchaseModal.open({ run, signup: mySignup })}
+              >
+                {t('signups.eventTicketPurchase.cta', 'Buy your {{ ticketName }}', { ticketName })}
+              </button>
+            )}
             <WithdrawSignupButton withdrawSignup={withdrawSignup} />
           </p>
         </>
@@ -166,50 +199,61 @@ function RunCard({
         event.registration_policy.total_slots_including_not_counted > 0));
 
   return (
-    <div
-      ref={cardRef}
-      className={classNames('card run-card', {
-        'glow-success': location.hash === `#run-${run.id}`,
-      })}
-      id={`run-${run.id}`}
-    >
-      {(siteMode !== 'single_event' || event.runs.length !== 1) && (
-        <div className="card-header">
-          {run.title_suffix ? (
-            <p>
-              <strong>{run.title_suffix}</strong>
-            </p>
-          ) : null}
+    <>
+      <div
+        ref={cardRef}
+        className={classNames('card run-card', {
+          'glow-success': location.hash === `#run-${run.id}`,
+        })}
+        id={`run-${run.id}`}
+      >
+        {(siteMode !== 'single_event' || event.runs.length !== 1) && (
+          <div className="card-header">
+            {run.title_suffix ? (
+              <p>
+                <strong>{run.title_suffix}</strong>
+              </p>
+            ) : null}
 
-          <div className="d-flex flex-wrap">
-            <div className="flex-grow-1">{formatRunTimespan(runTimespan, { formatType: 'short' })}</div>
+            <div className="d-flex flex-wrap">
+              <div className="flex-grow-1">{formatRunTimespan(runTimespan, { formatType: 'short' })}</div>
 
-            <div>
-              {run.rooms
-                .map((room) => room.name)
-                .sort()
-                .join(', ')}
+              <div>
+                {run.rooms
+                  .map((room) => room.name)
+                  .sort()
+                  .join(', ')}
+              </div>
             </div>
           </div>
-        </div>
-      )}
-      {acceptsSignups ? (
-        <>
-          <div className="card-body text-center">
-            <RunCapacityGraph run={run} event={event} signupsAvailable />
-            {renderMainSignupSection()}
+        )}
+        {acceptsSignups ? (
+          <>
+            <div className="card-body text-center">
+              <RunCapacityGraph run={run} event={event} signupsAvailable />
+              {renderMainSignupSection()}
+            </div>
+
+            {renderAuxiliarySignupSection()}
+
+            {showViewSignups && <ViewSignupsOptions event={event} run={run} currentAbility={currentAbility} />}
+          </>
+        ) : (
+          <div className="card-body">
+            <small>{t('signups.noSignupsAvailable', 'This event does not take signups.')}</small>
           </div>
+        )}
+      </div>
 
-          {renderAuxiliarySignupSection()}
-
-          {showViewSignups && <ViewSignupsOptions event={event} run={run} currentAbility={currentAbility} />}
-        </>
-      ) : (
-        <div className="card-body">
-          <small>{t('signups.noSignupsAvailable', 'This event does not take signups.')}</small>
-        </div>
-      )}
-    </div>
+      <EventTicketPurchaseModal
+        visible={eventTicketPurchaseModal.visible}
+        close={eventTicketPurchaseModal.close}
+        eventTitle={event.title ?? ''}
+        availableProducts={event.ticket_types.flatMap((ticketType) => ticketType.providing_products)}
+        run={eventTicketPurchaseModal.state?.run}
+        signup={eventTicketPurchaseModal.state?.signup}
+      />
+    </>
   );
 }
 

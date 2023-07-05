@@ -1,6 +1,7 @@
 $signup-state-color-confirmed: $green;
 $signup-state-color-waitlisted: $yellow;
 $signup-state-color-withdrawn: $red;
+$signup-state-color-ticket_purchase_hold: $blue;
 
 $signup-state-colors: () !default;
 $signup-state-colors: map-merge(
@@ -8,6 +9,7 @@ $signup-state-colors: map-merge(
     'signup-state-color-confirmed': $signup-state-color-confirmed,
     'signup-state-color-waitlisted': $signup-state-color-waitlisted,
     'signup-state-color-withdrawn': $signup-state-color-withdrawn,
+    'signup-state-color-ticket_purchase_hold': $signup-state-color-ticket_purchase_hold,
   ),
   $signup-state-colors
 );

@@ -13,7 +13,7 @@
             </p>
             <% if run.signups.any? %>
               <ul class="list-unstyled">
-                <% run.signups.select(&:confirmed?).sort_by { |signup| signup.user_con_profile.name_inverted.downcase }.each do |signup| %>
+                <% run.signups.select(&:occupying_slot?).sort_by { |signup| signup.user_con_profile.name_inverted.downcase }.each do |signup| %>
                   <li>
                     <%= signup.user_con_profile.name_inverted %>
                   </li>

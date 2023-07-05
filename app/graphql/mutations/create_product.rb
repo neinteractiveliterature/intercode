@@ -6,7 +6,11 @@ class Mutations::CreateProduct < Mutations::BaseMutation
 
   argument :product, Types::ProductInputType, required: true
 
-  authorize_create_convention_associated_model :products
+  define_authorization_check do |args|
+    convention = context[:convention]
+    product = convention.products.new(provides_ticket_type_id: args[:product][:provides_ticket_type_id])
+    policy(product).create?
+  end
 
   def resolve(**args)
     product_fields = args[:product].to_h.deep_symbolize_keys

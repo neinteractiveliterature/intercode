@@ -16,7 +16,9 @@ class SignupDrop < Liquid::Drop
   #   @return [RegistrationPolicy::BucketDrop] The bucket assigned to this signup
   # @!method requested_bucket
   #   @return [RegistrationPolicy::BucketDrop] The bucket the user requested to sign up in, if any
-  delegate :id, :run, :user_con_profile, :state, :bucket, :requested_bucket, :team_member?, to: :signup
+  # @!method expires_at
+  #   @return [DateTime] When this signup will expire, if it's being held tempoarily
+  delegate :id, :run, :user_con_profile, :state, :bucket, :requested_bucket, :team_member?, :expires_at, to: :signup
 
   # @return [Boolean] Whether or not this signup is for an event team member
   alias team_member team_member?

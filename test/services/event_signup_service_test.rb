@@ -47,6 +47,18 @@ class EventSignupServiceTest < ActiveSupport::TestCase
     end
   end
 
+  describe 'with a convention that uses ticket_per_event mode' do
+    let(:convention) { create :convention, :with_notification_templates, ticket_mode: 'ticket_per_event' }
+
+    it 'signs the user up for an event with a ticket purchase hold' do
+      result = subject.call
+      assert result.success?
+      assert result.signup.ticket_purchase_hold?
+      assert result.signup.expires_at
+      assert result.signup.expires_at < 1.hour.from_now
+    end
+  end
+
   describe 'with a valid ticket' do
     setup { ticket }
 
@@ -150,7 +162,21 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
       result = subject.call
       assert result.failure?
-      assert_match /\AYou are already signed up for 1 event/, result.errors.full_messages.join('\n')
+      assert_match(/\AYou are already signed up for 1 event/, result.errors.full_messages.join('\n'))
+    end
+
+    it 'does count ticket_purchase_hold signups towards the signup limit' do
+      convention.update!(
+        maximum_event_signups: ScheduledValue::ScheduledValue.new(timespans: [{ start: nil, finish: nil, value: '1' }])
+      )
+
+      another_event = create(:event, convention: convention)
+      another_run = create(:run, event: another_event, starts_at: the_run.ends_at)
+      create(:signup, state: 'ticket_purchase_hold', user_con_profile: user_con_profile, run: another_run)
+
+      result = subject.call
+      assert result.failure?
+      assert_match(/\AYou are already signed up for 1 event/, result.errors.full_messages.join('\n'))
     end
 
     it 'does not count withdrawn signups towards the signup limit' do
@@ -178,7 +204,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
       result = subject.call
       assert result.failure?
-      assert_match /\AYou are already signed up for 1 event/, result.errors.full_messages.join('\n')
+      assert_match(/\AYou are already signed up for 1 event/, result.errors.full_messages.join('\n'))
     end
 
     it 'disallows signups if signups are not yet open' do
@@ -189,7 +215,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
       result = subject.call
       assert result.failure?
-      assert_match /\ASignups are not allowed at this time/, result.errors.full_messages.join('\n')
+      assert_match(/\ASignups are not allowed at this time/, result.errors.full_messages.join('\n'))
     end
 
     it 'disallows signups to a frozen convention' do
@@ -200,8 +226,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
       result = subject.call
       assert result.failure?
-      assert_match /\ARegistrations for #{Regexp.escape convention.name} are frozen/,
-                   result.errors.full_messages.join('\n')
+      assert_match(/\ARegistrations for #{Regexp.escape convention.name} are frozen/,
+                   result.errors.full_messages.join('\n'))
     end
 
     describe 'with a conflicting event' do
@@ -224,8 +250,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase
         result = subject.call
         assert result.failure?
         assert waitlist_signup1.reload.waitlisted?
-        assert_match /\AYou are already waitlisted for #{Regexp.escape other_event.title}/,
-                     result.errors.full_messages.join('\n')
+        assert_match(/\AYou are already waitlisted for #{Regexp.escape other_event.title}/,
+                     result.errors.full_messages.join('\n'))
       end
 
       it 'disallows signups to conflicting events' do
@@ -234,8 +260,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
         result = subject.call
         assert result.failure?
-        assert_match /\AYou are already signed up for #{Regexp.escape other_event.title}/,
-                     result.errors.full_messages.join('\n')
+        assert_match(/\AYou are already signed up for #{Regexp.escape other_event.title}/,
+                     result.errors.full_messages.join('\n'))
       end
 
       it 'allows signups to conflicting events that allow concurrent signups' do
@@ -304,6 +330,17 @@ class EventSignupServiceTest < ActiveSupport::TestCase
         assert_equal 'cats', result.signup.requested_bucket_key
       end
 
+      it 'will go to the waitlist even if the other signups are ticket_purchase_hold' do
+        2.times { create_other_signup 'cats', state: 'ticket_purchase_hold' }
+        4.times { create_other_signup 'anything', state: 'ticket_purchase_hold' }
+
+        result = subject.call
+        assert result.success?
+        assert result.signup.waitlisted?
+        assert result.signup.bucket_key.nil?
+        assert_equal 'cats', result.signup.requested_bucket_key
+      end
+
       it 'emails only the team members who have requested waitlist emails' do
         email_team_member = create(:team_member, event: event, receive_signup_email: 'all_signups')
         no_email_team_member = create(:team_member, event: event, receive_signup_email: 'non_waitlist_signups')
@@ -327,8 +364,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase
         it 'disallows signups to a nonexistent bucket' do
           result = subject.call
           assert result.failure?
-          assert_match /\APlease choose one of the following buckets: dogs, cats.\z/,
-                       result.errors.full_messages.join('\n')
+          assert_match(/\APlease choose one of the following buckets: dogs, cats.\z/,
+                       result.errors.full_messages.join('\n'))
         end
       end
 
@@ -338,8 +375,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase
         it 'disallows signups to the anything bucket' do
           result = subject.call
           assert result.failure?
-          assert_match /\APlease choose one of the following buckets: dogs, cats.\z/,
-                       result.errors.full_messages.join('\n')
+          assert_match(/\APlease choose one of the following buckets: dogs, cats.\z/,
+                       result.errors.full_messages.join('\n'))
         end
       end
 
@@ -383,8 +420,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase
           it 'prevents it' do
             result = subject.call
             assert result.failure?
-            assert_match /\APlease choose one of the following buckets: dogs, cats.\z/,
-                         result.errors.full_messages.join('\n')
+            assert_match(/\APlease choose one of the following buckets: dogs, cats.\z/,
+                         result.errors.full_messages.join('\n'))
           end
         end
       end
