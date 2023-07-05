@@ -1538,7 +1538,7 @@ CREATE TABLE public.events (
     updated_by_id bigint,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    convention_id bigint NOT NULL,
+    convention_id bigint,
     owner_id bigint,
     status character varying DEFAULT 'active'::character varying NOT NULL,
     registration_policy jsonb,
@@ -2376,7 +2376,7 @@ ALTER SEQUENCE public.root_sites_id_seq OWNED BY public.root_sites.id;
 
 CREATE TABLE public.runs (
     id bigint NOT NULL,
-    event_id bigint NOT NULL,
+    event_id bigint,
     starts_at timestamp without time zone,
     title_suffix character varying,
     schedule_note text,
@@ -2501,8 +2501,7 @@ CREATE TABLE public.signup_requests (
     result_signup_id bigint,
     updated_by_id bigint,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    priority integer
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -2531,7 +2530,7 @@ ALTER SEQUENCE public.signup_requests_id_seq OWNED BY public.signup_requests.id;
 
 CREATE TABLE public.signups (
     id bigint NOT NULL,
-    run_id bigint NOT NULL,
+    run_id bigint,
     bucket_key character varying,
     updated_by_id bigint,
     created_at timestamp without time zone NOT NULL,
@@ -5921,18 +5920,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220502182655'),
 ('20220503164309'),
 ('20220609161816'),
-('20220807163855'),
-('20220807165227'),
-('20220807170349'),
-('20220807170912'),
-('20220807172511'),
 ('20220918173739'),
 ('20220924204825'),
-('20221120175702'),
-('20230109012113'),
-('20230112164622'),
-('20230113184026'),
-('20230113220828'),
-('20230627000846');
+('20221120175702');
 
 

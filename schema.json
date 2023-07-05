@@ -28688,6 +28688,12 @@
               "deprecationReason": null
             },
             {
+              "name": "ticket_purchase",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "vacancy_fill",
               "description": null,
               "isDeprecated": false,

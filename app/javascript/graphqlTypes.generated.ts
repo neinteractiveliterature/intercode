@@ -4422,6 +4422,7 @@ export enum SignupChangeAction {
   ChangeRegistrationPolicy = 'change_registration_policy',
   HoldExpired = 'hold_expired',
   SelfServiceSignup = 'self_service_signup',
+  TicketPurchase = 'ticket_purchase',
   Unknown = 'unknown',
   VacancyFill = 'vacancy_fill',
   Withdraw = 'withdraw'

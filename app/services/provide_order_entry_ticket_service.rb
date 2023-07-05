@@ -41,7 +41,8 @@ class ProvideOrderEntryTicketService < CivilService::Service
       )
 
       held_signup = user_con_profile.signups.ticket_purchase_hold.joins(:run).where(run_id: run.id).first
-      held_signup.update!(state: 'confirmed', expires_at: nil)
+      held_signup.update!(state: "confirmed", expires_at: nil)
+      held_signup.log_signup_change!(action: "ticket_purchase")
     else
       user_con_profile.create_ticket!(ticket_type: product.provides_ticket_type, order_entry: order_entry)
     end
@@ -57,10 +58,11 @@ class ProvideOrderEntryTicketService < CivilService::Service
     return if user_con_profile.convention == product.provides_ticket_type.convention
     return if user_con_profile.convention == product.provides_ticket_type.event&.convention
 
-    errors.add :base, 'User profile and ticket type are not from the same convention'
+    errors.add :base, "User profile and ticket type are not from the same convention"
   end
 
   def check_convention_is_not_over
+    return unless convention.ends_at
     return if Time.zone.now < convention.ends_at
 
     errors.add :base, "#{convention.name} is over and is no longer selling tickets."

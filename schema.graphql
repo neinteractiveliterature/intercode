@@ -5265,6 +5265,7 @@ enum SignupChangeAction {
   change_registration_policy
   hold_expired
   self_service_signup
+  ticket_purchase
   unknown
   vacancy_fill
   withdraw

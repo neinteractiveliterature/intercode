@@ -79,9 +79,11 @@ export default function EventTicketPurchaseModal({
         )}
       </div>
       <div className="modal-footer">
-        <button type="button" className="btn btn-secondary" onClick={cancelAsync}>
-          {cancelInProgress ? <LoadingIndicator /> : t('buttons.cancel', 'Cancel')}
-        </button>
+        {!orderEntry && (
+          <button type="button" className="btn btn-secondary" onClick={cancelAsync}>
+            {cancelInProgress ? <LoadingIndicator /> : t('buttons.cancel', 'Cancel')}
+          </button>
+        )}
         <ErrorDisplay graphQLError={cancelError as ApolloError | null} />
       </div>
     </Modal>
