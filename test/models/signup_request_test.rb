@@ -4,6 +4,7 @@
 # Table name: signup_requests
 #
 #  id                   :bigint           not null, primary key
+#  priority             :integer
 #  requested_bucket_key :string
 #  state                :string           default("pending"), not null
 #  created_at           :datetime         not null
@@ -32,7 +33,6 @@
 #  fk_rails_...  (user_con_profile_id => user_con_profiles.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 require 'test_helper'
 
 class SignupRequestTest < ActiveSupport::TestCase

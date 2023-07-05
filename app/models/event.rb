@@ -28,7 +28,7 @@
 #  url                          :text
 #  created_at                   :datetime
 #  updated_at                   :datetime
-#  convention_id                :bigint
+#  convention_id                :bigint           not null
 #  event_category_id            :bigint           not null
 #  owner_id                     :bigint
 #  updated_by_id                :bigint

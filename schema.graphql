@@ -2840,7 +2840,7 @@ type Event {
   provided_tickets: [Ticket!]!
   registration_policy: RegistrationPolicy
   run(id: ID): Run!
-  runs(excludeConflicts: Boolean, finish: Date, start: Date): [Run!]!
+  runs(excludeConflicts: Boolean @deprecated(reason: "This parameter hasn't actually worked for a long time"), finish: Date, start: Date): [Run!]!
   short_blurb: String
   short_blurb_html: String
   slots_limited: Boolean

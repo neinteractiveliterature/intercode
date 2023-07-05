@@ -10,7 +10,7 @@
 #  title_suffix     :string
 #  created_at       :datetime
 #  updated_at       :datetime
-#  event_id         :bigint
+#  event_id         :bigint           not null
 #  updated_by_id    :bigint
 #
 # Indexes

@@ -11,7 +11,7 @@
 #  state                :string           default("confirmed"), not null
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
-#  run_id               :bigint
+#  run_id               :bigint           not null
 #  updated_by_id        :bigint
 #  user_con_profile_id  :bigint           not null
 #
