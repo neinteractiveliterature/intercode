@@ -8,6 +8,7 @@
 
 # Ignore build artifacts
 /bin/*.cjs
+/bin/*.cjs.map
 /bin/assets-manifest.json
 /doc-site/schema
 /test/html_reports
