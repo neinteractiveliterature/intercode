@@ -100,7 +100,7 @@ const config = {
           },
           require.resolve('css-loader'),
           require.resolve('postcss-loader'),
-          { loader: require.resolve('sass-loader'), options: { sassOptions: {quietDeps: true} } }
+          { loader: require.resolve('sass-loader'), options: { sassOptions: { quietDeps: true } } },
         ],
       },
       {
@@ -120,7 +120,7 @@ const config = {
         type: 'javascript/auto',
         use: [
           {
-            loader: require.resolve('babel-loader'),
+            loader: require.resolve('swc-loader'),
           },
         ],
       },
@@ -129,7 +129,7 @@ const config = {
         exclude: [/node_modules/, /\.yalc/],
         use: [
           {
-            loader: require.resolve('babel-loader'),
+            loader: require.resolve('swc-loader'),
           },
         ],
       },
