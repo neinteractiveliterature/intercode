@@ -9,14 +9,15 @@ class SignupCountPresenter
   # combination
   def self.empty_signups_hash(default_value, buckets)
     Signup::STATES.each_with_object({}) do |state, states_hash|
-      states_hash[state] =
-        buckets.each_with_object({}) { |bucket, buckets_hash| buckets_hash[bucket.key] = default_value.dup }
+      states_hash[state] = buckets.each_with_object({}) do |bucket, buckets_hash|
+        buckets_hash[bucket.key] = default_value.dup
+      end
       states_hash[state][nil] = default_value.dup # Some signups are not in any bucket
     end
   end
 
   def self.effective_bucket_key(state, bucket_key, requested_bucket_key)
-    return requested_bucket_key if state == 'waitlisted'
+    return requested_bucket_key if state == "waitlisted"
     bucket_key
   end
 
@@ -27,7 +28,7 @@ class SignupCountPresenter
       group_key = {
         state: state,
         bucket_key: effective_bucket_key(state, bucket_key, requested_bucket_key),
-        counted: counted
+        counted: counted || false
       }
       grouped_data[group_key] ||= 0
       grouped_data[group_key] += count
@@ -80,13 +81,13 @@ class SignupCountPresenter
 
   def signups_description
     [
-      "Signed up: #{bucket_descriptions_text('confirmed')}",
-      (has_waitlist? ? "Waitlisted: #{bucket_descriptions_text('waitlisted')}" : nil)
+      "Signed up: #{bucket_descriptions_text("confirmed")}",
+      (has_waitlist? ? "Waitlisted: #{bucket_descriptions_text("waitlisted")}" : nil)
     ].compact.join("\n")
   end
 
   def bucket_descriptions_text(state)
-    bucket_descriptions(state).map(&:strip).join(', ')
+    bucket_descriptions(state).map(&:strip).join(", ")
   end
 
   def bucket_descriptions(state)
@@ -103,7 +104,7 @@ class SignupCountPresenter
           "#{bucket.name}: #{signups_by_bucket_key[bucket.key][bucket_counted_key]}"
         end
 
-      if state == 'waitlisted' && (signups_by_bucket_key[nil] && (signups_by_bucket_key[nil][:not_counted]).positive?)
+      if state == "waitlisted" && (signups_by_bucket_key[nil] && (signups_by_bucket_key[nil][:not_counted]).positive?)
         bucket_texts << "No preference: #{signups_by_bucket_key[nil][:not_counted]}"
       end
 
@@ -112,32 +113,32 @@ class SignupCountPresenter
   end
 
   def counted_key_for_state(state)
-    return :not_counted if state != 'confirmed' || registration_policy.only_uncounted?
+    return :not_counted if state != "confirmed" || registration_policy.only_uncounted?
     :counted
   end
 
   def confirmed_count
-    @confirmed_count ||= counted_signups_by_state('confirmed')
+    @confirmed_count ||= counted_signups_by_state("confirmed")
   end
 
   def confirmed_limited_count
     @confirmed_limited_count ||=
       buckets
         .select(&:slots_limited?)
-        .sum { |bucket| signup_count_by_state_and_bucket_key_and_counted['confirmed'][bucket.key][:counted] }
+        .sum { |bucket| signup_count_by_state_and_bucket_key_and_counted["confirmed"][bucket.key][:counted] }
   end
 
   # Waitlisted signups are never counted, so count them all here
   def waitlist_count
-    @waitlist_count ||= signup_count_by_state_and_bucket_key_and_counted['waitlisted'].values.flat_map(&:values).sum
+    @waitlist_count ||= signup_count_by_state_and_bucket_key_and_counted["waitlisted"].values.flat_map(&:values).sum
   end
 
   def confirmed_count_for_bucket(bucket_key)
-    signup_count_by_state_and_bucket_key_and_counted['confirmed'][bucket_key][:counted]
+    signup_count_by_state_and_bucket_key_and_counted["confirmed"][bucket_key][:counted]
   end
 
   def confirmed_count_for_bucket_including_not_counted(bucket_key)
-    signup_count_by_state_and_bucket_key_and_counted['confirmed'][bucket_key].values.sum
+    signup_count_by_state_and_bucket_key_and_counted["confirmed"][bucket_key].values.sum
   end
 
   def capacity_fraction_for_bucket(bucket_key)

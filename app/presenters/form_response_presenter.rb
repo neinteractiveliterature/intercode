@@ -8,7 +8,7 @@ class FormResponsePresenter
     @viewer_role = viewer_role&.to_s
     @team_member_name = team_member_name
     @controller = controller
-    @form_items = preloaded_form_items
+    @form_items = preloaded_form_items.compact
   end
 
   def as_json(replacement_content_format: "text", only_items: nil)
