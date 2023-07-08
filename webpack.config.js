@@ -4,6 +4,7 @@ const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const RollbarSourceMapPlugin = require('rollbar-sourcemap-webpack-plugin');
 const webpack = require('webpack');
+const TerserPlugin = require('terser-webpack-plugin');
 
 // Taken from https://webpack.js.org/loaders/style-loader/#insert
 function insertAtTop(element) {
@@ -53,6 +54,16 @@ const config = {
       arrowFunction: false,
     },
   },
+  optimization: {
+    minimizer: [
+      new TerserPlugin({
+        minify: TerserPlugin.swcMinify,
+        // `terserOptions` options will be passed to `swc` (`@swc/core`)
+        // Link to options - https://swc.rs/docs/config-js-minify
+        terserOptions: {},
+      }),
+    ],
+  },
   devServer: {
     port: 3135,
     historyApiFallback: {
@@ -100,7 +111,7 @@ const config = {
           },
           require.resolve('css-loader'),
           require.resolve('postcss-loader'),
-          { loader: require.resolve('sass-loader'), options: { sassOptions: {quietDeps: true} } }
+          { loader: require.resolve('sass-loader'), options: { sassOptions: { quietDeps: true } } },
         ],
       },
       {
@@ -120,7 +131,7 @@ const config = {
         type: 'javascript/auto',
         use: [
           {
-            loader: require.resolve('babel-loader'),
+            loader: require.resolve('swc-loader'),
           },
         ],
       },
@@ -129,7 +140,7 @@ const config = {
         exclude: [/node_modules/, /\.yalc/],
         use: [
           {
-            loader: require.resolve('babel-loader'),
+            loader: require.resolve('swc-loader'),
           },
         ],
       },

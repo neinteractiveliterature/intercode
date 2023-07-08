@@ -31,17 +31,9 @@ module.exports = {
     extraFileExtensions: ['.graphql'],
   },
 
-  plugins: [
-    // 'babel',
-    'jest',
-    'jsx-a11y',
-    'react-hooks',
-    '@graphql-eslint',
-    '@typescript-eslint',
-  ],
+  plugins: ['jest', 'jsx-a11y', 'react-hooks', '@graphql-eslint', '@typescript-eslint'],
 
   rules: {
-    // 'babel/camelcase': ['error', { properties: 'never', ignoreDestructuring: false }],
     camelcase: 'off',
     'jest/no-disabled-tests': 'warn',
     'jest/no-focused-tests': 'error',
