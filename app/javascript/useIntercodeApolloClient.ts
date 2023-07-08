@@ -23,8 +23,23 @@ function isFile(value: unknown): value is Blob | File {
   );
 }
 
+function containsFile(obj: object, seen: Set<object>): boolean {
+  return Object.values(obj).some((value) => {
+    if (isFile(value)) {
+      return true;
+    }
+
+    if (typeof value === 'object' && value != null && !seen.has(value)) {
+      seen.add(value);
+      return containsFile(value, seen);
+    }
+
+    return false;
+  });
+}
+
 function isUpload({ variables }: Operation) {
-  return Object.values(variables).some(isFile);
+  return containsFile(variables, new Set([variables]));
 }
 
 export function useIntercodeApolloLink(
