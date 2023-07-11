@@ -4,6 +4,7 @@ import type { DocumentNode } from 'graphql';
 
 import GraphQLAsyncSelect, { GraphQLAsyncSelectProps } from './GraphQLAsyncSelect';
 import { DefaultUsersQueryData, DefaultUsersQueryDocument } from './selectDefaultQueries.generated';
+import { useTranslation } from 'react-i18next';
 
 type UserNameLabelProps<OptionType, IsMulti extends boolean> = MultiValueGenericProps<OptionType, IsMulti> & {
   data: {
@@ -35,6 +36,8 @@ function UserSelect<
   OptionType extends DO<DataType> = DO<DQ>,
   IsMulti extends boolean = false,
 >({ usersQuery, ...otherProps }: UserSelectProps<DataType, OptionType, IsMulti>): JSX.Element {
+  const { t } = useTranslation();
+
   return (
     <GraphQLAsyncSelect<DataType, OptionType, IsMulti>
       isClearable
@@ -48,6 +51,12 @@ function UserSelect<
       )}
       query={usersQuery || DefaultUsersQueryDocument}
       components={{ MultiValueLabel: UserNameLabel }}
+      placeholder={t('selectors.userSelect.placeholder', 'Search for a user by name or email...')}
+      noOptionsMessage={({ inputValue }) =>
+        inputValue.trim() === ''
+          ? t('selectors.userSelect.noInputMessage', 'Type a name or email to search')
+          : t('selectors.userSelect.noResultsMessage', `No users found matching “{{ inputValue }}”`, { inputValue })
+      }
       {...otherProps}
     />
   );

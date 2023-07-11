@@ -51,6 +51,7 @@
       "ticketModeDisabled": "Convention does not sell {{ ticketNamePlural }}",
       "ticketModeLabel": "{{ ticketName, capitalize }} sales",
       "ticketModeRequiredForSignup": "{{ ticketNamePlural, capitalize }} are sold and required for event signups",
+      "ticketModeTicketPerEvent": "Each event in this convention sells {{ ticketNamePlural }} separately",
       "ticketNameLabel": "Name for “ticket” at this convention"
     },
     "eventCategories": {
@@ -240,6 +241,7 @@
     "close": "Close",
     "collapse": "Collapse",
     "composeEmail": "Compose email",
+    "delete": "Delete",
     "edit": "Edit",
     "expand": "Expand",
     "help": "Help",
@@ -248,6 +250,7 @@
     "preview": "Preview",
     "proposeEventLoggedOut": "Log in to propose an event",
     "refresh": "Refresh",
+    "save": "Save",
     "selectAll": "Select all",
     "selectNone": "Select none"
   },
@@ -429,7 +432,6 @@
       "editPageHeader": "Edit signup for {{ eventTitle }}",
       "editPageTitle": "Editing signup for “{{ name }}” - {{ eventTitle }}",
       "editTitle": "Edit signup",
-      "emailsCommaTitle": "Emails (comma-separated)",
       "emailFilters": {
         "confirmedBucket": "Include {{ bucketName }} (confirmed)",
         "nobody": "Nobody",
@@ -437,9 +439,10 @@
         "waitlisted": "Include waitlisted"
       },
       "emailHeader": "Email",
-      "emailTableHeader": "Email",
+      "emailsCommaTitle": "Emails (comma-separated)",
       "emailsSemicolonTitle": "Emails (semicolon-separated)",
       "emailsSemicolonWarning": "<0>Note:</0> Most email apps use comma-separated address lists.  Only Outlook uses semicolon-separated address lists.  If you’re not using Outlook, try comma-separated first.",
+      "emailTableHeader": "Email",
       "forceConfirmSignup": {
         "bucketInputCaption": "Please choose a signup bucket for {{ name }}.",
         "header": "Force signup into run",
@@ -766,6 +769,23 @@
       "scheduleViewSelectorHeader": "View type:"
     }
   },
+  "selectors": {
+    "eventSelect": {
+      "noInputMessage": "Type an event title to search",
+      "noResultsMessage": "No evets found matching “{{ inputValue }}”",
+      "placeholder": "Search for an event by title..."
+    },
+    "userConProfileSelect": {
+      "noInputMessage": "Type a name or email to search",
+      "noResultsMessage": "No attendees found matching “{{ inputValue }}”",
+      "placeholder": "Search for an attendee by name or email..."
+    },
+    "userSelect": {
+      "noInputMessage": "Type a name or email to search",
+      "noResultsMessage": "No users found matching “{{ inputValue }}”",
+      "placeholder": "Search for a user by name or email..."
+    }
+  },
   "signups": {
     "availability": {
       "full_one": "<0>Full</0><1> ({{count}} slot)</1>",
@@ -852,7 +872,9 @@
         "acceptSignupRequest": "accepted signup request",
         "adminCreateSignup": "admin-created signup",
         "changeRegistrationPolicy": "registration policy change",
+        "holdExpired": "hold expired",
         "selfServiceSignup": "self-service signup",
+        "ticketPurchase": "ticket purchase",
         "unknown": "unknown action",
         "vacancyFill": "vacancy fill",
         "withdraw": "withdraw"

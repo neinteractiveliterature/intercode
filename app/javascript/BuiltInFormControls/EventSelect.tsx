@@ -2,6 +2,7 @@ import type { DocumentNode } from 'graphql';
 
 import GraphQLAsyncSelect, { GraphQLAsyncSelectProps } from './GraphQLAsyncSelect';
 import { DefaultEventsQueryData, DefaultEventsQueryDocument } from './selectDefaultQueries.generated';
+import { useTranslation } from 'react-i18next';
 
 type DQ = DefaultEventsQueryData;
 type DO<QueryType extends DefaultEventsQueryData> = NonNullable<
@@ -21,6 +22,8 @@ function EventSelect<
   DataType extends DQ = DQ,
   OptionType extends DO<DataType> = DO<DQ>,
 >({ eventsQuery, ...otherProps }: EventSelectProps<DataType, OptionType, IsMulti>): JSX.Element {
+  const { t } = useTranslation();
+
   return (
     <GraphQLAsyncSelect<DataType, OptionType, IsMulti>
       isClearable
@@ -29,6 +32,14 @@ function EventSelect<
       getOptionValue={(option) => option.id}
       getOptionLabel={(option) => option.title ?? ''}
       query={eventsQuery || DefaultEventsQueryDocument}
+      placeholder={t('selectors.eventSelect.placeholder', 'Search for an event by title...')}
+      noOptionsMessage={({ inputValue }) =>
+        inputValue.trim() === ''
+          ? t('selectors.eventSelect.noInputMessage', 'Type an event title to search')
+          : t('selectors.eventSelect.noResultsMessage', `No evets found matching “{{ inputValue }}”`, {
+              inputValue,
+            })
+      }
       {...otherProps}
     />
   );

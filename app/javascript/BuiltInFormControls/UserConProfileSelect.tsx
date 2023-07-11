@@ -2,6 +2,7 @@ import type { DocumentNode } from 'graphql';
 
 import GraphQLAsyncSelect, { GraphQLAsyncSelectProps } from './GraphQLAsyncSelect';
 import { DefaultUserConProfilesQueryData, DefaultUserConProfilesQueryDocument } from './selectDefaultQueries.generated';
+import { useTranslation } from 'react-i18next';
 
 type DQ = DefaultUserConProfilesQueryData;
 type DO<QueryType extends DefaultUserConProfilesQueryData> = NonNullable<
@@ -20,6 +21,8 @@ function UserConProfileSelect<
   DataType extends DQ = DQ,
   OptionType extends DO<DataType> = DO<DQ>,
 >({ userConProfilesQuery, ...otherProps }: UserConProfileSelectProps<DataType, OptionType, IsMulti>): JSX.Element {
+  const { t } = useTranslation();
+
   return (
     <GraphQLAsyncSelect<DataType, OptionType, IsMulti>
       isClearable
@@ -32,6 +35,14 @@ function UserConProfileSelect<
         </>
       )}
       query={userConProfilesQuery ?? DefaultUserConProfilesQueryDocument}
+      placeholder={t('selectors.userConProfileSelect.placeholder', 'Search for an attendee by name or email...')}
+      noOptionsMessage={({ inputValue }) =>
+        inputValue.trim() === ''
+          ? t('selectors.userConProfileSelect.noInputMessage', 'Type a name or email to search')
+          : t('selectors.userConProfileSelect.noResultsMessage', `No attendees found matching “{{ inputValue }}”`, {
+              inputValue,
+            })
+      }
       {...otherProps}
     />
   );
