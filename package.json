@@ -191,7 +191,7 @@
     "@typescript-eslint/eslint-plugin": "5.60.1",
     "@typescript-eslint/parser": "5.60.1",
     "@webpack-cli/serve": "2.0.5",
-    "core-js-compat": "3.31.0",
+    "core-js-compat": "3.31.1",
     "eslint": "8.43.0",
     "eslint-config-airbnb": "19.0.4",
     "eslint-config-airbnb-base": "15.0.0",
