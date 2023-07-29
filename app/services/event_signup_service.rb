@@ -140,12 +140,9 @@ class EventSignupService < CivilService::Service
   end
 
   def must_have_ticket_if_required
-    return unless convention.ticket_mode == "required_for_signup"
+    return if user_signup_constraints.has_ticket_if_required?
 
-    ticket = user_con_profile.ticket
-    return if ticket&.allows_event_signups?
-
-    if ticket
+    if user_con_profile.ticket
       errors.add :base,
                  "You have a #{ticket.ticket_type.description}, \
 but these do not allow event signups.  If you want to sign up for events, please contact \
