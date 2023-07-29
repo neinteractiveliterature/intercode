@@ -144,7 +144,7 @@ class EventSignupService < CivilService::Service
 
     if user_con_profile.ticket
       errors.add :base,
-                 "You have a #{ticket.ticket_type.description}, \
+                 "You have a #{user_con_profile.ticket.ticket_type.description}, \
 but these do not allow event signups.  If you want to sign up for events, please contact \
 #{convention.name} staff."
     else
