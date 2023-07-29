@@ -53,4 +53,8 @@ class UserSignupConstraints
   def max_signups_allowed
     @max_signups_allowed ||= convention.maximum_event_signups.value_at(Time.zone.now)
   end
+
+  def has_ticket_if_required?
+    convention.ticket_mode != "required_for_signup" || user_con_profile.ticket&.allows_event_signups?
+  end
 end
