@@ -158,6 +158,10 @@ class Convention < ApplicationRecord
     LoadCmsContentSetService.new(convention: self, content_set_name: name).call!
   end
 
+  def max_lottery_number
+    10_000
+  end
+
   def timezone
     return nil if timezone_name.blank?
     ActiveSupport::TimeZone[timezone_name]

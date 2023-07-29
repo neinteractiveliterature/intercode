@@ -2503,7 +2503,8 @@ CREATE TABLE public.signup_requests (
     result_signup_id bigint,
     updated_by_id bigint,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    priority integer
 );
 
 
@@ -2789,7 +2790,8 @@ CREATE TABLE public.user_con_profiles (
     needs_update boolean DEFAULT false NOT NULL,
     accepted_clickwrap_agreement boolean DEFAULT false NOT NULL,
     mobile_phone character varying,
-    allow_sms boolean DEFAULT true NOT NULL
+    allow_sms boolean DEFAULT true NOT NULL,
+    lottery_number integer NOT NULL
 );
 
 
@@ -4789,6 +4791,13 @@ CREATE INDEX index_user_activity_alerts_on_user_id ON public.user_activity_alert
 
 
 --
+-- Name: index_user_con_profiles_on_convention_id_and_lottery_number; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_user_con_profiles_on_convention_id_and_lottery_number ON public.user_con_profiles USING btree (convention_id, lottery_number);
+
+
+--
 -- Name: index_user_con_profiles_on_convention_id_and_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -5711,6 +5720,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20231126173530'),
 ('20231105161432'),
 ('20230808164646'),
+('20230729164027'),
+('20230627000846'),
 ('20230113220828'),
 ('20230113184026'),
 ('20230109012113'),
