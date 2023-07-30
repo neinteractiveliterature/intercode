@@ -5,6 +5,7 @@ fragment CommonConventionData on Convention {
   name
   starts_at
   ends_at
+  signup_mode
   site_mode
   timezone_name
   timezone_mode

@@ -4,6 +4,7 @@ import buildSignupOptions from '../EventsApp/EventPage/buildSignupOptions';
 import RunCapacityGraph from '../EventsApp/EventPage/RunCapacityGraph';
 import SignupButtons from '../EventsApp/EventPage/SignupButtons';
 import { RegistrationPolicyForRegistrationPolicyUtils } from './RegistrationPolicy';
+import SignupCountData from '../EventsApp/SignupCountData';
 
 export type RegistrationPolicyPreviewProps = {
   registrationPolicy: RegistrationPolicyForRegistrationPolicyUtils;
@@ -31,6 +32,8 @@ function RegistrationPolicyPreview({ registrationPolicy }: RegistrationPolicyPre
             team_member_name: 'team member',
           },
         },
+        new SignupCountData([]),
+        false,
         undefined,
       ),
     [registrationPolicyForDisplay],

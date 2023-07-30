@@ -12,6 +12,19 @@ export type SignupButtonDisplayProps = {
 
 function SignupButtonDisplay({ signupOption, onClick, disabled }: SignupButtonDisplayProps): JSX.Element {
   const { t } = useTranslation();
+
+  let actionLabel;
+  switch (signupOption.action) {
+    case 'SIGN_UP_NOW':
+      actionLabel = t('signups.signupButton.signUpNow', 'Sign up: Now');
+      break;
+    case 'WAITLIST':
+      actionLabel = t('signups.signupButton.waitlist', 'Sign up: Waitlist');
+      break;
+    case 'ADD_TO_QUEUE':
+      actionLabel = t('signups.signupButton.addToQueue', 'Sign up: Queue');
+  }
+
   return (
     <ButtonWithTooltip
       buttonProps={{
@@ -25,13 +38,17 @@ function SignupButtonDisplay({ signupOption, onClick, disabled }: SignupButtonDi
       }}
       tooltipContent={signupOption.helpText}
     >
-      <strong>{t('signups.signupButton', 'Sign up')}</strong>
       {signupOption.label ? (
         <>
+          <strong>{signupOption.label}</strong>
           <br />
-          {signupOption.label}
+          {actionLabel}
         </>
-      ) : null}
+      ) : (
+        <>
+          <strong>{actionLabel}</strong>
+        </>
+      )}
     </ButtonWithTooltip>
   );
 }

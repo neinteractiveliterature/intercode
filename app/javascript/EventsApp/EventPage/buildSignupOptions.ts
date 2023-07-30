@@ -2,8 +2,12 @@ import { notEmpty } from '@neinteractiveliterature/litform';
 
 import { EventPageQueryData, RunCardRegistrationPolicyFieldsFragment } from './queries.generated';
 import sortBuckets from './sortBuckets';
+import SignupCountData from '../SignupCountData';
+import { SignupState } from '../../graphqlTypes.generated';
 
 type SignupOptionBucket = RunCardRegistrationPolicyFieldsFragment['buckets'][0];
+
+type SignupOptionAction = 'SIGN_UP_NOW' | 'WAITLIST' | 'ADD_TO_QUEUE';
 
 export type SignupOption = {
   bucket?: SignupOptionBucket;
@@ -14,6 +18,7 @@ export type SignupOption = {
   noPreference: boolean;
   counted: boolean;
   teamMember: boolean;
+  action: SignupOptionAction;
 };
 
 function isMainOption(option: SignupOption, noPreferenceOptions: SignupOption[], notCountedOptions: SignupOption[]) {
@@ -39,7 +44,12 @@ function isTeamMember(
   return event.team_members.some((teamMember) => teamMember.user_con_profile.id === userConProfile.id);
 }
 
-function buildBucketSignupOption(bucket: SignupOptionBucket, index: number, hideLabel: boolean): SignupOption {
+function buildBucketSignupOption(
+  bucket: SignupOptionBucket,
+  index: number,
+  hideLabel: boolean,
+  action: SignupOptionAction,
+): SignupOption {
   return {
     key: bucket.key,
     label: hideLabel ? undefined : bucket.name ?? undefined,
@@ -49,11 +59,14 @@ function buildBucketSignupOption(bucket: SignupOptionBucket, index: number, hide
     noPreference: false,
     teamMember: false,
     counted: !bucket.not_counted,
+    action,
   };
 }
 
 function buildNoPreferenceOptions(
   event: Pick<EventPageQueryData['convention']['event'], 'registration_policy'>,
+  signupCounts: SignupCountData,
+  addToQueue: boolean,
 ): SignupOption[] {
   if ((event.registration_policy || {}).prevent_no_preference_signups) {
     return [];
@@ -67,6 +80,21 @@ function buildNoPreferenceOptions(
     return [];
   }
 
+  const totalSlots = (event.registration_policy?.buckets ?? []).reduce((sum, bucket) => {
+    if (bucket.slots_limited && !bucket.not_counted) {
+      return sum + (bucket.total_slots ?? 0);
+    } else {
+      return sum;
+    }
+  }, 0);
+
+  let action: SignupOptionAction = 'SIGN_UP_NOW';
+  if (addToQueue) {
+    action = 'ADD_TO_QUEUE';
+  } else if (signupCounts.getConfirmedLimitedSignupCount(event) >= totalSlots) {
+    action = 'WAITLIST';
+  }
+
   return [
     {
       key: '_no_preference',
@@ -76,7 +104,8 @@ function buildNoPreferenceOptions(
       helpText: `Sign up for any of: ${eligibleBuckets.map((bucket) => bucket.name).join(', ')}`,
       noPreference: true,
       teamMember: false,
-      counted: true, // no preference signups only go to counted buckets
+      counted: true, // no preference signups only go to counted buckets,
+      action,
     },
   ];
 }
@@ -88,6 +117,8 @@ function allSignupOptions(
         team_member_name: string;
       };
     },
+  signupCounts: SignupCountData,
+  addToQueue: boolean,
   userConProfile?: { id: string },
 ): SignupOption[] {
   if (isTeamMember(event, userConProfile)) {
@@ -101,6 +132,7 @@ function allSignupOptions(
         noPreference: false,
         teamMember: true,
         counted: false,
+        action: 'SIGN_UP_NOW',
       },
     ];
   }
@@ -117,10 +149,21 @@ function allSignupOptions(
           return null;
         }
 
-        return buildBucketSignupOption(bucket, index, !bucket.not_counted && nonAnythingBuckets.length === 1);
+        let action: SignupOptionAction = 'SIGN_UP_NOW';
+        if (addToQueue) {
+          action = 'ADD_TO_QUEUE';
+        } else if (
+          bucket.slots_limited &&
+          signupCounts.sumSignupCounts({ bucket_key: bucket.key, state: SignupState.Confirmed }) >=
+            (bucket.total_slots ?? 0)
+        ) {
+          action = 'WAITLIST';
+        }
+
+        return buildBucketSignupOption(bucket, index, !bucket.not_counted && nonAnythingBuckets.length === 1, action);
       })
       .filter(notEmpty),
-    ...buildNoPreferenceOptions(event),
+    ...buildNoPreferenceOptions(event, signupCounts, addToQueue),
   ];
 }
 
@@ -132,9 +175,11 @@ export type PartitionedSignupOptions = {
 
 export default function buildSignupOptions(
   event: Parameters<typeof allSignupOptions>[0],
+  signupCounts: SignupCountData,
+  addToQueue: boolean,
   userConProfile?: { id: string },
 ): PartitionedSignupOptions {
-  const allOptions = allSignupOptions(event, userConProfile);
+  const allOptions = allSignupOptions(event, signupCounts, addToQueue, userConProfile);
   const noPreferenceOptions = allOptions.filter((option) => option.noPreference);
   const notCountedOptions = allOptions.filter((option) => !option.counted);
 
