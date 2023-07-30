@@ -72,7 +72,7 @@ class ExecuteRankedChoiceSignupRequestsService < CivilService::Service
   end
 
   def execute_request(user_con_profile, constraints, request, allow_waitlist: false)
-    conflicts = constraints.conflicting_signups_for_run(request.target_run).any?
+    conflicts = constraints.conflicting_signups_for_run(request.target_run)
     if conflicts.any?
       log_skip_request(
         user_con_profile: user_con_profile,
@@ -92,7 +92,7 @@ class ExecuteRankedChoiceSignupRequestsService < CivilService::Service
         request.requested_bucket_key,
         run.signups.counted.occupying_slot.to_a
       )
-    actual_bucket = bucket_finder.actual_bucket
+    actual_bucket = bucket_finder.find_bucket
     if actual_bucket
       result =
         AcceptSignupRequestService.new(
