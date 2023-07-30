@@ -54,6 +54,7 @@ fragment ConventionFields on Convention {
   timezone_mode
   event_mailing_list_domain
   site_mode
+  signup_mode
 
   event_categories {
     id

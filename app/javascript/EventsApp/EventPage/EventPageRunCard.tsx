@@ -10,10 +10,12 @@ import CreateModeratedSignupModal from './CreateModeratedSignupModal';
 import { EventPageQueryData, EventPageQueryDocument, EventPageQueryVariables } from './queries.generated';
 import {
   useCreateMySignupMutation,
+  useCreateSignupRequestMutation,
   useWithdrawMySignupMutation,
   useWithdrawSignupRequestMutation,
 } from './mutations.generated';
 import { SignupMode } from '../../graphqlTypes.generated';
+import SignupCountData from '../SignupCountData';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type TI = any;
@@ -62,12 +64,16 @@ export type EventPageRunCardProps = {
   run: EventPageQueryData['convention']['event']['runs'][0];
   myProfile: EventPageQueryData['convention']['my_profile'];
   currentAbility: EventPageQueryData['currentAbility'];
+  addToQueue: boolean;
 };
 
-function EventPageRunCard({ event, run, myProfile, currentAbility }: EventPageRunCardProps): JSX.Element {
+function EventPageRunCard({ event, run, myProfile, currentAbility, addToQueue }: EventPageRunCardProps): JSX.Element {
   const { t } = useTranslation();
   const { signupMode } = useContext(AppRootContext);
-  const signupOptions = useMemo(() => buildSignupOptions(event, myProfile ?? undefined), [event, myProfile]);
+  const signupOptions = useMemo(
+    () => buildSignupOptions(event, SignupCountData.fromRun(run), addToQueue, myProfile ?? undefined),
+    [event, run, myProfile, addToQueue],
+  );
   const confirm = useConfirm();
   const createModeratedSignupModal = useModal<{ signupOption: SignupOption }>();
   const mySignup = run.my_signups.find((signup) => signup.state !== 'withdrawn');
@@ -75,28 +81,40 @@ function EventPageRunCard({ event, run, myProfile, currentAbility }: EventPageRu
   const [createMySignupMutate] = useCreateMySignupMutation();
   const [withdrawMySignupMutate] = useWithdrawMySignupMutation();
   const [withdrawSignupRequestMutate] = useWithdrawSignupRequestMutation();
+  const [createSignupRequestMutate] = useCreateSignupRequestMutation();
   const apolloClient = useApolloClient();
 
   const selfServiceSignup = useCallback(
     async (signupOption: SignupOption) => {
-      const response = await createMySignupMutate({
-        variables: {
-          runId: run.id,
-          requestedBucketKey: (signupOption.bucket || {}).key,
-          noRequestedBucket: signupOption.bucket == null,
-        },
-        update: (cache, { data }) => {
-          const signup = data?.createMySignup?.signup;
-          if (signup) {
-            updateCacheAfterSignup(cache, event, run, signup);
-          }
-        },
-      });
+      if (signupOption.action === 'ADD_TO_QUEUE') {
+        await createSignupRequestMutate({
+          variables: {
+            targetRunId: run.id,
+            requestedBucketKey: signupOption.bucket?.key,
+          },
+        });
 
-      await apolloClient.resetStore();
-      return response.data?.createMySignup.signup;
+        await apolloClient.resetStore();
+      } else {
+        const response = await createMySignupMutate({
+          variables: {
+            runId: run.id,
+            requestedBucketKey: (signupOption.bucket || {}).key,
+            noRequestedBucket: signupOption.bucket == null,
+          },
+          update: (cache, { data }) => {
+            const signup = data?.createMySignup?.signup;
+            if (signup) {
+              updateCacheAfterSignup(cache, event, run, signup);
+            }
+          },
+        });
+
+        await apolloClient.resetStore();
+        return response.data?.createMySignup.signup;
+      }
     },
-    [apolloClient, createMySignupMutate, event, run],
+    [apolloClient, createMySignupMutate, createSignupRequestMutate, event, run],
   );
 
   const selfServiceWithdraw = useCallback(
@@ -138,7 +156,7 @@ function EventPageRunCard({ event, run, myProfile, currentAbility }: EventPageRu
   );
 
   const createSignup = (signupOption: SignupOption) => {
-    if (signupMode === SignupMode.SelfService || signupOption.teamMember) {
+    if (signupMode === SignupMode.SelfService || signupMode === SignupMode.RankedChoice || signupOption.teamMember) {
       return selfServiceSignup(signupOption);
     }
 

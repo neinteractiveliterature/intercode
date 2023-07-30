@@ -7,6 +7,7 @@ import RunCard from '../EventsApp/EventPage/RunCard';
 import { useCreateSignupRunCardQuery } from './queries.generated';
 import { useCreateUserSignupMutation, useWithdrawUserSignupMutation } from './mutations.generated';
 import { LoadQueryWithVariablesWrapper } from '../GraphqlLoadingWrappers';
+import SignupCountData from '../EventsApp/SignupCountData';
 
 export type CreateSignupRunCardProps = {
   eventId: string;
@@ -52,9 +53,17 @@ export default LoadQueryWithVariablesWrapper(
       return Promise.resolve();
     };
 
+    const run = useMemo(() => data.convention.event.runs.find((r) => r.id === runId), [data, runId]);
+
     const signupOptions = useMemo(
-      () => buildSignupOptions(data.convention.event, data.convention.user_con_profile),
-      [data],
+      () =>
+        buildSignupOptions(
+          data.convention.event,
+          run ? SignupCountData.fromRun(run) : new SignupCountData([]),
+          false,
+          data.convention.user_con_profile,
+        ),
+      [data, run],
     );
 
     const mySignup = useMemo(
@@ -69,8 +78,6 @@ export default LoadQueryWithVariablesWrapper(
         ),
       [data, runId],
     );
-
-    const run = useMemo(() => data.convention.event.runs.find((r) => r.id === runId), [data, runId]);
 
     if (!run) {
       return <ErrorDisplay stringError={`Run ${runId} not found`} />;
