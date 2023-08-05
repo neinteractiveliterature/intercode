@@ -226,6 +226,17 @@ class Types::ConventionType < Types::BaseObject
     my_profile&.signups || []
   end
 
+  field :my_signup_requests, [Types::SignupRequestType], null: false, camelize: false do
+    description <<~MARKDOWN
+      Returns all signup requests for the current user within this convention. If no user is signed in,
+      returns an empty array.
+    MARKDOWN
+  end
+
+  def my_signup_requests
+    my_profile&.signup_requests || []
+  end
+
   field :notification_templates, [Types::NotificationTemplateType], null: false
 
   field :notifier_liquid_assigns, [Types::LiquidAssign], null: false do

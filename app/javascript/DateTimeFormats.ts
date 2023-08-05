@@ -33,6 +33,8 @@ const DateTimeFormatGenerators = {
   shortTimeWithZone: (t: TFunction) => t('dateTimeFormats.shortTimeWithZone', 'h:mmaaa ZZZZ'),
   shortWeekday: (t: TFunction) => t('dateTimeFormats.shortWeekday', 'ccc'),
   shortWeekdayDateTime: (t: TFunction) => t('dateTimeFormats.shortWeekdayDateTime', 'ccc, MMM d, yyyy h:mmaaa'),
+  shortWeekdayDateTimeWithZone: (t: TFunction) =>
+    t('dateTimeFormats.shortWeekdayDateTimeWithZone', 'ccc, MMM d, yyyy h:mmaaa ZZZZ'),
   shortWeekdayTime: (t: TFunction) => t('dateTimeFormats.shortWeekdayTime', 'ccc h:mmaaa'),
   shortWeekdayTimeWithZone: (t: TFunction) => t('dateTimeFormats.shortWeekdayTimeWithZone', 'ccc h:mmaaa ZZZZ'),
   weekdayMidnight: (t: TFunction) => t('dateTimeFormats.weekdayMidnight', "ccc 'midnight'"),

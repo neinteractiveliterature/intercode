@@ -54,6 +54,7 @@
       "ticketModeDisabled": "",
       "ticketModeLabel": "",
       "ticketModeRequiredForSignup": "",
+      "ticketModeTicketPerEvent": "Each event in this convention sells {{ ticketNamePlural }} separately",
       "ticketNameLabel": ""
     },
     "eventCategories": {
@@ -248,6 +249,7 @@
     "close": "Cerrar",
     "collapse": "",
     "composeEmail": "",
+    "delete": "Delete",
     "edit": "Editar",
     "expand": "",
     "help": "Ayuda",
@@ -256,6 +258,7 @@
     "preview": "Previsualizar",
     "proposeEventLoggedOut": "Inicia sesión para proponer una actividad",
     "refresh": "Actualizar",
+    "save": "Save",
     "selectAll": "",
     "selectNone": ""
   },
@@ -330,6 +333,7 @@
     "shortTimeWithZone": "",
     "shortWeekday": "",
     "shortWeekdayDateTime": "",
+    "shortWeekdayDateTimeWithZone": "ccc, MMM d, yyyy h:mmaaa ZZZZ",
     "shortWeekdayTime": "",
     "shortWeekdayTimeWithZone": "",
     "weekdayMidnight": "",
@@ -442,7 +446,6 @@
       "editPageHeader": "",
       "editPageTitle": "",
       "editTitle": "",
-      "emailsCommaTitle": "",
       "emailFilters": {
         "confirmedBucket": "Include {{ bucketName }} (confirmed)",
         "nobody": "",
@@ -450,9 +453,10 @@
         "waitlisted": ""
       },
       "emailHeader": "",
-      "emailTableHeader": "",
+      "emailsCommaTitle": "",
       "emailsSemicolonTitle": "",
       "emailsSemicolonWarning": "",
+      "emailTableHeader": "",
       "forceConfirmSignup": {
         "bucketInputCaption": "",
         "header": "",
@@ -665,6 +669,7 @@
       "eventCatalog": "",
       "eventSchedule": "",
       "eventsList": "Listado de actividades",
+      "mySignupQueue": "My Signup Queue",
       "newProposal": "Proponer actividad"
     },
     "general": {
@@ -786,6 +791,23 @@
       "scheduleViewSelectorHeader": ""
     }
   },
+  "selectors": {
+    "eventSelect": {
+      "noInputMessage": "Type an event title to search",
+      "noResultsMessage": "No evets found matching “{{ inputValue }}”",
+      "placeholder": "Search for an event by title..."
+    },
+    "userConProfileSelect": {
+      "noInputMessage": "Type a name or email to search",
+      "noResultsMessage": "No attendees found matching “{{ inputValue }}”",
+      "placeholder": "Search for an attendee by name or email..."
+    },
+    "userSelect": {
+      "noInputMessage": "Type a name or email to search",
+      "noResultsMessage": "No users found matching “{{ inputValue }}”",
+      "placeholder": "Search for a user by name or email..."
+    }
+  },
   "signups": {
     "availability": {
       "full_one": "",
@@ -810,6 +832,10 @@
       "notYet": "",
       "unlimited": ""
     },
+    "mySignupQueue": {
+      "queueHeader": "Signup Queue - Round {{ roundNumber }} - {{ roundDateTime }}",
+      "title": "My signup queue"
+    },
     "noPreference": "",
     "noSignupsAvailable": "",
     "runCardText": {
@@ -820,7 +846,11 @@
       "waitlistedUnknownPosition": ""
     },
     "signedOutSignupButton": "",
-    "signupButton": "",
+    "signupButton": {
+      "addToQueue": "Add to my queue",
+      "signUpNow": "Sign up now",
+      "waitlist": "Waitlist"
+    },
     "signupSummaryLink": "",
     "states": {
       "bucketWithNoPreference": "",
@@ -876,7 +906,9 @@
         "acceptSignupRequest": "",
         "adminCreateSignup": "",
         "changeRegistrationPolicy": "",
+        "holdExpired": "hold expired",
         "selfServiceSignup": "",
+        "ticketPurchase": "ticket purchase",
         "unknown": "",
         "vacancyFill": "",
         "withdraw": ""

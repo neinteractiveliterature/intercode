@@ -777,6 +777,12 @@ type Convention implements CmsParent {
   my_profile: UserConProfile
 
   """
+  Returns all signup requests for the current user within this convention. If no user is signed in,
+  returns an empty array.
+  """
+  my_signup_requests: [SignupRequest!]!
+
+  """
   Returns all signups for the current user within this convention. If no user is signed in,
   returns an empty array.
   """
@@ -5415,6 +5421,7 @@ type SignupMoveResult {
 type SignupRequest {
   created_at: Date!
   id: ID!
+  priority: Int
   replace_signup: Signup
   requested_bucket_key: String
   result_signup: Signup

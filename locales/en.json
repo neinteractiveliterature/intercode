@@ -325,6 +325,7 @@
     "shortTimeWithZone": "h:mmaaa ZZZZ",
     "shortWeekday": "ccc",
     "shortWeekdayDateTime": "ccc, MMM d, yyyy h:mmaaa",
+    "shortWeekdayDateTimeWithZone": "ccc, MMM d, yyyy h:mmaaa ZZZZ",
     "shortWeekdayTime": "ccc h:mmaaa",
     "shortWeekdayTimeWithZone": "ccc h:mmaaa ZZZZ",
     "weekdayMidnight": "ccc 'midnight'",
@@ -649,6 +650,7 @@
       "eventCatalog": "Event Catalog",
       "eventSchedule": "Event Schedule",
       "eventsList": "List of Events",
+      "mySignupQueue": "My Signup Queue",
       "newProposal": "Propose an Event"
     },
     "general": {
@@ -807,6 +809,10 @@
       "notYet": "No signups yet",
       "unlimited": "Signups fully open"
     },
+    "mySignupQueue": {
+      "queueHeader": "Signup Queue - Round {{ roundNumber }} - {{ roundDateTime }}",
+      "title": "My signup queue"
+    },
     "noPreference": "No preference",
     "noSignupsAvailable": "This event does not take signups.",
     "runCardText": {
@@ -817,7 +823,11 @@
       "waitlistedUnknownPosition": "You are on the waitlist."
     },
     "signedOutSignupButton": "<0>Log in</0> to sign up for<2></2><3>{{eventTitle}}</3>",
-    "signupButton": "Sign up",
+    "signupButton": {
+      "addToQueue": "Add to my queue",
+      "signUpNow": "Sign up now",
+      "waitlist": "Waitlist"
+    },
     "signupSummaryLink": "Attendee-facing signup summary",
     "states": {
       "bucketWithNoPreference": "{{ bucketName }} (no preference)",
