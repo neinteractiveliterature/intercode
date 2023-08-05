@@ -16,13 +16,13 @@ function SignupButtonDisplay({ signupOption, onClick, disabled }: SignupButtonDi
   let actionLabel;
   switch (signupOption.action) {
     case 'SIGN_UP_NOW':
-      actionLabel = t('signups.signupButton.signUpNow', 'Sign up: Now');
+      actionLabel = t('signups.signupButton.signUpNow', 'Sign up now');
       break;
     case 'WAITLIST':
-      actionLabel = t('signups.signupButton.waitlist', 'Sign up: Waitlist');
+      actionLabel = t('signups.signupButton.waitlist', 'Waitlist');
       break;
     case 'ADD_TO_QUEUE':
-      actionLabel = t('signups.signupButton.addToQueue', 'Sign up: Queue');
+      actionLabel = t('signups.signupButton.addToQueue', 'Add to my queue');
   }
 
   return (

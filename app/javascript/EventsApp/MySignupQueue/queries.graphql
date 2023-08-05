@@ -1,0 +1,37 @@
+query MySignupQueueQuery {
+  convention: conventionByRequestHost {
+    id
+
+    my_signup_requests {
+      id
+      state
+      priority
+      requested_bucket_key
+
+      target_run {
+        id
+        title_suffix
+        starts_at
+
+        event {
+          id
+          title
+          length_seconds
+
+          event_category {
+            id
+            name
+          }
+
+          registration_policy {
+            buckets {
+              key
+              name
+              description
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -707,6 +707,11 @@ export type Convention = CmsParent & {
    */
   my_profile?: Maybe<UserConProfile>;
   /**
+   * Returns all signup requests for the current user within this convention. If no user is signed in,
+   * returns an empty array.
+   */
+  my_signup_requests: Array<SignupRequest>;
+  /**
    * Returns all signups for the current user within this convention. If no user is signed in,
    * returns an empty array.
    */
@@ -4518,6 +4523,7 @@ export type SignupRequest = {
   __typename: 'SignupRequest';
   created_at: Scalars['Date']['output'];
   id: Scalars['ID']['output'];
+  priority?: Maybe<Scalars['Int']['output']>;
   replace_signup?: Maybe<Signup>;
   requested_bucket_key?: Maybe<Scalars['String']['output']>;
   result_signup?: Maybe<Signup>;
