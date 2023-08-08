@@ -1,0 +1,38 @@
+---
+subject: "[{{ convention.name }}: {{ signup.event.title }}] Signup confirmation"
+body_text: |-
+  {%- assign run = signup.run -%}
+  Signup confirmation for {% include 'run_description' %}
+
+  This message is to confirm that you've successfully
+  {%- if signup.state == "waitlisted" %} joined the waitlist for
+  {%- else %} signed up for
+  {%- endif %} {% include 'run_description' %}. You are currently
+  {%- if signup.bucket %} {{ signup.state }} in the {{ signup.bucket.name }}
+    {%- if signup.requested_bucket %} bucket.
+    {%- else %} bucket (but have no bucket preference).
+    {%- endif -%}
+  {%- else %} {{ signup.state }}.
+  {%- endif %}
+---
+{% assign run = signup.run %}
+<h1>Signup confirmation for {% include 'run_description' %}</h1>
+
+<p>
+  This message is to confirm that you've successfully
+  {%- if signup.state == "waitlisted" %} joined the waitlist for
+  {%- else %} signed up for
+  {%- endif %}
+  {% include 'run_description' %}.
+  You are currently
+  {% if signup.bucket %}
+    {{ signup.state }} in the {{ signup.bucket.name }}
+    {% if signup.requested_bucket %}
+      bucket.
+    {% else %}
+      bucket (but have no bucket preference).
+    {% endif %}
+  {% else %}
+    {{ signup.state }}.
+  {% endif %}
+</p>

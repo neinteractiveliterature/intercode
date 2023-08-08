@@ -31,19 +31,27 @@ class NotifierPreviewFactory
     when :changes
       []
     when :event_proposal
-      EventProposal.new(convention: convention, event_category: EventCategory.new(convention: convention))
+      EventProposal.new(
+        convention: convention,
+        event_category: EventCategory.new(convention: convention, name: "Category Name"),
+        title: "Proposal Title"
+      )
     when :event
-      if event_key == 'user_activity_alerts/alert'
-        'test_event'
+      if event_key == "user_activity_alerts/alert"
+        "test_event"
       else
-        Event.new(convention: convention, event_category: EventCategory.new(convention: convention))
+        Event.new(
+          convention: convention,
+          event_category: EventCategory.new(convention: convention, name: "Category Name"),
+          title: "Event Title"
+        )
       end
     when :order
       Order.new(user_con_profile: UserConProfile.new(convention: convention))
     when :signup
-      Signup.new(run: Run.new(event: Event.new(convention: convention)))
+      Signup.new(run: Run.new(event: Event.new(convention: convention, title: "Event Title")))
     when :signup_request
-      SignupRequest.new(target_run: Run.new(event: Event.new(convention: convention)))
+      SignupRequest.new(target_run: Run.new(event: Event.new(convention: convention, title: "Event Title")))
     when :ticket
       Ticket.new(user_con_profile: UserConProfile.new(convention: convention))
     when :user_activity_alert
@@ -66,7 +74,7 @@ class NotifierPreviewFactory
     when :event_proposal
       convention.event_proposals.first
     when :event
-      event_key == 'user_activity_alerts/alert' ? 'test_event' : convention.events.first
+      event_key == "user_activity_alerts/alert" ? "test_event" : convention.events.first
     when :move_result
       find_signup_move_result
     when :move_results
@@ -74,11 +82,11 @@ class NotifierPreviewFactory
     when :order
       Order.where(user_con_profile: convention.user_con_profiles.select(:id)).first
     when :prev_state
-      'confirmed'
+      "confirmed"
     when :prev_bucket_key
-      'flex'
+      "flex"
     when :refund_id
-      'refund-abc123'
+      "refund-abc123"
     when :signup
       convention.signups.first
     when :signup_request
@@ -97,6 +105,6 @@ class NotifierPreviewFactory
   end
 
   def find_signup_move_result
-    SignupMoveResult.new(convention.signups.first.id, 'confirmed', 'flex', 'waitlisted', nil)
+    SignupMoveResult.new(convention.signups.first.id, "confirmed", "flex", "waitlisted", nil)
   end
 end

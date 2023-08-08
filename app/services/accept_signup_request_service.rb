@@ -27,7 +27,7 @@ class AcceptSignupRequestService < CivilService::Service
       signup_result = create_signup
     end
 
-    signup_request.update!(state: 'accepted', result_signup: signup_result.signup)
+    signup_request.update!(state: "accepted", result_signup: signup_result.signup)
 
     notify_user
     success(signup: signup_result.signup, withdraw_result: withdraw_result)
@@ -50,7 +50,8 @@ class AcceptSignupRequestService < CivilService::Service
       signup_request.replace_signup,
       whodunit,
       skip_locking: true,
-      suppress_notifications: suppress_notifications
+      suppress_notifications: suppress_notifications,
+      suppress_confirmation: true # notify_user will take care of this separately
     ).call!
   end
 
@@ -63,7 +64,8 @@ class AcceptSignupRequestService < CivilService::Service
       skip_locking: true,
       allow_non_self_service_signups: true,
       suppress_notifications: suppress_notifications,
-      action: 'accept_signup_request'
+      suppress_confirmation: true, # notify_user will take care of this separately
+      action: "accept_signup_request"
     ).call!
   end
 

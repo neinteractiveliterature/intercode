@@ -2070,6 +2070,7 @@ input CreateUserSignupInput {
   no_requested_bucket: Boolean
   requested_bucket_key: String
   runId: ID
+  suppress_confirmation: Boolean
   suppress_notifications: Boolean
   userConProfileId: ID
 }
@@ -6831,6 +6832,7 @@ input WithdrawUserSignupInput {
   """
   clientMutationId: String
   runId: ID
+  suppress_confirmation: Boolean
   suppress_notifications: Boolean
   userConProfileId: ID
 }

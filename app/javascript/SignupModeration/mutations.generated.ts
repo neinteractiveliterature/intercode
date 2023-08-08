@@ -41,7 +41,7 @@ export type RejectSignupRequestMutationData = { __typename: 'Mutation', rejectSi
 export const CreateUserSignupDocument = gql`
     mutation CreateUserSignup($runId: ID!, $userConProfileId: ID!, $requestedBucketKey: String, $noRequestedBucket: Boolean) {
   createUserSignup(
-    input: {runId: $runId, userConProfileId: $userConProfileId, requested_bucket_key: $requestedBucketKey, no_requested_bucket: $noRequestedBucket, suppress_notifications: true}
+    input: {runId: $runId, userConProfileId: $userConProfileId, requested_bucket_key: $requestedBucketKey, no_requested_bucket: $noRequestedBucket, suppress_notifications: true, suppress_confirmation: true}
   ) {
     clientMutationId
   }
@@ -79,7 +79,7 @@ export type CreateUserSignupMutationOptions = Apollo.BaseMutationOptions<CreateU
 export const WithdrawUserSignupDocument = gql`
     mutation WithdrawUserSignup($runId: ID!, $userConProfileId: ID!) {
   withdrawUserSignup(
-    input: {runId: $runId, userConProfileId: $userConProfileId, suppress_notifications: true}
+    input: {runId: $runId, userConProfileId: $userConProfileId, suppress_notifications: true, suppress_confirmation: true}
   ) {
     clientMutationId
   }

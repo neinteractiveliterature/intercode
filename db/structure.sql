@@ -2501,8 +2501,7 @@ CREATE TABLE public.signup_requests (
     result_signup_id bigint,
     updated_by_id bigint,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    priority integer
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -5933,6 +5932,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20230112164622'),
 ('20230113184026'),
 ('20230113220828'),
-('20230627000846');
+('20230808164646');
 
 

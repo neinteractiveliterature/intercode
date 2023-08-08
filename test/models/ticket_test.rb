@@ -7,10 +7,10 @@
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
 #  order_entry_id       :bigint
-#  provided_by_event_id :integer
+#  provided_by_event_id :bigint
 #  run_id               :bigint
-#  ticket_type_id       :integer
-#  user_con_profile_id  :integer
+#  ticket_type_id       :bigint
+#  user_con_profile_id  :bigint
 #
 # Indexes
 #

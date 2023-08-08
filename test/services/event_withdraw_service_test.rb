@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class EventWithdrawServiceTest < ActiveSupport::TestCase
   include ActiveJob::TestHelper
@@ -8,8 +8,8 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
   let(:the_run) { create :run, event: event }
   let(:user_con_profile) { create :user_con_profile, convention: convention }
   let(:user) { user_con_profile.user }
-  let(:bucket_key) { 'unlimited' }
-  let(:signup_state) { 'confirmed' }
+  let(:bucket_key) { "unlimited" }
+  let(:signup_state) { "confirmed" }
   let(:signup) do
     create(
       :signup,
@@ -23,20 +23,27 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
 
   subject { EventWithdrawService.new(signup, user) }
 
-  it 'withdraws the user from an event' do
-    result = subject.call
-    assert result.success?
-    assert signup.reload.withdrawn?
-    assert result.move_results.empty?
+  it "withdraws the user from an event and emails them a confirmation" do
+    perform_enqueued_jobs do
+      result = subject.call
+      assert result.success?
+      assert signup.reload.withdrawn?
+      assert result.move_results.empty?
+
+      assert_equal 1, ActionMailer::Base.deliveries.size
+      recipients = ActionMailer::Base.deliveries.flat_map(&:to)
+      assert_equal recipients, [user.email]
+    end
   end
 
-  it 'notifies team members who have requested it' do
-    email_team_member = create(:team_member, event: event, receive_signup_email: 'all_signups')
-    email_team_member2 = create(:team_member, event: event, receive_signup_email: 'non_waitlist_signups')
-    no_email_team_member = create(:team_member, event: event, receive_signup_email: 'no')
+  it "notifies team members who have requested it" do
+    email_team_member = create(:team_member, event: event, receive_signup_email: "all_signups")
+    email_team_member2 = create(:team_member, event: event, receive_signup_email: "non_waitlist_signups")
+    no_email_team_member = create(:team_member, event: event, receive_signup_email: "no")
 
     perform_enqueued_jobs do
-      subject.call!
+      # suppressing confirmation so we can only look at the emails to team members
+      EventWithdrawService.new(signup, user, suppress_confirmation: true).call!
 
       assert_equal 1, ActionMailer::Base.deliveries.size
       recipients = ActionMailer::Base.deliveries.flat_map(&:to)
@@ -46,10 +53,10 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
     end
   end
 
-  it 'disallows withdrawals in a frozen convention' do
+  it "disallows withdrawals in a frozen convention" do
     convention.update!(
       maximum_event_signups:
-        ScheduledValue::ScheduledValue.new(timespans: [{ start: nil, finish: nil, value: 'not_now' }])
+        ScheduledValue::ScheduledValue.new(timespans: [{ start: nil, finish: nil, value: "not_now" }])
     )
 
     result = subject.call
@@ -60,22 +67,22 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
     )
   end
 
-  describe 'with limited buckets' do
+  describe "with limited buckets" do
     let(:event) do
       create(
         :event,
         convention: convention,
         registration_policy: {
           buckets: [
-            { key: 'dogs', name: 'dogs', slots_limited: true, total_slots: 1 },
-            { key: 'cats', name: 'cats', slots_limited: true, total_slots: 1 },
-            { key: 'anything', name: 'anything', slots_limited: true, total_slots: 1, anything: true }
+            { key: "dogs", name: "dogs", slots_limited: true, total_slots: 1 },
+            { key: "cats", name: "cats", slots_limited: true, total_slots: 1 },
+            { key: "anything", name: "anything", slots_limited: true, total_slots: 1, anything: true }
           ]
         }
       )
     end
 
-    let(:bucket_key) { 'dogs' }
+    let(:bucket_key) { "dogs" }
 
     let(:anything_user_con_profile) { create(:user_con_profile, convention: convention) }
     let(:anything_signup) do
@@ -83,8 +90,8 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
         :signup,
         user_con_profile: anything_user_con_profile,
         run: the_run,
-        state: 'confirmed',
-        bucket_key: 'anything',
+        state: "confirmed",
+        bucket_key: "anything",
         requested_bucket_key: bucket_key
       )
     end
@@ -95,12 +102,12 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
         :signup,
         user_con_profile: anything_user_con_profile,
         run: the_run,
-        state: 'waitlisted',
+        state: "waitlisted",
         requested_bucket_key: bucket_key
       )
     end
 
-    it 'moves an anything-bucket signup into the vacancy' do
+    it "moves an anything-bucket signup into the vacancy" do
       anything_signup
 
       result = subject.call
@@ -112,7 +119,7 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
       assert_equal bucket_key, anything_signup.reload.bucket_key
     end
 
-    it 'moves a waitlist signup into the vacancy' do
+    it "moves a waitlist signup into the vacancy" do
       waitlist_signup
 
       result = subject.call
@@ -124,9 +131,9 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
       assert_equal bucket_key, waitlist_signup.reload.bucket_key
     end
 
-    it 'does not try to fill an overfilled bucket' do
+    it "does not try to fill an overfilled bucket" do
       extra_signup =
-        create(:signup, run: the_run, state: 'confirmed', bucket_key: bucket_key, requested_bucket_key: bucket_key)
+        create(:signup, run: the_run, state: "confirmed", bucket_key: bucket_key, requested_bucket_key: bucket_key)
       waitlist_signup
 
       result = subject.call
@@ -139,7 +146,7 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
       assert_equal bucket_key, extra_signup.reload.bucket_key
     end
 
-    it 'does not move confirmed signups unless necessary' do
+    it "does not move confirmed signups unless necessary" do
       anything_signup
       waitlist_signup
 
@@ -149,12 +156,12 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
 
       assert_equal 1, result.move_results.size
 
-      assert_equal 'anything', anything_signup.reload.bucket_key
+      assert_equal "anything", anything_signup.reload.bucket_key
       assert_equal bucket_key, waitlist_signup.reload.bucket_key
     end
 
-    it 'notifies team members who have requested it' do
-      team_member = create(:team_member, event: event, receive_signup_email: 'all_signups')
+    it "notifies team members who have requested it" do
+      team_member = create(:team_member, event: event, receive_signup_email: "all_signups")
       anything_signup
 
       perform_enqueued_jobs do
