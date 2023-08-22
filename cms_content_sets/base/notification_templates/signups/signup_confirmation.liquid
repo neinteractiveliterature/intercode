@@ -1,6 +1,15 @@
 ---
 subject: |-
-  [{{ convention.name }}: {{ signup.event.title }}] {% if signup.state == "waitlisted"%}Waitlist{% else %}Signup{% endif %} confirmation
+  [{{ convention.name }}: {{ signup.event.title }}]
+  {%- if signup.state == "waitlisted" %} Waitlist
+  {%- else -%}
+    {%- if signup.team_member? %} {{ signup.event.team_member_name }}
+    {%- elsif signup.bucket.name -%}
+      {%- if signup.bucket.name != 'Signups' -%}
+        {%- if signup.bucket.name != 'Interested' %} {{ signup.bucket.name }}{% endif -%}
+      {%- endif -%}
+    {%- endif %} Signup
+  {%- endif -%}
 body_text: |-
   {%- assign run = signup.run -%}
   {% if signup.state == "waitlisted"%}Waitlist{% else %}Signup{% endif %} confirmation for {% include 'run_description' %}
