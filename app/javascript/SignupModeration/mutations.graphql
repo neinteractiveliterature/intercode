@@ -13,6 +13,7 @@ mutation CreateUserSignup(
       requested_bucket_key: $requestedBucketKey
       no_requested_bucket: $noRequestedBucket
       suppress_notifications: true
+      suppress_confirmation: true
     }
   ) {
     clientMutationId
@@ -20,7 +21,14 @@ mutation CreateUserSignup(
 }
 
 mutation WithdrawUserSignup($runId: ID!, $userConProfileId: ID!) {
-  withdrawUserSignup(input: { runId: $runId, userConProfileId: $userConProfileId, suppress_notifications: true }) {
+  withdrawUserSignup(
+    input: {
+      runId: $runId
+      userConProfileId: $userConProfileId
+      suppress_notifications: true
+      suppress_confirmation: true
+    }
+  ) {
     clientMutationId
   }
 }

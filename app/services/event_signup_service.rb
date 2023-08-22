@@ -10,6 +10,7 @@ class EventSignupService < CivilService::Service
               :requested_bucket_key,
               :whodunit,
               :suppress_notifications,
+              :suppress_confirmation,
               :allow_non_self_service_signups,
               :action
   delegate :event, to: :run
@@ -27,13 +28,14 @@ class EventSignupService < CivilService::Service
   include SkippableAdvisoryLock
   include ConventionRegistrationFreeze
 
-  def initialize(
+  def initialize( # rubocop:disable Metrics/ParameterLists
     user_con_profile,
     run,
     requested_bucket_key,
     whodunit,
     skip_locking: false,
     suppress_notifications: false,
+    suppress_confirmation: false,
     allow_non_self_service_signups: false,
     action: "self_service_signup"
   )
@@ -43,13 +45,14 @@ class EventSignupService < CivilService::Service
     @whodunit = whodunit
     @skip_locking = skip_locking
     @suppress_notifications = suppress_notifications
+    @suppress_confirmation = suppress_confirmation
     @allow_non_self_service_signups = allow_non_self_service_signups
     @action = action
   end
 
   private
 
-  def inner_call
+  def inner_call # rubocop:disable Metrics/AbcSize
     signup = nil
     with_advisory_lock_unless_skip_locking("run_#{run.id}_signups") do
       return failure(errors) unless valid?
@@ -72,6 +75,7 @@ class EventSignupService < CivilService::Service
     end
 
     notify_team_members(signup)
+    send_confirmation(signup)
     success(signup: signup)
   end
 
@@ -271,7 +275,14 @@ sign up for events."
   def notify_team_members(signup)
     return if suppress_notifications
 
-    # Wait 30 seconds because the transaction hasn't been committed yet
+    # Wait 5 seconds because the transaction hasn't been committed yet
     Signups::NewSignupNotifier.new(signup: signup).deliver_later(wait: 5.seconds)
+  end
+
+  def send_confirmation(signup)
+    return if suppress_confirmation
+
+    # Wait 5 seconds because the transaction hasn't been committed yet
+    Signups::SignupConfirmationNotifier.new(signup: signup).deliver_later(wait: 5.seconds)
   end
 end

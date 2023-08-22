@@ -1,0 +1,21 @@
+---
+subject: "[{{ convention.name }}: {{ signup.event.title }}] Withdraw confirmation"
+body_text: |-
+  {% assign run = signup.run %}
+  Withdraw confirmation for {% include 'run_description' %}
+
+  This message is to confirm that you have successfully withdrawn from {% include 'run_description' %}.  (Previously, you were
+  {%- if prev_bucket %} {{ prev_state }} in the {{ prev_bucket.name }} bucket.)
+  {%- else %} {{ prev_state }}.)
+  {%- endif %}
+---
+{%- assign run = signup.run -%}
+<h1>Withdraw confirmation for {% include 'run_description' %}</h1>
+
+<p>
+  This message is to confirm that you have successfully withdrawn from {% include 'run_description' %}.  (Previously, you were
+  {%- if prev_bucket %} {{ prev_state }} in the {{ prev_bucket.name }} bucket.)
+  {%- else %} {{ prev_state }}.)
+  {%- endif %}
+</p>
+

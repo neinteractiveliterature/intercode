@@ -19,7 +19,7 @@ class CmsContentLoaders::Base < CivilService::Service
   end
 
   def storage_adapter
-    raise NotImplementedError, 'CmsContentLoaders::Base subclasses must implement #storage_adapter'
+    raise NotImplementedError, "CmsContentLoaders::Base subclasses must implement #storage_adapter"
   end
 
   def load_content(&block)
@@ -64,6 +64,8 @@ class CmsContentLoaders::Base < CivilService::Service
       .all_items_from_disk
       .map(&:identifier)
       .each do |identifier|
+        next if content_identifiers.present? && content_identifiers.exclude?(identifier)
+
         if taken_special_identifiers[identifier]
           errors.add(:base, "#{cms_parent.name} already has a #{taken_special_identifiers[identifier]}")
         end

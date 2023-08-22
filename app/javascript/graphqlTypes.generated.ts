@@ -1715,6 +1715,7 @@ export type CreateUserSignupInput = {
   no_requested_bucket?: InputMaybe<Scalars['Boolean']['input']>;
   requested_bucket_key?: InputMaybe<Scalars['String']['input']>;
   runId?: InputMaybe<Scalars['ID']['input']>;
+  suppress_confirmation?: InputMaybe<Scalars['Boolean']['input']>;
   suppress_notifications?: InputMaybe<Scalars['Boolean']['input']>;
   userConProfileId?: InputMaybe<Scalars['ID']['input']>;
 };
@@ -5596,6 +5597,7 @@ export type WithdrawUserSignupInput = {
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
   runId?: InputMaybe<Scalars['ID']['input']>;
+  suppress_confirmation?: InputMaybe<Scalars['Boolean']['input']>;
   suppress_notifications?: InputMaybe<Scalars['Boolean']['input']>;
   userConProfileId?: InputMaybe<Scalars['ID']['input']>;
 };

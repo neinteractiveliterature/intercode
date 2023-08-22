@@ -8,6 +8,7 @@ class EventWithdrawService < CivilService::Service
   attr_reader :signup,
               :whodunit,
               :suppress_notifications,
+              :suppress_confirmation,
               :allow_non_self_service_signups,
               :move_results,
               :prev_bucket_key,
@@ -21,11 +22,19 @@ class EventWithdrawService < CivilService::Service
   include SkippableAdvisoryLock
   include ConventionRegistrationFreeze
 
-  def initialize(signup, whodunit, skip_locking: false, suppress_notifications: false, action: 'withdraw')
+  def initialize(
+    signup,
+    whodunit,
+    skip_locking: false,
+    suppress_notifications: false,
+    suppress_confirmation: false,
+    action: "withdraw"
+  )
     @signup = signup
     @whodunit = whodunit
     @skip_locking = skip_locking
     @suppress_notifications = suppress_notifications
+    @suppress_confirmation = suppress_confirmation
     @action = action
     @move_results = []
     @prev_state = signup.state
@@ -37,7 +46,7 @@ class EventWithdrawService < CivilService::Service
 
   def inner_call
     with_advisory_lock_unless_skip_locking("run_#{run.id}_signups") do
-      signup.update!(state: 'withdrawn', bucket_key: nil, counted: false, updated_by: whodunit)
+      signup.update!(state: "withdrawn", bucket_key: nil, counted: false, updated_by: whodunit)
       signup.log_signup_change!(action: action)
 
       move_result = move_signups(prev_state, prev_bucket_key, prev_counted)
@@ -45,20 +54,35 @@ class EventWithdrawService < CivilService::Service
     end
 
     notify_team_members(signup, prev_state, prev_bucket_key, move_results)
+    send_confirmation(signup, prev_state, prev_bucket_key)
     success(prev_state: prev_state, prev_bucket_key: prev_bucket_key, move_results: move_results)
   end
 
   def notify_team_members(signup, prev_state, prev_bucket_key, move_results)
     return if suppress_notifications
 
-    # Wait 30 seconds because the transaction hasn't been committed yet
-    Signups::WithdrawalNotifier
-      .new(signup: signup, prev_state: prev_state, prev_bucket_key: prev_bucket_key, move_results: move_results)
-      .deliver_later(wait: 5.seconds)
+    # Wait 5 seconds because the transaction hasn't been committed yet
+    Signups::WithdrawalNotifier.new(
+      signup: signup,
+      prev_state: prev_state,
+      prev_bucket_key: prev_bucket_key,
+      move_results: move_results
+    ).deliver_later(wait: 5.seconds)
+  end
+
+  def send_confirmation(signup, prev_state, prev_bucket_key)
+    return if suppress_confirmation
+
+    # Wait 5 seconds because the transaction hasn't been committed yet
+    Signups::WithdrawConfirmationNotifier.new(
+      signup: signup,
+      prev_state: prev_state,
+      prev_bucket_key: prev_bucket_key
+    ).deliver_later(wait: 5.seconds)
   end
 
   def move_signups(prev_state, prev_bucket_key, prev_counted)
-    return success unless prev_counted && prev_state == 'confirmed'
+    return success unless prev_counted && prev_state == "confirmed"
     if prev_bucket_key
       # Don't fill vacancies in a previously-overfilled bucket
       prev_bucket = signup.run.event.registration_policy.bucket_with_key(prev_bucket_key)
