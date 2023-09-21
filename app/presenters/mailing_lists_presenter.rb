@@ -30,17 +30,23 @@ class MailingListsPresenter
 
   def event_proposers
     event_proposals =
-      convention.event_proposals.where.not(status: %i[draft rejected withdrawn]).includes(owner: :user).order_by_title
+      convention
+        .event_proposals
+        .where.not(status: %i[draft rejected withdrawn])
+        .includes(:event_category, owner: :user)
+        .order_by_title
 
     Result.new(
       event_proposals.map do |event_proposal|
         ContactEmail.new(
           event_proposal.owner.email,
           event_proposal.owner.name_without_nickname,
-          title: event_proposal.title
+          title: event_proposal.title,
+          event_category: event_proposal.event_category.name,
+          status: event_proposal.status
         )
       end,
-      [:title]
+      %i[title event_category status]
     )
   end
 
@@ -99,7 +105,7 @@ class MailingListsPresenter
   private
 
   def team_member_emails_for_event(event)
-    if event.con_mail_destination == 'event_email' && event.email.present?
+    if event.con_mail_destination == "event_email" && event.email.present?
       [ContactEmail.new(event.email, "#{event.title} Team", event: event.title)]
     else
       event
@@ -116,7 +122,7 @@ class MailingListsPresenter
   end
 
   def signups_during_timespan(timespan)
-    signups_scope = convention.signups.where.not(state: 'withdrawn').includes(run: :event)
+    signups_scope = convention.signups.where.not(state: "withdrawn").includes(run: :event)
     signups_scope.select { |signup| signup.run.timespan.overlaps?(timespan) }
   end
 end
