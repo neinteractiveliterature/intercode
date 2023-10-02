@@ -10,8 +10,10 @@ class CleanupDbService < CivilService::Service
     cleaner = Doorkeeper::StaleRecordsCleaner.new(Doorkeeper.config.access_grant_model)
     cleaner.clean_revoked
 
-    cleaner = Doorkeeper::StaleRecordsCleaner.new(Doorkeeper.config.access_grant_model)
-    cleaner.clean_expired(Doorkeeper.config.authorization_code_expires_in)
+    if Doorkeeper.configuration.access_token_expires_in
+      cleaner = Doorkeeper::StaleRecordsCleaner.new(Doorkeeper.config.access_grant_model)
+      cleaner.clean_expired(Doorkeeper.config.authorization_code_expires_in)
+    end
 
     trim_sessions
 
@@ -20,6 +22,8 @@ class CleanupDbService < CivilService::Service
 
   # Don't delete the most recently generated token for each user
   def custom_doorkeeper_token_cleanup
+    return unless Doorkeeper.configuration.access_token_expires_in
+
     expirable_tokens = Doorkeeper::AccessToken.where(refresh_token: nil).where(Arel.sql(<<~SQL))
       created_at != (
         SELECT MAX(created_at) FROM #{Doorkeeper::AccessToken.table_name} tokens2
@@ -33,7 +37,7 @@ class CleanupDbService < CivilService::Service
 
   # Copy/pasted from activerecord-session_store
   def trim_sessions
-    cutoff_period = (ENV['SESSION_DAYS_TRIM_THRESHOLD'] || 30).to_i.days.ago
-    ActiveRecord::SessionStore::Session.where('updated_at < ?', cutoff_period).delete_all
+    cutoff_period = (ENV["SESSION_DAYS_TRIM_THRESHOLD"] || 30).to_i.days.ago
+    ActiveRecord::SessionStore::Session.where("updated_at < ?", cutoff_period).delete_all
   end
 end
