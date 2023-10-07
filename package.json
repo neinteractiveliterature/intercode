@@ -117,7 +117,7 @@
     "payment": "2.4.6",
     "popper.js": "1.16.1",
     "porter-stemmer": "0.9.1",
-    "postcss": "8.4.26",
+    "postcss": "8.4.31",
     "postcss-import": "15.1.0",
     "postcss-loader": "7.3.3",
     "prop-types": "15.8.1",
