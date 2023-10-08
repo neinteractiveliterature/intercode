@@ -119,6 +119,9 @@ function useIntercodeApolloClient(
               currentAbility: {
                 merge: (existing, incoming) => ({ ...existing, ...incoming }),
               },
+              cmsParentByRequestHost: {
+                merge: (existing, incoming) => ({ ...existing, ...incoming }),
+              },
             },
           },
           UserConProfile: {
