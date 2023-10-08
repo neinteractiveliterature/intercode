@@ -122,6 +122,15 @@ function useIntercodeApolloClient(
               cmsParentByRequestHost: {
                 merge: (existing, incoming) => ({ ...existing, ...incoming }),
               },
+              conventionByRequestHostIfPresent: {
+                merge: (existing, incoming) => {
+                  if (existing == null && incoming == null) {
+                    return null;
+                  } else {
+                    return { ...existing, ...incoming };
+                  }
+                },
+              },
             },
           },
           UserConProfile: {
