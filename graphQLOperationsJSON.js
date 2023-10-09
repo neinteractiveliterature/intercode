@@ -1,7 +1,7 @@
 // @ts-check
 /* eslint-disable @typescript-eslint/no-var-requires */
 
-const { concatAST } = require('graphql');
+const { concatAST, Kind } = require('graphql');
 const { print } = require('graphql/language/printer');
 const { sortBy, uniq } = require('lodash');
 
@@ -38,6 +38,53 @@ function getFragmentNames(selectionSet, fragmentsByName, seenFragments) {
 
 /**
  *
+ * @param {import('graphql').SelectionSetNode} selectionSet
+ * @returns {import('graphql').SelectionSetNode}
+ */
+function addTypenameToSelectionSet(selectionSet) {
+  const newSelectionSet = { ...selectionSet };
+  const hasDefinition = selectionSet.selections.some(
+    (selection) => selection.kind === 'Field' && selection.name.value === '__typename',
+  );
+  if (!hasDefinition) {
+    /** @type {import('graphql').FieldNode} */
+    const typenameSelection = {
+      kind: Kind.FIELD,
+      name: {
+        kind: Kind.NAME,
+        value: '__typename',
+      },
+    };
+    newSelectionSet.selections = [...selectionSet.selections, typenameSelection];
+  }
+
+  newSelectionSet.selections = newSelectionSet.selections.map((selection) => {
+    if (selection.kind === Kind.FIELD && selection.selectionSet) {
+      return { ...selection, selectionSet: addTypenameToSelectionSet(selection.selectionSet) };
+    } else if (selection.kind === Kind.INLINE_FRAGMENT) {
+      return { ...selection, selectionSet: addTypenameToSelectionSet(selection.selectionSet) };
+    } else {
+      return selection;
+    }
+  });
+
+  return newSelectionSet;
+}
+
+/**
+ * @template {import('graphql').OperationDefinitionNode | import('graphql').FragmentDefinitionNode} T
+ * @param {T} definition
+ * @returns {T}
+ */
+function addTypenameToDefinition(definition) {
+  return {
+    ...definition,
+    selectionSet: addTypenameToSelectionSet(definition.selectionSet),
+  };
+}
+
+/**
+ *
  * @param {import('graphql').GraphQLSchema} _schema
  * @param {{location: string, document: import('graphql').DocumentNode}[]} documents
  * @returns
@@ -50,7 +97,7 @@ const GraphQLJSONOperationsPlugin = (_schema, documents) => {
     if (definition.kind === 'OperationDefinition') {
       const name = definition.name?.value;
       if (name) {
-        acc[name] = definition;
+        acc[name] = addTypenameToDefinition(definition);
       }
     }
     return acc;
@@ -60,7 +107,7 @@ const GraphQLJSONOperationsPlugin = (_schema, documents) => {
     if (definition.kind === 'FragmentDefinition') {
       const name = definition.name?.value;
       if (name) {
-        acc[name] = definition;
+        acc[name] = addTypenameToDefinition(definition);
       }
     }
     return acc;
