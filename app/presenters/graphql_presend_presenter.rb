@@ -1,10 +1,8 @@
 class GraphqlPresendPresenter
   attr_reader :controller, :cms_parent, :path, :context
 
-  APP_ROOT_QUERY = GraphqlOperation.by_name('AppRootQuery')
-  CMS_PAGE_QUERY = GraphqlOperation.by_name('CmsPageQuery')
-  COMMON_CONVENTION_DATA_QUERY = GraphqlOperation.by_name('CommonConventionDataQuery')
-  PAGE_ADMIN_DROPDOWN_QUERY = GraphqlOperation.by_name('PageAdminDropdownQuery')
+  APP_ROOT_QUERY, CMS_PAGE_QUERY, COMMON_CONVENTION_DATA_QUERY, PAGE_ADMIN_DROPDOWN_QUERY =
+    GraphqlOperation.by_name("AppRootQuery", "CmsPageQuery", "CommonConventionDataQuery", "PageAdminDropdownQuery")
 
   def initialize(controller:, cms_parent:)
     @controller = controller
@@ -19,34 +17,35 @@ class GraphqlPresendPresenter
   end
 
   def queries
-    @queries ||= case path
-      when '/' then cms_root_queries
+    @queries ||=
+      case path
+      when "/"
+        cms_root_queries
       when %r{\A/pages/(.+)\z}
         slug = Regexp.last_match(1)
         cms_page_queries(slug)
-      when %r{\A/events} then events_app_queries
-      else [non_cms_app_root_query]
+      when %r{\A/events}
+        events_app_queries
+      else
+        [non_cms_app_root_query]
       end
   end
 
   def graphql_presend_data
-    multiplex_args = queries.map do |query|
-      {
-        query: query[:operation].to_query_string,
-        operation_name: query[:operation].name,
-        variables: query[:variables],
-        context: context
-      }
-    end
+    multiplex_args =
+      queries.map do |query|
+        {
+          query: query[:operation].to_query_string,
+          operation_name: query[:operation].name,
+          variables: query[:variables],
+          context: context
+        }
+      end
 
     data = IntercodeSchema.multiplex(multiplex_args)
-    queries.zip(data).map do |(query, result)|
-      {
-        query: query[:operation].to_document,
-        variables: query[:variables],
-        **result
-      }
-    end
+    queries
+      .zip(data)
+      .map { |(query, result)| { query: query[:operation].to_document, variables: query[:variables], **result } }
   rescue StandardError => e
     # errors in GraphQL pre-sending aren't fatal, but we want to know they happened
     Rollbar.warn(e)
@@ -60,9 +59,7 @@ class GraphqlPresendPresenter
       { operation: CMS_PAGE_QUERY, variables: { rootPage: true } },
       { operation: APP_ROOT_QUERY, variables: { path: path } }
     ]
-    if cms_admin?
-      queries << { operation: PAGE_ADMIN_DROPDOWN_QUERY, variables: { id: cms_parent.root_page_id.to_s } }
-    end
+    queries << { operation: PAGE_ADMIN_DROPDOWN_QUERY, variables: { id: cms_parent.root_page_id.to_s } } if cms_admin?
     queries
   end
 
@@ -79,7 +76,7 @@ class GraphqlPresendPresenter
   end
 
   def non_cms_app_root_query
-    { operation: APP_ROOT_QUERY, variables: { path: '/non_cms_path' } }
+    { operation: APP_ROOT_QUERY, variables: { path: "/non_cms_path" } }
   end
 
   def events_app_queries

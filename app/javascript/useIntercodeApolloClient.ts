@@ -100,33 +100,14 @@ function useIntercodeApolloClient(
         addTypename: true,
         possibleTypes,
         typePolicies: {
-          Convention: {
-            fields: {
-              reports: {
-                merge: (existing, incoming) => ({ ...existing, ...incoming }),
-              },
-            },
+          Ability: {
+            merge: true,
           },
-          Event: {
-            fields: {
-              registrationPolicy: {
-                merge: (existing, incoming) => incoming,
-              },
-            },
+          ConventionReports: {
+            merge: true,
           },
-          Query: {
-            fields: {
-              currentAbility: {
-                merge: (existing, incoming) => ({ ...existing, ...incoming }),
-              },
-            },
-          },
-          UserConProfile: {
-            fields: {
-              ability: {
-                merge: (existing, incoming) => ({ ...existing, ...incoming }),
-              },
-            },
+          RegistrationPolicy: {
+            merge: (existing, incoming) => incoming,
           },
         },
       }),
