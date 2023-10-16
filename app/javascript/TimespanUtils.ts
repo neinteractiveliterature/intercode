@@ -11,6 +11,14 @@ export function timespanFromConvention(convention: ConventionForTimespanUtils): 
   return Timespan.fromStrings(convention.starts_at, convention.ends_at).tz(timezoneNameForConvention(convention));
 }
 
+export function timespanFromConventionIfValid(convention: ConventionForTimespanUtils): Timespan | undefined {
+  try {
+    return timespanFromConvention(convention);
+  } catch (err) {
+    return undefined;
+  }
+}
+
 export function timespanFromRun(
   timezoneName: string,
   event: Pick<Event, 'length_seconds'>,

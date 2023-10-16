@@ -13,7 +13,7 @@ import {
   LoadQueryWrapper,
 } from '@neinteractiveliterature/litform';
 
-import { timespanFromConvention } from '../TimespanUtils';
+import { timespanFromConvention, timespanFromConventionIfValid } from '../TimespanUtils';
 import DateTimeInput from '../BuiltInFormControls/DateTimeInput';
 import TimezoneSelect from '../BuiltInFormControls/TimezoneSelect';
 import OrganizationSelect from '../BuiltInFormControls/OrganizationSelect';
@@ -71,7 +71,7 @@ export default LoadQueryWrapper<NewConventionModalQueryData, NewConventionModalQ
       () => (cloneConvention ? timespanFromConvention(cloneConvention) : null),
       [cloneConvention],
     );
-    const [cmsContentSet, setCmsContentSet] = useState<typeof CMS_CONTENT_SET_OPTIONS[0] | null | undefined>(
+    const [cmsContentSet, setCmsContentSet] = useState<(typeof CMS_CONTENT_SET_OPTIONS)[0] | null | undefined>(
       cloneConvention ? null : CMS_CONTENT_SET_OPTIONS[0],
     );
 
@@ -99,7 +99,7 @@ export default LoadQueryWrapper<NewConventionModalQueryData, NewConventionModalQ
       if (
         newStartsAt &&
         cloneConventionTimespan?.isFinite() &&
-        timespanFromConvention(convention).getLength('days') === cloneConventionTimespan.getLength('days')
+        timespanFromConventionIfValid(convention)?.getLength('days') === cloneConventionTimespan.getLength('days')
       ) {
         const newStartsAtInZone = convention.timezone_name
           ? DateTime.fromISO(newStartsAt, { zone: convention.timezone_name })
@@ -210,7 +210,7 @@ export default LoadQueryWrapper<NewConventionModalQueryData, NewConventionModalQ
               label="Initial CMS content set"
               options={CMS_CONTENT_SET_OPTIONS}
               value={cmsContentSet}
-              onChange={(newValue: typeof CMS_CONTENT_SET_OPTIONS[0]) => setCmsContentSet(newValue)}
+              onChange={(newValue: (typeof CMS_CONTENT_SET_OPTIONS)[0]) => setCmsContentSet(newValue)}
               getOptionLabel={(option) => option.label}
               getOptionValue={(option) => option.name}
             />
