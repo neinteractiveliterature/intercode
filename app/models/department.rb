@@ -24,4 +24,8 @@
 class Department < ApplicationRecord
   belongs_to :convention
   has_many :event_categories, dependent: :nullify
+
+  def to_liquid
+    DepartmentDrop.new(self)
+  end
 end

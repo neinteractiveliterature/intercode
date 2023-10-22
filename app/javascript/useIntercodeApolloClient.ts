@@ -42,6 +42,11 @@ function isUpload({ variables }: Operation) {
   return containsFile(variables, new Set([variables]));
 }
 
+export function getIntercodeUserTimezoneHeader() {
+  const localTime = DateTime.local();
+  return { 'X-Intercode-User-Timezone': localTime.zoneName };
+}
+
 export function useIntercodeApolloLink(
   authenticityToken: string,
   onUnauthenticatedRef?: RefObject<() => void>,
@@ -51,13 +56,12 @@ export function useIntercodeApolloLink(
   const AddTimezoneLink = useMemo(
     () =>
       new ApolloLink((operation: Operation, next: NextLink) => {
-        const localTime = DateTime.local();
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         operation.setContext((context: Record<string, any>) => ({
           ...context,
           headers: {
             ...context.headers,
-            'X-Intercode-User-Timezone': localTime.zoneName,
+            ...getIntercodeUserTimezoneHeader(),
           },
         }));
 

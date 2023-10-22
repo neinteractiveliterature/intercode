@@ -1881,6 +1881,20 @@
           ]
         },
         {
+          "name": "departments_by_name",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "Departments at the convention, accessible by name (lowercased and underscored)",
+              "types": [
+                "Array<DepartmentDrop>"
+              ]
+            }
+          ]
+        },
+        {
           "name": "bio_eligible_user_con_profiles",
           "docstring": "",
           "tags": [
@@ -2119,6 +2133,73 @@
           "docstring": "",
           "tags": [
 
+          ]
+        }
+      ]
+    },
+    {
+      "name": "DepartmentDrop",
+      "superclasses": [
+        "DepartmentDrop",
+        "Liquid::Drop"
+      ],
+      "docstring": "A department in a convention.",
+      "tags": [
+
+      ],
+      "methods": [
+        {
+          "name": "department",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "api",
+              "name": null,
+              "text": "",
+              "types": null
+            }
+          ]
+        },
+        {
+          "name": "id",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The numeric database id of the department",
+              "types": [
+                "Integer"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "name",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The name of the department",
+              "types": [
+                "String"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "event_categories",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The event categories this department manages",
+              "types": [
+                "Array<EventCategoryDrop>"
+              ]
+            }
           ]
         }
       ]
