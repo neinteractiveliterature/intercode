@@ -125,6 +125,11 @@ class ConventionDrop < Liquid::Drop
     @event_categories ||= convention.event_categories.to_a
   end
 
+  # @return [Array<DepartmentDrop>] Departments at the convention, accessible by name (lowercased and underscored)
+  def departments_by_name
+    @departments_by_name ||= convention.departments.index_by(&:name).transform_keys(&:underscore)
+  end
+
   # @return [Array<UserConProfileDrop>] UserConProfiles in this convention that can have a bio
   def bio_eligible_user_con_profiles
     convention.user_con_profiles.can_have_bio.to_a
