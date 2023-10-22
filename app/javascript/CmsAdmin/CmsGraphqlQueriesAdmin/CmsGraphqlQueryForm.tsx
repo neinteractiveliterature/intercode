@@ -1,8 +1,6 @@
-import { Suspense, useContext, useCallback } from 'react';
+import { Suspense, useContext, useMemo } from 'react';
 import * as React from 'react';
-import { parse } from 'graphql/language/parser';
-import { execute, GraphQLRequest } from '@apollo/client';
-import { Fetcher } from '@graphiql/toolkit';
+import { createGraphiQLFetcher } from '@graphiql/toolkit';
 import {
   BootstrapFormInput,
   BootstrapFormTextarea,
@@ -11,7 +9,7 @@ import {
 } from '@neinteractiveliterature/litform';
 
 import { lazyWithAppEntrypointHeadersCheck } from '../../checkAppEntrypointHeadersMatch';
-import { useIntercodeApolloLink } from '../../useIntercodeApolloClient';
+import { getIntercodeUserTimezoneHeader } from '../../useIntercodeApolloClient';
 import AuthenticityTokensContext from '../../AuthenticityTokensContext';
 
 const GraphiQL = lazyWithAppEntrypointHeadersCheck(() => import(/* webpackChunkName: 'graphiql' */ 'graphiql'));
@@ -35,19 +33,13 @@ function CmsGraphqlQueryForm<T extends CmsGraphqlQueryFormFields>({
 }: CmsGraphqlQueryFormProps<T>): JSX.Element {
   const { graphql: authenticityToken } = useContext(AuthenticityTokensContext);
   const [setIdentifier, setAdminNotes, setQuery] = usePropertySetters(onChange, 'identifier', 'admin_notes', 'query');
-  const link = useIntercodeApolloLink(authenticityToken);
 
-  // Serious shenanigans going on in here, we have to majorly circumvent type checking
-  const fetcher: Fetcher = useCallback(
-    (operation) => {
-      const request: GraphQLRequest = operation as unknown as GraphQLRequest;
-      // eslint-disable-next-line no-param-reassign
-      request.query = parse(operation.query);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      return execute(link, request) as any;
-    },
-    [link],
-  );
+  const fetcher = useMemo(() => {
+    return createGraphiQLFetcher({
+      url: '/graphql',
+      headers: { 'X-CSRF-Token': authenticityToken, ...getIntercodeUserTimezoneHeader() },
+    });
+  }, [authenticityToken]);
 
   return (
     <>
