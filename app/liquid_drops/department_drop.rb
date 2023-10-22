@@ -10,5 +10,5 @@ class DepartmentDrop < Liquid::Drop
   #   @return [String] The name of the department
   # @!method event_categories
   #   @return [Array<EventCategoryDrop>] The event categories this department manages
-  delegate :id, :name, :event_categories
+  delegate :id, :name, :event_categories, to: :department
 end
