@@ -51,7 +51,7 @@
     "@types/debounce-promise": "3.1.8",
     "@types/diff": "5.0.7",
     "@types/file-saver": "2.0.6",
-    "@types/js-search": "1.4.0",
+    "@types/js-search": "1.4.2",
     "@types/lodash": "4.14.195",
     "@types/luxon": "3.2.2",
     "@types/mapbox-gl": "1.13.6",
