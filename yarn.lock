@@ -6586,10 +6586,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/diff@npm:5.0.3":
-  version: 5.0.3
-  resolution: "@types/diff@npm:5.0.3"
-  checksum: d8a7d4de12f1aba0bd0c17b0b0d1e45c83824d3d6cc65763fbad371cd8315361a7e16fbae3f260a83bfdf30cebe1c876b42cec4518698055bc430fb09db1cbc8
+"@types/diff@npm:5.0.7":
+  version: 5.0.7
+  resolution: "@types/diff@npm:5.0.7"
+  checksum: 38cad7b1e19789a11bfab2428409476ea204705e92c39dd13a9ba26b604930efcffb553352512296cb179adfb028e2d95e51f9df2b7443bb0a6ba306c8bc84d0
   languageName: node
   linkType: hard
 
@@ -20046,7 +20046,7 @@ __metadata:
     "@types/classnames": 2.3.1
     "@types/cssnano": 5.0.0
     "@types/debounce-promise": 3.1.8
-    "@types/diff": 5.0.3
+    "@types/diff": 5.0.7
     "@types/events": 3.0.0
     "@types/file-saver": 2.0.5
     "@types/history": 4.7.11
