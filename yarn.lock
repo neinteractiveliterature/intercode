@@ -6579,10 +6579,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/debounce-promise@npm:3.1.6":
-  version: 3.1.6
-  resolution: "@types/debounce-promise@npm:3.1.6"
-  checksum: db1e5bf86215dfcdd0b0f94497269b0be5b27e0b9622bbad53c7a24de078229b97927f848549bb661795575d80615fd935f8357d8f23928c0526b158b51fa122
+"@types/debounce-promise@npm:3.1.8":
+  version: 3.1.8
+  resolution: "@types/debounce-promise@npm:3.1.8"
+  checksum: 50ef1c9843ffef3f72fc7b176a90c231c8e2ece6ccc41bb7efaf9461f9111f337aae19fd55770357d0215d0292bd1c614ce59c8bf25a3d4d3f63be0f0f78b7d2
   languageName: node
   linkType: hard
 
@@ -20045,7 +20045,7 @@ __metadata:
     "@types/bytes": 3.1.3
     "@types/classnames": 2.3.1
     "@types/cssnano": 5.0.0
-    "@types/debounce-promise": 3.1.6
+    "@types/debounce-promise": 3.1.8
     "@types/diff": 5.0.3
     "@types/events": 3.0.0
     "@types/file-saver": 2.0.5
