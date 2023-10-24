@@ -6802,10 +6802,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash@npm:4.14.195":
-  version: 4.14.195
-  resolution: "@types/lodash@npm:4.14.195"
-  checksum: 39b75ca635b3fa943d17d3d3aabc750babe4c8212485a4df166fe0516e39288e14b0c60afc6e21913cc0e5a84734633c71e617e2bd14eaa1cf51b8d7799c432e
+"@types/lodash@npm:4.14.200":
+  version: 4.14.200
+  resolution: "@types/lodash@npm:4.14.200"
+  checksum: 6471f8bb5da692a6ecf03a8da4935bfbc341e67ee9bcb4f5730bfacff0c367232548f0a01e8ac5ea18c6fe78fb085d502494e33ccb47a7ee87cbdee03b47d00d
   languageName: node
   linkType: hard
 
@@ -10931,7 +10931,7 @@ __metadata:
     "@edno/docusaurus2-graphql-doc-generator": 1.13.1
     "@mdx-js/react": 1.6.22
     "@svgr/webpack": 8.0.1
-    "@types/lodash": 4.14.195
+    "@types/lodash": 4.14.200
     clsx: 1.2.1
     entities: 4.5.0
     file-loader: 6.2.0
@@ -20052,7 +20052,7 @@ __metadata:
     "@types/history": 4.7.11
     "@types/jest": 29.5.3
     "@types/js-search": 1.4.2
-    "@types/lodash": 4.14.195
+    "@types/lodash": 4.14.200
     "@types/luxon": 3.2.2
     "@types/mapbox-gl": 1.13.6
     "@types/minimist": 1.2.2
