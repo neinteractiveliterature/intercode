@@ -6848,10 +6848,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/minimist@npm:1.2.2":
-  version: 1.2.2
-  resolution: "@types/minimist@npm:1.2.2"
-  checksum: b8da83c66eb4aac0440e64674b19564d9d86c80ae273144db9681e5eeff66f238ade9515f5006ffbfa955ceff8b89ad2bd8ec577d7caee74ba101431fb07045d
+"@types/minimist@npm:1.2.4":
+  version: 1.2.4
+  resolution: "@types/minimist@npm:1.2.4"
+  checksum: d7912f9a466312cbc1333800272b9208178140ef4da2ccec3fa82231c8e67f57f84275b3c19109c4f68f1b7b057baeacc6b80af1de14b58b46e6b54233e44c6a
   languageName: node
   linkType: hard
 
@@ -20055,7 +20055,7 @@ __metadata:
     "@types/lodash": 4.14.200
     "@types/luxon": 3.2.2
     "@types/mapbox-gl": 1.13.6
-    "@types/minimist": 1.2.2
+    "@types/minimist": 1.2.4
     "@types/node": 18.16.19
     "@types/punycode": 2.1.0
     "@types/rails__activestorage": 7.0.1
