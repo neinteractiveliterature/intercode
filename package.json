@@ -183,7 +183,7 @@
     "@types/history": "4.7.11",
     "@types/jest": "29.5.3",
     "@types/node": "18.16.19",
-    "@types/punycode": "2.1.0",
+    "@types/punycode": "2.1.1",
     "@types/rails__activestorage": "7.0.1",
     "@types/react-dom": "18.2.7",
     "@types/react-transition-group": "4.4.6",
