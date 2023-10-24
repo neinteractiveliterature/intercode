@@ -6816,12 +6816,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/mapbox-gl@npm:1.13.6":
-  version: 1.13.6
-  resolution: "@types/mapbox-gl@npm:1.13.6"
+"@types/mapbox-gl@npm:1.13.8":
+  version: 1.13.8
+  resolution: "@types/mapbox-gl@npm:1.13.8"
   dependencies:
     "@types/geojson": "*"
-  checksum: 9c5e5c89e00fce7a71f3b345d4b5d54adede5f9e3b38e580fff9c01b3492906e9f7684a8486f4bbe4946c3086d53a71e9a0633f91d229af80bc6ab96b79817c8
+  checksum: 9f6deb1bdd81873bfa4f2fab4f3fa584b56a0685b7cb571ac906902967cbe590870e2e2b654d184012850b0396c06154b295b23160682a781d21c36dddb93f76
   languageName: node
   linkType: hard
 
@@ -20054,7 +20054,7 @@ __metadata:
     "@types/js-search": 1.4.2
     "@types/lodash": 4.14.200
     "@types/luxon": 3.2.2
-    "@types/mapbox-gl": 1.13.6
+    "@types/mapbox-gl": 1.13.8
     "@types/minimist": 1.2.4
     "@types/node": 18.16.19
     "@types/punycode": 2.1.0
