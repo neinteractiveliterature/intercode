@@ -57,7 +57,7 @@
     "@types/mapbox-gl": "1.13.8",
     "@types/minimist": "1.2.4",
     "@types/react": "18.2.15",
-    "@types/react-click-outside-hook": "1.0.0",
+    "@types/react-click-outside-hook": "1.0.1",
     "@types/react-color": "3.0.6",
     "@types/react-google-recaptcha": "2.1.5",
     "@types/react-onclickoutside": "6.7.4",
