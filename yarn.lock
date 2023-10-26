@@ -7173,10 +7173,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/tinycolor2@npm:1.4.3":
-  version: 1.4.3
-  resolution: "@types/tinycolor2@npm:1.4.3"
-  checksum: 61984b2825d4ee902016ef24777787bb2fb9e4999ccd4f7e5a709442c00cf90ba4afa510b9c78f18dcc83c03305d597d5fe3825a6aad38354f95c68af70ebc1b
+"@types/tinycolor2@npm:1.4.5":
+  version: 1.4.5
+  resolution: "@types/tinycolor2@npm:1.4.5"
+  checksum: 653b9d9b4a07c94f9e507e2173ee8d6bebcfbc7c73b19f5d357a3af489957390d817db82a9e5a4823b41b10179e9d0b2b825068f7f9d42706d591f8b2c1a464f
   languageName: node
   linkType: hard
 
@@ -20077,7 +20077,7 @@ __metadata:
     "@types/react-transition-group": 4.4.8
     "@types/source-map-support": 0.5.9
     "@types/testing-library__jest-dom": 5.14.9
-    "@types/tinycolor2": 1.4.3
+    "@types/tinycolor2": 1.4.5
     "@types/uuid": 9.0.2
     "@types/zxcvbn": 4.4.1
     "@typescript-eslint/eslint-plugin": 5.60.1
