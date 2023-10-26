@@ -6947,13 +6947,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-color@npm:3.0.6":
-  version: 3.0.6
-  resolution: "@types/react-color@npm:3.0.6"
+"@types/react-color@npm:3.0.9":
+  version: 3.0.9
+  resolution: "@types/react-color@npm:3.0.9"
   dependencies:
     "@types/react": "*"
     "@types/reactcss": "*"
-  checksum: 8cd881d6eb725190be942c1d71f7917d3dd1b418417740f64fa6c03ae3ba16cb91d07c4b3b348cf5bae20071c8ca5d4aaf514c9a5318077d5e50bd782a5e8da2
+  checksum: af4fc80c177f4b1161d99031c458b31d76565e555b125f5aa794909d7e76488d957ac74d8d65837a15d31d7be8ffaa86bc71a00c8202a657ff0c0904526d493b
   languageName: node
   linkType: hard
 
@@ -20069,7 +20069,7 @@ __metadata:
     "@types/rails__activestorage": 7.0.4
     "@types/react": 18.2.15
     "@types/react-click-outside-hook": 1.0.1
-    "@types/react-color": 3.0.6
+    "@types/react-color": 3.0.9
     "@types/react-dom": 18.2.7
     "@types/react-google-recaptcha": 2.1.5
     "@types/react-onclickoutside": 6.7.4
