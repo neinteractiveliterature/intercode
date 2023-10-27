@@ -65,7 +65,7 @@
     "@types/source-map-support": "0.5.9",
     "@types/tinycolor2": "1.4.5",
     "@types/uuid": "9.0.2",
-    "@types/zxcvbn": "4.4.1",
+    "@types/zxcvbn": "4.4.3",
     "apollo-upload-client": "17.0.0",
     "array-to-sentence": "2.0.0",
     "assert-never": "1.2.1",
