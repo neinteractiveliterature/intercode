@@ -311,7 +311,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@npm:^7.11.6, @babel/core@npm:^7.12.3, @babel/core@npm:^7.14.0, @babel/core@npm:^7.18.6, @babel/core@npm:^7.19.6, @babel/core@npm:^7.21.3, @babel/core@npm:^7.9.0":
+"@babel/core@npm:^7.11.6, @babel/core@npm:^7.12.3, @babel/core@npm:^7.14.0, @babel/core@npm:^7.18.6, @babel/core@npm:^7.19.6, @babel/core@npm:^7.21.3":
   version: 7.22.5
   resolution: "@babel/core@npm:7.22.5"
   dependencies:
@@ -1677,7 +1677,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/preset-env@npm:^7.18.6, @babel/preset-env@npm:^7.19.4, @babel/preset-env@npm:^7.20.2, @babel/preset-env@npm:^7.8.7":
+"@babel/preset-env@npm:^7.18.6, @babel/preset-env@npm:^7.19.4, @babel/preset-env@npm:^7.20.2":
   version: 7.22.5
   resolution: "@babel/preset-env@npm:7.22.5"
   dependencies:
@@ -1798,7 +1798,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/preset-typescript@npm:^7.18.6, @babel/preset-typescript@npm:^7.21.0, @babel/preset-typescript@npm:^7.8.3":
+"@babel/preset-typescript@npm:^7.18.6, @babel/preset-typescript@npm:^7.21.0":
   version: 7.22.5
   resolution: "@babel/preset-typescript@npm:7.22.5"
   dependencies:
@@ -4408,7 +4408,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jest/console@npm:^29.0.2, @jest/console@npm:^29.6.1":
+"@jest/console@npm:^29.6.1":
   version: 29.6.1
   resolution: "@jest/console@npm:29.6.1"
   dependencies:
@@ -5810,15 +5810,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sinonjs/commons@npm:^1, @sinonjs/commons@npm:^1.6.0, @sinonjs/commons@npm:^1.7.0, @sinonjs/commons@npm:^1.8.1":
-  version: 1.8.1
-  resolution: "@sinonjs/commons@npm:1.8.1"
-  dependencies:
-    type-detect: 4.0.8
-  checksum: 8f258c039275d217b654c94731409208a3530c56f64ebc2a1bddaa82045800c7f9dbd09806d6dc451ee12cb79c7a5d509a58ad28179a83336da266ba5c231912
-  languageName: node
-  linkType: hard
-
 "@sinonjs/commons@npm:^2.0.0":
   version: 2.0.0
   resolution: "@sinonjs/commons@npm:2.0.0"
@@ -5834,43 +5825,6 @@ __metadata:
   dependencies:
     "@sinonjs/commons": ^2.0.0
   checksum: c62aa98e7cefda8dedc101ce227abc888dc46b8ff9706c5f0a8dfd9c3ada97d0a5611384738d9ba0b26b59f99c2ba24efece8e779bb08329e9e87358fa309824
-  languageName: node
-  linkType: hard
-
-"@sinonjs/fake-timers@npm:^6.0.0, @sinonjs/fake-timers@npm:^6.0.1":
-  version: 6.0.1
-  resolution: "@sinonjs/fake-timers@npm:6.0.1"
-  dependencies:
-    "@sinonjs/commons": ^1.7.0
-  checksum: 8e331aa1412d905ecc8efd63550f58a6f77dcb510f878172004e53be63eb82650623618763001a918fc5e21257b86c45041e4e97c454ed6a2d187de084abbd11
-  languageName: node
-  linkType: hard
-
-"@sinonjs/formatio@npm:^5.0.1":
-  version: 5.0.1
-  resolution: "@sinonjs/formatio@npm:5.0.1"
-  dependencies:
-    "@sinonjs/commons": ^1
-    "@sinonjs/samsam": ^5.0.2
-  checksum: 6f751c79a272f491395de1ae3821000526ac487b96d92ca3b4ec9e965ad64df6beac1fb8e5a03017dc9f4b18e8624170899ea3a6af628b8d32e3eb25e8c7e9ed
-  languageName: node
-  linkType: hard
-
-"@sinonjs/samsam@npm:^5.0.2, @sinonjs/samsam@npm:^5.2.0":
-  version: 5.2.0
-  resolution: "@sinonjs/samsam@npm:5.2.0"
-  dependencies:
-    "@sinonjs/commons": ^1.6.0
-    lodash.get: ^4.4.2
-    type-detect: ^4.0.8
-  checksum: 4e049c0d5290c906d6294ccfa263c7f88de8e35ae2fea9761b7a7be6bcfd2d00a954f7fe8a1521829ffb8f02303ae2d091e7642479e8325ac3d9357adfd587e1
-  languageName: node
-  linkType: hard
-
-"@sinonjs/text-encoding@npm:^0.7.1":
-  version: 0.7.1
-  resolution: "@sinonjs/text-encoding@npm:0.7.1"
-  checksum: 130de0bb568c5f8a611ec21d1a4e3f80ab0c5ec333010f49cfc1adc5cba6d8808699c8a587a46b0f0b016a1f4c1389bc96141e773e8460fcbb441875b2e91ba7
   languageName: node
   linkType: hard
 
@@ -10942,7 +10896,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"diff@npm:^4.0.1, diff@npm:^4.0.2":
+"diff@npm:^4.0.1":
   version: 4.0.2
   resolution: "diff@npm:4.0.2"
   checksum: f2c09b0ce4e6b301c221addd83bf3f454c0bc00caa3dd837cf6c127d6edf7223aa2bbe3b688feea110b7f262adbfc845b757c44c8a9f8c0c5b15d8fa9ce9d20d
@@ -15128,25 +15082,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-html-reporter@npm:3.10.1":
-  version: 3.10.1
-  resolution: "jest-html-reporter@npm:3.10.1"
+"jest-html-reporter@npm:3.10.2":
+  version: 3.10.2
+  resolution: "jest-html-reporter@npm:3.10.2"
   dependencies:
-    "@babel/core": ^7.9.0
-    "@babel/preset-env": ^7.8.7
-    "@babel/preset-typescript": ^7.8.3
-    "@jest/console": ^29.0.2
     "@jest/test-result": ^29.0.2
     "@jest/types": ^29.0.2
     dateformat: 3.0.2
     mkdirp: ^1.0.3
-    sinon: ^9.0.1
     strip-ansi: 6.0.1
     xmlbuilder: 15.0.0
   peerDependencies:
     jest: 19.x - 29.x
     typescript: ^3.7.x || ^4.3.x || ^5.x
-  checksum: 3fe54d3a8a9a476f7b20f40e920be7c201890a32a1c9beba3133a93fce93ecd6ad817b28b4deba5e9e57b490eab1f6fff54d1e69e1b5f7452781f0a33ea33005
+  checksum: a8376fbfde183d1c797393113e55e20bdba06f84cd66f6f97af60d67b9d160e7f593211146c4c37feb0e809c26c5bf0aef966473cdd74227330fd24156cbef8b
   languageName: node
   linkType: hard
 
@@ -15709,13 +15658,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"just-extend@npm:^4.0.2":
-  version: 4.1.1
-  resolution: "just-extend@npm:4.1.1"
-  checksum: 066808f9a4b8b87d4966d42eca4ed7ee3602791ac70bf4d55bc2f44b0a2214a9dd05976d9581877731f8536f6eae11fee28968a5fabea5e43df7c965966126f4
-  languageName: node
-  linkType: hard
-
 "kdbush@npm:^3.0.0":
   version: 3.0.0
   resolution: "kdbush@npm:3.0.0"
@@ -16011,7 +15953,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash.get@npm:^4.0, lodash.get@npm:^4.4.2":
+"lodash.get@npm:^4.0":
   version: 4.4.2
   resolution: "lodash.get@npm:4.4.2"
   checksum: e403047ddb03181c9d0e92df9556570e2b67e0f0a930fcbbbd779370972368f5568e914f913e93f3b08f6d492abc71e14d4e9b7a18916c31fa04bd2306efe545
@@ -16837,19 +16779,6 @@ __metadata:
   version: 2.6.2
   resolution: "neo-async@npm:2.6.2"
   checksum: deac9f8d00eda7b2e5cd1b2549e26e10a0faa70adaa6fdadca701cc55f49ee9018e427f424bac0c790b7c7e2d3068db97f3093f1093975f2acb8f8818b936ed9
-  languageName: node
-  linkType: hard
-
-"nise@npm:^4.0.4":
-  version: 4.0.4
-  resolution: "nise@npm:4.0.4"
-  dependencies:
-    "@sinonjs/commons": ^1.7.0
-    "@sinonjs/fake-timers": ^6.0.0
-    "@sinonjs/text-encoding": ^0.7.1
-    just-extend: ^4.0.2
-    path-to-regexp: ^1.7.0
-  checksum: b03b5608d73ba9401d92f773e5f3a4d361cdb281ee9b0a9c9cb88c9f5aa8323c8876977e879db650c78503033dabbb850f46beef79b356c212c33be7410a967c
   languageName: node
   linkType: hard
 
@@ -20236,7 +20165,7 @@ __metadata:
     i18next-parser: 8.2.0
     jest: 29.6.1
     jest-environment-jsdom: 29.6.1
-    jest-html-reporter: 3.10.1
+    jest-html-reporter: 3.10.2
     jest-junit: 16.0.0
     jest-prop-type-error: 1.1.0
     js-search: 2.0.1
@@ -20875,21 +20804,6 @@ __metadata:
   dependencies:
     is-arrayish: ^0.3.1
   checksum: a7f3f2ab5c76c4472d5c578df892e857323e452d9f392e1b5cf74b74db66e6294a1e1b8b390b519fa1b96b5b613f2a37db6cffef52c3f1f8f3c5ea64eb2d54c0
-  languageName: node
-  linkType: hard
-
-"sinon@npm:^9.0.1":
-  version: 9.2.1
-  resolution: "sinon@npm:9.2.1"
-  dependencies:
-    "@sinonjs/commons": ^1.8.1
-    "@sinonjs/fake-timers": ^6.0.1
-    "@sinonjs/formatio": ^5.0.1
-    "@sinonjs/samsam": ^5.2.0
-    diff: ^4.0.2
-    nise: ^4.0.4
-    supports-color: ^7.1.0
-  checksum: 5d82f69b2b290d8398a78c67557a8c53bc5a03df1c649143eeaa02182b2f5b484631891c8ca00a953d5b6a0b630a8ccbafccde969a9255d1fc2511c3a6123a71
   languageName: node
   linkType: hard
 
@@ -22171,7 +22085,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"type-detect@npm:4.0.8, type-detect@npm:^4.0.8":
+"type-detect@npm:4.0.8":
   version: 4.0.8
   resolution: "type-detect@npm:4.0.8"
   checksum: 62b5628bff67c0eb0b66afa371bd73e230399a8d2ad30d852716efcc4656a7516904570cd8631a49a3ce57c10225adf5d0cbdcb47f6b0255fe6557c453925a15
