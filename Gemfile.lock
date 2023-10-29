@@ -434,7 +434,7 @@ GEM
       nio4r (~> 2.0)
     puma (6.3.1-java)
       nio4r (~> 2.0)
-    pundit (2.3.0)
+    pundit (2.3.1)
       activesupport (>= 3.0.0)
     racc (1.7.1)
     racc (1.7.1-java)
