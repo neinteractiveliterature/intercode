@@ -5,7 +5,7 @@
 #
 #  id               :bigint           not null, primary key
 #  schedule_note    :text
-#  starts_at        :datetime
+#  starts_at        :datetime         not null
 #  timespan_tsrange :tsrange          not null
 #  title_suffix     :string
 #  created_at       :datetime

@@ -2377,7 +2377,7 @@ ALTER SEQUENCE public.root_sites_id_seq OWNED BY public.root_sites.id;
 CREATE TABLE public.runs (
     id bigint NOT NULL,
     event_id bigint NOT NULL,
-    starts_at timestamp without time zone,
+    starts_at timestamp without time zone NOT NULL,
     title_suffix character varying,
     schedule_note text,
     updated_by_id bigint,
@@ -5932,6 +5932,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20230112164622'),
 ('20230113184026'),
 ('20230113220828'),
-('20230808164646');
+('20230808164646'),
+('20231105161432');
 
 

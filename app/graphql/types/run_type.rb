@@ -30,7 +30,7 @@ class Types::RunType < Types::BaseObject
   field :confirmed_signup_count, Integer, null: false
 
   def confirmed_signup_count
-    SignupCountLoader.for.load(object).then { |presenter| presenter.counted_signups_by_state('confirmed') }
+    SignupCountLoader.for.load(object).then { |presenter| presenter.counted_signups_by_state("confirmed") }
   end
 
   field :confirmed_limited_signup_count, Integer, null: false
@@ -52,14 +52,14 @@ class Types::RunType < Types::BaseObject
       .for
       .load(object)
       .then do |presenter|
-        (presenter.not_counted_signups_by_state('confirmed') + presenter.not_counted_signups_by_state('waitlisted'))
+        (presenter.not_counted_signups_by_state("confirmed") + presenter.not_counted_signups_by_state("waitlisted"))
       end
   end
 
   field :not_counted_confirmed_signup_count, Integer, null: false
 
   def not_counted_confirmed_signup_count
-    SignupCountLoader.for.load(object).then { |presenter| presenter.not_counted_signups_by_state('confirmed') }
+    SignupCountLoader.for.load(object).then { |presenter| presenter.not_counted_signups_by_state("confirmed") }
   end
 
   field :grouped_signup_counts, [Types::GroupedSignupCountType], null: false
@@ -71,7 +71,7 @@ class Types::RunType < Types::BaseObject
   field :signup_count_by_state_and_bucket_key_and_counted,
         Types::JSON,
         null: false,
-        deprecation_reason: 'Please use grouped_signup_counts instead'
+        deprecation_reason: "Please use grouped_signup_counts instead"
 
   def signup_count_by_state_and_bucket_key_and_counted
     SignupCountLoader.for.load(object).then(&:signup_count_by_state_and_bucket_key_and_counted)
@@ -107,9 +107,10 @@ class Types::RunType < Types::BaseObject
   def signups_paginated(**args)
     scope = object.signups.includes(:user_con_profile)
 
-    Tables::SignupsTableResultsPresenter
-      .new(scope, pundit_user, args[:filters].to_h, args[:sort])
-      .paginate(page: args[:page], per_page: args[:per_page])
+    Tables::SignupsTableResultsPresenter.new(scope, pundit_user, args[:filters].to_h, args[:sort]).paginate(
+      page: args[:page],
+      per_page: args[:per_page]
+    )
   end
 
   pagination_field(
@@ -131,8 +132,9 @@ class Types::RunType < Types::BaseObject
         )
       ).resolve
 
-    Tables::SignupChangesTableResultsPresenter
-      .new(scope, args[:filters].to_h, args[:sort])
-      .paginate(page: args[:page], per_page: args[:per_page])
+    Tables::SignupChangesTableResultsPresenter.new(scope, args[:filters].to_h, args[:sort]).paginate(
+      page: args[:page],
+      per_page: args[:per_page]
+    )
   end
 end
