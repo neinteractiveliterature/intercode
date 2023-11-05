@@ -2367,7 +2367,7 @@ export type EventProposal = {
   owner: UserConProfile;
   registration_policy?: Maybe<RegistrationPolicy>;
   status: Scalars['String']['output'];
-  submitted_at: Scalars['Date']['output'];
+  submitted_at?: Maybe<Scalars['Date']['output']>;
   title?: Maybe<Scalars['String']['output']>;
   updated_at: Scalars['Date']['output'];
 };

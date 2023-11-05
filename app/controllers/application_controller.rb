@@ -2,7 +2,7 @@
 class ApplicationController < ActionController::Base
   ASSUMED_IDENTITY_SESSION_LOGGING_OMIT_HEADERS = Set.new(%w[Cookie X-Csrf-Token])
 
-  include Pundit
+  include Pundit::Authorization
   include CmsContentHelpers
   include ProfileSetupWorkflow
   helper_method :effective_cms_layout
@@ -44,19 +44,19 @@ class ApplicationController < ActionController::Base
       redirect_to root_url, alert: error.message
     else
       session[:user_return_to] = request.url
-      redirect_to root_url(show_authentication: 'signIn')
+      redirect_to root_url(show_authentication: "signIn")
     end
   end
 
   def graphql_authenticity_token
-    form_authenticity_token(form_options: { action: graphql_path, method: 'POST' })
+    form_authenticity_token(form_options: { action: graphql_path, method: "POST" })
   end
   helper_method :graphql_authenticity_token
 
   def app_component_props
     {
       recaptchaSiteKey: Recaptcha.configuration.site_key,
-      mapboxAccessToken: ENV['MAPBOX_ACCESS_TOKEN'],
+      mapboxAccessToken: ENV["MAPBOX_ACCESS_TOKEN"],
       railsDirectUploadsUrl: rails_direct_uploads_url,
       railsDefaultActiveStorageServiceName: Rails.application.config.active_storage.service.to_s
     }
@@ -79,7 +79,7 @@ class ApplicationController < ActionController::Base
   # the Intercode::FindVirtualHost Rack middleware having already run, since it sets the key
   # "intercode.convention" inside the Rack environment.
   def convention
-    @convention ||= request.env['intercode.convention']
+    @convention ||= request.env["intercode.convention"]
   end
   helper_method :convention
 
@@ -123,10 +123,10 @@ class ApplicationController < ActionController::Base
 
   def timezone_for_request
     @timezone_for_request ||=
-      if convention&.timezone_mode == 'convention_local'
+      if convention&.timezone_mode == "convention_local"
         convention.timezone
-      elsif request.headers['X-Intercode-User-Timezone'].present?
-        ActiveSupport::TimeZone[request.headers['X-Intercode-User-Timezone']]
+      elsif request.headers["X-Intercode-User-Timezone"].present?
+        ActiveSupport::TimeZone[request.headers["X-Intercode-User-Timezone"]]
       end
   end
 
@@ -189,8 +189,8 @@ class ApplicationController < ActionController::Base
       http_headers:
         request
           .env
-          .select { |k, _v| k.start_with? 'HTTP_' }
-          .transform_keys { |k| k.sub(/^HTTP_/, '').split('_').map(&:capitalize).join('-') }
+          .select { |k, _v| k.start_with? "HTTP_" }
+          .transform_keys { |k| k.sub(/^HTTP_/, "").split("_").map(&:capitalize).join("-") }
           .reject { |k, _v| ASSUMED_IDENTITY_SESSION_LOGGING_OMIT_HEADERS.include?(k) },
       http_body: request.raw_post
     }
@@ -213,14 +213,14 @@ sites, please use the “Revert to #{assumed_identity_from_profile.name}” opti
   end
 
   def no_cache
-    response.headers['Cache-Control'] = 'no-cache, no-store, max-age=0, must-revalidate'
-    response.headers['Pragma'] = 'no-cache'
-    response.headers['Expires'] = 'Fri, 01 Jan 1990 00:00:00 GMT'
+    response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "Fri, 01 Jan 1990 00:00:00 GMT"
   end
 
   def devise_or_doorkeeper_controller?
     return true if devise_controller?
-    return true if self.class.name.start_with?('Doorkeeper::')
+    return true if self.class.name.start_with?("Doorkeeper::")
     false
   end
 end

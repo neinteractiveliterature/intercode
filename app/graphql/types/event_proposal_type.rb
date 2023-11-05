@@ -8,7 +8,7 @@ class Types::EventProposalType < Types::BaseObject
   field :title, String, null: true
   field :status, String, null: false
   field :convention, Types::ConventionType, null: false
-  field :submitted_at, Types::DateType, null: false
+  field :submitted_at, Types::DateType, null: true
   field :created_at, Types::DateType, null: false
   field :updated_at, Types::DateType, null: false
   field :registration_policy, Types::RegistrationPolicyType, null: true

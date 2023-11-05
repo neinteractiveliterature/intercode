@@ -2942,7 +2942,7 @@ type EventProposal {
   owner: UserConProfile!
   registration_policy: RegistrationPolicy
   status: String!
-  submitted_at: Date!
+  submitted_at: Date
   title: String
   updated_at: Date!
 }
