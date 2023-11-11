@@ -12,67 +12,67 @@ jobs:
     runs-on: ubuntu-latest
     if: github.actor != 'dependabot[bot]'
     steps:
-    - uses: actions/checkout@v3
-    - name: Install libvips42
-      run: sudo apt-get update && sudo apt-get install libvips42
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        bundler-cache: true
-    - name: Generate GraphQL schema file
-      run: bin/rails graphql:schema:dump
-    - uses: kamilkisiela/graphql-inspector@master
-      with:
-        schema: 'main:schema.graphql'
-        approve-label: major
+      - uses: actions/checkout@v3
+      - name: Install libvips42
+        run: sudo apt-get update && sudo apt-get install libvips42
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - name: Generate GraphQL schema file
+        run: bin/rails graphql:schema:dump
+      - uses: kamilkisiela/graphql-inspector@master
+        with:
+          schema: 'main:schema.graphql'
+          approve-label: major
   graphql-codegen-tsc:
     name: graphql-codegen-tsc
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Read .node-version
-      id: node-version
-      run: echo "node-version=$(cat .node-version)" >> $GITHUB_OUTPUT
-    - name: install node
-      uses: actions/setup-node@v3
-      with:
-        cache: yarn
-        node-version: ${{ steps.node-version.outputs.node-version }}
-    - name: yarn install
-      run: yarn install
-    - name: graphql-codegen
-      run: yarn run graphql:codegen
-    - name: tsc on resulting generated files
-      run: yarn run tsc --noEmit
+      - uses: actions/checkout@v3
+      - name: Read .node-version
+        id: node-version
+        run: echo "node-version=$(cat .node-version)" >> $GITHUB_OUTPUT
+      - name: install node
+        uses: actions/setup-node@v3
+        with:
+          cache: yarn
+          node-version: ${{ steps.node-version.outputs.node-version }}
+      - name: yarn install
+        run: yarn install
+      - name: graphql-codegen
+        run: yarn run graphql:codegen
+      - name: tsc on resulting generated files
+        run: yarn run tsc --noEmit
   jest:
     name: jest
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Read .node-version
-      id: node-version
-      run: echo "node-version=$(cat .node-version)" >> $GITHUB_OUTPUT
-    - name: install node
-      uses: actions/setup-node@v3
-      with:
-        cache: yarn
-        node-version: ${{ steps.node-version.outputs.node-version }}
-    - name: yarn install
-      run: yarn install
-    - name: build
-      run: yarn run test
-    - name: Publish Test Report
-      uses: mikepenz/action-junit-report@v3
-      if: always() # always run even if the previous step fails
-      with:
-        check_name: 'Jest Report'
-        report_paths: 'test/reports/TEST-*.xml'
-    - name: Archive HTML test reports
-      uses: actions/upload-artifact@v3
-      if: always()
-      with:
-        name: test-reports
-        path: test/html_reports
+      - uses: actions/checkout@v3
+      - name: Read .node-version
+        id: node-version
+        run: echo "node-version=$(cat .node-version)" >> $GITHUB_OUTPUT
+      - name: install node
+        uses: actions/setup-node@v3
+        with:
+          cache: yarn
+          node-version: ${{ steps.node-version.outputs.node-version }}
+      - name: yarn install
+        run: yarn install
+      - name: build
+        run: yarn run test
+      - name: Publish Test Report
+        uses: mikepenz/action-junit-report@v3
+        if: always() # always run even if the previous step fails
+        with:
+          check_name: 'Jest Report'
+          report_paths: 'test/reports/TEST-*.xml'
+      - name: Archive HTML test reports
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: test-reports
+          path: test/html_reports
   minitest:
     name: minitest
     runs-on: ubuntu-latest
@@ -118,111 +118,109 @@ jobs:
   docker-build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up webpack cache
-      uses: actions/cache@v3
-      id: webpack-cache # use this to check for `cache-hit` (`steps.webpack-cache.outputs.cache-hit != 'true'`)
-      with:
-        path: build-cache
-        key: ${{ runner.os }}-dockerimage-webpack-${{ github.ref }}
-        restore-keys: |
-          ${{ runner.os }}-dockerimage-webpack-${{ github.ref }}-
-          ${{ runner.os }}-dockerimage-webpack-
-    - name: Read .node-version
-      id: node-version
-      run: echo "node-version=$(cat .node-version)" >> $GITHUB_OUTPUT
-    - name: install node
-      uses: actions/setup-node@v3
-      with:
-        cache: yarn
-        node-version: ${{ steps.node-version.outputs.node-version }}
-    - name: yarn install
-      run: yarn install
-    - name: Log in to registry
-      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-    - name: Build webpack bundle
-      run: yarn run build
-    - name: Set up QEMU
-      uses: docker/setup-qemu-action@v2
-    - name: Set up Docker Buildx
-      id: buildx
-      uses: docker/setup-buildx-action@master
-    - name: Read .ruby-version
-      id: ruby-version
-      run: echo "ruby-version=$(cat .ruby-version)" >> $GITHUB_OUTPUT
-    - name: Build (and push to registry, if on main)
-      uses: docker/build-push-action@v4
-      with:
-        context: .
-        push: ${{ github.event_name == 'push' && github.event.ref == 'refs/heads/main' }}
-        platforms: linux/amd64
-        target: production
-        tags: |
-          ghcr.io/neinteractiveliterature/intercode:${{ github.sha }}
-        build-args: |
-          RUBY_VERSION=${{ steps.ruby-version.outputs.ruby-version }}
-          NODE_VERSION=${{ steps.node-version.outputs.node-version }}
-    - name: Build assets only (and push to registry, if on main)
-      uses: docker/build-push-action@v4
-      if: github.event_name == 'push' && github.event.ref == 'refs/heads/main'
-      with:
-        context: .
-        file: Dockerfile.assets
-        push: ${{ github.event_name == 'push' && github.event.ref == 'refs/heads/main' }}
-        platforms: linux/amd64
-        tags: |
-          ghcr.io/neinteractiveliterature/intercode-assets:${{ github.sha }}
-        build-args: |
-          BASEIMAGE=ghcr.io/neinteractiveliterature/intercode:${{ github.sha }}
+      - uses: actions/checkout@v3
+      - name: Set up webpack cache
+        uses: actions/cache@v3
+        id: webpack-cache # use this to check for `cache-hit` (`steps.webpack-cache.outputs.cache-hit != 'true'`)
+        with:
+          path: build-cache
+          key: ${{ runner.os }}-dockerimage-webpack-${{ github.ref }}
+          restore-keys: |
+            ${{ runner.os }}-dockerimage-webpack-${{ github.ref }}-
+            ${{ runner.os }}-dockerimage-webpack-
+      - name: Read .node-version
+        id: node-version
+        run: echo "node-version=$(cat .node-version)" >> $GITHUB_OUTPUT
+      - name: install node
+        uses: actions/setup-node@v3
+        with:
+          cache: yarn
+          node-version: ${{ steps.node-version.outputs.node-version }}
+      - name: yarn install
+        run: yarn install
+      - name: Log in to registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      - name: Build webpack bundle
+        run: yarn run build
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@master
+      - name: Read .ruby-version
+        id: ruby-version
+        run: echo "ruby-version=$(cat .ruby-version)" >> $GITHUB_OUTPUT
+      - name: Build (and push to registry, if on main)
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: ${{ github.event_name == 'push' && github.event.ref == 'refs/heads/main' }}
+          platforms: linux/amd64
+          target: production
+          tags: |
+            ghcr.io/neinteractiveliterature/intercode:${{ github.sha }}
+          build-args: |
+            RUBY_VERSION=${{ steps.ruby-version.outputs.ruby-version }}
+            NODE_VERSION=${{ steps.node-version.outputs.node-version }}
+      - name: Build assets only (and push to registry, if on main)
+        uses: docker/build-push-action@v4
+        if: github.event_name == 'push' && github.event.ref == 'refs/heads/main'
+        with:
+          context: .
+          file: Dockerfile.assets
+          push: ${{ github.event_name == 'push' && github.event.ref == 'refs/heads/main' }}
+          platforms: linux/amd64
+          tags: |
+            ghcr.io/neinteractiveliterature/intercode-assets:${{ github.sha }}
+          build-args: |
+            BASEIMAGE=ghcr.io/neinteractiveliterature/intercode:${{ github.sha }}
   doc-site:
     name: Build doc site
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up docusaurus cache
-      uses: actions/cache@v3
-      with:
-        path: doc-site/.yarn/.cache/webpack
-        key: ${{ runner.os }}-doc-site-docusaurus-${{ github.ref }}
-        restore-keys: |
-          ${{ runner.os }}-doc-site-docusaurus-${{ github.ref }}
-          ${{ runner.os }}-doc-site-docusaurus-
-    - name: Install libvips42
-      run: sudo apt-get update && sudo apt-get install libvips42
-    - name: Read .node-version
-      id: node-version
-      run: echo "node-version=$(cat .node-version)" >> $GITHUB_OUTPUT
-    - name: install node
-      uses: actions/setup-node@v3
-      with:
-        cache: yarn
-        node-version: ${{ steps.node-version.outputs.node-version }}
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        bundler-cache: true
-    - name: Install dependencies for generating Liquid doc JSON
-      run: gem install yard toys pry --no-doc
-    - name: yarn install
-      run: yarn install
-    - name: Generate GraphQL schema
-      run: bin/rails graphql:schema:dump
-    - name: Generate Liquid doc JSON
-      run: toys update_liquid_doc_json
-    - name: Build doc site
-      run: cd doc-site && yarn run docusaurus graphql-to-doc -f && yarn node liquid-to-doc.js && yarn run build
-      env:
-        # docusaurus breaks on Node 17+ if we don't do this
-        NODE_OPTIONS: --openssl-legacy-provider
-    - name: Compress built site
-      if: github.event_name == 'push' && github.event.ref == 'refs/heads/main'
-      run: tar cfz doc-site.tar.gz ./doc-site/build
-    - name: Store built site
-      if: github.event_name == 'push' && github.event.ref == 'refs/heads/main'
-      uses: actions/upload-artifact@v3
-      with:
-        name: doc-site
-        path: doc-site.tar.gz
+      - uses: actions/checkout@v3
+      - name: Set up docusaurus cache
+        uses: actions/cache@v3
+        with:
+          path: doc-site/.yarn/.cache/webpack
+          key: ${{ runner.os }}-doc-site-docusaurus-${{ github.ref }}
+          restore-keys: |
+            ${{ runner.os }}-doc-site-docusaurus-${{ github.ref }}
+            ${{ runner.os }}-doc-site-docusaurus-
+      - name: Install libvips42
+        run: sudo apt-get update && sudo apt-get install libvips42
+      - name: Read .node-version
+        id: node-version
+        run: echo "node-version=$(cat .node-version)" >> $GITHUB_OUTPUT
+      - name: install node
+        uses: actions/setup-node@v3
+        with:
+          cache: yarn
+          node-version: ${{ steps.node-version.outputs.node-version }}
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - name: Install dependencies for generating Liquid doc JSON
+        run: gem install yard toys pry --no-doc
+      - name: yarn install
+        run: yarn install
+      - name: Generate GraphQL schema
+        run: bin/rails graphql:schema:dump
+      - name: Generate Liquid doc JSON
+        run: toys update_liquid_doc_json
+      - name: Build doc site
+        run: cd doc-site && yarn run docusaurus graphql-to-doc -f && yarn node liquid-to-doc.js && yarn run build
+        env:
+          # docusaurus breaks on Node 17+ if we don't do this
+          NODE_OPTIONS: --openssl-legacy-provider
+      - name: Compress built site
+        if: github.event_name == 'push' && github.event.ref == 'refs/heads/main'
+        run: tar cfz doc-site.tar.gz ./doc-site/build
+      - name: Store built site
+        if: github.event_name == 'push' && github.event.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v3
+        with:
+          name: doc-site
+          path: doc-site.tar.gz
   update-release-draft:
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.event.ref == 'refs/heads/main'
