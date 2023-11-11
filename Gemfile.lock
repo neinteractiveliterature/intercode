@@ -36,11 +36,11 @@ GIT
       activemodel (>= 3.0.0)
 
 GIT
-  remote: https://github.com/neinteractiveliterature/cloudwatchlogger.git
-  revision: a04f38b215c5ffceaee297cdc522d090418905b1
-  branch: pass-logger-to-client
+  remote: https://github.com/zshannon/cloudwatchlogger.git
+  revision: f6c20a8fecf06670dd58d126c29d7481d650cce9
+  branch: master
   specs:
-    cloudwatchlogger (1.0.1)
+    cloudwatchlogger (1.0.2)
       aws-sdk-cloudwatchlogs (~> 1)
       multi_json (~> 1)
       uuid (~> 2)
@@ -141,8 +141,8 @@ GEM
     aws-sdk-cloudwatchevents (1.57.0)
       aws-sdk-core (~> 3, >= 3.127.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-cloudwatchlogs (1.62.0)
-      aws-sdk-core (~> 3, >= 3.165.0)
+    aws-sdk-cloudwatchlogs (1.70.0)
+      aws-sdk-core (~> 3, >= 3.177.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-core (3.178.0)
       aws-eventstream (~> 1, >= 1.0.2)

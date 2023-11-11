@@ -30,7 +30,7 @@ class Types::RunType < Types::BaseObject
   field :confirmed_signup_count, Integer, null: false
 
   def confirmed_signup_count
-    SignupCountLoader.for.load(object).then { |presenter| presenter.counted_signups_by_state("confirmed") }
+    SignupCountLoader.for.load(object).then { |presenter| presenter.signup_count(state: "confirmed", counted: true) }
   end
 
   field :confirmed_limited_signup_count, Integer, null: false
@@ -52,14 +52,17 @@ class Types::RunType < Types::BaseObject
       .for
       .load(object)
       .then do |presenter|
-        (presenter.not_counted_signups_by_state("confirmed") + presenter.not_counted_signups_by_state("waitlisted"))
+        (
+          presenter.signup_count(state: "confirmed", counted: false) +
+            presenter.signup_count(state: "waitlisted", counted: false)
+        )
       end
   end
 
   field :not_counted_confirmed_signup_count, Integer, null: false
 
   def not_counted_confirmed_signup_count
-    SignupCountLoader.for.load(object).then { |presenter| presenter.not_counted_signups_by_state("confirmed") }
+    SignupCountLoader.for.load(object).then { |presenter| presenter.signup_count(state: "confirmed", counted: false) }
   end
 
   field :grouped_signup_counts, [Types::GroupedSignupCountType], null: false

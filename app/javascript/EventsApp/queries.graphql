@@ -46,6 +46,7 @@ fragment RunBasicSignupData on Run {
     count
     counted
     state
+    team_member
   }
 
   my_signups {

@@ -2564,7 +2564,9 @@ export type GroupedSignupCount = {
   bucket_key?: Maybe<Scalars['String']['output']>;
   count: Scalars['Int']['output'];
   counted: Scalars['Boolean']['output'];
+  requested_bucket_key?: Maybe<Scalars['String']['output']>;
   state: SignupState;
+  team_member: Scalars['Boolean']['output'];
 };
 
 export type LiquidAssign = {

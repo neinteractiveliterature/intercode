@@ -3159,7 +3159,9 @@ type GroupedSignupCount {
   bucket_key: String
   count: Int!
   counted: Boolean!
+  requested_bucket_key: String
   state: SignupState!
+  team_member: Boolean!
 }
 
 """

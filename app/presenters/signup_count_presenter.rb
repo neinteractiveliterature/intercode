@@ -3,71 +3,118 @@ class SignupCountPresenter
   include SortBuckets
   include ActionView::Helpers::TextHelper
 
-  attr_reader :run
+  DIMENSIONS = %i[state bucket_key requested_bucket_key counted team_member]
 
-  # Initializes the signups-by-state-and-bucket hash with empty arrays for each state/bucket
-  # combination
-  def self.empty_signups_hash(default_value, buckets)
-    Signup::STATES.each_with_object({}) do |state, states_hash|
-      states_hash[state] = buckets.each_with_object({}) do |bucket, buckets_hash|
-        buckets_hash[bucket.key] = default_value.dup
-      end
-      states_hash[state][nil] = default_value.dup # Some signups are not in any bucket
+  class SignupCountRow
+    attr_reader :count, :state, :bucket_key, :requested_bucket_key, :counted, :team_member
+
+    def self.from_data(count, data)
+      state, bucket_key, requested_bucket_key, counted, team_member = data
+
+      new(
+        count: count,
+        state: state,
+        bucket_key: bucket_key,
+        requested_bucket_key: requested_bucket_key,
+        counted: counted || false,
+        team_member: team_member || false
+      )
+    end
+
+    def initialize(count:, state:, bucket_key:, requested_bucket_key:, counted:, team_member:)
+      @count = count
+      @state = state
+      @bucket_key = bucket_key
+      @requested_bucket_key = requested_bucket_key
+      @counted = counted
+      @team_member = team_member
+    end
+
+    def attributes
+      {
+        count: count,
+        state: state,
+        bucket_key: bucket_key,
+        requested_bucket_key: requested_bucket_key,
+        counted: counted,
+        team_member: team_member
+      }
     end
   end
+
+  class SignupCountData
+    attr_reader :dimension
+
+    def initialize(dimension, rows)
+      @dimension = dimension
+      @rows_by_dimension =
+        rows
+          .group_by { |row| row.public_send(dimension) }
+          .transform_values do |rows_subset|
+            final? ? rows_subset.sum(&:count) : SignupCountData.new(next_dimension, rows_subset)
+          end
+      @final = nil
+    end
+
+    def next_dimension
+      @next_dimension ||= DIMENSIONS[DIMENSIONS.index(dimension) + 1]
+    end
+
+    def final?
+      return @final unless @final.nil?
+      @final = dimension == DIMENSIONS[DIMENSIONS.size - 1]
+    end
+
+    def count(**filters)
+      filtered_data =
+        (filters.key?(dimension) ? [@rows_by_dimension[filters.fetch(dimension)]] : @rows_by_dimension.values)
+      final? ? filtered_data.sum : filtered_data.sum { |data| data&.count(**filters) || 0 }
+    end
+
+    def grouped_data
+      if final?
+        @rows_by_dimension.map { |key, value| { dimension => key, :count => value } }
+      else
+        @rows_by_dimension.flat_map { |key, value| value.grouped_data.map { |row| { dimension => key, **row } } }
+      end
+    end
+  end
+
+  attr_reader :run
 
   def self.effective_bucket_key(state, bucket_key, requested_bucket_key)
     return requested_bucket_key if state == "waitlisted"
     bucket_key
   end
 
-  def self.group_signup_count_data(data)
-    grouped_data = {}
-
-    data.each do |(state, bucket_key, requested_bucket_key, counted), count|
-      group_key = {
-        state: state,
-        bucket_key: effective_bucket_key(state, bucket_key, requested_bucket_key),
-        counted: counted || false
-      }
-      grouped_data[group_key] ||= 0
-      grouped_data[group_key] += count
-    end
-
-    grouped_data.map { |group_key, count| group_key.merge(count: count) }
-  end
-
-  def self.process_signup_count_data(buckets, data)
-    default_value = { counted: 0, not_counted: 0 }
-    signup_count_hash = empty_signups_hash(default_value, buckets)
-
-    data.each do |(state, bucket_key, requested_bucket_key, counted), count|
-      hash_bucket_key = effective_bucket_key(state, bucket_key, requested_bucket_key)
-      counted_key = counted ? :counted : :not_counted
-
-      signup_count_hash[state][hash_bucket_key] ||= default_value.dup
-      signup_count_hash[state][hash_bucket_key][counted_key] ||= 0
-      signup_count_hash[state][hash_bucket_key][counted_key] += count
-    end
-
-    signup_count_hash
+  def self.group_count_signups(scope)
+    scope
+      .joins(run: :event)
+      .joins(
+        "LEFT JOIN team_members ON team_members.event_id = events.id \
+AND team_members.user_con_profile_id = signups.user_con_profile_id"
+      )
+      .group(:run_id, :state, :bucket_key, :requested_bucket_key, :counted, "team_members.id IS NOT NULL")
+      .count
   end
 
   def self.signup_count_data_for_runs(runs)
-    data_with_run_ids =
-      Signup.where(run_id: runs.map(&:id)).group(:run_id, :state, :bucket_key, :requested_bucket_key, :counted).count
+    data_with_run_ids = group_count_signups(Signup.where(run_id: runs.map(&:id)))
 
     data_with_run_ids
       .to_a
       .group_by { |(key, _)| key.first }
       .transform_values do |run_data|
-        run_data.each_with_object({}) { |((_run_id, *key), value), hash| hash[key] = value }
+        rows = run_data.map { |(_run_id, *data), count| SignupCountRow.from_data(count, data) }
+        SignupCountData.new(DIMENSIONS[0], rows)
       end
   end
 
   def self.for_runs(runs)
     data_by_run_id = signup_count_data_for_runs(runs)
-    runs.each_with_object({}) { |run, hash| hash[run.id] = new(run, count_data: data_by_run_id[run.id] || []) }
+    runs.each_with_object({}) do |run, hash|
+      hash[run.id] = new(run, count_data: data_by_run_id[run.id] || SignupCountData.new(DIMENSIONS[0], []))
+    end
   end
 
   def initialize(run, count_data: nil)
@@ -76,7 +123,12 @@ class SignupCountPresenter
   end
 
   def count_data
-    @count_data ||= Signup.where(run_id: run.id).group(:state, :bucket_key, :requested_bucket_key, :counted).count
+    @count_data ||=
+      begin
+        data_with_run_ids = SignupCountPresenter.group_count_signups(Signup.where(run_id: run.id))
+        rows = data_with_run_ids.to_a.map { |(_run_id, *data), count| SignupCountRow.from_data(count, data) }
+        SignupCountData.new(DIMENSIONS[0], rows)
+      end
   end
 
   def signups_description
@@ -92,53 +144,43 @@ class SignupCountPresenter
 
   def bucket_descriptions(state)
     counted_key = counted_key_for_state(state)
-    signups_by_bucket_key = signup_count_by_state_and_bucket_key_and_counted[state]
 
     if buckets.size == 1
-      [signups_by_bucket_key.values.first[counted_key].to_s]
+      [count_data.count(bucket_key: buckets.first.key, counted: counted_key).to_s]
     else
       bucket_texts =
         buckets.map do |bucket|
           bucket_counted_key = counted_key
           bucket_counted_key = :not_counted if bucket.not_counted?
-          "#{bucket.name}: #{signups_by_bucket_key[bucket.key][bucket_counted_key]}"
+          "#{bucket.name}: #{count_data.count(bucket_key: bucket.key, counted: bucket_counted_key)}"
         end
 
-      if state == "waitlisted" && (signups_by_bucket_key[nil] && (signups_by_bucket_key[nil][:not_counted]).positive?)
-        bucket_texts << "No preference: #{signups_by_bucket_key[nil][:not_counted]}"
-      end
+      no_pref_count = count_data.count(requested_bucket_key: nil, counted: false)
+      bucket_texts << "No preference: #{no_pref_count}" if state == "waitlisted" && no_pref_count.positive?
 
       bucket_texts
     end
   end
 
   def counted_key_for_state(state)
-    return :not_counted if state != "confirmed" || registration_policy.only_uncounted?
-    :counted
+    return false if state != "confirmed" || registration_policy.only_uncounted?
+    true
   end
 
   def confirmed_count
-    @confirmed_count ||= counted_signups_by_state("confirmed")
+    @confirmed_count ||= count_data.count(state: "confirmed")
   end
 
   def confirmed_limited_count
     @confirmed_limited_count ||=
       buckets
         .select(&:slots_limited?)
-        .sum { |bucket| signup_count_by_state_and_bucket_key_and_counted["confirmed"][bucket.key][:counted] }
+        .sum { |bucket| count_data.count(state: "confirmed", bucket_key: bucket.key, counted: true) }
   end
 
   # Waitlisted signups are never counted, so count them all here
   def waitlist_count
-    @waitlist_count ||= signup_count_by_state_and_bucket_key_and_counted["waitlisted"].values.flat_map(&:values).sum
-  end
-
-  def confirmed_count_for_bucket(bucket_key)
-    signup_count_by_state_and_bucket_key_and_counted["confirmed"][bucket_key][:counted]
-  end
-
-  def confirmed_count_for_bucket_including_not_counted(bucket_key)
-    signup_count_by_state_and_bucket_key_and_counted["confirmed"][bucket_key].values.sum
+    @waitlist_count ||= count_data.count(state: "waitlisted")
   end
 
   def capacity_fraction_for_bucket(bucket_key)
@@ -146,7 +188,7 @@ class SignupCountPresenter
     return 1.0 if bucket.slots_unlimited?
     return 0.0 if bucket.total_slots.zero?
 
-    remaining_slots = (bucket.total_slots - confirmed_count_for_bucket_including_not_counted(bucket_key))
+    remaining_slots = (bucket.total_slots - count_data.count(state: "confirmed", bucket_key: bucket_key))
     remaining_slots.to_f / bucket.total_slots
   end
 
@@ -154,52 +196,12 @@ class SignupCountPresenter
     waitlist_count.positive?
   end
 
-  def counted_signups_by_state(state)
-    counts_by_bucket_key_and_counted = signup_count_by_state_and_bucket_key_and_counted[state]
-    counts_by_bucket_key_and_counted.sum { |_bucket_key, counts_by_counted| counts_by_counted[:counted] }
-  end
-
-  def not_counted_signups_by_state(state)
-    counts_by_bucket_key_and_counted = signup_count_by_state_and_bucket_key_and_counted[state]
-    counts_by_bucket_key_and_counted.sum { |_bucket_key, counts_by_counted| counts_by_counted[:not_counted] }
-  end
-
-  def signup_count(state: nil, bucket_key: nil, counted: nil)
-    bucket_key_and_counted_hashes = unpack_hash(signup_count_by_state_and_bucket_key_and_counted, state)
-
-    counted_hashes = bucket_key_and_counted_hashes.flat_map { |hash| unpack_hash(hash, bucket_key) }
-
-    counts = counted_hashes.flat_map { |hash| unpack_hash(hash, counted) }
-
-    counts.sum
-  end
-
-  def signup_count_by_state_and_bucket_key_and_counted
-    @signup_count_by_state_and_bucket_key_and_counted ||=
-      SignupCountPresenter.process_signup_count_data(buckets, count_data)
+  def signup_count(**filters)
+    count_data.count(**filters)
   end
 
   def grouped_signup_counts
-    @grouped_signup_counts ||= SignupCountPresenter.group_signup_count_data(count_data)
-  end
-
-  # WARNING: This method allocates a LOT of objects; don't use it unless you really need the actual
-  # signup models.
-  def signups_by_state_and_bucket_key
-    @signups_by_state_and_bucket_key ||=
-      begin
-        signups_hash = SignupCountPresenter.empty_signups_hash([], buckets)
-
-        run.signups.each do |signup|
-          bucket_key =
-            SignupCountPresenter.effective_bucket_key(signup.state, signup.bucket_key, signup.requested_bucket_key)
-
-          signups_hash[signup.state][bucket_key] ||= []
-          signups_hash[signup.state][bucket_key] << signup
-        end
-
-        signups_hash
-      end
+    @grouped_signup_counts ||= count_data.grouped_data
   end
 
   def buckets
@@ -210,10 +212,5 @@ class SignupCountPresenter
 
   def registration_policy
     @registration_policy ||= run.registration_policy
-  end
-
-  def unpack_hash(hash, selector)
-    return hash.values if selector.nil?
-    hash.select { |key, _hash| selector == key }.values
   end
 end

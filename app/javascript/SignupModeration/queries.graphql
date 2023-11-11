@@ -11,6 +11,7 @@ fragment SignupModerationRunFields on Run {
     count
     counted
     state
+    team_member
   }
 
   event {
