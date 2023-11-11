@@ -88,6 +88,7 @@ fragment RunFields on Run {
     count
     counted
     state
+    team_member
   }
 
   rooms {
