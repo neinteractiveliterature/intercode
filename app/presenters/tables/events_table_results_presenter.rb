@@ -97,7 +97,11 @@ class Tables::EventsTableResultsPresenter < Tables::TableResultsPresenter
         .each
         .inject(scope) do |acc_scope, (identifier, values)|
           if values.present?
-            acc_scope.where(%("events"."additional_info"->>? IN (?)), identifier, Array(values))
+            acc_scope.where(
+              %("events"."additional_info"->:field ?| array[:values]),
+              field: identifier,
+              values: Array(values)
+            )
           else
             acc_scope
           end
