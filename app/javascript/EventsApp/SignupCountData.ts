@@ -1,9 +1,9 @@
 import { GroupedSignupCount, SignupState } from '../graphqlTypes.generated';
 
+export type SignupCountFieldFilter<T> = T | T[] | undefined;
+
 export type SignupCountDataFilter = {
-  state?: SignupState | SignupState[];
-  bucket_key?: string | string[];
-  counted?: boolean | boolean[];
+  [Field in keyof GroupedSignupCount]?: SignupCountFieldFilter<GroupedSignupCount[Field]>;
 };
 
 export type SignupCountsByBucketKeyAndCounted = {
@@ -62,15 +62,16 @@ export default class SignupCountData {
       state: SignupState.Confirmed,
       bucket_key: limitedBuckets.map((bucket) => bucket.key),
       counted: true,
+      team_member: false,
     });
   }
 
   getNotCountedConfirmedSignupCount(): number {
-    return this.sumSignupCounts({ state: SignupState.Confirmed, counted: false });
+    return this.sumSignupCounts({ state: SignupState.Confirmed, counted: false, team_member: false });
   }
 
   getWaitlistCount(): number {
-    return this.sumSignupCounts({ state: SignupState.Waitlisted });
+    return this.sumSignupCounts({ state: SignupState.Waitlisted, team_member: false });
   }
 
   runFull(event: EventForSignupCountData): boolean {
