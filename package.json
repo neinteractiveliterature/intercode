@@ -177,7 +177,7 @@
     "@swc/jest": "^0.2.26",
     "@testing-library/jest-dom": "5.17.0",
     "@testing-library/react-hooks": "8.0.1",
-    "@types/bootstrap": "5.2.8",
+    "@types/bootstrap": "5.2.9",
     "@types/cssnano": "5.0.0",
     "@types/events": "3.0.2",
     "@types/history": "4.7.11",
