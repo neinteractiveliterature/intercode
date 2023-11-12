@@ -6509,10 +6509,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/bytes@npm:3.1.3":
-  version: 3.1.3
-  resolution: "@types/bytes@npm:3.1.3"
-  checksum: c636b74d5a6f4925f1030382d8afcfe271e329da7c8103d175a874688118b60b0b1523e23477554e29456d024e5a180df1ba99d88c49b3a51433b714acffdac9
+"@types/bytes@npm:3.1.4":
+  version: 3.1.4
+  resolution: "@types/bytes@npm:3.1.4"
+  checksum: 645732b37404847df9db7ae2af8b4bbdc21c966e9bbf8a5494d7fa95cbaee8bd7b9d65c68bbc2ec4277856d874e2e011b3b2b9479d981cd57d5136b0f41526e9
   languageName: node
   linkType: hard
 
@@ -20157,7 +20157,7 @@ __metadata:
     "@testing-library/react-hooks": 8.0.1
     "@types/apollo-upload-client": 17.0.5
     "@types/bootstrap": 5.2.9
-    "@types/bytes": 3.1.3
+    "@types/bytes": 3.1.4
     "@types/classnames": 2.3.1
     "@types/cssnano": 5.0.0
     "@types/debounce-promise": 3.1.8
