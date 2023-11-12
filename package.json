@@ -48,7 +48,7 @@
     "@types/apollo-upload-client": "17.0.5",
     "@types/bytes": "3.1.4",
     "@types/classnames": "2.3.1",
-    "@types/debounce-promise": "3.1.8",
+    "@types/debounce-promise": "3.1.9",
     "@types/diff": "5.0.7",
     "@types/file-saver": "2.0.6",
     "@types/js-search": "1.4.2",
