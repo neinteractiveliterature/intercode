@@ -6612,10 +6612,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/events@npm:3.0.2":
-  version: 3.0.2
-  resolution: "@types/events@npm:3.0.2"
-  checksum: 4f163c240bbd1492b11a713d3bdd7e8c0face1b2e7fb723e071171d1b2258986533b4804f78374836f18a5ad5006872aa72011940ddcdfa95982222eb74fd197
+"@types/events@npm:3.0.3":
+  version: 3.0.3
+  resolution: "@types/events@npm:3.0.3"
+  checksum: 50af9312fab001fd6bd4bb3ff65830f940877e6778de140a92481a0d9bf5f4853d44ec758a8800ef60e0598ac43ed1b5688116a3c65906ae54e989278d6c7c82
   languageName: node
   linkType: hard
 
@@ -20162,7 +20162,7 @@ __metadata:
     "@types/cssnano": 5.0.0
     "@types/debounce-promise": 3.1.9
     "@types/diff": 5.0.8
-    "@types/events": 3.0.2
+    "@types/events": 3.0.3
     "@types/file-saver": 2.0.6
     "@types/history": 4.7.11
     "@types/jest": 29.5.7
