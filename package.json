@@ -179,7 +179,7 @@
     "@testing-library/react-hooks": "8.0.1",
     "@types/bootstrap": "5.2.9",
     "@types/cssnano": "5.0.0",
-    "@types/events": "3.0.2",
+    "@types/events": "3.0.3",
     "@types/history": "4.7.11",
     "@types/jest": "29.5.7",
     "@types/node": "18.16.19",
