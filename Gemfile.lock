@@ -359,7 +359,7 @@ GEM
     minitest (5.20.0)
     minitest-focus (1.4.0)
       minitest (>= 4, < 6)
-    minitest-reporters (1.6.0)
+    minitest-reporters (1.6.1)
       ansi
       builder
       minitest (>= 5.0)
