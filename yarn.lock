@@ -6993,12 +6993,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-table@npm:7.7.17":
-  version: 7.7.17
-  resolution: "@types/react-table@npm:7.7.17"
+"@types/react-table@npm:7.7.18":
+  version: 7.7.18
+  resolution: "@types/react-table@npm:7.7.18"
   dependencies:
     "@types/react": "*"
-  checksum: 781105912073ceb5ea6c2ac20d6a21006e0d895103a12aeb69b3e56831b4b71c1cf9e8135f8062fb7aeb07913402c6241b23c7a7545e358d92393fdafa07205f
+  checksum: e3b909db24b20eaa596a30c1e1f994c16382f5d969f59a64b3fe212150883117a27dbac32a88649e96b189b90228708296a8e887158a5af2452fa7fa0584c3af
   languageName: node
   linkType: hard
 
@@ -20180,7 +20180,7 @@ __metadata:
     "@types/react-dom": 18.2.14
     "@types/react-google-recaptcha": 2.1.7
     "@types/react-onclickoutside": 6.7.6
-    "@types/react-table": 7.7.17
+    "@types/react-table": 7.7.18
     "@types/react-transition-group": 4.4.8
     "@types/source-map-support": 0.5.9
     "@types/testing-library__jest-dom": 5.14.9
