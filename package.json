@@ -60,7 +60,7 @@
     "@types/react-click-outside-hook": "1.0.2",
     "@types/react-color": "3.0.10",
     "@types/react-google-recaptcha": "2.1.8",
-    "@types/react-onclickoutside": "6.7.6",
+    "@types/react-onclickoutside": "6.7.7",
     "@types/react-table": "7.7.18",
     "@types/source-map-support": "0.5.9",
     "@types/tinycolor2": "1.4.6",
