@@ -6889,10 +6889,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/punycode@npm:2.1.1":
-  version: 2.1.1
-  resolution: "@types/punycode@npm:2.1.1"
-  checksum: a1fdbb0d4d22ceb8fd901995d72d66b096e4c46bd603faf192085f04113afc42a6a76403f7806a2c31d45a2f70d57c042d68329ba6affc202c15fa34870b51fa
+"@types/punycode@npm:2.1.2":
+  version: 2.1.2
+  resolution: "@types/punycode@npm:2.1.2"
+  checksum: 2cf4573bbdc28f9935154e0981acd2671e58d20ba9f61866e776295cf7b314c041bfe1aee8a1610de958fe4c1e46c8013908813fa23a28e361d256e823a56105
   languageName: node
   linkType: hard
 
@@ -20172,7 +20172,7 @@ __metadata:
     "@types/mapbox-gl": 1.13.9
     "@types/minimist": 1.2.5
     "@types/node": 18.16.19
-    "@types/punycode": 2.1.1
+    "@types/punycode": 2.1.2
     "@types/rails__activestorage": 7.0.4
     "@types/react": 18.2.33
     "@types/react-click-outside-hook": 1.0.1
