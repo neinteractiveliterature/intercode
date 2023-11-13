@@ -7002,12 +7002,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-transition-group@npm:4.4.8, @types/react-transition-group@npm:^4.4.0":
-  version: 4.4.8
-  resolution: "@types/react-transition-group@npm:4.4.8"
+"@types/react-transition-group@npm:4.4.9, @types/react-transition-group@npm:^4.4.0":
+  version: 4.4.9
+  resolution: "@types/react-transition-group@npm:4.4.9"
   dependencies:
     "@types/react": "*"
-  checksum: ad7ba2bce97631fda9d89b4ed9772489bd050fec3ccd7563041b206dbe219d37d22e0d7731b1f90f56e89daf40e69ba16beba8066c42165bf8a584533feb6a2c
+  checksum: be9e256e53919a7cf3b4a075f6d01c0a2dd3a67911dd28276aa6158be4beade4ca5327cbf1f096c28b413e04989f069122319b02e5a09c280d903a0accea9ead
   languageName: node
   linkType: hard
 
@@ -20181,7 +20181,7 @@ __metadata:
     "@types/react-google-recaptcha": 2.1.8
     "@types/react-onclickoutside": 6.7.6
     "@types/react-table": 7.7.18
-    "@types/react-transition-group": 4.4.8
+    "@types/react-transition-group": 4.4.9
     "@types/source-map-support": 0.5.9
     "@types/testing-library__jest-dom": 5.14.9
     "@types/tinycolor2": 1.4.6
