@@ -6917,10 +6917,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-click-outside-hook@npm:1.0.1":
-  version: 1.0.1
-  resolution: "@types/react-click-outside-hook@npm:1.0.1"
-  checksum: bdf0daaee492fb36c05fc5894d326e0f70f187561e571edb985c4600449a893842b288efde48364c1a8babcbfdaf5908e95dc361ab13a3c2349c75ae2a2e97b5
+"@types/react-click-outside-hook@npm:1.0.2":
+  version: 1.0.2
+  resolution: "@types/react-click-outside-hook@npm:1.0.2"
+  checksum: 766e537126112f8dfffa0def5e0eb7495e3d7a86aed4465f361979bab878c88e4f873a8cea5012a6b690a0b0f4645c928f3f1cac2d5cc878be9f77b09f9c8780
   languageName: node
   linkType: hard
 
@@ -20175,7 +20175,7 @@ __metadata:
     "@types/punycode": 2.1.2
     "@types/rails__activestorage": 7.0.4
     "@types/react": 18.2.33
-    "@types/react-click-outside-hook": 1.0.1
+    "@types/react-click-outside-hook": 1.0.2
     "@types/react-color": 3.0.9
     "@types/react-dom": 18.2.14
     "@types/react-google-recaptcha": 2.1.7
