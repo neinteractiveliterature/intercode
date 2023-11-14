@@ -184,7 +184,7 @@
     "@types/jest": "29.5.8",
     "@types/node": "18.16.19",
     "@types/punycode": "2.1.2",
-    "@types/rails__activestorage": "7.0.4",
+    "@types/rails__activestorage": "7.1.1",
     "@types/react-dom": "18.2.15",
     "@types/react-transition-group": "4.4.9",
     "@types/testing-library__jest-dom": "5.14.9",
