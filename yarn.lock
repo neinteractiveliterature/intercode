@@ -11083,7 +11083,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"domhandler@npm:^5.0, domhandler@npm:^5.0.1, domhandler@npm:^5.0.2, domhandler@npm:^5.0.3":
+"domhandler@npm:^5.0, domhandler@npm:^5.0.2, domhandler@npm:^5.0.3":
   version: 5.0.3
   resolution: "domhandler@npm:5.0.3"
   dependencies:
@@ -11103,14 +11103,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"domutils@npm:^3.0.1":
-  version: 3.0.1
-  resolution: "domutils@npm:3.0.1"
+"domutils@npm:^3.0.1, domutils@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "domutils@npm:3.1.0"
   dependencies:
     dom-serializer: ^2.0.0
     domelementtype: ^2.3.0
-    domhandler: ^5.0.1
-  checksum: 23aa7a840572d395220e173cb6263b0d028596e3950100520870a125af33ff819e6f609e1606d6f7d73bd9e7feb03bb404286e57a39063b5384c62b724d987b3
+    domhandler: ^5.0.3
+  checksum: e5757456ddd173caa411cfc02c2bb64133c65546d2c4081381a3bafc8a57411a41eed70494551aa58030be9e58574fcc489828bebd673863d39924fb4878f416
   languageName: node
   linkType: hard
 
@@ -11304,7 +11304,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"entities@npm:4.5.0, entities@npm:^4.2.0, entities@npm:^4.3.0, entities@npm:^4.4.0":
+"entities@npm:4.5.0, entities@npm:^4.2.0, entities@npm:^4.3.0, entities@npm:^4.4.0, entities@npm:^4.5.0":
   version: 4.5.0
   resolution: "entities@npm:4.5.0"
   checksum: 853f8ebd5b425d350bffa97dd6958143179a5938352ccae092c62d1267c4e392a039be1bae7d51b6e4ffad25f51f9617531fedf5237f15df302ccfb452cbf2d7
@@ -13686,16 +13686,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"html-to-react@npm:1.6.0":
-  version: 1.6.0
-  resolution: "html-to-react@npm:1.6.0"
+"html-to-react@npm:1.7.0":
+  version: 1.7.0
+  resolution: "html-to-react@npm:1.7.0"
   dependencies:
     domhandler: ^5.0
-    htmlparser2: ^8.0
+    htmlparser2: ^9.0
     lodash.camelcase: ^4.3.0
   peerDependencies:
     react: ^0.13.0 || ^0.14.0 || >=15
-  checksum: 8a6d44c1706ba52d033d69f78da8cb6f07e726f83fba4baacdf807f5af3f034de372b968d8e70998a6e81a255668b000485f32b9a4769d989fe420d83fb88241
+  checksum: 2366ba0f3eb05b4f83fc46ff5dad9813c28506ece8b70cccdaac202fef51675e110ca467ed78d29f347a41e0f89efb6d825db2db0715f00105b414e0120f4447
   languageName: node
   linkType: hard
 
@@ -13733,7 +13733,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"htmlparser2@npm:^8.0, htmlparser2@npm:^8.0.1":
+"htmlparser2@npm:^8.0.1":
   version: 8.0.1
   resolution: "htmlparser2@npm:8.0.1"
   dependencies:
@@ -13742,6 +13742,18 @@ __metadata:
     domutils: ^3.0.1
     entities: ^4.3.0
   checksum: 06d5c71e8313597722bc429ae2a7a8333d77bd3ab07ccb916628384b37332027b047f8619448d8f4a3312b6609c6ea3302a4e77435d859e9e686999e6699ca39
+  languageName: node
+  linkType: hard
+
+"htmlparser2@npm:^9.0":
+  version: 9.0.0
+  resolution: "htmlparser2@npm:9.0.0"
+  dependencies:
+    domelementtype: ^2.3.0
+    domhandler: ^5.0.3
+    domutils: ^3.1.0
+    entities: ^4.5.0
+  checksum: a234c3add821cae8308ca61ce4b8ad3e88af83cf9c3c2003059adc89c46a06ffc39cc2a92b39af8d16c3705e1055df6769d80877acb6529983867f0d7e74098d
   languageName: node
   linkType: hard
 
@@ -20287,7 +20299,7 @@ __metadata:
     graphql-tag: 2.12.6
     graphql-ws: 5.14.2
     history: 5.3.0
-    html-to-react: 1.6.0
+    html-to-react: 1.7.0
     husky: 8.0.3
     i18next: 23.2.11
     i18next-intervalplural-postprocessor: 3.0.0
