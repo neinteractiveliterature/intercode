@@ -403,7 +403,7 @@ GEM
     orm_adapter (0.5.0)
     ox (2.14.4)
     parallel (1.23.0)
-    parser (3.2.2.3)
+    parser (3.2.2.4)
       ast (~> 2.4.1)
       racc
     pg (1.5.4)
@@ -493,7 +493,7 @@ GEM
     rbtree (0.4.6)
     recaptcha (5.14.0)
     redcarpet (3.6.0)
-    regexp_parser (2.8.1)
+    regexp_parser (2.8.2)
     reline (0.3.3)
       io-console (~> 0.5)
     request_store (1.5.1)
@@ -511,18 +511,18 @@ GEM
       rollbar (>= 2.21, <= 4.0, < 4.0)
       shoryuken (>= 4.0, <= 5.3)
     rouge (3.26.1)
-    rubocop (1.54.1)
+    rubocop (1.57.2)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
       parallel (~> 1.10)
-      parser (>= 3.2.2.3)
+      parser (>= 3.2.2.4)
       rainbow (>= 2.2.2, < 4.0)
       regexp_parser (>= 1.8, < 3.0)
       rexml (>= 3.2.5, < 4.0)
-      rubocop-ast (>= 1.28.0, < 2.0)
+      rubocop-ast (>= 1.28.1, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 2.4.0, < 3.0)
-    rubocop-ast (1.29.0)
+    rubocop-ast (1.30.0)
       parser (>= 3.2.1.0)
     rubocop-performance (1.18.0)
       rubocop (>= 1.7.0, < 2.0)
@@ -628,7 +628,7 @@ GEM
       unf_ext
     unf (0.1.4-java)
     unf_ext (0.0.8)
-    unicode-display_width (2.4.2)
+    unicode-display_width (2.5.0)
     uuid (2.3.9)
       macaddr (~> 1.0)
     warden (1.2.9)
@@ -719,7 +719,7 @@ DEPENDENCIES
   reverse_markdown
   rollbar
   rollbar-shoryuken
-  rubocop (= 1.54.1)
+  rubocop (= 1.57.2)
   rubocop-performance
   rubocop-rails
   rubocop-sequel
