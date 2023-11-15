@@ -491,7 +491,7 @@ GEM
       msgpack (>= 0.4.3)
       optimist (>= 3.0.0)
     rbtree (0.4.6)
-    recaptcha (5.14.0)
+    recaptcha (5.16.0)
     redcarpet (3.6.0)
     regexp_parser (2.8.2)
     reline (0.3.3)
