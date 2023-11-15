@@ -62,7 +62,6 @@ export default class SignupCountData {
       state: SignupState.Confirmed,
       bucket_key: limitedBuckets.map((bucket) => bucket.key),
       counted: true,
-      team_member: false,
     });
   }
 
