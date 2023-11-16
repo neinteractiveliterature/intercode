@@ -20220,7 +20220,7 @@ __metadata:
     uuid: 9.0.1
     webpack: 5.89.0
     webpack-assets-manifest: 5.1.0
-    webpack-bundle-analyzer: 4.10.0
+    webpack-bundle-analyzer: 4.10.1
     webpack-cli: 5.1.4
     webpack-dev-middleware: 6.1.1
     webpack-dev-server: 4.15.1
@@ -23028,9 +23028,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-bundle-analyzer@npm:4.10.0, webpack-bundle-analyzer@npm:^4.5.0":
-  version: 4.10.0
-  resolution: "webpack-bundle-analyzer@npm:4.10.0"
+"webpack-bundle-analyzer@npm:4.10.1, webpack-bundle-analyzer@npm:^4.5.0":
+  version: 4.10.1
+  resolution: "webpack-bundle-analyzer@npm:4.10.1"
   dependencies:
     "@discoveryjs/json-ext": 0.5.7
     acorn: ^8.0.4
@@ -23047,7 +23047,7 @@ __metadata:
     ws: ^7.3.1
   bin:
     webpack-bundle-analyzer: lib/bin/analyzer.js
-  checksum: 9a8fc784db5bda390ecb3cb25a236901f76e4f7974057200dbc37a60fb1f7862a4d2a4bfec28f0a81b669f582387d847d4c7162dbe4cedf54b5c071254f19f9c
+  checksum: 77f48f10a493b1cc95674526472978a2de32412ddbf556bd3903738f14890611426f19477352993efe5a9fd6ca16711eb912d986f2221b17ba6eeca1b6f71fb6
   languageName: node
   linkType: hard
 
