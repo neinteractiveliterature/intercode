@@ -6724,10 +6724,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/js-search@npm:1.4.3":
-  version: 1.4.3
-  resolution: "@types/js-search@npm:1.4.3"
-  checksum: fe47f32a646550977fb6a1735a1fe0f22958b6a0c90cebde99c75d4a65f47804f151ea618a6f5d75aadc018af54e473db084b0f7327d6ca1e05695ae8711ec20
+"@types/js-search@npm:1.4.4":
+  version: 1.4.4
+  resolution: "@types/js-search@npm:1.4.4"
+  checksum: 45c8a706a4eec7eee4e2f7a78083d41f65a5193a8c2b7bd52aac2abd7abd2b903452d53022ae0b589c3a69b49da660129df50a63a5bb7670b40541b1d6467c94
   languageName: node
   linkType: hard
 
@@ -20063,7 +20063,7 @@ __metadata:
     "@types/file-saver": 2.0.7
     "@types/history": 4.7.11
     "@types/jest": 29.5.9
-    "@types/js-search": 1.4.3
+    "@types/js-search": 1.4.4
     "@types/lodash": 4.14.201
     "@types/luxon": 3.2.2
     "@types/mapbox-gl": 1.13.9
