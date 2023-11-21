@@ -181,7 +181,7 @@
     "@types/cssnano": "5.0.0",
     "@types/events": "3.0.3",
     "@types/history": "4.7.11",
-    "@types/jest": "29.5.8",
+    "@types/jest": "29.5.9",
     "@types/node": "20.9.2",
     "@types/punycode": "2.1.2",
     "@types/rails__activestorage": "7.1.1",
