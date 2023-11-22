@@ -6485,12 +6485,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/bootstrap@npm:5.2.9":
-  version: 5.2.9
-  resolution: "@types/bootstrap@npm:5.2.9"
+"@types/bootstrap@npm:5.2.10":
+  version: 5.2.10
+  resolution: "@types/bootstrap@npm:5.2.10"
   dependencies:
     "@popperjs/core": ^2.9.2
-  checksum: e5cb53bafb573f3baefee82979b9b2412f2ce565e3d1bdbf1c5906f0acee6b5cfdbac10c7ee60b406cbadc46e5c2b0a600550eaabbcfc5f86eb303c1ede2af78
+  checksum: d1253a2f19c96d667e280c07eb29cca00529f31fc3b799d5feef928476735994411a1a2643e3f1581855250d031f120e628396b79bade491ea956a99192eaeea
   languageName: node
   linkType: hard
 
@@ -20053,7 +20053,7 @@ __metadata:
     "@testing-library/react": 14.1.2
     "@testing-library/react-hooks": 8.0.1
     "@types/apollo-upload-client": 17.0.5
-    "@types/bootstrap": 5.2.9
+    "@types/bootstrap": 5.2.10
     "@types/bytes": 3.1.4
     "@types/classnames": 2.3.1
     "@types/cssnano": 5.0.0
