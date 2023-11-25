@@ -5834,16 +5834,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stripe/react-stripe-js@npm:2.3.2":
-  version: 2.3.2
-  resolution: "@stripe/react-stripe-js@npm:2.3.2"
+"@stripe/react-stripe-js@npm:2.4.0":
+  version: 2.4.0
+  resolution: "@stripe/react-stripe-js@npm:2.4.0"
   dependencies:
     prop-types: ^15.7.2
   peerDependencies:
     "@stripe/stripe-js": ^1.44.1 || ^2.0.0
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: 6c3fe407302914180abfb9c353bdeff1c7db6eac9d5e657d2668ac640029bfcb41b20f37effd1c579dbda34891844a40fe9442aded4e389357051328448162dc
+  checksum: 4cf16c9bca6cff67cfef51d95a1521563dc579f5957ae0bcb773b958afa1a57bc90c35a157e2e11452a2d1c0c26eddbe5644afe7f07cd39ed55697385d7b18a9
   languageName: node
   linkType: hard
 
@@ -20045,7 +20045,7 @@ __metadata:
     "@popperjs/core": 2.11.8
     "@prettier/plugin-ruby": 3.2.2
     "@rails/activestorage": 7.1.2
-    "@stripe/react-stripe-js": 2.3.2
+    "@stripe/react-stripe-js": 2.4.0
     "@stripe/stripe-js": 1.54.2
     "@swc/core": ^1.3.68
     "@swc/jest": ^0.2.26
