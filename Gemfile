@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 ruby File.read(File.expand_path(".ruby-version", __dir__)).strip
-gem "rails", "7.0.6"
+gem "rails", "7.1.2"
 
 gem "pg"
 gem "puma"
@@ -133,7 +133,7 @@ group :development do
   gem "solargraph-rails", "1.1.0"
 
   # Automatic annotation for models
-  gem "annotate", github: "dabit/annotate_models", branch: "rails-7"
+  gem "annotate"
 
   # Debugging
   gem "debug"

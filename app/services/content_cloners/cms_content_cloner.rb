@@ -20,21 +20,22 @@ class ContentCloners::CmsContentCloner < ContentCloners::ContentClonerBase
   def clone_simple_cms_content(convention)
     %i[cms_graphql_queries cms_variables cms_layouts cms_partials notification_templates].each do |association|
       Rails.logger.info("Cloning #{association}")
-      @id_maps[association] =
-        clone_with_id_map(source_convention.public_send(association), convention.public_send(association))
+      @id_maps[association] = clone_with_id_map(
+        source_convention.public_send(association),
+        convention.public_send(association)
+      )
     end
   end
 
   def clone_pages(convention)
-    Rails.logger.info('Cloning pages')
-    @id_maps[:pages] =
-      clone_with_id_map(source_convention.pages, convention.pages) do |page, cloned_page|
-        cloned_page.cms_layout = @id_maps[:cms_layouts][page.cms_layout_id]
-      end
+    Rails.logger.info("Cloning pages")
+    @id_maps[:pages] = clone_with_id_map(source_convention.pages, convention.pages) do |page, cloned_page|
+      cloned_page.cms_layout = @id_maps[:cms_layouts][page.cms_layout_id]
+    end
   end
 
   def clone_cms_navigation_items(convention)
-    Rails.logger.info('Cloning navigation items')
+    Rails.logger.info("Cloning navigation items")
     clone_with_id_map(
       source_convention.cms_navigation_items.root.order(:position),
       convention.cms_navigation_items
@@ -52,37 +53,34 @@ class ContentCloners::CmsContentCloner < ContentCloners::ContentClonerBase
   end
 
   def clone_cms_files(convention)
-    Rails.logger.info('Cloning files')
+    Rails.logger.info("Cloning files")
 
-    @id_maps[:cms_files] =
-      clone_with_id_map(source_convention.cms_files, convention.cms_files) do |file, cloned_file|
-        cloned_file.file.attach(file.file.blob)
-      end
+    @id_maps[:cms_files] = clone_with_id_map(source_convention.cms_files, convention.cms_files) do |file, cloned_file|
+      cloned_file.file.attach(file.file.blob)
+    end
   end
 
   def clone_forms(convention)
-    @id_maps[:forms] =
-      clone_with_id_map(source_convention.forms, convention.forms) do |form, cloned_form|
-        cloned_form.save!
-        content = FormExportPresenter.new(form).as_json
-        ImportFormContentService.new(form: cloned_form, content: content).call!
-      end
+    @id_maps[:forms] = clone_with_id_map(source_convention.forms, convention.forms) do |form, cloned_form|
+      cloned_form.save!
+      content = FormExportPresenter.new(form).as_json
+      ImportFormContentService.new(form: cloned_form, content: content).call!
+    end
   end
 
   def clone_cms_content_groups(convention)
-    @id_maps[:cms_content_groups] =
-      clone_with_id_map(
-        source_convention.cms_content_groups,
-        convention.cms_content_groups
-      ) do |cms_content_group, cloned_cms_content_group|
-        cloned_cms_content_group.save!
-        %i[pages cms_partials cms_layouts].each do |content_type|
-          cms_content_group
-            .public_send(content_type)
-            .each do |item|
-              cloned_cms_content_group.cms_content_group_associations.create!(content: @id_maps[content_type][item.id])
-            end
-        end
+    @id_maps[:cms_content_groups] = clone_with_id_map(
+      source_convention.cms_content_groups,
+      convention.cms_content_groups
+    ) do |cms_content_group, cloned_cms_content_group|
+      cloned_cms_content_group.save!
+      %i[pages cms_partials cms_layouts].each do |content_type|
+        cms_content_group
+          .public_send(content_type)
+          .each do |item|
+            cloned_cms_content_group.cms_content_group_associations.create!(content: @id_maps[content_type][item.id])
+          end
       end
+    end
   end
 end

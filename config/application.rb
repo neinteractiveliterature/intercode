@@ -1,8 +1,8 @@
-require_relative 'boot'
+require_relative "boot"
 
-require 'rails/all'
-require File.expand_path('lib/intercode/dynamic_cookie_domain', Rails.root)
-require File.expand_path('lib/intercode/virtual_host_constraint', Rails.root)
+require "rails/all"
+require File.expand_path("lib/intercode/dynamic_cookie_domain", Rails.root)
+require File.expand_path("lib/intercode/virtual_host_constraint", Rails.root)
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -12,8 +12,13 @@ module Intercode
   class Application < Rails::Application
     config.load_defaults 7.0
 
-    config.hosts << ENV.fetch('ASSETS_HOST', nil) if ENV['ASSETS_HOST'].present?
-    config.hosts << /.*#{Regexp.escape(ENV.fetch('INTERCODE_HOST', nil))}/ if ENV['INTERCODE_HOST'].present?
+    # Please, add to the `ignore` list any other `lib` subdirectories that do
+    # not contain `.rb` files, or that should not be reloaded or eager loaded.
+    # Common ones are `templates`, `generators`, or `middleware`, for example.
+    config.autoload_lib(ignore: %w[assets tasks])
+
+    config.hosts << ENV.fetch("ASSETS_HOST", nil) if ENV["ASSETS_HOST"].present?
+    config.hosts << /.*#{Regexp.escape(ENV.fetch("INTERCODE_HOST", nil))}/ if ENV["INTERCODE_HOST"].present?
     config.hosts << ->(host) { Convention.where(domain: host).any? }
 
     # Settings in config/environments/* take precedence over those specified here.
@@ -52,13 +57,13 @@ module Intercode
 
     config.to_prepare do
       # Only Applications list
-      Doorkeeper::ApplicationsController.layout 'doorkeeper/admin'
+      Doorkeeper::ApplicationsController.layout "doorkeeper/admin"
 
       # Only Authorization endpoint
-      Doorkeeper::AuthorizationsController.layout 'application'
+      Doorkeeper::AuthorizationsController.layout "application"
 
       # Only Authorized Applications
-      Doorkeeper::AuthorizedApplicationsController.layout 'application'
+      Doorkeeper::AuthorizedApplicationsController.layout "application"
 
       DeviseController.respond_to :html, :json
     end
