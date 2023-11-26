@@ -10,7 +10,7 @@ x-link-database: &link-database
 
 services:
   load_production_database:
-    image: postgres:14.10
+    image: postgres:15
     links:
       - postgres
     depends_on:
