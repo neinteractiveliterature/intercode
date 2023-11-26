@@ -8107,15 +8107,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"apollo-upload-client@npm:17.0.0":
-  version: 17.0.0
-  resolution: "apollo-upload-client@npm:17.0.0"
+"apollo-upload-client@npm:18.0.1":
+  version: 18.0.1
+  resolution: "apollo-upload-client@npm:18.0.1"
   dependencies:
-    extract-files: "npm:^11.0.0"
+    extract-files: "npm:^13.0.0"
   peerDependencies:
-    "@apollo/client": ^3.0.0
+    "@apollo/client": ^3.8.0
     graphql: 14 - 16
-  checksum: bddc4c26b7e81ec0b01885d969e007d1d0f44466d126594b91e0a3e375813b81f0e0b76ffedb4c78414ceddb126cb13428ca9715783ce5b6c4e299f482150bd7
+  checksum: 30803d91df5ee32231afc8e15fa52be2a46b11c827255e8028b4f49149bcc8e4b4d4469e33d4331e63e12aa697e9a5e359a32ae3608335c51a76dbe62ad55bcb
   languageName: node
   linkType: hard
 
@@ -12298,6 +12298,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"extract-files@npm:^13.0.0":
+  version: 13.0.0
+  resolution: "extract-files@npm:13.0.0"
+  dependencies:
+    is-plain-obj: "npm:^4.1.0"
+  checksum: ee1e6e37f24fcb7de5019c0dc054f3e075664f63b5a9bd38c9ba1a32481ed1e77fd237adf826a7f6c7a1db406d9db4428f8ae4395fb2dfb602235b15f8f4bc3e
+  languageName: node
+  linkType: hard
+
 "extsprintf@npm:^1.2.0":
   version: 1.4.0
   resolution: "extsprintf@npm:1.4.0"
@@ -14758,10 +14767,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-plain-obj@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "is-plain-obj@npm:4.0.0"
-  checksum: abe3ef27ac592b43d51c5d7a8c565fffaaf48241a40519057a5a58651ea4a8908e816346e43edae2323d303a3642668fca198dd9ef50b578f93fb014fc2f8460
+"is-plain-obj@npm:^4.0.0, is-plain-obj@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "is-plain-obj@npm:4.1.0"
+  checksum: 32130d651d71d9564dc88ba7e6fda0e91a1010a3694648e9f4f47bb6080438140696d3e3e15c741411d712e47ac9edc1a8a9de1fe76f3487b0d90be06ac9975e
   languageName: node
   linkType: hard
 
@@ -21068,7 +21077,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": "npm:6.13.0"
     "@typescript-eslint/parser": "npm:6.13.0"
     "@webpack-cli/serve": "npm:2.0.5"
-    apollo-upload-client: "npm:17.0.0"
+    apollo-upload-client: "npm:18.0.1"
     array-to-sentence: "npm:2.0.0"
     assert-never: "npm:1.2.1"
     autoprefixer: "npm:10.4.16"
