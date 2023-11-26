@@ -19048,10 +19048,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-fast-compare@npm:^3.0.1, react-fast-compare@npm:^3.2.0":
-  version: 3.2.0
-  resolution: "react-fast-compare@npm:3.2.0"
-  checksum: 2a7d75ce9fb5da1e3c01f74a5cd592f3369a8cc8d44e93654bf147ab221f430238e8be70677e896f2bfcb96a1cb7a47a8d05d84633de764a9d57d27005a4bb9e
+"react-fast-compare@npm:^3.0.1, react-fast-compare@npm:^3.2.0, react-fast-compare@npm:^3.2.2":
+  version: 3.2.2
+  resolution: "react-fast-compare@npm:3.2.2"
+  checksum: 0bbd2f3eb41ab2ff7380daaa55105db698d965c396df73e6874831dbafec8c4b5b08ba36ff09df01526caa3c61595247e3269558c284e37646241cba2b90a367
   languageName: node
   linkType: hard
 
@@ -19067,7 +19067,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-helmet-async@npm:*, react-helmet-async@npm:1.3.0, react-helmet-async@npm:^1.3.0":
+"react-helmet-async@npm:*, react-helmet-async@npm:2.0.1":
+  version: 2.0.1
+  resolution: "react-helmet-async@npm:2.0.1"
+  dependencies:
+    invariant: "npm:^2.2.4"
+    react-fast-compare: "npm:^3.2.2"
+    shallowequal: "npm:^1.1.0"
+  peerDependencies:
+    react: ^16.6.0 || ^17.0.0 || ^18.0.0
+    react-dom: ^16.6.0 || ^17.0.0 || ^18.0.0
+  checksum: f1fec97ae4d8d37fc040446adc473c26422b32fa9c73efa5ac6cb234090d1b51b33c603fefa6ec21332b3277f544235d56f2567c65afe1d349fc784fd3d99cd7
+  languageName: node
+  linkType: hard
+
+"react-helmet-async@npm:^1.3.0":
   version: 1.3.0
   resolution: "react-helmet-async@npm:1.3.0"
   dependencies:
@@ -20179,7 +20193,7 @@ __metadata:
     react-cookie-consent: "npm:9.0.0"
     react-dom: "npm:18.2.0"
     react-google-recaptcha: "npm:2.1.0"
-    react-helmet-async: "npm:1.3.0"
+    react-helmet-async: "npm:2.0.1"
     react-html-id: "npm:0.1.5"
     react-i18next: "npm:13.5.0"
     react-onclickoutside: "npm:6.13.0"
