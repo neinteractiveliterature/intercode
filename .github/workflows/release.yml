@@ -8,7 +8,7 @@ jobs:
   docker-release:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Log in to registry
       run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
     - name: Pull built image
@@ -31,7 +31,7 @@ jobs:
   heroku-release:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Install Heroku CLI
       run: curl https://cli-assets.heroku.com/install.sh | sh
     - name: Log in to registry
