@@ -74,9 +74,9 @@ class Convention < ApplicationRecord
 
   before_destroy :nullify_associated_content
 
-  belongs_to :updated_by, class_name: 'User', optional: true
+  belongs_to :updated_by, class_name: "User", optional: true
   belongs_to :organization, optional: true
-  belongs_to :catch_all_staff_position, class_name: 'StaffPosition', optional: true
+  belongs_to :catch_all_staff_position, class_name: "StaffPosition", optional: true
 
   has_many :cms_navigation_items, as: :parent, dependent: :destroy
   has_many :pages, as: :parent, dependent: :destroy
@@ -108,15 +108,15 @@ class Convention < ApplicationRecord
   has_many :user_activity_alerts, dependent: :destroy
   has_many :permissions, dependent: :destroy
 
-  belongs_to :root_page, class_name: 'Page', optional: true
-  belongs_to :default_layout, class_name: 'CmsLayout', optional: true
-  belongs_to :user_con_profile_form, class_name: 'Form', optional: true
+  belongs_to :root_page, class_name: "Page", optional: true
+  belongs_to :default_layout, class_name: "CmsLayout", optional: true
+  belongs_to :user_con_profile_form, class_name: "Form", optional: true
 
-  serialize :maximum_event_signups, ActiveModelCoder.new('ScheduledValue::ScheduledValue')
+  serialize :maximum_event_signups, coder: ActiveModelCoder.new("ScheduledValue::ScheduledValue")
 
   validates :name, presence: true
   validates :domain, presence: true, uniqueness: true
-  validates :timezone_name, presence: true, unless: ->(convention) { convention.timezone_mode == 'user_local' }
+  validates :timezone_name, presence: true, unless: ->(convention) { convention.timezone_mode == "user_local" }
   validates :show_schedule, inclusion: { in: %w[yes gms priv no] }
   validates :show_event_list, inclusion: { in: %w[yes gms priv no] }
   validates :ticket_mode, inclusion: { in: TICKET_MODES }, presence: true
@@ -138,12 +138,12 @@ class Convention < ApplicationRecord
   end
 
   def registrations_frozen?
-    maximum_event_signups.value_at(Time.zone.now) == 'not_now'
+    maximum_event_signups.value_at(Time.zone.now) == "not_now"
   end
 
   def tickets_available_for_purchase?
     return false if ended?
-    return false if ticket_mode == 'disabled'
+    return false if ticket_mode == "disabled"
 
     products.ticket_providing.available.any? { |product| product.pricing_structure.price(time: Time.zone.now) }
   end
@@ -183,7 +183,7 @@ class Convention < ApplicationRecord
   def maximum_event_signups_must_cover_all_time
     return if maximum_event_signups&.covers_all_time?
 
-    errors.add(:maximum_event_signups, 'must cover all time')
+    errors.add(:maximum_event_signups, "must cover all time")
   end
 
   def timezone_name_must_be_valid
@@ -191,7 +191,7 @@ class Convention < ApplicationRecord
 
     tz = timezone
     unless tz
-      errors.add(:timezone_name, 'must refer to a valid IANA timezone')
+      errors.add(:timezone_name, "must refer to a valid IANA timezone")
       return
     end
 
@@ -204,7 +204,7 @@ class Convention < ApplicationRecord
   end
 
   def site_mode_must_be_possible
-    if ticket_mode == 'required_for_signup' && site_mode != 'convention'
+    if ticket_mode == "required_for_signup" && site_mode != "convention"
       errors.add(
         :base,
         "The required_for_signup ticket mode only applies to sites in the \"convention\" mode.  To sell tickets for \
@@ -212,8 +212,8 @@ other types of site, use the ticket_per_event mode."
       )
     end
 
-    return unless site_mode == 'single_event' && events.count > 1
-    errors.add(:site_mode, 'single_event is not valid because this convention has multiple events already')
+    return unless site_mode == "single_event" && events.count > 1
+    errors.add(:site_mode, "single_event is not valid because this convention has multiple events already")
   end
 
   SCHEDULE_RELEASE_PERMISSIVITY_ORDER = %w[no priv gms yes].freeze
@@ -222,7 +222,7 @@ other types of site, use the ticket_per_event mode."
     show_schedule_permissivity = SCHEDULE_RELEASE_PERMISSIVITY_ORDER.index(show_schedule)
 
     return if show_event_list_permissivity >= show_schedule_permissivity
-    errors.add(:show_event_list, 'must be at least as permissive as show_schedule')
+    errors.add(:show_event_list, "must be at least as permissive as show_schedule")
   end
 
   def nullify_associated_content

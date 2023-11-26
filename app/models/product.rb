@@ -34,10 +34,10 @@ class Product < ApplicationRecord
   belongs_to :convention
   has_many :product_variants, dependent: :destroy
   has_many :order_entries, dependent: :destroy
-  belongs_to :provides_ticket_type, class_name: 'TicketType', optional: true
+  belongs_to :provides_ticket_type, class_name: "TicketType", optional: true
 
   has_one_attached :image
-  serialize :pricing_structure, ActiveModelCoder.new('PricingStructure')
+  serialize :pricing_structure, coder: ActiveModelCoder.new("PricingStructure")
 
   validate :ensure_valid_payment_options
   validate :ensure_ticket_providing_products_cannot_have_variants
@@ -63,7 +63,7 @@ class Product < ApplicationRecord
 
   def ensure_valid_payment_options
     unless payment_options.is_a?(Array)
-      errors.add :payment_options, 'must be an array'
+      errors.add :payment_options, "must be an array"
       return
     end
 
@@ -80,7 +80,7 @@ class Product < ApplicationRecord
     return unless provides_ticket_type
     return unless product_variants.any?
 
-    ticket_name = convention&.ticket_name&.capitalize || 'Ticket'
+    ticket_name = convention&.ticket_name&.capitalize || "Ticket"
     errors.add :base, "#{ticket_name}-providing products cannot have variants"
   end
 

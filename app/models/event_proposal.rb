@@ -65,7 +65,7 @@ class EventProposal < ApplicationRecord
                                :timeblock_preferences
 
   belongs_to :convention
-  belongs_to :owner, class_name: 'UserConProfile', optional: true
+  belongs_to :owner, class_name: "UserConProfile", optional: true
   belongs_to :event, optional: true
   belongs_to :event_category
 
@@ -73,13 +73,13 @@ class EventProposal < ApplicationRecord
 
   STATUSES.each { |status| scope status, -> { where(status: status) } }
 
-  scope :submitted, -> { where.not(status: 'draft') }
+  scope :submitted, -> { where.not(status: "draft") }
   scope :reminded, -> { where.not(reminded_at: nil) }
   scope :not_reminded, -> { where(reminded_at: nil) }
 
-  serialize :registration_policy, ActiveModelCoder.new('RegistrationPolicy')
+  serialize :registration_policy, coder: ActiveModelCoder.new("RegistrationPolicy")
   serialize :timeblock_preferences,
-            JSONArrayCoderWrapper.new(ActiveModelCoder.new('EventProposal::TimeblockPreference'))
+            coder: JSONArrayCoderWrapper.new(ActiveModelCoder.new("EventProposal::TimeblockPreference"))
 
   validates :status, inclusion: { in: STATUSES }
   validate :length_fits_in_convention

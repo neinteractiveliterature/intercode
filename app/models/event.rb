@@ -193,7 +193,7 @@ class Event < ApplicationRecord
   scope :with_runs_between,
         ->(convention, start, finish) { where(id: convention.runs.between(start, finish).select(:event_id)) }
 
-  serialize :registration_policy, ActiveModelCoder.new("RegistrationPolicy")
+  serialize :registration_policy, coder: ActiveModelCoder.new("RegistrationPolicy")
 
   attr_accessor :bypass_single_event_run_check, :allow_registration_policy_change
 

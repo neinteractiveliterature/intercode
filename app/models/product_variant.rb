@@ -28,7 +28,7 @@ class ProductVariant < ApplicationRecord
   belongs_to :product
 
   has_one_attached :image
-  serialize :override_pricing_structure, ActiveModelCoder.new('PricingStructure', allow_nil: true)
+  serialize :override_pricing_structure, coder: ActiveModelCoder.new("PricingStructure", allow_nil: true)
 
   def to_liquid
     ProductVariantDrop.new(self)
