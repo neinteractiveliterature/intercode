@@ -4946,7 +4946,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mdx-js/react@npm:1.6.22, @mdx-js/react@npm:^1.6.22":
+"@mdx-js/react@npm:3.0.0":
+  version: 3.0.0
+  resolution: "@mdx-js/react@npm:3.0.0"
+  dependencies:
+    "@types/mdx": "npm:^2.0.0"
+  peerDependencies:
+    "@types/react": ">=16"
+    react: ">=16"
+  checksum: 865f6ebc7ae83c6cb9f7e92db4eddd3f85cd1664391643b4736887ddc32b0ddb5aec012db6fbc9b486b552e08e6d5ad800450fcd9d51c20665667ff0f174d966
+  languageName: node
+  linkType: hard
+
+"@mdx-js/react@npm:^1.6.22":
   version: 1.6.22
   resolution: "@mdx-js/react@npm:1.6.22"
   peerDependencies:
@@ -6808,6 +6820,13 @@ __metadata:
   dependencies:
     "@types/unist": "npm:*"
   checksum: 375f08b3910505291b2815d9edf55dca63c6c4ec58dd33c866521e68905fd4e8fe83b397e167af2cdd3799b851a7e02817d58610cfb814aee20bf3c52d87be9b
+  languageName: node
+  linkType: hard
+
+"@types/mdx@npm:^2.0.0":
+  version: 2.0.10
+  resolution: "@types/mdx@npm:2.0.10"
+  checksum: a2a5d71967c44c650e883eaaeb61db9c0758b9c1d675e04b7a3cfeeaee6efd5044dc9c78d780aa3fe408a2f85680bf3b723c92a1772bb6c2da35ef346d766de2
   languageName: node
   linkType: hard
 
@@ -10974,7 +10993,7 @@ __metadata:
     "@docusaurus/preset-classic": "npm:2.4.3"
     "@docusaurus/types": "npm:2.4.3"
     "@edno/docusaurus2-graphql-doc-generator": "npm:1.13.1"
-    "@mdx-js/react": "npm:1.6.22"
+    "@mdx-js/react": "npm:3.0.0"
     "@svgr/webpack": "npm:8.1.0"
     "@types/lodash": "npm:4.14.202"
     clsx: "npm:1.2.1"
