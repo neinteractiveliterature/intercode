@@ -560,7 +560,8 @@ GEM
       errbase (>= 0.1.1)
     scheduled_value (1.4.0)
       sorted_set (~> 1.0)
-    sequel (5.70.0)
+    sequel (5.74.0)
+      bigdecimal
     set (1.0.3)
     shoryuken (5.3.0)
       aws-sdk-core (>= 2)
