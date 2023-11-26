@@ -54,11 +54,15 @@ module.exports = {
       ({
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
-          editUrl: 'https://github.com/neinteractiveliterature/intercode/edit/main/doc-site/',
+          editUrl: ({ docPath }) => {
+            return `https://holocron.so/github/pr/neinteractiveliterature/intercode/main/editor/doc-site/docs/${docPath}`
+          },
         },
         blog: {
           showReadingTime: true,
-          editUrl: 'https://github.com/neinteractiveliterature/intercode/edit/main/doc-site/blog/',
+          editUrl: ({ docPath }) => {
+            return `https://holocron.so/github/pr/neinteractiveliterature/intercode/main/editor/doc-site/blog/${docPath}`
+          },
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
