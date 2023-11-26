@@ -155,7 +155,7 @@ jobs:
         id: ruby-version
         run: echo "ruby-version=$(cat .ruby-version)" >> $GITHUB_OUTPUT
       - name: Build (and push to registry, if on main)
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v5
         with:
           context: .
           push: ${{ github.event_name == 'push' && github.event.ref == 'refs/heads/main' }}
@@ -167,7 +167,7 @@ jobs:
             RUBY_VERSION=${{ steps.ruby-version.outputs.ruby-version }}
             NODE_VERSION=${{ steps.node-version.outputs.node-version }}
       - name: Build assets only (and push to registry, if on main)
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v5
         if: github.event_name == 'push' && github.event.ref == 'refs/heads/main'
         with:
           context: .
