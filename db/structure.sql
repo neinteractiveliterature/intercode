@@ -3919,6 +3919,13 @@ CREATE UNIQUE INDEX index_ahoy_visits_on_visit_token ON public.ahoy_visits USING
 
 
 --
+-- Name: index_ahoy_visits_on_visitor_token_and_started_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ahoy_visits_on_visitor_token_and_started_at ON public.ahoy_visits USING btree (visitor_token, started_at);
+
+
+--
 -- Name: index_assumed_identity_request_logs_on_created_at; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -5691,6 +5698,7 @@ ALTER TABLE ONLY public.cms_files_pages
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20231126190837'),
 ('20231126173532'),
 ('20231126173531'),
 ('20231126173530'),
