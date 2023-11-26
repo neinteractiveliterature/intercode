@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.actor != 'dependabot[bot]'
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install libvips42
         run: sudo apt-get update && sudo apt-get install libvips42
       - name: Set up Ruby
@@ -29,7 +29,7 @@ jobs:
     name: graphql-codegen-tsc
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Read .node-version
         id: node-version
         run: echo "node-version=$(cat .node-version)" >> $GITHUB_OUTPUT
@@ -48,7 +48,7 @@ jobs:
     name: jest
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Read .node-version
         id: node-version
         run: echo "node-version=$(cat .node-version)" >> $GITHUB_OUTPUT
@@ -92,7 +92,7 @@ jobs:
         ports:
           - 5432:5432
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install libvips42
         run: sudo apt-get update && sudo apt-get install libvips42
       - name: Set up Ruby
@@ -118,7 +118,7 @@ jobs:
   docker-build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up webpack cache
         uses: actions/cache@v3
         id: webpack-cache # use this to check for `cache-hit` (`steps.webpack-cache.outputs.cache-hit != 'true'`)
@@ -176,7 +176,7 @@ jobs:
     name: Build doc site
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up docusaurus cache
         uses: actions/cache@v3
         with:
