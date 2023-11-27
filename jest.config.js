@@ -33,7 +33,7 @@ const config = {
     '^.+\\.(js|ts)x?$': '@swc/jest',
   },
   transformIgnorePatterns: [
-    '(node_modules|.yarn/(.cache|__virtual))/(?!(lodash-es|@juggle/resize-observer|react-dnd-multi-backend|@neinteractiveliterature-litform|react-bootstrap4-modal|@apollo/client/link|@apollo/client/utilities|ts-invariant|uuid)/)',
+    '(node_modules|.yarn/(.cache|__virtual))/(?!(lodash-es|@juggle/resize-observer|react-dnd-multi-backend|@neinteractiveliterature-litform|react-bootstrap4-modal|@apollo/client|ts-invariant|uuid)/)',
   ],
 };
 
