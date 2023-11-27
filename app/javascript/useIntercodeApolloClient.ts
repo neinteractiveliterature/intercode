@@ -11,7 +11,7 @@ import {
 } from '@apollo/client';
 import { BatchHttpLink } from '@apollo/client/link/batch-http';
 import { useAuthHeadersLink, useErrorHandlerLink } from '@neinteractiveliterature/litform';
-import { createUploadLink } from 'apollo-upload-client';
+import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
 import { DateTime } from 'luxon';
 
 import possibleTypes from './possibleTypes.json';
