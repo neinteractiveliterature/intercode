@@ -105,7 +105,7 @@ function ScheduleMultipleRunsModal({
       nonConflictingTimespansWithinRange.map((t, index) => ({
         __typename: 'Run' as const,
         id: `prospectiveRun${index}`,
-        starts_at: t.start.toISO(),
+        starts_at: t.start.toISO() ?? '',
         rooms,
       })),
     [nonConflictingTimespansWithinRange, rooms],

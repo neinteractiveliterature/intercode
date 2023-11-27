@@ -321,7 +321,7 @@ export default class Schedule {
       my_signups: [],
       my_signup_requests: [],
       room_names: [],
-      starts_at: timespan.start.toISO(),
+      starts_at: timespan.start.toISO() ?? '',
       confirmed_signup_count: 0,
       not_counted_signup_count: 0,
       grouped_signup_counts: [],

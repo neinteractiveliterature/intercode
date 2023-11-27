@@ -44,7 +44,7 @@ function isUpload({ variables }: Operation) {
 
 export function getIntercodeUserTimezoneHeader() {
   const localTime = DateTime.local();
-  return { 'X-Intercode-User-Timezone': localTime.zoneName };
+  return { 'X-Intercode-User-Timezone': localTime.zoneName ?? '' };
 }
 
 export function useIntercodeApolloLink(

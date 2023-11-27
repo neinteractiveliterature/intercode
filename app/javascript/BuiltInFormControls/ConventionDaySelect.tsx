@@ -52,7 +52,7 @@ function ConventionDaySelect({ convention, value, onChange }: ConventionDaySelec
           className="form-check-input"
           type="radio"
           name="day"
-          value={day.toISO()}
+          value={day.toISO() ?? ''}
           checked={day.toMillis() === value?.toMillis()}
           onChange={(event) => inputChange(event.target.value)}
           aria-label={format(day, 'longWeekday')}

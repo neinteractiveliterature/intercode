@@ -80,7 +80,7 @@ function TimeblockPreferenceEditorOmissionsRow({
 
           return {
             label: format(dayStart, 'longWeekday'),
-            value: dayStart.toISODate(),
+            value: dayStart.toISODate() ?? '',
             disabled: !timespan.overlapsTimespan(conventionTimespan),
           };
         })

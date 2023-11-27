@@ -143,7 +143,7 @@ export default LoadQueryWrapper<NewConventionModalQueryData, NewConventionModalQ
       }
     };
 
-    const timezoneNameForInputs = convention.timezone_name ?? DateTime.local().zoneName;
+    const timezoneNameForInputs = convention.timezone_name ?? DateTime.local().zoneName ?? '';
 
     const [createClicked, createError, createInProgress] = useAsyncFunction(create);
 

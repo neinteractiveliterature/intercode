@@ -9,7 +9,7 @@ import { useWhosFreeQuery } from './queries.generated';
 
 function WhosFreeResults({ timespan }: { timespan: FiniteTimespan }) {
   const { data, loading, error } = useWhosFreeQuery({
-    variables: { start: timespan.start.toISO(), finish: timespan.finish.toISO() },
+    variables: { start: timespan.start.toISO() ?? '', finish: timespan.finish.toISO() ?? '' },
   });
 
   if (loading) {
