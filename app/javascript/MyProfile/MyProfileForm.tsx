@@ -1,7 +1,6 @@
 import { useState, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-// @ts-expect-error md5.js has no type
-import MD5 from 'md5.js';
+import md5 from 'md5';
 import { useTranslation, Trans } from 'react-i18next';
 import { BooleanInput, PageLoadingIndicator, LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -174,9 +173,7 @@ function MyProfileFormInner({ initialSetup, initialUserConProfile, convention, f
             caption={
               <>
                 <Gravatar
-                  url={`https://gravatar.com/avatar/${new MD5()
-                    .update((userConProfile.email ?? '').trim().toLowerCase())
-                    .digest('hex')}`}
+                  url={`https://gravatar.com/avatar/${md5((userConProfile.email ?? '').trim().toLowerCase())}`}
                   enabled={userConProfile.gravatar_enabled}
                   pixelSize={32}
                   imgClassName="align-baseline"

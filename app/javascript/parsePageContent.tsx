@@ -1,9 +1,7 @@
 import { Suspense, CSSProperties, ReactNode, useLayoutEffect } from 'react';
 import * as React from 'react';
 import camelCase from 'lodash/camelCase';
-// @ts-expect-error html-to-react has no type declarations
 import IsValidNodeDefinitions from 'html-to-react/lib/is-valid-node-definitions';
-// @ts-expect-error html-to-react has no type declarations
 import camelCaseAttrMap from 'html-to-react/lib/camel-case-attribute-names';
 import { Link } from 'react-router-dom';
 import { ErrorBoundary } from '@neinteractiveliterature/litform';
