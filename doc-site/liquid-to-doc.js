@@ -41,7 +41,14 @@ function formatTypeName(typeName) {
     return `<code>${linkifyTypeName(typeName)}</code>`;
   }
 
-  return `<code>${typeName.replace(/\<(\w+)\>/g, (match, p1) => `&lt;${linkifyTypeName(p1)}&gt;`)}</code>`;
+  return `<code>${typeName.replace(
+    /\<([^\>]+)\>/g,
+    (match, p1) =>
+      `&lt;${p1
+        .split(',')
+        .map((p2) => linkifyTypeName(p2.trim()))
+        .join(', ')}&gt;`,
+  )}</code>`;
 }
 
 function formatMethodDoc(method) {
@@ -51,7 +58,7 @@ function formatMethodDoc(method) {
 
   return `#### \`${method.name}\` ${returnTag?.types ? `(${returnTag.types.map(formatTypeName).join(', ')})` : ''}
 
-${returnTag?.text ?? ''}
+${returnTag?.text?.replace(/([\{\}])/g, '\\$1') ?? ''}
 
 ${exampleTags.map(formatExampleTag).join('\n\n')}
 
