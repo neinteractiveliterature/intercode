@@ -50,8 +50,8 @@ export function parseTimeblockPreference(unparsedPreference: UnparsedTimeblockPr
 
 export function serializeTimeblockPreference(preference: ParsedTimeblockPreference): UnparsedTimeblockPreference {
   return {
-    start: preference.start.toISO(),
-    finish: preference.finish.toISO(),
+    start: preference.start.toISO() ?? '',
+    finish: preference.finish.toISO() ?? '',
     label: preference.label,
     ordinality: preference.ordinality,
   };

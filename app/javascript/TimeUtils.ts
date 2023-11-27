@@ -138,7 +138,7 @@ export function timezoneNameForConvention(
     return convention.timezone_name;
   }
 
-  return DateTime.local().zoneName;
+  return DateTime.local().zoneName ?? '';
 }
 
 export function useISODateTimeInAppZone(isoValue: string): DateTime {

@@ -6786,10 +6786,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/luxon@npm:3.2.2":
-  version: 3.2.2
-  resolution: "@types/luxon@npm:3.2.2"
-  checksum: 18567136c6e85ce524621ec01ecc9447aea5186ed2fde75eb2d3fa064e294ed37be5a81984da68fd316f72eac3b913193d5604c5156fe1c8b560253f662369c2
+"@types/luxon@npm:3.3.5":
+  version: 3.3.5
+  resolution: "@types/luxon@npm:3.3.5"
+  checksum: ff78fc4e31967098d28def1f9ff9a24158089498fc82ad75adcd6425ad77d13d9c957bec0ad6ce0628fdd3ac56838bf315876c3b31d0c759a8bb2f1c7ad3e87a
   languageName: node
   linkType: hard
 
@@ -16135,10 +16135,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"luxon@npm:3.3.0":
-  version: 3.3.0
-  resolution: "luxon@npm:3.3.0"
-  checksum: 47f8e1e96b25441c799b8aa833b3f007fb1854713bcffc8c3384eda8e61fc9af1f038474d137274d2d386492f341c8a8c992fc78c213adfb3143780feba2776c
+"luxon@npm:3.4.4":
+  version: 3.4.4
+  resolution: "luxon@npm:3.4.4"
+  checksum: 02e26a0b039c11fd5b75e1d734c8f0332c95510f6a514a9a0991023e43fb233884da02d7f966823ffb230632a733fc86d4a4b1e63c3fbe00058b8ee0f8c728af
   languageName: node
   linkType: hard
 
@@ -20095,7 +20095,7 @@ __metadata:
     "@types/jest": "npm:29.5.10"
     "@types/js-search": "npm:1.4.4"
     "@types/lodash": "npm:4.14.202"
-    "@types/luxon": "npm:3.2.2"
+    "@types/luxon": "npm:3.3.5"
     "@types/mapbox-gl": "npm:1.13.10"
     "@types/minimist": "npm:1.2.5"
     "@types/node": "npm:20.10.0"
@@ -20180,7 +20180,7 @@ __metadata:
     js-search: "npm:2.0.1"
     lint-staged: "npm:15.1.0"
     lodash: "npm:4.17.21"
-    luxon: "npm:3.3.0"
+    luxon: "npm:3.4.4"
     mapbox-gl: "npm:1.13.3"
     md5.js: "npm:1.3.5"
     mini-css-extract-plugin: "npm:2.7.6"
