@@ -1,4 +1,4 @@
 import './tempPolyfills';
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
 
 jest.setTimeout(10000);
