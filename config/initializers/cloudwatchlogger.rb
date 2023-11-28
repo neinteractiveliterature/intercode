@@ -133,5 +133,6 @@ if ENV["CLOUDWATCH_LOG_GROUP"]
       dyno_type || ENV["CLOUDWATCH_LOG_STREAM_NAME"] || "intercode",
       { format: :json, logger: logger_logger }
     )
-  Rails.application.config.logger.extend(ActiveSupport::Logger.broadcast(cloudwatch_logger))
+  Rails.application.config.logger =
+    ActiveSupport::BroadcastLogger.new(Rails.application.config.logger, cloudwatch_logger)
 end
