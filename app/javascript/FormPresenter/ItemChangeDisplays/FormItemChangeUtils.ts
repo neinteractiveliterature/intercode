@@ -1,5 +1,4 @@
-// @ts-expect-error md5.js has no type definitions
-import MD5 from 'md5.js';
+import md5 from 'md5';
 import { DateTime } from 'luxon';
 import sortBy from 'lodash/sortBy';
 
@@ -22,7 +21,7 @@ export function sortChanges<T extends Pick<FormResponseChange, 'created_at'>>(ch
 export function getChangeId(
   change: Pick<FormResponseChange, 'field_identifier' | 'previous_value' | 'new_value'>,
 ): string {
-  return new MD5().update(`${change.field_identifier}-${change.previous_value}-${change.new_value}`).digest('hex');
+  return md5(`${change.field_identifier}-${change.previous_value}-${change.new_value}`);
 }
 
 export type UnknownFormItemType = ParsedFormItem<unknown, { toString(): string }, string>;
@@ -92,7 +91,7 @@ export function buildChangeGroups(
     return [];
   }
 
-  const groupedChanges = sortedProcessedChanges.reduce<typeof sortedProcessedChanges[]>(
+  const groupedChanges = sortedProcessedChanges.reduce<(typeof sortedProcessedChanges)[]>(
     (workingSet, change) => {
       const lastChangeGroup = workingSet[workingSet.length - 1];
       const lastChange = lastChangeGroup.length > 0 ? lastChangeGroup[lastChangeGroup.length - 1] : null;
@@ -111,7 +110,7 @@ export function buildChangeGroups(
 
   return groupedChanges.map((changesInGroup) => ({
     changes: changesInGroup,
-    id: new MD5().update(changesInGroup.map((c) => c.id).join(',')).digest('hex'),
+    id: md5(changesInGroup.map((c) => c.id).join(',')),
   }));
 }
 

@@ -1,4 +1,3 @@
-// @ts-expect-error array-to-sentence has no type definitions
 import arrayToSentence from 'array-to-sentence';
 
 export type ArrayToSentenceCellProps = {

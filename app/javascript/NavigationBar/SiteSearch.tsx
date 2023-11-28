@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom';
 import { useApolloClient } from '@apollo/client';
 import { CSSTransition } from 'react-transition-group';
 import { Search, ExactWordIndexStrategy, StemmingTokenizer, SimpleTokenizer } from 'js-search';
-// @ts-expect-error porter-stemmer has no types
 import { stemmer } from 'porter-stemmer';
 import { v4 as uuidv4 } from 'uuid';
 import { useTranslation } from 'react-i18next';

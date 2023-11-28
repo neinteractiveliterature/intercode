@@ -1,7 +1,6 @@
 import { useContext, useState, Suspense, useId } from 'react';
 import * as React from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
-// @ts-expect-error array-to-sentence has no TypeScript declarations
 import arrayToSentence from 'array-to-sentence';
 import { useTranslation } from 'react-i18next';
 import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
