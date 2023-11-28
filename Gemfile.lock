@@ -422,7 +422,7 @@ GEM
       heroics (~> 0.1.1)
       moneta (~> 1.0.0)
       rate_throttle_client (~> 0.1.0)
-    prettier (4.0.2)
+    prettier (4.0.3)
       syntax_tree (>= 4.0.1)
       syntax_tree-haml (>= 2.0.0)
       syntax_tree-rbs (>= 0.2.0)
@@ -719,7 +719,7 @@ DEPENDENCIES
   pg_search
   phonelib
   platform-api
-  prettier (= 4.0.2)
+  prettier (= 4.0.3)
   prettier_print
   pry-rails
   pry-remote
