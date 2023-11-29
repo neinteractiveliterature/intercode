@@ -158,6 +158,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
+          load: true
           push: ${{ github.event_name == 'push' && github.event.ref == 'refs/heads/main' }}
           platforms: linux/amd64
           target: production
@@ -166,6 +167,8 @@ jobs:
           build-args: |
             RUBY_VERSION=${{ steps.ruby-version.outputs.ruby-version }}
             NODE_VERSION=${{ steps.node-version.outputs.node-version }}
+      - name: Check that app can boot
+        run: docker run ghcr.io/neinteractiveliterature/intercode:${{ github.sha }} bin/rails runner 'puts "Hello, world!"'
       - name: Build assets only (and push to registry, if on main)
         uses: docker/build-push-action@v5
         if: github.event_name == 'push' && github.event.ref == 'refs/heads/main'

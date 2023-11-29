@@ -10,10 +10,10 @@ USER root
 RUN useradd www
 WORKDIR /usr/src/intercode
 
-RUN apt-get update && apt-get install -y libvips42 git build-essential shared-mime-info libpq-dev && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y libvips42 git build-essential shared-mime-info libpq-dev libmariadb-dev && rm -rf /var/lib/apt/lists/*
 
 COPY --chown=www:www Gemfile Gemfile.lock .ruby-version /usr/src/intercode/
-RUN bundle config set without 'development test intercode1_import' \
+RUN bundle config set without 'development test' \
   && bundle install -j4 \
   && echo 'Running bundle clean --force' \
   && bundle clean --force \
@@ -38,7 +38,7 @@ ENV NODE_ENV production
 ENV AWS_ACCESS_KEY_ID dummy
 ENV AWS_SECRET_ACCESS_KEY dummy
 
-RUN bundle exec bootsnap precompile --gemfile --exclude lib/intercode/import app/ lib/
+RUN bundle exec bootsnap precompile --gemfile app/ lib/
 RUN DATABASE_URL=postgresql://fakehost/not_a_real_database AWS_S3_BUCKET=fakebucket bundle exec rails assets:precompile
 RUN rm -r doc-site
 
@@ -60,7 +60,7 @@ ENV RAILS_ENV production
 ENV NODE_ENV production
 
 USER root
-RUN apt-get update && apt-get install -y --no-install-recommends openssh-server iproute2 curl python3 libvips42 poppler-utils xz-utils libjemalloc2 shared-mime-info libpq5 && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends openssh-server iproute2 curl python3 libvips42 poppler-utils xz-utils libjemalloc2 shared-mime-info libpq5 mariadb-client && rm -rf /var/lib/apt/lists/*
 RUN useradd -ms $(which bash) www
 RUN mkdir /opt/node && \
   cd /opt/node && \

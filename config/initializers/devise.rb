@@ -1,5 +1,5 @@
-require 'intercode/strategies/legacy_md5'
-require 'intercode/strategies/legacy_sha1'
+require "devise/strategies/legacy_md5_authenticatable"
+require "devise/strategies/legacy_sha1_authenticatable"
 
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
@@ -9,21 +9,21 @@ Devise.setup do |config|
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class with default "from" parameter.
-  config.mailer_sender = 'overridden-in-user-mailer@example.com'
+  config.mailer_sender = "overridden-in-user-mailer@example.com"
 
   config.secret_key =
-    ENV['DEVISE_SECRET_KEY'] ||
+    ENV["DEVISE_SECRET_KEY"] ||
       "ccad6eab004acb9d2c45bd5a5ad385fe101d536b5271f139f59848a349fb144a7b8eddaa19af1fd7ed9a92dd0409781db162d80bf91dd39\
 9e414a5611497bc8f"
 
   # Configure the class responsible to send e-mails.
-  config.mailer = 'UserMailer'
+  config.mailer = "UserMailer"
 
   # ==> ORM configuration
   # Load and configure the ORM. Supports :active_record (default) and
   # :mongoid (bson_ext recommended) by default. Other ORMs may be
   # available as additional gems.
-  require 'devise/orm/active_record'
+  require "devise/orm/active_record"
 
   # ==> Configuration for any authentication mechanism
   # Configure which keys are used when authenticating a user. The default is
