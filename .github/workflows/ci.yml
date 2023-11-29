@@ -158,7 +158,6 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          load: true
           push: ${{ github.event_name == 'push' && github.event.ref == 'refs/heads/main' }}
           platforms: linux/amd64
           target: production
