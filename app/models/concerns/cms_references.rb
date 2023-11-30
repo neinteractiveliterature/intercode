@@ -18,15 +18,23 @@ module CmsReferences
   end
 
   def template_name_for_include_node(include_node)
-    regexp = /\A#{Regexp.escape include_node.tag_name}\s+#{Liquid::Include::Syntax}/
+    regexp = /\A#{Regexp.escape include_node.tag_name}\s+#{Liquid::Include::SYNTAX}/
     return nil unless include_node.raw =~ regexp
+    Liquid::Expression.parse(Regexp.last_match(1))
+  end
+
+  def template_name_for_render_node(render_node)
+    regexp = /\A#{Regexp.escape render_node.tag_name}\s+#{Liquid::Render::SYNTAX}/
+    return nil unless render_node.raw =~ regexp
     Liquid::Expression.parse(Regexp.last_match(1))
   end
 
   def referenced_partial_names
     each_liquid_node
-      .select { |node| node.is_a?(Liquid::Include) }
-      .filter_map { |include_node| template_name_for_include_node(include_node) }
+      .select { |node| node.is_a?(Liquid::Include) || node.is_a?(Liquid::Render) }
+      .filter_map do |node|
+        node.is_a?(Liquid::Include) ? template_name_for_include_node(node) : template_name_for_render_node(node)
+      end
   end
 
   def referenced_partials_direct(blacklist = [])
@@ -53,14 +61,12 @@ module CmsReferences
   end
 
   def referenced_files_recursive
-    CmsFile
-      .joins(file_attachment: :blob)
-      .where(
-        active_storage_blobs: {
-          filename: referenced_file_names + referenced_partials_recursive.flat_map(&:referenced_file_names)
-        },
-        parent: parent
-      )
+    CmsFile.joins(file_attachment: :blob).where(
+      active_storage_blobs: {
+        filename: referenced_file_names + referenced_partials_recursive.flat_map(&:referenced_file_names)
+      },
+      parent: parent
+    )
   end
 
   def template_invariant?(cms_variable_names)
