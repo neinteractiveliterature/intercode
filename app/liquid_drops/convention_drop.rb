@@ -115,6 +115,17 @@ class ConventionDrop < Liquid::Drop
     @events_created_since ||= EventsCreatedSinceDrop.new(convention)
   end
 
+  # @return [RunsCreatedSince] A structure that lets you access just the runs created since
+  #                            a certain time.  This is much more efficient than using the
+  #                            runs method and filtering by created_at.
+  # @example Retrieving the runs created since a certain date
+  #   {{ convention.runs_created_since["2018-11-03T00:00:00-05:00"] }}
+  # @example Retrieving the runs created since the last signup round opened
+  #   {{ convention.runs_created_since[convention.maximum_event_signups.current_value_change] }}
+  def runs_created_since
+    @runs_created_since ||= RunsCreatedSinceDrop.new(convention)
+  end
+
   # @return [Array<RunDrop>] Event runs at the convention
   def runs
     @events ||= convention.runs.includes(:event).to_a

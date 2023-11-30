@@ -68,7 +68,7 @@ class SignupCountPresenter
     def count(**filters)
       filtered_data =
         (filters.key?(dimension) ? [@rows_by_dimension[filters.fetch(dimension)]] : @rows_by_dimension.values)
-      final? ? filtered_data.sum : filtered_data.sum { |data| data&.count(**filters) || 0 }
+      final? ? filtered_data.compact.sum : filtered_data.compact.sum { |data| data&.count(**filters) || 0 }
     end
 
     def grouped_data

@@ -55,6 +55,11 @@ class EventDrop < Liquid::Drop
     event.runs.to_a
   end
 
+  # @return [ActiveSupport::TimeWithZone] The time at which the earliest run of this event starts
+  def first_run_starts_at
+    event.runs.min_by(&:starts_at).starts_at
+  end
+
   # @deprecated Please use event_category.name instead.  (Note that the name field on
   #             EventCategoryDrop is formatted as plain English rather than an underscored lowercase
   #             string.)
@@ -81,9 +86,10 @@ class EventDrop < Liquid::Drop
     define_method field do
       markdown = event.public_send(field)
       return nil unless markdown
-      MarkdownPresenter
-        .new('')
-        .render(markdown, local_images: event.images.includes(:blob).index_by { |image| image.filename.to_s })
+      MarkdownPresenter.new("").render(
+        markdown,
+        local_images: event.images.includes(:blob).index_by { |image| image.filename.to_s }
+      )
     end
   end
 
@@ -96,9 +102,9 @@ class EventDrop < Liquid::Drop
         event.event_category.event_form,
         event,
         team_member_name: event.event_category.team_member_name,
-        controller: @context.registers['controller']
+        controller: @context.registers["controller"]
       )
-      .as_json_with_rendered_markdown('event', event, '')
+      .as_json_with_rendered_markdown("event", event, "")
       .sync
   end
 end
