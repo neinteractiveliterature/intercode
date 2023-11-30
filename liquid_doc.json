@@ -571,6 +571,20 @@
           ]
         },
         {
+          "name": "first_run_starts_at",
+          "docstring": "",
+          "tags": [
+            {
+              "tag_name": "return",
+              "name": null,
+              "text": "The time at which the earliest run of this event starts",
+              "types": [
+                "ActiveSupport::TimeWithZone"
+              ]
+            }
+          ]
+        },
+        {
           "name": "category",
           "docstring": "",
           "tags": [
