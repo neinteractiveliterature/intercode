@@ -325,8 +325,8 @@ GEM
     jaro_winkler (1.5.6)
     jaro_winkler (1.5.6-java)
     jmespath (1.6.2)
-    json (2.6.3)
-    json (2.6.3-java)
+    json (2.7.0)
+    json (2.7.0-java)
     jwt (2.7.1)
     kramdown (2.4.0)
       rexml
