@@ -19975,9 +19975,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-helmet-async@npm:*, react-helmet-async@npm:2.0.1":
-  version: 2.0.1
-  resolution: "react-helmet-async@npm:2.0.1"
+"react-helmet-async@npm:*, react-helmet-async@npm:2.0.3":
+  version: 2.0.3
+  resolution: "react-helmet-async@npm:2.0.3"
   dependencies:
     invariant: "npm:^2.2.4"
     react-fast-compare: "npm:^3.2.2"
@@ -19985,7 +19985,7 @@ __metadata:
   peerDependencies:
     react: ^16.6.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.6.0 || ^17.0.0 || ^18.0.0
-  checksum: f1fec97ae4d8d37fc040446adc473c26422b32fa9c73efa5ac6cb234090d1b51b33c603fefa6ec21332b3277f544235d56f2567c65afe1d349fc784fd3d99cd7
+  checksum: 3ac58fac566e3f4951c3853975afd57dbc3af1442a897391a226fb1a54cc757506912d13485e897c61ecefe5d97e673ee91688b11ff20eb769b172c0309514ee
   languageName: node
   linkType: hard
 
@@ -21108,7 +21108,7 @@ __metadata:
     react-cookie-consent: "npm:9.0.0"
     react-dom: "npm:18.2.0"
     react-google-recaptcha: "npm:3.1.0"
-    react-helmet-async: "npm:2.0.1"
+    react-helmet-async: "npm:2.0.3"
     react-html-id: "npm:0.1.5"
     react-i18next: "npm:13.5.0"
     react-onclickoutside: "npm:6.13.0"
