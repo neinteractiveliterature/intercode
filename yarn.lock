@@ -7033,14 +7033,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:18.2.39":
-  version: 18.2.39
-  resolution: "@types/react@npm:18.2.39"
+"@types/react@npm:*, @types/react@npm:18.2.40":
+  version: 18.2.40
+  resolution: "@types/react@npm:18.2.40"
   dependencies:
     "@types/prop-types": "npm:*"
     "@types/scheduler": "npm:*"
     csstype: "npm:^3.0.2"
-  checksum: e91a5419d7615ab4fcaa7cb3ad2bd372093676e86c082748ab36ac394d3ed560070482d092a5488f74d6b1d913369e4dabf6eb287debed4d70cd3eb7dc135542
+  checksum: d6f860ed1c9656e1bec2782fb38f90b0bd627382e575d2d5fed32e2ab7d6ebcf31bbec5e2493dd6d72446bacb2f484a4cec83ffc90a2d63d9751164d84bc4b8c
   languageName: node
   linkType: hard
 
@@ -21007,7 +21007,7 @@ __metadata:
     "@types/node": "npm:20.10.2"
     "@types/punycode": "npm:2.1.3"
     "@types/rails__activestorage": "npm:7.1.1"
-    "@types/react": "npm:18.2.39"
+    "@types/react": "npm:18.2.40"
     "@types/react-click-outside-hook": "npm:1.0.2"
     "@types/react-color": "npm:3.0.10"
     "@types/react-dom": "npm:18.2.17"
