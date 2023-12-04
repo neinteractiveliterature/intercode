@@ -6807,10 +6807,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/luxon@npm:3.3.6":
-  version: 3.3.6
-  resolution: "@types/luxon@npm:3.3.6"
-  checksum: 8133b043aca1b9b8981a82d5a415de27c3cab304edb03f5195a967af0a51d3f62dc2ffb4ca07a239a6afaae119515f04afb47daba0b05979d74daa6d5bc9c947
+"@types/luxon@npm:3.3.7":
+  version: 3.3.7
+  resolution: "@types/luxon@npm:3.3.7"
+  checksum: ff6ba3fd83636c23c077fea7b2841ad5365ae22872a250baef2a99885123f0d5e997cfbc1ac0afccf89c70ff24b1517b2cc0ebadb2bee27559c670574620bed1
   languageName: node
   linkType: hard
 
@@ -21030,7 +21030,7 @@ __metadata:
     "@types/jest": "npm:29.5.10"
     "@types/js-search": "npm:1.4.4"
     "@types/lodash": "npm:4.14.202"
-    "@types/luxon": "npm:3.3.6"
+    "@types/luxon": "npm:3.3.7"
     "@types/mapbox-gl": "npm:1.13.10"
     "@types/md5": "npm:^2"
     "@types/minimist": "npm:1.2.5"
