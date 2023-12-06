@@ -77,7 +77,6 @@ gem "cloudwatch_scheduler", github: "nbudin/cloudwatch_scheduler", branch: "ruby
 gem "ahoy_matey"
 
 # Logging
-gem "cloudwatchlogger", github: "zshannon/cloudwatchlogger", branch: "master"
 gem "lograge"
 
 # Miscellany
