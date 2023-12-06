@@ -10,3 +10,6 @@ Ahoy.api = false
 # GDPR compliance
 Ahoy.mask_ips = true
 Ahoy.cookies = :none
+
+# Don't spam the logs
+Ahoy.logger = nil
