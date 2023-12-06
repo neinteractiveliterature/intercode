@@ -18,8 +18,7 @@ if ENV["JSON_LOGGING"]
 
     config.lograge.custom_options =
       lambda do |event|
-        gc_stat = GC.stat
-        {
+        custom_options = {
           request_time: Time.now,
           application: Rails.application.class.name.delete_suffix("::Application"),
           process_id: Process.pid,
@@ -33,11 +32,10 @@ if ENV["JSON_LOGGING"]
           exception: event.payload[:exception]&.first,
           request_id: event.payload[:headers]["action_dispatch.request_id"],
           current_user_id: event.payload[:current_user_id],
-          assumed_identity_from_profile_id: event.payload[:assumed_identity_from_profile_id],
-          dyno_type: dyno_type,
-          dyno_id: dyno_id,
-          gc: gc_stat
+          assumed_identity_from_profile_id: event.payload[:assumed_identity_from_profile_id]
         }.compact
+
+        custom_options[:gc_stat] = GC.stat if ENV["GC_DEBUG"]
       end
   end
 end
