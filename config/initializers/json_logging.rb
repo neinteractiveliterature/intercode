@@ -3,18 +3,6 @@ if ENV["JSON_LOGGING"]
     config.lograge.formatter = Lograge::Formatters::Json.new
     config.lograge.enabled = true
     config.lograge.base_controller_class = ["ActionController::Base"]
-    config.lograge.custom_payload do |controller|
-      {
-        host: controller.request.host,
-        current_user_id: controller.current_user&.id,
-        assumed_identity_from_profile_id:
-          controller.respond_to?(:assumed_identity_from_profile) ? controller.assumed_identity_from_profile&.id : nil,
-        remote_ip: controller.request.remote_ip,
-        ip: controller.request.ip,
-        x_forwarded_for: controller.request.headers["X-Forwarded-For"],
-        user_agent: controller.request.headers["User-Agent"]
-      }
-    end
 
     config.lograge.custom_options =
       lambda do |event|
@@ -36,6 +24,8 @@ if ENV["JSON_LOGGING"]
         }.compact
 
         custom_options[:gc_stat] = GC.stat if ENV["GC_DEBUG"]
+
+        custom_options
       end
   end
 end
