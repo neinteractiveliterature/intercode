@@ -85,8 +85,9 @@ Shoryuken.configure_server do |config|
 
   config.server_middleware { |chain| chain.add ShoryukenJSONLogging } if ENV["JSON_LOGGING"]
 
-  # Don't spam the logs
-  config.sqs_client = Aws::SQS::Client.new(log_level: :info)
+  # Don't spam the logs.  Counterintuitively this is telling AWS SDK what level to send its logs at, not what level to
+  # show logs at least
+  Aws.config.update(log_level: :debug)
 
   # config.server_middleware do |chain|
   #  chain.add Shoryuken::MyMiddleware

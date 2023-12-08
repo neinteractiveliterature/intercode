@@ -20,7 +20,8 @@ if ENV["JSON_LOGGING"]
           exception: event.payload[:exception]&.first,
           request_id: event.payload[:headers]["action_dispatch.request_id"],
           current_user_id: event.payload[:current_user_id],
-          assumed_identity_from_profile_id: event.payload[:assumed_identity_from_profile_id]
+          assumed_identity_from_profile_id: event.payload[:assumed_identity_from_profile_id],
+          fly_process_group: ENV.fetch("FLY_PROCESS_GROUP", nil)
         }.compact
 
         custom_options[:gc_stat] = GC.stat if ENV["GC_DEBUG"]

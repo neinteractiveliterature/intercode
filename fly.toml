@@ -1,0 +1,62 @@
+# fly.toml app configuration file generated for intercode on 2023-12-07T14:26:10-08:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "intercode"
+primary_region = "iad"
+swap_size_mb = 512
+
+[build]
+image = "ghcr.io/neinteractiveliterature/intercode"
+
+[env]
+ASSETS_HOST = "assets.neilhosting.net"
+CLOUDWATCH_LOG_GROUP = "intercode2_production"
+HEROKU_APP_NAME = "intercode"
+INTERCODE_CERTS_NO_WILDCARD_DOMAINS = "5pi-con.natbudin.com signups.greaterbostonlarpsociety.org thepitch.aegames.org"
+INTERCODE_HOST = "neilhosting.net"
+JSON_LOGGING = "1"
+MALLOC_ARENA_MAX = 2
+RACK_ENV = "production"
+RAILS_ENV = "production"
+RAILS_GROUPS = "skylight"
+RAILS_LOG_TO_STDOUT = "enabled"
+RAILS_MAX_THREADS = "3"
+RAILS_SERVE_STATIC_FILES = "enabled"
+ROLLBAR_CLIENT_ACCESS_TOKEN = "2b2ee6f354804509a8dfba07e04f098a"
+ROLLBAR_PUBLIC_PATH = "//neilhosting.net/packs"
+RUBY_YJIT_ENABLE = "1"
+TWILIO_SMS_NUMBER = "+14156345010"
+UPLOADS_HOST = "https://uploads.neilhosting.net"
+WEB_CONCURRENCY = "0"
+
+[processes]
+shoryuken = "bundle exec shoryuken --rails -C config/shoryuken.yml"
+web = "bundle exec bin/rails server -p 3000 -b 0.0.0.0"
+
+[http_service]
+force_https = true
+internal_port = 3000
+min_machines_running = 1
+processes = ["web"]
+
+# [[http_service.checks]]
+# grace_period = "10s"
+# interval = "30s"
+# method = "GET"
+# path = "/healthz"
+# timeout = "5s"
+# headers = {Host = "i.interconlarp.org"}
+
+[[vm]]
+cpu_kind = "shared"
+cpus = 1
+memory_mb = 512
+processes = ["web"]
+
+[[vm]]
+cpu_kind = "shared"
+cpus = 1
+memory_mb = 512
+processes = ["shoryuken"]
