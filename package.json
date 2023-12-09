@@ -55,7 +55,7 @@
     "@types/luxon": "3.3.7",
     "@types/mapbox-gl": "1.13.10",
     "@types/minimist": "1.2.5",
-    "@types/react": "18.2.42",
+    "@types/react": "18.2.43",
     "@types/react-click-outside-hook": "1.0.2",
     "@types/react-color": "3.0.10",
     "@types/react-google-recaptcha": "2.1.8",
