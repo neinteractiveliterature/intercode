@@ -8,7 +8,7 @@ primary_region = "iad"
 swap_size_mb = 512
 
 [build]
-image = "ghcr.io/neinteractiveliterature/intercode"
+image = "ghcr.io/neinteractiveliterature/intercode:latest"
 
 [env]
 ASSETS_HOST = "assets.neilhosting.net"
