@@ -271,6 +271,12 @@ GEM
     ffi (1.16.3)
     ffi (1.16.3-java)
     flamegraph (0.9.5)
+    fly-ruby (0.5.1)
+      rack (~> 2.0)
+    fly.io-rails (0.3.5)
+      fly-ruby
+      nats-pure
+      toml
     get_process_mem (0.2.7)
       ffi (~> 1.0)
     globalid (1.2.1)
@@ -374,6 +380,8 @@ GEM
     multi_json (1.15.0)
     mutex_m (0.2.0)
     mysql2 (0.5.5)
+    nats-pure (2.4.0)
+      concurrent-ruby (~> 1.0)
     net-imap (0.4.6)
       date
       net-protocol
@@ -399,6 +407,7 @@ GEM
     parser (3.2.2.4)
       ast (~> 2.4.1)
       racc
+    parslet (2.0.0)
     pg (1.5.4)
     pg_search (2.3.6)
       activerecord (>= 5.2)
@@ -614,6 +623,8 @@ GEM
     tilt (2.3.0)
     timeout (0.4.1)
     tins (1.20.2)
+    toml (0.3.0)
+      parslet (>= 1.8.0, < 3.0.0)
     twilio-ruby (6.8.3)
       faraday (>= 0.9, < 3.0)
       jwt (>= 1.5, < 3.0)
@@ -680,6 +691,7 @@ DEPENDENCIES
   factory_bot_rails
   faker
   flamegraph
+  fly.io-rails
   graphql (>= 2.0)
   graphql-batch
   graphql-rails_logger

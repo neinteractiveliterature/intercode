@@ -84,6 +84,7 @@ gem "dalli"
 gem "domain_prefix"
 gem "icalendar"
 gem "platform-api"
+gem "fly.io-rails"
 gem "tzinfo-data"
 gem "browser"
 
