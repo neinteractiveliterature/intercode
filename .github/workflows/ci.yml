@@ -167,6 +167,7 @@ jobs:
           build-args: |
             RUBY_VERSION=${{ steps.ruby-version.outputs.ruby-version }}
             NODE_VERSION=${{ steps.node-version.outputs.node-version }}
+            REVISION=${{ github.sha }}
       - name: Check that app can boot
         run: >
           docker run -e DATABASE_URL=postgresql://fakehost/not_a_real_database

@@ -55,9 +55,11 @@ ENV LD_PRELOAD=/usr/lib/aarch64-linux-gnu/libjemalloc.so.2
 FROM ${TARGETARCH}_jemalloc as production
 ARG NODE_VERSION
 ARG TARGETARCH
+ARG REVISION
 
 ENV RAILS_ENV production
 ENV NODE_ENV production
+ENV REVISION ${REVISION}
 
 USER root
 RUN apt-get update && apt-get install -y --no-install-recommends openssh-server iproute2 curl python3 libvips42 poppler-utils xz-utils libjemalloc2 shared-mime-info libpq5 mariadb-client && rm -rf /var/lib/apt/lists/*
@@ -65,6 +67,11 @@ RUN useradd -ms $(which bash) www
 RUN mkdir /opt/node && \
   cd /opt/node && \
   curl https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-$(echo ${TARGETARCH} | sed 's/amd64/x64/').tar.xz | tar xJ --strip-components=1
+
+# Set up flyctl
+RUN curl -L https://fly.io/install.sh | sh
+ENV FLYCTL_INSTALL="/root/.fly"
+ENV PATH="$FLYCTL_INSTALL/bin:$PATH"
 
 COPY --from=build /usr/local/bundle /usr/local/bundle
 COPY --from=build --chown=www /usr/src/intercode /usr/src/intercode
