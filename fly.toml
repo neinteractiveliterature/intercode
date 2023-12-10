@@ -10,6 +10,9 @@ swap_size_mb = 512
 [build]
 image = "ghcr.io/neinteractiveliterature/intercode:latest"
 
+[deploy]
+release_command = "bundle exec rails release:perform"
+
 [env]
 ASSETS_HOST = "assets.neilhosting.net"
 CLOUDWATCH_LOG_GROUP = "intercode2_production"
