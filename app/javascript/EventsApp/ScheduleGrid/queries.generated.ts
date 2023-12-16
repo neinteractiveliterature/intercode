@@ -97,8 +97,13 @@ export function useScheduleGridConventionDataQueryLazyQuery(baseOptions?: Apollo
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<ScheduleGridConventionDataQueryData, ScheduleGridConventionDataQueryVariables>(ScheduleGridConventionDataQueryDocument, options);
         }
+export function useScheduleGridConventionDataQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ScheduleGridConventionDataQueryData, ScheduleGridConventionDataQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ScheduleGridConventionDataQueryData, ScheduleGridConventionDataQueryVariables>(ScheduleGridConventionDataQueryDocument, options);
+        }
 export type ScheduleGridConventionDataQueryHookResult = ReturnType<typeof useScheduleGridConventionDataQuery>;
 export type ScheduleGridConventionDataQueryLazyQueryHookResult = ReturnType<typeof useScheduleGridConventionDataQueryLazyQuery>;
+export type ScheduleGridConventionDataQuerySuspenseQueryHookResult = ReturnType<typeof useScheduleGridConventionDataQuerySuspenseQuery>;
 export type ScheduleGridConventionDataQueryQueryResult = Apollo.QueryResult<ScheduleGridConventionDataQueryData, ScheduleGridConventionDataQueryVariables>;
 export const ScheduleGridEventsQueryDocument = gql`
     query ScheduleGridEventsQuery($start: Date, $finish: Date, $filters: EventFiltersInput, $fetchFormItemIdentifiers: [String!]) {
@@ -139,6 +144,11 @@ export function useScheduleGridEventsQueryLazyQuery(baseOptions?: Apollo.LazyQue
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<ScheduleGridEventsQueryData, ScheduleGridEventsQueryVariables>(ScheduleGridEventsQueryDocument, options);
         }
+export function useScheduleGridEventsQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ScheduleGridEventsQueryData, ScheduleGridEventsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ScheduleGridEventsQueryData, ScheduleGridEventsQueryVariables>(ScheduleGridEventsQueryDocument, options);
+        }
 export type ScheduleGridEventsQueryHookResult = ReturnType<typeof useScheduleGridEventsQuery>;
 export type ScheduleGridEventsQueryLazyQueryHookResult = ReturnType<typeof useScheduleGridEventsQueryLazyQuery>;
+export type ScheduleGridEventsQuerySuspenseQueryHookResult = ReturnType<typeof useScheduleGridEventsQuerySuspenseQuery>;
 export type ScheduleGridEventsQueryQueryResult = Apollo.QueryResult<ScheduleGridEventsQueryData, ScheduleGridEventsQueryVariables>;

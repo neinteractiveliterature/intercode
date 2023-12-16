@@ -67,6 +67,11 @@ export function useNavigationItemsAdminQueryLazyQuery(baseOptions?: Apollo.LazyQ
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<NavigationItemsAdminQueryData, NavigationItemsAdminQueryVariables>(NavigationItemsAdminQueryDocument, options);
         }
+export function useNavigationItemsAdminQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<NavigationItemsAdminQueryData, NavigationItemsAdminQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<NavigationItemsAdminQueryData, NavigationItemsAdminQueryVariables>(NavigationItemsAdminQueryDocument, options);
+        }
 export type NavigationItemsAdminQueryHookResult = ReturnType<typeof useNavigationItemsAdminQuery>;
 export type NavigationItemsAdminQueryLazyQueryHookResult = ReturnType<typeof useNavigationItemsAdminQueryLazyQuery>;
+export type NavigationItemsAdminQuerySuspenseQueryHookResult = ReturnType<typeof useNavigationItemsAdminQuerySuspenseQuery>;
 export type NavigationItemsAdminQueryQueryResult = Apollo.QueryResult<NavigationItemsAdminQueryData, NavigationItemsAdminQueryVariables>;

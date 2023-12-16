@@ -60,6 +60,11 @@ export function useDepartmentAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryH
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<DepartmentAdminQueryData, DepartmentAdminQueryVariables>(DepartmentAdminQueryDocument, options);
         }
+export function useDepartmentAdminQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<DepartmentAdminQueryData, DepartmentAdminQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<DepartmentAdminQueryData, DepartmentAdminQueryVariables>(DepartmentAdminQueryDocument, options);
+        }
 export type DepartmentAdminQueryHookResult = ReturnType<typeof useDepartmentAdminQuery>;
 export type DepartmentAdminQueryLazyQueryHookResult = ReturnType<typeof useDepartmentAdminQueryLazyQuery>;
+export type DepartmentAdminQuerySuspenseQueryHookResult = ReturnType<typeof useDepartmentAdminQuerySuspenseQuery>;
 export type DepartmentAdminQueryQueryResult = Apollo.QueryResult<DepartmentAdminQueryData, DepartmentAdminQueryVariables>;

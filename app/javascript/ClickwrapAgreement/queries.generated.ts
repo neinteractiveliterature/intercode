@@ -47,6 +47,11 @@ export function useClickwrapAgreementQueryLazyQuery(baseOptions?: Apollo.LazyQue
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<ClickwrapAgreementQueryData, ClickwrapAgreementQueryVariables>(ClickwrapAgreementQueryDocument, options);
         }
+export function useClickwrapAgreementQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ClickwrapAgreementQueryData, ClickwrapAgreementQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ClickwrapAgreementQueryData, ClickwrapAgreementQueryVariables>(ClickwrapAgreementQueryDocument, options);
+        }
 export type ClickwrapAgreementQueryHookResult = ReturnType<typeof useClickwrapAgreementQuery>;
 export type ClickwrapAgreementQueryLazyQueryHookResult = ReturnType<typeof useClickwrapAgreementQueryLazyQuery>;
+export type ClickwrapAgreementQuerySuspenseQueryHookResult = ReturnType<typeof useClickwrapAgreementQuerySuspenseQuery>;
 export type ClickwrapAgreementQueryQueryResult = Apollo.QueryResult<ClickwrapAgreementQueryData, ClickwrapAgreementQueryVariables>;

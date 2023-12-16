@@ -95,6 +95,11 @@ export function useEventListEventsQueryLazyQuery(baseOptions?: Apollo.LazyQueryH
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<EventListEventsQueryData, EventListEventsQueryVariables>(EventListEventsQueryDocument, options);
         }
+export function useEventListEventsQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<EventListEventsQueryData, EventListEventsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<EventListEventsQueryData, EventListEventsQueryVariables>(EventListEventsQueryDocument, options);
+        }
 export type EventListEventsQueryHookResult = ReturnType<typeof useEventListEventsQuery>;
 export type EventListEventsQueryLazyQueryHookResult = ReturnType<typeof useEventListEventsQueryLazyQuery>;
+export type EventListEventsQuerySuspenseQueryHookResult = ReturnType<typeof useEventListEventsQuerySuspenseQuery>;
 export type EventListEventsQueryQueryResult = Apollo.QueryResult<EventListEventsQueryData, EventListEventsQueryVariables>;

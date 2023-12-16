@@ -121,8 +121,13 @@ export function useFormAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<FormAdminQueryData, FormAdminQueryVariables>(FormAdminQueryDocument, options);
         }
+export function useFormAdminQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<FormAdminQueryData, FormAdminQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<FormAdminQueryData, FormAdminQueryVariables>(FormAdminQueryDocument, options);
+        }
 export type FormAdminQueryHookResult = ReturnType<typeof useFormAdminQuery>;
 export type FormAdminQueryLazyQueryHookResult = ReturnType<typeof useFormAdminQueryLazyQuery>;
+export type FormAdminQuerySuspenseQueryHookResult = ReturnType<typeof useFormAdminQuerySuspenseQuery>;
 export type FormAdminQueryQueryResult = Apollo.QueryResult<FormAdminQueryData, FormAdminQueryVariables>;
 export const FormEditorQueryDocument = gql`
     query FormEditorQuery($id: ID!) {
@@ -166,8 +171,13 @@ export function useFormEditorQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<FormEditorQueryData, FormEditorQueryVariables>(FormEditorQueryDocument, options);
         }
+export function useFormEditorQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<FormEditorQueryData, FormEditorQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<FormEditorQueryData, FormEditorQueryVariables>(FormEditorQueryDocument, options);
+        }
 export type FormEditorQueryHookResult = ReturnType<typeof useFormEditorQuery>;
 export type FormEditorQueryLazyQueryHookResult = ReturnType<typeof useFormEditorQueryLazyQuery>;
+export type FormEditorQuerySuspenseQueryHookResult = ReturnType<typeof useFormEditorQuerySuspenseQuery>;
 export type FormEditorQueryQueryResult = Apollo.QueryResult<FormEditorQueryData, FormEditorQueryVariables>;
 export const PreviewFormItemQueryDocument = gql`
     query PreviewFormItemQuery($formId: ID!, $formSectionId: ID!, $formItem: FormItemInput!) {
@@ -213,6 +223,11 @@ export function usePreviewFormItemQueryLazyQuery(baseOptions?: Apollo.LazyQueryH
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<PreviewFormItemQueryData, PreviewFormItemQueryVariables>(PreviewFormItemQueryDocument, options);
         }
+export function usePreviewFormItemQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<PreviewFormItemQueryData, PreviewFormItemQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<PreviewFormItemQueryData, PreviewFormItemQueryVariables>(PreviewFormItemQueryDocument, options);
+        }
 export type PreviewFormItemQueryHookResult = ReturnType<typeof usePreviewFormItemQuery>;
 export type PreviewFormItemQueryLazyQueryHookResult = ReturnType<typeof usePreviewFormItemQueryLazyQuery>;
+export type PreviewFormItemQuerySuspenseQueryHookResult = ReturnType<typeof usePreviewFormItemQuerySuspenseQuery>;
 export type PreviewFormItemQueryQueryResult = Apollo.QueryResult<PreviewFormItemQueryData, PreviewFormItemQueryVariables>;

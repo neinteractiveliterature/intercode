@@ -129,8 +129,13 @@ export function useConventionAdminConventionQueryLazyQuery(baseOptions?: Apollo.
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<ConventionAdminConventionQueryData, ConventionAdminConventionQueryVariables>(ConventionAdminConventionQueryDocument, options);
         }
+export function useConventionAdminConventionQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ConventionAdminConventionQueryData, ConventionAdminConventionQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ConventionAdminConventionQueryData, ConventionAdminConventionQueryVariables>(ConventionAdminConventionQueryDocument, options);
+        }
 export type ConventionAdminConventionQueryHookResult = ReturnType<typeof useConventionAdminConventionQuery>;
 export type ConventionAdminConventionQueryLazyQueryHookResult = ReturnType<typeof useConventionAdminConventionQueryLazyQuery>;
+export type ConventionAdminConventionQuerySuspenseQueryHookResult = ReturnType<typeof useConventionAdminConventionQuerySuspenseQuery>;
 export type ConventionAdminConventionQueryQueryResult = Apollo.QueryResult<ConventionAdminConventionQueryData, ConventionAdminConventionQueryVariables>;
 export const StripeAccountOnboardingLinkQueryDocument = gql`
     query StripeAccountOnboardingLinkQuery($baseUrl: String!) {
@@ -168,6 +173,11 @@ export function useStripeAccountOnboardingLinkQueryLazyQuery(baseOptions?: Apoll
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<StripeAccountOnboardingLinkQueryData, StripeAccountOnboardingLinkQueryVariables>(StripeAccountOnboardingLinkQueryDocument, options);
         }
+export function useStripeAccountOnboardingLinkQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<StripeAccountOnboardingLinkQueryData, StripeAccountOnboardingLinkQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<StripeAccountOnboardingLinkQueryData, StripeAccountOnboardingLinkQueryVariables>(StripeAccountOnboardingLinkQueryDocument, options);
+        }
 export type StripeAccountOnboardingLinkQueryHookResult = ReturnType<typeof useStripeAccountOnboardingLinkQuery>;
 export type StripeAccountOnboardingLinkQueryLazyQueryHookResult = ReturnType<typeof useStripeAccountOnboardingLinkQueryLazyQuery>;
+export type StripeAccountOnboardingLinkQuerySuspenseQueryHookResult = ReturnType<typeof useStripeAccountOnboardingLinkQuerySuspenseQuery>;
 export type StripeAccountOnboardingLinkQueryQueryResult = Apollo.QueryResult<StripeAccountOnboardingLinkQueryData, StripeAccountOnboardingLinkQueryVariables>;

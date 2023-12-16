@@ -138,8 +138,13 @@ export function useEventProposalQueryLazyQuery(baseOptions?: Apollo.LazyQueryHoo
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<EventProposalQueryData, EventProposalQueryVariables>(EventProposalQueryDocument, options);
         }
+export function useEventProposalQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<EventProposalQueryData, EventProposalQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<EventProposalQueryData, EventProposalQueryVariables>(EventProposalQueryDocument, options);
+        }
 export type EventProposalQueryHookResult = ReturnType<typeof useEventProposalQuery>;
 export type EventProposalQueryLazyQueryHookResult = ReturnType<typeof useEventProposalQueryLazyQuery>;
+export type EventProposalQuerySuspenseQueryHookResult = ReturnType<typeof useEventProposalQuerySuspenseQuery>;
 export type EventProposalQueryQueryResult = Apollo.QueryResult<EventProposalQueryData, EventProposalQueryVariables>;
 export const EventProposalQueryWithOwnerDocument = gql`
     query EventProposalQueryWithOwner($eventProposalId: ID!) {
@@ -191,8 +196,13 @@ export function useEventProposalQueryWithOwnerLazyQuery(baseOptions?: Apollo.Laz
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<EventProposalQueryWithOwnerQueryData, EventProposalQueryWithOwnerQueryVariables>(EventProposalQueryWithOwnerDocument, options);
         }
+export function useEventProposalQueryWithOwnerSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<EventProposalQueryWithOwnerQueryData, EventProposalQueryWithOwnerQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<EventProposalQueryWithOwnerQueryData, EventProposalQueryWithOwnerQueryVariables>(EventProposalQueryWithOwnerDocument, options);
+        }
 export type EventProposalQueryWithOwnerHookResult = ReturnType<typeof useEventProposalQueryWithOwner>;
 export type EventProposalQueryWithOwnerLazyQueryHookResult = ReturnType<typeof useEventProposalQueryWithOwnerLazyQuery>;
+export type EventProposalQueryWithOwnerSuspenseQueryHookResult = ReturnType<typeof useEventProposalQueryWithOwnerSuspenseQuery>;
 export type EventProposalQueryWithOwnerQueryResult = Apollo.QueryResult<EventProposalQueryWithOwnerQueryData, EventProposalQueryWithOwnerQueryVariables>;
 export const EventProposalAdminNotesQueryDocument = gql`
     query EventProposalAdminNotesQuery($eventProposalId: ID!) {
@@ -230,8 +240,13 @@ export function useEventProposalAdminNotesQueryLazyQuery(baseOptions?: Apollo.La
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<EventProposalAdminNotesQueryData, EventProposalAdminNotesQueryVariables>(EventProposalAdminNotesQueryDocument, options);
         }
+export function useEventProposalAdminNotesQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<EventProposalAdminNotesQueryData, EventProposalAdminNotesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<EventProposalAdminNotesQueryData, EventProposalAdminNotesQueryVariables>(EventProposalAdminNotesQueryDocument, options);
+        }
 export type EventProposalAdminNotesQueryHookResult = ReturnType<typeof useEventProposalAdminNotesQuery>;
 export type EventProposalAdminNotesQueryLazyQueryHookResult = ReturnType<typeof useEventProposalAdminNotesQueryLazyQuery>;
+export type EventProposalAdminNotesQuerySuspenseQueryHookResult = ReturnType<typeof useEventProposalAdminNotesQuerySuspenseQuery>;
 export type EventProposalAdminNotesQueryQueryResult = Apollo.QueryResult<EventProposalAdminNotesQueryData, EventProposalAdminNotesQueryVariables>;
 export const ProposeEventButtonQueryDocument = gql`
     query ProposeEventButtonQuery {
@@ -301,8 +316,13 @@ export function useProposeEventButtonQueryLazyQuery(baseOptions?: Apollo.LazyQue
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<ProposeEventButtonQueryData, ProposeEventButtonQueryVariables>(ProposeEventButtonQueryDocument, options);
         }
+export function useProposeEventButtonQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ProposeEventButtonQueryData, ProposeEventButtonQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProposeEventButtonQueryData, ProposeEventButtonQueryVariables>(ProposeEventButtonQueryDocument, options);
+        }
 export type ProposeEventButtonQueryHookResult = ReturnType<typeof useProposeEventButtonQuery>;
 export type ProposeEventButtonQueryLazyQueryHookResult = ReturnType<typeof useProposeEventButtonQueryLazyQuery>;
+export type ProposeEventButtonQuerySuspenseQueryHookResult = ReturnType<typeof useProposeEventButtonQuerySuspenseQuery>;
 export type ProposeEventButtonQueryQueryResult = Apollo.QueryResult<ProposeEventButtonQueryData, ProposeEventButtonQueryVariables>;
 export const EventProposalsAdminQueryDocument = gql`
     query EventProposalsAdminQuery($page: Int, $perPage: Int, $filters: EventProposalFiltersInput, $sort: [SortInput!]) {
@@ -380,8 +400,13 @@ export function useEventProposalsAdminQueryLazyQuery(baseOptions?: Apollo.LazyQu
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<EventProposalsAdminQueryData, EventProposalsAdminQueryVariables>(EventProposalsAdminQueryDocument, options);
         }
+export function useEventProposalsAdminQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<EventProposalsAdminQueryData, EventProposalsAdminQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<EventProposalsAdminQueryData, EventProposalsAdminQueryVariables>(EventProposalsAdminQueryDocument, options);
+        }
 export type EventProposalsAdminQueryHookResult = ReturnType<typeof useEventProposalsAdminQuery>;
 export type EventProposalsAdminQueryLazyQueryHookResult = ReturnType<typeof useEventProposalsAdminQueryLazyQuery>;
+export type EventProposalsAdminQuerySuspenseQueryHookResult = ReturnType<typeof useEventProposalsAdminQuerySuspenseQuery>;
 export type EventProposalsAdminQueryQueryResult = Apollo.QueryResult<EventProposalsAdminQueryData, EventProposalsAdminQueryVariables>;
 export const EventProposalHistoryQueryDocument = gql`
     query EventProposalHistoryQuery($id: ID!) {
@@ -451,6 +476,11 @@ export function useEventProposalHistoryQueryLazyQuery(baseOptions?: Apollo.LazyQ
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<EventProposalHistoryQueryData, EventProposalHistoryQueryVariables>(EventProposalHistoryQueryDocument, options);
         }
+export function useEventProposalHistoryQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<EventProposalHistoryQueryData, EventProposalHistoryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<EventProposalHistoryQueryData, EventProposalHistoryQueryVariables>(EventProposalHistoryQueryDocument, options);
+        }
 export type EventProposalHistoryQueryHookResult = ReturnType<typeof useEventProposalHistoryQuery>;
 export type EventProposalHistoryQueryLazyQueryHookResult = ReturnType<typeof useEventProposalHistoryQueryLazyQuery>;
+export type EventProposalHistoryQuerySuspenseQueryHookResult = ReturnType<typeof useEventProposalHistoryQuerySuspenseQuery>;
 export type EventProposalHistoryQueryQueryResult = Apollo.QueryResult<EventProposalHistoryQueryData, EventProposalHistoryQueryVariables>;

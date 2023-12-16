@@ -146,8 +146,13 @@ export function useCreateSignupEventsQueryLazyQuery(baseOptions?: Apollo.LazyQue
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<CreateSignupEventsQueryData, CreateSignupEventsQueryVariables>(CreateSignupEventsQueryDocument, options);
         }
+export function useCreateSignupEventsQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<CreateSignupEventsQueryData, CreateSignupEventsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<CreateSignupEventsQueryData, CreateSignupEventsQueryVariables>(CreateSignupEventsQueryDocument, options);
+        }
 export type CreateSignupEventsQueryHookResult = ReturnType<typeof useCreateSignupEventsQuery>;
 export type CreateSignupEventsQueryLazyQueryHookResult = ReturnType<typeof useCreateSignupEventsQueryLazyQuery>;
+export type CreateSignupEventsQuerySuspenseQueryHookResult = ReturnType<typeof useCreateSignupEventsQuerySuspenseQuery>;
 export type CreateSignupEventsQueryQueryResult = Apollo.QueryResult<CreateSignupEventsQueryData, CreateSignupEventsQueryVariables>;
 export const CreateSignupRunCardQueryDocument = gql`
     query CreateSignupRunCardQuery($userConProfileId: ID!, $eventId: ID!) {
@@ -249,8 +254,13 @@ export function useCreateSignupRunCardQueryLazyQuery(baseOptions?: Apollo.LazyQu
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<CreateSignupRunCardQueryData, CreateSignupRunCardQueryVariables>(CreateSignupRunCardQueryDocument, options);
         }
+export function useCreateSignupRunCardQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<CreateSignupRunCardQueryData, CreateSignupRunCardQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<CreateSignupRunCardQueryData, CreateSignupRunCardQueryVariables>(CreateSignupRunCardQueryDocument, options);
+        }
 export type CreateSignupRunCardQueryHookResult = ReturnType<typeof useCreateSignupRunCardQuery>;
 export type CreateSignupRunCardQueryLazyQueryHookResult = ReturnType<typeof useCreateSignupRunCardQueryLazyQuery>;
+export type CreateSignupRunCardQuerySuspenseQueryHookResult = ReturnType<typeof useCreateSignupRunCardQuerySuspenseQuery>;
 export type CreateSignupRunCardQueryQueryResult = Apollo.QueryResult<CreateSignupRunCardQueryData, CreateSignupRunCardQueryVariables>;
 export const SignupModerationQueueQueryDocument = gql`
     query SignupModerationQueueQuery($page: Int, $perPage: Int) {
@@ -296,6 +306,11 @@ export function useSignupModerationQueueQueryLazyQuery(baseOptions?: Apollo.Lazy
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<SignupModerationQueueQueryData, SignupModerationQueueQueryVariables>(SignupModerationQueueQueryDocument, options);
         }
+export function useSignupModerationQueueQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<SignupModerationQueueQueryData, SignupModerationQueueQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<SignupModerationQueueQueryData, SignupModerationQueueQueryVariables>(SignupModerationQueueQueryDocument, options);
+        }
 export type SignupModerationQueueQueryHookResult = ReturnType<typeof useSignupModerationQueueQuery>;
 export type SignupModerationQueueQueryLazyQueryHookResult = ReturnType<typeof useSignupModerationQueueQueryLazyQuery>;
+export type SignupModerationQueueQuerySuspenseQueryHookResult = ReturnType<typeof useSignupModerationQueueQuerySuspenseQuery>;
 export type SignupModerationQueueQueryQueryResult = Apollo.QueryResult<SignupModerationQueueQueryData, SignupModerationQueueQueryVariables>;

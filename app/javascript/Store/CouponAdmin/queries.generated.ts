@@ -73,6 +73,11 @@ export function useAdminCouponsQueryLazyQuery(baseOptions?: Apollo.LazyQueryHook
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<AdminCouponsQueryData, AdminCouponsQueryVariables>(AdminCouponsQueryDocument, options);
         }
+export function useAdminCouponsQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<AdminCouponsQueryData, AdminCouponsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<AdminCouponsQueryData, AdminCouponsQueryVariables>(AdminCouponsQueryDocument, options);
+        }
 export type AdminCouponsQueryHookResult = ReturnType<typeof useAdminCouponsQuery>;
 export type AdminCouponsQueryLazyQueryHookResult = ReturnType<typeof useAdminCouponsQueryLazyQuery>;
+export type AdminCouponsQuerySuspenseQueryHookResult = ReturnType<typeof useAdminCouponsQuerySuspenseQuery>;
 export type AdminCouponsQueryQueryResult = Apollo.QueryResult<AdminCouponsQueryData, AdminCouponsQueryVariables>;

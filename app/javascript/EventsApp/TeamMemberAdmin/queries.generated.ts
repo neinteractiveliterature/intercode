@@ -157,8 +157,13 @@ export function useTeamMembersQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookO
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<TeamMembersQueryData, TeamMembersQueryVariables>(TeamMembersQueryDocument, options);
         }
+export function useTeamMembersQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<TeamMembersQueryData, TeamMembersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<TeamMembersQueryData, TeamMembersQueryVariables>(TeamMembersQueryDocument, options);
+        }
 export type TeamMembersQueryHookResult = ReturnType<typeof useTeamMembersQuery>;
 export type TeamMembersQueryLazyQueryHookResult = ReturnType<typeof useTeamMembersQueryLazyQuery>;
+export type TeamMembersQuerySuspenseQueryHookResult = ReturnType<typeof useTeamMembersQuerySuspenseQuery>;
 export type TeamMembersQueryQueryResult = Apollo.QueryResult<TeamMembersQueryData, TeamMembersQueryVariables>;
 export const TeamMemberUserConProfilesQueryDocument = gql`
     query TeamMemberUserConProfilesQuery($name: String) {
@@ -198,6 +203,11 @@ export function useTeamMemberUserConProfilesQueryLazyQuery(baseOptions?: Apollo.
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<TeamMemberUserConProfilesQueryData, TeamMemberUserConProfilesQueryVariables>(TeamMemberUserConProfilesQueryDocument, options);
         }
+export function useTeamMemberUserConProfilesQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<TeamMemberUserConProfilesQueryData, TeamMemberUserConProfilesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<TeamMemberUserConProfilesQueryData, TeamMemberUserConProfilesQueryVariables>(TeamMemberUserConProfilesQueryDocument, options);
+        }
 export type TeamMemberUserConProfilesQueryHookResult = ReturnType<typeof useTeamMemberUserConProfilesQuery>;
 export type TeamMemberUserConProfilesQueryLazyQueryHookResult = ReturnType<typeof useTeamMemberUserConProfilesQueryLazyQuery>;
+export type TeamMemberUserConProfilesQuerySuspenseQueryHookResult = ReturnType<typeof useTeamMemberUserConProfilesQuerySuspenseQuery>;
 export type TeamMemberUserConProfilesQueryQueryResult = Apollo.QueryResult<TeamMemberUserConProfilesQueryData, TeamMemberUserConProfilesQueryVariables>;

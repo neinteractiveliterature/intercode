@@ -4275,7 +4275,7 @@ export type RunSignups_PaginatedArgs = {
   filters?: InputMaybe<SignupFiltersInput>;
   page?: InputMaybe<Scalars['Int']['input']>;
   per_page?: InputMaybe<Scalars['Int']['input']>;
-  sort?: InputMaybe<Array<InputMaybe<SortInput>>>;
+  sort?: InputMaybe<Array<SortInput>>;
 };
 
 export type RunInput = {

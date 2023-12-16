@@ -58,6 +58,11 @@ export function useCmsVariablesQueryLazyQuery(baseOptions?: Apollo.LazyQueryHook
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<CmsVariablesQueryData, CmsVariablesQueryVariables>(CmsVariablesQueryDocument, options);
         }
+export function useCmsVariablesQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<CmsVariablesQueryData, CmsVariablesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<CmsVariablesQueryData, CmsVariablesQueryVariables>(CmsVariablesQueryDocument, options);
+        }
 export type CmsVariablesQueryHookResult = ReturnType<typeof useCmsVariablesQuery>;
 export type CmsVariablesQueryLazyQueryHookResult = ReturnType<typeof useCmsVariablesQueryLazyQuery>;
+export type CmsVariablesQuerySuspenseQueryHookResult = ReturnType<typeof useCmsVariablesQuerySuspenseQuery>;
 export type CmsVariablesQueryQueryResult = Apollo.QueryResult<CmsVariablesQueryData, CmsVariablesQueryVariables>;

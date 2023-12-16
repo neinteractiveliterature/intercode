@@ -44,6 +44,11 @@ export function useCmsAdminBaseQueryLazyQuery(baseOptions?: Apollo.LazyQueryHook
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<CmsAdminBaseQueryData, CmsAdminBaseQueryVariables>(CmsAdminBaseQueryDocument, options);
         }
+export function useCmsAdminBaseQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<CmsAdminBaseQueryData, CmsAdminBaseQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<CmsAdminBaseQueryData, CmsAdminBaseQueryVariables>(CmsAdminBaseQueryDocument, options);
+        }
 export type CmsAdminBaseQueryHookResult = ReturnType<typeof useCmsAdminBaseQuery>;
 export type CmsAdminBaseQueryLazyQueryHookResult = ReturnType<typeof useCmsAdminBaseQueryLazyQuery>;
+export type CmsAdminBaseQuerySuspenseQueryHookResult = ReturnType<typeof useCmsAdminBaseQuerySuspenseQuery>;
 export type CmsAdminBaseQueryQueryResult = Apollo.QueryResult<CmsAdminBaseQueryData, CmsAdminBaseQueryVariables>;

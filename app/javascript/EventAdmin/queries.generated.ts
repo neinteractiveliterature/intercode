@@ -228,8 +228,13 @@ export function useEventAdminSingleEventQueryLazyQuery(baseOptions?: Apollo.Lazy
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<EventAdminSingleEventQueryData, EventAdminSingleEventQueryVariables>(EventAdminSingleEventQueryDocument, options);
         }
+export function useEventAdminSingleEventQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<EventAdminSingleEventQueryData, EventAdminSingleEventQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<EventAdminSingleEventQueryData, EventAdminSingleEventQueryVariables>(EventAdminSingleEventQueryDocument, options);
+        }
 export type EventAdminSingleEventQueryHookResult = ReturnType<typeof useEventAdminSingleEventQuery>;
 export type EventAdminSingleEventQueryLazyQueryHookResult = ReturnType<typeof useEventAdminSingleEventQueryLazyQuery>;
+export type EventAdminSingleEventQuerySuspenseQueryHookResult = ReturnType<typeof useEventAdminSingleEventQuerySuspenseQuery>;
 export type EventAdminSingleEventQueryQueryResult = Apollo.QueryResult<EventAdminSingleEventQueryData, EventAdminSingleEventQueryVariables>;
 export const EventAdminEventsQueryDocument = gql`
     query EventAdminEventsQuery {
@@ -272,6 +277,11 @@ export function useEventAdminEventsQueryLazyQuery(baseOptions?: Apollo.LazyQuery
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<EventAdminEventsQueryData, EventAdminEventsQueryVariables>(EventAdminEventsQueryDocument, options);
         }
+export function useEventAdminEventsQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<EventAdminEventsQueryData, EventAdminEventsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<EventAdminEventsQueryData, EventAdminEventsQueryVariables>(EventAdminEventsQueryDocument, options);
+        }
 export type EventAdminEventsQueryHookResult = ReturnType<typeof useEventAdminEventsQuery>;
 export type EventAdminEventsQueryLazyQueryHookResult = ReturnType<typeof useEventAdminEventsQueryLazyQuery>;
+export type EventAdminEventsQuerySuspenseQueryHookResult = ReturnType<typeof useEventAdminEventsQuerySuspenseQuery>;
 export type EventAdminEventsQueryQueryResult = Apollo.QueryResult<EventAdminEventsQueryData, EventAdminEventsQueryVariables>;

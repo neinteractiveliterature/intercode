@@ -150,6 +150,11 @@ export function useAppRootQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<AppRootQueryData, AppRootQueryVariables>(AppRootQueryDocument, options);
         }
+export function useAppRootQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<AppRootQueryData, AppRootQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<AppRootQueryData, AppRootQueryVariables>(AppRootQueryDocument, options);
+        }
 export type AppRootQueryHookResult = ReturnType<typeof useAppRootQuery>;
 export type AppRootQueryLazyQueryHookResult = ReturnType<typeof useAppRootQueryLazyQuery>;
+export type AppRootQuerySuspenseQueryHookResult = ReturnType<typeof useAppRootQuerySuspenseQuery>;
 export type AppRootQueryQueryResult = Apollo.QueryResult<AppRootQueryData, AppRootQueryVariables>;

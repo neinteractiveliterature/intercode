@@ -44,8 +44,13 @@ export function useAccountFormContentQueryLazyQuery(baseOptions?: Apollo.LazyQue
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<AccountFormContentQueryData, AccountFormContentQueryVariables>(AccountFormContentQueryDocument, options);
         }
+export function useAccountFormContentQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<AccountFormContentQueryData, AccountFormContentQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<AccountFormContentQueryData, AccountFormContentQueryVariables>(AccountFormContentQueryDocument, options);
+        }
 export type AccountFormContentQueryHookResult = ReturnType<typeof useAccountFormContentQuery>;
 export type AccountFormContentQueryLazyQueryHookResult = ReturnType<typeof useAccountFormContentQueryLazyQuery>;
+export type AccountFormContentQuerySuspenseQueryHookResult = ReturnType<typeof useAccountFormContentQuerySuspenseQuery>;
 export type AccountFormContentQueryQueryResult = Apollo.QueryResult<AccountFormContentQueryData, AccountFormContentQueryVariables>;
 export const EditUserQueryDocument = gql`
     query EditUserQuery {
@@ -85,6 +90,11 @@ export function useEditUserQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<EditUserQueryData, EditUserQueryVariables>(EditUserQueryDocument, options);
         }
+export function useEditUserQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<EditUserQueryData, EditUserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<EditUserQueryData, EditUserQueryVariables>(EditUserQueryDocument, options);
+        }
 export type EditUserQueryHookResult = ReturnType<typeof useEditUserQuery>;
 export type EditUserQueryLazyQueryHookResult = ReturnType<typeof useEditUserQueryLazyQuery>;
+export type EditUserQuerySuspenseQueryHookResult = ReturnType<typeof useEditUserQuerySuspenseQuery>;
 export type EditUserQueryQueryResult = Apollo.QueryResult<EditUserQueryData, EditUserQueryVariables>;

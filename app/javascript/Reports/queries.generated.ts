@@ -75,8 +75,13 @@ export function useReportsMenuQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookO
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<ReportsMenuQueryData, ReportsMenuQueryVariables>(ReportsMenuQueryDocument, options);
         }
+export function useReportsMenuQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ReportsMenuQueryData, ReportsMenuQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ReportsMenuQueryData, ReportsMenuQueryVariables>(ReportsMenuQueryDocument, options);
+        }
 export type ReportsMenuQueryHookResult = ReturnType<typeof useReportsMenuQuery>;
 export type ReportsMenuQueryLazyQueryHookResult = ReturnType<typeof useReportsMenuQueryLazyQuery>;
+export type ReportsMenuQuerySuspenseQueryHookResult = ReturnType<typeof useReportsMenuQuerySuspenseQuery>;
 export type ReportsMenuQueryQueryResult = Apollo.QueryResult<ReportsMenuQueryData, ReportsMenuQueryVariables>;
 export const AttendanceByPaymentAmountQueryDocument = gql`
     query AttendanceByPaymentAmountQuery {
@@ -135,8 +140,13 @@ export function useAttendanceByPaymentAmountQueryLazyQuery(baseOptions?: Apollo.
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<AttendanceByPaymentAmountQueryData, AttendanceByPaymentAmountQueryVariables>(AttendanceByPaymentAmountQueryDocument, options);
         }
+export function useAttendanceByPaymentAmountQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<AttendanceByPaymentAmountQueryData, AttendanceByPaymentAmountQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<AttendanceByPaymentAmountQueryData, AttendanceByPaymentAmountQueryVariables>(AttendanceByPaymentAmountQueryDocument, options);
+        }
 export type AttendanceByPaymentAmountQueryHookResult = ReturnType<typeof useAttendanceByPaymentAmountQuery>;
 export type AttendanceByPaymentAmountQueryLazyQueryHookResult = ReturnType<typeof useAttendanceByPaymentAmountQueryLazyQuery>;
+export type AttendanceByPaymentAmountQuerySuspenseQueryHookResult = ReturnType<typeof useAttendanceByPaymentAmountQuerySuspenseQuery>;
 export type AttendanceByPaymentAmountQueryQueryResult = Apollo.QueryResult<AttendanceByPaymentAmountQueryData, AttendanceByPaymentAmountQueryVariables>;
 export const EventProvidedTicketsQueryDocument = gql`
     query EventProvidedTicketsQuery {
@@ -190,8 +200,13 @@ export function useEventProvidedTicketsQueryLazyQuery(baseOptions?: Apollo.LazyQ
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<EventProvidedTicketsQueryData, EventProvidedTicketsQueryVariables>(EventProvidedTicketsQueryDocument, options);
         }
+export function useEventProvidedTicketsQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<EventProvidedTicketsQueryData, EventProvidedTicketsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<EventProvidedTicketsQueryData, EventProvidedTicketsQueryVariables>(EventProvidedTicketsQueryDocument, options);
+        }
 export type EventProvidedTicketsQueryHookResult = ReturnType<typeof useEventProvidedTicketsQuery>;
 export type EventProvidedTicketsQueryLazyQueryHookResult = ReturnType<typeof useEventProvidedTicketsQueryLazyQuery>;
+export type EventProvidedTicketsQuerySuspenseQueryHookResult = ReturnType<typeof useEventProvidedTicketsQuerySuspenseQuery>;
 export type EventProvidedTicketsQueryQueryResult = Apollo.QueryResult<EventProvidedTicketsQueryData, EventProvidedTicketsQueryVariables>;
 export const EventsByChoiceQueryDocument = gql`
     query EventsByChoiceQuery {
@@ -237,8 +252,13 @@ export function useEventsByChoiceQueryLazyQuery(baseOptions?: Apollo.LazyQueryHo
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<EventsByChoiceQueryData, EventsByChoiceQueryVariables>(EventsByChoiceQueryDocument, options);
         }
+export function useEventsByChoiceQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<EventsByChoiceQueryData, EventsByChoiceQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<EventsByChoiceQueryData, EventsByChoiceQueryVariables>(EventsByChoiceQueryDocument, options);
+        }
 export type EventsByChoiceQueryHookResult = ReturnType<typeof useEventsByChoiceQuery>;
 export type EventsByChoiceQueryLazyQueryHookResult = ReturnType<typeof useEventsByChoiceQueryLazyQuery>;
+export type EventsByChoiceQuerySuspenseQueryHookResult = ReturnType<typeof useEventsByChoiceQuerySuspenseQuery>;
 export type EventsByChoiceQueryQueryResult = Apollo.QueryResult<EventsByChoiceQueryData, EventsByChoiceQueryVariables>;
 export const SignupCountsByStateQueryDocument = gql`
     query SignupCountsByStateQuery {
@@ -275,8 +295,13 @@ export function useSignupCountsByStateQueryLazyQuery(baseOptions?: Apollo.LazyQu
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<SignupCountsByStateQueryData, SignupCountsByStateQueryVariables>(SignupCountsByStateQueryDocument, options);
         }
+export function useSignupCountsByStateQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<SignupCountsByStateQueryData, SignupCountsByStateQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<SignupCountsByStateQueryData, SignupCountsByStateQueryVariables>(SignupCountsByStateQueryDocument, options);
+        }
 export type SignupCountsByStateQueryHookResult = ReturnType<typeof useSignupCountsByStateQuery>;
 export type SignupCountsByStateQueryLazyQueryHookResult = ReturnType<typeof useSignupCountsByStateQueryLazyQuery>;
+export type SignupCountsByStateQuerySuspenseQueryHookResult = ReturnType<typeof useSignupCountsByStateQuerySuspenseQuery>;
 export type SignupCountsByStateQueryQueryResult = Apollo.QueryResult<SignupCountsByStateQueryData, SignupCountsByStateQueryVariables>;
 export const SignupSpySignupChangesQueryDocument = gql`
     query SignupSpySignupChangesQuery($filters: SignupChangeFiltersInput, $page: Int, $perPage: Int, $sort: [SortInput!]) {
@@ -373,6 +398,11 @@ export function useSignupSpySignupChangesQueryLazyQuery(baseOptions?: Apollo.Laz
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<SignupSpySignupChangesQueryData, SignupSpySignupChangesQueryVariables>(SignupSpySignupChangesQueryDocument, options);
         }
+export function useSignupSpySignupChangesQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<SignupSpySignupChangesQueryData, SignupSpySignupChangesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<SignupSpySignupChangesQueryData, SignupSpySignupChangesQueryVariables>(SignupSpySignupChangesQueryDocument, options);
+        }
 export type SignupSpySignupChangesQueryHookResult = ReturnType<typeof useSignupSpySignupChangesQuery>;
 export type SignupSpySignupChangesQueryLazyQueryHookResult = ReturnType<typeof useSignupSpySignupChangesQueryLazyQuery>;
+export type SignupSpySignupChangesQuerySuspenseQueryHookResult = ReturnType<typeof useSignupSpySignupChangesQuerySuspenseQuery>;
 export type SignupSpySignupChangesQueryQueryResult = Apollo.QueryResult<SignupSpySignupChangesQueryData, SignupSpySignupChangesQueryVariables>;

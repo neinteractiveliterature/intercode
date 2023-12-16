@@ -62,8 +62,13 @@ export function usePreviewLiquidQueryLazyQuery(baseOptions?: Apollo.LazyQueryHoo
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<PreviewLiquidQueryData, PreviewLiquidQueryVariables>(PreviewLiquidQueryDocument, options);
         }
+export function usePreviewLiquidQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<PreviewLiquidQueryData, PreviewLiquidQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<PreviewLiquidQueryData, PreviewLiquidQueryVariables>(PreviewLiquidQueryDocument, options);
+        }
 export type PreviewLiquidQueryHookResult = ReturnType<typeof usePreviewLiquidQuery>;
 export type PreviewLiquidQueryLazyQueryHookResult = ReturnType<typeof usePreviewLiquidQueryLazyQuery>;
+export type PreviewLiquidQuerySuspenseQueryHookResult = ReturnType<typeof usePreviewLiquidQuerySuspenseQuery>;
 export type PreviewLiquidQueryQueryResult = Apollo.QueryResult<PreviewLiquidQueryData, PreviewLiquidQueryVariables>;
 export const PreviewMarkdownQueryDocument = gql`
     query PreviewMarkdownQuery($markdown: String!, $eventId: ID, $eventProposalId: ID) {
@@ -104,8 +109,13 @@ export function usePreviewMarkdownQueryLazyQuery(baseOptions?: Apollo.LazyQueryH
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<PreviewMarkdownQueryData, PreviewMarkdownQueryVariables>(PreviewMarkdownQueryDocument, options);
         }
+export function usePreviewMarkdownQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<PreviewMarkdownQueryData, PreviewMarkdownQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<PreviewMarkdownQueryData, PreviewMarkdownQueryVariables>(PreviewMarkdownQueryDocument, options);
+        }
 export type PreviewMarkdownQueryHookResult = ReturnType<typeof usePreviewMarkdownQuery>;
 export type PreviewMarkdownQueryLazyQueryHookResult = ReturnType<typeof usePreviewMarkdownQueryLazyQuery>;
+export type PreviewMarkdownQuerySuspenseQueryHookResult = ReturnType<typeof usePreviewMarkdownQuerySuspenseQuery>;
 export type PreviewMarkdownQueryQueryResult = Apollo.QueryResult<PreviewMarkdownQueryData, PreviewMarkdownQueryVariables>;
 export const PreviewNotifierLiquidQueryDocument = gql`
     query PreviewNotifierLiquidQuery($eventKey: String!, $liquid: String!) {
@@ -141,6 +151,11 @@ export function usePreviewNotifierLiquidQueryLazyQuery(baseOptions?: Apollo.Lazy
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<PreviewNotifierLiquidQueryData, PreviewNotifierLiquidQueryVariables>(PreviewNotifierLiquidQueryDocument, options);
         }
+export function usePreviewNotifierLiquidQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<PreviewNotifierLiquidQueryData, PreviewNotifierLiquidQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<PreviewNotifierLiquidQueryData, PreviewNotifierLiquidQueryVariables>(PreviewNotifierLiquidQueryDocument, options);
+        }
 export type PreviewNotifierLiquidQueryHookResult = ReturnType<typeof usePreviewNotifierLiquidQuery>;
 export type PreviewNotifierLiquidQueryLazyQueryHookResult = ReturnType<typeof usePreviewNotifierLiquidQueryLazyQuery>;
+export type PreviewNotifierLiquidQuerySuspenseQueryHookResult = ReturnType<typeof usePreviewNotifierLiquidQuerySuspenseQuery>;
 export type PreviewNotifierLiquidQueryQueryResult = Apollo.QueryResult<PreviewNotifierLiquidQueryData, PreviewNotifierLiquidQueryVariables>;

@@ -71,8 +71,13 @@ export function useTicketPurchaseFormQueryLazyQuery(baseOptions?: Apollo.LazyQue
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<TicketPurchaseFormQueryData, TicketPurchaseFormQueryVariables>(TicketPurchaseFormQueryDocument, options);
         }
+export function useTicketPurchaseFormQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<TicketPurchaseFormQueryData, TicketPurchaseFormQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<TicketPurchaseFormQueryData, TicketPurchaseFormQueryVariables>(TicketPurchaseFormQueryDocument, options);
+        }
 export type TicketPurchaseFormQueryHookResult = ReturnType<typeof useTicketPurchaseFormQuery>;
 export type TicketPurchaseFormQueryLazyQueryHookResult = ReturnType<typeof useTicketPurchaseFormQueryLazyQuery>;
+export type TicketPurchaseFormQuerySuspenseQueryHookResult = ReturnType<typeof useTicketPurchaseFormQuerySuspenseQuery>;
 export type TicketPurchaseFormQueryQueryResult = Apollo.QueryResult<TicketPurchaseFormQueryData, TicketPurchaseFormQueryVariables>;
 export const MyTicketDisplayQueryDocument = gql`
     query MyTicketDisplayQuery {
@@ -136,6 +141,11 @@ export function useMyTicketDisplayQueryLazyQuery(baseOptions?: Apollo.LazyQueryH
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<MyTicketDisplayQueryData, MyTicketDisplayQueryVariables>(MyTicketDisplayQueryDocument, options);
         }
+export function useMyTicketDisplayQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<MyTicketDisplayQueryData, MyTicketDisplayQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<MyTicketDisplayQueryData, MyTicketDisplayQueryVariables>(MyTicketDisplayQueryDocument, options);
+        }
 export type MyTicketDisplayQueryHookResult = ReturnType<typeof useMyTicketDisplayQuery>;
 export type MyTicketDisplayQueryLazyQueryHookResult = ReturnType<typeof useMyTicketDisplayQueryLazyQuery>;
+export type MyTicketDisplayQuerySuspenseQueryHookResult = ReturnType<typeof useMyTicketDisplayQuerySuspenseQuery>;
 export type MyTicketDisplayQueryQueryResult = Apollo.QueryResult<MyTicketDisplayQueryData, MyTicketDisplayQueryVariables>;

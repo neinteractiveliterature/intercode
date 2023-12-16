@@ -59,8 +59,13 @@ export function useLiquidAssignsQueryLazyQuery(baseOptions?: Apollo.LazyQueryHoo
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<LiquidAssignsQueryData, LiquidAssignsQueryVariables>(LiquidAssignsQueryDocument, options);
         }
+export function useLiquidAssignsQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<LiquidAssignsQueryData, LiquidAssignsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<LiquidAssignsQueryData, LiquidAssignsQueryVariables>(LiquidAssignsQueryDocument, options);
+        }
 export type LiquidAssignsQueryHookResult = ReturnType<typeof useLiquidAssignsQuery>;
 export type LiquidAssignsQueryLazyQueryHookResult = ReturnType<typeof useLiquidAssignsQueryLazyQuery>;
+export type LiquidAssignsQuerySuspenseQueryHookResult = ReturnType<typeof useLiquidAssignsQuerySuspenseQuery>;
 export type LiquidAssignsQueryQueryResult = Apollo.QueryResult<LiquidAssignsQueryData, LiquidAssignsQueryVariables>;
 export const NotifierLiquidAssignsQueryDocument = gql`
     query NotifierLiquidAssignsQuery($eventKey: String!) {
@@ -97,6 +102,11 @@ export function useNotifierLiquidAssignsQueryLazyQuery(baseOptions?: Apollo.Lazy
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<NotifierLiquidAssignsQueryData, NotifierLiquidAssignsQueryVariables>(NotifierLiquidAssignsQueryDocument, options);
         }
+export function useNotifierLiquidAssignsQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<NotifierLiquidAssignsQueryData, NotifierLiquidAssignsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<NotifierLiquidAssignsQueryData, NotifierLiquidAssignsQueryVariables>(NotifierLiquidAssignsQueryDocument, options);
+        }
 export type NotifierLiquidAssignsQueryHookResult = ReturnType<typeof useNotifierLiquidAssignsQuery>;
 export type NotifierLiquidAssignsQueryLazyQueryHookResult = ReturnType<typeof useNotifierLiquidAssignsQueryLazyQuery>;
+export type NotifierLiquidAssignsQuerySuspenseQueryHookResult = ReturnType<typeof useNotifierLiquidAssignsQuerySuspenseQuery>;
 export type NotifierLiquidAssignsQueryQueryResult = Apollo.QueryResult<NotifierLiquidAssignsQueryData, NotifierLiquidAssignsQueryVariables>;

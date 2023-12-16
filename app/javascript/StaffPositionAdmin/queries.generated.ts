@@ -84,6 +84,11 @@ export function useStaffPositionsQueryLazyQuery(baseOptions?: Apollo.LazyQueryHo
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<StaffPositionsQueryData, StaffPositionsQueryVariables>(StaffPositionsQueryDocument, options);
         }
+export function useStaffPositionsQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<StaffPositionsQueryData, StaffPositionsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<StaffPositionsQueryData, StaffPositionsQueryVariables>(StaffPositionsQueryDocument, options);
+        }
 export type StaffPositionsQueryHookResult = ReturnType<typeof useStaffPositionsQuery>;
 export type StaffPositionsQueryLazyQueryHookResult = ReturnType<typeof useStaffPositionsQueryLazyQuery>;
+export type StaffPositionsQuerySuspenseQueryHookResult = ReturnType<typeof useStaffPositionsQuerySuspenseQuery>;
 export type StaffPositionsQueryQueryResult = Apollo.QueryResult<StaffPositionsQueryData, StaffPositionsQueryVariables>;

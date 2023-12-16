@@ -55,6 +55,11 @@ export function useRoomsAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<RoomsAdminQueryData, RoomsAdminQueryVariables>(RoomsAdminQueryDocument, options);
         }
+export function useRoomsAdminQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<RoomsAdminQueryData, RoomsAdminQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<RoomsAdminQueryData, RoomsAdminQueryVariables>(RoomsAdminQueryDocument, options);
+        }
 export type RoomsAdminQueryHookResult = ReturnType<typeof useRoomsAdminQuery>;
 export type RoomsAdminQueryLazyQueryHookResult = ReturnType<typeof useRoomsAdminQueryLazyQuery>;
+export type RoomsAdminQuerySuspenseQueryHookResult = ReturnType<typeof useRoomsAdminQuerySuspenseQuery>;
 export type RoomsAdminQueryQueryResult = Apollo.QueryResult<RoomsAdminQueryData, RoomsAdminQueryVariables>;

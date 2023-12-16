@@ -72,8 +72,13 @@ export function useAdminTicketTypesQueryLazyQuery(baseOptions?: Apollo.LazyQuery
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<AdminTicketTypesQueryData, AdminTicketTypesQueryVariables>(AdminTicketTypesQueryDocument, options);
         }
+export function useAdminTicketTypesQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<AdminTicketTypesQueryData, AdminTicketTypesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<AdminTicketTypesQueryData, AdminTicketTypesQueryVariables>(AdminTicketTypesQueryDocument, options);
+        }
 export type AdminTicketTypesQueryHookResult = ReturnType<typeof useAdminTicketTypesQuery>;
 export type AdminTicketTypesQueryLazyQueryHookResult = ReturnType<typeof useAdminTicketTypesQueryLazyQuery>;
+export type AdminTicketTypesQuerySuspenseQueryHookResult = ReturnType<typeof useAdminTicketTypesQuerySuspenseQuery>;
 export type AdminTicketTypesQueryQueryResult = Apollo.QueryResult<AdminTicketTypesQueryData, AdminTicketTypesQueryVariables>;
 export const EventTicketTypesQueryDocument = gql`
     query EventTicketTypesQuery($id: ID!) {
@@ -115,6 +120,11 @@ export function useEventTicketTypesQueryLazyQuery(baseOptions?: Apollo.LazyQuery
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<EventTicketTypesQueryData, EventTicketTypesQueryVariables>(EventTicketTypesQueryDocument, options);
         }
+export function useEventTicketTypesQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<EventTicketTypesQueryData, EventTicketTypesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<EventTicketTypesQueryData, EventTicketTypesQueryVariables>(EventTicketTypesQueryDocument, options);
+        }
 export type EventTicketTypesQueryHookResult = ReturnType<typeof useEventTicketTypesQuery>;
 export type EventTicketTypesQueryLazyQueryHookResult = ReturnType<typeof useEventTicketTypesQueryLazyQuery>;
+export type EventTicketTypesQuerySuspenseQueryHookResult = ReturnType<typeof useEventTicketTypesQuerySuspenseQuery>;
 export type EventTicketTypesQueryQueryResult = Apollo.QueryResult<EventTicketTypesQueryData, EventTicketTypesQueryVariables>;

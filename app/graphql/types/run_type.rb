@@ -104,7 +104,7 @@ class Types::RunType < Types::BaseObject
     argument :page, Integer, required: false
     argument :per_page, Integer, required: false, camelize: false
     argument :filters, Types::SignupFiltersInputType, required: false
-    argument :sort, [Types::SortInputType, { null: true }], required: false
+    argument :sort, [Types::SortInputType], required: false
   end
 
   def signups_paginated(**args)
