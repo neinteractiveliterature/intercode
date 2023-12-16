@@ -4,7 +4,7 @@
 # Table name: maximum_event_provided_tickets_overrides
 #
 #  id             :bigint           not null, primary key
-#  override_value :integer
+#  override_value :integer          not null
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
 #  event_id       :bigint
@@ -21,7 +21,6 @@
 #  fk_rails_...  (ticket_type_id => ticket_types.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 FactoryBot.define do
   factory :maximum_event_provided_tickets_override do
     association :event

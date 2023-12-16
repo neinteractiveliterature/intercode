@@ -5,7 +5,7 @@
 # Table name: maximum_event_provided_tickets_overrides
 #
 #  id             :bigint           not null, primary key
-#  override_value :integer
+#  override_value :integer          not null
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
 #  event_id       :bigint
