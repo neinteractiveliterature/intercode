@@ -59,6 +59,11 @@ export function useCmsGraphqlQueriesQueryLazyQuery(baseOptions?: Apollo.LazyQuer
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<CmsGraphqlQueriesQueryData, CmsGraphqlQueriesQueryVariables>(CmsGraphqlQueriesQueryDocument, options);
         }
+export function useCmsGraphqlQueriesQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<CmsGraphqlQueriesQueryData, CmsGraphqlQueriesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<CmsGraphqlQueriesQueryData, CmsGraphqlQueriesQueryVariables>(CmsGraphqlQueriesQueryDocument, options);
+        }
 export type CmsGraphqlQueriesQueryHookResult = ReturnType<typeof useCmsGraphqlQueriesQuery>;
 export type CmsGraphqlQueriesQueryLazyQueryHookResult = ReturnType<typeof useCmsGraphqlQueriesQueryLazyQuery>;
+export type CmsGraphqlQueriesQuerySuspenseQueryHookResult = ReturnType<typeof useCmsGraphqlQueriesQuerySuspenseQuery>;
 export type CmsGraphqlQueriesQueryQueryResult = Apollo.QueryResult<CmsGraphqlQueriesQueryData, CmsGraphqlQueriesQueryVariables>;

@@ -114,6 +114,11 @@ export function useStandaloneEditEventQueryLazyQuery(baseOptions?: Apollo.LazyQu
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<StandaloneEditEventQueryData, StandaloneEditEventQueryVariables>(StandaloneEditEventQueryDocument, options);
         }
+export function useStandaloneEditEventQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<StandaloneEditEventQueryData, StandaloneEditEventQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<StandaloneEditEventQueryData, StandaloneEditEventQueryVariables>(StandaloneEditEventQueryDocument, options);
+        }
 export type StandaloneEditEventQueryHookResult = ReturnType<typeof useStandaloneEditEventQuery>;
 export type StandaloneEditEventQueryLazyQueryHookResult = ReturnType<typeof useStandaloneEditEventQueryLazyQuery>;
+export type StandaloneEditEventQuerySuspenseQueryHookResult = ReturnType<typeof useStandaloneEditEventQuerySuspenseQuery>;
 export type StandaloneEditEventQueryQueryResult = Apollo.QueryResult<StandaloneEditEventQueryData, StandaloneEditEventQueryVariables>;

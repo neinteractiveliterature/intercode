@@ -72,6 +72,11 @@ export function useMyProfileQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<MyProfileQueryData, MyProfileQueryVariables>(MyProfileQueryDocument, options);
         }
+export function useMyProfileQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<MyProfileQueryData, MyProfileQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<MyProfileQueryData, MyProfileQueryVariables>(MyProfileQueryDocument, options);
+        }
 export type MyProfileQueryHookResult = ReturnType<typeof useMyProfileQuery>;
 export type MyProfileQueryLazyQueryHookResult = ReturnType<typeof useMyProfileQueryLazyQuery>;
+export type MyProfileQuerySuspenseQueryHookResult = ReturnType<typeof useMyProfileQuerySuspenseQuery>;
 export type MyProfileQueryQueryResult = Apollo.QueryResult<MyProfileQueryData, MyProfileQueryVariables>;

@@ -61,6 +61,11 @@ export function useRootSiteEmailRoutesAdminTableQueryLazyQuery(baseOptions?: Apo
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<RootSiteEmailRoutesAdminTableQueryData, RootSiteEmailRoutesAdminTableQueryVariables>(RootSiteEmailRoutesAdminTableQueryDocument, options);
         }
+export function useRootSiteEmailRoutesAdminTableQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<RootSiteEmailRoutesAdminTableQueryData, RootSiteEmailRoutesAdminTableQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<RootSiteEmailRoutesAdminTableQueryData, RootSiteEmailRoutesAdminTableQueryVariables>(RootSiteEmailRoutesAdminTableQueryDocument, options);
+        }
 export type RootSiteEmailRoutesAdminTableQueryHookResult = ReturnType<typeof useRootSiteEmailRoutesAdminTableQuery>;
 export type RootSiteEmailRoutesAdminTableQueryLazyQueryHookResult = ReturnType<typeof useRootSiteEmailRoutesAdminTableQueryLazyQuery>;
+export type RootSiteEmailRoutesAdminTableQuerySuspenseQueryHookResult = ReturnType<typeof useRootSiteEmailRoutesAdminTableQuerySuspenseQuery>;
 export type RootSiteEmailRoutesAdminTableQueryQueryResult = Apollo.QueryResult<RootSiteEmailRoutesAdminTableQueryData, RootSiteEmailRoutesAdminTableQueryVariables>;

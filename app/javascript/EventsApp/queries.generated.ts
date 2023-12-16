@@ -101,6 +101,11 @@ export function useCommonConventionDataQueryLazyQuery(baseOptions?: Apollo.LazyQ
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<CommonConventionDataQueryData, CommonConventionDataQueryVariables>(CommonConventionDataQueryDocument, options);
         }
+export function useCommonConventionDataQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<CommonConventionDataQueryData, CommonConventionDataQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<CommonConventionDataQueryData, CommonConventionDataQueryVariables>(CommonConventionDataQueryDocument, options);
+        }
 export type CommonConventionDataQueryHookResult = ReturnType<typeof useCommonConventionDataQuery>;
 export type CommonConventionDataQueryLazyQueryHookResult = ReturnType<typeof useCommonConventionDataQueryLazyQuery>;
+export type CommonConventionDataQuerySuspenseQueryHookResult = ReturnType<typeof useCommonConventionDataQuerySuspenseQuery>;
 export type CommonConventionDataQueryQueryResult = Apollo.QueryResult<CommonConventionDataQueryData, CommonConventionDataQueryVariables>;

@@ -67,6 +67,11 @@ export function useCmsFilesAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryHoo
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<CmsFilesAdminQueryData, CmsFilesAdminQueryVariables>(CmsFilesAdminQueryDocument, options);
         }
+export function useCmsFilesAdminQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<CmsFilesAdminQueryData, CmsFilesAdminQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<CmsFilesAdminQueryData, CmsFilesAdminQueryVariables>(CmsFilesAdminQueryDocument, options);
+        }
 export type CmsFilesAdminQueryHookResult = ReturnType<typeof useCmsFilesAdminQuery>;
 export type CmsFilesAdminQueryLazyQueryHookResult = ReturnType<typeof useCmsFilesAdminQueryLazyQuery>;
+export type CmsFilesAdminQuerySuspenseQueryHookResult = ReturnType<typeof useCmsFilesAdminQuerySuspenseQuery>;
 export type CmsFilesAdminQueryQueryResult = Apollo.QueryResult<CmsFilesAdminQueryData, CmsFilesAdminQueryVariables>;

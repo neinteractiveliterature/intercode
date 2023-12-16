@@ -78,6 +78,11 @@ export function useEventHistoryQueryLazyQuery(baseOptions?: Apollo.LazyQueryHook
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<EventHistoryQueryData, EventHistoryQueryVariables>(EventHistoryQueryDocument, options);
         }
+export function useEventHistoryQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<EventHistoryQueryData, EventHistoryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<EventHistoryQueryData, EventHistoryQueryVariables>(EventHistoryQueryDocument, options);
+        }
 export type EventHistoryQueryHookResult = ReturnType<typeof useEventHistoryQuery>;
 export type EventHistoryQueryLazyQueryHookResult = ReturnType<typeof useEventHistoryQueryLazyQuery>;
+export type EventHistoryQuerySuspenseQueryHookResult = ReturnType<typeof useEventHistoryQuerySuspenseQuery>;
 export type EventHistoryQueryQueryResult = Apollo.QueryResult<EventHistoryQueryData, EventHistoryQueryVariables>;

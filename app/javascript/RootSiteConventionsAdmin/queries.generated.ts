@@ -104,8 +104,13 @@ export function useRootSiteConventionsAdminTableQueryLazyQuery(baseOptions?: Apo
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<RootSiteConventionsAdminTableQueryData, RootSiteConventionsAdminTableQueryVariables>(RootSiteConventionsAdminTableQueryDocument, options);
         }
+export function useRootSiteConventionsAdminTableQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<RootSiteConventionsAdminTableQueryData, RootSiteConventionsAdminTableQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<RootSiteConventionsAdminTableQueryData, RootSiteConventionsAdminTableQueryVariables>(RootSiteConventionsAdminTableQueryDocument, options);
+        }
 export type RootSiteConventionsAdminTableQueryHookResult = ReturnType<typeof useRootSiteConventionsAdminTableQuery>;
 export type RootSiteConventionsAdminTableQueryLazyQueryHookResult = ReturnType<typeof useRootSiteConventionsAdminTableQueryLazyQuery>;
+export type RootSiteConventionsAdminTableQuerySuspenseQueryHookResult = ReturnType<typeof useRootSiteConventionsAdminTableQuerySuspenseQuery>;
 export type RootSiteConventionsAdminTableQueryQueryResult = Apollo.QueryResult<RootSiteConventionsAdminTableQueryData, RootSiteConventionsAdminTableQueryVariables>;
 export const ConventionDisplayQueryDocument = gql`
     query ConventionDisplayQuery($id: ID!) {
@@ -140,8 +145,13 @@ export function useConventionDisplayQueryLazyQuery(baseOptions?: Apollo.LazyQuer
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<ConventionDisplayQueryData, ConventionDisplayQueryVariables>(ConventionDisplayQueryDocument, options);
         }
+export function useConventionDisplayQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ConventionDisplayQueryData, ConventionDisplayQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ConventionDisplayQueryData, ConventionDisplayQueryVariables>(ConventionDisplayQueryDocument, options);
+        }
 export type ConventionDisplayQueryHookResult = ReturnType<typeof useConventionDisplayQuery>;
 export type ConventionDisplayQueryLazyQueryHookResult = ReturnType<typeof useConventionDisplayQueryLazyQuery>;
+export type ConventionDisplayQuerySuspenseQueryHookResult = ReturnType<typeof useConventionDisplayQuerySuspenseQuery>;
 export type ConventionDisplayQueryQueryResult = Apollo.QueryResult<ConventionDisplayQueryData, ConventionDisplayQueryVariables>;
 export const NewConventionModalQueryDocument = gql`
     query NewConventionModalQuery {
@@ -175,6 +185,11 @@ export function useNewConventionModalQueryLazyQuery(baseOptions?: Apollo.LazyQue
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<NewConventionModalQueryData, NewConventionModalQueryVariables>(NewConventionModalQueryDocument, options);
         }
+export function useNewConventionModalQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<NewConventionModalQueryData, NewConventionModalQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<NewConventionModalQueryData, NewConventionModalQueryVariables>(NewConventionModalQueryDocument, options);
+        }
 export type NewConventionModalQueryHookResult = ReturnType<typeof useNewConventionModalQuery>;
 export type NewConventionModalQueryLazyQueryHookResult = ReturnType<typeof useNewConventionModalQueryLazyQuery>;
+export type NewConventionModalQuerySuspenseQueryHookResult = ReturnType<typeof useNewConventionModalQuerySuspenseQuery>;
 export type NewConventionModalQueryQueryResult = Apollo.QueryResult<NewConventionModalQueryData, NewConventionModalQueryVariables>;

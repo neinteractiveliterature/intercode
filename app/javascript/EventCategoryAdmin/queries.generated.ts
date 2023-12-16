@@ -88,6 +88,11 @@ export function useEventCategoryAdminQueryLazyQuery(baseOptions?: Apollo.LazyQue
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<EventCategoryAdminQueryData, EventCategoryAdminQueryVariables>(EventCategoryAdminQueryDocument, options);
         }
+export function useEventCategoryAdminQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<EventCategoryAdminQueryData, EventCategoryAdminQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<EventCategoryAdminQueryData, EventCategoryAdminQueryVariables>(EventCategoryAdminQueryDocument, options);
+        }
 export type EventCategoryAdminQueryHookResult = ReturnType<typeof useEventCategoryAdminQuery>;
 export type EventCategoryAdminQueryLazyQueryHookResult = ReturnType<typeof useEventCategoryAdminQueryLazyQuery>;
+export type EventCategoryAdminQuerySuspenseQueryHookResult = ReturnType<typeof useEventCategoryAdminQuerySuspenseQuery>;
 export type EventCategoryAdminQueryQueryResult = Apollo.QueryResult<EventCategoryAdminQueryData, EventCategoryAdminQueryVariables>;

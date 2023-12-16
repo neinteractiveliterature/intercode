@@ -68,6 +68,11 @@ export function useOrganizationAdminOrganizationsQueryLazyQuery(baseOptions?: Ap
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<OrganizationAdminOrganizationsQueryData, OrganizationAdminOrganizationsQueryVariables>(OrganizationAdminOrganizationsQueryDocument, options);
         }
+export function useOrganizationAdminOrganizationsQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<OrganizationAdminOrganizationsQueryData, OrganizationAdminOrganizationsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<OrganizationAdminOrganizationsQueryData, OrganizationAdminOrganizationsQueryVariables>(OrganizationAdminOrganizationsQueryDocument, options);
+        }
 export type OrganizationAdminOrganizationsQueryHookResult = ReturnType<typeof useOrganizationAdminOrganizationsQuery>;
 export type OrganizationAdminOrganizationsQueryLazyQueryHookResult = ReturnType<typeof useOrganizationAdminOrganizationsQueryLazyQuery>;
+export type OrganizationAdminOrganizationsQuerySuspenseQueryHookResult = ReturnType<typeof useOrganizationAdminOrganizationsQuerySuspenseQuery>;
 export type OrganizationAdminOrganizationsQueryQueryResult = Apollo.QueryResult<OrganizationAdminOrganizationsQueryData, OrganizationAdminOrganizationsQueryVariables>;

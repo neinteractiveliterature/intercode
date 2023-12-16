@@ -82,6 +82,11 @@ export function useRootSiteAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryHoo
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<RootSiteAdminQueryData, RootSiteAdminQueryVariables>(RootSiteAdminQueryDocument, options);
         }
+export function useRootSiteAdminQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<RootSiteAdminQueryData, RootSiteAdminQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<RootSiteAdminQueryData, RootSiteAdminQueryVariables>(RootSiteAdminQueryDocument, options);
+        }
 export type RootSiteAdminQueryHookResult = ReturnType<typeof useRootSiteAdminQuery>;
 export type RootSiteAdminQueryLazyQueryHookResult = ReturnType<typeof useRootSiteAdminQueryLazyQuery>;
+export type RootSiteAdminQuerySuspenseQueryHookResult = ReturnType<typeof useRootSiteAdminQuerySuspenseQuery>;
 export type RootSiteAdminQueryQueryResult = Apollo.QueryResult<RootSiteAdminQueryData, RootSiteAdminQueryVariables>;

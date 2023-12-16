@@ -64,8 +64,13 @@ export function useDefaultEventsQueryLazyQuery(baseOptions?: Apollo.LazyQueryHoo
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<DefaultEventsQueryData, DefaultEventsQueryVariables>(DefaultEventsQueryDocument, options);
         }
+export function useDefaultEventsQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<DefaultEventsQueryData, DefaultEventsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<DefaultEventsQueryData, DefaultEventsQueryVariables>(DefaultEventsQueryDocument, options);
+        }
 export type DefaultEventsQueryHookResult = ReturnType<typeof useDefaultEventsQuery>;
 export type DefaultEventsQueryLazyQueryHookResult = ReturnType<typeof useDefaultEventsQueryLazyQuery>;
+export type DefaultEventsQuerySuspenseQueryHookResult = ReturnType<typeof useDefaultEventsQuerySuspenseQuery>;
 export type DefaultEventsQueryQueryResult = Apollo.QueryResult<DefaultEventsQueryData, DefaultEventsQueryVariables>;
 export const DefaultUserConProfilesQueryDocument = gql`
     query DefaultUserConProfilesQuery($name: String) {
@@ -106,8 +111,13 @@ export function useDefaultUserConProfilesQueryLazyQuery(baseOptions?: Apollo.Laz
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<DefaultUserConProfilesQueryData, DefaultUserConProfilesQueryVariables>(DefaultUserConProfilesQueryDocument, options);
         }
+export function useDefaultUserConProfilesQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<DefaultUserConProfilesQueryData, DefaultUserConProfilesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<DefaultUserConProfilesQueryData, DefaultUserConProfilesQueryVariables>(DefaultUserConProfilesQueryDocument, options);
+        }
 export type DefaultUserConProfilesQueryHookResult = ReturnType<typeof useDefaultUserConProfilesQuery>;
 export type DefaultUserConProfilesQueryLazyQueryHookResult = ReturnType<typeof useDefaultUserConProfilesQueryLazyQuery>;
+export type DefaultUserConProfilesQuerySuspenseQueryHookResult = ReturnType<typeof useDefaultUserConProfilesQuerySuspenseQuery>;
 export type DefaultUserConProfilesQueryQueryResult = Apollo.QueryResult<DefaultUserConProfilesQueryData, DefaultUserConProfilesQueryVariables>;
 export const DefaultUsersQueryDocument = gql`
     query DefaultUsersQuery($name: String) {
@@ -145,6 +155,11 @@ export function useDefaultUsersQueryLazyQuery(baseOptions?: Apollo.LazyQueryHook
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<DefaultUsersQueryData, DefaultUsersQueryVariables>(DefaultUsersQueryDocument, options);
         }
+export function useDefaultUsersQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<DefaultUsersQueryData, DefaultUsersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<DefaultUsersQueryData, DefaultUsersQueryVariables>(DefaultUsersQueryDocument, options);
+        }
 export type DefaultUsersQueryHookResult = ReturnType<typeof useDefaultUsersQuery>;
 export type DefaultUsersQueryLazyQueryHookResult = ReturnType<typeof useDefaultUsersQueryLazyQuery>;
+export type DefaultUsersQuerySuspenseQueryHookResult = ReturnType<typeof useDefaultUsersQuerySuspenseQuery>;
 export type DefaultUsersQueryQueryResult = Apollo.QueryResult<DefaultUsersQueryData, DefaultUsersQueryVariables>;

@@ -476,7 +476,7 @@ export type CmsParent = {
  * object for more details about this.)
  */
 export type CmsParentCmsContentGroupArgs = {
-  id?: InputMaybe<Scalars['ID']['input']>;
+  id: Scalars['ID']['input'];
 };
 
 
@@ -807,7 +807,7 @@ export type Convention = CmsParent & {
 
 
 export type ConventionCmsContentGroupArgs = {
-  id?: InputMaybe<Scalars['ID']['input']>;
+  id: Scalars['ID']['input'];
 };
 
 
@@ -4194,7 +4194,7 @@ export type RootSite = CmsParent & {
 
 
 export type RootSiteCmsContentGroupArgs = {
-  id?: InputMaybe<Scalars['ID']['input']>;
+  id: Scalars['ID']['input'];
 };
 
 
@@ -4275,7 +4275,7 @@ export type RunSignups_PaginatedArgs = {
   filters?: InputMaybe<SignupFiltersInput>;
   page?: InputMaybe<Scalars['Int']['input']>;
   per_page?: InputMaybe<Scalars['Int']['input']>;
-  sort?: InputMaybe<Array<InputMaybe<SortInput>>>;
+  sort?: InputMaybe<Array<SortInput>>;
 };
 
 export type RunInput = {

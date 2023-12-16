@@ -113,8 +113,13 @@ export function useCmsContentGroupsAdminQueryLazyQuery(baseOptions?: Apollo.Lazy
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<CmsContentGroupsAdminQueryData, CmsContentGroupsAdminQueryVariables>(CmsContentGroupsAdminQueryDocument, options);
         }
+export function useCmsContentGroupsAdminQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<CmsContentGroupsAdminQueryData, CmsContentGroupsAdminQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<CmsContentGroupsAdminQueryData, CmsContentGroupsAdminQueryVariables>(CmsContentGroupsAdminQueryDocument, options);
+        }
 export type CmsContentGroupsAdminQueryHookResult = ReturnType<typeof useCmsContentGroupsAdminQuery>;
 export type CmsContentGroupsAdminQueryLazyQueryHookResult = ReturnType<typeof useCmsContentGroupsAdminQueryLazyQuery>;
+export type CmsContentGroupsAdminQuerySuspenseQueryHookResult = ReturnType<typeof useCmsContentGroupsAdminQuerySuspenseQuery>;
 export type CmsContentGroupsAdminQueryQueryResult = Apollo.QueryResult<CmsContentGroupsAdminQueryData, CmsContentGroupsAdminQueryVariables>;
 export const SearchCmsContentQueryDocument = gql`
     query SearchCmsContentQuery($name: String) {
@@ -151,6 +156,11 @@ export function useSearchCmsContentQueryLazyQuery(baseOptions?: Apollo.LazyQuery
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<SearchCmsContentQueryData, SearchCmsContentQueryVariables>(SearchCmsContentQueryDocument, options);
         }
+export function useSearchCmsContentQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<SearchCmsContentQueryData, SearchCmsContentQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<SearchCmsContentQueryData, SearchCmsContentQueryVariables>(SearchCmsContentQueryDocument, options);
+        }
 export type SearchCmsContentQueryHookResult = ReturnType<typeof useSearchCmsContentQuery>;
 export type SearchCmsContentQueryLazyQueryHookResult = ReturnType<typeof useSearchCmsContentQueryLazyQuery>;
+export type SearchCmsContentQuerySuspenseQueryHookResult = ReturnType<typeof useSearchCmsContentQuerySuspenseQuery>;
 export type SearchCmsContentQueryQueryResult = Apollo.QueryResult<SearchCmsContentQueryData, SearchCmsContentQueryVariables>;

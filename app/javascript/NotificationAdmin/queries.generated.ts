@@ -56,6 +56,11 @@ export function useNotificationAdminQueryLazyQuery(baseOptions?: Apollo.LazyQuer
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<NotificationAdminQueryData, NotificationAdminQueryVariables>(NotificationAdminQueryDocument, options);
         }
+export function useNotificationAdminQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<NotificationAdminQueryData, NotificationAdminQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<NotificationAdminQueryData, NotificationAdminQueryVariables>(NotificationAdminQueryDocument, options);
+        }
 export type NotificationAdminQueryHookResult = ReturnType<typeof useNotificationAdminQuery>;
 export type NotificationAdminQueryLazyQueryHookResult = ReturnType<typeof useNotificationAdminQueryLazyQuery>;
+export type NotificationAdminQuerySuspenseQueryHookResult = ReturnType<typeof useNotificationAdminQuerySuspenseQuery>;
 export type NotificationAdminQueryQueryResult = Apollo.QueryResult<NotificationAdminQueryData, NotificationAdminQueryVariables>;

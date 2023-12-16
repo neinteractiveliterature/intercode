@@ -113,8 +113,13 @@ export function useUsersTableUsersQueryLazyQuery(baseOptions?: Apollo.LazyQueryH
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<UsersTableUsersQueryData, UsersTableUsersQueryVariables>(UsersTableUsersQueryDocument, options);
         }
+export function useUsersTableUsersQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<UsersTableUsersQueryData, UsersTableUsersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<UsersTableUsersQueryData, UsersTableUsersQueryVariables>(UsersTableUsersQueryDocument, options);
+        }
 export type UsersTableUsersQueryHookResult = ReturnType<typeof useUsersTableUsersQuery>;
 export type UsersTableUsersQueryLazyQueryHookResult = ReturnType<typeof useUsersTableUsersQueryLazyQuery>;
+export type UsersTableUsersQuerySuspenseQueryHookResult = ReturnType<typeof useUsersTableUsersQuerySuspenseQuery>;
 export type UsersTableUsersQueryQueryResult = Apollo.QueryResult<UsersTableUsersQueryData, UsersTableUsersQueryVariables>;
 export const UserAdminQueryDocument = gql`
     query UserAdminQuery($id: ID!) {
@@ -149,8 +154,13 @@ export function useUserAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<UserAdminQueryData, UserAdminQueryVariables>(UserAdminQueryDocument, options);
         }
+export function useUserAdminQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<UserAdminQueryData, UserAdminQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<UserAdminQueryData, UserAdminQueryVariables>(UserAdminQueryDocument, options);
+        }
 export type UserAdminQueryHookResult = ReturnType<typeof useUserAdminQuery>;
 export type UserAdminQueryLazyQueryHookResult = ReturnType<typeof useUserAdminQueryLazyQuery>;
+export type UserAdminQuerySuspenseQueryHookResult = ReturnType<typeof useUserAdminQuerySuspenseQuery>;
 export type UserAdminQueryQueryResult = Apollo.QueryResult<UserAdminQueryData, UserAdminQueryVariables>;
 export const MergeUsersModalQueryDocument = gql`
     query MergeUsersModalQuery($ids: [ID!]!) {
@@ -185,6 +195,11 @@ export function useMergeUsersModalQueryLazyQuery(baseOptions?: Apollo.LazyQueryH
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<MergeUsersModalQueryData, MergeUsersModalQueryVariables>(MergeUsersModalQueryDocument, options);
         }
+export function useMergeUsersModalQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<MergeUsersModalQueryData, MergeUsersModalQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<MergeUsersModalQueryData, MergeUsersModalQueryVariables>(MergeUsersModalQueryDocument, options);
+        }
 export type MergeUsersModalQueryHookResult = ReturnType<typeof useMergeUsersModalQuery>;
 export type MergeUsersModalQueryLazyQueryHookResult = ReturnType<typeof useMergeUsersModalQueryLazyQuery>;
+export type MergeUsersModalQuerySuspenseQueryHookResult = ReturnType<typeof useMergeUsersModalQuerySuspenseQuery>;
 export type MergeUsersModalQueryQueryResult = Apollo.QueryResult<MergeUsersModalQueryData, MergeUsersModalQueryVariables>;

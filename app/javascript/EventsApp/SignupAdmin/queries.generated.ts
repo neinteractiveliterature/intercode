@@ -206,8 +206,13 @@ export function useSignupAdminEventQueryLazyQuery(baseOptions?: Apollo.LazyQuery
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<SignupAdminEventQueryData, SignupAdminEventQueryVariables>(SignupAdminEventQueryDocument, options);
         }
+export function useSignupAdminEventQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<SignupAdminEventQueryData, SignupAdminEventQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<SignupAdminEventQueryData, SignupAdminEventQueryVariables>(SignupAdminEventQueryDocument, options);
+        }
 export type SignupAdminEventQueryHookResult = ReturnType<typeof useSignupAdminEventQuery>;
 export type SignupAdminEventQueryLazyQueryHookResult = ReturnType<typeof useSignupAdminEventQueryLazyQuery>;
+export type SignupAdminEventQuerySuspenseQueryHookResult = ReturnType<typeof useSignupAdminEventQuerySuspenseQuery>;
 export type SignupAdminEventQueryQueryResult = Apollo.QueryResult<SignupAdminEventQueryData, SignupAdminEventQueryVariables>;
 export const AdminSignupQueryDocument = gql`
     query AdminSignupQuery($id: ID!) {
@@ -252,8 +257,13 @@ export function useAdminSignupQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookO
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<AdminSignupQueryData, AdminSignupQueryVariables>(AdminSignupQueryDocument, options);
         }
+export function useAdminSignupQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<AdminSignupQueryData, AdminSignupQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<AdminSignupQueryData, AdminSignupQueryVariables>(AdminSignupQueryDocument, options);
+        }
 export type AdminSignupQueryHookResult = ReturnType<typeof useAdminSignupQuery>;
 export type AdminSignupQueryLazyQueryHookResult = ReturnType<typeof useAdminSignupQueryLazyQuery>;
+export type AdminSignupQuerySuspenseQueryHookResult = ReturnType<typeof useAdminSignupQuerySuspenseQuery>;
 export type AdminSignupQueryQueryResult = Apollo.QueryResult<AdminSignupQueryData, AdminSignupQueryVariables>;
 export const RunSignupsTableSignupsQueryDocument = gql`
     query RunSignupsTableSignupsQuery($eventId: ID!, $runId: ID!, $page: Int, $perPage: Int, $filters: SignupFiltersInput, $sort: [SortInput!]) {
@@ -349,8 +359,13 @@ export function useRunSignupsTableSignupsQueryLazyQuery(baseOptions?: Apollo.Laz
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<RunSignupsTableSignupsQueryData, RunSignupsTableSignupsQueryVariables>(RunSignupsTableSignupsQueryDocument, options);
         }
+export function useRunSignupsTableSignupsQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<RunSignupsTableSignupsQueryData, RunSignupsTableSignupsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<RunSignupsTableSignupsQueryData, RunSignupsTableSignupsQueryVariables>(RunSignupsTableSignupsQueryDocument, options);
+        }
 export type RunSignupsTableSignupsQueryHookResult = ReturnType<typeof useRunSignupsTableSignupsQuery>;
 export type RunSignupsTableSignupsQueryLazyQueryHookResult = ReturnType<typeof useRunSignupsTableSignupsQueryLazyQuery>;
+export type RunSignupsTableSignupsQuerySuspenseQueryHookResult = ReturnType<typeof useRunSignupsTableSignupsQuerySuspenseQuery>;
 export type RunSignupsTableSignupsQueryQueryResult = Apollo.QueryResult<RunSignupsTableSignupsQueryData, RunSignupsTableSignupsQueryVariables>;
 export const RunHeaderRunInfoQueryDocument = gql`
     query RunHeaderRunInfoQuery($eventId: ID!, $runId: ID!) {
@@ -404,8 +419,13 @@ export function useRunHeaderRunInfoQueryLazyQuery(baseOptions?: Apollo.LazyQuery
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<RunHeaderRunInfoQueryData, RunHeaderRunInfoQueryVariables>(RunHeaderRunInfoQueryDocument, options);
         }
+export function useRunHeaderRunInfoQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<RunHeaderRunInfoQueryData, RunHeaderRunInfoQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<RunHeaderRunInfoQueryData, RunHeaderRunInfoQueryVariables>(RunHeaderRunInfoQueryDocument, options);
+        }
 export type RunHeaderRunInfoQueryHookResult = ReturnType<typeof useRunHeaderRunInfoQuery>;
 export type RunHeaderRunInfoQueryLazyQueryHookResult = ReturnType<typeof useRunHeaderRunInfoQueryLazyQuery>;
+export type RunHeaderRunInfoQuerySuspenseQueryHookResult = ReturnType<typeof useRunHeaderRunInfoQuerySuspenseQuery>;
 export type RunHeaderRunInfoQueryQueryResult = Apollo.QueryResult<RunHeaderRunInfoQueryData, RunHeaderRunInfoQueryVariables>;
 export const RunSignupSummaryQueryDocument = gql`
     query RunSignupSummaryQuery($eventId: ID!, $runId: ID!) {
@@ -486,8 +506,13 @@ export function useRunSignupSummaryQueryLazyQuery(baseOptions?: Apollo.LazyQuery
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<RunSignupSummaryQueryData, RunSignupSummaryQueryVariables>(RunSignupSummaryQueryDocument, options);
         }
+export function useRunSignupSummaryQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<RunSignupSummaryQueryData, RunSignupSummaryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<RunSignupSummaryQueryData, RunSignupSummaryQueryVariables>(RunSignupSummaryQueryDocument, options);
+        }
 export type RunSignupSummaryQueryHookResult = ReturnType<typeof useRunSignupSummaryQuery>;
 export type RunSignupSummaryQueryLazyQueryHookResult = ReturnType<typeof useRunSignupSummaryQueryLazyQuery>;
+export type RunSignupSummaryQuerySuspenseQueryHookResult = ReturnType<typeof useRunSignupSummaryQuerySuspenseQuery>;
 export type RunSignupSummaryQueryQueryResult = Apollo.QueryResult<RunSignupSummaryQueryData, RunSignupSummaryQueryVariables>;
 export const UserConProfileSignupsQueryDocument = gql`
     query UserConProfileSignupsQuery($id: ID!) {
@@ -543,8 +568,13 @@ export function useUserConProfileSignupsQueryLazyQuery(baseOptions?: Apollo.Lazy
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<UserConProfileSignupsQueryData, UserConProfileSignupsQueryVariables>(UserConProfileSignupsQueryDocument, options);
         }
+export function useUserConProfileSignupsQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<UserConProfileSignupsQueryData, UserConProfileSignupsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<UserConProfileSignupsQueryData, UserConProfileSignupsQueryVariables>(UserConProfileSignupsQueryDocument, options);
+        }
 export type UserConProfileSignupsQueryHookResult = ReturnType<typeof useUserConProfileSignupsQuery>;
 export type UserConProfileSignupsQueryLazyQueryHookResult = ReturnType<typeof useUserConProfileSignupsQueryLazyQuery>;
+export type UserConProfileSignupsQuerySuspenseQueryHookResult = ReturnType<typeof useUserConProfileSignupsQuerySuspenseQuery>;
 export type UserConProfileSignupsQueryQueryResult = Apollo.QueryResult<UserConProfileSignupsQueryData, UserConProfileSignupsQueryVariables>;
 export const RunSignupChangesQueryDocument = gql`
     query RunSignupChangesQuery($runId: ID!, $filters: SignupChangeFiltersInput, $sort: [SortInput!], $page: Int, $perPage: Int) {
@@ -645,6 +675,11 @@ export function useRunSignupChangesQueryLazyQuery(baseOptions?: Apollo.LazyQuery
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<RunSignupChangesQueryData, RunSignupChangesQueryVariables>(RunSignupChangesQueryDocument, options);
         }
+export function useRunSignupChangesQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<RunSignupChangesQueryData, RunSignupChangesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<RunSignupChangesQueryData, RunSignupChangesQueryVariables>(RunSignupChangesQueryDocument, options);
+        }
 export type RunSignupChangesQueryHookResult = ReturnType<typeof useRunSignupChangesQuery>;
 export type RunSignupChangesQueryLazyQueryHookResult = ReturnType<typeof useRunSignupChangesQueryLazyQuery>;
+export type RunSignupChangesQuerySuspenseQueryHookResult = ReturnType<typeof useRunSignupChangesQuerySuspenseQuery>;
 export type RunSignupChangesQueryQueryResult = Apollo.QueryResult<RunSignupChangesQueryData, RunSignupChangesQueryVariables>;

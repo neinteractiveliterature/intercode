@@ -100,8 +100,13 @@ export function useMailingListsMenuQueryLazyQuery(baseOptions?: Apollo.LazyQuery
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<MailingListsMenuQueryData, MailingListsMenuQueryVariables>(MailingListsMenuQueryDocument, options);
         }
+export function useMailingListsMenuQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<MailingListsMenuQueryData, MailingListsMenuQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<MailingListsMenuQueryData, MailingListsMenuQueryVariables>(MailingListsMenuQueryDocument, options);
+        }
 export type MailingListsMenuQueryHookResult = ReturnType<typeof useMailingListsMenuQuery>;
 export type MailingListsMenuQueryLazyQueryHookResult = ReturnType<typeof useMailingListsMenuQueryLazyQuery>;
+export type MailingListsMenuQuerySuspenseQueryHookResult = ReturnType<typeof useMailingListsMenuQuerySuspenseQuery>;
 export type MailingListsMenuQueryQueryResult = Apollo.QueryResult<MailingListsMenuQueryData, MailingListsMenuQueryVariables>;
 export const TicketedAttendeesQueryDocument = gql`
     query TicketedAttendeesQuery {
@@ -141,8 +146,13 @@ export function useTicketedAttendeesQueryLazyQuery(baseOptions?: Apollo.LazyQuer
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<TicketedAttendeesQueryData, TicketedAttendeesQueryVariables>(TicketedAttendeesQueryDocument, options);
         }
+export function useTicketedAttendeesQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<TicketedAttendeesQueryData, TicketedAttendeesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<TicketedAttendeesQueryData, TicketedAttendeesQueryVariables>(TicketedAttendeesQueryDocument, options);
+        }
 export type TicketedAttendeesQueryHookResult = ReturnType<typeof useTicketedAttendeesQuery>;
 export type TicketedAttendeesQueryLazyQueryHookResult = ReturnType<typeof useTicketedAttendeesQueryLazyQuery>;
+export type TicketedAttendeesQuerySuspenseQueryHookResult = ReturnType<typeof useTicketedAttendeesQuerySuspenseQuery>;
 export type TicketedAttendeesQueryQueryResult = Apollo.QueryResult<TicketedAttendeesQueryData, TicketedAttendeesQueryVariables>;
 export const EventProposersQueryDocument = gql`
     query EventProposersQuery {
@@ -181,8 +191,13 @@ export function useEventProposersQueryLazyQuery(baseOptions?: Apollo.LazyQueryHo
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<EventProposersQueryData, EventProposersQueryVariables>(EventProposersQueryDocument, options);
         }
+export function useEventProposersQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<EventProposersQueryData, EventProposersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<EventProposersQueryData, EventProposersQueryVariables>(EventProposersQueryDocument, options);
+        }
 export type EventProposersQueryHookResult = ReturnType<typeof useEventProposersQuery>;
 export type EventProposersQueryLazyQueryHookResult = ReturnType<typeof useEventProposersQueryLazyQuery>;
+export type EventProposersQuerySuspenseQueryHookResult = ReturnType<typeof useEventProposersQuerySuspenseQuery>;
 export type EventProposersQueryQueryResult = Apollo.QueryResult<EventProposersQueryData, EventProposersQueryVariables>;
 export const TeamMembersMailingListQueryDocument = gql`
     query TeamMembersMailingListQuery {
@@ -221,8 +236,13 @@ export function useTeamMembersMailingListQueryLazyQuery(baseOptions?: Apollo.Laz
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<TeamMembersMailingListQueryData, TeamMembersMailingListQueryVariables>(TeamMembersMailingListQueryDocument, options);
         }
+export function useTeamMembersMailingListQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<TeamMembersMailingListQueryData, TeamMembersMailingListQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<TeamMembersMailingListQueryData, TeamMembersMailingListQueryVariables>(TeamMembersMailingListQueryDocument, options);
+        }
 export type TeamMembersMailingListQueryHookResult = ReturnType<typeof useTeamMembersMailingListQuery>;
 export type TeamMembersMailingListQueryLazyQueryHookResult = ReturnType<typeof useTeamMembersMailingListQueryLazyQuery>;
+export type TeamMembersMailingListQuerySuspenseQueryHookResult = ReturnType<typeof useTeamMembersMailingListQuerySuspenseQuery>;
 export type TeamMembersMailingListQueryQueryResult = Apollo.QueryResult<TeamMembersMailingListQueryData, TeamMembersMailingListQueryVariables>;
 export const UsersWithPendingBioQueryDocument = gql`
     query UsersWithPendingBioQuery {
@@ -261,8 +281,13 @@ export function useUsersWithPendingBioQueryLazyQuery(baseOptions?: Apollo.LazyQu
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<UsersWithPendingBioQueryData, UsersWithPendingBioQueryVariables>(UsersWithPendingBioQueryDocument, options);
         }
+export function useUsersWithPendingBioQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<UsersWithPendingBioQueryData, UsersWithPendingBioQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<UsersWithPendingBioQueryData, UsersWithPendingBioQueryVariables>(UsersWithPendingBioQueryDocument, options);
+        }
 export type UsersWithPendingBioQueryHookResult = ReturnType<typeof useUsersWithPendingBioQuery>;
 export type UsersWithPendingBioQueryLazyQueryHookResult = ReturnType<typeof useUsersWithPendingBioQueryLazyQuery>;
+export type UsersWithPendingBioQuerySuspenseQueryHookResult = ReturnType<typeof useUsersWithPendingBioQuerySuspenseQuery>;
 export type UsersWithPendingBioQueryQueryResult = Apollo.QueryResult<UsersWithPendingBioQueryData, UsersWithPendingBioQueryVariables>;
 export const WaitlistMailingListsQueryDocument = gql`
     query WaitlistMailingListsQuery {
@@ -314,8 +339,13 @@ export function useWaitlistMailingListsQueryLazyQuery(baseOptions?: Apollo.LazyQ
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<WaitlistMailingListsQueryData, WaitlistMailingListsQueryVariables>(WaitlistMailingListsQueryDocument, options);
         }
+export function useWaitlistMailingListsQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<WaitlistMailingListsQueryData, WaitlistMailingListsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<WaitlistMailingListsQueryData, WaitlistMailingListsQueryVariables>(WaitlistMailingListsQueryDocument, options);
+        }
 export type WaitlistMailingListsQueryHookResult = ReturnType<typeof useWaitlistMailingListsQuery>;
 export type WaitlistMailingListsQueryLazyQueryHookResult = ReturnType<typeof useWaitlistMailingListsQueryLazyQuery>;
+export type WaitlistMailingListsQuerySuspenseQueryHookResult = ReturnType<typeof useWaitlistMailingListsQuerySuspenseQuery>;
 export type WaitlistMailingListsQueryQueryResult = Apollo.QueryResult<WaitlistMailingListsQueryData, WaitlistMailingListsQueryVariables>;
 export const WhosFreeFormConventionQueryDocument = gql`
     query WhosFreeFormConventionQuery {
@@ -353,8 +383,13 @@ export function useWhosFreeFormConventionQueryLazyQuery(baseOptions?: Apollo.Laz
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<WhosFreeFormConventionQueryData, WhosFreeFormConventionQueryVariables>(WhosFreeFormConventionQueryDocument, options);
         }
+export function useWhosFreeFormConventionQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<WhosFreeFormConventionQueryData, WhosFreeFormConventionQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<WhosFreeFormConventionQueryData, WhosFreeFormConventionQueryVariables>(WhosFreeFormConventionQueryDocument, options);
+        }
 export type WhosFreeFormConventionQueryHookResult = ReturnType<typeof useWhosFreeFormConventionQuery>;
 export type WhosFreeFormConventionQueryLazyQueryHookResult = ReturnType<typeof useWhosFreeFormConventionQueryLazyQuery>;
+export type WhosFreeFormConventionQuerySuspenseQueryHookResult = ReturnType<typeof useWhosFreeFormConventionQuerySuspenseQuery>;
 export type WhosFreeFormConventionQueryQueryResult = Apollo.QueryResult<WhosFreeFormConventionQueryData, WhosFreeFormConventionQueryVariables>;
 export const WhosFreeQueryDocument = gql`
     query WhosFreeQuery($start: Date!, $finish: Date!) {
@@ -395,6 +430,11 @@ export function useWhosFreeQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<WhosFreeQueryData, WhosFreeQueryVariables>(WhosFreeQueryDocument, options);
         }
+export function useWhosFreeQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<WhosFreeQueryData, WhosFreeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<WhosFreeQueryData, WhosFreeQueryVariables>(WhosFreeQueryDocument, options);
+        }
 export type WhosFreeQueryHookResult = ReturnType<typeof useWhosFreeQuery>;
 export type WhosFreeQueryLazyQueryHookResult = ReturnType<typeof useWhosFreeQueryLazyQuery>;
+export type WhosFreeQuerySuspenseQueryHookResult = ReturnType<typeof useWhosFreeQuerySuspenseQuery>;
 export type WhosFreeQueryQueryResult = Apollo.QueryResult<WhosFreeQueryData, WhosFreeQueryVariables>;

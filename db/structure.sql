@@ -1727,7 +1727,7 @@ CREATE TABLE public.maximum_event_provided_tickets_overrides (
     id bigint NOT NULL,
     event_id bigint,
     ticket_type_id bigint,
-    override_value integer,
+    override_value integer NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -5698,6 +5698,7 @@ ALTER TABLE ONLY public.cms_files_pages
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20231216024636'),
 ('20231130162442'),
 ('20231126190837'),
 ('20231126173532'),

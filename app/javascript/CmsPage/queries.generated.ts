@@ -73,8 +73,13 @@ export function useCmsPageQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<CmsPageQueryData, CmsPageQueryVariables>(CmsPageQueryDocument, options);
         }
+export function useCmsPageQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<CmsPageQueryData, CmsPageQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<CmsPageQueryData, CmsPageQueryVariables>(CmsPageQueryDocument, options);
+        }
 export type CmsPageQueryHookResult = ReturnType<typeof useCmsPageQuery>;
 export type CmsPageQueryLazyQueryHookResult = ReturnType<typeof useCmsPageQueryLazyQuery>;
+export type CmsPageQuerySuspenseQueryHookResult = ReturnType<typeof useCmsPageQuerySuspenseQuery>;
 export type CmsPageQueryQueryResult = Apollo.QueryResult<CmsPageQueryData, CmsPageQueryVariables>;
 export const PageAdminDropdownQueryDocument = gql`
     query PageAdminDropdownQuery($id: ID!) {
@@ -131,6 +136,11 @@ export function usePageAdminDropdownQueryLazyQuery(baseOptions?: Apollo.LazyQuer
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<PageAdminDropdownQueryData, PageAdminDropdownQueryVariables>(PageAdminDropdownQueryDocument, options);
         }
+export function usePageAdminDropdownQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<PageAdminDropdownQueryData, PageAdminDropdownQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<PageAdminDropdownQueryData, PageAdminDropdownQueryVariables>(PageAdminDropdownQueryDocument, options);
+        }
 export type PageAdminDropdownQueryHookResult = ReturnType<typeof usePageAdminDropdownQuery>;
 export type PageAdminDropdownQueryLazyQueryHookResult = ReturnType<typeof usePageAdminDropdownQueryLazyQuery>;
+export type PageAdminDropdownQuerySuspenseQueryHookResult = ReturnType<typeof usePageAdminDropdownQuerySuspenseQuery>;
 export type PageAdminDropdownQueryQueryResult = Apollo.QueryResult<PageAdminDropdownQueryData, PageAdminDropdownQueryVariables>;

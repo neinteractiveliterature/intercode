@@ -199,8 +199,13 @@ export function useEventPageQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<EventPageQueryData, EventPageQueryVariables>(EventPageQueryDocument, options);
         }
+export function useEventPageQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<EventPageQueryData, EventPageQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<EventPageQueryData, EventPageQueryVariables>(EventPageQueryDocument, options);
+        }
 export type EventPageQueryHookResult = ReturnType<typeof useEventPageQuery>;
 export type EventPageQueryLazyQueryHookResult = ReturnType<typeof useEventPageQueryLazyQuery>;
+export type EventPageQuerySuspenseQueryHookResult = ReturnType<typeof useEventPageQuerySuspenseQuery>;
 export type EventPageQueryQueryResult = Apollo.QueryResult<EventPageQueryData, EventPageQueryVariables>;
 export const CreateModeratedSignupModalQueryDocument = gql`
     query CreateModeratedSignupModalQuery {
@@ -250,6 +255,11 @@ export function useCreateModeratedSignupModalQueryLazyQuery(baseOptions?: Apollo
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<CreateModeratedSignupModalQueryData, CreateModeratedSignupModalQueryVariables>(CreateModeratedSignupModalQueryDocument, options);
         }
+export function useCreateModeratedSignupModalQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<CreateModeratedSignupModalQueryData, CreateModeratedSignupModalQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<CreateModeratedSignupModalQueryData, CreateModeratedSignupModalQueryVariables>(CreateModeratedSignupModalQueryDocument, options);
+        }
 export type CreateModeratedSignupModalQueryHookResult = ReturnType<typeof useCreateModeratedSignupModalQuery>;
 export type CreateModeratedSignupModalQueryLazyQueryHookResult = ReturnType<typeof useCreateModeratedSignupModalQueryLazyQuery>;
+export type CreateModeratedSignupModalQuerySuspenseQueryHookResult = ReturnType<typeof useCreateModeratedSignupModalQuerySuspenseQuery>;
 export type CreateModeratedSignupModalQueryQueryResult = Apollo.QueryResult<CreateModeratedSignupModalQueryData, CreateModeratedSignupModalQueryVariables>;

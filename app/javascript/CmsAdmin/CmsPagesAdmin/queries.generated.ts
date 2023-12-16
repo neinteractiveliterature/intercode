@@ -95,6 +95,11 @@ export function useCmsPagesAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryHoo
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<CmsPagesAdminQueryData, CmsPagesAdminQueryVariables>(CmsPagesAdminQueryDocument, options);
         }
+export function useCmsPagesAdminQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<CmsPagesAdminQueryData, CmsPagesAdminQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<CmsPagesAdminQueryData, CmsPagesAdminQueryVariables>(CmsPagesAdminQueryDocument, options);
+        }
 export type CmsPagesAdminQueryHookResult = ReturnType<typeof useCmsPagesAdminQuery>;
 export type CmsPagesAdminQueryLazyQueryHookResult = ReturnType<typeof useCmsPagesAdminQueryLazyQuery>;
+export type CmsPagesAdminQuerySuspenseQueryHookResult = ReturnType<typeof useCmsPagesAdminQuerySuspenseQuery>;
 export type CmsPagesAdminQueryQueryResult = Apollo.QueryResult<CmsPagesAdminQueryData, CmsPagesAdminQueryVariables>;
