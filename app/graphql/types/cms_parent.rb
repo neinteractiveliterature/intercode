@@ -33,7 +33,7 @@ module Types::CmsParent
   end
 
   field :cms_content_group, Types::CmsContentGroupType, null: false do
-    argument :id, ID, required: false, description: 'The ID of the CMS content group to find.'
+    argument :id, ID, required: true, description: "The ID of the CMS content group to find."
 
     description <<~MARKDOWN
       Finds a CMS content group by ID within the domain name of this HTTP request. If there is no
@@ -55,9 +55,9 @@ module Types::CmsParent
   end
 
   field :cms_page, Types::PageType, null: false do
-    argument :id, ID, required: false, description: 'The ID of the page to find.'
-    argument :slug, String, required: false, description: 'The unique slug of the page to find.'
-    argument :root_page, Boolean, required: false, description: 'If true, returns the root page for this domain.'
+    argument :id, ID, required: false, description: "The ID of the page to find."
+    argument :slug, String, required: false, description: "The unique slug of the page to find."
+    argument :root_page, Boolean, required: false, description: "If true, returns the root page for this domain."
 
     description <<~MARKDOWN
       Finds a CMS page within the domain name of this HTTP request. Exactly one of the three
@@ -100,7 +100,7 @@ module Types::CmsParent
   field :default_layout, Types::CmsLayoutType, null: false
 
   field :effective_cms_layout, Types::CmsLayoutType, null: false do
-    argument :path, String, required: true, description: 'The path to find the effective layout for.'
+    argument :path, String, required: true, description: "The path to find the effective layout for."
 
     description <<~MARKDOWN
       Returns the CMS layout to be used for a particular URL path within the current domain. (This
@@ -110,7 +110,7 @@ module Types::CmsParent
   end
 
   field :full_text_search, Types::SearchResultType, null: false do
-    argument :query, String, required: true, description: 'The text to search for.'
+    argument :query, String, required: true, description: "The text to search for."
 
     description <<~MARKDOWN
     Does a full-text search within this domain.
@@ -126,15 +126,15 @@ module Types::CmsParent
   end
 
   field :preview_markdown, String, null: false do
-    argument :markdown, String, required: true, description: 'The Markdown content to render.'
+    argument :markdown, String, required: true, description: "The Markdown content to render."
     argument :event_id,
              ID,
              required: false,
-             description: 'The event ID that this Markdown will apply to, if applicable.'
+             description: "The event ID that this Markdown will apply to, if applicable."
     argument :event_proposal_id,
              ID,
              required: false,
-             description: 'The event proposal ID that this Markdown will apply to, if applicable.'
+             description: "The event proposal ID that this Markdown will apply to, if applicable."
 
     description <<~MARKDOWN
     Given a Markdown text string, renders it to HTML and returns the result.
@@ -142,7 +142,7 @@ module Types::CmsParent
   end
 
   field :preview_liquid, String, null: false do
-    argument :content, String, required: true, description: 'The Liquid content to render.'
+    argument :content, String, required: true, description: "The Liquid content to render."
 
     description <<~MARKDOWN
     Given a Liquid text string, renders it to HTML and returns the result.

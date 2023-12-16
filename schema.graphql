@@ -324,7 +324,7 @@ interface CmsParent {
     """
     The ID of the CMS content group to find.
     """
-    id: ID
+    id: ID!
   ): CmsContentGroup!
 
   """
@@ -520,7 +520,7 @@ type Convention implements CmsParent {
     """
     The ID of the CMS content group to find.
     """
-    id: ID
+    id: ID!
   ): CmsContentGroup!
 
   """
@@ -4907,7 +4907,7 @@ type RootSite implements CmsParent {
     """
     The ID of the CMS content group to find.
     """
-    id: ID
+    id: ID!
   ): CmsContentGroup!
 
   """
