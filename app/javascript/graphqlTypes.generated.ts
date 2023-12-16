@@ -5462,7 +5462,7 @@ export type UserConProfile = {
   team_members: Array<TeamMember>;
   ticket?: Maybe<Ticket>;
   user?: Maybe<User>;
-  user_id: Scalars['Int']['output'];
+  user_id: Scalars['ID']['output'];
   zipcode?: Maybe<Scalars['String']['output']>;
 };
 

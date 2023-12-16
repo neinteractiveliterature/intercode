@@ -6659,7 +6659,7 @@ type UserConProfile {
   team_members: [TeamMember!]!
   ticket: Ticket
   user: User
-  user_id: Int!
+  user_id: ID!
   zipcode: String
 }
 

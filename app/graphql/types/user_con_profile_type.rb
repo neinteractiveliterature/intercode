@@ -44,12 +44,12 @@ class Types::UserConProfileType < Types::BaseObject
 
   # This is a little bit of a weird thing to expose here; normally we'd just have people query for
   # User, but access to that object is restricted
-  field :user_id, Integer, null: false
+  field :user_id, ID, null: false
 
   def bio_html
-    MarkdownLoader
-      .for('user_con_profile', 'No bio provided', context[:controller])
-      .load([[object, 'bio_html'], object.bio, {}])
+    MarkdownLoader.for("user_con_profile", "No bio provided", context[:controller]).load(
+      [[object, "bio_html"], object.bio, {}]
+    )
   end
 
   def form_response_attrs_json
@@ -57,8 +57,8 @@ class Types::UserConProfileType < Types::BaseObject
 
     attrs_promise.then do |attrs|
       allowed_attrs = attrs.keys
-      allowed_attrs.delete('email') unless policy(object).read_email?
-      allowed_attrs.delete('birth_date') unless policy(object).read_birth_date?
+      allowed_attrs.delete("email") unless policy(object).read_email?
+      allowed_attrs.delete("birth_date") unless policy(object).read_birth_date?
       unless policy(object).read_personal_info?
         allowed_attrs.select! { |attr| %w[first_name last_name nickname email birth_date].include?(attr) }
       end
@@ -150,7 +150,7 @@ class Types::UserConProfileType < Types::BaseObject
   field :order_summary, String, null: false
 
   def order_summary
-    return '' unless policy(Order.new(user_con_profile: object)).read?
+    return "" unless policy(Order.new(user_con_profile: object)).read?
     OrderSummaryLoader.for.load(object)
   end
 
