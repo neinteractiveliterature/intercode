@@ -912,7 +912,7 @@ export type ConventionPreview_Notifier_LiquidArgs = {
 
 
 export type ConventionProductArgs = {
-  id?: InputMaybe<Scalars['ID']['input']>;
+  id: Scalars['ID']['input'];
 };
 
 
@@ -923,12 +923,12 @@ export type ConventionProductsArgs = {
 
 
 export type ConventionRunArgs = {
-  id?: InputMaybe<Scalars['ID']['input']>;
+  id: Scalars['ID']['input'];
 };
 
 
 export type ConventionSignupArgs = {
-  id?: InputMaybe<Scalars['ID']['input']>;
+  id: Scalars['ID']['input'];
 };
 
 
@@ -964,12 +964,12 @@ export type ConventionUser_Activity_AlertArgs = {
 
 
 export type ConventionUser_Con_ProfileArgs = {
-  id?: InputMaybe<Scalars['ID']['input']>;
+  id: Scalars['ID']['input'];
 };
 
 
 export type ConventionUser_Con_Profile_By_User_IdArgs = {
-  userId?: InputMaybe<Scalars['ID']['input']>;
+  userId: Scalars['ID']['input'];
 };
 
 

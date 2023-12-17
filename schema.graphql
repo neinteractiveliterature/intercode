@@ -878,7 +878,7 @@ type Convention implements CmsParent {
     """
     The ID of the product to find.
     """
-    id: ID
+    id: ID!
   ): Product!
   products(only_available: Boolean, only_ticket_providing: Boolean): [Product!]!
   reports: ConventionReports!
@@ -893,7 +893,7 @@ type Convention implements CmsParent {
     """
     The ID of the run to find
     """
-    id: ID
+    id: ID!
   ): Run!
   show_event_list: ShowSchedule
   show_schedule: ShowSchedule
@@ -906,7 +906,7 @@ type Convention implements CmsParent {
     """
     The ID of the signup to find.
     """
-    id: ID
+    id: ID!
   ): Signup!
   signup_changes_paginated(
     """
@@ -1011,7 +1011,7 @@ type Convention implements CmsParent {
     """
     The ID of the UserConProfile to find.
     """
-    id: ID
+    id: ID!
   ): UserConProfile!
 
   """
@@ -1022,7 +1022,7 @@ type Convention implements CmsParent {
     """
     The user ID of the UserConProfile to find.
     """
-    userId: ID
+    userId: ID!
   ): UserConProfile!
   user_con_profile_form: Form!
   user_con_profiles_paginated(
