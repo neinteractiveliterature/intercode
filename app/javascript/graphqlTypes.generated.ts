@@ -381,7 +381,6 @@ export type CmsLayoutInput = {
 export type CmsNavigationItem = {
   __typename: 'CmsNavigationItem';
   id: Scalars['ID']['output'];
-  navigation_items?: Maybe<Array<Maybe<CmsNavigationItem>>>;
   navigation_section?: Maybe<CmsNavigationItem>;
   page?: Maybe<Page>;
   position?: Maybe<Scalars['Int']['output']>;
@@ -832,7 +831,7 @@ export type ConventionEffectiveCmsLayoutArgs = {
 
 
 export type ConventionEventArgs = {
-  id?: InputMaybe<Scalars['ID']['input']>;
+  id: Scalars['ID']['input'];
 };
 
 
@@ -842,7 +841,7 @@ export type ConventionEvent_CategoriesArgs = {
 
 
 export type ConventionEvent_ProposalArgs = {
-  id?: InputMaybe<Scalars['ID']['input']>;
+  id: Scalars['ID']['input'];
 };
 
 
@@ -871,7 +870,7 @@ export type ConventionEvents_PaginatedArgs = {
 
 
 export type ConventionFormArgs = {
-  id?: InputMaybe<Scalars['ID']['input']>;
+  id: Scalars['ID']['input'];
 };
 
 
@@ -949,7 +948,7 @@ export type ConventionSignup_Requests_PaginatedArgs = {
 
 
 export type ConventionStaff_PositionArgs = {
-  id?: InputMaybe<Scalars['ID']['input']>;
+  id: Scalars['ID']['input'];
 };
 
 
@@ -959,7 +958,7 @@ export type ConventionTypeaheadSearchCmsContentArgs = {
 
 
 export type ConventionUser_Activity_AlertArgs = {
-  id?: InputMaybe<Scalars['ID']['input']>;
+  id: Scalars['ID']['input'];
 };
 
 
