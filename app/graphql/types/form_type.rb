@@ -3,7 +3,7 @@ class Types::FormType < Types::BaseObject
   field :id, ID, null: false
   field :title, String, null: false
   field :form_section, Types::FormSectionType, null: false, camelize: false do
-    argument :id, ID, required: false, description: 'The ID of the form section to find.', camelize: true
+    argument :id, ID, required: true, description: "The ID of the form section to find.", camelize: true
   end
   field :form_sections, [Types::FormSectionType], null: false, camelize: false
   field :form_type, Types::FormTypeType, null: false, camelize: false
@@ -16,7 +16,7 @@ class Types::FormType < Types::BaseObject
 
   authorize_record
 
-  def form_section(id: nil)
+  def form_section(id:)
     object.form_sections.find(id)
   end
 

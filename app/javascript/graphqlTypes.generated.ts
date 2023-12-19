@@ -2463,7 +2463,7 @@ export type Form = {
 
 
 export type FormForm_SectionArgs = {
-  id?: InputMaybe<Scalars['ID']['input']>;
+  id: Scalars['ID']['input'];
 };
 
 export type FormInput = {
@@ -3577,7 +3577,7 @@ export type OrderEntryInput = {
 };
 
 export type OrderFiltersInput = {
-  id?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
   status?: InputMaybe<Array<Scalars['String']['input']>>;
   user_name?: InputMaybe<Scalars['String']['input']>;
 };

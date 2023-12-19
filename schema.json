@@ -15787,9 +15787,13 @@
                   "name": "id",
                   "description": "The ID of the form section to find.",
                   "type": {
-                    "kind": "SCALAR",
-                    "name": "ID",
-                    "ofType": null
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "ID",
+                      "ofType": null
+                    }
                   },
                   "defaultValue": null,
                   "isDeprecated": false,
@@ -22868,7 +22872,7 @@
               "description": null,
               "type": {
                 "kind": "SCALAR",
-                "name": "String",
+                "name": "ID",
                 "ofType": null
               },
               "defaultValue": null,

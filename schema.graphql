@@ -3046,7 +3046,7 @@ type Form {
     """
     The ID of the form section to find.
     """
-    id: ID
+    id: ID!
   ): FormSection!
   form_sections: [FormSection!]!
   form_type: FormType!
@@ -4200,7 +4200,7 @@ input OrderEntryInput {
 }
 
 input OrderFiltersInput {
-  id: String
+  id: ID
   status: [String!]
   user_name: String
 }
