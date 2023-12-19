@@ -501,7 +501,7 @@ GEM
       ffi (~> 1.0)
     rbs (3.3.2)
       abbrev
-    rbtrace (0.5.0)
+    rbtrace (0.5.1)
       ffi (>= 1.0.6)
       msgpack (>= 0.4.3)
       optimist (>= 3.0.0)
