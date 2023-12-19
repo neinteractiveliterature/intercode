@@ -291,7 +291,6 @@ input CmsLayoutInput {
 
 type CmsNavigationItem {
   id: ID!
-  navigation_items: [CmsNavigationItem]
   navigation_section: CmsNavigationItem
   page: Page
   position: Int
@@ -637,7 +636,7 @@ type Convention implements CmsParent {
     """
     The ID of the event to find
     """
-    id: ID
+    id: ID!
   ): Event!
   event_categories(current_ability_can_read_event_proposals: Boolean): [EventCategory!]!
   event_mailing_list_domain: String
@@ -650,7 +649,7 @@ type Convention implements CmsParent {
     """
     The ID of the event proposal to find.
     """
-    id: ID
+    id: ID!
   ): EventProposal!
   event_proposals_paginated(
     """
@@ -742,7 +741,7 @@ type Convention implements CmsParent {
     """
     The ID of the form to find.
     """
-    id: ID
+    id: ID!
   ): Form!
   forms: [Form!]!
 
@@ -878,7 +877,7 @@ type Convention implements CmsParent {
     """
     The ID of the product to find.
     """
-    id: ID
+    id: ID!
   ): Product!
   products(only_available: Boolean, only_ticket_providing: Boolean): [Product!]!
   reports: ConventionReports!
@@ -893,7 +892,7 @@ type Convention implements CmsParent {
     """
     The ID of the run to find
     """
-    id: ID
+    id: ID!
   ): Run!
   show_event_list: ShowSchedule
   show_schedule: ShowSchedule
@@ -906,7 +905,7 @@ type Convention implements CmsParent {
     """
     The ID of the signup to find.
     """
-    id: ID
+    id: ID!
   ): Signup!
   signup_changes_paginated(
     """
@@ -969,7 +968,7 @@ type Convention implements CmsParent {
     """
     The ID of the staff position to find.
     """
-    id: ID
+    id: ID!
   ): StaffPosition!
   staff_positions: [StaffPosition!]!
   starts_at: Date
@@ -1000,7 +999,7 @@ type Convention implements CmsParent {
     name: String
   ): [CmsContent!]!
   updated_at: Date
-  user_activity_alert(id: ID): UserActivityAlert!
+  user_activity_alert(id: ID!): UserActivityAlert!
   user_activity_alerts: [UserActivityAlert!]!
 
   """
@@ -1011,7 +1010,7 @@ type Convention implements CmsParent {
     """
     The ID of the UserConProfile to find.
     """
-    id: ID
+    id: ID!
   ): UserConProfile!
 
   """
@@ -1022,7 +1021,7 @@ type Convention implements CmsParent {
     """
     The user ID of the UserConProfile to find.
     """
-    userId: ID
+    userId: ID!
   ): UserConProfile!
   user_con_profile_form: Form!
   user_con_profiles_paginated(
@@ -3047,7 +3046,7 @@ type Form {
     """
     The ID of the form section to find.
     """
-    id: ID
+    id: ID!
   ): FormSection!
   form_sections: [FormSection!]!
   form_type: FormType!
@@ -4201,7 +4200,7 @@ input OrderEntryInput {
 }
 
 input OrderFiltersInput {
-  id: String
+  id: ID
   status: [String!]
   user_name: String
 }
@@ -6659,7 +6658,7 @@ type UserConProfile {
   team_members: [TeamMember!]!
   ticket: Ticket
   user: User
-  user_id: Int!
+  user_id: ID!
   zipcode: String
 }
 

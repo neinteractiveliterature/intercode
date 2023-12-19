@@ -39,7 +39,7 @@ class Types::ConventionType < Types::BaseObject
   field :ends_at, Types::DateType, null: true
 
   field :event, Types::EventType, null: false do
-    argument :id, ID, required: false, description: "The ID of the event to find", camelize: true
+    argument :id, ID, required: true, description: "The ID of the event to find", camelize: true
 
     description <<~MARKDOWN
       Finds an active event by ID in this convention. If there is no event with that ID in this
@@ -47,8 +47,8 @@ class Types::ConventionType < Types::BaseObject
     MARKDOWN
   end
 
-  def event(**args)
-    object.events.active.find(args[:id])
+  def event(id:)
+    object.events.active.find(id)
   end
 
   field :event_categories, [Types::EventCategoryType], null: false do
@@ -80,7 +80,7 @@ class Types::ConventionType < Types::BaseObject
   end
 
   field :event_proposal, Types::EventProposalType, null: false do
-    argument :id, ID, required: false, description: "The ID of the event proposal to find.", camelize: true
+    argument :id, ID, required: true, description: "The ID of the event proposal to find.", camelize: true
 
     description <<~MARKDOWN
       Finds an event proposal by ID in this convention. If there is no event proposal with that ID
@@ -88,8 +88,8 @@ class Types::ConventionType < Types::BaseObject
     MARKDOWN
   end
 
-  def event_proposal(**args)
-    object.event_proposals.find(args[:id])
+  def event_proposal(id:)
+    object.event_proposals.find(id)
   end
 
   pagination_field :event_proposals_paginated, Types::EventProposalsPaginationType, Types::EventProposalFiltersInputType
@@ -180,7 +180,7 @@ class Types::ConventionType < Types::BaseObject
   end
 
   field :form, Types::FormType, null: false do
-    argument :id, ID, required: false, description: "The ID of the form to find.", camelize: true
+    argument :id, ID, required: true, description: "The ID of the form to find.", camelize: true
 
     description <<~MARKDOWN
       Finds a form by ID in this convention. If there is no form with that ID in this convention,
@@ -188,8 +188,8 @@ class Types::ConventionType < Types::BaseObject
     MARKDOWN
   end
 
-  def form(**args)
-    object.forms.find(args[:id])
+  def form(id:)
+    object.forms.find(id)
   end
 
   field :forms, [Types::FormType], null: false
@@ -308,7 +308,7 @@ class Types::ConventionType < Types::BaseObject
   end
 
   field :product, Types::ProductType, null: false do
-    argument :id, ID, required: false, description: "The ID of the product to find.", camelize: true
+    argument :id, ID, required: true, description: "The ID of the product to find.", camelize: true
 
     description <<~MARKDOWN
       Finds a product by ID in this convention. If there is no product with that ID in this
@@ -316,7 +316,7 @@ class Types::ConventionType < Types::BaseObject
     MARKDOWN
   end
 
-  def product(id: nil)
+  def product(id:)
     policy_scope(object.products).find(id)
   end
 
@@ -345,7 +345,7 @@ class Types::ConventionType < Types::BaseObject
   field :rooms, [Types::RoomType], null: false
 
   field :run, Types::RunType, null: false do
-    argument :id, ID, required: false, description: "The ID of the run to find", camelize: true
+    argument :id, ID, required: true, description: "The ID of the run to find", camelize: true
 
     description <<~MARKDOWN
       Finds an active run by ID in this convention. If there is no run with that ID in this
@@ -353,8 +353,8 @@ class Types::ConventionType < Types::BaseObject
     MARKDOWN
   end
 
-  def run(**args)
-    Run.where(event_id: object.events.active.select(:id)).find(args[:id])
+  def run(id:)
+    Run.where(event_id: object.events.active.select(:id)).find(id)
   end
 
   field :staff_positions, [Types::StaffPositionType], null: false
@@ -362,7 +362,7 @@ class Types::ConventionType < Types::BaseObject
   field :show_schedule, Types::ShowScheduleType, null: true
 
   field :signup, Types::SignupType, null: false do
-    argument :id, ID, required: false, description: "The ID of the signup to find.", camelize: true
+    argument :id, ID, required: true, description: "The ID of the signup to find.", camelize: true
 
     description <<~MARKDOWN
       Finds a signup by ID in this convention. If there is no signup with that ID in this
@@ -370,8 +370,8 @@ class Types::ConventionType < Types::BaseObject
     MARKDOWN
   end
 
-  def signup(**args)
-    object.signups.find(args[:id])
+  def signup(id:)
+    object.signups.find(id)
   end
 
   pagination_field(
@@ -427,7 +427,7 @@ class Types::ConventionType < Types::BaseObject
   field :site_mode, Types::SiteModeType, null: false
 
   field :staff_position, Types::StaffPositionType, null: false do
-    argument :id, ID, required: false, description: "The ID of the staff position to find.", camelize: true
+    argument :id, ID, required: true, description: "The ID of the staff position to find.", camelize: true
 
     description <<~MARKDOWN
       Finds a staff position by ID in this convention. If there is no staff position with that ID
@@ -435,7 +435,7 @@ class Types::ConventionType < Types::BaseObject
     MARKDOWN
   end
 
-  def staff_position(id: nil)
+  def staff_position(id:)
     convention.staff_positions.find(id)
   end
 
@@ -466,16 +466,16 @@ class Types::ConventionType < Types::BaseObject
   field :timezone_name, String, null: true
   field :updated_at, Types::DateType, null: true
   field :user_activity_alert, Types::UserActivityAlertType, null: false do
-    argument :id, ID, required: false, camelize: true
+    argument :id, ID, required: true, camelize: true
   end
 
-  def user_activity_alert(id: nil)
+  def user_activity_alert(id:)
     RecordLoader.for(UserActivityAlert, where: { convention_id: object.id }).load(id)
   end
   field :user_activity_alerts, [Types::UserActivityAlertType], null: false
 
   field :user_con_profile, Types::UserConProfileType, null: false do
-    argument :id, ID, required: false, description: "The ID of the UserConProfile to find.", camelize: true
+    argument :id, ID, required: true, description: "The ID of the UserConProfile to find.", camelize: true
 
     description <<~MARKDOWN
       Finds a UserConProfile by ID in the convention associated with this convention. If there is
@@ -483,12 +483,12 @@ class Types::ConventionType < Types::BaseObject
     MARKDOWN
   end
 
-  def user_con_profile(**args)
-    object.user_con_profiles.find(args[:id])
+  def user_con_profile(id:)
+    object.user_con_profiles.find(id)
   end
 
   field :user_con_profile_by_user_id, Types::UserConProfileType, null: false do
-    argument :user_id, ID, required: false, description: "The user ID of the UserConProfile to find.", camelize: true
+    argument :user_id, ID, required: true, description: "The user ID of the UserConProfile to find.", camelize: true
 
     description <<~MARKDOWN
       Finds a UserConProfile by user ID in the convention associated with this convention. If
@@ -496,7 +496,7 @@ class Types::ConventionType < Types::BaseObject
     MARKDOWN
   end
 
-  def user_con_profile_by_user_id(user_id: nil)
+  def user_con_profile_by_user_id(user_id:)
     object.user_con_profiles.find_by!(user_id: user_id)
   end
 

@@ -381,7 +381,6 @@ export type CmsLayoutInput = {
 export type CmsNavigationItem = {
   __typename: 'CmsNavigationItem';
   id: Scalars['ID']['output'];
-  navigation_items?: Maybe<Array<Maybe<CmsNavigationItem>>>;
   navigation_section?: Maybe<CmsNavigationItem>;
   page?: Maybe<Page>;
   position?: Maybe<Scalars['Int']['output']>;
@@ -832,7 +831,7 @@ export type ConventionEffectiveCmsLayoutArgs = {
 
 
 export type ConventionEventArgs = {
-  id?: InputMaybe<Scalars['ID']['input']>;
+  id: Scalars['ID']['input'];
 };
 
 
@@ -842,7 +841,7 @@ export type ConventionEvent_CategoriesArgs = {
 
 
 export type ConventionEvent_ProposalArgs = {
-  id?: InputMaybe<Scalars['ID']['input']>;
+  id: Scalars['ID']['input'];
 };
 
 
@@ -871,7 +870,7 @@ export type ConventionEvents_PaginatedArgs = {
 
 
 export type ConventionFormArgs = {
-  id?: InputMaybe<Scalars['ID']['input']>;
+  id: Scalars['ID']['input'];
 };
 
 
@@ -912,7 +911,7 @@ export type ConventionPreview_Notifier_LiquidArgs = {
 
 
 export type ConventionProductArgs = {
-  id?: InputMaybe<Scalars['ID']['input']>;
+  id: Scalars['ID']['input'];
 };
 
 
@@ -923,12 +922,12 @@ export type ConventionProductsArgs = {
 
 
 export type ConventionRunArgs = {
-  id?: InputMaybe<Scalars['ID']['input']>;
+  id: Scalars['ID']['input'];
 };
 
 
 export type ConventionSignupArgs = {
-  id?: InputMaybe<Scalars['ID']['input']>;
+  id: Scalars['ID']['input'];
 };
 
 
@@ -949,7 +948,7 @@ export type ConventionSignup_Requests_PaginatedArgs = {
 
 
 export type ConventionStaff_PositionArgs = {
-  id?: InputMaybe<Scalars['ID']['input']>;
+  id: Scalars['ID']['input'];
 };
 
 
@@ -959,17 +958,17 @@ export type ConventionTypeaheadSearchCmsContentArgs = {
 
 
 export type ConventionUser_Activity_AlertArgs = {
-  id?: InputMaybe<Scalars['ID']['input']>;
+  id: Scalars['ID']['input'];
 };
 
 
 export type ConventionUser_Con_ProfileArgs = {
-  id?: InputMaybe<Scalars['ID']['input']>;
+  id: Scalars['ID']['input'];
 };
 
 
 export type ConventionUser_Con_Profile_By_User_IdArgs = {
-  userId?: InputMaybe<Scalars['ID']['input']>;
+  userId: Scalars['ID']['input'];
 };
 
 
@@ -2464,7 +2463,7 @@ export type Form = {
 
 
 export type FormForm_SectionArgs = {
-  id?: InputMaybe<Scalars['ID']['input']>;
+  id: Scalars['ID']['input'];
 };
 
 export type FormInput = {
@@ -3578,7 +3577,7 @@ export type OrderEntryInput = {
 };
 
 export type OrderFiltersInput = {
-  id?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
   status?: InputMaybe<Array<Scalars['String']['input']>>;
   user_name?: InputMaybe<Scalars['String']['input']>;
 };
@@ -5462,7 +5461,7 @@ export type UserConProfile = {
   team_members: Array<TeamMember>;
   ticket?: Maybe<Ticket>;
   user?: Maybe<User>;
-  user_id: Scalars['Int']['output'];
+  user_id: Scalars['ID']['output'];
   zipcode?: Maybe<Scalars['String']['output']>;
 };
 
