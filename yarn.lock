@@ -21184,7 +21184,7 @@ __metadata:
     tinycolor2: "npm:1.6.0"
     ts-node: "npm:10.9.2"
     typescript: "npm:5.3.3"
-    tzdata: "npm:1.0.38"
+    tzdata: "npm:1.0.39"
     uuid: "npm:9.0.1"
     webpack: "npm:5.89.0"
     webpack-assets-manifest: "npm:5.1.0"
@@ -23184,10 +23184,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tzdata@npm:1.0.38":
-  version: 1.0.38
-  resolution: "tzdata@npm:1.0.38"
-  checksum: f1cc94b735b809153ae671bc52a5cbff46b3f43b8bad0e8451db781c042fa9c0e43f73ee8460aba7a716def2ff83a0bf0971dc842f4d151c6a0047c71d3756dd
+"tzdata@npm:1.0.39":
+  version: 1.0.39
+  resolution: "tzdata@npm:1.0.39"
+  checksum: 40d96cd88c1eb92b51e4d83cca3059760efb7dab1075f9981867ce1b74912cf26d14eb07cb306b06d15a2a595c10c82b0d61046c9a92dacd78b12e6054729cbc
   languageName: node
   linkType: hard
 
