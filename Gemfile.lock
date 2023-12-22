@@ -203,7 +203,7 @@ GEM
     date (3.3.4)
     date (3.3.4-java)
     dead_end (4.0.0)
-    debug (1.9.0)
+    debug (1.9.1)
       irb (~> 1.10)
       reline (>= 0.3.8)
     derailed_benchmarks (2.1.2)
