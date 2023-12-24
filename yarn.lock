@@ -9794,7 +9794,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"commander@npm:11.1.0":
+"commander@npm:11.1.0, commander@npm:~11.1.0":
   version: 11.1.0
   resolution: "commander@npm:11.1.0"
   checksum: 13cc6ac875e48780250f723fb81c1c1178d35c5decb1abb1b628b3177af08a8554e76b2c0f29de72d69eef7c864d12613272a71fabef8047922bc622ab75a179
@@ -9833,13 +9833,6 @@ __metadata:
   version: 8.3.0
   resolution: "commander@npm:8.3.0"
   checksum: 8b043bb8322ea1c39664a1598a95e0495bfe4ca2fad0d84a92d7d1d8d213e2a155b441d2470c8e08de7c4a28cf2bc6e169211c49e1b21d9f7edc6ae4d9356060
-  languageName: node
-  linkType: hard
-
-"commander@npm:~11.0.0":
-  version: 11.0.0
-  resolution: "commander@npm:11.0.0"
-  checksum: 471c44cd2d31dee556753df6ceb5ef52ccded0ba6308d3ba7a76251aa0edeedf5ac66ca86cb6096cc8fe20997064233c476983d346265f85180e86312724de0c
   languageName: node
   linkType: hard
 
@@ -14150,14 +14143,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next-parser@npm:8.9.0":
-  version: 8.9.0
-  resolution: "i18next-parser@npm:8.9.0"
+"i18next-parser@npm:8.11.0":
+  version: 8.11.0
+  resolution: "i18next-parser@npm:8.11.0"
   dependencies:
     broccoli-plugin: "npm:^4.0.7"
     cheerio: "npm:^1.0.0-rc.2"
     colors: "npm:1.4.0"
-    commander: "npm:~11.0.0"
+    commander: "npm:~11.1.0"
     eol: "npm:^0.9.1"
     esbuild: "npm:^0.19.0"
     fs-extra: "npm:^11.1.0"
@@ -14173,7 +14166,7 @@ __metadata:
     vue-template-compiler: "npm:^2.6.11"
   bin:
     i18next: bin/cli.js
-  checksum: c8c650cfa672afc673daed92ecf6bfb28947c5663549f3dc4aa2e1b8d7949a9c93a09b9b1f7239576656b60b6fb9f9c86076a01d8d8c6fb967fda398653ebcda
+  checksum: 2c4d46c34a6ac54b3067faf4c1c31d4b65a8d4ac82647875edf61099fec59bbf20c977cc559067432eacc5e961de6109caa0f83d55c3638990c0b3e2eb37d044
   languageName: node
   linkType: hard
 
@@ -21126,7 +21119,7 @@ __metadata:
     husky: "npm:8.0.3"
     i18next: "npm:23.7.11"
     i18next-intervalplural-postprocessor: "npm:3.0.0"
-    i18next-parser: "npm:8.9.0"
+    i18next-parser: "npm:8.11.0"
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
     jest-html-reporter: "npm:3.10.2"
