@@ -8171,10 +8171,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"arg@npm:^5.0.0":
-  version: 5.0.1
-  resolution: "arg@npm:5.0.1"
-  checksum: b7087004468507db9bb5dbd00de408e0b589b63620e09ca8c45bef0731fce337ce43f66fb1dd88551648f31e8ae081a60a8ed27a60213d3968b6f65b7b1f5930
+"arg@npm:^5.0.0, arg@npm:^5.0.2":
+  version: 5.0.2
+  resolution: "arg@npm:5.0.2"
+  checksum: ccaf86f4e05d342af6666c569f844bec426595c567d32a8289715087825c2ca7edd8a3d204e4d2fb2aa4602e09a57d0c13ea8c9eea75aac3dbb4af5514e6800e
   languageName: node
   linkType: hard
 
@@ -14137,6 +14137,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"hyperdyperid@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "hyperdyperid@npm:1.2.0"
+  checksum: 885ba3177c7181d315a856ee9c0005ff8eb5dcb1ce9e9d61be70987895d934d84686c37c981cceeb53216d4c9c15c1cc25f1804e84cc6a74a16993c5d7fd0893
+  languageName: node
+  linkType: hard
+
 "i18next-intervalplural-postprocessor@npm:3.0.0":
   version: 3.0.0
   resolution: "i18next-intervalplural-postprocessor@npm:3.0.0"
@@ -15801,6 +15808,29 @@ __metadata:
   languageName: node
   linkType: hard
 
+"json-joy@npm:^9.2.0":
+  version: 9.9.1
+  resolution: "json-joy@npm:9.9.1"
+  dependencies:
+    arg: "npm:^5.0.2"
+    hyperdyperid: "npm:^1.2.0"
+  peerDependencies:
+    quill-delta: ^5
+    rxjs: 7
+    tslib: 2
+  bin:
+    jj: bin/jj.js
+    json-pack: bin/json-pack.js
+    json-pack-test: bin/json-pack-test.js
+    json-patch: bin/json-patch.js
+    json-patch-test: bin/json-patch-test.js
+    json-pointer: bin/json-pointer.js
+    json-pointer-test: bin/json-pointer-test.js
+    json-unpack: bin/json-unpack.js
+  checksum: e147eceae446a84521d60c36326c1528268aafbaaedfc0a79a25207ace9da23dc1b599be4b5a90ca84ff1d01eda1b29b037abc0f970fef7cff4ab1e9db20ba6b
+  languageName: node
+  linkType: hard
+
 "json-parse-better-errors@npm:^1.0.2":
   version: 1.0.2
   resolution: "json-parse-better-errors@npm:1.0.2"
@@ -16831,12 +16861,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"memfs@npm:^3.1.2, memfs@npm:^3.4.12, memfs@npm:^3.4.3":
+"memfs@npm:^3.1.2, memfs@npm:^3.4.3":
   version: 3.4.12
   resolution: "memfs@npm:3.4.12"
   dependencies:
     fs-monkey: "npm:^1.0.3"
   checksum: 60c44a3887fb02fc2f625dca0f801db5174cd9990ebb6aa5871b6800c442f2b5d1d900168db3a717c380dda76e3c891afc4623ac3a1568a2978bf05bbf727f23
+  languageName: node
+  linkType: hard
+
+"memfs@npm:^4.6.0":
+  version: 4.6.0
+  resolution: "memfs@npm:4.6.0"
+  dependencies:
+    json-joy: "npm:^9.2.0"
+    thingies: "npm:^1.11.1"
+  peerDependencies:
+    tslib: 2
+  checksum: 370a70ff9156aaf5a75bfeca265d66b08795bf736c5ad0c1a597e489864d4f031f424b320ef3f331a99f0fa36ad90688ab28859b7c647ee3b473d4ee1fdd8d95
   languageName: node
   linkType: hard
 
@@ -21184,7 +21226,7 @@ __metadata:
     webpack-assets-manifest: "npm:5.1.0"
     webpack-bundle-analyzer: "npm:4.10.1"
     webpack-cli: "npm:5.1.4"
-    webpack-dev-middleware: "npm:6.1.1"
+    webpack-dev-middleware: "npm:7.0.0"
     webpack-dev-server: "npm:4.15.1"
     webpack-manifest-plugin: "npm:5.0.0"
     webpack-merge: "npm:5.10.0"
@@ -22712,6 +22754,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"thingies@npm:^1.11.1":
+  version: 1.15.0
+  resolution: "thingies@npm:1.15.0"
+  peerDependencies:
+    tslib: ^2
+  checksum: 62d855eedcaeec748d6b99a35052ab2b476ac5ec4fb22b89b3bf2056e97e6750f234c7e2fc541c400d08fc301a6ae08077ea306a3fb99ba6002acb957b710081
+  languageName: node
+  linkType: hard
+
 "thread-loader@npm:4.0.2":
   version: 4.0.2
   resolution: "thread-loader@npm:4.0.2"
@@ -24025,12 +24076,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-dev-middleware@npm:6.1.1":
-  version: 6.1.1
-  resolution: "webpack-dev-middleware@npm:6.1.1"
+"webpack-dev-middleware@npm:7.0.0":
+  version: 7.0.0
+  resolution: "webpack-dev-middleware@npm:7.0.0"
   dependencies:
     colorette: "npm:^2.0.10"
-    memfs: "npm:^3.4.12"
+    memfs: "npm:^4.6.0"
     mime-types: "npm:^2.1.31"
     range-parser: "npm:^1.2.1"
     schema-utils: "npm:^4.0.0"
@@ -24039,7 +24090,7 @@ __metadata:
   peerDependenciesMeta:
     webpack:
       optional: true
-  checksum: f8f5b7f7591fa3e4d4008b28ab2b5c13367a24587257e3e37cff31e2d8a6c859de5294af83c79e8faf3137db194377f392fffacdf5010b5c1311eba6f9b71568
+  checksum: f1dcabc60d321c3e63f94c9b1322f139426d0ca5e0e226343149475ff34dde9a3fb680c6c8bd43745ef99010e9937324ff2c04d04f3f93250dd44cbfdd4650cd
   languageName: node
   linkType: hard
 
