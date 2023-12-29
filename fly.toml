@@ -12,6 +12,7 @@ image = "ghcr.io/neinteractiveliterature/intercode:latest"
 
 [deploy]
 release_command = "bundle exec rails release:perform"
+strategy = "bluegreen"
 
 [env]
 ASSETS_HOST = "assets.neilhosting.net"
@@ -46,11 +47,11 @@ min_machines_running = 1
 processes = ["web"]
 
 [[http_service.checks]]
-grace_period = "10s"
-headers = {Host = "www.neilhosting.net"}
+grace_period = "15s"
 interval = "30s"
 method = "GET"
 path = "/healthz"
+protocol = "http"
 timeout = "5s"
 
 [[vm]]
