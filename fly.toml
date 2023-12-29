@@ -45,13 +45,13 @@ internal_port = 3000
 min_machines_running = 1
 processes = ["web"]
 
-# [[http_service.checks]]
-# grace_period = "10s"
-# interval = "30s"
-# method = "GET"
-# path = "/healthz"
-# timeout = "5s"
-# headers = {Host = "i.interconlarp.org"}
+[[http_service.checks]]
+grace_period = "10s"
+headers = {Host = "www.neilhosting.net"}
+interval = "30s"
+method = "GET"
+path = "/healthz"
+timeout = "5s"
 
 [[vm]]
 cpu_kind = "shared"
