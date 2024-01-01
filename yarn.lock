@@ -6984,12 +6984,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-onclickoutside@npm:6.7.8":
-  version: 6.7.8
-  resolution: "@types/react-onclickoutside@npm:6.7.8"
+"@types/react-onclickoutside@npm:6.7.9":
+  version: 6.7.9
+  resolution: "@types/react-onclickoutside@npm:6.7.9"
   dependencies:
     "@types/react": "npm:*"
-  checksum: 9176a0a940538c2b4918a527d0aba8daa2e54dccab966a48b5528a41b28a003cfe7477841df1756d40571b0361456e86406d5caa5817d971499bbbd993cbb908
+  checksum: bfce264e8dce3785163ca025ede7bf995f825cc6b09269538955ad1740e50d9f23935e09815c2a8e09d6cead8cb406b644dc52f252359efacfd9c776c7298a10
   languageName: node
   linkType: hard
 
@@ -21060,7 +21060,7 @@ __metadata:
     "@types/react-color": "npm:3.0.10"
     "@types/react-dom": "npm:18.2.18"
     "@types/react-google-recaptcha": "npm:2.1.8"
-    "@types/react-onclickoutside": "npm:6.7.8"
+    "@types/react-onclickoutside": "npm:6.7.9"
     "@types/react-table": "npm:7.7.18"
     "@types/react-transition-group": "npm:4.4.10"
     "@types/source-map-support": "npm:0.5.10"
