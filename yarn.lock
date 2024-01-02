@@ -14149,9 +14149,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next-parser@npm:8.11.0":
-  version: 8.11.0
-  resolution: "i18next-parser@npm:8.11.0"
+"i18next-parser@npm:8.12.0":
+  version: 8.12.0
+  resolution: "i18next-parser@npm:8.12.0"
   dependencies:
     broccoli-plugin: "npm:^4.0.7"
     cheerio: "npm:^1.0.0-rc.2"
@@ -14163,7 +14163,7 @@ __metadata:
     gulp-sort: "npm:^2.0.0"
     i18next: "npm:^23.5.1"
     js-yaml: "npm:4.1.0"
-    lilconfig: "npm:^2.0.6"
+    lilconfig: "npm:^3.0.0"
     rsvp: "npm:^4.8.2"
     sort-keys: "npm:^5.0.0"
     typescript: "npm:^5.0.4"
@@ -14172,7 +14172,7 @@ __metadata:
     vue-template-compiler: "npm:^2.6.11"
   bin:
     i18next: bin/cli.js
-  checksum: 2c4d46c34a6ac54b3067faf4c1c31d4b65a8d4ac82647875edf61099fec59bbf20c977cc559067432eacc5e961de6109caa0f83d55c3638990c0b3e2eb37d044
+  checksum: 4a18fa839d2d3327e02b48e91da7452dd3303da843e99d038390a90a69ee31617a5e7340bd463839c04afa022484c9cad3b9b079b660fe57fc39bd9d2956cbb5
   languageName: node
   linkType: hard
 
@@ -16037,7 +16037,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lilconfig@npm:^2.0.3, lilconfig@npm:^2.0.6":
+"lilconfig@npm:^2.0.3":
   version: 2.1.0
   resolution: "lilconfig@npm:2.1.0"
   checksum: 64645641aa8d274c99338e130554abd6a0190533c0d9eb2ce7ebfaf2e05c7d9961f3ffe2bfa39efd3b60c521ba3dd24fa236fe2775fc38501bf82bf49d4678b8
@@ -21125,7 +21125,7 @@ __metadata:
     husky: "npm:8.0.3"
     i18next: "npm:23.7.13"
     i18next-intervalplural-postprocessor: "npm:3.0.0"
-    i18next-parser: "npm:8.11.0"
+    i18next-parser: "npm:8.12.0"
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
     jest-html-reporter: "npm:3.10.2"
