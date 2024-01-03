@@ -8796,10 +8796,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bootstrap-icons@npm:1.11.2":
-  version: 1.11.2
-  resolution: "bootstrap-icons@npm:1.11.2"
-  checksum: b11812c4b4cb9f7c8dd3eb011aea294e5dada5e3cd4d59a86870adcb38134fbaf6439a494b4dcae85e4fd79bfb6d41c1ae92cd969120260059412718c23a586f
+"bootstrap-icons@npm:1.11.3":
+  version: 1.11.3
+  resolution: "bootstrap-icons@npm:1.11.3"
+  checksum: 37eefd418c6bbbb304bdff0f2ed527f82c3c6f331d3e3a7c4aa8bbdbaf7118bb86725b024f85e7d738c613d48c7353cd81c09e58e9d8d34c5633960fdec8410b
   languageName: node
   linkType: hard
 
@@ -21076,7 +21076,7 @@ __metadata:
     assert-never: "npm:1.2.1"
     autoprefixer: "npm:10.4.16"
     bootstrap: "npm:5.3.2"
-    bootstrap-icons: "npm:1.11.2"
+    bootstrap-icons: "npm:1.11.3"
     buffer: "npm:6.0.3"
     bytes: "npm:3.1.2"
     cadmus-navbar-admin: "npm:6.0.0"
