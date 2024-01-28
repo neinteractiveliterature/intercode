@@ -47,6 +47,7 @@
     "icon": "bi-calendar",
     "classifyEventsBy": "category",
     "showSignupStatusBadge": true,
+    "showPersonalFilters": true,
     "showSignedUp": true,
     "groupEventsBy": "room",
     "filterEmptyGroups": true,
