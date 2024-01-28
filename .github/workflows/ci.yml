@@ -71,7 +71,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: test-reports
+          name: jest-reports
           path: test/html_reports
   minitest:
     name: minitest
@@ -119,7 +119,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: test-reports
+          name: minitest-reports
           path: test/html_reports
   docker-build:
     runs-on: ubuntu-latest
