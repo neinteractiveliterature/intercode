@@ -16,6 +16,6 @@ class Types::CmsContentGroupType < Types::BaseObject
   end
 
   def contents
-    object.cms_content_group_associations.includes(:content).map(&:content)
+    object.cms_content_group_associations.includes(:content).filter_map(&:content)
   end
 end
