@@ -6975,12 +6975,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-google-recaptcha@npm:2.1.8":
-  version: 2.1.8
-  resolution: "@types/react-google-recaptcha@npm:2.1.8"
+"@types/react-google-recaptcha@npm:2.1.9":
+  version: 2.1.9
+  resolution: "@types/react-google-recaptcha@npm:2.1.9"
   dependencies:
     "@types/react": "npm:*"
-  checksum: 48dc568bf47789c497ba60d89ca65682160a3984453a14ece7493d47caeca80f3747445f12b1062311dc49780887af77420e6c2f039904d0b99c6a64f9d81b22
+  checksum: 12b1806ef4083524cf108fb7c83f7438feb5746e672af2589a2645de26d2ac1ed0f4b687a1e7d482f51a92a75850c074a8696396c1024a3f80e8902a780d4f95
   languageName: node
   linkType: hard
 
@@ -21108,7 +21108,7 @@ __metadata:
     "@types/react-click-outside-hook": "npm:1.0.3"
     "@types/react-color": "npm:3.0.11"
     "@types/react-dom": "npm:18.2.18"
-    "@types/react-google-recaptcha": "npm:2.1.8"
+    "@types/react-google-recaptcha": "npm:2.1.9"
     "@types/react-onclickoutside": "npm:6.7.9"
     "@types/react-table": "npm:7.7.19"
     "@types/react-transition-group": "npm:4.4.10"
