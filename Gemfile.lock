@@ -198,7 +198,8 @@ GEM
     concurrent-ruby (1.2.2)
     connection_pool (2.4.1)
     crass (1.0.6)
-    dalli (3.2.6)
+    dalli (3.2.7)
+      base64
     dante (0.2.0)
     date (3.3.4)
     date (3.3.4-java)
