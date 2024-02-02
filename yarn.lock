@@ -211,24 +211,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/client@npm:3.8.10":
-  version: 3.8.10
-  resolution: "@apollo/client@npm:3.8.10"
+"@apollo/client@npm:3.9.2":
+  version: 3.9.2
+  resolution: "@apollo/client@npm:3.9.2"
   dependencies:
     "@graphql-typed-document-node/core": "npm:^3.1.1"
+    "@wry/caches": "npm:^1.0.0"
     "@wry/equality": "npm:^0.5.6"
     "@wry/trie": "npm:^0.5.0"
     graphql-tag: "npm:^2.12.6"
     hoist-non-react-statics: "npm:^3.3.2"
     optimism: "npm:^0.18.0"
     prop-types: "npm:^15.7.2"
+    rehackt: "npm:0.0.3"
     response-iterator: "npm:^0.2.6"
     symbol-observable: "npm:^4.0.0"
     ts-invariant: "npm:^0.10.3"
     tslib: "npm:^2.3.0"
     zen-observable-ts: "npm:^1.2.5"
   peerDependencies:
-    graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
+    graphql: ^15.0.0 || ^16.0.0
     graphql-ws: ^5.5.5
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
@@ -242,7 +244,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: 10c0/983306f61de042aca2f02e414533fbdac0c9c905648a98b42bb79bccb19012306eebb3c55c6d665523addbc1948625d1aae70bdc2dd511775b7a962a40dfc5b1
+  checksum: 10c0/a30952bab7f4dca5a2e50cd5fce553a513e87c34c89c07e9269999dfd0cde4aba7c47163f78f26868ce821f1f375304276980da44a956ba56e08e2c43b6f6970
   languageName: node
   linkType: hard
 
@@ -20591,6 +20593,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"rehackt@npm:0.0.3":
+  version: 0.0.3
+  resolution: "rehackt@npm:0.0.3"
+  peerDependencies:
+    "@types/react": "*"
+    react: "*"
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+    react:
+      optional: true
+  checksum: 10c0/c7f4b25619617958312d8b7f415ba9e0cbf632fe058c4a330cce51593f1fb0ceef8ebf6e047e22056eea7f0d39eee985a337dc174b5adfbc6b817ff462ad3344
+  languageName: node
+  linkType: hard
+
 "rehype-raw@npm:^7.0.0":
   version: 7.0.0
   resolution: "rehype-raw@npm:7.0.0"
@@ -21028,7 +21045,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
-    "@apollo/client": "npm:3.8.10"
+    "@apollo/client": "npm:3.9.2"
     "@codemirror/highlight": "npm:0.19.8"
     "@codemirror/lang-html": "npm:6.4.5"
     "@codemirror/lang-json": "npm:6.0.1"
