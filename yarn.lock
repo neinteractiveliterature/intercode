@@ -9911,15 +9911,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"compression-webpack-plugin@npm:10.0.0":
-  version: 10.0.0
-  resolution: "compression-webpack-plugin@npm:10.0.0"
+"compression-webpack-plugin@npm:11.0.0":
+  version: 11.0.0
+  resolution: "compression-webpack-plugin@npm:11.0.0"
   dependencies:
-    schema-utils: "npm:^4.0.0"
-    serialize-javascript: "npm:^6.0.0"
+    schema-utils: "npm:^4.2.0"
+    serialize-javascript: "npm:^6.0.2"
   peerDependencies:
     webpack: ^5.1.0
-  checksum: 10c0/9a804645dacb6f1b2e836434258cee374ecc6b589594177a3e3da5b0f8e09b0e2c2c7ca22f47d2214ee88d4e598c9754cd7e2a2081664e55ce6ad425464713e3
+  checksum: 10c0/02a9b286daae9e050ef20612f7fed10e3353f612fb6b13c3d287b5fe22000c9fb3154cf4988547354e9d5788a6a30f00d61c39e339a3907506e3d14ea2da1026
   languageName: node
   linkType: hard
 
@@ -21212,7 +21212,7 @@ __metadata:
     caniuse-lite: "npm:1.0.30001585"
     case-sensitive-paths-webpack-plugin: "npm:2.4.0"
     classnames: "npm:2.5.1"
-    compression-webpack-plugin: "npm:10.0.0"
+    compression-webpack-plugin: "npm:11.0.0"
     core-js: "npm:3.35.1"
     core-js-compat: "npm:3.35.1"
     crypto-browserify: "npm:3.12.0"
@@ -21520,15 +21520,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"schema-utils@npm:^4.0.0, schema-utils@npm:^4.0.1":
-  version: 4.0.1
-  resolution: "schema-utils@npm:4.0.1"
+"schema-utils@npm:^4.0.0, schema-utils@npm:^4.0.1, schema-utils@npm:^4.2.0":
+  version: 4.2.0
+  resolution: "schema-utils@npm:4.2.0"
   dependencies:
     "@types/json-schema": "npm:^7.0.9"
     ajv: "npm:^8.9.0"
     ajv-formats: "npm:^2.1.1"
     ajv-keywords: "npm:^5.1.0"
-  checksum: 10c0/946298a2efc7ae1cdf084bae8cd9927c25f8396cf0e848603f12554d3f8e962d375fbe337e60d7ed7e27dc69969f014e9b945a87ce32c6f9259a9d61c9d4fa28
+  checksum: 10c0/8dab7e7800316387fd8569870b4b668cfcecf95ac551e369ea799bbcbfb63fb0365366d4b59f64822c9f7904d8c5afcfaf5a6124a4b08783e558cd25f299a6b4
   languageName: node
   linkType: hard
 
@@ -21635,12 +21635,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"serialize-javascript@npm:^6.0.0, serialize-javascript@npm:^6.0.1":
-  version: 6.0.1
-  resolution: "serialize-javascript@npm:6.0.1"
+"serialize-javascript@npm:^6.0.0, serialize-javascript@npm:^6.0.1, serialize-javascript@npm:^6.0.2":
+  version: 6.0.2
+  resolution: "serialize-javascript@npm:6.0.2"
   dependencies:
     randombytes: "npm:^2.1.0"
-  checksum: 10c0/1af427f4fee3fee051f54ffe15f77068cff78a3c96d20f5c1178d20630d3ab122d8350e639d5e13cde8111ef9db9439b871305ffb185e24be0a2149cec230988
+  checksum: 10c0/2dd09ef4b65a1289ba24a788b1423a035581bef60817bea1f01eda8e3bda623f86357665fe7ac1b50f6d4f583f97db9615b3f07b2a2e8cbcb75033965f771dd2
   languageName: node
   linkType: hard
 
