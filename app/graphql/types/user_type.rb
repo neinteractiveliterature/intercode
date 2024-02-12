@@ -15,13 +15,11 @@ class Types::UserType < Types::BaseObject
   association_loaders User, :user_con_profiles
 
   def event_proposals
-    AssociationLoader
-      .new(User, :event_proposals)
-      .load(object)
-      .then do |event_proposals|
-        # avoid n+1 in the policy check
-        ::ActiveRecord::Associations::Preloader.new(records: event_proposals, associations: :owner).call
-        event_proposals
-      end
+    event_proposals = dataloader.with(Sources::ActiveRecordAssociation, User, :event_proposals).load(object)
+
+    # avoid n+1 in the policy check
+    ::ActiveRecord::Associations::Preloader.new(records: event_proposals, associations: :owner).call
+
+    event_proposals
   end
 end

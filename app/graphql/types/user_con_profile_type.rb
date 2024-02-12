@@ -19,7 +19,7 @@ class Types::UserConProfileType < Types::BaseObject
 
   field :site_admin, Boolean, null: false
   def site_admin
-    AssociationLoader.for(UserConProfile, :user).load(object).then(&:site_admin?)
+    dataloader.with(Sources::ActiveRecordAssociation, UserConProfile, :user).load(object).site_admin?
   end
 
   field :name, String, null: false
@@ -76,52 +76,34 @@ class Types::UserConProfileType < Types::BaseObject
   association_loaders UserConProfile, :convention, :orders, :signups, :signup_requests, :ticket, :user
 
   def email
-    AssociationLoader.for(UserConProfile, :user).load(object).then(&:email)
+    dataloader.with(Sources::ActiveRecordAssociation, UserConProfile, :user).load(object).email
   end
 
   def gravatar_url
-    AssociationLoader.for(UserConProfile, :user).load(object).then { object.gravatar_url }
+    dataloader.with(Sources::ActiveRecordAssociation, UserConProfile, :user).load(object).gravatar_url
   end
 
   def staff_positions
-    AssociationLoader
-      .for(UserConProfile, :staff_positions)
-      .load(object)
-      .then do |staff_positions|
-        staff_positions
+    dataloader.with(Sources::ActiveRecordAssociation, UserConProfile, :staff_positions).load(object)
 
-        # TODO: talk to Dave about this, it will break the bios page as currently coded
-        # because the page assumes Con Com is visible
-        # if context[:query_from_liquid]
-        #   staff_positions.select(&:visible?)
-        # else
-        #   staff_positions
-        # end
-      end
+    # TODO: talk to Dave about this, it will break the bios page as currently coded
+    # because the page assumes Con Com is visible
+    # if context[:query_from_liquid]
+    #   staff_positions.select(&:visible?)
+    # else
+    #   staff_positions
+    # end
   end
 
   def team_members
-    AssociationLoader
-      .for(UserConProfile, :team_members)
-      .load(object)
-      .then do |team_members|
-        # Policy code is going to check fields on the convention, so it absolutely needs to be
-        # loaded to avoid n+1 queries in all cases
-        eager_load_promises =
-          team_members.map do |team_member|
-            AssociationLoader
-              .for(TeamMember, :event)
-              .load(team_member)
-              .then { |event| AssociationLoader.for(Event, :convention).load(event) }
-          end
+    team_members = dataloader.with(Sources::ActiveRecordAssociation, UserConProfile, :team_members).load(object)
+    team_members.map do |team_member|
+      event = dataloader.with(Sources::ActiveRecordAssociation, TeamMember, :event).load(team_member)
+      dataloader.with(Sources::ActiveRecordAssociation, Event, :convention).load(event)
+    end
 
-        Promise
-          .all(eager_load_promises)
-          .then do |_events|
-            readable_team_members = team_members.select { |team_member| policy(team_member).read? }
-            context[:query_from_liquid] ? readable_team_members.select(&:display?) : readable_team_members
-          end
-      end
+    readable_team_members = team_members.select { |team_member| policy(team_member).read? }
+    context[:query_from_liquid] ? readable_team_members.select(&:display?) : readable_team_members
   end
 
   field :birth_date, Types::DateType, null: true

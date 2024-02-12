@@ -6,10 +6,9 @@ class Types::RunType < Types::BaseObject
   field :event, Types::EventType, null: false
 
   def event
-    AssociationLoader
-      .for(Run, :event)
-      .load(object)
-      .then { |event| AssociationLoader.for(Event, :convention).load(event).then { |_convention| event } }
+    event = dataloader.with(Sources::ActiveRecordAssociation, Run, :event).load(object)
+    dataloader.with(Sources::ActiveRecordAssociation, Event, :convention).load(event)
+    event
   end
 
   field :starts_at, Types::DateType, null: false

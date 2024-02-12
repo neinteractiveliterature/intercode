@@ -19,7 +19,7 @@ module FormResponseAttrsFields
         if item_identifiers
           FormItemsLoader.for.load_many(item_identifiers.map { |item_identifier| [form.id, item_identifier] })
         else
-          AssociationLoader.for(Form, :form_items).load(form)
+          dataloader.with(Sources::ActiveRecordAssociation, Form, :form_items).load(form)
         end
 
       items_promise.then do |form_items|
@@ -41,7 +41,7 @@ module FormResponseAttrsFields
         if item_identifiers
           FormItemsLoader.for.load_many(item_identifiers.map { |item_identifier| [form.id, item_identifier] })
         else
-          AssociationLoader.for(Form, :form_items).load(form)
+          dataloader.with(Sources::ActiveRecordAssociation, Form, :form_items).load(form)
         end
 
       items_promise.then do |form_items|

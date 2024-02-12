@@ -28,17 +28,13 @@ class Types::EventProposalType < Types::BaseObject
   field :form, Types::FormType, null: true
 
   def form
-    AssociationLoader
-      .for(EventProposal, :event_category)
-      .load(object)
-      .then { |event_category| AssociationLoader.for(EventCategory, :event_proposal_form).load(event_category) }
+    event_category = dataloader.with(Sources::ActiveRecordAssociation, EventProposal, :event_category).load(object)
+    dataloader.with(Sources::ActiveRecordAssociation, EventCategory, :event_proposal_form).load(event_category)
   end
 
   def form_response_changes
-    AssociationLoader
-      .for(EventProposal, :form_response_changes)
-      .load(object)
-      .then { |changes| CompactingFormResponseChangesPresenter.new(changes).compacted_changes }
+    changes = dataloader.with(Sources::ActiveRecordAssociation, EventProposal, :form_response_changes).load(object)
+    CompactingFormResponseChangesPresenter.new(changes).compacted_changes
   end
 
   def images

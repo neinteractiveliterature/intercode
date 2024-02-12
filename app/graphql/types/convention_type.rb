@@ -56,26 +56,16 @@ class Types::ConventionType < Types::BaseObject
   end
 
   def event_categories(**args)
-    promise = AssociationLoader.for(Convention, :event_categories).load(object)
+    event_categories = dataloader.with(Sources::ActiveRecordAssociation, Convention, :event_categories).load(object)
 
     if args[:current_ability_can_read_event_proposals]
-      promise.then do |event_categories|
-        event_categories.select do |category|
-          policy(EventProposal.new(event_category: category, convention: convention, status: "proposed")).read?
-        end
+      event_categories.select do |category|
+        policy(EventProposal.new(event_category: category, convention: convention, status: "proposed")).read?
       end
     else
-      AssociationLoader
-        .for(Convention, :event_categories)
-        .load(object)
-        .then do |event_categories|
-          # reading #proposable? will attempt to n+1 these if we don't do this
-          ::ActiveRecord::Associations::Preloader.new(
-            records: event_categories,
-            associations: :event_proposal_form
-          ).call
-          event_categories
-        end
+      # reading #proposable? will attempt to n+1 these if we don't do this
+      ::ActiveRecord::Associations::Preloader.new(records: event_categories, associations: :event_proposal_form).call
+      event_categories
     end
   end
 
@@ -326,7 +316,9 @@ class Types::ConventionType < Types::BaseObject
   end
 
   def products(only_ticket_providing: false, only_available: false)
-    return AssociationLoader.for(Convention, :products).load(object) if !only_ticket_providing && !only_available
+    if !only_ticket_providing && !only_available
+      return dataloader.with(Sources::ActiveRecordAssociation, Convention, :products).load(object)
+    end
 
     scope = convention.products
     scope = scope.ticket_providing if only_ticket_providing
