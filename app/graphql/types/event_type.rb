@@ -105,7 +105,7 @@ class Types::EventType < Types::BaseObject
     attachments = dataloader.with(Sources::ActiveRecordAssociation, Event, :images_attachments).load(object)
     _blobs = dataloader.with(Sources::ActiveRecordAssociation, ActiveStorage::Attachment, :blob).load_all(attachments)
 
-    MarkdownLoader.for("event", "No information provided", context[:controller]).load(
+    dataloader.with(Sources::Markdown, "event", "No information provided", context[:controller]).load(
       [[object, "short_blurb_html"], object.short_blurb, object.images_attachments.index_by { |att| att.filename.to_s }]
     )
   end
@@ -116,7 +116,7 @@ class Types::EventType < Types::BaseObject
     attachments = dataloader.with(Sources::ActiveRecordAssociation, Event, :images_attachments).load(object)
     _blobs = dataloader.with(Sources::ActiveRecordAssociation, ActiveStorage::Attachment, :blob).load_all(attachments)
 
-    MarkdownLoader.for("event", "No information provided", context[:controller]).load(
+    dataloader.with(Sources::Markdown, "event", "No information provided", context[:controller]).load(
       [[object, "description_html"], object.description, object.images_attachments.index_by { |att| att.filename.to_s }]
     )
   end
@@ -145,6 +145,6 @@ class Types::EventType < Types::BaseObject
 
   field :images, [Types::ActiveStorageAttachmentType], null: false
   def images
-    ActiveStorageAttachmentLoader.for(Event, :images).load(object)
+    dataloader.with(Sources::ActiveStorageAttachment, Event, :images).load(object)
   end
 end

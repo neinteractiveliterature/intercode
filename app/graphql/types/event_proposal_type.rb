@@ -38,6 +38,6 @@ class Types::EventProposalType < Types::BaseObject
   end
 
   def images
-    ActiveStorageAttachmentLoader.for(EventProposal, :images).load(object)
+    dataloader.with(Sources::ActiveStorageAttachment, EventProposal, :images).load(object)
   end
 end

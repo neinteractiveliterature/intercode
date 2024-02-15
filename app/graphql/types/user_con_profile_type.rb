@@ -47,7 +47,7 @@ class Types::UserConProfileType < Types::BaseObject
   field :user_id, ID, null: false
 
   def bio_html
-    MarkdownLoader.for("user_con_profile", "No bio provided", context[:controller]).load(
+    dataloader.with(Sources::Markdown, "user_con_profile", "No bio provided", context[:controller]).load(
       [[object, "bio_html"], object.bio, {}]
     )
   end
@@ -80,7 +80,8 @@ class Types::UserConProfileType < Types::BaseObject
   end
 
   def gravatar_url
-    dataloader.with(Sources::ActiveRecordAssociation, UserConProfile, :user).load(object).gravatar_url
+    dataloader.with(Sources::ActiveRecordAssociation, UserConProfile, :user).load(object)
+    object.gravatar_url
   end
 
   def staff_positions

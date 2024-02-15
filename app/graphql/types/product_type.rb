@@ -25,7 +25,7 @@ class Types::ProductType < Types::BaseObject
   field :image, Types::ActiveStorageAttachmentType, null: true
 
   def image
-    ActiveStorageAttachmentLoader.for(Product, :image).load(object)
+    dataloader.with(Sources::ActiveStorageAttachment, Product, :image).load(object)
   end
 
   field :image_url, String, null: true, deprecation_reason: "Please use the image field instead."

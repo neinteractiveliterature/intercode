@@ -16,7 +16,7 @@ class Types::PageType < Types::BaseObject
   field :referenced_partials, [Types::CmsPartialType], null: false, method: :referenced_partials_recursive
 
   def content_html
-    CmsPageContentLoader.for(cms_rendering_context_for_cms_parent(object.parent)).load(object)
+    dataloader.with(Sources::CmsPageContent, cms_rendering_context_for_cms_parent(object.parent)).load(object)
   end
 
   def current_ability_can_update

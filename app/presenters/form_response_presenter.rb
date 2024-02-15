@@ -1,14 +1,23 @@
 # frozen_string_literal: true
 class FormResponsePresenter
-  attr_reader :form, :response, :viewer_role, :team_member_name, :controller
+  attr_reader :form, :response, :viewer_role, :team_member_name, :controller, :dataloader
 
-  def initialize(form, response, preloaded_form_items: nil, team_member_name: nil, viewer_role: nil, controller: nil)
+  def initialize(
+    form,
+    response,
+    preloaded_form_items: nil,
+    team_member_name: nil,
+    viewer_role: nil,
+    controller: nil,
+    dataloader: nil
+  )
     @form = form
     @response = response
     @viewer_role = viewer_role&.to_s
     @team_member_name = team_member_name
     @controller = controller
     @form_items = preloaded_form_items&.compact
+    @dataloader = dataloader
   end
 
   def as_json(replacement_content_format: "text", only_items: nil)
@@ -68,8 +77,15 @@ class FormResponsePresenter
   end
 
   def render_markdown_for_field(field, value, group_cache_key, object_cache_key, default_content)
-    loader = MarkdownLoader.for(group_cache_key, default_content, controller)
-    loader.load([[object_cache_key, field], value, local_images])
+    if dataloader
+      dataloader.with(Sources::Markdown, group_cache_key, default_content, context[:controller]).load(
+        [[object_cache_key, field], value, local_images]
+      )
+    else
+      Sources::Markdown.new(group_cache_key, default_content, context[:controller]).load(
+        [[object_cache_key, field], value, local_images]
+      )
+    end
   end
 
   def local_images
