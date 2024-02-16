@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 ruby File.read(File.expand_path(".ruby-version", __dir__)).strip
-gem "rails", "7.1.3"
+gem "rails", "7.1.2"
 
 gem "pg"
 gem "puma"
@@ -139,7 +139,7 @@ group :development do
   gem "debug"
 
   # Linting
-  gem "rubocop", "1.60.2"
+  gem "rubocop", "1.59.0"
   gem "rubocop-performance"
   gem "rubocop-rails"
   gem "rubocop-sequel"
