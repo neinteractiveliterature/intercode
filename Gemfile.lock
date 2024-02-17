@@ -237,7 +237,7 @@ GEM
     domain_prefix (0.4.20210906)
       json
       simpleidn (>= 0.0.5)
-    doorkeeper (5.6.8)
+    doorkeeper (5.6.9)
       railties (>= 5)
     doorkeeper-jwt (0.4.1)
       jwt (>= 2.1)
@@ -314,7 +314,7 @@ GEM
       ruby-vips (>= 2.0.17, < 3)
     io-console (0.7.2)
     io-console (0.7.2-java)
-    irb (1.11.1)
+    irb (1.11.2)
       rdoc
       reline (>= 0.4.2)
     jar-dependencies (0.4.1)
@@ -357,7 +357,7 @@ GEM
     mini_magick (4.11.0)
     mini_mime (1.1.5)
     mini_portile2 (2.8.5)
-    minitest (5.22.0)
+    minitest (5.22.2)
     minitest-focus (1.4.0)
       minitest (>= 4, < 6)
     minitest-reporters (1.6.1)
@@ -663,7 +663,7 @@ GEM
       activerecord (>= 6.1)
       zeitwerk (>= 2.6)
     yard (0.9.34)
-    zeitwerk (2.6.12)
+    zeitwerk (2.6.13)
 
 PLATFORMS
   java
@@ -693,7 +693,7 @@ DEPENDENCIES
   devise-doorkeeper
   devise-encryptable
   domain_prefix
-  doorkeeper (= 5.6.8)
+  doorkeeper (= 5.6.9)
   doorkeeper-jwt
   doorkeeper-openid_connect
   dotenv-rails
