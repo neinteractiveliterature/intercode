@@ -451,7 +451,7 @@ GEM
     racc (1.7.3)
     racc (1.7.3-java)
     rack (2.2.8)
-    rack-mini-profiler (3.3.0)
+    rack-mini-profiler (3.3.1)
       rack (>= 1.2.0)
     rack-session (1.0.2)
       rack (< 3)
