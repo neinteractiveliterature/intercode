@@ -638,7 +638,7 @@ GEM
       faraday (>= 0.9, < 3.0)
       jwt (>= 1.5, < 3.0)
       nokogiri (>= 1.6, < 2.0)
-    typeprof (0.21.9)
+    typeprof (0.21.10)
       rbs (>= 1.8.1)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
