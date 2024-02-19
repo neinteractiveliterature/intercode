@@ -78,11 +78,11 @@ class FormResponsePresenter
 
   def render_markdown_for_field(field, value, group_cache_key, object_cache_key, default_content)
     if dataloader
-      dataloader.with(Sources::Markdown, group_cache_key, default_content, context[:controller]).load(
+      dataloader.with(Sources::Markdown, group_cache_key, default_content, controller).load(
         [[object_cache_key, field], value, local_images]
       )
     else
-      Sources::Markdown.new(group_cache_key, default_content, context[:controller]).load(
+      Sources::Markdown.new(group_cache_key, default_content, controller).load(
         [[object_cache_key, field], value, local_images]
       )
     end

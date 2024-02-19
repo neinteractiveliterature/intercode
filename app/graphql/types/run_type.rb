@@ -96,7 +96,7 @@ class Types::RunType < Types::BaseObject
   field :current_ability_can_signup_summary_run, Boolean, null: false
 
   def current_ability_can_signup_summary_run
-    ModelPermissionLoader.for(Run).load([pundit_user, :signup_summary, object.id])
+    dataloader.with(Sources::ModelPermission, Run).load([pundit_user, :signup_summary, object.id])
   end
 
   field :signups_paginated, Types::SignupsPaginationType, null: false do

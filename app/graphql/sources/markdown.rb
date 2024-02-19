@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Sources::Markdown < GraphQL::Dataloader
+class Sources::Markdown < GraphQL::Dataloader::Source
   attr_reader :group_cache_key, :default_content, :controller
 
   def initialize(group_cache_key, default_content, controller)
@@ -8,7 +8,7 @@ class Sources::Markdown < GraphQL::Dataloader
     @controller = controller
   end
 
-  def perform(keys)
+  def fetch(keys)
     presenter = MarkdownPresenter.new(default_content, controller: controller)
 
     render_proc_by_cache_key =

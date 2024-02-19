@@ -47,7 +47,7 @@ class Types::EventType < Types::BaseObject
   end
 
   def runs(**args)
-    EventRunsLoader.for(args[:start], args[:finish], args[:exclude_conflicts], pundit_user).load(object)
+    dataloader.with(Sources::EventRuns, args[:start], args[:finish], args[:exclude_conflicts], pundit_user).load(object)
   end
 
   field :run, Types::RunType, null: false do
