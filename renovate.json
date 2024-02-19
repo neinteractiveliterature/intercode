@@ -11,6 +11,10 @@
       "automerge": true
     },
     {
+      "matchPackageNames": ["graphql", "graphql-batch"],
+      "enabled": false
+    },
+    {
       "matchPackageNames": ["mapbox-gl", "@types/mapbox-gl"],
       "allowedVersions": "< 2"
     },

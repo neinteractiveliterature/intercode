@@ -282,7 +282,8 @@ GEM
       ffi (~> 1.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
-    graphql (2.2.9)
+    graphql (2.2.4)
+      racc (~> 1.4)
     graphql-batch (0.5.3)
       graphql (>= 1.12.18, < 3)
       promise.rb (~> 0.7.2)
@@ -702,8 +703,8 @@ DEPENDENCIES
   faker
   flamegraph
   fly.io-rails
-  graphql (>= 2.0)
-  graphql-batch
+  graphql (= 2.2.4)
+  graphql-batch (= 0.5.3)
   graphql-rails_logger
   icalendar
   image_processing (~> 1.2)
