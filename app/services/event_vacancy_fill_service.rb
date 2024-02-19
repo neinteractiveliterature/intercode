@@ -105,14 +105,14 @@ class EventVacancyFillService < CivilService::Service
   end
 
   def all_signups_ordered
-    @all_signups_ordered ||= all_signups.to_a.sort_by { |signup| signup_priority_key(signup) }
+    @all_signups_ordered ||= all_signups.sort_by { |signup| signup_priority_key(signup) }
   end
 
   def all_signups
     @all_signups ||=
       begin
         run.signups.reload
-        run.signups.where.not(state: "withdrawn").where.not(id: team_member_signups.map(&:id))
+        run.signups.where.not(state: "withdrawn").where.not(id: team_member_signups.map(&:id)).to_a
       end
   end
 
@@ -130,10 +130,10 @@ class EventVacancyFillService < CivilService::Service
     [
       # Move waitlisted signups first
       signup.occupying_slot? ? 1 : 0,
-      # don't move confirmed no-preference signups unless necessary
+      # don't move confirmed or held no-preference signups unless necessary
       signup.no_preference? && signup.occupying_slot? ? 1 : 0,
       # When moving confirmed signups, try to keep the earlier signups stable
-      signup.created_at.to_i * (signup.occupying_slot? ? -1 : 1)
+      signup.created_at.to_f * (signup.occupying_slot? ? -1 : 1)
     ]
   end
 
