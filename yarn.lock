@@ -9041,17 +9041,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"browserslist@npm:^4.0.0, browserslist@npm:^4.18.1, browserslist@npm:^4.21.10, browserslist@npm:^4.21.4, browserslist@npm:^4.21.9, browserslist@npm:^4.22.2":
-  version: 4.22.3
-  resolution: "browserslist@npm:4.22.3"
+"browserslist@npm:^4.0.0, browserslist@npm:^4.18.1, browserslist@npm:^4.21.10, browserslist@npm:^4.21.4, browserslist@npm:^4.21.9, browserslist@npm:^4.22.2, browserslist@npm:^4.22.3":
+  version: 4.23.0
+  resolution: "browserslist@npm:4.23.0"
   dependencies:
-    caniuse-lite: "npm:^1.0.30001580"
-    electron-to-chromium: "npm:^1.4.648"
+    caniuse-lite: "npm:^1.0.30001587"
+    electron-to-chromium: "npm:^1.4.668"
     node-releases: "npm:^2.0.14"
     update-browserslist-db: "npm:^1.0.13"
   bin:
     browserslist: cli.js
-  checksum: 10c0/5a1f673ce0d6e61a68369835a6b66e199669bde02c3bed5ec51e77598d8daafd91719dba55b15af2021b9ad0bbaa94951fd702eb71087449eb28be8002815ece
+  checksum: 10c0/8e9cc154529062128d02a7af4d8adeead83ca1df8cd9ee65a88e2161039f3d68a4d40fea7353cab6bae4c16182dec2fdd9a1cf7dc2a2935498cee1af0e998943
   languageName: node
   linkType: hard
 
@@ -9246,7 +9246,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"caniuse-lite@npm:1.0.30001588, caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30001578, caniuse-lite@npm:^1.0.30001580":
+"caniuse-lite@npm:1.0.30001588, caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30001578, caniuse-lite@npm:^1.0.30001587":
   version: 1.0.30001588
   resolution: "caniuse-lite@npm:1.0.30001588"
   checksum: 10c0/f8333cb52e7ebc169d462763cecc33807530f1e04d22ba1084e05a583907aa801fb3c013d60b38d54cb792440f48efcd2a1a68f22d5fce896b5bd0277392347c
@@ -10099,12 +10099,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js-compat@npm:3.35.1, core-js-compat@npm:^3.31.0, core-js-compat@npm:^3.33.1":
-  version: 3.35.1
-  resolution: "core-js-compat@npm:3.35.1"
+"core-js-compat@npm:3.36.0, core-js-compat@npm:^3.31.0, core-js-compat@npm:^3.33.1":
+  version: 3.36.0
+  resolution: "core-js-compat@npm:3.36.0"
   dependencies:
-    browserslist: "npm:^4.22.2"
-  checksum: 10c0/c3b872e1f9703aa9554cce816207d85730da4703f1776c540b4da11bbbef6d9a1e6041625b5c1f58d2ada3d05f4a2b92897b7de5315c5ecd5d33d50dec86cca7
+    browserslist: "npm:^4.22.3"
+  checksum: 10c0/5ce2ad0ece8379883c01958e196575abc015692fc0394b8917f132b6b32e5c2bfb2612902c3f98f270cfa2d9d6522c28d36665038f3726796f1f4b436e4f863e
   languageName: node
   linkType: hard
 
@@ -11325,10 +11325,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron-to-chromium@npm:^1.4.648":
-  version: 1.4.657
-  resolution: "electron-to-chromium@npm:1.4.657"
-  checksum: 10c0/264e9756c7028691405c4ef4d5a07d4c854b52fdbdafcbcbb50e7203a744a8755ebaba59c421b12fa3264d9b7ae3e01ea7526ef8ab82833e2f94b82906468ba5
+"electron-to-chromium@npm:^1.4.668":
+  version: 1.4.676
+  resolution: "electron-to-chromium@npm:1.4.676"
+  checksum: 10c0/f135dab8b3aab360cfdf63a2fba42faf149b5ca9dbe1688c4a4245c9a2a93b388e0e47644359977726d89f5cb9bf5c0a3b95ad30f5bf0889d49e576d148c2dfb
   languageName: node
   linkType: hard
 
@@ -21214,7 +21214,7 @@ __metadata:
     classnames: "npm:2.5.1"
     compression-webpack-plugin: "npm:11.0.0"
     core-js: "npm:3.36.0"
-    core-js-compat: "npm:3.35.1"
+    core-js-compat: "npm:3.36.0"
     crypto-browserify: "npm:3.12.0"
     css-loader: "npm:6.10.0"
     css-minimizer-webpack-plugin: "npm:5.0.1"
