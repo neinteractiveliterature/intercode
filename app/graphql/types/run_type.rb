@@ -83,14 +83,14 @@ class Types::RunType < Types::BaseObject
 
   def my_signups
     return [] unless context[:user_con_profile]
-    MySignupsLoader.for(context[:user_con_profile]).load(object)
+    dataloader.with(Sources::MySignups, context[:user_con_profile]).load(object)
   end
 
   field :my_signup_requests, [Types::SignupRequestType], null: false
 
   def my_signup_requests
     return [] unless context[:user_con_profile]
-    MySignupRequestsLoader.for(context[:user_con_profile]).load(object)
+    dataloader.with(Sources::MySignupRequests, context[:user_con_profile]).load(object)
   end
 
   field :current_ability_can_signup_summary_run, Boolean, null: false

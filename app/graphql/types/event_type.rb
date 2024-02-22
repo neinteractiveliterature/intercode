@@ -132,7 +132,7 @@ class Types::EventType < Types::BaseObject
       return nil
     end
 
-    EventRatingLoader.for(user_con_profile).load(object)
+    dataloader.with(Sources::EventRating, user_con_profile).load(object)
   end
 
   field :form_response_changes, [Types::FormResponseChangeType], null: false do
