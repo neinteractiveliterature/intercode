@@ -29,7 +29,8 @@ module FormResponseAttrsFields
       viewer_role: current_user_form_item_viewer_role,
       team_member_name: respond_to?(:event_category) ? event_category&.team_member_name : nil,
       controller: context[:controller],
-      preloaded_form_items: form_items
+      preloaded_form_items: form_items,
+      dataloader: dataloader
     ).as_json(only_items: item_identifiers)
   end
 
@@ -49,7 +50,8 @@ module FormResponseAttrsFields
       viewer_role: current_user_form_item_viewer_role,
       team_member_name: respond_to?(:event_category) ? event_category&.team_member_name : nil,
       controller: context[:controller],
-      preloaded_form_items: form_items
+      preloaded_form_items: form_items,
+      dataloader: dataloader
     ).as_json_with_rendered_markdown("event", object, "", only_items: item_identifiers)
   end
 

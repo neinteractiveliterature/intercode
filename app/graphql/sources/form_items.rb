@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Sources::FormItems < GraphQL::DataLoader::Source
+class Sources::FormItems < GraphQL::Dataloader::Source
   def fetch(keys)
     clauses = []
     keys.each do |(form_id, identifier)|
