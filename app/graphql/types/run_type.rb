@@ -23,51 +23,53 @@ class Types::RunType < Types::BaseObject
   field :room_names, [String], null: false
 
   def room_names
-    RunRoomNamesLoader.for.load(object)
+    dataloader.with(Sources::RunRoomNames).load(object)
   end
 
   field :confirmed_signup_count, Integer, null: false
 
   def confirmed_signup_count
-    SignupCountLoader.for.load(object).then { |presenter| presenter.signup_count(state: "confirmed", counted: true) }
+    presenter = dataloader.with(Sources::SignupCount).load(object)
+    presenter.signup_count(state: "confirmed", counted: true)
   end
 
   field :confirmed_limited_signup_count, Integer, null: false
 
   def confirmed_limited_signup_count
-    SignupCountLoader.for.load(object).then(&:confirmed_limited_count)
+    presenter = dataloader.with(Sources::SignupCount).load(object)
+    presenter.confirmed_limited_count
   end
 
   field :waitlisted_signup_count, Integer, null: false
 
   def waitlisted_signup_count
-    SignupCountLoader.for.load(object).then(&:waitlist_count)
+    presenter = dataloader.with(Sources::SignupCount).load(object)
+    presenter.waitlist_count
   end
 
   field :not_counted_signup_count, Integer, null: false
 
   def not_counted_signup_count
-    SignupCountLoader
-      .for
-      .load(object)
-      .then do |presenter|
-        (
-          presenter.signup_count(state: "confirmed", counted: false) +
-            presenter.signup_count(state: "waitlisted", counted: false)
-        )
-      end
+    presenter = dataloader.with(Sources::SignupCount).load(object)
+
+    (
+      presenter.signup_count(state: "confirmed", counted: false) +
+        presenter.signup_count(state: "waitlisted", counted: false)
+    )
   end
 
   field :not_counted_confirmed_signup_count, Integer, null: false
 
   def not_counted_confirmed_signup_count
-    SignupCountLoader.for.load(object).then { |presenter| presenter.signup_count(state: "confirmed", counted: false) }
+    presenter = dataloader.with(Sources::SignupCount).load(object)
+    presenter.signup_count(state: "confirmed", counted: false)
   end
 
   field :grouped_signup_counts, [Types::GroupedSignupCountType], null: false
 
   def grouped_signup_counts
-    SignupCountLoader.for.load(object).then(&:grouped_signup_counts)
+    presenter = dataloader.with(Sources::SignupCount).load(object)
+    presenter.grouped_signup_counts
   end
 
   field :signup_count_by_state_and_bucket_key_and_counted,
@@ -76,7 +78,8 @@ class Types::RunType < Types::BaseObject
         deprecation_reason: "Please use grouped_signup_counts instead"
 
   def signup_count_by_state_and_bucket_key_and_counted
-    SignupCountLoader.for.load(object).then(&:signup_count_by_state_and_bucket_key_and_counted)
+    presenter = dataloader.with(Sources::SignupCount).load(object)
+    presenter.signup_count_by_state_and_bucket_key_and_counted
   end
 
   field :my_signups, [Types::SignupType], null: false
