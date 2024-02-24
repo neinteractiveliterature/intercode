@@ -61,7 +61,7 @@ export const SiteSearchQueryDocument = gql`
  *   },
  * });
  */
-export function useSiteSearchQuery(baseOptions: Apollo.QueryHookOptions<SiteSearchQueryData, SiteSearchQueryVariables>) {
+export function useSiteSearchQuery(baseOptions: Apollo.QueryHookOptions<SiteSearchQueryData, SiteSearchQueryVariables> & ({ variables: SiteSearchQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<SiteSearchQueryData, SiteSearchQueryVariables>(SiteSearchQueryDocument, options);
       }

@@ -4425,6 +4425,8 @@ union PricingStructureValue = Money | PayWhatYouWantValue | ScheduledMoneyValue
 
 type Product {
   available: Boolean!
+  clickwrap_agreement: String
+  clickwrap_agreement_html: String
   description: String
   description_html: String
   id: ID!
@@ -4440,6 +4442,7 @@ type Product {
 
 input ProductInput {
   available: Boolean
+  clickwrapAgreement: String
   deleteVariantIds: [ID!]
   description: String
   image: Upload

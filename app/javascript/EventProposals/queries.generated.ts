@@ -130,7 +130,7 @@ ${EventProposalFieldsFragmentDoc}`;
  *   },
  * });
  */
-export function useEventProposalQuery(baseOptions: Apollo.QueryHookOptions<EventProposalQueryData, EventProposalQueryVariables>) {
+export function useEventProposalQuery(baseOptions: Apollo.QueryHookOptions<EventProposalQueryData, EventProposalQueryVariables> & ({ variables: EventProposalQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<EventProposalQueryData, EventProposalQueryVariables>(EventProposalQueryDocument, options);
       }
@@ -188,7 +188,7 @@ ${EventProposalFieldsFragmentDoc}`;
  *   },
  * });
  */
-export function useEventProposalQueryWithOwner(baseOptions: Apollo.QueryHookOptions<EventProposalQueryWithOwnerQueryData, EventProposalQueryWithOwnerQueryVariables>) {
+export function useEventProposalQueryWithOwner(baseOptions: Apollo.QueryHookOptions<EventProposalQueryWithOwnerQueryData, EventProposalQueryWithOwnerQueryVariables> & ({ variables: EventProposalQueryWithOwnerQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<EventProposalQueryWithOwnerQueryData, EventProposalQueryWithOwnerQueryVariables>(EventProposalQueryWithOwnerDocument, options);
       }
@@ -232,7 +232,7 @@ export const EventProposalAdminNotesQueryDocument = gql`
  *   },
  * });
  */
-export function useEventProposalAdminNotesQuery(baseOptions: Apollo.QueryHookOptions<EventProposalAdminNotesQueryData, EventProposalAdminNotesQueryVariables>) {
+export function useEventProposalAdminNotesQuery(baseOptions: Apollo.QueryHookOptions<EventProposalAdminNotesQueryData, EventProposalAdminNotesQueryVariables> & ({ variables: EventProposalAdminNotesQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<EventProposalAdminNotesQueryData, EventProposalAdminNotesQueryVariables>(EventProposalAdminNotesQueryDocument, options);
       }
@@ -468,7 +468,7 @@ export const EventProposalHistoryQueryDocument = gql`
  *   },
  * });
  */
-export function useEventProposalHistoryQuery(baseOptions: Apollo.QueryHookOptions<EventProposalHistoryQueryData, EventProposalHistoryQueryVariables>) {
+export function useEventProposalHistoryQuery(baseOptions: Apollo.QueryHookOptions<EventProposalHistoryQueryData, EventProposalHistoryQueryVariables> & ({ variables: EventProposalHistoryQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<EventProposalHistoryQueryData, EventProposalHistoryQueryVariables>(EventProposalHistoryQueryDocument, options);
       }

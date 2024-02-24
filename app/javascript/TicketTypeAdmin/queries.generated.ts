@@ -112,7 +112,7 @@ export const EventTicketTypesQueryDocument = gql`
  *   },
  * });
  */
-export function useEventTicketTypesQuery(baseOptions: Apollo.QueryHookOptions<EventTicketTypesQueryData, EventTicketTypesQueryVariables>) {
+export function useEventTicketTypesQuery(baseOptions: Apollo.QueryHookOptions<EventTicketTypesQueryData, EventTicketTypesQueryVariables> & ({ variables: EventTicketTypesQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<EventTicketTypesQueryData, EventTicketTypesQueryVariables>(EventTicketTypesQueryDocument, options);
       }

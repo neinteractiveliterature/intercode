@@ -5,6 +5,7 @@
 #
 #  id                      :bigint           not null, primary key
 #  available               :boolean
+#  clickwrap_agreement     :text
 #  description             :text
 #  image                   :string
 #  name                    :text
@@ -26,7 +27,6 @@
 #  fk_rails_...  (provides_ticket_type_id => ticket_types.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 FactoryBot.define do
   factory :product do
     sequence(:name) { |n| "Product #{n}" }

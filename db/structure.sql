@@ -2274,7 +2274,8 @@ CREATE TABLE public.products (
     updated_at timestamp without time zone NOT NULL,
     payment_options jsonb,
     pricing_structure jsonb NOT NULL,
-    provides_ticket_type_id bigint
+    provides_ticket_type_id bigint,
+    clickwrap_agreement text
 );
 
 
@@ -5698,6 +5699,7 @@ ALTER TABLE ONLY public.cms_files_pages
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20240224192755'),
 ('20231216024636'),
 ('20231130162442'),
 ('20231126190837'),

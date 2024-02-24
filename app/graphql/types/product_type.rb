@@ -7,12 +7,19 @@ class Types::ProductType < Types::BaseObject
   field :description, String, null: true
   field :description_html, String, null: true
   field :provides_ticket_type, Types::TicketTypeType, null: true
+  field :clickwrap_agreement, String, null: true
+  field :clickwrap_agreement_html, String, null: true
 
   association_loaders Product, :product_variants, :provides_ticket_type
 
   def description_html
-    return unless object.description_template
+    return nil unless object.description_template
     context[:cadmus_renderer].render(object.description_template, :html)
+  end
+
+  def clickwrap_agreement_html
+    return nil if object.clickwrap_agreement.blank?
+    cadmus_renderer.render(Liquid::Template.parse(object.clickwrap_agreement), :html)
   end
 
   field :image, Types::ActiveStorageAttachmentType, null: true
@@ -21,7 +28,7 @@ class Types::ProductType < Types::BaseObject
     ActiveStorageAttachmentLoader.for(Product, :image).load(object)
   end
 
-  field :image_url, String, null: true, deprecation_reason: 'Please use the image field instead.'
+  field :image_url, String, null: true, deprecation_reason: "Please use the image field instead."
 
   def image_url
     object.image&.url

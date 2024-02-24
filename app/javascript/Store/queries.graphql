@@ -194,6 +194,7 @@ query OrderFormProductQuery($productId: ID!) {
         id
         url
       }
+      clickwrap_agreement_html
 
       product_variants {
         id

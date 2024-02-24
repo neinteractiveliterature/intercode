@@ -54,7 +54,7 @@ export const PreviewLiquidQueryDocument = gql`
  *   },
  * });
  */
-export function usePreviewLiquidQuery(baseOptions: Apollo.QueryHookOptions<PreviewLiquidQueryData, PreviewLiquidQueryVariables>) {
+export function usePreviewLiquidQuery(baseOptions: Apollo.QueryHookOptions<PreviewLiquidQueryData, PreviewLiquidQueryVariables> & ({ variables: PreviewLiquidQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<PreviewLiquidQueryData, PreviewLiquidQueryVariables>(PreviewLiquidQueryDocument, options);
       }
@@ -101,7 +101,7 @@ export const PreviewMarkdownQueryDocument = gql`
  *   },
  * });
  */
-export function usePreviewMarkdownQuery(baseOptions: Apollo.QueryHookOptions<PreviewMarkdownQueryData, PreviewMarkdownQueryVariables>) {
+export function usePreviewMarkdownQuery(baseOptions: Apollo.QueryHookOptions<PreviewMarkdownQueryData, PreviewMarkdownQueryVariables> & ({ variables: PreviewMarkdownQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<PreviewMarkdownQueryData, PreviewMarkdownQueryVariables>(PreviewMarkdownQueryDocument, options);
       }
@@ -143,7 +143,7 @@ export const PreviewNotifierLiquidQueryDocument = gql`
  *   },
  * });
  */
-export function usePreviewNotifierLiquidQuery(baseOptions: Apollo.QueryHookOptions<PreviewNotifierLiquidQueryData, PreviewNotifierLiquidQueryVariables>) {
+export function usePreviewNotifierLiquidQuery(baseOptions: Apollo.QueryHookOptions<PreviewNotifierLiquidQueryData, PreviewNotifierLiquidQueryVariables> & ({ variables: PreviewNotifierLiquidQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<PreviewNotifierLiquidQueryData, PreviewNotifierLiquidQueryVariables>(PreviewNotifierLiquidQueryDocument, options);
       }

@@ -137,7 +137,7 @@ export const ConventionDisplayQueryDocument = gql`
  *   },
  * });
  */
-export function useConventionDisplayQuery(baseOptions: Apollo.QueryHookOptions<ConventionDisplayQueryData, ConventionDisplayQueryVariables>) {
+export function useConventionDisplayQuery(baseOptions: Apollo.QueryHookOptions<ConventionDisplayQueryData, ConventionDisplayQueryVariables> & ({ variables: ConventionDisplayQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<ConventionDisplayQueryData, ConventionDisplayQueryVariables>(ConventionDisplayQueryDocument, options);
       }

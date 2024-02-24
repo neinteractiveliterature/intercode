@@ -128,7 +128,7 @@ export const PageAdminDropdownQueryDocument = gql`
  *   },
  * });
  */
-export function usePageAdminDropdownQuery(baseOptions: Apollo.QueryHookOptions<PageAdminDropdownQueryData, PageAdminDropdownQueryVariables>) {
+export function usePageAdminDropdownQuery(baseOptions: Apollo.QueryHookOptions<PageAdminDropdownQueryData, PageAdminDropdownQueryVariables> & ({ variables: PageAdminDropdownQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<PageAdminDropdownQueryData, PageAdminDropdownQueryVariables>(PageAdminDropdownQueryDocument, options);
       }
