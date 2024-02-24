@@ -6,6 +6,7 @@
 #
 #  id                      :bigint           not null, primary key
 #  available               :boolean
+#  clickwrap_agreement     :text
 #  description             :text
 #  image                   :string
 #  name                    :text

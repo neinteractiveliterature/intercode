@@ -3775,6 +3775,8 @@ export type PricingStructureValue = Money | PayWhatYouWantValue | ScheduledMoney
 export type Product = {
   __typename: 'Product';
   available: Scalars['Boolean']['output'];
+  clickwrap_agreement?: Maybe<Scalars['String']['output']>;
+  clickwrap_agreement_html?: Maybe<Scalars['String']['output']>;
   description?: Maybe<Scalars['String']['output']>;
   description_html?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
@@ -3791,6 +3793,7 @@ export type Product = {
 
 export type ProductInput = {
   available?: InputMaybe<Scalars['Boolean']['input']>;
+  clickwrapAgreement?: InputMaybe<Scalars['String']['input']>;
   deleteVariantIds?: InputMaybe<Array<Scalars['ID']['input']>>;
   description?: InputMaybe<Scalars['String']['input']>;
   image?: InputMaybe<Scalars['Upload']['input']>;

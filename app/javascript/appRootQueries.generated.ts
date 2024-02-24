@@ -142,7 +142,7 @@ export const AppRootQueryDocument = gql`
  *   },
  * });
  */
-export function useAppRootQuery(baseOptions: Apollo.QueryHookOptions<AppRootQueryData, AppRootQueryVariables>) {
+export function useAppRootQuery(baseOptions: Apollo.QueryHookOptions<AppRootQueryData, AppRootQueryVariables> & ({ variables: AppRootQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<AppRootQueryData, AppRootQueryVariables>(AppRootQueryDocument, options);
       }

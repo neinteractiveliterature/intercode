@@ -9,6 +9,8 @@ fragment AdminProductFields on Product {
   description_html
   available
   payment_options
+  clickwrap_agreement
+  clickwrap_agreement_html
 
   image {
     id

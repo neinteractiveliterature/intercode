@@ -70,6 +70,7 @@ export default function buildProductInput(product: EditingProduct): ProductInput
     })),
     deleteVariantIds: product.delete_variant_ids,
     providesTicketTypeId: product.provides_ticket_type?.id || null,
+    clickwrapAgreement: product.clickwrap_agreement,
     ...imageInput,
   };
 }

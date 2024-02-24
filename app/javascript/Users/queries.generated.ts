@@ -146,7 +146,7 @@ export const UserAdminQueryDocument = gql`
  *   },
  * });
  */
-export function useUserAdminQuery(baseOptions: Apollo.QueryHookOptions<UserAdminQueryData, UserAdminQueryVariables>) {
+export function useUserAdminQuery(baseOptions: Apollo.QueryHookOptions<UserAdminQueryData, UserAdminQueryVariables> & ({ variables: UserAdminQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<UserAdminQueryData, UserAdminQueryVariables>(UserAdminQueryDocument, options);
       }
@@ -187,7 +187,7 @@ export const MergeUsersModalQueryDocument = gql`
  *   },
  * });
  */
-export function useMergeUsersModalQuery(baseOptions: Apollo.QueryHookOptions<MergeUsersModalQueryData, MergeUsersModalQueryVariables>) {
+export function useMergeUsersModalQuery(baseOptions: Apollo.QueryHookOptions<MergeUsersModalQueryData, MergeUsersModalQueryVariables> & ({ variables: MergeUsersModalQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<MergeUsersModalQueryData, MergeUsersModalQueryVariables>(MergeUsersModalQueryDocument, options);
       }

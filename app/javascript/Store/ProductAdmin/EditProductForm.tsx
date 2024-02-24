@@ -34,7 +34,7 @@ export default function EditProductForm<ProductType extends WithRealOrGeneratedI
 }: EditProductFormProps<ProductType>) {
   const { t } = useTranslation();
   const { ticketName } = useContext(AppRootContext);
-  const [setAvailable, setName, setPaymentOptions, setPricingStructure, setDescription, setProductVariants] =
+  const [setAvailable, setName, setPaymentOptions, setPricingStructure, setDescription, setProductVariants, setClickwrapAgreement] =
     usePropertySetters(
       setProduct,
       'available',
@@ -43,6 +43,7 @@ export default function EditProductForm<ProductType extends WithRealOrGeneratedI
       'pricing_structure',
       'description',
       'product_variants',
+      'clickwrap_agreement'
     );
   const imageChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = (event.target.files ?? [])[0];
@@ -152,6 +153,13 @@ export default function EditProductForm<ProductType extends WithRealOrGeneratedI
               onChange={imageChanged}
               aria-label="Choose image..."
             />
+          </div>
+
+          <div className="mb-3">
+            <label className="form-label form-item-label">
+              {t('admin.store.products.clickwrapAgreementLabel', 'Product-specific clickwrap agreement')}
+            </label>
+            <LiquidInput value={product.clickwrap_agreement ?? ''} onChange={setClickwrapAgreement} />
           </div>
         </section>
 

@@ -220,7 +220,7 @@ export const EventAdminSingleEventQueryDocument = gql`
  *   },
  * });
  */
-export function useEventAdminSingleEventQuery(baseOptions: Apollo.QueryHookOptions<EventAdminSingleEventQueryData, EventAdminSingleEventQueryVariables>) {
+export function useEventAdminSingleEventQuery(baseOptions: Apollo.QueryHookOptions<EventAdminSingleEventQueryData, EventAdminSingleEventQueryVariables> & ({ variables: EventAdminSingleEventQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<EventAdminSingleEventQueryData, EventAdminSingleEventQueryVariables>(EventAdminSingleEventQueryDocument, options);
       }

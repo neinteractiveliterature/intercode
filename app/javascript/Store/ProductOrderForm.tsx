@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { ApolloError } from '@apollo/client';
-import { LoadingIndicator, ErrorDisplay, parseIntOrNull, FormGroupWithLabel } from '@neinteractiveliterature/litform';
+import { LoadingIndicator, ErrorDisplay, parseIntOrNull, FormGroupWithLabel, useConfirm } from '@neinteractiveliterature/litform';
 
 import formatMoney from '../formatMoney';
 import sortProductVariants from './sortProductVariants';
@@ -43,6 +43,7 @@ export default LoadQueryWithVariablesWrapper(
       product.pricing_structure.value.__typename === 'PayWhatYouWantValue'
         ? product.pricing_structure.value
         : undefined;
+    const confirm = useConfirm();
 
     const dataComplete = useMemo(
       () =>
@@ -53,7 +54,7 @@ export default LoadQueryWithVariablesWrapper(
       [product, productVariantId, quantity, payWhatYouWantAmount],
     );
 
-    const [addToCartClicked, addToCartError, addToCartInProgress] = useAsyncFunction(async () => {
+    const addToCart = async () => {
       const result = await addOrderEntryToCurrentPendingOrder({
         variables: {
           productId: product.id,
@@ -70,7 +71,17 @@ export default LoadQueryWithVariablesWrapper(
       if (orderEntry) {
         onAddedToCart(orderEntry);
       }
-      // navigate('/cart');
+    };
+
+    const [addToCartClicked, addToCartError, addToCartInProgress] = useAsyncFunction(async () => {
+      if (product.clickwrap_agreement_html != null) {
+        confirm({
+          action: addToCart,
+          prompt: <div dangerouslySetInnerHTML={{ __html: product.clickwrap_agreement_html }} />
+        });
+      } else {
+        await addToCart();
+      }
     });
 
     const renderVariantSelect = () => {
