@@ -249,7 +249,7 @@ jobs:
       name: ${{ steps.release-drafter.outputs.name }}
       html_url: ${{ steps.release-drafter.outputs.html_url }}
     steps:
-      - uses: release-drafter/release-drafter@v5
+      - uses: release-drafter/release-drafter@v6
         id: release-drafter
         with:
           config-name: release-drafter.yml
