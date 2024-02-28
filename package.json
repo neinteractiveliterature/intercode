@@ -118,7 +118,7 @@
     "porter-stemmer": "0.9.1",
     "postcss": "8.4.35",
     "postcss-import": "16.0.1",
-    "postcss-loader": "8.1.0",
+    "postcss-loader": "8.1.1",
     "prop-types": "15.8.1",
     "punycode": "2.3.1",
     "react": "18.2.0",
