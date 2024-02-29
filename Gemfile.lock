@@ -578,7 +578,7 @@ GEM
     simplecov_json_formatter (0.1.4)
     simpleidn (0.2.1)
       unf (~> 0.1.4)
-    skylight (6.0.3)
+    skylight (6.0.4)
       activesupport (>= 5.2.0)
     slop (3.6.0)
     solargraph (0.48.0)
