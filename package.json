@@ -181,7 +181,7 @@
     "@types/history": "4.7.11",
     "@types/jest": "29.5.12",
     "@types/md5": "^2",
-    "@types/node": "20.11.22",
+    "@types/node": "20.11.24",
     "@types/punycode": "2.1.4",
     "@types/rails__activestorage": "7.1.1",
     "@types/react-dom": "18.2.19",
