@@ -1365,6 +1365,37 @@ ALTER SEQUENCE public.deprecated_graph_ql_usages_id_seq OWNED BY public.deprecat
 
 
 --
+-- Name: domains; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.domains (
+    id bigint NOT NULL,
+    name text NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: domains_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.domains_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: domains_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.domains_id_seq OWNED BY public.domains.id;
+
+
+--
 -- Name: email_routes; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2299,6 +2330,39 @@ ALTER SEQUENCE public.products_id_seq OWNED BY public.products.id;
 
 
 --
+-- Name: redirect_urls; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.redirect_urls (
+    id bigint NOT NULL,
+    domain_id bigint NOT NULL,
+    path text NOT NULL,
+    destination text,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: redirect_urls_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.redirect_urls_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: redirect_urls_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.redirect_urls_id_seq OWNED BY public.redirect_urls.id;
+
+
+--
 -- Name: rooms; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2998,6 +3062,13 @@ ALTER TABLE ONLY public.deprecated_graph_ql_usages ALTER COLUMN id SET DEFAULT n
 
 
 --
+-- Name: domains id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.domains ALTER COLUMN id SET DEFAULT nextval('public.domains_id_seq'::regclass);
+
+
+--
 -- Name: email_routes id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -3170,6 +3241,13 @@ ALTER TABLE ONLY public.product_variants ALTER COLUMN id SET DEFAULT nextval('pu
 --
 
 ALTER TABLE ONLY public.products ALTER COLUMN id SET DEFAULT nextval('public.products_id_seq'::regclass);
+
+
+--
+-- Name: redirect_urls id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.redirect_urls ALTER COLUMN id SET DEFAULT nextval('public.redirect_urls_id_seq'::regclass);
 
 
 --
@@ -3471,6 +3549,14 @@ ALTER TABLE ONLY public.deprecated_graph_ql_usages
 
 
 --
+-- Name: domains domains_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.domains
+    ADD CONSTRAINT domains_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: email_routes email_routes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3676,6 +3762,14 @@ ALTER TABLE ONLY public.product_variants
 
 ALTER TABLE ONLY public.products
     ADD CONSTRAINT products_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: redirect_urls redirect_urls_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.redirect_urls
+    ADD CONSTRAINT redirect_urls_pkey PRIMARY KEY (id);
 
 
 --
@@ -4130,6 +4224,13 @@ CREATE INDEX index_departments_on_convention_id ON public.departments USING btre
 
 
 --
+-- Name: index_domains_on_name; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_domains_on_name ON public.domains USING btree (name);
+
+
+--
 -- Name: index_email_routes_on_receiver_address; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4519,6 +4620,20 @@ CREATE INDEX index_products_on_convention_id ON public.products USING btree (con
 --
 
 CREATE INDEX index_products_on_provides_ticket_type_id ON public.products USING btree (provides_ticket_type_id);
+
+
+--
+-- Name: index_redirect_urls_on_domain_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_redirect_urls_on_domain_id ON public.redirect_urls USING btree (domain_id);
+
+
+--
+-- Name: index_redirect_urls_on_domain_id_and_path; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_redirect_urls_on_domain_id_and_path ON public.redirect_urls USING btree (domain_id, path);
 
 
 --
@@ -5501,6 +5616,14 @@ ALTER TABLE ONLY public.active_storage_attachments
 
 
 --
+-- Name: redirect_urls fk_rails_c416b88964; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.redirect_urls
+    ADD CONSTRAINT fk_rails_c416b88964 FOREIGN KEY (domain_id) REFERENCES public.domains(id);
+
+
+--
 -- Name: permissions fk_rails_c526e10020; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5699,6 +5822,8 @@ ALTER TABLE ONLY public.cms_files_pages
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20240301032251'),
+('20240301032203'),
 ('20240224192755'),
 ('20231216024636'),
 ('20231130162442'),

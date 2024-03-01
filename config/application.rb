@@ -2,6 +2,7 @@ require_relative "boot"
 
 require "rails/all"
 require File.expand_path("lib/intercode/dynamic_cookie_domain", Rails.root)
+require File.expand_path("lib/intercode/redirect_url", Rails.root)
 require File.expand_path("lib/intercode/virtual_host_constraint", Rails.root)
 
 # Require the gems listed in Gemfile, including any gems
@@ -20,11 +21,7 @@ module Intercode
     config.hosts << ENV.fetch("ASSETS_HOST", nil) if ENV["ASSETS_HOST"].present?
     config.hosts << /.*#{Regexp.escape(ENV.fetch("INTERCODE_HOST", nil))}/ if ENV["INTERCODE_HOST"].present?
     config.hosts << ->(host) { Convention.where(domain: host).any? }
-    config.host_authorization = {
-      exclude: ->(request) do
-        request.path =~ %r{\A/healthz(\z|/)}
-      end
-    }
+    config.host_authorization = { exclude: ->(request) { request.path =~ %r{\A/healthz(\z|/)} } }
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
@@ -34,6 +31,7 @@ module Intercode
     config.active_job.queue_adapter = :shoryuken
     config.active_job.queue_name_prefix = "intercode_#{Rails.env}"
 
+    config.middleware.use Intercode::RedirectUrl
     config.middleware.use Intercode::DynamicCookieDomain
     config.middleware.use Intercode::FindVirtualHost
     config.middleware.use Rack::Deflater
