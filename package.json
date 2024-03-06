@@ -24,7 +24,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@apollo/client": "3.9.5",
+    "@apollo/client": "3.9.6",
     "@codemirror/highlight": "0.19.8",
     "@codemirror/lang-html": "6.4.5",
     "@codemirror/lang-json": "6.0.1",
