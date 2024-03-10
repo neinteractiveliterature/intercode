@@ -81,11 +81,10 @@ class FormResponsePresenter
         [[object_cache_key, field], value, local_images]
       )
     else
-      result =
-        Sources::Markdown
-          .new(group_cache_key, default_content, controller)
-          .fetch([[[object_cache_key, field], value, local_images]])
-          .first
+      Sources::Markdown
+        .new(group_cache_key, default_content, controller)
+        .fetch([[[object_cache_key, field], value, local_images]])
+        .first
     end
   end
 
