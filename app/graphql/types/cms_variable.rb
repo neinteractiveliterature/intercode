@@ -7,11 +7,11 @@ class Types::CmsVariable < Types::BaseObject
   field :current_ability_can_delete, Boolean, null: false
 
   def current_ability_can_update
-    ModelPermissionLoader.for(::CmsVariable).load([pundit_user, :update, object.id])
+    dataloader.with(Sources::ModelPermission, ::CmsVariable).load([pundit_user, :update, object.id])
   end
 
   def current_ability_can_delete
-    ModelPermissionLoader.for(::CmsVariable).load([pundit_user, :destroy, object.id])
+    dataloader.with(Sources::ModelPermission, ::CmsVariable).load([pundit_user, :destroy, object.id])
   end
 
   def value_json
