@@ -70,7 +70,7 @@ gem "phonelib"
 # Background workers and scheduling
 gem "shoryuken"
 gem "aws-sdk-sqs"
-gem "cloudwatch_scheduler", github: "nbudin/cloudwatch_scheduler", branch: "ruby3_rails7_compat"
+gem "cloudwatch_scheduler", github: "paul/cloudwatch_scheduler"
 
 # Privacy-respecting metrics
 gem "ahoy_matey"
