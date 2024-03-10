@@ -8,6 +8,6 @@ class Types::SignupMoveResultType < Types::BaseObject
   field :signup, Types::SignupType, null: false
 
   def signup
-    RecordLoader.for(Signup).load(object.signup_id)
+    dataloader.with(Sources::ModelById, Signup).load(object.signup_id)
   end
 end

@@ -30,20 +30,20 @@ class Types::SignupType < Types::BaseObject
   end
 
   def run
-    RecordLoader.for(Run).load(object.run_id)
+    dataloader.with(Sources::ModelById, Run).load(object.run_id)
   end
 
   def user_con_profile
-    RecordLoader.for(UserConProfile, includes: [:convention]).load(object.user_con_profile_id)
+    dataloader.with(Sources::ModelById, UserConProfile, includes: [:convention]).load(object.user_con_profile_id)
   end
 
   def choice
-    SignupChoiceLoader.for.load(object)
+    dataloader.with(Sources::SignupChoice).load(object)
   end
 
   def waitlist_position
     return nil unless object.waitlisted?
-    WaitlistPositionLoader.for.load(object)
+    dataloader.with(Sources::WaitlistPosition).load(object)
   end
 
   def counted

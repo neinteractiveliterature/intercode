@@ -6,14 +6,14 @@ class Types::NotificationDestinationType < Types::BaseObject
   field :staff_position, Types::StaffPositionType, null: true, camelize: false
 
   def source
-    AssociationLoader.for(NotificationDestination, :source).load(object)
+    dataloader.with(Sources::ActiveRecordAssociation, NotificationDestination, :source).load(object)
   end
 
   def user_con_profile
-    AssociationLoader.for(NotificationDestination, :user_con_profile).load(object)
+    dataloader.with(Sources::ActiveRecordAssociation, NotificationDestination, :user_con_profile).load(object)
   end
 
   def staff_position
-    AssociationLoader.for(NotificationDestination, :staff_position).load(object)
+    dataloader.with(Sources::ActiveRecordAssociation, NotificationDestination, :staff_position).load(object)
   end
 end

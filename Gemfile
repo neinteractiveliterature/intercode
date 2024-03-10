@@ -52,8 +52,7 @@ gem "will_paginate"
 gem "pg_search"
 
 # GraphQL server
-gem "graphql", "2.2.4"
-gem "graphql-batch", "0.5.3"
+gem "graphql"
 gem "apollo_upload_server", "2.1.5"
 gem "graphql-rails_logger", groups: %i[development test]
 
@@ -91,7 +90,6 @@ gem "browser"
 gem "faker", group: "development", require: false
 
 gem "rollbar"
-gem "rollbar-shoryuken"
 gem "oj", "~> 3.16.0"
 
 # Reduces boot times through caching; required in config/boot.rb

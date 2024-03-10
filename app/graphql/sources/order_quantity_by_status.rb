@@ -1,13 +1,13 @@
 # frozen_string_literal: true
-class OrderQuantityByStatusLoader < GraphQL::Batch::Loader
+class Sources::OrderQuantityByStatus < GraphQL::Dataloader::Source
   def initialize(model)
     @model = model
 
     return if [Product, ProductVariant].include?(model)
-    raise 'model must be either Product or ProductVariant'
+    raise ArgumentError, "model must be either Product or ProductVariant"
   end
 
-  def perform(records)
+  def fetch(records)
     records_by_id = records.index_by(&:id)
 
     results_by_record_and_status = {}
@@ -21,25 +21,25 @@ class OrderQuantityByStatusLoader < GraphQL::Batch::Loader
         results_by_record_and_status[record][status] = result
       end
 
-    records.each do |record|
+    records.map do |record|
       results = results_by_record_and_status[record]
-      results ? fulfill(record, results.values) : fulfill(record, empty_results_by_status.values)
+      results ? results.values : empty_results_by_status.values
     end
   end
 
   private
 
   def query_scope(record_ids)
-    scope = OrderEntry.joins(:order).where.not(orders: { status: 'pending' })
+    scope = OrderEntry.joins(:order).where.not(orders: { status: "pending" })
     if @model == Product
-      scope.where(product_variant_id: nil, product_id: record_ids).group(:product_id, 'orders.status')
+      scope.where(product_variant_id: nil, product_id: record_ids).group(:product_id, "orders.status")
     else
-      scope.where(product_variant_id: record_ids).group(:product_variant_id, 'orders.status')
+      scope.where(product_variant_id: record_ids).group(:product_variant_id, "orders.status")
     end
   end
 
   def empty_results_by_status
-    (Types::OrderStatusType.values.keys - ['pending'])
+    (Types::OrderStatusType.values.keys - ["pending"])
       .map { |status| { status: status, quantity: 0 } }
       .index_by { |result| result[:status] }
   end

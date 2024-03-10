@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class MarkdownLoader < GraphQL::Batch::Loader
+class Sources::Markdown < GraphQL::Dataloader::Source
   attr_reader :group_cache_key, :default_content, :controller
 
   def initialize(group_cache_key, default_content, controller)
@@ -8,7 +8,7 @@ class MarkdownLoader < GraphQL::Batch::Loader
     @controller = controller
   end
 
-  def perform(keys)
+  def fetch(keys)
     presenter = MarkdownPresenter.new(default_content, controller: controller)
 
     render_proc_by_cache_key =
@@ -19,8 +19,6 @@ class MarkdownLoader < GraphQL::Batch::Loader
     rendered_content =
       Rails.cache.fetch_multi(*render_proc_by_cache_key.keys) { |key| render_proc_by_cache_key[key].call }
 
-    keys.each do |(object_cache_key, markdown, local_images)|
-      fulfill([object_cache_key, markdown, local_images], rendered_content[[object_cache_key, group_cache_key]])
-    end
+    keys.map { |(object_cache_key, _markdown, _local_images)| rendered_content[[object_cache_key, group_cache_key]] } # rubocop:disable Rails/Pluck
   end
 end

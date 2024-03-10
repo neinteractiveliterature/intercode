@@ -18,25 +18,13 @@ class Types::SignupChangeType < Types::BaseObject
 
   # Ugly AF, but it gets us everything the policy wants
   def signup
-    AssociationLoader
-      .for(SignupChange, :signup)
-      .load(object)
-      .then do |signup|
-        run_promise =
-          AssociationLoader
-            .for(Signup, :run)
-            .load(signup)
-            .then do |run|
-              AssociationLoader
-                .for(Run, :event)
-                .load(run)
-                .then { |event| AssociationLoader.for(Event, :convention).load(event) }
-            end
+    signup = dataloader.with(Sources::ActiveRecordAssociation, SignupChange, :signup).load(object)
+    run = dataloader.with(Sources::ActiveRecordAssociation, Signup, :run).load(signup)
+    event = dataloader.with(Sources::ActiveRecordAssociation, Run, :event).load(run)
+    dataloader.with(Sources::ActiveRecordAssociation, Event, :convention).load(event)
+    dataloader.with(Sources::ActiveRecordAssociation, Signup, :user_con_profile).load(signup)
 
-        Promise
-          .all([run_promise, AssociationLoader.for(Signup, :user_con_profile).load(signup)])
-          .then { |_results| signup }
-      end
+    signup
   end
 
   def counted
@@ -48,7 +36,7 @@ class Types::SignupChangeType < Types::BaseObject
   def bucket_key
     return nil unless object.bucket_key
 
-    signup.then { |signup| bucket_key_for_signup(signup) }
+    bucket_key_for_signup(signup)
   end
 
   private

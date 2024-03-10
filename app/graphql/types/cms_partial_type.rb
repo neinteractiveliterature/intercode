@@ -10,10 +10,10 @@ class Types::CmsPartialType < Types::BaseObject
   field :current_ability_can_delete, Boolean, null: false
 
   def current_ability_can_update
-    ModelPermissionLoader.for(CmsPartial, [:parent]).load([pundit_user, :update, object.id])
+    dataloader.with(Sources::ModelPermission, CmsPartial, [:parent]).load([pundit_user, :update, object.id])
   end
 
   def current_ability_can_delete
-    ModelPermissionLoader.for(CmsPartial, [:parent]).load([pundit_user, :destroy, object.id])
+    dataloader.with(Sources::ModelPermission, CmsPartial, [:parent]).load([pundit_user, :destroy, object.id])
   end
 end

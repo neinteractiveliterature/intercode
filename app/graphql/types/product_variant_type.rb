@@ -17,10 +17,10 @@ class Types::ProductVariantType < Types::BaseObject
   field :image, Types::ActiveStorageAttachmentType, null: true
 
   def image
-    ActiveStorageAttachmentLoader.for(ProductVariant, :image).load(object)
+    dataloader.with(Sources::ActiveStorageAttachment, ProductVariant, :image).load(object)
   end
 
-  field :image_url, String, null: true, deprecation_reason: 'Please use the image field instead.'
+  field :image_url, String, null: true, deprecation_reason: "Please use the image field instead."
 
   def image_url
     object.image&.url
@@ -32,6 +32,6 @@ class Types::ProductVariantType < Types::BaseObject
   field :order_quantities_by_status, [Types::OrderQuantityByStatusType], null: false
 
   def order_quantities_by_status
-    OrderQuantityByStatusLoader.for(ProductVariant).load(object)
+    dataloader.with(Sources::OrderQuantityByStatus, ProductVariant).load(object)
   end
 end

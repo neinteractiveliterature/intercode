@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class RecordLoader < GraphQL::Batch::Loader
+class Sources::ModelById < GraphQL::Dataloader::Source
   def initialize(model, column: model.primary_key, where: nil, includes: nil)
     @model = model
     @column = column.to_s
@@ -8,13 +8,10 @@ class RecordLoader < GraphQL::Batch::Loader
     @includes = includes
   end
 
-  def load(key)
-    super(@column_type.cast(key))
-  end
-
-  def perform(keys)
-    query(keys).each { |record| fulfill(record.public_send(@column), record) }
-    keys.each { |key| fulfill(key, nil) unless fulfilled?(key) }
+  def fetch(keys)
+    keys = keys.map { |key| @column_type.cast(key) }
+    records_by_key = query(keys).index_by { |record| record.public_send(@column) }
+    keys.map { |key| records_by_key[key] }
   end
 
   private

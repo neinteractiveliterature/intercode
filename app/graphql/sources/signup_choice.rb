@@ -1,12 +1,12 @@
 # frozen_string_literal: true
-class SignupChoiceLoader < GraphQL::Batch::Loader
-  def perform(keys)
+class Sources::SignupChoice < GraphQL::Dataloader::Source
+  def fetch(keys)
     signups_by_user_con_profile_id = load_signups_by_user_con_profile_id(keys)
 
-    keys.each do |signup|
+    keys.map do |signup|
       user_signups = signups_by_user_con_profile_id[signup.user_con_profile_id] || []
       index = user_signups.find_index(signup)
-      fulfill(signup, index ? index + 1 : nil)
+      index ? index + 1 : nil
     end
   end
 

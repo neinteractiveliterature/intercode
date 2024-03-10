@@ -6,13 +6,13 @@ class Types::MaximumEventProvidedTicketsOverrideType < Types::BaseObject
   field :event, Types::EventType, null: false
 
   def event
-    AssociationLoader.for(MaximumEventProvidedTicketsOverride, :event).load(object)
+    dataloader.with(Sources::ActiveRecordAssociation, MaximumEventProvidedTicketsOverride, :event).load(object)
   end
 
   field :ticket_type, Types::TicketTypeType, null: false
 
   def ticket_type
-    AssociationLoader.for(MaximumEventProvidedTicketsOverride, :ticket_type).load(object)
+    dataloader.with(Sources::ActiveRecordAssociation, MaximumEventProvidedTicketsOverride, :ticket_type).load(object)
   end
 
   field :override_value, Integer, null: false

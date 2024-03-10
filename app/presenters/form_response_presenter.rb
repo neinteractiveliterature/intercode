@@ -1,14 +1,23 @@
 # frozen_string_literal: true
 class FormResponsePresenter
-  attr_reader :form, :response, :viewer_role, :team_member_name, :controller
+  attr_reader :form, :response, :viewer_role, :team_member_name, :controller, :dataloader
 
-  def initialize(form, response, preloaded_form_items: nil, team_member_name: nil, viewer_role: nil, controller: nil)
+  def initialize(
+    form,
+    response,
+    preloaded_form_items: nil,
+    team_member_name: nil,
+    viewer_role: nil,
+    controller: nil,
+    dataloader: nil
+  )
     @form = form
     @response = response
     @viewer_role = viewer_role&.to_s
     @team_member_name = team_member_name
     @controller = controller
     @form_items = preloaded_form_items&.compact
+    @dataloader = dataloader
   end
 
   def as_json(replacement_content_format: "text", only_items: nil)
@@ -26,12 +35,12 @@ class FormResponsePresenter
   def as_json_with_rendered_markdown(group_cache_key, object_cache_key, default_content, only_items: nil)
     raw_json = as_json(replacement_content_format: "markdown", only_items: only_items)
     items = only_items ? form_items.select { |item| only_items.include?(item.identifier) } : form_items
-    render_promises =
+    render_results =
       items.filter_map do |form_item|
         render_form_item(group_cache_key, object_cache_key, default_content, form_item, raw_json)
       end
 
-    Promise.all(render_promises).then { |render_results| raw_json.merge(render_results.to_h) }
+    raw_json.merge(render_results.to_h)
   end
 
   private
@@ -44,13 +53,12 @@ class FormResponsePresenter
     field = form_item.identifier.to_s
 
     unless form_item.item_type == "free_text" && form_item.properties["format"] == "markdown"
-      return Promise.resolve([field, raw_json[field]])
+      return field, raw_json[field]
     end
 
     markdown = raw_json[field]
-    render_markdown_for_field(field, markdown, group_cache_key, object_cache_key, default_content).then do |html|
-      [field, html]
-    end
+    html = render_markdown_for_field(field, markdown, group_cache_key, object_cache_key, default_content)
+    [field, html]
   end
 
   def replacement_content_for_form_item(form_item, content, format)
@@ -68,8 +76,16 @@ class FormResponsePresenter
   end
 
   def render_markdown_for_field(field, value, group_cache_key, object_cache_key, default_content)
-    loader = MarkdownLoader.for(group_cache_key, default_content, controller)
-    loader.load([[object_cache_key, field], value, local_images])
+    if dataloader
+      dataloader.with(Sources::Markdown, group_cache_key, default_content, controller).load(
+        [[object_cache_key, field], value, local_images]
+      )
+    else
+      Sources::Markdown
+        .new(group_cache_key, default_content, controller)
+        .fetch([[[object_cache_key, field], value, local_images]])
+        .first
+    end
   end
 
   def local_images

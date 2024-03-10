@@ -19,7 +19,7 @@ class Types::UserConProfileType < Types::BaseObject
 
   field :site_admin, Boolean, null: false
   def site_admin
-    AssociationLoader.for(UserConProfile, :user).load(object).then(&:site_admin?)
+    dataloader.with(Sources::ActiveRecordAssociation, UserConProfile, :user).load(object).site_admin?
   end
 
   field :name, String, null: false
@@ -47,24 +47,22 @@ class Types::UserConProfileType < Types::BaseObject
   field :user_id, ID, null: false
 
   def bio_html
-    MarkdownLoader.for("user_con_profile", "No bio provided", context[:controller]).load(
+    dataloader.with(Sources::Markdown, "user_con_profile", "No bio provided", context[:controller]).load(
       [[object, "bio_html"], object.bio, {}]
     )
   end
 
   def form_response_attrs_json
-    attrs_promise = super
+    attrs = super
 
-    attrs_promise.then do |attrs|
-      allowed_attrs = attrs.keys
-      allowed_attrs.delete("email") unless policy(object).read_email?
-      allowed_attrs.delete("birth_date") unless policy(object).read_birth_date?
-      unless policy(object).read_personal_info?
-        allowed_attrs.select! { |attr| %w[first_name last_name nickname email birth_date].include?(attr) }
-      end
-
-      attrs.slice(*allowed_attrs)
+    allowed_attrs = attrs.keys
+    allowed_attrs.delete("email") unless policy(object).read_email?
+    allowed_attrs.delete("birth_date") unless policy(object).read_birth_date?
+    unless policy(object).read_personal_info?
+      allowed_attrs.select! { |attr| %w[first_name last_name nickname email birth_date].include?(attr) }
     end
+
+    attrs.slice(*allowed_attrs)
   end
 
   personal_info_field :user, Types::UserType, null: true
@@ -76,52 +74,35 @@ class Types::UserConProfileType < Types::BaseObject
   association_loaders UserConProfile, :convention, :orders, :signups, :signup_requests, :ticket, :user
 
   def email
-    AssociationLoader.for(UserConProfile, :user).load(object).then(&:email)
+    dataloader.with(Sources::ActiveRecordAssociation, UserConProfile, :user).load(object).email
   end
 
   def gravatar_url
-    AssociationLoader.for(UserConProfile, :user).load(object).then { object.gravatar_url }
+    dataloader.with(Sources::ActiveRecordAssociation, UserConProfile, :user).load(object)
+    object.gravatar_url
   end
 
   def staff_positions
-    AssociationLoader
-      .for(UserConProfile, :staff_positions)
-      .load(object)
-      .then do |staff_positions|
-        staff_positions
+    dataloader.with(Sources::ActiveRecordAssociation, UserConProfile, :staff_positions).load(object)
 
-        # TODO: talk to Dave about this, it will break the bios page as currently coded
-        # because the page assumes Con Com is visible
-        # if context[:query_from_liquid]
-        #   staff_positions.select(&:visible?)
-        # else
-        #   staff_positions
-        # end
-      end
+    # TODO: talk to Dave about this, it will break the bios page as currently coded
+    # because the page assumes Con Com is visible
+    # if context[:query_from_liquid]
+    #   staff_positions.select(&:visible?)
+    # else
+    #   staff_positions
+    # end
   end
 
   def team_members
-    AssociationLoader
-      .for(UserConProfile, :team_members)
-      .load(object)
-      .then do |team_members|
-        # Policy code is going to check fields on the convention, so it absolutely needs to be
-        # loaded to avoid n+1 queries in all cases
-        eager_load_promises =
-          team_members.map do |team_member|
-            AssociationLoader
-              .for(TeamMember, :event)
-              .load(team_member)
-              .then { |event| AssociationLoader.for(Event, :convention).load(event) }
-          end
+    team_members = dataloader.with(Sources::ActiveRecordAssociation, UserConProfile, :team_members).load(object)
+    team_members.map do |team_member|
+      event = dataloader.with(Sources::ActiveRecordAssociation, TeamMember, :event).load(team_member)
+      dataloader.with(Sources::ActiveRecordAssociation, Event, :convention).load(event)
+    end
 
-        Promise
-          .all(eager_load_promises)
-          .then do |_events|
-            readable_team_members = team_members.select { |team_member| policy(team_member).read? }
-            context[:query_from_liquid] ? readable_team_members.select(&:display?) : readable_team_members
-          end
-      end
+    readable_team_members = team_members.select { |team_member| policy(team_member).read? }
+    context[:query_from_liquid] ? readable_team_members.select(&:display?) : readable_team_members
   end
 
   field :birth_date, Types::DateType, null: true
@@ -143,7 +124,7 @@ class Types::UserConProfileType < Types::BaseObject
   field :ability, Types::AbilityType, null: true
 
   def ability
-    object == context[:user_con_profile] ? pundit_user : AuthorizationInfoLoader.for(UserConProfile).load(object)
+    object == context[:user_con_profile] ? pundit_user : dataloader.with(AuthorizationInfo, UserConProfile).load(object)
   end
 
   field :orders, [Types::OrderType], null: false
@@ -151,7 +132,7 @@ class Types::UserConProfileType < Types::BaseObject
 
   def order_summary
     return "" unless policy(Order.new(user_con_profile: object)).read?
-    OrderSummaryLoader.for.load(object)
+    dataloader.with(Sources::OrderSummary).load(object)
   end
 
   field :signups, [Types::SignupType], null: false
@@ -170,6 +151,6 @@ class Types::UserConProfileType < Types::BaseObject
 
   # Not exposed as a field, but needed by FormResponseAttrsFields
   def form
-    convention.then(&:user_con_profile_form)
+    convention.user_con_profile_form
   end
 end

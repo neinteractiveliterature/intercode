@@ -25,7 +25,7 @@ class Types::ProductType < Types::BaseObject
   field :image, Types::ActiveStorageAttachmentType, null: true
 
   def image
-    ActiveStorageAttachmentLoader.for(Product, :image).load(object)
+    dataloader.with(Sources::ActiveStorageAttachment, Product, :image).load(object)
   end
 
   field :image_url, String, null: true, deprecation_reason: "Please use the image field instead."
@@ -39,6 +39,6 @@ class Types::ProductType < Types::BaseObject
   field :order_quantities_by_status, [Types::OrderQuantityByStatusType], null: false
 
   def order_quantities_by_status
-    OrderQuantityByStatusLoader.for(Product).load(object)
+    dataloader.with(Sources::OrderQuantityByStatus, Product).load(object)
   end
 end

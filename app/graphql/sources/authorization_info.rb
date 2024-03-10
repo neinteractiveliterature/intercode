@@ -1,18 +1,22 @@
-# frozen_string_literal: true
-class AuthorizationInfoLoader < GraphQL::Batch::Loader
+class Sources::AuthorizationInfo < GraphQL::Dataloader::Source
   def initialize(model)
     @model = model
 
     return if [User, UserConProfile].include?(model)
-    raise 'model must be either User or UserConProfile'
+    raise ArgumentError, "model must be either User or UserConProfile"
   end
 
-  def perform(keys)
+  def fetch(keys)
+    authorization_info_by_key = {}
     users_with_keys(keys).each do |(key, user)|
       known_user_con_profiles = model.is_a?(UserConProfile) ? [model] : []
-      fulfill(key, AuthorizationInfo.new(user, nil, known_user_con_profiles: known_user_con_profiles))
+      authorization_info_by_key[key] = AuthorizationInfo.new(
+        user,
+        nil,
+        known_user_con_profiles: known_user_con_profiles
+      )
     end
-    keys.each { |key| fulfill(key, nil) unless fulfilled?(key) }
+    keys.map { |key| authorization_info_by_key[key] }
   end
 
   private

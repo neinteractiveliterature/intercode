@@ -91,7 +91,7 @@ class IntercodeSchema < GraphQL::Schema
 
   query_analyzer DeprecatedUsageAnalyzer
 
-  use GraphQL::Batch
+  use GraphQL::Dataloader
 
   rescue_from ActiveRecord::RecordInvalid do |err, _obj, _args, _ctx, _field|
     raise GraphQL::ExecutionError.new(
@@ -154,9 +154,11 @@ class IntercodeSchema < GraphQL::Schema
     end
   end
 
-  def self.object_from_id(node_id, ctx); end
+  def self.object_from_id(node_id, ctx)
+  end
 
-  def self.id_from_object(object, type, ctx); end
+  def self.id_from_object(object, type, ctx)
+  end
 
   def self.unauthorized_object(error)
     # Add a top-level error to the response instead of returning nil:

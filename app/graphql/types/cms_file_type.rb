@@ -5,7 +5,7 @@ class Types::CmsFileType < Types::BaseObject
   field :file, Types::ActiveStorageAttachmentType, null: false
 
   def file
-    ActiveStorageAttachmentLoader.for(CmsFile, :file).load(object)
+    dataloader.with(Sources::ActiveStorageAttachment, CmsFile, :file).load(object)
   end
 
   def current_ability_can_delete

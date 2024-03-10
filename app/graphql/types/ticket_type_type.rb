@@ -29,6 +29,8 @@ class Types::TicketTypeType < Types::BaseObject
 
   # Force convention and parent loaders to resolve before calling `parent`, effectively emulating an eager load
   def parent
-    convention.then { |_convention| event.then { |_event| object.parent } }
+    convention
+    event
+    object.parent
   end
 end

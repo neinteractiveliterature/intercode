@@ -33,10 +33,8 @@ class Types::EventType < Types::BaseObject
   association_loaders Event, :event_category, :team_members, :ticket_types
 
   def form
-    AssociationLoader
-      .for(Event, :event_category)
-      .load(object)
-      .then { |event_category| AssociationLoader.for(EventCategory, :event_form).load(event_category) }
+    event_category = dataloader.with(Sources::ActiveRecordAssociation, Event, :event_category).load(object)
+    dataloader.with(Sources::ActiveRecordAssociation, EventCategory, :event_form).load(event_category)
   end
 
   field :runs, [Types::RunType], null: false do
@@ -49,7 +47,7 @@ class Types::EventType < Types::BaseObject
   end
 
   def runs(**args)
-    EventRunsLoader.for(args[:start], args[:finish], args[:exclude_conflicts], pundit_user).load(object)
+    dataloader.with(Sources::EventRuns, args[:start], args[:finish], args[:exclude_conflicts], pundit_user).load(object)
   end
 
   field :run, Types::RunType, null: false do
@@ -57,16 +55,14 @@ class Types::EventType < Types::BaseObject
   end
 
   def run(**args)
-    RecordLoader.for(Run).load(args[:id])
+    dataloader.with(Sources::ModelById, Run).load(args[:id])
   end
 
   field :team_members, [Types::TeamMemberType], null: false
 
   def team_members
-    EventTeamMembersLoader
-      .for(pundit_user)
-      .load(object)
-      .then { |team_members| context[:query_from_liquid] ? team_members.select(&:display?) : team_members }
+    team_members = dataloader.with(Sources::EventTeamMembers, pundit_user).load(object)
+    context[:query_from_liquid] ? team_members.select(&:display?) : team_members
   end
 
   field :provided_tickets, [Types::TicketType], null: false do
@@ -82,8 +78,9 @@ class Types::EventType < Types::BaseObject
   field :maximum_event_provided_tickets_overrides, [override_type], null: false
 
   def maximum_event_provided_tickets_overrides
-    loader = AssociationLoader.for(Event, :maximum_event_provided_tickets_overrides)
-    loader.load(object).then { |meptos| meptos.select { |mepto| policy(mepto).read? } }
+    meptos =
+      dataloader.with(Sources::ActiveRecordAssociation, Event, :maximum_event_provided_tickets_overrides).load(object)
+    meptos.select { |mepto| policy(mepto).read? }
   end
 
   field :registration_policy, Types::RegistrationPolicyType, null: true
@@ -103,45 +100,23 @@ class Types::EventType < Types::BaseObject
   field :short_blurb_html, String, null: true
 
   def short_blurb_html
-    AssociationLoader
-      .for(Event, :images_attachments)
-      .load(object)
-      .then do |attachments|
-        AssociationLoader
-          .for(ActiveStorage::Attachment, :blob)
-          .load_many(attachments)
-          .then do |_blobs|
-            MarkdownLoader.for("event", "No information provided", context[:controller]).load(
-              [
-                [object, "short_blurb_html"],
-                object.short_blurb,
-                object.images_attachments.index_by { |att| att.filename.to_s }
-              ]
-            )
-          end
-      end
+    attachments = dataloader.with(Sources::ActiveRecordAssociation, Event, :images_attachments).load(object)
+    _blobs = dataloader.with(Sources::ActiveRecordAssociation, ActiveStorage::Attachment, :blob).load_all(attachments)
+
+    dataloader.with(Sources::Markdown, "event", "No information provided", context[:controller]).load(
+      [[object, "short_blurb_html"], object.short_blurb, object.images_attachments.index_by { |att| att.filename.to_s }]
+    )
   end
 
   field :description_html, String, null: true
 
   def description_html
-    AssociationLoader
-      .for(Event, :images_attachments)
-      .load(object)
-      .then do |attachments|
-        AssociationLoader
-          .for(ActiveStorage::Attachment, :blob)
-          .load_many(attachments)
-          .then do |_blobs|
-            MarkdownLoader.for("event", "No information provided", context[:controller]).load(
-              [
-                [object, "description_html"],
-                object.description,
-                object.images_attachments.index_by { |att| att.filename.to_s }
-              ]
-            )
-          end
-      end
+    attachments = dataloader.with(Sources::ActiveRecordAssociation, Event, :images_attachments).load(object)
+    _blobs = dataloader.with(Sources::ActiveRecordAssociation, ActiveStorage::Attachment, :blob).load_all(attachments)
+
+    dataloader.with(Sources::Markdown, "event", "No information provided", context[:controller]).load(
+      [[object, "description_html"], object.description, object.images_attachments.index_by { |att| att.filename.to_s }]
+    )
   end
 
   field :admin_notes, String, null: true do
@@ -155,21 +130,19 @@ class Types::EventType < Types::BaseObject
       return nil
     end
 
-    EventRatingLoader.for(user_con_profile).load(object)
+    dataloader.with(Sources::EventRating, user_con_profile).load(object)
   end
 
   field :form_response_changes, [Types::FormResponseChangeType], null: false do
     authorize_action :update
   end
   def form_response_changes
-    AssociationLoader
-      .for(Event, :form_response_changes)
-      .load(object)
-      .then { |changes| CompactingFormResponseChangesPresenter.new(changes).compacted_changes }
+    changes = dataloader.with(Sources::ActiveRecordAssociation, Event, :form_response_changes).load(object)
+    CompactingFormResponseChangesPresenter.new(changes).compacted_changes
   end
 
   field :images, [Types::ActiveStorageAttachmentType], null: false
   def images
-    ActiveStorageAttachmentLoader.for(Event, :images).load(object)
+    dataloader.with(Sources::ActiveStorageAttachment, Event, :images).load(object)
   end
 end
