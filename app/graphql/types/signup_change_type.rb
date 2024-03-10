@@ -36,7 +36,7 @@ class Types::SignupChangeType < Types::BaseObject
   def bucket_key
     return nil unless object.bucket_key
 
-    signup.then { |signup| bucket_key_for_signup(signup) }
+    bucket_key_for_signup(signup)
   end
 
   private

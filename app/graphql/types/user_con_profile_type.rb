@@ -53,18 +53,16 @@ class Types::UserConProfileType < Types::BaseObject
   end
 
   def form_response_attrs_json
-    attrs_promise = super
+    attrs = super
 
-    attrs_promise.then do |attrs|
-      allowed_attrs = attrs.keys
-      allowed_attrs.delete("email") unless policy(object).read_email?
-      allowed_attrs.delete("birth_date") unless policy(object).read_birth_date?
-      unless policy(object).read_personal_info?
-        allowed_attrs.select! { |attr| %w[first_name last_name nickname email birth_date].include?(attr) }
-      end
-
-      attrs.slice(*allowed_attrs)
+    allowed_attrs = attrs.keys
+    allowed_attrs.delete("email") unless policy(object).read_email?
+    allowed_attrs.delete("birth_date") unless policy(object).read_birth_date?
+    unless policy(object).read_personal_info?
+      allowed_attrs.select! { |attr| %w[first_name last_name nickname email birth_date].include?(attr) }
     end
+
+    attrs.slice(*allowed_attrs)
   end
 
   personal_info_field :user, Types::UserType, null: true
@@ -134,7 +132,7 @@ class Types::UserConProfileType < Types::BaseObject
 
   def order_summary
     return "" unless policy(Order.new(user_con_profile: object)).read?
-    OrderSummaryLoader.for.load(object)
+    dataloader.with(Sources::OrderSummary).load(object)
   end
 
   field :signups, [Types::SignupType], null: false
@@ -153,6 +151,6 @@ class Types::UserConProfileType < Types::BaseObject
 
   # Not exposed as a field, but needed by FormResponseAttrsFields
   def form
-    convention.then(&:user_con_profile_form)
+    convention.user_con_profile_form
   end
 end

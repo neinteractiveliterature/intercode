@@ -35,12 +35,12 @@ class FormResponsePresenter
   def as_json_with_rendered_markdown(group_cache_key, object_cache_key, default_content, only_items: nil)
     raw_json = as_json(replacement_content_format: "markdown", only_items: only_items)
     items = only_items ? form_items.select { |item| only_items.include?(item.identifier) } : form_items
-    render_promises =
+    render_results =
       items.filter_map do |form_item|
         render_form_item(group_cache_key, object_cache_key, default_content, form_item, raw_json)
       end
 
-    Promise.all(render_promises).then { |render_results| raw_json.merge(render_results.to_h) }
+    raw_json.merge(render_results.to_h)
   end
 
   private
@@ -53,13 +53,12 @@ class FormResponsePresenter
     field = form_item.identifier.to_s
 
     unless form_item.item_type == "free_text" && form_item.properties["format"] == "markdown"
-      return Promise.resolve([field, raw_json[field]])
+      return field, raw_json[field]
     end
 
     markdown = raw_json[field]
-    render_markdown_for_field(field, markdown, group_cache_key, object_cache_key, default_content).then do |html|
-      [field, html]
-    end
+    html = render_markdown_for_field(field, markdown, group_cache_key, object_cache_key, default_content)
+    [field, html]
   end
 
   def replacement_content_for_form_item(form_item, content, format)

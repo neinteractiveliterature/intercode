@@ -91,7 +91,6 @@ class IntercodeSchema < GraphQL::Schema
 
   query_analyzer DeprecatedUsageAnalyzer
 
-  use GraphQL::Batch
   use GraphQL::Dataloader
 
   rescue_from ActiveRecord::RecordInvalid do |err, _obj, _args, _ctx, _field|

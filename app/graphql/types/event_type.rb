@@ -61,10 +61,8 @@ class Types::EventType < Types::BaseObject
   field :team_members, [Types::TeamMemberType], null: false
 
   def team_members
-    EventTeamMembersLoader
-      .for(pundit_user)
-      .load(object)
-      .then { |team_members| context[:query_from_liquid] ? team_members.select(&:display?) : team_members }
+    team_members = dataloader.with(Sources::EventTeamMembers, pundit_user).load(object)
+    context[:query_from_liquid] ? team_members.select(&:display?) : team_members
   end
 
   field :provided_tickets, [Types::TicketType], null: false do

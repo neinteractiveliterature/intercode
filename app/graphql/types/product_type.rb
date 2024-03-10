@@ -39,6 +39,6 @@ class Types::ProductType < Types::BaseObject
   field :order_quantities_by_status, [Types::OrderQuantityByStatusType], null: false
 
   def order_quantities_by_status
-    OrderQuantityByStatusLoader.for(Product).load(object)
+    dataloader.with(Sources::OrderQuantityByStatus, Product).load(object)
   end
 end
