@@ -5,6 +5,6 @@ class Types::TicketCountByTypeAndPaymentAmountType < Types::BaseObject
   field :payment_amount, Types::MoneyType, null: false
 
   def ticket_type
-    RecordLoader.for(TicketType).load(object[:ticket_type_id])
+    dataloader.with(Sources::ModelById, TicketType).load(object[:ticket_type_id])
   end
 end

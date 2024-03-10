@@ -6,6 +6,6 @@ class Types::SalesCountByProductAndPaymentAmountType < Types::BaseObject
   field :payment_amount, Types::MoneyType, null: false
 
   def product
-    RecordLoader.for(Product).load(object[:product_id])
+    dataloader.with(Sources::ModelById, Product).load(object[:product_id])
   end
 end

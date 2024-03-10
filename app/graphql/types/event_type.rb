@@ -55,7 +55,7 @@ class Types::EventType < Types::BaseObject
   end
 
   def run(**args)
-    RecordLoader.for(Run).load(args[:id])
+    dataloader.with(Sources::ModelById, Run).load(args[:id])
   end
 
   field :team_members, [Types::TeamMemberType], null: false

@@ -126,7 +126,7 @@ class Types::UserConProfileType < Types::BaseObject
   field :ability, Types::AbilityType, null: true
 
   def ability
-    object == context[:user_con_profile] ? pundit_user : AuthorizationInfoLoader.for(UserConProfile).load(object)
+    object == context[:user_con_profile] ? pundit_user : dataloader.with(AuthorizationInfo, UserConProfile).load(object)
   end
 
   field :orders, [Types::OrderType], null: false

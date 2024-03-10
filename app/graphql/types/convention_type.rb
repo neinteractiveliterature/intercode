@@ -462,7 +462,7 @@ class Types::ConventionType < Types::BaseObject
   end
 
   def user_activity_alert(id:)
-    RecordLoader.for(UserActivityAlert, where: { convention_id: object.id }).load(id)
+    dataloader.with(Sources::ModelById, UserActivityAlert, where: { convention_id: object.id }).load(id)
   end
   field :user_activity_alerts, [Types::UserActivityAlertType], null: false
 
