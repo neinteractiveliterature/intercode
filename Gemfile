@@ -90,7 +90,6 @@ gem "browser"
 gem "faker", group: "development", require: false
 
 gem "rollbar"
-gem "rollbar-shoryuken"
 gem "oj", "~> 3.16.0"
 
 # Reduces boot times through caching; required in config/boot.rb

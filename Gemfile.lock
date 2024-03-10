@@ -403,7 +403,6 @@ GEM
       bigdecimal (>= 3.0)
     optimist (3.1.0)
     orm_adapter (0.5.0)
-    ox (2.14.4)
     parallel (1.24.0)
     parser (3.3.0.5)
       ast (~> 2.4.1)
@@ -520,11 +519,6 @@ GEM
       nokogiri
     rexml (3.2.6)
     rollbar (3.5.2)
-    rollbar-shoryuken (1.1.0)
-      aws-sdk-sqs (~> 1.20, <= 2.0)
-      ox (~> 2.14)
-      rollbar (>= 2.21, <= 4.0, < 4.0)
-      shoryuken (>= 4.0, <= 5.3)
     rouge (3.26.1)
     rubocop (1.62.0)
       json (~> 2.3)
@@ -734,7 +728,6 @@ DEPENDENCIES
   redcarpet
   reverse_markdown
   rollbar
-  rollbar-shoryuken
   rubocop (= 1.62.0)
   rubocop-performance
   rubocop-rails
