@@ -79,14 +79,11 @@ class EventProposalDrop < Liquid::Drop
   #                visible to everyone who can see this proposal will be replaced with a
   #                "this is hidden" message.
   def form_response
-    FormResponsePresenter
-      .new(
-        event_proposal.event_category.event_proposal_form,
-        event_proposal,
-        team_member_name: event_proposal.event_category.team_member_name,
-        controller: @context.registers['controller']
-      )
-      .as_json_with_rendered_markdown('event_proposal', event_proposal, '')
-      .sync
+    FormResponsePresenter.new(
+      event_proposal.event_category.event_proposal_form,
+      event_proposal,
+      team_member_name: event_proposal.event_category.team_member_name,
+      controller: @context.registers["controller"]
+    ).as_json_with_rendered_markdown("event_proposal", event_proposal, "")
   end
 end

@@ -97,14 +97,11 @@ class EventDrop < Liquid::Drop
   #                event category.  This only includes publicly-visible fields; fields not
   #                visible to the public will be replaced with a "this is hidden" message.
   def form_response
-    FormResponsePresenter
-      .new(
-        event.event_category.event_form,
-        event,
-        team_member_name: event.event_category.team_member_name,
-        controller: @context.registers["controller"]
-      )
-      .as_json_with_rendered_markdown("event", event, "")
-      .sync
+    FormResponsePresenter.new(
+      event.event_category.event_form,
+      event,
+      team_member_name: event.event_category.team_member_name,
+      controller: @context.registers["controller"]
+    ).as_json_with_rendered_markdown("event", event, "")
   end
 end

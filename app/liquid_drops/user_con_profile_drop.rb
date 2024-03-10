@@ -57,14 +57,14 @@ class UserConProfileDrop < Liquid::Drop
   # @return [Array<EventDrop>] All the active events at this convention for which this user is a
   #                            team member
   def team_member_events
-    user_con_profile.team_members.includes(event: :event_category).where(events: { status: 'active' }).map(&:event)
+    user_con_profile.team_members.includes(event: :event_category).where(events: { status: "active" }).map(&:event)
   end
 
   # @return [Array<SignupDrop>] All the user's signups, excluding withdrawn events
   def signups
     user_con_profile
       .signups
-      .where.not(state: 'withdrawn')
+      .where.not(state: "withdrawn")
       .includes(event: :event_category, run: { rooms: nil, event: { team_members: :user_con_profile } })
       .to_a
   end
@@ -95,27 +95,24 @@ class UserConProfileDrop < Liquid::Drop
   # @return [String] A webcal:// URL for the user's personal schedule for this convention.  This URL
   #                  is considered secret and should only be given to that user.
   def schedule_calendar_url
-    user_schedule_url(user_con_profile.ical_secret, host: user_con_profile.convention.domain, protocol: 'webcal')
+    user_schedule_url(user_con_profile.ical_secret, host: user_con_profile.convention.domain, protocol: "webcal")
   end
 
   # @return [Hash] The user's response to the profile form set up by this convention.  This includes
   #                the fields that the user themselves can see; admin-only fields will be replaced
   #                with a "this is hidden" message.
   def form_response
-    FormResponsePresenter
-      .new(
-        user_con_profile.convention.user_con_profile_form,
-        user_con_profile,
-        controller: @context.registers['controller']
-      )
-      .as_json_with_rendered_markdown('user_con_profile', user_con_profile, '')
-      .sync
+    FormResponsePresenter.new(
+      user_con_profile.convention.user_con_profile_form,
+      user_con_profile,
+      controller: @context.registers["controller"]
+    ).as_json_with_rendered_markdown("user_con_profile", user_con_profile, "")
   end
 
   private
 
   # @api
   def markdown_presenter
-    @markdown_presenter ||= MarkdownPresenter.new('No bio provided')
+    @markdown_presenter ||= MarkdownPresenter.new("No bio provided")
   end
 end
