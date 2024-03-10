@@ -5,7 +5,7 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
 
   let(:convention) { create(:convention, :with_notification_templates) }
   let(:event) { create :event, convention: convention }
-  let(:the_run) { create :run, event: event }
+  let(:the_run) { create :run, event: event, starts_at: 1.day.from_now }
   let(:user_con_profile) { create :user_con_profile, convention: convention }
   let(:user) { user_con_profile.user }
   let(:bucket_key) { "unlimited" }
@@ -65,6 +65,15 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
       /\ARegistrations for #{Regexp.escape convention.name} are frozen/,
       result.errors.full_messages.join('\n')
     )
+  end
+
+  it "disallows withdrawals for events that have ended" do
+    event.update!(length_seconds: 4.hours)
+    the_run.update!(starts_at: 5.days.ago)
+
+    result = subject.call
+    assert result.failure?
+    assert_match(/\A#{Regexp.escape event.title} has ended/, result.errors.full_messages.join('\n'))
   end
 
   describe "with limited buckets" do

@@ -22,6 +22,8 @@ class EventWithdrawService < CivilService::Service
   include SkippableAdvisoryLock
   include ConventionRegistrationFreeze
 
+  validate :run_must_not_be_over
+
   def initialize(
     signup,
     whodunit,
@@ -98,5 +100,10 @@ class EventWithdrawService < CivilService::Service
 
   def fill_vacancy(prev_bucket_key)
     EventVacancyFillService.new(run, prev_bucket_key, skip_locking: true).call
+  end
+
+  def run_must_not_be_over
+    return unless run.ends_at < Time.now
+    errors.add :base, "#{event.title} has ended."
   end
 end
