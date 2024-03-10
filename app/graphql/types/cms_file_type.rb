@@ -9,6 +9,6 @@ class Types::CmsFileType < Types::BaseObject
   end
 
   def current_ability_can_delete
-    ModelPermissionLoader.for(CmsFile, [:parent]).load([pundit_user, :destroy, object.id])
+    dataloader.with(Sources::ModelPermission, CmsFile, [:parent]).load([pundit_user, :destroy, object.id])
   end
 end
