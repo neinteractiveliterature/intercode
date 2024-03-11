@@ -1823,31 +1823,31 @@ __metadata:
   linkType: hard
 
 "@codemirror/autocomplete@npm:^6.0.0, @codemirror/autocomplete@npm:^6.7.1":
-  version: 6.8.1
-  resolution: "@codemirror/autocomplete@npm:6.8.1"
+  version: 6.14.0
+  resolution: "@codemirror/autocomplete@npm:6.14.0"
   dependencies:
     "@codemirror/language": "npm:^6.0.0"
     "@codemirror/state": "npm:^6.0.0"
-    "@codemirror/view": "npm:^6.6.0"
+    "@codemirror/view": "npm:^6.17.0"
     "@lezer/common": "npm:^1.0.0"
   peerDependencies:
     "@codemirror/language": ^6.0.0
     "@codemirror/state": ^6.0.0
     "@codemirror/view": ^6.0.0
     "@lezer/common": ^1.0.0
-  checksum: 10c0/87cc44802faef06adb0ccfc8eeb408d01b18b2abbad666151a429f5f319e60aab16db06a9bf1001b6a4208a7179c665ef5ba1e5467f9231be89fa325b90356a5
+  checksum: 10c0/1b385f3b9ce397b349a306f3851ecf4d625fade048e4721a9166a8398a39422663a3a2b62781d01972807bc75b55a0788a74b7d167ee685bc7cb6eb420aecb4d
   languageName: node
   linkType: hard
 
-"@codemirror/commands@npm:^6.0, @codemirror/commands@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "@codemirror/commands@npm:6.0.0"
+"@codemirror/commands@npm:^6.0.0, @codemirror/commands@npm:^6.3.3":
+  version: 6.3.3
+  resolution: "@codemirror/commands@npm:6.3.3"
   dependencies:
     "@codemirror/language": "npm:^6.0.0"
-    "@codemirror/state": "npm:^6.0.0"
+    "@codemirror/state": "npm:^6.4.0"
     "@codemirror/view": "npm:^6.0.0"
-    "@lezer/common": "npm:^1.0.0"
-  checksum: 10c0/849eaaea385d7cfc39e752af5393be240535455724cd1ca356dfad71529575ba1bc7c6e3ea2184e1bbb8ebc58f199e261f30eba06d5eabb97f8a63cfd58ac0ba
+    "@lezer/common": "npm:^1.1.0"
+  checksum: 10c0/0b8384e54232c4046a6a1a4fd56081b2040eb072f678b4f6918f0f792c2c66b52540938b7c7cc766e1f9d5173ab0c57707ff486fa351ed60540471ad7ce7dfdd
   languageName: node
   linkType: hard
 
@@ -1866,46 +1866,47 @@ __metadata:
   linkType: hard
 
 "@codemirror/lang-css@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "@codemirror/lang-css@npm:6.0.0"
+  version: 6.2.1
+  resolution: "@codemirror/lang-css@npm:6.2.1"
   dependencies:
     "@codemirror/autocomplete": "npm:^6.0.0"
     "@codemirror/language": "npm:^6.0.0"
     "@codemirror/state": "npm:^6.0.0"
+    "@lezer/common": "npm:^1.0.2"
     "@lezer/css": "npm:^1.0.0"
-  checksum: 10c0/14f4b19d31a30e9bcd98515a306805e42a479d712a770fd9aaed4da6408cb1812967d10867bcaaa2e78f6ce568b9f194bd1d0b26e753f21c19edb17343afba21
+  checksum: 10c0/1196926c0145156bf96f3c9ae71549fbf0a24aa27cdcdc5a7b11107e7c0dbbb3dfd2e84c552978b6378605e03921b0ddc0bfe0617800f7d15cbd245be2f57e40
   languageName: node
   linkType: hard
 
-"@codemirror/lang-html@npm:6.4.5, @codemirror/lang-html@npm:^6.0, @codemirror/lang-html@npm:^6.0.0":
-  version: 6.4.5
-  resolution: "@codemirror/lang-html@npm:6.4.5"
+"@codemirror/lang-html@npm:6.4.8, @codemirror/lang-html@npm:^6.0.0, @codemirror/lang-html@npm:^6.4.8":
+  version: 6.4.8
+  resolution: "@codemirror/lang-html@npm:6.4.8"
   dependencies:
     "@codemirror/autocomplete": "npm:^6.0.0"
     "@codemirror/lang-css": "npm:^6.0.0"
     "@codemirror/lang-javascript": "npm:^6.0.0"
     "@codemirror/language": "npm:^6.4.0"
     "@codemirror/state": "npm:^6.0.0"
-    "@codemirror/view": "npm:^6.2.2"
+    "@codemirror/view": "npm:^6.17.0"
     "@lezer/common": "npm:^1.0.0"
     "@lezer/css": "npm:^1.1.0"
     "@lezer/html": "npm:^1.3.0"
-  checksum: 10c0/91256d3ed451654bd7f512ad316bba239b5143a434428a1ecfb773e8930fdff55698265210f350cccb744af69665e36cfb5b85ba398b61efcfc1f9797bd2666e
+  checksum: 10c0/ce8329fa2c26ad6e08875cb3cee65c72ddf20e9ee33b698bdef61e104dcf223a5fda6ff519af57cd0a9a15299b08ab8769fb8e6f58752c076aaceb7ddbddb0f7
   languageName: node
   linkType: hard
 
 "@codemirror/lang-javascript@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "@codemirror/lang-javascript@npm:6.0.0"
+  version: 6.2.2
+  resolution: "@codemirror/lang-javascript@npm:6.2.2"
   dependencies:
     "@codemirror/autocomplete": "npm:^6.0.0"
-    "@codemirror/language": "npm:^6.0.0"
+    "@codemirror/language": "npm:^6.6.0"
     "@codemirror/lint": "npm:^6.0.0"
     "@codemirror/state": "npm:^6.0.0"
-    "@codemirror/view": "npm:^6.0.0"
+    "@codemirror/view": "npm:^6.17.0"
     "@lezer/common": "npm:^1.0.0"
     "@lezer/javascript": "npm:^1.0.0"
-  checksum: 10c0/0a23d4f69eea8c9c741ff73881c4c3201c0d835b88edf304c96e186d1f16897b660333c913001689d335125c2cd3ac06f92baaa5134038092316f4c6300bfcd6
+  checksum: 10c0/348969167fa5f18e8ec7e3614d408a95a54514f5625afcc680377d58a53d0f4ea412dcaeee65f0965e7d96f358d513b5c2744641b21ee5d0d976905b33715e48
   languageName: node
   linkType: hard
 
@@ -1919,32 +1920,32 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/lang-markdown@npm:6.2.0":
-  version: 6.2.0
-  resolution: "@codemirror/lang-markdown@npm:6.2.0"
+"@codemirror/lang-markdown@npm:6.2.4":
+  version: 6.2.4
+  resolution: "@codemirror/lang-markdown@npm:6.2.4"
   dependencies:
     "@codemirror/autocomplete": "npm:^6.7.1"
     "@codemirror/lang-html": "npm:^6.0.0"
     "@codemirror/language": "npm:^6.3.0"
     "@codemirror/state": "npm:^6.0.0"
     "@codemirror/view": "npm:^6.0.0"
-    "@lezer/common": "npm:^1.0.0"
+    "@lezer/common": "npm:^1.2.1"
     "@lezer/markdown": "npm:^1.0.0"
-  checksum: 10c0/2d928a47fce003e98f58cb8ba35bc226268d2d920d77a7e3e9d17dbf7bc8fca64c8c369773c61bd7042c8989e8808a9be9ec95bbee7074e6a32ec8ef2e9dd2f6
+  checksum: 10c0/54c38ecb5e6decc47835f4012141689d41419da4e9188e4c889d7ca296e730f12adb826c9f9c8305557641d961287c88f91873353c5ad67a1f4db9129226078a
   languageName: node
   linkType: hard
 
-"@codemirror/language@npm:6.8.0, @codemirror/language@npm:^6.0, @codemirror/language@npm:^6.0.0, @codemirror/language@npm:^6.3.0, @codemirror/language@npm:^6.4.0":
-  version: 6.8.0
-  resolution: "@codemirror/language@npm:6.8.0"
+"@codemirror/language@npm:6.10.1, @codemirror/language@npm:^6.0.0, @codemirror/language@npm:^6.10.1, @codemirror/language@npm:^6.3.0, @codemirror/language@npm:^6.4.0, @codemirror/language@npm:^6.6.0":
+  version: 6.10.1
+  resolution: "@codemirror/language@npm:6.10.1"
   dependencies:
     "@codemirror/state": "npm:^6.0.0"
-    "@codemirror/view": "npm:^6.0.0"
-    "@lezer/common": "npm:^1.0.0"
+    "@codemirror/view": "npm:^6.23.0"
+    "@lezer/common": "npm:^1.1.0"
     "@lezer/highlight": "npm:^1.0.0"
     "@lezer/lr": "npm:^1.0.0"
     style-mod: "npm:^4.0.0"
-  checksum: 10c0/9e6fc6d57b6e268acf4022193995440f4b6541c5c6dad2707c0fef0b8bffa17230a4fe40d5620dc1a76e35fd1e24c43a59790482dccaab8b77fb31ec704281dc
+  checksum: 10c0/b910b7be491d3c73389e31d54a6910ad82b35f8ba7a7a48048ea949d881a16e261789b133bee7d458bc5cb1a14eaa2e18f50ac643da17a29d9323d346d3f2a74
   languageName: node
   linkType: hard
 
@@ -1962,40 +1963,40 @@ __metadata:
   linkType: hard
 
 "@codemirror/lint@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "@codemirror/lint@npm:6.0.0"
+  version: 6.5.0
+  resolution: "@codemirror/lint@npm:6.5.0"
   dependencies:
     "@codemirror/state": "npm:^6.0.0"
     "@codemirror/view": "npm:^6.0.0"
     crelt: "npm:^1.0.5"
-  checksum: 10c0/7d8ec3e3e47d08c4a2f91f1957ae373fcc80541ccd528796cf88a2035ad80414010b5e2db846ece911badefc616b7adb873ac0c4af5ea35c61161395f52da834
+  checksum: 10c0/5180cc4c56bf8da78d9e506c3f4d281108194103c050a9babd1304bc50a91085d99616cd19cc9fae3c0d55a3288ab5112c1cb4b4b52c4fd032d6396954b0abd8
   languageName: node
   linkType: hard
 
 "@codemirror/rangeset@npm:^0.19.0, @codemirror/rangeset@npm:^0.19.5":
-  version: 0.19.5
-  resolution: "@codemirror/rangeset@npm:0.19.5"
+  version: 0.19.9
+  resolution: "@codemirror/rangeset@npm:0.19.9"
   dependencies:
     "@codemirror/state": "npm:^0.19.0"
-  checksum: 10c0/61e2c5914aabf3cc1a62cfc58f8a71d8919085d5b180bc949a35ce54f74c67c35d6b854ec3426a732f88b81f3107291033bf5ce54dcb01b7f5419a1cf5a9ff7d
+  checksum: 10c0/40fc64994f8020f29c224f4f5a5f83b4cb46252f14ec3837258e3fa27228df59fb891d67f0b42bf873b07543f3965b2e6d5a5ea567481792c904b0031b041236
   languageName: node
   linkType: hard
 
 "@codemirror/search@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "@codemirror/search@npm:6.0.0"
+  version: 6.5.6
+  resolution: "@codemirror/search@npm:6.5.6"
   dependencies:
     "@codemirror/state": "npm:^6.0.0"
     "@codemirror/view": "npm:^6.0.0"
     crelt: "npm:^1.0.5"
-  checksum: 10c0/cb8c1b9929c55b6055405b8e10e7d15868f780426420186fbf53ce3e25e45159af791878fec0250b8a482d365e9cd4600fa771651589961b6ca12b9e36215418
+  checksum: 10c0/4bb8ca46d105e4b7eb5830c65abc61302f5cc86f0118c5ad3f0fe72d2a7f7309a7394eba8c784a8ac152569e16003f6edf3d69a7da6dac0c7abe96fe5395ed9b
   languageName: node
   linkType: hard
 
-"@codemirror/state@npm:6.2.1, @codemirror/state@npm:^6.0, @codemirror/state@npm:^6.0.0, @codemirror/state@npm:^6.1.4":
-  version: 6.2.1
-  resolution: "@codemirror/state@npm:6.2.1"
-  checksum: 10c0/ebae138825791055366efa3ad5c643a4d4718ae159d67664d5e0a226c1f0bd1528695d2eb5d970ad0cef30c301af1f4a3318b0ca271aacacf38f8800eaf51190
+"@codemirror/state@npm:6.4.1, @codemirror/state@npm:^6.0.0, @codemirror/state@npm:^6.4.0, @codemirror/state@npm:^6.4.1":
+  version: 6.4.1
+  resolution: "@codemirror/state@npm:6.4.1"
+  checksum: 10c0/cdab74d0ca4e262531a257ac419c9c44124f3ace8b0ca1262598a9218fbb6fd8f0afeb4b5ed2f64552a9573a0fc5d55481d4b9b05e9505ef729f9bd0f9469423
   languageName: node
   linkType: hard
 
@@ -2009,20 +2010,20 @@ __metadata:
   linkType: hard
 
 "@codemirror/text@npm:^0.19.0":
-  version: 0.19.3
-  resolution: "@codemirror/text@npm:0.19.3"
-  checksum: 10c0/41a9608e62623f6c17f9596a785c248819833e36e2094ab556e8b81fe6b2328ac53bf2ba13e536b619c29fe5b1a44bed289566d5d24efe46d72dace9965d2ac2
+  version: 0.19.6
+  resolution: "@codemirror/text@npm:0.19.6"
+  checksum: 10c0/2c7cf96116e704e0126e4105f5a91b5feda1c9b403de47bb40ef9e650af2e38a1ba5d8f8e40725e8756260589e41337d1f815f634307adf5cd6df4bf95b61718
   languageName: node
   linkType: hard
 
-"@codemirror/view@npm:6.14.1, @codemirror/view@npm:^6.0, @codemirror/view@npm:^6.0.0, @codemirror/view@npm:^6.2.2, @codemirror/view@npm:^6.6.0":
-  version: 6.14.1
-  resolution: "@codemirror/view@npm:6.14.1"
+"@codemirror/view@npm:6.25.1, @codemirror/view@npm:^6.0.0, @codemirror/view@npm:^6.17.0, @codemirror/view@npm:^6.23.0, @codemirror/view@npm:^6.25.1":
+  version: 6.25.1
+  resolution: "@codemirror/view@npm:6.25.1"
   dependencies:
-    "@codemirror/state": "npm:^6.1.4"
-    style-mod: "npm:^4.0.0"
+    "@codemirror/state": "npm:^6.4.0"
+    style-mod: "npm:^4.1.0"
     w3c-keyname: "npm:^2.2.4"
-  checksum: 10c0/350291524d241d657b5d3e63f5a1a9aa29c6a1d0309663489e52c03cfec8ce9da6f5398d5d77137ae3e0338c5ccb2259e5b3749a2607fa67631a02677281c08d
+  checksum: 10c0/21d41c40a7d44d12fc82efe5ec87d95bc044243d18b12cac04ec40895de34ae0988001b5270a3dc8b4687d0d65054ed848134764ae9bbebcc8e0a6d1a6f09b8a
   languageName: node
   linkType: hard
 
@@ -4782,7 +4783,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lezer/common@npm:1.2.1, @lezer/common@npm:^1.0.0":
+"@lezer/common@npm:1.2.1, @lezer/common@npm:^1.0.0, @lezer/common@npm:^1.0.2, @lezer/common@npm:^1.1.0, @lezer/common@npm:^1.2.0, @lezer/common@npm:^1.2.1":
   version: 1.2.1
   resolution: "@lezer/common@npm:1.2.1"
   checksum: 10c0/af61436dc026f8deebaded13d8e1beea2ae307cbbfb270116cdedadb8208f0674da9c3b5963128a2b1cd4072b4e90bc8128133f4feaf31b6e801e4568f1a15a6
@@ -4797,80 +4798,83 @@ __metadata:
   linkType: hard
 
 "@lezer/css@npm:^1.0.0, @lezer/css@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "@lezer/css@npm:1.1.0"
+  version: 1.1.8
+  resolution: "@lezer/css@npm:1.1.8"
   dependencies:
+    "@lezer/common": "npm:^1.2.0"
     "@lezer/highlight": "npm:^1.0.0"
     "@lezer/lr": "npm:^1.0.0"
-  checksum: 10c0/e0162dc0acfadce977bbf84d7de32da8ff823888b0387a9eec29ec2b7f8edcb5714ea027fe8ba62fc40ed1dd63ba4e8cd11b733285f12d0c767ed7b392dc5f72
+  checksum: 10c0/d28a84c912eedd675b437a7d0b95c72a6c00987da7dc208049889f64ce57250e9ae640856d007a32df6b8f4b0c8986e7751b40e2536b4df26382a78ead362281
   languageName: node
   linkType: hard
 
-"@lezer/highlight@npm:^1.0, @lezer/highlight@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@lezer/highlight@npm:1.0.0"
+"@lezer/highlight@npm:^1.0.0, @lezer/highlight@npm:^1.1.3, @lezer/highlight@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "@lezer/highlight@npm:1.2.0"
   dependencies:
     "@lezer/common": "npm:^1.0.0"
-  checksum: 10c0/99d29fc04074921dd26229f0a60e6e97d7d0a3f762e2164607aac6b17e61a5a6ebe9b643af9a2939e000b049ebbeabcc1d803477aafb4606f4cf664131cc5707
+  checksum: 10c0/d4312f95b78e4b6f10833b1cf99601c6381c22b755bbf60fd61d6fe9b4cf7780650e2e2dadf75beb8d94824dcb5ec81da5cfc9ca54122688a482e488103105aa
   languageName: node
   linkType: hard
 
 "@lezer/html@npm:^1.3.0":
-  version: 1.3.0
-  resolution: "@lezer/html@npm:1.3.0"
+  version: 1.3.9
+  resolution: "@lezer/html@npm:1.3.9"
   dependencies:
-    "@lezer/common": "npm:^1.0.0"
+    "@lezer/common": "npm:^1.2.0"
     "@lezer/highlight": "npm:^1.0.0"
     "@lezer/lr": "npm:^1.0.0"
-  checksum: 10c0/b6a232acea5c70a2725349a679f3b95ef765042b2bbc93542704970b658f0378ed0f1043fca10223885a1fd222692f0b8d953fba3692c5da5687327e745d6384
+  checksum: 10c0/05677a9788456805812efa42028824136c7d7bb9a8d0236404531a74805de8998fda50198da71ed385459a5f4b9f2c13c85b7cddd173f8e0001be5d37ecd62a4
   languageName: node
   linkType: hard
 
 "@lezer/javascript@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@lezer/javascript@npm:1.0.0"
+  version: 1.4.13
+  resolution: "@lezer/javascript@npm:1.4.13"
   dependencies:
-    "@lezer/highlight": "npm:^1.0.0"
-    "@lezer/lr": "npm:^1.0.0"
-  checksum: 10c0/4972a7596225aac5be480696435ed1040e21674e5f06e96c6785ee3d32a4f299a708a0743e6cf4f6b00039730a79ce046d4e3ab13e708839981e7d8055bdefd8
+    "@lezer/common": "npm:^1.2.0"
+    "@lezer/highlight": "npm:^1.1.3"
+    "@lezer/lr": "npm:^1.3.0"
+  checksum: 10c0/0d2f18eec3f0eeddcf01b61ca94dbe29e792ce1797aaefeef6886607de151b6b66c6d7180c6e4ea0895ccbb28d4b596b70e70685c4e1ad05b5ccbe34cc9552a2
   languageName: node
   linkType: hard
 
 "@lezer/json@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@lezer/json@npm:1.0.0"
+  version: 1.0.2
+  resolution: "@lezer/json@npm:1.0.2"
   dependencies:
+    "@lezer/common": "npm:^1.2.0"
     "@lezer/highlight": "npm:^1.0.0"
     "@lezer/lr": "npm:^1.0.0"
-  checksum: 10c0/f760e074ff53c80c5501fde733b08a2961c1b21926fa252b5954418fc1fdcc01f491197dcd17b9e2b5b8e749463c580318336a41a1d828feadf44259b1d3e61f
+  checksum: 10c0/a84283b4e4ded682b5e90a068c52155deaeac79e8dc16da0e9904e72633be029a00ad2da26daa259e503ae3b116722985c3e15d9448336e5f0fde59f79b716ad
   languageName: node
   linkType: hard
 
 "@lezer/lr@npm:^0.15.0":
-  version: 0.15.4
-  resolution: "@lezer/lr@npm:0.15.4"
+  version: 0.15.8
+  resolution: "@lezer/lr@npm:0.15.8"
   dependencies:
     "@lezer/common": "npm:^0.15.0"
-  checksum: 10c0/040f6e70078ac86dd94dc06836d620ca7c0f4fa42c1053eaf88396b79c4fa1113794a7e6897476f8b5be3af73cf571ef06a803abb7205dec8729637634bb4448
+  checksum: 10c0/5cd5123aca5cb2f268d265b6c21922ba3426ba60b9bbc1df85f4bfeed48097a444c656e642557fa93de8a8eb00d3254f502ce2796ae9edc1d186f14fa540a863
   languageName: node
   linkType: hard
 
-"@lezer/lr@npm:^1.0, @lezer/lr@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@lezer/lr@npm:1.0.0"
+"@lezer/lr@npm:^1.0.0, @lezer/lr@npm:^1.3.0, @lezer/lr@npm:^1.4.0":
+  version: 1.4.0
+  resolution: "@lezer/lr@npm:1.4.0"
   dependencies:
     "@lezer/common": "npm:^1.0.0"
-  checksum: 10c0/e40d6ad2b469a457d15b2ea2aec9da6ca6de0cb661e1a04f0fe852697268d6ec177aab396fdb671b30e4be53d29d5106c9948bab742439ae97084363cf7986e5
+  checksum: 10c0/1e3af297cc142bb6676cb3c4e1bd310da2e93b53273cf745dc85d839a08e1d3cbbd67e0fc0322a480cf25ee215fefe967c53bc2af3ddf5d9b1bf267081dfa164
   languageName: node
   linkType: hard
 
 "@lezer/markdown@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@lezer/markdown@npm:1.0.0"
+  version: 1.2.0
+  resolution: "@lezer/markdown@npm:1.2.0"
   dependencies:
     "@lezer/common": "npm:^1.0.0"
     "@lezer/highlight": "npm:^1.0.0"
-  checksum: 10c0/3d3e9516c5ade0d813f84f61672409cfd9fe043c012209aef6113edc08e07ab4791a53ae9784a5e3c13503e253eb91d04f9fdefb104075e9d84201b0429906d9
+  checksum: 10c0/92661c69789e5a5ed8250058f8671eef88b9c1c9c4dca65ef1c68191691da1ec88026d06d45c1982c1c325e9831d8c5056663942157a34370661ce5e1eae291c
   languageName: node
   linkType: hard
 
@@ -5061,17 +5065,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@neinteractiveliterature/litform@npm:0.28.0":
-  version: 0.28.0
-  resolution: "@neinteractiveliterature/litform@npm:0.28.0"
+"@neinteractiveliterature/litform@npm:0.29.0":
+  version: 0.29.0
+  resolution: "@neinteractiveliterature/litform@npm:0.29.0"
   dependencies:
-    "@codemirror/commands": "npm:^6.0"
-    "@codemirror/lang-html": "npm:^6.0"
-    "@codemirror/language": "npm:^6.0"
-    "@codemirror/state": "npm:^6.0"
-    "@codemirror/view": "npm:^6.0"
-    "@lezer/highlight": "npm:^1.0"
-    "@lezer/lr": "npm:^1.0"
+    "@codemirror/commands": "npm:^6.3.3"
+    "@codemirror/lang-html": "npm:^6.4.8"
+    "@codemirror/language": "npm:^6.10.1"
+    "@codemirror/state": "npm:^6.4.1"
+    "@codemirror/view": "npm:^6.25.1"
+    "@lezer/highlight": "npm:^1.2.0"
+    "@lezer/lr": "npm:^1.4.0"
     "@popperjs/core": "npm:^2.11.5"
     classnames: "npm:^2.3.1"
     codemirror: "npm:^6.0"
@@ -5087,7 +5091,7 @@ __metadata:
     "@apollo/client": ^3.3.18
     graphql: ^15.5.0
     react: ">= 18"
-  checksum: 10c0/2ac652a65ce7d9c6b76f4a771198d10b07d4c1e7b3bbd85d22d43e6612b7df59d0ddbb76d312e62a76cb1d9b4f6a7a1c5284b4b8b5f240d314d8b40308473359
+  checksum: 10c0/b82c1466e02537f6ecc95e77a26130435f07a35f698a55e85baf4f26ec48235d3776ffd85eba345719be59d34669365a2ec40f1d5c0eb4eb5b3c0727a285724e
   languageName: node
   linkType: hard
 
@@ -21380,12 +21384,12 @@ __metadata:
   dependencies:
     "@apollo/client": "npm:3.9.6"
     "@codemirror/highlight": "npm:0.19.8"
-    "@codemirror/lang-html": "npm:6.4.5"
+    "@codemirror/lang-html": "npm:6.4.8"
     "@codemirror/lang-json": "npm:6.0.1"
-    "@codemirror/lang-markdown": "npm:6.2.0"
-    "@codemirror/language": "npm:6.8.0"
-    "@codemirror/state": "npm:6.2.1"
-    "@codemirror/view": "npm:6.14.1"
+    "@codemirror/lang-markdown": "npm:6.2.4"
+    "@codemirror/language": "npm:6.10.1"
+    "@codemirror/state": "npm:6.4.1"
+    "@codemirror/view": "npm:6.25.1"
     "@dnd-kit/core": "npm:6.1.0"
     "@dnd-kit/sortable": "npm:8.0.0"
     "@dnd-kit/utilities": "npm:3.2.2"
@@ -21402,7 +21406,7 @@ __metadata:
     "@graphql-eslint/eslint-plugin": "npm:3.20.1"
     "@juggle/resize-observer": "npm:3.4.0"
     "@lezer/common": "npm:1.2.1"
-    "@neinteractiveliterature/litform": "npm:0.28.0"
+    "@neinteractiveliterature/litform": "npm:0.29.0"
     "@popperjs/core": "npm:2.11.8"
     "@prettier/plugin-ruby": "npm:4.0.4"
     "@rails/activestorage": "npm:7.1.3"
@@ -22780,10 +22784,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"style-mod@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "style-mod@npm:4.0.0"
-  checksum: 10c0/9720b81d4023174ee7680c844b84aacf1026d96ab1d9fc42d09acaf9c82358860fbd9322308154c9449c86a612d94408a6978e1a3847b2cd38c7157443c9b437
+"style-mod@npm:^4.0.0, style-mod@npm:^4.1.0":
+  version: 4.1.2
+  resolution: "style-mod@npm:4.1.2"
+  checksum: 10c0/ad4d870b3642b0e42ecc7be0e106dd14b7af11985e34fee8de34e5e38c3214bfc96fa7055acea86d75a3a59ddea3f6a8c6641001a66494d7df72d09685e3fadb
   languageName: node
   linkType: hard
 
