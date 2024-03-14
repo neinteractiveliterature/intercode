@@ -15,7 +15,7 @@ import { conventionRequiresDates } from './runTimeFormatting';
 import { LoadQueryWrapper, notEmpty } from '@neinteractiveliterature/litform/dist';
 import { useScheduleGridConventionDataQuery } from './ScheduleGrid/queries.generated';
 import useFilterableFormItems from './useFilterableFormItems';
-import EventListFilterableFormItemDropdown from './EventList/EventListFilterableFormItemDropdown';
+import EventListFilterableFormItemDropdown from './EventCatalog/EventList/EventListFilterableFormItemDropdown';
 import useReactRouterReactTable from '../Tables/useReactRouterReactTable';
 import { buildFieldFilterCodecs, FilterCodecs } from '../Tables/FilterUtils';
 import { reactTableFiltersToTableResultsFilters } from '../Tables/TableUtils';

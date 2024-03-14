@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 
 import AppRootContext from '../AppRootContext';
-import EventList from './EventList';
 import EventPage from './EventPage';
 import RunSignupSummary from './SignupAdmin/RunSignupSummary';
 import SignupAdmin from './SignupAdmin';
@@ -16,6 +15,8 @@ import EditTeamMember from './TeamMemberAdmin/EditTeamMember';
 import TeamMembersIndex from './TeamMemberAdmin/TeamMembersIndex';
 import { SiteMode, TicketMode } from '../graphqlTypes.generated';
 import EventTicketTypesWrapper from './EventTicketTypesWrapper';
+import EventList from './EventCatalog/EventList';
+import EventTable from './EventCatalog/EventTable';
 
 const LazyTicketTypeAdmin = React.lazy(() => import('../TicketTypeAdmin'));
 
@@ -31,6 +32,7 @@ function EventsApp(): JSX.Element {
       {siteMode !== SiteMode.SingleEvent && (
         <Route path="schedule_with_counts/*" element={<Navigate to="../schedule" replace />} />
       )}
+      {siteMode !== SiteMode.SingleEvent && <Route path="table" element={<EventTable />} />}
       <Route path=":eventId">
         <Route
           path="edit"

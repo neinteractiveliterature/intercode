@@ -3,9 +3,9 @@ import * as React from 'react';
 import isEqual from 'lodash/isEqual';
 import { SortingRule } from 'react-table';
 
-import AppRootContext from '../../AppRootContext';
-import { DropdownMenu } from '../../UIComponents/DropdownMenu';
-import humanize from '../../humanize';
+import AppRootContext from '../../../AppRootContext';
+import { DropdownMenu } from '../../../UIComponents/DropdownMenu';
+import humanize from '../../../humanize';
 
 const SORT_ORDERS = [
   { sorted: [{ id: 'title', desc: false }], caption: 'title' },

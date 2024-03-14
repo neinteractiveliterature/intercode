@@ -2,10 +2,10 @@ import { useState, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import { ChoiceSet } from '@neinteractiveliterature/litform';
 
-import { DropdownMenu } from '../../UIComponents/DropdownMenu';
-import { locationsEqualWithSearchParamsTransform } from '../../URLUtils';
+import { DropdownMenu } from '../../../UIComponents/DropdownMenu';
+import { locationsEqualWithSearchParamsTransform } from '../../../URLUtils';
 import { useTranslation } from 'react-i18next';
-import { CommonConventionDataQueryData } from '../queries.generated';
+import { CommonConventionDataQueryData } from '../../queries.generated';
 
 type ConventionType = NonNullable<CommonConventionDataQueryData['convention']>;
 type LocationType = ReturnType<typeof useLocation>;

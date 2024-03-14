@@ -1,19 +1,20 @@
-import { useMemo, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Column, FilterProps, CellProps } from 'react-table';
 
-import { breakValueIntoUnitQuantities } from '../FormPresenter/TimespanItemUtils';
 import ChoiceSetFilter from '../Tables/ChoiceSetFilter';
 import { buildFieldFilterCodecs, FilterCodecs } from '../Tables/FilterUtils';
 import FreeTextFilter from '../Tables/FreeTextFilter';
 import useReactTableWithTheWorks, { QueryDataContext } from '../Tables/useReactTableWithTheWorks';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
-import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 import TableHeader from '../Tables/TableHeader';
 import usePageTitle from '../usePageTitle';
 import UserConProfileWithGravatarCell from '../Tables/UserConProfileWithGravatarCell';
 import { SingleLineTimestampCell } from '../Tables/TimestampCell';
 import { EventProposalsAdminQueryData, useEventProposalsAdminQuery } from './queries.generated';
+import EventCategoryCell from '../Tables/EventCategoryCell';
+import EventCategoryFilter from '../Tables/EventCategoryFilter';
+import DurationCell from '../Tables/DurationCell';
+import CapacityCell from '../Tables/CapacityCell';
 
 type EventProposalType = EventProposalsAdminQueryData['convention']['event_proposals_paginated']['entries'][0];
 
@@ -22,17 +23,7 @@ const FILTER_CODECS = buildFieldFilterCodecs({
   event_category: FilterCodecs.integerArray,
 });
 
-function formatCapacity(registrationPolicy: NonNullable<EventProposalType['registration_policy']>) {
-  if (!registrationPolicy.slots_limited) {
-    return 'unlimited';
-  }
 
-  if (registrationPolicy.total_slots === registrationPolicy.minimum_slots) {
-    return registrationPolicy.total_slots;
-  }
-
-  return `${registrationPolicy.minimum_slots}-${registrationPolicy.total_slots}`;
-}
 
 const STATUS_OPTIONS = [
   { value: 'proposed', label: 'Proposed', badgeClass: 'bg-light text-dark' },
@@ -42,29 +33,6 @@ const STATUS_OPTIONS = [
   { value: 'rejected', label: 'Rejected', badgeClass: 'bg-danger' },
   { value: 'withdrawn', label: 'Withdrawn', badgeClass: 'bg-warning' },
 ] as const;
-
-function EventCategoryCell({ value }: { value: EventProposalType['event_category'] }) {
-  return (
-    <span className="p-1 small rounded" style={getEventCategoryStyles({ eventCategory: value, variant: 'default' })}>
-      {value.name}
-    </span>
-  );
-}
-
-function CapacityCell({ value }: { value: NonNullable<EventProposalType['registration_policy']> }) {
-  return <div className="text-nowrap text-end">{formatCapacity(value)}</div>;
-}
-
-function DurationCell({ value }: { value: EventProposalType['length_seconds'] }) {
-  if (value == null) {
-    return <></>;
-  }
-  const unitQuantities = breakValueIntoUnitQuantities(value);
-  const hours = (unitQuantities.find(({ unit }) => unit.name === 'hour') || {}).quantity || 0;
-  const minutes = (unitQuantities.find(({ unit }) => unit.name === 'minute') || {}).quantity || 0;
-
-  return <div className="text-nowrap text-end">{`${hours}:${minutes.toString().padStart(2, '0')}`}</div>;
-}
 
 function StatusFilter(props: FilterProps<EventProposalType>) {
   return <ChoiceSetFilter {...props} choices={STATUS_OPTIONS} multiple />;
@@ -92,21 +60,6 @@ function ExtraCell({ row: { original } }: CellProps<EventProposalType>) {
   );
 }
 
-const EventCategoryFilter = (props: FilterProps<EventProposalType>) => {
-  const data = useContext(QueryDataContext) as EventProposalsAdminQueryData;
-  const choices = useMemo(
-    () =>
-      data
-        ? data.convention.event_categories.map((eventCategory) => ({
-            value: eventCategory.id.toString(),
-            label: eventCategory.name,
-          }))
-        : [],
-    [data],
-  );
-
-  return <ChoiceSetFilter {...props} choices={choices} multiple />;
-};
 
 function getPossibleColumns(): Column<EventProposalType>[] {
   return [
