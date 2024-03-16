@@ -13,11 +13,11 @@ class CsvExportsController < ApplicationController
     ].freeze
 
     def format_run_start_day(run)
-      run.starts_at.strftime('%a')
+      run.starts_at.strftime("%a")
     end
 
     def format_run_start_time(run)
-      run.starts_at.strftime('%a %-l:%M%P')
+      run.starts_at.strftime("%a %-l:%M%P")
     end
 
     def format_run_rooms(run)
@@ -91,7 +91,7 @@ class CsvExportsController < ApplicationController
         params[:sort],
         params[:columns]
       ),
-      RunSignupsFilenameFinder.new.unique_filename(run.event, run, 'Signup change history')
+      RunSignupsFilenameFinder.new.unique_filename(run.event, run, "Signup change history")
     )
   end
 
@@ -107,7 +107,20 @@ class CsvExportsController < ApplicationController
         params[:sort],
         params[:columns]
       ),
-      RunSignupsFilenameFinder.new.unique_filename(run.event, run, 'Signups')
+      RunSignupsFilenameFinder.new.unique_filename(run.event, run, "Signups")
+    )
+  end
+
+  def runs
+    send_table_presenter_csv(
+      Tables::RunsTableResultsPresenter.for_convention(
+        convention: convention,
+        pundit_user: pundit_user,
+        filters: params[:filters]&.to_unsafe_h,
+        sort: params[:sort],
+        visible_field_ids: params[:columns]
+      ),
+      "#{convention.name} Events"
     )
   end
 
@@ -121,10 +134,10 @@ class CsvExportsController < ApplicationController
           )
         ).resolve,
         params[:filters]&.to_unsafe_h,
-        [{ field: 'created_at', desc: true }],
+        [{ field: "created_at", desc: true }],
         params[:columns]
       ),
-      [convention.name, 'Signup Changelog', Time.zone.today.iso8601].compact.join(' - ')
+      [convention.name, "Signup Changelog", Time.zone.today.iso8601].compact.join(" - ")
     )
   end
 
@@ -153,7 +166,7 @@ class CsvExportsController < ApplicationController
         params[:sort],
         params[:columns]
       ),
-      'Users'
+      "Users"
     )
   end
 end

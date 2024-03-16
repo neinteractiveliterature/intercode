@@ -748,6 +748,7 @@ export type Convention = CmsParent & {
    * convention, or the run's event is no longer active, errors out.
    */
   run: Run;
+  runs_paginated: RunsPagination;
   show_event_list?: Maybe<ShowSchedule>;
   show_schedule?: Maybe<ShowSchedule>;
   /**
@@ -923,6 +924,14 @@ export type ConventionProductsArgs = {
 
 export type ConventionRunArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type ConventionRuns_PaginatedArgs = {
+  filters?: InputMaybe<RunFiltersInput>;
+  page?: InputMaybe<Scalars['Int']['input']>;
+  per_page?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<SortInput>>;
 };
 
 
@@ -4280,11 +4289,32 @@ export type RunSignups_PaginatedArgs = {
   sort?: InputMaybe<Array<SortInput>>;
 };
 
+export type RunFiltersInput = {
+  category?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  form_items?: InputMaybe<Scalars['JSON']['input']>;
+  my_rating?: InputMaybe<Array<Scalars['Int']['input']>>;
+  title?: InputMaybe<Scalars['String']['input']>;
+  title_prefix?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type RunInput = {
   roomIds?: InputMaybe<Array<Scalars['ID']['input']>>;
   schedule_note?: InputMaybe<Scalars['String']['input']>;
   starts_at?: InputMaybe<Scalars['Date']['input']>;
   title_suffix?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type RunsPagination = PaginationInterface & {
+  __typename: 'RunsPagination';
+  /** The number of the page currently being returned in this query */
+  current_page: Scalars['Int']['output'];
+  entries: Array<Run>;
+  /** The number of items per page currently being returned in this query */
+  per_page: Scalars['Int']['output'];
+  /** The total number of items in the paginated list (across all pages) */
+  total_entries: Scalars['Int']['output'];
+  /** The total number of pages in the paginated list */
+  total_pages: Scalars['Int']['output'];
 };
 
 export type SalesCountByProductAndPaymentAmount = {

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'csv'
+require "csv"
 
 class Tables::TableResultsPresenter
   class Field
@@ -8,7 +8,7 @@ class Tables::TableResultsPresenter
     def self.column_filter(column_name = nil, filter_on_blank: false)
       define_method :apply_filter do |scope, value|
         return scope if value.blank? && !filter_on_blank
-        scope.where((column_name || id) => value)
+        scope.where(column_name || id => value)
       end
     end
 
@@ -58,32 +58,34 @@ class Tables::TableResultsPresenter
 
     def invert_sort_direction(direction)
       case direction.to_s.upcase
-      when 'DESC'
-        'ASC'
+      when "DESC"
+        "ASC"
       else
-        'DESC'
+        "DESC"
       end
     end
   end
 
   class FormField < Field
-    attr_reader :form_item
+    attr_reader :form_item, :get_form_response_from_row
 
-    def initialize(presenter, form_item)
+    def initialize(presenter, form_item, get_form_response_from_row: nil)
       super(presenter)
       @form_item = form_item
+      @get_form_response_from_row = get_form_response_from_row
     end
 
     def id
-      form_item.identifier.to_sym
+      :"form_fields[#{form_item.identifier}]"
     end
 
     def csv_header
-      form_item.properties['admin_description'] || form_item.identifier.humanize
+      form_item.properties["public_description"] || form_item.identifier.humanize
     end
 
-    def generate_csv_cell(form_response)
-      form_response.read_form_response_attribute(id)
+    def generate_csv_cell(row)
+      form_response = (get_form_response_from_row ? get_form_response_from_row.call(row) : row)
+      form_response.read_form_response_attribute(form_item.identifier)
     end
   end
 
@@ -196,12 +198,12 @@ class Tables::TableResultsPresenter
 
     expanded_scope =
       sort.inject(scope) do |current_scope, sort_entry|
-        fields[sort_entry[:field].to_sym].expand_scope_for_sort(current_scope, sort_entry[:desc] ? 'DESC' : 'ASC')
+        fields[sort_entry[:field].to_sym].expand_scope_for_sort(current_scope, sort_entry[:desc] ? "DESC" : "ASC")
       end
 
     expanded_scope.order(
       sort.filter_map do |entry|
-        direction = entry[:desc] ? 'DESC' : 'ASC'
+        direction = entry[:desc] ? "DESC" : "ASC"
         fields[entry[:field].to_sym].sql_order(direction)
       end
     )

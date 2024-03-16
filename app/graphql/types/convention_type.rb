@@ -349,6 +349,17 @@ class Types::ConventionType < Types::BaseObject
     Run.where(event_id: object.events.active.select(:id)).find(id)
   end
 
+  pagination_field :runs_paginated, Types::RunsPaginationType, Types::RunFiltersInputType
+
+  def runs_paginated(**args)
+    Tables::RunsTableResultsPresenter.for_convention(
+      convention: object,
+      pundit_user: pundit_user,
+      filters: args[:filters].to_h,
+      sort: args[:sort]
+    ).paginate(page: args[:page], per_page: args[:per_page])
+  end
+
   field :staff_positions, [Types::StaffPositionType], null: false
   field :show_event_list, Types::ShowScheduleType, null: true
   field :show_schedule, Types::ShowScheduleType, null: true

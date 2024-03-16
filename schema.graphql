@@ -894,6 +894,30 @@ type Convention implements CmsParent {
     """
     id: ID!
   ): Run!
+  runs_paginated(
+    """
+    Filters to restrict what items will appear in the result set.
+    """
+    filters: RunFiltersInput
+
+    """
+    The page number to return from the result set.  Page numbers start with 1.
+    """
+    page: Int
+
+    """
+    The number of items to return per page.  Defaults to 20, can go up to 200.
+    """
+    per_page: Int
+
+    """
+    A set of fields to use for ordering the result set. The second field is used as a
+    tiebreaker for the first, the third field is used as a tiebreaker for the first two,
+    and so on. If the sort argument is missing or empty, the order of items will be left
+    up to the database (and may be unpredictable).
+    """
+    sort: [SortInput!]
+  ): RunsPagination!
   show_event_list: ShowSchedule
   show_schedule: ShowSchedule
 
@@ -5108,11 +5132,42 @@ type Run {
   waitlisted_signup_count: Int!
 }
 
+input RunFiltersInput {
+  category: [Int]
+  form_items: JSON
+  my_rating: [Int!]
+  title: String
+  title_prefix: String
+}
+
 input RunInput {
   roomIds: [ID!]
   schedule_note: String
   starts_at: Date
   title_suffix: String
+}
+
+type RunsPagination implements PaginationInterface {
+  """
+  The number of the page currently being returned in this query
+  """
+  current_page: Int!
+  entries: [Run!]!
+
+  """
+  The number of items per page currently being returned in this query
+  """
+  per_page: Int!
+
+  """
+  The total number of items in the paginated list (across all pages)
+  """
+  total_entries: Int!
+
+  """
+  The total number of pages in the paginated list
+  """
+  total_pages: Int!
 }
 
 type SalesCountByProductAndPaymentAmount {
