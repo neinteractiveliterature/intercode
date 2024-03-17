@@ -2,7 +2,7 @@ import { lazy, ComponentType } from 'react';
 
 const HEADERS_TO_CHECK_FOR_MISMATCH = ['last-modified', 'etag', 'content-length'] as const;
 
-let appEntrypointHeaders: Record<typeof HEADERS_TO_CHECK_FOR_MISMATCH[number], string | null> | undefined;
+let appEntrypointHeaders: Record<(typeof HEADERS_TO_CHECK_FOR_MISMATCH)[number], string | null> | undefined;
 
 async function appEntrypointHeadersMatch() {
   try {

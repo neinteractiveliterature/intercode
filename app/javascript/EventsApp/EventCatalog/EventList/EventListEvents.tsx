@@ -5,12 +5,12 @@ import { DateTime } from 'luxon';
 
 import EventCard from './EventCard';
 import getSortedRuns from './getSortedRuns';
-import { timespanFromConvention, getConventionDayTimespans } from '../../TimespanUtils';
-import AppRootContext from '../../AppRootContext';
+import { timespanFromConvention, getConventionDayTimespans } from '../../../TimespanUtils';
+import AppRootContext from '../../../AppRootContext';
 import { EventListEventsQueryData } from './queries.generated';
-import { FiniteTimespan } from '../../Timespan';
-import { useAppDateTimeFormat } from '../../TimeUtils';
-import { CommonConventionDataFragment } from '../queries.generated';
+import { FiniteTimespan } from '../../../Timespan';
+import { useAppDateTimeFormat } from '../../../TimeUtils';
+import { CommonConventionDataFragment } from '../../queries.generated';
 
 export type EventListEventsProps = {
   convention: NonNullable<EventListEventsQueryData['convention']>;

@@ -1,6 +1,12 @@
 import { useMemo, useState } from 'react';
 import { ApolloError } from '@apollo/client';
-import { LoadingIndicator, ErrorDisplay, parseIntOrNull, FormGroupWithLabel, useConfirm } from '@neinteractiveliterature/litform';
+import {
+  LoadingIndicator,
+  ErrorDisplay,
+  parseIntOrNull,
+  FormGroupWithLabel,
+  useConfirm,
+} from '@neinteractiveliterature/litform';
 
 import formatMoney from '../formatMoney';
 import sortProductVariants from './sortProductVariants';
@@ -77,7 +83,7 @@ export default LoadQueryWithVariablesWrapper(
       if (product.clickwrap_agreement_html != null) {
         confirm({
           action: addToCart,
-          prompt: <div dangerouslySetInnerHTML={{ __html: product.clickwrap_agreement_html }} />
+          prompt: <div dangerouslySetInnerHTML={{ __html: product.clickwrap_agreement_html }} />,
         });
       } else {
         await addToCart();

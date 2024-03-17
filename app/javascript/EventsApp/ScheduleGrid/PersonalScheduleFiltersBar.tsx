@@ -6,7 +6,7 @@ import { parseIntOrNull } from '@neinteractiveliterature/litform';
 import ChoiceSetFilter from '../../Tables/ChoiceSetFilter';
 import { buildFieldFilterCodecs, FilterCodecs } from '../../Tables/FilterUtils';
 import useReactRouterReactTable from '../../Tables/useReactRouterReactTable';
-import { RATING_OPTIONS } from '../EventList/EventListMyRatingSelector';
+import { RATING_OPTIONS } from '../EventCatalog/EventList/EventListMyRatingSelector';
 
 const filterCodecs = buildFieldFilterCodecs({
   my_rating: FilterCodecs.integerArray,

@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { DropdownMenu } from '../../UIComponents/DropdownMenu';
-import { locationsEqualWithSearchParamsTransform } from '../../URLUtils';
-import FormItemFilter, { ConventionForFormItemFilter } from '../../FormPresenter/ItemFilters/FormItemFilter';
-import { TypedFormItem } from '../../FormAdmin/FormItemUtils';
+import { DropdownMenu } from '../../../UIComponents/DropdownMenu';
+import { locationsEqualWithSearchParamsTransform } from '../../../URLUtils';
+import FormItemFilter, { ConventionForFormItemFilter } from '../../../FormPresenter/ItemFilters/FormItemFilter';
+import { TypedFormItem } from '../../../FormAdmin/FormItemUtils';
 
 type LocationType = ReturnType<typeof useLocation>;
 

@@ -1,7 +1,7 @@
 import sortBy from 'lodash/sortBy';
 import { DateTime } from 'luxon';
 
-import { Run } from '../../graphqlTypes.generated';
+import { Run } from '../../../graphqlTypes.generated';
 
 export default function getSortedRuns<EventType extends { runs: Pick<Run, 'starts_at'>[] }>(
   event: EventType,

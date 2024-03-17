@@ -10,7 +10,7 @@ import AppRootContext from '../AppRootContext';
 import { ConventionFieldsFragment, EventFieldsFragment, RunFieldsFragment } from './queries.generated';
 import { useUpdateEventAdminNotesMutation } from './mutations.generated';
 import { timespanFromRun } from '../TimespanUtils';
-import getSortedRuns from '../EventsApp/EventList/getSortedRuns';
+import getSortedRuns from '../EventsApp/EventCatalog/EventList/getSortedRuns';
 import { getDateTimeFormat } from '../TimeUtils';
 import { useFormatRunTimespan } from '../EventsApp/runTimeFormatting';
 

@@ -34,17 +34,24 @@ export default function EditProductForm<ProductType extends WithRealOrGeneratedI
 }: EditProductFormProps<ProductType>) {
   const { t } = useTranslation();
   const { ticketName } = useContext(AppRootContext);
-  const [setAvailable, setName, setPaymentOptions, setPricingStructure, setDescription, setProductVariants, setClickwrapAgreement] =
-    usePropertySetters(
-      setProduct,
-      'available',
-      'name',
-      'payment_options',
-      'pricing_structure',
-      'description',
-      'product_variants',
-      'clickwrap_agreement'
-    );
+  const [
+    setAvailable,
+    setName,
+    setPaymentOptions,
+    setPricingStructure,
+    setDescription,
+    setProductVariants,
+    setClickwrapAgreement,
+  ] = usePropertySetters(
+    setProduct,
+    'available',
+    'name',
+    'payment_options',
+    'pricing_structure',
+    'description',
+    'product_variants',
+    'clickwrap_agreement',
+  );
   const imageChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = (event.target.files ?? [])[0];
     if (!file) {

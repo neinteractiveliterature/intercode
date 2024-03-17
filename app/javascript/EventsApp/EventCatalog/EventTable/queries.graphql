@@ -1,0 +1,65 @@
+query EventCatalogRunsQuery(
+  $page: Int
+  $pageSize: Int
+  $filters: RunFiltersInput
+  $sort: [SortInput!]
+  $fetchFormItemIdentifiers: [String!]
+) {
+  currentAbility {
+    can_read_schedule
+  }
+
+  convention: conventionByRequestHost {
+    id
+    timezone_mode
+
+    runs_paginated(page: $page, per_page: $pageSize, filters: $filters, sort: $sort) {
+      total_entries
+      total_pages
+      current_page
+      per_page
+
+      entries {
+        id
+        starts_at
+        title_suffix
+        schedule_note
+
+        event {
+          id
+          title
+          created_at
+          description_html
+          short_blurb_html
+          form_response_attrs_json_with_rendered_markdown(itemIdentifiers: $fetchFormItemIdentifiers)
+          my_rating
+          length_seconds
+          author
+
+          event_category {
+            id
+          }
+
+          team_members {
+            id
+            display_team_member
+
+            user_con_profile {
+              id
+              last_name
+              name_without_nickname
+              gravatar_enabled
+              gravatar_url
+            }
+          }
+
+          registration_policy {
+            slots_limited
+            total_slots
+            minimum_slots
+          }
+        }
+      }
+    }
+  }
+}

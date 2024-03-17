@@ -92,17 +92,15 @@ declare module 'react-table' {
       // UseRowStateState<D>,
       UseSortByState<D> {}
 
-  export interface ColumnInterface<
-    D extends Record<string, unknown> = Record<string, unknown>,
-  > extends UseFiltersColumnOptions<D>,
+  export interface ColumnInterface<D extends Record<string, unknown> = Record<string, unknown>>
+    extends UseFiltersColumnOptions<D>,
       // UseGlobalFiltersColumnOptions<D>,
       // UseGroupByColumnOptions<D>,
       UseResizeColumnsColumnOptions<D>,
       UseSortByColumnOptions<D> {}
 
-  export interface ColumnInstance<
-    D extends Record<string, unknown> = Record<string, unknown>,
-  > extends UseFiltersColumnProps<D>,
+  export interface ColumnInstance<D extends Record<string, unknown> = Record<string, unknown>>
+    extends UseFiltersColumnProps<D>,
       // UseGroupByColumnProps<D>,
       UseResizeColumnsColumnProps<D>,
       UseSortByColumnProps<D> {}

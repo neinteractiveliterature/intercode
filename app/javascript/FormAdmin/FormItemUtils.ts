@@ -28,7 +28,7 @@ export const FORM_ITEM_ROLES: FormItemRole[] = [
 ];
 
 const GENERATED_ID_ARRAY_PROPERTIES = ['choices', 'presets', 'timeblocks', 'omit_timeblocks'] as const;
-export type GeneratedIdArrayProperty = typeof GENERATED_ID_ARRAY_PROPERTIES[number];
+export type GeneratedIdArrayProperty = (typeof GENERATED_ID_ARRAY_PROPERTIES)[number];
 
 export type ParsedFormItem<PropertiesType, ValueType, ItemType = string> = Omit<
   FormEditorFormItemFieldsFragment,
@@ -43,17 +43,11 @@ export type ParsedFormItem<PropertiesType, ValueType, ItemType = string> = Omit<
   expose_in?: FormItemExposeIn[] | null;
 };
 
-export type FormItemPropertiesType<FormItemType> = FormItemType extends ParsedFormItem<
-  infer PropertiesType,
-  unknown,
-  unknown
->
-  ? PropertiesType
-  : never;
+export type FormItemPropertiesType<FormItemType> =
+  FormItemType extends ParsedFormItem<infer PropertiesType, unknown, unknown> ? PropertiesType : never;
 
-export type FormItemValueType<FormItemType> = FormItemType extends ParsedFormItem<unknown, infer ValueType, unknown>
-  ? ValueType
-  : never;
+export type FormItemValueType<FormItemType> =
+  FormItemType extends ParsedFormItem<unknown, infer ValueType, unknown> ? ValueType : never;
 
 export type WithRequiredIdentifier<T extends ParsedFormItem<unknown, unknown>> = Omit<T, 'identifier'> & {
   identifier: NonNullable<T['identifier']>;
@@ -484,16 +478,16 @@ export function mutationUpdaterForFormSection<ResultDataType>(
 }
 
 export type FormTypeDefinition =
-  | typeof FormTypes['event']
-  | typeof FormTypes['event_proposal']
-  | typeof FormTypes['user_con_profile'];
+  | (typeof FormTypes)['event']
+  | (typeof FormTypes)['event_proposal']
+  | (typeof FormTypes)['user_con_profile'];
 
 export type StandardItemIdentifier<FormType extends FormTypeDefinition> = keyof FormType['standard_items'];
 
 export type AnyStandardItemIdentifier =
-  | StandardItemIdentifier<typeof FormTypes['event']>
-  | StandardItemIdentifier<typeof FormTypes['event_proposal']>
-  | StandardItemIdentifier<typeof FormTypes['user_con_profile']>;
+  | StandardItemIdentifier<(typeof FormTypes)['event']>
+  | StandardItemIdentifier<(typeof FormTypes)['event_proposal']>
+  | StandardItemIdentifier<(typeof FormTypes)['user_con_profile']>;
 
 export type StandardItem = Partial<
   Omit<

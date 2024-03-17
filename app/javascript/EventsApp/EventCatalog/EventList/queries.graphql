@@ -29,6 +29,7 @@ query EventListEventsQuery(
         short_blurb_html
         form_response_attrs_json_with_rendered_markdown(itemIdentifiers: $fetchFormItemIdentifiers)
         my_rating
+        length_seconds
 
         event_category {
           id
@@ -50,6 +51,12 @@ query EventListEventsQuery(
             gravatar_enabled
             gravatar_url
           }
+        }
+
+        registration_policy {
+          slots_limited
+          total_slots
+          minimum_slots
         }
       }
     }

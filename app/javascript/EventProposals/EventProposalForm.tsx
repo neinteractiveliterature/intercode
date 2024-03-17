@@ -54,15 +54,18 @@ function EventProposalFormInner({
     [eventProposal.id, eventProposal.images, attachImage],
   );
 
-  const responseValuesChanged = useCallback((newResponseValues: typeof initialEventProposal['form_response_attrs']) => {
-    setEventProposal((prevEventProposal) => ({
-      ...prevEventProposal,
-      form_response_attrs: {
-        ...prevEventProposal.form_response_attrs,
-        ...newResponseValues,
-      },
-    }));
-  }, []);
+  const responseValuesChanged = useCallback(
+    (newResponseValues: (typeof initialEventProposal)['form_response_attrs']) => {
+      setEventProposal((prevEventProposal) => ({
+        ...prevEventProposal,
+        form_response_attrs: {
+          ...prevEventProposal.form_response_attrs,
+          ...newResponseValues,
+        },
+      }));
+    },
+    [],
+  );
 
   const commitResponse = useCallback(
     async (proposal: typeof eventProposal) => {

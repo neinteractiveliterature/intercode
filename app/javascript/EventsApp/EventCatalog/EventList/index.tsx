@@ -11,22 +11,23 @@ import {
   notEmpty,
 } from '@neinteractiveliterature/litform';
 
-import { buildFieldFilterCodecs, FilterCodecs } from '../../Tables/FilterUtils';
+import { buildFieldFilterCodecs, FilterCodecs } from '../../../Tables/FilterUtils';
 import EventListCategoryDropdown from './EventListCategoryDropdown';
 import EventListEvents from './EventListEvents';
 import EventListSortDropdown from './EventListSortDropdown';
-import useReactRouterReactTable from '../../Tables/useReactRouterReactTable';
-import { reactTableFiltersToTableResultsFilters, reactTableSortToTableResultsSort } from '../../Tables/TableUtils';
-import usePageTitle from '../../usePageTitle';
-import AppRootContext from '../../AppRootContext';
+import useReactRouterReactTable from '../../../Tables/useReactRouterReactTable';
+import { reactTableFiltersToTableResultsFilters, reactTableSortToTableResultsSort } from '../../../Tables/TableUtils';
+import usePageTitle from '../../../usePageTitle';
+import AppRootContext from '../../../AppRootContext';
 import EventListMyRatingSelector from './EventListMyRatingSelector';
-import useAsyncFunction from '../../useAsyncFunction';
+import useAsyncFunction from '../../../useAsyncFunction';
 import { EventListEventsQueryData, useEventListEventsQuery } from './queries.generated';
-import { TypedFormItem } from '../../FormAdmin/FormItemUtils';
+import { TypedFormItem } from '../../../FormAdmin/FormItemUtils';
 import EventListFilterableFormItemDropdown from './EventListFilterableFormItemDropdown';
-import { CommonConventionDataQueryData, useCommonConventionDataQuery } from '../queries.generated';
-import useFilterableFormItems from '../useFilterableFormItems';
-import useMergeCategoriesIntoEvents from '../useMergeCategoriesIntoEvents';
+import { CommonConventionDataQueryData, useCommonConventionDataQuery } from '../../queries.generated';
+import useFilterableFormItems from '../../useFilterableFormItems';
+import useMergeCategoriesIntoEvents from '../../useMergeCategoriesIntoEvents';
+import EventCatalogNavTabs from '../EventCatalogNavTabs';
 
 const PAGE_SIZE = 20;
 
@@ -170,7 +171,9 @@ function EventList({ filterableFormItems, convention }: EventListProps): JSX.Ele
 
   return (
     <>
-      <h1>Events at {convention.name}</h1>
+      <h1>Event Catalog</h1>
+
+      <EventCatalogNavTabs />
 
       <div className="mb-2">
         <div className="d-flex flex-column flex-sm-row mt-4">

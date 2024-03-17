@@ -22,7 +22,7 @@ function TimeblockPreferenceEditor({ formItem, setFormItem }: TimeblockPreferenc
 
   const sensors = useSortableDndSensors();
   const [addTimeblock, timeblockChanged, deleteTimeblock, draggingTimeblock, sortableHandlers] = useArrayProperty<
-    typeof formItem['properties']['timeblocks'][0],
+    (typeof formItem)['properties']['timeblocks'][0],
     typeof formItem,
     'timeblocks'
   >(formItem.properties.timeblocks, 'timeblocks', setFormItem, generateNewTimeblock);

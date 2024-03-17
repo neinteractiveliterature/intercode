@@ -30,7 +30,7 @@ function CreateEventProposalModal({
   departments,
 }: CreateEventProposalModalProps): JSX.Element {
   const { t } = useTranslation();
-  const [cloneEventProposal, setCloneEventProposal] = useState<typeof userEventProposals[0]>();
+  const [cloneEventProposal, setCloneEventProposal] = useState<(typeof userEventProposals)[0]>();
   const topLevelEventCategories = useMemo(
     () => proposableEventCategories.filter((category) => !category.department),
     [proposableEventCategories],
@@ -93,7 +93,7 @@ function CreateEventProposalModal({
           value={department || (eventCategory && eventCategory.department == null ? eventCategory : null)}
           getOptionValue={(option) => `${option.__typename}:${option.id}`}
           getOptionLabel={(option) => option.name}
-          onChange={(entity: typeof topLevelEntities[0]) => {
+          onChange={(entity: (typeof topLevelEntities)[0]) => {
             if (!entity) {
               setDepartment(undefined);
               setEventCategory(undefined);
@@ -125,7 +125,7 @@ function CreateEventProposalModal({
               value={eventCategory}
               getOptionValue={(option) => option.id.toString()}
               getOptionLabel={(option) => option.name}
-              onChange={(category: typeof departmentEventCategories[0]) => {
+              onChange={(category: (typeof departmentEventCategories)[0]) => {
                 setEventCategory(category);
               }}
             />
@@ -156,7 +156,7 @@ function CreateEventProposalModal({
           value={cloneEventProposal}
           getOptionValue={(option) => option.id.toString()}
           getOptionLabel={(option) => `${option.title} (${option.event_category.name}, ${option.convention.name})`}
-          onChange={(proposal: typeof userEventProposals[0]) => {
+          onChange={(proposal: (typeof userEventProposals)[0]) => {
             setCloneEventProposal(proposal);
           }}
         />
