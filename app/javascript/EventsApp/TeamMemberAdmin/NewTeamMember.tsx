@@ -54,7 +54,7 @@ export default LoadQueryWrapper(useTeamMembersQueryFromParams, function NewTeamM
     }),
   );
 
-  const userConProfileChanged = (userConProfile: typeof teamMember['user_con_profile']) =>
+  const userConProfileChanged = (userConProfile: (typeof teamMember)['user_con_profile']) =>
     setTeamMember((prevTeamMember) => ({
       ...prevTeamMember,
       user_con_profile: userConProfile,

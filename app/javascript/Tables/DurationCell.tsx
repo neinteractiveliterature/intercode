@@ -1,4 +1,4 @@
-import { breakValueIntoUnitQuantities } from "../FormPresenter/TimespanItemUtils";
+import { breakValueIntoUnitQuantities } from '../FormPresenter/TimespanItemUtils';
 
 export default function DurationCell({ value }: { value: number | null | undefined }) {
   if (value == null) {

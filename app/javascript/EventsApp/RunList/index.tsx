@@ -78,7 +78,7 @@ export default LoadQueryWithVariablesWrapper(
     const eventsByRunId = useMemo(() => {
       const eventMap = new Map<
         string,
-        typeof data['convention']['events'][number] & {
+        (typeof data)['convention']['events'][number] & {
           event_category: ScheduleGridConventionDataQueryData['convention']['event_categories'][number];
         }
       >();

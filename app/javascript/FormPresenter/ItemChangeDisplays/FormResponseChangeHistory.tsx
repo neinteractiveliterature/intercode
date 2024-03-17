@@ -25,7 +25,7 @@ function FormResponseChangeHistory({
   const changeGroups = useMemo(() => buildChangeGroups(changes, form), [changes, form]);
   const format = useAppDateTimeFormat();
 
-  const renderTimespan = (changeGroup: typeof changeGroups[number]) => {
+  const renderTimespan = (changeGroup: (typeof changeGroups)[number]) => {
     const timespan = getTimespanForChangeGroup(changeGroup);
     return (
       <>

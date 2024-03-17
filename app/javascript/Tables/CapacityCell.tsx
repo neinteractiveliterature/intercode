@@ -1,6 +1,8 @@
-import { RegistrationPolicy } from "../graphqlTypes.generated";
+import { RegistrationPolicy } from '../graphqlTypes.generated';
 
-function formatCapacity(registrationPolicy: Pick<RegistrationPolicy, 'slots_limited' | 'total_slots' | 'minimum_slots'>) {
+function formatCapacity(
+  registrationPolicy: Pick<RegistrationPolicy, 'slots_limited' | 'total_slots' | 'minimum_slots'>,
+) {
   if (!registrationPolicy.slots_limited) {
     return 'unlimited';
   }
@@ -12,7 +14,11 @@ function formatCapacity(registrationPolicy: Pick<RegistrationPolicy, 'slots_limi
   return `${registrationPolicy.minimum_slots}-${registrationPolicy.total_slots}`;
 }
 
-export default function CapacityCell({ value }: { value: Pick<RegistrationPolicy, 'slots_limited' | 'total_slots' | 'minimum_slots'> | null | undefined }) {
+export default function CapacityCell({
+  value,
+}: {
+  value: Pick<RegistrationPolicy, 'slots_limited' | 'total_slots' | 'minimum_slots'> | null | undefined;
+}) {
   if (value == null) {
     return <></>;
   }

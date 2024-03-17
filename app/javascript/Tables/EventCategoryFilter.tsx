@@ -1,9 +1,12 @@
-import {useContext, useMemo } from "react";
-import { FilterProps } from "react-table";
-import { QueryDataContext } from "./useReactTableWithTheWorks";
-import ChoiceSetFilter from "./ChoiceSetFilter";
+import { useContext, useMemo } from 'react';
+import { FilterProps } from 'react-table';
+import { QueryDataContext } from './useReactTableWithTheWorks';
+import ChoiceSetFilter from './ChoiceSetFilter';
 
-export default function EventCategoryFilter<T extends object, QueryData extends { convention: { event_categories: { id: string, name: string }[]}}>(props: FilterProps<T>) {
+export default function EventCategoryFilter<
+  T extends object,
+  QueryData extends { convention: { event_categories: { id: string; name: string }[] } },
+>(props: FilterProps<T>) {
   const data = useContext(QueryDataContext) as QueryData;
   const choices = useMemo(
     () =>
@@ -17,4 +20,4 @@ export default function EventCategoryFilter<T extends object, QueryData extends 
   );
 
   return <ChoiceSetFilter {...props} choices={choices} multiple />;
-};
+}

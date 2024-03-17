@@ -9,8 +9,8 @@ import { useUpdateNotificationTemplateMutation } from './mutations.generated';
 import FourOhFourPage from '../FourOhFourPage';
 
 type NotificationConfigurationFormProps = {
-  category: typeof NotificationsConfig['categories'][number];
-  event: typeof NotificationsConfig['categories'][number]['events'][number];
+  category: (typeof NotificationsConfig)['categories'][number];
+  event: (typeof NotificationsConfig)['categories'][number]['events'][number];
   initialNotificationTemplate: NotificationAdminQueryData['convention']['notification_templates'][number];
   eventKey: string;
 };

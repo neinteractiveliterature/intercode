@@ -49,10 +49,10 @@ export function printTree(
     initialCursor instanceof TreeCursor
       ? initialCursor
       : typeof initialCursor === 'function'
-      ? initialCursor()
-      : initialCursor instanceof Tree
-      ? initialCursor.cursor()
-      : initialCursor.cursor();
+        ? initialCursor()
+        : initialCursor instanceof Tree
+          ? initialCursor.cursor()
+          : initialCursor.cursor();
   let input = initialInput;
   if (typeof input === 'string') input = new StringInput(input);
   const { from = -Infinity, to = Infinity, start = 0, includeParents = false } = options;

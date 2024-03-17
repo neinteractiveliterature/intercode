@@ -73,7 +73,10 @@ export default LoadQueryWrapper<
   RunEmailListProps
 >(useRunSignupsTableSignupsQueryFromParams, function RunEmailList({ data, separator }) {
   const { t } = useTranslation();
-  const [includes, setIncludes] = useState(() => ['teamMembers', ...(data.convention.event.registration_policy?.buckets ?? []).map((bucket) => bucket.key)]);
+  const [includes, setIncludes] = useState(() => [
+    'teamMembers',
+    ...(data.convention.event.registration_policy?.buckets ?? []).map((bucket) => bucket.key),
+  ]);
 
   const mainTitle = useMemo(() => {
     separator === '; '
@@ -99,9 +102,9 @@ export default LoadQueryWrapper<
             },
             ...(data.convention.event.registration_policy?.buckets ?? []).map((bucket) => ({
               label: t('events.signupAdmin.emailFilters.confirmedBucket', 'Include {{ bucketName }} (confirmed)', {
-                bucketName: bucket.name ?? bucket.key
+                bucketName: bucket.name ?? bucket.key,
               }),
-              value: bucket.key
+              value: bucket.key,
             })),
             {
               label: t('events.signupAdmin.emailFilters.waitlisted', 'Include waitlisted'),

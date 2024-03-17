@@ -227,7 +227,7 @@ function TicketAdminSection({ convention, userConProfile }: TicketAdminSectionPr
   const { timezoneName } = useContext(AppRootContext);
   const format = useAppDateTimeFormat();
 
-  const renderTicketData = (ticket: typeof userConProfile['ticket']) => {
+  const renderTicketData = (ticket: (typeof userConProfile)['ticket']) => {
     if (!ticket) {
       return <p>No {convention.ticket_name}</p>;
     }

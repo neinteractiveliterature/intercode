@@ -1,9 +1,8 @@
 export type RealIdObject<IdType> = { id: IdType };
 export type GeneratedIdObject<IdType> = { generatedId: IdType };
 
-export type WithGeneratedId<T, IdType> = T extends RealIdObject<IdType>
-  ? Omit<T, 'id'> & GeneratedIdObject<IdType>
-  : T & GeneratedIdObject<IdType>;
+export type WithGeneratedId<T, IdType> =
+  T extends RealIdObject<IdType> ? Omit<T, 'id'> & GeneratedIdObject<IdType> : T & GeneratedIdObject<IdType>;
 
 export type WithoutGeneratedId<T extends GeneratedIdObject<unknown>> = Omit<T, 'generatedId'>;
 
@@ -14,8 +13,8 @@ export type WithRealId<T extends GeneratedIdObject<IdType>, IdType> = Omit<T, 'g
 export type ArrayWithGeneratedIds<T, IdType> = T extends RealIdObject<IdType>[]
   ? WithGeneratedId<T[0], IdType>[]
   : T extends unknown[]
-  ? (T[0] & GeneratedIdObject<IdType>)[]
-  : never;
+    ? (T[0] & GeneratedIdObject<IdType>)[]
+    : never;
 
 export type ArrayWithoutGeneratedIds<T, IdType> = T extends GeneratedIdObject<IdType>[]
   ? WithRealId<T[0], IdType>[]

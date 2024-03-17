@@ -1,6 +1,6 @@
 import { useState, useContext, Suspense, useId } from 'react';
 import * as React from 'react';
-import {  useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { BootstrapFormInput, LoadingIndicator, ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import { Navigate } from 'react-router-dom';
@@ -62,7 +62,7 @@ async function updateUser(
 }
 
 export default LoadQueryWrapper(useEditUserQuery, function EditUserForm({ data: { currentUser: initialFormState } }) {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const authenticityToken = useContext(AuthenticityTokensContext).updateUser;
   const [formState, setFormState] = useState<UserFormState | undefined>(initialFormState ?? undefined);
   const [password, setPassword] = useState('');

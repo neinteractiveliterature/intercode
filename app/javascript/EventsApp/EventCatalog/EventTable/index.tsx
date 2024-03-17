@@ -1,26 +1,26 @@
-import { LoadQueryWrapper, notEmpty } from "@neinteractiveliterature/litform";
-import { CommonConventionDataQueryData, useCommonConventionDataQuery } from "../../queries.generated";
-import useFilterableFormItems from "../../useFilterableFormItems";
-import { TypedFormItem } from "../../../FormAdmin/FormItemUtils";
-import useReactTableWithTheWorks, { QueryDataContext } from "../../../Tables/useReactTableWithTheWorks";
-import usePageTitle from "../../../usePageTitle";
-import { FilterCodecs, buildFieldFilterCodecs } from "../../../Tables/FilterUtils";
-import TableHeader from "../../../Tables/TableHeader";
-import ReactTableWithTheWorks from "../../../Tables/ReactTableWithTheWorks";
-import { useNavigate } from "react-router";
-import { Column } from "react-table";
-import EventCategoryCell from "../../../Tables/EventCategoryCell";
-import EventCategoryFilter from "../../../Tables/EventCategoryFilter";
-import { useContext, useMemo } from "react";
-import  { SingleLineTimestampCell } from "../../../Tables/TimestampCell";
-import CapacityCell from "../../../Tables/CapacityCell";
-import { EventCatalogRunsQueryData, useEventCatalogRunsQuery } from "./queries.generated";
-import FormItemDisplay from "../../../FormPresenter/ItemDisplays/FormItemDisplay";
-import DurationCell from "../../../Tables/DurationCell";
-import FreeTextFilter from "../../../Tables/FreeTextFilter";
-import HtmlCell from "../../../Tables/HtmlCell";
-import { DateTime } from "luxon";
-import EventCatalogNavTabs from "../EventCatalogNavTabs";
+import { LoadQueryWrapper, notEmpty } from '@neinteractiveliterature/litform';
+import { CommonConventionDataQueryData, useCommonConventionDataQuery } from '../../queries.generated';
+import useFilterableFormItems from '../../useFilterableFormItems';
+import { TypedFormItem } from '../../../FormAdmin/FormItemUtils';
+import useReactTableWithTheWorks, { QueryDataContext } from '../../../Tables/useReactTableWithTheWorks';
+import usePageTitle from '../../../usePageTitle';
+import { FilterCodecs, buildFieldFilterCodecs } from '../../../Tables/FilterUtils';
+import TableHeader from '../../../Tables/TableHeader';
+import ReactTableWithTheWorks from '../../../Tables/ReactTableWithTheWorks';
+import { useNavigate } from 'react-router';
+import { Column } from 'react-table';
+import EventCategoryCell from '../../../Tables/EventCategoryCell';
+import EventCategoryFilter from '../../../Tables/EventCategoryFilter';
+import { useContext, useMemo } from 'react';
+import { SingleLineTimestampCell } from '../../../Tables/TimestampCell';
+import CapacityCell from '../../../Tables/CapacityCell';
+import { EventCatalogRunsQueryData, useEventCatalogRunsQuery } from './queries.generated';
+import FormItemDisplay from '../../../FormPresenter/ItemDisplays/FormItemDisplay';
+import DurationCell from '../../../Tables/DurationCell';
+import FreeTextFilter from '../../../Tables/FreeTextFilter';
+import HtmlCell from '../../../Tables/HtmlCell';
+import { DateTime } from 'luxon';
+import EventCatalogNavTabs from '../EventCatalogNavTabs';
 
 const FILTER_CODECS = buildFieldFilterCodecs({
   status: FilterCodecs.stringArray,
@@ -28,13 +28,19 @@ const FILTER_CODECS = buildFieldFilterCodecs({
 });
 
 function TeamMembersCell({ value }: { value: RunType['event']['team_members'] }) {
-  return <div>{value.filter((teamMember) => teamMember.display_team_member).map((teamMember) => teamMember.user_con_profile.name_without_nickname.trim()).join(", ")}</div>;
+  return (
+    <div>
+      {value
+        .filter((teamMember) => teamMember.display_team_member)
+        .map((teamMember) => teamMember.user_con_profile.name_without_nickname.trim())
+        .join(', ')}
+    </div>
+  );
 }
 
 type RunType = EventCatalogRunsQueryData['convention']['runs_paginated']['entries'][number];
 
 function getPossibleColumns(filterableFormItems: TypedFormItem[]): Column<RunType>[] {
-
   return [
     {
       Header: 'Category',
@@ -101,44 +107,43 @@ function getPossibleColumns(filterableFormItems: TypedFormItem[]): Column<RunTyp
       Header: 'Team members',
       id: 'team_members',
       accessor: (run) => run.event.team_members,
-      Cell: TeamMembersCell
+      Cell: TeamMembersCell,
     },
     {
       Header: 'Author(s)',
       id: 'author',
-      accessor: (run) => run.event.author
+      accessor: (run) => run.event.author,
     },
     {
       Header: 'Event added at',
       id: 'event_created_at',
       accessor: (run) => run.event.created_at,
-      Cell: SingleLineTimestampCell
+      Cell: SingleLineTimestampCell,
     },
-    ...filterableFormItems.map((formItem) => {
-      if (formItem.item_type === 'static_text') {
-        return undefined;
-      }
-
-      return {
-        Header: formItem.public_description ?? formItem.identifier,
-        id: `form_fields[${formItem.identifier}]`,
-        accessor: (run: RunType) => (JSON.parse(run.event.form_response_attrs_json_with_rendered_markdown ?? '{}'))[formItem.identifier],
-        Cell: ({ value }: { value: unknown }) => {
-          const data = useContext(QueryDataContext) as EventCatalogRunsQueryData;
-          return <FormItemDisplay convention={data.convention} formItem={formItem} displayMode="public" value={value}  />
+    ...filterableFormItems
+      .map((formItem) => {
+        if (formItem.item_type === 'static_text') {
+          return undefined;
         }
-      }
-    }).filter(notEmpty)
+
+        return {
+          Header: formItem.public_description ?? formItem.identifier,
+          id: `form_fields[${formItem.identifier}]`,
+          accessor: (run: RunType) =>
+            JSON.parse(run.event.form_response_attrs_json_with_rendered_markdown ?? '{}')[formItem.identifier],
+          Cell: ({ value }: { value: unknown }) => {
+            const data = useContext(QueryDataContext) as EventCatalogRunsQueryData;
+            return (
+              <FormItemDisplay convention={data.convention} formItem={formItem} displayMode="public" value={value} />
+            );
+          },
+        };
+      })
+      .filter(notEmpty),
   ];
 }
 
-const defaultVisibleColumns = [
-  'category',
-  'title',
-  'starts_at',
-  'length_seconds',
-  'total_slots',
-];
+const defaultVisibleColumns = ['category', 'title', 'starts_at', 'length_seconds', 'total_slots'];
 
 type EventTableProps = {
   convention: CommonConventionDataQueryData['convention'];
@@ -162,21 +167,23 @@ function EventTable({ convention, filterableFormItems }: EventTableProps) {
 
   const mergedQueryData = useMemo(() => ({ ...queryData, convention }), [queryData, convention]);
 
-  return <>
-    <h1>Event Catalog</h1>
-    <EventCatalogNavTabs />
-    <div className="mb-4">
-      <TableHeader {...tableHeaderProps} exportUrl="/csv_exports/runs" />
+  return (
+    <>
+      <h1>Event Catalog</h1>
+      <EventCatalogNavTabs />
+      <div className="mb-4">
+        <TableHeader {...tableHeaderProps} exportUrl="/csv_exports/runs" />
 
-      <QueryDataContext.Provider value={mergedQueryData}>
-        <ReactTableWithTheWorks
-          tableInstance={tableInstance}
-          loading={loading}
-          onClickRow={(row) => navigate(`/events/${row.original.id}`)}
-        />
-      </QueryDataContext.Provider>
-    </div>
-  </>;
+        <QueryDataContext.Provider value={mergedQueryData}>
+          <ReactTableWithTheWorks
+            tableInstance={tableInstance}
+            loading={loading}
+            onClickRow={(row) => navigate(`/events/${row.original.id}`)}
+          />
+        </QueryDataContext.Provider>
+      </div>
+    </>
+  );
 }
 
 const EventTableWrapper = LoadQueryWrapper(useCommonConventionDataQuery, ({ data }) => {

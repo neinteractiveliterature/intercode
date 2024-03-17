@@ -30,8 +30,8 @@ export const humanTimeFormat = (time: DateTime, t: TFunction, includeDay?: boole
             ? 'weekdayMidnightWithZone'
             : 'weekdayMidnight'
           : differentZone
-          ? 'midnight'
-          : 'midnightWithZone',
+            ? 'midnight'
+            : 'midnightWithZone',
         t,
       );
     }
@@ -43,8 +43,8 @@ export const humanTimeFormat = (time: DateTime, t: TFunction, includeDay?: boole
             ? 'weekdayNoonWithZone'
             : 'weekdayNoon'
           : differentZone
-          ? 'noonWithZone'
-          : 'noon',
+            ? 'noonWithZone'
+            : 'noon',
         t,
       );
     }
@@ -56,8 +56,8 @@ export const humanTimeFormat = (time: DateTime, t: TFunction, includeDay?: boole
         ? 'shortWeekdayTimeWithZone'
         : 'shortWeekdayTime'
       : differentZone
-      ? 'shortTimeWithZone'
-      : 'shortTime',
+        ? 'shortTimeWithZone'
+        : 'shortTime',
     t,
   );
 };

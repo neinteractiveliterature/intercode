@@ -70,7 +70,7 @@ export default LoadQueryWrapper(useRootSiteAdminQuery, function EditRootSite({ d
         getOptionValue={(option) => option.id.toString()}
         getOptionLabel={(option) => option.name ?? ''}
         options={data.rootSite.cmsLayouts}
-        onChange={(newValue: typeof data['rootSite']['cmsLayouts'][0]) => setDefaultLayout(newValue)}
+        onChange={(newValue: (typeof data)['rootSite']['cmsLayouts'][0]) => setDefaultLayout(newValue)}
         isDisabled={updateInProgress}
       />
 
@@ -82,7 +82,7 @@ export default LoadQueryWrapper(useRootSiteAdminQuery, function EditRootSite({ d
         getOptionValue={(option) => option.id.toString()}
         getOptionLabel={(option) => option.name ?? ''}
         options={data.rootSite.cmsPages}
-        onChange={(newValue: typeof data['rootSite']['rootPage']) => setRootPage(newValue)}
+        onChange={(newValue: (typeof data)['rootSite']['rootPage']) => setRootPage(newValue)}
         isDisabled={updateInProgress}
       />
 

@@ -21,7 +21,7 @@ const DISCOUNT_MODE_CHOICES = [
 ] as const;
 
 const DISCOUNT_MODES = DISCOUNT_MODE_CHOICES.map((choice) => choice.value);
-type DiscountMode = typeof DISCOUNT_MODES[0];
+type DiscountMode = (typeof DISCOUNT_MODES)[0];
 
 const blankProduct: NonNullable<AdminCouponFieldsFragment['provides_product']> = {
   __typename: 'Product',

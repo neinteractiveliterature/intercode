@@ -227,7 +227,7 @@ export default class Schedule {
           id: roomName,
           rowHeader: roomName,
           runIds: runIdsByRoomMap.get(roomName) ?? [],
-        } as ScheduleGroup),
+        }) as ScheduleGroup,
     );
   }
 

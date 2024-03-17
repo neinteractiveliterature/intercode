@@ -23,8 +23,6 @@ const FILTER_CODECS = buildFieldFilterCodecs({
   event_category: FilterCodecs.integerArray,
 });
 
-
-
 const STATUS_OPTIONS = [
   { value: 'proposed', label: 'Proposed', badgeClass: 'bg-light text-dark' },
   { value: 'reviewing', label: 'Reviewing', badgeClass: 'bg-info' },
@@ -59,7 +57,6 @@ function ExtraCell({ row: { original } }: CellProps<EventProposalType>) {
     </Link>
   );
 }
-
 
 function getPossibleColumns(): Column<EventProposalType>[] {
   return [

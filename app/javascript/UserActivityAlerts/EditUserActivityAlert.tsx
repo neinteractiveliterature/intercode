@@ -20,7 +20,7 @@ export default LoadSingleValueFromCollectionWrapper(
     const navigate = useNavigate();
     const [userActivityAlert, setUserActivityAlert] = useState(initialUserActivityAlert);
     const [notificationDestinationChangeSet, addNotificationDestination, removeNotificationDestination] =
-      useChangeSet<typeof userActivityAlert['notification_destinations'][0]>();
+      useChangeSet<(typeof userActivityAlert)['notification_destinations'][0]>();
     const [updateMutate] = useUpdateUserActivityAlertMutation();
     const [update, updateError, updateInProgress] = useAsyncFunction(updateMutate);
     const [deleteAlert] = useDeleteMutationWithReferenceArrayUpdater(

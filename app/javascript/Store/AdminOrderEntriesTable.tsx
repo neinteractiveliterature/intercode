@@ -111,7 +111,7 @@ function AdminOrderEntriesTable<
           product,
           product_variant: null,
           price_per_item: product?.pricing_structure?.price,
-        } as T),
+        }) as T,
     );
   };
 
@@ -122,7 +122,7 @@ function AdminOrderEntriesTable<
           ...prevAddingItem,
           product_variant: variant,
           price_per_item: variant?.override_pricing_structure?.price ?? prevAddingItem?.price_per_item,
-        } as T),
+        }) as T,
     );
   };
 
@@ -267,7 +267,7 @@ function AdminOrderEntriesTable<
                       ({
                         ...prev,
                         quantity: parseIntOrNull(newValue),
-                      } as T),
+                      }) as T,
                   )
                 }
               />
@@ -275,7 +275,7 @@ function AdminOrderEntriesTable<
             <td>
               <InPlaceMoneyEditor
                 value={addingItem.price_per_item}
-                onChange={(value) => setAddingItem((prev) => ({ ...prev, price_per_item: value } as T))}
+                onChange={(value) => setAddingItem((prev) => ({ ...prev, price_per_item: value }) as T)}
                 disabled={createInProgress}
               >
                 {formatMoney(addingItem.price_per_item)}

@@ -36,7 +36,7 @@ function UserActivityAlertForm({
   const userSelectId = useId();
   const confirm = useConfirm();
   const [addDestinationType, setAddDestinationType] = useState<string | null>(null);
-  const addStaffPositionDestination = (staffPosition: typeof convention['staff_positions'][0]) => {
+  const addStaffPositionDestination = (staffPosition: (typeof convention)['staff_positions'][0]) => {
     onAddNotificationDestination({
       __typename: 'NotificationDestination',
       staff_position: staffPosition,

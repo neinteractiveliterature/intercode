@@ -9,11 +9,11 @@ import { Search, TfIdfSearchIndex } from 'js-search';
 
 import timezoneSelectData from './timezoneSelectData.json';
 
-function isValidZone(zoneName: string): zoneName is keyof typeof timezoneSelectData['zones'] {
+function isValidZone(zoneName: string): zoneName is keyof (typeof timezoneSelectData)['zones'] {
   return zoneName in timezoneSelectData.zones;
 }
 
-type ZoneData = typeof timezoneSelectData['zones']['America/New_York'];
+type ZoneData = (typeof timezoneSelectData)['zones']['America/New_York'];
 
 interface TfIdfSearchIndexWithOverridableCreate extends TfIdfSearchIndex {
   _createCalculateTfIdf(): (tokens: string[], document: BoostableDocument, documents: BoostableDocument[]) => number;
