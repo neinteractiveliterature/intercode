@@ -29,10 +29,12 @@ query EventCatalogRunsQuery(
           id
           title
           created_at
+          description_html
           short_blurb_html
           form_response_attrs_json_with_rendered_markdown(itemIdentifiers: $fetchFormItemIdentifiers)
           my_rating
           length_seconds
+          author
 
           event_category {
             id

@@ -13,7 +13,7 @@ export type EventCatalogRunsQueryVariables = Types.Exact<{
 }>;
 
 
-export type EventCatalogRunsQueryData = { __typename: 'Query', currentAbility: { __typename: 'Ability', can_read_schedule: boolean }, convention: { __typename: 'Convention', id: string, timezone_mode: Types.TimezoneMode, runs_paginated: { __typename: 'RunsPagination', total_entries: number, total_pages: number, current_page: number, per_page: number, entries: Array<{ __typename: 'Run', id: string, starts_at: string, title_suffix?: string | null, schedule_note?: string | null, event: { __typename: 'Event', id: string, title?: string | null, created_at?: string | null, short_blurb_html?: string | null, form_response_attrs_json_with_rendered_markdown?: string | null, my_rating?: number | null, length_seconds: number, event_category: { __typename: 'EventCategory', id: string }, runs: Array<{ __typename: 'Run', id: string }>, team_members: Array<{ __typename: 'TeamMember', id: string, display_team_member: boolean, user_con_profile: { __typename: 'UserConProfile', id: string, last_name: string, name_without_nickname: string, gravatar_enabled: boolean, gravatar_url: string } }>, registration_policy?: { __typename: 'RegistrationPolicy', slots_limited?: boolean | null, total_slots?: number | null, minimum_slots?: number | null } | null } }> } } };
+export type EventCatalogRunsQueryData = { __typename: 'Query', currentAbility: { __typename: 'Ability', can_read_schedule: boolean }, convention: { __typename: 'Convention', id: string, timezone_mode: Types.TimezoneMode, runs_paginated: { __typename: 'RunsPagination', total_entries: number, total_pages: number, current_page: number, per_page: number, entries: Array<{ __typename: 'Run', id: string, starts_at: string, title_suffix?: string | null, schedule_note?: string | null, event: { __typename: 'Event', id: string, title?: string | null, created_at?: string | null, description_html?: string | null, short_blurb_html?: string | null, form_response_attrs_json_with_rendered_markdown?: string | null, my_rating?: number | null, length_seconds: number, author?: string | null, event_category: { __typename: 'EventCategory', id: string }, team_members: Array<{ __typename: 'TeamMember', id: string, display_team_member: boolean, user_con_profile: { __typename: 'UserConProfile', id: string, last_name: string, name_without_nickname: string, gravatar_enabled: boolean, gravatar_url: string } }>, registration_policy?: { __typename: 'RegistrationPolicy', slots_limited?: boolean | null, total_slots?: number | null, minimum_slots?: number | null } | null } }> } } };
 
 
 export const EventCatalogRunsQueryDocument = gql`
@@ -38,16 +38,15 @@ export const EventCatalogRunsQueryDocument = gql`
           id
           title
           created_at
+          description_html
           short_blurb_html
           form_response_attrs_json_with_rendered_markdown(
             itemIdentifiers: $fetchFormItemIdentifiers
           )
           my_rating
           length_seconds
+          author
           event_category {
-            id
-          }
-          runs {
             id
           }
           team_members {

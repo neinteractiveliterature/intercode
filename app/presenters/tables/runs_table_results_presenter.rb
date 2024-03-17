@@ -74,6 +74,7 @@ class Tables::RunsTableResultsPresenter < Tables::TableResultsPresenter
   end
 
   field :starts_at, "Starts at"
+  field :ends_at, "Ends at"
 
   field :length_seconds, "Duration" do
     def generate_csv_cell(run)
@@ -83,6 +84,33 @@ class Tables::RunsTableResultsPresenter < Tables::TableResultsPresenter
   end
 
   field :event_created_at, "Event added at"
+
+  field :total_slots, "Capacity" do
+    def generate_csv_cell(run)
+      registration_policy = run.event.registration_policy
+      return unless registration_policy
+
+      if !registration_policy.slots_limited?
+        "unlimited"
+      elsif registration_policy.total_slots == registration_policy.minimum_slots
+        registration_policy.total_slots
+      else
+        "#{registration_policy.minimum_slots}-#{registration_policy.total_slots}"
+      end
+    end
+  end
+
+  field :team_members, "Team members" do
+    def generate_csv_cell(run)
+      run.event.team_members.select(&:display?).map { |tm| tm.user_con_profile.name_without_nickname.strip }.join(", ")
+    end
+  end
+
+  field :author, "Author(s)" do
+    def generate_csv_cell(run)
+      run.event.author
+    end
+  end
 
   field :form_items, "Convention-specific form items" do
     def apply_filter(scope, value)
@@ -99,6 +127,18 @@ class Tables::RunsTableResultsPresenter < Tables::TableResultsPresenter
             acc_scope
           end
         end
+    end
+  end
+
+  field :short_blurb, "Short blurb" do
+    def generate_csv_cell(run)
+      run.event.short_blurb
+    end
+  end
+
+  field :description, "Description" do
+    def generate_csv_cell(run)
+      run.event.description
     end
   end
 

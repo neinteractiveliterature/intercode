@@ -18,11 +18,17 @@ import { EventCatalogRunsQueryData, useEventCatalogRunsQuery } from "./queries.g
 import FormItemDisplay from "../../../FormPresenter/ItemDisplays/FormItemDisplay";
 import DurationCell from "../../../Tables/DurationCell";
 import FreeTextFilter from "../../../Tables/FreeTextFilter";
+import HtmlCell from "../../../Tables/HtmlCell";
+import { DateTime } from "luxon";
 
 const FILTER_CODECS = buildFieldFilterCodecs({
   status: FilterCodecs.stringArray,
   category: FilterCodecs.integerArray,
 });
+
+function TeamMembersCell({ value }: { value: RunType['event']['team_members'] }) {
+  return <div>{value.filter((teamMember) => teamMember.display_team_member).map((teamMember) => teamMember.user_con_profile.name_without_nickname.trim()).join(", ")}</div>;
+}
 
 type RunType = EventCatalogRunsQueryData['convention']['runs_paginated']['entries'][number];
 
@@ -56,6 +62,14 @@ function getPossibleColumns(filterableFormItems: TypedFormItem[]): Column<RunTyp
       Cell: SingleLineTimestampCell,
     },
     {
+      Header: 'Ends at',
+      id: 'ends_at',
+      accessor: (run) => DateTime.fromISO(run.starts_at).plus({ seconds: run.event.length_seconds }).toISO(),
+      width: 80,
+      disableSortBy: false,
+      Cell: SingleLineTimestampCell,
+    },
+    {
       Header: 'Duration',
       id: 'length_seconds',
       accessor: (run) => run.event.length_seconds,
@@ -64,11 +78,34 @@ function getPossibleColumns(filterableFormItems: TypedFormItem[]): Column<RunTyp
       Cell: DurationCell,
     },
     {
+      Header: 'Short blurb',
+      id: 'short_blurb',
+      accessor: (run) => run.event.short_blurb_html,
+      Cell: HtmlCell,
+    },
+    {
+      Header: 'Description',
+      id: 'description',
+      accessor: (run) => run.event.description_html,
+      Cell: HtmlCell,
+    },
+    {
       Header: 'Capacity',
       id: 'total_slots',
       width: 80,
       accessor: (run) => run.event.registration_policy,
       Cell: CapacityCell,
+    },
+    {
+      Header: 'Team members',
+      id: 'team_members',
+      accessor: (run) => run.event.team_members,
+      Cell: TeamMembersCell
+    },
+    {
+      Header: 'Author(s)',
+      id: 'author',
+      accessor: (run) => run.event.author
     },
     {
       Header: 'Event added at',
