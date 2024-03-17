@@ -20,6 +20,7 @@ import DurationCell from "../../../Tables/DurationCell";
 import FreeTextFilter from "../../../Tables/FreeTextFilter";
 import HtmlCell from "../../../Tables/HtmlCell";
 import { DateTime } from "luxon";
+import EventCatalogNavTabs from "../EventCatalogNavTabs";
 
 const FILTER_CODECS = buildFieldFilterCodecs({
   status: FilterCodecs.stringArray,
@@ -162,7 +163,8 @@ function EventTable({ convention, filterableFormItems }: EventTableProps) {
   const mergedQueryData = useMemo(() => ({ ...queryData, convention }), [queryData, convention]);
 
   return <>
-  <h1 className="mb-4">Event Catalog</h1>
+    <h1>Event Catalog</h1>
+    <EventCatalogNavTabs />
     <div className="mb-4">
       <TableHeader {...tableHeaderProps} exportUrl="/csv_exports/runs" />
 

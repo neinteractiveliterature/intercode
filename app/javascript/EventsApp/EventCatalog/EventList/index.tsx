@@ -27,6 +27,7 @@ import EventListFilterableFormItemDropdown from './EventListFilterableFormItemDr
 import { CommonConventionDataQueryData, useCommonConventionDataQuery } from '../../queries.generated';
 import useFilterableFormItems from '../../useFilterableFormItems';
 import useMergeCategoriesIntoEvents from '../../useMergeCategoriesIntoEvents';
+import EventCatalogNavTabs from '../EventCatalogNavTabs';
 
 const PAGE_SIZE = 20;
 
@@ -171,6 +172,8 @@ function EventList({ filterableFormItems, convention }: EventListProps): JSX.Ele
   return (
     <>
       <h1>Event Catalog</h1>
+
+      <EventCatalogNavTabs />
 
       <div className="mb-2">
         <div className="d-flex flex-column flex-sm-row mt-4">
