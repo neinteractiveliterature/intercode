@@ -35,6 +35,8 @@ query EventCatalogRunsQuery(
           my_rating
           length_seconds
           author
+          content_warnings
+          participant_communications
 
           event_category {
             id
