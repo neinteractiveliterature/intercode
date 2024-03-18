@@ -97,6 +97,18 @@ function getPossibleColumns(filterableFormItems: TypedFormItem[]): Column<RunTyp
       Cell: HtmlCell,
     },
     {
+      Header: 'Content warnings',
+      id: 'content_warnings',
+      accessor: (run) => run.event.content_warnings,
+      Cell: HtmlCell,
+    },
+    {
+      Header: 'Participant communications',
+      id: 'participant communications',
+      accessor: (run) => run.event.participant_communications,
+      Cell: HtmlCell,
+    },
+    {
       Header: 'Capacity',
       id: 'total_slots',
       width: 80,

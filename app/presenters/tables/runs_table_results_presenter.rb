@@ -83,8 +83,6 @@ class Tables::RunsTableResultsPresenter < Tables::TableResultsPresenter
     end
   end
 
-  field :event_created_at, "Event added at"
-
   field :total_slots, "Capacity" do
     def generate_csv_cell(run)
       registration_policy = run.event.registration_policy
@@ -139,6 +137,24 @@ class Tables::RunsTableResultsPresenter < Tables::TableResultsPresenter
   field :description, "Description" do
     def generate_csv_cell(run)
       run.event.description
+    end
+  end
+
+  field :content_warnings, "Content warnings" do
+    def generate_csv_cell(run)
+      run.event.content_warnings
+    end
+  end
+
+  field :participant_communications, "Participant communications" do
+    def generate_csv_cell(run)
+      run.event.participant_communications
+    end
+  end
+
+  field :event_created_at, "Event added at" do
+    def generate_csv_cell(run)
+      run.event.created_at
     end
   end
 
