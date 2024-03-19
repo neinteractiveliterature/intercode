@@ -219,7 +219,7 @@
     "ts-node": "10.9.2",
     "typescript": "5.4.2",
     "webpack-cli": "5.1.4",
-    "webpack-dev-server": "5.0.3"
+    "webpack-dev-server": "5.0.4"
   },
   "resolutions": {
     "@typescript-eslint/parser": "7.3.1"

@@ -18379,6 +18379,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"on-finished@npm:^2.4.1":
+  version: 2.4.1
+  resolution: "on-finished@npm:2.4.1"
+  dependencies:
+    ee-first: "npm:1.1.1"
+  checksum: 10c0/46fb11b9063782f2d9968863d9cbba33d77aa13c17f895f56129c274318b86500b22af3a160fe9995aa41317efcd22941b6eba747f718ced08d9a73afdb087b4
+  languageName: node
+  linkType: hard
+
 "on-finished@npm:~2.3.0":
   version: 2.3.0
   resolution: "on-finished@npm:2.3.0"
@@ -21570,7 +21579,7 @@ __metadata:
     webpack-bundle-analyzer: "npm:4.10.1"
     webpack-cli: "npm:5.1.4"
     webpack-dev-middleware: "npm:7.0.0"
-    webpack-dev-server: "npm:5.0.3"
+    webpack-dev-server: "npm:5.0.4"
     webpack-manifest-plugin: "npm:5.0.0"
     webpack-merge: "npm:5.10.0"
     webpack-shell-plugin-next: "npm:2.3.1"
@@ -24418,7 +24427,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-dev-middleware@npm:7.0.0, webpack-dev-middleware@npm:^7.0.0":
+"webpack-dev-middleware@npm:7.0.0":
   version: 7.0.0
   resolution: "webpack-dev-middleware@npm:7.0.0"
   dependencies:
@@ -24451,9 +24460,28 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-dev-server@npm:5.0.3":
-  version: 5.0.3
-  resolution: "webpack-dev-server@npm:5.0.3"
+"webpack-dev-middleware@npm:^7.1.0":
+  version: 7.1.0
+  resolution: "webpack-dev-middleware@npm:7.1.0"
+  dependencies:
+    colorette: "npm:^2.0.10"
+    memfs: "npm:^4.6.0"
+    mime-types: "npm:^2.1.31"
+    on-finished: "npm:^2.4.1"
+    range-parser: "npm:^1.2.1"
+    schema-utils: "npm:^4.0.0"
+  peerDependencies:
+    webpack: ^5.0.0
+  peerDependenciesMeta:
+    webpack:
+      optional: true
+  checksum: 10c0/d739913c0c4f2811e520f07b06d3ada914bb505667c8ad18fbd7ce44765114930a7bf3efaca18f48c877029cba08e37292c86424a071adbac22e10dba7eebc57
+  languageName: node
+  linkType: hard
+
+"webpack-dev-server@npm:5.0.4":
+  version: 5.0.4
+  resolution: "webpack-dev-server@npm:5.0.4"
   dependencies:
     "@types/bonjour": "npm:^3.5.13"
     "@types/connect-history-api-fallback": "npm:^1.5.4"
@@ -24483,7 +24511,7 @@ __metadata:
     serve-index: "npm:^1.9.1"
     sockjs: "npm:^0.3.24"
     spdy: "npm:^4.0.2"
-    webpack-dev-middleware: "npm:^7.0.0"
+    webpack-dev-middleware: "npm:^7.1.0"
     ws: "npm:^8.16.0"
   peerDependencies:
     webpack: ^5.0.0
@@ -24494,7 +24522,7 @@ __metadata:
       optional: true
   bin:
     webpack-dev-server: bin/webpack-dev-server.js
-  checksum: 10c0/5c3802d261f87c10023ad44a9b0f4d6caf696e36b11c78fff815aed0e903bec49f48b61fa7d007127f88d706f26ee6a3a1fe3fd08489224182b1cdeb7f104f59
+  checksum: 10c0/f3b5ffac798bdfdb7cc3d24000bde49816eab42fc6062641e6e61cd0057e8c268d495f8162fb97aeaee5e273c91457e90a99ba780526744ad2002e9e99e57036
   languageName: node
   linkType: hard
 
