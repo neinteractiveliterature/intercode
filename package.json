@@ -152,7 +152,7 @@
     "tinycolor2": "1.6.0",
     "tzdata": "1.0.40",
     "uuid": "9.0.1",
-    "webpack": "5.90.3",
+    "webpack": "5.91.0",
     "webpack-assets-manifest": "5.2.1",
     "webpack-bundle-analyzer": "4.10.1",
     "webpack-dev-middleware": "7.1.1",
