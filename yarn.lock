@@ -6646,12 +6646,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/cssnano@npm:5.0.0":
-  version: 5.0.0
-  resolution: "@types/cssnano@npm:5.0.0"
+"@types/cssnano@npm:5.1.0":
+  version: 5.1.0
+  resolution: "@types/cssnano@npm:5.1.0"
   dependencies:
-    postcss: "npm:^8"
-  checksum: 10c0/3b939509d65c053c274dc261cef17d9329e02d82784b569e441e01fb61dbcd5c914c5f7f53499cc641a1b224c30a9c814e419f8cb682be249d87fa2ddc20e9ae
+    cssnano: "npm:*"
+  checksum: 10c0/bf11bbc9540ec0e8545f71bb081cad27c03910806c31856f4e100b34e1f25bbd26fd84b9041d8595863d103adca91b5051ee7ba70d5c49514b7f2dc8247af445
   languageName: node
   linkType: hard
 
@@ -10726,7 +10726,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cssnano@npm:6.1.1, cssnano@npm:^6.0.3":
+"cssnano@npm:*, cssnano@npm:6.1.1, cssnano@npm:^6.0.3":
   version: 6.1.1
   resolution: "cssnano@npm:6.1.1"
   dependencies:
@@ -19817,7 +19817,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:8.4.38, postcss@npm:^8, postcss@npm:^8.2.14, postcss@npm:^8.4.17, postcss@npm:^8.4.21, postcss@npm:^8.4.26, postcss@npm:^8.4.33":
+"postcss@npm:8.4.38, postcss@npm:^8.2.14, postcss@npm:^8.4.17, postcss@npm:^8.4.21, postcss@npm:^8.4.26, postcss@npm:^8.4.33":
   version: 8.4.38
   resolution: "postcss@npm:8.4.38"
   dependencies:
@@ -21429,7 +21429,7 @@ __metadata:
     "@types/bootstrap": "npm:5.2.10"
     "@types/bytes": "npm:3.1.4"
     "@types/classnames": "npm:2.3.1"
-    "@types/cssnano": "npm:5.0.0"
+    "@types/cssnano": "npm:5.1.0"
     "@types/debounce-promise": "npm:3.1.9"
     "@types/diff": "npm:5.0.9"
     "@types/events": "npm:3.0.3"
