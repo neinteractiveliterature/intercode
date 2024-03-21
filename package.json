@@ -179,7 +179,7 @@
     "@types/bootstrap": "5.2.10",
     "@types/cssnano": "5.1.0",
     "@types/events": "3.0.3",
-    "@types/history": "4.7.11",
+    "@types/history": "5.0.0",
     "@types/jest": "29.5.12",
     "@types/md5": "^2",
     "@types/node": "20.11.30",
