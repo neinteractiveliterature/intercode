@@ -4,7 +4,6 @@
 # Table name: signup_requests
 #
 #  id                   :bigint           not null, primary key
-#  priority             :integer
 #  requested_bucket_key :string
 #  state                :string           default("pending"), not null
 #  created_at           :datetime         not null

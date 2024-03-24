@@ -4912,9 +4912,32 @@
               "args": []
             },
             {
+              "name": "my_signup_ranked_choices",
+              "description": "Returns all signup ranked choices for the current user within this convention. If no user is signed in,\nreturns an empty array.\n",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "SignupRankedChoice",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
               "name": "my_signup_requests",
               "description": "Returns all signup requests for the current user within this convention. If no user is signed in,\nreturns an empty array.\n",
-              "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -4933,7 +4956,8 @@
                 }
               },
               "isDeprecated": false,
-              "deprecationReason": null
+              "deprecationReason": null,
+              "args": []
             },
             {
               "name": "my_signups",
@@ -29632,6 +29656,200 @@
         },
         {
           "kind": "OBJECT",
+          "name": "SignupRankedChoice",
+          "description": null,
+          "interfaces": [],
+          "possibleTypes": null,
+          "fields": [
+            {
+              "name": "created_at",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Date",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "id",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "priority",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "requested_bucket_key",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "result_signup",
+              "description": null,
+              "type": {
+                "kind": "OBJECT",
+                "name": "Signup",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "state",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "SignupRankedChoiceState",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "target_run",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Run",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "updated_at",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Date",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "updated_by",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "User",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "user_con_profile",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "UserConProfile",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            }
+          ],
+          "inputFields": null,
+          "enumValues": null
+        },
+        {
+          "kind": "ENUM",
+          "name": "SignupRankedChoiceState",
+          "description": null,
+          "interfaces": null,
+          "possibleTypes": null,
+          "fields": null,
+          "inputFields": null,
+          "enumValues": [
+            {
+              "name": "pending",
+              "description": "We have not yet attempted to process this choice",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "signed_up",
+              "description": "The attendee has been signed up (see the result_signup field for the actual signup)",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "waitlisted",
+              "description": "The attendee has been waitlisted (see the result_signup field for the actual signup)",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "skipped",
+              "description": "We attempted to process this choice but could not, so we skipped it",
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ]
+        },
+        {
+          "kind": "OBJECT",
           "name": "SignupRequest",
           "description": null,
           "interfaces": [],
@@ -29672,14 +29890,14 @@
             {
               "name": "priority",
               "description": null,
-              "args": [],
               "type": {
                 "kind": "SCALAR",
                 "name": "Int",
                 "ofType": null
               },
               "isDeprecated": false,
-              "deprecationReason": null
+              "deprecationReason": null,
+              "args": []
             },
             {
               "name": "replace_signup",

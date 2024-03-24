@@ -226,6 +226,17 @@ class Types::ConventionType < Types::BaseObject
     my_profile&.signups || []
   end
 
+  field :my_signup_ranked_choices, [Types::SignupRankedChoiceType], null: false, camelize: false do
+    description <<~MARKDOWN
+      Returns all signup ranked choices for the current user within this convention. If no user is signed in,
+      returns an empty array.
+    MARKDOWN
+  end
+
+  def my_signup_ranked_choices
+    my_profile&.signup_ranked_choices || []
+  end
+
   field :my_signup_requests, [Types::SignupRequestType], null: false, camelize: false do
     description <<~MARKDOWN
       Returns all signup requests for the current user within this convention. If no user is signed in,

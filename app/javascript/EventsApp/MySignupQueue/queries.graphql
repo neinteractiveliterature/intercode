@@ -2,7 +2,7 @@ query MySignupQueueQuery {
   convention: conventionByRequestHost {
     id
 
-    my_signup_requests {
+    my_signup_ranked_choices {
       id
       state
       priority

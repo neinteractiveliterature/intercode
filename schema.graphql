@@ -777,6 +777,12 @@ type Convention implements CmsParent {
   my_profile: UserConProfile
 
   """
+  Returns all signup ranked choices for the current user within this convention. If no user is signed in,
+  returns an empty array.
+  """
+  my_signup_ranked_choices: [SignupRankedChoice!]!
+
+  """
   Returns all signup requests for the current user within this convention. If no user is signed in,
   returns an empty array.
   """
@@ -5416,6 +5422,41 @@ type SignupMoveResult {
   signup: Signup!
   signup_id: Int!
   state: SignupState!
+}
+
+type SignupRankedChoice {
+  created_at: Date!
+  id: ID!
+  priority: Int
+  requested_bucket_key: String
+  result_signup: Signup
+  state: SignupRankedChoiceState!
+  target_run: Run!
+  updated_at: Date!
+  updated_by: User!
+  user_con_profile: UserConProfile!
+}
+
+enum SignupRankedChoiceState {
+  """
+  We have not yet attempted to process this choice
+  """
+  pending
+
+  """
+  The attendee has been signed up (see the result_signup field for the actual signup)
+  """
+  signed_up
+
+  """
+  We attempted to process this choice but could not, so we skipped it
+  """
+  skipped
+
+  """
+  The attendee has been waitlisted (see the result_signup field for the actual signup)
+  """
+  waitlisted
 }
 
 type SignupRequest {

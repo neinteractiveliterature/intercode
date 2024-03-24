@@ -58,6 +58,7 @@ class UserConProfile < ApplicationRecord
   has_many :run_tickets, -> { where.not(run_id: nil) }, class_name: "Ticket", dependent: :destroy
   has_many :team_members, dependent: :destroy
   has_many :signups, dependent: :destroy
+  has_many :signup_ranked_choices, dependent: :destroy
   has_many :signup_requests, dependent: :destroy
   has_many :event_proposals, foreign_key: :owner_id, dependent: :nullify
   has_many :event_ratings, dependent: :destroy

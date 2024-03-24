@@ -4,18 +4,18 @@ import { DateTime } from 'luxon';
 import { LoadQueryWrapper } from '@neinteractiveliterature/litform/dist';
 import { useMySignupQueueQuery } from './queries.generated';
 import { useMemo } from 'react';
-import { SignupRequestState } from '../../graphqlTypes.generated';
+import { SignupRankedChoiceState } from '../../graphqlTypes.generated';
 import sortBy from 'lodash/sortBy';
 
 const MySignupQueue = LoadQueryWrapper(useMySignupQueueQuery, ({ data }) => {
   const { t } = useTranslation();
 
-  const pendingSignupRequests = useMemo(() => {
-    const pendingRequests = data.convention.my_signup_requests.filter(
-      (request) => request.state === SignupRequestState.Pending,
+  const pendingChoices = useMemo(() => {
+    const pendingChoices = data.convention.my_signup_ranked_choices.filter(
+      (choice) => choice.state === SignupRankedChoiceState.Pending,
     );
-    return sortBy(pendingRequests, (request) => request.priority);
-  }, [data.convention.my_signup_requests]);
+    return sortBy(pendingChoices, (request) => request.priority);
+  }, [data.convention.my_signup_ranked_choices]);
 
   return (
     <>
@@ -32,7 +32,7 @@ const MySignupQueue = LoadQueryWrapper(useMySignupQueueQuery, ({ data }) => {
           })}
         </div>
         <ul className="list-group list-group-flush text-dark">
-          {pendingSignupRequests.map((signupRequest, index) => (
+          {pendingChoices.map((pendingChoice, index) => (
             <>
               <li className="list-group-item d-flex align-items-center">
                 <div className="me-3">
@@ -54,18 +54,18 @@ const MySignupQueue = LoadQueryWrapper(useMySignupQueueQuery, ({ data }) => {
                 <div className="flex-grow-1 me-3">
                   <div>
                     <strong>
-                      {signupRequest.target_run.event.event_category.name}: {signupRequest.target_run.event.title}
-                      {signupRequest.target_run.title_suffix && `(${signupRequest.target_run.title_suffix})`}
+                      {pendingChoice.target_run.event.event_category.name}: {pendingChoice.target_run.event.title}
+                      {pendingChoice.target_run.title_suffix && `(${pendingChoice.target_run.title_suffix})`}
                     </strong>
                     <br />
                     {formatLCM(
-                      DateTime.fromISO(signupRequest.target_run.starts_at),
+                      DateTime.fromISO(pendingChoice.target_run.starts_at),
                       getDateTimeFormat('shortWeekdayTimeWithZone', t),
                     )}{' '}
                     |{' '}
                     {
-                      signupRequest.target_run.event.registration_policy?.buckets.find(
-                        (bucket) => bucket.key === signupRequest.requested_bucket_key,
+                      pendingChoice.target_run.event.registration_policy?.buckets.find(
+                        (bucket) => bucket.key === pendingChoice.requested_bucket_key,
                       )?.name
                     }
                   </div>

@@ -1,13 +1,13 @@
 # frozen_string_literal: true
-class ExecuteRankedChoiceSignupRequestsService < CivilService::Service
+class ExecuteRankedChoiceSignupsService < CivilService::Service
   class RankedChoiceDecision
-    attr_reader :user_con_profile, :decision, :reason, :signup_request, :signup, :extra
+    attr_reader :user_con_profile, :decision, :reason, :signup_ranked_choice, :signup, :extra
 
-    def initialize(user_con_profile:, decision:, reason: nil, signup_request: nil, signup: nil, **extra)
+    def initialize(user_con_profile:, decision:, reason: nil, signup_ranked_choice: nil, signup: nil, **extra)
       @user_con_profile = user_con_profile
       @decision = decision
       @reason = reason
-      @signup_request = signup_request
+      @signup_ranked_choice = signup_ranked_choice
       @signup = signup
       @extra = extra
     end
@@ -30,7 +30,7 @@ class ExecuteRankedChoiceSignupRequestsService < CivilService::Service
   end
 
   def inner_call
-    ordered_user_con_profiles.to_a.each { |user_con_profile| execute_requests_for_user_con_profile(user_con_profile) }
+    ordered_user_con_profiles.to_a.each { |user_con_profile| execute_choices_for_user_con_profile(user_con_profile) }
 
     success(decisions: decisions)
   end
@@ -44,11 +44,11 @@ class ExecuteRankedChoiceSignupRequestsService < CivilService::Service
     when :desc
       convention.user_con_profiles.order(lottery_number: :desc)
     else
-      raise "Unknown order for executing signup requests: #{order.inspect}"
+      raise "Unknown order for executing signup choices: #{order.inspect}"
     end
   end
 
-  def execute_requests_for_user_con_profile(user_con_profile)
+  def execute_choices_for_user_con_profile(user_con_profile)
     constraints = UserSignupConstraints.new(user_con_profile)
     unless constraints.has_ticket_if_required?
       log_skip_user(user_con_profile: user_con_profile, reason: :missing_ticket)
@@ -60,24 +60,24 @@ class ExecuteRankedChoiceSignupRequestsService < CivilService::Service
       return
     end
 
-    pending_requests = user_con_profile.signup_requests.where(state: "pending").order(:priority).to_a
-    unless pending_requests.any?
-      log_skip_user(user_con_profile: user_con_profile, reason: :no_pending_requests)
+    pending_choices = user_con_profile.signup_ranked_choices.where(state: "pending").order(:priority).to_a
+    unless pending_choices.any?
+      log_skip_user(user_con_profile: user_con_profile, reason: :no_pending_choices)
       return
     end
 
-    signup = pending_requests.find { |request| execute_request(user_con_profile, constraints, request) }
+    signup = pending_choices.find { |choice| execute_choice(user_con_profile, constraints, choice) }
     signup ||
-      pending_requests.find { |request| execute_request(user_con_profile, constraints, request, allow_waitlist: true) }
+      pending_choices.find { |choice| execute_choice(user_con_profile, constraints, choice, allow_waitlist: true) }
   end
 
-  def execute_request(user_con_profile, constraints, request, allow_waitlist: false)
-    conflicts = constraints.conflicting_signups_for_run(request.target_run)
+  def execute_choice(user_con_profile, constraints, choice, allow_waitlist: false)
+    conflicts = constraints.conflicting_signups_for_run(choice.target_run)
     if conflicts.any?
-      log_skip_request(
+      log_skip_choice(
         user_con_profile: user_con_profile,
         reason: :conflict,
-        signup_request: request,
+        signup_choice: choice,
         extra: {
           conflicts: conflicts
         }
@@ -85,36 +85,39 @@ class ExecuteRankedChoiceSignupRequestsService < CivilService::Service
       return
     end
 
-    run = request.target_run
+    run = choice.target_run
     bucket_finder =
       SignupBucketFinder.new(
         run.registration_policy,
-        request.requested_bucket_key,
+        choice.requested_bucket_key,
         run.signups.counted.occupying_slot.to_a
       )
     actual_bucket = bucket_finder.find_bucket
     if actual_bucket
       result =
-        AcceptSignupRequestService.new(
-          signup_request: request,
+        AcceptSignupChoiceService.new(
+          signup_choice: choice,
           whodunit: whodunit,
           skip_locking: skip_locking,
           suppress_notifications: suppress_notifications
         ).call!
-      log_signup(user_con_profile: user_con_profile, signup_request: request, signup: result.signup)
+      choice.update!(state: "signed_up")
+      log_signup(user_con_profile: user_con_profile, signup_choice: choice, signup: result.signup)
       result.signup
     elsif allow_waitlist
       result =
-        AcceptSignupRequestService.new(
-          signup_request: request,
+        AcceptSignupChoiceService.new(
+          signup_choice: choice,
           whodunit: whodunit,
           skip_locking: skip_locking,
           suppress_notifications: suppress_notifications
         ).call!
-      log_waitlist(user_con_profile: user_con_profile, signup_request: request, signup: result.signup)
+      choice.update!(state: "waitlisted")
+      log_waitlist(user_con_profile: user_con_profile, signup_choice: choice, signup: result.signup)
       result.signup
     else
-      log_skip_request(user_con_profile: user_con_profile, reason: :full, signup_request: request)
+      choice.update!(state: "skipped")
+      log_skip_choice(user_con_profile: user_con_profile, reason: :full, signup_choice: choice)
       nil
     end
   end
@@ -127,8 +130,8 @@ class ExecuteRankedChoiceSignupRequestsService < CivilService::Service
     log_decision(decision: :skip_user, **args)
   end
 
-  def log_skip_request(**args)
-    log_decision(decision: :skip_request, **args)
+  def log_skip_choice(**args)
+    log_decision(decision: :skip_choice, **args)
   end
 
   def log_signup(**args)
