@@ -492,7 +492,7 @@ GEM
       msgpack (>= 0.4.3)
       optimist (>= 3.0.0)
     rbtree (0.4.6)
-    rdoc (6.6.2)
+    rdoc (6.6.3.1)
       psych (>= 4.0.0)
     recaptcha (5.16.0)
     redcarpet (3.6.0)
