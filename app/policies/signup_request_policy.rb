@@ -7,13 +7,13 @@ class SignupRequestPolicy < ApplicationPolicy
   def read?
     return false if assumed_identity_from_profile && assumed_identity_from_profile.convention != convention
 
-    if oauth_scoped_disjunction do |d|
+    if oauth_scoped_disjunction { |d|
          d.add(:read_signups) { record.user_con_profile.user_id == user&.id }
 
          d.add(:read_conventions) do
-           convention.signup_mode == 'moderated' && has_convention_permission?(convention, 'update_signups')
+           convention.signup_mode == "moderated" && has_convention_permission?(convention, "update_signups")
          end
-       end
+       }
       return true
     end
 
@@ -21,11 +21,11 @@ class SignupRequestPolicy < ApplicationPolicy
   end
 
   def manage?
-    if oauth_scoped_disjunction do |d|
+    if oauth_scoped_disjunction { |d|
          d.add(:manage_conventions) do
-           convention.signup_mode == 'moderated' && has_convention_permission?(convention, 'update_signups')
+           convention.signup_mode == "moderated" && has_convention_permission?(convention, "update_signups")
          end
-       end
+       }
       return true
     end
 
@@ -43,13 +43,14 @@ class SignupRequestPolicy < ApplicationPolicy
   def create?
     return false unless oauth_scope?(:manage_signups)
     return false if assumed_identity_from_profile && assumed_identity_from_profile.convention != convention
-    user && user.id == record.user_con_profile.user_id && convention.signup_mode == 'moderated'
+    user && user.id == record.user_con_profile.user_id &&
+      (convention.signup_mode == "moderated" || convention.signup_mode == "ranked_choice")
   end
 
   def withdraw?
     return false unless oauth_scope?(:manage_signups)
     return false if assumed_identity_from_profile && assumed_identity_from_profile.convention != convention
-    user && record.state == 'pending' && user.id == record.user_con_profile.user_id
+    user && record.state == "pending" && user.id == record.user_con_profile.user_id
   end
 
   class Scope < Scope
@@ -67,7 +68,7 @@ class SignupRequestPolicy < ApplicationPolicy
                 Run.where(
                   event:
                     Event.where(
-                      convention: conventions_with_permission('update_signups').where(signup_mode: 'moderated')
+                      convention: conventions_with_permission("update_signups").where(signup_mode: "moderated")
                     )
                 )
             )

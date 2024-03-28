@@ -501,6 +501,12 @@
         "description": "Attendees can request signups and signup changes but con staff must approve them",
         "isDeprecated": false,
         "deprecationReason": null
+      },
+      {
+        "name": "ranked_choice",
+        "description": "Attendees make a ranked list of choices and the site attempts to give everyone what they want",
+        "isDeprecated": false,
+        "deprecationReason": null
       }
     ],
     "possibleTypes": null

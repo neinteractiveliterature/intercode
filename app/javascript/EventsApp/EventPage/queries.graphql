@@ -81,8 +81,22 @@ query EventPageQuery($eventId: ID!) {
     id
     ...CommonConventionData
 
+    maximum_event_signups {
+      timespans {
+        start
+        finish
+        value
+      }
+    }
+
     my_profile {
       id
+    }
+
+    my_signups {
+      id
+      state
+      counted
     }
 
     event(id: $eventId) {

@@ -21,6 +21,7 @@
 #  gravatar_enabled             :boolean          default(FALSE), not null
 #  ical_secret                  :text             not null
 #  last_name                    :string           not null
+#  lottery_number               :integer          not null
 #  mobile_phone                 :string
 #  needs_update                 :boolean          default(FALSE), not null
 #  nickname                     :string
@@ -36,7 +37,8 @@
 #
 # Indexes
 #
-#  index_user_con_profiles_on_convention_id_and_user_id  (convention_id,user_id) UNIQUE
+#  index_user_con_profiles_on_convention_id_and_lottery_number  (convention_id,lottery_number) UNIQUE
+#  index_user_con_profiles_on_convention_id_and_user_id         (convention_id,user_id) UNIQUE
 #
 # Foreign Keys
 #
@@ -56,6 +58,7 @@ class UserConProfile < ApplicationRecord
   has_many :run_tickets, -> { where.not(run_id: nil) }, class_name: "Ticket", dependent: :destroy
   has_many :team_members, dependent: :destroy
   has_many :signups, dependent: :destroy
+  has_many :signup_ranked_choices, dependent: :destroy
   has_many :signup_requests, dependent: :destroy
   has_many :event_proposals, foreign_key: :owner_id, dependent: :nullify
   has_many :event_ratings, dependent: :destroy
@@ -69,6 +72,7 @@ class UserConProfile < ApplicationRecord
   validates :preferred_contact, inclusion: { in: %w[email day_phone evening_phone], allow_blank: true }
 
   before_create :generate_ical_secret
+  before_create :generate_lottery_number
   after_commit :send_user_activity_alerts, on: :create
   after_commit :touch_team_member_events, on: %i[create update]
 
@@ -241,6 +245,15 @@ class UserConProfile < ApplicationRecord
 
   def generate_ical_secret
     self.ical_secret ||= Devise.friendly_token
+  end
+
+  def generate_lottery_number
+    return if self.lottery_number.present?
+
+    possible_lottery_numbers = Set.new(1..convention.max_lottery_number)
+    existing_lottery_numbers = Set.new(convention.user_con_profiles.pluck(:lottery_number))
+    sample_set = (possible_lottery_numbers - existing_lottery_numbers).to_a
+    self.lottery_number = sample_set.sample
   end
 
   def touch_team_member_events

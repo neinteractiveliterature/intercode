@@ -14,7 +14,7 @@ class Mutations::CreateSignupRequest < Mutations::BaseMutation
   end
 
   def resolve(**args)
-    raise 'Signup requests are closed.' unless convention.signup_requests_open?
+    raise "Signup requests are closed." if convention.signup_mode == "moderated" && !convention.signup_requests_open?
 
     replace_signup = (user_con_profile.signups.find(args[:replace_signup_id]) if args[:replace_signup_id])
 

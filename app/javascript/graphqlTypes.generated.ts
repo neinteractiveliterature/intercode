@@ -707,6 +707,16 @@ export type Convention = CmsParent & {
    */
   my_profile?: Maybe<UserConProfile>;
   /**
+   * Returns all signup ranked choices for the current user within this convention. If no user is signed in,
+   * returns an empty array.
+   */
+  my_signup_ranked_choices: Array<SignupRankedChoice>;
+  /**
+   * Returns all signup requests for the current user within this convention. If no user is signed in,
+   * returns an empty array.
+   */
+  my_signup_requests: Array<SignupRequest>;
+  /**
    * Returns all signups for the current user within this convention. If no user is signed in,
    * returns an empty array.
    */
@@ -4498,6 +4508,8 @@ export type SignupFiltersInput = {
 export enum SignupMode {
   /** Attendees can request signups and signup changes but con staff must approve them */
   Moderated = 'moderated',
+  /** Attendees make a ranked list of choices and the site attempts to give everyone what they want */
+  RankedChoice = 'ranked_choice',
   /** Attendees can sign themselves up for events */
   SelfService = 'self_service'
 }
@@ -4512,10 +4524,36 @@ export type SignupMoveResult = {
   state: SignupState;
 };
 
+export type SignupRankedChoice = {
+  __typename: 'SignupRankedChoice';
+  created_at: Scalars['Date']['output'];
+  id: Scalars['ID']['output'];
+  priority?: Maybe<Scalars['Int']['output']>;
+  requested_bucket_key?: Maybe<Scalars['String']['output']>;
+  result_signup?: Maybe<Signup>;
+  state: SignupRankedChoiceState;
+  target_run: Run;
+  updated_at: Scalars['Date']['output'];
+  updated_by: User;
+  user_con_profile: UserConProfile;
+};
+
+export enum SignupRankedChoiceState {
+  /** We have not yet attempted to process this choice */
+  Pending = 'pending',
+  /** The attendee has been signed up (see the result_signup field for the actual signup) */
+  SignedUp = 'signed_up',
+  /** We attempted to process this choice but could not, so we skipped it */
+  Skipped = 'skipped',
+  /** The attendee has been waitlisted (see the result_signup field for the actual signup) */
+  Waitlisted = 'waitlisted'
+}
+
 export type SignupRequest = {
   __typename: 'SignupRequest';
   created_at: Scalars['Date']['output'];
   id: Scalars['ID']['output'];
+  priority?: Maybe<Scalars['Int']['output']>;
   replace_signup?: Maybe<Signup>;
   requested_bucket_key?: Maybe<Scalars['String']['output']>;
   result_signup?: Maybe<Signup>;
