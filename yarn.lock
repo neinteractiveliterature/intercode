@@ -2875,16 +2875,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@emotion/serialize@npm:1.1.3, @emotion/serialize@npm:^1.0.2, @emotion/serialize@npm:^1.0.3":
-  version: 1.1.3
-  resolution: "@emotion/serialize@npm:1.1.3"
+"@emotion/serialize@npm:1.1.4, @emotion/serialize@npm:^1.0.2, @emotion/serialize@npm:^1.0.3":
+  version: 1.1.4
+  resolution: "@emotion/serialize@npm:1.1.4"
   dependencies:
     "@emotion/hash": "npm:^0.9.1"
     "@emotion/memoize": "npm:^0.8.1"
     "@emotion/unitless": "npm:^0.8.1"
     "@emotion/utils": "npm:^1.2.1"
     csstype: "npm:^3.0.2"
-  checksum: 10c0/875241eafaa30e7d3b7cf9b585d8c1f224cbf627a674e87eb1d7662dafa76a8c8d67f14a79dbf7d1eaa017e9f68389962990fbcc699d5ad65035a1a047432a3f
+  checksum: 10c0/164d936f72382594c47b9c24e67a51c7fc16b83d9a36b84eec5e4cb9bf7be029218a490ef4b44233a1b53423bdb3905d65b597cde3ebba759d40dab7a4c99121
   languageName: node
   linkType: hard
 
@@ -21410,7 +21410,7 @@ __metadata:
     "@dnd-kit/core": "npm:6.1.0"
     "@dnd-kit/sortable": "npm:8.0.0"
     "@dnd-kit/utilities": "npm:3.2.2"
-    "@emotion/serialize": "npm:1.1.3"
+    "@emotion/serialize": "npm:1.1.4"
     "@graphiql/toolkit": "npm:0.9.1"
     "@graphql-codegen/add": "npm:5.0.2"
     "@graphql-codegen/cli": "npm:5.0.2"
