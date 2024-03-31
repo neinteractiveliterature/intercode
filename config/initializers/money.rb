@@ -3,15 +3,30 @@
 Money.locale_backend = :i18n
 Money.rounding_mode = BigDecimal::ROUND_HALF_EVEN
 
+class CachingEuCentralBank < EuCentralBank
+  CACHE_PATH = Rails.root.join("tmp/eu_central_bank_rates.xml")
+
+  def get_rate(from, to, date = nil)
+    return super if date
+
+    if !rates_updated_at || rates_updated_at < 0.business_days.ago.to_date
+      save_rates(CACHE_PATH)
+      update_rates(CACHE_PATH)
+    end
+
+    super
+  end
+end
+
 MoneyRails.configure do |config|
   # To set the default currency
   #
-  config.default_currency = :usd
+  config.default_currency = ENV["DEFAULT_CURRENCY"] || "USD"
 
   # Set default bank object
   #
   # Example:
-  config.default_bank = EuCentralBank.new
+  config.default_bank = CachingEuCentralBank.new
 
   # Add exchange rates to current money bank object.
   # (The conversion rate refers to one direction only)

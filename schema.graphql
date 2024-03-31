@@ -4693,6 +4693,11 @@ type Query {
   rootSite: RootSite!
 
   """
+  Returns a list of all supported currency codes
+  """
+  supportedCurrencyCodes: [String!]!
+
+  """
   Finds a user by ID. If there is no user with that ID, errors out.
   """
   user(

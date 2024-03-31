@@ -25594,6 +25594,30 @@
               "args": []
             },
             {
+              "name": "supportedCurrencyCodes",
+              "description": "Returns a list of all supported currency codes",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
               "name": "user",
               "description": "Finds a user by ID. If there is no user with that ID, errors out.\n",
               "type": {
