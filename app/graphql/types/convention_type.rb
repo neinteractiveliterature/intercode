@@ -32,6 +32,7 @@ class Types::ConventionType < Types::BaseObject
   end
 
   field :created_at, Types::DateType, null: true
+  field :default_currency_code, String, null: true
   field :departments, [Types::DepartmentType], null: false
   field :domain, String, null: true
   field :email_from, String, null: false

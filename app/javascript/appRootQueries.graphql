@@ -67,6 +67,7 @@ query AppRootQuery($path: String!) {
     id
     name
     domain
+    default_currency_code
     accepting_proposals
     canceled
     language
@@ -121,4 +122,7 @@ query AppRootQuery($path: String!) {
     id
     site_name
   }
+
+  defaultCurrencyCode
+  supportedCurrencyCodes
 }

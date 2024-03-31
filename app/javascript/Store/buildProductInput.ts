@@ -44,6 +44,7 @@ function buildPricingStructureInput(
         minimumAmount: buildMoneyInput((pricingStructure.value as PayWhatYouWantValue).minimum_amount),
         maximumAmount: buildMoneyInput((pricingStructure.value as PayWhatYouWantValue).maximum_amount),
         suggestedAmount: buildMoneyInput((pricingStructure.value as PayWhatYouWantValue).suggested_amount),
+        allowedCurrencyCodes: (pricingStructure.value as PayWhatYouWantValue).allowed_currency_codes
       },
     };
   }

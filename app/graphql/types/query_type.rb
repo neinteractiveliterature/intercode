@@ -237,6 +237,14 @@ represented as a JSON object."
     RootSite.instance
   end
 
+  field :default_currency_code, String, null: false do
+    description "Returns the default currency for this site"
+  end
+
+  def default_currency_code
+    Money.default_currency.iso_code
+  end
+
   field :supported_currency_codes, [String], null: false do
     description "Returns a list of all supported currency codes"
   end

@@ -610,6 +610,7 @@ type Convention implements CmsParent {
   ): CouponsPagination!
   created_at: Date
   defaultLayout: CmsLayout!
+  default_currency_code: String
   departments: [Department!]!
   domain: String
 
@@ -1083,6 +1084,7 @@ input ConventionInput {
   accepting_proposals: Boolean
   catchAllStaffPositionId: ID
   clickwrap_agreement: String
+  defaultCurrencyCode: String
   defaultLayoutId: ID
   domain: String
   email_from: String
@@ -4367,12 +4369,14 @@ interface PaginationInterface {
 }
 
 input PayWhatYouWantInput {
+  allowedCurrencyCodes: [String!]
   maximumAmount: MoneyInput
   minimumAmount: MoneyInput
   suggestedAmount: MoneyInput
 }
 
 type PayWhatYouWantValue {
+  allowed_currency_codes: [String!]
   maximum_amount: Money
   minimum_amount: Money
   suggested_amount: Money
@@ -4617,6 +4621,11 @@ type Query {
   Returns the currently signed-in user. If no user is signed in, returns null.
   """
   currentUser: User
+
+  """
+  Returns the default currency for this site
+  """
+  defaultCurrencyCode: String!
 
   """
   Returns a paginated list of the _global_ email routes configured in Intercode.

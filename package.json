@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "@apollo/client": "3.9.9",
+    "@breezehr/currency-codes": "^2.2.1",
     "@codemirror/highlight": "0.19.8",
     "@codemirror/lang-html": "6.4.8",
     "@codemirror/lang-json": "6.0.1",

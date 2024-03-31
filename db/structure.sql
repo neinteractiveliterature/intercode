@@ -1204,7 +1204,7 @@ CREATE TABLE public.conventions (
     open_graph_image text,
     favicon text,
     signup_automation_mode character varying,
-    default_currency character varying NOT NULL
+    default_currency_code character varying
 );
 
 
@@ -5821,6 +5821,7 @@ ALTER TABLE ONLY public.cms_files_pages
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20240331173308'),
 ('20240331160734'),
 ('20240325174012'),
 ('20240324173737'),

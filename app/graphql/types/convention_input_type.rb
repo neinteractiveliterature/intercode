@@ -3,6 +3,7 @@ class Types::ConventionInputType < Types::BaseInputObject
   argument :accepting_proposals, Boolean, required: false, camelize: false
   argument :catch_all_staff_position_id, ID, required: false, camelize: true
   argument :clickwrap_agreement, String, required: false, camelize: false
+  argument :default_currency_code, String, required: false, camelize: true
   argument :default_layout_id, ID, required: false, camelize: true
   argument :domain, String, required: false
   argument :ends_at, Types::DateType, required: false, camelize: false
@@ -12,9 +13,9 @@ class Types::ConventionInputType < Types::BaseInputObject
   argument :favicon,
            ApolloUploadServer::Upload,
            required: false,
-           prepare: ->(upload, _) {
+           prepare: ->(upload, _) do
              upload&.__getobj__ # Unwrap value for ActiveStorage
-           }
+           end
   argument :hidden, Boolean, required: false
   argument :language, String, required: false
   argument :location, Types::JSON, required: false
@@ -24,9 +25,9 @@ class Types::ConventionInputType < Types::BaseInputObject
   argument :open_graph_image,
            ApolloUploadServer::Upload,
            required: false,
-           prepare: ->(upload, _) {
+           prepare: ->(upload, _) do
              upload&.__getobj__ # Unwrap value for ActiveStorage
-           }
+           end
   argument :root_page_id, ID, required: false, camelize: true
   argument :show_schedule, Types::ShowScheduleType, required: false, camelize: false
   argument :show_event_list, Types::ShowScheduleType, required: false, camelize: false

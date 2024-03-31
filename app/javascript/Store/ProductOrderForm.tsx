@@ -16,7 +16,7 @@ import {
   AddOrderEntryToCurrentPendingOrderMutationData,
   useAddOrderEntryToCurrentPendingOrderMutation,
 } from './mutations.generated';
-import { Money, PricingStrategy } from '../graphqlTypes.generated';
+import { Money, PayWhatYouWantValue, PricingStrategy } from '../graphqlTypes.generated';
 import { LoadQueryWithVariablesWrapper } from '../GraphqlLoadingWrappers';
 import { describePayWhatYouWantRange } from './describePricingStructure';
 import { Trans, useTranslation } from 'react-i18next';
@@ -171,6 +171,7 @@ export default LoadQueryWithVariablesWrapper(
                     value={payWhatYouWantAmount}
                     onChange={setPayWhatYouWantAmount}
                     key={payWhatYouWantAmountForcedKey}
+                    allowedCurrencyCodes={(product.pricing_structure.value as PayWhatYouWantValue).allowed_currency_codes ?? undefined}
                   />
                 </div>
               )}
