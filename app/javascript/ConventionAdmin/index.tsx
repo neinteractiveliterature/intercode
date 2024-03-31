@@ -57,6 +57,7 @@ export default LoadQueryWrapper(useConventionAdminConventionQuery, function Conv
         'show_event_list',
         'maximum_tickets',
         'signup_mode',
+        'signup_automation_mode',
         'signup_requests_open',
         'site_mode',
         'hidden',

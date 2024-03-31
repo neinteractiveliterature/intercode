@@ -434,6 +434,7 @@ class Types::ConventionType < Types::BaseObject
   end
 
   field :signup_mode, Types::SignupModeType, null: false
+  field :signup_automation_mode, Types::SignupAutomationModeType, null: false
   field :signup_requests_open, Boolean, null: false
 
   pagination_field :signup_requests_paginated,

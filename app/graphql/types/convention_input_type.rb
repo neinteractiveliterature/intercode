@@ -32,6 +32,7 @@ class Types::ConventionInputType < Types::BaseInputObject
   argument :show_schedule, Types::ShowScheduleType, required: false, camelize: false
   argument :show_event_list, Types::ShowScheduleType, required: false, camelize: false
   argument :signup_mode, Types::SignupModeType, required: false, camelize: false
+  argument :signup_automation_mode, Types::SignupAutomationModeType, required: false, camelize: false
   argument :signup_requests_open, Boolean, required: false, camelize: false
   argument :site_mode, Types::SiteModeType, required: false, camelize: false
   argument :starts_at, Types::DateType, required: false, camelize: false

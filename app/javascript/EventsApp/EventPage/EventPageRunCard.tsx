@@ -10,11 +10,11 @@ import CreateModeratedSignupModal from './CreateModeratedSignupModal';
 import { EventPageQueryData, EventPageQueryDocument, EventPageQueryVariables } from './queries.generated';
 import {
   useCreateMySignupMutation,
-  useCreateSignupRequestMutation,
+  useCreateSignupRankedChoiceMutation,
   useWithdrawMySignupMutation,
   useWithdrawSignupRequestMutation,
 } from './mutations.generated';
-import { SignupMode } from '../../graphqlTypes.generated';
+import { SignupAutomationMode, SignupMode } from '../../graphqlTypes.generated';
 import SignupCountData from '../SignupCountData';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -69,7 +69,7 @@ export type EventPageRunCardProps = {
 
 function EventPageRunCard({ event, run, myProfile, currentAbility, addToQueue }: EventPageRunCardProps): JSX.Element {
   const { t } = useTranslation();
-  const { signupMode } = useContext(AppRootContext);
+  const { signupMode, signupAutomationMode } = useContext(AppRootContext);
   const signupOptions = useMemo(
     () => buildSignupOptions(event, SignupCountData.fromRun(run), addToQueue, myProfile ?? undefined),
     [event, run, myProfile, addToQueue],
@@ -81,13 +81,13 @@ function EventPageRunCard({ event, run, myProfile, currentAbility, addToQueue }:
   const [createMySignupMutate] = useCreateMySignupMutation();
   const [withdrawMySignupMutate] = useWithdrawMySignupMutation();
   const [withdrawSignupRequestMutate] = useWithdrawSignupRequestMutation();
-  const [createSignupRequestMutate] = useCreateSignupRequestMutation();
+  const [createSignupRankedChoiceMutate] = useCreateSignupRankedChoiceMutation();
   const apolloClient = useApolloClient();
 
   const selfServiceSignup = useCallback(
     async (signupOption: SignupOption) => {
       if (signupOption.action === 'ADD_TO_QUEUE') {
-        await createSignupRequestMutate({
+        await createSignupRankedChoiceMutate({
           variables: {
             targetRunId: run.id,
             requestedBucketKey: signupOption.bucket?.key,
@@ -114,7 +114,7 @@ function EventPageRunCard({ event, run, myProfile, currentAbility, addToQueue }:
         return response.data?.createMySignup.signup;
       }
     },
-    [apolloClient, createMySignupMutate, createSignupRequestMutate, event, run],
+    [apolloClient, createMySignupMutate, createSignupRankedChoiceMutate, event, run],
   );
 
   const selfServiceWithdraw = useCallback(
@@ -156,7 +156,7 @@ function EventPageRunCard({ event, run, myProfile, currentAbility, addToQueue }:
   );
 
   const createSignup = (signupOption: SignupOption) => {
-    if (signupMode === SignupMode.SelfService || signupMode === SignupMode.RankedChoice || signupOption.teamMember) {
+    if (signupMode === SignupMode.SelfService || signupAutomationMode === SignupAutomationMode.RankedChoice || signupOption.teamMember) {
       return selfServiceSignup(signupOption);
     }
 

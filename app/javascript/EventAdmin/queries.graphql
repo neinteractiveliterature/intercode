@@ -55,6 +55,7 @@ fragment ConventionFields on Convention {
   event_mailing_list_domain
   site_mode
   signup_mode
+  signup_automation_mode
 
   event_categories {
     id

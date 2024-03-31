@@ -68,6 +68,7 @@ class Convention < ApplicationRecord
   TICKET_MODES = Types::TicketModeType.values.values.map(&:value).freeze
   SITE_MODES = Types::SiteModeType.values.values.map(&:value).freeze
   SIGNUP_MODES = Types::SignupModeType.values.values.map(&:value).freeze
+  SIGNUP_AUTOMATION_MODES = Types::SignupAutomationModeType.values.values.map(&:value).freeze
   EMAIL_MODES = Types::EmailModeType.values.values.map(&:value).freeze
   TIMEZONE_MODES = Types::TimezoneModeType.values.values.map(&:value).freeze
 
@@ -123,6 +124,7 @@ class Convention < ApplicationRecord
   validates :show_event_list, inclusion: { in: %w[yes gms priv no] }
   validates :ticket_mode, inclusion: { in: TICKET_MODES }, presence: true
   validates :signup_mode, inclusion: { in: SIGNUP_MODES }, presence: true
+  validates :signup_automation_mode, inclusion: { in: SIGNUP_AUTOMATION_MODES }, presence: true
   validates :site_mode, inclusion: { in: SITE_MODES }, presence: true
   validates :email_mode, inclusion: { in: EMAIL_MODES }, presence: true
   validates :maximum_event_signups, presence: true

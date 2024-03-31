@@ -12,7 +12,7 @@ import MaximumEventSignupsPreview, {
   MAXIMUM_EVENT_SIGNUPS_OPTIONS,
 } from './MaximumEventSignupsPreview';
 import type { ConventionFormConvention } from './ConventionForm';
-import { ShowSchedule, SignupMode } from '../graphqlTypes.generated';
+import { ShowSchedule, SignupAutomationMode, SignupMode } from '../graphqlTypes.generated';
 
 const buildMaximumEventSignupsInput = (
   value: MaximumEventSignupsValue | undefined,
@@ -61,6 +61,7 @@ function ConventionFormEventsSection({
   const timezoneName = timezoneNameForConvention(convention);
   const [
     setSignupMode,
+    setSignupAutomationMode,
     setSignupRequestsOpen,
     setAcceptingProposals,
     setShowEventList,
@@ -69,6 +70,7 @@ function ConventionFormEventsSection({
   ] = usePropertySetters(
     setConvention,
     'signup_mode',
+    'signup_automation_mode',
     'signup_requests_open',
     'accepting_proposals',
     'show_event_list',
@@ -96,14 +98,28 @@ function ConventionFormEventsSection({
             value: 'moderated',
             label: 'Moderated (attendees can request signups and signup changes but con staff must approve them)',
           },
+        ]}
+        value={convention.signup_mode}
+        onChange={(newValue: string) => setSignupMode(newValue as SignupMode)}
+        disabled={disabled}
+      />
+
+      <MultipleChoiceInput
+        name="signup_automation_mode"
+        caption="Signup automation mode"
+        choices={[
+          {
+            value: 'none',
+            label: 'Signups are fully manual',
+          },
           {
             value: 'ranked_choice',
             label:
               'Ranked choice (attendees make a ranked list of choices and the site attempts to give everyone what they want)',
           },
         ]}
-        value={convention.signup_mode}
-        onChange={(newValue: string) => setSignupMode(newValue as SignupMode)}
+        value={convention.signup_automation_mode}
+        onChange={(newValue: string) => setSignupAutomationMode(newValue as SignupAutomationMode)}
         disabled={disabled}
       />
 

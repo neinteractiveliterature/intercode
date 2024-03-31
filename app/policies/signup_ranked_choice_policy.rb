@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class SignupRequestPolicy < ApplicationPolicy
+class SignupRankedChoicePolicy < ApplicationPolicy
   delegate :target_run, to: :record
   delegate :event, to: :target_run
   delegate :convention, to: :event
@@ -11,7 +11,8 @@ class SignupRequestPolicy < ApplicationPolicy
          d.add(:read_signups) { record.user_con_profile.user_id == user&.id }
 
          d.add(:read_conventions) do
-           convention.signup_mode == "moderated" && has_convention_permission?(convention, "update_signups")
+           convention.signup_automation_mode == "ranked_choice" &&
+             has_convention_permission?(convention, "update_signups")
          end
        }
       return true
@@ -23,7 +24,8 @@ class SignupRequestPolicy < ApplicationPolicy
   def manage?
     if oauth_scoped_disjunction { |d|
          d.add(:manage_conventions) do
-           convention.signup_mode == "moderated" && has_convention_permission?(convention, "update_signups")
+           convention.signup_automation_mode == "ranked_choice" &&
+             has_convention_permission?(convention, "update_signups")
          end
        }
       return true
@@ -43,7 +45,7 @@ class SignupRequestPolicy < ApplicationPolicy
   def create?
     return false unless oauth_scope?(:manage_signups)
     return false if assumed_identity_from_profile && assumed_identity_from_profile.convention != convention
-    user && user.id == record.user_con_profile.user_id && convention.signup_mode == "moderated"
+    user && user.id == record.user_con_profile.user_id && (convention.signup_automation_mode == "ranked_choice")
   end
 
   def withdraw?
@@ -67,7 +69,8 @@ class SignupRequestPolicy < ApplicationPolicy
                 Run.where(
                   event:
                     Event.where(
-                      convention: conventions_with_permission("update_signups").where(signup_mode: "moderated")
+                      convention:
+                        conventions_with_permission("update_signups").where(signup_automation_mode: "ranked_choice")
                     )
                 )
             )

@@ -20,6 +20,15 @@ fragment MySignupRequestFields on SignupRequest {
   }
 }
 
+fragment MySignupRankedChoiceFields on SignupRankedChoice {
+  id
+  state
+  target_run {
+    id
+  }
+  requested_bucket_key
+}
+
 fragment EventPageRunFields on Run {
   id
   title_suffix
@@ -47,6 +56,11 @@ fragment EventPageRunFields on Run {
   my_signup_requests {
     id
     ...MySignupRequestFields
+  }
+
+  my_signup_ranked_choices {
+    id
+    ...MySignupRankedChoiceFields
   }
 }
 

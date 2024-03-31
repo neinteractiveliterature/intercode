@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Types::MutationType < Types::BaseObject
-  graphql_name 'Mutation'
+  graphql_name "Mutation"
 
   # CSRF verification, but only for mutations
   def self.authorized?(_value, context)
@@ -207,6 +207,10 @@ class Types::MutationType < Types::BaseObject
   field :forceConfirmSignup, null: false, mutation: Mutations::ForceConfirmSignup
   field :updateSignupBucket, null: false, mutation: Mutations::UpdateSignupBucket
   field :updateSignupCounted, null: false, mutation: Mutations::UpdateSignupCounted
+
+  ### SignupRankedChoice
+
+  field :createSignupRankedChoice, null: false, mutation: Mutations::CreateSignupRankedChoice
 
   ### SignupRequest
 

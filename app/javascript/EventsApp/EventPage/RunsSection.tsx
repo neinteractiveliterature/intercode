@@ -6,7 +6,7 @@ import RunCapacityGraph from './RunCapacityGraph';
 import EventPageRunCard from './EventPageRunCard';
 import { EventPageQueryData, useEventPageQuery } from './queries.generated';
 import { LoadQueryWithVariablesWrapper } from '../../GraphqlLoadingWrappers';
-import { ScheduledValue, SignupMode, SignupState } from '../../graphqlTypes.generated';
+import { ScheduledValue, SignupAutomationMode, SignupState } from '../../graphqlTypes.generated';
 import { findCurrentValue } from '../../ScheduledValueUtils';
 
 function getMaxSignupCount(maximumEventSignups: ScheduledValue | null | undefined) {
@@ -57,7 +57,7 @@ export default LoadQueryWithVariablesWrapper(
     );
 
     const addToQueue = useMemo(() => {
-      if (data.convention.signup_mode !== SignupMode.RankedChoice) {
+      if (data.convention.signup_automation_mode !== SignupAutomationMode.RankedChoice) {
         return false;
       }
 
@@ -71,7 +71,7 @@ export default LoadQueryWithVariablesWrapper(
         data.convention.my_signups.filter((signup) => signup.state === SignupState.Confirmed && signup.counted)
           .length >= maxSignups
       );
-    }, [data.convention.signup_mode, data.convention.my_signups, data.convention.maximum_event_signups]);
+    }, [data.convention.signup_automation_mode, data.convention.my_signups, data.convention.maximum_event_signups]);
 
     const { currentAbility, convention } = data;
     const myProfile = convention.my_profile;

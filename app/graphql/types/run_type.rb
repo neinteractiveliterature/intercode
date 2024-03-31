@@ -96,6 +96,13 @@ class Types::RunType < Types::BaseObject
     dataloader.with(Sources::MySignupRequests, context[:user_con_profile]).load(object)
   end
 
+  field :my_signup_ranked_choices, [Types::SignupRankedChoiceType], null: false
+
+  def my_signup_ranked_choices
+    return [] unless context[:user_con_profile]
+    dataloader.with(Sources::MySignupRankedChoices, context[:user_con_profile]).load(object)
+  end
+
   field :current_ability_can_signup_summary_run, Boolean, null: false
 
   def current_ability_can_signup_summary_run

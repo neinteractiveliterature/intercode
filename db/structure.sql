@@ -1203,7 +1203,8 @@ CREATE TABLE public.conventions (
     stripe_account_ready_to_charge boolean DEFAULT false NOT NULL,
     open_graph_image text,
     favicon text,
-    default_currency_code character varying
+    default_currency_code character varying,
+    signup_automation_mode character varying
 );
 
 
@@ -5822,6 +5823,7 @@ SET search_path TO "$user", public;
 INSERT INTO "schema_migrations" (version) VALUES
 ('20240331173308'),
 ('20240331160734'),
+('20240325174012'),
 ('20240324173737'),
 ('20240224192755'),
 ('20231216024636'),

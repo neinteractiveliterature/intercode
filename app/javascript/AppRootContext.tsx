@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { SignupMode, SiteMode, TicketMode } from './graphqlTypes.generated';
+import { SignupAutomationMode, SignupMode, SiteMode, TicketMode } from './graphqlTypes.generated';
 import { AppRootQueryData } from './appRootQueries.generated';
 import type Timespan from './Timespan';
 
@@ -21,6 +21,7 @@ export type AppRootContextValue = {
   myProfile?: NonNullable<AppRootQueryData['convention']>['my_profile'];
   rootSiteName?: string | null;
   signupMode?: SignupMode;
+  signupAutomationMode?: SignupAutomationMode;
   siteMode?: SiteMode;
   supportedCurrencyCodes: AppRootQueryData['supportedCurrencyCodes'];
   ticketsAvailableForPurchase?: boolean | null;

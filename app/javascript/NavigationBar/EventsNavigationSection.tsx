@@ -4,11 +4,11 @@ import { notFalse, notEmpty } from '@neinteractiveliterature/litform';
 
 import AppRootContext from '../AppRootContext';
 import GeneratedNavigationSection, { GeneratedNavigationItem } from './GeneratedNavigationSection';
-import { SignupMode } from '../graphqlTypes.generated';
+import { SignupAutomationMode } from '../graphqlTypes.generated';
 
 export function useEventsNavigationItems(): GeneratedNavigationItem[] {
   const { t } = useTranslation();
-  const { conventionAcceptingProposals, currentAbility, signupMode } = useContext(AppRootContext);
+  const { conventionAcceptingProposals, currentAbility, signupAutomationMode } = useContext(AppRootContext);
 
   const items = useMemo(
     () =>
@@ -23,7 +23,7 @@ export function useEventsNavigationItems(): GeneratedNavigationItem[] {
           url: '/events',
           icon: 'bi-list-ul',
         },
-        signupMode === SignupMode.RankedChoice && {
+        signupAutomationMode === SignupAutomationMode.RankedChoice && {
           label: t('navigation.events.mySignupQueue', 'My Signup Queue'),
           url: '/events/my-signup-queue',
           icon: 'bi-card-checklist',
@@ -36,7 +36,7 @@ export function useEventsNavigationItems(): GeneratedNavigationItem[] {
       ]
         .filter(notFalse)
         .filter(notEmpty),
-    [currentAbility, conventionAcceptingProposals, signupMode, t],
+    [currentAbility, conventionAcceptingProposals, signupAutomationMode, t],
   );
 
   return items;
