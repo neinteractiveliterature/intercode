@@ -3,7 +3,7 @@ class Types::QueryType < Types::BaseObject
   field_class Types::BaseField # Camelize fields in this type
 
   field :convention_by_domain, Types::ConventionType, null: false do
-    argument :domain, String, required: true, description: 'The domain name to find a convention by.'
+    argument :domain, String, required: true, description: "The domain name to find a convention by."
 
     description <<~MARKDOWN
     Returns the convention associated with a specified domain name.
@@ -65,9 +65,11 @@ class Types::QueryType < Types::BaseObject
   end
 
   def conventions_paginated(**args)
-    Tables::ConventionsTableResultsPresenter
-      .new(policy_scope(Convention.all), args[:filters].to_h, args[:sort])
-      .paginate(page: args[:page], per_page: args[:per_page])
+    Tables::ConventionsTableResultsPresenter.new(
+      policy_scope(Convention.all),
+      args[:filters].to_h,
+      args[:sort]
+    ).paginate(page: args[:page], per_page: args[:per_page])
   end
 
   pagination_field :email_routes_paginated,
@@ -81,9 +83,11 @@ class Types::QueryType < Types::BaseObject
   end
 
   def email_routes_paginated(**args)
-    Tables::EmailRoutesTableResultsPresenter
-      .new(policy_scope(EmailRoute.all), args[:filters].to_h, args[:sort])
-      .paginate(page: args[:page], per_page: args[:per_page])
+    Tables::EmailRoutesTableResultsPresenter.new(
+      policy_scope(EmailRoute.all),
+      args[:filters].to_h,
+      args[:sort]
+    ).paginate(page: args[:page], per_page: args[:per_page])
   end
 
   field :my_authorized_applications, [Types::AuthorizedApplicationType], null: false do
@@ -165,7 +169,7 @@ class Types::QueryType < Types::BaseObject
   end
 
   def account_form_content_html
-    partial = CmsPartial.global.find_by(name: 'account_form_text')
+    partial = CmsPartial.global.find_by(name: "account_form_text")
     return nil unless partial
     context[:cadmus_renderer].render(Liquid::Template.parse(partial.content), :html)
   end
@@ -186,8 +190,8 @@ class Types::QueryType < Types::BaseObject
              Types::JSON,
              required: true,
              description:
-               'A set of HTTP query parameters for `/oauth/authorize`, parsed out and
-represented as a JSON object.'
+               "A set of HTTP query parameters for `/oauth/authorize`, parsed out and
+represented as a JSON object."
 
     description <<~MARKDOWN
       Given a set of valid OAuth query parameters for the `/oauth/authorize` endpoint, returns a
@@ -233,6 +237,22 @@ represented as a JSON object.'
     RootSite.instance
   end
 
+  field :default_currency_code, String, null: false do
+    description "Returns the default currency for this site"
+  end
+
+  def default_currency_code
+    Money.default_currency.iso_code
+  end
+
+  field :supported_currency_codes, [String], null: false do
+    description "Returns a list of all supported currency codes"
+  end
+
+  def supported_currency_codes
+    ["EUR"] + EuCentralBank::CURRENCIES
+  end
+
   pagination_field :users_paginated, Types::UsersPaginationType, Types::UserFiltersInputType, camelize: false do
     description <<~MARKDOWN
       Returns a paginated list of users. See PaginationInterface for details on how to use
@@ -241,13 +261,14 @@ represented as a JSON object.'
   end
 
   def users_paginated(**args)
-    Tables::UsersTableResultsPresenter
-      .new(policy_scope(User.all), args[:filters].to_h, args[:sort])
-      .paginate(page: args[:page], per_page: args[:per_page])
+    Tables::UsersTableResultsPresenter.new(policy_scope(User.all), args[:filters].to_h, args[:sort]).paginate(
+      page: args[:page],
+      per_page: args[:per_page]
+    )
   end
 
   field :user, Types::UserType, null: false do
-    argument :id, ID, required: false, description: 'The ID of the user to find.', camelize: true
+    argument :id, ID, required: false, description: "The ID of the user to find.", camelize: true
 
     description <<~MARKDOWN
     Finds a user by ID. If there is no user with that ID, errors out.
@@ -259,7 +280,7 @@ represented as a JSON object.'
   end
 
   field :users, [Types::UserType], null: false do
-    argument :ids, [ID], required: false, description: 'The IDs of the users to find.'
+    argument :ids, [ID], required: false, description: "The IDs of the users to find."
 
     description <<~MARKDOWN
     Finds up to 25 users by ID. If any of the IDs don't match an existing user, errors out.

@@ -15,12 +15,14 @@ export type AppRootContextValue = {
   currentAbility: AppRootQueryData['currentAbility'];
   currentPendingOrder?: NonNullable<NonNullable<AppRootQueryData['convention']>['my_profile']>['current_pending_order'];
   currentUser?: AppRootQueryData['currentUser'];
+  defaultCurrencyCode: string;
   hasOAuthApplications: boolean;
   language: string;
   myProfile?: NonNullable<AppRootQueryData['convention']>['my_profile'];
   rootSiteName?: string | null;
   signupMode?: SignupMode;
   siteMode?: SiteMode;
+  supportedCurrencyCodes: AppRootQueryData['supportedCurrencyCodes'];
   ticketsAvailableForPurchase?: boolean | null;
   ticketMode?: TicketMode | null;
   ticketName?: string;
@@ -67,12 +69,14 @@ export const appRootContextDefaultValue: AppRootContextValue = {
   },
   currentPendingOrder: null,
   currentUser: null,
+  defaultCurrencyCode: 'EUR',
   hasOAuthApplications: false,
   language: 'en',
   myProfile: null,
   rootSiteName: null,
   siteMode: undefined,
   signupMode: undefined,
+  supportedCurrencyCodes: ['EUR'],
   ticketsAvailableForPurchase: null,
   ticketMode: null,
   ticketName: 'ticket',

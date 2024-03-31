@@ -46,6 +46,8 @@ gem "active_storage_svg_sanitizer"
 gem "money-rails"
 gem "eu_central_bank"
 gem "stripe"
+gem "business_time"
+gem "holidays"
 
 # Pagination and search
 gem "will_paginate"

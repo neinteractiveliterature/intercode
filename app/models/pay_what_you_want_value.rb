@@ -8,16 +8,17 @@ class PayWhatYouWantValue
               less_than_or_equal_to: ->(value) { value.maximum_amount || 999_999_99 },
               greater_than_or_equal_to: ->(value) { value.minimum_amount || 0 },
               allow_nil: true,
-              message: 'must be between minimum and maximum amount'
+              message: "must be between minimum and maximum amount"
             }
   validates :maximum_amount,
             numericality: {
               greater_than_or_equal_to: ->(value) { value.minimum_amount || 0 },
               allow_nil: true,
-              message: 'must be greater than minimum amount'
+              message: "must be greater than minimum amount"
             }
 
   attr_reader :minimum_amount, :maximum_amount, :suggested_amount
+  attr_accessor :allowed_currency_codes
 
   %i[minimum_amount maximum_amount suggested_amount].each do |field|
     define_method :"#{field}=" do |value|
@@ -26,7 +27,9 @@ class PayWhatYouWantValue
   end
 
   def attributes
-    %i[minimum_amount maximum_amount suggested_amount].index_with { |attr_name| public_send(attr_name) }
+    %i[minimum_amount maximum_amount suggested_amount allowed_currency_codes].index_with do |attr_name|
+      public_send(attr_name)
+    end
   end
 
   def as_json

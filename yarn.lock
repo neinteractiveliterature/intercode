@@ -1822,6 +1822,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@breezehr/currency-codes@npm:^2.2.1":
+  version: 2.2.1
+  resolution: "@breezehr/currency-codes@npm:2.2.1"
+  dependencies:
+    first-match: "npm:~0.0.1"
+    nub: "npm:~0.0.0"
+  checksum: 10c0/d213e8c54a90ea56f4b12b30b1e206380ce1b371edfaf42008a392abababc5032dcde69284a2be9731fd63585eef813eb35da8d3d5476a3b197605c8615778dd
+  languageName: node
+  linkType: hard
+
 "@codemirror/autocomplete@npm:^6.0.0, @codemirror/autocomplete@npm:^6.7.1":
   version: 6.14.0
   resolution: "@codemirror/autocomplete@npm:6.14.0"
@@ -12827,6 +12837,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"first-match@npm:~0.0.1":
+  version: 0.0.1
+  resolution: "first-match@npm:0.0.1"
+  checksum: 10c0/1639a2ba8cab9b1e5c2c91120b0c5090124ed25326422162de583dcdda103294cb33c271b19c5d7ac4e48c9ad1d134dd108de76a5b840823d767b5c84afab915
+  languageName: node
+  linkType: hard
+
 "flat-cache@npm:^3.0.4":
   version: 3.0.4
   resolution: "flat-cache@npm:3.0.4"
@@ -18256,6 +18273,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"nub@npm:~0.0.0":
+  version: 0.0.0
+  resolution: "nub@npm:0.0.0"
+  checksum: 10c0/25f3c6612378d79a468b12b143325a4c25c331c2f26b3b4ef940950c016781687301956262709491d1d805d55e7b3e1cf82f5b18f475d0533266484c09db5c6c
+  languageName: node
+  linkType: hard
+
 "nullthrows@npm:^1.0.0, nullthrows@npm:^1.1.1":
   version: 1.1.1
   resolution: "nullthrows@npm:1.1.1"
@@ -21392,6 +21416,7 @@ __metadata:
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
     "@apollo/client": "npm:3.9.9"
+    "@breezehr/currency-codes": "npm:^2.2.1"
     "@codemirror/highlight": "npm:0.19.8"
     "@codemirror/lang-html": "npm:6.4.8"
     "@codemirror/lang-json": "npm:6.0.1"

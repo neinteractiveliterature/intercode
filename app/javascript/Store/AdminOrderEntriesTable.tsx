@@ -173,13 +173,22 @@ function AdminOrderEntriesTable<
             <td>
               <InPlaceMoneyEditor
                 value={orderEntry.price_per_item}
-                onChange={(value) =>
-                  updateOrderEntry(orderEntry, {
-                    price_per_item: value
-                      ? { currency_code: value.currency_code, fractional: value.fractional }
-                      : undefined,
-                  } as Partial<T>)
-                }
+                onChange={(value) => {
+                  if (typeof value === 'function') {
+                    const newValue = value(orderEntry.price_per_item);
+                    updateOrderEntry(orderEntry, {
+                      price_per_item: newValue
+                        ? { currency_code: newValue.currency_code, fractional: newValue.fractional }
+                        : undefined,
+                    } as Partial<T>);
+                  } else {
+                    updateOrderEntry(orderEntry, {
+                      price_per_item: value
+                        ? { currency_code: value.currency_code, fractional: value.fractional }
+                        : undefined,
+                    } as Partial<T>);
+                  }
+                }}
               >
                 {formatMoney(orderEntry.price_per_item)}
                 {orderEntry.quantity > 1 && ' each'}

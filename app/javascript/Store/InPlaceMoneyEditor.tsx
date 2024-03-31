@@ -3,6 +3,7 @@ import * as React from 'react';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import MoneyInput, { MoneyInputProps } from './MoneyInput';
 import formatMoney from '../formatMoney';
+import { Money } from '../graphqlTypes.generated';
 
 export type InPlaceMoneyEditorProps = MoneyInputProps & {
   children?: React.ReactNode;
@@ -10,8 +11,8 @@ export type InPlaceMoneyEditorProps = MoneyInputProps & {
 
 function InPlaceMoneyEditor({ value, children, ...props }: InPlaceMoneyEditorProps): JSX.Element {
   return (
-    <InPlaceEditor
-      value={value}
+    <InPlaceEditor<Money | undefined>
+      value={value ?? undefined}
       renderInput={({ commitEditing, cancelEditing, inputProps }) => (
         <MoneyInput
           {...inputProps}

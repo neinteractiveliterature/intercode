@@ -644,6 +644,7 @@ export type Convention = CmsParent & {
   coupons_paginated: CouponsPagination;
   created_at?: Maybe<Scalars['Date']['output']>;
   defaultLayout: CmsLayout;
+  default_currency_code?: Maybe<Scalars['String']['output']>;
   departments: Array<Department>;
   domain?: Maybe<Scalars['String']['output']>;
   /**
@@ -997,6 +998,7 @@ export type ConventionInput = {
   accepting_proposals?: InputMaybe<Scalars['Boolean']['input']>;
   catchAllStaffPositionId?: InputMaybe<Scalars['ID']['input']>;
   clickwrap_agreement?: InputMaybe<Scalars['String']['input']>;
+  defaultCurrencyCode?: InputMaybe<Scalars['String']['input']>;
   defaultLayoutId?: InputMaybe<Scalars['ID']['input']>;
   domain?: InputMaybe<Scalars['String']['input']>;
   email_from?: InputMaybe<Scalars['String']['input']>;
@@ -3701,6 +3703,7 @@ export type PaginationInterface = {
 };
 
 export type PayWhatYouWantInput = {
+  allowedCurrencyCodes?: InputMaybe<Array<Scalars['String']['input']>>;
   maximumAmount?: InputMaybe<MoneyInput>;
   minimumAmount?: InputMaybe<MoneyInput>;
   suggestedAmount?: InputMaybe<MoneyInput>;
@@ -3708,6 +3711,7 @@ export type PayWhatYouWantInput = {
 
 export type PayWhatYouWantValue = {
   __typename: 'PayWhatYouWantValue';
+  allowed_currency_codes?: Maybe<Array<Scalars['String']['output']>>;
   maximum_amount?: Maybe<Money>;
   minimum_amount?: Maybe<Money>;
   suggested_amount?: Maybe<Money>;
@@ -3905,6 +3909,8 @@ export type Query = {
   currentAbility: Ability;
   /** Returns the currently signed-in user. If no user is signed in, returns null. */
   currentUser?: Maybe<User>;
+  /** Returns the default currency for this site */
+  defaultCurrencyCode: Scalars['String']['output'];
   /**
    * Returns a paginated list of the _global_ email routes configured in Intercode.
    * (Convention-specific email routing is controlled via that convention's StaffPositions.)
@@ -3940,6 +3946,8 @@ export type Query = {
   organizations: Array<Organization>;
   /** Returns the singleton RootSite object, which is a CMS parent. */
   rootSite: RootSite;
+  /** Returns a list of all supported currency codes */
+  supportedCurrencyCodes: Array<Scalars['String']['output']>;
   /** Finds a user by ID. If there is no user with that ID, errors out. */
   user: User;
   /** Finds up to 25 users by ID. If any of the IDs don't match an existing user, errors out. */

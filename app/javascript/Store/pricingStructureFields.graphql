@@ -41,6 +41,7 @@ fragment PricingStructureFields on PricingStructure {
         currency_code
         fractional
       }
+      allowed_currency_codes
     }
   }
 }

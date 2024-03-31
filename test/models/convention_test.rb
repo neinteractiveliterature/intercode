@@ -7,6 +7,7 @@
 #  accepting_proposals            :boolean
 #  canceled                       :boolean          default(FALSE), not null
 #  clickwrap_agreement            :text
+#  default_currency_code          :string
 #  domain                         :string           not null
 #  email_from                     :text             not null
 #  email_mode                     :string           default("forward"), not null
@@ -22,6 +23,7 @@
 #  open_graph_image               :text
 #  show_event_list                :string           default("no"), not null
 #  show_schedule                  :string           default("no"), not null
+#  signup_automation_mode         :string
 #  signup_mode                    :string           default("self_service"), not null
 #  signup_requests_open           :boolean          default(FALSE), not null
 #  site_mode                      :string           default("convention"), not null

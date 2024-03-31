@@ -4203,6 +4203,18 @@
               "args": []
             },
             {
+              "name": "default_currency_code",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
               "name": "departments",
               "description": null,
               "type": {
@@ -6354,6 +6366,18 @@
             },
             {
               "name": "clickwrap_agreement",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "defaultCurrencyCode",
               "description": null,
               "type": {
                 "kind": "SCALAR",
@@ -23905,6 +23929,26 @@
               "defaultValue": null,
               "isDeprecated": false,
               "deprecationReason": null
+            },
+            {
+              "name": "allowedCurrencyCodes",
+              "description": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "enumValues": null
@@ -23916,6 +23960,26 @@
           "interfaces": [],
           "possibleTypes": null,
           "fields": [
+            {
+              "name": "allowed_currency_codes",
+              "description": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
             {
               "name": "maximum_amount",
               "description": null,
@@ -25408,6 +25472,22 @@
               "args": []
             },
             {
+              "name": "defaultCurrencyCode",
+              "description": "Returns the default currency for this site",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
               "name": "email_routes_paginated",
               "description": "Returns a paginated list of the _global_ email routes configured in Intercode.\n(Convention-specific email routing is controlled via that convention's StaffPositions.)\n",
               "type": {
@@ -25587,6 +25667,30 @@
                   "kind": "OBJECT",
                   "name": "RootSite",
                   "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "supportedCurrencyCodes",
+              "description": "Returns a list of all supported currency codes",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  }
                 }
               },
               "isDeprecated": false,
