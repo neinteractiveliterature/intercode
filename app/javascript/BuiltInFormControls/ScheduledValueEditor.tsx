@@ -97,13 +97,13 @@ type DeleteTimespanAction = {
 type UpdateTimespanValueAction<ValueType> = {
   type: 'updateTimespanValue';
   index: number;
-  value: ValueType | undefined;
+  value: React.SetStateAction<ValueType | null | undefined> | null | undefined;
 };
 
 type UpdateTimespanFinishAction = {
   type: 'updateTimespanFinish';
   index: number;
-  finish: string | undefined;
+  finish: React.SetStateAction<string | null | undefined> | null | undefined;
 };
 
 export type ScheduledValueReducerAction<ValueType> =
@@ -131,7 +131,14 @@ export function scheduledValueReducer<ValueType, ScheduledValueType extends Edit
         ...state,
         timespans: state.timespans.map((timespan, index) => {
           if (index === action.index) {
-            return { ...timespan, value: action.value };
+            if (typeof action.value === 'function') {
+              return {
+                ...timespan,
+                value: (action.value as (prev: ValueType | undefined) => ValueType | undefined)(timespan.value),
+              };
+            } else {
+              return { ...timespan, value: action.value };
+            }
           }
 
           return timespan;
@@ -140,7 +147,11 @@ export function scheduledValueReducer<ValueType, ScheduledValueType extends Edit
     case 'updateTimespanFinish':
       return {
         ...state,
-        timespans: updateTimespanFinish(state.timespans, action.index, action.finish),
+        timespans: updateTimespanFinish(
+          state.timespans,
+          action.index,
+          calculateNewFinish<ValueType, ScheduledValueType>(action, state),
+        ),
       };
     default:
       return state;
@@ -153,6 +164,19 @@ export type ScheduledValueEditorProps<ValueType> = {
   dispatch: (action: ScheduledValueReducerAction<ValueType>) => void;
   buildValueInput: (value: ValueType | undefined, onChange: React.Dispatch<ValueType | undefined>) => JSX.Element;
 };
+
+function calculateNewFinish<ValueType, ScheduledValueType extends EditingScheduledValue<ValueType>>(
+  action: UpdateTimespanFinishAction,
+  state: ScheduledValueType,
+) {
+  let newFinish: string | undefined;
+  if (typeof action.finish === 'function') {
+    newFinish = action.finish(state.timespans[action.index].finish) ?? undefined;
+  } else {
+    newFinish = action.finish ?? undefined;
+  }
+  return newFinish;
+}
 
 function ScheduledValueEditor<ValueType>({
   scheduledValue,

@@ -14,7 +14,7 @@ class Mutations::AddOrderEntryToCurrentPendingOrder < Mutations::BaseMutation
     validate_amount(product, pay_what_you_want_amount)
 
     order = current_pending_order
-    order ||= user_con_profile.orders.create!(status: 'pending')
+    order ||= user_con_profile.orders.create!(status: "pending")
 
     new_order_entry =
       order
@@ -26,7 +26,7 @@ class Mutations::AddOrderEntryToCurrentPendingOrder < Mutations::BaseMutation
         ) { |entry| entry.quantity = 0 }
 
     new_order_entry.quantity += order_entry.quantity
-    if product.pricing_structure.pricing_strategy == 'pay_what_you_want'
+    if product.pricing_structure.pricing_strategy == "pay_what_you_want"
       new_order_entry.price_per_item = pay_what_you_want_amount
     end
     new_order_entry.save!
@@ -37,11 +37,11 @@ class Mutations::AddOrderEntryToCurrentPendingOrder < Mutations::BaseMutation
   private
 
   def validate_amount(product, pay_what_you_want_amount)
-    if product.pricing_structure.pricing_strategy == 'pay_what_you_want'
-      raise GraphQL::ExecutionError, 'Amount is required for pay-what-you-want products' unless pay_what_you_want_amount
+    if product.pricing_structure.pricing_strategy == "pay_what_you_want"
+      raise GraphQL::ExecutionError, "Amount is required for pay-what-you-want products" unless pay_what_you_want_amount
 
       value = product.pricing_structure.value
-      minimum = value.minimum_amount || Money.new(0, 'USD')
+      minimum = value.minimum_amount || Money.new(0, product.convention.default_currency_code_or_site_default)
       raise GraphQL::ExecutionError, "Amount must be at least #{minimum.format}" if pay_what_you_want_amount < minimum
 
       if value.maximum_amount && pay_what_you_want_amount > value.maximum_amount
@@ -49,7 +49,7 @@ class Mutations::AddOrderEntryToCurrentPendingOrder < Mutations::BaseMutation
               "Amount cannot be higher than #{product.pricing_structure.value.maximum_amount.format}"
       end
     elsif pay_what_you_want_amount
-      raise GraphQL::ExecutionError, 'This is not a pay-what-you-want product; amount cannot be passed'
+      raise GraphQL::ExecutionError, "This is not a pay-what-you-want product; amount cannot be passed"
     end
   end
 end

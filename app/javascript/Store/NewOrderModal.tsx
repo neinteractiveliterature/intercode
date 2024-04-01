@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { ApolloError, useApolloClient } from '@apollo/client';
 import { Modal } from 'react-bootstrap4-modal';
 import { v4 as uuidv4 } from 'uuid';
@@ -18,6 +18,7 @@ import {
   UserConProfile,
 } from '../graphqlTypes.generated';
 import { useCreateCouponApplicationMutation, useCreateOrderMutation } from './mutations.generated';
+import AppRootContext from '../AppRootContext';
 
 export type CreatingOrder = Omit<OrderInput, 'payment_amount'> & {
   status: OrderStatus;
@@ -38,17 +39,19 @@ export type CreatingOrder = Omit<OrderInput, 'payment_amount'> & {
 
 type OrderEntryType = CreatingOrder['order_entries'][0];
 
-const BLANK_ORDER: CreatingOrder = {
-  payment_amount: {
-    __typename: 'Money',
-    fractional: 0,
-    currency_code: 'USD',
-  },
-  payment_note: '',
-  status: OrderStatus.Paid,
-  order_entries: [],
-  coupon_applications: [],
-};
+function buildBlankOrder(currencyCode: string): CreatingOrder {
+  return {
+    payment_amount: {
+      __typename: 'Money',
+      fractional: 0,
+      currency_code: currencyCode,
+    },
+    payment_note: '',
+    status: OrderStatus.Paid,
+    order_entries: [],
+    coupon_applications: [],
+  };
+}
 
 export type NewOrderModalProps = {
   visible: boolean;
@@ -58,16 +61,17 @@ export type NewOrderModalProps = {
 
 function NewOrderModal({ visible, close, initialOrder }: NewOrderModalProps): JSX.Element {
   const confirm = useConfirm();
-  const [order, setOrder] = useState(initialOrder ?? BLANK_ORDER);
+  const { defaultCurrencyCode } = useContext(AppRootContext);
+  const [order, setOrder] = useState(() => initialOrder ?? buildBlankOrder(defaultCurrencyCode));
   const [createMutate] = useCreateOrderMutation();
   const [createCouponApplicationMutate] = useCreateCouponApplicationMutation();
   const apolloClient = useApolloClient();
 
   useEffect(() => {
     if (!visible) {
-      setOrder(initialOrder || BLANK_ORDER);
+      setOrder(initialOrder || buildBlankOrder(defaultCurrencyCode));
     }
-  }, [visible, initialOrder]);
+  }, [visible, initialOrder, defaultCurrencyCode]);
 
   const createOrder = async () => {
     const userConProfile = order.user_con_profile;

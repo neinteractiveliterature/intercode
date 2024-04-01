@@ -28,14 +28,24 @@ export default React.forwardRef<HTMLInputElement, MoneyInputProps>(function Mone
   ref,
 ) {
   const { defaultCurrencyCode, supportedCurrencyCodes } = useContext(AppRootContext);
+  const defaultCurrencyCodeForThisInput = useMemo(() => {
+    if (allowedCurrencyCodes?.includes(defaultCurrencyCode)) {
+      return defaultCurrencyCode;
+    } else if (allowedCurrencyCodes != null) {
+      return allowedCurrencyCodes[0];
+    } else {
+      return defaultCurrencyCode;
+    }
+  }, [allowedCurrencyCodes, defaultCurrencyCode]);
 
   const currency = useMemo(() => {
     if (value?.currency_code) {
-      return currencyCodes.code(value.currency_code);
+      return currencyCodes.code(value.currency_code)!;
     } else {
-      return undefined;
+      return currencyCodes.code(defaultCurrencyCodeForThisInput)!;
     }
-  }, [value?.currency_code]);
+  }, [value?.currency_code, defaultCurrencyCodeForThisInput]);
+
   const showCurrencySelect = useMemo(() => {
     if (allowedCurrencyCodes && allowedCurrencyCodes.length > 1) {
       return true;
@@ -57,8 +67,8 @@ export default React.forwardRef<HTMLInputElement, MoneyInputProps>(function Mone
     if (floatValue != null) {
       onChange({
         __typename: 'Money',
-        fractional: Math.floor(floatValue * 10 ** (currency?.digits ?? 2)),
-        currency_code: currency?.code ?? defaultCurrencyCode,
+        fractional: Math.floor(floatValue * 10 ** currency.digits),
+        currency_code: currency.code,
       });
     } else {
       onChange(undefined);
@@ -67,9 +77,7 @@ export default React.forwardRef<HTMLInputElement, MoneyInputProps>(function Mone
 
   return (
     <div className={inputGroupClassName || 'input-group'}>
-      <span className="input-group-text">
-        {getCurrencySymbol(navigator.language, currency?.code ?? defaultCurrencyCode)}
-      </span>
+      <span className="input-group-text">{getCurrencySymbol(navigator.language, currency.code)}</span>
       {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
       <input
         type="text"
@@ -88,8 +96,12 @@ export default React.forwardRef<HTMLInputElement, MoneyInputProps>(function Mone
           onChange={(newCurrencyCode) =>
             onChange((prevValue) => ({
               __typename: 'Money',
-              fractional: prevValue?.fractional ?? 0,
-              currency_code: newCurrencyCode ?? defaultCurrencyCode,
+              fractional:
+                (prevValue?.fractional ?? 0) /
+                10 **
+                  (currencyCodes.code(prevValue?.currency_code ?? defaultCurrencyCodeForThisInput)!.digits -
+                    currencyCodes.code(newCurrencyCode ?? defaultCurrencyCodeForThisInput)!.digits),
+              currency_code: newCurrencyCode ?? defaultCurrencyCodeForThisInput,
             }))
           }
         />

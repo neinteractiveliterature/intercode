@@ -8,6 +8,7 @@ import {
   ErrorDisplay,
   LoadingIndicator,
   parseIntOrNull,
+  FormGroupWithLabel,
 } from '@neinteractiveliterature/litform';
 
 import { useCreateConventionStripeAccountMutation } from './mutations.generated';
@@ -20,6 +21,7 @@ import {
   StripeAccountOnboardingLinkQueryVariables,
 } from './queries.generated';
 import { useTranslation } from 'react-i18next';
+import CurrencySelect from '../Store/CurrencySelect';
 
 export type ConventionFormBillingSectionProps = {
   convention: ConventionFormConvention;
@@ -32,11 +34,12 @@ function ConventionFormBillingSection({
   setConvention,
   disabled,
 }: ConventionFormBillingSectionProps): JSX.Element {
-  const [setTicketName, setMaximumTickets, setTicketMode] = usePropertySetters(
+  const [setTicketName, setMaximumTickets, setTicketMode, setDefaultCurrencyCode] = usePropertySetters(
     setConvention,
     'ticket_name',
     'maximum_tickets',
     'ticket_mode',
+    'default_currency_code',
   );
   const [createConventionStripeAccount] = useCreateConventionStripeAccountMutation();
   const apolloClient = useApolloClient();
@@ -110,6 +113,17 @@ function ConventionFormBillingSection({
         }}
         disabled={disabled}
       />
+
+      <FormGroupWithLabel label={t('admin.convention.defaultCurrency', 'Default currency for convention')}>
+        {(id) => (
+          <CurrencySelect
+            id={id}
+            className="form-select"
+            value={convention.default_currency_code ?? undefined}
+            onChange={setDefaultCurrencyCode}
+          />
+        )}
+      </FormGroupWithLabel>
 
       <div className="card bg-light mb-3">
         <div className="card-header">Stripe account</div>

@@ -18,13 +18,15 @@ class ConventionReportsPresenter
               :product_id,
               :status,
               "COALESCE(price_per_item_cents, 0)",
-              "COALESCE(price_per_item_currency, 'USD')"
+              "COALESCE(price_per_item_currency, #{ActiveRecord::Base.quote(convention.default_currency_code_or_site_default)})"
             )
             .pluck(
               :product_id,
               :status,
               Arel.sql("COALESCE(price_per_item_cents, 0)"),
-              Arel.sql("COALESCE(price_per_item_currency, 'USD')"),
+              Arel.sql(
+                "COALESCE(price_per_item_currency, #{ActiveRecord::Base.quote(convention.default_currency_code_or_site_default)})"
+              ),
               Arel.sql("SUM(quantity) sum_quantity")
             )
 
@@ -47,7 +49,11 @@ class ConventionReportsPresenter
           convention
             .tickets
             .left_joins(:order_entry)
-            .group(:ticket_type_id, "COALESCE(price_per_item_cents, 0)", "COALESCE(price_per_item_currency, 'USD')")
+            .group(
+              :ticket_type_id,
+              "COALESCE(price_per_item_cents, 0)",
+              "COALESCE(price_per_item_currency, #{ActiveRecord::Base.quote(convention.default_currency_code_or_site_default)})"
+            )
             .count
 
         grouped_count_data.map do |(ticket_type_id, amount_cents, amount_currency), count|
@@ -63,7 +69,7 @@ class ConventionReportsPresenter
         next false if order_statuses.present? && order_statuses.exclude?(row[:status])
         true
       end
-    return Money.new(0, "USD") if sales_count_rows.empty?
+    return Money.new(0, convention.default_currency_code_or_site_default) if sales_count_rows.empty?
     sales_count_rows.sum { |row| row[:payment_amount] * row[:count] }
   end
 

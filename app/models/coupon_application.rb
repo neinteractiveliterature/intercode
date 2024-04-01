@@ -27,7 +27,7 @@ class CouponApplication < ApplicationRecord
   belongs_to :order
 
   scope :active, -> { where(order: Order.completed) }
-  validates :coupon_id, uniqueness: { scope: :order_id, message: 'has already been applied to this order' }
+  validates :coupon_id, uniqueness: { scope: :order_id, message: "has already been applied to this order" }
 
   def discount
     if coupon.fixed_amount
@@ -39,9 +39,10 @@ class CouponApplication < ApplicationRecord
       order_entries_for_product = order.order_entries.select { |entry| entry.product_id == coupon.provides_product_id }
 
       # take the most expensive instance of a product in the order
-      order_entries_for_product.map(&:price_per_item).max || Money.new(0, 'USD')
+      order_entries_for_product.map(&:price_per_item).max ||
+        Money.new(0, coupon.convention.default_currency_code_or_site_default)
     else
-      Money.new(0, 'USD')
+      Money.new(0, coupon.convention.default_currency_code_or_site_default)
     end
   end
 end

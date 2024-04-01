@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { ErrorDisplay, useModal, addNewObjectToReferenceArrayUpdater } from '@neinteractiveliterature/litform';
 import { useTranslation } from 'react-i18next';
 import Modal from 'react-bootstrap4-modal';
@@ -13,6 +13,7 @@ import { CreateProductMutationData, useCreateProductMutation } from '../Store/mu
 import buildProductInput from '../Store/buildProductInput';
 import { AdminProductFieldsFragment, AdminProductFieldsFragmentDoc } from '../Store/adminProductFields.generated';
 import { buildBlankProduct } from './TicketTypesList';
+import AppRootContext from '../AppRootContext';
 
 export type NewTicketProvidingProductModalProps = {
   visible: boolean;
@@ -25,19 +26,20 @@ export default function NewTicketProvidingProductModal({
   close,
   ticketType,
 }: NewTicketProvidingProductModalProps) {
+  const { defaultCurrencyCode } = useContext(AppRootContext);
   const { t } = useTranslation();
   const [createProduct, { error, loading }] = useCreateProductMutation();
 
-  const [product, setProduct] = useState<WithGeneratedId<EditingProductBase, string>>(buildBlankProduct);
+  const [product, setProduct] = useState<WithGeneratedId<EditingProductBase, string>>(() => buildBlankProduct(defaultCurrencyCode));
 
   useEffect(() => {
     setProduct((product) => ({
-      ...buildBlankProduct(),
+      ...buildBlankProduct(defaultCurrencyCode),
       ...product,
       provides_ticket_type: ticketType,
       name: ticketType?.description ?? '',
     }));
-  }, [ticketType]);
+  }, [ticketType, defaultCurrencyCode]);
 
   const saveClicked = async () => {
     if (!ticketType) {
@@ -57,7 +59,7 @@ export default function NewTicketProvidingProductModal({
     });
 
     close();
-    setProduct(buildBlankProduct());
+    setProduct(buildBlankProduct(defaultCurrencyCode));
   };
 
   const pricingStructureModal = useModal<PricingStructureModalState>();

@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useContext, useMemo } from 'react';
 import * as React from 'react';
 import {
   BootstrapFormInput,
@@ -13,6 +13,8 @@ import MoneyInput from '../MoneyInput';
 import ProductSelect from '../../BuiltInFormControls/ProductSelect';
 import DateTimeInput from '../../BuiltInFormControls/DateTimeInput';
 import { AdminCouponFieldsFragment } from './queries.generated';
+import { Money } from '../../graphqlTypes.generated';
+import AppRootContext from '../../AppRootContext';
 
 const DISCOUNT_MODE_CHOICES = [
   { label: 'Fixed amount discount', value: 'fixed_amount' },
@@ -29,19 +31,21 @@ const blankProduct: NonNullable<AdminCouponFieldsFragment['provides_product']> =
   id: '',
 };
 
-const BLANK_VALUES: {
-  fixed_amount: NonNullable<AdminCouponFieldsFragment['fixed_amount']>;
-  percent_discount: NonNullable<AdminCouponFieldsFragment['percent_discount']>;
-  provides_product: NonNullable<AdminCouponFieldsFragment['provides_product']>;
-} = {
-  fixed_amount: {
+function buildBlankFixedAmount(currencyCode: string): Money {
+  return {
     __typename: 'Money',
     fractional: 0,
-    currency_code: 'USD',
-  },
-  percent_discount: '0',
-  provides_product: blankProduct,
-} as const;
+    currency_code: currencyCode,
+  };
+}
+
+function buildBlankPercentDiscount() {
+  return '0';
+}
+
+function buildBlankProduct(): typeof blankProduct {
+  return blankProduct;
+}
 
 export type CouponFormProps<T extends Omit<AdminCouponFieldsFragment, 'id'>> = {
   value: T;
@@ -52,6 +56,7 @@ function CouponForm<T extends Omit<AdminCouponFieldsFragment, 'id'>>({
   value,
   onChange,
 }: CouponFormProps<T>): JSX.Element {
+  const { defaultCurrencyCode } = useContext(AppRootContext);
   const [setCode, setFixedAmount, setPercentDiscount, setProvidesProduct, setExpiresAt, setUsageLimit] =
     usePropertySetters(
       onChange,
@@ -69,7 +74,13 @@ function CouponForm<T extends Omit<AdminCouponFieldsFragment, 'id'>>({
       (fields, mode) => ({ ...fields, [mode]: null }),
       {},
     );
-    discountFields[newDiscountMode] = BLANK_VALUES[newDiscountMode];
+    if (newDiscountMode === 'fixed_amount') {
+      discountFields.fixed_amount = buildBlankFixedAmount(defaultCurrencyCode);
+    } else if (newDiscountMode === 'percent_discount') {
+      discountFields.percent_discount = buildBlankPercentDiscount();
+    } else if (newDiscountMode === 'provides_product') {
+      discountFields.provides_product = buildBlankProduct();
+    }
     onChange((prevValue) => ({ ...prevValue, ...discountFields }));
   };
 
@@ -96,7 +107,7 @@ function CouponForm<T extends Omit<AdminCouponFieldsFragment, 'id'>>({
               id={id}
               value={value.fixed_amount}
               onChange={(newFixedAmount) => {
-                setFixedAmount(newFixedAmount ?? BLANK_VALUES.fixed_amount);
+                setFixedAmount(newFixedAmount ?? buildBlankFixedAmount(defaultCurrencyCode));
               }}
             />
           )}
@@ -123,7 +134,7 @@ function CouponForm<T extends Omit<AdminCouponFieldsFragment, 'id'>>({
               value={value.provides_product}
               isMulti={false}
               onChange={(newProduct) => {
-                setProvidesProduct(newProduct ?? BLANK_VALUES.provides_product);
+                setProvidesProduct(newProduct ?? buildBlankProduct());
               }}
             />
           )}

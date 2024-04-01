@@ -5,8 +5,8 @@ class PricingStructure
 
   PRICING_STRATEGIES = %w[fixed scheduled_value pay_what_you_want].freeze
   FIXED_VALUE_CODER = MoneyCoder
-  SCHEDULED_VALUE_CODER = ActiveModelCoder.new('ScheduledMoneyValue')
-  PAY_WHAT_YOU_WANT_CODER = ActiveModelCoder.new('PayWhatYouWantValue')
+  SCHEDULED_VALUE_CODER = ActiveModelCoder.new("ScheduledMoneyValue")
+  PAY_WHAT_YOU_WANT_CODER = ActiveModelCoder.new("PayWhatYouWantValue")
 
   attr_accessor :pricing_strategy
   attr_writer :value
@@ -37,7 +37,7 @@ class PricingStructure
     when ScheduledMoneyValue
       value.value_at(time || Time.zone.now)
     when PayWhatYouWantValue
-      value.suggested_amount || value.minimum_amount || Money.new(0, 'USD')
+      value.suggested_amount || value.minimum_amount || Money.new(0, Money.default_currency)
     else
       raise TypeError, "Can't get a price from #{value.inspect}"
     end
@@ -51,11 +51,11 @@ class PricingStructure
 
   def coder_for_strategy
     case pricing_strategy
-    when 'fixed'
+    when "fixed"
       FIXED_VALUE_CODER
-    when 'scheduled_value'
+    when "scheduled_value"
       SCHEDULED_VALUE_CODER
-    when 'pay_what_you_want'
+    when "pay_what_you_want"
       PAY_WHAT_YOU_WANT_CODER
     else
       raise "Invalid pricing strategy: #{pricing_strategy.inspect}"
@@ -67,11 +67,11 @@ class PricingStructure
 
     expected_class =
       case pricing_strategy
-      when 'fixed'
+      when "fixed"
         Money
-      when 'scheduled_value'
+      when "scheduled_value"
         ScheduledMoneyValue
-      when 'pay_what_you_want'
+      when "pay_what_you_want"
         PayWhatYouWantValue
       else
         return # let the other validations handle this case

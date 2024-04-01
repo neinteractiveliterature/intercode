@@ -66,7 +66,7 @@ function describeTicketTypeOptions(
   return null;
 }
 
-export function buildBlankProduct() {
+export function buildBlankProduct(currencyCode: string) {
   return {
     __typename: 'Product' as const,
     available: true,
@@ -78,7 +78,7 @@ export function buildBlankProduct() {
     pricing_structure: {
       __typename: 'PricingStructure' as const,
       pricing_strategy: PricingStrategy.Fixed,
-      value: { __typename: 'Money' as const, currency_code: 'USD', fractional: 0 },
+      value: { __typename: 'Money' as const, currency_code: currencyCode, fractional: 0 },
     },
   };
 }
@@ -94,7 +94,7 @@ function TicketTypeDisplay({
   newProductModal: ModalData<{ ticketType: TicketTypeType }>;
   editProductModal: ModalData<EditTicketProvidingProductModalProps['state']>;
 }) {
-  const { ticketName, ticketNamePlural } = useContext(AppRootContext);
+  const { ticketName, ticketNamePlural, defaultCurrencyCode } = useContext(AppRootContext);
   const { t } = useTranslation();
   const confirm = useConfirm();
   const [deleteTicketType] = useDeleteMutationWithReferenceArrayUpdater(
@@ -186,7 +186,7 @@ function TicketTypeDisplay({
                     <button
                       className="btn btn-sm btn-outline-primary"
                       onClick={() =>
-                        editProductModal.open({ ticketType, initialProduct: { ...buildBlankProduct(), ...product } })
+                        editProductModal.open({ ticketType, initialProduct: { ...buildBlankProduct(defaultCurrencyCode), ...product } })
                       }
                     >
                       Edit

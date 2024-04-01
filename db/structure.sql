@@ -1203,7 +1203,6 @@ CREATE TABLE public.conventions (
     stripe_account_ready_to_charge boolean DEFAULT false NOT NULL,
     open_graph_image text,
     favicon text,
-    signup_automation_mode character varying,
     default_currency_code character varying
 );
 
@@ -2491,43 +2490,6 @@ ALTER SEQUENCE public.signup_changes_id_seq OWNED BY public.signup_changes.id;
 
 
 --
--- Name: signup_ranked_choices; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.signup_ranked_choices (
-    id bigint NOT NULL,
-    priority integer NOT NULL,
-    requested_bucket_key character varying NOT NULL,
-    state character varying NOT NULL,
-    result_signup_id bigint,
-    target_run_id bigint NOT NULL,
-    updated_by_id bigint NOT NULL,
-    user_con_profile_id bigint NOT NULL,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
-);
-
-
---
--- Name: signup_ranked_choices_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.signup_ranked_choices_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: signup_ranked_choices_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.signup_ranked_choices_id_seq OWNED BY public.signup_ranked_choices.id;
-
-
---
 -- Name: signup_requests; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2827,8 +2789,7 @@ CREATE TABLE public.user_con_profiles (
     needs_update boolean DEFAULT false NOT NULL,
     accepted_clickwrap_agreement boolean DEFAULT false NOT NULL,
     mobile_phone character varying,
-    allow_sms boolean DEFAULT true NOT NULL,
-    lottery_number integer NOT NULL
+    allow_sms boolean DEFAULT true NOT NULL
 );
 
 
@@ -3245,13 +3206,6 @@ ALTER TABLE ONLY public.sessions ALTER COLUMN id SET DEFAULT nextval('public.ses
 --
 
 ALTER TABLE ONLY public.signup_changes ALTER COLUMN id SET DEFAULT nextval('public.signup_changes_id_seq'::regclass);
-
-
---
--- Name: signup_ranked_choices id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.signup_ranked_choices ALTER COLUMN id SET DEFAULT nextval('public.signup_ranked_choices_id_seq'::regclass);
 
 
 --
@@ -3779,14 +3733,6 @@ ALTER TABLE ONLY public.sessions
 
 ALTER TABLE ONLY public.signup_changes
     ADD CONSTRAINT signup_changes_pkey PRIMARY KEY (id);
-
-
---
--- Name: signup_ranked_choices signup_ranked_choices_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.signup_ranked_choices
-    ADD CONSTRAINT signup_ranked_choices_pkey PRIMARY KEY (id);
 
 
 --
@@ -4689,34 +4635,6 @@ CREATE INDEX index_signup_changes_on_user_con_profile_id ON public.signup_change
 
 
 --
--- Name: index_signup_ranked_choices_on_result_signup_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_signup_ranked_choices_on_result_signup_id ON public.signup_ranked_choices USING btree (result_signup_id);
-
-
---
--- Name: index_signup_ranked_choices_on_target_run_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_signup_ranked_choices_on_target_run_id ON public.signup_ranked_choices USING btree (target_run_id);
-
-
---
--- Name: index_signup_ranked_choices_on_updated_by_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_signup_ranked_choices_on_updated_by_id ON public.signup_ranked_choices USING btree (updated_by_id);
-
-
---
--- Name: index_signup_ranked_choices_on_user_con_profile_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_signup_ranked_choices_on_user_con_profile_id ON public.signup_ranked_choices USING btree (user_con_profile_id);
-
-
---
 -- Name: index_signup_requests_on_replace_signup_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4871,13 +4789,6 @@ CREATE INDEX index_user_activity_alerts_on_user_id ON public.user_activity_alert
 
 
 --
--- Name: index_user_con_profiles_on_convention_id_and_lottery_number; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_user_con_profiles_on_convention_id_and_lottery_number ON public.user_con_profiles USING btree (convention_id, lottery_number);
-
-
---
 -- Name: index_user_con_profiles_on_convention_id_and_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -5023,14 +4934,6 @@ ALTER TABLE ONLY public.permissions
 
 
 --
--- Name: signup_ranked_choices fk_rails_1cd870c99b; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.signup_ranked_choices
-    ADD CONSTRAINT fk_rails_1cd870c99b FOREIGN KEY (target_run_id) REFERENCES public.runs(id);
-
-
---
 -- Name: permissions fk_rails_1dd9fc9231; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5044,14 +4947,6 @@ ALTER TABLE ONLY public.permissions
 
 ALTER TABLE ONLY public.organization_roles
     ADD CONSTRAINT fk_rails_1edd21f138 FOREIGN KEY (organization_id) REFERENCES public.organizations(id);
-
-
---
--- Name: signup_ranked_choices fk_rails_2168bdd71d; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.signup_ranked_choices
-    ADD CONSTRAINT fk_rails_2168bdd71d FOREIGN KEY (updated_by_id) REFERENCES public.users(id);
 
 
 --
@@ -5319,14 +5214,6 @@ ALTER TABLE ONLY public.signup_changes
 
 
 --
--- Name: signup_ranked_choices fk_rails_7f83596537; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.signup_ranked_choices
-    ADD CONSTRAINT fk_rails_7f83596537 FOREIGN KEY (user_con_profile_id) REFERENCES public.user_con_profiles(id);
-
-
---
 -- Name: cms_files_layouts fk_rails_82c2fb2f5b; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5428,14 +5315,6 @@ ALTER TABLE ONLY public.notification_templates
 
 ALTER TABLE ONLY public.coupon_applications
     ADD CONSTRAINT fk_rails_9478621569 FOREIGN KEY (order_id) REFERENCES public.orders(id);
-
-
---
--- Name: signup_ranked_choices fk_rails_9479dad612; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.signup_ranked_choices
-    ADD CONSTRAINT fk_rails_9479dad612 FOREIGN KEY (result_signup_id) REFERENCES public.signups(id);
 
 
 --
@@ -5823,8 +5702,6 @@ SET search_path TO "$user", public;
 INSERT INTO "schema_migrations" (version) VALUES
 ('20240331173308'),
 ('20240331160734'),
-('20240325174012'),
-('20240324173737'),
 ('20240224192755'),
 ('20231216024636'),
 ('20231130162442'),
@@ -5834,7 +5711,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20231126173530'),
 ('20231105161432'),
 ('20230808164646'),
-('20230729164027'),
 ('20230113220828'),
 ('20230113184026'),
 ('20230109012113'),

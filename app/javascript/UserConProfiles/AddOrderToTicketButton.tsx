@@ -30,7 +30,7 @@ function AddOrderToTicketButton({
   className,
 }: AddOrderToTicketButtonProps): JSX.Element {
   const newOrderModal = useModal();
-  const { myProfile } = useContext(AppRootContext);
+  const { myProfile, defaultCurrencyCode } = useContext(AppRootContext);
 
   const providingProduct = useMemo(() => {
     if (!ticket.id) {
@@ -57,7 +57,7 @@ function AddOrderToTicketButton({
           user_con_profile: userConProfile,
           payment_amount: providingProduct.pricing_structure?.price ?? {
             __typename: 'Money',
-            currency_code: 'USD',
+            currency_code: defaultCurrencyCode,
             fractional: 0,
           },
           status: OrderStatus.Paid,
@@ -71,7 +71,7 @@ function AddOrderToTicketButton({
               quantity: 1,
               price_per_item: providingProduct.pricing_structure?.price ?? {
                 __typename: 'Money',
-                currency_code: 'USD',
+                currency_code: defaultCurrencyCode,
                 fractional: 0,
               },
               ticket_id: ticket.id,

@@ -65,7 +65,7 @@ class Order < ApplicationRecord
         if entry_currencies.size == 1
           entry_currencies.first
         else
-          entry_currencies.first || convention.default_currency_code || Money.default_currency
+          entry_currencies.first || convention.default_currency_code_or_site_default
         end
       end
   end
