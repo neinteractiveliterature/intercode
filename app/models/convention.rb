@@ -180,6 +180,10 @@ class Convention < ApplicationRecord
     ScheduledValue::Timespan.new(start: starts_at, finish: ends_at)
   end
 
+  def default_currency_code_or_site_default
+    default_currency_code || Money.default_currency.iso_code
+  end
+
   private
 
   def maximum_event_signups_must_cover_all_time

@@ -6,7 +6,7 @@ export default function formatMoney(moneyValue: Money | null | undefined, includ
     return '';
   }
 
-  const currency = code(moneyValue.currency_code);
+  const currency = code(moneyValue.currency_code ?? '');
   if (currency == null) {
     return '';
   }

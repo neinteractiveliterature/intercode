@@ -35,7 +35,9 @@ Use #object or #context_convention instead."
 
   # Deprecated and misleading: this is only total _ticket sales_ revenue.
   def total_revenue
-    return Money.new(0, "USD") if object.ticket_count_by_type_and_payment_amount.blank?
+    if object.ticket_count_by_type_and_payment_amount.blank?
+      return Money.new(0, object.default_currency_code_or_site_default)
+    end
     object.ticket_count_by_type_and_payment_amount.sum { |row| row[:payment_amount] * row[:count] }
   end
 end

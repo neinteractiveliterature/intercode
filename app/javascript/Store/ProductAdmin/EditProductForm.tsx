@@ -33,7 +33,7 @@ export default function EditProductForm<ProductType extends WithRealOrGeneratedI
   hideVariants,
 }: EditProductFormProps<ProductType>) {
   const { t } = useTranslation();
-  const { ticketName } = useContext(AppRootContext);
+  const { ticketName, defaultCurrencyCode } = useContext(AppRootContext);
   const [
     setAvailable,
     setName,
@@ -192,7 +192,7 @@ export default function EditProductForm<ProductType extends WithRealOrGeneratedI
                   pricing_strategy: PricingStrategy.Fixed,
                   value: {
                     __typename: 'Money',
-                    currency_code: 'USD',
+                    currency_code: defaultCurrencyCode,
                     fractional: 0,
                   },
                 }

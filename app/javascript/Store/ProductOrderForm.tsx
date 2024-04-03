@@ -171,7 +171,9 @@ export default LoadQueryWithVariablesWrapper(
                     value={payWhatYouWantAmount}
                     onChange={setPayWhatYouWantAmount}
                     key={payWhatYouWantAmountForcedKey}
-                    allowedCurrencyCodes={(product.pricing_structure.value as PayWhatYouWantValue).allowed_currency_codes ?? undefined}
+                    allowedCurrencyCodes={
+                      (product.pricing_structure.value as PayWhatYouWantValue).allowed_currency_codes ?? undefined
+                    }
                   />
                 </div>
               )}

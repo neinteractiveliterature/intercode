@@ -1,6 +1,6 @@
 import { HTMLProps, useContext, useMemo } from 'react';
 import currencyCodes, { CurrencyCodeRecord } from '@breezehr/currency-codes';
-import { notEmpty } from '@neinteractiveliterature/litform/lib/ValueUtils';
+import { notEmpty } from '@neinteractiveliterature/litform';
 import AppRootContext from '../AppRootContext';
 
 export function useAllowedCurrencies(allowedCurrencyCodes?: string[]): CurrencyCodeRecord[] {

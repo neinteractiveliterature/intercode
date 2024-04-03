@@ -75,6 +75,7 @@ export default LoadQueryWrapper(useConventionAdminConventionQuery, function Conv
       defaultLayoutId: convention.defaultLayout?.id.toString(),
       rootPageId: convention.rootPage.id.toString(),
       catchAllStaffPositionId: convention.catch_all_staff_position?.id.toString(),
+      defaultCurrencyCode: convention.default_currency_code,
       ...(typeof favicon === 'undefined' ? {} : { favicon }),
       ...(typeof openGraphImage === 'undefined' ? {} : { openGraphImage }),
     };

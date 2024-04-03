@@ -59,19 +59,38 @@ export default function PricingStructureForm({ pricingStructure, setPricingStruc
         value={pricingStructure?.pricing_strategy}
         onChange={(strategy: PricingStrategy) =>
           setPricingStructure((prev) => {
-            const newPricingStructure = {
-              ...prev,
-              pricing_strategy: strategy,
-            };
-            if (strategy === PricingStrategy.PayWhatYouWant) {
-              const prevValue = prev?.value ?? {};
-              newPricingStructure.value = {
-                __typename: 'PayWhatYouWantValue',
-                allowed_currency_codes: [defaultCurrencyCode],
-                ...prevValue,
+            if (strategy === PricingStrategy.Fixed) {
+              return {
+                ...prev,
+                value: {
+                  __typename: 'Money',
+                  fractional: 0,
+                  currency_code: defaultCurrencyCode,
+                  ...(prev?.value as Money | undefined),
+                },
+                pricing_strategy: strategy,
+              };
+            } else if (strategy === PricingStrategy.PayWhatYouWant) {
+              return {
+                ...prev,
+                value: {
+                  __typename: 'PayWhatYouWantValue',
+                  allowed_currency_codes: [defaultCurrencyCode],
+                  ...(prev?.value as PayWhatYouWantValue | undefined),
+                },
+                pricing_strategy: strategy,
+              };
+            } else if (strategy === PricingStrategy.ScheduledValue) {
+              return {
+                ...prev,
+                value: {
+                  __typename: 'ScheduledMoneyValue',
+                  timespans: [],
+                  ...(prev?.value as ScheduledMoneyValue | undefined),
+                },
+                pricing_strategy: strategy,
               };
             }
-            return newPricingStructure;
           })
         }
       />
@@ -146,17 +165,31 @@ export default function PricingStructureForm({ pricingStructure, setPricingStruc
                     allowedCurrencyCodes={
                       (pricingStructure.value as PayWhatYouWantValue | undefined)?.allowed_currency_codes ?? undefined
                     }
-                    onChange={(newValue) =>
-                      setPricingStructure((prev) => ({
-                        ...prev,
-                        value: {
-                          __typename: 'PayWhatYouWantValue',
-                          allowed_currency_codes: allowedCurrencies.map((currency) => currency.code),
-                          ...prev?.value,
-                          [fieldName]: newValue,
-                        },
-                      }))
-                    }
+                    onChange={(newValue) => {
+                      if (typeof newValue === 'function') {
+                        setPricingStructure((prev) => ({
+                          ...prev,
+                          value: {
+                            __typename: 'PayWhatYouWantValue' as const,
+                            allowed_currency_codes: allowedCurrencies.map((currency) => currency.code),
+                            ...prev?.value,
+                            [fieldName]: newValue(
+                              ((prev?.value as PayWhatYouWantValue | undefined) ?? {})[fieldName] ?? undefined,
+                            ),
+                          },
+                        }));
+                      } else {
+                        setPricingStructure((prev) => ({
+                          ...prev,
+                          value: {
+                            __typename: 'PayWhatYouWantValue',
+                            allowed_currency_codes: allowedCurrencies.map((currency) => currency.code),
+                            ...prev?.value,
+                            [fieldName]: newValue,
+                          },
+                        }));
+                      }
+                    }}
                   />
                 )}
               </FormGroupWithLabel>
