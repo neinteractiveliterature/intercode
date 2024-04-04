@@ -190,7 +190,7 @@ function EventTable({ convention, filterableFormItems }: EventTableProps) {
           <ReactTableWithTheWorks
             tableInstance={tableInstance}
             loading={loading}
-            onClickRow={(row) => navigate(`/events/${row.original.id}`)}
+            onClickRow={(row) => navigate(`/events/${row.original.event.id}`)}
           />
         </QueryDataContext.Provider>
       </div>
