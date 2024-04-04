@@ -18,14 +18,14 @@ class ConventionReportsPresenter
               :product_id,
               :status,
               "COALESCE(price_per_item_cents, 0)",
-              "COALESCE(price_per_item_currency, #{ActiveRecord::Base.quote(convention.default_currency_code_or_site_default)})"
+              "COALESCE(price_per_item_currency, #{ActiveRecord::Base.connection.quote(convention.default_currency_code_or_site_default)})"
             )
             .pluck(
               :product_id,
               :status,
               Arel.sql("COALESCE(price_per_item_cents, 0)"),
               Arel.sql(
-                "COALESCE(price_per_item_currency, #{ActiveRecord::Base.quote(convention.default_currency_code_or_site_default)})"
+                "COALESCE(price_per_item_currency, #{ActiveRecord::Base.connection.quote(convention.default_currency_code_or_site_default)})"
               ),
               Arel.sql("SUM(quantity) sum_quantity")
             )
@@ -52,7 +52,7 @@ class ConventionReportsPresenter
             .group(
               :ticket_type_id,
               "COALESCE(price_per_item_cents, 0)",
-              "COALESCE(price_per_item_currency, #{ActiveRecord::Base.quote(convention.default_currency_code_or_site_default)})"
+              "COALESCE(price_per_item_currency, #{ActiveRecord::Base.connection.quote(convention.default_currency_code_or_site_default)})"
             )
             .count
 
@@ -82,7 +82,7 @@ class ConventionReportsPresenter
       .map { |provided_by_event, event_tickets| { provided_by_event: provided_by_event, tickets: event_tickets } }
   end
 
-  def events_by_choice # rubocop:disable Metrics/MethodLength
+  def events_by_choice
     rows = ActiveRecord::Base.connection.select_rows <<~SQL.squish
       SELECT event_id, state, choice, count(*) FROM (
         SELECT
