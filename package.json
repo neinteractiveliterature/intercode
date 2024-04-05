@@ -82,7 +82,7 @@
     "compression-webpack-plugin": "11.1.0",
     "core-js": "3.36.1",
     "crypto-browserify": "3.12.0",
-    "css-loader": "6.10.0",
+    "css-loader": "6.11.0",
     "css-minimizer-webpack-plugin": "6.0.0",
     "cssnano": "6.1.2",
     "csv-string": "4.1.1",
