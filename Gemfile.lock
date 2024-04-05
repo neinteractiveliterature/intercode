@@ -543,7 +543,7 @@ GEM
     safely_block (0.4.0)
     scheduled_value (1.4.0)
       sorted_set (~> 1.0)
-    sequel (5.78.0)
+    sequel (5.79.0)
       bigdecimal
     set (1.0.3)
     shoryuken (6.2.1)
