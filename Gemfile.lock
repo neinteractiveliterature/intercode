@@ -313,8 +313,8 @@ GEM
       reline (>= 0.4.2)
     jar-dependencies (0.4.1)
     jmespath (1.6.2)
-    json (2.7.1)
-    json (2.7.1-java)
+    json (2.7.2)
+    json (2.7.2-java)
     jwt (2.8.1)
       base64
     language_server-protocol (3.17.0.3)
@@ -513,7 +513,7 @@ GEM
     rexml (3.2.6)
     rollbar (3.5.2)
     rouge (3.26.1)
-    rubocop (1.62.1)
+    rubocop (1.63.0)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
       parallel (~> 1.10)
@@ -705,7 +705,7 @@ DEPENDENCIES
   redcarpet
   reverse_markdown
   rollbar
-  rubocop (= 1.62.1)
+  rubocop (= 1.63.0)
   rubocop-performance
   rubocop-rails
   rubocop-sequel
