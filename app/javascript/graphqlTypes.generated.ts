@@ -4569,6 +4569,7 @@ export type SignupRankedChoice = {
   priority?: Maybe<Scalars['Int']['output']>;
   requested_bucket_key?: Maybe<Scalars['String']['output']>;
   result_signup?: Maybe<Signup>;
+  result_signup_request?: Maybe<SignupRequest>;
   state: SignupRankedChoiceState;
   target_run: Run;
   updated_at: Scalars['Date']['output'];
@@ -4579,6 +4580,8 @@ export type SignupRankedChoice = {
 export enum SignupRankedChoiceState {
   /** We have not yet attempted to process this choice */
   Pending = 'pending',
+  /** The attendee has had a signup request put in (see the result_signup_request field for the actual signup request) */
+  Requested = 'requested',
   /** The attendee has been signed up (see the result_signup field for the actual signup) */
   SignedUp = 'signed_up',
   /** We attempted to process this choice but could not, so we skipped it */

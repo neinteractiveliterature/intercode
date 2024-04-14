@@ -95,7 +95,7 @@ class ExecuteRankedChoiceSignupsService < CivilService::Service
     actual_bucket = bucket_finder.find_bucket
     if actual_bucket
       result =
-        AcceptSignupChoiceService.new(
+        AcceptSignupRankedChoiceService.new(
           signup_choice: choice,
           whodunit: whodunit,
           skip_locking: skip_locking,
@@ -106,7 +106,7 @@ class ExecuteRankedChoiceSignupsService < CivilService::Service
       result.signup
     elsif allow_waitlist
       result =
-        AcceptSignupChoiceService.new(
+        AcceptSignupRankedChoiceService.new(
           signup_choice: choice,
           whodunit: whodunit,
           skip_locking: skip_locking,

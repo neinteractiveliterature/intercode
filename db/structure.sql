@@ -2504,7 +2504,8 @@ CREATE TABLE public.signup_ranked_choices (
     updated_by_id bigint NOT NULL,
     user_con_profile_id bigint NOT NULL,
     created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    updated_at timestamp(6) without time zone NOT NULL,
+    result_signup_request_id bigint
 );
 
 
@@ -4696,6 +4697,13 @@ CREATE INDEX index_signup_ranked_choices_on_result_signup_id ON public.signup_ra
 
 
 --
+-- Name: index_signup_ranked_choices_on_result_signup_request_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_signup_ranked_choices_on_result_signup_request_id ON public.signup_ranked_choices USING btree (result_signup_request_id);
+
+
+--
 -- Name: index_signup_ranked_choices_on_target_run_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -5220,6 +5228,14 @@ ALTER TABLE ONLY public.cms_content_group_associations
 
 ALTER TABLE ONLY public.root_sites
     ADD CONSTRAINT fk_rails_5cb3c6880e FOREIGN KEY (default_layout_id) REFERENCES public.cms_layouts(id);
+
+
+--
+-- Name: signup_ranked_choices fk_rails_6129ac5277; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.signup_ranked_choices
+    ADD CONSTRAINT fk_rails_6129ac5277 FOREIGN KEY (result_signup_request_id) REFERENCES public.signup_requests(id);
 
 
 --
@@ -5821,6 +5837,7 @@ ALTER TABLE ONLY public.cms_files_pages
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20240414172424'),
 ('20240331173308'),
 ('20240331160734'),
 ('20240325174012'),

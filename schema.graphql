@@ -5469,6 +5469,7 @@ type SignupRankedChoice {
   priority: Int
   requested_bucket_key: String
   result_signup: Signup
+  result_signup_request: SignupRequest
   state: SignupRankedChoiceState!
   target_run: Run!
   updated_at: Date!
@@ -5481,6 +5482,11 @@ enum SignupRankedChoiceState {
   We have not yet attempted to process this choice
   """
   pending
+
+  """
+  The attendee has had a signup request put in (see the result_signup_request field for the actual signup request)
+  """
+  requested
 
   """
   The attendee has been signed up (see the result_signup field for the actual signup)

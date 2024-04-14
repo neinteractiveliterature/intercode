@@ -29918,6 +29918,18 @@
               "args": []
             },
             {
+              "name": "result_signup_request",
+              "description": null,
+              "type": {
+                "kind": "OBJECT",
+                "name": "SignupRequest",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
               "name": "state",
               "description": null,
               "type": {
@@ -30025,6 +30037,12 @@
             {
               "name": "waitlisted",
               "description": "The attendee has been waitlisted (see the result_signup field for the actual signup)",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "requested",
+              "description": "The attendee has had a signup request put in (see the result_signup_request field for the actual signup request)",
               "isDeprecated": false,
               "deprecationReason": null
             },
