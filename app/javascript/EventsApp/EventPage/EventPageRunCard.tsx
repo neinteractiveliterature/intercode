@@ -14,7 +14,7 @@ import {
   useWithdrawMySignupMutation,
   useWithdrawSignupRequestMutation,
 } from './mutations.generated';
-import { SignupAutomationMode, SignupMode } from '../../graphqlTypes.generated';
+import { SignupMode } from '../../graphqlTypes.generated';
 import SignupCountData from '../SignupCountData';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -69,7 +69,7 @@ export type EventPageRunCardProps = {
 
 function EventPageRunCard({ event, run, myProfile, currentAbility, addToQueue }: EventPageRunCardProps): JSX.Element {
   const { t } = useTranslation();
-  const { signupMode, signupAutomationMode } = useContext(AppRootContext);
+  const { signupMode } = useContext(AppRootContext);
   const signupOptions = useMemo(
     () => buildSignupOptions(event, SignupCountData.fromRun(run), addToQueue, myProfile ?? undefined),
     [event, run, myProfile, addToQueue],
@@ -156,7 +156,7 @@ function EventPageRunCard({ event, run, myProfile, currentAbility, addToQueue }:
   );
 
   const createSignup = (signupOption: SignupOption) => {
-    if (signupMode === SignupMode.SelfService || signupAutomationMode === SignupAutomationMode.RankedChoice || signupOption.teamMember) {
+    if (signupMode === SignupMode.SelfService || signupOption.action === 'ADD_TO_QUEUE' || signupOption.teamMember) {
       return selfServiceSignup(signupOption);
     }
 
