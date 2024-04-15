@@ -7,6 +7,7 @@
   },
   "admin": {
     "convention": {
+      "defaultCurrency": "Default currency for convention",
       "faviconHelpText": "Used by browsers for the icon in tabs for this site.  180x180 pixels is recommended.",
       "faviconLabel": "Favicon",
       "header": {
@@ -117,6 +118,7 @@
       },
       "products": {
         "available": "Available for purchase",
+        "clickwrapAgreementLabel": "Product-specific clickwrap agreement",
         "deleteConfirmation": "Are you sure you want to delete the product {{ productName }}?",
         "deleteLabel": "Delete product",
         "descriptionLabel": "Product description",
@@ -810,7 +812,7 @@
       "unlimited": "Signups fully open"
     },
     "mySignupQueue": {
-      "queueHeader": "Signup Queue - Round {{ roundNumber }} - {{ roundDateTime }}",
+      "queueHeader": "Signup Queue - Round {{ roundNumber }} - {{ roundDateTime }} - {{ signupCount }}",
       "title": "My signup queue"
     },
     "noPreference": "No preference",

@@ -7,13 +7,20 @@ const defaultOptions = {} as const;
 export type MySignupQueueQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type MySignupQueueQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, my_signup_ranked_choices: Array<{ __typename: 'SignupRankedChoice', id: string, state: Types.SignupRankedChoiceState, priority?: number | null, requested_bucket_key?: string | null, target_run: { __typename: 'Run', id: string, title_suffix?: string | null, starts_at: string, event: { __typename: 'Event', id: string, title?: string | null, length_seconds: number, event_category: { __typename: 'EventCategory', id: string, name: string }, registration_policy?: { __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null, description?: string | null }> } | null } } }> } };
+export type MySignupQueueQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, maximum_event_signups?: { __typename: 'ScheduledValue', timespans: Array<{ __typename: 'TimespanWithValue', start?: string | null, finish?: string | null, value: string }> } | null, my_signup_ranked_choices: Array<{ __typename: 'SignupRankedChoice', id: string, state: Types.SignupRankedChoiceState, priority?: number | null, requested_bucket_key?: string | null, target_run: { __typename: 'Run', id: string, title_suffix?: string | null, starts_at: string, event: { __typename: 'Event', id: string, title?: string | null, length_seconds: number, event_category: { __typename: 'EventCategory', id: string, name: string }, registration_policy?: { __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null, description?: string | null }> } | null } } }> } };
 
 
 export const MySignupQueueQueryDocument = gql`
     query MySignupQueueQuery {
   convention: conventionByRequestHost {
     id
+    maximum_event_signups {
+      timespans {
+        start
+        finish
+        value
+      }
+    }
     my_signup_ranked_choices {
       id
       state
