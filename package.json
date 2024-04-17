@@ -145,7 +145,7 @@
     "resolve-url-loader": "5.0.0",
     "rollbar-sourcemap-webpack-plugin": "3.3.0",
     "sass": "1.75.0",
-    "sass-loader": "14.2.0",
+    "sass-loader": "14.2.1",
     "source-map-support": "0.5.21",
     "stream-browserify": "3.0.0",
     "style-loader": "3.3.4",
