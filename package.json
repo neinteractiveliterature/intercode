@@ -189,8 +189,8 @@
     "@types/react-dom": "18.2.25",
     "@types/react-transition-group": "4.4.10",
     "@types/testing-library__jest-dom": "5.14.9",
-    "@typescript-eslint/eslint-plugin": "7.6.0",
-    "@typescript-eslint/parser": "7.6.0",
+    "@typescript-eslint/eslint-plugin": "7.7.0",
+    "@typescript-eslint/parser": "7.7.0",
     "@webpack-cli/serve": "2.0.5",
     "core-js-compat": "3.37.0",
     "eslint": "8.57.0",
@@ -223,7 +223,7 @@
     "webpack-dev-server": "5.0.4"
   },
   "resolutions": {
-    "@typescript-eslint/parser": "7.6.0"
+    "@typescript-eslint/parser": "7.7.0"
   },
   "graphdoc": {
     "logo": "<h1 style=\"font-family: Helvetica, Arial; letter-spacing: -4px; font-size: 60px; font-weight: bold;\">Intercode</h1>"
