@@ -88,6 +88,7 @@ gem "platform-api"
 gem "fly.io-rails"
 gem "tzinfo-data"
 gem "browser"
+gem "positioning"
 
 gem "faker", group: "development", require: false
 

@@ -4566,7 +4566,7 @@ export type SignupRankedChoice = {
   __typename: 'SignupRankedChoice';
   created_at: Scalars['Date']['output'];
   id: Scalars['ID']['output'];
-  priority?: Maybe<Scalars['Int']['output']>;
+  priority: Scalars['Int']['output'];
   requested_bucket_key?: Maybe<Scalars['String']['output']>;
   result_signup?: Maybe<Signup>;
   result_signup_request?: Maybe<SignupRequest>;

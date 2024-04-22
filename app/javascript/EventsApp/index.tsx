@@ -34,7 +34,9 @@ function EventsApp(): JSX.Element {
         <Route path="schedule_with_counts/*" element={<Navigate to="../schedule" replace />} />
       )}
       {siteMode !== SiteMode.SingleEvent && <Route path="table" element={<EventTable />} />}
-      {signupAutomationMode === SignupAutomationMode.RankedChoice && <Route path="my-signup-queue" element={<LazyMySignupQueue />} />}
+      {signupAutomationMode === SignupAutomationMode.RankedChoice && (
+        <Route path="my-signup-queue" element={<LazyMySignupQueue />} />
+      )}
       <Route path=":eventId">
         <Route
           path="edit"

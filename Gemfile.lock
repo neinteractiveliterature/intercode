@@ -410,6 +410,9 @@ GEM
       heroics (~> 0.1.1)
       moneta (~> 1.0.0)
       rate_throttle_client (~> 0.1.0)
+    positioning (0.2.1)
+      activerecord (>= 6.1)
+      activesupport (>= 6.1)
     prettier (4.0.4)
       syntax_tree (>= 4.0.1)
       syntax_tree-haml (>= 2.0.0)
@@ -703,6 +706,7 @@ DEPENDENCIES
   pg_search
   phonelib
   platform-api
+  positioning
   prettier (= 4.0.4)
   prettier_print
   pry-rails

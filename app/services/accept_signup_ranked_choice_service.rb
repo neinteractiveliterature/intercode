@@ -35,13 +35,7 @@ class AcceptSignupRankedChoiceService < CivilService::Service
   end
 
   def with_relevant_locks(&block)
-    with_advisory_lock_unless_skip_locking("run_#{signup_ranked_choice.target_run.id}_signups") do
-      if signup_ranked_choice.replace_signup
-        with_advisory_lock_unless_skip_locking("run_#{signup_ranked_choice.replace_signup.run.id}_signups", &block)
-      else
-        yield
-      end
-    end
+    with_advisory_lock_unless_skip_locking("run_#{signup_ranked_choice.target_run.id}_signups", &block)
   end
 
   def create_signup

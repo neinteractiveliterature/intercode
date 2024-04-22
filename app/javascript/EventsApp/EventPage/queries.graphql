@@ -27,6 +27,7 @@ fragment MySignupRankedChoiceFields on SignupRankedChoice {
     id
   }
   requested_bucket_key
+  priority
 }
 
 fragment EventPageRunFields on Run {

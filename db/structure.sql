@@ -3899,6 +3899,13 @@ CREATE INDEX idx_max_event_provided_tickets_on_ticket_type_id ON public.maximum_
 
 
 --
+-- Name: idx_on_user_con_profile_id_state_priority_7c693e2c51; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX idx_on_user_con_profile_id_state_priority_7c693e2c51 ON public.signup_ranked_choices USING btree (user_con_profile_id, state, priority);
+
+
+--
 -- Name: idx_permissions_unique_join; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -5837,6 +5844,7 @@ ALTER TABLE ONLY public.cms_files_pages
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20240417195945'),
 ('20240414172424'),
 ('20240331173308'),
 ('20240331160734'),

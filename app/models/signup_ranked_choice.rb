@@ -17,6 +17,7 @@
 #
 # Indexes
 #
+#  idx_on_user_con_profile_id_state_priority_7c693e2c51     (user_con_profile_id,state,priority) UNIQUE
 #  index_signup_ranked_choices_on_result_signup_id          (result_signup_id)
 #  index_signup_ranked_choices_on_result_signup_request_id  (result_signup_request_id)
 #  index_signup_ranked_choices_on_target_run_id             (target_run_id)
@@ -47,6 +48,8 @@ class SignupRankedChoice < ApplicationRecord
             presence: {
               if: ->(signup_ranked_choice) { signup_ranked_choice.state == "requested" }
             }
+
+  positioned on: %i[user_con_profile state], column: :priority
 
   private
 

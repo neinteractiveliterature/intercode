@@ -5,7 +5,7 @@ module Types
     authorize_record
 
     field :id, ID, null: false
-    field :priority, Integer, null: true
+    field :priority, Integer, null: false
     field :state, Types::SignupRankedChoiceStateType, null: false
     field :requested_bucket_key, String, null: true
     field :user_con_profile, Types::UserConProfileType, null: false

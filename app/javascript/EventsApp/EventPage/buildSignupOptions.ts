@@ -3,11 +3,11 @@ import { notEmpty } from '@neinteractiveliterature/litform';
 import { EventPageQueryData, RunCardRegistrationPolicyFieldsFragment } from './queries.generated';
 import sortBuckets from './sortBuckets';
 import SignupCountData from '../SignupCountData';
-import { SignupState } from '../../graphqlTypes.generated';
+import { SignupState, SignupRankedChoice } from '../../graphqlTypes.generated';
 
 type SignupOptionBucket = RunCardRegistrationPolicyFieldsFragment['buckets'][0];
 
-type SignupOptionAction = 'SIGN_UP_NOW' | 'WAITLIST' | 'ADD_TO_QUEUE';
+type SignupOptionAction = 'SIGN_UP_NOW' | 'WAITLIST' | 'ADD_TO_QUEUE' | 'IN_QUEUE';
 
 export type SignupOption = {
   bucket?: SignupOptionBucket;
@@ -67,6 +67,7 @@ function buildNoPreferenceOptions(
   event: Pick<EventPageQueryData['convention']['event'], 'registration_policy'>,
   signupCounts: SignupCountData,
   addToQueue: boolean,
+  inQueue: boolean,
 ): SignupOption[] {
   if ((event.registration_policy || {}).prevent_no_preference_signups) {
     return [];
@@ -89,7 +90,9 @@ function buildNoPreferenceOptions(
   }, 0);
 
   let action: SignupOptionAction = 'SIGN_UP_NOW';
-  if (addToQueue) {
+  if (inQueue) {
+    action = 'IN_QUEUE';
+  } else if (addToQueue) {
     action = 'ADD_TO_QUEUE';
   } else if (signupCounts.getConfirmedLimitedSignupCount(event) >= totalSlots) {
     action = 'WAITLIST';
@@ -119,6 +122,7 @@ function allSignupOptions(
     },
   signupCounts: SignupCountData,
   addToQueue: boolean,
+  myPendingRankedChoices: Pick<SignupRankedChoice, 'requested_bucket_key'>[],
   userConProfile?: { id: string },
 ): SignupOption[] {
   if (isTeamMember(event, userConProfile)) {
@@ -150,7 +154,9 @@ function allSignupOptions(
         }
 
         let action: SignupOptionAction = 'SIGN_UP_NOW';
-        if (addToQueue) {
+        if (myPendingRankedChoices.find((request) => request.requested_bucket_key === bucket.key) != null) {
+          action = 'IN_QUEUE';
+        } else if (addToQueue) {
           action = 'ADD_TO_QUEUE';
         } else if (
           bucket.slots_limited &&
@@ -163,7 +169,12 @@ function allSignupOptions(
         return buildBucketSignupOption(bucket, index, !bucket.not_counted && nonAnythingBuckets.length === 1, action);
       })
       .filter(notEmpty),
-    ...buildNoPreferenceOptions(event, signupCounts, addToQueue),
+    ...buildNoPreferenceOptions(
+      event,
+      signupCounts,
+      addToQueue,
+      myPendingRankedChoices.find((request) => request.requested_bucket_key == null) != null,
+    ),
   ];
 }
 
@@ -177,9 +188,10 @@ export default function buildSignupOptions(
   event: Parameters<typeof allSignupOptions>[0],
   signupCounts: SignupCountData,
   addToQueue: boolean,
+  myPendingRankedChoices: Pick<SignupRankedChoice, 'requested_bucket_key'>[],
   userConProfile?: { id: string },
 ): PartitionedSignupOptions {
-  const allOptions = allSignupOptions(event, signupCounts, addToQueue, userConProfile);
+  const allOptions = allSignupOptions(event, signupCounts, addToQueue, myPendingRankedChoices, userConProfile);
   const noPreferenceOptions = allOptions.filter((option) => option.noPreference);
   const notCountedOptions = allOptions.filter((option) => !option.counted);
 

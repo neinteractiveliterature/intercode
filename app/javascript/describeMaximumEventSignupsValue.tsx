@@ -1,6 +1,6 @@
-import { MaximumEventSignupsValue } from './MaximumEventSignupsPreview';
 import { TFunction } from 'i18next';
 import assertNever from 'assert-never';
+import { MaximumEventSignupsValue } from './ConventionAdmin/MaximumEventSignupsPreview';
 
 export function describeMaximumEventSignupsValue(value: MaximumEventSignupsValue | null | undefined, t: TFunction) {
   if (!value) {
@@ -13,7 +13,7 @@ export function describeMaximumEventSignupsValue(value: MaximumEventSignupsValue
     case '1':
     case '2':
     case '3':
-      return t('signups.maximumSignups.limitedCount', 'Up to {{ count }} event');
+      return t('signups.maximumSignups.limitedCount', 'Up to {{ count }} event(s)');
     case 'unlimited':
       return t('signups.maximumSignups.unlimited', 'Signups fully open');
     case 'not_now':

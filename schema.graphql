@@ -5466,7 +5466,7 @@ type SignupMoveResult {
 type SignupRankedChoice {
   created_at: Date!
   id: ID!
-  priority: Int
+  priority: Int!
   requested_bucket_key: String
   result_signup: Signup
   result_signup_request: SignupRequest

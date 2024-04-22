@@ -14,7 +14,7 @@ import {
   useWithdrawMySignupMutation,
   useWithdrawSignupRequestMutation,
 } from './mutations.generated';
-import { SignupMode } from '../../graphqlTypes.generated';
+import { SignupMode, SignupRankedChoiceState } from '../../graphqlTypes.generated';
 import SignupCountData from '../SignupCountData';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -70,9 +70,20 @@ export type EventPageRunCardProps = {
 function EventPageRunCard({ event, run, myProfile, currentAbility, addToQueue }: EventPageRunCardProps): JSX.Element {
   const { t } = useTranslation();
   const { signupMode } = useContext(AppRootContext);
+  const myPendingRankedChoices = useMemo(
+    () => run.my_signup_ranked_choices.filter((choice) => choice.state === SignupRankedChoiceState.Pending),
+    [run.my_signup_ranked_choices],
+  );
   const signupOptions = useMemo(
-    () => buildSignupOptions(event, SignupCountData.fromRun(run), addToQueue, myProfile ?? undefined),
-    [event, run, myProfile, addToQueue],
+    () =>
+      buildSignupOptions(
+        event,
+        SignupCountData.fromRun(run),
+        addToQueue,
+        myPendingRankedChoices,
+        myProfile ?? undefined,
+      ),
+    [event, run, myProfile, addToQueue, myPendingRankedChoices],
   );
   const confirm = useConfirm();
   const createModeratedSignupModal = useModal<{ signupOption: SignupOption }>();

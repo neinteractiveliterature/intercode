@@ -92,7 +92,13 @@ const RunDisplay = forwardRef<HTMLDivElement, RunDisplayProps>(function RunDispl
       return null;
     }
 
-    return <SignupStatusBadge signupStatus={signupStatus} myRating={event.my_rating ?? undefined} />;
+    return (
+      <SignupStatusBadge
+        signupStatus={signupStatus}
+        myRating={event.my_rating ?? undefined}
+        mySignupRankedChoices={run.my_signup_ranked_choices}
+      />
+    );
   };
 
   return (

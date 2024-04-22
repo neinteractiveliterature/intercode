@@ -60,6 +60,12 @@ fragment RunBasicSignupData on Run {
     id
     state
   }
+
+  my_signup_ranked_choices {
+    id
+    state
+    priority
+  }
 }
 
 query CommonConventionDataQuery {
