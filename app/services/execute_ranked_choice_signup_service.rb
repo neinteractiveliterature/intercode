@@ -98,12 +98,12 @@ class ExecuteRankedChoiceSignupService < CivilService::Service
         skip_locking: skip_locking,
         suppress_notifications: suppress_notifications
       ).call!
-    signup_ranked_choice.update!(state: "waitlisted")
     RankedChoiceDecision.create!(
       decision: :waitlist,
       user_con_profile: user_con_profile,
       signup_ranked_choice: signup_ranked_choice,
-      signup: result.signup
+      signup: result.signup,
+      signup_request: result.signup_request
     )
   end
 end

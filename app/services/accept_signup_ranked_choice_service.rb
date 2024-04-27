@@ -22,7 +22,10 @@ class AcceptSignupRankedChoiceService < CivilService::Service
     if signup_ranked_choice.convention.signup_mode == "self_service"
       signup_result = nil
       with_relevant_locks { signup_result = create_signup }
-      signup_ranked_choice.update!(state: "signed_up", result_signup: signup_result.signup)
+      signup_ranked_choice.update!(
+        state: signup_result.signup.confirmed? ? "signed_up" : "waitlisted",
+        result_signup: signup_result.signup
+      )
       success(signup: signup_result.signup)
     else
       signup_request = nil
