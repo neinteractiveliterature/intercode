@@ -4502,6 +4502,7 @@ export type SignupChange = {
 };
 
 export enum SignupChangeAction {
+  AcceptSignupRankedChoice = 'accept_signup_ranked_choice',
   AcceptSignupRequest = 'accept_signup_request',
   AdminCreateSignup = 'admin_create_signup',
   ChangeRegistrationPolicy = 'change_registration_policy',
@@ -4584,8 +4585,6 @@ export enum SignupRankedChoiceState {
   Requested = 'requested',
   /** The attendee has been signed up (see the result_signup field for the actual signup) */
   SignedUp = 'signed_up',
-  /** We attempted to process this choice but could not, so we skipped it */
-  Skipped = 'skipped',
   /** The attendee has been waitlisted (see the result_signup field for the actual signup) */
   Waitlisted = 'waitlisted'
 }

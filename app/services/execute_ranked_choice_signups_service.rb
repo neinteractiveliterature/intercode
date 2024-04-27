@@ -1,18 +1,5 @@
 # frozen_string_literal: true
 class ExecuteRankedChoiceSignupsService < CivilService::Service
-  class RankedChoiceDecision
-    attr_reader :user_con_profile, :decision, :reason, :signup_ranked_choice, :signup, :extra
-
-    def initialize(user_con_profile:, decision:, reason: nil, signup_ranked_choice: nil, signup: nil, **extra)
-      @user_con_profile = user_con_profile
-      @decision = decision
-      @reason = reason
-      @signup_ranked_choice = signup_ranked_choice
-      @signup = signup
-      @extra = extra
-    end
-  end
-
   class Result < CivilService::Result
     attr_accessor :decisions
   end
@@ -50,95 +37,55 @@ class ExecuteRankedChoiceSignupsService < CivilService::Service
 
   def execute_choices_for_user_con_profile(user_con_profile)
     constraints = UserSignupConstraints.new(user_con_profile)
-    unless constraints.has_ticket_if_required?
-      log_skip_user(user_con_profile: user_con_profile, reason: :missing_ticket)
-      return
-    end
-
-    unless constraints.signup_count_allowed?(constraints.current_signup_count + 1)
-      log_skip_user(user_con_profile: user_con_profile, reason: :no_more_signups_allowed)
-      return
-    end
+    return if check_skip_user_for_policy_reasons(constraints)
 
     pending_choices = user_con_profile.signup_ranked_choices.where(state: "pending").order(:priority).to_a
     unless pending_choices.any?
-      log_skip_user(user_con_profile: user_con_profile, reason: :no_pending_choices)
-      return
-    end
-
-    signup = pending_choices.find { |choice| execute_choice(user_con_profile, constraints, choice) }
-    signup ||
-      pending_choices.find { |choice| execute_choice(user_con_profile, constraints, choice, allow_waitlist: true) }
-  end
-
-  def execute_choice(user_con_profile, constraints, choice, allow_waitlist: false)
-    conflicts = constraints.conflicting_signups_for_run(choice.target_run)
-    if conflicts.any?
-      log_skip_choice(
+      decisions << RankedChoiceDecision.create!(
+        decision: :skip_user,
         user_con_profile: user_con_profile,
-        reason: :conflict,
-        signup_choice: choice,
-        extra: {
-          conflicts: conflicts
-        }
+        reason: :no_pending_choices
       )
       return
     end
 
-    run = choice.target_run
-    bucket_finder =
-      SignupBucketFinder.new(
-        run.registration_policy,
-        choice.requested_bucket_key,
-        run.signups.counted.occupying_slot.to_a
+    signup = pending_choices.find { |choice| execute_choice(constraints, choice) }
+    signup || pending_choices.find { |choice| execute_choice(constraints, choice, allow_waitlist: true) }
+  end
+
+  def check_skip_user_for_policy_reasons(constraints)
+    unless constraints.has_ticket_if_required?
+      decisions << RankedChoiceDecision.create!(
+        decision: :skip_user,
+        user_con_profile: user_con_profile,
+        reason: :missing_ticket
       )
-    actual_bucket = bucket_finder.find_bucket
-    if actual_bucket
-      result =
-        AcceptSignupRankedChoiceService.new(
-          signup_choice: choice,
-          whodunit: whodunit,
-          skip_locking: skip_locking,
-          suppress_notifications: suppress_notifications
-        ).call!
-      choice.update!(state: "signed_up")
-      log_signup(user_con_profile: user_con_profile, signup_choice: choice, signup: result.signup)
-      result.signup
-    elsif allow_waitlist
-      result =
-        AcceptSignupRankedChoiceService.new(
-          signup_choice: choice,
-          whodunit: whodunit,
-          skip_locking: skip_locking,
-          suppress_notifications: suppress_notifications
-        ).call!
-      choice.update!(state: "waitlisted")
-      log_waitlist(user_con_profile: user_con_profile, signup_choice: choice, signup: result.signup)
-      result.signup
-    else
-      choice.update!(state: "skipped")
-      log_skip_choice(user_con_profile: user_con_profile, reason: :full, signup_choice: choice)
-      nil
+      return true
     end
+
+    unless constraints.signup_count_allowed?(constraints.current_signup_count + 1)
+      decisions << RankedChoiceDecision.create!(
+        decision: :skip_user,
+        user_con_profile: user_con_profile,
+        reason: :no_more_signups_allowed
+      )
+      return true
+    end
+
+    false
   end
 
-  def log_decision(**args)
-    decisions << RankedChoiceDecision.new(**args)
-  end
-
-  def log_skip_user(**args)
-    log_decision(decision: :skip_user, **args)
-  end
-
-  def log_skip_choice(**args)
-    log_decision(decision: :skip_choice, **args)
-  end
-
-  def log_signup(**args)
-    log_decision(decision: :signup, **args)
-  end
-
-  def log_waitlist(**args)
-    log_decision(decision: :waitlist, **args)
+  def execute_choice(constraints, choice, allow_waitlist: false)
+    result =
+      ExecuteRankedChoiceSignupService.call!(
+        whodunit: whodunit,
+        signup_ranked_choice: choice,
+        allow_waitlist: allow_waitlist,
+        constraints: constraints,
+        skip_locking: skip_locking,
+        suppress_notifications: suppress_notifications
+      )
+    decisions << result.decision
+    result.decision.decision != "skip_choice"
   end
 end

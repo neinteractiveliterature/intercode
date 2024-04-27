@@ -2301,6 +2301,43 @@ ALTER SEQUENCE public.products_id_seq OWNED BY public.products.id;
 
 
 --
+-- Name: ranked_choice_decisions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.ranked_choice_decisions (
+    id bigint NOT NULL,
+    user_con_profile_id bigint,
+    signup_ranked_choice_id bigint,
+    decision text NOT NULL,
+    reason text,
+    signup_id bigint,
+    signup_request_id bigint,
+    extra jsonb,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: ranked_choice_decisions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.ranked_choice_decisions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: ranked_choice_decisions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.ranked_choice_decisions_id_seq OWNED BY public.ranked_choice_decisions.id;
+
+
+--
 -- Name: rooms; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -3214,6 +3251,13 @@ ALTER TABLE ONLY public.products ALTER COLUMN id SET DEFAULT nextval('public.pro
 
 
 --
+-- Name: ranked_choice_decisions id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ranked_choice_decisions ALTER COLUMN id SET DEFAULT nextval('public.ranked_choice_decisions_id_seq'::regclass);
+
+
+--
 -- Name: rooms id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -3724,6 +3768,14 @@ ALTER TABLE ONLY public.product_variants
 
 ALTER TABLE ONLY public.products
     ADD CONSTRAINT products_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: ranked_choice_decisions ranked_choice_decisions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ranked_choice_decisions
+    ADD CONSTRAINT ranked_choice_decisions_pkey PRIMARY KEY (id);
 
 
 --
@@ -4585,6 +4637,34 @@ CREATE INDEX index_products_on_provides_ticket_type_id ON public.products USING 
 
 
 --
+-- Name: index_ranked_choice_decisions_on_signup_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ranked_choice_decisions_on_signup_id ON public.ranked_choice_decisions USING btree (signup_id);
+
+
+--
+-- Name: index_ranked_choice_decisions_on_signup_ranked_choice_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ranked_choice_decisions_on_signup_ranked_choice_id ON public.ranked_choice_decisions USING btree (signup_ranked_choice_id);
+
+
+--
+-- Name: index_ranked_choice_decisions_on_signup_request_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ranked_choice_decisions_on_signup_request_id ON public.ranked_choice_decisions USING btree (signup_request_id);
+
+
+--
+-- Name: index_ranked_choice_decisions_on_user_con_profile_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ranked_choice_decisions_on_user_con_profile_id ON public.ranked_choice_decisions USING btree (user_con_profile_id);
+
+
+--
 -- Name: index_rooms_on_convention_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -5126,6 +5206,14 @@ ALTER TABLE ONLY public.user_activity_alerts
 
 
 --
+-- Name: ranked_choice_decisions fk_rails_3163578a2d; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ranked_choice_decisions
+    ADD CONSTRAINT fk_rails_3163578a2d FOREIGN KEY (signup_request_id) REFERENCES public.signup_requests(id);
+
+
+--
 -- Name: form_sections fk_rails_364c041eca; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5270,6 +5358,14 @@ ALTER TABLE ONLY public.cms_files
 
 
 --
+-- Name: ranked_choice_decisions fk_rails_6f2a29f310; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ranked_choice_decisions
+    ADD CONSTRAINT fk_rails_6f2a29f310 FOREIGN KEY (user_con_profile_id) REFERENCES public.user_con_profiles(id);
+
+
+--
 -- Name: signups fk_rails_6f474f10dd; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5339,6 +5435,14 @@ ALTER TABLE ONLY public.signups
 
 ALTER TABLE ONLY public.signup_changes
     ADD CONSTRAINT fk_rails_79e46f1342 FOREIGN KEY (user_con_profile_id) REFERENCES public.user_con_profiles(id);
+
+
+--
+-- Name: ranked_choice_decisions fk_rails_7a24c25ccf; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ranked_choice_decisions
+    ADD CONSTRAINT fk_rails_7a24c25ccf FOREIGN KEY (signup_id) REFERENCES public.signups(id);
 
 
 --
@@ -5598,6 +5702,14 @@ ALTER TABLE ONLY public.oauth_access_grants
 
 
 --
+-- Name: ranked_choice_decisions fk_rails_b5dde4741e; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ranked_choice_decisions
+    ADD CONSTRAINT fk_rails_b5dde4741e FOREIGN KEY (signup_ranked_choice_id) REFERENCES public.signup_ranked_choices(id);
+
+
+--
 -- Name: conventions fk_rails_b74d51e308; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5844,6 +5956,7 @@ ALTER TABLE ONLY public.cms_files_pages
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20240427160255'),
 ('20240417195945'),
 ('20240414172424'),
 ('20240331173308'),

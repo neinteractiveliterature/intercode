@@ -5390,6 +5390,7 @@ type SignupChange {
 }
 
 enum SignupChangeAction {
+  accept_signup_ranked_choice
   accept_signup_request
   admin_create_signup
   change_registration_policy
@@ -5492,11 +5493,6 @@ enum SignupRankedChoiceState {
   The attendee has been signed up (see the result_signup field for the actual signup)
   """
   signed_up
-
-  """
-  We attempted to process this choice but could not, so we skipped it
-  """
-  skipped
 
   """
   The attendee has been waitlisted (see the result_signup field for the actual signup)

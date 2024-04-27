@@ -23,14 +23,12 @@ class AcceptSignupRankedChoiceService < CivilService::Service
       signup_result = nil
       with_relevant_locks { signup_result = create_signup }
       signup_ranked_choice.update!(state: "signed_up", result_signup: signup_result.signup)
-      notify_user
       success(signup: signup_result.signup)
     else
       signup_request = nil
       with_relevant_locks { signup_request = create_signup_request }
       signup_ranked_choice.update!(state: "requested", result_signup_request: signup_request)
-      notify_user
-      success(signup_requsest: signup_request)
+      success(signup_request: signup_request)
     end
   end
 
@@ -46,7 +44,7 @@ class AcceptSignupRankedChoiceService < CivilService::Service
       whodunit,
       skip_locking: true,
       suppress_notifications: suppress_notifications,
-      suppress_confirmation: true, # notify_user will take care of this separately
+      suppress_confirmation: suppress_notifications,
       action: "accept_signup_ranked_choice"
     ).call!
   end
@@ -54,16 +52,8 @@ class AcceptSignupRankedChoiceService < CivilService::Service
   def create_signup_request
     signup_ranked_choice.user_con_profile.signup_requests.create!(
       target_run: signup_ranked_choice.target_run,
-      requested_bucket_key: signup_ranked_choice.requested_bucket_key
-    )
-  end
-
-  def notify_user
-    return if suppress_notifications
-
-    # 5-second delay to let the transaction commit
-    SignupRequests::RequestAcceptedNotifier.new(signup_ranked_choice: signup_ranked_choice).deliver_later(
-      wait: 5.seconds
+      requested_bucket_key: signup_ranked_choice.requested_bucket_key,
+      updated_by: whodunit
     )
   end
 end

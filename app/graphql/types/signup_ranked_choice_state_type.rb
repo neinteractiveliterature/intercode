@@ -7,5 +7,4 @@ class Types::SignupRankedChoiceStateType < Types::BaseEnum
     "requested",
     "The attendee has had a signup request put in (see the result_signup_request field for the actual signup request)"
   )
-  value("skipped", "We attempted to process this choice but could not, so we skipped it")
 end

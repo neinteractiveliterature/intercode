@@ -29435,6 +29435,12 @@
               "deprecationReason": null
             },
             {
+              "name": "accept_signup_ranked_choice",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "unknown",
               "description": null,
               "isDeprecated": false,
@@ -30047,12 +30053,6 @@
             {
               "name": "requested",
               "description": "The attendee has had a signup request put in (see the result_signup_request field for the actual signup request)",
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "skipped",
-              "description": "We attempted to process this choice but could not, so we skipped it",
               "isDeprecated": false,
               "deprecationReason": null
             }
