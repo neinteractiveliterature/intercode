@@ -1,8 +1,8 @@
 import { Trans, useTranslation } from 'react-i18next';
 import { formatLCM, getDateTimeFormat } from '../../TimeUtils';
 import { DateTime } from 'luxon';
-import { LoadQueryWrapper } from '@neinteractiveliterature/litform/dist';
-import { useMySignupQueueQuery } from './queries.generated';
+import { ErrorDisplay, LoadQueryWrapper, useConfirm } from '@neinteractiveliterature/litform';
+import { MySignupQueueQueryDocument, useMySignupQueueQuery } from './queries.generated';
 import { useMemo } from 'react';
 import { SignupRankedChoiceState } from '../../graphqlTypes.generated';
 import sortBy from 'lodash/sortBy';
@@ -10,9 +10,15 @@ import { findCurrentTimespanIndex } from '../../ScheduledValueUtils';
 import RankedChoicePriorityIndicator from './RankedChoicePriorityIndicator';
 import buildEventUrl from '../buildEventUrl';
 import { Link } from 'react-router-dom';
+import { useDeleteSignupRankedChoiceMutation } from './mutations.generated';
+import React from 'react';
 
 const MySignupQueue = LoadQueryWrapper(useMySignupQueueQuery, ({ data }) => {
   const { t } = useTranslation();
+  const [deleteSignupRankedChoice] = useDeleteSignupRankedChoiceMutation({
+    refetchQueries: [{ query: MySignupQueueQueryDocument }],
+  });
+  const confirm = useConfirm();
 
   const pendingChoices = useMemo(() => {
     const pendingChoices = data.convention.my_signup_ranked_choices.filter(
@@ -76,7 +82,7 @@ const MySignupQueue = LoadQueryWrapper(useMySignupQueueQuery, ({ data }) => {
       <section className="card my-4">
         <ul className="list-group list-group-flush">
           {pendingChoices.map((pendingChoice) => (
-            <>
+            <React.Fragment key={pendingChoice.id}>
               <li className="list-group-item d-flex align-items-center">
                 <div className="me-3">
                   <div className="d-flex align-items-center">
@@ -122,10 +128,25 @@ const MySignupQueue = LoadQueryWrapper(useMySignupQueueQuery, ({ data }) => {
                   </button>
                 </div>
                 <div>
-                  <button className="btn btn-outline-danger">{t('signups.mySignupQueue.remove', 'Remove')}</button>
+                  <button
+                    className="btn btn-outline-danger"
+                    onClick={() =>
+                      confirm({
+                        prompt: t(
+                          'signups.mySignupQueue.removeConfirmPrompt',
+                          'Are you sure you want to remove {{ eventTitle }} from your signup queue?',
+                          { eventTitle: pendingChoice.target_run.event.title },
+                        ),
+                        action: () => deleteSignupRankedChoice({ variables: { id: pendingChoice.id } }),
+                        renderError: (error) => <ErrorDisplay graphQLError={error} />,
+                      })
+                    }
+                  >
+                    {t('signups.mySignupQueue.remove', 'Remove')}
+                  </button>
                 </div>
               </li>
-            </>
+            </React.Fragment>
           ))}
         </ul>
       </section>

@@ -48,7 +48,7 @@ class SignupRankedChoicePolicy < ApplicationPolicy
     user && user.id == record.user_con_profile.user_id && (convention.signup_automation_mode == "ranked_choice")
   end
 
-  def withdraw?
+  def destroy?
     return false unless oauth_scope?(:manage_signups)
     return false if assumed_identity_from_profile && assumed_identity_from_profile.convention != convention
     user && record.state == "pending" && user.id == record.user_con_profile.user_id

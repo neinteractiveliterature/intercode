@@ -1,5 +1,5 @@
 export type RankedChoicePriorityIndicatorProps = {
-  priority: number;
+  priority: number | null | undefined;
   fontSize: number;
 };
 

@@ -1,0 +1,5 @@
+mutation DeleteSignupRankedChoice($id: ID!) {
+  deleteSignupRankedChoice(input: { id: $id }) {
+    clientMutationId
+  }
+}

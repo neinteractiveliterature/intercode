@@ -211,6 +211,7 @@ class Types::MutationType < Types::BaseObject
   ### SignupRankedChoice
 
   field :createSignupRankedChoice, null: false, mutation: Mutations::CreateSignupRankedChoice
+  field :deleteSignupRankedChoice, null: false, mutation: Mutations::DeleteSignupRankedChoice
 
   ### SignupRequest
 
