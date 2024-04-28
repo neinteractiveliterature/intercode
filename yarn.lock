@@ -12096,9 +12096,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-jest@npm:28.2.0":
-  version: 28.2.0
-  resolution: "eslint-plugin-jest@npm:28.2.0"
+"eslint-plugin-jest@npm:28.3.0":
+  version: 28.3.0
+  resolution: "eslint-plugin-jest@npm:28.3.0"
   dependencies:
     "@typescript-eslint/utils": "npm:^6.0.0"
   peerDependencies:
@@ -12110,7 +12110,7 @@ __metadata:
       optional: true
     jest:
       optional: true
-  checksum: 10c0/9f825bad115b57f05cd74a108d46c0ef29fd9aefd7dee565e328b5c7767c9a2b73878af31b2f807e4df8414badd6d721822857b1d9fd3f013fede8cc76c73da0
+  checksum: 10c0/091270b8b13199e630668b60c9434ad1f43d0e0d590c48a79d51a10a9ec18c494324dd9c4c311cb76cf024277595a39bf75ddf8b2525b67b4a479af52f2060ea
   languageName: node
   linkType: hard
 
@@ -21556,7 +21556,7 @@ __metadata:
     eslint-import-resolver-typescript: "npm:3.6.1"
     eslint-import-resolver-webpack: "npm:0.13.8"
     eslint-plugin-import: "npm:2.29.1"
-    eslint-plugin-jest: "npm:28.2.0"
+    eslint-plugin-jest: "npm:28.3.0"
     eslint-plugin-jsx-a11y: "npm:6.8.0"
     eslint-plugin-react: "npm:7.34.1"
     eslint-plugin-react-hooks: "npm:4.6.0"
