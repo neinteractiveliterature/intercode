@@ -1,7 +1,7 @@
 import { Trans, useTranslation } from 'react-i18next';
 import { formatLCM, getDateTimeFormat } from '../../TimeUtils';
 import { DateTime } from 'luxon';
-import { ErrorDisplay, LoadQueryWrapper, useConfirm } from '@neinteractiveliterature/litform';
+import { ErrorDisplay, LoadQueryWrapper, LoadingIndicator, useConfirm } from '@neinteractiveliterature/litform';
 import { MySignupQueueQueryDocument, useMySignupQueueQuery } from './queries.generated';
 import { useMemo } from 'react';
 import { SignupRankedChoiceState } from '../../graphqlTypes.generated';
@@ -10,7 +10,10 @@ import { findCurrentTimespanIndex } from '../../ScheduledValueUtils';
 import RankedChoicePriorityIndicator from './RankedChoicePriorityIndicator';
 import buildEventUrl from '../buildEventUrl';
 import { Link } from 'react-router-dom';
-import { useDeleteSignupRankedChoiceMutation } from './mutations.generated';
+import {
+  useDeleteSignupRankedChoiceMutation,
+  useUpdateSignupRankedChoicePriorityMutation,
+} from './mutations.generated';
 import React from 'react';
 
 const MySignupQueue = LoadQueryWrapper(useMySignupQueueQuery, ({ data }) => {
@@ -18,6 +21,10 @@ const MySignupQueue = LoadQueryWrapper(useMySignupQueueQuery, ({ data }) => {
   const [deleteSignupRankedChoice] = useDeleteSignupRankedChoiceMutation({
     refetchQueries: [{ query: MySignupQueueQueryDocument }],
   });
+  const [updateSignupRankedChoicePriority, { loading: updatePriorityLoading }] =
+    useUpdateSignupRankedChoicePriorityMutation({
+      refetchQueries: [{ query: MySignupQueueQueryDocument }],
+    });
   const confirm = useConfirm();
 
   const pendingChoices = useMemo(() => {
@@ -81,7 +88,7 @@ const MySignupQueue = LoadQueryWrapper(useMySignupQueueQuery, ({ data }) => {
       )}
       <section className="card my-4">
         <ul className="list-group list-group-flush">
-          {pendingChoices.map((pendingChoice) => (
+          {pendingChoices.map((pendingChoice, index) => (
             <React.Fragment key={pendingChoice.id}>
               <li className="list-group-item d-flex align-items-center">
                 <div className="me-3">
@@ -116,15 +123,27 @@ const MySignupQueue = LoadQueryWrapper(useMySignupQueueQuery, ({ data }) => {
                     aria-label={t('signups.mySignupQueue.moveUp', 'Move up in queue')}
                     title={t('signups.mySignupQueue.moveUp', 'Move up in queue')}
                     className="btn btn-dark px-1 py-0"
+                    disabled={updatePriorityLoading || index < 1}
+                    onClick={() =>
+                      updateSignupRankedChoicePriority({
+                        variables: { id: pendingChoice.id, priority: pendingChoice.priority - 1 },
+                      })
+                    }
                   >
-                    <i className="bi-caret-up-fill" />
+                    {updatePriorityLoading ? <LoadingIndicator size={9} /> : <i className="bi-caret-up-fill" />}
                   </button>
                   <button
                     aria-label={t('signups.mySignupQueue.moveDown', 'Move down in queue')}
                     title={t('signups.mySignupQueue.moveDown', 'Move down in queue')}
                     className="btn btn-dark px-1 py-0"
+                    disabled={updatePriorityLoading || index >= pendingChoices.length - 1}
+                    onClick={() =>
+                      updateSignupRankedChoicePriority({
+                        variables: { id: pendingChoice.id, priority: pendingChoice.priority + 1 },
+                      })
+                    }
                   >
-                    <i className="bi-caret-down-fill" />
+                    {updatePriorityLoading ? <LoadingIndicator size={9} /> : <i className="bi-caret-down-fill" />}
                   </button>
                 </div>
                 <div>

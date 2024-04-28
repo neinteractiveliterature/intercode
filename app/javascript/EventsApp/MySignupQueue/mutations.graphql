@@ -3,3 +3,9 @@ mutation DeleteSignupRankedChoice($id: ID!) {
     clientMutationId
   }
 }
+
+mutation UpdateSignupRankedChoicePriority($id: ID!, $priority: Int!) {
+  updateSignupRankedChoicePriority(input: { id: $id, priority: $priority }) {
+    clientMutationId
+  }
+}

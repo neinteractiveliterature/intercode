@@ -2,7 +2,7 @@
 class Mutations::DeleteSignupRankedChoice < Mutations::BaseMutation
   field :signup_ranked_choice, Types::SignupRankedChoiceType, null: false
 
-  argument :id, ID, required: false
+  argument :id, ID, required: true
 
   load_and_authorize_model_with_id SignupRankedChoice, :id, :destroy
 
