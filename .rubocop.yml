@@ -10,7 +10,8 @@ inherit_gem:
 
 AllCops:
   NewCops: enable
-  TargetRubyVersion: 3.0
+  TargetRubyVersion: 3.3
+  ParserEngine: parser_prism
   Exclude:
     - bin/bundle
     - bin/rails
@@ -24,6 +25,7 @@ AllCops:
     - db/schema.rb
     - public/uploads/**/*.rb
     - script/rails
+    - tmp/
 
 Sequel:
   Enabled: false
@@ -63,6 +65,10 @@ Metrics/MethodLength:
   Max: 20 # default is 10
   Exclude:
     - db/migrate/**/*.rb
+
+# rubocop-rails isn't correctly determining the database from database.yml, tell it it's postgres
+Rails/BulkChangeTable:
+  Database: postgresql
 
 # prettier and rubocop are fighting about this one, let prettier win
 Style/StringLiteralsInInterpolation:

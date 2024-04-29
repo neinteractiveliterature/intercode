@@ -9,7 +9,7 @@
 #  updated_at :datetime         not null
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+# rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 FactoryBot.define do
   factory :organization do
     sequence(:name) { |n| "Organization #{n}" }

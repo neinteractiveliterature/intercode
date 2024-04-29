@@ -17,14 +17,14 @@
 #  index_cms_graphql_queries_on_parent_type_and_parent_id  (parent_type,parent_id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
-require 'test_helper'
+# rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
+require "test_helper"
 
 class CmsGraphqlQueryTest < ActiveSupport::TestCase
   let(:parent) { create(:convention) }
 
-  describe 'query execution' do
-    it 'executes a query' do
+  describe "query execution" do
+    it "executes a query" do
       query = CmsGraphqlQuery.create!(parent: parent, query: <<~GRAPHQL)
         query {
           convention: conventionByRequestHost {
@@ -34,12 +34,12 @@ class CmsGraphqlQueryTest < ActiveSupport::TestCase
       GRAPHQL
 
       results = query.execute(context: { convention: parent }, variables: {})
-      assert_equal parent.name, results.to_h['data']['convention']['name']
+      assert_equal parent.name, results.to_h["data"]["convention"]["name"]
     end
   end
 
-  describe 'query validation' do
-    it 'validates a valid query' do
+  describe "query validation" do
+    it "validates a valid query" do
       query = CmsGraphqlQuery.new(parent: parent, query: <<~GRAPHQL)
         query {
           convention: conventionByRequestHost {
@@ -53,12 +53,12 @@ class CmsGraphqlQueryTest < ActiveSupport::TestCase
       assert query.valid?
     end
 
-    it 'rejects an invalid query' do
-      query = CmsGraphqlQuery.new(parent: parent, query: 'invalidquerystring')
+    it "rejects an invalid query" do
+      query = CmsGraphqlQuery.new(parent: parent, query: "invalidquerystring")
       refute query.valid?
     end
 
-    it 'rejects a valid mutation' do
+    it "rejects a valid mutation" do
       Rails.backtrace_cleaner.remove_silencers!
       query = CmsGraphqlQuery.new(parent: parent, query: <<~GRAPHQL)
         mutation($id: ID!) {

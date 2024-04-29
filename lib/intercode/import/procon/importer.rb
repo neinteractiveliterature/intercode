@@ -1,13 +1,13 @@
-require 'sequel'
+require "sequel"
 
 class Intercode::Import::Procon::Importer
   attr_reader :procon_connection, :illyan_connection, :convention_domain_regex, :organization_name
 
   def initialize(procon_db_url, illyan_db_url, convention_domain_regex, organization_name)
-    logger.info('Connecting to ProCon database')
+    logger.info("Connecting to ProCon database")
     @procon_connection = Sequel.connect(procon_db_url)
 
-    logger.info('Connecting to Illyan database')
+    logger.info("Connecting to Illyan database")
     @illyan_connection = Sequel.connect(illyan_db_url)
 
     @convention_domain_regex = Regexp.new(convention_domain_regex)
@@ -34,7 +34,7 @@ class Intercode::Import::Procon::Importer
   end
 
   def expand_conventions
-    logger.info 'Expanding convention times to fit all event runs'
+    logger.info "Expanding convention times to fit all event runs"
     @conventions_table.id_map.values.each do |convention|
       next unless convention.runs.any?
 
@@ -62,7 +62,7 @@ class Intercode::Import::Procon::Importer
   def convention_staff_attendances_table
     @convention_staff_attendances_table ||=
       Intercode::Import::Procon::Tables::ConventionStaffAttendances.new(
-        # rubocop:disable Metrics/LineLength
+        # rubocop:disable Layout/LineLength
         procon_connection,
         conventions_table.id_map,
         people_table.id_map

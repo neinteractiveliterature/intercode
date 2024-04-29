@@ -145,6 +145,7 @@ group :development do
   gem "syntax_tree"
   gem "syntax_tree-haml"
   gem "syntax_tree-rbs"
+  gem "prism"
 
   # Find missing `end` statements
   gem "dead_end"

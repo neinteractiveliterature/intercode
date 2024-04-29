@@ -22,8 +22,8 @@
 #  fk_rails_...  (convention_id => conventions.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
-require 'test_helper'
+# rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
+require "test_helper"
 
 class NotificationTemplateTest < ActiveSupport::TestCase
   # test "the truth" do

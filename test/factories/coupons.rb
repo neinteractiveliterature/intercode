@@ -28,10 +28,10 @@
 #  fk_rails_...  (provides_product_id => products.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+# rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 FactoryBot.define do
   factory :coupon do
     convention
-    fixed_amount { Money.new(1000, 'USD') }
+    fixed_amount { Money.new(1000, "USD") }
   end
 end
