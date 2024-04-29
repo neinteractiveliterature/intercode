@@ -1178,7 +1178,6 @@ CREATE TABLE public.conventions (
     name character varying,
     domain character varying NOT NULL,
     timezone_name character varying,
-    maximum_event_signups jsonb,
     maximum_tickets integer,
     default_layout_id bigint,
     user_con_profile_form_id bigint,
@@ -2603,6 +2602,39 @@ ALTER SEQUENCE public.signup_requests_id_seq OWNED BY public.signup_requests.id;
 
 
 --
+-- Name: signup_rounds; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.signup_rounds (
+    id bigint NOT NULL,
+    convention_id bigint NOT NULL,
+    start timestamp without time zone,
+    maximum_event_signups text NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: signup_rounds_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.signup_rounds_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: signup_rounds_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.signup_rounds_id_seq OWNED BY public.signup_rounds.id;
+
+
+--
 -- Name: signups; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -3307,6 +3339,13 @@ ALTER TABLE ONLY public.signup_requests ALTER COLUMN id SET DEFAULT nextval('pub
 
 
 --
+-- Name: signup_rounds id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.signup_rounds ALTER COLUMN id SET DEFAULT nextval('public.signup_rounds_id_seq'::regclass);
+
+
+--
 -- Name: signups id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -3848,6 +3887,14 @@ ALTER TABLE ONLY public.signup_ranked_choices
 
 ALTER TABLE ONLY public.signup_requests
     ADD CONSTRAINT signup_requests_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: signup_rounds signup_rounds_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.signup_rounds
+    ADD CONSTRAINT signup_rounds_pkey PRIMARY KEY (id);
 
 
 --
@@ -4854,6 +4901,13 @@ CREATE INDEX index_signup_requests_on_user_con_profile_id ON public.signup_reque
 
 
 --
+-- Name: index_signup_rounds_on_convention_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_signup_rounds_on_convention_id ON public.signup_rounds USING btree (convention_id);
+
+
+--
 -- Name: index_signups_on_expires_at; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -5454,6 +5508,14 @@ ALTER TABLE ONLY public.signup_ranked_choices
 
 
 --
+-- Name: signup_rounds fk_rails_802d8d2a31; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.signup_rounds
+    ADD CONSTRAINT fk_rails_802d8d2a31 FOREIGN KEY (convention_id) REFERENCES public.conventions(id);
+
+
+--
 -- Name: cms_files_layouts fk_rails_82c2fb2f5b; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5956,6 +6018,7 @@ ALTER TABLE ONLY public.cms_files_pages
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20240428174607'),
 ('20240427160255'),
 ('20240417195945'),
 ('20240414172424'),

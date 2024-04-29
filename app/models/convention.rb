@@ -18,7 +18,6 @@
 #  hidden                         :boolean          default(FALSE), not null
 #  language                       :string           not null
 #  location                       :jsonb
-#  maximum_event_signups          :jsonb
 #  maximum_tickets                :integer
 #  name                           :string
 #  open_graph_image               :text
@@ -110,12 +109,11 @@ class Convention < ApplicationRecord
   has_many :orders, through: :user_con_profiles
   has_many :user_activity_alerts, dependent: :destroy
   has_many :permissions, dependent: :destroy
+  has_many :signup_rounds, dependent: :destroy
 
   belongs_to :root_page, class_name: "Page", optional: true
   belongs_to :default_layout, class_name: "CmsLayout", optional: true
   belongs_to :user_con_profile_form, class_name: "Form", optional: true
-
-  serialize :maximum_event_signups, coder: ActiveModelCoder.new("ScheduledValue::ScheduledValue")
 
   validates :name, presence: true
   validates :domain, presence: true, uniqueness: true
@@ -127,8 +125,6 @@ class Convention < ApplicationRecord
   validates :signup_automation_mode, inclusion: { in: SIGNUP_AUTOMATION_MODES }, presence: true
   validates :site_mode, inclusion: { in: SITE_MODES }, presence: true
   validates :email_mode, inclusion: { in: EMAIL_MODES }, presence: true
-  validates :maximum_event_signups, presence: true
-  validate :maximum_event_signups_must_cover_all_time
   validate :timezone_name_must_be_valid
   validate :site_mode_must_be_possible
   validate :show_event_list_must_be_at_least_as_permissive_as_show_schedule
@@ -139,6 +135,22 @@ class Convention < ApplicationRecord
 
   def ended?
     ends_at && ends_at <= Time.zone.now
+  end
+
+  def maximum_event_signups
+    @maximum_event_signups ||=
+      begin
+        sorted_rounds = signup_rounds.sort_by { |round| round.start || Time.at(0) }
+        timespans =
+          sorted_rounds
+            .each_cons(2)
+            .map do |(round, next_round)|
+              { start: round.start, value: round.maximum_event_signups, finish: next_round.start }
+            end
+        timespans << { start: sorted_rounds.last.start, value: sorted_rounds.last.maximum_event_signups, finish: nil }
+
+        ScheduledValue::ScheduledValue.new(timespans: timespans)
+      end
   end
 
   def registrations_frozen?

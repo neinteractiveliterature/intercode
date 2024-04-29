@@ -17,7 +17,6 @@
 #  hidden                         :boolean          default(FALSE), not null
 #  language                       :string           not null
 #  location                       :jsonb
-#  maximum_event_signups          :jsonb
 #  maximum_tickets                :integer
 #  name                           :string
 #  open_graph_image               :text
