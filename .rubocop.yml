@@ -4,6 +4,8 @@ require:
   - rubocop-performance
   - rubocop-rails
   - rubocop-sequel
+  - rubocop-factory_bot
+  - rubocop-graphql
 
 inherit_gem:
   prettier: rubocop.yml
@@ -68,6 +70,10 @@ Metrics/MethodLength:
 
 # rubocop-rails isn't correctly determining the database from database.yml, tell it it's postgres
 Rails/BulkChangeTable:
+  Database: postgresql
+
+# rubocop-rails isn't correctly determining the database from database.yml, tell it it's postgres
+Rails/NotNullColumn:
   Database: postgresql
 
 # prettier and rubocop are fighting about this one, let prettier win

@@ -3,8 +3,6 @@ module Types::CmsParent
   include Types::BaseInterface
   field_class Types::BaseField
 
-  field :id, ID, null: false
-
   definition_methods do
     def resolve_type(object, _context)
       case object
@@ -25,6 +23,8 @@ module Types::CmsParent
     renders when there is no convention associated with the current domain name. (See the RootSite
     object for more details about this.)
   MARKDOWN
+
+  field :id, ID, null: false
 
   field :cms_content_groups, [Types::CmsContentGroupType], null: false do
     description <<~MARKDOWN

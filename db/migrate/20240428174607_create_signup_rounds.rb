@@ -15,15 +15,11 @@ class CreateSignupRounds < ActiveRecord::Migration[7.1]
         SQL
 
         maximum_event_signups_by_convention_id =
-          Hash[select_result].transform_values { |json| JSON.parse(json).fetch("timespans") }
+          select_result.to_h.transform_values { |json| JSON.parse(json).fetch("timespans") }
         signup_rounds =
           maximum_event_signups_by_convention_id.flat_map do |convention_id, timespans|
             timespans.map do |timespan|
-              {
-                convention_id: convention_id,
-                start: timespan.fetch("start"),
-                maximum_event_signups: timespan.fetch("value")
-              }
+              { convention_id:, start: timespan.fetch("start"), maximum_event_signups: timespan.fetch("value") }
             end
           end
         SignupRound.insert_all!(signup_rounds)
@@ -43,7 +39,7 @@ class CreateSignupRounds < ActiveRecord::Migration[7.1]
                 sorted_rows.each_cons(2).map { |(row, next_row)| { start: row[1], value: row[2], finish: next_row[1] } }
               timespans << { start: sorted_rows.last[1], value: sorted_rows.last[2], finish: nil }
 
-              { timespans: timespans }
+              { timespans: }
             end
 
         maximum_event_signups_by_convention_id.each do |convention_id, maximum_event_signups|
