@@ -25,7 +25,7 @@
     "webpack-dev-server": "webpack serve --progress --color --config ./webpack.config.js"
   },
   "dependencies": {
-    "@apollo/client": "3.10.1",
+    "@apollo/client": "3.10.2",
     "@breezehr/currency-codes": "^2.2.1",
     "@codemirror/highlight": "0.19.8",
     "@codemirror/lang-html": "6.4.9",
