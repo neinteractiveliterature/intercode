@@ -433,6 +433,7 @@ export type CmsParent = {
   cmsPartials: Array<CmsPartial>;
   /** Returns all CMS variables within the current domain. */
   cmsVariables: Array<CmsVariable>;
+  /** Returns the default CMS layout used in this domain. */
   defaultLayout: CmsLayout;
   /**
    * Returns the CMS layout to be used for a particular URL path within the current domain. (This
@@ -442,6 +443,7 @@ export type CmsParent = {
   effectiveCmsLayout: CmsLayout;
   /** Does a full-text search within this domain. */
   fullTextSearch: SearchResult;
+  /** The ID of this object. */
   id: Scalars['ID']['output'];
   /**
    * Returns all the Liquid assigns for regular CMS page rendering in the current domain name.
@@ -453,6 +455,7 @@ export type CmsParent = {
   previewLiquid: Scalars['String']['output'];
   /** Given a Markdown text string, renders it to HTML and returns the result. */
   previewMarkdown: Scalars['String']['output'];
+  /** The CMS page used for the root path (/) of this domain. */
   rootPage: Page;
   /**
    * Finds CMS content by partial name, case-insensitive, within the current domain's CMS content.
@@ -643,6 +646,7 @@ export type Convention = CmsParent & {
   cmsVariables: Array<CmsVariable>;
   coupons_paginated: CouponsPagination;
   created_at?: Maybe<Scalars['Date']['output']>;
+  /** Returns the default CMS layout used in this domain. */
   defaultLayout: CmsLayout;
   default_currency_code?: Maybe<Scalars['String']['output']>;
   departments: Array<Department>;
@@ -753,6 +757,7 @@ export type Convention = CmsParent & {
   products: Array<Product>;
   reports: ConventionReports;
   rooms: Array<Room>;
+  /** The CMS page used for the root path (/) of this domain. */
   rootPage: Page;
   /**
    * Finds an active run by ID in this convention. If there is no run with that ID in this
@@ -1617,7 +1622,9 @@ export type CreateRunPayload = {
 export type CreateSignupRankedChoiceInput = {
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  /** The bucket key to queue a signup ranked choice in, or null to queue a no-preference choice */
   requested_bucket_key?: InputMaybe<Scalars['String']['input']>;
+  /** The ID of the run to queue a signup ranked choice for */
   targetRunId?: InputMaybe<Scalars['ID']['input']>;
 };
 
@@ -1626,6 +1633,7 @@ export type CreateSignupRankedChoicePayload = {
   __typename: 'CreateSignupRankedChoicePayload';
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
+  /** The SignupRankedChoice that has been created */
   signup_ranked_choice: SignupRankedChoice;
 };
 
@@ -2112,6 +2120,7 @@ export type DeleteRunPayload = {
 export type DeleteSignupRankedChoiceInput = {
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  /** The ID of the SignupRankedChoice to delete */
   id: Scalars['ID']['input'];
 };
 
@@ -2120,6 +2129,7 @@ export type DeleteSignupRankedChoicePayload = {
   __typename: 'DeleteSignupRankedChoicePayload';
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
+  /** The SignupRankedChoice that has been deleted */
   signup_ranked_choice: SignupRankedChoice;
 };
 
@@ -2784,6 +2794,7 @@ export type Mutation = {
   createProduct: CreateProductPayload;
   createRoom: CreateRoomPayload;
   createRun: CreateRunPayload;
+  /** Create a new SignupRankedChoice in a user's signup queue */
   createSignupRankedChoice: CreateSignupRankedChoicePayload;
   createSignupRequest: CreateSignupRequestPayload;
   createStaffPosition: CreateStaffPositionPayload;
@@ -2816,6 +2827,7 @@ export type Mutation = {
   deleteProduct: DeleteProductPayload;
   deleteRoom: DeleteRoomPayload;
   deleteRun: DeleteRunPayload;
+  /** Deletes a SignupRankedChoice from a user's signup queue */
   deleteSignupRankedChoice: DeleteSignupRankedChoicePayload;
   deleteStaffPosition: DeleteStaffPositionPayload;
   deleteTeamMember: DeleteTeamMemberPayload;
@@ -2873,6 +2885,7 @@ export type Mutation = {
   updateRun: UpdateRunPayload;
   updateSignupBucket: UpdateSignupBucketPayload;
   updateSignupCounted: UpdateSignupCountedPayload;
+  /** Change the priority of a SignupRankedChoice in a user's queue */
   updateSignupRankedChoicePriority: UpdateSignupRankedChoicePriorityPayload;
   updateStaffPosition: UpdateStaffPositionPayload;
   updateStaffPositionPermissions: UpdateStaffPositionPermissionsPayload;
@@ -4238,6 +4251,7 @@ export type RootSite = CmsParent & {
   cmsPartials: Array<CmsPartial>;
   /** Returns all CMS variables within the current domain. */
   cmsVariables: Array<CmsVariable>;
+  /** Returns the default CMS layout used in this domain. */
   defaultLayout: CmsLayout;
   /**
    * Returns the CMS layout to be used for a particular URL path within the current domain. (This
@@ -4259,6 +4273,7 @@ export type RootSite = CmsParent & {
   previewLiquid: Scalars['String']['output'];
   /** Given a Markdown text string, renders it to HTML and returns the result. */
   previewMarkdown: Scalars['String']['output'];
+  /** The CMS page used for the root path (/) of this domain. */
   rootPage: Page;
   site_name: Scalars['String']['output'];
   /**
@@ -4317,33 +4332,66 @@ export type RootSiteInput = {
   site_name?: InputMaybe<Scalars['String']['input']>;
 };
 
+/**
+ * A run of an event within a convention. Events can have multiple runs of the course of a convention (with some
+ * exceptions, such as conventions that use single_event site mode).
+ */
 export type Run = {
   __typename: 'Run';
+  /** The number of confirmed signups in limited-signup buckets for this run */
   confirmed_limited_signup_count: Scalars['Int']['output'];
+  /** The number of confirmed signups (regardless of bucket) for this run */
   confirmed_signup_count: Scalars['Int']['output'];
+  /** Whether or not the current user is allowed to request a signup summary of this run */
   current_ability_can_signup_summary_run: Scalars['Boolean']['output'];
+  /** The time at which this run finishes */
   ends_at: Scalars['Date']['output'];
+  /** The event this is a run of */
   event: Event;
+  /**
+   * A GroupedSignupCounts object for this run, from which more detailed information about the number of signups can
+   * be obtained (sliced in various ways).
+   */
   grouped_signup_counts: Array<GroupedSignupCount>;
+  /** The ID of this run */
   id: Scalars['ID']['output'];
+  /** The current user's SignupRankedChoices for this Run */
   my_signup_ranked_choices: Array<SignupRankedChoice>;
+  /** The current user's SignupRequests for this Run */
   my_signup_requests: Array<SignupRequest>;
+  /** The current user's Signups for this Run */
   my_signups: Array<Signup>;
+  /** The number of confirmed, but not counted signups for this run */
   not_counted_confirmed_signup_count: Scalars['Int']['output'];
+  /** The number of non-counted signups for this run (regardless of confirmation status) */
   not_counted_signup_count: Scalars['Int']['output'];
+  /** The names of all the rooms this run takes place in */
   room_names: Array<Scalars['String']['output']>;
+  /** The rooms this run takes place in */
   rooms: Array<Room>;
+  /** An optional, admin-only note to put on this run.  This note is not visible to most users. */
   schedule_note?: Maybe<Scalars['String']['output']>;
   signup_changes_paginated: SignupChangesPagination;
   /** @deprecated Please use grouped_signup_counts instead */
   signup_count_by_state_and_bucket_key_and_counted: Scalars['Json']['output'];
+  /** The signups for this run */
   signups_paginated: SignupsPagination;
+  /** The time at which this run starts */
   starts_at: Scalars['Date']['output'];
+  /**
+   * If present, Intercode will append this suffix string to this run whenever it appears in the UI.  This can be
+   * used to disambiguate between multiple runs of the same event.
+   */
   title_suffix?: Maybe<Scalars['String']['output']>;
+  /** The number of signups currently on the waitlist for this run */
   waitlisted_signup_count: Scalars['Int']['output'];
 };
 
 
+/**
+ * A run of an event within a convention. Events can have multiple runs of the course of a convention (with some
+ * exceptions, such as conventions that use single_event site mode).
+ */
 export type RunSignup_Changes_PaginatedArgs = {
   filters?: InputMaybe<SignupChangeFiltersInput>;
   page?: InputMaybe<Scalars['Int']['input']>;
@@ -4352,6 +4400,10 @@ export type RunSignup_Changes_PaginatedArgs = {
 };
 
 
+/**
+ * A run of an event within a convention. Events can have multiple runs of the course of a convention (with some
+ * exceptions, such as conventions that use single_event site mode).
+ */
 export type RunSignups_PaginatedArgs = {
   filters?: InputMaybe<SignupFiltersInput>;
   page?: InputMaybe<Scalars['Int']['input']>;
@@ -5412,7 +5464,9 @@ export type UpdateSignupCountedPayload = {
 export type UpdateSignupRankedChoicePriorityInput = {
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  /** The ID of the SignupRankedChoice to update */
   id: Scalars['ID']['input'];
+  /** The new priority to set the SignupRankedChoice to */
   priority: Scalars['Int']['input'];
 };
 
@@ -5421,6 +5475,7 @@ export type UpdateSignupRankedChoicePriorityPayload = {
   __typename: 'UpdateSignupRankedChoicePriorityPayload';
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
+  /** The SignupRankedChoice that has just been reprioritized */
   signup_ranked_choice: SignupRankedChoice;
 };
 

@@ -3108,7 +3108,7 @@
             },
             {
               "name": "defaultLayout",
-              "description": null,
+              "description": "Returns the default CMS layout used in this domain.\n",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -3190,7 +3190,7 @@
             },
             {
               "name": "id",
-              "description": null,
+              "description": "The ID of this object.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -3320,7 +3320,7 @@
             },
             {
               "name": "rootPage",
-              "description": null,
+              "description": "The CMS page used for the root path (/) of this domain.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -4188,7 +4188,7 @@
             },
             {
               "name": "defaultLayout",
-              "description": null,
+              "description": "Returns the default CMS layout used in this domain.\n",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -5448,7 +5448,7 @@
             },
             {
               "name": "rootPage",
-              "description": null,
+              "description": "The CMS page used for the root path (/) of this domain.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -10324,11 +10324,11 @@
               "deprecationReason": null
             },
             {
-              "name": "targetRunId",
-              "description": null,
+              "name": "requested_bucket_key",
+              "description": "The bucket key to queue a signup ranked choice in, or null to queue a no-preference choice",
               "type": {
                 "kind": "SCALAR",
-                "name": "ID",
+                "name": "String",
                 "ofType": null
               },
               "defaultValue": null,
@@ -10336,11 +10336,11 @@
               "deprecationReason": null
             },
             {
-              "name": "requested_bucket_key",
-              "description": null,
+              "name": "targetRunId",
+              "description": "The ID of the run to queue a signup ranked choice for",
               "type": {
                 "kind": "SCALAR",
-                "name": "String",
+                "name": "ID",
                 "ofType": null
               },
               "defaultValue": null,
@@ -10371,7 +10371,7 @@
             },
             {
               "name": "signup_ranked_choice",
-              "description": null,
+              "description": "The SignupRankedChoice that has been created",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -12935,7 +12935,7 @@
             },
             {
               "name": "id",
-              "description": null,
+              "description": "The ID of the SignupRankedChoice to delete",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -12973,7 +12973,7 @@
             },
             {
               "name": "signup_ranked_choice",
-              "description": null,
+              "description": "The SignupRankedChoice that has been deleted",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -19282,7 +19282,7 @@
             },
             {
               "name": "createSignupRankedChoice",
-              "description": null,
+              "description": "Create a new SignupRankedChoice in a user's signup queue",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -20338,7 +20338,7 @@
             },
             {
               "name": "deleteSignupRankedChoice",
-              "description": null,
+              "description": "Deletes a SignupRankedChoice from a user's signup queue",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -22186,7 +22186,7 @@
             },
             {
               "name": "updateSignupRankedChoicePriority",
-              "description": null,
+              "description": "Change the priority of a SignupRankedChoice in a user's queue",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -27312,7 +27312,7 @@
             },
             {
               "name": "defaultLayout",
-              "description": null,
+              "description": "Returns the default CMS layout used in this domain.\n",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -27540,7 +27540,7 @@
             },
             {
               "name": "rootPage",
-              "description": null,
+              "description": "The CMS page used for the root path (/) of this domain.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -27677,13 +27677,13 @@
         {
           "kind": "OBJECT",
           "name": "Run",
-          "description": null,
+          "description": "A run of an event within a convention. Events can have multiple runs of the course of a convention (with some\nexceptions, such as conventions that use single_event site mode).\n",
           "interfaces": [],
           "possibleTypes": null,
           "fields": [
             {
               "name": "confirmed_limited_signup_count",
-              "description": null,
+              "description": "The number of confirmed signups in limited-signup buckets for this run",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -27699,7 +27699,7 @@
             },
             {
               "name": "confirmed_signup_count",
-              "description": null,
+              "description": "The number of confirmed signups (regardless of bucket) for this run",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -27715,7 +27715,7 @@
             },
             {
               "name": "current_ability_can_signup_summary_run",
-              "description": null,
+              "description": "Whether or not the current user is allowed to request a signup summary of this run",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -27731,7 +27731,7 @@
             },
             {
               "name": "ends_at",
-              "description": null,
+              "description": "The time at which this run finishes",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -27747,7 +27747,7 @@
             },
             {
               "name": "event",
-              "description": null,
+              "description": "The event this is a run of",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -27763,7 +27763,7 @@
             },
             {
               "name": "grouped_signup_counts",
-              "description": null,
+              "description": "A GroupedSignupCounts object for this run, from which more detailed information about the number of signups can\nbe obtained (sliced in various ways).\n",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -27787,7 +27787,7 @@
             },
             {
               "name": "id",
-              "description": null,
+              "description": "The ID of this run",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -27803,7 +27803,7 @@
             },
             {
               "name": "my_signup_ranked_choices",
-              "description": null,
+              "description": "The current user's SignupRankedChoices for this Run",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -27827,7 +27827,7 @@
             },
             {
               "name": "my_signup_requests",
-              "description": null,
+              "description": "The current user's SignupRequests for this Run",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -27851,7 +27851,7 @@
             },
             {
               "name": "my_signups",
-              "description": null,
+              "description": "The current user's Signups for this Run",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -27875,7 +27875,7 @@
             },
             {
               "name": "not_counted_confirmed_signup_count",
-              "description": null,
+              "description": "The number of confirmed, but not counted signups for this run",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -27891,7 +27891,7 @@
             },
             {
               "name": "not_counted_signup_count",
-              "description": null,
+              "description": "The number of non-counted signups for this run (regardless of confirmation status)",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -27907,7 +27907,7 @@
             },
             {
               "name": "room_names",
-              "description": null,
+              "description": "The names of all the rooms this run takes place in",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -27931,7 +27931,7 @@
             },
             {
               "name": "rooms",
-              "description": null,
+              "description": "The rooms this run takes place in",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -27955,7 +27955,7 @@
             },
             {
               "name": "schedule_note",
-              "description": null,
+              "description": "An optional, admin-only note to put on this run.  This note is not visible to most users.\n",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -28056,7 +28056,7 @@
             },
             {
               "name": "signups_paginated",
-              "description": null,
+              "description": "The signups for this run",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -28070,8 +28070,20 @@
               "deprecationReason": null,
               "args": [
                 {
+                  "name": "filters",
+                  "description": "Only return objects matching these filters",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "SignupFiltersInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                },
+                {
                   "name": "page",
-                  "description": null,
+                  "description": "The number of the page to return (the first page is 1)",
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
@@ -28083,7 +28095,7 @@
                 },
                 {
                   "name": "per_page",
-                  "description": null,
+                  "description": "The number of items to return per page",
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
@@ -28094,20 +28106,8 @@
                   "deprecationReason": null
                 },
                 {
-                  "name": "filters",
-                  "description": null,
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "SignupFiltersInput",
-                    "ofType": null
-                  },
-                  "defaultValue": null,
-                  "isDeprecated": false,
-                  "deprecationReason": null
-                },
-                {
                   "name": "sort",
-                  "description": null,
+                  "description": "Sort the resulting objects",
                   "type": {
                     "kind": "LIST",
                     "name": null,
@@ -28129,7 +28129,7 @@
             },
             {
               "name": "starts_at",
-              "description": null,
+              "description": "The time at which this run starts",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -28145,7 +28145,7 @@
             },
             {
               "name": "title_suffix",
-              "description": null,
+              "description": "If present, Intercode will append this suffix string to this run whenever it appears in the UI.  This can be\nused to disambiguate between multiple runs of the same event.\n",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -28157,7 +28157,7 @@
             },
             {
               "name": "waitlisted_signup_count",
-              "description": null,
+              "description": "The number of signups currently on the waitlist for this run",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -35325,7 +35325,7 @@
             },
             {
               "name": "id",
-              "description": null,
+              "description": "The ID of the SignupRankedChoice to update",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -35341,7 +35341,7 @@
             },
             {
               "name": "priority",
-              "description": null,
+              "description": "The new priority to set the SignupRankedChoice to",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -35379,7 +35379,7 @@
             },
             {
               "name": "signup_ranked_choice",
-              "description": null,
+              "description": "The SignupRankedChoice that has just been reprioritized",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,

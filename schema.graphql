@@ -388,6 +388,10 @@ interface CmsParent {
   Returns all CMS variables within the current domain.
   """
   cmsVariables: [CmsVariable!]!
+
+  """
+  Returns the default CMS layout used in this domain.
+  """
   defaultLayout: CmsLayout!
 
   """
@@ -411,6 +415,10 @@ interface CmsParent {
     """
     query: String!
   ): SearchResult!
+
+  """
+  The ID of this object.
+  """
   id: ID!
 
   """
@@ -449,6 +457,10 @@ interface CmsParent {
     """
     markdown: String!
   ): String!
+
+  """
+  The CMS page used for the root path (/) of this domain.
+  """
   rootPage: Page!
 
   """
@@ -609,6 +621,10 @@ type Convention implements CmsParent {
     sort: [SortInput!]
   ): CouponsPagination!
   created_at: Date
+
+  """
+  Returns the default CMS layout used in this domain.
+  """
   defaultLayout: CmsLayout!
   default_currency_code: String
   departments: [Department!]!
@@ -895,6 +911,10 @@ type Convention implements CmsParent {
   products(only_available: Boolean, only_ticket_providing: Boolean): [Product!]!
   reports: ConventionReports!
   rooms: [Room!]!
+
+  """
+  The CMS page used for the root path (/) of this domain.
+  """
   rootPage: Page!
 
   """
@@ -1940,7 +1960,15 @@ input CreateSignupRankedChoiceInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
+
+  """
+  The bucket key to queue a signup ranked choice in, or null to queue a no-preference choice
+  """
   requested_bucket_key: String
+
+  """
+  The ID of the run to queue a signup ranked choice for
+  """
   targetRunId: ID
 }
 
@@ -1952,6 +1980,10 @@ type CreateSignupRankedChoicePayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
+
+  """
+  The SignupRankedChoice that has been created
+  """
   signup_ranked_choice: SignupRankedChoice!
 }
 
@@ -2664,6 +2696,10 @@ input DeleteSignupRankedChoiceInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
+
+  """
+  The ID of the SignupRankedChoice to delete
+  """
   id: ID!
 }
 
@@ -2675,6 +2711,10 @@ type DeleteSignupRankedChoicePayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
+
+  """
+  The SignupRankedChoice that has been deleted
+  """
   signup_ranked_choice: SignupRankedChoice!
 }
 
@@ -3623,6 +3663,10 @@ type Mutation {
     """
     input: CreateRunInput!
   ): CreateRunPayload!
+
+  """
+  Create a new SignupRankedChoice in a user's signup queue
+  """
   createSignupRankedChoice(
     """
     Parameters for CreateSignupRankedChoice
@@ -3815,6 +3859,10 @@ type Mutation {
     """
     input: DeleteRunInput!
   ): DeleteRunPayload!
+
+  """
+  Deletes a SignupRankedChoice from a user's signup queue
+  """
   deleteSignupRankedChoice(
     """
     Parameters for DeleteSignupRankedChoice
@@ -4155,6 +4203,10 @@ type Mutation {
     """
     input: UpdateSignupCountedInput!
   ): UpdateSignupCountedPayload!
+
+  """
+  Change the priority of a SignupRankedChoice in a user's queue
+  """
   updateSignupRankedChoicePriority(
     """
     Parameters for UpdateSignupRankedChoicePriority
@@ -5089,6 +5141,10 @@ type RootSite implements CmsParent {
   Returns all CMS variables within the current domain.
   """
   cmsVariables: [CmsVariable!]!
+
+  """
+  Returns the default CMS layout used in this domain.
+  """
   defaultLayout: CmsLayout!
 
   """
@@ -5151,6 +5207,10 @@ type RootSite implements CmsParent {
     """
     markdown: String!
   ): String!
+
+  """
+  The CMS page used for the root path (/) of this domain.
+  """
   rootPage: Page!
   site_name: String!
 
@@ -5177,21 +5237,85 @@ input RootSiteInput {
   site_name: String
 }
 
+"""
+A run of an event within a convention. Events can have multiple runs of the course of a convention (with some
+exceptions, such as conventions that use single_event site mode).
+"""
 type Run {
+  """
+  The number of confirmed signups in limited-signup buckets for this run
+  """
   confirmed_limited_signup_count: Int!
+
+  """
+  The number of confirmed signups (regardless of bucket) for this run
+  """
   confirmed_signup_count: Int!
+
+  """
+  Whether or not the current user is allowed to request a signup summary of this run
+  """
   current_ability_can_signup_summary_run: Boolean!
+
+  """
+  The time at which this run finishes
+  """
   ends_at: Date!
+
+  """
+  The event this is a run of
+  """
   event: Event!
+
+  """
+  A GroupedSignupCounts object for this run, from which more detailed information about the number of signups can
+  be obtained (sliced in various ways).
+  """
   grouped_signup_counts: [GroupedSignupCount!]!
+
+  """
+  The ID of this run
+  """
   id: ID!
+
+  """
+  The current user's SignupRankedChoices for this Run
+  """
   my_signup_ranked_choices: [SignupRankedChoice!]!
+
+  """
+  The current user's SignupRequests for this Run
+  """
   my_signup_requests: [SignupRequest!]!
+
+  """
+  The current user's Signups for this Run
+  """
   my_signups: [Signup!]!
+
+  """
+  The number of confirmed, but not counted signups for this run
+  """
   not_counted_confirmed_signup_count: Int!
+
+  """
+  The number of non-counted signups for this run (regardless of confirmation status)
+  """
   not_counted_signup_count: Int!
+
+  """
+  The names of all the rooms this run takes place in
+  """
   room_names: [String!]!
+
+  """
+  The rooms this run takes place in
+  """
   rooms: [Room!]!
+
+  """
+  An optional, admin-only note to put on this run.  This note is not visible to most users.
+  """
   schedule_note: String
   signup_changes_paginated(
     """
@@ -5218,9 +5342,46 @@ type Run {
     sort: [SortInput!]
   ): SignupChangesPagination!
   signup_count_by_state_and_bucket_key_and_counted: Json! @deprecated(reason: "Please use grouped_signup_counts instead")
-  signups_paginated(filters: SignupFiltersInput, page: Int, per_page: Int, sort: [SortInput!]): SignupsPagination!
+
+  """
+  The signups for this run
+  """
+  signups_paginated(
+    """
+    Only return objects matching these filters
+    """
+    filters: SignupFiltersInput
+
+    """
+    The number of the page to return (the first page is 1)
+    """
+    page: Int
+
+    """
+    The number of items to return per page
+    """
+    per_page: Int
+
+    """
+    Sort the resulting objects
+    """
+    sort: [SortInput!]
+  ): SignupsPagination!
+
+  """
+  The time at which this run starts
+  """
   starts_at: Date!
+
+  """
+  If present, Intercode will append this suffix string to this run whenever it appears in the UI.  This can be
+  used to disambiguate between multiple runs of the same event.
+  """
   title_suffix: String
+
+  """
+  The number of signups currently on the waitlist for this run
+  """
   waitlisted_signup_count: Int!
 }
 
@@ -6623,7 +6784,15 @@ input UpdateSignupRankedChoicePriorityInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
+
+  """
+  The ID of the SignupRankedChoice to update
+  """
   id: ID!
+
+  """
+  The new priority to set the SignupRankedChoice to
+  """
   priority: Int!
 }
 
@@ -6635,6 +6804,10 @@ type UpdateSignupRankedChoicePriorityPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
+
+  """
+  The SignupRankedChoice that has just been reprioritized
+  """
   signup_ranked_choice: SignupRankedChoice!
 }
 
