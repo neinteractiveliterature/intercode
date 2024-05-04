@@ -34,12 +34,12 @@ class ExecuteRankedChoiceSignupService < CivilService::Service
     conflicts = constraints.conflicting_signups_for_run(signup_ranked_choice.target_run)
     if conflicts.any?
       decision = do_skip_choice(:conflict, { conflicting_signup_ids: conflicts.map(&:id) })
-      return success(decision: decision)
+      return success(decision:)
     end
 
     actual_bucket = find_bucket
     decision = execute_choice(actual_bucket)
-    success(decision: decision)
+    success(decision:)
   end
 
   private
@@ -64,27 +64,21 @@ class ExecuteRankedChoiceSignupService < CivilService::Service
   end
 
   def do_skip_choice(reason, extra = nil)
-    RankedChoiceDecision.create!(
-      decision: :skip_choice,
-      user_con_profile: user_con_profile,
-      reason: reason,
-      signup_ranked_choice: signup_ranked_choice,
-      extra: extra
-    )
+    RankedChoiceDecision.create!(decision: :skip_choice, user_con_profile:, reason:, signup_ranked_choice:, extra:)
   end
 
   def do_signup
     result =
       AcceptSignupRankedChoiceService.new(
-        signup_ranked_choice: signup_ranked_choice,
-        whodunit: whodunit,
-        skip_locking: skip_locking,
-        suppress_notifications: suppress_notifications
+        signup_ranked_choice:,
+        whodunit:,
+        skip_locking:,
+        suppress_notifications:
       ).call!
     RankedChoiceDecision.create!(
       decision: :signup,
-      user_con_profile: user_con_profile,
-      signup_ranked_choice: signup_ranked_choice,
+      user_con_profile:,
+      signup_ranked_choice:,
       signup: result.signup,
       signup_request: result.signup_request
     )
@@ -93,15 +87,15 @@ class ExecuteRankedChoiceSignupService < CivilService::Service
   def do_waitlist
     result =
       AcceptSignupRankedChoiceService.new(
-        signup_ranked_choice: signup_ranked_choice,
-        whodunit: whodunit,
-        skip_locking: skip_locking,
-        suppress_notifications: suppress_notifications
+        signup_ranked_choice:,
+        whodunit:,
+        skip_locking:,
+        suppress_notifications:
       ).call!
     RankedChoiceDecision.create!(
       decision: :waitlist,
-      user_con_profile: user_con_profile,
-      signup_ranked_choice: signup_ranked_choice,
+      user_con_profile:,
+      signup_ranked_choice:,
       signup: result.signup,
       signup_request: result.signup_request
     )

@@ -22,8 +22,10 @@ class ExecuteRankedChoiceSignupRoundService < CivilService::Service
     SignupRound.transaction do
       with_relevant_locks do
         signup_round.update!(executed_at: Time.zone.now)
-        ordered_user_con_profiles.to_a.each do |user_con_profile|
-          execute_choices_for_user_con_profile(user_con_profile)
+
+        loop do
+          executed_choices_this_pass = execute_pass
+          break if executed_choices_this_pass.blank?
         end
       end
     end
@@ -45,6 +47,24 @@ class ExecuteRankedChoiceSignupRoundService < CivilService::Service
       convention.user_con_profiles.order(lottery_number: :desc)
     else
       raise "Unknown order for executing signup choices: #{signup_round.ranked_choice_order.inspect}"
+    end
+  end
+
+  def execute_pass
+    prev_decisions = @decisions.dup
+
+    ActiveRecord::Base.transaction do
+      executed_choices =
+        ordered_user_con_profiles.to_a.filter_map do |user_con_profile|
+          execute_choices_for_user_con_profile(user_con_profile)
+        end
+
+      if executed_choices.empty?
+        @decisions = prev_decisions
+        raise ActiveRecord::Rollback
+      end
+
+      executed_choices
     end
   end
 

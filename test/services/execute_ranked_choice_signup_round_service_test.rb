@@ -107,6 +107,32 @@ describe ExecuteRankedChoiceSignupRoundService do
     assert_equal high_number_user, result.decisions[1].user_con_profile
   end
 
+  it "keeps going until no users have signups left" do
+    signup_round = create(:signup_round, convention:, ranked_choice_order: "asc", maximum_event_signups: "2")
+    low_number_user = create(:user_con_profile, convention:, lottery_number: 1, ranked_choice_allow_waitlist: false)
+    high_number_user = create(:user_con_profile, convention:, lottery_number: 2, ranked_choice_allow_waitlist: true)
+    create(:signup_ranked_choice, user_con_profile: low_number_user, target_run: the_run)
+    create(:signup_ranked_choice, user_con_profile: high_number_user, target_run: the_run)
+    other_event = create(:event, convention:, registration_policy: one_player_registration_policy)
+    other_run = create(:run, event: other_event, starts_at: 1.day.from_now)
+    unlimited_event = create(:event, convention:, registration_policy: RegistrationPolicy.unlimited)
+    unlimited_run = create(:run, event: unlimited_event, starts_at: 2.days.from_now)
+    create(:signup_ranked_choice, user_con_profile: low_number_user, target_run: unlimited_run)
+    create(:signup_ranked_choice, user_con_profile: high_number_user, target_run: unlimited_run)
+    # duplicate choice just to make sure the user doesn't get signed up twice
+    create(:signup_ranked_choice, user_con_profile: high_number_user, target_run: unlimited_run)
+    create(:signup, user_con_profile: low_number_user, run: other_run)
+
+    result = ExecuteRankedChoiceSignupRoundService.new(signup_round:, whodunit: nil).call!
+
+    assert_equal %w[signup skip_choice signup skip_user skip_choice skip_choice waitlist],
+                 result.decisions.map(&:decision)
+    assert_equal [[the_run.id, "confirmed"], [other_run.id, "confirmed"]].sort,
+                 low_number_user.signups.map { |signup| [signup.run_id, signup.state] }.sort
+    assert_equal [[the_run.id, "waitlisted"], [unlimited_run.id, "confirmed"]].sort,
+                 high_number_user.signups.map { |signup| [signup.run_id, signup.state] }.sort
+  end
+
   describe "in a convention that requires tickets" do
     let(:convention) { create(:convention, :with_notification_templates, ticket_mode: "required_for_signup") }
 
