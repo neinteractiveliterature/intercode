@@ -6,15 +6,12 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
     {
       name: "CopyCon",
       domain: "copycon.example.com",
-      maximum_event_signups: ScheduledValue::ScheduledValue.always("unlimited"),
       starts_at: Time.utc(2018, 10, 28, 18, 0, 0),
       ends_at: Time.utc(2018, 10, 30, 18, 0, 0),
       email_from: "noreply@copycon.example.com"
     }
   end
-  let(:service) do
-    CloneConventionService.new(source_convention: convention, new_convention_attributes: new_convention_attributes)
-  end
+  let(:service) { CloneConventionService.new(source_convention: convention, new_convention_attributes:) }
 
   it "clones only some convention attributes" do
     convention.update!(
@@ -28,7 +25,7 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
       stripe_account_id: "acct_12345",
       clickwrap_agreement: "I agree to abide by the {{ convention.name }} code of conduct."
     )
-    result = service.call
+    result = service.call!
     assert result.success?
 
     assert_equal Time.utc(2018, 10, 28, 18, 0, 0), result.convention.starts_at
@@ -46,33 +43,33 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
   end
 
   it "clones CMS content" do
-    ClearCmsContentService.new(convention: convention).call!
+    ClearCmsContentService.new(convention:).call!
     File.open(__FILE__) { |f| convention.cms_files.create!(file: { io: f, filename: File.basename(__FILE__) }) }
-    LoadCmsContentSetService.new(convention: convention, content_set_name: "standard").call!
-    result = service.call
+    LoadCmsContentSetService.new(convention:, content_set_name: "standard").call!
+    result = service.call!
     assert result.success?
   end
 
   it "clones event categories" do
-    ClearCmsContentService.new(convention: convention).call!
-    LoadCmsContentSetService.new(convention: convention, content_set_name: "standard").call!
-    create(:event_category, convention: convention)
+    ClearCmsContentService.new(convention:).call!
+    LoadCmsContentSetService.new(convention:, content_set_name: "standard").call!
+    create(:event_category, convention:)
     convention.reload
-    result = service.call
+    result = service.call!
     assert result.success?
     result.convention.reload
     assert_equal 1, result.convention.event_categories.count
   end
 
   it "clones rooms" do
-    create_list(:room, 5, convention: convention)
-    result = service.call
+    create_list(:room, 5, convention:)
+    result = service.call!
     result.convention.reload
     assert_equal 5, result.convention.rooms.count
   end
 
   it "clones ticket types" do
-    ticket_type = create(:paid_ticket_type, convention: convention)
+    ticket_type = create(:paid_ticket_type, convention:)
     ticket_type.providing_products.first.update!(
       pricing_structure:
         PricingStructure.new(
@@ -99,7 +96,7 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
             )
         )
     )
-    result = service.call
+    result = service.call!
     result.convention.reload
     assert result.success?
 
@@ -108,14 +105,14 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
   end
 
   it "clones staff positions" do
-    ClearCmsContentService.new(convention: convention).call!
-    LoadCmsContentSetService.new(convention: convention, content_set_name: "standard").call!
-    event_category = create(:event_category, convention: convention)
-    staff_position = create(:staff_position, convention: convention)
+    ClearCmsContentService.new(convention:).call!
+    LoadCmsContentSetService.new(convention:, content_set_name: "standard").call!
+    event_category = create(:event_category, convention:)
+    staff_position = create(:staff_position, convention:)
     staff_position.permissions.create!(model: event_category, permission: "read_event_proposals")
     convention.reload
 
-    result = service.call
+    result = service.call!
     assert result.success?
     result.convention.reload
     assert_equal 1, result.convention.staff_positions.count
@@ -128,11 +125,11 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
   end
 
   it "clones store content" do
-    create(:product, convention: convention)
-    product_with_variants = create(:product, convention: convention)
+    create(:product, convention:)
+    product_with_variants = create(:product, convention:)
     create_list(:product_variant, 5, product: product_with_variants)
 
-    result = service.call
+    result = service.call!
     result.convention.reload
     assert result.success?
     assert_equal 2, result.convention.products.count
@@ -140,11 +137,11 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
   end
 
   it "clones user activity alerts" do
-    alert = create(:user_activity_alert, convention: convention)
-    staff_position = create(:staff_position, convention: convention)
-    alert.notification_destinations.create!(staff_position: staff_position)
+    alert = create(:user_activity_alert, convention:)
+    staff_position = create(:staff_position, convention:)
+    alert.notification_destinations.create!(staff_position:)
 
-    result = service.call
+    result = service.call!
     result.convention.reload
     assert result.success?
     assert_equal 1, result.convention.user_activity_alerts.count
@@ -152,9 +149,9 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
   end
 
   it "does not clone coupons" do
-    create(:coupon, convention: convention)
+    create(:coupon, convention:)
 
-    result = service.call
+    result = service.call!
     result.convention.reload
     assert result.success?
     assert_equal 0, result.convention.coupons.count

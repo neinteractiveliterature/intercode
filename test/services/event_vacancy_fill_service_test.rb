@@ -7,7 +7,7 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
   let(:event) do
     create(
       :event,
-      convention: convention,
+      convention:,
       registration_policy: {
         buckets: [
           { key: "dogs", slots_limited: true, total_slots: 1 },
@@ -18,12 +18,12 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
     )
   end
 
-  let(:the_run) { create :run, event: event }
+  let(:the_run) { create(:run, event:) }
   let(:bucket_key) { "dogs" }
 
   def create_signup(**attrs)
-    user_con_profile = create(:user_con_profile, convention: convention)
-    create(:signup, user_con_profile: user_con_profile, run: the_run, **attrs)
+    user_con_profile = create(:user_con_profile, convention:)
+    create(:signup, user_con_profile:, run: the_run, **attrs)
   end
 
   let(:anything_signup) { create_signup(state: "confirmed", bucket_key: "anything", requested_bucket_key: bucket_key) }
@@ -32,7 +32,7 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
 
   let(:waitlist_no_pref_signup) { create_signup(state: "waitlisted", requested_bucket_key: nil) }
 
-  let(:no_pref_signup) { create_signup(state: "confirmed", bucket_key: bucket_key, requested_bucket_key: nil) }
+  let(:no_pref_signup) { create_signup(state: "confirmed", bucket_key:, requested_bucket_key: nil) }
 
   subject { EventVacancyFillService.new(the_run, bucket_key) }
 
@@ -193,10 +193,7 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
   end
 
   it "disallows vacancy filling in a frozen convention" do
-    convention.update!(
-      maximum_event_signups:
-        ScheduledValue::ScheduledValue.new(timespans: [{ start: nil, finish: nil, value: "not_now" }])
-    )
+    create(:signup_round, convention:, maximum_event_signups: "not_now")
 
     result = subject.call
     assert result.failure?
@@ -210,7 +207,7 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
     let(:event) do
       create(
         :event,
-        convention: convention,
+        convention:,
         registration_policy: {
           buckets: [
             { key: "pc", slots_limited: true, total_slots: 1 },

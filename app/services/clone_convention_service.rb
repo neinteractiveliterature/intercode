@@ -9,22 +9,22 @@ class CloneConventionService < CivilService::Service
 
   def initialize(source_convention:, new_convention_attributes:)
     @source_convention = source_convention
-    @new_convention_attributes =
-      { show_schedule: 'no', accepting_proposals: false }.merge(
-        source_convention.attributes.symbolize_keys.slice(
-          *%i[
-            language
-            maximum_tickets
-            ticket_name
-            ticket_mode
-            timezone_name
-            timezone_mode
-            stripe_account_id
-            clickwrap_agreement
-            hidden
-          ]
-        )
-      ).merge(new_convention_attributes.symbolize_keys)
+    @new_convention_attributes = { show_schedule: "no", accepting_proposals: false }.merge(
+      source_convention.attributes.symbolize_keys.slice(
+        *%i[
+          language
+          maximum_tickets
+          ticket_name
+          ticket_mode
+          timezone_name
+          timezone_mode
+          signup_automation_mode
+          stripe_account_id
+          clickwrap_agreement
+          hidden
+        ]
+      )
+    ).merge(new_convention_attributes.symbolize_keys)
   end
 
   private
@@ -37,6 +37,7 @@ class CloneConventionService < CivilService::Service
 
       [
         ContentCloners::ConventionCloner,
+        ContentCloners::SignupRoundsCloner,
         ContentCloners::CmsContentCloner,
         ContentCloners::DepartmentsCloner,
         ContentCloners::EventCategoriesCloner,
@@ -52,6 +53,6 @@ class CloneConventionService < CivilService::Service
       end
     end
 
-    success(convention: convention)
+    success(convention:)
   end
 end

@@ -61,22 +61,22 @@ class EventSignupService < CivilService::Service
 
       signup =
         run.signups.create!(
-          run: run,
+          run:,
           bucket_key: actual_bucket&.key,
-          requested_bucket_key: requested_bucket_key,
-          user_con_profile: user_con_profile,
+          requested_bucket_key:,
+          user_con_profile:,
           counted: counts_towards_total?,
           state: signup_state,
           expires_at: signup_state == "ticket_purchase_hold" ? 30.minutes.from_now : nil,
           updated_by: whodunit
         )
 
-      signup.log_signup_change!(action: action)
+      signup.log_signup_change!(action:)
     end
 
     notify_team_members(signup)
     send_confirmation(signup)
-    success(signup: signup)
+    success(signup:)
   end
 
   def convention_must_allow_self_service_signups
@@ -232,13 +232,13 @@ sign up for events."
     return if suppress_notifications
 
     # Wait 5 seconds because the transaction hasn't been committed yet
-    Signups::NewSignupNotifier.new(signup: signup).deliver_later(wait: 5.seconds)
+    Signups::NewSignupNotifier.new(signup:).deliver_later(wait: 5.seconds)
   end
 
   def send_confirmation(signup)
     return if suppress_confirmation
 
     # Wait 5 seconds because the transaction hasn't been committed yet
-    Signups::SignupConfirmationNotifier.new(signup: signup).deliver_later(wait: 5.seconds)
+    Signups::SignupConfirmationNotifier.new(signup:).deliver_later(wait: 5.seconds)
   end
 end
