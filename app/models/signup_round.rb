@@ -27,4 +27,30 @@ class SignupRound < ApplicationRecord
   belongs_to :convention
 
   validates :ranked_choice_order, inclusion: { in: RANKED_CHOICE_ORDERS, allow_nil: true }
+
+  scope :due_at, ->(time) { where("executed_at IS NULL AND (start IS NULL OR start <= ?)", time) }
+  scope :currently_due, -> { due_at(Time.zone.now) }
+  scope :chronological, -> { order("start ASC NULLS FIRST") }
+
+  def self.execute_currently_due_rounds!
+    currently_due
+      .chronological
+      .includes(:convention)
+      .find_each do |signup_round|
+        signup_round.execute!
+      rescue StandardError => e
+        Rollbar.error(e)
+        Rails.logger.error(e)
+      end
+  end
+
+  def execute!
+    transaction do
+      if convention.signup_automation_mode == "ranked_choice"
+        ExecuteRankedChoiceSignupRoundService.new(signup_round: self, whodunit: nil).call!
+      end
+
+      update!(executed_at: Time.zone.now)
+    end
+  end
 end

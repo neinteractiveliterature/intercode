@@ -19,14 +19,10 @@ class ExecuteRankedChoiceSignupRoundService < CivilService::Service
   end
 
   def inner_call
-    SignupRound.transaction do
-      with_relevant_locks do
-        signup_round.update!(executed_at: Time.zone.now)
-
-        loop do
-          executed_choices_this_pass = execute_pass
-          break if executed_choices_this_pass.blank?
-        end
+    with_relevant_locks do
+      loop do
+        executed_choices_this_pass = execute_pass
+        break if executed_choices_this_pass.blank?
       end
     end
 

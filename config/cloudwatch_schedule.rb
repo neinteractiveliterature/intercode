@@ -19,6 +19,10 @@ CloudwatchScheduler() do |_config|
     DropExpiredSignupsJob.perform_later
   end
 
+  task "execute_signup_rounds", cron: "0/15 * * * ? *" do
+    SignupRound.execute_currently_due_rounds!
+  end
+
   if ENV["HEROKU_API_TOKEN"].present? && ENV["HEROKU_APP_NAME"].present?
     task "refresh_certs", cron: "30 5 * * ? *" do
       RefreshSslCertificateService.new(
