@@ -147,7 +147,11 @@ class Convention < ApplicationRecord
             .map do |(round, next_round)|
               { start: round.start, value: round.maximum_event_signups, finish: next_round.start }
             end
-        timespans << { start: sorted_rounds.last.start, value: sorted_rounds.last.maximum_event_signups, finish: nil }
+        if sorted_rounds.any?
+          timespans << { start: sorted_rounds.last.start, value: sorted_rounds.last.maximum_event_signups, finish: nil }
+        end
+
+        timespans = [{ start: nil, value: "unlimited", finish: nil }] if timespans.empty?
 
         ScheduledValue::ScheduledValue.new(timespans:)
       end

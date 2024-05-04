@@ -4,11 +4,11 @@ describe ExecuteRankedChoiceSignupService do
   let(:convention) { create(:convention, :with_notification_templates) }
 
   it "signs a user up in the happy path" do
-    event = create(:event, convention: convention)
-    the_run = create(:run, event: event)
+    event = create(:event, convention:)
+    the_run = create(:run, event:)
     signup_ranked_choice = create(:signup_ranked_choice, target_run: the_run)
 
-    result = ExecuteRankedChoiceSignupService.new(signup_ranked_choice: signup_ranked_choice, whodunit: nil).call!
+    result = ExecuteRankedChoiceSignupService.new(signup_ranked_choice:, whodunit: nil).call!
 
     signup_ranked_choice.reload
     assert_equal "signup", result.decision.decision
@@ -20,14 +20,14 @@ describe ExecuteRankedChoiceSignupService do
     event =
       create(
         :event,
-        convention: convention,
+        convention:,
         registration_policy:
           RegistrationPolicy.new(buckets: [RegistrationPolicy::Bucket.new(slots_limited: true, total_slots: 0)])
       )
-    the_run = create(:run, event: event)
+    the_run = create(:run, event:)
     signup_ranked_choice = create(:signup_ranked_choice, target_run: the_run)
 
-    result = ExecuteRankedChoiceSignupService.new(signup_ranked_choice: signup_ranked_choice, whodunit: nil).call!
+    result = ExecuteRankedChoiceSignupService.new(signup_ranked_choice:, whodunit: nil).call!
 
     signup_ranked_choice.reload
     assert_equal "skip_choice", result.decision.decision
@@ -40,19 +40,14 @@ describe ExecuteRankedChoiceSignupService do
     event =
       create(
         :event,
-        convention: convention,
+        convention:,
         registration_policy:
           RegistrationPolicy.new(buckets: [RegistrationPolicy::Bucket.new(slots_limited: true, total_slots: 0)])
       )
-    the_run = create(:run, event: event)
+    the_run = create(:run, event:)
     signup_ranked_choice = create(:signup_ranked_choice, target_run: the_run)
 
-    result =
-      ExecuteRankedChoiceSignupService.new(
-        signup_ranked_choice: signup_ranked_choice,
-        whodunit: nil,
-        allow_waitlist: true
-      ).call!
+    result = ExecuteRankedChoiceSignupService.new(signup_ranked_choice:, whodunit: nil, allow_waitlist: true).call!
 
     signup_ranked_choice.reload
     assert_equal "waitlist", result.decision.decision
@@ -61,13 +56,13 @@ describe ExecuteRankedChoiceSignupService do
   end
 
   it "skips the choice if the user is already signed up for an event at the same time" do
-    event = create(:event, convention: convention)
-    the_run = create(:run, event: event)
+    event = create(:event, convention:)
+    the_run = create(:run, event:)
     signup_ranked_choice = create(:signup_ranked_choice, target_run: the_run)
-    the_other_run = create(:run, event: event, starts_at: the_run.starts_at)
+    the_other_run = create(:run, event:, starts_at: the_run.starts_at)
     conflicting_signup = create(:signup, user_con_profile: signup_ranked_choice.user_con_profile, run: the_other_run)
 
-    result = ExecuteRankedChoiceSignupService.new(signup_ranked_choice: signup_ranked_choice, whodunit: nil).call!
+    result = ExecuteRankedChoiceSignupService.new(signup_ranked_choice:, whodunit: nil).call!
 
     signup_ranked_choice.reload
     assert_equal "skip_choice", result.decision.decision
@@ -81,11 +76,11 @@ describe ExecuteRankedChoiceSignupService do
     let(:convention) { create(:convention, :with_notification_templates, signup_mode: "moderated") }
 
     it "requests a signup in the happy path" do
-      event = create(:event, convention: convention)
-      the_run = create(:run, event: event)
+      event = create(:event, convention:)
+      the_run = create(:run, event:)
       signup_ranked_choice = create(:signup_ranked_choice, target_run: the_run)
 
-      result = ExecuteRankedChoiceSignupService.new(signup_ranked_choice: signup_ranked_choice, whodunit: nil).call!
+      result = ExecuteRankedChoiceSignupService.new(signup_ranked_choice:, whodunit: nil).call!
 
       signup_ranked_choice.reload
       assert_equal "signup", result.decision.decision
@@ -98,19 +93,14 @@ describe ExecuteRankedChoiceSignupService do
       event =
         create(
           :event,
-          convention: convention,
+          convention:,
           registration_policy:
             RegistrationPolicy.new(buckets: [RegistrationPolicy::Bucket.new(slots_limited: true, total_slots: 0)])
         )
-      the_run = create(:run, event: event)
+      the_run = create(:run, event:)
       signup_ranked_choice = create(:signup_ranked_choice, target_run: the_run)
 
-      result =
-        ExecuteRankedChoiceSignupService.new(
-          signup_ranked_choice: signup_ranked_choice,
-          whodunit: nil,
-          allow_waitlist: true
-        ).call!
+      result = ExecuteRankedChoiceSignupService.new(signup_ranked_choice:, whodunit: nil, allow_waitlist: true).call!
 
       signup_ranked_choice.reload
       assert_equal "waitlist", result.decision.decision

@@ -73,9 +73,6 @@ FactoryBot.define do
     accepting_proposals { false }
     language { "en" }
     updated_by { nil }
-    maximum_event_signups do
-      ScheduledValue::ScheduledValue.new(timespans: [{ start: nil, finish: nil, value: "unlimited" }])
-    end
     starts_at { Time.utc(2016, 10, 28, 18, 0, 0) }
     ends_at { Time.utc(2016, 10, 30, 18, 0, 0) }
     stripe_account_id { "acct_#{Devise.friendly_token}" }

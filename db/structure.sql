@@ -2900,7 +2900,8 @@ CREATE TABLE public.user_con_profiles (
     accepted_clickwrap_agreement boolean DEFAULT false NOT NULL,
     mobile_phone character varying,
     allow_sms boolean DEFAULT true NOT NULL,
-    lottery_number integer NOT NULL
+    lottery_number integer NOT NULL,
+    ranked_choice_allow_waitlist boolean DEFAULT true NOT NULL
 );
 
 
@@ -6020,6 +6021,7 @@ ALTER TABLE ONLY public.cms_files_pages
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20240504165651'),
 ('20240504163701'),
 ('20240428174607'),
 ('20240427160255'),

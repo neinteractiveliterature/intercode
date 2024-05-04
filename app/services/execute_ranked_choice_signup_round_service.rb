@@ -38,13 +38,13 @@ class ExecuteRankedChoiceSignupRoundService < CivilService::Service
   end
 
   def ordered_user_con_profiles
-    case signup_round.order
-    when 'asc'
+    case signup_round.ranked_choice_order
+    when "asc"
       convention.user_con_profiles.order(lottery_number: :asc)
-    when 'desc'
+    when "desc"
       convention.user_con_profiles.order(lottery_number: :desc)
     else
-      raise "Unknown order for executing signup choices: #{order.inspect}"
+      raise "Unknown order for executing signup choices: #{signup_round.ranked_choice_order.inspect}"
     end
   end
 
@@ -58,20 +58,27 @@ class ExecuteRankedChoiceSignupRoundService < CivilService::Service
       return
     end
 
-    signup = pending_choices.find { |choice| execute_choice(constraints, choice) }
-    signup || pending_choices.find { |choice| execute_choice(constraints, choice, allow_waitlist: true) }
+    executed_choice = pending_choices.find { |choice| execute_choice(constraints, choice) }
+    return executed_choice if executed_choice
+    return unless user_con_profile.ranked_choice_allow_waitlist
+
+    pending_choices.find { |choice| execute_choice(constraints, choice, allow_waitlist: true) }
   end
 
   def check_skip_user_for_policy_reasons(constraints)
     unless constraints.has_ticket_if_required?
-      decisions << RankedChoiceDecision.create!(decision: :skip_user, user_con_profile:, reason: :missing_ticket)
+      decisions << RankedChoiceDecision.create!(
+        decision: :skip_user,
+        user_con_profile: constraints.user_con_profile,
+        reason: :missing_ticket
+      )
       return true
     end
 
     unless constraints.signup_count_allowed?(constraints.current_signup_count + 1)
       decisions << RankedChoiceDecision.create!(
         decision: :skip_user,
-        user_con_profile:,
+        user_con_profile: constraints.user_con_profile,
         reason: :no_more_signups_allowed
       )
       return true
@@ -82,14 +89,14 @@ class ExecuteRankedChoiceSignupRoundService < CivilService::Service
 
   def execute_choice(constraints, signup_ranked_choice, allow_waitlist: false)
     result =
-      ExecuteRankedChoiceSignupService.call!(
+      ExecuteRankedChoiceSignupService.new(
         whodunit:,
         signup_ranked_choice:,
         allow_waitlist:,
         constraints:,
         skip_locking:,
         suppress_notifications:
-      )
+      ).call!
     decisions << result.decision
     result.decision.decision != "skip_choice"
   end
