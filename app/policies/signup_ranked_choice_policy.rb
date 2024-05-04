@@ -54,6 +54,12 @@ class SignupRankedChoicePolicy < ApplicationPolicy
     user && record.state == "pending" && user.id == record.user_con_profile.user_id
   end
 
+  def update?
+    return false unless oauth_scope?(:manage_signups)
+    return false if assumed_identity_from_profile && assumed_identity_from_profile.convention != convention
+    user && record.state == "pending" && user.id == record.user_con_profile.user_id
+  end
+
   class Scope < Scope
     # rubocop:disable Metrics/MethodLength
     def resolve

@@ -123,7 +123,7 @@ class UserConProfile < ApplicationRecord
     return unless birth_date
 
     on_or_after_birthday =
-      (date.month > birth_date.month || (date.month == birth_date.month && date.day >= birth_date.day))
+      date.month > birth_date.month || (date.month == birth_date.month && date.day >= birth_date.day)
 
     date.year - birth_date.year - (on_or_after_birthday ? 0 : 1)
   end
@@ -149,7 +149,7 @@ class UserConProfile < ApplicationRecord
 
   def is_team_member? # rubocop:disable Naming/PredicateName
     return team_members.size.positive? if team_members.loaded?
-    self.class.is_team_member.where(id: id).any?
+    self.class.is_team_member.where(id:).any?
   end
 
   def can_have_bio?
@@ -161,7 +161,7 @@ class UserConProfile < ApplicationRecord
   end
 
   def email=(email)
-    self.user = User.find_by(email: email)
+    self.user = User.find_by(email:)
     self.first_name ||= user.first_name
     self.last_name ||= user.last_name
   end
@@ -249,7 +249,7 @@ class UserConProfile < ApplicationRecord
   end
 
   def generate_lottery_number
-    return if self.lottery_number.present?
+    return if lottery_number.present?
 
     possible_lottery_numbers = Set.new(1..convention.max_lottery_number)
     existing_lottery_numbers = Set.new(convention.user_con_profiles.pluck(:lottery_number))

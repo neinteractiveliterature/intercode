@@ -54,7 +54,7 @@ class UserSignupConstraints
     @max_signups_allowed ||= convention.maximum_event_signups.value_at(Time.zone.now)
   end
 
-  def has_ticket_if_required?
+  def has_ticket_if_required? # rubocop:disable Naming/PredicateName
     convention.ticket_mode != "required_for_signup" || user_con_profile.ticket&.allows_event_signups?
   end
 end

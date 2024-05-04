@@ -76,8 +76,16 @@ Rails/BulkChangeTable:
 Rails/NotNullColumn:
   Database: postgresql
 
+GraphQL/ObjectDescription:
+  Exclude:
+    - app/graphql/sources/**/*.rb
+
 # prettier and rubocop are fighting about this one, let prettier win
 Style/StringLiteralsInInterpolation:
+  Enabled: false
+
+# prettier and rubocop are fighting about this one, let prettier win
+Style/BlockDelimiters:
   Enabled: false
 
 # Not sure why Prettier isn't disabling this but apparently we have to
