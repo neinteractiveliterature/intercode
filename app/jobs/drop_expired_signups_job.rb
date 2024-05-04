@@ -8,7 +8,7 @@ class DropExpiredSignupsJob < ApplicationJob
       .where("expires_at < ?", 1.minute.ago)
       .find_each do |signup|
         EventWithdrawService.new(signup, nil, action: "hold_expired").call!
-        Signups::HoldExpiredNotifier.new(signup: signup).deliver_later(wait: 5.seconds)
+        Signups::HoldExpiredNotifier.new(signup:).deliver_later(wait: 5.seconds)
       end
   end
 end

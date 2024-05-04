@@ -2611,7 +2611,9 @@ CREATE TABLE public.signup_rounds (
     start timestamp without time zone,
     maximum_event_signups text NOT NULL,
     created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    updated_at timestamp(6) without time zone NOT NULL,
+    ranked_choice_order text,
+    executed_at timestamp without time zone
 );
 
 
@@ -6018,6 +6020,7 @@ ALTER TABLE ONLY public.cms_files_pages
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20240504163701'),
 ('20240428174607'),
 ('20240427160255'),
 ('20240417195945'),

@@ -4,7 +4,9 @@
 # Table name: signup_rounds
 #
 #  id                    :bigint           not null, primary key
+#  executed_at           :datetime
 #  maximum_event_signups :text             not null
+#  ranked_choice_order   :text
 #  start                 :datetime
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null

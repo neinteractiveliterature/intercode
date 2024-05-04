@@ -31,12 +31,12 @@ class AcceptSignupRankedChoiceService < CivilService::Service
       signup_request = nil
       with_relevant_locks { signup_request = create_signup_request }
       signup_ranked_choice.update!(state: "requested", result_signup_request: signup_request)
-      success(signup_request: signup_request)
+      success(signup_request:)
     end
   end
 
-  def with_relevant_locks(&block)
-    with_advisory_lock_unless_skip_locking("run_#{signup_ranked_choice.target_run.id}_signups", &block)
+  def with_relevant_locks(&)
+    with_advisory_lock_unless_skip_locking("run_#{signup_ranked_choice.target_run.id}_signups", &)
   end
 
   def create_signup
@@ -46,7 +46,7 @@ class AcceptSignupRankedChoiceService < CivilService::Service
       signup_ranked_choice.requested_bucket_key,
       whodunit,
       skip_locking: true,
-      suppress_notifications: suppress_notifications,
+      suppress_notifications:,
       suppress_confirmation: suppress_notifications,
       action: "accept_signup_ranked_choice"
     ).call!
