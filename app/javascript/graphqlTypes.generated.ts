@@ -4642,18 +4642,37 @@ export type SignupMoveResult = {
   state: SignupState;
 };
 
+/**
+ * In a ranked-choice signup convention, SignupRankedChoices are the items in a user's signup queue.  Users may have
+ * as many of these as they like.  When SignupRounds open, Intercode will automatically attempt to sign users up for
+ * the number of events they're allowed at this time based on their SignupRankedChoices.
+ */
 export type SignupRankedChoice = {
   __typename: 'SignupRankedChoice';
+  /** The time this choice was added to the user's queue */
   created_at: Scalars['Date']['output'];
+  /** The ID of this SignupRankedChoice */
   id: Scalars['ID']['output'];
+  /** The priority of this choice (lower numbers are higher priority) */
   priority: Scalars['Int']['output'];
+  /** The bucket that this choice is trying to sign up in (or null, if it's a no-preference signup) */
   requested_bucket_key?: Maybe<Scalars['String']['output']>;
+  /** The resulting Signup from processing this choice, if it has been processed */
   result_signup?: Maybe<Signup>;
+  /**
+   * The resulting SignupRequest from processing this choice, if it has been processed (and is in a moderated-signup
+   * convention)
+   */
   result_signup_request?: Maybe<SignupRequest>;
+  /** The current processing state of this choice (e.g. pending, accepted) */
   state: SignupRankedChoiceState;
+  /** The event run that this choice is trying to sign up for */
   target_run: Run;
+  /** The last time this choice was modified */
   updated_at: Scalars['Date']['output'];
+  /** The user who last updated this choice */
   updated_by: User;
+  /** The user whose queue this choice is part of */
   user_con_profile: UserConProfile;
 };
 
