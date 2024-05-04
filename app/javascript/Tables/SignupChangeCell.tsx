@@ -18,6 +18,10 @@ export function describeAction(action: SignupChangeAction, t: TFunction): string
     return t('tables.signupChange.actions.acceptSignupRequest', 'accepted signup request');
   }
 
+  if (action === 'accept_signup_ranked_choice') {
+    return t('tables.signupChange.actions.acceptSignupRankedChoice', 'accepted signup ranked choice');
+  }
+
   if (action === 'change_registration_policy') {
     return t('tables.signupChange.actions.changeRegistrationPolicy', 'registration policy change');
   }

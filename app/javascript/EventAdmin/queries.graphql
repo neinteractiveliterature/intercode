@@ -107,6 +107,12 @@ fragment RunFields on Run {
     id
     state
   }
+
+  my_signup_ranked_choices {
+    id
+    priority
+    state
+  }
 }
 
 fragment EventFields on Event {

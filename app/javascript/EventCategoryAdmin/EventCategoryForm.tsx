@@ -87,7 +87,7 @@ function EventColorPicker({ variant, eventRunProps, eventCategory, color, setCol
           availability={variant === 'full' ? 0.0 : 0.5}
           {...eventRunProps}
         >
-          <SignupStatusBadge signupStatus={eventRunProps.signupStatus} />
+          <SignupStatusBadge signupStatus={eventRunProps.signupStatus} mySignupRankedChoices={[]} />
           {humanize(variant)}
         </FakeEventRun>
       </div>

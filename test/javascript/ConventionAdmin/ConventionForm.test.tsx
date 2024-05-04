@@ -7,6 +7,7 @@ import ConventionForm, {
 import {
   EmailMode,
   ShowSchedule,
+  SignupAutomationMode,
   SignupMode,
   SiteMode,
   TicketMode,
@@ -37,6 +38,7 @@ describe('ConventionForm', () => {
     timezone_mode: TimezoneMode.ConventionLocal,
     site_mode: SiteMode.Convention,
     signup_mode: SignupMode.SelfService,
+    signup_automation_mode: SignupAutomationMode.None,
     accepting_proposals: false,
     show_schedule: ShowSchedule.No,
     show_event_list: ShowSchedule.No,

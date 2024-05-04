@@ -149,6 +149,7 @@ export type ProspectiveRunScheduleProps = {
     | 'room_names'
     | 'my_signups'
     | 'my_signup_requests'
+    | 'my_signup_ranked_choices'
   >[];
   event: EventFieldsFragment;
 };
@@ -177,6 +178,7 @@ export default LoadQueryWrapper<EventAdminEventsQueryData, EventAdminEventsQuery
           room_names: (run.rooms ?? []).map((room) => room.name).filter(notEmpty),
           my_signups: [],
           my_signup_requests: [],
+          my_signup_ranked_choices: [],
         })),
       [runs, event.id],
     );
