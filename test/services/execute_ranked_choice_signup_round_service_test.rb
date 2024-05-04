@@ -111,22 +111,34 @@ describe ExecuteRankedChoiceSignupRoundService do
     signup_round = create(:signup_round, convention:, ranked_choice_order: "asc", maximum_event_signups: "2")
     low_number_user = create(:user_con_profile, convention:, lottery_number: 1, ranked_choice_allow_waitlist: false)
     high_number_user = create(:user_con_profile, convention:, lottery_number: 2, ranked_choice_allow_waitlist: true)
-    create(:signup_ranked_choice, user_con_profile: low_number_user, target_run: the_run)
-    create(:signup_ranked_choice, user_con_profile: high_number_user, target_run: the_run)
+    low_first_run = create(:signup_ranked_choice, user_con_profile: low_number_user, target_run: the_run)
+    high_first_run = create(:signup_ranked_choice, user_con_profile: high_number_user, target_run: the_run)
     other_event = create(:event, convention:, registration_policy: one_player_registration_policy)
     other_run = create(:run, event: other_event, starts_at: 1.day.from_now)
     unlimited_event = create(:event, convention:, registration_policy: RegistrationPolicy.unlimited)
     unlimited_run = create(:run, event: unlimited_event, starts_at: 2.days.from_now)
     create(:signup_ranked_choice, user_con_profile: low_number_user, target_run: unlimited_run)
-    create(:signup_ranked_choice, user_con_profile: high_number_user, target_run: unlimited_run)
-    # duplicate choice just to make sure the user doesn't get signed up twice
-    create(:signup_ranked_choice, user_con_profile: high_number_user, target_run: unlimited_run)
+    high_unlimited_run = create(:signup_ranked_choice, user_con_profile: high_number_user, target_run: unlimited_run)
+    high_duplicate_unlimited_run =
+      create(:signup_ranked_choice, user_con_profile: high_number_user, target_run: unlimited_run)
     create(:signup, user_con_profile: low_number_user, run: other_run)
 
     result = ExecuteRankedChoiceSignupRoundService.new(signup_round:, whodunit: nil).call!
 
-    assert_equal %w[signup skip_choice signup skip_user skip_choice skip_choice waitlist],
-                 result.decisions.map(&:decision)
+    assert_equal [
+                   [low_first_run.id, "signup", nil],
+                   [high_first_run.id, "skip_choice", "full"],
+                   [high_unlimited_run.id, "signup", nil],
+                   [nil, "skip_user", "no_more_signups_allowed"],
+                   [high_first_run.id, "skip_choice", "full"],
+                   [high_duplicate_unlimited_run.id, "skip_choice", "conflict"],
+                   [high_first_run.id, "waitlist", nil]
+                 ],
+                 (
+                   result.decisions.map do |decision|
+                     [decision.signup_ranked_choice_id, decision.decision, decision.reason]
+                   end
+                 )
     assert_equal [[the_run.id, "confirmed"], [other_run.id, "confirmed"]].sort,
                  low_number_user.signups.map { |signup| [signup.run_id, signup.state] }.sort
     assert_equal [[the_run.id, "waitlisted"], [unlimited_run.id, "confirmed"]].sort,
