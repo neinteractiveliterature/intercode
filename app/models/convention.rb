@@ -149,7 +149,7 @@ class Convention < ApplicationRecord
             end
         timespans << { start: sorted_rounds.last.start, value: sorted_rounds.last.maximum_event_signups, finish: nil }
 
-        ScheduledValue::ScheduledValue.new(timespans: timespans)
+        ScheduledValue::ScheduledValue.new(timespans:)
       end
   end
 

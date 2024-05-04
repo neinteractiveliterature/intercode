@@ -13,13 +13,22 @@ class Mutations::UpdateConvention < Mutations::BaseMutation
   end
 
   def resolve(**args)
-    convention_data =
-      args[:convention].to_h.merge(
-        'maximum_event_signups' => process_scheduled_value_input(args[:convention].maximum_event_signups),
-        'updated_by' => current_user
-      )
+    maximum_event_signups_scheduled_value = process_scheduled_value_input(args[:convention].maximum_event_signups)
+    desired_signup_rounds =
+      maximum_event_signups_scheduled_value[:timespans].map do |timespan|
+        { convention_id: @convention.id, start: timespan[:start], maximum_event_signups: timespan[:value] }
+      end
 
-    @convention.update!(convention_data)
+    convention_data = args[:convention].to_h.merge(updated_by: current_user)
+    convention_data.delete(:maximum_event_signups)
+
+    Convention.transaction do
+      @convention.update!(convention_data)
+      @convention.signup_rounds.destroy_all
+      @convention.signup_rounds.insert_all(desired_signup_rounds)
+    end
+
+    @convention.signup_rounds.reload
 
     { convention: @convention }
   end
