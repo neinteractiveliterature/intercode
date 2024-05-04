@@ -1,9 +1,40 @@
 # frozen_string_literal: true
 class Types::RunType < Types::BaseObject
+  description <<~MARKDOWN
+    A run of an event within a convention. Events can have multiple runs of the course of a convention (with some
+    exceptions, such as conventions that use single_event site mode).
+  MARKDOWN
+
   authorize_record
 
-  field :id, ID, null: false
+  field :confirmed_limited_signup_count, Integer, null: false
+  field :confirmed_signup_count, Integer, null: false
+  field :current_ability_can_signup_summary_run, Boolean, null: false
+  field :ends_at, Types::DateType, null: false
   field :event, Types::EventType, null: false
+  field :grouped_signup_counts, [Types::GroupedSignupCountType], null: false
+  field :id, ID, null: false
+  field :my_signup_ranked_choices, [Types::SignupRankedChoiceType], null: false
+  field :my_signup_requests, [Types::SignupRequestType], null: false
+  field :my_signups, [Types::SignupType], null: false
+  field :not_counted_confirmed_signup_count, Integer, null: false
+  field :not_counted_signup_count, Integer, null: false
+  field :room_names, [String], null: false
+  field :rooms, [Types::RoomType], null: false
+  field :schedule_note, String, null: true
+  field :signup_count_by_state_and_bucket_key_and_counted,
+        Types::JSON,
+        null: false,
+        deprecation_reason: "Please use grouped_signup_counts instead"
+  field :signups_paginated, Types::SignupsPaginationType, null: false do
+    argument :filters, Types::SignupFiltersInputType, required: false
+    argument :page, Integer, required: false
+    argument :per_page, Integer, required: false, camelize: false
+    argument :sort, [Types::SortInputType], required: false
+  end
+  field :starts_at, Types::DateType, null: false
+  field :title_suffix, String, null: true
+  field :waitlisted_signup_count, Integer, null: false
 
   def event
     event = dataloader.with(Sources::ActiveRecordAssociation, Run, :event).load(object)
@@ -11,43 +42,26 @@ class Types::RunType < Types::BaseObject
     event
   end
 
-  field :starts_at, Types::DateType, null: false
-  field :ends_at, Types::DateType, null: false
-  field :title_suffix, String, null: true
-  field :schedule_note, String, null: true
-
-  field :rooms, [Types::RoomType], null: false
-
   association_loaders Run, :rooms
-
-  field :room_names, [String], null: false
 
   def room_names
     dataloader.with(Sources::RunRoomNames).load(object)
   end
-
-  field :confirmed_signup_count, Integer, null: false
 
   def confirmed_signup_count
     presenter = dataloader.with(Sources::SignupCount).load(object)
     presenter.signup_count(state: "confirmed", counted: true)
   end
 
-  field :confirmed_limited_signup_count, Integer, null: false
-
   def confirmed_limited_signup_count
     presenter = dataloader.with(Sources::SignupCount).load(object)
     presenter.confirmed_limited_count
   end
 
-  field :waitlisted_signup_count, Integer, null: false
-
   def waitlisted_signup_count
     presenter = dataloader.with(Sources::SignupCount).load(object)
     presenter.waitlist_count
   end
-
-  field :not_counted_signup_count, Integer, null: false
 
   def not_counted_signup_count
     presenter = dataloader.with(Sources::SignupCount).load(object)
@@ -58,62 +72,38 @@ class Types::RunType < Types::BaseObject
     )
   end
 
-  field :not_counted_confirmed_signup_count, Integer, null: false
-
   def not_counted_confirmed_signup_count
     presenter = dataloader.with(Sources::SignupCount).load(object)
     presenter.signup_count(state: "confirmed", counted: false)
   end
-
-  field :grouped_signup_counts, [Types::GroupedSignupCountType], null: false
 
   def grouped_signup_counts
     presenter = dataloader.with(Sources::SignupCount).load(object)
     presenter.grouped_signup_counts
   end
 
-  field :signup_count_by_state_and_bucket_key_and_counted,
-        Types::JSON,
-        null: false,
-        deprecation_reason: "Please use grouped_signup_counts instead"
-
   def signup_count_by_state_and_bucket_key_and_counted
     presenter = dataloader.with(Sources::SignupCount).load(object)
     presenter.signup_count_by_state_and_bucket_key_and_counted
   end
-
-  field :my_signups, [Types::SignupType], null: false
 
   def my_signups
     return [] unless context[:user_con_profile]
     dataloader.with(Sources::MySignups, context[:user_con_profile]).load(object)
   end
 
-  field :my_signup_requests, [Types::SignupRequestType], null: false
-
   def my_signup_requests
     return [] unless context[:user_con_profile]
     dataloader.with(Sources::MySignupRequests, context[:user_con_profile]).load(object)
   end
-
-  field :my_signup_ranked_choices, [Types::SignupRankedChoiceType], null: false
 
   def my_signup_ranked_choices
     return [] unless context[:user_con_profile]
     dataloader.with(Sources::MySignupRankedChoices, context[:user_con_profile]).load(object)
   end
 
-  field :current_ability_can_signup_summary_run, Boolean, null: false
-
   def current_ability_can_signup_summary_run
     dataloader.with(Sources::ModelPermission, Run).load([pundit_user, :signup_summary, object.id])
-  end
-
-  field :signups_paginated, Types::SignupsPaginationType, null: false do
-    argument :page, Integer, required: false
-    argument :per_page, Integer, required: false, camelize: false
-    argument :filters, Types::SignupFiltersInputType, required: false
-    argument :sort, [Types::SortInputType], required: false
   end
 
   def signups_paginated(**args)
