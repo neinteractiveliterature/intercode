@@ -607,13 +607,33 @@ export type ContactEmail = {
   name?: Maybe<Scalars['String']['output']>;
 };
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type Convention = CmsParent & {
   __typename: 'Convention';
+  /** Is this convention currently accepting event proposals? */
   accepting_proposals?: Maybe<Scalars['Boolean']['output']>;
+  /** User profiles in this convention that can have a bio (because they're staff or event team members). */
   bio_eligible_user_con_profiles: Array<UserConProfile>;
+  /** Is this convention canceled? */
   canceled: Scalars['Boolean']['output'];
+  /**
+   * If this convention's email_mode is set to staff_emails_to_catch_all, all email sent to staff position email
+   * addresses at this convention will be forwarded to this staff position.
+   */
   catch_all_staff_position?: Maybe<StaffPosition>;
+  /**
+   * A clickwrap agreement, in Liquid format.  If present, users will have to agree to this before they're allowed to
+   * use the web site.
+   */
   clickwrap_agreement?: Maybe<Scalars['String']['output']>;
+  /** The value of clickwrap_agreement, rendered as HTML. */
   clickwrap_agreement_html?: Maybe<Scalars['String']['output']>;
   /**
    * Finds a CMS content group by ID within the domain name of this HTTP request. If there is no
@@ -645,11 +665,15 @@ export type Convention = CmsParent & {
   /** Returns all CMS variables within the current domain. */
   cmsVariables: Array<CmsVariable>;
   coupons_paginated: CouponsPagination;
+  /** When this convention was created. */
   created_at?: Maybe<Scalars['Date']['output']>;
   /** Returns the default CMS layout used in this domain. */
   defaultLayout: CmsLayout;
+  /** The ISO 4217 currency code used by default for products in this convention.  If null, defaults to USD. */
   default_currency_code?: Maybe<Scalars['String']['output']>;
+  /** All the departments in this convention. */
   departments: Array<Department>;
+  /** The domain name used for serving this convention web site. */
   domain?: Maybe<Scalars['String']['output']>;
   /**
    * Returns the CMS layout to be used for a particular URL path within the current domain. (This
@@ -657,15 +681,23 @@ export type Convention = CmsParent & {
    * the default layout for the domain otherwise.)
    */
   effectiveCmsLayout: CmsLayout;
+  /** The default address that site emails will be sent from. */
   email_from: Scalars['String']['output'];
+  /** How this convention site will handle incoming emails to its domain. */
   email_mode: EmailMode;
+  /** When this convention ends. */
   ends_at?: Maybe<Scalars['Date']['output']>;
   /**
    * Finds an active event by ID in this convention. If there is no event with that ID in this
    * convention, or the event is no longer active, errors out.
    */
   event: Event;
+  /** All the EventCategories in this convention. */
   event_categories: Array<EventCategory>;
+  /**
+   * If present, the site will automatically offer to set up forwarding email addresses for event teams under this
+   * domain.
+   */
   event_mailing_list_domain?: Maybe<Scalars['String']['output']>;
   /**
    * Finds an event proposal by ID in this convention. If there is no event proposal with that ID
@@ -682,6 +714,7 @@ export type Convention = CmsParent & {
    */
   events: Array<Event>;
   events_paginated: EventsPagination;
+  /** The favicon that will be served to browsers on this site. */
   favicon?: Maybe<ActiveStorageAttachment>;
   /** @deprecated Please use the favicon field instead. */
   favicon_url?: Maybe<Scalars['String']['output']>;
@@ -690,11 +723,15 @@ export type Convention = CmsParent & {
    * errors out.
    */
   form: Form;
+  /** All the forms in this convention. */
   forms: Array<Form>;
   /** Does a full-text search within this domain. */
   fullTextSearch: SearchResult;
+  /** If true, this convention will not be listed in CMS content on the root site. */
   hidden: Scalars['Boolean']['output'];
+  /** The ID of this convention. */
   id: Scalars['ID']['output'];
+  /** The language to use for localized content in this site. */
   language: Scalars['String']['output'];
   /**
    * Returns all the Liquid assigns for regular CMS page rendering in the current domain name.
@@ -702,9 +739,16 @@ export type Convention = CmsParent & {
    * CMS variables.
    */
   liquidAssigns: Array<LiquidAssign>;
+  /** The physical location of the convention, in Mapbox format. */
   location?: Maybe<Scalars['Json']['output']>;
+  /** A sub-object for accessing this convention's autogenerated mailing lists. */
   mailing_lists: MailingLists;
+  /**
+   * The schedule of how many signups are allowed in this convention and when.
+   * @deprecated Please use SignupRound instead
+   */
   maximum_event_signups?: Maybe<ScheduledValue>;
+  /** The maximum number of tickets this convention can sell. */
   maximum_tickets?: Maybe<Scalars['Int']['output']>;
   /**
    * Returns the convention-specific profile for the current user within this convention. If no
@@ -726,7 +770,9 @@ export type Convention = CmsParent & {
    * returns an empty array.
    */
   my_signups: Array<Signup>;
+  /** The name of this convention. */
   name: Scalars['String']['output'];
+  /** All the NotificationTemplates in this convention. */
   notification_templates: Array<NotificationTemplate>;
   /**
    * Returns all the Liquid assigns for rendering a particular notification event in this
@@ -734,11 +780,17 @@ export type Convention = CmsParent & {
    * to that notification event, and convention-specific user-defined CMS variables.
    */
   notifier_liquid_assigns: Array<LiquidAssign>;
+  /**
+   * The image that will be served from this site using the `<meta property="og:image">` tag.  For more information
+   * about OpenGraph, see https://ogp.me/.
+   */
   open_graph_image?: Maybe<ActiveStorageAttachment>;
   /** @deprecated Please use the open_graph_image field instead. */
   open_graph_image_url?: Maybe<Scalars['String']['output']>;
   orders_paginated: OrdersPagination;
+  /** The organization in charge of this convention. */
   organization?: Maybe<Organization>;
+  /** If present, a block of HTML content to show above the schedule on various schedule pages. */
   pre_schedule_content_html?: Maybe<Scalars['String']['output']>;
   /** Given a Liquid text string, renders it to HTML and returns the result. */
   previewLiquid: Scalars['String']['output'];
@@ -754,8 +806,11 @@ export type Convention = CmsParent & {
    * convention, errors out.
    */
   product: Product;
+  /** Returns the products in this convention. */
   products: Array<Product>;
+  /** A sub-object containing various reports that can be generated for this convention. */
   reports: ConventionReports;
+  /** All the rooms in this convention. */
   rooms: Array<Room>;
   /** The CMS page used for the root path (/) of this domain. */
   rootPage: Page;
@@ -765,37 +820,56 @@ export type Convention = CmsParent & {
    */
   run: Run;
   runs_paginated: RunsPagination;
+  /** Who can currently see the event catalog? */
   show_event_list?: Maybe<ShowSchedule>;
+  /** Who can currently see the event schedule? */
   show_schedule?: Maybe<ShowSchedule>;
   /**
    * Finds a signup by ID in this convention. If there is no signup with that ID in this
    * convention, errors out.
    */
   signup: Signup;
+  /** The signup automation mode used for this convention. */
   signup_automation_mode: SignupAutomationMode;
   signup_changes_paginated: SignupChangesPagination;
   signup_counts_by_state: Array<SignupCountByState>;
+  /** The signup mode used for this convention. */
   signup_mode: SignupMode;
+  /** In a moderated-signup convention, are signup requests currently allowed? */
   signup_requests_open: Scalars['Boolean']['output'];
   signup_requests_paginated: SignupRequestsPagination;
+  /** The mode this convention site is operating in. */
   site_mode: SiteMode;
   /**
    * Finds a staff position by ID in this convention. If there is no staff position with that ID
    * in this convention, errors out.
    */
   staff_position: StaffPosition;
+  /** All the staff positions in this convention. */
   staff_positions: Array<StaffPosition>;
+  /** When this convention starts. */
   starts_at?: Maybe<Scalars['Date']['output']>;
+  /** The Stripe account this convention uses for payments. */
   stripe_account?: Maybe<StripeAccount>;
+  /** The ID of the Stripe account this convention uses for payments. */
   stripe_account_id?: Maybe<Scalars['String']['output']>;
+  /** Is this convention's Stripe account in a state where the convention can accept payments? */
   stripe_account_ready_to_charge: Scalars['Boolean']['output'];
+  /** The publishable key of this convention's Stripe account. */
   stripe_publishable_key?: Maybe<Scalars['String']['output']>;
+  /** The word this convention uses for 'tickets'. */
   ticketNamePlural: Scalars['String']['output'];
+  /** The mode used for ticket behaviors in this convention. */
   ticket_mode: TicketMode;
+  /** The word this convention uses for 'ticket'. */
   ticket_name: Scalars['String']['output'];
+  /** All the ticket types in this convention. */
   ticket_types: Array<TicketType>;
+  /** Can users currently buy tickets to this convention? */
   tickets_available_for_purchase: Scalars['Boolean']['output'];
+  /** The mode used for time zone display and time conversion behavior in this site. */
   timezone_mode: TimezoneMode;
+  /** The home time zone of this convention. */
   timezone_name?: Maybe<Scalars['String']['output']>;
   /**
    * Finds CMS content by partial name, case-insensitive, within the current domain's CMS content.
@@ -805,8 +879,11 @@ export type Convention = CmsParent & {
    * This query is always limited to a maximum of 10 results.
    */
   typeaheadSearchCmsContent: Array<CmsContent>;
+  /** When this convention was last modified. */
   updated_at?: Maybe<Scalars['Date']['output']>;
+  /** Find a UserActivityAlert by ID. */
   user_activity_alert: UserActivityAlert;
+  /** All the UserActivityAlerts in this convention. */
   user_activity_alerts: Array<UserActivityAlert>;
   /**
    * Finds a UserConProfile by ID in the convention associated with this convention. If there is
@@ -818,16 +895,33 @@ export type Convention = CmsParent & {
    * there is no UserConProfile with that user ID in this convention, errors out.
    */
   user_con_profile_by_user_id: UserConProfile;
+  /** The form used for user profiles in this convention. */
   user_con_profile_form: Form;
   user_con_profiles_paginated: UserConProfilesPagination;
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionCmsContentGroupArgs = {
   id: Scalars['ID']['input'];
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionCmsPageArgs = {
   id?: InputMaybe<Scalars['ID']['input']>;
   rootPage?: InputMaybe<Scalars['Boolean']['input']>;
@@ -835,6 +929,14 @@ export type ConventionCmsPageArgs = {
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionCoupons_PaginatedArgs = {
   filters?: InputMaybe<CouponFiltersInput>;
   page?: InputMaybe<Scalars['Int']['input']>;
@@ -843,26 +945,66 @@ export type ConventionCoupons_PaginatedArgs = {
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionEffectiveCmsLayoutArgs = {
   path: Scalars['String']['input'];
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionEventArgs = {
   id: Scalars['ID']['input'];
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionEvent_CategoriesArgs = {
   current_ability_can_read_event_proposals?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionEvent_ProposalArgs = {
   id: Scalars['ID']['input'];
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionEvent_Proposals_PaginatedArgs = {
   filters?: InputMaybe<EventProposalFiltersInput>;
   page?: InputMaybe<Scalars['Int']['input']>;
@@ -871,6 +1013,14 @@ export type ConventionEvent_Proposals_PaginatedArgs = {
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionEventsArgs = {
   filters?: InputMaybe<EventFiltersInput>;
   finish?: InputMaybe<Scalars['Date']['input']>;
@@ -879,6 +1029,14 @@ export type ConventionEventsArgs = {
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionEvents_PaginatedArgs = {
   filters?: InputMaybe<EventFiltersInput>;
   page?: InputMaybe<Scalars['Int']['input']>;
@@ -887,21 +1045,53 @@ export type ConventionEvents_PaginatedArgs = {
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionFormArgs = {
   id: Scalars['ID']['input'];
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionFullTextSearchArgs = {
   query: Scalars['String']['input'];
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionNotifier_Liquid_AssignsArgs = {
   eventKey: Scalars['String']['input'];
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionOrders_PaginatedArgs = {
   filters?: InputMaybe<OrderFiltersInput>;
   page?: InputMaybe<Scalars['Int']['input']>;
@@ -910,11 +1100,27 @@ export type ConventionOrders_PaginatedArgs = {
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionPreviewLiquidArgs = {
   content: Scalars['String']['input'];
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionPreviewMarkdownArgs = {
   eventId?: InputMaybe<Scalars['ID']['input']>;
   eventProposalId?: InputMaybe<Scalars['ID']['input']>;
@@ -922,28 +1128,68 @@ export type ConventionPreviewMarkdownArgs = {
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionPreview_Notifier_LiquidArgs = {
   content: Scalars['String']['input'];
   eventKey: Scalars['String']['input'];
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionProductArgs = {
   id: Scalars['ID']['input'];
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionProductsArgs = {
   only_available?: InputMaybe<Scalars['Boolean']['input']>;
   only_ticket_providing?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionRunArgs = {
   id: Scalars['ID']['input'];
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionRuns_PaginatedArgs = {
   filters?: InputMaybe<RunFiltersInput>;
   page?: InputMaybe<Scalars['Int']['input']>;
@@ -952,11 +1198,27 @@ export type ConventionRuns_PaginatedArgs = {
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionSignupArgs = {
   id: Scalars['ID']['input'];
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionSignup_Changes_PaginatedArgs = {
   filters?: InputMaybe<SignupChangeFiltersInput>;
   page?: InputMaybe<Scalars['Int']['input']>;
@@ -965,6 +1227,14 @@ export type ConventionSignup_Changes_PaginatedArgs = {
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionSignup_Requests_PaginatedArgs = {
   filters?: InputMaybe<SignupRequestFiltersInput>;
   page?: InputMaybe<Scalars['Int']['input']>;
@@ -973,31 +1243,79 @@ export type ConventionSignup_Requests_PaginatedArgs = {
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionStaff_PositionArgs = {
   id: Scalars['ID']['input'];
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionTypeaheadSearchCmsContentArgs = {
   name?: InputMaybe<Scalars['String']['input']>;
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionUser_Activity_AlertArgs = {
   id: Scalars['ID']['input'];
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionUser_Con_ProfileArgs = {
   id: Scalars['ID']['input'];
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionUser_Con_Profile_By_User_IdArgs = {
   userId: Scalars['ID']['input'];
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionUser_Con_Profiles_PaginatedArgs = {
   filters?: InputMaybe<UserConProfileFiltersInput>;
   page?: InputMaybe<Scalars['Int']['input']>;
