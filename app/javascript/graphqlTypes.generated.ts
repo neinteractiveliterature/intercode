@@ -4913,6 +4913,11 @@ export type Signup = {
   waitlist_position?: Maybe<Scalars['Int']['output']>;
 };
 
+/**
+ * The automation behavior to use for event signups in a Convention.  Currently, we only support one type of
+ * automated signups, the "ranked choice" behavior.  Conventions can also disable automation entirely using the
+ * "none" value.
+ */
 export enum SignupAutomationMode {
   /** Signups are fully manual */
   None = 'none',

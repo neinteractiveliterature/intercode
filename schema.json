@@ -29322,7 +29322,7 @@
         {
           "kind": "ENUM",
           "name": "SignupAutomationMode",
-          "description": null,
+          "description": "The automation behavior to use for event signups in a Convention.  Currently, we only support one type of\nautomated signups, the \"ranked choice\" behavior.  Conventions can also disable automation entirely using the\n\"none\" value.\n",
           "interfaces": null,
           "possibleTypes": null,
           "fields": null,
