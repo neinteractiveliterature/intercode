@@ -4687,18 +4687,34 @@ export enum SignupRankedChoiceState {
   Waitlisted = 'waitlisted'
 }
 
+/**
+ * In a moderated-signup convention, SignupRequests are the queue of signups that users have asked to do.  Convention
+ * staff can go through these requests and accept them (which produces a Signup) or reject them.
+ */
 export type SignupRequest = {
   __typename: 'SignupRequest';
+  /** The time this request was put in */
   created_at: Scalars['Date']['output'];
+  /** The ID of this SignupRequest */
   id: Scalars['ID']['output'];
-  priority?: Maybe<Scalars['Int']['output']>;
+  /**
+   * The signup that this request is asking to replace (e.g. if the user is trying to leave a conflicting event).  If
+   * this request is accepted, the replace_signup will be withdrawn.
+   */
   replace_signup?: Maybe<Signup>;
+  /** The bucket that this request is asking to sign up in (or null, if it's a no-preference signup) */
   requested_bucket_key?: Maybe<Scalars['String']['output']>;
+  /** The resulting Signup from accepting this request, if it has been accepted */
   result_signup?: Maybe<Signup>;
+  /** The current processing state of this request (e.g. pending, accepted, rejected) */
   state: SignupRequestState;
+  /** The run the user would like to sign up for */
   target_run: Run;
+  /** The last time this request was modified */
   updated_at: Scalars['Date']['output'];
+  /** The last user who modified this request */
   updated_by: User;
+  /** The user who made this request */
   user_con_profile: UserConProfile;
 };
 

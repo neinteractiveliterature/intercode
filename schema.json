@@ -30205,13 +30205,13 @@
         {
           "kind": "OBJECT",
           "name": "SignupRequest",
-          "description": null,
+          "description": "In a moderated-signup convention, SignupRequests are the queue of signups that users have asked to do.  Convention\nstaff can go through these requests and accept them (which produces a Signup) or reject them.\n",
           "interfaces": [],
           "possibleTypes": null,
           "fields": [
             {
               "name": "created_at",
-              "description": null,
+              "description": "The time this request was put in",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -30227,7 +30227,7 @@
             },
             {
               "name": "id",
-              "description": null,
+              "description": "The ID of this SignupRequest",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -30242,20 +30242,8 @@
               "args": []
             },
             {
-              "name": "priority",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Int",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "args": []
-            },
-            {
               "name": "replace_signup",
-              "description": null,
+              "description": "The signup that this request is asking to replace (e.g. if the user is trying to leave a conflicting event).  If\nthis request is accepted, the replace_signup will be withdrawn.\n",
               "type": {
                 "kind": "OBJECT",
                 "name": "Signup",
@@ -30267,7 +30255,7 @@
             },
             {
               "name": "requested_bucket_key",
-              "description": null,
+              "description": "The bucket that this request is asking to sign up in (or null, if it's a no-preference signup)",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -30279,7 +30267,7 @@
             },
             {
               "name": "result_signup",
-              "description": null,
+              "description": "The resulting Signup from accepting this request, if it has been accepted",
               "type": {
                 "kind": "OBJECT",
                 "name": "Signup",
@@ -30291,7 +30279,7 @@
             },
             {
               "name": "state",
-              "description": null,
+              "description": "The current processing state of this request (e.g. pending, accepted, rejected)",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -30307,7 +30295,7 @@
             },
             {
               "name": "target_run",
-              "description": null,
+              "description": "The run the user would like to sign up for",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -30323,7 +30311,7 @@
             },
             {
               "name": "updated_at",
-              "description": null,
+              "description": "The last time this request was modified",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -30339,7 +30327,7 @@
             },
             {
               "name": "updated_by",
-              "description": null,
+              "description": "The last user who modified this request",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -30355,7 +30343,7 @@
             },
             {
               "name": "user_con_profile",
-              "description": null,
+              "description": "The user who made this request",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
