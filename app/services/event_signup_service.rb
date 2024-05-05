@@ -22,6 +22,7 @@ class EventSignupService < CivilService::Service
   validate :must_not_already_be_signed_up
   validate :must_not_have_conflicting_signups
   validate :must_have_ticket_if_required
+  validate :must_not_have_signup_rounds_due
   validate :require_valid_bucket, unless: :team_member?
   validate :require_no_bucket_for_team_member
 
@@ -161,6 +162,15 @@ sign up for events."
     return unless already_signed_up
 
     errors.add :base, "You are already signed up for this run of #{event.title}."
+  end
+
+  def must_not_have_signup_rounds_due
+    return if action == "accept_signup_ranked_choice"
+    return unless convention.signup_automation_mode == "ranked_choice"
+    return unless convention.signup_rounds.currently_due.any?
+
+    errors.add :base,
+               "We are currently processing ranked choice signups for this round. Please wait a moment and try again."
   end
 
   def require_valid_bucket

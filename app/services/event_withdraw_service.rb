@@ -23,6 +23,7 @@ class EventWithdrawService < CivilService::Service
   include ConventionRegistrationFreeze
 
   validate :run_must_not_be_over
+  validate :must_not_have_signup_rounds_due
 
   def initialize(
     signup,
@@ -49,7 +50,7 @@ class EventWithdrawService < CivilService::Service
   def inner_call
     with_advisory_lock_unless_skip_locking("run_#{run.id}_signups") do
       signup.update!(state: "withdrawn", bucket_key: nil, counted: false, updated_by: whodunit)
-      signup.log_signup_change!(action: action)
+      signup.log_signup_change!(action:)
 
       move_result = move_signups(prev_state, prev_bucket_key, prev_counted)
       return move_result if move_result.failure?
@@ -57,30 +58,23 @@ class EventWithdrawService < CivilService::Service
 
     notify_team_members(signup, prev_state, prev_bucket_key, move_results)
     send_confirmation(signup, prev_state, prev_bucket_key)
-    success(prev_state: prev_state, prev_bucket_key: prev_bucket_key, move_results: move_results)
+    success(prev_state:, prev_bucket_key:, move_results:)
   end
 
   def notify_team_members(signup, prev_state, prev_bucket_key, move_results)
     return if suppress_notifications
 
     # Wait 5 seconds because the transaction hasn't been committed yet
-    Signups::WithdrawalNotifier.new(
-      signup: signup,
-      prev_state: prev_state,
-      prev_bucket_key: prev_bucket_key,
-      move_results: move_results
-    ).deliver_later(wait: 5.seconds)
+    Signups::WithdrawalNotifier.new(signup:, prev_state:, prev_bucket_key:, move_results:).deliver_later(
+      wait: 5.seconds
+    )
   end
 
   def send_confirmation(signup, prev_state, prev_bucket_key)
     return if suppress_confirmation
 
     # Wait 5 seconds because the transaction hasn't been committed yet
-    Signups::WithdrawConfirmationNotifier.new(
-      signup: signup,
-      prev_state: prev_state,
-      prev_bucket_key: prev_bucket_key
-    ).deliver_later(wait: 5.seconds)
+    Signups::WithdrawConfirmationNotifier.new(signup:, prev_state:, prev_bucket_key:).deliver_later(wait: 5.seconds)
   end
 
   def move_signups(prev_state, prev_bucket_key, prev_counted)
@@ -105,5 +99,13 @@ class EventWithdrawService < CivilService::Service
   def run_must_not_be_over
     return unless run.ends_at < Time.now
     errors.add :base, "#{event.title} has ended."
+  end
+
+  def must_not_have_signup_rounds_due
+    return unless convention.signup_automation_mode == "ranked_choice"
+    return unless convention.signup_rounds.currently_due.any?
+
+    errors.add :base,
+               "We are currently processing ranked choice signups for this round. Please wait a moment and try again."
   end
 end

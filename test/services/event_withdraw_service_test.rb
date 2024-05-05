@@ -171,4 +171,32 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
       end
     end
   end
+
+  describe "in ranked-choice conventions" do
+    let(:convention) { create(:convention, :with_notification_templates, signup_automation_mode: "ranked_choice") }
+
+    it "allows withdrawals normally" do
+      create(
+        :signup_round,
+        convention:,
+        maximum_event_signups: "unlimited",
+        start: 1.minute.ago,
+        executed_at: 1.minute.ago
+      )
+
+      result = subject.call!
+
+      assert result.success?
+      assert signup.reload.withdrawn?
+    end
+
+    it "does not allow withdrawals while waiting for a signup round to process" do
+      create(:signup_round, convention:, maximum_event_signups: "unlimited", start: 1.minute.ago, executed_at: nil)
+
+      result = subject.call
+
+      assert result.failure?
+      assert_match(/\AWe are currently processing ranked choice signups/, result.errors.full_messages.join('\n'))
+    end
+  end
 end
