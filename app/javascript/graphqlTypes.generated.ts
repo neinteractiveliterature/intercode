@@ -829,7 +829,7 @@ export type Convention = CmsParent & {
    * convention, errors out.
    */
   signup: Signup;
-  /** The signup automation mode used for this convention. */
+  /** The type of signup automation used for this convention. */
   signup_automation_mode: SignupAutomationMode;
   signup_changes_paginated: SignupChangesPagination;
   signup_counts_by_state: Array<SignupCountByState>;
@@ -1328,36 +1328,73 @@ export type ConventionFiltersInput = {
   organization_name?: InputMaybe<Scalars['String']['input']>;
 };
 
+/** An input for creating or modifying Conventions. */
 export type ConventionInput = {
+  /** Is this convention currently accepting event proposals? */
   accepting_proposals?: InputMaybe<Scalars['Boolean']['input']>;
+  /** The ID of the StaffPosition to set as the catch-all for inbound emails. */
   catchAllStaffPositionId?: InputMaybe<Scalars['ID']['input']>;
+  /** The clickwrap agreement for the convention, in Liquid format. */
   clickwrap_agreement?: InputMaybe<Scalars['String']['input']>;
+  /** The ISO 4217 currency code to use as the default for products in this convention. */
   defaultCurrencyCode?: InputMaybe<Scalars['String']['input']>;
+  /** The ID of the CmsLayout to use as the default layout for pages in this convention. */
   defaultLayoutId?: InputMaybe<Scalars['ID']['input']>;
+  /** The domain name to use for serving this convention web site. */
   domain?: InputMaybe<Scalars['String']['input']>;
+  /** The default address to send site emails from. */
   email_from?: InputMaybe<Scalars['String']['input']>;
+  /** How this convention site should handle incoming emails to its domain. */
   email_mode?: InputMaybe<EmailMode>;
+  /** When this convention ends. */
   ends_at?: InputMaybe<Scalars['Date']['input']>;
+  /** A domain to use to set up forwarding email addresses for event teams. */
   event_mailing_list_domain?: InputMaybe<Scalars['String']['input']>;
+  /** A favicon image to serve to browsers on this site. */
   favicon?: InputMaybe<Scalars['Upload']['input']>;
+  /** Should this event be hidden from CMS content on the root site? */
   hidden?: InputMaybe<Scalars['Boolean']['input']>;
+  /** The language code to use for localized content in this site (e.g. 'en' for English, 'es' for Spanish). */
   language?: InputMaybe<Scalars['String']['input']>;
+  /** The physical location of this convention, in Mapbox format. */
   location?: InputMaybe<Scalars['Json']['input']>;
+  /**
+   * The schedule of how many signups are allowed in this convention and when.
+   * @deprecated Please use SignupRound instead
+   */
   maximum_event_signups?: InputMaybe<ScheduledValueInput>;
+  /** The maximum number of tickets this convention should be able to sell. */
   maximum_tickets?: InputMaybe<Scalars['Int']['input']>;
+  /** The name of this convention. */
   name?: InputMaybe<Scalars['String']['input']>;
+  /**
+   * The image that should be served from this site using the `<meta property="og:image">` tag.  For more information
+   * about OpenGraph, see https://ogp.me/.
+   */
   openGraphImage?: InputMaybe<Scalars['Upload']['input']>;
+  /** The ID of the Page to serve at the root path (/) of this convention site. */
   rootPageId?: InputMaybe<Scalars['ID']['input']>;
+  /** Who should be able to see the event catalog? */
   show_event_list?: InputMaybe<ShowSchedule>;
+  /** Who should be able to see the event schedule? */
   show_schedule?: InputMaybe<ShowSchedule>;
+  /** The type of signup automation to use for this convention. */
   signup_automation_mode?: InputMaybe<SignupAutomationMode>;
+  /** The signup mode to use for this convention. */
   signup_mode?: InputMaybe<SignupMode>;
+  /** In a moderated-signup convention, should signup requests currently be allowed? */
   signup_requests_open?: InputMaybe<Scalars['Boolean']['input']>;
+  /** The mode this convention site should operate in. */
   site_mode?: InputMaybe<SiteMode>;
+  /** When this convention starts. */
   starts_at?: InputMaybe<Scalars['Date']['input']>;
+  /** The mode to use for ticket behaviors in this convention. */
   ticket_mode?: InputMaybe<TicketMode>;
+  /** The word this convention should use for 'ticket'. */
   ticket_name?: InputMaybe<Scalars['String']['input']>;
+  /** The mode to use for time zone display and time conversion behavior in this site. */
   timezone_mode?: InputMaybe<TimezoneMode>;
+  /** The home time zone for this convention. */
   timezone_name?: InputMaybe<Scalars['String']['input']>;
 };
 

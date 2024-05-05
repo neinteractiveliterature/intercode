@@ -5627,7 +5627,7 @@
             },
             {
               "name": "signup_automation_mode",
-              "description": "The signup automation mode used for this convention.",
+              "description": "The type of signup automation used for this convention.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -6399,14 +6399,14 @@
         {
           "kind": "INPUT_OBJECT",
           "name": "ConventionInput",
-          "description": null,
+          "description": "An input for creating or modifying Conventions.",
           "interfaces": null,
           "possibleTypes": null,
           "fields": null,
           "inputFields": [
             {
               "name": "accepting_proposals",
-              "description": null,
+              "description": "Is this convention currently accepting event proposals?",
               "type": {
                 "kind": "SCALAR",
                 "name": "Boolean",
@@ -6418,7 +6418,7 @@
             },
             {
               "name": "catchAllStaffPositionId",
-              "description": null,
+              "description": "The ID of the StaffPosition to set as the catch-all for inbound emails.",
               "type": {
                 "kind": "SCALAR",
                 "name": "ID",
@@ -6430,7 +6430,7 @@
             },
             {
               "name": "clickwrap_agreement",
-              "description": null,
+              "description": "The clickwrap agreement for the convention, in Liquid format.",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -6442,7 +6442,7 @@
             },
             {
               "name": "defaultCurrencyCode",
-              "description": null,
+              "description": "The ISO 4217 currency code to use as the default for products in this convention.",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -6454,7 +6454,7 @@
             },
             {
               "name": "defaultLayoutId",
-              "description": null,
+              "description": "The ID of the CmsLayout to use as the default layout for pages in this convention.",
               "type": {
                 "kind": "SCALAR",
                 "name": "ID",
@@ -6466,31 +6466,7 @@
             },
             {
               "name": "domain",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "ends_at",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Date",
-                "ofType": null
-              },
-              "defaultValue": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "event_mailing_list_domain",
-              "description": null,
+              "description": "The domain name to use for serving this convention web site.",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -6502,7 +6478,7 @@
             },
             {
               "name": "email_from",
-              "description": null,
+              "description": "The default address to send site emails from.",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -6514,7 +6490,7 @@
             },
             {
               "name": "email_mode",
-              "description": null,
+              "description": "How this convention site should handle incoming emails to its domain.",
               "type": {
                 "kind": "ENUM",
                 "name": "EmailMode",
@@ -6525,8 +6501,32 @@
               "deprecationReason": null
             },
             {
+              "name": "ends_at",
+              "description": "When this convention ends.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Date",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "event_mailing_list_domain",
+              "description": "A domain to use to set up forwarding email addresses for event teams.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "favicon",
-              "description": null,
+              "description": "A favicon image to serve to browsers on this site.",
               "type": {
                 "kind": "SCALAR",
                 "name": "Upload",
@@ -6538,7 +6538,7 @@
             },
             {
               "name": "hidden",
-              "description": null,
+              "description": "Should this event be hidden from CMS content on the root site?",
               "type": {
                 "kind": "SCALAR",
                 "name": "Boolean",
@@ -6550,7 +6550,7 @@
             },
             {
               "name": "language",
-              "description": null,
+              "description": "The language code to use for localized content in this site (e.g. 'en' for English, 'es' for Spanish).",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -6562,7 +6562,7 @@
             },
             {
               "name": "location",
-              "description": null,
+              "description": "The physical location of this convention, in Mapbox format.",
               "type": {
                 "kind": "SCALAR",
                 "name": "Json",
@@ -6574,19 +6574,19 @@
             },
             {
               "name": "maximum_event_signups",
-              "description": null,
+              "description": "The schedule of how many signups are allowed in this convention and when.",
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "ScheduledValueInput",
                 "ofType": null
               },
               "defaultValue": null,
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "Please use SignupRound instead"
             },
             {
               "name": "maximum_tickets",
-              "description": null,
+              "description": "The maximum number of tickets this convention should be able to sell.",
               "type": {
                 "kind": "SCALAR",
                 "name": "Int",
@@ -6598,7 +6598,7 @@
             },
             {
               "name": "name",
-              "description": null,
+              "description": "The name of this convention.",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -6610,7 +6610,7 @@
             },
             {
               "name": "openGraphImage",
-              "description": null,
+              "description": "The image that should be served from this site using the `<meta property=\"og:image\">` tag.  For more information\nabout OpenGraph, see https://ogp.me/.\n",
               "type": {
                 "kind": "SCALAR",
                 "name": "Upload",
@@ -6622,7 +6622,7 @@
             },
             {
               "name": "rootPageId",
-              "description": null,
+              "description": "The ID of the Page to serve at the root path (/) of this convention site.",
               "type": {
                 "kind": "SCALAR",
                 "name": "ID",
@@ -6633,20 +6633,8 @@
               "deprecationReason": null
             },
             {
-              "name": "show_schedule",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "ShowSchedule",
-                "ofType": null
-              },
-              "defaultValue": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "show_event_list",
-              "description": null,
+              "description": "Who should be able to see the event catalog?",
               "type": {
                 "kind": "ENUM",
                 "name": "ShowSchedule",
@@ -6657,11 +6645,11 @@
               "deprecationReason": null
             },
             {
-              "name": "signup_mode",
-              "description": null,
+              "name": "show_schedule",
+              "description": "Who should be able to see the event schedule?",
               "type": {
                 "kind": "ENUM",
-                "name": "SignupMode",
+                "name": "ShowSchedule",
                 "ofType": null
               },
               "defaultValue": null,
@@ -6670,7 +6658,7 @@
             },
             {
               "name": "signup_automation_mode",
-              "description": null,
+              "description": "The type of signup automation to use for this convention.",
               "type": {
                 "kind": "ENUM",
                 "name": "SignupAutomationMode",
@@ -6681,8 +6669,20 @@
               "deprecationReason": null
             },
             {
+              "name": "signup_mode",
+              "description": "The signup mode to use for this convention.",
+              "type": {
+                "kind": "ENUM",
+                "name": "SignupMode",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "signup_requests_open",
-              "description": null,
+              "description": "In a moderated-signup convention, should signup requests currently be allowed?",
               "type": {
                 "kind": "SCALAR",
                 "name": "Boolean",
@@ -6694,7 +6694,7 @@
             },
             {
               "name": "site_mode",
-              "description": null,
+              "description": "The mode this convention site should operate in.",
               "type": {
                 "kind": "ENUM",
                 "name": "SiteMode",
@@ -6706,7 +6706,7 @@
             },
             {
               "name": "starts_at",
-              "description": null,
+              "description": "When this convention starts.",
               "type": {
                 "kind": "SCALAR",
                 "name": "Date",
@@ -6717,20 +6717,8 @@
               "deprecationReason": null
             },
             {
-              "name": "ticket_name",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "ticket_mode",
-              "description": null,
+              "description": "The mode to use for ticket behaviors in this convention.",
               "type": {
                 "kind": "ENUM",
                 "name": "TicketMode",
@@ -6741,8 +6729,8 @@
               "deprecationReason": null
             },
             {
-              "name": "timezone_name",
-              "description": null,
+              "name": "ticket_name",
+              "description": "The word this convention should use for 'ticket'.",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -6754,10 +6742,22 @@
             },
             {
               "name": "timezone_mode",
-              "description": null,
+              "description": "The mode to use for time zone display and time conversion behavior in this site.",
               "type": {
                 "kind": "ENUM",
                 "name": "TimezoneMode",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "timezone_name",
+              "description": "The home time zone for this convention.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
                 "ofType": null
               },
               "defaultValue": null,

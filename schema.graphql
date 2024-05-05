@@ -1128,7 +1128,7 @@ type Convention implements CmsParent {
   ): Signup!
 
   """
-  The signup automation mode used for this convention.
+  The type of signup automation used for this convention.
   """
   signup_automation_mode: SignupAutomationMode!
   signup_changes_paginated(
@@ -1364,36 +1364,159 @@ input ConventionFiltersInput {
   organization_name: String
 }
 
+"""
+An input for creating or modifying Conventions.
+"""
 input ConventionInput {
+  """
+  Is this convention currently accepting event proposals?
+  """
   accepting_proposals: Boolean
+
+  """
+  The ID of the StaffPosition to set as the catch-all for inbound emails.
+  """
   catchAllStaffPositionId: ID
+
+  """
+  The clickwrap agreement for the convention, in Liquid format.
+  """
   clickwrap_agreement: String
+
+  """
+  The ISO 4217 currency code to use as the default for products in this convention.
+  """
   defaultCurrencyCode: String
+
+  """
+  The ID of the CmsLayout to use as the default layout for pages in this convention.
+  """
   defaultLayoutId: ID
+
+  """
+  The domain name to use for serving this convention web site.
+  """
   domain: String
+
+  """
+  The default address to send site emails from.
+  """
   email_from: String
+
+  """
+  How this convention site should handle incoming emails to its domain.
+  """
   email_mode: EmailMode
+
+  """
+  When this convention ends.
+  """
   ends_at: Date
+
+  """
+  A domain to use to set up forwarding email addresses for event teams.
+  """
   event_mailing_list_domain: String
+
+  """
+  A favicon image to serve to browsers on this site.
+  """
   favicon: Upload
+
+  """
+  Should this event be hidden from CMS content on the root site?
+  """
   hidden: Boolean
+
+  """
+  The language code to use for localized content in this site (e.g. 'en' for English, 'es' for Spanish).
+  """
   language: String
+
+  """
+  The physical location of this convention, in Mapbox format.
+  """
   location: Json
-  maximum_event_signups: ScheduledValueInput
+
+  """
+  The schedule of how many signups are allowed in this convention and when.
+  """
+  maximum_event_signups: ScheduledValueInput @deprecated(reason: "Please use SignupRound instead")
+
+  """
+  The maximum number of tickets this convention should be able to sell.
+  """
   maximum_tickets: Int
+
+  """
+  The name of this convention.
+  """
   name: String
+
+  """
+  The image that should be served from this site using the `<meta property="og:image">` tag.  For more information
+  about OpenGraph, see https://ogp.me/.
+  """
   openGraphImage: Upload
+
+  """
+  The ID of the Page to serve at the root path (/) of this convention site.
+  """
   rootPageId: ID
+
+  """
+  Who should be able to see the event catalog?
+  """
   show_event_list: ShowSchedule
+
+  """
+  Who should be able to see the event schedule?
+  """
   show_schedule: ShowSchedule
+
+  """
+  The type of signup automation to use for this convention.
+  """
   signup_automation_mode: SignupAutomationMode
+
+  """
+  The signup mode to use for this convention.
+  """
   signup_mode: SignupMode
+
+  """
+  In a moderated-signup convention, should signup requests currently be allowed?
+  """
   signup_requests_open: Boolean
+
+  """
+  The mode this convention site should operate in.
+  """
   site_mode: SiteMode
+
+  """
+  When this convention starts.
+  """
   starts_at: Date
+
+  """
+  The mode to use for ticket behaviors in this convention.
+  """
   ticket_mode: TicketMode
+
+  """
+  The word this convention should use for 'ticket'.
+  """
   ticket_name: String
+
+  """
+  The mode to use for time zone display and time conversion behavior in this site.
+  """
   timezone_mode: TimezoneMode
+
+  """
+  The home time zone for this convention.
+  """
   timezone_name: String
 }
 

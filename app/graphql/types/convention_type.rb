@@ -242,7 +242,7 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
     MARKDOWN
   end
   field :signup_automation_mode, Types::SignupAutomationModeType, null: false do
-    description "The signup automation mode used for this convention."
+    description "The type of signup automation used for this convention."
   end
   field :signup_counts_by_state, [Types::SignupCountByStateType], null: false do
     description Types::SignupCountByStateType.description
