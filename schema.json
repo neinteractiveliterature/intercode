@@ -30170,7 +30170,7 @@
         {
           "kind": "ENUM",
           "name": "SignupRankedChoiceState",
-          "description": null,
+          "description": "The processing state of a SignupRankedChoice",
           "interfaces": null,
           "possibleTypes": null,
           "fields": null,
@@ -30395,7 +30395,7 @@
         {
           "kind": "ENUM",
           "name": "SignupRequestState",
-          "description": null,
+          "description": "The processing state of a SignupRequest",
           "interfaces": null,
           "possibleTypes": null,
           "fields": null,

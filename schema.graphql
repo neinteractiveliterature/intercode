@@ -5722,6 +5722,9 @@ type SignupRankedChoice {
   user_con_profile: UserConProfile!
 }
 
+"""
+The processing state of a SignupRankedChoice
+"""
 enum SignupRankedChoiceState {
   """
   We have not yet attempted to process this choice
@@ -5805,6 +5808,9 @@ input SignupRequestFiltersInput {
   state: [SignupRequestState!]
 }
 
+"""
+The processing state of a SignupRequest
+"""
 enum SignupRequestState {
   """
   The request has been accepted and the requester has been signed up (see the result_signup field for the actual signup)

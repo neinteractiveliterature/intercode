@@ -4676,6 +4676,7 @@ export type SignupRankedChoice = {
   user_con_profile: UserConProfile;
 };
 
+/** The processing state of a SignupRankedChoice */
 export enum SignupRankedChoiceState {
   /** We have not yet attempted to process this choice */
   Pending = 'pending',
@@ -4722,6 +4723,7 @@ export type SignupRequestFiltersInput = {
   state?: InputMaybe<Array<SignupRequestState>>;
 };
 
+/** The processing state of a SignupRequest */
 export enum SignupRequestState {
   /** The request has been accepted and the requester has been signed up (see the result_signup field for the actual signup) */
   Accepted = 'accepted',
