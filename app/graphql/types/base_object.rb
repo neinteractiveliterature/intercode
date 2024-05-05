@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Types::BaseObject < GraphQL::Schema::Object
+class Types::BaseObject < GraphQL::Schema::Object # rubocop:disable GraphQL/ObjectDescription
   include ContextAccessors
 
   def self.association_loader(model_class, association)
@@ -15,14 +15,14 @@ class Types::BaseObject < GraphQL::Schema::Object
 
   def self.pagination_field(name, pagination_type, filters_input_type, **options, &block)
     field name, pagination_type, null: false, **options do
+      argument :filters, filters_input_type, required: false do
+        description "Filters to restrict what items will appear in the result set."
+      end
       argument :page, Int, required: false do
         description "The page number to return from the result set.  Page numbers start with 1."
       end
       argument :per_page, Int, required: false, camelize: false do
         description "The number of items to return per page.  Defaults to 20, can go up to 200."
-      end
-      argument :filters, filters_input_type, required: false do
-        description "Filters to restrict what items will appear in the result set."
       end
       argument :sort, [Types::SortInputType], required: false do
         description <<~MARKDOWN
