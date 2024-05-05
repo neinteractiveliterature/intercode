@@ -36,7 +36,7 @@ class RankedChoiceDecision < ApplicationRecord
   belongs_to :signup_request, optional: true
 
   DECISIONS = %w[signup waitlist skip_user skip_choice]
-  REASONS = %w[missing_ticket no_more_signups_allowed no_pending_choices conflict full]
+  REASONS = %w[missing_ticket no_more_signups_allowed no_pending_choices conflict full ranked_choice_user_constraints]
 
   validates :decision, inclusion: { in: DECISIONS }
   validates :reason, inclusion: { in: REASONS, allow_nil: true }

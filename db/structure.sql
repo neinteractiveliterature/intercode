@@ -2337,6 +2337,40 @@ ALTER SEQUENCE public.ranked_choice_decisions_id_seq OWNED BY public.ranked_choi
 
 
 --
+-- Name: ranked_choice_user_constraints; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.ranked_choice_user_constraints (
+    id bigint NOT NULL,
+    user_con_profile_id bigint NOT NULL,
+    start timestamp without time zone,
+    finish timestamp without time zone,
+    maximum_signups integer NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: ranked_choice_user_constraints_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.ranked_choice_user_constraints_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: ranked_choice_user_constraints_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.ranked_choice_user_constraints_id_seq OWNED BY public.ranked_choice_user_constraints.id;
+
+
+--
 -- Name: rooms; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -3293,6 +3327,13 @@ ALTER TABLE ONLY public.ranked_choice_decisions ALTER COLUMN id SET DEFAULT next
 
 
 --
+-- Name: ranked_choice_user_constraints id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ranked_choice_user_constraints ALTER COLUMN id SET DEFAULT nextval('public.ranked_choice_user_constraints_id_seq'::regclass);
+
+
+--
 -- Name: rooms id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -3818,6 +3859,14 @@ ALTER TABLE ONLY public.products
 
 ALTER TABLE ONLY public.ranked_choice_decisions
     ADD CONSTRAINT ranked_choice_decisions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: ranked_choice_user_constraints ranked_choice_user_constraints_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ranked_choice_user_constraints
+    ADD CONSTRAINT ranked_choice_user_constraints_pkey PRIMARY KEY (id);
 
 
 --
@@ -4715,6 +4764,13 @@ CREATE INDEX index_ranked_choice_decisions_on_user_con_profile_id ON public.rank
 
 
 --
+-- Name: index_ranked_choice_user_constraints_on_user_con_profile_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ranked_choice_user_constraints_on_user_con_profile_id ON public.ranked_choice_user_constraints USING btree (user_con_profile_id);
+
+
+--
 -- Name: index_rooms_on_convention_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -5583,6 +5639,14 @@ ALTER TABLE ONLY public.orders
 
 
 --
+-- Name: ranked_choice_user_constraints fk_rails_8f6fba977a; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ranked_choice_user_constraints
+    ADD CONSTRAINT fk_rails_8f6fba977a FOREIGN KEY (user_con_profile_id) REFERENCES public.user_con_profiles(id);
+
+
+--
 -- Name: order_entries fk_rails_8fea6b4169; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6021,6 +6085,7 @@ ALTER TABLE ONLY public.cms_files_pages
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20240505160246'),
 ('20240504165651'),
 ('20240504163701'),
 ('20240428174607'),

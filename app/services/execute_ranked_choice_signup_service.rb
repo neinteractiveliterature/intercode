@@ -37,6 +37,17 @@ class ExecuteRankedChoiceSignupService < CivilService::Service
       return success(decision:)
     end
 
+    violated_constraints =
+      constraints.ranked_choice_user_constraints_at_maximum(signup_ranked_choice.target_run.timespan)
+    if violated_constraints.any?
+      decision =
+        do_skip_choice(
+          :ranked_choice_user_constraints,
+          { ranked_choice_user_constraint_ids: violated_constraints.map(&:id) }
+        )
+      return success(decision:)
+    end
+
     actual_bucket = find_bucket
     decision = execute_choice(actual_bucket)
     success(decision:)

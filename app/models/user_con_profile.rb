@@ -66,6 +66,7 @@ class UserConProfile < ApplicationRecord
   has_many :orders, dependent: :destroy
   has_and_belongs_to_many :staff_positions
   has_many :permissions, through: :staff_positions
+  has_many :ranked_choice_user_constraints, dependent: :destroy
 
   delegate :email, to: :user, allow_nil: true
 

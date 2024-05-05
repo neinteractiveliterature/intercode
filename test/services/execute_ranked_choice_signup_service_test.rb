@@ -109,4 +109,78 @@ describe ExecuteRankedChoiceSignupService do
       assert_equal "requested", signup_ranked_choice.state
     end
   end
+
+  describe "with user constraints" do
+    it "does the signup if it fits in the user constraints" do
+      event = create(:event, convention:)
+      the_run = create(:run, event:)
+      signup_ranked_choice = create(:signup_ranked_choice, target_run: the_run)
+      create(
+        :ranked_choice_user_constraint,
+        user_con_profile: signup_ranked_choice.user_con_profile,
+        maximum_signups: 3
+      )
+
+      result = ExecuteRankedChoiceSignupService.new(signup_ranked_choice:, whodunit: nil).call!
+
+      signup_ranked_choice.reload
+      assert_equal "signup", result.decision.decision
+      assert_equal "confirmed", result.decision.signup.state
+      assert_equal "signed_up", signup_ranked_choice.state
+    end
+
+    it "only considers counted signups for constraints" do
+      event = create(:event, convention:)
+      the_run = create(:run, event:)
+      other_event = create(:event, convention:)
+      other_run = create(:run, event: other_event, starts_at: the_run.starts_at + 1.day)
+      user_con_profile = create(:user_con_profile, convention:)
+      signup_ranked_choice = create(:signup_ranked_choice, target_run: the_run, user_con_profile:)
+      _not_counted_signup = create(:signup, user_con_profile:, run: other_run, counted: false)
+      create(:ranked_choice_user_constraint, user_con_profile:, maximum_signups: 1)
+
+      result = ExecuteRankedChoiceSignupService.new(signup_ranked_choice:, whodunit: nil).call!
+
+      signup_ranked_choice.reload
+      assert_equal "signup", result.decision.decision
+      assert_equal "confirmed", result.decision.signup.state
+      assert_equal "signed_up", signup_ranked_choice.state
+    end
+
+    it "does not sign a user up for an event that violates their constraints" do
+      event = create(:event, convention:)
+      the_run = create(:run, event:)
+      other_event = create(:event, convention:)
+      other_run = create(:run, event: other_event, starts_at: the_run.starts_at + 1.day)
+      user_con_profile = create(:user_con_profile, convention:)
+      signup_ranked_choice = create(:signup_ranked_choice, target_run: the_run, user_con_profile:)
+      _other_signup = create(:signup, user_con_profile:, run: other_run)
+      constraint = create(:ranked_choice_user_constraint, user_con_profile:, maximum_signups: 1)
+
+      result = ExecuteRankedChoiceSignupService.new(signup_ranked_choice:, whodunit: nil).call!
+
+      signup_ranked_choice.reload
+      assert_equal "skip_choice", result.decision.decision
+      assert_equal "ranked_choice_user_constraints", result.decision.reason
+      assert_equal [constraint.id], result.decision.extra["ranked_choice_user_constraint_ids"]
+    end
+
+    it "signs a user up for an event outside the timespan of their constraints" do
+      event = create(:event, convention:)
+      the_run = create(:run, event:)
+      other_event = create(:event, convention:)
+      other_run = create(:run, event: other_event, starts_at: the_run.starts_at + 1.day)
+      user_con_profile = create(:user_con_profile, convention:)
+      signup_ranked_choice = create(:signup_ranked_choice, target_run: the_run, user_con_profile:)
+      _other_signup = create(:signup, user_con_profile:, run: other_run)
+      create(:ranked_choice_user_constraint, user_con_profile:, maximum_signups: 1, start: other_run.starts_at - 1.hour)
+
+      result = ExecuteRankedChoiceSignupService.new(signup_ranked_choice:, whodunit: nil).call!
+
+      signup_ranked_choice.reload
+      assert_equal "signup", result.decision.decision
+      assert_equal "confirmed", result.decision.signup.state
+      assert_equal "signed_up", signup_ranked_choice.state
+    end
+  end
 end

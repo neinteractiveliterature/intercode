@@ -1,6 +1,6 @@
 class UserSignupConstraints
   attr_reader :user_con_profile
-  delegate :convention, to: :user_con_profile
+  delegate :convention, :ranked_choice_user_constraints, to: :user_con_profile
 
   def initialize(user_con_profile)
     @user_con_profile = user_con_profile
@@ -56,5 +56,15 @@ class UserSignupConstraints
 
   def has_ticket_if_required? # rubocop:disable Naming/PredicateName
     convention.ticket_mode != "required_for_signup" || user_con_profile.ticket&.allows_event_signups?
+  end
+
+  def ranked_choice_user_constraints_at_maximum(timespan)
+    applicable_constraints =
+      ranked_choice_user_constraints.filter { |constraint| constraint.timespan.overlaps?(timespan) }
+
+    applicable_constraints.filter do |constraint|
+      signups_within_constraint = current_signups.filter { |signup| signup.run.timespan.overlaps?(constraint.timespan) }
+      signups_within_constraint.size >= constraint.maximum_signups
+    end
   end
 end
