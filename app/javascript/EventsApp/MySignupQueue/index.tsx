@@ -15,6 +15,7 @@ import {
   useUpdateSignupRankedChoicePriorityMutation,
 } from './mutations.generated';
 import React from 'react';
+import RankedChoiceUserSettings from './RankedChoiceUserSettings';
 
 const MySignupQueue = LoadQueryWrapper(useMySignupQueueQuery, ({ data }) => {
   const { t } = useTranslation();
@@ -68,107 +69,115 @@ const MySignupQueue = LoadQueryWrapper(useMySignupQueueQuery, ({ data }) => {
     <>
       <h1>{t('signups.mySignupQueue.title', 'My signup queue')}</h1>
 
-      {nextRound && (
-        <div className="alert alert-info">
-          <Trans i18nKey="signups.mySignupQueue.nextRoundInfo">
-            The next signup round starts at{' '}
-            <strong>
-              {{
-                nextRoundStart: nextRound.timespan.start
-                  ? formatLCM(
-                      DateTime.fromISO(nextRound.timespan.start),
-                      getDateTimeFormat('shortWeekdayDateTimeWithZone', t),
-                    )
-                  : '',
-              }}
-            </strong>
-            . {{ nextRoundActionDescription }}
-          </Trans>
+      <div className="row">
+        <div className="col-12 col-md-8">
+          {nextRound && (
+            <div className="alert alert-info">
+              <Trans i18nKey="signups.mySignupQueue.nextRoundInfo">
+                The next signup round starts at{' '}
+                <strong>
+                  {{
+                    nextRoundStart: nextRound.timespan.start
+                      ? formatLCM(
+                          DateTime.fromISO(nextRound.timespan.start),
+                          getDateTimeFormat('shortWeekdayDateTimeWithZone', t),
+                        )
+                      : '',
+                  }}
+                </strong>
+                . {{ nextRoundActionDescription }}
+              </Trans>
+            </div>
+          )}
+          <section className="card my-4">
+            <ul className="list-group list-group-flush">
+              {pendingChoices.map((pendingChoice, index) => (
+                <React.Fragment key={pendingChoice.id}>
+                  <li className="list-group-item d-flex align-items-center">
+                    <div className="me-3">
+                      <div className="d-flex align-items-center">
+                        <RankedChoicePriorityIndicator priority={pendingChoice.priority} fontSize={14} />
+                      </div>
+                    </div>
+                    <div className="flex-grow-1 me-3">
+                      <div>
+                        <strong>
+                          {pendingChoice.target_run.event.event_category.name}:{' '}
+                          <Link to={buildEventUrl(pendingChoice.target_run.event)}>
+                            {pendingChoice.target_run.event.title}
+                          </Link>
+                          {pendingChoice.target_run.title_suffix && `(${pendingChoice.target_run.title_suffix})`}
+                        </strong>
+                        <br />
+                        {formatLCM(
+                          DateTime.fromISO(pendingChoice.target_run.starts_at),
+                          getDateTimeFormat('shortWeekdayTimeWithZone', t),
+                        )}{' '}
+                        |{' '}
+                        {
+                          pendingChoice.target_run.event.registration_policy?.buckets.find(
+                            (bucket) => bucket.key === pendingChoice.requested_bucket_key,
+                          )?.name
+                        }
+                      </div>
+                    </div>
+                    <div className="d-flex flex-column gap-2 justify-content-center me-3">
+                      <button
+                        aria-label={t('signups.mySignupQueue.moveUp', 'Move up in queue')}
+                        title={t('signups.mySignupQueue.moveUp', 'Move up in queue')}
+                        className="btn btn-dark px-1 py-0"
+                        disabled={updatePriorityLoading || index < 1}
+                        onClick={() =>
+                          updateSignupRankedChoicePriority({
+                            variables: { id: pendingChoice.id, priority: pendingChoice.priority - 1 },
+                          })
+                        }
+                      >
+                        {updatePriorityLoading ? <LoadingIndicator size={9} /> : <i className="bi-caret-up-fill" />}
+                      </button>
+                      <button
+                        aria-label={t('signups.mySignupQueue.moveDown', 'Move down in queue')}
+                        title={t('signups.mySignupQueue.moveDown', 'Move down in queue')}
+                        className="btn btn-dark px-1 py-0"
+                        disabled={updatePriorityLoading || index >= pendingChoices.length - 1}
+                        onClick={() =>
+                          updateSignupRankedChoicePriority({
+                            variables: { id: pendingChoice.id, priority: pendingChoice.priority + 1 },
+                          })
+                        }
+                      >
+                        {updatePriorityLoading ? <LoadingIndicator size={9} /> : <i className="bi-caret-down-fill" />}
+                      </button>
+                    </div>
+                    <div>
+                      <button
+                        className="btn btn-outline-danger"
+                        onClick={() =>
+                          confirm({
+                            prompt: t(
+                              'signups.mySignupQueue.removeConfirmPrompt',
+                              'Are you sure you want to remove {{ eventTitle }} from your signup queue?',
+                              { eventTitle: pendingChoice.target_run.event.title },
+                            ),
+                            action: () => deleteSignupRankedChoice({ variables: { id: pendingChoice.id } }),
+                            renderError: (error) => <ErrorDisplay graphQLError={error} />,
+                          })
+                        }
+                      >
+                        {t('signups.mySignupQueue.remove', 'Remove')}
+                      </button>
+                    </div>
+                  </li>
+                </React.Fragment>
+              ))}
+            </ul>
+          </section>
         </div>
-      )}
-      <section className="card my-4">
-        <ul className="list-group list-group-flush">
-          {pendingChoices.map((pendingChoice, index) => (
-            <React.Fragment key={pendingChoice.id}>
-              <li className="list-group-item d-flex align-items-center">
-                <div className="me-3">
-                  <div className="d-flex align-items-center">
-                    <RankedChoicePriorityIndicator priority={pendingChoice.priority} fontSize={14} />
-                  </div>
-                </div>
-                <div className="flex-grow-1 me-3">
-                  <div>
-                    <strong>
-                      {pendingChoice.target_run.event.event_category.name}:{' '}
-                      <Link to={buildEventUrl(pendingChoice.target_run.event)}>
-                        {pendingChoice.target_run.event.title}
-                      </Link>
-                      {pendingChoice.target_run.title_suffix && `(${pendingChoice.target_run.title_suffix})`}
-                    </strong>
-                    <br />
-                    {formatLCM(
-                      DateTime.fromISO(pendingChoice.target_run.starts_at),
-                      getDateTimeFormat('shortWeekdayTimeWithZone', t),
-                    )}{' '}
-                    |{' '}
-                    {
-                      pendingChoice.target_run.event.registration_policy?.buckets.find(
-                        (bucket) => bucket.key === pendingChoice.requested_bucket_key,
-                      )?.name
-                    }
-                  </div>
-                </div>
-                <div className="d-flex flex-column gap-2 justify-content-center me-3">
-                  <button
-                    aria-label={t('signups.mySignupQueue.moveUp', 'Move up in queue')}
-                    title={t('signups.mySignupQueue.moveUp', 'Move up in queue')}
-                    className="btn btn-dark px-1 py-0"
-                    disabled={updatePriorityLoading || index < 1}
-                    onClick={() =>
-                      updateSignupRankedChoicePriority({
-                        variables: { id: pendingChoice.id, priority: pendingChoice.priority - 1 },
-                      })
-                    }
-                  >
-                    {updatePriorityLoading ? <LoadingIndicator size={9} /> : <i className="bi-caret-up-fill" />}
-                  </button>
-                  <button
-                    aria-label={t('signups.mySignupQueue.moveDown', 'Move down in queue')}
-                    title={t('signups.mySignupQueue.moveDown', 'Move down in queue')}
-                    className="btn btn-dark px-1 py-0"
-                    disabled={updatePriorityLoading || index >= pendingChoices.length - 1}
-                    onClick={() =>
-                      updateSignupRankedChoicePriority({
-                        variables: { id: pendingChoice.id, priority: pendingChoice.priority + 1 },
-                      })
-                    }
-                  >
-                    {updatePriorityLoading ? <LoadingIndicator size={9} /> : <i className="bi-caret-down-fill" />}
-                  </button>
-                </div>
-                <div>
-                  <button
-                    className="btn btn-outline-danger"
-                    onClick={() =>
-                      confirm({
-                        prompt: t(
-                          'signups.mySignupQueue.removeConfirmPrompt',
-                          'Are you sure you want to remove {{ eventTitle }} from your signup queue?',
-                          { eventTitle: pendingChoice.target_run.event.title },
-                        ),
-                        action: () => deleteSignupRankedChoice({ variables: { id: pendingChoice.id } }),
-                        renderError: (error) => <ErrorDisplay graphQLError={error} />,
-                      })
-                    }
-                  >
-                    {t('signups.mySignupQueue.remove', 'Remove')}
-                  </button>
-                </div>
-              </li>
-            </React.Fragment>
-          ))}
-        </ul>
-      </section>
+
+        <div className="col-12 col-md-4">
+          <RankedChoiceUserSettings />
+        </div>
+      </div>
     </>
   );
 });

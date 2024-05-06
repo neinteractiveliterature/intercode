@@ -10,6 +10,18 @@ query MySignupQueueQuery {
       }
     }
 
+    my_profile {
+      id
+      ranked_choice_allow_waitlist
+
+      ranked_choice_user_constraints {
+        id
+        start
+        finish
+        maximum_signups
+      }
+    }
+
     my_signup_ranked_choices {
       id
       state
