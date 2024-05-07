@@ -46,7 +46,7 @@
     "@rails/activestorage": "7.1.3",
     "@stripe/react-stripe-js": "2.7.1",
     "@stripe/stripe-js": "2.4.0",
-    "@testing-library/react": "15.0.6",
+    "@testing-library/react": "15.0.7",
     "@types/bytes": "3.1.4",
     "@types/classnames": "2.3.1",
     "@types/debounce-promise": "3.1.9",
