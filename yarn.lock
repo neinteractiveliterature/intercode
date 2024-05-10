@@ -19899,13 +19899,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-onclickoutside@npm:6.13.0":
-  version: 6.13.0
-  resolution: "react-onclickoutside@npm:6.13.0"
+"react-onclickoutside@npm:6.13.1":
+  version: 6.13.1
+  resolution: "react-onclickoutside@npm:6.13.1"
   peerDependencies:
     react: ^15.5.x || ^16.x || ^17.x || ^18.x
     react-dom: ^15.5.x || ^16.x || ^17.x || ^18.x
-  checksum: 10c0/2013471d03965e3c89ead649063bda246a8e9ba72b7be1dbf00642c6c8a34a0142e951b1db3cf73ac53f34f459b772132eff6f7b89f4cde51c35740be6617161
+  checksum: 10c0/93b02c493332ca7f8b480a1e185386c4af55d1daf33af2f68ddf440e4fc9b22ad13f59d7e204694aa31c1c2e332f0766c7ee302fe3b0cecbd0e0b45d55905c96
   languageName: node
   linkType: hard
 
@@ -20973,7 +20973,7 @@ __metadata:
     react-helmet-async: "npm:2.0.5"
     react-html-id: "npm:0.1.5"
     react-i18next: "npm:14.1.1"
-    react-onclickoutside: "npm:6.13.0"
+    react-onclickoutside: "npm:6.13.1"
     react-popper: "npm:2.3.0"
     react-router: "npm:6.23.0"
     react-router-dom: "npm:6.23.0"
