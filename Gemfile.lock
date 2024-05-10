@@ -183,7 +183,7 @@ GEM
     benchmark-ips (2.10.0)
     bigdecimal (3.1.8)
     bigdecimal (3.1.8-java)
-    bindata (0.11.1)
+    bindata (2.5.0)
     bootsnap (1.18.3)
       msgpack (~> 1.2)
     browser (5.3.1)
