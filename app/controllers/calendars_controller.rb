@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'icalendar/tzinfo'
+require "icalendar/tzinfo"
 
 class CalendarsController < ApplicationController
   include AbsoluteUrls
@@ -9,7 +9,7 @@ class CalendarsController < ApplicationController
 
     cal = build_user_schedule_calendar(user_con_profile)
     cal.publish
-    response.content_type = 'text/calendar'
+    response.content_type = "text/calendar"
     render plain: cal.to_ical
   end
 
@@ -18,24 +18,26 @@ class CalendarsController < ApplicationController
   def build_user_schedule_calendar(user_con_profile)
     cal = Icalendar::Calendar.new
     cal.x_wr_calname = "#{convention.name} Schedule for #{user_con_profile.name_without_nickname}"
-    tzid = convention.timezone_name || 'Etc/UTC'
+    tzid = convention.timezone_name || "Etc/UTC"
     set_timezone_metadata(cal, tzid)
 
-    signups = user_con_profile.signups.where.not(state: 'withdrawn').includes(run: :event)
+    signups = user_con_profile.signups.where.not(state: "withdrawn").includes(run: :event)
     signups.each { |signup| cal.event { |e| set_event_properties_from_signup(e, signup, tzid) } }
 
     cal
   end
 
   def set_timezone_metadata(cal, tzid)
+    return if tzid.blank?
+
     tz = TZInfo::Timezone.get(tzid)
-    timezone = tz.ical_timezone convention.starts_at
+    timezone = tz.ical_timezone(convention.starts_at || Time.zone.now)
     cal.add_timezone timezone
   end
 
   def set_event_properties_from_signup(event, signup, tzid)
-    event.dtstart = Icalendar::Values::DateTime.new(signup.run.starts_at.in_time_zone(tzid), 'tzid' => tzid)
-    event.dtend = Icalendar::Values::DateTime.new(signup.run.ends_at.in_time_zone(tzid), 'tzid' => tzid)
+    event.dtstart = Icalendar::Values::DateTime.new(signup.run.starts_at.in_time_zone(tzid), "tzid" => tzid)
+    event.dtend = Icalendar::Values::DateTime.new(signup.run.ends_at.in_time_zone(tzid), "tzid" => tzid)
     event.summary = event_summary_from_signup(signup)
     event.location = event_location_from_signup(signup)
     event.description = signup.event.short_blurb
@@ -44,9 +46,9 @@ class CalendarsController < ApplicationController
 
   def event_summary_from_signup(signup)
     [
-      signup.waitlisted? ? '[WAITLISTED] ' : '',
+      signup.waitlisted? ? "[WAITLISTED] " : "",
       signup.run.event.title,
-      signup.run.title_suffix.present? ? " (#{signup.run.title_suffix})" : ''
+      signup.run.title_suffix.present? ? " (#{signup.run.title_suffix})" : ""
     ].join
   end
 
