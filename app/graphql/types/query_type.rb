@@ -212,7 +212,10 @@ represented as a JSON object."
 
   def oauth_pre_auth(query_params:)
     pre_auth =
-      Doorkeeper::OAuth::PreAuthorization.new(Doorkeeper.configuration, ActionController::Parameters.new(query_params))
+      Doorkeeper::OAuth::PreAuthorization.new(
+        Doorkeeper.configuration,
+        ActionController::Parameters.new(query_params).permit!
+      )
     pre_auth.valid?
     pre_auth.as_json({})
   end
