@@ -7,13 +7,45 @@ import { useTranslation } from 'react-i18next';
 import { useAppDateTimeFormat } from '../../TimeUtils';
 import { DateTime } from 'luxon';
 import Timespan from '../../Timespan';
-import { RankedChoiceUserConstraint } from '../../graphqlTypes.generated';
+import { RankedChoiceUserConstraint, SignupState } from '../../graphqlTypes.generated';
 import {
   useCreateMyRankedChoiceUserConstraintMutation,
   useDeleteRankedChoiceUserConstraintMutation,
   useUpdateRankedChoiceUserConstraintMutation,
 } from './mutations.generated';
 import { useUpdateUserConProfileMutation } from '../../UserConProfiles/mutations.generated';
+import BucketAvailabilityDisplay from '../EventPage/BucketAvailabilityDisplay';
+
+type ConstraintAvailabilityDisplayProps = {
+  constraint: Pick<RankedChoiceUserConstraint, 'start' | 'finish' | 'maximum_signups'>;
+  mySignups: MySignupQueueQueryData['convention']['my_signups'];
+};
+
+function ConstraintAvailabilityDisplay({ constraint, mySignups }: ConstraintAvailabilityDisplayProps) {
+  const timespan = useMemo(
+    () => Timespan.fromStrings(constraint.start, constraint.finish),
+    [constraint.start, constraint.finish],
+  );
+  const signupsWithinTimespan = useMemo(
+    () =>
+      mySignups.filter((signup) => {
+        if (signup.state !== SignupState.Confirmed || !signup.counted) {
+          return false;
+        }
+
+        const runTimespan = Timespan.fromStrings(signup.run.starts_at, signup.run.ends_at);
+        return timespan.overlapsTimespan(runTimespan);
+      }),
+    [timespan, mySignups],
+  );
+
+  return (
+    <BucketAvailabilityDisplay
+      remainingCapacity={constraint.maximum_signups - signupsWithinTimespan.length}
+      signupCount={signupsWithinTimespan.length}
+    />
+  );
+}
 
 type MaximumSignupsLimitSelectProps = HTMLProps<HTMLSelectElement> & {
   value: number | null | undefined;
@@ -85,7 +117,8 @@ const RankedChoiceUserSettings = LoadQueryWrapper(useMySignupQueueQuery, ({ data
         const start = DateTime.fromISO(constraint.start);
         const finish = DateTime.fromISO(constraint.finish);
         const conventionDay = conventionDays.find(
-          (conventionDay) => start.equals(conventionDay.start) && finish.equals(conventionDay.finish),
+          // timezone-insensitive comparison
+          (conventionDay) => +start === +conventionDay.start && +finish === +conventionDay.finish,
         );
 
         if (conventionDay && conventionDaySignupConstraints.get(conventionDay) == null) {
@@ -170,13 +203,6 @@ const RankedChoiceUserSettings = LoadQueryWrapper(useMySignupQueueQuery, ({ data
           <h3>Limits</h3>
 
           <table className="table table-striped">
-            <thead>
-              <tr>
-                <th scope="col">Limit type</th>
-                <th scope="col">My limit</th>
-              </tr>
-            </thead>
-
             <tbody>
               <tr>
                 <td>
@@ -200,6 +226,14 @@ const RankedChoiceUserSettings = LoadQueryWrapper(useMySignupQueueQuery, ({ data
                     }
                     disabled={loading}
                   />
+                </td>
+                <td>
+                  {totalSignupsConstraint && (
+                    <ConstraintAvailabilityDisplay
+                      constraint={totalSignupsConstraint}
+                      mySignups={data.convention.my_signups}
+                    />
+                  )}
                 </td>
               </tr>
 
@@ -238,6 +272,14 @@ const RankedChoiceUserSettings = LoadQueryWrapper(useMySignupQueueQuery, ({ data
                       disabled={loading}
                     />
                   </td>
+                  <td>
+                    {conventionDaySignupConstraints.get(conventionDay) && (
+                      <ConstraintAvailabilityDisplay
+                        constraint={conventionDaySignupConstraints.get(conventionDay)!}
+                        mySignups={data.convention.my_signups}
+                      />
+                    )}
+                  </td>
                 </tr>
               ))}
 
@@ -268,6 +310,9 @@ const RankedChoiceUserSettings = LoadQueryWrapper(useMySignupQueueQuery, ({ data
                       }
                       disabled={loading}
                     />
+                  </td>
+                  <td>
+                    <ConstraintAvailabilityDisplay constraint={constraint} mySignups={data.convention.my_signups} />
                   </td>
                 </tr>
               ))}

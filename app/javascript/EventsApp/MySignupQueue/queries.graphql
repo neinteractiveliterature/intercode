@@ -27,6 +27,18 @@ query MySignupQueueQuery {
       }
     }
 
+    my_signups {
+      id
+      state
+      counted
+
+      run {
+        id
+        starts_at
+        ends_at
+      }
+    }
+
     my_signup_ranked_choices {
       id
       state

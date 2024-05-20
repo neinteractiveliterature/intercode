@@ -18,6 +18,7 @@ import React from 'react';
 import RankedChoiceUserSettings from './RankedChoiceUserSettings';
 import UserConProfileSignupsCard from '../SignupAdmin/UserConProfileSignupsCard';
 import AppRootContext from '../../AppRootContext';
+import classNames from 'classnames';
 
 const MySignupQueue = LoadQueryWrapper(useMySignupQueueQuery, ({ data }) => {
   const { t } = useTranslation();
@@ -128,7 +129,7 @@ const MySignupQueue = LoadQueryWrapper(useMySignupQueueQuery, ({ data }) => {
                       <button
                         aria-label={t('signups.mySignupQueue.moveUp', 'Move up in queue')}
                         title={t('signups.mySignupQueue.moveUp', 'Move up in queue')}
-                        className="btn btn-dark px-1 py-0"
+                        className={classNames('btn btn-dark px-1 py-0', { 'opacity-25': index < 1 })}
                         disabled={updatePriorityLoading || index < 1}
                         onClick={() =>
                           updateSignupRankedChoicePriority({
@@ -141,7 +142,9 @@ const MySignupQueue = LoadQueryWrapper(useMySignupQueueQuery, ({ data }) => {
                       <button
                         aria-label={t('signups.mySignupQueue.moveDown', 'Move down in queue')}
                         title={t('signups.mySignupQueue.moveDown', 'Move down in queue')}
-                        className="btn btn-dark px-1 py-0"
+                        className={classNames('btn btn-dark px-1 py-0', {
+                          'opacity-25': index >= pendingChoices.length - 1,
+                        })}
                         disabled={updatePriorityLoading || index >= pendingChoices.length - 1}
                         onClick={() =>
                           updateSignupRankedChoicePriority({
