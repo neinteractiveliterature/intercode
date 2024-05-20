@@ -1,5 +1,5 @@
-import { LoadQueryWrapper, MultipleChoiceInput } from '@neinteractiveliterature/litform';
-import { MySignupQueueQueryData, useMySignupQueueQuery } from './queries.generated';
+import { ErrorDisplay, HelpPopover, LoadQueryWrapper, MultipleChoiceInput } from '@neinteractiveliterature/litform';
+import { MySignupQueueQueryData, MySignupQueueQueryDocument, useMySignupQueueQuery } from './queries.generated';
 import { HTMLProps, useContext, useMemo } from 'react';
 import { describeInterval, getConventionDayTimespans } from '../../TimespanUtils';
 import AppRootContext from '../../AppRootContext';
@@ -7,6 +7,13 @@ import { useTranslation } from 'react-i18next';
 import { useAppDateTimeFormat } from '../../TimeUtils';
 import { DateTime } from 'luxon';
 import Timespan from '../../Timespan';
+import { RankedChoiceUserConstraint } from '../../graphqlTypes.generated';
+import {
+  useCreateMyRankedChoiceUserConstraintMutation,
+  useDeleteRankedChoiceUserConstraintMutation,
+  useUpdateRankedChoiceUserConstraintMutation,
+} from './mutations.generated';
+import { useUpdateUserConProfileMutation } from '../../UserConProfiles/mutations.generated';
 
 type MaximumSignupsLimitSelectProps = HTMLProps<HTMLSelectElement> & {
   value: number | null | undefined;
@@ -46,11 +53,21 @@ type ConstraintType = NonNullable<
 const RankedChoiceUserSettings = LoadQueryWrapper(useMySignupQueueQuery, ({ data }) => {
   const { t } = useTranslation();
   const formatDateTime = useAppDateTimeFormat();
-  const { conventionTimespan, timezoneName } = useContext(AppRootContext);
+  const { conventionTimespan, timezoneName, myProfile } = useContext(AppRootContext);
   const conventionDays = useMemo(
     () => (conventionTimespan?.isFinite() ? getConventionDayTimespans(conventionTimespan, timezoneName) : []),
     [conventionTimespan, timezoneName],
   );
+  const [createMyRankedChoiceUserConstraint, { error: createError, loading: createLoading }] =
+    useCreateMyRankedChoiceUserConstraintMutation();
+  const [updateRankedChoiceUserConstraint, { error: updateError, loading: updateLoading }] =
+    useUpdateRankedChoiceUserConstraintMutation();
+  const [deleteRankedChoiceUserConstraint, { error: deleteError, loading: deleteLoading }] =
+    useDeleteRankedChoiceUserConstraintMutation();
+  const [updateUserConProfile, { error: profileUpdateError, loading: profileUpdateLoading }] =
+    useUpdateUserConProfileMutation();
+
+  const loading = createLoading || updateLoading || deleteLoading;
 
   const { totalSignupsConstraint, conventionDaySignupConstraints, miscConstraints } = useMemo(() => {
     let totalSignupsConstraint: ConstraintType | undefined;
@@ -84,6 +101,39 @@ const RankedChoiceUserSettings = LoadQueryWrapper(useMySignupQueueQuery, ({ data
     return { totalSignupsConstraint, conventionDaySignupConstraints, miscConstraints };
   }, [conventionDays, data.convention.my_profile?.ranked_choice_user_constraints]);
 
+  const constraintChanged = async (
+    constraint: Pick<RankedChoiceUserConstraint, 'id'> | undefined,
+    start: DateTime | undefined,
+    finish: DateTime | undefined,
+    maximumSignups: number | null | undefined,
+  ) => {
+    if (constraint == null) {
+      await createMyRankedChoiceUserConstraint({
+        variables: {
+          rankedChoiceUserConstraint: {
+            start: start?.toISO(),
+            finish: finish?.toISO(),
+            maximumSignups,
+          },
+        },
+        refetchQueries: [{ query: MySignupQueueQueryDocument }],
+      });
+    } else if (maximumSignups == null) {
+      await deleteRankedChoiceUserConstraint({
+        variables: { id: constraint.id },
+        refetchQueries: [{ query: MySignupQueueQueryDocument }],
+      });
+    } else {
+      await updateRankedChoiceUserConstraint({
+        variables: {
+          id: constraint.id,
+          rankedChoiceUserConstraint: { maximumSignups },
+        },
+        refetchQueries: [{ query: MySignupQueueQueryDocument }],
+      });
+    }
+  };
+
   return (
     <div className="card">
       <div className="card-header">Settings</div>
@@ -98,13 +148,28 @@ const RankedChoiceUserSettings = LoadQueryWrapper(useMySignupQueueQuery, ({ data
             { label: t('signups.mySignupQueue.allowWaitlist.no', "Don't sign me up for anything"), value: 'false' },
           ]}
           value={(data.convention.my_profile?.ranked_choice_allow_waitlist || false).toString()}
-          onChange={() => alert('TODO')}
+          onChange={(newValue) =>
+            updateUserConProfile({
+              variables: {
+                input: {
+                  user_con_profile: {
+                    ranked_choice_allow_waitlist: newValue === 'true',
+                  },
+                  id: myProfile?.id,
+                },
+              },
+              refetchQueries: [{ query: MySignupQueueQueryDocument }],
+            })
+          }
+          disabled={profileUpdateLoading}
         />
+
+        <ErrorDisplay graphQLError={profileUpdateError} />
 
         <section>
           <h3>Limits</h3>
 
-          <table className="table">
+          <table className="table table-striped">
             <thead>
               <tr>
                 <th scope="col">Limit type</th>
@@ -116,14 +181,24 @@ const RankedChoiceUserSettings = LoadQueryWrapper(useMySignupQueueQuery, ({ data
               <tr>
                 <td>
                   <label htmlFor="totalSignupsLimit">
-                    {t('signups.mySignupQueue.totalSignupsConstraint', 'Total events')}
+                    {t('signups.mySignupQueue.totalSignupsConstraint.label', 'Total event signups')}
                   </label>
+
+                  <HelpPopover>
+                    {t(
+                      'signups.mySignupQueue.totalSignupsConstraint.help',
+                      'How many events do you want to sign up for over the entirety of the con (in addition to any events you are running?)',
+                    )}
+                  </HelpPopover>
                 </td>
                 <td>
                   <MaximumSignupsLimitSelect
                     id="totalSignupsLimit"
                     value={totalSignupsConstraint?.maximum_signups}
-                    onValueChange={() => alert('TODO')}
+                    onValueChange={(newValue) =>
+                      constraintChanged(totalSignupsConstraint, undefined, undefined, newValue)
+                    }
+                    disabled={loading}
                   />
                 </td>
               </tr>
@@ -132,16 +207,35 @@ const RankedChoiceUserSettings = LoadQueryWrapper(useMySignupQueueQuery, ({ data
                 <tr key={conventionDay.start.toISO()}>
                   <td>
                     <label htmlFor={`conventionDaySignupsLimit-${conventionDay.start.toISO()}`}>
-                      {t('signups.mySignupQueue.conventionDaySignupsConstraint', 'Events on {{ conventionDay }}', {
-                        conventionDay: formatDateTime(conventionDay.start, 'longWeekday'),
-                      })}
+                      {t(
+                        'signups.mySignupQueue.conventionDaySignupsConstraint.label',
+                        '{{ conventionDay }} event signups',
+                        {
+                          conventionDay: formatDateTime(conventionDay.start, 'longWeekday'),
+                        },
+                      )}
                     </label>
+                    <HelpPopover>
+                      {t(
+                        'signups.mySignupQueue.conventionDaySignupsConstraint.help',
+                        'How many events do you want to sign up for on {{ conventionDay }} (in addition to any events you are running?)',
+                        { conventionDay: formatDateTime(conventionDay.start, 'longWeekday') },
+                      )}
+                    </HelpPopover>
                   </td>
                   <td>
                     <MaximumSignupsLimitSelect
                       id={`conventionDaySignupsLimit-${conventionDay.start.toISO()}`}
                       value={conventionDaySignupConstraints.get(conventionDay)?.maximum_signups}
-                      onValueChange={() => alert('TODO')}
+                      onValueChange={(newValue) =>
+                        constraintChanged(
+                          conventionDaySignupConstraints.get(conventionDay),
+                          conventionDay.start,
+                          conventionDay.finish,
+                          newValue,
+                        )
+                      }
+                      disabled={loading}
                     />
                   </td>
                 </tr>
@@ -164,13 +258,25 @@ const RankedChoiceUserSettings = LoadQueryWrapper(useMySignupQueueQuery, ({ data
                     <MaximumSignupsLimitSelect
                       id={`miscConstraint-${constraint.id}`}
                       value={constraint.maximum_signups}
-                      onValueChange={() => alert('TODO')}
+                      onValueChange={(newValue) =>
+                        constraintChanged(
+                          constraint,
+                          constraint.start ? DateTime.fromISO(constraint.start) : undefined,
+                          constraint.finish ? DateTime.fromISO(constraint.finish) : undefined,
+                          newValue,
+                        )
+                      }
+                      disabled={loading}
                     />
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
+
+          <ErrorDisplay graphQLError={createError} />
+          <ErrorDisplay graphQLError={updateError} />
+          <ErrorDisplay graphQLError={deleteError} />
         </section>
       </div>
     </div>

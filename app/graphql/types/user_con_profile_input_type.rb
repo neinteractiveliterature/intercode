@@ -17,4 +17,5 @@ class Types::UserConProfileInputType < Types::BaseInputObject
   argument :best_call_time, String, required: false, camelize: false
   argument :preferred_contact, String, required: false, camelize: false
   argument :gravatar_enabled, Boolean, required: false, camelize: false
+  argument :ranked_choice_allow_waitlist, Boolean, required: false, camelize: false
 end

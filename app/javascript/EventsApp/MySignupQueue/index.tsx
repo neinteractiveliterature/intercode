@@ -3,7 +3,7 @@ import { formatLCM, getDateTimeFormat } from '../../TimeUtils';
 import { DateTime } from 'luxon';
 import { ErrorDisplay, LoadQueryWrapper, LoadingIndicator, useConfirm } from '@neinteractiveliterature/litform';
 import { MySignupQueueQueryDocument, useMySignupQueueQuery } from './queries.generated';
-import { useMemo } from 'react';
+import { useContext, useMemo } from 'react';
 import { SignupRankedChoiceState } from '../../graphqlTypes.generated';
 import sortBy from 'lodash/sortBy';
 import { findCurrentTimespanIndex } from '../../ScheduledValueUtils';
@@ -16,9 +16,12 @@ import {
 } from './mutations.generated';
 import React from 'react';
 import RankedChoiceUserSettings from './RankedChoiceUserSettings';
+import UserConProfileSignupsCard from '../SignupAdmin/UserConProfileSignupsCard';
+import AppRootContext from '../../AppRootContext';
 
 const MySignupQueue = LoadQueryWrapper(useMySignupQueueQuery, ({ data }) => {
   const { t } = useTranslation();
+  const { myProfile } = useContext(AppRootContext);
   const [deleteSignupRankedChoice] = useDeleteSignupRankedChoiceMutation({
     refetchQueries: [{ query: MySignupQueueQueryDocument }],
   });
@@ -69,7 +72,7 @@ const MySignupQueue = LoadQueryWrapper(useMySignupQueueQuery, ({ data }) => {
     <>
       <h1>{t('signups.mySignupQueue.title', 'My signup queue')}</h1>
 
-      <div className="row">
+      <div className="row mb-4">
         <div className="col-12 col-md-8">
           {nextRound && (
             <div className="alert alert-info">
@@ -175,9 +178,11 @@ const MySignupQueue = LoadQueryWrapper(useMySignupQueueQuery, ({ data }) => {
         </div>
 
         <div className="col-12 col-md-4">
-          <RankedChoiceUserSettings />
+          {myProfile && <UserConProfileSignupsCard userConProfileId={myProfile.id} />}
         </div>
       </div>
+
+      <RankedChoiceUserSettings />
     </>
   );
 });

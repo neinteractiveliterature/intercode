@@ -188,6 +188,12 @@ class Types::MutationType < Types::BaseObject # rubocop:disable GraphQL/ObjectDe
   field :deleteProduct, null: false, mutation: Mutations::DeleteProduct
   field :updateProduct, null: false, mutation: Mutations::UpdateProduct
 
+  ### RankedChoiceUserConstraint
+
+  field :createRankedChoiceUserConstraint, null: false, mutation: Mutations::CreateRankedChoiceUserConstraint
+  field :deleteRankedChoiceUserConstraint, null: false, mutation: Mutations::DeleteRankedChoiceUserConstraint
+  field :updateRankedChoiceUserConstraint, null: false, mutation: Mutations::UpdateRankedChoiceUserConstraint
+
   ### Room
 
   field :createRoom, null: false, mutation: Mutations::CreateRoom

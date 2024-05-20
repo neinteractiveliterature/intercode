@@ -1,3 +1,10 @@
+fragment RankedChoiceUserConstraintFields on RankedChoiceUserConstraint {
+  id
+  start
+  finish
+  maximum_signups
+}
+
 query MySignupQueueQuery {
   convention: conventionByRequestHost {
     id
@@ -16,9 +23,7 @@ query MySignupQueueQuery {
 
       ranked_choice_user_constraints {
         id
-        start
-        finish
-        maximum_signups
+        ...RankedChoiceUserConstraintFields
       }
     }
 

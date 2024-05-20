@@ -4,12 +4,21 @@ import * as Types from '../../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
+export type RankedChoiceUserConstraintFieldsFragment = { __typename: 'RankedChoiceUserConstraint', id: string, start?: string | null, finish?: string | null, maximum_signups: number };
+
 export type MySignupQueueQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type MySignupQueueQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, maximum_event_signups?: { __typename: 'ScheduledValue', timespans: Array<{ __typename: 'TimespanWithValue', start?: string | null, finish?: string | null, value: string }> } | null, my_profile?: { __typename: 'UserConProfile', id: string, ranked_choice_allow_waitlist: boolean, ranked_choice_user_constraints: Array<{ __typename: 'RankedChoiceUserConstraint', id: string, start?: string | null, finish?: string | null, maximum_signups: number }> } | null, my_signup_ranked_choices: Array<{ __typename: 'SignupRankedChoice', id: string, state: Types.SignupRankedChoiceState, priority: number, requested_bucket_key?: string | null, target_run: { __typename: 'Run', id: string, title_suffix?: string | null, starts_at: string, event: { __typename: 'Event', id: string, title?: string | null, length_seconds: number, event_category: { __typename: 'EventCategory', id: string, name: string }, registration_policy?: { __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null, description?: string | null }> } | null } } }> } };
 
-
+export const RankedChoiceUserConstraintFieldsFragmentDoc = gql`
+    fragment RankedChoiceUserConstraintFields on RankedChoiceUserConstraint {
+  id
+  start
+  finish
+  maximum_signups
+}
+    `;
 export const MySignupQueueQueryDocument = gql`
     query MySignupQueueQuery {
   convention: conventionByRequestHost {
@@ -26,9 +35,7 @@ export const MySignupQueueQueryDocument = gql`
       ranked_choice_allow_waitlist
       ranked_choice_user_constraints {
         id
-        start
-        finish
-        maximum_signups
+        ...RankedChoiceUserConstraintFields
       }
     }
     my_signup_ranked_choices {
@@ -60,7 +67,7 @@ export const MySignupQueueQueryDocument = gql`
     }
   }
 }
-    `;
+    ${RankedChoiceUserConstraintFieldsFragmentDoc}`;
 
 /**
  * __useMySignupQueueQuery__

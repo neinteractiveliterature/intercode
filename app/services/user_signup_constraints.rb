@@ -18,8 +18,16 @@ class UserSignupConstraints
       end
   end
 
+  def pending_signup_requests
+    @pending_signup_requests ||= user_con_profile.signup_requests.where(state: "pending").to_a
+  end
+
   def current_signup_count
     current_signups.size
+  end
+
+  def pending_signup_request_count
+    pending_signup_requests.size
   end
 
   def concurrent_signups_for_run(run)
