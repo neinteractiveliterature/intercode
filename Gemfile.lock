@@ -297,7 +297,7 @@ GEM
       moneta
       multi_json (>= 1.9.2)
       webrick
-    holidays (8.7.1)
+    holidays (8.8.0)
     i18n (1.14.5)
       concurrent-ruby (~> 1.0)
     icalendar (2.10.1)
