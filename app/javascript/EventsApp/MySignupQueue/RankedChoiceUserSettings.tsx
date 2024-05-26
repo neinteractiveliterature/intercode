@@ -1,6 +1,6 @@
 import { ErrorDisplay, HelpPopover, LoadQueryWrapper, MultipleChoiceInput } from '@neinteractiveliterature/litform';
 import { MySignupQueueQueryData, MySignupQueueQueryDocument, useMySignupQueueQuery } from './queries.generated';
-import { HTMLProps, useContext, useMemo } from 'react';
+import { HTMLProps, useContext, useId, useMemo } from 'react';
 import { describeInterval, getConventionDayTimespans } from '../../TimespanUtils';
 import AppRootContext from '../../AppRootContext';
 import { useTranslation } from 'react-i18next';
@@ -41,6 +41,7 @@ function ConstraintAvailabilityDisplay({ constraint, mySignups }: ConstraintAvai
 
   return (
     <BucketAvailabilityDisplay
+      className="justify-content-end"
       remainingCapacity={constraint.maximum_signups - signupsWithinTimespan.length}
       signupCount={signupsWithinTimespan.length}
     />
@@ -58,7 +59,7 @@ function MaximumSignupsLimitSelect({ value, onValueChange, ...props }: MaximumSi
   return (
     <select
       {...props}
-      className="form-select"
+      className="form-select d-inline-block w-auto"
       value={value ?? 'NO_LIMIT'}
       onChange={(event) => {
         if (event.target.value === 'NO_LIMIT') {
@@ -71,10 +72,48 @@ function MaximumSignupsLimitSelect({ value, onValueChange, ...props }: MaximumSi
       <option value="NO_LIMIT">{t('signups.mySignupQueue.noLimit', 'No limit')}</option>
       {Array.from({ length: 10 }, (n, index) => index + 1).map((n) => (
         <option key={n} value={n}>
-          {n}
+          {t('signups.mySignupQueue.maximumSignupsLimit', '{{ number }} at most', { number: n })}
         </option>
       ))}
     </select>
+  );
+}
+
+type SignupConstraintRowProps = {
+  constraint?: Pick<RankedChoiceUserConstraint, 'id' | 'start' | 'finish' | 'maximum_signups'>;
+  mySignups: MySignupQueueQueryData['convention']['my_signups'];
+  label: React.ReactNode;
+  help?: React.ReactNode;
+  onChange: (newValue: number | null | undefined) => void;
+  loading: boolean;
+};
+
+function SignupConstraintRow({ constraint, mySignups, label, help, onChange, loading }: SignupConstraintRowProps) {
+  const rowId = useId();
+
+  return (
+    <>
+      <tr aria-labelledby={`${rowId}-label`}>
+        <td className="text-nowrap w-25">
+          <label id={`${rowId}-label`} htmlFor={`${rowId}-select`}>
+            {label}
+          </label>
+
+          {help && <HelpPopover>{help}</HelpPopover>}
+        </td>
+        <td>
+          <MaximumSignupsLimitSelect
+            id={`${rowId}-select`}
+            value={constraint?.maximum_signups}
+            onValueChange={(newValue) => onChange(newValue)}
+            disabled={loading}
+          />
+        </td>
+        <td className="text-nowrap">
+          {constraint && <ConstraintAvailabilityDisplay constraint={constraint} mySignups={mySignups} />}
+        </td>
+      </tr>
+    </>
   );
 }
 
@@ -169,7 +208,7 @@ const RankedChoiceUserSettings = LoadQueryWrapper(useMySignupQueueQuery, ({ data
 
   return (
     <div className="card">
-      <div className="card-header">Settings</div>
+      <div className="card-header">{t('signups.mySignupQue.settingsSection.label', 'Settings')}</div>
       <div className="card-body">
         <MultipleChoiceInput
           caption={t('signups.mySignupQueue.allowWaitlist.caption', 'What should we do if all your choices are full?')}
@@ -200,121 +239,73 @@ const RankedChoiceUserSettings = LoadQueryWrapper(useMySignupQueueQuery, ({ data
         <ErrorDisplay graphQLError={profileUpdateError} />
 
         <section>
-          <h3>Limits</h3>
+          <h3>{t('signups.mySignupQueue.constraintsTable.label', 'Limits')}</h3>
 
           <table className="table table-striped">
             <tbody>
-              <tr>
-                <td>
-                  <label htmlFor="totalSignupsLimit">
-                    {t('signups.mySignupQueue.totalSignupsConstraint.label', 'Total event signups')}
-                  </label>
-
-                  <HelpPopover>
-                    {t(
-                      'signups.mySignupQueue.totalSignupsConstraint.help',
-                      'How many events do you want to sign up for over the entirety of the con (in addition to any events you are running?)',
-                    )}
-                  </HelpPopover>
-                </td>
-                <td>
-                  <MaximumSignupsLimitSelect
-                    id="totalSignupsLimit"
-                    value={totalSignupsConstraint?.maximum_signups}
-                    onValueChange={(newValue) =>
-                      constraintChanged(totalSignupsConstraint, undefined, undefined, newValue)
-                    }
-                    disabled={loading}
-                  />
-                </td>
-                <td>
-                  {totalSignupsConstraint && (
-                    <ConstraintAvailabilityDisplay
-                      constraint={totalSignupsConstraint}
-                      mySignups={data.convention.my_signups}
-                    />
-                  )}
-                </td>
-              </tr>
+              <SignupConstraintRow
+                constraint={totalSignupsConstraint}
+                label={t('signups.mySignupQueue.totalSignupsConstraint.label', 'Total event signups')}
+                help={t(
+                  'signups.mySignupQueue.totalSignupsConstraint.help',
+                  'How many events do you want to sign up for over the entirety of the con (in addition to any events you are running?)',
+                )}
+                onChange={(newValue) => constraintChanged(totalSignupsConstraint, undefined, undefined, newValue)}
+                loading={loading}
+                mySignups={data.convention.my_signups}
+              />
 
               {conventionDays.map((conventionDay) => (
-                <tr key={conventionDay.start.toISO()}>
-                  <td>
-                    <label htmlFor={`conventionDaySignupsLimit-${conventionDay.start.toISO()}`}>
-                      {t(
-                        'signups.mySignupQueue.conventionDaySignupsConstraint.label',
-                        '{{ conventionDay }} event signups',
-                        {
-                          conventionDay: formatDateTime(conventionDay.start, 'longWeekday'),
-                        },
-                      )}
-                    </label>
-                    <HelpPopover>
-                      {t(
-                        'signups.mySignupQueue.conventionDaySignupsConstraint.help',
-                        'How many events do you want to sign up for on {{ conventionDay }} (in addition to any events you are running?)',
-                        { conventionDay: formatDateTime(conventionDay.start, 'longWeekday') },
-                      )}
-                    </HelpPopover>
-                  </td>
-                  <td>
-                    <MaximumSignupsLimitSelect
-                      id={`conventionDaySignupsLimit-${conventionDay.start.toISO()}`}
-                      value={conventionDaySignupConstraints.get(conventionDay)?.maximum_signups}
-                      onValueChange={(newValue) =>
-                        constraintChanged(
-                          conventionDaySignupConstraints.get(conventionDay),
-                          conventionDay.start,
-                          conventionDay.finish,
-                          newValue,
-                        )
-                      }
-                      disabled={loading}
-                    />
-                  </td>
-                  <td>
-                    {conventionDaySignupConstraints.get(conventionDay) && (
-                      <ConstraintAvailabilityDisplay
-                        constraint={conventionDaySignupConstraints.get(conventionDay)!}
-                        mySignups={data.convention.my_signups}
-                      />
-                    )}
-                  </td>
-                </tr>
+                <SignupConstraintRow
+                  key={conventionDay.start.toISO()}
+                  constraint={conventionDaySignupConstraints.get(conventionDay)}
+                  label={t(
+                    'signups.mySignupQueue.conventionDaySignupsConstraint.label',
+                    '{{ conventionDay }} event signups',
+                    {
+                      conventionDay: formatDateTime(conventionDay.start, 'longWeekday'),
+                    },
+                  )}
+                  help={t(
+                    'signups.mySignupQueue.conventionDaySignupsConstraint.help',
+                    'How many events do you want to sign up for on {{ conventionDay }} (in addition to any events you are running?)',
+                    { conventionDay: formatDateTime(conventionDay.start, 'longWeekday') },
+                  )}
+                  onChange={(newValue) =>
+                    constraintChanged(
+                      conventionDaySignupConstraints.get(conventionDay),
+                      conventionDay.start,
+                      conventionDay.finish,
+                      newValue,
+                    )
+                  }
+                  loading={loading}
+                  mySignups={data.convention.my_signups}
+                />
               ))}
 
               {miscConstraints.map((constraint) => (
-                <tr key={constraint.id}>
-                  <td>
-                    <label htmlFor={`miscConstraint-${constraint.id}`}>
-                      {t('signups.mySignupQueue.miscSignupsConstraint', 'Events {{ interval }}', {
-                        interval: describeInterval(
-                          Timespan.fromStrings(constraint.start, constraint.finish),
-                          (dateTime) => formatDateTime(dateTime, 'compactDateTime'),
-                          timezoneName,
-                        ),
-                      })}
-                    </label>
-                  </td>
-                  <td>
-                    <MaximumSignupsLimitSelect
-                      id={`miscConstraint-${constraint.id}`}
-                      value={constraint.maximum_signups}
-                      onValueChange={(newValue) =>
-                        constraintChanged(
-                          constraint,
-                          constraint.start ? DateTime.fromISO(constraint.start) : undefined,
-                          constraint.finish ? DateTime.fromISO(constraint.finish) : undefined,
-                          newValue,
-                        )
-                      }
-                      disabled={loading}
-                    />
-                  </td>
-                  <td>
-                    <ConstraintAvailabilityDisplay constraint={constraint} mySignups={data.convention.my_signups} />
-                  </td>
-                </tr>
+                <SignupConstraintRow
+                  key={constraint.id}
+                  constraint={constraint}
+                  label={t('signups.mySignupQueue.miscSignupsConstraint', 'Events {{ interval }}', {
+                    interval: describeInterval(
+                      Timespan.fromStrings(constraint.start, constraint.finish),
+                      (dateTime) => formatDateTime(dateTime, 'compactDateTime'),
+                      timezoneName,
+                    ),
+                  })}
+                  onChange={(newValue) =>
+                    constraintChanged(
+                      constraint,
+                      constraint.start ? DateTime.fromISO(constraint.start) : undefined,
+                      constraint.finish ? DateTime.fromISO(constraint.finish) : undefined,
+                      newValue,
+                    )
+                  }
+                  loading={loading}
+                  mySignups={data.convention.my_signups}
+                />
               ))}
             </tbody>
           </table>
