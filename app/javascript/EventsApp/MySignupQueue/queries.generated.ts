@@ -9,7 +9,7 @@ export type RankedChoiceUserConstraintFieldsFragment = { __typename: 'RankedChoi
 export type MySignupQueueQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type MySignupQueueQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, maximum_event_signups?: { __typename: 'ScheduledValue', timespans: Array<{ __typename: 'TimespanWithValue', start?: string | null, finish?: string | null, value: string }> } | null, my_profile?: { __typename: 'UserConProfile', id: string, ranked_choice_allow_waitlist: boolean, ranked_choice_user_constraints: Array<{ __typename: 'RankedChoiceUserConstraint', id: string, start?: string | null, finish?: string | null, maximum_signups: number }> } | null, my_signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState, counted: boolean, run: { __typename: 'Run', id: string, starts_at: string, ends_at: string } }>, my_signup_ranked_choices: Array<{ __typename: 'SignupRankedChoice', id: string, state: Types.SignupRankedChoiceState, priority: number, requested_bucket_key?: string | null, target_run: { __typename: 'Run', id: string, title_suffix?: string | null, starts_at: string, event: { __typename: 'Event', id: string, title?: string | null, length_seconds: number, event_category: { __typename: 'EventCategory', id: string, name: string }, registration_policy?: { __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null, description?: string | null }> } | null } } }> } };
+export type MySignupQueueQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, signup_rounds: Array<{ __typename: 'SignupRound', id: string, start?: string | null, maximum_event_signups: string }>, my_profile?: { __typename: 'UserConProfile', id: string, ranked_choice_allow_waitlist: boolean, ranked_choice_user_constraints: Array<{ __typename: 'RankedChoiceUserConstraint', id: string, start?: string | null, finish?: string | null, maximum_signups: number }> } | null, my_signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState, counted: boolean, run: { __typename: 'Run', id: string, starts_at: string, ends_at: string } }>, my_signup_ranked_choices: Array<{ __typename: 'SignupRankedChoice', id: string, state: Types.SignupRankedChoiceState, priority: number, requested_bucket_key?: string | null, target_run: { __typename: 'Run', id: string, title_suffix?: string | null, starts_at: string, event: { __typename: 'Event', id: string, title?: string | null, length_seconds: number, event_category: { __typename: 'EventCategory', id: string, name: string }, registration_policy?: { __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null, description?: string | null }> } | null } } }> } };
 
 export const RankedChoiceUserConstraintFieldsFragmentDoc = gql`
     fragment RankedChoiceUserConstraintFields on RankedChoiceUserConstraint {
@@ -23,12 +23,10 @@ export const MySignupQueueQueryDocument = gql`
     query MySignupQueueQuery {
   convention: conventionByRequestHost {
     id
-    maximum_event_signups {
-      timespans {
-        start
-        finish
-        value
-      }
+    signup_rounds {
+      id
+      start
+      maximum_event_signups
     }
     my_profile {
       id

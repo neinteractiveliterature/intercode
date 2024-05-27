@@ -45,12 +45,11 @@ fragment ConventionAdminConventionFields on Convention {
     display_name
   }
 
-  maximum_event_signups {
-    timespans {
-      start
-      finish
-      value
-    }
+  signup_rounds {
+    id
+    start
+    maximum_event_signups
+    ranked_choice_order
   }
 
   defaultLayout {

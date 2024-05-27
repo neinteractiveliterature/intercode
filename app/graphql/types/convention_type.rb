@@ -249,9 +249,10 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
     authorize_action :view_reports
   end
   field :signup_mode, Types::SignupModeType, null: false, description: "The signup mode used for this convention."
-  field :signup_requests_open, Boolean, null: false do # rubocop:disable GraphQL/ExtractType
+  field :signup_requests_open, Boolean, null: false do
     description "In a moderated-signup convention, are signup requests currently allowed?"
   end
+  field :signup_rounds, [Types::SignupRoundType], null: false, description: "The signup rounds in this convention." # rubocop:disable GraphQL/ExtractType
   field :site_mode, Types::SiteModeType, null: false, description: "The mode this convention site is operating in."
   field :staff_position, Types::StaffPositionType, null: false do
     argument :id, ID, required: true, description: "The ID of the staff position to find."
@@ -609,6 +610,7 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
     :pages,
     :rooms,
     :root_page,
+    :signup_rounds,
     :staff_positions,
     :ticket_types,
     :user_activity_alerts

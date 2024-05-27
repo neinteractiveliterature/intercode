@@ -234,6 +234,12 @@ class Types::MutationType < Types::BaseObject # rubocop:disable GraphQL/ObjectDe
   field :rejectSignupRequest, null: false, mutation: Mutations::RejectSignupRequest
   field :withdrawSignupRequest, null: false, mutation: Mutations::WithdrawSignupRequest
 
+  ### SignupRound
+
+  field :createSignupRound, null: false, mutation: Mutations::CreateSignupRound
+  field :deleteSignupRound, null: false, mutation: Mutations::DeleteSignupRound
+  field :updateSignupRound, null: false, mutation: Mutations::UpdateSignupRound
+
   ### StaffPosition
 
   field :createStaffPosition, null: false, mutation: Mutations::CreateStaffPosition

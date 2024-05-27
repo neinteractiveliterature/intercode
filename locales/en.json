@@ -634,6 +634,7 @@
       "reports": "Reports",
       "rooms": "Rooms",
       "signupModeration": "Signup Moderation",
+      "signupRounds": "Signup Rounds",
       "siteContent": "Site Content",
       "staffPositions": "Staff Positions",
       "store": "Store",
@@ -806,7 +807,8 @@
       "title": "Your {{ ticketName }} for {{ eventTitle }}"
     },
     "maximumSignups": {
-      "limitedCount": "Up to {{ count }} event",
+      "limitedCount_one": "Up to {{ count }} event",
+      "limitedCount_other": "Up to {{ count }} events",
       "notNow": "Signups frozen",
       "notYet": "No signups yet",
       "unlimited": "Signups fully open"

@@ -15,7 +15,7 @@ const MapboxMap = lazyWithAppEntrypointHeadersCheck(
   () => import(/* webpackChunkName: "mapbox-map" */ './Maps/MapboxMap'),
 );
 const MaximumEventSignupsPreview = lazyWithAppEntrypointHeadersCheck(
-  () => import(/* webpackChunkName: 'scheduled-value-preview' */ './ConventionAdmin/MaximumEventSignupsPreview'),
+  () => import(/* webpackChunkName: 'scheduled-value-preview' */ './SignupRoundsAdmin/MaximumEventSignupsPreview'),
 );
 const ProposeEventButton = lazyWithAppEntrypointHeadersCheck(
   () => import(/* webpackChunkName: 'propose-event-button' */ './EventProposals/ProposeEventButton'),

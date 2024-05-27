@@ -13,7 +13,7 @@ export type CreateConventionMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateConventionMutationData = { __typename: 'Mutation', createConvention: { __typename: 'CreateConventionPayload', convention: { __typename: 'Convention', id: string, name: string, starts_at?: string | null, ends_at?: string | null, canceled: boolean, timezone_name?: string | null, timezone_mode: Types.TimezoneMode, domain?: string | null, site_mode: Types.SiteMode, ticket_mode: Types.TicketMode, show_event_list?: Types.ShowSchedule | null, show_schedule?: Types.ShowSchedule | null, email_from: string, hidden: boolean, language: string, maximum_event_signups?: { __typename: 'ScheduledValue', timespans: Array<{ __typename: 'TimespanWithValue', start?: string | null, finish?: string | null, value: string }> } | null, organization?: { __typename: 'Organization', id: string, name: string } | null } } };
+export type CreateConventionMutationData = { __typename: 'Mutation', createConvention: { __typename: 'CreateConventionPayload', convention: { __typename: 'Convention', id: string, name: string, starts_at?: string | null, ends_at?: string | null, canceled: boolean, timezone_name?: string | null, timezone_mode: Types.TimezoneMode, domain?: string | null, site_mode: Types.SiteMode, ticket_mode: Types.TicketMode, show_event_list?: Types.ShowSchedule | null, show_schedule?: Types.ShowSchedule | null, email_from: string, hidden: boolean, language: string, signup_rounds: Array<{ __typename: 'SignupRound', id: string, start?: string | null, maximum_event_signups: string }>, organization?: { __typename: 'Organization', id: string, name: string } | null } } };
 
 export type SetConventionCanceledMutationVariables = Types.Exact<{
   id: Types.Scalars['ID']['input'];
@@ -21,7 +21,7 @@ export type SetConventionCanceledMutationVariables = Types.Exact<{
 }>;
 
 
-export type SetConventionCanceledMutationData = { __typename: 'Mutation', setConventionCanceled: { __typename: 'SetConventionCanceledPayload', convention: { __typename: 'Convention', id: string, name: string, starts_at?: string | null, ends_at?: string | null, canceled: boolean, timezone_name?: string | null, timezone_mode: Types.TimezoneMode, domain?: string | null, site_mode: Types.SiteMode, ticket_mode: Types.TicketMode, show_event_list?: Types.ShowSchedule | null, show_schedule?: Types.ShowSchedule | null, email_from: string, hidden: boolean, language: string, maximum_event_signups?: { __typename: 'ScheduledValue', timespans: Array<{ __typename: 'TimespanWithValue', start?: string | null, finish?: string | null, value: string }> } | null, organization?: { __typename: 'Organization', id: string, name: string } | null } } };
+export type SetConventionCanceledMutationData = { __typename: 'Mutation', setConventionCanceled: { __typename: 'SetConventionCanceledPayload', convention: { __typename: 'Convention', id: string, name: string, starts_at?: string | null, ends_at?: string | null, canceled: boolean, timezone_name?: string | null, timezone_mode: Types.TimezoneMode, domain?: string | null, site_mode: Types.SiteMode, ticket_mode: Types.TicketMode, show_event_list?: Types.ShowSchedule | null, show_schedule?: Types.ShowSchedule | null, email_from: string, hidden: boolean, language: string, signup_rounds: Array<{ __typename: 'SignupRound', id: string, start?: string | null, maximum_event_signups: string }>, organization?: { __typename: 'Organization', id: string, name: string } | null } } };
 
 
 export const CreateConventionDocument = gql`

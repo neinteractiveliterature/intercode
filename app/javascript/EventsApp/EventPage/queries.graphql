@@ -96,12 +96,10 @@ query EventPageQuery($eventId: ID!) {
     id
     ...CommonConventionData
 
-    maximum_event_signups {
-      timespans {
-        start
-        finish
-        value
-      }
+    signup_rounds {
+      id
+      start
+      maximum_event_signups
     }
 
     my_profile {

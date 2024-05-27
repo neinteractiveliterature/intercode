@@ -1,51 +1,9 @@
-import { useCallback } from 'react';
 import * as React from 'react';
 import { BooleanInput, MultipleChoiceInput, usePropertySetters } from '@neinteractiveliterature/litform';
 
-import ScheduledValueEditor, {
-  scheduledValueReducer,
-  ScheduledValueReducerAction,
-} from '../BuiltInFormControls/ScheduledValueEditor';
-import { timezoneNameForConvention } from '../TimeUtils';
-import MaximumEventSignupsPreview, {
-  MaximumEventSignupsValue,
-  MAXIMUM_EVENT_SIGNUPS_OPTIONS,
-} from './MaximumEventSignupsPreview';
 import type { ConventionFormConvention } from './ConventionForm';
 import { ShowSchedule, SignupAutomationMode, SignupMode } from '../graphqlTypes.generated';
-
-const buildMaximumEventSignupsInput = (
-  value: MaximumEventSignupsValue | undefined,
-  onChange: React.Dispatch<MaximumEventSignupsValue | undefined>,
-) => {
-  const processChangeEvent = (event: React.FocusEvent<HTMLSelectElement>) => {
-    const { value: newValue } = event.target;
-    switch (newValue) {
-      case 'not_yet':
-      case '1':
-      case '2':
-      case '3':
-      case 'unlimited':
-      case 'not_now':
-        return onChange(newValue);
-      default:
-        return onChange(undefined);
-    }
-  };
-
-  const options = MAXIMUM_EVENT_SIGNUPS_OPTIONS.map(([optionValue, label]) => (
-    <option key={optionValue} value={optionValue}>
-      {label}
-    </option>
-  ));
-
-  return (
-    <select className="form-select" value={value} onChange={processChangeEvent}>
-      <option aria-label="Blank placeholder option" />
-      {options}
-    </select>
-  );
-};
+import { Trans } from 'react-i18next';
 
 export type ConventionFormEventsSectionProps = {
   convention: ConventionFormConvention;
@@ -58,7 +16,6 @@ function ConventionFormEventsSection({
   setConvention,
   disabled,
 }: ConventionFormEventsSectionProps): JSX.Element {
-  const timezoneName = timezoneNameForConvention(convention);
   const [
     setSignupMode,
     setSignupAutomationMode,
@@ -66,7 +23,6 @@ function ConventionFormEventsSection({
     setAcceptingProposals,
     setShowEventList,
     setShowSchedule,
-    setMaximumEventSignups,
   ] = usePropertySetters(
     setConvention,
     'signup_mode',
@@ -75,13 +31,6 @@ function ConventionFormEventsSection({
     'accepting_proposals',
     'show_event_list',
     'show_schedule',
-    'maximum_event_signups',
-  );
-  const dispatchMaximumEventSignups = useCallback(
-    (action: ScheduledValueReducerAction<MaximumEventSignupsValue>) => {
-      setMaximumEventSignups((prevState) => scheduledValueReducer(prevState, action));
-    },
-    [setMaximumEventSignups],
   );
 
   return (
@@ -173,19 +122,12 @@ function ConventionFormEventsSection({
         disabled={disabled || convention.site_mode === 'single_event'}
       />
 
-      <fieldset>
-        <legend className="col-form-label">Event signup schedule</legend>
-        <MaximumEventSignupsPreview
-          maximumEventSignups={convention.maximum_event_signups}
-          timezoneName={timezoneName}
-        />
-        <ScheduledValueEditor
-          scheduledValue={convention.maximum_event_signups ?? { timespans: [] }}
-          dispatch={dispatchMaximumEventSignups}
-          timezone={timezoneName}
-          buildValueInput={buildMaximumEventSignupsInput}
-        />
-      </fieldset>
+      <div className="alert alert-info">
+        <Trans i18nKey="admin.convention.signupScheduleMoved">
+          The signup schedule editor has moved! To edit the signup schedule for this convention, go to the Admin menu
+          and choose “Signup rounds.”
+        </Trans>
+      </div>
     </>
   );
 }

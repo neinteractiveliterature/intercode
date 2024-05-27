@@ -2,7 +2,6 @@ import { memo, Fragment, useMemo } from 'react';
 import { DateTime } from 'luxon';
 
 import { findCurrentValue } from '../ScheduledValueUtils';
-import { MaximumEventSignupsValue } from './MaximumEventSignupsPreview';
 import { timezoneNameForConvention } from '../TimeUtils';
 import { ShowSchedule } from '../graphqlTypes.generated';
 import { EditingScheduledValue } from '../BuiltInFormControls/ScheduledValueEditor';
@@ -10,6 +9,7 @@ import { ConventionAdminConventionQueryData } from './queries.generated';
 import { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { describeMaximumEventSignupsValue } from '../describeMaximumEventSignupsValue';
+import { MaximumEventSignupsValue } from '../SignupRoundUtils';
 
 function describeEventVisibility(visibility: ShowSchedule | null | undefined, t: TFunction) {
   switch (visibility) {

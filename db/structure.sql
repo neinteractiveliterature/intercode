@@ -2647,7 +2647,8 @@ CREATE TABLE public.signup_rounds (
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     ranked_choice_order text,
-    executed_at timestamp without time zone
+    executed_at timestamp without time zone,
+    CONSTRAINT chk_rails_4c92d587c4 CHECK (((maximum_event_signups = ANY (ARRAY['not_yet'::text, 'not_now'::text, 'unlimited'::text])) OR ((maximum_event_signups)::integer >= 1)))
 );
 
 
@@ -6085,6 +6086,7 @@ ALTER TABLE ONLY public.cms_files_pages
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20240526181616'),
 ('20240505160246'),
 ('20240504165651'),
 ('20240504163701'),

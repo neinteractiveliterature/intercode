@@ -102,6 +102,11 @@ function useConventionAdminNavigationItems(): GeneratedNavigationItem[] {
             url: '/signup_moderation',
             icon: 'bi-megaphone-fill',
           },
+        currentAbility.can_update_convention && {
+          label: t('navigation.admin.signupRounds', 'Signup Rounds'),
+          url: '/signup_rounds',
+          icon: 'bi-calendar-range',
+        },
         generateSiteContentItem(currentAbility, t),
         currentAbility.can_manage_staff_positions && {
           label: t('navigation.admin.staffPositions', 'Staff Positions'),

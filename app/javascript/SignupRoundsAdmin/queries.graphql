@@ -1,0 +1,12 @@
+query SignupRoundsAdminQuery {
+  convention: conventionByRequestHost {
+    id
+    signup_rounds {
+      id
+      maximum_event_signups
+      ranked_choice_order
+      start
+      executed_at
+    }
+  }
+}

@@ -22,7 +22,7 @@
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
 class SignupRound < ApplicationRecord
-  RANKED_CHOICE_ORDERS = %w[asc desc]
+  RANKED_CHOICE_ORDERS = Types::RankedChoiceOrder.values.values.map(&:value).freeze
 
   belongs_to :convention
 

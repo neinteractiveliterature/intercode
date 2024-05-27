@@ -71,6 +71,7 @@ function renderCommonInConventionRoutes({
     ...(signupMode === 'moderated'
       ? [<Route path="/signup_moderation/*" key="signupModeration" element={<PageComponents.SignupModeration />} />]
       : []),
+    <Route path="/signup_rounds" key="signupRounds" element={<PageComponents.SignupRoundsAdmin />} />,
     <Route path="/staff_positions/*" key="staffPositions" element={<PageComponents.StaffPositionAdmin />} />,
     <Route path="/ticket/*" key="myTicket" element={<PageComponents.MyTicket />} />,
     ...(ticketMode === 'required_for_signup'

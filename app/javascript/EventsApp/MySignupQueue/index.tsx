@@ -6,7 +6,6 @@ import { MySignupQueueQueryDocument, useMySignupQueueQuery } from './queries.gen
 import { useContext, useMemo } from 'react';
 import { SignupRankedChoiceState } from '../../graphqlTypes.generated';
 import sortBy from 'lodash/sortBy';
-import { findCurrentTimespanIndex } from '../../ScheduledValueUtils';
 import RankedChoicePriorityIndicator from './RankedChoicePriorityIndicator';
 import buildEventUrl from '../buildEventUrl';
 import { Link } from 'react-router-dom';
@@ -19,6 +18,7 @@ import RankedChoiceUserSettings from './RankedChoiceUserSettings';
 import UserConProfileSignupsCard from '../SignupAdmin/UserConProfileSignupsCard';
 import AppRootContext from '../../AppRootContext';
 import classNames from 'classnames';
+import { parseSignupRounds } from '../../SignupRoundUtils';
 
 const MySignupQueue = LoadQueryWrapper(useMySignupQueueQuery, ({ data }) => {
   const { t } = useTranslation();
@@ -40,33 +40,34 @@ const MySignupQueue = LoadQueryWrapper(useMySignupQueueQuery, ({ data }) => {
   }, [data.convention.my_signup_ranked_choices]);
 
   const nextRound = useMemo(() => {
-    if (data.convention.maximum_event_signups) {
-      const currentIndex = findCurrentTimespanIndex(data.convention.maximum_event_signups);
-      if (currentIndex < data.convention.maximum_event_signups.timespans.length - 1) {
-        return {
-          timespan: data.convention.maximum_event_signups.timespans[currentIndex + 1],
-        };
-      }
+    const parsedRounds = parseSignupRounds(data.convention.signup_rounds);
+    const now = DateTime.local();
+    const currentIndex = parsedRounds.findIndex((round) => round.timespan.includesTime(now));
+
+    if (currentIndex < parsedRounds.length - 1) {
+      return parsedRounds[currentIndex + 1];
     }
-  }, [data.convention.maximum_event_signups]);
+  }, [data.convention.signup_rounds]);
 
   const nextRoundActionDescription = useMemo(() => {
     if (!nextRound) {
       return undefined;
     }
 
-    if (nextRound.timespan.value === 'unlimited') {
+    if (nextRound.maximum_event_signups === 'unlimited') {
       return t(
         'signups.mySignupQueue.nextRoundAction.unlimited',
         'At that time, players will be signed up for events automatically based on their queue selections until their schedule is full.',
       );
     }
 
-    return t(
-      'signups.mySignupQueue.nextRoundAction.limited',
-      'At that time, players will be automatically signed up for up to {{ count }} event(s).',
-      { count: Number.parseInt(nextRound.timespan.value) },
-    );
+    if (typeof nextRound.maximum_event_signups === 'number') {
+      return t(
+        'signups.mySignupQueue.nextRoundAction.limited',
+        'At that time, players will be automatically signed up for up to {{ count }} event(s).',
+        { count: nextRound.maximum_event_signups },
+      );
+    }
   }, [nextRound, t]);
 
   return (
@@ -76,16 +77,13 @@ const MySignupQueue = LoadQueryWrapper(useMySignupQueueQuery, ({ data }) => {
       <div className="row mb-4">
         <div className="col-12 col-md-8">
           {nextRound && (
-            <div className="alert alert-info">
+            <div className="alert alert-info mb-4">
               <Trans i18nKey="signups.mySignupQueue.nextRoundInfo">
                 The next signup round starts at{' '}
                 <strong>
                   {{
                     nextRoundStart: nextRound.timespan.start
-                      ? formatLCM(
-                          DateTime.fromISO(nextRound.timespan.start),
-                          getDateTimeFormat('shortWeekdayDateTimeWithZone', t),
-                        )
+                      ? formatLCM(nextRound.timespan.start, getDateTimeFormat('shortWeekdayDateTimeWithZone', t))
                       : '',
                   }}
                 </strong>
@@ -93,7 +91,7 @@ const MySignupQueue = LoadQueryWrapper(useMySignupQueueQuery, ({ data }) => {
               </Trans>
             </div>
           )}
-          <section className="card my-4">
+          <section className="card">
             <ul className="list-group list-group-flush">
               {pendingChoices.map((pendingChoice, index) => (
                 <React.Fragment key={pendingChoice.id}>

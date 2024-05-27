@@ -6,15 +6,19 @@ import RunCapacityGraph from './RunCapacityGraph';
 import EventPageRunCard from './EventPageRunCard';
 import { EventPageQueryData, useEventPageQuery } from './queries.generated';
 import { LoadQueryWithVariablesWrapper } from '../../GraphqlLoadingWrappers';
-import { ScheduledValue, SignupAutomationMode, SignupState } from '../../graphqlTypes.generated';
-import { findCurrentValue } from '../../ScheduledValueUtils';
+import { SignupAutomationMode, SignupRound, SignupState } from '../../graphqlTypes.generated';
+import { parseSignupRounds } from '../../SignupRoundUtils';
 
-function getMaxSignupCount(maximumEventSignups: ScheduledValue | null | undefined) {
-  if (maximumEventSignups == null) {
+function getMaxSignupCount(signupRounds: Pick<SignupRound, 'start' | 'maximum_event_signups'>[]) {
+  const parsedRounds = parseSignupRounds(signupRounds);
+  const now = DateTime.local();
+  const currentRound = parsedRounds.find((round) => round.timespan.includesTime(now));
+
+  if (currentRound == null) {
     return undefined;
   }
 
-  const strValue = findCurrentValue(maximumEventSignups);
+  const strValue = currentRound.maximum_event_signups;
 
   if (strValue === 'not_now' || strValue === 'not_yet') {
     return 0;
@@ -24,7 +28,7 @@ function getMaxSignupCount(maximumEventSignups: ScheduledValue | null | undefine
     return undefined;
   }
 
-  return Number.parseInt(strValue ?? '');
+  return strValue;
 }
 
 type FakeRunProps = {
@@ -61,7 +65,7 @@ export default LoadQueryWithVariablesWrapper(
         return false;
       }
 
-      const maxSignups = getMaxSignupCount(data.convention.maximum_event_signups);
+      const maxSignups = getMaxSignupCount(data.convention.signup_rounds);
 
       if (maxSignups === undefined || Number.isNaN(maxSignups)) {
         return false;
@@ -71,7 +75,7 @@ export default LoadQueryWithVariablesWrapper(
         data.convention.my_signups.filter((signup) => signup.state === SignupState.Confirmed && signup.counted)
           .length >= maxSignups
       );
-    }, [data.convention.signup_automation_mode, data.convention.my_signups, data.convention.maximum_event_signups]);
+    }, [data.convention.signup_automation_mode, data.convention.my_signups, data.convention.signup_rounds]);
 
     const { currentAbility, convention } = data;
     const myProfile = convention.my_profile;

@@ -30,6 +30,33 @@
   font-weight: bold;
 }
 
+.maximum-event-signups-4 {
+  background-color: $pink;
+}
+
+.maximum-event-signups-4-transition {
+  background-image: linear-gradient(to right, transparent, $pink);
+  font-weight: bold;
+}
+
+.maximum-event-signups-5 {
+  background-color: $orange;
+}
+
+.maximum-event-signups-5-transition {
+  background-image: linear-gradient(to right, transparent, $orange);
+  font-weight: bold;
+}
+
+.maximum-event-signups-6 {
+  background-color: $teal;
+}
+
+.maximum-event-signups-6-transition {
+  background-image: linear-gradient(to right, transparent, $teal);
+  font-weight: bold;
+}
+
 .maximum-event-signups-unlimited {
   background-color: $success-light;
 }
