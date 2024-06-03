@@ -1,7 +1,7 @@
 import { ErrorDisplay, HelpPopover, LoadQueryWrapper, MultipleChoiceInput } from '@neinteractiveliterature/litform';
 import { MySignupQueueQueryData, MySignupQueueQueryDocument, useMySignupQueueQuery } from './queries.generated';
 import { HTMLProps, useContext, useId, useMemo } from 'react';
-import { describeInterval, getConventionDayTimespans } from '../../TimespanUtils';
+import { describeTimespan, getConventionDayTimespans } from '../../TimespanUtils';
 import AppRootContext from '../../AppRootContext';
 import { useTranslation } from 'react-i18next';
 import { useAppDateTimeFormat } from '../../TimeUtils';
@@ -289,9 +289,10 @@ const RankedChoiceUserSettings = LoadQueryWrapper(useMySignupQueueQuery, ({ data
                   key={constraint.id}
                   constraint={constraint}
                   label={t('signups.mySignupQueue.miscSignupsConstraint', 'Events {{ interval }}', {
-                    interval: describeInterval(
+                    interval: describeTimespan(
                       Timespan.fromStrings(constraint.start, constraint.finish),
-                      (dateTime) => formatDateTime(dateTime, 'compactDateTime'),
+                      t,
+                      'compactDateTime',
                       timezoneName,
                     ),
                   })}

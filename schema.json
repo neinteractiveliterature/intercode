@@ -36439,8 +36439,8 @@
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Int",
+                  "kind": "INPUT_OBJECT",
+                  "name": "SignupRoundInput",
                   "ofType": null
                 }
               },

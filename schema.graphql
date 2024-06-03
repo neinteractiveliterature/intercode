@@ -7687,7 +7687,7 @@ input UpdateSignupRoundInput {
   """
   The new data to write to the SignupRound
   """
-  signupRound: Int!
+  signupRound: SignupRoundInput!
 }
 
 """

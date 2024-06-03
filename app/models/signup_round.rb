@@ -31,6 +31,7 @@ class SignupRound < ApplicationRecord
   scope :due_at, ->(time) { where("executed_at IS NULL AND (start IS NULL OR start <= ?)", time) }
   scope :currently_due, -> { due_at(Time.zone.now) }
   scope :chronological, -> { order("start ASC NULLS FIRST") }
+  scope :reverse_chronological, -> { order("start DESC NULLS LAST") }
 
   def self.execute_currently_due_rounds!
     currently_due
@@ -51,6 +52,17 @@ class SignupRound < ApplicationRecord
       end
 
       update!(executed_at: Time.zone.now)
+    end
+  end
+
+  def maximum_event_signups_as_number
+    case maximum_event_signups
+    when "not_yet", "not_now"
+      0
+    when "unlimited"
+      Float::INFINITY
+    else
+      maximum_event_signups.to_i
     end
   end
 end

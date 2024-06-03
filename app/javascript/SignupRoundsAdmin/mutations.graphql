@@ -1,0 +1,25 @@
+#import "./queries.graphql"
+
+mutation CreateSignupRound($conventionId: ID!, $signupRound: SignupRoundInput!) {
+  createSignupRound(input: { conventionId: $conventionId, signupRound: $signupRound }) {
+    signup_round {
+      id
+      ...SignupRoundFields
+    }
+  }
+}
+
+mutation UpdateSignupRound($id: ID!, $signupRound: SignupRoundInput!) {
+  updateSignupRound(input: { id: $id, signupRound: $signupRound }) {
+    signup_round {
+      id
+      ...SignupRoundFields
+    }
+  }
+}
+
+mutation DeleteSignupRound($id: ID!) {
+  deleteSignupRound(input: { id: $id }) {
+    clientMutationId
+  }
+}

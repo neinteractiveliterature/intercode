@@ -19,6 +19,17 @@ class ExecuteRankedChoiceSignupRoundService < CivilService::Service
   end
 
   def inner_call
+    prev_round =
+      signup_round
+        .convention
+        .signup_rounds
+        .reverse_chronological
+        .where(start: ...signup_round.start)
+        .where.not(id: signup_round.id)
+        .first
+    prev_max_signups = prev_round&.maximum_event_signups_as_number || 0
+    return success(decisions: []) if signup_round.maximum_event_signups_as_number <= prev_max_signups
+
     with_relevant_locks do
       loop do
         executed_choices_this_pass = execute_pass

@@ -4,26 +4,33 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
+export type SignupRoundFieldsFragment = { __typename: 'SignupRound', id: string, maximum_event_signups: string, ranked_choice_order?: Types.RankedChoiceOrder | null, start?: string | null, executed_at?: string | null };
+
 export type SignupRoundsAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type SignupRoundsAdminQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, signup_rounds: Array<{ __typename: 'SignupRound', id: string, maximum_event_signups: string, ranked_choice_order?: Types.RankedChoiceOrder | null, start?: string | null, executed_at?: string | null }> } };
 
-
+export const SignupRoundFieldsFragmentDoc = gql`
+    fragment SignupRoundFields on SignupRound {
+  id
+  maximum_event_signups
+  ranked_choice_order
+  start
+  executed_at
+}
+    `;
 export const SignupRoundsAdminQueryDocument = gql`
     query SignupRoundsAdminQuery {
   convention: conventionByRequestHost {
     id
     signup_rounds {
       id
-      maximum_event_signups
-      ranked_choice_order
-      start
-      executed_at
+      ...SignupRoundFields
     }
   }
 }
-    `;
+    ${SignupRoundFieldsFragmentDoc}`;
 
 /**
  * __useSignupRoundsAdminQuery__

@@ -44,6 +44,7 @@
       "maximumTicketsLabel": "",
       "openGraphImageHelpText": "",
       "openGraphImageLabel": "",
+      "signupScheduleMoved": "The signup schedule editor has moved! To edit the signup schedule for this convention, go to the Admin menu and choose “Signup rounds.”",
       "stripeAccountActive": "",
       "stripeAccountContinue": "",
       "stripeAccountDisplayName": "",
@@ -260,6 +261,7 @@
     "preview": "Previsualizar",
     "proposeEventLoggedOut": "Inicia sesión para proponer una actividad",
     "refresh": "Actualizar",
+    "reset": "",
     "save": "Save",
     "selectAll": "",
     "selectNone": ""
@@ -653,6 +655,7 @@
       "reports": "Informes",
       "rooms": "Salas",
       "signupModeration": "Control de inscripciones",
+      "signupRounds": "Signup Rounds",
       "siteContent": "Contenido de la página",
       "staffPositions": "Organigrama de organización",
       "store": "Tienda",
@@ -748,6 +751,9 @@
     "selectAmount": "",
     "unavailable": ""
   },
+  "prompts": {
+    "confirmReset": "Are you sure? This will discard any unsaved changes."
+  },
   "schedule": {
     "goToEvent": "",
     "legends": {
@@ -829,17 +835,61 @@
       "title": ""
     },
     "maximumSignups": {
-      "limitedCount": "",
+      "label": "Maximum signups allowed",
+      "limitedCount_one": "Up to {{ count }} event(s)",
+      "limitedCount_many": "Up to {{ count }} event(s)",
+      "limitedCount_other": "Up to {{ count }} event(s)",
+      "limitedCountLabel": "Max:",
+      "limitedUnspecified": "Limited number of signups",
       "notNow": "",
       "notYet": "",
       "unlimited": ""
     },
+    "mySignupQue": {
+      "settingsSection": {
+        "label": "Settings"
+      }
+    },
     "mySignupQueue": {
-      "queueHeader": "Signup Queue - Round {{ roundNumber }} - {{ roundDateTime }}",
-      "title": "My signup queue"
+      "allowWaitlist": {
+        "caption": "What should we do if all your choices are full?",
+        "no": "Don't sign me up for anything",
+        "yes": "Add me to the waitlist of my top-ranked choice"
+      },
+      "constraintsTable": {
+        "label": "Limits"
+      },
+      "conventionDaySignupsConstraint": {
+        "help": "How many events do you want to sign up for on {{ conventionDay }} (in addition to any events you are running?)",
+        "label": "{{ conventionDay }} event signups"
+      },
+      "maximumSignupsLimit": "{{ number }} at most",
+      "miscSignupsConstraint": "Events {{ interval }}",
+      "moveDown": "Move down in queue",
+      "moveUp": "Move up in queue",
+      "nextRoundAction": {
+        "limited_one": "At that time, players will be automatically signed up for up to {{ count }} event(s).",
+        "limited_many": "At that time, players will be automatically signed up for up to {{ count }} event(s).",
+        "limited_other": "At that time, players will be automatically signed up for up to {{ count }} event(s).",
+        "unlimited": "At that time, players will be signed up for events automatically based on their queue selections until their schedule is full."
+      },
+      "nextRoundInfo": "The next signup round starts at <2>{{nextRoundStart}}</2>. {{nextRoundActionDescription}}",
+      "noLimit": "No limit",
+      "remove": "Remove",
+      "removeConfirmPrompt": "Are you sure you want to remove {{ eventTitle }} from your signup queue?",
+      "title": "My signup queue",
+      "totalSignupsConstraint": {
+        "help": "How many events do you want to sign up for over the entirety of the con (in addition to any events you are running?)",
+        "label": "Total event signups"
+      }
     },
     "noPreference": "",
     "noSignupsAvailable": "",
+    "rankedChoiceOrder": {
+      "asc": "Ascending lottery number order",
+      "desc": "Descending lottery number order"
+    },
+    "rankedChoiceOrderLabel": "Ranked choice order",
     "runCardText": {
       "confirmed": "",
       "requestPending": "",
@@ -850,8 +900,14 @@
     "signedOutSignupButton": "",
     "signupButton": {
       "addToQueue": "Add to my queue",
+      "inMyQueue": "In my queue",
       "signUpNow": "Sign up now",
       "waitlist": "Waitlist"
+    },
+    "signupRounds": {
+      "preSignupRoundPeriod": "Pre-signups period",
+      "scheduleHeader": "Schedule",
+      "scheduleRowHeader": "Round {{ number }}"
     },
     "signupSummaryLink": "",
     "states": {
@@ -905,6 +961,7 @@
     },
     "signupChange": {
       "actions": {
+        "acceptSignupRankedChoice": "accepted signup ranked choice",
         "acceptSignupRequest": "",
         "adminCreateSignup": "",
         "changeRegistrationPolicy": "",
@@ -920,5 +977,11 @@
     "ticketStatus": {
       "unpaid": "No pagado"
     }
+  },
+  "timespans": {
+    "finiteBothEnds": "{{ start }} to {{ finish }}",
+    "infiniteBothEnds": "anytime",
+    "infiniteFinish": "from {{ start }} indefinitely",
+    "infiniteStart": "anytime up to {{ finish }}"
   }
 }

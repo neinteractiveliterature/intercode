@@ -9,6 +9,27 @@ describe ExecuteRankedChoiceSignupRoundService do
   let(:the_run) { create(:run, event:) }
 
   describe "ordering" do
+    it "does not require an order if the round does not sign people up" do
+      not_yet_round = create(:signup_round, convention:, maximum_event_signups: "not_yet", start: 2.days.ago)
+      first_round =
+        create(:signup_round, convention:, ranked_choice_order: "asc", maximum_event_signups: "1", start: 1.day.ago)
+      second_first_round =
+        create(:signup_round, convention:, ranked_choice_order: "asc", maximum_event_signups: "1", start: 6.hours.ago)
+      not_now_round =
+        create(
+          :signup_round,
+          convention:,
+          ranked_choice_order: "asc",
+          maximum_event_signups: "not_now",
+          start: Time.now
+        )
+
+      [not_yet_round, first_round, second_first_round, not_now_round].each_with_index do |round, index|
+        result = ExecuteRankedChoiceSignupRoundService.new(signup_round: round, whodunit: nil).call
+        assert result.success?, "Executing round #{index + 1} failed: #{result.exception}"
+      end
+    end
+
     it "does ascending order correctly" do
       signup_round = create(:signup_round, convention:, ranked_choice_order: "asc")
       low_number_user = create(:user_con_profile, convention:, lottery_number: 1, ranked_choice_allow_waitlist: false)

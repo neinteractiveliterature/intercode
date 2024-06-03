@@ -2,6 +2,7 @@ import { parseIntOrNull } from '@neinteractiveliterature/litform';
 import { MaximumEventSignupsValue } from '../SignupRoundUtils';
 import { useTranslation } from 'react-i18next';
 import React, { useRef } from 'react';
+import isEqual from 'lodash/isEqual';
 
 type LimitedMaximumEventSignupsInputState = {
   valueType: 'limited';
@@ -41,9 +42,10 @@ function maximumEventSignupsValueToInputState(
 type MaximumEventSignupsInputProps = {
   value: MaximumEventSignupsValue | undefined;
   onChange: React.Dispatch<MaximumEventSignupsValue | undefined>;
+  id?: string;
 };
 
-function MaximumEventSignupsInput({ value, onChange }: MaximumEventSignupsInputProps) {
+function MaximumEventSignupsInput({ value, onChange, id }: MaximumEventSignupsInputProps) {
   const { t } = useTranslation();
   const [inputState, setInputState] = React.useState<MaximumEventSignupsInputState>(() =>
     maximumEventSignupsValueToInputState(value),
@@ -74,9 +76,24 @@ function MaximumEventSignupsInput({ value, onChange }: MaximumEventSignupsInputP
     }
   }, [inputState]);
 
+  React.useEffect(() => {
+    if (value == null) {
+      return;
+    }
+
+    const valueAsInputState = maximumEventSignupsValueToInputState(value);
+    setInputState((prevInputState) => {
+      if (!isEqual(valueAsInputState, prevInputState)) {
+        return valueAsInputState;
+      } else {
+        return prevInputState;
+      }
+    });
+  }, [value]);
+
   return (
     <div className="input-group">
-      <select className="form-select" value={inputState.valueType} onChange={valueTypeChanged}>
+      <select className="form-select" value={inputState.valueType} onChange={valueTypeChanged} id={id}>
         <option aria-label="Blank placeholder option" />
         <option value="not_yet">{t('signups.maximumSignups.notYet')}</option>
         <option value="limited">{t('signups.maximumSignups.limitedUnspecified', 'Limited number of signups')}</option>
@@ -92,7 +109,7 @@ function MaximumEventSignupsInput({ value, onChange }: MaximumEventSignupsInputP
             id={limitedCountId}
             aria-labelledby={`${limitedCountId}-label`}
             className="form-control"
-            value={inputState.limitedCount}
+            value={inputState.limitedCount ?? ''}
             type="number"
             min={1}
             onChange={(event) =>
