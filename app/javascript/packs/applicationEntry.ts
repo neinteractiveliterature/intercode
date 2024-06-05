@@ -1,4 +1,5 @@
 import './setPublicPath';
+import './sentryInit';
 import './applicationStyles';
 
 import(/* webpackChunkName: 'bootstrap-js' */ 'bootstrap');

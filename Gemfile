@@ -176,3 +176,5 @@ group :test do
   # Not sure if we actually need it or not, but adding this for now to unbreak controller tests
   gem "rails-controller-testing"
 end
+
+gem "sentry-ruby", "~> 5.17"

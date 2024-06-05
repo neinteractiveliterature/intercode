@@ -10,4 +10,9 @@ declare class GlobalRollbar {
 
 declare global {
   const Rollbar: GlobalRollbar | undefined;
+
+  declare interface Window {
+    intercodeAssetsHost?: string;
+    sentryFrontendDSN?: string;
+  }
 }

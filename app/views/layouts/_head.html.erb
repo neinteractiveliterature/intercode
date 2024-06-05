@@ -5,6 +5,11 @@
     window.intercodeAssetsHost = <%=raw ENV['ASSETS_HOST'].to_json %>;
   </script>
 <% end -%>
+<% if ENV['SENTRY_FRONTEND_DSN'].present? -%>
+  <script type="application/javascript">
+    window.sentryFrontendDSN = <%=raw ENV['SENTRY_FRONTEND_DSN'].to_json %>;
+  </script>
+<% end -%>
 <%= javascript_include_tag url_with_possible_host('/packs/application.js', ENV['ASSETS_HOST']), defer: true, type: 'module' %>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
 <meta property="og:url" content="<%= request.url %>">
