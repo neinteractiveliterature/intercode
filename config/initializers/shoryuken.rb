@@ -69,6 +69,16 @@ class ShoryukenJSONLogging
   end
 end
 
+class SentryReporter
+  def call(_worker_instance, queue, _sqs_msg, body)
+    Sentry.with_scope do |scope|
+      scope.set_tags(job: body["job_class"], queue: queue)
+      scope.set_extras(message: body)
+      yield
+    end
+  end
+end
+
 Shoryuken.configure_server do |config|
   # Replace Rails logger so messages are logged wherever Shoryuken is logging
   # Note: this entire block is only run by the processor, so we don't overwrite
@@ -83,7 +93,10 @@ Shoryuken.configure_server do |config|
   Shoryuken.sqs_client_receive_message_opts[:ahoy] = { wait_time_seconds: 20 }
   Shoryuken.sqs_client_receive_message_opts[:cloudwatch_scheduler] = { wait_time_seconds: 20 }
 
-  config.server_middleware { |chain| chain.add ShoryukenJSONLogging } if ENV["JSON_LOGGING"]
+  config.server_middleware do |chain|
+    chain.add ShoryukenJSONLogging if ENV["JSON_LOGGING"]
+    chain.add SentryReporter
+  end
 
   # Don't spam the logs.  Counterintuitively this is telling AWS SDK what level to send its logs at, not what level to
   # show logs at least
