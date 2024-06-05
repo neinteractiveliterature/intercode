@@ -544,6 +544,9 @@ GEM
     safely_block (0.4.0)
     scheduled_value (1.4.0)
       sorted_set (~> 1.0)
+    sentry-rails (5.17.3)
+      railties (>= 5.0)
+      sentry-ruby (~> 5.17.3)
     sentry-ruby (5.17.3)
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
@@ -720,6 +723,7 @@ DEPENDENCIES
   rubocop-sequel
   ruby-vips
   scheduled_value (~> 1.4.0)
+  sentry-rails (~> 5.17)
   sentry-ruby (~> 5.17)
   sequel
   shoryuken
