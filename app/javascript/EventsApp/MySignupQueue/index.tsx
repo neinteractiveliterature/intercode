@@ -1,4 +1,4 @@
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { formatLCM, getDateTimeFormat } from '../../TimeUtils';
 import { DateTime } from 'luxon';
 import { ErrorDisplay, LoadQueryWrapper, LoadingIndicator, useConfirm } from '@neinteractiveliterature/litform';
@@ -18,7 +18,7 @@ import RankedChoiceUserSettings from './RankedChoiceUserSettings';
 import UserConProfileSignupsCard from '../SignupAdmin/UserConProfileSignupsCard';
 import AppRootContext from '../../AppRootContext';
 import classNames from 'classnames';
-import { parseSignupRounds } from '../../SignupRoundUtils';
+import NextRoundInfoBox from './NextRoundInfoBox';
 
 const MySignupQueue = LoadQueryWrapper(useMySignupQueueQuery, ({ data }) => {
   const { t } = useTranslation();
@@ -39,58 +39,13 @@ const MySignupQueue = LoadQueryWrapper(useMySignupQueueQuery, ({ data }) => {
     return sortBy(pendingChoices, (request) => request.priority);
   }, [data.convention.my_signup_ranked_choices]);
 
-  const nextRound = useMemo(() => {
-    const parsedRounds = parseSignupRounds(data.convention.signup_rounds);
-    const now = DateTime.local();
-    const currentIndex = parsedRounds.findIndex((round) => round.timespan.includesTime(now));
-
-    if (currentIndex < parsedRounds.length - 1) {
-      return parsedRounds[currentIndex + 1];
-    }
-  }, [data.convention.signup_rounds]);
-
-  const nextRoundActionDescription = useMemo(() => {
-    if (!nextRound) {
-      return undefined;
-    }
-
-    if (nextRound.maximum_event_signups === 'unlimited') {
-      return t(
-        'signups.mySignupQueue.nextRoundAction.unlimited',
-        'At that time, players will be signed up for events automatically based on their queue selections until their schedule is full.',
-      );
-    }
-
-    if (typeof nextRound.maximum_event_signups === 'number') {
-      return t(
-        'signups.mySignupQueue.nextRoundAction.limited',
-        'At that time, players will be automatically signed up for up to {{ count }} event(s).',
-        { count: nextRound.maximum_event_signups },
-      );
-    }
-  }, [nextRound, t]);
-
   return (
     <>
       <h1>{t('signups.mySignupQueue.title', 'My signup queue')}</h1>
 
       <div className="row mb-4">
         <div className="col-12 col-md-8">
-          {nextRound && (
-            <div className="alert alert-info mb-4">
-              <Trans i18nKey="signups.mySignupQueue.nextRoundInfo">
-                The next signup round starts at{' '}
-                <strong>
-                  {{
-                    nextRoundStart: nextRound.timespan.start
-                      ? formatLCM(nextRound.timespan.start, getDateTimeFormat('shortWeekdayDateTimeWithZone', t))
-                      : '',
-                  }}
-                </strong>
-                . {{ nextRoundActionDescription }}
-              </Trans>
-            </div>
-          )}
+          <NextRoundInfoBox />
           <section className="card">
             <ul className="list-group list-group-flush">
               {pendingChoices.map((pendingChoice, index) => (
