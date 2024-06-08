@@ -43,9 +43,9 @@ describe('ConventionForm', () => {
     show_schedule: ShowSchedule.No,
     show_event_list: ShowSchedule.No,
     hidden: false,
-    maximum_event_signups: {
-      timespans: [{ start: null, finish: null, value: 'unlimited' }],
-    },
+    signup_rounds: [
+      { __typename: 'SignupRound', id: '0', start: null, maximum_event_signups: 'unlimited' }
+    ],
     maximum_tickets: null,
     ticket_name: 'ticket',
     ticketNamePlural: 'tickets',
@@ -86,12 +86,10 @@ describe('ConventionForm', () => {
         timezone_name: 'Etc/UTC',
         accepting_proposals: true,
         show_schedule: ShowSchedule.Gms,
-        maximum_event_signups: {
-          timespans: [
-            { start: null, finish: now, value: 'not_yet' },
-            { start: now, finish: null, value: 'unlimited' },
-          ],
-        },
+        signup_rounds: [
+          { __typename: 'SignupRound', id: '1', start: null, maximum_event_signups: 'not_yet' },
+          { __typename: 'SignupRound', id: '2', start: now, maximum_event_signups: 'unlimited' }
+        ],
         maximum_tickets: 100,
       },
     );
