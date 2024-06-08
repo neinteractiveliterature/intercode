@@ -2,13 +2,14 @@ require "test_helper"
 
 describe ExecuteRankedChoiceSignupService do
   let(:convention) { create(:convention, :with_notification_templates) }
+  let(:signup_round) { create(:signup_round, convention:) }
 
   it "signs a user up in the happy path" do
     event = create(:event, convention:)
     the_run = create(:run, event:)
     signup_ranked_choice = create(:signup_ranked_choice, target_run: the_run)
 
-    result = ExecuteRankedChoiceSignupService.new(signup_ranked_choice:, whodunit: nil).call!
+    result = ExecuteRankedChoiceSignupService.new(signup_round:, signup_ranked_choice:, whodunit: nil).call!
 
     signup_ranked_choice.reload
     assert_equal "signup", result.decision.decision
@@ -27,7 +28,7 @@ describe ExecuteRankedChoiceSignupService do
     the_run = create(:run, event:)
     signup_ranked_choice = create(:signup_ranked_choice, target_run: the_run)
 
-    result = ExecuteRankedChoiceSignupService.new(signup_ranked_choice:, whodunit: nil).call!
+    result = ExecuteRankedChoiceSignupService.new(signup_round:, signup_ranked_choice:, whodunit: nil).call!
 
     signup_ranked_choice.reload
     assert_equal "skip_choice", result.decision.decision
@@ -47,7 +48,13 @@ describe ExecuteRankedChoiceSignupService do
     the_run = create(:run, event:)
     signup_ranked_choice = create(:signup_ranked_choice, target_run: the_run)
 
-    result = ExecuteRankedChoiceSignupService.new(signup_ranked_choice:, whodunit: nil, allow_waitlist: true).call!
+    result =
+      ExecuteRankedChoiceSignupService.new(
+        signup_round:,
+        signup_ranked_choice:,
+        whodunit: nil,
+        allow_waitlist: true
+      ).call!
 
     signup_ranked_choice.reload
     assert_equal "waitlist", result.decision.decision
@@ -62,7 +69,7 @@ describe ExecuteRankedChoiceSignupService do
     the_other_run = create(:run, event:, starts_at: the_run.starts_at)
     conflicting_signup = create(:signup, user_con_profile: signup_ranked_choice.user_con_profile, run: the_other_run)
 
-    result = ExecuteRankedChoiceSignupService.new(signup_ranked_choice:, whodunit: nil).call!
+    result = ExecuteRankedChoiceSignupService.new(signup_round:, signup_ranked_choice:, whodunit: nil).call!
 
     signup_ranked_choice.reload
     assert_equal "skip_choice", result.decision.decision
@@ -80,7 +87,7 @@ describe ExecuteRankedChoiceSignupService do
       the_run = create(:run, event:)
       signup_ranked_choice = create(:signup_ranked_choice, target_run: the_run)
 
-      result = ExecuteRankedChoiceSignupService.new(signup_ranked_choice:, whodunit: nil).call!
+      result = ExecuteRankedChoiceSignupService.new(signup_round:, signup_ranked_choice:, whodunit: nil).call!
 
       signup_ranked_choice.reload
       assert_equal "signup", result.decision.decision
@@ -100,7 +107,13 @@ describe ExecuteRankedChoiceSignupService do
       the_run = create(:run, event:)
       signup_ranked_choice = create(:signup_ranked_choice, target_run: the_run)
 
-      result = ExecuteRankedChoiceSignupService.new(signup_ranked_choice:, whodunit: nil, allow_waitlist: true).call!
+      result =
+        ExecuteRankedChoiceSignupService.new(
+          signup_round:,
+          signup_ranked_choice:,
+          whodunit: nil,
+          allow_waitlist: true
+        ).call!
 
       signup_ranked_choice.reload
       assert_equal "waitlist", result.decision.decision
@@ -121,7 +134,7 @@ describe ExecuteRankedChoiceSignupService do
         maximum_signups: 3
       )
 
-      result = ExecuteRankedChoiceSignupService.new(signup_ranked_choice:, whodunit: nil).call!
+      result = ExecuteRankedChoiceSignupService.new(signup_round:, signup_ranked_choice:, whodunit: nil).call!
 
       signup_ranked_choice.reload
       assert_equal "signup", result.decision.decision
@@ -139,7 +152,7 @@ describe ExecuteRankedChoiceSignupService do
       _not_counted_signup = create(:signup, user_con_profile:, run: other_run, counted: false)
       create(:ranked_choice_user_constraint, user_con_profile:, maximum_signups: 1)
 
-      result = ExecuteRankedChoiceSignupService.new(signup_ranked_choice:, whodunit: nil).call!
+      result = ExecuteRankedChoiceSignupService.new(signup_round:, signup_ranked_choice:, whodunit: nil).call!
 
       signup_ranked_choice.reload
       assert_equal "signup", result.decision.decision
@@ -157,7 +170,7 @@ describe ExecuteRankedChoiceSignupService do
       _other_signup = create(:signup, user_con_profile:, run: other_run)
       constraint = create(:ranked_choice_user_constraint, user_con_profile:, maximum_signups: 1)
 
-      result = ExecuteRankedChoiceSignupService.new(signup_ranked_choice:, whodunit: nil).call!
+      result = ExecuteRankedChoiceSignupService.new(signup_round:, signup_ranked_choice:, whodunit: nil).call!
 
       signup_ranked_choice.reload
       assert_equal "skip_choice", result.decision.decision
@@ -175,7 +188,7 @@ describe ExecuteRankedChoiceSignupService do
       _other_signup = create(:signup, user_con_profile:, run: other_run)
       create(:ranked_choice_user_constraint, user_con_profile:, maximum_signups: 1, start: other_run.starts_at - 1.hour)
 
-      result = ExecuteRankedChoiceSignupService.new(signup_ranked_choice:, whodunit: nil).call!
+      result = ExecuteRankedChoiceSignupService.new(signup_round:, signup_ranked_choice:, whodunit: nil).call!
 
       signup_ranked_choice.reload
       assert_equal "signup", result.decision.decision

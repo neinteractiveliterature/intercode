@@ -4,7 +4,8 @@ class ExecuteRankedChoiceSignupService < CivilService::Service
   end
   self.result_class = Result
 
-  attr_reader :whodunit,
+  attr_reader :signup_round,
+              :whodunit,
               :signup_ranked_choice,
               :constraints,
               :skip_locking,
@@ -15,6 +16,7 @@ class ExecuteRankedChoiceSignupService < CivilService::Service
   delegate :convention, to: :user_con_profile
 
   def initialize(
+    signup_round:,
     whodunit:,
     signup_ranked_choice:,
     allow_waitlist: false,
@@ -22,6 +24,7 @@ class ExecuteRankedChoiceSignupService < CivilService::Service
     skip_locking: false,
     suppress_notifications: false
   )
+    @signup_round = signup_round
     @whodunit = whodunit
     @signup_ranked_choice = signup_ranked_choice
     @allow_waitlist = allow_waitlist
@@ -75,7 +78,14 @@ class ExecuteRankedChoiceSignupService < CivilService::Service
   end
 
   def do_skip_choice(reason, extra = nil)
-    RankedChoiceDecision.create!(decision: :skip_choice, user_con_profile:, reason:, signup_ranked_choice:, extra:)
+    RankedChoiceDecision.create!(
+      signup_round:,
+      decision: :skip_choice,
+      user_con_profile:,
+      reason:,
+      signup_ranked_choice:,
+      extra:
+    )
   end
 
   def do_signup
@@ -87,6 +97,7 @@ class ExecuteRankedChoiceSignupService < CivilService::Service
         suppress_notifications:
       ).call!
     RankedChoiceDecision.create!(
+      signup_round:,
       decision: :signup,
       user_con_profile:,
       signup_ranked_choice:,
@@ -104,6 +115,7 @@ class ExecuteRankedChoiceSignupService < CivilService::Service
         suppress_notifications:
       ).call!
     RankedChoiceDecision.create!(
+      signup_round:,
       decision: :waitlist,
       user_con_profile:,
       signup_ranked_choice:,

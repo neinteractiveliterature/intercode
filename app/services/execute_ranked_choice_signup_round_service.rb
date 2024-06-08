@@ -81,7 +81,12 @@ class ExecuteRankedChoiceSignupRoundService < CivilService::Service
 
     pending_choices = user_con_profile.signup_ranked_choices.where(state: "pending").order(:priority).to_a
     unless pending_choices.any?
-      decisions << RankedChoiceDecision.create!(decision: :skip_user, user_con_profile:, reason: :no_pending_choices)
+      decisions << RankedChoiceDecision.create!(
+        signup_round:,
+        decision: :skip_user,
+        user_con_profile:,
+        reason: :no_pending_choices
+      )
       return
     end
 
@@ -95,6 +100,7 @@ class ExecuteRankedChoiceSignupRoundService < CivilService::Service
   def check_skip_user_for_policy_reasons(constraints)
     unless constraints.has_ticket_if_required?
       decisions << RankedChoiceDecision.create!(
+        signup_round:,
         decision: :skip_user,
         user_con_profile: constraints.user_con_profile,
         reason: :missing_ticket
@@ -106,6 +112,7 @@ class ExecuteRankedChoiceSignupRoundService < CivilService::Service
              constraints.current_signup_count + constraints.pending_signup_request_count + 1
            )
       decisions << RankedChoiceDecision.create!(
+        signup_round:,
         decision: :skip_user,
         user_con_profile: constraints.user_con_profile,
         reason: :no_more_signups_allowed
@@ -119,6 +126,7 @@ class ExecuteRankedChoiceSignupRoundService < CivilService::Service
   def execute_choice(constraints, signup_ranked_choice, allow_waitlist: false)
     result =
       ExecuteRankedChoiceSignupService.new(
+        signup_round:,
         whodunit:,
         signup_ranked_choice:,
         allow_waitlist:,

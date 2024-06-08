@@ -2313,7 +2313,8 @@ CREATE TABLE public.ranked_choice_decisions (
     signup_request_id bigint,
     extra jsonb,
     created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    updated_at timestamp(6) without time zone NOT NULL,
+    signup_round_id bigint
 );
 
 
@@ -4758,6 +4759,13 @@ CREATE INDEX index_ranked_choice_decisions_on_signup_request_id ON public.ranked
 
 
 --
+-- Name: index_ranked_choice_decisions_on_signup_round_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ranked_choice_decisions_on_signup_round_id ON public.ranked_choice_decisions USING btree (signup_round_id);
+
+
+--
 -- Name: index_ranked_choice_decisions_on_user_con_profile_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -5960,6 +5968,14 @@ ALTER TABLE ONLY public.product_variants
 
 
 --
+-- Name: ranked_choice_decisions fk_rails_de9f967785; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ranked_choice_decisions
+    ADD CONSTRAINT fk_rails_de9f967785 FOREIGN KEY (signup_round_id) REFERENCES public.signup_rounds(id);
+
+
+--
 -- Name: products fk_rails_e4e774d01f; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6086,6 +6102,7 @@ ALTER TABLE ONLY public.cms_files_pages
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20240608175912'),
 ('20240526181616'),
 ('20240505160246'),
 ('20240504165651'),
