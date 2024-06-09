@@ -9850,13 +9850,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"commander@npm:~11.1.0":
-  version: 11.1.0
-  resolution: "commander@npm:11.1.0"
-  checksum: 10c0/13cc6ac875e48780250f723fb81c1c1178d35c5decb1abb1b628b3177af08a8554e76b2c0f29de72d69eef7c864d12613272a71fabef8047922bc622ab75a179
-  languageName: node
-  linkType: hard
-
 "commander@npm:~12.1.0":
   version: 12.1.0
   resolution: "commander@npm:12.1.0"
@@ -10746,13 +10739,6 @@ __metadata:
   version: 3.0.2
   resolution: "dateformat@npm:3.0.2"
   checksum: 10c0/92d11de3d58f98810a8c66e182431a33cafcb87c848a6186417561f862a092e7a440ce3b80b5dd2bd7178803e8631581c57a07a92d775f9a9078afd85d07a7c3
-  languageName: node
-  linkType: hard
-
-"de-indent@npm:^1.0.2":
-  version: 1.0.2
-  resolution: "de-indent@npm:1.0.2"
-  checksum: 10c0/7058ce58abd6dfc123dd204e36be3797abd419b59482a634605420f47ae97639d0c183ec5d1b904f308a01033f473673897afc2bd59bc620ebf1658763ef4291
   languageName: node
   linkType: hard
 
@@ -13858,7 +13844,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"he@npm:^1.1.0, he@npm:^1.2.0":
+"he@npm:^1.2.0":
   version: 1.2.0
   resolution: "he@npm:1.2.0"
   bin:
@@ -14285,15 +14271,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next-parser@npm:8.13.0":
-  version: 8.13.0
-  resolution: "i18next-parser@npm:8.13.0"
+"i18next-parser@npm:9.0.0":
+  version: 9.0.0
+  resolution: "i18next-parser@npm:9.0.0"
   dependencies:
     "@babel/runtime": "npm:^7.23.2"
     broccoli-plugin: "npm:^4.0.7"
     cheerio: "npm:^1.0.0-rc.2"
     colors: "npm:1.4.0"
-    commander: "npm:~11.1.0"
+    commander: "npm:~12.1.0"
     eol: "npm:^0.9.1"
     esbuild: "npm:^0.20.1"
     fs-extra: "npm:^11.1.0"
@@ -14306,10 +14292,9 @@ __metadata:
     typescript: "npm:^5.0.4"
     vinyl: "npm:~3.0.0"
     vinyl-fs: "npm:^4.0.0"
-    vue-template-compiler: "npm:^2.6.11"
   bin:
     i18next: bin/cli.js
-  checksum: 10c0/e767d31cd2e05218ccebdff9734d9db9249a7de592ca435092c7561639fec2caad85ee48f282c1f0dab05c935b7954e4054128ccd944b7daa708ff947adb1e28
+  checksum: 10c0/000dde4d182fe826e15155874516660e9760bb5b7bb3256e46c9e62b38ed1e4d544c1882fc83545cf4a3ea77506793d06eca2aa9c46aadf64a9c3164fb19938d
   languageName: node
   linkType: hard
 
@@ -21435,7 +21420,7 @@ __metadata:
     husky: "npm:9.0.11"
     i18next: "npm:23.11.5"
     i18next-intervalplural-postprocessor: "npm:3.0.0"
-    i18next-parser: "npm:8.13.0"
+    i18next-parser: "npm:9.0.0"
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
     jest-html-reporter: "npm:3.10.2"
@@ -24109,16 +24094,6 @@ __metadata:
     "@mapbox/vector-tile": "npm:^1.3.1"
     pbf: "npm:^3.0.5"
   checksum: 10c0/7607573322bf79cdbca244746ab833b302391f790a539728c118d383d2d73a6ceaabad19e01cdb3ed85d98f3dece3efb5af6ae8b186222e026526dd2a7e6d0ed
-  languageName: node
-  linkType: hard
-
-"vue-template-compiler@npm:^2.6.11":
-  version: 2.6.12
-  resolution: "vue-template-compiler@npm:2.6.12"
-  dependencies:
-    de-indent: "npm:^1.0.2"
-    he: "npm:^1.1.0"
-  checksum: 10c0/66a8d47c35ff2f7318e4a80c9807baa1e8e8c6faa1563030f9bca9702585d77e106303665c3828efff22bd9a7a6631755f9d2e1269248f705ece975ff4f7ad2f
   languageName: node
   linkType: hard
 
