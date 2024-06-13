@@ -31,15 +31,15 @@
 #  fk_rails_...  (staff_position_id => staff_positions.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+# rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 FactoryBot.define do
   factory :organization_permission, class: Permission do
     association :organization_role
-    permission { 'manage_organization_access' }
+    permission { "manage_organization_access" }
   end
 
   factory :event_category_permission, class: Permission do
-    permission { 'update_events' }
+    permission { "update_events" }
 
     before(:create) do |permission|
       convention = permission.staff_position&.convention || permission.model&.convention || create(:convention)

@@ -21,7 +21,7 @@
 FactoryBot.define do
   factory :cms_variable do
     sequence(:key) { |n| "variable_#{n}" }
-    value { 'foobar' }
+    value { "foobar" }
     association :parent, factory: :convention
   end
 end

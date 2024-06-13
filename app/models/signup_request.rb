@@ -36,15 +36,15 @@
 
 class SignupRequest < ApplicationRecord
   belongs_to :user_con_profile
-  belongs_to :target_run, class_name: 'Run'
-  belongs_to :replace_signup, class_name: 'Signup', optional: true
-  belongs_to :result_signup, class_name: 'Signup', optional: true
-  belongs_to :updated_by, class_name: 'User'
+  belongs_to :target_run, class_name: "Run"
+  belongs_to :replace_signup, class_name: "Signup", optional: true
+  belongs_to :result_signup, class_name: "Signup", optional: true
+  belongs_to :updated_by, class_name: "User", optional: true
   has_one :convention, through: :user_con_profile
 
   validates :state, presence: true, inclusion: { in: Types::SignupRequestStateType.values.keys }
   validate :ensure_all_fields_point_at_the_same_convention
-  validates :result_signup, presence: { if: ->(signup_request) { signup_request.state == 'accepted' } }
+  validates :result_signup, presence: { if: ->(signup_request) { signup_request.state == "accepted" } }
 
   def to_liquid
     SignupRequestDrop.new(self)

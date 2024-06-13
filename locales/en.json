@@ -7,6 +7,7 @@
   },
   "admin": {
     "convention": {
+      "defaultCurrency": "Default currency for convention",
       "faviconHelpText": "Used by browsers for the icon in tabs for this site.  180x180 pixels is recommended.",
       "faviconLabel": "Favicon",
       "header": {
@@ -40,6 +41,7 @@
       "maximumTicketsLabel": "Maximum {{ ticketNamePlural }}",
       "openGraphImageHelpText": "Used by social media sites for previewing links to this site. 1200x630 pixels is recommended for Facebook.",
       "openGraphImageLabel": "OpenGraph image",
+      "signupScheduleMoved": "The signup schedule editor has moved! To edit the signup schedule for this convention, go to the Admin menu and choose “Signup rounds.”",
       "stripeAccountActive": "{{ conventionName }} is connected to a Stripe account and is able to sell {{ ticketNamePlural }} and/or products.",
       "stripeAccountContinue": "Continue Stripe account setup for {{ conventionName }}",
       "stripeAccountDisplayName": "Display name",
@@ -117,6 +119,7 @@
       },
       "products": {
         "available": "Available for purchase",
+        "clickwrapAgreementLabel": "Product-specific clickwrap agreement",
         "deleteConfirmation": "Are you sure you want to delete the product {{ productName }}?",
         "deleteLabel": "Delete product",
         "descriptionLabel": "Product description",
@@ -250,6 +253,7 @@
     "preview": "Preview",
     "proposeEventLoggedOut": "Log in to propose an event",
     "refresh": "Refresh",
+    "reset": "Reset",
     "save": "Save",
     "selectAll": "Select all",
     "selectNone": "Select none"
@@ -318,13 +322,14 @@
     "noon": "'noon'",
     "noonWithZone": "'noon' ZZZZ",
     "shortDateTime": "MMM d, yyyy h:mmaaa",
-    "shortDateTimeWithZone": "h:mmaaa ZZZZ",
+    "shortDateTimeWithZone": "MMM d, yyyy h:mmaaa ZZZZ",
     "shortHour": "haaa",
     "shortTime": "h:mmaaa",
     "shortTimeWithSeconds": "h:mm:ssaaa",
     "shortTimeWithZone": "h:mmaaa ZZZZ",
     "shortWeekday": "ccc",
     "shortWeekdayDateTime": "ccc, MMM d, yyyy h:mmaaa",
+    "shortWeekdayDateTimeWithZone": "ccc, MMM d, yyyy h:mmaaa ZZZZ",
     "shortWeekdayTime": "ccc h:mmaaa",
     "shortWeekdayTimeWithZone": "ccc h:mmaaa ZZZZ",
     "weekdayMidnight": "ccc 'midnight'",
@@ -631,6 +636,7 @@
       "reports": "Reports",
       "rooms": "Rooms",
       "signupModeration": "Signup Moderation",
+      "signupRounds": "Signup Rounds",
       "siteContent": "Site Content",
       "staffPositions": "Staff Positions",
       "store": "Store",
@@ -649,6 +655,7 @@
       "eventCatalog": "Event Catalog",
       "eventSchedule": "Event Schedule",
       "eventsList": "List of Events",
+      "mySignupQueue": "My Signup Queue",
       "newProposal": "Propose an Event"
     },
     "general": {
@@ -723,6 +730,9 @@
     "scheduledValueWithNext": "<bold>{{ price, money }}</bold><break/><sm>(<bold>{{ nextPrice, money }}</bold> starting {{ nextChange, dateTimeNamed(format: shortDateTime) }})</sm>",
     "selectAmount": "Amount",
     "unavailable": "Currently unavailable"
+  },
+  "prompts": {
+    "confirmReset": "Are you sure? This will discard any unsaved changes."
   },
   "schedule": {
     "goToEvent": "Go to event",
@@ -802,13 +812,59 @@
       "title": "Your {{ ticketName }} for {{ eventTitle }}"
     },
     "maximumSignups": {
-      "limitedCount": "Up to {{ count }} event",
+      "label": "Maximum signups allowed",
+      "limitedCount_one": "Up to {{ count }} event",
+      "limitedCount_other": "Up to {{ count }} events",
+      "limitedCountLabel": "Max:",
+      "limitedUnspecified": "Limited number of signups",
       "notNow": "Signups frozen",
       "notYet": "No signups yet",
       "unlimited": "Signups fully open"
     },
+    "mySignupQue": {
+      "settingsSection": {
+        "label": "Settings"
+      }
+    },
+    "mySignupQueue": {
+      "allowWaitlist": {
+        "caption": "What should we do if all your choices are full?",
+        "no": "Don't sign me up for anything",
+        "yes": "Add me to the waitlist of my top-ranked choice"
+      },
+      "constraintsTable": {
+        "label": "Limits"
+      },
+      "conventionDaySignupsConstraint": {
+        "help": "How many events do you want to sign up for on {{ conventionDay }} (in addition to any events you are running?)",
+        "label": "{{ conventionDay }} event signups"
+      },
+      "maximumSignupsLimit": "{{ number }} at most",
+      "miscSignupsConstraint": "Events {{ interval }}",
+      "moveDown": "Move down in queue",
+      "moveUp": "Move up in queue",
+      "nextRoundAction": {
+        "limited_one": "At that time, players will be automatically signed up for up to {{ count }} event(s).",
+        "limited_other": "At that time, players will be automatically signed up for up to {{ count }} event(s).",
+        "unlimited": "At that time, players will be signed up for events automatically based on their queue selections until their schedule is full."
+      },
+      "nextRoundInfo": "The next signup round starts at <2>{{nextRoundStart}}</2>. {{nextRoundActionDescription}}",
+      "noLimit": "No limit",
+      "remove": "Remove",
+      "removeConfirmPrompt": "Are you sure you want to remove {{ eventTitle }} from your signup queue?",
+      "title": "My signup queue",
+      "totalSignupsConstraint": {
+        "help": "How many events do you want to sign up for over the entirety of the con (in addition to any events you are running?)",
+        "label": "Total event signups"
+      }
+    },
     "noPreference": "No preference",
     "noSignupsAvailable": "This event does not take signups.",
+    "rankedChoiceOrder": {
+      "asc": "Ascending lottery number order",
+      "desc": "Descending lottery number order"
+    },
+    "rankedChoiceOrderLabel": "Ranked choice order",
     "runCardText": {
       "confirmed": "You are signed up.",
       "requestPending": "You have requested to sign up for this event.",
@@ -817,7 +873,17 @@
       "waitlistedUnknownPosition": "You are on the waitlist."
     },
     "signedOutSignupButton": "<0>Log in</0> to sign up for<2></2><3>{{eventTitle}}</3>",
-    "signupButton": "Sign up",
+    "signupButton": {
+      "addToQueue": "Add to my queue",
+      "inMyQueue": "In my queue",
+      "signUpNow": "Sign up now",
+      "waitlist": "Waitlist"
+    },
+    "signupRounds": {
+      "preSignupRoundPeriod": "Pre-signups period",
+      "roundNumber": "Round {{ number }}",
+      "scheduleHeader": "Schedule"
+    },
     "signupSummaryLink": "Attendee-facing signup summary",
     "states": {
       "bucketWithNoPreference": "{{ bucketName }} (no preference)",
@@ -869,6 +935,7 @@
     },
     "signupChange": {
       "actions": {
+        "acceptSignupRankedChoice": "accepted signup ranked choice",
         "acceptSignupRequest": "accepted signup request",
         "adminCreateSignup": "admin-created signup",
         "changeRegistrationPolicy": "registration policy change",
@@ -884,5 +951,11 @@
     "ticketStatus": {
       "unpaid": "Unpaid"
     }
+  },
+  "timespans": {
+    "finiteBothEnds": "{{ start }} to {{ finish }}",
+    "infiniteBothEnds": "anytime",
+    "infiniteFinish": "from {{ start }} indefinitely",
+    "infiniteStart": "anytime up to {{ finish }}"
   }
 }

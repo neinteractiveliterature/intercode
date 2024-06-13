@@ -226,7 +226,7 @@ function UserConProfileAdminDisplay(): JSX.Element {
       return null;
     }
 
-    return <UserConProfileSignupsCard userConProfileId={data.convention.user_con_profile.id} />;
+    return <UserConProfileSignupsCard userConProfileId={data.convention.user_con_profile.id} showWithdrawFromAll />;
   };
 
   if (loading) {

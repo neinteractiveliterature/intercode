@@ -6,6 +6,30 @@ import RunCapacityGraph from './RunCapacityGraph';
 import EventPageRunCard from './EventPageRunCard';
 import { EventPageQueryData, useEventPageQuery } from './queries.generated';
 import { LoadQueryWithVariablesWrapper } from '../../GraphqlLoadingWrappers';
+import { SignupAutomationMode, SignupRound, SignupState } from '../../graphqlTypes.generated';
+import { parseSignupRounds } from '../../SignupRoundUtils';
+
+function getMaxSignupCount(signupRounds: Pick<SignupRound, 'start' | 'maximum_event_signups'>[]) {
+  const parsedRounds = parseSignupRounds(signupRounds);
+  const now = DateTime.local();
+  const currentRound = parsedRounds.find((round) => round.timespan.includesTime(now));
+
+  if (currentRound == null) {
+    return undefined;
+  }
+
+  const strValue = currentRound.maximum_event_signups;
+
+  if (strValue === 'not_now' || strValue === 'not_yet') {
+    return 0;
+  }
+
+  if (strValue === 'unlimited') {
+    return undefined;
+  }
+
+  return strValue;
+}
 
 type FakeRunProps = {
   event: EventPageQueryData['convention']['event'];
@@ -36,6 +60,23 @@ export default LoadQueryWithVariablesWrapper(
       [data],
     );
 
+    const addToQueue = useMemo(() => {
+      if (data.convention.signup_automation_mode !== SignupAutomationMode.RankedChoice) {
+        return false;
+      }
+
+      const maxSignups = getMaxSignupCount(data.convention.signup_rounds);
+
+      if (maxSignups === undefined || Number.isNaN(maxSignups)) {
+        return false;
+      }
+
+      return (
+        data.convention.my_signups.filter((signup) => signup.state === SignupState.Confirmed && signup.counted)
+          .length >= maxSignups
+      );
+    }, [data.convention.signup_automation_mode, data.convention.my_signups, data.convention.signup_rounds]);
+
     const { currentAbility, convention } = data;
     const myProfile = convention.my_profile;
     const event = convention.event;
@@ -55,6 +96,7 @@ export default LoadQueryWithVariablesWrapper(
               key={run.id}
               myProfile={myProfile}
               currentAbility={currentAbility}
+              addToQueue={addToQueue}
             />
           ))
         )}

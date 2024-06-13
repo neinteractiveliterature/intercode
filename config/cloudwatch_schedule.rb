@@ -19,16 +19,20 @@ CloudwatchScheduler() do |_config|
     DropExpiredSignupsJob.perform_later
   end
 
+  task "execute_signup_rounds", cron: "0/15 * * * ? *" do
+    SignupRound.execute_currently_due_rounds!
+  end
+
   if ENV["HEROKU_API_TOKEN"].present? && ENV["HEROKU_APP_NAME"].present?
     task "refresh_certs", cron: "30 5 * * ? *" do
       RefreshSslCertificateService.new(
-        heroku_api_token: ENV["HEROKU_API_TOKEN"],
-        heroku_app_name: ENV["HEROKU_APP_NAME"],
-        root_domain: ENV["INTERCODE_HOST"],
+        heroku_api_token: ENV.fetch("HEROKU_API_TOKEN", nil),
+        heroku_app_name: ENV.fetch("HEROKU_APP_NAME", nil),
+        root_domain: ENV.fetch("INTERCODE_HOST", nil),
         **{
-          no_wildcard_domains: ENV["INTERCODE_CERTS_NO_WILDCARD_DOMAINS"]&.split(" "),
-          skip_domains: ENV["INTERCODE_CERTS_SKIP_DOMAINS"]&.split(" "),
-          staging: ENV["INTERCODE_CERTS_STAGING"]
+          no_wildcard_domains: ENV["INTERCODE_CERTS_NO_WILDCARD_DOMAINS"]&.split,
+          skip_domains: ENV["INTERCODE_CERTS_SKIP_DOMAINS"]&.split,
+          staging: ENV.fetch("INTERCODE_CERTS_STAGING", nil)
         }.compact
       ).call!
     end

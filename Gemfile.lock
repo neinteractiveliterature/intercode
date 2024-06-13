@@ -410,11 +410,15 @@ GEM
       heroics (~> 0.1.1)
       moneta (~> 1.0.0)
       rate_throttle_client (~> 0.1.0)
+    positioning (0.2.1)
+      activerecord (>= 6.1)
+      activesupport (>= 6.1)
     prettier (4.0.4)
       syntax_tree (>= 4.0.1)
       syntax_tree-haml (>= 2.0.0)
       syntax_tree-rbs (>= 0.2.0)
     prettier_print (1.2.1)
+    prism (0.27.0)
     pry (0.14.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -527,6 +531,10 @@ GEM
       unicode-display_width (>= 2.4.0, < 3.0)
     rubocop-ast (1.31.3)
       parser (>= 3.3.1.0)
+    rubocop-factory_bot (2.25.1)
+      rubocop (~> 1.41)
+    rubocop-graphql (1.5.1)
+      rubocop (>= 0.90, < 2)
     rubocop-performance (1.21.0)
       rubocop (>= 1.48.1, < 2.0)
       rubocop-ast (>= 1.31.1, < 2.0)
@@ -561,6 +569,9 @@ GEM
       docile (~> 1.1)
       simplecov-html (~> 0.11)
       simplecov_json_formatter (~> 0.1)
+    simplecov-cobertura (2.1.0)
+      rexml
+      simplecov (~> 0.19)
     simplecov-html (0.12.3)
     simplecov_json_formatter (0.1.4)
     simpleidn (0.2.1)
@@ -703,8 +714,10 @@ DEPENDENCIES
   pg_search
   phonelib
   platform-api
+  positioning
   prettier (= 4.0.4)
   prettier_print
+  prism
   pry-rails
   pry-remote
   puma
@@ -718,6 +731,8 @@ DEPENDENCIES
   reverse_markdown
   rollbar
   rubocop (= 1.63.3)
+  rubocop-factory_bot
+  rubocop-graphql
   rubocop-performance
   rubocop-rails
   rubocop-sequel
@@ -728,6 +743,7 @@ DEPENDENCIES
   sequel
   shoryuken
   simplecov
+  simplecov-cobertura
   skylight
   sprockets-rails
   stackprof
@@ -749,4 +765,4 @@ RUBY VERSION
    ruby 3.3.2p78
 
 BUNDLED WITH
-   2.4.3
+   2.5.9

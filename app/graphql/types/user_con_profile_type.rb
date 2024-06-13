@@ -1,10 +1,15 @@
 # frozen_string_literal: true
 class Types::UserConProfileType < Types::BaseObject
+  description <<~MARKDOWN
+    A UserConProfile is a user's profile in a particular convention web site.  Most convention-level objects are
+    attached to the UserConProfile (e.g. signups, event team memberships, staff positions, etc.).
+  MARKDOWN
+
   include FormResponseAttrsFields
 
   # It should be safe to request these fields but they'll return nil if you're not authorized
-  def self.personal_info_field(field_name, *args, **kwargs, &block)
-    field(field_name, *args, **kwargs, &block)
+  def self.personal_info_field(field_name, ...)
+    field(field_name, ...)
 
     define_method field_name do
       return nil unless policy(object).read_personal_info?
@@ -14,37 +19,109 @@ class Types::UserConProfileType < Types::BaseObject
 
   authorize_record
 
-  field :id, ID, null: false
-  field :convention, Types::ConventionType, null: false
+  field :ability, Types::AbilityType, null: true, description: "This user profile's permission set."
+  field :bio, String, null: true, description: "The bio to display for this user profile, in Markdown format."
+  field :bio_html, String, null: true, description: "The bio to display for this user profile, rendered as HTML."
+  field :bio_name, String, null: true do # rubocop:disable GraphQL/ExtractType
+    description "If present, overrides the name to use for this user profile in their bio display."
+  end
+  field :can_have_bio, Boolean, null: false, method: :can_have_bio? do
+    description <<~MARKDOWN
+      Is this user allowed to display a bio on the web site (e.g. because they're a convention staff member or an
+      event team member)?
+    MARKDOWN
+  end
+  field :can_override_maximum_event_provided_tickets, Boolean, null: false do # rubocop:disable GraphQL/ExtractType
+    description "Does this user have permission to override the event-provided ticket thresholds in this convention?"
+  end
+  field :convention, Types::ConventionType, null: false, description: "The convention this profile is attached to."
+  field :current_pending_order, Types::OrderType, null: true do
+    description <<~MARKDOWN
+      If this profile has a pending order, returns that order. Otherwise, returns null.
+    MARKDOWN
+  end
+  field :email, String, null: true, description: "This user profile's email address." do
+    authorize_action :read_email
+  end
+  field :first_name, String, null: false, description: "This user profile's first name."
+  field :gravatar_enabled, Boolean, null: false, description: "Has this user enabled Gravatars for this profile?"
+  field :gravatar_url, String, null: false, description: "The URL of this profile's Gravatar." # rubocop:disable GraphQL/ExtractType
+  field :id, ID, null: false, description: "The ID of this profile."
+  field :last_name, String, null: false, description: "This user profile's last name."
+  field :name, String, null: false, description: "This user profile's full name, including their nickname if present."
+  field :name_inverted, String, null: false, description: "This user profile's name in Last, First format."
+  field :name_without_nickname, String, null: false do # rubocop:disable GraphQL/ExtractType
+    description "This user profile's full name, not including their nickname."
+  end
+  field :nickname, String, null: true, description: "This user profile's nickname."
+  field :order_summary, String, null: false, description: "A human-readable summary of all this profile's orders."
+  field :orders, [Types::OrderType], null: false, description: "All the orders placed by this profile."
+  field :ranked_choice_allow_waitlist, Boolean, null: false do
+    description "If this user can't be signed up for any of their ranked choices, should the site waitlist them?"
+  end
+  field :ranked_choice_user_constraints, [Types::RankedChoiceUserConstraintType], null: false do # rubocop:disable GraphQL/ExtractType
+    description "All the constraints this profile has placed on the number of ranked choice signups they want."
+  end
+  field :show_nickname_in_bio, Boolean, null: true do
+    description "Should this profile's bio use the nickname as part of their name?"
+  end
+  field :signup_requests, [Types::SignupRequestType], null: false do
+    description "All the signup requests made by this profile."
+  end
+  field :signups, [Types::SignupType], null: false do
+    description "All the event signups attached to this profile."
+  end
+  field :site_admin, Boolean, null: false, description: "Does this profile belong to a global site admin?"
+  field :staff_positions, [Types::StaffPositionType], null: false do
+    description "All the staff positions this profile belongs to."
+  end
+  field :team_members, [Types::TeamMemberType], null: false do
+    description "All the team memberships this profile is in."
+  end
+  field :ticket, Types::TicketType, null: true do
+    description "This profile's convention ticket, if present."
+  end
+  field :user_id, ID, null: false do
+    description <<~MARKDOWN
+      The ID of the user account this profile belongs to.
 
-  field :site_admin, Boolean, null: false
+      This is a little bit of a weird thing to expose here; normally we'd just have people query for
+      User, but access to that object is restricted.  So if you need the user ID (e.g. to determine whether two profiles
+      are the same person) but you don't necessarily have access to the User account, you can use this field.
+    MARKDOWN
+  end
+
+  personal_info_field :accepted_clickwrap_agreement, Boolean, null: true do
+    description "Has this user accepted the clickwrap agreement for this convention (if it has one)?"
+  end
+  personal_info_field :address, String, null: true do
+    description "The street address portion of this profile's mailing address."
+  end
+  personal_info_field :birth_date, Types::DateType, null: true, description: "This user profile's date of birth."
+  personal_info_field :city, String, null: true, description: "The city portion of this profile's mailing address."
+  personal_info_field :country, String, null: true do
+    description "The country portion of this profile's mailing address."
+  end
+  personal_info_field :ical_secret, String, null: true do
+    description "The randomly-generated secret portion of the URL to use for fetching this profile's personal calendar."
+  end
+  personal_info_field :mobile_phone, String, null: true, description: "This profile's mobile phone number."
+  personal_info_field :state, String, null: true, description: "The state portion of this profile's mailing address."
+  personal_info_field :user, Types::UserType, null: true, description: "The user account attached to this profile."
+  personal_info_field :zipcode, String, null: true, description: "The ZIP portion of this profile's mailing address."
+
   def site_admin
     dataloader.with(Sources::ActiveRecordAssociation, UserConProfile, :user).load(object).site_admin?
   end
 
-  field :name, String, null: false
-  field :name_without_nickname, String, null: false
-  field :name_inverted, String, null: false
-  field :first_name, String, null: false
-  field :last_name, String, null: false
-  field :nickname, String, null: true
-  field :gravatar_url, String, null: false
-  field :gravatar_enabled, Boolean, null: false
-  field :bio, String, null: true
-  field :can_have_bio, Boolean, null: false, method: :can_have_bio?
-  field :bio_name, String, null: true
-  field :show_nickname_in_bio, Boolean, null: true
-  field :bio_html, String, null: true
-
-  field :current_pending_order, Types::OrderType, null: true do
-    description <<~MARKDOWN
-    If this profile has a pending order, returns that order. Otherwise, returns null.
-  MARKDOWN
-  end
-
-  # This is a little bit of a weird thing to expose here; normally we'd just have people query for
-  # User, but access to that object is restricted
-  field :user_id, ID, null: false
+  association_loaders UserConProfile,
+                      :convention,
+                      :orders,
+                      :ranked_choice_user_constraints,
+                      :signups,
+                      :signup_requests,
+                      :ticket,
+                      :user
 
   def bio_html
     dataloader.with(Sources::Markdown, "user_con_profile", "No bio provided", context[:controller]).load(
@@ -64,14 +141,6 @@ class Types::UserConProfileType < Types::BaseObject
 
     attrs.slice(*allowed_attrs)
   end
-
-  personal_info_field :user, Types::UserType, null: true
-  field :email, String, null: true do
-    authorize_action :read_email
-  end
-  field :staff_positions, [Types::StaffPositionType], null: false
-
-  association_loaders UserConProfile, :convention, :orders, :signups, :signup_requests, :ticket, :user
 
   def email
     dataloader.with(Sources::ActiveRecordAssociation, UserConProfile, :user).load(object).email
@@ -105,40 +174,19 @@ class Types::UserConProfileType < Types::BaseObject
     context[:query_from_liquid] ? readable_team_members.select(&:display?) : readable_team_members
   end
 
-  field :birth_date, Types::DateType, null: true
   def birth_date
     return nil unless policy(object).read_birth_date?
     object.birth_date
   end
 
-  personal_info_field :address, String, null: true
-  personal_info_field :city, String, null: true
-  personal_info_field :state, String, null: true
-  personal_info_field :zipcode, String, null: true
-  personal_info_field :country, String, null: true
-  personal_info_field :mobile_phone, String, null: true
-  personal_info_field :accepted_clickwrap_agreement, Boolean, null: true
-  personal_info_field :ical_secret, String, null: true
-
-  field :ticket, Types::TicketType, null: true
-  field :ability, Types::AbilityType, null: true
-
   def ability
     object == context[:user_con_profile] ? pundit_user : dataloader.with(AuthorizationInfo, UserConProfile).load(object)
   end
-
-  field :orders, [Types::OrderType], null: false
-  field :order_summary, String, null: false
 
   def order_summary
     return "" unless policy(Order.new(user_con_profile: object)).read?
     dataloader.with(Sources::OrderSummary).load(object)
   end
-
-  field :signups, [Types::SignupType], null: false
-  field :signup_requests, [Types::SignupRequestType], null: false
-  field :team_members, [Types::TeamMemberType], null: false
-  field :can_override_maximum_event_provided_tickets, Boolean, null: false
 
   def can_override_maximum_event_provided_tickets
     user = object == context[:user_con_profile] ? pundit_user : AuthorizationInfo.new(object.user, nil)

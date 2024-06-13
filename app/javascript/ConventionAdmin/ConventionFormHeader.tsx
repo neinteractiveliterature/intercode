@@ -2,14 +2,14 @@ import { memo, Fragment, useMemo } from 'react';
 import { DateTime } from 'luxon';
 
 import { findCurrentValue } from '../ScheduledValueUtils';
-import { MaximumEventSignupsValue, MAXIMUM_EVENT_SIGNUPS_OPTIONS } from './MaximumEventSignupsPreview';
 import { timezoneNameForConvention } from '../TimeUtils';
 import { ShowSchedule } from '../graphqlTypes.generated';
 import { EditingScheduledValue } from '../BuiltInFormControls/ScheduledValueEditor';
 import { ConventionAdminConventionQueryData } from './queries.generated';
 import { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
-import assertNever from 'assert-never';
+import { describeMaximumEventSignupsValue } from '../describeMaximumEventSignupsValue';
+import { MaximumEventSignupsValue } from '../SignupRoundUtils';
 
 function describeEventVisibility(visibility: ShowSchedule | null | undefined, t: TFunction) {
   switch (visibility) {
@@ -35,32 +35,7 @@ function describeMaximumEventSignups(
   }
 
   const currentValue = findCurrentValue(scheduledValue);
-
-  if (!currentValue) {
-    return t('signups.maximumSignups.notYet', 'No signups yet');
-  }
-
-  const currentOption = MAXIMUM_EVENT_SIGNUPS_OPTIONS.find(([option]) => currentValue === option);
-  if (!currentOption) {
-    return currentValue;
-  }
-
-  switch (currentOption[0]) {
-    case 'not_yet':
-      return t('signups.maximumSignups.notYet', 'No signups yet');
-    case '1':
-    case '2':
-    case '3':
-      return t('signups.maximumSignups.limitedCount', 'Up to {{ count }} event');
-    case 'unlimited':
-      return t('signups.maximumSignups.unlimited', 'Signups fully open');
-    case 'not_now':
-      return t('signups.maximumSignups.notNow', 'Signups frozen');
-    default:
-      assertNever(currentOption[0], true);
-      // @ts-expect-error Deliberately unreachable fallback
-      return currentOption[0];
-  }
+  return describeMaximumEventSignupsValue(currentValue, t);
 }
 
 function describeConventionTiming(

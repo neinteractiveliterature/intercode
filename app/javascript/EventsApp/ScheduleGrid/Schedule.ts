@@ -320,6 +320,7 @@ export default class Schedule {
       event_id: fakeRunId,
       my_signups: [],
       my_signup_requests: [],
+      my_signup_ranked_choices: [],
       room_names: [],
       starts_at: timespan.start.toISO() ?? '',
       confirmed_signup_count: 0,

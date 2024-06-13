@@ -20,8 +20,8 @@
 #  fk_rails_...  (cms_content_group_id => cms_content_groups.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
-require 'test_helper'
+# rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
+require "test_helper"
 
 class CmsContentGroupAssociationTest < ActiveSupport::TestCase
   # test "the truth" do

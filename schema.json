@@ -3108,7 +3108,7 @@
             },
             {
               "name": "defaultLayout",
-              "description": null,
+              "description": "Returns the default CMS layout used in this domain.\n",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -3190,7 +3190,7 @@
             },
             {
               "name": "id",
-              "description": null,
+              "description": "The ID of this object.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -3320,7 +3320,7 @@
             },
             {
               "name": "rootPage",
-              "description": null,
+              "description": "The CMS page used for the root path (/) of this domain.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -3725,7 +3725,7 @@
         {
           "kind": "OBJECT",
           "name": "Convention",
-          "description": null,
+          "description": "A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,\nreal-world convention (and this is probably the most common use case), but it can also represent a single event\n(if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).\n\nThey're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of\nthem as \"web site.\"\n",
           "interfaces": [
             {
               "kind": "INTERFACE",
@@ -3737,7 +3737,7 @@
           "fields": [
             {
               "name": "accepting_proposals",
-              "description": null,
+              "description": "Is this convention currently accepting event proposals?",
               "type": {
                 "kind": "SCALAR",
                 "name": "Boolean",
@@ -3749,7 +3749,7 @@
             },
             {
               "name": "bio_eligible_user_con_profiles",
-              "description": null,
+              "description": "User profiles in this convention that can have a bio (because they're staff or event team members).",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -3773,7 +3773,7 @@
             },
             {
               "name": "canceled",
-              "description": null,
+              "description": "Is this convention canceled?",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -3789,7 +3789,7 @@
             },
             {
               "name": "catch_all_staff_position",
-              "description": null,
+              "description": "If this convention's email_mode is set to staff_emails_to_catch_all, all email sent to staff position email\naddresses at this convention will be forwarded to this staff position.\n",
               "type": {
                 "kind": "OBJECT",
                 "name": "StaffPosition",
@@ -3801,7 +3801,7 @@
             },
             {
               "name": "clickwrap_agreement",
-              "description": null,
+              "description": "A clickwrap agreement, in Liquid format.  If present, users will have to agree to this before they're allowed to\nuse the web site.\n",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -3813,7 +3813,7 @@
             },
             {
               "name": "clickwrap_agreement_html",
-              "description": null,
+              "description": "The value of clickwrap_agreement, rendered as HTML.",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -4117,6 +4117,18 @@
               "deprecationReason": null,
               "args": [
                 {
+                  "name": "filters",
+                  "description": "Filters to restrict what items will appear in the result set.",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "CouponFiltersInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                },
+                {
                   "name": "page",
                   "description": "The page number to return from the result set.  Page numbers start with 1.",
                   "type": {
@@ -4134,18 +4146,6 @@
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null,
-                  "isDeprecated": false,
-                  "deprecationReason": null
-                },
-                {
-                  "name": "filters",
-                  "description": "Filters to restrict what items will appear in the result set.",
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "CouponFiltersInput",
                     "ofType": null
                   },
                   "defaultValue": null,
@@ -4176,7 +4176,7 @@
             },
             {
               "name": "created_at",
-              "description": null,
+              "description": "When this convention was created.",
               "type": {
                 "kind": "SCALAR",
                 "name": "Date",
@@ -4188,7 +4188,7 @@
             },
             {
               "name": "defaultLayout",
-              "description": null,
+              "description": "Returns the default CMS layout used in this domain.\n",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -4204,7 +4204,7 @@
             },
             {
               "name": "default_currency_code",
-              "description": null,
+              "description": "The ISO 4217 currency code used by default for products in this convention.  If null, defaults to USD.",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -4216,7 +4216,7 @@
             },
             {
               "name": "departments",
-              "description": null,
+              "description": "All the departments in this convention.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -4240,7 +4240,7 @@
             },
             {
               "name": "domain",
-              "description": null,
+              "description": "The domain name used for serving this convention web site.",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -4285,7 +4285,7 @@
             },
             {
               "name": "email_from",
-              "description": null,
+              "description": "The default address that site emails will be sent from.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -4301,7 +4301,7 @@
             },
             {
               "name": "email_mode",
-              "description": null,
+              "description": "How this convention site will handle incoming emails to its domain.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -4317,7 +4317,7 @@
             },
             {
               "name": "ends_at",
-              "description": null,
+              "description": "When this convention ends.",
               "type": {
                 "kind": "SCALAR",
                 "name": "Date",
@@ -4362,7 +4362,7 @@
             },
             {
               "name": "event_categories",
-              "description": null,
+              "description": "All the EventCategories in this convention.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -4385,7 +4385,7 @@
               "args": [
                 {
                   "name": "current_ability_can_read_event_proposals",
-                  "description": null,
+                  "description": "If true, will only return EventCategories where the current user is allowed to read event proposals.",
                   "type": {
                     "kind": "SCALAR",
                     "name": "Boolean",
@@ -4399,7 +4399,7 @@
             },
             {
               "name": "event_mailing_list_domain",
-              "description": null,
+              "description": "If present, the site will automatically offer to set up forwarding email addresses for event teams under this\ndomain.\n",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -4458,6 +4458,18 @@
               "deprecationReason": null,
               "args": [
                 {
+                  "name": "filters",
+                  "description": "Filters to restrict what items will appear in the result set.",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "EventProposalFiltersInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                },
+                {
                   "name": "page",
                   "description": "The page number to return from the result set.  Page numbers start with 1.",
                   "type": {
@@ -4475,18 +4487,6 @@
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null,
-                  "isDeprecated": false,
-                  "deprecationReason": null
-                },
-                {
-                  "name": "filters",
-                  "description": "Filters to restrict what items will appear in the result set.",
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "EventProposalFiltersInput",
                     "ofType": null
                   },
                   "defaultValue": null,
@@ -4539,23 +4539,11 @@
               "deprecationReason": null,
               "args": [
                 {
-                  "name": "includeDropped",
-                  "description": "If true, includes dropped events in addition to active events.",
+                  "name": "filters",
+                  "description": "If present, filters the returned events.",
                   "type": {
-                    "kind": "SCALAR",
-                    "name": "Boolean",
-                    "ofType": null
-                  },
-                  "defaultValue": null,
-                  "isDeprecated": false,
-                  "deprecationReason": null
-                },
-                {
-                  "name": "start",
-                  "description": "If present, only returns events that occur at this time or later. (These events may have started before that time, but will still be ongoing during it.)",
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "Date",
+                    "kind": "INPUT_OBJECT",
+                    "name": "EventFiltersInput",
                     "ofType": null
                   },
                   "defaultValue": null,
@@ -4575,11 +4563,23 @@
                   "deprecationReason": null
                 },
                 {
-                  "name": "filters",
-                  "description": "If present, filters the returned events.",
+                  "name": "includeDropped",
+                  "description": "If true, includes dropped events in addition to active events.",
                   "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "EventFiltersInput",
+                    "kind": "SCALAR",
+                    "name": "Boolean",
+                    "ofType": null
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                },
+                {
+                  "name": "start",
+                  "description": "If present, only returns events that occur at this time or later. (These events may have started before that time, but will still be ongoing during it.)",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Date",
                     "ofType": null
                   },
                   "defaultValue": null,
@@ -4604,6 +4604,18 @@
               "deprecationReason": null,
               "args": [
                 {
+                  "name": "filters",
+                  "description": "Filters to restrict what items will appear in the result set.",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "EventFiltersInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                },
+                {
                   "name": "page",
                   "description": "The page number to return from the result set.  Page numbers start with 1.",
                   "type": {
@@ -4621,18 +4633,6 @@
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null,
-                  "isDeprecated": false,
-                  "deprecationReason": null
-                },
-                {
-                  "name": "filters",
-                  "description": "Filters to restrict what items will appear in the result set.",
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "EventFiltersInput",
                     "ofType": null
                   },
                   "defaultValue": null,
@@ -4663,7 +4663,7 @@
             },
             {
               "name": "favicon",
-              "description": null,
+              "description": "The favicon that will be served to browsers on this site.",
               "type": {
                 "kind": "OBJECT",
                 "name": "ActiveStorageAttachment",
@@ -4720,7 +4720,7 @@
             },
             {
               "name": "forms",
-              "description": null,
+              "description": "All the forms in this convention.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -4777,7 +4777,7 @@
             },
             {
               "name": "hidden",
-              "description": null,
+              "description": "If true, this convention will not be listed in CMS content on the root site.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -4793,7 +4793,7 @@
             },
             {
               "name": "id",
-              "description": null,
+              "description": "The ID of this convention.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -4809,7 +4809,7 @@
             },
             {
               "name": "language",
-              "description": null,
+              "description": "The language to use for localized content in this site.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -4849,7 +4849,7 @@
             },
             {
               "name": "location",
-              "description": null,
+              "description": "The physical location of the convention, in Mapbox format.",
               "type": {
                 "kind": "SCALAR",
                 "name": "Json",
@@ -4861,7 +4861,7 @@
             },
             {
               "name": "mailing_lists",
-              "description": null,
+              "description": "A sub-object for accessing this convention's autogenerated mailing lists.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -4877,19 +4877,19 @@
             },
             {
               "name": "maximum_event_signups",
-              "description": null,
+              "description": "The schedule of how many signups are allowed in this convention and when.",
               "type": {
                 "kind": "OBJECT",
                 "name": "ScheduledValue",
                 "ofType": null
               },
-              "isDeprecated": false,
-              "deprecationReason": null,
+              "isDeprecated": true,
+              "deprecationReason": "Please use SignupRound instead",
               "args": []
             },
             {
               "name": "maximum_tickets",
-              "description": null,
+              "description": "The maximum number of tickets this convention can sell.",
               "type": {
                 "kind": "SCALAR",
                 "name": "Int",
@@ -4906,6 +4906,54 @@
                 "kind": "OBJECT",
                 "name": "UserConProfile",
                 "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "my_signup_ranked_choices",
+              "description": "Returns all signup ranked choices for the current user within this convention. If no user is signed in,\nreturns an empty array.\n",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "SignupRankedChoice",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "my_signup_requests",
+              "description": "Returns all signup requests for the current user within this convention. If no user is signed in,\nreturns an empty array.\n",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "SignupRequest",
+                      "ofType": null
+                    }
+                  }
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null,
@@ -4937,7 +4985,7 @@
             },
             {
               "name": "name",
-              "description": null,
+              "description": "The name of this convention.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -4953,7 +5001,7 @@
             },
             {
               "name": "notification_templates",
-              "description": null,
+              "description": "All the NotificationTemplates in this convention.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -5018,7 +5066,7 @@
             },
             {
               "name": "open_graph_image",
-              "description": null,
+              "description": "The image that will be served from this site using the `<meta property=\"og:image\">` tag.  For more information\nabout OpenGraph, see https://ogp.me/.\n",
               "type": {
                 "kind": "OBJECT",
                 "name": "ActiveStorageAttachment",
@@ -5056,6 +5104,18 @@
               "deprecationReason": null,
               "args": [
                 {
+                  "name": "filters",
+                  "description": "Filters to restrict what items will appear in the result set.",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "OrderFiltersInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                },
+                {
                   "name": "page",
                   "description": "The page number to return from the result set.  Page numbers start with 1.",
                   "type": {
@@ -5073,18 +5133,6 @@
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null,
-                  "isDeprecated": false,
-                  "deprecationReason": null
-                },
-                {
-                  "name": "filters",
-                  "description": "Filters to restrict what items will appear in the result set.",
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "OrderFiltersInput",
                     "ofType": null
                   },
                   "defaultValue": null,
@@ -5115,7 +5163,7 @@
             },
             {
               "name": "organization",
-              "description": null,
+              "description": "The organization in charge of this convention.",
               "type": {
                 "kind": "OBJECT",
                 "name": "Organization",
@@ -5127,7 +5175,7 @@
             },
             {
               "name": "pre_schedule_content_html",
-              "description": null,
+              "description": "If present, a block of HTML content to show above the schedule on various schedule pages.",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -5243,8 +5291,8 @@
               "deprecationReason": null,
               "args": [
                 {
-                  "name": "eventKey",
-                  "description": "The key of the notification event to use for generating the preview.",
+                  "name": "content",
+                  "description": "The Liquid content to render.",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -5259,8 +5307,8 @@
                   "deprecationReason": null
                 },
                 {
-                  "name": "content",
-                  "description": "The Liquid content to render.",
+                  "name": "eventKey",
+                  "description": "The key of the notification event to use for generating the preview.",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -5311,7 +5359,7 @@
             },
             {
               "name": "products",
-              "description": null,
+              "description": "Returns the products in this convention.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -5333,8 +5381,8 @@
               "deprecationReason": null,
               "args": [
                 {
-                  "name": "only_ticket_providing",
-                  "description": null,
+                  "name": "only_available",
+                  "description": "If true, only returns products that are currently available for purchase.",
                   "type": {
                     "kind": "SCALAR",
                     "name": "Boolean",
@@ -5345,8 +5393,8 @@
                   "deprecationReason": null
                 },
                 {
-                  "name": "only_available",
-                  "description": null,
+                  "name": "only_ticket_providing",
+                  "description": "If true, only returns products that provide the buyer a ticket to this convention.",
                   "type": {
                     "kind": "SCALAR",
                     "name": "Boolean",
@@ -5360,7 +5408,7 @@
             },
             {
               "name": "reports",
-              "description": null,
+              "description": "A sub-object containing various reports that can be generated for this convention.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -5376,7 +5424,7 @@
             },
             {
               "name": "rooms",
-              "description": null,
+              "description": "All the rooms in this convention.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -5400,7 +5448,7 @@
             },
             {
               "name": "rootPage",
-              "description": null,
+              "description": "The CMS page used for the root path (/) of this domain.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -5463,6 +5511,18 @@
               "deprecationReason": null,
               "args": [
                 {
+                  "name": "filters",
+                  "description": "Filters to restrict what items will appear in the result set.",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "RunFiltersInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                },
+                {
                   "name": "page",
                   "description": "The page number to return from the result set.  Page numbers start with 1.",
                   "type": {
@@ -5480,18 +5540,6 @@
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null,
-                  "isDeprecated": false,
-                  "deprecationReason": null
-                },
-                {
-                  "name": "filters",
-                  "description": "Filters to restrict what items will appear in the result set.",
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "RunFiltersInput",
                     "ofType": null
                   },
                   "defaultValue": null,
@@ -5522,7 +5570,7 @@
             },
             {
               "name": "show_event_list",
-              "description": null,
+              "description": "Who can currently see the event catalog?",
               "type": {
                 "kind": "ENUM",
                 "name": "ShowSchedule",
@@ -5534,7 +5582,7 @@
             },
             {
               "name": "show_schedule",
-              "description": null,
+              "description": "Who can currently see the event schedule?",
               "type": {
                 "kind": "ENUM",
                 "name": "ShowSchedule",
@@ -5578,6 +5626,22 @@
               ]
             },
             {
+              "name": "signup_automation_mode",
+              "description": "The type of signup automation used for this convention.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "SignupAutomationMode",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
               "name": "signup_changes_paginated",
               "description": null,
               "type": {
@@ -5592,6 +5656,18 @@
               "isDeprecated": false,
               "deprecationReason": null,
               "args": [
+                {
+                  "name": "filters",
+                  "description": "Filters to restrict what items will appear in the result set.",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "SignupChangeFiltersInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                },
                 {
                   "name": "page",
                   "description": "The page number to return from the result set.  Page numbers start with 1.",
@@ -5610,18 +5686,6 @@
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null,
-                  "isDeprecated": false,
-                  "deprecationReason": null
-                },
-                {
-                  "name": "filters",
-                  "description": "Filters to restrict what items will appear in the result set.",
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "SignupChangeFiltersInput",
                     "ofType": null
                   },
                   "defaultValue": null,
@@ -5676,7 +5740,7 @@
             },
             {
               "name": "signup_mode",
-              "description": null,
+              "description": "The signup mode used for this convention.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -5692,7 +5756,7 @@
             },
             {
               "name": "signup_requests_open",
-              "description": null,
+              "description": "In a moderated-signup convention, are signup requests currently allowed?",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -5722,6 +5786,18 @@
               "deprecationReason": null,
               "args": [
                 {
+                  "name": "filters",
+                  "description": "Filters to restrict what items will appear in the result set.",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "SignupRequestFiltersInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                },
+                {
                   "name": "page",
                   "description": "The page number to return from the result set.  Page numbers start with 1.",
                   "type": {
@@ -5739,18 +5815,6 @@
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null,
-                  "isDeprecated": false,
-                  "deprecationReason": null
-                },
-                {
-                  "name": "filters",
-                  "description": "Filters to restrict what items will appear in the result set.",
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "SignupRequestFiltersInput",
                     "ofType": null
                   },
                   "defaultValue": null,
@@ -5780,8 +5844,32 @@
               ]
             },
             {
+              "name": "signup_rounds",
+              "description": "The signup rounds in this convention.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "SignupRound",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
               "name": "site_mode",
-              "description": null,
+              "description": "The mode this convention site is operating in.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -5830,7 +5918,7 @@
             },
             {
               "name": "staff_positions",
-              "description": null,
+              "description": "All the staff positions in this convention.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -5854,7 +5942,7 @@
             },
             {
               "name": "starts_at",
-              "description": null,
+              "description": "When this convention starts.",
               "type": {
                 "kind": "SCALAR",
                 "name": "Date",
@@ -5866,7 +5954,7 @@
             },
             {
               "name": "stripe_account",
-              "description": null,
+              "description": "The Stripe account this convention uses for payments.",
               "type": {
                 "kind": "OBJECT",
                 "name": "StripeAccount",
@@ -5878,7 +5966,7 @@
             },
             {
               "name": "stripe_account_id",
-              "description": null,
+              "description": "The ID of the Stripe account this convention uses for payments.",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -5890,7 +5978,7 @@
             },
             {
               "name": "stripe_account_ready_to_charge",
-              "description": null,
+              "description": "Is this convention's Stripe account in a state where the convention can accept payments?",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -5906,7 +5994,7 @@
             },
             {
               "name": "stripe_publishable_key",
-              "description": null,
+              "description": "The publishable key of this convention's Stripe account.",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -5918,7 +6006,7 @@
             },
             {
               "name": "ticketNamePlural",
-              "description": null,
+              "description": "The word this convention uses for 'tickets'.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -5934,7 +6022,7 @@
             },
             {
               "name": "ticket_mode",
-              "description": null,
+              "description": "The mode used for ticket behaviors in this convention.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -5950,7 +6038,7 @@
             },
             {
               "name": "ticket_name",
-              "description": null,
+              "description": "The word this convention uses for 'ticket'.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -5966,7 +6054,7 @@
             },
             {
               "name": "ticket_types",
-              "description": null,
+              "description": "All the ticket types in this convention.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -5990,7 +6078,7 @@
             },
             {
               "name": "tickets_available_for_purchase",
-              "description": null,
+              "description": "Can users currently buy tickets to this convention?",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -6006,7 +6094,7 @@
             },
             {
               "name": "timezone_mode",
-              "description": null,
+              "description": "The mode used for time zone display and time conversion behavior in this site.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -6022,7 +6110,7 @@
             },
             {
               "name": "timezone_name",
-              "description": null,
+              "description": "The home time zone of this convention.",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -6071,7 +6159,7 @@
             },
             {
               "name": "updated_at",
-              "description": null,
+              "description": "When this convention was last modified.",
               "type": {
                 "kind": "SCALAR",
                 "name": "Date",
@@ -6083,7 +6171,7 @@
             },
             {
               "name": "user_activity_alert",
-              "description": null,
+              "description": "Find a UserActivityAlert by ID.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -6098,7 +6186,7 @@
               "args": [
                 {
                   "name": "id",
-                  "description": null,
+                  "description": "The ID of the UserActivityAlert to find.",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -6116,7 +6204,7 @@
             },
             {
               "name": "user_activity_alerts",
-              "description": null,
+              "description": "All the UserActivityAlerts in this convention.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -6206,7 +6294,7 @@
             },
             {
               "name": "user_con_profile_form",
-              "description": null,
+              "description": "The form used for user profiles in this convention.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -6236,6 +6324,18 @@
               "deprecationReason": null,
               "args": [
                 {
+                  "name": "filters",
+                  "description": "Filters to restrict what items will appear in the result set.",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "UserConProfileFiltersInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                },
+                {
                   "name": "page",
                   "description": "The page number to return from the result set.  Page numbers start with 1.",
                   "type": {
@@ -6253,18 +6353,6 @@
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null,
-                  "isDeprecated": false,
-                  "deprecationReason": null
-                },
-                {
-                  "name": "filters",
-                  "description": "Filters to restrict what items will appear in the result set.",
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "UserConProfileFiltersInput",
                     "ofType": null
                   },
                   "defaultValue": null,
@@ -6335,14 +6423,14 @@
         {
           "kind": "INPUT_OBJECT",
           "name": "ConventionInput",
-          "description": null,
+          "description": "An input for creating or modifying Conventions.",
           "interfaces": null,
           "possibleTypes": null,
           "fields": null,
           "inputFields": [
             {
               "name": "accepting_proposals",
-              "description": null,
+              "description": "Is this convention currently accepting event proposals?",
               "type": {
                 "kind": "SCALAR",
                 "name": "Boolean",
@@ -6354,7 +6442,7 @@
             },
             {
               "name": "catchAllStaffPositionId",
-              "description": null,
+              "description": "The ID of the StaffPosition to set as the catch-all for inbound emails.",
               "type": {
                 "kind": "SCALAR",
                 "name": "ID",
@@ -6366,7 +6454,7 @@
             },
             {
               "name": "clickwrap_agreement",
-              "description": null,
+              "description": "The clickwrap agreement for the convention, in Liquid format.",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -6378,7 +6466,7 @@
             },
             {
               "name": "defaultCurrencyCode",
-              "description": null,
+              "description": "The ISO 4217 currency code to use as the default for products in this convention.",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -6390,7 +6478,7 @@
             },
             {
               "name": "defaultLayoutId",
-              "description": null,
+              "description": "The ID of the CmsLayout to use as the default layout for pages in this convention.",
               "type": {
                 "kind": "SCALAR",
                 "name": "ID",
@@ -6402,31 +6490,7 @@
             },
             {
               "name": "domain",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "ends_at",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Date",
-                "ofType": null
-              },
-              "defaultValue": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "event_mailing_list_domain",
-              "description": null,
+              "description": "The domain name to use for serving this convention web site.",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -6438,7 +6502,7 @@
             },
             {
               "name": "email_from",
-              "description": null,
+              "description": "The default address to send site emails from.",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -6450,7 +6514,7 @@
             },
             {
               "name": "email_mode",
-              "description": null,
+              "description": "How this convention site should handle incoming emails to its domain.",
               "type": {
                 "kind": "ENUM",
                 "name": "EmailMode",
@@ -6461,8 +6525,32 @@
               "deprecationReason": null
             },
             {
+              "name": "ends_at",
+              "description": "When this convention ends.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Date",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "event_mailing_list_domain",
+              "description": "A domain to use to set up forwarding email addresses for event teams.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "favicon",
-              "description": null,
+              "description": "A favicon image to serve to browsers on this site.",
               "type": {
                 "kind": "SCALAR",
                 "name": "Upload",
@@ -6474,7 +6562,7 @@
             },
             {
               "name": "hidden",
-              "description": null,
+              "description": "Should this event be hidden from CMS content on the root site?",
               "type": {
                 "kind": "SCALAR",
                 "name": "Boolean",
@@ -6486,7 +6574,7 @@
             },
             {
               "name": "language",
-              "description": null,
+              "description": "The language code to use for localized content in this site (e.g. 'en' for English, 'es' for Spanish).",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -6498,7 +6586,7 @@
             },
             {
               "name": "location",
-              "description": null,
+              "description": "The physical location of this convention, in Mapbox format.",
               "type": {
                 "kind": "SCALAR",
                 "name": "Json",
@@ -6510,19 +6598,19 @@
             },
             {
               "name": "maximum_event_signups",
-              "description": null,
+              "description": "The schedule of how many signups are allowed in this convention and when.",
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "ScheduledValueInput",
                 "ofType": null
               },
               "defaultValue": null,
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "Please use SignupRound instead"
             },
             {
               "name": "maximum_tickets",
-              "description": null,
+              "description": "The maximum number of tickets this convention should be able to sell.",
               "type": {
                 "kind": "SCALAR",
                 "name": "Int",
@@ -6534,7 +6622,7 @@
             },
             {
               "name": "name",
-              "description": null,
+              "description": "The name of this convention.",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -6546,7 +6634,7 @@
             },
             {
               "name": "openGraphImage",
-              "description": null,
+              "description": "The image that should be served from this site using the `<meta property=\"og:image\">` tag.  For more information\nabout OpenGraph, see https://ogp.me/.\n",
               "type": {
                 "kind": "SCALAR",
                 "name": "Upload",
@@ -6558,7 +6646,7 @@
             },
             {
               "name": "rootPageId",
-              "description": null,
+              "description": "The ID of the Page to serve at the root path (/) of this convention site.",
               "type": {
                 "kind": "SCALAR",
                 "name": "ID",
@@ -6569,8 +6657,8 @@
               "deprecationReason": null
             },
             {
-              "name": "show_schedule",
-              "description": null,
+              "name": "show_event_list",
+              "description": "Who should be able to see the event catalog?",
               "type": {
                 "kind": "ENUM",
                 "name": "ShowSchedule",
@@ -6581,11 +6669,23 @@
               "deprecationReason": null
             },
             {
-              "name": "show_event_list",
-              "description": null,
+              "name": "show_schedule",
+              "description": "Who should be able to see the event schedule?",
               "type": {
                 "kind": "ENUM",
                 "name": "ShowSchedule",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "signup_automation_mode",
+              "description": "The type of signup automation to use for this convention.",
+              "type": {
+                "kind": "ENUM",
+                "name": "SignupAutomationMode",
                 "ofType": null
               },
               "defaultValue": null,
@@ -6594,7 +6694,7 @@
             },
             {
               "name": "signup_mode",
-              "description": null,
+              "description": "The signup mode to use for this convention.",
               "type": {
                 "kind": "ENUM",
                 "name": "SignupMode",
@@ -6606,7 +6706,7 @@
             },
             {
               "name": "signup_requests_open",
-              "description": null,
+              "description": "In a moderated-signup convention, should signup requests currently be allowed?",
               "type": {
                 "kind": "SCALAR",
                 "name": "Boolean",
@@ -6618,7 +6718,7 @@
             },
             {
               "name": "site_mode",
-              "description": null,
+              "description": "The mode this convention site should operate in.",
               "type": {
                 "kind": "ENUM",
                 "name": "SiteMode",
@@ -6630,7 +6730,7 @@
             },
             {
               "name": "starts_at",
-              "description": null,
+              "description": "When this convention starts.",
               "type": {
                 "kind": "SCALAR",
                 "name": "Date",
@@ -6641,20 +6741,8 @@
               "deprecationReason": null
             },
             {
-              "name": "ticket_name",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "ticket_mode",
-              "description": null,
+              "description": "The mode to use for ticket behaviors in this convention.",
               "type": {
                 "kind": "ENUM",
                 "name": "TicketMode",
@@ -6665,8 +6753,8 @@
               "deprecationReason": null
             },
             {
-              "name": "timezone_name",
-              "description": null,
+              "name": "ticket_name",
+              "description": "The word this convention should use for 'ticket'.",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -6678,10 +6766,22 @@
             },
             {
               "name": "timezone_mode",
-              "description": null,
+              "description": "The mode to use for time zone display and time conversion behavior in this site.",
               "type": {
                 "kind": "ENUM",
                 "name": "TimezoneMode",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "timezone_name",
+              "description": "The home time zone for this convention.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
                 "ofType": null
               },
               "defaultValue": null,
@@ -10061,6 +10161,96 @@
         },
         {
           "kind": "INPUT_OBJECT",
+          "name": "CreateRankedChoiceUserConstraintInput",
+          "description": "Autogenerated input type of CreateRankedChoiceUserConstraint",
+          "interfaces": null,
+          "possibleTypes": null,
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "clientMutationId",
+              "description": "A unique identifier for the client performing the mutation.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "rankedChoiceUserConstraint",
+              "description": "The constraint to create.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "RankedChoiceUserConstraintInput",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "userConProfileId",
+              "description": "The user profile to apply this constraint to.  If not specified, will use the current user profile.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "enumValues": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "CreateRankedChoiceUserConstraintPayload",
+          "description": "Autogenerated return type of CreateRankedChoiceUserConstraint.",
+          "interfaces": [],
+          "possibleTypes": null,
+          "fields": [
+            {
+              "name": "clientMutationId",
+              "description": "A unique identifier for the client performing the mutation.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "ranked_choice_user_constraint",
+              "description": "The RankedChoiceUserConstraint that has just been created.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "RankedChoiceUserConstraint",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            }
+          ],
+          "inputFields": null,
+          "enumValues": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
           "name": "CreateRoomInput",
           "description": "Autogenerated input type of CreateRoom",
           "interfaces": null,
@@ -10229,6 +10419,92 @@
         },
         {
           "kind": "INPUT_OBJECT",
+          "name": "CreateSignupRankedChoiceInput",
+          "description": "Autogenerated input type of CreateSignupRankedChoice",
+          "interfaces": null,
+          "possibleTypes": null,
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "clientMutationId",
+              "description": "A unique identifier for the client performing the mutation.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "requested_bucket_key",
+              "description": "The bucket key to queue a signup ranked choice in, or null to queue a no-preference choice",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "targetRunId",
+              "description": "The ID of the run to queue a signup ranked choice for",
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "enumValues": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "CreateSignupRankedChoicePayload",
+          "description": "Autogenerated return type of CreateSignupRankedChoice.",
+          "interfaces": [],
+          "possibleTypes": null,
+          "fields": [
+            {
+              "name": "clientMutationId",
+              "description": "A unique identifier for the client performing the mutation.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "signup_ranked_choice",
+              "description": "The SignupRankedChoice that has been created",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "SignupRankedChoice",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            }
+          ],
+          "inputFields": null,
+          "enumValues": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
           "name": "CreateSignupRequestInput",
           "description": "Autogenerated input type of CreateSignupRequest",
           "interfaces": null,
@@ -10314,6 +10590,96 @@
                 "ofType": {
                   "kind": "OBJECT",
                   "name": "SignupRequest",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            }
+          ],
+          "inputFields": null,
+          "enumValues": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "CreateSignupRoundInput",
+          "description": "Autogenerated input type of CreateSignupRound",
+          "interfaces": null,
+          "possibleTypes": null,
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "clientMutationId",
+              "description": "A unique identifier for the client performing the mutation.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "conventionId",
+              "description": "The ID of the Convention to create a SignupRound in",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "signupRound",
+              "description": "The data for the SignupRound to create",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "SignupRoundInput",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "enumValues": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "CreateSignupRoundPayload",
+          "description": "Autogenerated return type of CreateSignupRound.",
+          "interfaces": [],
+          "possibleTypes": null,
+          "fields": [
+            {
+              "name": "clientMutationId",
+              "description": "A unique identifier for the client performing the mutation.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "signup_round",
+              "description": "The SignupRound that has been created",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "SignupRound",
                   "ofType": null
                 }
               },
@@ -12605,6 +12971,84 @@
         },
         {
           "kind": "INPUT_OBJECT",
+          "name": "DeleteRankedChoiceUserConstraintInput",
+          "description": "Autogenerated input type of DeleteRankedChoiceUserConstraint",
+          "interfaces": null,
+          "possibleTypes": null,
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "clientMutationId",
+              "description": "A unique identifier for the client performing the mutation.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "id",
+              "description": "The ID of the constraint to delete.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "enumValues": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "DeleteRankedChoiceUserConstraintPayload",
+          "description": "Autogenerated return type of DeleteRankedChoiceUserConstraint.",
+          "interfaces": [],
+          "possibleTypes": null,
+          "fields": [
+            {
+              "name": "clientMutationId",
+              "description": "A unique identifier for the client performing the mutation.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "ranked_choice_user_constraint",
+              "description": "The constraint that has just been deleted.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "RankedChoiceUserConstraint",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            }
+          ],
+          "inputFields": null,
+          "enumValues": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
           "name": "DeleteRoomInput",
           "description": "Autogenerated input type of DeleteRoom",
           "interfaces": null,
@@ -12740,6 +13184,162 @@
                 "ofType": {
                   "kind": "OBJECT",
                   "name": "Run",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            }
+          ],
+          "inputFields": null,
+          "enumValues": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "DeleteSignupRankedChoiceInput",
+          "description": "Autogenerated input type of DeleteSignupRankedChoice",
+          "interfaces": null,
+          "possibleTypes": null,
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "clientMutationId",
+              "description": "A unique identifier for the client performing the mutation.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "id",
+              "description": "The ID of the SignupRankedChoice to delete",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "enumValues": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "DeleteSignupRankedChoicePayload",
+          "description": "Autogenerated return type of DeleteSignupRankedChoice.",
+          "interfaces": [],
+          "possibleTypes": null,
+          "fields": [
+            {
+              "name": "clientMutationId",
+              "description": "A unique identifier for the client performing the mutation.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "signup_ranked_choice",
+              "description": "The SignupRankedChoice that has been deleted",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "SignupRankedChoice",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            }
+          ],
+          "inputFields": null,
+          "enumValues": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "DeleteSignupRoundInput",
+          "description": "Autogenerated input type of DeleteSignupRound",
+          "interfaces": null,
+          "possibleTypes": null,
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "clientMutationId",
+              "description": "A unique identifier for the client performing the mutation.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "id",
+              "description": "The ID of the SignupRound to delete",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "enumValues": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "DeleteSignupRoundPayload",
+          "description": "Autogenerated return type of DeleteSignupRound.",
+          "interfaces": [],
+          "possibleTypes": null,
+          "fields": [
+            {
+              "name": "clientMutationId",
+              "description": "A unique identifier for the client performing the mutation.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "signup_round",
+              "description": "The SignupRound that has been deleted",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "SignupRound",
                   "ofType": null
                 }
               },
@@ -14442,6 +15042,18 @@
               "deprecationReason": null,
               "args": [
                 {
+                  "name": "filters",
+                  "description": "Filters to restrict what items will appear in the result set.",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "EventFiltersInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                },
+                {
                   "name": "page",
                   "description": "The page number to return from the result set.  Page numbers start with 1.",
                   "type": {
@@ -14459,18 +15071,6 @@
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null,
-                  "isDeprecated": false,
-                  "deprecationReason": null
-                },
-                {
-                  "name": "filters",
-                  "description": "Filters to restrict what items will appear in the result set.",
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "EventFiltersInput",
                     "ofType": null
                   },
                   "defaultValue": null,
@@ -18975,6 +19575,39 @@
               ]
             },
             {
+              "name": "createRankedChoiceUserConstraint",
+              "description": "Create a new RankedChoiceUserConstraint",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CreateRankedChoiceUserConstraintPayload",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": [
+                {
+                  "name": "input",
+                  "description": "Parameters for CreateRankedChoiceUserConstraint",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "CreateRankedChoiceUserConstraintInput",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ]
+            },
+            {
               "name": "createRoom",
               "description": null,
               "type": {
@@ -19041,6 +19674,39 @@
               ]
             },
             {
+              "name": "createSignupRankedChoice",
+              "description": "Create a new SignupRankedChoice in a user's signup queue",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CreateSignupRankedChoicePayload",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": [
+                {
+                  "name": "input",
+                  "description": "Parameters for CreateSignupRankedChoice",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "CreateSignupRankedChoiceInput",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ]
+            },
+            {
               "name": "createSignupRequest",
               "description": null,
               "type": {
@@ -19064,6 +19730,39 @@
                     "ofType": {
                       "kind": "INPUT_OBJECT",
                       "name": "CreateSignupRequestInput",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ]
+            },
+            {
+              "name": "createSignupRound",
+              "description": "Create a new SignupRound in a convention",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CreateSignupRoundPayload",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": [
+                {
+                  "name": "input",
+                  "description": "Parameters for CreateSignupRound",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "CreateSignupRoundInput",
                       "ofType": null
                     }
                   },
@@ -19998,6 +20697,39 @@
               ]
             },
             {
+              "name": "deleteRankedChoiceUserConstraint",
+              "description": "Delete a RankedChoiceUserConstraint from a user's profile.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "DeleteRankedChoiceUserConstraintPayload",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": [
+                {
+                  "name": "input",
+                  "description": "Parameters for DeleteRankedChoiceUserConstraint",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "DeleteRankedChoiceUserConstraintInput",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ]
+            },
+            {
               "name": "deleteRoom",
               "description": null,
               "type": {
@@ -20054,6 +20786,72 @@
                     "ofType": {
                       "kind": "INPUT_OBJECT",
                       "name": "DeleteRunInput",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ]
+            },
+            {
+              "name": "deleteSignupRankedChoice",
+              "description": "Deletes a SignupRankedChoice from a user's signup queue",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "DeleteSignupRankedChoicePayload",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": [
+                {
+                  "name": "input",
+                  "description": "Parameters for DeleteSignupRankedChoice",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "DeleteSignupRankedChoiceInput",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ]
+            },
+            {
+              "name": "deleteSignupRound",
+              "description": "Deletes a SignupRound from a convention",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "DeleteSignupRoundPayload",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": [
+                {
+                  "name": "input",
+                  "description": "Parameters for DeleteSignupRound",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "DeleteSignupRoundInput",
                       "ofType": null
                     }
                   },
@@ -21714,6 +22512,39 @@
               ]
             },
             {
+              "name": "updateRankedChoiceUserConstraint",
+              "description": "Update a RankedChoiceUserConstraint by ID.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "UpdateRankedChoiceUserConstraintPayload",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": [
+                {
+                  "name": "input",
+                  "description": "Parameters for UpdateRankedChoiceUserConstraint",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "UpdateRankedChoiceUserConstraintInput",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ]
+            },
+            {
               "name": "updateRoom",
               "description": null,
               "type": {
@@ -21869,6 +22700,72 @@
                     "ofType": {
                       "kind": "INPUT_OBJECT",
                       "name": "UpdateSignupCountedInput",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ]
+            },
+            {
+              "name": "updateSignupRankedChoicePriority",
+              "description": "Change the priority of a SignupRankedChoice in a user's queue",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "UpdateSignupRankedChoicePriorityPayload",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": [
+                {
+                  "name": "input",
+                  "description": "Parameters for UpdateSignupRankedChoicePriority",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "UpdateSignupRankedChoicePriorityInput",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ]
+            },
+            {
+              "name": "updateSignupRound",
+              "description": "Modify an existing SignupRound",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "UpdateSignupRoundPayload",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": [
+                {
+                  "name": "input",
+                  "description": "Parameters for UpdateSignupRound",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "UpdateSignupRoundInput",
                       "ofType": null
                     }
                   },
@@ -25386,6 +26283,18 @@
               "deprecationReason": null,
               "args": [
                 {
+                  "name": "filters",
+                  "description": "Filters to restrict what items will appear in the result set.",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "ConventionFiltersInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                },
+                {
                   "name": "page",
                   "description": "The page number to return from the result set.  Page numbers start with 1.",
                   "type": {
@@ -25403,18 +26312,6 @@
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null,
-                  "isDeprecated": false,
-                  "deprecationReason": null
-                },
-                {
-                  "name": "filters",
-                  "description": "Filters to restrict what items will appear in the result set.",
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "ConventionFiltersInput",
                     "ofType": null
                   },
                   "defaultValue": null,
@@ -25503,6 +26400,18 @@
               "deprecationReason": null,
               "args": [
                 {
+                  "name": "filters",
+                  "description": "Filters to restrict what items will appear in the result set.",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "EmailRouteFiltersInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                },
+                {
                   "name": "page",
                   "description": "The page number to return from the result set.  Page numbers start with 1.",
                   "type": {
@@ -25520,18 +26429,6 @@
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null,
-                  "isDeprecated": false,
-                  "deprecationReason": null
-                },
-                {
-                  "name": "filters",
-                  "description": "Filters to restrict what items will appear in the result set.",
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "EmailRouteFiltersInput",
                     "ofType": null
                   },
                   "defaultValue": null,
@@ -25787,6 +26684,18 @@
               "deprecationReason": null,
               "args": [
                 {
+                  "name": "filters",
+                  "description": "Filters to restrict what items will appear in the result set.",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "UserFiltersInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                },
+                {
                   "name": "page",
                   "description": "The page number to return from the result set.  Page numbers start with 1.",
                   "type": {
@@ -25804,18 +26713,6 @@
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null,
-                  "isDeprecated": false,
-                  "deprecationReason": null
-                },
-                {
-                  "name": "filters",
-                  "description": "Filters to restrict what items will appear in the result set.",
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "UserFiltersInput",
                     "ofType": null
                   },
                   "defaultValue": null,
@@ -25846,6 +26743,191 @@
             }
           ],
           "inputFields": null,
+          "enumValues": null
+        },
+        {
+          "kind": "ENUM",
+          "name": "RankedChoiceOrder",
+          "description": "An order to execute ranked-choice signup rounds in.",
+          "interfaces": null,
+          "possibleTypes": null,
+          "fields": null,
+          "inputFields": null,
+          "enumValues": [
+            {
+              "name": "ASC",
+              "description": "In lottery number order, lowest number first",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "DESC",
+              "description": "In lottery nmber order, highest number first",
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ]
+        },
+        {
+          "kind": "OBJECT",
+          "name": "RankedChoiceUserConstraint",
+          "description": "A user-defined constraint on how many events the ranked choice algorithm should sign them up for.  This can be\ntime-bounded, and a user can have as many or as few of these as they like.\n",
+          "interfaces": [],
+          "possibleTypes": null,
+          "fields": [
+            {
+              "name": "created_at",
+              "description": "When this constraint was created.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Date",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "finish",
+              "description": "The time at which this constraint stops applying (non-inclusive).  If null, this constraint is unbounded on the\nfinish side.\n",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Date",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "id",
+              "description": "The ID of this constraint.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "maximum_signups",
+              "description": "The maximum number of counted signups to be allowed in the timespan described by this constraint.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "start",
+              "description": "The time at which this constraint starts applying (inclusive).  If null, this constraint is unbounded on the\nstart side.\n",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Date",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "updated_at",
+              "description": "The last time this constraint was modified.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Date",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "user_con_profile",
+              "description": "The user this constraint applies to.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "UserConProfile",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            }
+          ],
+          "inputFields": null,
+          "enumValues": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "RankedChoiceUserConstraintInput",
+          "description": "A user-defined constraint on how many events the ranked choice algorithm should sign them up for.  This can be\ntime-bounded, and a user can have as many or as few of these as they like.\n",
+          "interfaces": null,
+          "possibleTypes": null,
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "finish",
+              "description": "The time at which this constraint stops applying (non-inclusive).  If null, this constraint is unbounded on the\nfinish side.\n",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Date",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "maximumSignups",
+              "description": "The maximum number of counted signups to be allowed in the timespan described by this constraint.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "start",
+              "description": "The time at which this constraint starts applying (inclusive).  If null, this constraint is unbounded on the\nstart side.\n",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Date",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
           "enumValues": null
         },
         {
@@ -26973,7 +28055,7 @@
             },
             {
               "name": "defaultLayout",
-              "description": null,
+              "description": "Returns the default CMS layout used in this domain.\n",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -27201,7 +28283,7 @@
             },
             {
               "name": "rootPage",
-              "description": null,
+              "description": "The CMS page used for the root path (/) of this domain.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -27338,13 +28420,13 @@
         {
           "kind": "OBJECT",
           "name": "Run",
-          "description": null,
+          "description": "A run of an event within a convention. Events can have multiple runs of the course of a convention (with some\nexceptions, such as conventions that use single_event site mode).\n",
           "interfaces": [],
           "possibleTypes": null,
           "fields": [
             {
               "name": "confirmed_limited_signup_count",
-              "description": null,
+              "description": "The number of confirmed signups in limited-signup buckets for this run",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -27360,7 +28442,7 @@
             },
             {
               "name": "confirmed_signup_count",
-              "description": null,
+              "description": "The number of confirmed signups (regardless of bucket) for this run",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -27376,7 +28458,7 @@
             },
             {
               "name": "current_ability_can_signup_summary_run",
-              "description": null,
+              "description": "Whether or not the current user is allowed to request a signup summary of this run",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -27392,7 +28474,7 @@
             },
             {
               "name": "ends_at",
-              "description": null,
+              "description": "The time at which this run finishes",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -27408,7 +28490,7 @@
             },
             {
               "name": "event",
-              "description": null,
+              "description": "The event this is a run of",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -27424,7 +28506,7 @@
             },
             {
               "name": "grouped_signup_counts",
-              "description": null,
+              "description": "A GroupedSignupCounts object for this run, from which more detailed information about the number of signups can\nbe obtained (sliced in various ways).\n",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -27448,7 +28530,7 @@
             },
             {
               "name": "id",
-              "description": null,
+              "description": "The ID of this run",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -27463,8 +28545,32 @@
               "args": []
             },
             {
+              "name": "my_signup_ranked_choices",
+              "description": "The current user's SignupRankedChoices for this Run",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "SignupRankedChoice",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
               "name": "my_signup_requests",
-              "description": null,
+              "description": "The current user's SignupRequests for this Run",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -27488,7 +28594,7 @@
             },
             {
               "name": "my_signups",
-              "description": null,
+              "description": "The current user's Signups for this Run",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -27512,7 +28618,7 @@
             },
             {
               "name": "not_counted_confirmed_signup_count",
-              "description": null,
+              "description": "The number of confirmed, but not counted signups for this run",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -27528,7 +28634,7 @@
             },
             {
               "name": "not_counted_signup_count",
-              "description": null,
+              "description": "The number of non-counted signups for this run (regardless of confirmation status)",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -27544,7 +28650,7 @@
             },
             {
               "name": "room_names",
-              "description": null,
+              "description": "The names of all the rooms this run takes place in",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -27568,7 +28674,7 @@
             },
             {
               "name": "rooms",
-              "description": null,
+              "description": "The rooms this run takes place in",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -27592,7 +28698,7 @@
             },
             {
               "name": "schedule_note",
-              "description": null,
+              "description": "An optional, admin-only note to put on this run.  This note is not visible to most users.\n",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -27618,6 +28724,18 @@
               "deprecationReason": null,
               "args": [
                 {
+                  "name": "filters",
+                  "description": "Filters to restrict what items will appear in the result set.",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "SignupChangeFiltersInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                },
+                {
                   "name": "page",
                   "description": "The page number to return from the result set.  Page numbers start with 1.",
                   "type": {
@@ -27635,18 +28753,6 @@
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null,
-                  "isDeprecated": false,
-                  "deprecationReason": null
-                },
-                {
-                  "name": "filters",
-                  "description": "Filters to restrict what items will appear in the result set.",
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "SignupChangeFiltersInput",
                     "ofType": null
                   },
                   "defaultValue": null,
@@ -27693,7 +28799,7 @@
             },
             {
               "name": "signups_paginated",
-              "description": null,
+              "description": "The signups for this run",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -27707,8 +28813,20 @@
               "deprecationReason": null,
               "args": [
                 {
+                  "name": "filters",
+                  "description": "Only return objects matching these filters",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "SignupFiltersInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                },
+                {
                   "name": "page",
-                  "description": null,
+                  "description": "The number of the page to return (the first page is 1)",
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
@@ -27720,7 +28838,7 @@
                 },
                 {
                   "name": "per_page",
-                  "description": null,
+                  "description": "The number of items to return per page",
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
@@ -27731,20 +28849,8 @@
                   "deprecationReason": null
                 },
                 {
-                  "name": "filters",
-                  "description": null,
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "SignupFiltersInput",
-                    "ofType": null
-                  },
-                  "defaultValue": null,
-                  "isDeprecated": false,
-                  "deprecationReason": null
-                },
-                {
                   "name": "sort",
-                  "description": null,
+                  "description": "Sort the resulting objects",
                   "type": {
                     "kind": "LIST",
                     "name": null,
@@ -27766,7 +28872,7 @@
             },
             {
               "name": "starts_at",
-              "description": null,
+              "description": "The time at which this run starts",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -27782,7 +28888,7 @@
             },
             {
               "name": "title_suffix",
-              "description": null,
+              "description": "If present, Intercode will append this suffix string to this run whenever it appears in the UI.  This can be\nused to disambiguate between multiple runs of the same event.\n",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -27794,7 +28900,7 @@
             },
             {
               "name": "waitlisted_signup_count",
-              "description": null,
+              "description": "The number of signups currently on the waitlist for this run",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -28957,6 +30063,29 @@
           "enumValues": null
         },
         {
+          "kind": "ENUM",
+          "name": "SignupAutomationMode",
+          "description": "The automation behavior to use for event signups in a Convention.  Currently, we only support one type of\nautomated signups, the \"ranked choice\" behavior.  Conventions can also disable automation entirely using the\n\"none\" value.\n",
+          "interfaces": null,
+          "possibleTypes": null,
+          "fields": null,
+          "inputFields": null,
+          "enumValues": [
+            {
+              "name": "none",
+              "description": "Signups are fully manual",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "ranked_choice",
+              "description": "Attendees make a ranked list of choices and the site attempts to give everyone what they want",
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ]
+        },
+        {
           "kind": "OBJECT",
           "name": "SignupChange",
           "description": null,
@@ -29188,6 +30317,12 @@
             },
             {
               "name": "withdraw",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "accept_signup_ranked_choice",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
@@ -29602,14 +30737,14 @@
         },
         {
           "kind": "OBJECT",
-          "name": "SignupRequest",
-          "description": null,
+          "name": "SignupRankedChoice",
+          "description": "In a ranked-choice signup convention, SignupRankedChoices are the items in a user's signup queue.  Users may have\nas many of these as they like.  When SignupRounds open, Intercode will automatically attempt to sign users up for\nthe number of events they're allowed at this time based on their SignupRankedChoices.\n",
           "interfaces": [],
           "possibleTypes": null,
           "fields": [
             {
               "name": "created_at",
-              "description": null,
+              "description": "The time this choice was added to the user's queue",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -29625,7 +30760,7 @@
             },
             {
               "name": "id",
-              "description": null,
+              "description": "The ID of this SignupRankedChoice",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -29640,12 +30775,16 @@
               "args": []
             },
             {
-              "name": "replace_signup",
-              "description": null,
+              "name": "priority",
+              "description": "The priority of this choice (lower numbers are higher priority)",
               "type": {
-                "kind": "OBJECT",
-                "name": "Signup",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null,
@@ -29653,7 +30792,7 @@
             },
             {
               "name": "requested_bucket_key",
-              "description": null,
+              "description": "The bucket that this choice is trying to sign up in (or null, if it's a no-preference signup)",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -29665,7 +30804,7 @@
             },
             {
               "name": "result_signup",
-              "description": null,
+              "description": "The resulting Signup from processing this choice, if it has been processed",
               "type": {
                 "kind": "OBJECT",
                 "name": "Signup",
@@ -29676,14 +30815,26 @@
               "args": []
             },
             {
+              "name": "result_signup_request",
+              "description": "The resulting SignupRequest from processing this choice, if it has been processed (and is in a moderated-signup\nconvention)\n",
+              "type": {
+                "kind": "OBJECT",
+                "name": "SignupRequest",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
               "name": "state",
-              "description": null,
+              "description": "The current processing state of this choice (e.g. pending, accepted)",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
                   "kind": "ENUM",
-                  "name": "SignupRequestState",
+                  "name": "SignupRankedChoiceState",
                   "ofType": null
                 }
               },
@@ -29693,7 +30844,7 @@
             },
             {
               "name": "target_run",
-              "description": null,
+              "description": "The event run that this choice is trying to sign up for",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -29709,7 +30860,7 @@
             },
             {
               "name": "updated_at",
-              "description": null,
+              "description": "The last time this choice was modified",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -29725,7 +30876,7 @@
             },
             {
               "name": "updated_by",
-              "description": null,
+              "description": "The user who last updated this choice",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -29741,7 +30892,201 @@
             },
             {
               "name": "user_con_profile",
-              "description": null,
+              "description": "The user whose queue this choice is part of",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "UserConProfile",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            }
+          ],
+          "inputFields": null,
+          "enumValues": null
+        },
+        {
+          "kind": "ENUM",
+          "name": "SignupRankedChoiceState",
+          "description": "The processing state of a SignupRankedChoice",
+          "interfaces": null,
+          "possibleTypes": null,
+          "fields": null,
+          "inputFields": null,
+          "enumValues": [
+            {
+              "name": "pending",
+              "description": "We have not yet attempted to process this choice",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "signed_up",
+              "description": "The attendee has been signed up (see the result_signup field for the actual signup)",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "waitlisted",
+              "description": "The attendee has been waitlisted (see the result_signup field for the actual signup)",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "requested",
+              "description": "The attendee has had a signup request put in (see the result_signup_request field for the actual signup request)",
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ]
+        },
+        {
+          "kind": "OBJECT",
+          "name": "SignupRequest",
+          "description": "In a moderated-signup convention, SignupRequests are the queue of signups that users have asked to do.  Convention\nstaff can go through these requests and accept them (which produces a Signup) or reject them.\n",
+          "interfaces": [],
+          "possibleTypes": null,
+          "fields": [
+            {
+              "name": "created_at",
+              "description": "The time this request was put in",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Date",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "id",
+              "description": "The ID of this SignupRequest",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "replace_signup",
+              "description": "The signup that this request is asking to replace (e.g. if the user is trying to leave a conflicting event).  If\nthis request is accepted, the replace_signup will be withdrawn.\n",
+              "type": {
+                "kind": "OBJECT",
+                "name": "Signup",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "requested_bucket_key",
+              "description": "The bucket that this request is asking to sign up in (or null, if it's a no-preference signup)",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "result_signup",
+              "description": "The resulting Signup from accepting this request, if it has been accepted",
+              "type": {
+                "kind": "OBJECT",
+                "name": "Signup",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "state",
+              "description": "The current processing state of this request (e.g. pending, accepted, rejected)",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "SignupRequestState",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "target_run",
+              "description": "The run the user would like to sign up for",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Run",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "updated_at",
+              "description": "The last time this request was modified",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Date",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "updated_by",
+              "description": "The last user who modified this request",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "User",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "user_con_profile",
+              "description": "The user who made this request",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -29793,7 +31138,7 @@
         {
           "kind": "ENUM",
           "name": "SignupRequestState",
-          "description": null,
+          "description": "The processing state of a SignupRequest",
           "interfaces": null,
           "possibleTypes": null,
           "fields": null,
@@ -29928,6 +31273,180 @@
             }
           ],
           "inputFields": null,
+          "enumValues": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "SignupRound",
+          "description": "A round of signups in a particular convention.  This represents a range of time in which a certain number of\nsignups is allowed.\n\nIn conventions that use automated signups (e.g. ranked-choice signups), signup rounds are used as triggers for\nsignup automation.\n",
+          "interfaces": [],
+          "possibleTypes": null,
+          "fields": [
+            {
+              "name": "convention",
+              "description": "The convention this SignupRound is in.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Convention",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "created_at",
+              "description": "When this SignupRound was first created.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Date",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "executed_at",
+              "description": "In conventions that use automated signups, when this SignupRound was executed.  If it has not been executed yet,\nthis will be null.\n",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Date",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "id",
+              "description": "The ID of this SignupRound.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "maximum_event_signups",
+              "description": "Either \"not_yet\", \"not_now\", \"unlimited\", or a string representation of a number.  This is the maximum number of\nsignups allowed during this SignupRound.\n",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "ranked_choice_order",
+              "description": "In ranked-choice signup conventions, the order to use for executing users' ranked choices in this round.\n",
+              "type": {
+                "kind": "ENUM",
+                "name": "RankedChoiceOrder",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "start",
+              "description": "When this SignupRound starts.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Date",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "updated_at",
+              "description": "When this SignupRound was last modified.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Date",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            }
+          ],
+          "inputFields": null,
+          "enumValues": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "SignupRoundInput",
+          "description": "An input for creating or modifying SignupRounds.",
+          "interfaces": null,
+          "possibleTypes": null,
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "maximum_event_signups",
+              "description": "The maximum number of signups allowed during this signup round",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "ranked_choice_order",
+              "description": "For ranked-choice conventions, the order to execute signup choices in",
+              "type": {
+                "kind": "ENUM",
+                "name": "RankedChoiceOrder",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "start",
+              "description": "The time that this signup round starts",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Date",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
           "enumValues": null
         },
         {
@@ -34253,6 +35772,100 @@
         },
         {
           "kind": "INPUT_OBJECT",
+          "name": "UpdateRankedChoiceUserConstraintInput",
+          "description": "Autogenerated input type of UpdateRankedChoiceUserConstraint",
+          "interfaces": null,
+          "possibleTypes": null,
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "clientMutationId",
+              "description": "A unique identifier for the client performing the mutation.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "id",
+              "description": "The ID of the constraint to update.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "rankedChoiceUserConstraint",
+              "description": "The updated values to use for this constraint.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "RankedChoiceUserConstraintInput",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "enumValues": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "UpdateRankedChoiceUserConstraintPayload",
+          "description": "Autogenerated return type of UpdateRankedChoiceUserConstraint.",
+          "interfaces": [],
+          "possibleTypes": null,
+          "fields": [
+            {
+              "name": "clientMutationId",
+              "description": "A unique identifier for the client performing the mutation.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "ranked_choice_user_constraint",
+              "description": "The constraint after being updated.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "RankedChoiceUserConstraint",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            }
+          ],
+          "inputFields": null,
+          "enumValues": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
           "name": "UpdateRoomInput",
           "description": "Autogenerated input type of UpdateRoom",
           "interfaces": null,
@@ -34678,6 +36291,194 @@
                 "ofType": {
                   "kind": "OBJECT",
                   "name": "Signup",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            }
+          ],
+          "inputFields": null,
+          "enumValues": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "UpdateSignupRankedChoicePriorityInput",
+          "description": "Autogenerated input type of UpdateSignupRankedChoicePriority",
+          "interfaces": null,
+          "possibleTypes": null,
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "clientMutationId",
+              "description": "A unique identifier for the client performing the mutation.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "id",
+              "description": "The ID of the SignupRankedChoice to update",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "priority",
+              "description": "The new priority to set the SignupRankedChoice to",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "enumValues": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "UpdateSignupRankedChoicePriorityPayload",
+          "description": "Autogenerated return type of UpdateSignupRankedChoicePriority.",
+          "interfaces": [],
+          "possibleTypes": null,
+          "fields": [
+            {
+              "name": "clientMutationId",
+              "description": "A unique identifier for the client performing the mutation.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "signup_ranked_choice",
+              "description": "The SignupRankedChoice that has just been reprioritized",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "SignupRankedChoice",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            }
+          ],
+          "inputFields": null,
+          "enumValues": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "UpdateSignupRoundInput",
+          "description": "Autogenerated input type of UpdateSignupRound",
+          "interfaces": null,
+          "possibleTypes": null,
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "clientMutationId",
+              "description": "A unique identifier for the client performing the mutation.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "id",
+              "description": "The ID of the SignupRound to update",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "signupRound",
+              "description": "The new data to write to the SignupRound",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "SignupRoundInput",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "enumValues": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "UpdateSignupRoundPayload",
+          "description": "Autogenerated return type of UpdateSignupRound.",
+          "interfaces": [],
+          "possibleTypes": null,
+          "fields": [
+            {
+              "name": "clientMutationId",
+              "description": "A unique identifier for the client performing the mutation.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "signup_round",
+              "description": "The SignupRound that has just been reprioritized",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "SignupRound",
                   "ofType": null
                 }
               },
@@ -35769,13 +37570,13 @@
         {
           "kind": "OBJECT",
           "name": "UserConProfile",
-          "description": null,
+          "description": "A UserConProfile is a user's profile in a particular convention web site.  Most convention-level objects are\nattached to the UserConProfile (e.g. signups, event team memberships, staff positions, etc.).\n",
           "interfaces": [],
           "possibleTypes": null,
           "fields": [
             {
               "name": "ability",
-              "description": null,
+              "description": "This user profile's permission set.",
               "type": {
                 "kind": "OBJECT",
                 "name": "Ability",
@@ -35787,7 +37588,7 @@
             },
             {
               "name": "accepted_clickwrap_agreement",
-              "description": null,
+              "description": "Has this user accepted the clickwrap agreement for this convention (if it has one)?",
               "type": {
                 "kind": "SCALAR",
                 "name": "Boolean",
@@ -35799,7 +37600,7 @@
             },
             {
               "name": "address",
-              "description": null,
+              "description": "The street address portion of this profile's mailing address.",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -35811,7 +37612,7 @@
             },
             {
               "name": "bio",
-              "description": null,
+              "description": "The bio to display for this user profile, in Markdown format.",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -35823,7 +37624,7 @@
             },
             {
               "name": "bio_html",
-              "description": null,
+              "description": "The bio to display for this user profile, rendered as HTML.",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -35835,7 +37636,7 @@
             },
             {
               "name": "bio_name",
-              "description": null,
+              "description": "If present, overrides the name to use for this user profile in their bio display.",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -35847,7 +37648,7 @@
             },
             {
               "name": "birth_date",
-              "description": null,
+              "description": "This user profile's date of birth.",
               "type": {
                 "kind": "SCALAR",
                 "name": "Date",
@@ -35859,7 +37660,7 @@
             },
             {
               "name": "can_have_bio",
-              "description": null,
+              "description": "Is this user allowed to display a bio on the web site (e.g. because they're a convention staff member or an\nevent team member)?\n",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -35875,7 +37676,7 @@
             },
             {
               "name": "can_override_maximum_event_provided_tickets",
-              "description": null,
+              "description": "Does this user have permission to override the event-provided ticket thresholds in this convention?",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -35891,7 +37692,7 @@
             },
             {
               "name": "city",
-              "description": null,
+              "description": "The city portion of this profile's mailing address.",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -35903,7 +37704,7 @@
             },
             {
               "name": "convention",
-              "description": null,
+              "description": "The convention this profile is attached to.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -35919,7 +37720,7 @@
             },
             {
               "name": "country",
-              "description": null,
+              "description": "The country portion of this profile's mailing address.",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -35975,7 +37776,7 @@
             },
             {
               "name": "email",
-              "description": null,
+              "description": "This user profile's email address.",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -35987,7 +37788,7 @@
             },
             {
               "name": "first_name",
-              "description": null,
+              "description": "This user profile's first name.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -36069,7 +37870,7 @@
             },
             {
               "name": "gravatar_enabled",
-              "description": null,
+              "description": "Has this user enabled Gravatars for this profile?",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -36085,7 +37886,7 @@
             },
             {
               "name": "gravatar_url",
-              "description": null,
+              "description": "The URL of this profile's Gravatar.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -36101,7 +37902,7 @@
             },
             {
               "name": "ical_secret",
-              "description": null,
+              "description": "The randomly-generated secret portion of the URL to use for fetching this profile's personal calendar.",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -36113,7 +37914,7 @@
             },
             {
               "name": "id",
-              "description": null,
+              "description": "The ID of this profile.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -36129,7 +37930,7 @@
             },
             {
               "name": "last_name",
-              "description": null,
+              "description": "This user profile's last name.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -36145,7 +37946,7 @@
             },
             {
               "name": "mobile_phone",
-              "description": null,
+              "description": "This profile's mobile phone number.",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -36157,7 +37958,7 @@
             },
             {
               "name": "name",
-              "description": null,
+              "description": "This user profile's full name, including their nickname if present.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -36173,7 +37974,7 @@
             },
             {
               "name": "name_inverted",
-              "description": null,
+              "description": "This user profile's name in Last, First format.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -36189,7 +37990,7 @@
             },
             {
               "name": "name_without_nickname",
-              "description": null,
+              "description": "This user profile's full name, not including their nickname.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -36205,7 +38006,7 @@
             },
             {
               "name": "nickname",
-              "description": null,
+              "description": "This user profile's nickname.",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -36217,7 +38018,7 @@
             },
             {
               "name": "order_summary",
-              "description": null,
+              "description": "A human-readable summary of all this profile's orders.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -36233,7 +38034,7 @@
             },
             {
               "name": "orders",
-              "description": null,
+              "description": "All the orders placed by this profile.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -36256,8 +38057,48 @@
               "args": []
             },
             {
+              "name": "ranked_choice_allow_waitlist",
+              "description": "If this user can't be signed up for any of their ranked choices, should the site waitlist them?",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "ranked_choice_user_constraints",
+              "description": "All the constraints this profile has placed on the number of ranked choice signups they want.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "RankedChoiceUserConstraint",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
               "name": "show_nickname_in_bio",
-              "description": null,
+              "description": "Should this profile's bio use the nickname as part of their name?",
               "type": {
                 "kind": "SCALAR",
                 "name": "Boolean",
@@ -36269,7 +38110,7 @@
             },
             {
               "name": "signup_requests",
-              "description": null,
+              "description": "All the signup requests made by this profile.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -36293,7 +38134,7 @@
             },
             {
               "name": "signups",
-              "description": null,
+              "description": "All the event signups attached to this profile.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -36317,7 +38158,7 @@
             },
             {
               "name": "site_admin",
-              "description": null,
+              "description": "Does this profile belong to a global site admin?",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -36333,7 +38174,7 @@
             },
             {
               "name": "staff_positions",
-              "description": null,
+              "description": "All the staff positions this profile belongs to.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -36357,7 +38198,7 @@
             },
             {
               "name": "state",
-              "description": null,
+              "description": "The state portion of this profile's mailing address.",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -36369,7 +38210,7 @@
             },
             {
               "name": "team_members",
-              "description": null,
+              "description": "All the team memberships this profile is in.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -36393,7 +38234,7 @@
             },
             {
               "name": "ticket",
-              "description": null,
+              "description": "This profile's convention ticket, if present.",
               "type": {
                 "kind": "OBJECT",
                 "name": "Ticket",
@@ -36405,7 +38246,7 @@
             },
             {
               "name": "user",
-              "description": null,
+              "description": "The user account attached to this profile.",
               "type": {
                 "kind": "OBJECT",
                 "name": "User",
@@ -36417,7 +38258,7 @@
             },
             {
               "name": "user_id",
-              "description": null,
+              "description": "The ID of the user account this profile belongs to.\n\nThis is a little bit of a weird thing to expose here; normally we'd just have people query for\nUser, but access to that object is restricted.  So if you need the user ID (e.g. to determine whether two profiles\nare the same person) but you don't necessarily have access to the User account, you can use this field.\n",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -36433,7 +38274,7 @@
             },
             {
               "name": "zipcode",
-              "description": null,
+              "description": "The ZIP portion of this profile's mailing address.",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -36804,6 +38645,18 @@
             },
             {
               "name": "gravatar_enabled",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "ranked_choice_allow_waitlist",
               "description": null,
               "type": {
                 "kind": "SCALAR",

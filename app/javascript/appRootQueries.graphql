@@ -73,6 +73,7 @@ query AppRootQuery($path: String!) {
     language
     site_mode
     signup_mode
+    signup_automation_mode
     starts_at
     stripe_account_id
     stripe_publishable_key

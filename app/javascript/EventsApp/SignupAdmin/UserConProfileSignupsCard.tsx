@@ -24,12 +24,13 @@ function filterAndSortSignups(signups: UserConProfileSignupsQueryData['conventio
 
 export type UserConProfileSignupsCardProps = {
   userConProfileId: string;
+  showWithdrawFromAll?: boolean;
 };
 
 export default LoadQueryWithVariablesWrapper(
   useUserConProfileSignupsQuery,
   ({ userConProfileId }: UserConProfileSignupsCardProps) => ({ id: userConProfileId }),
-  function UserConProfileSignupsCard({ userConProfileId, data }) {
+  function UserConProfileSignupsCard({ userConProfileId, data, showWithdrawFromAll }) {
     const { t } = useTranslation();
     const { timezoneName } = useContext(AppRootContext);
     const [withdrawAllSignups] = useWithdrawAllUserConProfileSignupsMutation();
@@ -145,7 +146,7 @@ export default LoadQueryWithVariablesWrapper(
           {signups.map((signup) => renderSignup(signup))}
           {renderUnSignedUpTeamMemberEvents(userConProfile, myProfile)}
         </ul>
-        {myProfile?.ability?.can_withdraw_all_user_con_profile_signups && signups.length > 0 && (
+        {showWithdrawFromAll && myProfile?.ability?.can_withdraw_all_user_con_profile_signups && signups.length > 0 && (
           <div className="card-footer border-top-0">
             <button
               type="button"

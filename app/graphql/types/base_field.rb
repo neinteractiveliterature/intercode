@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Types::BaseField < GraphQL::Schema::Field
+class Types::BaseField < GraphQL::Schema::Field # rubocop:disable GraphQL/ObjectDescription
   def authorize(&block)
     @authorization_block = block
   end
@@ -12,7 +12,7 @@ class Types::BaseField < GraphQL::Schema::Field
   def authorize_action(action)
     authorize do |obj, _args, context|
       policy = Pundit.policy(context[:pundit_user], obj)
-      policy.public_send("#{action}?")
+      policy.public_send(:"#{action}?")
     end
   end
 end

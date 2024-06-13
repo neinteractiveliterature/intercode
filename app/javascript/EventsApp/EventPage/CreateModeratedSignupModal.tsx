@@ -1,6 +1,6 @@
 import { useContext, useMemo } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
-import { ApolloError } from '@apollo/client';
+import { ApolloError, useApolloClient } from '@apollo/client';
 import classnames from 'classnames';
 import { ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
@@ -15,7 +15,7 @@ import {
   useCreateModeratedSignupModalQuery,
 } from './queries.generated';
 import { SignupOption } from './buildSignupOptions';
-import { useCreateSignupRequestMutation } from './mutations.generated';
+import { useCreateSignupRankedChoiceMutation, useCreateSignupRequestMutation } from './mutations.generated';
 
 export type CreateModeratedSignupModalProps = {
   visible: boolean;
@@ -38,6 +38,8 @@ export default LoadQueryWrapper<
     });
     const [createSignupRequest, createError, createInProgress] = useAsyncFunction(createMutate);
     const runTimespan = useMemo(() => timespanFromRun(timezoneName, event, run), [timezoneName, event, run]);
+    const [createSignupRankedChoiceMutate] = useCreateSignupRankedChoiceMutation();
+    const apolloClient = useApolloClient();
 
     const conflictingSignup = useMemo(() => {
       return (data.convention.my_profile?.signups || []).find((signup) => {
@@ -59,13 +61,24 @@ export default LoadQueryWrapper<
         );
       }
 
-      await createSignupRequest({
-        variables: {
-          targetRunId: run.id,
-          requestedBucketKey: signupOption.bucket?.key,
-          replaceSignupId: conflictingSignup?.id,
-        },
-      });
+      if (signupOption.action === 'ADD_TO_QUEUE') {
+        await createSignupRankedChoiceMutate({
+          variables: {
+            targetRunId: run.id,
+            requestedBucketKey: signupOption.bucket?.key,
+          },
+        });
+
+        await apolloClient.resetStore();
+      } else {
+        await createSignupRequest({
+          variables: {
+            targetRunId: run.id,
+            requestedBucketKey: signupOption.bucket?.key,
+            replaceSignupId: conflictingSignup?.id,
+          },
+        });
+      }
       close();
     };
 

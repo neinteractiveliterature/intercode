@@ -88,6 +88,7 @@ gem "platform-api"
 gem "fly.io-rails"
 gem "tzinfo-data"
 gem "browser"
+gem "positioning"
 
 gem "faker", group: "development", require: false
 
@@ -139,11 +140,14 @@ group :development do
   gem "rubocop-performance"
   gem "rubocop-rails"
   gem "rubocop-sequel"
+  gem "rubocop-factory_bot", require: false
+  gem "rubocop-graphql", require: false
   gem "prettier", "4.0.4"
   gem "prettier_print"
   gem "syntax_tree"
   gem "syntax_tree-haml"
   gem "syntax_tree-rbs"
+  gem "prism"
 
   # Find missing `end` statements
   gem "dead_end"
@@ -171,6 +175,7 @@ group :test do
   gem "factory_bot"
   gem "factory_bot_rails"
   gem "simplecov"
+  gem "simplecov-cobertura"
   gem "stripe-ruby-mock", ">= 3.1.0.rc3", require: "stripe_mock"
 
   # Not sure if we actually need it or not, but adding this for now to unbreak controller tests

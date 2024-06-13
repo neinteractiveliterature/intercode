@@ -1,9 +1,9 @@
-import { removeCommonStringMiddle } from '@neinteractiveliterature/litform';
-
 import { DateTime, Duration } from 'luxon';
 import Timespan, { FiniteTimespan } from './Timespan';
-import { timezoneNameForConvention } from './TimeUtils';
+import { formatLCM, getDateTimeFormat, timezoneNameForConvention } from './TimeUtils';
 import { Convention, Event, Run } from './graphqlTypes.generated';
+import { TFunction } from 'i18next';
+import { DateTimeFormatKey } from './DateTimeFormats';
 
 export type ConventionForTimespanUtils = Pick<Convention, 'starts_at' | 'ends_at' | 'timezone_name' | 'timezone_mode'>;
 
@@ -45,15 +45,29 @@ export function getMemoizationKeyForTimespan(timespan?: Timespan): string {
   return [timespan.start ? timespan.start.toISO() : '', timespan.finish ? timespan.finish.toISO() : ''].join('/');
 }
 
-export function describeInterval(
+export function describeTimespan(
   timespan: Timespan,
-  formatDateTime: (dateTime: DateTime) => string,
+  t: TFunction,
+  formatKey: DateTimeFormatKey,
   timeZone: string,
 ): string {
-  const start = timespan.start ? formatDateTime(timespan.start.setZone(timeZone)) : 'anytime';
+  const dateTimeFormat = getDateTimeFormat(formatKey, t);
+  const formatDateTime = (dateTime: DateTime) => formatLCM(dateTime.setZone(timeZone), dateTimeFormat);
 
-  const finish = timespan.finish ? formatDateTime(timespan.finish.setZone(timeZone)) : 'indefinitely';
-
-  const [dedupedStart, dedupedFinish] = removeCommonStringMiddle(start, finish);
-  return [dedupedStart, dedupedFinish].join(timespan.finish ? ' to ' : ' ');
+  if (timespan.start && timespan.finish) {
+    return t('timespans.finiteBothEnds', '{{ start }} to {{ finish }}', {
+      start: formatDateTime(timespan.start),
+      finish: formatDateTime(timespan.finish),
+    });
+  } else if (timespan.finish) {
+    return t('timespans.infiniteStart', 'anytime up to {{ finish }}', {
+      finish: formatDateTime(timespan.finish),
+    });
+  } else if (timespan.start) {
+    return t('timespans.infiniteFinish', 'from {{ start }} indefinitely', {
+      start: formatDateTime(timespan.start),
+    });
+  } else {
+    return t('timespans.infiniteBothEnds', 'anytime');
+  }
 }

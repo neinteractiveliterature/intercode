@@ -117,6 +117,7 @@ function AppRoot(): JSX.Element {
             siteMode: data.convention?.site_mode,
             signupMode: data.convention?.signup_mode,
             supportedCurrencyCodes: data.supportedCurrencyCodes,
+            signupAutomationMode: data.convention?.signup_automation_mode,
             ticketMode: data.convention?.ticket_mode,
             ticketName: data.convention?.ticket_name,
             ticketNamePlural: data.convention?.ticketNamePlural,

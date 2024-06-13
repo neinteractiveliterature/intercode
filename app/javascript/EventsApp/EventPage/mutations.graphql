@@ -52,3 +52,12 @@ mutation WithdrawSignupRequest($id: ID!) {
     }
   }
 }
+
+mutation CreateSignupRankedChoice($targetRunId: ID!, $requestedBucketKey: String) {
+  createSignupRankedChoice(input: { targetRunId: $targetRunId, requested_bucket_key: $requestedBucketKey }) {
+    signup_ranked_choice {
+      id
+      ...MySignupRankedChoiceFields
+    }
+  }
+}

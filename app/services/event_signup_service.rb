@@ -22,6 +22,7 @@ class EventSignupService < CivilService::Service
   validate :must_not_already_be_signed_up
   validate :must_not_have_conflicting_signups
   validate :must_have_ticket_if_required
+  validate :must_not_have_signup_rounds_due
   validate :require_valid_bucket, unless: :team_member?
   validate :require_no_bucket_for_team_member
 
@@ -61,22 +62,22 @@ class EventSignupService < CivilService::Service
 
       signup =
         run.signups.create!(
-          run: run,
+          run:,
           bucket_key: actual_bucket&.key,
-          requested_bucket_key: requested_bucket_key,
-          user_con_profile: user_con_profile,
+          requested_bucket_key:,
+          user_con_profile:,
           counted: counts_towards_total?,
           state: signup_state,
           expires_at: signup_state == "ticket_purchase_hold" ? 30.minutes.from_now : nil,
           updated_by: whodunit
         )
 
-      signup.log_signup_change!(action: action)
+      signup.log_signup_change!(action:)
     end
 
     notify_team_members(signup)
     send_confirmation(signup)
-    success(signup: signup)
+    success(signup:)
   end
 
   def convention_must_allow_self_service_signups
@@ -87,20 +88,21 @@ class EventSignupService < CivilService::Service
     errors.add :base, "#{convention.name} does not allow self-service signups."
   end
 
-  def max_signups_allowed
-    @max_signups_allowed ||= convention.maximum_event_signups.value_at(Time.zone.now)
+  def user_signup_constraints
+    @user_signup_constraints ||= UserSignupConstraints.new(user_con_profile)
   end
 
   def signup_count_must_be_allowed
     return unless signup_count_check_required?
 
-    case max_signups_allowed
+    case user_signup_constraints.max_signups_allowed
     when "not_now"
       nil # ConventionRegistrationFreeze will take care of this
     when "not_yet"
       errors.add :base, "Signups are not allowed at this time."
     else
-      unless signup_count_allowed?(user_signup_count + 1)
+      user_signup_count = user_signup_constraints.current_signup_count
+      unless user_signup_constraints.signup_count_allowed?(user_signup_count + 1)
         errors.add :base,
                    "You are already signed up for #{user_signup_count} \
 #{"event".pluralize(user_signup_count)}, which is the maximum allowed at this time."
@@ -113,6 +115,10 @@ class EventSignupService < CivilService::Service
     return false if Signup::SLOT_OCCUPYING_STATES.include?(signup_state) && !counts_towards_total?
 
     true
+  end
+
+  def conflicting_signups
+    @conflicting_signups ||= user_signup_constraints.conflicting_signups_for_run(run, allow_team_member: team_member?)
   end
 
   def must_not_have_conflicting_signups
@@ -135,14 +141,11 @@ class EventSignupService < CivilService::Service
   end
 
   def must_have_ticket_if_required
-    return unless convention.ticket_mode == "required_for_signup"
+    return if user_signup_constraints.has_ticket_if_required?
 
-    ticket = user_con_profile.ticket
-    return if ticket&.allows_event_signups?
-
-    if ticket
+    if user_con_profile.ticket
       errors.add :base,
-                 "You have a #{ticket.ticket_type.description}, \
+                 "You have a #{user_con_profile.ticket.ticket_type.description}, \
 but these do not allow event signups.  If you want to sign up for events, please contact \
 #{convention.name} staff."
     else
@@ -159,6 +162,15 @@ sign up for events."
     return unless already_signed_up
 
     errors.add :base, "You are already signed up for this run of #{event.title}."
+  end
+
+  def must_not_have_signup_rounds_due
+    return if action == "accept_signup_ranked_choice"
+    return unless convention.signup_automation_mode == "ranked_choice"
+    return unless convention.signup_rounds.currently_due.any?
+
+    errors.add :base,
+               "We are currently processing ranked choice signups for this round. Please wait a moment and try again."
   end
 
   def require_valid_bucket
@@ -193,18 +205,6 @@ sign up for events."
     end
   end
 
-  def other_signups_including_not_counted
-    @other_signups_including_not_counted ||=
-      user_con_profile.signups.includes(run: :event).where.not(run_id: run.id).where.not(state: "withdrawn").to_a
-  end
-
-  def other_signups
-    @other_signups ||=
-      other_signups_including_not_counted.select do |signup|
-        signup.counted? || (signup.state == "waitlisted" && !signup.requested_bucket&.not_counted?)
-      end
-  end
-
   def bucket_finder
     @bucket_finder ||=
       SignupBucketFinder.new(run.registration_policy, requested_bucket_key, run.signups.counted.occupying_slot.to_a)
@@ -215,43 +215,9 @@ sign up for events."
     @actual_bucket ||= bucket_finder.find_bucket
   end
 
-  def user_signup_count
-    other_signups.size
-  end
-
   def team_member?
     return @is_team_member unless @is_team_member.nil?
     @is_team_member = event.team_members.where(user_con_profile_id: user_con_profile.id).any?
-  end
-
-  def signup_count_allowed?(signup_count)
-    case max_signups_allowed
-    when "unlimited"
-      true
-    when "not_yet"
-      false
-    else
-      signup_count <= max_signups_allowed.to_i
-    end
-  end
-
-  def concurrent_signups
-    @concurrent_signups ||=
-      other_signups_including_not_counted.select do |signup|
-        other_run = signup.run
-        !other_run.event.can_play_concurrently? && run.overlaps?(other_run)
-      end
-  end
-
-  def conflicting_signups
-    @conflicting_signups ||=
-      if team_member?
-        # You can be a team member for multiple events at once, as long as you're not also a
-        # regular participant in anything that disallows concurrent signups
-        concurrent_signups.reject(&:team_member?)
-      else
-        concurrent_signups
-      end
   end
 
   def existing_signups
@@ -276,13 +242,13 @@ sign up for events."
     return if suppress_notifications
 
     # Wait 5 seconds because the transaction hasn't been committed yet
-    Signups::NewSignupNotifier.new(signup: signup).deliver_later(wait: 5.seconds)
+    Signups::NewSignupNotifier.new(signup:).deliver_later(wait: 5.seconds)
   end
 
   def send_confirmation(signup)
     return if suppress_confirmation
 
     # Wait 5 seconds because the transaction hasn't been committed yet
-    Signups::SignupConfirmationNotifier.new(signup: signup).deliver_later(wait: 5.seconds)
+    Signups::SignupConfirmationNotifier.new(signup:).deliver_later(wait: 5.seconds)
   end
 end

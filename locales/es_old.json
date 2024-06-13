@@ -1,0 +1,10 @@
+{
+  "signups": {
+    "maximumSignups": {
+      "limitedCount": ""
+    },
+    "mySignupQueue": {
+      "queueHeader": "Signup Queue - Round {{ roundNumber }} - {{ roundDateTime }}"
+    }
+  }
+}

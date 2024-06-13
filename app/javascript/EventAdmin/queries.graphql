@@ -54,6 +54,8 @@ fragment ConventionFields on Convention {
   timezone_mode
   event_mailing_list_domain
   site_mode
+  signup_mode
+  signup_automation_mode
 
   event_categories {
     id
@@ -103,6 +105,12 @@ fragment RunFields on Run {
 
   my_signup_requests {
     id
+    state
+  }
+
+  my_signup_ranked_choices {
+    id
+    priority
     state
   }
 }

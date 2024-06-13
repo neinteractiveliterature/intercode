@@ -23,7 +23,7 @@
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
 # rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
-require 'test_helper'
+require "test_helper"
 
 class ProductVariantTest < ActiveSupport::TestCase
   # test "the truth" do

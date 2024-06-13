@@ -15,7 +15,7 @@ jobs:
         uses: reviewdog/action-rubocop@v2
         with:
           rubocop_version: gemfile
-          rubocop_extensions: rubocop-rails:gemfile rubocop-sequel:gemfile rubocop-performance:gemfile prettier:gemfile
+          rubocop_extensions: rubocop-rails:gemfile rubocop-sequel:gemfile rubocop-performance:gemfile rubocop-factory_bot:gemfile rubocop-graphql:gemfile prism:gemfile prettier:gemfile
   eslint:
     name: eslint
     runs-on: ubuntu-latest

@@ -26,6 +26,7 @@
 #  needs_update                 :boolean          default(FALSE), not null
 #  nickname                     :string
 #  preferred_contact            :string
+#  ranked_choice_allow_waitlist :boolean          default(TRUE), not null
 #  receive_whos_free_emails     :boolean          default(TRUE), not null
 #  show_nickname_in_bio         :boolean
 #  state                        :string
@@ -58,12 +59,14 @@ class UserConProfile < ApplicationRecord
   has_many :run_tickets, -> { where.not(run_id: nil) }, class_name: "Ticket", dependent: :destroy
   has_many :team_members, dependent: :destroy
   has_many :signups, dependent: :destroy
+  has_many :signup_ranked_choices, dependent: :destroy
   has_many :signup_requests, dependent: :destroy
   has_many :event_proposals, foreign_key: :owner_id, dependent: :nullify
   has_many :event_ratings, dependent: :destroy
   has_many :orders, dependent: :destroy
   has_and_belongs_to_many :staff_positions
   has_many :permissions, through: :staff_positions
+  has_many :ranked_choice_user_constraints, dependent: :destroy
 
   delegate :email, to: :user, allow_nil: true
 
@@ -71,6 +74,7 @@ class UserConProfile < ApplicationRecord
   validates :preferred_contact, inclusion: { in: %w[email day_phone evening_phone], allow_blank: true }
 
   before_create :generate_ical_secret
+  before_create :generate_lottery_number
   after_commit :send_user_activity_alerts, on: :create
   after_commit :touch_team_member_events, on: %i[create update]
 
@@ -120,7 +124,7 @@ class UserConProfile < ApplicationRecord
     return unless birth_date
 
     on_or_after_birthday =
-      (date.month > birth_date.month || (date.month == birth_date.month && date.day >= birth_date.day))
+      date.month > birth_date.month || (date.month == birth_date.month && date.day >= birth_date.day)
 
     date.year - birth_date.year - (on_or_after_birthday ? 0 : 1)
   end
@@ -146,7 +150,7 @@ class UserConProfile < ApplicationRecord
 
   def is_team_member? # rubocop:disable Naming/PredicateName
     return team_members.size.positive? if team_members.loaded?
-    self.class.is_team_member.where(id: id).any?
+    self.class.is_team_member.where(id:).any?
   end
 
   def can_have_bio?
@@ -158,7 +162,7 @@ class UserConProfile < ApplicationRecord
   end
 
   def email=(email)
-    self.user = User.find_by(email: email)
+    self.user = User.find_by(email:)
     self.first_name ||= user.first_name
     self.last_name ||= user.last_name
   end
@@ -243,6 +247,15 @@ class UserConProfile < ApplicationRecord
 
   def generate_ical_secret
     self.ical_secret ||= Devise.friendly_token
+  end
+
+  def generate_lottery_number
+    return if lottery_number.present?
+
+    possible_lottery_numbers = Set.new(1..convention.max_lottery_number)
+    existing_lottery_numbers = Set.new(convention.user_con_profiles.pluck(:lottery_number))
+    sample_set = (possible_lottery_numbers - existing_lottery_numbers).to_a
+    self.lottery_number = sample_set.sample
   end
 
   def touch_team_member_events

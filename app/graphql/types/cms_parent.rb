@@ -3,8 +3,6 @@ module Types::CmsParent
   include Types::BaseInterface
   field_class Types::BaseField
 
-  field :id, ID, null: false
-
   definition_methods do
     def resolve_type(object, _context)
       case object
@@ -25,6 +23,8 @@ module Types::CmsParent
     renders when there is no convention associated with the current domain name. (See the RootSite
     object for more details about this.)
   MARKDOWN
+
+  field :id, ID, null: false, description: "The ID of this object."
 
   field :cms_content_groups, [Types::CmsContentGroupType], null: false do
     description <<~MARKDOWN
@@ -97,7 +97,11 @@ module Types::CmsParent
   MARKDOWN
   end
 
-  field :default_layout, Types::CmsLayoutType, null: false
+  field :default_layout, Types::CmsLayoutType, null: false do
+    description <<~MARKDOWN
+      Returns the default CMS layout used in this domain.
+    MARKDOWN
+  end
 
   field :effective_cms_layout, Types::CmsLayoutType, null: false do
     argument :path, String, required: true, description: "The path to find the effective layout for."
@@ -160,7 +164,9 @@ module Types::CmsParent
     end
   end
 
-  field :root_page, Types::PageType, null: false
+  field :root_page, Types::PageType, null: false do
+    description "The CMS page used for the root path (/) of this domain."
+  end
 
   field :typeahead_search_cms_content, [Types::CmsContentType], null: false do
     argument :name,

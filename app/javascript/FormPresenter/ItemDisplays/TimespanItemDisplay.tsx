@@ -6,7 +6,7 @@ import { TFunction } from 'i18next';
 import assertNever from 'assert-never';
 import { useTranslation } from 'react-i18next';
 
-export function describeTimespan(value: number, t: TFunction): string {
+export function describeDuration(value: number, t: TFunction): string {
   return breakValueIntoUnitQuantities(value)
     .map(({ unit, quantity }) => {
       switch (unit.name) {
@@ -27,7 +27,7 @@ export type TimespanItemDisplayProps = {
 
 function TimespanItemDisplay({ value }: TimespanItemDisplayProps): JSX.Element {
   const { t } = useTranslation();
-  const description = useMemo(() => describeTimespan(value, t), [value, t]);
+  const description = useMemo(() => describeDuration(value, t), [value, t]);
   return <>{description}</>;
 }
 

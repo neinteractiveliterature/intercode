@@ -8,17 +8,10 @@ import ConventionFormWebsiteSection from './ConventionFormWebsiteSection';
 import ConventionFormBillingSection from './ConventionFormBillingSection';
 import ConventionFormEventsSection from './ConventionFormEventsSection';
 import useAsyncFunction from '../useAsyncFunction';
-import { EditingScheduledValue } from '../BuiltInFormControls/ScheduledValueEditor';
 import ConventionFormEmailSection from './ConventionFormEmailSection';
 import { ConventionAdminConventionQueryData } from './queries.generated';
-import { MaximumEventSignupsValue } from './MaximumEventSignupsPreview';
 
-export type ConventionFormConvention = Omit<
-  ConventionAdminConventionQueryData['convention'],
-  'maximum_event_signups'
-> & {
-  maximum_event_signups: EditingScheduledValue<MaximumEventSignupsValue>;
-};
+export type ConventionFormConvention = ConventionAdminConventionQueryData['convention'];
 
 export type ConventionFormProps = {
   initialConvention: ConventionFormConvention;

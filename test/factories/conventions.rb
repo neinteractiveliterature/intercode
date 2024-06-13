@@ -17,7 +17,6 @@
 #  hidden                         :boolean          default(FALSE), not null
 #  language                       :string           not null
 #  location                       :jsonb
-#  maximum_event_signups          :jsonb
 #  maximum_tickets                :integer
 #  name                           :string
 #  open_graph_image               :text
@@ -64,32 +63,30 @@
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
 FactoryBot.define do
   factory :convention do
-    name { 'TestCon' }
+    name { "TestCon" }
     sequence(:domain) { |n| "testcon#{n}.example.com" }
-    timezone_name { 'UTC' }
-    timezone_mode { 'convention_local' }
-    show_schedule { 'yes' }
-    show_event_list { 'yes' }
+    timezone_name { "UTC" }
+    timezone_mode { "convention_local" }
+    signup_automation_mode { "none" }
+    show_schedule { "yes" }
+    show_event_list { "yes" }
     accepting_proposals { false }
-    language { 'en' }
+    language { "en" }
     updated_by { nil }
-    maximum_event_signups do
-      ScheduledValue::ScheduledValue.new(timespans: [{ start: nil, finish: nil, value: 'unlimited' }])
-    end
     starts_at { Time.utc(2016, 10, 28, 18, 0, 0) }
     ends_at { Time.utc(2016, 10, 30, 18, 0, 0) }
     stripe_account_id { "acct_#{Devise.friendly_token}" }
 
     after(:build) do |convention|
-      convention.user_con_profile_form ||= convention.build_user_con_profile_form(form_type: 'user_con_profile')
+      convention.user_con_profile_form ||= convention.build_user_con_profile_form(form_type: "user_con_profile")
       convention.email_from ||= "noreply@#{convention.domain}"
     end
 
     trait :with_notification_templates do
       after(:create) do |convention|
-        content_set = CmsContentSet.new(name: 'standard')
-        CmsContentLoaders::CmsPartials.new(cms_parent: convention, content_set: content_set).call!
-        CmsContentLoaders::NotificationTemplates.new(cms_parent: convention, content_set: content_set).call!
+        content_set = CmsContentSet.new(name: "standard")
+        CmsContentLoaders::CmsPartials.new(cms_parent: convention, content_set:).call!
+        CmsContentLoaders::NotificationTemplates.new(cms_parent: convention, content_set:).call!
       end
     end
 
@@ -97,7 +94,7 @@ FactoryBot.define do
       after(:create) do |convention|
         convention.forms.destroy_all
         convention.update!(user_con_profile_form: nil)
-        LoadCmsContentSetService.new(convention: convention, content_set_name: 'standard').call!
+        LoadCmsContentSetService.new(convention:, content_set_name: "standard").call!
       end
     end
   end

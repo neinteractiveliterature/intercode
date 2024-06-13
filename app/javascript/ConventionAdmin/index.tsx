@@ -12,8 +12,6 @@ import useAuthorizationRequired from '../Authentication/useAuthorizationRequired
 import { useConventionAdminConventionQuery } from './queries.generated';
 import { useUpdateConventionMutation } from './mutations.generated';
 import { ConventionInput } from '../graphqlTypes.generated';
-import { EditingScheduledValue } from '../BuiltInFormControls/ScheduledValueEditor';
-import { MaximumEventSignupsValue } from './MaximumEventSignupsPreview';
 
 export default LoadQueryWrapper(useConventionAdminConventionQuery, function ConventionAdmin({ data }) {
   const navigate = useNavigate();
@@ -25,9 +23,6 @@ export default LoadQueryWrapper(useConventionAdminConventionQuery, function Conv
   const initialConvention: ConventionFormConvention = useMemo(() => {
     return {
       ...data.convention,
-      maximum_event_signups: data.convention.maximum_event_signups
-        ? (data.convention.maximum_event_signups as EditingScheduledValue<MaximumEventSignupsValue>)
-        : { timespans: [] },
     };
   }, [data]);
 
@@ -57,6 +52,7 @@ export default LoadQueryWrapper(useConventionAdminConventionQuery, function Conv
         'show_event_list',
         'maximum_tickets',
         'signup_mode',
+        'signup_automation_mode',
         'signup_requests_open',
         'site_mode',
         'hidden',
@@ -65,13 +61,6 @@ export default LoadQueryWrapper(useConventionAdminConventionQuery, function Conv
         'clickwrap_agreement',
         'language',
       ]),
-      maximum_event_signups: {
-        timespans: convention.maximum_event_signups.timespans.map((timespan) => ({
-          start: timespan.start,
-          finish: timespan.finish,
-          string_value: timespan.value,
-        })),
-      },
       defaultLayoutId: convention.defaultLayout?.id.toString(),
       rootPageId: convention.rootPage.id.toString(),
       catchAllStaffPositionId: convention.catch_all_staff_position?.id.toString(),

@@ -3,13 +3,13 @@ require "test_helper"
 class EventSignupServiceTest < ActiveSupport::TestCase
   include ActiveJob::TestHelper
 
-  let(:convention) { create :convention, :with_notification_templates, ticket_mode: "required_for_signup" }
-  let(:event) { create :event, convention: convention }
-  let(:the_run) { create :run, event: event }
-  let(:user_con_profile) { create :user_con_profile, convention: convention }
+  let(:convention) { create(:convention, :with_notification_templates, ticket_mode: "required_for_signup") }
+  let(:event) { create(:event, convention:) }
+  let(:the_run) { create(:run, event:) }
+  let(:user_con_profile) { create(:user_con_profile, convention:) }
   let(:user) { user_con_profile.user }
-  let(:ticket_type) { create :free_ticket_type, convention: convention }
-  let(:ticket) { create :ticket, ticket_type: ticket_type, user_con_profile: user_con_profile }
+  let(:ticket_type) { create(:free_ticket_type, convention:) }
+  let(:ticket) { create(:ticket, ticket_type:, user_con_profile:) }
   let(:requested_bucket_key) { :unlimited }
 
   subject { EventSignupService.new(user_con_profile, the_run, requested_bucket_key, user) }
@@ -26,7 +26,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
   end
 
   describe "with a ticket that does not allow signups" do
-    let(:ticket_type) { create :free_ticket_type, convention: convention, allows_event_signups: false }
+    let(:ticket_type) { create(:free_ticket_type, convention:, allows_event_signups: false) }
 
     setup { ticket }
 
@@ -38,7 +38,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
   end
 
   describe "with a convention that does not require tickets" do
-    let(:convention) { create :convention, :with_notification_templates, ticket_mode: "disabled" }
+    let(:convention) { create(:convention, :with_notification_templates, ticket_mode: "disabled") }
 
     it "signs the user up for an event" do
       result = subject.call
@@ -48,7 +48,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
   end
 
   describe "with a convention that uses ticket_per_event mode" do
-    let(:convention) { create :convention, :with_notification_templates, ticket_mode: "ticket_per_event" }
+    let(:convention) { create(:convention, :with_notification_templates, ticket_mode: "ticket_per_event") }
 
     it "signs the user up for an event with a ticket purchase hold" do
       result = subject.call
@@ -75,9 +75,9 @@ class EventSignupServiceTest < ActiveSupport::TestCase
     end
 
     it "emails the team members who have requested it" do
-      email_team_member = create(:team_member, event: event, receive_signup_email: "all_signups")
-      email_team_member2 = create(:team_member, event: event, receive_signup_email: "non_waitlist_signups")
-      no_email_team_member = create(:team_member, event: event, receive_signup_email: "no")
+      email_team_member = create(:team_member, event:, receive_signup_email: "all_signups")
+      email_team_member2 = create(:team_member, event:, receive_signup_email: "non_waitlist_signups")
+      no_email_team_member = create(:team_member, event:, receive_signup_email: "no")
 
       perform_enqueued_jobs do
         # suppress confirmations so that we can check for only 1 email
@@ -103,8 +103,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase
       create(
         :signup,
         run: the_run,
-        user_con_profile: user_con_profile,
-        requested_bucket_key: requested_bucket_key,
+        user_con_profile:,
+        requested_bucket_key:,
         bucket_key: requested_bucket_key,
         state: "confirmed",
         counted: true
@@ -118,7 +118,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
     describe "as a team member" do
       let(:requested_bucket_key) { nil }
 
-      setup { create(:team_member, event: event, user_con_profile: user_con_profile) }
+      setup { create(:team_member, event:, user_con_profile:) }
 
       it "signs up a team member as not counted" do
         result = subject.call
@@ -131,10 +131,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
       end
 
       it "does not care whether signups are open yet" do
-        convention.update!(
-          maximum_event_signups:
-            ScheduledValue::ScheduledValue.new(timespans: [{ start: nil, finish: nil, value: "not_yet" }])
-        )
+        create(:signup_round, convention:, maximum_event_signups: "not_yet")
 
         result = subject.call
         assert result.success?
@@ -143,9 +140,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
     end
 
     it "allows signups if the user has not yet reached the current signup limit" do
-      convention.update!(
-        maximum_event_signups: ScheduledValue::ScheduledValue.new(timespans: [{ start: nil, finish: nil, value: "1" }])
-      )
+      create(:signup_round, convention:, maximum_event_signups: "1")
 
       result = subject.call
       assert result.success?
@@ -153,12 +148,11 @@ class EventSignupServiceTest < ActiveSupport::TestCase
     end
 
     it "does not count non-counted signups towards the signup limit" do
-      convention.update!(
-        maximum_event_signups: ScheduledValue::ScheduledValue.new(timespans: [{ start: nil, finish: nil, value: "1" }])
-      )
-      another_event = create(:event, convention: convention)
+      create(:signup_round, convention:, maximum_event_signups: "1")
+
+      another_event = create(:event, convention:)
       another_run = create(:run, event: another_event, starts_at: the_run.ends_at)
-      create(:signup, counted: false, user_con_profile: user_con_profile, run: another_run)
+      create(:signup, counted: false, user_con_profile:, run: another_run)
 
       result = subject.call
       assert result.success?
@@ -166,13 +160,11 @@ class EventSignupServiceTest < ActiveSupport::TestCase
     end
 
     it "does count waitlisted signups towards the signup limit" do
-      convention.update!(
-        maximum_event_signups: ScheduledValue::ScheduledValue.new(timespans: [{ start: nil, finish: nil, value: "1" }])
-      )
+      create(:signup_round, convention:, maximum_event_signups: "1")
 
-      another_event = create(:event, convention: convention)
+      another_event = create(:event, convention:)
       another_run = create(:run, event: another_event, starts_at: the_run.ends_at)
-      create(:signup, state: "waitlisted", user_con_profile: user_con_profile, run: another_run)
+      create(:signup, state: "waitlisted", user_con_profile:, run: another_run)
 
       result = subject.call
       assert result.failure?
@@ -180,13 +172,11 @@ class EventSignupServiceTest < ActiveSupport::TestCase
     end
 
     it "does count ticket_purchase_hold signups towards the signup limit" do
-      convention.update!(
-        maximum_event_signups: ScheduledValue::ScheduledValue.new(timespans: [{ start: nil, finish: nil, value: "1" }])
-      )
+      create(:signup_round, convention:, maximum_event_signups: "1")
 
-      another_event = create(:event, convention: convention)
+      another_event = create(:event, convention:)
       another_run = create(:run, event: another_event, starts_at: the_run.ends_at)
-      create(:signup, state: "ticket_purchase_hold", user_con_profile: user_con_profile, run: another_run)
+      create(:signup, state: "ticket_purchase_hold", user_con_profile:, run: another_run)
 
       result = subject.call
       assert result.failure?
@@ -194,12 +184,11 @@ class EventSignupServiceTest < ActiveSupport::TestCase
     end
 
     it "does not count withdrawn signups towards the signup limit" do
-      convention.update!(
-        maximum_event_signups: ScheduledValue::ScheduledValue.new(timespans: [{ start: nil, finish: nil, value: "1" }])
-      )
-      another_event = create(:event, convention: convention)
+      create(:signup_round, convention:, maximum_event_signups: "1")
+
+      another_event = create(:event, convention:)
       another_run = create(:run, event: another_event, starts_at: the_run.ends_at)
-      create(:signup, state: "withdrawn", user_con_profile: user_con_profile, run: another_run)
+      create(:signup, state: "withdrawn", user_con_profile:, run: another_run)
 
       result = subject.call
       assert result.success?
@@ -207,11 +196,9 @@ class EventSignupServiceTest < ActiveSupport::TestCase
     end
 
     it "disallows signups if the user has reached the current signup limit" do
-      convention.update!(
-        maximum_event_signups: ScheduledValue::ScheduledValue.new(timespans: [{ start: nil, finish: nil, value: "1" }])
-      )
+      create(:signup_round, convention:, maximum_event_signups: "1")
 
-      other_event = create(:event, convention: convention, length_seconds: event.length_seconds)
+      other_event = create(:event, convention:, length_seconds: event.length_seconds)
       other_run = create(:run, event: other_event, starts_at: the_run.starts_at + event.length_seconds * 2)
       other_signup_service = EventSignupService.new(user_con_profile, other_run, requested_bucket_key, user)
       assert other_signup_service.call.success?
@@ -222,10 +209,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
     end
 
     it "disallows signups if signups are not yet open" do
-      convention.update!(
-        maximum_event_signups:
-          ScheduledValue::ScheduledValue.new(timespans: [{ start: nil, finish: nil, value: "not_yet" }])
-      )
+      create(:signup_round, convention:, maximum_event_signups: "not_yet")
 
       result = subject.call
       assert result.failure?
@@ -233,10 +217,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
     end
 
     it "disallows signups to a frozen convention" do
-      convention.update!(
-        maximum_event_signups:
-          ScheduledValue::ScheduledValue.new(timespans: [{ start: nil, finish: nil, value: "not_now" }])
-      )
+      create(:signup_round, convention:, maximum_event_signups: "not_now")
 
       result = subject.call
       assert result.failure?
@@ -247,14 +228,14 @@ class EventSignupServiceTest < ActiveSupport::TestCase
     end
 
     describe "with a conflicting event" do
-      let(:other_event) { create(:event, convention: convention, length_seconds: event.length_seconds) }
+      let(:other_event) { create(:event, convention:, length_seconds: event.length_seconds) }
       let(:other_run) { create(:run, event: other_event, starts_at: the_run.starts_at) }
 
       it "disallows signups with conflicting waitlist games" do
         waitlist_signup1 =
           create(
             :signup,
-            user_con_profile: user_con_profile,
+            user_con_profile:,
             run: other_run,
             state: "waitlisted",
             bucket_key: nil,
@@ -308,7 +289,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
       let(:event) do
         create(
           :event,
-          convention: convention,
+          convention:,
           registration_policy: {
             buckets: [
               { key: "dogs", name: "dogs", slots_limited: true, total_slots: 3 },
@@ -362,8 +343,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase
       end
 
       it "emails only the team members who have requested waitlist emails" do
-        email_team_member = create(:team_member, event: event, receive_signup_email: "all_signups")
-        no_email_team_member = create(:team_member, event: event, receive_signup_email: "non_waitlist_signups")
+        email_team_member = create(:team_member, event:, receive_signup_email: "all_signups")
+        no_email_team_member = create(:team_member, event:, receive_signup_email: "non_waitlist_signups")
         2.times { create_other_signup "cats" }
         4.times { create_other_signup "anything" }
 
@@ -437,7 +418,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
           let(:event) do
             create(
               :event,
-              convention: convention,
+              convention:,
               registration_policy: {
                 buckets: [
                   { key: "dogs", name: "dogs", slots_limited: true, total_slots: 3 },
@@ -464,7 +445,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
         it "does not move them if you could go into flex" do
           # we'll assume there used to be 4 in the flex bucket, but one dropped
           3.times { create_other_signup "anything" }
-          immovable_signup = create_other_signup "cats"
+          _immovable_signup = create_other_signup "cats"
           movable_signup = create_other_signup "cats", requested_bucket_key: nil
 
           result = subject.call
@@ -480,7 +461,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
         it "moves them into a different bucket if the flex bucket is not possible" do
           4.times { create_other_signup "anything" }
-          immovable_signup = create_other_signup "cats"
+          _immovable_signup = create_other_signup "cats"
           movable_signup = create_other_signup "cats", requested_bucket_key: nil
 
           result = subject.call
@@ -497,7 +478,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
         it "waitlists you if not possible" do
           4.times { create_other_signup "anything" }
           3.times { create_other_signup "dogs" }
-          immovable_signup = create_other_signup "cats"
+          _immovable_signup = create_other_signup "cats"
           movable_signup = create_other_signup "cats", requested_bucket_key: nil
 
           result = subject.call
@@ -543,7 +524,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
       let(:event) do
         create(
           :event,
-          convention: convention,
+          convention:,
           registration_policy: {
             buckets: [
               { key: "pc", name: "PC", slots_limited: true, total_slots: 1 },
@@ -589,18 +570,53 @@ class EventSignupServiceTest < ActiveSupport::TestCase
     end
   end
 
+  describe "in ranked-choice conventions" do
+    let(:convention) { create(:convention, :with_notification_templates, signup_automation_mode: "ranked_choice") }
+
+    it "allows signups normally" do
+      create(
+        :signup_round,
+        convention:,
+        maximum_event_signups: "unlimited",
+        start: 1.minute.ago,
+        executed_at: 1.minute.ago
+      )
+
+      result = subject.call!
+
+      assert result.success?
+      assert result.signup.confirmed?
+    end
+
+    it "does not allow signups while waiting for a signup round to process" do
+      create(:signup_round, convention:, maximum_event_signups: "unlimited", start: 1.minute.ago, executed_at: nil)
+
+      result = subject.call
+
+      assert result.failure?
+      assert_match(/\AWe are currently processing ranked choice signups/, result.errors.full_messages.join('\n'))
+    end
+
+    it "allows ranked-choice signup acceptance during a round" do
+      create(:signup_round, convention:, maximum_event_signups: "unlimited", start: 1.minute.ago, executed_at: nil)
+      signup_ranked_choice = create(:signup_ranked_choice, user_con_profile:, target_run: the_run)
+
+      result = AcceptSignupRankedChoiceService.new(signup_ranked_choice:, whodunit: nil).call!
+
+      assert result.success?
+      assert result.signup.confirmed?
+    end
+  end
+
   private
 
   def create_other_signup(bucket_key, **attributes)
-    signup_user_con_profile = create(:user_con_profile, convention: convention)
+    signup_user_con_profile = create(:user_con_profile, convention:)
     create(
       :signup,
-      {
-        user_con_profile: signup_user_con_profile,
-        run: the_run,
-        bucket_key: bucket_key,
-        requested_bucket_key: bucket_key
-      }.merge(attributes)
+      { user_con_profile: signup_user_con_profile, run: the_run, bucket_key:, requested_bucket_key: bucket_key }.merge(
+        attributes
+      )
     )
   end
 end

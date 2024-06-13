@@ -1,0 +1,17 @@
+fragment SignupRoundFields on SignupRound {
+  id
+  maximum_event_signups
+  ranked_choice_order
+  start
+  executed_at
+}
+
+query SignupRoundsAdminQuery {
+  convention: conventionByRequestHost {
+    id
+    signup_rounds {
+      id
+      ...SignupRoundFields
+    }
+  }
+}

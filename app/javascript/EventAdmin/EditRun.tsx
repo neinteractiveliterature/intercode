@@ -3,7 +3,7 @@ import { useNavigate, useParams, useLocation } from 'react-router-dom';
 
 import EditRunModal, { EditingRun } from './EditRunModal';
 import buildEventCategoryUrl from './buildEventCategoryUrl';
-import { ConventionFieldsFragment, EventAdminEventsQueryData, EventFieldsFragment } from './queries.generated';
+import { EventAdminEventsQueryData, EventFieldsFragment } from './queries.generated';
 
 export type EditRunProps = {
   convention: EventAdminEventsQueryData['convention'];
@@ -33,6 +33,7 @@ function EditRun({ convention, events }: EditRunProps): JSX.Element {
         id: '',
         my_signups: [],
         my_signup_requests: [],
+        my_signup_ranked_choices: [],
         starts_at: undefined,
         title_suffix: undefined,
         schedule_note: undefined,

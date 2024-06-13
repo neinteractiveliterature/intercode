@@ -19,8 +19,8 @@
 #  fk_rails_...  (root_page_id => pages.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
-require 'test_helper'
+# rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
+require "test_helper"
 
 class RootSiteTest < ActiveSupport::TestCase
   # test "the truth" do

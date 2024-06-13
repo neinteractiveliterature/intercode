@@ -75,7 +75,7 @@ export function formatLCM(dateTime: DateTime, format: string, options?: LocaleOp
   return dateTime.toFormat(hackedFormat, options);
 }
 
-export function useAppDateTimeFormat(): typeof formatLCM {
+export function useAppDateTimeFormat() {
   const { t } = useTranslation();
   const format = useCallback(
     (dateTime: DateTime, formatKey: DateTimeFormatKey, options?: LocaleOptions) =>

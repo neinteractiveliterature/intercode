@@ -24,6 +24,7 @@ fragment ConventionAdminConventionFields on Convention {
   ticket_mode
   site_mode
   signup_mode
+  signup_automation_mode
   signup_requests_open
   stripe_account_ready_to_charge
 
@@ -44,12 +45,11 @@ fragment ConventionAdminConventionFields on Convention {
     display_name
   }
 
-  maximum_event_signups {
-    timespans {
-      start
-      finish
-      value
-    }
+  signup_rounds {
+    id
+    start
+    maximum_event_signups
+    ranked_choice_order
   }
 
   defaultLayout {

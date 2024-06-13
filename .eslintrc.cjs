@@ -56,7 +56,7 @@ module.exports = {
     'jsx-a11y/control-has-associated-label': [
       2,
       {
-        ignoreElements: ['th'],
+        ignoreElements: ['tr', 'th', 'td'],
         required: {
           some: ['nesting', 'id'],
         },

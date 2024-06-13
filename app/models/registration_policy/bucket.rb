@@ -19,7 +19,7 @@ class RegistrationPolicy::Bucket
   alias expose_attendees? expose_attendees
 
   def self.normalize_key(key)
-    key.to_s.downcase.gsub(/[^0-9a-z]/, '_')
+    key.to_s.downcase.gsub(/[^0-9a-z]/, "_")
   end
 
   %w[minimum_slots preferred_slots total_slots].each do |method|
@@ -61,10 +61,18 @@ class RegistrationPolicy::Bucket
     return nil if slots_unlimited?
     my_signups_count =
       signups.count do |signup|
-        signup.occupying_slot? && signup.bucket_key == key &&
-          (
-            not_counted? || signup.counted # don't count non-counted signups in a counted bucket
-          )
+        case signup
+        when Signup
+          signup.occupying_slot? && signup.bucket_key == key &&
+            (
+              not_counted? || signup.counted # don't count non-counted signups in a counted bucket
+            )
+        when SignupRequest
+          signup.requested_bucket_key == key
+        else
+          raise ArgumentError,
+                "RegistrationPolicy::Bucket doesn't know how to count #{signup.class.name} objects as signups"
+        end
       end
     [total_slots - my_signups_count, 0].max
   end

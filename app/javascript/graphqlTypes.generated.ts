@@ -433,6 +433,7 @@ export type CmsParent = {
   cmsPartials: Array<CmsPartial>;
   /** Returns all CMS variables within the current domain. */
   cmsVariables: Array<CmsVariable>;
+  /** Returns the default CMS layout used in this domain. */
   defaultLayout: CmsLayout;
   /**
    * Returns the CMS layout to be used for a particular URL path within the current domain. (This
@@ -442,6 +443,7 @@ export type CmsParent = {
   effectiveCmsLayout: CmsLayout;
   /** Does a full-text search within this domain. */
   fullTextSearch: SearchResult;
+  /** The ID of this object. */
   id: Scalars['ID']['output'];
   /**
    * Returns all the Liquid assigns for regular CMS page rendering in the current domain name.
@@ -453,6 +455,7 @@ export type CmsParent = {
   previewLiquid: Scalars['String']['output'];
   /** Given a Markdown text string, renders it to HTML and returns the result. */
   previewMarkdown: Scalars['String']['output'];
+  /** The CMS page used for the root path (/) of this domain. */
   rootPage: Page;
   /**
    * Finds CMS content by partial name, case-insensitive, within the current domain's CMS content.
@@ -604,13 +607,33 @@ export type ContactEmail = {
   name?: Maybe<Scalars['String']['output']>;
 };
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type Convention = CmsParent & {
   __typename: 'Convention';
+  /** Is this convention currently accepting event proposals? */
   accepting_proposals?: Maybe<Scalars['Boolean']['output']>;
+  /** User profiles in this convention that can have a bio (because they're staff or event team members). */
   bio_eligible_user_con_profiles: Array<UserConProfile>;
+  /** Is this convention canceled? */
   canceled: Scalars['Boolean']['output'];
+  /**
+   * If this convention's email_mode is set to staff_emails_to_catch_all, all email sent to staff position email
+   * addresses at this convention will be forwarded to this staff position.
+   */
   catch_all_staff_position?: Maybe<StaffPosition>;
+  /**
+   * A clickwrap agreement, in Liquid format.  If present, users will have to agree to this before they're allowed to
+   * use the web site.
+   */
   clickwrap_agreement?: Maybe<Scalars['String']['output']>;
+  /** The value of clickwrap_agreement, rendered as HTML. */
   clickwrap_agreement_html?: Maybe<Scalars['String']['output']>;
   /**
    * Finds a CMS content group by ID within the domain name of this HTTP request. If there is no
@@ -642,10 +665,15 @@ export type Convention = CmsParent & {
   /** Returns all CMS variables within the current domain. */
   cmsVariables: Array<CmsVariable>;
   coupons_paginated: CouponsPagination;
+  /** When this convention was created. */
   created_at?: Maybe<Scalars['Date']['output']>;
+  /** Returns the default CMS layout used in this domain. */
   defaultLayout: CmsLayout;
+  /** The ISO 4217 currency code used by default for products in this convention.  If null, defaults to USD. */
   default_currency_code?: Maybe<Scalars['String']['output']>;
+  /** All the departments in this convention. */
   departments: Array<Department>;
+  /** The domain name used for serving this convention web site. */
   domain?: Maybe<Scalars['String']['output']>;
   /**
    * Returns the CMS layout to be used for a particular URL path within the current domain. (This
@@ -653,15 +681,23 @@ export type Convention = CmsParent & {
    * the default layout for the domain otherwise.)
    */
   effectiveCmsLayout: CmsLayout;
+  /** The default address that site emails will be sent from. */
   email_from: Scalars['String']['output'];
+  /** How this convention site will handle incoming emails to its domain. */
   email_mode: EmailMode;
+  /** When this convention ends. */
   ends_at?: Maybe<Scalars['Date']['output']>;
   /**
    * Finds an active event by ID in this convention. If there is no event with that ID in this
    * convention, or the event is no longer active, errors out.
    */
   event: Event;
+  /** All the EventCategories in this convention. */
   event_categories: Array<EventCategory>;
+  /**
+   * If present, the site will automatically offer to set up forwarding email addresses for event teams under this
+   * domain.
+   */
   event_mailing_list_domain?: Maybe<Scalars['String']['output']>;
   /**
    * Finds an event proposal by ID in this convention. If there is no event proposal with that ID
@@ -678,6 +714,7 @@ export type Convention = CmsParent & {
    */
   events: Array<Event>;
   events_paginated: EventsPagination;
+  /** The favicon that will be served to browsers on this site. */
   favicon?: Maybe<ActiveStorageAttachment>;
   /** @deprecated Please use the favicon field instead. */
   favicon_url?: Maybe<Scalars['String']['output']>;
@@ -686,11 +723,15 @@ export type Convention = CmsParent & {
    * errors out.
    */
   form: Form;
+  /** All the forms in this convention. */
   forms: Array<Form>;
   /** Does a full-text search within this domain. */
   fullTextSearch: SearchResult;
+  /** If true, this convention will not be listed in CMS content on the root site. */
   hidden: Scalars['Boolean']['output'];
+  /** The ID of this convention. */
   id: Scalars['ID']['output'];
+  /** The language to use for localized content in this site. */
   language: Scalars['String']['output'];
   /**
    * Returns all the Liquid assigns for regular CMS page rendering in the current domain name.
@@ -698,9 +739,16 @@ export type Convention = CmsParent & {
    * CMS variables.
    */
   liquidAssigns: Array<LiquidAssign>;
+  /** The physical location of the convention, in Mapbox format. */
   location?: Maybe<Scalars['Json']['output']>;
+  /** A sub-object for accessing this convention's autogenerated mailing lists. */
   mailing_lists: MailingLists;
+  /**
+   * The schedule of how many signups are allowed in this convention and when.
+   * @deprecated Please use SignupRound instead
+   */
   maximum_event_signups?: Maybe<ScheduledValue>;
+  /** The maximum number of tickets this convention can sell. */
   maximum_tickets?: Maybe<Scalars['Int']['output']>;
   /**
    * Returns the convention-specific profile for the current user within this convention. If no
@@ -708,11 +756,23 @@ export type Convention = CmsParent & {
    */
   my_profile?: Maybe<UserConProfile>;
   /**
+   * Returns all signup ranked choices for the current user within this convention. If no user is signed in,
+   * returns an empty array.
+   */
+  my_signup_ranked_choices: Array<SignupRankedChoice>;
+  /**
+   * Returns all signup requests for the current user within this convention. If no user is signed in,
+   * returns an empty array.
+   */
+  my_signup_requests: Array<SignupRequest>;
+  /**
    * Returns all signups for the current user within this convention. If no user is signed in,
    * returns an empty array.
    */
   my_signups: Array<Signup>;
+  /** The name of this convention. */
   name: Scalars['String']['output'];
+  /** All the NotificationTemplates in this convention. */
   notification_templates: Array<NotificationTemplate>;
   /**
    * Returns all the Liquid assigns for rendering a particular notification event in this
@@ -720,11 +780,17 @@ export type Convention = CmsParent & {
    * to that notification event, and convention-specific user-defined CMS variables.
    */
   notifier_liquid_assigns: Array<LiquidAssign>;
+  /**
+   * The image that will be served from this site using the `<meta property="og:image">` tag.  For more information
+   * about OpenGraph, see https://ogp.me/.
+   */
   open_graph_image?: Maybe<ActiveStorageAttachment>;
   /** @deprecated Please use the open_graph_image field instead. */
   open_graph_image_url?: Maybe<Scalars['String']['output']>;
   orders_paginated: OrdersPagination;
+  /** The organization in charge of this convention. */
   organization?: Maybe<Organization>;
+  /** If present, a block of HTML content to show above the schedule on various schedule pages. */
   pre_schedule_content_html?: Maybe<Scalars['String']['output']>;
   /** Given a Liquid text string, renders it to HTML and returns the result. */
   previewLiquid: Scalars['String']['output'];
@@ -740,9 +806,13 @@ export type Convention = CmsParent & {
    * convention, errors out.
    */
   product: Product;
+  /** Returns the products in this convention. */
   products: Array<Product>;
+  /** A sub-object containing various reports that can be generated for this convention. */
   reports: ConventionReports;
+  /** All the rooms in this convention. */
   rooms: Array<Room>;
+  /** The CMS page used for the root path (/) of this domain. */
   rootPage: Page;
   /**
    * Finds an active run by ID in this convention. If there is no run with that ID in this
@@ -750,36 +820,58 @@ export type Convention = CmsParent & {
    */
   run: Run;
   runs_paginated: RunsPagination;
+  /** Who can currently see the event catalog? */
   show_event_list?: Maybe<ShowSchedule>;
+  /** Who can currently see the event schedule? */
   show_schedule?: Maybe<ShowSchedule>;
   /**
    * Finds a signup by ID in this convention. If there is no signup with that ID in this
    * convention, errors out.
    */
   signup: Signup;
+  /** The type of signup automation used for this convention. */
+  signup_automation_mode: SignupAutomationMode;
   signup_changes_paginated: SignupChangesPagination;
   signup_counts_by_state: Array<SignupCountByState>;
+  /** The signup mode used for this convention. */
   signup_mode: SignupMode;
+  /** In a moderated-signup convention, are signup requests currently allowed? */
   signup_requests_open: Scalars['Boolean']['output'];
   signup_requests_paginated: SignupRequestsPagination;
+  /** The signup rounds in this convention. */
+  signup_rounds: Array<SignupRound>;
+  /** The mode this convention site is operating in. */
   site_mode: SiteMode;
   /**
    * Finds a staff position by ID in this convention. If there is no staff position with that ID
    * in this convention, errors out.
    */
   staff_position: StaffPosition;
+  /** All the staff positions in this convention. */
   staff_positions: Array<StaffPosition>;
+  /** When this convention starts. */
   starts_at?: Maybe<Scalars['Date']['output']>;
+  /** The Stripe account this convention uses for payments. */
   stripe_account?: Maybe<StripeAccount>;
+  /** The ID of the Stripe account this convention uses for payments. */
   stripe_account_id?: Maybe<Scalars['String']['output']>;
+  /** Is this convention's Stripe account in a state where the convention can accept payments? */
   stripe_account_ready_to_charge: Scalars['Boolean']['output'];
+  /** The publishable key of this convention's Stripe account. */
   stripe_publishable_key?: Maybe<Scalars['String']['output']>;
+  /** The word this convention uses for 'tickets'. */
   ticketNamePlural: Scalars['String']['output'];
+  /** The mode used for ticket behaviors in this convention. */
   ticket_mode: TicketMode;
+  /** The word this convention uses for 'ticket'. */
   ticket_name: Scalars['String']['output'];
+  /** All the ticket types in this convention. */
   ticket_types: Array<TicketType>;
+  /** Can users currently buy tickets to this convention? */
   tickets_available_for_purchase: Scalars['Boolean']['output'];
+  /** The mode used for time zone display and time conversion behavior in this site. */
   timezone_mode: TimezoneMode;
+  /** The home time zone of this convention. */
   timezone_name?: Maybe<Scalars['String']['output']>;
   /**
    * Finds CMS content by partial name, case-insensitive, within the current domain's CMS content.
@@ -789,8 +881,11 @@ export type Convention = CmsParent & {
    * This query is always limited to a maximum of 10 results.
    */
   typeaheadSearchCmsContent: Array<CmsContent>;
+  /** When this convention was last modified. */
   updated_at?: Maybe<Scalars['Date']['output']>;
+  /** Find a UserActivityAlert by ID. */
   user_activity_alert: UserActivityAlert;
+  /** All the UserActivityAlerts in this convention. */
   user_activity_alerts: Array<UserActivityAlert>;
   /**
    * Finds a UserConProfile by ID in the convention associated with this convention. If there is
@@ -802,16 +897,33 @@ export type Convention = CmsParent & {
    * there is no UserConProfile with that user ID in this convention, errors out.
    */
   user_con_profile_by_user_id: UserConProfile;
+  /** The form used for user profiles in this convention. */
   user_con_profile_form: Form;
   user_con_profiles_paginated: UserConProfilesPagination;
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionCmsContentGroupArgs = {
   id: Scalars['ID']['input'];
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionCmsPageArgs = {
   id?: InputMaybe<Scalars['ID']['input']>;
   rootPage?: InputMaybe<Scalars['Boolean']['input']>;
@@ -819,6 +931,14 @@ export type ConventionCmsPageArgs = {
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionCoupons_PaginatedArgs = {
   filters?: InputMaybe<CouponFiltersInput>;
   page?: InputMaybe<Scalars['Int']['input']>;
@@ -827,26 +947,66 @@ export type ConventionCoupons_PaginatedArgs = {
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionEffectiveCmsLayoutArgs = {
   path: Scalars['String']['input'];
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionEventArgs = {
   id: Scalars['ID']['input'];
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionEvent_CategoriesArgs = {
   current_ability_can_read_event_proposals?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionEvent_ProposalArgs = {
   id: Scalars['ID']['input'];
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionEvent_Proposals_PaginatedArgs = {
   filters?: InputMaybe<EventProposalFiltersInput>;
   page?: InputMaybe<Scalars['Int']['input']>;
@@ -855,6 +1015,14 @@ export type ConventionEvent_Proposals_PaginatedArgs = {
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionEventsArgs = {
   filters?: InputMaybe<EventFiltersInput>;
   finish?: InputMaybe<Scalars['Date']['input']>;
@@ -863,6 +1031,14 @@ export type ConventionEventsArgs = {
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionEvents_PaginatedArgs = {
   filters?: InputMaybe<EventFiltersInput>;
   page?: InputMaybe<Scalars['Int']['input']>;
@@ -871,21 +1047,53 @@ export type ConventionEvents_PaginatedArgs = {
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionFormArgs = {
   id: Scalars['ID']['input'];
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionFullTextSearchArgs = {
   query: Scalars['String']['input'];
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionNotifier_Liquid_AssignsArgs = {
   eventKey: Scalars['String']['input'];
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionOrders_PaginatedArgs = {
   filters?: InputMaybe<OrderFiltersInput>;
   page?: InputMaybe<Scalars['Int']['input']>;
@@ -894,11 +1102,27 @@ export type ConventionOrders_PaginatedArgs = {
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionPreviewLiquidArgs = {
   content: Scalars['String']['input'];
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionPreviewMarkdownArgs = {
   eventId?: InputMaybe<Scalars['ID']['input']>;
   eventProposalId?: InputMaybe<Scalars['ID']['input']>;
@@ -906,28 +1130,68 @@ export type ConventionPreviewMarkdownArgs = {
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionPreview_Notifier_LiquidArgs = {
   content: Scalars['String']['input'];
   eventKey: Scalars['String']['input'];
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionProductArgs = {
   id: Scalars['ID']['input'];
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionProductsArgs = {
   only_available?: InputMaybe<Scalars['Boolean']['input']>;
   only_ticket_providing?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionRunArgs = {
   id: Scalars['ID']['input'];
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionRuns_PaginatedArgs = {
   filters?: InputMaybe<RunFiltersInput>;
   page?: InputMaybe<Scalars['Int']['input']>;
@@ -936,11 +1200,27 @@ export type ConventionRuns_PaginatedArgs = {
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionSignupArgs = {
   id: Scalars['ID']['input'];
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionSignup_Changes_PaginatedArgs = {
   filters?: InputMaybe<SignupChangeFiltersInput>;
   page?: InputMaybe<Scalars['Int']['input']>;
@@ -949,6 +1229,14 @@ export type ConventionSignup_Changes_PaginatedArgs = {
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionSignup_Requests_PaginatedArgs = {
   filters?: InputMaybe<SignupRequestFiltersInput>;
   page?: InputMaybe<Scalars['Int']['input']>;
@@ -957,31 +1245,79 @@ export type ConventionSignup_Requests_PaginatedArgs = {
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionStaff_PositionArgs = {
   id: Scalars['ID']['input'];
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionTypeaheadSearchCmsContentArgs = {
   name?: InputMaybe<Scalars['String']['input']>;
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionUser_Activity_AlertArgs = {
   id: Scalars['ID']['input'];
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionUser_Con_ProfileArgs = {
   id: Scalars['ID']['input'];
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionUser_Con_Profile_By_User_IdArgs = {
   userId: Scalars['ID']['input'];
 };
 
 
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionUser_Con_Profiles_PaginatedArgs = {
   filters?: InputMaybe<UserConProfileFiltersInput>;
   page?: InputMaybe<Scalars['Int']['input']>;
@@ -994,35 +1330,73 @@ export type ConventionFiltersInput = {
   organization_name?: InputMaybe<Scalars['String']['input']>;
 };
 
+/** An input for creating or modifying Conventions. */
 export type ConventionInput = {
+  /** Is this convention currently accepting event proposals? */
   accepting_proposals?: InputMaybe<Scalars['Boolean']['input']>;
+  /** The ID of the StaffPosition to set as the catch-all for inbound emails. */
   catchAllStaffPositionId?: InputMaybe<Scalars['ID']['input']>;
+  /** The clickwrap agreement for the convention, in Liquid format. */
   clickwrap_agreement?: InputMaybe<Scalars['String']['input']>;
+  /** The ISO 4217 currency code to use as the default for products in this convention. */
   defaultCurrencyCode?: InputMaybe<Scalars['String']['input']>;
+  /** The ID of the CmsLayout to use as the default layout for pages in this convention. */
   defaultLayoutId?: InputMaybe<Scalars['ID']['input']>;
+  /** The domain name to use for serving this convention web site. */
   domain?: InputMaybe<Scalars['String']['input']>;
+  /** The default address to send site emails from. */
   email_from?: InputMaybe<Scalars['String']['input']>;
+  /** How this convention site should handle incoming emails to its domain. */
   email_mode?: InputMaybe<EmailMode>;
+  /** When this convention ends. */
   ends_at?: InputMaybe<Scalars['Date']['input']>;
+  /** A domain to use to set up forwarding email addresses for event teams. */
   event_mailing_list_domain?: InputMaybe<Scalars['String']['input']>;
+  /** A favicon image to serve to browsers on this site. */
   favicon?: InputMaybe<Scalars['Upload']['input']>;
+  /** Should this event be hidden from CMS content on the root site? */
   hidden?: InputMaybe<Scalars['Boolean']['input']>;
+  /** The language code to use for localized content in this site (e.g. 'en' for English, 'es' for Spanish). */
   language?: InputMaybe<Scalars['String']['input']>;
+  /** The physical location of this convention, in Mapbox format. */
   location?: InputMaybe<Scalars['Json']['input']>;
+  /**
+   * The schedule of how many signups are allowed in this convention and when.
+   * @deprecated Please use SignupRound instead
+   */
   maximum_event_signups?: InputMaybe<ScheduledValueInput>;
+  /** The maximum number of tickets this convention should be able to sell. */
   maximum_tickets?: InputMaybe<Scalars['Int']['input']>;
+  /** The name of this convention. */
   name?: InputMaybe<Scalars['String']['input']>;
+  /**
+   * The image that should be served from this site using the `<meta property="og:image">` tag.  For more information
+   * about OpenGraph, see https://ogp.me/.
+   */
   openGraphImage?: InputMaybe<Scalars['Upload']['input']>;
+  /** The ID of the Page to serve at the root path (/) of this convention site. */
   rootPageId?: InputMaybe<Scalars['ID']['input']>;
+  /** Who should be able to see the event catalog? */
   show_event_list?: InputMaybe<ShowSchedule>;
+  /** Who should be able to see the event schedule? */
   show_schedule?: InputMaybe<ShowSchedule>;
+  /** The type of signup automation to use for this convention. */
+  signup_automation_mode?: InputMaybe<SignupAutomationMode>;
+  /** The signup mode to use for this convention. */
   signup_mode?: InputMaybe<SignupMode>;
+  /** In a moderated-signup convention, should signup requests currently be allowed? */
   signup_requests_open?: InputMaybe<Scalars['Boolean']['input']>;
+  /** The mode this convention site should operate in. */
   site_mode?: InputMaybe<SiteMode>;
+  /** When this convention starts. */
   starts_at?: InputMaybe<Scalars['Date']['input']>;
+  /** The mode to use for ticket behaviors in this convention. */
   ticket_mode?: InputMaybe<TicketMode>;
+  /** The word this convention should use for 'ticket'. */
   ticket_name?: InputMaybe<Scalars['String']['input']>;
+  /** The mode to use for time zone display and time conversion behavior in this site. */
   timezone_mode?: InputMaybe<TimezoneMode>;
+  /** The home time zone for this convention. */
   timezone_name?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -1570,6 +1944,25 @@ export type CreateProductPayload = {
   product: Product;
 };
 
+/** Autogenerated input type of CreateRankedChoiceUserConstraint */
+export type CreateRankedChoiceUserConstraintInput = {
+  /** A unique identifier for the client performing the mutation. */
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  /** The constraint to create. */
+  rankedChoiceUserConstraint: RankedChoiceUserConstraintInput;
+  /** The user profile to apply this constraint to.  If not specified, will use the current user profile. */
+  userConProfileId?: InputMaybe<Scalars['ID']['input']>;
+};
+
+/** Autogenerated return type of CreateRankedChoiceUserConstraint. */
+export type CreateRankedChoiceUserConstraintPayload = {
+  __typename: 'CreateRankedChoiceUserConstraintPayload';
+  /** A unique identifier for the client performing the mutation. */
+  clientMutationId?: Maybe<Scalars['String']['output']>;
+  /** The RankedChoiceUserConstraint that has just been created. */
+  ranked_choice_user_constraint: RankedChoiceUserConstraint;
+};
+
 /** Autogenerated input type of CreateRoom */
 export type CreateRoomInput = {
   /** A unique identifier for the client performing the mutation. */
@@ -1601,6 +1994,25 @@ export type CreateRunPayload = {
   run: Run;
 };
 
+/** Autogenerated input type of CreateSignupRankedChoice */
+export type CreateSignupRankedChoiceInput = {
+  /** A unique identifier for the client performing the mutation. */
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  /** The bucket key to queue a signup ranked choice in, or null to queue a no-preference choice */
+  requested_bucket_key?: InputMaybe<Scalars['String']['input']>;
+  /** The ID of the run to queue a signup ranked choice for */
+  targetRunId?: InputMaybe<Scalars['ID']['input']>;
+};
+
+/** Autogenerated return type of CreateSignupRankedChoice. */
+export type CreateSignupRankedChoicePayload = {
+  __typename: 'CreateSignupRankedChoicePayload';
+  /** A unique identifier for the client performing the mutation. */
+  clientMutationId?: Maybe<Scalars['String']['output']>;
+  /** The SignupRankedChoice that has been created */
+  signup_ranked_choice: SignupRankedChoice;
+};
+
 /** Autogenerated input type of CreateSignupRequest */
 export type CreateSignupRequestInput = {
   /** A unique identifier for the client performing the mutation. */
@@ -1616,6 +2028,25 @@ export type CreateSignupRequestPayload = {
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   signup_request: SignupRequest;
+};
+
+/** Autogenerated input type of CreateSignupRound */
+export type CreateSignupRoundInput = {
+  /** A unique identifier for the client performing the mutation. */
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  /** The ID of the Convention to create a SignupRound in */
+  conventionId: Scalars['ID']['input'];
+  /** The data for the SignupRound to create */
+  signupRound?: InputMaybe<SignupRoundInput>;
+};
+
+/** Autogenerated return type of CreateSignupRound. */
+export type CreateSignupRoundPayload = {
+  __typename: 'CreateSignupRoundPayload';
+  /** A unique identifier for the client performing the mutation. */
+  clientMutationId?: Maybe<Scalars['String']['output']>;
+  /** The SignupRound that has been created */
+  signup_round: SignupRound;
 };
 
 /** Autogenerated input type of CreateStaffPosition */
@@ -2050,6 +2481,23 @@ export type DeleteProductPayload = {
   product: Product;
 };
 
+/** Autogenerated input type of DeleteRankedChoiceUserConstraint */
+export type DeleteRankedChoiceUserConstraintInput = {
+  /** A unique identifier for the client performing the mutation. */
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  /** The ID of the constraint to delete. */
+  id: Scalars['ID']['input'];
+};
+
+/** Autogenerated return type of DeleteRankedChoiceUserConstraint. */
+export type DeleteRankedChoiceUserConstraintPayload = {
+  __typename: 'DeleteRankedChoiceUserConstraintPayload';
+  /** A unique identifier for the client performing the mutation. */
+  clientMutationId?: Maybe<Scalars['String']['output']>;
+  /** The constraint that has just been deleted. */
+  ranked_choice_user_constraint: RankedChoiceUserConstraint;
+};
+
 /** Autogenerated input type of DeleteRoom */
 export type DeleteRoomInput = {
   /** A unique identifier for the client performing the mutation. */
@@ -2078,6 +2526,40 @@ export type DeleteRunPayload = {
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   run: Run;
+};
+
+/** Autogenerated input type of DeleteSignupRankedChoice */
+export type DeleteSignupRankedChoiceInput = {
+  /** A unique identifier for the client performing the mutation. */
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  /** The ID of the SignupRankedChoice to delete */
+  id: Scalars['ID']['input'];
+};
+
+/** Autogenerated return type of DeleteSignupRankedChoice. */
+export type DeleteSignupRankedChoicePayload = {
+  __typename: 'DeleteSignupRankedChoicePayload';
+  /** A unique identifier for the client performing the mutation. */
+  clientMutationId?: Maybe<Scalars['String']['output']>;
+  /** The SignupRankedChoice that has been deleted */
+  signup_ranked_choice: SignupRankedChoice;
+};
+
+/** Autogenerated input type of DeleteSignupRound */
+export type DeleteSignupRoundInput = {
+  /** A unique identifier for the client performing the mutation. */
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  /** The ID of the SignupRound to delete */
+  id: Scalars['ID']['input'];
+};
+
+/** Autogenerated return type of DeleteSignupRound. */
+export type DeleteSignupRoundPayload = {
+  __typename: 'DeleteSignupRoundPayload';
+  /** A unique identifier for the client performing the mutation. */
+  clientMutationId?: Maybe<Scalars['String']['output']>;
+  /** The SignupRound that has been deleted */
+  signup_round: SignupRound;
 };
 
 /** Autogenerated input type of DeleteStaffPosition */
@@ -2739,9 +3221,15 @@ export type Mutation = {
   createOrganizationRole: CreateOrganizationRolePayload;
   createPage: CreatePagePayload;
   createProduct: CreateProductPayload;
+  /** Create a new RankedChoiceUserConstraint */
+  createRankedChoiceUserConstraint: CreateRankedChoiceUserConstraintPayload;
   createRoom: CreateRoomPayload;
   createRun: CreateRunPayload;
+  /** Create a new SignupRankedChoice in a user's signup queue */
+  createSignupRankedChoice: CreateSignupRankedChoicePayload;
   createSignupRequest: CreateSignupRequestPayload;
+  /** Create a new SignupRound in a convention */
+  createSignupRound: CreateSignupRoundPayload;
   createStaffPosition: CreateStaffPositionPayload;
   createTeamMember: CreateTeamMemberPayload;
   createTicket: CreateTicketPayload;
@@ -2770,8 +3258,14 @@ export type Mutation = {
   deleteOrganizationRole: DeleteOrganizationRolePayload;
   deletePage: DeletePagePayload;
   deleteProduct: DeleteProductPayload;
+  /** Delete a RankedChoiceUserConstraint from a user's profile. */
+  deleteRankedChoiceUserConstraint: DeleteRankedChoiceUserConstraintPayload;
   deleteRoom: DeleteRoomPayload;
   deleteRun: DeleteRunPayload;
+  /** Deletes a SignupRankedChoice from a user's signup queue */
+  deleteSignupRankedChoice: DeleteSignupRankedChoicePayload;
+  /** Deletes a SignupRound from a convention */
+  deleteSignupRound: DeleteSignupRoundPayload;
   deleteStaffPosition: DeleteStaffPositionPayload;
   deleteTeamMember: DeleteTeamMemberPayload;
   deleteTicket: DeleteTicketPayload;
@@ -2823,11 +3317,17 @@ export type Mutation = {
   updateOrganizationRole: UpdateOrganizationRolePayload;
   updatePage: UpdatePagePayload;
   updateProduct: UpdateProductPayload;
+  /** Update a RankedChoiceUserConstraint by ID. */
+  updateRankedChoiceUserConstraint: UpdateRankedChoiceUserConstraintPayload;
   updateRoom: UpdateRoomPayload;
   updateRootSite: UpdateRootSitePayload;
   updateRun: UpdateRunPayload;
   updateSignupBucket: UpdateSignupBucketPayload;
   updateSignupCounted: UpdateSignupCountedPayload;
+  /** Change the priority of a SignupRankedChoice in a user's queue */
+  updateSignupRankedChoicePriority: UpdateSignupRankedChoicePriorityPayload;
+  /** Modify an existing SignupRound */
+  updateSignupRound: UpdateSignupRoundPayload;
   updateStaffPosition: UpdateStaffPositionPayload;
   updateStaffPositionPermissions: UpdateStaffPositionPermissionsPayload;
   updateTeamMember: UpdateTeamMemberPayload;
@@ -3017,6 +3517,11 @@ export type MutationCreateProductArgs = {
 };
 
 
+export type MutationCreateRankedChoiceUserConstraintArgs = {
+  input: CreateRankedChoiceUserConstraintInput;
+};
+
+
 export type MutationCreateRoomArgs = {
   input: CreateRoomInput;
 };
@@ -3027,8 +3532,18 @@ export type MutationCreateRunArgs = {
 };
 
 
+export type MutationCreateSignupRankedChoiceArgs = {
+  input: CreateSignupRankedChoiceInput;
+};
+
+
 export type MutationCreateSignupRequestArgs = {
   input: CreateSignupRequestInput;
+};
+
+
+export type MutationCreateSignupRoundArgs = {
+  input: CreateSignupRoundInput;
 };
 
 
@@ -3172,6 +3687,11 @@ export type MutationDeleteProductArgs = {
 };
 
 
+export type MutationDeleteRankedChoiceUserConstraintArgs = {
+  input: DeleteRankedChoiceUserConstraintInput;
+};
+
+
 export type MutationDeleteRoomArgs = {
   input: DeleteRoomInput;
 };
@@ -3179,6 +3699,16 @@ export type MutationDeleteRoomArgs = {
 
 export type MutationDeleteRunArgs = {
   input: DeleteRunInput;
+};
+
+
+export type MutationDeleteSignupRankedChoiceArgs = {
+  input: DeleteSignupRankedChoiceInput;
+};
+
+
+export type MutationDeleteSignupRoundArgs = {
+  input: DeleteSignupRoundInput;
 };
 
 
@@ -3432,6 +3962,11 @@ export type MutationUpdateProductArgs = {
 };
 
 
+export type MutationUpdateRankedChoiceUserConstraintArgs = {
+  input: UpdateRankedChoiceUserConstraintInput;
+};
+
+
 export type MutationUpdateRoomArgs = {
   input: UpdateRoomInput;
 };
@@ -3454,6 +3989,16 @@ export type MutationUpdateSignupBucketArgs = {
 
 export type MutationUpdateSignupCountedArgs = {
   input: UpdateSignupCountedInput;
+};
+
+
+export type MutationUpdateSignupRankedChoicePriorityArgs = {
+  input: UpdateSignupRankedChoicePriorityInput;
+};
+
+
+export type MutationUpdateSignupRoundArgs = {
+  input: UpdateSignupRoundInput;
 };
 
 
@@ -4013,6 +4558,61 @@ export type QueryUsers_PaginatedArgs = {
   sort?: InputMaybe<Array<SortInput>>;
 };
 
+/** An order to execute ranked-choice signup rounds in. */
+export enum RankedChoiceOrder {
+  /** In lottery number order, lowest number first */
+  Asc = 'ASC',
+  /** In lottery nmber order, highest number first */
+  Desc = 'DESC'
+}
+
+/**
+ * A user-defined constraint on how many events the ranked choice algorithm should sign them up for.  This can be
+ * time-bounded, and a user can have as many or as few of these as they like.
+ */
+export type RankedChoiceUserConstraint = {
+  __typename: 'RankedChoiceUserConstraint';
+  /** When this constraint was created. */
+  created_at: Scalars['Date']['output'];
+  /**
+   * The time at which this constraint stops applying (non-inclusive).  If null, this constraint is unbounded on the
+   * finish side.
+   */
+  finish?: Maybe<Scalars['Date']['output']>;
+  /** The ID of this constraint. */
+  id: Scalars['ID']['output'];
+  /** The maximum number of counted signups to be allowed in the timespan described by this constraint. */
+  maximum_signups: Scalars['Int']['output'];
+  /**
+   * The time at which this constraint starts applying (inclusive).  If null, this constraint is unbounded on the
+   * start side.
+   */
+  start?: Maybe<Scalars['Date']['output']>;
+  /** The last time this constraint was modified. */
+  updated_at: Scalars['Date']['output'];
+  /** The user this constraint applies to. */
+  user_con_profile: UserConProfile;
+};
+
+/**
+ * A user-defined constraint on how many events the ranked choice algorithm should sign them up for.  This can be
+ * time-bounded, and a user can have as many or as few of these as they like.
+ */
+export type RankedChoiceUserConstraintInput = {
+  /**
+   * The time at which this constraint stops applying (non-inclusive).  If null, this constraint is unbounded on the
+   * finish side.
+   */
+  finish?: InputMaybe<Scalars['Date']['input']>;
+  /** The maximum number of counted signups to be allowed in the timespan described by this constraint. */
+  maximumSignups?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   * The time at which this constraint starts applying (inclusive).  If null, this constraint is unbounded on the
+   * start side.
+   */
+  start?: InputMaybe<Scalars['Date']['input']>;
+};
+
 /** Autogenerated input type of RateEvent */
 export type RateEventInput = {
   /** A unique identifier for the client performing the mutation. */
@@ -4177,6 +4777,7 @@ export type RootSite = CmsParent & {
   cmsPartials: Array<CmsPartial>;
   /** Returns all CMS variables within the current domain. */
   cmsVariables: Array<CmsVariable>;
+  /** Returns the default CMS layout used in this domain. */
   defaultLayout: CmsLayout;
   /**
    * Returns the CMS layout to be used for a particular URL path within the current domain. (This
@@ -4198,6 +4799,7 @@ export type RootSite = CmsParent & {
   previewLiquid: Scalars['String']['output'];
   /** Given a Markdown text string, renders it to HTML and returns the result. */
   previewMarkdown: Scalars['String']['output'];
+  /** The CMS page used for the root path (/) of this domain. */
   rootPage: Page;
   site_name: Scalars['String']['output'];
   /**
@@ -4256,32 +4858,66 @@ export type RootSiteInput = {
   site_name?: InputMaybe<Scalars['String']['input']>;
 };
 
+/**
+ * A run of an event within a convention. Events can have multiple runs of the course of a convention (with some
+ * exceptions, such as conventions that use single_event site mode).
+ */
 export type Run = {
   __typename: 'Run';
+  /** The number of confirmed signups in limited-signup buckets for this run */
   confirmed_limited_signup_count: Scalars['Int']['output'];
+  /** The number of confirmed signups (regardless of bucket) for this run */
   confirmed_signup_count: Scalars['Int']['output'];
+  /** Whether or not the current user is allowed to request a signup summary of this run */
   current_ability_can_signup_summary_run: Scalars['Boolean']['output'];
+  /** The time at which this run finishes */
   ends_at: Scalars['Date']['output'];
+  /** The event this is a run of */
   event: Event;
+  /**
+   * A GroupedSignupCounts object for this run, from which more detailed information about the number of signups can
+   * be obtained (sliced in various ways).
+   */
   grouped_signup_counts: Array<GroupedSignupCount>;
+  /** The ID of this run */
   id: Scalars['ID']['output'];
+  /** The current user's SignupRankedChoices for this Run */
+  my_signup_ranked_choices: Array<SignupRankedChoice>;
+  /** The current user's SignupRequests for this Run */
   my_signup_requests: Array<SignupRequest>;
+  /** The current user's Signups for this Run */
   my_signups: Array<Signup>;
+  /** The number of confirmed, but not counted signups for this run */
   not_counted_confirmed_signup_count: Scalars['Int']['output'];
+  /** The number of non-counted signups for this run (regardless of confirmation status) */
   not_counted_signup_count: Scalars['Int']['output'];
+  /** The names of all the rooms this run takes place in */
   room_names: Array<Scalars['String']['output']>;
+  /** The rooms this run takes place in */
   rooms: Array<Room>;
+  /** An optional, admin-only note to put on this run.  This note is not visible to most users. */
   schedule_note?: Maybe<Scalars['String']['output']>;
   signup_changes_paginated: SignupChangesPagination;
   /** @deprecated Please use grouped_signup_counts instead */
   signup_count_by_state_and_bucket_key_and_counted: Scalars['Json']['output'];
+  /** The signups for this run */
   signups_paginated: SignupsPagination;
+  /** The time at which this run starts */
   starts_at: Scalars['Date']['output'];
+  /**
+   * If present, Intercode will append this suffix string to this run whenever it appears in the UI.  This can be
+   * used to disambiguate between multiple runs of the same event.
+   */
   title_suffix?: Maybe<Scalars['String']['output']>;
+  /** The number of signups currently on the waitlist for this run */
   waitlisted_signup_count: Scalars['Int']['output'];
 };
 
 
+/**
+ * A run of an event within a convention. Events can have multiple runs of the course of a convention (with some
+ * exceptions, such as conventions that use single_event site mode).
+ */
 export type RunSignup_Changes_PaginatedArgs = {
   filters?: InputMaybe<SignupChangeFiltersInput>;
   page?: InputMaybe<Scalars['Int']['input']>;
@@ -4290,6 +4926,10 @@ export type RunSignup_Changes_PaginatedArgs = {
 };
 
 
+/**
+ * A run of an event within a convention. Events can have multiple runs of the course of a convention (with some
+ * exceptions, such as conventions that use single_event site mode).
+ */
 export type RunSignups_PaginatedArgs = {
   filters?: InputMaybe<SignupFiltersInput>;
   page?: InputMaybe<Scalars['Int']['input']>;
@@ -4444,6 +5084,18 @@ export type Signup = {
   waitlist_position?: Maybe<Scalars['Int']['output']>;
 };
 
+/**
+ * The automation behavior to use for event signups in a Convention.  Currently, we only support one type of
+ * automated signups, the "ranked choice" behavior.  Conventions can also disable automation entirely using the
+ * "none" value.
+ */
+export enum SignupAutomationMode {
+  /** Signups are fully manual */
+  None = 'none',
+  /** Attendees make a ranked list of choices and the site attempts to give everyone what they want */
+  RankedChoice = 'ranked_choice'
+}
+
 export type SignupChange = {
   __typename: 'SignupChange';
   action: SignupChangeAction;
@@ -4460,6 +5112,7 @@ export type SignupChange = {
 };
 
 export enum SignupChangeAction {
+  AcceptSignupRankedChoice = 'accept_signup_ranked_choice',
   AcceptSignupRequest = 'accept_signup_request',
   AdminCreateSignup = 'admin_create_signup',
   ChangeRegistrationPolicy = 'change_registration_policy',
@@ -4520,17 +5173,80 @@ export type SignupMoveResult = {
   state: SignupState;
 };
 
+/**
+ * In a ranked-choice signup convention, SignupRankedChoices are the items in a user's signup queue.  Users may have
+ * as many of these as they like.  When SignupRounds open, Intercode will automatically attempt to sign users up for
+ * the number of events they're allowed at this time based on their SignupRankedChoices.
+ */
+export type SignupRankedChoice = {
+  __typename: 'SignupRankedChoice';
+  /** The time this choice was added to the user's queue */
+  created_at: Scalars['Date']['output'];
+  /** The ID of this SignupRankedChoice */
+  id: Scalars['ID']['output'];
+  /** The priority of this choice (lower numbers are higher priority) */
+  priority: Scalars['Int']['output'];
+  /** The bucket that this choice is trying to sign up in (or null, if it's a no-preference signup) */
+  requested_bucket_key?: Maybe<Scalars['String']['output']>;
+  /** The resulting Signup from processing this choice, if it has been processed */
+  result_signup?: Maybe<Signup>;
+  /**
+   * The resulting SignupRequest from processing this choice, if it has been processed (and is in a moderated-signup
+   * convention)
+   */
+  result_signup_request?: Maybe<SignupRequest>;
+  /** The current processing state of this choice (e.g. pending, accepted) */
+  state: SignupRankedChoiceState;
+  /** The event run that this choice is trying to sign up for */
+  target_run: Run;
+  /** The last time this choice was modified */
+  updated_at: Scalars['Date']['output'];
+  /** The user who last updated this choice */
+  updated_by: User;
+  /** The user whose queue this choice is part of */
+  user_con_profile: UserConProfile;
+};
+
+/** The processing state of a SignupRankedChoice */
+export enum SignupRankedChoiceState {
+  /** We have not yet attempted to process this choice */
+  Pending = 'pending',
+  /** The attendee has had a signup request put in (see the result_signup_request field for the actual signup request) */
+  Requested = 'requested',
+  /** The attendee has been signed up (see the result_signup field for the actual signup) */
+  SignedUp = 'signed_up',
+  /** The attendee has been waitlisted (see the result_signup field for the actual signup) */
+  Waitlisted = 'waitlisted'
+}
+
+/**
+ * In a moderated-signup convention, SignupRequests are the queue of signups that users have asked to do.  Convention
+ * staff can go through these requests and accept them (which produces a Signup) or reject them.
+ */
 export type SignupRequest = {
   __typename: 'SignupRequest';
+  /** The time this request was put in */
   created_at: Scalars['Date']['output'];
+  /** The ID of this SignupRequest */
   id: Scalars['ID']['output'];
+  /**
+   * The signup that this request is asking to replace (e.g. if the user is trying to leave a conflicting event).  If
+   * this request is accepted, the replace_signup will be withdrawn.
+   */
   replace_signup?: Maybe<Signup>;
+  /** The bucket that this request is asking to sign up in (or null, if it's a no-preference signup) */
   requested_bucket_key?: Maybe<Scalars['String']['output']>;
+  /** The resulting Signup from accepting this request, if it has been accepted */
   result_signup?: Maybe<Signup>;
+  /** The current processing state of this request (e.g. pending, accepted, rejected) */
   state: SignupRequestState;
+  /** The run the user would like to sign up for */
   target_run: Run;
+  /** The last time this request was modified */
   updated_at: Scalars['Date']['output'];
+  /** The last user who modified this request */
   updated_by: User;
+  /** The user who made this request */
   user_con_profile: UserConProfile;
 };
 
@@ -4538,6 +5254,7 @@ export type SignupRequestFiltersInput = {
   state?: InputMaybe<Array<SignupRequestState>>;
 };
 
+/** The processing state of a SignupRequest */
 export enum SignupRequestState {
   /** The request has been accepted and the requester has been signed up (see the result_signup field for the actual signup) */
   Accepted = 'accepted',
@@ -4560,6 +5277,49 @@ export type SignupRequestsPagination = PaginationInterface & {
   total_entries: Scalars['Int']['output'];
   /** The total number of pages in the paginated list */
   total_pages: Scalars['Int']['output'];
+};
+
+/**
+ * A round of signups in a particular convention.  This represents a range of time in which a certain number of
+ * signups is allowed.
+ *
+ * In conventions that use automated signups (e.g. ranked-choice signups), signup rounds are used as triggers for
+ * signup automation.
+ */
+export type SignupRound = {
+  __typename: 'SignupRound';
+  /** The convention this SignupRound is in. */
+  convention: Convention;
+  /** When this SignupRound was first created. */
+  created_at: Scalars['Date']['output'];
+  /**
+   * In conventions that use automated signups, when this SignupRound was executed.  If it has not been executed yet,
+   * this will be null.
+   */
+  executed_at?: Maybe<Scalars['Date']['output']>;
+  /** The ID of this SignupRound. */
+  id: Scalars['ID']['output'];
+  /**
+   * Either "not_yet", "not_now", "unlimited", or a string representation of a number.  This is the maximum number of
+   * signups allowed during this SignupRound.
+   */
+  maximum_event_signups: Scalars['String']['output'];
+  /** In ranked-choice signup conventions, the order to use for executing users' ranked choices in this round. */
+  ranked_choice_order?: Maybe<RankedChoiceOrder>;
+  /** When this SignupRound starts. */
+  start?: Maybe<Scalars['Date']['output']>;
+  /** When this SignupRound was last modified. */
+  updated_at: Scalars['Date']['output'];
+};
+
+/** An input for creating or modifying SignupRounds. */
+export type SignupRoundInput = {
+  /** The maximum number of signups allowed during this signup round */
+  maximum_event_signups?: InputMaybe<Scalars['String']['input']>;
+  /** For ranked-choice conventions, the order to execute signup choices in */
+  ranked_choice_order?: InputMaybe<RankedChoiceOrder>;
+  /** The time that this signup round starts */
+  start?: InputMaybe<Scalars['Date']['input']>;
 };
 
 export enum SignupState {
@@ -5232,6 +5992,25 @@ export type UpdateProductPayload = {
   product: Product;
 };
 
+/** Autogenerated input type of UpdateRankedChoiceUserConstraint */
+export type UpdateRankedChoiceUserConstraintInput = {
+  /** A unique identifier for the client performing the mutation. */
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  /** The ID of the constraint to update. */
+  id: Scalars['ID']['input'];
+  /** The updated values to use for this constraint. */
+  rankedChoiceUserConstraint: RankedChoiceUserConstraintInput;
+};
+
+/** Autogenerated return type of UpdateRankedChoiceUserConstraint. */
+export type UpdateRankedChoiceUserConstraintPayload = {
+  __typename: 'UpdateRankedChoiceUserConstraintPayload';
+  /** A unique identifier for the client performing the mutation. */
+  clientMutationId?: Maybe<Scalars['String']['output']>;
+  /** The constraint after being updated. */
+  ranked_choice_user_constraint: RankedChoiceUserConstraint;
+};
+
 /** Autogenerated input type of UpdateRoom */
 export type UpdateRoomInput = {
   /** A unique identifier for the client performing the mutation. */
@@ -5309,6 +6088,44 @@ export type UpdateSignupCountedPayload = {
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   signup: Signup;
+};
+
+/** Autogenerated input type of UpdateSignupRankedChoicePriority */
+export type UpdateSignupRankedChoicePriorityInput = {
+  /** A unique identifier for the client performing the mutation. */
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  /** The ID of the SignupRankedChoice to update */
+  id: Scalars['ID']['input'];
+  /** The new priority to set the SignupRankedChoice to */
+  priority: Scalars['Int']['input'];
+};
+
+/** Autogenerated return type of UpdateSignupRankedChoicePriority. */
+export type UpdateSignupRankedChoicePriorityPayload = {
+  __typename: 'UpdateSignupRankedChoicePriorityPayload';
+  /** A unique identifier for the client performing the mutation. */
+  clientMutationId?: Maybe<Scalars['String']['output']>;
+  /** The SignupRankedChoice that has just been reprioritized */
+  signup_ranked_choice: SignupRankedChoice;
+};
+
+/** Autogenerated input type of UpdateSignupRound */
+export type UpdateSignupRoundInput = {
+  /** A unique identifier for the client performing the mutation. */
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  /** The ID of the SignupRound to update */
+  id: Scalars['ID']['input'];
+  /** The new data to write to the SignupRound */
+  signupRound: SignupRoundInput;
+};
+
+/** Autogenerated return type of UpdateSignupRound. */
+export type UpdateSignupRoundPayload = {
+  __typename: 'UpdateSignupRoundPayload';
+  /** A unique identifier for the client performing the mutation. */
+  clientMutationId?: Maybe<Scalars['String']['output']>;
+  /** The SignupRound that has just been reprioritized */
+  signup_round: SignupRound;
 };
 
 /** Autogenerated input type of UpdateStaffPosition */
@@ -5459,59 +6276,121 @@ export type UserActivityAlertInput = {
   userId?: InputMaybe<Scalars['ID']['input']>;
 };
 
+/**
+ * A UserConProfile is a user's profile in a particular convention web site.  Most convention-level objects are
+ * attached to the UserConProfile (e.g. signups, event team memberships, staff positions, etc.).
+ */
 export type UserConProfile = {
   __typename: 'UserConProfile';
+  /** This user profile's permission set. */
   ability?: Maybe<Ability>;
+  /** Has this user accepted the clickwrap agreement for this convention (if it has one)? */
   accepted_clickwrap_agreement?: Maybe<Scalars['Boolean']['output']>;
+  /** The street address portion of this profile's mailing address. */
   address?: Maybe<Scalars['String']['output']>;
+  /** The bio to display for this user profile, in Markdown format. */
   bio?: Maybe<Scalars['String']['output']>;
+  /** The bio to display for this user profile, rendered as HTML. */
   bio_html?: Maybe<Scalars['String']['output']>;
+  /** If present, overrides the name to use for this user profile in their bio display. */
   bio_name?: Maybe<Scalars['String']['output']>;
+  /** This user profile's date of birth. */
   birth_date?: Maybe<Scalars['Date']['output']>;
+  /**
+   * Is this user allowed to display a bio on the web site (e.g. because they're a convention staff member or an
+   * event team member)?
+   */
   can_have_bio: Scalars['Boolean']['output'];
+  /** Does this user have permission to override the event-provided ticket thresholds in this convention? */
   can_override_maximum_event_provided_tickets: Scalars['Boolean']['output'];
+  /** The city portion of this profile's mailing address. */
   city?: Maybe<Scalars['String']['output']>;
+  /** The convention this profile is attached to. */
   convention: Convention;
+  /** The country portion of this profile's mailing address. */
   country?: Maybe<Scalars['String']['output']>;
   /** If this profile has a pending order, returns that order. Otherwise, returns null. */
   current_pending_order?: Maybe<Order>;
   current_user_form_item_viewer_role: FormItemRole;
   current_user_form_item_writer_role: FormItemRole;
+  /** This user profile's email address. */
   email?: Maybe<Scalars['String']['output']>;
+  /** This user profile's first name. */
   first_name: Scalars['String']['output'];
   form_response_attrs_json?: Maybe<Scalars['Json']['output']>;
   form_response_attrs_json_with_rendered_markdown?: Maybe<Scalars['Json']['output']>;
+  /** Has this user enabled Gravatars for this profile? */
   gravatar_enabled: Scalars['Boolean']['output'];
+  /** The URL of this profile's Gravatar. */
   gravatar_url: Scalars['String']['output'];
+  /** The randomly-generated secret portion of the URL to use for fetching this profile's personal calendar. */
   ical_secret?: Maybe<Scalars['String']['output']>;
+  /** The ID of this profile. */
   id: Scalars['ID']['output'];
+  /** This user profile's last name. */
   last_name: Scalars['String']['output'];
+  /** This profile's mobile phone number. */
   mobile_phone?: Maybe<Scalars['String']['output']>;
+  /** This user profile's full name, including their nickname if present. */
   name: Scalars['String']['output'];
+  /** This user profile's name in Last, First format. */
   name_inverted: Scalars['String']['output'];
+  /** This user profile's full name, not including their nickname. */
   name_without_nickname: Scalars['String']['output'];
+  /** This user profile's nickname. */
   nickname?: Maybe<Scalars['String']['output']>;
+  /** A human-readable summary of all this profile's orders. */
   order_summary: Scalars['String']['output'];
+  /** All the orders placed by this profile. */
   orders: Array<Order>;
+  /** If this user can't be signed up for any of their ranked choices, should the site waitlist them? */
+  ranked_choice_allow_waitlist: Scalars['Boolean']['output'];
+  /** All the constraints this profile has placed on the number of ranked choice signups they want. */
+  ranked_choice_user_constraints: Array<RankedChoiceUserConstraint>;
+  /** Should this profile's bio use the nickname as part of their name? */
   show_nickname_in_bio?: Maybe<Scalars['Boolean']['output']>;
+  /** All the signup requests made by this profile. */
   signup_requests: Array<SignupRequest>;
+  /** All the event signups attached to this profile. */
   signups: Array<Signup>;
+  /** Does this profile belong to a global site admin? */
   site_admin: Scalars['Boolean']['output'];
+  /** All the staff positions this profile belongs to. */
   staff_positions: Array<StaffPosition>;
+  /** The state portion of this profile's mailing address. */
   state?: Maybe<Scalars['String']['output']>;
+  /** All the team memberships this profile is in. */
   team_members: Array<TeamMember>;
+  /** This profile's convention ticket, if present. */
   ticket?: Maybe<Ticket>;
+  /** The user account attached to this profile. */
   user?: Maybe<User>;
+  /**
+   * The ID of the user account this profile belongs to.
+   *
+   * This is a little bit of a weird thing to expose here; normally we'd just have people query for
+   * User, but access to that object is restricted.  So if you need the user ID (e.g. to determine whether two profiles
+   * are the same person) but you don't necessarily have access to the User account, you can use this field.
+   */
   user_id: Scalars['ID']['output'];
+  /** The ZIP portion of this profile's mailing address. */
   zipcode?: Maybe<Scalars['String']['output']>;
 };
 
 
+/**
+ * A UserConProfile is a user's profile in a particular convention web site.  Most convention-level objects are
+ * attached to the UserConProfile (e.g. signups, event team memberships, staff positions, etc.).
+ */
 export type UserConProfileForm_Response_Attrs_JsonArgs = {
   itemIdentifiers?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
+/**
+ * A UserConProfile is a user's profile in a particular convention web site.  Most convention-level objects are
+ * attached to the UserConProfile (e.g. signups, event team memberships, staff positions, etc.).
+ */
 export type UserConProfileForm_Response_Attrs_Json_With_Rendered_MarkdownArgs = {
   itemIdentifiers?: InputMaybe<Array<Scalars['String']['input']>>;
 };
@@ -5545,6 +6424,7 @@ export type UserConProfileInput = {
   last_name?: InputMaybe<Scalars['String']['input']>;
   nickname?: InputMaybe<Scalars['String']['input']>;
   preferred_contact?: InputMaybe<Scalars['String']['input']>;
+  ranked_choice_allow_waitlist?: InputMaybe<Scalars['Boolean']['input']>;
   show_nickname_in_bio?: InputMaybe<Scalars['Boolean']['input']>;
   state?: InputMaybe<Scalars['String']['input']>;
   zipcode?: InputMaybe<Scalars['String']['input']>;

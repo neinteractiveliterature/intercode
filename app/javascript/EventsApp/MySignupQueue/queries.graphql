@@ -1,0 +1,80 @@
+fragment RankedChoiceUserConstraintFields on RankedChoiceUserConstraint {
+  id
+  start
+  finish
+  maximum_signups
+}
+
+query MySignupQueueQuery {
+  convention: conventionByRequestHost {
+    id
+
+    signup_rounds {
+      id
+      start
+      maximum_event_signups
+    }
+
+    my_profile {
+      id
+      ranked_choice_allow_waitlist
+
+      ranked_choice_user_constraints {
+        id
+        ...RankedChoiceUserConstraintFields
+      }
+
+      ticket {
+        id
+        ticket_type {
+          id
+          allows_event_signups
+        }
+      }
+    }
+
+    my_signups {
+      id
+      state
+      counted
+
+      run {
+        id
+        starts_at
+        ends_at
+      }
+    }
+
+    my_signup_ranked_choices {
+      id
+      state
+      priority
+      requested_bucket_key
+
+      target_run {
+        id
+        title_suffix
+        starts_at
+
+        event {
+          id
+          title
+          length_seconds
+
+          event_category {
+            id
+            name
+          }
+
+          registration_policy {
+            buckets {
+              key
+              name
+              description
+            }
+          }
+        }
+      }
+    }
+  }
+}

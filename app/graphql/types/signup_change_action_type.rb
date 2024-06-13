@@ -8,5 +8,6 @@ class Types::SignupChangeActionType < Types::BaseEnum
   value "ticket_purchase"
   value "vacancy_fill"
   value "withdraw"
+  value "accept_signup_ranked_choice"
   value "unknown"
 end

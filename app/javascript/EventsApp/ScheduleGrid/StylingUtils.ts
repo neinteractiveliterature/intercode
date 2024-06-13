@@ -4,7 +4,7 @@ import { assertNever } from 'assert-never';
 
 import getFullnessClass from './getFullnessClass';
 import { PIXELS_PER_LANE, LANE_GUTTER_HEIGHT } from './LayoutConstants';
-import { SignupState, SignupRequestState } from '../../graphqlTypes.generated';
+import { SignupState, SignupRequestState, SignupRankedChoiceState } from '../../graphqlTypes.generated';
 import { ScheduleGridConfig } from './ScheduleGridConfig';
 import SignupCountData, { EventForSignupCountData } from '../SignupCountData';
 import { RunDimensions, ScheduleLayoutResult } from './ScheduleLayout/ScheduleLayoutBlock';
@@ -15,11 +15,13 @@ export enum SignupStatus {
   Waitlisted = 'waitlisted',
   Withdrawn = 'withdrawn',
   RequestPending = 'request_pending',
+  InMyQueue = 'in_my_queue',
 }
 
 export function userSignupStatus(run: {
   my_signups: { state: SignupState }[];
   my_signup_requests: { state: SignupRequestState }[];
+  my_signup_ranked_choices: { state: SignupRankedChoiceState }[];
 }): SignupStatus | null {
   if (run.my_signups.some((signup) => signup.state === SignupState.Confirmed)) {
     return SignupStatus.Confirmed;
@@ -31,6 +33,10 @@ export function userSignupStatus(run: {
 
   if (run.my_signup_requests.some((signupRequest) => signupRequest.state === SignupRequestState.Pending)) {
     return SignupStatus.RequestPending;
+  }
+
+  if (run.my_signup_ranked_choices.some((rankedChoice) => rankedChoice.state === SignupRankedChoiceState.Pending)) {
+    return SignupStatus.InMyQueue;
   }
 
   return null;
@@ -69,7 +75,8 @@ export function getRunClassName({
     'small',
     config.classifyEventsBy === 'fullness' ? getFullnessClass(event, signupCountData) : null,
     {
-      'signed-up': config.showSignedUp && signupStatus != null,
+      'signed-up': config.showSignedUp && signupStatus != null && signupStatus !== SignupStatus.InMyQueue,
+      'in-queue': config.showSignedUp && signupStatus === SignupStatus.InMyQueue,
       'zero-capacity': event.registration_policy && event.registration_policy.total_slots_including_not_counted === 0,
       full: config.classifyEventsBy !== 'fullness' && signupCountData.runFull(event) && signupStatus == null,
       fake: event.fake,

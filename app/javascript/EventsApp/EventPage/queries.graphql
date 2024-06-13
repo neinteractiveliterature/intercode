@@ -20,6 +20,16 @@ fragment MySignupRequestFields on SignupRequest {
   }
 }
 
+fragment MySignupRankedChoiceFields on SignupRankedChoice {
+  id
+  state
+  target_run {
+    id
+  }
+  requested_bucket_key
+  priority
+}
+
 fragment EventPageRunFields on Run {
   id
   title_suffix
@@ -47,6 +57,11 @@ fragment EventPageRunFields on Run {
   my_signup_requests {
     id
     ...MySignupRequestFields
+  }
+
+  my_signup_ranked_choices {
+    id
+    ...MySignupRankedChoiceFields
   }
 }
 
@@ -81,8 +96,20 @@ query EventPageQuery($eventId: ID!) {
     id
     ...CommonConventionData
 
+    signup_rounds {
+      id
+      start
+      maximum_event_signups
+    }
+
     my_profile {
       id
+    }
+
+    my_signups {
+      id
+      state
+      counted
     }
 
     event(id: $eventId) {

@@ -5,6 +5,8 @@ fragment CommonConventionData on Convention {
   name
   starts_at
   ends_at
+  signup_mode
+  signup_automation_mode
   site_mode
   timezone_name
   timezone_mode
@@ -57,6 +59,12 @@ fragment RunBasicSignupData on Run {
   my_signup_requests {
     id
     state
+  }
+
+  my_signup_ranked_choices {
+    id
+    state
+    priority
   }
 }
 

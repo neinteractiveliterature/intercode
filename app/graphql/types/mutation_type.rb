@@ -1,6 +1,13 @@
 # frozen_string_literal: true
-class Types::MutationType < Types::BaseObject
-  graphql_name 'Mutation'
+# rubocop:disable GraphQL/FieldName, GraphQL/FieldDescription, GraphQL/ExtractType
+class Types::MutationType < Types::BaseObject # rubocop:disable GraphQL/ObjectDescription
+  class MutationRootField < Types::BaseField # rubocop:disable GraphQL/ObjectDescription
+    def initialize(*args, resolver_class:, **kwargs, &block)
+      super(*args, resolver_class:, description: resolver_class.description, **kwargs, &block)
+    end
+  end
+
+  field_class MutationRootField
 
   # CSRF verification, but only for mutations
   def self.authorized?(_value, context)
@@ -15,56 +22,56 @@ class Types::MutationType < Types::BaseObject
   ### CmsContentGroup
 
   field :createCmsContentGroup, null: false, mutation: Mutations::CreateCmsContentGroup
-  field :updateCmsContentGroup, null: false, mutation: Mutations::UpdateCmsContentGroup
   field :deleteCmsContentGroup, null: false, mutation: Mutations::DeleteCmsContentGroup
+  field :updateCmsContentGroup, null: false, mutation: Mutations::UpdateCmsContentGroup
 
   ### CmsFile
 
   field :createCmsFile, null: false, mutation: Mutations::CreateCmsFile
-  field :renameCmsFile, null: false, mutation: Mutations::RenameCmsFile
   field :deleteCmsFile, null: false, mutation: Mutations::DeleteCmsFile
+  field :renameCmsFile, null: false, mutation: Mutations::RenameCmsFile
 
   ### CmsGraphqlQuery
 
   field :createCmsGraphqlQuery, null: false, mutation: Mutations::CreateCmsGraphqlQuery
-  field :updateCmsGraphqlQuery, null: false, mutation: Mutations::UpdateCmsGraphqlQuery
   field :deleteCmsGraphqlQuery, null: false, mutation: Mutations::DeleteCmsGraphqlQuery
+  field :updateCmsGraphqlQuery, null: false, mutation: Mutations::UpdateCmsGraphqlQuery
 
   ### CmsLayout
 
   field :createCmsLayout, null: false, mutation: Mutations::CreateCmsLayout
-  field :updateCmsLayout, null: false, mutation: Mutations::UpdateCmsLayout
   field :deleteCmsLayout, null: false, mutation: Mutations::DeleteCmsLayout
+  field :updateCmsLayout, null: false, mutation: Mutations::UpdateCmsLayout
 
   ### CmsNavigationItem
 
   field :createCmsNavigationItem, null: false, mutation: Mutations::CreateCmsNavigationItem
-  field :updateCmsNavigationItem, null: false, mutation: Mutations::UpdateCmsNavigationItem
   field :deleteCmsNavigationItem, null: false, mutation: Mutations::DeleteCmsNavigationItem
   field :sortCmsNavigationItems, null: false, mutation: Mutations::SortCmsNavigationItems
+  field :updateCmsNavigationItem, null: false, mutation: Mutations::UpdateCmsNavigationItem
 
   ### CmsPartial
 
   field :createCmsPartial, null: false, mutation: Mutations::CreateCmsPartial
-  field :updateCmsPartial, null: false, mutation: Mutations::UpdateCmsPartial
   field :deleteCmsPartial, null: false, mutation: Mutations::DeleteCmsPartial
+  field :updateCmsPartial, null: false, mutation: Mutations::UpdateCmsPartial
 
   ### CmsVariable
 
-  field :setCmsVariable, null: false, mutation: Mutations::SetCmsVariable
   field :deleteCmsVariable, null: false, mutation: Mutations::DeleteCmsVariable
+  field :setCmsVariable, null: false, mutation: Mutations::SetCmsVariable
 
   ### Convention
 
   field :createConvention, null: false, mutation: Mutations::CreateConvention
-  field :updateConvention, null: false, mutation: Mutations::UpdateConvention
-  field :setConventionCanceled, null: false, mutation: Mutations::SetConventionCanceled
   field :createConventionStripeAccount, null: false, mutation: Mutations::CreateConventionStripeAccount
+  field :setConventionCanceled, null: false, mutation: Mutations::SetConventionCanceled
+  field :updateConvention, null: false, mutation: Mutations::UpdateConvention
 
   ### Coupon
   field :createCoupon, null: false, mutation: Mutations::CreateCoupon
-  field :updateCoupon, null: false, mutation: Mutations::UpdateCoupon
   field :deleteCoupon, null: false, mutation: Mutations::DeleteCoupon
+  field :updateCoupon, null: false, mutation: Mutations::UpdateCoupon
 
   ### CouponApplication
   field :createCouponApplication, null: false, mutation: Mutations::CreateCouponApplication
@@ -73,14 +80,14 @@ class Types::MutationType < Types::BaseObject
   ### Department
 
   field :createDepartment, null: false, mutation: Mutations::CreateDepartment
-  field :updateDepartment, null: false, mutation: Mutations::UpdateDepartment
   field :deleteDepartment, null: false, mutation: Mutations::DeleteDepartment
+  field :updateDepartment, null: false, mutation: Mutations::UpdateDepartment
 
   ### EmailRoute
 
   field :createEmailRoute, null: false, mutation: Mutations::CreateEmailRoute
-  field :updateEmailRoute, null: false, mutation: Mutations::UpdateEmailRoute
   field :deleteEmailRoute, null: false, mutation: Mutations::DeleteEmailRoute
+  field :updateEmailRoute, null: false, mutation: Mutations::UpdateEmailRoute
 
   ### Event
 
@@ -88,104 +95,110 @@ class Types::MutationType < Types::BaseObject
   field :createEvent, null: false, mutation: Mutations::CreateEvent
   field :createFillerEvent, null: false, mutation: Mutations::CreateFillerEvent
   field :dropEvent, null: false, mutation: Mutations::DropEvent
+  field :rateEvent, null: false, mutation: Mutations::RateEvent
   field :restoreDroppedEvent, null: false, mutation: Mutations::RestoreDroppedEvent
   field :updateEvent, null: false, mutation: Mutations::UpdateEvent
   field :updateEventAdminNotes, null: false, mutation: Mutations::UpdateEventAdminNotes
-  field :rateEvent, null: false, mutation: Mutations::RateEvent
 
   ### EventCategory
 
   field :createEventCategory, null: false, mutation: Mutations::CreateEventCategory
-  field :updateEventCategory, null: false, mutation: Mutations::UpdateEventCategory
   field :deleteEventCategory, null: false, mutation: Mutations::DeleteEventCategory
+  field :updateEventCategory, null: false, mutation: Mutations::UpdateEventCategory
 
   ### EventProposal
 
-  field :createEventProposal, null: false, mutation: Mutations::CreateEventProposal
-  field :updateEventProposal, null: false, mutation: Mutations::UpdateEventProposal
   field :attachImageToEventProposal, null: false, mutation: Mutations::AttachImageToEventProposal
+  field :createEventProposal, null: false, mutation: Mutations::CreateEventProposal
   field :deleteEventProposal, null: false, mutation: Mutations::DeleteEventProposal
   field :submitEventProposal, null: false, mutation: Mutations::SubmitEventProposal
   field :transitionEventProposal, null: false, mutation: Mutations::TransitionEventProposal
+  field :updateEventProposal, null: false, mutation: Mutations::UpdateEventProposal
   field :updateEventProposalAdminNotes, null: false, mutation: Mutations::UpdateEventProposalAdminNotes
 
   ### Form
 
-  field :createFormWithJSON, null: false, mutation: Mutations::CreateFormWithJSON
-  field :updateFormWithJSON, null: false, mutation: Mutations::UpdateFormWithJSON
   field :createForm, null: false, mutation: Mutations::CreateForm
-  field :updateForm, null: false, mutation: Mutations::UpdateForm
+  field :createFormWithJSON, null: false, mutation: Mutations::CreateFormWithJSON
   field :deleteForm, null: false, mutation: Mutations::DeleteForm
+  field :updateForm, null: false, mutation: Mutations::UpdateForm
+  field :updateFormWithJSON, null: false, mutation: Mutations::UpdateFormWithJSON
 
   ### FormItem
 
   field :createFormItem, null: false, mutation: Mutations::CreateFormItem
-  field :updateFormItem, null: false, mutation: Mutations::UpdateFormItem
-  field :moveFormItem, null: false, mutation: Mutations::MoveFormItem
   field :deleteFormItem, null: false, mutation: Mutations::DeleteFormItem
+  field :moveFormItem, null: false, mutation: Mutations::MoveFormItem
+  field :updateFormItem, null: false, mutation: Mutations::UpdateFormItem
 
   ### FormSection
 
   field :createFormSection, null: false, mutation: Mutations::CreateFormSection
-  field :updateFormSection, null: false, mutation: Mutations::UpdateFormSection
-  field :moveFormSection, null: false, mutation: Mutations::MoveFormSection
   field :deleteFormSection, null: false, mutation: Mutations::DeleteFormSection
+  field :moveFormSection, null: false, mutation: Mutations::MoveFormSection
+  field :updateFormSection, null: false, mutation: Mutations::UpdateFormSection
 
   ### MaximumEventProvidedTicketsOverride
 
   field :createMaximumEventProvidedTicketsOverride,
         null: false,
         mutation: Mutations::CreateMaximumEventProvidedTicketsOverride
-  field :updateMaximumEventProvidedTicketsOverride,
-        null: false,
-        mutation: Mutations::UpdateMaximumEventProvidedTicketsOverride
   field :deleteMaximumEventProvidedTicketsOverride,
         null: false,
         mutation: Mutations::DeleteMaximumEventProvidedTicketsOverride
+  field :updateMaximumEventProvidedTicketsOverride,
+        null: false,
+        mutation: Mutations::UpdateMaximumEventProvidedTicketsOverride
 
   ### NotificationTemplate
 
-  field :updateNotificationTemplate, null: false, mutation: Mutations::UpdateNotificationTemplate
   field :sendNotificationPreview, null: false, mutation: Mutations::SendNotificationPreview
+  field :updateNotificationTemplate, null: false, mutation: Mutations::UpdateNotificationTemplate
 
   ### OrderEntry
 
   field :addOrderEntryToCurrentPendingOrder, null: false, mutation: Mutations::AddOrderEntryToCurrentPendingOrder
   field :createOrderEntry, null: false, mutation: Mutations::CreateOrderEntry
-  field :updateOrderEntry, null: false, mutation: Mutations::UpdateOrderEntry
   field :deleteOrderEntry, null: false, mutation: Mutations::DeleteOrderEntry
+  field :updateOrderEntry, null: false, mutation: Mutations::UpdateOrderEntry
 
   ### Order
 
-  field :submitOrder, null: false, mutation: Mutations::SubmitOrder
+  field :cancelOrder, null: false, mutation: Mutations::CancelOrder
   field :createOrder, null: false, mutation: Mutations::CreateOrder
   field :markOrderPaid, null: false, mutation: Mutations::MarkOrderPaid
+  field :submitOrder, null: false, mutation: Mutations::SubmitOrder
   field :updateOrder, null: false, mutation: Mutations::UpdateOrder
-  field :cancelOrder, null: false, mutation: Mutations::CancelOrder
 
   ### OrganizationRole
 
   field :createOrganizationRole, null: false, mutation: Mutations::CreateOrganizationRole
-  field :updateOrganizationRole, null: false, mutation: Mutations::UpdateOrganizationRole
   field :deleteOrganizationRole, null: false, mutation: Mutations::DeleteOrganizationRole
+  field :updateOrganizationRole, null: false, mutation: Mutations::UpdateOrganizationRole
 
   ### Page
 
   field :createPage, null: false, mutation: Mutations::CreatePage
-  field :updatePage, null: false, mutation: Mutations::UpdatePage
   field :deletePage, null: false, mutation: Mutations::DeletePage
+  field :updatePage, null: false, mutation: Mutations::UpdatePage
 
   ### Product
 
   field :createProduct, null: false, mutation: Mutations::CreateProduct
-  field :updateProduct, null: false, mutation: Mutations::UpdateProduct
   field :deleteProduct, null: false, mutation: Mutations::DeleteProduct
+  field :updateProduct, null: false, mutation: Mutations::UpdateProduct
+
+  ### RankedChoiceUserConstraint
+
+  field :createRankedChoiceUserConstraint, null: false, mutation: Mutations::CreateRankedChoiceUserConstraint
+  field :deleteRankedChoiceUserConstraint, null: false, mutation: Mutations::DeleteRankedChoiceUserConstraint
+  field :updateRankedChoiceUserConstraint, null: false, mutation: Mutations::UpdateRankedChoiceUserConstraint
 
   ### Room
 
   field :createRoom, null: false, mutation: Mutations::CreateRoom
-  field :updateRoom, null: false, mutation: Mutations::UpdateRoom
   field :deleteRoom, null: false, mutation: Mutations::DeleteRoom
+  field :updateRoom, null: false, mutation: Mutations::UpdateRoom
 
   ### RootSite
 
@@ -193,34 +206,46 @@ class Types::MutationType < Types::BaseObject
 
   ### Run
 
-  field :createRun, null: false, mutation: Mutations::CreateRun
   field :createMultipleRuns, null: false, mutation: Mutations::CreateMultipleRuns
+  field :createRun, null: false, mutation: Mutations::CreateRun
   field :deleteRun, null: false, mutation: Mutations::DeleteRun
   field :updateRun, null: false, mutation: Mutations::UpdateRun
 
   ### Signup
 
   field :createMySignup, null: false, mutation: Mutations::CreateMySignup
-  field :withdrawMySignup, null: false, mutation: Mutations::WithdrawMySignup
   field :createUserSignup, null: false, mutation: Mutations::CreateUserSignup
-  field :withdrawUserSignup, null: false, mutation: Mutations::WithdrawUserSignup
   field :forceConfirmSignup, null: false, mutation: Mutations::ForceConfirmSignup
   field :updateSignupBucket, null: false, mutation: Mutations::UpdateSignupBucket
   field :updateSignupCounted, null: false, mutation: Mutations::UpdateSignupCounted
+  field :withdrawMySignup, null: false, mutation: Mutations::WithdrawMySignup
+  field :withdrawUserSignup, null: false, mutation: Mutations::WithdrawUserSignup
+
+  ### SignupRankedChoice
+
+  field :createSignupRankedChoice, null: false, mutation: Mutations::CreateSignupRankedChoice
+  field :deleteSignupRankedChoice, null: false, mutation: Mutations::DeleteSignupRankedChoice
+  field :updateSignupRankedChoicePriority, null: false, mutation: Mutations::UpdateSignupRankedChoicePriority
 
   ### SignupRequest
 
-  field :createSignupRequest, null: false, mutation: Mutations::CreateSignupRequest
-  field :withdrawSignupRequest, null: false, mutation: Mutations::WithdrawSignupRequest
   field :acceptSignupRequest, null: false, mutation: Mutations::AcceptSignupRequest
+  field :createSignupRequest, null: false, mutation: Mutations::CreateSignupRequest
   field :rejectSignupRequest, null: false, mutation: Mutations::RejectSignupRequest
+  field :withdrawSignupRequest, null: false, mutation: Mutations::WithdrawSignupRequest
+
+  ### SignupRound
+
+  field :createSignupRound, null: false, mutation: Mutations::CreateSignupRound
+  field :deleteSignupRound, null: false, mutation: Mutations::DeleteSignupRound
+  field :updateSignupRound, null: false, mutation: Mutations::UpdateSignupRound
 
   ### StaffPosition
 
   field :createStaffPosition, null: false, mutation: Mutations::CreateStaffPosition
+  field :deleteStaffPosition, null: false, mutation: Mutations::DeleteStaffPosition
   field :updateStaffPosition, null: false, mutation: Mutations::UpdateStaffPosition
   field :updateStaffPositionPermissions, null: false, mutation: Mutations::UpdateStaffPositionPermissions
-  field :deleteStaffPosition, null: false, mutation: Mutations::DeleteStaffPosition
 
   ### TeamMember
 
@@ -230,11 +255,11 @@ class Types::MutationType < Types::BaseObject
 
   ### Ticket
 
+  field :convertTicketToEventProvided, null: false, mutation: Mutations::ConvertTicketToEventProvided
   field :createTicket, null: false, mutation: Mutations::CreateTicket
-  field :updateTicket, null: false, mutation: Mutations::UpdateTicket
   field :deleteTicket, null: false, mutation: Mutations::DeleteTicket
   field :provideEventTicket, null: false, mutation: Mutations::ProvideEventTicket
-  field :convertTicketToEventProvided, null: false, mutation: Mutations::ConvertTicketToEventProvided
+  field :updateTicket, null: false, mutation: Mutations::UpdateTicket
 
   ### TicketType
 
@@ -254,9 +279,9 @@ class Types::MutationType < Types::BaseObject
 
   ### UserConProfile
 
-  field :createUserConProfile, null: false, mutation: Mutations::CreateUserConProfile
-  field :updateUserConProfile, null: false, mutation: Mutations::UpdateUserConProfile
-  field :deleteUserConProfile, null: false, mutation: Mutations::DeleteUserConProfile
-  field :withdrawAllUserConProfileSignups, null: false, mutation: Mutations::WithdrawAllUserConProfileSignups
   field :acceptClickwrapAgreement, null: false, mutation: Mutations::AcceptClickwrapAgreement
+  field :createUserConProfile, null: false, mutation: Mutations::CreateUserConProfile
+  field :deleteUserConProfile, null: false, mutation: Mutations::DeleteUserConProfile
+  field :updateUserConProfile, null: false, mutation: Mutations::UpdateUserConProfile
+  field :withdrawAllUserConProfileSignups, null: false, mutation: Mutations::WithdrawAllUserConProfileSignups
 end

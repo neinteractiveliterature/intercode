@@ -36,12 +36,10 @@ fragment ConventionDisplayFields on Convention {
   hidden
   language
 
-  maximum_event_signups {
-    timespans {
-      start
-      finish
-      value
-    }
+  signup_rounds {
+    id
+    start
+    maximum_event_signups
   }
 
   organization {
