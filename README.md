@@ -11,7 +11,7 @@ Intercode is a web application that:
 
 [The original Intercode](https://github.com/neinteractiveliterature/intercode-classic) was written in PHP by Barry Tannenbaum for Intercon New England, and has since been used by several other conventions around the world.
 
-Intercode 2 is a ground-up rewrite of Intercode, making it more robust, more flexible, and more modern.
+Intercode 2 was a ground-up rewrite of Intercode, making it more robust, more flexible, and more modern.  Starting at version 3.0.0, we've used [semantic versioning](https://semver.org/) for our releases.
 
 # Overall Architecture
 
@@ -19,11 +19,11 @@ Intercode 2 is a ground-up rewrite of Intercode, making it more robust, more fle
 - **Frontend**: React and Apollo-based single-page JavaScript app
 - **Database engine**: PostgreSQL
 - **Background queue system**: Amazon SQS + Shoryuken (this might change in the future)
-- **Production infrastructure**: For [New England Interactive Literature](http://interactiveliterature.org)'s installation of Intercode, we're hosting it on [Render](https://render.com) and running it via Docker containers.
+- **Production infrastructure**: For [New England Interactive Literature](http://interactiveliterature.org)'s installation of Intercode, we're hosting it on [Fly](https://fly.io).
 
 # Getting Started with Developing Intercode
 
-- Intercode 2 in development mode uses `intercode.test` as its cookie domain. If you use `localhost` to visit the site, that will mysteriously fail. I'm going to try to make the site detect the wrong domain and redirect you, but for now, please just use the `intercode.test` domain name.
+- Intercode in development mode uses `intercode.test` as its cookie domain. If you use `localhost` to visit the site, that will mysteriously fail. I'm going to try to make the site detect the wrong domain and redirect you, but for now, please just use the `intercode.test` domain name.
 - We used to support a Docker Compose-based development workflow, but this has been deprecated. Please run Rails locally using the instructions below.
 
 ## Developer Setup with local Rails
