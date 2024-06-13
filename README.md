@@ -76,7 +76,7 @@ If you want to test how the app runs in production, but using your local develop
 
 # Contacting us
 
-To contact the Intercode 2 project team, you can:
+To contact the Intercode project team, you can:
 
 - [File an issue or feature request here](https://github.com/neinteractiveliterature/issues)
 - [Email Nat Budin](mailto:natbudin@gmail.com).
@@ -87,4 +87,4 @@ Participants in the Intercode project are expected to follow the Contributor Cov
 
 # License
 
-Intercode 2 is released under the terms and conditions of the MIT license. Please see the LICENSE file for the full legalese.
+Intercode is released under the terms and conditions of the MIT license. Please see the LICENSE file for the full legalese.
