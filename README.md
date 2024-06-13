@@ -1,4 +1,4 @@
-# Intercode 2
+# Intercode
 
 [![Build Status](https://github.com/neinteractiveliterature/intercode/workflows/Docker%20Image%20CI/badge.svg)](https://github.com/neinteractiveliterature/intercode/actions?workflow=Docker+Image+CI)
 [![Automated Code Review](https://github.com/neinteractiveliterature/intercode/workflows/Pronto/badge.svg)](https://github.com/neinteractiveliterature/intercode/actions?workflow=Pronto)
