@@ -45,7 +45,7 @@ jobs:
     steps:
     - name: Format release notes for Slack
       id: format-release-notes
-      uses: LoveToKnow/slackify-markdown-action@v1.1.0
+      uses: LoveToKnow/slackify-markdown-action@v1.1.1
       with:
         text: ${{ github.event.release.body }}
     - name: Post about release to Slack
