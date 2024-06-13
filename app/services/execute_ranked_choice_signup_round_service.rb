@@ -97,7 +97,7 @@ class ExecuteRankedChoiceSignupRoundService < CivilService::Service
     pending_choices.find { |choice| execute_choice(constraints, choice, allow_waitlist: true) }
   end
 
-  def check_skip_user_for_policy_reasons(constraints)
+  def check_skip_user_for_policy_reasons(constraints) # rubocop:disable Metrics/MethodLength
     unless constraints.has_ticket_if_required?
       decisions << RankedChoiceDecision.create!(
         signup_round:,
