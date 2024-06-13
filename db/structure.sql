@@ -2314,7 +2314,7 @@ CREATE TABLE public.ranked_choice_decisions (
     extra jsonb,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
-    signup_round_id bigint
+    signup_round_id bigint NOT NULL
 );
 
 

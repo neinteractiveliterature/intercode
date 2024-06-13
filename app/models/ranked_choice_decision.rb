@@ -12,7 +12,7 @@
 #  signup_id               :bigint
 #  signup_ranked_choice_id :bigint
 #  signup_request_id       :bigint
-#  signup_round_id         :bigint
+#  signup_round_id         :bigint           not null
 #  user_con_profile_id     :bigint
 #
 # Indexes

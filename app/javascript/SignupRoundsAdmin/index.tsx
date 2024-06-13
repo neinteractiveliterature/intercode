@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import usePageTitle from '../usePageTitle';
 import MaximumEventSignupsPreview from './MaximumEventSignupsPreview';
 import SignupRoundScheduleTable from './SignupRoundScheduleTable';
+import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 
 const SignupRoundsAdmin = LoadQueryWrapper(useSignupRoundsAdminQuery, ({ data }) => {
   const { t } = useTranslation();
@@ -20,6 +21,11 @@ const SignupRoundsAdmin = LoadQueryWrapper(useSignupRoundsAdminQuery, ({ data })
   );
 
   usePageTitle(t('navigation.admin.signupRounds'));
+
+  const replacementContent = useAuthorizationRequired('can_update_convention');
+  if (replacementContent) {
+    return replacementContent;
+  }
 
   return (
     <>

@@ -27,6 +27,7 @@ class SignupRound < ApplicationRecord
   belongs_to :convention
 
   validates :ranked_choice_order, inclusion: { in: RANKED_CHOICE_ORDERS, allow_nil: true }
+  validates :start, { uniqueness: { scope: :convention_id } }
 
   scope :due_at, ->(time) { where("executed_at IS NULL AND (start IS NULL OR start <= ?)", time) }
   scope :currently_due, -> { due_at(Time.zone.now) }

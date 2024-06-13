@@ -1,6 +1,6 @@
 import { useContext, useState, useMemo } from 'react';
 import { ParsedSignupRound } from '../SignupRoundUtils';
-import { RankedChoiceOrder, SignupAutomationMode, SignupRoundInput } from '../graphqlTypes.generated';
+import { RankedChoiceOrder, SignupAutomationMode } from '../graphqlTypes.generated';
 import { useTranslation } from 'react-i18next';
 import MaximumEventSignupsInput from './MaximumEventSignupsInput';
 import {
@@ -14,16 +14,7 @@ import AppRootContext from '../AppRootContext';
 import isEqual from 'lodash/isEqual';
 import { useUpdateSignupRoundMutation } from './mutations.generated';
 import { describeTimespan } from '../TimespanUtils';
-
-function buildSignupRoundInput(
-  round: ParsedSignupRound<SignupRoundsAdminQueryData['convention']['signup_rounds'][number]>,
-): SignupRoundInput {
-  return {
-    maximum_event_signups: round.maximum_event_signups?.toString(),
-    ranked_choice_order: round.ranked_choice_order,
-    start: round.timespan.start?.toISO(),
-  };
-}
+import { buildSignupRoundInput } from './buildSignupRoundInput';
 
 type SignupRoundCardProps = {
   rounds: ParsedSignupRound<SignupRoundsAdminQueryData['convention']['signup_rounds'][number]>[];
@@ -71,26 +62,6 @@ function SignupRoundCard({ rounds, roundIndex }: SignupRoundCardProps) {
         <strong>{roundDescription}:</strong> {describeTimespan(round.timespan, t, 'shortDateTime', timezoneName)}
       </div>
       <div className="card-body">
-        {/* <div className="mb-3">
-          <FormGroupWithLabel label={t('signups.signupRoundStart', 'Starts at')}>
-            {(id) => (
-              <div className="d-flex flex-row align-items-center justify-content-stretch text-nowrap">
-                <DateTimeInput
-                  id={id}
-                  value={editingRound.timespan.start?.toISO()}
-                  timezoneName={timezoneName}
-                  onChange={(value) =>
-                    setEditingRound((prevRound) => {
-                      const newTimespan = prevRound.timespan.clone();
-                      newTimespan.start = DateTime.fromISO(value);
-                      return { ...prevRound, timespan: newTimespan };
-                    })
-                  }
-                />
-              </div>
-            )}
-          </FormGroupWithLabel>
-        </div> */}
         <div className="mb-3">
           <FormGroupWithLabel label={t('signups.maximumSignups.label', 'Maximum signups allowed')}>
             {(id) => (

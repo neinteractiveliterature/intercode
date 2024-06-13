@@ -31,29 +31,29 @@
 }
 
 .maximum-event-signups-4 {
-  background-color: $pink;
+  background-color: lighten($orange, 20%);
 }
 
 .maximum-event-signups-4-transition {
-  background-image: linear-gradient(to right, transparent, $pink);
+  background-image: linear-gradient(to right, transparent, lighten($orange, 20%));
   font-weight: bold;
 }
 
 .maximum-event-signups-5 {
-  background-color: $orange;
+  background-color: lighten($pink, 20%);
 }
 
 .maximum-event-signups-5-transition {
-  background-image: linear-gradient(to right, transparent, $orange);
+  background-image: linear-gradient(to right, transparent, lighten($pink, 20%));
   font-weight: bold;
 }
 
 .maximum-event-signups-6 {
-  background-color: $teal;
+  background-color: lighten($purple, 20%);
 }
 
 .maximum-event-signups-6-transition {
-  background-image: linear-gradient(to right, transparent, $teal);
+  background-image: linear-gradient(to right, transparent, lighten($purple, 20%));
   font-weight: bold;
 }
 
