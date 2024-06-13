@@ -73,12 +73,12 @@ class AutoscaleServersService < CivilService::Service
 
   def self.scaling_target_for(time)
     nearby_increases = Convention.connection.select_rows <<~SQL
-      select id, timespans.*
-      from conventions,
-        jsonb_to_recordset(maximum_event_signups->'timespans') timespans(start timestamptz, value text)
+      select conventions.id, signup_rounds.start, signup_rounds.maximum_event_signups
+      from conventions
+      join signup_rounds on signup_rounds.convention_id = conventions.id
       where start between #{Convention.connection.quote time - SIGNUP_OPENING_LOOKBACK_TIME}
       and #{Convention.connection.quote time + SIGNUP_OPENING_LOOKAHEAD_TIME}
-      and value not in ('not_now', 'not_yet')
+      and maximum_event_signups not in ('not_now', 'not_yet')
       and signup_mode = 'self_service';
     SQL
 
