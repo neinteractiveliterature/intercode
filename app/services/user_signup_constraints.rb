@@ -37,14 +37,34 @@ class UserSignupConstraints
     end
   end
 
+  def concurrent_signup_requests_for_run(run)
+    pending_signup_requests.select do |signup_request|
+      other_run = signup_request.target_run
+      !other_run.event.can_play_concurrently? && run.overlaps?(other_run)
+    end
+  end
+
   def conflicting_signups_for_run(run, allow_team_member: false)
     if allow_team_member
       # You can be a team member for multiple events at once, as long as you're not also a
       # regular participant in anything that disallows concurrent signups
-      concurrent_signups_for_run(run).reject(&:team_member?)
+      concurrent_signups_for_run(run).reject(&:team_member?) + concurrent_signup_requests_for_run(run)
     else
-      concurrent_signups_for_run(run)
+      concurrent_signups_for_run(run) + concurrent_signup_requests_for_run(run)
     end
+  end
+
+  def conflict_descriptions(conflicting_signups)
+    descriptions = []
+
+    %w[pending confirmed ticket_purchase_hold waitlisted].each do |state|
+      titles = conflicting_signups.select { |signup| signup.state == state }.map { |signup| signup.event.title }
+      next unless titles.any?
+
+      descriptions << I18n.t("signups.conflict_descriptions.#{state}", event_titles: titles.to_sentence)
+    end
+
+    descriptions.to_sentence
   end
 
   def signup_count_allowed?(signup_count)

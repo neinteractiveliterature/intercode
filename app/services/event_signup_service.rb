@@ -85,7 +85,7 @@ class EventSignupService < CivilService::Service
     return if convention.signup_mode == "self_service"
     return if team_member?
 
-    errors.add :base, "#{convention.name} does not allow self-service signups."
+    errors.add :base, I18n.t("signups.errors.wrong_signup_mode")
   end
 
   def user_signup_constraints
@@ -99,13 +99,11 @@ class EventSignupService < CivilService::Service
     when "not_now"
       nil # ConventionRegistrationFreeze will take care of this
     when "not_yet"
-      errors.add :base, "Signups are not allowed at this time."
+      errors.add :base, I18n.t("signups.errors.closed")
     else
       user_signup_count = user_signup_constraints.current_signup_count
       unless user_signup_constraints.signup_count_allowed?(user_signup_count + 1)
-        errors.add :base,
-                   "You are already signed up for #{user_signup_count} \
-#{"event".pluralize(user_signup_count)}, which is the maximum allowed at this time."
+        errors.add :base, I18n.t("signups.errors.already_at_max", count: user_signup_count)
       end
     end
   end
@@ -124,20 +122,13 @@ class EventSignupService < CivilService::Service
   def must_not_have_conflicting_signups
     return unless !event.can_play_concurrently? && conflicting_signups.any?
 
-    verb = conflicting_signups.size > 1 ? "conflict" : "conflicts"
-    errors.add :base, "You are already #{conflict_descriptions}, which #{verb} with #{event.title}."
-  end
-
-  def conflict_descriptions
-    confirmed_titles = conflicting_signups.select(&:confirmed?).map { |signup| signup.event.title }
-    ticket_purchase_hold_titles =
-      conflicting_signups.select(&:ticket_purchase_hold?).map { |signup| signup.event.title }
-    waitlisted_titles = conflicting_signups.select(&:waitlisted?).map { |signup| signup.event.title }
-    [
-      confirmed_titles.any? ? "signed up for #{confirmed_titles.to_sentence}" : nil,
-      ticket_purchase_hold_titles.any? ? "holding a spot for #{ticket_purchase_hold_titles.to_sentence}" : nil,
-      waitlisted_titles.any? ? "waitlisted for #{waitlisted_titles.to_sentence}" : nil
-    ].compact.join(" and ")
+    errors.add :base,
+               I18n.t(
+                 "signups.errors.conflicts",
+                 conflict_descriptions: user_signup_constraints.conflict_descriptions(conflicting_signups),
+                 count: conflicting_signups.size,
+                 event_title: event.title
+               )
   end
 
   def must_have_ticket_if_required
@@ -145,13 +136,18 @@ class EventSignupService < CivilService::Service
 
     if user_con_profile.ticket
       errors.add :base,
-                 "You have a #{user_con_profile.ticket.ticket_type.description}, \
-but these do not allow event signups.  If you want to sign up for events, please contact \
-#{convention.name} staff."
+                 I18n.t(
+                   "signups.errors.ticket_does_not_allow_signups",
+                   ticket_type_description: user_con_profile.ticket.ticket_type.description,
+                   convention_name: convention.name
+                 )
     else
       errors.add :base,
-                 "You must have a valid #{convention.ticket_name} to #{convention.name} to \
-sign up for events."
+                 I18n.t(
+                   "signups.errors.no_ticket",
+                   ticket_name: convention.ticket_name,
+                   convention_name: convention.name
+                 )
     end
   end
 
@@ -161,7 +157,7 @@ sign up for events."
 
     return unless already_signed_up
 
-    errors.add :base, "You are already signed up for this run of #{event.title}."
+    errors.add :base, I18n.t("signups.errors.already_signed_up", event_title: event.title)
   end
 
   def must_not_have_signup_rounds_due
@@ -169,8 +165,7 @@ sign up for events."
     return unless convention.signup_automation_mode == "ranked_choice"
     return unless convention.signup_rounds.currently_due.any?
 
-    errors.add :base,
-               "We are currently processing ranked choice signups for this round. Please wait a moment and try again."
+    errors.add :base, I18n.t("signups.errors.signup_round_in_progress")
   end
 
   def require_valid_bucket
@@ -180,14 +175,15 @@ sign up for events."
     return if requested_bucket && !requested_bucket.anything?
 
     non_anything_buckets = run.registration_policy.buckets.reject(&:anything?)
-    errors.add :base, "Please choose one of the following buckets: #{non_anything_buckets.map(&:name).join(", ")}."
+    errors.add :base,
+               I18n.t("signups.errors.invalid_bucket", valid_buckets: non_anything_buckets.map(&:name).join(", "))
   end
 
   def require_no_bucket_for_team_member
     return unless team_member?
     return unless requested_bucket_key
 
-    errors.add :base, "Team members must sign up as non-counted"
+    errors.add :base, I18n.t("signups.errors.team_members_cannot_be_counted")
   end
 
   def counts_towards_total?
