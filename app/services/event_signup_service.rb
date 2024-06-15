@@ -116,7 +116,15 @@ class EventSignupService < CivilService::Service
   end
 
   def conflicting_signups
-    @conflicting_signups ||= user_signup_constraints.conflicting_signups_for_run(run, allow_team_member: team_member?)
+    @conflicting_signups ||=
+      begin
+        conflicts = user_signup_constraints.conflicting_signups_for_run(run, allow_team_member: team_member?)
+        if action == "accept_signup_request"
+          conflicts.reject { |conflict| conflict.is_a?(SignupRequest) && conflict.target_run == run }
+        else
+          conflicts
+        end
+      end
   end
 
   def must_not_have_conflicting_signups
