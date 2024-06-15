@@ -1,6 +1,6 @@
 require "test_helper"
 
-class EventSignupServiceTest < ActiveSupport::TestCase
+class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics/ClassLength
   include ActiveJob::TestHelper
 
   let(:convention) { create(:convention, :with_notification_templates, ticket_mode: "required_for_signup") }
@@ -285,7 +285,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
       end
 
       it "counts a pending request as a conflict" do
-        signup_request = create(:signup_request, user_con_profile:, target_run: other_run, state: "pending")
+        create(:signup_request, user_con_profile:, target_run: other_run, state: "pending")
 
         result = subject.call
         assert result.failure?

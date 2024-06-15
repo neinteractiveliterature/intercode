@@ -33,9 +33,9 @@ class CreateSignupRequestService < CivilService::Service
   def inner_call
     signup_request =
       user_con_profile.signup_requests.create!(
-        target_run: target_run,
-        replace_signup: replace_signup,
-        requested_bucket_key: requested_bucket_key,
+        target_run:,
+        replace_signup:,
+        requested_bucket_key:,
         updated_by: whodunit
       )
 

@@ -43,7 +43,7 @@ class CreateSignupRequestServiceTest < ActiveSupport::TestCase
     let(:other_run) { create(:run, event: other_event, starts_at: the_run.starts_at) }
 
     it "counts a conflicting signup as a conflict" do
-      signup = create(:signup, user_con_profile:, run: other_run, state: "confirmed")
+      create(:signup, user_con_profile:, run: other_run, state: "confirmed")
 
       result = subject.call
       assert result.failure?
@@ -54,7 +54,7 @@ class CreateSignupRequestServiceTest < ActiveSupport::TestCase
     end
 
     it "counts a pending request as a conflict" do
-      signup_request = create(:signup_request, user_con_profile:, target_run: other_run, state: "pending")
+      create(:signup_request, user_con_profile:, target_run: other_run, state: "pending")
 
       result = subject.call
       assert result.failure?
@@ -65,7 +65,7 @@ class CreateSignupRequestServiceTest < ActiveSupport::TestCase
     end
 
     it "does not count a rejected request as a conflict" do
-      signup_request = create(:signup_request, user_con_profile:, target_run: other_run, state: "withdrawn")
+      create(:signup_request, user_con_profile:, target_run: other_run, state: "withdrawn")
 
       result = subject.call
       assert result.success?
