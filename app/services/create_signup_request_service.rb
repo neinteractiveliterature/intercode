@@ -39,9 +39,7 @@ class CreateSignupRequestService < CivilService::Service
         updated_by: whodunit
       )
 
-    unless suppress_notifications
-      SignupRequests::NewSignupRequestNotifier.new(signup_request: signup_request).deliver_later
-    end
+    SignupRequests::NewSignupRequestNotifier.new(signup_request:).deliver_later unless suppress_notifications
 
     success(signup_request:)
   end
