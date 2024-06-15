@@ -115,7 +115,7 @@ jobs:
       - name: Run tests
         run: TERM=xterm-color bundle exec rails test
       - name: Generate Coverage Report
-        uses: clearlyip/code-coverage-report-action@v4
+        uses: clearlyip/code-coverage-report-action@v5
         id: code_coverage_report_action
         #Dont run for dependabot unless you fix PR comment permissions
         if: ${{ github.actor != 'dependabot[bot]'}}
