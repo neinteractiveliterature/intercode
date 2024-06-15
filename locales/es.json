@@ -14,16 +14,10 @@
         "conventionTiming": {
           "canceled": "",
           "endsToday": "",
-          "future_one": "",
-          "future_many": "",
-          "future_other": "",
+          "future": "{{ conventionName }} starts in {{ count }} days",
           "isToday": "",
-          "ongoing_one": "",
-          "ongoing_many": "",
-          "ongoing_other": "",
-          "past_one": "",
-          "past_many": "",
-          "past_other": ""
+          "ongoing": "{{ conventionName }} ends in {{ count }} days",
+          "past": "{{ conventionName }} ended {{ count }} days ago"
         },
         "eventList": "",
         "eventVisibilityGMs": "",
@@ -851,6 +845,7 @@
       }
     },
     "mySignupQueue": {
+      "addAdditional": "To add more events to your queue, go to <1>the event catalog</1> or <4>the event schedule</4>. You can add events to your queue from each event’s page.",
       "allowWaitlist": {
         "caption": "What should we do if all your choices are full?",
         "no": "Don't sign me up for anything",
@@ -863,6 +858,7 @@
         "help": "How many events do you want to sign up for on {{ conventionDay }} (in addition to any events you are running?)",
         "label": "{{ conventionDay }} event signups"
       },
+      "emptyState": "You currently have no events in your signup queue. To add something to your queue, go to <2>the event catalog</2> or <5>the event schedule</5>. You can add events to your queue from each event’s page.",
       "maximumSignupsLimit": "{{ number }} at most",
       "miscSignupsConstraint": "Events {{ interval }}",
       "moveDown": "Move down in queue",
@@ -877,6 +873,11 @@
       "noLimit": "No limit",
       "remove": "Remove",
       "removeConfirmPrompt": "Are you sure you want to remove {{ eventTitle }} from your signup queue?",
+      "ticketStatus": {
+        "noTicket": "You do not have a {{ ticketName }}.  You will not be able to sign up for games until you have purchased a {{ ticketName }}.",
+        "ok": "You have a {{ ticketName }} and will be signed up for events at that time.",
+        "signupsNotAllowed": "You have a {{ ticketName }} that does not allow event signups.  You will not be able to sign up for games until you have arranged for a full {{ ticketName }}."
+      },
       "title": "My signup queue",
       "totalSignupsConstraint": {
         "help": "How many events do you want to sign up for over the entirety of the con (in addition to any events you are running?)",
@@ -905,9 +906,14 @@
       "waitlist": "Waitlist"
     },
     "signupRounds": {
+      "addNewSignupRound": "Add new signup round",
+      "errors": {
+        "startTimeRequired": "Start time is required."
+      },
       "preSignupRoundPeriod": "Pre-signups period",
+      "roundNumber": "Round {{ number }}",
       "scheduleHeader": "Schedule",
-      "scheduleRowHeader": "Round {{ number }}"
+      "start": "Starts at"
     },
     "signupSummaryLink": "",
     "states": {
