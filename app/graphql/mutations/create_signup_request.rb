@@ -16,13 +16,14 @@ class Mutations::CreateSignupRequest < Mutations::BaseMutation
   def resolve(**args)
     replace_signup = (user_con_profile.signups.find(args[:replace_signup_id]) if args[:replace_signup_id])
 
-    result = CreateSignupRequestService.new(
-      user_con_profile:
-      target_run:,
-      replace_signup:,
-      requested_bucket_key: args[:requested_bucket_key],
-      whodunit: current_user
-    ).call!
+    result =
+      CreateSignupRequestService.new(
+        user_con_profile:,
+        target_run:,
+        replace_signup:,
+        requested_bucket_key: args[:requested_bucket_key],
+        whodunit: current_user
+      ).call!
 
     { signup_request: result.signup_request }
   end
