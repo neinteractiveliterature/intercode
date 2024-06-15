@@ -1,6 +1,6 @@
 require "test_helper"
 
-class EventSignupServiceTest < ActiveSupport::TestCase
+class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics/ClassLength
   include ActiveJob::TestHelper
 
   let(:convention) { create(:convention, :with_notification_templates, ticket_mode: "required_for_signup") }
@@ -282,6 +282,17 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
         result = subject.call
         assert result.success?
+      end
+
+      it "counts a pending request as a conflict" do
+        create(:signup_request, user_con_profile:, target_run: other_run, state: "pending")
+
+        result = subject.call
+        assert result.failure?
+        assert_match(
+          /\AYou are already requesting to sign up for #{Regexp.escape other_event.title}/,
+          result.errors.full_messages.join('\n')
+        )
       end
     end
 
@@ -567,6 +578,16 @@ class EventSignupServiceTest < ActiveSupport::TestCase
           assert_nil result.signup.requested_bucket_key
         end
       end
+    end
+  end
+
+  describe "in a moderated-signup convention" do
+    let(:convention) { create(:convention, :with_notification_templates, signup_mode: "moderated") }
+
+    it "does not allow self-service signups" do
+      result = subject.call
+      assert result.failure?
+      assert_match(/does not allow self-service signups/, result.errors.full_messages.join('\n'))
     end
   end
 

@@ -9,11 +9,11 @@ module ConventionRegistrationFreeze
 
   def registrations_must_not_be_frozen
     return unless convention.registrations_frozen?
-    errors.add :base, "Registrations for #{convention.name} are frozen."
+    errors.add :base, I18n.t("signups.errors.frozen", convention_name: convention.name)
   end
 
   def convention_must_not_be_canceled
     return unless convention.canceled?
-    errors.add :base, "#{convention.name} is canceled (and therefore registrations are frozen)."
+    errors.add :base, I18n.t("signups.errors.convention_canceled", convention_name: convention.name)
   end
 end

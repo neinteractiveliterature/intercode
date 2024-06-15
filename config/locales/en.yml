@@ -57,3 +57,30 @@ en:
       team_member: 'This information is only visible to %{team_member_name_pluralized}.'
       all_profiles_basic_access: 'This information is only visible to staff members.'
       admin: 'This information is only visible to administrators.'
+  signups:
+    conflict_descriptions:
+      confirmed: "signed up for %{event_titles}"
+      pending: "requesting to sign up for %{event_titles}"
+      ticket_purchase_hold: "holding a spot for %{event_titles}"
+      waitlisted: "waitlisted for %{event_titles}"
+    errors:
+      already_at_max:
+        one: "You are already signed up for %{count} event, which is the maximum allowed at this time."
+        other: "You are already signed up for %{count} events, which is the maximum allowed at this time."
+      already_signed_up: "You are already signed up for this run of %{event_title}."
+      closed: "Signups are not allowed at this time."
+      conflicts:
+        one: "You are already %{conflict_descriptions}, which conflicts with %{event_title}."
+        other: "You are already %{conflict_descriptions}, which conflict with %{event_title}."
+      convention_canceled: "%{convention_name} is canceled (and therefore registrations are frozen)."
+      frozen: "Registrations for %{convention_name} are frozen."
+      invalid_bucket: "Please choose one of the following buckets: %{valid_buckets}."
+      no_ticket: "You must have a valid %{ticket_name} to %{convention_name} to sign up for events."
+      signup_round_in_progress: "We are currently processing ranked choice signups for this round. Please wait a moment and try again."
+      team_members_cannot_be_counted: "Team members must sign up as non-counted"
+      ticket_does_not_allow_signups: "You have a %{ticket_type_description}, but these do not allow event signups.  If you want to sign up for events, please contact %{convention_name} staff."
+      wrong_signup_mode: "%{convention_name} does not allow self-service signups."
+  signup_requests:
+    errors:
+      closed: "Signup requests are closed."
+      wrong_signup_mode: "This convention does not moderate signups. Instead of making a signup request, please sign up for events directly."

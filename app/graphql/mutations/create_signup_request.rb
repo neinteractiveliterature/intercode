@@ -14,20 +14,17 @@ class Mutations::CreateSignupRequest < Mutations::BaseMutation
   end
 
   def resolve(**args)
-    raise "Signup requests are closed." if convention.signup_mode == "moderated" && !convention.signup_requests_open?
-
     replace_signup = (user_con_profile.signups.find(args[:replace_signup_id]) if args[:replace_signup_id])
 
-    signup_request =
-      user_con_profile.signup_requests.create!(
-        target_run: target_run,
-        replace_signup: replace_signup,
+    result =
+      CreateSignupRequestService.new(
+        user_con_profile:,
+        target_run:,
+        replace_signup:,
         requested_bucket_key: args[:requested_bucket_key],
-        updated_by: current_user
-      )
+        whodunit: current_user
+      ).call!
 
-    SignupRequests::NewSignupRequestNotifier.new(signup_request: signup_request).deliver_later
-
-    { signup_request: signup_request }
+    { signup_request: result.signup_request }
   end
 end
