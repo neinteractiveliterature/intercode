@@ -14,6 +14,7 @@ jobs:
       - name: rubocop
         uses: reviewdog/action-rubocop@v2
         with:
+          skip_install: true
           use_bundler: true
   eslint:
     name: eslint
