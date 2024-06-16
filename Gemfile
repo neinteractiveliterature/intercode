@@ -142,6 +142,7 @@ group :development do
   gem "rubocop-sequel"
   gem "rubocop-factory_bot", require: false
   gem "rubocop-graphql", require: false
+  gem "rubocop-rspec", require: false
   gem "prettier", "4.0.4"
   gem "prettier_print"
   gem "syntax_tree"
