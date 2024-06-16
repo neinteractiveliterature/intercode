@@ -518,7 +518,7 @@ GEM
       strscan
     rollbar (3.5.2)
     rouge (3.26.1)
-    rubocop (1.63.3)
+    rubocop (1.64.1)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
       parallel (~> 1.10)
@@ -543,6 +543,8 @@ GEM
       rack (>= 1.1)
       rubocop (>= 1.33.0, < 2.0)
       rubocop-ast (>= 1.31.1, < 2.0)
+    rubocop-rspec (3.0.1)
+      rubocop (~> 1.61)
     rubocop-sequel (0.3.4)
       rubocop (~> 1.0)
     ruby-progressbar (1.13.0)
@@ -730,11 +732,12 @@ DEPENDENCIES
   redcarpet
   reverse_markdown
   rollbar
-  rubocop (= 1.63.3)
+  rubocop (= 1.64.1)
   rubocop-factory_bot
   rubocop-graphql
   rubocop-performance
   rubocop-rails
+  rubocop-rspec
   rubocop-sequel
   ruby-vips
   scheduled_value (~> 1.4.0)

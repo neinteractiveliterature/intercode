@@ -27,7 +27,8 @@ AllCops:
     - db/schema.rb
     - public/uploads/**/*.rb
     - script/rails
-    - tmp/
+    - tmp/**/*
+    - vendor/bundle/**/*
 
 Sequel:
   Enabled: false

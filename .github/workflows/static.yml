@@ -10,12 +10,12 @@ jobs:
         uses: actions/checkout@v4
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.0.0
+          bundler-cache: true
       - name: rubocop
         uses: reviewdog/action-rubocop@v2
         with:
-          rubocop_version: gemfile
-          rubocop_extensions: rubocop-rails:gemfile rubocop-sequel:gemfile rubocop-performance:gemfile rubocop-factory_bot:gemfile rubocop-graphql:gemfile prism:gemfile prettier:gemfile
+          skip_install: true
+          use_bundler: true
   eslint:
     name: eslint
     runs-on: ubuntu-latest
