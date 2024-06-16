@@ -6331,7 +6331,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/jest-dom@npm:6.4.6":
+"@testing-library/jest-dom@npm:*, @testing-library/jest-dom@npm:6.4.6":
   version: 6.4.6
   resolution: "@testing-library/jest-dom@npm:6.4.6"
   dependencies:
@@ -6800,7 +6800,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:*, @types/jest@npm:29.5.12":
+"@types/jest@npm:29.5.12":
   version: 29.5.12
   resolution: "@types/jest@npm:29.5.12"
   dependencies:
@@ -7236,12 +7236,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/testing-library__jest-dom@npm:5.14.9":
-  version: 5.14.9
-  resolution: "@types/testing-library__jest-dom@npm:5.14.9"
+"@types/testing-library__jest-dom@npm:6.0.0":
+  version: 6.0.0
+  resolution: "@types/testing-library__jest-dom@npm:6.0.0"
   dependencies:
-    "@types/jest": "npm:*"
-  checksum: 10c0/91f7b15e8813b515912c54da44464fb60ecf21162b7cae2272fcb3918074f4e1387dc2beca1f5041667e77b76b34253c39675ea4e0b3f28f102d8cc87fdba9fa
+    "@testing-library/jest-dom": "npm:*"
+  checksum: 10c0/824950dc82752ddb656fa7ca851bf454804332f7a7a8571231abfc3553902198c6b96de209bb3dd1f1a15ee6a269a1efa56866041f5692ee0129308772e658e0
   languageName: node
   linkType: hard
 
@@ -21359,7 +21359,7 @@ __metadata:
     "@types/react-table": "npm:7.7.20"
     "@types/react-transition-group": "npm:4.4.10"
     "@types/source-map-support": "npm:0.5.10"
-    "@types/testing-library__jest-dom": "npm:5.14.9"
+    "@types/testing-library__jest-dom": "npm:6.0.0"
     "@types/tinycolor2": "npm:1.4.6"
     "@types/uuid": "npm:9.0.8"
     "@types/zxcvbn": "npm:4.4.4"
