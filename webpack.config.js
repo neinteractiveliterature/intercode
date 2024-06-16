@@ -6,24 +6,6 @@ const RollbarSourceMapPlugin = require('rollbar-sourcemap-webpack-plugin');
 const webpack = require('webpack');
 const TerserPlugin = require('terser-webpack-plugin');
 
-// Taken from https://webpack.js.org/loaders/style-loader/#insert
-function insertAtTop(element) {
-  var parent = document.querySelector('head');
-  // eslint-disable-next-line no-underscore-dangle
-  var lastInsertedElement = window._lastElementInsertedByStyleLoader;
-
-  if (!lastInsertedElement) {
-    parent.insertBefore(element, parent.firstChild);
-  } else if (lastInsertedElement.nextSibling) {
-    parent.insertBefore(element, lastInsertedElement.nextSibling);
-  } else {
-    parent.appendChild(element);
-  }
-
-  // eslint-disable-next-line no-underscore-dangle
-  window._lastElementInsertedByStyleLoader = element;
-}
-
 const ASSET_PATH =
   process.env.ASSET_PATH || (process.env.NODE_ENV === 'production' ? '/packs/' : 'https://localhost:3135/packs/');
 
@@ -107,7 +89,7 @@ const config = {
         use: [
           {
             loader: require.resolve('style-loader'),
-            options: { insert: insertAtTop },
+            options: { insert: require.resolve('./insertAtTop') },
           },
           require.resolve('css-loader'),
           require.resolve('postcss-loader'),
@@ -119,7 +101,7 @@ const config = {
         use: [
           {
             loader: require.resolve('style-loader'),
-            options: { insert: insertAtTop },
+            options: { insert: require.resolve('./insertAtTop') },
           },
           require.resolve('css-loader'),
           require.resolve('postcss-loader'),
