@@ -112,6 +112,11 @@ query EventPageQuery($eventId: ID!) {
       counted
     }
 
+    my_signup_requests {
+      id
+      state
+    }
+
     event(id: $eventId) {
       id
       title

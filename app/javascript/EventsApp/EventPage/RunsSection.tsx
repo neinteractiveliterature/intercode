@@ -6,7 +6,7 @@ import RunCapacityGraph from './RunCapacityGraph';
 import EventPageRunCard from './EventPageRunCard';
 import { EventPageQueryData, useEventPageQuery } from './queries.generated';
 import { LoadQueryWithVariablesWrapper } from '../../GraphqlLoadingWrappers';
-import { SignupAutomationMode, SignupRound, SignupState } from '../../graphqlTypes.generated';
+import { SignupAutomationMode, SignupRequestState, SignupRound, SignupState } from '../../graphqlTypes.generated';
 import { parseSignupRounds } from '../../SignupRoundUtils';
 
 function getMaxSignupCount(signupRounds: Pick<SignupRound, 'start' | 'maximum_event_signups'>[]) {
@@ -71,11 +71,20 @@ export default LoadQueryWithVariablesWrapper(
         return false;
       }
 
-      return (
-        data.convention.my_signups.filter((signup) => signup.state === SignupState.Confirmed && signup.counted)
-          .length >= maxSignups
+      const confirmedCountedSignups = data.convention.my_signups.filter(
+        (signup) => signup.state === SignupState.Confirmed && signup.counted,
       );
-    }, [data.convention.signup_automation_mode, data.convention.my_signups, data.convention.signup_rounds]);
+      const pendingSignupRequests = data.convention.my_signup_requests.filter(
+        (signupRequest) => signupRequest.state === SignupRequestState.Pending,
+      );
+
+      return confirmedCountedSignups.length + pendingSignupRequests.length >= maxSignups;
+    }, [
+      data.convention.signup_automation_mode,
+      data.convention.my_signups,
+      data.convention.my_signup_requests,
+      data.convention.signup_rounds,
+    ]);
 
     const { currentAbility, convention } = data;
     const myProfile = convention.my_profile;
