@@ -178,7 +178,7 @@ jobs:
         id: ruby-version
         run: echo "ruby-version=$(cat .ruby-version)" >> $GITHUB_OUTPUT
       - name: Build (and push to registry, if on main)
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           push: ${{ github.event_name == 'push' && github.event.ref == 'refs/heads/main' }}
@@ -198,7 +198,7 @@ jobs:
           ghcr.io/neinteractiveliterature/intercode:${{ github.sha }}
           bin/rails runner 'puts "Hello, world!"'
       - name: Build assets only (and push to registry, if on main)
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         if: github.event_name == 'push' && github.event.ref == 'refs/heads/main'
         with:
           context: .
