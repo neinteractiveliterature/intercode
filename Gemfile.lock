@@ -340,7 +340,7 @@ GEM
       net-pop
       net-smtp
     marcel (1.0.4)
-    memory_profiler (1.0.1)
+    memory_profiler (1.0.2)
     method_source (1.0.0)
     mini_histogram (0.3.1)
     mini_magick (4.11.0)
