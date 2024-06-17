@@ -7,6 +7,7 @@ const DateTimeFormatGenerators = {
   anytime: (t: TFunction) => t('dateTimeFormats.anytime', "'anytime'"),
   compactDate: (t: TFunction) => t('dateTimeFormats.compactDate', 'yyyy-MM-dd'),
   compactDateTime: (t: TFunction) => t('dateTimeFormats.compactDateTime', 'yyyy-MM-dd HH:mm'),
+  compactWeekday: (t: TFunction) => t('dateTimeFormats.compactWeekday', 'ccccc'),
   durationHoursMinutes: (t: TFunction) => t('dateTimeFormats.durationHoursMinutes', 'h:mm'),
   indefinitely: (t: TFunction) => t('dateTimeFormats.indefinitely', "'indefinitely'"),
   longDate: (t: TFunction) => t('dateTimeFormats.longDate', 'MMMM d, yyyy'),
