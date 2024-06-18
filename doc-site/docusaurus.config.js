@@ -36,13 +36,16 @@ module.exports = {
     addWebpackFallbacks,
     require.resolve('@docusaurus/plugin-ideal-image'),
     [
-      require.resolve('@edno/docusaurus2-graphql-doc-generator'),
+      require.resolve('@graphql-markdown/docusaurus'),
       {
         schema: '../schema.graphql',
         rootPath: './docs', // docs will be generated under './docs/graphql' (rootPath/baseURL)
         baseURL: 'graphql',
         linkRoot: '/docs',
         homepage: './graphql-homepage.md',
+        loaders: {
+          GraphQLFileLoader: require.resolve('@graphql-tools/graphql-file-loader'),
+        },
       },
     ],
   ],
