@@ -6,9 +6,9 @@ class ContentCloners::SignupRoundsCloner < ContentCloners::ContentClonerBase
     @id_maps[:signup_rounds] = clone_with_id_map(
       source_convention.signup_rounds,
       convention.signup_rounds
-    ) do |round, _source_round|
+    ) do |_source_round, round|
+      round.executed_at = nil
       round.start += time_distance if round.start
-      round.finish += time_distance if round.finish
     end
   end
 end
