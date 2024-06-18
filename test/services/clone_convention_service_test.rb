@@ -42,6 +42,22 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
     )
   end
 
+  it "clones signup rounds" do
+    pre_round = create(:signup_round, convention:, start: nil, maximum_event_signups: "not_yet", executed_at: Time.now)
+    open_round =
+      create(:signup_round, convention:, start: convention.starts_at - 30.days, maximum_event_signups: "unlimited")
+
+    result = service.call!
+    assert result.success?
+
+    new_rounds = result.convention.signup_rounds.chronological.to_a
+    assert_nil new_rounds[0].executed_at
+    assert_nil new_rounds[0].start
+    assert_equal "not_yet", new_rounds[0].maximum_event_signups
+    assert_equal Time.utc(2018, 9, 28, 18, 0, 0), new_rounds[1].start
+    assert_equal "unlimited", new_rounds[1].maximum_event_signups
+  end
+
   it "clones CMS content" do
     ClearCmsContentService.new(convention:).call!
     File.open(__FILE__) { |f| convention.cms_files.create!(file: { io: f, filename: File.basename(__FILE__) }) }
