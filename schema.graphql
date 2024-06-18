@@ -1192,6 +1192,17 @@ type Convention implements CmsParent {
   ): SignupRequestsPagination!
 
   """
+  Finds a signup round by ID in this convention. If there is no signup round with that ID in this convention,
+  errors out.
+  """
+  signup_round(
+    """
+    The ID of the signup round to find.
+    """
+    id: ID!
+  ): [SignupRound!]!
+
+  """
   The signup rounds in this convention.
   """
   signup_rounds: [SignupRound!]!
@@ -5454,6 +5465,115 @@ type Query {
   ): UsersPagination!
 }
 
+type RankedChoiceDecision {
+  """
+  The time this RankedChoiceDecision was created.
+  """
+  created_at: Date!
+  decision: RankedChoiceDecisionValue!
+  extra: JSON
+  id: ID!
+  reason: RankedChoiceDecisionReason
+  signup: Signup
+  signup_ranked_choice: SignupRankedChoice
+  signup_request: SignupRequest
+  signup_round: SignupRound!
+
+  """
+  The time this RankedChoiceDecision was last modified.
+  """
+  updated_at: Date!
+  user_con_profile: UserConProfile
+}
+
+input RankedChoiceDecisionFiltersInput {
+  decisions: [RankedChoiceDecisionValue!]
+  reasons: [RankedChoiceDecisionReason!]
+}
+
+"""
+The reason the ranked choice automation algorithm made the decision it did when evaluating a particular choice.
+"""
+enum RankedChoiceDecisionReason {
+  """
+  This choice would conflict with an existing signup this user has
+  """
+  CONFLICT
+
+  """
+  This event is full
+  """
+  FULL
+
+  """
+  Tickets are required in this convention and this user doesn't have one
+  """
+  MISSING_TICKET
+
+  """
+  This user already has the maximum number of allowed signups at this time
+  """
+  NO_MORE_SIGNUPS_ALLOWED
+
+  """
+  This user has no more pending ranked choices in their queue
+  """
+  NO_PENDING_CHOICES
+
+  """
+  The user's personal constraints prohibit signing up for this event (in conjunction with their existing signups)
+  """
+  RANKED_CHOICE_USER_CONSTRAINTS
+}
+
+"""
+The decision the ranked choice automation algorithm made when evaluating a particular choice.
+"""
+enum RankedChoiceDecisionValue {
+  """
+  Sign the user up for the chosen event
+  """
+  SIGNUP
+
+  """
+  Skip this choice but continue evaluating this user's ranked choices
+  """
+  SKIP_CHOICE
+
+  """
+  Skip all remaining choices for this user
+  """
+  SKIP_USER
+
+  """
+  Sign the user up in the waitlist for the chosen event
+  """
+  WAITLIST
+}
+
+type RankedChoiceDecisionsPagination implements PaginationInterface {
+  """
+  The number of the page currently being returned in this query
+  """
+  current_page: Int!
+  entries: [RankedChoiceDecision!]!
+
+  """
+  The number of items per page currently being returned in this query
+  """
+  per_page: Int!
+
+  """
+  The total number of items in the paginated list (across all pages)
+  """
+  total_entries: Int!
+
+  """
+  The total number of pages in the paginated list
+  """
+  total_pages: Int!
+}
+
 """
 An order to execute ranked-choice signup rounds in.
 """
@@ -6545,6 +6665,30 @@ type SignupRound {
   signups allowed during this SignupRound.
   """
   maximum_event_signups: String!
+  ranked_choice_decisions_paginated(
+    """
+    Filters to restrict what items will appear in the result set.
+    """
+    filters: RankedChoiceDecisionFiltersInput
+
+    """
+    The page number to return from the result set.  Page numbers start with 1.
+    """
+    page: Int
+
+    """
+    The number of items to return per page.  Defaults to 20, can go up to 200.
+    """
+    per_page: Int
+
+    """
+    A set of fields to use for ordering the result set. The second field is used as a
+    tiebreaker for the first, the third field is used as a tiebreaker for the first two,
+    and so on. If the sort argument is missing or empty, the order of items will be left
+    up to the database (and may be unpredictable).
+    """
+    sort: [SortInput!]
+  ): RankedChoiceDecisionsPagination!
 
   """
   In ranked-choice signup conventions, the order to use for executing users' ranked choices in this round.
@@ -8135,24 +8279,99 @@ input UserConProfileFiltersInput {
   ticket_type: [String!]
 }
 
+"""
+An input for creating or modifying UserConProfiles.
+"""
 input UserConProfileInput {
+  """
+  The street address portion of this profile's mailing address.
+  """
   address: String
+
+  """
+  The time this user profile prefers to be called on the phone.
+  """
   best_call_time: String
+
+  """
+  The bio to display for this user profile, in Markdown format.
+  """
   bio: String
+
+  """
+  This user profile's date of birth.
+  """
   birth_date: Date
+
+  """
+  The city portion of this profile's mailing address.
+  """
   city: String
+
+  """
+  The country portion of this profile's mailing address.
+  """
   country: String
+
+  """
+  This user profile's daytime phone number.
+  """
   day_phone: String
+
+  """
+  This user profile's evening phone number.
+  """
   evening_phone: String
+
+  """
+  This user profile's first name.
+  """
   first_name: String
+
+  """
+  An object in JSON format, where the keys are form fields on the UserConProfile form for this convention and the
+  values are the appropriate values to be set on those fields for this user profile.
+  """
   form_response_attrs_json: String
+
+  """
+  Has this user enabled Gravatars for this profile?
+  """
   gravatar_enabled: Boolean
+
+  """
+  This user profile's last name.
+  """
   last_name: String
+
+  """
+  This user profile's nickname.
+  """
   nickname: String
+
+  """
+  The method by which this user profile prefers the convention contact them.
+  """
   preferred_contact: String
+
+  """
+  If this user can't be signed up for any of their ranked choices, should the site waitlist them?
+  """
   ranked_choice_allow_waitlist: Boolean
+
+  """
+  Should this profile's bio use the nickname as part of their name?
+  """
   show_nickname_in_bio: Boolean
+
+  """
+  The state portion of this profile's mailing address.
+  """
   state: String
+
+  """
+  The ZIP portion of this profile's mailing address.
+  """
   zipcode: String
 }
 

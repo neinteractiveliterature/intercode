@@ -34,5 +34,19 @@ module Types
     field :updated_at, Types::DateType, null: false, description: "When this SignupRound was last modified."
 
     association_loaders SignupRound, :convention
+
+    pagination_field :ranked_choice_decisions_paginated,
+                     Types::RankedChoiceDecisionsPaginationType,
+                     Types::RankedChoiceDecisionFiltersInputType,
+                     null: false
+
+    def ranked_choice_decisions_paginated(**args)
+      Tables::RankedChoiceDecisionsTableResultsPresenter.for_signup_round(
+        signup_round: object,
+        pundit_user:,
+        filters: args[:filters].to_h,
+        sort: args[:sort]
+      ).paginate(page: args[:page], per_page: args[:per_page])
+    end
   end
 end

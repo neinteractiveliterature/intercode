@@ -15,6 +15,10 @@ import isEqual from 'lodash/isEqual';
 import { useUpdateSignupRoundMutation } from './mutations.generated';
 import { describeTimespan } from '../TimespanUtils';
 import { buildSignupRoundInput } from './buildSignupRoundInput';
+import { useAppDateTimeFormat } from '../TimeUtils';
+import { DateTime } from 'luxon';
+import { Link } from 'react-router-dom';
+import { describeSignupRound } from './describeSignupRound';
 
 type SignupRoundCardProps = {
   rounds: ParsedSignupRound<SignupRoundsAdminQueryData['convention']['signup_rounds'][number]>[];
@@ -23,6 +27,7 @@ type SignupRoundCardProps = {
 
 function SignupRoundCard({ rounds, roundIndex }: SignupRoundCardProps) {
   const { t } = useTranslation();
+  const format = useAppDateTimeFormat();
   const round = rounds[roundIndex];
   const [editingRound, setEditingRound] = useState(round);
   const { signupAutomationMode, timezoneName } = useContext(AppRootContext);
@@ -32,17 +37,7 @@ function SignupRoundCard({ rounds, roundIndex }: SignupRoundCardProps) {
   const unsavedChanges = useMemo(() => !isEqual(editingRound, round), [editingRound, round]);
 
   const prevRound = roundIndex > 0 ? rounds[roundIndex - 1] : undefined;
-  const roundDescription = useMemo(() => {
-    if (round.timespan.start == null) {
-      return t('signups.signupRounds.preSignupRoundPeriod', 'Pre-signups period');
-    } else {
-      if (rounds[0] && rounds[0].timespan.start == null) {
-        return t('signups.signupRounds.roundNumber', { number: roundIndex });
-      } else {
-        return t('signups.signupRounds.roundNumber', { number: roundIndex + 1 });
-      }
-    }
-  }, [round.timespan, t, roundIndex, rounds]);
+  const roundDescription = useMemo(() => describeSignupRound(rounds, roundIndex, t), [rounds, roundIndex, t]);
   const increasedMaximumSignups = useMemo(() => {
     return (
       prevRound &&
@@ -78,27 +73,48 @@ function SignupRoundCard({ rounds, roundIndex }: SignupRoundCardProps) {
             )}
           </FormGroupWithLabel>
         </div>
-        {signupAutomationMode === SignupAutomationMode.RankedChoice && increasedMaximumSignups && (
-          <BootstrapFormSelect
-            label={t('signups.rankedChoiceOrderLabel', 'Ranked choice order')}
-            value={editingRound.ranked_choice_order ?? undefined}
-            onValueChange={(newValue) =>
-              setEditingRound((prevEditingRound) => {
-                const newOrder =
-                  newValue === RankedChoiceOrder.Asc || newValue === RankedChoiceOrder.Desc ? newValue : undefined;
+        {signupAutomationMode === SignupAutomationMode.RankedChoice && (
+          <>
+            {increasedMaximumSignups && (
+              <BootstrapFormSelect
+                label={t('signups.rankedChoiceOrderLabel', 'Ranked choice order')}
+                value={editingRound.ranked_choice_order ?? undefined}
+                onValueChange={(newValue) =>
+                  setEditingRound((prevEditingRound) => {
+                    const newOrder =
+                      newValue === RankedChoiceOrder.Asc || newValue === RankedChoiceOrder.Desc ? newValue : undefined;
 
-                return { ...prevEditingRound, ranked_choice_order: newOrder };
-              })
-            }
-          >
-            <option aria-label="Blank placeholder option" />
-            <option value={RankedChoiceOrder.Asc}>
-              {t('signups.rankedChoiceOrder.asc', 'Ascending lottery number order')}
-            </option>
-            <option value={RankedChoiceOrder.Desc}>
-              {t('signups.rankedChoiceOrder.desc', 'Descending lottery number order')}
-            </option>
-          </BootstrapFormSelect>
+                    return { ...prevEditingRound, ranked_choice_order: newOrder };
+                  })
+                }
+              >
+                <option aria-label="Blank placeholder option" />
+                <option value={RankedChoiceOrder.Asc}>
+                  {t('signups.rankedChoiceOrder.asc', 'Ascending lottery number order')}
+                </option>
+                <option value={RankedChoiceOrder.Desc}>
+                  {t('signups.rankedChoiceOrder.desc', 'Descending lottery number order')}
+                </option>
+              </BootstrapFormSelect>
+            )}
+            <div className="">
+              {editingRound.executed_at ? (
+                <>
+                  <i className="bi-check-circle-fill" />{' '}
+                  {t('signupRounds.executedAt', 'Automation ran {{ executedAt }}.', {
+                    executedAt: format(DateTime.fromISO(editingRound.executed_at), 'longWeekdayDateTimeWithZone'),
+                  })}{' '}
+                  <Link className="btn btn-outline-secondary btn-sm" to={`/signup_rounds/${editingRound.id}/results`}>
+                    {t('signupRounds.viewResults', 'View results')} <i className="bi-arrow-right" />
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <i className="bi-circle" /> {t('signupRounds.notExecutedYet', 'Automation has not yet run.')}
+                </>
+              )}
+            </div>
+          </>
         )}
       </div>
       <div className="card-footer">

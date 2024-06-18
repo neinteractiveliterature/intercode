@@ -838,6 +838,11 @@ export type Convention = CmsParent & {
   /** In a moderated-signup convention, are signup requests currently allowed? */
   signup_requests_open: Scalars['Boolean']['output'];
   signup_requests_paginated: SignupRequestsPagination;
+  /**
+   * Finds a signup round by ID in this convention. If there is no signup round with that ID in this convention,
+   * errors out.
+   */
+  signup_round: Array<SignupRound>;
   /** The signup rounds in this convention. */
   signup_rounds: Array<SignupRound>;
   /** The mode this convention site is operating in. */
@@ -1242,6 +1247,19 @@ export type ConventionSignup_Requests_PaginatedArgs = {
   page?: InputMaybe<Scalars['Int']['input']>;
   per_page?: InputMaybe<Scalars['Int']['input']>;
   sort?: InputMaybe<Array<SortInput>>;
+};
+
+
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
+export type ConventionSignup_RoundArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -4558,6 +4576,69 @@ export type QueryUsers_PaginatedArgs = {
   sort?: InputMaybe<Array<SortInput>>;
 };
 
+export type RankedChoiceDecision = {
+  __typename: 'RankedChoiceDecision';
+  /** The time this RankedChoiceDecision was created. */
+  created_at: Scalars['Date']['output'];
+  decision: RankedChoiceDecisionValue;
+  extra?: Maybe<Scalars['JSON']['output']>;
+  id: Scalars['ID']['output'];
+  reason?: Maybe<RankedChoiceDecisionReason>;
+  signup?: Maybe<Signup>;
+  signup_ranked_choice?: Maybe<SignupRankedChoice>;
+  signup_request?: Maybe<SignupRequest>;
+  signup_round: SignupRound;
+  /** The time this RankedChoiceDecision was last modified. */
+  updated_at: Scalars['Date']['output'];
+  user_con_profile?: Maybe<UserConProfile>;
+};
+
+export type RankedChoiceDecisionFiltersInput = {
+  decisions?: InputMaybe<Array<RankedChoiceDecisionValue>>;
+  reasons?: InputMaybe<Array<RankedChoiceDecisionReason>>;
+};
+
+/** The reason the ranked choice automation algorithm made the decision it did when evaluating a particular choice. */
+export enum RankedChoiceDecisionReason {
+  /** This choice would conflict with an existing signup this user has */
+  Conflict = 'CONFLICT',
+  /** This event is full */
+  Full = 'FULL',
+  /** Tickets are required in this convention and this user doesn't have one */
+  MissingTicket = 'MISSING_TICKET',
+  /** This user already has the maximum number of allowed signups at this time */
+  NoMoreSignupsAllowed = 'NO_MORE_SIGNUPS_ALLOWED',
+  /** This user has no more pending ranked choices in their queue */
+  NoPendingChoices = 'NO_PENDING_CHOICES',
+  /** The user's personal constraints prohibit signing up for this event (in conjunction with their existing signups) */
+  RankedChoiceUserConstraints = 'RANKED_CHOICE_USER_CONSTRAINTS'
+}
+
+/** The decision the ranked choice automation algorithm made when evaluating a particular choice. */
+export enum RankedChoiceDecisionValue {
+  /** Sign the user up for the chosen event */
+  Signup = 'SIGNUP',
+  /** Skip this choice but continue evaluating this user's ranked choices */
+  SkipChoice = 'SKIP_CHOICE',
+  /** Skip all remaining choices for this user */
+  SkipUser = 'SKIP_USER',
+  /** Sign the user up in the waitlist for the chosen event */
+  Waitlist = 'WAITLIST'
+}
+
+export type RankedChoiceDecisionsPagination = PaginationInterface & {
+  __typename: 'RankedChoiceDecisionsPagination';
+  /** The number of the page currently being returned in this query */
+  current_page: Scalars['Int']['output'];
+  entries: Array<RankedChoiceDecision>;
+  /** The number of items per page currently being returned in this query */
+  per_page: Scalars['Int']['output'];
+  /** The total number of items in the paginated list (across all pages) */
+  total_entries: Scalars['Int']['output'];
+  /** The total number of pages in the paginated list */
+  total_pages: Scalars['Int']['output'];
+};
+
 /** An order to execute ranked-choice signup rounds in. */
 export enum RankedChoiceOrder {
   /** In lottery number order, lowest number first */
@@ -5304,12 +5385,28 @@ export type SignupRound = {
    * signups allowed during this SignupRound.
    */
   maximum_event_signups: Scalars['String']['output'];
+  ranked_choice_decisions_paginated: RankedChoiceDecisionsPagination;
   /** In ranked-choice signup conventions, the order to use for executing users' ranked choices in this round. */
   ranked_choice_order?: Maybe<RankedChoiceOrder>;
   /** When this SignupRound starts. */
   start?: Maybe<Scalars['Date']['output']>;
   /** When this SignupRound was last modified. */
   updated_at: Scalars['Date']['output'];
+};
+
+
+/**
+ * A round of signups in a particular convention.  This represents a range of time in which a certain number of
+ * signups is allowed.
+ *
+ * In conventions that use automated signups (e.g. ranked-choice signups), signup rounds are used as triggers for
+ * signup automation.
+ */
+export type SignupRoundRanked_Choice_Decisions_PaginatedArgs = {
+  filters?: InputMaybe<RankedChoiceDecisionFiltersInput>;
+  page?: InputMaybe<Scalars['Int']['input']>;
+  per_page?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<SortInput>>;
 };
 
 /** An input for creating or modifying SignupRounds. */
@@ -6409,24 +6506,46 @@ export type UserConProfileFiltersInput = {
   ticket_type?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
+/** An input for creating or modifying UserConProfiles. */
 export type UserConProfileInput = {
+  /** The street address portion of this profile's mailing address. */
   address?: InputMaybe<Scalars['String']['input']>;
+  /** The time this user profile prefers to be called on the phone. */
   best_call_time?: InputMaybe<Scalars['String']['input']>;
+  /** The bio to display for this user profile, in Markdown format. */
   bio?: InputMaybe<Scalars['String']['input']>;
+  /** This user profile's date of birth. */
   birth_date?: InputMaybe<Scalars['Date']['input']>;
+  /** The city portion of this profile's mailing address. */
   city?: InputMaybe<Scalars['String']['input']>;
+  /** The country portion of this profile's mailing address. */
   country?: InputMaybe<Scalars['String']['input']>;
+  /** This user profile's daytime phone number. */
   day_phone?: InputMaybe<Scalars['String']['input']>;
+  /** This user profile's evening phone number. */
   evening_phone?: InputMaybe<Scalars['String']['input']>;
+  /** This user profile's first name. */
   first_name?: InputMaybe<Scalars['String']['input']>;
+  /**
+   * An object in JSON format, where the keys are form fields on the UserConProfile form for this convention and the
+   * values are the appropriate values to be set on those fields for this user profile.
+   */
   form_response_attrs_json?: InputMaybe<Scalars['String']['input']>;
+  /** Has this user enabled Gravatars for this profile? */
   gravatar_enabled?: InputMaybe<Scalars['Boolean']['input']>;
+  /** This user profile's last name. */
   last_name?: InputMaybe<Scalars['String']['input']>;
+  /** This user profile's nickname. */
   nickname?: InputMaybe<Scalars['String']['input']>;
+  /** The method by which this user profile prefers the convention contact them. */
   preferred_contact?: InputMaybe<Scalars['String']['input']>;
+  /** If this user can't be signed up for any of their ranked choices, should the site waitlist them? */
   ranked_choice_allow_waitlist?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Should this profile's bio use the nickname as part of their name? */
   show_nickname_in_bio?: InputMaybe<Scalars['Boolean']['input']>;
+  /** The state portion of this profile's mailing address. */
   state?: InputMaybe<Scalars['String']['input']>;
+  /** The ZIP portion of this profile's mailing address. */
   zipcode?: InputMaybe<Scalars['String']['input']>;
 };
 
