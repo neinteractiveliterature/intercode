@@ -261,7 +261,7 @@ GEM
       railties (>= 5.0.0)
     faker (3.4.1)
       i18n (>= 1.8.11, < 2)
-    faraday (2.9.1)
+    faraday (2.9.2)
       faraday-net_http (>= 2.0, < 3.2)
     faraday-net_http (3.1.0)
       net-http
@@ -315,7 +315,7 @@ GEM
     jmespath (1.6.2)
     json (2.7.2)
     json (2.7.2-java)
-    jwt (2.8.1)
+    jwt (2.8.2)
       base64
     language_server-protocol (3.17.0.3)
     launchy (2.5.2)
@@ -387,10 +387,10 @@ GEM
       net-protocol
     nio4r (2.5.9)
     nio4r (2.5.9-java)
-    nokogiri (1.16.5)
+    nokogiri (1.16.6)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
-    nokogiri (1.16.5-java)
+    nokogiri (1.16.6-java)
       racc (~> 1.4)
     oj (3.16.4)
       bigdecimal (>= 3.0)
@@ -625,7 +625,7 @@ GEM
       sync
     toml (0.3.0)
       parslet (>= 1.8.0, < 3.0.0)
-    twilio-ruby (7.1.1)
+    twilio-ruby (7.2.0)
       faraday (>= 0.9, < 3.0)
       jwt (>= 1.5, < 3.0)
       nokogiri (>= 1.6, < 2.0)
@@ -756,7 +756,7 @@ DEPENDENCIES
   syntax_tree-haml
   syntax_tree-rbs
   term-ansicolor
-  twilio-ruby (~> 7.1.0)
+  twilio-ruby (~> 7.2.0)
   typeprof
   tzinfo-data
   webrick
