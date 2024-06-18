@@ -43,9 +43,8 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
   end
 
   it "clones signup rounds" do
-    pre_round = create(:signup_round, convention:, start: nil, maximum_event_signups: "not_yet", executed_at: Time.now)
-    open_round =
-      create(:signup_round, convention:, start: convention.starts_at - 30.days, maximum_event_signups: "unlimited")
+    create(:signup_round, convention:, start: nil, maximum_event_signups: "not_yet", executed_at: Time.now)
+    create(:signup_round, convention:, start: convention.starts_at - 30.days, maximum_event_signups: "unlimited")
 
     result = service.call!
     assert result.success?
