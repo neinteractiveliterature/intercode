@@ -41,7 +41,7 @@ namespace :release do
         URI.parse "https://sentry.io/api/0/organizations/#{ENV.fetch("SENTRY_ORGANIZATION_ID")}/releases/intercode-#{ENV.fetch("REVISION")}/deploys/"
       params = { environment: ENV["RAILS_ENV"], projects: [Sentry.get_current_client.configuration.dsn.project_id] }
 
-      request = Net::HTTP::Post.new(uri.request_uri)
+      request = Net::HTTP::Post.new(uri)
       request.body = ::JSON.dump(params)
       request["Authorization"] = "Bearer #{ENV.fetch("SENTRY_RELEASE_TOKEN")}"
       request["Content-Type"] = "application/json"
@@ -49,7 +49,7 @@ namespace :release do
       Net::HTTP.start(uri.host, uri.port, :ENV, use_ssl: true) do |http|
         response = http.request(request)
         unless response.is_a?(Net::HTTPSuccess)
-          raise "Sentry error: #{response.code}\n#{response.body}\n\nRequest URI: #{request.uri}\nRequest body: #{request.body}"
+          raise "Sentry error: #{response.code}\n#{response.body}\n\nRequest URI: #{uri}\nRequest body: #{request.body}"
         end
       end
 
