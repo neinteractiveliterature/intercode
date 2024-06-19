@@ -44,10 +44,13 @@ namespace :release do
       request = Net::HTTP::Post.new(uri.request_uri)
       request.body = ::JSON.dump(params)
       request["Authorization"] = "Bearer #{ENV.fetch("SENTRY_RELEASE_TOKEN")}"
+      request["Content-Type"] = "application/json"
 
       Net::HTTP.start(uri.host, uri.port, :ENV, use_ssl: true) do |http|
         response = http.request(request)
-        raise "Sentry error: #{response.code}\n#{response.body}" unless response.is_a?(Net::HTTPSuccess)
+        unless response.is_a?(Net::HTTPSuccess)
+          raise "Sentry error: #{response.code}\n#{response.body}\n\nRequest URI: #{request.uri}\nRequest body: #{request.body}"
+        end
       end
 
       puts "Sentry notification complete."
