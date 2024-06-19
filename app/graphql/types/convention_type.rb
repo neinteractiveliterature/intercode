@@ -252,7 +252,7 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
   field :signup_requests_open, Boolean, null: false do
     description "In a moderated-signup convention, are signup requests currently allowed?"
   end
-  field :signup_round, [Types::SignupRoundType], null: false do
+  field :signup_round, Types::SignupRoundType, null: false do
     argument :id, ID, required: true, description: "The ID of the signup round to find."
 
     description <<~MARKDOWN

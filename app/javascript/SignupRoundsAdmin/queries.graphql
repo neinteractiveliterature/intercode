@@ -36,6 +36,11 @@ query SignupRoundRankedChoiceDecisionsTableQuery(
           decision
           reason
 
+          user_con_profile {
+            id
+            name_without_nickname
+          }
+
           signup_ranked_choice {
             id
             priority

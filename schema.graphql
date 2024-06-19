@@ -1200,7 +1200,7 @@ type Convention implements CmsParent {
     The ID of the signup round to find.
     """
     id: ID!
-  ): [SignupRound!]!
+  ): SignupRound!
 
   """
   The signup rounds in this convention.

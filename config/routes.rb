@@ -67,6 +67,7 @@ Intercode::Application.routes.draw do
       get :coupons
       get :event_proposals
       get :orders
+      get :ranked_choice_decisions
       get :run_signup_changes
       get :run_signups
       get :runs

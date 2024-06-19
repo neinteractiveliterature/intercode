@@ -5850,17 +5850,9 @@
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "OBJECT",
-                      "name": "SignupRound",
-                      "ofType": null
-                    }
-                  }
+                  "kind": "OBJECT",
+                  "name": "SignupRound",
+                  "ofType": null
                 }
               },
               "isDeprecated": false,

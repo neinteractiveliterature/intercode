@@ -842,7 +842,7 @@ export type Convention = CmsParent & {
    * Finds a signup round by ID in this convention. If there is no signup round with that ID in this convention,
    * errors out.
    */
-  signup_round: Array<SignupRound>;
+  signup_round: SignupRound;
   /** The signup rounds in this convention. */
   signup_rounds: Array<SignupRound>;
   /** The mode this convention site is operating in. */

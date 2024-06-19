@@ -1,7 +1,16 @@
 {
-  "CmsContent": ["CmsLayout", "CmsPartial", "Page"],
-  "CmsParent": ["Convention", "RootSite"],
-  "NotificationSource": ["UserActivityAlert"],
+  "CmsContent": [
+    "CmsLayout",
+    "CmsPartial",
+    "Page"
+  ],
+  "CmsParent": [
+    "Convention",
+    "RootSite"
+  ],
+  "NotificationSource": [
+    "UserActivityAlert"
+  ],
   "PaginationInterface": [
     "ConventionsPagination",
     "CouponsPagination",
@@ -9,15 +18,36 @@
     "EventProposalsPagination",
     "EventsPagination",
     "OrdersPagination",
+    "RankedChoiceDecisionsPagination",
+    "RunsPagination",
     "SignupChangesPagination",
     "SignupRequestsPagination",
     "SignupsPagination",
     "UserConProfilesPagination",
     "UsersPagination"
   ],
-  "PermissionedModel": ["CmsContentGroup", "Convention", "EventCategory"],
-  "PermissionedRole": ["OrganizationRole", "StaffPosition"],
-  "PricingStructureValue": ["Money", "PayWhatYouWantValue", "ScheduledMoneyValue"],
-  "SearchableModel": ["Event", "EventProposal", "Page", "UserConProfile"],
-  "TicketTypeParent": ["Convention", "Event"]
+  "PermissionedModel": [
+    "CmsContentGroup",
+    "Convention",
+    "EventCategory"
+  ],
+  "PermissionedRole": [
+    "OrganizationRole",
+    "StaffPosition"
+  ],
+  "PricingStructureValue": [
+    "Money",
+    "PayWhatYouWantValue",
+    "ScheduledMoneyValue"
+  ],
+  "SearchableModel": [
+    "Event",
+    "EventProposal",
+    "Page",
+    "UserConProfile"
+  ],
+  "TicketTypeParent": [
+    "Convention",
+    "Event"
+  ]
 }

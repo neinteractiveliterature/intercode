@@ -20,7 +20,7 @@ export type SignupRoundRankedChoiceDecisionsTableQueryVariables = Types.Exact<{
 }>;
 
 
-export type SignupRoundRankedChoiceDecisionsTableQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, signup_round: Array<{ __typename: 'SignupRound', id: string, ranked_choice_decisions_paginated: { __typename: 'RankedChoiceDecisionsPagination', total_pages: number, entries: Array<{ __typename: 'RankedChoiceDecision', id: string, created_at: string, decision: Types.RankedChoiceDecisionValue, reason?: Types.RankedChoiceDecisionReason | null, signup_ranked_choice?: { __typename: 'SignupRankedChoice', id: string, priority: number, requested_bucket_key?: string | null, state: Types.SignupRankedChoiceState, target_run: { __typename: 'Run', id: string, starts_at: string, title_suffix?: string | null, event: { __typename: 'Event', id: string, title?: string | null } } } | null }> } }> } };
+export type SignupRoundRankedChoiceDecisionsTableQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, signup_round: { __typename: 'SignupRound', id: string, ranked_choice_decisions_paginated: { __typename: 'RankedChoiceDecisionsPagination', total_pages: number, entries: Array<{ __typename: 'RankedChoiceDecision', id: string, created_at: string, decision: Types.RankedChoiceDecisionValue, reason?: Types.RankedChoiceDecisionReason | null, user_con_profile?: { __typename: 'UserConProfile', id: string, name_without_nickname: string } | null, signup_ranked_choice?: { __typename: 'SignupRankedChoice', id: string, priority: number, requested_bucket_key?: string | null, state: Types.SignupRankedChoiceState, target_run: { __typename: 'Run', id: string, starts_at: string, title_suffix?: string | null, event: { __typename: 'Event', id: string, title?: string | null } } } | null }> } } } };
 
 export const SignupRoundFieldsFragmentDoc = gql`
     fragment SignupRoundFields on SignupRound {
@@ -92,6 +92,10 @@ export const SignupRoundRankedChoiceDecisionsTableQueryDocument = gql`
           created_at
           decision
           reason
+          user_con_profile {
+            id
+            name_without_nickname
+          }
           signup_ranked_choice {
             id
             priority
