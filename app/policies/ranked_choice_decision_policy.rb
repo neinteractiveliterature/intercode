@@ -24,7 +24,6 @@ class RankedChoiceDecisionPolicy < ApplicationPolicy
   end
 
   class Scope < Scope
-    # rubocop:disable Metrics/MethodLength
     def resolve
       return scope.all if site_admin?
 
@@ -49,6 +48,5 @@ class RankedChoiceDecisionPolicy < ApplicationPolicy
         decision_scope
       end
     end
-    # rubocop:enable Metrics/MethodLength
   end
 end

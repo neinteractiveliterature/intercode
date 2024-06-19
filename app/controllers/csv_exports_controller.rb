@@ -80,21 +80,19 @@ class CsvExportsController < ApplicationController
     )
   end
 
-  def ranked_choice_decisions
+  def ranked_choice_decisions # rubocop:disable Metrics/MethodLength
     signup_round = SignupRound.find(params[:signup_round_id])
     authorize signup_round, :update?
 
     transformed_filters =
-      Hash[
-        params[:filters]&.to_unsafe_h&.map do |field, value|
-          case field
-          when "decision", "reason"
-            [field, value&.map(&:downcase)]
-          else
-            [field, value]
-          end
+      params[:filters]&.to_unsafe_h&.to_h do |field, value|
+        case field
+        when "decision", "reason"
+          [field, value&.map(&:downcase)]
+        else
+          [field, value]
         end
-      ]
+      end
 
     send_table_presenter_csv(
       Tables::RankedChoiceDecisionsTableResultsPresenter.for_signup_round(
