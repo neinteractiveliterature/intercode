@@ -38,9 +38,10 @@ namespace :release do
       require "json"
 
       release_version = "intercode-#{ENV.fetch("REVISION")}"
+      project_slugs = ENV.fetch("SENTRY_PROJECT_SLUGS", "").split(",")
 
       uri = URI.parse "https://sentry.io/api/0/organizations/#{ENV.fetch("SENTRY_ORGANIZATION_ID")}/releases/"
-      params = { version: release_version, projects: [Sentry.get_current_client.configuration.dsn.project_id] }
+      params = { version: release_version, projects: project_slugs }
 
       request = Net::HTTP::Post.new(uri)
       request.body = ::JSON.dump(params)
@@ -56,7 +57,7 @@ namespace :release do
 
       uri =
         URI.parse "https://sentry.io/api/0/organizations/#{ENV.fetch("SENTRY_ORGANIZATION_ID")}/releases/#{release_version}/deploys/"
-      params = { environment: ENV["RAILS_ENV"], projects: [Sentry.get_current_client.configuration.dsn.project_id] }
+      params = { environment: ENV["RAILS_ENV"], projects: project_slugs }
 
       request = Net::HTTP::Post.new(uri)
       request.body = ::JSON.dump(params)
