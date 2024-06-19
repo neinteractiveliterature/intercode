@@ -80,6 +80,32 @@ class CsvExportsController < ApplicationController
     )
   end
 
+  def ranked_choice_decisions # rubocop:disable Metrics/MethodLength
+    signup_round = SignupRound.find(params[:signup_round_id])
+    authorize signup_round, :update?
+
+    transformed_filters =
+      params[:filters]&.to_unsafe_h&.to_h do |field, value|
+        case field
+        when "decision", "reason"
+          [field, value&.map(&:downcase)]
+        else
+          [field, value]
+        end
+      end
+
+    send_table_presenter_csv(
+      Tables::RankedChoiceDecisionsTableResultsPresenter.for_signup_round(
+        signup_round:,
+        pundit_user:,
+        filters: transformed_filters,
+        sort: params[:sort],
+        visible_field_ids: params[:columns]
+      ),
+      "#{signup_round.convention.name} Ranked Choice Signups Log - #{signup_round.executed_at}"
+    )
+  end
+
   def run_signup_changes
     run = convention.runs.includes(:event).find(params[:run_id])
     authorize SignupChange.new(run: run), :read?

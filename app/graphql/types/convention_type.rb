@@ -252,6 +252,14 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
   field :signup_requests_open, Boolean, null: false do
     description "In a moderated-signup convention, are signup requests currently allowed?"
   end
+  field :signup_round, Types::SignupRoundType, null: false do
+    argument :id, ID, required: true, description: "The ID of the signup round to find."
+
+    description <<~MARKDOWN
+      Finds a signup round by ID in this convention. If there is no signup round with that ID in this convention,
+      errors out.
+    MARKDOWN
+  end
   field :signup_rounds, [Types::SignupRoundType], null: false, description: "The signup rounds in this convention." # rubocop:disable GraphQL/ExtractType
   field :site_mode, Types::SiteModeType, null: false, description: "The mode this convention site is operating in."
   field :staff_position, Types::StaffPositionType, null: false do
@@ -557,6 +565,10 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
       filters: args[:filters].to_h,
       sort: args[:sort]
     ).paginate(page: args[:page], per_page: args[:per_page])
+  end
+
+  def signup_round(id:)
+    object.signup_rounds.find(id)
   end
 
   def staff_position(id:)

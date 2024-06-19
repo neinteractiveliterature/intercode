@@ -38,9 +38,11 @@ class RankedChoiceDecision < ApplicationRecord
   belongs_to :signup_ranked_choice, optional: true
   belongs_to :signup, optional: true
   belongs_to :signup_request, optional: true
+  has_one :target_run, through: :signup_request
+  has_one :event, through: :target_run
 
-  DECISIONS = %w[signup waitlist skip_user skip_choice]
-  REASONS = %w[missing_ticket no_more_signups_allowed no_pending_choices conflict full ranked_choice_user_constraints]
+  DECISIONS = Types::RankedChoiceDecisionValueType.values.values.map(&:value).freeze
+  REASONS = Types::RankedChoiceDecisionReasonType.values.values.map(&:value).freeze
 
   validates :decision, inclusion: { in: DECISIONS }
   validates :reason, inclusion: { in: REASONS, allow_nil: true }

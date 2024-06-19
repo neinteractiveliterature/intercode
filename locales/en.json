@@ -301,6 +301,7 @@
     "anytime": "'anytime'",
     "compactDate": "yyyy-MM-dd",
     "compactDateTime": "yyyy-MM-dd HH:mm",
+    "compactWeekday": "ccccc",
     "durationHoursMinutes": "h:mm",
     "indefinitely": "'indefinitely'",
     "longDate": "MMMM d, yyyy",

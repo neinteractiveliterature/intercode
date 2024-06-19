@@ -15,3 +15,51 @@ query SignupRoundsAdminQuery {
     }
   }
 }
+
+query SignupRoundRankedChoiceDecisionsTableQuery(
+  $signupRoundId: ID!
+  $page: Int
+  $perPage: Int
+  $filters: RankedChoiceDecisionFiltersInput
+  $sort: [SortInput!]
+) {
+  convention: conventionByRequestHost {
+    id
+    signup_round(id: $signupRoundId) {
+      id
+      ranked_choice_decisions_paginated(page: $page, per_page: $perPage, filters: $filters, sort: $sort) {
+        total_pages
+
+        entries {
+          id
+          created_at
+          decision
+          reason
+
+          user_con_profile {
+            id
+            name_without_nickname
+          }
+
+          signup_ranked_choice {
+            id
+            priority
+            requested_bucket_key
+            state
+
+            target_run {
+              id
+              starts_at
+              title_suffix
+
+              event {
+                id
+                title
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

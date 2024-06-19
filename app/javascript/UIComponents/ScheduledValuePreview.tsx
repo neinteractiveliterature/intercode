@@ -1,7 +1,7 @@
 import { memo, ReactNode, RefObject, useCallback, useMemo, useRef, useState } from 'react';
 import minBy from 'lodash/minBy';
 import maxBy from 'lodash/maxBy';
-import { DateTime } from 'luxon';
+import { DateTime, WeekdayNumbers } from 'luxon';
 import { notEmpty, Tooltip, useLitformPopper } from '@neinteractiveliterature/litform';
 
 import { EditingScheduledValue } from '../BuiltInFormControls/ScheduledValueEditor';
@@ -47,15 +47,15 @@ function ScheduledValuePreviewTooltipContent<ValueType>({
 
   return (
     <>
-      <strong>{date.toLocaleString(DateTime.DATE_FULL)}</strong>
+      <strong>{format(date, 'longWeekdayDate')}</strong>
       <br />
-      {value !== nextValue && nextChange && <em>Before {format(nextChange, 'shortDateTimeWithZone')}</em>}
+      {value !== nextValue && nextChange && <em>Before {format(nextChange, 'shortTimeWithZone')}</em>}
       <br />
       {getDescriptionForValue(value)}
       {value !== nextValue && nextChange && (
         <>
           <hr className="my-2 border-white" />
-          <em>Starting at {format(nextChange, 'shortDateTimeWithZone')}</em>
+          <em>Starting at {format(nextChange, 'shortTimeWithZone')}</em>
           <br />
           {getDescriptionForValue(nextValue)}
         </>
@@ -172,10 +172,10 @@ function ScheduledValuePreviewCalendar<ValueType>({
     let currentWeek: JSX.Element[] = [];
     while (now.month === currentMonth) {
       if (now.day === 1) {
-        for (let wd = 1; wd < now.weekday; wd += 1) {
+        for (let wd = 0; wd < now.weekday; wd += 1) {
           currentWeek.push(<td key={`fill-weekday-${wd}`} className="p-1" />);
         }
-      } else if (now.weekday === 1) {
+      } else if (now.weekday === 7) {
         weekPreviews.push(<tr key={now.toISO()}>{currentWeek}</tr>);
         currentWeek = [];
       }
@@ -211,6 +211,16 @@ function ScheduledValuePreviewCalendar<ValueType>({
             <th colSpan={7} className="text-center">
               {format(startOfMonth, 'longMonthYear')}
             </th>
+          </tr>
+          <tr className="border-bottom border-1">
+            {Array.from({ length: 7 }).map((_value, dayIndex) => (
+              <td key={dayIndex} className="text-center">
+                {format(
+                  DateTime.now().set({ weekday: (((dayIndex - 1) % 7) + 1) as WeekdayNumbers }),
+                  'compactWeekday',
+                )}
+              </td>
+            ))}
           </tr>
         </thead>
         <tbody>{weekPreviews}</tbody>

@@ -25,6 +25,7 @@ class SignupRound < ApplicationRecord
   RANKED_CHOICE_ORDERS = Types::RankedChoiceOrder.values.values.map(&:value).freeze
 
   belongs_to :convention
+  has_many :ranked_choice_decisions, dependent: :restrict_with_exception
 
   validates :ranked_choice_order, inclusion: { in: RANKED_CHOICE_ORDERS, allow_nil: true }
   validates :start, { uniqueness: { scope: :convention_id } }

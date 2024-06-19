@@ -5844,6 +5844,39 @@
               ]
             },
             {
+              "name": "signup_round",
+              "description": "Finds a signup round by ID in this convention. If there is no signup round with that ID in this convention,\nerrors out.\n",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "SignupRound",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": [
+                {
+                  "name": "id",
+                  "description": "The ID of the signup round to find.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "ID",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ]
+            },
+            {
               "name": "signup_rounds",
               "description": "The signup rounds in this convention.",
               "type": {
@@ -24685,6 +24718,11 @@
             },
             {
               "kind": "OBJECT",
+              "name": "RankedChoiceDecisionsPagination",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
               "name": "RunsPagination",
               "ofType": null
             },
@@ -26740,6 +26778,407 @@
                   "deprecationReason": null
                 }
               ]
+            }
+          ],
+          "inputFields": null,
+          "enumValues": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "RankedChoiceDecision",
+          "description": null,
+          "interfaces": [],
+          "possibleTypes": null,
+          "fields": [
+            {
+              "name": "created_at",
+              "description": "The time this RankedChoiceDecision was created.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Date",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "decision",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "RankedChoiceDecisionValue",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "extra",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "JSON",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "id",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "reason",
+              "description": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "RankedChoiceDecisionReason",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "signup",
+              "description": null,
+              "type": {
+                "kind": "OBJECT",
+                "name": "Signup",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "signup_ranked_choice",
+              "description": null,
+              "type": {
+                "kind": "OBJECT",
+                "name": "SignupRankedChoice",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "signup_request",
+              "description": null,
+              "type": {
+                "kind": "OBJECT",
+                "name": "SignupRequest",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "signup_round",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "SignupRound",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "updated_at",
+              "description": "The time this RankedChoiceDecision was last modified.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Date",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "user_con_profile",
+              "description": null,
+              "type": {
+                "kind": "OBJECT",
+                "name": "UserConProfile",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            }
+          ],
+          "inputFields": null,
+          "enumValues": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "RankedChoiceDecisionFiltersInput",
+          "description": null,
+          "interfaces": null,
+          "possibleTypes": null,
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "decisions",
+              "description": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "ENUM",
+                    "name": "RankedChoiceDecisionValue",
+                    "ofType": null
+                  }
+                }
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "reasons",
+              "description": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "ENUM",
+                    "name": "RankedChoiceDecisionReason",
+                    "ofType": null
+                  }
+                }
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "enumValues": null
+        },
+        {
+          "kind": "ENUM",
+          "name": "RankedChoiceDecisionReason",
+          "description": "The reason the ranked choice automation algorithm made the decision it did when evaluating a particular choice.",
+          "interfaces": null,
+          "possibleTypes": null,
+          "fields": null,
+          "inputFields": null,
+          "enumValues": [
+            {
+              "name": "MISSING_TICKET",
+              "description": "Tickets are required in this convention and this user doesn't have one",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "NO_MORE_SIGNUPS_ALLOWED",
+              "description": "This user already has the maximum number of allowed signups at this time",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "NO_PENDING_CHOICES",
+              "description": "This user has no more pending ranked choices in their queue",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "CONFLICT",
+              "description": "This choice would conflict with an existing signup this user has",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "FULL",
+              "description": "This event is full",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "RANKED_CHOICE_USER_CONSTRAINTS",
+              "description": "The user's personal constraints prohibit signing up for this event (in conjunction with their existing signups)",
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ]
+        },
+        {
+          "kind": "ENUM",
+          "name": "RankedChoiceDecisionValue",
+          "description": "The decision the ranked choice automation algorithm made when evaluating a particular choice.",
+          "interfaces": null,
+          "possibleTypes": null,
+          "fields": null,
+          "inputFields": null,
+          "enumValues": [
+            {
+              "name": "SIGNUP",
+              "description": "Sign the user up for the chosen event",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "WAITLIST",
+              "description": "Sign the user up in the waitlist for the chosen event",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "SKIP_USER",
+              "description": "Skip all remaining choices for this user",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "SKIP_CHOICE",
+              "description": "Skip this choice but continue evaluating this user's ranked choices",
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ]
+        },
+        {
+          "kind": "OBJECT",
+          "name": "RankedChoiceDecisionsPagination",
+          "description": null,
+          "interfaces": [
+            {
+              "kind": "INTERFACE",
+              "name": "PaginationInterface",
+              "ofType": null
+            }
+          ],
+          "possibleTypes": null,
+          "fields": [
+            {
+              "name": "current_page",
+              "description": "The number of the page currently being returned in this query",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "entries",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "RankedChoiceDecision",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "per_page",
+              "description": "The number of items per page currently being returned in this query",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "total_entries",
+              "description": "The total number of items in the paginated list (across all pages)",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "total_pages",
+              "description": "The total number of pages in the paginated list",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
             }
           ],
           "inputFields": null,
@@ -31357,6 +31796,79 @@
               "isDeprecated": false,
               "deprecationReason": null,
               "args": []
+            },
+            {
+              "name": "ranked_choice_decisions_paginated",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "RankedChoiceDecisionsPagination",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": [
+                {
+                  "name": "filters",
+                  "description": "Filters to restrict what items will appear in the result set.",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "RankedChoiceDecisionFiltersInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                },
+                {
+                  "name": "page",
+                  "description": "The page number to return from the result set.  Page numbers start with 1.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                },
+                {
+                  "name": "per_page",
+                  "description": "The number of items to return per page.  Defaults to 20, can go up to 200.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                },
+                {
+                  "name": "sort",
+                  "description": "A set of fields to use for ordering the result set. The second field is used as a\ntiebreaker for the first, the third field is used as a tiebreaker for the first two,\nand so on. If the sort argument is missing or empty, the order of items will be left\nup to the database (and may be unpredictable).\n",
+                  "type": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": {
+                        "kind": "INPUT_OBJECT",
+                        "name": "SortInput",
+                        "ofType": null
+                      }
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ]
             },
             {
               "name": "ranked_choice_order",
@@ -38446,170 +38958,14 @@
         {
           "kind": "INPUT_OBJECT",
           "name": "UserConProfileInput",
-          "description": null,
+          "description": "An input for creating or modifying UserConProfiles.",
           "interfaces": null,
           "possibleTypes": null,
           "fields": null,
           "inputFields": [
             {
-              "name": "first_name",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "last_name",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "nickname",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "bio",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "show_nickname_in_bio",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              },
-              "defaultValue": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "form_response_attrs_json",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "birth_date",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Date",
-                "ofType": null
-              },
-              "defaultValue": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "address",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "city",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "state",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "zipcode",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "country",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "day_phone",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "evening_phone",
-              "description": null,
+              "description": "The street address portion of this profile's mailing address.",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -38621,7 +38977,7 @@
             },
             {
               "name": "best_call_time",
-              "description": null,
+              "description": "The time this user profile prefers to be called on the phone.",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -38632,8 +38988,92 @@
               "deprecationReason": null
             },
             {
-              "name": "preferred_contact",
-              "description": null,
+              "name": "bio",
+              "description": "The bio to display for this user profile, in Markdown format.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "birth_date",
+              "description": "This user profile's date of birth.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Date",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "city",
+              "description": "The city portion of this profile's mailing address.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "country",
+              "description": "The country portion of this profile's mailing address.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "day_phone",
+              "description": "This user profile's daytime phone number.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "evening_phone",
+              "description": "This user profile's evening phone number.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "first_name",
+              "description": "This user profile's first name.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "form_response_attrs_json",
+              "description": "An object in JSON format, where the keys are form fields on the UserConProfile form for this convention and the\nvalues are the appropriate values to be set on those fields for this user profile.\n",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -38645,7 +39085,7 @@
             },
             {
               "name": "gravatar_enabled",
-              "description": null,
+              "description": "Has this user enabled Gravatars for this profile?",
               "type": {
                 "kind": "SCALAR",
                 "name": "Boolean",
@@ -38656,11 +39096,83 @@
               "deprecationReason": null
             },
             {
+              "name": "last_name",
+              "description": "This user profile's last name.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "nickname",
+              "description": "This user profile's nickname.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "preferred_contact",
+              "description": "The method by which this user profile prefers the convention contact them.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "ranked_choice_allow_waitlist",
-              "description": null,
+              "description": "If this user can't be signed up for any of their ranked choices, should the site waitlist them?",
               "type": {
                 "kind": "SCALAR",
                 "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "show_nickname_in_bio",
+              "description": "Should this profile's bio use the nickname as part of their name?",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "state",
+              "description": "The state portion of this profile's mailing address.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "zipcode",
+              "description": "The ZIP portion of this profile's mailing address.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
                 "ofType": null
               },
               "defaultValue": null,

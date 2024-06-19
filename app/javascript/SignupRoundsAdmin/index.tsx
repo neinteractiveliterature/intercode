@@ -1,49 +1,31 @@
-import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
-import { useSignupRoundsAdminQuery } from './queries.generated';
-import React, { useContext } from 'react';
-import AppRootContext from '../AppRootContext';
-import { parseSignupRounds } from '../SignupRoundUtils';
-import SignupRoundCard from './SignupRoundCard';
+import { Route, Routes } from 'react-router';
+import SignupRoundsAdminPage from './SignupRoundsAdminPage';
+import RankedChoiceSignupDecisionsPage from './RankedChoiceSignupDecisionsPage';
+import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
+import RouteActivatedBreadcrumbItemV2 from '../Breadcrumbs/RouteActivatedBreadcrumbItemV2';
 import { useTranslation } from 'react-i18next';
-import usePageTitle from '../usePageTitle';
-import MaximumEventSignupsPreview from './MaximumEventSignupsPreview';
-import SignupRoundScheduleTable from './SignupRoundScheduleTable';
-import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 
-const SignupRoundsAdmin = LoadQueryWrapper(useSignupRoundsAdminQuery, ({ data }) => {
+function SignupRoundsAdmin() {
   const { t } = useTranslation();
-  const { timezoneName } = useContext(AppRootContext);
-  const { convention } = data;
-
-  const parsedSignupRounds = React.useMemo(
-    () => parseSignupRounds(convention.signup_rounds, timezoneName),
-    [convention.signup_rounds, timezoneName],
-  );
-
-  usePageTitle(t('navigation.admin.signupRounds'));
-
-  const replacementContent = useAuthorizationRequired('can_update_convention');
-  if (replacementContent) {
-    return replacementContent;
-  }
 
   return (
     <>
-      <h1 className="mb-4">{t('navigation.admin.signupRounds')}</h1>
-      <section className="shadow bg-body-tertiary rounded p-4 mb-4 border">
-        <h3 className="mb-3">{t('signups.signupRounds.scheduleHeader', 'Schedule')}</h3>
-        <div className="d-flex gap-4">
-          <div className="bg-white">
-            <MaximumEventSignupsPreview signupRounds={convention.signup_rounds} timezoneName={timezoneName} />
-          </div>
-          <SignupRoundScheduleTable parsedSignupRounds={parsedSignupRounds} />
-        </div>
-      </section>
-      {parsedSignupRounds.map((round, index) => (
-        <SignupRoundCard rounds={parsedSignupRounds} roundIndex={index} key={round.id} />
-      ))}
+      <ol className="breadcrumb">
+        <RouteActivatedBreadcrumbItem to="/signup_rounds" end>
+          {t('navigation.admin.signupRounds')}
+        </RouteActivatedBreadcrumbItem>
+
+        <RouteActivatedBreadcrumbItemV2 route={{ path: '/signup_rounds/:id/results' }} to="." hideUnlessMatch>
+          {t('signups.signupRounds.results', 'Results')}
+        </RouteActivatedBreadcrumbItemV2>
+      </ol>
+
+      <Routes>
+        <Route path=":id/results" element={<RankedChoiceSignupDecisionsPage />} />
+        <Route index element={<SignupRoundsAdminPage />} />
+      </Routes>
     </>
   );
-});
+}
 
 export default SignupRoundsAdmin;
