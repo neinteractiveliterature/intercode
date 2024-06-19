@@ -1,5 +1,7 @@
 class Types::RankedChoiceDecisionReasonType < Types::BaseEnum
-  description "The reason the ranked choice automation algorithm made the decision it did when evaluating a particular choice."
+  description <<~MARKDOWN
+    The reason the ranked choice automation algorithm made the decision it did when evaluating a particular choice.
+  MARKDOWN
 
   # missing_ticket no_more_signups_allowed no_pending_choices conflict full ranked_choice_user_constraints
   value "MISSING_TICKET",
@@ -12,6 +14,7 @@ class Types::RankedChoiceDecisionReasonType < Types::BaseEnum
   value "CONFLICT", "This choice would conflict with an existing signup this user has", value: "conflict"
   value "FULL", "This event is full", value: "full"
   value "RANKED_CHOICE_USER_CONSTRAINTS",
-        "The user's personal constraints prohibit signing up for this event (in conjunction with their existing signups)",
+        "The user's personal constraints prohibit signing up for this event (in conjunction with their existing signups\
+)",
         value: "ranked_choice_user_constraints"
 end
