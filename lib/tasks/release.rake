@@ -37,8 +37,25 @@ namespace :release do
       require "net/http"
       require "json"
 
+      release_version = "intercode-#{ENV.fetch("REVISION")}"
+
+      uri = URI.parse "https://sentry.io/api/0/organizations/#{ENV.fetch("SENTRY_ORGANIZATION_ID")}/releases/"
+      params = { version: release_version, projects: [Sentry.get_current_client.configuration.dsn.project_id] }
+
+      request = Net::HTTP::Post.new(uri)
+      request.body = ::JSON.dump(params)
+      request["Authorization"] = "Bearer #{ENV.fetch("SENTRY_RELEASE_TOKEN")}"
+      request["Content-Type"] = "application/json"
+
+      Net::HTTP.start(uri.host, uri.port, :ENV, use_ssl: true) do |http|
+        response = http.request(request)
+        unless response.is_a?(Net::HTTPSuccess)
+          raise "Sentry error: #{response.code}\n#{response.body}\n\nRequest URI: #{uri}\nRequest body: #{request.body}"
+        end
+      end
+
       uri =
-        URI.parse "https://sentry.io/api/0/organizations/#{ENV.fetch("SENTRY_ORGANIZATION_ID")}/releases/intercode-#{ENV.fetch("REVISION")}/deploys/"
+        URI.parse "https://sentry.io/api/0/organizations/#{ENV.fetch("SENTRY_ORGANIZATION_ID")}/releases/#{release_version}/deploys/"
       params = { environment: ENV["RAILS_ENV"], projects: [Sentry.get_current_client.configuration.dsn.project_id] }
 
       request = Net::HTTP::Post.new(uri)
