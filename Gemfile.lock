@@ -346,10 +346,10 @@ GEM
     mini_magick (4.11.0)
     mini_mime (1.1.5)
     mini_portile2 (2.8.7)
-    minitest (5.23.1)
+    minitest (5.24.0)
     minitest-focus (1.4.0)
       minitest (>= 4, < 6)
-    minitest-reporters (1.6.1)
+    minitest-reporters (1.7.1)
       ansi
       builder
       minitest (>= 5.0)
