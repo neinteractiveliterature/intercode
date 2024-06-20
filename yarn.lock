@@ -16684,9 +16684,9 @@ __metadata:
   linkType: hard
 
 "luxon@npm:^2.4.0":
-  version: 2.5.0
-  resolution: "luxon@npm:2.5.0"
-  checksum: 10c0/ff47e1fc70a796630001f3a60433b4a96bb1da0b10e70bf191fa33f57161c882d2d1380101665d7b36e83c79e3e820589ebffe5a46f73a5e104e89c7770d8cff
+  version: 2.5.2
+  resolution: "luxon@npm:2.5.2"
+  checksum: 10c0/c93b71c4ae74c440982f39832159b9311eca6db1e55d032d30a3f9354e6ceb16d576158c5dc9f847eb15c481557063bd61defdb96ee0953f8df2c57cd91e0b13
   languageName: node
   linkType: hard
 
@@ -24479,8 +24479,8 @@ __metadata:
   linkType: hard
 
 "webpack-dev-middleware@npm:^5.3.1":
-  version: 5.3.3
-  resolution: "webpack-dev-middleware@npm:5.3.3"
+  version: 5.3.4
+  resolution: "webpack-dev-middleware@npm:5.3.4"
   dependencies:
     colorette: "npm:^2.0.10"
     memfs: "npm:^3.4.3"
@@ -24489,7 +24489,7 @@ __metadata:
     schema-utils: "npm:^4.0.0"
   peerDependencies:
     webpack: ^4.0.0 || ^5.0.0
-  checksum: 10c0/378ceed430b61c0b0eccdbb55a97173aa36231bb88e20ad12bafb3d553e542708fa31f08474b9c68d4ac95174a047def9e426e193b7134be3736afa66a0d1708
+  checksum: 10c0/257df7d6bc5494d1d3cb66bba70fbdf5a6e0423e39b6420f7631aeb52435afbfbff8410a62146dcdf3d2f945c62e03193aae2ac1194a2f7d5a2523b9d194e9e1
   languageName: node
   linkType: hard
 
