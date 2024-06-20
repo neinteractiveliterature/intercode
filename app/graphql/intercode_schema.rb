@@ -86,6 +86,8 @@ class IntercodeSchema < GraphQL::Schema
     end
   end
 
+  trace_with GraphQL::Tracing::SentryTrace if Sentry.get_current_client
+
   mutation(Types::MutationType)
   query(Types::QueryType)
 
