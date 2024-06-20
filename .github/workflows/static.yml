@@ -2,6 +2,23 @@ name: Static analysis
 on: [pull_request]
 
 jobs:
+  graphql-inspector:
+    name: graphql-inspector
+    runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install libvips42
+        run: sudo apt-get update && sudo apt-get install libvips42
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - name: Generate GraphQL schema file
+        run: bin/rails graphql:schema:dump
+      - uses: kamilkisiela/graphql-inspector@master
+        with:
+          schema: 'main:schema.graphql'
   rubocop:
     runs-on: ubuntu-latest
     if: github.actor != 'dependabot[bot]'

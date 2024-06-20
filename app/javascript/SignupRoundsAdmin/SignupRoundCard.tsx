@@ -95,6 +95,12 @@ function SignupRoundCard({ rounds, roundIndex }: SignupRoundCardProps) {
                 <option value={RankedChoiceOrder.Desc}>
                   {t('signups.rankedChoiceOrder.desc', 'Descending lottery number order')}
                 </option>
+                <option value={RankedChoiceOrder.AscSerpentine}>
+                  {t('signups.rankedChoiceOrder.ascSerpentine', 'Serpentine lottery number order, ascending first')}
+                </option>
+                <option value={RankedChoiceOrder.DescSerpentine}>
+                  {t('signups.rankedChoiceOrder.descSerpentine', 'Serpentine lottery number order, descending first')}
+                </option>
               </BootstrapFormSelect>
             )}
             <div className="">

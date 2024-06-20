@@ -67,4 +67,13 @@ class SignupRound < ApplicationRecord
       maximum_event_signups.to_i
     end
   end
+
+  def serpentine_ranked_choice_order?
+    case ranked_choice_order
+    when "asc_serpentine", "desc_serpentine"
+      true
+    else
+      false
+    end
+  end
 end

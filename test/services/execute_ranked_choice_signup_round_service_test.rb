@@ -88,6 +88,114 @@ describe ExecuteRankedChoiceSignupRoundService do
       end
     end
 
+    it "does ascending serpentine order correctly" do
+      signup_round =
+        create(:signup_round, convention:, ranked_choice_order: "asc_serpentine", maximum_event_signups: "unlimited")
+      boost_1_user = create(:user_con_profile, convention:, lottery_number: -1, ranked_choice_ordering_boost: 1)
+      boost_2_user = create(:user_con_profile, convention:, lottery_number: 0, ranked_choice_ordering_boost: 2)
+      low_number_user = create(:user_con_profile, convention:, lottery_number: 1, ranked_choice_allow_waitlist: false)
+      high_number_user = create(:user_con_profile, convention:, lottery_number: 2, ranked_choice_allow_waitlist: false)
+      another_run = create(:run, event:, starts_at: the_run.ends_at)
+      yet_another_run = create(:run, event:, starts_at: another_run.ends_at)
+      create(:signup_ranked_choice, user_con_profile: low_number_user, target_run: the_run, priority: 1)
+      create(:signup_ranked_choice, user_con_profile: high_number_user, target_run: the_run, priority: 1)
+      create(:signup_ranked_choice, user_con_profile: low_number_user, target_run: another_run, priority: 2)
+      create(:signup_ranked_choice, user_con_profile: high_number_user, target_run: another_run, priority: 2)
+      create(:signup_ranked_choice, user_con_profile: low_number_user, target_run: yet_another_run, priority: 3)
+
+      result = ExecuteRankedChoiceSignupRoundService.new(signup_round:, whodunit: nil).call!
+
+      assert_equal 10, result.decisions.size
+      assert_equal "skip_user", result.decisions[0].decision
+      assert_equal "no_pending_choices", result.decisions[0].reason
+      assert_equal boost_2_user, result.decisions[0].user_con_profile
+      assert_equal "skip_user", result.decisions[1].decision
+      assert_equal "no_pending_choices", result.decisions[1].reason
+      assert_equal boost_1_user, result.decisions[1].user_con_profile
+      assert_equal "signup", result.decisions[2].decision
+      assert_equal low_number_user, result.decisions[2].user_con_profile
+      assert_equal the_run, result.decisions[2].signup_ranked_choice.result_signup.run
+      assert_equal "skip_choice", result.decisions[3].decision
+      assert_equal "full", result.decisions[3].reason
+      assert_equal high_number_user, result.decisions[3].user_con_profile
+      assert_equal "signup", result.decisions[4].decision
+      assert_equal high_number_user, result.decisions[4].user_con_profile
+      assert_equal another_run, result.decisions[4].signup_ranked_choice.result_signup.run
+      assert_equal "skip_choice", result.decisions[5].decision
+      assert_equal "full", result.decisions[5].reason
+      assert_equal high_number_user, result.decisions[5].user_con_profile
+      assert_equal "skip_choice", result.decisions[6].decision
+      assert_equal "full", result.decisions[6].reason
+      assert_equal low_number_user, result.decisions[6].user_con_profile
+      assert_equal "signup", result.decisions[7].decision
+      assert_equal low_number_user, result.decisions[7].user_con_profile
+      assert_equal yet_another_run, result.decisions[7].signup_ranked_choice.result_signup.run
+      assert_equal "skip_user", result.decisions[8].decision
+      assert_equal "no_pending_choices", result.decisions[8].reason
+      assert_equal boost_1_user, result.decisions[8].user_con_profile
+      assert_equal "skip_user", result.decisions[9].decision
+      assert_equal "no_pending_choices", result.decisions[9].reason
+      assert_equal boost_2_user, result.decisions[9].user_con_profile
+
+      [boost_1_user, boost_2_user, low_number_user, high_number_user].each do |user|
+        assert_equal 0, user.reload.ranked_choice_ordering_boost
+      end
+    end
+
+    it "does descending serpentine order correctly" do
+      signup_round =
+        create(:signup_round, convention:, ranked_choice_order: "desc_serpentine", maximum_event_signups: "unlimited")
+      boost_1_user = create(:user_con_profile, convention:, lottery_number: 4, ranked_choice_ordering_boost: 1)
+      boost_2_user = create(:user_con_profile, convention:, lottery_number: 3, ranked_choice_ordering_boost: 2)
+      low_number_user = create(:user_con_profile, convention:, lottery_number: 1, ranked_choice_allow_waitlist: false)
+      high_number_user = create(:user_con_profile, convention:, lottery_number: 2, ranked_choice_allow_waitlist: false)
+      another_run = create(:run, event:, starts_at: the_run.ends_at)
+      yet_another_run = create(:run, event:, starts_at: another_run.ends_at)
+      create(:signup_ranked_choice, user_con_profile: low_number_user, target_run: the_run, priority: 1)
+      create(:signup_ranked_choice, user_con_profile: high_number_user, target_run: the_run, priority: 1)
+      create(:signup_ranked_choice, user_con_profile: low_number_user, target_run: another_run, priority: 2)
+      create(:signup_ranked_choice, user_con_profile: high_number_user, target_run: another_run, priority: 2)
+      create(:signup_ranked_choice, user_con_profile: high_number_user, target_run: yet_another_run, priority: 3)
+
+      result = ExecuteRankedChoiceSignupRoundService.new(signup_round:, whodunit: nil).call!
+
+      assert_equal 10, result.decisions.size
+      assert_equal "skip_user", result.decisions[0].decision
+      assert_equal "no_pending_choices", result.decisions[0].reason
+      assert_equal boost_2_user, result.decisions[0].user_con_profile
+      assert_equal "skip_user", result.decisions[1].decision
+      assert_equal "no_pending_choices", result.decisions[1].reason
+      assert_equal boost_1_user, result.decisions[1].user_con_profile
+      assert_equal "signup", result.decisions[2].decision
+      assert_equal high_number_user, result.decisions[2].user_con_profile
+      assert_equal the_run, result.decisions[2].signup_ranked_choice.result_signup.run
+      assert_equal "skip_choice", result.decisions[3].decision
+      assert_equal "full", result.decisions[3].reason
+      assert_equal low_number_user, result.decisions[3].user_con_profile
+      assert_equal "signup", result.decisions[4].decision
+      assert_equal low_number_user, result.decisions[4].user_con_profile
+      assert_equal another_run, result.decisions[4].signup_ranked_choice.result_signup.run
+      assert_equal "skip_choice", result.decisions[5].decision
+      assert_equal "full", result.decisions[5].reason
+      assert_equal low_number_user, result.decisions[5].user_con_profile
+      assert_equal "skip_choice", result.decisions[6].decision
+      assert_equal "full", result.decisions[6].reason
+      assert_equal high_number_user, result.decisions[6].user_con_profile
+      assert_equal "signup", result.decisions[7].decision
+      assert_equal high_number_user, result.decisions[7].user_con_profile
+      assert_equal yet_another_run, result.decisions[7].signup_ranked_choice.result_signup.run
+      assert_equal "skip_user", result.decisions[8].decision
+      assert_equal "no_pending_choices", result.decisions[8].reason
+      assert_equal boost_1_user, result.decisions[8].user_con_profile
+      assert_equal "skip_user", result.decisions[9].decision
+      assert_equal "no_pending_choices", result.decisions[9].reason
+      assert_equal boost_2_user, result.decisions[9].user_con_profile
+
+      [boost_1_user, boost_2_user, low_number_user, high_number_user].each do |user|
+        assert_equal 0, user.reload.ranked_choice_ordering_boost
+      end
+    end
+
     it "rejects unknown orderings" do
       signup_round = create(:signup_round, convention:)
 

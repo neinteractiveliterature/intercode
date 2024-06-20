@@ -26786,7 +26786,7 @@
         {
           "kind": "OBJECT",
           "name": "RankedChoiceDecision",
-          "description": null,
+          "description": "A record of a decision the ranked choice automation made while processing a signup round.",
           "interfaces": [],
           "possibleTypes": null,
           "fields": [
@@ -26808,7 +26808,7 @@
             },
             {
               "name": "decision",
-              "description": null,
+              "description": "The decision the algorithm made.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -26824,7 +26824,7 @@
             },
             {
               "name": "extra",
-              "description": null,
+              "description": "Any additional data the algorithm attached to this decision record.",
               "type": {
                 "kind": "SCALAR",
                 "name": "JSON",
@@ -26836,7 +26836,7 @@
             },
             {
               "name": "id",
-              "description": null,
+              "description": "The ID of this decision record.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -26852,7 +26852,7 @@
             },
             {
               "name": "reason",
-              "description": null,
+              "description": "The reason for this decision, if any.",
               "type": {
                 "kind": "ENUM",
                 "name": "RankedChoiceDecisionReason",
@@ -26864,7 +26864,7 @@
             },
             {
               "name": "signup",
-              "description": null,
+              "description": "The signup that resulted from this decision, if any.",
               "type": {
                 "kind": "OBJECT",
                 "name": "Signup",
@@ -26876,7 +26876,7 @@
             },
             {
               "name": "signup_ranked_choice",
-              "description": null,
+              "description": "The choice that was being processed when this decision was made, if any.",
               "type": {
                 "kind": "OBJECT",
                 "name": "SignupRankedChoice",
@@ -26888,7 +26888,7 @@
             },
             {
               "name": "signup_request",
-              "description": null,
+              "description": "The signup request that resulted from this decision, if any.",
               "type": {
                 "kind": "OBJECT",
                 "name": "SignupRequest",
@@ -26900,7 +26900,7 @@
             },
             {
               "name": "signup_round",
-              "description": null,
+              "description": "The signup round in which this decision was made.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -26932,7 +26932,7 @@
             },
             {
               "name": "user_con_profile",
-              "description": null,
+              "description": "The user profile this decision pertains to, if any.",
               "type": {
                 "kind": "OBJECT",
                 "name": "UserConProfile",
@@ -26949,14 +26949,14 @@
         {
           "kind": "INPUT_OBJECT",
           "name": "RankedChoiceDecisionFiltersInput",
-          "description": null,
+          "description": "Filters that can be applied to a paginated table of RankedChoiceDecisions.",
           "interfaces": null,
           "possibleTypes": null,
           "fields": null,
           "inputFields": [
             {
-              "name": "decisions",
-              "description": null,
+              "name": "decision",
+              "description": "Filter by the type of decision(s) that were made.",
               "type": {
                 "kind": "LIST",
                 "name": null,
@@ -26975,8 +26975,20 @@
               "deprecationReason": null
             },
             {
-              "name": "reasons",
-              "description": null,
+              "name": "event_title",
+              "description": "Filter by the title of the event the decisions pertained to.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "reason",
+              "description": "Filter by the reason(s) for the decisions.",
               "type": {
                 "kind": "LIST",
                 "name": null,
@@ -26993,6 +27005,18 @@
               "defaultValue": null,
               "isDeprecated": false,
               "deprecationReason": null
+            },
+            {
+              "name": "user_con_profile_name",
+              "description": "Filter by the name of the user profiles these decisions pertained to.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "enumValues": null
@@ -27000,7 +27024,7 @@
         {
           "kind": "ENUM",
           "name": "RankedChoiceDecisionReason",
-          "description": "The reason the ranked choice automation algorithm made the decision it did when evaluating a particular choice.",
+          "description": "The reason the ranked choice automation algorithm made the decision it did when evaluating a particular choice.\n",
           "interfaces": null,
           "possibleTypes": null,
           "fields": null,
@@ -27082,7 +27106,7 @@
         {
           "kind": "OBJECT",
           "name": "RankedChoiceDecisionsPagination",
-          "description": null,
+          "description": "A paginated table of RankedChoiceDecisions.",
           "interfaces": [
             {
               "kind": "INTERFACE",
@@ -27201,7 +27225,19 @@
             },
             {
               "name": "DESC",
-              "description": "In lottery nmber order, highest number first",
+              "description": "In lottery number order, highest number first",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "ASC_SERPENTINE",
+              "description": "In lottery number order, lowest number first, then highest, then lowest, etc.",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "DESC_SERPENTINE",
+              "description": "In lottery number order, highest number first, then lowest, then highest, etc.",
               "isDeprecated": false,
               "deprecationReason": null
             }
