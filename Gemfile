@@ -89,6 +89,7 @@ gem "fly.io-rails"
 gem "tzinfo-data"
 gem "browser"
 gem "positioning"
+gem "stackprof"
 
 gem "faker", group: "development", require: false
 
@@ -115,7 +116,6 @@ group :development do
 
   # For call-stack profiling flamegraphs (requires Ruby MRI 2.0.0+)
   gem "flamegraph"
-  gem "stackprof"
 
   # Rails-specific benchmarking
   gem "derailed_benchmarks"
