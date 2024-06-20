@@ -1,4 +1,4 @@
-import { useMemo, useEffect, Suspense } from 'react';
+import { useMemo, useEffect, Suspense, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 import usePageTitle from '../usePageTitle';
@@ -22,10 +22,25 @@ export default LoadQueryWithVariablesWrapper(
   function CmsPage({ data }): JSX.Element {
     const navigate = useNavigate();
     const location = useLocation();
+    const lastHash = useRef('');
     const content = useMemo(
       () => parseCmsContent(data.cmsParent.cmsPage.content_html).bodyComponents,
       [data.cmsParent.cmsPage.content_html],
     );
+
+    // from https://dev.to/mindactuate/scroll-to-anchor-element-with-react-router-v6-38op
+    useEffect(() => {
+      if (location.hash) {
+        lastHash.current = location.hash.slice(1); // safe hash for further use after navigation
+      }
+
+      if (lastHash.current && document.getElementById(lastHash.current)) {
+        setTimeout(() => {
+          document.getElementById(lastHash.current)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          lastHash.current = '';
+        }, 100);
+      }
+    }, [location]);
 
     useEffect(() => {
       if (
