@@ -27,6 +27,7 @@
 #  nickname                     :string
 #  preferred_contact            :string
 #  ranked_choice_allow_waitlist :boolean          default(TRUE), not null
+#  ranked_choice_ordering_boost :integer
 #  receive_whos_free_emails     :boolean          default(TRUE), not null
 #  show_nickname_in_bio         :boolean
 #  state                        :string

@@ -35,6 +35,8 @@ class ExecuteRankedChoiceSignupRoundService < CivilService::Service
         executed_choices_this_pass = execute_pass
         break if executed_choices_this_pass.blank?
       end
+
+      ordered_user_con_profiles.update_all(ranked_choice_ordering_boost: 0)
     end
 
     success(decisions:)
@@ -47,11 +49,13 @@ class ExecuteRankedChoiceSignupRoundService < CivilService::Service
   end
 
   def ordered_user_con_profiles
+    scope = convention.user_con_profiles.order("ranked_choice_ordering_boost DESC NULLS LAST")
+
     case signup_round.ranked_choice_order
     when "asc"
-      convention.user_con_profiles.order(lottery_number: :asc)
+      scope.order(lottery_number: :asc)
     when "desc"
-      convention.user_con_profiles.order(lottery_number: :desc)
+      scope.order(lottery_number: :desc)
     else
       raise "Unknown order for executing signup choices: #{signup_round.ranked_choice_order.inspect}"
     end
