@@ -2937,7 +2937,8 @@ CREATE TABLE public.user_con_profiles (
     mobile_phone character varying,
     allow_sms boolean DEFAULT true NOT NULL,
     lottery_number integer NOT NULL,
-    ranked_choice_allow_waitlist boolean DEFAULT true NOT NULL
+    ranked_choice_allow_waitlist boolean DEFAULT true NOT NULL,
+    ranked_choice_ordering_boost integer
 );
 
 
@@ -6102,6 +6103,7 @@ ALTER TABLE ONLY public.cms_files_pages
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20240620014115'),
 ('20240608175912'),
 ('20240526181616'),
 ('20240505160246'),
