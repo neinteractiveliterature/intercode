@@ -31,9 +31,11 @@ class ExecuteRankedChoiceSignupRoundService < CivilService::Service
     return success(decisions: []) if signup_round.maximum_event_signups_as_number <= prev_max_signups
 
     with_relevant_locks do
+      pass_number = 0
       loop do
-        executed_choices_this_pass = execute_pass
+        executed_choices_this_pass = execute_pass(pass_number)
         break if executed_choices_this_pass.blank?
+        pass_number += 1
       end
 
       ordered_user_con_profiles.update_all(ranked_choice_ordering_boost: 0)
@@ -52,23 +54,24 @@ class ExecuteRankedChoiceSignupRoundService < CivilService::Service
     scope = convention.user_con_profiles.order("ranked_choice_ordering_boost DESC NULLS LAST")
 
     case signup_round.ranked_choice_order
-    when "asc"
+    when "asc", "asc_serpentine"
       scope.order(lottery_number: :asc)
-    when "desc"
+    when "desc", "desc_serpentine"
       scope.order(lottery_number: :desc)
     else
       raise "Unknown order for executing signup choices: #{signup_round.ranked_choice_order.inspect}"
     end
   end
 
-  def execute_pass
+  def execute_pass(pass_number)
     prev_decisions = @decisions.dup
 
     ActiveRecord::Base.transaction do
+      user_con_profiles = ordered_user_con_profiles.to_a
+      user_con_profiles.reverse! if signup_round.serpentine_ranked_choice_order? && pass_number.odd?
+
       executed_choices =
-        ordered_user_con_profiles.to_a.filter_map do |user_con_profile|
-          execute_choices_for_user_con_profile(user_con_profile)
-        end
+        user_con_profiles.filter_map { |user_con_profile| execute_choices_for_user_con_profile(user_con_profile) }
 
       if executed_choices.empty?
         @decisions = prev_decisions

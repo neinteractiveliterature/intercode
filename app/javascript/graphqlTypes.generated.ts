@@ -4576,26 +4576,43 @@ export type QueryUsers_PaginatedArgs = {
   sort?: InputMaybe<Array<SortInput>>;
 };
 
+/** A record of a decision the ranked choice automation made while processing a signup round. */
 export type RankedChoiceDecision = {
   __typename: 'RankedChoiceDecision';
   /** The time this RankedChoiceDecision was created. */
   created_at: Scalars['Date']['output'];
+  /** The decision the algorithm made. */
   decision: RankedChoiceDecisionValue;
+  /** Any additional data the algorithm attached to this decision record. */
   extra?: Maybe<Scalars['JSON']['output']>;
+  /** The ID of this decision record. */
   id: Scalars['ID']['output'];
+  /** The reason for this decision, if any. */
   reason?: Maybe<RankedChoiceDecisionReason>;
+  /** The signup that resulted from this decision, if any. */
   signup?: Maybe<Signup>;
+  /** The choice that was being processed when this decision was made, if any. */
   signup_ranked_choice?: Maybe<SignupRankedChoice>;
+  /** The signup request that resulted from this decision, if any. */
   signup_request?: Maybe<SignupRequest>;
+  /** The signup round in which this decision was made. */
   signup_round: SignupRound;
   /** The time this RankedChoiceDecision was last modified. */
   updated_at: Scalars['Date']['output'];
+  /** The user profile this decision pertains to, if any. */
   user_con_profile?: Maybe<UserConProfile>;
 };
 
+/** Filters that can be applied to a paginated table of RankedChoiceDecisions. */
 export type RankedChoiceDecisionFiltersInput = {
-  decisions?: InputMaybe<Array<RankedChoiceDecisionValue>>;
-  reasons?: InputMaybe<Array<RankedChoiceDecisionReason>>;
+  /** Filter by the type of decision(s) that were made. */
+  decision?: InputMaybe<Array<RankedChoiceDecisionValue>>;
+  /** Filter by the title of the event the decisions pertained to. */
+  event_title?: InputMaybe<Scalars['String']['input']>;
+  /** Filter by the reason(s) for the decisions. */
+  reason?: InputMaybe<Array<RankedChoiceDecisionReason>>;
+  /** Filter by the name of the user profiles these decisions pertained to. */
+  user_con_profile_name?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** The reason the ranked choice automation algorithm made the decision it did when evaluating a particular choice. */
@@ -4626,6 +4643,7 @@ export enum RankedChoiceDecisionValue {
   Waitlist = 'WAITLIST'
 }
 
+/** A paginated table of RankedChoiceDecisions. */
 export type RankedChoiceDecisionsPagination = PaginationInterface & {
   __typename: 'RankedChoiceDecisionsPagination';
   /** The number of the page currently being returned in this query */
@@ -4643,8 +4661,12 @@ export type RankedChoiceDecisionsPagination = PaginationInterface & {
 export enum RankedChoiceOrder {
   /** In lottery number order, lowest number first */
   Asc = 'ASC',
-  /** In lottery nmber order, highest number first */
-  Desc = 'DESC'
+  /** In lottery number order, lowest number first, then highest, then lowest, etc. */
+  AscSerpentine = 'ASC_SERPENTINE',
+  /** In lottery number order, highest number first */
+  Desc = 'DESC',
+  /** In lottery number order, highest number first, then lowest, then highest, etc. */
+  DescSerpentine = 'DESC_SERPENTINE'
 }
 
 /**

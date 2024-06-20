@@ -5465,30 +5465,89 @@ type Query {
   ): UsersPagination!
 }
 
+"""
+A record of a decision the ranked choice automation made while processing a signup round.
+"""
 type RankedChoiceDecision {
   """
   The time this RankedChoiceDecision was created.
   """
   created_at: Date!
+
+  """
+  The decision the algorithm made.
+  """
   decision: RankedChoiceDecisionValue!
+
+  """
+  Any additional data the algorithm attached to this decision record.
+  """
   extra: JSON
+
+  """
+  The ID of this decision record.
+  """
   id: ID!
+
+  """
+  The reason for this decision, if any.
+  """
   reason: RankedChoiceDecisionReason
+
+  """
+  The signup that resulted from this decision, if any.
+  """
   signup: Signup
+
+  """
+  The choice that was being processed when this decision was made, if any.
+  """
   signup_ranked_choice: SignupRankedChoice
+
+  """
+  The signup request that resulted from this decision, if any.
+  """
   signup_request: SignupRequest
+
+  """
+  The signup round in which this decision was made.
+  """
   signup_round: SignupRound!
 
   """
   The time this RankedChoiceDecision was last modified.
   """
   updated_at: Date!
+
+  """
+  The user profile this decision pertains to, if any.
+  """
   user_con_profile: UserConProfile
 }
 
+"""
+Filters that can be applied to a paginated table of RankedChoiceDecisions.
+"""
 input RankedChoiceDecisionFiltersInput {
-  decisions: [RankedChoiceDecisionValue!]
-  reasons: [RankedChoiceDecisionReason!]
+  """
+  Filter by the type of decision(s) that were made.
+  """
+  decision: [RankedChoiceDecisionValue!]
+
+  """
+  Filter by the title of the event the decisions pertained to.
+  """
+  event_title: String
+
+  """
+  Filter by the reason(s) for the decisions.
+  """
+  reason: [RankedChoiceDecisionReason!]
+
+  """
+  Filter by the name of the user profiles these decisions pertained to.
+  """
+  user_con_profile_name: String
 }
 
 """
@@ -5551,6 +5610,9 @@ enum RankedChoiceDecisionValue {
   WAITLIST
 }
 
+"""
+A paginated table of RankedChoiceDecisions.
+"""
 type RankedChoiceDecisionsPagination implements PaginationInterface {
   """
   The number of the page currently being returned in this query
@@ -5584,9 +5646,19 @@ enum RankedChoiceOrder {
   ASC
 
   """
-  In lottery nmber order, highest number first
+  In lottery number order, lowest number first, then highest, then lowest, etc.
+  """
+  ASC_SERPENTINE
+
+  """
+  In lottery number order, highest number first
   """
   DESC
+
+  """
+  In lottery number order, highest number first, then lowest, then highest, etc.
+  """
+  DESC_SERPENTINE
 }
 
 """

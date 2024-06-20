@@ -298,7 +298,7 @@
   "RankedChoiceDecisionReason": {
     "kind": "ENUM",
     "name": "RankedChoiceDecisionReason",
-    "description": "The reason the ranked choice automation algorithm made the decision it did when evaluating a particular choice.",
+    "description": "The reason the ranked choice automation algorithm made the decision it did when evaluating a particular choice.\n",
     "interfaces": null,
     "possibleTypes": null,
     "fields": null,
@@ -394,7 +394,19 @@
       },
       {
         "name": "DESC",
-        "description": "In lottery nmber order, highest number first",
+        "description": "In lottery number order, highest number first",
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "ASC_SERPENTINE",
+        "description": "In lottery number order, lowest number first, then highest, then lowest, etc.",
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "DESC_SERPENTINE",
+        "description": "In lottery number order, highest number first, then lowest, then highest, etc.",
         "isDeprecated": false,
         "deprecationReason": null
       }

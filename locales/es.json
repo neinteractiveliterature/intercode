@@ -811,6 +811,11 @@
       "placeholder": "Search for a user by name or email..."
     }
   },
+  "signupRounds": {
+    "executedAt": "Automation ran {{ executedAt }}.",
+    "notExecutedYet": "Automation has not yet run.",
+    "viewResults": "View results"
+  },
   "signups": {
     "availability": {
       "full_one": "",
@@ -889,7 +894,9 @@
     "noSignupsAvailable": "",
     "rankedChoiceOrder": {
       "asc": "Ascending lottery number order",
-      "desc": "Descending lottery number order"
+      "ascSerpentine": "Serpentine lottery number order, ascending first",
+      "desc": "Descending lottery number order",
+      "descSerpentine": "Serpentine lottery number order, descending first"
     },
     "rankedChoiceOrderLabel": "Ranked choice order",
     "runCardText": {
@@ -912,6 +919,7 @@
         "startTimeRequired": "Start time is required."
       },
       "preSignupRoundPeriod": "Pre-signups period",
+      "results": "Results",
       "roundNumber": "Round {{ number }}",
       "scheduleHeader": "Schedule",
       "start": "Starts at"
@@ -965,6 +973,19 @@
     },
     "privileges": {
       "siteAdmin": "Admin Global"
+    },
+    "rankedChoiceDecision": {
+      "decisions": {
+        "conflict": "conflict",
+        "full": "event full",
+        "missingTicket": "{{ ticketName }} required",
+        "noMoreSignupsAllowed": "no more signups allowed",
+        "noPendingChoices": "user constraints",
+        "signup": "sign up",
+        "skipChoice": "skip choice",
+        "skipUser": "skip user",
+        "waitlist": "waitlist"
+      }
     },
     "signupChange": {
       "actions": {
