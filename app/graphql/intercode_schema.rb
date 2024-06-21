@@ -86,7 +86,7 @@ class IntercodeSchema < GraphQL::Schema
     end
   end
 
-  trace_with GraphQL::Tracing::SentryTrace if ENV["SENTRY_DSN"].present?
+  trace_with GraphQL::Tracing::SentryTrace
 
   mutation(Types::MutationType)
   query(Types::QueryType)

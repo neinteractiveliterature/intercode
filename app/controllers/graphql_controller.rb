@@ -50,6 +50,10 @@ class GraphqlController < ApplicationController
     def delete(key)
       @values.delete(key)
     end
+
+    def dup
+      Context.new(@controller, @values.dup)
+    end
   end
 
   skip_before_action :verify_authenticity_token # We're doing this in MutationType.authorized?
@@ -85,21 +89,19 @@ class GraphqlController < ApplicationController
     if params[:_json]
       queries =
         params[:_json].map do |param|
+          query_context = context.dup
+          query_context[:set_sentry_transaction_name] = param[:operationName]
           {
             query: param[:query],
             operation_name: param[:operationName],
             variables: ensure_hash(param[:variables]),
-            context: context
+            context: query_context
           }
         end
       IntercodeSchema.multiplex(queries)
     else
-      IntercodeSchema.execute(
-        params[:query],
-        operation_name: params[:operationName],
-        variables: variables,
-        context: context
-      )
+      context[:set_sentry_transaction_name] = param[:operationName]
+      IntercodeSchema.execute(params[:query], operation_name: params[:operationName], variables:, context:)
     end
   end
 
