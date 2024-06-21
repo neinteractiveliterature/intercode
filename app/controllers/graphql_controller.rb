@@ -52,7 +52,7 @@ class GraphqlController < ApplicationController
     end
 
     def dup
-      Context.new(@controller, @values.dup)
+      Context.new(@controller, **@values.dup)
     end
   end
 
