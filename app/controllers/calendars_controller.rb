@@ -21,7 +21,7 @@ class CalendarsController < ApplicationController
     tzid = convention.timezone_name || "Etc/UTC"
     set_timezone_metadata(cal, tzid)
 
-    signups = user_con_profile.signups.where.not(state: "withdrawn").includes(run: :event)
+    signups = user_con_profile.signups.where.not(state: "withdrawn").includes(run: :rooms, event: :convention)
     signups.each { |signup| cal.event { |e| set_event_properties_from_signup(e, signup, tzid) } }
 
     cal
