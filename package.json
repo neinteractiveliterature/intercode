@@ -219,7 +219,7 @@
     "react-test-renderer": "18.3.1",
     "swc-loader": "^0.2.6",
     "ts-node": "10.9.2",
-    "typescript": "5.4.5",
+    "typescript": "5.5.2",
     "webpack-cli": "5.1.4",
     "webpack-dev-server": "5.0.4"
   },
