@@ -22,6 +22,8 @@ class Types::SignupType < Types::BaseObject
   field :created_at, Types::DateType, null: false, camelize: false
   field :updated_at, Types::DateType, null: false, camelize: false
 
+  association_loaders Signup, :run, :user_con_profile
+
   # Why not just do this as an authorized hook?  We need it to be safe to ask for this data even if
   # you can't actually read it
   def bucket_key
@@ -44,6 +46,11 @@ class Types::SignupType < Types::BaseObject
   def waitlist_position
     return nil unless object.waitlisted?
     dataloader.with(Sources::WaitlistPosition).load(object)
+  end
+
+  def age_restrictions_check
+    run.event # just to preload the association
+    object.age_restrictions_check
   end
 
   def counted
