@@ -100,7 +100,7 @@ class GraphqlController < ApplicationController
         end
       IntercodeSchema.multiplex(queries)
     else
-      context[:set_sentry_transaction_name] = param[:operationName]
+      context[:set_sentry_transaction_name] = params[:operationName]
       IntercodeSchema.execute(params[:query], operation_name: params[:operationName], variables:, context:)
     end
   end
