@@ -4,6 +4,7 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import { RunCardRegistrationPolicyFieldsFragmentDoc, EventPageRunFieldsFragmentDoc } from '../EventsApp/EventPage/queries.generated';
 import { PricingStructureFieldsFragmentDoc } from '../Store/pricingStructureFields.generated';
+import { UserConProfileRankedChoiceQueueFieldsFragmentDoc } from '../EventsApp/MySignupQueue/queries.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type SignupModerationRunFieldsFragment = { __typename: 'Run', id: string, title_suffix?: string | null, starts_at: string, grouped_signup_counts: Array<{ __typename: 'GroupedSignupCount', bucket_key?: string | null, count: number, counted: boolean, state: Types.SignupState, team_member: boolean }>, event: { __typename: 'Event', id: string, title?: string | null, length_seconds: number } };
@@ -32,6 +33,13 @@ export type SignupModerationQueueQueryVariables = Types.Exact<{
 
 
 export type SignupModerationQueueQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, signup_requests_paginated: { __typename: 'SignupRequestsPagination', total_pages: number, entries: Array<{ __typename: 'SignupRequest', id: string, state: Types.SignupRequestState, requested_bucket_key?: string | null, created_at: string, user_con_profile: { __typename: 'UserConProfile', id: string, name: string, name_inverted: string, gravatar_enabled: boolean, gravatar_url: string }, replace_signup?: { __typename: 'Signup', id: string, run: { __typename: 'Run', id: string, title_suffix?: string | null, starts_at: string, grouped_signup_counts: Array<{ __typename: 'GroupedSignupCount', bucket_key?: string | null, count: number, counted: boolean, state: Types.SignupState, team_member: boolean }>, event: { __typename: 'Event', id: string, title?: string | null, length_seconds: number } } } | null, target_run: { __typename: 'Run', id: string, title_suffix?: string | null, starts_at: string, event: { __typename: 'Event', id: string, title?: string | null, length_seconds: number, registration_policy?: { __typename: 'RegistrationPolicy', prevent_no_preference_signups: boolean, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null, total_slots?: number | null, slots_limited: boolean, anything: boolean, not_counted: boolean }> } | null }, grouped_signup_counts: Array<{ __typename: 'GroupedSignupCount', bucket_key?: string | null, count: number, counted: boolean, state: Types.SignupState, team_member: boolean }> }, result_signup?: { __typename: 'Signup', id: string, state: Types.SignupState, waitlist_position?: number | null } | null }> } } };
+
+export type SignupModerationAttendeeRankedChoicesQueryVariables = Types.Exact<{
+  userConProfileId: Types.Scalars['ID']['input'];
+}>;
+
+
+export type SignupModerationAttendeeRankedChoicesQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, user_con_profile: { __typename: 'UserConProfile', id: string, name_without_nickname: string, ranked_choice_allow_waitlist: boolean, ranked_choice_user_constraints: Array<{ __typename: 'RankedChoiceUserConstraint', id: string, start?: string | null, finish?: string | null, maximum_signups: number }>, ticket?: { __typename: 'Ticket', id: string, ticket_type: { __typename: 'TicketType', id: string, allows_event_signups: boolean } } | null, signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState, counted: boolean, run: { __typename: 'Run', id: string, starts_at: string, ends_at: string } }>, signup_ranked_choices: Array<{ __typename: 'SignupRankedChoice', id: string, state: Types.SignupRankedChoiceState, priority: number, requested_bucket_key?: string | null, target_run: { __typename: 'Run', id: string, title_suffix?: string | null, starts_at: string, event: { __typename: 'Event', id: string, title?: string | null, length_seconds: number, event_category: { __typename: 'EventCategory', id: string, name: string }, registration_policy?: { __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null, description?: string | null }> } | null } } }> } } };
 
 export const SignupModerationRunFieldsFragmentDoc = gql`
     fragment SignupModerationRunFields on Run {
@@ -314,3 +322,48 @@ export type SignupModerationQueueQueryHookResult = ReturnType<typeof useSignupMo
 export type SignupModerationQueueQueryLazyQueryHookResult = ReturnType<typeof useSignupModerationQueueQueryLazyQuery>;
 export type SignupModerationQueueQuerySuspenseQueryHookResult = ReturnType<typeof useSignupModerationQueueQuerySuspenseQuery>;
 export type SignupModerationQueueQueryQueryResult = Apollo.QueryResult<SignupModerationQueueQueryData, SignupModerationQueueQueryVariables>;
+export const SignupModerationAttendeeRankedChoicesQueryDocument = gql`
+    query SignupModerationAttendeeRankedChoicesQuery($userConProfileId: ID!) {
+  convention: conventionByRequestHost {
+    id
+    user_con_profile(id: $userConProfileId) {
+      id
+      name_without_nickname
+      ...UserConProfileRankedChoiceQueueFields
+    }
+  }
+}
+    ${UserConProfileRankedChoiceQueueFieldsFragmentDoc}`;
+
+/**
+ * __useSignupModerationAttendeeRankedChoicesQuery__
+ *
+ * To run a query within a React component, call `useSignupModerationAttendeeRankedChoicesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSignupModerationAttendeeRankedChoicesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSignupModerationAttendeeRankedChoicesQuery({
+ *   variables: {
+ *      userConProfileId: // value for 'userConProfileId'
+ *   },
+ * });
+ */
+export function useSignupModerationAttendeeRankedChoicesQuery(baseOptions: Apollo.QueryHookOptions<SignupModerationAttendeeRankedChoicesQueryData, SignupModerationAttendeeRankedChoicesQueryVariables> & ({ variables: SignupModerationAttendeeRankedChoicesQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SignupModerationAttendeeRankedChoicesQueryData, SignupModerationAttendeeRankedChoicesQueryVariables>(SignupModerationAttendeeRankedChoicesQueryDocument, options);
+      }
+export function useSignupModerationAttendeeRankedChoicesQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SignupModerationAttendeeRankedChoicesQueryData, SignupModerationAttendeeRankedChoicesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SignupModerationAttendeeRankedChoicesQueryData, SignupModerationAttendeeRankedChoicesQueryVariables>(SignupModerationAttendeeRankedChoicesQueryDocument, options);
+        }
+export function useSignupModerationAttendeeRankedChoicesQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<SignupModerationAttendeeRankedChoicesQueryData, SignupModerationAttendeeRankedChoicesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<SignupModerationAttendeeRankedChoicesQueryData, SignupModerationAttendeeRankedChoicesQueryVariables>(SignupModerationAttendeeRankedChoicesQueryDocument, options);
+        }
+export type SignupModerationAttendeeRankedChoicesQueryHookResult = ReturnType<typeof useSignupModerationAttendeeRankedChoicesQuery>;
+export type SignupModerationAttendeeRankedChoicesQueryLazyQueryHookResult = ReturnType<typeof useSignupModerationAttendeeRankedChoicesQueryLazyQuery>;
+export type SignupModerationAttendeeRankedChoicesQuerySuspenseQueryHookResult = ReturnType<typeof useSignupModerationAttendeeRankedChoicesQuerySuspenseQuery>;
+export type SignupModerationAttendeeRankedChoicesQueryQueryResult = Apollo.QueryResult<SignupModerationAttendeeRankedChoicesQueryData, SignupModerationAttendeeRankedChoicesQueryVariables>;

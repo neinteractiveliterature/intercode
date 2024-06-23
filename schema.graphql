@@ -8280,6 +8280,11 @@ type UserConProfile {
   show_nickname_in_bio: Boolean
 
   """
+  This user's ranked choice list for signups.
+  """
+  signup_ranked_choices: [SignupRankedChoice!]!
+
+  """
   All the signup requests made by this profile.
   """
   signup_requests: [SignupRequest!]!

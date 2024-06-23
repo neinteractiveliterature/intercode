@@ -6468,6 +6468,8 @@ export type UserConProfile = {
   ranked_choice_user_constraints: Array<RankedChoiceUserConstraint>;
   /** Should this profile's bio use the nickname as part of their name? */
   show_nickname_in_bio?: Maybe<Scalars['Boolean']['output']>;
+  /** This user's ranked choice list for signups. */
+  signup_ranked_choices: Array<SignupRankedChoice>;
   /** All the signup requests made by this profile. */
   signup_requests: Array<SignupRequest>;
   /** All the event signups attached to this profile. */

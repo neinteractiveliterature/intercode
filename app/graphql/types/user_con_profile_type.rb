@@ -65,7 +65,10 @@ class Types::UserConProfileType < Types::BaseObject
   field :show_nickname_in_bio, Boolean, null: true do
     description "Should this profile's bio use the nickname as part of their name?"
   end
-  field :signup_requests, [Types::SignupRequestType], null: false do
+  field :signup_ranked_choices, [Types::SignupRankedChoiceType], null: false do
+    description "This user's ranked choice list for signups."
+  end
+  field :signup_requests, [Types::SignupRequestType], null: false do # rubocop:disable GraphQL/ExtractType
     description "All the signup requests made by this profile."
   end
   field :signups, [Types::SignupType], null: false do
@@ -119,6 +122,7 @@ class Types::UserConProfileType < Types::BaseObject
                       :orders,
                       :ranked_choice_user_constraints,
                       :signups,
+                      :signup_ranked_choices,
                       :signup_requests,
                       :ticket,
                       :user

@@ -6,7 +6,7 @@ import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 import AppRootContext from '../AppRootContext';
 import { timespanFromRun } from '../TimespanUtils';
 import RunCapacityGraph from '../EventsApp/EventPage/RunCapacityGraph';
-import { SignupRequestState } from '../graphqlTypes.generated';
+import { SignupAutomationMode, SignupRequestState } from '../graphqlTypes.generated';
 import {
   SignupModerationQueueQueryData,
   SignupModerationSignupRequestFieldsFragment,
@@ -18,6 +18,8 @@ import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
 import UserConProfileWithGravatarCell from '../Tables/UserConProfileWithGravatarCell';
 import TimestampCell from '../Tables/TimestampCell';
 import { useFormatRunTimespan } from '../EventsApp/runTimeFormatting';
+import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 type SignupModerationContextValue = {
   acceptClicked: (signupRequest: SignupModerationSignupRequestFieldsFragment) => void;
@@ -87,6 +89,29 @@ function SignupModerationRunDetails({ run, showRequestedBucket, requestedBucketK
   );
 }
 
+function SignupRequestUserConProfileCell({
+  value,
+}: {
+  value: SignupModerationSignupRequestFieldsFragment['user_con_profile'];
+}) {
+  const { signupAutomationMode } = useContext(AppRootContext);
+  const { t } = useTranslation();
+
+  return (
+    <>
+      <UserConProfileWithGravatarCell value={value} />
+      {signupAutomationMode === SignupAutomationMode.RankedChoice && (
+        <>
+          <br />
+          <Link to={`../ranked_choice_queue/${value.id}`}>
+            {t('signupModeration.goToRankedChoiceQueue', 'Go to ranked choice queue')}
+          </Link>
+        </>
+      )}
+    </>
+  );
+}
+
 function SignupRequestCell({ value }: { value: SignupModerationSignupRequestFieldsFragment }) {
   return (
     <>
@@ -144,7 +169,7 @@ function getPossibleColumns(): Column<
       Header: 'Attendee',
       accessor: 'user_con_profile',
       width: 130,
-      Cell: UserConProfileWithGravatarCell,
+      Cell: SignupRequestUserConProfileCell,
     },
     {
       id: 'request',
