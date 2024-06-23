@@ -8,7 +8,13 @@ class CreateSignupRequestService < CivilService::Service
   validate :signup_requests_must_be_open
   validate :must_not_have_conflicting_signups
 
-  attr_reader :user_con_profile, :target_run, :requested_bucket_key, :replace_signup, :whodunit, :suppress_notifications
+  attr_reader :user_con_profile,
+              :target_run,
+              :requested_bucket_key,
+              :replace_signup,
+              :whodunit,
+              :suppress_notifications,
+              :keep_pending_ranked_choices
   delegate :convention, to: :user_con_profile
   delegate :event, to: :target_run
 
@@ -18,7 +24,8 @@ class CreateSignupRequestService < CivilService::Service
     requested_bucket_key:,
     replace_signup: nil,
     whodunit: nil,
-    suppress_notifications: false
+    suppress_notifications: false,
+    keep_pending_ranked_choices: false
   )
     @user_con_profile = user_con_profile
     @target_run = target_run
@@ -26,6 +33,7 @@ class CreateSignupRequestService < CivilService::Service
     @replace_signup = replace_signup
     @whodunit = whodunit
     @suppress_notifications = suppress_notifications
+    @keep_pending_ranked_choices = keep_pending_ranked_choices
   end
 
   private
@@ -38,6 +46,7 @@ class CreateSignupRequestService < CivilService::Service
         requested_bucket_key:,
         updated_by: whodunit
       )
+    destroy_pending_ranked_choices
 
     SignupRequests::NewSignupRequestNotifier.new(signup_request:).deliver_later unless suppress_notifications
 
@@ -73,5 +82,14 @@ class CreateSignupRequestService < CivilService::Service
                  count: conflicting_signups.size,
                  event_title: event.title
                )
+  end
+
+  def destroy_pending_ranked_choices
+    return if keep_pending_ranked_choices
+
+    user_con_profile
+      .signup_ranked_choices
+      .where(state: "pending", target_run_id: target_run.id, requested_bucket_key:)
+      .destroy_all
   end
 end

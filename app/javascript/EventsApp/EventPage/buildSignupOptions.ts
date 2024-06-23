@@ -3,7 +3,16 @@ import { notEmpty } from '@neinteractiveliterature/litform';
 import { EventPageQueryData, RunCardRegistrationPolicyFieldsFragment } from './queries.generated';
 import sortBuckets from './sortBuckets';
 import SignupCountData from '../SignupCountData';
-import { SignupState, SignupRankedChoice } from '../../graphqlTypes.generated';
+import {
+  SignupState,
+  SignupRankedChoice,
+  SignupRound,
+  Signup,
+  SignupRequest,
+  SignupRequestState,
+} from '../../graphqlTypes.generated';
+import { parseSignupRounds } from '../../SignupRoundUtils';
+import { DateTime } from 'luxon';
 
 type SignupOptionBucket = RunCardRegistrationPolicyFieldsFragment['buckets'][0];
 
@@ -19,6 +28,7 @@ export type SignupOption = {
   counted: boolean;
   teamMember: boolean;
   action: SignupOptionAction;
+  pendingRankedChoices: Pick<SignupRankedChoice, 'priority' | 'requested_bucket_key'>[];
 };
 
 function isMainOption(option: SignupOption, noPreferenceOptions: SignupOption[], notCountedOptions: SignupOption[]) {
@@ -49,6 +59,7 @@ function buildBucketSignupOption(
   index: number,
   hideLabel: boolean,
   action: SignupOptionAction,
+  pendingRankedChoices: SignupOption['pendingRankedChoices'],
 ): SignupOption {
   return {
     key: bucket.key,
@@ -60,6 +71,7 @@ function buildBucketSignupOption(
     teamMember: false,
     counted: !bucket.not_counted,
     action,
+    pendingRankedChoices,
   };
 }
 
@@ -68,6 +80,7 @@ function buildNoPreferenceOptions(
   signupCounts: SignupCountData,
   addToQueue: boolean,
   inQueue: boolean,
+  pendingRankedChoices: SignupOption['pendingRankedChoices'],
 ): SignupOption[] {
   if ((event.registration_policy || {}).prevent_no_preference_signups) {
     return [];
@@ -109,6 +122,7 @@ function buildNoPreferenceOptions(
       teamMember: false,
       counted: true, // no preference signups only go to counted buckets,
       action,
+      pendingRankedChoices,
     },
   ];
 }
@@ -122,7 +136,10 @@ function allSignupOptions(
     },
   signupCounts: SignupCountData,
   addToQueue: boolean,
-  myPendingRankedChoices: Pick<SignupRankedChoice, 'requested_bucket_key'>[],
+  mySignups: Pick<Signup, 'state' | 'counted'>[],
+  mySignupRequests: Pick<SignupRequest, 'state'>[],
+  myPendingRankedChoices: Pick<SignupRankedChoice, 'requested_bucket_key' | 'priority'>[],
+  signupRounds: Pick<SignupRound, 'start' | 'maximum_event_signups'>[],
   userConProfile?: { id: string },
 ): SignupOption[] {
   if (isTeamMember(event, userConProfile)) {
@@ -137,12 +154,27 @@ function allSignupOptions(
         teamMember: true,
         counted: false,
         action: 'SIGN_UP_NOW',
+        pendingRankedChoices: [],
       },
     ];
   }
 
   const buckets = sortBuckets((event.registration_policy || {}).buckets || []);
   const nonAnythingBuckets = buckets.filter((bucket) => !bucket.anything);
+  const parsedRounds = parseSignupRounds(signupRounds);
+  const now = DateTime.local();
+  const currentRound = parsedRounds.find((round) => round.timespan.includesTime(now));
+  const maximumEventSignups = currentRound?.maximum_event_signups ?? 'not_now';
+  const signupCount =
+    mySignups.filter(
+      (signup) =>
+        (signup.state === SignupState.Confirmed || signup.state === SignupState.TicketPurchaseHold) && signup.counted,
+    ).length + mySignupRequests.filter((signupRequest) => signupRequest.state === SignupRequestState.Pending).length;
+  const hasAvailableSignups =
+    typeof maximumEventSignups === 'number' ? signupCount < maximumEventSignups : maximumEventSignups === 'unlimited';
+  const noPreferencePendingRankedChoices = myPendingRankedChoices.filter(
+    (request) => request.requested_bucket_key == null,
+  );
 
   return [
     ...buckets
@@ -154,9 +186,12 @@ function allSignupOptions(
         }
 
         let action: SignupOptionAction = 'SIGN_UP_NOW';
-        if (myPendingRankedChoices.find((request) => request.requested_bucket_key === bucket.key) != null) {
+        const pendingRankedChoices = myPendingRankedChoices.filter(
+          (request) => request.requested_bucket_key === bucket.key,
+        );
+        if (!hasAvailableSignups && pendingRankedChoices.length > 0) {
           action = 'IN_QUEUE';
-        } else if (addToQueue) {
+        } else if (!hasAvailableSignups && addToQueue) {
           action = 'ADD_TO_QUEUE';
         } else if (
           bucket.slots_limited &&
@@ -166,14 +201,21 @@ function allSignupOptions(
           action = 'WAITLIST';
         }
 
-        return buildBucketSignupOption(bucket, index, !bucket.not_counted && nonAnythingBuckets.length === 1, action);
+        return buildBucketSignupOption(
+          bucket,
+          index,
+          !bucket.not_counted && nonAnythingBuckets.length === 1,
+          action,
+          pendingRankedChoices,
+        );
       })
       .filter(notEmpty),
     ...buildNoPreferenceOptions(
       event,
       signupCounts,
       addToQueue,
-      myPendingRankedChoices.find((request) => request.requested_bucket_key == null) != null,
+      noPreferencePendingRankedChoices.length > 0,
+      noPreferencePendingRankedChoices,
     ),
   ];
 }
@@ -188,10 +230,22 @@ export default function buildSignupOptions(
   event: Parameters<typeof allSignupOptions>[0],
   signupCounts: SignupCountData,
   addToQueue: boolean,
-  myPendingRankedChoices: Pick<SignupRankedChoice, 'requested_bucket_key'>[],
+  mySignups: Pick<Signup, 'state' | 'counted'>[],
+  mySignupRequests: Pick<SignupRequest, 'state'>[],
+  myPendingRankedChoices: Pick<SignupRankedChoice, 'requested_bucket_key' | 'priority'>[],
+  signupRounds: Pick<SignupRound, 'start' | 'maximum_event_signups'>[],
   userConProfile?: { id: string },
 ): PartitionedSignupOptions {
-  const allOptions = allSignupOptions(event, signupCounts, addToQueue, myPendingRankedChoices, userConProfile);
+  const allOptions = allSignupOptions(
+    event,
+    signupCounts,
+    addToQueue,
+    mySignups,
+    mySignupRequests,
+    myPendingRankedChoices,
+    signupRounds,
+    userConProfile,
+  );
   const noPreferenceOptions = allOptions.filter((option) => option.noPreference);
   const notCountedOptions = allOptions.filter((option) => !option.counted);
 

@@ -627,6 +627,15 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
       assert result.success?
       assert result.signup.confirmed?
     end
+
+    it "automatically deletes any ranked choices the user has for this run/bucket" do
+      signup_ranked_choice = create(:signup_ranked_choice, user_con_profile:, target_run: the_run)
+
+      result = subject.call
+
+      assert result.success?
+      assert_equal 0, SignupRankedChoice.where(id: signup_ranked_choice.id).count
+    end
   end
 
   private

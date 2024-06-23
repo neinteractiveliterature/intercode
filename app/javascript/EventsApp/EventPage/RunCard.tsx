@@ -1,4 +1,4 @@
-import { useContext, useRef, useEffect, useCallback, useMemo } from 'react';
+import { useContext, useRef, useEffect, useCallback } from 'react';
 import classNames from 'classnames';
 import { useLocation } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
@@ -17,7 +17,7 @@ import AuthenticationModalContext from '../../Authentication/AuthenticationModal
 import { EventPageQueryData } from './queries.generated';
 import { PartitionedSignupOptions, SignupOption } from './buildSignupOptions';
 import { useFormatRunTimespan } from '../runTimeFormatting';
-import { Signup, SignupRankedChoiceState, SignupState } from '../../graphqlTypes.generated';
+import { Signup, SignupState } from '../../graphqlTypes.generated';
 import EventTicketPurchaseModal from './EventTicketPurchaseModal';
 
 function describeSignupState(
@@ -86,11 +86,6 @@ function RunCard({
     }
   }, [location.hash, run.id]);
   const eventTicketPurchaseModal = useModal<{ run: NonNullable<typeof run>; signup: NonNullable<typeof mySignup> }>();
-
-  const myPendingRankedChoices = useMemo(
-    () => run.my_signup_ranked_choices.filter((choice) => choice.state === SignupRankedChoiceState.Pending),
-    [run.my_signup_ranked_choices],
-  );
 
   const performSignup = useCallback(
     async (signupOption: SignupOption) => {
@@ -166,13 +161,11 @@ function RunCard({
           signupOptions={signupOptions.mainPreference}
           disabled={mutationInProgress}
           onClick={signupButtonClicked}
-          myPendingRankedChoices={myPendingRankedChoices}
         />
         <SignupButtons
           signupOptions={signupOptions.mainNoPreference}
           disabled={mutationInProgress}
           onClick={signupButtonClicked}
-          myPendingRankedChoices={myPendingRankedChoices}
         />
         {mutationInProgress && <LoadingIndicator iconSet="bootstrap-icons" />}
         <ErrorDisplay graphQLError={signupError as ApolloError} />
@@ -192,7 +185,6 @@ function RunCard({
             signupOptions={signupOptions.auxiliary}
             disabled={mutationInProgress}
             onClick={signupButtonClicked}
-            myPendingRankedChoices={myPendingRankedChoices}
           />
         </li>
       </ul>

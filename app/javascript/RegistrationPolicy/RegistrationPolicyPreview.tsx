@@ -35,6 +35,9 @@ function RegistrationPolicyPreview({ registrationPolicy }: RegistrationPolicyPre
         new SignupCountData([]),
         false,
         [],
+        [],
+        [],
+        [],
         undefined,
       ),
     [registrationPolicyForDisplay],
@@ -61,14 +64,14 @@ function RegistrationPolicyPreview({ registrationPolicy }: RegistrationPolicyPre
               run={{ grouped_signup_counts: [] }}
               signupsAvailable
             />
-            <SignupButtons signupOptions={signupOptions.mainPreference} myPendingRankedChoices={[]} />
-            <SignupButtons signupOptions={signupOptions.mainNoPreference} myPendingRankedChoices={[]} />
+            <SignupButtons signupOptions={signupOptions.mainPreference} />
+            <SignupButtons signupOptions={signupOptions.mainNoPreference} />
           </div>
 
           {signupOptions.auxiliary.length > 0 ? (
             <ul className="list-group list-group-flush">
               <li className="list-group-item border-bottom-0">
-                <SignupButtons signupOptions={signupOptions.auxiliary} myPendingRankedChoices={[]} />
+                <SignupButtons signupOptions={signupOptions.auxiliary} />
               </li>
             </ul>
           ) : null}

@@ -3,22 +3,15 @@ import { useTranslation } from 'react-i18next';
 import { ButtonWithTooltip } from '@neinteractiveliterature/litform';
 
 import { SignupOption } from './buildSignupOptions';
-import { SignupRankedChoice } from '../../graphqlTypes.generated';
 import RankedChoicePriorityIndicator from '../MySignupQueue/RankedChoicePriorityIndicator';
 
 export type SignupButtonDisplayProps = {
   signupOption: SignupOption;
   onClick?: (signupOption: SignupOption) => void;
   disabled?: boolean;
-  rankedChoices: Pick<SignupRankedChoice, 'priority'>[];
 };
 
-function SignupButtonDisplay({
-  signupOption,
-  onClick,
-  disabled,
-  rankedChoices,
-}: SignupButtonDisplayProps): JSX.Element {
+function SignupButtonDisplay({ signupOption, onClick, disabled }: SignupButtonDisplayProps): JSX.Element {
   const { t } = useTranslation();
 
   let actionLabel;
@@ -33,15 +26,17 @@ function SignupButtonDisplay({
       actionLabel = t('signups.signupButton.addToQueue', 'Add to my queue');
       break;
     case 'IN_QUEUE':
-      actionLabel = (
-        <>
-          {rankedChoices.map((choice) => (
-            <RankedChoicePriorityIndicator fontSize={12} priority={choice.priority ?? 0} key={choice.priority} />
-          ))}{' '}
-          {t('signups.signupButton.inMyQueue', 'In my queue')}
-        </>
-      );
+      actionLabel = t('signups.signupButton.inMyQueue', 'In my queue');
   }
+
+  const rankedChoicePriorityIndicators =
+    signupOption.pendingRankedChoices.length > 0 ? (
+      <>
+        {signupOption.pendingRankedChoices.map((choice) => (
+          <RankedChoicePriorityIndicator fontSize={12} priority={choice.priority ?? 0} key={choice.priority} />
+        ))}{' '}
+      </>
+    ) : undefined;
 
   return (
     <ButtonWithTooltip
@@ -60,11 +55,19 @@ function SignupButtonDisplay({
         <>
           <strong>{signupOption.label}</strong>
           <br />
+          {rankedChoicePriorityIndicators}
           {actionLabel}
         </>
       ) : (
         <>
           <strong>{actionLabel}</strong>
+          {rankedChoicePriorityIndicators && (
+            <>
+              <br />
+              {rankedChoicePriorityIndicators}
+              <em>{t('signups.signupButton.inMyQueue', 'In my queue')}</em>
+            </>
+          )}
         </>
       )}
     </ButtonWithTooltip>

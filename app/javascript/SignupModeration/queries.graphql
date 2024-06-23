@@ -107,6 +107,12 @@ query CreateSignupRunCardQuery($userConProfileId: ID!, $eventId: ID!) {
   convention: conventionByRequestHost {
     id
 
+    signup_rounds {
+      id
+      start
+      maximum_event_signups
+    }
+
     event(id: $eventId) {
       id
       title
@@ -164,6 +170,7 @@ query CreateSignupRunCardQuery($userConProfileId: ID!, $eventId: ID!) {
         id
         state
         waitlist_position
+        counted
 
         run {
           id

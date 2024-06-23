@@ -11,6 +11,7 @@ class EventSignupService < CivilService::Service
               :whodunit,
               :suppress_notifications,
               :suppress_confirmation,
+              :keep_pending_ranked_choices,
               :allow_non_self_service_signups,
               :action
   delegate :event, to: :run
@@ -38,6 +39,7 @@ class EventSignupService < CivilService::Service
     suppress_notifications: false,
     suppress_confirmation: false,
     allow_non_self_service_signups: false,
+    keep_pending_ranked_choices: false,
     action: "self_service_signup"
   )
     @user_con_profile = user_con_profile
@@ -47,13 +49,14 @@ class EventSignupService < CivilService::Service
     @skip_locking = skip_locking
     @suppress_notifications = suppress_notifications
     @suppress_confirmation = suppress_confirmation
+    @keep_pending_ranked_choices = keep_pending_ranked_choices
     @allow_non_self_service_signups = allow_non_self_service_signups
     @action = action
   end
 
   private
 
-  def inner_call # rubocop:disable Metrics/AbcSize
+  def inner_call # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     signup = nil
     with_advisory_lock_unless_skip_locking("run_#{run.id}_signups") do
       return failure(errors) unless valid?
@@ -71,6 +74,7 @@ class EventSignupService < CivilService::Service
           expires_at: signup_state == "ticket_purchase_hold" ? 30.minutes.from_now : nil,
           updated_by: whodunit
         )
+      destroy_pending_ranked_choices
 
       signup.log_signup_change!(action:)
     end
@@ -254,5 +258,14 @@ class EventSignupService < CivilService::Service
 
     # Wait 5 seconds because the transaction hasn't been committed yet
     Signups::SignupConfirmationNotifier.new(signup:).deliver_later(wait: 5.seconds)
+  end
+
+  def destroy_pending_ranked_choices
+    return if keep_pending_ranked_choices
+
+    user_con_profile
+      .signup_ranked_choices
+      .where(state: "pending", target_run_id: run.id, requested_bucket_key:)
+      .destroy_all
   end
 end

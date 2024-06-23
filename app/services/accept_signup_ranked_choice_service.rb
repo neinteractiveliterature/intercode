@@ -48,7 +48,8 @@ class AcceptSignupRankedChoiceService < CivilService::Service
       skip_locking: true,
       suppress_notifications:,
       suppress_confirmation: suppress_notifications,
-      action: "accept_signup_ranked_choice"
+      action: "accept_signup_ranked_choice",
+      keep_pending_ranked_choices: true
     ).call!
   end
 
