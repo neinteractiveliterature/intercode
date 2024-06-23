@@ -56,7 +56,7 @@ class EventSignupService < CivilService::Service
 
   private
 
-  def inner_call # rubocop:disable Metrics/AbcSize
+  def inner_call # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     signup = nil
     with_advisory_lock_unless_skip_locking("run_#{run.id}_signups") do
       return failure(errors) unless valid?
