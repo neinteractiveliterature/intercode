@@ -104,6 +104,9 @@ export default LoadQueryWithVariablesWrapper(
               run={run}
               key={run.id}
               myProfile={myProfile}
+              mySignups={data.convention.my_signups}
+              mySignupRequests={data.convention.my_signup_requests}
+              signupRounds={data.convention.signup_rounds}
               currentAbility={currentAbility}
               addToQueue={addToQueue}
             />

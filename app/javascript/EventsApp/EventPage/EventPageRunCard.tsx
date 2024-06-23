@@ -63,11 +63,23 @@ export type EventPageRunCardProps = {
   event: EventPageQueryData['convention']['event'];
   run: EventPageQueryData['convention']['event']['runs'][0];
   myProfile: EventPageQueryData['convention']['my_profile'];
+  mySignups: EventPageQueryData['convention']['my_signups'];
+  mySignupRequests: EventPageQueryData['convention']['my_signup_requests'];
+  signupRounds: EventPageQueryData['convention']['signup_rounds'];
   currentAbility: EventPageQueryData['currentAbility'];
   addToQueue: boolean;
 };
 
-function EventPageRunCard({ event, run, myProfile, currentAbility, addToQueue }: EventPageRunCardProps): JSX.Element {
+function EventPageRunCard({
+  event,
+  run,
+  myProfile,
+  mySignups,
+  mySignupRequests,
+  currentAbility,
+  signupRounds,
+  addToQueue,
+}: EventPageRunCardProps): JSX.Element {
   const { t } = useTranslation();
   const { signupMode } = useContext(AppRootContext);
   const myPendingRankedChoices = useMemo(
@@ -80,10 +92,13 @@ function EventPageRunCard({ event, run, myProfile, currentAbility, addToQueue }:
         event,
         SignupCountData.fromRun(run),
         addToQueue,
+        mySignups,
+        mySignupRequests,
         myPendingRankedChoices,
+        signupRounds,
         myProfile ?? undefined,
       ),
-    [event, run, myProfile, addToQueue, myPendingRankedChoices],
+    [event, run, myProfile, mySignups, mySignupRequests, signupRounds, addToQueue, myPendingRankedChoices],
   );
   const confirm = useConfirm();
   const createModeratedSignupModal = useModal<{ signupOption: SignupOption }>();
