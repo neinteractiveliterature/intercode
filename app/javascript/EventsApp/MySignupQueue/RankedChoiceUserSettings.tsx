@@ -18,7 +18,7 @@ import BucketAvailabilityDisplay from '../EventPage/BucketAvailabilityDisplay';
 
 type ConstraintAvailabilityDisplayProps = {
   constraint: Pick<RankedChoiceUserConstraint, 'start' | 'finish' | 'maximum_signups'>;
-  mySignups: MySignupQueueQueryData['convention']['my_signups'];
+  mySignups: NonNullable<MySignupQueueQueryData['convention']['my_profile']>['signups'];
 };
 
 function ConstraintAvailabilityDisplay({ constraint, mySignups }: ConstraintAvailabilityDisplayProps) {
@@ -81,7 +81,7 @@ function MaximumSignupsLimitSelect({ value, onValueChange, ...props }: MaximumSi
 
 type SignupConstraintRowProps = {
   constraint?: Pick<RankedChoiceUserConstraint, 'id' | 'start' | 'finish' | 'maximum_signups'>;
-  mySignups: MySignupQueueQueryData['convention']['my_signups'];
+  mySignups: NonNullable<MySignupQueueQueryData['convention']['my_profile']>['signups'];
   label: React.ReactNode;
   help?: React.ReactNode;
   onChange: (newValue: number | null | undefined) => void;
@@ -252,7 +252,7 @@ const RankedChoiceUserSettings = LoadQueryWrapper(useMySignupQueueQuery, ({ data
                 )}
                 onChange={(newValue) => constraintChanged(totalSignupsConstraint, undefined, undefined, newValue)}
                 loading={loading}
-                mySignups={data.convention.my_signups}
+                mySignups={data.convention.my_profile?.signups ?? []}
               />
 
               {conventionDays.map((conventionDay) => (
@@ -280,7 +280,7 @@ const RankedChoiceUserSettings = LoadQueryWrapper(useMySignupQueueQuery, ({ data
                     )
                   }
                   loading={loading}
-                  mySignups={data.convention.my_signups}
+                  mySignups={data.convention.my_profile?.signups ?? []}
                 />
               ))}
 
@@ -305,7 +305,7 @@ const RankedChoiceUserSettings = LoadQueryWrapper(useMySignupQueueQuery, ({ data
                     )
                   }
                   loading={loading}
-                  mySignups={data.convention.my_signups}
+                  mySignups={data.convention.my_profile?.signups ?? []}
                 />
               ))}
             </tbody>

@@ -38657,6 +38657,30 @@
               "args": []
             },
             {
+              "name": "signup_ranked_choices",
+              "description": "This user's ranked choice list for signups.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "SignupRankedChoice",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
               "name": "signup_requests",
               "description": "All the signup requests made by this profile.",
               "type": {

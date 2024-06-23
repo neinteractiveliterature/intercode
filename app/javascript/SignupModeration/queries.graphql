@@ -1,5 +1,6 @@
 #import "../EventsApp/EventPage/queries.graphql"
 #import "../Store/pricingStructureFields.graphql"
+#import "../MySignupQueue/queries.graphql"
 
 fragment SignupModerationRunFields on Run {
   id
@@ -196,6 +197,18 @@ query SignupModerationQueueQuery($page: Int, $perPage: Int) {
         id
         ...SignupModerationSignupRequestFields
       }
+    }
+  }
+}
+
+query SignupModerationAttendeeRankedChoicesQuery($userConProfileId: ID!) {
+  convention: conventionByRequestHost {
+    id
+
+    user_con_profile(id: $userConProfileId) {
+      id
+      name_without_nickname
+      ...UserConProfileRankedChoiceQueueFields
     }
   }
 }

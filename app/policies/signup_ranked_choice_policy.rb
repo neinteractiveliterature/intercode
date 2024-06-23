@@ -11,7 +11,7 @@ class SignupRankedChoicePolicy < ApplicationPolicy
          d.add(:read_signups) { record.user_con_profile.user_id == user&.id }
 
          d.add(:read_conventions) do
-           convention.signup_automation_mode == "ranked_choice" &&
+           convention.signup_mode == "moderated" && convention.signup_automation_mode == "ranked_choice" &&
              has_convention_permission?(convention, "update_signups")
          end
        }
@@ -24,7 +24,7 @@ class SignupRankedChoicePolicy < ApplicationPolicy
   def manage?
     if oauth_scoped_disjunction { |d|
          d.add(:manage_conventions) do
-           convention.signup_automation_mode == "ranked_choice" &&
+           convention.signup_mode == "moderated" && convention.signup_automation_mode == "ranked_choice" &&
              has_convention_permission?(convention, "update_signups")
          end
        }
