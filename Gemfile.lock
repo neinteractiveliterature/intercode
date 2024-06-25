@@ -236,7 +236,7 @@ GEM
     domain_prefix (0.4.20210906)
       json
       simpleidn (>= 0.0.5)
-    doorkeeper (5.7.0)
+    doorkeeper (5.7.1)
       railties (>= 5)
     doorkeeper-jwt (0.4.1)
       jwt (>= 2.1)
@@ -308,7 +308,7 @@ GEM
       ruby-vips (>= 2.0.17, < 3)
     io-console (0.7.2)
     io-console (0.7.2-java)
-    irb (1.13.1)
+    irb (1.13.2)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
     jar-dependencies (0.4.1)
@@ -509,7 +509,7 @@ GEM
     recaptcha (5.17.0)
     redcarpet (3.6.0)
     regexp_parser (2.9.2)
-    reline (0.5.8)
+    reline (0.5.9)
       io-console (~> 0.5)
     request_store (1.5.1)
       rack (>= 1.4)
@@ -603,7 +603,7 @@ GEM
       activesupport (>= 6.1)
       sprockets (>= 3.0.0)
     stackprof (0.2.26)
-    stringio (3.1.0)
+    stringio (3.1.1)
     stripe (5.55.0)
     stripe-ruby-mock (3.1.0)
       dante (>= 0.2.0)
@@ -663,7 +663,7 @@ GEM
       activerecord (>= 6.1)
       zeitwerk (>= 2.6)
     yard (0.9.36)
-    zeitwerk (2.6.15)
+    zeitwerk (2.6.16)
 
 PLATFORMS
   java
@@ -694,7 +694,7 @@ DEPENDENCIES
   devise-doorkeeper
   devise-encryptable
   domain_prefix
-  doorkeeper (= 5.7.0)
+  doorkeeper (= 5.7.1)
   doorkeeper-jwt
   doorkeeper-openid_connect
   dotenv-rails
