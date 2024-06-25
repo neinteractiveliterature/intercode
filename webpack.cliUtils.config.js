@@ -10,6 +10,7 @@ module.exports = {
     diffTranslations: './script/diffTranslations.ts',
     mergeTranslations: './script/mergeTranslations.ts',
     renderFormResponseChangeGroup: './script/renderFormResponseChangeGroup.tsx',
+    server: './app/javascript/server.tsx',
   },
   devtool: 'cheap-source-map',
   output: {
@@ -34,6 +35,7 @@ module.exports = {
           'chmod +x bin/diffTranslations.cjs',
           'chmod +x bin/mergeTranslations.cjs',
           'chmod +x bin/renderFormResponseChangeGroup.cjs',
+          'chmod +x bin/server.cjs',
         ],
       },
     }),

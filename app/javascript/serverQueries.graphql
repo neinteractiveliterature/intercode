@@ -1,0 +1,9 @@
+query GetAppLayoutContent($host: String!, $path: String!) {
+  cmsParentByDomain(domain: $host) {
+    id
+    effectiveCmsLayout(path: $path) {
+      id
+      app_root_content(path: $path)
+    }
+  }
+}

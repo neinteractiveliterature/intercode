@@ -47,7 +47,7 @@ function I18NextWrapper({ children }: { children: (i18nInstance: i18n) => ReactN
   return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
 }
 
-export type AppWrapperProps = {
+export type AppWrapperInnerProps = {
   authenticityTokens: {
     graphql: string;
   };
@@ -59,32 +59,15 @@ export type AppWrapperProps = {
   stripePublishableKey: string;
 };
 
-function AppWrapper<P extends JSX.IntrinsicAttributes>(
+export function AppWrapperInner<P extends JSX.IntrinsicAttributes>(
   WrappedComponent: React.ComponentType<P>,
-): React.ComponentType<P> {
-  function Wrapper(props: P & AppWrapperProps) {
+): React.ComponentType<P & AppWrapperInnerProps> {
+  function Wrapper(props: P & AppWrapperInnerProps) {
     const { authenticityTokens, mapboxAccessToken, recaptchaSiteKey, stripePublishableKey, queryData, ...otherProps } =
       props;
     // TODO bring this back when we re-add prompting
     // const confirm = useConfirm();
-    const authenticityTokensProviderValue = useAuthenticityTokens(authenticityTokens);
-    const { graphql: authenticityToken, refresh } = authenticityTokensProviderValue;
-    const authenticationModalContextValue = useAuthenticationModalProvider(recaptchaSiteKey);
-    const {
-      open: openAuthenticationModal,
-      unauthenticatedError,
-      setUnauthenticatedError,
-    } = authenticationModalContextValue;
-    const openSignIn = useCallback(async () => {
-      setUnauthenticatedError(true);
-      await refresh();
-      openAuthenticationModal({ currentView: 'signIn' });
-    }, [openAuthenticationModal, setUnauthenticatedError, refresh]);
-    const onUnauthenticatedRef = useRef(openSignIn);
-    useEffect(() => {
-      onUnauthenticatedRef.current = openSignIn;
-    }, [openSignIn]);
-    const apolloClient = useIntercodeApolloClient(authenticityToken, onUnauthenticatedRef, queryData);
+
     const railsDirectUploadsContextValue = useMemo(
       () => ({
         railsDirectUploadsUrl: props.railsDirectUploadsUrl,
@@ -107,48 +90,27 @@ function AppWrapper<P extends JSX.IntrinsicAttributes>(
 
     const mapboxContextValue = useMapboxContext({ mapboxAccessToken });
 
-    if (!apolloClient) {
-      // we need one render cycle to initialize the client
-      return <></>;
-    }
-
     return (
-      <React.StrictMode>
-        <HelmetProvider>
-          <BrowserRouter basename="/">
-            {' '}
-            {/* TODO bring this back when we re-add prompting getUserConfirmation={getUserConfirmation}> */}
-            <RailsDirectUploadsContext.Provider value={railsDirectUploadsContextValue}>
-              <AuthenticityTokensContext.Provider value={authenticityTokensProviderValue}>
-                <MapboxContext.Provider value={mapboxContextValue}>
-                  <ApolloProvider client={apolloClient}>
-                    <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
-                      <>
-                        {!unauthenticatedError && (
-                          <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
-                            <I18NextWrapper>
-                              {(i18nInstance) => (
-                                <AlertProvider okText={i18nInstance.t('buttons.ok', 'OK')}>
-                                  <ToastProvider>
-                                    <ErrorBoundary placement="replace" errorType="plain">
-                                      <WrappedComponent {...(otherProps as unknown as P)} />{' '}
-                                    </ErrorBoundary>
-                                  </ToastProvider>
-                                </AlertProvider>
-                              )}
-                            </I18NextWrapper>
-                          </Suspense>
-                        )}
-                        <AuthenticationModal />
-                      </>
-                    </AuthenticationModalContext.Provider>
-                  </ApolloProvider>
-                </MapboxContext.Provider>
-              </AuthenticityTokensContext.Provider>
-            </RailsDirectUploadsContext.Provider>
-          </BrowserRouter>
-        </HelmetProvider>
-      </React.StrictMode>
+      <HelmetProvider>
+        {/* TODO bring this back when we re-add prompting getUserConfirmation={getUserConfirmation}> */}
+        <RailsDirectUploadsContext.Provider value={railsDirectUploadsContextValue}>
+          <MapboxContext.Provider value={mapboxContextValue}>
+            <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
+              <I18NextWrapper>
+                {(i18nInstance) => (
+                  <AlertProvider okText={i18nInstance.t('buttons.ok', 'OK')}>
+                    <ToastProvider>
+                      <ErrorBoundary placement="replace" errorType="plain">
+                        <WrappedComponent {...(otherProps as unknown as P)} />{' '}
+                      </ErrorBoundary>
+                    </ToastProvider>
+                  </AlertProvider>
+                )}
+              </I18NextWrapper>
+            </Suspense>
+          </MapboxContext.Provider>
+        </RailsDirectUploadsContext.Provider>
+      </HelmetProvider>
     );
   }
 
@@ -156,7 +118,7 @@ function AppWrapper<P extends JSX.IntrinsicAttributes>(
 
   Wrapper.displayName = `AppWrapper(${wrappedComponentDisplayName})`;
 
-  function ConfirmWrapper(props: P & AppWrapperProps) {
+  function ConfirmWrapper(props: P & AppWrapperInnerProps) {
     return (
       <Confirm>
         <Wrapper {...props} />
@@ -167,4 +129,58 @@ function AppWrapper<P extends JSX.IntrinsicAttributes>(
   return ConfirmWrapper;
 }
 
-export default AppWrapper;
+function BrowserAppWrapper<P extends JSX.IntrinsicAttributes & AppWrapperInnerProps>(
+  WrappedComponent: React.ComponentType<P>,
+): React.ComponentType<P> {
+  const Children = AppWrapperInner(WrappedComponent);
+
+  const Wrapped = (props: P) => {
+    const authenticityTokensProviderValue = useAuthenticityTokens(props.authenticityTokens);
+    const { graphql: authenticityToken, refresh } = authenticityTokensProviderValue;
+    const authenticationModalContextValue = useAuthenticationModalProvider(props.recaptchaSiteKey);
+    const {
+      open: openAuthenticationModal,
+      unauthenticatedError,
+      setUnauthenticatedError,
+    } = authenticationModalContextValue;
+    const openSignIn = useCallback(async () => {
+      setUnauthenticatedError(true);
+      await refresh();
+      openAuthenticationModal({ currentView: 'signIn' });
+    }, [openAuthenticationModal, setUnauthenticatedError, refresh]);
+    const onUnauthenticatedRef = useRef(openSignIn);
+    useEffect(() => {
+      onUnauthenticatedRef.current = openSignIn;
+    }, [openSignIn]);
+
+    const apolloClient = useIntercodeApolloClient(authenticityToken, onUnauthenticatedRef, props.queryData);
+
+    if (!apolloClient) {
+      // we need one render cycle to initialize the client
+      return <></>;
+    }
+
+    return (
+      <React.StrictMode>
+        <AuthenticityTokensContext.Provider value={authenticityTokensProviderValue}>
+          <ApolloProvider client={apolloClient}>
+            <BrowserRouter basename="/">
+              <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
+                <>
+                  {!unauthenticatedError && <Children {...props} />}
+                  <AuthenticationModal />
+                </>
+              </AuthenticationModalContext.Provider>
+            </BrowserRouter>
+          </ApolloProvider>
+        </AuthenticityTokensContext.Provider>
+      </React.StrictMode>
+    );
+  };
+
+  const wrappedComponentDisplayName = WrappedComponent.displayName || WrappedComponent.name || 'Component';
+  Wrapped.displayName = `BrowserAppWrapper(${wrappedComponentDisplayName})`;
+  return Wrapped;
+}
+
+export default BrowserAppWrapper;

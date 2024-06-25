@@ -6,6 +6,7 @@ class CmsRenderingContext
   include ActionView::Helpers::TagHelper
   include ActionView::Helpers::AssetTagHelper
   attr_reader :cms_parent, :controller, :assigns, :cached_partials, :cached_files, :timezone
+  delegate :request, to: :controller
 
   NOSCRIPT_WARNING = <<~HTML.html_safe
   <noscript id="no-javascript-warning">

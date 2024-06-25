@@ -14,5 +14,6 @@ declare global {
   declare interface Window {
     intercodeAssetsHost?: string;
     sentryFrontendDSN?: string;
+    _elementsInsertedByStyleLoader?: Element[];
   }
 }
