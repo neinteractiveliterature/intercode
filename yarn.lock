@@ -21588,7 +21588,6 @@ __metadata:
     swc-loader: "npm:^0.2.6"
     terser-webpack-plugin: "npm:5.3.10"
     tinycolor2: "npm:1.6.0"
-    ts-node: "npm:10.9.2"
     tsx: "npm:^4.16.2"
     typescript: "npm:5.5.3"
     tzdata: "npm:1.0.40"

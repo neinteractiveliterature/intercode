@@ -53,7 +53,7 @@ export type ScriptTagProps = {
 };
 
 export function ScriptTag({ url, content }: ScriptTagProps) {
-  const ref = React.useRef<HTMLSpanElement>(null);
+  const ref = React.useRef<HTMLMetaElement>(null);
   useLayoutEffect(() => {
     if (!ref.current) {
       return;
@@ -78,7 +78,7 @@ export function ScriptTag({ url, content }: ScriptTagProps) {
     };
   }, [url, content]);
 
-  return <span ref={ref} />;
+  return <meta ref={ref} />;
 }
 
 export function ScriptTagWrapper(props: ScriptTagProps) {

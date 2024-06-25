@@ -230,7 +230,6 @@
     "prettier": "3.3.3",
     "react-test-renderer": "18.3.1",
     "swc-loader": "^0.2.6",
-    "ts-node": "10.9.2",
     "tsx": "^4.16.2",
     "typescript": "5.5.3",
     "webpack-cli": "5.1.4",
