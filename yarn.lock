@@ -11236,7 +11236,7 @@ __metadata:
     "@svgr/webpack": "npm:8.1.0"
     "@types/lodash": "npm:4.17.5"
     clsx: "npm:2.1.1"
-    entities: "npm:4.5.0"
+    entities: "npm:5.0.0"
     file-loader: "npm:6.2.0"
     graphql: "npm:^16.8.2"
     graphql-config: "npm:^5.0.3"
@@ -11564,10 +11564,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"entities@npm:4.5.0, entities@npm:^4.2.0, entities@npm:^4.3.0, entities@npm:^4.4.0, entities@npm:^4.5.0":
-  version: 4.5.0
-  resolution: "entities@npm:4.5.0"
-  checksum: 10c0/5b039739f7621f5d1ad996715e53d964035f75ad3b9a4d38c6b3804bb226e282ffeae2443624d8fdd9c47d8e926ae9ac009c54671243f0c3294c26af7cc85250
+"entities@npm:5.0.0":
+  version: 5.0.0
+  resolution: "entities@npm:5.0.0"
+  checksum: 10c0/f8c23e240e46047dd258546ced25487dffee79be91210f3c68bd03a9e4d61bcdf654036e204f01aebe1321ff461b9027a0486efd76ff1c6a2a654192e973f07c
   languageName: node
   linkType: hard
 
@@ -11575,6 +11575,13 @@ __metadata:
   version: 2.2.0
   resolution: "entities@npm:2.2.0"
   checksum: 10c0/7fba6af1f116300d2ba1c5673fc218af1961b20908638391b4e1e6d5850314ee2ac3ec22d741b3a8060479911c99305164aed19b6254bde75e7e6b1b2c3f3aa3
+  languageName: node
+  linkType: hard
+
+"entities@npm:^4.2.0, entities@npm:^4.3.0, entities@npm:^4.4.0, entities@npm:^4.5.0":
+  version: 4.5.0
+  resolution: "entities@npm:4.5.0"
+  checksum: 10c0/5b039739f7621f5d1ad996715e53d964035f75ad3b9a4d38c6b3804bb226e282ffeae2443624d8fdd9c47d8e926ae9ac009c54671243f0c3294c26af7cc85250
   languageName: node
   linkType: hard
 
