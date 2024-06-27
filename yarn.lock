@@ -211,9 +211,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/client@npm:3.10.7":
-  version: 3.10.7
-  resolution: "@apollo/client@npm:3.10.7"
+"@apollo/client@npm:3.10.8":
+  version: 3.10.8
+  resolution: "@apollo/client@npm:3.10.8"
   dependencies:
     "@graphql-typed-document-node/core": "npm:^3.1.1"
     "@wry/caches": "npm:^1.0.0"
@@ -244,7 +244,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: 10c0/25bf271370533943f71f97101e97ec80e7408dde5bec5a743b065ba810bf55bf90269c38264badee2c6ba952f650b642e5be3e6aac8792554c904071e6b5cfdf
+  checksum: 10c0/38f69040c8bbed78dc3b7c18de8ede1aacdf0501e5a7340171d95d4c339b72857c6ef3cb233038cc3e69bc44f1917c4c1a01cfaae3a130285eafbf89f96b290a
   languageName: node
   linkType: hard
 
@@ -21443,7 +21443,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
-    "@apollo/client": "npm:3.10.7"
+    "@apollo/client": "npm:3.10.8"
     "@breezehr/currency-codes": "npm:^2.2.1"
     "@codemirror/highlight": "npm:0.19.8"
     "@codemirror/lang-html": "npm:6.4.9"
