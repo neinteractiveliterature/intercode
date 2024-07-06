@@ -13352,9 +13352,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@npm:10.4.2, glob@npm:^10.3.7":
-  version: 10.4.2
-  resolution: "glob@npm:10.4.2"
+"glob@npm:10.4.3, glob@npm:^10.3.7":
+  version: 10.4.3
+  resolution: "glob@npm:10.4.3"
   dependencies:
     foreground-child: "npm:^3.1.0"
     jackspeak: "npm:^3.1.2"
@@ -13364,7 +13364,7 @@ __metadata:
     path-scurry: "npm:^1.11.1"
   bin:
     glob: dist/esm/bin.mjs
-  checksum: 10c0/2c7296695fa75a935f3ad17dc62e4e170a8bb8752cf64d328be8992dd6ad40777939003754e10e9741ff8fbe43aa52fba32d6930d0ffa0e3b74bc3fb5eebaa2f
+  checksum: 10c0/bea148e5dae96c17e2764f4764c72376a6ab7072b27a21e861ae4af6f97f3e810d79d67f64de52f63ce1d7fdb73b7306f61c65b48d0f61ca7c8647ce8acaf9a7
   languageName: node
   linkType: hard
 
@@ -21557,7 +21557,7 @@ __metadata:
     file-loader: "npm:6.2.0"
     file-saver: "npm:2.0.5"
     font-awesome: "npm:4.7.0"
-    glob: "npm:10.4.2"
+    glob: "npm:10.4.3"
     graphiql: "npm:3.3.2"
     graphql: "npm:16.8.1"
     graphql-anywhere: "npm:4.2.8"
