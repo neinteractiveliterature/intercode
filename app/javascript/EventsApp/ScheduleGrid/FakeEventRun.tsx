@@ -106,10 +106,9 @@ function FakeEventRun({
       {...clickableProps}
     >
       <div className="schedule-grid-event-content">
+        <AvailabilityBar availabilityFraction={availability ?? 0.0} unlimited={unlimited} runStyle={runStyle} />
         <div className="schedule-grid-event-content-main">{children}</div>
       </div>
-
-      <AvailabilityBar availabilityFraction={availability ?? 0.0} unlimited={unlimited} runStyle={runStyle} />
     </div>
   );
 }
