@@ -794,6 +794,12 @@
       "placeholder": "Search for a user by name or email..."
     }
   },
+  "signupModeration": {
+    "createSignups": "Create signups",
+    "goToRankedChoiceQueue": "Go to ranked choice queue",
+    "moderationQueue": "Moderation queue",
+    "rankedChoiceQueue": "Attendee ranked choice queue"
+  },
   "signupRounds": {
     "executedAt": "Automation ran {{ executedAt }}.",
     "notExecutedYet": "Automation has not yet run.",
@@ -906,11 +912,13 @@
     "states": {
       "bucketWithNoPreference": "{{ bucketName }} (no preference)",
       "confirmed": "Confirmed",
+      "inMyQueue": "In my signup queue",
       "inUnrequestedBucket": "{{ bucketName }} (requested {{ requestedBucketName }})",
       "noBucketName": "None",
       "notCounted": "Not counted",
       "notCountedWithBucket": "{{ bucketName }} (not counted)",
       "notSignedUp": "Not signed up",
+      "requestPending": "Signup request pending",
       "stateWithRequestedBucket": "{{ state }} (requested {{ requestedBucket }})",
       "teamMemberNotCounted": "{{ teamMemberName }} (not counted)",
       "ticketPurchaseHold": "Held pending {{ ticketName }} purchase",
