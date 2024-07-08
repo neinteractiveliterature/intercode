@@ -4,6 +4,7 @@ import { SignupRankedChoice } from '../../graphqlTypes.generated';
 import RankedChoicePriorityIndicator from '../MySignupQueue/RankedChoicePriorityIndicator';
 import { SignupStatus } from './StylingUtils';
 import sortBy from 'lodash/sortBy';
+import { useTranslation } from 'react-i18next';
 
 export type SignupStatusBadgeProps = {
   signupStatus?: SignupStatus | null;
@@ -12,21 +13,25 @@ export type SignupStatusBadgeProps = {
 };
 
 function SignupStatusBadge({ signupStatus, myRating, mySignupRankedChoices }: SignupStatusBadgeProps): JSX.Element {
+  const { t } = useTranslation();
+
   const signupRankedChoicesOrdered = useMemo(
     () => sortBy(mySignupRankedChoices, (choice) => choice.priority),
     [mySignupRankedChoices],
   );
 
   if (signupStatus === SignupStatus.Confirmed) {
-    return <i className="bi-person-circle me-1" title="Confirmed signup" />;
+    return <i className="bi-person-circle me-1" title={t('signups.states.confirmed', 'Confirmed')} />;
   }
 
   if (signupStatus === SignupStatus.Waitlisted) {
-    return <i className="bi-hourglass-split me-1" title="Waitlisted" />;
+    return <i className="bi-hourglass-split me-1" title={t('signups.states.waitlisted', 'Waitlisted')} />;
   }
 
   if (signupStatus === SignupStatus.RequestPending) {
-    return <i className="bi-pause-circle-fill me-1" title="Signup request pending" />;
+    return (
+      <i className="bi-pause-circle-fill me-1" title={t('signups.states.requestPending', 'Signup request pending')} />
+    );
   }
 
   if (signupStatus === SignupStatus.InMyQueue) {

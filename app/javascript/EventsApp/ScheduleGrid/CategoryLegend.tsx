@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
 import groupBy from 'lodash/groupBy';
@@ -7,9 +7,13 @@ import { sortByLocaleString } from '@neinteractiveliterature/litform/lib/ValueUt
 import FakeEventRun from './FakeEventRun';
 import { useCommonConventionDataQuery } from '../queries.generated';
 import { SignupStatus } from './StylingUtils';
+import AppRootContext from '../../AppRootContext';
+import { SignupAutomationMode, SignupMode } from '../../graphqlTypes.generated';
+import RankedChoicePriorityIndicator from '../MySignupQueue/RankedChoicePriorityIndicator';
 
 export default LoadQueryWrapper(useCommonConventionDataQuery, function CategoryLegend({ data }) {
   const { t } = useTranslation();
+  const { signupAutomationMode, signupMode } = useContext(AppRootContext);
   const sortedEventCategories = useMemo(() => {
     const nameSortedEventCategories = sortByLocaleString(data.convention.event_categories, (c) => c.name);
     const eventCategoriesByDefaultColor = groupBy(nameSortedEventCategories, (c) => c.default_color ?? '_undefined');
@@ -82,6 +86,20 @@ export default LoadQueryWrapper(useCommonConventionDataQuery, function CategoryL
             <FakeEventRun eventCategory={defaultCategory} signupStatus={SignupStatus.Waitlisted}>
               <i className="bi-hourglass-split" /> {t('signups.states.waitlisted', 'Waitlisted')}
             </FakeEventRun>
+
+            {signupMode === SignupMode.Moderated && (
+              <FakeEventRun eventCategory={defaultCategory} signupStatus={SignupStatus.RequestPending}>
+                <i className="bi-pause-circle-fill me-1" />
+                {t('signups.states.requestPending', 'Request pending')}
+              </FakeEventRun>
+            )}
+
+            {signupAutomationMode === SignupAutomationMode.RankedChoice && (
+              <FakeEventRun eventCategory={defaultCategory} signupStatus={SignupStatus.InMyQueue}>
+                <RankedChoicePriorityIndicator fontSize={12} priority={1} />{' '}
+                {t('signups.states.inMyQueue', 'In my signup queue')}
+              </FakeEventRun>
+            )}
 
             <FakeEventRun eventCategory={defaultCategory}>
               {t('signups.states.notSignedUp', 'Not signed up')}

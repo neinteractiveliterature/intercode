@@ -171,7 +171,7 @@ export function getRunClassificationStyles({
 }: GetRunClassificationStylesOptions): CSSProperties {
   if (config.classifyEventsBy === 'category') {
     let variant: EventStyleVariant = 'default';
-    if (signupStatus != null) {
+    if (signupStatus != null && signupStatus !== SignupStatus.InMyQueue) {
       variant = 'signed_up';
     } else if (signupCountData.runFull(event)) {
       variant = 'full';
