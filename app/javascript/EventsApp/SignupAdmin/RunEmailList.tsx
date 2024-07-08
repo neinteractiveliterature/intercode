@@ -103,7 +103,7 @@ export default LoadQueryWrapper<
             ...(data.convention.event.registration_policy?.buckets ?? []).map((bucket) => ({
               label: t('events.signupAdmin.emailFilters.confirmedBucket', 'Include {{ bucketName }} (confirmed)', {
                 bucketName: bucket.name ?? bucket.key,
-              }),
+              }) as string,
               value: bucket.key,
             })),
             {

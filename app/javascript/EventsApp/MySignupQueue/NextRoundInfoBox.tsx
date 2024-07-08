@@ -84,24 +84,26 @@ const NextRoundInfoBox = LoadQueryWrapper(useMySignupQueueQuery, ({ data }) => {
           </p>
 
           <p className="mb-0">
-            {ticketStatus === 'ok' &&
-              t(
-                'signups.mySignupQueue.ticketStatus.ok',
-                'You have a {{ ticketName }} and will be signed up for events at that time.',
-                { ticketName },
-              )}
-            {ticketStatus === 'signupsNotAllowed' &&
-              t(
-                'signups.mySignupQueue.ticketStatus.signupsNotAllowed',
-                'You have a {{ ticketName }} that does not allow event signups.  You will not be able to sign up for games until you have arranged for a full {{ ticketName }}.',
-                { ticketName },
-              )}
-            {ticketStatus === 'noTicket' &&
-              t(
-                'signups.mySignupQueue.ticketStatus.noTicket',
-                'You do not have a {{ ticketName }}.  You will not be able to sign up for games until you have purchased a {{ ticketName }}.',
-                { ticketName },
-              )}
+            <>
+              {ticketStatus === 'ok' &&
+                t(
+                  'signups.mySignupQueue.ticketStatus.ok',
+                  'You have a {{ ticketName }} and will be signed up for events at that time.',
+                  { ticketName },
+                )}
+              {ticketStatus === 'signupsNotAllowed' &&
+                t(
+                  'signups.mySignupQueue.ticketStatus.signupsNotAllowed',
+                  'You have a {{ ticketName }} that does not allow event signups.  You will not be able to sign up for games until you have arranged for a full {{ ticketName }}.',
+                  { ticketName },
+                )}
+              {ticketStatus === 'noTicket' &&
+                t(
+                  'signups.mySignupQueue.ticketStatus.noTicket',
+                  'You do not have a {{ ticketName }}.  You will not be able to sign up for games until you have purchased a {{ ticketName }}.',
+                  { ticketName },
+                )}
+            </>
           </p>
 
           {ticketStatus === 'noTicket' && (

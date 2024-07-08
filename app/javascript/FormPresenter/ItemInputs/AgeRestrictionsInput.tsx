@@ -12,7 +12,7 @@ import { CommonFormItemInputProps } from './CommonFormItemInputProps';
 import { AgeRestrictionsFormItem } from '../../FormAdmin/FormItemUtils';
 import { FORM_ITEM_ROLE_COLOR_CLASSES, VisibilityDisclosureText } from './PermissionDisclosures';
 
-function getDefaultAgeRestrictionsDescription(minimumAge: number | null | undefined, t: TFunction) {
+function getDefaultAgeRestrictionsDescription(minimumAge: number | null | undefined, t: TFunction): string {
   if (!minimumAge) {
     return t('forms.ageRestrictions.noRestrictions', 'No age restrictions.');
   }

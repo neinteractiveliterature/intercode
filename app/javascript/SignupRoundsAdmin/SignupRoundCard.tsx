@@ -111,7 +111,9 @@ function SignupRoundCard({ rounds, roundIndex }: SignupRoundCardProps) {
                     executedAt: format(DateTime.fromISO(editingRound.executed_at), 'longWeekdayDateTimeWithZone'),
                   })}{' '}
                   <Link className="btn btn-outline-secondary btn-sm" to={`/signup_rounds/${editingRound.id}/results`}>
-                    {t('signupRounds.viewResults', 'View results')} <i className="bi-arrow-right" />
+                    <>
+                      {t('signupRounds.viewResults', 'View results')} <i className="bi-arrow-right" />
+                    </>
                   </Link>
                 </>
               ) : (

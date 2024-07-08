@@ -11,7 +11,7 @@ function describeCapacity(
   signupCount: number,
   signupsAvailable: boolean,
   t: TFunction,
-) {
+): string {
   if (!bucket.slots_limited) {
     if (!signupsAvailable) {
       return t('events.runCapacity.unlimitedSimple', 'unlimited');

@@ -32,7 +32,7 @@ function ProvidableTicketTypeSelection({
   const remainingCountByType = getRemainingTicketCountByType(convention, convention.event);
 
   const totalRemaining = sumBy(Object.entries(remainingCountByType), ([, remaining]) => remaining);
-  const providabilityDescription = t(
+  const providabilityDescription: string = t(
     'events.teamMemberAdmin.ticketProvidability',
     '{{ eventTitle }} has {{ count }} {{ ticketName }} remaining to provide.',
     {
@@ -54,7 +54,7 @@ function ProvidableTicketTypeSelection({
           ticketName: convention.ticket_name,
           count: remaining,
         },
-      ),
+      ) as string,
       value: ticketType.id.toString(),
       disabled: remaining < 1,
     };
