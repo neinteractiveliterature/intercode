@@ -2,7 +2,7 @@ import { useContext, useMemo } from 'react';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { useApolloClient } from '@apollo/client';
-import { Placement } from 'popper.js';
+import { Placement } from '@popperjs/core';
 import { usePopper } from 'react-popper';
 import { useTranslation } from 'react-i18next';
 
@@ -113,8 +113,9 @@ const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(function Ru
               className="btn btn-link btn-sm text-dark"
               style={{ cursor: 'pointer' }}
               onClick={toggle}
+              aria-label={t('buttons.close')}
             >
-              <i className="bi-x" title={t('buttons.close', 'Close')} />
+              <i className="bi-x" title={t('buttons.close')} />
             </button>
           </div>
         </div>
