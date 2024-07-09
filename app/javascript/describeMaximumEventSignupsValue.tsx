@@ -2,7 +2,10 @@ import { TFunction } from 'i18next';
 import assertNever from 'assert-never';
 import { MaximumEventSignupsValue } from './SignupRoundUtils';
 
-export function describeMaximumEventSignupsValue(value: MaximumEventSignupsValue | null | undefined, t: TFunction) {
+export function describeMaximumEventSignupsValue(
+  value: MaximumEventSignupsValue | null | undefined,
+  t: TFunction,
+): string | null | undefined {
   if (!value) {
     return t('signups.maximumSignups.notYet', 'No signups yet');
   }
@@ -20,6 +23,6 @@ export function describeMaximumEventSignupsValue(value: MaximumEventSignupsValue
       return t('signups.maximumSignups.notNow', 'Signups frozen');
     default:
       assertNever(value, true);
-      return value;
+      return value?.toString();
   }
 }

@@ -157,7 +157,7 @@ function EventCard({ convention, event, sortBy, canReadSchedule }: EventCardProp
   }
 
   if (formResponse.author && !teamIsAllAuthors(formResponse.author, event.team_members)) {
-    const authorDescription = t('events.catalog.author', 'Authors', {
+    const authorDescription: string = t('events.catalog.author', 'Authors', {
       count: formResponse.author.split(/(,|;| and )/).length,
     });
     metadataItems.push({

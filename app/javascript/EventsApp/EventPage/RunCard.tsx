@@ -24,7 +24,7 @@ function describeSignupState(
   mySignup: EventPageQueryData['convention']['event']['runs'][0]['my_signups'][0],
   t: TFunction,
   ticketName: string,
-) {
+): string {
   if (mySignup.state === 'confirmed') {
     return t('signups.runCardText.confirmed', 'You are signed up.');
   }

@@ -35,7 +35,7 @@ function TeamMemberForm({ event, disabled, value, onChange }: TeamMemberFormProp
       name: 'display_team_member',
       label: t('events.teamMemberAdmin.displayLabel', 'Display as {{ teamMemberName }}', {
         teamMemberName,
-      }),
+      }) as string,
       value: value.display_team_member,
       onChange: setDisplayTeamMember,
     },

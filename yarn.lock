@@ -1776,6 +1776,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime@npm:^7.22.15":
+  version: 7.24.7
+  resolution: "@babel/runtime@npm:7.24.7"
+  dependencies:
+    regenerator-runtime: "npm:^0.14.0"
+  checksum: 10c0/b6fa3ec61a53402f3c1d75f4d808f48b35e0dfae0ec8e2bb5c6fc79fb95935da75766e0ca534d0f1c84871f6ae0d2ebdd950727cfadb745a2cdbef13faef5513
+  languageName: node
+  linkType: hard
+
 "@babel/template@npm:^7.18.10, @babel/template@npm:^7.20.7, @babel/template@npm:^7.22.15, @babel/template@npm:^7.3.3":
   version: 7.23.9
   resolution: "@babel/template@npm:7.23.9"
@@ -14390,10 +14399,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"i18next-chained-backend@npm:^4.6.2":
+  version: 4.6.2
+  resolution: "i18next-chained-backend@npm:4.6.2"
+  dependencies:
+    "@babel/runtime": "npm:^7.23.2"
+  checksum: 10c0/319d7b69b9c86e6b0684e8506bd7d3ef55fe149695f9b5602ac4f2d335b85efdfbbb771406cd79936ecccf7ab1671055ebf4acd473addd6117d43a0265565270
+  languageName: node
+  linkType: hard
+
 "i18next-intervalplural-postprocessor@npm:3.0.0":
   version: 3.0.0
   resolution: "i18next-intervalplural-postprocessor@npm:3.0.0"
   checksum: 10c0/4812e1b292345d18d5cc52b5ace469c0c6c9d7f58c784907595c7efc92a0a3c0732945bc3c62e6ffa8dd7788600b682abdb8296eed3d3642fa8ce4d8866bafdb
+  languageName: node
+  linkType: hard
+
+"i18next-localstorage-backend@npm:^4.2.0":
+  version: 4.2.0
+  resolution: "i18next-localstorage-backend@npm:4.2.0"
+  dependencies:
+    "@babel/runtime": "npm:^7.22.15"
+  checksum: 10c0/b19b4c8b23f8b84cf4e7ba90086fdb60c75b211431e2ee9df07aee77f8f622470b87ee0c1ede19ebe07fee2dc697065f02f6d662d31ae047e6e77186ab31bbee
   languageName: node
   linkType: hard
 
@@ -21568,7 +21595,9 @@ __metadata:
     html-to-react: "npm:1.7.0"
     husky: "npm:9.0.11"
     i18next: "npm:23.11.5"
+    i18next-chained-backend: "npm:^4.6.2"
     i18next-intervalplural-postprocessor: "npm:3.0.0"
+    i18next-localstorage-backend: "npm:^4.2.0"
     i18next-parser: "npm:9.0.0"
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"

@@ -85,7 +85,9 @@ export default function EditProductForm<ProductType extends WithRealOrGeneratedI
     {
       label: (
         <span>
-          <i className="bi-credit-card" /> {t('admin.store.paymentOptions.stripe', 'Card payment via Stripe')}
+          <>
+            <i className="bi-credit-card" /> {t('admin.store.paymentOptions.stripe', 'Card payment via Stripe')}
+          </>
         </span>
       ),
       value: 'stripe',
@@ -93,7 +95,9 @@ export default function EditProductForm<ProductType extends WithRealOrGeneratedI
     {
       label: (
         <span>
-          <i className="bi-briefcase-fill" /> {t('admin.store.paymentOptions.payAtConvention', 'Pay at convention')}
+          <>
+            <i className="bi-briefcase-fill" /> {t('admin.store.paymentOptions.payAtConvention')}
+          </>
         </span>
       ),
       value: 'pay_at_convention',

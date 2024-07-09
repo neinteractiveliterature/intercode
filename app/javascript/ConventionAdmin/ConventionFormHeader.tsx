@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { describeMaximumEventSignupsValue } from '../describeMaximumEventSignupsValue';
 import { MaximumEventSignupsValue } from '../SignupRoundUtils';
 
-function describeEventVisibility(visibility: ShowSchedule | null | undefined, t: TFunction) {
+function describeEventVisibility(visibility: ShowSchedule | null | undefined, t: TFunction): string | null | undefined {
   switch (visibility) {
     case 'no':
       return t('admin.convention.header.eventVisibilityHidden', 'Hidden');
@@ -29,7 +29,7 @@ function describeEventVisibility(visibility: ShowSchedule | null | undefined, t:
 function describeMaximumEventSignups(
   scheduledValue: EditingScheduledValue<MaximumEventSignupsValue> | null | undefined,
   t: TFunction,
-) {
+): string | null | undefined {
   if (!scheduledValue) {
     return t('admin.convention.header.signupScheduleNotConfiguredYet', 'Signup schedule not configured yet');
   }
@@ -45,7 +45,7 @@ function describeConventionTiming(
   timezoneName: string,
   canceled: boolean,
   t: TFunction,
-) {
+): string {
   if (canceled) {
     return t('admin.convention.header.conventionTiming.canceled', '{{ conventionName }} is canceled', {
       conventionName,

@@ -1,4 +1,6 @@
 import i18next, { BackendModule, i18n, InitOptions, ResourceKey } from 'i18next';
+import ChainedBackend, { ChainedBackendOptions } from 'i18next-chained-backend';
+import LocalStorageBackend from 'i18next-localstorage-backend';
 import { DateTime } from 'luxon';
 import { initReactI18next } from 'react-i18next';
 import { DateTimeFormatKey } from './DateTimeFormats';
@@ -20,50 +22,32 @@ function filterEmptyStrings(obj: Exclude<ResourceKey, string>): ResourceKey {
   );
 }
 
-type PromiseI18NextBackendOptions = {
-  loaders: {
-    [language: string]: {
-      [namespace: string]: Promise<ResourceKey>;
-    };
-  };
-};
-
-type PromiseI18NextBackendModule = BackendModule<PromiseI18NextBackendOptions> & {
-  loaders: PromiseI18NextBackendOptions['loaders'];
-};
-
-const PromiseI18nextBackend: PromiseI18NextBackendModule = {
+// https://gist.github.com/SimeonC/6a738467c691eef7f21ebf96918cd95f
+// Used for not namespacing, ie `defaultNamespace: 'translations'`
+const CodeSplitLoaderBackend: BackendModule<Record<string, never>> = {
   type: 'backend',
-  loaders: {},
-  init(services, backendOptions) {
-    this.loaders = backendOptions.loaders || {};
-  },
+  init() {},
   read(language, namespace, callback) {
-    const loader = this.loaders[language][namespace];
-
-    if (!loader) {
-      callback(new Error(`Unknown language '${language}'`), false);
-    }
-
-    loader()
-      .then((resources: Exclude<ResourceKey, string>) => callback(null, filterEmptyStrings(resources)))
-      .catch((error: Error) => callback(error, false));
-  },
-  create() {
-    // can't actually save anything
+    import(`../../locales/${language}.json`)
+      .then((resources) => {
+        callback(null, filterEmptyStrings(resources));
+      })
+      .catch((error) => {
+        callback(error, null);
+      });
   },
 };
 
-const initOptions: InitOptions = {
+const initOptions: InitOptions<ChainedBackendOptions> = {
   backend: {
-    loaders: {
-      en: {
-        translation: () => import('../../locales/en.json').then((module) => module.default),
+    backends: [LocalStorageBackend, CodeSplitLoaderBackend],
+    backendOptions: [
+      {},
+      {
+        // 1 day
+        expirationTime: 24 * 60 * 60 * 1000,
       },
-      es: {
-        translation: () => import('../../locales/es.json').then((module) => module.default),
-      },
-    },
+    ],
   },
   defaultNS: 'translation',
   lng: 'en',
@@ -77,7 +61,7 @@ const initOptions: InitOptions = {
 let ready = false;
 const i18nObject = i18next
   .use(initReactI18next) // passes i18n down to react-i18next
-  .use(PromiseI18nextBackend);
+  .use(ChainedBackend);
 
 const i18nInitPromise = i18nObject.init(initOptions).then(() => {
   i18nObject.services.formatter?.add('money', (value: Money | null | undefined) => formatMoney(value));

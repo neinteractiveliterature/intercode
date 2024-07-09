@@ -1,4 +1,5 @@
 import configData from '../../../../config/schedule_grid_configs.json';
+import { ParseKeys } from 'i18next';
 
 export type ScheduleGridCategoryMatchRule = {
   categoryName: string;
@@ -28,7 +29,7 @@ export type ScheduleGridLegendConfig = {
 
 export type ScheduleGridConfig = {
   key: string;
-  titlei18nKey: string;
+  titlei18nKey: ParseKeys;
   icon: string;
   classifyEventsBy: 'category' | 'fullness';
   groupEventsBy: 'category' | 'room';

@@ -85,6 +85,9 @@
       "durationColumn": "Duration",
       "eventListPageTitle": "{{ categoryName, capitalize }} events",
       "newEventLabel": "Create new {{ categoryName }} event",
+      "prospectiveRunSchedule": {
+        "title": "Prospective run schedule"
+      },
       "runsColumn": "Runs",
       "titleColumn": "Title"
     },
@@ -768,6 +771,7 @@
         "unlimited": "Unlimited slots"
       }
     },
+    "skeletonTitle": "Please wait, loading schedule...",
     "timezoneMessage": "All times displayed in {{ offsetName }}.",
     "views": {
       "gridView": "Grid view",

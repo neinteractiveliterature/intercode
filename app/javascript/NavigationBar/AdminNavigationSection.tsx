@@ -123,7 +123,7 @@ function useConventionAdminNavigationItems(): GeneratedNavigationItem[] {
           ticketMode !== TicketMode.TicketPerEvent && {
             label: t('navigation.admin.ticketTypes', '{{ ticketName }} Types', {
               ticketName: capitalize(ticketName ?? 'ticket'),
-            }),
+            }) as string,
             url: '/ticket_types',
             icon: 'bi-person-badge-fill',
           },

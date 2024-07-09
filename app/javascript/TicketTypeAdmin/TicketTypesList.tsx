@@ -47,7 +47,7 @@ function describeTicketTypeOptions(
   ticketNamePlural: string,
   t: TFunction,
 ) {
-  let eventProvidedDescription;
+  let eventProvidedDescription: string | undefined;
   if (ticketType.maximum_event_provided_tickets > 0) {
     eventProvidedDescription = t(
       'admin.ticketTypes.eventProvidedDescription',
@@ -186,7 +186,10 @@ function TicketTypeDisplay({
                     <button
                       className="btn btn-sm btn-outline-primary"
                       onClick={() =>
-                        editProductModal.open({ ticketType, initialProduct: { ...buildBlankProduct(defaultCurrencyCode), ...product } })
+                        editProductModal.open({
+                          ticketType,
+                          initialProduct: { ...buildBlankProduct(defaultCurrencyCode), ...product },
+                        })
                       }
                     >
                       Edit
