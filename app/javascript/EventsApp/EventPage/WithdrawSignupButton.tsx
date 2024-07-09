@@ -15,7 +15,7 @@ function WithdrawSignupButton({ buttonClass, buttonText, withdrawSignup }: Withd
       type="button"
       onClick={withdrawSignup}
     >
-      {buttonText ?? t('signups.withdrawButton', 'Withdraw')}
+      {buttonText ?? t('signups.withdrawButton')}
     </button>
   );
 }

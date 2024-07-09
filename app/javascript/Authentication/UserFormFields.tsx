@@ -22,12 +22,12 @@ function UserFormFields({ formState, setFormState, showNameWarning }: UserFormFi
     <>
       <fieldset>
         <BootstrapFormInput
-          label={t('authentication.userForm.firstNameLabel', 'First name')}
+          label={t('authentication.userForm.firstNameLabel')}
           value={formState.first_name ?? ''}
           onTextChange={setFirstName}
         />
         <BootstrapFormInput
-          label={t('authentication.userForm.lastNameLabel', 'Last name')}
+          label={t('authentication.userForm.lastNameLabel')}
           value={formState.last_name ?? ''}
           onTextChange={setLastName}
         />
@@ -37,17 +37,12 @@ function UserFormFields({ formState, setFormState, showNameWarning }: UserFormFi
               <h1 className="me-4">
                 <i className="bi-exclamation-triangle-fill" />
               </h1>
-              <div className="flex-grow-1">
-                {t(
-                  'authentication.userForm.nameWarning',
-                  'Please note that each convention keeps a separate record of your name.  Changing your name here will apply to new conventions you sign up for in the future.  To change your name on existing conventions, please go to each convention’s web site and choose “my profile” from the menu.',
-                )}
-              </div>
+              <div className="flex-grow-1">{t('authentication.userForm.nameWarning')}</div>
             </div>
           </div>
         )}
         <BootstrapFormInput
-          label={t('authentication.userForm.emailLabel', 'Email')}
+          label={t('authentication.userForm.emailLabel')}
           type="email"
           value={formState.email ?? ''}
           onTextChange={setEmail}

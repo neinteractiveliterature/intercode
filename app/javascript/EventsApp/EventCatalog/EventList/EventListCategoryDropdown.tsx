@@ -32,13 +32,13 @@ function EventListCategoryDropdown({
   const currentCategories = eventCategories.filter((category) => (value || []).includes(category.id));
   const { t } = useTranslation();
 
-  let categoryDescription = t('events.categoryDropdown.allCategoriesLabel', 'All event types');
+  let categoryDescription = t('events.categoryDropdown.allCategoriesLabel');
   if (currentCategories.length === 1) {
-    categoryDescription = t('events.categoryDropdown.singleCategoryLabel', '{{ categoryName }} events', {
+    categoryDescription = t('events.categoryDropdown.singleCategoryLabel', {
       categoryName: currentCategories[0].name,
     });
   } else if (currentCategories.length > 1 && currentCategories.length < eventCategories.length) {
-    categoryDescription = t('events.categoryDropdown.multipleCategoriesLabel', '{{ count }} event types', {
+    categoryDescription = t('events.categoryDropdown.multipleCategoriesLabel', {
       count: currentCategories.length,
     });
   }
@@ -83,10 +83,10 @@ function EventListCategoryDropdown({
           type="button"
           onClick={() => onChange(sortedCategories.map((c) => c.id))}
         >
-          {t('buttons.selectAll', 'Select all')}
+          {t('buttons.selectAll')}
         </button>
         <button className="btn btn-link btn-sm" type="button" onClick={() => onChange([])}>
-          {t('buttons.selectNone', 'Select none')}
+          {t('buttons.selectNone')}
         </button>
       </div>
     </DropdownMenu>

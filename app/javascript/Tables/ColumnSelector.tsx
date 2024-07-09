@@ -44,7 +44,7 @@ function ColumnSelector<RowType extends Record<string, unknown>>({
       popperOptions={{ placement: 'bottom-end' }}
       buttonContent={
         <>
-          {t('tables.columnSelectorButton', 'Columns')}
+          {t('tables.columnSelectorButton')}
           {renderHiddenColumnCount()}
         </>
       }

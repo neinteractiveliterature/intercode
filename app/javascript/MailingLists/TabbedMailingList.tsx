@@ -34,7 +34,7 @@ function TabbedMailingList({ emails, id, metadataFields, csvFilename }: TabbedMa
     [
       {
         id: `${idPrefix}table-view`,
-        name: t('mailingLists.tableView', 'Table view'),
+        name: t('mailingLists.tableView'),
         renderContent: () => (
           <>
             <button type="button" className="btn btn-outline-primary mt-2" onClick={exportCSV}>
@@ -73,7 +73,7 @@ function TabbedMailingList({ emails, id, metadataFields, csvFilename }: TabbedMa
       },
       {
         id: `${idPrefix}comma-separated`,
-        name: t('mailingLists.commaSeparated', 'Comma-separated'),
+        name: t('mailingLists.commaSeparated'),
         renderContent: () => (
           <div className="mt-2">
             <EmailList emails={emails} separator=", " />
@@ -82,7 +82,7 @@ function TabbedMailingList({ emails, id, metadataFields, csvFilename }: TabbedMa
       },
       {
         id: `${idPrefix}semicolon-separated`,
-        name: t('mailingLists.semicolonSeparated', 'Semicolon-separated'),
+        name: t('mailingLists.semicolonSeparated'),
         renderContent: () => (
           <div className="mt-2">
             <EmailList emails={emails} separator="; " />
@@ -95,10 +95,7 @@ function TabbedMailingList({ emails, id, metadataFields, csvFilename }: TabbedMa
 
   return (
     <>
-      <p className="lead mb-4">
-        {t('mailingLists.recipientCount', '{{ count }} recipients', { count: emails.length })}
-      </p>
-
+      <p className="lead mb-4">{t('mailingLists.recipientCount', { count: emails.length })}</p>
       <TabList {...tabProps} />
       <TabBody {...tabProps} />
     </>

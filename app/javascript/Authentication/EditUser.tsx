@@ -92,25 +92,21 @@ export default LoadQueryWrapper(useEditUserQuery, function EditUserForm({ data: 
 
   return (
     <>
-      <h1 className="mb-4">{t('authentication.editUser.header', 'Update your account')}</h1>
-
+      <h1 className="mb-4">{t('authentication.editUser.header')}</h1>
       <AccountFormContent />
-
       <form onSubmit={onSubmit} className="card">
-        <div className="card-header">{t('authentication.editUser.accountDataHeader', 'Account data')}</div>
+        <div className="card-header">{t('authentication.editUser.accountDataHeader')}</div>
 
         <div className="card-body">
           <UserFormFields formState={formState} setFormState={setFormState} showNameWarning />
           <div className="mb-3">
             <label className="form-label" htmlFor={passwordFieldId}>
-              {t('authentication.editUser.passwordLabel', 'Password')}
+              {t('authentication.editUser.passwordLabel')}
             </label>
             <Suspense fallback={<LoadingIndicator iconSet="bootstrap-icons" />}>
               <PasswordInputWithStrengthCheck id={passwordFieldId} value={password} onChange={setPassword} />
             </Suspense>
-            <small className="form-text text-muted">
-              {t('authentication.editUser.passwordHelpText', 'Leave blank if you don’t want to change it')}
-            </small>
+            <small className="form-text text-muted">{t('authentication.editUser.passwordHelpText')}</small>
           </div>
           <PasswordConfirmationInput
             password={password}
@@ -118,11 +114,8 @@ export default LoadQueryWrapper(useEditUserQuery, function EditUserForm({ data: 
             onChange={setPasswordConfirmation}
           />
           <BootstrapFormInput
-            label={t('authentication.editUser.currentPasswordLabel', 'Current password')}
-            helpText={t(
-              'authentication.editUser.currentPasswordHelpText',
-              'We need your current password to verify your identity',
-            )}
+            label={t('authentication.editUser.currentPasswordLabel')}
+            helpText={t('authentication.editUser.currentPasswordHelpText')}
             type="password"
             value={currentPassword}
             onTextChange={setCurrentPassword}
@@ -137,8 +130,8 @@ export default LoadQueryWrapper(useEditUserQuery, function EditUserForm({ data: 
               type="submit"
               className="btn btn-primary"
               disabled={updateUserInProgress}
-              value={t('authentication.editUser.updateAccountButton', 'Update account').toString()}
-              aria-label={t('authentication.editUser.updateAccountButton', 'Update account')}
+              value={t('authentication.editUser.updateAccountButton').toString()}
+              aria-label={t('authentication.editUser.updateAccountButton')}
             />
           </div>
         </div>

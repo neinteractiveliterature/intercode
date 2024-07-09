@@ -82,8 +82,8 @@ function MarkdownInput({ eventId, eventProposalId, imageAttachmentConfig, ...pro
         {...props}
         editorRef={editorRef}
         value={props.value}
-        editButtonText={t('buttons.edit', 'Edit')}
-        previewButtonText={t('buttons.preview', 'Preview')}
+        editButtonText={t('buttons.edit')}
+        previewButtonText={t('buttons.preview')}
         getPreviewContent={async (markdownContent) => {
           const response = await client.query<PreviewMarkdownQueryData>({
             query: PreviewMarkdownQueryDocument,
@@ -100,7 +100,7 @@ function MarkdownInput({ eventId, eventProposalId, imageAttachmentConfig, ...pro
                 <button type="button" className="btn btn-link nav-link px-2 py-0" onClick={attachImageModal.open}>
                   <>
                     <MenuIcon icon="bi-file-earmark-image" colorClass="" />
-                    {t('buttons.attachImage', 'Attach image…')}
+                    {t('buttons.attachImage')}
                   </>
                 </button>
               </li>

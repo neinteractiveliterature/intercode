@@ -80,31 +80,23 @@ function ConventionFormBillingSection({
   return (
     <>
       <MultipleChoiceInput
-        caption={t('admin.convention.ticketModeLabel', '{{ ticketName, capitalize }} sales', {
+        caption={t('admin.convention.ticketModeLabel', {
           ticketName: convention.ticket_name,
         })}
         choices={[
           {
             value: 'disabled',
-            label: t('admin.convention.ticketModeDisabled', 'Convention does not sell {{ ticketNamePlural }}', {
+            label: t('admin.convention.ticketModeDisabled', {
               ticketNamePlural: convention.ticketNamePlural,
             }),
           },
           {
             value: 'required_for_signup',
-            label: t(
-              'admin.convention.ticketModeRequiredForSignup',
-              '{{ ticketNamePlural, capitalize }} are sold and required for event signups',
-              { ticketNamePlural: convention.ticketNamePlural },
-            ),
+            label: t('admin.convention.ticketModeRequiredForSignup', { ticketNamePlural: convention.ticketNamePlural }),
           },
           {
             value: 'ticket_per_event',
-            label: t(
-              'admin.convention.ticketModeTicketPerEvent',
-              'Each event in this convention sells {{ ticketNamePlural }} separately',
-              { ticketNamePlural: convention.ticketNamePlural },
-            ),
+            label: t('admin.convention.ticketModeTicketPerEvent', { ticketNamePlural: convention.ticketNamePlural }),
           },
         ]}
         value={convention.ticket_mode}
@@ -113,8 +105,7 @@ function ConventionFormBillingSection({
         }}
         disabled={disabled}
       />
-
-      <FormGroupWithLabel label={t('admin.convention.defaultCurrency', 'Default currency for convention')}>
+      <FormGroupWithLabel label={t('admin.convention.defaultCurrency')}>
         {(id) => (
           <CurrencySelect
             id={id}
@@ -124,36 +115,24 @@ function ConventionFormBillingSection({
           />
         )}
       </FormGroupWithLabel>
-
       <div className="card bg-light mb-3">
         <div className="card-header">Stripe account</div>
 
         <div className="card-body">
           <p>
             <>
-              {t(
-                'admin.convention.stripeAccountRequired',
-                'In order to sell {{ ticketNamePlural }} and/or products, a Stripe account is required.',
-                { ticketNamePlural: convention.ticketNamePlural },
-              )}{' '}
+              {t('admin.convention.stripeAccountRequired', { ticketNamePlural: convention.ticketNamePlural })}{' '}
               {convention.stripe_account && (
                 <>
                   {convention.stripe_account.charges_enabled ? (
                     <>
-                      {t(
-                        'admin.convention.stripeAccountActive',
-                        '{{ conventionName }} is connected to a Stripe account and is able to sell {{ ticketNamePlural }} and/or products.',
-                        { conventionName: convention.name, ticketNamePlural: convention.ticketNamePlural },
-                      )}
+                      {t('admin.convention.stripeAccountActive', {
+                        conventionName: convention.name,
+                        ticketNamePlural: convention.ticketNamePlural,
+                      })}
                     </>
                   ) : (
-                    <>
-                      {t(
-                        'admin.convention.stripeAccountPending',
-                        '{{ conventionName }} is connected to a Stripe account but that account is still in the setup process.',
-                        { conventionName: convention.name },
-                      )}
-                    </>
+                    <>{t('admin.convention.stripeAccountPending', { conventionName: convention.name })}</>
                   )}
                 </>
               )}
@@ -162,13 +141,13 @@ function ConventionFormBillingSection({
           {convention.stripe_account ? (
             <>
               <dl>
-                <dt>{t('admin.convention.stripeAccountId', 'Account ID')}</dt>
+                <dt>{t('admin.convention.stripeAccountId')}</dt>
                 <dd>{convention.stripe_account.id}</dd>
 
-                <dt>{t('admin.convention.stripeAccountEmail', 'Email')}</dt>
+                <dt>{t('admin.convention.stripeAccountEmail')}</dt>
                 <dd>{convention.stripe_account.email}</dd>
 
-                <dt>{t('admin.convention.stripeAccountDisplayName', 'Display name')}</dt>
+                <dt>{t('admin.convention.stripeAccountDisplayName')}</dt>
                 <dd>{convention.stripe_account.display_name}</dd>
               </dl>
               {!convention.stripe_account.charges_enabled && (
@@ -182,11 +161,7 @@ function ConventionFormBillingSection({
                     {obtainOnboardinLinkInProgress ? (
                       <LoadingIndicator iconSet="bootstrap-icons" />
                     ) : (
-                      t(
-                        'admin.convention.stripeAccountContinue',
-                        'Continue Stripe account setup for {{ conventionName }}',
-                        { conventionName: convention.name },
-                      )
+                      t('admin.convention.stripeAccountContinue', { conventionName: convention.name })
                     )}
                   </button>
                   <ErrorDisplay graphQLError={obtainOnboardingLinkError as ApolloError} />
@@ -204,7 +179,7 @@ function ConventionFormBillingSection({
                 {createStripeAccountInProgress ? (
                   <LoadingIndicator iconSet="bootstrap-icons" />
                 ) : (
-                  t('admin.convention.stripeAccountSetup', 'Set up a Stripe account for {{ conventionName }}', {
+                  t('admin.convention.stripeAccountSetup', {
                     conventionName: convention.name,
                   })
                 )}
@@ -214,19 +189,17 @@ function ConventionFormBillingSection({
           )}
         </div>
       </div>
-
       <BootstrapFormInput
         name="ticket_name"
-        label={t('admin.convention.ticketNameLabel', 'Name for “ticket” at this convention')}
+        label={t('admin.convention.ticketNameLabel')}
         type="text"
         value={convention.ticket_name ?? ''}
         onTextChange={setTicketName}
         disabled={disabled || convention.ticket_mode === 'disabled'}
       />
-
       <BootstrapFormInput
         name="maximum_tickets"
-        label={t('admin.convention.maximumTicketsLabel', 'Maximum {{ ticketNamePlural }}', {
+        label={t('admin.convention.maximumTicketsLabel', {
           ticketNamePlural: convention.ticketNamePlural,
         })}
         type="number"

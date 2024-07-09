@@ -22,17 +22,13 @@ function EditEventHeader({ event, showDropButton, dropEvent }: EditEventHeaderPr
         className="btn btn-outline-danger float-end"
         onClick={() =>
           confirm({
-            prompt: t(
-              'events.edit.dropPrompt',
-              'Are you sure you want to drop {{ eventTitle }}?  Doing so will also delete any runs of this event and remove any participants signed up for those runs.',
-              { eventTitle: event.title },
-            ),
+            prompt: t('events.edit.dropPrompt', { eventTitle: event.title }),
             action: dropEvent,
             renderError: (error) => <ErrorDisplay graphQLError={error} />,
           })
         }
       >
-        {t('events.edit.dropButton', 'Drop event')}
+        {t('events.edit.dropButton')}
       </button>
     );
   }
@@ -40,10 +36,7 @@ function EditEventHeader({ event, showDropButton, dropEvent }: EditEventHeaderPr
   return (
     <header>
       {dropButton}
-
-      <h3 className="mb-4">
-        {event.id ? t('events.edit.editHeader', 'Edit event') : t('events.edit.newHeader', 'New event')}
-      </h3>
+      <h3 className="mb-4">{event.id ? t('events.edit.editHeader') : t('events.edit.newHeader')}</h3>
     </header>
   );
 }

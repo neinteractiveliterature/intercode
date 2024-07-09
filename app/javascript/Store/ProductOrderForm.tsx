@@ -159,7 +159,7 @@ export default LoadQueryWithVariablesWrapper(
             <FormGroupWithLabel
               label={
                 <>
-                  {t('pricingStructure.selectAmount', 'Amount')} (
+                  {t('pricingStructure.selectAmount')} (
                   {describePayWhatYouWantRange(product.pricing_structure.value, t)})
                 </>
               }
@@ -203,7 +203,7 @@ export default LoadQueryWithVariablesWrapper(
 
       return (
         <p>
-          <strong>{t('store.totalPrice', 'Total: {{ totalPrice, money }}', { totalPrice })}</strong>
+          <strong>{t('store.totalPrice', { totalPrice })}</strong>
         </p>
       );
     };

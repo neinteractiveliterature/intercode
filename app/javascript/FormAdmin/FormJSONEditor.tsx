@@ -89,14 +89,12 @@ export default LoadSingleValueFromCollectionWrapper(
     return (
       <div>
         <h1 className="mb-4">{initialForm.id ? `Editing ${form.title}` : 'New form'}</h1>
-
         <BootstrapFormInput
           label="Title"
           name="title"
           value={form.title}
           onTextChange={(title) => setForm((prevForm) => ({ ...prevForm, title }))}
         />
-
         <BootstrapFormSelect
           label="Form type"
           name="form_type"
@@ -111,17 +109,15 @@ export default LoadSingleValueFromCollectionWrapper(
           <option value="event_proposal">Event proposal form</option>
           <option value="user_con_profile">User con profile form</option>
         </BootstrapFormSelect>
-
         <fieldset className="mb-4">
           <legend className="col-form-label">Content</legend>
           <CodeInput
             editorRef={editorRef}
             value={form.sectionsJSON}
-            editButtonText={t('buttons.edit', 'Edit')}
-            previewButtonText={t('buttons.preview', 'Preview')}
+            editButtonText={t('buttons.edit')}
+            previewButtonText={t('buttons.preview')}
           />
         </fieldset>
-
         <div className="mb-4">
           <button
             type="button"
@@ -132,7 +128,6 @@ export default LoadSingleValueFromCollectionWrapper(
             Save changes
           </button>
         </div>
-
         <ErrorDisplay graphQLError={(createError ?? updateError) as ApolloError | undefined} />
       </div>
     );

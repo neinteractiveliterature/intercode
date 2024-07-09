@@ -32,29 +32,21 @@ function ProvidableTicketTypeSelection({
   const remainingCountByType = getRemainingTicketCountByType(convention, convention.event);
 
   const totalRemaining = sumBy(Object.entries(remainingCountByType), ([, remaining]) => remaining);
-  const providabilityDescription: string = t(
-    'events.teamMemberAdmin.ticketProvidability',
-    '{{ eventTitle }} has {{ count }} {{ ticketName }} remaining to provide.',
-    {
-      eventTitle: convention.event.title,
-      count: totalRemaining,
-      ticketName: totalRemaining === 1 ? convention.ticket_name : convention.ticketNamePlural,
-    },
-  );
+  const providabilityDescription: string = t('events.teamMemberAdmin.ticketProvidability', {
+    eventTitle: convention.event.title,
+    count: totalRemaining,
+    ticketName: totalRemaining === 1 ? convention.ticket_name : convention.ticketNamePlural,
+  });
 
   const choices = providableTicketTypes.map((ticketType) => {
     const remaining = remainingCountByType[ticketType.id];
 
     return {
-      label: t(
-        'events.teamMemberAdmin.provideTicketChoice',
-        'Provide {{ ticketType }} {{ ticketName }} ({{ count }} remaining)',
-        {
-          ticketType: humanize(ticketType.name).toLowerCase(),
-          ticketName: convention.ticket_name,
-          count: remaining,
-        },
-      ) as string,
+      label: t('events.teamMemberAdmin.provideTicketChoice', {
+        ticketType: humanize(ticketType.name).toLowerCase(),
+        ticketName: convention.ticket_name,
+        count: remaining,
+      }) as string,
       value: ticketType.id.toString(),
       disabled: remaining < 1,
     };

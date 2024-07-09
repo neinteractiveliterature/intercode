@@ -38,7 +38,7 @@ function MyProfileDisplay(): JSX.Element {
     return getSortedParsedFormItems(data.convention.user_con_profile_form);
   }, [data?.convention?.user_con_profile_form]);
 
-  usePageTitle(t('myProfile.display.pageTitle', 'My profile'));
+  usePageTitle(t('myProfile.display.pageTitle'));
 
   if (loading) {
     return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
@@ -78,16 +78,16 @@ function MyProfileDisplay(): JSX.Element {
       <div className="col-lg-9">
         <section>
           <h1 className="mb-4">
-            {t('myProfile.display.header', 'My {{ conventionName }} profile', {
+            {t('myProfile.display.header', {
               conventionName: convention.name,
             })}
           </h1>
 
           <dl className="row">
-            <dt className="col-md-3 mb-2">{t('myProfile.display.emailLabel', 'Email')}</dt>
+            <dt className="col-md-3 mb-2">{t('myProfile.display.emailLabel')}</dt>
             <dd className="col-md-9 mb-2">{myProfile.email}</dd>
 
-            <dt className="col-md-3 mb-2">{t('myProfile.display.avatarLabel', 'Avatar')}</dt>
+            <dt className="col-md-3 mb-2">{t('myProfile.display.avatarLabel')}</dt>
             <dd className="col-md-9 mb-2">
               <div className="d-flex align-items-center">
                 <div className="me-2">
@@ -95,15 +95,15 @@ function MyProfileDisplay(): JSX.Element {
                 </div>
                 <div className="font-italic">
                   {myProfile.gravatar_enabled
-                    ? t('myProfile.display.gravatarEnabled', 'Gravatar enabled')
-                    : t('myProfile.display.gravatarDisabled', 'Gravatar disabled')}
+                    ? t('myProfile.display.gravatarEnabled')
+                    : t('myProfile.display.gravatarDisabled')}
                 </div>
               </div>
             </dd>
 
             {myProfile.can_have_bio && (
               <>
-                <dt className="col-md-3 mb-2">{t('myProfile.display.bioLabel', 'Bio')}</dt>
+                <dt className="col-md-3 mb-2">{t('myProfile.display.bioLabel')}</dt>
                 <dd className="col-md-9 mb-2">
                   <div className="card bg-light">
                     <div className="card-body">
@@ -138,11 +138,10 @@ function MyProfileDisplay(): JSX.Element {
           </dl>
 
           <Link to="/my_profile/edit" className="btn btn-secondary">
-            {t('myProfile.editButton', 'Edit my profile')}
+            {t('myProfile.editButton')}
           </Link>
         </section>
       </div>
-
       <div className="col-lg-3">
         <div className="mt-4 mt-lg-0">
           <UserConProfileSignupsCard userConProfileId={myProfile.id} />

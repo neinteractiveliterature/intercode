@@ -159,26 +159,21 @@ function EventCategoryForm<T extends EventCategoryForForm>({
     <>
       <BootstrapFormInput
         name="name"
-        label={t('admin.eventCategories.nameLabel', 'Name')}
+        label={t('admin.eventCategories.nameLabel')}
         value={value.name}
         onTextChange={setName}
         disabled={disabled}
       />
-
       <BootstrapFormInput
         name="team_member_name"
-        label={t('admin.eventCategories.teamMemberNameLabel', 'Team member name')}
+        label={t('admin.eventCategories.teamMemberNameLabel')}
         value={value.team_member_name ?? ''}
         onTextChange={setTeamMemberName}
-        helpText={t(
-          'admin.eventCategories.teamMemberNameHelpText',
-          'This is the word the site will use to refer to team members of this event, e.g. “GM”, “facilitator”, etc.',
-        )}
+        helpText={t('admin.eventCategories.teamMemberNameHelpText')}
         disabled={disabled}
       />
-
       <SelectWithLabel<T['department'] | null>
-        label={t('admin.eventCategories.departmentLabel', 'Department')}
+        label={t('admin.eventCategories.departmentLabel')}
         options={departments}
         getOptionValue={(option) => option?.id.toString() ?? ''}
         getOptionLabel={(option) => option?.name ?? ''}
@@ -187,37 +182,34 @@ function EventCategoryForm<T extends EventCategoryForForm>({
         isDisabled={disabled}
         isClearable
       />
-
       <BootstrapFormTextarea
         name="proposal_description"
-        label={t('admin.eventCategories.proposalDescriptionLabel', 'Proposal dialog description')}
+        label={t('admin.eventCategories.proposalDescriptionLabel')}
         value={value.proposal_description ?? ''}
         onTextChange={setProposalDescription}
         helpText={t(
           'admin.eventCategories.proposalDescriptionHelpText',
           `When attendees propose an event and select this category, the proposal dialog will show
-          the text you write here.  Use this to describe what they can expect after proposing the
-          event.  For example: ”Your proposal will go to the Board Game Proposals Committee.  You‘ll
-          hear back within a week or two.“`,
+        the text you write here.  Use this to describe what they can expect after proposing the
+        event.  For example: ”Your proposal will go to the Board Game Proposals Committee.  You‘ll
+        hear back within a week or two.“`,
         )}
         disabled={disabled}
       />
-
       <MultipleChoiceInput
         name="scheduling_ui"
-        caption={t('admin.eventCategories.schedulingUILabel', 'Scheduling UI')}
+        caption={t('admin.eventCategories.schedulingUILabel')}
         value={value.scheduling_ui}
         onChange={(newValue: SchedulingUi) => setSchedulingUi(newValue)}
         choices={[
-          { value: 'regular', label: t('admin.eventCategories.schedulingUIRegular', 'Regular (multi-run)') },
-          { value: 'single_run', label: t('admin.eventCategories.schedulingUISingleRun', 'Single run') },
-          { value: 'recurring', label: t('admin.eventCategories.schedulingUIRecurring', 'Recurring') },
+          { value: 'regular', label: t('admin.eventCategories.schedulingUIRegular') },
+          { value: 'single_run', label: t('admin.eventCategories.schedulingUISingleRun') },
+          { value: 'recurring', label: t('admin.eventCategories.schedulingUIRecurring') },
         ]}
         disabled={disabled}
       />
-
       <fieldset className="mb-3">
-        <legend className="col-form-label">{t('admin.eventCategories.colorsHeader', 'Colors')}</legend>
+        <legend className="col-form-label">{t('admin.eventCategories.colorsHeader')}</legend>
 
         <div className="d-flex flex-wrap">
           {(
@@ -259,15 +251,11 @@ function EventCategoryForm<T extends EventCategoryForForm>({
           onClick={() => onChange(autogenerateColors(value))}
           disabled={disabled}
         >
-          {t(
-            'admin.eventCategories.autogenerateColorsLabel',
-            'Generate signed up and full colors based on default color',
-          )}
+          {t('admin.eventCategories.autogenerateColorsLabel')}
         </button>
       </fieldset>
-
       <SelectWithLabel
-        label={t('admin.eventCategories.eventFormLabel', 'Event form (required)')}
+        label={t('admin.eventCategories.eventFormLabel')}
         options={forms.filter((form) => form?.form_type === 'event')}
         getOptionValue={(option) => option?.id.toString() ?? ''}
         getOptionLabel={(option) => option?.title ?? ''}
@@ -275,12 +263,8 @@ function EventCategoryForm<T extends EventCategoryForForm>({
         onChange={(newValue: T['event_form']) => setEventForm(newValue)}
         isDisabled={disabled}
       />
-
       <SelectWithLabel
-        label={t(
-          'admin.eventCategories.eventProposalFormLabel',
-          'Event proposal form (optional; if blank this event category cannot be proposed)',
-        )}
+        label={t('admin.eventCategories.eventProposalFormLabel')}
         options={forms.filter((form) => form?.form_type === 'event_proposal')}
         getOptionValue={(option) => option?.id.toString() ?? ''}
         getOptionLabel={(option) => option?.title ?? ''}
@@ -289,11 +273,10 @@ function EventCategoryForm<T extends EventCategoryForForm>({
         isDisabled={disabled}
         isClearable
       />
-
       {ticketMode !== 'disabled' && (
         <BooleanInput
           name="can_provide_tickets"
-          caption={t('admin.eventCategories.canProvideTicketsLabel', 'Can provide {{ ticketNamePlural }}?', {
+          caption={t('admin.eventCategories.canProvideTicketsLabel', {
             ticketNamePlural,
           })}
           value={value.can_provide_tickets ?? false}

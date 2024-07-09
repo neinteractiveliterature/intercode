@@ -26,7 +26,7 @@ function PreventNoPreferenceSignupRow({
       return (
         <span>
           <>
-            {t('events.registrationPolicies.noPreferenceInapplicable', '“No preference” option is inapplicable')}
+            {t('events.registrationPolicies.noPreferenceInapplicable')}
             <NoPreferenceHelpPopover registrationPolicy={registrationPolicy} />
           </>
         </span>
@@ -37,7 +37,7 @@ function PreventNoPreferenceSignupRow({
       return (
         <span>
           <>
-            {t('events.registrationPolicies.noPreferenceDisabled', '“No preference” option will not be available')}
+            {t('events.registrationPolicies.noPreferenceDisabled')}
             <NoPreferenceHelpPopover registrationPolicy={registrationPolicy} />
           </>
         </span>
@@ -47,7 +47,7 @@ function PreventNoPreferenceSignupRow({
     return (
       <span>
         <>
-          {t('events.registrationPolicies.noPreferenceEnabled', '“No preference” option will be available')}
+          {t('events.registrationPolicies.noPreferenceEnabled')}
           <NoPreferenceHelpPopover registrationPolicy={registrationPolicy} />
         </>
       </span>
@@ -57,7 +57,7 @@ function PreventNoPreferenceSignupRow({
   if (preset || !isPreventNoPreferenceSignupsApplicable(registrationPolicy)) {
     return (
       <tr>
-        <td>{t('events.registrationPolicies.noPreferenceEnabled', '“No preference” option will be available')}</td>
+        <td>{t('events.registrationPolicies.noPreferenceEnabled')}</td>
         <td colSpan={columnCount - 1}>{renderPreventNoPreferenceSignupsDescription()}</td>
       </tr>
     );
@@ -70,7 +70,7 @@ function PreventNoPreferenceSignupRow({
     <tr>
       <td className="text-nowrap">
         <>
-          {t('signups.noPreference', 'No preference')}
+          {t('signups.noPreference')}
           <NoPreferenceHelpPopover registrationPolicy={registrationPolicy} />
         </>
       </td>
@@ -79,11 +79,11 @@ function PreventNoPreferenceSignupRow({
           name="prevent_no_preference_signups"
           choices={[
             {
-              label: t('events.registrationPolicies.enableNoPreference', 'Show "no preference" option'),
+              label: t('events.registrationPolicies.enableNoPreference'),
               value: 'false',
             },
             {
-              label: t('events.registrationPolicies.disableNoPreference', 'Don’t show "no preference" option'),
+              label: t('events.registrationPolicies.disableNoPreference'),
               value: 'true',
             },
           ]}

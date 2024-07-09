@@ -52,7 +52,7 @@ function TicketStatusCell({ value }: TicketStatusCellProps): JSX.Element {
   const { t } = useTranslation();
 
   if (!value) {
-    return <>{t('tables.ticketStatus.unpaid', 'Unpaid')}</>;
+    return <>{t('tables.ticketStatus.unpaid')}</>;
   }
 
   return <>{humanize(value.ticket_type.name)}</>;
@@ -90,7 +90,7 @@ const TicketTypeFilter = (props: FilterProps<UserConProfilesTableRow>): JSX.Elem
     () =>
       data
         ? [
-            { label: t('tables.ticketStatus.unpaid', 'Unpaid'), value: 'none' },
+            { label: t('tables.ticketStatus.unpaid'), value: 'none' },
             ...data.convention.ticket_types.map((ticketType) => ({
               label: humanize(ticketType.name),
               value: ticketType.id.toString(),
@@ -106,7 +106,7 @@ const TicketTypeFilter = (props: FilterProps<UserConProfilesTableRow>): JSX.Elem
 const PrivilegesCell = ({ row: { original } }: CellProps<UserConProfilesTableRow>) => {
   const { t } = useTranslation();
   if (original.site_admin) {
-    return <>{t('tables.privileges.siteAdmin', 'Global admin')}</>;
+    return <>{t('tables.privileges.siteAdmin')}</>;
   }
 
   return <></>;
@@ -115,11 +115,7 @@ const PrivilegesCell = ({ row: { original } }: CellProps<UserConProfilesTableRow
 const PrivilegesFilter = (props: FilterProps<UserConProfilesTableRow>) => {
   const { t } = useTranslation();
   return (
-    <ChoiceSetFilter
-      {...props}
-      choices={[{ label: t('tables.privileges.siteAdmin', 'Global admin'), value: 'site_admin' }]}
-      multiple
-    />
+    <ChoiceSetFilter {...props} choices={[{ label: t('tables.privileges.siteAdmin'), value: 'site_admin' }]} multiple />
   );
 };
 
@@ -131,19 +127,19 @@ function getPossibleColumns(
 ): Column<UserConProfilesTableRow>[] {
   const columns: Column<UserConProfilesTableRow>[] = [
     {
-      Header: <>{t('admin.userConProfiles.id', 'ID')}</>,
+      Header: <>{t('admin.userConProfiles.id')}</>,
       id: 'id',
       accessor: (userConProfile) => userConProfile.id,
       width: 70,
     },
     {
-      Header: <>{t('admin.userConProfiles.userId', 'User ID')}</>,
+      Header: <>{t('admin.userConProfiles.userId')}</>,
       id: 'user_id',
       accessor: (userConProfile) => userConProfile.user_id,
       width: 70,
     },
     {
-      Header: <>{t('admin.userConProfiles.name', 'Name')}</>,
+      Header: <>{t('admin.userConProfiles.name')}</>,
       id: 'name',
       accessor: (userConProfile) => userConProfile,
       disableFilters: false,
@@ -152,7 +148,7 @@ function getPossibleColumns(
       Cell: UserConProfileWithGravatarCell,
     },
     {
-      Header: <>{t('admin.userConProfiles.firstName', 'First name')}</>,
+      Header: <>{t('admin.userConProfiles.firstName')}</>,
       id: 'first_name',
       accessor: (userConProfile) => userConProfile.first_name,
       disableFilters: false,
@@ -160,7 +156,7 @@ function getPossibleColumns(
       Filter: FreeTextFilter,
     },
     {
-      Header: <>{t('admin.userConProfiles.lastName', 'Last name')}</>,
+      Header: <>{t('admin.userConProfiles.lastName')}</>,
       id: 'last_name',
       accessor: (userConProfile) => userConProfile.last_name,
       disableFilters: false,
@@ -168,7 +164,7 @@ function getPossibleColumns(
       Filter: FreeTextFilter,
     },
     {
-      Header: <>{t('admin.userConProfiles.email', 'Email')}</>,
+      Header: <>{t('admin.userConProfiles.email')}</>,
       id: 'email',
       accessor: (userConProfile) => userConProfile.email,
       disableFilters: false,
@@ -193,7 +189,7 @@ function getPossibleColumns(
       {
         Header: (
           <>
-            {t('admin.userConProfiles.ticketType', '{{ ticketName }} type', {
+            {t('admin.userConProfiles.ticketType', {
               ticketName: humanize(data.convention.ticket_name || 'ticket'),
             })}
           </>
@@ -207,7 +203,7 @@ function getPossibleColumns(
         Filter: TicketTypeFilter,
       },
       {
-        Header: <>{t('admin.userConProfiles.paymentAmount', 'Payment amount')}</>,
+        Header: <>{t('admin.userConProfiles.paymentAmount')}</>,
         id: 'payment_amount',
         accessor: (userConProfile) => userConProfile.ticket,
         width: 150,
@@ -221,7 +217,7 @@ function getPossibleColumns(
 
   columns.push(
     {
-      Header: <>{t('admin.userConProfiles.isTeamMember', 'Event team member?')}</>,
+      Header: <>{t('admin.userConProfiles.isTeamMember')}</>,
       id: 'is_team_member',
       accessor: (userConProfile) => userConProfile.team_members.length > 0,
       width: 150,
@@ -230,7 +226,7 @@ function getPossibleColumns(
       Filter: BooleanChoiceSetFilter,
     },
     {
-      Header: <>{t('admin.userConProfiles.isAttending', 'Attending?')}</>,
+      Header: <>{t('admin.userConProfiles.isAttending')}</>,
       id: 'attending',
       accessor: (userConProfile) => userConProfile.ticket != null,
       width: 150,
@@ -244,7 +240,7 @@ function getPossibleColumns(
     columns.push({
       Header: (
         <>
-          {t('admin.userConProfiles.ticketStatusChangedAt', '{{ ticketName }} status changed', {
+          {t('admin.userConProfiles.ticketStatusChangedAt', {
             ticketName: humanize(data.convention.ticket_name || 'ticket'),
           })}
         </>
@@ -259,7 +255,7 @@ function getPossibleColumns(
 
   columns.push(
     {
-      Header: <>{t('admin.userConProfiles.privileges', 'Privileges')}</>,
+      Header: <>{t('admin.userConProfiles.privileges')}</>,
       id: 'privileges',
       accessor: (row) => row,
       disableFilters: false,
@@ -268,7 +264,7 @@ function getPossibleColumns(
       Filter: PrivilegesFilter,
     },
     {
-      Header: <>{t('admin.userConProfiles.orderSummary', 'Order summary')}</>,
+      Header: <>{t('admin.userConProfiles.orderSummary')}</>,
       id: 'order_summary',
       accessor: 'order_summary',
     },
@@ -339,7 +335,7 @@ function UserConProfilesTable({ defaultVisibleColumns }: UserConProfilesTablePro
             queryData && (queryData.currentAbility || {}).can_create_user_con_profiles ? (
               <Link to="/user_con_profiles/new" className="btn btn-primary ms-2 mb-2">
                 <>
-                  <i className="bi-plus" /> {t('admin.userConProfiles.addAttendee.buttonText', 'Add attendee')}
+                  <i className="bi-plus" /> {t('admin.userConProfiles.addAttendee.buttonText')}
                 </>
               </Link>
             ) : null

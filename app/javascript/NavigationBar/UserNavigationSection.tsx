@@ -38,7 +38,7 @@ function CurrentPendingOrderButton() {
         popperOptions={{ placement: 'bottom-end' }}
         buttonContent={
           <>
-            <i className="bi-cart-fill" title={t('navigation.myShoppingCart.buttonText', 'My shopping cart')} />
+            <i className="bi-cart-fill" title={t('navigation.myShoppingCart.buttonText')} />
             <div className="badge rounded-pill bg-danger" style={{ position: 'absolute', right: '-7px', top: '0' }}>
               {totalQuantity}
             </div>
@@ -47,11 +47,11 @@ function CurrentPendingOrderButton() {
         dropdownStyle={{ zIndex: 1100 }}
       >
         <div className="px-3 pt-3">
-          <h4 className="mb-2">{t('navigation.myShoppingCart.buttonText', 'My shopping cart')}</h4>
+          <h4 className="mb-2">{t('navigation.myShoppingCart.buttonText')}</h4>
           <CartContents
             checkOutButton={
               <Link className="btn btn-primary mt-2" to="/cart">
-                {t('navigation.myShoppingCart.goToCart', 'Go to cart')}
+                {t('navigation.myShoppingCart.goToCart')}
               </Link>
             }
           />
@@ -95,7 +95,7 @@ const LoggedInDropdownTarget = forwardRef<HTMLButtonElement, LoggedInDropdownTar
         onClick={toggle}
         ref={ref}
         type="button"
-        aria-label={t('navigation.headers.user', 'User options')}
+        aria-label={t('navigation.headers.user')}
       >
         <Gravatar
           url={(myProfile || {}).gravatar_url}
@@ -177,7 +177,7 @@ function UserNavigationSection(): JSX.Element {
               {currentUser && (
                 <NavigationItem
                   inSection
-                  label={t('navigation.user.myAccount', 'My Account')}
+                  label={t('navigation.user.myAccount')}
                   url="/users/edit"
                   icon="bi-card-heading"
                 />
@@ -185,7 +185,7 @@ function UserNavigationSection(): JSX.Element {
               {myProfile && (
                 <NavigationItem
                   inSection
-                  label={t('navigation.user.myProfile', 'My {{ conventionName }} Profile', {
+                  label={t('navigation.user.myProfile', {
                     conventionName,
                   })}
                   url="/my_profile"
@@ -195,7 +195,7 @@ function UserNavigationSection(): JSX.Element {
               {myProfile && (
                 <NavigationItem
                   inSection
-                  label={t('navigation.user.myOrderHistory', 'My Order History')}
+                  label={t('navigation.user.myOrderHistory')}
                   url="/order_history"
                   icon="bi-bag-fill"
                 />
@@ -203,7 +203,7 @@ function UserNavigationSection(): JSX.Element {
               {currentUser && hasOAuthApplications && (
                 <NavigationItem
                   inSection
-                  label={t('navigation.user.authorizedApplications', 'Authorized Applications')}
+                  label={t('navigation.user.authorizedApplications')}
                   url="/oauth/authorized_applications"
                   icon="bi-lock-fill"
                 />
@@ -214,7 +214,7 @@ function UserNavigationSection(): JSX.Element {
                   caption={
                     <>
                       <MenuIcon icon="bi-box-arrow-right" />
-                      {t('navigation.user.logOut', 'Log out')}
+                      {t('navigation.user.logOut')}
                     </>
                   }
                 />
@@ -230,7 +230,7 @@ function UserNavigationSection(): JSX.Element {
   const renderLoggedOutContent = () => (
     <>
       <button className="btn btn-primary" onClick={toggle} ref={setReferenceElement} type="button">
-        {t('navigation.headers.authentication', 'Log in/sign up')}
+        {t('navigation.headers.authentication')}
       </button>
       <div
         className={classNames('dropdown-menu m-0', { show: dropdownOpen })}
@@ -247,7 +247,7 @@ function UserNavigationSection(): JSX.Element {
             caption={
               <>
                 <MenuIcon icon="bi-box-arrow-in-right" />
-                {t('navigation.authentication.logIn', 'Log in')}
+                {t('navigation.authentication.logIn')}
               </>
             }
           />
@@ -258,7 +258,7 @@ function UserNavigationSection(): JSX.Element {
             caption={
               <>
                 <MenuIcon icon="bi-pencil-square" />
-                {t('navigation.authentication.signUp', 'Sign up')}
+                {t('navigation.authentication.signUp')}
               </>
             }
           />

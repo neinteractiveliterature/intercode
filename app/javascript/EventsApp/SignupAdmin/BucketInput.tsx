@@ -10,10 +10,10 @@ type BucketType = NonNullable<SignupFieldsFragment['run']['event']['registration
 function getLabelForBucketChoice(signup: SignupFieldsFragment, bucket: BucketType, t: TFunction) {
   const addenda = [];
   if (bucket.key === signup.bucket_key) {
-    addenda.push(t('events.signupAdmin.bucketInput.currentBucketLabel', 'current'));
+    addenda.push(t('events.signupAdmin.bucketInput.currentBucketLabel'));
   }
   if (bucket.key === signup.requested_bucket_key) {
-    addenda.push(t('events.signupAdmin.bucketInput.userRequestedBucketLabel', 'user requested'));
+    addenda.push(t('events.signupAdmin.bucketInput.userRequestedBucketLabel'));
   }
   const addendaString = addenda.length > 0 ? ` (${addenda.join(', ')})` : '';
 

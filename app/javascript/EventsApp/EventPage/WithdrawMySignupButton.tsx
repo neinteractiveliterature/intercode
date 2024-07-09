@@ -22,7 +22,7 @@ function WithdrawMySignupButton({
   const confirm = useConfirm();
   const withdrawSignup = () =>
     confirm({
-      prompt: t('events.withdrawPrompt.selfServiceSignup', 'Are you sure you want to withdraw from {{ eventTitle }}?', {
+      prompt: t('events.withdrawPrompt.selfServiceSignup', {
         eventTitle: event.title,
       }),
       action: async () => {

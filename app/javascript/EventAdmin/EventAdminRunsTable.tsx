@@ -24,7 +24,7 @@ export default LoadQueryWrapper<EventAdminEventsQueryData, EventAdminEventsQuery
     const { t } = useTranslation();
 
     usePageTitle(
-      t('admin.events.eventListPageTitle', '{{ categoryName, capitalize }} events', {
+      t('admin.events.eventListPageTitle', {
         categoryName: eventCategory?.name,
       }),
     );
@@ -32,17 +32,16 @@ export default LoadQueryWrapper<EventAdminEventsQueryData, EventAdminEventsQuery
     return (
       <div>
         <Link to={`${buildEventCategoryUrl(eventCategory)}/new`} className="btn btn-primary mt-4 mb-2">
-          {t('admin.events.newEventLabel', 'Create new {{ categoryName }} event', {
+          {t('admin.events.newEventLabel', {
             categoryName: eventCategory?.name,
           })}
         </Link>
-
         <table className="table table-striped no-top-border">
           <thead>
             <tr>
-              <th style={{ minWidth: '200px' }}>{t('admin.events.titleColumn', 'Title')}</th>
-              <th>{t('admin.events.durationColumn', 'Duration')}</th>
-              <th>{t('admin.events.runsColumn', 'Runs')}</th>
+              <th style={{ minWidth: '200px' }}>{t('admin.events.titleColumn')}</th>
+              <th>{t('admin.events.durationColumn')}</th>
+              <th>{t('admin.events.runsColumn')}</th>
             </tr>
           </thead>
           <tbody>
@@ -51,7 +50,6 @@ export default LoadQueryWrapper<EventAdminEventsQueryData, EventAdminEventsQuery
             ))}
           </tbody>
         </table>
-
         <Routes>
           <Route
             path={`:eventId/runs/:runId/edit`}

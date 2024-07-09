@@ -69,10 +69,10 @@ function MaximumSignupsLimitSelect({ value, onValueChange, ...props }: MaximumSi
         }
       }}
     >
-      <option value="NO_LIMIT">{t('signups.mySignupQueue.noLimit', 'No limit')}</option>
+      <option value="NO_LIMIT">{t('signups.mySignupQueue.noLimit')}</option>
       {Array.from({ length: 10 }, (n, index) => index + 1).map((n) => (
         <option key={n} value={n}>
-          {t('signups.mySignupQueue.maximumSignupsLimit', '{{ number }} at most', { number: n })}
+          {t('signups.mySignupQueue.maximumSignupsLimit', { number: n })}
         </option>
       ))}
     </select>
@@ -208,16 +208,16 @@ const RankedChoiceUserSettings = LoadQueryWrapper(useMySignupQueueQuery, ({ data
 
   return (
     <div className="card">
-      <div className="card-header">{t('signups.mySignupQue.settingsSection.label', 'Settings')}</div>
+      <div className="card-header">{t('signups.mySignupQue.settingsSection.label')}</div>
       <div className="card-body">
         <MultipleChoiceInput
-          caption={t('signups.mySignupQueue.allowWaitlist.caption', 'What should we do if all your choices are full?')}
+          caption={t('signups.mySignupQueue.allowWaitlist.caption')}
           choices={[
             {
-              label: t('signups.mySignupQueue.allowWaitlist.yes', 'Add me to the waitlist of my top-ranked choice'),
+              label: t('signups.mySignupQueue.allowWaitlist.yes'),
               value: 'true',
             },
-            { label: t('signups.mySignupQueue.allowWaitlist.no', "Don't sign me up for anything"), value: 'false' },
+            { label: t('signups.mySignupQueue.allowWaitlist.no'), value: 'false' },
           ]}
           value={(data.convention.my_profile?.ranked_choice_allow_waitlist || false).toString()}
           onChange={(newValue) =>
@@ -239,17 +239,14 @@ const RankedChoiceUserSettings = LoadQueryWrapper(useMySignupQueueQuery, ({ data
         <ErrorDisplay graphQLError={profileUpdateError} />
 
         <section>
-          <h3>{t('signups.mySignupQueue.constraintsTable.label', 'Limits')}</h3>
+          <h3>{t('signups.mySignupQueue.constraintsTable.label')}</h3>
 
           <table className="table table-striped">
             <tbody>
               <SignupConstraintRow
                 constraint={totalSignupsConstraint}
-                label={t('signups.mySignupQueue.totalSignupsConstraint.label', 'Total event signups')}
-                help={t(
-                  'signups.mySignupQueue.totalSignupsConstraint.help',
-                  'How many events do you want to sign up for over the entirety of the con (in addition to any events you are running?)',
-                )}
+                label={t('signups.mySignupQueue.totalSignupsConstraint.label')}
+                help={t('signups.mySignupQueue.totalSignupsConstraint.help')}
                 onChange={(newValue) => constraintChanged(totalSignupsConstraint, undefined, undefined, newValue)}
                 loading={loading}
                 mySignups={data.convention.my_profile?.signups ?? []}
@@ -259,18 +256,12 @@ const RankedChoiceUserSettings = LoadQueryWrapper(useMySignupQueueQuery, ({ data
                 <SignupConstraintRow
                   key={conventionDay.start.toISO()}
                   constraint={conventionDaySignupConstraints.get(conventionDay)}
-                  label={t(
-                    'signups.mySignupQueue.conventionDaySignupsConstraint.label',
-                    '{{ conventionDay }} event signups',
-                    {
-                      conventionDay: formatDateTime(conventionDay.start, 'longWeekday'),
-                    },
-                  )}
-                  help={t(
-                    'signups.mySignupQueue.conventionDaySignupsConstraint.help',
-                    'How many events do you want to sign up for on {{ conventionDay }} (in addition to any events you are running?)',
-                    { conventionDay: formatDateTime(conventionDay.start, 'longWeekday') },
-                  )}
+                  label={t('signups.mySignupQueue.conventionDaySignupsConstraint.label', {
+                    conventionDay: formatDateTime(conventionDay.start, 'longWeekday'),
+                  })}
+                  help={t('signups.mySignupQueue.conventionDaySignupsConstraint.help', {
+                    conventionDay: formatDateTime(conventionDay.start, 'longWeekday'),
+                  })}
                   onChange={(newValue) =>
                     constraintChanged(
                       conventionDaySignupConstraints.get(conventionDay),
@@ -288,7 +279,7 @@ const RankedChoiceUserSettings = LoadQueryWrapper(useMySignupQueueQuery, ({ data
                 <SignupConstraintRow
                   key={constraint.id}
                   constraint={constraint}
-                  label={t('signups.mySignupQueue.miscSignupsConstraint', 'Events {{ interval }}', {
+                  label={t('signups.mySignupQueue.miscSignupsConstraint', {
                     interval: describeTimespan(
                       Timespan.fromStrings(constraint.start, constraint.finish),
                       t,

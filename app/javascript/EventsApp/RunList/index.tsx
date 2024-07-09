@@ -56,9 +56,7 @@ export default LoadQueryWithVariablesWrapper(
     const conventionDay = useParams<{ conventionDay: string }>().conventionDay;
     const { t } = useTranslation();
 
-    usePageTitle(
-      `${t('navigation.events.eventSchedule', 'Event Schedule')} (${t('schedule.views.listView', 'List view')})`,
-    );
+    usePageTitle(`${t('navigation.events.eventSchedule')} (${t('schedule.views.listView')})`);
 
     useLayoutEffect(() => {
       if (conventionDay) {

@@ -55,7 +55,7 @@ export default function EventTicketPurchaseModal({
   return (
     <Modal visible={visible} dialogClassName="modal-lg">
       <div className="modal-header">
-        {t('signups.eventTicketPurchase.title', 'Your {{ ticketName }} for {{ eventTitle }}', {
+        {t('signups.eventTicketPurchase.title', {
           ticketName,
           eventTitle,
         })}
@@ -63,11 +63,7 @@ export default function EventTicketPurchaseModal({
       <div className="modal-body">
         {signup?.expires_at && (
           <div className="alert alert-info">
-            {t(
-              'signups.eventTicketPurchase.spotHeldUntil',
-              'Your spot is being held.  You have until {{ expiresAt }} to purchase a {{ ticketName }}.',
-              { ticketName, expiresAt: humanizeTime(expiresAt) },
-            )}
+            {t('signups.eventTicketPurchase.spotHeldUntil', { ticketName, expiresAt: humanizeTime(expiresAt) })}
           </div>
         )}
         {orderEntry ? (
@@ -81,7 +77,7 @@ export default function EventTicketPurchaseModal({
       <div className="modal-footer">
         {!orderEntry && (
           <button type="button" className="btn btn-secondary" onClick={cancelAsync}>
-            {cancelInProgress ? <LoadingIndicator /> : t('buttons.cancel', 'Cancel')}
+            {cancelInProgress ? <LoadingIndicator /> : t('buttons.cancel')}
           </button>
         )}
         <ErrorDisplay graphQLError={cancelError as ApolloError | null} />

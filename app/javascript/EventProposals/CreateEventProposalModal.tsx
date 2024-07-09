@@ -80,13 +80,10 @@ function CreateEventProposalModal({
 
   return (
     <Modal visible={visible} dialogClassName="modal-lg" className="text-body">
-      <div className="modal-header">{t('eventProposals.newProposalModal.title', 'New event proposal')}</div>
+      <div className="modal-header">{t('eventProposals.newProposalModal.title')}</div>
       <div className="modal-body text-start">
         <SelectWithLabel
-          label={t(
-            'eventProposals.newProposalModal.categoryLabel',
-            'What category of event would you like to propose?',
-          )}
+          label={t('eventProposals.newProposalModal.categoryLabel')}
           options={topLevelEntities}
           isClearable={topLevelEntities.length > 1}
           isDisabled={createInProgress}
@@ -114,11 +111,7 @@ function CreateEventProposalModal({
             )}
 
             <SelectWithLabel
-              label={t(
-                'eventProposals.newProposalModal.subcategoryLabel',
-                'What subcategory of {{ departmentName }} event would you like to propose?',
-                { departmentName: department.name },
-              )}
+              label={t('eventProposals.newProposalModal.subcategoryLabel', { departmentName: department.name })}
               options={departmentEventCategories}
               isClearable
               isDisabled={createInProgress}
@@ -184,7 +177,7 @@ function CreateEventProposalModal({
       </div>
       <div className="modal-footer">
         <button className="btn btn-secondary" type="button" disabled={createInProgress} onClick={cancel}>
-          {t('buttons.cancel', 'Cancel')}
+          {t('buttons.cancel')}
         </button>
         <button
           className="btn btn-primary"
@@ -192,7 +185,7 @@ function CreateEventProposalModal({
           disabled={!eventCategory || createInProgress}
           onClick={createClicked}
         >
-          {t('eventProposals.newProposalModal.createProposalButton', 'Create proposal')}
+          {t('eventProposals.newProposalModal.createProposalButton')}
         </button>
       </div>
     </Modal>

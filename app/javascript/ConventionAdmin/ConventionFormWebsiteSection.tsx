@@ -63,7 +63,6 @@ function ConventionFormWebsiteSection({
         styles={selectStyles}
         isDisabled={disabled}
       />
-
       <SelectWithLabel
         name="root_page_id"
         label="Root page"
@@ -76,7 +75,6 @@ function ConventionFormWebsiteSection({
         styles={selectStyles}
         isDisabled={disabled}
       />
-
       <BooleanInput
         caption={
           <>
@@ -90,7 +88,6 @@ function ConventionFormWebsiteSection({
         value={convention.hidden}
         onChange={setHidden}
       />
-
       <fieldset className="mb-4">
         <legend className="col-form-label">
           Clickwrap agreement (if present, all users will be prompted to accept this agreement before using the site)
@@ -101,15 +98,9 @@ function ConventionFormWebsiteSection({
           disabled={disabled}
         />
       </fieldset>
-
       <fieldset className="mb-4">
-        <legend className="col-form-label">{t('admin.convention.openGraphImageLabel', 'OpenGraph image')}</legend>
-        <HelpText>
-          {t(
-            'admin.convention.openGraphImageHelpText',
-            'Used by social media sites for previewing links to this site. 1200x630 pixels is recommended for Facebook.',
-          )}
-        </HelpText>
+        <legend className="col-form-label">{t('admin.convention.openGraphImageLabel')}</legend>
+        <HelpText>{t('admin.convention.openGraphImageHelpText')}</HelpText>
         <FileInputWithPreview
           existingFileUrl={convention.open_graph_image?.url}
           file={openGraphImage}
@@ -117,15 +108,9 @@ function ConventionFormWebsiteSection({
           disabled={disabled}
         />
       </fieldset>
-
       <fieldset className="mb-4">
-        <legend className="col-form-label">{t('admin.convention.faviconLabel', 'Favicon')}</legend>
-        <HelpText>
-          {t(
-            'admin.convention.faviconHelpText',
-            'Used by browsers for the icon in tabs for this site.  180x180 pixels is recommended.',
-          )}
-        </HelpText>
+        <legend className="col-form-label">{t('admin.convention.faviconLabel')}</legend>
+        <HelpText>{t('admin.convention.faviconHelpText')}</HelpText>
         <FileInputWithPreview
           existingFileUrl={convention.favicon?.url}
           file={favicon}

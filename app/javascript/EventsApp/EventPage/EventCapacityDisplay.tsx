@@ -6,7 +6,7 @@ import { EventPageQueryData, RunCardRegistrationPolicyFieldsFragment } from './q
 
 function describeBucketCapacity(bucket: RunCardRegistrationPolicyFieldsFragment['buckets'][0], t: TFunction) {
   if (!bucket.slots_limited) {
-    return t('events.runCapacity.unlimitedSimple', 'unlimited');
+    return t('events.runCapacity.unlimitedSimple');
   }
 
   if (bucket.minimum_slots === bucket.total_slots) {

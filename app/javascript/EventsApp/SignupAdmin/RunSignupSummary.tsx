@@ -65,7 +65,7 @@ export default LoadQueryWrapper(useRunSignupSummaryQueryFromParams, function Run
   const { runId } = useParams();
   const { t } = useTranslation();
 
-  const signupSummaryTitle = t('events.signupSummary.title', 'Signup summary');
+  const signupSummaryTitle = t('events.signupSummary.title');
 
   usePageTitle(`${signupSummaryTitle} - ${data.convention.event.title}`);
 
@@ -140,14 +140,12 @@ export default LoadQueryWrapper(useRunSignupSummaryQueryFromParams, function Run
           </BreadcrumbItem>
         </ol>
       </nav>
-
       <RunHeader />
-
       <table className="table">
         <thead>
           <tr>
-            <th>{t('events.signupSummary.nameHeader', 'Name')}</th>
-            <th>{t('events.signupSummary.stateHeader', 'State')}</th>
+            <th>{t('events.signupSummary.nameHeader')}</th>
+            <th>{t('events.signupSummary.stateHeader')}</th>
           </tr>
         </thead>
         <tbody>

@@ -70,7 +70,7 @@ function FileUploadForm({ onUpload }: FileUploadFormProps): JSX.Element {
 
   return (
     <div className="card">
-      <div className="card-header">{t('cms.fileUploadForm.title', 'Upload a file')}</div>
+      <div className="card-header">{t('cms.fileUploadForm.title')}</div>
       <div className="card-body">
         <Helmet>
           {/* ActiveStorage JS requires us to put the csrf token in the head */}
@@ -102,7 +102,7 @@ function FileUploadForm({ onUpload }: FileUploadFormProps): JSX.Element {
             className="btn btn-primary me-4"
             disabled={!file || uploading}
           >
-            {t('cms.fileUploadForm.uploadFileButton', 'Upload')}
+            {t('cms.fileUploadForm.uploadFileButton')}
           </button>
         </div>
       </div>

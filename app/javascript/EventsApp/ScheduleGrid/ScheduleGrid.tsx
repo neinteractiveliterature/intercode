@@ -19,7 +19,7 @@ function ScheduleGrid({ timespan }: ScheduleGridProps): JSX.Element {
   const { config, schedule } = useContext(ScheduleGridContext);
   const { t } = useTranslation();
 
-  usePageTitle(`${t('navigation.events.eventSchedule', 'Event Schedule')} (${t(config.titlei18nKey)})`);
+  usePageTitle(`${t('navigation.events.eventSchedule')} (${t(config.titlei18nKey)})`);
 
   const layout = useLayoutForTimespan(schedule, timespan);
   if (!layout) {

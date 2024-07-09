@@ -26,11 +26,11 @@ const CLASS_NAMES_BY_SCOPE_GROUP = {
 function getScopeGroupDescription(scopeGroup: string, t: TFunction) {
   switch (scopeGroup) {
     case 'readPublic':
-      return t('oauth.permissionGroups.readPublic', 'Read-only access to public data');
+      return t('oauth.permissionGroups.readPublic');
     case 'readPrivate':
-      return t('oauth.permissionGroups.readPrivate', 'Read-only access to personal data');
+      return t('oauth.permissionGroups.readPrivate');
     case 'manage':
-      return t('oauth.permissionGroups.manage', 'Read/write access to personal data');
+      return t('oauth.permissionGroups.manage');
     default:
       return scopeGroup;
   }
@@ -39,39 +39,33 @@ function getScopeGroupDescription(scopeGroup: string, t: TFunction) {
 function getScopeDescription(scopeName: string, t: TFunction) {
   switch (scopeName) {
     case 'public':
-      return t(
-        'oauth.permissions.public',
-        'Access your public data, and public data about conventions you are signed up for',
-      );
+      return t('oauth.permissions.public');
     case 'openid':
-      return t('oauth.permissions.openid', 'Authenticate you using your account');
+      return t('oauth.permissions.openid');
     case 'read_profile':
-      return t('oauth.permissions.read_profile', 'Access your personal profile data');
+      return t('oauth.permissions.read_profile');
     case 'read_signups':
-      return t('oauth.permissions.read_signups', 'Access data about your signups');
+      return t('oauth.permissions.read_signups');
     case 'read_events':
-      return t('oauth.permissions.read_events', 'Access data about the events and event proposals you manage');
+      return t('oauth.permissions.read_events');
     case 'read_conventions':
-      return t(
-        'oauth.permissions.read_conventions',
-        'Access privileged data about the conventions you manage (e.g. user profiles)',
-      );
+      return t('oauth.permissions.read_conventions');
     case 'read_organizations':
-      return t('oauth.permissions.read_organizations', 'Access privileged data about organizations on the site');
+      return t('oauth.permissions.read_organizations');
     case 'read_email_routing':
-      return t('oauth.permissions.read_email_routing', 'Read sitewide email routing rules');
+      return t('oauth.permissions.read_email_routing');
     case 'manage_profile':
-      return t('oauth.permissions.manage_profile', 'Update your personal profile data');
+      return t('oauth.permissions.manage_profile');
     case 'manage_signups':
-      return t('oauth.permissions.manage_signups', 'Sign you up and withdraw you from events');
+      return t('oauth.permissions.manage_signups');
     case 'manage_events':
-      return t('oauth.permissions.manage_events', 'Update events and event proposals you manage');
+      return t('oauth.permissions.manage_events');
     case 'manage_conventions':
-      return t('oauth.permissions.manage_conventions', 'Update conventions you manage');
+      return t('oauth.permissions.manage_conventions');
     case 'manage_organizations':
-      return t('oauth.permissions.manage_organizations', 'Update privileged data about organizations on the site');
+      return t('oauth.permissions.manage_organizations');
     case 'manage_email_routing':
-      return t('oauth.permissions.manage_email_routing', 'Update sitewide email routing rules');
+      return t('oauth.permissions.manage_email_routing');
     default:
       return scopeName;
   }
@@ -113,17 +107,16 @@ function PermissionsPrompt({ scopeNames }: PermissionsPromptProps): JSX.Element 
               >
                 {expandedGroups.includes(scopeGroup) ? (
                   <i className="bi-caret-down-fill">
-                    <span className="visually-hidden">{t('buttons.collapse', 'Collapse')}</span>
+                    <span className="visually-hidden">{t('buttons.collapse')}</span>
                   </i>
                 ) : (
                   <i className="bi-caret-right-fill">
-                    <span className="visually-hidden">{t('buttons.expand', 'Expand')}</span>
+                    <span className="visually-hidden">{t('buttons.expand')}</span>
                   </i>
                 )}{' '}
                 <strong>{getScopeGroupDescription(scopeGroup, t)}</strong>
               </button>
             </div>
-
             {expandedGroups.includes(scopeGroup) ? (
               <div className="card-body">
                 <p>This application will be able to:</p>

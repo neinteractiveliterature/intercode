@@ -50,14 +50,13 @@ function ChangeBucketModal({ signup, onComplete, onCancel }: ChangeBucketModalPr
       <div>
         <BucketInput
           signup={signup}
-          caption={t('events.signupAdmin.changeBucketInputCaption', 'Please choose a signup bucket for {{ name }}.', {
+          caption={t('events.signupAdmin.changeBucketInputCaption', {
             name: signup.user_con_profile.name_without_nickname,
           })}
           name="bucketKey"
           value={bucketKey}
           onChange={setBucketKey}
         />
-
         <ErrorDisplay graphQLError={error as ApolloError} />
       </div>
     );
@@ -65,11 +64,11 @@ function ChangeBucketModal({ signup, onComplete, onCancel }: ChangeBucketModalPr
 
   return (
     <Modal visible={signup != null}>
-      <div className="modal-header">{t('events.signupAdmin.changeBucketHeader', 'Change signup bucket')}</div>
+      <div className="modal-header">{t('events.signupAdmin.changeBucketHeader')}</div>
       <div className="modal-body">{renderBody()}</div>
       <div className="modal-footer">
         <button className="btn btn-secondary" onClick={onCancel} type="button">
-          {t('buttons.cancel', 'Cancel')}
+          {t('buttons.cancel')}
         </button>
         <button
           className="btn btn-primary"
@@ -77,7 +76,7 @@ function ChangeBucketModal({ signup, onComplete, onCancel }: ChangeBucketModalPr
           disabled={bucketKey == null || requestInProgress}
           type="button"
         >
-          {t('buttons.ok', 'OK')}
+          {t('buttons.ok')}
         </button>
       </div>
     </Modal>

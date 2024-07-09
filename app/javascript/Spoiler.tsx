@@ -22,7 +22,7 @@ function Spoiler({ content }: SpoilerProps): JSX.Element {
       tabIndex={-1}
     >
       {content}
-      <span className="spoiler-hover">{t('spoiler.hoverText', 'Click to reveal')}</span>
+      <span className="spoiler-hover">{t('spoiler.hoverText')}</span>
     </span>
   );
 }

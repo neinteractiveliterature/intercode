@@ -37,10 +37,9 @@ export default LoadQueryWrapper(useEventHistoryQueryFromParams, function EventHi
           <BreadcrumbItem to=".." active={false}>
             {data.convention.event.title}
           </BreadcrumbItem>
-          <RouteActivatedBreadcrumbItem to="">{t('events.history.title', 'History')}</RouteActivatedBreadcrumbItem>
+          <RouteActivatedBreadcrumbItem to="">{t('events.history.title')}</RouteActivatedBreadcrumbItem>
         </ol>
       </nav>
-
       <FormResponseChangeHistory
         changes={changes}
         convention={data.convention}

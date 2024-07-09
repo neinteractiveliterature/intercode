@@ -60,16 +60,12 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }: EditAdminP
   return (
     <div className="mb-4 card bg-light border-dark glow-dark">
       <div className="card-header">
-        {hasRealId(product)
-          ? t('admin.store.products.editProduct', 'Edit product')
-          : t('admin.store.products.newProduct', 'New product')}
+        {hasRealId(product) ? t('admin.store.products.editProduct') : t('admin.store.products.newProduct')}
       </div>
-
       <div className="card-body">
         <EditProductForm product={product} setProduct={setProduct} ticketTypes={ticketTypes} />
         <ErrorDisplay graphQLError={saveError as ApolloError} />
       </div>
-
       <div className="card-footer">
         <div className="ms-2">
           <ul className="list-inline m-0">

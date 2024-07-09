@@ -14,10 +14,10 @@ import { FORM_ITEM_ROLE_COLOR_CLASSES, VisibilityDisclosureText } from './Permis
 
 function getDefaultAgeRestrictionsDescription(minimumAge: number | null | undefined, t: TFunction): string {
   if (!minimumAge) {
-    return t('forms.ageRestrictions.noRestrictions', 'No age restrictions.');
+    return t('forms.ageRestrictions.noRestrictions');
   }
 
-  return t('forms.ageRestrictions.minimumAgeDescription', 'Must be {{ count }} years or older.', {
+  return t('forms.ageRestrictions.minimumAgeDescription', {
     count: minimumAge,
   });
 }
@@ -90,12 +90,11 @@ function AgeRestrictionsInput(props: AgeRestrictionsInputProps): JSX.Element {
           dangerouslySetInnerHTML={{ __html: formItem.rendered_properties.caption }}
         />
       </div>
-
       <div className="card-body pb-1">
         <div className="mb-3">
           <label className="form-label" htmlFor={descriptionId}>
             <>
-              {t('forms.ageRestrictions.descriptionLabel', 'Publicly visible age restrictions text')}
+              {t('forms.ageRestrictions.descriptionLabel')}
               <RequiredIndicator formItem={formItem} />
             </>
           </label>
@@ -118,7 +117,7 @@ function AgeRestrictionsInput(props: AgeRestrictionsInputProps): JSX.Element {
           onTextChange={minimumAgeChanged}
           type="number"
           min="0"
-          label={t('forms.ageRestrictions.minimumAgeLabel', 'Minimum age')}
+          label={t('forms.ageRestrictions.minimumAgeLabel')}
           helpText={
             <Trans i18nKey="forms.ageRestrictions.minimumAgeHelpText">
               If specified, the signups list will warn you if someone too young to play has signed up.{' '}
@@ -127,7 +126,6 @@ function AgeRestrictionsInput(props: AgeRestrictionsInputProps): JSX.Element {
           }
         />
       </div>
-
       <div className="card-footer">
         <VisibilityDisclosureText formItem={formItem} formTypeIdentifier={formTypeIdentifier} />
       </div>

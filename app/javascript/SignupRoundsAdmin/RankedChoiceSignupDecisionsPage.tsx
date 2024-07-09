@@ -29,19 +29,19 @@ import { FilterCodecs, buildFieldFilterCodecs } from '../Tables/FilterUtils';
 
 export function describeDecision(decision: RankedChoiceDecisionValue, t: TFunction): string {
   if (decision === RankedChoiceDecisionValue.Signup) {
-    return t('tables.rankedChoiceDecision.decisions.signup', 'sign up');
+    return t('tables.rankedChoiceDecision.decisions.signup');
   }
 
   if (decision === RankedChoiceDecisionValue.SkipChoice) {
-    return t('tables.rankedChoiceDecision.decisions.skipChoice', 'skip choice');
+    return t('tables.rankedChoiceDecision.decisions.skipChoice');
   }
 
   if (decision === RankedChoiceDecisionValue.SkipUser) {
-    return t('tables.rankedChoiceDecision.decisions.skipUser', 'skip user');
+    return t('tables.rankedChoiceDecision.decisions.skipUser');
   }
 
   if (decision === RankedChoiceDecisionValue.Waitlist) {
-    return t('tables.rankedChoiceDecision.decisions.waitlist', 'waitlist');
+    return t('tables.rankedChoiceDecision.decisions.waitlist');
   }
 
   assertNever(decision, true);
@@ -72,27 +72,27 @@ export function RankedChoiceDecisionCell({ value }: RankedChoiceDecisionCellProp
 
 export function describeReason(reason: RankedChoiceDecisionReason, ticketName: string, t: TFunction): string {
   if (reason === RankedChoiceDecisionReason.Conflict) {
-    return t('tables.rankedChoiceDecision.decisions.conflict', 'conflict');
+    return t('tables.rankedChoiceDecision.decisions.conflict');
   }
 
   if (reason === RankedChoiceDecisionReason.Full) {
-    return t('tables.rankedChoiceDecision.decisions.full', 'event full');
+    return t('tables.rankedChoiceDecision.decisions.full');
   }
 
   if (reason === RankedChoiceDecisionReason.MissingTicket) {
-    return t('tables.rankedChoiceDecision.decisions.missingTicket', '{{ ticketName }} required', { ticketName });
+    return t('tables.rankedChoiceDecision.decisions.missingTicket', { ticketName });
   }
 
   if (reason === RankedChoiceDecisionReason.NoMoreSignupsAllowed) {
-    return t('tables.rankedChoiceDecision.decisions.noMoreSignupsAllowed', 'no more signups allowed');
+    return t('tables.rankedChoiceDecision.decisions.noMoreSignupsAllowed');
   }
 
   if (reason === RankedChoiceDecisionReason.NoPendingChoices) {
-    return t('tables.rankedChoiceDecision.decisions.noPendingChoices', 'no pending choices');
+    return t('tables.rankedChoiceDecision.decisions.noPendingChoices');
   }
 
   if (reason === RankedChoiceDecisionReason.RankedChoiceUserConstraints) {
-    return t('tables.rankedChoiceDecision.decisions.noPendingChoices', 'user constraints');
+    return t('tables.rankedChoiceDecision.decisions.noPendingChoices');
   }
 
   assertNever(reason, true);
@@ -208,7 +208,7 @@ function RankedChoiceSignupDecisionsTable({ signupRoundId }: RankedChoiceSignupD
     variables: { signupRoundId },
   });
 
-  usePageTitle(t('signups.signupRounds.results', 'Results'));
+  usePageTitle(t('signups.signupRounds.results'));
 
   return (
     <QueryDataContext.Provider value={queryData ?? {}}>
@@ -243,7 +243,7 @@ const RankedChoiceSignupDecisionsPage = LoadQueryWrapper(useSignupRoundsAdminQue
       </h1>
       {round.executed_at && (
         <p>
-          {t('signupRounds.executedAt', 'Automation ran {{ executedAt }}.', {
+          {t('signupRounds.executedAt', {
             executedAt: format(DateTime.fromISO(round.executed_at), 'longWeekdayDateTimeWithZone'),
           })}
         </p>

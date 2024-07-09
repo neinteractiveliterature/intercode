@@ -55,19 +55,19 @@ export function describeTimespan(
   const formatDateTime = (dateTime: DateTime) => formatLCM(dateTime.setZone(timeZone), dateTimeFormat);
 
   if (timespan.start && timespan.finish) {
-    return t('timespans.finiteBothEnds', '{{ start }} to {{ finish }}', {
+    return t('timespans.finiteBothEnds', {
       start: formatDateTime(timespan.start),
       finish: formatDateTime(timespan.finish),
     });
   } else if (timespan.finish) {
-    return t('timespans.infiniteStart', 'anytime up to {{ finish }}', {
+    return t('timespans.infiniteStart', {
       finish: formatDateTime(timespan.finish),
     });
   } else if (timespan.start) {
-    return t('timespans.infiniteFinish', 'from {{ start }} indefinitely', {
+    return t('timespans.infiniteFinish', {
       start: formatDateTime(timespan.start),
     });
   } else {
-    return t('timespans.infiniteBothEnds', 'anytime');
+    return t('timespans.infiniteBothEnds');
   }
 }

@@ -14,13 +14,13 @@ import { MaximumEventSignupsValue } from '../SignupRoundUtils';
 function describeEventVisibility(visibility: ShowSchedule | null | undefined, t: TFunction): string | null | undefined {
   switch (visibility) {
     case 'no':
-      return t('admin.convention.header.eventVisibilityHidden', 'Hidden');
+      return t('admin.convention.header.eventVisibilityHidden');
     case 'priv':
-      return t('admin.convention.header.eventVisibilityPriv', 'Staff only');
+      return t('admin.convention.header.eventVisibilityPriv');
     case 'gms':
-      return t('admin.convention.header.eventVisibilityGMs', 'Staff and event teams');
+      return t('admin.convention.header.eventVisibilityGMs');
     case 'yes':
-      return t('admin.convention.header.eventVisibilityYes', 'Public');
+      return t('admin.convention.header.eventVisibilityYes');
     default:
       return visibility;
   }
@@ -31,7 +31,7 @@ function describeMaximumEventSignups(
   t: TFunction,
 ): string | null | undefined {
   if (!scheduledValue) {
-    return t('admin.convention.header.signupScheduleNotConfiguredYet', 'Signup schedule not configured yet');
+    return t('admin.convention.header.signupScheduleNotConfiguredYet');
   }
 
   const currentValue = findCurrentValue(scheduledValue);
@@ -47,7 +47,7 @@ function describeConventionTiming(
   t: TFunction,
 ): string {
   if (canceled) {
-    return t('admin.convention.header.conventionTiming.canceled', '{{ conventionName }} is canceled', {
+    return t('admin.convention.header.conventionTiming.canceled', {
       conventionName,
     });
   }
@@ -61,21 +61,21 @@ function describeConventionTiming(
   }
 
   if (now < conventionStart) {
-    return t('admin.convention.header.conventionTiming.future', '{{ conventionName }} starts in {{ count }} days', {
+    return t('admin.convention.header.conventionTiming.future', {
       conventionName,
       count: Math.ceil(conventionStart.diff(now, 'days').days),
     });
   }
 
   if (now < conventionEnd) {
-    return t('admin.convention.header.conventionTiming.ongoing', '{{ conventionName }} ends in {{ count }} days', {
+    return t('admin.convention.header.conventionTiming.ongoing', {
       conventionName,
       count: Math.ceil(conventionEnd.diff(now, 'days').days),
     });
   }
 
   if (conventionEnd < now) {
-    return t('admin.convention.header.conventionTiming.past', '{{ conventionName }} ended {{ count }} days ago', {
+    return t('admin.convention.header.conventionTiming.past', {
       conventionName,
       count: Math.floor(now.diff(conventionEnd, 'days').days),
     });
@@ -83,11 +83,11 @@ function describeConventionTiming(
 
   const isMultiDay = conventionStart < conventionEnd;
   if (isMultiDay) {
-    return t('admin.convention.header.conventionTiming.endsToday', '{{ conventionName }} ends today', {
+    return t('admin.convention.header.conventionTiming.endsToday', {
       conventionName,
     });
   }
-  return t('admin.convention.header.conventionTiming.isToday', '{{ conventionName }} is today', {
+  return t('admin.convention.header.conventionTiming.isToday', {
     conventionName,
   });
 }
@@ -139,21 +139,21 @@ function ConventionFormHeader({ convention, compact }: ConventionFormHeaderProps
     ...(convention.site_mode === 'single_event'
       ? [
           {
-            label: t('admin.convention.header.siteMode', 'Site mode'),
-            value: t('admin.convention.header.singleEventSiteMode', 'Single event'),
+            label: t('admin.convention.header.siteMode'),
+            value: t('admin.convention.header.singleEventSiteMode'),
           },
         ]
       : [
           {
-            label: t('admin.convention.header.eventList', 'Event list'),
+            label: t('admin.convention.header.eventList'),
             value: describeEventVisibility(convention.show_event_list, t),
           },
           {
-            label: t('admin.convention.header.schedule', 'Schedule'),
+            label: t('admin.convention.header.schedule'),
             value: describeEventVisibility(convention.show_schedule, t),
           },
         ]),
-    { label: t('admin.convention.header.signups', 'Signups'), value: signupsDescription },
+    { label: t('admin.convention.header.signups'), value: signupsDescription },
   ];
 
   return (

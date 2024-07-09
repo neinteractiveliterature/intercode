@@ -40,7 +40,7 @@ export default LoadQueryWrapper(useRoomsAdminQuery, function RoomsAdmin({ data }
 
   const [creatingRoomName, setCreatingRoomName] = useState('');
 
-  usePageTitle(t('navigation.admin.rooms', 'Rooms'));
+  usePageTitle(t('navigation.admin.rooms'));
 
   if (authorizationWarning) return authorizationWarning;
 
@@ -79,16 +79,16 @@ export default LoadQueryWrapper(useRoomsAdminQuery, function RoomsAdmin({ data }
         <div className="flex-grow-1">
           {room.runs.length > 0 ? (
             <span className="text-muted">
-              <>({t('admin.rooms.eventRunCount', '{{ count }} event runs', { count: room.runs.length })})</>
+              <>({t('admin.rooms.eventRunCount', { count: room.runs.length })})</>
             </span>
           ) : null}
         </div>
         <button
           className="btn btn-sm btn-outline-danger ms-2"
-          title={t('admin.rooms.deleteLabel', 'Delete room')}
+          title={t('admin.rooms.deleteLabel')}
           onClick={() =>
             confirm({
-              prompt: t('admin.rooms.deleteConfirmation', 'Are you sure you want to delete this room?'),
+              prompt: t('admin.rooms.deleteConfirmation'),
               action: () => deleteRoom(room),
             })
           }
@@ -111,12 +111,12 @@ export default LoadQueryWrapper(useRoomsAdminQuery, function RoomsAdmin({ data }
               <div className="flex-grow-1">
                 <input
                   type="text"
-                  placeholder={t('admin.rooms.roomNameLabel', 'Room name')}
+                  placeholder={t('admin.rooms.roomNameLabel')}
                   className="form-control"
                   value={creatingRoomName}
                   onChange={(event) => setCreatingRoomName(event.target.value)}
                   onKeyDown={keyDownInCreatingRoom}
-                  aria-label={t('admin.rooms.roomNameLabel', 'Room name')}
+                  aria-label={t('admin.rooms.roomNameLabel')}
                 />
               </div>
               <button
@@ -125,7 +125,7 @@ export default LoadQueryWrapper(useRoomsAdminQuery, function RoomsAdmin({ data }
                 onClick={createRoomWasClicked}
                 type="button"
               >
-                {t('admin.rooms.addRoomLabel', 'Add room')}
+                {t('admin.rooms.addRoomLabel')}
               </button>
             </div>
           </li>

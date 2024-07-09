@@ -11,9 +11,9 @@ export function describeDuration(value: number, t: TFunction): string {
     .map(({ unit, quantity }) => {
       switch (unit.name) {
         case 'hour':
-          return t('general.timeUnits.hours', '{{ count }} hours', { count: quantity });
+          return t('general.timeUnits.hours', { count: quantity });
         case 'minute':
-          return t('general.timeUnits.minutes', '{{ count }} minutes', { count: quantity });
+          return t('general.timeUnits.minutes', { count: quantity });
         default:
           assertNever(unit.name);
       }

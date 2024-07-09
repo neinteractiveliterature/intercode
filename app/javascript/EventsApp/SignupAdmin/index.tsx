@@ -34,14 +34,13 @@ export default LoadQueryWrapper(useSignupAdminEventQueryFromParams, function Sig
             active={!location.pathname.endsWith('edit')}
             to={`${runPath}/admin_signups?filters.state=confirmed%2Cwaitlisted&sort.id=asc`}
           >
-            {t('events.signupAdmin.title', 'Signups')}
+            {t('events.signupAdmin.title')}
           </BreadcrumbItem>
           <LeafBreadcrumbItem path={`${runPath}/admin_signups/:id/edit`}>
-            {t('events.signupAdmin.editTitle', 'Edit signup')}
+            {t('events.signupAdmin.editTitle')}
           </LeafBreadcrumbItem>
         </ol>
       </nav>
-
       <Routes>
         <Route path=":id/edit" element={<EditSignup teamMembersUrl={`${eventPath}/team_members`} />} />
         <Route element={<SignupsIndex runPath={runPath} />}>

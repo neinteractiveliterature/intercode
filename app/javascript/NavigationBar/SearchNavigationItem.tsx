@@ -45,7 +45,7 @@ function SearchNavigationItem(): JSX.Element {
           onClick={() => setVisibleWithHiding(true)}
         >
           <i className="bi-search" />
-          <span className="visually-hidden">{t('navigation.search.buttonText', 'Search')}</span>
+          <span className="visually-hidden">{t('navigation.search.buttonText')}</span>
         </button>
       </CSSTransition>
     </div>

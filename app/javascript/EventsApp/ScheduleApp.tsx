@@ -37,7 +37,7 @@ function getDefaultScheduleView(scheduleGridConfigs: ScheduleGridConfig[]) {
 
 function getScheduleViewLabel(view: string, t: TFunction) {
   if (view === 'list') {
-    return t('schedule.views.listView', 'List view');
+    return t('schedule.views.listView');
   }
 
   const config = allConfigs.find((c) => c.key === view);
@@ -48,9 +48,9 @@ function getScheduleViewLabel(view: string, t: TFunction) {
   return view;
 
   // Deliberately unreachable code in order to get i18next-parse not to delete these translations
-  t('schedule.views.gridView', 'Grid view');
-  t('schedule.views.gridViewByRoom', 'Grid view by room');
-  t('schedule.views.gridViewWithCounts', 'Grid view with counts');
+  t('schedule.views.gridView');
+  t('schedule.views.gridViewByRoom');
+  t('schedule.views.gridViewWithCounts');
 }
 
 type ScheduleViewDropdownProps = {
@@ -67,7 +67,7 @@ function ScheduleViewDropdown({ viewSelected, scheduleView, configs }: ScheduleV
       buttonContent={
         <>
           <strong className="d-none d-md-inline">
-            <>{t('schedule.views.scheduleViewSelectorHeader', 'View type:')} </>
+            <>{t('schedule.views.scheduleViewSelectorHeader')} </>
           </strong>
           {getScheduleViewLabel(scheduleView, t)}
         </>
@@ -195,11 +195,10 @@ const ScheduleApp = LoadQueryWrapper(useScheduleGridConventionDataQuery, functio
       <nav aria-label="breadcrumb">
         <ol className="breadcrumb">
           <li className="breadcrumb-item active" aria-current="page">
-            {t('navigation.events.eventSchedule', 'Event Schedule')}
+            {t('navigation.events.eventSchedule')}
           </li>
         </ol>
       </nav>
-
       <div className="schedule-grid-navigation-bar mb-3">
         <div className="bg-light p-1 d-flex">
           <div className="flex-grow-1 d-flex">
@@ -236,7 +235,6 @@ const ScheduleApp = LoadQueryWrapper(useScheduleGridConventionDataQuery, functio
           )}
         </div>
       </div>
-
       {renderSchedule()}
     </>
   );

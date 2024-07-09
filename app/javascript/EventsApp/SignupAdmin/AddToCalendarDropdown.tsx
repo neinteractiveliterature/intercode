@@ -20,28 +20,27 @@ function AddToCalendarDropdown({ icalSecret, className }: AddToCalendarDropdownP
       buttonContent={
         <>
           <i className="bi-calendar3" aria-hidden />
-          <span className="visually-hidden">{t('addToCalendarDropdown.title', 'Add to calendar')}</span>
+          <span className="visually-hidden">{t('addToCalendarDropdown.title')}</span>
         </>
       }
       popperOptions={{ placement: 'bottom-end' }}
     >
       <a className="dropdown-item" href={googleCalendarUrl} target="_blank" rel="noopener noreferrer">
         <>
-          <i className="bi-google" aria-hidden />{' '}
-          {t('addToCalendarDropdown.subscribeGoogle', 'Subscribe on Google Calendar')}
+          <i className="bi-google" aria-hidden /> {t('addToCalendarDropdown.subscribeGoogle')}
         </>
       </a>
       <a className="dropdown-item" href={icalUrl.toString()}>
         <>
-          <i className="bi-calendar3" aria-hidden /> {t('addToCalendarDropdown.subscribeICal', 'Subscribe via iCal')}
+          <i className="bi-calendar3" aria-hidden /> {t('addToCalendarDropdown.subscribeICal')}
         </>
       </a>
       <CopyToClipboardButton
         className="dropdown-item"
         text={icalUrl.toString()}
         copiedProps={{ className: 'dropdown-item text-success' }}
-        defaultText={t('addToCalendarDropdown.copyWebcal', 'Copy webcal:// link')}
-        copiedText={t('copyToClipboard.defaultSuccess', 'Copied!')}
+        defaultText={t('addToCalendarDropdown.copyWebcal')}
+        copiedText={t('copyToClipboard.defaultSuccess')}
         iconSet="bootstrap-icons"
       />
     </DropdownMenu>

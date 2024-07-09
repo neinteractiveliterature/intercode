@@ -35,7 +35,7 @@ function FormResponseChangeHistory({
   };
 
   if (changeGroups.length === 0) {
-    return <>{t('forms.history.noChanges', 'No changes.')}</>;
+    return <>{t('forms.history.noChanges')}</>;
   }
 
   return (

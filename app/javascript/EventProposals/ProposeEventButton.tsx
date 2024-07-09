@@ -33,7 +33,7 @@ export default LoadQueryWrapper<ProposeEventButtonQueryData, ProposeEventButtonQ
         <SignInButton
           afterSignInPath={window.location.href}
           className={className}
-          caption={t('buttons.proposeEventLoggedOut', 'Log in to propose an event')}
+          caption={t('buttons.proposeEventLoggedOut')}
         />
       );
     }

@@ -19,7 +19,7 @@ function PasswordConfirmationInput({ value, onChange, password }: PasswordConfir
   return (
     <BootstrapFormInput
       type="password"
-      label={t('authentication.confirmPasswordLabel', 'Confirm password')}
+      label={t('authentication.confirmPasswordLabel')}
       className={classNames('form-control', { 'is-invalid': confirmationInvalid })}
       value={value}
       onTextChange={onChange}

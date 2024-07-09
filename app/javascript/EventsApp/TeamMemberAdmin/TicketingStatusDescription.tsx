@@ -23,31 +23,23 @@ function TicketingStatusDescription({ userConProfile, convention }: TicketingSta
     if (userConProfile.ticket.provided_by_event) {
       return (
         <>
-          {t(
-            'events.teamMemberAdmin.eventProvidedTicketDescription',
-            '{{ name }} has a {{ ticketType }} {{ ticketName }} provided by {{ eventTitle }}.',
-            {
-              name: userConProfile.name_without_nickname,
-              ticketType: humanize(userConProfile.ticket.ticket_type.name).toLowerCase(),
-              ticketName,
-              eventTitle: userConProfile.ticket.provided_by_event.title,
-            },
-          )}
+          {t('events.teamMemberAdmin.eventProvidedTicketDescription', {
+            name: userConProfile.name_without_nickname,
+            ticketType: humanize(userConProfile.ticket.ticket_type.name).toLowerCase(),
+            ticketName,
+            eventTitle: userConProfile.ticket.provided_by_event.title,
+          })}
         </>
       );
     }
 
     return (
       <>
-        {t(
-          'events.teamMemberAdmin.nonEventProvidedTicketDescription',
-          '{{ name }} has a {{ ticketType }} {{ ticketName }}.',
-          {
-            name: userConProfile.name_without_nickname,
-            ticketType: humanize(userConProfile.ticket.ticket_type.name).toLowerCase(),
-            ticketName,
-          },
-        )}
+        {t('events.teamMemberAdmin.nonEventProvidedTicketDescription', {
+          name: userConProfile.name_without_nickname,
+          ticketType: humanize(userConProfile.ticket.ticket_type.name).toLowerCase(),
+          ticketName,
+        })}
       </>
     );
   }

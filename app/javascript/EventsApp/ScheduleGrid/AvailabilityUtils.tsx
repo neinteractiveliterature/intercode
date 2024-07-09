@@ -57,7 +57,7 @@ export function describeAvailability(event: ScheduleEvent, signupCountData: Sign
   const { unlimited, totalSlots, signupCount } = calculateAvailability(event, signupCountData);
 
   if (unlimited) {
-    return <>{t('signups.availability.unlimited', 'Unlimited slots')}</>;
+    return <>{t('signups.availability.unlimited')}</>;
   }
 
   if (totalSlots === 0) {
@@ -68,7 +68,7 @@ export function describeAvailability(event: ScheduleEvent, signupCountData: Sign
 
   return (
     <>
-      {t('signups.availability.partiallyFull', '{{ signupCount }} of {{ count }} slots filled', {
+      {t('signups.availability.partiallyFull', {
         signupCount: displayCount,
         count: totalSlots,
       })}

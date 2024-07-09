@@ -13,18 +13,18 @@ export function getSignupStateLabel(
 ): string {
   switch (state) {
     case SignupState.Confirmed:
-      return t('signups.states.confirmed', 'Confirmed');
+      return t('signups.states.confirmed');
     case SignupState.TicketPurchaseHold:
-      return t('signups.states.ticketPurchaseHold', 'Held pending {{ ticketName }} purchase', {
-        ticketName: ticketName ?? t('defaultTicketName', 'ticket'),
+      return t('signups.states.ticketPurchaseHold', {
+        ticketName: ticketName ?? t('defaultTicketName'),
       });
     case SignupState.Waitlisted:
-      return t('signups.states.waitlisted', 'Waitlisted');
+      return t('signups.states.waitlisted');
     case SignupState.Withdrawn:
-      return t('signups.states.withdrawn', 'Withdrawn');
+      return t('signups.states.withdrawn');
     default:
       if (state == null) {
-        return t('signups.states.notSignedUp', 'Not signed up');
+        return t('signups.states.notSignedUp');
       } else {
         assertNever(state, true);
         return state ?? 'unknown';

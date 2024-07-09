@@ -41,11 +41,9 @@ function SingleProposalBreadcrumbs() {
       <RouteActivatedBreadcrumbItem to="" end>
         {data?.convention.event_proposal.title}
       </RouteActivatedBreadcrumbItem>
-
-      <LeafBreadcrumbItem path="edit">{t('navigation.general.edit', 'Edit')}</LeafBreadcrumbItem>
-
+      <LeafBreadcrumbItem path="edit">{t('navigation.general.edit')}</LeafBreadcrumbItem>
       <RouteActivatedBreadcrumbItem to="history" hideUnlessMatch>
-        {t('navigation.general.history', 'History')}
+        {t('navigation.general.history')}
       </RouteActivatedBreadcrumbItem>
     </>
   );
@@ -63,7 +61,7 @@ function AdminEditEventProposal() {
   usePageTitle(
     useValueUnless(
       () =>
-        t('general.pageTitles.editing', 'Editing “{{ title }}”', {
+        t('general.pageTitles.editing', {
           title: data?.convention.event_proposal.title,
         }),
       error || loading,
@@ -78,7 +76,7 @@ function AdminEditEventProposal() {
       }}
       exitButton={
         <Link className="btn btn-outline-secondary me-2" to={`/admin_event_proposals/${eventProposalId}`}>
-          {t('admin.eventProposals.edit.exitButton', 'Return to proposal')}
+          {t('admin.eventProposals.edit.exitButton')}
         </Link>
       }
     />
@@ -96,7 +94,7 @@ function EventProposalsAdmin(): JSX.Element {
       <nav aria-label="breadcrumb">
         <ol className="breadcrumb">
           <RouteActivatedBreadcrumbItem to=".?sort.status=asc&sort.submitted_at=desc" end>
-            {t('navigation.admin.eventProposals', 'Event Proposals')}
+            {t('navigation.admin.eventProposals')}
           </RouteActivatedBreadcrumbItem>
 
           <Routes>
@@ -104,7 +102,6 @@ function EventProposalsAdmin(): JSX.Element {
           </Routes>
         </ol>
       </nav>
-
       <Routes>
         <Route path=":id/history/*" element={<EventProposalHistory />} />
         <Route path=":id/edit" element={<AdminEditEventProposal />} />

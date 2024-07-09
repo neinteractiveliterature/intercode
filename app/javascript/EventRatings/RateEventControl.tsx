@@ -64,7 +64,7 @@ function RateEventControl({ value, onChange, size }: RateEventControlProps): JSX
           onClick={clearRating}
           selected
           size={size}
-          tooltipContent={t('events.ratings.clearButton', 'Clear rating')}
+          tooltipContent={t('events.ratings.clearButton')}
         />
       ) : (
         <div className="d-flex">
@@ -72,14 +72,14 @@ function RateEventControl({ value, onChange, size }: RateEventControlProps): JSX
             rating={1}
             onClick={() => onChange(1)}
             size={size}
-            tooltipContent={t('events.ratings.favoriteButton', 'Mark as favorite')}
+            tooltipContent={t('events.ratings.favoriteButton')}
           />
 
           <RatingButton
             rating={-1}
             onClick={() => onChange(-1)}
             size={size}
-            tooltipContent={t('events.ratings.hideButton', 'Hide event')}
+            tooltipContent={t('events.ratings.hideButton')}
           />
         </div>
       )}

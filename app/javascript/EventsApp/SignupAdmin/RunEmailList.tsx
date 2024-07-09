@@ -79,9 +79,7 @@ export default LoadQueryWrapper<
   ]);
 
   const mainTitle = useMemo(() => {
-    separator === '; '
-      ? t('events.signupAdmin.emailsSemicolonTitle', 'Emails (semicolon-separated)')
-      : t('events.signupAdmin.emailsCommaTitle', 'Emails (comma-separated)');
+    separator === '; ' ? t('events.signupAdmin.emailsSemicolonTitle') : t('events.signupAdmin.emailsCommaTitle');
   }, [separator, t]);
 
   usePageTitle(`${mainTitle} - ${data.convention.event.title}`);
@@ -95,19 +93,19 @@ export default LoadQueryWrapper<
           multiple
           choices={[
             {
-              label: t('events.signupAdmin.emailFilters.teamMembers', 'Include {{ teamMemberName }}', {
+              label: t('events.signupAdmin.emailFilters.teamMembers', {
                 teamMemberName: data.convention.event.event_category.teamMemberNamePlural,
               }),
               value: 'teamMembers',
             },
             ...(data.convention.event.registration_policy?.buckets ?? []).map((bucket) => ({
-              label: t('events.signupAdmin.emailFilters.confirmedBucket', 'Include {{ bucketName }} (confirmed)', {
+              label: t('events.signupAdmin.emailFilters.confirmedBucket', {
                 bucketName: bucket.name ?? bucket.key,
               }) as string,
               value: bucket.key,
             })),
             {
-              label: t('events.signupAdmin.emailFilters.waitlisted', 'Include waitlisted'),
+              label: t('events.signupAdmin.emailFilters.waitlisted'),
               value: 'waitlisted',
             },
           ]}
@@ -117,7 +115,7 @@ export default LoadQueryWrapper<
           }}
           renderHeaderCaption={(currentIncludes) => {
             if (currentIncludes.length === 0) {
-              return t('events.signupAdmin.emailFilters.nobody', 'Nobody');
+              return t('events.signupAdmin.emailFilters.nobody');
             }
 
             return [...currentIncludes]

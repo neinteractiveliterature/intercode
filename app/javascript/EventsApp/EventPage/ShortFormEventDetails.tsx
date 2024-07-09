@@ -84,7 +84,7 @@ export default LoadQueryWithVariablesWrapper(
         ) : null}
         {acceptsSignups ? (
           <>
-            <dt className="col-md-3">{t('events.runCapacity.label', 'Capacity')}</dt>
+            <dt className="col-md-3">{t('events.runCapacity.label')}</dt>
             <dd className="col-md-9 mb-0">
               <EventCapacityDisplay event={event} />
             </dd>

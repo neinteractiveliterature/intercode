@@ -100,7 +100,7 @@ function NavigationBarContent({ navbarClasses, rootItems }: NavigationBarContent
             onClick={toggleCollapsed}
             aria-controls="navbarSupportedContent"
             aria-expanded={!collapsed}
-            aria-label={t('navigation.toggle', 'Toggle navigation')}
+            aria-label={t('navigation.toggle')}
           >
             <i className={collapsed ? 'bi-list' : 'bi-x'} />
           </button>
@@ -109,7 +109,7 @@ function NavigationBarContent({ navbarClasses, rootItems }: NavigationBarContent
           <div className="navbar-convention-canceled-notice">
             <div className="container">
               <div className="text-center flex-grow-1">
-                {t('alerts.conventionCanceled', '{{ conventionName }} is canceled.', {
+                {t('alerts.conventionCanceled', {
                   conventionName,
                 })}
               </div>

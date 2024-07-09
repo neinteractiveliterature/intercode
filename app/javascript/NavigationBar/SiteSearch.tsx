@@ -76,9 +76,9 @@ function SearchMenu(props: MenuProps<SiteSearchOptionType, false>) {
         {props.children}
         <div className="bg-light small p-1 text-muted d-none d-md-block">
           <>
-            <i className="bi-lightbulb" /> {t('navigation.search.searchAnywhereText', 'Search anywhere:')}{' '}
+            <i className="bi-lightbulb" /> {t('navigation.search.searchAnywhereText')}{' '}
             <span className="bg-white font-monospace border rounded px-1">
-              {t('navigation.search.searchAnywhereKeyCombo', 'Ctrl-/')}
+              {t('navigation.search.searchAnywhereKeyCombo')}
             </span>
           </>
         </div>

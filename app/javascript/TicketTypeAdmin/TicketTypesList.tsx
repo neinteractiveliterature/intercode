@@ -49,14 +49,10 @@ function describeTicketTypeOptions(
 ) {
   let eventProvidedDescription: string | undefined;
   if (ticketType.maximum_event_provided_tickets > 0) {
-    eventProvidedDescription = t(
-      'admin.ticketTypes.eventProvidedDescription',
-      'events can provide up to {{ count }} {{ ticketName }}',
-      {
-        count: ticketType.maximum_event_provided_tickets,
-        ticketName: ticketType.maximum_event_provided_tickets === 1 ? ticketName : ticketNamePlural,
-      },
-    );
+    eventProvidedDescription = t('admin.ticketTypes.eventProvidedDescription', {
+      count: ticketType.maximum_event_provided_tickets,
+      ticketName: ticketType.maximum_event_provided_tickets === 1 ? ticketName : ticketNamePlural,
+    });
   }
 
   if (eventProvidedDescription != null) {
@@ -146,7 +142,6 @@ function TicketTypeDisplay({
           {!ticketType.allows_event_signups && <div>Does not allow event signups</div>}
         </div>
       </div>
-
       <div className="card-body bg-white text-body">
         <p>
           <strong>Providing products:</strong>
@@ -181,7 +176,7 @@ function TicketTypeDisplay({
                       }
                     >
                       <i className="bi-trash" />
-                      <span className="visually-hidden">{t('buttons.delete', 'Delete')}</span>
+                      <span className="visually-hidden">{t('buttons.delete')}</span>
                     </button>
                     <button
                       className="btn btn-sm btn-outline-primary"
@@ -208,7 +203,7 @@ function TicketTypeDisplay({
             className="btn btn-outline-primary"
             onClick={() => newProductModal.open({ ticketType })}
           >
-            {t('admin.tickets.createProduct', 'Create product')}
+            {t('admin.tickets.createProduct')}
           </button>
         </div>
       </div>

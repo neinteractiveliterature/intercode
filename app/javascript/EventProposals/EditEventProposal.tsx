@@ -24,7 +24,7 @@ export default LoadQueryWrapper(useLoadEventProposal, function EditEventProposal
   const apolloClient = useApolloClient();
 
   usePageTitle(
-    t('general.pageTitles.editing', 'Editing “{{ title }}”', {
+    t('general.pageTitles.editing', {
       title: data.convention.event_proposal.title,
     }),
   );
@@ -37,14 +37,11 @@ export default LoadQueryWrapper(useLoadEventProposal, function EditEventProposal
 
   const canDelete = data.currentAbility.can_delete_event_proposal;
   const deleteButtonProps = {
-    children: t('eventProposals.edit.deleteButton', 'Delete proposal'),
+    children: t('eventProposals.edit.deleteButton'),
     className: 'btn btn-danger',
     onClick: () =>
       confirm({
-        prompt: t(
-          'eventProposals.edit.deleteConfirmation',
-          'Are you sure?  This will erase your proposal along with everything you’ve written here.',
-        ),
+        prompt: t('eventProposals.edit.deleteConfirmation'),
         action: async () => {
           await deleteProposal({ variables: { id: eventProposalId } });
           await apolloClient.clearStore();
@@ -58,7 +55,7 @@ export default LoadQueryWrapper(useLoadEventProposal, function EditEventProposal
     <>
       <div className="row mb-2">
         <div className="col-md-9">
-          <h1>{t('navigation.events.newProposal', 'Propose an Event')}</h1>
+          <h1>{t('navigation.events.newProposal')}</h1>
         </div>
         <div className="col-md-3">
           {canDelete && (
@@ -80,7 +77,7 @@ export default LoadQueryWrapper(useLoadEventProposal, function EditEventProposal
         afterSubmit={() => navigate('/pages/new-proposal')}
         exitButton={
           <Link className="btn btn-outline-secondary me-2" to="/pages/new-proposal">
-            {t('eventProposals.edit.exitButton', 'Return to proposals page')}
+            {t('eventProposals.edit.exitButton')}
           </Link>
         }
       />

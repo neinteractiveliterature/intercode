@@ -103,9 +103,7 @@ function SignupRequestUserConProfileCell({
       {signupAutomationMode === SignupAutomationMode.RankedChoice && (
         <>
           <br />
-          <Link to={`../ranked_choice_queue/${value.id}`}>
-            {t('signupModeration.goToRankedChoiceQueue', 'Go to ranked choice queue')}
-          </Link>
+          <Link to={`../ranked_choice_queue/${value.id}`}>{t('signupModeration.goToRankedChoiceQueue')}</Link>
         </>
       )}
     </>

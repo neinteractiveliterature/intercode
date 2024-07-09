@@ -64,14 +64,13 @@ function ResetPassword(): JSX.Element {
 
   return (
     <>
-      <h1 className="mb-4">{t('authentication.resetPassword.header', 'Reset password')}</h1>
-
+      <h1 className="mb-4">{t('authentication.resetPassword.header')}</h1>
       <form onSubmit={onSubmit}>
         <div className="card">
           <div className="card-body">
             <div className="mb-3">
               <label className="form-label" htmlFor={passwordId}>
-                {t('authentication.resetPassword.passwordLabel', 'Password')}
+                {t('authentication.resetPassword.passwordLabel')}
               </label>
               <Suspense fallback={<LoadingIndicator iconSet="bootstrap-icons" />}>
                 <PasswordInputWithStrengthCheck value={password} onChange={setPassword} id={passwordId} />
@@ -89,9 +88,9 @@ function ResetPassword(): JSX.Element {
           <div className="card-footer text-end">
             <input
               type="submit"
-              value={t('authentication.resetPassword.setPasswordButton', 'Set password').toString()}
+              value={t('authentication.resetPassword.setPasswordButton').toString()}
               className="btn btn-primary"
-              aria-label={t('authentication.resetPassword.setPasswordButton', 'Set password')}
+              aria-label={t('authentication.resetPassword.setPasswordButton')}
             />
           </div>
         </div>

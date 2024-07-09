@@ -54,7 +54,7 @@ function ScheduleGridApp({
             <div className="m-0 p-2 border-bottom">
               <h3 className="p-0 m-0">{format(timespan.start, 'longWeekdayDate')}</h3>
               <div className="font-italic">
-                {t('schedule.timezoneMessage', 'All times displayed in {{ offsetName }}.', {
+                {t('schedule.timezoneMessage', {
                   offsetName: timespan.start
                     .reconfigure({
                       locale: language,

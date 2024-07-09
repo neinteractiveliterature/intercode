@@ -33,7 +33,7 @@ function TeamMemberForm({ event, disabled, value, onChange }: TeamMemberFormProp
   const checkboxProperties = [
     {
       name: 'display_team_member',
-      label: t('events.teamMemberAdmin.displayLabel', 'Display as {{ teamMemberName }}', {
+      label: t('events.teamMemberAdmin.displayLabel', {
         teamMemberName,
       }) as string,
       value: value.display_team_member,
@@ -43,13 +43,8 @@ function TeamMemberForm({ event, disabled, value, onChange }: TeamMemberFormProp
       name: 'show_email',
       label: (
         <>
-          {t('events.teamMemberAdmin.showEmail.label', 'Show individual email address on event page')}{' '}
-          <HelpPopover iconSet="bootstrap-icons">
-            {t(
-              'events.teamMemberAdmin.showEmail.helpPopover',
-              'Selecting this option will make the individual email address for this {{ teamMemberName }} appear on the event page, but only for logged-in site users.',
-            )}
-          </HelpPopover>
+          {t('events.teamMemberAdmin.showEmail.label')}{' '}
+          <HelpPopover iconSet="bootstrap-icons">{t('events.teamMemberAdmin.showEmail.helpPopover')}</HelpPopover>
         </>
       ),
       value: value.show_email,
@@ -57,7 +52,7 @@ function TeamMemberForm({ event, disabled, value, onChange }: TeamMemberFormProp
     },
     {
       name: 'receive_con_email',
-      label: t('events.teamMemberAdmin.receiveConEmailLabel', 'Receive email from convention'),
+      label: t('events.teamMemberAdmin.receiveConEmailLabel'),
       value: value.receive_con_email,
       onChange: setReceiveConEmail,
     },
@@ -76,22 +71,18 @@ function TeamMemberForm({ event, disabled, value, onChange }: TeamMemberFormProp
           onCheckedChange={checkboxChange}
         />
       ))}
-
       <MultipleChoiceInput
-        caption={t('events.teamMemberAdmin.receiveSignupEmailLabel', 'Receive email on signup and withdrawal')}
+        caption={t('events.teamMemberAdmin.receiveSignupEmailLabel')}
         choices={[
           {
-            label: t('events.teamMemberAdmin.receiveSignupEmail.allSignups', 'Yes, all signup activity'),
+            label: t('events.teamMemberAdmin.receiveSignupEmail.allSignups'),
             value: 'ALL_SIGNUPS',
           },
           {
-            label: t(
-              'events.teamMemberAdmin.receiveSignupEmail.nonWaitlistSignups',
-              'Yes, except joining and dropping from waitlist',
-            ),
+            label: t('events.teamMemberAdmin.receiveSignupEmail.nonWaitlistSignups'),
             value: 'NON_WAITLIST_SIGNUPS',
           },
-          { label: t('events.teamMemberAdmin.receiveSignupEmail.noEmail', 'No'), value: 'NO' },
+          { label: t('events.teamMemberAdmin.receiveSignupEmail.noEmail'), value: 'NO' },
         ]}
         value={value.receive_signup_email}
         onChange={(newValue: ReceiveSignupEmail) => setReceiveSignupEmail(newValue)}

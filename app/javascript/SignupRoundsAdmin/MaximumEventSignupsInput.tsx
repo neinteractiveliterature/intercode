@@ -96,14 +96,14 @@ function MaximumEventSignupsInput({ value, onChange, id }: MaximumEventSignupsIn
       <select className="form-select" value={inputState.valueType} onChange={valueTypeChanged} id={id}>
         <option aria-label="Blank placeholder option" />
         <option value="not_yet">{t('signups.maximumSignups.notYet')}</option>
-        <option value="limited">{t('signups.maximumSignups.limitedUnspecified', 'Limited number of signups')}</option>
+        <option value="limited">{t('signups.maximumSignups.limitedUnspecified')}</option>
         <option value="unlimited">{t('signups.maximumSignups.unlimited')}</option>
         <option value="not_now">{t('signups.maximumSignups.notNow')}</option>
       </select>
       {inputState.valueType === 'limited' && (
         <>
           <label className="input-group-text" htmlFor={limitedCountId} id={`${limitedCountId}-label`}>
-            {t('signups.maximumSignups.limitedCountLabel', 'Max:')}
+            {t('signups.maximumSignups.limitedCountLabel')}
           </label>
           <input
             id={limitedCountId}

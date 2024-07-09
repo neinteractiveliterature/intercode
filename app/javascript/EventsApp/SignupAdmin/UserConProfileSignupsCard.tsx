@@ -100,15 +100,10 @@ export default LoadQueryWithVariablesWrapper(
         <li className="list-group-item list-group-item-warning">
           <>
             {userConProfile.id === myProfile?.id
-              ? t(
-                  'admin.userConProfiles.signupsCard.unSignedUpYou',
-                  'You are a team member for the following events, but are not signed up for them:',
-                )
-              : t(
-                  'admin.userConProfiles.signupsCard.unSignedUpOther',
-                  '{{ name }} is a team member for the following events, but is not signed up for them:',
-                  { name: userConProfile.name_without_nickname },
-                )}{' '}
+              ? t('admin.userConProfiles.signupsCard.unSignedUpYou')
+              : t('admin.userConProfiles.signupsCard.unSignedUpOther', {
+                  name: userConProfile.name_without_nickname,
+                })}{' '}
             {joinReact(
               unSignedUpEvents.map((event) => renderEventLink(event)),
               ', ',
@@ -134,13 +129,13 @@ export default LoadQueryWithVariablesWrapper(
                 />
               </div>
             )}
-            {t('admin.userConProfiles.signupsCard.header', 'Signups')}
+            {t('admin.userConProfiles.signupsCard.header')}
           </>
         </div>
         <ul className="list-group list-group-flush">
           {signups.length === 0 ? (
             <li className="list-group-item">
-              <em>{t('admin.userConProfiles.signupsCard.noSignups', 'No signups')}</em>
+              <em>{t('admin.userConProfiles.signupsCard.noSignups')}</em>
             </li>
           ) : null}
           {signups.map((signup) => renderSignup(signup))}
@@ -153,20 +148,16 @@ export default LoadQueryWithVariablesWrapper(
               className="btn btn-danger btn-sm"
               onClick={() =>
                 confirm({
-                  prompt: t(
-                    'admin.userConProfiles.signupsCard.withdrawFromAllConfirmation',
-                    'Are you sure you want to withdraw {{ name }} from all their events at {{ conventionName }}?',
-                    {
-                      name: userConProfile.name_without_nickname,
-                      conventionName: convention?.name,
-                    },
-                  ),
+                  prompt: t('admin.userConProfiles.signupsCard.withdrawFromAllConfirmation', {
+                    name: userConProfile.name_without_nickname,
+                    conventionName: convention?.name,
+                  }),
                   action: () => withdrawAllSignups({ variables: { userConProfileId } }),
                   renderError: (withdrawError) => <ErrorDisplay graphQLError={withdrawError} />,
                 })
               }
             >
-              {t('admin.userConProfiles.withdrawFromAllButton', 'Withdraw from all')}
+              {t('admin.userConProfiles.withdrawFromAllButton')}
             </button>
           </div>
         )}

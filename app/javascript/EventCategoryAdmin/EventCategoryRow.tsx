@@ -35,7 +35,7 @@ function EventCategoryRow({ convention, eventCategory }: EventCategoryRowProps):
         <small>
           <>
             (
-            {t('admin.eventCategories.eventCount', '{{ count }} events', {
+            {t('admin.eventCategories.eventCount', {
               count: eventCategory.events_paginated.total_entries,
             })}
             )
@@ -57,7 +57,7 @@ function EventCategoryRow({ convention, eventCategory }: EventCategoryRowProps):
             }
           >
             <i className="bi-trash" />
-            <span className="visually-hidden">{t('admin.eventCategories.deleteLabel', 'Delete event category')}</span>
+            <span className="visually-hidden">{t('admin.eventCategories.deleteLabel')}</span>
           </ButtonWithTooltip>
         ) : (
           <button
@@ -65,10 +65,7 @@ function EventCategoryRow({ convention, eventCategory }: EventCategoryRowProps):
             className="btn btn-outline-danger btn-sm me-2"
             onClick={() =>
               confirm({
-                prompt: t(
-                  'admin.eventCategories.deleteConfirmation',
-                  'Are you sure you want to delete this event category?',
-                ),
+                prompt: t('admin.eventCategories.deleteConfirmation'),
                 renderError: (error) => <ErrorDisplay graphQLError={error} />,
                 action: () => deleteEventCategory(eventCategory),
               })
@@ -79,7 +76,7 @@ function EventCategoryRow({ convention, eventCategory }: EventCategoryRowProps):
           </button>
         )}
         <Link to={`/event_categories/${eventCategory.id}/edit`} className="btn btn-primary btn-sm">
-          {t('buttons.edit', 'Edit')}
+          {t('buttons.edit')}
         </Link>
       </td>
     </tr>

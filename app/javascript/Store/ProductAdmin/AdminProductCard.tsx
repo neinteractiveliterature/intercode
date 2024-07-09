@@ -17,11 +17,11 @@ export type AdminProductCardProps = {
 
 function describePaymentOption(paymentOption: string, t: TFunction): string {
   if (paymentOption === 'stripe') {
-    return t('admin.store.paymentOptions.stripe', 'Stripe');
+    return t('admin.store.paymentOptions.stripe');
   }
 
   if (paymentOption === 'pay_at_convention') {
-    return t('admin.store.paymentOptions.payAtConvention', 'Pay at convention');
+    return t('admin.store.paymentOptions.payAtConvention');
   }
 
   return paymentOption;
@@ -34,11 +34,7 @@ function AdminProductCard({ currentAbility, startEditing, product }: AdminProduc
 
   const deleteClicked = () => {
     confirm({
-      prompt: t(
-        'admin.store.products.deleteConfirmation',
-        'Are you sure you want to delete the product {{ productName }}?',
-        { productName: product.name },
-      ),
+      prompt: t('admin.store.products.deleteConfirmation', { productName: product.name }),
       action: () =>
         deleteProduct({
           variables: { id: product.id },
@@ -78,16 +74,14 @@ function AdminProductCard({ currentAbility, startEditing, product }: AdminProduc
                   <li className="list-inline-item">
                     <button type="button" className="btn btn-sm btn-danger" onClick={deleteClicked}>
                       <i className="bi-trash">
-                        <span className="visually-hidden">
-                          {t('admin.store.products.deleteLabel', 'Delete product')}
-                        </span>
+                        <span className="visually-hidden">{t('admin.store.products.deleteLabel')}</span>
                       </i>
                     </button>
                   </li>
                 )}
                 <li className="list-inline-item">
                   <button type="button" className="btn btn-sm btn-secondary" onClick={startEditing}>
-                    {t('buttons.edit', 'Edit')}
+                    {t('buttons.edit')}
                   </button>
                 </li>
               </ul>
@@ -96,9 +90,7 @@ function AdminProductCard({ currentAbility, startEditing, product }: AdminProduc
         </div>
         <div>
           <span className={classNames('badge', product.available ? 'bg-success' : 'bg-danger')}>
-            {product.available
-              ? t('admin.store.products.available', 'Available for purchase')
-              : t('admin.store.products.unavailable', 'Not available for purchase')}
+            {product.available ? t('admin.store.products.available') : t('admin.store.products.unavailable')}
           </span>
           {product.payment_options.map((paymentOption) => (
             <i
@@ -117,7 +109,6 @@ function AdminProductCard({ currentAbility, startEditing, product }: AdminProduc
           </div>
         )}
       </div>
-
       <div className="card-body">
         <div className="d-lg-flex justify-content-lg-start align-items-lg-start">
           {product.image && <img src={product.image.url} style={{ maxWidth: '200px' }} alt={product.name} />}

@@ -55,20 +55,20 @@ export default function FileInputWithPreview({ existingFileUrl, file, onChange, 
         <div className="d-flex align-items-start">
           <FilePreview filename={file?.name} contentType={file?.type} url={imageUrl ?? undefined} />
           <button className="btn btn-secondary ms-4" type="button" onClick={clearFile}>
-            {t('cms.fileUploadForm.clearFileButton', 'Clear')}
+            {t('cms.fileUploadForm.clearFileButton')}
           </button>
         </div>
       ) : existingFileUrl && typeof file === 'undefined' ? (
         <div className="d-flex align-items-start">
           <FilePreview contentType="image/unknown" url={existingFileUrl} />
           <button className="btn btn-secondary ms-4" type="button" onClick={clearFile}>
-            {t('cms.fileUploadForm.clearFileButton', 'Clear')}
+            {t('cms.fileUploadForm.clearFileButton')}
           </button>
         </div>
       ) : (
         <div className="mb-3">
           <label className="form-label" htmlFor={fileInputId} aria-hidden>
-            {t('cms.fileUploadForm.fileInputLabel', 'File to upload')}
+            {t('cms.fileUploadForm.fileInputLabel')}
           </label>
           {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           <input

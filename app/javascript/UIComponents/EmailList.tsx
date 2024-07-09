@@ -33,7 +33,7 @@ function EmailList({ emails, separator, renderToolbarContent }: EmailListProps):
         <div className="flex-grow-1">
           <a href={mailtoLink} className="btn btn-secondary me-2">
             <>
-              <i className="bi-envelope-fill" /> {t('buttons.composeEmail', 'Compose email')}
+              <i className="bi-envelope-fill" /> {t('buttons.composeEmail')}
             </>
           </a>
 
@@ -43,20 +43,19 @@ function EmailList({ emails, separator, renderToolbarContent }: EmailListProps):
             copiedProps={{
               className: 'btn btn-outline-secondary me-2',
             }}
-            defaultText={t('copyToClipboard.defaultText', 'Copy to clipboard')}
-            copiedText={t('copyToClipboard.defaultSuccess', 'Copied!')}
+            defaultText={t('copyToClipboard.defaultText')}
+            copiedText={t('copyToClipboard.defaultSuccess')}
             iconSet="bootstrap-icons"
           />
         </div>
         {renderToolbarContent ? renderToolbarContent() : null}
       </div>
-
       <textarea
         className="form-control"
         readOnly
         rows={textareaRows}
         value={addresses}
-        aria-label={t('mailingLists.emailAddresses', 'Email addresses')}
+        aria-label={t('mailingLists.emailAddresses')}
       />
     </>
   );

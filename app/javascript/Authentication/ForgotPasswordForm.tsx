@@ -63,9 +63,7 @@ function ForgotPasswordForm(): JSX.Element {
     <>
       <form onSubmit={onSubmit}>
         <div className="modal-header bg-light align-items-center">
-          <div className="lead flex-grow-1">
-            {t('authentication.forgotPasswordForm.header', 'Forgot your password?')}
-          </div>
+          <div className="lead flex-grow-1">{t('authentication.forgotPasswordForm.header')}</div>
         </div>
 
         <div className="modal-body">
@@ -81,7 +79,7 @@ function ForgotPasswordForm(): JSX.Element {
           ) : (
             <BootstrapFormInput
               type="email"
-              label={t('authentication.forgotPasswordForm.emailLabel', 'Email')}
+              label={t('authentication.forgotPasswordForm.emailLabel')}
               value={email}
               onTextChange={setEmail}
               disabled={resetPasswordInProgress}
@@ -100,7 +98,7 @@ function ForgotPasswordForm(): JSX.Element {
                 setCurrentView('signUp');
               }}
             >
-              {t('authentication.signUpLink', 'Sign up for an account')}
+              {t('authentication.signUpLink')}
             </button>
             <button
               type="button"
@@ -109,7 +107,7 @@ function ForgotPasswordForm(): JSX.Element {
                 setCurrentView('signIn');
               }}
             >
-              {t('authentication.logInLink', 'Log in to an existing account')}
+              {t('authentication.logInLink')}
             </button>
           </div>
           <div>
@@ -119,15 +117,15 @@ function ForgotPasswordForm(): JSX.Element {
               disabled={resetPasswordInProgress}
               onClick={closeModal}
             >
-              {success ? t('buttons.ok', 'OK') : t('buttons.cancel', 'Cancel')}
+              {success ? t('buttons.ok') : t('buttons.cancel')}
             </button>
             {!success && (
               <input
                 type="submit"
                 className="btn btn-primary"
                 disabled={resetPasswordInProgress}
-                value={t('authentication.forgotPassword.sendInstructionsButton', 'Send instructions').toString()}
-                aria-label={t('authentication.forgotPassword.sendInstructionsButton', 'Send instructions')}
+                value={t('authentication.forgotPassword.sendInstructionsButton').toString()}
+                aria-label={t('authentication.forgotPassword.sendInstructionsButton')}
               />
             )}
           </div>

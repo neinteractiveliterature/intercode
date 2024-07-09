@@ -41,18 +41,11 @@ export default LoadQueryWrapper(useClickwrapAgreementQuery, function ClickwrapAg
 
   return (
     <>
-      <p className="my-4">
-        {t(
-          'clickwrap.disclosureMessage',
-          'In order to use the {{ conventionName }} web site, you must agree to the following terms of service.  If you do not agree, please close this browser window.',
-          { conventionName: convention.name },
-        )}
-      </p>
-
+      <p className="my-4">{t('clickwrap.disclosureMessage', { conventionName: convention.name })}</p>
       <div className="px-4">
         <div className="card">
           <div className="card-header">
-            {t('clickwrap.header', '{{ conventionName }} terms of service', {
+            {t('clickwrap.header', {
               conventionName: convention.name,
             })}
           </div>
@@ -63,7 +56,7 @@ export default LoadQueryWrapper(useClickwrapAgreementQuery, function ClickwrapAg
           </div>
           <div className="card-footer text-end">
             <button className="btn btn-primary" type="button" onClick={acceptClicked} disabled={acceptInProgress}>
-              {t('clickwrap.agreeButton', 'I agree')}
+              {t('clickwrap.agreeButton')}
             </button>
           </div>
         </div>

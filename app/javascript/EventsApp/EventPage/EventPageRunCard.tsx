@@ -146,11 +146,7 @@ function EventPageRunCard({
   const selfServiceWithdraw = useCallback(
     () =>
       confirm({
-        prompt: t(
-          'events.withdrawPrompt.selfServiceSignup',
-          'Are you sure you want to withdraw from {{ eventTitle }}?',
-          { eventTitle: event.title },
-        ),
+        prompt: t('events.withdrawPrompt.selfServiceSignup', { eventTitle: event.title }),
         action: async () => {
           await withdrawMySignupMutate({ variables: { runId: run.id } });
           await apolloClient.resetStore();
@@ -214,11 +210,7 @@ function EventPageRunCard({
     }
 
     confirm({
-      prompt: t(
-        'events.withdrawPrompt.signupRequest',
-        'Are you sure you want to withdraw your request to sign up for {{ eventTitle }}?',
-        { eventTitle: event.title },
-      ),
+      prompt: t('events.withdrawPrompt.signupRequest', { eventTitle: event.title }),
       action: () => withdrawSignupRequestMutate({ variables: { id: myPendingSignupRequest.id } }),
       renderError: (error) => <ErrorDisplay graphQLError={error} />,
     });

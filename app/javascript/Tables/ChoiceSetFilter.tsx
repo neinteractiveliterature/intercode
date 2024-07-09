@@ -158,7 +158,7 @@ function ChoiceSetFilter<RowType extends Record<string, unknown>>(props: ChoiceS
       return <span className="me-2">{props.renderHeaderCaption(filterValue)}</span>;
     }
 
-    const anyText = t('tables.choiceSetFilter.anyText', 'Any');
+    const anyText = t('tables.choiceSetFilter.anyText');
 
     if (Array.isArray(filterValue)) {
       if (filterValue.length > 0) {

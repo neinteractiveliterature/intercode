@@ -88,8 +88,8 @@ export default LoadQueryWrapper(useCmsFilesAdminQuery, function CmsFilesAdmin({ 
               </small>
               <CopyToClipboardButton
                 className="btn btn-sm btn-outline-primary"
-                defaultText={t('cms.files.copyEmbedCode', 'Copy CMS embed code')}
-                copiedText={t('copyToClipboard.defaultSuccess', 'Copied!')}
+                defaultText={t('cms.files.copyEmbedCode')}
+                copiedText={t('copyToClipboard.defaultSuccess')}
                 text={`{% file_url ${cmsFile.file.filename} %}`}
                 iconSet="bootstrap-icons"
               />
@@ -112,7 +112,6 @@ export default LoadQueryWrapper(useCmsFilesAdminQuery, function CmsFilesAdmin({ 
           </div>
         ))}
       </div>
-
       {data?.currentAbility.can_create_cms_files && <FileUploadForm onUpload={onUpload} />}
     </>
   );

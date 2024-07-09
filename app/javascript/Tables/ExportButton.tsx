@@ -103,7 +103,7 @@ function ReactTableExportButton<RowType extends Record<string, unknown>>({
   return (
     <a className="btn btn-outline-primary" href={href}>
       <>
-        <i className="bi-file-earmark-spreadsheet" /> {t('tables.exportCSV.buttonText', 'Export CSV')}
+        <i className="bi-file-earmark-spreadsheet" /> {t('tables.exportCSV.buttonText')}
       </>
     </a>
   );

@@ -32,10 +32,10 @@ function EventSelect<
       getOptionValue={(option) => option.id}
       getOptionLabel={(option) => option.title ?? ''}
       query={eventsQuery || DefaultEventsQueryDocument}
-      placeholder={t('selectors.eventSelect.placeholder', 'Search for an event by title...')}
+      placeholder={t('selectors.eventSelect.placeholder')}
       noOptionsMessage={({ inputValue }) =>
         inputValue.trim() === ''
-          ? t('selectors.eventSelect.noInputMessage', 'Type an event title to search')
+          ? t('selectors.eventSelect.noInputMessage')
           : t('selectors.eventSelect.noResultsMessage', `No evets found matching “{{ inputValue }}”`, {
               inputValue,
             })
