@@ -191,7 +191,7 @@ function allSignupOptions(
         );
         if (!hasAvailableSignups && pendingRankedChoices.length > 0) {
           action = 'IN_QUEUE';
-        } else if (!hasAvailableSignups && addToQueue) {
+        } else if (!hasAvailableSignups && addToQueue && !bucket.not_counted) {
           action = 'ADD_TO_QUEUE';
         } else if (
           bucket.slots_limited &&
