@@ -85,6 +85,7 @@ export default LoadQueryWrapper(useRoomsAdminQuery, function RoomsAdmin({ data }
         </div>
         <button
           className="btn btn-sm btn-outline-danger ms-2"
+          aria-label={t('admin.rooms.deleteLabel')}
           title={t('admin.rooms.deleteLabel')}
           onClick={() =>
             confirm({

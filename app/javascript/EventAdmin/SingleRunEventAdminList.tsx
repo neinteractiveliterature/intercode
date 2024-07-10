@@ -74,6 +74,8 @@ export default LoadQueryWrapper<
                 renderError: (e) => <ErrorDisplay graphQLError={e} />,
               })
             }
+            aria-label={t('events.edit.dropButton')}
+            title={t('events.edit.dropButton')}
           >
             <i className="bi-trash" />
           </button>
