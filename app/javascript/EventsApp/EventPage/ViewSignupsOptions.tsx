@@ -20,14 +20,12 @@ function ViewSignupsOptions({ event, run, currentAbility }: ViewSignupsOptionsPr
         <Link
           to={`${eventPath}/runs/${run.id}/admin_signups?filters.state=confirmed,waitlisted,ticket_purchase_hold&sort.id=asc`}
         >
-          {t('signups.viewSignupsLink', 'View signups')}
+          {t('signups.viewSignupsLink')}
         </Link>
         {run.current_ability_can_signup_summary_run && !event.private_signup_list ? (
           <>
             <br />
-            <Link to={`${eventPath}/runs/${run.id}/signup_summary`}>
-              {t('signups.signupSummaryLink', 'Attendee-facing signup summary')}
-            </Link>
+            <Link to={`${eventPath}/runs/${run.id}/signup_summary`}>{t('signups.signupSummaryLink')}</Link>
           </>
         ) : null}
       </div>
@@ -37,7 +35,7 @@ function ViewSignupsOptions({ event, run, currentAbility }: ViewSignupsOptionsPr
   if (run.current_ability_can_signup_summary_run) {
     return (
       <div className="card-footer text-center">
-        <Link to={`${eventPath}/runs/${run.id}/signup_summary`}>{t('signups.viewSignupsLink', 'View signups')}</Link>
+        <Link to={`${eventPath}/runs/${run.id}/signup_summary`}>{t('signups.viewSignupsLink')}</Link>
       </div>
     );
   }

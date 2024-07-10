@@ -16,21 +16,19 @@ function SignupModeration(): JSX.Element {
   return (
     <>
       <h1 className="mb-4">Signup moderation</h1>
-
       <ul className="nav nav-tabs mb-3" role="tablist">
         <BootstrapNavLink path="/signup_moderation/queue" icon="bi-list-check">
-          {t('signupModeration.moderationQueue', 'Moderation queue')}
+          {t('signupModeration.moderationQueue')}
         </BootstrapNavLink>
         <BootstrapNavLink path="/signup_moderation/create_signups" icon="bi-plus-circle">
-          {t('signupModeration.createSignups', 'Create signups')}
+          {t('signupModeration.createSignups')}
         </BootstrapNavLink>
         {signupAutomationMode === SignupAutomationMode.RankedChoice && (
           <BootstrapNavLink path="/signup_moderation/ranked_choice_queue" icon="bi-card-checklist">
-            {t('signupModeration.rankedChoiceQueue', 'Attendee ranked choice queue')}
+            {t('signupModeration.rankedChoiceQueue')}
           </BootstrapNavLink>
         )}
       </ul>
-
       <Routes>
         {signupAutomationMode === SignupAutomationMode.RankedChoice && (
           <Route path="ranked_choice_queue/*" element={<RankedChoiceQueue />} />

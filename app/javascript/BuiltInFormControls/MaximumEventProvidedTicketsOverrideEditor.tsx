@@ -157,18 +157,14 @@ function MaximumEventProvidedTicketsOverrideEditor({
           onClick={() =>
             confirm({
               action: () => deleteOverrideConfirmed(override),
-              prompt: t(
-                'events.ticketQuotaOverrides.deletePrompt',
-                'Are you sure you want to remove the override for "{{ ticketType }}" tickets?',
-                { ticketType: override.ticket_type.description },
-              ),
+              prompt: t('events.ticketQuotaOverrides.deletePrompt', { ticketType: override.ticket_type.description }),
               renderError: (err) => <ErrorDisplay graphQLError={err} />,
             })
           }
         >
           <i className="bi-trash" />
           <span className="visually-hidden">
-            {t('events.ticketQuotaOverrides.deleteButton', 'Delete override for {{ ticketType }}', {
+            {t('events.ticketQuotaOverrides.deleteButton', {
               ticketType: override.ticket_type.description,
             })}
           </span>
@@ -187,20 +183,18 @@ function MaximumEventProvidedTicketsOverrideEditor({
 
   return (
     <div className="card bg-light">
-      <div className="card-header">
-        {t('events.ticketQuotaOverrides.header', 'Override event-provided {{ ticketName }} quotas', { ticketName })}
-      </div>
+      <div className="card-header">{t('events.ticketQuotaOverrides.header', { ticketName })}</div>
       <div className="card-body">
         <table className="table table-striped">
           <thead>
             <tr>
               <th>
-                {t('events.ticketQuotaOverrides.ticketTypeHeader', '{{ ticketName }} type', {
+                {t('events.ticketQuotaOverrides.ticketTypeHeader', {
                   ticketName: capitalize(ticketName),
                 })}
               </th>
-              <th>{t('events.ticketQuotaOverrides.defaultQuotaHeader', 'Default quota')}</th>
-              <th>{t('events.ticketQuotaOverrides.overridenQuotaHeader', 'Overridden quota')}</th>
+              <th>{t('events.ticketQuotaOverrides.defaultQuotaHeader')}</th>
+              <th>{t('events.ticketQuotaOverrides.overridenQuotaHeader')}</th>
               <th />
             </tr>
           </thead>
@@ -213,7 +207,7 @@ function MaximumEventProvidedTicketsOverrideEditor({
                   value={addingOverride.ticket_type.id}
                   onChange={addingTicketTypeIdDidChange}
                 >
-                  <option aria-label={t('general.placeholderOptionLabel', 'Blank placeholder option')} />
+                  <option aria-label={t('general.placeholderOptionLabel')} />
                   {ticketTypeOptions}
                 </select>
               </td>
@@ -225,7 +219,7 @@ function MaximumEventProvidedTicketsOverrideEditor({
                   min="0"
                   value={addingOverride.override_value == null ? '' : addingOverride.override_value}
                   onChange={addingOverrideValueDidChange}
-                  aria-label={t('events.ticketQuotaOverrides.overridenQuotaHeader', 'Overridden quota')}
+                  aria-label={t('events.ticketQuotaOverrides.overridenQuotaHeader')}
                 />
               </td>
               <td>
@@ -235,7 +229,7 @@ function MaximumEventProvidedTicketsOverrideEditor({
                   disabled={!addingOverrideDataComplete}
                   onClick={addOverride}
                 >
-                  {t('buttons.add', 'Add')}
+                  {t('buttons.add')}
                 </button>
               </td>
             </tr>

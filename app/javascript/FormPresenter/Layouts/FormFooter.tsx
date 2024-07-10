@@ -17,7 +17,7 @@ function BackButton({ goToPreviousSection }: BackButtonProps) {
   return (
     <button className="btn btn-secondary" onClick={goToPreviousSection} type="button">
       <>
-        <i className="bi-chevron-left" /> {t('forms.general.backButton', 'Back')}
+        <i className="bi-chevron-left" /> {t('forms.general.backButton')}
       </>
     </button>
   );
@@ -32,7 +32,7 @@ function ContinueButton({ tryNextSection }: ContinueButtonProps) {
   return (
     <button className="btn btn-primary" onClick={tryNextSection} type="button">
       <>
-        {t('forms.general.continueButton', 'Continue')} <i className="bi-chevron-right" />
+        {t('forms.general.continueButton')} <i className="bi-chevron-right" />
       </>
     </button>
   );

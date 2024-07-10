@@ -26,17 +26,15 @@ export default LoadQueryWrapper(useRunHeaderRunInfoQueryFromParams, function Run
         {event.title}
         {event.run.title_suffix && event.run.title_suffix.trim() !== '' ? `- ${event.run.title_suffix}` : ''}
       </h1>
-
       <h3 className="mt-0">
         {formatRunTimespan(timespanFromRun(timezoneName, event, event.run), {
           formatType: 'short',
         })}
       </h3>
-
       <ul className="list-inline">
         {event.registration_policy?.slots_limited && (
           <li className="list-inline-item">
-            {t('events.runHeader.maxSignups', 'Max signups: {{ count }}', {
+            {t('events.runHeader.maxSignups', {
               count: event.registration_policy.total_slots ?? undefined,
             })}
           </li>

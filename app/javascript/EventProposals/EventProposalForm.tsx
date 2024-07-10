@@ -142,12 +142,10 @@ function EventProposalFormInner({
           responseValuesChanged={responseValuesChanged}
           submitForm={submitForm}
           exitButton={exitButton}
-          submitButton={{ caption: t('eventProposals.edit.submitButton', 'Submit proposal') }}
+          submitButton={{ caption: t('eventProposals.edit.submitButton') }}
           footerContent={
             <div className="text-end">
-              <small className="text-muted">
-                {t('forms.general.autocommitDisclosure', 'Your responses are automatically saved.')}
-              </small>
+              <small className="text-muted">{t('forms.general.autocommitDisclosure')}</small>
             </div>
           }
           imageAttachmentConfig={imageAttachmentConfig}

@@ -35,10 +35,10 @@ function UserConProfileSelect<
         </>
       )}
       query={userConProfilesQuery ?? DefaultUserConProfilesQueryDocument}
-      placeholder={t('selectors.userConProfileSelect.placeholder', 'Search for an attendee by name or email...')}
+      placeholder={t('selectors.userConProfileSelect.placeholder')}
       noOptionsMessage={({ inputValue }) =>
         inputValue.trim() === ''
-          ? t('selectors.userConProfileSelect.noInputMessage', 'Type a name or email to search')
+          ? t('selectors.userConProfileSelect.noInputMessage')
           : t('selectors.userConProfileSelect.noResultsMessage', `No attendees found matching “{{ inputValue }}”`, {
               inputValue,
             })

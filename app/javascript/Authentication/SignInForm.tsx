@@ -102,13 +102,13 @@ function SignInForm(): JSX.Element {
     <>
       <form onSubmit={submit}>
         <div className="modal-header bg-light align-items-center">
-          <div className="lead flex-grow-1">{t('authentication.signInForm.header', 'Log in')}</div>
+          <div className="lead flex-grow-1">{t('authentication.signInForm.header')}</div>
         </div>
 
         <div className="modal-body">
           <BootstrapFormInput
             type="email"
-            label={t('authentication.signInForm.emailLabel', 'Email')}
+            label={t('authentication.signInForm.emailLabel')}
             value={email}
             onTextChange={setEmail}
             disabled={submitInProgress}
@@ -116,7 +116,7 @@ function SignInForm(): JSX.Element {
 
           <BootstrapFormInput
             type="password"
-            label={t('authentication.signInForm.passwordLabel', 'Password')}
+            label={t('authentication.signInForm.passwordLabel')}
             value={password}
             onTextChange={setPassword}
             disabled={submitInProgress}
@@ -124,7 +124,7 @@ function SignInForm(): JSX.Element {
 
           <BootstrapFormCheckbox
             type="checkbox"
-            label={t('authentication.signInForm.rememberMeLabel', 'Remember me')}
+            label={t('authentication.signInForm.rememberMeLabel')}
             checked={rememberMe}
             onCheckedChange={setRememberMe}
             disabled={submitInProgress}
@@ -142,7 +142,7 @@ function SignInForm(): JSX.Element {
                 setCurrentView('signUp');
               }}
             >
-              {t('authentication.signUpLink', 'Sign up for an account')}
+              {t('authentication.signUpLink')}
             </button>
             <button
               type="button"
@@ -151,19 +151,19 @@ function SignInForm(): JSX.Element {
                 setCurrentView('forgotPassword');
               }}
             >
-              {t('authentication.forgotPasswordLink', 'Forgot your password?')}
+              {t('authentication.forgotPasswordLink')}
             </button>
           </div>
           <div>
             <button type="button" className="btn btn-secondary me-2" disabled={submitInProgress} onClick={onCancel}>
-              {t('buttons.cancel', 'Cancel')}
+              {t('buttons.cancel')}
             </button>
             <input
               type="submit"
               className="btn btn-primary"
               disabled={submitInProgress}
-              value={t('authentication.signInForm.logInButton', 'Log in').toString()}
-              aria-label={t('authentication.signInForm.logInButton', 'Log in')}
+              value={t('authentication.signInForm.logInButton').toString()}
+              aria-label={t('authentication.signInForm.logInButton')}
             />
           </div>
         </div>

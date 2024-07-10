@@ -47,7 +47,7 @@ export function describePayWhatYouWantRange(value: PayWhatYouWantValue | undefin
       />
     );
   } else {
-    return t('payWhatYouWant.noBounds', 'any amount');
+    return t('payWhatYouWant.noBounds');
   }
 }
 
@@ -111,7 +111,7 @@ export function describeAdminPricingStructure(
   if (pricingStructure.pricing_strategy === PricingStrategy.PayWhatYouWant) {
     return (
       <>
-        {t('pricingStructure.payWhatYouWant', 'Pay what you want')} (
+        {t('pricingStructure.payWhatYouWant')}(
         {describePayWhatYouWantRange(pricingStructure.value as PayWhatYouWantValue, t)})
       </>
     );
@@ -146,7 +146,7 @@ export function describeUserPricingStructure(
     const scheduledValue = pricingStructure.value as ScheduledMoneyValue;
     const currentTimespanIndex = findCurrentTimespanIndex(scheduledValue);
     if (currentTimespanIndex === -1) {
-      return <>{t('pricingStructure.unavailable', 'Currently unavailable')}</>;
+      return <>{t('pricingStructure.unavailable')}</>;
     }
 
     const currentValue = scheduledValue.timespans[currentTimespanIndex].value;
@@ -204,7 +204,7 @@ export function describeCurrentPrice(
   if (pricingStructure.pricing_strategy === 'scheduled_value') {
     const currentValue = findCurrentValue(pricingStructure.value as ScheduledMoneyValue);
     if (currentValue == null) {
-      return <>{t('pricingStructure.unavailable', 'Currently unavailable')}</>;
+      return <>{t('pricingStructure.unavailable')}</>;
     }
 
     return (
@@ -220,7 +220,7 @@ export function describeCurrentPrice(
   if (pricingStructure.pricing_strategy === PricingStrategy.PayWhatYouWant) {
     return (
       <>
-        {t('pricingStructure.payWhatYouWant', 'Pay what you want')}(
+        {t('pricingStructure.payWhatYouWant')}(
         {describePayWhatYouWantRange(pricingStructure.value as PayWhatYouWantValue, t)})
       </>
     );

@@ -72,8 +72,8 @@ function UserSignupQueue({ userConProfile, refetchQueries, readOnly }: UserSignu
               <div className="d-flex flex-column gap-2 justify-content-center me-3">
                 {!readOnly && (
                   <button
-                    aria-label={t('signups.mySignupQueue.moveUp', 'Move up in queue')}
-                    title={t('signups.mySignupQueue.moveUp', 'Move up in queue')}
+                    aria-label={t('signups.mySignupQueue.moveUp')}
+                    title={t('signups.mySignupQueue.moveUp')}
                     className={classNames('btn btn-dark px-1 py-0', { 'opacity-25': index < 1 })}
                     disabled={updatePriorityLoading || index < 1}
                     onClick={() =>
@@ -87,8 +87,8 @@ function UserSignupQueue({ userConProfile, refetchQueries, readOnly }: UserSignu
                 )}
                 {!readOnly && (
                   <button
-                    aria-label={t('signups.mySignupQueue.moveDown', 'Move down in queue')}
-                    title={t('signups.mySignupQueue.moveDown', 'Move down in queue')}
+                    aria-label={t('signups.mySignupQueue.moveDown')}
+                    title={t('signups.mySignupQueue.moveDown')}
                     className={classNames('btn btn-dark px-1 py-0', {
                       'opacity-25': index >= pendingChoices.length - 1,
                     })}
@@ -109,17 +109,15 @@ function UserSignupQueue({ userConProfile, refetchQueries, readOnly }: UserSignu
                     className="btn btn-outline-danger"
                     onClick={() =>
                       confirm({
-                        prompt: t(
-                          'signups.mySignupQueue.removeConfirmPrompt',
-                          'Are you sure you want to remove {{ eventTitle }} from your signup queue?',
-                          { eventTitle: pendingChoice.target_run.event.title },
-                        ),
+                        prompt: t('signups.mySignupQueue.removeConfirmPrompt', {
+                          eventTitle: pendingChoice.target_run.event.title,
+                        }),
                         action: () => deleteSignupRankedChoice({ variables: { id: pendingChoice.id } }),
                         renderError: (error) => <ErrorDisplay graphQLError={error} />,
                       })
                     }
                   >
-                    {t('signups.mySignupQueue.remove', 'Remove')}
+                    {t('signups.mySignupQueue.remove')}
                   </button>
                 )}
               </div>

@@ -48,7 +48,7 @@ export default LoadQueryWrapper(useTeamMembersQueryFromParams, function NewTeamM
     );
 
   usePageTitle(
-    t('events.teamMemberAdmin.newPageTitle', 'Add {{ teamMemberName }} - {{ eventTitle }}', {
+    t('events.teamMemberAdmin.newPageTitle', {
       teamMemberName: event.event_category.team_member_name,
       eventTitle: event.title,
     }),
@@ -80,14 +80,13 @@ export default LoadQueryWrapper(useTeamMembersQueryFromParams, function NewTeamM
   return (
     <>
       <h1 className="mb-4">
-        {t('events.teamMemberAdmin.newHeader', 'Add {{ teamMemberName }}', {
+        {t('events.teamMemberAdmin.newHeader', {
           teamMemberName: capitalize(event.event_category.team_member_name),
         })}
       </h1>
-
       <div className="mb-3">
         <label className="form-label" htmlFor={userConProfileSelectId}>
-          {t('events.teamMemberAdmin.userConProfileLabel', '{{ teamMemberName }} to add', {
+          {t('events.teamMemberAdmin.userConProfileLabel', {
             teamMemberName: capitalize(event.event_category.team_member_name),
           })}
         </label>
@@ -97,14 +96,11 @@ export default LoadQueryWrapper(useTeamMembersQueryFromParams, function NewTeamM
           onChange={(newValue) => userConProfileChanged(newValue ?? undefined)}
           isDisabled={createInProgress}
           userConProfilesQuery={TeamMemberUserConProfilesQueryDocument}
-          placeholder={t(
-            'events.teamMemberAdmin.userConProfilePlaceholder',
-            'Type the name of the {{ teamMemberName }} you want to add',
-            { teamMemberName: event.event_category.team_member_name },
-          )}
+          placeholder={t('events.teamMemberAdmin.userConProfilePlaceholder', {
+            teamMemberName: event.event_category.team_member_name,
+          })}
         />
       </div>
-
       {teamMember.user_con_profile ? (
         <>
           <TeamMemberForm event={event} value={teamMember} onChange={setTeamMember} disabled={createInProgress} />
@@ -114,7 +110,7 @@ export default LoadQueryWrapper(useTeamMembersQueryFromParams, function NewTeamM
           <ul className="list-inline mt-4">
             <li className="list-inline-item">
               <button type="button" className="btn btn-primary" disabled={createInProgress} onClick={createClicked}>
-                {t('events.teamMemberAdmin.addButton', 'Add {{ teamMemberName }}', {
+                {t('events.teamMemberAdmin.addButton', {
                   teamMemberName: event.event_category.team_member_name,
                 })}
               </button>
@@ -122,7 +118,7 @@ export default LoadQueryWrapper(useTeamMembersQueryFromParams, function NewTeamM
           </ul>
         </>
       ) : (
-        <p>{t('events.teamMemberAdmin.selectUserConProfilePrompt', 'Select a person to continue.')}</p>
+        <p>{t('events.teamMemberAdmin.selectUserConProfilePrompt')}</p>
       )}
     </>
   );

@@ -17,8 +17,7 @@ const MySignupQueue = LoadQueryWrapper(useMySignupQueueQuery, ({ data }) => {
 
   return (
     <>
-      <h1>{t('signups.mySignupQueue.title', 'My signup queue')}</h1>
-
+      <h1>{t('signups.mySignupQueue.title')}</h1>
       <div className="row mb-4">
         <div className="col-12 col-md-8">
           <NextRoundInfoBox />
@@ -66,7 +65,6 @@ const MySignupQueue = LoadQueryWrapper(useMySignupQueueQuery, ({ data }) => {
           {myProfile && <UserConProfileSignupsCard userConProfileId={myProfile.id} />}
         </div>
       </div>
-
       <RankedChoiceUserSettings />
     </>
   );

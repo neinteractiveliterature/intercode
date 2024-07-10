@@ -7,134 +7,16 @@
   },
   "admin": {
     "convention": {
-      "defaultCurrency": "Default currency for convention",
-      "faviconHelpText": "",
-      "faviconLabel": "",
-      "header": {
-        "conventionTiming": {
-          "canceled": "",
-          "endsToday": "",
-          "future": "{{ conventionName }} starts in {{ count }} days",
-          "isToday": "",
-          "ongoing": "{{ conventionName }} ends in {{ count }} days",
-          "past": "{{ conventionName }} ended {{ count }} days ago"
-        },
-        "eventList": "",
-        "eventVisibilityGMs": "",
-        "eventVisibilityHidden": "",
-        "eventVisibilityPriv": "",
-        "eventVisibilityYes": "",
-        "schedule": "",
-        "signups": "",
-        "signupScheduleNotConfiguredYet": "",
-        "singleEventSiteMode": "",
-        "siteMode": ""
-      },
       "language": {
         "en": "Inglés",
         "es": "Español (trabajo en progreso, no al 100%)",
         "label": "Idioma de la página"
-      },
-      "maximumTicketsLabel": "",
-      "openGraphImageHelpText": "",
-      "openGraphImageLabel": "",
-      "signupScheduleMoved": "The signup schedule editor has moved! To edit the signup schedule for this convention, go to the Admin menu and choose “Signup rounds.”",
-      "stripeAccountActive": "",
-      "stripeAccountContinue": "",
-      "stripeAccountDisplayName": "",
-      "stripeAccountEmail": "",
-      "stripeAccountId": "",
-      "stripeAccountPending": "",
-      "stripeAccountRequired": "",
-      "stripeAccountSetup": "",
-      "ticketModeDisabled": "",
-      "ticketModeLabel": "",
-      "ticketModeRequiredForSignup": "",
-      "ticketModeTicketPerEvent": "Each event in this convention sells {{ ticketNamePlural }} separately",
-      "ticketNameLabel": ""
-    },
-    "eventCategories": {
-      "autogenerateColorsLabel": "",
-      "cannotDeleteCategoryWithEvents": "",
-      "canProvideTicketsLabel": "",
-      "colorsHeader": "",
-      "deleteConfirmation": "",
-      "deleteLabel": "",
-      "departmentLabel": "",
-      "eventCount_one": "",
-      "eventCount_many": "",
-      "eventCount_other": "",
-      "eventFormLabel": "",
-      "eventProposalFormLabel": "",
-      "nameLabel": "",
-      "proposalDescriptionHelpText": "",
-      "proposalDescriptionLabel": "",
-      "schedulingUILabel": "",
-      "schedulingUIRecurring": "",
-      "schedulingUIRegular": "",
-      "schedulingUISingleRun": "",
-      "teamMemberNameHelpText": "",
-      "teamMemberNameLabel": ""
+      }
     },
     "eventProposals": {
       "edit": {
         "exitButton": "Volver a la propuesta"
       }
-    },
-    "events": {
-      "dropEventConfirmation": "",
-      "durationColumn": "",
-      "eventListPageTitle": "",
-      "newEventLabel": "",
-      "runsColumn": "",
-      "titleColumn": ""
-    },
-    "rooms": {
-      "addRoomLabel": "",
-      "deleteConfirmation": "",
-      "deleteLabel": "",
-      "eventRunCount_one": "",
-      "eventRunCount_many": "",
-      "eventRunCount_other": "",
-      "roomNameLabel": ""
-    },
-    "store": {
-      "orderEntries": {
-        "addCouponLabel": "",
-        "couponCodeLabel": "",
-        "deleteConfirmation_one": "",
-        "deleteConfirmation_many": "",
-        "deleteConfirmation_other": "",
-        "deleteCouponConfirmation": "",
-        "deleteCouponLabel": "",
-        "itemColumnHeader": "",
-        "priceColumnHeader": "",
-        "pricePerEachSuffix": "",
-        "quantityColumnHeader": "",
-        "totalPrice": ""
-      },
-      "paymentOptions": {
-        "payAtConvention": "",
-        "stripe": ""
-      },
-      "products": {
-        "available": "",
-        "clickwrapAgreementLabel": "Product-specific clickwrap agreement",
-        "deleteConfirmation": "",
-        "deleteLabel": "",
-        "descriptionLabel": "",
-        "editProduct": "",
-        "newProduct": "",
-        "unavailable": ""
-      }
-    },
-    "tickets": {
-      "createProduct": ""
-    },
-    "ticketTypes": {
-      "eventProvidedDescription_one": "",
-      "eventProvidedDescription_many": "",
-      "eventProvidedDescription_other": ""
     },
     "userConProfiles": {
       "addAttendee": {
@@ -144,9 +26,7 @@
         "header": "Añadir participante",
         "text": "Elige un usuario a añadir como participante de {{ conventionName }}.  La persona debe ser un usuario de la base de datos para poder ser añadida."
       },
-      "email": "Email",
       "firstName": "Nombre de pila",
-      "id": "ID",
       "isAttending": "¿Participará?",
       "isTeamMember": "¿Forma parte de la Organización del Evento?",
       "lastName": "Apellidos",
@@ -165,21 +45,6 @@
       "ticketType": "Tipo de {{ ticketName }}",
       "userId": "Identificador de usuario",
       "withdrawFromAllButton": "Retirar de todas"
-    },
-    "users": {
-      "merge": {
-        "hasTicket": "",
-        "noTicket": "",
-        "noUsers": "",
-        "noWinner": "",
-        "profileLabel": "",
-        "signupCount_one": "",
-        "signupCount_many": "",
-        "signupCount_other": ""
-      }
-    },
-    "warnings": {
-      "emptyUserConProfileForm": ""
     }
   },
   "alerts": {
@@ -200,7 +65,6 @@
       "sendInstructionsButton": "Enviar instrucciones"
     },
     "forgotPasswordForm": {
-      "emailLabel": "Email",
       "header": "¿Olvidaste la contraseña?",
       "successMessage": "<0>Por favor comprueba tu e-mail. Deberías recibir instrucciones sobre resetear la contraseña en breve.</0><1>Si no recibes las instrucciones, por favor envía un e-mail a <2>nuestro equipo web</2> para que te ayuden a resetear tu contraseña.</1>"
     },
@@ -241,24 +105,13 @@
   },
   "buttons": {
     "add": "Añadir",
-    "attachImage": "",
     "cancel": "Cancelar",
     "close": "Cerrar",
-    "collapse": "",
-    "composeEmail": "",
-    "delete": "Delete",
     "edit": "Editar",
-    "expand": "",
     "help": "Ayuda",
-    "ok": "OK",
-    "options": "",
     "preview": "Previsualizar",
     "proposeEventLoggedOut": "Inicia sesión para proponer una actividad",
-    "refresh": "Actualizar",
-    "reset": "",
-    "save": "Save",
-    "selectAll": "",
-    "selectNone": ""
+    "refresh": "Actualizar"
   },
   "clickwrap": {
     "agreeButton": "Estoy de acuerdo",
@@ -273,17 +126,11 @@
       },
       "title": "Añadir fichero"
     },
-    "files": {
-      "copyEmbedCode": ""
-    },
     "fileUploadForm": {
       "clearFileButton": "Limpiar",
       "fileInputLabel": "Elige un fichero...",
       "title": "Cargar fichero",
       "uploadFileButton": "Cargar"
-    },
-    "layoutForm": {
-      "navbarClassesHelpText": ""
     },
     "liquidInput": {
       "addFileButton": "Añadir fichero...",
@@ -302,51 +149,8 @@
     "defaultSuccess": "¡Copiado!",
     "defaultText": "Copiado al portapapeles"
   },
-  "dateTimeFormats": {
-    "anytime": "",
-    "compactDate": "",
-    "compactDateTime": "",
-    "compactWeekday": "",
-    "durationHoursMinutes": "",
-    "indefinitely": "",
-    "longDate": "",
-    "longDateTime": "",
-    "longDateTimeWithZone": "",
-    "longDayYear": "",
-    "longMonthDay": "",
-    "longMonthYear": "",
-    "longWeekday": "",
-    "longWeekdayDate": "",
-    "longWeekdayDateTimeWithZone": "",
-    "longWeekdayTime": "",
-    "longWeekdayTimeWithZone": "",
-    "midnight": "",
-    "midnightWithZone": "",
-    "noon": "",
-    "noonWithZone": "",
-    "shortDateTime": "",
-    "shortDateTimeWithZone": "",
-    "shortHour": "",
-    "shortTime": "",
-    "shortTimeWithSeconds": "",
-    "shortTimeWithZone": "",
-    "shortWeekday": "",
-    "shortWeekdayDateTime": "",
-    "shortWeekdayDateTimeWithZone": "ccc, MMM d, yyyy h:mmaaa ZZZZ",
-    "shortWeekdayTime": "",
-    "shortWeekdayTimeWithZone": "",
-    "weekdayMidnight": "",
-    "weekdayMidnightWithZone": "",
-    "weekdayNoon": "",
-    "weekdayNoonWithZone": "",
-    "year": ""
-  },
   "errors": {
-    "404": "",
     "unauthorized": "Lo siento, tu cuenta no está autorizada a ver esta página."
-  },
-  "eventCategorySelect": {
-    "defaultLabel": ""
   },
   "eventProposals": {
     "edit": {
@@ -365,192 +169,15 @@
     }
   },
   "events": {
-    "adminMenu": {
-      "editLink": "",
-      "editTeamMembersLink": "",
-      "header": "",
-      "historyLink": ""
-    },
-    "catalog": {
-      "author_one": "",
-      "author_many": "",
-      "author_other": "",
-      "organization": ""
-    },
-    "categoryDropdown": {
-      "allCategoriesLabel": "",
-      "multipleCategoriesLabel_one": "",
-      "multipleCategoriesLabel_many": "",
-      "multipleCategoriesLabel_other": "",
-      "singleCategoryLabel": ""
-    },
-    "edit": {
-      "dropButton": "",
-      "dropPrompt": "",
-      "editHeader": "",
-      "newHeader": "",
-      "roomsLabel": "",
-      "scheduleNoteLabel": "",
-      "timeLabel": "",
-      "titleSuffixLabel": ""
-    },
-    "history": {
-      "title": ""
-    },
-    "ratings": {
-      "clearButton": "",
-      "favoriteButton": "",
-      "helpText": "",
-      "hideButton": ""
-    },
-    "registrationPolicies": {
-      "disableNoPreference": "",
-      "enableNoPreference": "",
-      "noPreferenceDisabled": "",
-      "noPreferenceEnabled": "",
-      "noPreferenceHelpText": "",
-      "noPreferenceInapplicable": "",
-      "noPreferenceInapplicableHelpText": ""
-    },
     "runCapacity": {
-      "label": "",
-      "slotCount_one": "",
-      "slotCount_many": "",
-      "slotCount_other": "",
-      "slotRemainingCount_one": "",
-      "slotRemainingCount_many": "",
-      "slotRemainingCount_other": "",
       "unlimitedSimple": "ilimitadas",
       "unlimitedWithCount": "({{ signupCount }} inscritas (capacidad ilimitada)",
-      "waitlistCount": "",
       "zeroCapacity": "plazas agotadas"
-    },
-    "runHeader": {
-      "maxSignups_one": "",
-      "maxSignups_many": "",
-      "maxSignups_other": ""
-    },
-    "signupAdmin": {
-      "addressHeader": "",
-      "ageCheckHeader": "",
-      "ageHeader": "",
-      "ageTableHeader": "",
-      "bucketHeader": "",
-      "bucketInput": {
-        "currentBucketLabel": "",
-        "userRequestedBucketLabel": ""
-      },
-      "changeBucketHeader": "",
-      "changeBucketInputCaption": "",
-      "editPageHeader": "",
-      "editPageTitle": "",
-      "editTitle": "",
-      "emailFilters": {
-        "confirmedBucket": "Include {{ bucketName }} (confirmed)",
-        "nobody": "",
-        "teamMembers": "",
-        "waitlisted": ""
-      },
-      "emailHeader": "",
-      "emailsCommaTitle": "",
-      "emailsSemicolonTitle": "",
-      "emailsSemicolonWarning": "",
-      "emailTableHeader": "",
-      "forceConfirmSignup": {
-        "bucketInputCaption": "",
-        "header": "",
-        "overfillWarning": ""
-      },
-      "history": {
-        "bucketHeader": "",
-        "changeHeader": "",
-        "nameHeader": "",
-        "timestampHeader": ""
-      },
-      "historyPageTitle": "",
-      "historyTitle": "",
-      "indexPageTitle": "",
-      "makeCountedConfirmPrompt": "",
-      "makeNotCountedConfirmPrompt": "",
-      "nameHeader": "",
-      "nicknameHeader": "",
-      "phoneHeader": "",
-      "sequenceHeader": "",
-      "stateHeader": "",
-      "title": ""
-    },
-    "signupSummary": {
-      "nameHeader": "",
-      "stateHeader": "",
-      "title": ""
-    },
-    "teamMemberAdmin": {
-      "addButton": "",
-      "addTeamMemberButton": "",
-      "displayEmailHeader": "",
-      "displayHeader": "",
-      "displayLabel": "",
-      "editHeader": "",
-      "editPageTitle": "",
-      "editSettingsLink": "",
-      "emailLabel": "",
-      "eventProvidedTicketDescription": "",
-      "hasEventTicketHeader": "",
-      "header": "",
-      "mobilePhoneLabel": "",
-      "nameHeader": "",
-      "newHeader": "",
-      "newPageTitle": "",
-      "nonEventProvidedTicketDescription": "",
-      "provideTicketButton": "",
-      "provideTicketChoice_one": "",
-      "provideTicketChoice_many": "",
-      "provideTicketChoice_other": "",
-      "provideTicketLink": "",
-      "receiveConEmailHeader": "",
-      "receiveConEmailLabel": "",
-      "receiveSignupEmail": {
-        "allSignups": "",
-        "noEmail": "",
-        "nonWaitlistSignups": ""
-      },
-      "receiveSignupEmailHeader": "",
-      "receiveSignupEmailLabel": "",
-      "removeTeamMemberLink": "",
-      "removeTeamMemberPrompt": "",
-      "selectUserConProfilePrompt": "",
-      "showEmail": {
-        "helpPopover": "",
-        "label": ""
-      },
-      "ticketProvidability_one": "",
-      "ticketProvidability_many": "",
-      "ticketProvidability_other": "",
-      "unticketedWarning": "",
-      "updateButton": "",
-      "userConProfileLabel": "",
-      "userConProfilePlaceholder": ""
-    },
-    "ticketQuotaOverrides": {
-      "defaultQuotaHeader": "",
-      "deleteButton": "",
-      "deletePrompt": "",
-      "header": "",
-      "overridenQuotaHeader": "",
-      "ticketTypeHeader": ""
-    },
-    "withdrawPrompt": {
-      "moderatedSignup": "",
-      "selfServiceSignup": "",
-      "signupRequest": ""
     }
   },
   "forms": {
     "ageRestrictions": {
       "descriptionLabel": "Texto público de restricción por edad",
-      "minimumAgeDescription_one": "",
-      "minimumAgeDescription_many": "",
-      "minimumAgeDescription_other": "",
       "minimumAgeHelpText": "Si se especifica, la lista de participantes inscritas mostrará si alguien demasiado joven se ha anotado a la actividad. <2>La web no impone restricciones por edad; eso debes hacerlo tú.</2>",
       "minimumAgeLabel": "Edad mínima",
       "noRestrictions": "Sin restricciones de edad."
@@ -569,20 +196,6 @@
       "backButton": "Volver",
       "continueButton": "Continuar",
       "fieldRequiredError": "Campo obligatorio."
-    },
-    "history": {
-      "noChanges": ""
-    },
-    "roles": {
-      "admin": "",
-      "confirmed_attendee": "",
-      "proposer": "",
-      "public": "",
-      "read_all_profiles": "",
-      "team_member": "",
-      "update_all_profiles": "",
-      "user": "",
-      "visibilityDisclosure": ""
     }
   },
   "general": {
@@ -591,33 +204,12 @@
     },
     "pageTitles": {
       "editing": "Editando “{{ title }}”"
-    },
-    "placeholderOptionLabel": "",
-    "timeUnits": {
-      "hours_one": "",
-      "hours_many": "",
-      "hours_other": "",
-      "minutes_one": "",
-      "minutes_many": "",
-      "minutes_other": ""
     }
   },
-  "mailingLists": {
-    "commaSeparated": "",
-    "emailAddresses": "",
-    "recipientCount_one": "",
-    "recipientCount_many": "",
-    "recipientCount_other": "",
-    "semicolonSeparated": "",
-    "tableView": ""
-  },
   "myProfile": {
-    "bioLabel": "Bio",
     "bioNicknameHelpText": "Tu nombre aparecerá en tu bio como {{ name }}.",
     "bioNicknameLabel": "Mostrar apodo (si lo tiene) en la bio",
     "display": {
-      "avatarLabel": "Avatar",
-      "bioLabel": "Bio",
       "emailLabel": "E-mail",
       "gravatarDisabled": "Gravatar desactivado",
       "gravatarEnabled": "Gravatar activado",
@@ -650,7 +242,6 @@
       "reports": "Informes",
       "rooms": "Salas",
       "signupModeration": "Control de inscripciones",
-      "signupRounds": "Signup Rounds",
       "siteContent": "Contenido de la página",
       "staffPositions": "Organigrama de organización",
       "store": "Tienda",
@@ -666,10 +257,7 @@
       "signUp": "Inscripción"
     },
     "events": {
-      "eventCatalog": "",
-      "eventSchedule": "",
       "eventsList": "Listado de actividades",
-      "mySignupQueue": "My Signup Queue",
       "newProposal": "Proponer actividad"
     },
     "general": {
@@ -677,7 +265,6 @@
       "history": "Histórico"
     },
     "headers": {
-      "admin": "Admin",
       "authentication": "Iniciar sesión o Inscripción",
       "events": "Actividades",
       "user": "Opciones de usuario"
@@ -688,12 +275,10 @@
     },
     "search": {
       "buttonText": "Buscar",
-      "searchAnywhereKeyCombo": "Ctrl-/",
       "searchAnywhereText": "Buscar en cualquier sitio:"
     },
     "ticketPurchase": {
-      "ctaLong": "Comprar un {{ ticketName }}!",
-      "ctaShort": "{{ ticketName }}!"
+      "ctaLong": "Comprar un {{ ticketName }}!"
     },
     "toggle": "Cambiar navegación",
     "user": {
@@ -704,57 +289,10 @@
       "myProfile": "Mi perfil de {{ conventionName }}"
     }
   },
-  "oauth": {
-    "permissionGroups": {
-      "manage": "",
-      "readPrivate": "",
-      "readPublic": ""
-    },
-    "permissions": {
-      "manage_conventions": "",
-      "manage_email_routing": "",
-      "manage_events": "",
-      "manage_organizations": "",
-      "manage_profile": "",
-      "manage_signups": "",
-      "openid": "",
-      "public": "",
-      "read_conventions": "",
-      "read_email_routing": "",
-      "read_events": "",
-      "read_organizations": "",
-      "read_profile": "",
-      "read_signups": ""
-    }
-  },
-  "payWhatYouWant": {
-    "maxOnly": "",
-    "minAndMax": "",
-    "minOnly": "",
-    "noBounds": "",
-    "suggestedAmount": "",
-    "useSuggestedAmount": ""
-  },
-  "pricingStructure": {
-    "fixedPrice": "",
-    "payWhatYouWant": "",
-    "price": "",
-    "scheduledValueSummary_one": "",
-    "scheduledValueSummary_many": "",
-    "scheduledValueSummary_other": "",
-    "scheduledValueWithNext": "",
-    "selectAmount": "",
-    "unavailable": ""
-  },
-  "prompts": {
-    "confirmReset": "Are you sure? This will discard any unsaved changes."
-  },
   "schedule": {
-    "goToEvent": "",
     "legends": {
       "attendeeCounts": {
         "confirmed": "inscripciones confirmadas",
-        "confirmedAbbreviation": "conf",
         "minPreferredMax": "min/preferido/max",
         "nocount": "inscripciones no contabilizadas (staff y PNJ's generalmente)",
         "nocountAbbreviation": "nocont",
@@ -785,239 +323,37 @@
         "unlimited": "Plazas ilimitadas"
       }
     },
-    "timezoneMessage": "Todos los horarios mostrados en zona horaria {{ offsetName }}.",
-    "views": {
-      "gridView": "",
-      "gridViewByRoom": "",
-      "gridViewWithCounts": "",
-      "listView": "",
-      "scheduleViewSelectorHeader": ""
-    }
-  },
-  "selectors": {
-    "eventSelect": {
-      "noInputMessage": "Type an event title to search",
-      "noResultsMessage": "No evets found matching “{{ inputValue }}”",
-      "placeholder": "Search for an event by title..."
-    },
-    "userConProfileSelect": {
-      "noInputMessage": "Type a name or email to search",
-      "noResultsMessage": "No attendees found matching “{{ inputValue }}”",
-      "placeholder": "Search for an attendee by name or email..."
-    },
-    "userSelect": {
-      "noInputMessage": "Type a name or email to search",
-      "noResultsMessage": "No users found matching “{{ inputValue }}”",
-      "placeholder": "Search for a user by name or email..."
-    }
-  },
-  "signupModeration": {
-    "createSignups": "Create signups",
-    "goToRankedChoiceQueue": "Go to ranked choice queue",
-    "moderationQueue": "Moderation queue",
-    "rankedChoiceQueue": "Attendee ranked choice queue"
-  },
-  "signupRounds": {
-    "executedAt": "Automation ran {{ executedAt }}.",
-    "notExecutedYet": "Automation has not yet run.",
-    "viewResults": "View results"
+    "timezoneMessage": "Todos los horarios mostrados en zona horaria {{ offsetName }}."
   },
   "signups": {
-    "availability": {
-      "full_one": "",
-      "full_many": "",
-      "full_other": "",
-      "partiallyFull_one": "",
-      "partiallyFull_many": "",
-      "partiallyFull_other": "",
-      "unlimited": "",
-      "waitlistCount_one": "",
-      "waitlistCount_many": "",
-      "waitlistCount_other": ""
-    },
-    "eventTicketPurchase": {
-      "cta": "",
-      "spotHeldUntil": "",
-      "title": ""
-    },
     "maximumSignups": {
-      "label": "Maximum signups allowed",
       "limitedCount_one": "Up to {{ count }} event(s)",
       "limitedCount_many": "Up to {{ count }} event(s)",
-      "limitedCount_other": "Up to {{ count }} event(s)",
-      "limitedCountLabel": "Max:",
-      "limitedUnspecified": "Limited number of signups",
-      "notNow": "",
-      "notYet": "",
-      "unlimited": ""
-    },
-    "mySignupQue": {
-      "settingsSection": {
-        "label": "Settings"
-      }
+      "limitedCount_other": "Up to {{ count }} event(s)"
     },
     "mySignupQueue": {
-      "addAdditional": "To add more events to your queue, go to <1>the event catalog</1> or <4>the event schedule</4>. You can add events to your queue from each event’s page.",
-      "allowWaitlist": {
-        "caption": "What should we do if all your choices are full?",
-        "no": "Don't sign me up for anything",
-        "yes": "Add me to the waitlist of my top-ranked choice"
-      },
-      "constraintsTable": {
-        "label": "Limits"
-      },
-      "conventionDaySignupsConstraint": {
-        "help": "How many events do you want to sign up for on {{ conventionDay }} (in addition to any events you are running?)",
-        "label": "{{ conventionDay }} event signups"
-      },
-      "emptyState": "You currently have no events in your signup queue. To add something to your queue, go to <2>the event catalog</2> or <5>the event schedule</5>. You can add events to your queue from each event’s page.",
-      "maximumSignupsLimit": "{{ number }} at most",
-      "miscSignupsConstraint": "Events {{ interval }}",
-      "moveDown": "Move down in queue",
-      "moveUp": "Move up in queue",
       "nextRoundAction": {
-        "limited_one": "At that time, players will be automatically signed up for up to {{ count }} event(s).",
-        "limited_many": "At that time, players will be automatically signed up for up to {{ count }} event(s).",
-        "limited_other": "At that time, players will be automatically signed up for up to {{ count }} event(s).",
-        "unlimited": "At that time, players will be signed up for events automatically based on their queue selections until their schedule is full."
-      },
-      "nextRoundInfo": "The next signup round starts at <2>{{nextRoundStart}}</2>. {{nextRoundActionDescription}}",
-      "noLimit": "No limit",
-      "remove": "Remove",
-      "removeConfirmPrompt": "Are you sure you want to remove {{ eventTitle }} from your signup queue?",
-      "ticketStatus": {
-        "noTicket": "You do not have a {{ ticketName }}.  You will not be able to sign up for games until you have purchased a {{ ticketName }}.",
-        "ok": "You have a {{ ticketName }} and will be signed up for events at that time.",
-        "signupsNotAllowed": "You have a {{ ticketName }} that does not allow event signups.  You will not be able to sign up for games until you have arranged for a full {{ ticketName }}."
-      },
-      "title": "My signup queue",
-      "totalSignupsConstraint": {
-        "help": "How many events do you want to sign up for over the entirety of the con (in addition to any events you are running?)",
-        "label": "Total event signups"
+        "limited_many": "At that time, players will be automatically signed up for up to {{ count }} event(s)."
       }
     },
-    "noPreference": "",
-    "noSignupsAvailable": "",
-    "rankedChoiceOrder": {
-      "asc": "Ascending lottery number order",
-      "ascSerpentine": "Serpentine lottery number order, ascending first",
-      "desc": "Descending lottery number order",
-      "descSerpentine": "Serpentine lottery number order, descending first"
-    },
-    "rankedChoiceOrderLabel": "Ranked choice order",
-    "runCardText": {
-      "confirmed": "",
-      "requestPending": "",
-      "ticketPurchaseHold": "",
-      "waitlisted": "",
-      "waitlistedUnknownPosition": ""
-    },
-    "signedOutSignupButton": "",
-    "signupButton": {
-      "addToQueue": "Add to my queue",
-      "inMyQueue": "In my queue",
-      "signUpNow": "Sign up now",
-      "waitlist": "Waitlist"
-    },
-    "signupRounds": {
-      "addNewSignupRound": "Add new signup round",
-      "errors": {
-        "startTimeRequired": "Start time is required."
-      },
-      "preSignupRoundPeriod": "Pre-signups period",
-      "results": "Results",
-      "roundNumber": "Round {{ number }}",
-      "scheduleHeader": "Schedule",
-      "start": "Starts at"
-    },
-    "signupSummaryLink": "",
     "states": {
-      "bucketWithNoPreference": "",
       "confirmed": "Confirmado",
-      "inMyQueue": "In my signup queue",
-      "inUnrequestedBucket": "",
-      "noBucketName": "",
-      "notCounted": "",
-      "notCountedWithBucket": "",
       "notSignedUp": "No inscrita",
-      "requestPending": "Signup request pending",
-      "stateWithRequestedBucket": "",
-      "teamMemberNotCounted": "",
-      "ticketPurchaseHold": "",
-      "waitlisted": "En lista de espera",
-      "waitlistedNoPreference": "",
-      "waitlistedWithRequestedBucket": "",
-      "withdrawn": ""
-    },
-    "viewSignupsLink": "",
-    "withdrawButton": "",
-    "withdrawSignupRequestButton": ""
-  },
-  "spoiler": {
-    "hoverText": ""
-  },
-  "store": {
-    "coupons": {
-      "unlimitedUses": "",
-      "usageLimitCount_one": "",
-      "usageLimitCount_many": "",
-      "usageLimitCount_other": ""
-    },
-    "selectProductLabel": "",
-    "totalPrice": ""
+      "waitlisted": "En lista de espera"
+    }
   },
   "tables": {
-    "ageRestrictionsCheck": {
-      "notApplicable": "",
-      "ok": "",
-      "unknown": ""
-    },
     "choiceSetFilter": {
       "anyText": "Cualquiera"
     },
-    "columnSelectorButton": "",
     "exportCSV": {
       "buttonText": "Exportar CSV"
     },
     "privileges": {
       "siteAdmin": "Admin Global"
     },
-    "rankedChoiceDecision": {
-      "decisions": {
-        "conflict": "conflict",
-        "full": "event full",
-        "missingTicket": "{{ ticketName }} required",
-        "noMoreSignupsAllowed": "no more signups allowed",
-        "noPendingChoices": "user constraints",
-        "signup": "sign up",
-        "skipChoice": "skip choice",
-        "skipUser": "skip user",
-        "waitlist": "waitlist"
-      }
-    },
-    "signupChange": {
-      "actions": {
-        "acceptSignupRankedChoice": "accepted signup ranked choice",
-        "acceptSignupRequest": "",
-        "adminCreateSignup": "",
-        "changeRegistrationPolicy": "",
-        "holdExpired": "hold expired",
-        "selfServiceSignup": "",
-        "ticketPurchase": "ticket purchase",
-        "unknown": "",
-        "vacancyFill": "",
-        "withdraw": ""
-      },
-      "unknownState": ""
-    },
     "ticketStatus": {
       "unpaid": "No pagado"
     }
-  },
-  "timespans": {
-    "finiteBothEnds": "{{ start }} to {{ finish }}",
-    "infiniteBothEnds": "anytime",
-    "infiniteFinish": "from {{ start }} indefinitely",
-    "infiniteStart": "anytime up to {{ finish }}"
   }
 }

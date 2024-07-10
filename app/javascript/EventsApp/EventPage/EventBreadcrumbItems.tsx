@@ -69,10 +69,10 @@ function EventBreadcrumbItems({
                 : '/events/schedule'
             }
           >
-            {t('navigation.events.eventSchedule', 'Event Schedule')}
+            {t('navigation.events.eventSchedule')}
           </Link>
         ) : (
-          <Link to="/events">{t('navigation.events.eventsList', 'List of events')}</Link>
+          <Link to="/events">{t('navigation.events.eventsList')}</Link>
         )}
       </li>
       <RouteActivatedBreadcrumbItem to={eventPath} end>

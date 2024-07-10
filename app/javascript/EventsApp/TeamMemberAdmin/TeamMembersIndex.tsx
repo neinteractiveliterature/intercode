@@ -55,20 +55,20 @@ function TeamMemberActionMenu({
       buttonContent={
         <>
           <i className="bi-three-dots" />
-          <span className="visually-hidden">{t('buttons.options', 'Options')}</span>
+          <span className="visually-hidden">{t('buttons.options')}</span>
         </>
       }
       popperOptions={{ placement: 'bottom-end' }}
     >
       <>
         <Link to={`${eventPath}/team_members/${teamMember.id}`} className="dropdown-item">
-          {t('events.teamMemberAdmin.editSettingsLink', 'Edit {{ teamMemberName }} settings', {
+          {t('events.teamMemberAdmin.editSettingsLink', {
             teamMemberName: event.event_category.team_member_name,
           })}
         </Link>
         {event.event_category.can_provide_tickets && convention.ticket_mode !== 'disabled' ? (
           <button className="dropdown-item cursor-pointer" onClick={openProvideTicketModal} type="button">
-            {t('events.teamMemberAdmin.provideTicketLink', 'Provide {{ ticketName }}', {
+            {t('events.teamMemberAdmin.provideTicketLink', {
               ticketName: convention.ticket_name,
             })}
           </button>
@@ -78,20 +78,16 @@ function TeamMemberActionMenu({
           type="button"
           onClick={() =>
             confirm({
-              prompt: t(
-                'events.teamMemberAdmin.removeTeamMemberPrompt',
-                'Are you sure you want to remove {{ name }} as a {{ teamMemberName }}?',
-                {
-                  name: teamMember.user_con_profile.name_without_nickname,
-                  teamMemberName: event.event_category.team_member_name,
-                },
-              ),
+              prompt: t('events.teamMemberAdmin.removeTeamMemberPrompt', {
+                name: teamMember.user_con_profile.name_without_nickname,
+                teamMemberName: event.event_category.team_member_name,
+              }),
               action: () => deleteTeamMember(teamMember),
               renderError: (error) => <ErrorDisplay graphQLError={error} />,
             })
           }
         >
-          {t('events.teamMemberAdmin.removeTeamMemberLink', 'Remove {{ teamMemberName }}', {
+          {t('events.teamMemberAdmin.removeTeamMemberLink', {
             teamMemberName: event.event_category.team_member_name,
           })}
         </button>
@@ -122,29 +118,28 @@ export default LoadQueryWrapper(useTeamMembersQueryFromParams, function TeamMemb
   return (
     <>
       <h1 className="mb-4">
-        {t('events.teamMemberAdmin.header', '{{ teamMemberName }} for {{ eventTitle }}', {
+        {t('events.teamMemberAdmin.header', {
           teamMemberName: titleizedTeamMemberName,
           eventTitle: event.title,
         })}
       </h1>
-
       {event.team_members.length > 0 ? (
         <div className="table-responsive">
           <table className="table table-striped">
             <thead>
               <tr>
-                <th>{t('events.teamMemberAdmin.nameHeader', 'Name')}</th>
+                <th>{t('events.teamMemberAdmin.nameHeader')}</th>
                 <th>
-                  {t('events.teamMemberAdmin.displayHeader', 'Display as {{ teamMemberName }}', {
+                  {t('events.teamMemberAdmin.displayHeader', {
                     teamMemberName: event.event_category.team_member_name,
                   })}
                 </th>
-                <th>{t('events.teamMemberAdmin.displayEmailHeader', 'Display email address')}</th>
-                <th>{t('events.teamMemberAdmin.receiveConEmailHeader', 'Receive email from con')}</th>
-                <th>{t('events.teamMemberAdmin.receiveSignupEmailHeader', 'Receive email on signup or withdrawal')}</th>
+                <th>{t('events.teamMemberAdmin.displayEmailHeader')}</th>
+                <th>{t('events.teamMemberAdmin.receiveConEmailHeader')}</th>
+                <th>{t('events.teamMemberAdmin.receiveSignupEmailHeader')}</th>
                 {convention.ticket_mode !== 'disabled' && (
                   <th>
-                    {t('events.teamMemberAdmin.hasEventTicketHeader', '{{ ticketName }} from this event', {
+                    {t('events.teamMemberAdmin.hasEventTicketHeader', {
                       ticketName: capitalize(convention.ticket_name),
                     })}
                   </th>
@@ -192,12 +187,11 @@ export default LoadQueryWrapper(useTeamMembersQueryFromParams, function TeamMemb
       ) : null}
       <p>
         <Link to={`${buildEventUrl(event)}/team_members/new`} className="btn btn-primary">
-          {t('events.teamMemberAdmin.addTeamMemberButton', 'Add {{ teamMemberName }}', {
+          {t('events.teamMemberAdmin.addTeamMemberButton', {
             teamMemberName: event.event_category.team_member_name,
           })}
         </Link>
       </p>
-
       <ProvideTicketModal
         visible={modal.visible}
         onClose={modal.close}

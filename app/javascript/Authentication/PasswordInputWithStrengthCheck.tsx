@@ -86,10 +86,10 @@ function PasswordInputWithStrengthCheck({ id, value, onChange }: PasswordInputWi
     'text-success': score >= 4,
   };
   const scoreTextTranslated = {
-    insecure: t('authentication.passwordInput.insecure', 'insecure'),
-    fair: t('authentication.passwordInput.fair', 'fair'),
-    good: t('authentication.passwordInput.good', 'good'),
-    great: t('authentication.passwordInput.great', 'great'),
+    insecure: t('authentication.passwordInput.insecure'),
+    fair: t('authentication.passwordInput.fair'),
+    good: t('authentication.passwordInput.good'),
+    great: t('authentication.passwordInput.great'),
   }[scoreText];
 
   const [dropdownButton, setDropdownButton] = useState<HTMLButtonElement | null>(null);
@@ -115,7 +115,7 @@ function PasswordInputWithStrengthCheck({ id, value, onChange }: PasswordInputWi
           type="password"
           value={value}
           onChange={(event) => onChange(event.target.value)}
-          aria-label={t('authentication.passwordInput.label', 'Password')}
+          aria-label={t('authentication.passwordInput.label')}
         />
         <div style={{ right: 0, top: 0, position: 'absolute' }} className={classNames('me-2', 'mt-2')}>
           <button
@@ -141,7 +141,7 @@ function PasswordInputWithStrengthCheck({ id, value, onChange }: PasswordInputWi
                   <>
                     {' '}
                     <i className="bi-question-circle-fill" style={{ cursor: 'pointer' }}>
-                      <span className="visually-hidden">{t('buttons.help', 'Help')}</span>
+                      <span className="visually-hidden">{t('buttons.help')}</span>
                     </i>
                   </>
                 )}
@@ -178,7 +178,7 @@ function PasswordInputWithStrengthCheck({ id, value, onChange }: PasswordInputWi
             className={classNames('progress-bar', scoreProgressClasses)}
             aria-valuemin={0}
             aria-valuemax={4}
-            aria-label={t('authentication.passwordInput.strengthMeterLabel', 'Password strength')}
+            aria-label={t('authentication.passwordInput.strengthMeterLabel')}
           />
         </div>
       </div>

@@ -14,22 +14,22 @@ export function useEventsNavigationItems(): GeneratedNavigationItem[] {
     () =>
       [
         currentAbility.can_read_schedule && {
-          label: t('navigation.events.eventSchedule', 'Event Schedule'),
+          label: t('navigation.events.eventSchedule'),
           url: '/events/schedule',
           icon: 'bi-calendar3',
         },
         currentAbility.can_list_events && {
-          label: t('navigation.events.eventCatalog', 'Event Catalog'),
+          label: t('navigation.events.eventCatalog'),
           url: '/events',
           icon: 'bi-list-ul',
         },
         signupAutomationMode === SignupAutomationMode.RankedChoice && {
-          label: t('navigation.events.mySignupQueue', 'My Signup Queue'),
+          label: t('navigation.events.mySignupQueue'),
           url: '/events/my-signup-queue',
           icon: 'bi-card-checklist',
         },
         conventionAcceptingProposals && {
-          label: t('navigation.events.newProposal', 'Propose an Event'),
+          label: t('navigation.events.newProposal'),
           url: '/pages/new-proposal',
           icon: 'bi-gift-fill',
         },

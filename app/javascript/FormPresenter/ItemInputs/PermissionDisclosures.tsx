@@ -23,34 +23,28 @@ export function describeFormItemRole(
 ): string {
   switch (role) {
     case FormItemRole.Admin:
-      return t('forms.roles.admin', 'Admin only');
+      return t('forms.roles.admin');
     case FormItemRole.ConfirmedAttendee:
-      return t('forms.roles.confirmed_attendee', 'Confirmed attendees, team members, and admins');
+      return t('forms.roles.confirmed_attendee');
     case FormItemRole.TeamMember:
-      return t('forms.roles.team_member', 'Team members and admins');
+      return t('forms.roles.team_member');
     case FormItemRole.AllProfilesBasicAccess:
       if (purpose === 'visibility') {
-        return t(
-          'forms.roles.read_all_profiles',
-          'Staff who can see the non-personal fields on all user profiles, and admins',
-        );
+        return t('forms.roles.read_all_profiles');
       }
 
-      return t(
-        'forms.roles.update_all_profiles',
-        'Staff who can update the non-personal fields on all user profiles, and admins',
-      );
+      return t('forms.roles.update_all_profiles');
     case FormItemRole.Normal:
       switch (formTypeIdentifier) {
         case FormType.Event:
           if (purpose === 'visibility') {
-            return t('forms.roles.public', 'Public');
+            return t('forms.roles.public');
           }
-          return t('forms.roles.team_member', 'Team members and admins');
+          return t('forms.roles.team_member');
         case FormType.EventProposal:
-          return t('forms.roles.proposer', 'Event proposer, reviewers, and admins');
+          return t('forms.roles.proposer');
         case FormType.UserConProfile:
-          return t('forms.roles.user', 'User and admins');
+          return t('forms.roles.user');
         default:
           assertNever(formTypeIdentifier);
       }
@@ -71,7 +65,7 @@ export function getVisibilityDisclosureText(
     return undefined;
   }
 
-  return t('forms.roles.visibilityDisclosure', 'Visible to: {{ roleDescription }}', {
+  return t('forms.roles.visibilityDisclosure', {
     roleDescription: describeFormItemRole('visibility', formItem.visibility, formTypeIdentifier, t),
   });
 }

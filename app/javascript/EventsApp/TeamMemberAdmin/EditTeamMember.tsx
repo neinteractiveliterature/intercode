@@ -25,7 +25,7 @@ export default LoadQueryWrapper(useTeamMembersQueryFromParams, function EditTeam
   const [update, updateError, updateInProgress] = useAsyncFunction(updateMutate);
 
   usePageTitle(
-    t('events.teamMemberAdmin.editPageTitle', 'Editing {{ teamMemberName }} “{{ name }}” - {{ eventTitle }}', {
+    t('events.teamMemberAdmin.editPageTitle', {
       teamMemberName: event.event_category.team_member_name,
       name: teamMember?.user_con_profile.name_without_nickname,
       eventTitle: event.title,
@@ -56,24 +56,22 @@ export default LoadQueryWrapper(useTeamMembersQueryFromParams, function EditTeam
   return (
     <>
       <h1 className="mb-4">
-        {t('events.teamMemberAdmin.editHeader', '{{ teamMemberName }} Settings for {{ name }}', {
+        {t('events.teamMemberAdmin.editHeader', {
           teamMemberName: capitalize(event.event_category.team_member_name),
           name: teamMember.user_con_profile.name_without_nickname,
         })}
       </h1>
-
       <dl className="row">
-        <dt className="col-md-3">{t('events.teamMemberAdmin.emailLabel', 'Email')}</dt>
+        <dt className="col-md-3">{t('events.teamMemberAdmin.emailLabel')}</dt>
         <dd className="col-md-9">
           <a href={`mailto:${teamMember.user_con_profile.email}`}>{teamMember.user_con_profile.email}</a>
         </dd>
 
-        <dt className="col-md-3">{t('events.teamMemberAdmin.mobilePhoneLabel', 'Mobile phone')}</dt>
+        <dt className="col-md-3">{t('events.teamMemberAdmin.mobilePhoneLabel')}</dt>
         <dd className="col-md-9">
           <a href={`tel:${teamMember.user_con_profile.mobile_phone}`}>{teamMember.user_con_profile.mobile_phone}</a>
         </dd>
       </dl>
-
       <TeamMemberForm
         event={event}
         value={teamMember}
@@ -82,13 +80,11 @@ export default LoadQueryWrapper(useTeamMembersQueryFromParams, function EditTeam
         }
         disabled={updateInProgress}
       />
-
       <ErrorDisplay graphQLError={updateError as ApolloError} />
-
       <ul className="list-inline mt-4">
         <li className="list-inline-item">
           <button type="button" className="btn btn-primary" disabled={updateInProgress} onClick={updateClicked}>
-            {t('events.teamMemberAdmin.updateButton', 'Update {{ teamMemberName }}', {
+            {t('events.teamMemberAdmin.updateButton', {
               teamMemberName: event.event_category.team_member_name,
             })}
           </button>

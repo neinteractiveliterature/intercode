@@ -53,14 +53,14 @@ export default function AddFileModal({ visible, existingFiles, addBlob, fileChos
 
   return (
     <Modal visible={visible} dialogClassName="modal-lg">
-      <div className="modal-header">{t('cms.addFileModal.title', 'Add file')}</div>
+      <div className="modal-header">{t('cms.addFileModal.title')}</div>
       <div className="modal-body">
         {error ? (
           <ErrorDisplay graphQLError={error} />
         ) : (
           <>
             <SelectWithLabel<ActiveStorageAttachment>
-              label={t('cms.addFileModal.chooseExistingFileLabel', 'Choose existing file')}
+              label={t('cms.addFileModal.chooseExistingFileLabel')}
               options={existingFiles}
               getOptionLabel={(f) => f.filename}
               getOptionValue={(f) => f.filename}
@@ -87,7 +87,7 @@ export default function AddFileModal({ visible, existingFiles, addBlob, fileChos
             )}
             {file && (
               <div className="card mt-2">
-                <div className="card-header">{t('cms.addFileModal.filePreview.title', 'Preview')}</div>
+                <div className="card-header">{t('cms.addFileModal.filePreview.title')}</div>
                 <div className="card-body">
                   <FilePreview url={file.url} contentType={file.content_type} filename={file.filename} />
                 </div>
@@ -98,7 +98,7 @@ export default function AddFileModal({ visible, existingFiles, addBlob, fileChos
       </div>
       <div className="modal-footer">
         <button className="btn btn-secondary" type="button" onClick={close}>
-          {t('buttons.cancel', 'Cancel')}
+          {t('buttons.cancel')}
         </button>
         <button
           type="button"
@@ -113,7 +113,7 @@ export default function AddFileModal({ visible, existingFiles, addBlob, fileChos
             close();
           }}
         >
-          {t('buttons.add', 'Add')}
+          {t('buttons.add')}
         </button>
       </div>
     </Modal>

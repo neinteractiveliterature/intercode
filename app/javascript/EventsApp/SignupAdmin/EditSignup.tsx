@@ -73,7 +73,7 @@ function getMakeNotCountedConfirmPrompt(signup: SignupFieldsFragment) {
 const renderAddressItem = (userConProfile: SignupFieldsFragment['user_con_profile'], t: TFunction) => {
   const elements = (
     [
-      ['header', t('events.signupAdmin.addressHeader', 'Address:')],
+      ['header', t('events.signupAdmin.addressHeader')],
       ['address', userConProfile.address],
       ['cityStateZip', cityStateZip(userConProfile)],
       ['country', userConProfile.country],
@@ -113,7 +113,7 @@ function EditSignup({ teamMembersUrl }: EditSignupProps): JSX.Element {
   usePageTitle(
     useValueUnless(
       () =>
-        t('events.signupAdmin.editPageTitle', 'Editing signup for “{{ name }}” - {{ eventTitle }}', {
+        t('events.signupAdmin.editPageTitle', {
           name: data?.convention.signup.user_con_profile.name_without_nickname,
           eventTitle: data?.convention.signup.run.event.title,
         }),
@@ -159,12 +159,12 @@ function EditSignup({ teamMembersUrl }: EditSignupProps): JSX.Element {
         <ul className="list-group list-group-flush">
           <li className="list-group-item">
             <>
-              {t('events.signupAdmin.nicknameHeader', 'Nickname:')} {userConProfile.nickname}
+              {t('events.signupAdmin.nicknameHeader')} {userConProfile.nickname}
             </>
           </li>
           <li className="list-group-item">
             <>
-              {t('events.signupAdmin.ageHeader', 'Age at {{ eventTitle }}:', {
+              {t('events.signupAdmin.ageHeader', {
                 eventTitle: signup.run.event.title,
               })}{' '}
               {ageAsOf(
@@ -177,13 +177,13 @@ function EditSignup({ teamMembersUrl }: EditSignupProps): JSX.Element {
           </li>
           <li className={classNames('list-group-item')}>
             <>
-              {t('events.signupAdmin.emailHeader', 'Email:')}{' '}
+              {t('events.signupAdmin.emailHeader')}{' '}
               <a href={`mailto:${userConProfile.email}`}>{userConProfile.email}</a>
             </>
           </li>
           <li className="list-group-item">
             <>
-              {t('events.signupAdmin.phoneHeader', 'Phone:')}{' '}
+              {t('events.signupAdmin.phoneHeader')}{' '}
               <a href={`tel:${userConProfile.mobile_phone}`}>{userConProfile.mobile_phone}</a>
             </>
           </li>
@@ -326,23 +326,20 @@ function EditSignup({ teamMembersUrl }: EditSignupProps): JSX.Element {
   return (
     <>
       <h1 className="mb-4">
-        {t('events.signupAdmin.editPageHeader', 'Edit signup for {{ eventTitle }}', {
+        {t('events.signupAdmin.editPageHeader', {
           eventTitle: data?.convention.signup.run.event.title,
         })}
       </h1>
-
       <div className="row">
         <div className="col col-md-6">{renderUserSection()}</div>
 
         <div className="col col-md-6">{renderRunSection()}</div>
       </div>
-
       <ForceConfirmSignupModal
         signup={forceConfirmModal.visible ? data?.convention.signup : undefined}
         onComplete={forceConfirmModal.close}
         onCancel={forceConfirmModal.close}
       />
-
       <ChangeBucketModal
         signup={changeBucketModal.visible ? data?.convention.signup : undefined}
         onComplete={changeBucketModal.close}

@@ -20,8 +20,8 @@ function EventCategorySelect({ eventCategories, label, ...props }: EventCategory
   ));
 
   return (
-    <BootstrapFormSelect label={label || t('eventCategorySelect.defaultLabel', 'Event Category')} {...props}>
-      <option aria-label={t('general.placeholderOptionLabel', 'Blank placeholder option')} />
+    <BootstrapFormSelect label={label || t('eventCategorySelect.defaultLabel')} {...props}>
+      <option aria-label={t('general.placeholderOptionLabel')} />
       {categoryOptions}
     </BootstrapFormSelect>
   );

@@ -85,7 +85,7 @@ function EventEmailInput({
         <FormGroupWithLabel
           label={
             <>
-              {t('forms.eventEmail.mailingListAddressLabel', 'Mailing list address')}
+              {t('forms.eventEmail.mailingListAddressLabel')}
               <RequiredIndicator formItem={formItem} />
             </>
           }
@@ -95,7 +95,7 @@ function EventEmailInput({
               value={(value || {}).team_mailing_list_name}
               onTextChange={(newName) => updateValue({ ...value, team_mailing_list_name: newName })}
               id={id}
-              aria-label={t('forms.eventEmail.mailingListAliasLabel', 'Mailing list address (portion before @ sign)')}
+              aria-label={t('forms.eventEmail.mailingListAliasLabel')}
               domain={convention.event_mailing_list_domain ?? ''}
             />
           )}
@@ -107,7 +107,7 @@ function EventEmailInput({
       <BootstrapFormInput
         label={
           <>
-            {t('forms.eventEmail.contactEmailLabel', 'Contact email address')}
+            {t('forms.eventEmail.contactEmailLabel')}
             <RequiredIndicator formItem={formItem} />
           </>
         }
@@ -129,9 +129,7 @@ function EventEmailInput({
           })}
         >
           <legend className="col-form-label">
-            <span>
-              {t('forms.eventEmail.formGroupLegend', 'How would you like to receive email about this event?')}
-            </span>
+            <span>{t('forms.eventEmail.formGroupLegend')}</span>
             <RequiredIndicator formItem={formItem} />
           </legend>
           <ChoiceSet
@@ -140,23 +138,17 @@ function EventEmailInput({
               ...(convention.event_mailing_list_domain
                 ? [
                     {
-                      label: t(
-                        'forms.eventEmail.teamMailingListOption',
-                        'Have the convention create and manage a team mailing list for me',
-                      ),
+                      label: t('forms.eventEmail.teamMailingListOption'),
                       value: 'team_mailing_list',
                     },
                   ]
                 : []),
               {
-                label: t('forms.eventEmail.eventEmailOption', 'Use a contact email I specify'),
+                label: t('forms.eventEmail.eventEmailOption'),
                 value: 'event_email',
               },
               {
-                label: t(
-                  'forms.eventEmail.teamMembersOption',
-                  'Specify a contact email for attendees, but have the convention email individual team members with updates',
-                ),
+                label: t('forms.eventEmail.teamMembersOption'),
                 value: 'gms',
               },
             ]}
@@ -164,9 +156,7 @@ function EventEmailInput({
             onChange={emailBehaviorChanged}
           />
           <div className="mt-4">{renderEmailInput()}</div>
-          {valueInvalid ? (
-            <span className="text-danger">{t('forms.general.fieldRequiredError', 'This field is required.')}</span>
-          ) : null}
+          {valueInvalid ? <span className="text-danger">{t('forms.general.fieldRequiredError')}</span> : null}
         </div>
       </VisibilityDisclosureCard>
     </fieldset>

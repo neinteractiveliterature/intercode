@@ -149,9 +149,9 @@ function AdminOrderEntriesTable<
     <table className="table table-sm mb-0">
       <thead>
         <tr>
-          <th>{t('admin.store.orderEntries.itemColumnHeader', 'Item')}</th>
-          <th>{t('admin.store.orderEntries.quantityColumnHeader', 'Quantity')}</th>
-          <th>{t('admin.store.orderEntries.priceColumnHeader', 'Price')}</th>
+          <th>{t('admin.store.orderEntries.itemColumnHeader')}</th>
+          <th>{t('admin.store.orderEntries.quantityColumnHeader')}</th>
+          <th>{t('admin.store.orderEntries.priceColumnHeader')}</th>
           <th />
         </tr>
       </thead>
@@ -201,11 +201,10 @@ function AdminOrderEntriesTable<
                 aria-label="Delete item"
                 onClick={() =>
                   confirm({
-                    prompt: t(
-                      'admin.store.orderEntries.deleteConfirmation',
-                      'Are you sure you want to delete {{ count }} {{ productName }} items from the order?  This cannot be undone.',
-                      { count: orderEntry.quantity, productName: orderEntry.product.name },
-                    ),
+                    prompt: t('admin.store.orderEntries.deleteConfirmation', {
+                      count: orderEntry.quantity,
+                      productName: orderEntry.product.name,
+                    }),
                     action: () => deleteOrderEntry(orderEntry),
                     renderError: (error) => <ErrorDisplay graphQLError={error} />,
                   })
@@ -219,7 +218,7 @@ function AdminOrderEntriesTable<
         {(order.coupon_applications ?? []).map((couponApplication) => (
           <tr key={couponApplication.id} className="bg-light">
             <td colSpan={2}>
-              <em>{t('admin.store.orderEntries.couponCodeLabel', 'Coupon code: ')}</em>
+              <em>{t('admin.store.orderEntries.couponCodeLabel')}</em>
               <code>{couponApplication.coupon.code}</code>
             </td>
             <td className="font-italic">-{formatMoney(couponApplication.discount)}</td>
@@ -227,13 +226,10 @@ function AdminOrderEntriesTable<
               <button
                 className="btn btn-outline-danger btn-sm"
                 type="button"
-                aria-label={t('admin.store.orderEntries.deleteCouponLabel', 'Delete coupon')}
+                aria-label={t('admin.store.orderEntries.deleteCouponLabel')}
                 onClick={() =>
                   confirm({
-                    prompt: t(
-                      'admin.store.orderEntries.deleteCouponConfirmation',
-                      'Are you sure you want to delete this coupon from the order?  This cannot be undone.',
-                    ),
+                    prompt: t('admin.store.orderEntries.deleteCouponConfirmation'),
                     action: () => deleteCouponApplication(couponApplication),
                     renderError: (error) => <ErrorDisplay graphQLError={error} />,
                   })
@@ -284,11 +280,19 @@ function AdminOrderEntriesTable<
             <td>
               <InPlaceMoneyEditor
                 value={addingItem.price_per_item}
-                onChange={(value) => setAddingItem((prev) => ({ ...prev, price_per_item: value }) as T)}
+                onChange={(value) =>
+                  setAddingItem(
+                    (prev) =>
+                      ({
+                        ...prev,
+                        price_per_item: value,
+                      }) as T,
+                  )
+                }
                 disabled={createInProgress}
               >
                 {formatMoney(addingItem.price_per_item)}
-                {addingItem.quantity > 1 && ` ${t('admin.store.orderEntries.pricePerEachSuffix', 'each')}`}
+                {addingItem.quantity > 1 && ` ${t('admin.store.orderEntries.pricePerEachSuffix')}`}
               </InPlaceMoneyEditor>
             </td>
             <td>
@@ -298,7 +302,7 @@ function AdminOrderEntriesTable<
                 onClick={saveAddingItem}
                 disabled={createInProgress}
               >
-                {t('buttons.add', 'Add')}
+                {t('buttons.add')}
               </button>
             </td>
           </tr>
@@ -337,11 +341,11 @@ function AdminOrderEntriesTable<
             )}
             {!applyingCoupon && (
               <button className="btn btn-sm btn-outline-primary" type="button" onClick={() => setApplyingCoupon(true)}>
-                {t('admin.store.orderEntries.addCouponLabel', 'Add coupon')}
+                {t('admin.store.orderEntries.addCouponLabel')}
               </button>
             )}
           </td>
-          <td>{t('admin.store.orderEntries.totalPrice', 'Total price')}</td>
+          <td>{t('admin.store.orderEntries.totalPrice')}</td>
           <td>{formatMoney(order.total_price)}</td>
           <td />
         </tr>

@@ -93,7 +93,7 @@ function SignUpForm(): JSX.Element {
     <>
       <form onSubmit={submit}>
         <div className="modal-header bg-light align-items-center">
-          <div className="lead flex-grow-1">{t('authentication.signUpForm.header', 'Sign up')}</div>
+          <div className="lead flex-grow-1">{t('authentication.signUpForm.header')}</div>
         </div>
 
         <div className="modal-body">
@@ -101,7 +101,7 @@ function SignUpForm(): JSX.Element {
           <UserFormFields formState={formState} setFormState={setFormState} />
           <div className="mb-3">
             <label className="form-label" htmlFor={passwordFieldId}>
-              {t('authentication.signUpForm.passwordLabel', 'Password')}
+              {t('authentication.signUpForm.passwordLabel')}
             </label>
             <Suspense fallback={<LoadingIndicator iconSet="bootstrap-icons" />}>
               <PasswordInputWithStrengthCheck id={passwordFieldId} value={password} onChange={setPassword} />
@@ -126,7 +126,7 @@ function SignUpForm(): JSX.Element {
                 setCurrentView('signIn');
               }}
             >
-              {t('authentication.logInLink', 'Log in to an existing account')}
+              {t('authentication.logInLink')}
             </button>
             <button
               type="button"
@@ -135,19 +135,19 @@ function SignUpForm(): JSX.Element {
                 setCurrentView('forgotPassword');
               }}
             >
-              {t('authentication.forgotPasswordLink', 'Forgot your password?')}
+              {t('authentication.forgotPasswordLink')}
             </button>
           </div>
           <div>
             <button type="button" className="btn btn-secondary me-2" disabled={submitInProgress} onClick={closeModal}>
-              {t('buttons.cancel', 'Cancel')}
+              {t('buttons.cancel')}
             </button>
             <input
               type="submit"
               className="btn btn-primary"
               disabled={submitInProgress}
-              value={t('authentication.signUpForm.signUpButton', 'Sign up').toString()}
-              aria-label={t('authentication.signUpForm.signUpButton', 'Sign up')}
+              value={t('authentication.signUpForm.signUpButton').toString()}
+              aria-label={t('authentication.signUpForm.signUpButton')}
             />
           </div>
         </div>

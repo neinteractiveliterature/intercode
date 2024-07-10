@@ -59,13 +59,13 @@ const AgeRestrictionsCheckCell = ({ value }: CellProps<SignupType, string>) => {
   let text = value;
   if (value === 'OK') {
     badgeClass = 'bg-success';
-    text = t('tables.ageRestrictionsCheck.ok', 'OK');
+    text = t('tables.ageRestrictionsCheck.ok');
   } else if (value === 'Unknown age') {
     badgeClass = 'bg-warning';
-    text = t('tables.ageRestrictionsCheck.unknown', 'Unknown age');
+    text = t('tables.ageRestrictionsCheck.unknown');
   } else if (value === 'N/A') {
     badgeClass = 'bg-secondary';
-    text = t('tables.ageRestrictionsCheck.notApplicable', 'N/A');
+    text = t('tables.ageRestrictionsCheck.notApplicable');
   }
 
   return <span className={`badge ${badgeClass}`}>{text}</span>;
@@ -96,14 +96,14 @@ const BucketFilter = (props: FilterProps<SignupType>) => {
 function getPossibleColumns(t: TFunction): Column<SignupType>[] {
   return [
     {
-      Header: <>{t('events.signupAdmin.sequenceHeader', 'Seq')}</>,
+      Header: <>{t('events.signupAdmin.sequenceHeader')}</>,
       id: 'id',
       accessor: 'id',
       disableSortBy: false,
       width: 65,
     },
     {
-      Header: <>{t('events.signupAdmin.stateHeader', 'State')}</>,
+      Header: <>{t('events.signupAdmin.stateHeader')}</>,
       id: 'state',
       accessor: 'state',
       width: 130,
@@ -113,7 +113,7 @@ function getPossibleColumns(t: TFunction): Column<SignupType>[] {
       Cell: SignupStateCell,
     },
     {
-      Header: <>{t('events.signupAdmin.nameHeader', 'Name')}</>,
+      Header: <>{t('events.signupAdmin.nameHeader')}</>,
       id: 'name',
       accessor: (signup: SignupType) => signup.user_con_profile,
       disableFilters: false,
@@ -122,7 +122,7 @@ function getPossibleColumns(t: TFunction): Column<SignupType>[] {
       Cell: UserConProfileWithGravatarCell,
     },
     {
-      Header: <>{t('events.signupAdmin.bucketHeader', 'Bucket')}</>,
+      Header: <>{t('events.signupAdmin.bucketHeader')}</>,
       id: 'bucket',
       accessor: (signup: SignupType) => signup.bucket_key,
       Cell: BucketCell,
@@ -131,7 +131,7 @@ function getPossibleColumns(t: TFunction): Column<SignupType>[] {
       Filter: BucketFilter,
     },
     {
-      Header: <>{t('events.signupAdmin.ageCheckHeader', 'Age check')}</>,
+      Header: <>{t('events.signupAdmin.ageCheckHeader')}</>,
       id: 'age_restrictions_check',
       accessor: 'age_restrictions_check',
       width: 100,
@@ -139,7 +139,7 @@ function getPossibleColumns(t: TFunction): Column<SignupType>[] {
       Cell: AgeRestrictionsCheckCell,
     },
     {
-      Header: <>{t('events.signupAdmin.ageTableHeader', 'Age')}</>,
+      Header: <>{t('events.signupAdmin.ageTableHeader')}</>,
       id: 'age',
       width: 40,
       accessor: (signup: SignupType) =>
@@ -150,7 +150,7 @@ function getPossibleColumns(t: TFunction): Column<SignupType>[] {
       disableSortBy: false,
     },
     {
-      Header: <>{t('events.signupAdmin.emailTableHeader', 'Email')}</>,
+      Header: <>{t('events.signupAdmin.emailTableHeader')}</>,
       id: 'email',
       accessor: (signup: SignupType) => signup.user_con_profile.email,
       Cell: EmailCell,
@@ -195,7 +195,7 @@ export default LoadQueryWrapper<SignupAdminEventQueryData, SignupAdminEventQuery
     });
 
     usePageTitle(
-      t('events.signupAdmin.indexPageTitle', 'Signups - {{ eventTitle }}', {
+      t('events.signupAdmin.indexPageTitle', {
         eventTitle: data?.convention.event.title,
       }),
     );

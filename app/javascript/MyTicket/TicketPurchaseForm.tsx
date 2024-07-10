@@ -75,7 +75,7 @@ export default function TicketPurchaseForm({ availableProducts, onAddedToCart, r
                       aria-labelledby={`product-label-${id}`}
                     />
                     <div className="d-flex">
-                      <div className="flex-grow-1">{t('store.selectProductLabel', 'Select')}</div>
+                      <div className="flex-grow-1">{t('store.selectProductLabel')}</div>
                       <Checkmark value={product?.id === id} className="ms-2" />
                     </div>
                   </label>

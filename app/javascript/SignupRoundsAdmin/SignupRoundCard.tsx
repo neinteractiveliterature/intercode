@@ -58,7 +58,7 @@ function SignupRoundCard({ rounds, roundIndex }: SignupRoundCardProps) {
       </div>
       <div className="card-body">
         <div className="mb-3">
-          <FormGroupWithLabel label={t('signups.maximumSignups.label', 'Maximum signups allowed')}>
+          <FormGroupWithLabel label={t('signups.maximumSignups.label')}>
             {(id) => (
               <MaximumEventSignupsInput
                 id={id}
@@ -77,7 +77,7 @@ function SignupRoundCard({ rounds, roundIndex }: SignupRoundCardProps) {
           <>
             {increasedMaximumSignups && (
               <BootstrapFormSelect
-                label={t('signups.rankedChoiceOrderLabel', 'Ranked choice order')}
+                label={t('signups.rankedChoiceOrderLabel')}
                 value={editingRound.ranked_choice_order ?? undefined}
                 onValueChange={(newValue) =>
                   setEditingRound((prevEditingRound) => {
@@ -89,17 +89,11 @@ function SignupRoundCard({ rounds, roundIndex }: SignupRoundCardProps) {
                 }
               >
                 <option aria-label="Blank placeholder option" />
-                <option value={RankedChoiceOrder.Asc}>
-                  {t('signups.rankedChoiceOrder.asc', 'Ascending lottery number order')}
-                </option>
-                <option value={RankedChoiceOrder.Desc}>
-                  {t('signups.rankedChoiceOrder.desc', 'Descending lottery number order')}
-                </option>
-                <option value={RankedChoiceOrder.AscSerpentine}>
-                  {t('signups.rankedChoiceOrder.ascSerpentine', 'Serpentine lottery number order, ascending first')}
-                </option>
+                <option value={RankedChoiceOrder.Asc}>{t('signups.rankedChoiceOrder.asc')}</option>
+                <option value={RankedChoiceOrder.Desc}>{t('signups.rankedChoiceOrder.desc')}</option>
+                <option value={RankedChoiceOrder.AscSerpentine}>{t('signups.rankedChoiceOrder.ascSerpentine')}</option>
                 <option value={RankedChoiceOrder.DescSerpentine}>
-                  {t('signups.rankedChoiceOrder.descSerpentine', 'Serpentine lottery number order, descending first')}
+                  {t('signups.rankedChoiceOrder.descSerpentine')}
                 </option>
               </BootstrapFormSelect>
             )}
@@ -107,18 +101,18 @@ function SignupRoundCard({ rounds, roundIndex }: SignupRoundCardProps) {
               {editingRound.executed_at ? (
                 <>
                   <i className="bi-check-circle-fill" />{' '}
-                  {t('signupRounds.executedAt', 'Automation ran {{ executedAt }}.', {
+                  {t('signupRounds.executedAt', {
                     executedAt: format(DateTime.fromISO(editingRound.executed_at), 'longWeekdayDateTimeWithZone'),
                   })}{' '}
                   <Link className="btn btn-outline-secondary btn-sm" to={`/signup_rounds/${editingRound.id}/results`}>
                     <>
-                      {t('signupRounds.viewResults', 'View results')} <i className="bi-arrow-right" />
+                      {t('signupRounds.viewResults')} <i className="bi-arrow-right" />
                     </>
                   </Link>
                 </>
               ) : (
                 <>
-                  <i className="bi-circle" /> {t('signupRounds.notExecutedYet', 'Automation has not yet run.')}
+                  <i className="bi-circle" /> {t('signupRounds.notExecutedYet')}
                 </>
               )}
             </div>
@@ -132,7 +126,7 @@ function SignupRoundCard({ rounds, roundIndex }: SignupRoundCardProps) {
             disabled={!unsavedChanges || updateLoading}
             onClick={() =>
               confirm({
-                prompt: t('prompts.confirmReset', 'Are you sure? This will discard any unsaved changes.'),
+                prompt: t('prompts.confirmReset'),
                 action: () => setEditingRound(round),
               })
             }

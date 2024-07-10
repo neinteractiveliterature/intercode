@@ -148,7 +148,7 @@ function EventList({ filterableFormItems, convention }: EventListProps): JSX.Ele
     data?.convention.events_paginated.entries ?? [],
   );
 
-  usePageTitle(t('navigation.events.eventCatalog', 'Event Catalog'));
+  usePageTitle(t('navigation.events.eventCatalog'));
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

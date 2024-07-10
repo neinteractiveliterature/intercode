@@ -31,7 +31,7 @@ const SignupRoundsAdminPage = LoadQueryWrapper(useSignupRoundsAdminQuery, ({ dat
     <>
       <h1 className="mb-4">{t('navigation.admin.signupRounds')}</h1>
       <section className="shadow bg-body-tertiary rounded p-4 mb-4 border">
-        <h3 className="mb-3">{t('signups.signupRounds.scheduleHeader', 'Schedule')}</h3>
+        <h3 className="mb-3">{t('signups.signupRounds.scheduleHeader')}</h3>
         <div className="d-flex gap-4">
           <div className="bg-white rounded">
             <MaximumEventSignupsPreview signupRounds={convention.signup_rounds} timezoneName={timezoneName} />

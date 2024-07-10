@@ -30,7 +30,9 @@ export default function NewTicketProvidingProductModal({
   const { t } = useTranslation();
   const [createProduct, { error, loading }] = useCreateProductMutation();
 
-  const [product, setProduct] = useState<WithGeneratedId<EditingProductBase, string>>(() => buildBlankProduct(defaultCurrencyCode));
+  const [product, setProduct] = useState<WithGeneratedId<EditingProductBase, string>>(() =>
+    buildBlankProduct(defaultCurrencyCode),
+  );
 
   useEffect(() => {
     setProduct((product) => ({
@@ -67,7 +69,7 @@ export default function NewTicketProvidingProductModal({
   return (
     <>
       <Modal visible={visible && !pricingStructureModal.visible} dialogClassName="modal-xl">
-        <div className="modal-header">{t('admin.store.products.newProduct', 'New product')}</div>
+        <div className="modal-header">{t('admin.store.products.newProduct')}</div>
         <div className="modal-body">
           <PricingStructureModalContext.Provider value={pricingStructureModal}>
             <EditProductForm
@@ -85,7 +87,7 @@ export default function NewTicketProvidingProductModal({
             Cancel
           </button>
           <button type="button" className="btn btn-primary" onClick={saveClicked} disabled={loading}>
-            {t('buttons.save', 'Save')}
+            {t('buttons.save')}
           </button>
         </div>
       </Modal>

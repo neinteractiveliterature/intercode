@@ -190,7 +190,7 @@ const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(function Ru
           </table>
 
           <Link to={`${buildEventUrl(event)}#run-${run.id}`} className="btn btn-primary btn-sm mb-2">
-            <>{t('schedule.goToEvent', 'Go to event')} &raquo;</>
+            <>{t('schedule.goToEvent')} &raquo;</>
           </Link>
 
           <div

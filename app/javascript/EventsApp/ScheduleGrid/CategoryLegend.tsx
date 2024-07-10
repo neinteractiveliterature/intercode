@@ -38,7 +38,7 @@ export default LoadQueryWrapper(useCommonConventionDataQuery, function CategoryL
     <div className="d-flex flex-wrap">
       <div className="col-md-6 col-lg-4 mb-4 pe-3">
         <div className="card bg-light">
-          <div className="card-header">{t('schedule.legends.eventCategories.title', 'Event categories')}</div>
+          <div className="card-header">{t('schedule.legends.eventCategories.title')}</div>
 
           <div className="card-body">
             {sortedEventCategories.map((category) => (
@@ -49,61 +49,56 @@ export default LoadQueryWrapper(useCommonConventionDataQuery, function CategoryL
           </div>
         </div>
       </div>
-
       <div className="col-md-6 col-lg-4 mb-4 pe-3">
         <div className="card bg-light">
-          <div className="card-header">{t('schedule.legends.slotAvailability.title', 'Slot availability')}</div>
+          <div className="card-header">{t('schedule.legends.slotAvailability.title')}</div>
 
           <div className="card-body">
             <FakeEventRun eventCategory={defaultCategory} availability={1}>
-              {t('schedule.legends.slotAvailability.fullyAvailable', '100% slots available')}
+              {t('schedule.legends.slotAvailability.fullyAvailable')}
             </FakeEventRun>
 
             <FakeEventRun eventCategory={defaultCategory} availability={0.5}>
-              {t('schedule.legends.slotAvailability.halfAvailable', '50% slots available')}
+              {t('schedule.legends.slotAvailability.halfAvailable')}
             </FakeEventRun>
 
             <FakeEventRun eventCategory={defaultCategory} runFull availability={0}>
-              {t('schedule.legends.slotAvailability.noAvailability', 'Full')}
+              {t('schedule.legends.slotAvailability.noAvailability')}
             </FakeEventRun>
 
             <FakeEventRun eventCategory={defaultCategory} unlimited>
-              {t('schedule.legends.slotAvailability.unlimited', 'Unlimited slots')}
+              {t('schedule.legends.slotAvailability.unlimited')}
             </FakeEventRun>
           </div>
         </div>
       </div>
-
       <div className="col-md-6 col-lg-4 mb-4 pe-3">
         <div className="card bg-light">
-          <div className="card-header">{t('schedule.legends.signupStatus.title', 'Signup status')}</div>
+          <div className="card-header">{t('schedule.legends.signupStatus.title')}</div>
 
           <div className="card-body">
             <FakeEventRun eventCategory={defaultCategory} signupStatus={SignupStatus.Confirmed}>
-              <i className="bi-person-circle" /> {t('signups.states.confirmed', 'Confirmed')}
+              <i className="bi-person-circle" /> {t('signups.states.confirmed')}
             </FakeEventRun>
 
             <FakeEventRun eventCategory={defaultCategory} signupStatus={SignupStatus.Waitlisted}>
-              <i className="bi-hourglass-split" /> {t('signups.states.waitlisted', 'Waitlisted')}
+              <i className="bi-hourglass-split" /> {t('signups.states.waitlisted')}
             </FakeEventRun>
 
             {signupMode === SignupMode.Moderated && (
               <FakeEventRun eventCategory={defaultCategory} signupStatus={SignupStatus.RequestPending}>
                 <i className="bi-pause-circle-fill me-1" />
-                {t('signups.states.requestPending', 'Request pending')}
+                {t('signups.states.requestPending')}
               </FakeEventRun>
             )}
 
             {signupAutomationMode === SignupAutomationMode.RankedChoice && (
               <FakeEventRun eventCategory={defaultCategory} signupStatus={SignupStatus.InMyQueue}>
-                <RankedChoicePriorityIndicator fontSize={12} priority={1} />{' '}
-                {t('signups.states.inMyQueue', 'In my signup queue')}
+                <RankedChoicePriorityIndicator fontSize={12} priority={1} /> {t('signups.states.inMyQueue')}
               </FakeEventRun>
             )}
 
-            <FakeEventRun eventCategory={defaultCategory}>
-              {t('signups.states.notSignedUp', 'Not signed up')}
-            </FakeEventRun>
+            <FakeEventRun eventCategory={defaultCategory}>{t('signups.states.notSignedUp')}</FakeEventRun>
           </div>
         </div>
       </div>

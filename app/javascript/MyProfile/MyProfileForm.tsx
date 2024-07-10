@@ -112,28 +112,22 @@ function MyProfileFormInner({ initialSetup, initialUserConProfile, convention, f
   return (
     <>
       <h1 className="mb-4">
-        {t('myProfile.title', 'My {{ conventionName }} profile', {
+        {t('myProfile.title', {
           conventionName: convention.name,
         })}
       </h1>
-
       {initialSetup && (
         <div className="alert alert-success mb-4">
-          {t(
-            'myProfile.initialSetupText',
-            'Welcome to {{ conventionName }}!  You haven’t signed into this convention before, so please take a moment to update your profile.',
-            { conventionName: convention.name },
-          )}
+          {t('myProfile.initialSetupText', { conventionName: convention.name })}
         </div>
       )}
       <ItemInteractionTrackerContext.Provider value={itemInteractionProps}>
         <SinglePageFormPresenter {...formPresenterProps} />
       </ItemInteractionTrackerContext.Provider>
-
       {initialUserConProfile.can_have_bio && (
         <>
           <div className="mb-3">
-            <legend className="col-form-label">{t('myProfile.bioLabel', 'Bio')}</legend>
+            <legend className="col-form-label">{t('myProfile.bioLabel')}</legend>
             <MarkdownInput value={userConProfile.bio ?? ''} onChange={setBio} />
             <small className="form-text text-muted">
               <Trans i18nKey="general.editors.markdownHelpText">
@@ -151,22 +145,21 @@ function MyProfileFormInner({ initialSetup, initialUserConProfile, convention, f
           </div>
 
           <BooleanInput
-            caption={t('myProfile.bioNicknameLabel', 'Show nickname (if any) in bio')}
+            caption={t('myProfile.bioNicknameLabel')}
             value={userConProfile.show_nickname_in_bio ?? false}
             onChange={setShowNickname}
-            helpText={t('myProfile.bioNicknameHelpText', 'Your name will appear in your bio as {{ name }}.', {
+            helpText={t('myProfile.bioNicknameHelpText', {
               name: `${userConProfile.form_response_attrs.first_name}
-                  ${
-                    userConProfile.show_nickname_in_bio && userConProfile.form_response_attrs.nickname
-                      ? `“${userConProfile.form_response_attrs.nickname}”`
-                      : ''
-                  }
-                  ${userConProfile.form_response_attrs.last_name}`,
+                ${
+                  userConProfile.show_nickname_in_bio && userConProfile.form_response_attrs.nickname
+                    ? `“${userConProfile.form_response_attrs.nickname}”`
+                    : ''
+                }
+                ${userConProfile.form_response_attrs.last_name}`,
             })}
           />
         </>
       )}
-
       <div className="d-flex align-items-center">
         <div>
           <BooleanInput
@@ -178,7 +171,7 @@ function MyProfileFormInner({ initialSetup, initialUserConProfile, convention, f
                   pixelSize={32}
                   imgClassName="align-baseline"
                 />{' '}
-                {t('myProfile.gravatarEnabledLabel', 'Enable Gravatar for my profile')}
+                {t('myProfile.gravatarEnabledLabel')}
               </>
             }
             value={userConProfile.gravatar_enabled}
@@ -196,15 +189,14 @@ function MyProfileFormInner({ initialSetup, initialUserConProfile, convention, f
           />
         </div>
       </div>
-
       <div className="my-4">
         {initialSetup ? (
           <Link to="/" className="btn btn-primary">
-            {t('myProfile.initialSetupFinishButton', 'Finish')}
+            {t('myProfile.initialSetupFinishButton')}
           </Link>
         ) : (
           <Link to="/my_profile" className="btn btn-primary">
-            {t('myProfile.profileEditFinishButton', 'Finish and return to my profile')}
+            {t('myProfile.profileEditFinishButton')}
           </Link>
         )}
         {mutationInProgress && (

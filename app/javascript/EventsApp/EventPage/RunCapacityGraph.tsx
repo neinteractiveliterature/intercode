@@ -29,7 +29,7 @@ function RunCapacityGraph({ run, event, signupsAvailable }: RunCapacityGraphProp
       ))}
       <div className="bucket-capacity">
         <>
-          {t('events.runCapacity.waitlistCount', 'Waitlist - {{ waitlistCount }}', {
+          {t('events.runCapacity.waitlistCount', {
             waitlistCount: signupCountData.getWaitlistCount(),
           })}
           <BucketAvailabilityDisplay

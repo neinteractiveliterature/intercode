@@ -55,7 +55,7 @@ export default function EditTicketProvidingProductModal({
   return (
     <>
       <Modal visible={visible && !pricingStructureModal.visible} dialogClassName="modal-xl">
-        <div className="modal-header">{t('admin.store.products.editProduct', 'Edit product')}</div>
+        <div className="modal-header">{t('admin.store.products.editProduct')}</div>
         <div className="modal-body">
           <PricingStructureModalContext.Provider value={pricingStructureModal}>
             {product && (
@@ -75,7 +75,7 @@ export default function EditTicketProvidingProductModal({
             Cancel
           </button>
           <button type="button" className="btn btn-primary" onClick={saveClicked} disabled={loading}>
-            {t('buttons.save', 'Save')}
+            {t('buttons.save')}
           </button>
         </div>
       </Modal>

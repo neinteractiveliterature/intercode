@@ -24,11 +24,9 @@ function TicketPurchaseNavigationItem(): JSX.Element {
   return (
     <li className="nav-item my-auto">
       <Link to="/ticket/new" className="btn btn-sm btn-primary">
-        <span className="d-inline d-md-none d-lg-inline">
-          {t('navigation.ticketPurchase.ctaLong', 'Buy a {{ ticketName }}!', { ticketName })}
-        </span>
+        <span className="d-inline d-md-none d-lg-inline">{t('navigation.ticketPurchase.ctaLong', { ticketName })}</span>
         <span className="d-none d-md-inline d-lg-none">
-          {t('navigation.ticketPurchase.ctaShort', '{{ ticketName }}!', {
+          {t('navigation.ticketPurchase.ctaShort', {
             ticketName: humanize(ticketName ?? 'ticket'),
           })}
         </span>

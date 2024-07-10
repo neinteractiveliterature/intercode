@@ -24,7 +24,7 @@ export default LoadQueryWrapper<EventAdminEventsQueryData, EventAdminEventsQuery
     const { t } = useTranslation();
 
     usePageTitle(
-      t('admin.events.eventListPageTitle', '{{ categoryName, capitalize }} events', {
+      t('admin.events.eventListPageTitle', {
         categoryName: eventCategory?.name,
       }),
     );
@@ -32,7 +32,7 @@ export default LoadQueryWrapper<EventAdminEventsQueryData, EventAdminEventsQuery
     return (
       <div>
         <Link className="btn btn-primary mt-4" to={`${buildEventCategoryUrl(eventCategory)}/new`}>
-          {t('admin.events.newEventLabel', 'Create new {{ categoryName }} event', {
+          {t('admin.events.newEventLabel', {
             categoryName: eventCategory?.name,
           })}
         </Link>

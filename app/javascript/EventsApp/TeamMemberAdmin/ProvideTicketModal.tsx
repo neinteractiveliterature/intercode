@@ -94,7 +94,6 @@ function ProvideTicketModal({ event, convention, onClose, teamMember, visible }:
   return (
     <Modal visible={visible}>
       <div className="modal-header">{capitalize(convention.ticketNamePlural)}</div>
-
       <div className="modal-body">
         {teamMember ? (
           <>
@@ -115,16 +114,15 @@ function ProvideTicketModal({ event, convention, onClose, teamMember, visible }:
 
         <ErrorDisplay graphQLError={error as ApolloError} />
       </div>
-
       <div className="modal-footer">
         {teamMember && teamMember.user_con_profile.ticket ? (
           <button type="button" className="btn btn-primary" onClick={onClose}>
-            {t('buttons.ok', 'OK')}
+            {t('buttons.ok')}
           </button>
         ) : (
           <>
             <button type="button" className="btn btn-secondary" onClick={onClose} disabled={mutationInProgress}>
-              {t('buttons.cancel', 'Cancel')}
+              {t('buttons.cancel')}
             </button>
             <button
               type="button"
@@ -132,7 +130,7 @@ function ProvideTicketModal({ event, convention, onClose, teamMember, visible }:
               disabled={ticketTypeId == null || mutationInProgress}
               onClick={provideTicketClicked}
             >
-              {t('events.teamMemberAdmin.provideTicketButton', 'Provide {{ ticketName }}', {
+              {t('events.teamMemberAdmin.provideTicketButton', {
                 ticketName: convention.ticket_name,
               })}
             </button>

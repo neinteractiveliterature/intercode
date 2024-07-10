@@ -33,7 +33,7 @@ export default LoadQueryWrapper<
   const confirm = useConfirm();
 
   usePageTitle(
-    t('admin.events.eventListPageTitle', '{{ categoryName, capitalize }} events', {
+    t('admin.events.eventListPageTitle', {
       categoryName: eventCategory?.name,
     }),
   );
@@ -62,18 +62,20 @@ export default LoadQueryWrapper<
         <td>{timespan && formatRunTimespan(timespan, { formatType: 'short' })}</td>
         <td>
           <Link className="btn btn-secondary btn-sm" to={`/admin_events/${event.id}/edit`}>
-            {t('buttons.edit', 'Edit')}
+            {t('buttons.edit')}
           </Link>{' '}
           <button
             type="button"
             className="btn btn-outline-danger btn-sm"
             onClick={() =>
               confirm({
-                prompt: t('admin.events.dropEventConfirmation', 'Are you sure you want to drop this event?'),
+                prompt: t('admin.events.dropEventConfirmation'),
                 action: () => drop({ variables: { input: { id: event.id } } }),
                 renderError: (e) => <ErrorDisplay graphQLError={e} />,
               })
             }
+            aria-label={t('events.edit.dropButton')}
+            title={t('events.edit.dropButton')}
           >
             <i className="bi-trash" />
           </button>
@@ -85,7 +87,7 @@ export default LoadQueryWrapper<
   return (
     <div>
       <Link className="btn btn-primary my-4" to={`${buildEventCategoryUrl(eventCategory)}/new`}>
-        {t('admin.events.newEventLabel', 'Create new {{ categoryName }} event', {
+        {t('admin.events.newEventLabel', {
           categoryName: eventCategory?.name,
         })}
       </Link>

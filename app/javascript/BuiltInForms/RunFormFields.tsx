@@ -109,7 +109,7 @@ function RunFormFields<RunType extends RunForRunFormFields>({
 
     return (
       <fieldset className="mb-3">
-        <legend className="col-form-label">{t('events.edit.timeLabel', 'Time')}</legend>
+        <legend className="col-form-label">{t('events.edit.timeLabel')}</legend>
         <TimeSelect value={{ hour, minute }} onChange={timeInputChanged} timespan={timespan}>
           {startTime && `- ${format(startTime.plus({ seconds: event.length_seconds }), 'shortTime')}`}
         </TimeSelect>
@@ -121,8 +121,7 @@ function RunFormFields<RunType extends RunForRunFormFields>({
     <div>
       {<ConventionDaySelect convention={convention} value={day} onChange={setDay} />}
       {renderTimeSelect()}
-
-      <FormGroupWithLabel label={t('events.edit.roomsLabel', 'Room(s)')}>
+      <FormGroupWithLabel label={t('events.edit.roomsLabel')}>
         {(id) => (
           <RoomSelect
             id={id}
@@ -134,16 +133,14 @@ function RunFormFields<RunType extends RunForRunFormFields>({
           />
         )}
       </FormGroupWithLabel>
-
       <ProspectiveRunSchedule
         day={day ?? undefined}
         runs={runsForProspectiveRunSchedule}
         event={eventForProspectiveRunSchedule}
       />
-
       <BootstrapFormInput
         name="title_suffix"
-        label={t('events.edit.titleSuffixLabel', 'Title suffix')}
+        label={t('events.edit.titleSuffixLabel')}
         value={run.title_suffix || ''}
         onTextChange={(titleSuffix) =>
           onChange((prevRun) => ({
@@ -154,7 +151,7 @@ function RunFormFields<RunType extends RunForRunFormFields>({
       />
       <BootstrapFormInput
         name="schedule_note"
-        label={t('events.edit.scheduleNoteLabel', 'Schedule note')}
+        label={t('events.edit.scheduleNoteLabel')}
         value={run.schedule_note || ''}
         onTextChange={(scheduleNote) =>
           onChange((prevRun) => ({

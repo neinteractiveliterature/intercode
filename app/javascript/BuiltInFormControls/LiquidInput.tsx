@@ -150,7 +150,7 @@ function LiquidInput(props: LiquidInputProps): JSX.Element {
                     className={classNames('nav-link', { active: currentDocTab === 'convention' })}
                     onClick={(e) => docTabClicked(e, 'convention')}
                   >
-                    {t('cms.liquidInput.help.conventionSpecificMarkup', 'Convention-specific markup')}
+                    {t('cms.liquidInput.help.conventionSpecificMarkup')}
                   </a>
                 </li>
                 <li className="nav-item">
@@ -160,7 +160,7 @@ function LiquidInput(props: LiquidInputProps): JSX.Element {
                     className={classNames('nav-link', { active: currentDocTab === 'core' })}
                     onClick={(e) => docTabClicked(e, 'core')}
                   >
-                    {t('cms.liquidInput.help.coreLiquidMarkup', 'Core Liquid markup')}
+                    {t('cms.liquidInput.help.coreLiquidMarkup')}
                   </a>
                 </li>
               </ul>
@@ -172,13 +172,13 @@ function LiquidInput(props: LiquidInputProps): JSX.Element {
                 style={{ cursor: 'pointer' }}
                 onClick={() => setShowingDocs(false)}
               >
-                <i className="bi-x" title={t('buttons.close', 'Close')} />
+                <i className="bi-x" title={t('buttons.close')} />
               </button>
             </div>
           </header>
           <iframe
             src={currentDocTab === 'convention' ? liquidDocsUrl : 'https://shopify.github.io/liquid/'}
-            title={t('cms.liquidInput.help.iframeTitle', 'Documentation')}
+            title={t('cms.liquidInput.help.iframeTitle')}
             className="flex-grow-1 border-0"
           />
         </div>
@@ -193,15 +193,15 @@ function LiquidInput(props: LiquidInputProps): JSX.Element {
         {...props}
         editorRef={editorRef}
         getPreviewContent={getPreviewContent}
-        editButtonText={t('buttons.edit', 'Edit')}
-        previewButtonText={t('buttons.preview', 'Preview')}
+        editButtonText={t('buttons.edit')}
+        previewButtonText={t('buttons.preview')}
         extraNavControls={
           <>
             <li className="nav-item">
               <button type="button" className="btn btn-link nav-link px-2 py-0" onClick={addFileModal.open}>
                 <>
                   <MenuIcon icon="bi-file-earmark-image" colorClass="" />
-                  {t('cms.liquidInput.addFileButton', 'Add file…')}
+                  {t('cms.liquidInput.addFileButton')}
                 </>
               </button>
             </li>
@@ -216,7 +216,7 @@ function LiquidInput(props: LiquidInputProps): JSX.Element {
                   }}
                 >
                   <>
-                    <i className="bi-question-circle-fill" /> {t('buttons.help', 'Help')}
+                    <i className="bi-question-circle-fill" /> {t('buttons.help')}
                   </>
                 </button>
               </div>

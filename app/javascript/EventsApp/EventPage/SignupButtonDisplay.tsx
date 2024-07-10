@@ -17,16 +17,16 @@ function SignupButtonDisplay({ signupOption, onClick, disabled }: SignupButtonDi
   let actionLabel;
   switch (signupOption.action) {
     case 'SIGN_UP_NOW':
-      actionLabel = t('signups.signupButton.signUpNow', 'Sign up now');
+      actionLabel = t('signups.signupButton.signUpNow');
       break;
     case 'WAITLIST':
-      actionLabel = t('signups.signupButton.waitlist', 'Waitlist');
+      actionLabel = t('signups.signupButton.waitlist');
       break;
     case 'ADD_TO_QUEUE':
-      actionLabel = t('signups.signupButton.addToQueue', 'Add to my queue');
+      actionLabel = t('signups.signupButton.addToQueue');
       break;
     case 'IN_QUEUE':
-      actionLabel = t('signups.signupButton.inMyQueue', 'In my queue');
+      actionLabel = t('signups.signupButton.inMyQueue');
   }
 
   const rankedChoicePriorityIndicators =
@@ -65,7 +65,7 @@ function SignupButtonDisplay({ signupOption, onClick, disabled }: SignupButtonDi
             <>
               <br />
               {rankedChoicePriorityIndicators}
-              <em>{t('signups.signupButton.inMyQueue', 'In my queue')}</em>
+              <em>{t('signups.signupButton.inMyQueue')}</em>
             </>
           )}
         </>

@@ -45,10 +45,10 @@ function MergeUsersModal({ closeModal, visible, userIds }: MergeUsersModalProps)
 
   const performMerge = async () => {
     if (!userIds) {
-      throw new Error(t('admin.users.merge.noUsers', 'No userIds to merge'));
+      throw new Error(t('admin.users.merge.noUsers'));
     }
     if (!winningUserId) {
-      throw new Error(t('admin.users.merge.noWinner', 'No winningUserId for merge'));
+      throw new Error(t('admin.users.merge.noWinner'));
     }
     await mutate({
       variables: {
@@ -128,26 +128,21 @@ function MergeUsersModal({ closeModal, visible, userIds }: MergeUsersModalProps)
           <legend className="col-form-label pb-0">
             <strong>{convention.name}</strong>
           </legend>
-
           <ChoiceSet
             choices={userConProfiles.map((profile) => {
               const ticketWording = profile.ticket
-                ? t('admin.users.merge.hasTicket', 'Has {{ ticketName }}', { ticketName: convention.ticket_name })
-                : t('admin.users.merge.noTicket', 'No {{ ticketName }}', { ticketName: convention.ticket_name });
+                ? t('admin.users.merge.hasTicket', { ticketName: convention.ticket_name })
+                : t('admin.users.merge.noTicket', { ticketName: convention.ticket_name });
               const signups = profile.signups.filter((signup) => signup.state !== 'withdrawn');
-              const signupWording = t('admin.users.merge.signupCount', '{{ count }} signups', {
+              const signupWording = t('admin.users.merge.signupCount', {
                 count: signups.length,
               });
               return {
-                label: t(
-                  'admin.users.merge.profileLabel',
-                  '{{ email }}’s profile [{{ ticketDescription }}, {{ signupsDescription }}]',
-                  {
-                    email: profile.email,
-                    ticketDescription: ticketWording,
-                    signupsDescription: signupWording,
-                  },
-                ),
+                label: t('admin.users.merge.profileLabel', {
+                  email: profile.email,
+                  ticketDescription: ticketWording,
+                  signupsDescription: signupWording,
+                }),
                 value: profile.id.toString(),
               };
             })}

@@ -25,9 +25,9 @@ const transformColumnIdForExport = (columnId: string) => {
 function CouponUsageLimitCell({ value }: { value: CouponType['usage_limit'] }) {
   const { t } = useTranslation();
   return value ? (
-    <>{t('store.coupons.usageLimitCount', '{{ count }} uses', { count: value })}</>
+    <>{t('store.coupons.usageLimitCount', { count: value })}</>
   ) : (
-    <em>{t('store.coupons.unlimitedUses', 'Unlimited uses')}</em>
+    <em>{t('store.coupons.unlimitedUses')}</em>
   );
 }
 

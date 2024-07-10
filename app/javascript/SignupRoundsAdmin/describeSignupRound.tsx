@@ -10,7 +10,7 @@ export function describeSignupRound(
   const round = rounds[roundIndex];
 
   if (round.timespan.start == null) {
-    return t('signups.signupRounds.preSignupRoundPeriod', 'Pre-signups period');
+    return t('signups.signupRounds.preSignupRoundPeriod');
   } else {
     if (rounds[0] && rounds[0].timespan.start == null) {
       return t('signups.signupRounds.roundNumber', { number: roundIndex });

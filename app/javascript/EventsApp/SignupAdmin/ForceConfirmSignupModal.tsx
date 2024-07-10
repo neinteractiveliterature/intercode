@@ -41,23 +41,14 @@ function ForceConfirmSignupModal({ signup, onComplete, onCancel }: ForceConfirmS
       <div>
         <BucketInput
           signup={signup}
-          caption={t(
-            'events.signupAdmin.forceConfirmSignup.bucketInputCaption',
-            'Please choose a signup bucket for {{ name }}.',
-            { name: signup.user_con_profile.name_without_nickname },
-          )}
+          caption={t('events.signupAdmin.forceConfirmSignup.bucketInputCaption', {
+            name: signup.user_con_profile.name_without_nickname,
+          })}
           name="bucketKey"
           value={bucketKey}
           onChange={setBucketKey}
         />
-
-        <p className="text-danger">
-          {t(
-            'events.signupAdmin.forceConfirmSignup.overfillWarning',
-            'Caution: this operation ignores registration bucket capacity (and therefore can overfill the event run). Doing this may have unexpected effects if other attendees drop out of the event. Adjusting the event capacity after doing this is strongly recommended.',
-          )}
-        </p>
-
+        <p className="text-danger">{t('events.signupAdmin.forceConfirmSignup.overfillWarning')}</p>
         <ErrorDisplay graphQLError={error as ApolloError} />
       </div>
     );
@@ -67,14 +58,14 @@ function ForceConfirmSignupModal({ signup, onComplete, onCancel }: ForceConfirmS
 
   return (
     <Modal visible={signup != null}>
-      <div className="modal-header">{t('events.signupAdmin.forceConfirmSignup.header', 'Force signup into run')}</div>
+      <div className="modal-header">{t('events.signupAdmin.forceConfirmSignup.header')}</div>
       <div className="modal-body">{renderBody()}</div>
       <div className="modal-footer">
         <button type="button" className="btn btn-secondary" onClick={onCancel}>
-          {t('buttons.cancel', 'Cancel')}
+          {t('buttons.cancel')}
         </button>
         <button type="button" className="btn btn-primary" onClick={onClickOK} disabled={disableOK}>
-          {t('buttons.ok', 'OK')}
+          {t('buttons.ok')}
         </button>
       </div>
     </Modal>

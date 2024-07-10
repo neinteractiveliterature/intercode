@@ -35,13 +35,13 @@ export function formatBucket(signup: SignupForFormatBucket, event: EventForForma
 
   if (!signup.counted) {
     if (bucketKey) {
-      return t('signups.states.notCountedWithBucket', '{{ bucketName }} (not counted)', {
+      return t('signups.states.notCountedWithBucket', {
         bucketName: findBucket(bucketKey, registrationPolicy)?.name,
       });
     }
 
     if (event.team_members.some((teamMember) => teamMember.user_con_profile?.id === signup.user_con_profile?.id)) {
-      return t('signups.states.teamMemberNotCounted', '{{ teamMemberName }} (not counted)', {
+      return t('signups.states.teamMemberNotCounted', {
         teamMemberName: humanize(snakeCase(event.event_category.team_member_name)),
       });
     }
@@ -49,15 +49,15 @@ export function formatBucket(signup: SignupForFormatBucket, event: EventForForma
     if (signup.state === 'waitlisted') {
       const requestedBucket = findBucket(signup.requested_bucket_key, registrationPolicy);
       if (requestedBucket) {
-        return t('signups.states.waitlistedWithRequestedBucket', 'Waitlisted (requested {{ requestedBucketName }})', {
+        return t('signups.states.waitlistedWithRequestedBucket', {
           requestedBucketName: requestedBucket.name,
         });
       }
 
-      return t('signups.states.waitlistedNoPreference', 'Waitlisted (no preference)');
+      return t('signups.states.waitlistedNoPreference');
     }
 
-    return t('signups.states.notCounted', 'Not counted');
+    return t('signups.states.notCounted');
   }
 
   const bucket = findBucket(bucketKey, registrationPolicy);
@@ -68,35 +68,35 @@ export function formatBucket(signup: SignupForFormatBucket, event: EventForForma
   }
 
   if (requestedBucket) {
-    return t('signups.states.inUnrequestedBucket', '{{ bucketName }} (requested {{ requestedBucketName }})', {
-      bucketName: bucket?.name ?? t('signups.states.noBucketName', 'None'),
+    return t('signups.states.inUnrequestedBucket', {
+      bucketName: bucket?.name ?? t('signups.states.noBucketName'),
       requestedBucketName: requestedBucket.name,
     });
   }
 
   if (bucket) {
-    return t('signups.states.bucketWithNoPreference', '{{ bucketName }} (no preference)', {
+    return t('signups.states.bucketWithNoPreference', {
       bucketName: bucket.name,
     });
   }
 
-  return t('signups.states.noBucketName', 'None');
+  return t('signups.states.noBucketName');
 }
 
 export function formatSignupState(state: SignupState | undefined | null, t: TFunction): string {
   if (state == null) {
-    return t('signups.states.notSignedUp', 'Not signed up');
+    return t('signups.states.notSignedUp');
   }
 
   switch (state) {
     case SignupState.TicketPurchaseHold:
-      return t('signups.states.ticketPurchaseHold', 'Held temporarily while awaiting payment');
+      return t('signups.states.ticketPurchaseHold');
     case SignupState.Confirmed:
-      return t('signups.states.confirmed', 'Confirmed');
+      return t('signups.states.confirmed');
     case SignupState.Waitlisted:
-      return t('signups.states.waitlisted', 'Waitlisted');
+      return t('signups.states.waitlisted');
     case SignupState.Withdrawn:
-      return t('signups.states.withdrawn', 'Withdrawn');
+      return t('signups.states.withdrawn');
     default:
       assertNever(state, true);
       // @ts-expect-error Deliberately unreachable code in case we get an invalid state
@@ -113,7 +113,7 @@ export function formatSignupStatus(signup: SignupForFormatBucket, event: EventFo
   const stateText = formatSignupState(signup.state, t);
 
   if (requestedBucket) {
-    return t('signups.states.stateWithRequestedBucket', '{{ state }} (requested {{ requestedBucket }})', {
+    return t('signups.states.stateWithRequestedBucket', {
       state: stateText,
       requestedBucket: requestedBucket.name,
     });

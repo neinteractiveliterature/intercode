@@ -11,7 +11,7 @@ function CookieConsent({ cookiePolicyUrl }: CookieConsentProps): JSX.Element {
   return (
     <ReactCookieConsent
       location="bottom"
-      buttonText={t('cookieConsent.buttonText', 'I understand')}
+      buttonText={t('cookieConsent.buttonText')}
       buttonClasses="btn btn-warning me-2"
       overlay
       overlayClasses="fixed-bottom bg-dark text-white py-2"

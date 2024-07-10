@@ -8,11 +8,7 @@ import useLoginRequired from './useLoginRequired';
 export function AuthorizationError() {
   const { t } = useTranslation();
 
-  return (
-    <div className="alert alert-danger">
-      {t('errors.unauthorized', 'Sorry, your account is not authorized to view this page.')}
-    </div>
-  );
+  return <div className="alert alert-danger">{t('errors.unauthorized')}</div>;
 }
 
 type AbilityType = AppRootContextValue['currentAbility'];

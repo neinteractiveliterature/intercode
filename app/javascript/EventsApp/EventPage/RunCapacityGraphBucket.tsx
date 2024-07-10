@@ -14,27 +14,27 @@ function describeCapacity(
 ): string {
   if (!bucket.slots_limited) {
     if (!signupsAvailable) {
-      return t('events.runCapacity.unlimitedSimple', 'unlimited');
+      return t('events.runCapacity.unlimitedSimple');
     }
 
-    return t('events.runCapacity.unlimitedWithCount', 'unlimited ({{ signupCount }} signed up)', {
+    return t('events.runCapacity.unlimitedWithCount', {
       signupCount,
     });
   }
 
   if (bucket.total_slots == null) {
-    return t('events.runCapacity.zeroCapacity', '0 slots');
+    return t('events.runCapacity.zeroCapacity');
   }
 
   const remainingCapacity = bucket.total_slots - signupCount;
 
   if (!signupsAvailable && remainingCapacity === bucket.total_slots) {
-    return t('events.runCapacity.slotCount', '{{ count }} slots', { count: remainingCapacity });
+    return t('events.runCapacity.slotCount', { count: remainingCapacity });
   }
 
   const displayCount = signupCount > bucket.total_slots ? bucket.total_slots : signupCount;
 
-  return t('events.runCapacity.slotRemainingCount', '{{ filledCount }} of {{ count }} slots filled', {
+  return t('events.runCapacity.slotRemainingCount', {
     count: bucket.total_slots,
     filledCount: displayCount,
   });

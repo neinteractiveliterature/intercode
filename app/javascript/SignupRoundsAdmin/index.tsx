@@ -16,10 +16,9 @@ function SignupRoundsAdmin() {
         </RouteActivatedBreadcrumbItem>
 
         <RouteActivatedBreadcrumbItemV2 route={{ path: '/signup_rounds/:id/results' }} to="." hideUnlessMatch>
-          {t('signups.signupRounds.results', 'Results')}
+          {t('signups.signupRounds.results')}
         </RouteActivatedBreadcrumbItemV2>
       </ol>
-
       <Routes>
         <Route path=":id/results" element={<RankedChoiceSignupDecisionsPage />} />
         <Route index element={<SignupRoundsAdminPage />} />

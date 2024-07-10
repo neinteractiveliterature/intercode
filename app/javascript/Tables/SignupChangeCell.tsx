@@ -7,43 +7,43 @@ import { SignupChangeAction, SignupState } from '../graphqlTypes.generated';
 
 export function describeAction(action: SignupChangeAction, t: TFunction): string {
   if (action === 'self_service_signup') {
-    return t('tables.signupChange.actions.selfServiceSignup', 'self-service signup');
+    return t('tables.signupChange.actions.selfServiceSignup');
   }
 
   if (action === 'admin_create_signup') {
-    return t('tables.signupChange.actions.adminCreateSignup', 'admin-created signup');
+    return t('tables.signupChange.actions.adminCreateSignup');
   }
 
   if (action === 'accept_signup_request') {
-    return t('tables.signupChange.actions.acceptSignupRequest', 'accepted signup request');
+    return t('tables.signupChange.actions.acceptSignupRequest');
   }
 
   if (action === 'accept_signup_ranked_choice') {
-    return t('tables.signupChange.actions.acceptSignupRankedChoice', 'accepted signup ranked choice');
+    return t('tables.signupChange.actions.acceptSignupRankedChoice');
   }
 
   if (action === 'change_registration_policy') {
-    return t('tables.signupChange.actions.changeRegistrationPolicy', 'registration policy change');
+    return t('tables.signupChange.actions.changeRegistrationPolicy');
   }
 
   if (action === 'hold_expired') {
-    return t('tables.signupChange.actions.holdExpired', 'hold expired');
+    return t('tables.signupChange.actions.holdExpired');
   }
 
   if (action === 'ticket_purchase') {
-    return t('tables.signupChange.actions.ticketPurchase', 'ticket purchase');
+    return t('tables.signupChange.actions.ticketPurchase');
   }
 
   if (action === 'vacancy_fill') {
-    return t('tables.signupChange.actions.vacancyFill', 'vacancy fill');
+    return t('tables.signupChange.actions.vacancyFill');
   }
 
   if (action === 'withdraw') {
-    return t('tables.signupChange.actions.withdraw', 'withdraw');
+    return t('tables.signupChange.actions.withdraw');
   }
 
   if (action === 'unknown') {
-    return t('tables.signupChange.actions.unknown', 'unknown action');
+    return t('tables.signupChange.actions.unknown');
   }
 
   assertNever(action, true);
@@ -73,7 +73,7 @@ const SignupChangeCell = ({ value }: SignupChangeCellProps): JSX.Element => {
       ) : (
         value.action === 'unknown' && (
           <span className="text-muted">
-            <>{t('tables.signupChange.unknownState', 'unknown')} → </>
+            <>{t('tables.signupChange.unknownState')} → </>
           </span>
         )
       )}

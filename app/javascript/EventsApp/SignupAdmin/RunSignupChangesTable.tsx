@@ -27,7 +27,7 @@ type SignupChangeType = RunSignupChangesQueryData['convention']['run']['signup_c
 
 const getPossibleColumns: (t: TFunction) => Column<SignupChangeType>[] = (t) => [
   {
-    Header: <>{t('events.signupAdmin.history.nameHeader', 'Name')}</>,
+    Header: <>{t('events.signupAdmin.history.nameHeader')}</>,
     id: 'name',
     accessor: (signupChange: SignupChangeType) => signupChange.user_con_profile,
     disableFilters: false,
@@ -35,7 +35,7 @@ const getPossibleColumns: (t: TFunction) => Column<SignupChangeType>[] = (t) => 
     Filter: FreeTextFilter,
   },
   {
-    Header: <>{t('events.signupAdmin.history.changeHeader', 'Change')}</>,
+    Header: <>{t('events.signupAdmin.history.changeHeader')}</>,
     id: 'action',
     accessor: (signupChange: SignupChangeType) => signupChange,
     disableFilters: false,
@@ -43,13 +43,13 @@ const getPossibleColumns: (t: TFunction) => Column<SignupChangeType>[] = (t) => 
     Filter: SignupChangeActionFilter,
   },
   {
-    Header: <>{t('events.signupAdmin.history.bucketHeader', 'Bucket')}</>,
+    Header: <>{t('events.signupAdmin.history.bucketHeader')}</>,
     id: 'bucket_change',
     accessor: (signupChange: SignupChangeType) => signupChange,
     Cell: ({ value }: { value: SignupChangeType }) => <BucketChangeCell value={value} />,
   },
   {
-    Header: <>{t('events.signupAdmin.history.timestampHeader', 'Timestamp')}</>,
+    Header: <>{t('events.signupAdmin.history.timestampHeader')}</>,
     id: 'created_at',
     accessor: 'created_at',
     width: 130,
@@ -78,7 +78,7 @@ function RunSignupChangesTable(): JSX.Element {
   usePageTitle(
     useValueUnless(
       () =>
-        t('events.signupAdmin.historyPageTitle', 'Signup change history - {{ eventTitle }}', {
+        t('events.signupAdmin.historyPageTitle', {
           eventTitle: queryData?.convention.run.event.title,
         }),
       !queryData,

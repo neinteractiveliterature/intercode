@@ -26,24 +26,20 @@ function describeSignupState(
   ticketName: string,
 ): string {
   if (mySignup.state === 'confirmed') {
-    return t('signups.runCardText.confirmed', 'You are signed up.');
+    return t('signups.runCardText.confirmed');
   }
 
   if (mySignup.waitlist_position) {
-    return t('signups.runCardText.waitlisted', 'You are #{{ waitlistPosition }} on the waitlist.', {
+    return t('signups.runCardText.waitlisted', {
       waitlistPosition: mySignup.waitlist_position,
     });
   }
 
   if (mySignup.state === SignupState.TicketPurchaseHold) {
-    return t(
-      'signups.runCardText.ticketPurchaseHold',
-      'Your spot is being held while you purchase your {{ ticketName }}.',
-      { ticketName },
-    );
+    return t('signups.runCardText.ticketPurchaseHold', { ticketName });
   }
 
-  return t('signups.runCardText.waitlistedUnknownPosition', 'You are on the waitlist.');
+  return t('signups.runCardText.waitlistedUnknownPosition');
 }
 
 export type RunCardProps = {
@@ -133,7 +129,7 @@ function RunCard({
                 type="button"
                 onClick={() => eventTicketPurchaseModal.open({ run, signup: mySignup })}
               >
-                {t('signups.eventTicketPurchase.cta', 'Buy your {{ ticketName }}', { ticketName })}
+                {t('signups.eventTicketPurchase.cta', { ticketName })}
               </button>
             )}
             <WithdrawSignupButton withdrawSignup={withdrawSignup} />
@@ -145,10 +141,10 @@ function RunCard({
     if (myPendingSignupRequest) {
       return (
         <>
-          <em>{t('signups.runCardText.requestPending', 'You have requested to sign up for this event.')}</em>
+          <em>{t('signups.runCardText.requestPending')}</em>
           <p className="mb-0">
             <button className="btn btn-outline-danger" type="button" onClick={withdrawPendingSignupRequest}>
-              {t('signups.withdrawSignupRequestButton', 'Withdraw signup request')}
+              {t('signups.withdrawSignupRequestButton')}
             </button>
           </p>
         </>
@@ -240,11 +236,10 @@ function RunCard({
           </>
         ) : (
           <div className="card-body">
-            <small>{t('signups.noSignupsAvailable', 'This event does not take signups.')}</small>
+            <small>{t('signups.noSignupsAvailable')}</small>
           </div>
         )}
       </div>
-
       <EventTicketPurchaseModal
         visible={eventTicketPurchaseModal.visible}
         close={eventTicketPurchaseModal.close}

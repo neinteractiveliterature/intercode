@@ -64,8 +64,7 @@ function AddAttendeeModal({ conventionName, visible }: AddAttendeeModalProps): J
 
   return (
     <Modal visible={visible} dialogClassName="modal-lg">
-      <div className="modal-header">{t('admin.userConProfiles.addAttendee.header', 'Add attendee')}</div>
-
+      <div className="modal-header">{t('admin.userConProfiles.addAttendee.header')}</div>
       <div className="modal-body">
         <p>
           {t(
@@ -84,27 +83,21 @@ function AddAttendeeModal({ conventionName, visible }: AddAttendeeModalProps): J
 
         {user && (
           <div className="mt-4">
-            <p>
-              {t(
-                'admin.userConProfiles.addAttendee.dataCopyingNote',
-                'Profile data will be copied from user’s latest convention profile.',
-              )}
-            </p>
+            <p>{t('admin.userConProfiles.addAttendee.dataCopyingNote')}</p>
           </div>
         )}
 
         <ErrorDisplay graphQLError={error as ApolloError} />
       </div>
-
       <div className="modal-footer">
         <button className="btn btn-secondary" type="button" onClick={close} disabled={inProgress}>
-          {t('buttons.cancel', 'Cancel')}
+          {t('buttons.cancel')}
         </button>
         <button className="btn btn-primary" type="button" onClick={createClicked} disabled={user == null || inProgress}>
           {inProgress ? (
             <LoadingIndicator iconSet="bootstrap-icons" />
           ) : (
-            t('admin.userConProfiles.addAttendee.addButtonText', 'Add')
+            t('admin.userConProfiles.addAttendee.addButtonText')
           )}
         </button>
       </div>

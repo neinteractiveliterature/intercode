@@ -51,10 +51,10 @@ function UserSelect<
       )}
       query={usersQuery || DefaultUsersQueryDocument}
       components={{ MultiValueLabel: UserNameLabel }}
-      placeholder={t('selectors.userSelect.placeholder', 'Search for a user by name or email...')}
+      placeholder={t('selectors.userSelect.placeholder')}
       noOptionsMessage={({ inputValue }) =>
         inputValue.trim() === ''
-          ? t('selectors.userSelect.noInputMessage', 'Type a name or email to search')
+          ? t('selectors.userSelect.noInputMessage')
           : t('selectors.userSelect.noResultsMessage', `No users found matching “{{ inputValue }}”`, { inputValue })
       }
       {...otherProps}

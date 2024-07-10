@@ -86,7 +86,7 @@ export default function EditProductForm<ProductType extends WithRealOrGeneratedI
       label: (
         <span>
           <>
-            <i className="bi-credit-card" /> {t('admin.store.paymentOptions.stripe', 'Card payment via Stripe')}
+            <i className="bi-credit-card" /> {t('admin.store.paymentOptions.stripe')}
           </>
         </span>
       ),
@@ -107,7 +107,6 @@ export default function EditProductForm<ProductType extends WithRealOrGeneratedI
   return (
     <div className="d-lg-flex justify-content-lg-start align-items-lg-start">
       <div className="d-flex flex-column align-items-center"></div>
-
       <div className="ml-lg-4 col-lg">
         <BootstrapFormInput label="Product name" value={product.name} onTextChange={setName} />
 
@@ -145,9 +144,7 @@ export default function EditProductForm<ProductType extends WithRealOrGeneratedI
           <h3>Product display</h3>
 
           <div className="mb-3">
-            <label className="form-label form-item-label">
-              {t('admin.store.products.descriptionLabel', 'Product description')}
-            </label>
+            <label className="form-label form-item-label">{t('admin.store.products.descriptionLabel')}</label>
             <LiquidInput value={product.description ?? ''} onChange={setDescription} />
           </div>
 
@@ -167,9 +164,7 @@ export default function EditProductForm<ProductType extends WithRealOrGeneratedI
           </div>
 
           <div className="mb-3">
-            <label className="form-label form-item-label">
-              {t('admin.store.products.clickwrapAgreementLabel', 'Product-specific clickwrap agreement')}
-            </label>
+            <label className="form-label form-item-label">{t('admin.store.products.clickwrapAgreementLabel')}</label>
             <LiquidInput value={product.clickwrap_agreement ?? ''} onChange={setClickwrapAgreement} />
           </div>
         </section>

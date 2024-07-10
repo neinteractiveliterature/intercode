@@ -21,17 +21,15 @@ function SignupStatusBadge({ signupStatus, myRating, mySignupRankedChoices }: Si
   );
 
   if (signupStatus === SignupStatus.Confirmed) {
-    return <i className="bi-person-circle me-1" title={t('signups.states.confirmed', 'Confirmed')} />;
+    return <i className="bi-person-circle me-1" title={t('signups.states.confirmed')} />;
   }
 
   if (signupStatus === SignupStatus.Waitlisted) {
-    return <i className="bi-hourglass-split me-1" title={t('signups.states.waitlisted', 'Waitlisted')} />;
+    return <i className="bi-hourglass-split me-1" title={t('signups.states.waitlisted')} />;
   }
 
   if (signupStatus === SignupStatus.RequestPending) {
-    return (
-      <i className="bi-pause-circle-fill me-1" title={t('signups.states.requestPending', 'Signup request pending')} />
-    );
+    return <i className="bi-pause-circle-fill me-1" title={t('signups.states.requestPending')} />;
   }
 
   if (signupStatus === SignupStatus.InMyQueue) {

@@ -31,12 +31,12 @@ export default LoadQueryWithVariablesWrapper(
 
     return (
       <div className="card mb-4">
-        <div className="card-header">{t('events.adminMenu.header', 'Event Admin')}</div>
+        <div className="card-header">{t('events.adminMenu.header')}</div>
         <ul className="list-group list-group-flush">
           <li className="list-group-item">
             <Link to={`${eventPath}/edit`}>
               <>
-                <MenuIcon icon="bi-pencil-square" colorClass="" /> {t('events.adminMenu.editLink', 'Edit event')}
+                <MenuIcon icon="bi-pencil-square" colorClass="" /> {t('events.adminMenu.editLink')}
               </>
             </Link>
           </li>
@@ -44,7 +44,7 @@ export default LoadQueryWithVariablesWrapper(
             <Link to={`${eventPath}/team_members`}>
               <>
                 <MenuIcon icon="bi-megaphone-fill" colorClass="" />{' '}
-                {t('events.adminMenu.editTeamMembersLink', 'Edit {{ teamMemberNamePlural }}', {
+                {t('events.adminMenu.editTeamMembersLink', {
                   teamMemberNamePlural: event.event_category.teamMemberNamePlural,
                 })}
               </>
@@ -55,7 +55,7 @@ export default LoadQueryWithVariablesWrapper(
               <Link to={`${eventPath}/ticket_types`}>
                 <>
                   <MenuIcon icon="bi-person-badge-fill" colorClass="" />{' '}
-                  {t('navigation.admin.ticketTypes', '{{ ticketName }} Types', {
+                  {t('navigation.admin.ticketTypes', {
                     ticketName: capitalize(ticketName ?? 'ticket'),
                   })}
                 </>
@@ -65,8 +65,7 @@ export default LoadQueryWithVariablesWrapper(
           <li className="list-group-item">
             <Link to={`${eventPath}/history`}>
               <>
-                <MenuIcon icon="bi-hourglass-split" colorClass="" />{' '}
-                {t('events.adminMenu.historyLink', 'View edit history')}
+                <MenuIcon icon="bi-hourglass-split" colorClass="" /> {t('events.adminMenu.historyLink')}
               </>
             </Link>
           </li>
