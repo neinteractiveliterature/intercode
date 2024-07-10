@@ -17,7 +17,7 @@
     "graphql:codegen": "graphql-codegen --config codegen.yml",
     "graphql:update": "yarn run graphql:codegen && yarn run graphql:build_type_data",
     "i18next:dedupe": "yarn run tsx ./script/deduplicateTranslations.ts",
-    "lint": "eslint app/javascript test/javascript schema.graphql --cache --ext .js,.jsx,.ts,.tsx,.gql,.graphql",
+    "lint": "eslint app/javascript test/javascript schema.graphql --cache",
     "prepare": "husky install",
     "start": "NODE_OPTIONS=--max-old-space-size=8192 yarn run webpack-dev-server",
     "test": "jest --testPathPattern=test/javascript --coverage",
@@ -160,6 +160,9 @@
     "zxcvbn": "4.4.2"
   },
   "devDependencies": {
+    "@eslint/compat": "^1.1.0",
+    "@eslint/eslintrc": "^3.1.0",
+    "@eslint/js": "^9.6.0",
     "@graphql-codegen/add": "5.0.3",
     "@graphql-codegen/cli": "5.0.2",
     "@graphql-codegen/fragment-matcher": "5.0.2",
@@ -202,6 +205,7 @@
     "eslint-plugin-jsx-a11y": "6.9.0",
     "eslint-plugin-react": "7.34.3",
     "eslint-plugin-react-hooks": "4.6.2",
+    "globals": "^15.8.0",
     "husky": "9.0.11",
     "jest": "29.7.0",
     "jest-environment-jsdom": "29.7.0",
