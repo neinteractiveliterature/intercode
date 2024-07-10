@@ -206,7 +206,7 @@ function TicketAdminControls({ convention, userConProfile }: TicketAdminControls
     return (
       <ul className="list-inline">
         {buttons.map((button, i) => (
-          // eslint-disable-next-line react/no-array-index-key
+           
           <li key={i} className="list-inline-item">
             {button}
           </li>

@@ -37,7 +37,7 @@ function MethodDoc({ method, prefix }: MethodDocProps): JSX.Element {
 
       <ul className="list-unstyled">
         {sortedTags.map((tag, i) => (
-          // eslint-disable-next-line react/no-array-index-key
+           
           <TagDoc tag={tag} key={`${tag.tag_name}-${i}`} method={method} prefix={prefix} />
         ))}
       </ul>

@@ -248,7 +248,7 @@ function EventCard({ convention, event, sortBy, canReadSchedule }: EventCardProp
 
         <div
           className="card-body"
-          // eslint-disable-next-line react/no-danger
+           
           dangerouslySetInnerHTML={{ __html: event.short_blurb_html ?? '' }}
         />
       </div>

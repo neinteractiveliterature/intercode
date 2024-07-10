@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports
 import { gql } from '@apollo/client';
 import { MockedResponse } from '@apollo/client/testing';
 
@@ -51,7 +52,7 @@ describe('GraphQLAsyncSelect', () => {
   ];
 
   const renderUserConProfileSelect = <
-    DataType extends typeof defaultMocks[0]['result']['data'],
+    DataType extends (typeof defaultMocks)[0]['result']['data'],
     OptionType extends DataType['convention']['user_con_profiles_paginated']['entries'][number],
   >(
     props?: Partial<GraphQLAsyncSelectProps<DataType, OptionType, false>>,

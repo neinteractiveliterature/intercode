@@ -13,7 +13,7 @@ export type ReportsMenuQueryData = { __typename: 'Query', convention: { __typena
 export type AttendanceByPaymentAmountQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type AttendanceByPaymentAmountQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, ticket_name: string, ticketNamePlural: string, reports: { __typename: 'ConventionReports', ticket_count_by_type_and_payment_amount: Array<{ __typename: 'TicketCountByTypeAndPaymentAmount', count: number, ticket_type: { __typename: 'TicketType', id: string, name: string, description?: string | null, providing_products: Array<{ __typename: 'Product', id: string, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: { __typename: 'Money', fractional: number, currency_code: string } | null, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'PayWhatYouWantValue', allowed_currency_codes?: Array<string> | null, maximum_amount?: { __typename: 'Money', currency_code: string, fractional: number } | null, minimum_amount?: { __typename: 'Money', currency_code: string, fractional: number } | null, suggested_amount?: { __typename: 'Money', currency_code: string, fractional: number } | null } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: string | null, finish?: string | null, value: { __typename: 'Money', fractional: number, currency_code: string } }> } } }> }, payment_amount: { __typename: 'Money', fractional: number, currency_code: string } }>, total_revenue: { __typename: 'Money', fractional: number, currency_code: string } } } };
+export type AttendanceByPaymentAmountQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, ticket_name: string, ticketNamePlural: string, reports: { __typename: 'ConventionReports', sales_count_by_product_and_payment_amount: Array<{ __typename: 'SalesCountByProductAndPaymentAmount', count: number, product: { __typename: 'Product', id: string, name: string, provides_ticket_type?: { __typename: 'TicketType', id: string, name: string, description?: string | null, providing_products: Array<{ __typename: 'Product', id: string, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: { __typename: 'Money', fractional: number, currency_code: string } | null, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'PayWhatYouWantValue', allowed_currency_codes?: Array<string> | null, maximum_amount?: { __typename: 'Money', currency_code: string, fractional: number } | null, minimum_amount?: { __typename: 'Money', currency_code: string, fractional: number } | null, suggested_amount?: { __typename: 'Money', currency_code: string, fractional: number } | null } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: string | null, finish?: string | null, value: { __typename: 'Money', fractional: number, currency_code: string } }> } } }> } | null }, payment_amount: { __typename: 'Money', fractional: number, currency_code: string } }>, sum_revenue: { __typename: 'Money', fractional: number, currency_code: string } } } };
 
 export type EventProvidedTicketsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
@@ -90,16 +90,20 @@ export const AttendanceByPaymentAmountQueryDocument = gql`
     ticket_name
     ticketNamePlural
     reports {
-      ticket_count_by_type_and_payment_amount {
+      sales_count_by_product_and_payment_amount {
         count
-        ticket_type {
+        product {
           id
           name
-          description
-          providing_products {
+          provides_ticket_type {
             id
-            pricing_structure {
-              ...PricingStructureFields
+            name
+            description
+            providing_products {
+              id
+              pricing_structure {
+                ...PricingStructureFields
+              }
             }
           }
         }
@@ -108,7 +112,7 @@ export const AttendanceByPaymentAmountQueryDocument = gql`
           currency_code
         }
       }
-      total_revenue {
+      sum_revenue {
         fractional
         currency_code
       }

@@ -255,7 +255,7 @@ function SiteSearch({ visible, setVisible, visibilityChangeComplete }: SiteSearc
                 WebkitLineClamp: 2,
                 overflow: 'hidden',
               }}
-              // eslint-disable-next-line react/no-danger
+               
               dangerouslySetInnerHTML={{ __html: entry.highlight ?? '' }}
             />
           </>

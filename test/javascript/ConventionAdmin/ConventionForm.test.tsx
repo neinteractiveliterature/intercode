@@ -65,7 +65,7 @@ describe('ConventionForm', () => {
       <ConventionForm
         initialConvention={{ ...defaultInitialConvention, ...initialConventionProps }}
         rootSite={{ __typename: 'RootSite', url: 'https://example.com', id: '123' }}
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
+         
         saveConvention={async () => {}}
         cmsLayouts={[]}
         pages={[]}

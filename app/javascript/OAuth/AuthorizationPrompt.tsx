@@ -83,7 +83,7 @@ export default LoadQueryWrapper(useOAuthAuthorizationPromptQueryFromParams, func
   }
 
   if (!grantAuthorizationToken || !denyAuthorizationToken) {
-    if (typeof Rollbar != null) {
+    if (typeof Rollbar != 'undefined' && Rollbar != null) {
       Rollbar?.error("CSRF tokens couldn't be loaded in <AuthorizationPrompt />!");
     }
     return (

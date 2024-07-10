@@ -295,10 +295,13 @@ function EditSignup({ teamMembersUrl }: EditSignupProps): JSX.Element {
               </strong>
             </div>
             {signup.state === 'confirmed' && data.currentAbility.can_update_bucket_signup ? (
-              <button className="btn btn-link" onClick={changeBucketModal.open} type="button">
-                <i className="bi-pencil-fill">
-                  <span className="visually-hidden">Change</span>
-                </i>
+              <button
+                className="btn btn-link"
+                onClick={changeBucketModal.open}
+                type="button"
+                aria-label={t('events.signupAdmin.changeBucketHeader')}
+              >
+                <i className="bi-pencil-fill" />
               </button>
             ) : null}
           </li>

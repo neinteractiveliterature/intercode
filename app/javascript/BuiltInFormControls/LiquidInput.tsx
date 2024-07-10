@@ -9,7 +9,7 @@ import {
   CodeInput,
   useStandardCodeMirror,
   UseStandardCodeMirrorExtensionsOptions,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   liquid,
   LoadQueryWrapper,
 } from '@neinteractiveliterature/litform';
@@ -171,8 +171,10 @@ function LiquidInput(props: LiquidInputProps): JSX.Element {
                 className="btn btn-link btn-sm me-3 text-body"
                 style={{ cursor: 'pointer' }}
                 onClick={() => setShowingDocs(false)}
+                title={t('buttons.close')}
+                aria-label={t('buttons.close')}
               >
-                <i className="bi-x" title={t('buttons.close')} />
+                <i className="bi-x" />
               </button>
             </div>
           </header>

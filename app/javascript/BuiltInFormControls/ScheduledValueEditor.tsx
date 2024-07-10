@@ -209,7 +209,7 @@ function ScheduledValueEditor<ValueType>({
     <ScheduledValueTimespanRow
       timespan={timespan}
       timezone={timezone}
-      key={i} // eslint-disable-line react/no-array-index-key
+      key={i}  
       rowIdentifier={i}
       deleteClicked={deleteRowClicked}
       finishDidChange={timespanFinishDidChange}

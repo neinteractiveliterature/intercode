@@ -1,6 +1,7 @@
 import { useState, useCallback, useRef, ReactNode, InputHTMLAttributes } from 'react';
 import * as React from 'react';
 import classNames from 'classnames';
+import { useTranslation } from 'react-i18next';
 
 type CommitableInputChangeHandler = React.Dispatch<string> | ((value: string) => Promise<void>);
 
@@ -33,6 +34,7 @@ function CommitableInput({
   const [editingValue, setEditingValue] = useState<string | undefined>('');
   const [commitInProgress, setCommitInProgress] = useState(false);
   const inputRef = useRef<HTMLInputElement>();
+  const { t } = useTranslation();
 
   const beginEditing = useCallback(() => {
     setEditing(true);
@@ -159,10 +161,9 @@ function CommitableInput({
             onChange('');
           }}
           disabled={disabled || !value}
+          aria-label={t('buttons.clear')}
         >
-          <i className="bi-x-square-fill">
-            <span className="visually-hidden">Clear</span>
-          </i>
+          <i className="bi-x-square-fill" />
         </button>
       ) : null}
     </div>

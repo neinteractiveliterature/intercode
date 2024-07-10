@@ -54,4 +54,4 @@ jobs:
       - uses: reviewdog/action-eslint@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          eslint_flags: 'app/javascript test/javascript schema.graphql --ext .js,.jsx,.ts,.tsx,.gql,.graphql'
+          eslint_flags: 'app/javascript test/javascript schema.graphql'

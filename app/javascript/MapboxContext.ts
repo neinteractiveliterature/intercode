@@ -43,12 +43,12 @@ export function useMapboxContext({ mapboxAccessToken }: UseMapboxContextOptions)
     }
 
     if (loadingPromise.current) {
-      // eslint-disable-next-line @typescript-eslint/no-throw-literal
+       
       throw loadingPromise.current;
     }
 
     const promise = loadMapboxGL().then((result) => {
-      // eslint-disable-next-line no-param-reassign
+       
       result.accessToken = mapboxAccessToken;
       setMapboxgl({
         Map: result.Map,
@@ -56,7 +56,7 @@ export function useMapboxContext({ mapboxAccessToken }: UseMapboxContextOptions)
       });
     });
     loadingPromise.current = promise;
-    // eslint-disable-next-line @typescript-eslint/no-throw-literal
+     
     throw promise;
   }, [mapboxgl, loadMapboxGL, mapboxAccessToken]);
 

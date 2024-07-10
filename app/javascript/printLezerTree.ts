@@ -11,7 +11,7 @@ class StringInput implements Input {
     return this.string.slice(from);
   }
 
-  // eslint-disable-next-line class-methods-use-this
+   
   get lineChunks() {
     return false;
   }
@@ -95,7 +95,7 @@ export function printTree(
           output += `: ${colorize(JSON.stringify(input.read(node.from, node.to)), Color.Green)}`;
         }
       }
-      // eslint-disable-next-line no-continue
+       
       if (!isLeaf) continue;
     }
     for (;;) {
@@ -113,6 +113,6 @@ export function logTree(
   input: Input | string,
   options: { from?: number; to?: number; start?: number; includeParents?: boolean } = {},
 ): void {
-  // eslint-disable-next-line no-console
+   
   console.log(printTree(tree, input, options));
 }

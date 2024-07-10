@@ -70,7 +70,7 @@ function ScheduleGridApp({
       {(config.legends || []).map((legend, i) => {
         if (legend.type === 'text') {
           return (
-            // eslint-disable-next-line react/no-array-index-key
+             
             <p key={i} className="font-italic">
               {legend.text}
             </p>
@@ -78,12 +78,12 @@ function ScheduleGridApp({
         }
 
         if (legend.type === 'category') {
-          // eslint-disable-next-line react/no-array-index-key
+           
           return <CategoryLegend key={i} />;
         }
 
         if (legend.type === 'fullness') {
-          // eslint-disable-next-line react/no-array-index-key
+           
           return <FullnessLegend key={i} />;
         }
 

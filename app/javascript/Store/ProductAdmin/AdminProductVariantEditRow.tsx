@@ -8,6 +8,7 @@ import PricingStructureInput from './PricingStructureInput';
 import { EditingVariant } from './EditingProductTypes';
 import { getRealOrGeneratedId } from '../../GeneratedIdUtils';
 import { getSortableStyle } from '../../SortableUtils';
+import { useTranslation } from 'react-i18next';
 
 export type AdminProductVariantEditRowProps = {
   variant: EditingVariant;
@@ -20,6 +21,7 @@ function AdminProductVariantEditRow({
   updateVariant,
   deleteVariant,
 }: AdminProductVariantEditRowProps): JSX.Element {
+  const { t } = useTranslation();
   const { setNodeRef, transform, attributes, listeners, transition, isDragging } = useSortable({
     id: getRealOrGeneratedId(variant).toString(),
   });
@@ -59,13 +61,13 @@ function AdminProductVariantEditRow({
         <PricingStructureInput value={variant.override_pricing_structure} onChange={setOverridePricingStructure} />
       </td>
       <td>
-        <button type="button" className="btn btn-sm btn-danger" onClick={deleteVariant}>
-          <i className="bi-trash">
-            <span className="visually-hidden">
-              Delete
-              {variant.name}
-            </span>
-          </i>
+        <button
+          type="button"
+          className="btn btn-sm btn-danger"
+          onClick={deleteVariant}
+          aria-label={t('admin.store.products.deleteVariant', { name: variant.name })}
+        >
+          <i className="bi-trash" />
         </button>
       </td>
     </tr>

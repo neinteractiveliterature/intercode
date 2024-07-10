@@ -76,7 +76,7 @@ function RecurringEventSectionBody({ event, convention, startSchedulingRuns }: R
       <div className="card bg-light my-4">
         <div
           className="card-body small"
-          // eslint-disable-next-line react/no-danger
+           
           dangerouslySetInnerHTML={{ __html: event.description_html ?? '' }}
         />
       </div>

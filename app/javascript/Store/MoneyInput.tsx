@@ -78,7 +78,7 @@ export default React.forwardRef<HTMLInputElement, MoneyInputProps>(function Mone
   return (
     <div className={inputGroupClassName || 'input-group'}>
       <span className="input-group-text">{getCurrencySymbol(navigator.language, currency.code)}</span>
-      {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+      { }
       <input
         type="text"
         className={className ?? 'form-control'}

@@ -66,7 +66,7 @@ function AssignDoc({ assign, prefix }: AssignDocProps): JSX.Element {
                   <Link to={`/liquid_docs${location.search}`}>Documentation home</Link>
                 </li>
                 {prefixParts.map((part, i) => (
-                  // eslint-disable-next-line react/no-array-index-key
+                   
                   <li className="breadcrumb-item text-nowrap" key={i}>
                     <Link to={`/liquid_docs/assigns/${prefixParts.slice(0, i + 1).join('.')}${location.search}`}>
                       {part}

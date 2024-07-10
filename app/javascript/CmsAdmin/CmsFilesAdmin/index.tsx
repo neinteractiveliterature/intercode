@@ -75,6 +75,7 @@ export default LoadQueryWrapper(useCmsFilesAdminQuery, function CmsFilesAdmin({ 
                         renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
                       })
                     }
+                    aria-label={t('buttons.delete')}
                   >
                     <i className="bi-trash-fill" aria-hidden="true" />
                   </button>
@@ -95,7 +96,7 @@ export default LoadQueryWrapper(useCmsFilesAdminQuery, function CmsFilesAdmin({ 
               />
             </div>
             <div className="card-body text-center py-2">
-              <a href={cmsFile.file.url}>
+              <a href={cmsFile.file.url} aria-label={cmsFile.file.filename}>
                 <FilePreview
                   url={cmsFile.file.thumbnailUrl}
                   contentType={cmsFile.file.content_type}

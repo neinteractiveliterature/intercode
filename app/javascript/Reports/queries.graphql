@@ -16,18 +16,22 @@ query AttendanceByPaymentAmountQuery {
     ticketNamePlural
 
     reports {
-      ticket_count_by_type_and_payment_amount {
+      sales_count_by_product_and_payment_amount {
         count
 
-        ticket_type {
+        product {
           id
           name
-          description
-
-          providing_products {
+          provides_ticket_type {
             id
-            pricing_structure {
-              ...PricingStructureFields
+            name
+            description
+
+            providing_products {
+              id
+              pricing_structure {
+                ...PricingStructureFields
+              }
             }
           }
         }
@@ -38,7 +42,7 @@ query AttendanceByPaymentAmountQuery {
         }
       }
 
-      total_revenue {
+      sum_revenue {
         fractional
         currency_code
       }

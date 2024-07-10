@@ -49,7 +49,7 @@ export type AdminProductVariantsTableProps =
   | AdminProductVariantsTableEditingProps
   | AdminProductVariantsTableViewingProps;
 
-// eslint-disable-next-line @typescript-eslint/no-empty-function
+ 
 const noop = () => {};
 
 function AdminProductVariantsTable(props: AdminProductVariantsTableProps): JSX.Element {

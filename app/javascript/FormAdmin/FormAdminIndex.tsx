@@ -62,7 +62,7 @@ export default LoadQueryWrapper(useFormAdminQuery, function FormAdminIndex({ dat
               <td>
                 <ul className="list-unstyled m-0">
                   {describeFormUsers(form).map((formUser, i) => (
-                    <li key={i /* eslint-disable-line react/no-array-index-key */}>{formUser}</li>
+                    <li key={i  }>{formUser}</li>
                   ))}
                 </ul>
               </td>

@@ -25,11 +25,11 @@ export type PricingStructureModalContextValue = ModalData<PricingStructureModalS
 export const PricingStructureModalContext = React.createContext<PricingStructureModalContextValue>({
   visible: false,
   state: undefined,
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
+   
   open: () => {},
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
+   
   close: () => {},
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
+   
   setState: () => {},
 });
 

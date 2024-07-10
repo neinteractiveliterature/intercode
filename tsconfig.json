@@ -19,7 +19,6 @@
     "./app/javascript/",
     "./script",
     "./test/javascript/",
-    ".eslintrc.js",
     "buildTimezoneData.js",
     "graphql.config.js",
     "i18next-parser-english.config.cjs",

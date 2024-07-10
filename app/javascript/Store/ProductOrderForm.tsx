@@ -224,6 +224,9 @@ export default LoadQueryWithVariablesWrapper(
                   // force a re-render on the MoneyInput because it uses an internal string state for the input
                   setPayWhatYouWantAmountForcedKey(new Date().getTime());
                 }}
+                aria-label={t('payWhatYouWant.useSuggestedAmountPlainText', {
+                  amount: payWhatYouWantValue.suggested_amount,
+                })}
               >
                 <Trans
                   i18nKey="payWhatYouWant.useSuggestedAmount"
