@@ -9,7 +9,7 @@ import { useCreateProductMutation, useUpdateProductMutation } from '../mutations
 import { EditingProduct } from './EditingProductTypes';
 import { hasRealId } from '../../GeneratedIdUtils';
 import EditProductForm from './EditProductForm';
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 export type EditAdminProductCardProps = {
   initialProduct: EditingProduct;
@@ -21,6 +21,7 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }: EditAdminP
   const [createProduct] = useCreateProductMutation();
   const [updateProduct] = useUpdateProductMutation();
   const [product, setProduct] = useState(initialProduct);
+  const { t } = useTranslation();
 
   const saveProduct = async () => {
     const productInput = buildProductInput(product);

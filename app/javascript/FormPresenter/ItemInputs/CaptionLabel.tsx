@@ -11,7 +11,12 @@ function CaptionLabel<PropertiesType extends { caption: string; required?: boole
   htmlFor,
 }: CaptionLabelProps<PropertiesType>): JSX.Element {
   return (
-    <label className="form-label form-item-label" htmlFor={htmlFor}>
+    <label
+      className="form-label form-item-label"
+      htmlFor={htmlFor}
+      aria-label={formItem.rendered_properties.caption}
+      aria-required={formItem.rendered_properties.required ?? false}
+    >
       <span dangerouslySetInnerHTML={{ __html: formItem.rendered_properties.caption }} />
       <RequiredIndicator formItem={formItem} />
     </label>

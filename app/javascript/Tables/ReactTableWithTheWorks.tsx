@@ -147,7 +147,7 @@ function ReactTableWithTheWorks<
           {loading && rows.length === 0
             ? [...Array(pageSize)].map((value, index) => (
                 // eslint-disable-next-line react/no-array-index-key
-                <div key={index} role="row">
+                <div key={index} role="row" aria-hidden>
                   <div>&nbsp;</div>
                 </div>
               ))

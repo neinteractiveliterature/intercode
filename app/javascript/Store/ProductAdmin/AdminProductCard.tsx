@@ -72,10 +72,13 @@ function AdminProductCard({ currentAbility, startEditing, product }: AdminProduc
               <ul className="list-inline m-0">
                 {product.id != null && (
                   <li className="list-inline-item">
-                    <button type="button" className="btn btn-sm btn-danger" onClick={deleteClicked}>
-                      <i className="bi-trash">
-                        <span className="visually-hidden">{t('admin.store.products.deleteLabel')}</span>
-                      </i>
+                    <button
+                      type="button"
+                      className="btn btn-sm btn-danger"
+                      onClick={deleteClicked}
+                      aria-label={t('admin.store.products.deleteLabel')}
+                    >
+                      <i className="bi-trash" />
                     </button>
                   </li>
                 )}

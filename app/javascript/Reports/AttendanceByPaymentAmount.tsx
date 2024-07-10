@@ -4,49 +4,60 @@ import capitalize from 'lodash/capitalize';
 import formatMoney from '../formatMoney';
 import usePageTitle from '../usePageTitle';
 import { AttendanceByPaymentAmountQueryData, useAttendanceByPaymentAmountQuery } from './queries.generated';
-import { Money } from '../graphqlTypes.generated';
+import { Money, Product } from '../graphqlTypes.generated';
+import assertNever from 'assert-never';
 
 type RowType =
-  AttendanceByPaymentAmountQueryData['convention']['reports']['ticket_count_by_type_and_payment_amount'][0];
+  AttendanceByPaymentAmountQueryData['convention']['reports']['sales_count_by_product_and_payment_amount'][number];
+type ProvidesTicketType = NonNullable<RowType['product']['provides_ticket_type']>;
 
-function describeRow(ticketType: RowType['ticket_type'], paymentAmount: RowType['payment_amount']) {
-  if (paymentAmount.fractional > 0) {
-    return `${ticketType.description} @ ${formatMoney(paymentAmount)}`;
+function priceIsPossibleForProduct(price: Money, product: Pick<Product, 'pricing_structure'>) {
+  const value = product.pricing_structure.value;
+  if (value.__typename === 'Money') {
+    return value.fractional === price.fractional;
+  } else if (value.__typename === 'PayWhatYouWantValue') {
+    return (
+      (value.minimum_amount == null || price.fractional >= value.minimum_amount.fractional) &&
+      (value.maximum_amount == null || price.fractional <= value.maximum_amount.fractional)
+    );
+  } else if (value.__typename === 'ScheduledMoneyValue') {
+    return value.timespans.some((timespan) => timespan.value.fractional == price.fractional);
+  } else {
+    assertNever(value, false);
+    return false;
   }
-
-  return ticketType.description;
 }
 
-function descriptionCell(ticketType: RowType['ticket_type'], paymentAmount: RowType['payment_amount']) {
-  const priceIsPossibleForProduct: (price: Money) => boolean = ticketType.providing_products.reduce(
-    (otherwisePossible: (price: Money) => boolean, product) => {
-      const value = product.pricing_structure.value;
-      if (value.__typename === 'Money') {
-        return (price) => otherwisePossible(price) || value.fractional === price.fractional;
-      }
-      if (value.__typename === 'PayWhatYouWantValue') {
-        return (price) =>
-          otherwisePossible(price) ||
-          ((value.minimum_amount == null || price.fractional >= value.minimum_amount.fractional) &&
-            (value.maximum_amount == null || price.fractional <= value.maximum_amount.fractional));
-      }
+function describeRow(
+  ticketType: ProvidesTicketType | null | undefined,
+  productName: string,
+  paymentAmount: RowType['payment_amount'],
+) {
+  if (paymentAmount.fractional > 0) {
+    return `${ticketType?.description ?? productName} @ ${formatMoney(paymentAmount)}`;
+  }
 
-      return (price) =>
-        otherwisePossible(price) || value.timespans.some((timespan) => timespan.value.fractional == price.fractional);
-    },
-    () => false,
-  );
+  return ticketType?.description ?? productName;
+}
 
-  if (priceIsPossibleForProduct(paymentAmount)) {
-    return <td>{describeRow(ticketType, paymentAmount)}</td>;
+function descriptionCell(
+  ticketType: ProvidesTicketType | null | undefined,
+  productName: string,
+  paymentAmount: RowType['payment_amount'],
+) {
+  const priceIsPossibleForAnyProduct =
+    ticketType?.providing_products.some((product) => priceIsPossibleForProduct(paymentAmount, product)) ?? true;
+
+  if (priceIsPossibleForAnyProduct) {
+    return <td>{describeRow(ticketType, productName, paymentAmount)}</td>;
   }
 
   return (
     <td
       className="text-danger"
-      title={`${formatMoney(paymentAmount)} does not appear in the pricing schedule for ${ticketType.description}`}
+      title={`${formatMoney(paymentAmount)} does not appear in the pricing schedule for ${ticketType?.description ?? productName}`}
     >
-      <i className="bi-exclamation-circle-fill" /> {describeRow(ticketType, paymentAmount)}
+      <i className="bi-exclamation-circle-fill" /> {describeRow(ticketType, productName, paymentAmount)}
     </td>
   );
 }
@@ -54,9 +65,13 @@ function descriptionCell(ticketType: RowType['ticket_type'], paymentAmount: RowT
 export default LoadQueryWrapper(useAttendanceByPaymentAmountQuery, function AttendanceByPaymentAmount({ data }) {
   usePageTitle('Attendance by payment amount');
 
-  const sortedRows = [...data.convention.reports.ticket_count_by_type_and_payment_amount].sort((a, b) => {
-    if (a.ticket_type.name !== b.ticket_type.name) {
-      return a.ticket_type.name.localeCompare(b.ticket_type.name, undefined, {
+  const sortedRows = [...data.convention.reports.sales_count_by_product_and_payment_amount].sort((a, b) => {
+    if (
+      a.product.provides_ticket_type &&
+      b.product.provides_ticket_type &&
+      a.product.provides_ticket_type.name !== b.product.provides_ticket_type.name
+    ) {
+      return a.product.provides_ticket_type.name.localeCompare(b.product.provides_ticket_type?.name ?? '', undefined, {
         sensitivity: 'base',
       });
     }
@@ -80,30 +95,40 @@ export default LoadQueryWrapper(useAttendanceByPaymentAmountQuery, function Atte
           </tr>
         </thead>
         <tbody>
-          {sortedRows.map(({ ticket_type: ticketType, payment_amount: paymentAmount, count }) => (
-            <tr key={`${ticketType.name}-${paymentAmount.fractional}`}>
-              {descriptionCell(ticketType, paymentAmount)}
-              <td className="text-end">
-                <a
-                  href={`/user_con_profiles?columns=name,email,ticket,privileges,payment_amount&filters.ticket=${
-                    ticketType.id
-                  }&filters.payment_amount=${paymentAmount.fractional / 100}`}
-                >
-                  {count}
-                </a>
-              </td>
-              <td className="text-end">
-                {formatMoney({ ...paymentAmount, fractional: paymentAmount.fractional * count })}
-              </td>
-            </tr>
-          ))}
+          {sortedRows.map(
+            ({
+              product: { name: productName, provides_ticket_type: ticketType },
+              payment_amount: paymentAmount,
+              count,
+            }) => (
+              <tr key={`${ticketType?.name ?? productName}-${paymentAmount.fractional}`}>
+                {descriptionCell(ticketType, productName, paymentAmount)}
+                <td className="text-end">
+                  {ticketType ? (
+                    <a
+                      href={`/user_con_profiles?columns=name,email,ticket,privileges,payment_amount&filters.ticket=${
+                        ticketType.id
+                      }&filters.payment_amount=${paymentAmount.fractional / 100}`}
+                    >
+                      {count}
+                    </a>
+                  ) : (
+                    count
+                  )}
+                </td>
+                <td className="text-end">
+                  {formatMoney({ ...paymentAmount, fractional: paymentAmount.fractional * count })}
+                </td>
+              </tr>
+            ),
+          )}
         </tbody>
         <tfoot>
           <tr className="fw-bold">
             <td colSpan={2} className="text-end">
               Total revenue
             </td>
-            <td className="text-end">{formatMoney(data.convention.reports.total_revenue)}</td>
+            <td className="text-end">{formatMoney(data.convention.reports.sum_revenue)}</td>
           </tr>
         </tfoot>
       </table>

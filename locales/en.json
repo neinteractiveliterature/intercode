@@ -122,6 +122,7 @@
         "clickwrapAgreementLabel": "Product-specific clickwrap agreement",
         "deleteConfirmation": "Are you sure you want to delete the product {{ productName }}?",
         "deleteLabel": "Delete product",
+        "deleteVariant": "Delete {{ name }}",
         "descriptionLabel": "Product description",
         "editProduct": "Edit product",
         "newProduct": "New product",
@@ -241,6 +242,7 @@
     "add": "Add",
     "attachImage": "Attach image…",
     "cancel": "Cancel",
+    "clear": "Clear",
     "close": "Close",
     "collapse": "Collapse",
     "composeEmail": "Compose email",
@@ -249,6 +251,7 @@
     "expand": "Expand",
     "help": "Help",
     "ok": "OK",
+    "open": "Open",
     "options": "Options",
     "preview": "Preview",
     "proposeEventLoggedOut": "Log in to propose an event",
@@ -721,7 +724,8 @@
     "minOnly": "at least <bold>{{ minimumAmount, money }}</bold>",
     "noBounds": "any amount",
     "suggestedAmount": "Suggested amount: <bold>{{ suggestedAmount, money }}</bold>",
-    "useSuggestedAmount": "Use suggested amount (<bold>{{ amount, money }}</bold>)"
+    "useSuggestedAmount": "Use suggested amount (<bold>{{ amount, money }}</bold>)",
+    "useSuggestedAmountPlainText": "Use suggested amount ({{ amount, money }})"
   },
   "pricingStructure": {
     "fixedPrice": "<bold>{{ price, money }}</bold> (fixed price)",

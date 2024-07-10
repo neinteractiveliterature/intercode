@@ -16,6 +16,7 @@ module.exports = {
     'plugin:react-hooks/recommended',
     'plugin:jest/recommended',
     'plugin:jsx-a11y/recommended',
+    'plugin:i18next/recommended',
     'prettier',
   ],
 
@@ -73,6 +74,7 @@ module.exports = {
     'prefer-arrow-callback': ['error', { allowNamedFunctions: true }],
     '@typescript-eslint/no-empty-function': 'off',
     '@typescript-eslint/no-unused-vars': ['error', { ignoreRestSiblings: true }],
+    'i18next/no-literal-string': 'warn',
   },
 
   overrides: [
@@ -98,6 +100,11 @@ module.exports = {
                 name: '@apollo/client',
                 importNames: ['useQuery', 'useMutation'],
                 message: 'Please use generated operation-specific hooks instead',
+              },
+              {
+                name: 'i18next',
+                importNames: ['t'],
+                message: 'Please import useTranslation from react-i18next instead',
               },
             ],
           },
@@ -161,6 +168,7 @@ module.exports = {
                 'Query',
                 'RegistrationPolicy',
                 'RegistrationPolicyBucket',
+                'SalesCountByProductAndPaymentAmount',
                 'ScheduledMoneyValue',
                 'ScheduledValue',
                 'SearchResultEntry',

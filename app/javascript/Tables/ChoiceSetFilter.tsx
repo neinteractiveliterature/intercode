@@ -183,7 +183,12 @@ function ChoiceSetFilter<RowType extends Record<string, unknown>>(props: ChoiceS
       <div className="flex-grow-1 d-flex flex-wrap" style={{ overflow: 'hidden' }}>
         {renderHeaderCaptionWithChoices()}
       </div>
-      <button type="button" className="btn btn-outline-secondary btn-sm py-0 align-self-start" onClick={toggleOpen}>
+      <button
+        type="button"
+        className="btn btn-outline-secondary btn-sm py-0 align-self-start"
+        onClick={toggleOpen}
+        aria-label={dropdownOpen ? t('buttons.close') : t('buttons.open')}
+      >
         <i
           className={classNames({
             'bi-caret-down': !dropdownOpen,

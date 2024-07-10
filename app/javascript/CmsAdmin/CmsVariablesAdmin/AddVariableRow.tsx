@@ -6,6 +6,7 @@ import updateCmsVariable from './updateCmsVariable';
 import useAsyncFunction from '../../useAsyncFunction';
 import { CmsVariablesQueryData } from './queries.generated';
 import { useSetCmsVariableMutation } from './mutations.generated';
+import { useTranslation } from 'react-i18next';
 
 export type AddingVariable = Omit<CmsVariablesQueryData['cmsParent']['cmsVariables'][0], 'id'> & {
   generatedId: number;
@@ -22,6 +23,7 @@ function AddVariableRow({ variable, onChange, onSave, onCancel }: AddVariableRow
   const [setCmsVariableMutate] = useSetCmsVariableMutation();
   const [setCmsVariable, setError, setInProgress] = useAsyncFunction(setCmsVariableMutate);
   const apolloClient = useApolloClient();
+  const { t } = useTranslation();
 
   const save = async () => {
     await setCmsVariable({
@@ -76,6 +78,7 @@ function AddVariableRow({ variable, onChange, onSave, onCancel }: AddVariableRow
               className="btn btn-outline-secondary"
               onClick={() => onCancel(variable.generatedId)}
               disabled={setInProgress}
+              aria-label={t('buttons.cancel')}
             >
               <i className="bi-x" />
             </button>
@@ -84,6 +87,7 @@ function AddVariableRow({ variable, onChange, onSave, onCancel }: AddVariableRow
               className="btn btn-primary"
               disabled={variable.key.trim() === '' || variable.value_json.trim() === '' || setInProgress}
               onClick={save}
+              aria-label={t('buttons.save')}
             >
               <i className="bi-check" />
             </button>
