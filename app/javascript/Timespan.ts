@@ -1,4 +1,4 @@
-/* eslint-disable max-classes-per-file */
+ 
 import { TFunction } from 'i18next';
 import { DateTime, DateTimeUnit, Duration, DurationLike, DurationUnit } from 'luxon';
 import { chooseAmong, preferNull, notEmpty } from '@neinteractiveliterature/litform';

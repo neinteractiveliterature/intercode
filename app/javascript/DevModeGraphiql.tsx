@@ -23,7 +23,7 @@ function DevModeGraphiql({ authenticityTokens: { graphql: authenticityToken } }:
   const fetcher: Fetcher = useCallback(
     (operation) => {
       const operationAsGraphQLRequest = operation as unknown as GraphQLRequest;
-      // eslint-disable-next-line no-param-reassign
+       
       operationAsGraphQLRequest.query = parse(operation.query);
       return execute(link, operationAsGraphQLRequest);
     },

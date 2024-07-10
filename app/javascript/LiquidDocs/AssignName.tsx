@@ -11,7 +11,7 @@ function AssignName({ assign, prefix }: AssignNameProps): JSX.Element {
   const concatenatedName = `${prefix || ''}${assign.name}`;
   const rawParts = concatenatedName.split('.');
   const parts = rawParts.map((part, i) => (
-    // eslint-disable-next-line react/no-array-index-key
+     
     <Fragment key={i}>
       <span className="text-nowrap">{part}</span>
       {i < rawParts.length - 1 ? <>&#8203;.</> : null}

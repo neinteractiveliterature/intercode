@@ -195,7 +195,7 @@ const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(function Ru
 
           <div
             className="small"
-            // eslint-disable-next-line react/no-danger
+             
             dangerouslySetInnerHTML={{ __html: event.short_blurb_html ?? '' }}
           />
         </div>

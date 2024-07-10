@@ -120,7 +120,7 @@ function AdminProductCard({ currentAbility, startEditing, product }: AdminProduc
             <p>
               <strong>Base price: {describeAdminPricingStructure(product.pricing_structure, t)}</strong>
             </p>
-            {/* eslint-disable-next-line react/no-danger */}
+            { }
             <div dangerouslySetInnerHTML={{ __html: product.description_html ?? '' }} />
             <AdminProductVariantsTable product={product} editing={false} />
           </div>

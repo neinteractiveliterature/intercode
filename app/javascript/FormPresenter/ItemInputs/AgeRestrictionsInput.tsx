@@ -86,7 +86,7 @@ function AgeRestrictionsInput(props: AgeRestrictionsInputProps): JSX.Element {
       <div className="card-header py-0">
         <legend
           className="col-form-label"
-          // eslint-disable-next-line react/no-danger
+           
           dangerouslySetInnerHTML={{ __html: formItem.rendered_properties.caption }}
         />
       </div>

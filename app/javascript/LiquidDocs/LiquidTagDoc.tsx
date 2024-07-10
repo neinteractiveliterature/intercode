@@ -34,7 +34,7 @@ function LiquidTagDoc({ liquidTag }: LiquidTagDocProps): JSX.Element {
             {liquidTag.tags
               .filter((tag) => tag.tag_name !== 'liquid_tag_name')
               .map((tag, i) => (
-                // eslint-disable-next-line react/no-array-index-key
+                 
                 <TagDoc tag={tag} key={i} />
               ))}
           </ul>

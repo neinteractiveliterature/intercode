@@ -83,7 +83,7 @@ fragment RunCardRegistrationPolicyFields on RegistrationPolicy {
 }
 
 query EventPageQuery($eventId: ID!) {
-  # eslint-disable-next-line @graphql-eslint/naming-convention
+   
   __typename
 
   currentAbility {

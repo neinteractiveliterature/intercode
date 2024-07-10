@@ -1,4 +1,4 @@
-# eslint-disable @graphql-eslint/no-unused-fragments
+ 
 
 fragment CouponFields on Coupon {
   id

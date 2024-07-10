@@ -78,7 +78,7 @@ function MapboxMap({ center, zoom, markerLocation, setCenter, setZoom, height }:
 
   return (
     <div ref={containerRef} style={{ height: height ?? '30rem' }}>
-      {/* eslint-disable-next-line no-nested-ternary */}
+      { }
       {mapboxgl ? null : mapboxAccessToken ? (
         <PageLoadingIndicator visible iconSet="bootstrap-icons" />
       ) : (

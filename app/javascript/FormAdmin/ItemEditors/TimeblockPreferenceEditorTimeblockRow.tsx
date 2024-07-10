@@ -62,7 +62,7 @@ function TimeblockPreferenceEditorTimeblockRow({
     }
 
     try {
-      // eslint-disable-next-line no-new
+       
       getTimeblockTimespanForDisplay(timeblock);
     } catch (e) {
       return e.message;

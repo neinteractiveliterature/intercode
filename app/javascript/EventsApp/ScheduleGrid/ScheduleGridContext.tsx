@@ -62,7 +62,7 @@ export const ScheduleGridContext = createContext<ScheduleGridContextValue>({
   convention: skeletonConvention,
   isRunDetailsVisible: () => false,
   visibleRunDetails: new Map<string, RunDetailsVisibilitySpec[]>(),
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
+   
   toggleRunDetailsVisibility: () => {},
 });
 
@@ -317,7 +317,7 @@ export function ScheduleGridProvider({
   return (
     <ScheduleGridFiltersContext.Provider value={filtersContextValue}>
       {convention.pre_schedule_content_html && (
-        // eslint-disable-next-line react/no-danger
+         
         <div dangerouslySetInnerHTML={{ __html: convention.pre_schedule_content_html }} />
       )}
       <ConventionDayTabContainer

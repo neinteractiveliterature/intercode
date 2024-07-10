@@ -39,7 +39,7 @@ fragment CommonConventionData on Convention {
 }
 
 # This fragment is used in EventPage/mutations.graphql and ScheduleGrid/queries.graphql
-# eslint-disable-next-line @graphql-eslint/no-unused-fragments
+ 
 fragment RunBasicSignupData on Run {
   id
 

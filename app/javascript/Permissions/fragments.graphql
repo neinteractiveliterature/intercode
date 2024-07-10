@@ -1,7 +1,7 @@
-# eslint-disable @graphql-eslint/no-unused-fragments
+ 
 
 fragment PermissionedModelFields on PermissionedModel {
-  # eslint-disable-next-line @graphql-eslint/naming-convention
+   
   __typename
 
   ... on CmsContentGroup {
@@ -22,7 +22,7 @@ fragment PermissionedModelFields on PermissionedModel {
 }
 
 fragment PermissionedRoleFields on PermissionedRole {
-  # eslint-disable-next-line @graphql-eslint/naming-convention
+   
   __typename
 
   ... on StaffPosition {

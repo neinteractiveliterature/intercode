@@ -51,7 +51,7 @@ export default function TicketPurchaseForm({ availableProducts, onAddedToCart, r
                 {availableProduct.description_html && (
                   <p
                     className="small"
-                    // eslint-disable-next-line react/no-danger
+                     
                     dangerouslySetInnerHTML={{ __html: availableProduct.description_html }}
                   />
                 )}

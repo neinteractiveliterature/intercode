@@ -1,7 +1,7 @@
 #import "../../Permissions/fragments.graphql"
 
 fragment CmsContentFields on CmsContent {
-  # eslint-disable-next-line @graphql-eslint/naming-convention
+   
   __typename
 
   ... on Page {

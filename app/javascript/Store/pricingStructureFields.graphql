@@ -1,4 +1,4 @@
-# eslint-disable @graphql-eslint/no-unused-fragments
+ 
 
 fragment PricingStructureFields on PricingStructure {
   pricing_strategy
@@ -9,7 +9,7 @@ fragment PricingStructureFields on PricingStructure {
   }
 
   value {
-    # eslint-disable-next-line @graphql-eslint/naming-convention
+     
     __typename
 
     ... on Money {

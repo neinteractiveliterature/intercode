@@ -9,7 +9,7 @@ query SiteSearchQuery($query: String!) {
         highlight
 
         model {
-          # eslint-disable-next-line @graphql-eslint/naming-convention
+           
           __typename
 
           ... on Page {

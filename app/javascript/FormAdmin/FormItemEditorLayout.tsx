@@ -127,9 +127,9 @@ function FormItemEditorLayout(): JSX.Element {
               convention={convention}
               formItem={previewFormItem}
               formTypeIdentifier={formTypeIdentifier}
-              // eslint-disable-next-line @typescript-eslint/no-empty-function
+               
               onInteract={() => {}}
-              // eslint-disable-next-line @typescript-eslint/no-empty-function
+               
               onChange={() => {}}
               value={previewFormItem.default_value}
               valueInvalid={false}

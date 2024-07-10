@@ -389,7 +389,7 @@ export function removeGeneratedIds<PropertiesType>(
       return {
         ...memo,
         [property]: value.map((item) => {
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+           
           const { generatedId, ...otherItemProperties } = item;
           return otherItemProperties;
         }),
@@ -397,7 +397,7 @@ export function removeGeneratedIds<PropertiesType>(
     }
 
     return memo;
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+     
   }, properties!) as PropertiesWithoutGeneratedIds<PropertiesType>;
 }
 

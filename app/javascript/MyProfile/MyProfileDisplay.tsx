@@ -109,7 +109,7 @@ function MyProfileDisplay(): JSX.Element {
                     <div className="card-body">
                       <strong>{myProfile.bio_name}</strong>
                       <br />
-                      {/* eslint-disable-next-line react/no-danger */}
+                      { }
                       <div dangerouslySetInnerHTML={{ __html: myProfile.bio_html ?? '' }} />
                     </div>
                   </div>

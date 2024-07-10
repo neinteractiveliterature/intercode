@@ -1,4 +1,4 @@
-# eslint-disable @graphql-eslint/no-unused-fragments
+ 
 
 #import "./pricingStructureFields.graphql"
 

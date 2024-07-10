@@ -49,7 +49,7 @@ function ArrayEditor<T>({
 
       <ul className="list-group list-group-flush">
         {array.map((value, index) => (
-          // eslint-disable-next-line react/no-array-index-key
+           
           <li className="list-group-item" key={index}>
             <div className="d-flex">
               <div className="flex-grow-1">{renderValue(value)}</div>

@@ -40,7 +40,7 @@ function TextDiffDisplay({ before, after }: TextDiffDisplayProps): JSX.Element {
   return (
     <>
       {diff.map(({ value, added, removed }, index) => (
-        // eslint-disable-next-line react/no-array-index-key
+         
         <EditDisplay value={value} added={added} removed={removed} key={index} />
       ))}
     </>

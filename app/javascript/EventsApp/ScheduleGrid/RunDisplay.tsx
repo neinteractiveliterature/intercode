@@ -102,9 +102,9 @@ const RunDisplay = forwardRef<HTMLDivElement, RunDisplayProps>(function RunDispl
   };
 
   return (
-    // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+     
     <div
-      // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+       
       tabIndex={run.disableDetailsPopup ? undefined : 0}
       className={getRunClassName({
         event,

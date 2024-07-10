@@ -20,7 +20,7 @@ export default function useMergeCategoriesIntoEvents<T extends { event_category:
 
   const eventsWithCategories = useMemo(
     () =>
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+       
       events?.map((event) => ({ ...event, event_category: eventCategoriesById.get(event.event_category.id)! })) ?? [],
     [events, eventCategoriesById],
   );
