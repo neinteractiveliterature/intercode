@@ -14,7 +14,7 @@
     "build:cli": "webpack --progress --config ./webpack.cliUtils.config.js",
     "build:timezone_data": "node ./buildTimezoneData.js",
     "graphql:build_type_data": "node ./buildGraphQLTypeData.js",
-    "graphql:codegen": "graphql-codegen --config codegen.yml",
+    "graphql:codegen": "graphql-codegen --config codegen.ts",
     "graphql:update": "yarn run graphql:codegen && yarn run graphql:build_type_data",
     "i18next:dedupe": "yarn run tsx ./script/deduplicateTranslations.ts",
     "lint": "eslint app/javascript test/javascript schema.graphql --cache",
