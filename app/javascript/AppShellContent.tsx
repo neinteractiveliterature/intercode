@@ -7,20 +7,12 @@ type AppShellContentProps = {
 
 function AppShellContent({ appRootContent, parseDocument }: AppShellContentProps) {
   const content = useMemo(() => parseDocument(appRootContent), [appRootContent, parseDocument]);
-  // const styleLoaderInserts = useMemo(
-  //   // eslint-disable-next-line no-underscore-dangle
-  //   () => parseDocument((window._elementsInsertedByStyleLoader ?? []).map((element) => element.innerHTML).join('')),
-  //   [parseDocument],
-  // );
-  // const dataIntercodeSSRHydrate = useMemo(() => JSON.stringify({ appRootContent }), [appRootContent]);
+  const dataIntercodeSSRHydrate = useMemo(() => JSON.stringify({ appRootContent }), [appRootContent]);
 
   return (
     <html lang="en">
-      <head>
-        {/* {styleLoaderInserts.headComponents} */}
-        {content.headComponents}
-      </head>
-      <body>{content.bodyComponents}</body>
+      <head>{content.headComponents}</head>
+      <body data-intercode-ssr-hydrate={dataIntercodeSSRHydrate}>{content.bodyComponents}</body>
     </html>
   );
 }

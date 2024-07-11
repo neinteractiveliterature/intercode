@@ -1,5 +1,5 @@
-query GetAppLayoutContent($host: String!, $path: String!) {
-  cmsParentByDomain(domain: $host) {
+query GetAppLayoutContent($domain: String!, $path: String!) {
+  cmsParentByDomain(domain: $domain) {
     id
     effectiveCmsLayout(path: $path) {
       id

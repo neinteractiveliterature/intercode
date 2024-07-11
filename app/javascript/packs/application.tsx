@@ -10,10 +10,10 @@ if (ssrHydratePropsJSON) {
   const ssrHydrateProps = JSON.parse(ssrHydratePropsJSON);
   import('../parsePageContent').then((parsePageContent) => {
     const parseDocument = (html: string) => parsePageContent.default(html, components);
-    import('../AppShellContent').then((AppShellContent) => {
+    import('../AppShellContent').then(({ default: AppShellContent }) => {
       hydrateRoot(
         document,
-        <AppShellContent.default appRootContent={ssrHydrateProps.appRootContent} parseDocument={parseDocument} />,
+        <AppShellContent appRootContent={ssrHydrateProps.appRootContent} parseDocument={parseDocument} />,
       );
     });
   });

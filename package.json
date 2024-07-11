@@ -20,7 +20,7 @@
     "lint": "eslint app/javascript test/javascript schema.graphql --cache",
     "prepare": "husky install",
     "start": "NODE_OPTIONS=--max-old-space-size=8192 yarn run webpack-dev-server",
-    "start:ssr": "NODE_EXTRA_CA_CERTS=dev_ca.crt yarn run tsx watch ./app/javascript/server.tsx --backend=https://intercode.test:5050 --ssl-key=dev_certificate.key --ssl-cert=dev_certificate.crt",
+    "start:ssr": "NODE_EXTRA_CA_CERTS=dev_ca.crt yarn run tsx watch ./app/javascript/server/index.tsx --backend=https://intercode.test:5050 --ssl-key=dev_certificate.key --ssl-cert=dev_certificate.crt",
     "test": "jest --testPathPattern=test/javascript --coverage",
     "test:watch": "jest --watch --testPathPattern=test/javascript"
   },

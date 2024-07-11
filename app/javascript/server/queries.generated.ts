@@ -1,11 +1,11 @@
 /* eslint-disable */
-import * as Types from './graphqlTypes.generated';
+import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type GetAppLayoutContentQueryVariables = Types.Exact<{
-  host: Types.Scalars['String']['input'];
+  domain: Types.Scalars['String']['input'];
   path: Types.Scalars['String']['input'];
 }>;
 
@@ -14,8 +14,8 @@ export type GetAppLayoutContentQueryData = { __typename: 'Query', cmsParentByDom
 
 
 export const GetAppLayoutContentDocument = gql`
-    query GetAppLayoutContent($host: String!, $path: String!) {
-  cmsParentByDomain(domain: $host) {
+    query GetAppLayoutContent($domain: String!, $path: String!) {
+  cmsParentByDomain(domain: $domain) {
     id
     effectiveCmsLayout(path: $path) {
       id
@@ -37,7 +37,7 @@ export const GetAppLayoutContentDocument = gql`
  * @example
  * const { data, loading, error } = useGetAppLayoutContentQuery({
  *   variables: {
- *      host: // value for 'host'
+ *      domain: // value for 'domain'
  *      path: // value for 'path'
  *   },
  * });
