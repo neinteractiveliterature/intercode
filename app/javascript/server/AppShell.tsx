@@ -1,17 +1,18 @@
 import { JSDOM } from 'jsdom';
-import { parseDocument } from '../parsePageContent';
+import { ComponentMap, ContentParserContext, parseDocument } from '../parsePageContent';
 import { AppWrapperInnerProps } from '../AppWrapper';
 import { ApolloClient, ApolloProvider, NormalizedCacheObject } from '@apollo/client';
 import AuthenticityTokensContext, { useAuthenticityTokens } from '../AuthenticityTokensContext';
-import React from 'react';
+import React, { useRef } from 'react';
 import { StaticRouter } from 'react-router-dom/server';
 import AppShellContent from '../AppShellContent';
 import { unwrappedComponents } from '../packs/components';
+import { HelmetProvider } from 'react-helmet-async';
 
-function parseDocumentWithJSDOM(html: string) {
+function parseDocumentWithJSDOM(html: string, componentMap: ComponentMap = unwrappedComponents) {
   const dom = new JSDOM(html);
   // eslint-disable-next-line no-underscore-dangle
-  return parseDocument(dom.window._document, unwrappedComponents, dom.window.Node, dom.window);
+  return parseDocument(dom.window._document, componentMap, dom.window.Node, dom.window);
 }
 
 type AppShellProps = JSX.IntrinsicAttributes & {
@@ -23,16 +24,21 @@ type AppShellProps = JSX.IntrinsicAttributes & {
 
 export default function AppShell({ appRootContent, url, authenticityTokens, apolloClient }: AppShellProps) {
   const authenticityTokensProviderValue = useAuthenticityTokens(authenticityTokens);
+  const helmetContext = useRef({});
 
   return (
     <React.StrictMode>
-      <StaticRouter basename="/" location={url}>
-        <AuthenticityTokensContext.Provider value={authenticityTokensProviderValue}>
-          <ApolloProvider client={apolloClient}>
-            <AppShellContent appRootContent={appRootContent} parseDocument={parseDocumentWithJSDOM} />
-          </ApolloProvider>
-        </AuthenticityTokensContext.Provider>
-      </StaticRouter>
+      <HelmetProvider context={helmetContext.current}>
+        <StaticRouter basename="/" location={url}>
+          <AuthenticityTokensContext.Provider value={authenticityTokensProviderValue}>
+            <ApolloProvider client={apolloClient}>
+              <ContentParserContext.Provider value={parseDocumentWithJSDOM}>
+                <AppShellContent appRootContent={appRootContent} />
+              </ContentParserContext.Provider>
+            </ApolloProvider>
+          </AuthenticityTokensContext.Provider>
+        </StaticRouter>
+      </HelmetProvider>
     </React.StrictMode>
   );
 }

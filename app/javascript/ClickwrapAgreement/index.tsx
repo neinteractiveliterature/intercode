@@ -4,11 +4,11 @@ import { useNavigate, Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { LoadQueryWrapper, ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import parseCmsContent from '../parseCmsContent';
 import AuthenticityTokensContext from '../AuthenticityTokensContext';
 import useLoginRequired from '../Authentication/useLoginRequired';
 import { useAcceptClickwrapAgreementMutation } from './mutations.generated';
 import { useClickwrapAgreementQuery } from './queries.generated';
+import { useParseCmsContent } from '../parseCmsContent';
 
 export default LoadQueryWrapper(useClickwrapAgreementQuery, function ClickwrapAgreement({ data }) {
   const { t } = useTranslation();
@@ -17,6 +17,7 @@ export default LoadQueryWrapper(useClickwrapAgreementQuery, function ClickwrapAg
   const { refresh } = useContext(AuthenticityTokensContext);
   const apolloClient = useApolloClient();
   const loginRequired = useLoginRequired();
+  const parseCmsContent = useParseCmsContent();
 
   const acceptClicked = async () => {
     try {

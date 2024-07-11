@@ -3,25 +3,20 @@ import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { Settings } from 'luxon';
 import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
-import { useAppRootQuery } from './appRootQueries.generated';
+import { useAppRootQuerySuspenseQuery } from './appRootQueries.generated';
 import AppRouter from './AppRouter';
 import AppRootContext from './AppRootContext';
-import useCachedLoadableValue from './useCachedLoadableValue';
 import PageComponents from './PageComponents';
-import parseCmsContent, { CMS_COMPONENT_MAP } from './parseCmsContent';
+import { CMS_COMPONENT_MAP, useParseCmsContent } from './parseCmsContent';
 import { timezoneNameForConvention } from './TimeUtils';
 import getI18n from './setupI18Next';
-import { lazyWithAppEntrypointHeadersCheck } from './checkAppEntrypointHeadersMatch';
 import { timespanFromConvention } from './TimespanUtils';
 import { LazyStripeContext } from './LazyStripe';
 import { Stripe } from '@stripe/stripe-js';
 import { Helmet } from 'react-helmet-async';
 import React from 'react';
 import { ScriptTag } from './parsePageContent';
-
-const NavigationBar = lazyWithAppEntrypointHeadersCheck(
-  () => import(/* webpackChunkName: 'navigation-bar' */ './NavigationBar'),
-);
+import NavigationBar from './NavigationBar';
 
 // Avoid unnecessary layout checks when moving between pages that can't change layout
 function normalizePathForLayout(path: string) {
@@ -41,7 +36,7 @@ function normalizePathForLayout(path: string) {
 function AppRoot(): JSX.Element {
   const location = useLocation();
   const navigate = useNavigate();
-  const { data, loading, error } = useAppRootQuery({
+  const { data, error } = useAppRootQuerySuspenseQuery({
     variables: { path: normalizePathForLayout(location.pathname) },
   });
 
@@ -49,8 +44,10 @@ function AppRoot(): JSX.Element {
   const [layoutChanged, setLayoutChanged] = useState(false);
   const [stripePromise, setStripePromise] = useState<Promise<Stripe | null> | null>(null);
 
+  const parseCmsContent = useParseCmsContent();
+
   const parsedCmsContent = useMemo(() => {
-    if (error || loading || !data) {
+    if (error) {
       return null;
     }
 
@@ -59,7 +56,7 @@ function AppRoot(): JSX.Element {
       AppRouter,
       NavigationBar,
     });
-  }, [data, error, loading]);
+  }, [data, error, parseCmsContent]);
 
   useEffect(() => {
     if (typeof Rollbar !== 'undefined') {
@@ -73,16 +70,15 @@ function AppRoot(): JSX.Element {
     }
   }, [data?.currentUser?.id]);
 
-  const cachedCmsContent = useCachedLoadableValue(loading, error, () => parsedCmsContent, [parsedCmsContent]);
   const [headComponentsWithoutScriptTags, headScriptTags] = useMemo(() => {
-    if (cachedCmsContent?.headComponents == null) {
+    if (parsedCmsContent?.headComponents == null) {
       return [[], []];
     }
 
     const nonScriptTags: React.ReactNode[] = [];
     const scriptTags: React.ReactNode[] = [];
 
-    React.Children.forEach(cachedCmsContent.headComponents, (child) => {
+    React.Children.forEach(parsedCmsContent.headComponents, (child) => {
       if (React.isValidElement(child) && child.type === ScriptTag) {
         scriptTags.push(child);
       } else {
@@ -91,46 +87,41 @@ function AppRoot(): JSX.Element {
     });
 
     return [nonScriptTags, scriptTags];
-  }, [cachedCmsContent?.headComponents]);
-  const appRootContextValue = useCachedLoadableValue(
-    loading,
-    error,
-    () =>
-      data
-        ? {
-            assumedIdentityFromProfile: data.assumedIdentityFromProfile,
-            cmsNavigationItems: data.cmsParentByRequestHost.cmsNavigationItems,
-            convention: data.convention,
-            conventionAcceptingProposals: data.convention?.accepting_proposals,
-            conventionCanceled: data.convention?.canceled,
-            conventionName: data.convention?.name,
-            conventionDomain: data.convention?.domain,
-            conventionTimespan: data?.convention ? timespanFromConvention(data.convention) : undefined,
-            currentAbility: data.currentAbility,
-            currentPendingOrder: data.convention?.my_profile?.current_pending_order,
-            currentUser: data.currentUser,
-            defaultCurrencyCode: data.convention?.default_currency_code ?? data.defaultCurrencyCode,
-            hasOAuthApplications: data.hasOauthApplications,
-            language: data.convention?.language ?? 'en',
-            myProfile: data.convention?.my_profile,
-            rootSiteName: data.rootSite?.site_name,
-            siteMode: data.convention?.site_mode,
-            signupMode: data.convention?.signup_mode,
-            supportedCurrencyCodes: data.supportedCurrencyCodes,
-            signupAutomationMode: data.convention?.signup_automation_mode,
-            ticketMode: data.convention?.ticket_mode,
-            ticketName: data.convention?.ticket_name,
-            ticketNamePlural: data.convention?.ticketNamePlural,
-            ticketTypes: data.convention?.ticket_types,
-            ticketsAvailableForPurchase: data.convention?.tickets_available_for_purchase,
-            timezoneName: timezoneNameForConvention(data.convention),
-          }
-        : undefined,
+  }, [parsedCmsContent?.headComponents]);
+  const appRootContextValue = useMemo(
+    () => ({
+      assumedIdentityFromProfile: data.assumedIdentityFromProfile,
+      cmsNavigationItems: data.cmsParentByRequestHost.cmsNavigationItems,
+      convention: data.convention,
+      conventionAcceptingProposals: data.convention?.accepting_proposals,
+      conventionCanceled: data.convention?.canceled,
+      conventionName: data.convention?.name,
+      conventionDomain: data.convention?.domain,
+      conventionTimespan: data?.convention ? timespanFromConvention(data.convention) : undefined,
+      currentAbility: data.currentAbility,
+      currentPendingOrder: data.convention?.my_profile?.current_pending_order,
+      currentUser: data.currentUser,
+      defaultCurrencyCode: data.convention?.default_currency_code ?? data.defaultCurrencyCode,
+      hasOAuthApplications: data.hasOauthApplications,
+      language: data.convention?.language ?? 'en',
+      myProfile: data.convention?.my_profile,
+      rootSiteName: data.rootSite?.site_name,
+      siteMode: data.convention?.site_mode,
+      signupMode: data.convention?.signup_mode,
+      supportedCurrencyCodes: data.supportedCurrencyCodes,
+      signupAutomationMode: data.convention?.signup_automation_mode,
+      ticketMode: data.convention?.ticket_mode,
+      ticketName: data.convention?.ticket_name,
+      ticketNamePlural: data.convention?.ticketNamePlural,
+      ticketTypes: data.convention?.ticket_types,
+      ticketsAvailableForPurchase: data.convention?.tickets_available_for_purchase,
+      timezoneName: timezoneNameForConvention(data.convention),
+    }),
     [data],
   );
 
   useEffect(() => {
-    if (!loading && !error && data && cachedCmsLayoutId !== data.cmsParentByRequestHost.effectiveCmsLayout.id) {
+    if (!error && cachedCmsLayoutId !== data.cmsParentByRequestHost.effectiveCmsLayout.id) {
       if (cachedCmsLayoutId) {
         // if the layout changed we need a full page reload to rerender the <head>
         setLayoutChanged(true);
@@ -139,11 +130,10 @@ function AppRoot(): JSX.Element {
         setCachedCmsLayoutId(data.cmsParentByRequestHost.effectiveCmsLayout.id);
       }
     }
-  }, [loading, error, cachedCmsLayoutId, data]);
+  }, [error, cachedCmsLayoutId, data]);
 
   useEffect(() => {
     if (
-      !loading &&
       !error &&
       data?.convention?.my_profile &&
       (data.convention.clickwrap_agreement || '').trim() !== '' &&
@@ -154,7 +144,7 @@ function AppRoot(): JSX.Element {
     ) {
       navigate('/clickwrap_agreement', { replace: true });
     }
-  }, [data, error, navigate, loading, location]);
+  }, [data, error, navigate, location]);
 
   useEffect(() => {
     if (appRootContextValue?.language) {
@@ -169,17 +159,8 @@ function AppRoot(): JSX.Element {
     return <></>;
   }
 
-  if (loading && !cachedCmsContent?.bodyComponents) {
-    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
-  }
-
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
-  }
-
-  if (!appRootContextValue) {
-    // we need to wait a render cycle for useCachedLoadableValue to do its thing
-    return <></>;
   }
 
   return (
@@ -203,7 +184,7 @@ function AppRoot(): JSX.Element {
               }}
             >
               <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
-                {cachedCmsContent?.bodyComponents}
+                {parsedCmsContent?.bodyComponents}
               </Suspense>
             </LazyStripeContext.Provider>
           }

@@ -401,11 +401,16 @@ export function parseDocument(
   return { bodyComponents, headComponents };
 }
 
-export default function parsePageContent(
+export type ParseContentFunction = (
   content: string,
-  componentMap: ComponentMap = DEFAULT_COMPONENT_MAP,
-): { bodyComponents: ReactNode; headComponents: ReactNode } {
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(content, 'text/html');
-  return parseDocument(doc, componentMap, Node, window);
+  componentMap?: ComponentMap,
+) => { bodyComponents: ReactNode; headComponents: ReactNode };
+
+export const ContentParserContext = React.createContext<ParseContentFunction>(() => ({
+  bodyComponents: <></>,
+  headComponents: <></>,
+}));
+
+export function useParseContent() {
+  return React.useContext(ContentParserContext);
 }

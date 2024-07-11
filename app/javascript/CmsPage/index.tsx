@@ -3,9 +3,9 @@ import { useNavigate, useLocation } from 'react-router-dom';
 
 import usePageTitle from '../usePageTitle';
 import { lazyWithAppEntrypointHeadersCheck } from '../checkAppEntrypointHeadersMatch';
-import parseCmsContent from '../parseCmsContent';
 import { useCmsPageQuery } from './queries.generated';
 import { LoadQueryWithVariablesWrapper } from '../GraphqlLoadingWrappers';
+import { useParseCmsContent } from '../parseCmsContent';
 
 const PageAdminDropdown = lazyWithAppEntrypointHeadersCheck(
   () => import(/* webpackChunkName: "page-admin-dropdown" */ './PageAdminDropdown'),
@@ -23,9 +23,10 @@ export default LoadQueryWithVariablesWrapper(
     const navigate = useNavigate();
     const location = useLocation();
     const lastHash = useRef('');
+    const parseCmsContent = useParseCmsContent();
     const content = useMemo(
       () => parseCmsContent(data.cmsParent.cmsPage.content_html).bodyComponents,
-      [data.cmsParent.cmsPage.content_html],
+      [data.cmsParent.cmsPage.content_html, parseCmsContent],
     );
 
     // from https://dev.to/mindactuate/scroll-to-anchor-element-with-react-router-v6-38op

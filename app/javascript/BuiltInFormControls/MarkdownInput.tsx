@@ -13,12 +13,12 @@ import { markdown } from '@codemirror/lang-markdown';
 import { useMemo } from 'react';
 import { Extension } from '@codemirror/state';
 
-import parsePageContent from '../parsePageContent';
 import { PreviewMarkdownQueryData, PreviewMarkdownQueryDocument } from './previewQueries.generated';
 import { ActiveStorageAttachment } from '../graphqlTypes.generated';
 import AddFileModal from './AddFileModal';
 import { Blob } from '@rails/activestorage';
 import MenuIcon from '../NavigationBar/MenuIcon';
+import { useParseContent } from '../parsePageContent';
 
 type AttachImageModalProps = {
   visible: boolean;
@@ -70,6 +70,7 @@ function MarkdownInput({ eventId, eventProposalId, imageAttachmentConfig, ...pro
     onChange: props.onChange,
   });
   const attachImageModal = useModal();
+  const parseContent = useParseContent();
 
   const addFile = (file: ActiveStorageAttachment) => {
     editorView.dispatch(editorView.state.replaceSelection(`![${file.filename}](${file.filename})`));
@@ -91,7 +92,7 @@ function MarkdownInput({ eventId, eventProposalId, imageAttachmentConfig, ...pro
             fetchPolicy: 'no-cache',
           });
 
-          return parsePageContent(response.data?.cmsParent.previewMarkdown ?? '').bodyComponents;
+          return parseContent(response.data?.cmsParent.previewMarkdown ?? '').bodyComponents;
         }}
         extraNavControls={
           <>

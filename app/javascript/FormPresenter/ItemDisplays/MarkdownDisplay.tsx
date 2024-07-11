@@ -1,6 +1,6 @@
 import { usePreviewMarkdownQuery } from '../../BuiltInFormControls/previewQueries.generated';
 import { LoadQueryWithVariablesWrapper } from '../../GraphqlLoadingWrappers';
-import parsePageContent from '../../parsePageContent';
+import { useParseContent } from '../../parsePageContent';
 import Spoiler from '../../Spoiler';
 import { FormResponse } from '../useFormResponse';
 
@@ -9,7 +9,8 @@ export type MarkdownDisplayProps = {
 };
 
 export default function MarkdownDisplay({ renderedMarkdown }: MarkdownDisplayProps): JSX.Element {
-  return <>{parsePageContent(renderedMarkdown ?? '', { Spoiler }).bodyComponents}</>;
+  const parseContent = useParseContent();
+  return <>{parseContent(renderedMarkdown ?? '', { Spoiler }).bodyComponents}</>;
 }
 
 export type UnrenderedMarkdownDisplayProps = {

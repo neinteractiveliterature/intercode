@@ -25,6 +25,7 @@ import useIntercodeApolloClient from './useIntercodeApolloClient';
 import MapboxContext, { useMapboxContext } from './MapboxContext';
 import getI18n from './setupI18Next';
 import RailsDirectUploadsContext from './RailsDirectUploadsContext';
+import { ComponentMap, ContentParserContext, DEFAULT_COMPONENT_MAP, parseDocument } from './parsePageContent';
 
 function I18NextWrapper({ children }: { children: (i18nInstance: i18n) => ReactNode }) {
   const [i18nInstance, seti18nInstance] = useState<i18n>();
@@ -129,6 +130,12 @@ export function AppWrapperInner<P extends JSX.IntrinsicAttributes>(
   return ConfirmWrapper;
 }
 
+function parseContent(content: string, componentMap: ComponentMap = DEFAULT_COMPONENT_MAP) {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(content, 'text/html');
+  return parseDocument(doc, componentMap, Node, window);
+}
+
 function BrowserAppWrapper<P extends JSX.IntrinsicAttributes & AppWrapperInnerProps>(
   WrappedComponent: React.ComponentType<P>,
 ): React.ComponentType<P> {
@@ -164,14 +171,16 @@ function BrowserAppWrapper<P extends JSX.IntrinsicAttributes & AppWrapperInnerPr
       <React.StrictMode>
         <AuthenticityTokensContext.Provider value={authenticityTokensProviderValue}>
           <ApolloProvider client={apolloClient}>
-            <BrowserRouter basename="/">
-              <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
-                <>
-                  {!unauthenticatedError && <Children {...props} />}
-                  <AuthenticationModal />
-                </>
-              </AuthenticationModalContext.Provider>
-            </BrowserRouter>
+            <ContentParserContext.Provider value={parseContent}>
+              <BrowserRouter basename="/">
+                <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
+                  <>
+                    {!unauthenticatedError && <Children {...props} />}
+                    <AuthenticationModal />
+                  </>
+                </AuthenticationModalContext.Provider>
+              </BrowserRouter>
+            </ContentParserContext.Provider>
           </ApolloProvider>
         </AuthenticityTokensContext.Provider>
       </React.StrictMode>

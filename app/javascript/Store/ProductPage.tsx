@@ -6,10 +6,10 @@ import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
 import ProductOrderForm from './ProductOrderForm';
 import SignInButton from '../Authentication/SignInButton';
 import usePageTitle from '../usePageTitle';
-import parseCmsContent from '../parseCmsContent';
 import { describeUserPricingStructure } from './describePricingStructure';
 import AppRootContext from '../AppRootContext';
 import { useOrderFormProductQuery } from './queries.generated';
+import { useParseCmsContent } from '../parseCmsContent';
 
 function useLoadProduct() {
   const { id } = useParams<{ id: string }>();
@@ -32,6 +32,7 @@ export default LoadQueryWrapper(
     const { t } = useTranslation();
     const { timezoneName } = useContext(AppRootContext);
     const navigate = useNavigate();
+    const parseCmsContent = useParseCmsContent();
 
     usePageTitle(product.name);
 

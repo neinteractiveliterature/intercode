@@ -1,5 +1,6 @@
+import { useCallback } from 'react';
 import { lazyWithAppEntrypointHeadersCheck } from './checkAppEntrypointHeadersMatch';
-import parsePageContent, { DEFAULT_COMPONENT_MAP, ComponentMap } from './parsePageContent';
+import { DEFAULT_COMPONENT_MAP, ComponentMap, useParseContent } from './parsePageContent';
 import CookieConsent from './UIComponents/CookieConsent';
 
 const AddToCalendarDropdown = lazyWithAppEntrypointHeadersCheck(
@@ -44,9 +45,11 @@ export const CMS_COMPONENT_MAP: ComponentMap = {
   WithdrawMySignupButton,
 };
 
-export default function parseCmsContent(
-  content: string,
-  componentMap = CMS_COMPONENT_MAP,
-): ReturnType<typeof parsePageContent> {
-  return parsePageContent(content, componentMap);
+export function useParseCmsContent() {
+  const parseContent = useParseContent();
+  const parseCmsContent = useCallback(
+    (content: string, componentMap: ComponentMap = CMS_COMPONENT_MAP) => parseContent(content, componentMap),
+    [parseContent],
+  );
+  return parseCmsContent;
 }

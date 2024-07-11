@@ -9,7 +9,6 @@ import {
   CodeInput,
   useStandardCodeMirror,
   UseStandardCodeMirrorExtensionsOptions,
-   
   liquid,
   LoadQueryWrapper,
 } from '@neinteractiveliterature/litform';
@@ -23,8 +22,6 @@ import {
   PreviewNotifierLiquidQueryDocument,
   PreviewLiquidQueryDocument,
 } from './previewQueries.generated';
-import parseCmsContent from '../parseCmsContent';
-import parsePageContent from '../parsePageContent';
 import AddFileModal from './AddFileModal';
 import { ActiveStorageAttachment } from '../graphqlTypes.generated';
 import {
@@ -34,6 +31,8 @@ import {
 } from '../CmsAdmin/CmsFilesAdmin/queries.generated';
 import { useCreateCmsFileMutation } from '../CmsAdmin/CmsFilesAdmin/mutations.generated';
 import { Blob } from '@rails/activestorage';
+import { useParseContent } from '../parsePageContent';
+import { useParseCmsContent } from '../parseCmsContent';
 
 type CreateCmsFileModalProps = {
   visible: boolean;
@@ -84,6 +83,8 @@ function LiquidInput(props: LiquidInputProps): JSX.Element {
   const client = useApolloClient();
   const { notifierEventKey } = props;
   const addFileModal = useModal();
+  const parseContent = useParseContent();
+  const parseCmsContent = useParseCmsContent();
 
   const languageExtension = useMemo(() => liquid({ baseLanguage: html({ matchClosingTags: false }).language }), []);
 
@@ -113,7 +114,7 @@ function LiquidInput(props: LiquidInputProps): JSX.Element {
             fetchPolicy: 'no-cache',
           });
 
-          return parsePageContent(response.data?.convention.previewLiquid ?? '', {}).bodyComponents;
+          return parseContent(response.data?.convention.previewLiquid ?? '', {}).bodyComponents;
         }
 
         const response = await client.query<PreviewLiquidQueryData>({
