@@ -15,12 +15,14 @@ import { useFormEditorQuery } from './queries.generated';
 import { FormType } from '../graphqlTypes.generated';
 import { useUpdateFormMutation } from './mutations.generated';
 import FourOhFourPage from '../FourOhFourPage';
+import { useTranslation } from 'react-i18next';
 
 function FormEditor(): JSX.Element {
   const params = useParams<{ id: string; sectionId?: string; itemId?: string }>();
   if (params.id == null) {
     throw new Error('id not found in URL params');
   }
+  const { t } = useTranslation();
   const { data, error, loading } = useFormEditorQuery({
     variables: {
       id: params.id,
@@ -91,11 +93,13 @@ function FormEditor(): JSX.Element {
       <div className="form-editor-top-navbar px-2 navbar navbar-light bg-warning-light">
         {params.itemId && currentSection ? (
           <Link to={`/admin_forms/${form.id}/edit/section/${currentSection.id}`} className="btn btn-secondary">
-            <i className="bi-chevron-left" /> Back to section
+            <i className="bi-chevron-left" />
+            {t('admin.forms.backToSection')}
           </Link>
         ) : (
           <Link to="/admin_forms" className="btn btn-secondary">
-            <i className="bi-chevron-left" /> Back to forms
+            <i className="bi-chevron-left" />
+            {t('admin.forms.backToForms')}
           </Link>
         )}
         <div className="flex-grow-1 ms-2">

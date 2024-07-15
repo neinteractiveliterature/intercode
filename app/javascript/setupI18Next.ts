@@ -38,15 +38,21 @@ const CodeSplitLoaderBackend: BackendModule<Record<string, never>> = {
   },
 };
 
+const localesVersion = typeof __webpack_hash__ === 'undefined' ? '' : __webpack_hash__;
+
 const initOptions: InitOptions<ChainedBackendOptions> = {
   backend: {
     backends: [LocalStorageBackend, CodeSplitLoaderBackend],
     backendOptions: [
-      {},
       {
         // 1 day
         expirationTime: 24 * 60 * 60 * 1000,
+        versions: {
+          en: localesVersion,
+          es: localesVersion,
+        },
       },
+      {},
     ],
   },
   defaultNS: 'translation',

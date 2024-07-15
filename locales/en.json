@@ -94,6 +94,11 @@
     "forms": {
       "addItem": "Add item",
       "addStaticText": "Add static text",
+      "backToForms": "Back to forms",
+      "backToSection": "Back to section",
+      "editFormItem": {
+        "previewHeader": "Preview"
+      },
       "newFormItem": {
         "customItemTypesHeader": "Custom item types",
         "deprecatedItemsHeader": "Deprecated items",

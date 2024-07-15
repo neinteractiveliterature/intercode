@@ -24,6 +24,7 @@ import {
   PreviewFormItemQueryDocument,
   PreviewFormItemQueryVariables,
 } from './queries.generated';
+import { useTranslation } from 'react-i18next';
 
 function addGeneratedIdsToFormItem(formItem: TypedFormItem): FormEditorFormItem {
   return {
@@ -34,6 +35,7 @@ function addGeneratedIdsToFormItem(formItem: TypedFormItem): FormEditorFormItem 
 }
 
 function FormItemEditorLayout(): JSX.Element {
+  const { t } = useTranslation();
   const params = useParams<{ itemId: string; id: string; sectionId: string }>();
   const navigate = useNavigate();
   const { convention, currentSection, form, formType, formTypeIdentifier, formItemsById } =
@@ -120,16 +122,14 @@ function FormItemEditorLayout(): JSX.Element {
         <FormItemTools saveFormItem={saveFormItem} />
       </nav>
       <div className="form-item-editor-preview bg-info-light">
-        <div className="bg-info text-white px-2 fw-bold">Preview</div>
+        <div className="bg-info text-white px-2 fw-bold">{t('admin.forms.editFormItem.previewHeader')}</div>
         <div className="glow-inset-info p-2 overflow-auto">
           {previewFormItem && (
             <FormItemInput
               convention={convention}
               formItem={previewFormItem}
               formTypeIdentifier={formTypeIdentifier}
-               
               onInteract={() => {}}
-               
               onChange={() => {}}
               value={previewFormItem.default_value}
               valueInvalid={false}
