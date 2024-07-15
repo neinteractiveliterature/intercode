@@ -1,4 +1,4 @@
-import React, { useState, useRef, useLayoutEffect, useEffect, HTMLAttributes } from 'react';
+import React, { useState, useRef, useEffect, HTMLAttributes } from 'react';
 import classnames from 'classnames';
 
 const COLLAPSE_DURATION = 350;
@@ -33,7 +33,7 @@ export default function useCollapse<T extends HTMLElement>(elementRef: React.Ref
     collapseTimeoutId.current = undefined;
   };
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!elementRef.current) {
       return;
     }
@@ -60,17 +60,14 @@ export default function useCollapse<T extends HTMLElement>(elementRef: React.Ref
         collapseTimeoutId.current = window.setTimeout(finishCollapse, COLLAPSE_DURATION);
       });
     }
-  }, [collapsed, elementRef, prevCollapsed]);
 
-  useEffect(
-    () => () => {
+    return () => {
       if (collapseTimeoutId.current) {
         clearTimeout(collapseTimeoutId.current);
         collapseTimeoutId.current = undefined;
       }
-    },
-    [],
-  );
+    };
+  }, [collapsed, elementRef, prevCollapsed]);
 
   const collapseProps = {
     className: classnames({

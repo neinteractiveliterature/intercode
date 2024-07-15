@@ -1,9 +1,9 @@
-import { Suspense, useMemo, useState, useEffect } from 'react';
+import { Suspense, useMemo, useState, useEffect, useDeferredValue } from 'react';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { Settings } from 'luxon';
 import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
-import { useAppRootQuerySuspenseQuery } from './appRootQueries.generated';
+import { AppRootQueryData, useAppRootQuerySuspenseQuery } from './appRootQueries.generated';
 import AppRouter from './AppRouter';
 import AppRootContext from './AppRootContext';
 import PageComponents from './PageComponents';
@@ -13,9 +13,6 @@ import getI18n from './setupI18Next';
 import { timespanFromConvention } from './TimespanUtils';
 import { LazyStripeContext } from './LazyStripe';
 import { Stripe } from '@stripe/stripe-js';
-import { Helmet } from 'react-helmet-async';
-import React from 'react';
-import { ScriptTag } from './parsePageContent';
 import NavigationBar from './NavigationBar';
 
 // Avoid unnecessary layout checks when moving between pages that can't change layout
@@ -33,12 +30,13 @@ function normalizePathForLayout(path: string) {
   return '/non_cms_path'; // arbitrary path that's not a CMS page
 }
 
-function AppRoot(): JSX.Element {
+type AppRootProps = {
+  data: AppRootQueryData;
+};
+
+function AppRoot({ data }: AppRootProps): JSX.Element {
   const location = useLocation();
   const navigate = useNavigate();
-  const { data, error } = useAppRootQuerySuspenseQuery({
-    variables: { path: normalizePathForLayout(location.pathname) },
-  });
 
   const [cachedCmsLayoutId, setCachedCmsLayoutId] = useState<string>();
   const [layoutChanged, setLayoutChanged] = useState(false);
@@ -47,16 +45,12 @@ function AppRoot(): JSX.Element {
   const parseCmsContent = useParseCmsContent();
 
   const parsedCmsContent = useMemo(() => {
-    if (error) {
-      return null;
-    }
-
     return parseCmsContent(data.cmsParentByRequestHost.effectiveCmsLayout.content_html ?? '', {
       ...CMS_COMPONENT_MAP,
       AppRouter,
       NavigationBar,
     });
-  }, [data, error, parseCmsContent]);
+  }, [data.cmsParentByRequestHost.effectiveCmsLayout.content_html, parseCmsContent]);
 
   useEffect(() => {
     if (typeof Rollbar !== 'undefined') {
@@ -70,24 +64,6 @@ function AppRoot(): JSX.Element {
     }
   }, [data?.currentUser?.id]);
 
-  const [headComponentsWithoutScriptTags, headScriptTags] = useMemo(() => {
-    if (parsedCmsContent?.headComponents == null) {
-      return [[], []];
-    }
-
-    const nonScriptTags: React.ReactNode[] = [];
-    const scriptTags: React.ReactNode[] = [];
-
-    React.Children.forEach(parsedCmsContent.headComponents, (child) => {
-      if (React.isValidElement(child) && child.type === ScriptTag) {
-        scriptTags.push(child);
-      } else {
-        nonScriptTags.push(child);
-      }
-    });
-
-    return [nonScriptTags, scriptTags];
-  }, [parsedCmsContent?.headComponents]);
   const appRootContextValue = useMemo(
     () => ({
       assumedIdentityFromProfile: data.assumedIdentityFromProfile,
@@ -121,7 +97,7 @@ function AppRoot(): JSX.Element {
   );
 
   useEffect(() => {
-    if (!error && cachedCmsLayoutId !== data.cmsParentByRequestHost.effectiveCmsLayout.id) {
+    if (cachedCmsLayoutId !== data.cmsParentByRequestHost.effectiveCmsLayout.id) {
       if (cachedCmsLayoutId) {
         // if the layout changed we need a full page reload to rerender the <head>
         setLayoutChanged(true);
@@ -130,11 +106,10 @@ function AppRoot(): JSX.Element {
         setCachedCmsLayoutId(data.cmsParentByRequestHost.effectiveCmsLayout.id);
       }
     }
-  }, [error, cachedCmsLayoutId, data]);
+  }, [cachedCmsLayoutId, data.cmsParentByRequestHost.effectiveCmsLayout.id]);
 
   useEffect(() => {
     if (
-      !error &&
       data?.convention?.my_profile &&
       (data.convention.clickwrap_agreement || '').trim() !== '' &&
       !data.convention.my_profile.accepted_clickwrap_agreement &&
@@ -144,7 +119,7 @@ function AppRoot(): JSX.Element {
     ) {
       navigate('/clickwrap_agreement', { replace: true });
     }
-  }, [data, error, navigate, location]);
+  }, [data, navigate, location]);
 
   useEffect(() => {
     if (appRootContextValue?.language) {
@@ -159,14 +134,9 @@ function AppRoot(): JSX.Element {
     return <></>;
   }
 
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
   return (
     <AppRootContext.Provider value={appRootContextValue}>
-      <Helmet>{headComponentsWithoutScriptTags}</Helmet>
-      {headScriptTags}
+      {parsedCmsContent?.headComponents}
       <Routes>
         <Route path="/admin_forms/:id/edit/*" element={<PageComponents.FormEditor />}>
           <Route path="section/:sectionId/item/:itemId" element={<PageComponents.FormItemEditorLayout />} />
@@ -194,4 +164,19 @@ function AppRoot(): JSX.Element {
   );
 }
 
-export default AppRoot;
+function AppRootLayoutLoader() {
+  const location = useLocation();
+  const pathForLayout = useMemo(() => normalizePathForLayout(location.pathname), [location.pathname]);
+  const deferredPathForLayout = useDeferredValue(pathForLayout);
+  const { data, error } = useAppRootQuerySuspenseQuery({
+    variables: { path: deferredPathForLayout },
+  });
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
+  }
+
+  return <AppRoot data={data} />;
+}
+
+export default AppRootLayoutLoader;

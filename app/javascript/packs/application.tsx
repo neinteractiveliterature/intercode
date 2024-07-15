@@ -8,8 +8,8 @@ const ssrHydratePropsJSON = document.body.getAttribute('data-intercode-ssr-hydra
 
 if (ssrHydratePropsJSON) {
   const ssrHydrateProps = JSON.parse(ssrHydratePropsJSON);
-  import('../AppShellContent').then(({ default: AppShellContent }) => {
-    hydrateRoot(document, <AppShellContent appRootContent={ssrHydrateProps.appRootContent} />);
+  import('../BrowserAppShell').then(({ default: BrowserAppShell }) => {
+    hydrateRoot(document, <BrowserAppShell appRootContent={ssrHydrateProps.appRootContent} />);
   });
 } else {
   mountReactComponents(components);

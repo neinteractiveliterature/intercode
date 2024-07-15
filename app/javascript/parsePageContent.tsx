@@ -407,8 +407,8 @@ export type ParseContentFunction = (
 ) => { bodyComponents: ReactNode; headComponents: ReactNode };
 
 export const ContentParserContext = React.createContext<ParseContentFunction>(() => ({
-  bodyComponents: <></>,
-  headComponents: <></>,
+  bodyComponents: <>Please specify a ContentParserContext</>,
+  headComponents: <>Please specify a ContentParserContext</>,
 }));
 
 export function useParseContent() {

@@ -49,6 +49,7 @@ export function getIntercodeUserTimezoneHeader() {
 
 export function useIntercodeApolloLink(
   authenticityToken: string,
+  uri: string,
   onUnauthenticatedRef?: RefObject<() => void>,
 ): ApolloLink {
   const AuthLink = useAuthHeadersLink(authenticityToken);
@@ -73,13 +74,17 @@ export function useIntercodeApolloLink(
   const ErrorHandlerLink = useErrorHandlerLink(onUnauthenticatedRef);
 
   // adapted from https://github.com/jaydenseric/apollo-upload-client/issues/63#issuecomment-392501449
-  const TerminatingLink = split(
-    isUpload,
-    createUploadLink({ uri: '/graphql', fetch }),
-    new BatchHttpLink({
-      uri: '/graphql',
-      fetch,
-    }),
+  const TerminatingLink = useMemo(
+    () =>
+      split(
+        isUpload,
+        createUploadLink({ uri, fetch }),
+        new BatchHttpLink({
+          uri,
+          fetch,
+        }),
+      ),
+    [uri],
   );
 
   const link = useMemo(
@@ -95,7 +100,7 @@ function useIntercodeApolloClient(
   onUnauthenticatedRef: RefObject<() => void>,
   queryData?: DataProxy.WriteQueryOptions<unknown, unknown>[],
 ): ApolloClient<NormalizedCacheObject> {
-  const link = useIntercodeApolloLink(authenticityToken, onUnauthenticatedRef);
+  const link = useIntercodeApolloLink(authenticityToken, '/graphql', onUnauthenticatedRef);
 
   const client = useMemo(() => {
     const client = new ApolloClient({

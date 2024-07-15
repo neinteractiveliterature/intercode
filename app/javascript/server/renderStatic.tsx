@@ -10,10 +10,12 @@ import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
 import { renderToPipeableStream } from 'react-dom/server';
 import AppShell from './AppShell';
 import { Request, Response } from 'express';
+import crossFetch from 'cross-fetch';
 
 export default async function renderStatic(req: Request, res: Response) {
   let didError = false;
   const isCrawler = isbot(req.headers['user-agent']);
+  const domain = (req.headers['host'] ?? '').replace(/:\d+$/, '');
   const client = new ApolloClient({
     ssrMode: true,
 
@@ -24,15 +26,15 @@ export default async function renderStatic(req: Request, res: Response) {
 
       headers: {
         cookie: req.headers['cookie'] ?? '',
-        host: req.headers['host'] ?? '',
+        host: domain,
         'user-agent': 'IntercodeSSR/1.0',
       },
+
+      fetch: crossFetch,
     }),
 
     cache: new InMemoryCache(),
   });
-
-  const domain = (req.headers['host'] ?? '').replace(/:\d+$/, '');
 
   const result = await client.query<GetAppLayoutContentQueryData, GetAppLayoutContentQueryVariables>({
     query: GetAppLayoutContentDocument,

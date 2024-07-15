@@ -1,5 +1,5 @@
 import AppRoot from '../AppRoot';
-import BrowserAppWrapper, { AppWrapperInnerProps } from '../AppWrapper';
+import { AppWrapperInnerProps, wrapBrowserApp } from '../AppWrapper';
 import { lazyWithAppEntrypointHeadersCheck } from '../checkAppEntrypointHeadersMatch';
 
 const LiquidDocs = lazyWithAppEntrypointHeadersCheck(
@@ -12,7 +12,7 @@ const unwrappedComponents: { [name: string]: React.ComponentType<JSX.IntrinsicAt
 };
 
 const wrappedComponents = Object.fromEntries(
-  Object.entries(unwrappedComponents).map(([key, value]) => [key, BrowserAppWrapper(value)]),
+  Object.entries(unwrappedComponents).map(([key, value]) => [key, wrapBrowserApp(value)]),
 );
 
 export default wrappedComponents;

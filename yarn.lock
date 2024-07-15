@@ -10208,6 +10208,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cross-fetch@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "cross-fetch@npm:4.0.0"
+  dependencies:
+    node-fetch: "npm:^2.6.12"
+  checksum: 10c0/386727dc4c6b044746086aced959ff21101abb85c43df5e1d151547ccb6f338f86dec3f28b9dbddfa8ff5b9ec8662ed2263ad4607a93b2dc354fb7fe3bbb898a
+  languageName: node
+  linkType: hard
+
 "cross-inspect@npm:1.0.0":
   version: 1.0.0
   resolution: "cross-inspect@npm:1.0.0"
@@ -17750,7 +17759,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mini-css-extract-plugin@npm:2.9.0, mini-css-extract-plugin@npm:^2.7.6":
+"mini-css-extract-plugin@npm:^2.7.6, mini-css-extract-plugin@npm:^2.9.0":
   version: 2.9.0
   resolution: "mini-css-extract-plugin@npm:2.9.0"
   dependencies:
@@ -18115,6 +18124,20 @@ __metadata:
     encoding:
       optional: true
   checksum: 10c0/fcae80f5ac52fbf5012f5e19df2bd3915e67d3b3ad51cb5942943df2238d32ba15890fecabd0e166876a9f98a581ab50f3f10eb942b09405c49ef8da36b826c7
+  languageName: node
+  linkType: hard
+
+"node-fetch@npm:^2.6.12":
+  version: 2.7.0
+  resolution: "node-fetch@npm:2.7.0"
+  dependencies:
+    whatwg-url: "npm:^5.0.0"
+  peerDependencies:
+    encoding: ^0.1.0
+  peerDependenciesMeta:
+    encoding:
+      optional: true
+  checksum: 10c0/b55786b6028208e6fbe594ccccc213cab67a72899c9234eb59dba51062a299ea853210fcf526998eaa2867b0963ad72338824450905679ff0fa304b8c5093ae8
   languageName: node
   linkType: hard
 
@@ -21490,6 +21513,7 @@ __metadata:
     compression-webpack-plugin: "npm:11.1.0"
     core-js: "npm:3.37.1"
     core-js-compat: "npm:3.37.1"
+    cross-fetch: "npm:^4.0.0"
     crypto-browserify: "npm:3.12.0"
     css-loader: "npm:7.1.2"
     css-minimizer-webpack-plugin: "npm:7.0.0"
@@ -21546,7 +21570,7 @@ __metadata:
     luxon: "npm:3.4.4"
     mapbox-gl: "npm:1.13.3"
     md5: "npm:2.3.0"
-    mini-css-extract-plugin: "npm:2.9.0"
+    mini-css-extract-plugin: "npm:^2.9.0"
     minimist: "npm:1.2.8"
     path-browserify: "npm:1.0.1"
     path-complete-extname: "npm:1.0.0"
