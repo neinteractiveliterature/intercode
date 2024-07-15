@@ -25,6 +25,7 @@ import {
   TypedFormItem,
 } from './FormItemUtils';
 import humanize from '../humanize';
+import { useTranslation } from 'react-i18next';
 
 const customItemTypes = Object.keys(FormItemDefaultProperties).filter((itemType) => itemType !== 'static_text');
 
@@ -54,6 +55,7 @@ function NewFormItemModal<FormType extends FormTypeDefinition>({
   createFormItem,
   formType,
 }: NewFormItemModalProps<FormType>): JSX.Element {
+  const { t } = useTranslation();
   const { form } = useContext(FormEditorContext);
   const [itemType, setItemType] = useState<TypedFormItem['item_type']>();
   const [standardItem, setStandardItem] = useState<StandardItem>();
@@ -147,13 +149,13 @@ function NewFormItemModal<FormType extends FormTypeDefinition>({
   return (
     <Modal visible={visible} dialogClassName="modal-xl">
       <div className="modal-header">
-        <h4 className="mb-0">Add item</h4>
+        <h4 className="mb-0">{t('admin.forms.addItem')}</h4>
       </div>
 
       <div className="modal-body">
         <div className="row mb-2">
           <div className="col-6">
-            <h5>Standard {formType.description} items</h5>
+            <h5>{t('admin.forms.newFormItem.standardItemsHeader', { formType: formType.description })}</h5>
 
             <section>
               {nonDeprecatedStandardItemsForDisplay.map((item) => (
@@ -179,7 +181,7 @@ function NewFormItemModal<FormType extends FormTypeDefinition>({
 
             {deprecatedStandardItemsForDisplay && (
               <section className="mt-3">
-                <h6>Deprecated items</h6>
+                <h6>{t('admin.forms.newFormItem.deprecatedItemsHeader')}</h6>
                 {deprecatedStandardItemsForDisplay.map((item) => (
                   <BootstrapFormCheckbox
                     key={item.identifier}
@@ -208,7 +210,7 @@ function NewFormItemModal<FormType extends FormTypeDefinition>({
             )}
           </div>
           <div className="col-6">
-            <h5>Custom item types</h5>
+            <h5>{t('admin.forms.newFormItem.customItemTypesHeader')}</h5>
 
             {customItemTypes.map((customItemType) => (
               <BootstrapFormCheckbox
@@ -237,7 +239,7 @@ function NewFormItemModal<FormType extends FormTypeDefinition>({
             onValueChange={(newValue: TypedFormItem['item_type']) => setItemType(newValue)}
           >
             <option aria-hidden value="">
-              Choose an item type...
+              {t('admin.forms.newFormItem.itemTypeSelectPlaceholder')}
             </option>
             {customItemTypes.map((customItemType) => (
               <option key={customItemType} value={customItemType}>
@@ -252,7 +254,7 @@ function NewFormItemModal<FormType extends FormTypeDefinition>({
 
       <div className="modal-footer">
         <button className="btn btn-secondary" type="button" onClick={close} disabled={createInProgress}>
-          Cancel
+          {t('buttons.cancel')}
         </button>
         <button
           className="btn btn-primary"
@@ -260,7 +262,7 @@ function NewFormItemModal<FormType extends FormTypeDefinition>({
           disabled={!dataComplete || createInProgress}
           onClick={addClicked}
         >
-          Add
+          {t('buttons.add')}
         </button>
       </div>
     </Modal>

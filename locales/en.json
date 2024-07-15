@@ -91,6 +91,21 @@
       "runsColumn": "Runs",
       "titleColumn": "Title"
     },
+    "forms": {
+      "addItem": "Add item",
+      "addStaticText": "Add static text",
+      "backToForms": "Back to forms",
+      "backToSection": "Back to section",
+      "editFormItem": {
+        "previewHeader": "Preview"
+      },
+      "newFormItem": {
+        "customItemTypesHeader": "Custom item types",
+        "deprecatedItemsHeader": "Deprecated items",
+        "itemTypeSelectPlaceholder": "Choose an item type...",
+        "standardItemsHeader": "Standard {{ formType }} items"
+      }
+    },
     "rooms": {
       "addRoomLabel": "Add room",
       "deleteConfirmation": "Are you sure you want to delete this room?",

@@ -25,8 +25,23 @@
         "required": true
       },
       "can_play_concurrently": {
+        "item_type": "multiple_choice",
         "description": "Can sign up for simultaneous events",
-        "required": true
+        "required": true,
+        "default_properties": {
+          "caption": "Can this event be played concurrently with other events?",
+          "style": "radio_horizontal",
+          "choices": [
+            {
+              "caption": "Yes",
+              "value": "true"
+            },
+            {
+              "caption": "No",
+              "value": "false"
+            }
+          ]
+        }
       },
       "description": {
         "description": "Full description",
@@ -87,8 +102,23 @@
         "required": true
       },
       "can_play_concurrently": {
+        "item_type": "multiple_choice",
         "description": "Can sign up for simultaneous events",
-        "required": true
+        "required": true,
+        "default_properties": {
+          "caption": "Can this event be played concurrently with other events?",
+          "style": "radio_horizontal",
+          "choices": [
+            {
+              "caption": "Yes",
+              "value": "true"
+            },
+            {
+              "caption": "No",
+              "value": "false"
+            }
+          ]
+        }
       },
       "timeblock_preferences": {
         "description": "Timeblock preferences",

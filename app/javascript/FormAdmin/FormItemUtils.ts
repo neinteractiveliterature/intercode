@@ -389,7 +389,6 @@ export function removeGeneratedIds<PropertiesType>(
       return {
         ...memo,
         [property]: value.map((item) => {
-           
           const { generatedId, ...otherItemProperties } = item;
           return otherItemProperties;
         }),
@@ -397,7 +396,6 @@ export function removeGeneratedIds<PropertiesType>(
     }
 
     return memo;
-     
   }, properties!) as PropertiesWithoutGeneratedIds<PropertiesType>;
 }
 
