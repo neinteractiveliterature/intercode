@@ -10,6 +10,7 @@ import { buildFormItemInput, mutationUpdaterForFormSection, ParsedFormItem } fro
 import NewFormItemModal from './NewFormItemModal';
 import { useCreateFormItemMutation } from './mutations.generated';
 import { FormEditorFormItemFieldsFragmentDoc, FormEditorQueryData } from './queries.generated';
+import { useTranslation } from 'react-i18next';
 
 type FormSectionEditorAddItemBarProps = {
   formSectionQueryData: FormEditorQueryData['convention']['form']['form_sections'][number];
@@ -22,6 +23,7 @@ function FormSectionEditorAddItemBar({
 }: FormSectionEditorAddItemBarProps): JSX.Element {
   const { form, formType } = useContext(FormEditorContext);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const [createFormItemMutate] = useCreateMutationWithReferenceArrayUpdater(
     useCreateFormItemMutation,
@@ -65,11 +67,11 @@ function FormSectionEditorAddItemBar({
   return (
     <div className="form-section-editor-add-item-bar bg-warning-light p-2 border-top border-warning">
       <button className="btn btn-sm btn-secondary me-2" type="button" onClick={newFormItemModal.open}>
-        Add item
+        {t('admin.forms.addItem')}
       </button>
 
       <button className="btn btn-sm btn-secondary" type="button" onClick={createStaticText}>
-        <i className="bi-paragraph" /> Add static text
+        <i className="bi-paragraph" /> {t('admin.forms.addStaticText')}
       </button>
 
       <NewFormItemModal
