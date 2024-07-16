@@ -11,6 +11,7 @@ import { useDeleteOrderEntryMutation } from '../../Store/mutations.generated';
 import { OrderPaymentModalContents, OrderPaymentModalContentsProps } from '../../Store/OrderPaymentModal';
 import { useHumanizeTime, useISODateTimeInAppZone } from '../../TimeUtils';
 import useAsyncFunction from '../../useAsyncFunction';
+import { useCurrentPendingOrderPaymentIntentClientSecretQuerySuspenseQuery } from '../../Store/queries.generated';
 
 export type EventTicketPurchaseModalProps = {
   visible: boolean;
@@ -36,6 +37,7 @@ export default function EventTicketPurchaseModal({
   const apolloClient = useApolloClient();
   const humanizeTime = useHumanizeTime();
   const expiresAt = useISODateTimeInAppZone(signup?.expires_at ?? '');
+  const { data, error } = useCurrentPendingOrderPaymentIntentClientSecretQuerySuspenseQuery();
 
   const cancel = async () => {
     if (orderEntry) {
@@ -52,6 +54,10 @@ export default function EventTicketPurchaseModal({
     close();
   };
 
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
+  }
+
   return (
     <Modal visible={visible} dialogClassName="modal-lg">
       <div className="modal-header">
@@ -67,7 +73,9 @@ export default function EventTicketPurchaseModal({
           </div>
         )}
         {orderEntry ? (
-          <LazyStripeElementsContainer>
+          <LazyStripeElementsContainer
+            options={{ clientSecret: data.convention.my_profile?.current_pending_order?.payment_intent_client_secret }}
+          >
             <OrderPaymentModalContents onCancel={cancelAsync} onComplete={complete} order={orderEntry.order} />
           </LazyStripeElementsContainer>
         ) : (
