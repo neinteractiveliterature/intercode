@@ -1,16 +1,14 @@
 import { useCallback } from 'react';
-import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
+import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
 import { useApolloClient } from '@apollo/client';
 import { PaymentIntent } from '@stripe/stripe-js';
 
 import { useSubmitOrderMutation } from './mutations.generated';
-import { PaymentDetails } from './OrderPaymentForm';
 import { PaymentMode } from '../graphqlTypes.generated';
 
 export default function useSubmitOrder(): (
   orderId: string,
   paymentMode: PaymentMode,
-  paymentDetails: PaymentDetails,
   paymentIntent?: PaymentIntent,
 ) => Promise<void> {
   const stripe = useStripe();
@@ -18,17 +16,12 @@ export default function useSubmitOrder(): (
   const apolloClient = useApolloClient();
   const [mutate] = useSubmitOrderMutation();
   const submitOrder = useCallback(
-    async (
-      orderId: string,
-      paymentMode: PaymentMode,
-      { stripeToken, paymentIntentId }: { stripeToken?: string; paymentIntentId?: string },
-    ) => {
+    async (orderId: string, paymentMode: PaymentMode, { paymentIntentId }: { paymentIntentId?: string }) => {
       await mutate({
         variables: {
           input: {
             id: orderId,
             payment_mode: paymentMode,
-            stripe_token: stripeToken,
             payment_intent_id: paymentIntentId,
           },
         },
@@ -39,7 +32,7 @@ export default function useSubmitOrder(): (
   );
 
   const submitCheckOutViaStripe = useCallback(
-    async (orderId: string, paymentMode: PaymentMode, paymentDetails: PaymentDetails) => {
+    async (orderId: string, paymentMode: PaymentMode) => {
       if (!stripe) {
         throw new Error('Stripe is not initialized');
       }
@@ -48,23 +41,22 @@ export default function useSubmitOrder(): (
         throw new Error('Stripe Elements is not initialized');
       }
 
-      const cardElement = elements.getElement(CardElement);
-      if (!cardElement) {
-        throw new Error('Could not find card element');
+      const paymentElement = elements.getElement(PaymentElement);
+      if (!paymentElement) {
+        throw new Error('Could not find payment element');
       }
 
-      const { token, error: tokenError } = await stripe.createToken(cardElement, {
-        name: paymentDetails.name,
-      });
-      if (tokenError) {
-        throw tokenError;
+      const { paymentIntent, error } = await stripe.confirmPayment({ elements, redirect: 'if_required' });
+
+      if (error) {
+        throw error;
       }
 
-      if (!token) {
-        throw new Error("Can't submit order without a Stripe token");
+      if (!paymentIntent) {
+        throw new Error("Can't submit order without a Stripe paymentIntent");
       }
 
-      await submitOrder(orderId, paymentMode, { stripeToken: token.id });
+      await submitOrder(orderId, paymentMode, { paymentIntentId: paymentIntent.id });
     },
     [stripe, submitOrder, elements],
   );
@@ -75,23 +67,13 @@ export default function useSubmitOrder(): (
   );
 
   return useCallback(
-    async (
-      orderId: string,
-      paymentMode: PaymentMode,
-      paymentDetails: PaymentDetails,
-      paymentIntent?: PaymentIntent,
-    ) => {
-      if (paymentMode === PaymentMode.Now) {
-        await submitCheckOutViaStripe(orderId, paymentMode, paymentDetails);
-      } else if (paymentMode === PaymentMode.PaymentIntent) {
-        if (!paymentIntent) {
-          throw new Error("Can't submit order without a payment intent");
-        }
-        await submitOrder(orderId, paymentMode, { paymentIntentId: paymentIntent.id });
+    async (orderId: string, paymentMode: PaymentMode) => {
+      if (paymentMode === PaymentMode.Now || paymentMode === PaymentMode.PaymentIntent) {
+        await submitCheckOutViaStripe(orderId, paymentMode);
       } else {
         await submitCheckOutWithoutStripe(orderId, paymentMode);
       }
     },
-    [submitCheckOutViaStripe, submitCheckOutWithoutStripe, submitOrder],
+    [submitCheckOutViaStripe, submitCheckOutWithoutStripe],
   );
 }

@@ -32,7 +32,7 @@ class Types::OrderType < Types::BaseObject
           amount: object.total_price.fractional,
           currency: object.total_price.currency,
           description: "#{description} for #{convention.name}",
-          statement_descriptor_suffix: PayOrderService.statement_descriptor_suffix(convention),
+          statement_descriptor_suffix: SubmitOrderService.statement_descriptor_suffix(convention),
           metadata: {
             order_id: object.id
           }
