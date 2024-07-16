@@ -154,12 +154,12 @@ jobs:
       - name: Read .ruby-version
         id: ruby-version
         run: echo "ruby-version=$(cat .ruby-version)" >> $GITHUB_OUTPUT
-      - name: Build (and push to registry, if on main)
+      - name: Build (and push to registry, if on v4-stable)
         uses: docker/build-push-action@v5
         with:
           context: .
-          push: ${{ github.event_name == 'push' && github.event.ref == 'refs/heads/main' }}
-          load: ${{ !(github.event_name == 'push' && github.event.ref == 'refs/heads/main') }}
+          push: ${{ github.event_name == 'push' && github.event.ref == 'refs/heads/v4-stable' }}
+          load: ${{ !(github.event_name == 'push' && github.event.ref == 'refs/heads/v4-stable') }}
           platforms: linux/amd64
           target: production
           tags: |
