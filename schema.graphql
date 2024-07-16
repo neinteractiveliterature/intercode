@@ -1112,11 +1112,39 @@ input ConventionInput {
   timezone_name: String
 }
 
+"""
+Reports that can be queried against a convention.
+"""
 type ConventionReports {
+  """
+  A report of all tickets provided by events at this convention.
+  """
   event_provided_tickets: [EventProvidedTicketList!]!
+
+  """
+  A report of events people signed up for along with which numbered choice they were for that person.
+  """
   events_by_choice: [EventWithChoiceCounts!]!
+
+  """
+  A breakdown of all product and ticket sales in this convention.
+  """
   sales_count_by_product_and_payment_amount: [SalesCountByProductAndPaymentAmount!]!
-  sum_revenue(orderStatuses: [OrderStatus!], productIds: [ID!]): Money!
+
+  """
+  The total revenue taken in by this convention, optionally filtered by various parameters.
+  """
+  sum_revenue(
+    """
+    If specified, only counts revenue from orders with these statuses.
+    """
+    orderStatuses: [OrderStatus!]
+
+    """
+    If specified, only counts revenue from these products.
+    """
+    productIds: [ID!]
+  ): Money!
   ticket_count_by_type_and_payment_amount: [TicketCountByTypeAndPaymentAmount!]! @deprecated(reason: "This only takes ticket sales into account.  Please use the sales_count_by_product_and_payment_amount field instead.")
   total_revenue: Money! @deprecated(reason: "This only takes ticket sales into account.  Please use the sum_revenue field instead.")
 }
@@ -1601,7 +1629,15 @@ input CreateFormInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
+
+  """
+  The properties for the form to create.
+  """
   form: FormInput!
+
+  """
+  The type of form to create.
+  """
   form_type: FormType!
 }
 
@@ -1636,6 +1672,10 @@ type CreateFormPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
+
+  """
+  The form that has just been created.
+  """
   form: Form!
 }
 
@@ -3480,6 +3520,10 @@ type Mutation {
     """
     input: CreateFillerEventInput!
   ): CreateFillerEventPayload!
+
+  """
+  Create a new form in a convention.
+  """
   createForm(
     """
     Parameters for CreateForm
@@ -4382,10 +4426,13 @@ type PayWhatYouWantValue {
   suggested_amount: Money
 }
 
+"""
+How should an order be paid for?
+"""
 enum PaymentMode {
   free
   later
-  now
+  now @deprecated(reason: "Please use payment_intent instead")
   payment_intent
 }
 
@@ -5631,7 +5678,6 @@ input SubmitOrderInput {
   id: ID
   payment_intent_id: String
   payment_mode: PaymentMode!
-  stripe_token: String
 }
 
 """

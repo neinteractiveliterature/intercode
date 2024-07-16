@@ -1,6 +1,13 @@
 # frozen_string_literal: true
 class SubmitOrderService < CivilService::Service
-  self.result_class = PayOrderService::Result
+  class Result < CivilService::Result
+    attr_accessor :card_error
+  end
+  self.result_class = Result
+
+  def self.statement_descriptor_suffix(convention)
+    convention.name.gsub(/[^0-9A-Za-z \-]/, "").slice(0, 22)
+  end
 
   validate :ensure_not_buying_duplicate_ticket
   validate :ensure_only_one_ticket
@@ -8,14 +15,13 @@ class SubmitOrderService < CivilService::Service
   validate :ensure_free_order_is_actually_free
   validate :check_ticket_provider_validity
 
-  attr_reader :order, :payment_mode, :stripe_token, :payment_intent_id
+  attr_reader :order, :payment_mode, :payment_intent_id
   delegate :user_con_profile, to: :order
   delegate :convention, to: :user_con_profile
 
-  def initialize(order, payment_mode:, stripe_token: nil, payment_intent_id: nil)
+  def initialize(order, payment_mode:, payment_intent_id: nil)
     @order = order
     @payment_mode = payment_mode
-    @stripe_token = stripe_token
     @payment_intent_id = payment_intent_id
   end
 
@@ -23,15 +29,12 @@ class SubmitOrderService < CivilService::Service
 
   def inner_call
     case payment_mode
-    when 'now'
-      order.update!(submitted_at: Time.zone.now)
-      PayOrderService.new(order, stripe_token).call!
-    when 'free'
-      order.update!(status: 'paid', submitted_at: Time.zone.now)
-    when 'payment_intent'
+    when "now", "payment_intent"
       update_order_from_payment_intent
+    when "free"
+      order.update!(status: "paid", submitted_at: Time.zone.now)
     else
-      order.update!(status: 'unpaid', submitted_at: Time.zone.now)
+      order.update!(status: "unpaid", submitted_at: Time.zone.now)
     end
 
     ticket_providers.each(&:call!)
@@ -40,10 +43,10 @@ class SubmitOrderService < CivilService::Service
 
   def update_order_from_payment_intent
     pi = Stripe::PaymentIntent.retrieve(payment_intent_id, stripe_account: convention.stripe_account_id)
-    if pi.status == 'succeeded'
+    if pi.status == "succeeded"
       charge = pi.charges.first
       order.update!(
-        status: 'paid',
+        status: "paid",
         payment_amount: order.total_price,
         payment_note:
           "Paid via Stripe on #{Time.at(charge.created).in_time_zone(convention.timezone)} (Charge ID #{charge.id})",
@@ -52,7 +55,7 @@ class SubmitOrderService < CivilService::Service
         submitted_at: Time.zone.now
       )
     else
-      order.update!(status: 'unpaid', submitted_at: Time.zone.now)
+      order.update!(status: "unpaid", submitted_at: Time.zone.now)
     end
   end
 
@@ -79,17 +82,17 @@ class SubmitOrderService < CivilService::Service
   end
 
   def ensure_free_order_is_actually_free
-    return unless payment_mode == 'free' && order.total_price.cents != 0
-    errors.add :base, 'Cannot use free payment mode on an order that costs money'
+    return unless payment_mode == "free" && order.total_price.cents != 0
+    errors.add :base, "Cannot use free payment mode on an order that costs money"
   end
 
   def ticket_providers
-    return [] if payment_mode == 'unpaid'
+    return [] if payment_mode == "unpaid"
 
     @ticket_providers ||=
       order.order_entries.flat_map do |order_entry|
         if order_entry.product.provides_ticket_type
-          [ProvideOrderEntryTicketService.new(order_entry, suppress_notifications: (payment_mode == 'now'))]
+          [ProvideOrderEntryTicketService.new(order_entry, suppress_notifications: (payment_mode == "now"))]
         else
           []
         end

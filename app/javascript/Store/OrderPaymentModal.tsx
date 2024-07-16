@@ -1,25 +1,19 @@
-import { useState, useCallback, useEffect, useMemo, useContext } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
-import { ApolloError, useApolloClient } from '@apollo/client';
-import { PaymentRequestButtonElement, useStripe } from '@stripe/react-stripe-js';
-import { PaymentRequest, PaymentRequestPaymentMethodEvent } from '@stripe/stripe-js';
-import { ErrorDisplay, MultipleChoiceInput, PageLoadingIndicator } from '@neinteractiveliterature/litform';
+import { ApolloError } from '@apollo/client';
+import { PaymentElement } from '@stripe/react-stripe-js';
+import { ErrorDisplay, MultipleChoiceInput } from '@neinteractiveliterature/litform';
 
-import OrderPaymentForm, { PaymentDetails } from './OrderPaymentForm';
-import paymentDetailsComplete from './paymentDetailsComplete';
 import { LazyStripeElementsContainer } from '../LazyStripe';
 import useAsyncFunction from '../useAsyncFunction';
 import useSubmitOrder from './useSubmitOrder';
 import formatMoney from '../formatMoney';
 import { Order, PaymentMode, Product } from '../graphqlTypes.generated';
-import {
-  CurrentPendingOrderPaymentIntentClientSecretQueryData,
-  CurrentPendingOrderPaymentIntentClientSecretQueryDocument,
-} from './queries.generated';
+import { useCurrentPendingOrderPaymentIntentClientSecretQuerySuspenseQuery } from './queries.generated';
 
 import PoweredByStripeLogo from '../images/powered_by_stripe.svg';
 import intersection from 'lodash/intersection';
-import AppRootContext from '../AppRootContext';
+import { useTranslation } from 'react-i18next';
 
 export type OrderPaymentModalContentsProps = {
   onCancel: () => void;
@@ -32,7 +26,7 @@ export type OrderPaymentModalContentsProps = {
 };
 
 export function OrderPaymentModalContents({ onCancel, onComplete, order }: OrderPaymentModalContentsProps) {
-  const { myProfile } = useContext(AppRootContext);
+  const { t } = useTranslation();
   const totalPrice = useMemo(() => order.total_price, [order.total_price]);
   const paymentOptions = useMemo(
     () => intersection(...(order.order_entries ?? []).map((entry) => entry.product.payment_options)),
@@ -41,108 +35,7 @@ export function OrderPaymentModalContents({ onCancel, onComplete, order }: Order
   const [paymentMode, setPaymentMode] = useState<PaymentMode | undefined>(
     paymentOptions.includes('pay_at_convention') ? undefined : PaymentMode.Now,
   );
-  const [paymentDetails, setPaymentDetails] = useState<PaymentDetails>({
-    name: myProfile?.name_without_nickname ?? '',
-  });
-  const stripe = useStripe();
-  const [paymentRequest, setPaymentRequest] = useState<PaymentRequest>();
-  const [awaitingPaymentRequestResult, setAwaitingPaymentRequestResult] = useState(false);
-  const [choseManualCardEntry, setChoseManualCardEntry] = useState(false);
-  const apolloClient = useApolloClient();
   const submitOrder = useSubmitOrder();
-
-  const onPaymentMethod = useCallback(
-    async (ev: PaymentRequestPaymentMethodEvent) => {
-      if (!stripe) {
-        throw new Error('Stripe not initialized');
-      }
-
-      const detailsFromEvent: PaymentDetails = {
-        name: ev.payerName ?? '',
-      };
-
-      let clientSecret = '';
-
-      try {
-        const { data } = await apolloClient.query<CurrentPendingOrderPaymentIntentClientSecretQueryData>({
-          query: CurrentPendingOrderPaymentIntentClientSecretQueryDocument,
-        });
-
-        const myProfile = data.convention.my_profile;
-        if (!myProfile) {
-          throw new Error('Must be logged in to check out');
-        }
-
-        const currentPendingOrder = myProfile.current_pending_order;
-        if (!currentPendingOrder) {
-          throw new Error('There is no order in progress');
-        }
-
-        clientSecret = currentPendingOrder.payment_intent_client_secret;
-      } catch (error) {
-        ev.complete('fail');
-      }
-
-      const { paymentIntent, error: confirmError } = await stripe.confirmCardPayment(
-        clientSecret,
-        { payment_method: ev.paymentMethod.id },
-        { handleActions: false },
-      );
-
-      if (confirmError || !paymentIntent) {
-        ev.complete('fail');
-      } else {
-        ev.complete('success');
-
-        if (paymentIntent.status === 'requires_action') {
-          const { error } = await stripe.confirmCardPayment(clientSecret);
-          if (error) {
-            throw new Error(error.message);
-          } else {
-            await submitOrder(order.id, PaymentMode.PaymentIntent, detailsFromEvent, paymentIntent);
-            onComplete();
-          }
-        } else {
-          await submitOrder(order.id, PaymentMode.PaymentIntent, detailsFromEvent, paymentIntent);
-          onComplete();
-        }
-      }
-    },
-    [apolloClient, onComplete, order.id, stripe, submitOrder],
-  );
-
-  useEffect(() => {
-    if (stripe && paymentMode === 'now' && totalPrice.fractional !== 0) {
-      setAwaitingPaymentRequestResult(true);
-
-      const pr = stripe.paymentRequest({
-        country: 'US',
-        currency: 'usd',
-        total: {
-          label: 'Total',
-          amount: totalPrice.fractional,
-        },
-        requestPayerName: true,
-        requestPayerEmail: true,
-        requestPayerPhone: false,
-        requestShipping: false,
-      });
-
-      pr.canMakePayment()
-        .then(async (result) => {
-          setAwaitingPaymentRequestResult(false);
-
-          if (result) {
-            setPaymentRequest(pr);
-
-            pr.on('paymentmethod', onPaymentMethod);
-          }
-        })
-        .catch(() => {
-          setAwaitingPaymentRequestResult(false);
-        });
-    }
-  }, [stripe, totalPrice, onPaymentMethod, paymentMode]);
 
   const [submitCheckOut, error, submitting] = useAsyncFunction(
     useCallback(async () => {
@@ -151,13 +44,13 @@ export function OrderPaymentModalContents({ onCancel, onComplete, order }: Order
         throw new Error('Could not determine payment mode to use');
       }
 
-      await submitOrder(order.id, actualPaymentMode, paymentDetails);
+      await submitOrder(order.id, actualPaymentMode);
       onComplete();
-    }, [onComplete, paymentMode, submitOrder, order.id, paymentDetails, totalPrice]),
+    }, [onComplete, paymentMode, submitOrder, order.id, totalPrice]),
     { suppressError: true },
   );
 
-  const disabled = !paymentMode || submitting || (paymentMode === 'now' && !paymentDetailsComplete(paymentDetails));
+  const disabled = !paymentMode || submitting;
 
   const renderCheckOutModalContent = () => {
     if (totalPrice.fractional === 0) {
@@ -176,8 +69,8 @@ export function OrderPaymentModalContents({ onCancel, onComplete, order }: Order
             setPaymentMode(newPaymentMode as PaymentMode);
           }}
           choices={[
-            { value: 'now', label: 'Pay now with a credit card' },
-            { value: 'later', label: 'Pay at the convention' },
+            { value: PaymentMode.PaymentIntent, label: 'Pay now with a credit card' },
+            { value: PaymentMode.Later, label: 'Pay at the convention' },
           ]}
         />
       );
@@ -186,31 +79,7 @@ export function OrderPaymentModalContents({ onCancel, onComplete, order }: Order
     return (
       <div className="modal-body">
         {paymentModeSelect}
-        {paymentMode === 'now' ? (
-          <>
-            {awaitingPaymentRequestResult ? (
-              <PageLoadingIndicator visible iconSet="bootstrap-icons" />
-            ) : (
-              <>
-                {(!paymentRequest || choseManualCardEntry) && (
-                  <OrderPaymentForm
-                    paymentDetails={paymentDetails}
-                    onChange={setPaymentDetails}
-                    disabled={submitting}
-                  />
-                )}
-                {paymentRequest && !choseManualCardEntry && (
-                  <>
-                    <PaymentRequestButtonElement options={{ paymentRequest }} />
-                    <button className="btn btn-link" type="button" onClick={() => setChoseManualCardEntry(true)}>
-                      Or, enter card details manually
-                    </button>
-                  </>
-                )}
-              </>
-            )}
-          </>
-        ) : null}
+        {paymentMode === PaymentMode.Now || PaymentMode.PaymentIntent ? <PaymentElement /> : null}
         <ErrorDisplay graphQLError={error as ApolloError} />
       </div>
     );
@@ -228,13 +97,11 @@ export function OrderPaymentModalContents({ onCancel, onComplete, order }: Order
             ) : null}
           </div>
           <button type="button" className="btn btn-secondary me-2" onClick={onCancel} disabled={submitting}>
-            Cancel
+            {t('buttons.cancel')}
           </button>
-          {awaitingPaymentRequestResult || (paymentRequest && !choseManualCardEntry) ? null : (
-            <button type="button" className="btn btn-primary" onClick={submitCheckOut} disabled={disabled}>
-              {totalPrice.fractional === 0 ? 'Submit order (free)' : `Pay ${formatMoney(totalPrice)}`}
-            </button>
-          )}
+          <button type="button" className="btn btn-primary" onClick={submitCheckOut} disabled={disabled}>
+            {totalPrice.fractional === 0 ? 'Submit order (free)' : `Pay ${formatMoney(totalPrice)}`}
+          </button>
         </div>
       </div>
     </>
@@ -247,10 +114,18 @@ export type OrderPaymentModalProps = Omit<OrderPaymentModalContentsProps, 'order
 };
 
 function OrderPaymentModal({ visible, onCancel, onComplete, order }: OrderPaymentModalProps): JSX.Element {
+  const { data, error } = useCurrentPendingOrderPaymentIntentClientSecretQuerySuspenseQuery();
+
+  if (error) {
+    return <ErrorDisplay graphQLError={error} />;
+  }
+
   return (
     <Modal visible={visible && order != null} dialogClassName="modal-lg">
       {visible && order != null && (
-        <LazyStripeElementsContainer>
+        <LazyStripeElementsContainer
+          options={{ clientSecret: data.convention.my_profile?.current_pending_order?.payment_intent_client_secret }}
+        >
           <OrderPaymentModalContents onCancel={onCancel} onComplete={onComplete} order={order} />
         </LazyStripeElementsContainer>
       )}
