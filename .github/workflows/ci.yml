@@ -23,7 +23,7 @@ jobs:
         run: bin/rails graphql:schema:dump
       - uses: kamilkisiela/graphql-inspector@master
         with:
-          schema: 'main:schema.graphql'
+          schema: 'v4-stable:schema.graphql'
           approve-label: major
   graphql-codegen-tsc:
     name: graphql-codegen-tsc
@@ -174,13 +174,13 @@ jobs:
           -e AWS_S3_BUCKET=fakebucket
           ghcr.io/neinteractiveliterature/intercode:${{ github.sha }}
           bin/rails runner 'puts "Hello, world!"'
-      - name: Build assets only (and push to registry, if on main)
+      - name: Build assets only (and push to registry, if on v4-stable)
         uses: docker/build-push-action@v5
-        if: github.event_name == 'push' && github.event.ref == 'refs/heads/main'
+        if: github.event_name == 'push' && github.event.ref == 'refs/heads/v4-stable'
         with:
           context: .
           file: Dockerfile.assets
-          push: ${{ github.event_name == 'push' && github.event.ref == 'refs/heads/main' }}
+          push: ${{ github.event_name == 'push' && github.event.ref == 'refs/heads/v4-stable' }}
           platforms: linux/amd64
           tags: |
             ghcr.io/neinteractiveliterature/intercode-assets:${{ github.sha }}
