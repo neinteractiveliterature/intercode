@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, ReactNode, useLayoutEffect } from 'react';
 import { loadStripe } from '@stripe/stripe-js/pure';
-import type { Stripe } from '@stripe/stripe-js';
+import type { Stripe, StripeElementsOptions } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -44,12 +44,22 @@ function useLazyStripe() {
   return [stripePromise, loadError] as const;
 }
 
-export function LazyStripeElementsContainer({ children }: { children: ReactNode }): JSX.Element {
+export function LazyStripeElementsContainer({
+  children,
+  options,
+}: {
+  children: ReactNode;
+  options: StripeElementsOptions | undefined;
+}): JSX.Element {
   const [stripePromise, loadError] = useLazyStripe();
 
   if (loadError) {
     return <ErrorDisplay stringError={loadError.message} />;
   }
 
-  return <Elements stripe={stripePromise}>{children}</Elements>;
+  return (
+    <Elements stripe={stripePromise} options={options}>
+      {children}
+    </Elements>
+  );
 }

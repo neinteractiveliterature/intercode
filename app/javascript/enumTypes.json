@@ -182,7 +182,7 @@
   "PaymentMode": {
     "kind": "ENUM",
     "name": "PaymentMode",
-    "description": null,
+    "description": "How should an order be paid for?",
     "interfaces": null,
     "possibleTypes": null,
     "fields": null,
@@ -191,8 +191,8 @@
       {
         "name": "now",
         "description": null,
-        "isDeprecated": false,
-        "deprecationReason": null
+        "isDeprecated": true,
+        "deprecationReason": "Please use payment_intent instead"
       },
       {
         "name": "later",

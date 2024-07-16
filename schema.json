@@ -6827,13 +6827,13 @@
         {
           "kind": "OBJECT",
           "name": "ConventionReports",
-          "description": null,
+          "description": "Reports that can be queried against a convention.",
           "interfaces": [],
           "possibleTypes": null,
           "fields": [
             {
               "name": "event_provided_tickets",
-              "description": null,
+              "description": "A report of all tickets provided by events at this convention.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -6857,7 +6857,7 @@
             },
             {
               "name": "events_by_choice",
-              "description": null,
+              "description": "A report of events people signed up for along with which numbered choice they were for that person.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -6881,7 +6881,7 @@
             },
             {
               "name": "sales_count_by_product_and_payment_amount",
-              "description": null,
+              "description": "A breakdown of all product and ticket sales in this convention.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -6905,7 +6905,7 @@
             },
             {
               "name": "sum_revenue",
-              "description": null,
+              "description": "The total revenue taken in by this convention, optionally filtered by various parameters.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -6919,28 +6919,8 @@
               "deprecationReason": null,
               "args": [
                 {
-                  "name": "productIds",
-                  "description": null,
-                  "type": {
-                    "kind": "LIST",
-                    "name": null,
-                    "ofType": {
-                      "kind": "NON_NULL",
-                      "name": null,
-                      "ofType": {
-                        "kind": "SCALAR",
-                        "name": "ID",
-                        "ofType": null
-                      }
-                    }
-                  },
-                  "defaultValue": null,
-                  "isDeprecated": false,
-                  "deprecationReason": null
-                },
-                {
                   "name": "orderStatuses",
-                  "description": null,
+                  "description": "If specified, only counts revenue from orders with these statuses.",
                   "type": {
                     "kind": "LIST",
                     "name": null,
@@ -6950,6 +6930,26 @@
                       "ofType": {
                         "kind": "ENUM",
                         "name": "OrderStatus",
+                        "ofType": null
+                      }
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                },
+                {
+                  "name": "productIds",
+                  "description": "If specified, only counts revenue from these products.",
+                  "type": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": {
+                        "kind": "SCALAR",
+                        "name": "ID",
                         "ofType": null
                       }
                     }
@@ -9034,7 +9034,7 @@
             },
             {
               "name": "form",
-              "description": null,
+              "description": "The properties for the form to create.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -9050,7 +9050,7 @@
             },
             {
               "name": "form_type",
-              "description": null,
+              "description": "The type of form to create.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -9178,7 +9178,7 @@
             },
             {
               "name": "form",
-              "description": null,
+              "description": "The form that has just been created.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -19213,7 +19213,7 @@
             },
             {
               "name": "createForm",
-              "description": null,
+              "description": "Create a new form in a convention.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -24958,7 +24958,7 @@
         {
           "kind": "ENUM",
           "name": "PaymentMode",
-          "description": null,
+          "description": "How should an order be paid for?",
           "interfaces": null,
           "possibleTypes": null,
           "fields": null,
@@ -24967,8 +24967,8 @@
             {
               "name": "now",
               "description": null,
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "Please use payment_intent instead"
             },
             {
               "name": "later",
@@ -32800,18 +32800,6 @@
                   "name": "PaymentMode",
                   "ofType": null
                 }
-              },
-              "defaultValue": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "stripe_token",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
               },
               "defaultValue": null,
               "isDeprecated": false,
