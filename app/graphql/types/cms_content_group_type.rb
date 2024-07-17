@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 class Types::CmsContentGroupType < Types::BaseObject
+  field :contents, [Types::CmsContentType], null: false
+  field :current_ability_can_delete, Boolean, null: false
+  field :current_ability_can_update, Boolean, null: false
   field :id, ID, null: false
   field :name, String, null: false
-  field :contents, [Types::CmsContentType], null: false
   field :permissions, [Types::PermissionType], null: false
-  field :current_ability_can_update, Boolean, null: false
-  field :current_ability_can_delete, Boolean, null: false
 
   def current_ability_can_update
     dataloader.with(Sources::ModelPermission, CmsContentGroup).load([pundit_user, :update, object.id])

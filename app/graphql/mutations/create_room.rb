@@ -8,6 +8,6 @@ class Mutations::CreateRoom < Mutations::BaseMutation
   def resolve(**args)
     room = convention.rooms.create!(args[:room].to_h)
 
-    { room: room }
+    { room: }
   end
 end

@@ -9,7 +9,7 @@ class Sources::Markdown < GraphQL::Dataloader::Source
   end
 
   def fetch(keys)
-    presenter = MarkdownPresenter.new(default_content, controller: controller)
+    presenter = MarkdownPresenter.new(default_content, controller:)
 
     render_proc_by_cache_key =
       keys.each_with_object({}) do |(object_cache_key, markdown, local_images), hash|

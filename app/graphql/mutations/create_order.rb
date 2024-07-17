@@ -4,10 +4,10 @@ class Mutations::CreateOrder < Mutations::BaseMutation
 
   field :order, Types::OrderType, null: false
 
-  argument :user_con_profile_id, ID, required: false, camelize: true
   argument :order, Types::OrderInputType, required: true
-  argument :status, Types::OrderStatusType, required: true
   argument :order_entries, [Types::OrderEntryInputType], required: false, camelize: false
+  argument :status, Types::OrderStatusType, required: true
+  argument :user_con_profile_id, ID, required: false, camelize: true
 
   attr_reader :order
 
@@ -19,7 +19,7 @@ class Mutations::CreateOrder < Mutations::BaseMutation
 
   # rubocop:disable Metrics/AbcSize
   def resolve(**args)
-    raise GraphQL::ExecutionError, 'Cannot create pending orders' if args[:status] == 'pending'
+    raise GraphQL::ExecutionError, "Cannot create pending orders" if args[:status] == "pending"
 
     order_attrs = args[:order].to_h.merge(status: args[:status], submitted_at: Time.zone.now)
     if order_attrs[:payment_amount]
@@ -36,11 +36,11 @@ class Mutations::CreateOrder < Mutations::BaseMutation
       next unless order_entry_input.ticket_id
 
       ticket = Ticket.where(user_con_profile_id: @order.user_con_profile.id).find(order_entry_input.ticket_id)
-      ticket.update!(order_entry: order_entry)
+      ticket.update!(order_entry:)
       order_entry.tickets.reload
     end
 
-    { order: order }
+    { order: }
   end
   # rubocop:enable Metrics/AbcSize
 end

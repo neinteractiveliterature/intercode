@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 class Mutations::ConvertTicketToEventProvided < Mutations::BaseMutation
-  field :deleted_ticket, Types::TicketType, 'The ticket we deleted in order to provide a new ticket', null: false
+  field :deleted_ticket, Types::TicketType, "The ticket we deleted in order to provide a new ticket", null: false
   field :refund_status, Types::RefundStatusType, null: false
-  field :ticket, Types::TicketType, 'The new ticket we just provided', null: false
+  field :ticket, Types::TicketType, "The new ticket we just provided", null: false
 
   argument :event_id, ID, required: false, camelize: true
   argument :ticket_type_id, ID, required: false, camelize: true
@@ -13,7 +13,7 @@ class Mutations::ConvertTicketToEventProvided < Mutations::BaseMutation
   define_authorization_check do |args|
     @event = convention.events.find(args[:event_id])
     @subject_profile = convention.user_con_profiles.find(args[:user_con_profile_id])
-    policy(user_con_profile.ticket).destroy? && policy(TeamMember.new(event: event)).update?
+    policy(user_con_profile.ticket).destroy? && policy(TeamMember.new(event:)).update?
   end
 
   def resolve(**args)
@@ -26,7 +26,7 @@ class Mutations::ConvertTicketToEventProvided < Mutations::BaseMutation
         ticket: existing_ticket,
         whodunit: user_con_profile,
         refund: existing_ticket.order_entry.present?,
-        operation_name: 'conversion to event-provided ticket'
+        operation_name: "conversion to event-provided ticket"
       ).call!
     subject_profile.reload
     result = ProvideEventTicketService.new(event, subject_profile, ticket_type).call!

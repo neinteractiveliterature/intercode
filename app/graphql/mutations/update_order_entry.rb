@@ -12,6 +12,6 @@ class Mutations::UpdateOrderEntry < Mutations::BaseMutation
   def resolve(**args)
     order_entry.update!(process_order_entry_input(args[:order_entry], order_entry))
 
-    { order_entry: order_entry }
+    { order_entry: }
   end
 end

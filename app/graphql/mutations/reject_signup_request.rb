@@ -7,8 +7,8 @@ class Mutations::RejectSignupRequest < Mutations::BaseMutation
   load_and_authorize_model_with_id SignupRequest, :id, :reject
 
   def resolve(**_args)
-    signup_request.update!(state: 'rejected')
+    signup_request.update!(state: "rejected")
 
-    { signup_request: signup_request }
+    { signup_request: }
   end
 end

@@ -8,6 +8,6 @@ class Mutations::DeleteRun < Mutations::BaseMutation
 
   def resolve(**_args)
     run.destroy!
-    { run: run }
+    { run: }
   end
 end

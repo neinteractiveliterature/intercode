@@ -9,6 +9,6 @@ class Mutations::CreatePage < Mutations::BaseMutation
   def resolve(**args)
     page = cms_parent.pages.create!(args[:page].to_h)
 
-    { page: page }
+    { page: }
   end
 end

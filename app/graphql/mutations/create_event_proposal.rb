@@ -2,8 +2,8 @@
 class Mutations::CreateEventProposal < Mutations::BaseMutation
   field :event_proposal, Types::EventProposalType, null: false
 
-  argument :event_category_id, ID, required: false, camelize: true
   argument :clone_event_proposal_id, ID, required: false, camelize: true
+  argument :event_category_id, ID, required: false, camelize: true
 
   authorize_create_convention_associated_model :event_proposals
 
@@ -16,13 +16,13 @@ class Mutations::CreateEventProposal < Mutations::BaseMutation
     raise "#{event_category.name} is not a proposable event category" unless event_category.event_proposal_form
 
     event_proposal = context[:convention].event_proposals.new
-    event_proposal.assign_attributes(owner: context[:user_con_profile], status: 'draft', event_category: event_category)
+    event_proposal.assign_attributes(owner: context[:user_con_profile], status: "draft", event_category:)
     event_proposal.assign_default_values_from_form_items(event_proposal.event_category.event_proposal_form.form_items)
 
     clone_attributes_from_event_proposal_id(clone_event_proposal_id, event_proposal)
     event_proposal.save!
 
-    { event_proposal: event_proposal }
+    { event_proposal: }
   end
 
   def clone_attributes_from_event_proposal_id(id, event_proposal)
@@ -40,7 +40,7 @@ class Mutations::CreateEventProposal < Mutations::BaseMutation
 
   def compatible_items_from_template(template_form, proposal_form)
     template_form.form_items.select do |template_item|
-      next false if template_item.identifier == 'event_email' # never copy event email
+      next false if template_item.identifier == "event_email" # never copy event email
 
       proposal_form_item = proposal_form.form_items.find { |item| item.identifier == template_item.identifier }
       next false unless proposal_form_item

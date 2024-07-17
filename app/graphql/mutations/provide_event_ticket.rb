@@ -14,14 +14,12 @@ class Mutations::ProvideEventTicket < Mutations::BaseMutation
     @subject_profile = convention.user_con_profiles.find(args[:user_con_profile_id])
 
     self.class.return_true_or_not_authorized_error(
-      policy(TeamMember.new(event: event)).update?,
+      policy(TeamMember.new(event:)).update?,
       current_user,
       message: "You are not authorized to update team members in this event."
     )
     self.class.return_true_or_not_authorized_error(
-      policy(
-        Ticket.new(ticket_type: ticket_type, user_con_profile: subject_profile, provided_by_event: event)
-      ).provide?,
+      policy(Ticket.new(ticket_type:, user_con_profile: subject_profile, provided_by_event: event)).provide?,
       current_user,
       message:
         "You are not authorized to provide #{ticket_type.description} \

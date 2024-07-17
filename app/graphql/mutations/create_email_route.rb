@@ -9,6 +9,6 @@ class Mutations::CreateEmailRoute < Mutations::BaseMutation
   def resolve(**args)
     email_route = EmailRoute.create!(args[:email_route].to_h)
 
-    { email_route: email_route }
+    { email_route: }
   end
 end

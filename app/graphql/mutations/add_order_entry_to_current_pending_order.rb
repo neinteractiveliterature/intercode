@@ -20,7 +20,7 @@ class Mutations::AddOrderEntryToCurrentPendingOrder < Mutations::BaseMutation
       order
         .order_entries
         .find_or_initialize_by(
-          product: product,
+          product:,
           product_variant_id: order_entry.product_variant_id,
           run_id: order_entry.run_id
         ) { |entry| entry.quantity = 0 }

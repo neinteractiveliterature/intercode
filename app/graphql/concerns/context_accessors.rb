@@ -42,10 +42,10 @@ module ContextAccessors
 
     cms_content_finder = CmsContentFinder.new(convention)
     cms_content_finder.cms_rendering_context(
-      path: path,
+      path:,
       controller: context[:controller],
       user: context[:current_user],
-      user_con_profile: user_con_profile,
+      user_con_profile:,
       timezone: context[:timezone_for_request]
     )
   end

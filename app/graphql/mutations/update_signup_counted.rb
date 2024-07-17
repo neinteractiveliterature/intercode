@@ -2,8 +2,8 @@
 class Mutations::UpdateSignupCounted < Mutations::BaseMutation
   field :signup, Types::SignupType, null: false
 
-  argument :id, ID, required: false
   argument :counted, Boolean, required: true
+  argument :id, ID, required: false
 
   load_and_authorize_convention_associated_model :signups, :id, :update_counted
 
@@ -14,6 +14,6 @@ class Mutations::UpdateSignupCounted < Mutations::BaseMutation
       EventVacancyFillService.new(signup.run, signup.bucket_key).call!
     end
 
-    { signup: signup }
+    { signup: }
   end
 end

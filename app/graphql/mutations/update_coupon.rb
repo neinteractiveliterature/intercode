@@ -2,8 +2,8 @@
 class Mutations::UpdateCoupon < Mutations::BaseMutation
   field :coupon, Types::CouponType, null: false
 
-  argument :id, ID, required: false
   argument :coupon, Types::CouponInputType, required: true
+  argument :id, ID, required: false
 
   load_and_authorize_convention_associated_model :coupons, :id, :update
 
@@ -16,6 +16,6 @@ class Mutations::UpdateCoupon < Mutations::BaseMutation
 
     coupon.update!(coupon_fields)
 
-    { coupon: coupon }
+    { coupon: }
   end
 end

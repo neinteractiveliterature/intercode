@@ -14,7 +14,7 @@ class Mutations::CreateConventionStripeAccount < Mutations::BaseMutation
  the associated Stripe account, please contact the site administrators."
     end
 
-    account = Stripe::Account.create({ type: 'standard' })
+    account = Stripe::Account.create({ type: "standard" })
     convention.update!(stripe_account_id: account.id)
 
     { stripe_account: account }

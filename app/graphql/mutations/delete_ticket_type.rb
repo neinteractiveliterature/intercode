@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Mutations::DeleteTicketType < Mutations::BaseMutation
-  graphql_name 'DeleteTicketType'
+  graphql_name "DeleteTicketType"
 
   field :ticket_type, Types::TicketTypeType, null: false
 
@@ -21,6 +21,6 @@ class Mutations::DeleteTicketType < Mutations::BaseMutation
 
     ticket_type.destroy!
 
-    { ticket_type: ticket_type }
+    { ticket_type: }
   end
 end

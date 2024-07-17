@@ -29,6 +29,6 @@ class Mutations::UpdateProduct < Mutations::BaseMutation
 
     product.update!(product_fields)
 
-    { product: product }
+    { product: }
   end
 end

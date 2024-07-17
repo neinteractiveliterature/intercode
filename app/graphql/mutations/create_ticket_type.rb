@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 class Mutations::CreateTicketType < Mutations::BaseMutation
-  graphql_name 'CreateTicketType'
+  graphql_name "CreateTicketType"
 
   field :ticket_type, Types::TicketTypeType, null: false
 
-  argument :ticket_type, Types::TicketTypeInputType, required: true, camelize: false
   argument :event_id, ID, required: false
+  argument :ticket_type, Types::TicketTypeInputType, required: true, camelize: false
 
   define_authorization_check do |**args|
     if args[:event_id]
@@ -24,6 +24,6 @@ class Mutations::CreateTicketType < Mutations::BaseMutation
         convention.ticket_types.create!(args[:ticket_type].to_h)
       end
 
-    { ticket_type: ticket_type }
+    { ticket_type: }
   end
 end

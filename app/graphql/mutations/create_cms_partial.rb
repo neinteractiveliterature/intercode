@@ -9,6 +9,6 @@ class Mutations::CreateCmsPartial < Mutations::BaseMutation
   def resolve(**args)
     cms_partial = cms_parent.cms_partials.create!(args[:cms_partial].to_h)
 
-    { cms_partial: cms_partial }
+    { cms_partial: }
   end
 end

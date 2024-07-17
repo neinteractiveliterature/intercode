@@ -7,15 +7,15 @@ class Mutations::MarkOrderPaid < Mutations::BaseMutation
   load_and_authorize_model_with_id Order, :id, :update
 
   def resolve(**_args)
-    raise "Order is #{order.status}" unless order.status == 'unpaid'
+    raise "Order is #{order.status}" unless order.status == "unpaid"
 
     order.update!(
-      status: 'paid',
+      status: "paid",
       payment_note:
         "Marked as paid by #{user_con_profile.name_without_nickname} \
-on #{Time.now.in_time_zone(convention.timezone).strftime('%B %-d, %Y at %l:%M%P')}"
+on #{Time.now.in_time_zone(convention.timezone).strftime("%B %-d, %Y at %l:%M%P")}"
     )
 
-    { order: order }
+    { order: }
   end
 end

@@ -8,6 +8,6 @@ class Mutations::DeleteRoom < Mutations::BaseMutation
 
   def resolve(**_args)
     room.destroy!
-    { room: room }
+    { room: }
   end
 end

@@ -10,11 +10,7 @@ class Sources::AuthorizationInfo < GraphQL::Dataloader::Source
     authorization_info_by_key = {}
     users_with_keys(keys).each do |(key, user)|
       known_user_con_profiles = model.is_a?(UserConProfile) ? [model] : []
-      authorization_info_by_key[key] = AuthorizationInfo.new(
-        user,
-        nil,
-        known_user_con_profiles: known_user_con_profiles
-      )
+      authorization_info_by_key[key] = AuthorizationInfo.new(user, nil, known_user_con_profiles:)
     end
     keys.map { |key| authorization_info_by_key[key] }
   end

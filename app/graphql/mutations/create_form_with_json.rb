@@ -8,9 +8,9 @@ class Mutations::CreateFormWithJSON < Mutations::BaseMutation
   authorize_create_convention_associated_model :forms
 
   def resolve(form_json:, form_type:)
-    form = context[:convention].forms.create!(form_type: form_type)
-    ImportFormContentService.new(form: form, content: JSON.parse(form_json)).call!
+    form = context[:convention].forms.create!(form_type:)
+    ImportFormContentService.new(form:, content: JSON.parse(form_json)).call!
 
-    { form: form }
+    { form: }
   end
 end

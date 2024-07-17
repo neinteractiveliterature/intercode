@@ -9,7 +9,7 @@ class Mutations::CreateEvent < Mutations::BaseMutation
 
   def resolve(signed_image_blob_ids: nil, **args)
     event_attrs = args[:event].to_h.merge(updated_by: user_con_profile.user).stringify_keys
-    form_response_attrs = JSON.parse(event_attrs.delete('form_response_attrs_json'))
+    form_response_attrs = JSON.parse(event_attrs.delete("form_response_attrs_json"))
 
     event = convention.events.new(event_attrs)
     event.assign_form_response_attributes(
@@ -25,6 +25,6 @@ class Mutations::CreateEvent < Mutations::BaseMutation
     end
     event.save!
 
-    { event: event }
+    { event: }
   end
 end

@@ -10,6 +10,6 @@ class Mutations::UpdatePage < Mutations::BaseMutation
   def resolve(**args)
     page.update!(args[:page].to_h)
 
-    { page: page }
+    { page: }
   end
 end

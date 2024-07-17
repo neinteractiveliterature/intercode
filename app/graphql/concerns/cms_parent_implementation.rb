@@ -7,7 +7,7 @@ module CmsParentImplementation
   def cms_page(id: nil, slug: nil, root_page: false)
     return object.root_page if root_page
     return object.pages.find(id) if id
-    object.pages.find_by!(slug: slug)
+    object.pages.find_by!(slug:)
   end
 
   def effective_cms_layout(path:)
@@ -32,9 +32,7 @@ module CmsParentImplementation
         object.event_proposals.find(event_proposal_id).images.includes(:blob).index_by { |image| image.filename.to_s }
     end
 
-    MarkdownPresenter
-      .new('', cadmus_renderer: cadmus_renderer, controller: context[:controller])
-      .render(markdown, local_images: local_images)
+    MarkdownPresenter.new("", cadmus_renderer:, controller: context[:controller]).render(markdown, local_images:)
   end
 
   def preview_liquid(content:)
@@ -50,7 +48,7 @@ module CmsParentImplementation
     contents =
       scopes.flat_map do |scope|
         filtered_scope = scope
-        filtered_scope = filtered_scope.where('lower(name) like ?', "%#{name.downcase}%") if name.present?
+        filtered_scope = filtered_scope.where("lower(name) like ?", "%#{name.downcase}%") if name.present?
 
         filtered_scope.limit(10).to_a
       end

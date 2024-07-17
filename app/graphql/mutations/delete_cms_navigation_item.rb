@@ -8,6 +8,6 @@ class Mutations::DeleteCmsNavigationItem < Mutations::BaseMutation
 
   def resolve(**_args)
     cms_navigation_item.destroy!
-    { cms_navigation_item: cms_navigation_item }
+    { cms_navigation_item: }
   end
 end

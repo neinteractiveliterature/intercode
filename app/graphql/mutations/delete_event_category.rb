@@ -9,6 +9,6 @@ class Mutations::DeleteEventCategory < Mutations::BaseMutation
   def resolve(**_args)
     event_category.destroy!
 
-    { event_category: event_category }
+    { event_category: }
   end
 end

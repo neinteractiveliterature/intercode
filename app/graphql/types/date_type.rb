@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Types::DateType < Types::BaseScalar
-  description 'Date in ISO8601 format'
+  description "Date in ISO8601 format"
 
   def self.coerce_input(value, _ctx)
     return nil if value.nil?

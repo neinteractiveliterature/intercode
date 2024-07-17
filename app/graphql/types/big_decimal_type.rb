@@ -6,6 +6,6 @@ class Types::BigDecimalType < Types::BaseScalar
   end
 
   def self.coerce_result(ruby_value, _context)
-    ruby_value&.to_s('F')
+    ruby_value&.to_s("F")
   end
 end

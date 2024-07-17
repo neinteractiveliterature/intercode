@@ -25,6 +25,6 @@ class Mutations::CreateProduct < Mutations::BaseMutation
     create_or_update_variants(product, product_variant_fields)
     product.product_variants.reload
 
-    { product: product }
+    { product: }
   end
 end

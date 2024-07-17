@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Mutations::DeleteDepartment < Mutations::BaseMutation
-  graphql_name 'DeleteDepartment'
+  graphql_name "DeleteDepartment"
 
   field :department, Types::DepartmentType, null: false
 
@@ -11,6 +11,6 @@ class Mutations::DeleteDepartment < Mutations::BaseMutation
   def resolve(**_args)
     department.destroy!
 
-    { department: department }
+    { department: }
   end
 end

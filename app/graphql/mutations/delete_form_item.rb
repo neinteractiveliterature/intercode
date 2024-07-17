@@ -6,10 +6,10 @@ class Mutations::DeleteFormItem < Mutations::BaseMutation
 
   def resolve(**_args)
     config = Form::FORM_TYPE_CONFIG[form_item.form.form_type]
-    standard_item = config['standard_items'][form_item.identifier]
-    if standard_item && standard_item['required']
+    standard_item = config["standard_items"][form_item.identifier]
+    if standard_item && standard_item["required"]
       raise GraphQL::ExecutionError,
-            "#{standard_item['description'].capitalize} is required for #{config['description']}"
+            "#{standard_item["description"].capitalize} is required for #{config["description"]}"
     end
 
     form_item.destroy!

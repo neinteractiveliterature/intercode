@@ -19,16 +19,16 @@ module Types::PaginationInterface
   MARKDOWN
 
   field :total_entries, Integer, null: false, camelize: false do
-    description 'The total number of items in the paginated list (across all pages)'
+    description "The total number of items in the paginated list (across all pages)"
   end
   field :total_pages, Integer, null: false, camelize: false do
-    description 'The total number of pages in the paginated list'
+    description "The total number of pages in the paginated list"
   end
   field :current_page, Integer, null: false, camelize: false do
-    description 'The number of the page currently being returned in this query'
+    description "The number of the page currently being returned in this query"
   end
   field :per_page, Integer, null: false, camelize: false do
-    description 'The number of items per page currently being returned in this query'
+    description "The number of items per page currently being returned in this query"
   end
 
   definition_methods do

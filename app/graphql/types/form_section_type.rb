@@ -2,17 +2,17 @@
 class Types::FormSectionType < Types::BaseObject
   authorize_record
 
-  field :id, ID, null: false
-  field :title, String, null: true
   field :form, Types::FormType, null: false, camelize: false
-  field :position, Int, null: false
   field :form_items, [Types::FormItemType], null: false, camelize: false
+  field :id, ID, null: false
+  field :position, Int, null: false
+  field :title, String, null: true
 
   field :preview_form_item, Types::FormItemType, null: false do
     argument :form_item,
              Types::FormItemInputType,
              required: true,
-             description: 'The fields to use for constructing the form item to preview.'
+             description: "The fields to use for constructing the form item to preview."
 
     description <<~MARKDOWN
       Given a FormItemInput, returns a preview version of that form item within this section. This

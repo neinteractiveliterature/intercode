@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Mutations::CreateDepartment < Mutations::BaseMutation
-  graphql_name 'CreateDepartment'
+  graphql_name "CreateDepartment"
 
   field :department, Types::DepartmentType, null: false
 
@@ -11,6 +11,6 @@ class Mutations::CreateDepartment < Mutations::BaseMutation
   def resolve(**args)
     department = convention.departments.create!(args[:department].to_h)
 
-    { department: department }
+    { department: }
   end
 end

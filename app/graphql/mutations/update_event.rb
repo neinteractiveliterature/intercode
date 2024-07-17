@@ -2,15 +2,15 @@
 class Mutations::UpdateEvent < Mutations::BaseMutation
   field :event, Types::EventType, null: false
 
-  argument :id, ID, required: false
   argument :event, Types::EventInputType, required: false
+  argument :id, ID, required: false
 
   load_and_authorize_convention_associated_model :events, :id, :update
 
   def resolve(**args)
     event_attrs = args[:event].to_h.merge(updated_by: user_con_profile.user).stringify_keys
-    form_response_attrs = JSON.parse(event_attrs.delete('form_response_attrs_json'))
-    registration_policy_attributes = form_response_attrs.delete('registration_policy')
+    form_response_attrs = JSON.parse(event_attrs.delete("form_response_attrs_json"))
+    registration_policy_attributes = form_response_attrs.delete("registration_policy")
 
     changes = apply_registration_policy(event, registration_policy_attributes)
     changes.update(apply_form_response_attrs(event, form_response_attrs))
@@ -19,7 +19,7 @@ class Mutations::UpdateEvent < Mutations::BaseMutation
 
     log_form_response_changes(event, changes)
 
-    { event: event }
+    { event: }
   end
 
   private
@@ -32,7 +32,7 @@ class Mutations::UpdateEvent < Mutations::BaseMutation
 
     event.reload
 
-    { 'registration_policy' => [event.registration_policy.as_json, new_registration_policy.as_json] }
+    { "registration_policy" => [event.registration_policy.as_json, new_registration_policy.as_json] }
   end
 
   def apply_form_response_attrs(event, form_response_attrs)
@@ -48,13 +48,7 @@ class Mutations::UpdateEvent < Mutations::BaseMutation
 
   def log_form_response_changes(event, changes)
     changes.each do |(key, (previous_value, new_value))|
-      FormResponseChange.create!(
-        response: event,
-        user_con_profile: user_con_profile,
-        field_identifier: key,
-        previous_value: previous_value,
-        new_value: new_value
-      )
+      FormResponseChange.create!(response: event, user_con_profile:, field_identifier: key, previous_value:, new_value:)
     end
   end
 end
