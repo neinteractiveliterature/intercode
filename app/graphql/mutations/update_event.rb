@@ -2,8 +2,8 @@
 class Mutations::UpdateEvent < Mutations::BaseMutation
   field :event, Types::EventType, null: false
 
-  argument :id, ID, required: false
   argument :event, Types::EventInputType, required: false
+  argument :id, ID, required: false
 
   load_and_authorize_convention_associated_model :events, :id, :update
 
@@ -19,7 +19,7 @@ class Mutations::UpdateEvent < Mutations::BaseMutation
 
     log_form_response_changes(event, changes)
 
-    { event: event }
+    { event: }
   end
 
   private
@@ -50,10 +50,10 @@ class Mutations::UpdateEvent < Mutations::BaseMutation
     changes.each do |(key, (previous_value, new_value))|
       FormResponseChange.create!(
         response: event,
-        user_con_profile: user_con_profile,
+        user_con_profile:,
         field_identifier: key,
-        previous_value: previous_value,
-        new_value: new_value
+        previous_value:,
+        new_value:
       )
     end
   end

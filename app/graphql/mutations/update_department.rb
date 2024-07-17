@@ -4,14 +4,14 @@ class Mutations::UpdateDepartment < Mutations::BaseMutation
 
   field :department, Types::DepartmentType, null: false
 
-  argument :id, ID, required: false
   argument :department, Types::DepartmentInputType, required: true, camelize: false
+  argument :id, ID, required: false
 
   load_and_authorize_convention_associated_model :departments, :id, :update
 
   def resolve(**args)
     department.update!(args[:department].to_h)
 
-    { department: department }
+    { department: }
   end
 end

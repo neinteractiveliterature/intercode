@@ -4,8 +4,8 @@ class Mutations::SetConventionCanceled < Mutations::BaseMutation
 
   field :convention, Types::ConventionType, null: false
 
-  argument :id, ID, required: false
   argument :canceled, Boolean, required: true
+  argument :id, ID, required: false
 
   define_authorization_check do |args|
     @convention = args[:id] ? Convention.find(args[:id]) : context[:convention]

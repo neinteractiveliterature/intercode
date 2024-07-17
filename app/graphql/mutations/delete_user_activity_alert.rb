@@ -9,6 +9,6 @@ class Mutations::DeleteUserActivityAlert < Mutations::BaseMutation
   def resolve(**_args)
     user_activity_alert.destroy!
 
-    { user_activity_alert: user_activity_alert }
+    { user_activity_alert: }
   end
 end

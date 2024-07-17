@@ -1,6 +1,6 @@
 class Mutations::AttachImageToEventProposal < Mutations::BaseMutation
-  field :event_proposal, Types::EventProposalType, null: false
   field :attachment, Types::ActiveStorageAttachmentType, null: false
+  field :event_proposal, Types::EventProposalType, null: false
 
   argument :id, ID, required: false
   argument :signed_blob_id, ID, required: true
@@ -14,6 +14,6 @@ class Mutations::AttachImageToEventProposal < Mutations::BaseMutation
 
     attachment = event_proposal.images.attachments.find { |att| att.blob_id == blob.id }
 
-    { attachment: attachment, event_proposal: event_proposal }
+    { attachment:, event_proposal: }
   end
 end

@@ -8,8 +8,8 @@ class Mutations::CancelOrder < Mutations::BaseMutation
   load_and_authorize_model_with_id Order, :id, :cancel
 
   def resolve(skip_refund: false, **_args)
-    CancelOrderService.new(order: order, whodunit: user_con_profile, skip_refund: skip_refund).call!
+    CancelOrderService.new(order:, whodunit: user_con_profile, skip_refund:).call!
 
-    { order: order }
+    { order: }
   end
 end

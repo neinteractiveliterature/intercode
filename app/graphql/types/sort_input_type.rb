@@ -5,11 +5,11 @@ class Types::SortInputType < Types::BaseInputObject
     fields to specify how the results should be ordered.
   MARKDOWN
 
-  argument :field, String, required: true, description: 'The name of the field to sort by.'
   argument :desc, Boolean, required: true do
     description <<~MARKDOWN
       If true, the field will be sorted in descending order. If false, it will be sorted in
       ascending order.
     MARKDOWN
   end
+  argument :field, String, required: true, description: 'The name of the field to sort by.'
 end

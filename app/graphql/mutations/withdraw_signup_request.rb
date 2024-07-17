@@ -9,6 +9,6 @@ class Mutations::WithdrawSignupRequest < Mutations::BaseMutation
   def resolve(**_args)
     signup_request.update!(state: 'withdrawn', updated_by: current_user)
 
-    { signup_request: signup_request }
+    { signup_request: }
   end
 end

@@ -10,6 +10,6 @@ class Mutations::UpdateRoom < Mutations::BaseMutation
   def resolve(**args)
     room.update!(args[:room].to_h)
 
-    { room: room }
+    { room: }
   end
 end

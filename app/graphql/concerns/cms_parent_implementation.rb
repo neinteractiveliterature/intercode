@@ -7,7 +7,7 @@ module CmsParentImplementation
   def cms_page(id: nil, slug: nil, root_page: false)
     return object.root_page if root_page
     return object.pages.find(id) if id
-    object.pages.find_by!(slug: slug)
+    object.pages.find_by!(slug:)
   end
 
   def effective_cms_layout(path:)
@@ -33,8 +33,8 @@ module CmsParentImplementation
     end
 
     MarkdownPresenter
-      .new('', cadmus_renderer: cadmus_renderer, controller: context[:controller])
-      .render(markdown, local_images: local_images)
+      .new('', cadmus_renderer:, controller: context[:controller])
+      .render(markdown, local_images:)
   end
 
   def preview_liquid(content:)

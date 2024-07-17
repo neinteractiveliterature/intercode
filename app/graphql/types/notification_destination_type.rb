@@ -2,8 +2,8 @@
 class Types::NotificationDestinationType < Types::BaseObject
   field :id, ID, null: false
   field :source, Types::NotificationSourceType, null: false
-  field :user_con_profile, Types::UserConProfileType, null: true, camelize: false
   field :staff_position, Types::StaffPositionType, null: true, camelize: false
+  field :user_con_profile, Types::UserConProfileType, null: true, camelize: false
 
   def source
     dataloader.with(Sources::ActiveRecordAssociation, NotificationDestination, :source).load(object)

@@ -15,7 +15,7 @@ class Sources::OrderQuantityByStatus < GraphQL::Dataloader::Source
     query_scope(records_by_id.keys)
       .sum(:quantity)
       .each do |(id, status), quantity|
-        result = { status: status, quantity: quantity }
+        result = { status:, quantity: }
         record = records_by_id[id]
         results_by_record_and_status[record] ||= empty_results_by_status
         results_by_record_and_status[record][status] = result
@@ -40,7 +40,7 @@ class Sources::OrderQuantityByStatus < GraphQL::Dataloader::Source
 
   def empty_results_by_status
     (Types::OrderStatusType.values.keys - ["pending"])
-      .map { |status| { status: status, quantity: 0 } }
+      .map { |status| { status:, quantity: 0 } }
       .index_by { |result| result[:status] }
   end
 end

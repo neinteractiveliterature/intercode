@@ -9,6 +9,6 @@ class Mutations::DeleteEmailRoute < Mutations::BaseMutation
   def resolve(**_args)
     email_route.destroy!
 
-    { email_route: email_route }
+    { email_route: }
   end
 end

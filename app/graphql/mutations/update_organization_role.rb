@@ -2,12 +2,12 @@
 class Mutations::UpdateOrganizationRole < Mutations::BaseMutation
   field :organization_role, Types::OrganizationRoleType, null: false
 
+  argument :add_permissions, [Types::PermissionInputType], required: false, camelize: false
+  argument :add_user_ids, [ID], required: false, camelize: true
   argument :id, ID, required: false, camelize: true
   argument :organization_role, Types::OrganizationRoleInputType, required: true, camelize: false
-  argument :add_user_ids, [ID], required: false, camelize: true
-  argument :remove_user_ids, [ID], required: false, camelize: true
-  argument :add_permissions, [Types::PermissionInputType], required: false, camelize: false
   argument :remove_permission_ids, [ID], required: false, camelize: true
+  argument :remove_user_ids, [ID], required: false, camelize: true
 
   load_and_authorize_model_with_id OrganizationRole, :id, :update
 
@@ -22,6 +22,6 @@ class Mutations::UpdateOrganizationRole < Mutations::BaseMutation
     # not sure why, but if I don't do this it seems like permissions get returned twice
     organization_role.reload
 
-    { organization_role: organization_role }
+    { organization_role: }
   end
 end

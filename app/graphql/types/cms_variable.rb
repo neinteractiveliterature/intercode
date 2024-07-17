@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 class Types::CmsVariable < Types::BaseObject
+  field :current_ability_can_delete, Boolean, null: false
+  field :current_ability_can_update, Boolean, null: false
   field :id, ID, null: false
   field :key, String, null: false
   field :value_json, String, null: false, camelize: false
-  field :current_ability_can_update, Boolean, null: false
-  field :current_ability_can_delete, Boolean, null: false
 
   def current_ability_can_update
     dataloader.with(Sources::ModelPermission, ::CmsVariable).load([pundit_user, :update, object.id])

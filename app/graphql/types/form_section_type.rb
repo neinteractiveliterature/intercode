@@ -2,11 +2,11 @@
 class Types::FormSectionType < Types::BaseObject
   authorize_record
 
-  field :id, ID, null: false
-  field :title, String, null: true
   field :form, Types::FormType, null: false, camelize: false
-  field :position, Int, null: false
   field :form_items, [Types::FormItemType], null: false, camelize: false
+  field :id, ID, null: false
+  field :position, Int, null: false
+  field :title, String, null: true
 
   field :preview_form_item, Types::FormItemType, null: false do
     argument :form_item,

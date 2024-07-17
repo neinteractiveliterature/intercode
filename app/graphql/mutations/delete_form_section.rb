@@ -13,7 +13,7 @@ class Mutations::DeleteFormSection < Mutations::BaseMutation
       end
 
     if required_items.any?
-      item_descriptions = required_items.map { |standard_item| standard_item['description'] }
+      item_descriptions = required_items.pluck('description')
       raise GraphQL::ExecutionError, "#{item_descriptions.to_sentence.capitalize} required for #{config['description']}"
     end
 

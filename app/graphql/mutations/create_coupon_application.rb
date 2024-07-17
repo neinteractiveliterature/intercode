@@ -13,7 +13,7 @@ class Mutations::CreateCouponApplication < Mutations::BaseMutation
     raise GraphQL::ExecutionError, "Coupon #{coupon.code} is expired" if coupon.expired?
     raise GraphQL::ExecutionError, "Coupon #{coupon.code} has been used up already" if coupon.usage_limit_reached?
 
-    coupon_application = order.coupon_applications.create!(coupon: coupon)
-    { coupon_application: coupon_application }
+    coupon_application = order.coupon_applications.create!(coupon:)
+    { coupon_application: }
   end
 end

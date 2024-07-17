@@ -24,6 +24,6 @@ class Mutations::UpdateUserConProfile < Mutations::BaseMutation
     user_con_profile.needs_update = false
     user_con_profile.save!
 
-    { user_con_profile: user_con_profile }
+    { user_con_profile: }
   end
 end

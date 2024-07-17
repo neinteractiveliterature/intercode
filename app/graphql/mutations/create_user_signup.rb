@@ -2,19 +2,19 @@
 class Mutations::CreateUserSignup < Mutations::BaseMutation
   field :signup, Types::SignupType, null: false
 
-  argument :run_id, ID, required: false, camelize: true
-  argument :user_con_profile_id, ID, required: false, camelize: true
-  argument :requested_bucket_key, String, required: false, camelize: false
   argument :no_requested_bucket, Boolean, required: false, camelize: false
-  argument :suppress_notifications, Boolean, required: false, camelize: false
+  argument :requested_bucket_key, String, required: false, camelize: false
+  argument :run_id, ID, required: false, camelize: true
   argument :suppress_confirmation, Boolean, required: false, camelize: false
+  argument :suppress_notifications, Boolean, required: false, camelize: false
+  argument :user_con_profile_id, ID, required: false, camelize: true
 
   attr_reader :run, :signup_user_con_profile
 
   define_authorization_check do |args|
     @run = convention.runs.find(args[:run_id])
     @signup_user_con_profile = convention.user_con_profiles.find(args[:user_con_profile_id])
-    policy(Signup.new(run: run, user_con_profile: signup_user_con_profile)).create?
+    policy(Signup.new(run:, user_con_profile: signup_user_con_profile)).create?
   end
 
   def resolve(**args)

@@ -14,6 +14,6 @@ class Mutations::UpdateOrder < Mutations::BaseMutation
     end
     order.update!(order_attrs)
 
-    { order: order }
+    { order: }
   end
 end

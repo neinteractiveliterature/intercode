@@ -9,12 +9,12 @@ class Mutations::CreateRun < Mutations::BaseMutation
 
   define_authorization_check do |args|
     @event = convention.events.find(args[:event_id])
-    policy(Run.new(event: event)).create?
+    policy(Run.new(event:)).create?
   end
 
   def resolve(**args)
     run = event.runs.create!(args[:run].to_h.merge(updated_by: current_user))
 
-    { run: run }
+    { run: }
   end
 end

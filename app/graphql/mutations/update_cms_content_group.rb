@@ -3,9 +3,9 @@ class Mutations::UpdateCmsContentGroup < Mutations::BaseMutation
   include CmsContentGroupMutation
 
   field :cms_content_group, Types::CmsContentGroupType, null: false
-  argument :id, ID, required: false
   argument :cms_content_group, Types::CmsContentGroupInputType, required: true, camelize: false
   argument :grant_permissions, [Types::PermissionInputType], required: false, camelize: false
+  argument :id, ID, required: false
   argument :revoke_permissions, [Types::PermissionInputType], required: false, camelize: false
 
   authorize_create_cms_model :cms_content_groups

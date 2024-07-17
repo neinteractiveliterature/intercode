@@ -11,6 +11,6 @@ class Mutations::DeleteDepartment < Mutations::BaseMutation
   def resolve(**_args)
     department.destroy!
 
-    { department: department }
+    { department: }
   end
 end

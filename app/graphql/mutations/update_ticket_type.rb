@@ -12,6 +12,6 @@ class Mutations::UpdateTicketType < Mutations::BaseMutation
   def resolve(**args)
     ticket_type.update!(args[:ticket_type].to_h)
 
-    { ticket_type: ticket_type }
+    { ticket_type: }
   end
 end
