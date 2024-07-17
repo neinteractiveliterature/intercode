@@ -8,6 +8,16 @@ GIT
       rails (>= 5.0.0)
 
 GIT
+  remote: https://github.com/mpmenne/stripe-ruby-mock.git
+  revision: bba255a98568ece10b4777ac1b9d67fa64de1e7f
+  branch: expand-latest-charge-on-payment-intent
+  specs:
+    stripe-ruby-mock (3.1.0.rc3)
+      dante (>= 0.2.0)
+      multi_json (~> 1.0)
+      stripe (> 5, < 6)
+
+GIT
   remote: https://github.com/neinteractiveliterature/civil_service.git
   revision: bba59c4a91c3ca61386cfca2f723031ba097da93
   branch: no-double-validate
@@ -605,10 +615,6 @@ GEM
     stackprof (0.2.26)
     stringio (3.1.1)
     stripe (5.55.0)
-    stripe-ruby-mock (3.1.0)
-      dante (>= 0.2.0)
-      multi_json (~> 1.0)
-      stripe (> 5, < 6)
     strscan (3.1.0)
     strscan (3.1.0-java)
     sync (0.5.0)
@@ -760,7 +766,7 @@ DEPENDENCIES
   sprockets-rails
   stackprof
   stripe
-  stripe-ruby-mock (>= 3.1.0.rc3)
+  stripe-ruby-mock!
   syntax_tree
   syntax_tree-haml
   syntax_tree-rbs
