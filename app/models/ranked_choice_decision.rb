@@ -25,9 +25,9 @@
 #
 # Foreign Keys
 #
-#  fk_rails_...  (signup_id => signups.id)
-#  fk_rails_...  (signup_ranked_choice_id => signup_ranked_choices.id)
-#  fk_rails_...  (signup_request_id => signup_requests.id)
+#  fk_rails_...  (signup_id => signups.id) ON DELETE => nullify
+#  fk_rails_...  (signup_ranked_choice_id => signup_ranked_choices.id) ON DELETE => nullify
+#  fk_rails_...  (signup_request_id => signup_requests.id) ON DELETE => nullify
 #  fk_rails_...  (signup_round_id => signup_rounds.id)
 #  fk_rails_...  (user_con_profile_id => user_con_profiles.id)
 #
