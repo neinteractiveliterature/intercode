@@ -42,9 +42,13 @@ class SubmitOrderService < CivilService::Service
   end
 
   def update_order_from_payment_intent
-    pi = Stripe::PaymentIntent.retrieve(payment_intent_id, stripe_account: convention.stripe_account_id)
+    pi =
+      Stripe::PaymentIntent.retrieve(
+        { id: payment_intent_id, expand: ["latest_charge"] },
+        { stripe_account: convention.stripe_account_id }
+      )
     if pi.status == "succeeded"
-      charge = Stripe::Charge.retrieve(pi.latest_charge)
+      charge = pi.latest_charge
       order.update!(
         status: "paid",
         payment_amount: order.total_price,
