@@ -4,14 +4,14 @@ class Mutations::CreateOrganizationRole < Mutations::BaseMutation
 
   argument :organization_id, ID, required: false, camelize: true
   argument :organization_role, Types::OrganizationRoleInputType, required: true, camelize: false
-  argument :permissions, [Types::PermissionInputType], required: true
   argument :user_ids, [ID], required: false, camelize: true
+  argument :permissions, [Types::PermissionInputType], required: true
 
   attr_reader :organization
 
   define_authorization_check do |args|
     @organization = Organization.find(args[:organization_id])
-    policy(OrganizationRole.new(organization:)).create?
+    policy(OrganizationRole.new(organization: organization)).create?
   end
 
   def resolve(**args)

@@ -7,7 +7,7 @@ class Sources::ActiveStorageAttachment < GraphQL::Dataloader::Source
   end
 
   def fetch(records)
-    ::ActiveRecord::Associations::Preloader.new(records:, associations: { @association_name => :blob }).call
+    ::ActiveRecord::Associations::Preloader.new(records: records, associations: { @association_name => :blob }).call
     records.map { |record| record.public_send(@association_name) }
   end
 

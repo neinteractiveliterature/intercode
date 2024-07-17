@@ -10,6 +10,6 @@ class Mutations::UpdateRun < Mutations::BaseMutation
   def resolve(**args)
     run.update!(args[:run].to_h.merge(updated_by: current_user))
 
-    { run: }
+    { run: run }
   end
 end

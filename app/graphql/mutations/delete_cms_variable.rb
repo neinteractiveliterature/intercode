@@ -9,6 +9,6 @@ class Mutations::DeleteCmsVariable < Mutations::BaseMutation
   def resolve(**_args)
     cms_variable.destroy!
 
-    { cms_variable: }
+    { cms_variable: cms_variable }
   end
 end

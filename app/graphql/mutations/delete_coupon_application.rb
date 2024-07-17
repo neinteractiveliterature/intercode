@@ -8,6 +8,6 @@ class Mutations::DeleteCouponApplication < Mutations::BaseMutation
 
   def resolve(**_args)
     coupon_application.destroy!
-    { coupon_application: }
+    { coupon_application: coupon_application }
   end
 end

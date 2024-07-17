@@ -8,6 +8,6 @@ class Mutations::DeleteTeamMember < Mutations::BaseMutation
 
   def resolve(**_args)
     team_member.destroy!
-    { team_member: }
+    { team_member: team_member }
   end
 end

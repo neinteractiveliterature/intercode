@@ -3,8 +3,8 @@ class Mutations::MergeUsers < Mutations::BaseMutation
   field :user, Types::UserType, null: false
 
   argument :user_ids, [ID], required: false, description: 'The user IDs to merge.', camelize: true
-  argument :winning_user_con_profiles, [Types::WinningUserConProfileInputType], required: true
   argument :winning_user_id, ID, required: false, camelize: true
+  argument :winning_user_con_profiles, [Types::WinningUserConProfileInputType], required: true
 
   define_authorization_check do |args|
     users = User.find(args[:user_ids])

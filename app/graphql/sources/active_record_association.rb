@@ -5,7 +5,7 @@ class Sources::ActiveRecordAssociation < GraphQL::Dataloader::Source
   end
 
   def fetch(records)
-    ::ActiveRecord::Associations::Preloader.new(records:, associations: @association_name).call
+    ::ActiveRecord::Associations::Preloader.new(records: records, associations: @association_name).call
     records.map { |record| record.public_send(@association_name) }
   end
 

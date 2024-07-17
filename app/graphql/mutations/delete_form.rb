@@ -8,6 +8,6 @@ class Mutations::DeleteForm < Mutations::BaseMutation
 
   def resolve(**_args)
     form.destroy!
-    { form: }
+    { form: form }
   end
 end

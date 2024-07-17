@@ -2,8 +2,8 @@
 # rubocop:disable GraphQL/FieldName, GraphQL/FieldDescription, GraphQL/ExtractType
 class Types::MutationType < Types::BaseObject # rubocop:disable GraphQL/ObjectDescription
   class MutationRootField < Types::BaseField # rubocop:disable GraphQL/ObjectDescription
-    def initialize(*, resolver_class:, **, &)
-      super(*, resolver_class:, description: resolver_class.description, **, &)
+    def initialize(*args, resolver_class:, **kwargs, &block)
+      super(*args, resolver_class:, description: resolver_class.description, **kwargs, &block)
     end
   end
 

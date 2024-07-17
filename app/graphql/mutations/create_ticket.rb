@@ -2,8 +2,8 @@
 class Mutations::CreateTicket < Mutations::BaseMutation
   field :ticket, Types::TicketType, null: false
 
-  argument :ticket, Types::TicketInputType, required: true
   argument :user_con_profile_id, ID, required: false, camelize: true
+  argument :ticket, Types::TicketInputType, required: true
 
   attr_reader :ticket_profile
 
@@ -15,6 +15,6 @@ class Mutations::CreateTicket < Mutations::BaseMutation
   def resolve(**args)
     ticket = ticket_profile.create_ticket!(args[:ticket].to_h)
 
-    { ticket: }
+    { ticket: ticket }
   end
 end

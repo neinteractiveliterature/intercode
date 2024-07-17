@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 class Mutations::UpdateStaffPositionPermissions < Mutations::BaseMutation
   field :staff_position, Types::StaffPositionType, null: false, camelize: false
+  argument :staff_position_id, ID, required: false, camelize: true
   argument :grant_permissions, [Types::PermissionInputType], required: true, camelize: false
   argument :revoke_permissions, [Types::PermissionInputType], required: true, camelize: false
-  argument :staff_position_id, ID, required: false, camelize: true
 
   attr_reader :staff_position
 
@@ -20,6 +20,6 @@ class Mutations::UpdateStaffPositionPermissions < Mutations::BaseMutation
 
     revoke_permissions.each { |input| Permission.revoke(staff_position, input[:model], input[:permission]) }
 
-    { staff_position: }
+    { staff_position: staff_position }
   end
 end

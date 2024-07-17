@@ -2,9 +2,9 @@
 class Mutations::TransitionEventProposal < Mutations::BaseMutation
   field :event_proposal, Types::EventProposalType, null: false, camelize: false
 
-  argument :drop_event, Boolean, required: false, camelize: false
   argument :id, ID, required: false
   argument :status, String, required: true
+  argument :drop_event, Boolean, required: false, camelize: false
 
   attr_reader :event_proposal
 
@@ -17,7 +17,7 @@ class Mutations::TransitionEventProposal < Mutations::BaseMutation
 
   def resolve(**args)
     if args[:status] == 'accepted' && !event_proposal.event
-      AcceptEventProposalService.new(event_proposal:).call!
+      AcceptEventProposalService.new(event_proposal: event_proposal).call!
     elsif args[:drop_event]
       DropEventService.new(event: event_proposal.event).call!
     end

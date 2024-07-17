@@ -2,8 +2,8 @@
 class Mutations::UpdateSignupBucket < Mutations::BaseMutation
   field :signup, Types::SignupType, null: false
 
-  argument :bucket_key, String, required: true, camelize: false
   argument :id, ID, required: false
+  argument :bucket_key, String, required: true, camelize: false
 
   load_and_authorize_convention_associated_model :signups, :id, :update_bucket
 

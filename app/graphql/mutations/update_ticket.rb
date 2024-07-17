@@ -10,6 +10,6 @@ class Mutations::UpdateTicket < Mutations::BaseMutation
   def resolve(**args)
     ticket.update!(args[:ticket].to_h)
 
-    { ticket: }
+    { ticket: ticket }
   end
 end

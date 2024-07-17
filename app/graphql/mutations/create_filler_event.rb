@@ -30,7 +30,7 @@ class Mutations::CreateFillerEvent < Mutations::BaseMutation
 
     event.save!
 
-    { event: }
+    { event: event }
   end
   # rubocop:enable Metrics/AbcSize
 end

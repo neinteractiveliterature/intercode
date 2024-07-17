@@ -8,6 +8,6 @@ class Mutations::DeleteCmsContentGroup < Mutations::BaseMutation
 
   def resolve(**_args)
     cms_content_group.destroy!
-    { cms_content_group: }
+    { cms_content_group: cms_content_group }
   end
 end

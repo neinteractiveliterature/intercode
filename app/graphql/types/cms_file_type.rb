@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 class Types::CmsFileType < Types::BaseObject
+  field :id, ID, null: false
   field :current_ability_can_delete, Boolean, null: false
   field :file, Types::ActiveStorageAttachmentType, null: false
-  field :id, ID, null: false
 
   def file
     dataloader.with(Sources::ActiveStorageAttachment, CmsFile, :file).load(object)

@@ -4,10 +4,10 @@ class Mutations::CreateOrder < Mutations::BaseMutation
 
   field :order, Types::OrderType, null: false
 
-  argument :order, Types::OrderInputType, required: true
-  argument :order_entries, [Types::OrderEntryInputType], required: false, camelize: false
-  argument :status, Types::OrderStatusType, required: true
   argument :user_con_profile_id, ID, required: false, camelize: true
+  argument :order, Types::OrderInputType, required: true
+  argument :status, Types::OrderStatusType, required: true
+  argument :order_entries, [Types::OrderEntryInputType], required: false, camelize: false
 
   attr_reader :order
 
@@ -36,11 +36,11 @@ class Mutations::CreateOrder < Mutations::BaseMutation
       next unless order_entry_input.ticket_id
 
       ticket = Ticket.where(user_con_profile_id: @order.user_con_profile.id).find(order_entry_input.ticket_id)
-      ticket.update!(order_entry:)
+      ticket.update!(order_entry: order_entry)
       order_entry.tickets.reload
     end
 
-    { order: }
+    { order: order }
   end
   # rubocop:enable Metrics/AbcSize
 end

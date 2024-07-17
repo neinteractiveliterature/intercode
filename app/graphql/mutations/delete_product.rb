@@ -11,6 +11,6 @@ class Mutations::DeleteProduct < Mutations::BaseMutation
 
     product.destroy!
 
-    { product: }
+    { product: product }
   end
 end

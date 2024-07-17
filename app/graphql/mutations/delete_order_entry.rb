@@ -8,6 +8,6 @@ class Mutations::DeleteOrderEntry < Mutations::BaseMutation
 
   def resolve(**_args)
     order_entry.destroy!
-    { order_entry: }
+    { order_entry: order_entry }
   end
 end

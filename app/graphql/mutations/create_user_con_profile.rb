@@ -2,8 +2,8 @@
 class Mutations::CreateUserConProfile < Mutations::BaseMutation
   field :user_con_profile, Types::UserConProfileType, null: false
 
-  argument :user_con_profile, Types::UserConProfileInputType, required: true, camelize: false
   argument :user_id, ID, required: false, camelize: true
+  argument :user_con_profile, Types::UserConProfileInputType, required: true, camelize: false
 
   authorize_create_convention_associated_model :user_con_profiles
 
@@ -12,7 +12,7 @@ class Mutations::CreateUserConProfile < Mutations::BaseMutation
     user = User.find(args[:user_id])
     ensure_no_existing_user_con_profile(user)
 
-    user_con_profile = convention.user_con_profiles.new(user:)
+    user_con_profile = convention.user_con_profiles.new(user: user)
     user_con_profile.assign_default_values_from_form_items(convention.user_con_profile_form.form_items)
 
     most_recent_profile = user.user_con_profiles.joins(:convention).order(Arel.sql('conventions.starts_at DESC')).first
@@ -30,7 +30,7 @@ class Mutations::CreateUserConProfile < Mutations::BaseMutation
     user_con_profile.needs_update = true
     user_con_profile.save!
 
-    { user_con_profile: }
+    { user_con_profile: user_con_profile }
   end
 
   def assign_filtered_attrs(user_con_profile, attrs)

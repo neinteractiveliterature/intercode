@@ -7,7 +7,7 @@ class Mutations::DropEvent < Mutations::BaseMutation
   load_and_authorize_convention_associated_model :events, :id, :drop
 
   def resolve(**_args)
-    DropEventService.new(event:).call!
-    { event: }
+    DropEventService.new(event: event).call!
+    { event: event }
   end
 end

@@ -9,6 +9,6 @@ class Mutations::DeleteStaffPosition < Mutations::BaseMutation
   def resolve(**_args)
     staff_position.destroy!
 
-    { staff_position: }
+    { staff_position: staff_position }
   end
 end

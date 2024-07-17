@@ -7,7 +7,7 @@ class Mutations::RestoreDroppedEvent < Mutations::BaseMutation
   load_and_authorize_convention_associated_model :events, :id, :restore
 
   def resolve(**_args)
-    RestoreDroppedEventService.new(event:).call!
-    { event: }
+    RestoreDroppedEventService.new(event: event).call!
+    { event: event }
   end
 end

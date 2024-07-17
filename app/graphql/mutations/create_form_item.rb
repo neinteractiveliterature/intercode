@@ -2,8 +2,8 @@
 class Mutations::CreateFormItem < Mutations::BaseMutation
   field :form_item, Types::FormItemType, null: false
 
-  argument :form_item, Types::FormItemInputType, required: true, camelize: false
   argument :form_section_id, ID, required: false, camelize: true
+  argument :form_item, Types::FormItemInputType, required: true, camelize: false
 
   attr_reader :form_item
 
@@ -15,6 +15,6 @@ class Mutations::CreateFormItem < Mutations::BaseMutation
 
   def resolve(**_args)
     form_item.save!
-    { form_item: }
+    { form_item: form_item }
   end
 end

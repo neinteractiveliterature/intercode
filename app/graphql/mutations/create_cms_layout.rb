@@ -9,6 +9,6 @@ class Mutations::CreateCmsLayout < Mutations::BaseMutation
   def resolve(**args)
     cms_layout = cms_parent.cms_layouts.create!(args[:cms_layout].to_h)
 
-    { cms_layout: }
+    { cms_layout: cms_layout }
   end
 end

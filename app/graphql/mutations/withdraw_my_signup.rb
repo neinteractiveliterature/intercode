@@ -17,6 +17,6 @@ class Mutations::WithdrawMySignup < Mutations::BaseMutation
   def resolve(**_args)
     EventWithdrawService.new(signup, context[:current_user]).call!
 
-    { signup: }
+    { signup: signup }
   end
 end

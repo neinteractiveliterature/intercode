@@ -25,6 +25,6 @@ class Mutations::CreateEvent < Mutations::BaseMutation
     end
     event.save!
 
-    { event: }
+    { event: event }
   end
 end

@@ -8,10 +8,10 @@ class Mutations::AcceptSignupRequest < Mutations::BaseMutation
   load_and_authorize_model_with_id SignupRequest, :id, :accept
 
   def resolve(**_args)
-    result = AcceptSignupRequestService.new(signup_request:, whodunit: current_user).call
+    result = AcceptSignupRequestService.new(signup_request: signup_request, whodunit: current_user).call
 
     raise GraphQL::ExecutionError, result.errors.full_messages.join(', ') if result.failure?
 
-    { signup: result.signup, signup_request: }
+    { signup: result.signup, signup_request: signup_request }
   end
 end

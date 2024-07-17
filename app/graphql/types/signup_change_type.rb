@@ -2,17 +2,17 @@
 class Types::SignupChangeType < Types::BaseObject
   authorize_record
 
-  field :action, Types::SignupChangeActionType, null: false
-  field :bucket_key, String, null: true, camelize: false
-  field :counted, Boolean, null: false
-  field :created_at, Types::DateType, null: false, camelize: false
   field :id, ID, null: false
+  field :state, Types::SignupStateType, null: false
+  field :counted, Boolean, null: false
   field :previous_signup_change, Types::SignupChangeType, null: true
+  field :bucket_key, String, null: true, camelize: false
   field :run, Types::RunType, null: false
   field :signup, Types::SignupType, null: false
-  field :state, Types::SignupStateType, null: false
-  field :updated_at, Types::DateType, null: false, camelize: false
+  field :action, Types::SignupChangeActionType, null: false
   field :user_con_profile, Types::UserConProfileType, null: false, camelize: false
+  field :created_at, Types::DateType, null: false, camelize: false
+  field :updated_at, Types::DateType, null: false, camelize: false
 
   association_loaders SignupChange, :previous_signup_change, :run, :user_con_profile
 

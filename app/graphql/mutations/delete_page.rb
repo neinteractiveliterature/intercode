@@ -8,6 +8,6 @@ class Mutations::DeletePage < Mutations::BaseMutation
 
   def resolve(**_args)
     page.destroy!
-    { page: }
+    { page: page }
   end
 end

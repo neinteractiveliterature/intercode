@@ -2,9 +2,9 @@
 class Mutations::WithdrawUserSignup < Mutations::BaseMutation
   field :signup, Types::SignupType, null: false
   argument :run_id, ID, required: false, camelize: true
-  argument :suppress_confirmation, Boolean, required: false, camelize: false
-  argument :suppress_notifications, Boolean, required: false, camelize: false
   argument :user_con_profile_id, ID, required: false, camelize: true
+  argument :suppress_notifications, Boolean, required: false, camelize: false
+  argument :suppress_confirmation, Boolean, required: false, camelize: false
 
   attr_reader :signup
 
@@ -25,6 +25,6 @@ class Mutations::WithdrawUserSignup < Mutations::BaseMutation
       suppress_confirmation: args[:suppress_confirmation]
     ).call!
 
-    { signup: }
+    { signup: signup }
   end
 end

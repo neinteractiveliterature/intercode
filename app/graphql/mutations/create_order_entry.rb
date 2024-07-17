@@ -4,8 +4,8 @@ class Mutations::CreateOrderEntry < Mutations::BaseMutation
 
   field :order_entry, Types::OrderEntryType, null: false
 
-  argument :order_entry, Types::OrderEntryInputType, required: true, camelize: false
   argument :order_id, ID, required: false, camelize: true
+  argument :order_entry, Types::OrderEntryInputType, required: true, camelize: false
 
   attr_reader :order_entry
 
@@ -19,6 +19,6 @@ class Mutations::CreateOrderEntry < Mutations::BaseMutation
     order_entry.assign_attributes(process_order_entry_input(args[:order_entry], order_entry))
     order_entry.save!
 
-    { order_entry: }
+    { order_entry: order_entry }
   end
 end

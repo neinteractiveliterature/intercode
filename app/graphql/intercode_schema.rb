@@ -51,7 +51,7 @@ class IntercodeSchema < GraphQL::Schema
 
       @deprecated_usages.add(
         {
-          operation_name:,
+          operation_name: operation_name,
           graphql_type: visitor.field_definition.owner.graphql_name,
           field_name: node.name,
           argument_name: nil
@@ -65,10 +65,10 @@ class IntercodeSchema < GraphQL::Schema
 
       @deprecated_usages.add(
         {
-          operation_name:,
+          operation_name: operation_name,
           graphql_type: visitor.field_definition.owner.graphql_name,
           field_name: node.name,
-          argument_name:
+          argument_name: argument_name
         }
       )
     end
@@ -80,7 +80,7 @@ class IntercodeSchema < GraphQL::Schema
       user_agent = @context[:controller]&.request&.user_agent
 
       @deprecated_usages.each do |usage|
-        DeprecatedGraphQlUsage.create(**usage, client_address:, user_agent:)
+        DeprecatedGraphQlUsage.create(**usage, client_address: client_address, user_agent: user_agent)
       end
       Rails.logger.warn("Deprecated GraphQL fields/arguments used: #{@deprecated_usages.as_json.inspect}")
     end

@@ -11,6 +11,6 @@ class Mutations::CreateDepartment < Mutations::BaseMutation
   def resolve(**args)
     department = convention.departments.create!(args[:department].to_h)
 
-    { department: }
+    { department: department }
   end
 end

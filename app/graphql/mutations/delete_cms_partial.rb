@@ -8,6 +8,6 @@ class Mutations::DeleteCmsPartial < Mutations::BaseMutation
 
   def resolve(**_args)
     cms_partial.destroy!
-    { cms_partial: }
+    { cms_partial: cms_partial }
   end
 end

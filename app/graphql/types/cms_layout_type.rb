@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 class Types::CmsLayoutType < Types::BaseObject
-  field :admin_notes, String, null: true do
-    authorize_action :update
-  end
+  field :id, ID, null: false
+  field :name, String, null: true
   field :content, String, null: true
   field :content_html, String, null: true do
     argument :path, String, required: false
@@ -10,11 +9,12 @@ class Types::CmsLayoutType < Types::BaseObject
   field :content_html_with_placeholders, String, null: true do
     argument :path, String, required: false
   end
-  field :current_ability_can_delete, Boolean, null: false
-  field :current_ability_can_update, Boolean, null: false
-  field :id, ID, null: false
-  field :name, String, null: true
   field :navbar_classes, String, null: true
+  field :admin_notes, String, null: true do
+    authorize_action :update
+  end
+  field :current_ability_can_update, Boolean, null: false
+  field :current_ability_can_delete, Boolean, null: false
 
   def current_ability_can_update
     dataloader.with(Sources::ModelPermission, CmsLayout, [:parent]).load([pundit_user, :update, object.id])
@@ -38,6 +38,6 @@ class Types::CmsLayoutType < Types::BaseObject
 
   def cms_rendering_context_for_path(path)
     @cms_rendering_context_by_path ||= {}
-    @cms_rendering_context_by_path[path] ||= cms_rendering_context_for_cms_parent(object.parent, path:)
+    @cms_rendering_context_by_path[path] ||= cms_rendering_context_for_cms_parent(object.parent, path: path)
   end
 end

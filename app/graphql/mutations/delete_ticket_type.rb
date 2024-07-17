@@ -21,6 +21,6 @@ class Mutations::DeleteTicketType < Mutations::BaseMutation
 
     ticket_type.destroy!
 
-    { ticket_type: }
+    { ticket_type: ticket_type }
   end
 end

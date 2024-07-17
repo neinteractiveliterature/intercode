@@ -15,6 +15,6 @@ class Mutations::CreateFormSection < Mutations::BaseMutation
 
   def resolve(**_args)
     form_section.save!
-    { form_section: }
+    { form_section: form_section }
   end
 end

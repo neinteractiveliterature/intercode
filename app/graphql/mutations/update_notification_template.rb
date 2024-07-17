@@ -10,6 +10,6 @@ class Mutations::UpdateNotificationTemplate < Mutations::BaseMutation
   def resolve(**args)
     notification_template.update!(args[:notification_template].to_h)
 
-    { notification_template: }
+    { notification_template: notification_template }
   end
 end

@@ -16,6 +16,6 @@ class Mutations::MarkOrderPaid < Mutations::BaseMutation
 on #{Time.now.in_time_zone(convention.timezone).strftime('%B %-d, %Y at %l:%M%P')}"
     )
 
-    { order: }
+    { order: order }
   end
 end

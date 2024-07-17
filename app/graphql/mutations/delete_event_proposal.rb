@@ -8,6 +8,6 @@ class Mutations::DeleteEventProposal < Mutations::BaseMutation
 
   def resolve(**_args)
     event_proposal.destroy!
-    { event_proposal: }
+    { event_proposal: event_proposal }
   end
 end

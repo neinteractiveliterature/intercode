@@ -8,6 +8,6 @@ class Mutations::CreateStaffPosition < Mutations::BaseMutation
 
   def resolve(**args)
     staff_position = convention.staff_positions.create!(args[:staff_position].to_h)
-    { staff_position: }
+    { staff_position: staff_position }
   end
 end

@@ -9,6 +9,6 @@ class Mutations::DeleteCmsFile < Mutations::BaseMutation
   def resolve(**_args)
     cms_file.file.purge_later
     cms_file.destroy!
-    { cms_file: }
+    { cms_file: cms_file }
   end
 end

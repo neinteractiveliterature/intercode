@@ -9,6 +9,6 @@ class Mutations::RejectSignupRequest < Mutations::BaseMutation
   def resolve(**_args)
     signup_request.update!(state: 'rejected')
 
-    { signup_request: }
+    { signup_request: signup_request }
   end
 end

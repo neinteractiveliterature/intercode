@@ -15,7 +15,7 @@ class Mutations::WithdrawAllUserConProfileSignups < Mutations::BaseMutation
     user_con_profile
       .signups
       .where.not(state: 'withdrawn')
-      .find_each { |signup| EventWithdrawService.new(signup, current_user).call! }
+      .each { |signup| EventWithdrawService.new(signup, current_user).call! }
 
     { user_con_profile: user_con_profile.reload }
   end

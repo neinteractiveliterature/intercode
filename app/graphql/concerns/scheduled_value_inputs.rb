@@ -7,7 +7,7 @@ module ScheduledValueInputs
       input_data[:timespans].map do |timespan|
         value = (timespan[:string_value])
 
-        { start: timespan[:start], finish: timespan[:finish], value: }
+        { start: timespan[:start], finish: timespan[:finish], value: value }
       end
 
     { timespans: timespans_data }

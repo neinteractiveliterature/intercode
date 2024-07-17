@@ -9,6 +9,6 @@ class Mutations::DeleteMaximumEventProvidedTicketsOverride < Mutations::BaseMuta
   def resolve(**_args)
     maximum_event_provided_tickets_override.destroy!
 
-    { maximum_event_provided_tickets_override: }
+    { maximum_event_provided_tickets_override: maximum_event_provided_tickets_override }
   end
 end

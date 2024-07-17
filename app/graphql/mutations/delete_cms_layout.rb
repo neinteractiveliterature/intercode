@@ -8,6 +8,6 @@ class Mutations::DeleteCmsLayout < Mutations::BaseMutation
 
   def resolve(**_args)
     cms_layout.destroy!
-    { cms_layout: }
+    { cms_layout: cms_layout }
   end
 end

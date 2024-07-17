@@ -5,9 +5,9 @@ class Mutations::CreateConvention < Mutations::BaseMutation
   field :convention, Types::ConventionType, null: false
 
   argument :clone_convention_id, ID, required: false, camelize: true
-  argument :cms_content_set_name, String, required: false, camelize: false
-  argument :convention, Types::ConventionInputType, required: true
   argument :organization_id, ID, required: false, camelize: true
+  argument :convention, Types::ConventionInputType, required: true
+  argument :cms_content_set_name, String, required: false, camelize: false
 
   define_authorization_check { |_args| policy(Convention.new).create? }
 

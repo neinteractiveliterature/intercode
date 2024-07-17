@@ -10,6 +10,6 @@ class Mutations::UpdateMaximumEventProvidedTicketsOverride < Mutations::BaseMuta
   def resolve(**args)
     maximum_event_provided_tickets_override.update!(override_value: args[:override_value])
 
-    { maximum_event_provided_tickets_override: }
+    { maximum_event_provided_tickets_override: maximum_event_provided_tickets_override }
   end
 end

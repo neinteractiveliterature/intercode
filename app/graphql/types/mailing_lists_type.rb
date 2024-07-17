@@ -25,12 +25,12 @@ class Types::MailingListsType < Types::BaseObject
   end
 
   field :whos_free, Types::MailingListsResultType, null: false do
-    argument :finish, Types::DateType, required: true
     argument :start, Types::DateType, required: true
+    argument :finish, Types::DateType, required: true
     authorize_action :read_user_con_profiles_mailing_list
   end
 
   def whos_free(start:, finish:)
-    object.whos_free(ScheduledValue::Timespan.new(start:, finish:))
+    object.whos_free(ScheduledValue::Timespan.new(start: start, finish: finish))
   end
 end

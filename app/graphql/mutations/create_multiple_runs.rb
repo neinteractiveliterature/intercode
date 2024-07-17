@@ -9,7 +9,7 @@ class Mutations::CreateMultipleRuns < Mutations::BaseMutation
 
   define_authorization_check do |args|
     @event = convention.events.find(args[:event_id])
-    policy(Run.new(event:)).create?
+    policy(Run.new(event: event)).create?
   end
 
   def resolve(**args)
@@ -25,6 +25,6 @@ class Mutations::CreateMultipleRuns < Mutations::BaseMutation
       end
     runs = event.runs.create!(run_attrs_hashes)
 
-    { runs: }
+    { runs: runs }
   end
 end

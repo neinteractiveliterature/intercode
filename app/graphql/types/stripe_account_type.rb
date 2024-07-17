@@ -1,17 +1,21 @@
 # frozen_string_literal: true
 class Types::StripeAccountType < Types::BaseObject
   field :id, ID, null: false
-
-  field :account_onboarding_link, String, null: false do
-    argument :base_url, String, required: true, camelize: false
-  end
-
+  field :email, String, null: true
   field :charges_enabled, Boolean, null: false
   field :display_name, String, null: true
-  field :email, String, null: true, hash_key: "email"
 
   def display_name
     object.settings&.dashboard&.display_name
+  end
+
+  def email
+    # in case Stripe didn't return it, which it apparently sometimes doesn't
+    object['email']
+  end
+
+  field :account_onboarding_link, String, null: false do
+    argument :base_url, String, required: true, camelize: false
   end
 
   def account_onboarding_link(base_url:)

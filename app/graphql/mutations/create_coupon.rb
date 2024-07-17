@@ -14,6 +14,6 @@ class Mutations::CreateCoupon < Mutations::BaseMutation
 
     coupon = convention.coupons.create!(coupon_fields)
 
-    { coupon: }
+    { coupon: coupon }
   end
 end
