@@ -21,7 +21,10 @@ class SignupBucketFinder
     return [] unless allow_movement
     return [] unless no_preference_bucket_finder.prioritized_buckets_with_capacity.any?
 
-    other_signups.select { |signup| signup.bucket_key == bucket.key && !signup.requested_bucket_key }
+    other_signups.select do |signup|
+      (signup.respond_to?(:bucket_key) && signup.bucket_key == bucket.key) &&
+        !(signup.respond_to?(:requested_bucket_key) && signup.requested_bucket_key)
+    end
   end
 
   def prioritized_buckets

@@ -36,15 +36,7 @@ class SignupRound < ApplicationRecord
   scope :reverse_chronological, -> { order("start DESC NULLS LAST") }
 
   def self.execute_currently_due_rounds!
-    currently_due
-      .chronological
-      .includes(:convention)
-      .find_each do |signup_round|
-        signup_round.execute!
-      rescue StandardError => e
-        Rollbar.error(e)
-        Rails.logger.error(e)
-      end
+    currently_due.chronological.includes(:convention).find_each(&:execute!)
   end
 
   def execute!
