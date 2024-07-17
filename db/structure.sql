@@ -2568,7 +2568,7 @@ ALTER SEQUENCE public.signup_changes_id_seq OWNED BY public.signup_changes.id;
 CREATE TABLE public.signup_ranked_choices (
     id bigint NOT NULL,
     priority integer NOT NULL,
-    requested_bucket_key character varying NOT NULL,
+    requested_bucket_key character varying,
     state character varying NOT NULL,
     result_signup_id bigint,
     target_run_id bigint NOT NULL,
@@ -5333,7 +5333,7 @@ ALTER TABLE ONLY public.user_activity_alerts
 --
 
 ALTER TABLE ONLY public.ranked_choice_decisions
-    ADD CONSTRAINT fk_rails_3163578a2d FOREIGN KEY (signup_request_id) REFERENCES public.signup_requests(id);
+    ADD CONSTRAINT fk_rails_3163578a2d FOREIGN KEY (signup_request_id) REFERENCES public.signup_requests(id) ON DELETE SET NULL;
 
 
 --
@@ -5453,7 +5453,7 @@ ALTER TABLE ONLY public.root_sites
 --
 
 ALTER TABLE ONLY public.signup_ranked_choices
-    ADD CONSTRAINT fk_rails_6129ac5277 FOREIGN KEY (result_signup_request_id) REFERENCES public.signup_requests(id);
+    ADD CONSTRAINT fk_rails_6129ac5277 FOREIGN KEY (result_signup_request_id) REFERENCES public.signup_requests(id) ON DELETE SET NULL;
 
 
 --
@@ -5565,7 +5565,7 @@ ALTER TABLE ONLY public.signup_changes
 --
 
 ALTER TABLE ONLY public.ranked_choice_decisions
-    ADD CONSTRAINT fk_rails_7a24c25ccf FOREIGN KEY (signup_id) REFERENCES public.signups(id);
+    ADD CONSTRAINT fk_rails_7a24c25ccf FOREIGN KEY (signup_id) REFERENCES public.signups(id) ON DELETE SET NULL;
 
 
 --
@@ -5845,7 +5845,7 @@ ALTER TABLE ONLY public.oauth_access_grants
 --
 
 ALTER TABLE ONLY public.ranked_choice_decisions
-    ADD CONSTRAINT fk_rails_b5dde4741e FOREIGN KEY (signup_ranked_choice_id) REFERENCES public.signup_ranked_choices(id);
+    ADD CONSTRAINT fk_rails_b5dde4741e FOREIGN KEY (signup_ranked_choice_id) REFERENCES public.signup_ranked_choices(id) ON DELETE SET NULL;
 
 
 --
@@ -6103,6 +6103,7 @@ ALTER TABLE ONLY public.cms_files_pages
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20240717150224'),
 ('20240620014115'),
 ('20240608175912'),
 ('20240526181616'),

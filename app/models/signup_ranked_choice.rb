@@ -5,7 +5,7 @@
 #
 #  id                       :bigint           not null, primary key
 #  priority                 :integer          not null
-#  requested_bucket_key     :string           not null
+#  requested_bucket_key     :string
 #  state                    :string           not null
 #  created_at               :datetime         not null
 #  updated_at               :datetime         not null
@@ -27,7 +27,7 @@
 # Foreign Keys
 #
 #  fk_rails_...  (result_signup_id => signups.id)
-#  fk_rails_...  (result_signup_request_id => signup_requests.id)
+#  fk_rails_...  (result_signup_request_id => signup_requests.id) ON DELETE => nullify
 #  fk_rails_...  (target_run_id => runs.id)
 #  fk_rails_...  (updated_by_id => users.id)
 #  fk_rails_...  (user_con_profile_id => user_con_profiles.id)
