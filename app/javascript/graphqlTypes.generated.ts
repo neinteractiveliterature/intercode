@@ -3318,6 +3318,7 @@ export type Mutation = {
   setConventionCanceled: SetConventionCanceledPayload;
   sortCmsNavigationItems: SortCmsNavigationItemsPayload;
   submitEventProposal: SubmitEventProposalPayload;
+  /** Submit an order.  This triggers payment, unless the order is free. */
   submitOrder: SubmitOrderPayload;
   transitionEventProposal: TransitionEventProposalPayload;
   updateCmsContentGroup: UpdateCmsContentGroupPayload;
@@ -5569,8 +5570,11 @@ export type SubmitEventProposalPayload = {
 export type SubmitOrderInput = {
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  /** The ID of the order to submit. */
   id?: InputMaybe<Scalars['ID']['input']>;
+  /** The ID of the Stripe PaymentIntent to use for payment, if applicable. */
   payment_intent_id?: InputMaybe<Scalars['String']['input']>;
+  /** The payment mode to use for submitting this order. */
   payment_mode: PaymentMode;
 };
 
@@ -5579,6 +5583,7 @@ export type SubmitOrderPayload = {
   __typename: 'SubmitOrderPayload';
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
+  /** The order after successful submission. */
   order: Order;
 };
 

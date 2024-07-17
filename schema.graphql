@@ -4615,6 +4615,10 @@ type Mutation {
     """
     input: SubmitEventProposalInput!
   ): SubmitEventProposalPayload!
+
+  """
+  Submit an order.  This triggers payment, unless the order is free.
+  """
   submitOrder(
     """
     Parameters for SubmitOrder
@@ -7004,8 +7008,20 @@ input SubmitOrderInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
+
+  """
+  The ID of the order to submit.
+  """
   id: ID
+
+  """
+  The ID of the Stripe PaymentIntent to use for payment, if applicable.
+  """
   payment_intent_id: String
+
+  """
+  The payment mode to use for submitting this order.
+  """
   payment_mode: PaymentMode!
 }
 
@@ -7017,6 +7033,10 @@ type SubmitOrderPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
+
+  """
+  The order after successful submission.
+  """
   order: Order!
 }
 
