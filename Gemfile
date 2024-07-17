@@ -171,7 +171,10 @@ group :test do
   gem "factory_bot"
   gem "factory_bot_rails"
   gem "simplecov"
-  gem "stripe-ruby-mock", ">= 3.1.0.rc3", require: "stripe_mock"
+  gem "stripe-ruby-mock",
+      github: "mpmenne/stripe-ruby-mock",
+      branch: "expand-latest-charge-on-payment-intent",
+      require: "stripe_mock"
 
   # Not sure if we actually need it or not, but adding this for now to unbreak controller tests
   gem "rails-controller-testing"
