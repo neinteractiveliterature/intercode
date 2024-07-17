@@ -138,7 +138,7 @@ class ExecuteRankedChoiceSignupRoundService < CivilService::Service
         signup_ranked_choice:,
         allow_waitlist:,
         constraints:,
-        skip_locking:,
+        skip_locking: true,
         suppress_notifications:
       ).call!
     decisions << result.decision
