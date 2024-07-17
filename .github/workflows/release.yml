@@ -15,8 +15,8 @@ jobs:
       run: docker pull ghcr.io/neinteractiveliterature/intercode:${{ github.sha }}
     - name: Tag image with version Tag
       run: docker tag ghcr.io/neinteractiveliterature/intercode:${{ github.sha }} ghcr.io/neinteractiveliterature/intercode:${{ github.event.release.name }}
-    - name: Tag image as latest
-      run: docker tag ghcr.io/neinteractiveliterature/intercode:${{ github.sha }} ghcr.io/neinteractiveliterature/intercode:latest
+    - name: Tag image as v4
+      run: docker tag ghcr.io/neinteractiveliterature/intercode:${{ github.sha }} ghcr.io/neinteractiveliterature/intercode:v4
     - name: Push to registry
       run: docker push ghcr.io/neinteractiveliterature/intercode:latest && docker push ghcr.io/neinteractiveliterature/intercode:${{ github.event.release.name }}
     # Now do the same for the assets
@@ -24,7 +24,7 @@ jobs:
       run: docker pull ghcr.io/neinteractiveliterature/intercode-assets:${{ github.sha }}
     - name: Tag image with version Tag
       run: docker tag ghcr.io/neinteractiveliterature/intercode-assets:${{ github.sha }} ghcr.io/neinteractiveliterature/intercode-assets:${{ github.event.release.name }}
-    - name: Tag image as latest
-      run: docker tag ghcr.io/neinteractiveliterature/intercode-assets:${{ github.sha }} ghcr.io/neinteractiveliterature/intercode-assets:latest
+    - name: Tag image as v4
+      run: docker tag ghcr.io/neinteractiveliterature/intercode-assets:${{ github.sha }} ghcr.io/neinteractiveliterature/intercode-assets:v4
     - name: Push to registry
       run: docker push ghcr.io/neinteractiveliterature/intercode-assets:latest && docker push ghcr.io/neinteractiveliterature/intercode-assets:${{ github.event.release.name }}
