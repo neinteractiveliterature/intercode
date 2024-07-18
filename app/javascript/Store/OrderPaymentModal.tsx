@@ -1,7 +1,7 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useContext } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
 import { ApolloError } from '@apollo/client';
-import { PaymentElement } from '@stripe/react-stripe-js';
+import { LinkAuthenticationElement, PaymentElement } from '@stripe/react-stripe-js';
 import { ErrorDisplay, MultipleChoiceInput } from '@neinteractiveliterature/litform';
 
 import { LazyStripeElementsContainer } from '../LazyStripe';
@@ -14,6 +14,7 @@ import { useCurrentPendingOrderPaymentIntentClientSecretQuerySuspenseQuery } fro
 import PoweredByStripeLogo from '../images/powered_by_stripe.svg';
 import intersection from 'lodash/intersection';
 import { useTranslation } from 'react-i18next';
+import AppRootContext from '../AppRootContext';
 
 export type OrderPaymentModalContentsProps = {
   onCancel: () => void;
@@ -36,6 +37,7 @@ export function OrderPaymentModalContents({ onCancel, onComplete, order }: Order
     paymentOptions.includes('pay_at_convention') ? undefined : PaymentMode.Now,
   );
   const submitOrder = useSubmitOrder();
+  const { myProfile } = useContext(AppRootContext);
 
   const [submitCheckOut, error, submitting] = useAsyncFunction(
     useCallback(async () => {
@@ -79,7 +81,14 @@ export function OrderPaymentModalContents({ onCancel, onComplete, order }: Order
     return (
       <div className="modal-body">
         {paymentModeSelect}
-        {paymentMode === PaymentMode.Now || PaymentMode.PaymentIntent ? <PaymentElement /> : null}
+        {paymentMode === PaymentMode.Now || PaymentMode.PaymentIntent ? (
+          <>
+            <LinkAuthenticationElement
+              options={myProfile?.email ? { defaultValues: { email: myProfile.email } } : {}}
+            />
+            <PaymentElement />
+          </>
+        ) : null}
         <ErrorDisplay graphQLError={error as ApolloError} />
       </div>
     );
