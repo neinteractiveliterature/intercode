@@ -58,6 +58,7 @@ class SubmitOrderService < CivilService::Service
         paid_at: Time.zone.at(charge.created),
         submitted_at: Time.zone.now
       )
+      Orders::PurchasedNotifier.new(order:).deliver_now
     else
       order.update!(status: "unpaid", submitted_at: Time.zone.now)
     end
