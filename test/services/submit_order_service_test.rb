@@ -6,17 +6,6 @@ class SubmitOrderServiceTest < ActiveSupport::TestCase
   end
   let(:user_con_profile) { create(:user_con_profile, convention:) }
   let(:order) { create(:order, user_con_profile:) }
-  let(:stripe_helper) { StripeMock.create_test_helper }
-  let(:payment_intent) do
-    Stripe::PaymentIntent.create(
-      { amount: 100, currency: "usd", payment_method: stripe_helper.generate_card_token, confirm: true }
-    )
-  end
-
-  before { StripeMock.start }
-  after { StripeMock.stop }
-
-  subject { SubmitOrderService.new(order, payment_mode: "now", payment_intent_id: payment_intent.id) }
 
   describe "ticket-providing products" do
     let(:ticket_type) { create(:paid_ticket_type, convention:) }
@@ -25,19 +14,19 @@ class SubmitOrderServiceTest < ActiveSupport::TestCase
     before { order_entry }
 
     it "buys a ticket" do
-      assert_difference("Ticket.count", 1) { subject.call! }
+      mocking_payment_intent do |payment_intent|
+        assert_difference("Ticket.count", 1) do
+          SubmitOrderService.new(order, payment_mode: "now", payment_intent_id: payment_intent.id).call!
+        end
+      end
     end
 
     describe "there is a card issue" do
-      let(:payment_intent) do
-        Stripe::PaymentIntent.create(
-          { amount: 3178, currency: "usd", payment_method: stripe_helper.generate_card_token, confirm: true }
-        )
-      end
-
       it "does not mark the order as paid" do
-        subject.call
-        assert_equal "unpaid", order.reload.status
+        mocking_payment_intent(status: "unpaid") do |payment_intent|
+          SubmitOrderService.new(order, payment_mode: "now", payment_intent_id: payment_intent.id).call!
+          assert_equal "unpaid", order.reload.status
+        end
       end
     end
 
@@ -45,9 +34,11 @@ class SubmitOrderServiceTest < ActiveSupport::TestCase
       before { create(:ticket, ticket_type:, user_con_profile:) }
 
       it "fails with an error" do
-        result = subject.call
-        assert result.failure?
-        assert_match(/\AYou already have a ticket/, result.errors.full_messages.join(", "))
+        mocking_payment_intent do |payment_intent|
+          result = SubmitOrderService.new(order, payment_mode: "now", payment_intent_id: payment_intent.id).call
+          assert result.failure?
+          assert_match(/\AYou already have a ticket/, result.errors.full_messages.join(", "))
+        end
       end
     end
 
@@ -60,9 +51,11 @@ class SubmitOrderServiceTest < ActiveSupport::TestCase
       end
 
       it "fails with an error" do
-        result = subject.call
-        assert result.failure?
-        assert_match(/sold out/, result.errors.full_messages.join(", "))
+        mocking_payment_intent do |payment_intent|
+          result = SubmitOrderService.new(order, payment_mode: "now", payment_intent_id: payment_intent.id).call
+          assert result.failure?
+          assert_match(/sold out/, result.errors.full_messages.join(", "))
+        end
       end
     end
 
@@ -70,10 +63,37 @@ class SubmitOrderServiceTest < ActiveSupport::TestCase
       before { convention.update!(ends_at: 5.minutes.ago) }
 
       it "fails with an error" do
-        result = subject.call
-        assert result.failure?
-        assert_match(/is over/, result.errors.full_messages.join(", "))
+        mocking_payment_intent do |payment_intent|
+          result = SubmitOrderService.new(order, payment_mode: "now", payment_intent_id: payment_intent.id).call
+          assert result.failure?
+          assert_match(/is over/, result.errors.full_messages.join(", "))
+        end
       end
+    end
+  end
+
+  private
+
+  def build_payment_intent(status: "succeeded")
+    Stripe::PaymentIntent.construct_from(
+      {
+        id: "pi_12345",
+        amount: 100,
+        currency: "usd",
+        payment_method: "tok_12345",
+        status:,
+        latest_charge: {
+          id: "ch_12345",
+          created: Time.now.to_i
+        }
+      }
+    )
+  end
+
+  def mocking_payment_intent(**args, &)
+    payment_intent = build_payment_intent(**args)
+    Stripe::PaymentIntent.stub :retrieve, payment_intent do
+      yield payment_intent
     end
   end
 end
