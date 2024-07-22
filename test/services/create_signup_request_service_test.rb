@@ -38,6 +38,89 @@ class CreateSignupRequestServiceTest < ActiveSupport::TestCase
     end
   end
 
+  describe "in a limited signup round" do
+    let(:signup_round) { create(:signup_round, convention:, maximum_event_signups: "1") }
+    let(:other_event) { create(:event, convention:, length_seconds: event.length_seconds) }
+    let(:other_run) { create(:run, event: other_event, starts_at: the_run.ends_at) }
+
+    before do
+      signup_round
+      other_run
+    end
+
+    it "lets you request signups up to the limit" do
+      result = subject.call
+      assert result.success?
+    end
+
+    it "does not let you add additional signup requests if you already have too many pending" do
+      skip "Fix this in round 2"
+      create(:signup_request, user_con_profile:, target_run: other_run, state: "pending")
+      result = subject.call
+      assert result.failure?
+      assert_match(/\AYou have already requested to sign up for 1 event/, result.errors.full_messages.join('\n'))
+    end
+
+    it "does not let you add additional signup requests if you already are at the signup limit" do
+      skip "Fix this in round 2"
+      create(:signup, user_con_profile:, run: other_run, state: "confirmed")
+      result = subject.call
+      assert result.failure?
+      assert_match(/\AYou are already signed up for 1 event/, result.errors.full_messages.join('\n'))
+    end
+
+    describe "the target run is non-counted" do
+      let(:event) do
+        create(
+          :event,
+          convention:,
+          registration_policy:
+            RegistrationPolicy.new(
+              buckets: [RegistrationPolicy::Bucket.new(key: "unlimited", slots_limited: false, not_counted: true)]
+            )
+        )
+      end
+
+      it "lets you request a signup even if there's a signup request pending" do
+        create(:signup_request, user_con_profile:, target_run: other_run, state: "pending")
+        result = subject.call
+        assert result.success?
+      end
+
+      it "lets you request a signup even if you're already signed up for the other run" do
+        create(:signup, user_con_profile:, run: other_run, state: "confirmed")
+        result = subject.call
+        assert result.success?
+      end
+    end
+
+    describe "the other run is non-counted" do
+      let(:other_event) do
+        create(
+          :event,
+          convention:,
+          length_seconds: event.length_seconds,
+          registration_policy:
+            RegistrationPolicy.new(
+              buckets: [RegistrationPolicy::Bucket.new(key: "unlimited", slots_limited: false, not_counted: true)]
+            )
+        )
+      end
+
+      it "lets you request a signup even if there's a signup request pending" do
+        create(:signup_request, user_con_profile:, target_run: other_run, state: "pending")
+        result = subject.call
+        assert result.success?
+      end
+
+      it "lets you request a signup even if you're already signed up for the other run" do
+        create(:signup, user_con_profile:, run: other_run, state: "confirmed")
+        result = subject.call
+        assert result.success?
+      end
+    end
+  end
+
   describe "conflicts" do
     let(:other_event) { create(:event, convention:, length_seconds: event.length_seconds) }
     let(:other_run) { create(:run, event: other_event, starts_at: the_run.starts_at) }

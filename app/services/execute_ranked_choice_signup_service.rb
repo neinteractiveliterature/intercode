@@ -93,7 +93,7 @@ class ExecuteRankedChoiceSignupService < CivilService::Service
       AcceptSignupRankedChoiceService.new(
         signup_ranked_choice:,
         whodunit:,
-        skip_locking:,
+        skip_locking: true,
         suppress_notifications:
       ).call!
     RankedChoiceDecision.create!(
@@ -111,7 +111,7 @@ class ExecuteRankedChoiceSignupService < CivilService::Service
       AcceptSignupRankedChoiceService.new(
         signup_ranked_choice:,
         whodunit:,
-        skip_locking:,
+        skip_locking: true,
         suppress_notifications:
       ).call!
     RankedChoiceDecision.create!(
