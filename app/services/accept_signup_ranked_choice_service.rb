@@ -28,10 +28,10 @@ class AcceptSignupRankedChoiceService < CivilService::Service
       )
       success(signup: signup_result.signup)
     else
-      signup_request = nil
-      with_relevant_locks { signup_request = create_signup_request }
-      signup_ranked_choice.update!(state: "requested", result_signup_request: signup_request)
-      success(signup_request:)
+      signup_request_result = nil
+      with_relevant_locks { signup_request_result = create_signup_request }
+      signup_ranked_choice.update!(state: "requested", result_signup_request: signup_request_result.signup_request)
+      success(signup_request: signup_request_result.signup_request)
     end
   end
 
@@ -54,10 +54,14 @@ class AcceptSignupRankedChoiceService < CivilService::Service
   end
 
   def create_signup_request
-    signup_ranked_choice.user_con_profile.signup_requests.create!(
+    CreateSignupRequestService.new(
+      user_con_profile: signup_ranked_choice.user_con_profile,
       target_run: signup_ranked_choice.target_run,
       requested_bucket_key: signup_ranked_choice.requested_bucket_key,
-      updated_by: whodunit
-    )
+      whodunit:,
+      suppress_notifications:,
+      action: "accept_signup_ranked_choice",
+      keep_pending_ranked_choices: true
+    ).call!
   end
 end

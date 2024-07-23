@@ -5,20 +5,28 @@ class EventVacancyFillService < CivilService::Service
   end
   self.result_class = Result
 
-  attr_reader :run, :bucket_key, :move_results, :suppress_notifications, :immovable_signups
+  attr_reader :run, :bucket_key, :move_results, :suppress_notifications, :immovable_signups, :action
   delegate :event, to: :run
   delegate :convention, to: :event
 
   include SkippableAdvisoryLock
   include ConventionRegistrationFreeze
 
-  def initialize(run, bucket_key, immovable_signups: [], skip_locking: false, suppress_notifications: false)
+  def initialize(
+    run,
+    bucket_key,
+    immovable_signups: [],
+    skip_locking: false,
+    suppress_notifications: false,
+    action: "vacancy_fill"
+  )
     @run = run
     @bucket_key = bucket_key
     @skip_locking = skip_locking
     @immovable_signups = immovable_signups
     @move_results = []
     @suppress_notifications = suppress_notifications
+    @action = action
   end
 
   private
