@@ -33,6 +33,7 @@ jobs:
         with:
           skip_install: true
           use_bundler: true
+          only_changed: true
   eslint:
     name: eslint
     runs-on: ubuntu-latest
