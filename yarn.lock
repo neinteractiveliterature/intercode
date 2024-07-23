@@ -3533,9 +3533,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-markdown/core@npm:^1.10.2":
-  version: 1.10.2
-  resolution: "@graphql-markdown/core@npm:1.10.2"
+"@graphql-markdown/core@npm:^1.10.4":
+  version: 1.10.4
+  resolution: "@graphql-markdown/core@npm:1.10.4"
   dependencies:
     "@graphql-markdown/graphql": "npm:^1.1.3"
     "@graphql-markdown/logger": "npm:^1.0.3"
@@ -3543,7 +3543,7 @@ __metadata:
   peerDependencies:
     "@graphql-markdown/diff": ^1.1.6
     "@graphql-markdown/helpers": ^1.0.6
-    "@graphql-markdown/printer-legacy": ^1.8.2
+    "@graphql-markdown/printer-legacy": ^1.8.4
     graphql-config: ^5.0.3
   peerDependenciesMeta:
     "@graphql-markdown/diff":
@@ -3554,20 +3554,20 @@ __metadata:
       optional: true
     graphql-config:
       optional: true
-  checksum: 10c0/85e94bc3285c1974d17eaa98b393a738a331028292e3a6f51e6cd0c27cd8bc40fd2e507adbb22c92c2c866fdd5d0c30a3899f099c5f85f5abe8ce4ae1a18726e
+  checksum: 10c0/9d07769ebb27abedc825e75a54c845212efb3c4443e2a1e6968c0e7f4580a0653222c724d8b28a48864d1bf248385b2d16092b46f85d266634d1024f0951bd46
   languageName: node
   linkType: hard
 
 "@graphql-markdown/docusaurus@npm:^1.24.1":
-  version: 1.24.2
-  resolution: "@graphql-markdown/docusaurus@npm:1.24.2"
+  version: 1.24.4
+  resolution: "@graphql-markdown/docusaurus@npm:1.24.4"
   dependencies:
-    "@graphql-markdown/core": "npm:^1.10.2"
+    "@graphql-markdown/core": "npm:^1.10.4"
     "@graphql-markdown/logger": "npm:^1.0.3"
-    "@graphql-markdown/printer-legacy": "npm:^1.8.2"
+    "@graphql-markdown/printer-legacy": "npm:^1.8.4"
   peerDependencies:
     "@docusaurus/logger": "*"
-  checksum: 10c0/c75aa6961f16cc7f2a16c272e82fb56d0188c6232ca2b8ba91e9b757f093412a0900543aba1e7b9e1b1b5a735f0f8e3053e392bd0e19a0c9abd783fb2335479e
+  checksum: 10c0/ff3e3e20b775ea572837ecbbea8e8269ce9437c8b63ada85d03b974152251400baa6bd0f55fe4eb94c0c51fb522a1c92c60ead586e77b58f5c388a27bed2a763
   languageName: node
   linkType: hard
 
@@ -3590,14 +3590,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-markdown/printer-legacy@npm:^1.8.2":
-  version: 1.8.2
-  resolution: "@graphql-markdown/printer-legacy@npm:1.8.2"
+"@graphql-markdown/printer-legacy@npm:^1.8.4":
+  version: 1.8.4
+  resolution: "@graphql-markdown/printer-legacy@npm:1.8.4"
   dependencies:
     "@docusaurus/utils": "npm:>=3.2.0"
     "@graphql-markdown/graphql": "npm:^1.1.3"
     "@graphql-markdown/utils": "npm:^1.6.5"
-  checksum: 10c0/4215fdb1ffcb5d9478c693678258bb94cac7f91b99cc6fa76b1b88e0791e859590789d312855cf8e04ce10791fc4516094e05397a48a3a1b471824cf082ac93e
+  checksum: 10c0/3584c5f1e8082b767ce8c0c0bb77460fe71aca7749557a89c80a92063efac51ef33bc001a3e039fe48646374ba4d074d2bedd04663989c50ee34a604161af816
   languageName: node
   linkType: hard
 
