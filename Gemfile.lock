@@ -603,7 +603,7 @@ GEM
       sprockets (>= 3.0.0)
     stackprof (0.2.26)
     stringio (3.1.1)
-    stripe (12.2.0)
+    stripe (12.3.0)
     strscan (3.1.0)
     strscan (3.1.0-java)
     sync (0.5.0)
