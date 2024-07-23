@@ -20039,9 +20039,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-i18next@npm:14.1.2":
-  version: 14.1.2
-  resolution: "react-i18next@npm:14.1.2"
+"react-i18next@npm:14.1.3":
+  version: 14.1.3
+  resolution: "react-i18next@npm:14.1.3"
   dependencies:
     "@babel/runtime": "npm:^7.23.9"
     html-parse-stringify: "npm:^3.0.1"
@@ -20053,7 +20053,7 @@ __metadata:
       optional: true
     react-native:
       optional: true
-  checksum: 10c0/cb8a83b3696639f083dc9f770d9d9e0681c0fe56f6b5fe24cd6facce08d363c37bd3440078e9d63abacabd7037b783e6b4e4d0c935de9c8dda7820bd4ef7e329
+  checksum: 10c0/a10426585a3bdfecbec5afc7eeb35df8005fa9d47032dd70dea170adb5506c13ea4e5f417a50669f59c547537d1b3a80e638580987f1c1bbc628ddc8f5974ec9
   languageName: node
   linkType: hard
 
@@ -21171,7 +21171,7 @@ __metadata:
     react-google-recaptcha: "npm:3.1.0"
     react-helmet-async: "npm:2.0.5"
     react-html-id: "npm:0.1.5"
-    react-i18next: "npm:14.1.2"
+    react-i18next: "npm:14.1.3"
     react-onclickoutside: "npm:6.13.1"
     react-popper: "npm:2.3.0"
     react-router: "npm:6.24.1"
