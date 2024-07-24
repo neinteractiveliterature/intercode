@@ -40,8 +40,8 @@ class Signup < ApplicationRecord
   belongs_to :run
   has_one :event, through: :run
   has_one :convention, through: :event
-  has_one :signup_request, foreign_key: 'result_signup_id', dependent: :destroy
-  belongs_to :updated_by, class_name: 'User', optional: true
+  has_one :signup_request, foreign_key: "result_signup_id", dependent: :destroy
+  belongs_to :updated_by, class_name: "User", optional: true
   has_many :signup_changes, dependent: :destroy
 
   validates :state, inclusion: { in: STATES }
@@ -50,7 +50,7 @@ class Signup < ApplicationRecord
   validate :user_con_profile_and_run_must_be_in_same_convention
 
   STATES.each do |state_name|
-    define_method "#{state_name}?" do
+    define_method :"#{state_name}?" do
       state == state_name
     end
 
@@ -64,8 +64,8 @@ class Signup < ApplicationRecord
 
   scope :counted, -> { where(counted: true) }
   scope :not_counted, -> { where.not(counted: true) }
-  scope :expired, -> { where('expires_at < ?', Time.now) }
-  scope :not_expired, -> { where('expires_at >= ? or expires_at is null', Time.now) }
+  scope :expired, -> { where(expires_at: ...Time.now) }
+  scope :not_expired, -> { where("expires_at >= ? or expires_at is null", Time.now) }
 
   def bucket
     run.registration_policy.bucket_with_key(bucket_key)
@@ -93,10 +93,10 @@ class Signup < ApplicationRecord
   end
 
   def age_restrictions_check
-    return 'N/A' if event.minimum_age.blank?
-    return 'Unknown age' if user_con_profile.birth_date.blank?
+    return "N/A" if event.minimum_age.blank?
+    return "Unknown age" if user_con_profile.birth_date.blank?
 
-    user_con_profile.age_as_of(run.starts_at) >= event.minimum_age ? 'OK' : 'Too young'
+    user_con_profile.age_as_of(run.starts_at) >= event.minimum_age ? "OK" : "Too young"
   end
 
   def log_signup_change!(**attrs)
@@ -104,14 +104,14 @@ class Signup < ApplicationRecord
     signup_changes.create!(
       {
         signup: self,
-        run_id: run_id,
-        user_con_profile_id: user_con_profile_id,
+        run_id:,
+        user_con_profile_id:,
         previous_signup_change: signup_changes.order(created_at: :desc).first,
-        updated_by_id: updated_by_id,
-        bucket_key: bucket_key,
-        requested_bucket_key: requested_bucket_key,
-        state: state,
-        counted: counted,
+        updated_by_id:,
+        bucket_key:,
+        requested_bucket_key:,
+        state:,
+        counted:,
         **attrs
       }
     )
@@ -129,7 +129,7 @@ class Signup < ApplicationRecord
   def user_con_profile_and_run_must_be_in_same_convention
     return if user_con_profile.convention_id == event.convention_id
 
-    errors.add(:base, 'User con profile and run must be in the same convention')
+    errors.add(:base, "User con profile and run must be in the same convention")
   end
 
   def can_have_invalid_buckets?
@@ -152,7 +152,7 @@ class Signup < ApplicationRecord
             .registration_policy
             .buckets
             .map(&:key)
-            .to_sentence(last_word_connector: ', or ', two_words_connector: ' or ')
+            .to_sentence(last_word_connector: ", or ", two_words_connector: " or ")
 
         "must be one of #{bucket_names}"
       end

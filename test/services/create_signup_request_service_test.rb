@@ -54,15 +54,13 @@ class CreateSignupRequestServiceTest < ActiveSupport::TestCase
     end
 
     it "does not let you add additional signup requests if you already have too many pending" do
-      skip "Fix this in round 2"
       create(:signup_request, user_con_profile:, target_run: other_run, state: "pending")
       result = subject.call
       assert result.failure?
-      assert_match(/\AYou have already requested to sign up for 1 event/, result.errors.full_messages.join('\n'))
+      assert_match(/\AYou are already signed up for 1 event/, result.errors.full_messages.join('\n'))
     end
 
     it "does not let you add additional signup requests if you already are at the signup limit" do
-      skip "Fix this in round 2"
       create(:signup, user_con_profile:, run: other_run, state: "confirmed")
       result = subject.call
       assert result.failure?
@@ -114,7 +112,7 @@ class CreateSignupRequestServiceTest < ActiveSupport::TestCase
       end
 
       it "lets you request a signup even if you're already signed up for the other run" do
-        create(:signup, user_con_profile:, run: other_run, state: "confirmed")
+        create(:signup, user_con_profile:, run: other_run, state: "confirmed", counted: false)
         result = subject.call
         assert result.success?
       end
@@ -152,6 +150,41 @@ class CreateSignupRequestServiceTest < ActiveSupport::TestCase
 
       result = subject.call
       assert result.success?
+    end
+  end
+
+  describe "in ranked-choice conventions" do
+    let(:convention) do
+      create(
+        :convention,
+        :with_notification_templates,
+        signup_automation_mode: "ranked_choice",
+        signup_mode: "moderated",
+        signup_requests_open: true
+      )
+    end
+
+    it "allows signup requests normally" do
+      create(
+        :signup_round,
+        convention:,
+        maximum_event_signups: "unlimited",
+        start: 1.minute.ago,
+        executed_at: 1.minute.ago
+      )
+
+      result = subject.call!
+
+      assert result.success?
+    end
+
+    it "does not allow signup requests while waiting for a signup round to process" do
+      create(:signup_round, convention:, maximum_event_signups: "unlimited", start: 1.minute.ago, executed_at: nil)
+
+      result = subject.call
+
+      assert result.failure?
+      assert_match(/\AWe are currently processing ranked choice signups/, result.errors.full_messages.join('\n'))
     end
   end
 end

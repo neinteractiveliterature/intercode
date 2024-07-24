@@ -18,17 +18,16 @@ class EventSignupService < CivilService::Service
   delegate :convention, to: :event
 
   self.validate_manually = true
-  validate :signup_count_must_be_allowed
   validate :convention_must_allow_self_service_signups
   validate :must_not_already_be_signed_up
   validate :must_not_have_conflicting_signups
   validate :must_have_ticket_if_required
-  validate :must_not_have_signup_rounds_due
   validate :require_valid_bucket, unless: :team_member?
   validate :require_no_bucket_for_team_member
 
   include SkippableAdvisoryLock
   include ConventionRegistrationFreeze
+  include SignupCountLimits
 
   def initialize( # rubocop:disable Metrics/ParameterLists
     user_con_profile,
@@ -96,29 +95,6 @@ class EventSignupService < CivilService::Service
     @user_signup_constraints ||= UserSignupConstraints.new(user_con_profile)
   end
 
-  def signup_count_must_be_allowed
-    return unless signup_count_check_required?
-
-    case user_signup_constraints.max_signups_allowed
-    when "not_now"
-      nil # ConventionRegistrationFreeze will take care of this
-    when "not_yet"
-      errors.add :base, I18n.t("signups.errors.closed")
-    else
-      user_signup_count = user_signup_constraints.current_signup_count
-      unless user_signup_constraints.signup_count_allowed?(user_signup_count + 1)
-        errors.add :base, I18n.t("signups.errors.already_at_max", count: user_signup_count)
-      end
-    end
-  end
-
-  def signup_count_check_required?
-    return false if team_member?
-    return false if Signup::SLOT_OCCUPYING_STATES.include?(signup_state) && !counts_towards_total?
-
-    true
-  end
-
   def conflicting_signups
     @conflicting_signups ||=
       begin
@@ -172,14 +148,6 @@ class EventSignupService < CivilService::Service
     errors.add :base, I18n.t("signups.errors.already_signed_up", event_title: event.title)
   end
 
-  def must_not_have_signup_rounds_due
-    return if action == "accept_signup_ranked_choice"
-    return unless convention.signup_automation_mode == "ranked_choice"
-    return unless convention.signup_rounds.currently_due.any?
-
-    errors.add :base, I18n.t("signups.errors.signup_round_in_progress")
-  end
-
   def require_valid_bucket
     return if run.registration_policy.allow_no_preference_signups? && !requested_bucket_key
 
@@ -221,11 +189,6 @@ class EventSignupService < CivilService::Service
   def actual_bucket
     return nil if team_member?
     @actual_bucket ||= bucket_finder.find_bucket
-  end
-
-  def team_member?
-    return @is_team_member unless @is_team_member.nil?
-    @is_team_member = event.team_members.where(user_con_profile_id: user_con_profile.id).any?
   end
 
   def existing_signups

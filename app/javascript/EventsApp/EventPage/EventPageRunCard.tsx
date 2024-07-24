@@ -14,8 +14,10 @@ import {
   useWithdrawMySignupMutation,
   useWithdrawSignupRequestMutation,
 } from './mutations.generated';
-import { SignupMode, SignupRankedChoiceState } from '../../graphqlTypes.generated';
+import { SignupAutomationMode, SignupMode, SignupRankedChoiceState } from '../../graphqlTypes.generated';
 import SignupCountData from '../SignupCountData';
+import { parseSignupRounds } from '../../SignupRoundUtils';
+import { DateTime } from 'luxon';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type TI = any;
@@ -81,7 +83,7 @@ function EventPageRunCard({
   addToQueue,
 }: EventPageRunCardProps): JSX.Element {
   const { t } = useTranslation();
-  const { signupMode } = useContext(AppRootContext);
+  const { signupMode, signupAutomationMode } = useContext(AppRootContext);
   const myPendingRankedChoices = useMemo(
     () => run.my_signup_ranked_choices.filter((choice) => choice.state === SignupRankedChoiceState.Pending),
     [run.my_signup_ranked_choices],
@@ -109,6 +111,12 @@ function EventPageRunCard({
   const [withdrawSignupRequestMutate] = useWithdrawSignupRequestMutation();
   const [createSignupRankedChoiceMutate] = useCreateSignupRankedChoiceMutation();
   const apolloClient = useApolloClient();
+
+  const currentRound = useMemo(() => {
+    const parsedRounds = parseSignupRounds(signupRounds);
+    const now = DateTime.local();
+    return parsedRounds.find((round) => round.timespan.includesTime(now));
+  }, [signupRounds]);
 
   const selfServiceSignup = useCallback(
     async (signupOption: SignupOption) => {
@@ -143,39 +151,42 @@ function EventPageRunCard({
     [apolloClient, createMySignupMutate, createSignupRankedChoiceMutate, event, run],
   );
 
-  const selfServiceWithdraw = useCallback(
-    () =>
-      confirm({
-        prompt: t('events.withdrawPrompt.selfServiceSignup', { eventTitle: event.title }),
-        action: async () => {
-          await withdrawMySignupMutate({ variables: { runId: run.id } });
-          await apolloClient.resetStore();
-        },
-        renderError: (error) => <ErrorDisplay graphQLError={error} />,
-      }),
-    [apolloClient, confirm, event.title, run.id, withdrawMySignupMutate, t],
-  );
+  const withdrawPrompt = useMemo(() => {
+    if (mySignup && !mySignup.counted) {
+      return t('events.withdrawPrompt.notCounted', { eventTitle: event.title });
+    } else if (
+      signupAutomationMode === SignupAutomationMode.RankedChoice &&
+      typeof currentRound?.maximum_event_signups === 'number'
+    ) {
+      return t('events.withdrawPrompt.duringLimitedRankedChoiceSignupRoundCounted', { eventTitle: event.title });
+    } else if (signupMode === 'moderated') {
+      return (
+        <Trans i18nKey="events.withdrawPrompt.moderatedSignup" values={{ eventTitle: event.title }}>
+          <p>
+            <strong>
+              If you’re thinking of signing up for a different event instead, please go to that event’s page and request
+              to sign up for it.
+            </strong>{' '}
+            If the request is accepted, you’ll automatically be withdrawn from this event.
+          </p>
+          <p className="mb-0">Are you sure you want to withdraw from {{ eventTitle: event.title } as TI}?</p>
+        </Trans>
+      );
+    } else {
+      return t('events.withdrawPrompt.selfServiceSignup', { eventTitle: event.title });
+    }
+  }, [event.title, mySignup, signupMode, signupAutomationMode, t, currentRound?.maximum_event_signups]);
 
-  const moderatedWithdraw = useCallback(
-    () =>
-      confirm({
-        prompt: (
-          <Trans i18nKey="events.withdrawPrompt.moderatedSignup">
-            <p>
-              <strong>
-                If you’re thinking of signing up for a different event instead, please go to that event’s page and
-                request to sign up for it.
-              </strong>{' '}
-              If the request is accepted, you’ll automatically be withdrawn from this event.
-            </p>
-            <p className="mb-0">Are you sure you want to withdraw from {{ eventTitle: event.title } as TI}?</p>
-          </Trans>
-        ),
-        action: () => withdrawMySignupMutate({ variables: { runId: run.id } }),
-        renderError: (error) => <ErrorDisplay graphQLError={error} />,
-      }),
-    [confirm, event.title, run.id, withdrawMySignupMutate],
-  );
+  const withdraw = useCallback(async () => {
+    confirm({
+      prompt: withdrawPrompt,
+      action: async () => {
+        await withdrawMySignupMutate({ variables: { runId: run.id } });
+        await apolloClient.resetStore();
+      },
+      renderError: (error) => <ErrorDisplay graphQLError={error} />,
+    });
+  }, [apolloClient, confirm, withdrawPrompt, run.id, withdrawMySignupMutate]);
 
   const createSignup = (signupOption: SignupOption) => {
     if (signupMode === SignupMode.SelfService || signupOption.action === 'ADD_TO_QUEUE' || signupOption.teamMember) {
@@ -185,20 +196,6 @@ function EventPageRunCard({
     if (signupMode === SignupMode.Moderated) {
       createModeratedSignupModal.open({ signupOption });
       return Promise.resolve(undefined);
-    }
-
-    return Promise.reject(new Error(`Invalid signup mode: ${signupMode}`));
-  };
-
-  const withdrawSignup = () => {
-    if (signupMode === 'self_service') {
-      selfServiceWithdraw();
-      return Promise.resolve();
-    }
-
-    if (signupMode === 'moderated') {
-      moderatedWithdraw();
-      return Promise.resolve();
     }
 
     return Promise.reject(new Error(`Invalid signup mode: ${signupMode}`));
@@ -230,7 +227,7 @@ function EventPageRunCard({
         signupOptions={signupOptions}
         showViewSignups
         createSignup={createSignup}
-        withdrawSignup={withdrawSignup}
+        withdrawSignup={withdraw}
         withdrawPendingSignupRequest={withdrawPendingSignupRequest}
       />
 

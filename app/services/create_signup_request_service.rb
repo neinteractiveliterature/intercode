@@ -14,9 +14,13 @@ class CreateSignupRequestService < CivilService::Service
               :replace_signup,
               :whodunit,
               :suppress_notifications,
-              :keep_pending_ranked_choices
+              :keep_pending_ranked_choices,
+              :action
   delegate :convention, to: :user_con_profile
   delegate :event, to: :target_run
+
+  include ConventionRegistrationFreeze
+  include SignupCountLimits
 
   def initialize(
     user_con_profile:,
@@ -25,7 +29,8 @@ class CreateSignupRequestService < CivilService::Service
     replace_signup: nil,
     whodunit: nil,
     suppress_notifications: false,
-    keep_pending_ranked_choices: false
+    keep_pending_ranked_choices: false,
+    action: "self_service_signup_request"
   )
     @user_con_profile = user_con_profile
     @target_run = target_run
@@ -34,6 +39,7 @@ class CreateSignupRequestService < CivilService::Service
     @whodunit = whodunit
     @suppress_notifications = suppress_notifications
     @keep_pending_ranked_choices = keep_pending_ranked_choices
+    @action = action
   end
 
   private
@@ -59,7 +65,9 @@ class CreateSignupRequestService < CivilService::Service
   end
 
   def signup_requests_must_be_open
+    return if action == "accept_signup_ranked_choice"
     return if convention.signup_requests_open?
+
     errors.add :base, I18n.t("signup_requests.errors.closed")
   end
 
@@ -91,5 +99,15 @@ class CreateSignupRequestService < CivilService::Service
       .signup_ranked_choices
       .where(state: "pending", target_run_id: target_run.id, requested_bucket_key:)
       .destroy_all
+  end
+
+  # This is required by SignupCountLimits validations
+  def signup_state
+    "confirmed"
+  end
+
+  def counts_towards_total?
+    target_bucket = event.registration_policy.bucket_with_key(requested_bucket_key)
+    target_bucket.nil? || target_bucket.counted?
   end
 end

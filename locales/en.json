@@ -550,7 +550,9 @@
       "ticketTypeHeader": "{{ ticketName }} type"
     },
     "withdrawPrompt": {
+      "duringLimitedRankedChoiceSignupRoundCounted": "Are you sure you want to withdraw from {{ eventTitle }}?  Once you do, you’ll have an available signup slot and will be able to immediately sign up for a different event.",
       "moderatedSignup": "<0><0>If you’re thinking of signing up for a different event instead, please go to that event’s page and request to sign up for it.</0> If the request is accepted, you’ll automatically be withdrawn from this event.</0><1>Are you sure you want to withdraw from {{eventTitle}}?</1>",
+      "notCounted": "Are you sure you want to withdraw from {{ eventTitle }}?  This event does not count towards your signup totals and will not free up a signup slot.",
       "selfServiceSignup": "Are you sure you want to withdraw from {{ eventTitle }}?",
       "signupRequest": "Are you sure you want to withdraw your request to sign up for {{ eventTitle }}?"
     }
@@ -879,8 +881,8 @@
       "moveDown": "Move down in queue",
       "moveUp": "Move up in queue",
       "nextRoundAction": {
-        "limited_one": "At that time, players will be automatically signed up for up to {{ count }} event(s).",
-        "limited_other": "At that time, players will be automatically signed up for up to {{ count }} event(s).",
+        "limited_one": "At that time, players will be automatically signed up for {{ count }} event.",
+        "limited_other": "At that time, players will be automatically signed up for events until they have a total of {{ count }}.",
         "unlimited": "At that time, players will be signed up for events automatically based on their queue selections until their schedule is full."
       },
       "nextRoundInfo": "The next signup round starts at <2>{{nextRoundStart}}</2>. {{nextRoundActionDescription}}",
