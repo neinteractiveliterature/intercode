@@ -53,7 +53,7 @@ export type RunCardProps = {
   showViewSignups?: boolean;
   createSignup: (
     signupOption: SignupOption,
-  ) => Promise<undefined | null | Pick<Signup, '__typename' | 'id' | 'state' | 'expires_at'>>;
+  ) => Promise<undefined | null | Pick<Signup, '__typename' | 'id' | 'state' | 'expires_at' | 'counted'>>;
   withdrawSignup: () => Promise<unknown>;
   withdrawPendingSignupRequest: () => Promise<unknown>;
 };

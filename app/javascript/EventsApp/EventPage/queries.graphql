@@ -5,6 +5,7 @@ fragment MySignupFields on Signup {
   id
   state
   waitlist_position
+  counted
   expires_at
 }
 
@@ -83,7 +84,6 @@ fragment RunCardRegistrationPolicyFields on RegistrationPolicy {
 }
 
 query EventPageQuery($eventId: ID!) {
-   
   __typename
 
   currentAbility {
