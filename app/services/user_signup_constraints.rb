@@ -18,8 +18,16 @@ class UserSignupConstraints
       end
   end
 
+  def pending_signup_requests_including_not_counted
+    @pending_signup_requests_including_not_counted ||=
+      user_con_profile.signup_requests.includes(target_run: :event).where(state: "pending").to_a
+  end
+
   def pending_signup_requests
-    @pending_signup_requests ||= user_con_profile.signup_requests.where(state: "pending").to_a
+    @pending_signup_requests ||=
+      pending_signup_requests_including_not_counted.reject do |signup_request|
+        signup_request.requested_bucket&.not_counted?
+      end
   end
 
   def current_signup_count
@@ -38,7 +46,7 @@ class UserSignupConstraints
   end
 
   def concurrent_signup_requests_for_run(run)
-    pending_signup_requests.select do |signup_request|
+    pending_signup_requests_including_not_counted.select do |signup_request|
       other_run = signup_request.target_run
       !other_run.event.can_play_concurrently? && run.overlaps?(other_run)
     end

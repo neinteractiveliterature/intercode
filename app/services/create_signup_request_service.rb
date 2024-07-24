@@ -103,6 +103,11 @@ class CreateSignupRequestService < CivilService::Service
 
   # This is required by SignupCountLimits validations
   def signup_state
-    "requested"
+    "confirmed"
+  end
+
+  def counts_towards_total?
+    target_bucket = event.registration_policy.bucket_with_key(requested_bucket_key)
+    target_bucket.nil? || target_bucket.counted?
   end
 end

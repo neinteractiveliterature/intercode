@@ -57,7 +57,7 @@ class CreateSignupRequestServiceTest < ActiveSupport::TestCase
       create(:signup_request, user_con_profile:, target_run: other_run, state: "pending")
       result = subject.call
       assert result.failure?
-      assert_match(/\AYou have already requested to sign up for 1 event/, result.errors.full_messages.join('\n'))
+      assert_match(/\AYou are already signed up for 1 event/, result.errors.full_messages.join('\n'))
     end
 
     it "does not let you add additional signup requests if you already are at the signup limit" do
@@ -112,7 +112,7 @@ class CreateSignupRequestServiceTest < ActiveSupport::TestCase
       end
 
       it "lets you request a signup even if you're already signed up for the other run" do
-        create(:signup, user_con_profile:, run: other_run, state: "confirmed")
+        create(:signup, user_con_profile:, run: other_run, state: "confirmed", counted: false)
         result = subject.call
         assert result.success?
       end

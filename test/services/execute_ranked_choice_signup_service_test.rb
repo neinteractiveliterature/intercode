@@ -121,6 +121,27 @@ describe ExecuteRankedChoiceSignupService do
       assert_equal "pending", result.decision.signup_request.state
       assert_equal "requested", signup_ranked_choice.state
     end
+
+    it "skips the choice if the run is already fully requested" do
+      event =
+        create(
+          :event,
+          convention:,
+          registration_policy:
+            RegistrationPolicy.new(buckets: [RegistrationPolicy::Bucket.new(slots_limited: true, total_slots: 1)])
+        )
+      the_run = create(:run, event:)
+      signup_ranked_choice = create(:signup_ranked_choice, target_run: the_run)
+      create(:signup_request, target_run: the_run)
+
+      result = ExecuteRankedChoiceSignupService.new(signup_round:, signup_ranked_choice:, whodunit: nil).call!
+
+      signup_ranked_choice.reload
+      assert_equal "skip_choice", result.decision.decision
+      assert_equal "full", result.decision.reason
+      assert_nil result.decision.signup
+      assert_equal "pending", signup_ranked_choice.state
+    end
   end
 
   describe "with user constraints" do

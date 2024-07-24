@@ -51,6 +51,10 @@ class SignupRequest < ApplicationRecord
     SignupRequestDrop.new(self)
   end
 
+  def requested_bucket
+    target_run.registration_policy.bucket_with_key(requested_bucket_key)
+  end
+
   private
 
   def ensure_all_fields_point_at_the_same_convention
