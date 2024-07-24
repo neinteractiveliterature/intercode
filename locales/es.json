@@ -326,16 +326,6 @@
     "timezoneMessage": "Todos los horarios mostrados en zona horaria {{ offsetName }}."
   },
   "signups": {
-    "maximumSignups": {
-      "limitedCount_one": "Up to {{ count }} event(s)",
-      "limitedCount_many": "Up to {{ count }} event(s)",
-      "limitedCount_other": "Up to {{ count }} event(s)"
-    },
-    "mySignupQueue": {
-      "nextRoundAction": {
-        "limited_many": "At that time, players will be automatically signed up for up to {{ count }} event(s)."
-      }
-    },
     "states": {
       "confirmed": "Confirmado",
       "notSignedUp": "No inscrita",

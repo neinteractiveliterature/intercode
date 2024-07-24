@@ -879,8 +879,8 @@
       "moveDown": "Move down in queue",
       "moveUp": "Move up in queue",
       "nextRoundAction": {
-        "limited_one": "At that time, players will be automatically signed up for up to {{ count }} event(s).",
-        "limited_other": "At that time, players will be automatically signed up for up to {{ count }} event(s).",
+        "limited_one": "At that time, players will be automatically signed up for {{ count }} event.",
+        "limited_other": "At that time, players will be automatically signed up for events until they have a total of {{ count }}.",
         "unlimited": "At that time, players will be signed up for events automatically based on their queue selections until their schedule is full."
       },
       "nextRoundInfo": "The next signup round starts at <2>{{nextRoundStart}}</2>. {{nextRoundActionDescription}}",
