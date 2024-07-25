@@ -13,21 +13,23 @@ import usePageTitle from '../usePageTitle';
 import { UsersTableUsersQueryData, UsersTableUsersQueryVariables, useUsersTableUsersQuery } from './queries.generated';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
 import { useTranslation } from 'react-i18next';
+import { TFunction } from 'i18next';
+import { useCallback } from 'react';
 
 type UserType = UsersTableUsersQueryData['users_paginated']['entries'][0];
 
 const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({});
 
-function getPossibleColumns(): Column<UserType>[] {
+function getPossibleColumns(t: TFunction): Column<UserType>[] {
   return [
     {
-      Header: 'ID',
+      Header: t('admin.users.table.headers.id'),
       id: 'id',
       accessor: 'id',
       width: 70,
     },
     {
-      Header: 'Name',
+      Header: t('admin.users.table.headers.name'),
       id: 'name',
       accessor: (user: UserType) => user.name_inverted,
       Filter: FreeTextFilter,
@@ -35,7 +37,7 @@ function getPossibleColumns(): Column<UserType>[] {
       disableSortBy: false,
     },
     {
-      Header: 'First name',
+      Header: t('admin.users.table.headers.firstName'),
       id: 'first_name',
       accessor: 'first_name',
       Filter: FreeTextFilter,
@@ -43,7 +45,7 @@ function getPossibleColumns(): Column<UserType>[] {
       disableSortBy: false,
     },
     {
-      Header: 'Last name',
+      Header: t('admin.users.table.headers.lastName'),
       id: 'last_name',
       accessor: 'last_name',
       Filter: FreeTextFilter,
@@ -51,7 +53,7 @@ function getPossibleColumns(): Column<UserType>[] {
       disableSortBy: false,
     },
     {
-      Header: 'Email',
+      Header: t('admin.users.table.headers.email'),
       id: 'email',
       accessor: 'email',
       Cell: EmailCell,
@@ -71,6 +73,8 @@ function UsersTable(): JSX.Element {
   const mergeModal = useModal<{ userIds: string[] }>();
   usePageTitle(t('navigation.admin.users'));
 
+  const getPossibleColumnsWithTranslation = useCallback(() => getPossibleColumns(t), [t]);
+
   const { tableInstance, refetch, tableHeaderProps, loading } = useReactTableWithTheWorks<
     UsersTableUsersQueryData,
     UserType,
@@ -81,7 +85,7 @@ function UsersTable(): JSX.Element {
     encodeFilterValue,
     getData: ({ data }) => data.users_paginated.entries,
     getPages: ({ data }) => data.users_paginated.total_pages,
-    getPossibleColumns,
+    getPossibleColumns: getPossibleColumnsWithTranslation,
     rowSelect: true,
     storageKeyPrefix: 'users',
     useQuery: useUsersTableUsersQuery,

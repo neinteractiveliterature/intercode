@@ -201,6 +201,13 @@
         "title": "Merge users"
       },
       "table": {
+        "headers": {
+          "email": "Email",
+          "firstName": "First name",
+          "id": "ID",
+          "lastName": "Last name",
+          "name": "Name"
+        },
         "mergeUsersAction": "Merge users",
         "title": "Users"
       }
