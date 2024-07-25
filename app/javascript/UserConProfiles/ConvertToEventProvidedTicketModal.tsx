@@ -18,6 +18,7 @@ import {
 import { useConvertTicketToEventProvidedMutation } from './mutations.generated';
 import { DefaultEventsQueryData } from '../BuiltInFormControls/selectDefaultQueries.generated';
 import { Convention } from '../graphqlTypes.generated';
+import { useTranslation } from 'react-i18next';
 
 type EventSpecificSectionProps = {
   event: {
@@ -38,6 +39,8 @@ function EventSpecificSection({
   setTicketTypeId,
   disabled,
 }: EventSpecificSectionProps) {
+  const { t } = useTranslation();
+
   const { data, loading, error } = useConvertToEventProvidedTicketQuery({
     variables: { eventId: event.id },
   });
@@ -51,7 +54,7 @@ function EventSpecificSection({
   }
 
   if (!data) {
-    return <ErrorDisplay stringError="No data loaded for query" />;
+    return <ErrorDisplay stringError={t('errors.noData')} />;
   }
 
   return (
@@ -84,6 +87,7 @@ function ConvertToEventProvidedTicketModal({
   visible,
   onClose,
 }: ConvertToEventProvidedTicketModalProps): JSX.Element {
+  const { t } = useTranslation();
   const [event, setEvent] = useState<EventType>();
   const [ticketTypeId, setTicketTypeId] = useState<string>();
   const [convertMutate] = useConvertTicketToEventProvidedMutation();
@@ -131,22 +135,18 @@ function ConvertToEventProvidedTicketModal({
   return (
     <Modal visible={visible}>
       <div className="modal-header">
-        {'Convert '}
-        {userConProfile.name_without_nickname}
-        {"'s "}
-        {convention.ticket_name}
-        {' to event-provided'}
+        {t('admin.userConProfiles.convertToEventProvidedTicket.title', {
+          name: userConProfile.name_without_nickname,
+          ticketName: convention.ticket_name,
+        })}
       </div>
 
       <div className="modal-body">
         <p>
-          {'This will delete '}
-          {userConProfile.name_without_nickname}
-          ’s
-          {' existing '}
-          {convention.ticket_name}
-          {' and create a new one for them, provided by an event.  If they paid for their existing '}
-          {convention.ticket_name}, that payment will be refunded.
+          {t('admin.userConProfiles.convertToEventProvidedTicket.prompt', {
+            name: userConProfile.name_without_nickname,
+            ticketName: convention.ticket_name,
+          })}
         </p>
 
         <EventSelect
@@ -155,7 +155,6 @@ function ConvertToEventProvidedTicketModal({
             setEvent(value);
             setTicketTypeId(undefined);
           }}
-          placeholder="Select event..."
           isDisabled={inProgress}
         />
 
@@ -175,7 +174,7 @@ function ConvertToEventProvidedTicketModal({
 
       <div className="modal-footer">
         <button type="button" onClick={onClose} className="btn btn-secondary" disabled={inProgress}>
-          Cancel
+          {t('buttons.cancel')}
         </button>
         <button
           type="button"
@@ -183,8 +182,7 @@ function ConvertToEventProvidedTicketModal({
           disabled={inProgress || !event || !ticketTypeId}
           onClick={convertClicked}
         >
-          {'Convert '}
-          {convention.ticket_name}
+          {t('admin.userConProfiles.convertToEventProvidedTicket.buttonText', { ticketName: convention.ticket_name })}
         </button>
       </div>
     </Modal>

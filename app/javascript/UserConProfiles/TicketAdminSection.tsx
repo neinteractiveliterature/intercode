@@ -20,7 +20,7 @@ import {
   UserConProfileAdminQueryDocument,
 } from './queries.generated';
 import { useAppDateTimeFormat } from '../TimeUtils';
-import humanize from '../humanize';
+import { useTranslation } from 'react-i18next';
 
 type UserConProfileData = UserConProfileAdminQueryData['convention']['user_con_profile'];
 type TicketData = NonNullable<UserConProfileData['ticket']>;
@@ -206,7 +206,6 @@ function TicketAdminControls({ convention, userConProfile }: TicketAdminControls
     return (
       <ul className="list-inline">
         {buttons.map((button, i) => (
-           
           <li key={i} className="list-inline-item">
             {button}
           </li>
@@ -224,41 +223,42 @@ export type TicketAdminSectionProps = {
 };
 
 function TicketAdminSection({ convention, userConProfile }: TicketAdminSectionProps): JSX.Element {
+  const { t } = useTranslation();
   const { timezoneName } = useContext(AppRootContext);
   const format = useAppDateTimeFormat();
 
   const renderTicketData = (ticket: (typeof userConProfile)['ticket']) => {
     if (!ticket) {
-      return <p>No {convention.ticket_name}</p>;
+      return <p>{t('admin.userConProfiles.ticketAdminSection.noTicket', { ticketName: convention.ticket_name })}</p>;
     }
 
     return (
       <dl className="row">
-        <dt className="col-md-3">Type</dt>
+        <dt className="col-md-3">{t('admin.userConProfiles.ticketAdminSection.ticketType')}</dt>
         <dd className="col-md-9">{ticket.ticket_type.description}</dd>
 
         {ticket.provided_by_event && (
           <>
-            <dt className="col-md-3">Provided by event</dt>
+            <dt className="col-md-3">{t('admin.userConProfiles.ticketAdminSection.providedByEvent')}</dt>
             <dd className="col-md-9">{ticket.provided_by_event.title}</dd>
           </>
         )}
 
-        <dt className="col-md-3">Paid</dt>
+        <dt className="col-md-3">{t('admin.userConProfiles.ticketAdminSection.paidAmount')}</dt>
         <dd className="col-md-9">{formatMoney(ticket.order_entry?.price_per_item) || '0'}</dd>
 
-        <dt className="col-md-3">Transaction ID</dt>
+        <dt className="col-md-3">{t('admin.userConProfiles.ticketAdminSection.transactionID')}</dt>
         <dd className="col-md-9">{ticket.order_entry?.order?.charge_id}</dd>
 
-        <dt className="col-md-3">Payment note</dt>
+        <dt className="col-md-3">{t('admin.userConProfiles.ticketAdminSection.paymentNote')}</dt>
         <dd className="col-md-9">{ticket.order_entry?.order?.payment_note}</dd>
 
-        <dt className="col-md-3">Created</dt>
+        <dt className="col-md-3">{t('admin.userConProfiles.ticketAdminSection.createdAt')}</dt>
         <dd className="col-md-9">
           {format(DateTime.fromISO(ticket.created_at, { zone: timezoneName }), 'longWeekdayDateTimeWithZone')}
         </dd>
 
-        <dt className="col-md-3">Last updated</dt>
+        <dt className="col-md-3">{t('admin.userConProfiles.ticketAdminSection.updatedAt')}</dt>
         <dd className="col-md-9">
           {format(DateTime.fromISO(ticket.updated_at, { zone: timezoneName }), 'longWeekdayDateTimeWithZone')}
         </dd>
@@ -268,7 +268,9 @@ function TicketAdminSection({ convention, userConProfile }: TicketAdminSectionPr
 
   return (
     <section className="card">
-      <div className="card-header">{humanize(convention.ticket_name)}</div>
+      <div className="card-header">
+        {t('admin.userConProfiles.ticketAdminSection.title', { ticketName: convention.ticket_name })}
+      </div>
       <div className="card-body pb-0">
         {renderTicketData(userConProfile.ticket)}
         <TicketAdminControls convention={convention} userConProfile={userConProfile} />

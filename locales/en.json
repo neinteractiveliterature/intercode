@@ -159,6 +159,10 @@
         "header": "Add attendee",
         "text": "Choose a user to add as an attendee for {{ conventionName }}.  This person must already be a user in the site database in order to be added."
       },
+      "addOrderToTicket": {
+        "buttonText": "Add order",
+        "defaultPaymentNote": "Entered manually by {{ adminName }}"
+      },
       "adminSection": {
         "becomeUser": "Become user",
         "editProfile": "Edit profile",
@@ -171,6 +175,11 @@
         "justificationHelpText": "Please enter the reason why you’re temporarily becoming this user.  For example: user requested signup assistance, troubleshooting, etc.",
         "prompt": "Are you sure you want to become {{ name }} for the duration of this session? <strong>Your actions while acting as this user will be logged, and the web site administrators may review this log for audit purposes.</strong>",
         "title": "Become user"
+      },
+      "convertToEventProvidedTicket": {
+        "buttonText": "Convert {{ ticketName }}",
+        "prompt": "This will delete {{ name }}’s existing {{ ticketName }} and create a new one for them, provided by an event.  If they paid for their existing {{ ticketName }}, that payment will be refunded.",
+        "title": "Convert {{ name }}’s {{ ticketName }} to event-provided"
       },
       "deleteConfirmation": "Are you sure you want to remove {{ name }} from {{ convention }}?",
       "email": "Email",
@@ -189,6 +198,25 @@
         "unSignedUpOther": "{{ name }} is a team member for the following events, but is not signed up for them:",
         "unSignedUpYou": "You are a team member for the following events, but are not signed up for them:",
         "withdrawFromAllConfirmation": "Are you sure you want to withdraw {{ name }} from all their events at {{ conventionName }}?"
+      },
+      "ticketAdminSection": {
+        "createdAt": "Created",
+        "noTicket": "No {{ ticketName }}",
+        "paidAmount": "Paid",
+        "paymentNote": "Payment note",
+        "providedByEvent": "Provided by event",
+        "transactionID": "Transaction ID",
+        "updatedAt": "Last updated",
+        "ticketType": "Type",
+        "title": "{{ ticketName, capitalize }}"
+      },
+      "ticketForm": {
+        "editOrderButton": "Edit order",
+        "orderID": "Order ID",
+        "orderInformationHeader": "Order information",
+        "providedByEvent": "Provided by event (if applicable)",
+        "ticketPrice": "{{ ticketName, capitalize }} price",
+        "ticketTypeLabel": "{{ ticketName, capitalize }} type"
       },
       "ticketStatusChangedAt": "{{ ticketName }} status changed",
       "ticketType": "{{ ticketName }} type",

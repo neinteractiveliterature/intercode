@@ -71,6 +71,7 @@ export default [
           'jsx-attributes': {
             include: ['title', 'aria-label', 'caption', 'placeholder', 'label', 'helpText', 'stringError'],
           },
+          'should-validate-template': true,
         },
       ],
     },
