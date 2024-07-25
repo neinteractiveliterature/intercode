@@ -61,7 +61,17 @@ export default [
   {
     files: ['app/javascript/**/*.tsx'],
     plugins: { i18next: fixupPluginRules(i18Next) },
-    rules: { 'i18next/no-literal-string': 'warn' },
+    rules: {
+      'i18next/no-literal-string': [
+        'warn',
+        {
+          mode: 'all',
+          callees: { include: ['usePageTitle'] },
+          'object-properties': { exclude: ['id', 'accessor', 'defaultVisibleColumns'] },
+          'jsx-attributes': { include: ['title', 'aria-label', 'caption', 'placeholder'] },
+        },
+      ],
+    },
   },
   {
     plugins: {

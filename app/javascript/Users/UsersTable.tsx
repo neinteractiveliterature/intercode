@@ -62,6 +62,7 @@ function getPossibleColumns(): Column<UserType>[] {
   ];
 }
 
+// eslint-disable-next-line i18next/no-literal-string
 const defaultVisibleColumns = ['id', 'first_name', 'last_name', 'email'];
 
 function UsersTable(): JSX.Element {
