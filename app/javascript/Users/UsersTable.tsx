@@ -12,6 +12,7 @@ import MergeUsersModal from './MergeUsersModal';
 import usePageTitle from '../usePageTitle';
 import { UsersTableUsersQueryData, UsersTableUsersQueryVariables, useUsersTableUsersQuery } from './queries.generated';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
+import { useTranslation } from 'react-i18next';
 
 type UserType = UsersTableUsersQueryData['users_paginated']['entries'][0];
 
@@ -64,9 +65,10 @@ function getPossibleColumns(): Column<UserType>[] {
 const defaultVisibleColumns = ['id', 'first_name', 'last_name', 'email'];
 
 function UsersTable(): JSX.Element {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const mergeModal = useModal<{ userIds: string[] }>();
-  usePageTitle('Users');
+  usePageTitle(t('navigation.admin.users'));
 
   const { tableInstance, refetch, tableHeaderProps, loading } = useReactTableWithTheWorks<
     UsersTableUsersQueryData,
@@ -86,7 +88,7 @@ function UsersTable(): JSX.Element {
 
   return (
     <div className="mb-4">
-      <h1 className="mb-4">Users</h1>
+      <h1 className="mb-4">{t('admin.users.table.title')}</h1>
 
       <TableHeader
         {...tableHeaderProps}

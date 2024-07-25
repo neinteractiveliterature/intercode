@@ -182,14 +182,27 @@
       "withdrawFromAllButton": "Withdraw from all"
     },
     "users": {
+      "edit": {
+        "conventionProfiles": "Convention profiles",
+        "privileges": "Privileges"
+      },
       "merge": {
+        "actionDescription": "User account {{ winningUserId }} will be preserved. All the others will be deleted, and their convention profiles will be merged into it. The resulting account will look like this:",
+        "buttonLabel": "Merge",
         "hasTicket": "Has {{ ticketName }}",
         "noTicket": "No {{ ticketName }}",
         "noUsers": "No userIds to merge",
         "noWinner": "No winningUserId for merge",
         "profileLabel": "{{ email }}’s profile [{{ ticketDescription }}, {{ signupsDescription }}]",
+        "selectWinningUser": "Please select a user account to merge others into:",
+        "singleProfile": "<strong>{{ conventionName }}:</strong> {{ email }}’s profile",
         "signupCount_one": "{{ count }} signups",
-        "signupCount_other": "{{ count }} signups"
+        "signupCount_other": "{{ count }} signups",
+        "title": "Merge users"
+      },
+      "table": {
+        "mergeUsersAction": "Merge users",
+        "title": "Users"
       }
     },
     "warnings": {

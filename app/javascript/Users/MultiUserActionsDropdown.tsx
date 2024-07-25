@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { DropdownMenu } from '../UIComponents/DropdownMenu';
 
 export type MultiUserActionsDropdownProps = {
@@ -6,6 +7,7 @@ export type MultiUserActionsDropdownProps = {
 };
 
 function MultiUserActionsDropdown({ selectedUserIds, onClickMerge }: MultiUserActionsDropdownProps): JSX.Element {
+  const { t } = useTranslation();
   return (
     <DropdownMenu buttonClassName="btn btn-outline-primary dropdown-toggle" buttonContent="Actions">
       <button
@@ -14,7 +16,7 @@ function MultiUserActionsDropdown({ selectedUserIds, onClickMerge }: MultiUserAc
         disabled={selectedUserIds.length < 2}
         onClick={() => onClickMerge(selectedUserIds)}
       >
-        Merge users
+        {t('admin.users.table.mergeUsersAction')}
       </button>
     </DropdownMenu>
   );

@@ -9,6 +9,7 @@ import { UserAdminQueryData, useUserAdminQuery } from './queries.generated';
 import { timespanFromConvention } from '../TimespanUtils';
 import { useAppDateTimeFormat } from '../TimeUtils';
 import humanize from '../humanize';
+import { useTranslation } from 'react-i18next';
 
 function sortByConventionDate(profiles: UserAdminQueryData['user']['user_con_profiles']) {
   return reverse(sortBy(profiles, (profile) => profile.convention.starts_at));
@@ -37,6 +38,7 @@ function renderProfileConventionYear(
 }
 
 export default LoadQueryWrapper(useLoadUserAdminData, function UserAdminDisplay({ data }) {
+  const { t } = useTranslation();
   usePageTitle(data.user.name);
   const format = useAppDateTimeFormat();
 
@@ -59,7 +61,7 @@ export default LoadQueryWrapper(useLoadUserAdminData, function UserAdminDisplay(
 
             <tr>
               <th scope="row" className="pe-2">
-                Privileges
+                {t('admin.users.edit.privileges')}
               </th>
               <td>
                 {data.user.privileges && data.user.privileges.length > 0
@@ -70,7 +72,7 @@ export default LoadQueryWrapper(useLoadUserAdminData, function UserAdminDisplay(
 
             <tr>
               <th scope="row" className="pe-2">
-                Convention profiles
+                {t('admin.users.edit.conventionProfiles')}
               </th>
               <td>
                 {data.user.user_con_profiles.length > 0 ? (

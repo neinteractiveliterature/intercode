@@ -5,6 +5,7 @@ import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import { useUserAdminQuery } from './queries.generated';
+import { useTranslation } from 'react-i18next';
 
 function UserBreadcrumbItem() {
   const { id } = useParams<{ id: string }>();
@@ -33,6 +34,7 @@ function UserBreadcrumbItem() {
 }
 
 function UsersAdmin(): JSX.Element {
+  const { t } = useTranslation();
   const authorizationWarning = useAuthorizationRequired('can_read_users');
   if (authorizationWarning) return authorizationWarning;
 
@@ -40,7 +42,7 @@ function UsersAdmin(): JSX.Element {
     <>
       <ol className="breadcrumb">
         <RouteActivatedBreadcrumbItem to="" end>
-          Users
+          {t('navigation.admin.users')}
         </RouteActivatedBreadcrumbItem>
 
         <Routes>
