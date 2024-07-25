@@ -24,6 +24,7 @@ module SignupCountLimits
   def signup_count_check_required?
     return false if team_member?
     return false if Signup::SLOT_OCCUPYING_STATES.include?(signup_state) && !counts_towards_total?
+    return false if action == "accept_signup_request"
 
     true
   end
