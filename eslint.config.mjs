@@ -68,7 +68,9 @@ export default [
           mode: 'all',
           callees: { include: ['usePageTitle'] },
           'object-properties': { exclude: ['id', 'accessor', 'defaultVisibleColumns'] },
-          'jsx-attributes': { include: ['title', 'aria-label', 'caption', 'placeholder'] },
+          'jsx-attributes': {
+            include: ['title', 'aria-label', 'caption', 'placeholder', 'label', 'helpText', 'stringError'],
+          },
         },
       ],
     },

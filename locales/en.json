@@ -159,6 +159,20 @@
         "header": "Add attendee",
         "text": "Choose a user to add as an attendee for {{ conventionName }}.  This person must already be a user in the site database in order to be added."
       },
+      "adminSection": {
+        "becomeUser": "Become user",
+        "editProfile": "Edit profile",
+        "printableReport": "Printable report",
+        "title": "User administration"
+      },
+      "becomeUser": {
+        "buttonText": "Become user",
+        "justificationLabel": "Justification",
+        "justificationHelpText": "Please enter the reason why you’re temporarily becoming this user.  For example: user requested signup assistance, troubleshooting, etc.",
+        "prompt": "Are you sure you want to become {{ name }} for the duration of this session? <strong>Your actions while acting as this user will be logged, and the web site administrators may review this log for audit purposes.</strong>",
+        "title": "Become user"
+      },
+      "deleteConfirmation": "Are you sure you want to remove {{ name }} from {{ convention }}?",
       "email": "Email",
       "firstName": "First name",
       "id": "ID",
@@ -380,6 +394,7 @@
   "defaultTicketName": "ticket",
   "errors": {
     "404": "<0>Oops!</0><1>We couldn’t find a page at the location {{pathname}}.</1>",
+    "noData": "No data returned for query",
     "unauthorized": "Sorry, your account is not authorized to view this page."
   },
   "eventCategorySelect": {

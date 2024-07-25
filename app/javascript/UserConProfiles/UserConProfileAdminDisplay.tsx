@@ -22,6 +22,7 @@ import { getSortedParsedFormItems } from '../Models/Form';
 import humanize from '../humanize';
 import Modal from 'react-bootstrap4-modal';
 import useAsyncFunction from '../useAsyncFunction';
+import { Trans, useTranslation } from 'react-i18next';
 
 async function becomeUser(userConProfileId: string, justification: string) {
   const formData = new FormData();
@@ -56,6 +57,7 @@ type BecomeUserModalProps = {
 };
 
 function BecomeUserModal({ userConProfileId, userConProfileName, visible, close }: BecomeUserModalProps): JSX.Element {
+  const { t } = useTranslation();
   const [justification, setJustification] = useState('');
   const [becomeAsync, error, inProgress] = useAsyncFunction(becomeUser);
 
@@ -70,19 +72,15 @@ function BecomeUserModal({ userConProfileId, userConProfileName, visible, close 
 
   return (
     <Modal visible={visible}>
-      <div className="modal-header">Become user</div>
+      <div className="modal-header">{t('admin.userConProfiles.becomeUser.title')}</div>
       <div className="modal-body">
         <p>
-          Are you sure you want to become {userConProfileName} for the duration of this session?{' '}
-          <strong>
-            Your actions while acting as this user will be logged, and the web site administrators may review this log
-            for audit purposes.
-          </strong>
+          <Trans i18nKey="admin.userConProfiles.becomeUser.prompt" values={{ name: userConProfileName }} />
         </p>
 
         <BootstrapFormTextarea
-          label="Justification"
-          helpText="Please enter the reason why you’re temporarily becoming this user.  For example: user requested signup assistance, troubleshooting, etc."
+          label={t('admin.userConProfiles.becomeUser.justificationLabel')}
+          helpText={t('admin.userConProfiles.becomeUser.justificationHelpText')}
           value={justification}
           onTextChange={setJustification}
         />
@@ -91,11 +89,11 @@ function BecomeUserModal({ userConProfileId, userConProfileName, visible, close 
       </div>
       <div className="modal-footer">
         <button disabled={inProgress} onClick={close} type="button" className="btn btn-secondary">
-          Cancel
+          {t('buttons.cancel')}
         </button>
         {userConProfileId && (
           <button disabled={inProgress} onClick={becomeClicked} type="button" className="btn btn-primary">
-            Become user
+            {t('admin.userConProfiles.becomeUser.buttonText')}
           </button>
         )}
       </div>
@@ -104,6 +102,7 @@ function BecomeUserModal({ userConProfileId, userConProfileName, visible, close 
 }
 
 function UserConProfileAdminDisplay(): JSX.Element {
+  const { t } = useTranslation();
   const userConProfileId = useParams<{ id: string }>().id;
   if (userConProfileId == null) {
     throw new Error('userConProfileId not found in params');
@@ -164,16 +163,18 @@ function UserConProfileAdminDisplay(): JSX.Element {
 
     return (
       <div className="card my-4 mt-lg-0">
-        <div className="card-header">User administration</div>
+        <div className="card-header">{t('admin.userConProfiles.adminSection.title')}</div>
         <ul className="list-group list-group-flush">
           {ability?.can_update_user_con_profile ? (
             <li className="list-group-item">
-              <Link to={`/user_con_profiles/${userConProfileId}/edit`}>Edit profile</Link>
+              <Link to={`/user_con_profiles/${userConProfileId}/edit`}>
+                {t('admin.userConProfiles.adminSection.editProfile')}
+              </Link>
             </li>
           ) : null}
           <li className="list-group-item">
             <a href={`/reports/user_con_profiles/${userConProfileId}`} target="_blank" rel="noopener noreferrer">
-              Printable report
+              {t('admin.userConProfiles.adminSection.printableReport')}
             </a>
           </li>
           {ability?.can_become_user_con_profile ? (
@@ -188,7 +189,7 @@ function UserConProfileAdminDisplay(): JSX.Element {
                   })
                 }
               >
-                Become user
+                {t('admin.userConProfiles.adminSection.becomeUser')}
               </button>
             </li>
           ) : null}
@@ -199,13 +200,16 @@ function UserConProfileAdminDisplay(): JSX.Element {
                 className="btn btn-link p-0 text-danger"
                 onClick={() =>
                   confirm({
-                    prompt: `Are you sure you want to remove ${data?.convention.user_con_profile.name} from ${data?.convention.name}?`,
+                    prompt: t('admin.userConProfiles.deleteConfirmation', {
+                      name: data?.convention.user_con_profile.name,
+                      convention: data?.convention.name,
+                    }),
                     action: deleteConfirmed,
                     renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
                   })
                 }
               >
-                Delete
+                {t('buttons.delete')}
               </button>
             </li>
           ) : null}
@@ -238,7 +242,7 @@ function UserConProfileAdminDisplay(): JSX.Element {
   }
 
   if (!data) {
-    return <ErrorDisplay stringError="No data returned for query" />;
+    return <ErrorDisplay stringError={t('errors.noData')} />;
   }
 
   return (
@@ -260,7 +264,7 @@ function UserConProfileAdminDisplay(): JSX.Element {
           <tbody>
             <tr>
               <th scope="row" className="pe-2">
-                Email
+                {t('admin.userConProfiles.email')}
               </th>
               <td className="col-md-9">{data.convention.user_con_profile.email}</td>
             </tr>
