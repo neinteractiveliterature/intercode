@@ -1975,14 +1975,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/view@npm:6.28.6, @codemirror/view@npm:^6.0.0, @codemirror/view@npm:^6.17.0, @codemirror/view@npm:^6.23.0, @codemirror/view@npm:^6.25.1":
-  version: 6.28.6
-  resolution: "@codemirror/view@npm:6.28.6"
+"@codemirror/view@npm:6.29.0, @codemirror/view@npm:^6.0.0, @codemirror/view@npm:^6.17.0, @codemirror/view@npm:^6.23.0, @codemirror/view@npm:^6.25.1":
+  version: 6.29.0
+  resolution: "@codemirror/view@npm:6.29.0"
   dependencies:
     "@codemirror/state": "npm:^6.4.0"
     style-mod: "npm:^4.1.0"
     w3c-keyname: "npm:^2.2.4"
-  checksum: 10c0/aaf0cd3959d846bb70cb760832c6dd2b74531d7d45d79b7bc10360ab8b0543234db3c04f6e56cee2d99b33057fc229f977e0f0f0c52be4cbd855b779d86e5a68
+  checksum: 10c0/155b58bfe7de5c91a4dd3877cc2b23e1e2f796de0bf59d01c46c0797126e70052f819465b2467e1558b2cfaac25c9569b53eef09fcc5a1ae1a432ab8019e364f
   languageName: node
   linkType: hard
 
@@ -20989,7 +20989,7 @@ __metadata:
     "@codemirror/lang-markdown": "npm:6.2.5"
     "@codemirror/language": "npm:6.10.2"
     "@codemirror/state": "npm:6.4.1"
-    "@codemirror/view": "npm:6.28.6"
+    "@codemirror/view": "npm:6.29.0"
     "@dnd-kit/core": "npm:6.1.0"
     "@dnd-kit/sortable": "npm:8.0.0"
     "@dnd-kit/utilities": "npm:3.2.2"
