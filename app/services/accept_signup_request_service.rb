@@ -30,7 +30,7 @@ class AcceptSignupRequestService < CivilService::Service
     signup_request.update!(state: "accepted", result_signup: signup_result.signup)
 
     notify_user
-    success(signup: signup_result.signup, withdraw_result: withdraw_result)
+    success(signup: signup_result.signup, withdraw_result:)
   end
 
   def with_relevant_locks(&block)
@@ -50,7 +50,7 @@ class AcceptSignupRequestService < CivilService::Service
       signup_request.replace_signup,
       whodunit,
       skip_locking: true,
-      suppress_notifications: suppress_notifications,
+      suppress_notifications:,
       suppress_confirmation: true # notify_user will take care of this separately
     ).call!
   end
@@ -63,7 +63,7 @@ class AcceptSignupRequestService < CivilService::Service
       whodunit,
       skip_locking: true,
       allow_non_self_service_signups: true,
-      suppress_notifications: suppress_notifications,
+      suppress_notifications:,
       suppress_confirmation: true, # notify_user will take care of this separately
       action: "accept_signup_request"
     ).call!
@@ -73,6 +73,6 @@ class AcceptSignupRequestService < CivilService::Service
     return if suppress_notifications
 
     # 5-second delay to let the transaction commit
-    SignupRequests::RequestAcceptedNotifier.new(signup_request: signup_request).deliver_later(wait: 5.seconds)
+    SignupRequests::RequestAcceptedNotifier.new(signup_request:).deliver_later(wait: 5.seconds)
   end
 end
