@@ -148,8 +148,17 @@
       "createProduct": "Create product"
     },
     "ticketTypes": {
+      "doesNotAllowEventSignups": "Does not allow event signups",
+      "doesNotCountTowardsConventionMaximum": "Does not count towards convention maximum",
       "eventProvidedDescription_one": "events can provide up to {{ count }} {{ ticketName }}",
-      "eventProvidedDescription_other": "events can provide up to {{ count }} {{ ticketName }}"
+      "eventProvidedDescription_other": "events can provide up to {{ count }} {{ ticketName }}",
+      "newButton": "New {{ ticketName }} type",
+      "providingProducts": {
+        "available": "Available for purchase",
+        "header": "Providing products:",
+        "none": "No products provide this {{ ticketName }} type",
+        "unavailable": "Not available for purchase"
+      }
     },
     "userActivityAlerts": {
       "alertDestinations": {
@@ -898,10 +907,15 @@
       "scheduleViewSelectorHeader": "View type:"
     }
   },
+  "scheduledValuePreview": {
+    "beforeNextChange": "Before {{ nextChange }}",
+    "startingAtNextChange": "Starting at {{ nextChange }}",
+    "tooLong": "Timespan too long to display a preview"
+  },
   "selectors": {
     "eventSelect": {
       "noInputMessage": "Type an event title to search",
-      "noResultsMessage": "No evets found matching “{{ inputValue }}”",
+      "noResultsMessage": "No events found matching “{{ inputValue }}”",
       "placeholder": "Search for an event by title..."
     },
     "userConProfileSelect": {
