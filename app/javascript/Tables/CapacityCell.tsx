@@ -1,10 +1,13 @@
+import { TFunction } from 'i18next';
 import { RegistrationPolicy } from '../graphqlTypes.generated';
+import { useTranslation } from 'react-i18next';
 
 function formatCapacity(
   registrationPolicy: Pick<RegistrationPolicy, 'slots_limited' | 'total_slots' | 'minimum_slots'>,
+  t: TFunction,
 ) {
   if (!registrationPolicy.slots_limited) {
-    return 'unlimited';
+    return t('events.runCapacity.unlimitedSimple');
   }
 
   if (registrationPolicy.total_slots === registrationPolicy.minimum_slots) {
@@ -19,9 +22,11 @@ export default function CapacityCell({
 }: {
   value: Pick<RegistrationPolicy, 'slots_limited' | 'total_slots' | 'minimum_slots'> | null | undefined;
 }) {
+  const { t } = useTranslation();
+
   if (value == null) {
     return <></>;
   }
 
-  return <div className="text-nowrap text-end">{formatCapacity(value)}</div>;
+  return <div className="text-nowrap text-end">{formatCapacity(value, t)}</div>;
 }

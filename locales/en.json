@@ -150,6 +150,13 @@
     "ticketTypes": {
       "doesNotAllowEventSignups": "Does not allow event signups",
       "doesNotCountTowardsConventionMaximum": "Does not count towards convention maximum",
+      "edit": {
+        "allowsEventSignupsLabel": "Allows event signups?",
+        "countsTowardsConventionMaximumLabel": "Counts towards convention maximum?",
+        "descriptionLabel": "Description",
+        "maximumEventProvidedTicketsLabel": "Number of event-provided {{ ticketNamePlural }} of this type (per event)",
+        "nameLabel": "Name (no spaces allowed — only letters, numbers, and underscores)"
+      },
       "eventProvidedDescription_one": "events can provide up to {{ count }} {{ ticketName }}",
       "eventProvidedDescription_other": "events can provide up to {{ count }} {{ ticketName }}",
       "newButton": "New {{ ticketName }} type",
@@ -700,6 +707,11 @@
     }
   },
   "general": {
+    "booleans": {
+      "any": "any",
+      "no": "no",
+      "yes": "yes"
+    },
     "breadcrumbAriaLabel": "Breadcrumb navigation",
     "editors": {
       "markdownHelpText": "Use <1>Markdown syntax</1> for formatting."
@@ -1057,6 +1069,7 @@
       "stateWithRequestedBucket": "{{ state }} (requested {{ requestedBucket }})",
       "teamMemberNotCounted": "{{ teamMemberName }} (not counted)",
       "ticketPurchaseHold": "Held pending {{ ticketName }} purchase",
+      "unknown": "Unknown",
       "waitlisted": "Waitlisted",
       "waitlistedNoPreference": "Waitlisted (no preference)",
       "waitlistedWithRequestedBucket": "Waitlisted (requested {{ requestedBucketName }})",
@@ -1091,6 +1104,13 @@
     "exportCSV": {
       "buttonText": "Export CSV"
     },
+    "pagination": {
+      "next": "Next",
+      "pageSelector": "<0>Page </0> <2/> of {{ totalPages }}",
+      "previous": "Previous",
+      "rowCount_one": "{{ count }} row",
+      "rowCount_other": "{{ count }} rows"
+    },
     "privileges": {
       "siteAdmin": "Global admin"
     },
@@ -1121,6 +1141,9 @@
         "withdraw": "withdraw"
       },
       "unknownState": "unknown"
+    },
+    "signupChoice": {
+      "notCounted": "N/C"
     },
     "ticketStatus": {
       "unpaid": "Unpaid"

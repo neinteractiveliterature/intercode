@@ -84,7 +84,7 @@ export default function NewTicketProvidingProductModal({
         <div className="modal-footer">
           <ErrorDisplay graphQLError={error} />
           <button type="button" className="btn btn-secondary" onClick={close} disabled={loading}>
-            Cancel
+            {t('buttons.cancel')}
           </button>
           <button type="button" className="btn btn-primary" onClick={saveClicked} disabled={loading}>
             {t('buttons.save')}

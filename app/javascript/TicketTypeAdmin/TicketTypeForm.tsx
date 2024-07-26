@@ -3,6 +3,7 @@ import { BooleanInput, BootstrapFormInput, parseIntOrNull, usePropertySetters } 
 
 import { TicketTypeAdmin_TicketTypeFieldsFragment } from './queries.generated';
 import AppRootContext from '../AppRootContext';
+import { useTranslation } from 'react-i18next';
 
 export type EditingTicketType = Omit<TicketTypeAdmin_TicketTypeFieldsFragment, 'maximum_event_provided_tickets'> & {
   maximum_event_provided_tickets?: number | null;
@@ -14,6 +15,7 @@ export type TicketTypeFormProps = {
 };
 
 function TicketTypeForm({ ticketType, onChange }: TicketTypeFormProps): JSX.Element {
+  const { t } = useTranslation();
   const { ticketNamePlural } = useContext(AppRootContext);
 
   const [
@@ -34,7 +36,7 @@ function TicketTypeForm({ ticketType, onChange }: TicketTypeFormProps): JSX.Elem
   return (
     <div>
       <BootstrapFormInput
-        label="Name (no spaces allowed &mdash; only letters, numbers, and underscores)"
+        label={t('admin.ticketTypes.edit.nameLabel')}
         name="name"
         type="text"
         style={{ fontFamily: 'monospace' }}
@@ -43,7 +45,7 @@ function TicketTypeForm({ ticketType, onChange }: TicketTypeFormProps): JSX.Elem
       />
 
       <BootstrapFormInput
-        label="Description"
+        label={t('admin.ticketTypes.edit.descriptionLabel')}
         name="description"
         type="text"
         value={ticketType.description ?? ''}
@@ -51,21 +53,21 @@ function TicketTypeForm({ ticketType, onChange }: TicketTypeFormProps): JSX.Elem
       />
 
       <BooleanInput
-        caption="Allows event signups?"
+        caption={t('admin.ticketTypes.edit.allowsEventSignupsLabel')}
         name="allows_event_signups"
         value={ticketType.allows_event_signups}
         onChange={setAllowsEventSignups}
       />
 
       <BooleanInput
-        caption="Counts towards convention maximum?"
+        caption={t('admin.ticketTypes.edit.countsTowardsConventionMaximumLabel')}
         name="counts_towards_convention_maximum"
         value={ticketType.counts_towards_convention_maximum}
         onChange={setCountsTowardsConventionMaximum}
       />
 
       <BootstrapFormInput
-        label={`Number of event-provided ${ticketNamePlural} of this type (per event)`}
+        label={t('admin.ticketTypes.edit.maximumEventProvidedTicketsLabel', { ticketNamePlural })}
         name="maximum_event_provided_tickets"
         type="number"
         value={(ticketType.maximum_event_provided_tickets ?? '').toString()}
