@@ -231,12 +231,12 @@ function ChoiceSetFilter<RowType extends Record<string, unknown>>(props: ChoiceS
               className="btn btn-link btn-sm"
               onClick={() => valueChanged(choices.map((c) => c.value))}
             >
-              Select all
+              {t('buttons.selectAll')}
             </button>
 
             {!props.hideSelectNone && (
               <button type="button" className="btn btn-link btn-sm" onClick={() => valueChanged([])}>
-                Select none
+                {t('buttons.selectNone')}
               </button>
             )}
           </div>

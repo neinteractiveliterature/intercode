@@ -1,5 +1,4 @@
 import { useState, useMemo, useCallback, SyntheticEvent } from 'react';
-import capitalize from 'lodash/capitalize';
 import { ApolloError } from '@apollo/client';
 import { useModal, BootstrapFormSelect, ErrorDisplay, FormGroupWithLabel } from '@neinteractiveliterature/litform';
 
@@ -11,6 +10,7 @@ import EditOrderModal from '../Store/EditOrderModal';
 import AddOrderToTicketButton, { AddOrderToTicketButtonProps } from './AddOrderToTicketButton';
 import { UserConProfileAdminQueryData } from './queries.generated';
 import { TicketInput, UserConProfile } from '../graphqlTypes.generated';
+import { useTranslation } from 'react-i18next';
 
 type TicketFromQuery = NonNullable<UserConProfileAdminQueryData['convention']['user_con_profile']['ticket']>;
 type EditingTicket = Omit<TicketFromQuery, 'id' | 'ticket_type' | 'created_at' | 'updated_at' | '__typename'> &
@@ -31,6 +31,7 @@ function TicketForm({
   onSubmit,
   submitCaption,
 }: TicketFormProps): JSX.Element {
+  const { t } = useTranslation();
   const editOrderModal = useModal();
   const [ticketTypeId, setTicketTypeId] = useState(initialTicket.ticket_type?.id);
   const [providedByEvent, setProvidedByEvent] = useState(initialTicket.provided_by_event);
@@ -60,11 +61,11 @@ function TicketForm({
   return (
     <form onSubmit={submitForm}>
       <BootstrapFormSelect
-        label={`${capitalize(convention.ticket_name)} type`}
+        label={t('admin.userConProfiles.ticketForm.ticketTypeLabel', { ticketName: convention.ticket_name })}
         value={ticketTypeId ?? ''}
         onValueChange={(newValue) => setTicketTypeId(newValue)}
       >
-        <option aria-label="Blank placeholder option" />
+        <option aria-label={t('general.placeholderOptionLabel')} />
         {sortedTicketTypes.map(({ id, description }) => (
           <option value={id} key={id}>
             {description}
@@ -72,21 +73,23 @@ function TicketForm({
         ))}
       </BootstrapFormSelect>
 
-      <FormGroupWithLabel label="Provided by event (if applicable)">
+      <FormGroupWithLabel label={t('admin.userConProfiles.ticketForm.providedByEvent')}>
         {(id) => <EventSelect inputId={id} value={providedByEvent} onChange={setProvidedByEvent} />}
       </FormGroupWithLabel>
 
       <div className="card mb-4">
-        <div className="card-header">Order information</div>
+        <div className="card-header">{t('admin.userConProfiles.ticketForm.orderInformationHeader')}</div>
 
         <div className="card-body">
           {orderEntry ? (
             <>
               <dl className="row">
-                <dt className="col-md-3">Order ID</dt>
+                <dt className="col-md-3">{t('admin.userConProfiles.ticketForm.orderID')}</dt>
                 <dd className="col-md-9">{orderEntry.order.id}</dd>
 
-                <dt className="col-md-3">{capitalize(convention.ticket_name)} price</dt>
+                <dt className="col-md-3">
+                  {t('admin.userConProfiles.ticketForm.ticketPrice', { ticketName: convention.ticket_name })}
+                </dt>
                 <dd className="col-md-9">{formatMoney(orderEntry.price_per_item)}</dd>
               </dl>
 
@@ -95,7 +98,7 @@ function TicketForm({
                 onClick={() => editOrderModal.open({ order: orderEntry.order })}
                 type="button"
               >
-                Edit order
+                {t('admin.userConProfiles.ticketForm.editOrderButton')}
               </button>
             </>
           ) : (

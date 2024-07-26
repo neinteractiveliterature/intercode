@@ -7,6 +7,7 @@ import { notEmpty, Tooltip, useLitformPopper } from '@neinteractiveliterature/li
 import { EditingScheduledValue } from '../BuiltInFormControls/ScheduledValueEditor';
 import { findTimespanAt, findValueAt } from '../ScheduledValueUtils';
 import { useAppDateTimeFormat } from '../TimeUtils';
+import { useTranslation } from 'react-i18next';
 
 function dateTimeIfValid(value: string | undefined, timezoneName: string) {
   if (value) {
@@ -34,6 +35,7 @@ function ScheduledValuePreviewTooltipContent<ValueType>({
 }: ScheduledValuePreviewTooltipContentProps<ValueType>) {
   const value = useMemo(() => findValueAt(scheduledValue, date), [scheduledValue, date]);
   const format = useAppDateTimeFormat();
+  const { t } = useTranslation();
 
   const nextValue = useMemo(() => {
     const tomorrow = date.plus({ days: 1 });
@@ -49,13 +51,17 @@ function ScheduledValuePreviewTooltipContent<ValueType>({
     <>
       <strong>{format(date, 'longWeekdayDate')}</strong>
       <br />
-      {value !== nextValue && nextChange && <em>Before {format(nextChange, 'shortTimeWithZone')}</em>}
+      {value !== nextValue && nextChange && (
+        <em>{t('scheduledValuePreview.beforeNextChange', { nextChange: format(nextChange, 'shortTimeWithZone') })}</em>
+      )}
       <br />
       {getDescriptionForValue(value)}
       {value !== nextValue && nextChange && (
         <>
           <hr className="my-2 border-white" />
-          <em>Starting at {format(nextChange, 'shortTimeWithZone')}</em>
+          <em>
+            {t('scheduledValuePreview.startingAtNextChange', { nextChange: format(nextChange, 'shortTimeWithZone') })}
+          </em>
           <br />
           {getDescriptionForValue(nextValue)}
         </>
@@ -131,6 +137,7 @@ function ScheduledValuePreviewCalendar<ValueType>({
   dateElementMapRef,
 }: ScheduledValuePreviewCalendarProps<ValueType>) {
   const format = useAppDateTimeFormat();
+  const { t } = useTranslation();
 
   const timespanFinishes = useMemo(
     () => scheduledValue.timespans.map((timespan) => timespan.finish).filter(notEmpty),
@@ -160,7 +167,7 @@ function ScheduledValuePreviewCalendar<ValueType>({
   }
 
   if (latestChange.diff(earliestChange, 'months').months > 6) {
-    return <>Timespan too long to display a preview</>;
+    return <>{t('scheduledValuePreview.tooLong')}</>;
   }
 
   const monthPreviews: JSX.Element[] = [];
@@ -251,7 +258,7 @@ function ScheduledValuePreview<ValueType>({
   const [arrow, setArrow] = useState<HTMLDivElement | null>(null);
   const dateElementMapRef = useRef(new Map<number, HTMLElement>());
 
-  const focusedDateElement = focusedDate ? dateElementMapRef.current.get(focusedDate.valueOf()) ?? null : null;
+  const focusedDateElement = focusedDate ? (dateElementMapRef.current.get(focusedDate.valueOf()) ?? null) : null;
 
   const { styles, attributes, state } = useLitformPopper(tooltip, focusedDateElement, arrow);
 

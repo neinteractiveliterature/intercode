@@ -27,7 +27,7 @@ export function getSignupStateLabel(
         return t('signups.states.notSignedUp');
       } else {
         assertNever(state, true);
-        return state ?? 'unknown';
+        return state ?? t('signups.states.unknown');
       }
   }
 }

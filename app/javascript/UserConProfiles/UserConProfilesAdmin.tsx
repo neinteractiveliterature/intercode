@@ -7,13 +7,15 @@ import UserConProfileAdminDisplay from './UserConProfileAdminDisplay';
 import UserConProfilesTable from './UserConProfilesTable';
 import usePageTitle from '../usePageTitle';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
+import { useTranslation } from 'react-i18next';
 
 function AttendeesPage() {
-  usePageTitle('Attendees');
+  const { t } = useTranslation();
+  usePageTitle(t('navigation.admin.attendees'));
 
   return (
     <>
-      <h1 className="mb-4">Attendees</h1>
+      <h1 className="mb-4">{t('navigation.admin.attendees')}</h1>
       <UserConProfilesTable defaultVisibleColumns={['name', 'email', 'ticket', 'privileges']} />
     </>
   );

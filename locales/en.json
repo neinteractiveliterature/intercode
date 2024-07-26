@@ -148,8 +148,54 @@
       "createProduct": "Create product"
     },
     "ticketTypes": {
+      "doesNotAllowEventSignups": "Does not allow event signups",
+      "doesNotCountTowardsConventionMaximum": "Does not count towards convention maximum",
+      "edit": {
+        "allowsEventSignupsLabel": "Allows event signups?",
+        "countsTowardsConventionMaximumLabel": "Counts towards convention maximum?",
+        "descriptionLabel": "Description",
+        "maximumEventProvidedTicketsLabel": "Number of event-provided {{ ticketNamePlural }} of this type (per event)",
+        "nameLabel": "Name (no spaces allowed — only letters, numbers, and underscores)"
+      },
       "eventProvidedDescription_one": "events can provide up to {{ count }} {{ ticketName }}",
-      "eventProvidedDescription_other": "events can provide up to {{ count }} {{ ticketName }}"
+      "eventProvidedDescription_other": "events can provide up to {{ count }} {{ ticketName }}",
+      "newButton": "New {{ ticketName }} type",
+      "providingProducts": {
+        "available": "Available for purchase",
+        "header": "Providing products:",
+        "none": "No products provide this {{ ticketName }} type",
+        "unavailable": "Not available for purchase"
+      }
+    },
+    "userActivityAlerts": {
+      "alertDestinations": {
+        "addDestination": {
+          "caption": "Add destination",
+          "staffPositionType": "Staff position",
+          "userConProfileType": "User"
+        },
+        "header": "Alert destinations",
+        "removeButton": "Remove destination",
+        "removePrompt": "Are you sure you want to remove this alert destination?",
+        "staffPosition": "<strong>Staff position:</strong> {{ staffPositionName }}",
+        "userConProfile": "<strong>User:</strong> {{ name }}"
+      },
+      "email": {
+        "label": "Email",
+        "helpText": "If the user’s email address matches this string, the alert will match.  Case insensitive, ignores dots before the @ and any text following a + sign."
+      },
+      "matchingHeader": "Matching",
+      "partialName": {
+        "label": "Partial name",
+        "helpText": "If any part of the user’s name matches this string, the alert will match.  Case insensitive."
+      },
+      "triggerEventsHeader": "Trigger events",
+      "triggerOnTicketCreate": "Trigger on {{ ticketName }} creation",
+      "triggerOnUserConProfileCreate": "Trigger on profile creation",
+      "user": {
+        "label": "User account",
+        "helpText": "Matches across all conventions using this server."
+      }
     },
     "userConProfiles": {
       "addAttendee": {
@@ -159,6 +205,29 @@
         "header": "Add attendee",
         "text": "Choose a user to add as an attendee for {{ conventionName }}.  This person must already be a user in the site database in order to be added."
       },
+      "addOrderToTicket": {
+        "buttonText": "Add order",
+        "defaultPaymentNote": "Entered manually by {{ adminName }}"
+      },
+      "adminSection": {
+        "becomeUser": "Become user",
+        "editProfile": "Edit profile",
+        "printableReport": "Printable report",
+        "title": "User administration"
+      },
+      "becomeUser": {
+        "buttonText": "Become user",
+        "justificationLabel": "Justification",
+        "justificationHelpText": "Please enter the reason why you’re temporarily becoming this user.  For example: user requested signup assistance, troubleshooting, etc.",
+        "prompt": "Are you sure you want to become {{ name }} for the duration of this session? <strong>Your actions while acting as this user will be logged, and the web site administrators may review this log for audit purposes.</strong>",
+        "title": "Become user"
+      },
+      "convertToEventProvidedTicket": {
+        "buttonText": "Convert {{ ticketName }}",
+        "prompt": "This will delete {{ name }}’s existing {{ ticketName }} and create a new one for them, provided by an event.  If they paid for their existing {{ ticketName }}, that payment will be refunded.",
+        "title": "Convert {{ name }}’s {{ ticketName }} to event-provided"
+      },
+      "deleteConfirmation": "Are you sure you want to remove {{ name }} from {{ convention }}?",
       "email": "Email",
       "firstName": "First name",
       "id": "ID",
@@ -176,20 +245,59 @@
         "unSignedUpYou": "You are a team member for the following events, but are not signed up for them:",
         "withdrawFromAllConfirmation": "Are you sure you want to withdraw {{ name }} from all their events at {{ conventionName }}?"
       },
+      "ticketAdminSection": {
+        "createdAt": "Created",
+        "noTicket": "No {{ ticketName }}",
+        "paidAmount": "Paid",
+        "paymentNote": "Payment note",
+        "providedByEvent": "Provided by event",
+        "transactionID": "Transaction ID",
+        "updatedAt": "Last updated",
+        "ticketType": "Type",
+        "title": "{{ ticketName, capitalize }}"
+      },
+      "ticketForm": {
+        "editOrderButton": "Edit order",
+        "orderID": "Order ID",
+        "orderInformationHeader": "Order information",
+        "providedByEvent": "Provided by event (if applicable)",
+        "ticketPrice": "{{ ticketName, capitalize }} price",
+        "ticketTypeLabel": "{{ ticketName, capitalize }} type"
+      },
       "ticketStatusChangedAt": "{{ ticketName }} status changed",
       "ticketType": "{{ ticketName }} type",
       "userId": "User ID",
       "withdrawFromAllButton": "Withdraw from all"
     },
     "users": {
+      "edit": {
+        "conventionProfiles": "Convention profiles",
+        "privileges": "Privileges"
+      },
       "merge": {
+        "actionDescription": "User account {{ winningUserId }} will be preserved. All the others will be deleted, and their convention profiles will be merged into it. The resulting account will look like this:",
+        "buttonLabel": "Merge",
         "hasTicket": "Has {{ ticketName }}",
         "noTicket": "No {{ ticketName }}",
         "noUsers": "No userIds to merge",
         "noWinner": "No winningUserId for merge",
         "profileLabel": "{{ email }}’s profile [{{ ticketDescription }}, {{ signupsDescription }}]",
+        "selectWinningUser": "Please select a user account to merge others into:",
+        "singleProfile": "<strong>{{ conventionName }}:</strong> {{ email }}’s profile",
         "signupCount_one": "{{ count }} signups",
-        "signupCount_other": "{{ count }} signups"
+        "signupCount_other": "{{ count }} signups",
+        "title": "Merge users"
+      },
+      "table": {
+        "headers": {
+          "email": "Email",
+          "firstName": "First name",
+          "id": "ID",
+          "lastName": "Last name",
+          "name": "Name"
+        },
+        "mergeUsersAction": "Merge users",
+        "title": "Users"
       }
     },
     "warnings": {
@@ -261,6 +369,7 @@
     "close": "Close",
     "collapse": "Collapse",
     "composeEmail": "Compose email",
+    "create": "Create",
     "delete": "Delete",
     "edit": "Edit",
     "expand": "Expand",
@@ -360,6 +469,7 @@
   "defaultTicketName": "ticket",
   "errors": {
     "404": "<0>Oops!</0><1>We couldn’t find a page at the location {{pathname}}.</1>",
+    "noData": "No data returned for query",
     "unauthorized": "Sorry, your account is not authorized to view this page."
   },
   "eventCategorySelect": {
@@ -597,6 +707,12 @@
     }
   },
   "general": {
+    "booleans": {
+      "any": "any",
+      "no": "no",
+      "yes": "yes"
+    },
+    "breadcrumbAriaLabel": "Breadcrumb navigation",
     "editors": {
       "markdownHelpText": "Use <1>Markdown syntax</1> for formatting."
     },
@@ -803,10 +919,15 @@
       "scheduleViewSelectorHeader": "View type:"
     }
   },
+  "scheduledValuePreview": {
+    "beforeNextChange": "Before {{ nextChange }}",
+    "startingAtNextChange": "Starting at {{ nextChange }}",
+    "tooLong": "Timespan too long to display a preview"
+  },
   "selectors": {
     "eventSelect": {
       "noInputMessage": "Type an event title to search",
-      "noResultsMessage": "No evets found matching “{{ inputValue }}”",
+      "noResultsMessage": "No events found matching “{{ inputValue }}”",
       "placeholder": "Search for an event by title..."
     },
     "userConProfileSelect": {
@@ -948,6 +1069,7 @@
       "stateWithRequestedBucket": "{{ state }} (requested {{ requestedBucket }})",
       "teamMemberNotCounted": "{{ teamMemberName }} (not counted)",
       "ticketPurchaseHold": "Held pending {{ ticketName }} purchase",
+      "unknown": "Unknown",
       "waitlisted": "Waitlisted",
       "waitlistedNoPreference": "Waitlisted (no preference)",
       "waitlistedWithRequestedBucket": "Waitlisted (requested {{ requestedBucketName }})",
@@ -982,6 +1104,13 @@
     "exportCSV": {
       "buttonText": "Export CSV"
     },
+    "pagination": {
+      "next": "Next",
+      "pageSelector": "<0>Page </0> <2/> of {{ totalPages }}",
+      "previous": "Previous",
+      "rowCount_one": "{{ count }} row",
+      "rowCount_other": "{{ count }} rows"
+    },
     "privileges": {
       "siteAdmin": "Global admin"
     },
@@ -1012,6 +1141,9 @@
         "withdraw": "withdraw"
       },
       "unknownState": "unknown"
+    },
+    "signupChoice": {
+      "notCounted": "N/C"
     },
     "ticketStatus": {
       "unpaid": "Unpaid"

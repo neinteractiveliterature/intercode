@@ -10,7 +10,7 @@ import { LoadingIndicator, ChoiceSet, ErrorDisplay } from '@neinteractiveliterat
 import { MergeUsersModalQueryData, useMergeUsersModalQuery } from './queries.generated';
 import { useMergeUsersMutation } from './mutations.generated';
 import humanize from '../humanize';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 function renderIfQueryReady(render: () => JSX.Element, { loading, error }: { loading: boolean; error?: ApolloError }) {
   if (error) {
@@ -117,9 +117,10 @@ function MergeUsersModal({ closeModal, visible, userIds }: MergeUsersModalProps)
 
       if (userConProfiles.length === 1) {
         return (
-          <>
-            <strong>{convention.name}:</strong> {userConProfiles[0].email}’s profile
-          </>
+          <Trans
+            i18nKey="admin.users.merge.singleProfile"
+            values={{ conventionName: convention.name, email: userConProfiles[0].email }}
+          />
         );
       }
 
@@ -161,26 +162,22 @@ function MergeUsersModal({ closeModal, visible, userIds }: MergeUsersModalProps)
 
     return (
       <div className="mt-4">
-        <p>
-          {'User account '}
-          {winningUserId} will be preserved. All the others will be deleted, and their convention profiles will be
-          merged into it. The resulting account will look like this:
-        </p>
+        <p>{t('admin.users.merge.actionDescription', { winningUserId })}</p>
 
         <dl className="row mb-0">
-          <dt className="col-sm-3">First name</dt>
+          <dt className="col-sm-3">{t('authentication.userForm.firstNameLabel')}</dt>
           <dd className="col-sm-9">{winningUser.first_name}</dd>
 
-          <dt className="col-sm-3">Last name</dt>
+          <dt className="col-sm-3">{t('authentication.userForm.lastNameLabel')}</dt>
           <dd className="col-sm-9">{winningUser.last_name}</dd>
 
-          <dt className="col-sm-3">Email</dt>
+          <dt className="col-sm-3">{t('authentication.userForm.emailLabel')}</dt>
           <dd className="col-sm-9">{winningUser.email}</dd>
 
-          <dt className="col-sm-3">Privileges</dt>
+          <dt className="col-sm-3">{t('admin.users.edit.privileges')}</dt>
           <dd className="col-sm-9">{allPrivileges.map((priv) => humanize(priv ?? '')).join(', ')}</dd>
 
-          <dt className="col-sm-3">Conventions</dt>
+          <dt className="col-sm-3">{t('admin.users.edit.conventionProfiles')}</dt>
           <dd className="col-sm-9">
             <ul className="list-unstyled">
               {allConventions.map((convention) => (
@@ -195,7 +192,7 @@ function MergeUsersModal({ closeModal, visible, userIds }: MergeUsersModalProps)
 
   const renderModalContent = () => (
     <>
-      <p>Please select a user account to merge others into:</p>
+      <p>{t('admin.users.merge.selectWinningUser')}</p>
 
       <ChoiceSet
         choices={sortBy(data?.users, (user) => user.id).map((user) => ({
@@ -212,7 +209,7 @@ function MergeUsersModal({ closeModal, visible, userIds }: MergeUsersModalProps)
 
   return (
     <Modal visible={visible} dialogClassName="modal-lg">
-      <div className="modal-header">Merge users</div>
+      <div className="modal-header">{t('admin.users.merge.title')}</div>
 
       <div className="modal-body">
         {renderIfQueryReady(renderModalContent, { loading, error })}
@@ -222,7 +219,7 @@ function MergeUsersModal({ closeModal, visible, userIds }: MergeUsersModalProps)
 
       <div className="modal-footer">
         <button type="button" className="btn btn-secondary" onClick={closeModal}>
-          Cancel
+          {t('buttons.cancel')}
         </button>
         <button
           type="button"
@@ -230,7 +227,7 @@ function MergeUsersModal({ closeModal, visible, userIds }: MergeUsersModalProps)
           disabled={!winningUserId || !fullyDisambiguated || mutationInProgress}
           onClick={performMerge}
         >
-          Merge
+          {t('admin.users.merge.buttonLabel')}
         </button>
       </div>
     </Modal>

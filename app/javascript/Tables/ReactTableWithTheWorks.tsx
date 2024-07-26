@@ -5,6 +5,7 @@ import { parseIntOrNull } from '@neinteractiveliterature/litform';
 
 import { UseReactTableWithTheWorksResult } from './useReactTableWithTheWorks';
 import { GraphQLReactTableVariables } from './useGraphQLReactTable';
+import { Trans, useTranslation } from 'react-i18next';
 
 function mergeProps<T extends HTMLAttributes<unknown>>(...propSets: T[]) {
   return propSets.reduce((acc, props) =>
@@ -55,6 +56,7 @@ function ReactTableWithTheWorks<
     state: { pageIndex, pageSize },
   } = tableInstance;
 
+  const { t } = useTranslation();
   const [pageInputValue, setPageInputValue] = useState<string>(() => (pageIndex + 1).toString());
   const pageInputId = useId();
 
@@ -146,7 +148,6 @@ function ReactTableWithTheWorks<
         >
           {loading && rows.length === 0
             ? [...Array(pageSize)].map((value, index) => (
-                 
                 <div key={index} role="row" aria-hidden>
                   <div>&nbsp;</div>
                 </div>
@@ -207,22 +208,24 @@ function ReactTableWithTheWorks<
               className="btn btn-outline-secondary col-3 me-2"
               disabled={!canPreviousPage}
             >
-              <i className="bi-chevron-left" /> Previous
+              <i className="bi-chevron-left" /> {t('tables.pagination.previous')}
             </button>
-            <div>
-              <label className="form-label" htmlFor={pageInputId}>
-                Page&nbsp;
-              </label>
-              {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-              <input
-                className="form-control form-control-sm d-inline"
-                style={{ width: '5rem' }}
-                id={pageInputId}
-                type="number"
-                value={pageInputValue}
-                onChange={pageInputChanged}
-              />
-              &nbsp;of {pageOptions.length}
+            <div className="text-nowrap">
+              <Trans i18nKey="tables.pagination.pageSelector" values={{ totalPages: pageOptions.length }}>
+                <label className="form-label" htmlFor={pageInputId}>
+                  Page
+                </label>{' '}
+                {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+                <input
+                  className="form-control form-control-sm d-inline"
+                  style={{ width: '5rem' }}
+                  id={pageInputId}
+                  type="number"
+                  value={pageInputValue}
+                  onChange={pageInputChanged}
+                />{' '}
+                of {{ totalPages: pageOptions.length }}
+              </Trans>
             </div>
             <div>
               <select
@@ -232,9 +235,9 @@ function ReactTableWithTheWorks<
                   setPageSize(Number(e.target.value));
                 }}
               >
-                {[5, 10, 20, 25, 50, 100].map((size) => (
-                  <option key={size} value={size}>
-                    {size} rows
+                {[5, 10, 20, 25, 50, 100].map((count) => (
+                  <option key={count} value={count}>
+                    {t('tables.pagination.rowCount', { count })}
                   </option>
                 ))}
               </select>
@@ -245,7 +248,7 @@ function ReactTableWithTheWorks<
               onClick={() => nextPage()}
               disabled={!canNextPage}
             >
-              Next <i className="bi-chevron-right" />
+              {t('tables.pagination.next')} <i className="bi-chevron-right" />
             </button>
           </div>
         </div>

@@ -6,6 +6,7 @@ export type EmailListEntry = { email: string; name?: string | null };
 
 function formatEmail({ email, name }: EmailListEntry) {
   if (name?.match(/[^0-9A-Za-z ]/)) {
+    // eslint-disable-next-line i18next/no-literal-string
     return `"${name.replace(/"/g, '\\"')}" <${email}>`;
   }
 
@@ -23,6 +24,7 @@ function EmailList({ emails, separator, renderToolbarContent }: EmailListProps):
   const addresses = emails.map(formatEmail).join(separator);
   const mailtoParams = new URLSearchParams();
   mailtoParams.append('bcc', addresses);
+  // eslint-disable-next-line i18next/no-literal-string
   const mailtoLink = `mailto:?bcc=${addresses}`;
 
   const textareaRows = emails.length > 80 ? emails.length / 4 : 20;

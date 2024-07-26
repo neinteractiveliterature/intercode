@@ -1,7 +1,8 @@
-import { fixupConfigRules, fixupPluginRules } from '@eslint/compat';
+import { fixupConfigRules, fixupPluginRules, includeIgnoreFile } from '@eslint/compat';
 import jest from 'eslint-plugin-jest';
 import jsxA11Y from 'eslint-plugin-jsx-a11y';
 import reactHooks from 'eslint-plugin-react-hooks';
+import i18Next from 'eslint-plugin-i18next';
 import * as graphqlEslint from '@graphql-eslint/eslint-plugin';
 import typescriptEslint from '@typescript-eslint/eslint-plugin';
 import globals from 'globals';
@@ -20,6 +21,7 @@ const compat = new FlatCompat({
   recommendedConfig: js.configs.recommended,
   allConfig: js.configs.all,
 });
+const gitignorePath = path.resolve(__dirname, '.gitignore');
 
 const graphqlEslintParser = {
   ...graphqlEslint,
@@ -29,6 +31,7 @@ const graphqlEslintParser = {
 };
 
 export default [
+  includeIgnoreFile(gitignorePath),
   {
     ignores: [
       '**/*{.,-}min.js',
@@ -52,10 +55,27 @@ export default [
       'plugin:react-hooks/recommended',
       'plugin:jest/recommended',
       'plugin:jsx-a11y/recommended',
-      'plugin:i18next/recommended',
       'prettier',
     ),
   ),
+  {
+    files: ['app/javascript/**/*.tsx'],
+    plugins: { i18next: fixupPluginRules(i18Next) },
+    rules: {
+      'i18next/no-literal-string': [
+        'warn',
+        {
+          mode: 'all',
+          callees: { include: ['usePageTitle'] },
+          'object-properties': { exclude: ['id', 'accessor', 'defaultVisibleColumns'] },
+          'jsx-attributes': {
+            include: ['title', 'aria-label', 'caption', 'placeholder', 'label', 'helpText', 'stringError'],
+          },
+          'should-validate-template': true,
+        },
+      ],
+    },
+  },
   {
     plugins: {
       jest: fixupPluginRules(jest),
@@ -165,8 +185,6 @@ export default [
           ignoreRestSiblings: true,
         },
       ],
-
-      'i18next/no-literal-string': 'warn',
     },
   },
   {

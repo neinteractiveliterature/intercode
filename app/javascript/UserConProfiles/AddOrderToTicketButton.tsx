@@ -4,6 +4,7 @@ import { useModal } from '@neinteractiveliterature/litform';
 import NewOrderModal from '../Store/NewOrderModal';
 import AppRootContext from '../AppRootContext';
 import { Money, OrderStatus, Product, Ticket, TicketType, UserConProfile } from '../graphqlTypes.generated';
+import { useTranslation } from 'react-i18next';
 
 export type AddOrderToTicketButtonProps = {
   className?: string;
@@ -29,6 +30,7 @@ function AddOrderToTicketButton({
   convention,
   className,
 }: AddOrderToTicketButtonProps): JSX.Element {
+  const { t } = useTranslation();
   const newOrderModal = useModal();
   const { myProfile, defaultCurrencyCode } = useContext(AppRootContext);
 
@@ -48,7 +50,7 @@ function AddOrderToTicketButton({
   return (
     <>
       <button className={className || 'btn btn-outline-primary'} onClick={newOrderModal.open} type="button">
-        Add order
+        {t('admin.userConProfiles.addOrderToTicket.buttonText')}
       </button>
       <NewOrderModal
         visible={newOrderModal.visible}
@@ -61,7 +63,9 @@ function AddOrderToTicketButton({
             fractional: 0,
           },
           status: OrderStatus.Paid,
-          payment_note: `Entered manually by ${myProfile?.name_without_nickname}`,
+          payment_note: t('admin.userConProfiles.addOrderToTicket.defaultPaymentNote', {
+            adminName: myProfile?.name_without_nickname,
+          }),
           coupon_applications: [],
           order_entries: [
             {

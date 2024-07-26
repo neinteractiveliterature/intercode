@@ -23,6 +23,7 @@ function dataToKeyPathValuePairs(data: URLParamSerializable, prependKeys: string
 
   if (typeof data === 'boolean') {
     if (data) {
+      // eslint-disable-next-line i18next/no-literal-string
       return [[prependKeys, 'true']];
     }
     return [];

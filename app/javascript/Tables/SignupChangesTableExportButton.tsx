@@ -4,10 +4,12 @@ import ReactTableExportButtonWithColumnTransform, {
 
 const transformColumnIdForExport = (columnId: string) => {
   if (columnId === 'action') {
+    // eslint-disable-next-line i18next/no-literal-string
     return ['action', 'prev_state', 'state'];
   }
 
   if (columnId === 'bucket_change') {
+    // eslint-disable-next-line i18next/no-literal-string
     return ['prev_bucket', 'bucket'];
   }
 

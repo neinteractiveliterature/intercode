@@ -35,9 +35,11 @@ function cardClassForTicketType(ticketType: TicketTypeType) {
   }
 
   if (ticketType.maximum_event_provided_tickets > 0) {
+    // eslint-disable-next-line i18next/no-literal-string
     return 'bg-info-light';
   }
 
+  // eslint-disable-next-line i18next/no-literal-string
   return 'bg-dark text-white';
 }
 
@@ -64,16 +66,20 @@ function describeTicketTypeOptions(
 
 export function buildBlankProduct(currencyCode: string) {
   return {
+    // eslint-disable-next-line i18next/no-literal-string
     __typename: 'Product' as const,
     available: true,
     delete_variant_ids: [],
     generatedId: uuidv4(),
     name: '',
+    // eslint-disable-next-line i18next/no-literal-string
     payment_options: ['stripe'],
     product_variants: [],
     pricing_structure: {
+      // eslint-disable-next-line i18next/no-literal-string
       __typename: 'PricingStructure' as const,
       pricing_strategy: PricingStrategy.Fixed,
+      // eslint-disable-next-line i18next/no-literal-string
       value: { __typename: 'Money' as const, currency_code: currencyCode, fractional: 0 },
     },
   };
@@ -127,24 +133,26 @@ function TicketTypeDisplay({
               }
             >
               <i className="bi-trash me-1" />
-              Delete
+              {t('buttons.delete')}
             </button>
             <Link to={`${ticketType.id}/edit`} className="btn btn-secondary btn-sm mx-1">
               <i className="bi-pencil-square me-1" />
-              Edit
+              {t('buttons.edit')}
             </Link>
           </div>
         </div>
 
         <div className="small font-italic">
           {describeTicketTypeOptions(ticketType, ticketName ?? 'ticket', ticketNamePlural ?? 'tickets', t)}
-          {!ticketType.counts_towards_convention_maximum && <div>Does not count towards convention maximum</div>}
-          {!ticketType.allows_event_signups && <div>Does not allow event signups</div>}
+          {!ticketType.counts_towards_convention_maximum && (
+            <div>{t('admin.ticketTypes.doesNotCountTowardsConventionMaximum')}</div>
+          )}
+          {!ticketType.allows_event_signups && <div>{t('admin.ticketTypes.doesNotAllowEventSignups')}</div>}
         </div>
       </div>
       <div className="card-body bg-white text-body">
         <p>
-          <strong>Providing products:</strong>
+          <strong>{t('admin.ticketTypes.providingProducts.header')}</strong>
         </p>
         {ticketType.providing_products.length > 0 ? (
           <table className="table table-striped">
@@ -155,11 +163,11 @@ function TicketTypeDisplay({
                   <td>
                     {product.available ? (
                       <div className="badge bg-success">
-                        <i className="bi-check-lg" /> Available for purchase
+                        <i className="bi-check-lg" /> {t('admin.ticketTypes.providingProducts.available')}
                       </div>
                     ) : (
                       <div className="badge bg-secondary">
-                        <i className="bi-x-lg" /> Not available for purchase
+                        <i className="bi-x-lg" /> {t('admin.ticketTypes.providingProducts.unavailable')}
                       </div>
                     )}
                   </td>
@@ -187,7 +195,7 @@ function TicketTypeDisplay({
                         })
                       }
                     >
-                      Edit
+                      {t('buttons.edit')}
                     </button>
                   </td>
                 </tr>
@@ -195,7 +203,7 @@ function TicketTypeDisplay({
             </tbody>
           </table>
         ) : (
-          `No products provide this ${ticketName} type`
+          t('admin.ticketTypes.providingProducts.none', { ticketName })
         )}
         <div>
           <button
@@ -212,6 +220,7 @@ function TicketTypeDisplay({
 }
 
 export default LoadQueryWrapper(useTicketTypesQueryFromRoute, function TicketTypesList({ data }) {
+  const { t } = useTranslation();
   const { ticketName } = useContext(AppRootContext);
   const event = 'event' in data.convention ? data.convention.event : undefined;
 
@@ -243,7 +252,7 @@ export default LoadQueryWrapper(useTicketTypesQueryFromRoute, function TicketTyp
       ))}
 
       <Link to="new" className="btn btn-primary">
-        New {ticketName} type
+        {t('admin.ticketTypes.newButton', { ticketName })}
       </Link>
 
       <NewTicketProvidingProductModal
