@@ -151,6 +151,36 @@
       "eventProvidedDescription_one": "events can provide up to {{ count }} {{ ticketName }}",
       "eventProvidedDescription_other": "events can provide up to {{ count }} {{ ticketName }}"
     },
+    "userActivityAlerts": {
+      "alertDestinations": {
+        "addDestination": {
+          "caption": "Add destination",
+          "staffPositionType": "Staff position",
+          "userConProfileType": "User"
+        },
+        "header": "Alert destinations",
+        "removeButton": "Remove destination",
+        "removePrompt": "Are you sure you want to remove this alert destination?",
+        "staffPosition": "<strong>Staff position:</strong> {{ staffPositionName }}",
+        "userConProfile": "<strong>User:</strong> {{ name }}"
+      },
+      "email": {
+        "label": "Email",
+        "helpText": "If the user’s email address matches this string, the alert will match.  Case insensitive, ignores dots before the @ and any text following a + sign."
+      },
+      "matchingHeader": "Matching",
+      "partialName": {
+        "label": "Partial name",
+        "helpText": "If any part of the user’s name matches this string, the alert will match.  Case insensitive."
+      },
+      "triggerEventsHeader": "Trigger events",
+      "triggerOnTicketCreate": "Trigger on {{ ticketName }} creation",
+      "triggerOnUserConProfileCreate": "Trigger on profile creation",
+      "user": {
+        "label": "User account",
+        "helpText": "Matches across all conventions using this server."
+      }
+    },
     "userConProfiles": {
       "addAttendee": {
         "addButtonText": "Add",
@@ -323,6 +353,7 @@
     "close": "Close",
     "collapse": "Collapse",
     "composeEmail": "Compose email",
+    "create": "Create",
     "delete": "Delete",
     "edit": "Edit",
     "expand": "Expand",
@@ -660,6 +691,7 @@
     }
   },
   "general": {
+    "breadcrumbAriaLabel": "Breadcrumb navigation",
     "editors": {
       "markdownHelpText": "Use <1>Markdown syntax</1> for formatting."
     },

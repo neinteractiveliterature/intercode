@@ -6,23 +6,25 @@ import UserActivityAlertsList from './UserActivityAlertsList';
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import LeafBreadcrumbItem from '../Breadcrumbs/LeafBreadcrumbItem';
+import { useTranslation } from 'react-i18next';
 
 function UserActivityAlertsAdmin(): JSX.Element {
+  const { t } = useTranslation();
   const authorizationWarning = useAuthorizationRequired('can_read_user_activity_alerts');
   if (authorizationWarning) return authorizationWarning;
 
   return (
     <>
-      <nav aria-label="breadcrumb" className="mb-4">
+      <nav aria-label={t('general.breadcrumbAriaLabel')} className="mb-4">
         <ol className="breadcrumb">
           <RouteActivatedBreadcrumbItem to="" end>
-            User activity alerts
+            {t('navigation.admin.userActivityAlerts')}
           </RouteActivatedBreadcrumbItem>
 
-          <LeafBreadcrumbItem path="new">Create</LeafBreadcrumbItem>
+          <LeafBreadcrumbItem path="new">{t('buttons.create')}</LeafBreadcrumbItem>
 
           <Routes>
-            <Route path=":id/edit" element={<LeafBreadcrumbItem path="">Edit</LeafBreadcrumbItem>} />
+            <Route path=":id/edit" element={<LeafBreadcrumbItem path="">{t('buttons.edit')}</LeafBreadcrumbItem>} />
           </Routes>
         </ol>
       </nav>

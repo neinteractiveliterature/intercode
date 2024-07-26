@@ -13,6 +13,7 @@ import UserConProfileSelect from '../BuiltInFormControls/UserConProfileSelect';
 import UserSelect from '../BuiltInFormControls/UserSelect';
 import { DefaultUserConProfilesQueryData } from '../BuiltInFormControls/selectDefaultQueries.generated';
 import { UserActivityAlertsAdminQueryData } from './queries.generated';
+import { Trans, useTranslation } from 'react-i18next';
 
 type AlertType = UserActivityAlertsAdminQueryData['convention']['user_activity_alerts'][number];
 
@@ -33,6 +34,7 @@ function UserActivityAlertForm({
   convention,
   disabled,
 }: UserActivityAlertFormProps): JSX.Element {
+  const { t } = useTranslation();
   const userSelectId = useId();
   const confirm = useConfirm();
   const [addDestinationType, setAddDestinationType] = useState<string | null>(null);
@@ -69,13 +71,13 @@ function UserActivityAlertForm({
   return (
     <>
       <div className="card">
-        <div className="card-header">Matching</div>
+        <div className="card-header">{t('admin.userActivityAlerts.matchingHeader')}</div>
 
         <div className="card-body">
           <BootstrapFormInput
             name="partial_name"
-            label="Partial name"
-            helpText="If any part of the user's name matches this string, the alert will match.  Case insensitive."
+            label={t('admin.userActivityAlerts.partialName.label')}
+            helpText={t('admin.userActivityAlerts.partialName.helpText')}
             value={userActivityAlert.partial_name || ''}
             onTextChange={setPartialName}
             disabled={disabled}
@@ -84,8 +86,8 @@ function UserActivityAlertForm({
           <BootstrapFormInput
             name="email"
             type="email"
-            label="Email"
-            helpText="If the user's email address matches this string, the alert will match.  Case insensitive, ignores dots before the @ and any text following a + sign."
+            label={t('admin.userActivityAlerts.email.label')}
+            helpText={t('admin.userActivityAlerts.email.helpText')}
             value={userActivityAlert.email || ''}
             onTextChange={setEmail}
             disabled={disabled}
@@ -93,7 +95,7 @@ function UserActivityAlertForm({
 
           <div className="mb-3 mb-0">
             <label className="form-label" htmlFor={userSelectId}>
-              User account
+              {t('admin.userActivityAlerts.user.label')}
             </label>
             <UserSelect
               inputId={userSelectId}
@@ -101,18 +103,18 @@ function UserActivityAlertForm({
               onChange={setUser}
               isDisabled={disabled}
             />
-            <small className="form-text text-muted">Matches across all conventions using this server.</small>
+            <small className="form-text text-muted">{t('admin.userActivityAlerts.user.helpText')}</small>
           </div>
         </div>
       </div>
 
       <div className="card mt-4">
-        <div className="card-header">Trigger events</div>
+        <div className="card-header">{t('admin.userActivityAlerts.triggerEventsHeader')}</div>
 
         <div className="card-body">
           <BootstrapFormCheckbox
             name="trigger_on_user_con_profile_create"
-            label="Trigger on profile creation"
+            label={t('admin.userActivityAlerts.triggerOnUserConProfileCreate')}
             type="checkbox"
             checked={userActivityAlert.trigger_on_user_con_profile_create}
             onCheckedChange={setTriggerOnUserConProfileCreate}
@@ -122,7 +124,7 @@ function UserActivityAlertForm({
           {convention.ticket_mode !== 'disabled' && (
             <BootstrapFormCheckbox
               name="trigger_on_ticket_create"
-              label={`Trigger on ${convention.ticket_name} creation`}
+              label={t('admin.userActivityAlerts.triggerOnTicketCreate', { ticketName: convention.ticket_name })}
               type="checkbox"
               checked={userActivityAlert.trigger_on_ticket_create}
               onCheckedChange={setTriggerOnTicketCreate}
@@ -133,7 +135,7 @@ function UserActivityAlertForm({
       </div>
 
       <div className="card mt-4">
-        <div className="card-header">Alert destinations</div>
+        <div className="card-header">{t('admin.userActivityAlerts.alertDestinations.header')}</div>
 
         <ul className="list-group list-group-flush">
           {userActivityAlert.notification_destinations.map((notificationDestination) => (
@@ -141,13 +143,15 @@ function UserActivityAlertForm({
               <div className="d-flex">
                 <div className="flex-grow-1">
                   {notificationDestination.staff_position ? (
-                    <>
-                      <strong>Staff position:</strong> {notificationDestination.staff_position.name}
-                    </>
+                    <Trans
+                      i18nKey="admin.userActivityAlerts.alertDestinations.staffPosition"
+                      values={{ staffPositionName: notificationDestination.staff_position.name }}
+                    />
                   ) : (
-                    <>
-                      <strong>User:</strong> {notificationDestination.user_con_profile?.name_without_nickname}
-                    </>
+                    <Trans
+                      i18nKey="admin.userActivityAlerts.alertDestinations.userConProfile"
+                      values={{ name: notificationDestination.user_con_profile?.name_without_nickname }}
+                    />
                   )}
                 </div>
                 <button
@@ -156,24 +160,32 @@ function UserActivityAlertForm({
                   onClick={() =>
                     confirm({
                       action: () => onRemoveNotificationDestination(notificationDestination.id),
-                      prompt: 'Are you sure you want to remove this alert destination?',
+                      prompt: t('admin.userActivityAlerts.alertDestinations.removePrompt'),
                     })
                   }
                   disabled={disabled}
                 >
                   <i className="bi-trash" />
-                  <span className="visually-hidden">Remove destination</span>
+                  <span className="visually-hidden">
+                    {t('admin.userActivityAlerts.alertDestinations.removeButton')}
+                  </span>
                 </button>
               </div>
             </li>
           ))}
           <li className="list-group-item">
             <MultipleChoiceInput
-              caption="Add destination"
+              caption={t('admin.userActivityAlerts.alertDestinations.addDestination.caption')}
               name="addDestinationType"
               choices={[
-                { label: 'Staff position', value: 'staff_position' },
-                { label: 'User', value: 'user_con_profile' },
+                {
+                  label: t('admin.userActivityAlerts.alertDestinations.addDestination.staffPositionType'),
+                  value: 'staff_position',
+                },
+                {
+                  label: t('admin.userActivityAlerts.alertDestinations.addDestination.userConProfileType'),
+                  value: 'user_con_profile',
+                },
               ]}
               value={addDestinationType}
               onChange={setAddDestinationType}
