@@ -7,6 +7,7 @@ import EnumTypes from '../../enumTypes.json';
 import MoneyInput from '../MoneyInput';
 import { Money } from '../../graphqlTypes.generated';
 import PricingStructureForm, { PricingStructureFormProps } from './PricingStructureForm';
+import { useTranslation } from 'react-i18next';
 
 type EditingPricingStructure = PricingStructureFormProps['pricingStructure'];
 
@@ -25,11 +26,11 @@ export type PricingStructureModalContextValue = ModalData<PricingStructureModalS
 export const PricingStructureModalContext = React.createContext<PricingStructureModalContextValue>({
   visible: false,
   state: undefined,
-   
+
   open: () => {},
-   
+
   close: () => {},
-   
+
   setState: () => {},
 });
 
@@ -40,6 +41,7 @@ export const buildScheduledMoneyValueInput = (value: Money | null | undefined, o
 export type EditPricingStructureModalProps = Pick<PricingStructureModalContextValue, 'visible' | 'state' | 'close'>;
 
 function EditPricingStructureModal({ visible, state, close }: EditPricingStructureModalProps): JSX.Element {
+  const { t } = useTranslation();
   const [pricingStructure, setPricingStructure] = useState(state?.value);
 
   useEffect(() => {
@@ -55,7 +57,7 @@ function EditPricingStructureModal({ visible, state, close }: EditPricingStructu
 
   return (
     <Modal dialogClassName="modal-xl" visible={visible}>
-      <div className="modal-header">Pricing structure</div>
+      <div className="modal-header">{t('admin.store.pricingStructure.title')}</div>
 
       <div className="modal-body">
         <PricingStructureForm pricingStructure={pricingStructure} setPricingStructure={setPricingStructure} />
@@ -63,11 +65,11 @@ function EditPricingStructureModal({ visible, state, close }: EditPricingStructu
 
       <div className="modal-footer">
         <button className="btn btn-secondary" type="button" onClick={close}>
-          Cancel
+          {t('buttons.cancel')}
         </button>
 
         <button className="btn btn-primary" type="button" onClick={okClicked}>
-          OK
+          {t('buttons.ok')}
         </button>
       </div>
     </Modal>

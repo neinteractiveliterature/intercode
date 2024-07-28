@@ -49,7 +49,6 @@ export type AdminProductVariantsTableProps =
   | AdminProductVariantsTableEditingProps
   | AdminProductVariantsTableViewingProps;
 
- 
 const noop = () => {};
 
 function AdminProductVariantsTable(props: AdminProductVariantsTableProps): JSX.Element {
@@ -142,7 +141,7 @@ function AdminProductVariantsTable(props: AdminProductVariantsTableProps): JSX.E
 
     return (
       <button type="button" className="btn btn-primary btn-sm" onClick={addVariantClicked}>
-        Add variant
+        {t('admin.store.productVariants.addVariant')}
       </button>
     );
   };
@@ -150,7 +149,7 @@ function AdminProductVariantsTable(props: AdminProductVariantsTableProps): JSX.E
   if (product.product_variants.length === 0) {
     return (
       <div>
-        <p>This product does not have any variants.</p>
+        <p>{t('admin.store.productVariants.noVariants')}</p>
         {renderAddVariantButton()}
       </div>
     );
@@ -189,9 +188,9 @@ function AdminProductVariantsTable(props: AdminProductVariantsTableProps): JSX.E
           <thead>
             <tr>
               <th />
-              <th>Variant name</th>
-              <th>Description</th>
-              <th>Override price</th>
+              <th>{t('admin.store.productVariants.nameHeader')}</th>
+              <th>{t('admin.store.productVariants.descriptionHeader')}</th>
+              <th>{t('admin.store.productVariants.overridePriceHeader')}</th>
               <th />
             </tr>
           </thead>

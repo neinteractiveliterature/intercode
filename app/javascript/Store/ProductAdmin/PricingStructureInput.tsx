@@ -24,7 +24,7 @@ function PricingStructureInput({ value, onChange }: PricingStructureInputProps):
         onClick={() => pricingStructureModal.open({ value, onChange })}
       >
         <i className="bi-pencil-fill" />
-        <span className="visually-hidden">Edit</span>
+        <span className="visually-hidden">{t('buttons.edit')}</span>
       </button>
     </>
   );

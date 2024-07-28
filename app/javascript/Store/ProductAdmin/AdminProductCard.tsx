@@ -118,9 +118,13 @@ function AdminProductCard({ currentAbility, startEditing, product }: AdminProduc
 
           <div className="ml-lg-4 col-lg">
             <p>
-              <strong>Base price: {describeAdminPricingStructure(product.pricing_structure, t)}</strong>
+              <strong>
+                {t('admin.store.products.basePrice', {
+                  price: describeAdminPricingStructure(product.pricing_structure, t),
+                })}
+              </strong>
             </p>
-            { }
+            {}
             <div dangerouslySetInnerHTML={{ __html: product.description_html ?? '' }} />
             <AdminProductVariantsTable product={product} editing={false} />
           </div>

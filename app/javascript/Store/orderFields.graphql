@@ -1,5 +1,3 @@
- 
-
 #import "./couponFields.graphql"
 
 fragment CouponApplicationFields on CouponApplication {
@@ -22,6 +20,7 @@ fragment AdminOrderFieldsFragment on Order {
   submitted_at
   charge_id
   payment_note
+  paid_at
 
   user_con_profile {
     id

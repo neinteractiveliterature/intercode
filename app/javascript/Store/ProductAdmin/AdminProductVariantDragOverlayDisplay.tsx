@@ -15,7 +15,7 @@ function AdminProductVariantDragOverlayDisplay({ variant }: AdminProductVariantD
     <tr className="bg-light border border-secondary">
       <td>
         <i className="bi-grip-vertical cursor-grab">
-          <span className="visually-hidden">Drag to reorder</span>
+          <span className="visually-hidden">{t('buttons.dragToReorder')}</span>
         </i>
       </td>
       <td>

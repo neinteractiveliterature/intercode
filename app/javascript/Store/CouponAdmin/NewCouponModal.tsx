@@ -8,6 +8,7 @@ import useAsyncFunction from '../../useAsyncFunction';
 import buildCouponInput from './buildCouponInput';
 import { AdminCouponFieldsFragment } from './queries.generated';
 import { useCreateCouponMutation } from './mutations.generated';
+import { useTranslation } from 'react-i18next';
 
 export type NewCouponModalProps = {
   visible: boolean;
@@ -15,6 +16,7 @@ export type NewCouponModalProps = {
 };
 
 function NewCouponModal({ visible, close }: NewCouponModalProps): JSX.Element {
+  const { t } = useTranslation();
   const [coupon, setCoupon] = useState<Omit<AdminCouponFieldsFragment, 'id'>>({
     __typename: 'Coupon',
     code: '',
@@ -36,17 +38,17 @@ function NewCouponModal({ visible, close }: NewCouponModalProps): JSX.Element {
 
   return (
     <Modal visible={visible} dialogClassName="modal-lg">
-      <div className="modal-header">New coupon</div>
+      <div className="modal-header">{t('admin.store.coupons.newCoupon')}</div>
       <div className="modal-body">
         <CouponForm value={coupon} onChange={setCoupon} />
         <ErrorDisplay graphQLError={error as ApolloError} />
       </div>
       <div className="modal-footer">
         <button type="button" className="btn btn-secondary" onClick={close} disabled={inProgress}>
-          Cancel
+          {t('buttons.cancel')}
         </button>
         <button type="button" className="btn btn-primary" onClick={saveClicked} disabled={inProgress}>
-          Create
+          {t('buttons.create')}
         </button>
       </div>
     </Modal>

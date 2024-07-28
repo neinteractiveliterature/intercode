@@ -4,12 +4,14 @@ import { ApolloError } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import useAsyncFunction from '../useAsyncFunction';
+import { useTranslation } from 'react-i18next';
 
 export type ApplyCouponControlProps = {
   createCouponApplication: (code: string) => Promise<unknown>;
 };
 
 function ApplyCouponControl({ createCouponApplication }: ApplyCouponControlProps): JSX.Element {
+  const { t } = useTranslation();
   const [couponCode, setCouponCode] = useState('');
   const couponCodeInputId = useId();
   const [applyCoupon, applyError, applyInProgress] = useAsyncFunction(createCouponApplication);
@@ -29,11 +31,11 @@ function ApplyCouponControl({ createCouponApplication }: ApplyCouponControlProps
   return (
     <>
       <label className="form-label" htmlFor={couponCodeInputId}>
-        Apply coupon
+        {t('store.coupons.applyLabel')}
       </label>
       <div className="input-group mb-2">
         <label className="input-group-text" htmlFor={couponCodeInputId}>
-          Code:
+          {t('store.coupons.code.label')}
         </label>
         <input
           type="text"
@@ -45,7 +47,7 @@ function ApplyCouponControl({ createCouponApplication }: ApplyCouponControlProps
           }}
           onKeyDown={keyDownInCodeInput}
           disabled={applyInProgress}
-          aria-label="Coupon code"
+          aria-label={t('store.coupons.code.ariaLabel')}
         />
         <button
           className="btn btn-sm btn-outline-primary"
@@ -53,7 +55,7 @@ function ApplyCouponControl({ createCouponApplication }: ApplyCouponControlProps
           onClick={applyClicked}
           disabled={applyInProgress}
         >
-          Apply
+          {t('buttons.apply')}
         </button>
       </div>
       <ErrorDisplay graphQLError={applyError as ApolloError} />

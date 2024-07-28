@@ -1,4 +1,4 @@
-import { useState, useContext, useMemo } from 'react';
+import { useState, useContext, useMemo, useCallback } from 'react';
 import { Column, FilterProps } from 'react-table';
 import { DateTime } from 'luxon';
 import { useModal } from '@neinteractiveliterature/litform';
@@ -17,6 +17,8 @@ import AppRootContext from '../AppRootContext';
 import { AdminOrdersQueryData, useAdminOrdersQuery } from './queries.generated';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
 import { useAppDateTimeFormat } from '../TimeUtils';
+import { TFunction } from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 type OrderType = AdminOrdersQueryData['convention']['orders_paginated']['entries'][0];
 
@@ -51,10 +53,10 @@ const SubmittedAtCell = ({ value }: SubmittedAtCellProps) => {
   return <>{format(DateTime.fromISO(value, { zone: timezoneName }), 'shortDateTime')}</>;
 };
 
-function getPossibleColumns(): Column<OrderType>[] {
+function getPossibleColumns(t: TFunction): Column<OrderType>[] {
   return [
     {
-      Header: 'ID',
+      Header: t('admin.store.orders.headers.id'),
       id: 'id',
       accessor: 'id',
       disableFilters: false,
@@ -63,7 +65,7 @@ function getPossibleColumns(): Column<OrderType>[] {
       width: 100,
     },
     {
-      Header: 'User',
+      Header: t('admin.store.orders.headers.user_name'),
       id: 'user_name',
       disableFilters: false,
       disableSortBy: false,
@@ -71,7 +73,7 @@ function getPossibleColumns(): Column<OrderType>[] {
       Filter: FreeTextFilter,
     },
     {
-      Header: 'Status',
+      Header: t('admin.store.orders.headers.status'),
       id: 'status',
       accessor: 'status',
       disableFilters: false,
@@ -79,20 +81,20 @@ function getPossibleColumns(): Column<OrderType>[] {
       Filter: StatusFilter,
     },
     {
-      Header: 'Submitted',
+      Header: t('admin.store.orders.headers.submitted_at'),
       id: 'submitted_at',
       accessor: 'submitted_at',
       disableSortBy: false,
       Cell: ({ value }: { value: OrderType['submitted_at'] }) => <SubmittedAtCell value={value} />,
     },
     {
-      Header: 'Products',
+      Header: t('admin.store.orders.headers.describe_products'),
       id: 'describe_products',
       accessor: (order: OrderType) => order.order_entries.map((entry) => entry.describe_products),
       Cell: ArrayToSentenceCell,
     },
     {
-      Header: 'Payment amount',
+      Header: t('admin.store.orders.headers.payment_amount'),
       id: 'payment_amount',
       accessor: 'payment_amount',
       Cell: MoneyCell,
@@ -101,14 +103,17 @@ function getPossibleColumns(): Column<OrderType>[] {
 }
 
 function OrderAdmin(): JSX.Element {
+  const { t } = useTranslation();
   const newOrderModal = useModal();
   const [editingOrderId, setEditingOrderId] = useState<string>();
-  usePageTitle('Orders');
+  usePageTitle(t('admin.store.orders.title'));
+
+  const getPossibleColumnsWithTranslation = useCallback(() => getPossibleColumns(t), [t]);
 
   const { tableHeaderProps, queryData, tableInstance, loading } = useReactTableWithTheWorks({
     getData: ({ data }) => data?.convention.orders_paginated.entries,
     getPages: ({ data }) => data?.convention.orders_paginated.total_pages,
-    getPossibleColumns,
+    getPossibleColumns: getPossibleColumnsWithTranslation,
     storageKeyPrefix: 'orderAdmin',
     useQuery: useAdminOrdersQuery,
     decodeFilterValue: fieldFilterCodecs.decodeFilterValue,

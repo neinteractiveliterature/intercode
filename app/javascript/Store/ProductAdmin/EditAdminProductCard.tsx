@@ -72,12 +72,12 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }: EditAdminP
           <ul className="list-inline m-0">
             <li className="list-inline-item">
               <button type="button" className="btn btn-sm btn-secondary" onClick={close}>
-                Cancel
+                {t('buttons.cancel')}
               </button>
             </li>
             <li className="list-inline-item">
               <button type="button" className="btn btn-sm btn-primary" onClick={saveClicked}>
-                Save
+                {t('buttons.save')}
               </button>
             </li>
           </ul>

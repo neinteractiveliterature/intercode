@@ -8,6 +8,7 @@ import useAsyncFunction from '../../useAsyncFunction';
 import buildCouponInput from './buildCouponInput';
 import { AdminCouponFieldsFragment } from './queries.generated';
 import { useDeleteCouponMutation, useUpdateCouponMutation } from './mutations.generated';
+import { useTranslation } from 'react-i18next';
 
 export type EditCouponModalProps = {
   initialCoupon?: AdminCouponFieldsFragment;
@@ -16,6 +17,7 @@ export type EditCouponModalProps = {
 };
 
 function EditCouponModal({ initialCoupon, visible, close }: EditCouponModalProps): JSX.Element {
+  const { t } = useTranslation();
   const confirm = useGraphQLConfirm();
   const [coupon, setCoupon] = useState(initialCoupon);
   const [updateCoupon] = useUpdateCouponMutation();
@@ -50,7 +52,7 @@ function EditCouponModal({ initialCoupon, visible, close }: EditCouponModalProps
   return (
     <Modal visible={visible && !confirm.visible} dialogClassName="modal-lg">
       <div className="modal-header">
-        <div className="flex-grow-1">Edit coupon</div>
+        <div className="flex-grow-1">{t('admin.store.coupons.editCoupon')}</div>
         <div>
           <button
             className="btn btn-outline-danger btn-sm"
@@ -58,11 +60,11 @@ function EditCouponModal({ initialCoupon, visible, close }: EditCouponModalProps
             onClick={() =>
               confirm({
                 action: deleteConfirmed,
-                prompt: 'Are you sure you want to delete this coupon?',
+                prompt: t('admin.store.coupons.deletePrompt'),
               })
             }
           >
-            <i className="bi-trash" /> Delete coupon
+            <i className="bi-trash" /> {t('admin.store.coupons.deleteCoupon')}
           </button>
         </div>
       </div>
@@ -72,10 +74,10 @@ function EditCouponModal({ initialCoupon, visible, close }: EditCouponModalProps
       </div>
       <div className="modal-footer">
         <button type="button" className="btn btn-secondary" onClick={close} disabled={inProgress}>
-          Cancel
+          {t('buttons.cancel')}
         </button>
         <button type="button" className="btn btn-primary" onClick={saveClicked} disabled={inProgress}>
-          Save
+          {t('buttons.save')}
         </button>
       </div>
     </Modal>

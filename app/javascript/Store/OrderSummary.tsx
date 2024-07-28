@@ -13,10 +13,13 @@ type ProductType = OrderSummaryQueryData['convention']['products'][0];
 function statusClass(status: OrderStatus) {
   switch (status) {
     case 'paid':
+      // eslint-disable-next-line i18next/no-literal-string
       return 'table-success';
     case 'unpaid':
+      // eslint-disable-next-line i18next/no-literal-string
       return 'table-warning';
     case 'cancelled':
+      // eslint-disable-next-line i18next/no-literal-string
       return 'text-muted';
     default:
       return '';

@@ -15,15 +15,10 @@ import DateTimeInput from '../../BuiltInFormControls/DateTimeInput';
 import { AdminCouponFieldsFragment } from './queries.generated';
 import { Money } from '../../graphqlTypes.generated';
 import AppRootContext from '../../AppRootContext';
+import { useTranslation } from 'react-i18next';
 
-const DISCOUNT_MODE_CHOICES = [
-  { label: 'Fixed amount discount', value: 'fixed_amount' },
-  { label: 'Percent discount', value: 'percent_discount' },
-  { label: 'Provide a product', value: 'provides_product' },
-] as const;
-
-const DISCOUNT_MODES = DISCOUNT_MODE_CHOICES.map((choice) => choice.value);
-type DiscountMode = (typeof DISCOUNT_MODES)[0];
+const DISCOUNT_MODES = ['fixed_amount', 'percent_discount', 'provides_product'] as const;
+type DiscountMode = (typeof DISCOUNT_MODES)[number];
 
 const blankProduct: NonNullable<AdminCouponFieldsFragment['provides_product']> = {
   __typename: 'Product',
@@ -56,6 +51,7 @@ function CouponForm<T extends Omit<AdminCouponFieldsFragment, 'id'>>({
   value,
   onChange,
 }: CouponFormProps<T>): JSX.Element {
+  const { t } = useTranslation();
   const { defaultCurrencyCode } = useContext(AppRootContext);
   const [setCode, setFixedAmount, setPercentDiscount, setProvidesProduct, setExpiresAt, setUsageLimit] =
     usePropertySetters(
@@ -87,21 +83,24 @@ function CouponForm<T extends Omit<AdminCouponFieldsFragment, 'id'>>({
   return (
     <>
       <BootstrapFormInput
-        label="Coupon code"
+        label={t('admin.store.coupons.code.label')}
         value={value.code ?? ''}
         onTextChange={setCode}
-        helpText="If you leave this blank, a random coupon code will be generated automatically."
+        helpText={t('admin.store.coupons.code.helpText')}
       />
 
       <MultipleChoiceInput
-        caption="Discount mode"
+        caption={t('admin.store.coupons.discountMode.label')}
         value={discountMode}
         onChange={setDiscountMode}
-        choices={DISCOUNT_MODE_CHOICES}
+        choices={DISCOUNT_MODES.map((mode) => ({
+          label: t(`admin.store.coupons.discountMode.${mode}`),
+          value: mode,
+        }))}
       />
 
       {discountMode === 'fixed_amount' && (
-        <FormGroupWithLabel label="Fixed discount amount">
+        <FormGroupWithLabel label={t('admin.store.coupons.discountMode.fixed_amount')}>
           {(id) => (
             <MoneyInput
               id={id}
@@ -116,7 +115,7 @@ function CouponForm<T extends Omit<AdminCouponFieldsFragment, 'id'>>({
 
       {discountMode === 'percent_discount' && (
         <BootstrapFormInput
-          label="Percent discount"
+          label={t('admin.store.coupons.discountMode.percent_discount')}
           type="number"
           min={0}
           max={100}
@@ -126,7 +125,7 @@ function CouponForm<T extends Omit<AdminCouponFieldsFragment, 'id'>>({
       )}
 
       {discountMode === 'provides_product' && (
-        <FormGroupWithLabel label="Product to provide">
+        <FormGroupWithLabel label={t('admin.store.coupons.providesProduct.label')}>
           {(id) => (
             <ProductSelect
               isClearable
@@ -141,21 +140,21 @@ function CouponForm<T extends Omit<AdminCouponFieldsFragment, 'id'>>({
         </FormGroupWithLabel>
       )}
 
-      <FormGroupWithLabel label="Expiration date">
+      <FormGroupWithLabel label={t('admin.store.coupons.expirationDate.label')}>
         {(id) => (
           <>
             <DateTimeInput id={id} value={value.expires_at} onChange={setExpiresAt} />
-            <HelpText>If blank, coupon never expires.</HelpText>
+            <HelpText>{t('admin.store.coupons.expirationDate.helpText')}</HelpText>
           </>
         )}
       </FormGroupWithLabel>
 
       <BootstrapFormInput
-        label="Usage limit"
+        label={t('admin.store.coupons.usageLimit.label')}
         value={value.usage_limit ?? ''}
         type="number"
         onTextChange={(newLimit) => setUsageLimit(parseIntOrNull(newLimit))}
-        helpText="If blank, coupon can be used an unlimited number of times."
+        helpText={t('admin.store.coupons.usageLimit.helpText')}
       />
     </>
   );
