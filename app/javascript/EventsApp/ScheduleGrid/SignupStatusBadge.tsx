@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import EventRatingIcon from '../../EventRatings/EventRatingIcon';
-import { SignupRankedChoice } from '../../graphqlTypes.generated';
+import { SignupRankedChoice, SignupRankedChoiceState } from '../../graphqlTypes.generated';
 import RankedChoicePriorityIndicator from '../MySignupQueue/RankedChoicePriorityIndicator';
 import { SignupStatus } from './StylingUtils';
 import sortBy from 'lodash/sortBy';
@@ -9,14 +9,18 @@ import { useTranslation } from 'react-i18next';
 export type SignupStatusBadgeProps = {
   signupStatus?: SignupStatus | null;
   myRating?: number;
-  mySignupRankedChoices: Pick<SignupRankedChoice, 'priority'>[];
+  mySignupRankedChoices: Pick<SignupRankedChoice, 'priority' | 'state'>[];
 };
 
 function SignupStatusBadge({ signupStatus, myRating, mySignupRankedChoices }: SignupStatusBadgeProps): JSX.Element {
   const { t } = useTranslation();
 
   const signupRankedChoicesOrdered = useMemo(
-    () => sortBy(mySignupRankedChoices, (choice) => choice.priority),
+    () =>
+      sortBy(
+        mySignupRankedChoices.filter((choice) => choice.state === SignupRankedChoiceState.Pending),
+        (choice) => choice.priority,
+      ),
     [mySignupRankedChoices],
   );
 
