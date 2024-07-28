@@ -19,6 +19,7 @@ import currencyCodes from '@breezehr/currency-codes';
 import { PRICING_STRATEGIES, buildScheduledMoneyValueInput } from './EditPricingStructureModal';
 import SelectWithLabel from '../../BuiltInFormControls/SelectWithLabel';
 import { useAllowedCurrencies } from '../CurrencySelect';
+import { useTranslation } from 'react-i18next';
 
 type EditingPricingStructure = Partial<PricingStructure>;
 
@@ -28,6 +29,7 @@ export type PricingStructureFormProps = {
 };
 
 export default function PricingStructureForm({ pricingStructure, setPricingStructure }: PricingStructureFormProps) {
+  const { t } = useTranslation();
   const { timezoneName, defaultCurrencyCode } = useContext(AppRootContext);
   const allowedCurrencies = useAllowedCurrencies();
 
@@ -54,7 +56,7 @@ export default function PricingStructureForm({ pricingStructure, setPricingStruc
   return (
     <>
       <MultipleChoiceInput
-        caption="Pricing strategy"
+        caption={t('admin.store.pricingStructure.pricingStrategyLabel')}
         choices={PRICING_STRATEGIES}
         value={pricingStructure?.pricing_strategy}
         onChange={(strategy: PricingStrategy) =>
@@ -98,7 +100,7 @@ export default function PricingStructureForm({ pricingStructure, setPricingStruc
       {!pricingStructure?.pricing_strategy ? (
         <></>
       ) : pricingStructure.pricing_strategy === PricingStrategy.Fixed ? (
-        <FormGroupWithLabel label="Price">
+        <FormGroupWithLabel label={t('admin.store.pricingStructure.priceLabel')}>
           {(id) => (
             <MoneyInput
               id={id}
@@ -115,7 +117,7 @@ export default function PricingStructureForm({ pricingStructure, setPricingStruc
         </FormGroupWithLabel>
       ) : pricingStructure.pricing_strategy === PricingStrategy.ScheduledValue ? (
         <fieldset>
-          <legend className="col-form-label">Pricing schedule</legend>
+          <legend className="col-form-label">{t('admin.store.pricingStructure.pricingScheduleLabel')}</legend>
           <ScheduledValueEditor
             timezone={timezoneName}
             scheduledValue={(pricingStructure.value as ScheduledMoneyValue | undefined) ?? { timespans: [] }}
@@ -126,7 +128,7 @@ export default function PricingStructureForm({ pricingStructure, setPricingStruc
       ) : pricingStructure.pricing_strategy === PricingStrategy.PayWhatYouWant ? (
         <>
           <SelectWithLabel
-            label="Allowed currencies"
+            label={t('admin.store.pricingStructure.allowedCurrenciesLabel')}
             isMulti
             options={allowedCurrencies}
             getOptionLabel={(currency) => currency.code}
@@ -148,9 +150,27 @@ export default function PricingStructureForm({ pricingStructure, setPricingStruc
           <div className="d-flex flex-column flex-md-row">
             {(
               [
-                ['minimum_amount', { label: 'Minimum amount', helpText: 'Optional, will default to $0' }],
-                ['suggested_amount', { label: 'Suggested amount', helpText: 'Optional' }],
-                ['maximum_amount', { label: 'Maximum amount', helpText: 'Optional' }],
+                [
+                  'minimum_amount',
+                  {
+                    label: t('admin.store.pricingStructure.minimumAmountLabel'),
+                    helpText: t('admin.store.pricingStructure.minimumAmountHelpText'),
+                  },
+                ],
+                [
+                  'suggested_amount',
+                  {
+                    label: t('admin.store.pricingStructure.suggestedAmountLabel'),
+                    helpText: t('admin.store.pricingStructure.suggestedAmountHelpText'),
+                  },
+                ],
+                [
+                  'maximum_amount',
+                  {
+                    label: t('admin.store.pricingStructure.maximumAmountLabel'),
+                    helpText: t('admin.store.pricingStructure.maximumAmountHelpText'),
+                  },
+                ],
               ] as const
             ).map(([fieldName, formGroupProps]) => (
               <FormGroupWithLabel

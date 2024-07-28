@@ -67,9 +67,11 @@ export default [
         {
           mode: 'all',
           callees: { include: ['usePageTitle'] },
-          'object-properties': { exclude: ['id', 'accessor', 'defaultVisibleColumns'] },
+          'object-properties': {
+            exclude: ['id', 'accessor', 'defaultVisibleColumns', '__typename', 'payment_options'],
+          },
           'jsx-attributes': {
-            include: ['title', 'aria-label', 'caption', 'placeholder', 'label', 'helpText', 'stringError'],
+            include: ['title', 'aria-label', 'caption', 'placeholder', 'label', 'helpText', 'stringError', 'alt'],
           },
           'should-validate-template': true,
         },

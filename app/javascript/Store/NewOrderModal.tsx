@@ -19,6 +19,7 @@ import {
 } from '../graphqlTypes.generated';
 import { useCreateCouponApplicationMutation, useCreateOrderMutation } from './mutations.generated';
 import AppRootContext from '../AppRootContext';
+import { useTranslation } from 'react-i18next';
 
 export type CreatingOrder = Omit<OrderInput, 'payment_amount'> & {
   status: OrderStatus;
@@ -60,6 +61,7 @@ export type NewOrderModalProps = {
 };
 
 function NewOrderModal({ visible, close, initialOrder }: NewOrderModalProps): JSX.Element {
+  const { t } = useTranslation();
   const confirm = useConfirm();
   const { defaultCurrencyCode } = useContext(AppRootContext);
   const [order, setOrder] = useState(() => initialOrder ?? buildBlankOrder(defaultCurrencyCode));
@@ -170,7 +172,7 @@ function NewOrderModal({ visible, close, initialOrder }: NewOrderModalProps): JS
 
   return (
     <Modal visible={visible && !confirm.visible} dialogClassName="modal-lg">
-      <div className="modal-header">New order</div>
+      <div className="modal-header">{t('store.newOrder.header')}</div>
       <div className="modal-body">
         <AdminOrderForm order={order} updateOrder={updateOrder} />
 
@@ -189,10 +191,10 @@ function NewOrderModal({ visible, close, initialOrder }: NewOrderModalProps): JS
       </div>
       <div className="modal-footer">
         <button type="button" className="btn btn-secondary" onClick={close} disabled={createOrderInProgress}>
-          Cancel
+          {t('buttons.cancel')}
         </button>
         <button type="button" className="btn btn-primary" onClick={createClicked} disabled={createOrderInProgress}>
-          Create
+          {t('buttons.create')}
         </button>
       </div>
     </Modal>

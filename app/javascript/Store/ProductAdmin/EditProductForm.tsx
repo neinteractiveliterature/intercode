@@ -90,6 +90,7 @@ export default function EditProductForm<ProductType extends WithRealOrGeneratedI
           </>
         </span>
       ),
+      // eslint-disable-next-line i18next/no-literal-string
       value: 'stripe',
     },
     {
@@ -100,6 +101,7 @@ export default function EditProductForm<ProductType extends WithRealOrGeneratedI
           </>
         </span>
       ),
+      // eslint-disable-next-line i18next/no-literal-string
       value: 'pay_at_convention',
     },
   ];
@@ -108,19 +110,19 @@ export default function EditProductForm<ProductType extends WithRealOrGeneratedI
     <div className="d-lg-flex justify-content-lg-start align-items-lg-start">
       <div className="d-flex flex-column align-items-center"></div>
       <div className="ml-lg-4 col-lg">
-        <BootstrapFormInput label="Product name" value={product.name} onTextChange={setName} />
+        <BootstrapFormInput label={t('admin.store.products.nameLabel')} value={product.name} onTextChange={setName} />
 
         <div className="mb-3">
           <BooleanInput
             name="available"
-            caption="Available for purchase"
+            caption={t('admin.store.products.available')}
             value={product.available}
             onChange={setAvailable}
           />
         </div>
         <div className="mb-3">
           <BootstrapFormSelect
-            label={`Provide ${ticketName} type`}
+            label={t('admin.store.products.providesTicketTypeLabel', { ticketName })}
             value={product.provides_ticket_type?.id}
             disabled={lockProvidesTicketType}
             onValueChange={(value) =>
@@ -130,7 +132,7 @@ export default function EditProductForm<ProductType extends WithRealOrGeneratedI
               }))
             }
           >
-            <option value={undefined}>No {ticketName}</option>
+            <option value={undefined}>{t('admin.store.products.noTicketOption', { ticketName })}</option>
             {ticketTypes.map((ticketType) => (
               <option value={ticketType.id} key={ticketType.id}>
                 {ticketType.description}
@@ -141,7 +143,7 @@ export default function EditProductForm<ProductType extends WithRealOrGeneratedI
 
         <section className="mt-4">
           <hr />
-          <h3>Product display</h3>
+          <h3>{t('admin.store.products.productDisplayHeader')}</h3>
 
           <div className="mb-3">
             <label className="form-label form-item-label">{t('admin.store.products.descriptionLabel')}</label>
@@ -151,7 +153,7 @@ export default function EditProductForm<ProductType extends WithRealOrGeneratedI
           {product.image && <img src={product.image.url} style={{ maxWidth: '200px' }} alt={product.name} />}
           <div className="mt-2 mb-3">
             <label className="form-label" htmlFor={imageInputId}>
-              Choose image...
+              {t('buttons.chooseImage')}
             </label>
             <input
               id={imageInputId}
@@ -159,7 +161,7 @@ export default function EditProductForm<ProductType extends WithRealOrGeneratedI
               type="file"
               accept="image/*"
               onChange={imageChanged}
-              aria-label="Choose image..."
+              aria-label={t('buttons.chooseImage')}
             />
           </div>
 
@@ -171,11 +173,11 @@ export default function EditProductForm<ProductType extends WithRealOrGeneratedI
 
         <section className="mt-4">
           <hr />
-          <h3>Payment</h3>
+          <h3>{t('admin.store.products.paymentHeader')}</h3>
 
           <MultipleChoiceInput
             name="payment_options"
-            caption="Payment options"
+            caption={t('admin.store.products.paymentOptionsLabel')}
             choices={paymentOptionChoices}
             multiple
             value={product.payment_options}
@@ -204,7 +206,7 @@ export default function EditProductForm<ProductType extends WithRealOrGeneratedI
         {!hideVariants && (
           <section className="mt-4">
             <hr />
-            <h3>Variants</h3>
+            <h3>{t('admin.store.products.variantsHeader')}</h3>
             <AdminProductVariantsTable
               product={product}
               editing

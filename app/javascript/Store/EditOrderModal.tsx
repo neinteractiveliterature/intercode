@@ -13,6 +13,7 @@ import {
   useDeleteCouponApplicationMutation,
 } from './mutations.generated';
 import { Coupon, CouponApplication, UpdateOrderEntryInput, UpdateOrderInput } from '../graphqlTypes.generated';
+import { useTranslation } from 'react-i18next';
 
 export type EditOrderModalProps = {
   order?: AdminOrderTypeWithId & {
@@ -28,6 +29,7 @@ export type EditOrderModalProps = {
 };
 
 function EditOrderModal({ order, closeModal }: EditOrderModalProps): JSX.Element {
+  const { t } = useTranslation();
   const confirm = useConfirm();
   const [updateMutate] = useAdminUpdateOrderMutation();
   const [createOrderEntryMutate] = useAdminCreateOrderEntryMutation();
@@ -123,7 +125,7 @@ function EditOrderModal({ order, closeModal }: EditOrderModalProps): JSX.Element
 
   return (
     <Modal visible={order != null && !confirm.visible} dialogClassName="modal-lg">
-      <div className="modal-header">Order #{(order || {}).id}</div>
+      <div className="modal-header">{t('store.editOrder.header', { orderId: order?.id })}</div>
       <div className="modal-body">
         {order && (
           <>
@@ -144,7 +146,7 @@ function EditOrderModal({ order, closeModal }: EditOrderModalProps): JSX.Element
       </div>
       <div className="modal-footer">
         <button type="button" className="btn btn-primary" onClick={closeModal}>
-          Close
+          {t('buttons.close')}
         </button>
       </div>
     </Modal>

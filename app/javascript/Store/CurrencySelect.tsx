@@ -2,6 +2,7 @@ import { HTMLProps, useContext, useMemo } from 'react';
 import currencyCodes, { CurrencyCodeRecord } from '@breezehr/currency-codes';
 import { notEmpty } from '@neinteractiveliterature/litform';
 import AppRootContext from '../AppRootContext';
+import { useTranslation } from 'react-i18next';
 
 export function useAllowedCurrencies(allowedCurrencyCodes?: string[]): CurrencyCodeRecord[] {
   const { supportedCurrencyCodes } = useContext(AppRootContext);
@@ -20,11 +21,12 @@ export type CurrencySelectProps = Omit<HTMLProps<HTMLSelectElement>, 'value' | '
 };
 
 export default function CurrencySelect({ value, onChange, allowedCurrencyCodes, ...inputProps }: CurrencySelectProps) {
+  const { t } = useTranslation();
   const allowedCurrencies = useAllowedCurrencies(allowedCurrencyCodes);
 
   return (
     <select value={value} onChange={(event) => onChange(event.target.value)} {...inputProps}>
-      <option value={undefined} aria-label="No currency selected" />
+      <option value={undefined} aria-label={t('store.currencySelect.noCurrencySelected')} />
       {allowedCurrencies.map((currency) => (
         <option value={currency.code} key={currency.code}>
           {currency.code}

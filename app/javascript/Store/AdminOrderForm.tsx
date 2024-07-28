@@ -1,18 +1,15 @@
-import { useContext } from 'react';
+import { useMemo } from 'react';
 import * as React from 'react';
 import classNames from 'classnames';
-import { DateTime } from 'luxon';
 import { useConfirm, ErrorDisplay, ChoiceSet } from '@neinteractiveliterature/litform';
 
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
-import AppRootContext from '../AppRootContext';
 import InPlaceMoneyEditor from './InPlaceMoneyEditor';
 import UserConProfileSelect from '../BuiltInFormControls/UserConProfileSelect';
 import EnumTypes from '../enumTypes.json';
 import { Order, OrderStatus, UserConProfile } from '../graphqlTypes.generated';
 import { useCancelOrderMutation, useMarkOrderPaidMutation } from './mutations.generated';
-import { useAppDateTimeFormat } from '../TimeUtils';
-import humanize from '../humanize';
+import { Trans, useTranslation } from 'react-i18next';
 
 const ORDER_STATUS_CHOICES = EnumTypes.OrderStatus.enumValues
   .map((enumValue) => ({ label: enumValue.name, value: enumValue.name }))
@@ -33,50 +30,31 @@ type CancelOrderButtonProps = {
   skipRefund: boolean;
 };
 
+enum CancelMode {
+  Refund = 'refund',
+  NoRefund = 'noRefund',
+  NoCharge = 'noCharge',
+  Free = 'free',
+}
+
 function CancelOrderButton({ order, skipRefund }: CancelOrderButtonProps) {
+  const { t } = useTranslation();
   const [cancelOrder] = useCancelOrderMutation();
   const confirm = useConfirm();
-  let prompt: React.ReactNode;
-  let buttonCaption: string;
 
-  if (order.charge_id && !skipRefund) {
-    prompt = (
-      <div>
-        <p>Are you sure you want to cancel order #{order.id}?</p>
-        <p>
-          This will issue a refund back to {order.user_con_profile?.name_without_nickname}
-          &apos;s payment card.
-        </p>
-      </div>
-    );
-    buttonCaption = 'Cancel and refund';
-  } else if (order.status === 'paid') {
-    prompt = (
-      <div>
-        <p>Are you sure you want to cancel order #{order.id}?</p>
-        {order.charge_id ? (
-          <div className="alert alert-danger mb-0">
-            This will not issue a refund. Please make sure this is what you want to do. If you would rather issue a
-            refund, cancel this and select “Cancel and refund” instead.
-          </div>
-        ) : (
-          <div className="alert alert-warning mb-0">
-            Because there is no Stripe charge associated with this order,{' '}
-            {order.user_con_profile?.name_without_nickname} will not automatically receive a refund, so they will have
-            to be refunded manually.
-          </div>
-        )}
-      </div>
-    );
-    buttonCaption = 'Cancel without refund';
-  } else {
-    prompt = (
-      <div>
-        <p>Are you sure you want to cancel order #{order.id}?</p>
-      </div>
-    );
-    buttonCaption = 'Cancel';
-  }
+  const mode = useMemo(() => {
+    if (order.charge_id && !skipRefund) {
+      return CancelMode.Refund;
+    } else if (order.status === OrderStatus.Paid) {
+      if (order.charge_id) {
+        return CancelMode.NoRefund;
+      } else {
+        return CancelMode.NoCharge;
+      }
+    } else {
+      return CancelMode.Free;
+    }
+  }, [order.charge_id, order.status, skipRefund]);
 
   return (
     <button
@@ -84,13 +62,22 @@ function CancelOrderButton({ order, skipRefund }: CancelOrderButtonProps) {
       className={classNames('btn btn-sm me-1', skipRefund ? 'btn-danger' : 'btn-warning')}
       onClick={() =>
         confirm({
-          prompt,
+          prompt: (
+            <Trans
+              i18nKey={`admin.store.cancelOrder.${mode}.prompt`}
+              values={{ orderId: order.id, name: order.user_con_profile?.name_without_nickname }}
+              components={{
+                danger: <div className="alert alert-danger mb-0" />,
+                warning: <div className="alert alert-warning mb-0" />,
+              }}
+            />
+          ),
           action: () => cancelOrder({ variables: { orderId: order.id, skipRefund } }),
           renderError: (error) => <ErrorDisplay graphQLError={error} />,
         })
       }
     >
-      {buttonCaption}
+      {t(`admin.store.cancelOrder.${mode}.button`)}
     </button>
   );
 }
@@ -100,6 +87,7 @@ type OrderActionsProps = {
 };
 
 function OrderActions({ order }: OrderActionsProps) {
+  const { t } = useTranslation();
   const confirm = useConfirm();
   const [markOrderPaid] = useMarkOrderPaidMutation();
 
@@ -112,14 +100,14 @@ function OrderActions({ order }: OrderActionsProps) {
         className="btn btn-sm btn-outline-danger me-1"
         onClick={() =>
           confirm({
-            prompt: `Are you sure you want to mark order #${order.id} as paid?`,
+            prompt: t('admin.store.markAsPaid.prompt', { orderId: order.id }),
             action: () => markOrderPaid({ variables: { orderId: order.id } }),
             renderError: (error) => <ErrorDisplay graphQLError={error} />,
           })
         }
         key="markAsPaid"
       >
-        Mark as paid
+        {t('admin.store.markAsPaid.button')}
       </button>,
     );
   }
@@ -141,13 +129,12 @@ export type AdminOrderFormProps<T extends AdminOrderType> = {
 };
 
 function AdminOrderForm<T extends AdminOrderType>({ order, updateOrder }: AdminOrderFormProps<T>): JSX.Element {
-  const { timezoneName } = useContext(AppRootContext);
-  const format = useAppDateTimeFormat();
+  const { t } = useTranslation();
 
   return (
     <div>
       <dl className="row m-0">
-        <dt className="col-md-3">Customer name</dt>
+        <dt className="col-md-3">{t('admin.store.orders.customerName')}</dt>
         <dd className="col-md-9">
           {adminOrderHasId(order) ? (
             order.user_con_profile?.name_without_nickname
@@ -159,7 +146,7 @@ function AdminOrderForm<T extends AdminOrderType>({ order, updateOrder }: AdminO
           )}
         </dd>
 
-        <dt className="col-md-3">Payment amount</dt>
+        <dt className="col-md-3">{t('admin.store.orders.paymentAmount')}</dt>
         <dd className="col-md-9">
           <InPlaceMoneyEditor
             value={order.payment_amount}
@@ -167,15 +154,12 @@ function AdminOrderForm<T extends AdminOrderType>({ order, updateOrder }: AdminO
           />
         </dd>
 
-        <dt className="col-md-3">Order status</dt>
+        <dt className="col-md-3">{t('admin.store.orders.status')}</dt>
         <dd className="col-md-9">
           {adminOrderHasId(order) ? (
             <ul className="list-inline m-0">
               <li className="list-inline-item">
-                {humanize(order.status)}
-                {order.paid_at
-                  ? `on ${format(DateTime.fromISO(order.paid_at, { zone: timezoneName }), 'shortWeekdayDateTime')}`
-                  : null}
+                {t(`admin.store.orders.statusDescription.${order.status}`, { paidAt: order.paid_at })}
               </li>
               <li className="list-inline-item">
                 <OrderActions order={order} />
@@ -191,7 +175,7 @@ function AdminOrderForm<T extends AdminOrderType>({ order, updateOrder }: AdminO
           )}
         </dd>
 
-        <dt className="col-md-3">Payment note</dt>
+        <dt className="col-md-3">{t('admin.store.orders.paymentNote')}</dt>
         <dd className="col-md-9">
           <InPlaceEditor
             value={order.payment_note || ''}

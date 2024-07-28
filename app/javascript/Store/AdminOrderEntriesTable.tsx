@@ -221,7 +221,10 @@ function AdminOrderEntriesTable<
               <em>{t('admin.store.orderEntries.couponCodeLabel')}</em>
               <code>{couponApplication.coupon.code}</code>
             </td>
-            <td className="font-italic">-{formatMoney(couponApplication.discount)}</td>
+            <td className="font-italic">
+              {couponApplication.discount &&
+                formatMoney({ ...couponApplication.discount, fractional: couponApplication.discount.fractional * -1 })}
+            </td>
             <td>
               <button
                 className="btn btn-outline-danger btn-sm"
@@ -336,7 +339,7 @@ function AdminOrderEntriesTable<
                   } as AddingOrderEntry<T>)
                 }
               >
-                Add item(s)
+                {t('admin.store.orderEntries.addItem')}
               </button>
             )}
             {!applyingCoupon && (

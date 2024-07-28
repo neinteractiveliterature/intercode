@@ -66,20 +66,16 @@ function describeTicketTypeOptions(
 
 export function buildBlankProduct(currencyCode: string) {
   return {
-    // eslint-disable-next-line i18next/no-literal-string
     __typename: 'Product' as const,
     available: true,
     delete_variant_ids: [],
     generatedId: uuidv4(),
     name: '',
-    // eslint-disable-next-line i18next/no-literal-string
     payment_options: ['stripe'],
     product_variants: [],
     pricing_structure: {
-      // eslint-disable-next-line i18next/no-literal-string
       __typename: 'PricingStructure' as const,
       pricing_strategy: PricingStrategy.Fixed,
-      // eslint-disable-next-line i18next/no-literal-string
       value: { __typename: 'Money' as const, currency_code: currencyCode, fractional: 0 },
     },
   };

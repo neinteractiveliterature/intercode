@@ -70,15 +70,24 @@ const i18nObject = i18next
   .use(ChainedBackend);
 
 const i18nInitPromise = i18nObject.init(initOptions).then(() => {
-  i18nObject.services.formatter?.add('money', (value: Money | null | undefined) => formatMoney(value));
-  i18nObject.services.formatter?.add(
-    'datetimenamed',
-    (value: DateTime, lng: string, options: { format: DateTimeFormatKey }) =>
-      formatLCM(value, i18nObject.t(`dateTimeFormats.${options.format}`, { lng })),
-  );
   i18nObject.services.formatter?.add('capitalize', (value: string) =>
     value === '' ? '' : `${value[0].toUpperCase()}${value.slice(1).toLowerCase()}`,
   );
+  i18nObject.services.formatter?.add(
+    'datetimenamed',
+    (value: DateTime | string | undefined | null, lng: string, options: { format: DateTimeFormatKey }) => {
+      let dateTimeValue: DateTime;
+      if (value == null) {
+        return '';
+      } else if (typeof value === 'string') {
+        dateTimeValue = DateTime.fromISO(value);
+      } else {
+        dateTimeValue = value;
+      }
+      return formatLCM(dateTimeValue, i18nObject.t(`dateTimeFormats.${options.format}`, { lng }));
+    },
+  );
+  i18nObject.services.formatter?.add('money', (value: Money | null | undefined) => formatMoney(value));
   ready = true;
 });
 

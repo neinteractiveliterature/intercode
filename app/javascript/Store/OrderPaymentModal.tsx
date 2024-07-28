@@ -56,7 +56,7 @@ export function OrderPaymentModalContents({ onCancel, onComplete, order }: Order
 
   const renderCheckOutModalContent = () => {
     if (totalPrice.fractional === 0) {
-      return <div className="modal-body">Your order is free.</div>;
+      return <div className="modal-body">{t('store.checkout.freeOrder')}</div>;
     }
 
     let paymentModeSelect = null;
@@ -65,14 +65,14 @@ export function OrderPaymentModalContents({ onCancel, onComplete, order }: Order
       paymentModeSelect = (
         <MultipleChoiceInput
           name="paymentMode"
-          caption="How would you like to pay for your order?"
+          caption={t('store.checkout.paymentModeSelect')}
           value={paymentMode}
           onChange={(newPaymentMode: string) => {
             setPaymentMode(newPaymentMode as PaymentMode);
           }}
           choices={[
-            { value: PaymentMode.PaymentIntent, label: 'Pay now with a credit card' },
-            { value: PaymentMode.Later, label: 'Pay at the convention' },
+            { value: PaymentMode.PaymentIntent, label: t('store.paymentMode.now') },
+            { value: PaymentMode.Later, label: t('store.paymentMode.later') },
           ]}
         />
       );
@@ -96,20 +96,22 @@ export function OrderPaymentModalContents({ onCancel, onComplete, order }: Order
 
   return (
     <>
-      <div className="modal-header lead">Checkout</div>
+      <div className="modal-header lead">{t('store.checkout.title')}</div>
       {renderCheckOutModalContent()}
       <div className="modal-footer">
         <div className="d-flex align-items-center">
           <div className="col">
             {paymentMode === 'now' && totalPrice.fractional !== 0 ? (
-              <img src={PoweredByStripeLogo} alt="Powered by Stripe" className="me-4" />
+              <img src={PoweredByStripeLogo} alt={t('store.checkout.poweredByStripe')} className="me-4" />
             ) : null}
           </div>
           <button type="button" className="btn btn-secondary me-2" onClick={onCancel} disabled={submitting}>
             {t('buttons.cancel')}
           </button>
           <button type="button" className="btn btn-primary" onClick={submitCheckOut} disabled={disabled}>
-            {totalPrice.fractional === 0 ? 'Submit order (free)' : `Pay ${formatMoney(totalPrice)}`}
+            {totalPrice.fractional === 0
+              ? t('store.checkout.submitFree')
+              : t('store.checkout.submitPaid', { price: formatMoney(totalPrice) })}
           </button>
         </div>
       </div>

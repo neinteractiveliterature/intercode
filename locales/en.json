@@ -115,8 +115,68 @@
       "roomNameLabel": "Room name"
     },
     "store": {
+      "cancelOrder": {
+        "free": {
+          "button": "Cancel",
+          "prompt": "<p>Are you sure you want to cancel order #{{ orderId }}?</p>"
+        },
+        "noRefund": {
+          "button": "Cancel without refund",
+          "prompt": "<p>Are you sure you want to cancel order #{{ orderId }}?</p><danger>This will not issue a refund. Please make sure this is what you want to do. If you would rather issue a refund, cancel this and select “Cancel and refund” instead.</danger>"
+        },
+        "noCharge": {
+          "button": "Cancel without refund",
+          "prompt": "<p>Are you sure you want to cancel order #{{ orderId }}?</p><warning>Because there is no Stripe charge associated with this order, {{ name }} will not automatically receive a refund, so they will have to be refunded manually.</warning>"
+        },
+        "refund": {
+          "button": "Cancel and refund",
+          "prompt": "<p>Are you sure you want to cancel order #{{ orderId }}?</p><p>This will issue a refund back to {{ name }}’s payment method.</p>"
+        }
+      },
+      "coupons": {
+        "code": {
+          "label": "Coupon code",
+          "helpText": "If you leave this blank, a random coupon code will be generated automatically."
+        },
+        "deleteCoupon": "Delete coupon",
+        "deletePrompt": "Are you sure you want to delete this coupon?",
+        "discountMode": {
+          "label": "Discount mode",
+          "fixed_amount": "Fixed amount discount",
+          "percent_discount": "Percent discount",
+          "provides_product": "Provide a product"
+        },
+        "editCoupon": "Edit coupon",
+        "expirationDate": {
+          "label": "Expiration date",
+          "helpText": "If blank, coupon never expires."
+        },
+        "newCoupon": "New coupon",
+        "providesProduct": {
+          "label": "Product to provide"
+        },
+        "table": {
+          "headers": {
+            "code": "Code",
+            "effect": "Effect",
+            "expires_at": "Expiration date",
+            "usage_limit": "Usage limit"
+          }
+        },
+        "title": "Coupons",
+        "usageLimit": {
+          "label": "Usage limit",
+          "helpText": "If blank, coupon can be used an unlimited number of times."
+        }
+      },
+      "header": "Store administration",
+      "markAsPaid": {
+        "button": "Mark as paid",
+        "prompt": "Are you sure you want to mark order #{{ orderId }} as paid?"
+      },
       "orderEntries": {
         "addCouponLabel": "Add coupon",
+        "addItem": "Add item(s)",
         "couponCodeLabel": "Coupon code: ",
         "deleteConfirmation_one": "Are you sure you want to delete {{ count }} {{ productName }} item from the order?  This cannot be undone.",
         "deleteConfirmation_other": "Are you sure you want to delete {{ count }} {{ productName }} items from the order?  This cannot be undone.",
@@ -128,20 +188,73 @@
         "quantityColumnHeader": "Quantity",
         "totalPrice": "Total price"
       },
+      "orderSummary": {
+        "title": "Order summary"
+      },
+      "orders": {
+        "customerName": "Customer name",
+        "headers": {
+          "describe_products": "Products",
+          "id": "ID",
+          "payment_amount": "Payment amount",
+          "status": "Status",
+          "submitted_at": "Submitted",
+          "user_name": "User"
+        },
+        "paymentAmount": "Payment amount",
+        "paymentNote": "Payment note",
+        "status": "Order status",
+        "statusDescription": {
+          "cancelled": "Canceled",
+          "paid": "Paid on {{ paidAt, dateTimeNamed(format: shortWeekdayDateTime) }}",
+          "pending": "Pending",
+          "unpaid": "Unpaid"
+        },
+        "title": "Orders"
+      },
       "paymentOptions": {
         "payAtConvention": "Pay at convention",
         "stripe": "Card payment via Stripe"
       },
+      "pricingStructure": {
+        "allowedCurrenciesLabel": "Allowed currencies",
+        "minimumAmountLabel": "Minimum amount",
+        "minimumAmountHelpText": "Optional, will default to 0",
+        "maximumAmountLabel": "Maximum amount",
+        "maximumAmountHelpText": "Optional",
+        "priceLabel": "Price",
+        "pricingScheduleLabel": "Pricing schedule",
+        "pricingStrategyLabel": "Pricing strategy",
+        "suggestedAmountLabel": "Suggested amount",
+        "suggestedAmountHelpText": "Optional",
+        "title": "Pricing structure"
+      },
       "products": {
         "available": "Available for purchase",
+        "basePrice": "Base price: {{ price }}",
         "clickwrapAgreementLabel": "Product-specific clickwrap agreement",
         "deleteConfirmation": "Are you sure you want to delete the product {{ productName }}?",
         "deleteLabel": "Delete product",
         "deleteVariant": "Delete {{ name }}",
         "descriptionLabel": "Product description",
         "editProduct": "Edit product",
+        "nameLabel": "Product name",
+        "noTicketOption": "No {{ ticketName }}",
         "newProduct": "New product",
-        "unavailable": "Not available for purchase"
+        "paymentHeader": "Payment",
+        "paymentOptionsLabel": "Payment options",
+        "productDisplayHeader": "Product display",
+        "providesTicketTypeLabel": "Provide {{ ticketName }} type",
+        "title": "Products",
+        "unavailable": "Not available for purchase",
+        "variantsHeader": "Variants"
+      },
+      "productVariants": {
+        "addVariant": "Add variant",
+        "descriptionHeader": "Description",
+        "nameHeader": "Variant name",
+        "noVariants": "This product does not have any variants.",
+        "overridePriceHeader": "Override price"
       }
     },
     "tickets": {
@@ -363,14 +476,17 @@
   },
   "buttons": {
     "add": "Add",
+    "apply": "Apply",
     "attachImage": "Attach image…",
     "cancel": "Cancel",
+    "chooseImage": "Choose image…",
     "clear": "Clear",
     "close": "Close",
     "collapse": "Collapse",
     "composeEmail": "Compose email",
     "create": "Create",
     "delete": "Delete",
+    "dragToReorder": "Drag to reorder",
     "edit": "Edit",
     "expand": "Expand",
     "help": "Help",
@@ -1083,10 +1199,49 @@
     "hoverText": "Click to reveal"
   },
   "store": {
+    "checkout": {
+      "freeOrder": "Your order is free.",
+      "paymentModeSelect": "How would you like to pay for your order?",
+      "poweredByStripe": "Powered by Stripe",
+      "submitFree": "Submit order (free)",
+      "submitPaid": "Pay {{ price }}",
+      "title": "Checkout"
+    },
     "coupons": {
+      "applyLabel": "Apply coupon",
+      "code": {
+        "ariaLabel": "Coupon code",
+        "label": "Code: "
+      },
       "unlimitedUses": "Unlimited uses",
       "usageLimitCount_one": "{{ count }} use",
       "usageLimitCount_other": "{{ count }} uses"
+    },
+    "currencySelect": {
+      "noCurrencySelected": "No currency selected"
+    },
+    "editOrder": {
+      "header": "Order #{{ orderId }}"
+    },
+    "newOrder": {
+      "header": "New order"
+    },
+    "paymentMode": {
+      "later": "Pay at convention",
+      "now": "Pay now"
+    },
+    "orderHistory": {
+      "cancellationRequestBody": "I would like to request that order {{ orderId }} be canceled.",
+      "cancellationRequestSubject": "[{{ conventionName }}] Cancellation request: order {{ orderId }}",
+      "couponCodeLabel": "Coupon code: ",
+      "orderHeader": "Order #{{ orderId }}",
+      "requestCancellation": "Request cancelation"
+    },
+    "orderStatus": {
+      "cancelled": "Canceled",
+      "paid": "Paid",
+      "pending": "Pending",
+      "unpaid": "Unpaid"
     },
     "selectProductLabel": "Select",
     "totalPrice": "Total: {{ totalPrice, money }}"

@@ -11,11 +11,14 @@ import ReactTableExportButtonWithColumnTransform from '../../Tables/ReactTableEx
 import { AdminCouponsQueryData, useAdminCouponsQuery } from './queries.generated';
 import ReactTableWithTheWorks from '../../Tables/ReactTableWithTheWorks';
 import { useTranslation } from 'react-i18next';
+import { TFunction } from 'i18next';
+import { useCallback } from 'react';
 
 type CouponType = AdminCouponsQueryData['convention']['coupons_paginated']['entries'][0];
 
 const transformColumnIdForExport = (columnId: string) => {
   if (columnId === 'effect') {
+    // eslint-disable-next-line i18next/no-literal-string
     return ['fixed_amount', 'percent_discount', 'provides_product'];
   }
 
@@ -33,30 +36,30 @@ function CouponUsageLimitCell({ value }: { value: CouponType['usage_limit'] }) {
 
 const CouponEffectCell = ({ value }: { value: CouponType }) => <>{describeCoupon(value)}</>;
 
-function getPossibleColumns(): Column<CouponType>[] {
+function getPossibleColumns(t: TFunction): Column<CouponType>[] {
   return [
     {
-      Header: 'Code',
+      Header: t('admin.store.coupons.table.headers.code'),
       id: 'code',
       accessor: 'code',
       width: 250,
       disableSortBy: false,
     },
     {
-      Header: 'Effect',
+      Header: t('admin.store.coupons.table.headers.effect'),
       id: 'effect',
       accessor: (coupon: CouponType) => coupon,
       Cell: CouponEffectCell,
     },
     {
-      Header: 'Usage limit',
+      Header: t('admin.store.coupons.table.headers.usage_limit'),
       id: 'usage_limit',
       accessor: 'usage_limit',
       disableSortBy: false,
       Cell: CouponUsageLimitCell,
     },
     {
-      Header: 'Expiration date',
+      Header: t('admin.store.coupons.table.headers.expires_at'),
       id: 'expires_at',
       accessor: 'expires_at',
       width: 150,
@@ -67,13 +70,16 @@ function getPossibleColumns(): Column<CouponType>[] {
 }
 
 function CouponAdminTable(): JSX.Element {
+  const { t } = useTranslation();
   const newCouponModal = useModal();
   const editCouponModal = useModal<{ initialCoupon: CouponType }>();
+
+  const getPossibleColumnsWithTranslation = useCallback(() => getPossibleColumns(t), [t]);
 
   const { tableHeaderProps, columnSelectionProps, tableInstance, loading } = useReactTableWithTheWorks({
     getData: ({ data }) => data?.convention.coupons_paginated.entries,
     getPages: ({ data }) => data?.convention.coupons_paginated.total_pages,
-    getPossibleColumns,
+    getPossibleColumns: getPossibleColumnsWithTranslation,
     useQuery: useAdminCouponsQuery,
     storageKeyPrefix: 'coupons',
   });
