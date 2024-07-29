@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo } from 'react';
+import { createContext, useCallback, useContext, useMemo } from 'react';
 import { assertNever } from 'assert-never';
 import { Column } from 'react-table';
 import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
@@ -19,7 +19,8 @@ import UserConProfileWithGravatarCell from '../Tables/UserConProfileWithGravatar
 import TimestampCell from '../Tables/TimestampCell';
 import { useFormatRunTimespan } from '../EventsApp/runTimeFormatting';
 import { Link } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
+import { TFunction } from 'i18next';
 
 type SignupModerationContextValue = {
   acceptClicked: (signupRequest: SignupModerationSignupRequestFieldsFragment) => void;
@@ -34,27 +35,32 @@ const SignupModerationContext = createContext<SignupModerationContextValue>({
 function signupRequestStateBadgeClass(state: SignupRequestState) {
   switch (state) {
     case SignupRequestState.Accepted:
+      // eslint-disable-next-line i18next/no-literal-string
       return 'bg-success';
     case SignupRequestState.Rejected:
+      // eslint-disable-next-line i18next/no-literal-string
       return 'bg-danger';
     case SignupRequestState.Pending:
+      // eslint-disable-next-line i18next/no-literal-string
       return 'bg-info';
     case SignupRequestState.Withdrawn:
+      // eslint-disable-next-line i18next/no-literal-string
       return 'bg-dark';
     default:
       assertNever(state, true);
+      // eslint-disable-next-line i18next/no-literal-string
       return 'bg-light';
   }
 }
 
-function describeRequestedBucket(signupRequest: SignupModerationSignupRequestFieldsFragment) {
+function describeRequestedBucket(signupRequest: SignupModerationSignupRequestFieldsFragment, t: TFunction) {
   return signupRequest.requested_bucket_key
     ? (
         signupRequest.target_run.event.registration_policy?.buckets.find(
           (bucket) => bucket.key === signupRequest.requested_bucket_key,
         ) || {}
       ).name
-    : 'No preference';
+    : t('signups.noPreference');
 }
 
 type SignupModerationRunDetailsProps = {
@@ -66,6 +72,7 @@ type SignupModerationRunDetailsProps = {
 };
 
 function SignupModerationRunDetails({ run, showRequestedBucket, requestedBucketKey }: SignupModerationRunDetailsProps) {
+  const { t } = useTranslation();
   const { timezoneName } = useContext(AppRootContext);
   const runTimespan = timespanFromRun(timezoneName, run.event, run);
   const formatRunTimespan = useFormatRunTimespan();
@@ -78,9 +85,9 @@ function SignupModerationRunDetails({ run, showRequestedBucket, requestedBucketK
       {showRequestedBucket && (
         <>
           <small>
-            <strong>Bucket:</strong>{' '}
+            <strong>{t('admin.signupModeration.bucketHeader')}</strong>{' '}
             {(run.event.registration_policy?.buckets.find((bucket) => bucket.key === requestedBucketKey) || {}).name ||
-              'No preference'}
+              t('signups.noPreference')}
           </small>
         </>
       )}
@@ -111,19 +118,25 @@ function SignupRequestUserConProfileCell({
 }
 
 function SignupRequestCell({ value }: { value: SignupModerationSignupRequestFieldsFragment }) {
+  const { t } = useTranslation();
+
   return (
     <>
       {value.replace_signup && (
         <p>
-          <strong className="text-danger">Withdraw from</strong>{' '}
+          <strong className="text-danger">{t('admin.signupModeration.signupRequest.withdrawFrom')}</strong>{' '}
           <SignupModerationRunDetails run={value.replace_signup.run} />
         </p>
       )}
-      <strong className="text-success">{value.replace_signup ? 'And sign up for' : 'Sign up for'}</strong>{' '}
+      <strong className="text-success">
+        {value.replace_signup
+          ? t('admin.signupModeration.signupRequest.signUpForReplacing')
+          : t('admin.signupModeration.signupRequest.signUpForNonReplacing')}
+      </strong>{' '}
       <SignupModerationRunDetails run={value.target_run} />
       <br />
       <small>
-        <strong>Requested bucket:</strong> {describeRequestedBucket(value)}
+        <strong>{t('admin.signupModeration.signupRequest.requestedBucket')}</strong> {describeRequestedBucket(value, t)}
       </small>
     </>
   );
@@ -134,6 +147,7 @@ function SignupRequestStateCell({ value }: { value: SignupRequestState }) {
 }
 
 function SignupRequestActionsCell({ value }: { value: SignupModerationSignupRequestFieldsFragment }) {
+  const { t } = useTranslation();
   const { acceptClicked, rejectClicked } = useContext(SignupModerationContext);
 
   return (
@@ -141,57 +155,57 @@ function SignupRequestActionsCell({ value }: { value: SignupModerationSignupRequ
       {value.state === 'pending' && (
         <>
           <button className="btn btn-sm btn-danger me-2" type="button" onClick={() => rejectClicked(value)}>
-            Reject
+            {t('admin.signupModeration.reject')}
           </button>
 
           <button className="btn btn-sm btn-success" type="button" onClick={() => acceptClicked(value)}>
-            Accept
+            {t('admin.signupModeration.accept')}
           </button>
         </>
       )}
       {value.state === 'rejected' && (
         <button className="btn btn-sm btn-warning" type="button" onClick={() => acceptClicked(value)}>
-          Accept after all
+          {t('admin.signupModeration.acceptPreviouslyRejected')}
         </button>
       )}
     </>
   );
 }
 
-function getPossibleColumns(): Column<
-  SignupModerationQueueQueryData['convention']['signup_requests_paginated']['entries'][number]
->[] {
+function getPossibleColumns(
+  t: TFunction,
+): Column<SignupModerationQueueQueryData['convention']['signup_requests_paginated']['entries'][number]>[] {
   return [
     {
       id: 'attendee',
-      Header: 'Attendee',
+      Header: t('admin.signupModeration.headers.user_con_profile'),
       accessor: 'user_con_profile',
       width: 130,
       Cell: SignupRequestUserConProfileCell,
     },
     {
       id: 'request',
-      Header: 'Request',
+      Header: t('admin.signupModeration.headers.signup_request'),
       Cell: SignupRequestCell,
       accessor: (signupRequest) => signupRequest,
     },
     {
       id: 'state',
-      Header: 'Status',
+      Header: t('admin.signupModeration.headers.state'),
       Cell: SignupRequestStateCell,
       width: 60,
       accessor: 'state',
     },
     {
       id: 'created_at',
-      Header: 'Submitted at',
+      Header: t('admin.signupModeration.headers.created_at'),
       Cell: TimestampCell,
       width: 60,
       accessor: 'created_at',
     },
     {
       id: 'actions',
-      Header: 'Actions',
+      Header: t('admin.signupModeration.headers.actions'),
       width: 100,
       Cell: SignupRequestActionsCell,
       accessor: (signupRequest) => signupRequest,
@@ -200,15 +214,18 @@ function getPossibleColumns(): Column<
 }
 
 function SignupModerationQueue(): JSX.Element {
+  const { t } = useTranslation();
   const [acceptSignupRequest] = useAcceptSignupRequestMutation();
   const [rejectSignupRequest] = useRejectSignupRequestMutation();
   const confirm = useConfirm();
+  const getPossibleColumnsWithTranslation = useCallback(() => getPossibleColumns(t), [t]);
+
   const { tableInstance, loading } = useReactTableWithTheWorks({
     useQuery: useSignupModerationQueueQuery,
     storageKeyPrefix: 'signupModerationQueue',
     getData: (result) => result.data.convention.signup_requests_paginated.entries,
     getPages: (result) => result.data.convention.signup_requests_paginated.total_pages,
-    getPossibleColumns,
+    getPossibleColumns: getPossibleColumnsWithTranslation,
   });
 
   const contextValue = useMemo(
@@ -218,17 +235,15 @@ function SignupModerationQueue(): JSX.Element {
           prompt: (
             <>
               <p>
-                Please confirm you want to accept this signup request. This will attempt to sign{' '}
-                {signupRequest.user_con_profile.name}
-                {' up for '}
-                {signupRequest.target_run.event.title}
-                {' as '}
-                {describeRequestedBucket(signupRequest)}. If there is no space in the requested bucket, the attendee
-                will either be signed up in a flex bucket, if possible, or waitlisted.
+                {t('admin.signupModeration.acceptPrompt', {
+                  name: signupRequest.user_con_profile.name,
+                  eventTitle: signupRequest.target_run.event.title,
+                  bucketDescription: describeRequestedBucket(signupRequest, t),
+                })}
               </p>
 
               <div className="mb-2">
-                <strong>Current space availability in this event run:</strong>
+                <strong>{t('admin.signupModeration.runCapacityGraphHeader')}</strong>
                 <RunCapacityGraph
                   event={signupRequest.target_run.event}
                   run={signupRequest.target_run}
@@ -236,9 +251,7 @@ function SignupModerationQueue(): JSX.Element {
                 />
               </div>
 
-              <p className="mb-0">
-                This will automatically email both the attendee and the event team to let them know about the signup.
-              </p>
+              <p className="mb-0">{t('admin.signupModeration.acceptPromptActions')}</p>
             </>
           ),
           action: () => acceptSignupRequest({ variables: { id: signupRequest.id } }),
@@ -252,15 +265,14 @@ function SignupModerationQueue(): JSX.Element {
         confirm({
           prompt: (
             <p className="mb-0">
-              Please confirm you want to reject this signup request. This will <strong>not</strong> automatically email
-              anyone. After doing this, you may wish to email the attendee to let them know.
+              <Trans i18nKey="admin.signupModeration.rejectPrompt" />
             </p>
           ),
           action: () => rejectSignupRequest({ variables: { id: signupRequest.id } }),
           renderError: (acceptError) => <ErrorDisplay graphQLError={acceptError} />,
         }),
     }),
-    [confirm, rejectSignupRequest, acceptSignupRequest],
+    [confirm, rejectSignupRequest, acceptSignupRequest, t],
   );
 
   return (

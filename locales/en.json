@@ -114,6 +114,29 @@
       "eventRunCount_other": "{{ count }} event runs",
       "roomNameLabel": "Room name"
     },
+    "signupModeration": {
+      "accept": "Accept",
+      "acceptPreviouslyRejected": "Accept after all",
+      "acceptPrompt": "Please confirm you want to accept this signup request.  This will attempt to sign {{ name }} up for {{ eventTitle }} as {{ bucketDescription }}. If there is no space in the requested bucket, the attendee will either be signed up in a flex bucket, if possible, or waitlisted.",
+      "acceptPromptActions": "This will automatically email both the attendee and the event team to let them know about the signup.",
+      "bucketHeader": "Bucket:",
+      "headers": {
+        "actions": "Actions",
+        "created_at": "Submitted at",
+        "signup_request": "Request",
+        "state": "Status",
+        "user_con_profile": "Attendee"
+      },
+      "reject": "Reject",
+      "rejectPrompt": "Please confirm you want to reject this signup request. This will <strong>not</strong> automatically email anyone. After doing this, you may wish to email the attendee to let them know.",
+      "runCapacityGraphHeader": "Current space availability in this event run:",
+      "signupRequest": {
+        "requestedBucket": "Requested bucket:",
+        "signUpForNonReplacing": "Sign up for",
+        "signUpForReplacing": "And sign up for",
+        "withdrawFrom": "Withdraw from"
+      }
+    },
     "store": {
       "cancelOrder": {
         "free": {
