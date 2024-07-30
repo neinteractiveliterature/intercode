@@ -26,8 +26,22 @@ class RerunModeratedRankedChoiceSignupRoundService < CivilService::Service
   def undo_decision(decision)
     signup_ranked_choice = decision.signup_ranked_choice
     signup_request = decision.signup_request
+    skips =
+      signup_round
+        .ranked_choice_decisions
+        .joins(:signup_ranked_choice)
+        .where(
+          user_con_profile: signup_ranked_choice.user_con_profile,
+          decision: "skip_choice",
+          signup_ranked_choices: {
+            state: "pending"
+          }
+        )
+        .includes(:signup_ranked_choice)
+    furthest_down_skip = skips.max_by { |skip| skip.signup_ranked_choice.priority }
+    priority = furthest_down_skip ? { after: furthest_down_skip.signup_ranked_choice } : :first
 
-    signup_ranked_choice.update!(state: "pending", priority: 0)
+    signup_ranked_choice.update!(state: "pending", priority:)
     signup_request.destroy!
     decision.destroy!
   end

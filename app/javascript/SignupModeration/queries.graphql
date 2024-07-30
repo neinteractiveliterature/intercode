@@ -32,6 +32,7 @@ fragment SignupModerationSignupRequestFields on SignupRequest {
     id
     name
     name_inverted
+    name_without_nickname
     gravatar_enabled
     gravatar_url
   }
@@ -69,6 +70,19 @@ fragment SignupModerationSignupRequestFields on SignupRequest {
     id
     state
     waitlist_position
+  }
+
+  signup_ranked_choice {
+    id
+    ranked_choice_decisions {
+      id
+      decision
+      created_at
+
+      signup_round {
+        id
+      }
+    }
   }
 }
 
@@ -185,6 +199,18 @@ query CreateSignupRunCardQuery($userConProfileId: ID!, $eventId: ID!) {
           id
         }
       }
+    }
+  }
+}
+
+query SignupModerationQueuePageQuery {
+  convention: conventionByRequestHost {
+    id
+
+    signup_rounds {
+      id
+      start
+      maximum_event_signups
     }
   }
 }
