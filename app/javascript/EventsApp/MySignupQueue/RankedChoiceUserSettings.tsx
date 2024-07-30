@@ -208,7 +208,7 @@ const RankedChoiceUserSettings = LoadQueryWrapper(useMySignupQueueQuery, ({ data
 
   return (
     <div className="card">
-      <div className="card-header">{t('signups.mySignupQue.settingsSection.label')}</div>
+      <div className="card-header">{t('signups.mySignupQueue.settingsSection.label')}</div>
       <div className="card-body">
         <MultipleChoiceInput
           caption={t('signups.mySignupQueue.allowWaitlist.caption')}
