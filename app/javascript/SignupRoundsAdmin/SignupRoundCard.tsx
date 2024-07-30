@@ -88,7 +88,7 @@ function SignupRoundCard({ rounds, roundIndex }: SignupRoundCardProps) {
                   })
                 }
               >
-                <option aria-label="Blank placeholder option" />
+                <option aria-label={t('general.placeholderOptionLabel')} />
                 <option value={RankedChoiceOrder.Asc}>{t('signups.rankedChoiceOrder.asc')}</option>
                 <option value={RankedChoiceOrder.Desc}>{t('signups.rankedChoiceOrder.desc')}</option>
                 <option value={RankedChoiceOrder.AscSerpentine}>{t('signups.rankedChoiceOrder.ascSerpentine')}</option>

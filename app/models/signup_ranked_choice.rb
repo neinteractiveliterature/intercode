@@ -40,6 +40,7 @@ class SignupRankedChoice < ApplicationRecord
   belongs_to :result_signup_request, class_name: "SignupRequest", optional: true
   belongs_to :updated_by, class_name: "User"
   has_one :convention, through: :user_con_profile
+  has_many :ranked_choice_decisions, dependent: :destroy
 
   validates :state, presence: true, inclusion: { in: Types::SignupRankedChoiceStateType.values.keys }
   validate :ensure_all_fields_point_at_the_same_convention

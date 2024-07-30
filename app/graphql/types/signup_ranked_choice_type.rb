@@ -15,6 +15,9 @@ module Types
     field :priority, Integer, null: false do
       description "The priority of this choice (lower numbers are higher priority)"
     end
+    field :ranked_choice_decisions, [RankedChoiceDecisionType], null: false do
+      description "All the automated decisions that have been made about this choice"
+    end
     field :requested_bucket_key, String, null: true do
       description "The bucket that this choice is trying to sign up in (or null, if it's a no-preference signup)"
     end
@@ -39,6 +42,11 @@ module Types
       description "The user whose queue this choice is part of"
     end
 
-    association_loaders SignupRankedChoice, :user_con_profile, :target_run, :result_signup, :result_signup_request
+    association_loaders SignupRankedChoice,
+                        :user_con_profile,
+                        :target_run,
+                        :result_signup,
+                        :result_signup_request,
+                        :ranked_choice_decisions
   end
 end

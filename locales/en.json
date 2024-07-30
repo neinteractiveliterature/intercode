@@ -120,22 +120,27 @@
       "acceptPrompt": "Please confirm you want to accept this signup request.  This will attempt to sign {{ name }} up for {{ eventTitle }} as {{ bucketDescription }}. If there is no space in the requested bucket, the attendee will either be signed up in a flex bucket, if possible, or waitlisted.",
       "acceptPromptActions": "This will automatically email both the attendee and the event team to let them know about the signup.",
       "bucketHeader": "Bucket:",
+      "decisionDescription": "{{ round }}: {{ decision }}",
       "headers": {
         "actions": "Actions",
         "created_at": "Submitted at",
+        "signup_ranked_choice": "Ranked choice",
         "signup_request": "Request",
         "state": "Status",
         "user_con_profile": "Attendee"
       },
       "reject": "Reject",
       "rejectPrompt": "Please confirm you want to reject this signup request. This will <strong>not</strong> automatically email anyone. After doing this, you may wish to email the attendee to let them know.",
+      "rerunRound": "Rerun round",
+      "rerunRoundPrompt": "<p>Are you sure you want to rerun {{ round }}? This will undo all <strong>pending</strong> signup requests and move them back to the attendees’ ranked choice queues, but leave all <strong>accepted</strong> and <strong>rejected</strong> requests in place. It will then re-run the round from that point.</p><p>This may take a while, depending on the size of the convention.</p>",
       "runCapacityGraphHeader": "Current space availability in this event run:",
       "signupRequest": {
         "requestedBucket": "Requested bucket:",
         "signUpForNonReplacing": "Sign up for",
         "signUpForReplacing": "And sign up for",
         "withdrawFrom": "Withdraw from"
-      }
+      },
+      "viewDecisionLog": "View log"
     },
     "store": {
       "cancelOrder": {
@@ -1116,11 +1121,6 @@
       "notYet": "No signups yet",
       "unlimited": "Signups fully open"
     },
-    "mySignupQue": {
-      "settingsSection": {
-        "label": "Settings"
-      }
-    },
     "mySignupQueue": {
       "addAdditional": "To add more events to your queue, go to <1>the event catalog</1> or <4>the event schedule</4>. You can add events to your queue from each event’s page.",
       "allowWaitlist": {
@@ -1149,6 +1149,9 @@
       "noLimit": "No limit",
       "remove": "Remove",
       "removeConfirmPrompt": "Are you sure you want to remove {{ eventTitle }} from your signup queue?",
+      "settingsSection": {
+        "label": "Settings"
+      },
       "ticketStatus": {
         "noTicket": "You do not have a {{ ticketName }}.  You will not be able to sign up for games until you have purchased a {{ ticketName }}.",
         "ok": "You have a {{ ticketName }} and will be signed up for events at that time.",

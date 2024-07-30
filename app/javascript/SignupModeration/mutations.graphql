@@ -50,3 +50,9 @@ mutation RejectSignupRequest($id: ID!) {
     }
   }
 }
+
+mutation RerunModeratedRankedChoiceSignupRound($id: ID!) {
+  rerunModeratedRankedChoiceSignupRound(input: { id: $id }) {
+    clientMutationId
+  }
+}

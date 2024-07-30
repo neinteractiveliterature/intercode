@@ -9,7 +9,7 @@ import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type SignupModerationRunFieldsFragment = { __typename: 'Run', id: string, title_suffix?: string | null, starts_at: string, grouped_signup_counts: Array<{ __typename: 'GroupedSignupCount', bucket_key?: string | null, count: number, counted: boolean, state: Types.SignupState, team_member: boolean }>, event: { __typename: 'Event', id: string, title?: string | null, length_seconds: number } };
 
-export type SignupModerationSignupRequestFieldsFragment = { __typename: 'SignupRequest', id: string, state: Types.SignupRequestState, requested_bucket_key?: string | null, created_at: string, user_con_profile: { __typename: 'UserConProfile', id: string, name: string, name_inverted: string, gravatar_enabled: boolean, gravatar_url: string }, replace_signup?: { __typename: 'Signup', id: string, run: { __typename: 'Run', id: string, title_suffix?: string | null, starts_at: string, grouped_signup_counts: Array<{ __typename: 'GroupedSignupCount', bucket_key?: string | null, count: number, counted: boolean, state: Types.SignupState, team_member: boolean }>, event: { __typename: 'Event', id: string, title?: string | null, length_seconds: number } } } | null, target_run: { __typename: 'Run', id: string, title_suffix?: string | null, starts_at: string, event: { __typename: 'Event', id: string, title?: string | null, length_seconds: number, registration_policy?: { __typename: 'RegistrationPolicy', prevent_no_preference_signups: boolean, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null, total_slots?: number | null, slots_limited: boolean, anything: boolean, not_counted: boolean }> } | null }, grouped_signup_counts: Array<{ __typename: 'GroupedSignupCount', bucket_key?: string | null, count: number, counted: boolean, state: Types.SignupState, team_member: boolean }> }, result_signup?: { __typename: 'Signup', id: string, state: Types.SignupState, waitlist_position?: number | null } | null };
+export type SignupModerationSignupRequestFieldsFragment = { __typename: 'SignupRequest', id: string, state: Types.SignupRequestState, requested_bucket_key?: string | null, created_at: string, user_con_profile: { __typename: 'UserConProfile', id: string, name: string, name_inverted: string, name_without_nickname: string, gravatar_enabled: boolean, gravatar_url: string }, replace_signup?: { __typename: 'Signup', id: string, run: { __typename: 'Run', id: string, title_suffix?: string | null, starts_at: string, grouped_signup_counts: Array<{ __typename: 'GroupedSignupCount', bucket_key?: string | null, count: number, counted: boolean, state: Types.SignupState, team_member: boolean }>, event: { __typename: 'Event', id: string, title?: string | null, length_seconds: number } } } | null, target_run: { __typename: 'Run', id: string, title_suffix?: string | null, starts_at: string, event: { __typename: 'Event', id: string, title?: string | null, length_seconds: number, registration_policy?: { __typename: 'RegistrationPolicy', prevent_no_preference_signups: boolean, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null, total_slots?: number | null, slots_limited: boolean, anything: boolean, not_counted: boolean }> } | null }, grouped_signup_counts: Array<{ __typename: 'GroupedSignupCount', bucket_key?: string | null, count: number, counted: boolean, state: Types.SignupState, team_member: boolean }> }, result_signup?: { __typename: 'Signup', id: string, state: Types.SignupState, waitlist_position?: number | null } | null, signup_ranked_choice?: { __typename: 'SignupRankedChoice', id: string, ranked_choice_decisions: Array<{ __typename: 'RankedChoiceDecision', id: string, decision: Types.RankedChoiceDecisionValue, created_at: string, signup_round: { __typename: 'SignupRound', id: string } }> } | null };
 
 export type CreateSignupEventsQueryVariables = Types.Exact<{
   title?: Types.InputMaybe<Types.Scalars['String']['input']>;
@@ -26,13 +26,18 @@ export type CreateSignupRunCardQueryVariables = Types.Exact<{
 
 export type CreateSignupRunCardQueryData = { __typename: 'Query', currentAbility: { __typename: 'Ability', can_read_schedule: boolean, can_read_event_signups: boolean, can_update_event: boolean }, convention: { __typename: 'Convention', id: string, signup_rounds: Array<{ __typename: 'SignupRound', id: string, start?: string | null, maximum_event_signups: string }>, event: { __typename: 'Event', id: string, title?: string | null, length_seconds: number, private_signup_list?: boolean | null, can_play_concurrently: boolean, registration_policy?: { __typename: 'RegistrationPolicy', slots_limited?: boolean | null, prevent_no_preference_signups: boolean, total_slots_including_not_counted?: number | null, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null, description?: string | null, not_counted: boolean, slots_limited: boolean, anything: boolean, minimum_slots?: number | null, total_slots?: number | null }> } | null, team_members: Array<{ __typename: 'TeamMember', id: string, display_team_member: boolean, user_con_profile: { __typename: 'UserConProfile', id: string, gravatar_url: string, gravatar_enabled: boolean, name_without_nickname: string } }>, event_category: { __typename: 'EventCategory', id: string, team_member_name: string, teamMemberNamePlural: string }, runs: Array<{ __typename: 'Run', id: string, title_suffix?: string | null, starts_at: string, current_ability_can_signup_summary_run: boolean, grouped_signup_counts: Array<{ __typename: 'GroupedSignupCount', bucket_key?: string | null, count: number, counted: boolean, state: Types.SignupState, team_member: boolean }>, rooms: Array<{ __typename: 'Room', id: string, name?: string | null }>, my_signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState, waitlist_position?: number | null, counted: boolean, expires_at?: string | null }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: string, state: Types.SignupRequestState, requested_bucket_key?: string | null, target_run: { __typename: 'Run', id: string }, replace_signup?: { __typename: 'Signup', id: string } | null }>, my_signup_ranked_choices: Array<{ __typename: 'SignupRankedChoice', id: string, state: Types.SignupRankedChoiceState, requested_bucket_key?: string | null, priority: number, target_run: { __typename: 'Run', id: string } }> }>, ticket_types: Array<{ __typename: 'TicketType', id: string, providing_products: Array<{ __typename: 'Product', id: string, description_html?: string | null, name: string, available: boolean, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: { __typename: 'Money', fractional: number, currency_code: string } | null, value: { __typename: 'Money', fractional: number, currency_code: string } | { __typename: 'PayWhatYouWantValue', allowed_currency_codes?: Array<string> | null, maximum_amount?: { __typename: 'Money', currency_code: string, fractional: number } | null, minimum_amount?: { __typename: 'Money', currency_code: string, fractional: number } | null, suggested_amount?: { __typename: 'Money', currency_code: string, fractional: number } | null } | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: string | null, finish?: string | null, value: { __typename: 'Money', fractional: number, currency_code: string } }> } } }> }> }, user_con_profile: { __typename: 'UserConProfile', id: string, name_without_nickname: string, signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState, waitlist_position?: number | null, counted: boolean, run: { __typename: 'Run', id: string } }>, signup_requests: Array<{ __typename: 'SignupRequest', id: string, state: Types.SignupRequestState, target_run: { __typename: 'Run', id: string } }> } } };
 
+export type SignupModerationQueuePageQueryVariables = Types.Exact<{ [key: string]: never; }>;
+
+
+export type SignupModerationQueuePageQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, signup_rounds: Array<{ __typename: 'SignupRound', id: string, start?: string | null, maximum_event_signups: string }> } };
+
 export type SignupModerationQueueQueryVariables = Types.Exact<{
   page?: Types.InputMaybe<Types.Scalars['Int']['input']>;
   perPage?: Types.InputMaybe<Types.Scalars['Int']['input']>;
 }>;
 
 
-export type SignupModerationQueueQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, signup_requests_paginated: { __typename: 'SignupRequestsPagination', total_pages: number, entries: Array<{ __typename: 'SignupRequest', id: string, state: Types.SignupRequestState, requested_bucket_key?: string | null, created_at: string, user_con_profile: { __typename: 'UserConProfile', id: string, name: string, name_inverted: string, gravatar_enabled: boolean, gravatar_url: string }, replace_signup?: { __typename: 'Signup', id: string, run: { __typename: 'Run', id: string, title_suffix?: string | null, starts_at: string, grouped_signup_counts: Array<{ __typename: 'GroupedSignupCount', bucket_key?: string | null, count: number, counted: boolean, state: Types.SignupState, team_member: boolean }>, event: { __typename: 'Event', id: string, title?: string | null, length_seconds: number } } } | null, target_run: { __typename: 'Run', id: string, title_suffix?: string | null, starts_at: string, event: { __typename: 'Event', id: string, title?: string | null, length_seconds: number, registration_policy?: { __typename: 'RegistrationPolicy', prevent_no_preference_signups: boolean, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null, total_slots?: number | null, slots_limited: boolean, anything: boolean, not_counted: boolean }> } | null }, grouped_signup_counts: Array<{ __typename: 'GroupedSignupCount', bucket_key?: string | null, count: number, counted: boolean, state: Types.SignupState, team_member: boolean }> }, result_signup?: { __typename: 'Signup', id: string, state: Types.SignupState, waitlist_position?: number | null } | null }> } } };
+export type SignupModerationQueueQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, signup_requests_paginated: { __typename: 'SignupRequestsPagination', total_pages: number, entries: Array<{ __typename: 'SignupRequest', id: string, state: Types.SignupRequestState, requested_bucket_key?: string | null, created_at: string, user_con_profile: { __typename: 'UserConProfile', id: string, name: string, name_inverted: string, name_without_nickname: string, gravatar_enabled: boolean, gravatar_url: string }, replace_signup?: { __typename: 'Signup', id: string, run: { __typename: 'Run', id: string, title_suffix?: string | null, starts_at: string, grouped_signup_counts: Array<{ __typename: 'GroupedSignupCount', bucket_key?: string | null, count: number, counted: boolean, state: Types.SignupState, team_member: boolean }>, event: { __typename: 'Event', id: string, title?: string | null, length_seconds: number } } } | null, target_run: { __typename: 'Run', id: string, title_suffix?: string | null, starts_at: string, event: { __typename: 'Event', id: string, title?: string | null, length_seconds: number, registration_policy?: { __typename: 'RegistrationPolicy', prevent_no_preference_signups: boolean, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null, total_slots?: number | null, slots_limited: boolean, anything: boolean, not_counted: boolean }> } | null }, grouped_signup_counts: Array<{ __typename: 'GroupedSignupCount', bucket_key?: string | null, count: number, counted: boolean, state: Types.SignupState, team_member: boolean }> }, result_signup?: { __typename: 'Signup', id: string, state: Types.SignupState, waitlist_position?: number | null } | null, signup_ranked_choice?: { __typename: 'SignupRankedChoice', id: string, ranked_choice_decisions: Array<{ __typename: 'RankedChoiceDecision', id: string, decision: Types.RankedChoiceDecisionValue, created_at: string, signup_round: { __typename: 'SignupRound', id: string } }> } | null }> } } };
 
 export type SignupModerationAttendeeRankedChoicesQueryVariables = Types.Exact<{
   userConProfileId: Types.Scalars['ID']['input'];
@@ -70,6 +75,7 @@ export const SignupModerationSignupRequestFieldsFragmentDoc = gql`
     id
     name
     name_inverted
+    name_without_nickname
     gravatar_enabled
     gravatar_url
   }
@@ -102,6 +108,17 @@ export const SignupModerationSignupRequestFieldsFragmentDoc = gql`
     id
     state
     waitlist_position
+  }
+  signup_ranked_choice {
+    id
+    ranked_choice_decisions {
+      id
+      decision
+      created_at
+      signup_round {
+        id
+      }
+    }
   }
 }
     ${SignupModerationRunFieldsFragmentDoc}`;
@@ -276,6 +293,50 @@ export type CreateSignupRunCardQueryHookResult = ReturnType<typeof useCreateSign
 export type CreateSignupRunCardQueryLazyQueryHookResult = ReturnType<typeof useCreateSignupRunCardQueryLazyQuery>;
 export type CreateSignupRunCardQuerySuspenseQueryHookResult = ReturnType<typeof useCreateSignupRunCardQuerySuspenseQuery>;
 export type CreateSignupRunCardQueryQueryResult = Apollo.QueryResult<CreateSignupRunCardQueryData, CreateSignupRunCardQueryVariables>;
+export const SignupModerationQueuePageQueryDocument = gql`
+    query SignupModerationQueuePageQuery {
+  convention: conventionByRequestHost {
+    id
+    signup_rounds {
+      id
+      start
+      maximum_event_signups
+    }
+  }
+}
+    `;
+
+/**
+ * __useSignupModerationQueuePageQuery__
+ *
+ * To run a query within a React component, call `useSignupModerationQueuePageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSignupModerationQueuePageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSignupModerationQueuePageQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useSignupModerationQueuePageQuery(baseOptions?: Apollo.QueryHookOptions<SignupModerationQueuePageQueryData, SignupModerationQueuePageQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SignupModerationQueuePageQueryData, SignupModerationQueuePageQueryVariables>(SignupModerationQueuePageQueryDocument, options);
+      }
+export function useSignupModerationQueuePageQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SignupModerationQueuePageQueryData, SignupModerationQueuePageQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SignupModerationQueuePageQueryData, SignupModerationQueuePageQueryVariables>(SignupModerationQueuePageQueryDocument, options);
+        }
+export function useSignupModerationQueuePageQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<SignupModerationQueuePageQueryData, SignupModerationQueuePageQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<SignupModerationQueuePageQueryData, SignupModerationQueuePageQueryVariables>(SignupModerationQueuePageQueryDocument, options);
+        }
+export type SignupModerationQueuePageQueryHookResult = ReturnType<typeof useSignupModerationQueuePageQuery>;
+export type SignupModerationQueuePageQueryLazyQueryHookResult = ReturnType<typeof useSignupModerationQueuePageQueryLazyQuery>;
+export type SignupModerationQueuePageQuerySuspenseQueryHookResult = ReturnType<typeof useSignupModerationQueuePageQuerySuspenseQuery>;
+export type SignupModerationQueuePageQueryQueryResult = Apollo.QueryResult<SignupModerationQueuePageQueryData, SignupModerationQueuePageQueryVariables>;
 export const SignupModerationQueueQueryDocument = gql`
     query SignupModerationQueueQuery($page: Int, $perPage: Int) {
   convention: conventionByRequestHost {

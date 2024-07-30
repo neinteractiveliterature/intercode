@@ -15,7 +15,7 @@ function SignupModeration(): JSX.Element {
 
   return (
     <>
-      <h1 className="mb-4">Signup moderation</h1>
+      <h1 className="mb-4">{t('navigation.admin.signupModeration')}</h1>
       <ul className="nav nav-tabs mb-3" role="tablist">
         <BootstrapNavLink path="/signup_moderation/queue" icon="bi-list-check">
           {t('signupModeration.moderationQueue')}

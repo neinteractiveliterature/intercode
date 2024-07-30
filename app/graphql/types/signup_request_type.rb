@@ -21,6 +21,9 @@ class Types::SignupRequestType < Types::BaseObject
   field :result_signup, Types::SignupType, null: true do
     description "The resulting Signup from accepting this request, if it has been accepted"
   end
+  field :signup_ranked_choice, Types::SignupRankedChoiceType, null: true do
+    description "The SignupRankedChoice this request resulted from, if any"
+  end
   field :state, Types::SignupRequestStateType, null: false do
     description "The current processing state of this request (e.g. pending, accepted, rejected)"
   end
@@ -29,5 +32,10 @@ class Types::SignupRequestType < Types::BaseObject
   field :updated_by, Types::UserType, null: false, description: "The last user who modified this request" # rubocop:disable GraphQL/ExtractType
   field :user_con_profile, Types::UserConProfileType, null: false, description: "The user who made this request"
 
-  association_loaders SignupRequest, :user_con_profile, :target_run, :replace_signup, :result_signup
+  association_loaders SignupRequest,
+                      :user_con_profile,
+                      :target_run,
+                      :replace_signup,
+                      :result_signup,
+                      :signup_ranked_choice
 end

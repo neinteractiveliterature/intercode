@@ -238,6 +238,7 @@ class Types::MutationType < Types::BaseObject # rubocop:disable GraphQL/ObjectDe
 
   field :createSignupRound, null: false, mutation: Mutations::CreateSignupRound
   field :deleteSignupRound, null: false, mutation: Mutations::DeleteSignupRound
+  field :rerunModeratedRankedChoiceSignupRound, null: false, mutation: Mutations::RerunModeratedRankedChoiceSignupRound
   field :updateSignupRound, null: false, mutation: Mutations::UpdateSignupRound
 
   ### StaffPosition
