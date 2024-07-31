@@ -43,6 +43,5 @@ class RerunModeratedRankedChoiceSignupRoundService < CivilService::Service
 
     signup_ranked_choice.update!(state: "pending", priority:)
     signup_request.destroy!
-    decision.destroy!
   end
 end

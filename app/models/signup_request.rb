@@ -43,6 +43,7 @@ class SignupRequest < ApplicationRecord
   has_one :convention, through: :user_con_profile
   has_one :event, through: :target_run
   has_one :signup_ranked_choice, inverse_of: :result_signup_request, dependent: :nullify
+  has_many :ranked_choice_decisions, dependent: :nullify
 
   validates :state, presence: true, inclusion: { in: Types::SignupRequestStateType.values.keys }
   validate :ensure_all_fields_point_at_the_same_convention
