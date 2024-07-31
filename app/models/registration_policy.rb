@@ -12,9 +12,9 @@ class RegistrationPolicy
     new(
       buckets: [
         RegistrationPolicy::Bucket.new(
-          key: 'unlimited',
-          name: 'Signups',
-          description: 'Signups for this event',
+          key: "unlimited",
+          name: "Signups",
+          description: "Signups for this event",
           slots_limited: false
         )
       ]
@@ -24,7 +24,7 @@ class RegistrationPolicy
   attr_reader :buckets
 
   def initialize(attributes = {})
-    super(attributes)
+    super
     @buckets ||= []
   end
 
@@ -69,7 +69,7 @@ class RegistrationPolicy
   end
 
   def attributes
-    { buckets: buckets, prevent_no_preference_signups: prevent_no_preference_signups? }
+    { buckets:, prevent_no_preference_signups: prevent_no_preference_signups? }
   end
 
   def buckets=(buckets)
@@ -125,8 +125,8 @@ class RegistrationPolicy
     buckets.all? { |bucket| bucket == other.bucket_with_key(bucket.key) }
   end
 
-  def as_json(*args)
-    super.merge(buckets: buckets.as_json(*args))
+  def as_json(*)
+    super.merge(buckets: buckets.as_json(*))
   end
 
   def blank?
