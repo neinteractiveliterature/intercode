@@ -3143,9 +3143,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphiql/toolkit@npm:0.9.1, @graphiql/toolkit@npm:^0.9.1":
-  version: 0.9.1
-  resolution: "@graphiql/toolkit@npm:0.9.1"
+"@graphiql/toolkit@npm:0.9.2, @graphiql/toolkit@npm:^0.9.1":
+  version: 0.9.2
+  resolution: "@graphiql/toolkit@npm:0.9.2"
   dependencies:
     "@n1ru4l/push-pull-async-iterable-iterator": "npm:^3.1.0"
     meros: "npm:^1.1.4"
@@ -3155,7 +3155,7 @@ __metadata:
   peerDependenciesMeta:
     graphql-ws:
       optional: true
-  checksum: 10c0/f212a083e635c354f17e829517720fac7170cd693ad36a1520ea0c67eede32360ebadbbae13910cf3da767036501b5aa59204e6384a59a0c20afd93606e30896
+  checksum: 10c0/c4224b48aabe7756760d1ed06199431ee993b7d36d180cc7965147a8da218a6c71b7ee1dab24924e702e9a5417dd1539780f99d7ef489e801e3ff4806a9a92c3
   languageName: node
   linkType: hard
 
@@ -20997,7 +20997,7 @@ __metadata:
     "@eslint/compat": "npm:^1.1.0"
     "@eslint/eslintrc": "npm:^3.1.0"
     "@eslint/js": "npm:^9.6.0"
-    "@graphiql/toolkit": "npm:0.9.1"
+    "@graphiql/toolkit": "npm:0.9.2"
     "@graphql-codegen/add": "npm:5.0.3"
     "@graphql-codegen/cli": "npm:5.0.2"
     "@graphql-codegen/fragment-matcher": "npm:5.0.2"
