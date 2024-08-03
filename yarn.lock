@@ -13290,8 +13290,8 @@ __metadata:
   linkType: hard
 
 "graphql-config@npm:^5.0.2, graphql-config@npm:^5.0.3":
-  version: 5.0.3
-  resolution: "graphql-config@npm:5.0.3"
+  version: 5.1.0
+  resolution: "graphql-config@npm:5.1.0"
   dependencies:
     "@graphql-tools/graphql-file-loader": "npm:^8.0.0"
     "@graphql-tools/json-file-loader": "npm:^8.0.0"
@@ -13310,7 +13310,7 @@ __metadata:
   peerDependenciesMeta:
     cosmiconfig-toml-loader:
       optional: true
-  checksum: 10c0/dadd04b08b0af5b9652ef1e8baf09adb7221ffca48e5272d933ee6faf0b962260a46b5e0da536576de56ffbdca118b257038e3319834045403fec9528b743e78
+  checksum: 10c0/bd2ce60b75ea8117cb977c22aa57e19414e4f61dcc36980602dcb58a5a14cd8de1260139822667887563c89d93ef3a9e8a29cec7bbcfc2a2ee3b0462cc89241a
   languageName: node
   linkType: hard
 
