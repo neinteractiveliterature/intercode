@@ -13148,12 +13148,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"globalthis@npm:^1.0.2, globalthis@npm:^1.0.3":
-  version: 1.0.3
-  resolution: "globalthis@npm:1.0.3"
+"globalthis@npm:^1.0.3, globalthis@npm:^1.0.4":
+  version: 1.0.4
+  resolution: "globalthis@npm:1.0.4"
   dependencies:
-    define-properties: "npm:^1.1.3"
-  checksum: 10c0/0db6e9af102a5254630351557ac15e6909bc7459d3e3f6b001e59fe784c96d31108818f032d9095739355a88467459e6488ff16584ee6250cd8c27dec05af4b0
+    define-properties: "npm:^1.2.1"
+    gopd: "npm:^1.0.1"
+  checksum: 10c0/9d156f313af79d80b1566b93e19285f481c591ad6d0d319b4be5e03750d004dde40a39a0f26f7e635f9007a3600802f53ecd85a759b86f109e80a5f705e01846
   languageName: node
   linkType: hard
 
@@ -18533,13 +18534,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"payment@npm:2.4.6":
-  version: 2.4.6
-  resolution: "payment@npm:2.4.6"
+"payment@npm:2.4.7":
+  version: 2.4.7
+  resolution: "payment@npm:2.4.7"
   dependencies:
-    globalthis: "npm:^1.0.2"
+    globalthis: "npm:^1.0.4"
     qj: "npm:~2.0.0"
-  checksum: 10c0/2d375a8990d6b0b72a1c62e43e93cb73ae29c6f31e05ea4ea46225508fa14a0281175e068be3e2bd294e47bdc14420da48ad3d49540d9bd3979b6bb85df19047
+  checksum: 10c0/68fab185645cb4662b8601b769024a1900217dbd1b3dd191dd9bad79ffc0539a421bfc29b98f622a65fab8c0becb0674c3a2e275e7399bc733ed6dfc7f39aa47
   languageName: node
   linkType: hard
 
@@ -21147,7 +21148,7 @@ __metadata:
     minimist: "npm:1.2.8"
     path-browserify: "npm:1.0.1"
     path-complete-extname: "npm:1.0.0"
-    payment: "npm:2.4.6"
+    payment: "npm:2.4.7"
     porter-stemmer: "npm:0.9.1"
     postcss: "npm:8.4.40"
     postcss-import: "npm:16.1.0"
