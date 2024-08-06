@@ -59,22 +59,23 @@ class RegistrationPolicy::Bucket
 
   def available_slots(signups)
     return nil if slots_unlimited?
-    my_signups_count =
-      signups.count do |signup|
-        case signup
-        when Signup
-          signup.occupying_slot? && signup.bucket_key == key &&
-            (
-              not_counted? || signup.counted # don't count non-counted signups in a counted bucket
-            )
-        when SignupRequest
-          signup.requested_bucket_key == key
-        else
-          raise ArgumentError,
-                "RegistrationPolicy::Bucket doesn't know how to count #{signup.class.name} objects as signups"
-        end
-      end
+    my_signups_count = signups.count { |signup| signup_definitely_occupies_slot_in_bucket?(signup) }
     [total_slots - my_signups_count, 0].max
+  end
+
+  def signup_definitely_occupies_slot_in_bucket?(signup)
+    case signup
+    when Signup
+      signup.occupying_slot? && signup.bucket_key == key &&
+        (
+          not_counted? || signup.counted # don't count non-counted signups in a counted bucket
+        )
+    when SignupRequest
+      signup.state == "pending" && signup.requested_bucket_key == key
+    else
+      raise ArgumentError,
+            "RegistrationPolicy::Bucket doesn't know how to count #{signup.class.name} objects as signups"
+    end
   end
 
   def errors_for_signup(_signup, _other_signups)
@@ -83,21 +84,21 @@ class RegistrationPolicy::Bucket
 
   def attributes
     {
-      key: key,
-      name: name,
-      description: description,
-      total_slots: total_slots,
-      minimum_slots: minimum_slots,
-      preferred_slots: preferred_slots,
-      slots_limited: slots_limited,
-      anything: anything,
-      not_counted: not_counted,
-      expose_attendees: expose_attendees
+      key:,
+      name:,
+      description:,
+      total_slots:,
+      minimum_slots:,
+      preferred_slots:,
+      slots_limited:,
+      anything:,
+      not_counted:,
+      expose_attendees:
     }
   end
 
   def metadata
-    { key: key, name: name, description: description }
+    { key:, name:, description: }
   end
 
   def ==(other)

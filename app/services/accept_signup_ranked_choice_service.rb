@@ -59,7 +59,8 @@ class AcceptSignupRankedChoiceService < CivilService::Service
       target_run: signup_ranked_choice.target_run,
       requested_bucket_key: signup_ranked_choice.requested_bucket_key,
       whodunit:,
-      suppress_notifications:,
+      # Never send notifications when creating SignupRequests from ranked choices
+      suppress_notifications: true,
       action: "accept_signup_ranked_choice",
       keep_pending_ranked_choices: true
     ).call!

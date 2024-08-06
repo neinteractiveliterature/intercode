@@ -10,11 +10,18 @@ class SignupBucketFinder
   end
 
   def find_bucket
-    # try not to bump people out of their signup buckets...
     @actual_bucket ||=
-      prioritized_buckets_with_capacity.first ||
-        # but do it if you have to
-        prioritized_buckets.find { |bucket| movable_signups_for_bucket(bucket).any? }
+      # This check is necessary because prioritized_buckets_with_capacity can't account for pending no-preference
+      # signup requests.  (It thinks they don't occupy any bucket, even though they will actually occupy a bucket, we
+      # just don't know which yet.)
+      if totally_full_including_signup_requests?
+        nil
+      else
+        # try not to bump people out of their signup buckets...
+        prioritized_buckets_with_capacity.first ||
+          # but do it if you have to
+          prioritized_buckets.find { |bucket| movable_signups_for_bucket(bucket).any? }
+      end
   end
 
   def movable_signups_for_bucket(bucket)
@@ -42,13 +49,16 @@ class SignupBucketFinder
   end
 
   def no_preference_bucket_finder
-    SignupBucketFinder.new(registration_policy, nil, other_signups, allow_movement: allow_movement)
+    SignupBucketFinder.new(registration_policy, nil, other_signups, allow_movement:)
   end
 
   private
 
+  def requested_bucket
+    @requested_bucket ||= registration_policy.bucket_with_key(requested_bucket_key)
+  end
+
   def prioritized_buckets_with_requested_bucket
-    requested_bucket = registration_policy.bucket_with_key(requested_bucket_key)
     [requested_bucket, (requested_bucket&.not_counted? ? nil : registration_policy.anything_bucket)].compact
   end
 
@@ -58,5 +68,23 @@ class SignupBucketFinder
       .select(&:counted?)
       .select(&:slots_limited?)
       .sort_by { |bucket| bucket.anything? ? 0 : 1 }
+  end
+
+  def slot_occupying_signups
+    @slot_occupying_signups ||=
+      other_signups.select do |signup|
+        signup.is_a?(Signup) && signup.bucket.signup_definitely_occupies_slot_in_bucket?(signup)
+      end
+  end
+
+  def pending_signup_requests
+    @pending_signup_requests ||=
+      other_signups.select { |signup| signup.is_a?(SignupRequest) && signup.state == "pending" }
+  end
+
+  def totally_full_including_signup_requests?
+    return false if registration_policy.slots_unlimited?
+
+    slot_occupying_signups.size + pending_signup_requests.size >= registration_policy.total_slots
   end
 end

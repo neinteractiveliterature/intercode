@@ -34,8 +34,8 @@
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
 FactoryBot.define do
   factory :signup_request do
-    association :target_run, factory: :run
-    state { 'pending' }
+    target_run factory: :run
+    state { "pending" }
 
     after(:build) do |signup_request|
       signup_request.user_con_profile ||=

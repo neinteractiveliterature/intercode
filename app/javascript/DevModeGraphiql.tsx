@@ -17,13 +17,13 @@ export type DevModeGraphiqlProps = {
 };
 
 function DevModeGraphiql({ authenticityTokens: { graphql: authenticityToken } }: DevModeGraphiqlProps): JSX.Element {
-  const link = useIntercodeApolloLink(authenticityToken);
+  const link = useIntercodeApolloLink(authenticityToken, '/graphql');
 
   // @ts-expect-error This might be really broken but I need to ship a patch release ASAP and this is less important
   const fetcher: Fetcher = useCallback(
     (operation) => {
       const operationAsGraphQLRequest = operation as unknown as GraphQLRequest;
-       
+
       operationAsGraphQLRequest.query = parse(operation.query);
       return execute(link, operationAsGraphQLRequest);
     },

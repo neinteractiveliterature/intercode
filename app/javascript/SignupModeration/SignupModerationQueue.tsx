@@ -195,7 +195,9 @@ function SignupRankedChoiceCell({ value }: { value: SignupModerationSignupReques
   const finalDecision = useMemo(() => {
     if (value.signup_ranked_choice?.ranked_choice_decisions) {
       return sortBy(
-        value.signup_ranked_choice.ranked_choice_decisions ?? [],
+        value.signup_ranked_choice.ranked_choice_decisions.filter(
+          (decision) => decision.decision !== RankedChoiceDecisionValue.SkipChoice,
+        ) ?? [],
         (decision) => new Date(decision.created_at).getTime() * -1,
       )[0];
     } else {
