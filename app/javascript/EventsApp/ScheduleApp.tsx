@@ -29,6 +29,7 @@ const SCHEDULE_VIEWS = ['list', ...allConfigs.map((config) => config.key)];
 function getDefaultScheduleView(scheduleGridConfigs: ScheduleGridConfig[]) {
   // Bootstrap's "medium" breakpoint
   if (window.innerWidth < 768 || scheduleGridConfigs.length === 0) {
+    // eslint-disable-next-line i18next/no-literal-string
     return 'list';
   }
 
@@ -46,11 +47,6 @@ function getScheduleViewLabel(view: string, t: TFunction) {
   }
 
   return view;
-
-  // Deliberately unreachable code in order to get i18next-parse not to delete these translations
-  t('schedule.views.gridView');
-  t('schedule.views.gridViewByRoom');
-  t('schedule.views.gridViewWithCounts');
 }
 
 type ScheduleViewDropdownProps = {
@@ -172,7 +168,7 @@ const ScheduleApp = LoadQueryWrapper(useScheduleGridConventionDataQuery, functio
       );
     }
 
-    return <div>Unknown view: {scheduleView}</div>;
+    return <div>{t('schedule.unknownView', { scheduleView })}</div>;
   };
 
   if (authorizationRequired) {

@@ -9,7 +9,7 @@ import {
   useAppRootLayoutQuerySuspenseQuery,
 } from './appRootQueries.generated';
 import AppRouter from './AppRouter';
-import AppRootContext from './AppRootContext';
+import AppRootContext, { AppRootContextValue } from './AppRootContext';
 import parseCmsContent, { CMS_COMPONENT_MAP } from './parseCmsContent';
 import { timezoneNameForConvention } from './TimeUtils';
 import getI18n from './setupI18Next';
@@ -41,6 +41,38 @@ function normalizePathForLayout(path: string) {
 
   // eslint-disable-next-line i18next/no-literal-string
   return '/non_cms_path'; // arbitrary path that's not a CMS page
+}
+
+export function buildAppRootContextValue(data: AppRootQueryData): AppRootContextValue {
+  return {
+    assumedIdentityFromProfile: data.assumedIdentityFromProfile,
+    cmsNavigationItems: data.cmsParentByRequestHost.cmsNavigationItems,
+    convention: data.convention,
+    conventionAcceptingProposals: data.convention?.accepting_proposals,
+    conventionCanceled: data.convention?.canceled,
+    conventionName: data.convention?.name,
+    conventionDomain: data.convention?.domain,
+    conventionTimespan: data?.convention ? timespanFromConvention(data.convention) : undefined,
+    currentAbility: data.currentAbility,
+    currentPendingOrder: data.convention?.my_profile?.current_pending_order,
+    currentUser: data.currentUser,
+    defaultCurrencyCode: data.convention?.default_currency_code ?? data.defaultCurrencyCode,
+    hasOAuthApplications: data.hasOauthApplications,
+    // eslint-disable-next-line i18next/no-literal-string
+    language: data.convention?.language ?? 'en',
+    myProfile: data.convention?.my_profile,
+    rootSiteName: data.rootSite?.site_name,
+    siteMode: data.convention?.site_mode,
+    signupMode: data.convention?.signup_mode,
+    supportedCurrencyCodes: data.supportedCurrencyCodes,
+    signupAutomationMode: data.convention?.signup_automation_mode,
+    ticketMode: data.convention?.ticket_mode,
+    ticketName: data.convention?.ticket_name,
+    ticketNamePlural: data.convention?.ticketNamePlural,
+    ticketTypes: data.convention?.ticket_types,
+    ticketsAvailableForPurchase: data.convention?.tickets_available_for_purchase,
+    timezoneName: timezoneNameForConvention(data.convention),
+  };
 }
 
 export function AppRootLayoutContent() {
@@ -132,40 +164,7 @@ function AppRoot(): JSX.Element {
     }
   }, [data?.currentUser?.id]);
 
-  const appRootContextValue = useMemo(
-    () =>
-      data
-        ? {
-            assumedIdentityFromProfile: data.assumedIdentityFromProfile,
-            cmsNavigationItems: data.cmsParentByRequestHost.cmsNavigationItems,
-            convention: data.convention,
-            conventionAcceptingProposals: data.convention?.accepting_proposals,
-            conventionCanceled: data.convention?.canceled,
-            conventionName: data.convention?.name,
-            conventionDomain: data.convention?.domain,
-            conventionTimespan: data?.convention ? timespanFromConvention(data.convention) : undefined,
-            currentAbility: data.currentAbility,
-            currentPendingOrder: data.convention?.my_profile?.current_pending_order,
-            currentUser: data.currentUser,
-            defaultCurrencyCode: data.convention?.default_currency_code ?? data.defaultCurrencyCode,
-            hasOAuthApplications: data.hasOauthApplications,
-            language: data.convention?.language ?? 'en',
-            myProfile: data.convention?.my_profile,
-            rootSiteName: data.rootSite?.site_name,
-            siteMode: data.convention?.site_mode,
-            signupMode: data.convention?.signup_mode,
-            supportedCurrencyCodes: data.supportedCurrencyCodes,
-            signupAutomationMode: data.convention?.signup_automation_mode,
-            ticketMode: data.convention?.ticket_mode,
-            ticketName: data.convention?.ticket_name,
-            ticketNamePlural: data.convention?.ticketNamePlural,
-            ticketTypes: data.convention?.ticket_types,
-            ticketsAvailableForPurchase: data.convention?.tickets_available_for_purchase,
-            timezoneName: timezoneNameForConvention(data.convention),
-          }
-        : undefined,
-    [data],
-  );
+  const appRootContextValue = useMemo(() => (data ? buildAppRootContextValue(data) : undefined), [data]);
 
   useEffect(() => {
     if (
