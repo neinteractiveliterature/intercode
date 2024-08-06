@@ -21198,7 +21198,7 @@ __metadata:
     webpack-dev-middleware: "npm:7.3.0"
     webpack-dev-server: "npm:5.0.4"
     webpack-manifest-plugin: "npm:5.0.0"
-    webpack-shell-plugin-next: "npm:2.3.1"
+    webpack-shell-plugin-next: "npm:2.3.2"
     zxcvbn: "npm:4.4.2"
   languageName: unknown
   linkType: soft
@@ -24023,12 +24023,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-shell-plugin-next@npm:2.3.1":
-  version: 2.3.1
-  resolution: "webpack-shell-plugin-next@npm:2.3.1"
+"webpack-shell-plugin-next@npm:2.3.2":
+  version: 2.3.2
+  resolution: "webpack-shell-plugin-next@npm:2.3.2"
   peerDependencies:
     webpack: ^5.18.0
-  checksum: 10c0/948e3017c296d16f7086e2f8f06aa3b532db84d44749afb3d7367d7d315bfc6d834971b331ada4f91ac5b7e6646144f9ae9618c6a2c20e4f0668e3eb0cb2667b
+  checksum: 10c0/dc01f388c5cac8d8bd69e90ded67821d73b514aad4a21bc257a2f1c6737cfcca1fdef01eaf3d6eed2ac3b0133d4410dd5bdfad253339a13cce958ba9e8fdf807
   languageName: node
   linkType: hard
 
