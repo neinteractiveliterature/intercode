@@ -9,6 +9,7 @@ import mountReactComponents from './mountReactComponents';
 
 import 'graphiql/graphiql.css';
 import './styles/dev-mode-graphiql.scss';
+import AuthenticityTokensManager from './AuthenticityTokensContext';
 
 export type DevModeGraphiqlProps = {
   authenticityTokens: {
@@ -16,8 +17,11 @@ export type DevModeGraphiqlProps = {
   };
 };
 
-function DevModeGraphiql({ authenticityTokens: { graphql: authenticityToken } }: DevModeGraphiqlProps): JSX.Element {
-  const link = useIntercodeApolloLink(authenticityToken, '/graphql');
+function DevModeGraphiql({ authenticityTokens }: DevModeGraphiqlProps): JSX.Element {
+  useCallback(() => {
+    AuthenticityTokensManager.instance.setTokens(authenticityTokens);
+  }, [authenticityTokens]);
+  const link = useIntercodeApolloLink('/graphql');
 
   // @ts-expect-error This might be really broken but I need to ship a patch release ASAP and this is less important
   const fetcher: Fetcher = useCallback(
