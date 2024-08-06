@@ -4,23 +4,24 @@ import * as Types from './graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
-export type AppRootQueryVariables = Types.Exact<{
+export type AppRootQueryVariables = Types.Exact<{ [key: string]: never; }>;
+
+
+export type AppRootQueryData = { __typename: 'Query', hasOauthApplications: boolean, defaultCurrencyCode: string, supportedCurrencyCodes: Array<string>, cmsParentByRequestHost: { __typename: 'Convention', id: string, cmsNavigationItems: Array<{ __typename: 'CmsNavigationItem', id: string, position?: number | null, title?: string | null, navigation_section?: { __typename: 'CmsNavigationItem', id: string } | null, page?: { __typename: 'Page', id: string, slug?: string | null } | null }> } | { __typename: 'RootSite', id: string, cmsNavigationItems: Array<{ __typename: 'CmsNavigationItem', id: string, position?: number | null, title?: string | null, navigation_section?: { __typename: 'CmsNavigationItem', id: string } | null, page?: { __typename: 'Page', id: string, slug?: string | null } | null }> }, currentAbility: { __typename: 'Ability', can_read_schedule: boolean, can_read_schedule_with_counts: boolean, can_list_events: boolean, can_read_user_con_profiles: boolean, can_manage_conventions: boolean, can_update_convention: boolean, can_update_departments: boolean, can_manage_email_routes: boolean, can_update_event_categories: boolean, can_read_event_proposals: boolean, can_manage_runs: boolean, can_manage_forms: boolean, can_read_any_mailing_list: boolean, can_update_notification_templates: boolean, can_manage_oauth_applications: boolean, can_read_reports: boolean, can_manage_rooms: boolean, can_manage_signups: boolean, can_manage_any_cms_content: boolean, can_manage_staff_positions: boolean, can_read_orders: boolean, can_manage_ticket_types: boolean, can_read_user_activity_alerts: boolean, can_read_organizations: boolean, can_read_users: boolean }, currentUser?: { __typename: 'User', id: string, name?: string | null } | null, assumedIdentityFromProfile?: { __typename: 'UserConProfile', id: string, name_without_nickname: string } | null, convention?: { __typename: 'Convention', id: string, name: string, domain?: string | null, default_currency_code?: string | null, accepting_proposals?: boolean | null, canceled: boolean, language: string, site_mode: Types.SiteMode, signup_mode: Types.SignupMode, signup_automation_mode: Types.SignupAutomationMode, starts_at?: string | null, stripe_account_id?: string | null, stripe_publishable_key?: string | null, ends_at?: string | null, ticket_mode: Types.TicketMode, timezone_name?: string | null, timezone_mode: Types.TimezoneMode, clickwrap_agreement?: string | null, tickets_available_for_purchase: boolean, ticket_name: string, ticketNamePlural: string, ticket_types: Array<{ __typename: 'TicketType', id: string, providing_products: Array<{ __typename: 'Product', id: string, available: boolean }> }>, my_profile?: { __typename: 'UserConProfile', id: string, name: string, email?: string | null, mobile_phone?: string | null, accepted_clickwrap_agreement?: boolean | null, name_without_nickname: string, first_name: string, last_name: string, gravatar_enabled: boolean, gravatar_url: string, ticket?: { __typename: 'Ticket', id: string } | null, current_pending_order?: { __typename: 'Order', id: string, order_entries: Array<{ __typename: 'OrderEntry', id: string, quantity: number }> } | null } | null } | null, rootSite: { __typename: 'RootSite', id: string, site_name: string } };
+
+export type AppRootLayoutQueryVariables = Types.Exact<{
   path: Types.Scalars['String']['input'];
 }>;
 
 
-export type AppRootQueryData = { __typename: 'Query', hasOauthApplications: boolean, defaultCurrencyCode: string, supportedCurrencyCodes: Array<string>, cmsParentByRequestHost: { __typename: 'Convention', id: string, effectiveCmsLayout: { __typename: 'CmsLayout', id: string, content_html?: string | null }, cmsNavigationItems: Array<{ __typename: 'CmsNavigationItem', id: string, position?: number | null, title?: string | null, navigation_section?: { __typename: 'CmsNavigationItem', id: string } | null, page?: { __typename: 'Page', id: string, slug?: string | null } | null }> } | { __typename: 'RootSite', id: string, effectiveCmsLayout: { __typename: 'CmsLayout', id: string, content_html?: string | null }, cmsNavigationItems: Array<{ __typename: 'CmsNavigationItem', id: string, position?: number | null, title?: string | null, navigation_section?: { __typename: 'CmsNavigationItem', id: string } | null, page?: { __typename: 'Page', id: string, slug?: string | null } | null }> }, currentAbility: { __typename: 'Ability', can_read_schedule: boolean, can_read_schedule_with_counts: boolean, can_list_events: boolean, can_read_user_con_profiles: boolean, can_manage_conventions: boolean, can_update_convention: boolean, can_update_departments: boolean, can_manage_email_routes: boolean, can_update_event_categories: boolean, can_read_event_proposals: boolean, can_manage_runs: boolean, can_manage_forms: boolean, can_read_any_mailing_list: boolean, can_update_notification_templates: boolean, can_manage_oauth_applications: boolean, can_read_reports: boolean, can_manage_rooms: boolean, can_manage_signups: boolean, can_manage_any_cms_content: boolean, can_manage_staff_positions: boolean, can_read_orders: boolean, can_manage_ticket_types: boolean, can_read_user_activity_alerts: boolean, can_read_organizations: boolean, can_read_users: boolean }, currentUser?: { __typename: 'User', id: string, name?: string | null } | null, assumedIdentityFromProfile?: { __typename: 'UserConProfile', id: string, name_without_nickname: string } | null, convention?: { __typename: 'Convention', id: string, name: string, domain?: string | null, default_currency_code?: string | null, accepting_proposals?: boolean | null, canceled: boolean, language: string, site_mode: Types.SiteMode, signup_mode: Types.SignupMode, signup_automation_mode: Types.SignupAutomationMode, starts_at?: string | null, stripe_account_id?: string | null, stripe_publishable_key?: string | null, ends_at?: string | null, ticket_mode: Types.TicketMode, timezone_name?: string | null, timezone_mode: Types.TimezoneMode, clickwrap_agreement?: string | null, tickets_available_for_purchase: boolean, ticket_name: string, ticketNamePlural: string, ticket_types: Array<{ __typename: 'TicketType', id: string, providing_products: Array<{ __typename: 'Product', id: string, available: boolean }> }>, my_profile?: { __typename: 'UserConProfile', id: string, name: string, email?: string | null, mobile_phone?: string | null, accepted_clickwrap_agreement?: boolean | null, name_without_nickname: string, first_name: string, last_name: string, gravatar_enabled: boolean, gravatar_url: string, ticket?: { __typename: 'Ticket', id: string } | null, current_pending_order?: { __typename: 'Order', id: string, order_entries: Array<{ __typename: 'OrderEntry', id: string, quantity: number }> } | null } | null } | null, rootSite: { __typename: 'RootSite', id: string, site_name: string } };
+export type AppRootLayoutQueryData = { __typename: 'Query', cmsParentByRequestHost: { __typename: 'Convention', id: string, effectiveCmsLayout: { __typename: 'CmsLayout', id: string, content_html?: string | null } } | { __typename: 'RootSite', id: string, effectiveCmsLayout: { __typename: 'CmsLayout', id: string, content_html?: string | null } } };
 
 
 export const AppRootQueryDocument = gql`
-    query AppRootQuery($path: String!) {
+    query AppRootQuery {
   hasOauthApplications
   cmsParentByRequestHost {
     id
-    effectiveCmsLayout(path: $path) {
-      id
-      content_html(path: $path)
-    }
     cmsNavigationItems {
       id
       position
@@ -142,11 +143,10 @@ export const AppRootQueryDocument = gql`
  * @example
  * const { data, loading, error } = useAppRootQuery({
  *   variables: {
- *      path: // value for 'path'
  *   },
  * });
  */
-export function useAppRootQuery(baseOptions: Apollo.QueryHookOptions<AppRootQueryData, AppRootQueryVariables> & ({ variables: AppRootQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+export function useAppRootQuery(baseOptions?: Apollo.QueryHookOptions<AppRootQueryData, AppRootQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<AppRootQueryData, AppRootQueryVariables>(AppRootQueryDocument, options);
       }
@@ -162,3 +162,47 @@ export type AppRootQueryHookResult = ReturnType<typeof useAppRootQuery>;
 export type AppRootQueryLazyQueryHookResult = ReturnType<typeof useAppRootQueryLazyQuery>;
 export type AppRootQuerySuspenseQueryHookResult = ReturnType<typeof useAppRootQuerySuspenseQuery>;
 export type AppRootQueryQueryResult = Apollo.QueryResult<AppRootQueryData, AppRootQueryVariables>;
+export const AppRootLayoutQueryDocument = gql`
+    query AppRootLayoutQuery($path: String!) {
+  cmsParentByRequestHost {
+    id
+    effectiveCmsLayout(path: $path) {
+      id
+      content_html(path: $path)
+    }
+  }
+}
+    `;
+
+/**
+ * __useAppRootLayoutQuery__
+ *
+ * To run a query within a React component, call `useAppRootLayoutQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAppRootLayoutQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAppRootLayoutQuery({
+ *   variables: {
+ *      path: // value for 'path'
+ *   },
+ * });
+ */
+export function useAppRootLayoutQuery(baseOptions: Apollo.QueryHookOptions<AppRootLayoutQueryData, AppRootLayoutQueryVariables> & ({ variables: AppRootLayoutQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AppRootLayoutQueryData, AppRootLayoutQueryVariables>(AppRootLayoutQueryDocument, options);
+      }
+export function useAppRootLayoutQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AppRootLayoutQueryData, AppRootLayoutQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AppRootLayoutQueryData, AppRootLayoutQueryVariables>(AppRootLayoutQueryDocument, options);
+        }
+export function useAppRootLayoutQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<AppRootLayoutQueryData, AppRootLayoutQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<AppRootLayoutQueryData, AppRootLayoutQueryVariables>(AppRootLayoutQueryDocument, options);
+        }
+export type AppRootLayoutQueryHookResult = ReturnType<typeof useAppRootLayoutQuery>;
+export type AppRootLayoutQueryLazyQueryHookResult = ReturnType<typeof useAppRootLayoutQueryLazyQuery>;
+export type AppRootLayoutQuerySuspenseQueryHookResult = ReturnType<typeof useAppRootLayoutQuerySuspenseQuery>;
+export type AppRootLayoutQueryQueryResult = Apollo.QueryResult<AppRootLayoutQueryData, AppRootLayoutQueryVariables>;

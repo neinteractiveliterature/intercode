@@ -1,13 +1,8 @@
-query AppRootQuery($path: String!) {
+query AppRootQuery {
   hasOauthApplications
 
   cmsParentByRequestHost {
     id
-
-    effectiveCmsLayout(path: $path) {
-      id
-      content_html(path: $path)
-    }
 
     cmsNavigationItems {
       id
@@ -126,4 +121,14 @@ query AppRootQuery($path: String!) {
 
   defaultCurrencyCode
   supportedCurrencyCodes
+}
+
+query AppRootLayoutQuery($path: String!) {
+  cmsParentByRequestHost {
+    id
+    effectiveCmsLayout(path: $path) {
+      id
+      content_html(path: $path)
+    }
+  }
 }

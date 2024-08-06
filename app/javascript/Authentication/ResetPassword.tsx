@@ -8,6 +8,7 @@ import PasswordConfirmationInput from './PasswordConfirmationInput';
 import AuthenticityTokensContext from '../AuthenticityTokensContext';
 import useAsyncFunction from '../useAsyncFunction';
 import { lazyWithAppEntrypointHeadersCheck } from '../checkAppEntrypointHeadersMatch';
+import AuthenticityTokensManager from '../AuthenticityTokensContext';
 
 const PasswordInputWithStrengthCheck = lazyWithAppEntrypointHeadersCheck(
   () => import(/* webpackChunkName: "password-input-with-strength-check" */ './PasswordInputWithStrengthCheck'),
@@ -46,7 +47,7 @@ function ResetPassword(): JSX.Element {
     () => new URLSearchParams(location.search).get('reset_password_token') ?? '',
     [location.search],
   );
-  const authenticityToken = useContext(AuthenticityTokensContext).changePassword;
+  const authenticityToken = AuthenticityTokensManager.instance.tokens.changePassword;
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const passwordId = useId();

@@ -2,7 +2,7 @@ import { useMemo, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
 import { ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
-import AuthenticityTokensContext from '../AuthenticityTokensContext';
+import AuthenticityTokensManager from '../AuthenticityTokensContext';
 import PermissionsPrompt from './PermissionsPrompt';
 import AuthenticationModalContext from '../Authentication/AuthenticationModalContext';
 import usePageTitle from '../usePageTitle';
@@ -45,8 +45,8 @@ export default LoadQueryWrapper(useOAuthAuthorizationPromptQueryFromParams, func
   const preAuth = useMemo(() => JSON.parse(data.oauthPreAuth) as PreAuth, [data]);
   const scopes = useMemo(() => preAuth.scope.split(' '), [preAuth]);
 
-  const authenticityTokens = useContext(AuthenticityTokensContext);
-  const { grantAuthorization: grantAuthorizationToken, denyAuthorization: denyAuthorizationToken } = authenticityTokens;
+  const { grantAuthorization: grantAuthorizationToken, denyAuthorization: denyAuthorizationToken } =
+    AuthenticityTokensManager.instance.tokens;
   const authorizationParams: AuthorizationParams | null = useMemo(
     () =>
       (

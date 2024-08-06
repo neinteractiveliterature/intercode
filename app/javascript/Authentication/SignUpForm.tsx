@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import useAsyncFunction from '../useAsyncFunction';
-import AuthenticityTokensContext from '../AuthenticityTokensContext';
 import AuthenticationModalContext from './AuthenticationModalContext';
 import AccountFormContent from './AccountFormContent';
 import UserFormFields, { UserFormState } from './UserFormFields';
@@ -14,6 +13,7 @@ import PasswordConfirmationInput from './PasswordConfirmationInput';
 import useAfterSessionChange from './useAfterSessionChange';
 import { lazyWithAppEntrypointHeadersCheck } from '../checkAppEntrypointHeadersMatch';
 import humanize from '../humanize';
+import AuthenticityTokensManager from '../AuthenticityTokensContext';
 
 const PasswordInputWithStrengthCheck = lazyWithAppEntrypointHeadersCheck(
   () => import(/* webpackChunkName: "password-input-with-strength-check" */ './PasswordInputWithStrengthCheck'),
@@ -63,7 +63,7 @@ async function signUp(
 function SignUpForm(): JSX.Element {
   const { t } = useTranslation();
   const { close: closeModal, setCurrentView, recaptchaSiteKey } = useContext(AuthenticationModalContext);
-  const authenticityToken = useContext(AuthenticityTokensContext).signUp;
+  const authenticityToken = AuthenticityTokensManager.instance.tokens.signUp;
   const [formState, setFormState] = useState({});
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');

@@ -1,20 +1,18 @@
-import { useContext } from 'react';
 import { useApolloClient } from '@apollo/client';
 import { useNavigate, Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { LoadQueryWrapper, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import parseCmsContent from '../parseCmsContent';
-import AuthenticityTokensContext from '../AuthenticityTokensContext';
 import useLoginRequired from '../Authentication/useLoginRequired';
 import { useAcceptClickwrapAgreementMutation } from './mutations.generated';
 import { useClickwrapAgreementQuery } from './queries.generated';
+import AuthenticityTokensManager from '../AuthenticityTokensContext';
 
 export default LoadQueryWrapper(useClickwrapAgreementQuery, function ClickwrapAgreement({ data }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [accept, { error: acceptError, loading: acceptInProgress }] = useAcceptClickwrapAgreementMutation();
-  const { refresh } = useContext(AuthenticityTokensContext);
   const apolloClient = useApolloClient();
   const loginRequired = useLoginRequired();
 
@@ -23,7 +21,7 @@ export default LoadQueryWrapper(useClickwrapAgreementQuery, function ClickwrapAg
       await accept();
       navigate('/my_profile/setup');
     } catch (err) {
-      await refresh();
+      await AuthenticityTokensManager.instance.refresh();
       await apolloClient.resetStore();
       throw err;
     }
