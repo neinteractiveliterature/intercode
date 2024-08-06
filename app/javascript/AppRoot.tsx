@@ -1,13 +1,15 @@
 import { Suspense, useMemo, useState, useEffect } from 'react';
-import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useLoaderData, Outlet } from 'react-router-dom';
 import { Settings } from 'luxon';
 import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
-import { useAppRootQuery } from './appRootQueries.generated';
+import {
+  AppRootQueryData,
+  AppRootQueryVariables,
+  useAppRootLayoutQuerySuspenseQuery,
+} from './appRootQueries.generated';
 import AppRouter from './AppRouter';
 import AppRootContext from './AppRootContext';
-import useCachedLoadableValue from './useCachedLoadableValue';
-import PageComponents from './PageComponents';
 import parseCmsContent, { CMS_COMPONENT_MAP } from './parseCmsContent';
 import { timezoneNameForConvention } from './TimeUtils';
 import getI18n from './setupI18Next';
@@ -18,6 +20,7 @@ import { Stripe } from '@stripe/stripe-js';
 import { Helmet } from 'react-helmet-async';
 import React from 'react';
 import { ScriptTag } from './parsePageContent';
+import { QueryRef, useReadQuery } from '@apollo/client';
 
 const NavigationBar = lazyWithAppEntrypointHeadersCheck(
   () => import(/* webpackChunkName: 'navigation-bar' */ './NavigationBar'),
@@ -32,25 +35,25 @@ function normalizePathForLayout(path: string) {
   // only event ID is relevant for layout rendering
   const eventsMatch = path.match(/^\/events\/(\d+)/);
   if (eventsMatch) {
+    // eslint-disable-next-line i18next/no-literal-string
     return `/events/${eventsMatch[1]}`;
   }
 
+  // eslint-disable-next-line i18next/no-literal-string
   return '/non_cms_path'; // arbitrary path that's not a CMS page
 }
 
-function AppRoot(): JSX.Element {
+export function AppRootLayoutContent() {
   const location = useLocation();
-  const navigate = useNavigate();
-  const { data, loading, error } = useAppRootQuery({
+  const [cachedCmsLayoutId, setCachedCmsLayoutId] = useState<string>();
+  const [layoutChanged, setLayoutChanged] = useState(false);
+
+  const { data, error } = useAppRootLayoutQuerySuspenseQuery({
     variables: { path: normalizePathForLayout(location.pathname) },
   });
 
-  const [cachedCmsLayoutId, setCachedCmsLayoutId] = useState<string>();
-  const [layoutChanged, setLayoutChanged] = useState(false);
-  const [stripePromise, setStripePromise] = useState<Promise<Stripe | null> | null>(null);
-
   const parsedCmsContent = useMemo(() => {
-    if (error || loading || !data) {
+    if (error) {
       return null;
     }
 
@@ -59,7 +62,63 @@ function AppRoot(): JSX.Element {
       AppRouter,
       NavigationBar,
     });
-  }, [data, error, loading]);
+  }, [data.cmsParentByRequestHost.effectiveCmsLayout.content_html, error]);
+
+  const [headComponentsWithoutScriptTags, headScriptTags] = useMemo(() => {
+    if (parsedCmsContent?.headComponents == null) {
+      return [[], []];
+    }
+
+    const nonScriptTags: React.ReactNode[] = [];
+    const scriptTags: React.ReactNode[] = [];
+
+    React.Children.forEach(parsedCmsContent.headComponents, (child) => {
+      if (React.isValidElement(child) && child.type === ScriptTag) {
+        scriptTags.push(child);
+      } else {
+        nonScriptTags.push(child);
+      }
+    });
+
+    return [nonScriptTags, scriptTags];
+  }, [parsedCmsContent?.headComponents]);
+
+  useEffect(() => {
+    if (!error && data && cachedCmsLayoutId !== data.cmsParentByRequestHost.effectiveCmsLayout.id) {
+      if (cachedCmsLayoutId) {
+        // if the layout changed we need a full page reload to rerender the <head>
+        setLayoutChanged(true);
+        window.location.reload();
+      } else {
+        setCachedCmsLayoutId(data.cmsParentByRequestHost.effectiveCmsLayout.id);
+      }
+    }
+  }, [error, cachedCmsLayoutId, data]);
+
+  if (layoutChanged) {
+    return <></>;
+  }
+
+  if (!parsedCmsContent?.bodyComponents) {
+    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
+  }
+
+  return (
+    <>
+      <Helmet>{headComponentsWithoutScriptTags}</Helmet>
+      {headScriptTags}
+      {parsedCmsContent?.bodyComponents}
+    </>
+  );
+}
+
+function AppRoot(): JSX.Element {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const queryRef = useLoaderData() as QueryRef<AppRootQueryData, AppRootQueryVariables>;
+  const { data, error } = useReadQuery(queryRef);
+
+  const [stripePromise, setStripePromise] = useState<Promise<Stripe | null> | null>(null);
 
   useEffect(() => {
     if (typeof Rollbar !== 'undefined') {
@@ -73,28 +132,7 @@ function AppRoot(): JSX.Element {
     }
   }, [data?.currentUser?.id]);
 
-  const cachedCmsContent = useCachedLoadableValue(loading, error, () => parsedCmsContent, [parsedCmsContent]);
-  const [headComponentsWithoutScriptTags, headScriptTags] = useMemo(() => {
-    if (cachedCmsContent?.headComponents == null) {
-      return [[], []];
-    }
-
-    const nonScriptTags: React.ReactNode[] = [];
-    const scriptTags: React.ReactNode[] = [];
-
-    React.Children.forEach(cachedCmsContent.headComponents, (child) => {
-      if (React.isValidElement(child) && child.type === ScriptTag) {
-        scriptTags.push(child);
-      } else {
-        nonScriptTags.push(child);
-      }
-    });
-
-    return [nonScriptTags, scriptTags];
-  }, [cachedCmsContent?.headComponents]);
-  const appRootContextValue = useCachedLoadableValue(
-    loading,
-    error,
+  const appRootContextValue = useMemo(
     () =>
       data
         ? {
@@ -130,20 +168,7 @@ function AppRoot(): JSX.Element {
   );
 
   useEffect(() => {
-    if (!loading && !error && data && cachedCmsLayoutId !== data.cmsParentByRequestHost.effectiveCmsLayout.id) {
-      if (cachedCmsLayoutId) {
-        // if the layout changed we need a full page reload to rerender the <head>
-        setLayoutChanged(true);
-        window.location.reload();
-      } else {
-        setCachedCmsLayoutId(data.cmsParentByRequestHost.effectiveCmsLayout.id);
-      }
-    }
-  }, [loading, error, cachedCmsLayoutId, data]);
-
-  useEffect(() => {
     if (
-      !loading &&
       !error &&
       data?.convention?.my_profile &&
       (data.convention.clickwrap_agreement || '').trim() !== '' &&
@@ -154,7 +179,7 @@ function AppRoot(): JSX.Element {
     ) {
       navigate('/clickwrap_agreement', { replace: true });
     }
-  }, [data, error, navigate, loading, location]);
+  }, [data, error, navigate, location]);
 
   useEffect(() => {
     if (appRootContextValue?.language) {
@@ -164,14 +189,6 @@ function AppRoot(): JSX.Element {
       });
     }
   }, [appRootContextValue]);
-
-  if (layoutChanged) {
-    return <></>;
-  }
-
-  if (loading && !cachedCmsContent?.bodyComponents) {
-    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
-  }
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
@@ -184,31 +201,18 @@ function AppRoot(): JSX.Element {
 
   return (
     <AppRootContext.Provider value={appRootContextValue}>
-      <Helmet>{headComponentsWithoutScriptTags}</Helmet>
-      {headScriptTags}
-      <Routes>
-        <Route path="/admin_forms/:id/edit/*" element={<PageComponents.FormEditor />}>
-          <Route path="section/:sectionId/item/:itemId" element={<PageComponents.FormItemEditorLayout />} />
-          <Route path="section/:sectionId" element={<PageComponents.FormSectionEditorLayout />} />
-        </Route>
-        <Route
-          path="*"
-          element={
-            <LazyStripeContext.Provider
-              value={{
-                publishableKey: data?.convention?.stripe_publishable_key ?? undefined,
-                accountId: data?.convention?.stripe_account_id ?? undefined,
-                stripePromise,
-                setStripePromise,
-              }}
-            >
-              <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
-                {cachedCmsContent?.bodyComponents}
-              </Suspense>
-            </LazyStripeContext.Provider>
-          }
-        />
-      </Routes>
+      <LazyStripeContext.Provider
+        value={{
+          publishableKey: data?.convention?.stripe_publishable_key ?? undefined,
+          accountId: data?.convention?.stripe_account_id ?? undefined,
+          stripePromise,
+          setStripePromise,
+        }}
+      >
+        <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
+          <Outlet />
+        </Suspense>
+      </LazyStripeContext.Provider>
     </AppRootContext.Provider>
   );
 }

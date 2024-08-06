@@ -10,6 +10,7 @@ import RailsDirectUploadsContext from '../RailsDirectUploadsContext';
 import classNames from 'classnames';
 import AuthenticityTokensContext from '../AuthenticityTokensContext';
 import { Helmet } from 'react-helmet-async';
+import AuthenticityTokensManager from '../AuthenticityTokensContext';
 
 function uploadFile(file: File, directUploadURL: string, onProgress?: (event: ProgressEvent<XMLHttpRequest>) => void) {
   return new Promise<Blob>((resolve, reject) => {
@@ -43,7 +44,7 @@ function FileUploadForm({ onUpload }: FileUploadFormProps): JSX.Element {
   const [progressPercent, setProgressPercent] = useState<number>(0);
   const [progressIndeterminate, setProgressIndeterminate] = useState(false);
   const { railsDirectUploadsUrl } = useContext(RailsDirectUploadsContext);
-  const { railsDirectUploads: directUploadsAuthenticityToken } = useContext(AuthenticityTokensContext);
+  const { railsDirectUploads: directUploadsAuthenticityToken } = AuthenticityTokensManager.instance.tokens;
 
   const onProgress = useCallback((event: ProgressEvent<XMLHttpRequest>) => {
     setProgressIndeterminate(!event.lengthComputable);

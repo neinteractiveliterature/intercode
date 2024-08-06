@@ -7,6 +7,7 @@ import AuthenticationModalContext from './AuthenticationModalContext';
 import AuthenticityTokensContext from '../AuthenticityTokensContext';
 import useAsyncFunction from '../useAsyncFunction';
 import humanize from '../humanize';
+import AuthenticityTokensManager from '../AuthenticityTokensContext';
 
 function parseRailsErrorHash(errors: Record<string, string[]> | undefined) {
   if (!errors) {
@@ -44,7 +45,7 @@ async function resetPassword(authenticityToken: string, email: string) {
 function ForgotPasswordForm(): JSX.Element {
   const { t } = useTranslation();
   const { close: closeModal, setCurrentView } = useContext(AuthenticationModalContext);
-  const authenticityToken = useContext(AuthenticityTokensContext).resetPassword;
+  const authenticityToken = AuthenticityTokensManager.instance.tokens.resetPassword;
   const [email, setEmail] = useState('');
   const [success, setSuccess] = useState(false);
   const [resetPasswordAsync, resetPasswordError, resetPasswordInProgress] = useAsyncFunction(resetPassword);

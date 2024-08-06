@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useContext } from 'react';
-import { NavLink, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import { NavLink, Routes, Route, useLocation, useNavigate, replace } from 'react-router-dom';
 import { useApolloClient } from '@apollo/client';
 import { DateTime } from 'luxon';
 
@@ -18,9 +18,11 @@ function conventionDayUrlPortionFormat(
 ): DateTimeFormatKey {
   const conventionLengthInDays = conventionTimespan?.getLength('days');
   if (siteMode === SiteMode.Convention && conventionLengthInDays && conventionLengthInDays.days < 7) {
+    // eslint-disable-next-line i18next/no-literal-string
     return 'longWeekday';
   }
 
+  // eslint-disable-next-line i18next/no-literal-string
   return 'compactDate';
 }
 
@@ -139,7 +141,7 @@ function ConventionDayTabContainer({
         ))}
         <Route
           path="*"
-          element={<RedirectToFirstDay basename={basename} conventionDayTimespans={conventionDayTimespans} />}
+          loader={() => replace(`${basename}/${conventionDayUrlPortion(conventionDayTimespans[0].start)}`)}
         />
       </Routes>
     </div>

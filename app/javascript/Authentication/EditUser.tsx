@@ -13,6 +13,7 @@ import usePageTitle from '../usePageTitle';
 import { lazyWithAppEntrypointHeadersCheck } from '../checkAppEntrypointHeadersMatch';
 import { useEditUserQuery } from './queries.generated';
 import humanize from '../humanize';
+import AuthenticityTokensManager from '../AuthenticityTokensContext';
 
 const PasswordInputWithStrengthCheck = lazyWithAppEntrypointHeadersCheck(
   () => import(/* webpackChunkName: "password-input-with-strength-check" */ './PasswordInputWithStrengthCheck'),
@@ -63,7 +64,7 @@ async function updateUser(
 
 export default LoadQueryWrapper(useEditUserQuery, function EditUserForm({ data: { currentUser: initialFormState } }) {
   const { t } = useTranslation();
-  const authenticityToken = useContext(AuthenticityTokensContext).updateUser;
+  const authenticityToken = AuthenticityTokensManager.instance.tokens.updateUser;
   const [formState, setFormState] = useState<UserFormState | undefined>(initialFormState ?? undefined);
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
