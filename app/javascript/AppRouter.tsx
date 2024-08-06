@@ -1,12 +1,14 @@
-import { useState, useContext, Suspense, useEffect, ReactNode } from 'react';
-import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { useState, Suspense, useEffect, ReactNode, useContext } from 'react';
+import { useLocation, RouteObject, replace, Outlet } from 'react-router-dom';
 import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
+import { useTranslation } from 'react-i18next';
 
-import AppRootContext from './AppRootContext';
 import PageComponents from './PageComponents';
 import { reloadOnAppEntrypointHeadersMismatch } from './checkAppEntrypointHeadersMatch';
 import FourOhFourPage from './FourOhFourPage';
-import { SignupMode, TicketMode } from './graphqlTypes.generated';
+import { SignupMode, SiteMode, TicketMode } from './graphqlTypes.generated';
+import AppRootContext, { AppRootContextValue } from './AppRootContext';
+import { eventsRoutes } from './EventsApp';
 
 function CmsPageBySlug() {
   // react-router 6 doesn't allow slashes in params, so we're going to do our own parsing here
@@ -15,173 +17,179 @@ function CmsPageBySlug() {
   return <PageComponents.CmsPage slug={slug} />;
 }
 
-function renderCommonRoutes() {
-  return [
-    <Route element={<PageComponents.CmsAdmin />} key="cmsAdmin">
-      <Route path="/cms_pages/*" element={<PageComponents.CmsPagesAdmin />} />,
-      <Route path="/cms_partials/*" element={<PageComponents.CmsPartialsAdmin />} />,
-      <Route path="/cms_files/*" element={<PageComponents.CmsFilesAdmin />} />,
-      <Route path="/cms_navigation_items/*" element={<PageComponents.NavigationItemsAdmin />} />,
-      <Route path="/cms_layouts/*" element={<PageComponents.CmsLayoutsAdmin />} />,
-      <Route path="/cms_variables/*" element={<PageComponents.CmsVariablesAdmin />} />,
-      <Route path="/cms_graphql_queries/*" element={<PageComponents.CmsGraphqlQueriesAdmin />} />,
-      <Route path="/cms_content_groups/*" element={<PageComponents.CmsContentGroupsAdmin />} />,
-    </Route>,
-    <Route path="/oauth/applications-embed" key="oauthApplications" element={<PageComponents.OAuthApplications />} />,
-    <Route path="/oauth/authorize" key="oauthAuthorization" element={<PageComponents.OAuthAuthorizationPrompt />} />,
-    <Route
-      path="/oauth/authorized_applications"
-      key="oauthAuthorizedApplications"
-      element={<PageComponents.AuthorizedApplications />}
-    />,
-    <Route path="/users/edit" key="editUser" element={<PageComponents.EditUser />} />,
-    <Route path="/users/password/edit" key="resetPassword" element={<PageComponents.ResetPassword />} />,
-    <Route path="/pages/*" key="cmsPage" element={<CmsPageBySlug />} />,
-    <Route index key="cmsRootPage" element={<PageComponents.CmsPage rootPage />} />,
-  ];
+export type AppRootContextRouteGuardProps = {
+  guard: (context: AppRootContextValue) => boolean;
+};
+
+export function AppRootContextRouteGuard({ guard }: AppRootContextRouteGuardProps) {
+  const context = useContext(AppRootContext);
+
+  if (guard(context)) {
+    return <Outlet />;
+  } else {
+    return <FourOhFourPage />;
+  }
 }
 
-function renderCommonInConventionRoutes({
-  signupMode,
-  ticketMode,
-}: {
-  signupMode: SignupMode | undefined;
-  ticketMode: TicketMode | undefined | null;
-}) {
-  return [
-    <Route path="/admin_departments/*" key="adminDepartments" element={<PageComponents.DepartmentAdmin />} />,
-    <Route path="/admin_events/*" key="adminEvents" element={<PageComponents.EventAdmin />} />,
-    <Route path="/admin_forms/*" key="adminForms" element={<PageComponents.FormAdmin />} />,
-    <Route path="/admin_notifications/*" key="adminNotifications" element={<PageComponents.NotificationAdmin />} />,
-    <Route path="/admin_store/*" key="adminStore" element={<PageComponents.StoreAdmin />} />,
-    <Route path="/cart" key="cart" element={<PageComponents.Cart />} />,
-    <Route
-      path="/clickwrap_agreement"
-      key="clickwrapAgreement"
-      element={<PageComponents.WrappedClickwrapAgreement />}
-    />,
-    <Route path="/convention/edit" key="conventionAdmin" element={<PageComponents.ConventionAdmin />} />,
-    <Route path="/events/*" key="eventsApp" element={<PageComponents.EventsApp />} />,
-    <Route path="/mailing_lists/*" key="mailingLists" element={<PageComponents.MailingLists />} />,
-    <Route path="/my_profile/*" key="myProfile" element={<PageComponents.MyProfile />} />,
-    <Route path="/order_history" key="orderHistory" element={<PageComponents.OrderHistory />} />,
-    <Route path="/products/:id" key="productPage" element={<PageComponents.ProductPage />} />,
-    <Route path="/reports/*" key="reports" element={<PageComponents.Reports />} />,
-    <Route path="/rooms" key="rooms" element={<PageComponents.RoomsAdmin />} />,
-    ...(signupMode === 'moderated'
-      ? [<Route path="/signup_moderation/*" key="signupModeration" element={<PageComponents.SignupModeration />} />]
-      : []),
-    <Route path="/signup_rounds/*" key="signupRounds" element={<PageComponents.SignupRoundsAdmin />} />,
-    <Route path="/staff_positions/*" key="staffPositions" element={<PageComponents.StaffPositionAdmin />} />,
-    <Route path="/ticket/*" key="myTicket" element={<PageComponents.MyTicket />} />,
-    ...(ticketMode === 'required_for_signup'
-      ? [<Route path="/ticket_types/*" key="ticketTypes" element={<PageComponents.TicketTypeAdmin />} />]
-      : []),
-    <Route
-      path="/user_activity_alerts/*"
-      key="userActivityAlerts"
-      element={<PageComponents.UserActivityAlertsAdmin />}
-    />,
-    <Route path="/user_con_profiles/*" key="userConProfiles" element={<PageComponents.UserConProfilesAdmin />} />,
-    ...renderCommonRoutes(),
-  ];
-}
+const commonRoutes: RouteObject[] = [
+  {
+    element: <PageComponents.CmsAdmin />,
+    children: [
+      { path: '/cms_pages/*', element: <PageComponents.CmsPagesAdmin /> },
+      { path: '/cms_partials/*', element: <PageComponents.CmsPartialsAdmin /> },
+      { path: '/cms_files/*', element: <PageComponents.CmsFilesAdmin /> },
+      { path: '/cms_navigation_items/*', element: <PageComponents.NavigationItemsAdmin /> },
+      { path: '/cms_layouts/*', element: <PageComponents.CmsLayoutsAdmin /> },
+      { path: '/cms_variables/*', element: <PageComponents.CmsVariablesAdmin /> },
+      { path: '/cms_graphql_queries/*', element: <PageComponents.CmsGraphqlQueriesAdmin /> },
+      { path: '/cms_content_groups/*', element: <PageComponents.CmsContentGroupsAdmin /> },
+    ],
+  },
+  { path: '/oauth/applications-embed', element: <PageComponents.OAuthApplications /> },
+  { path: '/oauth/authorize', element: <PageComponents.OAuthAuthorizationPrompt /> },
+  { path: '/oauth/authorized_applications', element: <PageComponents.AuthorizedApplications /> },
+  { path: '/users/edit', element: <PageComponents.EditUser /> },
+  { path: '/users/password/edit', element: <PageComponents.ResetPassword /> },
+  { path: '/pages/*', element: <CmsPageBySlug /> },
+  { index: true, element: <PageComponents.CmsPage rootPage /> },
+];
 
-function renderConventionModeRoutes({
-  signupMode,
-  ticketMode,
-}: {
-  signupMode: SignupMode | undefined;
-  ticketMode: TicketMode | undefined | null;
-}) {
-  return [
-    <Route
-      path="/admin_event_proposals/*"
-      key="adminEventProposals"
-      element={<PageComponents.EventProposalsAdmin />}
-    />,
-    <Route path="/event_categories/*" key="eventCategories" element={<PageComponents.EventCategoryAdmin />}>
-      <Route path="new" element={<PageComponents.NewEventCategory />} />
-      <Route path=":id/edit" element={<PageComponents.EditEventCategory />} />
-      <Route path="" element={<PageComponents.EventCategoryIndex />} />
-    </Route>,
-    <Route path="/event_proposals/:id/edit" key="editEventProposal" element={<PageComponents.EditEventProposal />} />,
-    <Route path="/event_proposals" key="eventProposals" element={<Navigate to="/pages/new-proposal" replace />} />,
-    ...renderCommonInConventionRoutes({ signupMode, ticketMode }),
-  ];
-}
+const commonInConventionRoutes: RouteObject[] = [
+  { path: '/admin_departments/*', element: <PageComponents.DepartmentAdmin /> },
+  { path: '/admin_events/*', element: <PageComponents.EventAdmin /> },
+  { path: '/admin_forms/*', element: <PageComponents.FormAdmin /> },
+  { path: '/admin_notifications/*', element: <PageComponents.NotificationAdmin /> },
+  { path: '/admin_store/*', element: <PageComponents.StoreAdmin /> },
+  { path: '/cart', element: <PageComponents.Cart /> },
+  { path: '/clickwrap_agreement', element: <PageComponents.WrappedClickwrapAgreement /> },
+  { path: '/convention/edit', element: <PageComponents.ConventionAdmin /> },
+  { path: '/events/*', children: eventsRoutes },
+  { path: '/mailing_lists/*', element: <PageComponents.MailingLists /> },
+  { path: '/my_profile/*', element: <PageComponents.MyProfile /> },
+  { path: '/order_history', element: <PageComponents.OrderHistory /> },
+  { path: '/products/:id', element: <PageComponents.ProductPage /> },
+  { path: '/reports/*', element: <PageComponents.Reports /> },
+  { path: '/rooms', element: <PageComponents.RoomsAdmin /> },
+  {
+    element: <AppRootContextRouteGuard guard={({ signupMode }) => signupMode === SignupMode.Moderated} />,
+    children: [{ path: '/signup_moderation/*', element: <PageComponents.SignupModeration /> }],
+  },
+  { path: '/signup_rounds/*', element: <PageComponents.SignupRoundsAdmin /> },
+  { path: '/staff_positions/*', element: <PageComponents.StaffPositionAdmin /> },
+  { path: '/ticket/*', element: <PageComponents.MyTicket /> },
+  {
+    element: <AppRootContextRouteGuard guard={({ ticketMode }) => ticketMode === TicketMode.RequiredForSignup} />,
+    children: [{ path: '/ticket_types/*', element: <PageComponents.TicketTypeAdmin /> }],
+  },
+  { path: '/user_activity_alerts/*', element: <PageComponents.UserActivityAlertsAdmin /> },
+  { path: '/user_con_profiles/*', element: <PageComponents.UserConProfilesAdmin /> },
+  ...commonRoutes,
+];
 
-function renderSingleEventModeRoutes({
-  signupMode,
-  ticketMode,
-}: {
-  signupMode: SignupMode | undefined;
-  ticketMode: TicketMode | undefined | null;
-}) {
-  return [...renderCommonInConventionRoutes({ signupMode, ticketMode })];
-}
+const conventionModeRoutes: RouteObject[] = [
+  { path: '/admin_event_proposals/*', element: <PageComponents.EventProposalsAdmin /> },
+  {
+    path: '/event_categories/*',
+    element: <PageComponents.EventCategoryAdmin />,
+    children: [
+      { path: 'new', element: <PageComponents.NewEventCategory /> },
+      { path: ':id/edit', element: <PageComponents.EditEventCategory /> },
+      { path: '', element: <PageComponents.EventCategoryIndex /> },
+    ],
+  },
+  { path: '/event_proposals/:id/edit', element: <PageComponents.EditEventProposal /> },
+  { path: '/event_proposals', loader: () => replace('/pages/new-proposal') },
+  ...commonInConventionRoutes,
+];
 
-function renderRootSiteRoutes() {
-  return [
-    <Route path="/conventions/*" key="conventions" element={<PageComponents.RootSiteConventionsAdmin />}>
-      <Route path=":id" element={<PageComponents.ConventionDisplay />} />
-      <Route path="" element={<PageComponents.RootSiteConventionsAdminTable />} />
-    </Route>,
-    <Route path="/email_routes" key="emailRoutes" element={<PageComponents.RootSiteEmailRoutesAdmin />} />,
-    <Route path="/organizations/*" key="organizations" element={<PageComponents.OrganizationAdmin />}>
-      <Route path=":id/roles/new" element={<PageComponents.NewOrganizationRole />} />
-      <Route path=":organizationId/roles/:organizationRoleId/edit" element={<PageComponents.EditOrganizationRole />} />
-      <Route path=":id" element={<PageComponents.OrganizationDisplay />} />
-      <Route path="" element={<PageComponents.OrganizationIndex />} />
-    </Route>,
-    <Route path="/root_site" key="rootSite" element={<PageComponents.CmsAdmin />}>
-      <Route path="" element={<PageComponents.RootSiteAdmin />} />
-    </Route>,
-    <Route path="/users" key="usersAdmin" element={<PageComponents.UsersAdmin />}>
-      <Route path=":id" element={<PageComponents.UserAdminDisplay />} />
-      <Route path="" element={<PageComponents.UsersTable />} />
-    </Route>,
-    ...renderCommonRoutes(),
-  ];
-}
+const singleEventModeRoutes = [...commonInConventionRoutes];
+
+const rootSiteRoutes: RouteObject[] = [
+  {
+    path: '/conventions/*',
+    element: <PageComponents.RootSiteConventionsAdmin />,
+    children: [
+      { path: ':id', element: <PageComponents.ConventionDisplay /> },
+      { path: '', element: <PageComponents.RootSiteConventionsAdminTable /> },
+    ],
+  },
+  { path: '/email_routes', element: <PageComponents.RootSiteEmailRoutesAdmin /> },
+  {
+    path: '/organizations/*',
+    element: <PageComponents.OrganizationAdmin />,
+    children: [
+      { path: ':id/roles/new', element: <PageComponents.NewOrganizationRole /> },
+      { path: ':organizationId/roles/:organizationRoleId/edit', element: <PageComponents.EditOrganizationRole /> },
+      { path: ':id', element: <PageComponents.OrganizationDisplay /> },
+      { path: '', element: <PageComponents.OrganizationIndex /> },
+    ],
+  },
+  {
+    path: '/root_site',
+    element: <PageComponents.CmsAdmin />,
+    children: [{ path: '', element: <PageComponents.RootSiteAdmin /> }],
+  },
+  {
+    path: '/users',
+    element: <PageComponents.UsersAdmin />,
+    children: [{ path: ':id', element: <PageComponents.UserAdminDisplay /> }],
+  },
+];
+
+export const routes: RouteObject[] = [
+  {
+    element: (
+      <AppRootContextRouteGuard
+        guard={({ conventionName, siteMode }) => conventionName != null && siteMode !== SiteMode.SingleEvent}
+      />
+    ),
+    children: conventionModeRoutes,
+  },
+  {
+    element: (
+      <AppRootContextRouteGuard
+        guard={({ conventionName, siteMode }) => conventionName != null && siteMode === SiteMode.SingleEvent}
+      />
+    ),
+    children: singleEventModeRoutes,
+  },
+  {
+    element: <AppRootContextRouteGuard guard={({ conventionName }) => conventionName == null} />,
+    children: rootSiteRoutes,
+  },
+  { path: '*', element: <FourOhFourPage /> },
+];
 
 export type AppRouterProps = {
   alert?: ReactNode;
 };
 
 function AppRouter({ alert }: AppRouterProps): JSX.Element {
+  const { t } = useTranslation();
   const location = useLocation();
-  const { conventionName, signupMode, siteMode, ticketMode } = useContext(AppRootContext);
   const [showAlert, setShowAlert] = useState(alert != null);
 
   useEffect(() => {
     reloadOnAppEntrypointHeadersMismatch();
   }, [location.pathname]);
 
-  const renderRoutes = () => {
-    if (!conventionName) {
-      return renderRootSiteRoutes();
-    }
-
-    if (siteMode === 'single_event') {
-      return renderSingleEventModeRoutes({ signupMode, ticketMode });
-    }
-
-    return renderConventionModeRoutes({ signupMode, ticketMode });
-  };
-
   return (
     <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
       {showAlert && (
         <div className="alert alert-danger" role="alert">
-          <button type="button" className="btn-close" onClick={() => setShowAlert(false)} aria-label="Close">
+          <button
+            type="button"
+            className="btn-close"
+            onClick={() => setShowAlert(false)}
+            aria-label={t('buttons.close')}
+          >
             <span aria-hidden="true">×</span>
           </button>
           {alert}
         </div>
       )}
 
-      <Routes>{[...renderRoutes(), <Route key="fourOhFour" path="*" element={<FourOhFourPage />} />]}</Routes>
+      <Outlet />
     </Suspense>
   );
 }

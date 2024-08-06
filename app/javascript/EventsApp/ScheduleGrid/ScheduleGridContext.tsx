@@ -19,6 +19,8 @@ import {
 } from './queries.generated';
 import { FiniteTimespan } from '../../Timespan';
 import useMergeCategoriesIntoEvents from '../useMergeCategoriesIntoEvents';
+import { useLoaderData } from 'react-router';
+import { ConventionDayLoaderResult } from '../conventionDayUrls';
 
 const IS_MOBILE = ['iOS', 'Android OS'].includes(detect()?.os ?? '');
 
@@ -37,10 +39,15 @@ export type ScheduleGridContextValue = {
 };
 
 const skeletonScheduleGridConfig: ScheduleGridConfig = {
+  // eslint-disable-next-line i18next/no-literal-string
   key: 'skeleton',
+  // eslint-disable-next-line i18next/no-literal-string
   icon: 'bi-calendar3',
+  // eslint-disable-next-line i18next/no-literal-string
   titlei18nKey: 'schedule.skeletonTitle',
+  // eslint-disable-next-line i18next/no-literal-string
   classifyEventsBy: 'category',
+  // eslint-disable-next-line i18next/no-literal-string
   groupEventsBy: 'category',
 };
 
@@ -62,7 +69,7 @@ export const ScheduleGridContext = createContext<ScheduleGridContextValue>({
   convention: skeletonConvention,
   isRunDetailsVisible: () => false,
   visibleRunDetails: new Map<string, RunDetailsVisibilitySpec[]>(),
-   
+
   toggleRunDetailsVisibility: () => {},
 });
 
@@ -215,7 +222,7 @@ function getEventsQueryVariables(
 type ScheduleGridProviderTabContentProps = {
   config: ScheduleGridConfig;
   convention: ScheduleGridConventionDataQueryData['convention'];
-  children: (timespan: FiniteTimespan) => ReactNode;
+  children: ReactNode;
   timespan: FiniteTimespan;
   afterLoaded: () => void;
   filters?: EventFiltersInput;
@@ -260,7 +267,7 @@ function ScheduleGridProviderTabContent({
     <ScheduleGridContext.Provider value={providerValue}>
       <div className="position-relative">
         <LoadingOverlay loading={loading} />
-        {children(timespan)}
+        {children}
       </div>
     </ScheduleGridContext.Provider>
   );
@@ -289,6 +296,7 @@ export function ScheduleGridProvider({
   const filtersContextValue = { myRatingFilter, hideConflicts };
   const prefetchAll = IS_MOBILE;
   const client = useApolloClient();
+  const { matchingTimespan: timespan } = useLoaderData() as ConventionDayLoaderResult;
 
   const prefetchTimespan = useCallback(
     (timespan: FiniteTimespan) =>
@@ -317,7 +325,6 @@ export function ScheduleGridProvider({
   return (
     <ScheduleGridFiltersContext.Provider value={filtersContextValue}>
       {convention.pre_schedule_content_html && (
-         
         <div dangerouslySetInnerHTML={{ __html: convention.pre_schedule_content_html }} />
       )}
       <ConventionDayTabContainer
@@ -325,20 +332,18 @@ export function ScheduleGridProvider({
         conventionTimespan={conventionTimespan as FiniteTimespan} // TODO: make this work with infinite cons
         prefetchTimespan={prefetchTimespan}
       >
-        {(timespan) => (
-          <Suspense fallback={<ScheduleGridSkeleton />}>
-            <ScheduleGridProviderTabContent
-              config={config}
-              convention={convention}
-              fetchFormItemIdentifiers={fetchFormItemIdentifiers}
-              timespan={timespan}
-              afterLoaded={afterTabLoaded}
-              filters={filters}
-            >
-              {children}
-            </ScheduleGridProviderTabContent>
-          </Suspense>
-        )}
+        <Suspense fallback={<ScheduleGridSkeleton />}>
+          <ScheduleGridProviderTabContent
+            config={config}
+            convention={convention}
+            fetchFormItemIdentifiers={fetchFormItemIdentifiers}
+            timespan={timespan}
+            afterLoaded={afterTabLoaded}
+            filters={filters}
+          >
+            {children}
+          </ScheduleGridProviderTabContent>
+        </Suspense>
       </ConventionDayTabContainer>
     </ScheduleGridFiltersContext.Provider>
   );

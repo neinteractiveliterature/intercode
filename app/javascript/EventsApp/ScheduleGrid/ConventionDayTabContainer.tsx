@@ -1,49 +1,15 @@
-import { useCallback, useMemo, useContext } from 'react';
-import { NavLink, Routes, Route, useLocation, useNavigate, replace } from 'react-router-dom';
+import { useCallback, useMemo, useContext, ReactNode } from 'react';
+import { NavLink, useLocation } from 'react-router-dom';
 import { useApolloClient } from '@apollo/client';
-import { DateTime } from 'luxon';
 
 import { getConventionDayTimespans } from '../../TimespanUtils';
 import RefreshButton from './RefreshButton';
 import AppRootContext from '../../AppRootContext';
-import Timespan, { FiniteTimespan } from '../../Timespan';
+import { FiniteTimespan } from '../../Timespan';
 import { useAppDateTimeFormat } from '../../TimeUtils';
-import { SiteMode } from '../../graphqlTypes.generated';
-import { DateTimeFormatKey } from '../../DateTimeFormats';
 import { ScheduleGridEventsQueryDocument } from './queries.generated';
-
-function conventionDayUrlPortionFormat(
-  siteMode: SiteMode | undefined,
-  conventionTimespan: Timespan | undefined,
-): DateTimeFormatKey {
-  const conventionLengthInDays = conventionTimespan?.getLength('days');
-  if (siteMode === SiteMode.Convention && conventionLengthInDays && conventionLengthInDays.days < 7) {
-    // eslint-disable-next-line i18next/no-literal-string
-    return 'longWeekday';
-  }
-
-  // eslint-disable-next-line i18next/no-literal-string
-  return 'compactDate';
-}
-
-export function buildConventionDayUrlPortion(
-  dayStart: DateTime,
-  format: ReturnType<typeof useAppDateTimeFormat>,
-  siteMode: SiteMode | undefined,
-  conventionTimespan: Timespan | undefined,
-): string {
-  return format(dayStart, conventionDayUrlPortionFormat(siteMode, conventionTimespan)).toLowerCase();
-}
-
-export function useConventionDayUrlPortion(): (dayStart: DateTime) => string {
-  const format = useAppDateTimeFormat();
-  const { conventionTimespan, siteMode } = useContext(AppRootContext);
-
-  return useCallback(
-    (dayStart) => buildConventionDayUrlPortion(dayStart, format, siteMode, conventionTimespan),
-    [format, siteMode, conventionTimespan],
-  );
-}
+import { useConventionDayUrlPortion } from '../conventionDayUrls';
+import { useTranslation } from 'react-i18next';
 
 type ConventionDayTabProps = {
   basename: string;
@@ -79,7 +45,7 @@ function ConventionDayTab({ basename, timespan, prefetchTimespan }: ConventionDa
 export type ConventionDayTabContainerProps = {
   basename: string;
   conventionTimespan: FiniteTimespan;
-  children: (timespan: FiniteTimespan) => JSX.Element;
+  children: ReactNode;
   prefetchTimespan?: (timespan: FiniteTimespan) => Promise<unknown>;
   showExtendedCounts?: boolean;
 };
@@ -91,9 +57,9 @@ function ConventionDayTabContainer({
   children,
   showExtendedCounts,
 }: ConventionDayTabContainerProps): JSX.Element {
+  const { t } = useTranslation();
   const { timezoneName } = useContext(AppRootContext);
   const client = useApolloClient();
-  const conventionDayUrlPortion = useConventionDayUrlPortion();
   const refreshData = useCallback(
     () =>
       client.query({
@@ -110,7 +76,7 @@ function ConventionDayTabContainer({
   );
 
   if (!conventionTimespan.isFinite()) {
-    return <div className="alert alert-warning">Convention start/end dates have not yet been set.</div>;
+    return <div className="alert alert-warning">{t('schedule.conventionTimespanIsInfinite')}</div>;
   }
 
   return (
@@ -131,39 +97,9 @@ function ConventionDayTabContainer({
           <RefreshButton refreshData={refreshData} />
         </div>
       </div>
-      <Routes>
-        {conventionDayTimespans.map((timespan) => (
-          <Route
-            path={conventionDayUrlPortion(timespan.start)}
-            key={timespan.start.toISO()}
-            element={children(timespan)}
-          />
-        ))}
-        <Route
-          path="*"
-          loader={() => replace(`${basename}/${conventionDayUrlPortion(conventionDayTimespans[0].start)}`)}
-        />
-      </Routes>
+      {children}
     </div>
   );
-}
-
-type RedirectToFirstDayProps = {
-  basename: string;
-  conventionDayTimespans: FiniteTimespan[];
-};
-
-function RedirectToFirstDay({ basename, conventionDayTimespans }: RedirectToFirstDayProps) {
-  const conventionDayUrlPortion = useConventionDayUrlPortion();
-  const navigate = useNavigate();
-
-  // This deliberately gets called on every render of this component.  We have another URL-changing thing on this page
-  // that can fight with it (usePersonalScheduleFilters, which potentially sets the query portion of the URL).  If we
-  // don't call this on every render, and usePersonalScheduleFilters goes second, a logged-in user can wind up in a
-  // state where they're not on any tab.
-  navigate(`${basename}/${conventionDayUrlPortion(conventionDayTimespans[0].start)}`, { replace: true });
-
-  return <></>;
 }
 
 export default ConventionDayTabContainer;

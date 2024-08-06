@@ -1022,7 +1022,9 @@
     "confirmReset": "Are you sure? This will discard any unsaved changes."
   },
   "schedule": {
+    "conventionTimespanIsInfinite": "Convention start/end dates have not yet been set.",
     "goToEvent": "Go to event",
+    "gridConfigNotFound": "Schedule grid configuration “{{ configKey }}” not found",
     "legends": {
       "attendeeCounts": {
         "confirmed": "confirmed signups",
@@ -1059,6 +1061,7 @@
     },
     "skeletonTitle": "Please wait, loading schedule...",
     "timezoneMessage": "All times displayed in {{ offsetName }}.",
+    "unknownView": "Unknown schedule view: {{ scheduleView }}",
     "views": {
       "gridView": "Grid view",
       "gridViewByRoom": "Grid view by room",

@@ -11,7 +11,6 @@ import { FiniteTimespan } from '../../Timespan';
 import { timespanFromRun } from '../../TimespanUtils';
 import { useAppDateTimeFormat } from '../../TimeUtils';
 import usePageTitle from '../../usePageTitle';
-import { useConventionDayUrlPortion } from '../ScheduleGrid/ConventionDayTabContainer';
 import { PIXELS_PER_LANE } from '../ScheduleGrid/LayoutConstants';
 import { usePersonalScheduleFilters } from '../ScheduleGrid/PersonalScheduleFiltersBar';
 import { ScheduleGridConventionDataQueryData, useScheduleGridEventsQuery } from '../ScheduleGrid/queries.generated';
@@ -21,6 +20,7 @@ import RunListEventRun from './RunListEventRun';
 import { LoadQueryWithVariablesWrapper } from '../../GraphqlLoadingWrappers';
 import { EventFiltersInput } from '../../graphqlTypes.generated';
 import useMergeCategoriesIntoEvents from '../useMergeCategoriesIntoEvents';
+import { useConventionDayUrlPortion } from '../conventionDayUrls';
 
 // http://stackoverflow.com/questions/123999/how-to-tell-if-a-dom-element-is-visible-in-the-current-viewport
 function isElementInViewport(el: HTMLElement) {

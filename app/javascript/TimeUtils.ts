@@ -75,11 +75,20 @@ export function formatLCM(dateTime: DateTime, format: string, options?: LocaleOp
   return dateTime.toFormat(hackedFormat, options);
 }
 
+export function appDateTimeFormat(
+  t: TFunction,
+  dateTime: DateTime,
+  formatKey: DateTimeFormatKey,
+  options?: LocaleOptions,
+) {
+  return formatLCM(dateTime, getDateTimeFormat(formatKey, t), options);
+}
+
 export function useAppDateTimeFormat() {
   const { t } = useTranslation();
   const format = useCallback(
     (dateTime: DateTime, formatKey: DateTimeFormatKey, options?: LocaleOptions) =>
-      formatLCM(dateTime, getDateTimeFormat(formatKey, t), options),
+      appDateTimeFormat(t, dateTime, formatKey, options),
     [t],
   );
   return format;

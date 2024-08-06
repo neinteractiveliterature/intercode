@@ -7,7 +7,7 @@ import { ConventionForTimespanUtils, getConventionDayTimespans, timespanFromConv
 import RouteActivatedBreadcrumbItem from '../../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import AppRootContext from '../../AppRootContext';
 import { Run } from '../../graphqlTypes.generated';
-import { useConventionDayUrlPortion } from '../ScheduleGrid/ConventionDayTabContainer';
+import { useConventionDayUrlPortion } from '../conventionDayUrls';
 
 function findRunFromHash<RunType extends { id: string }>(runs: RunType[], hash?: string | null) {
   if (!hash) {

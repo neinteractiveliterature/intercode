@@ -1,9 +1,9 @@
-/* eslint-disable i18next/no-literal-string */
 import { RouteObject } from 'react-router';
 import PageComponents from './PageComponents';
 import AppRoot, { AppRootLayoutContent } from './AppRoot';
 import { preloadQuery } from './useIntercodeApolloClient';
 import { AppRootQueryData, AppRootQueryDocument, AppRootQueryVariables } from './appRootQueries.generated';
+import { routes } from './AppRouter';
 
 const appRootRoutes: RouteObject[] = [
   {
@@ -19,8 +19,8 @@ const appRootRoutes: RouteObject[] = [
         ],
       },
       {
-        path: '*',
         element: <AppRootLayoutContent />,
+        children: routes,
       },
     ],
   },
