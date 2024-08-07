@@ -51,24 +51,32 @@ class SignupBucketFinder
         movable_signup.bucket_key = destination_bucket.key
       end
 
-      @other_signups << FakeSignup.new(
-        run: signup_request.target_run,
-        state: "confirmed",
-        bucket_key: actual_bucket.key,
-        user_con_profile: signup_request.user_con_profile,
-        requested_bucket_key: signup_request.requested_bucket_key,
-        counted: actual_bucket.counted?
-      )
+      simulate_confirmed_signup(signup_request, actual_bucket)
     else
-      @other_signups << FakeSignup.new(
-        run: signup_request.target_run,
-        state: "waitlisted",
-        bucket_key: nil,
-        user_con_profile: signup_request.user_con_profile,
-        requested_bucket_key: signup_request.requested_bucket_key,
-        counted: false
-      )
+      simulate_waitlist(signup_request)
     end
+  end
+
+  def simulate_confirmed_signup(signup_request, actual_bucket)
+    @other_signups << FakeSignup.new(
+      run: signup_request.target_run,
+      state: "confirmed",
+      bucket_key: actual_bucket.key,
+      user_con_profile: signup_request.user_con_profile,
+      requested_bucket_key: signup_request.requested_bucket_key,
+      counted: actual_bucket.counted?
+    )
+  end
+
+  def simulate_waitlist(signup_request)
+    @other_signups << FakeSignup.new(
+      run: signup_request.target_run,
+      state: "waitlisted",
+      bucket_key: nil,
+      user_con_profile: signup_request.user_con_profile,
+      requested_bucket_key: signup_request.requested_bucket_key,
+      counted: false
+    )
   end
 
   def find_bucket
