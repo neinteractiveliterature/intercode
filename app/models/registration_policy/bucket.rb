@@ -65,7 +65,7 @@ class RegistrationPolicy::Bucket
 
   def signup_definitely_occupies_slot_in_bucket?(signup)
     case signup
-    when Signup
+    when Signup, SignupBucketFinder::FakeSignup
       signup.occupying_slot? && signup.bucket_key == key &&
         (
           not_counted? || signup.counted # don't count non-counted signups in a counted bucket

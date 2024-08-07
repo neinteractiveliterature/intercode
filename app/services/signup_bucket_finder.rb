@@ -1,37 +1,94 @@
 # frozen_string_literal: true
 class SignupBucketFinder
+  class FakeSignup
+    include ActiveModel::Model
+
+    attr_accessor :id, :state, :run, :bucket_key, :requested_bucket_key, :user_con_profile, :counted
+
+    def self.from_signup(signup)
+      new(
+        signup.attributes.with_indifferent_access.slice(
+          :id,
+          :state,
+          :run,
+          :bucket_key,
+          :requested_bucket_key,
+          :user_con_profile,
+          :counted
+        )
+      )
+    end
+
+    def attributes
+      { id:, state:, run:, bucket_key:, requested_bucket_key:, user_con_profile:, counted: }
+    end
+
+    def occupying_slot?
+      Signup::SLOT_OCCUPYING_STATES.include?(state)
+    end
+  end
+
   attr_reader :registration_policy, :other_signups, :requested_bucket_key, :allow_movement
 
   def initialize(registration_policy, requested_bucket_key, other_signups, allow_movement: true)
     @registration_policy = registration_policy
     @requested_bucket_key = requested_bucket_key
-    @other_signups = other_signups
     @allow_movement = allow_movement
+    @original_other_signups_by_id = other_signups.index_by(&:id)
+    @other_signups = other_signups.map { |signup| FakeSignup.from_signup(signup) }
+  end
+
+  def simulate_accepting_signup_request(signup_request)
+    accept_finder =
+      SignupBucketFinder.new(registration_policy, signup_request.requested_bucket_key, @other_signups, allow_movement:)
+    actual_bucket = accept_finder.find_bucket
+
+    if actual_bucket
+      if actual_bucket.full?(other_signups)
+        movable_signup = accept_finder.movable_signups_for_bucket(actual_bucket).first
+        destination_bucket =
+          accept_finder.no_preference_bucket_finder.prioritized_buckets_with_capacity_except(actual_bucket).first
+        movable_signup.bucket_key = destination_bucket.key
+      end
+
+      @other_signups << FakeSignup.new(
+        run: signup_request.target_run,
+        state: "confirmed",
+        bucket_key: actual_bucket.key,
+        user_con_profile: signup_request.user_con_profile,
+        requested_bucket_key: signup_request.requested_bucket_key,
+        counted: actual_bucket.counted?
+      )
+    else
+      @other_signups << FakeSignup.new(
+        run: signup_request.target_run,
+        state: "waitlisted",
+        bucket_key: nil,
+        user_con_profile: signup_request.user_con_profile,
+        requested_bucket_key: signup_request.requested_bucket_key,
+        counted: false
+      )
+    end
   end
 
   def find_bucket
+    # try not to bump people out of their signup buckets...
     @actual_bucket ||=
-      # This check is necessary because prioritized_buckets_with_capacity can't account for pending no-preference
-      # signup requests.  (It thinks they don't occupy any bucket, even though they will actually occupy a bucket, we
-      # just don't know which yet.)
-      if totally_full_including_signup_requests?
-        nil
-      else
-        # try not to bump people out of their signup buckets...
-        prioritized_buckets_with_capacity.first ||
-          # but do it if you have to
-          prioritized_buckets.find { |bucket| movable_signups_for_bucket(bucket).any? }
-      end
+      prioritized_buckets_with_capacity.first ||
+        # but do it if you have to
+        prioritized_buckets.find { |bucket| movable_signups_for_bucket(bucket).any? }
   end
 
   def movable_signups_for_bucket(bucket)
     return [] unless allow_movement
     return [] unless no_preference_bucket_finder.prioritized_buckets_with_capacity.any?
 
-    other_signups.select do |signup|
-      (signup.respond_to?(:bucket_key) && signup.bucket_key == bucket.key) &&
-        !(signup.respond_to?(:requested_bucket_key) && signup.requested_bucket_key)
-    end
+    fake_signups =
+      other_signups.select do |signup|
+        (signup.respond_to?(:bucket_key) && signup.bucket_key == bucket.key) &&
+          !(signup.respond_to?(:requested_bucket_key) && signup.requested_bucket_key)
+      end
+    fake_signups.filter_map { |fake_signup| @original_other_signups_by_id[fake_signup.id] }
   end
 
   def prioritized_buckets
@@ -73,7 +130,7 @@ class SignupBucketFinder
   def slot_occupying_signups
     @slot_occupying_signups ||=
       other_signups.select do |signup|
-        signup.is_a?(Signup) && signup.bucket.signup_definitely_occupies_slot_in_bucket?(signup)
+        signup.is_a?(Signup) && signup.bucket&.signup_definitely_occupies_slot_in_bucket?(signup)
       end
   end
 
