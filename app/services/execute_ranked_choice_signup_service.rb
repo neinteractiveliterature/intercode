@@ -61,9 +61,15 @@ class ExecuteRankedChoiceSignupService < CivilService::Service
   def find_bucket
     run = signup_ranked_choice.target_run
     existing_signups = run.signups.counted.occupying_slot.to_a
-    existing_signups += run.signup_requests.where(state: "pending").to_a if convention.signup_mode == "moderated"
     bucket_finder =
       SignupBucketFinder.new(run.registration_policy, signup_ranked_choice.requested_bucket_key, existing_signups)
+    if convention.signup_mode == "moderated"
+      run
+        .signup_requests
+        .where(state: "pending")
+        .find_each { |request| bucket_finder.simulate_accepting_signup_request(request) }
+    end
+
     bucket_finder.find_bucket
   end
 
@@ -84,6 +90,7 @@ class ExecuteRankedChoiceSignupService < CivilService::Service
       user_con_profile:,
       reason:,
       signup_ranked_choice:,
+      after_signup_ranked_choice:,
       extra:
     )
   end
@@ -101,6 +108,7 @@ class ExecuteRankedChoiceSignupService < CivilService::Service
       decision: :signup,
       user_con_profile:,
       signup_ranked_choice:,
+      after_signup_ranked_choice:,
       signup: result.signup,
       signup_request: result.signup_request
     )
@@ -119,8 +127,14 @@ class ExecuteRankedChoiceSignupService < CivilService::Service
       decision: :waitlist,
       user_con_profile:,
       signup_ranked_choice:,
+      after_signup_ranked_choice:,
       signup: result.signup,
       signup_request: result.signup_request
     )
+  end
+
+  def after_signup_ranked_choice
+    @after_signup_ranked_choice ||=
+      user_con_profile.signup_ranked_choices.where("priority > ?", signup_ranked_choice.priority).order(:priority).first
   end
 end

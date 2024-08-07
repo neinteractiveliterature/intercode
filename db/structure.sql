@@ -2314,7 +2314,8 @@ CREATE TABLE public.ranked_choice_decisions (
     extra jsonb,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
-    signup_round_id bigint NOT NULL
+    signup_round_id bigint NOT NULL,
+    after_signup_ranked_choice_id bigint
 );
 
 
@@ -4739,6 +4740,13 @@ CREATE INDEX index_products_on_provides_ticket_type_id ON public.products USING 
 
 
 --
+-- Name: index_ranked_choice_decisions_on_after_signup_ranked_choice_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ranked_choice_decisions_on_after_signup_ranked_choice_id ON public.ranked_choice_decisions USING btree (after_signup_ranked_choice_id);
+
+
+--
 -- Name: index_ranked_choice_decisions_on_signup_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -5609,6 +5617,14 @@ ALTER TABLE ONLY public.event_categories
 
 
 --
+-- Name: ranked_choice_decisions fk_rails_870c17dde9; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ranked_choice_decisions
+    ADD CONSTRAINT fk_rails_870c17dde9 FOREIGN KEY (after_signup_ranked_choice_id) REFERENCES public.signup_ranked_choices(id) ON DELETE SET NULL;
+
+
+--
 -- Name: maximum_event_provided_tickets_overrides fk_rails_889a5603de; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6103,6 +6119,7 @@ ALTER TABLE ONLY public.cms_files_pages
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20240807155222'),
 ('20240717150224'),
 ('20240620014115'),
 ('20240608175912'),

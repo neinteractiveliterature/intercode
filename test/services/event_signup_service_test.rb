@@ -41,7 +41,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
     let(:convention) { create(:convention, :with_notification_templates, ticket_mode: "disabled") }
 
     it "signs the user up for an event" do
-      result = subject.call
+      result = subject.call!
       assert result.success?
       assert result.signup.confirmed?
     end
@@ -51,7 +51,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
     let(:convention) { create(:convention, :with_notification_templates, ticket_mode: "ticket_per_event") }
 
     it "signs the user up for an event with a ticket purchase hold" do
-      result = subject.call
+      result = subject.call!
       assert result.success?
       assert result.signup.ticket_purchase_hold?
       assert result.signup.expires_at
@@ -64,7 +64,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
 
     it "signs the user up for an event and emails them a confirmation" do
       perform_enqueued_jobs do
-        result = subject.call
+        result = subject.call!
         assert result.success?
         assert result.signup.confirmed?
 
@@ -88,7 +88,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
             requested_bucket_key,
             user,
             suppress_confirmation: true
-          ).call
+          ).call!
         assert result.success?
 
         assert_equal 1, ActionMailer::Base.deliveries.size
@@ -121,7 +121,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
       setup { create(:team_member, event:, user_con_profile:) }
 
       it "signs up a team member as not counted" do
-        result = subject.call
+        result = subject.call!
 
         assert result.success?
         assert result.signup.confirmed?
@@ -133,7 +133,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
       it "does not care whether signups are open yet" do
         create(:signup_round, convention:, maximum_event_signups: "not_yet")
 
-        result = subject.call
+        result = subject.call!
         assert result.success?
         assert result.signup.confirmed?
       end
@@ -142,7 +142,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
     it "allows signups if the user has not yet reached the current signup limit" do
       create(:signup_round, convention:, maximum_event_signups: "1")
 
-      result = subject.call
+      result = subject.call!
       assert result.success?
       assert result.signup.confirmed?
     end
@@ -154,7 +154,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
       another_run = create(:run, event: another_event, starts_at: the_run.ends_at)
       create(:signup, counted: false, user_con_profile:, run: another_run)
 
-      result = subject.call
+      result = subject.call!
       assert result.success?
       assert result.signup.confirmed?
     end
@@ -190,7 +190,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
       another_run = create(:run, event: another_event, starts_at: the_run.ends_at)
       create(:signup, state: "withdrawn", user_con_profile:, run: another_run)
 
-      result = subject.call
+      result = subject.call!
       assert result.success?
       assert result.signup.confirmed?
     end
@@ -270,7 +270,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
         other_signup_service = EventSignupService.new(user_con_profile, other_run, requested_bucket_key, user)
         assert other_signup_service.call.success?
 
-        result = subject.call
+        result = subject.call!
         assert result.success?
       end
 
@@ -280,7 +280,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
 
         event.update!(can_play_concurrently: true)
 
-        result = subject.call
+        result = subject.call!
         assert result.success?
       end
 
@@ -314,7 +314,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
       let(:requested_bucket_key) { :cats }
 
       it "will sign the user up into that bucket" do
-        result = subject.call
+        result = subject.call!
         assert result.success?
         assert result.signup.confirmed?
         assert_equal "cats", result.signup.bucket_key
@@ -324,7 +324,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
       it "will fall back to the anything bucket if necessary" do
         2.times { create_other_signup "cats" }
 
-        result = subject.call
+        result = subject.call!
         assert result.success?
         assert result.signup.confirmed?
         assert_equal "anything", result.signup.bucket_key
@@ -459,7 +459,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
           _immovable_signup = create_other_signup "cats"
           movable_signup = create_other_signup "cats", requested_bucket_key: nil
 
-          result = subject.call
+          result = subject.call!
           assert result.success?
           assert result.signup.confirmed?
           assert_equal "cats", result.signup.requested_bucket_key
@@ -475,7 +475,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
           _immovable_signup = create_other_signup "cats"
           movable_signup = create_other_signup "cats", requested_bucket_key: nil
 
-          result = subject.call
+          result = subject.call!
           assert result.success?
           assert result.signup.confirmed?
           assert_equal "cats", result.signup.requested_bucket_key
@@ -492,7 +492,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
           _immovable_signup = create_other_signup "cats"
           movable_signup = create_other_signup "cats", requested_bucket_key: nil
 
-          result = subject.call
+          result = subject.call!
           assert result.success?
           assert result.signup.waitlisted?
           assert_equal "cats", result.signup.requested_bucket_key
@@ -509,7 +509,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
           3.times { create_other_signup "cats", counted: false }
           4.times { create_other_signup "anything" }
 
-          result = subject.call
+          result = subject.call!
 
           assert result.success?
           assert result.signup.confirmed?
@@ -549,7 +549,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
       let(:requested_bucket_key) { :npc }
 
       it "will sign the user up into that bucket" do
-        result = subject.call
+        result = subject.call!
         assert result.success?
         assert result.signup.confirmed?
         refute result.signup.counted?
@@ -559,10 +559,21 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
 
       it "will not use anything buckets" do
         create_other_signup("npc")
-        result = subject.call
+        result = subject.call!
         assert result.success?
         assert result.signup.waitlisted?
         assert_nil result.signup.bucket_key
+        assert_equal "npc", result.signup.requested_bucket_key
+      end
+
+      it "will still sign the user up if the run is otherwise full" do
+        create_other_signup("pc")
+        4.times { create_other_signup("anything") }
+        result = subject.call!
+        assert result.success?
+        assert result.signup.confirmed?
+        refute result.signup.counted?
+        assert_equal "npc", result.signup.bucket_key
         assert_equal "npc", result.signup.requested_bucket_key
       end
 
@@ -571,7 +582,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
         it "will not put no-preference signups into the not-counted bucket" do
           create_other_signup("pc")
           4.times { create_other_signup("anything") }
-          result = subject.call
+          result = subject.call!
           assert result.success?
           assert result.signup.waitlisted?
           assert_nil result.signup.bucket_key
@@ -631,7 +642,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
     it "automatically deletes any ranked choices the user has for this run/bucket" do
       signup_ranked_choice = create(:signup_ranked_choice, user_con_profile:, target_run: the_run)
 
-      result = subject.call
+      result = subject.call!
 
       assert result.success?
       assert_equal 0, SignupRankedChoice.where(id: signup_ranked_choice.id).count

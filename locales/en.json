@@ -120,6 +120,10 @@
       "acceptPrompt": "Please confirm you want to accept this signup request.  This will attempt to sign {{ name }} up for {{ eventTitle }} as {{ bucketDescription }}. If there is no space in the requested bucket, the attendee will either be signed up in a flex bucket, if possible, or waitlisted.",
       "acceptPromptActions": "This will automatically email both the attendee and the event team to let them know about the signup.",
       "bucketHeader": "Bucket:",
+      "createSignups": {
+        "attendeeLabel": "Attendee",
+        "eventLabel": "Event"
+      },
       "decisionDescription": "{{ round }}: {{ decision }}",
       "headers": {
         "actions": "Actions",
