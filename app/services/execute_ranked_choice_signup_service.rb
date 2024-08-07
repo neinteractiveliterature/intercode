@@ -90,6 +90,7 @@ class ExecuteRankedChoiceSignupService < CivilService::Service
       user_con_profile:,
       reason:,
       signup_ranked_choice:,
+      after_signup_ranked_choice:,
       extra:
     )
   end
@@ -107,6 +108,7 @@ class ExecuteRankedChoiceSignupService < CivilService::Service
       decision: :signup,
       user_con_profile:,
       signup_ranked_choice:,
+      after_signup_ranked_choice:,
       signup: result.signup,
       signup_request: result.signup_request
     )
@@ -125,8 +127,14 @@ class ExecuteRankedChoiceSignupService < CivilService::Service
       decision: :waitlist,
       user_con_profile:,
       signup_ranked_choice:,
+      after_signup_ranked_choice:,
       signup: result.signup,
       signup_request: result.signup_request
     )
+  end
+
+  def after_signup_ranked_choice
+    @after_signup_ranked_choice ||=
+      user_con_profile.signup_ranked_choices.where("priority > ?", signup_ranked_choice.priority).order(:priority).first
   end
 end
