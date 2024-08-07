@@ -8,10 +8,15 @@ import AppRootContext from '../AppRootContext';
 import { SignupAutomationMode } from '../graphqlTypes.generated';
 import { useTranslation } from 'react-i18next';
 import RankedChoiceQueue from './RankedChoiceQueue';
+import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 
 function SignupModeration(): JSX.Element {
   const { signupAutomationMode } = useContext(AppRootContext);
   const { t } = useTranslation();
+  const replacementContent = useAuthorizationRequired('can_manage_signups');
+  if (replacementContent) {
+    return replacementContent;
+  }
 
   return (
     <>
