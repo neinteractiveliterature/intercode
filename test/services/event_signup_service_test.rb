@@ -566,6 +566,17 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
         assert_equal "npc", result.signup.requested_bucket_key
       end
 
+      it "will still sign the user up if the run is otherwise full" do
+        create_other_signup("pc")
+        4.times { create_other_signup("anything") }
+        result = subject.call
+        assert result.success?
+        assert result.signup.confirmed?
+        refute result.signup.counted?
+        assert_equal "npc", result.signup.bucket_key
+        assert_equal "npc", result.signup.requested_bucket_key
+      end
+
       describe "no-preference signups" do
         let(:requested_bucket_key) { nil }
         it "will not put no-preference signups into the not-counted bucket" do

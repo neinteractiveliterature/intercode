@@ -84,6 +84,7 @@ class SignupBucketFinder
 
   def totally_full_including_signup_requests?
     return false if registration_policy.slots_unlimited?
+    return false if requested_bucket&.not_counted?
 
     slot_occupying_signups.size + pending_signup_requests.size >= registration_policy.total_slots
   end
