@@ -9,6 +9,10 @@ import FourOhFourPage from './FourOhFourPage';
 import { SignupMode, SiteMode, TicketMode } from './graphqlTypes.generated';
 import AppRootContext, { AppRootContextValue } from './AppRootContext';
 import { eventsRoutes } from './EventsApp';
+import NewCmsLayout from './CmsAdmin/CmsLayoutsAdmin/NewCmsLayout';
+import CmsLayoutsAdminTable from './CmsAdmin/CmsLayoutsAdmin/CmsLayoutsAdminTable';
+import NewCmsPage from './CmsAdmin/CmsPagesAdmin/NewCmsPage';
+import CmsPagesAdminTable from './CmsAdmin/CmsPagesAdmin/CmsPagesAdminTable';
 
 function CmsPageBySlug() {
   // react-router 6 doesn't allow slashes in params, so we're going to do our own parsing here
@@ -31,18 +35,71 @@ export function AppRootContextRouteGuard({ guard }: AppRootContextRouteGuardProp
   }
 }
 
+function NonCMSPageWrapper() {
+  return (
+    <div className="non-cms-page">
+      <Outlet />
+    </div>
+  );
+}
+
+const cmsPageRoutes: RouteObject[] = [
+  { path: '/pages/*', element: <CmsPageBySlug /> },
+  { index: true, element: <PageComponents.CmsPage rootPage /> },
+];
+
 const commonRoutes: RouteObject[] = [
   {
     element: <PageComponents.CmsAdmin />,
     children: [
-      { path: '/cms_pages/*', element: <PageComponents.CmsPagesAdmin /> },
-      { path: '/cms_partials/*', element: <PageComponents.CmsPartialsAdmin /> },
+      {
+        path: '/cms_pages/*',
+        children: [
+          { path: ':id/edit', element: <PageComponents.EditCmsPage /> },
+          { path: ':id/view_source', element: <PageComponents.ViewCmsPageSource /> },
+          { path: 'new', element: <NewCmsPage /> },
+          { path: '', element: <CmsPagesAdminTable /> },
+        ],
+      },
+      {
+        path: '/cms_partials/*',
+        children: [
+          { path: ':id/edit', element: <PageComponents.EditCmsPartial /> },
+          { path: ':id/view_source', element: <PageComponents.ViewCmsPartialSource /> },
+          { path: 'new', element: <PageComponents.NewCmsPartial /> },
+          { path: '', element: <PageComponents.CmsPartialsAdminTable /> },
+        ],
+      },
       { path: '/cms_files/*', element: <PageComponents.CmsFilesAdmin /> },
       { path: '/cms_navigation_items/*', element: <PageComponents.NavigationItemsAdmin /> },
-      { path: '/cms_layouts/*', element: <PageComponents.CmsLayoutsAdmin /> },
+      {
+        path: '/cms_layouts/*',
+        children: [
+          { path: ':id/edit', element: <PageComponents.EditCmsLayout /> },
+          { path: ':id/view_source', element: <PageComponents.ViewCmsLayoutSource /> },
+          { path: 'new', element: <NewCmsLayout /> },
+          { path: '', element: <CmsLayoutsAdminTable /> },
+        ],
+      },
       { path: '/cms_variables/*', element: <PageComponents.CmsVariablesAdmin /> },
-      { path: '/cms_graphql_queries/*', element: <PageComponents.CmsGraphqlQueriesAdmin /> },
-      { path: '/cms_content_groups/*', element: <PageComponents.CmsContentGroupsAdmin /> },
+      {
+        path: '/cms_graphql_queries/*',
+        children: [
+          { path: ':id/edit', element: <PageComponents.EditCmsGraphqlQuery /> },
+          { path: ':id/view_source', element: <PageComponents.ViewCmsGraphqlQuerySource /> },
+          { path: 'new', element: <PageComponents.NewCmsGraphqlQuery /> },
+          { path: '', element: <PageComponents.CmsGraphqlQueriesAdminTable /> },
+        ],
+      },
+      {
+        path: '/cms_content_groups/*',
+        children: [
+          { path: ':id/edit', element: <PageComponents.EditCmsContentGroup /> },
+          { path: 'new', element: <PageComponents.NewCmsContentGroup /> },
+          { path: ':id', element: <PageComponents.ViewCmsContentGroup /> },
+          { path: '', element: <PageComponents.CmsContentGroupsAdminTable /> },
+        ],
+      },
     ],
   },
   { path: '/oauth/applications-embed', element: <PageComponents.OAuthApplications /> },
@@ -50,8 +107,6 @@ const commonRoutes: RouteObject[] = [
   { path: '/oauth/authorized_applications', element: <PageComponents.AuthorizedApplications /> },
   { path: '/users/edit', element: <PageComponents.EditUser /> },
   { path: '/users/password/edit', element: <PageComponents.ResetPassword /> },
-  { path: '/pages/*', element: <CmsPageBySlug /> },
-  { index: true, element: <PageComponents.CmsPage rootPage /> },
 ];
 
 const commonInConventionRoutes: RouteObject[] = [
@@ -61,7 +116,7 @@ const commonInConventionRoutes: RouteObject[] = [
   { path: '/admin_notifications/*', element: <PageComponents.NotificationAdmin /> },
   { path: '/admin_store/*', element: <PageComponents.StoreAdmin /> },
   { path: '/cart', element: <PageComponents.Cart /> },
-  { path: '/clickwrap_agreement', element: <PageComponents.WrappedClickwrapAgreement /> },
+  { path: '/clickwrap_agreement', element: <PageComponents.ClickwrapAgreement /> },
   { path: '/convention/edit', element: <PageComponents.ConventionAdmin /> },
   { path: '/events/*', children: eventsRoutes },
   { path: '/mailing_lists/*', element: <PageComponents.MailingLists /> },
@@ -138,25 +193,31 @@ const rootSiteRoutes: RouteObject[] = [
 
 export const routes: RouteObject[] = [
   {
-    element: (
-      <AppRootContextRouteGuard
-        guard={({ conventionName, siteMode }) => conventionName != null && siteMode !== SiteMode.SingleEvent}
-      />
-    ),
-    children: conventionModeRoutes,
+    element: <NonCMSPageWrapper />,
+    children: [
+      {
+        element: (
+          <AppRootContextRouteGuard
+            guard={({ conventionName, siteMode }) => conventionName != null && siteMode !== SiteMode.SingleEvent}
+          />
+        ),
+        children: conventionModeRoutes,
+      },
+      {
+        element: (
+          <AppRootContextRouteGuard
+            guard={({ conventionName, siteMode }) => conventionName != null && siteMode === SiteMode.SingleEvent}
+          />
+        ),
+        children: singleEventModeRoutes,
+      },
+      {
+        element: <AppRootContextRouteGuard guard={({ conventionName }) => conventionName == null} />,
+        children: rootSiteRoutes,
+      },
+    ],
   },
-  {
-    element: (
-      <AppRootContextRouteGuard
-        guard={({ conventionName, siteMode }) => conventionName != null && siteMode === SiteMode.SingleEvent}
-      />
-    ),
-    children: singleEventModeRoutes,
-  },
-  {
-    element: <AppRootContextRouteGuard guard={({ conventionName }) => conventionName == null} />,
-    children: rootSiteRoutes,
-  },
+  ...cmsPageRoutes,
   { path: '*', element: <FourOhFourPage /> },
 ];
 

@@ -1,9 +1,10 @@
 import { Outlet } from 'react-router-dom';
-import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
+import { LoadQueryWrapper, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import { useCmsAdminBaseQuery } from './queries.generated';
 import { BootstrapNavLink } from '../UIComponents/BootstrapNavLink';
+import { Suspense } from 'react';
 
 export default LoadQueryWrapper(useCmsAdminBaseQuery, function CmsAdmin({ data }): JSX.Element {
   const authorizationWarning = useAuthorizationRequired('can_manage_any_cms_content');
@@ -50,7 +51,9 @@ export default LoadQueryWrapper(useCmsAdminBaseQuery, function CmsAdmin({ data }
 
       <br />
 
-      <Outlet />
+      <Suspense fallback={<PageLoadingIndicator visible />}>
+        <Outlet />
+      </Suspense>
     </>
   );
 });

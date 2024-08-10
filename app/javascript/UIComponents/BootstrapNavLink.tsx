@@ -11,7 +11,7 @@ export type BootstrapNavLinkProps = {
 
 export function BootstrapNavLink({ path, children, icon }: BootstrapNavLinkProps) {
   const pathOnly = useMemo(() => new URL(path, window.location.href).pathname, [path]);
-  const pathOnlyMatch = useMatch(pathOnly);
+  const pathOnlyMatch = useMatch(`${pathOnly.replace(/\/$/, '')}/*`);
 
   return (
     <li className="nav-item">

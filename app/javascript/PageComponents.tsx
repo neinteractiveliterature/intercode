@@ -4,40 +4,21 @@ import ClickwrapAgreement from './ClickwrapAgreement';
 import CmsPage from './CmsPage';
 import { lazyWithAppEntrypointHeadersCheck } from './checkAppEntrypointHeadersMatch';
 
-function getDisplayName(WrappedComponent: React.ComponentType) {
-  return WrappedComponent.displayName || WrappedComponent.name || 'Component';
-}
-
-function NonCMSPageWrapper<TProps extends JSX.IntrinsicAttributes>(
-  WrappedComponent: React.ComponentType<TProps>,
-): React.FunctionComponent<TProps> {
-  const wrapper = (props: TProps) => (
-    <div className="non-cms-page">
-      <WrappedComponent {...props} />
-    </div>
-  );
-  wrapper.displayName = `NonCMSPageWrapper(${getDisplayName(WrappedComponent)})`;
-  return wrapper;
-}
-
 const UnwrappedNonCMSPageComponents = {
   AuthorizedApplications: () =>
     import(/* webpackChunkName: "authorized-applications" */ './OAuth/AuthorizedApplications'),
   Cart: () => import(/* webpackChunkName: "store" */ './Store/Cart'),
   CmsAdmin: () => import(/* webpackChunkName: "cms-admin" */ './CmsAdmin'),
-  CmsContentGroupsAdmin: () =>
-    import(/* webpackChunkName: "cms-content-groups-admin" */ './CmsAdmin/CmsContentGroupsAdmin'),
+  CmsContentGroupsAdminTable: () =>
+    import(/* webpackChunkName: "cms-admin" */ './CmsAdmin/CmsContentGroupsAdmin/CmsContentGroupsAdminTable'),
   CmsFilesAdmin: () => import(/* webpackChunkName: "cms-files-admin" */ './CmsAdmin/CmsFilesAdmin'),
-  CmsGraphqlQueriesAdmin: () =>
-    import(/* webpackChunkName: "cms-graphql-queries-admin" */ './CmsAdmin/CmsGraphqlQueriesAdmin'),
-  CmsLayoutsAdmin: () => import(/* webpackChunkName: "cms-layouts-admin" */ './CmsAdmin/CmsLayoutsAdmin'),
-  CmsPagesAdmin: () => import(/* webpackChunkName: "cms-pages-admin" */ './CmsAdmin/CmsPagesAdmin'),
-  CmsPartialsAdmin: () => import(/* webpackChunkName: "cms-partials-admin" */ './CmsAdmin/CmsPartialsAdmin'),
   CmsVariablesAdmin: () => import(/* webpackChunkName: "cms-variables-admin" */ './CmsAdmin/CmsVariablesAdmin'),
   ConventionAdmin: () => import(/* webpackChunkName: "convention-admin" */ './ConventionAdmin'),
   ConventionDisplay: () =>
     import(/* webpackChunkName: "root-site-conventions-admin" */ './RootSiteConventionsAdmin/ConventionDisplay'),
   DepartmentAdmin: () => import(/* webpackChunkName: "department-admin" */ './DepartmentAdmin'),
+  EditCmsContentGroup: () =>
+    import(/* webpackChunkName: "cms-admin" */ './CmsAdmin/CmsContentGroupsAdmin/EditCmsContentGroup'),
   EditEventCategory: () =>
     import(/* webpackChunkName: "event-category-admin" */ './EventCategoryAdmin/EditEventCategory'),
   EditOrganizationRole: () =>
@@ -49,7 +30,6 @@ const UnwrappedNonCMSPageComponents = {
     import(/* webpackChunkName: "event-category-admin" */ './EventCategoryAdmin/EventCategoryIndex'),
   EventProposalsAdmin: () =>
     import(/* webpackChunkName: "event-proposals-admin" */ './EventProposals/EventProposalsAdmin'),
-  EventsApp: () => import(/* webpackChunkName: "events-app" */ './EventsApp'),
   EditEventProposal: () => import(/* webpackChunkName: "edit-event-proposal" */ './EventProposals/EditEventProposal'),
   FormAdmin: () => import(/* webpackChunkName: "form-admin" */ './FormAdmin'),
   FormEditor: () => import(/* webpackChunkName: "form-editor" */ './FormAdmin/FormEditor'),
@@ -60,6 +40,8 @@ const UnwrappedNonCMSPageComponents = {
   MyTicket: () => import(/* webpackChunkName: 'my-ticket' */ './MyTicket'),
   NavigationItemsAdmin: () =>
     import(/* webpackChunkName: "navigation-items-admin" */ './CmsAdmin/NavigationItemsAdmin'),
+  NewCmsContentGroup: () =>
+    import(/* webpackChunkName: "cms-admin" */ './CmsAdmin/CmsContentGroupsAdmin/NewCmsContentGroup'),
   NewEventCategory: () =>
     import(/* webpackChunkName: "event-category-admin" */ './EventCategoryAdmin/NewEventCategory'),
   NewOrganizationRole: () =>
@@ -98,23 +80,50 @@ const UnwrappedNonCMSPageComponents = {
   UserAdminDisplay: () => import(/* webpackChunkName: "users-admin" */ './Users/UserAdminDisplay'),
   UsersAdmin: () => import(/* webpackChunkName: "users-admin" */ './Users/UsersAdmin'),
   UsersTable: () => import(/* webpackChunkName: "users-admin" */ './Users/UsersTable'),
+  ViewCmsContentGroup: () =>
+    import(/* webpackChunkName: "cms-admin" */ './CmsAdmin/CmsContentGroupsAdmin/ViewCmsContentGroup'),
+
+  CmsGraphqlQueriesAdminTable: () =>
+    import(/* webpackChunkName: "cms-admin" */ './CmsAdmin/CmsGraphqlQueriesAdmin/CmsGraphqlQueriesAdminTable'),
+  EditCmsGraphqlQuery: () =>
+    import(/* webpackChunkName: "cms-admin" */ './CmsAdmin/CmsGraphqlQueriesAdmin/EditCmsGraphqlQuery'),
+  NewCmsGraphqlQuery: () =>
+    import(/* webpackChunkName: "cms-admin" */ './CmsAdmin/CmsGraphqlQueriesAdmin/NewCmsGraphqlQuery'),
+  ViewCmsGraphqlQuerySource: () =>
+    import(/* webpackChunkName: "cms-admin" */ './CmsAdmin/CmsGraphqlQueriesAdmin/ViewCmsGraphqlQuerySource'),
+
+  CmsLayoutsAdminTable: () =>
+    import(/* webpackChunkName: "cms-admin" */ './CmsAdmin/CmsLayoutsAdmin/CmsLayoutsAdminTable'),
+  EditCmsLayout: () => import(/* webpackChunkName: "cms-admin" */ './CmsAdmin/CmsLayoutsAdmin/EditCmsLayout'),
+  NewCmsLayout: () => import(/* webpackChunkName: "cms-admin" */ './CmsAdmin/CmsLayoutsAdmin/NewCmsLayout'),
+  ViewCmsLayoutSource: () =>
+    import(/* webpackChunkName: "cms-admin" */ './CmsAdmin/CmsLayoutsAdmin/ViewCmsLayoutSource'),
+
+  CmsPagesAdminTable: () => import(/* webpackChunkName: "cms-admin" */ './CmsAdmin/CmsPagesAdmin/CmsPagesAdminTable'),
+  EditCmsPage: () => import(/* webpackChunkName: "cms-admin" */ './CmsAdmin/CmsPagesAdmin/EditCmsPage'),
+  NewCmsPage: () => import(/* webpackChunkName: "cms-admin" */ './CmsAdmin/CmsPagesAdmin/NewCmsPage'),
+  ViewCmsPageSource: () => import(/* webpackChunkName: "cms-admin" */ './CmsAdmin/CmsPagesAdmin/ViewCmsPageSource'),
+
+  CmsPartialsAdminTable: () =>
+    import(/* webpackChunkName: "cms-admin" */ './CmsAdmin/CmsPartialsAdmin/CmsPartialsAdminTable'),
+  EditCmsPartial: () => import(/* webpackChunkName: "cms-admin" */ './CmsAdmin/CmsPartialsAdmin/EditCmsPartial'),
+  NewCmsPartial: () => import(/* webpackChunkName: "cms-admin" */ './CmsAdmin/CmsPartialsAdmin/NewCmsPartial'),
+  ViewCmsPartialSource: () =>
+    import(/* webpackChunkName: "cms-admin" */ './CmsAdmin/CmsPartialsAdmin/ViewCmsPartialSource'),
 };
 
-const NonCMSPageComponents: Record<
-  keyof typeof UnwrappedNonCMSPageComponents | 'WrappedClickwrapAgreement',
-  React.ComponentType
-> = {
+const NonCMSPageComponents: Record<keyof typeof UnwrappedNonCMSPageComponents, React.ComponentType> = {
   ...(Object.fromEntries(
     Object.entries(UnwrappedNonCMSPageComponents).map(([name, component]) => [
       name,
-      NonCMSPageWrapper(lazyWithAppEntrypointHeadersCheck(component)),
+      lazyWithAppEntrypointHeadersCheck(component),
     ]),
-  ) as Record<keyof typeof UnwrappedNonCMSPageComponents, React.ComponentType>),
-  WrappedClickwrapAgreement: NonCMSPageWrapper(ClickwrapAgreement),
+  ) as Record<keyof typeof UnwrappedNonCMSPageComponents, React.LazyExoticComponent<React.ComponentType>>),
 };
 
 const PageComponents = {
   ...NonCMSPageComponents,
+  ClickwrapAgreement,
   CmsPage,
 };
 
