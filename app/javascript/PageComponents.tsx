@@ -16,7 +16,6 @@ const UnwrappedNonCMSPageComponents = {
   ConventionAdmin: () => import(/* webpackChunkName: "convention-admin" */ './ConventionAdmin'),
   ConventionDisplay: () =>
     import(/* webpackChunkName: "root-site-conventions-admin" */ './RootSiteConventionsAdmin/ConventionDisplay'),
-  DepartmentAdmin: () => import(/* webpackChunkName: "department-admin" */ './DepartmentAdmin'),
   EditCmsContentGroup: () =>
     import(/* webpackChunkName: "cms-admin" */ './CmsAdmin/CmsContentGroupsAdmin/EditCmsContentGroup'),
   EditEventCategory: () =>
@@ -110,6 +109,11 @@ const UnwrappedNonCMSPageComponents = {
   NewCmsPartial: () => import(/* webpackChunkName: "cms-admin" */ './CmsAdmin/CmsPartialsAdmin/NewCmsPartial'),
   ViewCmsPartialSource: () =>
     import(/* webpackChunkName: "cms-admin" */ './CmsAdmin/CmsPartialsAdmin/ViewCmsPartialSource'),
+
+  DepartmentAdminIndex: () =>
+    import(/* webpackChunkName: "department-admin" */ './DepartmentAdmin/DepartmentAdminIndex'),
+  EditDepartment: () => import(/* webpackChunkName: "department-admin" */ './DepartmentAdmin/EditDepartment'),
+  NewDepartment: () => import(/* webpackChunkName: "department-admin" */ './DepartmentAdmin/NewDepartment'),
 };
 
 const NonCMSPageComponents: Record<keyof typeof UnwrappedNonCMSPageComponents, React.ComponentType> = {

@@ -13,6 +13,7 @@ import NewCmsLayout from './CmsAdmin/CmsLayoutsAdmin/NewCmsLayout';
 import CmsLayoutsAdminTable from './CmsAdmin/CmsLayoutsAdmin/CmsLayoutsAdminTable';
 import NewCmsPage from './CmsAdmin/CmsPagesAdmin/NewCmsPage';
 import CmsPagesAdminTable from './CmsAdmin/CmsPagesAdmin/CmsPagesAdminTable';
+import useAuthorizationRequired, { AbilityName } from './Authentication/useAuthorizationRequired';
 
 function CmsPageBySlug() {
   // react-router 6 doesn't allow slashes in params, so we're going to do our own parsing here
@@ -33,6 +34,18 @@ export function AppRootContextRouteGuard({ guard }: AppRootContextRouteGuardProp
   } else {
     return <FourOhFourPage />;
   }
+}
+
+type AuthorizationRequiredRouteGuardProps = {
+  abilities: AbilityName[];
+};
+
+function AuthorizationRequiredRouteGuard({ abilities }: AuthorizationRequiredRouteGuardProps) {
+  const authorizationWarning = useAuthorizationRequired(...abilities);
+
+  if (authorizationWarning) return authorizationWarning;
+
+  return <Outlet />;
 }
 
 function NonCMSPageWrapper() {
@@ -110,7 +123,15 @@ const commonRoutes: RouteObject[] = [
 ];
 
 const commonInConventionRoutes: RouteObject[] = [
-  { path: '/admin_departments/*', element: <PageComponents.DepartmentAdmin /> },
+  {
+    path: '/admin_departments/*',
+    element: <AuthorizationRequiredRouteGuard abilities={['can_update_departments']} />,
+    children: [
+      { path: ':id/edit', element: <PageComponents.EditDepartment /> },
+      { path: 'new', element: <PageComponents.NewDepartment /> },
+      { path: '', element: <PageComponents.DepartmentAdminIndex /> },
+    ],
+  },
   { path: '/admin_events/*', element: <PageComponents.EventAdmin /> },
   { path: '/admin_forms/*', element: <PageComponents.FormAdmin /> },
   { path: '/admin_notifications/*', element: <PageComponents.NotificationAdmin /> },

@@ -11,8 +11,8 @@ export function AuthorizationError() {
   return <div className="alert alert-danger">{t('errors.unauthorized')}</div>;
 }
 
-type AbilityType = AppRootContextValue['currentAbility'];
-type AbilityName = keyof AbilityType;
+export type AbilityType = AppRootContextValue['currentAbility'];
+export type AbilityName = keyof AbilityType;
 
 export function useAuthorizationRequiredWithoutLogin(...abilities: AbilityName[]): JSX.Element | false {
   const { currentAbility } = useContext(AppRootContext);
