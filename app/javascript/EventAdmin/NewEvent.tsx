@@ -35,7 +35,7 @@ function runIsCreatable(run: RunForRunFormFields): run is Omit<RunForRunFormFiel
   return run.starts_at != null;
 }
 
-export default LoadQueryWrapper(useEventAdminEventsQuery, function NewEvent({ data }) {
+export const Component = LoadQueryWrapper(useEventAdminEventsQuery, function NewEvent({ data }) {
   const convention = data.convention;
   const navigate = useNavigate();
   const { eventCategoryId: eventCategoryIdParam } = useParams<{ eventCategoryId: string }>();
@@ -81,7 +81,7 @@ export default LoadQueryWrapper(useEventAdminEventsQuery, function NewEvent({ da
   });
   usePageTitle('New event');
 
-  const donePath = convention.site_mode === 'single_event' ? '/' : buildEventCategoryUrl(eventCategory) ?? '/';
+  const donePath = convention.site_mode === 'single_event' ? '/' : (buildEventCategoryUrl(eventCategory) ?? '/');
 
   const createEvent = async () => {
     if (!validateForm() || !runIsCreatable(run) || !eventCategory) {

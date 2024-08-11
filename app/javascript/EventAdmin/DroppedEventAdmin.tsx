@@ -4,7 +4,7 @@ import usePageTitle from '../usePageTitle';
 import { useEventAdminEventsQuery } from './queries.generated';
 import { useRestoreDroppedEventMutation } from './mutations.generated';
 
-export default LoadQueryWrapper(useEventAdminEventsQuery, function DroppedEventAdmin({ data }): JSX.Element {
+export const Component = LoadQueryWrapper(useEventAdminEventsQuery, function DroppedEventAdmin({ data }): JSX.Element {
   const [restoreDroppedEvent] = useRestoreDroppedEventMutation();
   const confirm = useConfirm();
 

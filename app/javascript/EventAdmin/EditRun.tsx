@@ -1,52 +1,65 @@
-import { useEffect, useMemo, useState } from 'react';
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate, useLocation, LoaderFunction, useLoaderData } from 'react-router-dom';
 
 import EditRunModal, { EditingRun } from './EditRunModal';
 import buildEventCategoryUrl from './buildEventCategoryUrl';
-import { EventAdminEventsQueryData, EventFieldsFragment } from './queries.generated';
+import {
+  EventAdminEventsQueryData,
+  EventAdminEventsQueryDocument,
+  useEventAdminEventsQuerySuspenseQuery,
+} from './queries.generated';
+import { client } from '../useIntercodeApolloClient';
 
-export type EditRunProps = {
-  convention: EventAdminEventsQueryData['convention'];
-  events: EventFieldsFragment[];
+type LoaderResult = {
+  initialRun: EditingRun;
+  event: EventAdminEventsQueryData['convention']['events'][number];
 };
 
-function EditRun({ convention, events }: EditRunProps): JSX.Element {
-  const params = useParams<{ eventId: string; runId: string }>();
-  const location = useLocation();
+export const loader: LoaderFunction = async ({ request, params: { eventId, runId } }) => {
+  const {
+    data: { convention },
+  } = await client.query<EventAdminEventsQueryData>({ query: EventAdminEventsQueryDocument });
+  const events = convention.events;
+  const event = events.find((e) => e.id.toString() === eventId);
+
+  console.log(new URL(request.url).pathname);
+  if (new URL(request.url).pathname.endsWith('/new')) {
+    const initialRun: EditingRun = {
+      __typename: 'Run',
+      id: '',
+      my_signups: [],
+      my_signup_requests: [],
+      my_signup_ranked_choices: [],
+      starts_at: undefined,
+      title_suffix: undefined,
+      schedule_note: undefined,
+      rooms: [],
+      room_names: [],
+      confirmed_signup_count: 0,
+      not_counted_signup_count: 0,
+      grouped_signup_counts: [],
+    };
+
+    return { initialRun, event } as LoaderResult;
+  }
+
+  const initialRun = event?.runs.find((r) => r.id === runId) as EditingRun;
+
+  if (initialRun) {
+    return { event, initialRun } as LoaderResult;
+  } else {
+    return new Response(null, { status: 404 });
+  }
+};
+
+function EditRun(): JSX.Element {
   const navigate = useNavigate();
-  const event = useMemo(() => {
-    if (params.eventId == null) {
-      return undefined;
-    }
+  const location = useLocation();
+  const {
+    data: { convention },
+  } = useEventAdminEventsQuerySuspenseQuery();
 
-    return events.find((e) => e.id.toString() === params.eventId);
-  }, [params.eventId, events]);
-
-  const initialRun: EditingRun | undefined = useMemo(() => {
-    if (!event) {
-      return undefined;
-    }
-
-    if (location.pathname.endsWith('/new')) {
-      return {
-        __typename: 'Run',
-        id: '',
-        my_signups: [],
-        my_signup_requests: [],
-        my_signup_ranked_choices: [],
-        starts_at: undefined,
-        title_suffix: undefined,
-        schedule_note: undefined,
-        rooms: [],
-        room_names: [],
-        confirmed_signup_count: 0,
-        not_counted_signup_count: 0,
-        grouped_signup_counts: [],
-      };
-    }
-
-    return event.runs.find((r) => r.id === params.runId);
-  }, [location.pathname, params.runId, event]);
+  const { event, initialRun } = useLoaderData() as LoaderResult;
 
   const cancelEditing = () => {
     if (!event) {
@@ -86,4 +99,4 @@ function EditRun({ convention, events }: EditRunProps): JSX.Element {
   );
 }
 
-export default EditRun;
+export const Component = EditRun;

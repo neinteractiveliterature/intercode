@@ -1,27 +1,22 @@
 import { useEffect, useMemo, useState } from 'react';
-import { NavLink, Route, Routes, Navigate, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, Outlet, LoaderFunction, useLoaderData } from 'react-router-dom';
 import classNames from 'classnames';
-import { LoadQueryWrapper, useLitformPopperWithAutoClosing } from '@neinteractiveliterature/litform';
+import { useLitformPopperWithAutoClosing } from '@neinteractiveliterature/litform';
 
-import DroppedEventAdmin from './DroppedEventAdmin';
-import EventAdminEditEvent from './EventAdminEditEvent';
-import EventAdminRunsTable from './EventAdminRunsTable';
-import NewEvent from './NewEvent';
-import RecurringEventAdmin from './RecurringEventAdmin';
 import sortEventCategories from './sortEventCategories';
-import buildEventCategoryUrl, { buildEventCategoryUrlPortion } from './buildEventCategoryUrl';
-import SingleRunEventAdminList from './SingleRunEventAdminList';
+import buildEventCategoryUrl from './buildEventCategoryUrl';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
-import { useEventAdminEventsQuery } from './queries.generated';
+import { EventAdminEventsQueryData, EventAdminEventsQueryDocument } from './queries.generated';
 import humanize from '../humanize';
+import { client } from '../useIntercodeApolloClient';
 
-const adminComponentsBySchedulingUi = {
-  regular: EventAdminRunsTable,
-  recurring: RecurringEventAdmin,
-  single_run: SingleRunEventAdminList,
+export const loader: LoaderFunction = async () => {
+  const { data } = await client.query<EventAdminEventsQueryData>({ query: EventAdminEventsQueryDocument });
+  return data;
 };
 
-export default LoadQueryWrapper(useEventAdminEventsQuery, function EventAdmin({ data }) {
+function EventAdmin() {
+  const data = useLoaderData() as EventAdminEventsQueryData;
   const authorizationWarning = useAuthorizationRequired('can_manage_runs');
   const location = useLocation();
 
@@ -41,27 +36,6 @@ export default LoadQueryWrapper(useEventAdminEventsQuery, function EventAdmin({ 
   }, [location.pathname]);
 
   if (authorizationWarning) return authorizationWarning;
-
-  if (data.convention.site_mode === 'single_event') {
-    if (data.convention.events.length === 0) {
-      return (
-        <Routes>
-          <Route path="new" element={<NewEvent />} />
-          <Route path="" element={<Navigate to="./new" replace />} />
-        </Routes>
-      );
-    }
-
-    return (
-      <Routes>
-        <Route
-          path=":id/edit"
-          element={<EventAdminEditEvent convention={data.convention} currentAbility={data.currentAbility} />}
-        />
-        <Route path="" element={<Navigate to={`./${data.convention.events[0].id}/edit`} replace />} />
-      </Routes>
-    );
-  }
 
   return (
     <>
@@ -101,28 +75,9 @@ export default LoadQueryWrapper(useEventAdminEventsQuery, function EventAdmin({ 
         </li>
       </ul>
 
-      <Routes>
-        <Route path={`:eventCategoryId/new`} element={<NewEvent />} />
-        {eventCategories.map((eventCategory) => {
-          const AdminComponent = adminComponentsBySchedulingUi[eventCategory.scheduling_ui];
-
-          return (
-            <Route
-              key={eventCategory.id}
-              path={`${buildEventCategoryUrlPortion(eventCategory)}/*`}
-              element={<AdminComponent eventCategoryId={eventCategory.id} />}
-            />
-          );
-        })}
-        <Route
-          path=":id/edit"
-          element={<EventAdminEditEvent convention={data.convention} currentAbility={data.currentAbility} />}
-        />
-        <Route path="dropped_events" element={<DroppedEventAdmin />} />
-        {eventCategories.length > 0 && (
-          <Route path="" element={<Navigate to={buildEventCategoryUrl(eventCategories[0])} replace />} />
-        )}
-      </Routes>
+      <Outlet />
     </>
   );
-});
+}
+
+export const Component = EventAdmin;

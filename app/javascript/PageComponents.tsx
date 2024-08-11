@@ -23,7 +23,6 @@ const UnwrappedNonCMSPageComponents = {
   EditOrganizationRole: () =>
     import(/* webpackChunkName: "organization-admin" */ './OrganizationAdmin/EditOrganizationRole'),
   EditUser: () => import(/* webpackChunkName: "authentication-forms" */ './Authentication/EditUser'),
-  EventAdmin: () => import(/* webpackChunkName: "event-admin" */ './EventAdmin'),
   EventCategoryAdmin: () => import(/* webpackChunkName: "event-category-admin" */ './EventCategoryAdmin'),
   EventCategoryIndex: () =>
     import(/* webpackChunkName: "event-category-admin" */ './EventCategoryAdmin/EventCategoryIndex'),

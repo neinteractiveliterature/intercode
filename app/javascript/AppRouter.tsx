@@ -1,5 +1,5 @@
 import { useState, Suspense, useEffect, ReactNode, useContext } from 'react';
-import { useLocation, RouteObject, replace, Outlet } from 'react-router-dom';
+import { useLocation, RouteObject, replace, Outlet, LoaderFunction, redirect } from 'react-router-dom';
 import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
 import { useTranslation } from 'react-i18next';
 
@@ -14,6 +14,9 @@ import CmsLayoutsAdminTable from './CmsAdmin/CmsLayoutsAdmin/CmsLayoutsAdminTabl
 import NewCmsPage from './CmsAdmin/CmsPagesAdmin/NewCmsPage';
 import CmsPagesAdminTable from './CmsAdmin/CmsPagesAdmin/CmsPagesAdminTable';
 import useAuthorizationRequired, { AbilityName } from './Authentication/useAuthorizationRequired';
+import { EventAdminEventsQueryData, EventAdminEventsQueryDocument } from './EventAdmin/queries.generated';
+import { client } from './useIntercodeApolloClient';
+import buildEventCategoryUrl from './EventAdmin/buildEventCategoryUrl';
 
 function CmsPageBySlug() {
   // react-router 6 doesn't allow slashes in params, so we're going to do our own parsing here
@@ -47,6 +50,28 @@ function AuthorizationRequiredRouteGuard({ abilities }: AuthorizationRequiredRou
 
   return <Outlet />;
 }
+
+const eventAdminRootRedirect: LoaderFunction = async () => {
+  const { data } = await client.query<EventAdminEventsQueryData>({ query: EventAdminEventsQueryDocument });
+  if (!data.convention) {
+    return new Response(null, { status: 404 });
+  }
+
+  if (data.convention.site_mode === SiteMode.SingleEvent) {
+    if (data.convention.events.length === 0) {
+      return redirect('./new');
+    } else {
+      return redirect(`./${data.convention.events[0].id}/edit`);
+    }
+  }
+
+  const firstEventCategory = data.convention.event_categories[0];
+  if (!firstEventCategory) {
+    return new Response(null, { status: 404 });
+  }
+
+  return redirect(buildEventCategoryUrl(firstEventCategory));
+};
 
 function NonCMSPageWrapper() {
   return (
@@ -132,7 +157,32 @@ const commonInConventionRoutes: RouteObject[] = [
       { path: '', element: <PageComponents.DepartmentAdminIndex /> },
     ],
   },
-  { path: '/admin_events/*', element: <PageComponents.EventAdmin /> },
+  {
+    path: '/admin_events/*',
+    lazy: () => import('./EventAdmin'),
+    children: [
+      {
+        element: <AppRootContextRouteGuard guard={({ siteMode }) => siteMode !== SiteMode.SingleEvent} />,
+        children: [
+          { path: ':eventCategoryId/new', lazy: () => import('./EventAdmin/NewEvent') },
+          { path: 'dropped_events', lazy: () => import('./EventAdmin/DroppedEventAdmin') },
+          {
+            path: ':eventCategoryId',
+            lazy: () => import('./EventAdmin/CategorySpecificEventAdmin'),
+            children: [
+              { path: ':eventId/runs/:runId/edit', lazy: () => import('./EventAdmin/EditRun') },
+              { path: ':eventId/runs/new', lazy: () => import('./EventAdmin/EditRun') },
+            ],
+          },
+        ],
+      },
+      { path: ':id/edit', lazy: () => import('./EventAdmin/EventAdminEditEvent') },
+      {
+        path: '',
+        loader: eventAdminRootRedirect,
+      },
+    ],
+  },
   { path: '/admin_forms/*', element: <PageComponents.FormAdmin /> },
   { path: '/admin_notifications/*', element: <PageComponents.NotificationAdmin /> },
   { path: '/admin_store/*', element: <PageComponents.StoreAdmin /> },
