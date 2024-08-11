@@ -1,22 +1,16 @@
 import { useCallback } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform';
+import { useNavigate, useParams, useRouteLoaderData } from 'react-router-dom';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import TicketForm from './TicketForm';
 import usePageTitle from '../usePageTitle';
-import { useUserConProfileAdminQuery } from './queries.generated';
+import { UserConProfileAdminQueryData } from './queries.generated';
 import { useUpdateTicketMutation } from './mutations.generated';
 import { TicketInput } from '../graphqlTypes.generated';
+import { NamedRoute } from '../AppRouter';
 
-function useUserConProfileAdminQueryFromParams() {
-  const userConProfileId = useParams<{ id: string }>().id;
-  if (userConProfileId == null) {
-    throw new Error('userConProfileId not found in params');
-  }
-  return useUserConProfileAdminQuery({ variables: { id: userConProfileId } });
-}
-
-export default LoadQueryWrapper(useUserConProfileAdminQueryFromParams, function EditTicket({ data }) {
+function EditTicket() {
+  const data = useRouteLoaderData(NamedRoute.AdminUserConProfile) as UserConProfileAdminQueryData;
   const userConProfileId = useParams<{ id: string }>().id;
   const navigate = useNavigate();
   const [updateTicket] = useUpdateTicketMutation();
@@ -64,4 +58,6 @@ export default LoadQueryWrapper(useUserConProfileAdminQueryFromParams, function 
       />
     </>
   );
-});
+}
+
+export const Component = EditTicket;

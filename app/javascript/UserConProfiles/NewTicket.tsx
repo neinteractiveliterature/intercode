@@ -1,33 +1,21 @@
 import { useCallback } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
+import { useNavigate, useRouteLoaderData } from 'react-router-dom';
 
 import TicketForm from './TicketForm';
 import usePageTitle from '../usePageTitle';
-import {
-  UserConProfileAdminQueryData,
-  UserConProfileAdminQueryDocument,
-  useUserConProfileAdminQuery,
-} from './queries.generated';
+import { UserConProfileAdminQueryData, UserConProfileAdminQueryDocument } from './queries.generated';
 import { useCreateTicketMutation } from './mutations.generated';
 import { TicketInput } from '../graphqlTypes.generated';
+import { NamedRoute } from '../AppRouter';
 
-function useUserConProfileAdminQueryFromParams() {
-  const userConProfileId = useParams<{ id: string }>().id;
-  if (userConProfileId == null) {
-    throw new Error('userConProfileId not found in params');
-  }
-  return useUserConProfileAdminQuery({ variables: { id: userConProfileId } });
-}
-
-export default LoadQueryWrapper(useUserConProfileAdminQueryFromParams, function NewTicket({ data }) {
-  const userConProfileId = useParams<{ id: string }>().id;
+function NewTicket() {
+  const data = useRouteLoaderData(NamedRoute.AdminUserConProfile) as UserConProfileAdminQueryData;
   const navigate = useNavigate();
   const [createTicket] = useCreateTicketMutation({
     update: (cache, result) => {
       const cacheData = cache.readQuery<UserConProfileAdminQueryData>({
         query: UserConProfileAdminQueryDocument,
-        variables: { id: userConProfileId },
+        variables: { id: data.convention.user_con_profile.id },
       });
       if (!cacheData) {
         return;
@@ -35,7 +23,7 @@ export default LoadQueryWrapper(useUserConProfileAdminQueryFromParams, function 
 
       cache.writeQuery<UserConProfileAdminQueryData>({
         query: UserConProfileAdminQueryDocument,
-        variables: { id: userConProfileId },
+        variables: { id: data.convention.user_con_profile.id },
         data: {
           ...cacheData,
           convention: {
@@ -52,18 +40,18 @@ export default LoadQueryWrapper(useUserConProfileAdminQueryFromParams, function 
 
   const onSubmit = useCallback(
     async (ticketInput: TicketInput) => {
-      if (userConProfileId == null) {
+      if (data.convention.user_con_profile.id == null) {
         throw new Error('userConProfileId not found in params');
       }
       await createTicket({
         variables: {
-          userConProfileId,
+          userConProfileId: data.convention.user_con_profile.id,
           ticket: ticketInput,
         },
       });
-      navigate(`/user_con_profiles/${userConProfileId}`);
+      navigate(`/user_con_profiles/${data.convention.user_con_profile.id}`);
     },
-    [createTicket, navigate, userConProfileId],
+    [createTicket, navigate, data.convention.user_con_profile.id],
   );
 
   usePageTitle(`New ${data.convention.ticket_name} for ${data.convention.user_con_profile.name}`);
@@ -92,4 +80,6 @@ export default LoadQueryWrapper(useUserConProfileAdminQueryFromParams, function 
       />
     </>
   );
-});
+}
+
+export const Component = NewTicket;

@@ -1,28 +1,31 @@
 import { useState, useCallback } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { LoaderFunction, useLoaderData, useNavigate } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
-import { ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import buildFormStateFromData from './buildFormStateFromData';
 import UserConProfileForm from './UserConProfileForm';
 import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
 import {
-  useUserConProfileQuery,
   UserConProfileAdminQueryData,
   UserConProfileAdminQueryDocument,
+  UserConProfileQueryData,
+  UserConProfileQueryDocument,
 } from './queries.generated';
 import { useUpdateUserConProfileMutation } from './mutations.generated';
+import { client } from '../useIntercodeApolloClient';
 
-function useUserConProfileQueryFromParams() {
-  const id = useParams<{ id: string }>().id;
-  if (id == null) {
-    throw new Error('id not found in params');
-  }
-  return useUserConProfileQuery({ variables: { id } });
-}
+export const loader: LoaderFunction = async ({ params: { id } }) => {
+  const { data } = await client.query<UserConProfileQueryData>({
+    query: UserConProfileQueryDocument,
+    variables: { id },
+  });
+  return data;
+};
 
-export default LoadQueryWrapper(useUserConProfileQueryFromParams, function EditUserConProfile({ data }) {
+function EditUserConProfile() {
+  const data = useLoaderData() as UserConProfileQueryData;
   const navigate = useNavigate();
   const {
     userConProfile: initialUserConProfile,
@@ -96,4 +99,6 @@ export default LoadQueryWrapper(useUserConProfileQueryFromParams, function EditU
       <ErrorDisplay graphQLError={updateError as ApolloError} />
     </div>
   );
-});
+}
+
+export const Component = EditUserConProfile;

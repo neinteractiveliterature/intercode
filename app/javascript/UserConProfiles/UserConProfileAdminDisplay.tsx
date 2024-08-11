@@ -1,28 +1,22 @@
 import { useMemo, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import {
-  useConfirm,
-  useModal,
-  ErrorDisplay,
-  PageLoadingIndicator,
-  BootstrapFormTextarea,
-} from '@neinteractiveliterature/litform';
+import { Link, useNavigate, useParams, useRouteLoaderData } from 'react-router-dom';
+import { useConfirm, useModal, ErrorDisplay, BootstrapFormTextarea } from '@neinteractiveliterature/litform';
 import upperFirst from 'lodash/upperFirst';
 
 import FormItemDisplay from '../FormPresenter/ItemDisplays/FormItemDisplay';
 import TicketAdminSection from './TicketAdminSection';
 import UserConProfileSignupsCard from '../EventsApp/SignupAdmin/UserConProfileSignupsCard';
 import usePageTitle from '../usePageTitle';
-import useValueUnless from '../useValueUnless';
 import Gravatar from '../Gravatar';
 import { useDeleteUserConProfileMutation } from './mutations.generated';
-import { useUserConProfileAdminQuery } from './queries.generated';
+import { UserConProfileAdminQueryData } from './queries.generated';
 import deserializeFormResponse from '../Models/deserializeFormResponse';
 import { getSortedParsedFormItems } from '../Models/Form';
 import humanize from '../humanize';
 import Modal from 'react-bootstrap4-modal';
 import useAsyncFunction from '../useAsyncFunction';
 import { Trans, useTranslation } from 'react-i18next';
+import { NamedRoute } from '../AppRouter';
 
 async function becomeUser(userConProfileId: string, justification: string) {
   const formData = new FormData();
@@ -108,22 +102,14 @@ function UserConProfileAdminDisplay(): JSX.Element {
     throw new Error('userConProfileId not found in params');
   }
   const navigate = useNavigate();
-  const { data, loading, error } = useUserConProfileAdminQuery({
-    variables: { id: userConProfileId },
-  });
-  const formItems = useMemo(
-    () => (loading || error || !data ? [] : getSortedParsedFormItems(data.convention.user_con_profile_form)),
-    [data, loading, error],
-  );
-  const formResponse = useMemo(
-    () => (loading || error || !data ? null : deserializeFormResponse(data.convention.user_con_profile)),
-    [data, loading, error],
-  );
+  const data = useRouteLoaderData(NamedRoute.AdminUserConProfile) as UserConProfileAdminQueryData;
+  const formItems = useMemo(() => getSortedParsedFormItems(data.convention.user_con_profile_form), [data]);
+  const formResponse = useMemo(() => deserializeFormResponse(data.convention.user_con_profile), [data]);
   const confirm = useConfirm();
   const [deleteUserConProfile] = useDeleteUserConProfileMutation();
   const becomeUserModal = useModal<{ userConProfileId: string; userConProfileName: string }>();
 
-  usePageTitle(useValueUnless(() => data?.convention.user_con_profile.name, error || loading));
+  usePageTitle(data.convention.user_con_profile.name);
 
   const deleteConfirmed = async () => {
     if (!data) {
@@ -233,14 +219,6 @@ function UserConProfileAdminDisplay(): JSX.Element {
     return <UserConProfileSignupsCard userConProfileId={data.convention.user_con_profile.id} showWithdrawFromAll />;
   };
 
-  if (loading) {
-    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
   if (!data) {
     return <ErrorDisplay stringError={t('errors.noData')} />;
   }
@@ -288,4 +266,4 @@ function UserConProfileAdminDisplay(): JSX.Element {
   );
 }
 
-export default UserConProfileAdminDisplay;
+export const Component = UserConProfileAdminDisplay;

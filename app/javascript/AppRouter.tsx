@@ -18,6 +18,10 @@ import { EventAdminEventsQueryData, EventAdminEventsQueryDocument } from './Even
 import { client } from './useIntercodeApolloClient';
 import buildEventCategoryUrl from './EventAdmin/buildEventCategoryUrl';
 
+export enum NamedRoute {
+  AdminUserConProfile = 'AdminUserConProfile',
+}
+
 function CmsPageBySlug() {
   // react-router 6 doesn't allow slashes in params, so we're going to do our own parsing here
   const location = useLocation();
@@ -208,7 +212,30 @@ const commonInConventionRoutes: RouteObject[] = [
     children: [{ path: '/ticket_types/*', element: <PageComponents.TicketTypeAdmin /> }],
   },
   { path: '/user_activity_alerts/*', element: <PageComponents.UserActivityAlertsAdmin /> },
-  { path: '/user_con_profiles/*', element: <PageComponents.UserConProfilesAdmin /> },
+  {
+    path: '/user_con_profiles/*',
+    element: <AuthorizationRequiredRouteGuard abilities={['can_read_user_con_profiles']} />,
+    children: [
+      { path: 'new', lazy: () => import('./UserConProfiles/AttendeesPage') },
+      {
+        path: ':id',
+        id: NamedRoute.AdminUserConProfile,
+        lazy: () => import('./UserConProfiles/userConProfileLoader'),
+        children: [
+          {
+            path: 'admin_ticket',
+            children: [
+              { path: 'new', lazy: () => import('./UserConProfiles/NewTicket') },
+              { path: 'edit', lazy: () => import('./UserConProfiles/EditTicket') },
+            ],
+          },
+          { path: 'edit', lazy: () => import('./UserConProfiles/EditUserConProfile') },
+          { path: '', lazy: () => import('./UserConProfiles/UserConProfileAdminDisplay') },
+        ],
+      },
+      { path: '', lazy: () => import('./UserConProfiles/AttendeesPage') },
+    ],
+  },
   ...commonRoutes,
 ];
 
@@ -225,10 +252,9 @@ const conventionModeRoutes: RouteObject[] = [
   },
   { path: '/event_proposals/:id/edit', element: <PageComponents.EditEventProposal /> },
   { path: '/event_proposals', loader: () => replace('/pages/new-proposal') },
-  ...commonInConventionRoutes,
 ];
 
-const singleEventModeRoutes = [...commonInConventionRoutes];
+const singleEventModeRoutes: RouteObject[] = [];
 
 const rootSiteRoutes: RouteObject[] = [
   {
@@ -284,6 +310,10 @@ export const routes: RouteObject[] = [
           />
         ),
         children: singleEventModeRoutes,
+      },
+      {
+        element: <AppRootContextRouteGuard guard={({ conventionName }) => conventionName != null} />,
+        children: commonInConventionRoutes,
       },
       {
         element: <AppRootContextRouteGuard guard={({ conventionName }) => conventionName == null} />,
