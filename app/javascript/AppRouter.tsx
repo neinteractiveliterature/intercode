@@ -20,6 +20,8 @@ import buildEventCategoryUrl from './EventAdmin/buildEventCategoryUrl';
 
 export enum NamedRoute {
   AdminUserConProfile = 'AdminUserConProfile',
+  EditUserActivityAlert = 'EditUserActivityAlert',
+  UserActivityAlerts = 'UserActivityAlerts',
 }
 
 function CmsPageBySlug() {
@@ -211,7 +213,20 @@ const commonInConventionRoutes: RouteObject[] = [
     element: <AppRootContextRouteGuard guard={({ ticketMode }) => ticketMode === TicketMode.RequiredForSignup} />,
     children: [{ path: '/ticket_types/*', element: <PageComponents.TicketTypeAdmin /> }],
   },
-  { path: '/user_activity_alerts/*', element: <PageComponents.UserActivityAlertsAdmin /> },
+  {
+    path: '/user_activity_alerts/*',
+    id: NamedRoute.UserActivityAlerts,
+    lazy: () => import('./UserActivityAlerts/UserActivityAlertsAdmin'),
+    children: [
+      { path: 'new', lazy: () => import('./UserActivityAlerts/NewUserActivityAlert') },
+      {
+        path: ':id/edit',
+        id: NamedRoute.EditUserActivityAlert,
+        lazy: () => import('./UserActivityAlerts/EditUserActivityAlert'),
+      },
+      { path: '', lazy: () => import('./UserActivityAlerts/UserActivityAlertsList') },
+    ],
+  },
   {
     path: '/user_con_profiles/*',
     element: <AuthorizationRequiredRouteGuard abilities={['can_read_user_con_profiles']} />,

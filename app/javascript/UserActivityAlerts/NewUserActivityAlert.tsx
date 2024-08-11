@@ -1,24 +1,18 @@
 import { useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useRouteLoaderData } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
-import {
-  LoadQueryWrapper,
-  ErrorDisplay,
-  useCreateMutationWithReferenceArrayUpdater,
-} from '@neinteractiveliterature/litform';
+import { ErrorDisplay, useCreateMutationWithReferenceArrayUpdater } from '@neinteractiveliterature/litform';
 
 import buildUserActivityAlertInput from './buildUserActivityAlertInput';
 import { useChangeSet } from '../ChangeSet';
 import UserActivityAlertForm from './UserActivityAlertForm';
 import usePageTitle from '../usePageTitle';
-import {
-  UserActivityAlertFieldsFragmentDoc,
-  UserActivityAlertsAdminQueryData,
-  useUserActivityAlertsAdminQuery,
-} from './queries.generated';
+import { UserActivityAlertFieldsFragmentDoc, UserActivityAlertsAdminQueryData } from './queries.generated';
 import { useCreateUserActivityAlertMutation } from './mutations.generated';
+import { NamedRoute } from '../AppRouter';
 
-export default LoadQueryWrapper(useUserActivityAlertsAdminQuery, function NewUserActivityAlert({ data }) {
+function NewUserActivityAlert() {
+  const data = useRouteLoaderData(NamedRoute.UserActivityAlerts) as UserActivityAlertsAdminQueryData;
   const navigate = useNavigate();
   usePageTitle('New user activity alert');
 
@@ -92,4 +86,6 @@ export default LoadQueryWrapper(useUserActivityAlertsAdminQuery, function NewUse
       </button>
     </>
   );
-});
+}
+
+export const Component = NewUserActivityAlert;

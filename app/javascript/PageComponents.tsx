@@ -71,8 +71,6 @@ const UnwrappedNonCMSPageComponents = {
   StaffPositionAdmin: () => import(/* webpackChunkName: "staff-position-admin" */ './StaffPositionAdmin'),
   StoreAdmin: () => import(/* webpackChunkName: "store-admin" */ './Store/StoreAdmin'),
   TicketTypeAdmin: () => import(/* webpackChunkName: "ticket-type-admin" */ './TicketTypeAdmin'),
-  UserActivityAlertsAdmin: () =>
-    import(/* webpackChunkName: "user-activity-alerts-admin" */ './UserActivityAlerts/UserActivityAlertsAdmin'),
   ViewCmsContentGroup: () =>
     import(/* webpackChunkName: "cms-admin" */ './CmsAdmin/CmsContentGroupsAdmin/ViewCmsContentGroup'),
 

@@ -1,14 +1,23 @@
-import { Routes, Route } from 'react-router-dom';
+import { useMatches, Outlet, LoaderFunction } from 'react-router-dom';
 
-import EditUserActivityAlert from './EditUserActivityAlert';
-import NewUserActivityAlert from './NewUserActivityAlert';
-import UserActivityAlertsList from './UserActivityAlertsList';
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import LeafBreadcrumbItem from '../Breadcrumbs/LeafBreadcrumbItem';
 import { useTranslation } from 'react-i18next';
+import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
+import { NamedRoute } from '../AppRouter';
+import { client } from '../useIntercodeApolloClient';
+import { UserActivityAlertsAdminQueryData, UserActivityAlertsAdminQueryDocument } from './queries.generated';
+
+export const loader: LoaderFunction = async () => {
+  const { data } = await client.query<UserActivityAlertsAdminQueryData>({
+    query: UserActivityAlertsAdminQueryDocument,
+  });
+  return data;
+};
 
 function UserActivityAlertsAdmin(): JSX.Element {
+  const matches = useMatches();
   const { t } = useTranslation();
   const authorizationWarning = useAuthorizationRequired('can_read_user_activity_alerts');
   if (authorizationWarning) return authorizationWarning;
@@ -23,19 +32,15 @@ function UserActivityAlertsAdmin(): JSX.Element {
 
           <LeafBreadcrumbItem path="new">{t('buttons.create')}</LeafBreadcrumbItem>
 
-          <Routes>
-            <Route path=":id/edit" element={<LeafBreadcrumbItem path="">{t('buttons.edit')}</LeafBreadcrumbItem>} />
-          </Routes>
+          {matches.some((match) => match.id === NamedRoute.EditUserActivityAlert) && (
+            <BreadcrumbItem active>{t('buttons.edit')}</BreadcrumbItem>
+          )}
         </ol>
       </nav>
 
-      <Routes>
-        <Route path="new" element={<NewUserActivityAlert />} />
-        <Route path=":id/edit" element={<EditUserActivityAlert />} />
-        <Route path="" element={<UserActivityAlertsList />} />
-      </Routes>
+      <Outlet />
     </>
   );
 }
 
-export default UserActivityAlertsAdmin;
+export const Component = UserActivityAlertsAdmin;
