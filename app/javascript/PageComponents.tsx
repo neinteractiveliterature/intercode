@@ -75,9 +75,6 @@ const UnwrappedNonCMSPageComponents = {
     import(/* webpackChunkName: "user-activity-alerts-admin" */ './UserActivityAlerts/UserActivityAlertsAdmin'),
   UserConProfilesAdmin: () =>
     import(/* webpackChunkName: "user-con-profiles-admin" */ './UserConProfiles/UserConProfilesAdmin'),
-  UserAdminDisplay: () => import(/* webpackChunkName: "users-admin" */ './Users/UserAdminDisplay'),
-  UsersAdmin: () => import(/* webpackChunkName: "users-admin" */ './Users/UsersAdmin'),
-  UsersTable: () => import(/* webpackChunkName: "users-admin" */ './Users/UsersTable'),
   ViewCmsContentGroup: () =>
     import(/* webpackChunkName: "cms-admin" */ './CmsAdmin/CmsContentGroupsAdmin/ViewCmsContentGroup'),
 

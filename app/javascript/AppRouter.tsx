@@ -1,5 +1,5 @@
 import { useState, Suspense, useEffect, ReactNode, useContext } from 'react';
-import { useLocation, RouteObject, replace, Outlet, LoaderFunction, redirect } from 'react-router-dom';
+import { useLocation, RouteObject, replace, Outlet, LoaderFunction, redirect, useNavigation } from 'react-router-dom';
 import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
 import { useTranslation } from 'react-i18next';
 
@@ -257,8 +257,11 @@ const rootSiteRoutes: RouteObject[] = [
   },
   {
     path: '/users',
-    element: <PageComponents.UsersAdmin />,
-    children: [{ path: ':id', element: <PageComponents.UserAdminDisplay /> }],
+    lazy: () => import('./Users/UsersAdmin'),
+    children: [
+      { path: ':id', lazy: () => import('./Users/UserAdminDisplay') },
+      { path: '', lazy: () => import('./Users/UsersTable') },
+    ],
   },
 ];
 
@@ -299,6 +302,7 @@ export type AppRouterProps = {
 function AppRouter({ alert }: AppRouterProps): JSX.Element {
   const { t } = useTranslation();
   const location = useLocation();
+  const navigation = useNavigation();
   const [showAlert, setShowAlert] = useState(alert != null);
 
   useEffect(() => {
@@ -306,23 +310,31 @@ function AppRouter({ alert }: AppRouterProps): JSX.Element {
   }, [location.pathname]);
 
   return (
-    <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
-      {showAlert && (
-        <div className="alert alert-danger" role="alert">
-          <button
-            type="button"
-            className="btn-close"
-            onClick={() => setShowAlert(false)}
-            aria-label={t('buttons.close')}
-          >
-            <span aria-hidden="true">×</span>
-          </button>
-          {alert}
-        </div>
-      )}
+    <>
+      <div
+        className="position-fixed d-flex flex-column justify-content-center"
+        style={{ zIndex: 1050, width: '100vw', height: '100vh', top: 0, left: 0, pointerEvents: 'none' }}
+      >
+        <PageLoadingIndicator visible={navigation.state === 'loading'} />
+      </div>
+      <Suspense fallback={<PageLoadingIndicator visible />}>
+        {showAlert && (
+          <div className="alert alert-danger" role="alert">
+            <button
+              type="button"
+              className="btn-close"
+              onClick={() => setShowAlert(false)}
+              aria-label={t('buttons.close')}
+            >
+              <span aria-hidden="true">×</span>
+            </button>
+            {alert}
+          </div>
+        )}
 
-      <Outlet />
-    </Suspense>
+        <Outlet />
+      </Suspense>
+    </>
   );
 }
 

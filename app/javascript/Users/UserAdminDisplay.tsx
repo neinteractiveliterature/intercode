@@ -1,15 +1,15 @@
 import { useMemo } from 'react';
 import reverse from 'lodash/reverse';
 import sortBy from 'lodash/sortBy';
-import { useParams } from 'react-router-dom';
-import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
+import { LoaderFunction, useLoaderData } from 'react-router-dom';
 
 import usePageTitle from '../usePageTitle';
-import { UserAdminQueryData, useUserAdminQuery } from './queries.generated';
+import { UserAdminQueryData, UserAdminQueryDocument } from './queries.generated';
 import { timespanFromConvention } from '../TimespanUtils';
 import { useAppDateTimeFormat } from '../TimeUtils';
 import humanize from '../humanize';
 import { useTranslation } from 'react-i18next';
+import { client } from '../useIntercodeApolloClient';
 
 function sortByConventionDate(profiles: UserAdminQueryData['user']['user_con_profiles']) {
   return reverse(sortBy(profiles, (profile) => profile.convention.starts_at));
@@ -21,13 +21,10 @@ function buildProfileUrl(profile: UserAdminQueryData['user']['user_con_profiles'
   return profileUrl.toString();
 }
 
-function useLoadUserAdminData() {
-  const userId = useParams<{ id: string }>().id;
-  if (userId == null) {
-    throw new Error('User ID not found in path');
-  }
-  return useUserAdminQuery({ variables: { id: userId } });
-}
+export const loader: LoaderFunction = async ({ params: { id } }) => {
+  const { data } = await client.query<UserAdminQueryData>({ query: UserAdminQueryDocument, variables: { id } });
+  return data;
+};
 
 function renderProfileConventionYear(
   profile: UserAdminQueryData['user']['user_con_profiles'][number],
@@ -37,7 +34,8 @@ function renderProfileConventionYear(
   return start ? format(start, 'year') : null;
 }
 
-export default LoadQueryWrapper(useLoadUserAdminData, function UserAdminDisplay({ data }) {
+export const Component = function UserAdminDisplay() {
+  const data = useLoaderData() as UserAdminQueryData;
   const { t } = useTranslation();
   usePageTitle(data.user.name);
   const format = useAppDateTimeFormat();
@@ -109,4 +107,4 @@ export default LoadQueryWrapper(useLoadUserAdminData, function UserAdminDisplay(
       <div className="col-lg-3">{/* this.renderUserAdminSection(data) */}</div>
     </div>
   );
-});
+};

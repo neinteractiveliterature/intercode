@@ -129,4 +129,4 @@ function UsersTable(): JSX.Element {
   );
 }
 
-export default UsersTable;
+export const Component = UsersTable;
