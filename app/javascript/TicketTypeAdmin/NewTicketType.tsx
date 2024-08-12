@@ -1,11 +1,7 @@
 import { useCallback, useContext, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLoaderData, useNavigate } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
-import {
-  ErrorDisplay,
-  LoadQueryWrapper,
-  useCreateMutationWithReferenceArrayUpdater,
-} from '@neinteractiveliterature/litform';
+import { ErrorDisplay, useCreateMutationWithReferenceArrayUpdater } from '@neinteractiveliterature/litform';
 
 import buildTicketTypeInput from './buildTicketTypeInput';
 import TicketTypeForm, { EditingTicketType } from './TicketTypeForm';
@@ -14,9 +10,12 @@ import usePageTitle from '../usePageTitle';
 import { useCreateTicketTypeMutation } from './mutations.generated';
 import { TicketTypeAdmin_TicketTypeFieldsFragmentDoc } from './queries.generated';
 import AppRootContext from '../AppRootContext';
-import { useTicketTypesQueryFromRoute } from './useTicketTypesQueryFromRoute';
+import { TicketTypeLoaderResult } from './loaders';
+import { useTranslation } from 'react-i18next';
 
-export default LoadQueryWrapper(useTicketTypesQueryFromRoute, function NewTicketType({ data }) {
+function NewTicketType() {
+  const { t } = useTranslation();
+  const { parent } = useLoaderData() as TicketTypeLoaderResult;
   const { ticketName } = useContext(AppRootContext);
 
   const navigate = useNavigate();
@@ -35,7 +34,7 @@ export default LoadQueryWrapper(useTicketTypesQueryFromRoute, function NewTicket
 
   const [mutate] = useCreateMutationWithReferenceArrayUpdater(
     useCreateTicketTypeMutation,
-    'event' in data.convention ? data.convention.event : data.convention,
+    parent,
     'ticket_types',
     (data) => data.createTicketType.ticket_type,
     TicketTypeAdmin_TicketTypeFieldsFragmentDoc,
@@ -48,12 +47,12 @@ export default LoadQueryWrapper(useTicketTypesQueryFromRoute, function NewTicket
         variables: {
           input: {
             ticket_type: buildTicketTypeInput(ticketType),
-            eventId: 'event' in data.convention ? data.convention.event.id : undefined,
+            eventId: parent.__typename === 'Event' ? parent.id : undefined,
           },
         },
       });
       navigate('..', { replace: true });
-    }, [mutate, ticketType, navigate, data.convention]),
+    }, [mutate, ticketType, navigate, parent]),
   );
 
   return (
@@ -61,9 +60,11 @@ export default LoadQueryWrapper(useTicketTypesQueryFromRoute, function NewTicket
       <h1 className="mb-4">New {ticketName} type</h1>
       <TicketTypeForm ticketType={ticketType} onChange={setTicketType} />
       <button type="button" className="btn btn-primary" onClick={saveClicked} disabled={inProgress}>
-        Save
+        {t('buttons.save')}
       </button>
       <ErrorDisplay graphQLError={error as ApolloError} />
     </div>
   );
-});
+}
+
+export const Component = NewTicketType;

@@ -70,7 +70,6 @@ const UnwrappedNonCMSPageComponents = {
   SignupRoundsAdmin: () => import(/* webpackChunkName: "signup-rounds-admin" */ './SignupRoundsAdmin'),
   StaffPositionAdmin: () => import(/* webpackChunkName: "staff-position-admin" */ './StaffPositionAdmin'),
   StoreAdmin: () => import(/* webpackChunkName: "store-admin" */ './Store/StoreAdmin'),
-  TicketTypeAdmin: () => import(/* webpackChunkName: "ticket-type-admin" */ './TicketTypeAdmin'),
   ViewCmsContentGroup: () =>
     import(/* webpackChunkName: "cms-admin" */ './CmsAdmin/CmsContentGroupsAdmin/ViewCmsContentGroup'),
 

@@ -1,14 +1,13 @@
 import { useContext, useMemo } from 'react';
-import { Outlet, Route, Routes, useParams } from 'react-router-dom';
-import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
+import { Outlet, useLoaderData, useParams } from 'react-router-dom';
 
 import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import LeafBreadcrumbItem from '../Breadcrumbs/LeafBreadcrumbItem';
-import { useTicketTypesQueryFromRoute } from '../TicketTypeAdmin/useTicketTypesQueryFromRoute';
 import AppRootContext from '../AppRootContext';
 import capitalize from 'lodash/capitalize';
 import { EventTicketTypesQueryData } from '../TicketTypeAdmin/queries.generated';
+import { TicketTypeLoaderResult } from '../TicketTypeAdmin/loaders';
 
 function SpecificTicketTypeBreadcrumbItem({ event }: { event: EventTicketTypesQueryData['convention']['event'] }) {
   const params = useParams<'id'>();
@@ -20,10 +19,12 @@ function SpecificTicketTypeBreadcrumbItem({ event }: { event: EventTicketTypesQu
   return <LeafBreadcrumbItem path="">{ticketType?.name}</LeafBreadcrumbItem>;
 }
 
-export default LoadQueryWrapper(useTicketTypesQueryFromRoute, function EventTicketTypesWrapper({ data }): JSX.Element {
+export default function EventTicketTypesWrapper(): JSX.Element {
   const { ticketName } = useContext(AppRootContext);
+  const { parent } = useLoaderData() as TicketTypeLoaderResult;
+  const { id } = useParams();
 
-  const event = 'event' in data.convention ? data.convention.event : undefined;
+  const event = parent.__typename === 'Event' ? parent : undefined;
   if (!event) {
     return <Outlet />;
   }
@@ -43,13 +44,11 @@ export default LoadQueryWrapper(useTicketTypesQueryFromRoute, function EventTick
             {ticketName}
             {' type'}
           </LeafBreadcrumbItem>
-          <Routes>
-            <Route path=":id/edit" element={<SpecificTicketTypeBreadcrumbItem event={event} />}></Route>
-          </Routes>
+          {id && <SpecificTicketTypeBreadcrumbItem event={event} />}
         </ol>
       </nav>
 
       <Outlet />
     </>
   );
-});
+}

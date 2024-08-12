@@ -18,8 +18,8 @@ import EventList from './EventCatalog/EventList';
 import EventTable from './EventCatalog/EventTable';
 import { AppRootContextRouteGuard } from '../AppRouter';
 import { conventionDayLoader } from './conventionDayUrls';
+import { eventSingleTicketTypeLoader, eventTicketTypesLoader } from '../TicketTypeAdmin/loaders';
 
-const LazyTicketTypeAdmin = React.lazy(() => import('../TicketTypeAdmin'));
 const LazyMySignupQueue = React.lazy(() => import('./MySignupQueue'));
 
 function EventPageGuard() {
@@ -80,7 +80,16 @@ export const eventsRoutes: RouteObject[] = [
           {
             path: 'ticket_types/*',
             element: <EventTicketTypesWrapper />,
-            children: [{ path: '*', element: <LazyTicketTypeAdmin /> }],
+            loader: eventTicketTypesLoader,
+            children: [
+              { path: 'new', loader: eventTicketTypesLoader, lazy: () => import('../TicketTypeAdmin/NewTicketType') },
+              {
+                path: ':id/edit',
+                loader: eventSingleTicketTypeLoader,
+                lazy: () => import('../TicketTypeAdmin/EditTicketType'),
+              },
+              { index: true, loader: eventTicketTypesLoader, lazy: () => import('../TicketTypeAdmin/TicketTypesList') },
+            ],
           },
         ],
       },

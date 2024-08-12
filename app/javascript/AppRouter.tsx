@@ -17,6 +17,7 @@ import useAuthorizationRequired, { AbilityName } from './Authentication/useAutho
 import { EventAdminEventsQueryData, EventAdminEventsQueryDocument } from './EventAdmin/queries.generated';
 import { client } from './useIntercodeApolloClient';
 import buildEventCategoryUrl from './EventAdmin/buildEventCategoryUrl';
+import { adminSingleTicketTypeLoader, adminTicketTypesLoader } from './TicketTypeAdmin/loaders';
 
 export enum NamedRoute {
   AdminUserConProfile = 'AdminUserConProfile',
@@ -211,7 +212,21 @@ const commonInConventionRoutes: RouteObject[] = [
   { path: '/ticket/*', element: <PageComponents.MyTicket /> },
   {
     element: <AppRootContextRouteGuard guard={({ ticketMode }) => ticketMode === TicketMode.RequiredForSignup} />,
-    children: [{ path: '/ticket_types/*', element: <PageComponents.TicketTypeAdmin /> }],
+    children: [
+      {
+        path: '/ticket_types',
+        element: <AuthorizationRequiredRouteGuard abilities={['can_manage_ticket_types']} />,
+        children: [
+          { path: 'new', loader: adminTicketTypesLoader, lazy: () => import('./TicketTypeAdmin/NewTicketType') },
+          {
+            path: ':id/edit',
+            loader: adminSingleTicketTypeLoader,
+            lazy: () => import('./TicketTypeAdmin/EditTicketType'),
+          },
+          { index: true, loader: adminTicketTypesLoader, lazy: () => import('./TicketTypeAdmin/TicketTypesList') },
+        ],
+      },
+    ],
   },
   {
     path: '/user_activity_alerts/*',
