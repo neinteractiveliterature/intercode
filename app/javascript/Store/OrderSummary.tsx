@@ -1,10 +1,11 @@
 import flatten from 'lodash/flatten';
-import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import usePageTitle from '../usePageTitle';
 import { OrderQuantityByStatus, OrderStatus } from '../graphqlTypes.generated';
-import { OrderSummaryQueryData, useOrderSummaryQuery } from './queries.generated';
+import { OrderSummaryQueryData, OrderSummaryQueryDocument } from './queries.generated';
 import humanize from '../humanize';
+import { LoaderFunction, useLoaderData } from 'react-router';
+import { client } from '../useIntercodeApolloClient';
 
 const ORDER_STATUSES = [OrderStatus.Paid, OrderStatus.Unpaid, OrderStatus.Cancelled];
 
@@ -26,7 +27,13 @@ function statusClass(status: OrderStatus) {
   }
 }
 
-export default LoadQueryWrapper(useOrderSummaryQuery, function OrderSummary({ data }) {
+export const loader: LoaderFunction = async () => {
+  const { data } = await client.query<OrderSummaryQueryData>({ query: OrderSummaryQueryDocument });
+  return data;
+};
+
+function OrderSummary() {
+  const data = useLoaderData() as OrderSummaryQueryData;
   usePageTitle('Order summary');
 
   const renderQuantityCell = (quantitiesByStatus: OrderQuantityByStatus[], status: OrderStatus) => {
@@ -117,4 +124,6 @@ export default LoadQueryWrapper(useOrderSummaryQuery, function OrderSummary({ da
       <tbody>{flatten(products)}</tbody>
     </table>
   );
-});
+}
+
+export const Component = OrderSummary;

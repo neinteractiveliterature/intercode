@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { useModal, sortByLocaleString, LoadQueryWrapper } from '@neinteractiveliterature/litform';
+import { useModal, sortByLocaleString } from '@neinteractiveliterature/litform';
 import { v4 as uuidv4 } from 'uuid';
 
 import AdminProductCard from './AdminProductCard';
@@ -10,9 +10,11 @@ import EditPricingStructureModal, {
 } from './EditPricingStructureModal';
 import EditAdminProductCard from './EditAdminProductCard';
 import scrollToLocationHash from '../../scrollToLocationHash';
-import { useAdminProductsQuery } from '../queries.generated';
+import { AdminProductsQueryData, AdminProductsQueryDocument } from '../queries.generated';
 import { duplicateProductForEditing, EditingProduct } from './EditingProductTypes';
 import { getRealOrGeneratedId, realOrGeneratedIdsMatch } from '../../GeneratedIdUtils';
+import { LoaderFunction, useLoaderData } from 'react-router';
+import { client } from '../../useIntercodeApolloClient';
 
 function generateBlankProduct(): EditingProduct {
   return {
@@ -27,7 +29,13 @@ function generateBlankProduct(): EditingProduct {
   };
 }
 
-const ProductAdminPage = LoadQueryWrapper(useAdminProductsQuery, function ProductAdmin({ data }) {
+export const loader: LoaderFunction = async () => {
+  const { data } = await client.query<AdminProductsQueryData>({ query: AdminProductsQueryDocument });
+  return data;
+};
+
+function ProductAdmin() {
+  const data = useLoaderData() as AdminProductsQueryData;
   const [newProducts, setNewProducts] = useState<EditingProduct[]>([]);
   const [editingProductIds, setEditingProductIds] = useState<string[]>([]);
   const pricingStructureModal = useModal<PricingStructureModalState>();
@@ -95,6 +103,6 @@ const ProductAdminPage = LoadQueryWrapper(useAdminProductsQuery, function Produc
       />
     </PricingStructureModalContext.Provider>
   );
-});
+}
 
-export default ProductAdminPage;
+export const Component = ProductAdmin;

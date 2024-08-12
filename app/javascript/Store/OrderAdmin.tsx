@@ -160,4 +160,4 @@ function OrderAdmin(): JSX.Element {
   );
 }
 
-export default OrderAdmin;
+export const Component = OrderAdmin;

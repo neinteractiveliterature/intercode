@@ -20978,6 +20978,7 @@ __metadata:
     "@graphql-codegen/typescript-operations": "npm:4.2.3"
     "@graphql-codegen/typescript-react-apollo": "npm:4.3.1"
     "@graphql-eslint/eslint-plugin": "npm:3.20.1"
+    "@graphql-typed-document-node/core": "npm:^3.2.0"
     "@juggle/resize-observer": "npm:3.4.0"
     "@lezer/common": "npm:1.2.1"
     "@neinteractiveliterature/litform": "npm:0.29.0"

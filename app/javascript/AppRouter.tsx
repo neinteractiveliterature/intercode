@@ -192,7 +192,17 @@ const commonInConventionRoutes: RouteObject[] = [
   },
   { path: '/admin_forms/*', element: <PageComponents.FormAdmin /> },
   { path: '/admin_notifications/*', element: <PageComponents.NotificationAdmin /> },
-  { path: '/admin_store/*', element: <PageComponents.StoreAdmin /> },
+  {
+    path: '/admin_store',
+    lazy: () => import('./Store/StoreAdmin'),
+    children: [
+      { path: 'products', lazy: () => import('./Store/ProductAdmin') },
+      { path: 'coupons', lazy: () => import('./Store/CouponAdmin/CouponAdminTable') },
+      { path: 'orders', lazy: () => import('./Store/OrderAdmin') },
+      { path: 'order_summary', lazy: () => import('./Store/OrderSummary') },
+      { path: '', loader: () => redirect('./products') },
+    ],
+  },
   { path: '/cart', element: <PageComponents.Cart /> },
   { path: '/clickwrap_agreement', element: <PageComponents.ClickwrapAgreement /> },
   { path: '/convention/edit', element: <PageComponents.ConventionAdmin /> },

@@ -1,9 +1,5 @@
-import { Navigate, NavLink, Route, Routes } from 'react-router-dom';
+import { NavLink, Outlet } from 'react-router-dom';
 
-import CouponAdminTable from './CouponAdmin/CouponAdminTable';
-import OrderAdmin from './OrderAdmin';
-import OrderSummary from './OrderSummary';
-import ProductAdmin from './ProductAdmin';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import { useTranslation } from 'react-i18next';
 
@@ -38,15 +34,9 @@ function StoreAdmin(): JSX.Element {
         </li>
       </ul>
 
-      <Routes>
-        <Route path="products" element={<ProductAdmin />} />
-        <Route path="coupons" element={<CouponAdminTable />} />
-        <Route path="orders" element={<OrderAdmin />} />
-        <Route path="order_summary" element={<OrderSummary />} />
-        <Route path="" element={<Navigate to="./products" replace />} />
-      </Routes>
+      <Outlet />
     </>
   );
 }
 
-export default StoreAdmin;
+export const Component = StoreAdmin;
