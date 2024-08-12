@@ -1,21 +1,24 @@
-import { Routes, Route, Link } from 'react-router-dom';
-import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
+import { Link, LoaderFunction, useLoaderData } from 'react-router-dom';
 
-import AttendanceByPaymentAmount from './AttendanceByPaymentAmount';
-import SignupSpy from './SignupSpy';
-import EventProvidedTickets from './EventProvidedTickets';
-import EventsByChoice from './EventsByChoice';
 import usePageTitle from '../usePageTitle';
-import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
-import { useReportsMenuQuery } from './queries.generated';
+import { ReportsMenuQueryData, ReportsMenuQueryDocument } from './queries.generated';
+import { client } from '../useIntercodeApolloClient';
+import { useTranslation } from 'react-i18next';
 
-const ReportsMenu = LoadQueryWrapper(useReportsMenuQuery, function ReportsMenu({ data }) {
-  usePageTitle('Reports');
+export const loader: LoaderFunction = async () => {
+  const { data } = await client.query<ReportsMenuQueryData>({ query: ReportsMenuQueryDocument });
+  return data;
+};
+
+function ReportsMenu() {
+  const { t } = useTranslation();
+  const data = useLoaderData() as ReportsMenuQueryData;
+  usePageTitle(t('navigation.admin.reports'));
 
   return (
     <>
       <header>
-        <h1>Reports</h1>
+        <h1>{t('navigation.admin.reports')}</h1>
       </header>
 
       <div className="card mt-4">
@@ -76,21 +79,6 @@ const ReportsMenu = LoadQueryWrapper(useReportsMenuQuery, function ReportsMenu({
       </div>
     </>
   );
-});
-
-function Reports(): JSX.Element {
-  const authorizationWarning = useAuthorizationRequired('can_read_reports');
-  if (authorizationWarning) return authorizationWarning;
-
-  return (
-    <Routes>
-      <Route path="attendance_by_payment_amount" element={<AttendanceByPaymentAmount />} />
-      <Route path="event_provided_tickets" element={<EventProvidedTickets />} />
-      <Route path="events_by_choice" element={<EventsByChoice />} />
-      <Route path="signup_spy" element={<SignupSpy />} />
-      <Route path="" element={<ReportsMenu />} />
-    </Routes>
-  );
 }
 
-export default Reports;
+export const Component = ReportsMenu;

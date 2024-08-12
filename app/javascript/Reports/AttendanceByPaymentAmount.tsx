@@ -1,11 +1,12 @@
-import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
 import capitalize from 'lodash/capitalize';
 
 import formatMoney from '../formatMoney';
 import usePageTitle from '../usePageTitle';
-import { AttendanceByPaymentAmountQueryData, useAttendanceByPaymentAmountQuery } from './queries.generated';
+import { AttendanceByPaymentAmountQueryData, AttendanceByPaymentAmountQueryDocument } from './queries.generated';
 import { Money, Product } from '../graphqlTypes.generated';
 import assertNever from 'assert-never';
+import { LoaderFunction, useLoaderData } from 'react-router';
+import { client } from '../useIntercodeApolloClient';
 
 type RowType =
   AttendanceByPaymentAmountQueryData['convention']['reports']['sales_count_by_product_and_payment_amount'][number];
@@ -62,7 +63,15 @@ function descriptionCell(
   );
 }
 
-export default LoadQueryWrapper(useAttendanceByPaymentAmountQuery, function AttendanceByPaymentAmount({ data }) {
+export const loader: LoaderFunction = async () => {
+  const { data } = await client.query<AttendanceByPaymentAmountQueryData>({
+    query: AttendanceByPaymentAmountQueryDocument,
+  });
+  return data;
+};
+
+function AttendanceByPaymentAmount() {
+  const data = useLoaderData() as AttendanceByPaymentAmountQueryData;
   usePageTitle('Attendance by payment amount');
 
   const sortedRows = [...data.convention.reports.sales_count_by_product_and_payment_amount].sort((a, b) => {
@@ -134,4 +143,6 @@ export default LoadQueryWrapper(useAttendanceByPaymentAmountQuery, function Atte
       </table>
     </>
   );
-});
+}
+
+export const Component = AttendanceByPaymentAmount;

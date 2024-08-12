@@ -6,10 +6,12 @@ import groupBy from 'lodash/groupBy';
 import keyBy from 'lodash/keyBy';
 import sum from 'lodash/sum';
 import capitalize from 'lodash/capitalize';
-import { LoadQueryWrapper, titleSort } from '@neinteractiveliterature/litform';
+import { titleSort } from '@neinteractiveliterature/litform';
 
 import usePageTitle from '../usePageTitle';
-import { useEventsByChoiceQuery } from './queries.generated';
+import { EventsByChoiceQueryData, EventsByChoiceQueryDocument } from './queries.generated';
+import { LoaderFunction, useLoaderData } from 'react-router';
+import { client } from '../useIntercodeApolloClient';
 
 type ProcessedChoiceCount = {
   confirmed?: number;
@@ -34,7 +36,13 @@ function renderChoiceCounts(choiceData: ProcessedChoiceCount) {
   );
 }
 
-export default LoadQueryWrapper(useEventsByChoiceQuery, function EventsByChoice({ data }) {
+export const loader: LoaderFunction = async () => {
+  const { data } = await client.query<EventsByChoiceQueryData>({ query: EventsByChoiceQueryDocument });
+  return data;
+};
+
+function EventsByChoice() {
+  const data = useLoaderData() as EventsByChoiceQueryData;
   const choiceColumns = useMemo(() => {
     const choices = flatMap(data.convention.reports.events_by_choice, (eventByChoice) =>
       eventByChoice.choice_counts.map((choiceCount) => choiceCount.choice),
@@ -117,4 +125,6 @@ export default LoadQueryWrapper(useEventsByChoiceQuery, function EventsByChoice(
       </table>
     </>
   );
-});
+}
+
+export const Component = EventsByChoice;

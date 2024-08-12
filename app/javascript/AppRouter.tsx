@@ -214,7 +214,17 @@ const commonInConventionRoutes: RouteObject[] = [
   { path: '/my_profile/*', element: <PageComponents.MyProfile /> },
   { path: '/order_history', element: <PageComponents.OrderHistory /> },
   { path: '/products/:id', element: <PageComponents.ProductPage /> },
-  { path: '/reports/*', element: <PageComponents.Reports /> },
+  {
+    path: '/reports',
+    element: <AuthorizationRequiredRouteGuard abilities={['can_read_reports']} />,
+    children: [
+      { path: 'attendance_by_payment_amount', lazy: () => import('./Reports/AttendanceByPaymentAmount') },
+      { path: 'event_provided_tickets', lazy: () => import('./Reports/EventProvidedTickets') },
+      { path: 'events_by_choice', lazy: () => import('./Reports/EventsByChoice') },
+      { path: 'signup_spy', lazy: () => import('./Reports/SignupSpy') },
+      { path: '', lazy: () => import('./Reports') },
+    ],
+  },
   { path: '/rooms', element: <PageComponents.RoomsAdmin /> },
   {
     element: <AppRootContextRouteGuard guard={({ signupMode }) => signupMode === SignupMode.Moderated} />,

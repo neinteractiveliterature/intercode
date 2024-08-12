@@ -1,11 +1,17 @@
-import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
-
 import SignupSpyTable from './SignupSpyTable';
 import usePageTitle from '../usePageTitle';
-import { useSignupCountsByStateQuery } from './queries.generated';
+import { SignupCountsByStateQueryData, SignupCountsByStateQueryDocument } from './queries.generated';
 import { SignupState } from '../graphqlTypes.generated';
+import { LoaderFunction, useLoaderData } from 'react-router';
+import { client } from '../useIntercodeApolloClient';
 
-export default LoadQueryWrapper(useSignupCountsByStateQuery, function SignupSpy({ data }) {
+export const loader: LoaderFunction = async () => {
+  const { data } = await client.query<SignupCountsByStateQueryData>({ query: SignupCountsByStateQueryDocument });
+  return data;
+};
+
+function SignupSpy() {
+  const data = useLoaderData() as SignupCountsByStateQueryData;
   const getSignupCount = (state: SignupState) =>
     (
       data.convention.signup_counts_by_state.find((record) => record.state === state) || {
@@ -41,4 +47,6 @@ export default LoadQueryWrapper(useSignupCountsByStateQuery, function SignupSpy(
       <SignupSpyTable />
     </>
   );
-});
+}
+
+export const Component = SignupSpy;
