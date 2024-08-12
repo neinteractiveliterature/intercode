@@ -1,11 +1,11 @@
-import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
 import {
   SignupRoundRankedChoiceDecisionsTableQueryData,
+  SignupRoundsAdminQueryData,
+  SignupRoundsAdminQueryDocument,
   useSignupRoundRankedChoiceDecisionsTableQuery,
-  useSignupRoundsAdminQuery,
 } from './queries.generated';
 import { useContext, useMemo } from 'react';
-import { useParams } from 'react-router';
+import { LoaderFunction, useLoaderData, useParams } from 'react-router';
 import { describeSignupRound } from './describeSignupRound';
 import { parseSignupRounds } from '../SignupRoundUtils';
 import { useTranslation } from 'react-i18next';
@@ -26,6 +26,7 @@ import ChoiceSetFilter from '../Tables/ChoiceSetFilter';
 import { TFunction } from 'i18next';
 import assertNever from 'assert-never';
 import { FilterCodecs, buildFieldFilterCodecs } from '../Tables/FilterUtils';
+import { client } from '../useIntercodeApolloClient';
 
 export function describeDecision(decision: RankedChoiceDecisionValue, t: TFunction): string {
   if (decision === RankedChoiceDecisionValue.Signup) {
@@ -183,6 +184,7 @@ function getPossibleColumns(): Column<
   ];
 }
 
+// eslint-disable-next-line i18next/no-literal-string
 const alwaysVisibleColumns = ['user_con_profile_name', 'event_title', 'decision', 'reason'];
 
 type RankedChoiceSignupDecisionsTableProps = {
@@ -224,7 +226,13 @@ function RankedChoiceSignupDecisionsTable({ signupRoundId }: RankedChoiceSignupD
   );
 }
 
-const RankedChoiceSignupDecisionsPage = LoadQueryWrapper(useSignupRoundsAdminQuery, ({ data }) => {
+export const loader: LoaderFunction = async () => {
+  const { data } = await client.query<SignupRoundsAdminQueryData>({ query: SignupRoundsAdminQueryDocument });
+  return data;
+};
+
+function RankedChoiceSignupDecisionsPage() {
+  const data = useLoaderData() as SignupRoundsAdminQueryData;
   const { id } = useParams();
   const { timezoneName } = useContext(AppRootContext);
   const { t } = useTranslation();
@@ -251,6 +259,6 @@ const RankedChoiceSignupDecisionsPage = LoadQueryWrapper(useSignupRoundsAdminQue
       <RankedChoiceSignupDecisionsTable signupRoundId={id ?? ''} />
     </>
   );
-});
+}
 
-export default RankedChoiceSignupDecisionsPage;
+export const Component = RankedChoiceSignupDecisionsPage;

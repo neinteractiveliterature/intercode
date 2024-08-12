@@ -1,6 +1,4 @@
-import { Route, Routes } from 'react-router';
-import SignupRoundsAdminPage from './SignupRoundsAdminPage';
-import RankedChoiceSignupDecisionsPage from './RankedChoiceSignupDecisionsPage';
+import { Outlet } from 'react-router';
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import RouteActivatedBreadcrumbItemV2 from '../Breadcrumbs/RouteActivatedBreadcrumbItemV2';
 import { useTranslation } from 'react-i18next';
@@ -19,12 +17,10 @@ function SignupRoundsAdmin() {
           {t('signups.signupRounds.results')}
         </RouteActivatedBreadcrumbItemV2>
       </ol>
-      <Routes>
-        <Route path=":id/results" element={<RankedChoiceSignupDecisionsPage />} />
-        <Route index element={<SignupRoundsAdminPage />} />
-      </Routes>
+
+      <Outlet />
     </>
   );
 }
 
-export default SignupRoundsAdmin;
+export const Component = SignupRoundsAdmin;

@@ -217,7 +217,14 @@ const commonInConventionRoutes: RouteObject[] = [
     element: <AppRootContextRouteGuard guard={({ signupMode }) => signupMode === SignupMode.Moderated} />,
     children: [{ path: '/signup_moderation/*', element: <PageComponents.SignupModeration /> }],
   },
-  { path: '/signup_rounds/*', element: <PageComponents.SignupRoundsAdmin /> },
+  {
+    path: '/signup_rounds/*',
+    lazy: () => import('./SignupRoundsAdmin'),
+    children: [
+      { path: ':id/results', lazy: () => import('./SignupRoundsAdmin/RankedChoiceSignupDecisionsPage') },
+      { index: true, lazy: () => import('./SignupRoundsAdmin/SignupRoundsAdminPage') },
+    ],
+  },
   { path: '/staff_positions/*', element: <PageComponents.StaffPositionAdmin /> },
   { path: '/ticket/*', element: <PageComponents.MyTicket /> },
   {

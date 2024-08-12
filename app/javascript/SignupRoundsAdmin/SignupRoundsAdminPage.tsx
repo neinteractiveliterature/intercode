@@ -1,5 +1,4 @@
-import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
-import { useSignupRoundsAdminQuery } from './queries.generated';
+import { SignupRoundsAdminQueryData, SignupRoundsAdminQueryDocument } from './queries.generated';
 import React, { useContext } from 'react';
 import AppRootContext from '../AppRootContext';
 import { parseSignupRounds } from '../SignupRoundUtils';
@@ -9,8 +8,16 @@ import usePageTitle from '../usePageTitle';
 import MaximumEventSignupsPreview from './MaximumEventSignupsPreview';
 import SignupRoundScheduleTable from './SignupRoundScheduleTable';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
+import { LoaderFunction, useLoaderData } from 'react-router';
+import { client } from '../useIntercodeApolloClient';
 
-const SignupRoundsAdminPage = LoadQueryWrapper(useSignupRoundsAdminQuery, ({ data }) => {
+export const loader: LoaderFunction = async () => {
+  const { data } = await client.query<SignupRoundsAdminQueryData>({ query: SignupRoundsAdminQueryDocument });
+  return data;
+};
+
+function SignupRoundsAdminPage() {
+  const data = useLoaderData() as SignupRoundsAdminQueryData;
   const { t } = useTranslation();
   const { timezoneName } = useContext(AppRootContext);
   const { convention } = data;
@@ -46,6 +53,6 @@ const SignupRoundsAdminPage = LoadQueryWrapper(useSignupRoundsAdminQuery, ({ dat
       ))}
     </>
   );
-});
+}
 
-export default SignupRoundsAdminPage;
+export const Component = SignupRoundsAdminPage;
