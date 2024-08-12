@@ -23,6 +23,8 @@ export enum NamedRoute {
   AdminUserConProfile = 'AdminUserConProfile',
   EditUserActivityAlert = 'EditUserActivityAlert',
   UserActivityAlerts = 'UserActivityAlerts',
+  EditStaffPositionPermissions = 'EditStaffPositionPermissions',
+  EditStaffPosition = 'EditStaffPosition',
 }
 
 function CmsPageBySlug() {
@@ -225,7 +227,29 @@ const commonInConventionRoutes: RouteObject[] = [
       { index: true, lazy: () => import('./SignupRoundsAdmin/SignupRoundsAdminPage') },
     ],
   },
-  { path: '/staff_positions/*', element: <PageComponents.StaffPositionAdmin /> },
+  {
+    path: '/staff_positions/*',
+    lazy: () => import('./StaffPositionAdmin'),
+    children: [
+      { path: 'new', lazy: () => import('./StaffPositionAdmin/NewStaffPosition') },
+      {
+        path: ':id',
+        children: [
+          {
+            path: 'edit',
+            id: NamedRoute.EditStaffPosition,
+            lazy: () => import('./StaffPositionAdmin/EditStaffPosition'),
+          },
+          {
+            path: 'edit_permissions',
+            id: NamedRoute.EditStaffPositionPermissions,
+            lazy: () => import('./StaffPositionAdmin/EditStaffPositionPermissions'),
+          },
+        ],
+      },
+      { path: '', lazy: () => import('./StaffPositionAdmin/StaffPositionsTable') },
+    ],
+  },
   { path: '/ticket/*', element: <PageComponents.MyTicket /> },
   {
     element: <AppRootContextRouteGuard guard={({ ticketMode }) => ticketMode === TicketMode.RequiredForSignup} />,

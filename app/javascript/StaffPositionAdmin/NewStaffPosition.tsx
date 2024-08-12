@@ -1,19 +1,26 @@
 import { useState, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { LoaderFunction, useLoaderData, useNavigate } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
-import {
-  ErrorDisplay,
-  LoadQueryWrapper,
-  useCreateMutationWithReferenceArrayUpdater,
-} from '@neinteractiveliterature/litform';
+import { ErrorDisplay, useCreateMutationWithReferenceArrayUpdater } from '@neinteractiveliterature/litform';
 
 import StaffPositionForm, { EditingStaffPosition } from './StaffPositionForm';
 import usePageTitle from '../usePageTitle';
 import buildStaffPositionInput from './buildStaffPositionInput';
 import { useCreateStaffPositionMutation } from './mutations.generated';
-import { StaffPositionFieldsFragmentDoc, useStaffPositionsQuery } from './queries.generated';
+import {
+  StaffPositionFieldsFragmentDoc,
+  StaffPositionsQueryData,
+  StaffPositionsQueryDocument,
+} from './queries.generated';
+import { client } from '../useIntercodeApolloClient';
 
-export default LoadQueryWrapper(useStaffPositionsQuery, function NewStaffPosition({ data }): JSX.Element {
+export const loader: LoaderFunction = async () => {
+  const { data } = await client.query<StaffPositionsQueryData>({ query: StaffPositionsQueryDocument });
+  return data;
+};
+
+function NewStaffPosition(): JSX.Element {
+  const data = useLoaderData() as StaffPositionsQueryData;
   const navigate = useNavigate();
   const [createMutate, { error, loading: inProgress }] = useCreateMutationWithReferenceArrayUpdater(
     useCreateStaffPositionMutation,
@@ -62,4 +69,6 @@ export default LoadQueryWrapper(useStaffPositionsQuery, function NewStaffPositio
       </button>
     </div>
   );
-});
+}
+
+export const Component = NewStaffPosition;
