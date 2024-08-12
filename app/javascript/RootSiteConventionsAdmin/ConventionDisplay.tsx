@@ -1,15 +1,29 @@
 import { useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { useModal, ErrorDisplay, useConfirm, LoadQueryWrapper } from '@neinteractiveliterature/litform';
+import { Link, LoaderFunction, useLoaderData, useLocation } from 'react-router-dom';
+import { useModal, ErrorDisplay, useConfirm } from '@neinteractiveliterature/litform';
 
 import ConventionFormHeader from '../ConventionAdmin/ConventionFormHeader';
-import { useConventionQueryFromIdParam } from './conventionQueryHooks';
 import NewConventionModal from './NewConventionModal';
 import usePageTitle from '../usePageTitle';
 import { useSetConventionCanceledMutation } from './mutations.generated';
 import humanize from '../humanize';
+import { client } from '../useIntercodeApolloClient';
+import {
+  ConventionDisplayQueryData,
+  ConventionDisplayQueryDocument,
+  ConventionDisplayQueryVariables,
+} from './queries.generated';
 
-export default LoadQueryWrapper(useConventionQueryFromIdParam, function ConventionDisplay({ data }) {
+export const loader: LoaderFunction = async ({ params: { id } }) => {
+  const { data } = await client.query<ConventionDisplayQueryData, ConventionDisplayQueryVariables>({
+    query: ConventionDisplayQueryDocument,
+    variables: { id: id ?? '' },
+  });
+  return data;
+};
+
+function ConventionDisplay() {
+  const data = useLoaderData() as ConventionDisplayQueryData;
   const confirm = useConfirm();
   const cloneModal = useModal();
   const [setConventionCanceled] = useSetConventionCanceledMutation();
@@ -100,4 +114,6 @@ export default LoadQueryWrapper(useConventionQueryFromIdParam, function Conventi
       <NewConventionModal visible={cloneModal.visible} close={cloneModal.close} cloneConvention={convention} />
     </>
   );
-});
+}
+
+export const Component = ConventionDisplay;

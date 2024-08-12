@@ -138,4 +138,4 @@ function RootSiteConventionsAdminTable(): JSX.Element {
   );
 }
 
-export default RootSiteConventionsAdminTable;
+export const Component = RootSiteConventionsAdminTable;

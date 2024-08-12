@@ -25,6 +25,7 @@ export enum NamedRoute {
   UserActivityAlerts = 'UserActivityAlerts',
   EditStaffPositionPermissions = 'EditStaffPositionPermissions',
   EditStaffPosition = 'EditStaffPosition',
+  RootSiteConventionDisplay = 'RootSiteConventionDisplay',
 }
 
 function CmsPageBySlug() {
@@ -356,10 +357,14 @@ const singleEventModeRoutes: RouteObject[] = [];
 const rootSiteRoutes: RouteObject[] = [
   {
     path: '/conventions/*',
-    element: <PageComponents.RootSiteConventionsAdmin />,
+    lazy: () => import('./RootSiteConventionsAdmin'),
     children: [
-      { path: ':id', element: <PageComponents.ConventionDisplay /> },
-      { path: '', element: <PageComponents.RootSiteConventionsAdminTable /> },
+      {
+        path: ':id',
+        id: NamedRoute.RootSiteConventionDisplay,
+        lazy: () => import('./RootSiteConventionsAdmin/ConventionDisplay'),
+      },
+      { path: '', lazy: () => import('./RootSiteConventionsAdmin/RootSiteConventionsAdminTable') },
     ],
   },
   { path: '/email_routes', element: <PageComponents.RootSiteEmailRoutesAdmin /> },
