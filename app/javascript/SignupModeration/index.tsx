@@ -1,13 +1,10 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { BootstrapNavLink } from '../UIComponents/BootstrapNavLink';
 
-import CreateSignup from './CreateSignup';
-import SignupModerationQueue from './SignupModerationQueue';
 import { useContext } from 'react';
 import AppRootContext from '../AppRootContext';
 import { SignupAutomationMode } from '../graphqlTypes.generated';
 import { useTranslation } from 'react-i18next';
-import RankedChoiceQueue from './RankedChoiceQueue';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 
 function SignupModeration(): JSX.Element {
@@ -34,16 +31,9 @@ function SignupModeration(): JSX.Element {
           </BootstrapNavLink>
         )}
       </ul>
-      <Routes>
-        {signupAutomationMode === SignupAutomationMode.RankedChoice && (
-          <Route path="ranked_choice_queue/*" element={<RankedChoiceQueue />} />
-        )}
-        <Route path="queue" element={<SignupModerationQueue />} />
-        <Route path="create_signups" element={<CreateSignup />} />
-        <Route path="" element={<Navigate to="/signup_moderation/queue" replace />} />
-      </Routes>
+      <Outlet />
     </>
   );
 }
 
-export default SignupModeration;
+export const Component = SignupModeration;

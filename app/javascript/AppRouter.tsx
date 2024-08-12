@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import PageComponents from './PageComponents';
 import { reloadOnAppEntrypointHeadersMismatch } from './checkAppEntrypointHeadersMatch';
 import FourOhFourPage from './FourOhFourPage';
-import { SignupMode, SiteMode, TicketMode } from './graphqlTypes.generated';
+import { SignupAutomationMode, SignupMode, SiteMode, TicketMode } from './graphqlTypes.generated';
 import AppRootContext, { AppRootContextValue } from './AppRootContext';
 import { eventsRoutes } from './EventsApp';
 import NewCmsLayout from './CmsAdmin/CmsLayoutsAdmin/NewCmsLayout';
@@ -217,7 +217,33 @@ const commonInConventionRoutes: RouteObject[] = [
   { path: '/rooms', element: <PageComponents.RoomsAdmin /> },
   {
     element: <AppRootContextRouteGuard guard={({ signupMode }) => signupMode === SignupMode.Moderated} />,
-    children: [{ path: '/signup_moderation/*', element: <PageComponents.SignupModeration /> }],
+    children: [
+      {
+        path: '/signup_moderation',
+        lazy: () => import('./SignupModeration'),
+        children: [
+          {
+            element: (
+              <AppRootContextRouteGuard
+                guard={({ signupAutomationMode }) => signupAutomationMode === SignupAutomationMode.RankedChoice}
+              />
+            ),
+            children: [
+              {
+                path: 'ranked_choice_queue',
+                lazy: () => import('./SignupModeration/RankedChoiceQueue'),
+                children: [
+                  { path: ':userConProfileId', lazy: () => import('./SignupModeration/UserRankedChoiceQueue') },
+                ],
+              },
+            ],
+          },
+          { path: 'queue', lazy: () => import('./SignupModeration/SignupModerationQueue') },
+          { path: 'create_signups', lazy: () => import('./SignupModeration/CreateSignup') },
+          { index: true, loader: () => redirect('./queue') },
+        ],
+      },
+    ],
   },
   {
     path: '/signup_rounds/*',
