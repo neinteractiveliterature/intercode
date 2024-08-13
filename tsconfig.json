@@ -10,7 +10,7 @@
     "target": "es6", // specify ECMAScript target version
     "allowJs": true, // allow a partial TypeScript and JavaScript codebase,
     "allowSyntheticDefaultImports": true,
-    "lib": ["DOM", "DOM.Iterable", "ES2015"],
+    "lib": ["DOM", "DOM.Iterable", "ES2023"],
     "noImplicitAny": true,
     "skipLibCheck": true,
     "maxNodeModuleJsDepth": 10

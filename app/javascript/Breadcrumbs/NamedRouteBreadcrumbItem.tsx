@@ -22,14 +22,18 @@ function NamedRouteBreadcrumbItem({ children, routeId, hideUnlessMatch }: NamedR
     }
   }, [routeId]);
 
-  const match = useMemo(() => matches.find((m) => routeIds.has(m.id)), [matches, routeIds]);
+  const matchIndex = useMemo(() => matches.findLastIndex((m) => routeIds.has(m.id)), [matches, routeIds]);
+  const match = matchIndex === -1 ? undefined : matches[matchIndex];
 
   if (hideUnlessMatch && !match) {
     return <></>;
   }
 
+  console.log(match);
+  console.log(generatePath(match?.pathname ?? '.', params));
+
   return (
-    <BreadcrumbItem to={match ? generatePath(match.pathname, params) : '.'} active={match != null}>
+    <BreadcrumbItem to={generatePath(match?.pathname ?? '.', params)} active={matchIndex === matches.length - 1}>
       {children}
     </BreadcrumbItem>
   );

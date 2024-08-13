@@ -18,6 +18,7 @@ import { EventAdminEventsQueryData, EventAdminEventsQueryDocument } from './Even
 import { client } from './useIntercodeApolloClient';
 import buildEventCategoryUrl from './EventAdmin/buildEventCategoryUrl';
 import { adminSingleTicketTypeLoader, adminTicketTypesLoader } from './TicketTypeAdmin/loaders';
+import { organizationsLoader, singleOrganizationLoader } from './OrganizationAdmin/loaders';
 
 export enum NamedRoute {
   AdminUserConProfile = 'AdminUserConProfile',
@@ -26,6 +27,10 @@ export enum NamedRoute {
   EditStaffPositionPermissions = 'EditStaffPositionPermissions',
   EditStaffPosition = 'EditStaffPosition',
   RootSiteConventionDisplay = 'RootSiteConventionDisplay',
+  Organization = 'Organization',
+  OrganizationAdmin = 'OrganizationAdmin',
+  EditOrganizationRole = 'EditOrganizationRole',
+  OrganizationDisplay = 'OrganizationDisplay',
 }
 
 function CmsPageBySlug() {
@@ -379,12 +384,29 @@ const rootSiteRoutes: RouteObject[] = [
   },
   { path: '/email_routes', element: <PageComponents.RootSiteEmailRoutesAdmin /> },
   {
-    path: '/organizations/*',
-    element: <PageComponents.OrganizationAdmin />,
+    path: '/organizations',
+    id: NamedRoute.OrganizationAdmin,
+    loader: organizationsLoader,
+    lazy: () => import('./OrganizationAdmin'),
     children: [
-      { path: ':id/roles/new', element: <PageComponents.NewOrganizationRole /> },
-      { path: ':organizationId/roles/:organizationRoleId/edit', element: <PageComponents.EditOrganizationRole /> },
-      { path: ':id', element: <PageComponents.OrganizationDisplay /> },
+      {
+        path: ':id',
+        loader: singleOrganizationLoader,
+        id: NamedRoute.Organization,
+        children: [
+          { path: 'roles/new', lazy: () => import('./OrganizationAdmin/NewOrganizationRole') },
+          {
+            path: 'roles/:organizationRoleId/edit',
+            id: NamedRoute.EditOrganizationRole,
+            lazy: () => import('./OrganizationAdmin/EditOrganizationRole'),
+          },
+          {
+            index: true,
+            id: NamedRoute.OrganizationDisplay,
+            lazy: () => import('./OrganizationAdmin/OrganizationDisplay'),
+          },
+        ],
+      },
       { path: '', element: <PageComponents.OrganizationIndex /> },
     ],
   },
