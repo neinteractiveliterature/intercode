@@ -182,8 +182,7 @@ class EventSignupService < CivilService::Service
   end
 
   def bucket_finder
-    @bucket_finder ||=
-      SignupBucketFinder.new(run.registration_policy, requested_bucket_key, run.signups.counted.occupying_slot.to_a)
+    @bucket_finder ||= SignupBucketFinder.new(run.registration_policy, requested_bucket_key, run.signups.to_a)
   end
 
   def actual_bucket
