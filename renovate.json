@@ -7,6 +7,11 @@
       "automerge": true
     },
     {
+      "matchPackageNames": ["rails"],
+      "matchUpdateTypes": ["minor"],
+      "automerge": false
+    },
+    {
       "matchDepTypes": ["devDependencies"],
       "automerge": true
     },
