@@ -1,26 +1,40 @@
-import { useState, useEffect, useMemo } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { LoadQueryWrapper, ErrorDisplay, usePropertySetters } from '@neinteractiveliterature/litform';
+import { useState, useEffect } from 'react';
+import { LoaderFunction, useLoaderData, useNavigate } from 'react-router-dom';
+import { ErrorDisplay, usePropertySetters } from '@neinteractiveliterature/litform';
 
 import NotificationsConfig from '../../../config/notifications.json';
 import LiquidInput from '../BuiltInFormControls/LiquidInput';
-import { NotificationAdminQueryData, useNotificationAdminQuery } from './queries.generated';
+import { NotificationAdminQueryData, NotificationAdminQueryDocument } from './queries.generated';
 import { useUpdateNotificationTemplateMutation } from './mutations.generated';
 import FourOhFourPage from '../FourOhFourPage';
+import { client } from '../useIntercodeApolloClient';
 
-type NotificationConfigurationFormProps = {
+type LoaderResult = {
   category: (typeof NotificationsConfig)['categories'][number];
   event: (typeof NotificationsConfig)['categories'][number]['events'][number];
   initialNotificationTemplate: NotificationAdminQueryData['convention']['notification_templates'][number];
-  eventKey: string;
 };
 
-function NotificationConfigurationForm({
-  category,
-  event,
-  initialNotificationTemplate,
-  eventKey,
-}: NotificationConfigurationFormProps) {
+export const loader: LoaderFunction = async ({ params }) => {
+  const category = NotificationsConfig.categories.find((c) => c.key === params.category);
+  const event = category?.events.find((e) => e.key === params.event);
+  if (!category || !event) {
+    return new Response(null, { status: 404 });
+  }
+
+  const { data } = await client.query<NotificationAdminQueryData>({ query: NotificationAdminQueryDocument });
+  const initialNotificationTemplate = data.convention.notification_templates.find(
+    (t) => t.event_key === `${category.key}/${event.key}`,
+  );
+  if (!initialNotificationTemplate) {
+    return new Response(null, { status: 404 });
+  }
+
+  return { category, event, initialNotificationTemplate } satisfies LoaderResult;
+};
+
+function NotificationConfigurationForm() {
+  const { category, event, initialNotificationTemplate } = useLoaderData() as LoaderResult;
   const navigate = useNavigate();
 
   const [updateNotificationTemplate, { loading: updateInProgress, error: updateError }] =
@@ -46,7 +60,7 @@ function NotificationConfigurationForm({
 
     await updateNotificationTemplate({
       variables: {
-        eventKey,
+        eventKey: notificationTemplate.event_key,
         notificationTemplate: {
           subject: notificationTemplate.subject,
           body_html: notificationTemplate.body_html,
@@ -77,7 +91,7 @@ function NotificationConfigurationForm({
         <LiquidInput
           value={notificationTemplate.subject ?? ''}
           onChange={setSubject}
-          notifierEventKey={eventKey}
+          notifierEventKey={notificationTemplate.event_key}
           renderPreview={(previewContent) => <div className="p-2">{previewContent}</div>}
           lines={1}
           disabled={updateInProgress}
@@ -89,7 +103,7 @@ function NotificationConfigurationForm({
         <LiquidInput
           value={notificationTemplate.body_html ?? ''}
           onChange={setBodyHtml}
-          notifierEventKey={eventKey}
+          notifierEventKey={notificationTemplate.event_key}
           disabled={updateInProgress}
         />
       </div>
@@ -99,7 +113,7 @@ function NotificationConfigurationForm({
         <LiquidInput
           value={notificationTemplate.body_text ?? ''}
           onChange={setBodyText}
-          notifierEventKey={eventKey}
+          notifierEventKey={notificationTemplate.event_key}
           renderPreview={(previewContent) => (
             <div className="p-2">
               <pre style={{ whiteSpace: 'pre-wrap' }}>{previewContent}</pre>
@@ -115,7 +129,7 @@ function NotificationConfigurationForm({
           <LiquidInput
             value={notificationTemplate.body_sms ?? ''}
             onChange={setBodySms}
-            notifierEventKey={eventKey}
+            notifierEventKey={notificationTemplate.event_key}
             renderPreview={(previewContent) => (
               <div className="p-2">
                 <pre style={{ whiteSpace: 'pre-wrap' }}>{previewContent}</pre>
@@ -139,28 +153,4 @@ function NotificationConfigurationForm({
   );
 }
 
-export default LoadQueryWrapper(useNotificationAdminQuery, function NotificationConfiguration({ data }) {
-  const params = useParams<{ category: string; event: string }>();
-  const category = useMemo(
-    () => NotificationsConfig.categories.find((c) => c.key === params.category),
-    [params.category],
-  );
-  const event = useMemo(() => category?.events.find((e) => e.key === params.event), [category, params.event]);
-
-  const eventKey = category && event ? `${category.key}/${event.key}` : 'FOUR_OH_FOUR';
-
-  const initialNotificationTemplate = data.convention.notification_templates.find((t) => t.event_key === eventKey);
-
-  if (!category || !event || !initialNotificationTemplate) {
-    return <FourOhFourPage />;
-  }
-
-  return (
-    <NotificationConfigurationForm
-      category={category}
-      event={event}
-      eventKey={eventKey}
-      initialNotificationTemplate={initialNotificationTemplate}
-    />
-  );
-});
+export const Component = NotificationConfigurationForm;

@@ -14,14 +14,10 @@ const UnwrappedNonCMSPageComponents = {
   CmsFilesAdmin: () => import(/* webpackChunkName: "cms-files-admin" */ './CmsAdmin/CmsFilesAdmin'),
   CmsVariablesAdmin: () => import(/* webpackChunkName: "cms-variables-admin" */ './CmsAdmin/CmsVariablesAdmin'),
   ConventionAdmin: () => import(/* webpackChunkName: "convention-admin" */ './ConventionAdmin'),
-  ConventionDisplay: () =>
-    import(/* webpackChunkName: "root-site-conventions-admin" */ './RootSiteConventionsAdmin/ConventionDisplay'),
   EditCmsContentGroup: () =>
     import(/* webpackChunkName: "cms-admin" */ './CmsAdmin/CmsContentGroupsAdmin/EditCmsContentGroup'),
   EditEventCategory: () =>
     import(/* webpackChunkName: "event-category-admin" */ './EventCategoryAdmin/EditEventCategory'),
-  EditOrganizationRole: () =>
-    import(/* webpackChunkName: "organization-admin" */ './OrganizationAdmin/EditOrganizationRole'),
   EditUser: () => import(/* webpackChunkName: "authentication-forms" */ './Authentication/EditUser'),
   EventCategoryAdmin: () => import(/* webpackChunkName: "event-category-admin" */ './EventCategoryAdmin'),
   EventCategoryIndex: () =>
@@ -42,31 +38,16 @@ const UnwrappedNonCMSPageComponents = {
     import(/* webpackChunkName: "cms-admin" */ './CmsAdmin/CmsContentGroupsAdmin/NewCmsContentGroup'),
   NewEventCategory: () =>
     import(/* webpackChunkName: "event-category-admin" */ './EventCategoryAdmin/NewEventCategory'),
-  NewOrganizationRole: () =>
-    import(/* webpackChunkName: "organization-admin" */ './OrganizationAdmin/NewOrganizationRole'),
-  NotificationAdmin: () => import(/* webpackChunkName: 'notification-admin' */ './NotificationAdmin'),
   OAuthApplications: () => import(/* webpackChunkName: "oauth-applications" */ './OAuthApplications'),
   OAuthAuthorizationPrompt: () =>
     import(/* webpackChunkName: "oauth-authorization-prompt" */ './OAuth/AuthorizationPrompt'),
   OrderHistory: () => import(/* webpackChunkName: "store" */ './Store/OrderHistory'),
-  OrganizationAdmin: () => import(/* webpackChunkName: "organization-admin" */ './OrganizationAdmin'),
-  OrganizationDisplay: () =>
-    import(/* webpackChunkName: "organization-admin" */ './OrganizationAdmin/OrganizationDisplay'),
-  OrganizationIndex: () => import(/* webpackChunkName: "organization-admin" */ './OrganizationAdmin/OrganizationIndex'),
   ProductPage: () => import(/* webpackChunkName: "store" */ './Store/ProductPage'),
-  Reports: () => import(/* webpackChunkName: "reports" */ './Reports'),
   ResetPassword: () => import(/* webpackChunkName: "authentication-forms" */ './Authentication/ResetPassword'),
   RoomsAdmin: () => import(/* webpackChunkName: "rooms-admin" */ './RoomsAdmin'),
   RootSiteAdmin: () => import(/* webpackChunkName: "root-site-admin" */ './RootSiteAdmin'),
-  RootSiteConventionsAdmin: () =>
-    import(/* webpackChunkName: "root-site-conventions-admin" */ './RootSiteConventionsAdmin'),
-  RootSiteConventionsAdminTable: () =>
-    import(
-      /* webpackChunkName: "root-site-conventions-admin" */ './RootSiteConventionsAdmin/RootSiteConventionsAdminTable'
-    ),
   RootSiteEmailRoutesAdmin: () =>
     import(/* webpackChunkName: "root-site-email-routes-admin" */ './RootSiteEmailRoutesAdmin'),
-  SignupModeration: () => import(/* webpackChunkName: "signup-moderation" */ './SignupModeration'),
   ViewCmsContentGroup: () =>
     import(/* webpackChunkName: "cms-admin" */ './CmsAdmin/CmsContentGroupsAdmin/ViewCmsContentGroup'),
 

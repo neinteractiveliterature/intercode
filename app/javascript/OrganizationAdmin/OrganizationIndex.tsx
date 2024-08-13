@@ -1,9 +1,13 @@
 import sortBy from 'lodash/sortBy';
-import { Link } from 'react-router-dom';
-import { LoadQueryWrapper, sortByLocaleString } from '@neinteractiveliterature/litform';
+import { Link, LoaderFunction, useLoaderData } from 'react-router-dom';
+import { sortByLocaleString } from '@neinteractiveliterature/litform';
 
 import usePageTitle from '../usePageTitle';
-import { OrganizationAdminOrganizationsQueryData, useOrganizationAdminOrganizationsQuery } from './queries.generated';
+import {
+  OrganizationAdminOrganizationsQueryData,
+  OrganizationAdminOrganizationsQueryDocument,
+} from './queries.generated';
+import { client } from '../useIntercodeApolloClient';
 
 function renderOrganizationConventions(organization: OrganizationAdminOrganizationsQueryData['organizations'][0]) {
   const sortedConventions = sortBy(organization.conventions, [(convention) => convention.starts_at]);
@@ -17,7 +21,15 @@ function renderOrganizationConventions(organization: OrganizationAdminOrganizati
   return conventionNames.join(', ');
 }
 
-export default LoadQueryWrapper(useOrganizationAdminOrganizationsQuery, function OrganizationIndex({ data }) {
+export const loader: LoaderFunction = async () => {
+  const { data } = await client.query<OrganizationAdminOrganizationsQueryData>({
+    query: OrganizationAdminOrganizationsQueryDocument,
+  });
+  return data;
+};
+
+function OrganizationIndex() {
+  const data = useLoaderData() as OrganizationAdminOrganizationsQueryData;
   usePageTitle('Organizations');
 
   const sortedOrganizations = sortByLocaleString(data.organizations, (organization) => organization.name);
@@ -51,4 +63,6 @@ export default LoadQueryWrapper(useOrganizationAdminOrganizationsQuery, function
       </table>
     </>
   );
-});
+}
+
+export const Component = OrganizationIndex;

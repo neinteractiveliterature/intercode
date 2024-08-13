@@ -2,10 +2,10 @@ import { ReactNode, useMemo } from 'react';
 import { generatePath, useMatches, useParams } from 'react-router';
 
 import BreadcrumbItem from './BreadcrumbItem';
-import { NamedRoute } from '../AppRouter';
+import { RouteName } from '../AppRouter';
 
 export type NamedRouteBreadcrumbItemProps = {
-  routeId: NamedRoute | NamedRoute[];
+  routeId: RouteName | RouteName[];
   children: ReactNode;
   hideUnlessMatch?: boolean;
 };
@@ -15,10 +15,10 @@ function NamedRouteBreadcrumbItem({ children, routeId, hideUnlessMatch }: NamedR
   const params = useParams();
 
   const routeIds = useMemo(() => {
-    if (typeof routeId === 'string') {
-      return new Set<string>([routeId]);
-    } else {
+    if (Array.isArray(routeId)) {
       return new Set<string>(routeId);
+    } else {
+      return new Set<string>([routeId]);
     }
   }, [routeId]);
 

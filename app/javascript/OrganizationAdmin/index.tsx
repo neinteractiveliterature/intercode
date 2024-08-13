@@ -20,15 +20,15 @@ function OrganizationAdmin(): JSX.Element {
 
         {organization && (
           <>
-            <NamedRouteBreadcrumbItem routeId={[NamedRoute.Organization, NamedRoute.OrganizationDisplay]}>
+            <NamedRouteBreadcrumbItem routeId={['Organization', 'OrganizationDisplay']}>
               {organization.name}
             </NamedRouteBreadcrumbItem>
 
-            <RouteActivatedBreadcrumbItem to="roles/new" hideUnlessMatch>
+            <NamedRouteBreadcrumbItem routeId="NewOrganizationRole" hideUnlessMatch>
               New organization role
-            </RouteActivatedBreadcrumbItem>
+            </NamedRouteBreadcrumbItem>
 
-            <NamedRouteBreadcrumbItem routeId={NamedRoute.EditOrganizationRole} hideUnlessMatch>
+            <NamedRouteBreadcrumbItem routeId="EditOrganizationRole" hideUnlessMatch>
               Edit organization role
             </NamedRouteBreadcrumbItem>
           </>

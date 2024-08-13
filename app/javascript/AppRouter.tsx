@@ -31,7 +31,10 @@ export enum NamedRoute {
   OrganizationAdmin = 'OrganizationAdmin',
   EditOrganizationRole = 'EditOrganizationRole',
   OrganizationDisplay = 'OrganizationDisplay',
+  NewOrganizationRole = 'NewOrganizationRole',
 }
+
+export type RouteName = keyof typeof NamedRoute & string;
 
 function CmsPageBySlug() {
   // react-router 6 doesn't allow slashes in params, so we're going to do our own parsing here
@@ -199,7 +202,14 @@ const commonInConventionRoutes: RouteObject[] = [
     ],
   },
   { path: '/admin_forms/*', element: <PageComponents.FormAdmin /> },
-  { path: '/admin_notifications/*', element: <PageComponents.NotificationAdmin /> },
+  {
+    path: '/admin_notifications',
+    element: <AuthorizationRequiredRouteGuard abilities={['can_update_notification_templates']} />,
+    children: [
+      { path: ':category/:event', lazy: () => import('./NotificationAdmin/NotificationConfiguration') },
+      { index: true, lazy: () => import('./NotificationAdmin/NotificationAdminIndex') },
+    ],
+  },
   {
     path: '/admin_store',
     lazy: () => import('./Store/StoreAdmin'),
@@ -394,7 +404,11 @@ const rootSiteRoutes: RouteObject[] = [
         loader: singleOrganizationLoader,
         id: NamedRoute.Organization,
         children: [
-          { path: 'roles/new', lazy: () => import('./OrganizationAdmin/NewOrganizationRole') },
+          {
+            path: 'roles/new',
+            id: NamedRoute.NewOrganizationRole,
+            lazy: () => import('./OrganizationAdmin/NewOrganizationRole'),
+          },
           {
             path: 'roles/:organizationRoleId/edit',
             id: NamedRoute.EditOrganizationRole,
@@ -407,7 +421,7 @@ const rootSiteRoutes: RouteObject[] = [
           },
         ],
       },
-      { path: '', element: <PageComponents.OrganizationIndex /> },
+      { path: '', lazy: () => import('./OrganizationAdmin/OrganizationIndex') },
     ],
   },
   {
