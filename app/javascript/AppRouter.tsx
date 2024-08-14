@@ -235,7 +235,19 @@ const commonInConventionRoutes: RouteObject[] = [
   { path: '/clickwrap_agreement', element: <PageComponents.ClickwrapAgreement /> },
   { path: '/convention/edit', element: <PageComponents.ConventionAdmin /> },
   { path: '/events/*', children: eventsRoutes },
-  { path: '/mailing_lists/*', element: <PageComponents.MailingLists /> },
+  {
+    path: '/mailing_lists',
+    element: <AuthorizationRequiredRouteGuard abilities={['can_read_any_mailing_list']} />,
+    children: [
+      { path: 'ticketed_attendees', lazy: () => import('./MailingLists/TicketedAttendees') },
+      { path: 'event_proposers', lazy: () => import('./MailingLists/EventProposers') },
+      { path: 'team_members', lazy: () => import('./MailingLists/TeamMembers') },
+      { path: 'users_with_pending_bio', lazy: () => import('./MailingLists/UsersWithPendingBio') },
+      { path: 'waitlists', lazy: () => import('./MailingLists/WaitlistMailingLists') },
+      { path: 'whos_free', lazy: () => import('./MailingLists/WhosFree') },
+      { index: true, lazy: () => import('./MailingLists') },
+    ],
+  },
   {
     path: '/my_profile',
     element: <LoginRequiredRouteGuard />,

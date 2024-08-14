@@ -32,15 +32,15 @@ function WhosFreeResults({ timespan }: { timespan: FiniteTimespan }) {
 function WhosFree(): JSX.Element {
   const [timespan, setTimespan] = useState<FiniteTimespan>();
 
-  usePageTitle('Who‘s free');
+  usePageTitle('Who’s free');
 
   return (
     <>
-      <h1 className="mb-4">Who&rsquo;s free?</h1>
+      <h1 className="mb-4">Who’s free?</h1>
       <WhosFreeForm onSubmit={({ start, finish }) => setTimespan(Timespan.finiteFromDateTimes(start, finish))} />
       {timespan && <WhosFreeResults timespan={timespan} />}
     </>
   );
 }
 
-export default WhosFree;
+export const Component = WhosFree;

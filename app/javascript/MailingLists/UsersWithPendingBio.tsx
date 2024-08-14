@@ -1,10 +1,16 @@
-import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
-
 import TabbedMailingList from './TabbedMailingList';
 import usePageTitle from '../usePageTitle';
-import { useUsersWithPendingBioQuery } from './queries.generated';
+import { UsersWithPendingBioQueryData, UsersWithPendingBioQueryDocument } from './queries.generated';
+import { client } from '../useIntercodeApolloClient';
+import { LoaderFunction, useLoaderData } from 'react-router';
 
-export default LoadQueryWrapper(useUsersWithPendingBioQuery, function UsersWithPendingBio({ data }) {
+export const loader: LoaderFunction = async () => {
+  const { data } = await client.query<UsersWithPendingBioQueryData>({ query: UsersWithPendingBioQueryDocument });
+  return data;
+};
+
+function UsersWithPendingBio() {
+  const data = useLoaderData() as UsersWithPendingBioQueryData;
   usePageTitle('Users with pending bio');
 
   return (
@@ -18,4 +24,6 @@ export default LoadQueryWrapper(useUsersWithPendingBioQuery, function UsersWithP
       />
     </>
   );
-});
+}
+
+export const Component = UsersWithPendingBio;

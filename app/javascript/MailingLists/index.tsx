@@ -1,28 +1,20 @@
-import { Link, Route, Routes } from 'react-router-dom';
-import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
+import { Link } from 'react-router-dom';
 
-import EventProposers from './EventProposers';
-import TicketedAttendees from './TicketedAttendees';
-import TeamMembers from './TeamMembers';
-import UsersWithPendingBio from './UsersWithPendingBio';
-import WaitlistMailingLists from './WaitlistMailingLists';
-import WhosFree from './WhosFree';
-import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
-import { useMailingListsMenuQuery } from './queries.generated';
+import { useContext } from 'react';
+import AppRootContext from '../AppRootContext';
+import { TicketMode } from '../graphqlTypes.generated';
 
-const MailingListsMenuWrapper = LoadQueryWrapper(useMailingListsMenuQuery, function MailingListsMenu({ data }) {
-  const authorizationWarning = useAuthorizationRequired('can_read_any_mailing_list');
-
-  if (authorizationWarning) return authorizationWarning;
+function MailingListsMenu() {
+  const { ticketMode, ticketName } = useContext(AppRootContext);
 
   return (
     <>
       <h1 className="mb-4">Mailing lists</h1>
 
       <ul>
-        {data.convention.ticket_mode !== 'disabled' && (
+        {ticketMode !== TicketMode.Disabled && (
           <li>
-            <Link to="/mailing_lists/ticketed_attendees">All attendees with {data.convention.ticket_name}</Link>
+            <Link to="/mailing_lists/ticketed_attendees">All attendees with {ticketName}</Link>
           </li>
         )}
         <li>
@@ -43,20 +35,6 @@ const MailingListsMenuWrapper = LoadQueryWrapper(useMailingListsMenuQuery, funct
       </ul>
     </>
   );
-});
-
-function MailingLists(): JSX.Element {
-  return (
-    <Routes>
-      <Route path="ticketed_attendees" element={<TicketedAttendees />} />
-      <Route path="event_proposers" element={<EventProposers />} />
-      <Route path="team_members" element={<TeamMembers />} />
-      <Route path="users_with_pending_bio" element={<UsersWithPendingBio />} />
-      <Route path="waitlists" element={<WaitlistMailingLists />} />
-      <Route path="whos_free" element={<WhosFree />} />
-      <Route path="" element={<MailingListsMenuWrapper />} />
-    </Routes>
-  );
 }
 
-export default MailingLists;
+export const Component = MailingListsMenu;

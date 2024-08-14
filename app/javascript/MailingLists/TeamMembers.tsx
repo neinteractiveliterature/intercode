@@ -1,10 +1,16 @@
-import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
-
 import TabbedMailingList from './TabbedMailingList';
 import usePageTitle from '../usePageTitle';
-import { useTeamMembersMailingListQuery } from './queries.generated';
+import { TeamMembersMailingListQueryData, TeamMembersMailingListQueryDocument } from './queries.generated';
+import { client } from '../useIntercodeApolloClient';
+import { LoaderFunction, useLoaderData } from 'react-router';
 
-export default LoadQueryWrapper(useTeamMembersMailingListQuery, function TeamMembers({ data }) {
+export const loader: LoaderFunction = async () => {
+  const { data } = await client.query<TeamMembersMailingListQueryData>({ query: TeamMembersMailingListQueryDocument });
+  return data;
+};
+
+function TeamMembers() {
+  const data = useLoaderData() as TeamMembersMailingListQueryData;
   usePageTitle('Event team members');
 
   return (
@@ -18,4 +24,6 @@ export default LoadQueryWrapper(useTeamMembersMailingListQuery, function TeamMem
       />
     </>
   );
-});
+}
+
+export const Component = TeamMembers;

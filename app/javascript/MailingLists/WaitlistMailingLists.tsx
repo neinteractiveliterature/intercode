@@ -1,14 +1,21 @@
 import { useContext } from 'react';
 import { DateTime } from 'luxon';
-import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import TabbedMailingList from './TabbedMailingList';
 import usePageTitle from '../usePageTitle';
 import AppRootContext from '../AppRootContext';
-import { useWaitlistMailingListsQuery } from './queries.generated';
+import { WaitlistMailingListsQueryData, WaitlistMailingListsQueryDocument } from './queries.generated';
 import { useAppDateTimeFormat } from '../TimeUtils';
+import { client } from '../useIntercodeApolloClient';
+import { LoaderFunction, useLoaderData } from 'react-router';
 
-export default LoadQueryWrapper(useWaitlistMailingListsQuery, function WaitlistMailingLists({ data }) {
+export const loader: LoaderFunction = async () => {
+  const { data } = await client.query<WaitlistMailingListsQueryData>({ query: WaitlistMailingListsQueryDocument });
+  return data;
+};
+
+function WaitlistMailingLists() {
+  const data = useLoaderData() as WaitlistMailingListsQueryData;
   const format = useAppDateTimeFormat();
   const { timezoneName } = useContext(AppRootContext);
 
@@ -46,4 +53,6 @@ export default LoadQueryWrapper(useWaitlistMailingListsQuery, function WaitlistM
       })}
     </>
   );
-});
+}
+
+export const Component = WaitlistMailingLists;
