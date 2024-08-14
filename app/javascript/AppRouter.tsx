@@ -302,7 +302,13 @@ const commonInConventionRoutes: RouteObject[] = [
       { path: '', lazy: () => import('./StaffPositionAdmin/StaffPositionsTable') },
     ],
   },
-  { path: '/ticket/*', element: <PageComponents.MyTicket /> },
+  {
+    path: '/ticket',
+    children: [
+      { path: 'new', lazy: () => import('./MyTicket/TicketPurchasePage') },
+      { index: true, lazy: () => import('./MyTicket/MyTicketDisplay') },
+    ],
+  },
   {
     element: <AppRootContextRouteGuard guard={({ ticketMode }) => ticketMode === TicketMode.RequiredForSignup} />,
     children: [

@@ -1,27 +1,36 @@
 import { useContext } from 'react';
-import { Navigate } from 'react-router-dom';
+import { LoaderFunction, replace, useLoaderData } from 'react-router-dom';
 import { DateTime } from 'luxon';
-import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
 
 import formatMoney from '../formatMoney';
 import usePageTitle from '../usePageTitle';
 import AppRootContext from '../AppRootContext';
-import { useMyTicketDisplayQuery } from './queries.generated';
+import { MyTicketDisplayQueryData, MyTicketDisplayQueryDocument } from './queries.generated';
 import { useAppDateTimeFormat } from '../TimeUtils';
+import { client } from '../useIntercodeApolloClient';
 
-export default LoadQueryWrapper(useMyTicketDisplayQuery, function MyTicketDisplay({ data }) {
+type LoaderResult = {
+  convention: MyTicketDisplayQueryData['convention'];
+  ticket: NonNullable<NonNullable<MyTicketDisplayQueryData['convention']['my_profile']>['ticket']>;
+};
+
+export const loader: LoaderFunction = async () => {
+  const { data } = await client.query<MyTicketDisplayQueryData>({ query: MyTicketDisplayQueryDocument });
+  if (!data.convention.my_profile?.ticket) {
+    return replace('new');
+  }
+
+  return { convention: data.convention, ticket: data.convention.my_profile.ticket } satisfies LoaderResult;
+};
+
+function MyTicketDisplay() {
+  const { convention, ticket } = useLoaderData() as LoaderResult;
   const format = useAppDateTimeFormat();
   const { timezoneName } = useContext(AppRootContext);
 
-  usePageTitle(`My ${data.convention.ticket_name} receipt`);
+  usePageTitle(`My ${convention.ticket_name} receipt`);
 
-  const { convention } = data;
-  const ticket = convention.my_profile?.ticket;
-  const paymentAmount = ticket?.order_entry?.price_per_item;
-
-  if (!ticket) {
-    return <Navigate to="/ticket/new" replace />;
-  }
+  const paymentAmount = ticket.order_entry?.price_per_item;
 
   return (
     <>
@@ -73,4 +82,6 @@ export default LoadQueryWrapper(useMyTicketDisplayQuery, function MyTicketDispla
       </div>
     </>
   );
-});
+}
+
+export const Component = MyTicketDisplay;

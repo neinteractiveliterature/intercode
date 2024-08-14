@@ -31,7 +31,6 @@ const UnwrappedNonCMSPageComponents = {
   FormSectionEditorLayout: () => import(/* webpackChunkName: "form-editor" */ './FormAdmin/FormSectionEditorLayout'),
   MailingLists: () => import(/* webpackChunkName: "mailing-lists" */ './MailingLists'),
   MyProfile: () => import(/* webpackChunkName: "my-profile" */ './MyProfile'),
-  MyTicket: () => import(/* webpackChunkName: 'my-ticket' */ './MyTicket'),
   NavigationItemsAdmin: () =>
     import(/* webpackChunkName: "navigation-items-admin" */ './CmsAdmin/NavigationItemsAdmin'),
   NewCmsContentGroup: () =>
