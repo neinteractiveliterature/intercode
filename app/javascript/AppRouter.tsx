@@ -19,6 +19,7 @@ import { client } from './useIntercodeApolloClient';
 import buildEventCategoryUrl from './EventAdmin/buildEventCategoryUrl';
 import { adminSingleTicketTypeLoader, adminTicketTypesLoader } from './TicketTypeAdmin/loaders';
 import { organizationsLoader, singleOrganizationLoader } from './OrganizationAdmin/loaders';
+import useLoginRequired from './Authentication/useLoginRequired';
 
 export enum NamedRoute {
   AdminUserConProfile = 'AdminUserConProfile',
@@ -55,6 +56,15 @@ export function AppRootContextRouteGuard({ guard }: AppRootContextRouteGuardProp
   } else {
     return <FourOhFourPage />;
   }
+}
+
+function LoginRequiredRouteGuard() {
+  const loginRequired = useLoginRequired();
+  if (loginRequired) {
+    return <></>;
+  }
+
+  return <Outlet />;
 }
 
 type AuthorizationRequiredRouteGuardProps = {
@@ -226,7 +236,16 @@ const commonInConventionRoutes: RouteObject[] = [
   { path: '/convention/edit', element: <PageComponents.ConventionAdmin /> },
   { path: '/events/*', children: eventsRoutes },
   { path: '/mailing_lists/*', element: <PageComponents.MailingLists /> },
-  { path: '/my_profile/*', element: <PageComponents.MyProfile /> },
+  {
+    path: '/my_profile',
+    element: <LoginRequiredRouteGuard />,
+    children: [
+      { path: 'edit_bio', loader: () => replace('./edit') },
+      { path: 'edit', lazy: () => import('./MyProfile/MyProfileForm') },
+      { path: 'setup', lazy: () => import('./MyProfile/MyProfileForm') },
+      { index: true, lazy: () => import('./MyProfile/MyProfileDisplay') },
+    ],
+  },
   { path: '/order_history', element: <PageComponents.OrderHistory /> },
   { path: '/products/:id', element: <PageComponents.ProductPage /> },
   {

@@ -1,8 +1,8 @@
-import { useState, useCallback, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useCallback } from 'react';
+import { Link, LoaderFunction, useLoaderData, useMatch } from 'react-router-dom';
 import md5 from 'md5';
 import { useTranslation, Trans } from 'react-i18next';
-import { BooleanInput, PageLoadingIndicator, LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
+import { BooleanInput, LoadingIndicator } from '@neinteractiveliterature/litform';
 
 import buildFormStateFromData from '../UserConProfiles/buildFormStateFromData';
 import SinglePageFormPresenter, { SinglePageFormPresenterProps } from '../FormPresenter/SinglePageFormPresenter';
@@ -13,25 +13,43 @@ import { useItemInteractionTracking, ItemInteractionTrackerContext } from '../Fo
 import usePageTitle from '../usePageTitle';
 import MarkdownInput from '../BuiltInFormControls/MarkdownInput';
 import Gravatar from '../Gravatar';
-import { useMyProfileQuery, MyProfileQueryData, MyProfileQueryDocument } from './queries.generated';
+import { MyProfileQueryData, MyProfileQueryDocument } from './queries.generated';
 import { CommonFormFieldsFragment } from '../Models/commonFormFragments.generated';
 import { useUpdateUserConProfileMutation } from '../UserConProfiles/mutations.generated';
 import { WithFormResponse } from '../Models/deserializeFormResponse';
-import FourOhFourPage from '../FourOhFourPage';
 import { parseResponseErrors } from '../parseResponseErrors';
+import { client } from '../useIntercodeApolloClient';
 
-type MyProfileFormInnerProps = {
-  initialSetup?: boolean;
+type LoaderResult = {
   initialUserConProfile: WithFormResponse<NonNullable<MyProfileQueryData['convention']['my_profile']>>;
   convention: NonNullable<MyProfileQueryData['convention']>;
   form: CommonFormFieldsFragment;
 };
 
-function MyProfileFormInner({ initialSetup, initialUserConProfile, convention, form }: MyProfileFormInnerProps) {
+export const loader: LoaderFunction = async () => {
+  const { data } = await client.query<MyProfileQueryData>({ query: MyProfileQueryDocument });
+  const myProfile = data.convention.my_profile;
+  if (!myProfile) {
+    return new Response(null, { status: 404 });
+  }
+  const formState = buildFormStateFromData(myProfile, data.convention);
+
+  return {
+    initialUserConProfile: formState.userConProfile,
+    convention: formState.convention,
+    form: formState.form,
+  } satisfies LoaderResult;
+};
+
+function MyProfileForm() {
+  const { initialUserConProfile, convention, form } = useLoaderData() as LoaderResult;
   const { t } = useTranslation();
   const [updateMutate] = useUpdateUserConProfileMutation();
   const [mutate, , mutationInProgress] = useAsyncFunction(updateMutate);
   const [responseErrors, setResponseErrors] = useState<Record<string, string[]>>({});
+  const initialSetup = useMatch('/my_profile/setup');
+
+  usePageTitle(`${initialSetup ? 'Set up' : 'Editing'} my profile`);
 
   const [userConProfile, setUserConProfile] = useState(initialUserConProfile);
   const [, responseValuesChanged] = useFormResponse(userConProfile, setUserConProfile);
@@ -209,43 +227,4 @@ function MyProfileFormInner({ initialSetup, initialUserConProfile, convention, f
   );
 }
 
-export type MyProfileFormProps = {
-  initialSetup?: boolean;
-};
-
-function MyProfileForm({ initialSetup }: MyProfileFormProps): JSX.Element {
-  const { data, loading, error } = useMyProfileQuery();
-
-  const formState = useMemo(
-    () =>
-      loading || error || !data || !data.convention.my_profile
-        ? null
-        : buildFormStateFromData(data.convention.my_profile, data.convention),
-    [loading, error, data],
-  );
-
-  usePageTitle(`${initialSetup ? 'Set up' : 'Editing'} my profile`);
-
-  if (loading) {
-    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
-  if (!formState) {
-    return <FourOhFourPage />;
-  }
-
-  return (
-    <MyProfileFormInner
-      initialUserConProfile={formState.userConProfile}
-      convention={formState.convention}
-      form={formState.form}
-      initialSetup={initialSetup ?? false}
-    />
-  );
-}
-
-export default MyProfileForm;
+export const Component = MyProfileForm;
