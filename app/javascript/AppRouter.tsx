@@ -441,10 +441,6 @@ const conventionModeRoutes: RouteObject[] = [
         ],
       },
       { index: true, lazy: () => import('./EventProposals/EventProposalsAdminTable') },
-      //   <Route path=":id/history/*" element={<EventProposalHistory />} />
-      //   <Route path=":id/edit" element={<AdminEditEventProposal />} />
-      //   <Route path=":id" element={<EventProposalAdminDisplay />} />
-      //   <Route path="" element={<EventProposalsAdminTable />} />
     ],
   },
   {

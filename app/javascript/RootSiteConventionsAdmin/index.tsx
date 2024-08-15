@@ -20,7 +20,7 @@ function RootSiteConventionsAdmin(): JSX.Element {
           Conventions
         </RouteActivatedBreadcrumbItem>
 
-        <NamedRouteBreadcrumbItem hideUnlessMatch routeId={NamedRoute.RootSiteConventionDisplay}>
+        <NamedRouteBreadcrumbItem routeId={NamedRoute.RootSiteConventionDisplay}>
           {conventionData?.convention.name}
         </NamedRouteBreadcrumbItem>
       </ol>

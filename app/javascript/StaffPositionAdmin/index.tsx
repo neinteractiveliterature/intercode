@@ -20,10 +20,8 @@ function StaffPositionAdmin(): JSX.Element {
 
           <LeafBreadcrumbItem path="new">New staff position</LeafBreadcrumbItem>
 
-          <NamedRouteBreadcrumbItem hideUnlessMatch routeId={NamedRoute.EditStaffPosition}>
-            Edit settings
-          </NamedRouteBreadcrumbItem>
-          <NamedRouteBreadcrumbItem hideUnlessMatch routeId={NamedRoute.EditStaffPositionPermissions}>
+          <NamedRouteBreadcrumbItem routeId={NamedRoute.EditStaffPosition}>Edit settings</NamedRouteBreadcrumbItem>
+          <NamedRouteBreadcrumbItem routeId={NamedRoute.EditStaffPositionPermissions}>
             Edit permissions
           </NamedRouteBreadcrumbItem>
         </ol>
