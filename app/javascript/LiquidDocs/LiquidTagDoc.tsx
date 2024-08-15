@@ -1,15 +1,19 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 
 import LiquidTagDocHeader from './LiquidTagDocHeader';
 import TagDoc from './TagDoc';
-import { YardClass } from './DocData';
+import { useLiquidDocs } from './loader';
+import FourOhFourPage from '../FourOhFourPage';
 
-export type LiquidTagDocProps = {
-  liquidTag: YardClass;
-};
-
-function LiquidTagDoc({ liquidTag }: LiquidTagDocProps): JSX.Element {
+function LiquidTagDoc(): JSX.Element {
+  const { name } = useParams();
+  const { tags } = useLiquidDocs();
   const location = useLocation();
+  const liquidTag = name ? tags[name] : undefined;
+
+  if (!liquidTag) {
+    return <FourOhFourPage />;
+  }
 
   return (
     <>
@@ -34,7 +38,6 @@ function LiquidTagDoc({ liquidTag }: LiquidTagDocProps): JSX.Element {
             {liquidTag.tags
               .filter((tag) => tag.tag_name !== 'liquid_tag_name')
               .map((tag, i) => (
-                 
                 <TagDoc tag={tag} key={i} />
               ))}
           </ul>
@@ -44,4 +47,4 @@ function LiquidTagDoc({ liquidTag }: LiquidTagDocProps): JSX.Element {
   );
 }
 
-export default LiquidTagDoc;
+export const Component = LiquidTagDoc;

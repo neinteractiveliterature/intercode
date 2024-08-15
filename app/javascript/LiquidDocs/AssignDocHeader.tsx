@@ -1,14 +1,15 @@
 import AssignName from './AssignName';
 import findClass from './findClass';
-import { LiquidAssignsQueryFromLocationData } from './useLiquidAssignsQueryFromLocation';
+import { LiquidDocsLoaderResult, useLiquidDocs } from './loader';
 
 export type AssignDocHeaderProps = {
-  assign: LiquidAssignsQueryFromLocationData['cmsParent']['liquidAssigns'][0];
+  assign: LiquidDocsLoaderResult['sortedAssigns'][number];
   prefix?: string;
 };
 
 function AssignDocHeader({ assign, prefix }: AssignDocHeaderProps): JSX.Element {
-  const assignClass = findClass(assign.drop_class_name);
+  const { docData } = useLiquidDocs();
+  const assignClass = findClass(docData, assign.drop_class_name);
 
   return (
     <>

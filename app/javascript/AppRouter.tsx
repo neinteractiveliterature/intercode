@@ -33,6 +33,7 @@ export enum NamedRoute {
   EditOrganizationRole = 'EditOrganizationRole',
   OrganizationDisplay = 'OrganizationDisplay',
   NewOrganizationRole = 'NewOrganizationRole',
+  LiquidDocs = 'LiquidDocs',
 }
 
 export type RouteName = keyof typeof NamedRoute & string;

@@ -1,19 +1,24 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useParams, useRouteLoaderData } from 'react-router-dom';
 
 import MethodDoc from './MethodDoc';
-import { YardMethod } from './DocData';
+import { NamedRoute } from '../AppRouter';
+import { LiquidDocsLoaderResult } from './loader';
+import FourOhFourPage from '../FourOhFourPage';
 
-export type FilterDocHeaderProps = {
-  filter: YardMethod;
-};
-
-function FilterDoc({ filter }: FilterDocHeaderProps): JSX.Element {
+function FilterDoc(): JSX.Element {
+  const { name } = useParams();
+  const { filters } = useRouteLoaderData(NamedRoute.LiquidDocs) as LiquidDocsLoaderResult;
   const location = useLocation();
+  const filter = name ? filters[name] : undefined;
+
+  if (!filter) {
+    return <FourOhFourPage />;
+  }
 
   return (
     <>
-      <nav aria-label="breadcrumb mb-4">
-        <ol className="breadcrumb">
+      <nav aria-label="breadcrumb">
+        <ol className="breadcrumb mb-4">
           <li className="breadcrumb-item">
             <Link to={`/liquid_docs${location.search}`}>Documentation home</Link>
           </li>
@@ -24,15 +29,17 @@ function FilterDoc({ filter }: FilterDocHeaderProps): JSX.Element {
       </nav>
 
       <section id={filter.name} className="card my-4">
-        <MethodDoc
-          method={{
-            ...filter,
-            name: `input | ${filter.name}`,
-          }}
-        />
+        <div className="card-body">
+          <MethodDoc
+            method={{
+              ...filter,
+              name: `input | ${filter.name}`,
+            }}
+          />
+        </div>
       </section>
     </>
   );
 }
 
-export default FilterDoc;
+export const Component = FilterDoc;

@@ -3,6 +3,7 @@ import findClass from './findClass';
 import findMethodReturnClass from './findMethodReturnClass';
 import { YardMethod, YardTag } from './DocData';
 import humanize from '../humanize';
+import { useLiquidDocs } from './loader';
 
 export type BaseTagDocProps = {
   tag: YardTag;
@@ -75,6 +76,8 @@ export type TagDocProps = BaseTagDocProps & {
 };
 
 function TagDoc({ tag, method, prefix }: TagDocProps): JSX.Element {
+  const { docData } = useLiquidDocs();
+
   if (tag.tag_name === 'example') {
     return <ExampleTagDoc tag={tag} />;
   }
@@ -82,7 +85,7 @@ function TagDoc({ tag, method, prefix }: TagDocProps): JSX.Element {
   if (tag.tag_name === 'return' && method) {
     const { returnClassName, assignName } = findMethodReturnClass(method);
 
-    if (returnClassName && findClass(returnClassName)) {
+    if (returnClassName && findClass(docData, returnClassName)) {
       return (
         <ReturnTagWithClassDoc tag={tag} assignName={assignName} returnClassName={returnClassName} prefix={prefix} />
       );
