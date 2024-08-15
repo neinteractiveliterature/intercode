@@ -182,4 +182,4 @@ function EventProposalsAdminTable(): JSX.Element {
   );
 }
 
-export default EventProposalsAdminTable;
+export const Component = EventProposalsAdminTable;

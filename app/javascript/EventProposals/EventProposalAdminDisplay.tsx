@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { LoadingIndicator, ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform';
+import { Link, useRouteLoaderData } from 'react-router-dom';
+import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import AdminNotes from '../BuiltInFormControls/AdminNotes';
 import EventProposalDisplay from './EventProposalDisplay';
@@ -9,11 +9,12 @@ import usePageTitle from '../usePageTitle';
 import {
   EventProposalAdminNotesQueryData,
   EventProposalAdminNotesQueryDocument,
+  EventProposalQueryWithOwnerQueryData,
   useEventProposalAdminNotesQuery,
-  useEventProposalQueryWithOwner,
 } from './queries.generated';
 import { useUpdateEventProposalAdminNotesMutation } from './mutations.generated';
 import humanize from '../humanize';
+import { NamedRoute } from '../AppRouter';
 
 export type EventProposalAdminNotesProps = {
   eventProposalId: string;
@@ -67,15 +68,8 @@ function EventProposalAdminNotes({ eventProposalId }: EventProposalAdminNotesPro
   return <AdminNotes value={data?.convention.event_proposal.admin_notes ?? ''} mutate={updateAdminNotes} />;
 }
 
-function useLoadEventProposal() {
-  const eventProposalId = useParams<{ id: string }>().id;
-  if (eventProposalId == null) {
-    throw new Error('id not found in URL params');
-  }
-  return useEventProposalQueryWithOwner({ variables: { eventProposalId } });
-}
-
-export default LoadQueryWrapper(useLoadEventProposal, function EventProposalAdminDisplay({ data }) {
+function EventProposalAdminDisplay() {
+  const data = useRouteLoaderData(NamedRoute.AdminEventProposal) as EventProposalQueryWithOwnerQueryData;
   usePageTitle(data.convention.event_proposal.title);
 
   const eventProposalId = data.convention.event_proposal.id;
@@ -124,4 +118,6 @@ export default LoadQueryWrapper(useLoadEventProposal, function EventProposalAdmi
       <EventProposalDisplay eventProposalId={eventProposalId} />
     </>
   );
-});
+}
+
+export const Component = EventProposalAdminDisplay;

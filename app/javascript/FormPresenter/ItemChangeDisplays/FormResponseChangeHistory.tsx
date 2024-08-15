@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { NavLink, Routes, Route, Navigate } from 'react-router-dom';
+import { NavLink, useParams, Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import FormItemChangeGroup from './FormItemChangeGroup';
@@ -21,6 +21,7 @@ function FormResponseChangeHistory({
   form,
   basePath,
 }: FormResponseChangeHistoryProps): JSX.Element {
+  const { changeGroupId } = useParams();
   const { t } = useTranslation();
   const changeGroups = useMemo(() => buildChangeGroups(changes, form), [changes, form]);
   const format = useAppDateTimeFormat();
@@ -34,8 +35,17 @@ function FormResponseChangeHistory({
     );
   };
 
+  const changeGroup = useMemo(
+    () => changeGroups.find((changeGroup) => changeGroup.id === changeGroupId),
+    [changeGroups, changeGroupId],
+  );
+
   if (changeGroups.length === 0) {
     return <>{t('forms.history.noChanges')}</>;
+  }
+
+  if (!changeGroup) {
+    return <Navigate to={`./${changeGroups[0].id}`} replace />;
   }
 
   return (
@@ -54,16 +64,7 @@ function FormResponseChangeHistory({
         </ul>
       </nav>
       <div className="col-md-9">
-        <Routes>
-          {changeGroups.map((changeGroup) => (
-            <Route
-              key={changeGroup.id}
-              path={changeGroup.id}
-              element={<FormItemChangeGroup convention={convention} changeGroup={changeGroup} />}
-            />
-          ))}
-          <Route path="" element={<Navigate to={`${basePath}/${changeGroups[0].id}`} replace />} />
-        </Routes>
+        <FormItemChangeGroup convention={convention} changeGroup={changeGroup} />
       </div>
     </div>
   );

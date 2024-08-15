@@ -7,7 +7,6 @@ import RunSignupSummary from './SignupAdmin/RunSignupSummary';
 import SignupAdmin from './SignupAdmin';
 import StandaloneEditEvent from './StandaloneEditEvent';
 import TeamMemberAdmin from './TeamMemberAdmin';
-import EventHistory from './EventPage/EventHistory';
 import ScheduleApp from './ScheduleApp';
 import NewTeamMember from './TeamMemberAdmin/NewTeamMember';
 import EditTeamMember from './TeamMemberAdmin/EditTeamMember';
@@ -103,7 +102,11 @@ export const eventsRoutes: RouteObject[] = [
           { path: '', element: <TeamMembersIndex /> },
         ],
       },
-      { path: 'history/*', element: <EventHistory /> },
+      {
+        path: 'history',
+        lazy: () => import('./EventPage/EventHistory'),
+        children: [{ path: ':changeGroupId', lazy: () => import('./EventPage/EventHistory') }],
+      },
       {
         path: 'runs/:runId',
         children: [

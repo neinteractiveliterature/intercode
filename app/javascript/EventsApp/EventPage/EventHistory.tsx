@@ -4,10 +4,14 @@ import { useTranslation } from 'react-i18next';
 import FormResponseChangeHistory from '../../FormPresenter/ItemChangeDisplays/FormResponseChangeHistory';
 import RouteActivatedBreadcrumbItem from '../../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import BreadcrumbItem from '../../Breadcrumbs/BreadcrumbItem';
-import { useEventHistoryQuery } from './eventHistoryQuery.generated';
-import { useParams } from 'react-router';
-import { LoadQueryWrapper } from '@neinteractiveliterature/litform/dist';
+import {
+  EventHistoryQueryData,
+  EventHistoryQueryDocument,
+  EventHistoryQueryVariables,
+} from './eventHistoryQuery.generated';
+import { LoaderFunction, useLoaderData } from 'react-router';
 import buildEventUrl from '../buildEventUrl';
+import { client } from '../../useIntercodeApolloClient';
 
 const EXCLUDE_FIELDS = new Set([
   'minimum_age',
@@ -17,12 +21,16 @@ const EXCLUDE_FIELDS = new Set([
   'team_mailing_list_name',
 ]);
 
-function useEventHistoryQueryFromParams() {
-  const { eventId } = useParams<{ eventId: string }>();
-  return useEventHistoryQuery({ variables: { id: eventId ?? '' } });
-}
+export const loader: LoaderFunction = async ({ params: { eventId } }) => {
+  const { data } = await client.query<EventHistoryQueryData, EventHistoryQueryVariables>({
+    query: EventHistoryQueryDocument,
+    variables: { id: eventId ?? '' },
+  });
+  return data;
+};
 
-export default LoadQueryWrapper(useEventHistoryQueryFromParams, function EventHistory({ data }) {
+function EventHistory() {
+  const data = useLoaderData() as EventHistoryQueryData;
   const { t } = useTranslation();
 
   const changes = useMemo(
@@ -48,4 +56,6 @@ export default LoadQueryWrapper(useEventHistoryQueryFromParams, function EventHi
       />
     </>
   );
-});
+}
+
+export const Component = EventHistory;

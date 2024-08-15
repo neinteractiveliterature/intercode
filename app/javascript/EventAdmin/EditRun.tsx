@@ -22,7 +22,6 @@ export const loader: LoaderFunction = async ({ request, params: { eventId, runId
   const events = convention.events;
   const event = events.find((e) => e.id.toString() === eventId);
 
-  console.log(new URL(request.url).pathname);
   if (new URL(request.url).pathname.endsWith('/new')) {
     const initialRun: EditingRun = {
       __typename: 'Run',

@@ -20,6 +20,7 @@ import buildEventCategoryUrl from './EventAdmin/buildEventCategoryUrl';
 import { adminSingleTicketTypeLoader, adminTicketTypesLoader } from './TicketTypeAdmin/loaders';
 import { organizationsLoader, singleOrganizationLoader } from './OrganizationAdmin/loaders';
 import useLoginRequired from './Authentication/useLoginRequired';
+import { eventProposalWithOwnerLoader } from './EventProposals/loaders';
 
 export enum NamedRoute {
   AdminUserConProfile = 'AdminUserConProfile',
@@ -34,6 +35,11 @@ export enum NamedRoute {
   OrganizationDisplay = 'OrganizationDisplay',
   NewOrganizationRole = 'NewOrganizationRole',
   LiquidDocs = 'LiquidDocs',
+  AdminEventProposal = 'AdminEventProposal',
+  EventProposalHistory = 'EventProposalHistory',
+  EventProposalHistoryChangeGroup = 'EventProposalHistoryChangeGroup',
+  AdminEditEventProposal = 'AdminEditEventProposal',
+  EventProposalAdminDisplay = 'EventProposalAdminDisplay',
 }
 
 export type RouteName = keyof typeof NamedRoute & string;
@@ -401,7 +407,46 @@ const commonInConventionRoutes: RouteObject[] = [
 ];
 
 const conventionModeRoutes: RouteObject[] = [
-  { path: '/admin_event_proposals/*', element: <PageComponents.EventProposalsAdmin /> },
+  {
+    path: '/admin_event_proposals',
+    lazy: () => import('./EventProposals/EventProposalsAdmin'),
+    children: [
+      {
+        path: ':id',
+        id: NamedRoute.AdminEventProposal,
+        loader: eventProposalWithOwnerLoader,
+        children: [
+          {
+            path: 'history',
+            id: NamedRoute.EventProposalHistory,
+            lazy: () => import('./EventProposals/EventProposalHistory'),
+            children: [
+              {
+                path: ':changeGroupId',
+                id: NamedRoute.EventProposalHistoryChangeGroup,
+                lazy: () => import('./EventProposals/EventProposalHistory'),
+              },
+            ],
+          },
+          {
+            path: 'edit',
+            id: NamedRoute.AdminEditEventProposal,
+            lazy: () => import('./EventProposals/AdminEditEventProposal'),
+          },
+          {
+            index: true,
+            id: NamedRoute.EventProposalAdminDisplay,
+            lazy: () => import('./EventProposals/EventProposalAdminDisplay'),
+          },
+        ],
+      },
+      { index: true, lazy: () => import('./EventProposals/EventProposalsAdminTable') },
+      //   <Route path=":id/history/*" element={<EventProposalHistory />} />
+      //   <Route path=":id/edit" element={<AdminEditEventProposal />} />
+      //   <Route path=":id" element={<EventProposalAdminDisplay />} />
+      //   <Route path="" element={<EventProposalsAdminTable />} />
+    ],
+  },
   {
     path: '/event_categories/*',
     element: <PageComponents.EventCategoryAdmin />,

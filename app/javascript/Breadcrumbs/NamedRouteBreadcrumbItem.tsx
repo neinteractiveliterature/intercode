@@ -7,10 +7,9 @@ import { RouteName } from '../AppRouter';
 export type NamedRouteBreadcrumbItemProps = {
   routeId: RouteName | RouteName[];
   children: ReactNode;
-  hideUnlessMatch?: boolean;
 };
 
-function NamedRouteBreadcrumbItem({ children, routeId, hideUnlessMatch }: NamedRouteBreadcrumbItemProps): JSX.Element {
+function NamedRouteBreadcrumbItem({ children, routeId }: NamedRouteBreadcrumbItemProps): JSX.Element {
   const matches = useMatches();
   const params = useParams();
 
@@ -25,12 +24,9 @@ function NamedRouteBreadcrumbItem({ children, routeId, hideUnlessMatch }: NamedR
   const matchIndex = useMemo(() => matches.findLastIndex((m) => routeIds.has(m.id)), [matches, routeIds]);
   const match = matchIndex === -1 ? undefined : matches[matchIndex];
 
-  if (hideUnlessMatch && !match) {
+  if (!match) {
     return <></>;
   }
-
-  console.log(match);
-  console.log(generatePath(match?.pathname ?? '.', params));
 
   return (
     <BreadcrumbItem to={generatePath(match?.pathname ?? '.', params)} active={matchIndex === matches.length - 1}>
