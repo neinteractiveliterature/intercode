@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import * as React from 'react';
 import { ApolloError } from '@apollo/client';
-import { BootstrapFormInput, ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform';
+import { BootstrapFormInput, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
 import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
-import { useRootSiteAdminQuery } from './queries.generated';
+import { RootSiteAdminQueryData, RootSiteAdminQueryDocument } from './queries.generated';
 import { useUpdateRootSiteMutation } from './mutations.generated';
+import { LoaderFunction, useLoaderData } from 'react-router';
+import { client } from '../useIntercodeApolloClient';
 
 function useDirtyState<T>(initialState: T, setDirty: () => void) {
   const [value, setValue] = useState(initialState);
@@ -20,7 +22,13 @@ function useDirtyState<T>(initialState: T, setDirty: () => void) {
   ] as const;
 }
 
-export default LoadQueryWrapper(useRootSiteAdminQuery, function EditRootSite({ data }) {
+export const loader: LoaderFunction = async () => {
+  const { data } = await client.query<RootSiteAdminQueryData>({ query: RootSiteAdminQueryDocument });
+  return data;
+};
+
+function EditRootSite() {
+  const data = useLoaderData() as RootSiteAdminQueryData;
   const [updateMutate] = useUpdateRootSiteMutation();
   const [update, updateError, updateInProgress] = useAsyncFunction(updateMutate);
 
@@ -95,4 +103,6 @@ export default LoadQueryWrapper(useRootSiteAdminQuery, function EditRootSite({ d
       {success ? ' Saved!' : null}
     </>
   );
-});
+}
+
+export const Component = EditRootSite;

@@ -1,13 +1,13 @@
 import { useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { LoaderFunction, useLoaderData, useNavigate } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
-import { useModal, useConfirm, ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform';
+import { useModal, useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import OrderPaymentModal from './OrderPaymentModal';
 import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
 import CartContents from './CartContents';
-import { CartQueryData, CartQueryDocument, useCartQuery } from './queries.generated';
+import { CartQueryData, CartQueryDocument } from './queries.generated';
 import {
   useCreateCouponApplicationMutation,
   useDeleteCouponApplicationMutation,
@@ -15,12 +15,19 @@ import {
   useUpdateOrderEntryMutation,
 } from './mutations.generated';
 import useLoginRequired from '../Authentication/useLoginRequired';
+import { client } from '../useIntercodeApolloClient';
 
 type OrderEntryType = NonNullable<
   NonNullable<CartQueryData['convention']['my_profile']>['current_pending_order']
 >['order_entries'][0];
 
-export default LoadQueryWrapper(useCartQuery, function Cart({ data }) {
+export const loader: LoaderFunction = async () => {
+  const { data } = await client.query<CartQueryData>({ query: CartQueryDocument });
+  return data;
+};
+
+function Cart() {
+  const data = useLoaderData() as CartQueryData;
   const navigate = useNavigate();
   const [updateMutate] = useUpdateOrderEntryMutation();
   const [deleteMutate] = useDeleteOrderEntryMutation();
@@ -163,4 +170,6 @@ export default LoadQueryWrapper(useCartQuery, function Cart({ data }) {
       />
     </div>
   );
-});
+}
+
+export const Component = Cart;

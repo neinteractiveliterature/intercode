@@ -1,16 +1,18 @@
 import { useContext } from 'react';
 import { DateTime } from 'luxon';
-import { useModal, LoadQueryWrapper } from '@neinteractiveliterature/litform';
+import { useModal } from '@neinteractiveliterature/litform';
 import { ModalData } from '@neinteractiveliterature/litform/lib/useModal';
 
 import OrderPaymentModal from './OrderPaymentModal';
 import formatMoney from '../formatMoney';
 import usePageTitle from '../usePageTitle';
 import AppRootContext from '../AppRootContext';
-import { OrderHistoryQueryData, useOrderHistoryQuery } from './queries.generated';
+import { OrderHistoryQueryData, OrderHistoryQueryDocument } from './queries.generated';
 import useLoginRequired from '../Authentication/useLoginRequired';
 import { useAppDateTimeFormat } from '../TimeUtils';
 import { useTranslation } from 'react-i18next';
+import { LoaderFunction, useLoaderData } from 'react-router';
+import { client } from '../useIntercodeApolloClient';
 
 type OrderType = NonNullable<OrderHistoryQueryData['convention']['my_profile']>['orders'][0];
 type PaymentModalState = {
@@ -177,7 +179,13 @@ function OrderHistoryOrder({ order, convention, paymentModal }: OrderHistoryOrde
   );
 }
 
-export default LoadQueryWrapper(useOrderHistoryQuery, function OrderHistory({ data }) {
+export const loader: LoaderFunction = async () => {
+  const { data } = await client.query<OrderHistoryQueryData>({ query: OrderHistoryQueryDocument });
+  return data;
+};
+
+function OrderHistory() {
+  const data = useLoaderData() as OrderHistoryQueryData;
   const paymentModal = useModal<PaymentModalState>();
 
   usePageTitle('My order history');
@@ -211,4 +219,6 @@ export default LoadQueryWrapper(useOrderHistoryQuery, function OrderHistory({ da
       <p>No orders to display.</p>
     </>
   );
-});
+}
+
+export const Component = OrderHistory;

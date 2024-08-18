@@ -1,19 +1,28 @@
 import { useMemo } from 'react';
 import { ApolloError, useApolloClient } from '@apollo/client';
-import { useNavigate } from 'react-router-dom';
+import { LoaderFunction, useLoaderData, useNavigate } from 'react-router-dom';
 import pick from 'lodash/pick';
-import { ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import ConventionForm, { ConventionFormConvention } from './ConventionForm';
 import useAsyncFunction from '../useAsyncFunction';
 import ConventionFormHeader from './ConventionFormHeader';
 import usePageTitle from '../usePageTitle';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
-import { useConventionAdminConventionQuery } from './queries.generated';
+import { ConventionAdminConventionQueryData, ConventionAdminConventionQueryDocument } from './queries.generated';
 import { useUpdateConventionMutation } from './mutations.generated';
 import { ConventionInput } from '../graphqlTypes.generated';
+import { client } from '../useIntercodeApolloClient';
 
-export default LoadQueryWrapper(useConventionAdminConventionQuery, function ConventionAdmin({ data }) {
+export const loader: LoaderFunction = async () => {
+  const { data } = await client.query<ConventionAdminConventionQueryData>({
+    query: ConventionAdminConventionQueryDocument,
+  });
+  return data;
+};
+
+function ConventionAdmin() {
+  const data = useLoaderData() as ConventionAdminConventionQueryData;
   const navigate = useNavigate();
   const [updateMutate] = useUpdateConventionMutation();
   const [mutate, mutationError] = useAsyncFunction(updateMutate);
@@ -97,4 +106,6 @@ export default LoadQueryWrapper(useConventionAdminConventionQuery, function Conv
       <ErrorDisplay graphQLError={mutationError as ApolloError} />
     </div>
   );
-});
+}
+
+export const Component = ConventionAdmin;

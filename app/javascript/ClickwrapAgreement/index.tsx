@@ -1,15 +1,26 @@
 import { useApolloClient } from '@apollo/client';
-import { useNavigate, Navigate } from 'react-router-dom';
+import { useNavigate, LoaderFunction, useLoaderData, replace } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { LoadQueryWrapper, ErrorDisplay } from '@neinteractiveliterature/litform';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import parseCmsContent from '../parseCmsContent';
 import useLoginRequired from '../Authentication/useLoginRequired';
 import { useAcceptClickwrapAgreementMutation } from './mutations.generated';
-import { useClickwrapAgreementQuery } from './queries.generated';
+import { ClickwrapAgreementQueryData, ClickwrapAgreementQueryDocument } from './queries.generated';
 import AuthenticityTokensManager from '../AuthenticityTokensContext';
+import { client } from '../useIntercodeApolloClient';
 
-export default LoadQueryWrapper(useClickwrapAgreementQuery, function ClickwrapAgreement({ data }) {
+export const loader: LoaderFunction = async () => {
+  const { data } = await client.query<ClickwrapAgreementQueryData>({ query: ClickwrapAgreementQueryDocument });
+  if (data.convention.my_profile?.accepted_clickwrap_agreement) {
+    return replace('/');
+  }
+
+  return data;
+};
+
+function ClickwrapAgreement() {
+  const data = useLoaderData() as ClickwrapAgreementQueryData;
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [accept, { error: acceptError, loading: acceptInProgress }] = useAcceptClickwrapAgreementMutation();
@@ -29,10 +40,6 @@ export default LoadQueryWrapper(useClickwrapAgreementQuery, function ClickwrapAg
 
   if (loginRequired) {
     return <></>;
-  }
-
-  if (data.convention.my_profile?.accepted_clickwrap_agreement) {
-    return <Navigate to="/" replace />;
   }
 
   const { convention } = data;
@@ -61,4 +68,6 @@ export default LoadQueryWrapper(useClickwrapAgreementQuery, function ClickwrapAg
       </div>
     </>
   );
-});
+}
+
+export const Component = ClickwrapAgreement;

@@ -380,6 +380,10 @@ const commonRoutes: RouteObject[] = [
           { index: true, lazy: () => import('./CmsAdmin/CmsContentGroupsAdmin/CmsContentGroupsAdminTable') },
         ],
       },
+      {
+        element: <AppRootContextRouteGuard guard={({ conventionName }) => conventionName == null} />,
+        children: [{ path: '/root_site', lazy: () => import('./RootSiteAdmin/EditRootSite') }],
+      },
     ],
   },
   { path: '/oauth/applications-embed', lazy: () => import('./OAuthApplications') },
@@ -615,7 +619,6 @@ const commonInConventionRoutes: RouteObject[] = [
       { index: true, lazy: () => import('./UserConProfiles/AttendeesPage') },
     ],
   },
-  ...commonRoutes,
 ];
 
 const conventionModeRoutes: RouteObject[] = [
@@ -716,11 +719,6 @@ const rootSiteRoutes: RouteObject[] = [
     ],
   },
   {
-    path: '/root_site',
-    lazy: () => import('./CmsAdmin'),
-    children: [{ index: true, lazy: () => import('./RootSiteAdmin') }],
-  },
-  {
     path: '/users',
     lazy: () => import('./Users/UsersAdmin'),
     children: [
@@ -758,6 +756,7 @@ export const appLayoutRoutes: RouteObject[] = [
         element: <AppRootContextRouteGuard guard={({ conventionName }) => conventionName == null} />,
         children: rootSiteRoutes,
       },
+      ...commonRoutes,
     ],
   },
   ...cmsPageRoutes,

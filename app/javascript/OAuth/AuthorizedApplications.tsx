@@ -1,14 +1,20 @@
-import { LoadQueryWrapper, useGraphQLConfirm } from '@neinteractiveliterature/litform';
+import { useGraphQLConfirm } from '@neinteractiveliterature/litform';
 
 import PermissionsPrompt from './PermissionsPrompt';
-import {
-  OAuthAuthorizedApplicationsQueryData,
-  OAuthAuthorizedApplicationsQueryDocument,
-  useOAuthAuthorizedApplicationsQuery,
-} from './queries.generated';
+import { OAuthAuthorizedApplicationsQueryData, OAuthAuthorizedApplicationsQueryDocument } from './queries.generated';
 import { useRevokeAuthorizedApplicationMutation } from './mutations.generated';
+import { LoaderFunction, useLoaderData } from 'react-router';
+import { client } from '../useIntercodeApolloClient';
 
-export default LoadQueryWrapper(useOAuthAuthorizedApplicationsQuery, function AuthorizedApplications({ data }) {
+export const loader: LoaderFunction = async () => {
+  const { data } = await client.query<OAuthAuthorizedApplicationsQueryData>({
+    query: OAuthAuthorizedApplicationsQueryDocument,
+  });
+  return data;
+};
+
+function AuthorizedApplications() {
+  const data = useLoaderData() as OAuthAuthorizedApplicationsQueryData;
   const [revokeAuthorizedApplication] = useRevokeAuthorizedApplicationMutation();
   const confirm = useGraphQLConfirm();
 
@@ -73,4 +79,6 @@ export default LoadQueryWrapper(useOAuthAuthorizedApplicationsQuery, function Au
       </table>
     </>
   );
-});
+}
+
+export const Component = AuthorizedApplications;

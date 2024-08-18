@@ -1,22 +1,24 @@
 import { useApolloClient } from '@apollo/client';
-import { Navigate, useNavigate, useParams, Link } from 'react-router-dom';
+import { Navigate, useNavigate, Link, LoaderFunction, useLoaderData } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { LoadQueryWrapper, ErrorDisplay, useConfirm } from '@neinteractiveliterature/litform';
+import { ErrorDisplay, useConfirm } from '@neinteractiveliterature/litform';
 
 import EventProposalForm from './EventProposalForm';
 import usePageTitle from '../usePageTitle';
 import { useDeleteEventProposalMutation } from './mutations.generated';
-import { useEventProposalQuery } from './queries.generated';
+import { EventProposalQueryData, EventProposalQueryDocument, EventProposalQueryVariables } from './queries.generated';
+import { client } from '../useIntercodeApolloClient';
 
-function useLoadEventProposal() {
-  const eventProposalId = useParams<{ id: string }>().id;
-  if (eventProposalId == null) {
-    throw new Error('id not found in URL params');
-  }
-  return useEventProposalQuery({ variables: { eventProposalId } });
-}
+export const loader: LoaderFunction = async ({ params: { id } }) => {
+  const { data } = await client.query<EventProposalQueryData, EventProposalQueryVariables>({
+    query: EventProposalQueryDocument,
+    variables: { eventProposalId: id ?? '' },
+  });
+  return data;
+};
 
-export default LoadQueryWrapper(useLoadEventProposal, function EditEventProposal({ data }) {
+function EditEventProposal() {
+  const data = useLoaderData() as EventProposalQueryData;
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [deleteProposal] = useDeleteEventProposalMutation();
@@ -38,6 +40,7 @@ export default LoadQueryWrapper(useLoadEventProposal, function EditEventProposal
   const canDelete = data.currentAbility.can_delete_event_proposal;
   const deleteButtonProps = {
     children: t('eventProposals.edit.deleteButton'),
+    // eslint-disable-next-line i18next/no-literal-string
     className: 'btn btn-danger',
     onClick: () =>
       confirm({
@@ -83,4 +86,6 @@ export default LoadQueryWrapper(useLoadEventProposal, function EditEventProposal
       />
     </>
   );
-});
+}
+
+export const Component = EditEventProposal;

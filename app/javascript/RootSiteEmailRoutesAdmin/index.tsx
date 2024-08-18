@@ -96,4 +96,4 @@ function RootSiteEmailRoutesAdminTable(): JSX.Element {
   );
 }
 
-export default RootSiteEmailRoutesAdminTable;
+export const Component = RootSiteEmailRoutesAdminTable;

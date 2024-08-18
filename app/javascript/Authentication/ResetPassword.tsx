@@ -1,11 +1,10 @@
-import { useState, useContext, useMemo, Suspense, useId } from 'react';
+import { useState, useMemo, Suspense, useId } from 'react';
 import * as React from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import PasswordConfirmationInput from './PasswordConfirmationInput';
-import AuthenticityTokensContext from '../AuthenticityTokensContext';
 import useAsyncFunction from '../useAsyncFunction';
 import { lazyWithAppEntrypointHeadersCheck } from '../checkAppEntrypointHeadersMatch';
 import AuthenticityTokensManager from '../AuthenticityTokensContext';
@@ -100,4 +99,4 @@ function ResetPassword(): JSX.Element {
   );
 }
 
-export default ResetPassword;
+export const Component = ResetPassword;

@@ -2,7 +2,6 @@ import { useState } from 'react';
 import * as React from 'react';
 import { ApolloError } from '@apollo/client';
 import {
-  LoadQueryWrapper,
   ErrorDisplay,
   useGraphQLConfirm,
   sortByLocaleString,
@@ -14,11 +13,19 @@ import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
-import { RoomAdminRoomFieldsFragmentDoc, useRoomsAdminQuery } from './queries.generated';
+import { RoomAdminRoomFieldsFragmentDoc, RoomsAdminQueryData, RoomsAdminQueryDocument } from './queries.generated';
 import { useCreateRoomMutation, useDeleteRoomMutation, useUpdateRoomMutation } from './mutations.generated';
 import { useTranslation } from 'react-i18next';
+import { LoaderFunction, useLoaderData } from 'react-router';
+import { client } from '../useIntercodeApolloClient';
 
-export default LoadQueryWrapper(useRoomsAdminQuery, function RoomsAdmin({ data }) {
+export const loader: LoaderFunction = async () => {
+  const { data } = await client.query<RoomsAdminQueryData>({ query: RoomsAdminQueryDocument });
+  return data;
+};
+
+function RoomsAdmin() {
+  const data = useLoaderData() as RoomsAdminQueryData;
   const authorizationWarning = useAuthorizationRequired('can_manage_rooms');
   const [updateMutate] = useUpdateRoomMutation();
   const [createRoom, { error: createError }] = useCreateMutationWithReferenceArrayUpdater(
@@ -103,7 +110,7 @@ export default LoadQueryWrapper(useRoomsAdminQuery, function RoomsAdmin({ data }
 
   return (
     <>
-      <h1 className="mb-4">Rooms</h1>
+      <h1 className="mb-4">{t('navigation.admin.rooms')}</h1>
       <div className="mb-4">
         <ul className="list-group mb-4">
           {roomRows}
@@ -136,4 +143,6 @@ export default LoadQueryWrapper(useRoomsAdminQuery, function RoomsAdmin({ data }
       </div>
     </>
   );
-});
+}
+
+export const Component = RoomsAdmin;
