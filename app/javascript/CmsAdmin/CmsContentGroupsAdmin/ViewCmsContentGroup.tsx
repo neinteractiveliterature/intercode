@@ -1,20 +1,21 @@
 import usePageTitle from '../../usePageTitle';
 import CmsContentGroupFormFields from './CmsContentGroupFormFields';
-import { useCmsContentGroupsAdminQuery } from './queries.generated';
-import { LoadSingleValueFromCollectionWrapper } from '../../GraphqlLoadingWrappers';
+import { useLoaderData } from 'react-router';
+import { singleCmsContentGroupAdminLoader, SingleCmsContentGroupAdminLoaderResult } from './loaders';
 
-export default LoadSingleValueFromCollectionWrapper(
-  useCmsContentGroupsAdminQuery,
-  (data, id) => data.cmsParent.cmsContentGroups.find((group) => group.id.toString() === id),
-  function ViewCmsContentGroup({ data, value: contentGroup }): JSX.Element {
-    usePageTitle(contentGroup.name);
+export const loader = singleCmsContentGroupAdminLoader;
 
-    return (
-      <>
-        <h3 className="mb-4">{contentGroup.name}</h3>
+function ViewCmsContentGroup(): JSX.Element {
+  const { data, contentGroup } = useLoaderData() as SingleCmsContentGroupAdminLoaderResult;
+  usePageTitle(contentGroup.name);
 
-        <CmsContentGroupFormFields contentGroup={contentGroup} convention={data.convention} readOnly />
-      </>
-    );
-  },
-);
+  return (
+    <>
+      <h3 className="mb-4">{contentGroup.name}</h3>
+
+      <CmsContentGroupFormFields contentGroup={contentGroup} convention={data.convention} readOnly />
+    </>
+  );
+}
+
+export const Component = ViewCmsContentGroup;

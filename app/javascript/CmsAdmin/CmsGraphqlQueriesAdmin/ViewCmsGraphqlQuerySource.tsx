@@ -2,23 +2,24 @@ import CmsGraphqlQueryForm from './CmsGraphqlQueryForm';
 import usePageTitle from '../../usePageTitle';
 
 import 'graphiql/graphiql.css';
-import { useCmsGraphqlQueriesQuery } from './queries.generated';
-import { LoadSingleValueFromCollectionWrapper } from '../../GraphqlLoadingWrappers';
+import { useLoaderData } from 'react-router';
+import { singleCmsGraphqlQueryAdminLoader, SingleCmsGraphqlQueryAdminLoaderResult } from './loaders';
 
-export default LoadSingleValueFromCollectionWrapper(
-  useCmsGraphqlQueriesQuery,
-  (data, id) => data.cmsParent.cmsGraphqlQueries.find((q) => q.id.toString() === id),
-  function ViewCmsGraphqlQuerySource({ value: query }) {
-    usePageTitle(`View “${query.identifier}” Source`);
+export const loader = singleCmsGraphqlQueryAdminLoader;
 
-    return (
-      <>
-        <h2 className="mb-4">View GraphQL query source</h2>
+function ViewCmsGraphqlQuerySource() {
+  const { graphqlQuery: query } = useLoaderData() as SingleCmsGraphqlQueryAdminLoaderResult;
+  usePageTitle(`View “${query.identifier}” Source`);
 
-        <div className="mb-4">
-          <CmsGraphqlQueryForm value={query} readOnly />
-        </div>
-      </>
-    );
-  },
-);
+  return (
+    <>
+      <h2 className="mb-4">View GraphQL query source</h2>
+
+      <div className="mb-4">
+        <CmsGraphqlQueryForm value={query} readOnly />
+      </div>
+    </>
+  );
+}
+
+export const Component = ViewCmsGraphqlQuerySource;

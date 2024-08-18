@@ -40,6 +40,7 @@ import { AppRootQueryData, AppRootQueryDocument, AppRootQueryVariables } from '.
 import { liquidDocsLoader } from './LiquidDocs/loader';
 import { cmsLayoutsAdminLoader } from './CmsAdmin/CmsLayoutsAdmin/loaders';
 import { cmsGraphqlQueriesAdminLoader } from './CmsAdmin/CmsGraphqlQueriesAdmin/loaders';
+import { cmsContentGroupsAdminLoader } from './CmsAdmin/CmsContentGroupsAdmin/loaders';
 
 export enum NamedRoute {
   AdminUserConProfile = 'AdminUserConProfile',
@@ -79,6 +80,7 @@ export enum NamedRoute {
   CmsPartialsAdmin = 'CmsPartialsAdmin',
   CmsLayoutsAdmin = 'CmsLayoutsAdmin',
   CmsGraphqlQueriesAdmin = 'CmsGraphqlQueriesAdmin',
+  CmsContentGroupsAdmin = 'CmsContentGroupsAdmin',
 }
 
 export type RouteName = keyof typeof NamedRoute & string;
@@ -369,6 +371,8 @@ const commonRoutes: RouteObject[] = [
       },
       {
         path: '/cms_content_groups',
+        loader: cmsContentGroupsAdminLoader,
+        id: NamedRoute.CmsContentGroupsAdmin,
         children: [
           { path: ':id/edit', lazy: () => import('./CmsAdmin/CmsContentGroupsAdmin/EditCmsContentGroup') },
           { path: 'new', lazy: () => import('./CmsAdmin/CmsContentGroupsAdmin/NewCmsContentGroup') },
