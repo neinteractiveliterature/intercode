@@ -1,21 +1,26 @@
 import { useMemo } from 'react';
-import { Link, Navigate, Route, Routes, useParams } from 'react-router-dom';
+import { Link, LoaderFunction, Navigate, Outlet, useLoaderData, useParams } from 'react-router-dom';
 import sortBy from 'lodash/sortBy';
 import flatMap from 'lodash/flatMap';
-import { notEmpty, ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
+import { notEmpty } from '@neinteractiveliterature/litform';
 
 import { FormEditorContext, FormEditorForm } from './FormEditorContexts';
-import FormItemEditorLayout from './FormItemEditorLayout';
-import FormSectionEditorLayout from './FormSectionEditorLayout';
 import FormTypes from '../../../config/form_types.json';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import { parseTypedFormItemObject } from './FormItemUtils';
 import usePageTitle from '../usePageTitle';
-import { useFormEditorQuery } from './queries.generated';
-import { FormType } from '../graphqlTypes.generated';
+import { FormEditorQueryData, FormEditorQueryDocument, FormEditorQueryVariables } from './queries.generated';
 import { useUpdateFormMutation } from './mutations.generated';
-import FourOhFourPage from '../FourOhFourPage';
 import { useTranslation } from 'react-i18next';
+import { client } from '../useIntercodeApolloClient';
+
+export const loader: LoaderFunction = async ({ params: { id } }) => {
+  const { data } = await client.query<FormEditorQueryData, FormEditorQueryVariables>({
+    query: FormEditorQueryDocument,
+    variables: { id: id ?? '' },
+  });
+  return data;
+};
 
 function FormEditor(): JSX.Element {
   const params = useParams<{ id: string; sectionId?: string; itemId?: string }>();
@@ -23,24 +28,10 @@ function FormEditor(): JSX.Element {
     throw new Error('id not found in URL params');
   }
   const { t } = useTranslation();
-  const { data, error, loading } = useFormEditorQuery({
-    variables: {
-      id: params.id,
-    },
-  });
+  const data = useLoaderData() as FormEditorQueryData;
   const [updateForm] = useUpdateFormMutation();
 
   const form: FormEditorForm = useMemo(() => {
-    if (loading || error || !data) {
-      return {
-        __typename: 'Form',
-        id: '',
-        form_type: FormType.Event,
-        title: '',
-        form_sections: [],
-      };
-    }
-
     return {
       ...data.convention.form,
       form_sections: sortBy(data.convention.form.form_sections, 'position').map((formSection) => ({
@@ -48,7 +39,7 @@ function FormEditor(): JSX.Element {
         form_items: sortBy(formSection.form_items, 'position').map(parseTypedFormItemObject).filter(notEmpty),
       })),
     };
-  }, [data, error, loading]);
+  }, [data]);
 
   const formItemsById = useMemo(
     () =>
@@ -60,19 +51,7 @@ function FormEditor(): JSX.Element {
 
   const updateFormTitle = (title: string) => updateForm({ variables: { id: form.id, form: { title } } });
 
-  usePageTitle(form.id ? `Editing “${form.title}”` : 'New Form');
-
-  if (loading) {
-    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
-  if (!data) {
-    return <FourOhFourPage />;
-  }
+  usePageTitle(`Editing “${form.title}”`);
 
   let currentSection: FormEditorForm['form_sections'][0] | undefined;
 
@@ -119,13 +98,10 @@ function FormEditor(): JSX.Element {
           formItemsById,
         }}
       >
-        <Routes>
-          <Route path="section/:sectionId/item/:itemId" element={<FormItemEditorLayout />} />
-          <Route path="section/:sectionId" element={<FormSectionEditorLayout />} />
-        </Routes>
+        <Outlet />
       </FormEditorContext.Provider>
     </div>
   );
 }
 
-export default FormEditor;
+export const Component = FormEditor;

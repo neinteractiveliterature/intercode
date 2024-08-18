@@ -1,19 +1,19 @@
 import { useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, LoaderFunction, useLoaderData } from 'react-router-dom';
 import {
   useModal,
   useConfirm,
   ErrorDisplay,
   sortByLocaleString,
-  LoadQueryWrapper,
   useDeleteMutationWithReferenceArrayUpdater,
 } from '@neinteractiveliterature/litform';
 
 import usePageTitle from '../usePageTitle';
 import NewFormModal from './NewFormModal';
-import { FormAdminQueryData, useFormAdminQuery } from './queries.generated';
+import { FormAdminQueryData, FormAdminQueryDocument } from './queries.generated';
 import { useDeleteFormMutation } from './mutations.generated';
 import humanize from '../humanize';
+import { client } from '../useIntercodeApolloClient';
 
 function describeFormUsers(form: FormAdminQueryData['convention']['forms'][0]) {
   return [
@@ -23,7 +23,13 @@ function describeFormUsers(form: FormAdminQueryData['convention']['forms'][0]) {
   ];
 }
 
-export default LoadQueryWrapper(useFormAdminQuery, function FormAdminIndex({ data }) {
+export const loader: LoaderFunction = async () => {
+  const { data } = await client.query<FormAdminQueryData>({ query: FormAdminQueryDocument });
+  return data;
+};
+
+function FormAdminIndex() {
+  const data = useLoaderData() as FormAdminQueryData;
   const confirm = useConfirm();
   const [deleteForm] = useDeleteMutationWithReferenceArrayUpdater(
     useDeleteFormMutation,
@@ -62,7 +68,7 @@ export default LoadQueryWrapper(useFormAdminQuery, function FormAdminIndex({ dat
               <td>
                 <ul className="list-unstyled m-0">
                   {describeFormUsers(form).map((formUser, i) => (
-                    <li key={i  }>{formUser}</li>
+                    <li key={i}>{formUser}</li>
                   ))}
                 </ul>
               </td>
@@ -97,4 +103,6 @@ export default LoadQueryWrapper(useFormAdminQuery, function FormAdminIndex({ dat
       <NewFormModal convention={data.convention} visible={newFormModal.visible} close={newFormModal.close} />
     </>
   );
-});
+}
+
+export const Component = FormAdminIndex;

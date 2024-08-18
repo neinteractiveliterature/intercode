@@ -147,4 +147,4 @@ function FormItemEditorLayout(): JSX.Element {
   );
 }
 
-export default FormItemEditorLayout;
+export const Component = FormItemEditorLayout;

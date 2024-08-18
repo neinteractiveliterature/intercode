@@ -113,4 +113,4 @@ function FormSectionEditorLayout(): JSX.Element {
   );
 }
 
-export default FormSectionEditorLayout;
+export const Component = FormSectionEditorLayout;

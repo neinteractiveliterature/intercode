@@ -23,10 +23,6 @@ const UnwrappedNonCMSPageComponents = {
   EventCategoryIndex: () =>
     import(/* webpackChunkName: "event-category-admin" */ './EventCategoryAdmin/EventCategoryIndex'),
   EditEventProposal: () => import(/* webpackChunkName: "edit-event-proposal" */ './EventProposals/EditEventProposal'),
-  FormAdmin: () => import(/* webpackChunkName: "form-admin" */ './FormAdmin'),
-  FormEditor: () => import(/* webpackChunkName: "form-editor" */ './FormAdmin/FormEditor'),
-  FormItemEditorLayout: () => import(/* webpackChunkName: "form-editor" */ './FormAdmin/FormItemEditorLayout'),
-  FormSectionEditorLayout: () => import(/* webpackChunkName: "form-editor" */ './FormAdmin/FormSectionEditorLayout'),
   NavigationItemsAdmin: () =>
     import(/* webpackChunkName: "navigation-items-admin" */ './CmsAdmin/NavigationItemsAdmin'),
   NewCmsContentGroup: () =>

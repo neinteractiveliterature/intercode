@@ -68,6 +68,9 @@ export enum NamedRoute {
   TeamMembersIndex = 'TeamMembersIndex',
   EditTeamMember = 'EditTeamMember',
   NewTeamMember = 'NewTeamMember',
+  FormJSONEditor = 'FormJSONEditor',
+  AdminForms = 'AdminForms',
+  FormAdminIndex = 'FormAdminIndex',
 }
 
 export type RouteName = keyof typeof NamedRoute & string;
@@ -404,7 +407,15 @@ const commonInConventionRoutes: RouteObject[] = [
       },
     ],
   },
-  { path: '/admin_forms/*', element: <PageComponents.FormAdmin /> },
+  {
+    path: '/admin_forms',
+    id: NamedRoute.AdminForms,
+    lazy: () => import('./FormAdmin'),
+    children: [
+      { path: ':id/edit_advanced', id: NamedRoute.FormJSONEditor, lazy: () => import('./FormAdmin/FormJSONEditor') },
+      { index: true, id: NamedRoute.FormAdminIndex, lazy: () => import('./FormAdmin/FormAdminIndex') },
+    ],
+  },
   {
     path: '/admin_notifications',
     element: <AuthorizationRequiredRouteGuard abilities={['can_update_notification_templates']} />,
