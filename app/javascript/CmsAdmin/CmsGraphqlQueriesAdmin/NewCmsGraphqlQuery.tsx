@@ -13,8 +13,10 @@ import usePageTitle from '../../usePageTitle';
 import 'graphiql/graphiql.css';
 import { CmsGraphqlQueryFieldsFragmentDoc, useCmsGraphqlQueriesQuery } from './queries.generated';
 import { useCreateCmsGraphqlQuery } from './mutations.generated';
+import { useCmsGraphqlQueriesAdminLoader } from './loaders';
 
-export default LoadQueryWrapper(useCmsGraphqlQueriesQuery, function NewCmsGraphqlQuery({ data }): JSX.Element {
+function NewCmsGraphqlQuery(): JSX.Element {
+  const data = useCmsGraphqlQueriesAdminLoader();
   const navigate = useNavigate();
   const [query, setQuery] = useState({ identifier: '', admin_notes: '', query: '' });
   const [create, { error: createError, loading: createInProgress }] = useCreateMutationWithReferenceArrayUpdater(
@@ -56,4 +58,6 @@ export default LoadQueryWrapper(useCmsGraphqlQueriesQuery, function NewCmsGraphq
       </button>
     </>
   );
-});
+}
+
+export const Component = NewCmsGraphqlQuery;

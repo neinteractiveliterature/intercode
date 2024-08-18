@@ -2,19 +2,17 @@ import { useState } from 'react';
 import * as React from 'react';
 import { ApolloError } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
-import {
-  ErrorDisplay,
-  LoadQueryWrapper,
-  useCreateMutationWithReferenceArrayUpdater,
-} from '@neinteractiveliterature/litform';
+import { ErrorDisplay, useCreateMutationWithReferenceArrayUpdater } from '@neinteractiveliterature/litform';
 
 import buildPageInput from './buildPageInput';
 import CmsPageForm, { PageFormFields } from './CmsPageForm';
 import usePageTitle from '../../usePageTitle';
-import { CmsPageFieldsFragmentDoc, useCmsPagesAdminQuery } from './queries.generated';
+import { CmsPageFieldsFragmentDoc } from './queries.generated';
 import { CreatePageMutationData, useCreatePageMutation } from './mutations.generated';
+import { useCmsPagesAdminLoader } from './loaders';
 
-export default LoadQueryWrapper(useCmsPagesAdminQuery, function NewCmsPage({ data }) {
+function NewCmsPage() {
+  const data = useCmsPagesAdminLoader();
   const navigate = useNavigate();
   const [page, setPage] = useState<PageFormFields>({
     hidden_from_search: false,
@@ -57,4 +55,6 @@ export default LoadQueryWrapper(useCmsPagesAdminQuery, function NewCmsPage({ dat
       </form>
     </>
   );
-});
+}
+
+export const Component = NewCmsPage;

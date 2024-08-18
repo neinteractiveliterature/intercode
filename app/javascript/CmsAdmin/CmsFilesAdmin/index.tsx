@@ -5,7 +5,6 @@ import {
   CopyToClipboardButton,
   useCreateMutationWithReferenceArrayUpdater,
   useDeleteMutationWithReferenceArrayUpdater,
-  LoadQueryWrapper,
 } from '@neinteractiveliterature/litform';
 import { useTranslation } from 'react-i18next';
 
@@ -13,12 +12,20 @@ import FilePreview from './FilePreview';
 import usePageTitle from '../../usePageTitle';
 import InPlaceEditor from '../../BuiltInFormControls/InPlaceEditor';
 import { useRenameCmsFileMutation, useDeleteCmsFileMutation, useCreateCmsFileMutation } from './mutations.generated';
-import { CmsFileFieldsFragmentDoc, useCmsFilesAdminQuery } from './queries.generated';
+import { CmsFileFieldsFragmentDoc, CmsFilesAdminQueryData, CmsFilesAdminQueryDocument } from './queries.generated';
 import { useCallback } from 'react';
 import FileUploadForm from '../../BuiltInForms/FileUploadForm';
 import { Blob } from '@rails/activestorage';
+import { LoaderFunction, useLoaderData } from 'react-router';
+import { client } from '../../useIntercodeApolloClient';
 
-export default LoadQueryWrapper(useCmsFilesAdminQuery, function CmsFilesAdmin({ data }): JSX.Element {
+export const loader: LoaderFunction = async () => {
+  const { data } = await client.query<CmsFilesAdminQueryData>({ query: CmsFilesAdminQueryDocument });
+  return data;
+};
+
+function CmsFilesAdmin(): JSX.Element {
+  const data = useLoaderData() as CmsFilesAdminQueryData;
   const [deleteFile] = useDeleteMutationWithReferenceArrayUpdater(
     useDeleteCmsFileMutation,
     data.cmsParent,
@@ -116,4 +123,6 @@ export default LoadQueryWrapper(useCmsFilesAdminQuery, function CmsFilesAdmin({ 
       {data?.currentAbility.can_create_cms_files && <FileUploadForm onUpload={onUpload} />}
     </>
   );
-});
+}
+
+export const Component = CmsFilesAdmin;

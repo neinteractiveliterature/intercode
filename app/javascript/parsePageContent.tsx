@@ -141,7 +141,7 @@ function jsxAttributesFromHTMLAttributes(node: Element, attributes: Attr[]) {
 
     try {
       testingNode.setAttribute(key, attribute.value ?? attribute.name);
-    } catch (error) {
+    } catch {
       if (typeof Rollbar !== 'undefined') {
         Rollbar.warn(`Invalid attribute ${key} for ${node.tagName} while parsing CMS content`);
       }
@@ -235,7 +235,7 @@ function processReactComponentNode(node: Element, children: ReactNode[], index: 
 function getURLOrigin(href: string) {
   try {
     return new URL(href, window.location.href).origin;
-  } catch (error) {
+  } catch {
     return undefined;
   }
 }

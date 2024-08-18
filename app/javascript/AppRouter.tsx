@@ -12,18 +12,13 @@ import {
 import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
 import { useTranslation } from 'react-i18next';
 
-import PageComponents from './PageComponents';
 import { reloadOnAppEntrypointHeadersMismatch } from './checkAppEntrypointHeadersMatch';
 import FourOhFourPage from './FourOhFourPage';
 import { SignupAutomationMode, SignupMode, SiteMode, TicketMode } from './graphqlTypes.generated';
 import AppRootContext, { AppRootContextValue } from './AppRootContext';
-import NewCmsLayout from './CmsAdmin/CmsLayoutsAdmin/NewCmsLayout';
-import CmsLayoutsAdminTable from './CmsAdmin/CmsLayoutsAdmin/CmsLayoutsAdminTable';
-import NewCmsPage from './CmsAdmin/CmsPagesAdmin/NewCmsPage';
-import CmsPagesAdminTable from './CmsAdmin/CmsPagesAdmin/CmsPagesAdminTable';
 import useAuthorizationRequired, { AbilityName } from './Authentication/useAuthorizationRequired';
 import { EventAdminEventsQueryData, EventAdminEventsQueryDocument } from './EventAdmin/queries.generated';
-import { client } from './useIntercodeApolloClient';
+import { client, preloadQuery } from './useIntercodeApolloClient';
 import buildEventCategoryUrl from './EventAdmin/buildEventCategoryUrl';
 import {
   adminSingleTicketTypeLoader,
@@ -37,6 +32,14 @@ import { eventProposalWithOwnerLoader } from './EventProposals/loaders';
 import { conventionDayLoader } from './EventsApp/conventionDayUrls';
 import { signupAdminEventLoader } from './EventsApp/SignupAdmin/loaders';
 import { teamMembersLoader } from './EventsApp/TeamMemberAdmin/loader';
+import { cmsAdminBaseQueryLoader } from './CmsAdmin/loaders';
+import { cmsPagesAdminLoader } from './CmsAdmin/CmsPagesAdmin/loaders';
+import { cmsPartialsAdminLoader } from './CmsAdmin/CmsPartialsAdmin/loaders';
+import AppRoot, { AppRootLayoutContent } from './AppRoot';
+import { AppRootQueryData, AppRootQueryDocument, AppRootQueryVariables } from './appRootQueries.generated';
+import { liquidDocsLoader } from './LiquidDocs/loader';
+import { cmsLayoutsAdminLoader } from './CmsAdmin/CmsLayoutsAdmin/loaders';
+import { cmsGraphqlQueriesAdminLoader } from './CmsAdmin/CmsGraphqlQueriesAdmin/loaders';
 
 export enum NamedRoute {
   AdminUserConProfile = 'AdminUserConProfile',
@@ -71,16 +74,14 @@ export enum NamedRoute {
   FormJSONEditor = 'FormJSONEditor',
   AdminForms = 'AdminForms',
   FormAdminIndex = 'FormAdminIndex',
+  CmsAdmin = 'CmsAdmin',
+  CmsPagesAdmin = 'CmsPagesAdmin',
+  CmsPartialsAdmin = 'CmsPartialsAdmin',
+  CmsLayoutsAdmin = 'CmsLayoutsAdmin',
+  CmsGraphqlQueriesAdmin = 'CmsGraphqlQueriesAdmin',
 }
 
 export type RouteName = keyof typeof NamedRoute & string;
-
-function CmsPageBySlug() {
-  // react-router 6 doesn't allow slashes in params, so we're going to do our own parsing here
-  const location = useLocation();
-  const slug = location.pathname.replace(/^\/pages\//, '').replace(/\/$/, '');
-  return <PageComponents.CmsPage slug={slug} />;
-}
 
 export type AppRootContextRouteGuardProps = {
   guard: (context: AppRootContextValue) => boolean;
@@ -171,13 +172,13 @@ const eventsRoutes: RouteObject[] = [
         path: 'schedule/*',
         children: [
           { path: ':day', lazy: () => import('./EventsApp/ScheduleApp') },
-          { path: '', loader: conventionDayLoader },
+          { index: true, loader: conventionDayLoader },
         ],
       },
       { path: 'schedule_by_room/*', loader: () => replace('../schedule') },
       { path: 'schedule_with_counts/*', loader: () => replace('../schedule') },
       { path: 'table', lazy: () => import('./EventsApp/EventCatalog/EventTable') },
-      { path: '', lazy: () => import('./EventsApp/EventCatalog/EventList') },
+      { index: true, lazy: () => import('./EventsApp/EventCatalog/EventList') },
     ],
   },
   {
@@ -216,7 +217,7 @@ const eventsRoutes: RouteObject[] = [
         element: <EditEventGuard />,
         children: [
           {
-            path: '',
+            index: true,
             lazy: () => import('./EventsApp/StandaloneEditEvent'),
           },
         ],
@@ -291,7 +292,7 @@ const eventsRoutes: RouteObject[] = [
       {
         path: '',
         element: <EventPageGuard />,
-        children: [{ path: '', id: NamedRoute.EventPage, lazy: () => import('./EventsApp/EventPage') }],
+        children: [{ index: true, id: NamedRoute.EventPage, lazy: () => import('./EventsApp/EventPage') }],
       },
     ],
   },
@@ -306,69 +307,82 @@ function NonCMSPageWrapper() {
 }
 
 const cmsPageRoutes: RouteObject[] = [
-  { path: '/pages/*', element: <CmsPageBySlug /> },
-  { index: true, element: <PageComponents.CmsPage rootPage /> },
+  { path: '/pages/*', lazy: () => import('./CmsPage') },
+  { index: true, lazy: () => import('./CmsPage') },
 ];
 
 const commonRoutes: RouteObject[] = [
   {
-    element: <PageComponents.CmsAdmin />,
+    lazy: () => import('./CmsAdmin'),
+    loader: cmsAdminBaseQueryLoader,
+    id: NamedRoute.CmsAdmin,
     children: [
       {
-        path: '/cms_pages/*',
+        path: '/cms_pages',
+        loader: cmsPagesAdminLoader,
+        id: NamedRoute.CmsPagesAdmin,
         children: [
-          { path: ':id/edit', element: <PageComponents.EditCmsPage /> },
-          { path: ':id/view_source', element: <PageComponents.ViewCmsPageSource /> },
-          { path: 'new', element: <NewCmsPage /> },
-          { path: '', element: <CmsPagesAdminTable /> },
+          { path: ':id/edit', lazy: () => import('./CmsAdmin/CmsPagesAdmin/EditCmsPage') },
+          { path: ':id/view_source', lazy: () => import('./CmsAdmin/CmsPagesAdmin/ViewCmsPageSource') },
+          { path: 'new', lazy: () => import('./CmsAdmin/CmsPagesAdmin/NewCmsPage') },
+          { index: true, lazy: () => import('./CmsAdmin/CmsPagesAdmin/CmsPagesAdminTable') },
         ],
       },
       {
-        path: '/cms_partials/*',
+        path: '/cms_partials',
+        loader: cmsPartialsAdminLoader,
+        id: NamedRoute.CmsPartialsAdmin,
         children: [
-          { path: ':id/edit', element: <PageComponents.EditCmsPartial /> },
-          { path: ':id/view_source', element: <PageComponents.ViewCmsPartialSource /> },
-          { path: 'new', element: <PageComponents.NewCmsPartial /> },
-          { path: '', element: <PageComponents.CmsPartialsAdminTable /> },
+          { path: ':id/edit', lazy: () => import('./CmsAdmin/CmsPartialsAdmin/EditCmsPartial') },
+          { path: ':id/view_source', lazy: () => import('./CmsAdmin/CmsPartialsAdmin/ViewCmsPartialSource') },
+          { path: 'new', lazy: () => import('./CmsAdmin/CmsPartialsAdmin/NewCmsPartial') },
+          { index: true, lazy: () => import('./CmsAdmin/CmsPartialsAdmin/CmsPartialsAdminTable') },
         ],
       },
-      { path: '/cms_files/*', element: <PageComponents.CmsFilesAdmin /> },
-      { path: '/cms_navigation_items/*', element: <PageComponents.NavigationItemsAdmin /> },
+      { path: '/cms_files', lazy: () => import('./CmsAdmin/CmsFilesAdmin') },
+      { path: '/cms_navigation_items', lazy: () => import('./CmsAdmin/NavigationItemsAdmin') },
       {
-        path: '/cms_layouts/*',
+        path: '/cms_layouts',
+        loader: cmsLayoutsAdminLoader,
+        id: NamedRoute.CmsLayoutsAdmin,
         children: [
-          { path: ':id/edit', element: <PageComponents.EditCmsLayout /> },
-          { path: ':id/view_source', element: <PageComponents.ViewCmsLayoutSource /> },
-          { path: 'new', element: <NewCmsLayout /> },
-          { path: '', element: <CmsLayoutsAdminTable /> },
+          { path: ':id/edit', lazy: () => import('./CmsAdmin/CmsLayoutsAdmin/EditCmsLayout') },
+          { path: ':id/view_source', lazy: () => import('./CmsAdmin/CmsLayoutsAdmin/ViewCmsLayoutSource') },
+          { path: 'new', lazy: () => import('./CmsAdmin/CmsLayoutsAdmin/NewCmsLayout') },
+          { index: true, lazy: () => import('./CmsAdmin/CmsLayoutsAdmin/CmsLayoutsAdminTable') },
         ],
       },
-      { path: '/cms_variables/*', element: <PageComponents.CmsVariablesAdmin /> },
+      { path: '/cms_variables', lazy: () => import('./CmsAdmin/CmsVariablesAdmin') },
       {
-        path: '/cms_graphql_queries/*',
+        path: '/cms_graphql_queries',
+        loader: cmsGraphqlQueriesAdminLoader,
+        id: NamedRoute.CmsGraphqlQueriesAdmin,
         children: [
-          { path: ':id/edit', element: <PageComponents.EditCmsGraphqlQuery /> },
-          { path: ':id/view_source', element: <PageComponents.ViewCmsGraphqlQuerySource /> },
-          { path: 'new', element: <PageComponents.NewCmsGraphqlQuery /> },
-          { path: '', element: <PageComponents.CmsGraphqlQueriesAdminTable /> },
+          { path: ':id/edit', lazy: () => import('./CmsAdmin/CmsGraphqlQueriesAdmin/EditCmsGraphqlQuery') },
+          {
+            path: ':id/view_source',
+            lazy: () => import('./CmsAdmin/CmsGraphqlQueriesAdmin/ViewCmsGraphqlQuerySource'),
+          },
+          { path: 'new', lazy: () => import('./CmsAdmin/CmsGraphqlQueriesAdmin/NewCmsGraphqlQuery') },
+          { index: true, lazy: () => import('./CmsAdmin/CmsGraphqlQueriesAdmin/CmsGraphqlQueriesAdminTable') },
         ],
       },
       {
-        path: '/cms_content_groups/*',
+        path: '/cms_content_groups',
         children: [
-          { path: ':id/edit', element: <PageComponents.EditCmsContentGroup /> },
-          { path: 'new', element: <PageComponents.NewCmsContentGroup /> },
-          { path: ':id', element: <PageComponents.ViewCmsContentGroup /> },
-          { path: '', element: <PageComponents.CmsContentGroupsAdminTable /> },
+          { path: ':id/edit', lazy: () => import('./CmsAdmin/CmsContentGroupsAdmin/EditCmsContentGroup') },
+          { path: 'new', lazy: () => import('./CmsAdmin/CmsContentGroupsAdmin/NewCmsContentGroup') },
+          { path: ':id', lazy: () => import('./CmsAdmin/CmsContentGroupsAdmin/ViewCmsContentGroup') },
+          { index: true, lazy: () => import('./CmsAdmin/CmsContentGroupsAdmin/CmsContentGroupsAdminTable') },
         ],
       },
     ],
   },
-  { path: '/oauth/applications-embed', element: <PageComponents.OAuthApplications /> },
-  { path: '/oauth/authorize', element: <PageComponents.OAuthAuthorizationPrompt /> },
-  { path: '/oauth/authorized_applications', element: <PageComponents.AuthorizedApplications /> },
-  { path: '/users/edit', element: <PageComponents.EditUser /> },
-  { path: '/users/password/edit', element: <PageComponents.ResetPassword /> },
+  { path: '/oauth/applications-embed', lazy: () => import('./OAuthApplications') },
+  { path: '/oauth/authorize', lazy: () => import('./OAuth/AuthorizationPrompt') },
+  { path: '/oauth/authorized_applications', lazy: () => import('./OAuth/AuthorizedApplications') },
+  { path: '/users/edit', lazy: () => import('./Authentication/EditUser') },
+  { path: '/users/password/edit', lazy: () => import('./Authentication/ResetPassword') },
 ];
 
 const commonInConventionRoutes: RouteObject[] = [
@@ -376,9 +390,9 @@ const commonInConventionRoutes: RouteObject[] = [
     path: '/admin_departments/*',
     element: <AuthorizationRequiredRouteGuard abilities={['can_update_departments']} />,
     children: [
-      { path: ':id/edit', element: <PageComponents.EditDepartment /> },
-      { path: 'new', element: <PageComponents.NewDepartment /> },
-      { path: '', element: <PageComponents.DepartmentAdminIndex /> },
+      { path: ':id/edit', lazy: () => import('./DepartmentAdmin/EditDepartment') },
+      { path: 'new', lazy: () => import('./DepartmentAdmin/NewDepartment') },
+      { index: true, lazy: () => import('./DepartmentAdmin/DepartmentAdminIndex') },
     ],
   },
   {
@@ -401,10 +415,7 @@ const commonInConventionRoutes: RouteObject[] = [
         ],
       },
       { path: ':id/edit', lazy: () => import('./EventAdmin/EventAdminEditEvent') },
-      {
-        path: '',
-        loader: eventAdminRootRedirect,
-      },
+      { index: true, loader: eventAdminRootRedirect },
     ],
   },
   {
@@ -432,12 +443,12 @@ const commonInConventionRoutes: RouteObject[] = [
       { path: 'coupons', lazy: () => import('./Store/CouponAdmin/CouponAdminTable') },
       { path: 'orders', lazy: () => import('./Store/OrderAdmin') },
       { path: 'order_summary', lazy: () => import('./Store/OrderSummary') },
-      { path: '', loader: () => redirect('./products') },
+      { index: true, loader: () => redirect('./products') },
     ],
   },
-  { path: '/cart', element: <PageComponents.Cart /> },
-  { path: '/clickwrap_agreement', element: <PageComponents.ClickwrapAgreement /> },
-  { path: '/convention/edit', element: <PageComponents.ConventionAdmin /> },
+  { path: '/cart', lazy: () => import('./Store/Cart') },
+  { path: '/clickwrap_agreement', lazy: () => import('./ClickwrapAgreement') },
+  { path: '/convention/edit', lazy: () => import('./ConventionAdmin') },
   { path: '/events/*', children: eventsRoutes },
   {
     path: '/mailing_lists',
@@ -462,8 +473,8 @@ const commonInConventionRoutes: RouteObject[] = [
       { index: true, lazy: () => import('./MyProfile/MyProfileDisplay') },
     ],
   },
-  { path: '/order_history', element: <PageComponents.OrderHistory /> },
-  { path: '/products/:id', element: <PageComponents.ProductPage /> },
+  { path: '/order_history', lazy: () => import('./Store/OrderHistory') },
+  { path: '/products/:id', lazy: () => import('./Store/ProductPage') },
   {
     path: '/reports',
     element: <AuthorizationRequiredRouteGuard abilities={['can_read_reports']} />,
@@ -472,10 +483,10 @@ const commonInConventionRoutes: RouteObject[] = [
       { path: 'event_provided_tickets', lazy: () => import('./Reports/EventProvidedTickets') },
       { path: 'events_by_choice', lazy: () => import('./Reports/EventsByChoice') },
       { path: 'signup_spy', lazy: () => import('./Reports/SignupSpy') },
-      { path: '', lazy: () => import('./Reports') },
+      { index: true, lazy: () => import('./Reports') },
     ],
   },
-  { path: '/rooms', element: <PageComponents.RoomsAdmin /> },
+  { path: '/rooms', lazy: () => import('./RoomsAdmin') },
   {
     element: <AppRootContextRouteGuard guard={({ signupMode }) => signupMode === SignupMode.Moderated} />,
     children: [
@@ -534,7 +545,7 @@ const commonInConventionRoutes: RouteObject[] = [
           },
         ],
       },
-      { path: '', lazy: () => import('./StaffPositionAdmin/StaffPositionsTable') },
+      { index: true, lazy: () => import('./StaffPositionAdmin/StaffPositionsTable') },
     ],
   },
   {
@@ -573,7 +584,7 @@ const commonInConventionRoutes: RouteObject[] = [
         id: NamedRoute.EditUserActivityAlert,
         lazy: () => import('./UserActivityAlerts/EditUserActivityAlert'),
       },
-      { path: '', lazy: () => import('./UserActivityAlerts/UserActivityAlertsList') },
+      { index: true, lazy: () => import('./UserActivityAlerts/UserActivityAlertsList') },
     ],
   },
   {
@@ -594,10 +605,10 @@ const commonInConventionRoutes: RouteObject[] = [
             ],
           },
           { path: 'edit', lazy: () => import('./UserConProfiles/EditUserConProfile') },
-          { path: '', lazy: () => import('./UserConProfiles/UserConProfileAdminDisplay') },
+          { index: true, lazy: () => import('./UserConProfiles/UserConProfileAdminDisplay') },
         ],
       },
-      { path: '', lazy: () => import('./UserConProfiles/AttendeesPage') },
+      { index: true, lazy: () => import('./UserConProfiles/AttendeesPage') },
     ],
   },
   ...commonRoutes,
@@ -642,14 +653,14 @@ const conventionModeRoutes: RouteObject[] = [
   },
   {
     path: '/event_categories/*',
-    element: <PageComponents.EventCategoryAdmin />,
+    lazy: () => import('./EventCategoryAdmin'),
     children: [
-      { path: 'new', element: <PageComponents.NewEventCategory /> },
-      { path: ':id/edit', element: <PageComponents.EditEventCategory /> },
-      { path: '', element: <PageComponents.EventCategoryIndex /> },
+      { path: 'new', lazy: () => import('./EventCategoryAdmin/NewEventCategory') },
+      { path: ':id/edit', lazy: () => import('./EventCategoryAdmin/EditEventCategory') },
+      { index: true, lazy: () => import('./EventCategoryAdmin/EventCategoryIndex') },
     ],
   },
-  { path: '/event_proposals/:id/edit', element: <PageComponents.EditEventProposal /> },
+  { path: '/event_proposals/:id/edit', lazy: () => import('./EventProposals/EditEventProposal') },
   { path: '/event_proposals', loader: () => replace('/pages/new-proposal') },
 ];
 
@@ -665,10 +676,10 @@ const rootSiteRoutes: RouteObject[] = [
         id: NamedRoute.RootSiteConventionDisplay,
         lazy: () => import('./RootSiteConventionsAdmin/ConventionDisplay'),
       },
-      { path: '', lazy: () => import('./RootSiteConventionsAdmin/RootSiteConventionsAdminTable') },
+      { index: true, lazy: () => import('./RootSiteConventionsAdmin/RootSiteConventionsAdminTable') },
     ],
   },
-  { path: '/email_routes', element: <PageComponents.RootSiteEmailRoutesAdmin /> },
+  { path: '/email_routes', lazy: () => import('./RootSiteEmailRoutesAdmin') },
   {
     path: '/organizations',
     id: NamedRoute.OrganizationAdmin,
@@ -697,25 +708,25 @@ const rootSiteRoutes: RouteObject[] = [
           },
         ],
       },
-      { path: '', lazy: () => import('./OrganizationAdmin/OrganizationIndex') },
+      { index: true, lazy: () => import('./OrganizationAdmin/OrganizationIndex') },
     ],
   },
   {
     path: '/root_site',
-    element: <PageComponents.CmsAdmin />,
-    children: [{ path: '', element: <PageComponents.RootSiteAdmin /> }],
+    lazy: () => import('./CmsAdmin'),
+    children: [{ index: true, lazy: () => import('./RootSiteAdmin') }],
   },
   {
     path: '/users',
     lazy: () => import('./Users/UsersAdmin'),
     children: [
       { path: ':id', lazy: () => import('./Users/UserAdminDisplay') },
-      { path: '', lazy: () => import('./Users/UsersTable') },
+      { index: true, lazy: () => import('./Users/UsersTable') },
     ],
   },
 ];
 
-export const routes: RouteObject[] = [
+export const appLayoutRoutes: RouteObject[] = [
   {
     element: <NonCMSPageWrapper />,
     children: [
@@ -747,6 +758,38 @@ export const routes: RouteObject[] = [
   },
   ...cmsPageRoutes,
   { path: '*', element: <FourOhFourPage /> },
+];
+
+export const appRootRoutes: RouteObject[] = [
+  {
+    element: <AppRoot />,
+    loader: () => preloadQuery<AppRootQueryData, AppRootQueryVariables>(AppRootQueryDocument),
+    children: [
+      {
+        path: '/admin_forms/:id/edit/*',
+        lazy: () => import('./FormAdmin/FormEditor'),
+        children: [
+          { path: 'section/:sectionId/item/:itemId', lazy: () => import('./FormAdmin/FormItemEditorLayout') },
+          { path: 'section/:sectionId', lazy: () => import('./FormAdmin/FormSectionEditorLayout') },
+        ],
+      },
+      {
+        path: '/liquid_docs',
+        id: NamedRoute.LiquidDocs,
+        loader: liquidDocsLoader,
+        children: [
+          { path: 'assigns/:name', lazy: () => import('./LiquidDocs/AssignDoc') },
+          { path: 'filters/:name', lazy: () => import('./LiquidDocs/FilterDoc') },
+          { path: 'tags/:name', lazy: () => import('./LiquidDocs/LiquidTagDoc') },
+          { index: true, lazy: () => import('./LiquidDocs') },
+        ],
+      },
+      {
+        element: <AppRootLayoutContent />,
+        children: appLayoutRoutes,
+      },
+    ],
+  },
 ];
 
 export type AppRouterProps = {

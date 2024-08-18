@@ -3,15 +3,15 @@ import { Link } from 'react-router-dom';
 import {
   sortByLocaleString,
   useGraphQLConfirm,
-  LoadQueryWrapper,
   useDeleteMutationWithReferenceArrayUpdater,
 } from '@neinteractiveliterature/litform';
 
 import usePageTitle from '../../usePageTitle';
-import { useCmsPagesAdminQuery } from './queries.generated';
 import { useDeletePageMutation } from './mutations.generated';
+import { useCmsPagesAdminLoader } from './loaders';
 
-export default LoadQueryWrapper(useCmsPagesAdminQuery, function CmsPagesAdminTable({ data }) {
+function CmsPagesAdminTable() {
+  const data = useCmsPagesAdminLoader();
   const confirm = useGraphQLConfirm();
   const [deletePage] = useDeleteMutationWithReferenceArrayUpdater(
     useDeletePageMutation,
@@ -83,4 +83,6 @@ export default LoadQueryWrapper(useCmsPagesAdminQuery, function CmsPagesAdminTab
       )}
     </>
   );
-});
+}
+
+export const Component = CmsPagesAdminTable;

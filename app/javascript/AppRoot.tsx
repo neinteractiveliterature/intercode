@@ -8,7 +8,6 @@ import {
   AppRootQueryVariables,
   useAppRootLayoutQuerySuspenseQuery,
 } from './appRootQueries.generated';
-import AppRouter from './AppRouter';
 import AppRootContext, { AppRootContextValue } from './AppRootContext';
 import parseCmsContent, { CMS_COMPONENT_MAP } from './parseCmsContent';
 import { timezoneNameForConvention } from './TimeUtils';
@@ -21,6 +20,7 @@ import { Helmet } from 'react-helmet-async';
 import React from 'react';
 import { ScriptTag } from './parsePageContent';
 import { QueryRef, useReadQuery } from '@apollo/client';
+import OutletWithLoading from './OutletWithLoading';
 
 const NavigationBar = lazyWithAppEntrypointHeadersCheck(
   () => import(/* webpackChunkName: 'navigation-bar' */ './NavigationBar'),
@@ -91,7 +91,7 @@ export function AppRootLayoutContent() {
 
     return parseCmsContent(data.cmsParentByRequestHost.effectiveCmsLayout.content_html ?? '', {
       ...CMS_COMPONENT_MAP,
-      AppRouter,
+      AppRouter: OutletWithLoading,
       NavigationBar,
     });
   }, [data.cmsParentByRequestHost.effectiveCmsLayout.content_html, error]);

@@ -1,16 +1,12 @@
 import { Link } from 'react-router-dom';
-import {
-  ErrorDisplay,
-  useConfirm,
-  LoadQueryWrapper,
-  useDeleteMutationWithReferenceArrayUpdater,
-} from '@neinteractiveliterature/litform';
+import { ErrorDisplay, useConfirm, useDeleteMutationWithReferenceArrayUpdater } from '@neinteractiveliterature/litform';
 
 import usePageTitle from '../../usePageTitle';
-import { useCmsGraphqlQueriesQuery } from './queries.generated';
 import { useDeleteCmsGraphqlQuery } from './mutations.generated';
+import { useCmsGraphqlQueriesAdminLoader } from './loaders';
 
-export default LoadQueryWrapper(useCmsGraphqlQueriesQuery, function CmsGraphqlQueriesAdminTable({ data }): JSX.Element {
+function CmsGraphqlQueriesAdminTable(): JSX.Element {
+  const data = useCmsGraphqlQueriesAdminLoader();
   const [deleteCmsGraphqlQuery] = useDeleteMutationWithReferenceArrayUpdater(
     useDeleteCmsGraphqlQuery,
     data.cmsParent,
@@ -77,4 +73,6 @@ export default LoadQueryWrapper(useCmsGraphqlQueriesQuery, function CmsGraphqlQu
       )}
     </>
   );
-});
+}
+
+export const Component = CmsGraphqlQueriesAdminTable;

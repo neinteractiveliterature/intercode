@@ -4,15 +4,15 @@ import {
   ErrorDisplay,
   useConfirm,
   sortByLocaleString,
-  LoadQueryWrapper,
   useDeleteMutationWithReferenceArrayUpdater,
 } from '@neinteractiveliterature/litform';
 
 import usePageTitle from '../../usePageTitle';
-import { useCmsLayoutsAdminQuery } from './queries.generated';
 import { useDeleteLayoutMutation } from './mutations.generated';
+import { useCmsLayoutsAdminLoader } from './loaders';
 
-export default LoadQueryWrapper(useCmsLayoutsAdminQuery, function CmsLayoutsAdminTable({ data }) {
+function CmsLayoutsAdminTable() {
+  const data = useCmsLayoutsAdminLoader();
   const confirm = useConfirm();
   const [deleteLayout] = useDeleteMutationWithReferenceArrayUpdater(
     useDeleteLayoutMutation,
@@ -80,4 +80,6 @@ export default LoadQueryWrapper(useCmsLayoutsAdminQuery, function CmsLayoutsAdmi
       )}
     </>
   );
-});
+}
+
+export const Component = CmsLayoutsAdminTable;

@@ -2,20 +2,18 @@ import { useState } from 'react';
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
-import {
-  ErrorDisplay,
-  LoadQueryWrapper,
-  useCreateMutationWithReferenceArrayUpdater,
-} from '@neinteractiveliterature/litform';
+import { ErrorDisplay, useCreateMutationWithReferenceArrayUpdater } from '@neinteractiveliterature/litform';
 
 import buildLayoutInput from './buildLayoutInput';
 import CmsLayoutForm from './CmsLayoutForm';
 import usePageTitle from '../../usePageTitle';
 import { CmsLayout } from '../../graphqlTypes.generated';
 import { CreateLayoutMutationData, useCreateLayoutMutation } from './mutations.generated';
-import { CmsLayoutFieldsFragmentDoc, useCmsLayoutsAdminQuery } from './queries.generated';
+import { CmsLayoutFieldsFragmentDoc } from './queries.generated';
+import { useCmsLayoutsAdminLoader } from './loaders';
 
-export default LoadQueryWrapper(useCmsLayoutsAdminQuery, function NewCmsLayout({ data }): JSX.Element {
+function NewCmsLayout(): JSX.Element {
+  const data = useCmsLayoutsAdminLoader();
   const navigate = useNavigate();
   const [layout, setLayout] = useState<Pick<CmsLayout, 'name' | 'admin_notes' | 'navbar_classes' | 'content'>>({});
   const [createLayout, { error: createError, loading: createInProgress }] = useCreateMutationWithReferenceArrayUpdater(
@@ -53,4 +51,6 @@ export default LoadQueryWrapper(useCmsLayoutsAdminQuery, function NewCmsLayout({
       />
     </form>
   );
-});
+}
+
+export const Component = NewCmsLayout;

@@ -4,15 +4,15 @@ import {
   ErrorDisplay,
   sortByLocaleString,
   useConfirm,
-  LoadQueryWrapper,
   useDeleteMutationWithReferenceArrayUpdater,
 } from '@neinteractiveliterature/litform';
 
 import usePageTitle from '../../usePageTitle';
-import { useCmsPartialsAdminQuery } from './queries.generated';
 import { useDeletePartialMutation } from './mutations.generated';
+import { useCmsPartialsAdminLoader } from './loaders';
 
-export default LoadQueryWrapper(useCmsPartialsAdminQuery, function CmsPartialsAdminTable({ data }) {
+function CmsPartialsAdminTable() {
+  const data = useCmsPartialsAdminLoader();
   const confirm = useConfirm();
   const [deletePartial] = useDeleteMutationWithReferenceArrayUpdater(
     useDeletePartialMutation,
@@ -80,4 +80,6 @@ export default LoadQueryWrapper(useCmsPartialsAdminQuery, function CmsPartialsAd
       )}
     </>
   );
-});
+}
+
+export const Component = CmsPartialsAdminTable;

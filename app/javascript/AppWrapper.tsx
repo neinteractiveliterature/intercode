@@ -25,7 +25,7 @@ import { client } from './useIntercodeApolloClient';
 import MapboxContext, { useMapboxContext } from './MapboxContext';
 import getI18n from './setupI18Next';
 import RailsDirectUploadsContext from './RailsDirectUploadsContext';
-import appRootRoutes from './appRootRoutes';
+import { appRootRoutes } from './AppRouter';
 
 function I18NextWrapper({ children }: { children: (i18nInstance: i18n) => ReactNode }) {
   const [i18nInstance, seti18nInstance] = useState<i18n>();

@@ -2,19 +2,17 @@ import { useState } from 'react';
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
-import {
-  useCreateMutationWithReferenceArrayUpdater,
-  ErrorDisplay,
-  LoadQueryWrapper,
-} from '@neinteractiveliterature/litform';
+import { useCreateMutationWithReferenceArrayUpdater, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import buildPartialInput from './buildPartialInput';
 import CmsPartialForm, { CmsPartialFormFields } from './CmsPartialForm';
 import usePageTitle from '../../usePageTitle';
-import { CmsPartialFieldsFragmentDoc, useCmsPartialsAdminQuery } from './queries.generated';
+import { CmsPartialFieldsFragmentDoc } from './queries.generated';
 import { useCreatePartialMutation } from './mutations.generated';
+import { useCmsPartialsAdminLoader } from './loaders';
 
-export default LoadQueryWrapper(useCmsPartialsAdminQuery, function NewCmsPartial({ data }): JSX.Element {
+function NewCmsPartial(): JSX.Element {
+  const data = useCmsPartialsAdminLoader();
   const navigate = useNavigate();
   const [partial, setPartial] = useState<CmsPartialFormFields>({});
   const [createPartial, { error: createError, loading: createInProgress }] = useCreateMutationWithReferenceArrayUpdater(
@@ -54,4 +52,6 @@ export default LoadQueryWrapper(useCmsPartialsAdminQuery, function NewCmsPartial
       </form>
     </>
   );
-});
+}
+
+export const Component = NewCmsPartial;

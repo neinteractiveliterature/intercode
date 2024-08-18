@@ -1,12 +1,20 @@
 import { useState, useCallback } from 'react';
-import { sortByLocaleString, LoadQueryWrapper } from '@neinteractiveliterature/litform';
+import { sortByLocaleString } from '@neinteractiveliterature/litform';
 
 import AddVariableRow, { AddingVariable } from './AddVariableRow';
 import ExistingVariableRow from './ExistingVariableRow';
 import usePageTitle from '../../usePageTitle';
-import { useCmsVariablesQuery } from './queries.generated';
+import { CmsVariablesQueryData, CmsVariablesQueryDocument } from './queries.generated';
+import { LoaderFunction, useLoaderData } from 'react-router';
+import { client } from '../../useIntercodeApolloClient';
 
-export default LoadQueryWrapper(useCmsVariablesQuery, function CmsVariablesAdmin({ data }): JSX.Element {
+export const loader: LoaderFunction = async () => {
+  const { data } = await client.query<CmsVariablesQueryData>({ query: CmsVariablesQueryDocument });
+  return data;
+};
+
+function CmsVariablesAdmin(): JSX.Element {
+  const data = useLoaderData() as CmsVariablesQueryData;
   const [addingVariables, setAddingVariables] = useState<AddingVariable[]>([]);
 
   const addVariable = useCallback(
@@ -94,4 +102,6 @@ export default LoadQueryWrapper(useCmsVariablesQuery, function CmsVariablesAdmin
       )}
     </table>
   );
-});
+}
+
+export const Component = CmsVariablesAdmin;
