@@ -1,7 +1,5 @@
- 
-
 if (window.sentryFrontendDSN) {
-  import('@sentry/browser').then((Sentry) => {
+  import(/* webpackChunkName: 'sentry-browser' */ '@sentry/browser').then((Sentry) => {
     Sentry.init({ dsn: window.sentryFrontendDSN });
   });
 }

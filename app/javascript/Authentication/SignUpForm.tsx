@@ -11,13 +11,9 @@ import AccountFormContent from './AccountFormContent';
 import UserFormFields, { UserFormState } from './UserFormFields';
 import PasswordConfirmationInput from './PasswordConfirmationInput';
 import useAfterSessionChange from './useAfterSessionChange';
-import { lazyWithAppEntrypointHeadersCheck } from '../checkAppEntrypointHeadersMatch';
 import humanize from '../humanize';
 import AuthenticityTokensManager from '../AuthenticityTokensContext';
-
-const PasswordInputWithStrengthCheck = lazyWithAppEntrypointHeadersCheck(
-  () => import(/* webpackChunkName: "password-input-with-strength-check" */ './PasswordInputWithStrengthCheck'),
-);
+import PasswordInputWithStrengthCheck from './PasswordInputWithStrengthCheck';
 
 async function signUp(
   authenticityToken: string,

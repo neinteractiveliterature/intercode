@@ -171,7 +171,7 @@ const eventsRoutes: RouteObject[] = [
     element: <AppRootContextRouteGuard guard={({ siteMode }) => siteMode !== SiteMode.SingleEvent} />,
     children: [
       {
-        path: 'schedule/*',
+        path: 'schedule',
         children: [
           { path: ':day', lazy: () => import('./EventsApp/ScheduleApp') },
           { index: true, loader: conventionDayLoader },
@@ -199,7 +199,7 @@ const eventsRoutes: RouteObject[] = [
         element: <AppRootContextRouteGuard guard={({ ticketMode }) => ticketMode === TicketMode.TicketPerEvent} />,
         children: [
           {
-            path: 'ticket_types/*',
+            path: 'ticket_types',
             loader: eventTicketTypesLoader,
             lazy: () => import('./EventsApp/EventTicketTypesWrapper'),
             children: [
@@ -395,7 +395,7 @@ const commonRoutes: RouteObject[] = [
 
 const commonInConventionRoutes: RouteObject[] = [
   {
-    path: '/admin_departments/*',
+    path: '/admin_departments',
     element: <AuthorizationRequiredRouteGuard abilities={['can_update_departments']} />,
     children: [
       { path: ':id/edit', lazy: () => import('./DepartmentAdmin/EditDepartment') },
@@ -404,7 +404,7 @@ const commonInConventionRoutes: RouteObject[] = [
     ],
   },
   {
-    path: '/admin_events/*',
+    path: '/admin_events',
     lazy: () => import('./EventAdmin'),
     children: [
       {
@@ -457,7 +457,7 @@ const commonInConventionRoutes: RouteObject[] = [
   { path: '/cart', lazy: () => import('./Store/Cart') },
   { path: '/clickwrap_agreement', lazy: () => import('./ClickwrapAgreement') },
   { path: '/convention/edit', lazy: () => import('./ConventionAdmin') },
-  { path: '/events/*', children: eventsRoutes },
+  { path: '/events', children: eventsRoutes },
   {
     path: '/mailing_lists',
     element: <AuthorizationRequiredRouteGuard abilities={['can_read_any_mailing_list']} />,
@@ -526,7 +526,7 @@ const commonInConventionRoutes: RouteObject[] = [
     ],
   },
   {
-    path: '/signup_rounds/*',
+    path: '/signup_rounds',
     lazy: () => import('./SignupRoundsAdmin'),
     children: [
       { path: ':id/results', lazy: () => import('./SignupRoundsAdmin/RankedChoiceSignupDecisionsPage') },
@@ -534,7 +534,7 @@ const commonInConventionRoutes: RouteObject[] = [
     ],
   },
   {
-    path: '/staff_positions/*',
+    path: '/staff_positions',
     lazy: () => import('./StaffPositionAdmin'),
     children: [
       { path: 'new', lazy: () => import('./StaffPositionAdmin/NewStaffPosition') },
@@ -582,7 +582,7 @@ const commonInConventionRoutes: RouteObject[] = [
     ],
   },
   {
-    path: '/user_activity_alerts/*',
+    path: '/user_activity_alerts',
     id: NamedRoute.UserActivityAlerts,
     lazy: () => import('./UserActivityAlerts/UserActivityAlertsAdmin'),
     children: [
@@ -596,7 +596,7 @@ const commonInConventionRoutes: RouteObject[] = [
     ],
   },
   {
-    path: '/user_con_profiles/*',
+    path: '/user_con_profiles',
     element: <AuthorizationRequiredRouteGuard abilities={['can_read_user_con_profiles']} />,
     children: [
       { path: 'new', lazy: () => import('./UserConProfiles/AttendeesPage') },
@@ -659,7 +659,7 @@ const conventionModeRoutes: RouteObject[] = [
     ],
   },
   {
-    path: '/event_categories/*',
+    path: '/event_categories',
     lazy: () => import('./EventCategoryAdmin'),
     children: [
       { path: 'new', lazy: () => import('./EventCategoryAdmin/NewEventCategory') },
@@ -675,7 +675,7 @@ const singleEventModeRoutes: RouteObject[] = [];
 
 const rootSiteRoutes: RouteObject[] = [
   {
-    path: '/conventions/*',
+    path: '/conventions',
     lazy: () => import('./RootSiteConventionsAdmin'),
     children: [
       {
@@ -769,7 +769,7 @@ export const appRootRoutes: RouteObject[] = [
     loader: () => preloadQuery<AppRootQueryData, AppRootQueryVariables>(AppRootQueryDocument),
     children: [
       {
-        path: '/admin_forms/:id/edit/*',
+        path: '/admin_forms/:id/edit',
         lazy: () => import('./FormAdmin/FormEditor'),
         children: [
           { path: 'section/:sectionId/item/:itemId', lazy: () => import('./FormAdmin/FormItemEditorLayout') },

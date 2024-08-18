@@ -6,12 +6,8 @@ import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform
 
 import PasswordConfirmationInput from './PasswordConfirmationInput';
 import useAsyncFunction from '../useAsyncFunction';
-import { lazyWithAppEntrypointHeadersCheck } from '../checkAppEntrypointHeadersMatch';
 import AuthenticityTokensManager from '../AuthenticityTokensContext';
-
-const PasswordInputWithStrengthCheck = lazyWithAppEntrypointHeadersCheck(
-  () => import(/* webpackChunkName: "password-input-with-strength-check" */ './PasswordInputWithStrengthCheck'),
-);
+import PasswordInputWithStrengthCheck from './PasswordInputWithStrengthCheck';
 
 async function changePassword(
   authenticityToken: string,
