@@ -1,14 +1,12 @@
-import { useMemo } from 'react';
-import { useParams, Outlet, Routes, Route } from 'react-router-dom';
-import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
+import { Suspense, useMemo } from 'react';
+import { useParams, Outlet } from 'react-router-dom';
+import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
-import BreadcrumbItem from '../../Breadcrumbs/BreadcrumbItem';
-import RouteActivatedBreadcrumbItem from '../../Breadcrumbs/RouteActivatedBreadcrumbItem';
-import buildEventUrl from '../buildEventUrl';
-import LeafBreadcrumbItem from '../../Breadcrumbs/LeafBreadcrumbItem';
-import useTeamMembersQueryFromParams from './useTeamMembersQueryFromParams';
+import { useTeamMembersLoader } from './loader';
+import NamedRouteBreadcrumbItem from '../../Breadcrumbs/NamedRouteBreadcrumbItem';
 
-export default LoadQueryWrapper(useTeamMembersQueryFromParams, function TeamMemberAdmin({ data }): JSX.Element {
+function TeamMemberAdmin(): JSX.Element {
+  const data = useTeamMembersLoader();
   const teamMemberId = useParams<{ teamMemberId: string }>().teamMemberId;
 
   const teamMember = useMemo(() => {
@@ -20,36 +18,30 @@ export default LoadQueryWrapper(useTeamMembersQueryFromParams, function TeamMemb
   }, [data.convention.event.team_members, teamMemberId]);
 
   const { event } = data.convention;
-  const eventPath = buildEventUrl(event);
 
   return (
     <>
       <nav aria-label="breadcrumb">
         <ol className="breadcrumb">
-          <BreadcrumbItem active={false} to={eventPath}>
-            {event.title}
-          </BreadcrumbItem>
-          <RouteActivatedBreadcrumbItem to={``} end>
+          <NamedRouteBreadcrumbItem routeId="Event">{event.title}</NamedRouteBreadcrumbItem>
+          <NamedRouteBreadcrumbItem routeId={['TeamMembers', 'TeamMembersIndex']}>
             {event.event_category.teamMemberNamePlural}
-          </RouteActivatedBreadcrumbItem>
-          <LeafBreadcrumbItem path={`new`}>
+          </NamedRouteBreadcrumbItem>
+          <NamedRouteBreadcrumbItem routeId="NewTeamMember">
             {'Add '}
             {event.event_category.team_member_name}
-          </LeafBreadcrumbItem>
-          <Routes>
-            <Route
-              path=":teamMemberId"
-              element={
-                <LeafBreadcrumbItem path="">
-                  {teamMember?.user_con_profile?.name_without_nickname || ''}
-                </LeafBreadcrumbItem>
-              }
-            />
-          </Routes>
+          </NamedRouteBreadcrumbItem>
+          <NamedRouteBreadcrumbItem routeId="EditTeamMember">
+            {teamMember?.user_con_profile?.name_without_nickname || ''}
+          </NamedRouteBreadcrumbItem>
         </ol>
       </nav>
 
-      <Outlet />
+      <Suspense fallback={<PageLoadingIndicator visible />}>
+        <Outlet />
+      </Suspense>
     </>
   );
-});
+}
+
+export const Component = TeamMemberAdmin;

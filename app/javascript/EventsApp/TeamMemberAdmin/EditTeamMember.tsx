@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { ApolloError } from '@apollo/client';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
 import capitalize from 'lodash/capitalize';
 
 import buildTeamMemberInput from './buildTeamMemberInput';
@@ -12,10 +12,11 @@ import usePageTitle from '../../usePageTitle';
 import { TeamMembersQueryData } from './queries.generated';
 import { useUpdateTeamMemberMutation } from './mutations.generated';
 import FourOhFourPage from '../../FourOhFourPage';
-import useTeamMembersQueryFromParams from './useTeamMembersQueryFromParams';
 import buildEventUrl from '../buildEventUrl';
+import { useTeamMembersLoader } from './loader';
 
-export default LoadQueryWrapper(useTeamMembersQueryFromParams, function EditTeamMember({ data }): JSX.Element {
+function EditTeamMember(): JSX.Element {
+  const data = useTeamMembersLoader();
   const event = data.convention.event;
   const { t } = useTranslation();
   const { teamMemberId } = useParams<{ teamMemberId: string }>();
@@ -92,4 +93,6 @@ export default LoadQueryWrapper(useTeamMembersQueryFromParams, function EditTeam
       </ul>
     </>
   );
-});
+}
+
+export const Component = EditTeamMember;

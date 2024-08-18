@@ -137,12 +137,22 @@ function AppWrapper<P extends JSX.IntrinsicAttributes>(
   function Wrapper(props: P & AppWrapperProps) {
     const router = useMemo(
       () =>
-        createBrowserRouter([
+        createBrowserRouter(
+          [
+            {
+              element: <ProviderStack {...props} />,
+              children: appRootRoutes,
+            },
+          ],
           {
-            element: <ProviderStack {...props} />,
-            children: appRootRoutes,
+            future: {
+              v7_normalizeFormMethod: true,
+              v7_partialHydration: true,
+              v7_skipActionErrorRevalidation: true,
+              v7_fetcherPersist: true,
+            },
           },
-        ]),
+        ),
       [props],
     );
 

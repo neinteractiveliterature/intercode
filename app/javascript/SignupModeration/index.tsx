@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom';
-import { BootstrapNavLink } from '../UIComponents/BootstrapNavLink';
+import { RouteActivatedBootstrapNavLink } from '../UIComponents/BootstrapNavLink';
 
 import { useContext } from 'react';
 import AppRootContext from '../AppRootContext';
@@ -19,16 +19,16 @@ function SignupModeration(): JSX.Element {
     <>
       <h1 className="mb-4">{t('navigation.admin.signupModeration')}</h1>
       <ul className="nav nav-tabs mb-3" role="tablist">
-        <BootstrapNavLink path="/signup_moderation/queue" icon="bi-list-check">
+        <RouteActivatedBootstrapNavLink path="/signup_moderation/queue" icon="bi-list-check">
           {t('signupModeration.moderationQueue')}
-        </BootstrapNavLink>
-        <BootstrapNavLink path="/signup_moderation/create_signups" icon="bi-plus-circle">
+        </RouteActivatedBootstrapNavLink>
+        <RouteActivatedBootstrapNavLink path="/signup_moderation/create_signups" icon="bi-plus-circle">
           {t('signupModeration.createSignups')}
-        </BootstrapNavLink>
+        </RouteActivatedBootstrapNavLink>
         {signupAutomationMode === SignupAutomationMode.RankedChoice && (
-          <BootstrapNavLink path="/signup_moderation/ranked_choice_queue" icon="bi-card-checklist">
+          <RouteActivatedBootstrapNavLink path="/signup_moderation/ranked_choice_queue" icon="bi-card-checklist">
             {t('signupModeration.rankedChoiceQueue')}
-          </BootstrapNavLink>
+          </RouteActivatedBootstrapNavLink>
         )}
       </ul>
       <Outlet />

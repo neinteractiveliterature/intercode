@@ -3,17 +3,17 @@ import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import snakeCase from 'lodash/snakeCase';
 
-import BreadcrumbItem from '../../Breadcrumbs/BreadcrumbItem';
-import EventBreadcrumbItems from '../EventPage/EventBreadcrumbItems';
 import { findBucket, formatSignupState } from './SignupUtils';
-import RunHeader from './RunHeader';
 import usePageTitle from '../../usePageTitle';
 import Gravatar from '../../Gravatar';
-import { RunSignupSummaryQueryData, useRunSignupSummaryQuery } from './queries.generated';
+import {
+  RunSignupSummaryQueryData,
+  RunSignupSummaryQueryDocument,
+  RunSignupSummaryQueryVariables,
+} from './queries.generated';
 import humanize from '../../humanize';
-import { useParams } from 'react-router';
-import { LoadQueryWrapper } from '@neinteractiveliterature/litform/dist';
-import buildEventUrl from '../buildEventUrl';
+import { LoaderFunction, useLoaderData } from 'react-router';
+import { client } from '../../useIntercodeApolloClient';
 
 type EventType = RunSignupSummaryQueryData['convention']['event'];
 type SignupType = EventType['run']['signups_paginated']['entries'][0];
@@ -50,19 +50,22 @@ function sortSignups(signups: SignupType[], teamMembers: EventType['team_members
   });
 }
 
-function useRunSignupSummaryQueryFromParams() {
-  const { eventId, runId } = useParams();
-  return useRunSignupSummaryQuery({ variables: { eventId: eventId ?? '', runId: runId ?? '' } });
-}
-
 export type RunSignupSummaryProps = {
   eventId: string;
   runId: string;
   eventPath: string;
 };
 
-export default LoadQueryWrapper(useRunSignupSummaryQueryFromParams, function RunSignupSummary({ data }): JSX.Element {
-  const { runId } = useParams();
+export const loader: LoaderFunction = async ({ params: { eventId, runId } }) => {
+  const { data } = await client.query<RunSignupSummaryQueryData, RunSignupSummaryQueryVariables>({
+    query: RunSignupSummaryQueryDocument,
+    variables: { eventId: eventId ?? '', runId: runId ?? '' },
+  });
+  return data;
+};
+
+function RunSignupSummary(): JSX.Element {
+  const data = useLoaderData() as RunSignupSummaryQueryData;
   const { t } = useTranslation();
 
   const signupSummaryTitle = t('events.signupSummary.title');
@@ -122,25 +125,11 @@ export default LoadQueryWrapper(useRunSignupSummaryQueryFromParams, function Run
     );
   };
 
-  const { convention, currentAbility } = data;
+  const { convention } = data;
   const event = convention.event;
 
   return (
     <>
-      <nav aria-label="breadcrumb">
-        <ol className="breadcrumb">
-          <EventBreadcrumbItems
-            event={event}
-            convention={convention}
-            currentAbility={currentAbility}
-            eventPath={buildEventUrl(event)}
-          />
-          <BreadcrumbItem active to={`${buildEventUrl(event)}/runs/${runId}/signup_summary`}>
-            {signupSummaryTitle}
-          </BreadcrumbItem>
-        </ol>
-      </nav>
-      <RunHeader />
       <table className="table">
         <thead>
           <tr>
@@ -161,4 +150,6 @@ export default LoadQueryWrapper(useRunSignupSummaryQueryFromParams, function Run
       </table>
     </>
   );
-});
+}
+
+export const Component = RunSignupSummary;

@@ -12,13 +12,19 @@ import PersonalScheduleFiltersBar, { usePersonalScheduleFilters } from './Schedu
 import { useAuthorizationRequiredWithoutLogin } from '../Authentication/useAuthorizationRequired';
 import { ScheduleGridConfig, allConfigs } from './ScheduleGrid/ScheduleGridConfig';
 import { conventionRequiresDates } from './runTimeFormatting';
-import { LoadQueryWrapper, notEmpty } from '@neinteractiveliterature/litform/dist';
-import { useScheduleGridConventionDataQuery } from './ScheduleGrid/queries.generated';
+import { notEmpty } from '@neinteractiveliterature/litform/dist';
+import {
+  ScheduleGridConventionDataQueryData,
+  ScheduleGridConventionDataQueryDocument,
+} from './ScheduleGrid/queries.generated';
 import useFilterableFormItems from './useFilterableFormItems';
 import EventListFilterableFormItemDropdown from './EventCatalog/EventList/EventListFilterableFormItemDropdown';
 import useReactRouterReactTable from '../Tables/useReactRouterReactTable';
 import { buildFieldFilterCodecs, FilterCodecs } from '../Tables/FilterUtils';
 import { reactTableFiltersToTableResultsFilters } from '../Tables/TableUtils';
+import { LoaderFunction, useLoaderData } from 'react-router';
+import { client } from '../useIntercodeApolloClient';
+import { conventionDayLoader, ConventionDayLoaderResult } from './conventionDayUrls';
 
 const filterCodecs = buildFieldFilterCodecs({
   form_items: FilterCodecs.json,
@@ -88,7 +94,24 @@ function ScheduleViewDropdown({ viewSelected, scheduleView, configs }: ScheduleV
   );
 }
 
-const ScheduleApp = LoadQueryWrapper(useScheduleGridConventionDataQuery, function ScheduleApp({ data }): JSX.Element {
+type LoaderResult = ConventionDayLoaderResult & { data: ScheduleGridConventionDataQueryData };
+
+export const loader: LoaderFunction = async ({ params, request }) => {
+  const [conventionDayLoaderResult, { data }] = await Promise.all([
+    conventionDayLoader({ params, request }),
+    await client.query<ScheduleGridConventionDataQueryData>({
+      query: ScheduleGridConventionDataQueryDocument,
+    }),
+  ]);
+  if (conventionDayLoaderResult instanceof Response) {
+    return conventionDayLoaderResult;
+  }
+
+  return { ...conventionDayLoaderResult, data } satisfies LoaderResult;
+};
+
+function ScheduleApp(): JSX.Element {
+  const { data } = useLoaderData() as LoaderResult;
   const { myProfile, currentAbility, conventionTimespan, siteMode } = useContext(AppRootContext);
   const { t } = useTranslation();
   const { choiceSetValue, choiceSetChanged } = usePersonalScheduleFilters({
@@ -234,6 +257,6 @@ const ScheduleApp = LoadQueryWrapper(useScheduleGridConventionDataQuery, functio
       {renderSchedule()}
     </>
   );
-});
+}
 
-export default ScheduleApp;
+export const Component = ScheduleApp;

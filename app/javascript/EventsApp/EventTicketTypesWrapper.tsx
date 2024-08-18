@@ -19,7 +19,7 @@ function SpecificTicketTypeBreadcrumbItem({ event }: { event: EventTicketTypesQu
   return <LeafBreadcrumbItem path="">{ticketType?.name}</LeafBreadcrumbItem>;
 }
 
-export default function EventTicketTypesWrapper(): JSX.Element {
+function EventTicketTypesWrapper(): JSX.Element {
   const { ticketName } = useContext(AppRootContext);
   const { parent } = useLoaderData() as TicketTypeLoaderResult;
   const { id } = useParams();
@@ -52,3 +52,5 @@ export default function EventTicketTypesWrapper(): JSX.Element {
     </>
   );
 }
+
+export const Component = EventTicketTypesWrapper;

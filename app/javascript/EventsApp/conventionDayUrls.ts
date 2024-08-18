@@ -103,8 +103,12 @@ export async function conventionDayLoader({ params, request }: { params: { day?:
 
   const matchingTimespan = params.day ? conventionDayTimespansByUrlPortion[params.day] : undefined;
 
-  if (!matchingTimespan && conventionDayTimespans.length > 0) {
-    return redirectToFirstDay({ conventionDayTimespans, urlPortionsByTimespanStart, request });
+  if (!matchingTimespan) {
+    if (conventionDayTimespans.length > 0) {
+      return redirectToFirstDay({ conventionDayTimespans, urlPortionsByTimespanStart, request });
+    } else {
+      throw new Response(null, { status: 404 });
+    }
   }
 
   return {
@@ -112,5 +116,5 @@ export async function conventionDayLoader({ params, request }: { params: { day?:
     matchingTimespan,
     urlPortionsByTimespanStart,
     conventionDayTimespansByUrlPortion,
-  };
+  } satisfies ConventionDayLoaderResult;
 }

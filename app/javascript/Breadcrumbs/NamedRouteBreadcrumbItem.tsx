@@ -1,8 +1,8 @@
-import { ReactNode, useMemo } from 'react';
-import { generatePath, useMatches, useParams } from 'react-router';
+import { ReactNode } from 'react';
 
 import BreadcrumbItem from './BreadcrumbItem';
 import { RouteName } from '../AppRouter';
+import { useNamedRouteMatch } from '../useNamedRouteMatch';
 
 export type NamedRouteBreadcrumbItemProps = {
   routeId: RouteName | RouteName[];
@@ -10,26 +10,14 @@ export type NamedRouteBreadcrumbItemProps = {
 };
 
 function NamedRouteBreadcrumbItem({ children, routeId }: NamedRouteBreadcrumbItemProps): JSX.Element {
-  const matches = useMatches();
-  const params = useParams();
-
-  const routeIds = useMemo(() => {
-    if (Array.isArray(routeId)) {
-      return new Set<string>(routeId);
-    } else {
-      return new Set<string>([routeId]);
-    }
-  }, [routeId]);
-
-  const matchIndex = useMemo(() => matches.findLastIndex((m) => routeIds.has(m.id)), [matches, routeIds]);
-  const match = matchIndex === -1 ? undefined : matches[matchIndex];
+  const { match, active, to } = useNamedRouteMatch(routeId);
 
   if (!match) {
     return <></>;
   }
 
   return (
-    <BreadcrumbItem to={generatePath(match?.pathname ?? '.', params)} active={matchIndex === matches.length - 1}>
+    <BreadcrumbItem to={to} active={active}>
       {children}
     </BreadcrumbItem>
   );

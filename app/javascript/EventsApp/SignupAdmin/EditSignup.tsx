@@ -1,25 +1,30 @@
 import { useCallback, useContext } from 'react';
 import classNames from 'classnames';
-import { Link, useParams } from 'react-router-dom';
+import { Link, LoaderFunction, useLoaderData } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
 import { DateTime } from 'luxon';
-import { useModal, useConfirm, ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
+import { useModal, useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 import snakeCase from 'lodash/snakeCase';
 
 import { ageAsOf } from '../../TimeUtils';
 import ChangeBucketModal from './ChangeBucketModal';
 import ForceConfirmSignupModal from './ForceConfirmSignupModal';
 import Timespan from '../../Timespan';
-import useValueUnless from '../../useValueUnless';
 import usePageTitle from '../../usePageTitle';
 import Gravatar from '../../Gravatar';
 import AppRootContext from '../../AppRootContext';
-import { AdminSignupQueryData, SignupFieldsFragment, useAdminSignupQuery } from './queries.generated';
+import {
+  AdminSignupQueryData,
+  AdminSignupQueryDocument,
+  AdminSignupQueryVariables,
+  SignupFieldsFragment,
+} from './queries.generated';
 import { useUpdateSignupCountedMutation } from './mutations.generated';
 import { useFormatRunTimespan } from '../runTimeFormatting';
 import humanize from '../../humanize';
 import { getSignupStateLabel } from '../../Tables/SignupStateCell';
+import { client } from '../../useIntercodeApolloClient';
 
 function cityState(userConProfile: SignupFieldsFragment['user_con_profile']) {
   return [userConProfile.city, userConProfile.state].filter((item) => item && item.trim() !== '').join(', ');
@@ -96,13 +101,17 @@ export type EditSignupProps = {
   teamMembersUrl: string;
 };
 
+export const loader: LoaderFunction = async ({ params: { id } }) => {
+  const { data } = await client.query<AdminSignupQueryData, AdminSignupQueryVariables>({
+    query: AdminSignupQueryDocument,
+    variables: { id: id ?? '' },
+  });
+  return data;
+};
+
 function EditSignup({ teamMembersUrl }: EditSignupProps): JSX.Element {
+  const data = useLoaderData() as AdminSignupQueryData;
   const { timezoneName, ticketName } = useContext(AppRootContext);
-  const { id } = useParams<{ id: string }>();
-  if (id == null) {
-    throw new Error('id not found in URL params');
-  }
-  const { data, loading, error } = useAdminSignupQuery({ variables: { id } });
   const changeBucketModal = useModal();
   const forceConfirmModal = useModal();
   const [updateCountedMutate] = useUpdateSignupCountedMutation();
@@ -111,14 +120,10 @@ function EditSignup({ teamMembersUrl }: EditSignupProps): JSX.Element {
   const formatRunTimespan = useFormatRunTimespan();
 
   usePageTitle(
-    useValueUnless(
-      () =>
-        t('events.signupAdmin.editPageTitle', {
-          name: data?.convention.signup.user_con_profile.name_without_nickname,
-          eventTitle: data?.convention.signup.run.event.title,
-        }),
-      error || loading,
-    ),
+    t('events.signupAdmin.editPageTitle', {
+      name: data.convention.signup.user_con_profile.name_without_nickname,
+      eventTitle: data.convention.signup.run.event.title,
+    }),
   );
 
   const toggleCounted = useCallback(
@@ -131,14 +136,6 @@ function EditSignup({ teamMembersUrl }: EditSignupProps): JSX.Element {
       }),
     [updateCountedMutate],
   );
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
-  if (loading) {
-    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
-  }
 
   const renderUserSection = () => {
     const signup = data?.convention.signup;
@@ -352,4 +349,4 @@ function EditSignup({ teamMembersUrl }: EditSignupProps): JSX.Element {
   );
 }
 
-export default EditSignup;
+export const Component = EditSignup;

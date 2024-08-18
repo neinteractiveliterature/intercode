@@ -724,7 +724,7 @@
       "emailHeader": "Email",
       "emailsCommaTitle": "Emails (comma-separated)",
       "emailsSemicolonTitle": "Emails (semicolon-separated)",
-      "emailsSemicolonWarning": "<0>Note:</0> Most email apps use comma-separated address lists.  Only Outlook uses semicolon-separated address lists.  If you’re not using Outlook, try comma-separated first.",
+      "emailsSemicolonWarning": "<strong>Note:</strong> Most email apps use comma-separated address lists.  Only Outlook uses semicolon-separated address lists.  If you’re not using Outlook, try comma-separated first.",
       "emailTableHeader": "Email",
       "forceConfirmSignup": {
         "bucketInputCaption": "Please choose a signup bucket for {{ name }}.",

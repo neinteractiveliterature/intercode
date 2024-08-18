@@ -1,5 +1,14 @@
 import { useState, Suspense, useEffect, ReactNode, useContext } from 'react';
-import { useLocation, RouteObject, replace, Outlet, LoaderFunction, redirect, useNavigation } from 'react-router-dom';
+import {
+  useLocation,
+  RouteObject,
+  replace,
+  Outlet,
+  LoaderFunction,
+  redirect,
+  useNavigation,
+  useNavigate,
+} from 'react-router-dom';
 import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
 import { useTranslation } from 'react-i18next';
 
@@ -8,7 +17,6 @@ import { reloadOnAppEntrypointHeadersMismatch } from './checkAppEntrypointHeader
 import FourOhFourPage from './FourOhFourPage';
 import { SignupAutomationMode, SignupMode, SiteMode, TicketMode } from './graphqlTypes.generated';
 import AppRootContext, { AppRootContextValue } from './AppRootContext';
-import { eventsRoutes } from './EventsApp';
 import NewCmsLayout from './CmsAdmin/CmsLayoutsAdmin/NewCmsLayout';
 import CmsLayoutsAdminTable from './CmsAdmin/CmsLayoutsAdmin/CmsLayoutsAdminTable';
 import NewCmsPage from './CmsAdmin/CmsPagesAdmin/NewCmsPage';
@@ -17,10 +25,18 @@ import useAuthorizationRequired, { AbilityName } from './Authentication/useAutho
 import { EventAdminEventsQueryData, EventAdminEventsQueryDocument } from './EventAdmin/queries.generated';
 import { client } from './useIntercodeApolloClient';
 import buildEventCategoryUrl from './EventAdmin/buildEventCategoryUrl';
-import { adminSingleTicketTypeLoader, adminTicketTypesLoader } from './TicketTypeAdmin/loaders';
+import {
+  adminSingleTicketTypeLoader,
+  adminTicketTypesLoader,
+  eventSingleTicketTypeLoader,
+  eventTicketTypesLoader,
+} from './TicketTypeAdmin/loaders';
 import { organizationsLoader, singleOrganizationLoader } from './OrganizationAdmin/loaders';
 import useLoginRequired from './Authentication/useLoginRequired';
 import { eventProposalWithOwnerLoader } from './EventProposals/loaders';
+import { conventionDayLoader } from './EventsApp/conventionDayUrls';
+import { signupAdminEventLoader } from './EventsApp/SignupAdmin/loaders';
+import { teamMembersLoader } from './EventsApp/TeamMemberAdmin/loader';
 
 export enum NamedRoute {
   AdminUserConProfile = 'AdminUserConProfile',
@@ -40,6 +56,18 @@ export enum NamedRoute {
   EventProposalHistoryChangeGroup = 'EventProposalHistoryChangeGroup',
   AdminEditEventProposal = 'AdminEditEventProposal',
   EventProposalAdminDisplay = 'EventProposalAdminDisplay',
+  SignupAdmin = 'SignupAdmin',
+  EditSignup = 'EditSignup',
+  RunSignupsTable = 'RunSignupsTable',
+  Event = 'Event',
+  EventPage = 'EventPage',
+  RunEmailList = 'RunEmailList',
+  RunSignupChangesTable = 'RunSignupChangesTable',
+  RunSignupSummary = 'RunSignupSummary',
+  TeamMembers = 'TeamMembers',
+  TeamMembersIndex = 'TeamMembersIndex',
+  EditTeamMember = 'EditTeamMember',
+  NewTeamMember = 'NewTeamMember',
 }
 
 export type RouteName = keyof typeof NamedRoute & string;
@@ -107,6 +135,164 @@ const eventAdminRootRedirect: LoaderFunction = async () => {
 
   return redirect(buildEventCategoryUrl(firstEventCategory));
 };
+
+function EventPageGuard() {
+  const { siteMode } = useContext(AppRootContext);
+  const navigate = useNavigate();
+
+  if (siteMode === SiteMode.SingleEvent) {
+    navigate('/', { replace: true });
+    return <></>;
+  } else {
+    return <Outlet />;
+  }
+}
+
+function EditEventGuard() {
+  const { siteMode } = useContext(AppRootContext);
+  const navigate = useNavigate();
+
+  if (siteMode === SiteMode.SingleEvent) {
+    navigate('/admin_events', { replace: true });
+    return <></>;
+  } else {
+    return <LoginRequiredRouteGuard />;
+  }
+}
+
+const eventsRoutes: RouteObject[] = [
+  {
+    element: <AppRootContextRouteGuard guard={({ siteMode }) => siteMode !== SiteMode.SingleEvent} />,
+    children: [
+      {
+        path: 'schedule/*',
+        children: [
+          { path: ':day', lazy: () => import('./EventsApp/ScheduleApp') },
+          { path: '', loader: conventionDayLoader },
+        ],
+      },
+      { path: 'schedule_by_room/*', loader: () => replace('../schedule') },
+      { path: 'schedule_with_counts/*', loader: () => replace('../schedule') },
+      { path: 'table', lazy: () => import('./EventsApp/EventCatalog/EventTable') },
+      { path: '', lazy: () => import('./EventsApp/EventCatalog/EventList') },
+    ],
+  },
+  {
+    element: (
+      <AppRootContextRouteGuard
+        guard={({ signupAutomationMode }) => signupAutomationMode === SignupAutomationMode.RankedChoice}
+      />
+    ),
+    children: [{ path: 'my-signup-queue', lazy: () => import('./EventsApp/MySignupQueue') }],
+  },
+  {
+    path: ':eventId',
+    id: NamedRoute.Event,
+    children: [
+      {
+        element: <AppRootContextRouteGuard guard={({ ticketMode }) => ticketMode === TicketMode.TicketPerEvent} />,
+        children: [
+          {
+            path: 'ticket_types/*',
+            loader: eventTicketTypesLoader,
+            lazy: () => import('./EventsApp/EventTicketTypesWrapper'),
+            children: [
+              { path: 'new', loader: eventTicketTypesLoader, lazy: () => import('./TicketTypeAdmin/NewTicketType') },
+              {
+                path: ':id/edit',
+                loader: eventSingleTicketTypeLoader,
+                lazy: () => import('./TicketTypeAdmin/EditTicketType'),
+              },
+              { index: true, loader: eventTicketTypesLoader, lazy: () => import('./TicketTypeAdmin/TicketTypesList') },
+            ],
+          },
+        ],
+      },
+      {
+        path: 'edit',
+        element: <EditEventGuard />,
+        children: [
+          {
+            path: '',
+            lazy: () => import('./EventsApp/StandaloneEditEvent'),
+          },
+        ],
+      },
+      {
+        path: 'team_members',
+        id: NamedRoute.TeamMembers,
+        loader: teamMembersLoader,
+        lazy: () => import('./EventsApp/TeamMemberAdmin'),
+        children: [
+          {
+            path: 'new',
+            id: NamedRoute.NewTeamMember,
+            lazy: () => import('./EventsApp/TeamMemberAdmin/NewTeamMember'),
+          },
+          {
+            path: ':teamMemberId',
+            id: NamedRoute.EditTeamMember,
+            lazy: () => import('./EventsApp/TeamMemberAdmin/EditTeamMember'),
+          },
+          {
+            index: true,
+            id: NamedRoute.TeamMembersIndex,
+            lazy: () => import('./EventsApp/TeamMemberAdmin/TeamMembersIndex'),
+          },
+        ],
+      },
+      {
+        path: 'history',
+        lazy: () => import('./EventsApp/EventPage/EventHistory'),
+        children: [{ path: ':changeGroupId', lazy: () => import('./EventsApp/EventPage/EventHistory') }],
+      },
+      {
+        path: 'runs/:runId',
+        lazy: () => import('./EventsApp/SignupAdmin/RunHeader'),
+        children: [
+          {
+            path: 'admin_signups',
+            loader: signupAdminEventLoader,
+            id: NamedRoute.SignupAdmin,
+            children: [
+              { path: ':id/edit', id: NamedRoute.EditSignup, lazy: () => import('./EventsApp/SignupAdmin/EditSignup') },
+              {
+                lazy: () => import('./EventsApp/SignupAdmin/SignupsIndex'),
+                children: [
+                  {
+                    path: 'emails/:separator',
+                    id: NamedRoute.RunEmailList,
+                    lazy: () => import('./EventsApp/SignupAdmin/RunEmailList'),
+                  },
+                  {
+                    path: 'signup_changes',
+                    id: NamedRoute.RunSignupChangesTable,
+                    lazy: () => import('./EventsApp/SignupAdmin/RunSignupChangesTable'),
+                  },
+                  {
+                    index: true,
+                    id: NamedRoute.RunSignupsTable,
+                    lazy: () => import('./EventsApp/SignupAdmin/RunSignupsTable'),
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            path: 'signup_summary',
+            id: NamedRoute.RunSignupSummary,
+            lazy: () => import('./EventsApp/SignupAdmin/RunSignupSummary'),
+          },
+        ],
+      },
+      {
+        path: '',
+        element: <EventPageGuard />,
+        children: [{ path: '', id: NamedRoute.EventPage, lazy: () => import('./EventsApp/EventPage') }],
+      },
+    ],
+  },
+];
 
 function NonCMSPageWrapper() {
   return (

@@ -1,13 +1,13 @@
-import { LoadQueryWrapper, notEmpty } from '@neinteractiveliterature/litform';
-import { CommonConventionDataQueryData, useCommonConventionDataQuery } from '../../queries.generated';
-import useFilterableFormItems from '../../useFilterableFormItems';
+import { notEmpty } from '@neinteractiveliterature/litform';
+import { CommonConventionDataQueryData, CommonConventionDataQueryDocument } from '../../queries.generated';
+import { getFilterableFormItems } from '../../useFilterableFormItems';
 import { TypedFormItem } from '../../../FormAdmin/FormItemUtils';
 import useReactTableWithTheWorks, { QueryDataContext } from '../../../Tables/useReactTableWithTheWorks';
 import usePageTitle from '../../../usePageTitle';
 import { FilterCodecs, buildFieldFilterCodecs } from '../../../Tables/FilterUtils';
 import TableHeader from '../../../Tables/TableHeader';
 import ReactTableWithTheWorks from '../../../Tables/ReactTableWithTheWorks';
-import { useNavigate } from 'react-router';
+import { LoaderFunction, useLoaderData, useNavigate } from 'react-router';
 import { Column } from 'react-table';
 import EventCategoryCell from '../../../Tables/EventCategoryCell';
 import EventCategoryFilter from '../../../Tables/EventCategoryFilter';
@@ -21,6 +21,7 @@ import FreeTextFilter from '../../../Tables/FreeTextFilter';
 import HtmlCell from '../../../Tables/HtmlCell';
 import { DateTime } from 'luxon';
 import EventCatalogNavTabs from '../EventCatalogNavTabs';
+import { client } from '../../../useIntercodeApolloClient';
 
 const FILTER_CODECS = buildFieldFilterCodecs({
   status: FilterCodecs.stringArray,
@@ -157,12 +158,19 @@ function getPossibleColumns(filterableFormItems: TypedFormItem[]): Column<RunTyp
 
 const defaultVisibleColumns = ['category', 'title', 'starts_at', 'length_seconds', 'total_slots'];
 
-type EventTableProps = {
+type LoaderResult = {
   convention: CommonConventionDataQueryData['convention'];
-  filterableFormItems: TypedFormItem[];
+  filterableFormItems: ReturnType<typeof getFilterableFormItems>;
 };
 
-function EventTable({ convention, filterableFormItems }: EventTableProps) {
+export const loader: LoaderFunction = async () => {
+  const { data } = await client.query<CommonConventionDataQueryData>({ query: CommonConventionDataQueryDocument });
+  const filterableFormItems = getFilterableFormItems(data.convention);
+  return { convention: data.convention, filterableFormItems } satisfies LoaderResult;
+};
+
+function EventTable() {
+  const { convention, filterableFormItems } = useLoaderData() as LoaderResult;
   const navigate = useNavigate();
   usePageTitle('Table View - Event Catalog');
 
@@ -198,9 +206,4 @@ function EventTable({ convention, filterableFormItems }: EventTableProps) {
   );
 }
 
-const EventTableWrapper = LoadQueryWrapper(useCommonConventionDataQuery, ({ data }) => {
-  const filterableFormItems = useFilterableFormItems(data.convention);
-  return <EventTable convention={data.convention} filterableFormItems={filterableFormItems} />;
-});
-
-export default EventTableWrapper;
+export const Component = EventTable;

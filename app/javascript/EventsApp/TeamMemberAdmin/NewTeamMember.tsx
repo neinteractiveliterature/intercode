@@ -2,11 +2,7 @@ import { useId, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ApolloError } from '@apollo/client';
-import {
-  ErrorDisplay,
-  LoadQueryWrapper,
-  useCreateMutationWithReferenceArrayUpdater,
-} from '@neinteractiveliterature/litform';
+import { ErrorDisplay, useCreateMutationWithReferenceArrayUpdater } from '@neinteractiveliterature/litform';
 import capitalize from 'lodash/capitalize';
 
 import buildTeamMemberInput from './buildTeamMemberInput';
@@ -20,10 +16,11 @@ import {
 } from './queries.generated';
 import { ReceiveSignupEmail } from '../../graphqlTypes.generated';
 import { useCreateTeamMemberMutation } from './mutations.generated';
-import useTeamMembersQueryFromParams from './useTeamMembersQueryFromParams';
 import buildEventUrl from '../buildEventUrl';
+import { useTeamMembersLoader } from './loader';
 
-export default LoadQueryWrapper(useTeamMembersQueryFromParams, function NewTeamMember({ data }): JSX.Element {
+function NewTeamMember(): JSX.Element {
+  const data = useTeamMembersLoader();
   const event = data.convention.event;
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -122,4 +119,6 @@ export default LoadQueryWrapper(useTeamMembersQueryFromParams, function NewTeamM
       )}
     </>
   );
-});
+}
+
+export const Component = NewTeamMember;

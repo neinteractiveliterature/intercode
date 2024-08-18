@@ -9,20 +9,24 @@ import LongFormEventDetails from './LongFormEventDetails';
 import RateEventControl from '../../EventRatings/RateEventControl';
 import AppRootContext from '../../AppRootContext';
 import useRateEvent from '../../EventRatings/useRateEvent';
-import { useEventPageQuery } from './queries.generated';
+import { EventPageQueryData, EventPageQueryDocument, EventPageQueryVariables } from './queries.generated';
 import useSectionizedFormItems from './useSectionizedFormItems';
 import FormItemDisplay from '../../FormPresenter/ItemDisplays/FormItemDisplay';
 import { valueIsPresent } from './valueIsPresent';
-import { useParams } from 'react-router';
-import { LoadQueryWrapper } from '@neinteractiveliterature/litform/dist';
+import { LoaderFunction, useLoaderData, useParams } from 'react-router';
 import buildEventUrl from '../buildEventUrl';
+import { client } from '../../useIntercodeApolloClient';
 
-function useLoadEventPageQueryFromParams() {
-  const params = useParams<{ eventId: string }>();
-  return useEventPageQuery({ variables: { eventId: params.eventId ?? '' } });
-}
+export const loader: LoaderFunction = async ({ params: { eventId } }) => {
+  const { data } = await client.query<EventPageQueryData, EventPageQueryVariables>({
+    query: EventPageQueryDocument,
+    variables: { eventId: eventId ?? '' },
+  });
+  return data;
+};
 
-export default LoadQueryWrapper(useLoadEventPageQueryFromParams, function EventPage({ data }): JSX.Element {
+function EventPage(): JSX.Element {
+  const data = useLoaderData() as EventPageQueryData;
   const params = useParams<{ eventId: string }>();
   const { myProfile } = useContext(AppRootContext);
   const rateEvent = useRateEvent();
@@ -95,4 +99,6 @@ export default LoadQueryWrapper(useLoadEventPageQueryFromParams, function EventP
       <LongFormEventDetails eventId={params.eventId ?? event.id} />
     </>
   );
-});
+}
+
+export const Component = EventPage;

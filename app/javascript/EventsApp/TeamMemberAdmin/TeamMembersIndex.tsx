@@ -7,7 +7,6 @@ import {
   useConfirm,
   sortByLocaleString,
   useDeleteMutationWithReferenceArrayUpdater,
-  LoadQueryWrapper,
 } from '@neinteractiveliterature/litform';
 import capitalize from 'lodash/capitalize';
 
@@ -18,8 +17,8 @@ import { TeamMembersQueryData } from './queries.generated';
 import { DropdownMenu } from '../../UIComponents/DropdownMenu';
 import { useDeleteTeamMemberMutation } from './mutations.generated';
 import humanize from '../../humanize';
-import useTeamMembersQueryFromParams from './useTeamMembersQueryFromParams';
 import buildEventUrl from '../buildEventUrl';
+import { useTeamMembersLoader } from './loader';
 
 function sortTeamMembers(teamMembers: TeamMembersQueryData['convention']['event']['team_members']) {
   return sortByLocaleString(teamMembers, (teamMember) => teamMember.user_con_profile.name_inverted ?? '');
@@ -96,7 +95,8 @@ function TeamMemberActionMenu({
   );
 }
 
-export default LoadQueryWrapper(useTeamMembersQueryFromParams, function TeamMembersIndex({ data }): JSX.Element {
+function TeamMembersIndex(): JSX.Element {
+  const data = useTeamMembersLoader();
   const { t } = useTranslation();
   const modal = useModal<{ teamMember: TeamMembersQueryData['convention']['event']['team_members'][0] }>();
 
@@ -201,4 +201,6 @@ export default LoadQueryWrapper(useTeamMembersQueryFromParams, function TeamMemb
       />
     </>
   );
-});
+}
+
+export const Component = TeamMembersIndex;
