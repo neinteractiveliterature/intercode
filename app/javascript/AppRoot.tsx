@@ -3,11 +3,7 @@ import { useLocation, useNavigate, useLoaderData, Outlet } from 'react-router-do
 import { Settings } from 'luxon';
 import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
-import {
-  AppRootQueryData,
-  AppRootQueryVariables,
-  useAppRootLayoutQuerySuspenseQuery,
-} from './appRootQueries.generated';
+import { AppRootLayoutQueryDocument, AppRootQueryData, AppRootQueryVariables } from './appRootQueries.generated';
 import AppRootContext, { AppRootContextValue } from './AppRootContext';
 import parseCmsContent, { CMS_COMPONENT_MAP } from './parseCmsContent';
 import { timezoneNameForConvention } from './TimeUtils';
@@ -19,7 +15,7 @@ import { Stripe } from '@stripe/stripe-js';
 import { Helmet } from 'react-helmet-async';
 import React from 'react';
 import { ScriptTag } from './parsePageContent';
-import { QueryRef, useReadQuery } from '@apollo/client';
+import { QueryRef, useReadQuery, useSuspenseQuery } from '@apollo/client';
 import OutletWithLoading from './OutletWithLoading';
 
 const NavigationBar = lazyWithAppEntrypointHeadersCheck(
@@ -80,7 +76,7 @@ export function AppRootLayoutContent() {
   const [cachedCmsLayoutId, setCachedCmsLayoutId] = useState<string>();
   const [layoutChanged, setLayoutChanged] = useState(false);
 
-  const { data, error } = useAppRootLayoutQuerySuspenseQuery({
+  const { data, error } = useSuspenseQuery(AppRootLayoutQueryDocument, {
     variables: { path: normalizePathForLayout(location.pathname) },
   });
 

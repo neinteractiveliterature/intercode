@@ -210,11 +210,6 @@ export default [
                 'Please define GraphQL operations in .graphql files and use graphql-code-generator to generate hooks',
             },
             {
-              name: '@apollo/client',
-              importNames: ['useQuery', 'useMutation'],
-              message: 'Please use generated operation-specific hooks instead',
-            },
-            {
               name: 'i18next',
               importNames: ['t'],
               message: 'Please import useTranslation from react-i18next instead',

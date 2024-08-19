@@ -1,10 +1,7 @@
 /* eslint-disable */
 import * as Types from '../../graphqlTypes.generated';
 
-import { gql } from '@apollo/client';
-import { CmsGraphqlQueryFieldsFragmentDoc } from './queries.generated';
-import * as Apollo from '@apollo/client';
-const defaultOptions = {} as const;
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type CreateCmsGraphqlQueryMutationVariables = Types.Exact<{
   query: Types.CmsGraphqlQueryInput;
 }>;
@@ -28,111 +25,6 @@ export type DeleteCmsGraphqlQueryMutationVariables = Types.Exact<{
 export type DeleteCmsGraphqlQueryMutationData = { __typename: 'Mutation', deleteCmsGraphqlQuery: { __typename: 'DeleteCmsGraphqlQueryPayload', query: { __typename: 'CmsGraphqlQuery', id: string } } };
 
 
-export const CreateCmsGraphqlQueryDocument = gql`
-    mutation CreateCmsGraphqlQuery($query: CmsGraphqlQueryInput!) {
-  createCmsGraphqlQuery(input: {query: $query}) {
-    query {
-      id
-      ...CmsGraphqlQueryFields
-    }
-  }
-}
-    ${CmsGraphqlQueryFieldsFragmentDoc}`;
-export type CreateCmsGraphqlQueryMutationFn = Apollo.MutationFunction<CreateCmsGraphqlQueryMutationData, CreateCmsGraphqlQueryMutationVariables>;
-
-/**
- * __useCreateCmsGraphqlQuery__
- *
- * To run a mutation, you first call `useCreateCmsGraphqlQuery` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateCmsGraphqlQuery` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createCmsGraphqlQuery, { data, loading, error }] = useCreateCmsGraphqlQuery({
- *   variables: {
- *      query: // value for 'query'
- *   },
- * });
- */
-export function useCreateCmsGraphqlQuery(baseOptions?: Apollo.MutationHookOptions<CreateCmsGraphqlQueryMutationData, CreateCmsGraphqlQueryMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateCmsGraphqlQueryMutationData, CreateCmsGraphqlQueryMutationVariables>(CreateCmsGraphqlQueryDocument, options);
-      }
-export type CreateCmsGraphqlQueryHookResult = ReturnType<typeof useCreateCmsGraphqlQuery>;
-export type CreateCmsGraphqlQueryMutationResult = Apollo.MutationResult<CreateCmsGraphqlQueryMutationData>;
-export type CreateCmsGraphqlQueryMutationOptions = Apollo.BaseMutationOptions<CreateCmsGraphqlQueryMutationData, CreateCmsGraphqlQueryMutationVariables>;
-export const UpdateCmsGraphqlQueryDocument = gql`
-    mutation UpdateCmsGraphqlQuery($id: ID!, $query: CmsGraphqlQueryInput!) {
-  updateCmsGraphqlQuery(input: {id: $id, query: $query}) {
-    query {
-      id
-      ...CmsGraphqlQueryFields
-    }
-  }
-}
-    ${CmsGraphqlQueryFieldsFragmentDoc}`;
-export type UpdateCmsGraphqlQueryMutationFn = Apollo.MutationFunction<UpdateCmsGraphqlQueryMutationData, UpdateCmsGraphqlQueryMutationVariables>;
-
-/**
- * __useUpdateCmsGraphqlQuery__
- *
- * To run a mutation, you first call `useUpdateCmsGraphqlQuery` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateCmsGraphqlQuery` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateCmsGraphqlQuery, { data, loading, error }] = useUpdateCmsGraphqlQuery({
- *   variables: {
- *      id: // value for 'id'
- *      query: // value for 'query'
- *   },
- * });
- */
-export function useUpdateCmsGraphqlQuery(baseOptions?: Apollo.MutationHookOptions<UpdateCmsGraphqlQueryMutationData, UpdateCmsGraphqlQueryMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateCmsGraphqlQueryMutationData, UpdateCmsGraphqlQueryMutationVariables>(UpdateCmsGraphqlQueryDocument, options);
-      }
-export type UpdateCmsGraphqlQueryHookResult = ReturnType<typeof useUpdateCmsGraphqlQuery>;
-export type UpdateCmsGraphqlQueryMutationResult = Apollo.MutationResult<UpdateCmsGraphqlQueryMutationData>;
-export type UpdateCmsGraphqlQueryMutationOptions = Apollo.BaseMutationOptions<UpdateCmsGraphqlQueryMutationData, UpdateCmsGraphqlQueryMutationVariables>;
-export const DeleteCmsGraphqlQueryDocument = gql`
-    mutation DeleteCmsGraphqlQuery($id: ID!) {
-  deleteCmsGraphqlQuery(input: {id: $id}) {
-    query {
-      id
-    }
-  }
-}
-    `;
-export type DeleteCmsGraphqlQueryMutationFn = Apollo.MutationFunction<DeleteCmsGraphqlQueryMutationData, DeleteCmsGraphqlQueryMutationVariables>;
-
-/**
- * __useDeleteCmsGraphqlQuery__
- *
- * To run a mutation, you first call `useDeleteCmsGraphqlQuery` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteCmsGraphqlQuery` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteCmsGraphqlQuery, { data, loading, error }] = useDeleteCmsGraphqlQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useDeleteCmsGraphqlQuery(baseOptions?: Apollo.MutationHookOptions<DeleteCmsGraphqlQueryMutationData, DeleteCmsGraphqlQueryMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteCmsGraphqlQueryMutationData, DeleteCmsGraphqlQueryMutationVariables>(DeleteCmsGraphqlQueryDocument, options);
-      }
-export type DeleteCmsGraphqlQueryHookResult = ReturnType<typeof useDeleteCmsGraphqlQuery>;
-export type DeleteCmsGraphqlQueryMutationResult = Apollo.MutationResult<DeleteCmsGraphqlQueryMutationData>;
-export type DeleteCmsGraphqlQueryMutationOptions = Apollo.BaseMutationOptions<DeleteCmsGraphqlQueryMutationData, DeleteCmsGraphqlQueryMutationVariables>;
+export const CreateCmsGraphqlQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateCmsGraphqlQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"query"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CmsGraphqlQueryInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createCmsGraphqlQuery"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"query"},"value":{"kind":"Variable","name":{"kind":"Name","value":"query"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"query"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"CmsGraphqlQueryFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CmsGraphqlQueryFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsGraphqlQuery"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"identifier"}},{"kind":"Field","name":{"kind":"Name","value":"query"}},{"kind":"Field","name":{"kind":"Name","value":"admin_notes"}},{"kind":"Field","name":{"kind":"Name","value":"current_ability_can_update"}},{"kind":"Field","name":{"kind":"Name","value":"current_ability_can_delete"}}]}}]} as unknown as DocumentNode<CreateCmsGraphqlQueryMutationData, CreateCmsGraphqlQueryMutationVariables>;
+export const UpdateCmsGraphqlQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateCmsGraphqlQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"query"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CmsGraphqlQueryInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateCmsGraphqlQuery"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"query"},"value":{"kind":"Variable","name":{"kind":"Name","value":"query"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"query"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"CmsGraphqlQueryFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CmsGraphqlQueryFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsGraphqlQuery"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"identifier"}},{"kind":"Field","name":{"kind":"Name","value":"query"}},{"kind":"Field","name":{"kind":"Name","value":"admin_notes"}},{"kind":"Field","name":{"kind":"Name","value":"current_ability_can_update"}},{"kind":"Field","name":{"kind":"Name","value":"current_ability_can_delete"}}]}}]} as unknown as DocumentNode<UpdateCmsGraphqlQueryMutationData, UpdateCmsGraphqlQueryMutationVariables>;
+export const DeleteCmsGraphqlQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteCmsGraphqlQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteCmsGraphqlQuery"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"query"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}}]} as unknown as DocumentNode<DeleteCmsGraphqlQueryMutationData, DeleteCmsGraphqlQueryMutationVariables>;

@@ -26,13 +26,8 @@ generates:
       - add:
           content: '/* eslint-disable */'
       - typescript-operations
-      - typescript-react-apollo
+      - typed-document-node
     config:
-      withComponent: false
-      withHOC: false
-      withHooks: true
-      documentMode: graphQLTag
-      gqlImport: '@apollo/client#gql'
       nonOptionalTypename: true
       dedupeOperationSuffix: true
       operationResultSuffix: Data

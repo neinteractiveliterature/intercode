@@ -91,7 +91,7 @@ export default function useReactTableWithTheWorks<
   getData,
   getPages,
   getPossibleColumns,
-  useQuery,
+  query,
   rowSelect,
   storageKeyPrefix,
   variables,
@@ -109,7 +109,7 @@ export default function useReactTableWithTheWorks<
   const { data, pages, loading, error, refetch, queryData } = useGraphQLReactTable<RowType, QueryData, Variables>({
     getData,
     getPages,
-    useQuery,
+    query,
     variables,
     page,
     pageSize,

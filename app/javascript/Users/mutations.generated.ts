@@ -1,10 +1,7 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { gql } from '@apollo/client';
-import { DetailedUserFieldsFragmentDoc } from './queries.generated';
-import * as Apollo from '@apollo/client';
-const defaultOptions = {} as const;
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type MergeUsersMutationVariables = Types.Exact<{
   userIds: Array<Types.Scalars['ID']['input']> | Types.Scalars['ID']['input'];
   winningUserId: Types.Scalars['ID']['input'];
@@ -15,43 +12,4 @@ export type MergeUsersMutationVariables = Types.Exact<{
 export type MergeUsersMutationData = { __typename: 'Mutation', mergeUsers: { __typename: 'MergeUsersPayload', user: { __typename: 'User', id: string, name?: string | null, first_name?: string | null, last_name?: string | null, email?: string | null, privileges?: Array<string> | null, user_con_profiles: Array<{ __typename: 'UserConProfile', id: string, email?: string | null, ticket?: { __typename: 'Ticket', id: string } | null, signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState }>, convention: { __typename: 'Convention', id: string, name: string, domain?: string | null, starts_at?: string | null, ticket_name: string, timezone_name?: string | null, timezone_mode: Types.TimezoneMode }, staff_positions: Array<{ __typename: 'StaffPosition', id: string, name: string }> }> } } };
 
 
-export const MergeUsersDocument = gql`
-    mutation MergeUsers($userIds: [ID!]!, $winningUserId: ID!, $winningUserConProfiles: [WinningUserConProfileInput!]!) {
-  mergeUsers(
-    input: {userIds: $userIds, winningUserId: $winningUserId, winningUserConProfiles: $winningUserConProfiles}
-  ) {
-    user {
-      id
-      ...DetailedUserFields
-    }
-  }
-}
-    ${DetailedUserFieldsFragmentDoc}`;
-export type MergeUsersMutationFn = Apollo.MutationFunction<MergeUsersMutationData, MergeUsersMutationVariables>;
-
-/**
- * __useMergeUsersMutation__
- *
- * To run a mutation, you first call `useMergeUsersMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useMergeUsersMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [mergeUsersMutation, { data, loading, error }] = useMergeUsersMutation({
- *   variables: {
- *      userIds: // value for 'userIds'
- *      winningUserId: // value for 'winningUserId'
- *      winningUserConProfiles: // value for 'winningUserConProfiles'
- *   },
- * });
- */
-export function useMergeUsersMutation(baseOptions?: Apollo.MutationHookOptions<MergeUsersMutationData, MergeUsersMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<MergeUsersMutationData, MergeUsersMutationVariables>(MergeUsersDocument, options);
-      }
-export type MergeUsersMutationHookResult = ReturnType<typeof useMergeUsersMutation>;
-export type MergeUsersMutationResult = Apollo.MutationResult<MergeUsersMutationData>;
-export type MergeUsersMutationOptions = Apollo.BaseMutationOptions<MergeUsersMutationData, MergeUsersMutationVariables>;
+export const MergeUsersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"MergeUsers"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"userIds"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"winningUserId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"winningUserConProfiles"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"WinningUserConProfileInput"}}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"mergeUsers"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"userIds"},"value":{"kind":"Variable","name":{"kind":"Name","value":"userIds"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"winningUserId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"winningUserId"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"winningUserConProfiles"},"value":{"kind":"Variable","name":{"kind":"Name","value":"winningUserConProfiles"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"DetailedUserFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"DetailedUserFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"User"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"first_name"}},{"kind":"Field","name":{"kind":"Name","value":"last_name"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"privileges"}},{"kind":"Field","name":{"kind":"Name","value":"user_con_profiles"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"ticket"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"signups"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"state"}}]}},{"kind":"Field","name":{"kind":"Name","value":"convention"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"domain"}},{"kind":"Field","name":{"kind":"Name","value":"starts_at"}},{"kind":"Field","name":{"kind":"Name","value":"ticket_name"}},{"kind":"Field","name":{"kind":"Name","value":"timezone_name"}},{"kind":"Field","name":{"kind":"Name","value":"timezone_mode"}}]}},{"kind":"Field","name":{"kind":"Name","value":"staff_positions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<MergeUsersMutationData, MergeUsersMutationVariables>;

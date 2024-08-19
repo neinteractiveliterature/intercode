@@ -10,7 +10,7 @@ import TableHeader from '../Tables/TableHeader';
 import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
 import MergeUsersModal from './MergeUsersModal';
 import usePageTitle from '../usePageTitle';
-import { UsersTableUsersQueryData, UsersTableUsersQueryVariables, useUsersTableUsersQuery } from './queries.generated';
+import { UsersTableUsersQueryData, UsersTableUsersQueryDocument } from './queries.generated';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
 import { useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
@@ -75,11 +75,7 @@ function UsersTable(): JSX.Element {
 
   const getPossibleColumnsWithTranslation = useCallback(() => getPossibleColumns(t), [t]);
 
-  const { tableInstance, refetch, tableHeaderProps, loading } = useReactTableWithTheWorks<
-    UsersTableUsersQueryData,
-    UserType,
-    UsersTableUsersQueryVariables
-  >({
+  const { tableInstance, refetch, tableHeaderProps, loading } = useReactTableWithTheWorks({
     decodeFilterValue,
     defaultVisibleColumns,
     encodeFilterValue,
@@ -88,7 +84,7 @@ function UsersTable(): JSX.Element {
     getPossibleColumns: getPossibleColumnsWithTranslation,
     rowSelect: true,
     storageKeyPrefix: 'users',
-    useQuery: useUsersTableUsersQuery,
+    query: UsersTableUsersQueryDocument,
   });
 
   return (

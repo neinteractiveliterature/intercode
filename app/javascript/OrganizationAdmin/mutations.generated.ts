@@ -1,10 +1,7 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { gql } from '@apollo/client';
-import { OrganizationRoleFieldsFragmentDoc } from './queries.generated';
-import * as Apollo from '@apollo/client';
-const defaultOptions = {} as const;
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type CreateOrganizationRoleMutationVariables = Types.Exact<{
   organizationId: Types.Scalars['ID']['input'];
   name: Types.Scalars['String']['input'];
@@ -35,120 +32,6 @@ export type DeleteOrganizationRoleMutationVariables = Types.Exact<{
 export type DeleteOrganizationRoleMutationData = { __typename: 'Mutation', deleteOrganizationRole: { __typename: 'DeleteOrganizationRolePayload', clientMutationId?: string | null } };
 
 
-export const CreateOrganizationRoleDocument = gql`
-    mutation CreateOrganizationRole($organizationId: ID!, $name: String!, $userIds: [ID!]!, $permissions: [PermissionInput!]!) {
-  createOrganizationRole(
-    input: {organizationId: $organizationId, organization_role: {name: $name}, userIds: $userIds, permissions: $permissions}
-  ) {
-    organization_role {
-      id
-      ...OrganizationRoleFields
-    }
-  }
-}
-    ${OrganizationRoleFieldsFragmentDoc}`;
-export type CreateOrganizationRoleMutationFn = Apollo.MutationFunction<CreateOrganizationRoleMutationData, CreateOrganizationRoleMutationVariables>;
-
-/**
- * __useCreateOrganizationRoleMutation__
- *
- * To run a mutation, you first call `useCreateOrganizationRoleMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateOrganizationRoleMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createOrganizationRoleMutation, { data, loading, error }] = useCreateOrganizationRoleMutation({
- *   variables: {
- *      organizationId: // value for 'organizationId'
- *      name: // value for 'name'
- *      userIds: // value for 'userIds'
- *      permissions: // value for 'permissions'
- *   },
- * });
- */
-export function useCreateOrganizationRoleMutation(baseOptions?: Apollo.MutationHookOptions<CreateOrganizationRoleMutationData, CreateOrganizationRoleMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateOrganizationRoleMutationData, CreateOrganizationRoleMutationVariables>(CreateOrganizationRoleDocument, options);
-      }
-export type CreateOrganizationRoleMutationHookResult = ReturnType<typeof useCreateOrganizationRoleMutation>;
-export type CreateOrganizationRoleMutationResult = Apollo.MutationResult<CreateOrganizationRoleMutationData>;
-export type CreateOrganizationRoleMutationOptions = Apollo.BaseMutationOptions<CreateOrganizationRoleMutationData, CreateOrganizationRoleMutationVariables>;
-export const UpdateOrganizationRoleDocument = gql`
-    mutation UpdateOrganizationRole($id: ID!, $name: String, $addUserIds: [ID!], $removeUserIds: [ID!], $addPermissions: [PermissionInput!], $removePermissionIds: [ID!]) {
-  updateOrganizationRole(
-    input: {id: $id, organization_role: {name: $name}, addUserIds: $addUserIds, removeUserIds: $removeUserIds, add_permissions: $addPermissions, removePermissionIds: $removePermissionIds}
-  ) {
-    organization_role {
-      id
-      ...OrganizationRoleFields
-    }
-  }
-}
-    ${OrganizationRoleFieldsFragmentDoc}`;
-export type UpdateOrganizationRoleMutationFn = Apollo.MutationFunction<UpdateOrganizationRoleMutationData, UpdateOrganizationRoleMutationVariables>;
-
-/**
- * __useUpdateOrganizationRoleMutation__
- *
- * To run a mutation, you first call `useUpdateOrganizationRoleMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateOrganizationRoleMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateOrganizationRoleMutation, { data, loading, error }] = useUpdateOrganizationRoleMutation({
- *   variables: {
- *      id: // value for 'id'
- *      name: // value for 'name'
- *      addUserIds: // value for 'addUserIds'
- *      removeUserIds: // value for 'removeUserIds'
- *      addPermissions: // value for 'addPermissions'
- *      removePermissionIds: // value for 'removePermissionIds'
- *   },
- * });
- */
-export function useUpdateOrganizationRoleMutation(baseOptions?: Apollo.MutationHookOptions<UpdateOrganizationRoleMutationData, UpdateOrganizationRoleMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateOrganizationRoleMutationData, UpdateOrganizationRoleMutationVariables>(UpdateOrganizationRoleDocument, options);
-      }
-export type UpdateOrganizationRoleMutationHookResult = ReturnType<typeof useUpdateOrganizationRoleMutation>;
-export type UpdateOrganizationRoleMutationResult = Apollo.MutationResult<UpdateOrganizationRoleMutationData>;
-export type UpdateOrganizationRoleMutationOptions = Apollo.BaseMutationOptions<UpdateOrganizationRoleMutationData, UpdateOrganizationRoleMutationVariables>;
-export const DeleteOrganizationRoleDocument = gql`
-    mutation DeleteOrganizationRole($id: ID!) {
-  deleteOrganizationRole(input: {id: $id}) {
-    clientMutationId
-  }
-}
-    `;
-export type DeleteOrganizationRoleMutationFn = Apollo.MutationFunction<DeleteOrganizationRoleMutationData, DeleteOrganizationRoleMutationVariables>;
-
-/**
- * __useDeleteOrganizationRoleMutation__
- *
- * To run a mutation, you first call `useDeleteOrganizationRoleMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteOrganizationRoleMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteOrganizationRoleMutation, { data, loading, error }] = useDeleteOrganizationRoleMutation({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useDeleteOrganizationRoleMutation(baseOptions?: Apollo.MutationHookOptions<DeleteOrganizationRoleMutationData, DeleteOrganizationRoleMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteOrganizationRoleMutationData, DeleteOrganizationRoleMutationVariables>(DeleteOrganizationRoleDocument, options);
-      }
-export type DeleteOrganizationRoleMutationHookResult = ReturnType<typeof useDeleteOrganizationRoleMutation>;
-export type DeleteOrganizationRoleMutationResult = Apollo.MutationResult<DeleteOrganizationRoleMutationData>;
-export type DeleteOrganizationRoleMutationOptions = Apollo.BaseMutationOptions<DeleteOrganizationRoleMutationData, DeleteOrganizationRoleMutationVariables>;
+export const CreateOrganizationRoleDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateOrganizationRole"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"organizationId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"name"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"userIds"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"permissions"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"PermissionInput"}}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createOrganizationRole"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"organizationId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"organizationId"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"organization_role"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"name"},"value":{"kind":"Variable","name":{"kind":"Name","value":"name"}}}]}},{"kind":"ObjectField","name":{"kind":"Name","value":"userIds"},"value":{"kind":"Variable","name":{"kind":"Name","value":"userIds"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"permissions"},"value":{"kind":"Variable","name":{"kind":"Name","value":"permissions"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"organization_role"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"OrganizationRoleFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"OrganizationRoleFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"OrganizationRole"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"email"}}]}},{"kind":"Field","name":{"kind":"Name","value":"permissions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"permission"}}]}}]}}]} as unknown as DocumentNode<CreateOrganizationRoleMutationData, CreateOrganizationRoleMutationVariables>;
+export const UpdateOrganizationRoleDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateOrganizationRole"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"name"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"addUserIds"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"removeUserIds"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"addPermissions"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"PermissionInput"}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"removePermissionIds"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateOrganizationRole"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"organization_role"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"name"},"value":{"kind":"Variable","name":{"kind":"Name","value":"name"}}}]}},{"kind":"ObjectField","name":{"kind":"Name","value":"addUserIds"},"value":{"kind":"Variable","name":{"kind":"Name","value":"addUserIds"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"removeUserIds"},"value":{"kind":"Variable","name":{"kind":"Name","value":"removeUserIds"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"add_permissions"},"value":{"kind":"Variable","name":{"kind":"Name","value":"addPermissions"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"removePermissionIds"},"value":{"kind":"Variable","name":{"kind":"Name","value":"removePermissionIds"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"organization_role"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"OrganizationRoleFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"OrganizationRoleFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"OrganizationRole"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"email"}}]}},{"kind":"Field","name":{"kind":"Name","value":"permissions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"permission"}}]}}]}}]} as unknown as DocumentNode<UpdateOrganizationRoleMutationData, UpdateOrganizationRoleMutationVariables>;
+export const DeleteOrganizationRoleDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteOrganizationRole"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteOrganizationRole"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"clientMutationId"}}]}}]}}]} as unknown as DocumentNode<DeleteOrganizationRoleMutationData, DeleteOrganizationRoleMutationVariables>;

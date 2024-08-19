@@ -2,12 +2,13 @@ import { useState, useEffect } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
 import { useTranslation } from 'react-i18next';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
-import { useCmsFilesAdminQueryLazyQuery } from '../CmsAdmin/CmsFilesAdmin/queries.generated';
+import { CmsFilesAdminQueryDocument } from '../CmsAdmin/CmsFilesAdmin/queries.generated';
 import FilePreview from '../CmsAdmin/CmsFilesAdmin/FilePreview';
 import SelectWithLabel from './SelectWithLabel';
 import FileUploadForm from '../BuiltInForms/FileUploadForm';
 import { ActiveStorageAttachment } from '../graphqlTypes.generated';
 import { Blob } from '@rails/activestorage';
+import { useLazyQuery } from '@apollo/client';
 
 export type AddFileModalProps = {
   visible: boolean;
@@ -19,7 +20,7 @@ export type AddFileModalProps = {
 
 export default function AddFileModal({ visible, existingFiles, addBlob, fileChosen, close }: AddFileModalProps) {
   const { t } = useTranslation();
-  const [loadData, { called, data, loading, error }] = useCmsFilesAdminQueryLazyQuery();
+  const [loadData, { called, data, loading, error }] = useLazyQuery(CmsFilesAdminQueryDocument);
   const [file, setFile] = useState<ActiveStorageAttachment | null>(null);
 
   const uploadedFile = async (blob: Blob, newFile: File) => {

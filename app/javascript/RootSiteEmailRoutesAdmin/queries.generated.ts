@@ -1,9 +1,7 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
-const defaultOptions = {} as const;
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type EmailRouteFieldsFragment = { __typename: 'EmailRoute', id: string, receiver_address: string, forward_addresses?: Array<string> | null };
 
 export type RootSiteEmailRoutesAdminTableQueryVariables = Types.Exact<{
@@ -15,57 +13,5 @@ export type RootSiteEmailRoutesAdminTableQueryVariables = Types.Exact<{
 
 export type RootSiteEmailRoutesAdminTableQueryData = { __typename: 'Query', email_routes_paginated: { __typename: 'EmailRoutesPagination', total_entries: number, total_pages: number, entries: Array<{ __typename: 'EmailRoute', id: string, receiver_address: string, forward_addresses?: Array<string> | null }> } };
 
-export const EmailRouteFieldsFragmentDoc = gql`
-    fragment EmailRouteFields on EmailRoute {
-  id
-  receiver_address
-  forward_addresses
-}
-    `;
-export const RootSiteEmailRoutesAdminTableQueryDocument = gql`
-    query RootSiteEmailRoutesAdminTableQuery($page: Int, $filters: EmailRouteFiltersInput, $sort: [SortInput!]) {
-  email_routes_paginated(page: $page, filters: $filters, sort: $sort) {
-    total_entries
-    total_pages
-    entries {
-      id
-      ...EmailRouteFields
-    }
-  }
-}
-    ${EmailRouteFieldsFragmentDoc}`;
-
-/**
- * __useRootSiteEmailRoutesAdminTableQuery__
- *
- * To run a query within a React component, call `useRootSiteEmailRoutesAdminTableQuery` and pass it any options that fit your needs.
- * When your component renders, `useRootSiteEmailRoutesAdminTableQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useRootSiteEmailRoutesAdminTableQuery({
- *   variables: {
- *      page: // value for 'page'
- *      filters: // value for 'filters'
- *      sort: // value for 'sort'
- *   },
- * });
- */
-export function useRootSiteEmailRoutesAdminTableQuery(baseOptions?: Apollo.QueryHookOptions<RootSiteEmailRoutesAdminTableQueryData, RootSiteEmailRoutesAdminTableQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<RootSiteEmailRoutesAdminTableQueryData, RootSiteEmailRoutesAdminTableQueryVariables>(RootSiteEmailRoutesAdminTableQueryDocument, options);
-      }
-export function useRootSiteEmailRoutesAdminTableQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<RootSiteEmailRoutesAdminTableQueryData, RootSiteEmailRoutesAdminTableQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<RootSiteEmailRoutesAdminTableQueryData, RootSiteEmailRoutesAdminTableQueryVariables>(RootSiteEmailRoutesAdminTableQueryDocument, options);
-        }
-export function useRootSiteEmailRoutesAdminTableQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<RootSiteEmailRoutesAdminTableQueryData, RootSiteEmailRoutesAdminTableQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<RootSiteEmailRoutesAdminTableQueryData, RootSiteEmailRoutesAdminTableQueryVariables>(RootSiteEmailRoutesAdminTableQueryDocument, options);
-        }
-export type RootSiteEmailRoutesAdminTableQueryHookResult = ReturnType<typeof useRootSiteEmailRoutesAdminTableQuery>;
-export type RootSiteEmailRoutesAdminTableQueryLazyQueryHookResult = ReturnType<typeof useRootSiteEmailRoutesAdminTableQueryLazyQuery>;
-export type RootSiteEmailRoutesAdminTableQuerySuspenseQueryHookResult = ReturnType<typeof useRootSiteEmailRoutesAdminTableQuerySuspenseQuery>;
-export type RootSiteEmailRoutesAdminTableQueryQueryResult = Apollo.QueryResult<RootSiteEmailRoutesAdminTableQueryData, RootSiteEmailRoutesAdminTableQueryVariables>;
+export const EmailRouteFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"EmailRouteFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"EmailRoute"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"receiver_address"}},{"kind":"Field","name":{"kind":"Name","value":"forward_addresses"}}]}}]} as unknown as DocumentNode<EmailRouteFieldsFragment, unknown>;
+export const RootSiteEmailRoutesAdminTableQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"RootSiteEmailRoutesAdminTableQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"page"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"filters"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"EmailRouteFiltersInput"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sort"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"SortInput"}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"email_routes_paginated"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"page"},"value":{"kind":"Variable","name":{"kind":"Name","value":"page"}}},{"kind":"Argument","name":{"kind":"Name","value":"filters"},"value":{"kind":"Variable","name":{"kind":"Name","value":"filters"}}},{"kind":"Argument","name":{"kind":"Name","value":"sort"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sort"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"total_entries"}},{"kind":"Field","name":{"kind":"Name","value":"total_pages"}},{"kind":"Field","name":{"kind":"Name","value":"entries"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"EmailRouteFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"EmailRouteFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"EmailRoute"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"receiver_address"}},{"kind":"Field","name":{"kind":"Name","value":"forward_addresses"}}]}}]} as unknown as DocumentNode<RootSiteEmailRoutesAdminTableQueryData, RootSiteEmailRoutesAdminTableQueryVariables>;

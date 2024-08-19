@@ -1,9 +1,7 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
-const defaultOptions = {} as const;
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type AdminDepartmentFieldsFragment = { __typename: 'Department', id: string, name: string, proposal_description?: string | null, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string }> };
 
 export type DepartmentAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
@@ -11,60 +9,5 @@ export type DepartmentAdminQueryVariables = Types.Exact<{ [key: string]: never; 
 
 export type DepartmentAdminQueryData = { __typename: 'Query', currentAbility: { __typename: 'Ability', can_update_departments: boolean }, convention: { __typename: 'Convention', id: string, departments: Array<{ __typename: 'Department', id: string, name: string, proposal_description?: string | null, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string }> }> } };
 
-export const AdminDepartmentFieldsFragmentDoc = gql`
-    fragment AdminDepartmentFields on Department {
-  id
-  name
-  proposal_description
-  event_categories {
-    id
-    name
-  }
-}
-    `;
-export const DepartmentAdminQueryDocument = gql`
-    query DepartmentAdminQuery {
-  currentAbility {
-    can_update_departments
-  }
-  convention: conventionByRequestHost {
-    id
-    departments {
-      id
-      ...AdminDepartmentFields
-    }
-  }
-}
-    ${AdminDepartmentFieldsFragmentDoc}`;
-
-/**
- * __useDepartmentAdminQuery__
- *
- * To run a query within a React component, call `useDepartmentAdminQuery` and pass it any options that fit your needs.
- * When your component renders, `useDepartmentAdminQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useDepartmentAdminQuery({
- *   variables: {
- *   },
- * });
- */
-export function useDepartmentAdminQuery(baseOptions?: Apollo.QueryHookOptions<DepartmentAdminQueryData, DepartmentAdminQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<DepartmentAdminQueryData, DepartmentAdminQueryVariables>(DepartmentAdminQueryDocument, options);
-      }
-export function useDepartmentAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DepartmentAdminQueryData, DepartmentAdminQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<DepartmentAdminQueryData, DepartmentAdminQueryVariables>(DepartmentAdminQueryDocument, options);
-        }
-export function useDepartmentAdminQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<DepartmentAdminQueryData, DepartmentAdminQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<DepartmentAdminQueryData, DepartmentAdminQueryVariables>(DepartmentAdminQueryDocument, options);
-        }
-export type DepartmentAdminQueryHookResult = ReturnType<typeof useDepartmentAdminQuery>;
-export type DepartmentAdminQueryLazyQueryHookResult = ReturnType<typeof useDepartmentAdminQueryLazyQuery>;
-export type DepartmentAdminQuerySuspenseQueryHookResult = ReturnType<typeof useDepartmentAdminQuerySuspenseQuery>;
-export type DepartmentAdminQueryQueryResult = Apollo.QueryResult<DepartmentAdminQueryData, DepartmentAdminQueryVariables>;
+export const AdminDepartmentFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AdminDepartmentFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Department"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"proposal_description"}},{"kind":"Field","name":{"kind":"Name","value":"event_categories"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<AdminDepartmentFieldsFragment, unknown>;
+export const DepartmentAdminQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"DepartmentAdminQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currentAbility"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"can_update_departments"}}]}},{"kind":"Field","alias":{"kind":"Name","value":"convention"},"name":{"kind":"Name","value":"conventionByRequestHost"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"departments"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"AdminDepartmentFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AdminDepartmentFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Department"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"proposal_description"}},{"kind":"Field","name":{"kind":"Name","value":"event_categories"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<DepartmentAdminQueryData, DepartmentAdminQueryVariables>;

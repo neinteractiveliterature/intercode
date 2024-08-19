@@ -1,7 +1,7 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, Suspense } from 'react';
 import * as React from 'react';
 import classNames from 'classnames';
-import { useApolloClient } from '@apollo/client';
+import { useApolloClient, useSuspenseQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { html } from '@codemirror/lang-html';
 import {
@@ -9,9 +9,7 @@ import {
   CodeInput,
   useStandardCodeMirror,
   UseStandardCodeMirrorExtensionsOptions,
-   
   liquid,
-  LoadQueryWrapper,
 } from '@neinteractiveliterature/litform';
 import { CodeInputProps } from '@neinteractiveliterature/litform/lib/CodeInput';
 import { Extension } from '@codemirror/state';
@@ -27,33 +25,28 @@ import parseCmsContent from '../parseCmsContent';
 import parsePageContent from '../parsePageContent';
 import AddFileModal from './AddFileModal';
 import { ActiveStorageAttachment } from '../graphqlTypes.generated';
-import {
-  CmsFilesAdminQueryData,
-  CmsFilesAdminQueryVariables,
-  useCmsFilesAdminQuery,
-} from '../CmsAdmin/CmsFilesAdmin/queries.generated';
-import { useCreateCmsFileMutation } from '../CmsAdmin/CmsFilesAdmin/mutations.generated';
+import { CmsFilesAdminQueryDocument } from '../CmsAdmin/CmsFilesAdmin/queries.generated';
 import { Blob } from '@rails/activestorage';
+import { useSubmit } from 'react-router-dom';
+import { NamedRoute } from '../AppRouter';
 
-type CreateCmsFileModalProps = {
+export type CreateCmsFileModalProps = {
   visible: boolean;
   close: () => void;
   fileChosen: (file: ActiveStorageAttachment) => void;
 };
 
-const CreateCmsFileModal = LoadQueryWrapper<
-  CmsFilesAdminQueryData,
-  CmsFilesAdminQueryVariables,
-  CreateCmsFileModalProps
->(useCmsFilesAdminQuery, function CreateCmsFileModal({ data, visible, close, fileChosen }) {
+function CreateCmsFileModal({ visible, close, fileChosen }: CreateCmsFileModalProps) {
+  const { data } = useSuspenseQuery(CmsFilesAdminQueryDocument);
   const attachments = useMemo(
     () => data.cmsParent.cmsFiles.map((cmsFile) => ({ ...cmsFile.file, resized_url: cmsFile.file.thumbnailUrl })),
     [data.cmsParent.cmsFiles],
   );
-  const [createCmsFile] = useCreateCmsFileMutation();
+  const submit = useSubmit();
   const addBlob = useCallback(
-    (blob: Blob) => createCmsFile({ variables: { signedBlobId: blob.signed_id } }),
-    [createCmsFile],
+    (blob: Blob) =>
+      submit({ variables: { signedBlobId: blob.signed_id } }, { method: 'POST', action: NamedRoute.CreateCmsFile }),
+    [submit],
   );
 
   return (
@@ -65,7 +58,7 @@ const CreateCmsFileModal = LoadQueryWrapper<
       fileChosen={fileChosen}
     />
   );
-});
+}
 
 export type LiquidInputProps = Omit<
   CodeInputProps,
@@ -135,6 +128,7 @@ function LiquidInput(props: LiquidInputProps): JSX.Element {
       return null;
     }
 
+    // eslint-disable-next-line i18next/no-literal-string
     const liquidDocsUrl = notifierEventKey ? `/liquid_docs?notifier_event_key=${notifierEventKey}` : '/liquid_docs';
 
     return (
@@ -228,7 +222,9 @@ function LiquidInput(props: LiquidInputProps): JSX.Element {
       >
         {renderDocs()}
       </CodeInput>
-      <CreateCmsFileModal visible={addFileModal.visible} close={addFileModal.close} fileChosen={addFile} />
+      <Suspense>
+        <CreateCmsFileModal visible={addFileModal.visible} close={addFileModal.close} fileChosen={addFile} />
+      </Suspense>
     </>
   );
 }

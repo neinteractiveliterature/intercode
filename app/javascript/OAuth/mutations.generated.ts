@@ -1,9 +1,7 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
-const defaultOptions = {} as const;
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type RevokeAuthorizedApplicationMutationVariables = Types.Exact<{
   uid: Types.Scalars['ID']['input'];
 }>;
@@ -12,36 +10,4 @@ export type RevokeAuthorizedApplicationMutationVariables = Types.Exact<{
 export type RevokeAuthorizedApplicationMutationData = { __typename: 'Mutation', revokeAuthorizedApplication: { __typename: 'RevokeAuthorizedApplicationPayload', clientMutationId?: string | null } };
 
 
-export const RevokeAuthorizedApplicationDocument = gql`
-    mutation RevokeAuthorizedApplication($uid: ID!) {
-  revokeAuthorizedApplication(input: {uid: $uid}) {
-    clientMutationId
-  }
-}
-    `;
-export type RevokeAuthorizedApplicationMutationFn = Apollo.MutationFunction<RevokeAuthorizedApplicationMutationData, RevokeAuthorizedApplicationMutationVariables>;
-
-/**
- * __useRevokeAuthorizedApplicationMutation__
- *
- * To run a mutation, you first call `useRevokeAuthorizedApplicationMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useRevokeAuthorizedApplicationMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [revokeAuthorizedApplicationMutation, { data, loading, error }] = useRevokeAuthorizedApplicationMutation({
- *   variables: {
- *      uid: // value for 'uid'
- *   },
- * });
- */
-export function useRevokeAuthorizedApplicationMutation(baseOptions?: Apollo.MutationHookOptions<RevokeAuthorizedApplicationMutationData, RevokeAuthorizedApplicationMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<RevokeAuthorizedApplicationMutationData, RevokeAuthorizedApplicationMutationVariables>(RevokeAuthorizedApplicationDocument, options);
-      }
-export type RevokeAuthorizedApplicationMutationHookResult = ReturnType<typeof useRevokeAuthorizedApplicationMutation>;
-export type RevokeAuthorizedApplicationMutationResult = Apollo.MutationResult<RevokeAuthorizedApplicationMutationData>;
-export type RevokeAuthorizedApplicationMutationOptions = Apollo.BaseMutationOptions<RevokeAuthorizedApplicationMutationData, RevokeAuthorizedApplicationMutationVariables>;
+export const RevokeAuthorizedApplicationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"RevokeAuthorizedApplication"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"uid"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"revokeAuthorizedApplication"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"uid"},"value":{"kind":"Variable","name":{"kind":"Name","value":"uid"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"clientMutationId"}}]}}]}}]} as unknown as DocumentNode<RevokeAuthorizedApplicationMutationData, RevokeAuthorizedApplicationMutationVariables>;

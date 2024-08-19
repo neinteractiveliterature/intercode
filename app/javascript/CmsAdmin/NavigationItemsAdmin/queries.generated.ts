@@ -1,9 +1,7 @@
 /* eslint-disable */
 import * as Types from '../../graphqlTypes.generated';
 
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
-const defaultOptions = {} as const;
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type AdminNavigationItemFieldsFragment = { __typename: 'CmsNavigationItem', id: string, position?: number | null, title?: string | null, page?: { __typename: 'Page', id: string } | null, navigation_section?: { __typename: 'CmsNavigationItem', id: string } | null };
 
 export type NavigationItemsAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
@@ -11,67 +9,5 @@ export type NavigationItemsAdminQueryVariables = Types.Exact<{ [key: string]: ne
 
 export type NavigationItemsAdminQueryData = { __typename: 'Query', convention?: { __typename: 'Convention', id: string, name: string } | null, cmsParent: { __typename: 'Convention', id: string, cmsPages: Array<{ __typename: 'Page', id: string, name?: string | null }>, cmsNavigationItems: Array<{ __typename: 'CmsNavigationItem', id: string, position?: number | null, title?: string | null, page?: { __typename: 'Page', id: string } | null, navigation_section?: { __typename: 'CmsNavigationItem', id: string } | null }> } | { __typename: 'RootSite', id: string, cmsPages: Array<{ __typename: 'Page', id: string, name?: string | null }>, cmsNavigationItems: Array<{ __typename: 'CmsNavigationItem', id: string, position?: number | null, title?: string | null, page?: { __typename: 'Page', id: string } | null, navigation_section?: { __typename: 'CmsNavigationItem', id: string } | null }> } };
 
-export const AdminNavigationItemFieldsFragmentDoc = gql`
-    fragment AdminNavigationItemFields on CmsNavigationItem {
-  id
-  position
-  title
-  page {
-    id
-  }
-  navigation_section {
-    id
-  }
-}
-    `;
-export const NavigationItemsAdminQueryDocument = gql`
-    query NavigationItemsAdminQuery {
-  convention: conventionByRequestHostIfPresent {
-    id
-    name
-  }
-  cmsParent: cmsParentByRequestHost {
-    id
-    cmsPages {
-      id
-      name
-    }
-    cmsNavigationItems {
-      id
-      ...AdminNavigationItemFields
-    }
-  }
-}
-    ${AdminNavigationItemFieldsFragmentDoc}`;
-
-/**
- * __useNavigationItemsAdminQuery__
- *
- * To run a query within a React component, call `useNavigationItemsAdminQuery` and pass it any options that fit your needs.
- * When your component renders, `useNavigationItemsAdminQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useNavigationItemsAdminQuery({
- *   variables: {
- *   },
- * });
- */
-export function useNavigationItemsAdminQuery(baseOptions?: Apollo.QueryHookOptions<NavigationItemsAdminQueryData, NavigationItemsAdminQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<NavigationItemsAdminQueryData, NavigationItemsAdminQueryVariables>(NavigationItemsAdminQueryDocument, options);
-      }
-export function useNavigationItemsAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<NavigationItemsAdminQueryData, NavigationItemsAdminQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<NavigationItemsAdminQueryData, NavigationItemsAdminQueryVariables>(NavigationItemsAdminQueryDocument, options);
-        }
-export function useNavigationItemsAdminQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<NavigationItemsAdminQueryData, NavigationItemsAdminQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<NavigationItemsAdminQueryData, NavigationItemsAdminQueryVariables>(NavigationItemsAdminQueryDocument, options);
-        }
-export type NavigationItemsAdminQueryHookResult = ReturnType<typeof useNavigationItemsAdminQuery>;
-export type NavigationItemsAdminQueryLazyQueryHookResult = ReturnType<typeof useNavigationItemsAdminQueryLazyQuery>;
-export type NavigationItemsAdminQuerySuspenseQueryHookResult = ReturnType<typeof useNavigationItemsAdminQuerySuspenseQuery>;
-export type NavigationItemsAdminQueryQueryResult = Apollo.QueryResult<NavigationItemsAdminQueryData, NavigationItemsAdminQueryVariables>;
+export const AdminNavigationItemFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AdminNavigationItemFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsNavigationItem"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"position"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"page"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"navigation_section"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<AdminNavigationItemFieldsFragment, unknown>;
+export const NavigationItemsAdminQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"NavigationItemsAdminQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"convention"},"name":{"kind":"Name","value":"conventionByRequestHostIfPresent"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","alias":{"kind":"Name","value":"cmsParent"},"name":{"kind":"Name","value":"cmsParentByRequestHost"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"cmsPages"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"cmsNavigationItems"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"AdminNavigationItemFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AdminNavigationItemFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsNavigationItem"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"position"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"page"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"navigation_section"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<NavigationItemsAdminQueryData, NavigationItemsAdminQueryVariables>;

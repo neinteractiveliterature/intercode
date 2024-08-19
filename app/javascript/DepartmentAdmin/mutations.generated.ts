@@ -1,10 +1,7 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { gql } from '@apollo/client';
-import { AdminDepartmentFieldsFragmentDoc } from './queries.generated';
-import * as Apollo from '@apollo/client';
-const defaultOptions = {} as const;
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type CreateDepartmentMutationVariables = Types.Exact<{
   department: Types.DepartmentInput;
 }>;
@@ -28,109 +25,6 @@ export type DeleteDepartmentMutationVariables = Types.Exact<{
 export type DeleteDepartmentMutationData = { __typename: 'Mutation', deleteDepartment: { __typename: 'DeleteDepartmentPayload', clientMutationId?: string | null } };
 
 
-export const CreateDepartmentDocument = gql`
-    mutation CreateDepartment($department: DepartmentInput!) {
-  createDepartment(input: {department: $department}) {
-    department {
-      id
-      ...AdminDepartmentFields
-    }
-  }
-}
-    ${AdminDepartmentFieldsFragmentDoc}`;
-export type CreateDepartmentMutationFn = Apollo.MutationFunction<CreateDepartmentMutationData, CreateDepartmentMutationVariables>;
-
-/**
- * __useCreateDepartmentMutation__
- *
- * To run a mutation, you first call `useCreateDepartmentMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateDepartmentMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createDepartmentMutation, { data, loading, error }] = useCreateDepartmentMutation({
- *   variables: {
- *      department: // value for 'department'
- *   },
- * });
- */
-export function useCreateDepartmentMutation(baseOptions?: Apollo.MutationHookOptions<CreateDepartmentMutationData, CreateDepartmentMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateDepartmentMutationData, CreateDepartmentMutationVariables>(CreateDepartmentDocument, options);
-      }
-export type CreateDepartmentMutationHookResult = ReturnType<typeof useCreateDepartmentMutation>;
-export type CreateDepartmentMutationResult = Apollo.MutationResult<CreateDepartmentMutationData>;
-export type CreateDepartmentMutationOptions = Apollo.BaseMutationOptions<CreateDepartmentMutationData, CreateDepartmentMutationVariables>;
-export const UpdateDepartmentDocument = gql`
-    mutation UpdateDepartment($id: ID!, $department: DepartmentInput!) {
-  updateDepartment(input: {id: $id, department: $department}) {
-    department {
-      id
-      ...AdminDepartmentFields
-    }
-  }
-}
-    ${AdminDepartmentFieldsFragmentDoc}`;
-export type UpdateDepartmentMutationFn = Apollo.MutationFunction<UpdateDepartmentMutationData, UpdateDepartmentMutationVariables>;
-
-/**
- * __useUpdateDepartmentMutation__
- *
- * To run a mutation, you first call `useUpdateDepartmentMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateDepartmentMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateDepartmentMutation, { data, loading, error }] = useUpdateDepartmentMutation({
- *   variables: {
- *      id: // value for 'id'
- *      department: // value for 'department'
- *   },
- * });
- */
-export function useUpdateDepartmentMutation(baseOptions?: Apollo.MutationHookOptions<UpdateDepartmentMutationData, UpdateDepartmentMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateDepartmentMutationData, UpdateDepartmentMutationVariables>(UpdateDepartmentDocument, options);
-      }
-export type UpdateDepartmentMutationHookResult = ReturnType<typeof useUpdateDepartmentMutation>;
-export type UpdateDepartmentMutationResult = Apollo.MutationResult<UpdateDepartmentMutationData>;
-export type UpdateDepartmentMutationOptions = Apollo.BaseMutationOptions<UpdateDepartmentMutationData, UpdateDepartmentMutationVariables>;
-export const DeleteDepartmentDocument = gql`
-    mutation DeleteDepartment($id: ID!) {
-  deleteDepartment(input: {id: $id}) {
-    clientMutationId
-  }
-}
-    `;
-export type DeleteDepartmentMutationFn = Apollo.MutationFunction<DeleteDepartmentMutationData, DeleteDepartmentMutationVariables>;
-
-/**
- * __useDeleteDepartmentMutation__
- *
- * To run a mutation, you first call `useDeleteDepartmentMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteDepartmentMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteDepartmentMutation, { data, loading, error }] = useDeleteDepartmentMutation({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useDeleteDepartmentMutation(baseOptions?: Apollo.MutationHookOptions<DeleteDepartmentMutationData, DeleteDepartmentMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteDepartmentMutationData, DeleteDepartmentMutationVariables>(DeleteDepartmentDocument, options);
-      }
-export type DeleteDepartmentMutationHookResult = ReturnType<typeof useDeleteDepartmentMutation>;
-export type DeleteDepartmentMutationResult = Apollo.MutationResult<DeleteDepartmentMutationData>;
-export type DeleteDepartmentMutationOptions = Apollo.BaseMutationOptions<DeleteDepartmentMutationData, DeleteDepartmentMutationVariables>;
+export const CreateDepartmentDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateDepartment"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"department"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"DepartmentInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createDepartment"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"department"},"value":{"kind":"Variable","name":{"kind":"Name","value":"department"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"department"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"AdminDepartmentFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AdminDepartmentFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Department"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"proposal_description"}},{"kind":"Field","name":{"kind":"Name","value":"event_categories"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<CreateDepartmentMutationData, CreateDepartmentMutationVariables>;
+export const UpdateDepartmentDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateDepartment"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"department"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"DepartmentInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateDepartment"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"department"},"value":{"kind":"Variable","name":{"kind":"Name","value":"department"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"department"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"AdminDepartmentFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AdminDepartmentFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Department"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"proposal_description"}},{"kind":"Field","name":{"kind":"Name","value":"event_categories"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<UpdateDepartmentMutationData, UpdateDepartmentMutationVariables>;
+export const DeleteDepartmentDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteDepartment"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteDepartment"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"clientMutationId"}}]}}]}}]} as unknown as DocumentNode<DeleteDepartmentMutationData, DeleteDepartmentMutationVariables>;

@@ -1,57 +1,11 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
-const defaultOptions = {} as const;
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type ClickwrapAgreementQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type ClickwrapAgreementQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, clickwrap_agreement_html?: string | null, my_profile?: { __typename: 'UserConProfile', id: string, accepted_clickwrap_agreement?: boolean | null } | null } };
 
 
-export const ClickwrapAgreementQueryDocument = gql`
-    query ClickwrapAgreementQuery {
-  convention: conventionByRequestHost {
-    id
-    name
-    clickwrap_agreement_html
-    my_profile {
-      id
-      accepted_clickwrap_agreement
-    }
-  }
-}
-    `;
-
-/**
- * __useClickwrapAgreementQuery__
- *
- * To run a query within a React component, call `useClickwrapAgreementQuery` and pass it any options that fit your needs.
- * When your component renders, `useClickwrapAgreementQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useClickwrapAgreementQuery({
- *   variables: {
- *   },
- * });
- */
-export function useClickwrapAgreementQuery(baseOptions?: Apollo.QueryHookOptions<ClickwrapAgreementQueryData, ClickwrapAgreementQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ClickwrapAgreementQueryData, ClickwrapAgreementQueryVariables>(ClickwrapAgreementQueryDocument, options);
-      }
-export function useClickwrapAgreementQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ClickwrapAgreementQueryData, ClickwrapAgreementQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ClickwrapAgreementQueryData, ClickwrapAgreementQueryVariables>(ClickwrapAgreementQueryDocument, options);
-        }
-export function useClickwrapAgreementQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ClickwrapAgreementQueryData, ClickwrapAgreementQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<ClickwrapAgreementQueryData, ClickwrapAgreementQueryVariables>(ClickwrapAgreementQueryDocument, options);
-        }
-export type ClickwrapAgreementQueryHookResult = ReturnType<typeof useClickwrapAgreementQuery>;
-export type ClickwrapAgreementQueryLazyQueryHookResult = ReturnType<typeof useClickwrapAgreementQueryLazyQuery>;
-export type ClickwrapAgreementQuerySuspenseQueryHookResult = ReturnType<typeof useClickwrapAgreementQuerySuspenseQuery>;
-export type ClickwrapAgreementQueryQueryResult = Apollo.QueryResult<ClickwrapAgreementQueryData, ClickwrapAgreementQueryVariables>;
+export const ClickwrapAgreementQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"ClickwrapAgreementQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"convention"},"name":{"kind":"Name","value":"conventionByRequestHost"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"clickwrap_agreement_html"}},{"kind":"Field","name":{"kind":"Name","value":"my_profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"accepted_clickwrap_agreement"}}]}}]}}]}}]} as unknown as DocumentNode<ClickwrapAgreementQueryData, ClickwrapAgreementQueryVariables>;

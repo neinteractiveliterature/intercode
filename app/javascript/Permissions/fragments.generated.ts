@@ -1,7 +1,7 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { gql } from '@apollo/client';
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type PermissionedModelFields_CmsContentGroup_Fragment = { __typename: 'CmsContentGroup', id: string, name: string };
 
 export type PermissionedModelFields_Convention_Fragment = { __typename: 'Convention', id: string, name: string };
@@ -16,34 +16,5 @@ export type PermissionedRoleFields_StaffPosition_Fragment = { __typename: 'Staff
 
 export type PermissionedRoleFieldsFragment = PermissionedRoleFields_OrganizationRole_Fragment | PermissionedRoleFields_StaffPosition_Fragment;
 
-export const PermissionedModelFieldsFragmentDoc = gql`
-    fragment PermissionedModelFields on PermissionedModel {
-  __typename
-  ... on CmsContentGroup {
-    id
-    name
-  }
-  ... on Convention {
-    id
-    name
-  }
-  ... on EventCategory {
-    id
-    name
-    default_color
-  }
-}
-    `;
-export const PermissionedRoleFieldsFragmentDoc = gql`
-    fragment PermissionedRoleFields on PermissionedRole {
-  __typename
-  ... on StaffPosition {
-    id
-    name
-  }
-  ... on OrganizationRole {
-    id
-    name
-  }
-}
-    `;
+export const PermissionedModelFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"PermissionedModelFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"PermissionedModel"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsContentGroup"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Convention"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"EventCategory"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"default_color"}}]}}]}}]} as unknown as DocumentNode<PermissionedModelFieldsFragment, unknown>;
+export const PermissionedRoleFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"PermissionedRoleFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"PermissionedRole"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"StaffPosition"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"OrganizationRole"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<PermissionedRoleFieldsFragment, unknown>;

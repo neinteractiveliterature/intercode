@@ -1,10 +1,7 @@
 /* eslint-disable */
 import * as Types from '../../graphqlTypes.generated';
 
-import { gql } from '@apollo/client';
-import { PermissionedModelFieldsFragmentDoc, PermissionedRoleFieldsFragmentDoc } from '../../Permissions/fragments.generated';
-import * as Apollo from '@apollo/client';
-const defaultOptions = {} as const;
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type CmsContentFields_CmsLayout_Fragment = { __typename: 'CmsLayout', id: string, name?: string | null };
 
 export type CmsContentFields_CmsPartial_Fragment = { __typename: 'CmsPartial', id: string, name?: string | null };
@@ -27,140 +24,7 @@ export type SearchCmsContentQueryVariables = Types.Exact<{
 
 export type SearchCmsContentQueryData = { __typename: 'Query', cmsParent: { __typename: 'Convention', id: string, typeaheadSearchCmsContent: Array<{ __typename: 'CmsLayout', id: string, name?: string | null } | { __typename: 'CmsPartial', id: string, name?: string | null } | { __typename: 'Page', id: string, name?: string | null }> } | { __typename: 'RootSite', id: string, typeaheadSearchCmsContent: Array<{ __typename: 'CmsLayout', id: string, name?: string | null } | { __typename: 'CmsPartial', id: string, name?: string | null } | { __typename: 'Page', id: string, name?: string | null }> } };
 
-export const CmsContentFieldsFragmentDoc = gql`
-    fragment CmsContentFields on CmsContent {
-  __typename
-  ... on Page {
-    id
-    name
-  }
-  ... on CmsPartial {
-    id
-    name
-  }
-  ... on CmsLayout {
-    id
-    name
-  }
-}
-    `;
-export const CmsContentGroupFieldsFragmentDoc = gql`
-    fragment CmsContentGroupFields on CmsContentGroup {
-  id
-  name
-  current_ability_can_update
-  current_ability_can_delete
-  contents {
-    ...CmsContentFields
-  }
-  permissions {
-    id
-    permission
-    model {
-      ...PermissionedModelFields
-    }
-    role {
-      ...PermissionedRoleFields
-    }
-  }
-}
-    ${CmsContentFieldsFragmentDoc}
-${PermissionedModelFieldsFragmentDoc}
-${PermissionedRoleFieldsFragmentDoc}`;
-export const CmsContentGroupsAdminQueryDocument = gql`
-    query CmsContentGroupsAdminQuery {
-  convention: conventionByRequestHostIfPresent {
-    id
-    name
-    staff_positions {
-      id
-      name
-    }
-  }
-  cmsParent: cmsParentByRequestHost {
-    id
-    cmsContentGroups {
-      id
-      ...CmsContentGroupFields
-    }
-  }
-  currentAbility {
-    can_create_cms_content_groups
-  }
-}
-    ${CmsContentGroupFieldsFragmentDoc}`;
-
-/**
- * __useCmsContentGroupsAdminQuery__
- *
- * To run a query within a React component, call `useCmsContentGroupsAdminQuery` and pass it any options that fit your needs.
- * When your component renders, `useCmsContentGroupsAdminQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useCmsContentGroupsAdminQuery({
- *   variables: {
- *   },
- * });
- */
-export function useCmsContentGroupsAdminQuery(baseOptions?: Apollo.QueryHookOptions<CmsContentGroupsAdminQueryData, CmsContentGroupsAdminQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<CmsContentGroupsAdminQueryData, CmsContentGroupsAdminQueryVariables>(CmsContentGroupsAdminQueryDocument, options);
-      }
-export function useCmsContentGroupsAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CmsContentGroupsAdminQueryData, CmsContentGroupsAdminQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<CmsContentGroupsAdminQueryData, CmsContentGroupsAdminQueryVariables>(CmsContentGroupsAdminQueryDocument, options);
-        }
-export function useCmsContentGroupsAdminQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<CmsContentGroupsAdminQueryData, CmsContentGroupsAdminQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<CmsContentGroupsAdminQueryData, CmsContentGroupsAdminQueryVariables>(CmsContentGroupsAdminQueryDocument, options);
-        }
-export type CmsContentGroupsAdminQueryHookResult = ReturnType<typeof useCmsContentGroupsAdminQuery>;
-export type CmsContentGroupsAdminQueryLazyQueryHookResult = ReturnType<typeof useCmsContentGroupsAdminQueryLazyQuery>;
-export type CmsContentGroupsAdminQuerySuspenseQueryHookResult = ReturnType<typeof useCmsContentGroupsAdminQuerySuspenseQuery>;
-export type CmsContentGroupsAdminQueryQueryResult = Apollo.QueryResult<CmsContentGroupsAdminQueryData, CmsContentGroupsAdminQueryVariables>;
-export const SearchCmsContentQueryDocument = gql`
-    query SearchCmsContentQuery($name: String) {
-  cmsParent: cmsParentByRequestHost {
-    id
-    typeaheadSearchCmsContent(name: $name) {
-      ...CmsContentFields
-    }
-  }
-}
-    ${CmsContentFieldsFragmentDoc}`;
-
-/**
- * __useSearchCmsContentQuery__
- *
- * To run a query within a React component, call `useSearchCmsContentQuery` and pass it any options that fit your needs.
- * When your component renders, `useSearchCmsContentQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useSearchCmsContentQuery({
- *   variables: {
- *      name: // value for 'name'
- *   },
- * });
- */
-export function useSearchCmsContentQuery(baseOptions?: Apollo.QueryHookOptions<SearchCmsContentQueryData, SearchCmsContentQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<SearchCmsContentQueryData, SearchCmsContentQueryVariables>(SearchCmsContentQueryDocument, options);
-      }
-export function useSearchCmsContentQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchCmsContentQueryData, SearchCmsContentQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<SearchCmsContentQueryData, SearchCmsContentQueryVariables>(SearchCmsContentQueryDocument, options);
-        }
-export function useSearchCmsContentQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<SearchCmsContentQueryData, SearchCmsContentQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<SearchCmsContentQueryData, SearchCmsContentQueryVariables>(SearchCmsContentQueryDocument, options);
-        }
-export type SearchCmsContentQueryHookResult = ReturnType<typeof useSearchCmsContentQuery>;
-export type SearchCmsContentQueryLazyQueryHookResult = ReturnType<typeof useSearchCmsContentQueryLazyQuery>;
-export type SearchCmsContentQuerySuspenseQueryHookResult = ReturnType<typeof useSearchCmsContentQuerySuspenseQuery>;
-export type SearchCmsContentQueryQueryResult = Apollo.QueryResult<SearchCmsContentQueryData, SearchCmsContentQueryVariables>;
+export const CmsContentFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CmsContentFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsContent"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Page"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsPartial"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsLayout"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<CmsContentFieldsFragment, unknown>;
+export const CmsContentGroupFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CmsContentGroupFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsContentGroup"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"current_ability_can_update"}},{"kind":"Field","name":{"kind":"Name","value":"current_ability_can_delete"}},{"kind":"Field","name":{"kind":"Name","value":"contents"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CmsContentFields"}}]}},{"kind":"Field","name":{"kind":"Name","value":"permissions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"permission"}},{"kind":"Field","name":{"kind":"Name","value":"model"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PermissionedModelFields"}}]}},{"kind":"Field","name":{"kind":"Name","value":"role"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PermissionedRoleFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CmsContentFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsContent"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Page"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsPartial"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsLayout"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"PermissionedModelFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"PermissionedModel"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsContentGroup"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Convention"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"EventCategory"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"default_color"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"PermissionedRoleFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"PermissionedRole"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"StaffPosition"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"OrganizationRole"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<CmsContentGroupFieldsFragment, unknown>;
+export const CmsContentGroupsAdminQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CmsContentGroupsAdminQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"convention"},"name":{"kind":"Name","value":"conventionByRequestHostIfPresent"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"staff_positions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"Field","alias":{"kind":"Name","value":"cmsParent"},"name":{"kind":"Name","value":"cmsParentByRequestHost"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"cmsContentGroups"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"CmsContentGroupFields"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"currentAbility"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"can_create_cms_content_groups"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CmsContentFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsContent"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Page"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsPartial"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsLayout"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"PermissionedModelFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"PermissionedModel"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsContentGroup"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Convention"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"EventCategory"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"default_color"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"PermissionedRoleFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"PermissionedRole"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"StaffPosition"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"OrganizationRole"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CmsContentGroupFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsContentGroup"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"current_ability_can_update"}},{"kind":"Field","name":{"kind":"Name","value":"current_ability_can_delete"}},{"kind":"Field","name":{"kind":"Name","value":"contents"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CmsContentFields"}}]}},{"kind":"Field","name":{"kind":"Name","value":"permissions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"permission"}},{"kind":"Field","name":{"kind":"Name","value":"model"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PermissionedModelFields"}}]}},{"kind":"Field","name":{"kind":"Name","value":"role"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PermissionedRoleFields"}}]}}]}}]}}]} as unknown as DocumentNode<CmsContentGroupsAdminQueryData, CmsContentGroupsAdminQueryVariables>;
+export const SearchCmsContentQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"SearchCmsContentQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"name"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"cmsParent"},"name":{"kind":"Name","value":"cmsParentByRequestHost"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"typeaheadSearchCmsContent"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"name"},"value":{"kind":"Variable","name":{"kind":"Name","value":"name"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CmsContentFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CmsContentFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsContent"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Page"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsPartial"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsLayout"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<SearchCmsContentQueryData, SearchCmsContentQueryVariables>;

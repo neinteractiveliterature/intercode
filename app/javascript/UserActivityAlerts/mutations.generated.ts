@@ -1,10 +1,7 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { gql } from '@apollo/client';
-import { UserActivityAlertFieldsFragmentDoc } from './queries.generated';
-import * as Apollo from '@apollo/client';
-const defaultOptions = {} as const;
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type CreateUserActivityAlertMutationVariables = Types.Exact<{
   userActivityAlert: Types.UserActivityAlertInput;
   notificationDestinations: Array<Types.NotificationDestinationInput> | Types.NotificationDestinationInput;
@@ -31,119 +28,6 @@ export type DeleteUserActivityAlertMutationVariables = Types.Exact<{
 export type DeleteUserActivityAlertMutationData = { __typename: 'Mutation', deleteUserActivityAlert: { __typename: 'DeleteUserActivityAlertPayload', user_activity_alert: { __typename: 'UserActivityAlert', id: string, email?: string | null, partial_name?: string | null, trigger_on_user_con_profile_create: boolean, trigger_on_ticket_create: boolean, user?: { __typename: 'User', id: string, name?: string | null } | null, notification_destinations: Array<{ __typename: 'NotificationDestination', id: string, staff_position?: { __typename: 'StaffPosition', id: string, name: string } | null, user_con_profile?: { __typename: 'UserConProfile', id: string, name_without_nickname: string } | null }> } } };
 
 
-export const CreateUserActivityAlertDocument = gql`
-    mutation CreateUserActivityAlert($userActivityAlert: UserActivityAlertInput!, $notificationDestinations: [NotificationDestinationInput!]!) {
-  createUserActivityAlert(
-    input: {user_activity_alert: $userActivityAlert, notification_destinations: $notificationDestinations}
-  ) {
-    user_activity_alert {
-      id
-      ...UserActivityAlertFields
-    }
-  }
-}
-    ${UserActivityAlertFieldsFragmentDoc}`;
-export type CreateUserActivityAlertMutationFn = Apollo.MutationFunction<CreateUserActivityAlertMutationData, CreateUserActivityAlertMutationVariables>;
-
-/**
- * __useCreateUserActivityAlertMutation__
- *
- * To run a mutation, you first call `useCreateUserActivityAlertMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateUserActivityAlertMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createUserActivityAlertMutation, { data, loading, error }] = useCreateUserActivityAlertMutation({
- *   variables: {
- *      userActivityAlert: // value for 'userActivityAlert'
- *      notificationDestinations: // value for 'notificationDestinations'
- *   },
- * });
- */
-export function useCreateUserActivityAlertMutation(baseOptions?: Apollo.MutationHookOptions<CreateUserActivityAlertMutationData, CreateUserActivityAlertMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateUserActivityAlertMutationData, CreateUserActivityAlertMutationVariables>(CreateUserActivityAlertDocument, options);
-      }
-export type CreateUserActivityAlertMutationHookResult = ReturnType<typeof useCreateUserActivityAlertMutation>;
-export type CreateUserActivityAlertMutationResult = Apollo.MutationResult<CreateUserActivityAlertMutationData>;
-export type CreateUserActivityAlertMutationOptions = Apollo.BaseMutationOptions<CreateUserActivityAlertMutationData, CreateUserActivityAlertMutationVariables>;
-export const UpdateUserActivityAlertDocument = gql`
-    mutation UpdateUserActivityAlert($id: ID!, $userActivityAlert: UserActivityAlertInput!, $addNotificationDestinations: [NotificationDestinationInput!]!, $removeNotificationDestinationIds: [ID!]!) {
-  updateUserActivityAlert(
-    input: {id: $id, user_activity_alert: $userActivityAlert, add_notification_destinations: $addNotificationDestinations, removeNotificationDestinationIds: $removeNotificationDestinationIds}
-  ) {
-    user_activity_alert {
-      id
-      ...UserActivityAlertFields
-    }
-  }
-}
-    ${UserActivityAlertFieldsFragmentDoc}`;
-export type UpdateUserActivityAlertMutationFn = Apollo.MutationFunction<UpdateUserActivityAlertMutationData, UpdateUserActivityAlertMutationVariables>;
-
-/**
- * __useUpdateUserActivityAlertMutation__
- *
- * To run a mutation, you first call `useUpdateUserActivityAlertMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateUserActivityAlertMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateUserActivityAlertMutation, { data, loading, error }] = useUpdateUserActivityAlertMutation({
- *   variables: {
- *      id: // value for 'id'
- *      userActivityAlert: // value for 'userActivityAlert'
- *      addNotificationDestinations: // value for 'addNotificationDestinations'
- *      removeNotificationDestinationIds: // value for 'removeNotificationDestinationIds'
- *   },
- * });
- */
-export function useUpdateUserActivityAlertMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserActivityAlertMutationData, UpdateUserActivityAlertMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateUserActivityAlertMutationData, UpdateUserActivityAlertMutationVariables>(UpdateUserActivityAlertDocument, options);
-      }
-export type UpdateUserActivityAlertMutationHookResult = ReturnType<typeof useUpdateUserActivityAlertMutation>;
-export type UpdateUserActivityAlertMutationResult = Apollo.MutationResult<UpdateUserActivityAlertMutationData>;
-export type UpdateUserActivityAlertMutationOptions = Apollo.BaseMutationOptions<UpdateUserActivityAlertMutationData, UpdateUserActivityAlertMutationVariables>;
-export const DeleteUserActivityAlertDocument = gql`
-    mutation DeleteUserActivityAlert($id: ID!) {
-  deleteUserActivityAlert(input: {id: $id}) {
-    user_activity_alert {
-      id
-      ...UserActivityAlertFields
-    }
-  }
-}
-    ${UserActivityAlertFieldsFragmentDoc}`;
-export type DeleteUserActivityAlertMutationFn = Apollo.MutationFunction<DeleteUserActivityAlertMutationData, DeleteUserActivityAlertMutationVariables>;
-
-/**
- * __useDeleteUserActivityAlertMutation__
- *
- * To run a mutation, you first call `useDeleteUserActivityAlertMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteUserActivityAlertMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteUserActivityAlertMutation, { data, loading, error }] = useDeleteUserActivityAlertMutation({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useDeleteUserActivityAlertMutation(baseOptions?: Apollo.MutationHookOptions<DeleteUserActivityAlertMutationData, DeleteUserActivityAlertMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteUserActivityAlertMutationData, DeleteUserActivityAlertMutationVariables>(DeleteUserActivityAlertDocument, options);
-      }
-export type DeleteUserActivityAlertMutationHookResult = ReturnType<typeof useDeleteUserActivityAlertMutation>;
-export type DeleteUserActivityAlertMutationResult = Apollo.MutationResult<DeleteUserActivityAlertMutationData>;
-export type DeleteUserActivityAlertMutationOptions = Apollo.BaseMutationOptions<DeleteUserActivityAlertMutationData, DeleteUserActivityAlertMutationVariables>;
+export const CreateUserActivityAlertDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateUserActivityAlert"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"userActivityAlert"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UserActivityAlertInput"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"notificationDestinations"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"NotificationDestinationInput"}}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createUserActivityAlert"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"user_activity_alert"},"value":{"kind":"Variable","name":{"kind":"Name","value":"userActivityAlert"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"notification_destinations"},"value":{"kind":"Variable","name":{"kind":"Name","value":"notificationDestinations"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user_activity_alert"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"UserActivityAlertFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"UserActivityAlertFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"UserActivityAlert"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"partial_name"}},{"kind":"Field","name":{"kind":"Name","value":"trigger_on_user_con_profile_create"}},{"kind":"Field","name":{"kind":"Name","value":"trigger_on_ticket_create"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"notification_destinations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"staff_position"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"user_con_profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name_without_nickname"}}]}}]}}]}}]} as unknown as DocumentNode<CreateUserActivityAlertMutationData, CreateUserActivityAlertMutationVariables>;
+export const UpdateUserActivityAlertDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateUserActivityAlert"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"userActivityAlert"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UserActivityAlertInput"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"addNotificationDestinations"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"NotificationDestinationInput"}}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"removeNotificationDestinationIds"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateUserActivityAlert"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"user_activity_alert"},"value":{"kind":"Variable","name":{"kind":"Name","value":"userActivityAlert"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"add_notification_destinations"},"value":{"kind":"Variable","name":{"kind":"Name","value":"addNotificationDestinations"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"removeNotificationDestinationIds"},"value":{"kind":"Variable","name":{"kind":"Name","value":"removeNotificationDestinationIds"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user_activity_alert"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"UserActivityAlertFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"UserActivityAlertFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"UserActivityAlert"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"partial_name"}},{"kind":"Field","name":{"kind":"Name","value":"trigger_on_user_con_profile_create"}},{"kind":"Field","name":{"kind":"Name","value":"trigger_on_ticket_create"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"notification_destinations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"staff_position"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"user_con_profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name_without_nickname"}}]}}]}}]}}]} as unknown as DocumentNode<UpdateUserActivityAlertMutationData, UpdateUserActivityAlertMutationVariables>;
+export const DeleteUserActivityAlertDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteUserActivityAlert"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteUserActivityAlert"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user_activity_alert"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"UserActivityAlertFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"UserActivityAlertFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"UserActivityAlert"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"partial_name"}},{"kind":"Field","name":{"kind":"Name","value":"trigger_on_user_con_profile_create"}},{"kind":"Field","name":{"kind":"Name","value":"trigger_on_ticket_create"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"notification_destinations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"staff_position"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"user_con_profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name_without_nickname"}}]}}]}}]}}]} as unknown as DocumentNode<DeleteUserActivityAlertMutationData, DeleteUserActivityAlertMutationVariables>;

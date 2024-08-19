@@ -1,9 +1,7 @@
 /* eslint-disable */
 import * as Types from '../../graphqlTypes.generated';
 
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
-const defaultOptions = {} as const;
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type CmsPageAdminLayoutFieldsFragment = { __typename: 'CmsLayout', id: string, name?: string | null };
 
 export type CmsPageFieldsFragment = { __typename: 'Page', id: string, name?: string | null, slug?: string | null, content?: string | null, admin_notes?: string | null, skip_clickwrap_agreement?: boolean | null, hidden_from_search: boolean, current_ability_can_update: boolean, current_ability_can_delete: boolean, cms_layout?: { __typename: 'CmsLayout', id: string, name?: string | null } | null };
@@ -13,93 +11,6 @@ export type CmsPagesAdminQueryVariables = Types.Exact<{ [key: string]: never; }>
 
 export type CmsPagesAdminQueryData = { __typename: 'Query', convention?: { __typename: 'Convention', id: string, name: string } | null, currentAbility: { __typename: 'Ability', can_create_pages: boolean }, cmsParent: { __typename: 'Convention', id: string, defaultLayout: { __typename: 'CmsLayout', id: string, name?: string | null }, cmsPages: Array<{ __typename: 'Page', id: string, name?: string | null, slug?: string | null, content?: string | null, admin_notes?: string | null, skip_clickwrap_agreement?: boolean | null, hidden_from_search: boolean, current_ability_can_update: boolean, current_ability_can_delete: boolean, cms_layout?: { __typename: 'CmsLayout', id: string, name?: string | null } | null }>, cmsLayouts: Array<{ __typename: 'CmsLayout', id: string, name?: string | null }> } | { __typename: 'RootSite', id: string, root_site_default_layout: { __typename: 'CmsLayout', id: string, name?: string | null }, cmsPages: Array<{ __typename: 'Page', id: string, name?: string | null, slug?: string | null, content?: string | null, admin_notes?: string | null, skip_clickwrap_agreement?: boolean | null, hidden_from_search: boolean, current_ability_can_update: boolean, current_ability_can_delete: boolean, cms_layout?: { __typename: 'CmsLayout', id: string, name?: string | null } | null }>, cmsLayouts: Array<{ __typename: 'CmsLayout', id: string, name?: string | null }> } };
 
-export const CmsPageAdminLayoutFieldsFragmentDoc = gql`
-    fragment CmsPageAdminLayoutFields on CmsLayout {
-  id
-  name
-}
-    `;
-export const CmsPageFieldsFragmentDoc = gql`
-    fragment CmsPageFields on Page {
-  id
-  name
-  slug
-  content
-  admin_notes
-  skip_clickwrap_agreement
-  hidden_from_search
-  current_ability_can_update
-  current_ability_can_delete
-  cms_layout {
-    id
-    ...CmsPageAdminLayoutFields
-  }
-}
-    ${CmsPageAdminLayoutFieldsFragmentDoc}`;
-export const CmsPagesAdminQueryDocument = gql`
-    query CmsPagesAdminQuery {
-  convention: conventionByRequestHostIfPresent {
-    id
-    name
-  }
-  currentAbility {
-    can_create_pages
-  }
-  cmsParent: cmsParentByRequestHost {
-    id
-    cmsPages {
-      id
-      ...CmsPageFields
-    }
-    cmsLayouts {
-      id
-      ...CmsPageAdminLayoutFields
-    }
-    ... on RootSite {
-      root_site_default_layout: defaultLayout {
-        id
-        ...CmsPageAdminLayoutFields
-      }
-    }
-    ... on Convention {
-      defaultLayout {
-        id
-        ...CmsPageAdminLayoutFields
-      }
-    }
-  }
-}
-    ${CmsPageFieldsFragmentDoc}
-${CmsPageAdminLayoutFieldsFragmentDoc}`;
-
-/**
- * __useCmsPagesAdminQuery__
- *
- * To run a query within a React component, call `useCmsPagesAdminQuery` and pass it any options that fit your needs.
- * When your component renders, `useCmsPagesAdminQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useCmsPagesAdminQuery({
- *   variables: {
- *   },
- * });
- */
-export function useCmsPagesAdminQuery(baseOptions?: Apollo.QueryHookOptions<CmsPagesAdminQueryData, CmsPagesAdminQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<CmsPagesAdminQueryData, CmsPagesAdminQueryVariables>(CmsPagesAdminQueryDocument, options);
-      }
-export function useCmsPagesAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CmsPagesAdminQueryData, CmsPagesAdminQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<CmsPagesAdminQueryData, CmsPagesAdminQueryVariables>(CmsPagesAdminQueryDocument, options);
-        }
-export function useCmsPagesAdminQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<CmsPagesAdminQueryData, CmsPagesAdminQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<CmsPagesAdminQueryData, CmsPagesAdminQueryVariables>(CmsPagesAdminQueryDocument, options);
-        }
-export type CmsPagesAdminQueryHookResult = ReturnType<typeof useCmsPagesAdminQuery>;
-export type CmsPagesAdminQueryLazyQueryHookResult = ReturnType<typeof useCmsPagesAdminQueryLazyQuery>;
-export type CmsPagesAdminQuerySuspenseQueryHookResult = ReturnType<typeof useCmsPagesAdminQuerySuspenseQuery>;
-export type CmsPagesAdminQueryQueryResult = Apollo.QueryResult<CmsPagesAdminQueryData, CmsPagesAdminQueryVariables>;
+export const CmsPageAdminLayoutFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CmsPageAdminLayoutFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsLayout"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]} as unknown as DocumentNode<CmsPageAdminLayoutFieldsFragment, unknown>;
+export const CmsPageFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CmsPageFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Page"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"admin_notes"}},{"kind":"Field","name":{"kind":"Name","value":"skip_clickwrap_agreement"}},{"kind":"Field","name":{"kind":"Name","value":"hidden_from_search"}},{"kind":"Field","name":{"kind":"Name","value":"current_ability_can_update"}},{"kind":"Field","name":{"kind":"Name","value":"current_ability_can_delete"}},{"kind":"Field","name":{"kind":"Name","value":"cms_layout"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"CmsPageAdminLayoutFields"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CmsPageAdminLayoutFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsLayout"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]} as unknown as DocumentNode<CmsPageFieldsFragment, unknown>;
+export const CmsPagesAdminQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CmsPagesAdminQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"convention"},"name":{"kind":"Name","value":"conventionByRequestHostIfPresent"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"currentAbility"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"can_create_pages"}}]}},{"kind":"Field","alias":{"kind":"Name","value":"cmsParent"},"name":{"kind":"Name","value":"cmsParentByRequestHost"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"cmsPages"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"CmsPageFields"}}]}},{"kind":"Field","name":{"kind":"Name","value":"cmsLayouts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"CmsPageAdminLayoutFields"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"RootSite"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"root_site_default_layout"},"name":{"kind":"Name","value":"defaultLayout"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"CmsPageAdminLayoutFields"}}]}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Convention"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"defaultLayout"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"CmsPageAdminLayoutFields"}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CmsPageAdminLayoutFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsLayout"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CmsPageFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Page"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"admin_notes"}},{"kind":"Field","name":{"kind":"Name","value":"skip_clickwrap_agreement"}},{"kind":"Field","name":{"kind":"Name","value":"hidden_from_search"}},{"kind":"Field","name":{"kind":"Name","value":"current_ability_can_update"}},{"kind":"Field","name":{"kind":"Name","value":"current_ability_can_delete"}},{"kind":"Field","name":{"kind":"Name","value":"cms_layout"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"CmsPageAdminLayoutFields"}}]}}]}}]} as unknown as DocumentNode<CmsPagesAdminQueryData, CmsPagesAdminQueryVariables>;

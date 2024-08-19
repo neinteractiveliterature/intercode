@@ -1,10 +1,7 @@
 /* eslint-disable */
 import * as Types from '../../graphqlTypes.generated';
 
-import { gql } from '@apollo/client';
-import { RunBasicSignupDataFragmentDoc, CommonConventionDataFragmentDoc } from '../queries.generated';
-import * as Apollo from '@apollo/client';
-const defaultOptions = {} as const;
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type ScheduleGridEventFragment = { __typename: 'Event', id: string, title?: string | null, length_seconds: number, short_blurb_html?: string | null, my_rating?: number | null, can_play_concurrently: boolean, form_response_attrs_json_with_rendered_markdown?: string | null, event_category: { __typename: 'EventCategory', id: string }, registration_policy?: { __typename: 'RegistrationPolicy', slots_limited?: boolean | null, only_uncounted?: boolean | null, total_slots?: number | null, total_slots_including_not_counted?: number | null, preferred_slots?: number | null, preferred_slots_including_not_counted?: number | null, minimum_slots?: number | null, minimum_slots_including_not_counted?: number | null, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, not_counted: boolean, total_slots?: number | null, slots_limited: boolean }> } | null, runs: Array<{ __typename: 'Run', id: string, starts_at: string, schedule_note?: string | null, title_suffix?: string | null, confirmed_signup_count: number, not_counted_signup_count: number, room_names: Array<string>, grouped_signup_counts: Array<{ __typename: 'GroupedSignupCount', bucket_key?: string | null, count: number, counted: boolean, state: Types.SignupState, team_member: boolean }>, my_signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: string, state: Types.SignupRequestState }>, my_signup_ranked_choices: Array<{ __typename: 'SignupRankedChoice', id: string, state: Types.SignupRankedChoiceState, priority: number }> }> };
 
 export type ScheduleGridConventionDataQueryVariables = Types.Exact<{ [key: string]: never; }>;
@@ -22,133 +19,6 @@ export type ScheduleGridEventsQueryVariables = Types.Exact<{
 
 export type ScheduleGridEventsQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, events: Array<{ __typename: 'Event', id: string, title?: string | null, length_seconds: number, short_blurb_html?: string | null, my_rating?: number | null, can_play_concurrently: boolean, form_response_attrs_json_with_rendered_markdown?: string | null, event_category: { __typename: 'EventCategory', id: string }, registration_policy?: { __typename: 'RegistrationPolicy', slots_limited?: boolean | null, only_uncounted?: boolean | null, total_slots?: number | null, total_slots_including_not_counted?: number | null, preferred_slots?: number | null, preferred_slots_including_not_counted?: number | null, minimum_slots?: number | null, minimum_slots_including_not_counted?: number | null, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, not_counted: boolean, total_slots?: number | null, slots_limited: boolean }> } | null, runs: Array<{ __typename: 'Run', id: string, starts_at: string, schedule_note?: string | null, title_suffix?: string | null, confirmed_signup_count: number, not_counted_signup_count: number, room_names: Array<string>, grouped_signup_counts: Array<{ __typename: 'GroupedSignupCount', bucket_key?: string | null, count: number, counted: boolean, state: Types.SignupState, team_member: boolean }>, my_signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: string, state: Types.SignupRequestState }>, my_signup_ranked_choices: Array<{ __typename: 'SignupRankedChoice', id: string, state: Types.SignupRankedChoiceState, priority: number }> }> }> } };
 
-export const ScheduleGridEventFragmentDoc = gql`
-    fragment ScheduleGridEventFragment on Event {
-  id
-  title
-  length_seconds
-  short_blurb_html
-  my_rating
-  can_play_concurrently
-  form_response_attrs_json_with_rendered_markdown(
-    itemIdentifiers: $fetchFormItemIdentifiers
-  )
-  event_category {
-    id
-  }
-  registration_policy {
-    slots_limited
-    only_uncounted
-    total_slots
-    total_slots_including_not_counted
-    preferred_slots
-    preferred_slots_including_not_counted
-    minimum_slots
-    minimum_slots_including_not_counted
-    buckets {
-      key
-      not_counted
-      total_slots
-      slots_limited
-    }
-  }
-  runs(start: $start, finish: $finish) {
-    id
-    starts_at
-    schedule_note
-    title_suffix
-    ...RunBasicSignupData
-    confirmed_signup_count
-    not_counted_signup_count
-    room_names
-  }
-}
-    ${RunBasicSignupDataFragmentDoc}`;
-export const ScheduleGridConventionDataQueryDocument = gql`
-    query ScheduleGridConventionDataQuery {
-  convention: conventionByRequestHost {
-    id
-    pre_schedule_content_html
-    ...CommonConventionData
-  }
-}
-    ${CommonConventionDataFragmentDoc}`;
-
-/**
- * __useScheduleGridConventionDataQuery__
- *
- * To run a query within a React component, call `useScheduleGridConventionDataQuery` and pass it any options that fit your needs.
- * When your component renders, `useScheduleGridConventionDataQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useScheduleGridConventionDataQuery({
- *   variables: {
- *   },
- * });
- */
-export function useScheduleGridConventionDataQuery(baseOptions?: Apollo.QueryHookOptions<ScheduleGridConventionDataQueryData, ScheduleGridConventionDataQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ScheduleGridConventionDataQueryData, ScheduleGridConventionDataQueryVariables>(ScheduleGridConventionDataQueryDocument, options);
-      }
-export function useScheduleGridConventionDataQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ScheduleGridConventionDataQueryData, ScheduleGridConventionDataQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ScheduleGridConventionDataQueryData, ScheduleGridConventionDataQueryVariables>(ScheduleGridConventionDataQueryDocument, options);
-        }
-export function useScheduleGridConventionDataQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ScheduleGridConventionDataQueryData, ScheduleGridConventionDataQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<ScheduleGridConventionDataQueryData, ScheduleGridConventionDataQueryVariables>(ScheduleGridConventionDataQueryDocument, options);
-        }
-export type ScheduleGridConventionDataQueryHookResult = ReturnType<typeof useScheduleGridConventionDataQuery>;
-export type ScheduleGridConventionDataQueryLazyQueryHookResult = ReturnType<typeof useScheduleGridConventionDataQueryLazyQuery>;
-export type ScheduleGridConventionDataQuerySuspenseQueryHookResult = ReturnType<typeof useScheduleGridConventionDataQuerySuspenseQuery>;
-export type ScheduleGridConventionDataQueryQueryResult = Apollo.QueryResult<ScheduleGridConventionDataQueryData, ScheduleGridConventionDataQueryVariables>;
-export const ScheduleGridEventsQueryDocument = gql`
-    query ScheduleGridEventsQuery($start: Date, $finish: Date, $filters: EventFiltersInput, $fetchFormItemIdentifiers: [String!]) {
-  convention: conventionByRequestHost {
-    id
-    events(start: $start, finish: $finish, filters: $filters) {
-      id
-      ...ScheduleGridEventFragment
-    }
-  }
-}
-    ${ScheduleGridEventFragmentDoc}`;
-
-/**
- * __useScheduleGridEventsQuery__
- *
- * To run a query within a React component, call `useScheduleGridEventsQuery` and pass it any options that fit your needs.
- * When your component renders, `useScheduleGridEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useScheduleGridEventsQuery({
- *   variables: {
- *      start: // value for 'start'
- *      finish: // value for 'finish'
- *      filters: // value for 'filters'
- *      fetchFormItemIdentifiers: // value for 'fetchFormItemIdentifiers'
- *   },
- * });
- */
-export function useScheduleGridEventsQuery(baseOptions?: Apollo.QueryHookOptions<ScheduleGridEventsQueryData, ScheduleGridEventsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ScheduleGridEventsQueryData, ScheduleGridEventsQueryVariables>(ScheduleGridEventsQueryDocument, options);
-      }
-export function useScheduleGridEventsQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ScheduleGridEventsQueryData, ScheduleGridEventsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ScheduleGridEventsQueryData, ScheduleGridEventsQueryVariables>(ScheduleGridEventsQueryDocument, options);
-        }
-export function useScheduleGridEventsQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ScheduleGridEventsQueryData, ScheduleGridEventsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<ScheduleGridEventsQueryData, ScheduleGridEventsQueryVariables>(ScheduleGridEventsQueryDocument, options);
-        }
-export type ScheduleGridEventsQueryHookResult = ReturnType<typeof useScheduleGridEventsQuery>;
-export type ScheduleGridEventsQueryLazyQueryHookResult = ReturnType<typeof useScheduleGridEventsQueryLazyQuery>;
-export type ScheduleGridEventsQuerySuspenseQueryHookResult = ReturnType<typeof useScheduleGridEventsQuerySuspenseQuery>;
-export type ScheduleGridEventsQueryQueryResult = Apollo.QueryResult<ScheduleGridEventsQueryData, ScheduleGridEventsQueryVariables>;
+export const ScheduleGridEventFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ScheduleGridEventFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Event"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"length_seconds"}},{"kind":"Field","name":{"kind":"Name","value":"short_blurb_html"}},{"kind":"Field","name":{"kind":"Name","value":"my_rating"}},{"kind":"Field","name":{"kind":"Name","value":"can_play_concurrently"}},{"kind":"Field","name":{"kind":"Name","value":"form_response_attrs_json_with_rendered_markdown"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"itemIdentifiers"},"value":{"kind":"Variable","name":{"kind":"Name","value":"fetchFormItemIdentifiers"}}}]},{"kind":"Field","name":{"kind":"Name","value":"event_category"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"registration_policy"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"slots_limited"}},{"kind":"Field","name":{"kind":"Name","value":"only_uncounted"}},{"kind":"Field","name":{"kind":"Name","value":"total_slots"}},{"kind":"Field","name":{"kind":"Name","value":"total_slots_including_not_counted"}},{"kind":"Field","name":{"kind":"Name","value":"preferred_slots"}},{"kind":"Field","name":{"kind":"Name","value":"preferred_slots_including_not_counted"}},{"kind":"Field","name":{"kind":"Name","value":"minimum_slots"}},{"kind":"Field","name":{"kind":"Name","value":"minimum_slots_including_not_counted"}},{"kind":"Field","name":{"kind":"Name","value":"buckets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"not_counted"}},{"kind":"Field","name":{"kind":"Name","value":"total_slots"}},{"kind":"Field","name":{"kind":"Name","value":"slots_limited"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"runs"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"start"},"value":{"kind":"Variable","name":{"kind":"Name","value":"start"}}},{"kind":"Argument","name":{"kind":"Name","value":"finish"},"value":{"kind":"Variable","name":{"kind":"Name","value":"finish"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"starts_at"}},{"kind":"Field","name":{"kind":"Name","value":"schedule_note"}},{"kind":"Field","name":{"kind":"Name","value":"title_suffix"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"RunBasicSignupData"}},{"kind":"Field","name":{"kind":"Name","value":"confirmed_signup_count"}},{"kind":"Field","name":{"kind":"Name","value":"not_counted_signup_count"}},{"kind":"Field","name":{"kind":"Name","value":"room_names"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"RunBasicSignupData"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Run"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"grouped_signup_counts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"bucket_key"}},{"kind":"Field","name":{"kind":"Name","value":"count"}},{"kind":"Field","name":{"kind":"Name","value":"counted"}},{"kind":"Field","name":{"kind":"Name","value":"state"}},{"kind":"Field","name":{"kind":"Name","value":"team_member"}}]}},{"kind":"Field","name":{"kind":"Name","value":"my_signups"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"state"}}]}},{"kind":"Field","name":{"kind":"Name","value":"my_signup_requests"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"state"}}]}},{"kind":"Field","name":{"kind":"Name","value":"my_signup_ranked_choices"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"state"}},{"kind":"Field","name":{"kind":"Name","value":"priority"}}]}}]}}]} as unknown as DocumentNode<ScheduleGridEventFragment, unknown>;
+export const ScheduleGridConventionDataQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"ScheduleGridConventionDataQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"convention"},"name":{"kind":"Name","value":"conventionByRequestHost"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"pre_schedule_content_html"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"CommonConventionData"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CommonFormItemFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"FormItem"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"position"}},{"kind":"Field","name":{"kind":"Name","value":"identifier"}},{"kind":"Field","name":{"kind":"Name","value":"item_type"}},{"kind":"Field","name":{"kind":"Name","value":"rendered_properties"}},{"kind":"Field","name":{"kind":"Name","value":"default_value"}},{"kind":"Field","name":{"kind":"Name","value":"visibility"}},{"kind":"Field","name":{"kind":"Name","value":"writeability"}},{"kind":"Field","name":{"kind":"Name","value":"expose_in"}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CommonConventionData"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Convention"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"starts_at"}},{"kind":"Field","name":{"kind":"Name","value":"ends_at"}},{"kind":"Field","name":{"kind":"Name","value":"signup_mode"}},{"kind":"Field","name":{"kind":"Name","value":"signup_automation_mode"}},{"kind":"Field","name":{"kind":"Name","value":"site_mode"}},{"kind":"Field","name":{"kind":"Name","value":"timezone_name"}},{"kind":"Field","name":{"kind":"Name","value":"timezone_mode"}},{"kind":"Field","name":{"kind":"Name","value":"ticket_name"}},{"kind":"Field","name":{"kind":"Name","value":"ticket_mode"}},{"kind":"Field","name":{"kind":"Name","value":"event_categories"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"scheduling_ui"}},{"kind":"Field","name":{"kind":"Name","value":"default_color"}},{"kind":"Field","name":{"kind":"Name","value":"full_color"}},{"kind":"Field","name":{"kind":"Name","value":"signed_up_color"}},{"kind":"Field","name":{"kind":"Name","value":"team_member_name"}},{"kind":"Field","name":{"kind":"Name","value":"teamMemberNamePlural"}},{"kind":"Field","name":{"kind":"Name","value":"event_form"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"form_sections"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"form_items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"public_description"}},{"kind":"Field","name":{"kind":"Name","value":"default_value"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"CommonFormItemFields"}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<ScheduleGridConventionDataQueryData, ScheduleGridConventionDataQueryVariables>;
+export const ScheduleGridEventsQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"ScheduleGridEventsQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"start"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Date"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"finish"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Date"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"filters"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"EventFiltersInput"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"fetchFormItemIdentifiers"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"convention"},"name":{"kind":"Name","value":"conventionByRequestHost"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"events"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"start"},"value":{"kind":"Variable","name":{"kind":"Name","value":"start"}}},{"kind":"Argument","name":{"kind":"Name","value":"finish"},"value":{"kind":"Variable","name":{"kind":"Name","value":"finish"}}},{"kind":"Argument","name":{"kind":"Name","value":"filters"},"value":{"kind":"Variable","name":{"kind":"Name","value":"filters"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"ScheduleGridEventFragment"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"RunBasicSignupData"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Run"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"grouped_signup_counts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"bucket_key"}},{"kind":"Field","name":{"kind":"Name","value":"count"}},{"kind":"Field","name":{"kind":"Name","value":"counted"}},{"kind":"Field","name":{"kind":"Name","value":"state"}},{"kind":"Field","name":{"kind":"Name","value":"team_member"}}]}},{"kind":"Field","name":{"kind":"Name","value":"my_signups"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"state"}}]}},{"kind":"Field","name":{"kind":"Name","value":"my_signup_requests"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"state"}}]}},{"kind":"Field","name":{"kind":"Name","value":"my_signup_ranked_choices"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"state"}},{"kind":"Field","name":{"kind":"Name","value":"priority"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ScheduleGridEventFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Event"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"length_seconds"}},{"kind":"Field","name":{"kind":"Name","value":"short_blurb_html"}},{"kind":"Field","name":{"kind":"Name","value":"my_rating"}},{"kind":"Field","name":{"kind":"Name","value":"can_play_concurrently"}},{"kind":"Field","name":{"kind":"Name","value":"form_response_attrs_json_with_rendered_markdown"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"itemIdentifiers"},"value":{"kind":"Variable","name":{"kind":"Name","value":"fetchFormItemIdentifiers"}}}]},{"kind":"Field","name":{"kind":"Name","value":"event_category"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"registration_policy"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"slots_limited"}},{"kind":"Field","name":{"kind":"Name","value":"only_uncounted"}},{"kind":"Field","name":{"kind":"Name","value":"total_slots"}},{"kind":"Field","name":{"kind":"Name","value":"total_slots_including_not_counted"}},{"kind":"Field","name":{"kind":"Name","value":"preferred_slots"}},{"kind":"Field","name":{"kind":"Name","value":"preferred_slots_including_not_counted"}},{"kind":"Field","name":{"kind":"Name","value":"minimum_slots"}},{"kind":"Field","name":{"kind":"Name","value":"minimum_slots_including_not_counted"}},{"kind":"Field","name":{"kind":"Name","value":"buckets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"not_counted"}},{"kind":"Field","name":{"kind":"Name","value":"total_slots"}},{"kind":"Field","name":{"kind":"Name","value":"slots_limited"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"runs"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"start"},"value":{"kind":"Variable","name":{"kind":"Name","value":"start"}}},{"kind":"Argument","name":{"kind":"Name","value":"finish"},"value":{"kind":"Variable","name":{"kind":"Name","value":"finish"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"starts_at"}},{"kind":"Field","name":{"kind":"Name","value":"schedule_note"}},{"kind":"Field","name":{"kind":"Name","value":"title_suffix"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"RunBasicSignupData"}},{"kind":"Field","name":{"kind":"Name","value":"confirmed_signup_count"}},{"kind":"Field","name":{"kind":"Name","value":"not_counted_signup_count"}},{"kind":"Field","name":{"kind":"Name","value":"room_names"}}]}}]}}]} as unknown as DocumentNode<ScheduleGridEventsQueryData, ScheduleGridEventsQueryVariables>;

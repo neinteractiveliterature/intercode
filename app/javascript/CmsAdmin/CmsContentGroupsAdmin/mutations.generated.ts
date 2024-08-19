@@ -1,10 +1,7 @@
 /* eslint-disable */
 import * as Types from '../../graphqlTypes.generated';
 
-import { gql } from '@apollo/client';
-import { CmsContentGroupFieldsFragmentDoc } from './queries.generated';
-import * as Apollo from '@apollo/client';
-const defaultOptions = {} as const;
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type CreateContentGroupMutationVariables = Types.Exact<{
   cmsContentGroup: Types.CmsContentGroupInput;
   permissions?: Types.InputMaybe<Array<Types.PermissionInput> | Types.PermissionInput>;
@@ -31,116 +28,6 @@ export type DeleteContentGroupMutationVariables = Types.Exact<{
 export type DeleteContentGroupMutationData = { __typename: 'Mutation', deleteCmsContentGroup: { __typename: 'DeleteCmsContentGroupPayload', clientMutationId?: string | null } };
 
 
-export const CreateContentGroupDocument = gql`
-    mutation CreateContentGroup($cmsContentGroup: CmsContentGroupInput!, $permissions: [PermissionInput!]) {
-  createCmsContentGroup(
-    input: {cms_content_group: $cmsContentGroup, permissions: $permissions}
-  ) {
-    cms_content_group {
-      id
-      ...CmsContentGroupFields
-    }
-  }
-}
-    ${CmsContentGroupFieldsFragmentDoc}`;
-export type CreateContentGroupMutationFn = Apollo.MutationFunction<CreateContentGroupMutationData, CreateContentGroupMutationVariables>;
-
-/**
- * __useCreateContentGroupMutation__
- *
- * To run a mutation, you first call `useCreateContentGroupMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateContentGroupMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createContentGroupMutation, { data, loading, error }] = useCreateContentGroupMutation({
- *   variables: {
- *      cmsContentGroup: // value for 'cmsContentGroup'
- *      permissions: // value for 'permissions'
- *   },
- * });
- */
-export function useCreateContentGroupMutation(baseOptions?: Apollo.MutationHookOptions<CreateContentGroupMutationData, CreateContentGroupMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateContentGroupMutationData, CreateContentGroupMutationVariables>(CreateContentGroupDocument, options);
-      }
-export type CreateContentGroupMutationHookResult = ReturnType<typeof useCreateContentGroupMutation>;
-export type CreateContentGroupMutationResult = Apollo.MutationResult<CreateContentGroupMutationData>;
-export type CreateContentGroupMutationOptions = Apollo.BaseMutationOptions<CreateContentGroupMutationData, CreateContentGroupMutationVariables>;
-export const UpdateContentGroupDocument = gql`
-    mutation UpdateContentGroup($id: ID!, $cmsContentGroup: CmsContentGroupInput!, $grantPermissions: [PermissionInput!], $revokePermissions: [PermissionInput!]) {
-  updateCmsContentGroup(
-    input: {id: $id, cms_content_group: $cmsContentGroup, grant_permissions: $grantPermissions, revoke_permissions: $revokePermissions}
-  ) {
-    cms_content_group {
-      id
-      ...CmsContentGroupFields
-    }
-  }
-}
-    ${CmsContentGroupFieldsFragmentDoc}`;
-export type UpdateContentGroupMutationFn = Apollo.MutationFunction<UpdateContentGroupMutationData, UpdateContentGroupMutationVariables>;
-
-/**
- * __useUpdateContentGroupMutation__
- *
- * To run a mutation, you first call `useUpdateContentGroupMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateContentGroupMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateContentGroupMutation, { data, loading, error }] = useUpdateContentGroupMutation({
- *   variables: {
- *      id: // value for 'id'
- *      cmsContentGroup: // value for 'cmsContentGroup'
- *      grantPermissions: // value for 'grantPermissions'
- *      revokePermissions: // value for 'revokePermissions'
- *   },
- * });
- */
-export function useUpdateContentGroupMutation(baseOptions?: Apollo.MutationHookOptions<UpdateContentGroupMutationData, UpdateContentGroupMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateContentGroupMutationData, UpdateContentGroupMutationVariables>(UpdateContentGroupDocument, options);
-      }
-export type UpdateContentGroupMutationHookResult = ReturnType<typeof useUpdateContentGroupMutation>;
-export type UpdateContentGroupMutationResult = Apollo.MutationResult<UpdateContentGroupMutationData>;
-export type UpdateContentGroupMutationOptions = Apollo.BaseMutationOptions<UpdateContentGroupMutationData, UpdateContentGroupMutationVariables>;
-export const DeleteContentGroupDocument = gql`
-    mutation DeleteContentGroup($id: ID!) {
-  deleteCmsContentGroup(input: {id: $id}) {
-    clientMutationId
-  }
-}
-    `;
-export type DeleteContentGroupMutationFn = Apollo.MutationFunction<DeleteContentGroupMutationData, DeleteContentGroupMutationVariables>;
-
-/**
- * __useDeleteContentGroupMutation__
- *
- * To run a mutation, you first call `useDeleteContentGroupMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteContentGroupMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteContentGroupMutation, { data, loading, error }] = useDeleteContentGroupMutation({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useDeleteContentGroupMutation(baseOptions?: Apollo.MutationHookOptions<DeleteContentGroupMutationData, DeleteContentGroupMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteContentGroupMutationData, DeleteContentGroupMutationVariables>(DeleteContentGroupDocument, options);
-      }
-export type DeleteContentGroupMutationHookResult = ReturnType<typeof useDeleteContentGroupMutation>;
-export type DeleteContentGroupMutationResult = Apollo.MutationResult<DeleteContentGroupMutationData>;
-export type DeleteContentGroupMutationOptions = Apollo.BaseMutationOptions<DeleteContentGroupMutationData, DeleteContentGroupMutationVariables>;
+export const CreateContentGroupDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateContentGroup"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"cmsContentGroup"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CmsContentGroupInput"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"permissions"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"PermissionInput"}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createCmsContentGroup"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"cms_content_group"},"value":{"kind":"Variable","name":{"kind":"Name","value":"cmsContentGroup"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"permissions"},"value":{"kind":"Variable","name":{"kind":"Name","value":"permissions"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cms_content_group"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"CmsContentGroupFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CmsContentFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsContent"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Page"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsPartial"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsLayout"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"PermissionedModelFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"PermissionedModel"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsContentGroup"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Convention"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"EventCategory"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"default_color"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"PermissionedRoleFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"PermissionedRole"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"StaffPosition"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"OrganizationRole"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CmsContentGroupFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsContentGroup"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"current_ability_can_update"}},{"kind":"Field","name":{"kind":"Name","value":"current_ability_can_delete"}},{"kind":"Field","name":{"kind":"Name","value":"contents"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CmsContentFields"}}]}},{"kind":"Field","name":{"kind":"Name","value":"permissions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"permission"}},{"kind":"Field","name":{"kind":"Name","value":"model"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PermissionedModelFields"}}]}},{"kind":"Field","name":{"kind":"Name","value":"role"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PermissionedRoleFields"}}]}}]}}]}}]} as unknown as DocumentNode<CreateContentGroupMutationData, CreateContentGroupMutationVariables>;
+export const UpdateContentGroupDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateContentGroup"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"cmsContentGroup"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CmsContentGroupInput"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"grantPermissions"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"PermissionInput"}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"revokePermissions"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"PermissionInput"}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateCmsContentGroup"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"cms_content_group"},"value":{"kind":"Variable","name":{"kind":"Name","value":"cmsContentGroup"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"grant_permissions"},"value":{"kind":"Variable","name":{"kind":"Name","value":"grantPermissions"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"revoke_permissions"},"value":{"kind":"Variable","name":{"kind":"Name","value":"revokePermissions"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cms_content_group"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"CmsContentGroupFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CmsContentFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsContent"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Page"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsPartial"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsLayout"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"PermissionedModelFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"PermissionedModel"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsContentGroup"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Convention"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"EventCategory"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"default_color"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"PermissionedRoleFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"PermissionedRole"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"StaffPosition"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"OrganizationRole"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CmsContentGroupFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsContentGroup"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"current_ability_can_update"}},{"kind":"Field","name":{"kind":"Name","value":"current_ability_can_delete"}},{"kind":"Field","name":{"kind":"Name","value":"contents"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CmsContentFields"}}]}},{"kind":"Field","name":{"kind":"Name","value":"permissions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"permission"}},{"kind":"Field","name":{"kind":"Name","value":"model"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PermissionedModelFields"}}]}},{"kind":"Field","name":{"kind":"Name","value":"role"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PermissionedRoleFields"}}]}}]}}]}}]} as unknown as DocumentNode<UpdateContentGroupMutationData, UpdateContentGroupMutationVariables>;
+export const DeleteContentGroupDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteContentGroup"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteCmsContentGroup"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"clientMutationId"}}]}}]}}]} as unknown as DocumentNode<DeleteContentGroupMutationData, DeleteContentGroupMutationVariables>;

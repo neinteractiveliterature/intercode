@@ -1,10 +1,7 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { gql } from '@apollo/client';
-import { CommonFormItemFieldsFragmentDoc, CommonFormFieldsFragmentDoc, CommonFormSectionFieldsFragmentDoc } from '../Models/commonFormFragments.generated';
-import * as Apollo from '@apollo/client';
-const defaultOptions = {} as const;
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type CommonConventionDataFragment = { __typename: 'Convention', id: string, name: string, starts_at?: string | null, ends_at?: string | null, signup_mode: Types.SignupMode, signup_automation_mode: Types.SignupAutomationMode, site_mode: Types.SiteMode, timezone_name?: string | null, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, scheduling_ui: Types.SchedulingUi, default_color?: string | null, full_color?: string | null, signed_up_color?: string | null, team_member_name: string, teamMemberNamePlural: string, event_form: { __typename: 'Form', id: string, form_sections: Array<{ __typename: 'FormSection', id: string, form_items: Array<{ __typename: 'FormItem', id: string, public_description?: string | null, default_value?: string | null, position: number, identifier?: string | null, item_type: string, rendered_properties: string, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in?: Array<Types.FormItemExposeIn> | null }> }> } }> };
 
 export type RunBasicSignupDataFragment = { __typename: 'Run', id: string, grouped_signup_counts: Array<{ __typename: 'GroupedSignupCount', bucket_key?: string | null, count: number, counted: boolean, state: Types.SignupState, team_member: boolean }>, my_signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: string, state: Types.SignupRequestState }>, my_signup_ranked_choices: Array<{ __typename: 'SignupRankedChoice', id: string, state: Types.SignupRankedChoiceState, priority: number }> };
@@ -14,105 +11,6 @@ export type CommonConventionDataQueryVariables = Types.Exact<{ [key: string]: ne
 
 export type CommonConventionDataQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, starts_at?: string | null, ends_at?: string | null, signup_mode: Types.SignupMode, signup_automation_mode: Types.SignupAutomationMode, site_mode: Types.SiteMode, timezone_name?: string | null, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, scheduling_ui: Types.SchedulingUi, default_color?: string | null, full_color?: string | null, signed_up_color?: string | null, team_member_name: string, teamMemberNamePlural: string, event_form: { __typename: 'Form', id: string, form_sections: Array<{ __typename: 'FormSection', id: string, form_items: Array<{ __typename: 'FormItem', id: string, public_description?: string | null, default_value?: string | null, position: number, identifier?: string | null, item_type: string, rendered_properties: string, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in?: Array<Types.FormItemExposeIn> | null }> }> } }> } };
 
-export const CommonConventionDataFragmentDoc = gql`
-    fragment CommonConventionData on Convention {
-  id
-  name
-  starts_at
-  ends_at
-  signup_mode
-  signup_automation_mode
-  site_mode
-  timezone_name
-  timezone_mode
-  ticket_name
-  ticket_mode
-  event_categories {
-    id
-    name
-    scheduling_ui
-    default_color
-    full_color
-    signed_up_color
-    team_member_name
-    teamMemberNamePlural
-    event_form {
-      id
-      form_sections {
-        id
-        form_items {
-          id
-          public_description
-          default_value
-          ...CommonFormItemFields
-        }
-      }
-    }
-  }
-}
-    ${CommonFormItemFieldsFragmentDoc}`;
-export const RunBasicSignupDataFragmentDoc = gql`
-    fragment RunBasicSignupData on Run {
-  id
-  grouped_signup_counts {
-    bucket_key
-    count
-    counted
-    state
-    team_member
-  }
-  my_signups {
-    id
-    state
-  }
-  my_signup_requests {
-    id
-    state
-  }
-  my_signup_ranked_choices {
-    id
-    state
-    priority
-  }
-}
-    `;
-export const CommonConventionDataQueryDocument = gql`
-    query CommonConventionDataQuery {
-  convention: conventionByRequestHost {
-    id
-    ...CommonConventionData
-  }
-}
-    ${CommonConventionDataFragmentDoc}`;
-
-/**
- * __useCommonConventionDataQuery__
- *
- * To run a query within a React component, call `useCommonConventionDataQuery` and pass it any options that fit your needs.
- * When your component renders, `useCommonConventionDataQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useCommonConventionDataQuery({
- *   variables: {
- *   },
- * });
- */
-export function useCommonConventionDataQuery(baseOptions?: Apollo.QueryHookOptions<CommonConventionDataQueryData, CommonConventionDataQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<CommonConventionDataQueryData, CommonConventionDataQueryVariables>(CommonConventionDataQueryDocument, options);
-      }
-export function useCommonConventionDataQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CommonConventionDataQueryData, CommonConventionDataQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<CommonConventionDataQueryData, CommonConventionDataQueryVariables>(CommonConventionDataQueryDocument, options);
-        }
-export function useCommonConventionDataQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<CommonConventionDataQueryData, CommonConventionDataQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<CommonConventionDataQueryData, CommonConventionDataQueryVariables>(CommonConventionDataQueryDocument, options);
-        }
-export type CommonConventionDataQueryHookResult = ReturnType<typeof useCommonConventionDataQuery>;
-export type CommonConventionDataQueryLazyQueryHookResult = ReturnType<typeof useCommonConventionDataQueryLazyQuery>;
-export type CommonConventionDataQuerySuspenseQueryHookResult = ReturnType<typeof useCommonConventionDataQuerySuspenseQuery>;
-export type CommonConventionDataQueryQueryResult = Apollo.QueryResult<CommonConventionDataQueryData, CommonConventionDataQueryVariables>;
+export const CommonConventionDataFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CommonConventionData"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Convention"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"starts_at"}},{"kind":"Field","name":{"kind":"Name","value":"ends_at"}},{"kind":"Field","name":{"kind":"Name","value":"signup_mode"}},{"kind":"Field","name":{"kind":"Name","value":"signup_automation_mode"}},{"kind":"Field","name":{"kind":"Name","value":"site_mode"}},{"kind":"Field","name":{"kind":"Name","value":"timezone_name"}},{"kind":"Field","name":{"kind":"Name","value":"timezone_mode"}},{"kind":"Field","name":{"kind":"Name","value":"ticket_name"}},{"kind":"Field","name":{"kind":"Name","value":"ticket_mode"}},{"kind":"Field","name":{"kind":"Name","value":"event_categories"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"scheduling_ui"}},{"kind":"Field","name":{"kind":"Name","value":"default_color"}},{"kind":"Field","name":{"kind":"Name","value":"full_color"}},{"kind":"Field","name":{"kind":"Name","value":"signed_up_color"}},{"kind":"Field","name":{"kind":"Name","value":"team_member_name"}},{"kind":"Field","name":{"kind":"Name","value":"teamMemberNamePlural"}},{"kind":"Field","name":{"kind":"Name","value":"event_form"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"form_sections"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"form_items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"public_description"}},{"kind":"Field","name":{"kind":"Name","value":"default_value"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"CommonFormItemFields"}}]}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CommonFormItemFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"FormItem"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"position"}},{"kind":"Field","name":{"kind":"Name","value":"identifier"}},{"kind":"Field","name":{"kind":"Name","value":"item_type"}},{"kind":"Field","name":{"kind":"Name","value":"rendered_properties"}},{"kind":"Field","name":{"kind":"Name","value":"default_value"}},{"kind":"Field","name":{"kind":"Name","value":"visibility"}},{"kind":"Field","name":{"kind":"Name","value":"writeability"}},{"kind":"Field","name":{"kind":"Name","value":"expose_in"}}]}}]} as unknown as DocumentNode<CommonConventionDataFragment, unknown>;
+export const RunBasicSignupDataFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"RunBasicSignupData"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Run"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"grouped_signup_counts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"bucket_key"}},{"kind":"Field","name":{"kind":"Name","value":"count"}},{"kind":"Field","name":{"kind":"Name","value":"counted"}},{"kind":"Field","name":{"kind":"Name","value":"state"}},{"kind":"Field","name":{"kind":"Name","value":"team_member"}}]}},{"kind":"Field","name":{"kind":"Name","value":"my_signups"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"state"}}]}},{"kind":"Field","name":{"kind":"Name","value":"my_signup_requests"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"state"}}]}},{"kind":"Field","name":{"kind":"Name","value":"my_signup_ranked_choices"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"state"}},{"kind":"Field","name":{"kind":"Name","value":"priority"}}]}}]}}]} as unknown as DocumentNode<RunBasicSignupDataFragment, unknown>;
+export const CommonConventionDataQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CommonConventionDataQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"convention"},"name":{"kind":"Name","value":"conventionByRequestHost"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"CommonConventionData"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CommonFormItemFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"FormItem"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"position"}},{"kind":"Field","name":{"kind":"Name","value":"identifier"}},{"kind":"Field","name":{"kind":"Name","value":"item_type"}},{"kind":"Field","name":{"kind":"Name","value":"rendered_properties"}},{"kind":"Field","name":{"kind":"Name","value":"default_value"}},{"kind":"Field","name":{"kind":"Name","value":"visibility"}},{"kind":"Field","name":{"kind":"Name","value":"writeability"}},{"kind":"Field","name":{"kind":"Name","value":"expose_in"}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CommonConventionData"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Convention"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"starts_at"}},{"kind":"Field","name":{"kind":"Name","value":"ends_at"}},{"kind":"Field","name":{"kind":"Name","value":"signup_mode"}},{"kind":"Field","name":{"kind":"Name","value":"signup_automation_mode"}},{"kind":"Field","name":{"kind":"Name","value":"site_mode"}},{"kind":"Field","name":{"kind":"Name","value":"timezone_name"}},{"kind":"Field","name":{"kind":"Name","value":"timezone_mode"}},{"kind":"Field","name":{"kind":"Name","value":"ticket_name"}},{"kind":"Field","name":{"kind":"Name","value":"ticket_mode"}},{"kind":"Field","name":{"kind":"Name","value":"event_categories"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"scheduling_ui"}},{"kind":"Field","name":{"kind":"Name","value":"default_color"}},{"kind":"Field","name":{"kind":"Name","value":"full_color"}},{"kind":"Field","name":{"kind":"Name","value":"signed_up_color"}},{"kind":"Field","name":{"kind":"Name","value":"team_member_name"}},{"kind":"Field","name":{"kind":"Name","value":"teamMemberNamePlural"}},{"kind":"Field","name":{"kind":"Name","value":"event_form"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"form_sections"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"form_items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"public_description"}},{"kind":"Field","name":{"kind":"Name","value":"default_value"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"CommonFormItemFields"}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<CommonConventionDataQueryData, CommonConventionDataQueryVariables>;
