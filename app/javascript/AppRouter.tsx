@@ -41,6 +41,8 @@ import { liquidDocsLoader } from './LiquidDocs/loader';
 import { cmsLayoutsAdminLoader } from './CmsAdmin/CmsLayoutsAdmin/loaders';
 import { cmsGraphqlQueriesAdminLoader } from './CmsAdmin/CmsGraphqlQueriesAdmin/loaders';
 import { cmsContentGroupsAdminLoader } from './CmsAdmin/CmsContentGroupsAdmin/loaders';
+import { departmentAdminLoader } from './DepartmentAdmin/loaders';
+import { eventCategoryAdminLoader } from './EventCategoryAdmin/loaders';
 
 export enum NamedRoute {
   AdminUserConProfile = 'AdminUserConProfile',
@@ -81,6 +83,11 @@ export enum NamedRoute {
   CmsLayoutsAdmin = 'CmsLayoutsAdmin',
   CmsGraphqlQueriesAdmin = 'CmsGraphqlQueriesAdmin',
   CmsContentGroupsAdmin = 'CmsContentGroupsAdmin',
+  DepartmentAdmin = 'DepartmentAdmin',
+  EventCategoryAdmin = 'EventCategoryAdmin',
+  NewEventCategory = 'NewEventCategory',
+  EditEventCategory = 'EditEventCategory',
+  EventCategoryIndex = 'EventCategoryIndex',
 }
 
 export type RouteName = keyof typeof NamedRoute & string;
@@ -397,6 +404,8 @@ const commonInConventionRoutes: RouteObject[] = [
   {
     path: '/admin_departments',
     element: <AuthorizationRequiredRouteGuard abilities={['can_update_departments']} />,
+    id: NamedRoute.DepartmentAdmin,
+    loader: departmentAdminLoader,
     children: [
       { path: ':id/edit', lazy: () => import('./DepartmentAdmin/EditDepartment') },
       { path: 'new', lazy: () => import('./DepartmentAdmin/NewDepartment') },
@@ -659,12 +668,27 @@ const conventionModeRoutes: RouteObject[] = [
     ],
   },
   {
-    path: '/event_categories',
-    lazy: () => import('./EventCategoryAdmin'),
+    element: <AuthorizationRequiredRouteGuard abilities={['can_update_event_categories']} />,
     children: [
-      { path: 'new', lazy: () => import('./EventCategoryAdmin/NewEventCategory') },
-      { path: ':id/edit', lazy: () => import('./EventCategoryAdmin/EditEventCategory') },
-      { index: true, lazy: () => import('./EventCategoryAdmin/EventCategoryIndex') },
+      {
+        path: '/event_categories',
+        lazy: () => import('./EventCategoryAdmin'),
+        id: NamedRoute.EventCategoryAdmin,
+        loader: eventCategoryAdminLoader,
+        children: [
+          { path: 'new', id: NamedRoute.NewEventCategory, lazy: () => import('./EventCategoryAdmin/NewEventCategory') },
+          {
+            path: ':id/edit',
+            id: NamedRoute.EditEventCategory,
+            lazy: () => import('./EventCategoryAdmin/EditEventCategory'),
+          },
+          {
+            index: true,
+            id: NamedRoute.EventCategoryIndex,
+            lazy: () => import('./EventCategoryAdmin/EventCategoryIndex'),
+          },
+        ],
+      },
     ],
   },
   { path: '/event_proposals/:id/edit', lazy: () => import('./EventProposals/EditEventProposal') },

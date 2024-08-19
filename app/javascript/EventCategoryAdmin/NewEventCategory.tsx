@@ -1,19 +1,17 @@
 import { useState } from 'react';
 import { ApolloError } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
-import {
-  ErrorDisplay,
-  LoadQueryWrapper,
-  useCreateMutationWithReferenceArrayUpdater,
-} from '@neinteractiveliterature/litform';
+import { ErrorDisplay, useCreateMutationWithReferenceArrayUpdater } from '@neinteractiveliterature/litform';
 
 import buildEventCategoryInput from './buildEventCategoryInput';
 import EventCategoryForm, { EventCategoryForForm } from './EventCategoryForm';
 import usePageTitle from '../usePageTitle';
-import { EventCategoryFieldsFragmentDoc, useEventCategoryAdminQuery } from './queries.generated';
+import { EventCategoryFieldsFragmentDoc } from './queries.generated';
 import { useCreateEventCategoryMutation } from './mutations.generated';
+import { useEventCategoryAdminLoader } from './loaders';
 
-export default LoadQueryWrapper(useEventCategoryAdminQuery, function NewEventCategory({ data }): JSX.Element {
+function NewEventCategory(): JSX.Element {
+  const data = useEventCategoryAdminLoader();
   const navigate = useNavigate();
   const [create, { error: createError, loading: createInProgress }] = useCreateMutationWithReferenceArrayUpdater(
     useCreateEventCategoryMutation,
@@ -68,4 +66,6 @@ export default LoadQueryWrapper(useEventCategoryAdminQuery, function NewEventCat
       </button>
     </>
   );
-});
+}
+
+export const Component = NewEventCategory;

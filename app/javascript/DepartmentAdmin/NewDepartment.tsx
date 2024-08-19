@@ -4,11 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import usePageTitle from '../usePageTitle';
 import buildDepartmentInput from './buildDepartmentInput';
 import DepartmentForm, { DepartmentFormProps } from './DepartmentForm';
-import { AdminDepartmentFieldsFragmentDoc, useDepartmentAdminQuery } from './queries.generated';
-import { LoadQueryWrapper, useCreateMutationWithReferenceArrayUpdater } from '@neinteractiveliterature/litform/dist';
+import { AdminDepartmentFieldsFragmentDoc } from './queries.generated';
+import { useCreateMutationWithReferenceArrayUpdater } from '@neinteractiveliterature/litform/dist';
 import { useCreateDepartmentMutation } from './mutations.generated';
+import { useDepartmentAdminLoader } from './loaders';
 
-export default LoadQueryWrapper(useDepartmentAdminQuery, function NewDepartment({ data }): JSX.Element {
+function NewDepartment(): JSX.Element {
+  const data = useDepartmentAdminLoader();
   const [createDepartment] = useCreateMutationWithReferenceArrayUpdater(
     useCreateDepartmentMutation,
     data.convention,
@@ -39,4 +41,6 @@ export default LoadQueryWrapper(useDepartmentAdminQuery, function NewDepartment(
       <DepartmentForm initialDepartment={{ name: '', proposal_description: '' }} onSave={onSave} />
     </>
   );
-});
+}
+
+export const Component = NewDepartment;
