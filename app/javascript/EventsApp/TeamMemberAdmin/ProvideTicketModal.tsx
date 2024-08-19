@@ -1,144 +1,100 @@
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
-import { ApolloError } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
-import { ErrorDisplay } from '@neinteractiveliterature/litform';
 import capitalize from 'lodash/capitalize';
 
 import { getProvidableTicketTypes } from './ProvideTicketUtils';
 import ProvidableTicketTypeSelection from './ProvidableTicketTypeSelection';
 import TicketingStatusDescription from './TicketingStatusDescription';
-import useAsyncFunction from '../../useAsyncFunction';
-import { TeamMembersQueryData, TeamMembersQueryDocument, TeamMembersQueryVariables } from './queries.generated';
-import { ProvideEventTicketMutationVariables, useProvideEventTicketMutation } from './mutations.generated';
+import { ActionFunction, Form, redirect, useLoaderData, useNavigate, useNavigation, useParams } from 'react-router-dom';
+import { singleTeamMemberLoader, SingleTeamMemberLoaderResult } from './loader';
+import { client } from '../../useIntercodeApolloClient';
+import { ProvideEventTicketDocument } from './mutations.generated';
+import { TeamMembersQueryDocument } from './queries.generated';
 
-export type ProvideTicketModalProps = {
-  event: TeamMembersQueryData['convention']['event'];
-  convention: NonNullable<TeamMembersQueryData['convention']>;
-  onClose: () => void;
-  teamMember?: TeamMembersQueryData['convention']['event']['team_members'][0];
-  visible: boolean;
+export const loader = singleTeamMemberLoader;
+
+export const action: ActionFunction = async ({ params: { eventId }, request }) => {
+  const formData = await request.formData();
+  await client.mutate({
+    mutation: ProvideEventTicketDocument,
+    variables: {
+      eventId,
+      userConProfileId: formData.get('userConProfileId'),
+      ticketTypeId: formData.get('ticketTypeId'),
+    },
+    refetchQueries: [{ query: TeamMembersQueryDocument, variables: { eventId: eventId } }],
+    awaitRefetchQueries: true,
+  });
+  return redirect(`/events/${eventId}/team_members`);
 };
 
-function ProvideTicketModal({ event, convention, onClose, teamMember, visible }: ProvideTicketModalProps): JSX.Element {
+function ProvideTicketModal(): JSX.Element {
+  const { data, teamMember } = useLoaderData() as SingleTeamMemberLoaderResult;
   const { t } = useTranslation();
   const [ticketTypeId, setTicketTypeId] = useState<string>();
-  const [provideTicketMutate] = useProvideEventTicketMutation();
-  const [provideTicketAsync, error, mutationInProgress] = useAsyncFunction(provideTicketMutate);
+  const navigation = useNavigation();
+  const navigate = useNavigate();
+  const { eventId } = useParams();
 
-  const provideTicket = useCallback(
-    (args: { variables: ProvideEventTicketMutationVariables }) =>
-      provideTicketAsync({
-        ...args,
-        update: (store, result) => {
-          const data = store.readQuery<TeamMembersQueryData, TeamMembersQueryVariables>({
-            query: TeamMembersQueryDocument,
-            variables: { eventId: event.id },
-          });
-          const ticket = result.data?.provideEventTicket?.ticket;
-          if (!data || !ticket) {
-            return;
-          }
+  const { convention } = data;
 
-          store.writeQuery<TeamMembersQueryData>({
-            query: TeamMembersQueryDocument,
-            variables: { eventId: event.id },
-            data: {
-              ...data,
-              convention: {
-                ...data.convention,
-                event: {
-                  ...data.convention.event,
-                  provided_tickets: [...data.convention.event.provided_tickets, ticket],
-                  team_members: data.convention.event.team_members.map((tm) => {
-                    if (tm.id !== teamMember?.id) {
-                      return tm;
-                    }
-
-                    return {
-                      ...tm,
-                      user_con_profile: {
-                        ...tm.user_con_profile,
-                        ticket,
-                      },
-                    };
-                  }),
-                },
-              },
-            },
-          });
-        },
-      }),
-    [event, provideTicketAsync, teamMember],
-  );
-
-  const provideTicketClicked = async () => {
-    if (!teamMember || !ticketTypeId) {
-      return;
-    }
-
-    await provideTicket({
-      variables: {
-        eventId: event.id,
-        userConProfileId: teamMember.user_con_profile.id,
-        ticketTypeId,
-      },
-    });
-    onClose();
-  };
-
-  if (getProvidableTicketTypes(convention).length < 1) {
+  if (getProvidableTicketTypes(data.convention).length < 1) {
     return <></>;
   }
 
+  const mutationInProgress = navigation.state === 'submitting';
+  const onClose = () => {
+    navigate(`/events/${eventId}/team_members`);
+  };
+
   return (
-    <Modal visible={visible}>
-      <div className="modal-header">{capitalize(convention.ticketNamePlural)}</div>
-      <div className="modal-body">
-        {teamMember ? (
-          <>
-            <p>
-              <TicketingStatusDescription userConProfile={teamMember.user_con_profile} convention={convention} />
-            </p>
+    <Modal visible>
+      <Form action="." method="POST">
+        <div className="modal-header">{capitalize(convention.ticketNamePlural)}</div>
+        <div className="modal-body">
+          {teamMember ? (
+            <>
+              <input type="hidden" name="userConProfileId" value={teamMember.user_con_profile.id} />
 
-            {teamMember && !teamMember.user_con_profile.ticket ? (
-              <ProvidableTicketTypeSelection
-                convention={convention}
-                value={ticketTypeId}
-                onChange={setTicketTypeId}
-                disabled={mutationInProgress}
-              />
-            ) : null}
-          </>
-        ) : null}
+              <p>
+                <TicketingStatusDescription userConProfile={teamMember.user_con_profile} convention={convention} />
+              </p>
 
-        <ErrorDisplay graphQLError={error as ApolloError} />
-      </div>
-      <div className="modal-footer">
-        {teamMember && teamMember.user_con_profile.ticket ? (
-          <button type="button" className="btn btn-primary" onClick={onClose}>
-            {t('buttons.ok')}
-          </button>
-        ) : (
-          <>
-            <button type="button" className="btn btn-secondary" onClick={onClose} disabled={mutationInProgress}>
-              {t('buttons.cancel')}
+              {teamMember && !teamMember.user_con_profile.ticket ? (
+                <ProvidableTicketTypeSelection
+                  convention={convention}
+                  value={ticketTypeId}
+                  onChange={setTicketTypeId}
+                  disabled={mutationInProgress}
+                />
+              ) : null}
+            </>
+          ) : null}
+
+          {/* <ErrorDisplay graphQLError={error as ApolloError} /> */}
+        </div>
+        <div className="modal-footer">
+          {teamMember && teamMember.user_con_profile.ticket ? (
+            <button type="button" className="btn btn-primary" onClick={onClose}>
+              {t('buttons.ok')}
             </button>
-            <button
-              type="button"
-              className="btn btn-primary"
-              disabled={ticketTypeId == null || mutationInProgress}
-              onClick={provideTicketClicked}
-            >
-              {t('events.teamMemberAdmin.provideTicketButton', {
-                ticketName: convention.ticket_name,
-              })}
-            </button>
-          </>
-        )}
-      </div>
+          ) : (
+            <>
+              <button type="button" className="btn btn-secondary" onClick={onClose} disabled={mutationInProgress}>
+                {t('buttons.cancel')}
+              </button>
+              <button type="submit" className="btn btn-primary" disabled={ticketTypeId == null || mutationInProgress}>
+                {t('events.teamMemberAdmin.provideTicketButton', {
+                  ticketName: convention.ticket_name,
+                })}
+              </button>
+            </>
+          )}
+        </div>
+      </Form>
     </Modal>
   );
 }
 
-export default ProvideTicketModal;
+export const Component = ProvideTicketModal;

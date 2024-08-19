@@ -1,21 +1,13 @@
 import { useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Outlet, useNavigate, useSubmit } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import {
-  useModal,
-  ErrorDisplay,
-  useConfirm,
-  sortByLocaleString,
-  useDeleteMutationWithReferenceArrayUpdater,
-} from '@neinteractiveliterature/litform';
+import { ErrorDisplay, useConfirm, sortByLocaleString } from '@neinteractiveliterature/litform';
 import capitalize from 'lodash/capitalize';
 
 import Checkmark from './Checkmark';
-import ProvideTicketModal from './ProvideTicketModal';
 import usePageTitle from '../../usePageTitle';
 import { TeamMembersQueryData } from './queries.generated';
 import { DropdownMenu } from '../../UIComponents/DropdownMenu';
-import { useDeleteTeamMemberMutation } from './mutations.generated';
 import humanize from '../../humanize';
 import buildEventUrl from '../buildEventUrl';
 import { useTeamMembersLoader } from './loader';
@@ -41,12 +33,7 @@ function TeamMemberActionMenu({
 }: TeamMemberActionMenuProps) {
   const { t } = useTranslation();
   const confirm = useConfirm();
-  const [deleteTeamMember] = useDeleteMutationWithReferenceArrayUpdater(
-    useDeleteTeamMemberMutation,
-    event,
-    'team_members',
-    (teamMember) => ({ input: { id: teamMember.id } }),
-  );
+  const submit = useSubmit();
 
   return (
     <DropdownMenu
@@ -81,7 +68,7 @@ function TeamMemberActionMenu({
                 name: teamMember.user_con_profile.name_without_nickname,
                 teamMemberName: event.event_category.team_member_name,
               }),
-              action: () => deleteTeamMember(teamMember),
+              action: () => submit({}, { action: teamMember.id, method: 'DELETE' }),
               renderError: (error) => <ErrorDisplay graphQLError={error} />,
             })
           }
@@ -98,7 +85,7 @@ function TeamMemberActionMenu({
 function TeamMembersIndex(): JSX.Element {
   const data = useTeamMembersLoader();
   const { t } = useTranslation();
-  const modal = useModal<{ teamMember: TeamMembersQueryData['convention']['event']['team_members'][0] }>();
+  const navigate = useNavigate();
 
   const titleizedTeamMemberName = useMemo(
     () => capitalize(data.convention.event.event_category.teamMemberNamePlural),
@@ -175,7 +162,7 @@ function TeamMembersIndex(): JSX.Element {
                       event={event}
                       convention={convention}
                       teamMember={teamMember}
-                      openProvideTicketModal={() => modal.open({ teamMember })}
+                      openProvideTicketModal={() => navigate(`${teamMember.id}/provide_ticket`)}
                       eventPath={buildEventUrl(event)}
                     />
                   </td>
@@ -192,13 +179,7 @@ function TeamMembersIndex(): JSX.Element {
           })}
         </Link>
       </p>
-      <ProvideTicketModal
-        visible={modal.visible}
-        onClose={modal.close}
-        event={event}
-        convention={convention}
-        teamMember={modal.state?.teamMember}
-      />
+      <Outlet />
     </>
   );
 }

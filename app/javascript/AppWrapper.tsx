@@ -1,6 +1,6 @@
 import { Suspense, useCallback, useRef, useEffect, ReactNode, useState, useMemo } from 'react';
 import * as React from 'react';
-import { ApolloProvider, DataProxy } from '@apollo/client';
+import { DataProxy } from '@apollo/client';
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
 import { i18n } from 'i18next';
 import { I18nextProvider } from 'react-i18next';
@@ -21,7 +21,6 @@ import AuthenticationModalContext, {
 } from './Authentication/AuthenticationModalContext';
 import AuthenticationModal from './Authentication/AuthenticationModal';
 import AuthenticityTokensManager, { useInitializeAuthenticityTokens } from './AuthenticityTokensContext';
-import { client } from './useIntercodeApolloClient';
 import MapboxContext, { useMapboxContext } from './MapboxContext';
 import getI18n from './setupI18Next';
 import RailsDirectUploadsContext from './RailsDirectUploadsContext';
@@ -49,7 +48,7 @@ function I18NextWrapper({ children }: { children: (i18nInstance: i18n) => ReactN
 }
 
 function ProviderStack(props: AppWrapperProps) {
-  const { authenticityTokens, mapboxAccessToken, recaptchaSiteKey, queryData } = props;
+  const { authenticityTokens, mapboxAccessToken, recaptchaSiteKey } = props;
   // TODO bring this back when we re-add prompting
   // const confirm = useConfirm();
   useInitializeAuthenticityTokens(authenticityTokens);
@@ -70,13 +69,13 @@ function ProviderStack(props: AppWrapperProps) {
   }, [openSignIn]);
   const mapboxContextValue = useMapboxContext({ mapboxAccessToken });
 
-  useEffect(() => {
-    if (queryData && Array.isArray(queryData)) {
-      for (const query of queryData) {
-        client.writeQuery(query);
-      }
-    }
-  }, [queryData]);
+  // useEffect(() => {
+  //   if (queryData && Array.isArray(queryData)) {
+  //     for (const query of queryData) {
+  //       client.writeQuery(query);
+  //     }
+  //   }
+  // }, [queryData]);
 
   const railsDirectUploadsContextValue = useMemo(
     () => ({
@@ -91,28 +90,26 @@ function ProviderStack(props: AppWrapperProps) {
       {/* TODO bring this back when we re-add prompting getUserConfirmation={getUserConfirmation}> */}
       <RailsDirectUploadsContext.Provider value={railsDirectUploadsContextValue}>
         <MapboxContext.Provider value={mapboxContextValue}>
-          <ApolloProvider client={client}>
-            <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
-              <>
-                {!unauthenticatedError && (
-                  <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
-                    <I18NextWrapper>
-                      {(i18nInstance) => (
-                        <AlertProvider okText={i18nInstance.t('buttons.ok', 'OK')}>
-                          <ToastProvider>
-                            <ErrorBoundary placement="replace" errorType="plain">
-                              <Outlet />
-                            </ErrorBoundary>
-                          </ToastProvider>
-                        </AlertProvider>
-                      )}
-                    </I18NextWrapper>
-                  </Suspense>
-                )}
-                <AuthenticationModal />
-              </>
-            </AuthenticationModalContext.Provider>
-          </ApolloProvider>
+          <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
+            <>
+              {!unauthenticatedError && (
+                <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
+                  <I18NextWrapper>
+                    {(i18nInstance) => (
+                      <AlertProvider okText={i18nInstance.t('buttons.ok', 'OK')}>
+                        <ToastProvider>
+                          <ErrorBoundary placement="replace" errorType="plain">
+                            <Outlet />
+                          </ErrorBoundary>
+                        </ToastProvider>
+                      </AlertProvider>
+                    )}
+                  </I18NextWrapper>
+                </Suspense>
+              )}
+              <AuthenticationModal />
+            </>
+          </AuthenticationModalContext.Provider>
         </MapboxContext.Provider>
       </RailsDirectUploadsContext.Provider>
     </HelmetProvider>

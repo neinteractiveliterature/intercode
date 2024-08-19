@@ -8,8 +8,9 @@ import {
   redirect,
   useNavigation,
   useNavigate,
+  useRouteError,
 } from 'react-router-dom';
-import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
+import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 import { useTranslation } from 'react-i18next';
 
 import { reloadOnAppEntrypointHeadersMismatch } from './checkAppEntrypointHeadersMatch';
@@ -17,8 +18,8 @@ import FourOhFourPage from './FourOhFourPage';
 import { SignupAutomationMode, SignupMode, SiteMode, TicketMode } from './graphqlTypes.generated';
 import AppRootContext, { AppRootContextValue } from './AppRootContext';
 import useAuthorizationRequired, { AbilityName } from './Authentication/useAuthorizationRequired';
-import { EventAdminEventsQueryData, EventAdminEventsQueryDocument } from './EventAdmin/queries.generated';
-import { client, preloadQuery } from './useIntercodeApolloClient';
+import { EventAdminEventsQueryDocument } from './EventAdmin/queries.generated';
+import { client } from './useIntercodeApolloClient';
 import buildEventCategoryUrl from './EventAdmin/buildEventCategoryUrl';
 import {
   adminSingleTicketTypeLoader,
@@ -35,8 +36,8 @@ import { teamMembersLoader } from './EventsApp/TeamMemberAdmin/loader';
 import { cmsAdminBaseQueryLoader } from './CmsAdmin/loaders';
 import { cmsPagesAdminLoader } from './CmsAdmin/CmsPagesAdmin/loaders';
 import { cmsPartialsAdminLoader } from './CmsAdmin/CmsPartialsAdmin/loaders';
-import AppRoot, { AppRootLayoutContent } from './AppRoot';
-import { AppRootQueryData, AppRootQueryDocument, AppRootQueryVariables } from './appRootQueries.generated';
+import AppRoot from './AppRoot';
+import { AppRootQueryDocument } from './appRootQueries.generated';
 import { liquidDocsLoader } from './LiquidDocs/loader';
 import { cmsLayoutsAdminLoader } from './CmsAdmin/CmsLayoutsAdmin/loaders';
 import { cmsGraphqlQueriesAdminLoader } from './CmsAdmin/CmsGraphqlQueriesAdmin/loaders';
@@ -128,7 +129,7 @@ function AuthorizationRequiredRouteGuard({ abilities }: AuthorizationRequiredRou
 }
 
 const eventAdminRootRedirect: LoaderFunction = async () => {
-  const { data } = await client.query<EventAdminEventsQueryData>({ query: EventAdminEventsQueryDocument });
+  const { data } = await client.query({ query: EventAdminEventsQueryDocument });
   if (!data.convention) {
     return new Response(null, { status: 404 });
   }
@@ -170,6 +171,18 @@ function EditEventGuard() {
     return <></>;
   } else {
     return <LoginRequiredRouteGuard />;
+  }
+}
+
+function RouteErrorBoundary() {
+  const error = useRouteError();
+
+  if (error instanceof Error) {
+    return <ErrorDisplay stringError={error.message} />;
+  } else if (typeof error === 'object' && error) {
+    return <ErrorDisplay stringError={error.toString()} />;
+  } else {
+    return <ErrorDisplay stringError={error as string} />;
   }
 }
 
@@ -248,9 +261,15 @@ const eventsRoutes: RouteObject[] = [
             lazy: () => import('./EventsApp/TeamMemberAdmin/EditTeamMember'),
           },
           {
-            index: true,
+            path: '',
             id: NamedRoute.TeamMembersIndex,
             lazy: () => import('./EventsApp/TeamMemberAdmin/TeamMembersIndex'),
+            children: [
+              {
+                path: ':teamMemberId/provide_ticket',
+                lazy: () => import('./EventsApp/TeamMemberAdmin/ProvideTicketModal'),
+              },
+            ],
           },
         ],
       },
@@ -790,7 +809,11 @@ export const appLayoutRoutes: RouteObject[] = [
 export const appRootRoutes: RouteObject[] = [
   {
     element: <AppRoot />,
-    loader: () => preloadQuery<AppRootQueryData, AppRootQueryVariables>(AppRootQueryDocument),
+    errorElement: <RouteErrorBoundary />,
+    loader: async () => {
+      const { data } = await client.query({ query: AppRootQueryDocument });
+      return data;
+    },
     children: [
       {
         path: '/admin_forms/:id/edit',
@@ -812,8 +835,8 @@ export const appRootRoutes: RouteObject[] = [
         ],
       },
       {
-        element: <AppRootLayoutContent />,
-        children: appLayoutRoutes,
+        lazy: () => import('./AppRootLayout'),
+        children: [{ errorElement: <RouteErrorBoundary />, children: appLayoutRoutes }],
       },
     ],
   },

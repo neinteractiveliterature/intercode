@@ -3,7 +3,6 @@ import { components, DropdownIndicatorProps, GroupBase, MenuProps } from 'react-
 import AsyncSelect from 'react-select/async';
 import debounce from 'debounce-promise';
 import { useNavigate } from 'react-router-dom';
-import { useApolloClient } from '@apollo/client';
 import { CSSTransition } from 'react-transition-group';
 import { Search, ExactWordIndexStrategy, StemmingTokenizer, SimpleTokenizer } from 'js-search';
 import { stemmer } from 'porter-stemmer';
@@ -11,11 +10,12 @@ import { v4 as uuidv4 } from 'uuid';
 import { useTranslation } from 'react-i18next';
 
 import buildEventUrl from '../EventsApp/buildEventUrl';
-import { SiteSearchQueryDocument, SiteSearchQueryData, SiteSearchQueryVariables } from './siteSearchQueries.generated';
+import { SiteSearchQueryDocument, SiteSearchQueryData } from './siteSearchQueries.generated';
 import { useAdminNavigationItems } from './AdminNavigationSection';
 import { useEventsNavigationItems } from './EventsNavigationSection';
 import { GeneratedNavigationItem } from './GeneratedNavigationSection';
-import Select from 'react-select/dist/declarations/src/Select';
+import { SelectInstance } from 'react-select';
+import { client } from '../useIntercodeApolloClient';
 
 type NavigationItemSearchDocument = GeneratedNavigationItem & {
   id: string;
@@ -95,7 +95,6 @@ export type SiteSearchProps = {
 
 function SiteSearch({ visible, setVisible, visibilityChangeComplete }: SiteSearchProps): JSX.Element {
   const navigate = useNavigate();
-  const apolloClient = useApolloClient();
   const [inputValue, setInputValue] = useState('');
   const [value, setValue] = useState(null);
   const adminNavigationItems = useAdminNavigationItems();
@@ -123,11 +122,7 @@ function SiteSearch({ visible, setVisible, visibilityChangeComplete }: SiteSearc
     () =>
       debounce(
         async (query: string) => {
-          const { data } = await apolloClient.query<SiteSearchQueryData, SiteSearchQueryVariables>({
-            query: SiteSearchQueryDocument,
-            variables: { query },
-            fetchPolicy: 'no-cache',
-          });
+          const { data } = await client.query({ query: SiteSearchQueryDocument, variables: { query } });
           const navigationItemsResult = (navigationItemsSearchIndex.search(query) as typeof navigationItemsWithId).map(
             (navigationItem) => ({
               title: navigationItem.label,
@@ -143,10 +138,10 @@ function SiteSearch({ visible, setVisible, visibilityChangeComplete }: SiteSearc
         200,
         { leading: false },
       ),
-    [apolloClient, navigationItemsSearchIndex],
+    [navigationItemsSearchIndex],
   );
 
-  const selectRef = useRef<Select<SiteSearchOptionType>>(null);
+  const selectRef = useRef<SelectInstance<SiteSearchOptionType>>(null);
 
   const keyDownListener = useCallback(
     (event: KeyboardEvent) => {
@@ -255,7 +250,6 @@ function SiteSearch({ visible, setVisible, visibilityChangeComplete }: SiteSearc
                 WebkitLineClamp: 2,
                 overflow: 'hidden',
               }}
-               
               dangerouslySetInnerHTML={{ __html: entry.highlight ?? '' }}
             />
           </>

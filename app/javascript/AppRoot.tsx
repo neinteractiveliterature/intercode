@@ -1,43 +1,17 @@
-import { Suspense, useMemo, useState, useEffect } from 'react';
-import { useLocation, useNavigate, useLoaderData, Outlet } from 'react-router-dom';
+import { Suspense, useMemo, useState, useEffect, useContext } from 'react';
+import { useLocation, useNavigate, useLoaderData, Outlet, ScrollRestoration } from 'react-router-dom';
 import { Settings } from 'luxon';
-import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
+import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
-import { AppRootLayoutQueryDocument, AppRootQueryData, AppRootQueryVariables } from './appRootQueries.generated';
+import { AppRootQueryData } from './appRootQueries.generated';
 import AppRootContext, { AppRootContextValue } from './AppRootContext';
-import parseCmsContent, { CMS_COMPONENT_MAP } from './parseCmsContent';
 import { timezoneNameForConvention } from './TimeUtils';
 import getI18n from './setupI18Next';
-import { lazyWithAppEntrypointHeadersCheck } from './checkAppEntrypointHeadersMatch';
 import { timespanFromConvention } from './TimespanUtils';
 import { LazyStripeContext } from './LazyStripe';
 import { Stripe } from '@stripe/stripe-js';
-import { Helmet } from 'react-helmet-async';
-import React from 'react';
-import { ScriptTag } from './parsePageContent';
-import { QueryRef, useReadQuery, useSuspenseQuery } from '@apollo/client';
-import OutletWithLoading from './OutletWithLoading';
-
-const NavigationBar = lazyWithAppEntrypointHeadersCheck(
-  () => import(/* webpackChunkName: 'navigation-bar' */ './NavigationBar'),
-);
-
-// Avoid unnecessary layout checks when moving between pages that can't change layout
-function normalizePathForLayout(path: string) {
-  if (path.startsWith('/pages/') || path === '/') {
-    return path;
-  }
-
-  // only event ID is relevant for layout rendering
-  const eventsMatch = path.match(/^\/events\/(\d+)/);
-  if (eventsMatch) {
-    // eslint-disable-next-line i18next/no-literal-string
-    return `/events/${eventsMatch[1]}`;
-  }
-
-  // eslint-disable-next-line i18next/no-literal-string
-  return '/non_cms_path'; // arbitrary path that's not a CMS page
-}
+import AuthenticationModalContext from './Authentication/AuthenticationModalContext';
+import { GraphQLNotAuthenticatedErrorEvent } from './useIntercodeApolloClient';
 
 export function buildAppRootContextValue(data: AppRootQueryData): AppRootContextValue {
   return {
@@ -71,80 +45,11 @@ export function buildAppRootContextValue(data: AppRootQueryData): AppRootContext
   };
 }
 
-export function AppRootLayoutContent() {
-  const location = useLocation();
-  const [cachedCmsLayoutId, setCachedCmsLayoutId] = useState<string>();
-  const [layoutChanged, setLayoutChanged] = useState(false);
-
-  const { data, error } = useSuspenseQuery(AppRootLayoutQueryDocument, {
-    variables: { path: normalizePathForLayout(location.pathname) },
-  });
-
-  const parsedCmsContent = useMemo(() => {
-    if (error) {
-      return null;
-    }
-
-    return parseCmsContent(data.cmsParentByRequestHost.effectiveCmsLayout.content_html ?? '', {
-      ...CMS_COMPONENT_MAP,
-      AppRouter: OutletWithLoading,
-      NavigationBar,
-    });
-  }, [data.cmsParentByRequestHost.effectiveCmsLayout.content_html, error]);
-
-  const [headComponentsWithoutScriptTags, headScriptTags] = useMemo(() => {
-    if (parsedCmsContent?.headComponents == null) {
-      return [[], []];
-    }
-
-    const nonScriptTags: React.ReactNode[] = [];
-    const scriptTags: React.ReactNode[] = [];
-
-    React.Children.forEach(parsedCmsContent.headComponents, (child) => {
-      if (React.isValidElement(child) && child.type === ScriptTag) {
-        scriptTags.push(child);
-      } else {
-        nonScriptTags.push(child);
-      }
-    });
-
-    return [nonScriptTags, scriptTags];
-  }, [parsedCmsContent?.headComponents]);
-
-  useEffect(() => {
-    if (!error && data && cachedCmsLayoutId !== data.cmsParentByRequestHost.effectiveCmsLayout.id) {
-      if (cachedCmsLayoutId) {
-        // if the layout changed we need a full page reload to rerender the <head>
-        setLayoutChanged(true);
-        window.location.reload();
-      } else {
-        setCachedCmsLayoutId(data.cmsParentByRequestHost.effectiveCmsLayout.id);
-      }
-    }
-  }, [error, cachedCmsLayoutId, data]);
-
-  if (layoutChanged) {
-    return <></>;
-  }
-
-  if (!parsedCmsContent?.bodyComponents) {
-    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
-  }
-
-  return (
-    <>
-      <Helmet>{headComponentsWithoutScriptTags}</Helmet>
-      {headScriptTags}
-      {parsedCmsContent?.bodyComponents}
-    </>
-  );
-}
-
 function AppRoot(): JSX.Element {
   const location = useLocation();
   const navigate = useNavigate();
-  const queryRef = useLoaderData() as QueryRef<AppRootQueryData, AppRootQueryVariables>;
-  const { data, error } = useReadQuery(queryRef);
+  const data = useLoaderData() as AppRootQueryData;
+  const authenticationModal = useContext(AuthenticationModalContext);
 
   const [stripePromise, setStripePromise] = useState<Promise<Stripe | null> | null>(null);
 
@@ -160,12 +65,11 @@ function AppRoot(): JSX.Element {
     }
   }, [data?.currentUser?.id]);
 
-  const appRootContextValue = useMemo(() => (data ? buildAppRootContextValue(data) : undefined), [data]);
+  const appRootContextValue = useMemo(() => buildAppRootContextValue(data), [data]);
 
   useEffect(() => {
     if (
-      !error &&
-      data?.convention?.my_profile &&
+      data.convention?.my_profile &&
       (data.convention.clickwrap_agreement || '').trim() !== '' &&
       !data.convention.my_profile.accepted_clickwrap_agreement &&
       location.pathname !== '/clickwrap_agreement' &&
@@ -174,7 +78,7 @@ function AppRoot(): JSX.Element {
     ) {
       navigate('/clickwrap_agreement', { replace: true });
     }
-  }, [data, error, navigate, location]);
+  }, [data, navigate, location]);
 
   useEffect(() => {
     if (appRootContextValue?.language) {
@@ -185,14 +89,20 @@ function AppRoot(): JSX.Element {
     }
   }, [appRootContextValue]);
 
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
+  useEffect(() => {
+    const unauthenticatedHandler = () => {
+      if (!authenticationModal.visible) {
+        authenticationModal.open({ currentView: 'signIn' });
+        authenticationModal.setAfterSignInPath(location.pathname);
+      }
+    };
 
-  if (!appRootContextValue) {
-    // we need to wait a render cycle for useCachedLoadableValue to do its thing
-    return <></>;
-  }
+    window.addEventListener(GraphQLNotAuthenticatedErrorEvent.type, unauthenticatedHandler);
+
+    return () => {
+      window.removeEventListener(GraphQLNotAuthenticatedErrorEvent.type, unauthenticatedHandler);
+    };
+  }, [authenticationModal, location.pathname]);
 
   return (
     <AppRootContext.Provider value={appRootContextValue}>
@@ -204,6 +114,7 @@ function AppRoot(): JSX.Element {
           setStripePromise,
         }}
       >
+        <ScrollRestoration />
         <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
           <Outlet />
         </Suspense>
