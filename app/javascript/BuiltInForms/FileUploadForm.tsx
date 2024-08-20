@@ -8,7 +8,6 @@ import FileInputWithPreview from '../CmsAdmin/CmsFilesAdmin/FileInputWithPreview
 import { DirectUpload, DirectUploadDelegate, Blob } from '@rails/activestorage';
 import RailsDirectUploadsContext from '../RailsDirectUploadsContext';
 import classNames from 'classnames';
-import AuthenticityTokensContext from '../AuthenticityTokensContext';
 import { Helmet } from 'react-helmet-async';
 import AuthenticityTokensManager from '../AuthenticityTokensContext';
 

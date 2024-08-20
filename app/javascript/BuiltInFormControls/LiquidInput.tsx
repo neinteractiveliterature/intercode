@@ -27,7 +27,7 @@ import AddFileModal from './AddFileModal';
 import { ActiveStorageAttachment } from '../graphqlTypes.generated';
 import { CmsFilesAdminQueryDocument } from '../CmsAdmin/CmsFilesAdmin/queries.generated';
 import { Blob } from '@rails/activestorage';
-import { useSubmit } from 'react-router-dom';
+import { useFetcher } from 'react-router-dom';
 import { NamedRoute } from '../AppRouter';
 
 export type CreateCmsFileModalProps = {
@@ -42,11 +42,14 @@ function CreateCmsFileModal({ visible, close, fileChosen }: CreateCmsFileModalPr
     () => data.cmsParent.cmsFiles.map((cmsFile) => ({ ...cmsFile.file, resized_url: cmsFile.file.thumbnailUrl })),
     [data.cmsParent.cmsFiles],
   );
-  const submit = useSubmit();
+  const addBlobFetcher = useFetcher();
   const addBlob = useCallback(
     (blob: Blob) =>
-      submit({ variables: { signedBlobId: blob.signed_id } }, { method: 'POST', action: NamedRoute.CreateCmsFile }),
-    [submit],
+      addBlobFetcher.submit(
+        { variables: { signedBlobId: blob.signed_id } },
+        { method: 'POST', action: NamedRoute.CmsFiles },
+      ),
+    [addBlobFetcher],
   );
 
   return (
@@ -128,7 +131,6 @@ function LiquidInput(props: LiquidInputProps): JSX.Element {
       return null;
     }
 
-    // eslint-disable-next-line i18next/no-literal-string
     const liquidDocsUrl = notifierEventKey ? `/liquid_docs?notifier_event_key=${notifierEventKey}` : '/liquid_docs';
 
     return (

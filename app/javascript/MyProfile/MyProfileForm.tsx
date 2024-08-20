@@ -1,12 +1,11 @@
-import { useState, useCallback } from 'react';
-import { Link, LoaderFunction, useLoaderData, useMatch } from 'react-router-dom';
+import { useState } from 'react';
+import { ActionFunction, Link, LoaderFunction, useFetcher, useLoaderData, useMatch } from 'react-router-dom';
 import md5 from 'md5';
 import { useTranslation, Trans } from 'react-i18next';
 import { BooleanInput, LoadingIndicator } from '@neinteractiveliterature/litform';
 
 import buildFormStateFromData from '../UserConProfiles/buildFormStateFromData';
 import SinglePageFormPresenter, { SinglePageFormPresenterProps } from '../FormPresenter/SinglePageFormPresenter';
-import useAsyncFunction from '../useAsyncFunction';
 import useAutocommitFormResponseOnChange from '../FormPresenter/useAutocommitFormResponseOnChange';
 import useFormResponse from '../FormPresenter/useFormResponse';
 import { useItemInteractionTracking, ItemInteractionTrackerContext } from '../FormPresenter/ItemInteractionTracker';
@@ -15,10 +14,37 @@ import MarkdownInput from '../BuiltInFormControls/MarkdownInput';
 import Gravatar from '../Gravatar';
 import { MyProfileQueryData, MyProfileQueryDocument } from './queries.generated';
 import { CommonFormFieldsFragment } from '../Models/commonFormFragments.generated';
-import { useUpdateUserConProfileMutation } from '../UserConProfiles/mutations.generated';
 import { WithFormResponse } from '../Models/deserializeFormResponse';
 import { parseResponseErrors } from '../parseResponseErrors';
 import { client } from '../useIntercodeApolloClient';
+import { UpdateUserConProfileDocument } from '../UserConProfiles/mutations.generated';
+import { SubmitTarget } from 'react-router-dom/dist/dom';
+
+export const action: ActionFunction = async ({ request }) => {
+  const profile = (await request.json()) as LoaderResult['initialUserConProfile'];
+
+  try {
+    await client.mutate({
+      mutation: UpdateUserConProfileDocument,
+      variables: {
+        input: {
+          id: profile.id,
+          user_con_profile: {
+            form_response_attrs_json: JSON.stringify(profile.form_response_attrs),
+            bio: profile.bio,
+            show_nickname_in_bio: profile.show_nickname_in_bio,
+            gravatar_enabled: profile.gravatar_enabled,
+          },
+        },
+      },
+      refetchQueries: [{ query: MyProfileQueryDocument }],
+    });
+
+    return null;
+  } catch (e) {
+    return parseResponseErrors(e, ['updateUserConProfile']);
+  }
+};
 
 type LoaderResult = {
   initialUserConProfile: WithFormResponse<NonNullable<MyProfileQueryData['convention']['my_profile']>>;
@@ -44,78 +70,49 @@ export const loader: LoaderFunction = async () => {
 function MyProfileForm() {
   const { initialUserConProfile, convention, form } = useLoaderData() as LoaderResult;
   const { t } = useTranslation();
-  const [updateMutate] = useUpdateUserConProfileMutation();
-  const [mutate, , mutationInProgress] = useAsyncFunction(updateMutate);
-  const [responseErrors, setResponseErrors] = useState<Record<string, string[]>>({});
   const initialSetup = useMatch('/my_profile/setup');
+  const fetcher = useFetcher();
+  const responseErrors = fetcher.data;
+  const mutationInProgress = fetcher.state !== 'idle';
 
   usePageTitle(`${initialSetup ? 'Set up' : 'Editing'} my profile`);
 
   const [userConProfile, setUserConProfile] = useState(initialUserConProfile);
   const [, responseValuesChanged] = useFormResponse(userConProfile, setUserConProfile);
 
-  const updateUserConProfile = useCallback(
-    async (profile: typeof userConProfile) => {
-      try {
-        await mutate({
-          variables: {
-            input: {
-              id: profile.id,
-              user_con_profile: {
-                form_response_attrs_json: JSON.stringify(profile.form_response_attrs),
-                bio: profile.bio,
-                show_nickname_in_bio: profile.show_nickname_in_bio,
-                gravatar_enabled: profile.gravatar_enabled,
-              },
-            },
-          },
-          refetchQueries: [MyProfileQueryDocument],
-        });
-      } catch (e) {
-        setResponseErrors(parseResponseErrors(e, ['updateUserConProfile']));
-      }
-    },
-    [mutate],
-  );
+  const updateUserConProfile = async (profile: typeof userConProfile) => {
+    fetcher.submit(profile as SubmitTarget, { method: 'PATCH', encType: 'application/json' });
+  };
   const itemInteractionProps = useItemInteractionTracking();
 
   const debouncedCommit = useAutocommitFormResponseOnChange(updateUserConProfile, userConProfile);
 
-  const setBio = useCallback(
-    (bio: string) => {
-      setUserConProfile((prevUserConProfile) => ({ ...prevUserConProfile, bio }));
-      debouncedCommit({ ...userConProfile, bio });
-    },
-    [debouncedCommit, userConProfile],
-  );
+  const setBio = (bio: string) => {
+    setUserConProfile((prevUserConProfile) => ({ ...prevUserConProfile, bio }));
+    debouncedCommit({ ...userConProfile, bio });
+  };
 
-  const setShowNickname = useCallback(
-    (showNickname: boolean) => {
-      setUserConProfile((prevUserConProfile) => ({
-        ...prevUserConProfile,
-        show_nickname_in_bio: showNickname,
-      }));
-      updateUserConProfile({
-        ...userConProfile,
-        show_nickname_in_bio: showNickname,
-      });
-    },
-    [updateUserConProfile, userConProfile],
-  );
+  const setShowNickname = (showNickname: boolean) => {
+    setUserConProfile((prevUserConProfile) => ({
+      ...prevUserConProfile,
+      show_nickname_in_bio: showNickname,
+    }));
+    updateUserConProfile({
+      ...userConProfile,
+      show_nickname_in_bio: showNickname,
+    });
+  };
 
-  const setGravatarEnabled = useCallback(
-    (gravatarEnabled: boolean) => {
-      setUserConProfile((prevUserConProfile) => ({
-        ...prevUserConProfile,
-        gravatar_enabled: gravatarEnabled,
-      }));
-      updateUserConProfile({
-        ...userConProfile,
-        gravatar_enabled: gravatarEnabled,
-      });
-    },
-    [updateUserConProfile, userConProfile],
-  );
+  const setGravatarEnabled = (gravatarEnabled: boolean) => {
+    setUserConProfile((prevUserConProfile) => ({
+      ...prevUserConProfile,
+      gravatar_enabled: gravatarEnabled,
+    }));
+    updateUserConProfile({
+      ...userConProfile,
+      gravatar_enabled: gravatarEnabled,
+    });
+  };
 
   const formPresenterProps: SinglePageFormPresenterProps = {
     form,
@@ -207,7 +204,7 @@ function MyProfileForm() {
           />
         </div>
       </div>
-      <div className="my-4">
+      <div className="my-4 d-flex align-items-center">
         {initialSetup ? (
           <Link to="/" className="btn btn-primary">
             {t('myProfile.initialSetupFinishButton')}
@@ -219,7 +216,7 @@ function MyProfileForm() {
         )}
         {mutationInProgress && (
           <span className="ms-2">
-            <LoadingIndicator iconSet="bootstrap-icons" />
+            <LoadingIndicator iconSet="bootstrap-icons" size={8} />
           </span>
         )}
       </div>

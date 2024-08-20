@@ -89,6 +89,7 @@ export enum NamedRoute {
   TeamMembers = 'TeamMembers',
   TeamMembersIndex = 'TeamMembersIndex',
   UserActivityAlerts = 'UserActivityAlerts',
+  CmsFiles = 'CmsFiles',
 }
 
 export type RouteName = keyof typeof NamedRoute & string;
@@ -350,8 +351,14 @@ const commonRoutes: RouteObject[] = [
         loader: cmsPagesAdminLoader,
         id: NamedRoute.CmsPagesAdmin,
         children: [
-          { path: ':id/edit', lazy: () => import('./CmsAdmin/CmsPagesAdmin/EditCmsPage') },
-          { path: ':id/view_source', lazy: () => import('./CmsAdmin/CmsPagesAdmin/ViewCmsPageSource') },
+          {
+            path: ':id',
+            lazy: () => import('./CmsAdmin/CmsPagesAdmin/SinglePageRoute'),
+            children: [
+              { path: 'edit', lazy: () => import('./CmsAdmin/CmsPagesAdmin/EditCmsPage') },
+              { path: 'view_source', lazy: () => import('./CmsAdmin/CmsPagesAdmin/ViewCmsPageSource') },
+            ],
+          },
           { path: 'new', lazy: () => import('./CmsAdmin/CmsPagesAdmin/NewCmsPage') },
           { index: true, lazy: () => import('./CmsAdmin/CmsPagesAdmin/CmsPagesAdminTable') },
         ],
@@ -361,21 +368,31 @@ const commonRoutes: RouteObject[] = [
         loader: cmsPartialsAdminLoader,
         id: NamedRoute.CmsPartialsAdmin,
         children: [
-          { path: ':id/edit', lazy: () => import('./CmsAdmin/CmsPartialsAdmin/EditCmsPartial') },
-          { path: ':id/view_source', lazy: () => import('./CmsAdmin/CmsPartialsAdmin/ViewCmsPartialSource') },
+          {
+            path: ':id',
+            children: [
+              { path: 'edit', lazy: () => import('./CmsAdmin/CmsPartialsAdmin/EditCmsPartial') },
+              { path: 'view_source', lazy: () => import('./CmsAdmin/CmsPartialsAdmin/ViewCmsPartialSource') },
+            ],
+          },
           { path: 'new', lazy: () => import('./CmsAdmin/CmsPartialsAdmin/NewCmsPartial') },
           { index: true, lazy: () => import('./CmsAdmin/CmsPartialsAdmin/CmsPartialsAdminTable') },
         ],
       },
-      { path: '/cms_files', lazy: () => import('./CmsAdmin/CmsFilesAdmin') },
+      { path: '/cms_files', id: NamedRoute.CmsFiles, lazy: () => import('./CmsAdmin/CmsFilesAdmin') },
       { path: '/cms_navigation_items', lazy: () => import('./CmsAdmin/NavigationItemsAdmin') },
       {
         path: '/cms_layouts',
         loader: cmsLayoutsAdminLoader,
         id: NamedRoute.CmsLayoutsAdmin,
         children: [
-          { path: ':id/edit', lazy: () => import('./CmsAdmin/CmsLayoutsAdmin/EditCmsLayout') },
-          { path: ':id/view_source', lazy: () => import('./CmsAdmin/CmsLayoutsAdmin/ViewCmsLayoutSource') },
+          {
+            path: ':id',
+            children: [
+              { path: 'edit', lazy: () => import('./CmsAdmin/CmsLayoutsAdmin/EditCmsLayout') },
+              { path: 'view_source', lazy: () => import('./CmsAdmin/CmsLayoutsAdmin/ViewCmsLayoutSource') },
+            ],
+          },
           { path: 'new', lazy: () => import('./CmsAdmin/CmsLayoutsAdmin/NewCmsLayout') },
           { index: true, lazy: () => import('./CmsAdmin/CmsLayoutsAdmin/CmsLayoutsAdminTable') },
         ],
@@ -386,10 +403,15 @@ const commonRoutes: RouteObject[] = [
         loader: cmsGraphqlQueriesAdminLoader,
         id: NamedRoute.CmsGraphqlQueriesAdmin,
         children: [
-          { path: ':id/edit', lazy: () => import('./CmsAdmin/CmsGraphqlQueriesAdmin/EditCmsGraphqlQuery') },
           {
-            path: ':id/view_source',
-            lazy: () => import('./CmsAdmin/CmsGraphqlQueriesAdmin/ViewCmsGraphqlQuerySource'),
+            path: ':id',
+            children: [
+              { path: 'edit', lazy: () => import('./CmsAdmin/CmsGraphqlQueriesAdmin/EditCmsGraphqlQuery') },
+              {
+                path: 'view_source',
+                lazy: () => import('./CmsAdmin/CmsGraphqlQueriesAdmin/ViewCmsGraphqlQuerySource'),
+              },
+            ],
           },
           { path: 'new', lazy: () => import('./CmsAdmin/CmsGraphqlQueriesAdmin/NewCmsGraphqlQuery') },
           { index: true, lazy: () => import('./CmsAdmin/CmsGraphqlQueriesAdmin/CmsGraphqlQueriesAdminTable') },
@@ -400,9 +422,12 @@ const commonRoutes: RouteObject[] = [
         loader: cmsContentGroupsAdminLoader,
         id: NamedRoute.CmsContentGroupsAdmin,
         children: [
-          { path: ':id/edit', lazy: () => import('./CmsAdmin/CmsContentGroupsAdmin/EditCmsContentGroup') },
+          {
+            path: ':id',
+            lazy: () => import('./CmsAdmin/CmsContentGroupsAdmin/ViewCmsContentGroup'),
+            children: [{ path: 'edit', lazy: () => import('./CmsAdmin/CmsContentGroupsAdmin/EditCmsContentGroup') }],
+          },
           { path: 'new', lazy: () => import('./CmsAdmin/CmsContentGroupsAdmin/NewCmsContentGroup') },
-          { path: ':id', lazy: () => import('./CmsAdmin/CmsContentGroupsAdmin/ViewCmsContentGroup') },
           { index: true, lazy: () => import('./CmsAdmin/CmsContentGroupsAdmin/CmsContentGroupsAdminTable') },
         ],
       },

@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useGraphQLConfirm } from '@neinteractiveliterature/litform';
 
 import MenuIcon from '../NavigationBar/MenuIcon';
@@ -35,6 +35,7 @@ export default function PageAdminDropdown({ showEdit, showDelete, pageId }: Page
   const navigate = useNavigate();
   const confirm = useGraphQLConfirm();
   const { data } = useSuspenseQuery(PageAdminDropdownQueryDocument, { variables: { id: pageId } });
+  const location = useLocation();
 
   const deleteConfirmed = useCallback(async () => {
     await client.mutate({ mutation: DeletePageDocument, variables: { id: pageId } });
@@ -60,16 +61,26 @@ export default function PageAdminDropdown({ showEdit, showDelete, pageId }: Page
       >
         {showEdit ? (
           <>
-            <Link to={`/cms_pages/${pageId}/edit`} className="dropdown-item">
+            <Link
+              to={`/cms_pages/${pageId}/edit?destination=${encodeURIComponent(location.pathname)}`}
+              className="dropdown-item"
+            >
               <MenuIcon icon="bi-file-earmark-text" />
               Edit page
             </Link>
-            <Link to={`/cms_layouts/${layoutId}/edit`} className="dropdown-item">
+            <Link
+              to={`/cms_layouts/${layoutId}/edit?destination=${encodeURIComponent(location.pathname)}`}
+              className="dropdown-item"
+            >
               <MenuIcon icon="bi-layout-split" />
               Edit layout
             </Link>
             {cmsPage.referenced_partials.map((partial) => (
-              <Link to={`/cms_partials/${partial.id}/edit`} className="dropdown-item" key={partial.id}>
+              <Link
+                to={`/cms_partials/${partial.id}/edit?destination=${encodeURIComponent(location.pathname)}`}
+                className="dropdown-item"
+                key={partial.id}
+              >
                 <MenuIcon icon="bi-paperclip" />
                 Edit partial “{partial.name}”
               </Link>
