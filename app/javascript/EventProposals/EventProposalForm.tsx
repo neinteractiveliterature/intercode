@@ -1,25 +1,24 @@
 import { useCallback, useState, useMemo, ReactNode } from 'react';
-import { ApolloError } from '@apollo/client';
+import { ApolloError, useSuspenseQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import FormPresenterApp from '../FormPresenter';
 import FormPresenter from '../FormPresenter/Layouts/FormPresenter';
-import useAsyncFunction from '../useAsyncFunction';
 import useAutocommitFormResponseOnChange from '../FormPresenter/useAutocommitFormResponseOnChange';
 import deserializeFormResponse, { WithFormResponse } from '../Models/deserializeFormResponse';
-import { useEventProposalQuery, EventProposalQueryData } from './queries.generated';
+import { EventProposalQueryData, EventProposalQueryDocument } from './queries.generated';
 import { ConventionForFormItemDisplay } from '../FormPresenter/ItemDisplays/FormItemDisplay';
 import { CommonFormFieldsFragment } from '../Models/commonFormFragments.generated';
-import {
-  useUpdateEventProposalMutation,
-  useSubmitEventProposalMutation,
-  useAttachImageToEventProposalMutation,
-} from './mutations.generated';
-import { LoadQueryWithVariablesWrapper } from '../GraphqlLoadingWrappers';
 import { parseResponseErrors } from '../parseResponseErrors';
 import { ImageAttachmentConfig } from '../BuiltInFormControls/MarkdownInput';
 import { Blob } from '@rails/activestorage';
+import { client } from '../useIntercodeApolloClient';
+import {
+  AttachImageToEventProposalDocument,
+  SubmitEventProposalDocument,
+  UpdateEventProposalDocument,
+} from './mutations.generated';
 
 type EventProposalFormInnerProps = {
   convention: ConventionForFormItemDisplay;
@@ -37,21 +36,20 @@ function EventProposalFormInner({
   exitButton,
 }: EventProposalFormInnerProps) {
   const { t } = useTranslation();
-  const [updateMutate] = useUpdateEventProposalMutation();
-  const [updateEventProposal, updateError, updateInProgress] = useAsyncFunction(updateMutate);
   const [updatePromise, setUpdatePromise] = useState<Promise<unknown>>();
-  const [attachImage] = useAttachImageToEventProposalMutation();
-  const [submitMutate] = useSubmitEventProposalMutation();
-  const [submitEventProposal, submitError, submitInProgress] = useAsyncFunction(submitMutate);
   const [eventProposal, setEventProposal] = useState(initialEventProposal);
   const [responseErrors, setResponseErrors] = useState({});
 
   const imageAttachmentConfig = useMemo<ImageAttachmentConfig>(
     () => ({
-      addBlob: (blob: Blob) => attachImage({ variables: { id: eventProposal.id, signedBlobId: blob.signed_id } }),
+      addBlob: (blob: Blob) =>
+        client.mutate({
+          mutation: AttachImageToEventProposalDocument,
+          variables: { id: eventProposal.id, signedBlobId: blob.signed_id },
+        }),
       existingImages: eventProposal.images,
     }),
-    [eventProposal.id, eventProposal.images, attachImage],
+    [eventProposal.id, eventProposal.images],
   );
 
   const responseValuesChanged = useCallback(
@@ -67,42 +65,41 @@ function EventProposalFormInner({
     [],
   );
 
-  const commitResponse = useCallback(
-    async (proposal: typeof eventProposal) => {
-      try {
-        setResponseErrors({});
-        const promise = updateEventProposal({
-          variables: {
-            input: {
-              id: proposal.id,
-              event_proposal: {
-                form_response_attrs_json: JSON.stringify(proposal.form_response_attrs),
-              },
+  const commitResponse = useCallback(async (proposal: typeof eventProposal) => {
+    try {
+      setResponseErrors({});
+      const promise = client.mutate({
+        mutation: UpdateEventProposalDocument,
+        variables: {
+          input: {
+            id: proposal.id,
+            event_proposal: {
+              form_response_attrs_json: JSON.stringify(proposal.form_response_attrs),
             },
           },
-        });
-        setUpdatePromise(promise);
-        await promise;
-      } catch (e) {
-        setResponseErrors(parseResponseErrors(e, ['updateEventProposal']));
-      } finally {
-        setUpdatePromise(undefined);
-      }
-    },
-    [updateEventProposal],
-  );
+        },
+      });
+      setUpdatePromise(promise);
+      await promise;
+    } catch (e) {
+      setResponseErrors(parseResponseErrors(e, ['updateEventProposal']));
+    } finally {
+      setUpdatePromise(undefined);
+    }
+  }, []);
   useAutocommitFormResponseOnChange(commitResponse, eventProposal);
 
   const submitResponse = useCallback(
     (proposal: typeof eventProposal) =>
-      submitEventProposal({
+      client.mutate({
+        mutation: SubmitEventProposalDocument,
         variables: {
           input: {
             id: proposal.id,
           },
         },
       }),
-    [submitEventProposal],
+    [],
   );
 
   const formSubmitted = useCallback(() => {
@@ -138,7 +135,7 @@ function EventProposalFormInner({
           response={eventProposal}
           responseErrors={responseErrors}
           isSubmittingResponse={submitInProgress}
-          isUpdatingResponse={updateInProgress}
+          isUpdatingResponse={updatePromise != null}
           responseValuesChanged={responseValuesChanged}
           submitForm={submitForm}
           exitButton={exitButton}
@@ -162,36 +159,37 @@ export type EventProposalFormProps = {
   exitButton?: ReactNode;
 };
 
-export default LoadQueryWithVariablesWrapper(
-  useEventProposalQuery,
-  ({ eventProposalId }: EventProposalFormProps) => ({ eventProposalId }),
-  function EventProposalForm({ data, afterSubmit, exitButton }): JSX.Element {
-    const initialEventProposal = useMemo(
-      () => deserializeFormResponse(data.convention.event_proposal),
-      [data.convention.event_proposal],
-    );
+export default function EventProposalForm({
+  eventProposalId,
+  afterSubmit,
+  exitButton,
+}: EventProposalFormProps): JSX.Element {
+  const { data } = useSuspenseQuery(EventProposalQueryDocument, { variables: { eventProposalId } });
+  const initialEventProposal = useMemo(
+    () => deserializeFormResponse(data.convention.event_proposal),
+    [data.convention.event_proposal],
+  );
 
-    const form = useMemo(
-      () => data.convention.event_proposal.event_category.event_proposal_form,
-      [data.convention.event_proposal.event_category.event_proposal_form],
-    );
+  const form = useMemo(
+    () => data.convention.event_proposal.event_category.event_proposal_form,
+    [data.convention.event_proposal.event_category.event_proposal_form],
+  );
 
-    if (!form) {
-      return (
-        <ErrorDisplay
-          stringError={`Event category ${data.convention.event_proposal.event_category.name} has no proposal form`}
-        />
-      );
-    }
-
+  if (!form) {
     return (
-      <EventProposalFormInner
-        convention={data.convention}
-        initialEventProposal={initialEventProposal}
-        form={form}
-        afterSubmit={afterSubmit}
-        exitButton={exitButton}
+      <ErrorDisplay
+        stringError={`Event category ${data.convention.event_proposal.event_category.name} has no proposal form`}
       />
     );
-  },
-);
+  }
+
+  return (
+    <EventProposalFormInner
+      convention={data.convention}
+      initialEventProposal={initialEventProposal}
+      form={form}
+      afterSubmit={afterSubmit}
+      exitButton={exitButton}
+    />
+  );
+}

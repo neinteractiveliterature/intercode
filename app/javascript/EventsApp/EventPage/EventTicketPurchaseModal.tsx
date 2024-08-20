@@ -1,4 +1,4 @@
-import { ApolloError, useApolloClient } from '@apollo/client';
+import { ApolloError, useSuspenseQuery } from '@apollo/client';
 import { ErrorDisplay, LoadingIndicator } from '@neinteractiveliterature/litform';
 import { useContext, useState } from 'react';
 import Modal from 'react-bootstrap4-modal';
@@ -7,11 +7,12 @@ import AppRootContext from '../../AppRootContext';
 import { Run, Signup } from '../../graphqlTypes.generated';
 import { LazyStripeElementsContainer } from '../../LazyStripe';
 import TicketPurchaseForm, { TicketPurchaseFormProps } from '../../MyTicket/TicketPurchaseForm';
-import { useDeleteOrderEntryMutation } from '../../Store/mutations.generated';
 import { OrderPaymentModalContents, OrderPaymentModalContentsProps } from '../../Store/OrderPaymentModal';
 import { useHumanizeTime, useISODateTimeInAppZone } from '../../TimeUtils';
 import useAsyncFunction from '../../useAsyncFunction';
-import { useCurrentPendingOrderPaymentIntentClientSecretQuerySuspenseQuery } from '../../Store/queries.generated';
+import { CurrentPendingOrderPaymentIntentClientSecretQueryDocument } from '../../Store/queries.generated';
+import { DeleteOrderEntryDocument } from '../../Store/mutations.generated';
+import { client } from '../../useIntercodeApolloClient';
 
 export type EventTicketPurchaseModalProps = {
   visible: boolean;
@@ -33,16 +34,14 @@ export default function EventTicketPurchaseModal({
   const { t } = useTranslation();
   const { ticketName } = useContext(AppRootContext);
   const [orderEntry, setOrderEntry] = useState<{ id: string; order: OrderPaymentModalContentsProps['order'] }>();
-  const [deleteOrderEntry] = useDeleteOrderEntryMutation();
-  const apolloClient = useApolloClient();
   const humanizeTime = useHumanizeTime();
   const expiresAt = useISODateTimeInAppZone(signup?.expires_at ?? '');
-  const { data, error } = useCurrentPendingOrderPaymentIntentClientSecretQuerySuspenseQuery();
+  const { data, error } = useSuspenseQuery(CurrentPendingOrderPaymentIntentClientSecretQueryDocument);
 
   const cancel = async () => {
     if (orderEntry) {
-      await deleteOrderEntry({ variables: { input: { id: orderEntry.id } } });
-      await apolloClient.resetStore();
+      await client.mutate({ mutation: DeleteOrderEntryDocument, variables: { input: { id: orderEntry.id } } });
+      await client.resetStore();
     }
 
     close();
@@ -50,7 +49,7 @@ export default function EventTicketPurchaseModal({
   const [cancelAsync, cancelError, cancelInProgress] = useAsyncFunction(cancel);
 
   const complete = async () => {
-    await apolloClient.resetStore();
+    await client.resetStore();
     close();
   };
 

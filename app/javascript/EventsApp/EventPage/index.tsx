@@ -13,7 +13,7 @@ import { EventPageQueryData, EventPageQueryDocument, EventPageQueryVariables } f
 import useSectionizedFormItems from './useSectionizedFormItems';
 import FormItemDisplay from '../../FormPresenter/ItemDisplays/FormItemDisplay';
 import { valueIsPresent } from './valueIsPresent';
-import { LoaderFunction, useLoaderData, useParams } from 'react-router';
+import { LoaderFunction, useLoaderData } from 'react-router';
 import buildEventUrl from '../buildEventUrl';
 import { client } from '../../useIntercodeApolloClient';
 
@@ -27,7 +27,6 @@ export const loader: LoaderFunction = async ({ params: { eventId } }) => {
 
 function EventPage(): JSX.Element {
   const data = useLoaderData() as EventPageQueryData;
-  const params = useParams<{ eventId: string }>();
   const { myProfile } = useContext(AppRootContext);
   const rateEvent = useRateEvent();
   const { secretFormItems, formResponse } = useSectionizedFormItems(data.convention.event);
@@ -54,7 +53,7 @@ function EventPage(): JSX.Element {
         <div className="col-md-9">
           <h1>{event.title}</h1>
 
-          <ShortFormEventDetails eventId={params.eventId ?? event.id} />
+          <ShortFormEventDetails data={data} />
         </div>
 
         <div className="col-md-3">
@@ -64,7 +63,7 @@ function EventPage(): JSX.Element {
             </div>
           )}
 
-          <EventAdminMenu eventId={params.eventId ?? event.id} />
+          <EventAdminMenu data={data} />
 
           {secretFormItems.map(
             (item) =>
@@ -93,10 +92,10 @@ function EventPage(): JSX.Element {
       </div>
 
       <section className="my-4">
-        <RunsSection eventId={params.eventId ?? event.id} />
+        <RunsSection data={data} />
       </section>
 
-      <LongFormEventDetails eventId={params.eventId ?? event.id} />
+      <LongFormEventDetails data={data} />
     </>
   );
 }

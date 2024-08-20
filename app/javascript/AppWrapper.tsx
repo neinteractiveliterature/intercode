@@ -1,6 +1,6 @@
 import { Suspense, useCallback, useRef, useEffect, ReactNode, useState, useMemo } from 'react';
 import * as React from 'react';
-import { DataProxy } from '@apollo/client';
+import { ApolloProvider, DataProxy } from '@apollo/client';
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
 import { i18n } from 'i18next';
 import { I18nextProvider } from 'react-i18next';
@@ -25,6 +25,7 @@ import MapboxContext, { useMapboxContext } from './MapboxContext';
 import getI18n from './setupI18Next';
 import RailsDirectUploadsContext from './RailsDirectUploadsContext';
 import { appRootRoutes } from './AppRouter';
+import { client } from './useIntercodeApolloClient';
 
 function I18NextWrapper({ children }: { children: (i18nInstance: i18n) => ReactNode }) {
   const [i18nInstance, seti18nInstance] = useState<i18n>();
@@ -86,33 +87,35 @@ function ProviderStack(props: AppWrapperProps) {
   );
 
   return (
-    <HelmetProvider>
-      {/* TODO bring this back when we re-add prompting getUserConfirmation={getUserConfirmation}> */}
-      <RailsDirectUploadsContext.Provider value={railsDirectUploadsContextValue}>
-        <MapboxContext.Provider value={mapboxContextValue}>
-          <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
-            <>
-              {!unauthenticatedError && (
-                <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
-                  <I18NextWrapper>
-                    {(i18nInstance) => (
-                      <AlertProvider okText={i18nInstance.t('buttons.ok', 'OK')}>
-                        <ToastProvider>
-                          <ErrorBoundary placement="replace" errorType="plain">
-                            <Outlet />
-                          </ErrorBoundary>
-                        </ToastProvider>
-                      </AlertProvider>
-                    )}
-                  </I18NextWrapper>
-                </Suspense>
-              )}
-              <AuthenticationModal />
-            </>
-          </AuthenticationModalContext.Provider>
-        </MapboxContext.Provider>
-      </RailsDirectUploadsContext.Provider>
-    </HelmetProvider>
+    <ApolloProvider client={client}>
+      <HelmetProvider>
+        {/* TODO bring this back when we re-add prompting getUserConfirmation={getUserConfirmation}> */}
+        <RailsDirectUploadsContext.Provider value={railsDirectUploadsContextValue}>
+          <MapboxContext.Provider value={mapboxContextValue}>
+            <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
+              <>
+                {!unauthenticatedError && (
+                  <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
+                    <I18NextWrapper>
+                      {(i18nInstance) => (
+                        <AlertProvider okText={i18nInstance.t('buttons.ok', 'OK')}>
+                          <ToastProvider>
+                            <ErrorBoundary placement="replace" errorType="plain">
+                              <Outlet />
+                            </ErrorBoundary>
+                          </ToastProvider>
+                        </AlertProvider>
+                      )}
+                    </I18NextWrapper>
+                  </Suspense>
+                )}
+                <AuthenticationModal />
+              </>
+            </AuthenticationModalContext.Provider>
+          </MapboxContext.Provider>
+        </RailsDirectUploadsContext.Provider>
+      </HelmetProvider>
+    </ApolloProvider>
   );
 }
 

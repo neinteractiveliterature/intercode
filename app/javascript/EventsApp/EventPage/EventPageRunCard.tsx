@@ -1,5 +1,5 @@
 import { useMemo, useCallback, useContext } from 'react';
-import { ApolloCache, useApolloClient } from '@apollo/client';
+import { ApolloCache } from '@apollo/client';
 import { useTranslation, Trans } from 'react-i18next';
 import { useModal, useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -8,16 +8,17 @@ import buildSignupOptions, { SignupOption } from './buildSignupOptions';
 import AppRootContext from '../../AppRootContext';
 import CreateModeratedSignupModal from './CreateModeratedSignupModal';
 import { EventPageQueryData, EventPageQueryDocument, EventPageQueryVariables } from './queries.generated';
-import {
-  useCreateMySignupMutation,
-  useCreateSignupRankedChoiceMutation,
-  useWithdrawMySignupMutation,
-  useWithdrawSignupRequestMutation,
-} from './mutations.generated';
 import { SignupAutomationMode, SignupMode, SignupRankedChoiceState } from '../../graphqlTypes.generated';
 import SignupCountData from '../SignupCountData';
 import { parseSignupRounds } from '../../SignupRoundUtils';
 import { DateTime } from 'luxon';
+import {
+  CreateMySignupDocument,
+  CreateSignupRankedChoiceDocument,
+  WithdrawMySignupDocument,
+  WithdrawSignupRequestDocument,
+} from './mutations.generated';
+import { client } from '../../useIntercodeApolloClient';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type TI = any;
@@ -106,11 +107,6 @@ function EventPageRunCard({
   const createModeratedSignupModal = useModal<{ signupOption: SignupOption }>();
   const mySignup = run.my_signups.find((signup) => signup.state !== 'withdrawn');
   const myPendingSignupRequest = run.my_signup_requests.find((signupRequest) => signupRequest.state === 'pending');
-  const [createMySignupMutate] = useCreateMySignupMutation();
-  const [withdrawMySignupMutate] = useWithdrawMySignupMutation();
-  const [withdrawSignupRequestMutate] = useWithdrawSignupRequestMutation();
-  const [createSignupRankedChoiceMutate] = useCreateSignupRankedChoiceMutation();
-  const apolloClient = useApolloClient();
 
   const currentRound = useMemo(() => {
     const parsedRounds = parseSignupRounds(signupRounds);
@@ -121,16 +117,18 @@ function EventPageRunCard({
   const selfServiceSignup = useCallback(
     async (signupOption: SignupOption) => {
       if (signupOption.action === 'ADD_TO_QUEUE') {
-        await createSignupRankedChoiceMutate({
+        await client.mutate({
+          mutation: CreateSignupRankedChoiceDocument,
           variables: {
             targetRunId: run.id,
             requestedBucketKey: signupOption.bucket?.key,
           },
         });
 
-        await apolloClient.resetStore();
+        await client.resetStore();
       } else {
-        const response = await createMySignupMutate({
+        const response = await client.mutate({
+          mutation: CreateMySignupDocument,
           variables: {
             runId: run.id,
             requestedBucketKey: (signupOption.bucket || {}).key,
@@ -144,11 +142,11 @@ function EventPageRunCard({
           },
         });
 
-        await apolloClient.resetStore();
+        await client.resetStore();
         return response.data?.createMySignup.signup;
       }
     },
-    [apolloClient, createMySignupMutate, createSignupRankedChoiceMutate, event, run],
+    [event, run],
   );
 
   const withdrawPrompt = useMemo(() => {
@@ -181,12 +179,12 @@ function EventPageRunCard({
     confirm({
       prompt: withdrawPrompt,
       action: async () => {
-        await withdrawMySignupMutate({ variables: { runId: run.id } });
-        await apolloClient.resetStore();
+        await client.mutate({ mutation: WithdrawMySignupDocument, variables: { runId: run.id } });
+        await client.resetStore();
       },
       renderError: (error) => <ErrorDisplay graphQLError={error} />,
     });
-  }, [apolloClient, confirm, withdrawPrompt, run.id, withdrawMySignupMutate]);
+  }, [confirm, withdrawPrompt, run.id]);
 
   const createSignup = (signupOption: SignupOption) => {
     if (signupMode === SignupMode.SelfService || signupOption.action === 'ADD_TO_QUEUE' || signupOption.teamMember) {
@@ -208,7 +206,8 @@ function EventPageRunCard({
 
     confirm({
       prompt: t('events.withdrawPrompt.signupRequest', { eventTitle: event.title }),
-      action: () => withdrawSignupRequestMutate({ variables: { id: myPendingSignupRequest.id } }),
+      action: () =>
+        client.mutate({ mutation: WithdrawSignupRequestDocument, variables: { id: myPendingSignupRequest.id } }),
       renderError: (error) => <ErrorDisplay graphQLError={error} />,
     });
 
