@@ -1,6 +1,6 @@
 import { createContext, Suspense, useState, useMemo, useCallback, useContext, useEffect, ReactNode } from 'react';
 import { detect } from 'detect-browser';
-import { useApolloClient } from '@apollo/client';
+import { useApolloClient, useQuery } from '@apollo/client';
 import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
 import ConventionDayTabContainer from './ConventionDayTabContainer';
@@ -15,7 +15,6 @@ import {
   ScheduleGridConventionDataQueryData,
   ScheduleGridEventFragment,
   ScheduleGridEventsQueryDocument,
-  useScheduleGridEventsQuery,
 } from './queries.generated';
 import { FiniteTimespan } from '../../Timespan';
 import useMergeCategoriesIntoEvents from '../useMergeCategoriesIntoEvents';
@@ -239,7 +238,7 @@ function ScheduleGridProviderTabContent({
   fetchFormItemIdentifiers,
 }: ScheduleGridProviderTabContentProps) {
   const { myRatingFilter, hideConflicts } = useContext(ScheduleGridFiltersContext);
-  const { data, error, loading } = useScheduleGridEventsQuery({
+  const { data, loading, error } = useQuery(ScheduleGridEventsQueryDocument, {
     variables: {
       ...getEventsQueryVariables(timespan, fetchFormItemIdentifiers, config.showExtendedCounts, filters),
     },
