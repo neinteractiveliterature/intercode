@@ -21219,7 +21219,7 @@ __metadata:
     webpack-assets-manifest: "npm:5.2.1"
     webpack-bundle-analyzer: "npm:4.10.2"
     webpack-cli: "npm:5.1.4"
-    webpack-dev-middleware: "npm:7.4.0"
+    webpack-dev-middleware: "npm:7.4.1"
     webpack-dev-server: "npm:5.0.4"
     webpack-manifest-plugin: "npm:5.0.0"
     webpack-shell-plugin-next: "npm:2.3.2"
@@ -23896,9 +23896,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-dev-middleware@npm:7.4.0, webpack-dev-middleware@npm:^7.1.0":
-  version: 7.4.0
-  resolution: "webpack-dev-middleware@npm:7.4.0"
+"webpack-dev-middleware@npm:7.4.1, webpack-dev-middleware@npm:^7.1.0":
+  version: 7.4.1
+  resolution: "webpack-dev-middleware@npm:7.4.1"
   dependencies:
     colorette: "npm:^2.0.10"
     memfs: "npm:^4.6.0"
@@ -23911,7 +23911,7 @@ __metadata:
   peerDependenciesMeta:
     webpack:
       optional: true
-  checksum: 10c0/c8cc17e713d219b1a88750c498acfd738b3fa6170964ff62c549f25a23f0c7d4ab0872ccd6b7619583d230650d635267adb03ae1e7ce9cca33082e82324479b3
+  checksum: 10c0/e3677e59f1604e1c143ba7d8b835c8da6e5b91d079a427dddabca5e86eabe590f23755b044ab7d60180dfbc80cd7c36370a80da5a1fca8d6a4dbbfeed708250c
   languageName: node
   linkType: hard
 
