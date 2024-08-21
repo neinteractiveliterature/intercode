@@ -1,81 +1,90 @@
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
 import flatMap from 'lodash/flatMap';
 import sortBy from 'lodash/sortBy';
 import uniq from 'lodash/uniq';
 import uniqBy from 'lodash/uniqBy';
-import { ApolloError } from '@apollo/client';
-import { LoadingIndicator, ChoiceSet, ErrorDisplay } from '@neinteractiveliterature/litform';
+import { ChoiceSet, ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import { MergeUsersModalQueryData, useMergeUsersModalQuery } from './queries.generated';
-import { useMergeUsersMutation } from './mutations.generated';
+import { MergeUsersModalQueryData, MergeUsersModalQueryDocument } from './queries.generated';
 import humanize from '../humanize';
 import { Trans, useTranslation } from 'react-i18next';
-
-function renderIfQueryReady(render: () => JSX.Element, { loading, error }: { loading: boolean; error?: ApolloError }) {
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
-  if (loading) {
-    return <LoadingIndicator iconSet="bootstrap-icons" />;
-  }
-
-  return render();
-}
+import {
+  ActionFunction,
+  LoaderFunction,
+  redirect,
+  useActionData,
+  useLoaderData,
+  useNavigate,
+  useNavigation,
+} from 'react-router';
+import { client } from '../useIntercodeApolloClient';
+import { MergeUsersDocument } from './mutations.generated';
+import { i18n } from '../setupI18Next';
+import { ApolloError } from '@apollo/client';
+import { useSubmit } from 'react-router-dom';
 
 type UserType = MergeUsersModalQueryData['users'][0];
 type UserConProfileType = UserType['user_con_profiles'][0];
 type ConventionType = UserConProfileType['convention'];
 
-export type MergeUsersModalProps = {
-  closeModal: () => void;
-  visible: boolean;
-  userIds?: string[];
+type ActionArgs = {
+  userIds: string[];
+  winningUserId: string | null;
+  winningProfileIds: Record<string, string>;
 };
 
-function MergeUsersModal({ closeModal, visible, userIds }: MergeUsersModalProps): JSX.Element {
-  const { data, loading, error } = useMergeUsersModalQuery({
-    variables: { ids: userIds || [] },
-  });
-  const [winningUserId, setWinningUserId] = useState<string>();
-  const [winningProfileIds, setWinningProfileIds] = useState(new Map<string, string>());
-  const [mutate, { error: mutationError, loading: mutationInProgress }] = useMergeUsersMutation();
-  const { t } = useTranslation();
+export const action: ActionFunction = async ({ request }) => {
+  const { userIds, winningUserId, winningProfileIds } = (await request.json()) as ActionArgs;
+  if (!userIds) {
+    throw new Error(i18n.t('admin.users.merge.noUsers'));
+  }
+  if (!winningUserId) {
+    throw new Error(i18n.t('admin.users.merge.noWinner'));
+  }
 
-  const performMerge = async () => {
-    if (!userIds) {
-      throw new Error(t('admin.users.merge.noUsers'));
-    }
-    if (!winningUserId) {
-      throw new Error(t('admin.users.merge.noWinner'));
-    }
-    await mutate({
+  try {
+    await client.mutate({
+      mutation: MergeUsersDocument,
       variables: {
         userIds: userIds,
         winningUserId: winningUserId,
-        winningUserConProfiles: [...winningProfileIds.entries()].map(([conventionId, userConProfileId]) => ({
+        winningUserConProfiles: Object.entries(winningProfileIds).map(([conventionId, userConProfileId]) => ({
           conventionId: conventionId,
           userConProfileId: userConProfileId,
         })),
       },
+      refetchQueries: 'active',
+      awaitRefetchQueries: true,
     });
-    closeModal();
-  };
+  } catch (e) {
+    return e;
+  }
 
-  useEffect(() => {
-    if (loading || error) {
-      if (winningUserId !== null) {
-        setWinningUserId(undefined);
-        setWinningProfileIds(new Map<string, string>());
-      }
-    }
-  }, [error, loading, winningUserId]);
+  return redirect('..');
+};
 
-  let allConventions: ConventionType[] = [];
-  const profilesByConventionId = new Map<string, UserConProfileType[]>();
-  if (!loading && !error && data) {
-    allConventions = sortBy(
+export const loader: LoaderFunction = async ({ params: { ids } }) => {
+  const { data } = await client.query({
+    query: MergeUsersModalQueryDocument,
+    variables: { ids: ids?.split(',') ?? [] },
+  });
+  return data;
+};
+
+function MergeUsersModal(): JSX.Element {
+  const data = useLoaderData() as MergeUsersModalQueryData;
+  const [winningUserId, setWinningUserId] = useState<string>();
+  const [winningProfileIds, setWinningProfileIds] = useState(new Map<string, string>());
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const mutationError = useActionData();
+  const navigation = useNavigation();
+  const submit = useSubmit();
+
+  const { profilesByConventionId, allConventions, ambiguousProfileConventionIds } = useMemo(() => {
+    const profilesByConventionId = new Map<string, UserConProfileType[]>();
+    const allConventions = sortBy(
       uniqBy(
         flatMap(data.users, (user) => user.user_con_profiles.map((profile) => profile.convention)),
         (convention) => convention.id,
@@ -92,11 +101,13 @@ function MergeUsersModal({ closeModal, visible, userIds }: MergeUsersModalProps)
       );
       profilesByConventionId.set(convention.id, profiles);
     });
-  }
 
-  const ambiguousProfileConventionIds = [...profilesByConventionId.entries()]
-    .filter(([, profiles]) => profiles.length > 1)
-    .map(([conventionId]) => conventionId);
+    const ambiguousProfileConventionIds = [...profilesByConventionId.entries()]
+      .filter(([, profiles]) => profiles.length > 1)
+      .map(([conventionId]) => conventionId);
+
+    return { profilesByConventionId, allConventions, ambiguousProfileConventionIds };
+  }, [data.users]);
 
   const fullyDisambiguated = ambiguousProfileConventionIds.every((conventionId) => winningProfileIds.get(conventionId));
 
@@ -190,42 +201,43 @@ function MergeUsersModal({ closeModal, visible, userIds }: MergeUsersModalProps)
     );
   };
 
-  const renderModalContent = () => (
-    <>
-      <p>{t('admin.users.merge.selectWinningUser')}</p>
-
-      <ChoiceSet
-        choices={sortBy(data?.users, (user) => user.id).map((user) => ({
-          label: `${user.id} (${user.name}, ${user.email})`,
-          value: user.id.toString(),
-        }))}
-        value={winningUserId?.toString()}
-        onChange={(newValue: string) => setWinningUserId(newValue)}
-      />
-
-      {renderMergePreview()}
-    </>
-  );
-
   return (
-    <Modal visible={visible} dialogClassName="modal-lg">
+    <Modal visible dialogClassName="modal-lg">
       <div className="modal-header">{t('admin.users.merge.title')}</div>
 
       <div className="modal-body">
-        {renderIfQueryReady(renderModalContent, { loading, error })}
+        <p>{t('admin.users.merge.selectWinningUser')}</p>
 
-        <ErrorDisplay graphQLError={mutationError} />
+        <ChoiceSet
+          choices={sortBy(data?.users, (user) => user.id).map((user) => ({
+            label: `${user.id} (${user.name}, ${user.email})`,
+            value: user.id.toString(),
+          }))}
+          value={winningUserId?.toString()}
+          onChange={(newValue: string) => setWinningUserId(newValue)}
+        />
+
+        {renderMergePreview()}
+
+        <ErrorDisplay graphQLError={mutationError as ApolloError} />
       </div>
 
       <div className="modal-footer">
-        <button type="button" className="btn btn-secondary" onClick={closeModal}>
+        <button type="button" className="btn btn-secondary" onClick={() => navigate('..')}>
           {t('buttons.cancel')}
         </button>
         <button
           type="button"
           className="btn btn-danger"
-          disabled={!winningUserId || !fullyDisambiguated || mutationInProgress}
-          onClick={performMerge}
+          disabled={!winningUserId || !fullyDisambiguated || navigation.state !== 'idle'}
+          onClick={() => {
+            const args: ActionArgs = {
+              userIds: data.users.map((user) => user.id),
+              winningProfileIds: Object.fromEntries(winningProfileIds.entries()),
+              winningUserId: winningUserId ?? null,
+            };
+            submit(args, { method: 'POST', encType: 'application/json' });
+          }}
         >
           {t('admin.users.merge.buttonLabel')}
         </button>
@@ -234,4 +246,4 @@ function MergeUsersModal({ closeModal, visible, userIds }: MergeUsersModalProps)
   );
 }
 
-export default MergeUsersModal;
+export const Component = MergeUsersModal;

@@ -90,6 +90,9 @@ export enum NamedRoute {
   TeamMembersIndex = 'TeamMembersIndex',
   UserActivityAlerts = 'UserActivityAlerts',
   CmsFiles = 'CmsFiles',
+  UserAdminDisplay = 'UserAdminDisplay',
+  UserAdmin = 'UserAdmin',
+  UsersTable = 'UsersTable',
 }
 
 export type RouteName = keyof typeof NamedRoute & string;
@@ -787,11 +790,23 @@ const rootSiteRoutes: RouteObject[] = [
     ],
   },
   {
-    path: '/users',
-    lazy: () => import('./Users/UsersAdmin'),
+    element: <AuthorizationRequiredRouteGuard abilities={['can_read_users']} />,
     children: [
-      { path: ':id', lazy: () => import('./Users/UserAdminDisplay') },
-      { index: true, lazy: () => import('./Users/UsersTable') },
+      {
+        path: '/users',
+        lazy: () => import('./Users/UsersAdmin'),
+        id: NamedRoute.UserAdmin,
+        children: [
+          { path: ':id', id: NamedRoute.UserAdminDisplay, lazy: () => import('./Users/UserAdminDisplay') },
+          {
+            lazy: () => import('./Users/UsersTable'),
+            children: [
+              { path: 'merge/:ids', lazy: () => import('./Users/MergeUsersModal') },
+              { index: true, id: NamedRoute.UsersTable },
+            ],
+          },
+        ],
+      },
     ],
   },
 ];
