@@ -42,7 +42,7 @@
     "@lezer/common": "1.2.1",
     "@neinteractiveliterature/litform": "0.29.0",
     "@popperjs/core": "^2.11.8",
-    "@rails/activestorage": "7.2.0",
+    "@rails/activestorage": "7.2.100",
     "@sentry/browser": "^8.7.0",
     "@stripe/react-stripe-js": "2.8.0",
     "@stripe/stripe-js": "4.3.0",
