@@ -7206,10 +7206,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/zxcvbn@npm:4.4.4":
-  version: 4.4.4
-  resolution: "@types/zxcvbn@npm:4.4.4"
-  checksum: 10c0/ad5319aa00782fb14cb9bb3c21f12f09c6e90c5a7b234dcc0a5f54c9b9d35110f3cb511ba821d97e02733a821fe7961dd78d78e2d6513a4f8c28a6d5973af1e4
+"@types/zxcvbn@npm:4.4.5":
+  version: 4.4.5
+  resolution: "@types/zxcvbn@npm:4.4.5"
+  checksum: 10c0/b0f2f8a310de61860d66ee24964e9746cadcc166f3b44df384147ebddab186555bef701dcba0a47d04bc80dfa47d5de15f2a08e0abd713fe3a77304342ae68a8
   languageName: node
   linkType: hard
 
@@ -21076,7 +21076,7 @@ __metadata:
     "@types/tinycolor2": "npm:1.4.6"
     "@types/uuid": "npm:10.0.0"
     "@types/webpack-env": "npm:^1.18.5"
-    "@types/zxcvbn": "npm:4.4.4"
+    "@types/zxcvbn": "npm:4.4.5"
     "@typescript-eslint/eslint-plugin": "npm:8.2.0"
     "@typescript-eslint/parser": "npm:8.2.0"
     "@webpack-cli/serve": "npm:2.0.5"
