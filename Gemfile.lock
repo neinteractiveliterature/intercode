@@ -261,7 +261,7 @@ GEM
       i18n (>= 1.8.11, < 2)
     faraday (2.9.2)
       faraday-net_http (>= 2.0, < 3.2)
-    faraday-net_http (3.1.0)
+    faraday-net_http (3.1.1)
       net-http
     ffi (1.17.0)
     ffi (1.17.0-java)
@@ -623,7 +623,7 @@ GEM
       sync
     toml (0.3.0)
       parslet (>= 1.8.0, < 3.0.0)
-    twilio-ruby (7.2.3)
+    twilio-ruby (7.2.4)
       faraday (>= 0.9, < 3.0)
       jwt (>= 1.5, < 3.0)
       nokogiri (>= 1.6, < 2.0)
