@@ -1,25 +1,14 @@
 import { useMemo } from 'react';
-import { Link } from 'react-router-dom';
-import {
-  ErrorDisplay,
-  useConfirm,
-  sortByLocaleString,
-  useDeleteMutationWithReferenceArrayUpdater,
-} from '@neinteractiveliterature/litform';
+import { Link, useSubmit } from 'react-router-dom';
+import { ErrorDisplay, useConfirm, sortByLocaleString } from '@neinteractiveliterature/litform';
 
 import usePageTitle from '../../usePageTitle';
-import { useDeleteLayoutMutation } from './mutations.generated';
 import { useCmsLayoutsAdminLoader } from './loaders';
 
 function CmsLayoutsAdminTable() {
   const data = useCmsLayoutsAdminLoader();
   const confirm = useConfirm();
-  const [deleteLayout] = useDeleteMutationWithReferenceArrayUpdater(
-    useDeleteLayoutMutation,
-    data.cmsParent,
-    'cmsLayouts',
-    (layout) => ({ id: layout.id }),
-  );
+  const submit = useSubmit();
 
   const layoutsSorted = useMemo(() => {
     return sortByLocaleString(data.cmsParent.cmsLayouts, (layout) => layout.name ?? '');
@@ -58,7 +47,7 @@ function CmsLayoutsAdminTable() {
                     onClick={() =>
                       confirm({
                         prompt: 'Are you sure you want to delete this layout?',
-                        action: () => deleteLayout(layout),
+                        action: () => submit(null, { action: layout.id, method: 'DELETE' }),
                         renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
                       })
                     }

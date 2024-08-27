@@ -1,19 +1,12 @@
-import { Link } from 'react-router-dom';
-import { ErrorDisplay, useConfirm, useDeleteMutationWithReferenceArrayUpdater } from '@neinteractiveliterature/litform';
+import { Link, useSubmit } from 'react-router-dom';
+import { ErrorDisplay, useConfirm } from '@neinteractiveliterature/litform';
 
 import usePageTitle from '../../usePageTitle';
-import { useDeleteCmsGraphqlQuery } from './mutations.generated';
 import { useCmsGraphqlQueriesAdminLoader } from './loaders';
 
 function CmsGraphqlQueriesAdminTable(): JSX.Element {
   const data = useCmsGraphqlQueriesAdminLoader();
-  const [deleteCmsGraphqlQuery] = useDeleteMutationWithReferenceArrayUpdater(
-    useDeleteCmsGraphqlQuery,
-    data.cmsParent,
-    'cmsGraphqlQueries',
-    (query) => ({ id: query.id }),
-  );
-
+  const submit = useSubmit();
   const confirm = useConfirm();
 
   usePageTitle('CMS GraphQL Queries');
@@ -53,7 +46,7 @@ function CmsGraphqlQueriesAdminTable(): JSX.Element {
                     onClick={() =>
                       confirm({
                         prompt: `Are you sure you want to delete the query '${query.identifier}'?`,
-                        action: () => deleteCmsGraphqlQuery(query),
+                        action: () => submit({}, { action: `./${query.id}`, method: 'DELETE' }),
                         renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
                       })
                     }

@@ -373,6 +373,7 @@ const commonRoutes: RouteObject[] = [
         children: [
           {
             path: ':id',
+            lazy: () => import('./CmsAdmin/CmsPartialsAdmin/SinglePartialRoute'),
             children: [
               { path: 'edit', lazy: () => import('./CmsAdmin/CmsPartialsAdmin/EditCmsPartial') },
               { path: 'view_source', lazy: () => import('./CmsAdmin/CmsPartialsAdmin/ViewCmsPartialSource') },
@@ -391,6 +392,7 @@ const commonRoutes: RouteObject[] = [
         children: [
           {
             path: ':id',
+            lazy: () => import('./CmsAdmin/CmsLayoutsAdmin/SingleLayoutRoute'),
             children: [
               { path: 'edit', lazy: () => import('./CmsAdmin/CmsLayoutsAdmin/EditCmsLayout') },
               { path: 'view_source', lazy: () => import('./CmsAdmin/CmsLayoutsAdmin/ViewCmsLayoutSource') },
@@ -400,7 +402,11 @@ const commonRoutes: RouteObject[] = [
           { index: true, lazy: () => import('./CmsAdmin/CmsLayoutsAdmin/CmsLayoutsAdminTable') },
         ],
       },
-      { path: '/cms_variables', lazy: () => import('./CmsAdmin/CmsVariablesAdmin') },
+      {
+        path: '/cms_variables',
+        lazy: () => import('./CmsAdmin/CmsVariablesAdmin'),
+        children: [{ path: ':key', lazy: () => import('./CmsAdmin/CmsVariablesAdmin/SingleVariableRoute') }],
+      },
       {
         path: '/cms_graphql_queries',
         loader: cmsGraphqlQueriesAdminLoader,
@@ -408,6 +414,7 @@ const commonRoutes: RouteObject[] = [
         children: [
           {
             path: ':id',
+            lazy: () => import('./CmsAdmin/CmsGraphqlQueriesAdmin/SingleGraphqlQueryRoute'),
             children: [
               { path: 'edit', lazy: () => import('./CmsAdmin/CmsGraphqlQueriesAdmin/EditCmsGraphqlQuery') },
               {
@@ -427,8 +434,11 @@ const commonRoutes: RouteObject[] = [
         children: [
           {
             path: ':id',
-            lazy: () => import('./CmsAdmin/CmsContentGroupsAdmin/ViewCmsContentGroup'),
-            children: [{ path: 'edit', lazy: () => import('./CmsAdmin/CmsContentGroupsAdmin/EditCmsContentGroup') }],
+            lazy: () => import('./CmsAdmin/CmsContentGroupsAdmin/SingleCmsContentGroupRoute'),
+            children: [
+              { path: 'edit', lazy: () => import('./CmsAdmin/CmsContentGroupsAdmin/EditCmsContentGroup') },
+              { index: true, lazy: () => import('./CmsAdmin/CmsContentGroupsAdmin/ViewCmsContentGroup') },
+            ],
           },
           { path: 'new', lazy: () => import('./CmsAdmin/CmsContentGroupsAdmin/NewCmsContentGroup') },
           { index: true, lazy: () => import('./CmsAdmin/CmsContentGroupsAdmin/CmsContentGroupsAdminTable') },

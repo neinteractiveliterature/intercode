@@ -1,25 +1,14 @@
 import { useMemo } from 'react';
-import { Link } from 'react-router-dom';
-import {
-  ErrorDisplay,
-  sortByLocaleString,
-  useConfirm,
-  useDeleteMutationWithReferenceArrayUpdater,
-} from '@neinteractiveliterature/litform';
+import { Link, useSubmit } from 'react-router-dom';
+import { ErrorDisplay, sortByLocaleString, useConfirm } from '@neinteractiveliterature/litform';
 
 import usePageTitle from '../../usePageTitle';
-import { useDeletePartialMutation } from './mutations.generated';
 import { useCmsPartialsAdminLoader } from './loaders';
 
 function CmsPartialsAdminTable() {
   const data = useCmsPartialsAdminLoader();
   const confirm = useConfirm();
-  const [deletePartial] = useDeleteMutationWithReferenceArrayUpdater(
-    useDeletePartialMutation,
-    data.cmsParent,
-    'cmsPartials',
-    (item) => ({ id: item.id }),
-  );
+  const submit = useSubmit();
 
   usePageTitle('CMS Partials');
 
@@ -58,7 +47,7 @@ function CmsPartialsAdminTable() {
                     onClick={() =>
                       confirm({
                         prompt: 'Are you sure you want to delete this partial?',
-                        action: () => deletePartial(partial),
+                        action: () => submit({}, { action: `/cms_partials/${partial.id}`, method: 'DELETE' }),
                         renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
                       })
                     }

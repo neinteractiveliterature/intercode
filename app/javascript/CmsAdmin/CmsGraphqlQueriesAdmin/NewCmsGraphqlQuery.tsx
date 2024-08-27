@@ -1,50 +1,43 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { ActionFunction, Form, redirect, useActionData, useNavigation } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
-import {
-  ErrorDisplay,
-  LoadQueryWrapper,
-  useCreateMutationWithReferenceArrayUpdater,
-} from '@neinteractiveliterature/litform';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import CmsGraphqlQueryForm from './CmsGraphqlQueryForm';
 import usePageTitle from '../../usePageTitle';
 
 import 'graphiql/graphiql.css';
-import { CmsGraphqlQueryFieldsFragmentDoc, useCmsGraphqlQueriesQuery } from './queries.generated';
-import { useCreateCmsGraphqlQuery } from './mutations.generated';
-import { useCmsGraphqlQueriesAdminLoader } from './loaders';
+import { CreateCmsGraphqlQueryDocument } from './mutations.generated';
+import { client } from '../../useIntercodeApolloClient';
+import { buildCmsGraphqlQueryInputFromFormData } from './buildCmsGraphqlQueryInput';
+
+export const action: ActionFunction = async ({ request }) => {
+  const formData = await request.formData();
+
+  try {
+    await client.mutate({
+      mutation: CreateCmsGraphqlQueryDocument,
+      variables: {
+        query: buildCmsGraphqlQueryInputFromFormData(formData),
+      },
+    });
+  } catch (e) {
+    return e;
+  }
+  await client.resetStore();
+
+  return redirect('/cms_graphql_queries');
+};
 
 function NewCmsGraphqlQuery(): JSX.Element {
-  const data = useCmsGraphqlQueriesAdminLoader();
-  const navigate = useNavigate();
   const [query, setQuery] = useState({ identifier: '', admin_notes: '', query: '' });
-  const [create, { error: createError, loading: createInProgress }] = useCreateMutationWithReferenceArrayUpdater(
-    useCreateCmsGraphqlQuery,
-    data.cmsParent,
-    'cmsGraphqlQueries',
-    (data) => data.createCmsGraphqlQuery.query,
-    CmsGraphqlQueryFieldsFragmentDoc,
-  );
+  const createError = useActionData();
+  const navigation = useNavigation();
 
   usePageTitle('CMS GraphQL Queries');
 
-  const createClicked = async () => {
-    await create({
-      variables: {
-        query: {
-          identifier: query.identifier,
-          admin_notes: query.admin_notes,
-          query: query.query,
-        },
-      },
-    });
-
-    navigate('/cms_graphql_queries');
-  };
-
   return (
-    <>
+    <Form action="." method="POST">
       <h2 className="mb-4">New GraphQL query</h2>
 
       <div className="mb-4">
@@ -53,10 +46,10 @@ function NewCmsGraphqlQuery(): JSX.Element {
 
       <ErrorDisplay graphQLError={createError as ApolloError} />
 
-      <button type="button" className="btn btn-primary" disabled={createInProgress} onClick={createClicked}>
+      <button type="submit" className="btn btn-primary" disabled={navigation.state !== 'idle'}>
         Create GraphQL query
       </button>
-    </>
+    </Form>
   );
 }
 

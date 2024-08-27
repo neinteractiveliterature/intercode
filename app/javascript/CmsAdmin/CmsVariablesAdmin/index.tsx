@@ -70,14 +70,13 @@ function CmsVariablesAdmin(): JSX.Element {
       </thead>
       <tbody>
         {sortByLocaleString(cmsVariables, (variable) => variable.key).map((variable) => (
-          <ExistingVariableRow cmsParent={data.cmsParent} variable={variable} key={variable.key} />
+          <ExistingVariableRow variable={variable} key={variable.key} />
         ))}
         {addingVariables.map((variable) => (
           <AddVariableRow
             variable={variable}
             key={variable.generatedId}
             onChange={(value) => addVariableChanged(variable.generatedId, value)}
-            onSave={(generatedId) => removeAddVariable(generatedId)}
             onCancel={(generatedId) => removeAddVariable(generatedId)}
           />
         ))}

@@ -1,49 +1,47 @@
 import { useState } from 'react';
-import * as React from 'react';
-import { ApolloError, useApolloClient } from '@apollo/client';
-import { useLoaderData, useNavigate, useNavigationType } from 'react-router-dom';
+import { ApolloError } from '@apollo/client';
+import { ActionFunction, Form, redirect, useActionData, useLoaderData, useNavigation } from 'react-router-dom';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import buildLayoutInput from './buildLayoutInput';
+import { buildLayoutInputFromFormData } from './buildLayoutInput';
 import CmsLayoutForm from './CmsLayoutForm';
-import useAsyncFunction from '../../useAsyncFunction';
 import usePageTitle from '../../usePageTitle';
-import { useUpdateLayoutMutation } from './mutations.generated';
-import { Action } from 'history';
 import { singleCmsLayoutAdminLoader, SingleCmsLayoutAdminLoaderResult } from './loaders';
+import { client } from '../../useIntercodeApolloClient';
+import { UpdateLayoutDocument } from './mutations.generated';
+
+export const action: ActionFunction = async ({ params: { id }, request }) => {
+  const formData = await request.formData();
+
+  try {
+    await client.mutate({
+      mutation: UpdateLayoutDocument,
+      variables: {
+        id: id ?? '',
+        cmsLayout: buildLayoutInputFromFormData(formData),
+      },
+    });
+  } catch (e) {
+    return e;
+  }
+  await client.resetStore();
+
+  return redirect(formData.get('destination')?.toString() ?? '/cms_layouts');
+};
 
 export const loader = singleCmsLayoutAdminLoader;
 
 function EditCmsLayout() {
   const { layout: initialLayout } = useLoaderData() as SingleCmsLayoutAdminLoaderResult;
-  const navigate = useNavigate();
-  const navigationType = useNavigationType();
   const [layout, setLayout] = useState(initialLayout);
-  const [updateMutate] = useUpdateLayoutMutation();
-  const [updateLayout, updateError, updateInProgress] = useAsyncFunction(updateMutate);
-  const apolloClient = useApolloClient();
+  const updateError = useActionData();
+  const navigation = useNavigation();
 
   usePageTitle(`Editing “${initialLayout.name}”`);
 
-  const formSubmitted = async (event: React.FormEvent) => {
-    event.preventDefault();
-    await updateLayout({
-      variables: {
-        id: initialLayout.id,
-        cmsLayout: buildLayoutInput(layout),
-      },
-    });
-    await apolloClient.resetStore();
-    if (navigationType === Action.Push) {
-      navigate(-1);
-    } else {
-      navigate('/cms_layouts');
-    }
-  };
-
   return (
     <>
-      <form onSubmit={formSubmitted}>
+      <Form action="." method="PATCH">
         <CmsLayoutForm layout={layout} onChange={setLayout} />
 
         <ErrorDisplay graphQLError={updateError as ApolloError} />
@@ -52,10 +50,10 @@ function EditCmsLayout() {
           type="submit"
           className="btn btn-primary"
           value="Save changes"
-          disabled={updateInProgress}
+          disabled={navigation.state !== 'idle'}
           aria-label="Save changes"
         />
-      </form>
+      </Form>
     </>
   );
 }

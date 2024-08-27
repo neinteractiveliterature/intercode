@@ -1,23 +1,57 @@
 import bytes from 'bytes';
-import {
-  ErrorDisplay,
-  useConfirm,
-  CopyToClipboardButton,
-  useCreateMutationWithReferenceArrayUpdater,
-  useDeleteMutationWithReferenceArrayUpdater,
-} from '@neinteractiveliterature/litform';
+import { ErrorDisplay, useConfirm, CopyToClipboardButton } from '@neinteractiveliterature/litform';
 import { useTranslation } from 'react-i18next';
 
 import FilePreview from './FilePreview';
 import usePageTitle from '../../usePageTitle';
 import InPlaceEditor from '../../BuiltInFormControls/InPlaceEditor';
-import { useRenameCmsFileMutation, useDeleteCmsFileMutation, useCreateCmsFileMutation } from './mutations.generated';
-import { CmsFileFieldsFragmentDoc, CmsFilesAdminQueryData, CmsFilesAdminQueryDocument } from './queries.generated';
+import { CmsFilesAdminQueryData, CmsFilesAdminQueryDocument } from './queries.generated';
 import { useCallback } from 'react';
 import FileUploadForm from '../../BuiltInForms/FileUploadForm';
 import { Blob } from '@rails/activestorage';
-import { LoaderFunction, useLoaderData } from 'react-router';
+import { ActionFunction, LoaderFunction, redirect, useLoaderData } from 'react-router';
 import { client } from '../../useIntercodeApolloClient';
+import { CreateCmsFileDocument, DeleteCmsFileDocument, RenameCmsFileDocument } from './mutations.generated';
+import { useSubmit } from 'react-router-dom';
+
+export const action: ActionFunction = async ({ request }) => {
+  const formData = await request.formData();
+
+  try {
+    if (request.method === 'DELETE') {
+      const id = formData.get('id')?.toString() ?? '';
+      await client.mutate({
+        mutation: DeleteCmsFileDocument,
+        variables: { id },
+        refetchQueries: [{ query: CmsFilesAdminQueryDocument }],
+        awaitRefetchQueries: true,
+      });
+    } else if (request.method === 'PATCH') {
+      const id = formData.get('id')?.toString() ?? '';
+      const filename = formData.get('filename')?.toString() ?? '';
+      await client.mutate({
+        mutation: RenameCmsFileDocument,
+        variables: { id, filename },
+        refetchQueries: [{ query: CmsFilesAdminQueryDocument }],
+        awaitRefetchQueries: true,
+      });
+    } else if (request.method === 'POST') {
+      const signedBlobId = formData.get('signedBlobId')?.toString() ?? '';
+      await client.mutate({
+        mutation: CreateCmsFileDocument,
+        variables: { signedBlobId },
+        refetchQueries: [{ query: CmsFilesAdminQueryDocument }],
+        awaitRefetchQueries: true,
+      });
+    } else {
+      return new Response(null, { status: 404 });
+    }
+  } catch (e) {
+    return e;
+  }
+
+  return redirect('/cms_files');
+};
 
 export const loader: LoaderFunction = async () => {
   const { data } = await client.query<CmsFilesAdminQueryData>({ query: CmsFilesAdminQueryDocument });
@@ -26,42 +60,19 @@ export const loader: LoaderFunction = async () => {
 
 function CmsFilesAdmin(): JSX.Element {
   const data = useLoaderData() as CmsFilesAdminQueryData;
-  const [deleteFile] = useDeleteMutationWithReferenceArrayUpdater(
-    useDeleteCmsFileMutation,
-    data.cmsParent,
-    'cmsFiles',
-    (file) => ({ id: file.id }),
-  );
-  const [renameFileMutate] = useRenameCmsFileMutation();
   const confirm = useConfirm();
   const { t } = useTranslation();
+  const submit = useSubmit();
 
   usePageTitle('CMS Files');
 
-  const renameFile = (id: string, filename: string) =>
-    renameFileMutate({
-      variables: { id, filename },
-    });
-
-  const [createFile] = useCreateMutationWithReferenceArrayUpdater(
-    useCreateCmsFileMutation,
-    data.cmsParent,
-    'cmsFiles',
-    (data) => data.createCmsFile.cms_file,
-    CmsFileFieldsFragmentDoc,
-  );
+  const renameFile = (id: string, filename: string) => submit({ id, filename }, { method: 'PATCH' });
 
   const onUpload = useCallback(
     async (blob: Blob) => {
-      const result = await createFile({ variables: { signedBlobId: blob.signed_id } });
-      const attachment = result.data?.createCmsFile.cms_file.file;
-      if (!attachment) {
-        throw new Error('Result did not include an ActiveStorage attachment');
-      }
-
-      return attachment;
+      submit({ signedBlobId: blob.signed_id }, { method: 'POST' });
     },
-    [createFile],
+    [submit],
   );
 
   return (
@@ -78,7 +89,7 @@ function CmsFilesAdmin(): JSX.Element {
                     onClick={() =>
                       confirm({
                         prompt: `Are you sure you want to delete ${cmsFile.file.filename}?`,
-                        action: () => deleteFile(cmsFile),
+                        action: () => submit({ id: cmsFile.id }, { method: 'DELETE' }),
                         renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
                       })
                     }

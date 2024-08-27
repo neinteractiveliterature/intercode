@@ -70,6 +70,7 @@ function CmsContentGroupFormFields({
     <>
       <BootstrapFormInput
         label="Name"
+        name="name"
         value={contentGroup.name}
         onTextChange={(name) => setContentGroup && setContentGroup({ ...contentGroup, name })}
         disabled={disabled}
@@ -80,6 +81,7 @@ function CmsContentGroupFormFields({
         {(id) => (
           <CmsContentSelect
             isMulti
+            name="contents"
             value={contentGroup.contents}
             inputId={id}
             onChange={(contents: CmsContentOption[]) =>

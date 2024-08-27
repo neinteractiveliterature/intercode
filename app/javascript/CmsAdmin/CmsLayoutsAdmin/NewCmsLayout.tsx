@@ -1,43 +1,42 @@
 import { useState } from 'react';
-import * as React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { ActionFunction, Form, redirect, useActionData, useNavigation } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
-import { ErrorDisplay, useCreateMutationWithReferenceArrayUpdater } from '@neinteractiveliterature/litform';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import buildLayoutInput from './buildLayoutInput';
+import { buildLayoutInputFromFormData } from './buildLayoutInput';
 import CmsLayoutForm from './CmsLayoutForm';
 import usePageTitle from '../../usePageTitle';
 import { CmsLayout } from '../../graphqlTypes.generated';
-import { CreateLayoutMutationData, useCreateLayoutMutation } from './mutations.generated';
-import { CmsLayoutFieldsFragmentDoc } from './queries.generated';
-import { useCmsLayoutsAdminLoader } from './loaders';
+import { CreateLayoutDocument } from './mutations.generated';
+import { client } from '../../useIntercodeApolloClient';
+
+export const action: ActionFunction = async ({ request }) => {
+  const formData = await request.formData();
+
+  try {
+    await client.mutate({
+      mutation: CreateLayoutDocument,
+      variables: {
+        cmsLayout: buildLayoutInputFromFormData(formData),
+      },
+    });
+  } catch (e) {
+    return e;
+  }
+  await client.resetStore();
+
+  return redirect('/cms_layouts');
+};
 
 function NewCmsLayout(): JSX.Element {
-  const data = useCmsLayoutsAdminLoader();
-  const navigate = useNavigate();
   const [layout, setLayout] = useState<Pick<CmsLayout, 'name' | 'admin_notes' | 'navbar_classes' | 'content'>>({});
-  const [createLayout, { error: createError, loading: createInProgress }] = useCreateMutationWithReferenceArrayUpdater(
-    useCreateLayoutMutation,
-    data.cmsParent,
-    'cmsLayouts',
-    (data: CreateLayoutMutationData) => data.createCmsLayout.cms_layout,
-    CmsLayoutFieldsFragmentDoc,
-  );
+  const createError = useActionData();
+  const navigation = useNavigation();
 
   usePageTitle('New Layout');
 
-  const formSubmitted = async (event: React.FormEvent) => {
-    event.preventDefault();
-    await createLayout({
-      variables: {
-        cmsLayout: buildLayoutInput(layout),
-      },
-    });
-    navigate('/cms_layouts');
-  };
-
   return (
-    <form onSubmit={formSubmitted}>
+    <Form action="." method="POST">
       <CmsLayoutForm layout={layout} onChange={setLayout} />
 
       <ErrorDisplay graphQLError={createError as ApolloError} />
@@ -46,10 +45,10 @@ function NewCmsLayout(): JSX.Element {
         type="submit"
         className="btn btn-primary"
         value="Create layout"
-        disabled={createInProgress}
+        disabled={navigation.state !== 'idle'}
         aria-label="Create layout"
       />
-    </form>
+    </Form>
   );
 }
 

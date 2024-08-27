@@ -15,7 +15,7 @@ import { buildPageInputFromFormData } from './buildPageInput';
 import CmsPageForm from './CmsPageForm';
 import usePageTitle from '../../usePageTitle';
 import { singleCmsPageAdminLoader, SingleCmsPageAdminLoaderResult } from './loaders';
-import { DeletePageDocument, UpdatePageDocument } from './mutations.generated';
+import { UpdatePageDocument } from './mutations.generated';
 import { client } from '../../useIntercodeApolloClient';
 
 export const action: ActionFunction = async ({ params: { id }, request }) => {

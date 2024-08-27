@@ -1,49 +1,29 @@
-import { ApolloError, useApolloClient } from '@apollo/client';
-import { useConfirm, ErrorDisplay, useDeleteMutationWithReferenceArrayUpdater } from '@neinteractiveliterature/litform';
+import { ApolloError } from '@apollo/client';
+import { useConfirm, ErrorDisplay, LoadingIndicator } from '@neinteractiveliterature/litform';
 
 import CommitableInput from '../../BuiltInFormControls/CommitableInput';
-import useAsyncFunction from '../../useAsyncFunction';
-import { useDeleteCmsVariableMutation, useSetCmsVariableMutation } from './mutations.generated';
 import { CmsVariablesQueryData } from './queries.generated';
+import { useActionData, useFetcher } from 'react-router-dom';
 
 export type ExistingVariableRowProps = {
-  cmsParent: CmsVariablesQueryData['cmsParent'];
   variable: CmsVariablesQueryData['cmsParent']['cmsVariables'][0];
 };
 
-function ExistingVariableRow({ cmsParent, variable }: ExistingVariableRowProps): JSX.Element {
-  const [setVariableMutate] = useSetCmsVariableMutation();
-  const [setVariable, setVariableError, , clearSetVariableError] = useAsyncFunction(setVariableMutate);
-  const [deleteVariableMutate] = useDeleteMutationWithReferenceArrayUpdater(
-    useDeleteCmsVariableMutation,
-    cmsParent,
-    'cmsVariables',
-    (variable) => ({ key: variable.key }),
-  );
-  const [deleteVariable, deleteVariableError, , clearDeleteVariableError] = useAsyncFunction(deleteVariableMutate);
+function ExistingVariableRow({ variable }: ExistingVariableRowProps): JSX.Element {
+  const error = useActionData();
   const confirm = useConfirm();
-  const apolloClient = useApolloClient();
+  const deleteFetcher = useFetcher();
+  const updateFetcher = useFetcher();
 
-  const error = setVariableError || deleteVariableError;
-  const clearError = () => {
-    clearSetVariableError();
-    clearDeleteVariableError();
+  const commitVariable = (value: string) => {
+    updateFetcher.submit(
+      { value_json: value },
+      { action: `./${variable.key}`, method: 'PATCH', preventScrollReset: true },
+    );
   };
 
-  const commitVariable = async (value: string) => {
-    await setVariable({
-      variables: {
-        key: variable.key,
-        value_json: value,
-      },
-    });
-
-    return apolloClient.resetStore();
-  };
-
-  const deleteConfirmed = async () => {
-    await deleteVariable(variable);
-    return apolloClient.resetStore();
+  const deleteConfirmed = () => {
+    deleteFetcher.submit({}, { action: `./${variable.key}`, method: 'DELETE' });
   };
 
   return (
@@ -54,12 +34,11 @@ function ExistingVariableRow({ cmsParent, variable }: ExistingVariableRowProps):
         </td>
         <td>
           {variable.current_ability_can_update ? (
-            <CommitableInput
-              className="font-monospace"
-              value={variable.value_json}
-              onChange={commitVariable}
-              onCancel={clearError}
-            />
+            updateFetcher.state === 'idle' ? (
+              <CommitableInput className="font-monospace" value={variable.value_json} onChange={commitVariable} />
+            ) : (
+              <LoadingIndicator size={8} />
+            )
           ) : (
             <span className="font-monospace">{variable.value_json}</span>
           )}

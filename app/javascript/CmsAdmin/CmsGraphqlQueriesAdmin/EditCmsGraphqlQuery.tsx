@@ -1,47 +1,50 @@
 import { useState } from 'react';
-import { ApolloError, useApolloClient } from '@apollo/client';
-import { useLoaderData, useNavigate } from 'react-router-dom';
+import { ApolloError } from '@apollo/client';
+import { ActionFunction, Form, redirect, useActionData, useLoaderData, useNavigation } from 'react-router-dom';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import CmsGraphqlQueryForm from './CmsGraphqlQueryForm';
-import useAsyncFunction from '../../useAsyncFunction';
 import usePageTitle from '../../usePageTitle';
 
 import 'graphiql/graphiql.css';
-import { useUpdateCmsGraphqlQuery } from './mutations.generated';
 import { singleCmsGraphqlQueryAdminLoader, SingleCmsGraphqlQueryAdminLoaderResult } from './loaders';
+import { client } from '../../useIntercodeApolloClient';
+import { UpdateCmsGraphqlQueryDocument } from './mutations.generated';
+import { buildCmsGraphqlQueryInputFromFormData } from './buildCmsGraphqlQueryInput';
+
+export const action: ActionFunction = async ({ params: { id }, request }) => {
+  const formData = await request.formData();
+
+  try {
+    await client.mutate({
+      mutation: UpdateCmsGraphqlQueryDocument,
+      variables: {
+        id: id ?? '',
+        query: buildCmsGraphqlQueryInputFromFormData(formData),
+      },
+    });
+  } catch (e) {
+    return e;
+  }
+  await client.resetStore();
+
+  return redirect(formData.get('destination')?.toString() ?? '/cms_graphql_queries');
+};
 
 export const loader = singleCmsGraphqlQueryAdminLoader;
 
 function EditCmsGraphqlQuery() {
   const { graphqlQuery: initialQuery } = useLoaderData() as SingleCmsGraphqlQueryAdminLoaderResult;
-  const navigate = useNavigate();
   const [query, setQuery] = useState(initialQuery);
-  const [updateMutate] = useUpdateCmsGraphqlQuery();
-  const apolloClient = useApolloClient();
+  const navigation = useNavigation();
+  const saveError = useActionData();
 
-  const saveClicked = async () => {
-    await updateMutate({
-      variables: {
-        id: query.id,
-        query: {
-          identifier: query.identifier,
-          admin_notes: query.admin_notes,
-          query: query.query,
-        },
-      },
-    });
-
-    await apolloClient.resetStore();
-    navigate('/cms_graphql_queries');
-  };
-
-  const [save, saveError, saveInProgress] = useAsyncFunction(saveClicked);
+  const saveInProgress = navigation.state !== 'idle';
 
   usePageTitle(`Editing “${initialQuery.identifier}”`);
 
   return (
-    <>
+    <Form action="." method="PATCH">
       <h2 className="mb-4">Edit GraphQL query</h2>
 
       <div className="mb-4">
@@ -50,10 +53,10 @@ function EditCmsGraphqlQuery() {
 
       <ErrorDisplay graphQLError={saveError as ApolloError} />
 
-      <button type="button" className="btn btn-primary" disabled={saveInProgress} onClick={save}>
+      <button type="submit" className="btn btn-primary" disabled={saveInProgress}>
         Save GraphQL query
       </button>
-    </>
+    </Form>
   );
 }
 

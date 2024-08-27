@@ -1,30 +1,39 @@
 import { useState } from 'react';
 import * as React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { ActionFunction, redirect, useActionData, useNavigation, useSubmit } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
-import { ErrorDisplay, useCreateMutationWithReferenceArrayUpdater } from '@neinteractiveliterature/litform';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { buildPermissionInput } from '../../Permissions/PermissionUtils';
 import { useChangeSet } from '../../ChangeSet';
 import usePageTitle from '../../usePageTitle';
 import CmsContentGroupFormFields from './CmsContentGroupFormFields';
-import { CmsContentGroupFieldsFragmentDoc, CmsContentGroupsAdminQueryData } from './queries.generated';
-import { useCreateContentGroupMutation } from './mutations.generated';
-import { CmsContentTypeIndicator } from '../../graphqlTypes.generated';
+import { CmsContentGroupsAdminQueryData } from './queries.generated';
+import { CmsContentTypeIndicator, CreateCmsContentGroupInput } from '../../graphqlTypes.generated';
 import { useCmsContentGroupsAdminLoader } from './loaders';
+import { CreateContentGroupDocument } from './mutations.generated';
+import { client } from '../../useIntercodeApolloClient';
+
+export const action: ActionFunction = async ({ request }) => {
+  const variables = (await request.json()) as CreateCmsContentGroupInput;
+  try {
+    await client.mutate({
+      mutation: CreateContentGroupDocument,
+      variables: {
+        cmsContentGroup: variables.cms_content_group,
+        permissions: variables.permissions,
+      },
+    });
+  } catch (e) {
+    return e;
+  }
+  await client.resetStore();
+
+  return redirect('/cms_content_groups');
+};
 
 function NewCmsContentGroup(): JSX.Element {
   const data = useCmsContentGroupsAdminLoader();
-  const navigate = useNavigate();
-  const [createCmsContentGroup, { error: createError, loading: createInProgress }] =
-    useCreateMutationWithReferenceArrayUpdater(
-      useCreateContentGroupMutation,
-      data.cmsParent,
-      'cmsContentGroups',
-      (data) => data.createCmsContentGroup.cms_content_group,
-      CmsContentGroupFieldsFragmentDoc,
-      'CmsContentGroupFields',
-    );
   const [contentGroup, setContentGroup] = useState<
     Omit<CmsContentGroupsAdminQueryData['cmsParent']['cmsContentGroups'][0], 'id'>
   >({
@@ -37,26 +46,27 @@ function NewCmsContentGroup(): JSX.Element {
   });
   const [permissionsChangeSet, addPermission, removePermission] =
     useChangeSet<CmsContentGroupsAdminQueryData['cmsParent']['cmsContentGroups'][0]['permissions'][0]>();
+  const navigation = useNavigation();
+  const createInProgress = navigation.state !== 'idle';
+  const createError = useActionData();
+  const submit = useSubmit();
 
   usePageTitle('New Content Group');
 
   const formSubmitted = async (event: React.FormEvent) => {
     event.preventDefault();
-
-    await createCmsContentGroup({
-      variables: {
-        cmsContentGroup: {
-          name: contentGroup.name,
-          contents: contentGroup.contents.map(({ id, __typename }) => ({
-            id,
-            content_type: __typename as CmsContentTypeIndicator,
-          })),
-        },
-        permissions: permissionsChangeSet.getAddValues().map(buildPermissionInput),
+    const variables: CreateCmsContentGroupInput = {
+      cms_content_group: {
+        name: contentGroup.name,
+        contents: contentGroup.contents.map(({ id, __typename }) => ({
+          id,
+          content_type: __typename as CmsContentTypeIndicator,
+        })),
       },
-    });
+      permissions: permissionsChangeSet.getAddValues().map(buildPermissionInput),
+    };
 
-    navigate('/cms_content_groups');
+    submit(variables, { action: '.', method: 'POST', encType: 'application/json' });
   };
 
   return (
