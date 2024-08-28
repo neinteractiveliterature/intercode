@@ -5992,10 +5992,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stripe/stripe-js@npm:4.3.0":
-  version: 4.3.0
-  resolution: "@stripe/stripe-js@npm:4.3.0"
-  checksum: 10c0/43ec28d0bf5d9fa68ba9394bb90ada96142594448115ae906b7dbb4a8bc47f629dac9fbf685ef0b592d303365344d23f97171fa808a4a98187e622d942e0984f
+"@stripe/stripe-js@npm:4.4.0":
+  version: 4.4.0
+  resolution: "@stripe/stripe-js@npm:4.4.0"
+  checksum: 10c0/ac418b6141c5b60dc6a40cfb2c4be15ff80f4b6ca802650d8e81141755a0a487dc44b0225a3bffe83b2d5c3d9a9d67c55cd35f39e23d5b68e38afdc9e144f355
   languageName: node
   linkType: hard
 
@@ -21064,7 +21064,7 @@ __metadata:
     "@rails/activestorage": "npm:7.2.100"
     "@sentry/browser": "npm:^8.7.0"
     "@stripe/react-stripe-js": "npm:2.8.0"
-    "@stripe/stripe-js": "npm:4.3.0"
+    "@stripe/stripe-js": "npm:4.4.0"
     "@swc/core": "npm:^1.4.2"
     "@swc/jest": "npm:^0.2.36"
     "@testing-library/dom": "npm:^10.1.0"
