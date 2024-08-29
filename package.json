@@ -46,7 +46,7 @@
     "@sentry/browser": "^8.7.0",
     "@stripe/react-stripe-js": "2.8.0",
     "@stripe/stripe-js": "4.4.0",
-    "@testing-library/react": "16.0.0",
+    "@testing-library/react": "16.0.1",
     "@types/bytes": "3.1.4",
     "@types/debounce-promise": "3.1.9",
     "@types/diff": "5.2.2",
