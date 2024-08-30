@@ -516,7 +516,7 @@ GEM
       nokogiri
     rexml (3.3.6)
       strscan
-    rollbar (3.5.2)
+    rollbar (3.6.0)
     rouge (3.26.1)
     rubocop (1.65.1)
       json (~> 2.3)
