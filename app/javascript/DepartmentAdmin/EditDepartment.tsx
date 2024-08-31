@@ -1,39 +1,56 @@
-import { useCallback } from 'react';
-import { useLoaderData, useNavigate } from 'react-router-dom';
+import { ActionFunction, Form, redirect, useLoaderData, useNavigation } from 'react-router-dom';
 
 import usePageTitle from '../usePageTitle';
-import buildDepartmentInput from './buildDepartmentInput';
+import { buildDepartmentInputFromFormData } from './buildDepartmentInput';
 import DepartmentForm from './DepartmentForm';
-import { useUpdateDepartmentMutation } from './mutations.generated';
 import { singleDepartmentAdminLoader, SingleDepartmentAdminLoaderResult } from './loaders';
+import { client } from '../useIntercodeApolloClient';
+import { UpdateDepartmentDocument } from './mutations.generated';
+import { DepartmentAdminQueryDocument } from './queries.generated';
+import { useTranslation } from 'react-i18next';
+
+export const action: ActionFunction = async ({ params: { id }, request }) => {
+  try {
+    const formData = await request.formData();
+    await client.mutate({
+      mutation: UpdateDepartmentDocument,
+      variables: {
+        id,
+        department: buildDepartmentInputFromFormData(formData),
+      },
+      refetchQueries: [{ query: DepartmentAdminQueryDocument }],
+      awaitRefetchQueries: true,
+    });
+    return redirect('../..');
+  } catch (error) {
+    return error;
+  }
+};
 
 export const loader = singleDepartmentAdminLoader;
 
 function EditDepartment() {
   const { department: initialDepartment } = useLoaderData() as SingleDepartmentAdminLoaderResult;
-  const [updateDepartment] = useUpdateDepartmentMutation();
-  const navigate = useNavigate();
+  const navigation = useNavigation();
+  const { t } = useTranslation();
 
   usePageTitle(`Editing “${initialDepartment?.name}”`);
-
-  const onSave = useCallback(
-    async (department: typeof initialDepartment) => {
-      await updateDepartment({
-        variables: {
-          id: initialDepartment.id,
-          department: buildDepartmentInput(department),
-        },
-      });
-      navigate('/admin_departments');
-    },
-    [navigate, initialDepartment, updateDepartment],
-  );
 
   return (
     <>
       <h1 className="mb-4">Editing {initialDepartment.name}</h1>
 
-      <DepartmentForm initialDepartment={initialDepartment} onSave={onSave} />
+      <Form action="." method="PATCH">
+        <DepartmentForm initialDepartment={initialDepartment} disabled={navigation.state !== 'idle'} />
+
+        <input
+          type="submit"
+          className="btn btn-primary"
+          value={t('buttons.save')}
+          aria-label={t('buttons.save')}
+          disabled={navigation.state !== 'idle'}
+        />
+      </Form>
     </>
   );
 }

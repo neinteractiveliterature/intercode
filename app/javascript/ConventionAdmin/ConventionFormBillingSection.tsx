@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import * as React from 'react';
-import { ApolloError, useApolloClient } from '@apollo/client';
+import { ApolloError, useApolloClient, useMutation } from '@apollo/client';
 import {
   BootstrapFormInput,
   MultipleChoiceInput,
@@ -11,7 +11,6 @@ import {
   FormGroupWithLabel,
 } from '@neinteractiveliterature/litform';
 
-import { useCreateConventionStripeAccountMutation } from './mutations.generated';
 import type { ConventionFormConvention } from './ConventionForm';
 import { TicketMode } from '../graphqlTypes.generated';
 import useAsyncFunction from '../useAsyncFunction';
@@ -22,6 +21,7 @@ import {
 } from './queries.generated';
 import { useTranslation } from 'react-i18next';
 import CurrencySelect from '../Store/CurrencySelect';
+import { CreateConventionStripeAccountDocument } from './mutations.generated';
 
 export type ConventionFormBillingSectionProps = {
   convention: ConventionFormConvention;
@@ -41,7 +41,7 @@ function ConventionFormBillingSection({
     'ticket_mode',
     'default_currency_code',
   );
-  const [createConventionStripeAccount] = useCreateConventionStripeAccountMutation();
+  const [createConventionStripeAccount] = useMutation(CreateConventionStripeAccountDocument);
   const apolloClient = useApolloClient();
   const { t } = useTranslation();
 

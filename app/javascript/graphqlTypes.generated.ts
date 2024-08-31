@@ -2754,6 +2754,7 @@ export type Event = {
   can_play_concurrently: Scalars['Boolean']['output'];
   con_mail_destination?: Maybe<Scalars['String']['output']>;
   content_warnings?: Maybe<Scalars['String']['output']>;
+  convention: Convention;
   created_at?: Maybe<Scalars['Date']['output']>;
   current_user_form_item_viewer_role: FormItemRole;
   current_user_form_item_writer_role: FormItemRole;

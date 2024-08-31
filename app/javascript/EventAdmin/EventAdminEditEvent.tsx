@@ -1,73 +1,53 @@
 import { useState, useCallback, useMemo } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { LoaderFunction, useFetcher, useLoaderData, useNavigate, useRouteLoaderData } from 'react-router-dom';
 
-import useMEPTOMutations from '../BuiltInFormControls/useMEPTOMutations';
 import useEventFormWithCategorySelection, { EventFormWithCategorySelection } from './useEventFormWithCategorySelection';
 import EditEvent from '../BuiltInForms/EditEvent';
 import MaximumEventProvidedTicketsOverrideEditor from '../BuiltInFormControls/MaximumEventProvidedTicketsOverrideEditor';
 import usePageTitle from '../usePageTitle';
-import useUpdateEvent from './useUpdateEvent';
 import RunFormFields, { RunFormFieldsProps } from '../BuiltInForms/RunFormFields';
 import buildEventCategoryUrl from './buildEventCategoryUrl';
-import deserializeFormResponse from '../Models/deserializeFormResponse';
+import deserializeFormResponse, { WithFormResponse } from '../Models/deserializeFormResponse';
 import {
-  MaximumEventProvidedTicketsOverrideFieldsFragmentDoc,
-  useEventAdminEventsQuerySuspenseQuery,
-  useEventAdminSingleEventQuerySuspenseQuery,
+  EventAdminEventsQueryData,
+  EventAdminSingleEventQueryData,
+  EventAdminSingleEventQueryDocument,
 } from './queries.generated';
-import {
-  useDropEventMutation,
-  useCreateMaximumEventProvidedTicketsOverrideMutation,
-  useUpdateMaximumEventProvidedTicketsOverrideMutation,
-  useDeleteMaximumEventProvidedTicketsOverrideMutation,
-  useAttachImageToEventMutation,
-} from './mutations.generated';
-import {
-  useCreateMutationWithReferenceArrayUpdater,
-  useDeleteMutationWithReferenceArrayUpdater,
-} from '@neinteractiveliterature/litform/dist';
 import { ImageAttachmentConfig } from '../BuiltInFormControls/MarkdownInput';
+import { updateEvent } from './updateEvent';
+import { NamedRoute } from '../AppRouter';
+import { client } from '../useIntercodeApolloClient';
 
-function EventAdminEditEvent() {
-  const params = useParams();
-  const {
-    data: { convention, currentAbility },
-  } = useEventAdminEventsQuerySuspenseQuery();
+type LoaderResult = WithFormResponse<EventAdminSingleEventQueryData['conventionByRequestHost']['event']>;
+
+export const loader: LoaderFunction = async ({ params: { id } }) => {
   const {
     data: {
       conventionByRequestHost: { event: serializedEvent },
     },
-  } = useEventAdminSingleEventQuerySuspenseQuery({ variables: { eventId: params.id ?? '' } });
-  const navigate = useNavigate();
-  const initialEvent = useMemo(() => deserializeFormResponse(serializedEvent), [serializedEvent]);
-
-  const meptoMutations = useMEPTOMutations({
-    createMutate: useCreateMutationWithReferenceArrayUpdater(
-      useCreateMaximumEventProvidedTicketsOverrideMutation,
-      serializedEvent,
-      'maximum_event_provided_tickets_overrides',
-      (data) => data.createMaximumEventProvidedTicketsOverride.maximum_event_provided_tickets_override,
-      MaximumEventProvidedTicketsOverrideFieldsFragmentDoc,
-      'MaximumEventProvidedTicketsOverrideFields',
-    )[0],
-    updateMutate: useUpdateMaximumEventProvidedTicketsOverrideMutation()[0],
-    deleteMutate: useDeleteMutationWithReferenceArrayUpdater(
-      useDeleteMaximumEventProvidedTicketsOverrideMutation,
-      serializedEvent,
-      'maximum_event_provided_tickets_overrides',
-      (mepto) => ({ input: { id: mepto.id } }),
-    )[0],
+  } = await client.query({
+    query: EventAdminSingleEventQueryDocument,
+    variables: { eventId: id ?? '' },
   });
+  const initialEvent = deserializeFormResponse(serializedEvent);
+  return initialEvent satisfies LoaderResult;
+};
+
+function EventAdminEditEvent() {
+  const { convention, currentAbility } = useRouteLoaderData(NamedRoute.EventAdmin) as EventAdminEventsQueryData;
+  const initialEvent = useLoaderData() as LoaderResult;
+  const navigate = useNavigate();
+  const fetcher = useFetcher();
 
   const [run, setRun] = useState(initialEvent?.runs[0] || {});
   const [attachImageToEvent] = useAttachImageToEventMutation();
 
   const imageAttachmentConfig = useMemo<ImageAttachmentConfig>(
     () => ({
-      addBlob: (blob) => attachImageToEvent({ variables: { id: serializedEvent.id, signedBlobId: blob.signed_id } }),
-      existingImages: serializedEvent.images,
+      addBlob: (blob) => attachImageToEvent({ variables: { id: initialEvent.id, signedBlobId: blob.signed_id } }),
+      existingImages: initialEvent.images,
     }),
-    [attachImageToEvent, serializedEvent.id, serializedEvent.images],
+    [attachImageToEvent, initialEvent.id, initialEvent.images],
   );
 
   const [eventFormWithCategorySelectionProps, { event, eventCategory, validateForm }] =
@@ -103,15 +83,11 @@ function EventAdminEditEvent() {
     [run, event],
   );
 
-  const updateEvent = useUpdateEvent();
+  const dropEvent = () => {
+    fetcher.submit({}, { method: 'PATCH', action: `/events/${initialEvent.id}/drop` });
+  };
 
-  const [dropEventMutate] = useDropEventMutation();
-  const dropEvent = useCallback(
-    () => dropEventMutate({ variables: { input: { id: initialEvent.id } } }),
-    [initialEvent, dropEventMutate],
-  );
-
-  usePageTitle(`Editing “${initialEvent?.title}”`);
+  usePageTitle(`Editing “${initialEvent.title}”`);
 
   const donePath =
     convention?.site_mode === 'single_event' ? '/' : (buildEventCategoryUrl(eventCategory) ?? '/admin_events');
@@ -141,7 +117,6 @@ function EventAdminEditEvent() {
           convention?.ticket_mode !== 'disabled' &&
           convention?.site_mode === 'convention' && (
             <MaximumEventProvidedTicketsOverrideEditor
-              {...meptoMutations}
               ticketTypes={convention.ticket_types}
               ticketName={convention.ticket_name}
               overrides={initialEvent.maximum_event_provided_tickets_overrides}

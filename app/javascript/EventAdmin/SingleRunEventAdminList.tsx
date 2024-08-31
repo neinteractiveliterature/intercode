@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom';
-import { ErrorDisplay, useConfirm, LoadQueryWrapper } from '@neinteractiveliterature/litform';
+import { Link, useSubmit } from 'react-router-dom';
+import { ErrorDisplay, useConfirm } from '@neinteractiveliterature/litform';
 
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 import { timespanFromRun } from '../TimespanUtils';
@@ -7,29 +7,21 @@ import usePageTitle from '../usePageTitle';
 import useEventAdminCategory from './useEventAdminCategory';
 import buildEventCategoryUrl from './buildEventCategoryUrl';
 import { timezoneNameForConvention } from '../TimeUtils';
-import {
-  EventAdminEventsQueryData,
-  EventAdminEventsQueryVariables,
-  useEventAdminEventsQuery,
-} from './queries.generated';
-import { useDropEventMutation } from './mutations.generated';
 import { useFormatRunTimespan } from '../EventsApp/runTimeFormatting';
 import { useTranslation } from 'react-i18next';
+import { useEventAdminEventsLoader } from './loaders';
 
 export type SingleRunEventAdminListProps = {
   eventCategoryId: string;
 };
 
-export default LoadQueryWrapper<
-  EventAdminEventsQueryData,
-  EventAdminEventsQueryVariables,
-  SingleRunEventAdminListProps
->(useEventAdminEventsQuery, function SingleRunEventAdminList({ eventCategoryId, data }) {
+export default function SingleRunEventAdminList({ eventCategoryId }: SingleRunEventAdminListProps) {
+  const data = useEventAdminEventsLoader();
   const [eventCategory, sortedEvents] = useEventAdminCategory(data, eventCategoryId);
   const formatRunTimespan = useFormatRunTimespan();
   const { t } = useTranslation();
+  const submit = useSubmit();
 
-  const [drop] = useDropEventMutation();
   const confirm = useConfirm();
 
   usePageTitle(
@@ -70,7 +62,7 @@ export default LoadQueryWrapper<
             onClick={() =>
               confirm({
                 prompt: t('admin.events.dropEventConfirmation'),
-                action: () => drop({ variables: { input: { id: event.id } } }),
+                action: () => submit({}, { action: `/events/${event.id}/drop`, method: 'PATCH' }),
                 renderError: (e) => <ErrorDisplay graphQLError={e} />,
               })
             }
@@ -96,4 +88,4 @@ export default LoadQueryWrapper<
       </table>
     </div>
   );
-});
+}

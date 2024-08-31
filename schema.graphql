@@ -3503,6 +3503,7 @@ type Event {
   can_play_concurrently: Boolean!
   con_mail_destination: String
   content_warnings: String
+  convention: Convention!
   created_at: Date
   current_user_form_item_viewer_role: FormItemRole!
   current_user_form_item_writer_role: FormItemRole!

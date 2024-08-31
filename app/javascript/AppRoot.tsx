@@ -1,5 +1,5 @@
 import { Suspense, useMemo, useState, useEffect, useContext } from 'react';
-import { useLocation, useNavigate, useLoaderData, Outlet, ScrollRestoration } from 'react-router-dom';
+import { useLocation, useNavigate, useLoaderData, Outlet, ScrollRestoration, useNavigation } from 'react-router-dom';
 import { Settings } from 'luxon';
 import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
@@ -12,6 +12,7 @@ import { LazyStripeContext } from './LazyStripe';
 import { Stripe } from '@stripe/stripe-js';
 import AuthenticationModalContext from './Authentication/AuthenticationModalContext';
 import { GraphQLNotAuthenticatedErrorEvent } from './useIntercodeApolloClient';
+import { reloadOnAppEntrypointHeadersMismatch } from './checkAppEntrypointHeadersMatch';
 
 export function buildAppRootContextValue(data: AppRootQueryData): AppRootContextValue {
   return {
@@ -50,6 +51,7 @@ function AppRoot(): JSX.Element {
   const navigate = useNavigate();
   const data = useLoaderData() as AppRootQueryData;
   const authenticationModal = useContext(AuthenticationModalContext);
+  const navigation = useNavigation();
 
   const [stripePromise, setStripePromise] = useState<Promise<Stripe | null> | null>(null);
 
@@ -64,6 +66,10 @@ function AppRoot(): JSX.Element {
       });
     }
   }, [data?.currentUser?.id]);
+
+  useEffect(() => {
+    reloadOnAppEntrypointHeadersMismatch();
+  }, [location.pathname]);
 
   const appRootContextValue = useMemo(() => buildAppRootContextValue(data), [data]);
 
@@ -114,10 +120,18 @@ function AppRoot(): JSX.Element {
           setStripePromise,
         }}
       >
-        <ScrollRestoration />
-        <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
-          <Outlet />
-        </Suspense>
+        <div className={navigation.state === 'idle' ? '' : 'cursor-wait'}>
+          <div
+            className="position-fixed d-flex flex-column justify-content-center"
+            style={{ zIndex: 1050, width: '100vw', height: '100vh', top: 0, left: 0, pointerEvents: 'none' }}
+          >
+            <PageLoadingIndicator visible={navigation.state === 'loading'} />
+          </div>
+          <ScrollRestoration />
+          <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
+            <Outlet />
+          </Suspense>
+        </div>
       </LazyStripeContext.Provider>
     </AppRootContext.Provider>
   );

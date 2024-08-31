@@ -5,6 +5,10 @@ mutation CreateEvent($input: CreateEventInput!) {
     event {
       id
       ...EventFields
+
+      convention {
+        id
+      }
     }
   }
 }
@@ -14,6 +18,10 @@ mutation CreateFillerEvent($input: CreateFillerEventInput!) {
     event {
       id
       ...EventFields
+
+      convention {
+        id
+      }
     }
   }
 }

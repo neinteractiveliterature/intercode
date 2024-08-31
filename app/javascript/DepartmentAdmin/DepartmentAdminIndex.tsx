@@ -1,25 +1,15 @@
-import { Link } from 'react-router-dom';
-import {
-  useGraphQLConfirm,
-  sortByLocaleString,
-  useDeleteMutationWithReferenceArrayUpdater,
-} from '@neinteractiveliterature/litform';
+import { Link, useSubmit } from 'react-router-dom';
+import { useGraphQLConfirm, sortByLocaleString } from '@neinteractiveliterature/litform';
 
 import usePageTitle from '../usePageTitle';
-import { useDeleteDepartmentMutation } from './mutations.generated';
 import { useDepartmentAdminLoader } from './loaders';
 import { useTranslation } from 'react-i18next';
 
 function DepartmentAdminIndex() {
   const data = useDepartmentAdminLoader();
   const confirm = useGraphQLConfirm();
-  const [deleteDepartment] = useDeleteMutationWithReferenceArrayUpdater(
-    useDeleteDepartmentMutation,
-    data.convention,
-    'departments',
-    (department) => ({ id: department.id }),
-  );
   const { t } = useTranslation();
+  const submit = useSubmit();
   usePageTitle(t('navigation.admin.departments'));
 
   return (
@@ -50,7 +40,7 @@ function DepartmentAdminIndex() {
                   className="btn btn-sm btn-outline-danger me-2"
                   onClick={() =>
                     confirm({
-                      action: () => deleteDepartment(department),
+                      action: () => submit({}, { action: `./${department.id}`, method: 'DELETE' }),
                       prompt: `Are you sure you want to delete the department “${department.name}”?`,
                     })
                   }

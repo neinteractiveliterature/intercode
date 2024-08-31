@@ -1,22 +1,16 @@
 import { useEffect, useMemo, useState } from 'react';
-import { NavLink, useLocation, Outlet, LoaderFunction, useLoaderData } from 'react-router-dom';
+import { NavLink, useLocation, Outlet } from 'react-router-dom';
 import classNames from 'classnames';
 import { useLitformPopperWithAutoClosing } from '@neinteractiveliterature/litform';
 
 import sortEventCategories from './sortEventCategories';
 import buildEventCategoryUrl from './buildEventCategoryUrl';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
-import { EventAdminEventsQueryData, EventAdminEventsQueryDocument } from './queries.generated';
 import humanize from '../humanize';
-import { client } from '../useIntercodeApolloClient';
-
-export const loader: LoaderFunction = async () => {
-  const { data } = await client.query<EventAdminEventsQueryData>({ query: EventAdminEventsQueryDocument });
-  return data;
-};
+import { useEventAdminEventsLoader } from './loaders';
 
 function EventAdmin() {
-  const data = useLoaderData() as EventAdminEventsQueryData;
+  const data = useEventAdminEventsLoader();
   const authorizationWarning = useAuthorizationRequired('can_manage_runs');
   const location = useLocation();
 

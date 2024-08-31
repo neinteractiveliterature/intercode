@@ -3,16 +3,18 @@ import { ApolloError } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import PlainTextDisplay from '../PlainTextDisplay';
-import useAsyncFunction from '../useAsyncFunction';
+import { useTranslation } from 'react-i18next';
 
 export type AdminNotesProps = {
-  mutate: (value: string) => Promise<unknown>;
+  mutate: (value: string) => void;
+  inProgress: boolean;
+  error: ApolloError | undefined | null;
   value?: string;
 };
 
-function AdminNotes({ mutate, value }: AdminNotesProps): JSX.Element {
+function AdminNotes({ mutate, inProgress, error, value }: AdminNotesProps): JSX.Element {
+  const { t } = useTranslation();
   const [editingValue, setEditingValue] = useState<string | null>(null);
-  const [save, saveError, saveInProgress] = useAsyncFunction(mutate);
   const textareaElement = useRef<HTMLTextAreaElement | null>(null);
 
   const startEditing = () => {
@@ -27,7 +29,7 @@ function AdminNotes({ mutate, value }: AdminNotesProps): JSX.Element {
   };
 
   const saveClicked = async () => {
-    await save(editingValue ?? '');
+    await mutate(editingValue ?? '');
     setEditingValue(null);
   };
 
@@ -38,7 +40,7 @@ function AdminNotes({ mutate, value }: AdminNotesProps): JSX.Element {
           {value ? <PlainTextDisplay value={value} /> : <small className="text-muted">Admin notes</small>}
         </div>
         <button className="btn btn-secondary btn-sm" type="button" onClick={startEditing}>
-          Edit
+          {t('buttons.edit')}
         </button>
       </div>
     );
@@ -57,14 +59,14 @@ function AdminNotes({ mutate, value }: AdminNotesProps): JSX.Element {
           ref={textareaElement}
           aria-label="Admin notes"
         />
-        <ErrorDisplay graphQLError={saveError as ApolloError} />
+        <ErrorDisplay graphQLError={error} />
       </div>
       <div className="card-footer text-end">
-        <button className="btn btn-secondary btn-sm" type="button" onClick={cancelEditing} disabled={saveInProgress}>
-          Cancel
+        <button className="btn btn-secondary btn-sm" type="button" onClick={cancelEditing} disabled={inProgress}>
+          {t('buttons.cancel')}
         </button>
-        <button className="btn btn-primary btn-sm ms-2" type="button" onClick={saveClicked} disabled={saveInProgress}>
-          Save
+        <button className="btn btn-primary btn-sm ms-2" type="button" onClick={saveClicked} disabled={inProgress}>
+          {t('buttons.save')}
         </button>
       </div>
     </div>

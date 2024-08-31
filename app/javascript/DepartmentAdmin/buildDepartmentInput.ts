@@ -8,3 +8,10 @@ export default function buildDepartmentInput(
     proposal_description: department.proposal_description,
   };
 }
+
+export function buildDepartmentInputFromFormData(formData: FormData): DepartmentInput {
+  return {
+    name: formData.get('name')?.toString(),
+    proposal_description: formData.get('description')?.toString(),
+  };
+}

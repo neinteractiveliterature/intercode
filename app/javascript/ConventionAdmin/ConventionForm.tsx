@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { TabList, TabBody, useTabsWithRouter, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { ApolloError } from '@apollo/client';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, useNavigation } from 'react-router-dom';
 import ConventionFormGeneralSection from './ConventionFormGeneralSection';
 import ConventionFormWebsiteSection from './ConventionFormWebsiteSection';
 import ConventionFormBillingSection from './ConventionFormBillingSection';
@@ -92,6 +92,7 @@ function ConventionForm({
   const navigate = useNavigate();
   const fakeHistory = useMemo(() => ({ replace: navigate }), [navigate]);
   const tabProps = useTabsWithRouter(tabs, '/convention/edit', location, fakeHistory);
+  const navigation = useNavigation();
 
   return (
     <form>
@@ -103,7 +104,7 @@ function ConventionForm({
 
       <ErrorDisplay graphQLError={saveError as ApolloError} />
 
-      <button className="btn btn-primary" onClick={onClickSave} type="button">
+      <button className="btn btn-primary" onClick={onClickSave} type="button" disabled={navigation.state !== 'idle'}>
         Save settings
       </button>
     </form>

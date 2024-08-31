@@ -5,17 +5,17 @@ import EditRunModal, { EditingRun } from './EditRunModal';
 import buildEventCategoryUrl from './buildEventCategoryUrl';
 import { EventAdminEventsQueryData, EventAdminEventsQueryDocument } from './queries.generated';
 import { client } from '../useIntercodeApolloClient';
-import { UpdateRunDocument } from './mutations.generated';
+import { CreateRunDocument } from './mutations.generated';
 import { buildRunInputFromFormData } from './buildRunInputFromFormData';
 
-export const action: ActionFunction = async ({ params: { eventCategoryId, runId }, request }) => {
+export const action: ActionFunction = async ({ params: { eventCategoryId, eventId }, request }) => {
   try {
     const formData = await request.formData();
     await client.mutate({
-      mutation: UpdateRunDocument,
+      mutation: CreateRunDocument,
       variables: {
         input: {
-          id: runId ?? '',
+          eventId: eventId ?? '',
           run: buildRunInputFromFormData(formData),
         },
       },
@@ -32,22 +32,37 @@ type LoaderResult = {
   convention: EventAdminEventsQueryData['convention'];
 };
 
-export const loader: LoaderFunction = async ({ params: { eventId, runId } }) => {
+export const loader: LoaderFunction = async ({ params: { eventId } }) => {
   const {
     data: { convention },
   } = await client.query<EventAdminEventsQueryData>({ query: EventAdminEventsQueryDocument });
   const events = convention.events;
   const event = events.find((e) => e.id.toString() === eventId);
-  const initialRun = event?.runs.find((r) => r.id === runId) as EditingRun;
 
-  if (initialRun) {
-    return { event, initialRun } as LoaderResult;
-  } else {
+  if (!event) {
     return new Response(null, { status: 404 });
   }
+
+  const initialRun: EditingRun = {
+    __typename: 'Run',
+    id: '',
+    my_signups: [],
+    my_signup_requests: [],
+    my_signup_ranked_choices: [],
+    starts_at: undefined,
+    title_suffix: undefined,
+    schedule_note: undefined,
+    rooms: [],
+    room_names: [],
+    confirmed_signup_count: 0,
+    not_counted_signup_count: 0,
+    grouped_signup_counts: [],
+  };
+
+  return { initialRun, event, convention } as LoaderResult;
 };
 
-function EditRun(): JSX.Element {
+function NewRun(): JSX.Element {
   const navigate = useNavigate();
   const { event, initialRun, convention } = useLoaderData() as LoaderResult;
 
@@ -63,7 +78,7 @@ function EditRun(): JSX.Element {
   const [run, setRun] = useState(initialRun);
 
   return (
-    <Form action="." method="PATCH">
+    <Form action="." method="POST">
       <EditRunModal
         convention={convention}
         editingRunChanged={setRun}
@@ -75,4 +90,4 @@ function EditRun(): JSX.Element {
   );
 }
 
-export const Component = EditRun;
+export const Component = NewRun;

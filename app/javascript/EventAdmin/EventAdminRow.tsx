@@ -1,5 +1,5 @@
 import { useState, useMemo, useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useFetcher } from 'react-router-dom';
 import { Duration } from 'luxon';
 import { useTranslation } from 'react-i18next';
 
@@ -8,7 +8,6 @@ import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 import buildEventCategoryUrl from './buildEventCategoryUrl';
 import AppRootContext from '../AppRootContext';
 import { ConventionFieldsFragment, EventFieldsFragment, RunFieldsFragment } from './queries.generated';
-import { useUpdateEventAdminNotesMutation } from './mutations.generated';
 import { timespanFromRun } from '../TimespanUtils';
 import getSortedRuns from '../EventsApp/EventCatalog/EventList/getSortedRuns';
 import { getDateTimeFormat } from '../TimeUtils';
@@ -22,9 +21,9 @@ export type EventAdminRowProps = {
 function EventAdminRow({ event, convention }: EventAdminRowProps): JSX.Element {
   const { t } = useTranslation();
   const { timezoneName } = useContext(AppRootContext);
-  const [updateEventAdminNotes] = useUpdateEventAdminNotesMutation();
   const [expanded, setExpanded] = useState(false);
   const formatRunTimespan = useFormatRunTimespan();
+  const adminNotesFetcher = useFetcher();
 
   const length = useMemo(() => Duration.fromObject({ seconds: event.length_seconds }), [event.length_seconds]);
   const eventCategory = useMemo(
@@ -107,7 +106,7 @@ function EventAdminRow({ event, convention }: EventAdminRowProps): JSX.Element {
     <tr>
       <td>
         <Link
-          to={`/admin_events/${event.id}/edit`}
+          to={`${event.id}/edit`}
           className="rounded p-1 text-dark"
           style={getEventCategoryStyles({ eventCategory, variant: 'default' })}
         >
@@ -117,7 +116,14 @@ function EventAdminRow({ event, convention }: EventAdminRowProps): JSX.Element {
         <div className="mt-2">
           <AdminNotes
             value={event.admin_notes ?? undefined}
-            mutate={(adminNotes) => updateEventAdminNotes({ variables: { eventId: event.id, adminNotes } })}
+            mutate={(adminNotes) =>
+              adminNotesFetcher.submit(
+                { admin_notes: adminNotes },
+                { action: `${event.id}/admin_notes`, method: 'PATCH' },
+              )
+            }
+            inProgress={adminNotesFetcher.state !== 'idle'}
+            error={adminNotesFetcher.data}
           />
         </div>
       </td>

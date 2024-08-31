@@ -1,19 +1,7 @@
-import { useState, Suspense, useEffect, ReactNode, useContext } from 'react';
-import {
-  useLocation,
-  RouteObject,
-  replace,
-  Outlet,
-  LoaderFunction,
-  redirect,
-  useNavigation,
-  useNavigate,
-  useRouteError,
-} from 'react-router-dom';
-import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
-import { useTranslation } from 'react-i18next';
+import { useContext } from 'react';
+import { RouteObject, replace, Outlet, LoaderFunction, redirect, useNavigate, useRouteError } from 'react-router-dom';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import { reloadOnAppEntrypointHeadersMismatch } from './checkAppEntrypointHeadersMatch';
 import FourOhFourPage from './FourOhFourPage';
 import { SignupAutomationMode, SignupMode, SiteMode, TicketMode } from './graphqlTypes.generated';
 import AppRootContext, { AppRootContextValue } from './AppRootContext';
@@ -44,6 +32,7 @@ import { cmsGraphqlQueriesAdminLoader } from './CmsAdmin/CmsGraphqlQueriesAdmin/
 import { cmsContentGroupsAdminLoader } from './CmsAdmin/CmsContentGroupsAdmin/loaders';
 import { departmentAdminLoader } from './DepartmentAdmin/loaders';
 import { eventCategoryAdminLoader } from './EventCategoryAdmin/loaders';
+import { eventAdminEventsLoader } from './EventAdmin/loaders';
 
 export enum NamedRoute {
   AdminEditEventProposal = 'AdminEditEventProposal',
@@ -93,6 +82,7 @@ export enum NamedRoute {
   UserAdminDisplay = 'UserAdminDisplay',
   UserAdmin = 'UserAdmin',
   UsersTable = 'UsersTable',
+  EventAdmin = 'EventAdmin',
 }
 
 export type RouteName = keyof typeof NamedRoute & string;
@@ -238,6 +228,7 @@ const eventsRoutes: RouteObject[] = [
           },
         ],
       },
+      { path: 'drop', lazy: () => import('./EventsApp/drop') },
       {
         path: 'edit',
         element: <EditEventGuard />,
@@ -247,6 +238,11 @@ const eventsRoutes: RouteObject[] = [
             lazy: () => import('./EventsApp/StandaloneEditEvent'),
           },
         ],
+      },
+      {
+        path: 'maximum_event_provided_ticket_overrides',
+        lazy: () => import('./EventsApp/MaximumEventProvidedTicketsOverrides/route'),
+        children: [{ path: ':id', lazy: () => import('./EventsApp/MaximumEventProvidedTicketsOverrides/$id') }],
       },
       {
         path: 'team_members',
@@ -464,7 +460,14 @@ const commonInConventionRoutes: RouteObject[] = [
     id: NamedRoute.DepartmentAdmin,
     loader: departmentAdminLoader,
     children: [
-      { path: ':id/edit', lazy: () => import('./DepartmentAdmin/EditDepartment') },
+      {
+        path: ':id',
+        lazy: () => import('./DepartmentAdmin/SingleDepartmentRoute'),
+        children: [
+          { path: 'edit', lazy: () => import('./DepartmentAdmin/EditDepartment') },
+          { index: true, loader: () => redirect('..') },
+        ],
+      },
       { path: 'new', lazy: () => import('./DepartmentAdmin/NewDepartment') },
       { index: true, lazy: () => import('./DepartmentAdmin/DepartmentAdminIndex') },
     ],
@@ -472,23 +475,47 @@ const commonInConventionRoutes: RouteObject[] = [
   {
     path: '/admin_events',
     lazy: () => import('./EventAdmin'),
+    loader: eventAdminEventsLoader,
+    id: NamedRoute.EventAdmin,
     children: [
       {
         element: <AppRootContextRouteGuard guard={({ siteMode }) => siteMode !== SiteMode.SingleEvent} />,
         children: [
-          { path: ':eventCategoryId/new', lazy: () => import('./EventAdmin/NewEvent') },
           { path: 'dropped_events', lazy: () => import('./EventAdmin/DroppedEventAdmin') },
           {
             path: ':eventCategoryId',
-            lazy: () => import('./EventAdmin/CategorySpecificEventAdmin'),
             children: [
-              { path: ':eventId/runs/:runId/edit', lazy: () => import('./EventAdmin/EditRun') },
-              { path: ':eventId/runs/new', lazy: () => import('./EventAdmin/EditRun') },
+              { path: 'new', lazy: () => import('./EventAdmin/NewEvent') },
+              {
+                path: '',
+                lazy: () => import('./EventAdmin/CategorySpecificEventAdmin'),
+                children: [
+                  {
+                    path: ':eventId',
+                    children: [
+                      { path: 'admin_notes', lazy: () => import('./EventAdmin/AdminNotesRoute') },
+                      { path: 'edit', lazy: () => import('./EventAdmin/EventAdminEditEvent') },
+                      { path: 'restore', lazy: () => import('./EventAdmin/RestoreEventRoute') },
+                      {
+                        path: 'runs',
+                        children: [
+                          {
+                            path: ':runId',
+                            lazy: () => import('./EventAdmin/SingleRunRoute'),
+                            children: [{ path: 'edit', lazy: () => import('./EventAdmin/EditRun') }],
+                          },
+                          { path: 'create_multiple', lazy: () => import('./EventAdmin/CreateMultipleRunsRoute') },
+                          { path: 'new', lazy: () => import('./EventAdmin/NewRun') },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              },
             ],
           },
         ],
       },
-      { path: ':id/edit', lazy: () => import('./EventAdmin/EventAdminEditEvent') },
       { index: true, loader: eventAdminRootRedirect },
     ],
   },
@@ -891,48 +918,3 @@ export const appRootRoutes: RouteObject[] = [
     ],
   },
 ];
-
-export type AppRouterProps = {
-  alert?: ReactNode;
-};
-
-function AppRouter({ alert }: AppRouterProps): JSX.Element {
-  const { t } = useTranslation();
-  const location = useLocation();
-  const navigation = useNavigation();
-  const [showAlert, setShowAlert] = useState(alert != null);
-
-  useEffect(() => {
-    reloadOnAppEntrypointHeadersMismatch();
-  }, [location.pathname]);
-
-  return (
-    <>
-      <div
-        className="position-fixed d-flex flex-column justify-content-center"
-        style={{ zIndex: 1050, width: '100vw', height: '100vh', top: 0, left: 0, pointerEvents: 'none' }}
-      >
-        <PageLoadingIndicator visible={navigation.state === 'loading'} />
-      </div>
-      <Suspense fallback={<PageLoadingIndicator visible />}>
-        {showAlert && (
-          <div className="alert alert-danger" role="alert">
-            <button
-              type="button"
-              className="btn-close"
-              onClick={() => setShowAlert(false)}
-              aria-label={t('buttons.close')}
-            >
-              <span aria-hidden="true">×</span>
-            </button>
-            {alert}
-          </div>
-        )}
-
-        <Outlet />
-      </Suspense>
-    </>
-  );
-}
-
-export default AppRouter;
