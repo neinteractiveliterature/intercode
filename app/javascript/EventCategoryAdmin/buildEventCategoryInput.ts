@@ -1,18 +1,17 @@
-import { EventCategoryInput } from '../graphqlTypes.generated';
-import { EventCategoryForForm } from './EventCategoryForm';
+import { EventCategoryInput, SchedulingUi } from '../graphqlTypes.generated';
 
-export default function buildEventCategoryInput(eventCategory: EventCategoryForForm): EventCategoryInput {
+export function buildEventCategoryFromFormData(formData: FormData): EventCategoryInput {
   return {
-    name: eventCategory.name,
-    team_member_name: eventCategory.team_member_name,
-    proposal_description: eventCategory.proposal_description,
-    departmentId: eventCategory.department?.id ?? null,
-    scheduling_ui: eventCategory.scheduling_ui,
-    default_color: eventCategory.default_color,
-    signed_up_color: eventCategory.signed_up_color,
-    full_color: eventCategory.full_color,
-    eventFormId: eventCategory.event_form?.id ?? null,
-    eventProposalFormId: eventCategory.event_proposal_form?.id ?? null,
-    can_provide_tickets: eventCategory.can_provide_tickets,
+    name: formData.get('name')?.toString(),
+    team_member_name: formData.get('team_member_name')?.toString(),
+    proposal_description: formData.get('proposal_description')?.toString(),
+    departmentId: formData.get('department_id')?.toString(),
+    scheduling_ui: formData.get('scheduling_ui')?.toString() as SchedulingUi | undefined,
+    default_color: formData.get('default_color')?.toString(),
+    signed_up_color: formData.get('signed_up_color')?.toString(),
+    full_color: formData.get('full_color')?.toString(),
+    eventFormId: formData.get('event_form_id')?.toString(),
+    eventProposalFormId: formData.get('event_proposal_form_id')?.toString(),
+    can_provide_tickets: formData.get('can_provide_tickets') === 'true',
   };
 }

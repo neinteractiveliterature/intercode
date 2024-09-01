@@ -29,6 +29,10 @@ fragment EventCategoryFields on EventCategory {
     title
     form_type
   }
+
+  convention {
+    id
+  }
 }
 
 query EventCategoryAdminQuery {

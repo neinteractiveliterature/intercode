@@ -29,7 +29,7 @@ async function appEntrypointHeadersMatch() {
     return HEADERS_TO_CHECK_FOR_MISMATCH.every(
       (header) => newHeaders[header] == null || (appEntrypointHeaders ?? {})[header] === newHeaders[header],
     );
-  } catch (error) {
+  } catch {
     // well, we tried
     return true;
   }

@@ -771,9 +771,15 @@ const conventionModeRoutes: RouteObject[] = [
         children: [
           { path: 'new', id: NamedRoute.NewEventCategory, lazy: () => import('./EventCategoryAdmin/NewEventCategory') },
           {
-            path: ':id/edit',
-            id: NamedRoute.EditEventCategory,
-            lazy: () => import('./EventCategoryAdmin/EditEventCategory'),
+            path: ':id',
+            lazy: () => import('./EventCategoryAdmin/$id'),
+            children: [
+              {
+                path: 'edit',
+                id: NamedRoute.EditEventCategory,
+                lazy: () => import('./EventCategoryAdmin/EditEventCategory'),
+              },
+            ],
           },
           {
             index: true,

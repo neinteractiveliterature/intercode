@@ -530,6 +530,7 @@
     "refresh": "Refresh",
     "reset": "Reset",
     "save": "Save",
+    "saveChanges": "Save changes",
     "selectAll": "Select all",
     "selectNone": "Select none"
   },

@@ -146,6 +146,7 @@ function AppWrapper<P extends JSX.IntrinsicAttributes>(
           ],
           {
             future: {
+              v7_relativeSplatPath: true,
               v7_normalizeFormMethod: true,
               v7_partialHydration: true,
               v7_skipActionErrorRevalidation: true,
@@ -170,7 +171,7 @@ function AppWrapper<P extends JSX.IntrinsicAttributes>(
 
     return (
       <React.StrictMode>
-        <RouterProvider router={router} />
+        <RouterProvider router={router} future={{ v7_startTransition: true }} />
       </React.StrictMode>
     );
   }

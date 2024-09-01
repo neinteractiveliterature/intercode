@@ -1,25 +1,48 @@
 import { useState } from 'react';
 import { ApolloError } from '@apollo/client';
-import { useNavigate } from 'react-router-dom';
-import { ErrorDisplay, useCreateMutationWithReferenceArrayUpdater } from '@neinteractiveliterature/litform';
+import { ActionFunction, Form, redirect, useActionData, useNavigation } from 'react-router-dom';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import buildEventCategoryInput from './buildEventCategoryInput';
 import EventCategoryForm, { EventCategoryForForm } from './EventCategoryForm';
 import usePageTitle from '../usePageTitle';
 import { EventCategoryFieldsFragmentDoc } from './queries.generated';
-import { useCreateEventCategoryMutation } from './mutations.generated';
 import { useEventCategoryAdminLoader } from './loaders';
+import { client } from '../useIntercodeApolloClient';
+import { CreateEventCategoryDocument } from './mutations.generated';
+import { buildEventCategoryFromFormData } from './buildEventCategoryInput';
+import { Convention } from '../graphqlTypes.generated';
+
+export const action: ActionFunction = async ({ request }) => {
+  try {
+    const formData = await request.formData();
+    await client.mutate({
+      mutation: CreateEventCategoryDocument,
+      variables: {
+        eventCategory: buildEventCategoryFromFormData(formData),
+      },
+      update: (cache, result) => {
+        const eventCategory = result.data?.createEventCategory.event_category;
+        if (eventCategory) {
+          const ref = cache.writeFragment({ fragment: EventCategoryFieldsFragmentDoc, data: eventCategory });
+          cache.modify<Convention>({
+            id: cache.identify(eventCategory.convention),
+            fields: {
+              event_categories: (value) => [...value, ref],
+            },
+          });
+        }
+      },
+    });
+    return redirect('..');
+  } catch (error) {
+    return error;
+  }
+};
 
 function NewEventCategory(): JSX.Element {
   const data = useEventCategoryAdminLoader();
-  const navigate = useNavigate();
-  const [create, { error: createError, loading: createInProgress }] = useCreateMutationWithReferenceArrayUpdater(
-    useCreateEventCategoryMutation,
-    data.convention,
-    'event_categories',
-    (data) => data.createEventCategory.event_category,
-    EventCategoryFieldsFragmentDoc,
-  );
+  const navigation = useNavigation();
+  const createError = useActionData();
 
   const [eventCategory, setEventCategory] = useState<EventCategoryForForm>({
     name: '',
@@ -31,16 +54,6 @@ function NewEventCategory(): JSX.Element {
     signed_up_color: '#17a2b8',
   });
 
-  const createClicked = async () => {
-    await create({
-      variables: {
-        eventCategory: buildEventCategoryInput(eventCategory),
-      },
-    });
-
-    navigate('/event_categories');
-  };
-
   usePageTitle('New Event Category');
 
   const { forms, departments, ticketNamePlural, ticket_mode: ticketMode } = data.convention;
@@ -49,21 +62,23 @@ function NewEventCategory(): JSX.Element {
     <>
       <h1 className="mb-4">New event category</h1>
 
-      <EventCategoryForm
-        value={eventCategory}
-        onChange={setEventCategory}
-        forms={forms}
-        ticketNamePlural={ticketNamePlural}
-        ticketMode={ticketMode}
-        disabled={createInProgress}
-        departments={departments}
-      />
+      <Form action="." method="POST">
+        <EventCategoryForm
+          value={eventCategory}
+          onChange={setEventCategory}
+          forms={forms}
+          ticketNamePlural={ticketNamePlural}
+          ticketMode={ticketMode}
+          disabled={navigation.state !== 'idle'}
+          departments={departments}
+        />
 
-      <ErrorDisplay graphQLError={createError as ApolloError} />
+        <ErrorDisplay graphQLError={createError as ApolloError} />
 
-      <button type="button" className="btn btn-primary" onClick={createClicked} disabled={createInProgress}>
-        Create event category
-      </button>
+        <button type="submit" className="btn btn-primary" disabled={navigation.state !== 'idle'}>
+          Create event category
+        </button>
+      </Form>
     </>
   );
 }
