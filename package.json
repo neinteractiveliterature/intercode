@@ -20,6 +20,7 @@
     "lint": "eslint app/javascript test/javascript schema.graphql --cache",
     "prepare": "husky install",
     "start": "NODE_OPTIONS=--max-old-space-size=8192 yarn run webpack-dev-server",
+    "ts:check": "tsc --noEmit --incremental",
     "test": "jest --testPathPattern=test/javascript --coverage",
     "test:watch": "jest --watch --testPathPattern=test/javascript",
     "webpack-dev-server": "webpack serve --progress --color --config ./webpack.config.js"

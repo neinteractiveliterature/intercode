@@ -47,7 +47,6 @@ export type ConventionDayTabContainerProps = {
   conventionTimespan: FiniteTimespan;
   children: ReactNode;
   prefetchTimespan?: (timespan: FiniteTimespan) => Promise<unknown>;
-  showExtendedCounts?: boolean;
 };
 
 function ConventionDayTabContainer({
@@ -55,7 +54,6 @@ function ConventionDayTabContainer({
   conventionTimespan,
   prefetchTimespan,
   children,
-  showExtendedCounts,
 }: ConventionDayTabContainerProps): JSX.Element {
   const { t } = useTranslation();
   const { timezoneName } = useContext(AppRootContext);
@@ -64,10 +62,9 @@ function ConventionDayTabContainer({
     () =>
       client.query({
         query: ScheduleGridEventsQueryDocument,
-        variables: { extendedCounts: showExtendedCounts || false },
         fetchPolicy: 'network-only',
       }),
-    [client, showExtendedCounts],
+    [client],
   );
 
   const conventionDayTimespans = useMemo(

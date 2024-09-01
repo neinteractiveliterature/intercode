@@ -1,5 +1,5 @@
 import { useState, useCallback, useContext, useMemo } from 'react';
-import { ApolloError } from '@apollo/client';
+import { ApolloError, useQuery } from '@apollo/client';
 import { Filters } from 'react-table';
 import { useTranslation } from 'react-i18next';
 import {
@@ -20,7 +20,7 @@ import usePageTitle from '../../../usePageTitle';
 import AppRootContext from '../../../AppRootContext';
 import EventListMyRatingSelector from './EventListMyRatingSelector';
 import useAsyncFunction from '../../../useAsyncFunction';
-import { EventListEventsQueryData, useEventListEventsQuery } from './queries.generated';
+import { EventListEventsQueryData, EventListEventsQueryDocument } from './queries.generated';
 import EventListFilterableFormItemDropdown from './EventListFilterableFormItemDropdown';
 import { CommonConventionDataQueryData, CommonConventionDataQueryDocument } from '../../queries.generated';
 import { getFilterableFormItems } from '../../useFilterableFormItems';
@@ -28,10 +28,11 @@ import useMergeCategoriesIntoEvents from '../../useMergeCategoriesIntoEvents';
 import EventCatalogNavTabs from '../EventCatalogNavTabs';
 import { LoaderFunction, useLoaderData } from 'react-router';
 import { client } from '../../../useIntercodeApolloClient';
+import { FetchMoreFunction } from '@apollo/client/react/hooks/useSuspenseQuery';
+import { ResultOf, VariablesOf } from '@graphql-typed-document-node/core';
 
 const PAGE_SIZE = 20;
 
-type FetchMoreFunction = ReturnType<typeof useEventListEventsQuery>['fetchMore'];
 type EventType = NonNullable<EventListEventsQueryData['convention']>['events_paginated']['entries'][number];
 
 const filterCodecs = buildFieldFilterCodecs({
@@ -41,7 +42,13 @@ const filterCodecs = buildFieldFilterCodecs({
   form_items: FilterCodecs.json,
 });
 
-const fetchMoreEvents = async (fetchMore: FetchMoreFunction, page: number) => {
+const fetchMoreEvents = async (
+  fetchMore: FetchMoreFunction<
+    ResultOf<typeof EventListEventsQueryDocument>,
+    VariablesOf<typeof EventListEventsQueryDocument>
+  >,
+  page: number,
+) => {
   try {
     await fetchMore({
       variables: { page, pageSize: PAGE_SIZE },
@@ -105,7 +112,7 @@ function EventList(): JSX.Element {
     [filterableFormItems],
   );
 
-  const { data, loading, error, fetchMore } = useEventListEventsQuery({
+  const { data, loading, error, fetchMore } = useQuery(EventListEventsQueryDocument, {
     variables: {
       page: 1,
       pageSize: PAGE_SIZE,

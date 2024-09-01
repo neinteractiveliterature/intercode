@@ -14,7 +14,7 @@ import EventCategoryFilter from '../../../Tables/EventCategoryFilter';
 import { useContext, useMemo } from 'react';
 import { SingleLineTimestampCell } from '../../../Tables/TimestampCell';
 import CapacityCell from '../../../Tables/CapacityCell';
-import { EventCatalogRunsQueryData, useEventCatalogRunsQuery } from './queries.generated';
+import { EventCatalogRunsQueryData, EventCatalogRunsQueryDocument } from './queries.generated';
 import FormItemDisplay from '../../../FormPresenter/ItemDisplays/FormItemDisplay';
 import DurationCell from '../../../Tables/DurationCell';
 import FreeTextFilter from '../../../Tables/FreeTextFilter';
@@ -181,7 +181,7 @@ function EventTable() {
     getData: ({ data: tableData }) => tableData.convention.runs_paginated.entries,
     getPages: ({ data: tableData }) => tableData.convention.runs_paginated.total_pages,
     getPossibleColumns: () => getPossibleColumns(filterableFormItems),
-    useQuery: useEventCatalogRunsQuery,
+    query: EventCatalogRunsQueryDocument,
     storageKeyPrefix: 'eventTable',
   });
 
