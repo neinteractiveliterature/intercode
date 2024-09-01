@@ -5,7 +5,6 @@ import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 import { timespanFromRun } from '../TimespanUtils';
 import usePageTitle from '../usePageTitle';
 import useEventAdminCategory from './useEventAdminCategory';
-import buildEventCategoryUrl from './buildEventCategoryUrl';
 import { timezoneNameForConvention } from '../TimeUtils';
 import { useFormatRunTimespan } from '../EventsApp/runTimeFormatting';
 import { useTranslation } from 'react-i18next';
@@ -53,7 +52,7 @@ export default function SingleRunEventAdminList({ eventCategoryId }: SingleRunEv
         </th>
         <td>{timespan && formatRunTimespan(timespan, { formatType: 'short' })}</td>
         <td>
-          <Link className="btn btn-secondary btn-sm" to={`/admin_events/${event.id}/edit`}>
+          <Link className="btn btn-secondary btn-sm" to={`./events/${event.id}/edit`}>
             {t('buttons.edit')}
           </Link>{' '}
           <button
@@ -62,7 +61,7 @@ export default function SingleRunEventAdminList({ eventCategoryId }: SingleRunEv
             onClick={() =>
               confirm({
                 prompt: t('admin.events.dropEventConfirmation'),
-                action: () => submit({}, { action: `/events/${event.id}/drop`, method: 'PATCH' }),
+                action: () => submit({}, { action: `./events/${event.id}/drop`, method: 'PATCH' }),
                 renderError: (e) => <ErrorDisplay graphQLError={e} />,
               })
             }
@@ -78,7 +77,7 @@ export default function SingleRunEventAdminList({ eventCategoryId }: SingleRunEv
 
   return (
     <div>
-      <Link className="btn btn-primary my-4" to={`${buildEventCategoryUrl(eventCategory)}/new`}>
+      <Link className="btn btn-primary my-4" to={`./events/new`}>
         {t('admin.events.newEventLabel', {
           categoryName: eventCategory?.name,
         })}

@@ -27,7 +27,7 @@ function EditRunModal({ convention, run, event, editingRunChanged, onCancel }: E
   const { eventCategoryId } = useParams();
 
   const deleteRun = () => {
-    submit({}, { action: `/admin_events/${eventCategoryId}/${event.id}/runs/${run.id}`, method: 'DELETE' });
+    submit({}, { action: `/admin_events/${eventCategoryId}/events/${event.id}/runs/${run.id}`, method: 'DELETE' });
   };
 
   const title = useMemo(() => {

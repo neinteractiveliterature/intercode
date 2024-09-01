@@ -12,10 +12,10 @@ export type EditEventProps = {
   cancelPath?: string;
   event: Pick<Event, 'status' | 'title'> & { id: string };
   validateForm: () => boolean;
-  updateEvent: () => Promise<unknown>;
-  onSave: () => void;
+  updateEvent: () => unknown;
+  onSave?: () => void;
   showDropButton?: boolean;
-  dropEvent?: () => Promise<unknown>;
+  dropEvent?: () => unknown;
   onDrop?: () => void;
 };
 
@@ -37,7 +37,9 @@ export default function EditEvent({
       }
 
       await updateEvent();
-      onSave();
+      if (onSave != null) {
+        onSave();
+      }
     }, [updateEvent, onSave, validateForm]),
     { suppressError: true },
   );

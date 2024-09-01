@@ -128,6 +128,12 @@ export function buildIntercodeApolloClient(link: ApolloLink): ApolloClient<Norma
         ConventionReports: {
           merge: true,
         },
+        Event: {
+          fields: {
+            rooms: { merge: true },
+            room_names: { merge: true },
+          },
+        },
         RegistrationPolicy: {
           merge: (existing, incoming) => incoming,
         },

@@ -119,7 +119,7 @@ function ScheduleMultipleRunsModal({
         starts_at: nonConflictingTimespansWithinRange.map((timespan) => timespan.start.toISO()),
         room_id: rooms.map((room) => room.id),
       },
-      { action: `/admin_events/${event.event_category.id}/${event.id}/runs/create_multiple`, method: 'POST' },
+      { action: `/admin_events/${event.event_category.id}/events/${event.id}/runs/create_multiple`, method: 'POST' },
     );
     onFinish();
   };

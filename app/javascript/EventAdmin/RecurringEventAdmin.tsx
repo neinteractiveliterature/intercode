@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import RecurringEventSection from './RecurringEventSection';
 import usePageTitle from '../usePageTitle';
 import useEventAdminCategory from './useEventAdminCategory';
-import buildEventCategoryUrl from './buildEventCategoryUrl';
 import { useTranslation } from 'react-i18next';
 import { useEventAdminEventsLoader } from './loaders';
 
@@ -24,7 +23,7 @@ export default function RecurringEventAdmin({ eventCategoryId }: RecurringEventA
 
   return (
     <div>
-      <Link className="btn btn-primary mt-4" to={`${buildEventCategoryUrl(eventCategory)}/new`}>
+      <Link className="btn btn-primary mt-4" to={`./events/new`}>
         {t('admin.events.newEventLabel', {
           categoryName: eventCategory?.name,
         })}

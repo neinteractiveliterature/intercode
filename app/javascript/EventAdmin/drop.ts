@@ -15,7 +15,7 @@ export const action: ActionFunction = async ({ params: { eventId }, request }) =
       return new Response(null, { status: 404 });
     }
 
-    return redirect(request.referrer);
+    return redirect('../..');
   } catch (error) {
     return error;
   }

@@ -228,7 +228,6 @@ const eventsRoutes: RouteObject[] = [
           },
         ],
       },
-      { path: 'drop', lazy: () => import('./EventsApp/drop') },
       {
         path: 'edit',
         element: <EditEventGuard />,
@@ -485,27 +484,37 @@ const commonInConventionRoutes: RouteObject[] = [
           {
             path: ':eventCategoryId',
             children: [
-              { path: 'new', lazy: () => import('./EventAdmin/NewEvent') },
+              { path: 'events/new', lazy: () => import('./EventAdmin/NewEvent') },
               {
                 path: '',
                 lazy: () => import('./EventAdmin/CategorySpecificEventAdmin'),
                 children: [
                   {
-                    path: ':eventId',
+                    path: 'events',
+                    lazy: () => import('./EventAdmin/create'),
                     children: [
-                      { path: 'admin_notes', lazy: () => import('./EventAdmin/AdminNotesRoute') },
-                      { path: 'edit', lazy: () => import('./EventAdmin/EventAdminEditEvent') },
-                      { path: 'restore', lazy: () => import('./EventAdmin/RestoreEventRoute') },
+                      { index: true, loader: () => redirect('..') },
                       {
-                        path: 'runs',
+                        path: ':eventId',
+                        lazy: () => import('./EventAdmin/$id'),
                         children: [
+                          { path: 'admin_notes', lazy: () => import('./EventAdmin/AdminNotesRoute') },
+                          { path: 'attach_image', lazy: () => import('./EventAdmin/attach_image') },
+                          { path: 'drop', lazy: () => import('./EventAdmin/drop') },
+                          { path: 'edit', lazy: () => import('./EventAdmin/EventAdminEditEvent') },
+                          { path: 'restore', lazy: () => import('./EventAdmin/RestoreEventRoute') },
                           {
-                            path: ':runId',
-                            lazy: () => import('./EventAdmin/SingleRunRoute'),
-                            children: [{ path: 'edit', lazy: () => import('./EventAdmin/EditRun') }],
+                            path: 'runs',
+                            children: [
+                              {
+                                path: ':runId',
+                                lazy: () => import('./EventAdmin/SingleRunRoute'),
+                                children: [{ path: 'edit', lazy: () => import('./EventAdmin/EditRun') }],
+                              },
+                              { path: 'create_multiple', lazy: () => import('./EventAdmin/CreateMultipleRunsRoute') },
+                              { path: 'new', lazy: () => import('./EventAdmin/NewRun') },
+                            ],
                           },
-                          { path: 'create_multiple', lazy: () => import('./EventAdmin/CreateMultipleRunsRoute') },
-                          { path: 'new', lazy: () => import('./EventAdmin/NewRun') },
                         ],
                       },
                     ],

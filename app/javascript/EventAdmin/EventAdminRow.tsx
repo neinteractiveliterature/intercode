@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 
 import AdminNotes from '../BuiltInFormControls/AdminNotes';
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
-import buildEventCategoryUrl from './buildEventCategoryUrl';
 import AppRootContext from '../AppRootContext';
 import { ConventionFieldsFragment, EventFieldsFragment, RunFieldsFragment } from './queries.generated';
 import { timespanFromRun } from '../TimespanUtils';
@@ -65,7 +64,7 @@ function EventAdminRow({ event, convention }: EventAdminRowProps): JSX.Element {
 
     return (
       <Link
-        to={`${buildEventCategoryUrl(eventCategory)}/${event.id}/runs/${run.id}/edit`}
+        to={`./events/${event.id}/runs/${run.id}/edit`}
         className="btn btn-secondary m-1 p-2 text-start"
         key={run.id}
       >
@@ -81,10 +80,7 @@ function EventAdminRow({ event, convention }: EventAdminRowProps): JSX.Element {
       return (
         <div className="d-flex flex-wrap align-items-start" style={{ maxWidth: '50vw' }}>
           {sortedRuns.map(renderRun)}
-          <Link
-            className="btn btn-primary btn-sm m-1"
-            to={`${buildEventCategoryUrl(eventCategory)}/${event.id}/runs/new`}
-          >
+          <Link className="btn btn-primary btn-sm m-1" to={`./events/${event.id}/runs/new`}>
             <i className="bi-plus" />
           </Link>
         </div>
@@ -106,7 +102,7 @@ function EventAdminRow({ event, convention }: EventAdminRowProps): JSX.Element {
     <tr>
       <td>
         <Link
-          to={`${event.id}/edit`}
+          to={`./events/${event.id}/edit`}
           className="rounded p-1 text-dark"
           style={getEventCategoryStyles({ eventCategory, variant: 'default' })}
         >
@@ -119,7 +115,7 @@ function EventAdminRow({ event, convention }: EventAdminRowProps): JSX.Element {
             mutate={(adminNotes) =>
               adminNotesFetcher.submit(
                 { admin_notes: adminNotes },
-                { action: `${event.id}/admin_notes`, method: 'PATCH' },
+                { action: `./events/${event.id}/admin_notes`, method: 'PATCH', preventScrollReset: true },
               )
             }
             inProgress={adminNotesFetcher.state !== 'idle'}

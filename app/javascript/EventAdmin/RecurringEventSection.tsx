@@ -8,7 +8,6 @@ import { useModal, DisclosureTriangle } from '@neinteractiveliterature/litform';
 
 import ScheduleMultipleRunsModal from './ScheduleMultipleRunsModal';
 import { timespanFromConvention, getConventionDayTimespans } from '../TimespanUtils';
-import buildEventCategoryUrl from './buildEventCategoryUrl';
 import AppRootContext from '../AppRootContext';
 import { ConventionFieldsFragment, EventFieldsFragment } from './queries.generated';
 import { getDateTimeFormat, useAppDateTimeFormat } from '../TimeUtils';
@@ -45,14 +44,10 @@ function RecurringEventSectionBody({ event, convention, startSchedulingRuns }: R
       if (runStart.weekday !== conventionDay.start.weekday) {
         formatKey = 'shortWeekdayTime';
       }
-      const eventCategory = convention.event_categories.find((c) => c.id === event.event_category.id);
 
       return (
         <li key={run.id} className="my-2">
-          <Link
-            className="btn btn-secondary"
-            to={`${buildEventCategoryUrl(eventCategory)}/${event.id}/runs/${run.id}/edit`}
-          >
+          <Link className="btn btn-secondary" to={`./events/${event.id}/runs/${run.id}/edit`}>
             {format(runStart, formatKey)}
           </Link>
         </li>
@@ -74,11 +69,7 @@ function RecurringEventSectionBody({ event, convention, startSchedulingRuns }: R
   return (
     <div>
       <div className="card bg-light my-4">
-        <div
-          className="card-body small"
-           
-          dangerouslySetInnerHTML={{ __html: event.description_html ?? '' }}
-        />
+        <div className="card-body small" dangerouslySetInnerHTML={{ __html: event.description_html ?? '' }} />
       </div>
 
       <div className="mb-4">

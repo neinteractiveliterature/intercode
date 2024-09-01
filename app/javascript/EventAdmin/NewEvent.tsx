@@ -1,18 +1,17 @@
 import { useState, useMemo } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { Link, useParams, useSubmit } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import buildEventCategoryUrl from './buildEventCategoryUrl';
 import RunFormFields, { RunForRunFormFields } from '../BuiltInForms/RunFormFields';
 import useEventFormWithCategorySelection, { EventFormWithCategorySelection } from './useEventFormWithCategorySelection';
-import { createEvent } from './useCreateEvent';
 import usePageTitle from '../usePageTitle';
 import { EventAdminEventsQueryData } from './queries.generated';
 import { buildEventInput } from './InputBuilders';
 import { Event, FormItemRole, SchedulingUi } from '../graphqlTypes.generated';
 import { ImageAttachmentConfig } from '../BuiltInFormControls/MarkdownInput';
 import { useEventAdminEventsLoader } from './loaders';
+import { CreateEventOptions } from './create';
 
 type NewEventFormResponseAttrs = {
   length_seconds?: number | null;
@@ -38,7 +37,7 @@ function runIsCreatable(run: RunForRunFormFields): run is Omit<RunForRunFormFiel
 function NewEvent() {
   const data = useEventAdminEventsLoader();
   const convention = data.convention;
-  const navigate = useNavigate();
+  const submit = useSubmit();
   const { eventCategoryId: eventCategoryIdParam } = useParams<{ eventCategoryId: string }>();
   const initialEventCategory = useMemo(
     () => convention.event_categories.find((c) => c.id === eventCategoryIdParam?.replace(/-.*$/, '')),
@@ -82,7 +81,7 @@ function NewEvent() {
   });
   usePageTitle('New event');
 
-  const donePath = convention.site_mode === 'single_event' ? '/' : (buildEventCategoryUrl(eventCategory) ?? '/');
+  const donePath = convention.site_mode === 'single_event' ? '/' : '../..';
 
   const createEventClicked = async () => {
     if (!validateForm() || !runIsCreatable(run) || !eventCategory) {
@@ -94,26 +93,32 @@ function NewEvent() {
       event_category: eventCategory,
     };
 
+    let payload: CreateEventOptions;
+    if (eventCategory.scheduling_ui === SchedulingUi.SingleRun) {
+      payload = {
+        event: eventForBuildEventInput,
+        eventCategory,
+        run,
+        signedImageBlobIds: signedBlobIds,
+      };
+    } else {
+      payload = {
+        event: eventForBuildEventInput,
+        eventCategory,
+        signedImageBlobIds: signedBlobIds,
+      };
+    }
+
     try {
-      if (eventCategory.scheduling_ui === SchedulingUi.SingleRun) {
-        await createEvent({
-          event: eventForBuildEventInput,
-          eventCategory,
-          run,
-          signedImageBlobIds: signedBlobIds,
-        });
-      } else {
-        await createEvent({
-          event: eventForBuildEventInput,
-          eventCategory,
-          signedImageBlobIds: signedBlobIds,
-        });
-      }
+      submit(payload, {
+        method: 'POST',
+        action: `/admin_events/${eventCategory.id}/events`,
+        encType: 'application/json',
+      });
     } catch (error) {
       setCreateError(error);
       throw error;
     }
-    navigate(donePath);
   };
 
   const warningMessage =

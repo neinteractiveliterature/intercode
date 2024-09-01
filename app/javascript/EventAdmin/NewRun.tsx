@@ -2,11 +2,11 @@ import { useState } from 'react';
 import { useNavigate, LoaderFunction, useLoaderData, Form, ActionFunction, redirect } from 'react-router-dom';
 
 import EditRunModal, { EditingRun } from './EditRunModal';
-import buildEventCategoryUrl from './buildEventCategoryUrl';
-import { EventAdminEventsQueryData, EventAdminEventsQueryDocument } from './queries.generated';
+import { EventAdminEventsQueryData, EventAdminEventsQueryDocument, RunFieldsFragmentDoc } from './queries.generated';
 import { client } from '../useIntercodeApolloClient';
 import { CreateRunDocument } from './mutations.generated';
 import { buildRunInputFromFormData } from './buildRunInputFromFormData';
+import { Event } from '../graphqlTypes.generated';
 
 export const action: ActionFunction = async ({ params: { eventCategoryId, eventId }, request }) => {
   try {
@@ -18,6 +18,18 @@ export const action: ActionFunction = async ({ params: { eventCategoryId, eventI
           eventId: eventId ?? '',
           run: buildRunInputFromFormData(formData),
         },
+      },
+      update: (cache, result) => {
+        const run = result.data?.createRun.run;
+        if (run) {
+          const runRef = cache.writeFragment({ data: run, fragment: RunFieldsFragmentDoc, fragmentName: 'RunFields' });
+          cache.modify<Event>({
+            id: cache.identify({ __typename: 'Event', id: eventId }),
+            fields: {
+              runs: (value) => [...value, runRef],
+            },
+          });
+        }
       },
     });
     return redirect(`/admin_events/${eventCategoryId}`);
@@ -67,12 +79,7 @@ function NewRun(): JSX.Element {
   const { event, initialRun, convention } = useLoaderData() as LoaderResult;
 
   const cancelEditing = () => {
-    const eventCategoryUrl = buildEventCategoryUrl(
-      convention.event_categories.find((c) => c.id === event.event_category.id),
-    );
-    if (eventCategoryUrl) {
-      navigate(eventCategoryUrl, { replace: true });
-    }
+    navigate('../../../..', { replace: true });
   };
 
   const [run, setRun] = useState(initialRun);

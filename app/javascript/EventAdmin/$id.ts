@@ -3,6 +3,7 @@ import { EventAdminEventsQueryData, EventAdminEventsQueryDocument } from './quer
 import { EventCategory, SchedulingUi } from '../graphqlTypes.generated';
 import { client } from '../useIntercodeApolloClient';
 import { CreateRunDocument, UpdateEventDocument, UpdateRunDocument } from './mutations.generated';
+import { ActionFunction, redirect } from 'react-router';
 
 export type UpdateRegularEventOptions = {
   event: Parameters<typeof buildEventInput>[0] & { id: string };
@@ -84,17 +85,27 @@ export async function updateSingleRunEvent({ event, run }: UpdateSingleRunEventO
 
 export type UpdateEventOptions = {
   event: Parameters<typeof buildEventInput>[0] & { id: string };
-  eventCategory: Pick<EventCategory, 'scheduling_ui'>;
-  run?: Parameters<typeof buildRunInput>[0] & { id?: string | null };
+  eventCategory: Pick<EventCategory, 'scheduling_ui' | 'id'>;
+  run?: (Parameters<typeof buildRunInput>[0] & { id?: string | null }) | null;
 };
 
-export function updateEvent({ event, eventCategory, run }: UpdateEventOptions) {
+async function updateEvent({ event, eventCategory, run }: UpdateEventOptions) {
   if (eventCategory.scheduling_ui === SchedulingUi.SingleRun) {
     if (!run) {
       throw new Error('When updating a single-run event, the run must be provided');
     }
-    return updateSingleRunEvent({ event, run });
+    return await updateSingleRunEvent({ event, run });
   }
 
-  return updateRegularEvent({ event });
+  return await updateRegularEvent({ event });
 }
+
+export const action: ActionFunction = async ({ request }) => {
+  try {
+    const options = (await request.json()) as UpdateEventOptions;
+    await updateEvent(options);
+    return redirect(`/admin_events/${options.eventCategory.id}`);
+  } catch (error) {
+    return error;
+  }
+};

@@ -1,7 +1,8 @@
 import { buildEventInput, buildRunInput } from './InputBuilders';
 import { CreateEventDocument, CreateFillerEventDocument } from './mutations.generated';
-import { SchedulingUi } from '../graphqlTypes.generated';
+import { EventCategory, SchedulingUi } from '../graphqlTypes.generated';
 import { client } from '../useIntercodeApolloClient';
+import { ActionFunction, redirect } from 'react-router';
 
 export type CreateRegularEventOptions = {
   event: Parameters<typeof buildEventInput>[0];
@@ -62,12 +63,12 @@ export async function createSingleRunEvent({ event, run, signedImageBlobIds }: C
 
 export type CreateEventOptions = {
   event: Parameters<typeof buildEventInput>[0];
-  eventCategory: { scheduling_ui: SchedulingUi };
+  eventCategory: Pick<EventCategory, 'scheduling_ui' | 'id'>;
   run?: Parameters<typeof buildRunInput>[0];
   signedImageBlobIds?: string[];
 };
 
-export async function createEvent({ event, eventCategory, run, signedImageBlobIds }: CreateEventOptions) {
+async function createEvent({ event, eventCategory, run, signedImageBlobIds }: CreateEventOptions) {
   if (eventCategory.scheduling_ui === SchedulingUi.SingleRun) {
     if (!run) {
       throw new Error('When creating a single-run event, the run must be provided');
@@ -77,3 +78,13 @@ export async function createEvent({ event, eventCategory, run, signedImageBlobId
 
   return await createRegularEvent({ event, signedImageBlobIds });
 }
+
+export const action: ActionFunction = async ({ request }) => {
+  try {
+    const options = (await request.json()) as CreateEventOptions;
+    await createEvent(options);
+    return redirect(`/admin_events/${options.eventCategory.id}`);
+  } catch (error) {
+    return error;
+  }
+};

@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useNavigate, LoaderFunction, useLoaderData, Form, ActionFunction, redirect } from 'react-router-dom';
 
 import EditRunModal, { EditingRun } from './EditRunModal';
-import buildEventCategoryUrl from './buildEventCategoryUrl';
 import { EventAdminEventsQueryData, EventAdminEventsQueryDocument } from './queries.generated';
 import { client } from '../useIntercodeApolloClient';
 import { UpdateRunDocument } from './mutations.generated';
@@ -40,8 +39,8 @@ export const loader: LoaderFunction = async ({ params: { eventId, runId } }) => 
   const event = events.find((e) => e.id.toString() === eventId);
   const initialRun = event?.runs.find((r) => r.id === runId) as EditingRun;
 
-  if (initialRun) {
-    return { event, initialRun } as LoaderResult;
+  if (event && initialRun) {
+    return { event, initialRun, convention } satisfies LoaderResult;
   } else {
     return new Response(null, { status: 404 });
   }
@@ -52,12 +51,7 @@ function EditRun(): JSX.Element {
   const { event, initialRun, convention } = useLoaderData() as LoaderResult;
 
   const cancelEditing = () => {
-    const eventCategoryUrl = buildEventCategoryUrl(
-      convention.event_categories.find((c) => c.id === event.event_category.id),
-    );
-    if (eventCategoryUrl) {
-      navigate(eventCategoryUrl, { replace: true });
-    }
+    navigate('../../../..', { replace: true });
   };
 
   const [run, setRun] = useState(initialRun);

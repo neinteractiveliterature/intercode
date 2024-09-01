@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom';
 
 import EventAdminRow from './EventAdminRow';
 import usePageTitle from '../usePageTitle';
-import buildEventCategoryUrl from './buildEventCategoryUrl';
 import useEventAdminCategory from './useEventAdminCategory';
 import { useTranslation } from 'react-i18next';
 import { useEventAdminEventsLoader } from './loaders';
@@ -24,7 +23,7 @@ export default function EventAdminRunsTable({ eventCategoryId }: EventAdminRunsT
 
   return (
     <div>
-      <Link to={`${buildEventCategoryUrl(eventCategory)}/new`} className="btn btn-primary mt-4 mb-2">
+      <Link to={`./events/new`} className="btn btn-primary mt-4 mb-2">
         {t('admin.events.newEventLabel', {
           categoryName: eventCategory?.name,
         })}

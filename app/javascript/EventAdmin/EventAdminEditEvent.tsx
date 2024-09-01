@@ -1,12 +1,11 @@
-import { useState, useCallback, useMemo } from 'react';
-import { LoaderFunction, useFetcher, useLoaderData, useNavigate, useRouteLoaderData } from 'react-router-dom';
+import { useState, useMemo } from 'react';
+import { LoaderFunction, useFetcher, useLoaderData, useRouteLoaderData, useSubmit } from 'react-router-dom';
 
 import useEventFormWithCategorySelection, { EventFormWithCategorySelection } from './useEventFormWithCategorySelection';
 import EditEvent from '../BuiltInForms/EditEvent';
 import MaximumEventProvidedTicketsOverrideEditor from '../BuiltInFormControls/MaximumEventProvidedTicketsOverrideEditor';
 import usePageTitle from '../usePageTitle';
 import RunFormFields, { RunFormFieldsProps } from '../BuiltInForms/RunFormFields';
-import buildEventCategoryUrl from './buildEventCategoryUrl';
 import deserializeFormResponse, { WithFormResponse } from '../Models/deserializeFormResponse';
 import {
   EventAdminEventsQueryData,
@@ -14,20 +13,20 @@ import {
   EventAdminSingleEventQueryDocument,
 } from './queries.generated';
 import { ImageAttachmentConfig } from '../BuiltInFormControls/MarkdownInput';
-import { updateEvent } from './updateEvent';
 import { NamedRoute } from '../AppRouter';
 import { client } from '../useIntercodeApolloClient';
+import { UpdateEventOptions } from './$id';
 
 type LoaderResult = WithFormResponse<EventAdminSingleEventQueryData['conventionByRequestHost']['event']>;
 
-export const loader: LoaderFunction = async ({ params: { id } }) => {
+export const loader: LoaderFunction = async ({ params: { eventId } }) => {
   const {
     data: {
       conventionByRequestHost: { event: serializedEvent },
     },
   } = await client.query({
     query: EventAdminSingleEventQueryDocument,
-    variables: { eventId: id ?? '' },
+    variables: { eventId: eventId ?? '' },
   });
   const initialEvent = deserializeFormResponse(serializedEvent);
   return initialEvent satisfies LoaderResult;
@@ -36,18 +35,17 @@ export const loader: LoaderFunction = async ({ params: { id } }) => {
 function EventAdminEditEvent() {
   const { convention, currentAbility } = useRouteLoaderData(NamedRoute.EventAdmin) as EventAdminEventsQueryData;
   const initialEvent = useLoaderData() as LoaderResult;
-  const navigate = useNavigate();
+  const submit = useSubmit();
   const fetcher = useFetcher();
 
   const [run, setRun] = useState(initialEvent?.runs[0] || {});
-  const [attachImageToEvent] = useAttachImageToEventMutation();
 
   const imageAttachmentConfig = useMemo<ImageAttachmentConfig>(
     () => ({
-      addBlob: (blob) => attachImageToEvent({ variables: { id: initialEvent.id, signedBlobId: blob.signed_id } }),
+      addBlob: (blob) => fetcher.submit({ signed_blob_id: blob.signed_id }, { action: `attach_image`, method: 'POST' }),
       existingImages: initialEvent.images,
     }),
-    [attachImageToEvent, initialEvent.id, initialEvent.images],
+    [fetcher, initialEvent.images],
   );
 
   const [eventFormWithCategorySelectionProps, { event, eventCategory, validateForm }] =
@@ -84,13 +82,12 @@ function EventAdminEditEvent() {
   );
 
   const dropEvent = () => {
-    fetcher.submit({}, { method: 'PATCH', action: `/events/${initialEvent.id}/drop` });
+    submit({}, { method: 'PATCH', action: `drop` });
   };
 
   usePageTitle(`Editing “${initialEvent.title}”`);
 
-  const donePath =
-    convention?.site_mode === 'single_event' ? '/' : (buildEventCategoryUrl(eventCategory) ?? '/admin_events');
+  const donePath = convention?.site_mode === 'single_event' ? '/' : '../..';
 
   return (
     <EditEvent
@@ -99,16 +96,14 @@ function EventAdminEditEvent() {
       event={event}
       dropEvent={dropEvent}
       validateForm={validateForm}
-      updateEvent={async () => {
+      updateEvent={() => {
         if (eventCategory) {
-          return await updateEvent({ event, eventCategory, run });
+          submit({ event, eventCategory, run } satisfies UpdateEventOptions, {
+            method: 'PATCH',
+            encType: 'application/json',
+            action: `/admin_events/${eventCategory.id}/events/${event.id}`,
+          });
         }
-      }}
-      onSave={() => {
-        navigate(donePath);
-      }}
-      onDrop={() => {
-        navigate(donePath);
       }}
     >
       <>
