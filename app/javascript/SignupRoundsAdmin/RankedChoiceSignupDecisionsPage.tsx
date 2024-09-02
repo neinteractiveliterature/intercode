@@ -1,8 +1,8 @@
 import {
   SignupRoundRankedChoiceDecisionsTableQueryData,
+  SignupRoundRankedChoiceDecisionsTableQueryDocument,
   SignupRoundsAdminQueryData,
   SignupRoundsAdminQueryDocument,
-  useSignupRoundRankedChoiceDecisionsTableQuery,
 } from './queries.generated';
 import { useContext, useMemo } from 'react';
 import { LoaderFunction, useLoaderData, useParams } from 'react-router';
@@ -206,7 +206,7 @@ function RankedChoiceSignupDecisionsTable({ signupRoundId }: RankedChoiceSignupD
     getPages: (queryData) => queryData.data.convention.signup_round.ranked_choice_decisions_paginated.total_pages,
     getPossibleColumns,
     storageKeyPrefix: `rankedChoiceSignupDecisions-${signupRoundId}`,
-    useQuery: useSignupRoundRankedChoiceDecisionsTableQuery,
+    query: SignupRoundRankedChoiceDecisionsTableQueryDocument,
     variables: { signupRoundId },
   });
 

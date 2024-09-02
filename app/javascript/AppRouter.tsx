@@ -631,7 +631,11 @@ const commonInConventionRoutes: RouteObject[] = [
     path: '/signup_rounds',
     lazy: () => import('./SignupRoundsAdmin'),
     children: [
-      { path: ':id/results', lazy: () => import('./SignupRoundsAdmin/RankedChoiceSignupDecisionsPage') },
+      {
+        path: ':id',
+        lazy: () => import('./SignupRoundsAdmin/$id'),
+        children: [{ path: 'results', lazy: () => import('./SignupRoundsAdmin/RankedChoiceSignupDecisionsPage') }],
+      },
       { index: true, lazy: () => import('./SignupRoundsAdmin/SignupRoundsAdminPage') },
     ],
   },

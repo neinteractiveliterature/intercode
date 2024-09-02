@@ -1,7 +1,7 @@
 import { parseIntOrNull } from '@neinteractiveliterature/litform';
 import { MaximumEventSignupsValue } from '../SignupRoundUtils';
 import { useTranslation } from 'react-i18next';
-import React, { useRef } from 'react';
+import React, { HTMLProps, useRef } from 'react';
 import isEqual from 'lodash/isEqual';
 
 type LimitedMaximumEventSignupsInputState = {
@@ -39,13 +39,14 @@ function maximumEventSignupsValueToInputState(
   };
 }
 
-type MaximumEventSignupsInputProps = {
+type MaximumEventSignupsInputProps = Omit<HTMLProps<HTMLSelectElement>, 'value' | 'onChange' | 'id' | 'name'> & {
   value: MaximumEventSignupsValue | undefined;
   onChange: React.Dispatch<MaximumEventSignupsValue | undefined>;
   id?: string;
+  name?: string;
 };
 
-function MaximumEventSignupsInput({ value, onChange, id }: MaximumEventSignupsInputProps) {
+function MaximumEventSignupsInput({ value, onChange, id, name, ...selectProps }: MaximumEventSignupsInputProps) {
   const { t } = useTranslation();
   const [inputState, setInputState] = React.useState<MaximumEventSignupsInputState>(() =>
     maximumEventSignupsValueToInputState(value),
@@ -93,7 +94,7 @@ function MaximumEventSignupsInput({ value, onChange, id }: MaximumEventSignupsIn
 
   return (
     <div className="input-group">
-      <select className="form-select" value={inputState.valueType} onChange={valueTypeChanged} id={id}>
+      <select className="form-select" value={inputState.valueType} onChange={valueTypeChanged} id={id} {...selectProps}>
         <option aria-label="Blank placeholder option" />
         <option value="not_yet">{t('signups.maximumSignups.notYet')}</option>
         <option value="limited">{t('signups.maximumSignups.limitedUnspecified')}</option>
@@ -121,6 +122,7 @@ function MaximumEventSignupsInput({ value, onChange, id }: MaximumEventSignupsIn
           />
         </>
       )}
+      {name && <input type="hidden" name={name} value={value} />}
     </div>
   );
 }

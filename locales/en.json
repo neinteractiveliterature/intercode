@@ -1199,6 +1199,7 @@
       "errors": {
         "startTimeRequired": "Start time is required."
       },
+      "maximumEventSignups": "Maximum signups",
       "preSignupRoundPeriod": "Pre-signups period",
       "results": "Results",
       "roundNumber": "Round {{ number }}",
