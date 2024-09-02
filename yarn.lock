@@ -10954,10 +10954,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"diff@npm:5.2.0":
-  version: 5.2.0
-  resolution: "diff@npm:5.2.0"
-  checksum: 10c0/aed0941f206fe261ecb258dc8d0ceea8abbde3ace5827518ff8d302f0fc9cc81ce116c4d8f379151171336caf0516b79e01abdc1ed1201b6440d895a66689eb4
+"diff@npm:6.0.0":
+  version: 6.0.0
+  resolution: "diff@npm:6.0.0"
+  checksum: 10c0/98d27ddd49cacf2230d5f44826d57b6440f32e89ea235b19810b19e23b94af17471ace4feabab1929a526516950e618ffa1be6b5c9b61b47991b305e31954c9c
   languageName: node
   linkType: hard
 
@@ -21126,7 +21126,7 @@ __metadata:
     custom-event-polyfill: "npm:1.0.7"
     debounce-promise: "npm:3.1.2"
     detect-browser: "npm:5.3.0"
-    diff: "npm:5.2.0"
+    diff: "npm:6.0.0"
     eslint: "npm:9.9.1"
     eslint-config-airbnb: "npm:19.0.4"
     eslint-config-airbnb-base: "npm:15.0.0"
