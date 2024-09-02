@@ -620,6 +620,27 @@ const commonInConventionRoutes: RouteObject[] = [
               },
             ],
           },
+          {
+            path: 'signup_requests',
+            children: [
+              {
+                path: ':id',
+                children: [
+                  { path: 'accept', lazy: () => import('./SignupModeration/signup_requests/$id/accept') },
+                  { path: 'reject', lazy: () => import('./SignupModeration/signup_requests/$id/reject') },
+                ],
+              },
+            ],
+          },
+          {
+            path: 'signup_rounds',
+            children: [
+              {
+                path: ':id',
+                children: [{ path: 'rerun', lazy: () => import('./SignupModeration/signup_rounds/$id/rerun') }],
+              },
+            ],
+          },
           { path: 'queue', lazy: () => import('./SignupModeration/SignupModerationQueue') },
           { path: 'create_signups', lazy: () => import('./SignupModeration/CreateSignup') },
           { index: true, loader: () => redirect('./queue') },
