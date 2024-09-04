@@ -83,7 +83,7 @@
     "crypto-browserify": "3.12.0",
     "css-loader": "7.1.2",
     "css-minimizer-webpack-plugin": "7.0.0",
-    "cssnano": "7.0.5",
+    "cssnano": "7.0.6",
     "csv-string": "4.1.1",
     "custom-event-polyfill": "1.0.7",
     "debounce-promise": "3.1.2",
