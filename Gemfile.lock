@@ -630,7 +630,7 @@ GEM
       rbs (>= 1.8.1)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
-    tzinfo-data (1.2024.1)
+    tzinfo-data (1.2024.2)
       tzinfo (>= 1.0.0)
     unf (0.1.4)
       unf_ext
@@ -762,7 +762,7 @@ DEPENDENCIES
   yard
 
 RUBY VERSION
-   ruby 3.3.4p94
+   ruby 3.3.5p100
 
 BUNDLED WITH
    2.5.9
