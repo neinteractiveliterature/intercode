@@ -21201,7 +21201,7 @@ __metadata:
     ts-node: "npm:10.9.2"
     tsx: "npm:^4.16.2"
     typescript: "npm:5.5.4"
-    tzdata: "npm:1.0.40"
+    tzdata: "npm:1.0.41"
     uuid: "npm:10.0.0"
     webpack: "npm:5.94.0"
     webpack-assets-manifest: "npm:5.2.1"
@@ -23141,10 +23141,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tzdata@npm:1.0.40":
-  version: 1.0.40
-  resolution: "tzdata@npm:1.0.40"
-  checksum: 10c0/5d9c444295a10da30b472bb8dd311d1c94b2d9c86ad748ee34a34ff8594b72f6b1fe980aa4fc50c88bd0cdf5c8a0fa6f858d1b7713a2b430c1215d0320116716
+"tzdata@npm:1.0.41":
+  version: 1.0.41
+  resolution: "tzdata@npm:1.0.41"
+  checksum: 10c0/88ce89337bd2e0c7c54a4e4070299ce7b58f55e357dfa23c8c6de3912bb92c13e10c08cd5e08dc6c1a14414ba54ef12de5f48b3cd65bf7ca5491497a5065a2bf
   languageName: node
   linkType: hard
 
