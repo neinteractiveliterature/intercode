@@ -149,7 +149,7 @@
     "style-loader": "4.0.0",
     "terser-webpack-plugin": "5.3.10",
     "tinycolor2": "1.6.0",
-    "tzdata": "1.0.40",
+    "tzdata": "1.0.41",
     "uuid": "10.0.0",
     "webpack": "5.94.0",
     "webpack-assets-manifest": "5.2.1",
