@@ -401,7 +401,7 @@ GEM
       ast (~> 2.4.1)
       racc
     parslet (2.0.0)
-    pg (1.5.7)
+    pg (1.5.8)
     pg_search (2.3.7)
       activerecord (>= 6.1)
       activesupport (>= 6.1)
