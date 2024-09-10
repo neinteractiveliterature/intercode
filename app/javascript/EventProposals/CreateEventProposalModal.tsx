@@ -68,7 +68,7 @@ function CreateEventProposalModal({
         ...(cloneEventProposal ? { clone_event_proposal_id: cloneEventProposal.id } : {}),
         event_category_id: eventCategory.id,
       },
-      { method: 'POST', action: `/event_proposals` },
+      { method: 'POST', action: `/event_proposals?index` },
     );
   };
 
