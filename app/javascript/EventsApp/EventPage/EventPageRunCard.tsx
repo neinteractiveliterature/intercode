@@ -19,6 +19,7 @@ import {
   WithdrawSignupRequestDocument,
 } from './mutations.generated';
 import { client } from '../../useIntercodeApolloClient';
+import { useRevalidator } from 'react-router';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type TI = any;
@@ -107,6 +108,7 @@ function EventPageRunCard({
   const createModeratedSignupModal = useModal<{ signupOption: SignupOption }>();
   const mySignup = run.my_signups.find((signup) => signup.state !== 'withdrawn');
   const myPendingSignupRequest = run.my_signup_requests.find((signupRequest) => signupRequest.state === 'pending');
+  const revalidator = useRevalidator();
 
   const currentRound = useMemo(() => {
     const parsedRounds = parseSignupRounds(signupRounds);
@@ -143,10 +145,11 @@ function EventPageRunCard({
         });
 
         await client.resetStore();
+        revalidator.revalidate();
         return response.data?.createMySignup.signup;
       }
     },
-    [event, run],
+    [event, run, revalidator],
   );
 
   const withdrawPrompt = useMemo(() => {
@@ -181,10 +184,11 @@ function EventPageRunCard({
       action: async () => {
         await client.mutate({ mutation: WithdrawMySignupDocument, variables: { runId: run.id } });
         await client.resetStore();
+        revalidator.revalidate();
       },
       renderError: (error) => <ErrorDisplay graphQLError={error} />,
     });
-  }, [confirm, withdrawPrompt, run.id]);
+  }, [confirm, withdrawPrompt, run.id, revalidator]);
 
   const createSignup = (signupOption: SignupOption) => {
     if (signupMode === SignupMode.SelfService || signupOption.action === 'ADD_TO_QUEUE' || signupOption.teamMember) {
@@ -206,8 +210,10 @@ function EventPageRunCard({
 
     confirm({
       prompt: t('events.withdrawPrompt.signupRequest', { eventTitle: event.title }),
-      action: () =>
-        client.mutate({ mutation: WithdrawSignupRequestDocument, variables: { id: myPendingSignupRequest.id } }),
+      action: async () => {
+        await client.mutate({ mutation: WithdrawSignupRequestDocument, variables: { id: myPendingSignupRequest.id } });
+        revalidator.revalidate();
+      },
       renderError: (error) => <ErrorDisplay graphQLError={error} />,
     });
 

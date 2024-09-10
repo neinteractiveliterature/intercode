@@ -26,7 +26,7 @@ function MySignupQueue() {
       <h1>{t('signups.mySignupQueue.title')}</h1>
       <div className="row mb-4">
         <div className="col-12 col-md-8">
-          <NextRoundInfoBox />
+          <NextRoundInfoBox data={data} />
 
           {pendingChoices.length > 0 ? (
             <>
@@ -71,7 +71,7 @@ function MySignupQueue() {
           {myProfile && <UserConProfileSignupsCard userConProfileId={myProfile.id} />}
         </div>
       </div>
-      <RankedChoiceUserSettings />
+      <RankedChoiceUserSettings data={data} />
     </>
   );
 }

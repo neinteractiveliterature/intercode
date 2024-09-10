@@ -1,5 +1,5 @@
-import { ErrorDisplay, HelpPopover, LoadQueryWrapper, MultipleChoiceInput } from '@neinteractiveliterature/litform';
-import { MySignupQueueQueryData, MySignupQueueQueryDocument, useMySignupQueueQuery } from './queries.generated';
+import { ErrorDisplay, HelpPopover, MultipleChoiceInput } from '@neinteractiveliterature/litform';
+import { MySignupQueueQueryData, MySignupQueueQueryDocument } from './queries.generated';
 import { HTMLProps, useContext, useId, useMemo } from 'react';
 import { describeTimespan, getConventionDayTimespans } from '../../TimespanUtils';
 import AppRootContext from '../../AppRootContext';
@@ -8,13 +8,15 @@ import { useAppDateTimeFormat } from '../../TimeUtils';
 import { DateTime } from 'luxon';
 import Timespan from '../../Timespan';
 import { RankedChoiceUserConstraint, SignupState } from '../../graphqlTypes.generated';
-import {
-  useCreateMyRankedChoiceUserConstraintMutation,
-  useDeleteRankedChoiceUserConstraintMutation,
-  useUpdateRankedChoiceUserConstraintMutation,
-} from './mutations.generated';
-import { useUpdateUserConProfileMutation } from '../../UserConProfiles/mutations.generated';
 import BucketAvailabilityDisplay from '../EventPage/BucketAvailabilityDisplay';
+import { useMutation } from '@apollo/client';
+import { UpdateUserConProfileDocument } from '../../UserConProfiles/mutations.generated';
+import {
+  CreateMyRankedChoiceUserConstraintDocument,
+  DeleteRankedChoiceUserConstraintDocument,
+  UpdateRankedChoiceUserConstraintDocument,
+} from './mutations.generated';
+import { useRevalidator } from 'react-router';
 
 type ConstraintAvailabilityDisplayProps = {
   constraint: Pick<RankedChoiceUserConstraint, 'start' | 'finish' | 'maximum_signups'>;
@@ -121,7 +123,7 @@ type ConstraintType = NonNullable<
   MySignupQueueQueryData['convention']['my_profile']
 >['ranked_choice_user_constraints'][number];
 
-const RankedChoiceUserSettings = LoadQueryWrapper(useMySignupQueueQuery, ({ data }) => {
+function RankedChoiceUserSettings({ data }: { data: MySignupQueueQueryData }) {
   const { t } = useTranslation();
   const formatDateTime = useAppDateTimeFormat();
   const { conventionTimespan, timezoneName, myProfile } = useContext(AppRootContext);
@@ -129,14 +131,19 @@ const RankedChoiceUserSettings = LoadQueryWrapper(useMySignupQueueQuery, ({ data
     () => (conventionTimespan?.isFinite() ? getConventionDayTimespans(conventionTimespan, timezoneName) : []),
     [conventionTimespan, timezoneName],
   );
-  const [createMyRankedChoiceUserConstraint, { error: createError, loading: createLoading }] =
-    useCreateMyRankedChoiceUserConstraintMutation();
-  const [updateRankedChoiceUserConstraint, { error: updateError, loading: updateLoading }] =
-    useUpdateRankedChoiceUserConstraintMutation();
-  const [deleteRankedChoiceUserConstraint, { error: deleteError, loading: deleteLoading }] =
-    useDeleteRankedChoiceUserConstraintMutation();
+  const revalidator = useRevalidator();
+  const [createMyRankedChoiceUserConstraint, { error: createError, loading: createLoading }] = useMutation(
+    CreateMyRankedChoiceUserConstraintDocument,
+    { onCompleted: revalidator.revalidate },
+  );
+  const [updateRankedChoiceUserConstraint, { error: updateError, loading: updateLoading }] = useMutation(
+    UpdateRankedChoiceUserConstraintDocument,
+  );
+  const [deleteRankedChoiceUserConstraint, { error: deleteError, loading: deleteLoading }] = useMutation(
+    DeleteRankedChoiceUserConstraintDocument,
+  );
   const [updateUserConProfile, { error: profileUpdateError, loading: profileUpdateLoading }] =
-    useUpdateUserConProfileMutation();
+    useMutation(UpdateUserConProfileDocument);
 
   const loading = createLoading || updateLoading || deleteLoading;
 
@@ -189,11 +196,13 @@ const RankedChoiceUserSettings = LoadQueryWrapper(useMySignupQueueQuery, ({ data
           },
         },
         refetchQueries: [{ query: MySignupQueueQueryDocument }],
+        awaitRefetchQueries: true,
       });
     } else if (maximumSignups == null) {
       await deleteRankedChoiceUserConstraint({
         variables: { id: constraint.id },
         refetchQueries: [{ query: MySignupQueueQueryDocument }],
+        awaitRefetchQueries: true,
       });
     } else {
       await updateRankedChoiceUserConstraint({
@@ -202,8 +211,11 @@ const RankedChoiceUserSettings = LoadQueryWrapper(useMySignupQueueQuery, ({ data
           rankedChoiceUserConstraint: { maximumSignups },
         },
         refetchQueries: [{ query: MySignupQueueQueryDocument }],
+        awaitRefetchQueries: true,
       });
     }
+
+    revalidator.revalidate();
   };
 
   return (
@@ -309,6 +321,6 @@ const RankedChoiceUserSettings = LoadQueryWrapper(useMySignupQueueQuery, ({ data
       </div>
     </div>
   );
-});
+}
 
 export default RankedChoiceUserSettings;
