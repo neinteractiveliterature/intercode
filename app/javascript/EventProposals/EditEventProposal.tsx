@@ -1,11 +1,9 @@
-import { useApolloClient } from '@apollo/client';
-import { Navigate, useNavigate, Link, LoaderFunction, useLoaderData } from 'react-router-dom';
+import { Navigate, useNavigate, Link, LoaderFunction, useLoaderData, useSubmit } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ErrorDisplay, useConfirm } from '@neinteractiveliterature/litform';
 
 import EventProposalForm from './EventProposalForm';
 import usePageTitle from '../usePageTitle';
-import { useDeleteEventProposalMutation } from './mutations.generated';
 import { EventProposalQueryData, EventProposalQueryDocument, EventProposalQueryVariables } from './queries.generated';
 import { client } from '../useIntercodeApolloClient';
 
@@ -21,9 +19,8 @@ function EditEventProposal() {
   const data = useLoaderData() as EventProposalQueryData;
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [deleteProposal] = useDeleteEventProposalMutation();
   const confirm = useConfirm();
-  const apolloClient = useApolloClient();
+  const submit = useSubmit();
 
   usePageTitle(
     t('general.pageTitles.editing', {
@@ -45,11 +42,7 @@ function EditEventProposal() {
     onClick: () =>
       confirm({
         prompt: t('eventProposals.edit.deleteConfirmation'),
-        action: async () => {
-          await deleteProposal({ variables: { id: eventProposalId } });
-          await apolloClient.clearStore();
-          navigate('/pages/new-proposal', { replace: true });
-        },
+        action: () => submit(null, { action: `/event_proposals/${eventProposalId}`, method: 'DELETE' }),
         renderError: (e) => <ErrorDisplay graphQLError={e} />,
       }),
   };

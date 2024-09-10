@@ -37,8 +37,11 @@ function EventProposalFormInner({
 }: EventProposalFormInnerProps) {
   const { t } = useTranslation();
   const [updatePromise, setUpdatePromise] = useState<Promise<unknown>>();
+  const [submitPromise, setSubmitPromise] = useState<Promise<unknown>>();
   const [eventProposal, setEventProposal] = useState(initialEventProposal);
   const [responseErrors, setResponseErrors] = useState({});
+  const [submitError, setSubmitError] = useState<ApolloError>();
+  const [updateError, setUpdateError] = useState<ApolloError>();
 
   const imageAttachmentConfig = useMemo<ImageAttachmentConfig>(
     () => ({
@@ -82,6 +85,7 @@ function EventProposalFormInner({
       setUpdatePromise(promise);
       await promise;
     } catch (e) {
+      setUpdateError(e);
       setResponseErrors(parseResponseErrors(e, ['updateEventProposal']));
     } finally {
       setUpdatePromise(undefined);
@@ -89,18 +93,24 @@ function EventProposalFormInner({
   }, []);
   useAutocommitFormResponseOnChange(commitResponse, eventProposal);
 
-  const submitResponse = useCallback(
-    (proposal: typeof eventProposal) =>
-      client.mutate({
+  const submitResponse = useCallback(async (proposal: typeof eventProposal) => {
+    try {
+      const promise = client.mutate({
         mutation: SubmitEventProposalDocument,
         variables: {
           input: {
             id: proposal.id,
           },
         },
-      }),
-    [],
-  );
+      });
+      setSubmitPromise(promise);
+      await promise;
+    } catch (e) {
+      setSubmitError(e);
+    } finally {
+      setSubmitPromise(undefined);
+    }
+  }, []);
 
   const formSubmitted = useCallback(() => {
     if (afterSubmit) {
@@ -134,7 +144,7 @@ function EventProposalFormInner({
           convention={convention}
           response={eventProposal}
           responseErrors={responseErrors}
-          isSubmittingResponse={submitInProgress}
+          isSubmittingResponse={submitPromise != null}
           isUpdatingResponse={updatePromise != null}
           responseValuesChanged={responseValuesChanged}
           submitForm={submitForm}

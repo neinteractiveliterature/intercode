@@ -10,7 +10,7 @@ import TableHeader from '../Tables/TableHeader';
 import usePageTitle from '../usePageTitle';
 import UserConProfileWithGravatarCell from '../Tables/UserConProfileWithGravatarCell';
 import { SingleLineTimestampCell } from '../Tables/TimestampCell';
-import { EventProposalsAdminQueryData, useEventProposalsAdminQuery } from './queries.generated';
+import { EventProposalsAdminQueryData, EventProposalsAdminQueryDocument } from './queries.generated';
 import EventCategoryCell from '../Tables/EventCategoryCell';
 import EventCategoryFilter from '../Tables/EventCategoryFilter';
 import DurationCell from '../Tables/DurationCell';
@@ -160,7 +160,7 @@ function EventProposalsAdminTable(): JSX.Element {
     getData: ({ data: tableData }) => tableData.convention.event_proposals_paginated.entries,
     getPages: ({ data: tableData }) => tableData.convention.event_proposals_paginated.total_pages,
     getPossibleColumns,
-    useQuery: useEventProposalsAdminQuery,
+    query: EventProposalsAdminQueryDocument,
     storageKeyPrefix: 'eventProposalsAdmin',
   });
 

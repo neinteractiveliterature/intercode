@@ -1,71 +1,37 @@
-import { useCallback } from 'react';
-import { Link, useRouteLoaderData } from 'react-router-dom';
-import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
+import { Link, useFetcher, useRouteLoaderData } from 'react-router-dom';
 
 import AdminNotes from '../BuiltInFormControls/AdminNotes';
 import EventProposalDisplay from './EventProposalDisplay';
 import EventProposalStatusUpdater from './EventProposalStatusUpdater';
 import usePageTitle from '../usePageTitle';
-import {
-  EventProposalAdminNotesQueryData,
-  EventProposalAdminNotesQueryDocument,
-  EventProposalQueryWithOwnerQueryData,
-  useEventProposalAdminNotesQuery,
-} from './queries.generated';
-import { useUpdateEventProposalAdminNotesMutation } from './mutations.generated';
+import { EventProposalAdminNotesQueryDocument, EventProposalQueryWithOwnerQueryData } from './queries.generated';
 import humanize from '../humanize';
 import { NamedRoute } from '../AppRouter';
+import { ApolloError, useSuspenseQuery } from '@apollo/client';
 
 export type EventProposalAdminNotesProps = {
   eventProposalId: string;
 };
 
 function EventProposalAdminNotes({ eventProposalId }: EventProposalAdminNotesProps) {
-  const { data, loading, error } = useEventProposalAdminNotesQuery({
+  const { data } = useSuspenseQuery(EventProposalAdminNotesQueryDocument, {
     variables: { eventProposalId },
   });
+  const fetcher = useFetcher();
 
-  const [updateAdminNotesMutate] = useUpdateEventProposalAdminNotesMutation();
-  const updateAdminNotes = useCallback(
-    (adminNotes: string) =>
-      updateAdminNotesMutate({
-        variables: { eventProposalId, adminNotes },
-        update: (cache) => {
-          const queryData = cache.readQuery<EventProposalAdminNotesQueryData>({
-            query: EventProposalAdminNotesQueryDocument,
-            variables: { eventProposalId },
-          });
-          if (!queryData) {
-            return;
-          }
-          cache.writeQuery<EventProposalAdminNotesQueryData>({
-            query: EventProposalAdminNotesQueryDocument,
-            variables: { eventProposalId },
-            data: {
-              ...queryData,
-              convention: {
-                ...queryData.convention,
-                event_proposal: {
-                  ...queryData.convention.event_proposal,
-                  admin_notes: adminNotes,
-                },
-              },
-            },
-          });
-        },
-      }),
-    [eventProposalId, updateAdminNotesMutate],
+  return (
+    <AdminNotes
+      value={data?.convention.event_proposal.admin_notes ?? ''}
+      mutate={(value) =>
+        fetcher.submit(
+          { admin_notes: value },
+          { action: `/event_proposals/${eventProposalId}/admin_notes`, method: 'PATCH' },
+        )
+      }
+      inProgress={fetcher.state !== 'idle'}
+      error={fetcher.data instanceof ApolloError ? fetcher.data : undefined}
+    />
   );
-
-  if (loading) {
-    return <LoadingIndicator iconSet="bootstrap-icons" />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
-  return <AdminNotes value={data?.convention.event_proposal.admin_notes ?? ''} mutate={updateAdminNotes} />;
 }
 
 function EventProposalAdminDisplay() {

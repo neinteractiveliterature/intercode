@@ -1,11 +1,12 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
 import { useModal, BooleanInput, ErrorDisplay, MultipleChoiceInput } from '@neinteractiveliterature/litform';
 
-import { useApolloClient } from '@apollo/client';
+import { ApolloError } from '@apollo/client';
 import { EventProposalQueryWithOwnerQueryData } from './queries.generated';
-import { useTransitionEventProposalMutation } from './mutations.generated';
 import humanize from '../humanize';
+import { useActionData, useFetcher } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const STATUSES = [
   { key: 'proposed', transitionLabel: 'Update', buttonClass: 'btn-primary' },
@@ -38,22 +39,16 @@ function EventProposalStatusUpdater({ eventProposal }: EventProposalStatusUpdate
   const [status, setStatus] = useState(eventProposal.status);
   const [dropEvent, setDropEvent] = useState(false);
   const { open: openModal, close: closeModal, visible: modalVisible } = useModal();
-  const apolloClient = useApolloClient();
-  const [transitionEventProposal, { loading: transitionInProgress, error: transitionError }] =
-    useTransitionEventProposalMutation();
+  const fetcher = useFetcher();
+  const actionData = useActionData();
+  const transitionError = actionData instanceof Error ? actionData : undefined;
+  const { t } = useTranslation();
 
-  const performTransition = async () => {
-    await transitionEventProposal({
-      variables: {
-        eventProposalId: eventProposal.id,
-        status,
-        dropEvent,
-      },
-    });
-    await apolloClient.resetStore();
-
-    closeModal();
-  };
+  useEffect(() => {
+    if (fetcher.data && fetcher.state === 'idle' && !transitionError) {
+      closeModal();
+    }
+  }, [fetcher.data, fetcher.state, closeModal, transitionError]);
 
   return (
     <div>
@@ -62,59 +57,67 @@ function EventProposalStatusUpdater({ eventProposal }: EventProposalStatusUpdate
         Change
       </button>
       <Modal visible={modalVisible}>
-        <div className="modal-header">
-          {'Change status for '}
-          {eventProposal.title}
-        </div>
+        <fetcher.Form action={`/event_proposals/${eventProposal.id}/transition`} method="PATCH">
+          <div className="modal-header">
+            {'Change status for '}
+            {eventProposal.title}
+          </div>
 
-        <div className="modal-body">
-          <MultipleChoiceInput
-            caption="New status"
-            choices={['proposed', 'reviewing', 'tentative_accept', 'accepted', 'rejected', 'withdrawn'].map((s) => ({
-              label: humanize(s),
-              value: s,
-            }))}
-            value={status}
-            onChange={(newStatus: string) => {
-              setStatus(newStatus);
-              setDropEvent(false);
-            }}
-            disabled={transitionInProgress}
-          />
-
-          {status === 'accepted' && !eventProposal.event ? (
-            <p className="text-danger">
-              This will create an event on the convention web site. It will not yet be on the schedule or possible to
-              sign up for, but it will appear in the events list.
-            </p>
-          ) : null}
-
-          {getStatus(status)?.offerDropEvent && eventProposal.event ? (
-            <BooleanInput
-              caption="Drop event?"
-              value={dropEvent}
-              onChange={setDropEvent}
-              disabled={transitionInProgress}
+          <div className="modal-body">
+            <MultipleChoiceInput
+              caption="New status"
+              name="status"
+              choices={['proposed', 'reviewing', 'tentative_accept', 'accepted', 'rejected', 'withdrawn'].map((s) => ({
+                label: humanize(s),
+                value: s,
+              }))}
+              value={status}
+              onChange={(newStatus: string) => {
+                setStatus(newStatus);
+                setDropEvent(false);
+              }}
+              disabled={fetcher.state !== 'idle'}
             />
-          ) : null}
 
-          <ErrorDisplay graphQLError={transitionError} />
-        </div>
+            {status === 'accepted' && !eventProposal.event ? (
+              <p className="text-danger">
+                This will create an event on the convention web site. It will not yet be on the schedule or possible to
+                sign up for, but it will appear in the events list.
+              </p>
+            ) : null}
 
-        <div className="modal-footer">
-          <button type="button" className="btn btn-secondary" onClick={closeModal} disabled={transitionInProgress}>
-            Cancel
-          </button>
+            {getStatus(status)?.offerDropEvent && eventProposal.event ? (
+              <BooleanInput
+                caption="Drop event?"
+                name="drop_event"
+                value={dropEvent}
+                onChange={setDropEvent}
+                disabled={fetcher.state !== 'idle'}
+              />
+            ) : null}
 
-          <button
-            type="button"
-            className={`btn ${getStatus(status)?.buttonClass}`}
-            onClick={performTransition}
-            disabled={transitionInProgress || status === eventProposal.status}
-          >
-            {getStatus(status)?.transitionLabel}
-          </button>
-        </div>
+            <ErrorDisplay graphQLError={transitionError as ApolloError} />
+          </div>
+
+          <div className="modal-footer">
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={closeModal}
+              disabled={fetcher.state !== 'idle'}
+            >
+              {t('buttons.cancel')}
+            </button>
+
+            <button
+              type="submit"
+              className={`btn ${getStatus(status)?.buttonClass}`}
+              disabled={fetcher.state !== 'idle' || status === eventProposal.status}
+            >
+              {getStatus(status)?.transitionLabel}
+            </button>
+          </div>
+        </fetcher.Form>
       </Modal>
     </div>
   );

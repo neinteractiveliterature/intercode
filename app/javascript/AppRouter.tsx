@@ -815,8 +815,21 @@ const conventionModeRoutes: RouteObject[] = [
       },
     ],
   },
-  { path: '/event_proposals/:id/edit', lazy: () => import('./EventProposals/EditEventProposal') },
-  { path: '/event_proposals', loader: () => replace('/pages/new-proposal') },
+  {
+    path: '/event_proposals',
+    children: [
+      {
+        path: ':id',
+        lazy: () => import('./EventProposals/$id/route'),
+        children: [
+          { path: 'admin_notes', lazy: () => import('./EventProposals/$id/admin_notes') },
+          { path: 'edit', lazy: () => import('./EventProposals/EditEventProposal') },
+          { path: 'transition', lazy: () => import('./EventProposals/$id/transition') },
+        ],
+      },
+      { index: true, loader: () => replace('/pages/new-proposal'), lazy: () => import('./EventProposals/route') },
+    ],
+  },
 ];
 
 const singleEventModeRoutes: RouteObject[] = [];
