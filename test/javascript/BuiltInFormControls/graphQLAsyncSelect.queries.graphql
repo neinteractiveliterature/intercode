@@ -1,0 +1,11 @@
+query FakeQuery($name: String) {
+  convention: conventionByRequestHost {
+    id
+    user_con_profiles_paginated(filters: { name: $name }) {
+      entries {
+        id
+        name_without_nickname
+      }
+    }
+  }
+}

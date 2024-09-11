@@ -2,6 +2,7 @@ overwrite: true
 schema: "schema.graphql"
 documents:
   - "./app/javascript/**/*.graphql"
+  - "./test/javascript/**/*.graphql"
 generates:
   app/javascript/graphqlTypes.generated.ts:
     plugins:
