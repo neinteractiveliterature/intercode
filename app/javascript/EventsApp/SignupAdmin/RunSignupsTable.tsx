@@ -19,9 +19,9 @@ import usePageTitle from '../../usePageTitle';
 import UserConProfileWithGravatarCell from '../../Tables/UserConProfileWithGravatarCell';
 import {
   RunSignupsTableSignupsQueryData,
+  RunSignupsTableSignupsQueryDocument,
   RunSignupsTableSignupsQueryVariables,
   SignupAdminEventQueryData,
-  useRunSignupsTableSignupsQuery,
 } from './queries.generated';
 import buildEventUrl from '../buildEventUrl';
 import { SignupState } from '../../graphqlTypes.generated';
@@ -189,7 +189,7 @@ function RunSignupsTable(): JSX.Element {
     getData: ({ data: tableData }) => tableData.convention.event.run.signups_paginated.entries,
     getPages: ({ data: tableData }) => tableData.convention.event.run.signups_paginated.total_pages,
     getPossibleColumns: getPossibleColumnsFunc,
-    useQuery: useRunSignupsTableSignupsQuery,
+    query: RunSignupsTableSignupsQueryDocument,
     storageKeyPrefix: 'adminSignups',
     variables: { eventId: data.convention.event.id, runId: runId ?? '' },
   });
@@ -208,7 +208,7 @@ function RunSignupsTable(): JSX.Element {
           tableInstance={tableInstance}
           loading={tableLoading}
           onClickRow={(row) =>
-            navigate(`${buildEventUrl(data.convention.event)}/runs/${runId}/admin_signups/${row.original.id}/edit`)
+            navigate(`${buildEventUrl(data.convention.event)}/runs/${runId}/admin_signups/${row.original.id}`)
           }
         />
       </div>

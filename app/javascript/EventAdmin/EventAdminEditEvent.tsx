@@ -42,10 +42,14 @@ function EventAdminEditEvent() {
 
   const imageAttachmentConfig = useMemo<ImageAttachmentConfig>(
     () => ({
-      addBlob: (blob) => fetcher.submit({ signed_blob_id: blob.signed_id }, { action: `attach_image`, method: 'POST' }),
+      addBlob: (blob) =>
+        fetcher.submit(
+          { signed_blob_id: blob.signed_id },
+          { action: `/events/${initialEvent.id}/attach_image`, method: 'POST' },
+        ),
       existingImages: initialEvent.images,
     }),
-    [fetcher, initialEvent.images],
+    [fetcher, initialEvent.images, initialEvent.id],
   );
 
   const [eventFormWithCategorySelectionProps, { event, eventCategory, validateForm }] =

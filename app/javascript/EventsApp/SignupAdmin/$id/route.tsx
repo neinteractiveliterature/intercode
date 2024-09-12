@@ -1,30 +1,23 @@
 import { useCallback, useContext } from 'react';
 import classNames from 'classnames';
-import { Link, LoaderFunction, useLoaderData } from 'react-router-dom';
+import { ActionFunction, json, Link, Outlet, useSubmit } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
 import { DateTime } from 'luxon';
-import { useModal, useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
+import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 import snakeCase from 'lodash/snakeCase';
-
-import { ageAsOf } from '../../TimeUtils';
-import ChangeBucketModal from './ChangeBucketModal';
-import ForceConfirmSignupModal from './ForceConfirmSignupModal';
-import Timespan from '../../Timespan';
-import usePageTitle from '../../usePageTitle';
-import Gravatar from '../../Gravatar';
-import AppRootContext from '../../AppRootContext';
-import {
-  AdminSignupQueryData,
-  AdminSignupQueryDocument,
-  AdminSignupQueryVariables,
-  SignupFieldsFragment,
-} from './queries.generated';
-import { useUpdateSignupCountedMutation } from './mutations.generated';
-import { useFormatRunTimespan } from '../runTimeFormatting';
-import humanize from '../../humanize';
-import { getSignupStateLabel } from '../../Tables/SignupStateCell';
-import { client } from '../../useIntercodeApolloClient';
+import { AdminSignupQueryData, SignupFieldsFragment } from '../queries.generated';
+import { client } from '../../../useIntercodeApolloClient';
+import { UpdateSignupCountedDocument } from '../mutations.generated';
+import { useSingleSignupLoader } from '../loaders';
+import AppRootContext from '../../../AppRootContext';
+import { useFormatRunTimespan } from '../../runTimeFormatting';
+import usePageTitle from '../../../usePageTitle';
+import Gravatar from '../../../Gravatar';
+import { ageAsOf } from '../../../TimeUtils';
+import Timespan from '../../../Timespan';
+import { getSignupStateLabel } from '../../../Tables/SignupStateCell';
+import humanize from '../../../humanize';
 
 function cityState(userConProfile: SignupFieldsFragment['user_con_profile']) {
   return [userConProfile.city, userConProfile.state].filter((item) => item && item.trim() !== '').join(', ');
@@ -101,23 +94,25 @@ export type EditSignupProps = {
   teamMembersUrl: string;
 };
 
-export const loader: LoaderFunction = async ({ params: { id } }) => {
-  const { data } = await client.query<AdminSignupQueryData, AdminSignupQueryVariables>({
-    query: AdminSignupQueryDocument,
-    variables: { id: id ?? '' },
+export const action: ActionFunction = async ({ request, params: { id } }) => {
+  const formData = await request.formData();
+  const { data } = await client.mutate({
+    mutation: UpdateSignupCountedDocument,
+    variables: {
+      signupId: id,
+      counted: formData.get('counted')?.toString() === 'true',
+    },
   });
-  return data;
+  return json(data);
 };
 
 function EditSignup({ teamMembersUrl }: EditSignupProps): JSX.Element {
-  const data = useLoaderData() as AdminSignupQueryData;
+  const data = useSingleSignupLoader();
   const { timezoneName, ticketName } = useContext(AppRootContext);
-  const changeBucketModal = useModal();
-  const forceConfirmModal = useModal();
-  const [updateCountedMutate] = useUpdateSignupCountedMutation();
   const confirm = useConfirm();
   const { t } = useTranslation();
   const formatRunTimespan = useFormatRunTimespan();
+  const submit = useSubmit();
 
   usePageTitle(
     t('events.signupAdmin.editPageTitle', {
@@ -128,13 +123,8 @@ function EditSignup({ teamMembersUrl }: EditSignupProps): JSX.Element {
 
   const toggleCounted = useCallback(
     (signup: AdminSignupQueryData['convention']['signup']) =>
-      updateCountedMutate({
-        variables: {
-          signupId: signup.id,
-          counted: !signup.counted,
-        },
-      }),
-    [updateCountedMutate],
+      submit({ counted: !signup.counted }, { action: '.', method: 'PATCH' }),
+    [submit],
   );
 
   const renderUserSection = () => {
@@ -203,9 +193,9 @@ function EditSignup({ teamMembersUrl }: EditSignupProps): JSX.Element {
 
     return (
       <div>
-        <button className="btn btn-link" onClick={forceConfirmModal.open} type="button">
+        <Link className="btn btn-link" to="./force_confirm" type="button">
           Force into run
-        </button>
+        </Link>
       </div>
     );
   };
@@ -292,14 +282,14 @@ function EditSignup({ teamMembersUrl }: EditSignupProps): JSX.Element {
               </strong>
             </div>
             {signup.state === 'confirmed' && data.currentAbility.can_update_bucket_signup ? (
-              <button
+              <Link
                 className="btn btn-link"
-                onClick={changeBucketModal.open}
+                to="./change_bucket"
                 type="button"
                 aria-label={t('events.signupAdmin.changeBucketHeader')}
               >
                 <i className="bi-pencil-fill" />
-              </button>
+              </Link>
             ) : null}
           </li>
           <li className="list-group-item d-flex align-items-center">
@@ -335,16 +325,7 @@ function EditSignup({ teamMembersUrl }: EditSignupProps): JSX.Element {
 
         <div className="col col-md-6">{renderRunSection()}</div>
       </div>
-      <ForceConfirmSignupModal
-        signup={forceConfirmModal.visible ? data?.convention.signup : undefined}
-        onComplete={forceConfirmModal.close}
-        onCancel={forceConfirmModal.close}
-      />
-      <ChangeBucketModal
-        signup={changeBucketModal.visible ? data?.convention.signup : undefined}
-        onComplete={changeBucketModal.close}
-        onCancel={changeBucketModal.close}
-      />
+      <Outlet />
     </>
   );
 }

@@ -19,7 +19,7 @@ import { organizationsLoader, singleOrganizationLoader } from './OrganizationAdm
 import useLoginRequired from './Authentication/useLoginRequired';
 import { eventProposalWithOwnerLoader } from './EventProposals/loaders';
 import { conventionDayLoader } from './EventsApp/conventionDayUrls';
-import { signupAdminEventLoader } from './EventsApp/SignupAdmin/loaders';
+import { signupAdminEventLoader, singleSignupLoader } from './EventsApp/SignupAdmin/loaders';
 import { teamMembersLoader } from './EventsApp/TeamMemberAdmin/loader';
 import { cmsAdminBaseQueryLoader } from './CmsAdmin/loaders';
 import { cmsPagesAdminLoader } from './CmsAdmin/CmsPagesAdmin/loaders';
@@ -209,6 +209,7 @@ const eventsRoutes: RouteObject[] = [
     path: ':eventId',
     id: NamedRoute.Event,
     children: [
+      { path: 'attach_image', lazy: () => import('./EventsApp/attach_image') },
       {
         element: <AppRootContextRouteGuard guard={({ ticketMode }) => ticketMode === TicketMode.TicketPerEvent} />,
         children: [
@@ -286,7 +287,16 @@ const eventsRoutes: RouteObject[] = [
             loader: signupAdminEventLoader,
             id: NamedRoute.SignupAdmin,
             children: [
-              { path: ':id/edit', id: NamedRoute.EditSignup, lazy: () => import('./EventsApp/SignupAdmin/EditSignup') },
+              {
+                path: ':id',
+                loader: singleSignupLoader,
+                id: NamedRoute.EditSignup,
+                lazy: () => import('./EventsApp/SignupAdmin/$id/route'),
+                children: [
+                  { path: 'change_bucket', lazy: () => import('./EventsApp/SignupAdmin/$id/change_bucket') },
+                  { path: 'force_confirm', lazy: () => import('./EventsApp/SignupAdmin/$id/force_confirm') },
+                ],
+              },
               {
                 lazy: () => import('./EventsApp/SignupAdmin/SignupsIndex'),
                 children: [
@@ -499,7 +509,6 @@ const commonInConventionRoutes: RouteObject[] = [
                         lazy: () => import('./EventAdmin/$id'),
                         children: [
                           { path: 'admin_notes', lazy: () => import('./EventAdmin/AdminNotesRoute') },
-                          { path: 'attach_image', lazy: () => import('./EventAdmin/attach_image') },
                           { path: 'drop', lazy: () => import('./EventAdmin/drop') },
                           { path: 'edit', lazy: () => import('./EventAdmin/EventAdminEditEvent') },
                           { path: 'restore', lazy: () => import('./EventAdmin/RestoreEventRoute') },

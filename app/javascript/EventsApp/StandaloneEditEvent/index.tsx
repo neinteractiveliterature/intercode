@@ -1,36 +1,23 @@
 import { useCallback, useMemo } from 'react';
-import { LoaderFunction, useLoaderData, useNavigate } from 'react-router-dom';
-import { useApolloClient } from '@apollo/client';
-import {
-  useCreateMutationWithReferenceArrayUpdater,
-  useDeleteMutationWithReferenceArrayUpdater,
-} from '@neinteractiveliterature/litform';
+import { LoaderFunction, useFetcher, useLoaderData, useNavigate } from 'react-router-dom';
 
 import useEventForm, { EventForm } from '../../EventAdmin/useEventForm';
-import useMEPTOMutations from '../../BuiltInFormControls/useMEPTOMutations';
 import EditEvent from '../../BuiltInForms/EditEvent';
 import MaximumEventProvidedTicketsOverrideEditor from '../../BuiltInFormControls/MaximumEventProvidedTicketsOverrideEditor';
 import usePageTitle from '../../usePageTitle';
 import {
   StandaloneEditEventQueryData,
-  StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFieldsFragmentDoc,
   StandaloneEditEventQueryVariables,
   StandaloneEditEventQueryDocument,
 } from './queries.generated';
 import deserializeFormResponse, { WithFormResponse } from '../../Models/deserializeFormResponse';
 import { CommonFormFieldsFragment } from '../../Models/commonFormFragments.generated';
-import {
-  useStandaloneCreateMaximumEventProvidedTicketsOverrideMutation,
-  useStandaloneUpdateMaximumEventProvidedTicketsOverrideMutation,
-  useStandaloneDeleteMaximumEventProvidedTicketsOverrideMutation,
-  useStandaloneUpdateEventMutation,
-  useStandaloneAttachImageToEventMutation,
-} from './mutations.generated';
 import FourOhFourPage from '../../FourOhFourPage';
 import { AuthorizationError } from '../../Authentication/useAuthorizationRequired';
 import buildEventUrl from '../buildEventUrl';
 import { ImageAttachmentConfig } from '../../BuiltInFormControls/MarkdownInput';
 import { client } from '../../useIntercodeApolloClient';
+import { StandaloneUpdateEventDocument } from './mutations.generated';
 
 export type StandaloneEditEventFormProps = {
   initialEvent: WithFormResponse<StandaloneEditEventQueryData['convention']['event']>;
@@ -48,14 +35,14 @@ function StandaloneEditEventForm({
   currentAbility,
 }: StandaloneEditEventFormProps) {
   const navigate = useNavigate();
-  const apolloClient = useApolloClient();
-  const [attachImageToEvent] = useStandaloneAttachImageToEventMutation();
+  const fetcher = useFetcher();
   const imageAttachmentConfig = useMemo<ImageAttachmentConfig>(
     () => ({
-      addBlob: (blob) => attachImageToEvent({ variables: { id: initialEvent.id, signedBlobId: blob.signed_id } }),
+      addBlob: (blob) =>
+        fetcher.submit({ signed_blob_id: blob.signed_id }, { action: '../attach_image', method: 'PATCH' }),
       existingImages: initialEvent.images,
     }),
-    [attachImageToEvent, initialEvent.images, initialEvent.id],
+    [fetcher, initialEvent.images],
   );
 
   const [eventFormProps, { event, validateForm }] = useEventForm({
@@ -65,42 +52,17 @@ function StandaloneEditEventForm({
     imageAttachmentConfig,
   });
 
-  const [updateEventMutate] = useStandaloneUpdateEventMutation();
   const updateEvent = useCallback(async () => {
-    await updateEventMutate({
+    await client.mutate({
+      mutation: StandaloneUpdateEventDocument,
       variables: {
         input: {
+          event: { form_response_attrs_json: JSON.stringify(event.form_response_attrs) },
           id: event.id,
-          event: {
-            form_response_attrs_json: JSON.stringify(event.form_response_attrs),
-          },
         },
       },
     });
-    await apolloClient.resetStore();
-  }, [apolloClient, event, updateEventMutate]);
-
-  const [createMutate] = useCreateMutationWithReferenceArrayUpdater(
-    useStandaloneCreateMaximumEventProvidedTicketsOverrideMutation,
-    initialEvent,
-    'maximum_event_provided_tickets_overrides',
-    (data) => data.createMaximumEventProvidedTicketsOverride.maximum_event_provided_tickets_override,
-    StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFieldsFragmentDoc,
-    'StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFields',
-  );
-  const [updateMutate] = useStandaloneUpdateMaximumEventProvidedTicketsOverrideMutation();
-  const [deleteMutate] = useDeleteMutationWithReferenceArrayUpdater(
-    useStandaloneDeleteMaximumEventProvidedTicketsOverrideMutation,
-    initialEvent,
-    'maximum_event_provided_tickets_overrides',
-    (mepto) => ({ input: { id: mepto.id } }),
-  );
-
-  const meptoMutations = useMEPTOMutations({
-    createMutate,
-    updateMutate,
-    deleteMutate,
-  });
+  }, [event]);
 
   return (
     <EditEvent
@@ -114,7 +76,6 @@ function StandaloneEditEventForm({
       <EventForm {...eventFormProps} />
       {currentAbility.can_override_maximum_event_provided_tickets && convention.ticket_mode !== 'disabled' && (
         <MaximumEventProvidedTicketsOverrideEditor
-          {...meptoMutations}
           ticketName={convention.ticket_name}
           ticketTypes={convention.ticket_types}
           // we use initialEvent here because we want it to be controlled by the query result
