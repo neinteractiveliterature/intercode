@@ -180,7 +180,7 @@
     "@testing-library/react-hooks": "8.0.1",
     "@types/bootstrap": "5.2.10",
     "@types/events": "3.0.3",
-    "@types/jest": "29.5.12",
+    "@types/jest": "29.5.13",
     "@types/md5": "^2",
     "@types/node": "20.16.5",
     "@types/punycode": "2.1.4",
