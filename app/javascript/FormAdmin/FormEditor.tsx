@@ -1,5 +1,15 @@
 import { useMemo } from 'react';
-import { Link, LoaderFunction, Navigate, Outlet, useLoaderData, useParams } from 'react-router-dom';
+import {
+  ActionFunction,
+  json,
+  Link,
+  LoaderFunction,
+  Navigate,
+  Outlet,
+  useFetcher,
+  useLoaderData,
+  useParams,
+} from 'react-router-dom';
 import sortBy from 'lodash/sortBy';
 import flatMap from 'lodash/flatMap';
 import { notEmpty } from '@neinteractiveliterature/litform';
@@ -10,9 +20,9 @@ import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import { parseTypedFormItemObject } from './FormItemUtils';
 import usePageTitle from '../usePageTitle';
 import { FormEditorQueryData, FormEditorQueryDocument, FormEditorQueryVariables } from './queries.generated';
-import { useUpdateFormMutation } from './mutations.generated';
 import { useTranslation } from 'react-i18next';
 import { client } from '../useIntercodeApolloClient';
+import { UpdateFormDocument } from './mutations.generated';
 
 export const loader: LoaderFunction = async ({ params: { id } }) => {
   const { data } = await client.query<FormEditorQueryData, FormEditorQueryVariables>({
@@ -22,6 +32,19 @@ export const loader: LoaderFunction = async ({ params: { id } }) => {
   return data;
 };
 
+export const action: ActionFunction = async ({ params: { id }, request }) => {
+  try {
+    const formData = await request.formData();
+    const { data } = await client.mutate({
+      mutation: UpdateFormDocument,
+      variables: { id: id ?? '', form: { title: formData.get('title')?.toString() } },
+    });
+    return json(data);
+  } catch (error) {
+    return error;
+  }
+};
+
 function FormEditor(): JSX.Element {
   const params = useParams<{ id: string; sectionId?: string; itemId?: string }>();
   if (params.id == null) {
@@ -29,7 +52,7 @@ function FormEditor(): JSX.Element {
   }
   const { t } = useTranslation();
   const data = useLoaderData() as FormEditorQueryData;
-  const [updateForm] = useUpdateFormMutation();
+  const fetcher = useFetcher();
 
   const form: FormEditorForm = useMemo(() => {
     return {
@@ -49,7 +72,7 @@ function FormEditor(): JSX.Element {
     [form],
   );
 
-  const updateFormTitle = (title: string) => updateForm({ variables: { id: form.id, form: { title } } });
+  const updateFormTitle = (title: string) => fetcher.submit({ title }, { action: '.', method: 'PATCH' });
 
   usePageTitle(`Editing “${form.title}”`);
 

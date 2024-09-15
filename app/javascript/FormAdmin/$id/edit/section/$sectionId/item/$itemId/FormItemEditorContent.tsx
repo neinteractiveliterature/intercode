@@ -1,16 +1,15 @@
 import { useContext } from 'react';
 import { assertNever } from 'assert-never';
-
-import StaticTextEditor from './ItemEditors/StaticTextEditor';
-import FreeTextEditor from './ItemEditors/FreeTextEditor';
-import DateEditor from './ItemEditors/DateEditor';
-import AgeRestrictionsEditor from './ItemEditors/AgeRestrictionsEditor';
-import EventEmailEditor from './ItemEditors/EventEmailEditor';
-import TimespanEditor from './ItemEditors/TimespanEditor';
-import MultipleChoiceEditor from './ItemEditors/MultipleChoiceEditor';
-import TimeblockPreferenceEditor from './ItemEditors/TimeblockPreferenceEditor';
-import RegistrationPolicyItemEditor from './ItemEditors/RegistrationPolicyItemEditor';
-import { FormItemEditorContext } from './FormEditorContexts';
+import AgeRestrictionsEditor from 'FormAdmin/ItemEditors/AgeRestrictionsEditor';
+import DateEditor from 'FormAdmin/ItemEditors/DateEditor';
+import EventEmailEditor from 'FormAdmin/ItemEditors/EventEmailEditor';
+import { FormItemEditorContext } from 'FormAdmin/FormEditorContexts';
+import FreeTextEditor from 'FormAdmin/ItemEditors/FreeTextEditor';
+import MultipleChoiceEditor from 'FormAdmin/ItemEditors/MultipleChoiceEditor';
+import RegistrationPolicyItemEditor from 'FormAdmin/ItemEditors/RegistrationPolicyItemEditor';
+import StaticTextEditor from 'FormAdmin/ItemEditors/StaticTextEditor';
+import TimeblockPreferenceEditor from 'FormAdmin/ItemEditors/TimeblockPreferenceEditor';
+import TimespanEditor from 'FormAdmin/ItemEditors/TimespanEditor';
 
 function FormItemEditorContent(): JSX.Element {
   const { formItem, setFormItem } = useContext(FormItemEditorContext);

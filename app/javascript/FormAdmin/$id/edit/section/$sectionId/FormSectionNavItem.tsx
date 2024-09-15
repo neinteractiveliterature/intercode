@@ -1,37 +1,21 @@
-import { useContext } from 'react';
-import { NavLink, useNavigate, useParams } from 'react-router-dom';
-import { useConfirm, ErrorDisplay, useDeleteMutationWithReferenceArrayUpdater } from '@neinteractiveliterature/litform';
+import { NavLink, useParams, useSubmit } from 'react-router-dom';
+import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { useSortable } from '@dnd-kit/sortable';
-import { FormEditorContext, FormEditorForm } from './FormEditorContexts';
-import { getSortableStyle } from '../SortableUtils';
-import { useDeleteFormSectionMutation } from './mutations.generated';
+import { FormEditorForm } from 'FormAdmin/FormEditorContexts';
+import { getSortableStyle } from 'SortableUtils';
 
 export type FormSectionNavItemProps = {
   formSection: FormEditorForm['form_sections'][0];
 };
 
 function FormSectionNavItem({ formSection }: FormSectionNavItemProps): JSX.Element {
-  const { form, currentSection, convention } = useContext(FormEditorContext);
   const confirm = useConfirm();
-  const navigate = useNavigate();
-  const params = useParams<{ id: string }>();
-  const [deleteFormSection] = useDeleteMutationWithReferenceArrayUpdater(
-    useDeleteFormSectionMutation,
-    convention.form,
-    'form_sections',
-    (section) => ({ id: section.id }),
-  );
+  const { id } = useParams();
+  const submit = useSubmit();
 
   const deleteConfirmed = async () => {
-    const unparsedFormSection = convention.form.form_sections.find((section) => section.id === formSection.id);
-    if (!unparsedFormSection) {
-      throw new Error("Couldn't find form section in original GraphQL server response!");
-    }
-    await deleteFormSection(unparsedFormSection);
-    if (currentSection && formSection.id === currentSection.id) {
-      navigate(`/admin_forms/${form.id}/edit`, { replace: true });
-    }
+    submit({}, { action: `/admin_forms/${id}/edit/section/${formSection.id}?index`, method: 'DELETE' });
   };
 
   const { setNodeRef, attributes, listeners, transform, transition, isDragging } = useSortable({
@@ -46,11 +30,7 @@ function FormSectionNavItem({ formSection }: FormSectionNavItemProps): JSX.Eleme
           <span className="visually-hidden">Drag to reorder</span>
           <i style={{ cursor: 'grab' }} className="bi-grip-vertical" />
         </div>
-        <NavLink
-          to={`/admin_forms/${params.id}/edit/section/${formSection.id}`}
-          className="nav-link flex-grow-1"
-          replace
-        >
+        <NavLink to={`/admin_forms/${id}/edit/section/${formSection.id}`} className="nav-link flex-grow-1" replace>
           {formSection.title}
         </NavLink>
         <div className="ms-2">

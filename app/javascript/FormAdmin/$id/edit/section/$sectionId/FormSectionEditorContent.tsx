@@ -1,32 +1,25 @@
 import { useCallback, useContext } from 'react';
-import {
-  buildOptimisticArrayForMove,
-  useArrayBasicSortableHandlers,
-  useMatchWidthStyle,
-} from '@neinteractiveliterature/litform';
+import { useArrayBasicSortableHandlers, useMatchWidthStyle } from '@neinteractiveliterature/litform';
 import { closestCorners, DndContext, DragOverlay } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 
-import { FormEditorContext } from './FormEditorContexts';
+import { useFetcher } from 'react-router-dom';
+import { FormEditorContext } from 'FormAdmin/FormEditorContexts';
+import { useSortableDndSensors } from 'SortableUtils';
+import InPlaceEditor from 'BuiltInFormControls/InPlaceEditor';
 import FormEditorItemPreview from './FormEditorItemPreview';
-import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
-import { useMoveFormItemMutation, useUpdateFormSectionMutation } from './mutations.generated';
-import { useSortableDndSensors } from '../SortableUtils';
 import FormEditorItemPreviewDragOverlay from './FormEditorItemPreviewDragOverlay';
-import { serializeParsedFormItem } from './serializeParsedFormItem';
 
 function FormSectionEditorContent(): JSX.Element {
   const { currentSection } = useContext(FormEditorContext);
-  const [updateFormSection] = useUpdateFormSectionMutation();
-  const [moveFormItem] = useMoveFormItemMutation();
+  const moveFetcher = useFetcher();
+  const updateFetcher = useFetcher();
 
   const sensors = useSortableDndSensors();
 
-  const updateSectionTitle = async (title: string | null | undefined) => {
+  const updateSectionTitle = async (title: string | null) => {
     if (currentSection) {
-      await updateFormSection({
-        variables: { id: currentSection.id, formSection: { title } },
-      });
+      updateFetcher.submit({ title }, { action: '.', method: 'PATCH' });
     }
   };
 
@@ -36,31 +29,13 @@ function FormSectionEditorContent(): JSX.Element {
         return;
       }
 
-      const optimisticItems = buildOptimisticArrayForMove(
-        currentSection.form_items.map(serializeParsedFormItem),
-        dragIndex,
-        hoverIndex,
+      const itemId = currentSection.form_items[dragIndex].id;
+      moveFetcher.submit(
+        { destination_index: hoverIndex, destination_section_id: currentSection.id },
+        { action: `item/${itemId}/move`, method: 'PATCH' },
       );
-
-      moveFormItem({
-        variables: {
-          id: currentSection.form_items[dragIndex].id,
-          formSectionId: currentSection.id,
-          destinationIndex: hoverIndex,
-        },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          moveFormItem: {
-            __typename: 'MoveFormItemPayload',
-            form_section: {
-              ...currentSection,
-              form_items: optimisticItems,
-            },
-          },
-        },
-      });
     },
-    [currentSection, moveFormItem],
+    [currentSection, moveFetcher],
   );
 
   const [matchWidthRef, matchWidthStyle] = useMatchWidthStyle<HTMLDivElement>();

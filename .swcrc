@@ -1,9 +1,10 @@
 {
   "$schema": "https://json.schemastore.org/swcrc",
   "jsc": {
+    "baseUrl": "./app/javascript",
     "parser": {
       "syntax": "typescript",
-      "jsx": true,
+      // "jsx": true,
       "dynamicImport": true
     },
     "transform": {

@@ -12,20 +12,20 @@ import {
   sortByLocaleString,
 } from '@neinteractiveliterature/litform';
 
-import { FormEditorContext } from './FormEditorContexts';
-import FormItemDefaultProperties from '../../../config/form_item_default_properties.json';
-import buildNewFormItem from './buildNewFormItem';
-import FormItemIdentifierInput from './ItemEditors/FormItemIdentifierInput';
-import useAsyncFunction from '../useAsyncFunction';
+import FormItemDefaultProperties from '../../../../../../../config/form_item_default_properties.json';
+import { useTranslation } from 'react-i18next';
 import {
   FormTypeDefinition,
   ParsedFormItem,
   StandardItem,
   StandardItemIdentifier,
   TypedFormItem,
-} from './FormItemUtils';
-import humanize from '../humanize';
-import { useTranslation } from 'react-i18next';
+} from 'FormAdmin/FormItemUtils';
+import { FormEditorContext } from 'FormAdmin/FormEditorContexts';
+import useAsyncFunction from 'useAsyncFunction';
+import buildNewFormItem from 'FormAdmin/buildNewFormItem';
+import humanize from 'humanize';
+import FormItemIdentifierInput from 'FormAdmin/ItemEditors/FormItemIdentifierInput';
 
 const customItemTypes = Object.keys(FormItemDefaultProperties).filter((itemType) => itemType !== 'static_text');
 

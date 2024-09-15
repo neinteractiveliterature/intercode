@@ -1,4 +1,4 @@
-import { FormEditorForm } from './FormEditorContexts';
+import { FormEditorForm } from 'FormAdmin/FormEditorContexts';
 
 export type FormSectionNavItemDragOverlayProps = {
   formSection: FormEditorForm['form_sections'][0];

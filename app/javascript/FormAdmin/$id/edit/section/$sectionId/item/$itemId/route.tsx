@@ -1,30 +1,61 @@
 import { useContext, useMemo, useState, useCallback } from 'react';
 import { useApolloClient, ApolloError } from '@apollo/client';
-import { useNavigate, useParams } from 'react-router-dom';
+import { ActionFunction, redirect, useFetcher, useParams } from 'react-router-dom';
 // TODO: uncomment this when re-adding Prompt support below
 // import isEqual from 'lodash/isEqual';
 import { useDebouncedState, ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import FormItemTools from './FormItemTools';
-import FormItemEditorContent from './FormItemEditorContent';
-import { FormEditorContext, FormItemEditorContext, FormEditorFormItem } from './FormEditorContexts';
+import { useTranslation } from 'react-i18next';
 import {
-  buildFormItemInput,
   addGeneratedIds,
-  parseTypedFormItemObject,
-  TypedFormItem,
+  buildFormItemInput,
   findStandardItem,
   ParsedFormItem,
-} from './FormItemUtils';
-import FormItemInput from '../FormPresenter/ItemInputs/FormItemInput';
-import useAsyncFunction from '../useAsyncFunction';
-import { useUpdateFormItemMutation } from './mutations.generated';
-import {
-  PreviewFormItemQueryData,
-  PreviewFormItemQueryDocument,
-  PreviewFormItemQueryVariables,
-} from './queries.generated';
-import { useTranslation } from 'react-i18next';
+  parseTypedFormItemObject,
+  TypedFormItem,
+} from 'FormAdmin/FormItemUtils';
+import { FormEditorContext, FormEditorFormItem, FormItemEditorContext } from 'FormAdmin/FormEditorContexts';
+import { PreviewFormItemQueryDocument } from 'FormAdmin/queries.generated';
+import FormItemTools from 'FormAdmin/FormItemTools';
+import FormItemInput from 'FormPresenter/ItemInputs/FormItemInput';
+import { client } from 'useIntercodeApolloClient';
+import { DeleteFormItemDocument, UpdateFormItemDocument } from 'FormAdmin/mutations.generated';
+import { FormItem } from 'graphqlTypes.generated';
+import FormItemEditorContent from './FormItemEditorContent';
+
+export const action: ActionFunction = async ({ request, params: { id, sectionId, itemId } }) => {
+  try {
+    if (request.method === 'PATCH') {
+      const json = await request.json();
+      await client.mutate({
+        mutation: UpdateFormItemDocument,
+        variables: {
+          id: itemId,
+          formItem: json,
+        },
+      });
+      return redirect(`/admin_forms/${id}/edit/section/${sectionId}`);
+    } else if (request.method === 'DELETE') {
+      await client.mutate({
+        mutation: DeleteFormItemDocument,
+        variables: {
+          id: itemId,
+        },
+        update: (cache) => {
+          cache.modify<FormItem>({
+            id: cache.identify({ __typename: 'FormItem', id: itemId }),
+            fields: (field, { DELETE }) => DELETE,
+          });
+        },
+      });
+      return redirect(`/admin_forms/${id}/edit/section/${sectionId}`);
+    } else {
+      return new Response(null, { status: 404 });
+    }
+  } catch (error) {
+    return error;
+  }
+};
 
 function addGeneratedIdsToFormItem(formItem: TypedFormItem): FormEditorFormItem {
   return {
@@ -37,7 +68,6 @@ function addGeneratedIdsToFormItem(formItem: TypedFormItem): FormEditorFormItem 
 function FormItemEditorLayout(): JSX.Element {
   const { t } = useTranslation();
   const params = useParams<{ itemId: string; id: string; sectionId: string }>();
-  const navigate = useNavigate();
   const { convention, currentSection, form, formType, formTypeIdentifier, formItemsById } =
     useContext(FormEditorContext);
   const apolloClient = useApolloClient();
@@ -52,7 +82,7 @@ function FormItemEditorLayout(): JSX.Element {
         return;
       }
 
-      const response = await apolloClient.query<PreviewFormItemQueryData, PreviewFormItemQueryVariables>({
+      const response = await apolloClient.query({
         query: PreviewFormItemQueryDocument,
         variables: {
           formId: form.id,
@@ -66,6 +96,9 @@ function FormItemEditorLayout(): JSX.Element {
     },
     [apolloClient, currentSection?.id, form.id],
   );
+  const updateFetcher = useFetcher();
+  const updateError = updateFetcher.data instanceof Error ? updateFetcher.data : undefined;
+  const updateInProgress = updateFetcher.state !== 'idle';
 
   const [formItem, setFormItem] = useDebouncedState<FormEditorFormItem | undefined>(
     () => (initialFormItem ? addGeneratedIdsToFormItem(initialFormItem) : undefined),
@@ -84,22 +117,12 @@ function FormItemEditorLayout(): JSX.Element {
   //   [formItem, initialFormItem],
   // );
 
-  const [updateFormItemMutate] = useUpdateFormItemMutation();
-  const [updateFormItem, updateError, updateInProgress] = useAsyncFunction(updateFormItemMutate);
-
   const saveFormItem = async () => {
     if (!formItem) {
       throw new Error('No form item to save');
     }
 
-    await updateFormItem({
-      variables: {
-        id: formItem.id,
-        formItem: buildFormItemInput<unknown>(formItem),
-      },
-    });
-
-    navigate(`/admin_forms/${params.id}/edit/section/${params.sectionId}`);
+    updateFetcher.submit(buildFormItemInput<unknown>(formItem), { method: 'PATCH', encType: 'application/json' });
   };
 
   if (!formItem) {

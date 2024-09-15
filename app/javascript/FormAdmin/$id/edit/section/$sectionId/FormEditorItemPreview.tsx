@@ -1,19 +1,12 @@
 import { useContext } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useSubmit } from 'react-router-dom';
 import classnames from 'classnames';
-import {
-  useConfirm,
-  ButtonWithTooltip,
-  ErrorDisplay,
-  useDeleteMutationWithReferenceArrayUpdater,
-} from '@neinteractiveliterature/litform';
+import { useConfirm, ButtonWithTooltip, ErrorDisplay } from '@neinteractiveliterature/litform';
 import { useSortable } from '@dnd-kit/sortable';
-
-import FormItemInput from '../FormPresenter/ItemInputs/FormItemInput';
-import { FormEditorContext, FormEditorForm } from './FormEditorContexts';
-import { TypedFormItem, findStandardItem, StandardItem } from './FormItemUtils';
-import { useDeleteFormItemMutation } from './mutations.generated';
-import { getSortableStyle } from '../SortableUtils';
+import { FormEditorContext, FormEditorForm } from 'FormAdmin/FormEditorContexts';
+import { findStandardItem, StandardItem, TypedFormItem } from 'FormAdmin/FormItemUtils';
+import { getSortableStyle } from 'SortableUtils';
+import FormItemInput from 'FormPresenter/ItemInputs/FormItemInput';
 
 function describeFormItemForDelete(formItem: TypedFormItem, standardItem: StandardItem | undefined) {
   if (standardItem) {
@@ -37,12 +30,7 @@ function FormEditorItemPreview({ formSection, formItem }: FormEditorItemPreviewP
   const params = useParams<{ id: string; sectionId: string }>();
   const { convention, formType, formTypeIdentifier, formItemsById } = useContext(FormEditorContext);
   const renderedFormItem = formItemsById.get(formItem.id);
-  const [deleteFormItem] = useDeleteMutationWithReferenceArrayUpdater(
-    useDeleteFormItemMutation,
-    formSection,
-    'form_items',
-    (item) => ({ id: item.id }),
-  );
+  const submit = useSubmit();
 
   const { setNodeRef, isDragging, attributes, listeners, transform, transition } = useSortable({
     id: formItem.id.toString(),
@@ -107,7 +95,14 @@ function FormEditorItemPreview({ formSection, formItem }: FormEditorItemPreviewP
             onClick={() =>
               confirm({
                 prompt: `Are you sure you want to delete ${describeFormItemForDelete(formItem, standardItem)}?`,
-                action: () => deleteFormItem(formItem),
+                action: () =>
+                  submit(
+                    {},
+                    {
+                      method: 'DELETE',
+                      action: `/admin_forms/${params.id}/edit/section/${formSection.id}/item/${formItem.id}?index`,
+                    },
+                  ),
                 renderError: (error) => <ErrorDisplay graphQLError={error} />,
               })
             }

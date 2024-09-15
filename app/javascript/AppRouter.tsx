@@ -958,8 +958,37 @@ export const appRootRoutes: RouteObject[] = [
         path: '/admin_forms/:id/edit',
         lazy: () => import('./FormAdmin/FormEditor'),
         children: [
-          { path: 'section/:sectionId/item/:itemId', lazy: () => import('./FormAdmin/FormItemEditorLayout') },
-          { path: 'section/:sectionId', lazy: () => import('./FormAdmin/FormSectionEditorLayout') },
+          {
+            path: 'section',
+            lazy: () => import('./FormAdmin/$id/edit/section/route'),
+            children: [
+              {
+                path: ':sectionId',
+                children: [
+                  {
+                    path: 'item',
+                    lazy: () => import('./FormAdmin/$id/edit/section/$sectionId/item/route'),
+                    children: [
+                      {
+                        path: ':itemId',
+                        children: [
+                          {
+                            path: 'move',
+                            lazy: () => import('./FormAdmin/$id/edit/section/$sectionId/item/$itemId/move'),
+                          },
+                          {
+                            index: true,
+                            lazy: () => import('./FormAdmin/$id/edit/section/$sectionId/item/$itemId/route'),
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                  { index: true, lazy: () => import('./FormAdmin/$id/edit/section/$sectionId/route') },
+                ],
+              },
+            ],
+          },
         ],
       },
       {

@@ -1,10 +1,9 @@
 import { useContext } from 'react';
 import classnames from 'classnames';
 import { ButtonWithTooltip } from '@neinteractiveliterature/litform';
-
-import FormItemInput from '../FormPresenter/ItemInputs/FormItemInput';
-import { FormEditorContext } from './FormEditorContexts';
-import { TypedFormItem, findStandardItem } from './FormItemUtils';
+import { FormEditorContext } from 'FormAdmin/FormEditorContexts';
+import FormItemInput from 'FormPresenter/ItemInputs/FormItemInput';
+import { findStandardItem, TypedFormItem } from 'FormAdmin/FormItemUtils';
 
 export type FormEditorItemPreviewDragOverlayProps = {
   formItem: TypedFormItem;
