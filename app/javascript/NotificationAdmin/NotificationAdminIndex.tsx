@@ -2,11 +2,11 @@ import { BootstrapFormCheckbox, ErrorDisplay } from '@neinteractiveliterature/li
 import useModal from '@neinteractiveliterature/litform/lib/useModal';
 import { Fragment, useContext, useEffect, useMemo, useState } from 'react';
 import Modal from 'react-bootstrap4-modal';
-import { Link } from 'react-router-dom';
+import { Link, useFetcher } from 'react-router-dom';
 
 import NotificationsConfig from '../../../config/notifications.json';
 import AppRootContext from '../AppRootContext';
-import { useSendNotificationPreviewMutation } from './mutations.generated';
+import { ApolloError } from '@apollo/client';
 
 type NotificationPreviewModalProps = {
   visible: boolean;
@@ -43,18 +43,21 @@ function NotificationPreviewModal({
     }
   }, [eventConfig]);
 
-  const [mutate, { loading, error }] = useSendNotificationPreviewMutation();
+  const fetcher = useFetcher();
+  const error = fetcher.data instanceof Error ? fetcher.data : undefined;
 
-  const sendPreview = async () => {
-    await mutate({
-      variables: {
-        email: sendEmail,
-        sms: sendSms,
-        eventKey: `${categoryKey}/${eventKey}`,
-      },
-    });
-    close();
+  const sendPreview = () => {
+    fetcher.submit(
+      { email: sendEmail, sms: sendSms },
+      { action: `./${categoryKey}/${eventKey}/preview`, method: 'POST' },
+    );
   };
+
+  useEffect(() => {
+    if (fetcher.data != null && fetcher.state === 'idle' && !error) {
+      close();
+    }
+  }, [error, fetcher.data, fetcher.state, close]);
 
   return (
     <Modal visible={visible}>
@@ -76,11 +79,11 @@ function NotificationPreviewModal({
         />
       </div>
       <div className="modal-footer">
-        <ErrorDisplay graphQLError={error} />
+        <ErrorDisplay graphQLError={error as ApolloError} />
         <button type="button" className="btn btn-secondary" onClick={close}>
           Cancel
         </button>
-        <button type="button" className="btn btn-primary" onClick={sendPreview} disabled={loading}>
+        <button type="button" className="btn btn-primary" onClick={sendPreview} disabled={fetcher.state !== 'idle'}>
           Send
         </button>
       </div>

@@ -1,13 +1,47 @@
 import { useState, useEffect } from 'react';
-import { LoaderFunction, useLoaderData, useNavigate } from 'react-router-dom';
+import {
+  ActionFunction,
+  Form,
+  LoaderFunction,
+  redirect,
+  useActionData,
+  useFetcher,
+  useLoaderData,
+  useNavigate,
+  useNavigation,
+} from 'react-router-dom';
 import { ErrorDisplay, usePropertySetters } from '@neinteractiveliterature/litform';
 
 import NotificationsConfig from '../../../config/notifications.json';
 import LiquidInput from '../BuiltInFormControls/LiquidInput';
 import { NotificationAdminQueryData, NotificationAdminQueryDocument } from './queries.generated';
-import { useUpdateNotificationTemplateMutation } from './mutations.generated';
 import FourOhFourPage from '../FourOhFourPage';
 import { client } from '../useIntercodeApolloClient';
+import { ApolloError } from '@apollo/client';
+import { UpdateNotificationTemplateDocument } from './mutations.generated';
+
+export const action: ActionFunction = async ({ params: { category, event }, request }) => {
+  try {
+    const formData = await request.formData();
+
+    const { data } = await client.mutate({
+      mutation: UpdateNotificationTemplateDocument,
+      variables: {
+        eventKey: `${category}/${event}`,
+        notificationTemplate: {
+          subject: formData.get('subject')?.toString(),
+          body_html: formData.get('body_html')?.toString(),
+          body_text: formData.get('body_text')?.toString(),
+          body_sms: formData.get('body_sms')?.toString(),
+        },
+      },
+    });
+
+    return redirect('/admin_notifications');
+  } catch (error) {
+    return error;
+  }
+};
 
 type LoaderResult = {
   category: (typeof NotificationsConfig)['categories'][number];
@@ -36,9 +70,10 @@ export const loader: LoaderFunction = async ({ params }) => {
 function NotificationConfigurationForm() {
   const { category, event, initialNotificationTemplate } = useLoaderData() as LoaderResult;
   const navigate = useNavigate();
-
-  const [updateNotificationTemplate, { loading: updateInProgress, error: updateError }] =
-    useUpdateNotificationTemplateMutation();
+  const navigation = useNavigation();
+  const data = useActionData();
+  const updateError = data instanceof Error ? data : undefined;
+  const updateInProgress = navigation.state !== 'idle';
 
   const [notificationTemplate, setNotificationTemplate] = useState(initialNotificationTemplate);
 
@@ -53,32 +88,8 @@ function NotificationConfigurationForm() {
   // if the page changes and we're still mounted
   useEffect(() => setNotificationTemplate(initialNotificationTemplate), [initialNotificationTemplate]);
 
-  const saveClicked = async () => {
-    if (!notificationTemplate) {
-      return;
-    }
-
-    await updateNotificationTemplate({
-      variables: {
-        eventKey: notificationTemplate.event_key,
-        notificationTemplate: {
-          subject: notificationTemplate.subject,
-          body_html: notificationTemplate.body_html,
-          body_text: notificationTemplate.body_text,
-          body_sms: notificationTemplate.body_sms,
-        },
-      },
-    });
-
-    navigate('/admin_notifications');
-  };
-
-  if (!notificationTemplate) {
-    return <FourOhFourPage />;
-  }
-
   return (
-    <>
+    <Form method="PATCH">
       <header className="mb-4">
         <h1>
           {category.name} &mdash; {event.name}
@@ -96,6 +107,7 @@ function NotificationConfigurationForm() {
           lines={1}
           disabled={updateInProgress}
         />
+        <input type="hidden" name="subject" value={notificationTemplate.subject ?? ''} />
       </div>
 
       <div className="mb-3">
@@ -106,6 +118,7 @@ function NotificationConfigurationForm() {
           notifierEventKey={notificationTemplate.event_key}
           disabled={updateInProgress}
         />
+        <input type="hidden" name="body_html" value={notificationTemplate.body_html ?? ''} />
       </div>
 
       <div className="mb-3">
@@ -121,6 +134,7 @@ function NotificationConfigurationForm() {
           )}
           disabled={updateInProgress}
         />
+        <input type="hidden" name="body_text" value={notificationTemplate.body_text ?? ''} />
       </div>
 
       {event.sends_sms ? (
@@ -137,6 +151,7 @@ function NotificationConfigurationForm() {
             )}
             disabled={updateInProgress}
           />
+          <input type="hidden" name="body_sms" value={notificationTemplate.body_sms ?? ''} />
         </div>
       ) : (
         <p>
@@ -144,12 +159,12 @@ function NotificationConfigurationForm() {
         </p>
       )}
 
-      <ErrorDisplay graphQLError={updateError} />
+      <ErrorDisplay graphQLError={updateError as ApolloError} />
 
-      <button type="button" className="btn btn-primary" onClick={saveClicked} disabled={updateInProgress}>
+      <button type="submit" className="btn btn-primary" disabled={updateInProgress}>
         Save changes
       </button>
-    </>
+    </Form>
   );
 }
 
