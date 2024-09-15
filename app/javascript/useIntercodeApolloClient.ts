@@ -125,6 +125,9 @@ export function buildIntercodeApolloClient(link: ApolloLink): ApolloClient<Norma
         Ability: {
           merge: true,
         },
+        AuthorizedApplication: {
+          keyFields: ['uid'],
+        },
         ConventionReports: {
           merge: true,
         },

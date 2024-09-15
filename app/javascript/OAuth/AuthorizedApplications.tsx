@@ -2,9 +2,9 @@ import { useGraphQLConfirm } from '@neinteractiveliterature/litform';
 
 import PermissionsPrompt from './PermissionsPrompt';
 import { OAuthAuthorizedApplicationsQueryData, OAuthAuthorizedApplicationsQueryDocument } from './queries.generated';
-import { useRevokeAuthorizedApplicationMutation } from './mutations.generated';
 import { LoaderFunction, useLoaderData } from 'react-router';
 import { client } from '../useIntercodeApolloClient';
+import { useFetcher } from 'react-router-dom';
 
 export const loader: LoaderFunction = async () => {
   const { data } = await client.query<OAuthAuthorizedApplicationsQueryData>({
@@ -15,35 +15,15 @@ export const loader: LoaderFunction = async () => {
 
 function AuthorizedApplications() {
   const data = useLoaderData() as OAuthAuthorizedApplicationsQueryData;
-  const [revokeAuthorizedApplication] = useRevokeAuthorizedApplicationMutation();
   const confirm = useGraphQLConfirm();
+  const fetcher = useFetcher();
 
   const revokeClicked = (
     authorizedApplication: OAuthAuthorizedApplicationsQueryData['myAuthorizedApplications'][0],
   ) => {
     confirm({
       prompt: `Are you sure you want to revoke the authorization for ${authorizedApplication.name}?`,
-      action: () =>
-        revokeAuthorizedApplication({
-          variables: { uid: authorizedApplication.uid },
-          update: (cache) => {
-            const cacheData = cache.readQuery<OAuthAuthorizedApplicationsQueryData>({
-              query: OAuthAuthorizedApplicationsQueryDocument,
-            });
-            if (!cacheData) {
-              return;
-            }
-            cache.writeQuery<OAuthAuthorizedApplicationsQueryData>({
-              query: OAuthAuthorizedApplicationsQueryDocument,
-              data: {
-                ...cacheData,
-                myAuthorizedApplications: cacheData.myAuthorizedApplications.filter(
-                  (app) => app.uid !== authorizedApplication.uid,
-                ),
-              },
-            });
-          },
-        }),
+      action: () => fetcher.submit({}, { action: `./${authorizedApplication.uid}`, method: 'DELETE' }),
     });
   };
 

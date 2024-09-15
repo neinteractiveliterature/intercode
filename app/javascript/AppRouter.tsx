@@ -457,7 +457,11 @@ const commonRoutes: RouteObject[] = [
   },
   { path: '/oauth/applications-embed', lazy: () => import('./OAuthApplications') },
   { path: '/oauth/authorize', lazy: () => import('./OAuth/AuthorizationPrompt') },
-  { path: '/oauth/authorized_applications', lazy: () => import('./OAuth/AuthorizedApplications') },
+  {
+    path: '/oauth/authorized_applications',
+    lazy: () => import('./OAuth/AuthorizedApplications'),
+    children: [{ path: ':uid', lazy: () => import('./OAuth/$uid') }],
+  },
   { path: '/users/edit', lazy: () => import('./Authentication/EditUser') },
   { path: '/users/password/edit', lazy: () => import('./Authentication/ResetPassword') },
 ];
