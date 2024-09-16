@@ -1,11 +1,10 @@
-import { Link, Navigate, useRouteLoaderData } from 'react-router-dom';
-import { ErrorDisplay, useConfirm, useDeleteMutationWithReferenceArrayUpdater } from '@neinteractiveliterature/litform';
+import { Link, Navigate, useFetcher, useRouteLoaderData } from 'react-router-dom';
+import { ErrorDisplay, useConfirm } from '@neinteractiveliterature/litform';
 import capitalize from 'lodash/capitalize';
 
 import PermissionNames from '../../../config/permission_names.json';
 import usePageTitle from '../usePageTitle';
 import { DropdownMenu } from '../UIComponents/DropdownMenu';
-import { useDeleteOrganizationRoleMutation } from './mutations.generated';
 import { NamedRoute } from '../AppRouter';
 import { SingleOrganizationLoaderResult } from './loaders';
 
@@ -20,12 +19,7 @@ function getOrganizationRolePermissionName(permissionName: string) {
 function OrganizationDisplay() {
   const organization = useRouteLoaderData(NamedRoute.Organization) as SingleOrganizationLoaderResult;
   const confirm = useConfirm();
-  const [deleteOrganizationRole] = useDeleteMutationWithReferenceArrayUpdater(
-    useDeleteOrganizationRoleMutation,
-    organization,
-    'organization_roles',
-    (organizationRole) => ({ id: organizationRole.id }),
-  );
+  const deleteFetcher = useFetcher();
 
   usePageTitle(organization.name);
 
@@ -81,7 +75,11 @@ function OrganizationDisplay() {
                     onClick={() =>
                       confirm({
                         prompt: `Are you sure you want to delete the role ${organizationRole.name}?`,
-                        action: () => deleteOrganizationRole(organizationRole),
+                        action: () =>
+                          deleteFetcher.submit(null, {
+                            action: `/organizations/${organization.id}/roles/${organizationRole.id}`,
+                            method: 'DELETE',
+                          }),
                         renderError: (e) => <ErrorDisplay graphQLError={e} />,
                       })
                     }

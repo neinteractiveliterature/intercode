@@ -1,16 +1,64 @@
-import { Navigate, useNavigate, useRouteLoaderData } from 'react-router-dom';
-import { ErrorDisplay, useCreateMutationWithReferenceArrayUpdater } from '@neinteractiveliterature/litform';
+import {
+  ActionFunction,
+  Navigate,
+  redirect,
+  useActionData,
+  useNavigation,
+  useRouteLoaderData,
+  useSubmit,
+} from 'react-router-dom';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import useOrganizationRoleForm, { OrganizationRoleFormState } from './useOrganizationRoleForm';
+import useOrganizationRoleForm from './useOrganizationRoleForm';
 import usePageTitle from '../usePageTitle';
 import { OrganizationRoleFieldsFragmentDoc } from './queries.generated';
-import { useCreateOrganizationRoleMutation } from './mutations.generated';
 import { NamedRoute } from '../AppRouter';
 import { SingleOrganizationLoaderResult } from './loaders';
+import invariant from 'tiny-invariant';
+import { CreateOrganizationRoleDocument, CreateOrganizationRoleMutationVariables } from './mutations.generated';
+import { client } from 'useIntercodeApolloClient';
+import { Organization } from 'graphqlTypes.generated';
+import { ApolloError } from '@apollo/client';
+
+type ActionRequest = Omit<CreateOrganizationRoleMutationVariables, 'organizationId'>;
+
+export const action: ActionFunction = async ({ request, params: { id } }) => {
+  try {
+    if (request.method === 'POST') {
+      invariant(id != null);
+      const variables = (await request.json()) as ActionRequest;
+
+      await client.mutate({
+        mutation: CreateOrganizationRoleDocument,
+        variables: {
+          organizationId: id,
+          ...variables,
+        },
+        update: (cache, result) => {
+          const organizationRole = result.data?.createOrganizationRole.organization_role;
+          if (organizationRole != null) {
+            const ref = cache.writeFragment({ fragment: OrganizationRoleFieldsFragmentDoc, data: organizationRole });
+            cache.modify<Organization>({
+              id: cache.identify({ __typename: 'Organization', id }),
+              fields: {
+                organization_roles: (value) => [...value, ref],
+              },
+            });
+          }
+        },
+      });
+
+      return redirect(`/organizations/${id}`);
+    } else {
+      return new Response(null, { status: 404 });
+    }
+  } catch (error) {
+    return error;
+  }
+};
 
 function NewOrganizationRole() {
   const organization = useRouteLoaderData(NamedRoute.Organization) as SingleOrganizationLoaderResult;
-  const navigate = useNavigate();
   const { renderForm, formState } = useOrganizationRoleForm({
     __typename: 'OrganizationRole',
     id: '',
@@ -18,13 +66,10 @@ function NewOrganizationRole() {
     users: [],
     permissions: [],
   });
-  const [mutate, { error: mutationError, loading: mutationInProgress }] = useCreateMutationWithReferenceArrayUpdater(
-    useCreateOrganizationRoleMutation,
-    organization,
-    'organization_roles',
-    (data) => data.createOrganizationRole.organization_role,
-    OrganizationRoleFieldsFragmentDoc,
-  );
+  const submit = useSubmit();
+  const actionData = useActionData();
+  const mutationError = actionData instanceof Error ? actionData : undefined;
+  const mutationInProgress = useNavigation().state !== 'idle';
 
   usePageTitle('New organization role');
 
@@ -32,18 +77,17 @@ function NewOrganizationRole() {
     return <Navigate to="/organizations" />;
   }
 
-  const createOrganizationRole = async ({ name, usersChangeSet, permissionsChangeSet }: OrganizationRoleFormState) => {
-    await mutate({
-      variables: {
-        organizationId: organization.id,
-        name,
-        userIds: usersChangeSet.getAddValues().map((user) => user.id),
-        permissions: permissionsChangeSet.getAddValues().map((permission) => ({
+  const createOrganizationRole = () => {
+    submit(
+      {
+        name: formState.name,
+        userIds: formState.usersChangeSet.getAddValues().map((user) => user.id),
+        permissions: formState.permissionsChangeSet.getAddValues().map((permission) => ({
           permission: permission.permission,
         })),
-      },
-    });
-    navigate(`/organizations/${organization.id}`);
+      } satisfies ActionRequest,
+      { encType: 'application/json', method: 'POST' },
+    );
   };
 
   return (
@@ -52,14 +96,9 @@ function NewOrganizationRole() {
 
       {renderForm()}
 
-      <ErrorDisplay graphQLError={mutationError} />
+      <ErrorDisplay graphQLError={mutationError as ApolloError} />
 
-      <button
-        className="btn btn-primary"
-        type="button"
-        onClick={() => createOrganizationRole(formState)}
-        disabled={mutationInProgress}
-      >
+      <button className="btn btn-primary" type="button" onClick={createOrganizationRole} disabled={mutationInProgress}>
         Create role
       </button>
     </>

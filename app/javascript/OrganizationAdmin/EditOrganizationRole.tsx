@@ -1,11 +1,11 @@
-import { LoaderFunction, Navigate, useLoaderData, useNavigate } from 'react-router-dom';
+import { LoaderFunction, Navigate, useActionData, useLoaderData, useNavigation, useSubmit } from 'react-router-dom';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import useOrganizationRoleForm, { OrganizationRoleFormState } from './useOrganizationRoleForm';
+import useOrganizationRoleForm from './useOrganizationRoleForm';
 import usePageTitle from '../usePageTitle';
 import { OrganizationAdminOrganizationsQueryData } from './queries.generated';
-import { useUpdateOrganizationRoleMutation } from './mutations.generated';
 import { organizationsLoader } from './loaders';
+import { ApolloError } from '@apollo/client';
 
 type LoaderResult = {
   organization: OrganizationAdminOrganizationsQueryData['organizations'][number];
@@ -26,27 +26,30 @@ export const loader: LoaderFunction = async ({ params: { id, organizationRoleId 
 
 function EditOrganizationRoleForm() {
   const { organization, initialOrganizationRole } = useLoaderData() as LoaderResult;
-  const navigate = useNavigate();
-
   const { renderForm, formState } = useOrganizationRoleForm(initialOrganizationRole);
-  const [mutate, { error: mutationError, loading: mutationInProgress }] = useUpdateOrganizationRoleMutation();
+  const submit = useSubmit();
+  const actionData = useActionData();
+  const mutationError = actionData instanceof Error ? actionData : undefined;
+  const mutationInProgress = useNavigation().state !== 'idle';
 
   usePageTitle(`Editing “${initialOrganizationRole.name}”`);
-  const updateOrganizationRole = async ({ name, usersChangeSet, permissionsChangeSet }: OrganizationRoleFormState) => {
-    await mutate({
-      variables: {
-        id: initialOrganizationRole.id,
-        name,
-        addUserIds: usersChangeSet.getAddValues().map((user) => user.id),
-        removeUserIds: usersChangeSet.getRemoveIds(),
-        addPermissions: permissionsChangeSet.getAddValues().map((permission) => ({
+  const updateOrganizationRole = () => {
+    submit(
+      {
+        name: formState.name,
+        addUserIds: formState.usersChangeSet.getAddValues().map((user) => user.id),
+        removeUserIds: formState.usersChangeSet.getRemoveIds(),
+        addPermissions: formState.permissionsChangeSet.getAddValues().map((permission) => ({
           permission: permission.permission,
         })),
-        removePermissionIds: permissionsChangeSet.getRemoveIds(),
+        removePermissionIds: formState.permissionsChangeSet.getRemoveIds(),
       },
-    });
-
-    navigate(`/organizations/${organization.id}`);
+      {
+        action: `/organizations/${organization.id}/roles/${initialOrganizationRole.id}`,
+        method: 'PATCH',
+        encType: 'application/json',
+      },
+    );
   };
 
   if (!organization.current_ability_can_manage_access) {
@@ -62,12 +65,12 @@ function EditOrganizationRoleForm() {
 
       {renderForm()}
 
-      <ErrorDisplay graphQLError={mutationError} />
+      <ErrorDisplay graphQLError={mutationError as ApolloError} />
 
       <button
         className="btn btn-primary"
         type="button"
-        onClick={() => updateOrganizationRole(formState)}
+        onClick={() => updateOrganizationRole()}
         disabled={mutationInProgress}
       >
         Save changes

@@ -882,14 +882,25 @@ const rootSiteRoutes: RouteObject[] = [
         id: NamedRoute.Organization,
         children: [
           {
-            path: 'roles/new',
-            id: NamedRoute.NewOrganizationRole,
-            lazy: () => import('./OrganizationAdmin/NewOrganizationRole'),
-          },
-          {
-            path: 'roles/:organizationRoleId/edit',
-            id: NamedRoute.EditOrganizationRole,
-            lazy: () => import('./OrganizationAdmin/EditOrganizationRole'),
+            path: 'roles',
+            children: [
+              {
+                path: 'new',
+                id: NamedRoute.NewOrganizationRole,
+                lazy: () => import('./OrganizationAdmin/NewOrganizationRole'),
+              },
+              {
+                path: ':organizationRoleId',
+                lazy: () => import('./OrganizationAdmin/$id/roles/$organizationRoleId/route'),
+                children: [
+                  {
+                    path: 'edit',
+                    id: NamedRoute.EditOrganizationRole,
+                    lazy: () => import('./OrganizationAdmin/EditOrganizationRole'),
+                  },
+                ],
+              },
+            ],
           },
           {
             index: true,
