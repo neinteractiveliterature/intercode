@@ -20,6 +20,7 @@ class ConventionReportsPresenter
               "COALESCE(price_per_item_cents, 0)",
               "COALESCE(price_per_item_currency, #{ActiveRecord::Base.connection.quote(convention.default_currency_code_or_site_default)})"
             )
+            .where("product_id IS NOT NULL")
             .pluck(
               :product_id,
               :status,
@@ -27,7 +28,7 @@ class ConventionReportsPresenter
               Arel.sql(
                 "COALESCE(price_per_item_currency, #{ActiveRecord::Base.connection.quote(convention.default_currency_code_or_site_default)})"
               ),
-              Arel.sql("SUM(quantity) sum_quantity")
+              Arel.sql("COALESCE(SUM(quantity), 0) sum_quantity")
             )
 
         grouped_count_data.map do |product_id, status, amount_cents, amount_currency, sum_quantity|

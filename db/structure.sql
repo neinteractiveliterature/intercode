@@ -2422,7 +2422,8 @@ CREATE TABLE public.root_sites (
     id bigint NOT NULL,
     site_name text,
     root_page_id bigint,
-    default_layout_id bigint
+    default_layout_id bigint,
+    disable_captcha boolean DEFAULT false NOT NULL
 );
 
 
@@ -6119,6 +6120,7 @@ ALTER TABLE ONLY public.cms_files_pages
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20240916155847'),
 ('20240807155222'),
 ('20240717150224'),
 ('20240620014115'),
