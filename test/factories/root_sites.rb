@@ -4,6 +4,7 @@
 # Table name: root_sites
 #
 #  id                :bigint           not null, primary key
+#  disable_captcha   :boolean          default(FALSE), not null
 #  site_name         :text
 #  default_layout_id :bigint
 #  root_page_id      :bigint
@@ -19,7 +20,6 @@
 #  fk_rails_...  (root_page_id => pages.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
 FactoryBot.define do
   factory :root_site do
     site_name { "The Root Site" }

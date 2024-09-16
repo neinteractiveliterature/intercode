@@ -5,6 +5,7 @@
 # Table name: root_sites
 #
 #  id                :bigint           not null, primary key
+#  disable_captcha   :boolean          default(FALSE), not null
 #  site_name         :text
 #  default_layout_id :bigint
 #  root_page_id      :bigint
