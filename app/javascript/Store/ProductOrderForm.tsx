@@ -17,11 +17,11 @@ import {
   AddOrderEntryToCurrentPendingOrderMutationData,
 } from './mutations.generated';
 import { Money, PayWhatYouWantValue, PricingStrategy } from '../graphqlTypes.generated';
-import { describePayWhatYouWantRange } from './describePricingStructure';
 import { Trans, useTranslation } from 'react-i18next';
 import MoneyInput from './MoneyInput';
 import buildMoneyInput from './buildMoneyInput';
 import { client } from '../useIntercodeApolloClient';
+import { PayWhatYouWantRangeDescription } from './describePricingStructure';
 
 export type ProductOrderFormProps = {
   productId: string;
@@ -154,7 +154,8 @@ export default function ProductOrderForm({ productId, onAddedToCart, runId }: Pr
           <FormGroupWithLabel
             label={
               <>
-                {t('pricingStructure.selectAmount')} ({describePayWhatYouWantRange(product.pricing_structure.value, t)})
+                {t('pricingStructure.selectAmount')} (
+                <PayWhatYouWantRangeDescription value={product.pricing_structure.value} />)
               </>
             }
           >

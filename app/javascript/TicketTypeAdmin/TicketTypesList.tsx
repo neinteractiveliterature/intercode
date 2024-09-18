@@ -11,7 +11,6 @@ import { v4 as uuidv4 } from 'uuid';
 
 import sortTicketTypes from './sortTicketTypes';
 import usePageTitle from '../usePageTitle';
-import { describeAdminPricingStructure } from '../Store/describePricingStructure';
 import { AdminTicketTypesQueryData, EventTicketTypesQueryData } from './queries.generated';
 import { useDeleteTicketTypeMutation } from './mutations.generated';
 import { TFunction } from 'i18next';
@@ -25,6 +24,7 @@ import EditTicketProvidingProductModal, {
   EditTicketProvidingProductModalProps,
 } from './EditTicketProvidingProductModal';
 import { TicketTypeLoaderResult } from './loaders';
+import { AdminPricingStructureDescription } from 'Store/describePricingStructure';
 
 type TicketTypeType = AdminTicketTypesQueryData['convention']['ticket_types'][0];
 
@@ -166,7 +166,9 @@ function TicketTypeDisplay({
                       </div>
                     )}
                   </td>
-                  <td>{describeAdminPricingStructure(product.pricing_structure, t)}</td>
+                  <td>
+                    <AdminPricingStructureDescription pricingStructure={product.pricing_structure} />
+                  </td>
                   <td className="text-end">
                     <button
                       className="btn btn-sm btn-outline-danger me-2"

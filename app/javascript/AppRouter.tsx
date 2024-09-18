@@ -573,8 +573,19 @@ const commonInConventionRoutes: RouteObject[] = [
     path: '/admin_store',
     lazy: () => import('./Store/StoreAdmin'),
     children: [
-      { path: 'products', lazy: () => import('./Store/ProductAdmin') },
-      { path: 'coupons', lazy: () => import('./Store/CouponAdmin/CouponAdminTable') },
+      {
+        path: 'products',
+        lazy: () => import('./Store/ProductAdmin'),
+        children: [{ path: ':id', lazy: () => import('./Store/ProductAdmin/$id') }],
+      },
+      {
+        path: 'coupons',
+        lazy: () => import('./Store/CouponAdmin/CouponAdminTable'),
+        children: [
+          { path: ':id', lazy: () => import('./Store/CouponAdmin/EditCouponModal') },
+          { path: 'new', lazy: () => import('./Store/CouponAdmin/NewCouponModal') },
+        ],
+      },
       { path: 'orders', lazy: () => import('./Store/OrderAdmin') },
       { path: 'order_summary', lazy: () => import('./Store/OrderSummary') },
       { index: true, loader: () => redirect('./products') },

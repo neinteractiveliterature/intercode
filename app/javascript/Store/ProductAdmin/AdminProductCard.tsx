@@ -2,12 +2,12 @@ import classNames from 'classnames';
 import { ErrorDisplay, useConfirm } from '@neinteractiveliterature/litform';
 
 import AdminProductVariantsTable from './AdminProductVariantsTable';
-import { describeAdminPricingStructure } from '../describePricingStructure';
-import { useDeleteProductMutation } from '../mutations.generated';
-import { AdminProductsQueryData, AdminProductsQueryDocument } from '../queries.generated';
+import { AdminProductsQueryData } from '../queries.generated';
 import { EditingProductWithRealId } from './EditingProductTypes';
 import { useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
+import { useFetcher } from 'react-router-dom';
+import { AdminPricingStructureDescription } from 'Store/describePricingStructure';
 
 export type AdminProductCardProps = {
   currentAbility: AdminProductsQueryData['currentAbility'];
@@ -29,33 +29,13 @@ function describePaymentOption(paymentOption: string, t: TFunction): string {
 
 function AdminProductCard({ currentAbility, startEditing, product }: AdminProductCardProps): JSX.Element {
   const confirm = useConfirm();
-  const [deleteProduct] = useDeleteProductMutation();
   const { t } = useTranslation();
+  const fetcher = useFetcher();
 
   const deleteClicked = () => {
     confirm({
       prompt: t('admin.store.products.deleteConfirmation', { productName: product.name }),
-      action: () =>
-        deleteProduct({
-          variables: { id: product.id },
-          update: (cache) => {
-            const data = cache.readQuery<AdminProductsQueryData>({ query: AdminProductsQueryDocument });
-            if (!data) {
-              return;
-            }
-
-            cache.writeQuery<AdminProductsQueryData>({
-              query: AdminProductsQueryDocument,
-              data: {
-                ...data,
-                convention: {
-                  ...data.convention,
-                  products: data.convention.products.filter((p) => p.id !== product.id),
-                },
-              },
-            });
-          },
-        }),
+      action: () => fetcher.submit({}, { method: 'DELETE', action: `/admin_store/products/${product.id}` }),
       renderError: (error) => <ErrorDisplay graphQLError={error} />,
     });
   };
@@ -118,11 +98,8 @@ function AdminProductCard({ currentAbility, startEditing, product }: AdminProduc
 
           <div className="ml-lg-4 col-lg">
             <p>
-              <strong>
-                {t('admin.store.products.basePrice', {
-                  price: describeAdminPricingStructure(product.pricing_structure, t),
-                })}
-              </strong>
+              <strong>{t('admin.store.products.basePrice')}</strong>{' '}
+              <AdminPricingStructureDescription pricingStructure={product.pricing_structure} />
             </p>
             {}
             <div dangerouslySetInnerHTML={{ __html: product.description_html ?? '' }} />

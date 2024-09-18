@@ -13,8 +13,45 @@ import scrollToLocationHash from '../../scrollToLocationHash';
 import { AdminProductsQueryData, AdminProductsQueryDocument } from '../queries.generated';
 import { duplicateProductForEditing, EditingProduct } from './EditingProductTypes';
 import { getRealOrGeneratedId, realOrGeneratedIdsMatch } from '../../GeneratedIdUtils';
-import { LoaderFunction, useLoaderData } from 'react-router';
+import { ActionFunction, json, LoaderFunction, useLoaderData } from 'react-router';
 import { client } from '../../useIntercodeApolloClient';
+import { Convention } from 'graphqlTypes.generated';
+import { CreateProductDocument } from 'Store/mutations.generated';
+import { AdminProductFieldsFragmentDoc } from 'Store/adminProductFields.generated';
+import { parseProductFormData } from 'Store/buildProductInput';
+
+export const action: ActionFunction = async ({ request }) => {
+  try {
+    if (request.method === 'POST') {
+      const product = parseProductFormData(await request.formData());
+      const { data } = await client.mutate({
+        mutation: CreateProductDocument,
+        variables: { product },
+        update: (cache, result) => {
+          const product = result.data?.createProduct.product;
+          if (product) {
+            const ref = cache.writeFragment({
+              fragment: AdminProductFieldsFragmentDoc,
+              fragmentName: 'AdminProductFields',
+              data: product,
+            });
+            cache.modify<Convention>({
+              id: cache.identify(product.convention),
+              fields: {
+                products: (value) => [...value, ref],
+              },
+            });
+          }
+        },
+      });
+      return json(data);
+    } else {
+      return new Response(null, { status: 404 });
+    }
+  } catch (error) {
+    return error;
+  }
+};
 
 function generateBlankProduct(): EditingProduct {
   return {

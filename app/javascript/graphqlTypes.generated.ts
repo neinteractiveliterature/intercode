@@ -664,6 +664,8 @@ export type Convention = CmsParent & {
   cmsPartials: Array<CmsPartial>;
   /** Returns all CMS variables within the current domain. */
   cmsVariables: Array<CmsVariable>;
+  /** Find a coupon by ID. */
+  coupon: Coupon;
   coupons_paginated: CouponsPagination;
   /** When this convention was created. */
   created_at?: Maybe<Scalars['Date']['output']>;
@@ -933,6 +935,19 @@ export type ConventionCmsPageArgs = {
   id?: InputMaybe<Scalars['ID']['input']>;
   rootPage?: InputMaybe<Scalars['Boolean']['input']>;
   slug?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
+export type ConventionCouponArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -4379,6 +4394,7 @@ export type Product = {
   available: Scalars['Boolean']['output'];
   clickwrap_agreement?: Maybe<Scalars['String']['output']>;
   clickwrap_agreement_html?: Maybe<Scalars['String']['output']>;
+  convention: Convention;
   description?: Maybe<Scalars['String']['output']>;
   description_html?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];

@@ -20,8 +20,9 @@ class Types::ProductType < Types::BaseObject
   field :name, String, null: false
   field :product_variants, [Types::ProductVariantType], null: false
   field :provides_ticket_type, Types::TicketTypeType, null: true
+  field :convention, Types::ConventionType, null: false
 
-  association_loaders Product, :product_variants, :provides_ticket_type
+  association_loaders Product, :product_variants, :provides_ticket_type, :convention
 
   def description_html
     return nil unless object.description_template

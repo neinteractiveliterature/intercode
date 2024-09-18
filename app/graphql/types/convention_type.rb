@@ -34,6 +34,10 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
   field :clickwrap_agreement_html, String, null: true do # rubocop:disable GraphQL/ExtractType
     description "The value of clickwrap_agreement, rendered as HTML."
   end
+  field :coupon, Types::CouponType, null: false do
+    description "Find a coupon by ID."
+    argument :id, ID, required: true, description: "The ID of the coupon to find."
+  end
   field :created_at, Types::DateType, null: true, description: "When this convention was created."
   field :default_currency_code, String, null: true do
     description "The ISO 4217 currency code used by default for products in this convention.  If null, defaults to USD."
@@ -338,6 +342,10 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
   def clickwrap_agreement_html
     return nil unless object.clickwrap_agreement
     cadmus_renderer.render(Liquid::Template.parse(object.clickwrap_agreement), :html)
+  end
+
+  def coupon(id:)
+    object.coupons.find(id)
   end
 
   pagination_field :coupons_paginated, Types::CouponsPaginationType, Types::CouponFiltersInputType, null: false

@@ -10,6 +10,7 @@ import {
 } from '../graphqlTypes.generated';
 import { EditingProduct } from './ProductAdmin/EditingProductTypes';
 import { hasRealId } from '../GeneratedIdUtils';
+import invariant from 'tiny-invariant';
 
 function buildPricingStructureInput(
   pricingStructure: Pick<PricingStructure, 'pricing_strategy' | 'value'> | null | undefined,
@@ -55,8 +56,7 @@ function buildPricingStructureInput(
   };
 }
 
-export default function buildProductInput(product: EditingProduct): ProductInput {
-  const imageInput = product.imageFile ? { image: product.imageFile } : {};
+function buildProductInput(product: EditingProduct): Omit<ProductInput, 'image'> {
   return {
     name: product.name,
     available: product.available,
@@ -72,6 +72,27 @@ export default function buildProductInput(product: EditingProduct): ProductInput
     deleteVariantIds: product.delete_variant_ids,
     providesTicketTypeId: product.provides_ticket_type?.id || null,
     clickwrapAgreement: product.clickwrap_agreement,
-    ...imageInput,
+  };
+}
+
+export function buildProductFormData(product: EditingProduct): FormData {
+  const productInput = buildProductInput(product);
+  const formData = new FormData();
+  formData.set('productInput', JSON.stringify(productInput));
+  if (product.imageFile != null) {
+    formData.set('image', product.imageFile);
+  }
+  return formData;
+}
+
+export function parseProductFormData(formData: FormData): ProductInput {
+  const inputJSON = formData.get('productInput');
+  invariant(typeof inputJSON === 'string');
+  const input = JSON.parse(inputJSON);
+  const image = formData.get('image');
+
+  return {
+    ...input,
+    image: image instanceof File ? image : undefined,
   };
 }

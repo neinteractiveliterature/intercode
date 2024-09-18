@@ -263,7 +263,7 @@
       },
       "products": {
         "available": "Available for purchase",
-        "basePrice": "Base price: {{ price }}",
+        "basePrice": "Base price:",
         "clickwrapAgreementLabel": "Product-specific clickwrap agreement",
         "deleteConfirmation": "Are you sure you want to delete the product {{ productName }}?",
         "deleteLabel": "Delete product",

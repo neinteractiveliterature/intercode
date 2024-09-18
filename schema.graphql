@@ -629,6 +629,16 @@ type Convention implements CmsParent {
   Returns all CMS variables within the current domain.
   """
   cmsVariables: [CmsVariable!]!
+
+  """
+  Find a coupon by ID.
+  """
+  coupon(
+    """
+    The ID of the coupon to find.
+    """
+    id: ID!
+  ): Coupon!
   coupons_paginated(
     """
     Filters to restrict what items will appear in the result set.
@@ -5229,6 +5239,7 @@ type Product {
   available: Boolean!
   clickwrap_agreement: String
   clickwrap_agreement_html: String
+  convention: Convention!
   description: String
   description_html: String
   id: ID!

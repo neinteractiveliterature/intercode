@@ -1,19 +1,16 @@
-import { useContext } from 'react';
 import { LoaderFunction, useLoaderData, useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 
 import ProductOrderForm from './ProductOrderForm';
 import SignInButton from '../Authentication/SignInButton';
 import usePageTitle from '../usePageTitle';
 import parseCmsContent from '../parseCmsContent';
-import { describeUserPricingStructure } from './describePricingStructure';
-import AppRootContext from '../AppRootContext';
 import {
   OrderFormProductQueryData,
   OrderFormProductQueryDocument,
   OrderFormProductQueryVariables,
 } from './queries.generated';
 import { client } from '../useIntercodeApolloClient';
+import { UserPricingStructureDescription } from './describePricingStructure';
 
 export const loader: LoaderFunction = async ({ params: { id } }) => {
   const { data } = await client.query<OrderFormProductQueryData, OrderFormProductQueryVariables>({
@@ -28,8 +25,6 @@ function ProductPage() {
     convention: { product },
     currentUser,
   } = useLoaderData() as OrderFormProductQueryData;
-  const { t } = useTranslation();
-  const { timezoneName } = useContext(AppRootContext);
   const navigate = useNavigate();
 
   usePageTitle(product.name);
@@ -44,7 +39,9 @@ function ProductPage() {
 
       <div className="mb-4">
         <h1>{product.name}</h1>
-        <div className="lead">{describeUserPricingStructure(product.pricing_structure, timezoneName, t)}</div>
+        <div className="lead">
+          <UserPricingStructureDescription pricingStructure={product.pricing_structure} />
+        </div>
       </div>
 
       {product.image && <img className="d-lg-none w-100" src={product.image.url} alt={product.name} />}

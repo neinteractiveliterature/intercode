@@ -49,6 +49,10 @@ mutation CreateProduct($product: ProductInput!) {
     product {
       id
       ...AdminProductFields
+
+      convention {
+        id
+      }
     }
   }
 }
