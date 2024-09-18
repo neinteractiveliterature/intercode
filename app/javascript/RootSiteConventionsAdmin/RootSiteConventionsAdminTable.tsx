@@ -1,20 +1,21 @@
 import { useMemo } from 'react';
 import { Column } from 'react-table';
-import { useNavigate } from 'react-router-dom';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { DateTime } from 'luxon';
 import { useTranslation } from 'react-i18next';
-import { useModal } from '@neinteractiveliterature/litform';
 
-import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
-import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
-import { buildFieldFilterCodecs } from '../Tables/FilterUtils';
-import FreeTextFilter from '../Tables/FreeTextFilter';
-import { timespanFromConvention } from '../TimespanUtils';
-import TableHeader from '../Tables/TableHeader';
-import usePageTitle from '../usePageTitle';
-import NewConventionModal from './NewConventionModal';
-import { RootSiteConventionsAdminTableQueryData, useRootSiteConventionsAdminTableQuery } from './queries.generated';
-import { getDateTimeFormat } from '../TimeUtils';
+import useReactTableWithTheWorks from 'Tables/useReactTableWithTheWorks';
+import ReactTableWithTheWorks from 'Tables/ReactTableWithTheWorks';
+import { buildFieldFilterCodecs } from 'Tables/FilterUtils';
+import FreeTextFilter from 'Tables/FreeTextFilter';
+import { timespanFromConvention } from 'TimespanUtils';
+import TableHeader from 'Tables/TableHeader';
+import usePageTitle from 'usePageTitle';
+import {
+  RootSiteConventionsAdminTableQueryData,
+  RootSiteConventionsAdminTableQueryDocument,
+} from './queries.generated';
+import { getDateTimeFormat } from 'TimeUtils';
 
 type ConventionType = RootSiteConventionsAdminTableQueryData['conventions_paginated']['entries'][0];
 
@@ -98,7 +99,6 @@ function getPossibleColumns(): Column<ConventionType>[] {
 const defaultVisibleColumns = ['name', 'organization_name', 'starts_at'];
 
 function RootSiteConventionsAdminTable(): JSX.Element {
-  const newConventionModal = useModal();
   const navigate = useNavigate();
   const { tableInstance, loading, tableHeaderProps } = useReactTableWithTheWorks({
     decodeFilterValue,
@@ -108,7 +108,7 @@ function RootSiteConventionsAdminTable(): JSX.Element {
     getPages: ({ data }) => data.conventions_paginated.total_pages,
     getPossibleColumns,
     storageKeyPrefix: 'conventions',
-    useQuery: useRootSiteConventionsAdminTableQuery,
+    query: RootSiteConventionsAdminTableQueryDocument,
   });
   usePageTitle('Conventions');
 
@@ -120,9 +120,9 @@ function RootSiteConventionsAdminTable(): JSX.Element {
         {...tableHeaderProps}
         renderLeftContent={() => (
           <>
-            <button type="button" className="btn btn-outline-primary" onClick={newConventionModal.open}>
+            <Link to="./new" className="btn btn-outline-primary">
               New convention
-            </button>
+            </Link>
           </>
         )}
       />
@@ -133,7 +133,7 @@ function RootSiteConventionsAdminTable(): JSX.Element {
         onClickRow={(row) => navigate(`/conventions/${row.original.id}`)}
       />
 
-      <NewConventionModal visible={newConventionModal.visible} close={newConventionModal.close} />
+      <Outlet />
     </div>
   );
 }

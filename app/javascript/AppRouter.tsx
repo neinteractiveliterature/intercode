@@ -83,6 +83,8 @@ export enum NamedRoute {
   UserAdmin = 'UserAdmin',
   UsersTable = 'UsersTable',
   EventAdmin = 'EventAdmin',
+  RootSiteConventionsAdmin = 'RootSiteConventionAdmin',
+  RootSiteConventionsAdminTable = 'RootSiteConventionsAdminTable',
 }
 
 export type RouteName = keyof typeof NamedRoute & string;
@@ -618,7 +620,11 @@ const commonInConventionRoutes: RouteObject[] = [
       { index: true, lazy: () => import('./Reports') },
     ],
   },
-  { path: '/rooms', lazy: () => import('./RoomsAdmin') },
+  {
+    path: '/rooms',
+    lazy: () => import('./RoomsAdmin'),
+    children: [{ path: ':id', lazy: () => import('./RoomsAdmin/$id/route') }],
+  },
   {
     element: <AppRootContextRouteGuard guard={({ signupMode }) => signupMode === SignupMode.Moderated} />,
     children: [
@@ -859,14 +865,21 @@ const singleEventModeRoutes: RouteObject[] = [];
 const rootSiteRoutes: RouteObject[] = [
   {
     path: '/conventions',
+    id: NamedRoute.RootSiteConventionsAdmin,
     lazy: () => import('./RootSiteConventionsAdmin'),
     children: [
       {
         path: ':id',
         id: NamedRoute.RootSiteConventionDisplay,
         lazy: () => import('./RootSiteConventionsAdmin/ConventionDisplay'),
+        children: [{ path: 'clone', lazy: () => import('./RootSiteConventionsAdmin/clone') }],
       },
-      { index: true, lazy: () => import('./RootSiteConventionsAdmin/RootSiteConventionsAdminTable') },
+      {
+        path: '',
+        id: NamedRoute.RootSiteConventionsAdminTable,
+        lazy: () => import('./RootSiteConventionsAdmin/RootSiteConventionsAdminTable'),
+        children: [{ path: 'new', lazy: () => import('./RootSiteConventionsAdmin/new') }],
+      },
     ],
   },
   { path: '/email_routes', lazy: () => import('./RootSiteEmailRoutesAdmin') },

@@ -1,23 +1,38 @@
 import { useState } from 'react';
 import * as React from 'react';
 import { ApolloError } from '@apollo/client';
-import {
-  ErrorDisplay,
-  useGraphQLConfirm,
-  sortByLocaleString,
-  useDeleteMutationWithReferenceArrayUpdater,
-  useCreateMutationWithReferenceArrayUpdater,
-} from '@neinteractiveliterature/litform';
+import { ErrorDisplay, useGraphQLConfirm, sortByLocaleString } from '@neinteractiveliterature/litform';
 
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
-import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
-import { RoomAdminRoomFieldsFragmentDoc, RoomsAdminQueryData, RoomsAdminQueryDocument } from './queries.generated';
-import { useCreateRoomMutation, useDeleteRoomMutation, useUpdateRoomMutation } from './mutations.generated';
+import { RoomsAdminQueryData, RoomsAdminQueryDocument } from './queries.generated';
 import { useTranslation } from 'react-i18next';
-import { LoaderFunction, useLoaderData } from 'react-router';
+import { ActionFunction, LoaderFunction, useActionData, useLoaderData } from 'react-router';
 import { client } from '../useIntercodeApolloClient';
+import { useSubmit } from 'react-router-dom';
+import { CreateRoomDocument } from './mutations.generated';
+
+export const action: ActionFunction = async ({ request }) => {
+  try {
+    if (request.method === 'POST') {
+      const formData = await request.formData();
+      const { data } = await client.mutate({
+        mutation: CreateRoomDocument,
+        variables: {
+          input: { room: { name: formData.get('name')?.toString() } },
+        },
+        refetchQueries: [{ query: RoomsAdminQueryDocument }],
+        awaitRefetchQueries: true,
+      });
+      return data;
+    } else {
+      return new Response(null, { status: 404 });
+    }
+  } catch (error) {
+    return error;
+  }
+};
 
 export const loader: LoaderFunction = async () => {
   const { data } = await client.query<RoomsAdminQueryData>({ query: RoomsAdminQueryDocument });
@@ -27,23 +42,11 @@ export const loader: LoaderFunction = async () => {
 function RoomsAdmin() {
   const data = useLoaderData() as RoomsAdminQueryData;
   const authorizationWarning = useAuthorizationRequired('can_manage_rooms');
-  const [updateMutate] = useUpdateRoomMutation();
-  const [createRoom, { error: createError }] = useCreateMutationWithReferenceArrayUpdater(
-    useCreateRoomMutation,
-    data.convention,
-    'rooms',
-    (data) => data.createRoom.room,
-    RoomAdminRoomFieldsFragmentDoc,
-  );
-  const [updateRoom, updateError] = useAsyncFunction(updateMutate);
-  const [deleteRoom, , { error: deleteError }] = useDeleteMutationWithReferenceArrayUpdater(
-    useDeleteRoomMutation,
-    data.convention,
-    'rooms',
-    (room) => ({ input: { id: room.id } }),
-  );
   const confirm = useGraphQLConfirm();
   const { t } = useTranslation();
+  const submit = useSubmit();
+  const actionData = useActionData();
+  const error = actionData instanceof Error ? actionData : undefined;
 
   const [creatingRoomName, setCreatingRoomName] = useState('');
 
@@ -51,16 +54,13 @@ function RoomsAdmin() {
 
   if (authorizationWarning) return authorizationWarning;
 
-  const roomNameDidChange = (id: string, name: string) =>
-    updateRoom({
-      variables: { input: { id: id, room: { name } } },
-    });
+  const roomNameDidChange = (id: string, name: string) => {
+    submit({ name }, { action: `./${id}`, method: 'PATCH' });
+  };
 
   const createRoomWasClicked = async (event: React.SyntheticEvent) => {
     event.preventDefault();
-    await createRoom({
-      variables: { input: { room: { name: creatingRoomName } } },
-    });
+    submit({ name: creatingRoomName }, { method: 'POST' });
     setCreatingRoomName('');
   };
 
@@ -97,7 +97,7 @@ function RoomsAdmin() {
           onClick={() =>
             confirm({
               prompt: t('admin.rooms.deleteConfirmation'),
-              action: () => deleteRoom(room),
+              action: () => submit(null, { action: `./${room.id}`, method: 'DELETE' }),
             })
           }
           type="button"
@@ -139,7 +139,7 @@ function RoomsAdmin() {
           </li>
         </ul>
 
-        <ErrorDisplay graphQLError={(createError || updateError || deleteError) as ApolloError | undefined} />
+        <ErrorDisplay graphQLError={error as ApolloError | undefined} />
       </div>
     </>
   );

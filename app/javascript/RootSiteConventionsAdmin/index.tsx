@@ -1,6 +1,5 @@
 import { Outlet, useRouteLoaderData } from 'react-router-dom';
 
-import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import NamedRouteBreadcrumbItem from '../Breadcrumbs/NamedRouteBreadcrumbItem';
 import { NamedRoute } from '../AppRouter';
@@ -16,9 +15,9 @@ function RootSiteConventionsAdmin(): JSX.Element {
   return (
     <>
       <ol className="breadcrumb">
-        <RouteActivatedBreadcrumbItem to=".?sort.starts_at=desc" end>
+        <NamedRouteBreadcrumbItem routeId={['RootSiteConventionsAdmin', 'RootSiteConventionsAdminTable']}>
           Conventions
-        </RouteActivatedBreadcrumbItem>
+        </NamedRouteBreadcrumbItem>
 
         <NamedRouteBreadcrumbItem routeId={NamedRoute.RootSiteConventionDisplay}>
           {conventionData?.convention.name}
