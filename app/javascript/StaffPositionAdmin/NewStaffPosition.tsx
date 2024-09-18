@@ -1,35 +1,39 @@
-import { useState, useCallback } from 'react';
-import { LoaderFunction, useLoaderData, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { ActionFunction, redirect, useFetcher } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
-import { ErrorDisplay, useCreateMutationWithReferenceArrayUpdater } from '@neinteractiveliterature/litform';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import StaffPositionForm, { EditingStaffPosition } from './StaffPositionForm';
 import usePageTitle from '../usePageTitle';
 import buildStaffPositionInput from './buildStaffPositionInput';
-import { useCreateStaffPositionMutation } from './mutations.generated';
-import {
-  StaffPositionFieldsFragmentDoc,
-  StaffPositionsQueryData,
-  StaffPositionsQueryDocument,
-} from './queries.generated';
+import { StaffPositionsQueryDocument } from './queries.generated';
 import { client } from '../useIntercodeApolloClient';
+import { StaffPositionInput } from 'graphqlTypes.generated';
+import { CreateStaffPositionDocument } from './mutations.generated';
 
-export const loader: LoaderFunction = async () => {
-  const { data } = await client.query<StaffPositionsQueryData>({ query: StaffPositionsQueryDocument });
-  return data;
+export const action: ActionFunction = async ({ request }) => {
+  try {
+    if (request.method === 'POST') {
+      const staffPosition = (await request.json()) as StaffPositionInput;
+      const { data } = await client.mutate({
+        mutation: CreateStaffPositionDocument,
+        variables: { input: { staff_position: staffPosition } },
+        refetchQueries: [{ query: StaffPositionsQueryDocument }],
+        awaitRefetchQueries: true,
+      });
+      return redirect(`/staff_positions/${data?.createStaffPosition.staff_position.id}/edit_permissions`);
+    } else {
+      return new Response(null, { status: 404 });
+    }
+  } catch (error) {
+    return error;
+  }
 };
 
 function NewStaffPosition(): JSX.Element {
-  const data = useLoaderData() as StaffPositionsQueryData;
-  const navigate = useNavigate();
-  const [createMutate, { error, loading: inProgress }] = useCreateMutationWithReferenceArrayUpdater(
-    useCreateStaffPositionMutation,
-    data.convention,
-    'staff_positions',
-    (data) => data.createStaffPosition.staff_position,
-    StaffPositionFieldsFragmentDoc,
-    'StaffPositionFields',
-  );
+  const fetcher = useFetcher();
+  const error = fetcher.data instanceof Error ? fetcher.data : undefined;
+  const inProgress = fetcher.state !== 'idle';
 
   const [staffPosition, setStaffPosition] = useState<EditingStaffPosition>({
     __typename: 'StaffPosition',
@@ -42,20 +46,9 @@ function NewStaffPosition(): JSX.Element {
     permissions: [],
   });
 
-  const saveClicked = useCallback(async () => {
-    const response = await createMutate({
-      variables: {
-        input: {
-          staff_position: buildStaffPositionInput(staffPosition),
-        },
-      },
-    });
-    if (response?.data) {
-      navigate(`/staff_positions/${response.data.createStaffPosition.staff_position.id}/edit_permissions`, {
-        replace: true,
-      });
-    }
-  }, [navigate, createMutate, staffPosition]);
+  const saveClicked = () => {
+    fetcher.submit(buildStaffPositionInput(staffPosition), { method: 'POST', encType: 'application/json' });
+  };
 
   usePageTitle('New staff position');
 

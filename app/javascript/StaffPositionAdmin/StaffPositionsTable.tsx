@@ -1,15 +1,9 @@
 import { Fragment, useContext, useMemo, useState } from 'react';
-import { Link, LoaderFunction, useLoaderData } from 'react-router-dom';
+import { Link, LoaderFunction, useFetcher, useLoaderData } from 'react-router-dom';
 import groupBy from 'lodash/groupBy';
 import flatMap from 'lodash/flatMap';
 import { assertNever } from 'assert-never';
-import {
-  useConfirm,
-  ErrorDisplay,
-  sortByLocaleString,
-  DisclosureTriangle,
-  useDeleteMutationWithReferenceArrayUpdater,
-} from '@neinteractiveliterature/litform';
+import { useConfirm, ErrorDisplay, sortByLocaleString, DisclosureTriangle } from '@neinteractiveliterature/litform';
 
 import PermissionNames from '../../../config/permission_names.json';
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
@@ -20,7 +14,6 @@ import AppRootContext from '../AppRootContext';
 import { DropdownMenu } from '../UIComponents/DropdownMenu';
 import { StaffPositionsQueryData, StaffPositionsQueryDocument } from './queries.generated';
 import { PolymorphicPermission } from '../Permissions/PermissionUtils';
-import { useDeleteStaffPositionMutation } from './mutations.generated';
 import { client } from '../useIntercodeApolloClient';
 
 type UserConProfilesListProps = {
@@ -164,13 +157,7 @@ function StaffPositionsTable() {
   const data = useLoaderData() as StaffPositionsQueryData;
   const { conventionDomain } = useContext(AppRootContext);
   const confirm = useConfirm();
-
-  const [deleteStaffPosition] = useDeleteMutationWithReferenceArrayUpdater(
-    useDeleteStaffPositionMutation,
-    data.convention,
-    'staff_positions',
-    (staffPosition) => ({ input: { id: staffPosition.id } }),
-  );
+  const fetcher = useFetcher();
 
   usePageTitle('Staff positions');
 
@@ -222,7 +209,7 @@ function StaffPositionsTable() {
             onClick={() =>
               confirm({
                 prompt: `Are you sure you want to delete the staff position ${staffPosition.name}?`,
-                action: () => deleteStaffPosition(staffPosition),
+                action: () => fetcher.submit({}, { action: `/staff_positions/${staffPosition.id}`, method: 'DELETE' }),
                 renderError: (e) => <ErrorDisplay graphQLError={e} />,
               })
             }

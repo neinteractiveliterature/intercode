@@ -1,15 +1,28 @@
-import { useState, useCallback } from 'react';
-import { LoaderFunction, useLoaderData, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { ActionFunction, LoaderFunction, redirect, useFetcher, useLoaderData } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import StaffPositionForm from './StaffPositionForm';
-import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
 import buildStaffPositionInput from './buildStaffPositionInput';
 import { StaffPositionsQueryData, StaffPositionsQueryDocument } from './queries.generated';
-import { useUpdateStaffPositionMutation } from './mutations.generated';
+import { UpdateStaffPositionDocument } from './mutations.generated';
 import { client } from '../useIntercodeApolloClient';
+import { StaffPositionInput } from 'graphqlTypes.generated';
+
+export const action: ActionFunction = async ({ params: { id }, request }) => {
+  try {
+    const staffPosition = (await request.json()) as StaffPositionInput;
+    await client.mutate({
+      mutation: UpdateStaffPositionDocument,
+      variables: { input: { id, staff_position: staffPosition } },
+    });
+    return redirect('/staff_positions');
+  } catch (error) {
+    return error;
+  }
+};
 
 type LoaderResult = {
   initialStaffPosition: StaffPositionsQueryData['convention']['staff_positions'][number];
@@ -27,24 +40,16 @@ export const loader: LoaderFunction = async ({ params: { id } }) => {
 
 function EditStaffPosition() {
   const { initialStaffPosition } = useLoaderData() as LoaderResult;
-  const navigate = useNavigate();
   const [staffPosition, setStaffPosition] = useState(initialStaffPosition);
-  const [updateMutate] = useUpdateStaffPositionMutation();
-  const [mutate, updateError, requestInProgress] = useAsyncFunction(updateMutate);
+  const fetcher = useFetcher();
+  const updateError = fetcher.data instanceof Error ? fetcher.data : undefined;
+  const requestInProgress = fetcher.state !== 'idle';
 
   usePageTitle(`Editing “${initialStaffPosition.name}”`);
 
-  const saveClicked = useCallback(async () => {
-    await mutate({
-      variables: {
-        input: {
-          id: staffPosition.id,
-          staff_position: buildStaffPositionInput(staffPosition),
-        },
-      },
-    });
-    navigate('/staff_positions');
-  }, [mutate, staffPosition, navigate]);
+  const saveClicked = () => {
+    fetcher.submit(buildStaffPositionInput(staffPosition), { encType: 'application/json', method: 'PATCH' });
+  };
 
   return (
     <div>

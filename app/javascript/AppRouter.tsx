@@ -695,6 +695,7 @@ const commonInConventionRoutes: RouteObject[] = [
       { path: 'new', lazy: () => import('./StaffPositionAdmin/NewStaffPosition') },
       {
         path: ':id',
+        lazy: () => import('./StaffPositionAdmin/$id/route'),
         children: [
           {
             path: 'edit',

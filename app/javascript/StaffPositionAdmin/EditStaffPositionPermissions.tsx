@@ -1,6 +1,5 @@
-import { useState } from 'react';
 import { ApolloError } from '@apollo/client';
-import { LoaderFunction, useLoaderData, useNavigate } from 'react-router-dom';
+import { ActionFunction, LoaderFunction, redirect, useFetcher, useLoaderData } from 'react-router-dom';
 import { useTabs, TabList, TabBody, notEmpty, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
@@ -12,8 +11,26 @@ import { getPermissionNamesForModelType, buildPermissionInput } from '../Permiss
 import { PermissionedModelTypeIndicator } from '../graphqlTypes.generated';
 import { StaffPositionsQueryData, StaffPositionsQueryDocument } from './queries.generated';
 import { PermissionWithId } from '../Permissions/usePermissionsChangeSet';
-import { useUpdateStaffPositionPermissionsMutation } from './mutations.generated';
 import { client } from '../useIntercodeApolloClient';
+import {
+  UpdateStaffPositionPermissionsDocument,
+  UpdateStaffPositionPermissionsMutationVariables,
+} from './mutations.generated';
+
+type ActionInput = Omit<UpdateStaffPositionPermissionsMutationVariables, 'staffPositionId'>;
+
+export const action: ActionFunction = async ({ params: { id }, request }) => {
+  try {
+    const { grantPermissions, revokePermissions } = (await request.json()) as ActionInput;
+    await client.mutate({
+      mutation: UpdateStaffPositionPermissionsDocument,
+      variables: { staffPositionId: id, grantPermissions, revokePermissions },
+    });
+    return redirect('/staff_positions');
+  } catch (error) {
+    return error;
+  }
+};
 
 const CmsContentGroupPermissionNames = getPermissionNamesForModelType(PermissionedModelTypeIndicator.CmsContentGroup);
 const EventCategoryPermissionNames = getPermissionNamesForModelType(PermissionedModelTypeIndicator.EventCategory);
@@ -36,14 +53,14 @@ export const loader: LoaderFunction = async ({ params: { id } }) => {
 
 function EditStaffPositionPermissions() {
   const { convention, staffPosition } = useLoaderData() as LoaderResult;
-  const navigate = useNavigate();
   const [conventionChangeSet, conventionAdd, conventionRemove, conventionReset] = useChangeSet<PermissionWithId>();
   const [eventCategoriesChangeSet, eventCategoriesAdd, eventCategoriesRemove] = useChangeSet<PermissionWithId>();
   const [contentGroupsChangeSet, contentGroupsAdd, contentGroupsRemove] = useChangeSet<PermissionWithId>();
 
-  const [error, setError] = useState<ApolloError>();
-  const [mutationInProgress, setMutationInProgress] = useState(false);
-  const [mutate] = useUpdateStaffPositionPermissionsMutation();
+  const fetcher = useFetcher();
+  const error = fetcher.data instanceof Error ? fetcher.data : undefined;
+  const mutationInProgress = fetcher.state !== 'idle';
+
   const tabProps = useTabs([
     {
       id: 'convention',
@@ -112,28 +129,18 @@ function EditStaffPositionPermissions() {
       ...eventCategoriesChangeSet.changes,
       ...contentGroupsChangeSet.changes,
     ]);
-    setMutationInProgress(true);
-    try {
-      await mutate({
-        variables: {
-          staffPositionId: staffPosition.id,
-          grantPermissions: combinedChangeSet.getAddValues().map(buildPermissionInput),
-          revokePermissions: combinedChangeSet
-            .getRemoveIds()
-            .map((removeId) => {
-              const existingPermission = staffPosition.permissions.find((p) => p.id === removeId);
+    const variables: ActionInput = {
+      grantPermissions: combinedChangeSet.getAddValues().map(buildPermissionInput),
+      revokePermissions: combinedChangeSet
+        .getRemoveIds()
+        .map((removeId) => {
+          const existingPermission = staffPosition.permissions.find((p) => p.id === removeId);
 
-              return existingPermission ? buildPermissionInput(existingPermission) : undefined;
-            })
-            .filter(notEmpty),
-        },
-      });
-
-      navigate('/staff_positions');
-    } catch (newError) {
-      setError(newError);
-      setMutationInProgress(false);
-    }
+          return existingPermission ? buildPermissionInput(existingPermission) : undefined;
+        })
+        .filter(notEmpty),
+    };
+    fetcher.submit(variables, { encType: 'application/json', method: 'PATCH' });
   };
 
   return (
@@ -148,7 +155,7 @@ function EditStaffPositionPermissions() {
         <TabBody {...tabProps} />
       </section>
 
-      <ErrorDisplay graphQLError={error} />
+      <ErrorDisplay graphQLError={error as ApolloError} />
 
       <button className="mt-4 btn btn-primary" type="button" onClick={saveChangesClicked} disabled={mutationInProgress}>
         Save changes
