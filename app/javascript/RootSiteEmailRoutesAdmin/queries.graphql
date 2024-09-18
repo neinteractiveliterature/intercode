@@ -15,3 +15,10 @@ query RootSiteEmailRoutesAdminTableQuery($page: Int, $filters: EmailRouteFilters
     }
   }
 }
+
+query RootSiteSingleEmailRouteQuery($id: ID!) {
+  email_route(id: $id) {
+    id
+    ...EmailRouteFields
+  }
+}

@@ -1,50 +1,61 @@
 import { useState, useEffect } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
-import { useApolloClient, ApolloError } from '@apollo/client';
+import { ApolloError } from '@apollo/client';
 import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import EmailRouteForm from './EmailRouteForm';
-import useAsyncFunction from '../useAsyncFunction';
 import buildEmailRouteInput from './buildEmailRouteInput';
-import { RootSiteEmailRoutesAdminTableQueryData } from './queries.generated';
-import { useDeleteEmailRouteMutation, useUpdateEmailRouteMutation } from './mutations.generated';
+import { RootSiteSingleEmailRouteQueryData, RootSiteSingleEmailRouteQueryDocument } from './queries.generated';
+import { ActionFunction, LoaderFunction, redirect, useLoaderData } from 'react-router';
+import { client } from 'useIntercodeApolloClient';
+import { DeleteEmailRouteDocument, UpdateEmailRouteDocument } from './mutations.generated';
+import { EmailRouteInput } from 'graphqlTypes.generated';
+import { Link, useFetcher } from 'react-router-dom';
 
-export type EditEmailRouteModalProps = {
-  visible: boolean;
-  close: () => void;
-  initialEmailRoute?: RootSiteEmailRoutesAdminTableQueryData['email_routes_paginated']['entries'][0];
+export const action: ActionFunction = async ({ params: { id }, request }) => {
+  try {
+    if (request.method === 'DELETE') {
+      await client.mutate({
+        mutation: DeleteEmailRouteDocument,
+        variables: { id },
+      });
+      await client.resetStore();
+      return redirect('..');
+    } else if (request.method === 'PATCH') {
+      const emailRoute = (await request.json()) as EmailRouteInput;
+      await client.mutate({
+        mutation: UpdateEmailRouteDocument,
+        variables: { id, emailRoute },
+      });
+      return redirect('..');
+    } else {
+      return new Response(null, { status: 404 });
+    }
+  } catch (error) {
+    return error;
+  }
 };
 
-function EditEmailRouteModal({ visible, close, initialEmailRoute }: EditEmailRouteModalProps): JSX.Element {
+export const loader: LoaderFunction = async ({ params: { id } }) => {
+  const { data } = await client.query({ query: RootSiteSingleEmailRouteQueryDocument, variables: { id } });
+  return data;
+};
+
+function EditEmailRouteModal(): JSX.Element {
+  const data = useLoaderData() as RootSiteSingleEmailRouteQueryData;
+  const initialEmailRoute = data.email_route;
   const confirm = useConfirm();
   const [emailRoute, setEmailRoute] = useState(initialEmailRoute);
-  const apolloClient = useApolloClient();
+  const fetcher = useFetcher();
+  const error = fetcher.data instanceof Error ? fetcher.data : undefined;
+  const inProgress = fetcher.state !== 'idle';
 
-  const [updateMutate] = useUpdateEmailRouteMutation();
-  const update = async () => {
-    if (!initialEmailRoute || !emailRoute) {
-      return;
-    }
-
-    await updateMutate({
-      variables: {
-        id: initialEmailRoute.id,
-        emailRoute: buildEmailRouteInput(emailRoute),
-      },
-    });
-    close();
+  const updateClicked = () => {
+    fetcher.submit(buildEmailRouteInput(emailRoute), { method: 'PATCH', encType: 'application/json' });
   };
-  const [updateClicked, error, inProgress] = useAsyncFunction(update);
 
-  const [deleteMutate] = useDeleteEmailRouteMutation();
-  const deleteConfirmed = async () => {
-    if (!initialEmailRoute) {
-      return;
-    }
-
-    await deleteMutate({ variables: { id: initialEmailRoute.id } });
-    await apolloClient.resetStore();
-    close();
+  const deleteConfirmed = () => {
+    fetcher.submit({}, { method: 'DELETE' });
   };
 
   useEffect(() => {
@@ -52,7 +63,7 @@ function EditEmailRouteModal({ visible, close, initialEmailRoute }: EditEmailRou
   }, [initialEmailRoute]);
 
   return (
-    <Modal visible={visible} dialogClassName="modal-lg">
+    <Modal visible dialogClassName="modal-lg">
       <div className="modal-header">
         <div className="flex-grow-1">Edit email route</div>
         <button
@@ -77,9 +88,9 @@ function EditEmailRouteModal({ visible, close, initialEmailRoute }: EditEmailRou
       </div>
 
       <div className="modal-footer">
-        <button className="btn btn-secondary" type="button" onClick={close} disabled={inProgress}>
+        <Link to=".." className="btn btn-secondary">
           Cancel
-        </button>
+        </Link>
 
         <button className="btn btn-primary" type="button" onClick={updateClicked} disabled={inProgress}>
           Update email route
@@ -89,4 +100,4 @@ function EditEmailRouteModal({ visible, close, initialEmailRoute }: EditEmailRou
   );
 }
 
-export default EditEmailRouteModal;
+export const Component = EditEmailRouteModal;

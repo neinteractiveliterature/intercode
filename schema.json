@@ -26472,6 +26472,39 @@
               "args": []
             },
             {
+              "name": "email_route",
+              "description": "Returns a global email route by ID.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "EmailRoute",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": [
+                {
+                  "name": "id",
+                  "description": "The ID of the email route to find.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "ID",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ]
+            },
+            {
               "name": "email_routes_paginated",
               "description": "Returns a paginated list of the _global_ email routes configured in Intercode.\n(Convention-specific email routing is controlled via that convention's StaffPositions.)\n",
               "type": {

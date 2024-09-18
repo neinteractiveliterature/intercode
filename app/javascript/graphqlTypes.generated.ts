@@ -4500,6 +4500,8 @@ export type Query = {
   currentUser?: Maybe<User>;
   /** Returns the default currency for this site */
   defaultCurrencyCode: Scalars['String']['output'];
+  /** Returns a global email route by ID. */
+  email_route: EmailRoute;
   /**
    * Returns a paginated list of the _global_ email routes configured in Intercode.
    * (Convention-specific email routing is controlled via that convention's StaffPositions.)
@@ -4569,6 +4571,11 @@ export type QueryConventions_PaginatedArgs = {
   page?: InputMaybe<Scalars['Int']['input']>;
   per_page?: InputMaybe<Scalars['Int']['input']>;
   sort?: InputMaybe<Array<SortInput>>;
+};
+
+
+export type QueryEmail_RouteArgs = {
+  id: Scalars['ID']['input'];
 };
 
 

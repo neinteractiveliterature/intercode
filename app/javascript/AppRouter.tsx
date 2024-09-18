@@ -882,7 +882,14 @@ const rootSiteRoutes: RouteObject[] = [
       },
     ],
   },
-  { path: '/email_routes', lazy: () => import('./RootSiteEmailRoutesAdmin') },
+  {
+    path: '/email_routes',
+    lazy: () => import('./RootSiteEmailRoutesAdmin'),
+    children: [
+      { path: ':id', lazy: () => import('./RootSiteEmailRoutesAdmin/EditEmailRouteModal') },
+      { path: 'new', lazy: () => import('./RootSiteEmailRoutesAdmin/NewEmailRouteModal') },
+    ],
+  },
   {
     path: '/organizations',
     id: NamedRoute.OrganizationAdmin,

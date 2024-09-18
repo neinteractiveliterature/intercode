@@ -5402,6 +5402,16 @@ type Query {
   defaultCurrencyCode: String!
 
   """
+  Returns a global email route by ID.
+  """
+  email_route(
+    """
+    The ID of the email route to find.
+    """
+    id: ID!
+  ): EmailRoute!
+
+  """
   Returns a paginated list of the _global_ email routes configured in Intercode.
   (Convention-specific email routing is controlled via that convention's StaffPositions.)
   """
