@@ -1,47 +1,5 @@
 #import "./orderFields.graphql"
-#import "./adminProductFields.graphql"
 #import "./pricingStructureFields.graphql"
-
-query AdminOrdersQuery($page: Int, $perPage: Int, $filters: OrderFiltersInput, $sort: [SortInput!]) {
-  currentAbility {
-    can_create_orders
-    can_update_orders
-  }
-
-  convention: conventionByRequestHost {
-    id
-    timezone_name
-
-    orders_paginated(page: $page, per_page: $perPage, filters: $filters, sort: $sort) {
-      current_page
-      per_page
-      total_pages
-
-      entries {
-        id
-        ...AdminOrderFieldsFragment
-      }
-    }
-  }
-}
-
-query AdminProductsQuery {
-  convention: conventionByRequestHost {
-    id
-    products {
-      id
-      ...AdminProductFields
-    }
-    ticket_types {
-      id
-      description
-    }
-  }
-
-  currentAbility {
-    can_update_products
-  }
-}
 
 query AdminStoreAbilityQuery {
   currentAbility {
@@ -52,23 +10,6 @@ query AdminStoreAbilityQuery {
   convention: conventionByRequestHost {
     id
     timezone_name
-  }
-}
-
-query CartQuery {
-  convention: conventionByRequestHost {
-    id
-    name
-
-    my_profile {
-      id
-      name_without_nickname
-
-      current_pending_order {
-        id
-        ...CartOrderFields
-      }
-    }
   }
 }
 

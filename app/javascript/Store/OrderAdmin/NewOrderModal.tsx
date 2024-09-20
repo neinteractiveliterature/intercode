@@ -1,12 +1,10 @@
-import { useState, useEffect, useContext } from 'react';
-import { ApolloError, useApolloClient } from '@apollo/client';
+import { useState, useContext } from 'react';
+import { ApolloError } from '@apollo/client';
 import { Modal } from 'react-bootstrap4-modal';
 import { v4 as uuidv4 } from 'uuid';
 import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import AdminOrderForm from './AdminOrderForm';
-import AdminOrderEntriesTable from './AdminOrderEntriesTable';
-import useAsyncFunction from '../useAsyncFunction';
+import { useTranslation } from 'react-i18next';
 import {
   CouponApplication,
   Money,
@@ -16,10 +14,15 @@ import {
   Product,
   ProductVariant,
   UserConProfile,
-} from '../graphqlTypes.generated';
-import { useCreateCouponApplicationMutation, useCreateOrderMutation } from './mutations.generated';
-import AppRootContext from '../AppRootContext';
-import { useTranslation } from 'react-i18next';
+} from 'graphqlTypes.generated';
+import AppRootContext from 'AppRootContext';
+import AdminOrderForm from './AdminOrderForm';
+import AdminOrderEntriesTable from './AdminOrderEntriesTable';
+import { ActionFunction, redirect } from 'react-router';
+import { client } from 'useIntercodeApolloClient';
+import { CreateOrderDocument, CreateOrderMutationVariables } from './mutations.generated';
+import { Link, useFetcher } from 'react-router-dom';
+import { CreateCouponApplicationDocument } from 'Store/mutations.generated';
 
 export type CreatingOrder = Omit<OrderInput, 'payment_amount'> & {
   status: OrderStatus;
@@ -40,6 +43,43 @@ export type CreatingOrder = Omit<OrderInput, 'payment_amount'> & {
 
 type OrderEntryType = CreatingOrder['order_entries'][0];
 
+type ActionInput = {
+  createOrderVariables: CreateOrderMutationVariables;
+  couponCodes: string[];
+};
+
+export const action: ActionFunction = async ({ request }) => {
+  try {
+    const { createOrderVariables, couponCodes } = (await request.json()) as ActionInput;
+
+    const { data } = await client.mutate({
+      mutation: CreateOrderDocument,
+      variables: createOrderVariables,
+    });
+
+    if (!data) {
+      return;
+    }
+
+    await Promise.all(
+      couponCodes.map((code) =>
+        client.mutate({
+          mutation: CreateCouponApplicationDocument,
+          variables: {
+            orderId: data.createOrder.order.id,
+            couponCode: code,
+          },
+        }),
+      ),
+    );
+
+    await client.resetStore();
+    return redirect('..');
+  } catch (error) {
+    return error;
+  }
+};
+
 function buildBlankOrder(currencyCode: string): CreatingOrder {
   return {
     payment_amount: {
@@ -54,79 +94,51 @@ function buildBlankOrder(currencyCode: string): CreatingOrder {
   };
 }
 
-export type NewOrderModalProps = {
-  visible: boolean;
-  close: () => void;
-  initialOrder?: CreatingOrder;
-};
-
-function NewOrderModal({ visible, close, initialOrder }: NewOrderModalProps): JSX.Element {
+function NewOrderModal(): JSX.Element {
   const { t } = useTranslation();
   const confirm = useConfirm();
   const { defaultCurrencyCode } = useContext(AppRootContext);
-  const [order, setOrder] = useState(() => initialOrder ?? buildBlankOrder(defaultCurrencyCode));
-  const [createMutate] = useCreateOrderMutation();
-  const [createCouponApplicationMutate] = useCreateCouponApplicationMutation();
-  const apolloClient = useApolloClient();
+  const [order, setOrder] = useState(() => buildBlankOrder(defaultCurrencyCode));
+  const fetcher = useFetcher();
+  const createOrderError = fetcher.data instanceof Error ? fetcher.data : undefined;
+  const createOrderInProgress = fetcher.state !== 'idle';
 
-  useEffect(() => {
-    if (!visible) {
-      setOrder(initialOrder || buildBlankOrder(defaultCurrencyCode));
-    }
-  }, [visible, initialOrder, defaultCurrencyCode]);
-
-  const createOrder = async () => {
+  const createOrder = () => {
     const userConProfile = order.user_con_profile;
     const paymentAmount = order.payment_amount;
     if (!userConProfile || !paymentAmount) {
       return;
     }
 
-    const { data } = await createMutate({
-      variables: {
-        userConProfileId: userConProfile.id,
-        order: {
-          payment_amount: {
-            currency_code: paymentAmount.currency_code,
-            fractional: paymentAmount.fractional,
-          },
-          payment_note: order.payment_note,
+    const createOrderVariables: CreateOrderMutationVariables = {
+      userConProfileId: userConProfile.id,
+      order: {
+        payment_amount: {
+          currency_code: paymentAmount.currency_code,
+          fractional: paymentAmount.fractional,
         },
-        status: order.status,
-        orderEntries: order.order_entries.map((orderEntry) => ({
-          productId: orderEntry.product.id,
-          productVariantId: orderEntry.product_variant?.id,
-          quantity: orderEntry.quantity,
-          price_per_item: {
-            currency_code: orderEntry.price_per_item.currency_code,
-            fractional: orderEntry.price_per_item.fractional,
-          },
-          ticketId: orderEntry.ticket_id,
-        })),
+        payment_note: order.payment_note,
       },
-    });
+      status: order.status,
+      orderEntries: order.order_entries.map((orderEntry) => ({
+        productId: orderEntry.product.id,
+        productVariantId: orderEntry.product_variant?.id,
+        quantity: orderEntry.quantity,
+        price_per_item: {
+          currency_code: orderEntry.price_per_item.currency_code,
+          fractional: orderEntry.price_per_item.fractional,
+        },
+        ticketId: orderEntry.ticket_id,
+      })),
+    };
 
-    if (!data) {
-      return;
-    }
-
-    await Promise.all(
-      order.coupon_applications.map((application) =>
-        createCouponApplicationMutate({
-          variables: {
-            orderId: data.createOrder.order.id,
-            couponCode: application.coupon.code,
-          },
-        }),
-      ),
+    fetcher.submit(
+      {
+        createOrderVariables,
+        couponCodes: order.coupon_applications.map((app) => app.coupon.code),
+      } satisfies ActionInput,
+      { method: 'POST', encType: 'application/json' },
     );
-  };
-  const [createOrderAsync, createOrderError, createOrderInProgress] = useAsyncFunction(createOrder);
-
-  const createClicked = async () => {
-    await createOrderAsync();
-    await apolloClient.resetStore();
-    close();
   };
 
   const updateOrder = (attributes: Partial<CreatingOrder>) =>
@@ -171,7 +183,7 @@ function NewOrderModal({ visible, close, initialOrder }: NewOrderModalProps): JS
     }));
 
   return (
-    <Modal visible={visible && !confirm.visible} dialogClassName="modal-lg">
+    <Modal visible={!confirm.visible} dialogClassName="modal-lg">
       <div className="modal-header">{t('store.newOrder.header')}</div>
       <div className="modal-body">
         <AdminOrderForm order={order} updateOrder={updateOrder} />
@@ -190,10 +202,10 @@ function NewOrderModal({ visible, close, initialOrder }: NewOrderModalProps): JS
         <ErrorDisplay graphQLError={createOrderError as ApolloError} />
       </div>
       <div className="modal-footer">
-        <button type="button" className="btn btn-secondary" onClick={close} disabled={createOrderInProgress}>
+        <Link className="btn btn-secondary" to="..">
           {t('buttons.cancel')}
-        </button>
-        <button type="button" className="btn btn-primary" onClick={createClicked} disabled={createOrderInProgress}>
+        </Link>
+        <button type="button" className="btn btn-primary" onClick={createOrder} disabled={createOrderInProgress}>
           {t('buttons.create')}
         </button>
       </div>
@@ -201,4 +213,4 @@ function NewOrderModal({ visible, close, initialOrder }: NewOrderModalProps): JS
   );
 }
 
-export default NewOrderModal;
+export const Component = NewOrderModal;

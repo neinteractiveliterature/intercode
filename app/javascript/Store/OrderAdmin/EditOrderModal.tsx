@@ -12,7 +12,7 @@ import {
   useCreateCouponApplicationMutation,
   useDeleteCouponApplicationMutation,
 } from './mutations.generated';
-import { Coupon, CouponApplication, UpdateOrderEntryInput, UpdateOrderInput } from '../graphqlTypes.generated';
+import { Coupon, CouponApplication, UpdateOrderEntryInput, UpdateOrderInput } from 'graphqlTypes.generated';
 import { useTranslation } from 'react-i18next';
 
 export type EditOrderModalProps = {
@@ -153,4 +153,4 @@ function EditOrderModal({ order, closeModal }: EditOrderModalProps): JSX.Element
   );
 }
 
-export default EditOrderModal;
+export const Component = EditOrderModal;

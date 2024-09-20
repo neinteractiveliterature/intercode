@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo, useContext } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
-import { ApolloError } from '@apollo/client';
+import { ApolloError, useSuspenseQuery } from '@apollo/client';
 import { LinkAuthenticationElement, PaymentElement } from '@stripe/react-stripe-js';
 import { ErrorDisplay, MultipleChoiceInput } from '@neinteractiveliterature/litform';
 
@@ -9,12 +9,12 @@ import useAsyncFunction from '../useAsyncFunction';
 import useSubmitOrder from './useSubmitOrder';
 import formatMoney from '../formatMoney';
 import { Order, PaymentMode, Product } from '../graphqlTypes.generated';
-import { useCurrentPendingOrderPaymentIntentClientSecretQuerySuspenseQuery } from './queries.generated';
 
 import PoweredByStripeLogo from '../images/powered_by_stripe.svg';
 import intersection from 'lodash/intersection';
 import { useTranslation } from 'react-i18next';
 import AppRootContext from '../AppRootContext';
+import { CurrentPendingOrderPaymentIntentClientSecretQueryDocument } from './queries.generated';
 
 export type OrderPaymentModalContentsProps = {
   onCancel: () => void;
@@ -125,7 +125,7 @@ export type OrderPaymentModalProps = Omit<OrderPaymentModalContentsProps, 'order
 };
 
 function OrderPaymentModal({ visible, onCancel, onComplete, order }: OrderPaymentModalProps): JSX.Element {
-  const { data, error } = useCurrentPendingOrderPaymentIntentClientSecretQuerySuspenseQuery();
+  const { data, error } = useSuspenseQuery(CurrentPendingOrderPaymentIntentClientSecretQueryDocument);
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;

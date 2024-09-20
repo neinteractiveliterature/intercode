@@ -1,24 +1,23 @@
-import { useState, useContext, useMemo, useCallback } from 'react';
+import { useContext, useCallback } from 'react';
 import { Column, FilterProps } from 'react-table';
 import { DateTime } from 'luxon';
-import { useModal } from '@neinteractiveliterature/litform';
 
-import ArrayToSentenceCell from '../Tables/ArrayToSentenceCell';
-import ChoiceSetFilter from '../Tables/ChoiceSetFilter';
-import FreeTextFilter from '../Tables/FreeTextFilter';
-import MoneyCell from '../Tables/MoneyCell';
-import TableHeader from '../Tables/TableHeader';
-import useReactTableWithTheWorks, { QueryDataContext } from '../Tables/useReactTableWithTheWorks';
-import usePageTitle from '../usePageTitle';
-import { buildFieldFilterCodecs, FilterCodecs } from '../Tables/FilterUtils';
-import EditOrderModal from './EditOrderModal';
-import NewOrderModal from './NewOrderModal';
-import AppRootContext from '../AppRootContext';
-import { AdminOrdersQueryData, useAdminOrdersQuery } from './queries.generated';
-import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
-import { useAppDateTimeFormat } from '../TimeUtils';
+import ArrayToSentenceCell from 'Tables/ArrayToSentenceCell';
+import ChoiceSetFilter from 'Tables/ChoiceSetFilter';
+import FreeTextFilter from 'Tables/FreeTextFilter';
+import MoneyCell from 'Tables/MoneyCell';
+import TableHeader from 'Tables/TableHeader';
+import useReactTableWithTheWorks, { QueryDataContext } from 'Tables/useReactTableWithTheWorks';
+import usePageTitle from 'usePageTitle';
+import { buildFieldFilterCodecs, FilterCodecs } from 'Tables/FilterUtils';
+import AppRootContext from 'AppRootContext';
+import { AdminOrdersQueryData, AdminOrdersQueryDocument } from './queries.generated';
+import ReactTableWithTheWorks from 'Tables/ReactTableWithTheWorks';
+import { useAppDateTimeFormat } from 'TimeUtils';
 import { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
+import { Outlet, useNavigate } from 'react-router';
+import { Link } from 'react-router-dom';
 
 type OrderType = AdminOrdersQueryData['convention']['orders_paginated']['entries'][0];
 
@@ -104,9 +103,8 @@ function getPossibleColumns(t: TFunction): Column<OrderType>[] {
 
 function OrderAdmin(): JSX.Element {
   const { t } = useTranslation();
-  const newOrderModal = useModal();
-  const [editingOrderId, setEditingOrderId] = useState<string>();
   usePageTitle(t('admin.store.orders.title'));
+  const navigate = useNavigate();
 
   const getPossibleColumnsWithTranslation = useCallback(() => getPossibleColumns(t), [t]);
 
@@ -115,20 +113,10 @@ function OrderAdmin(): JSX.Element {
     getPages: ({ data }) => data?.convention.orders_paginated.total_pages,
     getPossibleColumns: getPossibleColumnsWithTranslation,
     storageKeyPrefix: 'orderAdmin',
-    useQuery: useAdminOrdersQuery,
+    query: AdminOrdersQueryDocument,
     decodeFilterValue: fieldFilterCodecs.decodeFilterValue,
     encodeFilterValue: fieldFilterCodecs.encodeFilterValue,
   });
-
-  // memo to my future self if I get the bright idea to rip this out again:
-  // if we don't do it this way, the order doesn't update in the EditOrderModal after it changes
-  const editingOrder = useMemo(
-    () =>
-      editingOrderId
-        ? queryData?.convention?.orders_paginated?.entries?.find((order) => order.id === editingOrderId)
-        : undefined,
-    [queryData, editingOrderId],
-  );
 
   return (
     <QueryDataContext.Provider value={queryData ?? {}}>
@@ -138,9 +126,9 @@ function OrderAdmin(): JSX.Element {
           exportUrl="/csv_exports/orders"
           renderLeftContent={() =>
             queryData?.currentAbility?.can_create_orders && (
-              <button type="button" className="btn btn-outline-primary ms-2" onClick={newOrderModal.open}>
+              <Link className="btn btn-outline-primary ms-2" to="./new">
                 <i className="bi-plus" /> New order
-              </button>
+              </Link>
             )
           }
         />
@@ -149,12 +137,11 @@ function OrderAdmin(): JSX.Element {
           tableInstance={tableInstance}
           loading={loading}
           onClickRow={
-            queryData?.currentAbility.can_update_orders ? (row) => setEditingOrderId(row.original.id) : undefined
+            queryData?.currentAbility.can_update_orders ? (row) => navigate(`./${row.original.id}`) : undefined
           }
         />
 
-        <NewOrderModal visible={newOrderModal.visible} close={newOrderModal.close} />
-        <EditOrderModal order={editingOrder} closeModal={() => setEditingOrderId(undefined)} />
+        <Outlet />
       </div>
     </QueryDataContext.Provider>
   );

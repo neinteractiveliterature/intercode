@@ -12,10 +12,10 @@ import AppRootContext from '../../AppRootContext';
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
 import { WithRealOrGeneratedId } from '../../GeneratedIdUtils';
 import { PricingStrategy } from '../../graphqlTypes.generated';
-import { AdminProductsQueryData } from '../queries.generated';
 import AdminProductVariantsTable from './AdminProductVariantsTable';
 import { EditingProductBase } from './EditingProductTypes';
 import PricingStructureForm from './PricingStructureForm';
+import { AdminProductsQueryData } from './queries.generated';
 
 export type EditProductFormProps<ProductType extends WithRealOrGeneratedId<EditingProductBase, string>> = {
   product: ProductType;

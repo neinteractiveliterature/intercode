@@ -10,15 +10,15 @@ import EditPricingStructureModal, {
 } from './EditPricingStructureModal';
 import EditAdminProductCard from './EditAdminProductCard';
 import scrollToLocationHash from '../../scrollToLocationHash';
-import { AdminProductsQueryData, AdminProductsQueryDocument } from '../queries.generated';
+import { AdminProductsQueryData, AdminProductsQueryDocument } from './queries.generated';
 import { duplicateProductForEditing, EditingProduct } from './EditingProductTypes';
 import { getRealOrGeneratedId, realOrGeneratedIdsMatch } from '../../GeneratedIdUtils';
 import { ActionFunction, json, LoaderFunction, useLoaderData } from 'react-router';
 import { client } from '../../useIntercodeApolloClient';
 import { Convention } from 'graphqlTypes.generated';
-import { CreateProductDocument } from 'Store/mutations.generated';
 import { AdminProductFieldsFragmentDoc } from 'Store/adminProductFields.generated';
 import { parseProductFormData } from 'Store/buildProductInput';
+import { CreateProductDocument } from './mutations.generated';
 
 export const action: ActionFunction = async ({ request }) => {
   try {

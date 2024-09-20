@@ -3,12 +3,7 @@ import Select from 'react-select';
 import { ApolloError } from '@apollo/client';
 import { parseIntOrNull, useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import formatMoney from '../formatMoney';
-import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
-import InPlaceMoneyEditor from './InPlaceMoneyEditor';
-import ProductSelect from '../BuiltInFormControls/ProductSelect';
-import useAsyncFunction from '../useAsyncFunction';
-import ApplyCouponControl from './ApplyCouponControl';
+import { useTranslation } from 'react-i18next';
 import {
   Coupon,
   CouponApplication,
@@ -17,8 +12,13 @@ import {
   PricingStructure,
   Product,
   ProductVariant,
-} from '../graphqlTypes.generated';
-import { useTranslation } from 'react-i18next';
+} from 'graphqlTypes.generated';
+import InPlaceEditor from 'BuiltInFormControls/InPlaceEditor';
+import InPlaceMoneyEditor from 'Store/InPlaceMoneyEditor';
+import formatMoney from 'formatMoney';
+import ProductSelect from 'BuiltInFormControls/ProductSelect';
+import ApplyCouponControl from 'Store/ApplyCouponControl';
+import useAsyncFunction from 'useAsyncFunction';
 
 type ProductVariantType = Pick<ProductVariant, '__typename' | 'name'> & {
   id: string;

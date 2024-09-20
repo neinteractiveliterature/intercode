@@ -1,0 +1,18 @@
+#import "../orderFields.graphql"
+
+query CartQuery {
+  convention: conventionByRequestHost {
+    id
+    name
+
+    my_profile {
+      id
+      name_without_nickname
+
+      current_pending_order {
+        id
+        ...CartOrderFields
+      }
+    }
+  }
+}

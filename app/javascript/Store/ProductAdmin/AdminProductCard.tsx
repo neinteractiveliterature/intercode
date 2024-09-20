@@ -2,12 +2,12 @@ import classNames from 'classnames';
 import { ErrorDisplay, useConfirm } from '@neinteractiveliterature/litform';
 
 import AdminProductVariantsTable from './AdminProductVariantsTable';
-import { AdminProductsQueryData } from '../queries.generated';
 import { EditingProductWithRealId } from './EditingProductTypes';
 import { useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
 import { useFetcher } from 'react-router-dom';
 import { AdminPricingStructureDescription } from 'Store/describePricingStructure';
+import { AdminProductsQueryData } from './queries.generated';
 
 export type AdminProductCardProps = {
   currentAbility: AdminProductsQueryData['currentAbility'];

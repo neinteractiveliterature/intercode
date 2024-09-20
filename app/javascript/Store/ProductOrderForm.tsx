@@ -11,17 +11,18 @@ import {
 import formatMoney from '../formatMoney';
 import sortProductVariants from './sortProductVariants';
 import useAsyncFunction from '../useAsyncFunction';
-import { CartQueryDocument, OrderFormProductQueryDocument } from './queries.generated';
-import {
-  AddOrderEntryToCurrentPendingOrderDocument,
-  AddOrderEntryToCurrentPendingOrderMutationData,
-} from './mutations.generated';
+import { OrderFormProductQueryDocument } from './queries.generated';
 import { Money, PayWhatYouWantValue, PricingStrategy } from '../graphqlTypes.generated';
 import { Trans, useTranslation } from 'react-i18next';
 import MoneyInput from './MoneyInput';
 import buildMoneyInput from './buildMoneyInput';
 import { client } from '../useIntercodeApolloClient';
 import { PayWhatYouWantRangeDescription } from './describePricingStructure';
+import {
+  AddOrderEntryToCurrentPendingOrderDocument,
+  AddOrderEntryToCurrentPendingOrderMutationData,
+} from './Cart/mutations.generated';
+import { CartQueryDocument } from './Cart/queries.generated';
 
 export type ProductOrderFormProps = {
   productId: string;
@@ -67,6 +68,7 @@ export default function ProductOrderForm({ productId, onAddedToCart, runId }: Pr
         runId,
       },
       refetchQueries: [{ query: CartQueryDocument }],
+      awaitRefetchQueries: true,
     });
     const orderEntry = result.data?.addOrderEntryToCurrentPendingOrder.order_entry;
     if (orderEntry) {

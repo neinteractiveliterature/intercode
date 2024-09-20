@@ -11,8 +11,8 @@ import { OrderPaymentModalContents, OrderPaymentModalContentsProps } from '../..
 import { useHumanizeTime, useISODateTimeInAppZone } from '../../TimeUtils';
 import useAsyncFunction from '../../useAsyncFunction';
 import { CurrentPendingOrderPaymentIntentClientSecretQueryDocument } from '../../Store/queries.generated';
-import { DeleteOrderEntryDocument } from '../../Store/mutations.generated';
 import { client } from '../../useIntercodeApolloClient';
+import { DeleteOrderEntryDocument } from 'Store/OrderAdmin/mutations.generated';
 
 export type EventTicketPurchaseModalProps = {
   visible: boolean;

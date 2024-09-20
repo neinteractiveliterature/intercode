@@ -1,10 +1,10 @@
 import { useCallback } from 'react';
 import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
-import { useApolloClient } from '@apollo/client';
+import { useApolloClient, useMutation } from '@apollo/client';
 import { PaymentIntent } from '@stripe/stripe-js';
 
-import { useSubmitOrderMutation } from './mutations.generated';
 import { PaymentMode } from '../graphqlTypes.generated';
+import { SubmitOrderDocument } from './Cart/mutations.generated';
 
 export default function useSubmitOrder(): (
   orderId: string,
@@ -14,7 +14,7 @@ export default function useSubmitOrder(): (
   const stripe = useStripe();
   const elements = useElements();
   const apolloClient = useApolloClient();
-  const [mutate] = useSubmitOrderMutation();
+  const [mutate] = useMutation(SubmitOrderDocument);
   const submitOrder = useCallback(
     async (orderId: string, paymentMode: PaymentMode, { paymentIntentId }: { paymentIntentId?: string }) => {
       await mutate({

@@ -1,9 +1,9 @@
 import { Product } from 'graphqlTypes.generated';
 import { ActionFunction, json } from 'react-router';
 import { parseProductFormData } from 'Store/buildProductInput';
-import { DeleteProductDocument, UpdateProductDocument } from 'Store/mutations.generated';
 import invariant from 'tiny-invariant';
 import { client } from 'useIntercodeApolloClient';
+import { DeleteProductDocument, UpdateProductDocument } from './mutations.generated';
 
 export const action: ActionFunction = async ({ params: { id }, request }) => {
   invariant(id != null);

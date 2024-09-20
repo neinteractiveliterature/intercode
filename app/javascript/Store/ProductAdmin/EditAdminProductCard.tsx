@@ -3,12 +3,12 @@ import { ApolloError } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { buildProductFormData } from '../buildProductInput';
-import { AdminProductsQueryData } from '../queries.generated';
 import { EditingProduct } from './EditingProductTypes';
 import { hasRealId } from '../../GeneratedIdUtils';
 import EditProductForm from './EditProductForm';
 import { useTranslation } from 'react-i18next';
 import { useFetcher } from 'react-router-dom';
+import { AdminProductsQueryData } from './queries.generated';
 
 export type EditAdminProductCardProps = {
   initialProduct: EditingProduct;

@@ -586,12 +586,30 @@ const commonInConventionRoutes: RouteObject[] = [
           { path: 'new', lazy: () => import('./Store/CouponAdmin/NewCouponModal') },
         ],
       },
-      { path: 'orders', lazy: () => import('./Store/OrderAdmin') },
+      {
+        path: 'orders',
+        lazy: () => import('./Store/OrderAdmin'),
+        children: [
+          { path: ':id', lazy: () => import('./Store/OrderAdmin/EditOrderModal') },
+          { path: 'new', lazy: () => import('./Store/OrderAdmin/NewOrderModal') },
+        ],
+      },
       { path: 'order_summary', lazy: () => import('./Store/OrderSummary') },
       { index: true, loader: () => redirect('./products') },
     ],
   },
-  { path: '/cart', lazy: () => import('./Store/Cart') },
+  {
+    path: '/cart',
+    lazy: () => import('./Store/Cart'),
+    children: [
+      { path: 'order_entries/:id', lazy: () => import('./Store/Cart/order_entries/$id') },
+      {
+        path: 'coupon_applications',
+        lazy: () => import('./Store/Cart/coupon_applications/route'),
+        children: [{ path: ':id', lazy: () => import('./Store/Cart/coupon_applications/$id') }],
+      },
+    ],
+  },
   { path: '/clickwrap_agreement', lazy: () => import('./ClickwrapAgreement') },
   { path: '/convention/edit', lazy: () => import('./ConventionAdmin') },
   { path: '/events', children: eventsRoutes },
