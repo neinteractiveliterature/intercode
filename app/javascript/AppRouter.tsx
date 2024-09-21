@@ -814,7 +814,6 @@ const commonInConventionRoutes: RouteObject[] = [
     path: '/user_con_profiles',
     element: <AuthorizationRequiredRouteGuard abilities={['can_read_user_con_profiles']} />,
     children: [
-      { path: 'new', lazy: () => import('./UserConProfiles/AttendeesPage') },
       {
         path: ':id',
         id: NamedRoute.AdminUserConProfile,
@@ -831,7 +830,11 @@ const commonInConventionRoutes: RouteObject[] = [
           { index: true, lazy: () => import('./UserConProfiles/UserConProfileAdminDisplay') },
         ],
       },
-      { index: true, lazy: () => import('./UserConProfiles/AttendeesPage') },
+      {
+        path: '',
+        lazy: () => import('./UserConProfiles/AttendeesPage'),
+        children: [{ path: 'new', lazy: () => import('./UserConProfiles/AddAttendeeModal') }],
+      },
     ],
   },
 ];

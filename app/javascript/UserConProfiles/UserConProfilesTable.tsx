@@ -1,11 +1,10 @@
 import { useContext, useMemo } from 'react';
-import { Link, useMatch, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Column, CellProps, FilterProps } from 'react-table';
 import { useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
 import { DateTime } from 'luxon';
 
-import AddAttendeeModal from './AddAttendeeModal';
 import BooleanCell from '../Tables/BooleanCell';
 import BooleanChoiceSetFilter from '../Tables/BooleanChoiceSetFilter';
 import { buildFieldFilterCodecs, FilterCodecs } from '../Tables/FilterUtils';
@@ -19,7 +18,7 @@ import TableHeader from '../Tables/TableHeader';
 import UserConProfileWithGravatarCell from '../Tables/UserConProfileWithGravatarCell';
 import {
   UserConProfilesTableUserConProfilesQueryData,
-  useUserConProfilesTableUserConProfilesQuery,
+  UserConProfilesTableUserConProfilesQueryDocument,
   UserConProfilesTableUserConProfilesQueryVariables,
 } from './queries.generated';
 import { FormItemValueType, TypedFormItem } from '../FormAdmin/FormItemUtils';
@@ -304,7 +303,6 @@ function UserConProfilesTable({ defaultVisibleColumns }: UserConProfilesTablePro
   const { timezoneName } = useContext(AppRootContext);
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const newProfileMatch = useMatch('/user_con_profiles/new');
   const getPossibleColumnsWithTranslation = useMemo(
     () => (data: UserConProfilesTableUserConProfilesQueryData) =>
       getPossibleColumns(data, t, getSortedParsedFormItems(data.convention.user_con_profile_form), timezoneName),
@@ -321,7 +319,7 @@ function UserConProfilesTable({ defaultVisibleColumns }: UserConProfilesTablePro
     getData: ({ data }) => data?.convention.user_con_profiles_paginated.entries,
     getPages: ({ data }) => data?.convention.user_con_profiles_paginated.total_pages,
     getPossibleColumns: getPossibleColumnsWithTranslation,
-    useQuery: useUserConProfilesTableUserConProfilesQuery,
+    query: UserConProfilesTableUserConProfilesQueryDocument,
     storageKeyPrefix: 'userConProfiles',
   });
 
@@ -349,8 +347,6 @@ function UserConProfilesTable({ defaultVisibleColumns }: UserConProfilesTablePro
             navigate(`/user_con_profiles/${row.original.id}`);
           }}
         />
-
-        <AddAttendeeModal conventionName={queryData?.convention.name ?? ''} visible={newProfileMatch != null} />
       </div>
     </UserConProfilesTableQueryDataContext.Provider>
   );

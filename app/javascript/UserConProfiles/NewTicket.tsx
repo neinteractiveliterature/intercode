@@ -1,57 +1,60 @@
 import { useCallback } from 'react';
-import { useNavigate, useRouteLoaderData } from 'react-router-dom';
+import { ActionFunction, redirect, useFetcher, useRouteLoaderData } from 'react-router-dom';
 
 import TicketForm from './TicketForm';
 import usePageTitle from '../usePageTitle';
-import { UserConProfileAdminQueryData, UserConProfileAdminQueryDocument } from './queries.generated';
-import { useCreateTicketMutation } from './mutations.generated';
+import { UserConProfileAdminQueryData, UserConProfileAdminTicketFieldsFragmentDoc } from './queries.generated';
 import { TicketInput } from '../graphqlTypes.generated';
 import { NamedRoute } from '../AppRouter';
+import { client } from 'useIntercodeApolloClient';
+import { CreateTicketDocument, CreateTicketMutationVariables } from './mutations.generated';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
+import { ApolloError } from '@apollo/client';
+
+export const action: ActionFunction = async ({ request }) => {
+  try {
+    const variables = (await request.json()) as CreateTicketMutationVariables;
+    await client.mutate({
+      mutation: CreateTicketDocument,
+      variables,
+      update: (cache, result) => {
+        const ticket = result.data?.createTicket.ticket;
+        if (ticket) {
+          const ref = cache.writeFragment({
+            fragment: UserConProfileAdminTicketFieldsFragmentDoc,
+            fragmentName: 'UserConProfileAdminTicketFields',
+            data: ticket,
+          });
+          cache.modify({
+            id: cache.identify({ __typename: 'UserConProfile', id: variables.userConProfileId }),
+            fields: {
+              ticket: () => ref,
+            },
+          });
+        }
+      },
+    });
+    return redirect(`/user_con_profiles/${variables.userConProfileId}`);
+  } catch (error) {
+    return error;
+  }
+};
 
 function NewTicket() {
   const data = useRouteLoaderData(NamedRoute.AdminUserConProfile) as UserConProfileAdminQueryData;
-  const navigate = useNavigate();
-  const [createTicket] = useCreateTicketMutation({
-    update: (cache, result) => {
-      const cacheData = cache.readQuery<UserConProfileAdminQueryData>({
-        query: UserConProfileAdminQueryDocument,
-        variables: { id: data.convention.user_con_profile.id },
-      });
-      if (!cacheData) {
-        return;
-      }
-
-      cache.writeQuery<UserConProfileAdminQueryData>({
-        query: UserConProfileAdminQueryDocument,
-        variables: { id: data.convention.user_con_profile.id },
-        data: {
-          ...cacheData,
-          convention: {
-            ...cacheData.convention,
-            user_con_profile: {
-              ...cacheData.convention.user_con_profile,
-              ticket: result.data?.createTicket?.ticket,
-            },
-          },
-        },
-      });
-    },
-  });
+  const fetcher = useFetcher();
+  const error = fetcher.data instanceof Error ? fetcher.data : undefined;
 
   const onSubmit = useCallback(
-    async (ticketInput: TicketInput) => {
-      if (data.convention.user_con_profile.id == null) {
-        throw new Error('userConProfileId not found in params');
-      }
-      await createTicket({
-        variables: {
+    async (ticketInput: TicketInput) =>
+      fetcher.submit(
+        {
           userConProfileId: data.convention.user_con_profile.id,
           ticket: ticketInput,
-        },
-      });
-      navigate(`/user_con_profiles/${data.convention.user_con_profile.id}`);
-    },
-    [createTicket, navigate, data.convention.user_con_profile.id],
+        } satisfies CreateTicketMutationVariables,
+        { method: 'POST', encType: 'application/json' },
+      ),
+    [fetcher, data.convention.user_con_profile.id],
   );
 
   usePageTitle(`New ${data.convention.ticket_name} for ${data.convention.user_con_profile.name}`);
@@ -78,6 +81,8 @@ function NewTicket() {
         submitCaption={`Create ${convention.ticket_name}`}
         userConProfile={userConProfile}
       />
+
+      <ErrorDisplay graphQLError={error as ApolloError | undefined} />
     </>
   );
 }

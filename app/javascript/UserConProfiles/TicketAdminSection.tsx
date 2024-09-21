@@ -1,26 +1,25 @@
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
-// eslint-disable-next-line no-restricted-imports
-import { useQuery } from '@apollo/client';
+import { useSuspenseQuery } from '@apollo/client';
 import { DateTime } from 'luxon';
-import { useModal, useConfirm, ErrorDisplay, LoadingIndicator } from '@neinteractiveliterature/litform';
+import { useModal, useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import ConvertToEventProvidedTicketModal from './ConvertToEventProvidedTicketModal';
 import formatMoney from '../formatMoney';
 import AddOrderToTicketButton, { AddOrderToTicketButtonProps } from './AddOrderToTicketButton';
 import AppRootContext from '../AppRootContext';
-import { Event } from '../graphqlTypes.generated';
-import { useDeleteTicketMutation } from './mutations.generated';
+import { Event, Ticket } from '../graphqlTypes.generated';
 import {
   UserConProfileAdminQueryData,
   TicketAdminWithTicketAbilityQueryData,
   TicketAdminWithoutTicketAbilityQueryData,
   TicketAdminWithTicketAbilityQueryDocument,
   TicketAdminWithoutTicketAbilityQueryDocument,
-  UserConProfileAdminQueryDocument,
 } from './queries.generated';
 import { useAppDateTimeFormat } from '../TimeUtils';
 import { useTranslation } from 'react-i18next';
+import { client } from 'useIntercodeApolloClient';
+import { DeleteTicketDocument } from './mutations.generated';
 
 type UserConProfileData = UserConProfileAdminQueryData['convention']['user_con_profile'];
 type TicketData = NonNullable<UserConProfileData['ticket']>;
@@ -52,12 +51,12 @@ function TicketAdminControls({ convention, userConProfile }: TicketAdminControls
     ? TicketAdminWithTicketAbilityQueryDocument
     : TicketAdminWithoutTicketAbilityQueryDocument;
 
-  const { data, loading, error } = useQuery<
-    TicketAdminWithTicketAbilityQueryData | TicketAdminWithoutTicketAbilityQueryData
-  >(query, {
-    variables: { ticketId: (userConProfile.ticket || {}).id },
-  });
-  const [deleteTicketMutate] = useDeleteTicketMutation();
+  const { data } = useSuspenseQuery<TicketAdminWithTicketAbilityQueryData | TicketAdminWithoutTicketAbilityQueryData>(
+    query,
+    {
+      variables: { ticketId: (userConProfile.ticket || {}).id },
+    },
+  );
   const confirm = useConfirm();
   const convertModal = useModal();
 
@@ -65,45 +64,18 @@ function TicketAdminControls({ convention, userConProfile }: TicketAdminControls
     if (!userConProfile.ticket) {
       throw new Error(`User profile has no ${convention.ticket_name} to delete`);
     }
-    await deleteTicketMutate({
-      variables: {
-        ticketId: userConProfile.ticket.id,
-        refund,
-      },
+    const ticketId = userConProfile.ticket.id;
+    await client.mutate({
+      mutation: DeleteTicketDocument,
+      variables: { ticketId, refund },
       update: (cache) => {
-        const variables = { id: userConProfile.id };
-        const cacheData = cache.readQuery<UserConProfileAdminQueryData>({
-          query: UserConProfileAdminQueryDocument,
-          variables,
-        });
-        if (!cacheData) {
-          return;
-        }
-        cache.writeQuery<UserConProfileAdminQueryData>({
-          query: UserConProfileAdminQueryDocument,
-          variables,
-          data: {
-            ...cacheData,
-            convention: {
-              ...cacheData.convention,
-              user_con_profile: {
-                ...cacheData.convention.user_con_profile,
-                ticket: null,
-              },
-            },
-          },
+        cache.modify<Ticket>({
+          id: cache.identify({ __typename: 'Ticket', id: ticketId }),
+          fields: (value, { DELETE }) => DELETE,
         });
       },
     });
   };
-
-  if (loading) {
-    return <LoadingIndicator iconSet="bootstrap-icons" />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
 
   const buttons: JSX.Element[] = [];
   const currentAbility = data?.currentAbility;
