@@ -1,5 +1,5 @@
 import { fixupConfigRules, fixupPluginRules, includeIgnoreFile } from '@eslint/compat';
-import jest from 'eslint-plugin-jest';
+import vitest from 'eslint-plugin-vitest';
 import jsxA11Y from 'eslint-plugin-jsx-a11y';
 import reactHooks from 'eslint-plugin-react-hooks';
 import i18Next from 'eslint-plugin-i18next';
@@ -53,7 +53,6 @@ export default [
       'plugin:react/recommended',
       'plugin:react/jsx-runtime',
       'plugin:react-hooks/recommended',
-      'plugin:jest/recommended',
       'plugin:jsx-a11y/recommended',
       'prettier',
     ),
@@ -80,7 +79,7 @@ export default [
   },
   {
     plugins: {
-      jest: fixupPluginRules(jest),
+      vitest,
       'jsx-a11y': fixupPluginRules(jsxA11Y),
       'react-hooks': fixupPluginRules(reactHooks),
       '@typescript-eslint': fixupPluginRules(typescriptEslint),
@@ -92,7 +91,7 @@ export default [
         ...globals.browser,
         ...Object.fromEntries(Object.entries(globals.jquery).map(([key]) => [key, 'off'])),
         ...globals.node,
-        ...jest.environments.globals.globals,
+        ...vitest.environments.env.globals,
       },
 
       parser: tsParser,
@@ -123,11 +122,13 @@ export default [
     },
 
     rules: {
+      ...vitest.configs.recommended.rules,
+
       camelcase: 'off',
-      'jest/no-disabled-tests': 'warn',
-      'jest/no-focused-tests': 'error',
-      'jest/no-identical-title': 'error',
-      'jest/valid-expect': 'error',
+      'vitest/no-disabled-tests': 'warn',
+      'vitest/no-focused-tests': 'error',
+      'vitest/no-identical-title': 'error',
+      'vitest/valid-expect': 'error',
 
       'no-underscore-dangle': [
         'error',
