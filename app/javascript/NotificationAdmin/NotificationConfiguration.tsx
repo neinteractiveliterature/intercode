@@ -5,9 +5,7 @@ import {
   LoaderFunction,
   redirect,
   useActionData,
-  useFetcher,
   useLoaderData,
-  useNavigate,
   useNavigation,
 } from 'react-router-dom';
 import { ErrorDisplay, usePropertySetters } from '@neinteractiveliterature/litform';
@@ -15,7 +13,6 @@ import { ErrorDisplay, usePropertySetters } from '@neinteractiveliterature/litfo
 import NotificationsConfig from '../../../config/notifications.json';
 import LiquidInput from '../BuiltInFormControls/LiquidInput';
 import { NotificationAdminQueryData, NotificationAdminQueryDocument } from './queries.generated';
-import FourOhFourPage from '../FourOhFourPage';
 import { client } from '../useIntercodeApolloClient';
 import { ApolloError } from '@apollo/client';
 import { UpdateNotificationTemplateDocument } from './mutations.generated';
@@ -24,7 +21,7 @@ export const action: ActionFunction = async ({ params: { category, event }, requ
   try {
     const formData = await request.formData();
 
-    const { data } = await client.mutate({
+    await client.mutate({
       mutation: UpdateNotificationTemplateDocument,
       variables: {
         eventKey: `${category}/${event}`,
@@ -69,7 +66,6 @@ export const loader: LoaderFunction = async ({ params }) => {
 
 function NotificationConfigurationForm() {
   const { category, event, initialNotificationTemplate } = useLoaderData() as LoaderResult;
-  const navigate = useNavigate();
   const navigation = useNavigation();
   const data = useActionData();
   const updateError = data instanceof Error ? data : undefined;

@@ -10,7 +10,7 @@ Bundler.require(*Rails.groups)
 
 module Intercode
   class Application < Rails::Application
-    config.load_defaults 7.0
+    config.load_defaults 7.1
 
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
@@ -20,11 +20,7 @@ module Intercode
     config.hosts << ENV.fetch("ASSETS_HOST", nil) if ENV["ASSETS_HOST"].present?
     config.hosts << /.*#{Regexp.escape(ENV.fetch("INTERCODE_HOST", nil))}/ if ENV["INTERCODE_HOST"].present?
     config.hosts << ->(host) { Convention.where(domain: host).any? }
-    config.host_authorization = {
-      exclude: ->(request) do
-        request.path =~ %r{\A/healthz(\z|/)}
-      end
-    }
+    config.host_authorization = { exclude: ->(request) { request.path =~ %r{\A/healthz(\z|/)} } }
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers

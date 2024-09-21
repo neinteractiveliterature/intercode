@@ -246,5 +246,5 @@ Doorkeeper::JWT.configure do
 
   # Specify encryption type (https://github.com/progrium/ruby-jwt). Defaults to
   # `nil`.
-  encryption_method :RS256
+  signing_method :RS256
 end

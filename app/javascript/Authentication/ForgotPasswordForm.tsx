@@ -4,7 +4,6 @@ import { useTranslation, Trans } from 'react-i18next';
 import { BootstrapFormInput, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import AuthenticationModalContext from './AuthenticationModalContext';
-import AuthenticityTokensContext from '../AuthenticityTokensContext';
 import useAsyncFunction from '../useAsyncFunction';
 import humanize from '../humanize';
 import AuthenticityTokensManager from '../AuthenticityTokensContext';
