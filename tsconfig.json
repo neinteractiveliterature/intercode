@@ -14,7 +14,8 @@
     "noImplicitAny": true,
     "skipLibCheck": true,
     "maxNodeModuleJsDepth": 10,
-    "baseUrl": "./app/javascript"
+    "baseUrl": "./app/javascript",
+    "types": ["vitest/globals", "@types/webpack-env"]
   },
   "include": [
     "./app/javascript/",

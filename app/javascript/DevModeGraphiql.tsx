@@ -21,7 +21,7 @@ function DevModeGraphiql({ authenticityTokens }: DevModeGraphiqlProps): JSX.Elem
   useCallback(() => {
     AuthenticityTokensManager.instance.setTokens(authenticityTokens);
   }, [authenticityTokens]);
-  const link = useIntercodeApolloLink('/graphql');
+  const link = useIntercodeApolloLink(new URL('/graphql', window.location.href));
 
   // @ts-expect-error This might be really broken but I need to ship a patch release ASAP and this is less important
   const fetcher: Fetcher = useCallback(

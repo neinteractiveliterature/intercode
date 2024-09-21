@@ -9,7 +9,7 @@ import { EditingRegistrationBucket } from '../../../app/javascript/RegistrationP
 import { vi } from 'vitest';
 
 describe('RegistrationPolicyEditor', () => {
-  const onChange = vi.fn<() => [RegistrationPolicy]>();
+  const onChange = vi.fn<(rp: RegistrationPolicy) => void>();
   beforeEach(onChange.mockReset);
 
   const defaultRegistrationPolicyBucket: RegistrationPolicyBucket = {
