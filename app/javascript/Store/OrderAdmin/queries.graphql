@@ -22,3 +22,14 @@ query AdminOrdersQuery($page: Int, $perPage: Int, $filters: OrderFiltersInput, $
     }
   }
 }
+
+query AdminOrderQuery($id: ID!) {
+  convention: conventionByRequestHost {
+    id
+
+    order(id: $id) {
+      id
+      ...AdminOrderFieldsFragment
+    }
+  }
+}

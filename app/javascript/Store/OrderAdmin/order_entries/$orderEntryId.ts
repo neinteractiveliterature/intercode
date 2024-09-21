@@ -1,28 +1,28 @@
-import { OrderEntry } from 'graphqlTypes.generated';
+import { OrderEntry, OrderEntryInput } from 'graphqlTypes.generated';
 import { ActionFunction, json } from 'react-router';
-import { DeleteOrderEntryDocument, UpdateOrderEntryDocument } from 'Store/OrderAdmin/mutations.generated';
+import { AdminDeleteOrderEntryDocument, AdminUpdateOrderEntryDocument } from 'Store/OrderAdmin/mutations.generated';
 import { client } from 'useIntercodeApolloClient';
 
-export const action: ActionFunction = async ({ params: { id }, request }) => {
+export const action: ActionFunction = async ({ params: { orderEntryId }, request }) => {
   try {
     if (request.method === 'DELETE') {
       const { data } = await client.mutate({
-        mutation: DeleteOrderEntryDocument,
-        variables: { input: { id } },
+        mutation: AdminDeleteOrderEntryDocument,
+        variables: { input: { id: orderEntryId } },
         update: (cache) => {
           cache.modify<OrderEntry>({
-            id: cache.identify({ __typename: 'OrderEntry', id }),
+            id: cache.identify({ __typename: 'OrderEntry', id: orderEntryId }),
             fields: (value, { DELETE }) => DELETE,
           });
         },
       });
       return json(data);
     } else if (request.method === 'PATCH') {
-      const formData = await request.formData();
+      const orderEntry = (await request.json()) as OrderEntryInput;
       const { data } = await client.mutate({
-        mutation: UpdateOrderEntryDocument,
+        mutation: AdminUpdateOrderEntryDocument,
         variables: {
-          input: { id, order_entry: { quantity: Number.parseInt(formData.get('quantity')?.toString() ?? '') } },
+          input: { id: orderEntryId, order_entry: orderEntry },
         },
       });
       return json(data);

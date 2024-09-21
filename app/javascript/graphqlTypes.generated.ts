@@ -789,6 +789,8 @@ export type Convention = CmsParent & {
   open_graph_image?: Maybe<ActiveStorageAttachment>;
   /** @deprecated Please use the open_graph_image field instead. */
   open_graph_image_url?: Maybe<Scalars['String']['output']>;
+  /** Find an order by ID. */
+  order: Order;
   orders_paginated: OrdersPagination;
   /** The organization in charge of this convention. */
   organization?: Maybe<Organization>;
@@ -1103,6 +1105,19 @@ export type ConventionFullTextSearchArgs = {
  */
 export type ConventionNotifier_Liquid_AssignsArgs = {
   eventKey: Scalars['String']['input'];
+};
+
+
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
+export type ConventionOrderArgs = {
+  id: Scalars['ID']['input'];
 };
 
 

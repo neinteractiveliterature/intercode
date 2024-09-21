@@ -16,8 +16,48 @@ import ReactTableWithTheWorks from 'Tables/ReactTableWithTheWorks';
 import { useAppDateTimeFormat } from 'TimeUtils';
 import { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
-import { Outlet, useNavigate } from 'react-router';
+import { ActionFunction, json, Outlet, useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
+import { CreateOrderDocument, CreateOrderMutationVariables } from './mutations.generated';
+import { client } from 'useIntercodeApolloClient';
+import { CreateCouponApplicationDocument } from 'Store/mutations.generated';
+
+export type CreateOrderActionInput = {
+  createOrderVariables: CreateOrderMutationVariables;
+  couponCodes: string[];
+};
+
+export const action: ActionFunction = async ({ request }) => {
+  try {
+    const { createOrderVariables, couponCodes } = (await request.json()) as CreateOrderActionInput;
+
+    const { data } = await client.mutate({
+      mutation: CreateOrderDocument,
+      variables: createOrderVariables,
+    });
+
+    if (!data) {
+      return;
+    }
+
+    await Promise.all(
+      couponCodes.map((code) =>
+        client.mutate({
+          mutation: CreateCouponApplicationDocument,
+          variables: {
+            orderId: data.createOrder.order.id,
+            couponCode: code,
+          },
+        }),
+      ),
+    );
+
+    await client.resetStore();
+    return json(data);
+  } catch (error) {
+    return error;
+  }
+};
 
 type OrderType = AdminOrdersQueryData['convention']['orders_paginated']['entries'][0];
 

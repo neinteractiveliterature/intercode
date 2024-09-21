@@ -1,22 +1,22 @@
 import { useCallback } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
-import { useConfirm } from '@neinteractiveliterature/litform';
+import { ErrorDisplay, useConfirm } from '@neinteractiveliterature/litform';
 
 import AdminOrderForm, { AdminOrderTypeWithId } from './AdminOrderForm';
 import AdminOrderEntriesTable, { AdminOrderEntryWithIdType } from './AdminOrderEntriesTable';
 import {
-  useAdminCreateOrderEntryMutation,
-  useAdminDeleteOrderEntryMutation,
-  useAdminUpdateOrderEntryMutation,
-  useAdminUpdateOrderMutation,
-  useCreateCouponApplicationMutation,
-  useDeleteCouponApplicationMutation,
-} from './mutations.generated';
-import { Coupon, CouponApplication, UpdateOrderEntryInput, UpdateOrderInput } from 'graphqlTypes.generated';
+  Coupon,
+  CouponApplication,
+  OrderEntryInput,
+  UpdateOrderEntryInput,
+  UpdateOrderInput,
+} from 'graphqlTypes.generated';
 import { useTranslation } from 'react-i18next';
+import { useFetcher } from 'react-router-dom';
+import { ApolloError } from '@apollo/client';
 
 export type EditOrderModalProps = {
-  order?: AdminOrderTypeWithId & {
+  order: AdminOrderTypeWithId & {
     order_entries: (Omit<AdminOrderEntryWithIdType, 'product'> & {
       product: NonNullable<AdminOrderEntryWithIdType['product']> & { id: string };
     })[];
@@ -28,99 +28,90 @@ export type EditOrderModalProps = {
   closeModal: () => void;
 };
 
-function EditOrderModal({ order, closeModal }: EditOrderModalProps): JSX.Element {
+export default function EditOrderModal({ order, closeModal }: EditOrderModalProps): JSX.Element {
   const { t } = useTranslation();
   const confirm = useConfirm();
-  const [updateMutate] = useAdminUpdateOrderMutation();
-  const [createOrderEntryMutate] = useAdminCreateOrderEntryMutation();
-  const [updateOrderEntryMutate] = useAdminUpdateOrderEntryMutation();
-  const [deleteOrderEntryMutate] = useAdminDeleteOrderEntryMutation();
-  const [createCouponApplicationMutate] = useCreateCouponApplicationMutation();
-  const [deleteCouponApplicationMutate] = useDeleteCouponApplicationMutation();
+  const fetcher = useFetcher();
+  const error = fetcher.data instanceof Error ? fetcher.data : undefined;
+  const createFetcher = useFetcher();
+  const createError = createFetcher.data instanceof Error ? createFetcher.data : undefined;
 
   const updateOrder = useCallback(
     (attributes: UpdateOrderInput['order']) => {
-      if (!order) {
-        return;
-      }
-      return updateMutate({
-        variables: {
-          id: order.id,
-          order: attributes,
-        },
+      const input: UpdateOrderInput['order'] = {
+        ...attributes,
+        payment_amount: attributes.payment_amount
+          ? { currency_code: attributes.payment_amount.currency_code, fractional: attributes.payment_amount.fractional }
+          : null,
+      };
+      fetcher.submit(input, {
+        action: `/admin_store/orders/${order.id}`,
+        method: 'PATCH',
+        encType: 'application/json',
       });
     },
-    [order, updateMutate],
+
+    [fetcher, order.id],
   );
 
   const createOrderEntry = useCallback(
-    async (orderEntry: NonNullable<EditOrderModalProps['order']>['order_entries'][0]) => {
-      if (!order) {
-        return;
-      }
-      await createOrderEntryMutate({
-        variables: {
-          input: {
-            orderId: order.id,
-            order_entry: {
-              productId: orderEntry.product.id,
-              productVariantId: orderEntry.product_variant?.id,
-              quantity: orderEntry.quantity,
-              price_per_item: {
-                currency_code: orderEntry.price_per_item.currency_code,
-                fractional: orderEntry.price_per_item.fractional,
-              },
-            },
-          },
+    (orderEntry: NonNullable<EditOrderModalProps['order']>['order_entries'][0]) => {
+      const attributes: OrderEntryInput = {
+        productId: orderEntry.product.id,
+        productVariantId: orderEntry.product_variant?.id,
+        quantity: orderEntry.quantity,
+        price_per_item: {
+          currency_code: orderEntry.price_per_item.currency_code,
+          fractional: orderEntry.price_per_item.fractional,
         },
+      };
+      createFetcher.submit(attributes, {
+        action: `/admin_store/orders/${order.id}/order_entries`,
+        method: 'POST',
+        encType: 'application/json',
       });
     },
-    [createOrderEntryMutate, order],
+    [createFetcher, order.id],
   );
 
   const updateOrderEntry = useCallback(
     (
-      orderEntry: NonNullable<EditOrderModalProps['order']>['order_entries'][0],
+      orderEntry: EditOrderModalProps['order']['order_entries'][number],
       attributes: UpdateOrderEntryInput['order_entry'],
     ) =>
-      updateOrderEntryMutate({
-        variables: {
-          input: {
-            id: orderEntry.id,
-            order_entry: attributes,
-          },
-        },
+      fetcher.submit(attributes, {
+        action: `/admin_store/orders/${order.id}/order_entries/${orderEntry.id}`,
+        method: 'PATCH',
+        encType: 'application/json',
       }),
-    [updateOrderEntryMutate],
+    [fetcher, order.id],
   );
 
   const deleteOrderEntry = useCallback(
-    (orderEntry: NonNullable<EditOrderModalProps['order']>['order_entries'][0]) =>
-      deleteOrderEntryMutate({ variables: { input: { id: orderEntry.id } } }),
-    [deleteOrderEntryMutate],
+    (orderEntry: EditOrderModalProps['order']['order_entries'][number]) =>
+      fetcher.submit(null, {
+        action: `/admin_store/orders/${order.id}/order_entries/${orderEntry.id}`,
+        method: 'DELETE',
+      }),
+    [fetcher, order.id],
   );
 
   const createCouponApplication = useCallback(
-    async (couponCode: string) => {
-      if (!order) {
-        return;
-      }
-      await createCouponApplicationMutate({
-        variables: {
-          orderId: order.id,
-          couponCode,
-        },
-      });
-    },
-    [createCouponApplicationMutate, order],
+    (couponCode: string) =>
+      fetcher.submit(
+        { coupon_code: couponCode },
+        { method: 'POST', action: `/admin_store/orders/${order.id}/coupon_applications` },
+      ),
+    [fetcher, order.id],
   );
 
   const deleteCouponApplication = useCallback(
     (couponApplication: NonNullable<EditOrderModalProps['order']>['coupon_applications'][number]) =>
-      deleteCouponApplicationMutate({
-        variables: { id: couponApplication.id },
+      fetcher.submit(null, {
+        action: `/admin_store/orders/${order.id}/coupon_applications/${couponApplication.id}`,
+        method: 'DELETE',
       }),
-    [deleteCouponApplicationMutate],
+    [fetcher, order.id],
   );
 
   return (
@@ -139,8 +130,12 @@ function EditOrderModal({ order, closeModal }: EditOrderModalProps): JSX.Element
                 deleteOrderEntry={deleteOrderEntry}
                 createCouponApplication={createCouponApplication}
                 deleteCouponApplication={deleteCouponApplication}
+                createError={createError as ApolloError | undefined}
+                createInProgress={createFetcher.state !== 'idle'}
               />
             </section>
+
+            <ErrorDisplay graphQLError={error as ApolloError | undefined} />
           </>
         )}
       </div>
@@ -152,5 +147,3 @@ function EditOrderModal({ order, closeModal }: EditOrderModalProps): JSX.Element
     </Modal>
   );
 }
-
-export const Component = EditOrderModal;

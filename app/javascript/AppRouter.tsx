@@ -590,8 +590,32 @@ const commonInConventionRoutes: RouteObject[] = [
         path: 'orders',
         lazy: () => import('./Store/OrderAdmin'),
         children: [
-          { path: ':id', lazy: () => import('./Store/OrderAdmin/EditOrderModal') },
-          { path: 'new', lazy: () => import('./Store/OrderAdmin/NewOrderModal') },
+          {
+            path: ':id',
+            lazy: () => import('./Store/OrderAdmin/$id'),
+            children: [
+              { path: 'cancel', lazy: () => import('./Store/OrderAdmin/cancel') },
+              { path: 'mark_paid', lazy: () => import('./Store/OrderAdmin/mark_paid') },
+              {
+                path: 'order_entries',
+                lazy: () => import('./Store/OrderAdmin/order_entries/route'),
+                children: [
+                  { path: ':orderEntryId', lazy: () => import('./Store/OrderAdmin/order_entries/$orderEntryId') },
+                ],
+              },
+              {
+                path: 'coupon_applications',
+                lazy: () => import('./Store/OrderAdmin/coupon_applications/route'),
+                children: [
+                  {
+                    path: ':couponApplicationId',
+                    lazy: () => import('./Store/OrderAdmin/coupon_applications/$couponApplicationId'),
+                  },
+                ],
+              },
+            ],
+          },
+          { path: 'new', lazy: () => import('./Store/OrderAdmin/new') },
         ],
       },
       { path: 'order_summary', lazy: () => import('./Store/OrderSummary') },

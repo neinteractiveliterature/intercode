@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { ApolloError } from '@apollo/client';
 import { Modal } from 'react-bootstrap4-modal';
 import { v4 as uuidv4 } from 'uuid';
@@ -18,11 +18,9 @@ import {
 import AppRootContext from 'AppRootContext';
 import AdminOrderForm from './AdminOrderForm';
 import AdminOrderEntriesTable from './AdminOrderEntriesTable';
-import { ActionFunction, redirect } from 'react-router';
-import { client } from 'useIntercodeApolloClient';
-import { CreateOrderDocument, CreateOrderMutationVariables } from './mutations.generated';
-import { Link, useFetcher } from 'react-router-dom';
-import { CreateCouponApplicationDocument } from 'Store/mutations.generated';
+import { CreateOrderMutationVariables } from './mutations.generated';
+import { useFetcher } from 'react-router-dom';
+import { CreateOrderActionInput } from '.';
 
 export type CreatingOrder = Omit<OrderInput, 'payment_amount'> & {
   status: OrderStatus;
@@ -43,43 +41,6 @@ export type CreatingOrder = Omit<OrderInput, 'payment_amount'> & {
 
 type OrderEntryType = CreatingOrder['order_entries'][0];
 
-type ActionInput = {
-  createOrderVariables: CreateOrderMutationVariables;
-  couponCodes: string[];
-};
-
-export const action: ActionFunction = async ({ request }) => {
-  try {
-    const { createOrderVariables, couponCodes } = (await request.json()) as ActionInput;
-
-    const { data } = await client.mutate({
-      mutation: CreateOrderDocument,
-      variables: createOrderVariables,
-    });
-
-    if (!data) {
-      return;
-    }
-
-    await Promise.all(
-      couponCodes.map((code) =>
-        client.mutate({
-          mutation: CreateCouponApplicationDocument,
-          variables: {
-            orderId: data.createOrder.order.id,
-            couponCode: code,
-          },
-        }),
-      ),
-    );
-
-    await client.resetStore();
-    return redirect('..');
-  } catch (error) {
-    return error;
-  }
-};
-
 function buildBlankOrder(currencyCode: string): CreatingOrder {
   return {
     payment_amount: {
@@ -94,14 +55,26 @@ function buildBlankOrder(currencyCode: string): CreatingOrder {
   };
 }
 
-function NewOrderModal(): JSX.Element {
+export type NewOrderModalProps = {
+  visible: boolean;
+  close: () => void;
+  initialOrder?: CreatingOrder;
+};
+
+export default function NewOrderModal({ visible, close, initialOrder }: NewOrderModalProps): JSX.Element {
   const { t } = useTranslation();
   const confirm = useConfirm();
   const { defaultCurrencyCode } = useContext(AppRootContext);
-  const [order, setOrder] = useState(() => buildBlankOrder(defaultCurrencyCode));
+  const [order, setOrder] = useState(() => initialOrder || buildBlankOrder(defaultCurrencyCode));
   const fetcher = useFetcher();
   const createOrderError = fetcher.data instanceof Error ? fetcher.data : undefined;
   const createOrderInProgress = fetcher.state !== 'idle';
+
+  useEffect(() => {
+    if (fetcher.state === 'idle' && fetcher.data && !createOrderError) {
+      close();
+    }
+  }, [fetcher.state, fetcher.data, createOrderError, close]);
 
   const createOrder = () => {
     const userConProfile = order.user_con_profile;
@@ -136,8 +109,8 @@ function NewOrderModal(): JSX.Element {
       {
         createOrderVariables,
         couponCodes: order.coupon_applications.map((app) => app.coupon.code),
-      } satisfies ActionInput,
-      { method: 'POST', encType: 'application/json' },
+      } satisfies CreateOrderActionInput,
+      { action: '/admin_store/orders', method: 'POST', encType: 'application/json' },
     );
   };
 
@@ -183,7 +156,7 @@ function NewOrderModal(): JSX.Element {
     }));
 
   return (
-    <Modal visible={!confirm.visible} dialogClassName="modal-lg">
+    <Modal visible={visible && !confirm.visible} dialogClassName="modal-lg">
       <div className="modal-header">{t('store.newOrder.header')}</div>
       <div className="modal-body">
         <AdminOrderForm order={order} updateOrder={updateOrder} />
@@ -196,15 +169,17 @@ function NewOrderModal(): JSX.Element {
             deleteOrderEntry={deleteOrderEntry}
             createCouponApplication={createCouponApplication}
             deleteCouponApplication={deleteCouponApplication}
+            createError={undefined}
+            createInProgress={false}
           />
         </section>
 
         <ErrorDisplay graphQLError={createOrderError as ApolloError} />
       </div>
       <div className="modal-footer">
-        <Link className="btn btn-secondary" to="..">
+        <button type="button" className="btn btn-secondary" onClick={close} disabled={createOrderInProgress}>
           {t('buttons.cancel')}
-        </Link>
+        </button>
         <button type="button" className="btn btn-primary" onClick={createOrder} disabled={createOrderInProgress}>
           {t('buttons.create')}
         </button>
@@ -212,5 +187,3 @@ function NewOrderModal(): JSX.Element {
     </Modal>
   );
 }
-
-export const Component = NewOrderModal;

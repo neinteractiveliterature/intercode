@@ -184,6 +184,10 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
     MARKDOWN
   end
   field :open_graph_image_url, String, null: true, deprecation_reason: "Please use the open_graph_image field instead." # rubocop:disable GraphQL/FieldDescription, GraphQL/ExtractType
+  field :order, Types::OrderType, null: false do
+    description "Find an order by ID."
+    argument :id, ID, required: true, description: "The ID of the order to find."
+  end
   field :organization, Types::OrganizationType, null: true do
     description "The organization in charge of this convention."
   end
@@ -472,6 +476,10 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
 
   def open_graph_image_url
     object.open_graph_image.url
+  end
+
+  def order(id:)
+    object.orders.find(id)
   end
 
   pagination_field :orders_paginated, Types::OrdersPaginationType, Types::OrderFiltersInputType

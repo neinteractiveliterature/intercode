@@ -18,7 +18,6 @@ import InPlaceMoneyEditor from 'Store/InPlaceMoneyEditor';
 import formatMoney from 'formatMoney';
 import ProductSelect from 'BuiltInFormControls/ProductSelect';
 import ApplyCouponControl from 'Store/ApplyCouponControl';
-import useAsyncFunction from 'useAsyncFunction';
 
 type ProductVariantType = Pick<ProductVariant, '__typename' | 'name'> & {
   id: string;
@@ -74,11 +73,13 @@ export type AdminOrderEntriesTableProps<
     total_price?: Money;
     coupon_applications: CouponApplicationType[];
   };
-  createOrderEntry: (orderEntry: T) => Promise<unknown>;
-  updateOrderEntry: (orderEntry: T, attributes: Partial<T>) => Promise<unknown>;
-  deleteOrderEntry: (orderEntry: T) => Promise<unknown>;
-  createCouponApplication: (code: string) => Promise<unknown>;
-  deleteCouponApplication: (couponApplication: CouponApplicationType) => Promise<unknown>;
+  createOrderEntry: (orderEntry: T) => unknown;
+  updateOrderEntry: (orderEntry: T, attributes: Partial<T>) => unknown;
+  deleteOrderEntry: (orderEntry: T) => unknown;
+  createCouponApplication: (code: string) => unknown;
+  deleteCouponApplication: (couponApplication: CouponApplicationType) => unknown;
+  createError: ApolloError | undefined;
+  createInProgress: boolean;
 };
 
 function AdminOrderEntriesTable<
@@ -91,11 +92,12 @@ function AdminOrderEntriesTable<
   deleteOrderEntry,
   createCouponApplication,
   deleteCouponApplication,
+  createError,
+  createInProgress,
 }: AdminOrderEntriesTableProps<T, CouponApplicationType>): JSX.Element {
   const confirm = useConfirm();
   const [addingItem, setAddingItem] = useState<AddingOrderEntry<T>>();
   const [applyingCoupon, setApplyingCoupon] = useState(false);
-  const [createOrderEntryAsync, createError, createInProgress] = useAsyncFunction(createOrderEntry);
   const { t } = useTranslation();
 
   const applyCoupon = async (code: string) => {
@@ -131,7 +133,7 @@ function AdminOrderEntriesTable<
       return;
     }
 
-    createOrderEntryAsync({
+    createOrderEntry({
       price_per_item: addingItem.price_per_item
         ? {
             currency_code: addingItem.price_per_item.currency_code,
@@ -165,9 +167,9 @@ function AdminOrderEntriesTable<
             <td>
               <InPlaceEditor
                 value={orderEntry.quantity.toString()}
-                onChange={(newValue) =>
-                  updateOrderEntry(orderEntry, { quantity: parseIntOrNull(newValue) } as Partial<T>)
-                }
+                onChange={(newValue) => {
+                  updateOrderEntry(orderEntry, { quantity: parseIntOrNull(newValue) } as Partial<T>);
+                }}
               />
             </td>
             <td>

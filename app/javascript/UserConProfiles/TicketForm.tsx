@@ -6,7 +6,7 @@ import EventSelect from '../BuiltInFormControls/EventSelect';
 import sortTicketTypes from '../TicketTypeAdmin/sortTicketTypes';
 import useAsyncFunction from '../useAsyncFunction';
 import formatMoney from '../formatMoney';
-import EditOrderModal from '../Store/EditOrderModal';
+import { Component as EditOrderModal } from '../Store/OrderAdmin/EditOrderModal';
 import AddOrderToTicketButton, { AddOrderToTicketButtonProps } from './AddOrderToTicketButton';
 import { UserConProfileAdminQueryData } from './queries.generated';
 import { TicketInput, UserConProfile } from '../graphqlTypes.generated';

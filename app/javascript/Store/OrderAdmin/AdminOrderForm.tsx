@@ -9,6 +9,7 @@ import UserConProfileSelect from 'BuiltInFormControls/UserConProfileSelect';
 import EnumTypes from 'enumTypes.json';
 import { Order, OrderStatus, UserConProfile } from 'graphqlTypes.generated';
 import { Trans, useTranslation } from 'react-i18next';
+import { useFetcher } from 'react-router-dom';
 
 const ORDER_STATUS_CHOICES = EnumTypes.OrderStatus.enumValues
   .map((enumValue) => ({ label: enumValue.name, value: enumValue.name }))
@@ -38,8 +39,8 @@ enum CancelMode {
 
 function CancelOrderButton({ order, skipRefund }: CancelOrderButtonProps) {
   const { t } = useTranslation();
-  const [cancelOrder] = useCancelOrderMutation();
   const confirm = useConfirm();
+  const fetcher = useFetcher();
 
   const mode = useMemo(() => {
     if (order.charge_id && !skipRefund) {
@@ -71,7 +72,11 @@ function CancelOrderButton({ order, skipRefund }: CancelOrderButtonProps) {
               }}
             />
           ),
-          action: () => cancelOrder({ variables: { orderId: order.id, skipRefund } }),
+          action: () =>
+            fetcher.submit(
+              { skip_refund: skipRefund },
+              { action: `/admin_store/orders/${order.id}/cancel`, method: 'PATCH' },
+            ),
           renderError: (error) => <ErrorDisplay graphQLError={error} />,
         })
       }
@@ -88,7 +93,7 @@ type OrderActionsProps = {
 function OrderActions({ order }: OrderActionsProps) {
   const { t } = useTranslation();
   const confirm = useConfirm();
-  const [markOrderPaid] = useMarkOrderPaidMutation();
+  const fetcher = useFetcher();
 
   const buttons = [];
 
@@ -100,7 +105,8 @@ function OrderActions({ order }: OrderActionsProps) {
         onClick={() =>
           confirm({
             prompt: t('admin.store.markAsPaid.prompt', { orderId: order.id }),
-            action: () => markOrderPaid({ variables: { orderId: order.id } }),
+            action: () =>
+              fetcher.submit(null, { action: `/admin_store/orders/${order.id}/mark_paid`, method: 'PATCH' }),
             renderError: (error) => <ErrorDisplay graphQLError={error} />,
           })
         }

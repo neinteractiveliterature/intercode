@@ -959,6 +959,16 @@ type Convention implements CmsParent {
   """
   open_graph_image: ActiveStorageAttachment
   open_graph_image_url: String @deprecated(reason: "Please use the open_graph_image field instead.")
+
+  """
+  Find an order by ID.
+  """
+  order(
+    """
+    The ID of the order to find.
+    """
+    id: ID!
+  ): Order!
   orders_paginated(
     """
     Filters to restrict what items will appear in the result set.
