@@ -1,7 +1,9 @@
-$success-light: lighten($success, 35%);
-$warning-light: lighten($warning, 35%);
-$danger-light: lighten($danger, 35%);
-$info-light: lighten($info, 35%);
+@use "sass:color";
+
+$success-light: color.adjust($success, $lightness: 35%);
+$warning-light: color.adjust($warning, $lightness: 35%);
+$danger-light: color.adjust($danger, $lightness: 35%);
+$info-light: color.adjust($info, $lightness: 35%);
 
 $color-variants: () !default;
 $color-variants: map-merge(

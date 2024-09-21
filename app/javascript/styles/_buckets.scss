@@ -1,3 +1,5 @@
+@use "sass:color";
+
 .run-capacity {
   border: $card-border-width solid $card-border-color;
   padding-left: 2px;
@@ -76,7 +78,7 @@ $bucket-availability-compact-font-size: $progress-font-size * 0.8;
   }
 }
 
-$bucket-color-1: darken($orange, 5%);
+$bucket-color-1: color.adjust($orange, $lightness: -5%);
 $bucket-color-2: $green;
 $bucket-color-3: $purple;
 $bucket-color-4: $blue;
