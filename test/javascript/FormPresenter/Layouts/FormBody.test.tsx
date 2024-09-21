@@ -4,6 +4,7 @@ import FormBody, { FormBodyProps } from '../../../../app/javascript/FormPresente
 import { ItemInteractionTrackerContext } from '../../../../app/javascript/FormPresenter/ItemInteractionTracker';
 import { getSortedParsedFormItems } from '../../../../app/javascript/Models/Form';
 import { FormItemRole } from '../../../../app/javascript/graphqlTypes.generated';
+import { vi } from 'vitest';
 
 describe('FormBody', () => {
   const defaultProps: FormBodyProps = {
@@ -39,7 +40,7 @@ describe('FormBody', () => {
   });
 
   it('accepts item changes', async () => {
-    const responseValuesChanged = jest.fn();
+    const responseValuesChanged = vi.fn();
     const { getByLabelText } = await renderFormBody({ responseValuesChanged });
 
     fireEvent.change(getByLabelText('Title*'), { target: { value: 'Something' } });

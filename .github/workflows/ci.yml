@@ -30,8 +30,8 @@ jobs:
         run: yarn run graphql:codegen
       - name: tsc on resulting generated files
         run: yarn run tsc --noEmit
-  jest:
-    name: jest
+  vitest:
+    name: vitest
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -51,13 +51,13 @@ jobs:
         uses: mikepenz/action-junit-report@v4
         if: always() # always run even if the previous step fails
         with:
-          check_name: 'Jest Report'
+          check_name: 'Vitest Report'
           report_paths: 'test/reports/TEST-*.xml'
       - name: Archive HTML test reports
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: jest-reports
+          name: vitest-reports
           path: test/html_reports/*
   minitest:
     permissions: write-all
@@ -245,7 +245,7 @@ jobs:
     if: github.event_name == 'push' && github.event.ref == 'refs/heads/main'
     needs:
       - typescript
-      - jest
+      - vitest
       - minitest
       - docker-build
       - doc-site

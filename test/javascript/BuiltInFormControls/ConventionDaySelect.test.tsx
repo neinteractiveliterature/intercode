@@ -1,4 +1,5 @@
 import { DateTime } from 'luxon';
+import { vi } from 'vitest';
 
 import { render, fireEvent } from '../testUtils';
 import ConventionDaySelect, {
@@ -8,7 +9,7 @@ import AppRootContext, { appRootContextDefaultValue } from '../../../app/javascr
 import { TimezoneMode } from '../../../app/javascript/graphqlTypes.generated';
 
 describe('ConventionDaySelect', () => {
-  const onChange = jest.fn();
+  const onChange = vi.fn();
   beforeEach(onChange.mockReset);
 
   const renderConventionDaySelect = (props?: Partial<ConventionDaySelectProps>) =>

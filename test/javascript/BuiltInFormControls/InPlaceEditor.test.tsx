@@ -1,8 +1,9 @@
 import { render, fireEvent } from '../testUtils';
 import InPlaceEditor, { InPlaceEditorProps } from '../../../app/javascript/BuiltInFormControls/InPlaceEditor';
+import { vi } from 'vitest';
 
 describe('InPlaceEditor', () => {
-  const onChange = jest.fn();
+  const onChange = vi.fn();
   beforeEach(onChange.mockReset);
 
   const renderEditor = (props?: Partial<InPlaceEditorProps<unknown>>) =>

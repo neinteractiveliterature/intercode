@@ -1,10 +1,11 @@
 import { renderHook } from '@testing-library/react-hooks';
+import { vi } from 'vitest';
 import useFormResponse from '../../../app/javascript/FormPresenter/useFormResponse';
 
 describe('useFormResponse', () => {
   it('extracts attributes from the form response', () => {
     const model = { form_response_attrs: { color: 'blue' } };
-    const setModel = jest.fn();
+    const setModel = vi.fn();
     const { result } = renderHook(() => useFormResponse(model, setModel));
     const [formResponse] = result.current;
     expect(formResponse).toEqual({ color: 'blue' });
@@ -12,7 +13,7 @@ describe('useFormResponse', () => {
 
   it('changes the form response', () => {
     const model = { form_response_attrs: { color: 'blue' } };
-    const setModel = jest.fn();
+    const setModel = vi.fn();
     const { result } = renderHook(() => useFormResponse(model, setModel));
     const [, formResponseAttrsChanged] = result.current;
 

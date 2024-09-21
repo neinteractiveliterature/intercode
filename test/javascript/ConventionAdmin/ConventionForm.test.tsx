@@ -13,6 +13,27 @@ import {
   TicketMode,
   TimezoneMode,
 } from '../../../app/javascript/graphqlTypes.generated';
+import { vi } from 'vitest';
+import {
+  CmsFilesAdminQueryData,
+  CmsFilesAdminQueryDocument,
+  CmsFilesAdminQueryVariables,
+} from 'CmsAdmin/CmsFilesAdmin/queries.generated';
+import { MockedResponse } from '@apollo/client/testing';
+
+const mockCmsFilesAdminQuery: MockedResponse<CmsFilesAdminQueryData, CmsFilesAdminQueryVariables> = {
+  request: { query: CmsFilesAdminQueryDocument },
+  result: {
+    data: {
+      __typename: 'Query',
+      cmsParent: { __typename: 'Convention', id: '0', cmsFiles: [] },
+      currentAbility: {
+        __typename: 'Ability',
+        can_create_cms_files: true,
+      },
+    },
+  },
+};
 
 describe('ConventionForm', () => {
   const defaultInitialConvention: ConventionFormConvention = {
@@ -43,9 +64,7 @@ describe('ConventionForm', () => {
     show_schedule: ShowSchedule.No,
     show_event_list: ShowSchedule.No,
     hidden: false,
-    signup_rounds: [
-      { __typename: 'SignupRound', id: '0', start: null, maximum_event_signups: 'unlimited' }
-    ],
+    signup_rounds: [{ __typename: 'SignupRound', id: '0', start: null, maximum_event_signups: 'unlimited' }],
     maximum_tickets: null,
     ticket_name: 'ticket',
     ticketNamePlural: 'tickets',
@@ -65,12 +84,14 @@ describe('ConventionForm', () => {
       <ConventionForm
         initialConvention={{ ...defaultInitialConvention, ...initialConventionProps }}
         rootSite={{ __typename: 'RootSite', url: 'https://example.com', id: '123' }}
-         
         saveConvention={async () => {}}
         cmsLayouts={[]}
         pages={[]}
         {...props}
       />,
+      {
+        apolloMocks: [mockCmsFilesAdminQuery],
+      },
     );
 
   test('it renders the given values', async () => {
@@ -88,7 +109,7 @@ describe('ConventionForm', () => {
         show_schedule: ShowSchedule.Gms,
         signup_rounds: [
           { __typename: 'SignupRound', id: '1', start: null, maximum_event_signups: 'not_yet' },
-          { __typename: 'SignupRound', id: '2', start: now, maximum_event_signups: 'unlimited' }
+          { __typename: 'SignupRound', id: '2', start: now, maximum_event_signups: 'unlimited' },
         ],
         maximum_tickets: 100,
       },
@@ -128,7 +149,7 @@ describe('ConventionForm', () => {
   });
 
   test('onClickSave', async () => {
-    const saveConvention = jest.fn();
+    const saveConvention = vi.fn();
     const { getByText } = await renderConventionForm({ saveConvention });
 
     fireEvent.click(getByText('Save settings'), { selector: 'button' });

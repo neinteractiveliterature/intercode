@@ -21,8 +21,13 @@ function GraphQLAsyncSelect<QueryType extends TypedDocumentNode, OptionType, IsM
   ...otherProps
 }: GraphQLAsyncSelectProps<QueryType, OptionType, IsMulti>): JSX.Element {
   const loadOptions = async (inputValue: string) => {
-    const { data } = await client.query({ query, variables: getVariables(inputValue) });
-    return getOptions(data as ResultOf<QueryType>);
+    try {
+      const { data } = await client.query({ query, variables: getVariables(inputValue) });
+      return getOptions(data as ResultOf<QueryType>);
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
   };
 
   return <AsyncSelect loadOptions={loadOptions} {...otherProps} />;

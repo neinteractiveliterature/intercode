@@ -5,6 +5,7 @@ import ScheduledValueEditor, {
   ScheduledValueEditorProps,
   scheduledValueIsValid,
 } from '../../../app/javascript/BuiltInFormControls/ScheduledValueEditor';
+import { vi } from 'vitest';
 
 describe('ScheduledValueEditor', () => {
   const renderScheduledValueEditor = (props: Partial<ScheduledValueEditorProps<number | string>>) =>
@@ -35,14 +36,14 @@ describe('ScheduledValueEditor', () => {
   });
 
   test('adding a row', async () => {
-    const dispatch = jest.fn();
+    const dispatch = vi.fn();
     const { getByText } = await renderScheduledValueEditor({ dispatch });
     fireEvent.click(getByText('Add row'));
     expect(dispatch).toHaveBeenCalledWith({ type: 'addTimespan' });
   });
 
   test('deleting a row', async () => {
-    const dispatch = jest.fn();
+    const dispatch = vi.fn();
     const { getByText } = await renderScheduledValueEditor({
       scheduledValue: {
         timespans: [{ value: 'something', start: null, finish: null }],
@@ -54,7 +55,7 @@ describe('ScheduledValueEditor', () => {
   });
 
   test('changing something in a row', async () => {
-    const dispatch = jest.fn();
+    const dispatch = vi.fn();
     const { getByTestId } = await renderScheduledValueEditor({
       scheduledValue: {
         timespans: [{ value: 'something', start: null, finish: null }],

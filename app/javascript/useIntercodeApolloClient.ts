@@ -95,13 +95,13 @@ export const AuthHeadersLink = new ApolloLink((operation: Operation, next: NextL
   return next(operation);
 });
 
-export function buildIntercodeApolloLink(uri: string): ApolloLink {
+export function buildIntercodeApolloLink(uri: URL): ApolloLink {
   // adapted from https://github.com/jaydenseric/apollo-upload-client/issues/63#issuecomment-392501449
   const terminatingLink = split(
     isUpload,
-    createUploadLink({ uri, fetch }),
+    createUploadLink({ uri: uri.toString(), fetch }),
     new BatchHttpLink({
-      uri,
+      uri: uri.toString(),
       fetch,
     }),
   );
@@ -109,7 +109,7 @@ export function buildIntercodeApolloLink(uri: string): ApolloLink {
   return ApolloLink.from([AuthHeadersLink, AddTimezoneLink, ErrorHandlerLink, terminatingLink]);
 }
 
-export function useIntercodeApolloLink(uri: string): ApolloLink {
+export function useIntercodeApolloLink(uri: URL): ApolloLink {
   const link = useMemo(() => buildIntercodeApolloLink(uri), [uri]);
 
   return link;
@@ -145,5 +145,13 @@ export function buildIntercodeApolloClient(link: ApolloLink): ApolloClient<Norma
   });
 }
 
-export const client = buildIntercodeApolloClient(buildIntercodeApolloLink('/graphql'));
+function getClientURL(): URL {
+  if (typeof window !== 'undefined') {
+    return new URL('/graphql', window.location.href);
+  } else {
+    throw new Error('Not implemented: cannot yet use GraphQL outside a browser environment');
+  }
+}
+
+export const client = buildIntercodeApolloClient(buildIntercodeApolloLink(getClientURL()));
 export const preloadQuery = createQueryPreloader(client);

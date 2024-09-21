@@ -1,9 +1,10 @@
 import RegistrationBucketRow from '../../../app/javascript/RegistrationPolicy/RegistrationBucketRow';
 import { render, fireEvent, waitFor } from '../testUtils';
+import { Mock, vi } from 'vitest';
 
 describe('RegistrationBucketRow', () => {
-  let onChange: jest.Mock;
-  let onDelete: jest.Mock;
+  let onChange: Mock;
+  let onDelete: Mock;
 
   const defaultRegistrationBucketProps = {
     key: 'testBucket',
@@ -17,8 +18,8 @@ describe('RegistrationBucketRow', () => {
   };
 
   beforeEach(() => {
-    onChange = jest.fn();
-    onDelete = jest.fn();
+    onChange = vi.fn();
+    onDelete = vi.fn();
   });
 
   const renderRegistrationBucketRow = async (props = {}, registrationBucketProps = {}) => {
