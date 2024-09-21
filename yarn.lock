@@ -6509,7 +6509,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@swc/core@npm:^1.7.26":
+"@swc/core@npm:^1.3.61, @swc/core@npm:^1.7.26":
   version: 1.7.26
   resolution: "@swc/core@npm:1.7.26"
   dependencies:
@@ -10502,6 +10502,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"css-select@npm:^4.2.1":
+  version: 4.3.0
+  resolution: "css-select@npm:4.3.0"
+  dependencies:
+    boolbase: "npm:^1.0.0"
+    css-what: "npm:^6.0.1"
+    domhandler: "npm:^4.3.1"
+    domutils: "npm:^2.8.0"
+    nth-check: "npm:^2.0.1"
+  checksum: 10c0/a489d8e5628e61063d5a8fe0fa1cc7ae2478cb334a388a354e91cf2908154be97eac9fa7ed4dffe87a3e06cf6fcaa6016553115335c4fd3377e13dac7bd5a8e1
+  languageName: node
+  linkType: hard
+
 "css-select@npm:^5.1.0":
   version: 5.1.0
   resolution: "css-select@npm:5.1.0"
@@ -10542,7 +10555,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"css-what@npm:^6.1.0":
+"css-what@npm:^6.0.1, css-what@npm:^6.1.0":
   version: 6.1.0
   resolution: "css-what@npm:6.1.0"
   checksum: 10c0/a09f5a6b14ba8dcf57ae9a59474722e80f20406c53a61e9aedb0eedc693b135113ffe2983f4efc4b5065ae639442e9ae88df24941ef159c218b231011d733746
@@ -11331,6 +11344,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"domhandler@npm:^4.3.1":
+  version: 4.3.1
+  resolution: "domhandler@npm:4.3.1"
+  dependencies:
+    domelementtype: "npm:^2.2.0"
+  checksum: 10c0/5c199c7468cb052a8b5ab80b13528f0db3d794c64fc050ba793b574e158e67c93f8336e87fd81e9d5ee43b0e04aea4d8b93ed7be4899cb726a1601b3ba18538b
+  languageName: node
+  linkType: hard
+
 "domhandler@npm:^5.0, domhandler@npm:^5.0.2, domhandler@npm:^5.0.3":
   version: 5.0.3
   resolution: "domhandler@npm:5.0.3"
@@ -11340,7 +11362,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"domutils@npm:^2.5.2, domutils@npm:^2.6.0":
+"domutils@npm:^2.5.2, domutils@npm:^2.6.0, domutils@npm:^2.8.0":
   version: 2.8.0
   resolution: "domutils@npm:2.8.0"
   dependencies:
@@ -13934,7 +13956,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"he@npm:^1.2.0":
+"he@npm:1.2.0, he@npm:^1.2.0":
   version: 1.2.0
   resolution: "he@npm:1.2.0"
   bin:
@@ -17606,6 +17628,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"node-html-parser@npm:^5.3.3":
+  version: 5.4.2
+  resolution: "node-html-parser@npm:5.4.2"
+  dependencies:
+    css-select: "npm:^4.2.1"
+    he: "npm:1.2.0"
+  checksum: 10c0/5a46ce4dc29dcb656067a977ef977d09328b21d1e26e6105176230bb151970cf7deb2db0dd084abeb98106ac79a83102232ad0d9a45d0a686f3eb6931a048663
+  languageName: node
+  linkType: hard
+
 "node-int64@npm:^0.4.0":
   version: 0.4.0
   resolution: "node-int64@npm:0.4.0"
@@ -21064,6 +21096,7 @@ __metadata:
     tzdata: "npm:1.0.41"
     uuid: "npm:10.0.0"
     vite: "npm:^5.4.7"
+    vite-plugin-dynamic-base: "npm:^1.1.0"
     vite-tsconfig-paths: "npm:^5.0.1"
     vitest: "npm:^2.1.1"
     webpack: "npm:5.94.0"
@@ -23597,6 +23630,18 @@ __metadata:
   bin:
     vite-node: vite-node.mjs
   checksum: 10c0/8a8b958df3d48af915e07e7efb042ee4c036ca0b73d2c411dc29254fd3533ada0807ce5096d8339894d3e786418b7d1a9c4ae02718c6aca11b5098de2b14c336
+  languageName: node
+  linkType: hard
+
+"vite-plugin-dynamic-base@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "vite-plugin-dynamic-base@npm:1.1.0"
+  dependencies:
+    "@swc/core": "npm:^1.3.61"
+    node-html-parser: "npm:^5.3.3"
+  peerDependencies:
+    vite: ">= 2.9.5"
+  checksum: 10c0/c78c23e85f06dd0044d65942b11078f93294e59db0b92a916d65ff053afb8f1885865a74ce05de14c0a34aab0f335c56b215eb08577d4c642e516b0f952cdeaf
   languageName: node
   linkType: hard
 
