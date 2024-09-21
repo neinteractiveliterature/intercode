@@ -299,8 +299,9 @@ GEM
     holidays (8.8.0)
     i18n (1.14.6)
       concurrent-ruby (~> 1.0)
-    icalendar (2.10.2)
+    icalendar (2.10.3)
       ice_cube (~> 0.16)
+      ostruct
     ice_cube (0.16.4)
     image_processing (1.13.0)
       mini_magick (>= 4.9.5, < 5)
