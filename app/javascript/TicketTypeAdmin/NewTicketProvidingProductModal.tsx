@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { ErrorDisplay, useModal, addNewObjectToReferenceArrayUpdater } from '@neinteractiveliterature/litform';
+import { ErrorDisplay, useModal } from '@neinteractiveliterature/litform';
 import { useTranslation } from 'react-i18next';
 import Modal from 'react-bootstrap4-modal';
 import EditProductForm, { EditProductFormProps } from '../Store/ProductAdmin/EditProductForm';
@@ -9,11 +9,11 @@ import EditPricingStructureModal, {
   PricingStructureModalContext,
   PricingStructureModalState,
 } from '../Store/ProductAdmin/EditPricingStructureModal';
-import { CreateProductMutationData, useCreateProductMutation } from '../Store/mutations.generated';
-import buildProductInput from '../Store/buildProductInput';
-import { AdminProductFieldsFragment, AdminProductFieldsFragmentDoc } from '../Store/adminProductFields.generated';
 import { buildBlankProduct } from './TicketTypesList';
 import AppRootContext from '../AppRootContext';
+import { useFetcher } from 'react-router-dom';
+import { ApolloError } from '@apollo/client';
+import { buildProductFormData } from 'Store/buildProductInput';
 
 export type NewTicketProvidingProductModalProps = {
   visible: boolean;
@@ -28,7 +28,9 @@ export default function NewTicketProvidingProductModal({
 }: NewTicketProvidingProductModalProps) {
   const { defaultCurrencyCode } = useContext(AppRootContext);
   const { t } = useTranslation();
-  const [createProduct, { error, loading }] = useCreateProductMutation();
+  const fetcher = useFetcher();
+  const error = fetcher.data instanceof Error ? fetcher.data : undefined;
+  const loading = fetcher.state !== 'idle';
 
   const [product, setProduct] = useState<WithGeneratedId<EditingProductBase, string>>(() =>
     buildBlankProduct(defaultCurrencyCode),
@@ -43,25 +45,19 @@ export default function NewTicketProvidingProductModal({
     }));
   }, [ticketType, defaultCurrencyCode]);
 
+  useEffect(() => {
+    if (fetcher.data && fetcher.state === 'idle' && !error) {
+      close();
+      setProduct(buildBlankProduct(defaultCurrencyCode));
+    }
+  }, [close, defaultCurrencyCode, fetcher.data, fetcher.state, error]);
+
   const saveClicked = async () => {
     if (!ticketType) {
       return;
     }
-    await createProduct({
-      variables: {
-        product: buildProductInput(product),
-      },
-      update: addNewObjectToReferenceArrayUpdater<CreateProductMutationData, AdminProductFieldsFragment>(
-        ticketType,
-        'providing_products',
-        (data) => data.createProduct.product,
-        AdminProductFieldsFragmentDoc,
-        'AdminProductFields',
-      ),
-    });
 
-    close();
-    setProduct(buildBlankProduct(defaultCurrencyCode));
+    fetcher.submit(buildProductFormData(product), { action: `/admin_store/products`, method: 'POST' });
   };
 
   const pricingStructureModal = useModal<PricingStructureModalState>();
@@ -82,7 +78,7 @@ export default function NewTicketProvidingProductModal({
           </PricingStructureModalContext.Provider>
         </div>
         <div className="modal-footer">
-          <ErrorDisplay graphQLError={error} />
+          <ErrorDisplay graphQLError={error as ApolloError | undefined} />
           <button type="button" className="btn btn-secondary" onClick={close} disabled={loading}>
             {t('buttons.cancel')}
           </button>

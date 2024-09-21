@@ -781,9 +781,15 @@ const commonInConventionRoutes: RouteObject[] = [
         children: [
           { path: 'new', loader: adminTicketTypesLoader, lazy: () => import('./TicketTypeAdmin/NewTicketType') },
           {
-            path: ':id/edit',
-            loader: adminSingleTicketTypeLoader,
-            lazy: () => import('./TicketTypeAdmin/EditTicketType'),
+            path: ':id',
+            lazy: () => import('./TicketTypeAdmin/$id'),
+            children: [
+              {
+                path: 'edit',
+                loader: adminSingleTicketTypeLoader,
+                lazy: () => import('./TicketTypeAdmin/EditTicketType'),
+              },
+            ],
           },
           { index: true, loader: adminTicketTypesLoader, lazy: () => import('./TicketTypeAdmin/TicketTypesList') },
         ],

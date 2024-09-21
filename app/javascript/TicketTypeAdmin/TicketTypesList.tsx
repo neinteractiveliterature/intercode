@@ -1,23 +1,16 @@
 import { useContext, useMemo } from 'react';
-import { Link, useLoaderData } from 'react-router-dom';
-import {
-  ErrorDisplay,
-  useConfirm,
-  useDeleteMutationWithReferenceArrayUpdater,
-  useModal,
-} from '@neinteractiveliterature/litform';
+import { Link, useFetcher, useLoaderData } from 'react-router-dom';
+import { ErrorDisplay, useConfirm, useModal } from '@neinteractiveliterature/litform';
 import capitalize from 'lodash/capitalize';
 import { v4 as uuidv4 } from 'uuid';
 
 import sortTicketTypes from './sortTicketTypes';
 import usePageTitle from '../usePageTitle';
 import { AdminTicketTypesQueryData, EventTicketTypesQueryData } from './queries.generated';
-import { useDeleteTicketTypeMutation } from './mutations.generated';
 import { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 import AppRootContext from '../AppRootContext';
-import { useDeleteProductMutation } from '../Store/mutations.generated';
-import { PricingStrategy } from '../graphqlTypes.generated';
+import { PricingStrategy, Product } from '../graphqlTypes.generated';
 import { ModalData } from '@neinteractiveliterature/litform/dist/useModal';
 import NewTicketProvidingProductModal from './NewTicketProvidingProductModal';
 import EditTicketProvidingProductModal, {
@@ -81,7 +74,6 @@ export function buildBlankProduct(currencyCode: string) {
 }
 
 function TicketTypeDisplay({
-  parent,
   ticketType,
   newProductModal,
   editProductModal,
@@ -94,18 +86,15 @@ function TicketTypeDisplay({
   const { ticketName, ticketNamePlural, defaultCurrencyCode } = useContext(AppRootContext);
   const { t } = useTranslation();
   const confirm = useConfirm();
-  const [deleteTicketType] = useDeleteMutationWithReferenceArrayUpdater(
-    useDeleteTicketTypeMutation,
-    parent,
-    'ticket_types',
-    (ticketType) => ({ input: { id: ticketType.id } }),
-  );
-  const [deleteProduct] = useDeleteMutationWithReferenceArrayUpdater(
-    useDeleteProductMutation,
-    ticketType,
-    'providing_products',
-    (product) => ({ id: product.id }),
-  );
+  const fetcher = useFetcher();
+
+  const deleteProduct = (product: Pick<Product, 'id'>) => {
+    fetcher.submit(null, { action: `/admin_store/products/${product.id}`, method: 'DELETE' });
+  };
+
+  const deleteTicketType = (ticketType: Pick<TicketTypeType, 'id'>) => {
+    fetcher.submit(null, { action: `/ticket_types/${ticketType.id}`, method: 'DELETE' });
+  };
 
   return (
     <div className={`card my-4 overflow-hidden ${cardClassForTicketType(ticketType)}`} key={ticketType.id}>

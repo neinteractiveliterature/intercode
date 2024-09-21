@@ -15,7 +15,7 @@ import { duplicateProductForEditing, EditingProduct } from './EditingProductType
 import { getRealOrGeneratedId, realOrGeneratedIdsMatch } from '../../GeneratedIdUtils';
 import { ActionFunction, json, LoaderFunction, useLoaderData } from 'react-router';
 import { client } from '../../useIntercodeApolloClient';
-import { Convention } from 'graphqlTypes.generated';
+import { Convention, TicketType } from 'graphqlTypes.generated';
 import { AdminProductFieldsFragmentDoc } from 'Store/adminProductFields.generated';
 import { parseProductFormData } from 'Store/buildProductInput';
 import { CreateProductDocument } from './mutations.generated';
@@ -41,6 +41,14 @@ export const action: ActionFunction = async ({ request }) => {
                 products: (value) => [...value, ref],
               },
             });
+            if (product.provides_ticket_type) {
+              cache.modify<TicketType>({
+                id: cache.identify(product.provides_ticket_type),
+                fields: {
+                  providing_products: (value) => [...value, ref],
+                },
+              });
+            }
           }
         },
       });

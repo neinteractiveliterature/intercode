@@ -8,8 +8,9 @@ import EditPricingStructureModal, {
   PricingStructureModalContext,
   PricingStructureModalState,
 } from '../Store/ProductAdmin/EditPricingStructureModal';
-import { useUpdateProductMutation } from '../Store/mutations.generated';
-import buildProductInput from '../Store/buildProductInput';
+import { useFetcher } from 'react-router-dom';
+import { buildProductFormData } from 'Store/buildProductInput';
+import { ApolloError } from '@apollo/client';
 
 export type EditTicketProvidingProductModalProps = {
   visible: boolean;
@@ -26,7 +27,9 @@ export default function EditTicketProvidingProductModal({
   state,
 }: EditTicketProvidingProductModalProps) {
   const { t } = useTranslation();
-  const [updateProduct, { error, loading }] = useUpdateProductMutation();
+  const fetcher = useFetcher();
+  const error = fetcher.data instanceof Error ? fetcher.data : undefined;
+  const loading = fetcher.state !== 'idle';
 
   const [product, setProduct] = useState(state?.initialProduct);
 
@@ -34,20 +37,19 @@ export default function EditTicketProvidingProductModal({
     setProduct(state?.initialProduct);
   }, [state?.initialProduct]);
 
+  useEffect(() => {
+    if (fetcher.data && fetcher.state === 'idle' && !error) {
+      close();
+      setProduct(undefined);
+    }
+  }, [close, fetcher.data, fetcher.state, error]);
+
   const saveClicked = async () => {
     if (!product) {
       return;
     }
 
-    await updateProduct({
-      variables: {
-        id: product.id,
-        product: buildProductInput(product),
-      },
-    });
-
-    close();
-    setProduct(undefined);
+    fetcher.submit(buildProductFormData(product), { action: `/admin_store/products/${product.id}`, method: 'PATCH' });
   };
 
   const pricingStructureModal = useModal<PricingStructureModalState>();
@@ -70,7 +72,7 @@ export default function EditTicketProvidingProductModal({
           </PricingStructureModalContext.Provider>
         </div>
         <div className="modal-footer">
-          <ErrorDisplay graphQLError={error} />
+          <ErrorDisplay graphQLError={error as ApolloError | undefined} />
           <button type="button" className="btn btn-secondary" onClick={close} disabled={loading}>
             {t('buttons.cancel')}
           </button>
