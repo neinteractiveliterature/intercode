@@ -1,16 +1,51 @@
 import { useState, useMemo } from 'react';
-import { LoaderFunction, useLoaderData, useNavigate } from 'react-router-dom';
+import { ActionFunction, LoaderFunction, redirect, replace, useFetcher, useLoaderData } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
-import { useConfirm, ErrorDisplay, useDeleteMutationWithReferenceArrayUpdater } from '@neinteractiveliterature/litform';
+import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import buildUserActivityAlertInput from './buildUserActivityAlertInput';
 import { useChangeSet } from '../ChangeSet';
 import UserActivityAlertForm from './UserActivityAlertForm';
-import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
 import { UserActivityAlertsAdminQueryData, UserActivityAlertsAdminQueryDocument } from './queries.generated';
-import { useDeleteUserActivityAlertMutation, useUpdateUserActivityAlertMutation } from './mutations.generated';
+import {
+  DeleteUserActivityAlertDocument,
+  UpdateUserActivityAlertDocument,
+  UpdateUserActivityAlertMutationVariables,
+} from './mutations.generated';
 import { client } from '../useIntercodeApolloClient';
+import invariant from 'tiny-invariant';
+import { UserActivityAlert } from 'graphqlTypes.generated';
+
+export const action: ActionFunction = async ({ request, params: { id } }) => {
+  invariant(id != null);
+  try {
+    if (request.method === 'DELETE') {
+      await client.mutate({
+        mutation: DeleteUserActivityAlertDocument,
+        variables: { id },
+        update: (cache) => {
+          cache.modify<UserActivityAlert>({
+            id: cache.identify({ __typename: 'UserActivityAlert', id }),
+            fields: (value, { DELETE }) => DELETE,
+          });
+        },
+      });
+      return replace('/user_activity_alerts');
+    } else if (request.method === 'PATCH') {
+      const variables = (await request.json()) as Omit<UpdateUserActivityAlertMutationVariables, 'id'>;
+      await client.mutate({
+        mutation: UpdateUserActivityAlertDocument,
+        variables: { id, ...variables },
+      });
+      return redirect('/user_activity_alerts');
+    } else {
+      return new Response(null, { status: 404 });
+    }
+  } catch (error) {
+    return error;
+  }
+};
 
 type LoaderResult = {
   convention: UserActivityAlertsAdminQueryData['convention'];
@@ -33,18 +68,12 @@ function EditUserActivityAlertForm() {
   const { initialUserActivityAlert, convention } = useLoaderData() as LoaderResult;
 
   usePageTitle('Editing user activity alert');
-  const navigate = useNavigate();
   const [userActivityAlert, setUserActivityAlert] = useState(initialUserActivityAlert);
   const [notificationDestinationChangeSet, addNotificationDestination, removeNotificationDestination] =
     useChangeSet<(typeof userActivityAlert)['notification_destinations'][0]>();
-  const [updateMutate] = useUpdateUserActivityAlertMutation();
-  const [update, updateError, updateInProgress] = useAsyncFunction(updateMutate);
-  const [deleteAlert] = useDeleteMutationWithReferenceArrayUpdater(
-    useDeleteUserActivityAlertMutation,
-    convention,
-    'user_activity_alerts',
-    (alert) => ({ id: alert.id }),
-  );
+  const fetcher = useFetcher();
+  const error = fetcher.data instanceof Error ? fetcher.data : undefined;
+  const inProgress = fetcher.state !== 'idle';
   const combinedUserActivityAlert = useMemo(
     () => ({
       ...userActivityAlert,
@@ -54,30 +83,25 @@ function EditUserActivityAlertForm() {
   );
   const confirm = useConfirm();
 
-  const saveClicked = async () => {
-    await update({
-      variables: {
-        id: userActivityAlert.id,
-        userActivityAlert: buildUserActivityAlertInput(userActivityAlert),
-        addNotificationDestinations: notificationDestinationChangeSet.getAddValues().map((addValue) => {
-          if (addValue.staff_position) {
-            return { staffPositionId: addValue.staff_position.id };
-          }
-          if (addValue.user_con_profile) {
-            return { userConProfileId: addValue.user_con_profile.id };
-          }
-          throw new Error('Notification destination must have either a staff position or user con profile');
-        }),
-        removeNotificationDestinationIds: notificationDestinationChangeSet.getRemoveIds(),
-      },
-    });
-
-    navigate('/user_activity_alerts');
+  const saveClicked = () => {
+    const variables: Omit<UpdateUserActivityAlertMutationVariables, 'id'> = {
+      userActivityAlert: buildUserActivityAlertInput(userActivityAlert),
+      addNotificationDestinations: notificationDestinationChangeSet.getAddValues().map((addValue) => {
+        if (addValue.staff_position) {
+          return { staffPositionId: addValue.staff_position.id };
+        }
+        if (addValue.user_con_profile) {
+          return { userConProfileId: addValue.user_con_profile.id };
+        }
+        throw new Error('Notification destination must have either a staff position or user con profile');
+      }),
+      removeNotificationDestinationIds: notificationDestinationChangeSet.getRemoveIds(),
+    };
+    fetcher.submit(variables, { method: 'PATCH', encType: 'application/json' });
   };
 
-  const deleteClicked = async () => {
-    await deleteAlert(userActivityAlert);
-    navigate('/user_activity_alerts');
+  const deleteClicked = () => {
+    fetcher.submit(null, { method: 'DELETE' });
   };
 
   return (
@@ -103,10 +127,10 @@ function EditUserActivityAlertForm() {
         onChange={setUserActivityAlert}
         onAddNotificationDestination={addNotificationDestination}
         onRemoveNotificationDestination={removeNotificationDestination}
-        disabled={updateInProgress}
+        disabled={inProgress}
       />
-      <ErrorDisplay graphQLError={updateError as ApolloError} />
-      <button className="btn btn-primary mt-4" type="button" onClick={saveClicked} disabled={updateInProgress}>
+      <ErrorDisplay graphQLError={error as ApolloError} />
+      <button className="btn btn-primary mt-4" type="button" onClick={saveClicked} disabled={inProgress}>
         Save changes
       </button>
     </>
