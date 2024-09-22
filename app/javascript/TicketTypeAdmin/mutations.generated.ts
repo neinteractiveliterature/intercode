@@ -1,10 +1,7 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { gql } from '@apollo/client';
-import { TicketTypeAdmin_TicketTypeFieldsFragmentDoc } from './queries.generated';
-import * as Apollo from '@apollo/client';
-const defaultOptions = {} as const;
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type CreateTicketTypeMutationVariables = Types.Exact<{
   input: Types.CreateTicketTypeInput;
 }>;
@@ -27,110 +24,6 @@ export type DeleteTicketTypeMutationVariables = Types.Exact<{
 export type DeleteTicketTypeMutationData = { __typename: 'Mutation', deleteTicketType: { __typename: 'DeleteTicketTypePayload', ticket_type: { __typename: 'TicketType', id: string } } };
 
 
-export const CreateTicketTypeDocument = gql`
-    mutation CreateTicketType($input: CreateTicketTypeInput!) {
-  createTicketType(input: $input) {
-    ticket_type {
-      id
-      ...TicketTypeAdmin_TicketTypeFields
-    }
-  }
-}
-    ${TicketTypeAdmin_TicketTypeFieldsFragmentDoc}`;
-export type CreateTicketTypeMutationFn = Apollo.MutationFunction<CreateTicketTypeMutationData, CreateTicketTypeMutationVariables>;
-
-/**
- * __useCreateTicketTypeMutation__
- *
- * To run a mutation, you first call `useCreateTicketTypeMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateTicketTypeMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createTicketTypeMutation, { data, loading, error }] = useCreateTicketTypeMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useCreateTicketTypeMutation(baseOptions?: Apollo.MutationHookOptions<CreateTicketTypeMutationData, CreateTicketTypeMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateTicketTypeMutationData, CreateTicketTypeMutationVariables>(CreateTicketTypeDocument, options);
-      }
-export type CreateTicketTypeMutationHookResult = ReturnType<typeof useCreateTicketTypeMutation>;
-export type CreateTicketTypeMutationResult = Apollo.MutationResult<CreateTicketTypeMutationData>;
-export type CreateTicketTypeMutationOptions = Apollo.BaseMutationOptions<CreateTicketTypeMutationData, CreateTicketTypeMutationVariables>;
-export const UpdateTicketTypeDocument = gql`
-    mutation UpdateTicketType($input: UpdateTicketTypeInput!) {
-  updateTicketType(input: $input) {
-    ticket_type {
-      id
-      ...TicketTypeAdmin_TicketTypeFields
-    }
-  }
-}
-    ${TicketTypeAdmin_TicketTypeFieldsFragmentDoc}`;
-export type UpdateTicketTypeMutationFn = Apollo.MutationFunction<UpdateTicketTypeMutationData, UpdateTicketTypeMutationVariables>;
-
-/**
- * __useUpdateTicketTypeMutation__
- *
- * To run a mutation, you first call `useUpdateTicketTypeMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateTicketTypeMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateTicketTypeMutation, { data, loading, error }] = useUpdateTicketTypeMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useUpdateTicketTypeMutation(baseOptions?: Apollo.MutationHookOptions<UpdateTicketTypeMutationData, UpdateTicketTypeMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateTicketTypeMutationData, UpdateTicketTypeMutationVariables>(UpdateTicketTypeDocument, options);
-      }
-export type UpdateTicketTypeMutationHookResult = ReturnType<typeof useUpdateTicketTypeMutation>;
-export type UpdateTicketTypeMutationResult = Apollo.MutationResult<UpdateTicketTypeMutationData>;
-export type UpdateTicketTypeMutationOptions = Apollo.BaseMutationOptions<UpdateTicketTypeMutationData, UpdateTicketTypeMutationVariables>;
-export const DeleteTicketTypeDocument = gql`
-    mutation DeleteTicketType($input: DeleteTicketTypeInput!) {
-  deleteTicketType(input: $input) {
-    ticket_type {
-      id
-    }
-  }
-}
-    `;
-export type DeleteTicketTypeMutationFn = Apollo.MutationFunction<DeleteTicketTypeMutationData, DeleteTicketTypeMutationVariables>;
-
-/**
- * __useDeleteTicketTypeMutation__
- *
- * To run a mutation, you first call `useDeleteTicketTypeMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteTicketTypeMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteTicketTypeMutation, { data, loading, error }] = useDeleteTicketTypeMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useDeleteTicketTypeMutation(baseOptions?: Apollo.MutationHookOptions<DeleteTicketTypeMutationData, DeleteTicketTypeMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteTicketTypeMutationData, DeleteTicketTypeMutationVariables>(DeleteTicketTypeDocument, options);
-      }
-export type DeleteTicketTypeMutationHookResult = ReturnType<typeof useDeleteTicketTypeMutation>;
-export type DeleteTicketTypeMutationResult = Apollo.MutationResult<DeleteTicketTypeMutationData>;
-export type DeleteTicketTypeMutationOptions = Apollo.BaseMutationOptions<DeleteTicketTypeMutationData, DeleteTicketTypeMutationVariables>;
+export const CreateTicketTypeDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateTicketType"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateTicketTypeInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createTicketType"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ticket_type"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"TicketTypeAdmin_TicketTypeFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"PricingStructureFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"PricingStructure"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pricing_strategy"}},{"kind":"Field","name":{"kind":"Name","value":"price"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fractional"}},{"kind":"Field","name":{"kind":"Name","value":"currency_code"}}]}},{"kind":"Field","name":{"kind":"Name","value":"value"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Money"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fractional"}},{"kind":"Field","name":{"kind":"Name","value":"currency_code"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ScheduledMoneyValue"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"timespans"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"start"}},{"kind":"Field","name":{"kind":"Name","value":"finish"}},{"kind":"Field","name":{"kind":"Name","value":"value"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fractional"}},{"kind":"Field","name":{"kind":"Name","value":"currency_code"}}]}}]}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"PayWhatYouWantValue"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"maximum_amount"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currency_code"}},{"kind":"Field","name":{"kind":"Name","value":"fractional"}}]}},{"kind":"Field","name":{"kind":"Name","value":"minimum_amount"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currency_code"}},{"kind":"Field","name":{"kind":"Name","value":"fractional"}}]}},{"kind":"Field","name":{"kind":"Name","value":"suggested_amount"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currency_code"}},{"kind":"Field","name":{"kind":"Name","value":"fractional"}}]}},{"kind":"Field","name":{"kind":"Name","value":"allowed_currency_codes"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"TicketTypeAdmin_TicketTypeFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"TicketType"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"counts_towards_convention_maximum"}},{"kind":"Field","name":{"kind":"Name","value":"allows_event_signups"}},{"kind":"Field","name":{"kind":"Name","value":"maximum_event_provided_tickets"}},{"kind":"Field","name":{"kind":"Name","value":"providing_products"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"available"}},{"kind":"Field","name":{"kind":"Name","value":"pricing_structure"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PricingStructureFields"}}]}}]}}]}}]} as unknown as DocumentNode<CreateTicketTypeMutationData, CreateTicketTypeMutationVariables>;
+export const UpdateTicketTypeDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateTicketType"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateTicketTypeInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateTicketType"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ticket_type"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"TicketTypeAdmin_TicketTypeFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"PricingStructureFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"PricingStructure"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pricing_strategy"}},{"kind":"Field","name":{"kind":"Name","value":"price"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fractional"}},{"kind":"Field","name":{"kind":"Name","value":"currency_code"}}]}},{"kind":"Field","name":{"kind":"Name","value":"value"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Money"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fractional"}},{"kind":"Field","name":{"kind":"Name","value":"currency_code"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ScheduledMoneyValue"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"timespans"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"start"}},{"kind":"Field","name":{"kind":"Name","value":"finish"}},{"kind":"Field","name":{"kind":"Name","value":"value"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fractional"}},{"kind":"Field","name":{"kind":"Name","value":"currency_code"}}]}}]}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"PayWhatYouWantValue"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"maximum_amount"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currency_code"}},{"kind":"Field","name":{"kind":"Name","value":"fractional"}}]}},{"kind":"Field","name":{"kind":"Name","value":"minimum_amount"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currency_code"}},{"kind":"Field","name":{"kind":"Name","value":"fractional"}}]}},{"kind":"Field","name":{"kind":"Name","value":"suggested_amount"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currency_code"}},{"kind":"Field","name":{"kind":"Name","value":"fractional"}}]}},{"kind":"Field","name":{"kind":"Name","value":"allowed_currency_codes"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"TicketTypeAdmin_TicketTypeFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"TicketType"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"counts_towards_convention_maximum"}},{"kind":"Field","name":{"kind":"Name","value":"allows_event_signups"}},{"kind":"Field","name":{"kind":"Name","value":"maximum_event_provided_tickets"}},{"kind":"Field","name":{"kind":"Name","value":"providing_products"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"available"}},{"kind":"Field","name":{"kind":"Name","value":"pricing_structure"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PricingStructureFields"}}]}}]}}]}}]} as unknown as DocumentNode<UpdateTicketTypeMutationData, UpdateTicketTypeMutationVariables>;
+export const DeleteTicketTypeDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteTicketType"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"DeleteTicketTypeInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteTicketType"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ticket_type"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}}]} as unknown as DocumentNode<DeleteTicketTypeMutationData, DeleteTicketTypeMutationVariables>;

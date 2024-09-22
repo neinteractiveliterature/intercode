@@ -16,7 +16,7 @@ class Mutations::UpdateOrganizationRole < Mutations::BaseMutation
       user_ids: organization_role.user_ids + args[:add_user_ids] - args[:remove_user_ids],
       **args[:organization_role].to_h
     )
-    args[:add_permissions].each { |permission| organization_role.permissions.create!(permission) }
+    args[:add_permissions].each { |permission| organization_role.permissions.create!(permission.to_h) }
     organization_role.permissions.where(id: args[:remove_permission_ids]).destroy_all
 
     # not sure why, but if I don't do this it seems like permissions get returned twice

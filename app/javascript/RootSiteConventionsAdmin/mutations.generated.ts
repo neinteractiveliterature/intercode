@@ -1,10 +1,7 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { gql } from '@apollo/client';
-import { ConventionDisplayFieldsFragmentDoc } from './queries.generated';
-import * as Apollo from '@apollo/client';
-const defaultOptions = {} as const;
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type CreateConventionMutationVariables = Types.Exact<{
   convention: Types.ConventionInput;
   cloneConventionId?: Types.InputMaybe<Types.Scalars['ID']['input']>;
@@ -24,81 +21,5 @@ export type SetConventionCanceledMutationVariables = Types.Exact<{
 export type SetConventionCanceledMutationData = { __typename: 'Mutation', setConventionCanceled: { __typename: 'SetConventionCanceledPayload', convention: { __typename: 'Convention', id: string, name: string, starts_at?: string | null, ends_at?: string | null, canceled: boolean, timezone_name?: string | null, timezone_mode: Types.TimezoneMode, domain?: string | null, site_mode: Types.SiteMode, ticket_mode: Types.TicketMode, show_event_list?: Types.ShowSchedule | null, show_schedule?: Types.ShowSchedule | null, email_from: string, hidden: boolean, language: string, signup_rounds: Array<{ __typename: 'SignupRound', id: string, start?: string | null, maximum_event_signups: string }>, organization?: { __typename: 'Organization', id: string, name: string } | null } } };
 
 
-export const CreateConventionDocument = gql`
-    mutation CreateConvention($convention: ConventionInput!, $cloneConventionId: ID, $organizationId: ID, $cmsContentSetName: String) {
-  createConvention(
-    input: {convention: $convention, cloneConventionId: $cloneConventionId, organizationId: $organizationId, cms_content_set_name: $cmsContentSetName}
-  ) {
-    convention {
-      id
-      ...ConventionDisplayFields
-    }
-  }
-}
-    ${ConventionDisplayFieldsFragmentDoc}`;
-export type CreateConventionMutationFn = Apollo.MutationFunction<CreateConventionMutationData, CreateConventionMutationVariables>;
-
-/**
- * __useCreateConventionMutation__
- *
- * To run a mutation, you first call `useCreateConventionMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateConventionMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createConventionMutation, { data, loading, error }] = useCreateConventionMutation({
- *   variables: {
- *      convention: // value for 'convention'
- *      cloneConventionId: // value for 'cloneConventionId'
- *      organizationId: // value for 'organizationId'
- *      cmsContentSetName: // value for 'cmsContentSetName'
- *   },
- * });
- */
-export function useCreateConventionMutation(baseOptions?: Apollo.MutationHookOptions<CreateConventionMutationData, CreateConventionMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateConventionMutationData, CreateConventionMutationVariables>(CreateConventionDocument, options);
-      }
-export type CreateConventionMutationHookResult = ReturnType<typeof useCreateConventionMutation>;
-export type CreateConventionMutationResult = Apollo.MutationResult<CreateConventionMutationData>;
-export type CreateConventionMutationOptions = Apollo.BaseMutationOptions<CreateConventionMutationData, CreateConventionMutationVariables>;
-export const SetConventionCanceledDocument = gql`
-    mutation SetConventionCanceled($id: ID!, $canceled: Boolean!) {
-  setConventionCanceled(input: {id: $id, canceled: $canceled}) {
-    convention {
-      id
-      ...ConventionDisplayFields
-    }
-  }
-}
-    ${ConventionDisplayFieldsFragmentDoc}`;
-export type SetConventionCanceledMutationFn = Apollo.MutationFunction<SetConventionCanceledMutationData, SetConventionCanceledMutationVariables>;
-
-/**
- * __useSetConventionCanceledMutation__
- *
- * To run a mutation, you first call `useSetConventionCanceledMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useSetConventionCanceledMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [setConventionCanceledMutation, { data, loading, error }] = useSetConventionCanceledMutation({
- *   variables: {
- *      id: // value for 'id'
- *      canceled: // value for 'canceled'
- *   },
- * });
- */
-export function useSetConventionCanceledMutation(baseOptions?: Apollo.MutationHookOptions<SetConventionCanceledMutationData, SetConventionCanceledMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<SetConventionCanceledMutationData, SetConventionCanceledMutationVariables>(SetConventionCanceledDocument, options);
-      }
-export type SetConventionCanceledMutationHookResult = ReturnType<typeof useSetConventionCanceledMutation>;
-export type SetConventionCanceledMutationResult = Apollo.MutationResult<SetConventionCanceledMutationData>;
-export type SetConventionCanceledMutationOptions = Apollo.BaseMutationOptions<SetConventionCanceledMutationData, SetConventionCanceledMutationVariables>;
+export const CreateConventionDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateConvention"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"convention"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ConventionInput"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"cloneConventionId"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"organizationId"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"cmsContentSetName"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createConvention"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"convention"},"value":{"kind":"Variable","name":{"kind":"Name","value":"convention"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"cloneConventionId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"cloneConventionId"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"organizationId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"organizationId"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"cms_content_set_name"},"value":{"kind":"Variable","name":{"kind":"Name","value":"cmsContentSetName"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"convention"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"ConventionDisplayFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ConventionDisplayFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Convention"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"starts_at"}},{"kind":"Field","name":{"kind":"Name","value":"ends_at"}},{"kind":"Field","name":{"kind":"Name","value":"canceled"}},{"kind":"Field","name":{"kind":"Name","value":"timezone_name"}},{"kind":"Field","name":{"kind":"Name","value":"timezone_mode"}},{"kind":"Field","name":{"kind":"Name","value":"domain"}},{"kind":"Field","name":{"kind":"Name","value":"site_mode"}},{"kind":"Field","name":{"kind":"Name","value":"ticket_mode"}},{"kind":"Field","name":{"kind":"Name","value":"show_event_list"}},{"kind":"Field","name":{"kind":"Name","value":"show_schedule"}},{"kind":"Field","name":{"kind":"Name","value":"email_from"}},{"kind":"Field","name":{"kind":"Name","value":"hidden"}},{"kind":"Field","name":{"kind":"Name","value":"language"}},{"kind":"Field","name":{"kind":"Name","value":"signup_rounds"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"start"}},{"kind":"Field","name":{"kind":"Name","value":"maximum_event_signups"}}]}},{"kind":"Field","name":{"kind":"Name","value":"organization"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<CreateConventionMutationData, CreateConventionMutationVariables>;
+export const SetConventionCanceledDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"SetConventionCanceled"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"canceled"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"setConventionCanceled"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"canceled"},"value":{"kind":"Variable","name":{"kind":"Name","value":"canceled"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"convention"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"ConventionDisplayFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ConventionDisplayFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Convention"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"starts_at"}},{"kind":"Field","name":{"kind":"Name","value":"ends_at"}},{"kind":"Field","name":{"kind":"Name","value":"canceled"}},{"kind":"Field","name":{"kind":"Name","value":"timezone_name"}},{"kind":"Field","name":{"kind":"Name","value":"timezone_mode"}},{"kind":"Field","name":{"kind":"Name","value":"domain"}},{"kind":"Field","name":{"kind":"Name","value":"site_mode"}},{"kind":"Field","name":{"kind":"Name","value":"ticket_mode"}},{"kind":"Field","name":{"kind":"Name","value":"show_event_list"}},{"kind":"Field","name":{"kind":"Name","value":"show_schedule"}},{"kind":"Field","name":{"kind":"Name","value":"email_from"}},{"kind":"Field","name":{"kind":"Name","value":"hidden"}},{"kind":"Field","name":{"kind":"Name","value":"language"}},{"kind":"Field","name":{"kind":"Name","value":"signup_rounds"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"start"}},{"kind":"Field","name":{"kind":"Name","value":"maximum_event_signups"}}]}},{"kind":"Field","name":{"kind":"Name","value":"organization"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<SetConventionCanceledMutationData, SetConventionCanceledMutationVariables>;

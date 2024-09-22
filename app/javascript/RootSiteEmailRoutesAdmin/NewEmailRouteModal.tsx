@@ -1,41 +1,51 @@
 import { useState } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
-import { useApolloClient, ApolloError } from '@apollo/client';
+import { ApolloError } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import EmailRouteForm from './EmailRouteForm';
-import useAsyncFunction from '../useAsyncFunction';
 import buildEmailRouteInput from './buildEmailRouteInput';
-import { useCreateEmailRouteMutation } from './mutations.generated';
 import { EmailRouteFieldsFragment } from './queries.generated';
+import { ActionFunction, redirect } from 'react-router';
+import { client } from 'useIntercodeApolloClient';
+import { CreateEmailRouteDocument } from './mutations.generated';
+import { EmailRouteInput } from 'graphqlTypes.generated';
+import { useFetcher } from 'react-router-dom';
 
-export type NewEmailRouteModalProps = {
-  visible: boolean;
-  close: () => void;
+export const action: ActionFunction = async ({ request }) => {
+  try {
+    if (request.method === 'POST') {
+      const emailRoute = (await request.json()) as EmailRouteInput;
+      await client.mutate({
+        mutation: CreateEmailRouteDocument,
+        variables: { emailRoute },
+      });
+      await client.resetStore();
+      return redirect('..');
+    } else {
+      return new Response(null, { status: 404 });
+    }
+  } catch (error) {
+    return error;
+  }
 };
 
-function NewEmailRouteModal({ visible, close }: NewEmailRouteModalProps): JSX.Element {
+function NewEmailRouteModal(): JSX.Element {
   const [emailRoute, setEmailRoute] = useState<EmailRouteFieldsFragment>({
     __typename: 'EmailRoute',
     id: '',
     receiver_address: '',
     forward_addresses: [],
   });
-  const apolloClient = useApolloClient();
-  const [createMutate] = useCreateEmailRouteMutation();
-  const create = async () => {
-    await createMutate({
-      variables: {
-        emailRoute: buildEmailRouteInput(emailRoute),
-      },
-    });
-    await apolloClient.resetStore();
-    close();
+  const fetcher = useFetcher();
+  const createClicked = async () => {
+    fetcher.submit(buildEmailRouteInput(emailRoute), { method: 'POST', encType: 'application/json' });
   };
-  const [createClicked, error, inProgress] = useAsyncFunction(create);
+  const error = fetcher.data instanceof Error ? fetcher.data : undefined;
+  const inProgress = fetcher.state !== 'idle';
 
   return (
-    <Modal visible={visible} dialogClassName="modal-lg">
+    <Modal visible dialogClassName="modal-lg">
       <div className="modal-header">New email route</div>
 
       <div className="modal-body">
@@ -57,4 +67,4 @@ function NewEmailRouteModal({ visible, close }: NewEmailRouteModalProps): JSX.El
   );
 }
 
-export default NewEmailRouteModal;
+export const Component = NewEmailRouteModal;

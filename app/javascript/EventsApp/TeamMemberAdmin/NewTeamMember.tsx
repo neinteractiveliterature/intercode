@@ -1,32 +1,44 @@
 import { useId, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { ActionFunction, Form, redirect, useNavigation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ApolloError } from '@apollo/client';
-import {
-  ErrorDisplay,
-  LoadQueryWrapper,
-  useCreateMutationWithReferenceArrayUpdater,
-} from '@neinteractiveliterature/litform';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
 import capitalize from 'lodash/capitalize';
 
-import buildTeamMemberInput from './buildTeamMemberInput';
-import TeamMemberForm from './TeamMemberForm';
+import TeamMemberForm, { buildTeamMemberInputFromFormData } from './TeamMemberForm';
 import UserConProfileSelect from '../../BuiltInFormControls/UserConProfileSelect';
 import usePageTitle from '../../usePageTitle';
 import {
-  TeamMemberFieldsFragmentDoc,
   TeamMembersQueryData,
+  TeamMembersQueryDocument,
   TeamMemberUserConProfilesQueryDocument,
 } from './queries.generated';
 import { ReceiveSignupEmail } from '../../graphqlTypes.generated';
-import { useCreateTeamMemberMutation } from './mutations.generated';
-import useTeamMembersQueryFromParams from './useTeamMembersQueryFromParams';
-import buildEventUrl from '../buildEventUrl';
+import { useTeamMembersLoader } from './loader';
+import { client } from '../../useIntercodeApolloClient';
+import { CreateTeamMemberDocument } from './mutations.generated';
 
-export default LoadQueryWrapper(useTeamMembersQueryFromParams, function NewTeamMember({ data }): JSX.Element {
+export const action: ActionFunction = async ({ params: { eventId }, request }) => {
+  const formData = await request.formData();
+  await client.mutate({
+    mutation: CreateTeamMemberDocument,
+    variables: {
+      input: {
+        eventId,
+        userConProfileId: formData.get('userConProfileId') as string | null,
+        team_member: buildTeamMemberInputFromFormData(formData),
+      },
+    },
+    refetchQueries: [{ query: TeamMembersQueryDocument, variables: { eventId } }],
+    awaitRefetchQueries: true,
+  });
+  return redirect(`/events/${eventId}/team_members`);
+};
+
+function NewTeamMember(): JSX.Element {
+  const navigation = useNavigation();
+  const data = useTeamMembersLoader();
   const event = data.convention.event;
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const [teamMember, setTeamMember] = useState<Partial<TeamMembersQueryData['convention']['event']['team_members'][0]>>(
     {
       user_con_profile: undefined,
@@ -37,15 +49,6 @@ export default LoadQueryWrapper(useTeamMembersQueryFromParams, function NewTeamM
     },
   );
   const userConProfileSelectId = useId();
-  const [createTeamMember, { error: createError, loading: createInProgress }] =
-    useCreateMutationWithReferenceArrayUpdater(
-      useCreateTeamMemberMutation,
-      event,
-      'team_members',
-      (data) => data.createTeamMember.team_member,
-      TeamMemberFieldsFragmentDoc,
-      'TeamMemberFields',
-    );
 
   usePageTitle(
     t('events.teamMemberAdmin.newPageTitle', {
@@ -60,25 +63,11 @@ export default LoadQueryWrapper(useTeamMembersQueryFromParams, function NewTeamM
       user_con_profile: userConProfile,
     }));
 
-  const createClicked = async () => {
-    if (teamMember.user_con_profile) {
-      await createTeamMember({
-        variables: {
-          input: {
-            eventId: event.id,
-            team_member: buildTeamMemberInput(
-              teamMember as TeamMembersQueryData['convention']['event']['team_members'][0],
-            ),
-            userConProfileId: teamMember.user_con_profile.id,
-          },
-        },
-      });
-      navigate(`${buildEventUrl(event)}/team_members`, { replace: true });
-    }
-  };
+  const createInProgress = navigation.state !== 'idle';
+  const createError = undefined;
 
   return (
-    <>
+    <Form method="POST" action=".">
       <h1 className="mb-4">
         {t('events.teamMemberAdmin.newHeader', {
           teamMemberName: capitalize(event.event_category.team_member_name),
@@ -92,6 +81,7 @@ export default LoadQueryWrapper(useTeamMembersQueryFromParams, function NewTeamM
         </label>
         <UserConProfileSelect
           inputId={userConProfileSelectId}
+          name="userConProfileId"
           value={teamMember.user_con_profile}
           onChange={(newValue) => userConProfileChanged(newValue ?? undefined)}
           isDisabled={createInProgress}
@@ -105,11 +95,11 @@ export default LoadQueryWrapper(useTeamMembersQueryFromParams, function NewTeamM
         <>
           <TeamMemberForm event={event} value={teamMember} onChange={setTeamMember} disabled={createInProgress} />
 
-          <ErrorDisplay graphQLError={createError as ApolloError} />
+          <ErrorDisplay graphQLError={createError} />
 
           <ul className="list-inline mt-4">
             <li className="list-inline-item">
-              <button type="button" className="btn btn-primary" disabled={createInProgress} onClick={createClicked}>
+              <button type="submit" className="btn btn-primary" disabled={createInProgress}>
                 {t('events.teamMemberAdmin.addButton', {
                   teamMemberName: event.event_category.team_member_name,
                 })}
@@ -120,6 +110,8 @@ export default LoadQueryWrapper(useTeamMembersQueryFromParams, function NewTeamM
       ) : (
         <p>{t('events.teamMemberAdmin.selectUserConProfilePrompt')}</p>
       )}
-    </>
+    </Form>
   );
-});
+}
+
+export const Component = NewTeamMember;

@@ -1,10 +1,10 @@
 import { ReactNode } from 'react';
 import { components, MultiValueGenericProps } from 'react-select';
-import type { DocumentNode } from 'graphql';
 
 import GraphQLAsyncSelect, { GraphQLAsyncSelectProps } from './GraphQLAsyncSelect';
-import { DefaultUsersQueryData, DefaultUsersQueryDocument } from './selectDefaultQueries.generated';
+import { DefaultUsersQueryDocument } from './selectDefaultQueries.generated';
 import { useTranslation } from 'react-i18next';
+import { ResultOf, VariablesOf } from '@graphql-typed-document-node/core';
 
 type UserNameLabelProps<OptionType, IsMulti extends boolean> = MultiValueGenericProps<OptionType, IsMulti> & {
   data: {
@@ -21,14 +21,14 @@ function UserNameLabel<OptionType, IsMulti extends boolean>({
   return <components.MultiValueLabel {...otherProps}>{otherProps.data.name}</components.MultiValueLabel>;
 }
 
-type DQ = DefaultUsersQueryData;
-type DO<QueryType extends DefaultUsersQueryData> = NonNullable<QueryType['users_paginated']>['entries'][0];
+type DQ = typeof DefaultUsersQueryDocument;
+type DO<QueryType extends DQ> = NonNullable<ResultOf<QueryType>['users_paginated']>['entries'][0];
 
-export type UserSelectProps<DataType, OptionType, IsMulti extends boolean = false> = Omit<
+export type UserSelectProps<DataType extends DQ, OptionType, IsMulti extends boolean = false> = Omit<
   GraphQLAsyncSelectProps<DataType, OptionType, IsMulti>,
   'isClearable' | 'getOptions' | 'getVariables' | 'getOptionValue' | 'formatOptionLabel' | 'query' | 'components'
 > & {
-  usersQuery?: DocumentNode;
+  usersQuery?: DataType;
 };
 
 function UserSelect<
@@ -42,14 +42,14 @@ function UserSelect<
     <GraphQLAsyncSelect<DataType, OptionType, IsMulti>
       isClearable
       getOptions={(data) => data.users_paginated.entries as OptionType[]}
-      getVariables={(inputValue) => ({ name: inputValue })}
+      getVariables={(inputValue) => ({ name: inputValue }) as VariablesOf<DataType>}
       getOptionValue={(option: OptionType) => option.id}
       formatOptionLabel={(option: OptionType) => (
         <>
           {option.name} <small className="text-muted">{option.email}</small>
         </>
       )}
-      query={usersQuery || DefaultUsersQueryDocument}
+      query={usersQuery ?? (DefaultUsersQueryDocument as DataType)}
       components={{ MultiValueLabel: UserNameLabel }}
       placeholder={t('selectors.userSelect.placeholder')}
       noOptionsMessage={({ inputValue }) =>

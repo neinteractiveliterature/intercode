@@ -8,8 +8,17 @@ import {
   HelpPopover,
 } from '@neinteractiveliterature/litform';
 
-import { ReceiveSignupEmail } from '../../graphqlTypes.generated';
+import { ReceiveSignupEmail, TeamMemberInput } from '../../graphqlTypes.generated';
 import { TeamMembersQueryData } from './queries.generated';
+
+export function buildTeamMemberInputFromFormData(formData: FormData): TeamMemberInput {
+  return {
+    display_team_member: formData.get('display_team_member') != null,
+    receive_con_email: formData.get('receive_con_email') != null,
+    receive_signup_email: formData.get('receive_signup_email') as ReceiveSignupEmail | null,
+    show_email: formData.get('show_email') != null,
+  };
+}
 
 export type TeamMemberFormProps = {
   event: TeamMembersQueryData['convention']['event'];
@@ -72,6 +81,7 @@ function TeamMemberForm({ event, disabled, value, onChange }: TeamMemberFormProp
         />
       ))}
       <MultipleChoiceInput
+        name="receive_signup_email"
         caption={t('events.teamMemberAdmin.receiveSignupEmailLabel')}
         choices={[
           {

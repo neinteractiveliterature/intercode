@@ -1,8 +1,7 @@
-import { createContext, useState, useCallback, useMemo, useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
-export type AuthenticityTokensContextValue = {
-  refresh: () => Promise<void>;
-  graphql: string;
+export type AuthenticityTokens = {
+  graphql?: string;
   changePassword?: string;
   denyAuthorization?: string;
   grantAuthorization?: string;
@@ -14,17 +13,38 @@ export type AuthenticityTokensContextValue = {
   updateUser?: string;
 };
 
-const AuthenticityTokensContext = createContext<AuthenticityTokensContextValue>({
-  refresh: () => Promise.resolve(),
-  graphql: 'fakeAuthenticityToken',
-});
+export default class AuthenticityTokensManager {
+  static instance: AuthenticityTokensManager;
 
-export function useAuthenticityTokens(
-  initialTokens: Omit<AuthenticityTokensContextValue, 'refresh'>,
-): AuthenticityTokensContextValue {
-  const [tokens, setTokens] = useState(initialTokens);
+  tokens: AuthenticityTokens;
 
-  const refresh = useCallback(async () => {
+  constructor(tokens: AuthenticityTokens) {
+    if (AuthenticityTokensManager.instance) {
+      throw new Error(
+        "Please don't initialize AuthenticityTokensManager directly, instead use AuthenticityTokensManager.instance",
+      );
+    }
+
+    this.tokens = tokens;
+  }
+
+  setTokens(tokens: AuthenticityTokens) {
+    // perform a shallow comparison to avoid breaking object equality if we get the same tokens
+    // back from the server
+    const prevTokens = { ...this.tokens };
+    const newTokens = { ...prevTokens, ...tokens };
+
+    if (
+      Object.keys(newTokens).length === Object.keys(prevTokens ?? {}).length &&
+      Object.keys(prevTokens).every((key: keyof typeof prevTokens) => newTokens[key] !== prevTokens[key])
+    ) {
+      return;
+    }
+
+    this.tokens = newTokens;
+  }
+
+  async refresh() {
     const response = await fetch('/authenticity_tokens', {
       method: 'GET',
       headers: {
@@ -33,29 +53,22 @@ export function useAuthenticityTokens(
     });
 
     const json = await response.json();
-    setTokens((prevTokens) => {
-      // perform a shallow comparison to avoid breaking object equality if we get the same tokens
-      // back from the server
-      const newTokens = { ...prevTokens, ...json };
-      if (Object.keys(newTokens).length !== Object.keys(prevTokens ?? {}).length) {
-        return newTokens;
-      }
 
-      if (Object.keys(prevTokens).every((key: keyof typeof prevTokens) => newTokens[key] !== prevTokens[key])) {
-        return prevTokens;
-      }
-
-      return newTokens;
-    });
-  }, []);
-
-  useEffect(() => {
-    refresh();
-  }, [refresh]);
-
-  const value = useMemo(() => ({ ...tokens, refresh }), [refresh, tokens]);
-
-  return value;
+    this.setTokens(json);
+    return this.tokens;
+  }
 }
 
-export default AuthenticityTokensContext;
+AuthenticityTokensManager.instance = new AuthenticityTokensManager({});
+
+export function useInitializeAuthenticityTokens(initialTokens: AuthenticityTokens) {
+  const initializedRef = useRef(false);
+
+  useEffect(() => {
+    if (!initializedRef.current) {
+      AuthenticityTokensManager.instance.setTokens(initialTokens);
+      AuthenticityTokensManager.instance.refresh();
+      initializedRef.current = true;
+    }
+  }, [initialTokens]);
+}

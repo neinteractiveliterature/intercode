@@ -1,26 +1,45 @@
-import { useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { useModal, ErrorDisplay, useConfirm, LoadQueryWrapper } from '@neinteractiveliterature/litform';
+import { ActionFunction, json, Link, LoaderFunction, Outlet, useFetcher, useLoaderData } from 'react-router-dom';
+import { ErrorDisplay, useConfirm } from '@neinteractiveliterature/litform';
 
 import ConventionFormHeader from '../ConventionAdmin/ConventionFormHeader';
-import { useConventionQueryFromIdParam } from './conventionQueryHooks';
-import NewConventionModal from './NewConventionModal';
 import usePageTitle from '../usePageTitle';
-import { useSetConventionCanceledMutation } from './mutations.generated';
 import humanize from '../humanize';
+import { client } from '../useIntercodeApolloClient';
+import {
+  ConventionDisplayQueryData,
+  ConventionDisplayQueryDocument,
+  ConventionDisplayQueryVariables,
+} from './queries.generated';
+import { SetConventionCanceledDocument } from './mutations.generated';
 
-export default LoadQueryWrapper(useConventionQueryFromIdParam, function ConventionDisplay({ data }) {
+export const action: ActionFunction = async ({ params: { id }, request }) => {
+  try {
+    const formData = await request.formData();
+    const canceled = formData.get('canceled')?.toString() === 'true';
+    const { data } = await client.mutate({
+      mutation: SetConventionCanceledDocument,
+      variables: { id, canceled },
+    });
+    return json(data);
+  } catch (error) {
+    return error;
+  }
+};
+
+export const loader: LoaderFunction = async ({ params: { id } }) => {
+  const { data } = await client.query<ConventionDisplayQueryData, ConventionDisplayQueryVariables>({
+    query: ConventionDisplayQueryDocument,
+    variables: { id: id ?? '' },
+  });
+  return data;
+};
+
+function ConventionDisplay() {
+  const data = useLoaderData() as ConventionDisplayQueryData;
   const confirm = useConfirm();
-  const cloneModal = useModal();
-  const [setConventionCanceled] = useSetConventionCanceledMutation();
-  const location = useLocation();
-
-  const { close: closeCloneModal } = cloneModal;
+  const fetcher = useFetcher();
 
   usePageTitle(data.convention.name);
-  useEffect(() => {
-    closeCloneModal();
-  }, [closeCloneModal, location.pathname]);
 
   const { convention } = data;
   const { organization } = convention;
@@ -56,9 +75,9 @@ export default LoadQueryWrapper(useConventionQueryFromIdParam, function Conventi
           Edit convention settings
         </a>
 
-        <button type="button" className="btn btn-outline-secondary me-2" onClick={cloneModal.open}>
+        <Link to="./clone" className="btn btn-outline-secondary me-2">
           Clone convention
-        </button>
+        </Link>
 
         {convention.canceled ? (
           <button
@@ -67,10 +86,7 @@ export default LoadQueryWrapper(useConventionQueryFromIdParam, function Conventi
             onClick={() =>
               confirm({
                 prompt: `Are you sure you want to uncancel ${convention.name}?`,
-                action: () =>
-                  setConventionCanceled({
-                    variables: { id: convention.id, canceled: false },
-                  }),
+                action: () => fetcher.submit({ canceled: false }, { method: 'PATCH' }),
                 renderError: (e) => <ErrorDisplay graphQLError={e} />,
               })
             }
@@ -84,10 +100,7 @@ export default LoadQueryWrapper(useConventionQueryFromIdParam, function Conventi
             onClick={() =>
               confirm({
                 prompt: `Are you sure you want to cancel ${convention.name}?`,
-                action: () =>
-                  setConventionCanceled({
-                    variables: { id: convention.id, canceled: true },
-                  }),
+                action: () => fetcher.submit({ canceled: true }, { method: 'PATCH' }),
                 renderError: (e) => <ErrorDisplay graphQLError={e} />,
               })
             }
@@ -97,7 +110,9 @@ export default LoadQueryWrapper(useConventionQueryFromIdParam, function Conventi
         )}
       </div>
 
-      <NewConventionModal visible={cloneModal.visible} close={cloneModal.close} cloneConvention={convention} />
+      <Outlet />
     </>
   );
-});
+}
+
+export const Component = ConventionDisplay;

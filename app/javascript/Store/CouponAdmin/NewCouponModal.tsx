@@ -1,21 +1,34 @@
 import { useState } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
-import { ApolloError, useApolloClient } from '@apollo/client';
+import { ApolloError } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import CouponForm from './CouponForm';
-import useAsyncFunction from '../../useAsyncFunction';
 import buildCouponInput from './buildCouponInput';
 import { AdminCouponFieldsFragment } from './queries.generated';
-import { useCreateCouponMutation } from './mutations.generated';
+import { CreateCouponDocument } from './mutations.generated';
 import { useTranslation } from 'react-i18next';
+import { CouponInput } from 'graphqlTypes.generated';
+import { ActionFunction, redirect } from 'react-router';
+import { client } from 'useIntercodeApolloClient';
+import { Link, useFetcher } from 'react-router-dom';
 
-export type NewCouponModalProps = {
-  visible: boolean;
-  close: () => void;
+export const action: ActionFunction = async ({ request }) => {
+  try {
+    if (request.method === 'POST') {
+      const coupon = (await request.json()) as CouponInput;
+      await client.mutate({ mutation: CreateCouponDocument, variables: { coupon } });
+      await client.resetStore();
+      return redirect('..');
+    } else {
+      return new Response(null, { status: 404 });
+    }
+  } catch (error) {
+    return error;
+  }
 };
 
-function NewCouponModal({ visible, close }: NewCouponModalProps): JSX.Element {
+function NewCouponModal(): JSX.Element {
   const { t } = useTranslation();
   const [coupon, setCoupon] = useState<Omit<AdminCouponFieldsFragment, 'id'>>({
     __typename: 'Coupon',
@@ -26,27 +39,25 @@ function NewCouponModal({ visible, close }: NewCouponModalProps): JSX.Element {
     usage_limit: null,
     expires_at: null,
   });
-  const [createCoupon] = useCreateCouponMutation();
-  const [createCouponAsync, error, inProgress] = useAsyncFunction(createCoupon);
-  const apolloClient = useApolloClient();
+  const fetcher = useFetcher();
+  const error = fetcher.data instanceof Error ? fetcher.data : undefined;
+  const inProgress = fetcher.state !== 'idle';
 
-  const saveClicked = async () => {
-    await createCouponAsync({ variables: { coupon: buildCouponInput(coupon) } });
-    await apolloClient.resetStore();
-    close();
+  const saveClicked = () => {
+    fetcher.submit(buildCouponInput(coupon), { method: 'POST', encType: 'application/json' });
   };
 
   return (
-    <Modal visible={visible} dialogClassName="modal-lg">
+    <Modal visible dialogClassName="modal-lg">
       <div className="modal-header">{t('admin.store.coupons.newCoupon')}</div>
       <div className="modal-body">
         <CouponForm value={coupon} onChange={setCoupon} />
         <ErrorDisplay graphQLError={error as ApolloError} />
       </div>
       <div className="modal-footer">
-        <button type="button" className="btn btn-secondary" onClick={close} disabled={inProgress}>
+        <Link to=".." type="button" className="btn btn-secondary">
           {t('buttons.cancel')}
-        </button>
+        </Link>
         <button type="button" className="btn btn-primary" onClick={saveClicked} disabled={inProgress}>
           {t('buttons.create')}
         </button>
@@ -55,4 +66,4 @@ function NewCouponModal({ visible, close }: NewCouponModalProps): JSX.Element {
   );
 }
 
-export default NewCouponModal;
+export const Component = NewCouponModal;

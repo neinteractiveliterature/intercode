@@ -6,7 +6,7 @@ import 'cadmus-navbar-admin/styles/cadmus-navbar-admin.css';
 import Client from './Client';
 import usePageTitle from '../../usePageTitle';
 
-export default function NavigationItemsAdmin(): JSX.Element {
+function NavigationItemsAdmin(): JSX.Element {
   const apolloClient = useApolloClient();
   const navbarAdminClient = useMemo(() => new Client(apolloClient), [apolloClient]);
 
@@ -14,3 +14,5 @@ export default function NavigationItemsAdmin(): JSX.Element {
 
   return <CadmusNavbarAdminApp client={navbarAdminClient} />;
 }
+
+export const Component = NavigationItemsAdmin;

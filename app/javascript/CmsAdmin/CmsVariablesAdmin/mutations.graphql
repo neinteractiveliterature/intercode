@@ -13,7 +13,6 @@ mutation DeleteCmsVariableMutation($key: String!) {
   deleteCmsVariable(input: { key: $key }) {
     cms_variable {
       id
-      ...CmsVariableFields
     }
   }
 }

@@ -92,9 +92,9 @@ class ActiveSupport::TestCase
     end
   end
 
-  def execute_graphql_query(query, user_con_profile: nil, context_attrs: {}, **options)
+  def execute_graphql_query(query, user_con_profile: nil, context_attrs: {}, **)
     context = TestGraphqlContext.with_user_con_profile(user_con_profile, **context_attrs)
-    result = IntercodeSchema.execute(query, context: context, **options)
+    result = IntercodeSchema.execute(query, context:, **)
     raise GraphqlTestExecutionError.new(result) if result["errors"].present?
     result
   end

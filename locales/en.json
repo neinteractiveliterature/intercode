@@ -263,7 +263,7 @@
       },
       "products": {
         "available": "Available for purchase",
-        "basePrice": "Base price: {{ price }}",
+        "basePrice": "Base price:",
         "clickwrapAgreementLabel": "Product-specific clickwrap agreement",
         "deleteConfirmation": "Are you sure you want to delete the product {{ productName }}?",
         "deleteLabel": "Delete product",
@@ -516,6 +516,7 @@
     "close": "Close",
     "collapse": "Collapse",
     "composeEmail": "Compose email",
+    "confirm": "Confirm",
     "create": "Create",
     "delete": "Delete",
     "dragToReorder": "Drag to reorder",
@@ -530,6 +531,7 @@
     "refresh": "Refresh",
     "reset": "Reset",
     "save": "Save",
+    "saveChanges": "Save changes",
     "selectAll": "Select all",
     "selectNone": "Select none"
   },
@@ -724,7 +726,7 @@
       "emailHeader": "Email",
       "emailsCommaTitle": "Emails (comma-separated)",
       "emailsSemicolonTitle": "Emails (semicolon-separated)",
-      "emailsSemicolonWarning": "<0>Note:</0> Most email apps use comma-separated address lists.  Only Outlook uses semicolon-separated address lists.  If you’re not using Outlook, try comma-separated first.",
+      "emailsSemicolonWarning": "<strong>Note:</strong> Most email apps use comma-separated address lists.  Only Outlook uses semicolon-separated address lists.  If you’re not using Outlook, try comma-separated first.",
       "emailTableHeader": "Email",
       "forceConfirmSignup": {
         "bucketInputCaption": "Please choose a signup bucket for {{ name }}.",
@@ -1022,7 +1024,9 @@
     "confirmReset": "Are you sure? This will discard any unsaved changes."
   },
   "schedule": {
+    "conventionTimespanIsInfinite": "Convention start/end dates have not yet been set.",
     "goToEvent": "Go to event",
+    "gridConfigNotFound": "Schedule grid configuration “{{ configKey }}” not found",
     "legends": {
       "attendeeCounts": {
         "confirmed": "confirmed signups",
@@ -1059,6 +1063,7 @@
     },
     "skeletonTitle": "Please wait, loading schedule...",
     "timezoneMessage": "All times displayed in {{ offsetName }}.",
+    "unknownView": "Unknown schedule view: {{ scheduleView }}",
     "views": {
       "gridView": "Grid view",
       "gridViewByRoom": "Grid view by room",
@@ -1195,6 +1200,7 @@
       "errors": {
         "startTimeRequired": "Start time is required."
       },
+      "maximumEventSignups": "Maximum signups",
       "preSignupRoundPeriod": "Pre-signups period",
       "results": "Results",
       "roundNumber": "Round {{ number }}",

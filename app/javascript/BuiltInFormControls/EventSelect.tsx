@@ -1,20 +1,17 @@
-import type { DocumentNode } from 'graphql';
-
 import GraphQLAsyncSelect, { GraphQLAsyncSelectProps } from './GraphQLAsyncSelect';
-import { DefaultEventsQueryData, DefaultEventsQueryDocument } from './selectDefaultQueries.generated';
+import { DefaultEventsQueryDocument } from './selectDefaultQueries.generated';
 import { useTranslation } from 'react-i18next';
+import { ResultOf, VariablesOf } from '@graphql-typed-document-node/core';
 
-type DQ = DefaultEventsQueryData;
-type DO<QueryType extends DefaultEventsQueryData> = NonNullable<
-  QueryType['convention']
->['events_paginated']['entries'][0];
+type DQ = typeof DefaultEventsQueryDocument;
+type DO<QueryType extends DQ> = NonNullable<ResultOf<QueryType>['convention']>['events_paginated']['entries'][0];
 export type DefaultEventSelectOptionType = DO<DQ>;
 
-export type EventSelectProps<DataType, OptionType, IsMulti extends boolean> = Omit<
+export type EventSelectProps<DataType extends DQ, OptionType, IsMulti extends boolean> = Omit<
   GraphQLAsyncSelectProps<DataType, OptionType, IsMulti>,
   'isClearable' | 'getOptions' | 'getVariables' | 'getOptionValue' | 'formatOptionLabel' | 'query'
 > & {
-  eventsQuery?: DocumentNode;
+  eventsQuery?: DataType;
 };
 
 function EventSelect<
@@ -28,10 +25,10 @@ function EventSelect<
     <GraphQLAsyncSelect<DataType, OptionType, IsMulti>
       isClearable
       getOptions={(data) => data.convention.events_paginated.entries as OptionType[]}
-      getVariables={(inputValue) => ({ title: inputValue })}
+      getVariables={(inputValue) => ({ title: inputValue }) as VariablesOf<DataType>}
       getOptionValue={(option) => option.id}
       getOptionLabel={(option) => option.title ?? ''}
-      query={eventsQuery || DefaultEventsQueryDocument}
+      query={eventsQuery ?? (DefaultEventsQueryDocument as DataType)}
       placeholder={t('selectors.eventSelect.placeholder')}
       noOptionsMessage={({ inputValue }) =>
         inputValue.trim() === ''

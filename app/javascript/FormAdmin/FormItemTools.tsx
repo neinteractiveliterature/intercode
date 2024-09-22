@@ -1,5 +1,5 @@
 import { useContext, useId, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useFetcher, useNavigate, useParams } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
 import { Modal } from 'react-bootstrap4-modal';
 import { useModal, MultipleChoiceInput, ErrorDisplay } from '@neinteractiveliterature/litform';
@@ -7,9 +7,6 @@ import { useModal, MultipleChoiceInput, ErrorDisplay } from '@neinteractiveliter
 import { FormItemEditorContext, FormEditorContext } from './FormEditorContexts';
 import CommonQuestionFields from './ItemEditors/CommonQuestionFields';
 import useCollapse from '../NavigationBar/useCollapse';
-import useAsyncFunction from '../useAsyncFunction';
-import { useMoveFormItemMutation } from './mutations.generated';
-import { FormEditorQueryDocument } from './queries.generated';
 import humanize from '../humanize';
 
 function StandardItemMetadata() {
@@ -78,24 +75,16 @@ function MoveFormItemModal({ visible, close }: MoveFormItemModalProps) {
   const { form, currentSection } = useContext(FormEditorContext);
   const { formItem } = useContext(FormItemEditorContext);
   const [destinationSectionId, setDestinationSectionId] = useState<string>();
-  const [moveFormItemMutate] = useMoveFormItemMutation();
-  const [moveFormItem, error, inProgress] = useAsyncFunction(moveFormItemMutate);
-  const navigate = useNavigate();
+  const fetcher = useFetcher();
+  const error = fetcher.data instanceof Error ? fetcher.data : undefined;
+  const inProgress = fetcher.state !== 'idle';
 
   const moveConfirmed = async () => {
     if (destinationSectionId == null) {
       return;
     }
 
-    await moveFormItem({
-      variables: {
-        id: formItem.id,
-        formSectionId: destinationSectionId,
-      },
-      refetchQueries: [{ query: FormEditorQueryDocument, variables: { id: form.id } }],
-    });
-    navigate(`/admin_forms/${form.id}/edit/section/${destinationSectionId}/item/${formItem.id}`, { replace: true });
-    close();
+    fetcher.submit({ destination_section_id: destinationSectionId }, { action: './move', method: 'PATCH' });
   };
 
   const caption = propertiesHasCaption(formItem.properties) ? formItem.properties.caption : undefined;

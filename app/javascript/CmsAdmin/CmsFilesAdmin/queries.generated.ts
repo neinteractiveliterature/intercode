@@ -1,9 +1,7 @@
 /* eslint-disable */
 import * as Types from '../../graphqlTypes.generated';
 
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
-const defaultOptions = {} as const;
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type CmsFileFieldsFragment = { __typename: 'CmsFile', id: string, current_ability_can_delete: boolean, file: { __typename: 'ActiveStorageAttachment', id: string, filename: string, url: string, content_type: string, byte_size: number, thumbnailUrl?: string | null } };
 
 export type CmsFilesAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
@@ -11,67 +9,5 @@ export type CmsFilesAdminQueryVariables = Types.Exact<{ [key: string]: never; }>
 
 export type CmsFilesAdminQueryData = { __typename: 'Query', convention?: { __typename: 'Convention', id: string, name: string } | null, currentAbility: { __typename: 'Ability', can_create_cms_files: boolean }, cmsParent: { __typename: 'Convention', id: string, cmsFiles: Array<{ __typename: 'CmsFile', id: string, current_ability_can_delete: boolean, file: { __typename: 'ActiveStorageAttachment', id: string, filename: string, url: string, content_type: string, byte_size: number, thumbnailUrl?: string | null } }> } | { __typename: 'RootSite', id: string, cmsFiles: Array<{ __typename: 'CmsFile', id: string, current_ability_can_delete: boolean, file: { __typename: 'ActiveStorageAttachment', id: string, filename: string, url: string, content_type: string, byte_size: number, thumbnailUrl?: string | null } }> } };
 
-export const CmsFileFieldsFragmentDoc = gql`
-    fragment CmsFileFields on CmsFile {
-  id
-  current_ability_can_delete
-  file {
-    id
-    filename
-    url
-    content_type
-    byte_size
-    thumbnailUrl: resized_url(maxWidth: 100, maxHeight: 100)
-  }
-}
-    `;
-export const CmsFilesAdminQueryDocument = gql`
-    query CmsFilesAdminQuery {
-  convention: conventionByRequestHostIfPresent {
-    id
-    name
-  }
-  currentAbility {
-    can_create_cms_files
-  }
-  cmsParent: cmsParentByRequestHost {
-    id
-    cmsFiles {
-      id
-      ...CmsFileFields
-    }
-  }
-}
-    ${CmsFileFieldsFragmentDoc}`;
-
-/**
- * __useCmsFilesAdminQuery__
- *
- * To run a query within a React component, call `useCmsFilesAdminQuery` and pass it any options that fit your needs.
- * When your component renders, `useCmsFilesAdminQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useCmsFilesAdminQuery({
- *   variables: {
- *   },
- * });
- */
-export function useCmsFilesAdminQuery(baseOptions?: Apollo.QueryHookOptions<CmsFilesAdminQueryData, CmsFilesAdminQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<CmsFilesAdminQueryData, CmsFilesAdminQueryVariables>(CmsFilesAdminQueryDocument, options);
-      }
-export function useCmsFilesAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CmsFilesAdminQueryData, CmsFilesAdminQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<CmsFilesAdminQueryData, CmsFilesAdminQueryVariables>(CmsFilesAdminQueryDocument, options);
-        }
-export function useCmsFilesAdminQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<CmsFilesAdminQueryData, CmsFilesAdminQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<CmsFilesAdminQueryData, CmsFilesAdminQueryVariables>(CmsFilesAdminQueryDocument, options);
-        }
-export type CmsFilesAdminQueryHookResult = ReturnType<typeof useCmsFilesAdminQuery>;
-export type CmsFilesAdminQueryLazyQueryHookResult = ReturnType<typeof useCmsFilesAdminQueryLazyQuery>;
-export type CmsFilesAdminQuerySuspenseQueryHookResult = ReturnType<typeof useCmsFilesAdminQuerySuspenseQuery>;
-export type CmsFilesAdminQueryQueryResult = Apollo.QueryResult<CmsFilesAdminQueryData, CmsFilesAdminQueryVariables>;
+export const CmsFileFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CmsFileFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsFile"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"current_ability_can_delete"}},{"kind":"Field","name":{"kind":"Name","value":"file"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"filename"}},{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"content_type"}},{"kind":"Field","name":{"kind":"Name","value":"byte_size"}},{"kind":"Field","alias":{"kind":"Name","value":"thumbnailUrl"},"name":{"kind":"Name","value":"resized_url"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"maxWidth"},"value":{"kind":"IntValue","value":"100"}},{"kind":"Argument","name":{"kind":"Name","value":"maxHeight"},"value":{"kind":"IntValue","value":"100"}}]}]}}]}}]} as unknown as DocumentNode<CmsFileFieldsFragment, unknown>;
+export const CmsFilesAdminQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CmsFilesAdminQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"convention"},"name":{"kind":"Name","value":"conventionByRequestHostIfPresent"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"currentAbility"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"can_create_cms_files"}}]}},{"kind":"Field","alias":{"kind":"Name","value":"cmsParent"},"name":{"kind":"Name","value":"cmsParentByRequestHost"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"cmsFiles"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"CmsFileFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CmsFileFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsFile"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"current_ability_can_delete"}},{"kind":"Field","name":{"kind":"Name","value":"file"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"filename"}},{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"content_type"}},{"kind":"Field","name":{"kind":"Name","value":"byte_size"}},{"kind":"Field","alias":{"kind":"Name","value":"thumbnailUrl"},"name":{"kind":"Name","value":"resized_url"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"maxWidth"},"value":{"kind":"IntValue","value":"100"}},{"kind":"Argument","name":{"kind":"Name","value":"maxHeight"},"value":{"kind":"IntValue","value":"100"}}]}]}}]}}]} as unknown as DocumentNode<CmsFilesAdminQueryData, CmsFilesAdminQueryVariables>;

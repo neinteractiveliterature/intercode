@@ -1,16 +1,13 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { gql } from '@apollo/client';
-import { EventCategoryFieldsFragmentDoc } from './queries.generated';
-import * as Apollo from '@apollo/client';
-const defaultOptions = {} as const;
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type CreateEventCategoryMutationVariables = Types.Exact<{
   eventCategory: Types.EventCategoryInput;
 }>;
 
 
-export type CreateEventCategoryMutationData = { __typename: 'Mutation', createEventCategory: { __typename: 'CreateEventCategoryPayload', event_category: { __typename: 'EventCategory', id: string, name: string, team_member_name: string, proposal_description?: string | null, scheduling_ui: Types.SchedulingUi, default_color?: string | null, signed_up_color?: string | null, full_color?: string | null, can_provide_tickets: boolean, events_paginated: { __typename: 'EventsPagination', total_entries: number }, department?: { __typename: 'Department', id: string, name: string } | null, event_form: { __typename: 'Form', id: string, title: string, form_type: Types.FormType }, event_proposal_form?: { __typename: 'Form', id: string, title: string, form_type: Types.FormType } | null } } };
+export type CreateEventCategoryMutationData = { __typename: 'Mutation', createEventCategory: { __typename: 'CreateEventCategoryPayload', event_category: { __typename: 'EventCategory', id: string, name: string, team_member_name: string, proposal_description?: string | null, scheduling_ui: Types.SchedulingUi, default_color?: string | null, signed_up_color?: string | null, full_color?: string | null, can_provide_tickets: boolean, events_paginated: { __typename: 'EventsPagination', total_entries: number }, department?: { __typename: 'Department', id: string, name: string } | null, event_form: { __typename: 'Form', id: string, title: string, form_type: Types.FormType }, event_proposal_form?: { __typename: 'Form', id: string, title: string, form_type: Types.FormType } | null, convention: { __typename: 'Convention', id: string } } } };
 
 export type UpdateEventCategoryMutationVariables = Types.Exact<{
   id: Types.Scalars['ID']['input'];
@@ -18,7 +15,7 @@ export type UpdateEventCategoryMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateEventCategoryMutationData = { __typename: 'Mutation', updateEventCategory: { __typename: 'UpdateEventCategoryPayload', event_category: { __typename: 'EventCategory', id: string, name: string, team_member_name: string, proposal_description?: string | null, scheduling_ui: Types.SchedulingUi, default_color?: string | null, signed_up_color?: string | null, full_color?: string | null, can_provide_tickets: boolean, events_paginated: { __typename: 'EventsPagination', total_entries: number }, department?: { __typename: 'Department', id: string, name: string } | null, event_form: { __typename: 'Form', id: string, title: string, form_type: Types.FormType }, event_proposal_form?: { __typename: 'Form', id: string, title: string, form_type: Types.FormType } | null } } };
+export type UpdateEventCategoryMutationData = { __typename: 'Mutation', updateEventCategory: { __typename: 'UpdateEventCategoryPayload', event_category: { __typename: 'EventCategory', id: string, name: string, team_member_name: string, proposal_description?: string | null, scheduling_ui: Types.SchedulingUi, default_color?: string | null, signed_up_color?: string | null, full_color?: string | null, can_provide_tickets: boolean, events_paginated: { __typename: 'EventsPagination', total_entries: number }, department?: { __typename: 'Department', id: string, name: string } | null, event_form: { __typename: 'Form', id: string, title: string, form_type: Types.FormType }, event_proposal_form?: { __typename: 'Form', id: string, title: string, form_type: Types.FormType } | null, convention: { __typename: 'Convention', id: string } } } };
 
 export type DeleteEventCategoryMutationVariables = Types.Exact<{
   id: Types.Scalars['ID']['input'];
@@ -28,109 +25,6 @@ export type DeleteEventCategoryMutationVariables = Types.Exact<{
 export type DeleteEventCategoryMutationData = { __typename: 'Mutation', deleteEventCategory: { __typename: 'DeleteEventCategoryPayload', clientMutationId?: string | null } };
 
 
-export const CreateEventCategoryDocument = gql`
-    mutation CreateEventCategory($eventCategory: EventCategoryInput!) {
-  createEventCategory(input: {event_category: $eventCategory}) {
-    event_category {
-      id
-      ...EventCategoryFields
-    }
-  }
-}
-    ${EventCategoryFieldsFragmentDoc}`;
-export type CreateEventCategoryMutationFn = Apollo.MutationFunction<CreateEventCategoryMutationData, CreateEventCategoryMutationVariables>;
-
-/**
- * __useCreateEventCategoryMutation__
- *
- * To run a mutation, you first call `useCreateEventCategoryMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateEventCategoryMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createEventCategoryMutation, { data, loading, error }] = useCreateEventCategoryMutation({
- *   variables: {
- *      eventCategory: // value for 'eventCategory'
- *   },
- * });
- */
-export function useCreateEventCategoryMutation(baseOptions?: Apollo.MutationHookOptions<CreateEventCategoryMutationData, CreateEventCategoryMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateEventCategoryMutationData, CreateEventCategoryMutationVariables>(CreateEventCategoryDocument, options);
-      }
-export type CreateEventCategoryMutationHookResult = ReturnType<typeof useCreateEventCategoryMutation>;
-export type CreateEventCategoryMutationResult = Apollo.MutationResult<CreateEventCategoryMutationData>;
-export type CreateEventCategoryMutationOptions = Apollo.BaseMutationOptions<CreateEventCategoryMutationData, CreateEventCategoryMutationVariables>;
-export const UpdateEventCategoryDocument = gql`
-    mutation UpdateEventCategory($id: ID!, $eventCategory: EventCategoryInput!) {
-  updateEventCategory(input: {id: $id, event_category: $eventCategory}) {
-    event_category {
-      id
-      ...EventCategoryFields
-    }
-  }
-}
-    ${EventCategoryFieldsFragmentDoc}`;
-export type UpdateEventCategoryMutationFn = Apollo.MutationFunction<UpdateEventCategoryMutationData, UpdateEventCategoryMutationVariables>;
-
-/**
- * __useUpdateEventCategoryMutation__
- *
- * To run a mutation, you first call `useUpdateEventCategoryMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateEventCategoryMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateEventCategoryMutation, { data, loading, error }] = useUpdateEventCategoryMutation({
- *   variables: {
- *      id: // value for 'id'
- *      eventCategory: // value for 'eventCategory'
- *   },
- * });
- */
-export function useUpdateEventCategoryMutation(baseOptions?: Apollo.MutationHookOptions<UpdateEventCategoryMutationData, UpdateEventCategoryMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateEventCategoryMutationData, UpdateEventCategoryMutationVariables>(UpdateEventCategoryDocument, options);
-      }
-export type UpdateEventCategoryMutationHookResult = ReturnType<typeof useUpdateEventCategoryMutation>;
-export type UpdateEventCategoryMutationResult = Apollo.MutationResult<UpdateEventCategoryMutationData>;
-export type UpdateEventCategoryMutationOptions = Apollo.BaseMutationOptions<UpdateEventCategoryMutationData, UpdateEventCategoryMutationVariables>;
-export const DeleteEventCategoryDocument = gql`
-    mutation DeleteEventCategory($id: ID!) {
-  deleteEventCategory(input: {id: $id}) {
-    clientMutationId
-  }
-}
-    `;
-export type DeleteEventCategoryMutationFn = Apollo.MutationFunction<DeleteEventCategoryMutationData, DeleteEventCategoryMutationVariables>;
-
-/**
- * __useDeleteEventCategoryMutation__
- *
- * To run a mutation, you first call `useDeleteEventCategoryMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteEventCategoryMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteEventCategoryMutation, { data, loading, error }] = useDeleteEventCategoryMutation({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useDeleteEventCategoryMutation(baseOptions?: Apollo.MutationHookOptions<DeleteEventCategoryMutationData, DeleteEventCategoryMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteEventCategoryMutationData, DeleteEventCategoryMutationVariables>(DeleteEventCategoryDocument, options);
-      }
-export type DeleteEventCategoryMutationHookResult = ReturnType<typeof useDeleteEventCategoryMutation>;
-export type DeleteEventCategoryMutationResult = Apollo.MutationResult<DeleteEventCategoryMutationData>;
-export type DeleteEventCategoryMutationOptions = Apollo.BaseMutationOptions<DeleteEventCategoryMutationData, DeleteEventCategoryMutationVariables>;
+export const CreateEventCategoryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateEventCategory"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"eventCategory"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"EventCategoryInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createEventCategory"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"event_category"},"value":{"kind":"Variable","name":{"kind":"Name","value":"eventCategory"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"event_category"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"EventCategoryFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"EventCategoryFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"EventCategory"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"team_member_name"}},{"kind":"Field","name":{"kind":"Name","value":"proposal_description"}},{"kind":"Field","name":{"kind":"Name","value":"scheduling_ui"}},{"kind":"Field","name":{"kind":"Name","value":"default_color"}},{"kind":"Field","name":{"kind":"Name","value":"signed_up_color"}},{"kind":"Field","name":{"kind":"Name","value":"full_color"}},{"kind":"Field","name":{"kind":"Name","value":"can_provide_tickets"}},{"kind":"Field","name":{"kind":"Name","value":"events_paginated"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"total_entries"}}]}},{"kind":"Field","name":{"kind":"Name","value":"department"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"event_form"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"form_type"}}]}},{"kind":"Field","name":{"kind":"Name","value":"event_proposal_form"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"form_type"}}]}},{"kind":"Field","name":{"kind":"Name","value":"convention"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<CreateEventCategoryMutationData, CreateEventCategoryMutationVariables>;
+export const UpdateEventCategoryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateEventCategory"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"eventCategory"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"EventCategoryInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateEventCategory"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"event_category"},"value":{"kind":"Variable","name":{"kind":"Name","value":"eventCategory"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"event_category"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"EventCategoryFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"EventCategoryFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"EventCategory"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"team_member_name"}},{"kind":"Field","name":{"kind":"Name","value":"proposal_description"}},{"kind":"Field","name":{"kind":"Name","value":"scheduling_ui"}},{"kind":"Field","name":{"kind":"Name","value":"default_color"}},{"kind":"Field","name":{"kind":"Name","value":"signed_up_color"}},{"kind":"Field","name":{"kind":"Name","value":"full_color"}},{"kind":"Field","name":{"kind":"Name","value":"can_provide_tickets"}},{"kind":"Field","name":{"kind":"Name","value":"events_paginated"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"total_entries"}}]}},{"kind":"Field","name":{"kind":"Name","value":"department"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"event_form"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"form_type"}}]}},{"kind":"Field","name":{"kind":"Name","value":"event_proposal_form"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"form_type"}}]}},{"kind":"Field","name":{"kind":"Name","value":"convention"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<UpdateEventCategoryMutationData, UpdateEventCategoryMutationVariables>;
+export const DeleteEventCategoryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteEventCategory"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteEventCategory"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"clientMutationId"}}]}}]}}]} as unknown as DocumentNode<DeleteEventCategoryMutationData, DeleteEventCategoryMutationVariables>;

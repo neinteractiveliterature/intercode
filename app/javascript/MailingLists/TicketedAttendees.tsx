@@ -1,10 +1,16 @@
-import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
-
 import TabbedMailingList from './TabbedMailingList';
 import usePageTitle from '../usePageTitle';
-import { useTicketedAttendeesQuery } from './queries.generated';
+import { TicketedAttendeesQueryData, TicketedAttendeesQueryDocument } from './queries.generated';
+import { LoaderFunction, useLoaderData } from 'react-router';
+import { client } from '../useIntercodeApolloClient';
 
-export default LoadQueryWrapper(useTicketedAttendeesQuery, function TicketedAttendees({ data }) {
+export const loader: LoaderFunction = async () => {
+  const { data } = await client.query<TicketedAttendeesQueryData>({ query: TicketedAttendeesQueryDocument });
+  return data;
+};
+
+function TicketedAttendees() {
+  const data = useLoaderData() as TicketedAttendeesQueryData;
   usePageTitle(`All attendees with ${data.convention.ticket_name}`);
 
   return (
@@ -18,4 +24,6 @@ export default LoadQueryWrapper(useTicketedAttendeesQuery, function TicketedAtte
       />
     </>
   );
-});
+}
+
+export const Component = TicketedAttendees;

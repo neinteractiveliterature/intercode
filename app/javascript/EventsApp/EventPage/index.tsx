@@ -9,21 +9,24 @@ import LongFormEventDetails from './LongFormEventDetails';
 import RateEventControl from '../../EventRatings/RateEventControl';
 import AppRootContext from '../../AppRootContext';
 import useRateEvent from '../../EventRatings/useRateEvent';
-import { useEventPageQuery } from './queries.generated';
+import { EventPageQueryData, EventPageQueryDocument, EventPageQueryVariables } from './queries.generated';
 import useSectionizedFormItems from './useSectionizedFormItems';
 import FormItemDisplay from '../../FormPresenter/ItemDisplays/FormItemDisplay';
 import { valueIsPresent } from './valueIsPresent';
-import { useParams } from 'react-router';
-import { LoadQueryWrapper } from '@neinteractiveliterature/litform/dist';
+import { LoaderFunction, useLoaderData } from 'react-router';
 import buildEventUrl from '../buildEventUrl';
+import { client } from '../../useIntercodeApolloClient';
 
-function useLoadEventPageQueryFromParams() {
-  const params = useParams<{ eventId: string }>();
-  return useEventPageQuery({ variables: { eventId: params.eventId ?? '' } });
-}
+export const loader: LoaderFunction = async ({ params: { eventId } }) => {
+  const { data } = await client.query<EventPageQueryData, EventPageQueryVariables>({
+    query: EventPageQueryDocument,
+    variables: { eventId: eventId ?? '' },
+  });
+  return data;
+};
 
-export default LoadQueryWrapper(useLoadEventPageQueryFromParams, function EventPage({ data }): JSX.Element {
-  const params = useParams<{ eventId: string }>();
+function EventPage(): JSX.Element {
+  const data = useLoaderData() as EventPageQueryData;
   const { myProfile } = useContext(AppRootContext);
   const rateEvent = useRateEvent();
   const { secretFormItems, formResponse } = useSectionizedFormItems(data.convention.event);
@@ -50,7 +53,7 @@ export default LoadQueryWrapper(useLoadEventPageQueryFromParams, function EventP
         <div className="col-md-9">
           <h1>{event.title}</h1>
 
-          <ShortFormEventDetails eventId={params.eventId ?? event.id} />
+          <ShortFormEventDetails data={data} />
         </div>
 
         <div className="col-md-3">
@@ -60,7 +63,7 @@ export default LoadQueryWrapper(useLoadEventPageQueryFromParams, function EventP
             </div>
           )}
 
-          <EventAdminMenu eventId={params.eventId ?? event.id} />
+          <EventAdminMenu data={data} />
 
           {secretFormItems.map(
             (item) =>
@@ -89,10 +92,12 @@ export default LoadQueryWrapper(useLoadEventPageQueryFromParams, function EventP
       </div>
 
       <section className="my-4">
-        <RunsSection eventId={params.eventId ?? event.id} />
+        <RunsSection data={data} />
       </section>
 
-      <LongFormEventDetails eventId={params.eventId ?? event.id} />
+      <LongFormEventDetails data={data} />
     </>
   );
-});
+}
+
+export const Component = EventPage;

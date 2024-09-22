@@ -27,10 +27,17 @@ function CmsLayoutForm<T extends CmsLayoutFields>({ layout, onChange, readOnly }
 
   return (
     <>
-      <BootstrapFormInput label="Name" value={layout.name ?? ''} onTextChange={setName} readOnly={readOnly} />
+      <BootstrapFormInput
+        label="Name"
+        name="name"
+        value={layout.name ?? ''}
+        onTextChange={setName}
+        readOnly={readOnly}
+      />
 
       <BootstrapFormInput
         label="Admin notes"
+        name="admin_notes"
         value={layout.admin_notes ?? ''}
         onTextChange={setAdminNotes}
         readOnly={readOnly}
@@ -38,6 +45,7 @@ function CmsLayoutForm<T extends CmsLayoutFields>({ layout, onChange, readOnly }
 
       <BootstrapFormInput
         label="Navigation bar CSS classes"
+        name="navbar_classes"
         className="form-control font-monospace"
         value={layout.navbar_classes ?? ''}
         onTextChange={setNavbarClasses}
@@ -59,6 +67,7 @@ function CmsLayoutForm<T extends CmsLayoutFields>({ layout, onChange, readOnly }
       <div className="mb-3">
         <legend className="col-form-label">Content</legend>
         <LiquidInput value={layout.content ?? ''} onChange={setContent} extensions={extensions} />
+        <input type="hidden" name="content" value={layout.content ?? ''} />
       </div>
     </>
   );

@@ -1,15 +1,14 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ApolloError } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import useAsyncFunction from '../../useAsyncFunction';
-import buildProductInput from '../buildProductInput';
-import { AdminProductsQueryData, AdminProductsQueryDocument } from '../queries.generated';
-import { useCreateProductMutation, useUpdateProductMutation } from '../mutations.generated';
+import { buildProductFormData } from '../buildProductInput';
 import { EditingProduct } from './EditingProductTypes';
 import { hasRealId } from '../../GeneratedIdUtils';
 import EditProductForm from './EditProductForm';
 import { useTranslation } from 'react-i18next';
+import { useFetcher } from 'react-router-dom';
+import { AdminProductsQueryData } from './queries.generated';
 
 export type EditAdminProductCardProps = {
   initialProduct: EditingProduct;
@@ -18,45 +17,26 @@ export type EditAdminProductCardProps = {
 };
 
 function EditAdminProductCard({ initialProduct, close, ticketTypes }: EditAdminProductCardProps): JSX.Element {
-  const [createProduct] = useCreateProductMutation();
-  const [updateProduct] = useUpdateProductMutation();
   const [product, setProduct] = useState(initialProduct);
   const { t } = useTranslation();
+  const fetcher = useFetcher();
+  const saveError = fetcher.data instanceof Error ? fetcher.data : undefined;
 
-  const saveProduct = async () => {
-    const productInput = buildProductInput(product);
+  useEffect(() => {
+    if (fetcher.state === 'idle' && fetcher.data && !saveError) {
+      close();
+    }
+  }, [fetcher.state, fetcher.data, saveError, close]);
+
+  const saveProduct = () => {
+    const formData = buildProductFormData(product);
 
     if (hasRealId(product)) {
-      await updateProduct({
-        variables: { id: product.id, product: productInput },
-      });
+      fetcher.submit(formData, { method: 'PATCH', action: `/admin_store/products/${product.id}` });
     } else {
-      await createProduct({
-        variables: { product: productInput },
-        update: (cache, result) => {
-          const data = cache.readQuery<AdminProductsQueryData>({ query: AdminProductsQueryDocument });
-          const newProduct = result.data?.createProduct?.product;
-          if (!data || !newProduct) {
-            return;
-          }
-          cache.writeQuery<AdminProductsQueryData>({
-            query: AdminProductsQueryDocument,
-            data: {
-              ...data,
-              convention: {
-                ...data.convention,
-                products: [...data.convention.products, newProduct],
-              },
-            },
-          });
-        },
-      });
+      fetcher.submit(formData, { method: 'POST', action: '/admin_store/products' });
     }
-
-    close();
   };
-
-  const [saveClicked, saveError] = useAsyncFunction(saveProduct);
 
   return (
     <div className="mb-4 card bg-light border-dark glow-dark">
@@ -76,7 +56,7 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }: EditAdminP
               </button>
             </li>
             <li className="list-inline-item">
-              <button type="button" className="btn btn-sm btn-primary" onClick={saveClicked}>
+              <button type="button" className="btn btn-sm btn-primary" onClick={saveProduct}>
                 {t('buttons.save')}
               </button>
             </li>

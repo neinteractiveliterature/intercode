@@ -1,10 +1,7 @@
 /* eslint-disable */
 import * as Types from '../../graphqlTypes.generated';
 
-import { gql } from '@apollo/client';
-import { AdminCouponFieldsFragmentDoc } from './queries.generated';
-import * as Apollo from '@apollo/client';
-const defaultOptions = {} as const;
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type CreateCouponMutationVariables = Types.Exact<{
   coupon: Types.CouponInput;
 }>;
@@ -28,109 +25,6 @@ export type DeleteCouponMutationVariables = Types.Exact<{
 export type DeleteCouponMutationData = { __typename: 'Mutation', deleteCoupon: { __typename: 'DeleteCouponPayload', clientMutationId?: string | null } };
 
 
-export const CreateCouponDocument = gql`
-    mutation CreateCoupon($coupon: CouponInput!) {
-  createCoupon(input: {coupon: $coupon}) {
-    coupon {
-      id
-      ...AdminCouponFields
-    }
-  }
-}
-    ${AdminCouponFieldsFragmentDoc}`;
-export type CreateCouponMutationFn = Apollo.MutationFunction<CreateCouponMutationData, CreateCouponMutationVariables>;
-
-/**
- * __useCreateCouponMutation__
- *
- * To run a mutation, you first call `useCreateCouponMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateCouponMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createCouponMutation, { data, loading, error }] = useCreateCouponMutation({
- *   variables: {
- *      coupon: // value for 'coupon'
- *   },
- * });
- */
-export function useCreateCouponMutation(baseOptions?: Apollo.MutationHookOptions<CreateCouponMutationData, CreateCouponMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateCouponMutationData, CreateCouponMutationVariables>(CreateCouponDocument, options);
-      }
-export type CreateCouponMutationHookResult = ReturnType<typeof useCreateCouponMutation>;
-export type CreateCouponMutationResult = Apollo.MutationResult<CreateCouponMutationData>;
-export type CreateCouponMutationOptions = Apollo.BaseMutationOptions<CreateCouponMutationData, CreateCouponMutationVariables>;
-export const UpdateCouponDocument = gql`
-    mutation UpdateCoupon($id: ID!, $coupon: CouponInput!) {
-  updateCoupon(input: {id: $id, coupon: $coupon}) {
-    coupon {
-      id
-      ...AdminCouponFields
-    }
-  }
-}
-    ${AdminCouponFieldsFragmentDoc}`;
-export type UpdateCouponMutationFn = Apollo.MutationFunction<UpdateCouponMutationData, UpdateCouponMutationVariables>;
-
-/**
- * __useUpdateCouponMutation__
- *
- * To run a mutation, you first call `useUpdateCouponMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateCouponMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateCouponMutation, { data, loading, error }] = useUpdateCouponMutation({
- *   variables: {
- *      id: // value for 'id'
- *      coupon: // value for 'coupon'
- *   },
- * });
- */
-export function useUpdateCouponMutation(baseOptions?: Apollo.MutationHookOptions<UpdateCouponMutationData, UpdateCouponMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateCouponMutationData, UpdateCouponMutationVariables>(UpdateCouponDocument, options);
-      }
-export type UpdateCouponMutationHookResult = ReturnType<typeof useUpdateCouponMutation>;
-export type UpdateCouponMutationResult = Apollo.MutationResult<UpdateCouponMutationData>;
-export type UpdateCouponMutationOptions = Apollo.BaseMutationOptions<UpdateCouponMutationData, UpdateCouponMutationVariables>;
-export const DeleteCouponDocument = gql`
-    mutation DeleteCoupon($id: ID!) {
-  deleteCoupon(input: {id: $id}) {
-    clientMutationId
-  }
-}
-    `;
-export type DeleteCouponMutationFn = Apollo.MutationFunction<DeleteCouponMutationData, DeleteCouponMutationVariables>;
-
-/**
- * __useDeleteCouponMutation__
- *
- * To run a mutation, you first call `useDeleteCouponMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteCouponMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteCouponMutation, { data, loading, error }] = useDeleteCouponMutation({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useDeleteCouponMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCouponMutationData, DeleteCouponMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteCouponMutationData, DeleteCouponMutationVariables>(DeleteCouponDocument, options);
-      }
-export type DeleteCouponMutationHookResult = ReturnType<typeof useDeleteCouponMutation>;
-export type DeleteCouponMutationResult = Apollo.MutationResult<DeleteCouponMutationData>;
-export type DeleteCouponMutationOptions = Apollo.BaseMutationOptions<DeleteCouponMutationData, DeleteCouponMutationVariables>;
+export const CreateCouponDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateCoupon"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"coupon"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CouponInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createCoupon"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"coupon"},"value":{"kind":"Variable","name":{"kind":"Name","value":"coupon"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"coupon"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"AdminCouponFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CouponFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Coupon"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"fixed_amount"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fractional"}},{"kind":"Field","name":{"kind":"Name","value":"currency_code"}}]}},{"kind":"Field","name":{"kind":"Name","value":"percent_discount"}},{"kind":"Field","name":{"kind":"Name","value":"provides_product"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AdminCouponFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Coupon"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"CouponFields"}},{"kind":"Field","name":{"kind":"Name","value":"usage_limit"}},{"kind":"Field","name":{"kind":"Name","value":"expires_at"}}]}}]} as unknown as DocumentNode<CreateCouponMutationData, CreateCouponMutationVariables>;
+export const UpdateCouponDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateCoupon"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"coupon"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CouponInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateCoupon"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"coupon"},"value":{"kind":"Variable","name":{"kind":"Name","value":"coupon"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"coupon"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"AdminCouponFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CouponFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Coupon"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"fixed_amount"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fractional"}},{"kind":"Field","name":{"kind":"Name","value":"currency_code"}}]}},{"kind":"Field","name":{"kind":"Name","value":"percent_discount"}},{"kind":"Field","name":{"kind":"Name","value":"provides_product"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AdminCouponFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Coupon"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"CouponFields"}},{"kind":"Field","name":{"kind":"Name","value":"usage_limit"}},{"kind":"Field","name":{"kind":"Name","value":"expires_at"}}]}}]} as unknown as DocumentNode<UpdateCouponMutationData, UpdateCouponMutationVariables>;
+export const DeleteCouponDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteCoupon"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteCoupon"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"clientMutationId"}}]}}]}}]} as unknown as DocumentNode<DeleteCouponMutationData, DeleteCouponMutationVariables>;

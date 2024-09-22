@@ -15,7 +15,7 @@ import TableHeader from '../../Tables/TableHeader';
 import usePageTitle from '../../usePageTitle';
 import useValueUnless from '../../useValueUnless';
 import SignupChangesTableExportButton from '../../Tables/SignupChangesTableExportButton';
-import { RunSignupChangesQueryData, useRunSignupChangesQuery } from './queries.generated';
+import { RunSignupChangesQueryData, RunSignupChangesQueryDocument } from './queries.generated';
 import ReactTableWithTheWorks from '../../Tables/ReactTableWithTheWorks';
 import { useParams } from 'react-router';
 
@@ -70,7 +70,7 @@ function RunSignupChangesTable(): JSX.Element {
     getData: ({ data }) => data.convention.run.signup_changes_paginated.entries,
     getPages: ({ data }) => data.convention.run.signup_changes_paginated.total_pages,
     getPossibleColumns: getPossibleColumnsFunc,
-    useQuery: useRunSignupChangesQuery,
+    query: RunSignupChangesQueryDocument,
     storageKeyPrefix: 'signupSpy',
     variables: { runId: runId ?? '' },
   });
@@ -105,4 +105,4 @@ function RunSignupChangesTable(): JSX.Element {
   );
 }
 
-export default RunSignupChangesTable;
+export const Component = RunSignupChangesTable;

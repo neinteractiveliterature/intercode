@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import * as React from 'react';
 import { Modal } from 'react-bootstrap4-modal';
-import { ApolloError } from '@apollo/client';
-import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
+import { ApolloError, useMutation, useSuspenseQuery } from '@apollo/client';
+import { ErrorDisplay, LoadingIndicator } from '@neinteractiveliterature/litform';
 
 import EventSelect, { DefaultEventSelectOptionType } from '../BuiltInFormControls/EventSelect';
 import ProvidableTicketTypeSelection from '../EventsApp/TeamMemberAdmin/ProvidableTicketTypeSelection';
@@ -11,14 +11,14 @@ import TicketingStatusDescription, {
 } from '../EventsApp/TeamMemberAdmin/TicketingStatusDescription';
 import useAsyncFunction from '../useAsyncFunction';
 import {
-  useConvertToEventProvidedTicketQuery,
+  ConvertToEventProvidedTicketQueryDocument,
   UserConProfileAdminQueryData,
   UserConProfileAdminQueryDocument,
 } from './queries.generated';
-import { useConvertTicketToEventProvidedMutation } from './mutations.generated';
 import { DefaultEventsQueryData } from '../BuiltInFormControls/selectDefaultQueries.generated';
 import { Convention } from '../graphqlTypes.generated';
 import { useTranslation } from 'react-i18next';
+import { ConvertTicketToEventProvidedDocument } from './mutations.generated';
 
 type EventSpecificSectionProps = {
   event: {
@@ -39,23 +39,9 @@ function EventSpecificSection({
   setTicketTypeId,
   disabled,
 }: EventSpecificSectionProps) {
-  const { t } = useTranslation();
-
-  const { data, loading, error } = useConvertToEventProvidedTicketQuery({
+  const { data } = useSuspenseQuery(ConvertToEventProvidedTicketQueryDocument, {
     variables: { eventId: event.id },
   });
-
-  if (loading) {
-    return <LoadingIndicator iconSet="bootstrap-icons" />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
-  if (!data) {
-    return <ErrorDisplay stringError={t('errors.noData')} />;
-  }
 
   return (
     <>
@@ -90,7 +76,7 @@ function ConvertToEventProvidedTicketModal({
   const { t } = useTranslation();
   const [event, setEvent] = useState<EventType>();
   const [ticketTypeId, setTicketTypeId] = useState<string>();
-  const [convertMutate] = useConvertTicketToEventProvidedMutation();
+  const [convertMutate] = useMutation(ConvertTicketToEventProvidedDocument);
   const [convertTicketToEventProvided, error, inProgress] = useAsyncFunction(convertMutate);
 
   const convertClicked = async () => {
@@ -159,14 +145,16 @@ function ConvertToEventProvidedTicketModal({
         />
 
         {event && (
-          <EventSpecificSection
-            event={event}
-            userConProfile={userConProfile}
-            convention={convention}
-            ticketTypeId={ticketTypeId}
-            setTicketTypeId={setTicketTypeId}
-            disabled={inProgress}
-          />
+          <React.Suspense fallback={<LoadingIndicator />}>
+            <EventSpecificSection
+              event={event}
+              userConProfile={userConProfile}
+              convention={convention}
+              ticketTypeId={ticketTypeId}
+              setTicketTypeId={setTicketTypeId}
+              disabled={inProgress}
+            />
+          </React.Suspense>
         )}
 
         <ErrorDisplay graphQLError={error as ApolloError} />

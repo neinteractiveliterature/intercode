@@ -1,17 +1,13 @@
-import { useState, useContext, useMemo, Suspense, useId } from 'react';
+import { useState, useMemo, Suspense, useId } from 'react';
 import * as React from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import PasswordConfirmationInput from './PasswordConfirmationInput';
-import AuthenticityTokensContext from '../AuthenticityTokensContext';
 import useAsyncFunction from '../useAsyncFunction';
-import { lazyWithAppEntrypointHeadersCheck } from '../checkAppEntrypointHeadersMatch';
-
-const PasswordInputWithStrengthCheck = lazyWithAppEntrypointHeadersCheck(
-  () => import(/* webpackChunkName: "password-input-with-strength-check" */ './PasswordInputWithStrengthCheck'),
-);
+import AuthenticityTokensManager from '../AuthenticityTokensContext';
+import PasswordInputWithStrengthCheck from './PasswordInputWithStrengthCheck';
 
 async function changePassword(
   authenticityToken: string,
@@ -46,7 +42,7 @@ function ResetPassword(): JSX.Element {
     () => new URLSearchParams(location.search).get('reset_password_token') ?? '',
     [location.search],
   );
-  const authenticityToken = useContext(AuthenticityTokensContext).changePassword;
+  const authenticityToken = AuthenticityTokensManager.instance.tokens.changePassword;
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const passwordId = useId();
@@ -99,4 +95,4 @@ function ResetPassword(): JSX.Element {
   );
 }
 
-export default ResetPassword;
+export const Component = ResetPassword;

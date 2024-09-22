@@ -1,40 +1,13 @@
-import { useParams, Outlet, Route, Routes } from 'react-router-dom';
-import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
+import { Outlet, useRouteLoaderData } from 'react-router-dom';
 
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
-import { useOrganizationAdminOrganizationsQuery } from './queries.generated';
-import LeafBreadcrumbItem from '../Breadcrumbs/LeafBreadcrumbItem';
-
-const OrganizationWithIdBreadcrumbs = LoadQueryWrapper(
-  useOrganizationAdminOrganizationsQuery,
-  function OrganizationWithIdBreadcrumbs({ data }) {
-    const { id } = useParams<{ id: string }>();
-
-    const organization = data.organizations.find((org) => org.id.toString() === id);
-
-    return (
-      <>
-        <RouteActivatedBreadcrumbItem to="" end>
-          {organization?.name ?? 'Organization'}
-        </RouteActivatedBreadcrumbItem>
-
-        <RouteActivatedBreadcrumbItem to="roles/new" hideUnlessMatch>
-          New organization role
-        </RouteActivatedBreadcrumbItem>
-
-        <Routes>
-          <Route
-            path="roles/:id/edit"
-            element={<LeafBreadcrumbItem path="">Edit organization role</LeafBreadcrumbItem>}
-          />
-        </Routes>
-      </>
-    );
-  },
-);
+import { NamedRoute } from '../AppRouter';
+import { SingleOrganizationLoaderResult } from './loaders';
+import NamedRouteBreadcrumbItem from '../Breadcrumbs/NamedRouteBreadcrumbItem';
 
 function OrganizationAdmin(): JSX.Element {
+  const organization = useRouteLoaderData(NamedRoute.Organization) as SingleOrganizationLoaderResult | undefined;
   const authorizationWarning = useAuthorizationRequired('can_read_organizations');
   if (authorizationWarning) return authorizationWarning;
 
@@ -45,9 +18,16 @@ function OrganizationAdmin(): JSX.Element {
           Organizations
         </RouteActivatedBreadcrumbItem>
 
-        <Routes>
-          <Route path=":id/*" element={<OrganizationWithIdBreadcrumbs />} />
-        </Routes>
+        {organization && (
+          <>
+            <NamedRouteBreadcrumbItem routeId={['Organization', 'OrganizationDisplay']}>
+              {organization.name}
+            </NamedRouteBreadcrumbItem>
+
+            <NamedRouteBreadcrumbItem routeId="NewOrganizationRole">New organization role</NamedRouteBreadcrumbItem>
+            <NamedRouteBreadcrumbItem routeId="EditOrganizationRole">Edit organization role</NamedRouteBreadcrumbItem>
+          </>
+        )}
       </ol>
 
       <Outlet />
@@ -55,4 +35,4 @@ function OrganizationAdmin(): JSX.Element {
   );
 }
 
-export default OrganizationAdmin;
+export const Component = OrganizationAdmin;

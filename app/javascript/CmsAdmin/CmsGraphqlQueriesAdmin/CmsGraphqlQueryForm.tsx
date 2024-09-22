@@ -1,4 +1,4 @@
-import { Suspense, useContext, useMemo } from 'react';
+import { Suspense, useMemo } from 'react';
 import * as React from 'react';
 import { createGraphiQLFetcher } from '@graphiql/toolkit';
 import {
@@ -10,7 +10,7 @@ import {
 
 import { lazyWithAppEntrypointHeadersCheck } from '../../checkAppEntrypointHeadersMatch';
 import { getIntercodeUserTimezoneHeader } from '../../useIntercodeApolloClient';
-import AuthenticityTokensContext from '../../AuthenticityTokensContext';
+import AuthenticityTokensManager from '../../AuthenticityTokensContext';
 
 const GraphiQL = lazyWithAppEntrypointHeadersCheck(() => import(/* webpackChunkName: 'graphiql' */ 'graphiql'));
 
@@ -31,13 +31,13 @@ function CmsGraphqlQueryForm<T extends CmsGraphqlQueryFormFields>({
   onChange,
   readOnly,
 }: CmsGraphqlQueryFormProps<T>): JSX.Element {
-  const { graphql: authenticityToken } = useContext(AuthenticityTokensContext);
+  const { graphql: authenticityToken } = AuthenticityTokensManager.instance.tokens;
   const [setIdentifier, setAdminNotes, setQuery] = usePropertySetters(onChange, 'identifier', 'admin_notes', 'query');
 
   const fetcher = useMemo(() => {
     return createGraphiQLFetcher({
       url: '/graphql',
-      headers: { 'X-CSRF-Token': authenticityToken, ...getIntercodeUserTimezoneHeader() },
+      headers: { 'X-CSRF-Token': authenticityToken ?? '', ...getIntercodeUserTimezoneHeader() },
     });
   }, [authenticityToken]);
 
@@ -70,6 +70,7 @@ function CmsGraphqlQueryForm<T extends CmsGraphqlQueryFormFields>({
             editorTheme="intercode"
           />
         </Suspense>
+        <input type="hidden" name="query" value={value.query} />
       </div>
     </>
   );

@@ -1,18 +1,17 @@
 import { Column } from 'react-table';
-import { useModal } from '@neinteractiveliterature/litform';
 
 import describeCoupon from '../describeCoupon';
 import useReactTableWithTheWorks from '../../Tables/useReactTableWithTheWorks';
 import { SingleLineTimestampCell } from '../../Tables/TimestampCell';
 import TableHeader from '../../Tables/TableHeader';
-import NewCouponModal from './NewCouponModal';
-import EditCouponModal from './EditCouponModal';
 import ReactTableExportButtonWithColumnTransform from '../../Tables/ReactTableExportButtonWithColumnTransform';
-import { AdminCouponsQueryData, useAdminCouponsQuery } from './queries.generated';
+import { AdminCouponsQueryData, AdminCouponsQueryDocument } from './queries.generated';
 import ReactTableWithTheWorks from '../../Tables/ReactTableWithTheWorks';
 import { useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
 import { useCallback } from 'react';
+import { Outlet, useNavigate } from 'react-router';
+import { Link } from 'react-router-dom';
 
 type CouponType = AdminCouponsQueryData['convention']['coupons_paginated']['entries'][0];
 
@@ -71,8 +70,7 @@ function getPossibleColumns(t: TFunction): Column<CouponType>[] {
 
 function CouponAdminTable(): JSX.Element {
   const { t } = useTranslation();
-  const newCouponModal = useModal();
-  const editCouponModal = useModal<{ initialCoupon: CouponType }>();
+  const navigate = useNavigate();
 
   const getPossibleColumnsWithTranslation = useCallback(() => getPossibleColumns(t), [t]);
 
@@ -80,7 +78,7 @@ function CouponAdminTable(): JSX.Element {
     getData: ({ data }) => data?.convention.coupons_paginated.entries,
     getPages: ({ data }) => data?.convention.coupons_paginated.total_pages,
     getPossibleColumns: getPossibleColumnsWithTranslation,
-    useQuery: useAdminCouponsQuery,
+    query: AdminCouponsQueryDocument,
     storageKeyPrefix: 'coupons',
   });
 
@@ -89,9 +87,9 @@ function CouponAdminTable(): JSX.Element {
       <TableHeader
         {...tableHeaderProps}
         renderLeftContent={() => (
-          <button type="button" className="btn btn-outline-primary ms-2" onClick={newCouponModal.open}>
+          <Link to="./new" className="btn btn-outline-primary ms-2">
             <i className="bi-plus" /> New coupon
-          </button>
+          </Link>
         )}
         exportButton={
           <ReactTableExportButtonWithColumnTransform
@@ -107,18 +105,12 @@ function CouponAdminTable(): JSX.Element {
       <ReactTableWithTheWorks
         tableInstance={tableInstance}
         loading={loading}
-        onClickRow={(row) => editCouponModal.open({ initialCoupon: row.original })}
+        onClickRow={(row) => navigate(`./${row.original.id}`)}
       />
 
-      <NewCouponModal visible={newCouponModal.visible} close={newCouponModal.close} />
-
-      <EditCouponModal
-        initialCoupon={editCouponModal.state?.initialCoupon}
-        visible={editCouponModal.visible}
-        close={editCouponModal.close}
-      />
+      <Outlet />
     </>
   );
 }
 
-export default CouponAdminTable;
+export const Component = CouponAdminTable;

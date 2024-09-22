@@ -1,11 +1,10 @@
-import { SyntheticEvent, useCallback, useState } from 'react';
+import { SyntheticEvent, useCallback, useContext, useState } from 'react';
 import { DateTime } from 'luxon';
-import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import ConventionDaySelect from '../BuiltInFormControls/ConventionDaySelect';
 import TimeSelect, { TimeValues } from '../BuiltInFormControls/TimeSelect';
 import Timespan from '../Timespan';
-import { useWhosFreeFormConventionQuery } from './queries.generated';
+import AppRootContext from '../AppRootContext';
 
 function makeTimeOfDay(day: DateTime, newTime: TimeValues) {
   return day.set(newTime);
@@ -16,7 +15,7 @@ export type WhosFreeFormProps = {
 };
 
 function WhosFreeForm({ onSubmit }: WhosFreeFormProps): JSX.Element {
-  const { data, loading, error } = useWhosFreeFormConventionQuery();
+  const { convention } = useContext(AppRootContext);
   const [start, setStart] = useState<TimeValues>({
     hour: undefined,
     minute: undefined,
@@ -71,15 +70,9 @@ function WhosFreeForm({ onSubmit }: WhosFreeFormProps): JSX.Element {
     [onSubmit, day, start, finish],
   );
 
-  if (loading) {
-    return <LoadingIndicator iconSet="bootstrap-icons" />;
+  if (convention == null) {
+    return <></>;
   }
-
-  if (error || !data) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
-  const { convention } = data;
 
   return (
     <div className="card bg-light mb-4">

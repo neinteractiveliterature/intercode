@@ -1,10 +1,7 @@
 /* eslint-disable */
 import * as Types from '../../graphqlTypes.generated';
 
-import { gql } from '@apollo/client';
-import { CmsLayoutFieldsFragmentDoc } from './queries.generated';
-import * as Apollo from '@apollo/client';
-const defaultOptions = {} as const;
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type CreateLayoutMutationVariables = Types.Exact<{
   cmsLayout: Types.CmsLayoutInput;
 }>;
@@ -28,109 +25,6 @@ export type DeleteLayoutMutationVariables = Types.Exact<{
 export type DeleteLayoutMutationData = { __typename: 'Mutation', deleteCmsLayout: { __typename: 'DeleteCmsLayoutPayload', clientMutationId?: string | null } };
 
 
-export const CreateLayoutDocument = gql`
-    mutation CreateLayout($cmsLayout: CmsLayoutInput!) {
-  createCmsLayout(input: {cms_layout: $cmsLayout}) {
-    cms_layout {
-      id
-      ...CmsLayoutFields
-    }
-  }
-}
-    ${CmsLayoutFieldsFragmentDoc}`;
-export type CreateLayoutMutationFn = Apollo.MutationFunction<CreateLayoutMutationData, CreateLayoutMutationVariables>;
-
-/**
- * __useCreateLayoutMutation__
- *
- * To run a mutation, you first call `useCreateLayoutMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateLayoutMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createLayoutMutation, { data, loading, error }] = useCreateLayoutMutation({
- *   variables: {
- *      cmsLayout: // value for 'cmsLayout'
- *   },
- * });
- */
-export function useCreateLayoutMutation(baseOptions?: Apollo.MutationHookOptions<CreateLayoutMutationData, CreateLayoutMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateLayoutMutationData, CreateLayoutMutationVariables>(CreateLayoutDocument, options);
-      }
-export type CreateLayoutMutationHookResult = ReturnType<typeof useCreateLayoutMutation>;
-export type CreateLayoutMutationResult = Apollo.MutationResult<CreateLayoutMutationData>;
-export type CreateLayoutMutationOptions = Apollo.BaseMutationOptions<CreateLayoutMutationData, CreateLayoutMutationVariables>;
-export const UpdateLayoutDocument = gql`
-    mutation UpdateLayout($id: ID!, $cmsLayout: CmsLayoutInput!) {
-  updateCmsLayout(input: {id: $id, cms_layout: $cmsLayout}) {
-    cms_layout {
-      id
-      ...CmsLayoutFields
-    }
-  }
-}
-    ${CmsLayoutFieldsFragmentDoc}`;
-export type UpdateLayoutMutationFn = Apollo.MutationFunction<UpdateLayoutMutationData, UpdateLayoutMutationVariables>;
-
-/**
- * __useUpdateLayoutMutation__
- *
- * To run a mutation, you first call `useUpdateLayoutMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateLayoutMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateLayoutMutation, { data, loading, error }] = useUpdateLayoutMutation({
- *   variables: {
- *      id: // value for 'id'
- *      cmsLayout: // value for 'cmsLayout'
- *   },
- * });
- */
-export function useUpdateLayoutMutation(baseOptions?: Apollo.MutationHookOptions<UpdateLayoutMutationData, UpdateLayoutMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateLayoutMutationData, UpdateLayoutMutationVariables>(UpdateLayoutDocument, options);
-      }
-export type UpdateLayoutMutationHookResult = ReturnType<typeof useUpdateLayoutMutation>;
-export type UpdateLayoutMutationResult = Apollo.MutationResult<UpdateLayoutMutationData>;
-export type UpdateLayoutMutationOptions = Apollo.BaseMutationOptions<UpdateLayoutMutationData, UpdateLayoutMutationVariables>;
-export const DeleteLayoutDocument = gql`
-    mutation DeleteLayout($id: ID!) {
-  deleteCmsLayout(input: {id: $id}) {
-    clientMutationId
-  }
-}
-    `;
-export type DeleteLayoutMutationFn = Apollo.MutationFunction<DeleteLayoutMutationData, DeleteLayoutMutationVariables>;
-
-/**
- * __useDeleteLayoutMutation__
- *
- * To run a mutation, you first call `useDeleteLayoutMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteLayoutMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteLayoutMutation, { data, loading, error }] = useDeleteLayoutMutation({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useDeleteLayoutMutation(baseOptions?: Apollo.MutationHookOptions<DeleteLayoutMutationData, DeleteLayoutMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteLayoutMutationData, DeleteLayoutMutationVariables>(DeleteLayoutDocument, options);
-      }
-export type DeleteLayoutMutationHookResult = ReturnType<typeof useDeleteLayoutMutation>;
-export type DeleteLayoutMutationResult = Apollo.MutationResult<DeleteLayoutMutationData>;
-export type DeleteLayoutMutationOptions = Apollo.BaseMutationOptions<DeleteLayoutMutationData, DeleteLayoutMutationVariables>;
+export const CreateLayoutDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateLayout"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"cmsLayout"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CmsLayoutInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createCmsLayout"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"cms_layout"},"value":{"kind":"Variable","name":{"kind":"Name","value":"cmsLayout"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cms_layout"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"CmsLayoutFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CmsLayoutFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsLayout"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"navbar_classes"}},{"kind":"Field","name":{"kind":"Name","value":"admin_notes"}},{"kind":"Field","name":{"kind":"Name","value":"current_ability_can_update"}},{"kind":"Field","name":{"kind":"Name","value":"current_ability_can_delete"}}]}}]} as unknown as DocumentNode<CreateLayoutMutationData, CreateLayoutMutationVariables>;
+export const UpdateLayoutDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateLayout"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"cmsLayout"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CmsLayoutInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateCmsLayout"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"cms_layout"},"value":{"kind":"Variable","name":{"kind":"Name","value":"cmsLayout"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cms_layout"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"CmsLayoutFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CmsLayoutFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsLayout"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"navbar_classes"}},{"kind":"Field","name":{"kind":"Name","value":"admin_notes"}},{"kind":"Field","name":{"kind":"Name","value":"current_ability_can_update"}},{"kind":"Field","name":{"kind":"Name","value":"current_ability_can_delete"}}]}}]} as unknown as DocumentNode<UpdateLayoutMutationData, UpdateLayoutMutationVariables>;
+export const DeleteLayoutDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteLayout"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteCmsLayout"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"clientMutationId"}}]}}]}}]} as unknown as DocumentNode<DeleteLayoutMutationData, DeleteLayoutMutationVariables>;

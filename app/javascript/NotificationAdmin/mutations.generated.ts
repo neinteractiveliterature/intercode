@@ -1,10 +1,7 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { gql } from '@apollo/client';
-import { NotificationTemplateFieldsFragmentDoc } from './queries.generated';
-import * as Apollo from '@apollo/client';
-const defaultOptions = {} as const;
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type UpdateNotificationTemplateMutationVariables = Types.Exact<{
   eventKey: Types.Scalars['String']['input'];
   notificationTemplate: Types.NotificationTemplateInput;
@@ -23,77 +20,5 @@ export type SendNotificationPreviewMutationVariables = Types.Exact<{
 export type SendNotificationPreviewMutationData = { __typename: 'Mutation', sendNotificationPreview: { __typename: 'SendNotificationPreviewPayload', clientMutationId?: string | null } };
 
 
-export const UpdateNotificationTemplateDocument = gql`
-    mutation UpdateNotificationTemplate($eventKey: String!, $notificationTemplate: NotificationTemplateInput!) {
-  updateNotificationTemplate(
-    input: {event_key: $eventKey, notification_template: $notificationTemplate}
-  ) {
-    notification_template {
-      id
-      ...NotificationTemplateFields
-    }
-  }
-}
-    ${NotificationTemplateFieldsFragmentDoc}`;
-export type UpdateNotificationTemplateMutationFn = Apollo.MutationFunction<UpdateNotificationTemplateMutationData, UpdateNotificationTemplateMutationVariables>;
-
-/**
- * __useUpdateNotificationTemplateMutation__
- *
- * To run a mutation, you first call `useUpdateNotificationTemplateMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateNotificationTemplateMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateNotificationTemplateMutation, { data, loading, error }] = useUpdateNotificationTemplateMutation({
- *   variables: {
- *      eventKey: // value for 'eventKey'
- *      notificationTemplate: // value for 'notificationTemplate'
- *   },
- * });
- */
-export function useUpdateNotificationTemplateMutation(baseOptions?: Apollo.MutationHookOptions<UpdateNotificationTemplateMutationData, UpdateNotificationTemplateMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateNotificationTemplateMutationData, UpdateNotificationTemplateMutationVariables>(UpdateNotificationTemplateDocument, options);
-      }
-export type UpdateNotificationTemplateMutationHookResult = ReturnType<typeof useUpdateNotificationTemplateMutation>;
-export type UpdateNotificationTemplateMutationResult = Apollo.MutationResult<UpdateNotificationTemplateMutationData>;
-export type UpdateNotificationTemplateMutationOptions = Apollo.BaseMutationOptions<UpdateNotificationTemplateMutationData, UpdateNotificationTemplateMutationVariables>;
-export const SendNotificationPreviewDocument = gql`
-    mutation SendNotificationPreview($eventKey: String!, $email: Boolean!, $sms: Boolean!) {
-  sendNotificationPreview(input: {event_key: $eventKey, email: $email, sms: $sms}) {
-    clientMutationId
-  }
-}
-    `;
-export type SendNotificationPreviewMutationFn = Apollo.MutationFunction<SendNotificationPreviewMutationData, SendNotificationPreviewMutationVariables>;
-
-/**
- * __useSendNotificationPreviewMutation__
- *
- * To run a mutation, you first call `useSendNotificationPreviewMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useSendNotificationPreviewMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [sendNotificationPreviewMutation, { data, loading, error }] = useSendNotificationPreviewMutation({
- *   variables: {
- *      eventKey: // value for 'eventKey'
- *      email: // value for 'email'
- *      sms: // value for 'sms'
- *   },
- * });
- */
-export function useSendNotificationPreviewMutation(baseOptions?: Apollo.MutationHookOptions<SendNotificationPreviewMutationData, SendNotificationPreviewMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<SendNotificationPreviewMutationData, SendNotificationPreviewMutationVariables>(SendNotificationPreviewDocument, options);
-      }
-export type SendNotificationPreviewMutationHookResult = ReturnType<typeof useSendNotificationPreviewMutation>;
-export type SendNotificationPreviewMutationResult = Apollo.MutationResult<SendNotificationPreviewMutationData>;
-export type SendNotificationPreviewMutationOptions = Apollo.BaseMutationOptions<SendNotificationPreviewMutationData, SendNotificationPreviewMutationVariables>;
+export const UpdateNotificationTemplateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateNotificationTemplate"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"eventKey"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"notificationTemplate"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"NotificationTemplateInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateNotificationTemplate"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"event_key"},"value":{"kind":"Variable","name":{"kind":"Name","value":"eventKey"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"notification_template"},"value":{"kind":"Variable","name":{"kind":"Name","value":"notificationTemplate"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"notification_template"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"NotificationTemplateFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"NotificationTemplateFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"NotificationTemplate"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"event_key"}},{"kind":"Field","name":{"kind":"Name","value":"subject"}},{"kind":"Field","name":{"kind":"Name","value":"body_html"}},{"kind":"Field","name":{"kind":"Name","value":"body_text"}},{"kind":"Field","name":{"kind":"Name","value":"body_sms"}}]}}]} as unknown as DocumentNode<UpdateNotificationTemplateMutationData, UpdateNotificationTemplateMutationVariables>;
+export const SendNotificationPreviewDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"SendNotificationPreview"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"eventKey"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"email"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sms"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"sendNotificationPreview"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"event_key"},"value":{"kind":"Variable","name":{"kind":"Name","value":"eventKey"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"email"},"value":{"kind":"Variable","name":{"kind":"Name","value":"email"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"sms"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sms"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"clientMutationId"}}]}}]}}]} as unknown as DocumentNode<SendNotificationPreviewMutationData, SendNotificationPreviewMutationVariables>;

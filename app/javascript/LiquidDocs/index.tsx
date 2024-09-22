@@ -1,113 +1,47 @@
-import { createContext, useMemo } from 'react';
-import { Routes, Route } from 'react-router-dom';
-import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
-
-import AssignDoc from './AssignDoc';
 import AssignDocLink from './AssignDocLink';
-import DocData from './DocData';
-import findLiquidTagName from './findLiquidTagName';
-import FilterDoc from './FilterDoc';
 import FilterDocLink from './FilterDocLink';
-import LiquidTagDoc from './LiquidTagDoc';
 import LiquidTagDocLink from './LiquidTagDocLink';
-import useLiquidAssignsQueryFromLocation from './useLiquidAssignsQueryFromLocation';
-
-function sortByName<T extends { name: string }>(items: T[]) {
-  return [...items].sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
-}
-
-const LiquidDocsContext = createContext({});
+import { useLiquidDocs } from './loader';
 
 function LiquidDocs(): JSX.Element {
-  const [{ data, loading, error }, notifierEventKey] = useLiquidAssignsQueryFromLocation();
-
-  const sortedAssigns = useMemo(
-    () => (loading || error || !data ? [] : sortByName(data.cmsParent.liquidAssigns)),
-    [error, data, loading],
-  );
-
-  const sortedFilters = useMemo(() => sortByName(DocData.filter_methods), []);
-
-  const sortedTags = useMemo(
-    () => sortByName(DocData.classes.filter((klass) => klass.tags.some((tag) => tag.tag_name === 'liquid_tag_name'))),
-    [],
-  );
-
-  if (loading) {
-    return <LoadingIndicator iconSet="bootstrap-icons" />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
+  const { sortedAssigns, sortedFilters, sortedTags } = useLiquidDocs();
 
   return (
-    <LiquidDocsContext.Provider value={{ notifierEventKey }}>
-      <Routes>
+    <>
+      <nav aria-label="breadcrumb">
+        <ol className="breadcrumb mb-4">
+          <li className="breadcrumb-item active" aria-current="page">
+            Documentation home
+          </li>
+        </ol>
+      </nav>
+
+      <section className="mb-4">
+        <h2 className="mb-2">Assigns</h2>
+
         {sortedAssigns.map((assign) => (
-          <Route
-            path={`/liquid_docs/assigns/${assign.name}(\\..*)?`}
-            key={`route-${assign.name}`}
-            element={<AssignDoc assign={assign} />}
-          />
+          <AssignDocLink compact assign={assign} key={assign.name} />
         ))}
-        {sortedFilters.map((filter) => (
-          <Route
-            path={`/liquid_docs/filters/${filter.name}(\\..*)?`}
-            key={`route-${filter.name}`}
-            element={<FilterDoc filter={filter} />}
-          />
-        ))}
+      </section>
+
+      <section className="mb-4">
+        <h2 className="mb-2">Filters</h2>
+        <ul className="list-group">
+          {sortedFilters.map((filter) => (
+            <FilterDocLink filter={filter} key={filter.name} />
+          ))}
+        </ul>
+      </section>
+
+      <section>
+        <h2 className="mb-2">Tags</h2>
+
         {sortedTags.map((liquidTag) => (
-          <Route
-            path={`/liquid_docs/tags/${findLiquidTagName(liquidTag)}(\\..*)?`}
-            key={`route-${liquidTag.name}`}
-            element={<LiquidTagDoc liquidTag={liquidTag} />}
-          />
+          <LiquidTagDocLink liquidTag={liquidTag} key={liquidTag.name} />
         ))}
-
-        <Route
-          path="/liquid_docs"
-          element={
-            <>
-              <nav aria-label="breadcrumb mb-4">
-                <ol className="breadcrumb">
-                  <li className="breadcrumb-item active" aria-current="page">
-                    Documentation home
-                  </li>
-                </ol>
-              </nav>
-
-              <section className="mb-4">
-                <h2 className="mb-2">Assigns</h2>
-
-                {sortedAssigns.map((assign) => (
-                  <AssignDocLink compact assign={assign} key={assign.name} />
-                ))}
-              </section>
-
-              <section className="mb-4">
-                <h2 className="mb-2">Filters</h2>
-                <ul className="list-group">
-                  {sortedFilters.map((filter) => (
-                    <FilterDocLink filter={filter} key={filter.name} />
-                  ))}
-                </ul>
-              </section>
-
-              <section>
-                <h2 className="mb-2">Tags</h2>
-
-                {sortedTags.map((liquidTag) => (
-                  <LiquidTagDocLink liquidTag={liquidTag} key={liquidTag.name} />
-                ))}
-              </section>
-            </>
-          }
-        />
-      </Routes>
-    </LiquidDocsContext.Provider>
+      </section>
+    </>
   );
 }
 
-export default LiquidDocs;
+export const Component = LiquidDocs;

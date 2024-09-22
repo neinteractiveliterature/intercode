@@ -13,7 +13,7 @@ import BucketChangeCell from '../Tables/BucketChangeCell';
 import TableHeader from '../Tables/TableHeader';
 import SignupChangesTableExportButton from '../Tables/SignupChangesTableExportButton';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
-import { SignupSpySignupChangesQueryData, useSignupSpySignupChangesQuery } from './queries.generated';
+import { SignupSpySignupChangesQueryData, SignupSpySignupChangesQueryDocument } from './queries.generated';
 
 type SignupChangeType = SignupSpySignupChangesQueryData['convention']['signup_changes_paginated']['entries'][0];
 
@@ -68,6 +68,7 @@ const columns: Column<SignupChangeType>[] = [
   },
 ];
 
+// eslint-disable-next-line i18next/no-literal-string
 const defaultVisibleColumns = ['name', 'event_title', 'action', 'bucket_change', 'created_at', 'choice'];
 
 const defaultState = {
@@ -84,7 +85,7 @@ function SignupSpyTable(): JSX.Element {
       getData: ({ data }) => data.convention.signup_changes_paginated.entries,
       getPages: ({ data }) => data.convention.signup_changes_paginated.total_pages,
       getPossibleColumns: () => columns,
-      useQuery: useSignupSpySignupChangesQuery,
+      query: SignupSpySignupChangesQueryDocument,
       storageKeyPrefix: 'signupSpy',
     });
 

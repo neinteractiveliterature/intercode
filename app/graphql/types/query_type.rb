@@ -10,6 +10,11 @@ class Types::QueryType < Types::BaseObject
   MARKDOWN
   end
 
+  field :email_route, Types::EmailRouteType, null: false, camelize: false do
+    description "Returns a global email route by ID."
+    argument :id, ID, required: true, description: "The ID of the email route to find."
+  end
+
   field :convention_by_request_host, Types::ConventionType, null: false do
     description <<~MARKDOWN
       Returns the convention associated with the domain name of this HTTP request. If one is not
@@ -209,6 +214,10 @@ represented as a JSON object."
       args[:filters].to_h,
       args[:sort]
     ).paginate(page: args[:page], per_page: args[:per_page])
+  end
+
+  def email_route(id:)
+    EmailRoute.find(id)
   end
 
   def my_authorized_applications

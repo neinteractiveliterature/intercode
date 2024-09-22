@@ -1,5 +1,3 @@
-import data from '../../../liquid_doc.json';
-
 export type YardTag = {
   tag_name: string;
   name: string | null;
@@ -26,6 +24,6 @@ export type YardDocs = {
   filter_methods: YardMethod[];
 };
 
-const typedData: YardDocs = data;
-
-export default typedData;
+export function loadDocData(): Promise<YardDocs> {
+  return import('../../../liquid_doc.json');
+}

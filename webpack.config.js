@@ -1,13 +1,20 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable @typescript-eslint/no-require-imports */
 const path = require('path');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const RollbarSourceMapPlugin = require('rollbar-sourcemap-webpack-plugin');
 const webpack = require('webpack');
 const TerserPlugin = require('terser-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const ASSET_PATH =
   process.env.ASSET_PATH || (process.env.NODE_ENV === 'production' ? '/packs/' : 'https://localhost:3135/packs/');
+
+const cssLoadersConfig = [
+  MiniCssExtractPlugin.loader,
+  require.resolve('css-loader'),
+  require.resolve('postcss-loader'),
+];
 
 const config = {
   mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
@@ -87,35 +94,13 @@ const config = {
       {
         test: /\.s[ac]ss$/i,
         use: [
-          {
-            loader: require.resolve('style-loader'),
-            options: { insert: require.resolve('./insertAtTop') },
-          },
-          require.resolve('css-loader'),
-          require.resolve('postcss-loader'),
+          ...cssLoadersConfig,
           { loader: require.resolve('sass-loader'), options: { sassOptions: { quietDeps: true } } },
         ],
       },
       {
         test: /\.css$/i,
-        use: [
-          {
-            loader: require.resolve('style-loader'),
-            options: { insert: require.resolve('./insertAtTop') },
-          },
-          require.resolve('css-loader'),
-          require.resolve('postcss-loader'),
-        ],
-      },
-      {
-        test: /\.(jsx)$/,
-        include: [/node_modules\/cadmus-navbar-admin/],
-        type: 'javascript/auto',
-        use: [
-          {
-            loader: require.resolve('swc-loader'),
-          },
-        ],
+        use: cssLoadersConfig,
       },
       {
         test: /\.(mjs|js|jsx|ts|tsx)?(\.erb)?$/,
@@ -147,6 +132,9 @@ const config = {
       __DEV__: JSON.stringify(process.env.NODE_ENV !== 'production'),
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV ?? 'development'),
       'process.env.ASSET_PATH': JSON.stringify(ASSET_PATH),
+    }),
+    new MiniCssExtractPlugin({
+      filename: '[name]-[chunkhash].css',
     }),
     new CaseSensitivePathsPlugin(),
   ],

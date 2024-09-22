@@ -1,5 +1,5 @@
 import { useState, useCallback, useContext, useMemo } from 'react';
-import { ApolloError } from '@apollo/client';
+import { ApolloError, useQuery } from '@apollo/client';
 import { Filters } from 'react-table';
 import { useTranslation } from 'react-i18next';
 import {
@@ -7,7 +7,6 @@ import {
   ErrorDisplay,
   PageLoadingIndicator,
   SearchInput,
-  LoadQueryWrapper,
   notEmpty,
 } from '@neinteractiveliterature/litform';
 
@@ -21,17 +20,19 @@ import usePageTitle from '../../../usePageTitle';
 import AppRootContext from '../../../AppRootContext';
 import EventListMyRatingSelector from './EventListMyRatingSelector';
 import useAsyncFunction from '../../../useAsyncFunction';
-import { EventListEventsQueryData, useEventListEventsQuery } from './queries.generated';
-import { TypedFormItem } from '../../../FormAdmin/FormItemUtils';
+import { EventListEventsQueryData, EventListEventsQueryDocument } from './queries.generated';
 import EventListFilterableFormItemDropdown from './EventListFilterableFormItemDropdown';
-import { CommonConventionDataQueryData, useCommonConventionDataQuery } from '../../queries.generated';
-import useFilterableFormItems from '../../useFilterableFormItems';
+import { CommonConventionDataQueryData, CommonConventionDataQueryDocument } from '../../queries.generated';
+import { getFilterableFormItems } from '../../useFilterableFormItems';
 import useMergeCategoriesIntoEvents from '../../useMergeCategoriesIntoEvents';
 import EventCatalogNavTabs from '../EventCatalogNavTabs';
+import { LoaderFunction, useLoaderData } from 'react-router';
+import { client } from '../../../useIntercodeApolloClient';
+import { FetchMoreFunction } from '@apollo/client/react/hooks/useSuspenseQuery';
+import { ResultOf, VariablesOf } from '@graphql-typed-document-node/core';
 
 const PAGE_SIZE = 20;
 
-type FetchMoreFunction = ReturnType<typeof useEventListEventsQuery>['fetchMore'];
 type EventType = NonNullable<EventListEventsQueryData['convention']>['events_paginated']['entries'][number];
 
 const filterCodecs = buildFieldFilterCodecs({
@@ -41,7 +42,13 @@ const filterCodecs = buildFieldFilterCodecs({
   form_items: FilterCodecs.json,
 });
 
-const fetchMoreEvents = async (fetchMore: FetchMoreFunction, page: number) => {
+const fetchMoreEvents = async (
+  fetchMore: FetchMoreFunction<
+    ResultOf<typeof EventListEventsQueryDocument>,
+    VariablesOf<typeof EventListEventsQueryDocument>
+  >,
+  page: number,
+) => {
   try {
     await fetchMore({
       variables: { page, pageSize: PAGE_SIZE },
@@ -62,17 +69,24 @@ const fetchMoreEvents = async (fetchMore: FetchMoreFunction, page: number) => {
         return updatedQuery;
       },
     });
-  } catch (err) {
+  } catch {
     // ignore, see https://github.com/apollographql/apollo-client/issues/4114#issuecomment-502111099
   }
 };
 
-type EventListProps = {
+type LoaderResult = {
   convention: CommonConventionDataQueryData['convention'];
-  filterableFormItems: TypedFormItem[];
+  filterableFormItems: ReturnType<typeof getFilterableFormItems>;
 };
 
-function EventList({ filterableFormItems, convention }: EventListProps): JSX.Element {
+export const loader: LoaderFunction = async () => {
+  const { data } = await client.query<CommonConventionDataQueryData>({ query: CommonConventionDataQueryDocument });
+  const filterableFormItems = getFilterableFormItems(data.convention);
+  return { convention: data.convention, filterableFormItems } satisfies LoaderResult;
+};
+
+function EventList(): JSX.Element {
+  const { filterableFormItems, convention } = useLoaderData() as LoaderResult;
   const { sortBy, filters, updateSearch } = useReactRouterReactTable({
     ...filterCodecs,
   });
@@ -98,7 +112,7 @@ function EventList({ filterableFormItems, convention }: EventListProps): JSX.Ele
     [filterableFormItems],
   );
 
-  const { data, loading, error, fetchMore } = useEventListEventsQuery({
+  const { data, loading, error, fetchMore } = useQuery(EventListEventsQueryDocument, {
     variables: {
       page: 1,
       pageSize: PAGE_SIZE,
@@ -109,8 +123,8 @@ function EventList({ filterableFormItems, convention }: EventListProps): JSX.Ele
   });
   const [fetchMoreEventsAsync, fetchMoreError, fetchMoreInProgress] = useAsyncFunction(fetchMoreEvents);
 
-  const loadedEntries: number = loading || error || !data ? 0 : data.convention?.events_paginated.entries.length ?? 0;
-  const totalEntries: number = loading || error || !data ? 0 : data.convention?.events_paginated.total_entries ?? 0;
+  const loadedEntries: number = loading || error || !data ? 0 : (data.convention?.events_paginated.entries.length ?? 0);
+  const totalEntries: number = loading || error || !data ? 0 : (data.convention?.events_paginated.total_entries ?? 0);
 
   const fetchMoreIfNeeded = useCallback(() => {
     if (loadedEntries === 0) {
@@ -253,9 +267,4 @@ function EventList({ filterableFormItems, convention }: EventListProps): JSX.Ele
   );
 }
 
-const EventListWrapper = LoadQueryWrapper(useCommonConventionDataQuery, ({ data }) => {
-  const filterableFormItems = useFilterableFormItems(data.convention);
-  return <EventList convention={data.convention} filterableFormItems={filterableFormItems} />;
-});
-
-export default EventListWrapper;
+export const Component = EventList;

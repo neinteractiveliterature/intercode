@@ -1,9 +1,7 @@
 /* eslint-disable */
 import * as Types from '../../../graphqlTypes.generated';
 
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
-const defaultOptions = {} as const;
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type EventCatalogRunsQueryVariables = Types.Exact<{
   page?: Types.InputMaybe<Types.Scalars['Int']['input']>;
   pageSize?: Types.InputMaybe<Types.Scalars['Int']['input']>;
@@ -16,97 +14,4 @@ export type EventCatalogRunsQueryVariables = Types.Exact<{
 export type EventCatalogRunsQueryData = { __typename: 'Query', currentAbility: { __typename: 'Ability', can_read_schedule: boolean }, convention: { __typename: 'Convention', id: string, timezone_mode: Types.TimezoneMode, runs_paginated: { __typename: 'RunsPagination', total_entries: number, total_pages: number, current_page: number, per_page: number, entries: Array<{ __typename: 'Run', id: string, starts_at: string, title_suffix?: string | null, schedule_note?: string | null, event: { __typename: 'Event', id: string, title?: string | null, created_at?: string | null, description_html?: string | null, short_blurb_html?: string | null, form_response_attrs_json_with_rendered_markdown?: string | null, my_rating?: number | null, length_seconds: number, author?: string | null, content_warnings?: string | null, participant_communications?: string | null, event_category: { __typename: 'EventCategory', id: string }, team_members: Array<{ __typename: 'TeamMember', id: string, display_team_member: boolean, user_con_profile: { __typename: 'UserConProfile', id: string, last_name: string, name_without_nickname: string, gravatar_enabled: boolean, gravatar_url: string } }>, registration_policy?: { __typename: 'RegistrationPolicy', slots_limited?: boolean | null, total_slots?: number | null, minimum_slots?: number | null } | null } }> } } };
 
 
-export const EventCatalogRunsQueryDocument = gql`
-    query EventCatalogRunsQuery($page: Int, $pageSize: Int, $filters: RunFiltersInput, $sort: [SortInput!], $fetchFormItemIdentifiers: [String!]) {
-  currentAbility {
-    can_read_schedule
-  }
-  convention: conventionByRequestHost {
-    id
-    timezone_mode
-    runs_paginated(page: $page, per_page: $pageSize, filters: $filters, sort: $sort) {
-      total_entries
-      total_pages
-      current_page
-      per_page
-      entries {
-        id
-        starts_at
-        title_suffix
-        schedule_note
-        event {
-          id
-          title
-          created_at
-          description_html
-          short_blurb_html
-          form_response_attrs_json_with_rendered_markdown(
-            itemIdentifiers: $fetchFormItemIdentifiers
-          )
-          my_rating
-          length_seconds
-          author
-          content_warnings
-          participant_communications
-          event_category {
-            id
-          }
-          team_members {
-            id
-            display_team_member
-            user_con_profile {
-              id
-              last_name
-              name_without_nickname
-              gravatar_enabled
-              gravatar_url
-            }
-          }
-          registration_policy {
-            slots_limited
-            total_slots
-            minimum_slots
-          }
-        }
-      }
-    }
-  }
-}
-    `;
-
-/**
- * __useEventCatalogRunsQuery__
- *
- * To run a query within a React component, call `useEventCatalogRunsQuery` and pass it any options that fit your needs.
- * When your component renders, `useEventCatalogRunsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useEventCatalogRunsQuery({
- *   variables: {
- *      page: // value for 'page'
- *      pageSize: // value for 'pageSize'
- *      filters: // value for 'filters'
- *      sort: // value for 'sort'
- *      fetchFormItemIdentifiers: // value for 'fetchFormItemIdentifiers'
- *   },
- * });
- */
-export function useEventCatalogRunsQuery(baseOptions?: Apollo.QueryHookOptions<EventCatalogRunsQueryData, EventCatalogRunsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<EventCatalogRunsQueryData, EventCatalogRunsQueryVariables>(EventCatalogRunsQueryDocument, options);
-      }
-export function useEventCatalogRunsQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EventCatalogRunsQueryData, EventCatalogRunsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<EventCatalogRunsQueryData, EventCatalogRunsQueryVariables>(EventCatalogRunsQueryDocument, options);
-        }
-export function useEventCatalogRunsQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<EventCatalogRunsQueryData, EventCatalogRunsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<EventCatalogRunsQueryData, EventCatalogRunsQueryVariables>(EventCatalogRunsQueryDocument, options);
-        }
-export type EventCatalogRunsQueryHookResult = ReturnType<typeof useEventCatalogRunsQuery>;
-export type EventCatalogRunsQueryLazyQueryHookResult = ReturnType<typeof useEventCatalogRunsQueryLazyQuery>;
-export type EventCatalogRunsQuerySuspenseQueryHookResult = ReturnType<typeof useEventCatalogRunsQuerySuspenseQuery>;
-export type EventCatalogRunsQueryQueryResult = Apollo.QueryResult<EventCatalogRunsQueryData, EventCatalogRunsQueryVariables>;
+export const EventCatalogRunsQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"EventCatalogRunsQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"page"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"pageSize"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"filters"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"RunFiltersInput"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sort"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"SortInput"}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"fetchFormItemIdentifiers"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currentAbility"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"can_read_schedule"}}]}},{"kind":"Field","alias":{"kind":"Name","value":"convention"},"name":{"kind":"Name","value":"conventionByRequestHost"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"timezone_mode"}},{"kind":"Field","name":{"kind":"Name","value":"runs_paginated"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"page"},"value":{"kind":"Variable","name":{"kind":"Name","value":"page"}}},{"kind":"Argument","name":{"kind":"Name","value":"per_page"},"value":{"kind":"Variable","name":{"kind":"Name","value":"pageSize"}}},{"kind":"Argument","name":{"kind":"Name","value":"filters"},"value":{"kind":"Variable","name":{"kind":"Name","value":"filters"}}},{"kind":"Argument","name":{"kind":"Name","value":"sort"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sort"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"total_entries"}},{"kind":"Field","name":{"kind":"Name","value":"total_pages"}},{"kind":"Field","name":{"kind":"Name","value":"current_page"}},{"kind":"Field","name":{"kind":"Name","value":"per_page"}},{"kind":"Field","name":{"kind":"Name","value":"entries"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"starts_at"}},{"kind":"Field","name":{"kind":"Name","value":"title_suffix"}},{"kind":"Field","name":{"kind":"Name","value":"schedule_note"}},{"kind":"Field","name":{"kind":"Name","value":"event"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"created_at"}},{"kind":"Field","name":{"kind":"Name","value":"description_html"}},{"kind":"Field","name":{"kind":"Name","value":"short_blurb_html"}},{"kind":"Field","name":{"kind":"Name","value":"form_response_attrs_json_with_rendered_markdown"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"itemIdentifiers"},"value":{"kind":"Variable","name":{"kind":"Name","value":"fetchFormItemIdentifiers"}}}]},{"kind":"Field","name":{"kind":"Name","value":"my_rating"}},{"kind":"Field","name":{"kind":"Name","value":"length_seconds"}},{"kind":"Field","name":{"kind":"Name","value":"author"}},{"kind":"Field","name":{"kind":"Name","value":"content_warnings"}},{"kind":"Field","name":{"kind":"Name","value":"participant_communications"}},{"kind":"Field","name":{"kind":"Name","value":"event_category"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"team_members"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"display_team_member"}},{"kind":"Field","name":{"kind":"Name","value":"user_con_profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"last_name"}},{"kind":"Field","name":{"kind":"Name","value":"name_without_nickname"}},{"kind":"Field","name":{"kind":"Name","value":"gravatar_enabled"}},{"kind":"Field","name":{"kind":"Name","value":"gravatar_url"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"registration_policy"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"slots_limited"}},{"kind":"Field","name":{"kind":"Name","value":"total_slots"}},{"kind":"Field","name":{"kind":"Name","value":"minimum_slots"}}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<EventCatalogRunsQueryData, EventCatalogRunsQueryVariables>;

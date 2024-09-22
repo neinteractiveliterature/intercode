@@ -1,10 +1,7 @@
 /* eslint-disable */
 import * as Types from '../../graphqlTypes.generated';
 
-import { gql } from '@apollo/client';
-import { CmsVariableFieldsFragmentDoc } from './queries.generated';
-import * as Apollo from '@apollo/client';
-const defaultOptions = {} as const;
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type SetCmsVariableMutationVariables = Types.Exact<{
   key: Types.Scalars['String']['input'];
   value_json: Types.Scalars['String']['input'];
@@ -18,79 +15,8 @@ export type DeleteCmsVariableMutationVariables = Types.Exact<{
 }>;
 
 
-export type DeleteCmsVariableMutationData = { __typename: 'Mutation', deleteCmsVariable: { __typename: 'DeleteCmsVariablePayload', cms_variable: { __typename: 'CmsVariable', id: string, key: string, value_json: string, current_ability_can_update: boolean, current_ability_can_delete: boolean } } };
+export type DeleteCmsVariableMutationData = { __typename: 'Mutation', deleteCmsVariable: { __typename: 'DeleteCmsVariablePayload', cms_variable: { __typename: 'CmsVariable', id: string } } };
 
 
-export const SetCmsVariableMutationDocument = gql`
-    mutation SetCmsVariableMutation($key: String!, $value_json: String!) {
-  setCmsVariable(input: {cms_variable: {key: $key, value_json: $value_json}}) {
-    cms_variable {
-      id
-      ...CmsVariableFields
-    }
-  }
-}
-    ${CmsVariableFieldsFragmentDoc}`;
-export type SetCmsVariableMutationMutationFn = Apollo.MutationFunction<SetCmsVariableMutationData, SetCmsVariableMutationVariables>;
-
-/**
- * __useSetCmsVariableMutation__
- *
- * To run a mutation, you first call `useSetCmsVariableMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useSetCmsVariableMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [setCmsVariableMutation, { data, loading, error }] = useSetCmsVariableMutation({
- *   variables: {
- *      key: // value for 'key'
- *      value_json: // value for 'value_json'
- *   },
- * });
- */
-export function useSetCmsVariableMutation(baseOptions?: Apollo.MutationHookOptions<SetCmsVariableMutationData, SetCmsVariableMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<SetCmsVariableMutationData, SetCmsVariableMutationVariables>(SetCmsVariableMutationDocument, options);
-      }
-export type SetCmsVariableMutationHookResult = ReturnType<typeof useSetCmsVariableMutation>;
-export type SetCmsVariableMutationMutationResult = Apollo.MutationResult<SetCmsVariableMutationData>;
-export type SetCmsVariableMutationMutationOptions = Apollo.BaseMutationOptions<SetCmsVariableMutationData, SetCmsVariableMutationVariables>;
-export const DeleteCmsVariableMutationDocument = gql`
-    mutation DeleteCmsVariableMutation($key: String!) {
-  deleteCmsVariable(input: {key: $key}) {
-    cms_variable {
-      id
-      ...CmsVariableFields
-    }
-  }
-}
-    ${CmsVariableFieldsFragmentDoc}`;
-export type DeleteCmsVariableMutationMutationFn = Apollo.MutationFunction<DeleteCmsVariableMutationData, DeleteCmsVariableMutationVariables>;
-
-/**
- * __useDeleteCmsVariableMutation__
- *
- * To run a mutation, you first call `useDeleteCmsVariableMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteCmsVariableMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteCmsVariableMutation, { data, loading, error }] = useDeleteCmsVariableMutation({
- *   variables: {
- *      key: // value for 'key'
- *   },
- * });
- */
-export function useDeleteCmsVariableMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCmsVariableMutationData, DeleteCmsVariableMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteCmsVariableMutationData, DeleteCmsVariableMutationVariables>(DeleteCmsVariableMutationDocument, options);
-      }
-export type DeleteCmsVariableMutationHookResult = ReturnType<typeof useDeleteCmsVariableMutation>;
-export type DeleteCmsVariableMutationMutationResult = Apollo.MutationResult<DeleteCmsVariableMutationData>;
-export type DeleteCmsVariableMutationMutationOptions = Apollo.BaseMutationOptions<DeleteCmsVariableMutationData, DeleteCmsVariableMutationVariables>;
+export const SetCmsVariableMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"SetCmsVariableMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"key"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"value_json"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"setCmsVariable"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"cms_variable"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"key"},"value":{"kind":"Variable","name":{"kind":"Name","value":"key"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"value_json"},"value":{"kind":"Variable","name":{"kind":"Name","value":"value_json"}}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cms_variable"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"CmsVariableFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CmsVariableFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsVariable"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"value_json"}},{"kind":"Field","name":{"kind":"Name","value":"current_ability_can_update"}},{"kind":"Field","name":{"kind":"Name","value":"current_ability_can_delete"}}]}}]} as unknown as DocumentNode<SetCmsVariableMutationData, SetCmsVariableMutationVariables>;
+export const DeleteCmsVariableMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteCmsVariableMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"key"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteCmsVariable"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"key"},"value":{"kind":"Variable","name":{"kind":"Name","value":"key"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cms_variable"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}}]} as unknown as DocumentNode<DeleteCmsVariableMutationData, DeleteCmsVariableMutationVariables>;

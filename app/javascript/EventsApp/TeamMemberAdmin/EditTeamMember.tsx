@@ -1,28 +1,53 @@
 import { useState } from 'react';
-import { ApolloError } from '@apollo/client';
-import { useNavigate, useParams } from 'react-router-dom';
+import { ActionFunction, Form, redirect, useLoaderData, useNavigation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform';
 import capitalize from 'lodash/capitalize';
 
-import buildTeamMemberInput from './buildTeamMemberInput';
-import TeamMemberForm from './TeamMemberForm';
-import useAsyncFunction from '../../useAsyncFunction';
+import TeamMemberForm, { buildTeamMemberInputFromFormData } from './TeamMemberForm';
 import usePageTitle from '../../usePageTitle';
-import { TeamMembersQueryData } from './queries.generated';
-import { useUpdateTeamMemberMutation } from './mutations.generated';
+import { TeamMembersQueryData, TeamMembersQueryDocument } from './queries.generated';
 import FourOhFourPage from '../../FourOhFourPage';
-import useTeamMembersQueryFromParams from './useTeamMembersQueryFromParams';
-import buildEventUrl from '../buildEventUrl';
+import { singleTeamMemberLoader, SingleTeamMemberLoaderResult } from './loader';
+import { client } from '../../useIntercodeApolloClient';
+import { DeleteTeamMemberDocument, UpdateTeamMemberDocument } from './mutations.generated';
 
-export default LoadQueryWrapper(useTeamMembersQueryFromParams, function EditTeamMember({ data }): JSX.Element {
+export const loader = singleTeamMemberLoader;
+
+export const action: ActionFunction = async ({ params: { eventId, teamMemberId }, request }) => {
+  if (request.method === 'DELETE') {
+    await client.mutate({
+      mutation: DeleteTeamMemberDocument,
+      variables: {
+        input: {
+          id: teamMemberId,
+        },
+      },
+      refetchQueries: [{ query: TeamMembersQueryDocument, variables: { eventId: eventId } }],
+      awaitRefetchQueries: true,
+    });
+  } else {
+    const formData = await request.formData();
+
+    await client.query({
+      query: UpdateTeamMemberDocument,
+      variables: {
+        input: {
+          id: teamMemberId,
+          team_member: buildTeamMemberInputFromFormData(formData),
+        },
+      },
+    });
+  }
+
+  return redirect(`/events/${eventId}/team_members`);
+};
+
+function EditTeamMember(): JSX.Element {
+  const navigation = useNavigation();
+  const { data, teamMember: initialTeamMember } = useLoaderData() as SingleTeamMemberLoaderResult;
   const event = data.convention.event;
   const { t } = useTranslation();
-  const { teamMemberId } = useParams<{ teamMemberId: string }>();
-  const navigate = useNavigate();
-  const [teamMember, setTeamMember] = useState(event.team_members.find((tm) => tm.id === teamMemberId));
-  const [updateMutate] = useUpdateTeamMemberMutation();
-  const [update, updateError, updateInProgress] = useAsyncFunction(updateMutate);
+  const [teamMember, setTeamMember] = useState(initialTeamMember);
 
   usePageTitle(
     t('events.teamMemberAdmin.editPageTitle', {
@@ -32,29 +57,14 @@ export default LoadQueryWrapper(useTeamMembersQueryFromParams, function EditTeam
     }),
   );
 
-  const updateClicked = async () => {
-    if (!teamMember) {
-      return;
-    }
-
-    await update({
-      variables: {
-        input: {
-          id: teamMember.id,
-          team_member: buildTeamMemberInput(teamMember),
-        },
-      },
-    });
-
-    navigate(`${buildEventUrl(event)}/team_members`, { replace: true });
-  };
-
   if (!teamMember) {
     return <FourOhFourPage />;
   }
 
+  const updateInProgress = navigation.state !== 'idle';
+
   return (
-    <>
+    <Form method="PATCH" action=".">
       <h1 className="mb-4">
         {t('events.teamMemberAdmin.editHeader', {
           teamMemberName: capitalize(event.event_category.team_member_name),
@@ -80,16 +90,18 @@ export default LoadQueryWrapper(useTeamMembersQueryFromParams, function EditTeam
         }
         disabled={updateInProgress}
       />
-      <ErrorDisplay graphQLError={updateError as ApolloError} />
+      {/* <ErrorDisplay graphQLError={updateError as ApolloError} /> */}
       <ul className="list-inline mt-4">
         <li className="list-inline-item">
-          <button type="button" className="btn btn-primary" disabled={updateInProgress} onClick={updateClicked}>
+          <button type="submit" className="btn btn-primary" disabled={updateInProgress}>
             {t('events.teamMemberAdmin.updateButton', {
               teamMemberName: event.event_category.team_member_name,
             })}
           </button>
         </li>
       </ul>
-    </>
+    </Form>
   );
-});
+}
+
+export const Component = EditTeamMember;

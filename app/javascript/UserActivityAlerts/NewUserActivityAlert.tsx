@@ -1,25 +1,52 @@
 import { useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { ActionFunction, redirect, useFetcher, useRouteLoaderData } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
-import {
-  LoadQueryWrapper,
-  ErrorDisplay,
-  useCreateMutationWithReferenceArrayUpdater,
-} from '@neinteractiveliterature/litform';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import buildUserActivityAlertInput from './buildUserActivityAlertInput';
 import { useChangeSet } from '../ChangeSet';
 import UserActivityAlertForm from './UserActivityAlertForm';
 import usePageTitle from '../usePageTitle';
-import {
-  UserActivityAlertFieldsFragmentDoc,
-  UserActivityAlertsAdminQueryData,
-  useUserActivityAlertsAdminQuery,
-} from './queries.generated';
-import { useCreateUserActivityAlertMutation } from './mutations.generated';
+import { UserActivityAlertFieldsFragmentDoc, UserActivityAlertsAdminQueryData } from './queries.generated';
+import { CreateUserActivityAlertDocument, CreateUserActivityAlertMutationVariables } from './mutations.generated';
+import { NamedRoute } from '../AppRouter';
+import { client } from 'useIntercodeApolloClient';
+import { Convention } from 'graphqlTypes.generated';
 
-export default LoadQueryWrapper(useUserActivityAlertsAdminQuery, function NewUserActivityAlert({ data }) {
-  const navigate = useNavigate();
+export const action: ActionFunction = async ({ request }) => {
+  try {
+    if (request.method === 'POST') {
+      const variables = (await request.json()) as CreateUserActivityAlertMutationVariables;
+      await client.mutate({
+        mutation: CreateUserActivityAlertDocument,
+        variables,
+        update: (cache, result) => {
+          const userActivityAlert = result.data?.createUserActivityAlert.user_activity_alert;
+          if (userActivityAlert) {
+            const ref = cache.writeFragment({
+              fragment: UserActivityAlertFieldsFragmentDoc,
+              data: userActivityAlert,
+            });
+            cache.modify<Convention>({
+              id: cache.identify({ __typename: 'Convention', id: userActivityAlert.convention.id }),
+              fields: {
+                user_activity_alerts: (value) => [...value, ref],
+              },
+            });
+          }
+        },
+      });
+      return redirect('/user_activity_alerts');
+    } else {
+      return new Response(null, { status: 404 });
+    }
+  } catch (error) {
+    return error;
+  }
+};
+
+function NewUserActivityAlert() {
+  const data = useRouteLoaderData(NamedRoute.UserActivityAlerts) as UserActivityAlertsAdminQueryData;
   usePageTitle('New user activity alert');
 
   const [userActivityAlert, setUserActivityAlert] = useState<
@@ -38,13 +65,9 @@ export default LoadQueryWrapper(useUserActivityAlertsAdminQuery, function NewUse
     useChangeSet<
       UserActivityAlertsAdminQueryData['convention']['user_activity_alerts'][number]['notification_destinations'][number]
     >();
-  const [create, { error: createError, loading: createInProgress }] = useCreateMutationWithReferenceArrayUpdater(
-    useCreateUserActivityAlertMutation,
-    data.convention,
-    'user_activity_alerts',
-    (data) => data.createUserActivityAlert.user_activity_alert,
-    UserActivityAlertFieldsFragmentDoc,
-  );
+  const fetcher = useFetcher();
+  const createError = fetcher.data instanceof Error ? fetcher.data : undefined;
+  const createInProgress = fetcher.state !== 'idle';
   const combinedUserActivityAlert = useMemo(
     () => ({
       ...userActivityAlert,
@@ -53,23 +76,20 @@ export default LoadQueryWrapper(useUserActivityAlertsAdminQuery, function NewUse
     [notificationDestinationChangeSet, userActivityAlert],
   );
 
-  const saveClicked = async () => {
-    await create({
-      variables: {
-        userActivityAlert: buildUserActivityAlertInput(userActivityAlert),
-        notificationDestinations: notificationDestinationChangeSet.getAddValues().map((addValue) => {
-          if (addValue.staff_position) {
-            return { staffPositionId: addValue.staff_position.id };
-          }
-          if (addValue.user_con_profile) {
-            return { userConProfileId: addValue.user_con_profile.id };
-          }
-          throw new Error('Notification destination must have either a staff position or user con profile');
-        }),
-      },
-    });
-
-    navigate('/user_activity_alerts');
+  const saveClicked = () => {
+    const variables: CreateUserActivityAlertMutationVariables = {
+      userActivityAlert: buildUserActivityAlertInput(userActivityAlert),
+      notificationDestinations: notificationDestinationChangeSet.getAddValues().map((addValue) => {
+        if (addValue.staff_position) {
+          return { staffPositionId: addValue.staff_position.id };
+        }
+        if (addValue.user_con_profile) {
+          return { userConProfileId: addValue.user_con_profile.id };
+        }
+        throw new Error('Notification destination must have either a staff position or user con profile');
+      }),
+    };
+    fetcher.submit(variables, { method: 'POST', encType: 'application/json' });
   };
 
   return (
@@ -92,4 +112,6 @@ export default LoadQueryWrapper(useUserActivityAlertsAdminQuery, function NewUse
       </button>
     </>
   );
-});
+}
+
+export const Component = NewUserActivityAlert;

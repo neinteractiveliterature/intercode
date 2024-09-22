@@ -1,81 +1,58 @@
-import { useState, useCallback } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useMemo, useState } from 'react';
+import { ActionFunction, LoaderFunction, redirect, useFetcher, useLoaderData } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
-import { ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import buildFormStateFromData from './buildFormStateFromData';
 import UserConProfileForm from './UserConProfileForm';
-import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
-import {
-  useUserConProfileQuery,
-  UserConProfileAdminQueryData,
-  UserConProfileAdminQueryDocument,
-} from './queries.generated';
-import { useUpdateUserConProfileMutation } from './mutations.generated';
+import { UserConProfileQueryData, UserConProfileQueryDocument } from './queries.generated';
+import { client } from '../useIntercodeApolloClient';
+import { UpdateUserConProfileDocument } from './mutations.generated';
+import { UserConProfileInput } from 'graphqlTypes.generated';
 
-function useUserConProfileQueryFromParams() {
-  const id = useParams<{ id: string }>().id;
-  if (id == null) {
-    throw new Error('id not found in params');
+export const action: ActionFunction = async ({ request, params: { id } }) => {
+  try {
+    const userConProfile = (await request.json()) as UserConProfileInput;
+    await client.mutate({
+      mutation: UpdateUserConProfileDocument,
+      variables: { input: { id, user_con_profile: userConProfile } },
+    });
+    return redirect(`/user_con_profiles/${id}`);
+  } catch (error) {
+    return error;
   }
-  return useUserConProfileQuery({ variables: { id } });
-}
+};
 
-export default LoadQueryWrapper(useUserConProfileQueryFromParams, function EditUserConProfile({ data }) {
-  const navigate = useNavigate();
+export const loader: LoaderFunction = async ({ params: { id } }) => {
+  const { data } = await client.query<UserConProfileQueryData>({
+    query: UserConProfileQueryDocument,
+    variables: { id },
+  });
+  return data;
+};
+
+function EditUserConProfile() {
+  const data = useLoaderData() as UserConProfileQueryData;
   const {
     userConProfile: initialUserConProfile,
     convention,
     form,
-  } = buildFormStateFromData(data.convention.user_con_profile, data.convention);
+  } = useMemo(() => buildFormStateFromData(data.convention.user_con_profile, data.convention), [data.convention]);
 
   const [userConProfile, setUserConProfile] = useState(initialUserConProfile);
+  const fetcher = useFetcher();
+  const updateError = fetcher.data instanceof Error ? fetcher.data : undefined;
+  const updateInProgress = fetcher.state !== 'idle';
 
-  const [mutate] = useUpdateUserConProfileMutation({
-    update: (cache, result) => {
-      const variables = { id: initialUserConProfile.id };
-      let query: UserConProfileAdminQueryData | null = null;
-      query = cache.readQuery<UserConProfileAdminQueryData>({
-        query: UserConProfileAdminQueryDocument,
-        variables,
-      });
-
-      if (query) {
-        cache.writeQuery<UserConProfileAdminQueryData>({
-          query: UserConProfileAdminQueryDocument,
-          variables,
-          data: {
-            ...query,
-            convention: {
-              ...query.convention,
-              user_con_profile: {
-                ...query.convention.user_con_profile,
-                ...result.data?.updateUserConProfile?.user_con_profile,
-              },
-            },
-          },
-        });
-      }
-    },
-  });
-
-  const [updateUserConProfile, updateError, updateInProgress] = useAsyncFunction(
-    useCallback(async () => {
-      await mutate({
-        variables: {
-          input: {
-            id: userConProfile.id,
-            user_con_profile: {
-              form_response_attrs_json: JSON.stringify(userConProfile.form_response_attrs),
-            },
-          },
-        },
-      });
-
-      navigate(`/user_con_profiles/${userConProfile.id}`);
-    }, [mutate, navigate, userConProfile]),
-  );
+  const updateUserConProfile = () => {
+    fetcher.submit(
+      {
+        form_response_attrs_json: JSON.stringify(userConProfile.form_response_attrs),
+      } satisfies UserConProfileInput,
+      { method: 'PATCH', encType: 'application/json' },
+    );
+  };
 
   usePageTitle(`Editing “${initialUserConProfile.name}”`);
 
@@ -96,4 +73,6 @@ export default LoadQueryWrapper(useUserConProfileQueryFromParams, function EditU
       <ErrorDisplay graphQLError={updateError as ApolloError} />
     </div>
   );
-});
+}
+
+export const Component = EditUserConProfile;

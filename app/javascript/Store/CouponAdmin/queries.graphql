@@ -21,3 +21,13 @@ query AdminCouponsQuery($filters: CouponFiltersInput, $sort: [SortInput!], $page
     }
   }
 }
+
+query AdminSingleCouponQuery($id: ID!) {
+  convention: conventionByRequestHost {
+    id
+    coupon(id: $id) {
+      id
+      ...AdminCouponFields
+    }
+  }
+}

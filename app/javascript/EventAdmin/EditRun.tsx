@@ -1,89 +1,72 @@
-import { useEffect, useMemo, useState } from 'react';
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate, LoaderFunction, useLoaderData, Form, ActionFunction, redirect } from 'react-router-dom';
 
 import EditRunModal, { EditingRun } from './EditRunModal';
-import buildEventCategoryUrl from './buildEventCategoryUrl';
-import { EventAdminEventsQueryData, EventFieldsFragment } from './queries.generated';
+import { EventAdminEventsQueryData, EventAdminEventsQueryDocument } from './queries.generated';
+import { client } from '../useIntercodeApolloClient';
+import { UpdateRunDocument } from './mutations.generated';
+import { buildRunInputFromFormData } from './buildRunInputFromFormData';
 
-export type EditRunProps = {
-  convention: EventAdminEventsQueryData['convention'];
-  events: EventFieldsFragment[];
+export const action: ActionFunction = async ({ params: { eventCategoryId, runId }, request }) => {
+  try {
+    const formData = await request.formData();
+    await client.mutate({
+      mutation: UpdateRunDocument,
+      variables: {
+        input: {
+          id: runId ?? '',
+          run: buildRunInputFromFormData(formData),
+        },
+      },
+    });
+    return redirect(`/admin_events/${eventCategoryId}`);
+  } catch (error) {
+    return error;
+  }
 };
 
-function EditRun({ convention, events }: EditRunProps): JSX.Element {
-  const params = useParams<{ eventId: string; runId: string }>();
-  const location = useLocation();
+type LoaderResult = {
+  initialRun: EditingRun;
+  event: EventAdminEventsQueryData['convention']['events'][number];
+  convention: EventAdminEventsQueryData['convention'];
+};
+
+export const loader: LoaderFunction = async ({ params: { eventId, runId } }) => {
+  const {
+    data: { convention },
+  } = await client.query<EventAdminEventsQueryData>({ query: EventAdminEventsQueryDocument });
+  const events = convention.events;
+  const event = events.find((e) => e.id.toString() === eventId);
+  const initialRun = event?.runs.find((r) => r.id === runId) as EditingRun;
+
+  if (event && initialRun) {
+    return { event, initialRun, convention } satisfies LoaderResult;
+  } else {
+    return new Response(null, { status: 404 });
+  }
+};
+
+function EditRun(): JSX.Element {
   const navigate = useNavigate();
-  const event = useMemo(() => {
-    if (params.eventId == null) {
-      return undefined;
-    }
-
-    return events.find((e) => e.id.toString() === params.eventId);
-  }, [params.eventId, events]);
-
-  const initialRun: EditingRun | undefined = useMemo(() => {
-    if (!event) {
-      return undefined;
-    }
-
-    if (location.pathname.endsWith('/new')) {
-      return {
-        __typename: 'Run',
-        id: '',
-        my_signups: [],
-        my_signup_requests: [],
-        my_signup_ranked_choices: [],
-        starts_at: undefined,
-        title_suffix: undefined,
-        schedule_note: undefined,
-        rooms: [],
-        room_names: [],
-        confirmed_signup_count: 0,
-        not_counted_signup_count: 0,
-        grouped_signup_counts: [],
-      };
-    }
-
-    return event.runs.find((r) => r.id === params.runId);
-  }, [location.pathname, params.runId, event]);
+  const { event, initialRun, convention } = useLoaderData() as LoaderResult;
 
   const cancelEditing = () => {
-    if (!event) {
-      return;
-    }
-    const eventCategoryUrl = buildEventCategoryUrl(
-      convention.event_categories.find((c) => c.id === event.event_category.id),
-    );
-    if (eventCategoryUrl) {
-      navigate(eventCategoryUrl, { replace: true });
-    }
+    navigate('../../../..', { replace: true });
   };
 
   const [run, setRun] = useState(initialRun);
 
-  useEffect(() => {
-    // navigation happened, reset the run state
-    setRun(initialRun);
-  }, [location.pathname, initialRun]);
-
-  if (!event || !run) {
-    return <></>;
-  }
-
   return (
-    <EditRunModal
-      convention={convention}
-      editingRunChanged={setRun}
-      event={event}
-      onCancel={cancelEditing}
-      onDelete={cancelEditing}
-      onSaveStart={() => {}}
-      onSaveSucceeded={cancelEditing}
-      onSaveFailed={() => {}}
-      run={run}
-    />
+    <Form action="." method="PATCH">
+      <EditRunModal
+        convention={convention}
+        editingRunChanged={setRun}
+        event={event}
+        onCancel={cancelEditing}
+        run={run}
+      />
+    </Form>
   );
 }
 
-export default EditRun;
+export const Component = EditRun;

@@ -1,45 +1,13 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { gql } from '@apollo/client';
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type CommonFormItemFieldsFragment = { __typename: 'FormItem', id: string, position: number, identifier?: string | null, item_type: string, rendered_properties: string, default_value?: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in?: Array<Types.FormItemExposeIn> | null };
 
 export type CommonFormSectionFieldsFragment = { __typename: 'FormSection', id: string, title?: string | null, position: number, form_items: Array<{ __typename: 'FormItem', id: string, position: number, identifier?: string | null, item_type: string, rendered_properties: string, default_value?: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in?: Array<Types.FormItemExposeIn> | null }> };
 
 export type CommonFormFieldsFragment = { __typename: 'Form', id: string, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: string, title?: string | null, position: number, form_items: Array<{ __typename: 'FormItem', id: string, position: number, identifier?: string | null, item_type: string, rendered_properties: string, default_value?: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in?: Array<Types.FormItemExposeIn> | null }> }> };
 
-export const CommonFormItemFieldsFragmentDoc = gql`
-    fragment CommonFormItemFields on FormItem {
-  id
-  position
-  identifier
-  item_type
-  rendered_properties
-  default_value
-  visibility
-  writeability
-  expose_in
-}
-    `;
-export const CommonFormSectionFieldsFragmentDoc = gql`
-    fragment CommonFormSectionFields on FormSection {
-  id
-  title
-  position
-  form_items {
-    id
-    ...CommonFormItemFields
-  }
-}
-    ${CommonFormItemFieldsFragmentDoc}`;
-export const CommonFormFieldsFragmentDoc = gql`
-    fragment CommonFormFields on Form {
-  id
-  title
-  form_type
-  form_sections {
-    id
-    ...CommonFormSectionFields
-  }
-}
-    ${CommonFormSectionFieldsFragmentDoc}`;
+export const CommonFormItemFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CommonFormItemFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"FormItem"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"position"}},{"kind":"Field","name":{"kind":"Name","value":"identifier"}},{"kind":"Field","name":{"kind":"Name","value":"item_type"}},{"kind":"Field","name":{"kind":"Name","value":"rendered_properties"}},{"kind":"Field","name":{"kind":"Name","value":"default_value"}},{"kind":"Field","name":{"kind":"Name","value":"visibility"}},{"kind":"Field","name":{"kind":"Name","value":"writeability"}},{"kind":"Field","name":{"kind":"Name","value":"expose_in"}}]}}]} as unknown as DocumentNode<CommonFormItemFieldsFragment, unknown>;
+export const CommonFormSectionFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CommonFormSectionFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"FormSection"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"position"}},{"kind":"Field","name":{"kind":"Name","value":"form_items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"CommonFormItemFields"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CommonFormItemFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"FormItem"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"position"}},{"kind":"Field","name":{"kind":"Name","value":"identifier"}},{"kind":"Field","name":{"kind":"Name","value":"item_type"}},{"kind":"Field","name":{"kind":"Name","value":"rendered_properties"}},{"kind":"Field","name":{"kind":"Name","value":"default_value"}},{"kind":"Field","name":{"kind":"Name","value":"visibility"}},{"kind":"Field","name":{"kind":"Name","value":"writeability"}},{"kind":"Field","name":{"kind":"Name","value":"expose_in"}}]}}]} as unknown as DocumentNode<CommonFormSectionFieldsFragment, unknown>;
+export const CommonFormFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CommonFormFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Form"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"form_type"}},{"kind":"Field","name":{"kind":"Name","value":"form_sections"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"CommonFormSectionFields"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CommonFormItemFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"FormItem"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"position"}},{"kind":"Field","name":{"kind":"Name","value":"identifier"}},{"kind":"Field","name":{"kind":"Name","value":"item_type"}},{"kind":"Field","name":{"kind":"Name","value":"rendered_properties"}},{"kind":"Field","name":{"kind":"Name","value":"default_value"}},{"kind":"Field","name":{"kind":"Name","value":"visibility"}},{"kind":"Field","name":{"kind":"Name","value":"writeability"}},{"kind":"Field","name":{"kind":"Name","value":"expose_in"}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CommonFormSectionFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"FormSection"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"position"}},{"kind":"Field","name":{"kind":"Name","value":"form_items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"CommonFormItemFields"}}]}}]}}]} as unknown as DocumentNode<CommonFormFieldsFragment, unknown>;

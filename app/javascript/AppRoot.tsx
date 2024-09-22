@@ -1,65 +1,59 @@
-import { Suspense, useMemo, useState, useEffect } from 'react';
-import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import { Suspense, useMemo, useState, useEffect, useContext } from 'react';
+import { useLocation, useNavigate, useLoaderData, Outlet, ScrollRestoration, useNavigation } from 'react-router-dom';
 import { Settings } from 'luxon';
-import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
+import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
-import { useAppRootQuery } from './appRootQueries.generated';
-import AppRouter from './AppRouter';
-import AppRootContext from './AppRootContext';
-import useCachedLoadableValue from './useCachedLoadableValue';
-import PageComponents from './PageComponents';
-import parseCmsContent, { CMS_COMPONENT_MAP } from './parseCmsContent';
+import { AppRootQueryData } from './appRootQueries.generated';
+import AppRootContext, { AppRootContextValue } from './AppRootContext';
 import { timezoneNameForConvention } from './TimeUtils';
 import getI18n from './setupI18Next';
-import { lazyWithAppEntrypointHeadersCheck } from './checkAppEntrypointHeadersMatch';
 import { timespanFromConvention } from './TimespanUtils';
 import { LazyStripeContext } from './LazyStripe';
 import { Stripe } from '@stripe/stripe-js';
-import { Helmet } from 'react-helmet-async';
-import React from 'react';
-import { ScriptTag } from './parsePageContent';
+import AuthenticationModalContext from './Authentication/AuthenticationModalContext';
+import { GraphQLNotAuthenticatedErrorEvent } from './useIntercodeApolloClient';
+import { reloadOnAppEntrypointHeadersMismatch } from './checkAppEntrypointHeadersMatch';
 
-const NavigationBar = lazyWithAppEntrypointHeadersCheck(
-  () => import(/* webpackChunkName: 'navigation-bar' */ './NavigationBar'),
-);
-
-// Avoid unnecessary layout checks when moving between pages that can't change layout
-function normalizePathForLayout(path: string) {
-  if (path.startsWith('/pages/') || path === '/') {
-    return path;
-  }
-
-  // only event ID is relevant for layout rendering
-  const eventsMatch = path.match(/^\/events\/(\d+)/);
-  if (eventsMatch) {
-    return `/events/${eventsMatch[1]}`;
-  }
-
-  return '/non_cms_path'; // arbitrary path that's not a CMS page
+export function buildAppRootContextValue(data: AppRootQueryData): AppRootContextValue {
+  return {
+    assumedIdentityFromProfile: data.assumedIdentityFromProfile,
+    cmsNavigationItems: data.cmsParentByRequestHost.cmsNavigationItems,
+    convention: data.convention,
+    conventionAcceptingProposals: data.convention?.accepting_proposals,
+    conventionCanceled: data.convention?.canceled,
+    conventionName: data.convention?.name,
+    conventionDomain: data.convention?.domain,
+    conventionTimespan: data?.convention ? timespanFromConvention(data.convention) : undefined,
+    currentAbility: data.currentAbility,
+    currentPendingOrder: data.convention?.my_profile?.current_pending_order,
+    currentUser: data.currentUser,
+    defaultCurrencyCode: data.convention?.default_currency_code ?? data.defaultCurrencyCode,
+    hasOAuthApplications: data.hasOauthApplications,
+    // eslint-disable-next-line i18next/no-literal-string
+    language: data.convention?.language ?? 'en',
+    myProfile: data.convention?.my_profile,
+    rootSiteName: data.rootSite?.site_name,
+    siteMode: data.convention?.site_mode,
+    signupMode: data.convention?.signup_mode,
+    supportedCurrencyCodes: data.supportedCurrencyCodes,
+    signupAutomationMode: data.convention?.signup_automation_mode,
+    ticketMode: data.convention?.ticket_mode,
+    ticketName: data.convention?.ticket_name,
+    ticketNamePlural: data.convention?.ticketNamePlural,
+    ticketTypes: data.convention?.ticket_types,
+    ticketsAvailableForPurchase: data.convention?.tickets_available_for_purchase,
+    timezoneName: timezoneNameForConvention(data.convention),
+  };
 }
 
 function AppRoot(): JSX.Element {
   const location = useLocation();
   const navigate = useNavigate();
-  const { data, loading, error } = useAppRootQuery({
-    variables: { path: normalizePathForLayout(location.pathname) },
-  });
+  const data = useLoaderData() as AppRootQueryData;
+  const authenticationModal = useContext(AuthenticationModalContext);
+  const navigation = useNavigation();
 
-  const [cachedCmsLayoutId, setCachedCmsLayoutId] = useState<string>();
-  const [layoutChanged, setLayoutChanged] = useState(false);
   const [stripePromise, setStripePromise] = useState<Promise<Stripe | null> | null>(null);
-
-  const parsedCmsContent = useMemo(() => {
-    if (error || loading || !data) {
-      return null;
-    }
-
-    return parseCmsContent(data.cmsParentByRequestHost.effectiveCmsLayout.content_html ?? '', {
-      ...CMS_COMPONENT_MAP,
-      AppRouter,
-      NavigationBar,
-    });
-  }, [data, error, loading]);
 
   useEffect(() => {
     if (typeof Rollbar !== 'undefined') {
@@ -73,79 +67,15 @@ function AppRoot(): JSX.Element {
     }
   }, [data?.currentUser?.id]);
 
-  const cachedCmsContent = useCachedLoadableValue(loading, error, () => parsedCmsContent, [parsedCmsContent]);
-  const [headComponentsWithoutScriptTags, headScriptTags] = useMemo(() => {
-    if (cachedCmsContent?.headComponents == null) {
-      return [[], []];
-    }
-
-    const nonScriptTags: React.ReactNode[] = [];
-    const scriptTags: React.ReactNode[] = [];
-
-    React.Children.forEach(cachedCmsContent.headComponents, (child) => {
-      if (React.isValidElement(child) && child.type === ScriptTag) {
-        scriptTags.push(child);
-      } else {
-        nonScriptTags.push(child);
-      }
-    });
-
-    return [nonScriptTags, scriptTags];
-  }, [cachedCmsContent?.headComponents]);
-  const appRootContextValue = useCachedLoadableValue(
-    loading,
-    error,
-    () =>
-      data
-        ? {
-            assumedIdentityFromProfile: data.assumedIdentityFromProfile,
-            cmsNavigationItems: data.cmsParentByRequestHost.cmsNavigationItems,
-            convention: data.convention,
-            conventionAcceptingProposals: data.convention?.accepting_proposals,
-            conventionCanceled: data.convention?.canceled,
-            conventionName: data.convention?.name,
-            conventionDomain: data.convention?.domain,
-            conventionTimespan: data?.convention ? timespanFromConvention(data.convention) : undefined,
-            currentAbility: data.currentAbility,
-            currentPendingOrder: data.convention?.my_profile?.current_pending_order,
-            currentUser: data.currentUser,
-            defaultCurrencyCode: data.convention?.default_currency_code ?? data.defaultCurrencyCode,
-            hasOAuthApplications: data.hasOauthApplications,
-            language: data.convention?.language ?? 'en',
-            myProfile: data.convention?.my_profile,
-            rootSiteName: data.rootSite?.site_name,
-            siteMode: data.convention?.site_mode,
-            signupMode: data.convention?.signup_mode,
-            supportedCurrencyCodes: data.supportedCurrencyCodes,
-            signupAutomationMode: data.convention?.signup_automation_mode,
-            ticketMode: data.convention?.ticket_mode,
-            ticketName: data.convention?.ticket_name,
-            ticketNamePlural: data.convention?.ticketNamePlural,
-            ticketTypes: data.convention?.ticket_types,
-            ticketsAvailableForPurchase: data.convention?.tickets_available_for_purchase,
-            timezoneName: timezoneNameForConvention(data.convention),
-          }
-        : undefined,
-    [data],
-  );
-
   useEffect(() => {
-    if (!loading && !error && data && cachedCmsLayoutId !== data.cmsParentByRequestHost.effectiveCmsLayout.id) {
-      if (cachedCmsLayoutId) {
-        // if the layout changed we need a full page reload to rerender the <head>
-        setLayoutChanged(true);
-        window.location.reload();
-      } else {
-        setCachedCmsLayoutId(data.cmsParentByRequestHost.effectiveCmsLayout.id);
-      }
-    }
-  }, [loading, error, cachedCmsLayoutId, data]);
+    reloadOnAppEntrypointHeadersMismatch();
+  }, [location.pathname]);
+
+  const appRootContextValue = useMemo(() => buildAppRootContextValue(data), [data]);
 
   useEffect(() => {
     if (
-      !loading &&
-      !error &&
-      data?.convention?.my_profile &&
+      data.convention?.my_profile &&
       (data.convention.clickwrap_agreement || '').trim() !== '' &&
       !data.convention.my_profile.accepted_clickwrap_agreement &&
       location.pathname !== '/clickwrap_agreement' &&
@@ -154,7 +84,7 @@ function AppRoot(): JSX.Element {
     ) {
       navigate('/clickwrap_agreement', { replace: true });
     }
-  }, [data, error, navigate, loading, location]);
+  }, [data, navigate, location]);
 
   useEffect(() => {
     if (appRootContextValue?.language) {
@@ -165,50 +95,44 @@ function AppRoot(): JSX.Element {
     }
   }, [appRootContextValue]);
 
-  if (layoutChanged) {
-    return <></>;
-  }
+  useEffect(() => {
+    const unauthenticatedHandler = () => {
+      if (!authenticationModal.visible) {
+        authenticationModal.open({ currentView: 'signIn' });
+        authenticationModal.setAfterSignInPath(location.pathname);
+      }
+    };
 
-  if (loading && !cachedCmsContent?.bodyComponents) {
-    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
-  }
+    window.addEventListener(GraphQLNotAuthenticatedErrorEvent.type, unauthenticatedHandler);
 
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
-  if (!appRootContextValue) {
-    // we need to wait a render cycle for useCachedLoadableValue to do its thing
-    return <></>;
-  }
+    return () => {
+      window.removeEventListener(GraphQLNotAuthenticatedErrorEvent.type, unauthenticatedHandler);
+    };
+  }, [authenticationModal, location.pathname]);
 
   return (
     <AppRootContext.Provider value={appRootContextValue}>
-      <Helmet>{headComponentsWithoutScriptTags}</Helmet>
-      {headScriptTags}
-      <Routes>
-        <Route path="/admin_forms/:id/edit/*" element={<PageComponents.FormEditor />}>
-          <Route path="section/:sectionId/item/:itemId" element={<PageComponents.FormItemEditorLayout />} />
-          <Route path="section/:sectionId" element={<PageComponents.FormSectionEditorLayout />} />
-        </Route>
-        <Route
-          path="*"
-          element={
-            <LazyStripeContext.Provider
-              value={{
-                publishableKey: data?.convention?.stripe_publishable_key ?? undefined,
-                accountId: data?.convention?.stripe_account_id ?? undefined,
-                stripePromise,
-                setStripePromise,
-              }}
-            >
-              <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
-                {cachedCmsContent?.bodyComponents}
-              </Suspense>
-            </LazyStripeContext.Provider>
-          }
-        />
-      </Routes>
+      <LazyStripeContext.Provider
+        value={{
+          publishableKey: data?.convention?.stripe_publishable_key ?? undefined,
+          accountId: data?.convention?.stripe_account_id ?? undefined,
+          stripePromise,
+          setStripePromise,
+        }}
+      >
+        <div className={navigation.state === 'idle' ? '' : 'cursor-wait'}>
+          <div
+            className="position-fixed d-flex flex-column justify-content-center"
+            style={{ zIndex: 1050, width: '100vw', height: '100vh', top: 0, left: 0, pointerEvents: 'none' }}
+          >
+            <PageLoadingIndicator visible={navigation.state === 'loading'} />
+          </div>
+          <ScrollRestoration />
+          <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
+            <Outlet />
+          </Suspense>
+        </div>
+      </LazyStripeContext.Provider>
     </AppRootContext.Provider>
   );
 }

@@ -1,0 +1,19 @@
+#import "../adminProductFields.graphql"
+
+query AdminProductsQuery {
+  convention: conventionByRequestHost {
+    id
+    products {
+      id
+      ...AdminProductFields
+    }
+    ticket_types {
+      id
+      description
+    }
+  }
+
+  currentAbility {
+    can_update_products
+  }
+}

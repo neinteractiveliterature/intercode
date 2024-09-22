@@ -1,5 +1,12 @@
 import { useMemo } from 'react';
-import { QueryResult, QueryHookOptions, ApolloQueryResult, ApolloError, OperationVariables } from '@apollo/client';
+import {
+  QueryResult,
+  ApolloQueryResult,
+  ApolloError,
+  OperationVariables,
+  TypedDocumentNode,
+  useQuery,
+} from '@apollo/client';
 import { Filters, SortingRule } from 'react-table';
 
 import { reactTableFiltersToTableResultsFilters, reactTableSortToTableResultsSort } from './TableUtils';
@@ -33,7 +40,7 @@ export type UseGraphQLReactTableOptions<
 > = {
   getData: (queryData: QueryResultWithData<QueryData, Variables>) => RowType[];
   getPages: (queryData: QueryResultWithData<QueryData, Variables>) => number;
-  useQuery: (options?: QueryHookOptions<QueryData, Variables>) => QueryResult<QueryData, Variables>;
+  query: TypedDocumentNode<QueryData, Variables>;
   variables?: Variables;
   filters?: Filters<RowType>;
   sortBy?: SortingRule<RowType>[];
@@ -48,7 +55,7 @@ export default function useGraphQLReactTable<
 >({
   getData,
   getPages,
-  useQuery,
+  query,
   variables,
   filters,
   sortBy,
@@ -72,7 +79,7 @@ export default function useGraphQLReactTable<
     }),
     [variables, page, pageSize, sortBy, filters],
   );
-  const queryResult = useQuery({
+  const queryResult = useQuery<QueryData, Variables>(query, {
     variables: effectiveVariables,
     fetchPolicy: 'network-only',
   });

@@ -2,6 +2,7 @@ import * as formMockData from '../EventAdmin/formMockData';
 import EditEvent from '../../../app/javascript/BuiltInForms/EditEvent';
 import useEventForm, { EventForm } from '../../../app/javascript/EventAdmin/useEventForm';
 import { render, fireEvent, waitFor } from '../testUtils';
+import { vi } from 'vitest';
 
 const defaultProps = {
   updateEvent: async () => {},
@@ -45,8 +46,8 @@ describe('EditEvent', () => {
 
   describe('saving', () => {
     test('the save button validates the form', async () => {
-      const updateEvent = jest.fn();
-      const onSave = jest.fn();
+      const updateEvent = vi.fn();
+      const onSave = vi.fn();
       const { getByText, getByLabelText } = await renderEditEvent({ updateEvent, onSave });
       fireEvent.click(getByText('Save event'));
       await waitFor(() => expect(getByLabelText('Title*')).toHaveClass('is-invalid'));
@@ -55,8 +56,8 @@ describe('EditEvent', () => {
     });
 
     test('the save button updates the event and calls onSave', async () => {
-      const updateEvent = jest.fn();
-      const onSave = jest.fn();
+      const updateEvent = vi.fn();
+      const onSave = vi.fn();
       const { getByText } = await renderEditEvent({
         updateEvent,
         onSave,
@@ -71,10 +72,10 @@ describe('EditEvent', () => {
     });
 
     test('if the save fails, it displays the error and does not call onSave', async () => {
-      const updateEvent = jest.fn(() => {
+      const updateEvent = vi.fn(() => {
         throw new Error('blahhhh');
       });
-      const onSave = jest.fn();
+      const onSave = vi.fn();
       const { getByText } = await renderEditEvent({
         updateEvent,
         onSave,
@@ -118,8 +119,8 @@ describe('EditEvent', () => {
     });
 
     test('dropping the event', async () => {
-      const dropEvent = jest.fn();
-      const onDrop = jest.fn();
+      const dropEvent = vi.fn();
+      const onDrop = vi.fn();
       const { getByText } = await renderEditEvent({ showDropButton: true, dropEvent, onDrop });
       fireEvent.click(getByText('Drop event'));
       await waitFor(() => expect(getByText('OK')).toBeVisible());
@@ -130,8 +131,8 @@ describe('EditEvent', () => {
     });
 
     test('canceling the drop', async () => {
-      const dropEvent = jest.fn();
-      const onDrop = jest.fn();
+      const dropEvent = vi.fn();
+      const onDrop = vi.fn();
       const { getByText } = await renderEditEvent({ showDropButton: true, dropEvent, onDrop });
       fireEvent.click(getByText('Drop event'));
       await waitFor(() => expect(getByText('Cancel')).toBeVisible());
@@ -142,8 +143,8 @@ describe('EditEvent', () => {
     });
 
     test('if the drop fails, it displays the error and does not call onDrop', async () => {
-      const dropEvent = jest.fn().mockRejectedValue(new Error('fooey'));
-      const onDrop = jest.fn();
+      const dropEvent = vi.fn().mockRejectedValue(new Error('fooey'));
+      const onDrop = vi.fn();
       const { getByText } = await renderEditEvent({ showDropButton: true, dropEvent, onDrop });
       fireEvent.click(getByText('Drop event'));
       await waitFor(() => expect(getByText('OK')).toBeInTheDocument());

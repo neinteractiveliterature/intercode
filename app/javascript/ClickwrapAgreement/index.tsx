@@ -1,40 +1,55 @@
-import { useContext } from 'react';
-import { useApolloClient } from '@apollo/client';
-import { useNavigate, Navigate } from 'react-router-dom';
+import { ApolloError } from '@apollo/client';
+import {
+  LoaderFunction,
+  useLoaderData,
+  replace,
+  ActionFunction,
+  redirect,
+  useSubmit,
+  useNavigation,
+  useActionData,
+} from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { LoadQueryWrapper, ErrorDisplay } from '@neinteractiveliterature/litform';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import parseCmsContent from '../parseCmsContent';
-import AuthenticityTokensContext from '../AuthenticityTokensContext';
 import useLoginRequired from '../Authentication/useLoginRequired';
-import { useAcceptClickwrapAgreementMutation } from './mutations.generated';
-import { useClickwrapAgreementQuery } from './queries.generated';
+import { ClickwrapAgreementQueryData, ClickwrapAgreementQueryDocument } from './queries.generated';
+import AuthenticityTokensManager from '../AuthenticityTokensContext';
+import { client } from '../useIntercodeApolloClient';
+import { AcceptClickwrapAgreementDocument } from './mutations.generated';
 
-export default LoadQueryWrapper(useClickwrapAgreementQuery, function ClickwrapAgreement({ data }) {
+export const action: ActionFunction = async () => {
+  try {
+    await client.mutate({ mutation: AcceptClickwrapAgreementDocument });
+    return redirect('/my_profile/setup');
+  } catch (err) {
+    await AuthenticityTokensManager.instance.refresh();
+    await client.resetStore();
+    return err;
+  }
+};
+
+export const loader: LoaderFunction = async () => {
+  const { data } = await client.query<ClickwrapAgreementQueryData>({ query: ClickwrapAgreementQueryDocument });
+  if (data.convention.my_profile?.accepted_clickwrap_agreement) {
+    return replace('/');
+  }
+
+  return data;
+};
+
+function ClickwrapAgreement() {
+  const data = useLoaderData() as ClickwrapAgreementQueryData;
   const { t } = useTranslation();
-  const navigate = useNavigate();
-  const [accept, { error: acceptError, loading: acceptInProgress }] = useAcceptClickwrapAgreementMutation();
-  const { refresh } = useContext(AuthenticityTokensContext);
-  const apolloClient = useApolloClient();
   const loginRequired = useLoginRequired();
-
-  const acceptClicked = async () => {
-    try {
-      await accept();
-      navigate('/my_profile/setup');
-    } catch (err) {
-      await refresh();
-      await apolloClient.resetStore();
-      throw err;
-    }
-  };
+  const submit = useSubmit();
+  const navigation = useNavigation();
+  const acceptInProgress = navigation.state !== 'idle';
+  const acceptError = useActionData() as ApolloError | undefined;
 
   if (loginRequired) {
     return <></>;
-  }
-
-  if (data.convention.my_profile?.accepted_clickwrap_agreement) {
-    return <Navigate to="/" replace />;
   }
 
   const { convention } = data;
@@ -55,7 +70,12 @@ export default LoadQueryWrapper(useClickwrapAgreementQuery, function ClickwrapAg
             <ErrorDisplay graphQLError={acceptError} />
           </div>
           <div className="card-footer text-end">
-            <button className="btn btn-primary" type="button" onClick={acceptClicked} disabled={acceptInProgress}>
+            <button
+              className="btn btn-primary"
+              type="button"
+              onClick={() => submit({}, { method: 'POST' })}
+              disabled={acceptInProgress}
+            >
               {t('clickwrap.agreeButton')}
             </button>
           </div>
@@ -63,4 +83,6 @@ export default LoadQueryWrapper(useClickwrapAgreementQuery, function ClickwrapAg
       </div>
     </>
   );
-});
+}
+
+export const Component = ClickwrapAgreement;

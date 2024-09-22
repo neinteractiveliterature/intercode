@@ -2,16 +2,17 @@ import * as React from 'react';
 
 import AssignName from './AssignName';
 import findClass from './findClass';
-import { LiquidAssignsQueryFromLocationData } from './useLiquidAssignsQueryFromLocation';
+import { LiquidDocsLoaderResult, useLiquidDocs } from './loader';
 
 export type CompactAssignDocHeaderProps = {
-  assign: LiquidAssignsQueryFromLocationData['cmsParent']['liquidAssigns'][0];
+  assign: LiquidDocsLoaderResult['sortedAssigns'][number];
   prefix?: string;
   preAssignNameContent?: React.ReactNode;
 };
 
 function CompactAssignDocHeader({ assign, prefix, preAssignNameContent }: CompactAssignDocHeaderProps): JSX.Element {
-  const assignClass = findClass(assign.drop_class_name);
+  const { docData } = useLiquidDocs();
+  const assignClass = findClass(docData, assign.drop_class_name);
 
   return (
     <>

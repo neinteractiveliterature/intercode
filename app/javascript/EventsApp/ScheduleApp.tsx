@@ -12,13 +12,19 @@ import PersonalScheduleFiltersBar, { usePersonalScheduleFilters } from './Schedu
 import { useAuthorizationRequiredWithoutLogin } from '../Authentication/useAuthorizationRequired';
 import { ScheduleGridConfig, allConfigs } from './ScheduleGrid/ScheduleGridConfig';
 import { conventionRequiresDates } from './runTimeFormatting';
-import { LoadQueryWrapper, notEmpty } from '@neinteractiveliterature/litform/dist';
-import { useScheduleGridConventionDataQuery } from './ScheduleGrid/queries.generated';
+import { notEmpty } from '@neinteractiveliterature/litform/dist';
+import {
+  ScheduleGridConventionDataQueryData,
+  ScheduleGridConventionDataQueryDocument,
+} from './ScheduleGrid/queries.generated';
 import useFilterableFormItems from './useFilterableFormItems';
 import EventListFilterableFormItemDropdown from './EventCatalog/EventList/EventListFilterableFormItemDropdown';
 import useReactRouterReactTable from '../Tables/useReactRouterReactTable';
 import { buildFieldFilterCodecs, FilterCodecs } from '../Tables/FilterUtils';
 import { reactTableFiltersToTableResultsFilters } from '../Tables/TableUtils';
+import { LoaderFunction, useLoaderData } from 'react-router';
+import { client } from '../useIntercodeApolloClient';
+import { conventionDayLoader, ConventionDayLoaderResult } from './conventionDayUrls';
 
 const filterCodecs = buildFieldFilterCodecs({
   form_items: FilterCodecs.json,
@@ -29,6 +35,7 @@ const SCHEDULE_VIEWS = ['list', ...allConfigs.map((config) => config.key)];
 function getDefaultScheduleView(scheduleGridConfigs: ScheduleGridConfig[]) {
   // Bootstrap's "medium" breakpoint
   if (window.innerWidth < 768 || scheduleGridConfigs.length === 0) {
+    // eslint-disable-next-line i18next/no-literal-string
     return 'list';
   }
 
@@ -46,11 +53,6 @@ function getScheduleViewLabel(view: string, t: TFunction) {
   }
 
   return view;
-
-  // Deliberately unreachable code in order to get i18next-parse not to delete these translations
-  t('schedule.views.gridView');
-  t('schedule.views.gridViewByRoom');
-  t('schedule.views.gridViewWithCounts');
 }
 
 type ScheduleViewDropdownProps = {
@@ -92,7 +94,24 @@ function ScheduleViewDropdown({ viewSelected, scheduleView, configs }: ScheduleV
   );
 }
 
-const ScheduleApp = LoadQueryWrapper(useScheduleGridConventionDataQuery, function ScheduleApp({ data }): JSX.Element {
+type LoaderResult = ConventionDayLoaderResult & { data: ScheduleGridConventionDataQueryData };
+
+export const loader: LoaderFunction = async ({ params, request }) => {
+  const [conventionDayLoaderResult, { data }] = await Promise.all([
+    conventionDayLoader({ params, request }),
+    await client.query<ScheduleGridConventionDataQueryData>({
+      query: ScheduleGridConventionDataQueryDocument,
+    }),
+  ]);
+  if (conventionDayLoaderResult instanceof Response) {
+    return conventionDayLoaderResult;
+  }
+
+  return { ...conventionDayLoaderResult, data } satisfies LoaderResult;
+};
+
+function ScheduleApp(): JSX.Element {
+  const { data } = useLoaderData() as LoaderResult;
   const { myProfile, currentAbility, conventionTimespan, siteMode } = useContext(AppRootContext);
   const { t } = useTranslation();
   const { choiceSetValue, choiceSetChanged } = usePersonalScheduleFilters({
@@ -172,7 +191,7 @@ const ScheduleApp = LoadQueryWrapper(useScheduleGridConventionDataQuery, functio
       );
     }
 
-    return <div>Unknown view: {scheduleView}</div>;
+    return <div>{t('schedule.unknownView', { scheduleView })}</div>;
   };
 
   if (authorizationRequired) {
@@ -238,6 +257,6 @@ const ScheduleApp = LoadQueryWrapper(useScheduleGridConventionDataQuery, functio
       {renderSchedule()}
     </>
   );
-});
+}
 
-export default ScheduleApp;
+export const Component = ScheduleApp;

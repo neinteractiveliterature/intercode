@@ -12,6 +12,8 @@ import { useAppDateTimeFormat } from '../../TimeUtils';
 import { usePersonalScheduleFilters } from './PersonalScheduleFiltersBar';
 import { ScheduleGridConventionDataQueryData } from './queries.generated';
 import { EventFiltersInput } from '../../graphqlTypes.generated';
+import { useLoaderData } from 'react-router';
+import { ConventionDayLoaderResult } from '../conventionDayUrls';
 
 export type ScheduleGridAppProps = {
   configKey: string;
@@ -34,9 +36,10 @@ function ScheduleGridApp({
     showPersonalFilters: config?.showPersonalFilters ?? false,
     signedIn: myProfile != null,
   });
+  const { matchingTimespan: timespan } = useLoaderData() as ConventionDayLoaderResult;
 
   if (!config) {
-    return <ErrorDisplay stringError={`Schedule grid configuration "${configKey}" not found`} />;
+    return <ErrorDisplay stringError={t('schedule.gridConfigNotFound', { configKey })} />;
   }
 
   return (
@@ -49,28 +52,25 @@ function ScheduleGridApp({
         hideConflicts={myProfile ? hideConflicts : false}
         filters={filters}
       >
-        {(timespan) => (
-          <div className="mb-4">
-            <div className="m-0 p-2 border-bottom">
-              <h3 className="p-0 m-0">{format(timespan.start, 'longWeekdayDate')}</h3>
-              <div className="font-italic">
-                {t('schedule.timezoneMessage', {
-                  offsetName: timespan.start
-                    .reconfigure({
-                      locale: language,
-                    })
-                    .setZone(timezoneName).offsetNameLong,
-                })}
-              </div>
+        <div className="mb-4">
+          <div className="m-0 p-2 border-bottom">
+            <h3 className="p-0 m-0">{format(timespan.start, 'longWeekdayDate')}</h3>
+            <div className="font-italic">
+              {t('schedule.timezoneMessage', {
+                offsetName: timespan.start
+                  .reconfigure({
+                    locale: language,
+                  })
+                  .setZone(timezoneName).offsetNameLong,
+              })}
             </div>
-            <ScheduleGrid timespan={timespan} />
           </div>
-        )}
+          <ScheduleGrid timespan={timespan} />
+        </div>
       </ScheduleGridProvider>
       {(config.legends || []).map((legend, i) => {
         if (legend.type === 'text') {
           return (
-             
             <p key={i} className="font-italic">
               {legend.text}
             </p>
@@ -78,12 +78,10 @@ function ScheduleGridApp({
         }
 
         if (legend.type === 'category') {
-           
           return <CategoryLegend key={i} />;
         }
 
         if (legend.type === 'fullness') {
-           
           return <FullnessLegend key={i} />;
         }
 

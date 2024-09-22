@@ -24,10 +24,17 @@ function CmsPartialForm<T extends CmsPartialFormFields>({
 
   return (
     <>
-      <BootstrapFormInput label="Name" value={partial.name ?? ''} onTextChange={setName} readOnly={readOnly} />
+      <BootstrapFormInput
+        label="Name"
+        name="name"
+        value={partial.name ?? ''}
+        onTextChange={setName}
+        readOnly={readOnly}
+      />
 
       <BootstrapFormInput
         label="Admin notes"
+        name="admin_notes"
         value={partial.admin_notes ?? ''}
         onTextChange={setAdminNotes}
         readOnly={readOnly}
@@ -36,6 +43,7 @@ function CmsPartialForm<T extends CmsPartialFormFields>({
       <div className="mb-3">
         <legend className="col-form-label">Content</legend>
         <LiquidInput value={partial.content ?? ''} onChange={setContent} extensions={extensions} />
+        <input type="hidden" name="content" value={partial.content ?? ''} />
       </div>
     </>
   );

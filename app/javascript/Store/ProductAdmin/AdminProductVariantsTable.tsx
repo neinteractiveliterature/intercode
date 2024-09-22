@@ -7,12 +7,12 @@ import { v4 as uuidv4 } from 'uuid';
 
 import AdminProductVariantEditRow from './AdminProductVariantEditRow';
 import sortProductVariants from '../sortProductVariants';
-import { describeAdminPricingStructure } from '../describePricingStructure';
 import { EditingProduct, EditingVariant } from './EditingProductTypes';
 import { getRealOrGeneratedId, hasRealId, realOrGeneratedIdsMatch } from '../../GeneratedIdUtils';
 import AdminProductVariantDragOverlayDisplay from './AdminProductVariantDragOverlayDisplay';
 import { useSortableDndSensors } from '../../SortableUtils';
 import { useTranslation } from 'react-i18next';
+import { AdminPricingStructureDescription } from 'Store/describePricingStructure';
 
 function updateVariant(
   productVariants: EditingVariant[],
@@ -175,7 +175,9 @@ function AdminProductVariantsTable(props: AdminProductVariantsTableProps): JSX.E
         <td />
         <td>{variant.name}</td>
         <td>{variant.description}</td>
-        <td>{describeAdminPricingStructure(variant.override_pricing_structure, t)}</td>
+        <td>
+          <AdminPricingStructureDescription pricingStructure={variant.override_pricing_structure} />
+        </td>
         <td />
       </tr>
     );

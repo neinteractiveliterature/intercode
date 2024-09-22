@@ -1,0 +1,102 @@
+#import "../orderFields.graphql"
+
+mutation MarkOrderPaid($orderId: ID!) {
+  markOrderPaid(input: { id: $orderId }) {
+    order {
+      id
+      ...AdminOrderFieldsFragment
+    }
+  }
+}
+
+mutation CancelOrder($orderId: ID!, $skipRefund: Boolean) {
+  cancelOrder(input: { id: $orderId, skip_refund: $skipRefund }) {
+    order {
+      id
+      ...AdminOrderFieldsFragment
+    }
+  }
+}
+
+mutation CreateOrder(
+  $userConProfileId: ID!
+  $order: OrderInput!
+  $status: OrderStatus!
+  $orderEntries: [OrderEntryInput!]
+) {
+  createOrder(
+    input: { userConProfileId: $userConProfileId, order: $order, status: $status, order_entries: $orderEntries }
+  ) {
+    order {
+      id
+      ...AdminOrderFieldsFragment
+    }
+  }
+}
+
+mutation AdminUpdateOrder($id: ID!, $order: OrderInput!) {
+  updateOrder(input: { id: $id, order: $order }) {
+    order {
+      id
+      ...AdminOrderFieldsFragment
+    }
+  }
+}
+
+mutation AdminCreateOrderEntry($input: CreateOrderEntryInput!) {
+  createOrderEntry(input: $input) {
+    order_entry {
+      id
+      ...OrderEntryFields
+
+      order {
+        id
+        ...AdminOrderFieldsFragment
+      }
+    }
+  }
+}
+
+mutation AdminUpdateOrderEntry($input: UpdateOrderEntryInput!) {
+  updateOrderEntry(input: $input) {
+    order_entry {
+      id
+      ...OrderEntryFields
+
+      order {
+        id
+        ...AdminOrderFieldsFragment
+      }
+    }
+  }
+}
+
+mutation UpdateOrderEntry($input: UpdateOrderEntryInput!) {
+  updateOrderEntry(input: $input) {
+    order_entry {
+      id
+      ...OrderEntryFields
+    }
+  }
+}
+
+mutation DeleteOrderEntry($input: DeleteOrderEntryInput!) {
+  deleteOrderEntry(input: $input) {
+    order_entry {
+      id
+    }
+  }
+}
+
+mutation AdminDeleteOrderEntry($input: DeleteOrderEntryInput!) {
+  deleteOrderEntry(input: $input) {
+    order_entry {
+      id
+
+      order {
+        id
+        ...AdminOrderFieldsFragment
+      }
+    }
+  }
+}

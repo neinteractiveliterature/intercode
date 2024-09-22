@@ -1,25 +1,14 @@
 import { useMemo } from 'react';
-import { Link } from 'react-router-dom';
-import {
-  ErrorDisplay,
-  sortByLocaleString,
-  useConfirm,
-  LoadQueryWrapper,
-  useDeleteMutationWithReferenceArrayUpdater,
-} from '@neinteractiveliterature/litform';
+import { Link, useSubmit } from 'react-router-dom';
+import { ErrorDisplay, sortByLocaleString, useConfirm } from '@neinteractiveliterature/litform';
 
 import usePageTitle from '../../usePageTitle';
-import { useCmsContentGroupsAdminQuery } from './queries.generated';
-import { useDeleteContentGroupMutation } from './mutations.generated';
+import { useCmsContentGroupsAdminLoader } from './loaders';
 
-export default LoadQueryWrapper(useCmsContentGroupsAdminQuery, function CmsContentGroupsAdminTable({ data }) {
+function CmsContentGroupsAdminTable() {
+  const data = useCmsContentGroupsAdminLoader();
+  const submit = useSubmit();
   const confirm = useConfirm();
-  const [deleteContentGroup] = useDeleteMutationWithReferenceArrayUpdater(
-    useDeleteContentGroupMutation,
-    data.cmsParent,
-    'cmsContentGroups',
-    (item) => ({ id: item.id }),
-  );
 
   usePageTitle('CMS Content Groups');
 
@@ -50,7 +39,7 @@ export default LoadQueryWrapper(useCmsContentGroupsAdminQuery, function CmsConte
                     onClick={() =>
                       confirm({
                         prompt: 'Are you sure you want to delete this content group?',
-                        action: () => deleteContentGroup(contentGroup),
+                        action: () => submit({}, { action: `./${contentGroup.id}`, method: 'DELETE' }),
                         renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
                       })
                     }
@@ -72,4 +61,6 @@ export default LoadQueryWrapper(useCmsContentGroupsAdminQuery, function CmsConte
       )}
     </>
   );
-});
+}
+
+export const Component = CmsContentGroupsAdminTable;

@@ -1,10 +1,14 @@
 import { useMemo } from 'react';
-import { useParams } from 'react-router-dom';
-import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
+import { LoaderFunction, useLoaderData } from 'react-router-dom';
 
 import FormResponseChangeHistory from '../FormPresenter/ItemChangeDisplays/FormResponseChangeHistory';
-import { useEventProposalHistoryQuery } from './queries.generated';
+import {
+  EventProposalHistoryQueryData,
+  EventProposalHistoryQueryDocument,
+  EventProposalHistoryQueryVariables,
+} from './queries.generated';
 import { FormType } from '../graphqlTypes.generated';
+import { client } from '../useIntercodeApolloClient';
 
 const EXCLUDE_FIELDS = new Set([
   'minimum_age',
@@ -14,17 +18,16 @@ const EXCLUDE_FIELDS = new Set([
   'team_mailing_list_name',
 ]);
 
-function useEventProposalHistoryQueryFromParams() {
-  const params = useParams<{ id: string }>();
-  if (params.id == null) {
-    throw new Error('id not found in URL params');
-  }
-  return useEventProposalHistoryQuery({
-    variables: { id: params.id },
+export const loader: LoaderFunction = async ({ params: { id } }) => {
+  const { data } = await client.query<EventProposalHistoryQueryData, EventProposalHistoryQueryVariables>({
+    query: EventProposalHistoryQueryDocument,
+    variables: { id: id ?? '' },
   });
-}
+  return data;
+};
 
-export default LoadQueryWrapper(useEventProposalHistoryQueryFromParams, function EventProposalHistory({ data }) {
+function EventProposalHistory() {
+  const data = useLoaderData() as EventProposalHistoryQueryData;
   const changes = useMemo(
     () =>
       data.convention.event_proposal.form_response_changes.filter(
@@ -50,4 +53,6 @@ export default LoadQueryWrapper(useEventProposalHistoryQueryFromParams, function
       form={effectiveForm}
     />
   );
-});
+}
+
+export const Component = EventProposalHistory;

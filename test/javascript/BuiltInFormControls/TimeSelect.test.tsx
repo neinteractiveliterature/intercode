@@ -4,6 +4,7 @@ import { render, fireEvent, queries } from '../testUtils';
 import TimeSelect, { TimeSelectProps } from '../../../app/javascript/BuiltInFormControls/TimeSelect';
 import Timespan from '../../../app/javascript/Timespan';
 import { formatLCM } from '../../../app/javascript/TimeUtils';
+import { vi } from 'vitest';
 
 const START_TIME = DateTime.fromISO('2017-01-01T00:00:00Z', { zone: 'Etc/UTC' });
 const FINISH_TIME = DateTime.fromISO('2017-01-02T00:00:00Z', { zone: 'Etc/UTC' });
@@ -57,7 +58,7 @@ describe('TimeSelect', () => {
 
   describe('onChange', () => {
     test('it defaults to 0 minutes', async () => {
-      const onChange = jest.fn();
+      const onChange = vi.fn();
       const { getByLabelText } = await renderTimeSelect({ onChange });
       const hourSelect = getByLabelText(/Hour/);
       fireEvent.change(hourSelect, {
@@ -67,7 +68,7 @@ describe('TimeSelect', () => {
     });
 
     test('it does not clear minutes', async () => {
-      const onChange = jest.fn();
+      const onChange = vi.fn();
       const { getByLabelText } = await renderTimeSelect({
         onChange,
         value: { hour: 1, minute: 15 },
@@ -80,7 +81,7 @@ describe('TimeSelect', () => {
     });
 
     test('it clears a field', async () => {
-      const onChange = jest.fn();
+      const onChange = vi.fn();
       const { getByLabelText } = await renderTimeSelect({
         value: { hour: 3, minute: 45 },
         onChange,

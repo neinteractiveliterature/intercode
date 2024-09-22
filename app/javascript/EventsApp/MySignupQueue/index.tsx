@@ -1,16 +1,22 @@
 import { Trans, useTranslation } from 'react-i18next';
-import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
-import { MySignupQueueQueryDocument, useMySignupQueueQuery } from './queries.generated';
+import { MySignupQueueQueryData, MySignupQueueQueryDocument } from './queries.generated';
 import { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, LoaderFunction, useLoaderData } from 'react-router-dom';
 import RankedChoiceUserSettings from './RankedChoiceUserSettings';
 import UserConProfileSignupsCard from '../SignupAdmin/UserConProfileSignupsCard';
 import AppRootContext from '../../AppRootContext';
 import NextRoundInfoBox from './NextRoundInfoBox';
 import UserSignupQueue from './UserSignupQueue';
 import { usePendingChoices } from './usePendingChoices';
+import { client } from '../../useIntercodeApolloClient';
 
-const MySignupQueue = LoadQueryWrapper(useMySignupQueueQuery, ({ data }) => {
+export const loader: LoaderFunction = async () => {
+  const { data } = await client.query<MySignupQueueQueryData>({ query: MySignupQueueQueryDocument });
+  return data;
+};
+
+function MySignupQueue() {
+  const data = useLoaderData() as MySignupQueueQueryData;
   const { t } = useTranslation();
   const { myProfile } = useContext(AppRootContext);
   const pendingChoices = usePendingChoices(data.convention.my_profile);
@@ -20,7 +26,7 @@ const MySignupQueue = LoadQueryWrapper(useMySignupQueueQuery, ({ data }) => {
       <h1>{t('signups.mySignupQueue.title')}</h1>
       <div className="row mb-4">
         <div className="col-12 col-md-8">
-          <NextRoundInfoBox />
+          <NextRoundInfoBox data={data} />
 
           {pendingChoices.length > 0 ? (
             <>
@@ -65,9 +71,9 @@ const MySignupQueue = LoadQueryWrapper(useMySignupQueueQuery, ({ data }) => {
           {myProfile && <UserConProfileSignupsCard userConProfileId={myProfile.id} />}
         </div>
       </div>
-      <RankedChoiceUserSettings />
+      <RankedChoiceUserSettings data={data} />
     </>
   );
-});
+}
 
-export default MySignupQueue;
+export const Component = MySignupQueue;

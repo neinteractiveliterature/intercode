@@ -1,23 +1,26 @@
 import { Link } from 'react-router-dom';
-import { LoadQueryWrapper, sortByLocaleString } from '@neinteractiveliterature/litform';
+import { sortByLocaleString } from '@neinteractiveliterature/litform';
 
 import EventCategoryRow from './EventCategoryRow';
 import usePageTitle from '../usePageTitle';
-import { useEventCategoryAdminQuery } from './queries.generated';
+import { useEventCategoryAdminLoader } from './loaders';
+import { useTranslation } from 'react-i18next';
 
-export default LoadQueryWrapper(useEventCategoryAdminQuery, function EventCategoryIndex({ data }) {
-  usePageTitle('Event Categories');
+function EventCategoryIndex() {
+  const data = useEventCategoryAdminLoader();
+  const { t } = useTranslation();
+  usePageTitle(t('navigation.admin.eventCategories'));
 
   const { event_categories: eventCategories } = data.convention;
 
   return (
     <>
-      <h1 className="mb-4">Event categories</h1>
+      <h1 className="mb-4">{t('navigation.admin.eventCategories')}</h1>
 
       <table className="table table-striped">
         <tbody>
           {sortByLocaleString([...eventCategories], (eventCategory) => eventCategory.name).map((eventCategory) => (
-            <EventCategoryRow convention={data.convention} eventCategory={eventCategory} key={eventCategory.id} />
+            <EventCategoryRow eventCategory={eventCategory} key={eventCategory.id} />
           ))}
         </tbody>
       </table>
@@ -27,4 +30,6 @@ export default LoadQueryWrapper(useEventCategoryAdminQuery, function EventCatego
       </Link>
     </>
   );
-});
+}
+
+export const Component = EventCategoryIndex;

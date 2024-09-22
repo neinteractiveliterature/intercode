@@ -1,10 +1,7 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { gql } from '@apollo/client';
-import { RootSiteFieldsFragmentDoc } from './queries.generated';
-import * as Apollo from '@apollo/client';
-const defaultOptions = {} as const;
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type UpdateRootSiteMutationVariables = Types.Exact<{
   siteName?: Types.InputMaybe<Types.Scalars['String']['input']>;
   defaultLayoutId?: Types.InputMaybe<Types.Scalars['ID']['input']>;
@@ -15,43 +12,4 @@ export type UpdateRootSiteMutationVariables = Types.Exact<{
 export type UpdateRootSiteMutationData = { __typename: 'Mutation', updateRootSite: { __typename: 'UpdateRootSitePayload', root_site: { __typename: 'RootSite', id: string, site_name: string, rootPage: { __typename: 'Page', id: string, name?: string | null }, defaultLayout: { __typename: 'CmsLayout', id: string, name?: string | null }, cmsPages: Array<{ __typename: 'Page', id: string, name?: string | null }>, cmsLayouts: Array<{ __typename: 'CmsLayout', id: string, name?: string | null }> } } };
 
 
-export const UpdateRootSiteDocument = gql`
-    mutation UpdateRootSite($siteName: String, $defaultLayoutId: ID, $rootPageId: ID) {
-  updateRootSite(
-    input: {root_site: {site_name: $siteName, defaultLayoutId: $defaultLayoutId, rootPageId: $rootPageId}}
-  ) {
-    root_site {
-      id
-      ...RootSiteFields
-    }
-  }
-}
-    ${RootSiteFieldsFragmentDoc}`;
-export type UpdateRootSiteMutationFn = Apollo.MutationFunction<UpdateRootSiteMutationData, UpdateRootSiteMutationVariables>;
-
-/**
- * __useUpdateRootSiteMutation__
- *
- * To run a mutation, you first call `useUpdateRootSiteMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateRootSiteMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateRootSiteMutation, { data, loading, error }] = useUpdateRootSiteMutation({
- *   variables: {
- *      siteName: // value for 'siteName'
- *      defaultLayoutId: // value for 'defaultLayoutId'
- *      rootPageId: // value for 'rootPageId'
- *   },
- * });
- */
-export function useUpdateRootSiteMutation(baseOptions?: Apollo.MutationHookOptions<UpdateRootSiteMutationData, UpdateRootSiteMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateRootSiteMutationData, UpdateRootSiteMutationVariables>(UpdateRootSiteDocument, options);
-      }
-export type UpdateRootSiteMutationHookResult = ReturnType<typeof useUpdateRootSiteMutation>;
-export type UpdateRootSiteMutationResult = Apollo.MutationResult<UpdateRootSiteMutationData>;
-export type UpdateRootSiteMutationOptions = Apollo.BaseMutationOptions<UpdateRootSiteMutationData, UpdateRootSiteMutationVariables>;
+export const UpdateRootSiteDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateRootSite"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"siteName"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"defaultLayoutId"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"rootPageId"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateRootSite"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"root_site"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"site_name"},"value":{"kind":"Variable","name":{"kind":"Name","value":"siteName"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"defaultLayoutId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"defaultLayoutId"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"rootPageId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"rootPageId"}}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"root_site"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"RootSiteFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"PageFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Page"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"RootSiteAdminLayoutFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsLayout"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"RootSiteFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"RootSite"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"site_name"}},{"kind":"Field","name":{"kind":"Name","value":"rootPage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"PageFields"}}]}},{"kind":"Field","name":{"kind":"Name","value":"defaultLayout"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"RootSiteAdminLayoutFields"}}]}},{"kind":"Field","name":{"kind":"Name","value":"cmsPages"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"PageFields"}}]}},{"kind":"Field","name":{"kind":"Name","value":"cmsLayouts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"RootSiteAdminLayoutFields"}}]}}]}}]} as unknown as DocumentNode<UpdateRootSiteMutationData, UpdateRootSiteMutationVariables>;

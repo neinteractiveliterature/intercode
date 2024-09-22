@@ -1,16 +1,18 @@
 import { CellProps, Column, Renderer } from 'react-table';
-import { useModal } from '@neinteractiveliterature/litform';
 
 import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
 import { buildFieldFilterCodecs } from '../Tables/FilterUtils';
 import FreeTextFilter from '../Tables/FreeTextFilter';
 import TableHeader from '../Tables/TableHeader';
 import usePageTitle from '../usePageTitle';
-import NewEmailRouteModal from './NewEmailRouteModal';
-import EditEmailRouteModal from './EditEmailRouteModal';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
-import { RootSiteEmailRoutesAdminTableQueryData, useRootSiteEmailRoutesAdminTableQuery } from './queries.generated';
+import {
+  RootSiteEmailRoutesAdminTableQueryData,
+  RootSiteEmailRoutesAdminTableQueryDocument,
+} from './queries.generated';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
+import { Outlet, useNavigate } from 'react-router';
+import { Link } from 'react-router-dom';
 
 type EmailRouteType = RootSiteEmailRoutesAdminTableQueryData['email_routes_paginated']['entries'][0];
 
@@ -49,8 +51,6 @@ const defaultVisibleColumns = ['receiver_address', 'forward_addresses'];
 function RootSiteEmailRoutesAdminTable(): JSX.Element {
   const authorizationWarning = useAuthorizationRequired('can_manage_email_routes');
 
-  const newEmailRouteModal = useModal();
-  const editEmailRouteModal = useModal<{ emailRoute: EmailRouteType }>();
   const { tableInstance, loading, tableHeaderProps } = useReactTableWithTheWorks({
     decodeFilterValue,
     defaultVisibleColumns,
@@ -59,9 +59,10 @@ function RootSiteEmailRoutesAdminTable(): JSX.Element {
     getPages: ({ data }) => data.email_routes_paginated.total_pages,
     getPossibleColumns,
     storageKeyPrefix: 'email-routes',
-    useQuery: useRootSiteEmailRoutesAdminTableQuery,
+    query: RootSiteEmailRoutesAdminTableQueryDocument,
   });
   usePageTitle('Email routes');
+  const navigate = useNavigate();
 
   if (authorizationWarning) return authorizationWarning;
 
@@ -73,9 +74,9 @@ function RootSiteEmailRoutesAdminTable(): JSX.Element {
         {...tableHeaderProps}
         renderLeftContent={() => (
           <>
-            <button type="button" className="btn btn-outline-primary" onClick={newEmailRouteModal.open}>
+            <Link to="./new" type="button" className="btn btn-outline-primary">
               New email route
-            </button>
+            </Link>
           </>
         )}
       />
@@ -83,17 +84,12 @@ function RootSiteEmailRoutesAdminTable(): JSX.Element {
       <ReactTableWithTheWorks
         tableInstance={tableInstance}
         loading={loading}
-        onClickRow={(row) => editEmailRouteModal.open({ emailRoute: row.original })}
+        onClickRow={(row) => navigate(`./${row.original.id}`)}
       />
 
-      <NewEmailRouteModal visible={newEmailRouteModal.visible} close={newEmailRouteModal.close} />
-      <EditEmailRouteModal
-        visible={editEmailRouteModal.visible}
-        close={editEmailRouteModal.close}
-        initialEmailRoute={editEmailRouteModal.state?.emailRoute}
-      />
+      <Outlet />
     </div>
   );
 }
 
-export default RootSiteEmailRoutesAdminTable;
+export const Component = RootSiteEmailRoutesAdminTable;

@@ -1,12 +1,10 @@
 import * as React from 'react';
-import { ApolloError, useApolloClient } from '@apollo/client';
+import { ApolloError } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import updateCmsVariable from './updateCmsVariable';
-import useAsyncFunction from '../../useAsyncFunction';
 import { CmsVariablesQueryData } from './queries.generated';
-import { useSetCmsVariableMutation } from './mutations.generated';
 import { useTranslation } from 'react-i18next';
+import { useActionData, useFetcher, useNavigation } from 'react-router-dom';
 
 export type AddingVariable = Omit<CmsVariablesQueryData['cmsParent']['cmsVariables'][0], 'id'> & {
   generatedId: number;
@@ -15,27 +13,19 @@ export type AddingVariable = Omit<CmsVariablesQueryData['cmsParent']['cmsVariabl
 export type AddVariableRowProps = {
   variable: AddingVariable;
   onChange: React.Dispatch<AddingVariable>;
-  onSave: (id: number) => void;
   onCancel: (id: number) => void;
 };
 
-function AddVariableRow({ variable, onChange, onSave, onCancel }: AddVariableRowProps): JSX.Element {
-  const [setCmsVariableMutate] = useSetCmsVariableMutation();
-  const [setCmsVariable, setError, setInProgress] = useAsyncFunction(setCmsVariableMutate);
-  const apolloClient = useApolloClient();
+function AddVariableRow({ variable, onChange, onCancel }: AddVariableRowProps): JSX.Element {
   const { t } = useTranslation();
+  const fetcher = useFetcher();
+  const setError = useActionData();
+  const navigation = useNavigation();
+  const setInProgress = navigation.state !== 'idle';
 
-  const save = async () => {
-    await setCmsVariable({
-      variables: {
-        key: variable.key,
-        value_json: variable.value_json,
-      },
-      update: updateCmsVariable,
-    });
-    await apolloClient.resetStore();
-
-    return onSave(variable.generatedId);
+  const save = () => {
+    fetcher.submit({ value_json: variable.value_json }, { action: `./${variable.key}`, method: 'POST' });
+    onCancel(variable.generatedId);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {

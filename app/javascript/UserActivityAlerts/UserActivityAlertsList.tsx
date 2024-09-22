@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { Link } from 'react-router-dom';
-import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
+import { Link, useRouteLoaderData } from 'react-router-dom';
 
 import usePageTitle from '../usePageTitle';
-import { UserActivityAlertsAdminQueryData, useUserActivityAlertsAdminQuery } from './queries.generated';
+import { UserActivityAlertsAdminQueryData } from './queries.generated';
 import humanize from '../humanize';
+import { NamedRoute } from '../AppRouter';
 
 function renderCriteriaList(criteria: React.ReactNode[], defaultText: React.ReactNode) {
   if (criteria.length > 0) {
@@ -83,7 +83,8 @@ function renderAlertNotificationDestinations(
   return renderCriteriaList(destinations, 'No destinations');
 }
 
-export default LoadQueryWrapper(useUserActivityAlertsAdminQuery, function UserActivityAlertsList({ data }) {
+function UserActivityAlertsList() {
+  const data = useRouteLoaderData(NamedRoute.UserActivityAlerts) as UserActivityAlertsAdminQueryData;
   usePageTitle('User activity alerts');
 
   return (
@@ -126,4 +127,6 @@ export default LoadQueryWrapper(useUserActivityAlertsAdminQuery, function UserAc
       </Link>
     </>
   );
-});
+}
+
+export const Component = UserActivityAlertsList;

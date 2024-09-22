@@ -1,12 +1,10 @@
-import { Route, Routes } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 
-import EditStaffPosition from './EditStaffPosition';
-import EditStaffPositionPermissions from './EditStaffPositionPermissions';
-import NewStaffPosition from './NewStaffPosition';
-import StaffPositionsTable from './StaffPositionsTable';
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import LeafBreadcrumbItem from '../Breadcrumbs/LeafBreadcrumbItem';
+import NamedRouteBreadcrumbItem from '../Breadcrumbs/NamedRouteBreadcrumbItem';
+import { NamedRoute } from '../AppRouter';
 
 function StaffPositionAdmin(): JSX.Element {
   const authorizationWarning = useAuthorizationRequired('can_manage_staff_positions');
@@ -22,28 +20,16 @@ function StaffPositionAdmin(): JSX.Element {
 
           <LeafBreadcrumbItem path="new">New staff position</LeafBreadcrumbItem>
 
-          <Routes>
-            <Route
-              path=":id/*"
-              element={
-                <>
-                  <LeafBreadcrumbItem path="edit">Edit settings</LeafBreadcrumbItem>
-                  <LeafBreadcrumbItem path="edit_permissions">Edit permissions</LeafBreadcrumbItem>
-                </>
-              }
-            />
-          </Routes>
+          <NamedRouteBreadcrumbItem routeId={NamedRoute.EditStaffPosition}>Edit settings</NamedRouteBreadcrumbItem>
+          <NamedRouteBreadcrumbItem routeId={NamedRoute.EditStaffPositionPermissions}>
+            Edit permissions
+          </NamedRouteBreadcrumbItem>
         </ol>
       </nav>
 
-      <Routes>
-        <Route path="new" element={<NewStaffPosition />} />
-        <Route path=":id/edit" element={<EditStaffPosition />} />
-        <Route path=":id/edit_permissions" element={<EditStaffPositionPermissions />} />
-        <Route path="" element={<StaffPositionsTable />} />
-      </Routes>
+      <Outlet />
     </>
   );
 }
 
-export default StaffPositionAdmin;
+export const Component = StaffPositionAdmin;

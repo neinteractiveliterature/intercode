@@ -1,37 +1,33 @@
 import AsyncSelect, { AsyncProps } from 'react-select/async';
-import { useApolloClient } from '@apollo/client';
-import type { DocumentNode } from 'graphql';
+import { TypedDocumentNode, ResultOf, VariablesOf } from '@graphql-typed-document-node/core';
 import { GroupBase } from 'react-select';
+import { client } from '../useIntercodeApolloClient';
 
 // This will be a lot more useful once https://github.com/microsoft/TypeScript/issues/36981
 // is fixed
-export type GraphQLAsyncSelectProps<DataType, OptionType, IsMulti extends boolean> = Omit<
+export type GraphQLAsyncSelectProps<QueryType extends TypedDocumentNode, OptionType, IsMulti extends boolean> = Omit<
   AsyncProps<OptionType, IsMulti, GroupBase<OptionType>>,
   'loadOptions'
 > & {
-  query: DocumentNode;
-  getVariables: (inputValue: string) => Record<string, unknown> | undefined;
-  getOptions: (results: DataType) => OptionType[];
+  query: QueryType;
+  getVariables: (inputValue: string) => VariablesOf<QueryType>;
+  getOptions: (results: ResultOf<QueryType>) => OptionType[];
 };
 
-function GraphQLAsyncSelect<DataType, OptionType, IsMulti extends boolean = false>({
+function GraphQLAsyncSelect<QueryType extends TypedDocumentNode, OptionType, IsMulti extends boolean = false>({
   query,
   getOptions,
   getVariables,
   ...otherProps
-}: GraphQLAsyncSelectProps<DataType, OptionType, IsMulti>): JSX.Element {
-  const client = useApolloClient();
+}: GraphQLAsyncSelectProps<QueryType, OptionType, IsMulti>): JSX.Element {
   const loadOptions = async (inputValue: string) => {
-    const results = await client.query<DataType>({
-      query,
-      variables: getVariables(inputValue),
-    });
-
-    if (!results.data) {
-      return [];
+    try {
+      const { data } = await client.query({ query, variables: getVariables(inputValue) });
+      return getOptions(data as ResultOf<QueryType>);
+    } catch (error) {
+      console.error(error);
+      throw error;
     }
-
-    return getOptions(results.data);
   };
 
   return <AsyncSelect loadOptions={loadOptions} {...otherProps} />;

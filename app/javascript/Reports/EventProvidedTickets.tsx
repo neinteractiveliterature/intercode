@@ -2,17 +2,12 @@ import { useMemo } from 'react';
 import capitalize from 'lodash/capitalize';
 import flatMap from 'lodash/flatMap';
 import sum from 'lodash/sum';
-import {
-  LoadQueryWrapper,
-  sortByLocaleString,
-  titleSort,
-  useTabs,
-  TabList,
-  TabBody,
-} from '@neinteractiveliterature/litform';
+import { sortByLocaleString, titleSort, useTabs, TabList, TabBody } from '@neinteractiveliterature/litform';
 
 import usePageTitle from '../usePageTitle';
-import { EventProvidedTicketsQueryData, useEventProvidedTicketsQuery } from './queries.generated';
+import { EventProvidedTicketsQueryData, EventProvidedTicketsQueryDocument } from './queries.generated';
+import { LoaderFunction, useLoaderData } from 'react-router';
+import { client } from '../useIntercodeApolloClient';
 
 function EventProvidedTicketsByEvent({ data }: { data: EventProvidedTicketsQueryData }) {
   const sortedRows = titleSort(
@@ -71,7 +66,13 @@ function EventProvidedTicketsByUser({ data }: { data: EventProvidedTicketsQueryD
   );
 }
 
-export default LoadQueryWrapper(useEventProvidedTicketsQuery, function EventProvidedTickets({ data }) {
+export const loader: LoaderFunction = async () => {
+  const { data } = await client.query<EventProvidedTicketsQueryData>({ query: EventProvidedTicketsQueryDocument });
+  return data;
+};
+
+function EventProvidedTickets() {
+  const data = useLoaderData() as EventProvidedTicketsQueryData;
   const tabProps = useTabs([
     {
       id: 'by-event',
@@ -109,4 +110,6 @@ export default LoadQueryWrapper(useEventProvidedTicketsQuery, function EventProv
       <TabBody {...tabProps} />
     </>
   );
-});
+}
+
+export const Component = EventProvidedTickets;

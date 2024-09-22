@@ -1,13 +1,14 @@
 import CmsLayoutForm from './CmsLayoutForm';
 import usePageTitle from '../../usePageTitle';
-import { LoadSingleValueFromCollectionWrapper } from '../../GraphqlLoadingWrappers';
-import { useCmsLayoutsAdminQuery } from './queries.generated';
+import { singleCmsLayoutAdminLoader, SingleCmsLayoutAdminLoaderResult } from './loaders';
+import { useLoaderData } from 'react-router';
 
-export default LoadSingleValueFromCollectionWrapper(
-  useCmsLayoutsAdminQuery,
-  (data, id) => data.cmsParent.cmsLayouts.find((layout) => layout.id.toString() === id),
-  function ViewCmsLayoutSource({ value }) {
-    usePageTitle(`View “${value.name}” Source`);
-    return <CmsLayoutForm layout={value} readOnly />;
-  },
-);
+export const loader = singleCmsLayoutAdminLoader;
+
+function ViewCmsLayoutSource() {
+  const { layout: value } = useLoaderData() as SingleCmsLayoutAdminLoaderResult;
+  usePageTitle(`View “${value.name}” Source`);
+  return <CmsLayoutForm layout={value} readOnly />;
+}
+
+export const Component = ViewCmsLayoutSource;

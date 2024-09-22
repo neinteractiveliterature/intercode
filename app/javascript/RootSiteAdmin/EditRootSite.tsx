@@ -1,13 +1,32 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import * as React from 'react';
 import { ApolloError } from '@apollo/client';
-import { BootstrapFormInput, ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform';
+import { BootstrapFormInput, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
-import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
-import { useRootSiteAdminQuery } from './queries.generated';
-import { useUpdateRootSiteMutation } from './mutations.generated';
+import { RootSiteAdminQueryData, RootSiteAdminQueryDocument } from './queries.generated';
+import { ActionFunction, json, LoaderFunction, useActionData, useLoaderData, useNavigation } from 'react-router';
+import { client } from '../useIntercodeApolloClient';
+import { Form } from 'react-router-dom';
+import { UpdateRootSiteDocument } from './mutations.generated';
+
+export const action: ActionFunction = async ({ request }) => {
+  try {
+    const formData = await request.formData();
+    const { data } = await client.mutate({
+      mutation: UpdateRootSiteDocument,
+      variables: {
+        defaultLayoutId: formData.get('default_layout_id')?.toString(),
+        rootPageId: formData.get('root_page_id')?.toString(),
+        siteName: formData.get('site_name')?.toString(),
+      },
+    });
+    return json(data);
+  } catch (error) {
+    return error;
+  }
+};
 
 function useDirtyState<T>(initialState: T, setDirty: () => void) {
   const [value, setValue] = useState(initialState);
@@ -20,9 +39,17 @@ function useDirtyState<T>(initialState: T, setDirty: () => void) {
   ] as const;
 }
 
-export default LoadQueryWrapper(useRootSiteAdminQuery, function EditRootSite({ data }) {
-  const [updateMutate] = useUpdateRootSiteMutation();
-  const [update, updateError, updateInProgress] = useAsyncFunction(updateMutate);
+export const loader: LoaderFunction = async () => {
+  const { data } = await client.query<RootSiteAdminQueryData>({ query: RootSiteAdminQueryDocument });
+  return data;
+};
+
+function EditRootSite() {
+  const data = useLoaderData() as RootSiteAdminQueryData;
+  const actionData = useActionData();
+  const error = actionData instanceof Error ? actionData : undefined;
+  const navigation = useNavigation();
+  const updateInProgress = navigation.state !== 'idle';
 
   const [edited, setEdited] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -35,31 +62,24 @@ export default LoadQueryWrapper(useRootSiteAdminQuery, function EditRootSite({ d
   const [defaultLayout, setDefaultLayout] = useDirtyState(data.rootSite.defaultLayout, setDirty);
   const [rootPage, setRootPage] = useDirtyState(data.rootSite.rootPage, setDirty);
 
+  useEffect(() => {
+    if (navigation.state === 'idle' && actionData != null && !error) {
+      setSuccess(true);
+      setEdited(false);
+    }
+  }, [actionData, error, navigation.state]);
+
   usePageTitle('Root Site Settings');
 
-  const saveClicked = async () => {
-    setSuccess(false);
-
-    await update({
-      variables: {
-        siteName,
-        rootPageId: rootPage.id,
-        defaultLayoutId: defaultLayout.id,
-      },
-    });
-
-    setSuccess(true);
-    setEdited(false);
-  };
-
   return (
-    <>
+    <Form method="PATCH">
       <BootstrapFormInput
         name="site_name"
         label="Site name"
         helpText="This will show on the left side of the navigation bar"
         value={siteName}
         onTextChange={setSiteName}
+        disabled={updateInProgress}
       />
 
       <SelectWithLabel
@@ -86,13 +106,15 @@ export default LoadQueryWrapper(useRootSiteAdminQuery, function EditRootSite({ d
         isDisabled={updateInProgress}
       />
 
-      <ErrorDisplay graphQLError={updateError as ApolloError} />
+      <ErrorDisplay graphQLError={error as ApolloError} />
 
-      <button className="btn btn-primary" type="button" disabled={!edited || updateInProgress} onClick={saveClicked}>
+      <button className="btn btn-primary" type="submit" disabled={!edited || updateInProgress}>
         Save changes
       </button>
 
       {success ? ' Saved!' : null}
-    </>
+    </Form>
   );
-});
+}
+
+export const Component = EditRootSite;

@@ -1,21 +1,49 @@
 import { useMemo } from 'react';
-import { Link, Navigate, Route, Routes, useParams } from 'react-router-dom';
+import {
+  ActionFunction,
+  json,
+  Link,
+  LoaderFunction,
+  Navigate,
+  Outlet,
+  useFetcher,
+  useLoaderData,
+  useParams,
+} from 'react-router-dom';
 import sortBy from 'lodash/sortBy';
 import flatMap from 'lodash/flatMap';
-import { notEmpty, ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
+import { notEmpty } from '@neinteractiveliterature/litform';
 
 import { FormEditorContext, FormEditorForm } from './FormEditorContexts';
-import FormItemEditorLayout from './FormItemEditorLayout';
-import FormSectionEditorLayout from './FormSectionEditorLayout';
 import FormTypes from '../../../config/form_types.json';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import { parseTypedFormItemObject } from './FormItemUtils';
 import usePageTitle from '../usePageTitle';
-import { useFormEditorQuery } from './queries.generated';
-import { FormType } from '../graphqlTypes.generated';
-import { useUpdateFormMutation } from './mutations.generated';
-import FourOhFourPage from '../FourOhFourPage';
+import { FormEditorQueryData, FormEditorQueryDocument, FormEditorQueryVariables } from './queries.generated';
 import { useTranslation } from 'react-i18next';
+import { client } from '../useIntercodeApolloClient';
+import { UpdateFormDocument } from './mutations.generated';
+
+export const loader: LoaderFunction = async ({ params: { id } }) => {
+  const { data } = await client.query<FormEditorQueryData, FormEditorQueryVariables>({
+    query: FormEditorQueryDocument,
+    variables: { id: id ?? '' },
+  });
+  return data;
+};
+
+export const action: ActionFunction = async ({ params: { id }, request }) => {
+  try {
+    const formData = await request.formData();
+    const { data } = await client.mutate({
+      mutation: UpdateFormDocument,
+      variables: { id: id ?? '', form: { title: formData.get('title')?.toString() } },
+    });
+    return json(data);
+  } catch (error) {
+    return error;
+  }
+};
 
 function FormEditor(): JSX.Element {
   const params = useParams<{ id: string; sectionId?: string; itemId?: string }>();
@@ -23,24 +51,10 @@ function FormEditor(): JSX.Element {
     throw new Error('id not found in URL params');
   }
   const { t } = useTranslation();
-  const { data, error, loading } = useFormEditorQuery({
-    variables: {
-      id: params.id,
-    },
-  });
-  const [updateForm] = useUpdateFormMutation();
+  const data = useLoaderData() as FormEditorQueryData;
+  const fetcher = useFetcher();
 
   const form: FormEditorForm = useMemo(() => {
-    if (loading || error || !data) {
-      return {
-        __typename: 'Form',
-        id: '',
-        form_type: FormType.Event,
-        title: '',
-        form_sections: [],
-      };
-    }
-
     return {
       ...data.convention.form,
       form_sections: sortBy(data.convention.form.form_sections, 'position').map((formSection) => ({
@@ -48,7 +62,7 @@ function FormEditor(): JSX.Element {
         form_items: sortBy(formSection.form_items, 'position').map(parseTypedFormItemObject).filter(notEmpty),
       })),
     };
-  }, [data, error, loading]);
+  }, [data]);
 
   const formItemsById = useMemo(
     () =>
@@ -58,21 +72,9 @@ function FormEditor(): JSX.Element {
     [form],
   );
 
-  const updateFormTitle = (title: string) => updateForm({ variables: { id: form.id, form: { title } } });
+  const updateFormTitle = (title: string) => fetcher.submit({ title }, { action: '.', method: 'PATCH' });
 
-  usePageTitle(form.id ? `Editing “${form.title}”` : 'New Form');
-
-  if (loading) {
-    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
-  if (!data) {
-    return <FourOhFourPage />;
-  }
+  usePageTitle(`Editing “${form.title}”`);
 
   let currentSection: FormEditorForm['form_sections'][0] | undefined;
 
@@ -119,13 +121,10 @@ function FormEditor(): JSX.Element {
           formItemsById,
         }}
       >
-        <Routes>
-          <Route path="section/:sectionId/item/:itemId" element={<FormItemEditorLayout />} />
-          <Route path="section/:sectionId" element={<FormSectionEditorLayout />} />
-        </Routes>
+        <Outlet />
       </FormEditorContext.Provider>
     </div>
   );
 }
 
-export default FormEditor;
+export const Component = FormEditor;

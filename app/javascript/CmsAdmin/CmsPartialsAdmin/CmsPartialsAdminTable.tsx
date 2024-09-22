@@ -1,25 +1,14 @@
 import { useMemo } from 'react';
-import { Link } from 'react-router-dom';
-import {
-  ErrorDisplay,
-  sortByLocaleString,
-  useConfirm,
-  LoadQueryWrapper,
-  useDeleteMutationWithReferenceArrayUpdater,
-} from '@neinteractiveliterature/litform';
+import { Link, useSubmit } from 'react-router-dom';
+import { ErrorDisplay, sortByLocaleString, useConfirm } from '@neinteractiveliterature/litform';
 
 import usePageTitle from '../../usePageTitle';
-import { useCmsPartialsAdminQuery } from './queries.generated';
-import { useDeletePartialMutation } from './mutations.generated';
+import { useCmsPartialsAdminLoader } from './loaders';
 
-export default LoadQueryWrapper(useCmsPartialsAdminQuery, function CmsPartialsAdminTable({ data }) {
+function CmsPartialsAdminTable() {
+  const data = useCmsPartialsAdminLoader();
   const confirm = useConfirm();
-  const [deletePartial] = useDeleteMutationWithReferenceArrayUpdater(
-    useDeletePartialMutation,
-    data.cmsParent,
-    'cmsPartials',
-    (item) => ({ id: item.id }),
-  );
+  const submit = useSubmit();
 
   usePageTitle('CMS Partials');
 
@@ -58,7 +47,7 @@ export default LoadQueryWrapper(useCmsPartialsAdminQuery, function CmsPartialsAd
                     onClick={() =>
                       confirm({
                         prompt: 'Are you sure you want to delete this partial?',
-                        action: () => deletePartial(partial),
+                        action: () => submit({}, { action: `/cms_partials/${partial.id}`, method: 'DELETE' }),
                         renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
                       })
                     }
@@ -80,4 +69,6 @@ export default LoadQueryWrapper(useCmsPartialsAdminQuery, function CmsPartialsAd
       )}
     </>
   );
-});
+}
+
+export const Component = CmsPartialsAdminTable;

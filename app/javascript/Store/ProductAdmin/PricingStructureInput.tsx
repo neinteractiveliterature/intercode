@@ -1,10 +1,10 @@
 import { useContext } from 'react';
 import * as React from 'react';
 
-import { describeAdminPricingStructure } from '../describePricingStructure';
 import { PricingStructureModalContext } from './EditPricingStructureModal';
 import { EditingPricingStructure } from './EditingProductTypes';
 import { useTranslation } from 'react-i18next';
+import { AdminPricingStructureDescription } from 'Store/describePricingStructure';
 
 export type PricingStructureInputProps = {
   value?: EditingPricingStructure | null;
@@ -17,7 +17,7 @@ function PricingStructureInput({ value, onChange }: PricingStructureInputProps):
 
   return (
     <>
-      {describeAdminPricingStructure(value, t)}
+      <AdminPricingStructureDescription pricingStructure={value} />
       <button
         type="button"
         className="btn btn-link py-0"

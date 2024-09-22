@@ -1,56 +1,60 @@
-import { useState, useCallback, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useContext } from 'react';
+import { ActionFunction, redirect, useFetcher, useLoaderData } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import buildTicketTypeInput from './buildTicketTypeInput';
 import TicketTypeForm from './TicketTypeForm';
-import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
-import { useUpdateTicketTypeMutation } from './mutations.generated';
-import { LoadSingleValueFromCollectionWrapper } from '../GraphqlLoadingWrappers';
-import { useTicketTypesQueryFromRoute } from './useTicketTypesQueryFromRoute';
 import AppRootContext from '../AppRootContext';
+import { SingleTicketTypeLoaderResult } from './loaders';
+import { TicketTypeInput } from 'graphqlTypes.generated';
+import { client } from 'useIntercodeApolloClient';
+import { UpdateTicketTypeDocument } from './mutations.generated';
+import invariant from 'tiny-invariant';
 
-export default LoadSingleValueFromCollectionWrapper(
-  useTicketTypesQueryFromRoute,
-  (data, id) =>
-    ('event' in data.convention ? data.convention.event : data.convention).ticket_types.find(
-      (tt) => tt.id.toString() === id,
-    ),
-  function EditTicketTypeForm({ value: initialTicketType }) {
-    const { ticketName } = useContext(AppRootContext);
-    const navigate = useNavigate();
-    usePageTitle(`Editing “${initialTicketType.name}”`);
-    const [ticketType, setTicketType] = useState(initialTicketType);
-    const [mutate] = useUpdateTicketTypeMutation();
-    const [saveClicked, error, inProgress] = useAsyncFunction(
-      useCallback(async () => {
-        await mutate({
-          variables: {
-            input: {
-              id: ticketType.id,
-              ticket_type: buildTicketTypeInput(ticketType),
-            },
-          },
-        });
-        navigate('..');
-      }, [mutate, navigate, ticketType]),
-    );
+export const action: ActionFunction = async ({ request, params: { id } }) => {
+  invariant(id != null);
+  try {
+    const ticketType = (await request.json()) as TicketTypeInput;
+    await client.mutate({
+      mutation: UpdateTicketTypeDocument,
+      variables: {
+        input: { ticket_type: ticketType, id },
+      },
+    });
 
-    return (
-      <div>
-        <h1 className="mb-4">
-          Editing {ticketName} type &ldquo;
-          {initialTicketType.name}
-          &rdquo;
-        </h1>
-        <TicketTypeForm ticketType={ticketType} onChange={setTicketType} />
-        <button type="button" className="btn btn-primary" onClick={saveClicked} disabled={inProgress}>
-          Save changes
-        </button>
-        <ErrorDisplay graphQLError={error as ApolloError} />
-      </div>
-    );
-  },
-);
+    return redirect('/ticket_types');
+  } catch (error) {
+    return error;
+  }
+};
+
+function EditTicketTypeForm() {
+  const initialTicketType = useLoaderData() as SingleTicketTypeLoaderResult;
+  const { ticketName } = useContext(AppRootContext);
+  usePageTitle(`Editing “${initialTicketType.name}”`);
+  const [ticketType, setTicketType] = useState(initialTicketType);
+  const fetcher = useFetcher();
+  const error = fetcher.data instanceof Error ? fetcher.data : undefined;
+  const inProgress = fetcher.state !== 'idle';
+
+  const saveClicked = () => {
+    fetcher.submit(buildTicketTypeInput(ticketType), { method: 'PATCH', encType: 'application/json' });
+  };
+
+  return (
+    <div>
+      <h1 className="mb-4">
+        Editing {ticketName} type “{initialTicketType.name}”
+      </h1>
+      <TicketTypeForm ticketType={ticketType} onChange={setTicketType} />
+      <button type="button" className="btn btn-primary" onClick={saveClicked} disabled={inProgress}>
+        Save changes
+      </button>
+      <ErrorDisplay graphQLError={error as ApolloError} />
+    </div>
+  );
+}
+
+export const Component = EditTicketTypeForm;

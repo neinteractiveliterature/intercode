@@ -6,8 +6,8 @@ import { ApolloError } from '@apollo/client';
 import { ErrorDisplay, sortByLocaleString, parseIntOrNull, useConfirm } from '@neinteractiveliterature/litform';
 
 import InPlaceEditor from './InPlaceEditor';
-import useAsyncFunction from '../useAsyncFunction';
 import { TicketType, MaximumEventProvidedTicketsOverride } from '../graphqlTypes.generated';
+import { useFetcher } from 'react-router-dom';
 
 type TicketTypeForMEPTO = Pick<TicketType, 'description' | 'maximum_event_provided_tickets'> & { id: string };
 
@@ -33,9 +33,6 @@ export type MEPTOEditorProps = {
   ticketName: string;
   overrides: MEPTOForEditor[];
   ticketTypes: TicketTypeForMEPTO[];
-  createOverride: (input: MEPTOInput) => Promise<unknown>;
-  updateOverride: (input: { id: string; overrideValue: number }) => Promise<unknown>;
-  deleteOverride: (mepto: MEPTOForEditor) => Promise<unknown>;
 };
 
 function MaximumEventProvidedTicketsOverrideEditor({
@@ -43,14 +40,9 @@ function MaximumEventProvidedTicketsOverrideEditor({
   ticketName,
   overrides,
   ticketTypes,
-  createOverride,
-  updateOverride,
-  deleteOverride,
 }: MEPTOEditorProps): JSX.Element {
   const { t } = useTranslation();
-  const [createOverrideAsync, createError, , clearCreateError] = useAsyncFunction(createOverride);
-  const [updateOverrideAsync, updateError, , clearUpdateError] = useAsyncFunction(updateOverride);
-  const [deleteOverrideAsync, deleteError, , clearDeleteError] = useAsyncFunction(deleteOverride);
+  const fetcher = useFetcher();
   const [addingOverride, setAddingOverride] = useState<{
     ticket_type: TicketTypeForMEPTO;
     override_value: number | null;
@@ -59,11 +51,6 @@ function MaximumEventProvidedTicketsOverrideEditor({
     override_value: null,
   });
   const confirm = useConfirm();
-  const clearAllErrors = () => {
-    clearCreateError();
-    clearUpdateError();
-    clearDeleteError();
-  };
 
   const sortedOverrides = useMemo(
     () => sortByLocaleString(overrides, (o) => o.ticket_type?.description ?? ''),
@@ -111,13 +98,10 @@ function MaximumEventProvidedTicketsOverrideEditor({
       return;
     }
 
-    clearAllErrors();
-
-    await createOverrideAsync({
-      eventId,
-      ticketTypeId: addingOverride.ticket_type.id,
-      overrideValue: addingOverride.override_value,
-    });
+    fetcher.submit(
+      { ticket_type_id: addingOverride.ticket_type.id, override_value: addingOverride.override_value },
+      { action: `/events/${eventId}/maximum_event_provided_ticket_overrides`, method: 'POST' },
+    );
 
     setAddingOverride({
       ticket_type: NULL_TICKET_TYPE,
@@ -126,16 +110,17 @@ function MaximumEventProvidedTicketsOverrideEditor({
   };
 
   const existingOverrideValueDidChange = (id: string, overrideValue: string) => {
-    clearAllErrors();
-    updateOverrideAsync({
-      id,
-      overrideValue: Number.parseInt(overrideValue, 10),
-    });
+    fetcher.submit(
+      { override_value: overrideValue },
+      { action: `/events/${eventId}/maximum_event_provided_ticket_overrides/${id}`, method: 'PATCH' },
+    );
   };
 
   const deleteOverrideConfirmed = async (override: MEPTOForEditor) => {
-    clearAllErrors();
-    await deleteOverrideAsync(override);
+    fetcher.submit(
+      {},
+      { action: `/events/${eventId}/maximum_event_provided_ticket_overrides/${override.id}`, method: 'DELETE' },
+    );
   };
 
   const rows = sortedOverrides.map((override) => (
@@ -178,8 +163,6 @@ function MaximumEventProvidedTicketsOverrideEditor({
       {ticketType.description}
     </option>
   ));
-
-  const error = createError || updateError || deleteError;
 
   return (
     <div className="card bg-light">
@@ -235,7 +218,7 @@ function MaximumEventProvidedTicketsOverrideEditor({
             </tr>
           </tfoot>
         </table>
-        <ErrorDisplay graphQLError={error as ApolloError | null} />
+        <ErrorDisplay graphQLError={fetcher.data as ApolloError | null} />
       </div>
     </div>
   );

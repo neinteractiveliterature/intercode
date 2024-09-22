@@ -1,0 +1,32 @@
+#import "../adminProductFields.graphql"
+
+mutation CreateProduct($product: ProductInput!) {
+  createProduct(input: { product: $product }) {
+    product {
+      id
+      ...AdminProductFields
+
+      convention {
+        id
+      }
+    }
+  }
+}
+
+mutation UpdateProduct($id: ID!, $product: ProductInput!) {
+  updateProduct(input: { id: $id, product: $product }) {
+    product {
+      id
+      ...AdminProductFields
+    }
+  }
+}
+
+mutation DeleteProduct($id: ID!) {
+  deleteProduct(input: { id: $id }) {
+    product {
+      id
+      ...AdminProductFields
+    }
+  }
+}

@@ -1,12 +1,17 @@
 import { useMemo, useContext } from 'react';
-import { useLocation } from 'react-router-dom';
-import { ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform';
+import { LoaderFunction, useLoaderData } from 'react-router-dom';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import AuthenticityTokensContext from '../AuthenticityTokensContext';
+import AuthenticityTokensManager from '../AuthenticityTokensContext';
 import PermissionsPrompt from './PermissionsPrompt';
 import AuthenticationModalContext from '../Authentication/AuthenticationModalContext';
 import usePageTitle from '../usePageTitle';
-import { useOAuthAuthorizationPromptQuery } from './queries.generated';
+import {
+  OAuthAuthorizationPromptQueryData,
+  OAuthAuthorizationPromptQueryDocument,
+  OAuthAuthorizationPromptQueryVariables,
+} from './queries.generated';
+import { client } from '../useIntercodeApolloClient';
 
 type AuthorizationParams = {
   client_id?: string;
@@ -24,29 +29,27 @@ type PreAuth = AuthorizationParams & {
   scope: string;
 };
 
-function useOAuthAuthorizationPromptQueryFromParams() {
-  const location = useLocation();
-  const preAuthParamsJSON = useMemo(
-    () =>
-      JSON.stringify(
-        [...new URLSearchParams(location.search)].reduce(
-          (object, [field, value]) => ({ ...object, [field]: value }),
-          {},
-        ),
-      ),
-    [location.search],
+export const loader: LoaderFunction = async ({ request }) => {
+  const url = new URL(request.url);
+  const preAuthParamsJSON = JSON.stringify(
+    [...url.searchParams].reduce((object, [field, value]) => ({ ...object, [field]: value }), {}),
   );
-  return useOAuthAuthorizationPromptQuery({
+
+  const { data } = await client.query<OAuthAuthorizationPromptQueryData, OAuthAuthorizationPromptQueryVariables>({
+    query: OAuthAuthorizationPromptQueryDocument,
     variables: { queryParams: preAuthParamsJSON },
   });
-}
 
-export default LoadQueryWrapper(useOAuthAuthorizationPromptQueryFromParams, function AuthorizationPrompt({ data }) {
+  return data;
+};
+
+function AuthorizationPrompt() {
+  const data = useLoaderData() as OAuthAuthorizationPromptQueryData;
   const preAuth = useMemo(() => JSON.parse(data.oauthPreAuth) as PreAuth, [data]);
   const scopes = useMemo(() => preAuth.scope.split(' '), [preAuth]);
 
-  const authenticityTokens = useContext(AuthenticityTokensContext);
-  const { grantAuthorization: grantAuthorizationToken, denyAuthorization: denyAuthorizationToken } = authenticityTokens;
+  const { grantAuthorization: grantAuthorizationToken, denyAuthorization: denyAuthorizationToken } =
+    AuthenticityTokensManager.instance.tokens;
   const authorizationParams: AuthorizationParams | null = useMemo(
     () =>
       (
@@ -162,4 +165,6 @@ export default LoadQueryWrapper(useOAuthAuthorizationPromptQueryFromParams, func
       </main>
     </div>
   );
-});
+}
+
+export const Component = AuthorizationPrompt;

@@ -113,6 +113,7 @@ function RunFormFields<RunType extends RunForRunFormFields>({
         <TimeSelect value={{ hour, minute }} onChange={timeInputChanged} timespan={timespan}>
           {startTime && `- ${format(startTime.plus({ seconds: event.length_seconds }), 'shortTime')}`}
         </TimeSelect>
+        <input type="hidden" name="starts_at" value={startTime?.toISO() ?? ''} />
       </fieldset>
     );
   };

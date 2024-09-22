@@ -1,31 +1,39 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
-import { useNavigate } from 'react-router-dom';
-import { ApolloError, useApolloClient } from '@apollo/client';
+import { ActionFunction, redirect, useFetcher, useNavigate } from 'react-router-dom';
+import { ApolloError } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import UserSelect from '../BuiltInFormControls/UserSelect';
-import useAsyncFunction from '../useAsyncFunction';
-import { useCreateUserConProfileMutation } from './mutations.generated';
 import { AddAttendeeUsersQueryData, AddAttendeeUsersQueryDocument } from './queries.generated';
 import { FormResponse } from '../FormPresenter/useFormResponse';
+import AppRootContext from 'AppRootContext';
+import { CreateUserConProfileDocument, CreateUserConProfileMutationVariables } from './mutations.generated';
+import { client } from 'useIntercodeApolloClient';
 
-export type AddAttendeeModalProps = {
-  conventionName: string;
-  visible: boolean;
+export const action: ActionFunction = async ({ request }) => {
+  try {
+    const variables = (await request.json()) as CreateUserConProfileMutationVariables;
+    await client.mutate({ mutation: CreateUserConProfileDocument, variables });
+    await client.resetStore();
+    return redirect('..');
+  } catch (error) {
+    return error;
+  }
 };
 
 type UserType = AddAttendeeUsersQueryData['users_paginated']['entries'][0];
 
-function AddAttendeeModal({ conventionName, visible }: AddAttendeeModalProps): JSX.Element {
+function AddAttendeeModal(): JSX.Element {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const apolloClient = useApolloClient();
+  const { convention } = useContext(AppRootContext);
   const [user, setUser] = useState<UserType>();
   const [userConProfile, setUserConProfile] = useState<FormResponse>();
-  const [createUserConProfileMutate] = useCreateUserConProfileMutation();
-  const [createUserConProfile, error, inProgress] = useAsyncFunction(createUserConProfileMutate);
+  const fetcher = useFetcher();
+  const error = fetcher.data instanceof Error ? fetcher.data : undefined;
+  const inProgress = fetcher.state !== 'idle';
 
   const close = () => {
     setUser(undefined);
@@ -39,31 +47,30 @@ function AddAttendeeModal({ conventionName, visible }: AddAttendeeModalProps): J
       __typename: 'UserConProfile',
       id: 'not-created-yet',
       form_response_attrs: {
-        first_name: newUser.first_name,
-        last_name: newUser.last_name,
+        first_name: newUser.first_name ?? null,
+        last_name: newUser.last_name ?? null,
       },
     });
   };
 
-  const createClicked = async () => {
+  const createClicked = () => {
     if (!user || !userConProfile) {
       return;
     }
 
-    await createUserConProfile({
-      variables: {
+    fetcher.submit(
+      {
         user_id: user.id,
         user_con_profile: {
           form_response_attrs_json: JSON.stringify(userConProfile.form_response_attrs),
         },
-      },
-    });
-    await apolloClient.resetStore();
-    close();
+      } satisfies CreateUserConProfileMutationVariables,
+      { method: 'POST', encType: 'application/json' },
+    );
   };
 
   return (
-    <Modal visible={visible} dialogClassName="modal-lg">
+    <Modal visible dialogClassName="modal-lg">
       <div className="modal-header">{t('admin.userConProfiles.addAttendee.header')}</div>
       <div className="modal-body">
         <p>
@@ -71,15 +78,11 @@ function AddAttendeeModal({ conventionName, visible }: AddAttendeeModalProps): J
             'admin.userConProfiles.addAttendee.text',
             `Choose a user to add as an attendee for {{ conventionName }}.
             This person must already be a user in the site database in order to be added.`,
-            { conventionName },
+            { conventionName: convention?.name },
           )}
         </p>
 
-        <UserSelect<AddAttendeeUsersQueryData>
-          value={user}
-          onChange={userSelected}
-          usersQuery={AddAttendeeUsersQueryDocument}
-        />
+        <UserSelect value={user} onChange={userSelected} usersQuery={AddAttendeeUsersQueryDocument} />
 
         {user && (
           <div className="mt-4">
@@ -105,4 +108,4 @@ function AddAttendeeModal({ conventionName, visible }: AddAttendeeModalProps): J
   );
 }
 
-export default AddAttendeeModal;
+export const Component = AddAttendeeModal;

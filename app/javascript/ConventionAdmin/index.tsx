@@ -1,40 +1,25 @@
 import { useMemo } from 'react';
-import { ApolloError, useApolloClient } from '@apollo/client';
-import { useNavigate } from 'react-router-dom';
+import { ApolloError } from '@apollo/client';
+import { ActionFunction, LoaderFunction, redirect, useActionData, useLoaderData, useSubmit } from 'react-router-dom';
 import pick from 'lodash/pick';
-import { ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import ConventionForm, { ConventionFormConvention } from './ConventionForm';
-import useAsyncFunction from '../useAsyncFunction';
 import ConventionFormHeader from './ConventionFormHeader';
 import usePageTitle from '../usePageTitle';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
-import { useConventionAdminConventionQuery } from './queries.generated';
-import { useUpdateConventionMutation } from './mutations.generated';
+import { ConventionAdminConventionQueryData, ConventionAdminConventionQueryDocument } from './queries.generated';
 import { ConventionInput } from '../graphqlTypes.generated';
+import { client } from '../useIntercodeApolloClient';
+import { UpdateConventionDocument } from './mutations.generated';
 
-export default LoadQueryWrapper(useConventionAdminConventionQuery, function ConventionAdmin({ data }) {
-  const navigate = useNavigate();
-  const [updateMutate] = useUpdateConventionMutation();
-  const [mutate, mutationError] = useAsyncFunction(updateMutate);
-  const apolloClient = useApolloClient();
-  const authorizationWarning = useAuthorizationRequired('can_update_convention');
+export const action: ActionFunction = async ({ request }) => {
+  try {
+    const formData = await request.formData();
+    const favicon = formData.get('favicon') as File | null;
+    const openGraphImage = formData.get('openGraphImage') as File | null;
+    const convention = JSON.parse(formData.get('convention')?.toString() ?? '{}') as ConventionFormConvention;
 
-  const initialConvention: ConventionFormConvention = useMemo(() => {
-    return {
-      ...data.convention,
-    };
-  }, [data]);
-
-  usePageTitle('Convention Settings');
-
-  if (authorizationWarning) return authorizationWarning;
-
-  const saveConvention = async (
-    convention: ConventionFormConvention,
-    openGraphImage: File | null | undefined,
-    favicon: File | null | undefined,
-  ) => {
     const conventionInput: ConventionInput = {
       ...pick(convention, [
         'accepting_proposals',
@@ -65,19 +50,63 @@ export default LoadQueryWrapper(useConventionAdminConventionQuery, function Conv
       rootPageId: convention.rootPage.id.toString(),
       catchAllStaffPositionId: convention.catch_all_staff_position?.id.toString(),
       defaultCurrencyCode: convention.default_currency_code,
-      ...(typeof favicon === 'undefined' ? {} : { favicon }),
-      ...(typeof openGraphImage === 'undefined' ? {} : { openGraphImage }),
+      ...(favicon == null ? {} : { favicon }),
+      ...(openGraphImage == null ? {} : { openGraphImage }),
     };
-    await mutate({
+
+    await client.mutate({
+      mutation: UpdateConventionDocument,
       variables: {
         input: {
           convention: conventionInput,
         },
       },
     });
+  } catch (error) {
+    return error;
+  }
 
-    await apolloClient.resetStore();
-    navigate('/');
+  await client.resetStore();
+  return redirect('/');
+};
+
+export const loader: LoaderFunction = async () => {
+  const { data } = await client.query<ConventionAdminConventionQueryData>({
+    query: ConventionAdminConventionQueryDocument,
+  });
+  return data;
+};
+
+function ConventionAdmin() {
+  const data = useLoaderData() as ConventionAdminConventionQueryData;
+  const authorizationWarning = useAuthorizationRequired('can_update_convention');
+  const submit = useSubmit();
+  const mutationError = useActionData();
+
+  const initialConvention: ConventionFormConvention = useMemo(() => {
+    return {
+      ...data.convention,
+    };
+  }, [data]);
+
+  usePageTitle('Convention Settings');
+
+  if (authorizationWarning) return authorizationWarning;
+
+  const saveConvention = async (
+    convention: ConventionFormConvention,
+    openGraphImage: File | null | undefined,
+    favicon: File | null | undefined,
+  ) => {
+    const formData = new FormData();
+    formData.set('convention', JSON.stringify(convention));
+    if (openGraphImage) {
+      formData.set('openGraphImage', openGraphImage);
+    }
+    if (favicon) {
+      formData.set('favicon', favicon);
+    }
+    submit(formData, { method: 'PATCH', action: '.', encType: 'multipart/form-data' });
   };
 
   return (
@@ -97,4 +126,6 @@ export default LoadQueryWrapper(useConventionAdminConventionQuery, function Conv
       <ErrorDisplay graphQLError={mutationError as ApolloError} />
     </div>
   );
-});
+}
+
+export const Component = ConventionAdmin;

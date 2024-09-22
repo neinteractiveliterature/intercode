@@ -63,6 +63,7 @@ class Types::EventType < Types::BaseObject
   field :can_play_concurrently, Boolean, null: false
   field :con_mail_destination, String, null: true
   field :content_warnings, String, null: true
+  field :convention, Types::ConventionType, null: false
   field :created_at, Types::DateType, null: true
   field :description, String, null: true
   field :email, String, null: true
@@ -79,7 +80,7 @@ class Types::EventType < Types::BaseObject
 
   field :event_category, Types::EventCategoryType, null: false
 
-  association_loaders Event, :event_category, :team_members, :ticket_types
+  association_loaders Event, :event_category, :team_members, :ticket_types, :convention
 
   def form
     event_category = dataloader.with(Sources::ActiveRecordAssociation, Event, :event_category).load(object)

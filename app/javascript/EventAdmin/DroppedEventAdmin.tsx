@@ -1,12 +1,20 @@
-import { useConfirm, ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform';
+import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import usePageTitle from '../usePageTitle';
-import { useEventAdminEventsQuery } from './queries.generated';
-import { useRestoreDroppedEventMutation } from './mutations.generated';
+import { EventAdminEventsQueryData, EventAdminEventsQueryDocument } from './queries.generated';
+import { LoaderFunction, useLoaderData } from 'react-router';
+import { client } from '../useIntercodeApolloClient';
+import { useSubmit } from 'react-router-dom';
 
-export default LoadQueryWrapper(useEventAdminEventsQuery, function DroppedEventAdmin({ data }): JSX.Element {
-  const [restoreDroppedEvent] = useRestoreDroppedEventMutation();
+export const loader: LoaderFunction = async () => {
+  const { data } = await client.query({ query: EventAdminEventsQueryDocument });
+  return data;
+};
+
+function DroppedEventAdmin(): JSX.Element {
+  const data = useLoaderData() as EventAdminEventsQueryData;
   const confirm = useConfirm();
+  const submit = useSubmit();
 
   usePageTitle('Dropped Events');
 
@@ -35,7 +43,14 @@ export default LoadQueryWrapper(useEventAdminEventsQuery, function DroppedEventA
             confirm({
               prompt: `Are you sure you want to restore this event?  (Scheduled runs and
               previous signups will not be restored.)`,
-              action: () => restoreDroppedEvent({ variables: { input: { id: droppedEvent.id } } }),
+              action: () =>
+                submit(
+                  {},
+                  {
+                    action: `/admin_events/${droppedEvent.event_category.id}/${droppedEvent.id}/restore`,
+                    method: 'POST',
+                  },
+                ),
               renderError: (restoreError) => <ErrorDisplay graphQLError={restoreError} />,
             })
           }
@@ -53,4 +68,6 @@ export default LoadQueryWrapper(useEventAdminEventsQuery, function DroppedEventA
       </table>
     </div>
   );
-});
+}
+
+export const Component = DroppedEventAdmin;

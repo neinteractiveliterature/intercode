@@ -11,7 +11,7 @@ import SignUpButton from '../Authentication/SignUpButton';
 import AppRootContext from '../AppRootContext';
 import NavigationItem from './NavigationItem';
 import Gravatar from '../Gravatar';
-import CartContents from '../Store/CartContents';
+import CartContents from 'Store/Cart/CartContents';
 import MenuIcon from './MenuIcon';
 import SignOutButton from '../Authentication/SignOutButton';
 import { DropdownMenu } from '../UIComponents/DropdownMenu';

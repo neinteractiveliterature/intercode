@@ -1,15 +1,20 @@
 import { DateTime } from 'luxon';
-import { TFunction } from 'i18next';
 
 import { findCurrentValue, findCurrentTimespanIndex } from '../ScheduledValueUtils';
 import { PayWhatYouWantValue, PricingStrategy, PricingStructure, ScheduledMoneyValue } from '../graphqlTypes.generated';
 import assertNever from 'assert-never';
-import { Trans } from 'react-i18next';
-import React from 'react';
+import { Trans, useTranslation } from 'react-i18next';
+import { useContext } from 'react';
+import AppRootContext from 'AppRootContext';
 
-export function describePayWhatYouWantRange(value: PayWhatYouWantValue | undefined | null, t: TFunction) {
+export type PayWhatYouWantRangeDescriptionProps = {
+  value?: PayWhatYouWantValue | null;
+};
+
+export function PayWhatYouWantRangeDescription({ value }: PayWhatYouWantRangeDescriptionProps): JSX.Element {
+  const { t } = useTranslation();
   if (!value) {
-    return '';
+    return <></>;
   }
 
   if (value.minimum_amount && value.maximum_amount) {
@@ -47,19 +52,23 @@ export function describePayWhatYouWantRange(value: PayWhatYouWantValue | undefin
       />
     );
   } else {
-    return t('payWhatYouWant.noBounds');
+    return <>{t('payWhatYouWant.noBounds')}</>;
   }
 }
 
-export function describePayWhatYouWantValue(value: PayWhatYouWantValue | undefined | null, t: TFunction) {
+export type PayWhatYouWantValueDescriptionProps = {
+  value?: PayWhatYouWantValue | null;
+};
+
+export function PayWhatYouWantValueDescription({ value }: PayWhatYouWantValueDescriptionProps): JSX.Element {
   if (!value) {
-    return '';
+    return <></>;
   }
 
   if (value.suggested_amount) {
     return (
       <>
-        {describePayWhatYouWantRange(value, t)}
+        <PayWhatYouWantRangeDescription value={value} />
         <br />
         <Trans
           i18nKey="payWhatYouWant.suggestedAmount"
@@ -70,16 +79,21 @@ export function describePayWhatYouWantValue(value: PayWhatYouWantValue | undefin
       </>
     );
   } else {
-    return describePayWhatYouWantRange(value, t);
+    return <PayWhatYouWantRangeDescription value={value} />;
   }
 }
 
-export function describeAdminPricingStructure(
-  pricingStructure: Pick<PricingStructure, 'pricing_strategy' | 'value'> | null | undefined,
-  t: TFunction,
-): React.ReactNode {
+export type AdminPricingStructureDescriptionProps = {
+  pricingStructure?: Pick<PricingStructure, 'pricing_strategy' | 'value'> | null;
+};
+
+export function AdminPricingStructureDescription({
+  pricingStructure,
+}: AdminPricingStructureDescriptionProps): JSX.Element {
+  const { t } = useTranslation();
+
   if (!pricingStructure) {
-    return null;
+    return <></>;
   }
 
   if (pricingStructure.pricing_strategy === 'fixed') {
@@ -112,23 +126,27 @@ export function describeAdminPricingStructure(
     return (
       <>
         {t('pricingStructure.payWhatYouWant')}(
-        {describePayWhatYouWantRange(pricingStructure.value as PayWhatYouWantValue, t)})
+        <PayWhatYouWantRangeDescription value={pricingStructure.value as PayWhatYouWantValue} />)
       </>
     );
   }
 
   assertNever(pricingStructure.pricing_strategy, true);
-
-  return null;
+  return <></>;
 }
 
-export function describeUserPricingStructure(
-  pricingStructure: Pick<PricingStructure, 'pricing_strategy' | 'value'> | undefined | null,
-  timezoneName: string,
-  t: TFunction,
-): React.ReactNode {
+export type UserPricingStructureDescriptionProps = {
+  pricingStructure?: Pick<PricingStructure, 'pricing_strategy' | 'value'> | null;
+};
+
+export function UserPricingStructureDescription({
+  pricingStructure,
+}: UserPricingStructureDescriptionProps): JSX.Element {
+  const { t } = useTranslation();
+  const { timezoneName } = useContext(AppRootContext);
+
   if (!pricingStructure) {
-    return null;
+    return <></>;
   }
 
   if (pricingStructure.pricing_strategy === 'fixed') {
@@ -174,20 +192,22 @@ export function describeUserPricingStructure(
   }
 
   if (pricingStructure.pricing_strategy === PricingStrategy.PayWhatYouWant) {
-    return describePayWhatYouWantValue(pricingStructure.value as PayWhatYouWantValue, t);
+    return <PayWhatYouWantValueDescription value={pricingStructure.value as PayWhatYouWantValue} />;
   }
 
   assertNever(pricingStructure.pricing_strategy, true);
-
-  return null;
+  return <></>;
 }
 
-export function describeCurrentPrice(
-  pricingStructure: Pick<PricingStructure, 'pricing_strategy' | 'value'> | null | undefined,
-  t: TFunction,
-): React.ReactNode {
+export type CurrentPriceDescriptionProps = {
+  pricingStructure?: Pick<PricingStructure, 'pricing_strategy' | 'value'> | null;
+};
+
+export function CurrentPriceDescription({ pricingStructure }: CurrentPriceDescriptionProps): JSX.Element {
+  const { t } = useTranslation();
+
   if (!pricingStructure) {
-    return null;
+    return <></>;
   }
 
   if (pricingStructure.pricing_strategy === 'fixed') {
@@ -221,12 +241,11 @@ export function describeCurrentPrice(
     return (
       <>
         {t('pricingStructure.payWhatYouWant')}(
-        {describePayWhatYouWantRange(pricingStructure.value as PayWhatYouWantValue, t)})
+        <PayWhatYouWantRangeDescription value={pricingStructure.value as PayWhatYouWantValue} />)
       </>
     );
   }
 
   assertNever(pricingStructure.pricing_strategy, true);
-
-  return null;
+  return <></>;
 }

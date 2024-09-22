@@ -1,10 +1,7 @@
 /* eslint-disable */
 import * as Types from '../../graphqlTypes.generated';
 
-import { gql } from '@apollo/client';
-import { CmsFileFieldsFragmentDoc } from './queries.generated';
-import * as Apollo from '@apollo/client';
-const defaultOptions = {} as const;
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type CreateCmsFileMutationVariables = Types.Exact<{
   signedBlobId: Types.Scalars['ID']['input'];
 }>;
@@ -28,109 +25,6 @@ export type DeleteCmsFileMutationVariables = Types.Exact<{
 export type DeleteCmsFileMutationData = { __typename: 'Mutation', deleteCmsFile: { __typename: 'DeleteCmsFilePayload', clientMutationId?: string | null } };
 
 
-export const CreateCmsFileDocument = gql`
-    mutation CreateCmsFile($signedBlobId: ID!) {
-  createCmsFile(input: {signedBlobId: $signedBlobId}) {
-    cms_file {
-      id
-      ...CmsFileFields
-    }
-  }
-}
-    ${CmsFileFieldsFragmentDoc}`;
-export type CreateCmsFileMutationFn = Apollo.MutationFunction<CreateCmsFileMutationData, CreateCmsFileMutationVariables>;
-
-/**
- * __useCreateCmsFileMutation__
- *
- * To run a mutation, you first call `useCreateCmsFileMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateCmsFileMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createCmsFileMutation, { data, loading, error }] = useCreateCmsFileMutation({
- *   variables: {
- *      signedBlobId: // value for 'signedBlobId'
- *   },
- * });
- */
-export function useCreateCmsFileMutation(baseOptions?: Apollo.MutationHookOptions<CreateCmsFileMutationData, CreateCmsFileMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateCmsFileMutationData, CreateCmsFileMutationVariables>(CreateCmsFileDocument, options);
-      }
-export type CreateCmsFileMutationHookResult = ReturnType<typeof useCreateCmsFileMutation>;
-export type CreateCmsFileMutationResult = Apollo.MutationResult<CreateCmsFileMutationData>;
-export type CreateCmsFileMutationOptions = Apollo.BaseMutationOptions<CreateCmsFileMutationData, CreateCmsFileMutationVariables>;
-export const RenameCmsFileDocument = gql`
-    mutation RenameCmsFile($id: ID!, $filename: String!) {
-  renameCmsFile(input: {id: $id, filename: $filename}) {
-    cms_file {
-      id
-      ...CmsFileFields
-    }
-  }
-}
-    ${CmsFileFieldsFragmentDoc}`;
-export type RenameCmsFileMutationFn = Apollo.MutationFunction<RenameCmsFileMutationData, RenameCmsFileMutationVariables>;
-
-/**
- * __useRenameCmsFileMutation__
- *
- * To run a mutation, you first call `useRenameCmsFileMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useRenameCmsFileMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [renameCmsFileMutation, { data, loading, error }] = useRenameCmsFileMutation({
- *   variables: {
- *      id: // value for 'id'
- *      filename: // value for 'filename'
- *   },
- * });
- */
-export function useRenameCmsFileMutation(baseOptions?: Apollo.MutationHookOptions<RenameCmsFileMutationData, RenameCmsFileMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<RenameCmsFileMutationData, RenameCmsFileMutationVariables>(RenameCmsFileDocument, options);
-      }
-export type RenameCmsFileMutationHookResult = ReturnType<typeof useRenameCmsFileMutation>;
-export type RenameCmsFileMutationResult = Apollo.MutationResult<RenameCmsFileMutationData>;
-export type RenameCmsFileMutationOptions = Apollo.BaseMutationOptions<RenameCmsFileMutationData, RenameCmsFileMutationVariables>;
-export const DeleteCmsFileDocument = gql`
-    mutation DeleteCmsFile($id: ID!) {
-  deleteCmsFile(input: {id: $id}) {
-    clientMutationId
-  }
-}
-    `;
-export type DeleteCmsFileMutationFn = Apollo.MutationFunction<DeleteCmsFileMutationData, DeleteCmsFileMutationVariables>;
-
-/**
- * __useDeleteCmsFileMutation__
- *
- * To run a mutation, you first call `useDeleteCmsFileMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteCmsFileMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteCmsFileMutation, { data, loading, error }] = useDeleteCmsFileMutation({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useDeleteCmsFileMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCmsFileMutationData, DeleteCmsFileMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteCmsFileMutationData, DeleteCmsFileMutationVariables>(DeleteCmsFileDocument, options);
-      }
-export type DeleteCmsFileMutationHookResult = ReturnType<typeof useDeleteCmsFileMutation>;
-export type DeleteCmsFileMutationResult = Apollo.MutationResult<DeleteCmsFileMutationData>;
-export type DeleteCmsFileMutationOptions = Apollo.BaseMutationOptions<DeleteCmsFileMutationData, DeleteCmsFileMutationVariables>;
+export const CreateCmsFileDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateCmsFile"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"signedBlobId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createCmsFile"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"signedBlobId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"signedBlobId"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cms_file"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"CmsFileFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CmsFileFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsFile"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"current_ability_can_delete"}},{"kind":"Field","name":{"kind":"Name","value":"file"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"filename"}},{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"content_type"}},{"kind":"Field","name":{"kind":"Name","value":"byte_size"}},{"kind":"Field","alias":{"kind":"Name","value":"thumbnailUrl"},"name":{"kind":"Name","value":"resized_url"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"maxWidth"},"value":{"kind":"IntValue","value":"100"}},{"kind":"Argument","name":{"kind":"Name","value":"maxHeight"},"value":{"kind":"IntValue","value":"100"}}]}]}}]}}]} as unknown as DocumentNode<CreateCmsFileMutationData, CreateCmsFileMutationVariables>;
+export const RenameCmsFileDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"RenameCmsFile"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"filename"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"renameCmsFile"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"filename"},"value":{"kind":"Variable","name":{"kind":"Name","value":"filename"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cms_file"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"CmsFileFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CmsFileFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsFile"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"current_ability_can_delete"}},{"kind":"Field","name":{"kind":"Name","value":"file"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"filename"}},{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"content_type"}},{"kind":"Field","name":{"kind":"Name","value":"byte_size"}},{"kind":"Field","alias":{"kind":"Name","value":"thumbnailUrl"},"name":{"kind":"Name","value":"resized_url"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"maxWidth"},"value":{"kind":"IntValue","value":"100"}},{"kind":"Argument","name":{"kind":"Name","value":"maxHeight"},"value":{"kind":"IntValue","value":"100"}}]}]}}]}}]} as unknown as DocumentNode<RenameCmsFileMutationData, RenameCmsFileMutationVariables>;
+export const DeleteCmsFileDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteCmsFile"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteCmsFile"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"clientMutationId"}}]}}]}}]} as unknown as DocumentNode<DeleteCmsFileMutationData, DeleteCmsFileMutationVariables>;

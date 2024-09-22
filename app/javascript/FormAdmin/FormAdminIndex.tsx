@@ -1,19 +1,14 @@
 import { useMemo } from 'react';
-import { Link } from 'react-router-dom';
-import {
-  useModal,
-  useConfirm,
-  ErrorDisplay,
-  sortByLocaleString,
-  LoadQueryWrapper,
-  useDeleteMutationWithReferenceArrayUpdater,
-} from '@neinteractiveliterature/litform';
+import { ActionFunction, Link, LoaderFunction, redirect, useLoaderData, useSubmit } from 'react-router-dom';
+import { useModal, useConfirm, ErrorDisplay, sortByLocaleString } from '@neinteractiveliterature/litform';
 
 import usePageTitle from '../usePageTitle';
 import NewFormModal from './NewFormModal';
-import { FormAdminQueryData, useFormAdminQuery } from './queries.generated';
-import { useDeleteFormMutation } from './mutations.generated';
+import { FormAdminQueryData, FormAdminQueryDocument } from './queries.generated';
 import humanize from '../humanize';
+import { client } from '../useIntercodeApolloClient';
+import { CreateFormDocument } from './mutations.generated';
+import { FormType } from '../graphqlTypes.generated';
 
 function describeFormUsers(form: FormAdminQueryData['convention']['forms'][0]) {
   return [
@@ -23,16 +18,35 @@ function describeFormUsers(form: FormAdminQueryData['convention']['forms'][0]) {
   ];
 }
 
-export default LoadQueryWrapper(useFormAdminQuery, function FormAdminIndex({ data }) {
+export const loader: LoaderFunction = async () => {
+  const { data } = await client.query<FormAdminQueryData>({ query: FormAdminQueryDocument });
+  return data;
+};
+
+export const action: ActionFunction = async ({ request }) => {
+  try {
+    const formData = await request.formData();
+    const { data } = await client.mutate({
+      mutation: CreateFormDocument,
+      variables: {
+        form: {
+          title: formData.get('title')?.toString(),
+        },
+        formType: formData.get('form_type')?.toString() as FormType,
+      },
+    });
+    return redirect(`/admin_forms/${data?.createForm.form.id}/edit`);
+  } catch (error) {
+    return error;
+  }
+};
+
+function FormAdminIndex() {
+  const data = useLoaderData() as FormAdminQueryData;
   const confirm = useConfirm();
-  const [deleteForm] = useDeleteMutationWithReferenceArrayUpdater(
-    useDeleteFormMutation,
-    data.convention,
-    'forms',
-    (form) => ({ id: form.id }),
-  );
   const newFormModal = useModal();
   const sortedForms = useMemo(() => sortByLocaleString(data.convention.forms, (form) => form.title), [data]);
+  const submit = useSubmit();
 
   usePageTitle('Forms');
 
@@ -62,7 +76,7 @@ export default LoadQueryWrapper(useFormAdminQuery, function FormAdminIndex({ dat
               <td>
                 <ul className="list-unstyled m-0">
                   {describeFormUsers(form).map((formUser, i) => (
-                    <li key={i  }>{formUser}</li>
+                    <li key={i}>{formUser}</li>
                   ))}
                 </ul>
               </td>
@@ -74,7 +88,7 @@ export default LoadQueryWrapper(useFormAdminQuery, function FormAdminIndex({ dat
                     confirm({
                       prompt: 'Are you sure you want to delete this form?',
                       renderError: (deleteError) => <ErrorDisplay graphQLError={deleteError} />,
-                      action: () => deleteForm(form),
+                      action: () => submit({}, { action: `./${form.id}`, method: 'DELETE' }),
                     })
                   }
                 >
@@ -94,7 +108,9 @@ export default LoadQueryWrapper(useFormAdminQuery, function FormAdminIndex({ dat
         New form
       </button>
 
-      <NewFormModal convention={data.convention} visible={newFormModal.visible} close={newFormModal.close} />
+      <NewFormModal visible={newFormModal.visible} close={newFormModal.close} />
     </>
   );
-});
+}
+
+export const Component = FormAdminIndex;

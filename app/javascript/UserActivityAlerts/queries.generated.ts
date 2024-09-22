@@ -1,9 +1,7 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
-const defaultOptions = {} as const;
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type UserActivityAlertsAdminConventionFieldsFragment = { __typename: 'Convention', id: string, ticket_name: string, ticket_mode: Types.TicketMode, staff_positions: Array<{ __typename: 'StaffPosition', id: string, name: string }> };
 
 export type UserActivityAlertFieldsFragment = { __typename: 'UserActivityAlert', id: string, email?: string | null, partial_name?: string | null, trigger_on_user_con_profile_create: boolean, trigger_on_ticket_create: boolean, user?: { __typename: 'User', id: string, name?: string | null } | null, notification_destinations: Array<{ __typename: 'NotificationDestination', id: string, staff_position?: { __typename: 'StaffPosition', id: string, name: string } | null, user_con_profile?: { __typename: 'UserConProfile', id: string, name_without_nickname: string } | null }> };
@@ -13,83 +11,6 @@ export type UserActivityAlertsAdminQueryVariables = Types.Exact<{ [key: string]:
 
 export type UserActivityAlertsAdminQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, ticket_name: string, ticket_mode: Types.TicketMode, user_activity_alerts: Array<{ __typename: 'UserActivityAlert', id: string, email?: string | null, partial_name?: string | null, trigger_on_user_con_profile_create: boolean, trigger_on_ticket_create: boolean, user?: { __typename: 'User', id: string, name?: string | null } | null, notification_destinations: Array<{ __typename: 'NotificationDestination', id: string, staff_position?: { __typename: 'StaffPosition', id: string, name: string } | null, user_con_profile?: { __typename: 'UserConProfile', id: string, name_without_nickname: string } | null }> }>, staff_positions: Array<{ __typename: 'StaffPosition', id: string, name: string }> } };
 
-export const UserActivityAlertsAdminConventionFieldsFragmentDoc = gql`
-    fragment UserActivityAlertsAdminConventionFields on Convention {
-  id
-  ticket_name
-  ticket_mode
-  staff_positions {
-    id
-    name
-  }
-}
-    `;
-export const UserActivityAlertFieldsFragmentDoc = gql`
-    fragment UserActivityAlertFields on UserActivityAlert {
-  id
-  email
-  partial_name
-  trigger_on_user_con_profile_create
-  trigger_on_ticket_create
-  user {
-    id
-    name
-  }
-  notification_destinations {
-    id
-    staff_position {
-      id
-      name
-    }
-    user_con_profile {
-      id
-      name_without_nickname
-    }
-  }
-}
-    `;
-export const UserActivityAlertsAdminQueryDocument = gql`
-    query UserActivityAlertsAdminQuery {
-  convention: conventionByRequestHost {
-    id
-    ...UserActivityAlertsAdminConventionFields
-    user_activity_alerts {
-      id
-      ...UserActivityAlertFields
-    }
-  }
-}
-    ${UserActivityAlertsAdminConventionFieldsFragmentDoc}
-${UserActivityAlertFieldsFragmentDoc}`;
-
-/**
- * __useUserActivityAlertsAdminQuery__
- *
- * To run a query within a React component, call `useUserActivityAlertsAdminQuery` and pass it any options that fit your needs.
- * When your component renders, `useUserActivityAlertsAdminQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useUserActivityAlertsAdminQuery({
- *   variables: {
- *   },
- * });
- */
-export function useUserActivityAlertsAdminQuery(baseOptions?: Apollo.QueryHookOptions<UserActivityAlertsAdminQueryData, UserActivityAlertsAdminQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<UserActivityAlertsAdminQueryData, UserActivityAlertsAdminQueryVariables>(UserActivityAlertsAdminQueryDocument, options);
-      }
-export function useUserActivityAlertsAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserActivityAlertsAdminQueryData, UserActivityAlertsAdminQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<UserActivityAlertsAdminQueryData, UserActivityAlertsAdminQueryVariables>(UserActivityAlertsAdminQueryDocument, options);
-        }
-export function useUserActivityAlertsAdminQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<UserActivityAlertsAdminQueryData, UserActivityAlertsAdminQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<UserActivityAlertsAdminQueryData, UserActivityAlertsAdminQueryVariables>(UserActivityAlertsAdminQueryDocument, options);
-        }
-export type UserActivityAlertsAdminQueryHookResult = ReturnType<typeof useUserActivityAlertsAdminQuery>;
-export type UserActivityAlertsAdminQueryLazyQueryHookResult = ReturnType<typeof useUserActivityAlertsAdminQueryLazyQuery>;
-export type UserActivityAlertsAdminQuerySuspenseQueryHookResult = ReturnType<typeof useUserActivityAlertsAdminQuerySuspenseQuery>;
-export type UserActivityAlertsAdminQueryQueryResult = Apollo.QueryResult<UserActivityAlertsAdminQueryData, UserActivityAlertsAdminQueryVariables>;
+export const UserActivityAlertsAdminConventionFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"UserActivityAlertsAdminConventionFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Convention"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"ticket_name"}},{"kind":"Field","name":{"kind":"Name","value":"ticket_mode"}},{"kind":"Field","name":{"kind":"Name","value":"staff_positions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<UserActivityAlertsAdminConventionFieldsFragment, unknown>;
+export const UserActivityAlertFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"UserActivityAlertFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"UserActivityAlert"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"partial_name"}},{"kind":"Field","name":{"kind":"Name","value":"trigger_on_user_con_profile_create"}},{"kind":"Field","name":{"kind":"Name","value":"trigger_on_ticket_create"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"notification_destinations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"staff_position"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"user_con_profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name_without_nickname"}}]}}]}}]}}]} as unknown as DocumentNode<UserActivityAlertFieldsFragment, unknown>;
+export const UserActivityAlertsAdminQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"UserActivityAlertsAdminQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"convention"},"name":{"kind":"Name","value":"conventionByRequestHost"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"UserActivityAlertsAdminConventionFields"}},{"kind":"Field","name":{"kind":"Name","value":"user_activity_alerts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"UserActivityAlertFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"UserActivityAlertsAdminConventionFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Convention"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"ticket_name"}},{"kind":"Field","name":{"kind":"Name","value":"ticket_mode"}},{"kind":"Field","name":{"kind":"Name","value":"staff_positions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"UserActivityAlertFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"UserActivityAlert"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"partial_name"}},{"kind":"Field","name":{"kind":"Name","value":"trigger_on_user_con_profile_create"}},{"kind":"Field","name":{"kind":"Name","value":"trigger_on_ticket_create"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"notification_destinations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"staff_position"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"user_con_profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name_without_nickname"}}]}}]}}]}}]} as unknown as DocumentNode<UserActivityAlertsAdminQueryData, UserActivityAlertsAdminQueryVariables>;

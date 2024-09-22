@@ -1,31 +1,23 @@
 import { useContext, useMemo } from 'react';
-import { Link } from 'react-router-dom';
-import {
-  LoadQueryWrapper,
-  ErrorDisplay,
-  useConfirm,
-  useDeleteMutationWithReferenceArrayUpdater,
-  useModal,
-} from '@neinteractiveliterature/litform';
+import { Link, useFetcher, useLoaderData } from 'react-router-dom';
+import { ErrorDisplay, useConfirm, useModal } from '@neinteractiveliterature/litform';
 import capitalize from 'lodash/capitalize';
 import { v4 as uuidv4 } from 'uuid';
 
 import sortTicketTypes from './sortTicketTypes';
 import usePageTitle from '../usePageTitle';
-import { describeAdminPricingStructure } from '../Store/describePricingStructure';
 import { AdminTicketTypesQueryData, EventTicketTypesQueryData } from './queries.generated';
-import { useDeleteTicketTypeMutation } from './mutations.generated';
 import { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 import AppRootContext from '../AppRootContext';
-import { useTicketTypesQueryFromRoute } from './useTicketTypesQueryFromRoute';
-import { useDeleteProductMutation } from '../Store/mutations.generated';
-import { PricingStrategy } from '../graphqlTypes.generated';
+import { PricingStrategy, Product } from '../graphqlTypes.generated';
 import { ModalData } from '@neinteractiveliterature/litform/dist/useModal';
 import NewTicketProvidingProductModal from './NewTicketProvidingProductModal';
 import EditTicketProvidingProductModal, {
   EditTicketProvidingProductModalProps,
 } from './EditTicketProvidingProductModal';
+import { TicketTypeLoaderResult } from './loaders';
+import { AdminPricingStructureDescription } from 'Store/describePricingStructure';
 
 type TicketTypeType = AdminTicketTypesQueryData['convention']['ticket_types'][0];
 
@@ -82,7 +74,6 @@ export function buildBlankProduct(currencyCode: string) {
 }
 
 function TicketTypeDisplay({
-  parent,
   ticketType,
   newProductModal,
   editProductModal,
@@ -95,18 +86,15 @@ function TicketTypeDisplay({
   const { ticketName, ticketNamePlural, defaultCurrencyCode } = useContext(AppRootContext);
   const { t } = useTranslation();
   const confirm = useConfirm();
-  const [deleteTicketType] = useDeleteMutationWithReferenceArrayUpdater(
-    useDeleteTicketTypeMutation,
-    parent,
-    'ticket_types',
-    (ticketType) => ({ input: { id: ticketType.id } }),
-  );
-  const [deleteProduct] = useDeleteMutationWithReferenceArrayUpdater(
-    useDeleteProductMutation,
-    ticketType,
-    'providing_products',
-    (product) => ({ id: product.id }),
-  );
+  const fetcher = useFetcher();
+
+  const deleteProduct = (product: Pick<Product, 'id'>) => {
+    fetcher.submit(null, { action: `/admin_store/products/${product.id}`, method: 'DELETE' });
+  };
+
+  const deleteTicketType = (ticketType: Pick<TicketTypeType, 'id'>) => {
+    fetcher.submit(null, { action: `/ticket_types/${ticketType.id}`, method: 'DELETE' });
+  };
 
   return (
     <div className={`card my-4 overflow-hidden ${cardClassForTicketType(ticketType)}`} key={ticketType.id}>
@@ -167,7 +155,9 @@ function TicketTypeDisplay({
                       </div>
                     )}
                   </td>
-                  <td>{describeAdminPricingStructure(product.pricing_structure, t)}</td>
+                  <td>
+                    <AdminPricingStructureDescription pricingStructure={product.pricing_structure} />
+                  </td>
                   <td className="text-end">
                     <button
                       className="btn btn-sm btn-outline-danger me-2"
@@ -215,23 +205,18 @@ function TicketTypeDisplay({
   );
 }
 
-export default LoadQueryWrapper(useTicketTypesQueryFromRoute, function TicketTypesList({ data }) {
+function TicketTypesList() {
+  const { parent, ticketTypes } = useLoaderData() as TicketTypeLoaderResult;
   const { t } = useTranslation();
   const { ticketName } = useContext(AppRootContext);
-  const event = 'event' in data.convention ? data.convention.event : undefined;
+  const event = parent.__typename === 'Event' ? parent : undefined;
 
   usePageTitle(`${capitalize(ticketName)} types${event ? ` - ${event.title}` : ''}`);
 
   const newProductModal = useModal<{ ticketType: TicketTypeType }>();
   const editProductModal = useModal<EditTicketProvidingProductModalProps['state']>();
 
-  const sortedTicketTypes = useMemo(
-    () =>
-      'ticket_types' in data.convention
-        ? sortTicketTypes(data.convention.ticket_types)
-        : sortTicketTypes(data.convention.event.ticket_types),
-    [data.convention],
-  );
+  const sortedTicketTypes = useMemo(() => sortTicketTypes(ticketTypes), [ticketTypes]);
 
   return (
     <div>
@@ -240,7 +225,7 @@ export default LoadQueryWrapper(useTicketTypesQueryFromRoute, function TicketTyp
       {sortedTicketTypes.map((ticketType) => (
         <TicketTypeDisplay
           key={ticketType.id}
-          parent={'ticket_types' in data.convention ? data.convention : data.convention.event}
+          parent={parent}
           newProductModal={newProductModal}
           editProductModal={editProductModal}
           ticketType={ticketType}
@@ -264,4 +249,6 @@ export default LoadQueryWrapper(useTicketTypesQueryFromRoute, function TicketTyp
       />
     </div>
   );
-});
+}
+
+export const Component = TicketTypesList;

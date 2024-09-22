@@ -1,14 +1,14 @@
 import CmsPartialForm from './CmsPartialForm';
 import usePageTitle from '../../usePageTitle';
-import { LoadSingleValueFromCollectionWrapper } from '../../GraphqlLoadingWrappers';
-import { useCmsPartialsAdminQuery } from './queries.generated';
+import { singleCmsPartialAdminLoader, SingleCmsPartialAdminLoaderResult } from './loaders';
+import { useLoaderData } from 'react-router';
 
-export default LoadSingleValueFromCollectionWrapper(
-  useCmsPartialsAdminQuery,
-  (data, id) => data.cmsParent.cmsPartials.find((p) => id === p.id.toString()),
+export const loader = singleCmsPartialAdminLoader;
 
-  function ViewCmsPartialSource({ value: partial }) {
-    usePageTitle(`Viewing “${partial.name}” Source`);
-    return <CmsPartialForm partial={partial} readOnly />;
-  },
-);
+function ViewCmsPartialSource() {
+  const { partial } = useLoaderData() as SingleCmsPartialAdminLoaderResult;
+  usePageTitle(`Viewing “${partial.name}” Source`);
+  return <CmsPartialForm partial={partial} readOnly />;
+}
+
+export const Component = ViewCmsPartialSource;

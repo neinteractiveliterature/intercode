@@ -1,0 +1,45 @@
+mutation AddOrderEntryToCurrentPendingOrder(
+  $productId: ID!
+  $productVariantId: ID
+  $quantity: Int!
+  $payWhatYouWantAmount: MoneyInput
+  $runId: ID
+) {
+  addOrderEntryToCurrentPendingOrder(
+    input: {
+      order_entry: { productId: $productId, productVariantId: $productVariantId, quantity: $quantity, runId: $runId }
+      pay_what_you_want_amount: $payWhatYouWantAmount
+    }
+  ) {
+    order_entry {
+      id
+
+      order {
+        id
+
+        total_price {
+          __typename
+          currency_code
+          fractional
+        }
+
+        order_entries {
+          id
+          product {
+            id
+            payment_options
+          }
+        }
+      }
+    }
+  }
+}
+
+mutation SubmitOrder($input: SubmitOrderInput!) {
+  submitOrder(input: $input) {
+    order {
+      id
+      status
+    }
+  }
+}

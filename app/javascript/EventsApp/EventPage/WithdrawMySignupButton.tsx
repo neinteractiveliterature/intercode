@@ -3,7 +3,8 @@ import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import WithdrawSignupButton, { WithdrawSignupButtonProps } from './WithdrawSignupButton';
 import { EventPageQueryData } from './queries.generated';
-import { useWithdrawMySignupMutation } from './mutations.generated';
+import { client } from '../../useIntercodeApolloClient';
+import { WithdrawMySignupDocument } from './mutations.generated';
 
 export type WithdrawMySignupButtonProps = Omit<WithdrawSignupButtonProps, 'withdrawSignup'> & {
   run: EventPageQueryData['convention']['event']['runs'][0];
@@ -18,7 +19,6 @@ function WithdrawMySignupButton({
   ...otherProps
 }: WithdrawMySignupButtonProps): JSX.Element {
   const { t } = useTranslation();
-  const [withdrawMutate] = useWithdrawMySignupMutation();
   const confirm = useConfirm();
   const withdrawSignup = () =>
     confirm({
@@ -26,7 +26,7 @@ function WithdrawMySignupButton({
         eventTitle: event.title,
       }),
       action: async () => {
-        await withdrawMutate({ variables: { runId: run.id } });
+        await client.mutate({ mutation: WithdrawMySignupDocument, variables: { runId: run.id } });
         if (reloadOnSuccess) {
           window.location.reload();
         }

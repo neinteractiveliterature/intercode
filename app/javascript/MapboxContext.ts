@@ -43,12 +43,10 @@ export function useMapboxContext({ mapboxAccessToken }: UseMapboxContextOptions)
     }
 
     if (loadingPromise.current) {
-       
       throw loadingPromise.current;
     }
 
     const promise = loadMapboxGL().then((result) => {
-       
       result.accessToken = mapboxAccessToken;
       setMapboxgl({
         Map: result.Map,
@@ -56,7 +54,7 @@ export function useMapboxContext({ mapboxAccessToken }: UseMapboxContextOptions)
       });
     });
     loadingPromise.current = promise;
-     
+
     throw promise;
   }, [mapboxgl, loadMapboxGL, mapboxAccessToken]);
 

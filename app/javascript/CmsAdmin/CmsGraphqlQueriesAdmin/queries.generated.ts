@@ -1,9 +1,7 @@
 /* eslint-disable */
 import * as Types from '../../graphqlTypes.generated';
 
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
-const defaultOptions = {} as const;
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type CmsGraphqlQueryFieldsFragment = { __typename: 'CmsGraphqlQuery', id: string, identifier: string, query: string, admin_notes?: string | null, current_ability_can_update: boolean, current_ability_can_delete: boolean };
 
 export type CmsGraphqlQueriesQueryVariables = Types.Exact<{ [key: string]: never; }>;
@@ -11,59 +9,5 @@ export type CmsGraphqlQueriesQueryVariables = Types.Exact<{ [key: string]: never
 
 export type CmsGraphqlQueriesQueryData = { __typename: 'Query', cmsParent: { __typename: 'Convention', id: string, cmsGraphqlQueries: Array<{ __typename: 'CmsGraphqlQuery', id: string, identifier: string, query: string, admin_notes?: string | null, current_ability_can_update: boolean, current_ability_can_delete: boolean }> } | { __typename: 'RootSite', id: string, cmsGraphqlQueries: Array<{ __typename: 'CmsGraphqlQuery', id: string, identifier: string, query: string, admin_notes?: string | null, current_ability_can_update: boolean, current_ability_can_delete: boolean }> }, currentAbility: { __typename: 'Ability', can_create_cms_graphql_queries: boolean } };
 
-export const CmsGraphqlQueryFieldsFragmentDoc = gql`
-    fragment CmsGraphqlQueryFields on CmsGraphqlQuery {
-  id
-  identifier
-  query
-  admin_notes
-  current_ability_can_update
-  current_ability_can_delete
-}
-    `;
-export const CmsGraphqlQueriesQueryDocument = gql`
-    query CmsGraphqlQueriesQuery {
-  cmsParent: cmsParentByRequestHost {
-    id
-    cmsGraphqlQueries {
-      id
-      ...CmsGraphqlQueryFields
-    }
-  }
-  currentAbility {
-    can_create_cms_graphql_queries
-  }
-}
-    ${CmsGraphqlQueryFieldsFragmentDoc}`;
-
-/**
- * __useCmsGraphqlQueriesQuery__
- *
- * To run a query within a React component, call `useCmsGraphqlQueriesQuery` and pass it any options that fit your needs.
- * When your component renders, `useCmsGraphqlQueriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useCmsGraphqlQueriesQuery({
- *   variables: {
- *   },
- * });
- */
-export function useCmsGraphqlQueriesQuery(baseOptions?: Apollo.QueryHookOptions<CmsGraphqlQueriesQueryData, CmsGraphqlQueriesQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<CmsGraphqlQueriesQueryData, CmsGraphqlQueriesQueryVariables>(CmsGraphqlQueriesQueryDocument, options);
-      }
-export function useCmsGraphqlQueriesQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CmsGraphqlQueriesQueryData, CmsGraphqlQueriesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<CmsGraphqlQueriesQueryData, CmsGraphqlQueriesQueryVariables>(CmsGraphqlQueriesQueryDocument, options);
-        }
-export function useCmsGraphqlQueriesQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<CmsGraphqlQueriesQueryData, CmsGraphqlQueriesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<CmsGraphqlQueriesQueryData, CmsGraphqlQueriesQueryVariables>(CmsGraphqlQueriesQueryDocument, options);
-        }
-export type CmsGraphqlQueriesQueryHookResult = ReturnType<typeof useCmsGraphqlQueriesQuery>;
-export type CmsGraphqlQueriesQueryLazyQueryHookResult = ReturnType<typeof useCmsGraphqlQueriesQueryLazyQuery>;
-export type CmsGraphqlQueriesQuerySuspenseQueryHookResult = ReturnType<typeof useCmsGraphqlQueriesQuerySuspenseQuery>;
-export type CmsGraphqlQueriesQueryQueryResult = Apollo.QueryResult<CmsGraphqlQueriesQueryData, CmsGraphqlQueriesQueryVariables>;
+export const CmsGraphqlQueryFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CmsGraphqlQueryFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsGraphqlQuery"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"identifier"}},{"kind":"Field","name":{"kind":"Name","value":"query"}},{"kind":"Field","name":{"kind":"Name","value":"admin_notes"}},{"kind":"Field","name":{"kind":"Name","value":"current_ability_can_update"}},{"kind":"Field","name":{"kind":"Name","value":"current_ability_can_delete"}}]}}]} as unknown as DocumentNode<CmsGraphqlQueryFieldsFragment, unknown>;
+export const CmsGraphqlQueriesQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CmsGraphqlQueriesQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"cmsParent"},"name":{"kind":"Name","value":"cmsParentByRequestHost"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"cmsGraphqlQueries"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"CmsGraphqlQueryFields"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"currentAbility"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"can_create_cms_graphql_queries"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CmsGraphqlQueryFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsGraphqlQuery"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"identifier"}},{"kind":"Field","name":{"kind":"Name","value":"query"}},{"kind":"Field","name":{"kind":"Name","value":"admin_notes"}},{"kind":"Field","name":{"kind":"Name","value":"current_ability_can_update"}},{"kind":"Field","name":{"kind":"Name","value":"current_ability_can_delete"}}]}}]} as unknown as DocumentNode<CmsGraphqlQueriesQueryData, CmsGraphqlQueriesQueryVariables>;

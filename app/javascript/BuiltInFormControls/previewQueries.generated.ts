@@ -1,9 +1,7 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
-const defaultOptions = {} as const;
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type PreviewLiquidQueryVariables = Types.Exact<{
   liquid: Types.Scalars['String']['input'];
 }>;
@@ -29,133 +27,6 @@ export type PreviewNotifierLiquidQueryVariables = Types.Exact<{
 export type PreviewNotifierLiquidQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, previewLiquid: string } };
 
 
-export const PreviewLiquidQueryDocument = gql`
-    query PreviewLiquidQuery($liquid: String!) {
-  cmsParent: cmsParentByRequestHost {
-    id
-    previewLiquid(content: $liquid)
-  }
-}
-    `;
-
-/**
- * __usePreviewLiquidQuery__
- *
- * To run a query within a React component, call `usePreviewLiquidQuery` and pass it any options that fit your needs.
- * When your component renders, `usePreviewLiquidQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = usePreviewLiquidQuery({
- *   variables: {
- *      liquid: // value for 'liquid'
- *   },
- * });
- */
-export function usePreviewLiquidQuery(baseOptions: Apollo.QueryHookOptions<PreviewLiquidQueryData, PreviewLiquidQueryVariables> & ({ variables: PreviewLiquidQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<PreviewLiquidQueryData, PreviewLiquidQueryVariables>(PreviewLiquidQueryDocument, options);
-      }
-export function usePreviewLiquidQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PreviewLiquidQueryData, PreviewLiquidQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<PreviewLiquidQueryData, PreviewLiquidQueryVariables>(PreviewLiquidQueryDocument, options);
-        }
-export function usePreviewLiquidQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<PreviewLiquidQueryData, PreviewLiquidQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<PreviewLiquidQueryData, PreviewLiquidQueryVariables>(PreviewLiquidQueryDocument, options);
-        }
-export type PreviewLiquidQueryHookResult = ReturnType<typeof usePreviewLiquidQuery>;
-export type PreviewLiquidQueryLazyQueryHookResult = ReturnType<typeof usePreviewLiquidQueryLazyQuery>;
-export type PreviewLiquidQuerySuspenseQueryHookResult = ReturnType<typeof usePreviewLiquidQuerySuspenseQuery>;
-export type PreviewLiquidQueryQueryResult = Apollo.QueryResult<PreviewLiquidQueryData, PreviewLiquidQueryVariables>;
-export const PreviewMarkdownQueryDocument = gql`
-    query PreviewMarkdownQuery($markdown: String!, $eventId: ID, $eventProposalId: ID) {
-  cmsParent: cmsParentByRequestHost {
-    id
-    previewMarkdown(
-      markdown: $markdown
-      eventId: $eventId
-      eventProposalId: $eventProposalId
-    )
-  }
-}
-    `;
-
-/**
- * __usePreviewMarkdownQuery__
- *
- * To run a query within a React component, call `usePreviewMarkdownQuery` and pass it any options that fit your needs.
- * When your component renders, `usePreviewMarkdownQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = usePreviewMarkdownQuery({
- *   variables: {
- *      markdown: // value for 'markdown'
- *      eventId: // value for 'eventId'
- *      eventProposalId: // value for 'eventProposalId'
- *   },
- * });
- */
-export function usePreviewMarkdownQuery(baseOptions: Apollo.QueryHookOptions<PreviewMarkdownQueryData, PreviewMarkdownQueryVariables> & ({ variables: PreviewMarkdownQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<PreviewMarkdownQueryData, PreviewMarkdownQueryVariables>(PreviewMarkdownQueryDocument, options);
-      }
-export function usePreviewMarkdownQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PreviewMarkdownQueryData, PreviewMarkdownQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<PreviewMarkdownQueryData, PreviewMarkdownQueryVariables>(PreviewMarkdownQueryDocument, options);
-        }
-export function usePreviewMarkdownQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<PreviewMarkdownQueryData, PreviewMarkdownQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<PreviewMarkdownQueryData, PreviewMarkdownQueryVariables>(PreviewMarkdownQueryDocument, options);
-        }
-export type PreviewMarkdownQueryHookResult = ReturnType<typeof usePreviewMarkdownQuery>;
-export type PreviewMarkdownQueryLazyQueryHookResult = ReturnType<typeof usePreviewMarkdownQueryLazyQuery>;
-export type PreviewMarkdownQuerySuspenseQueryHookResult = ReturnType<typeof usePreviewMarkdownQuerySuspenseQuery>;
-export type PreviewMarkdownQueryQueryResult = Apollo.QueryResult<PreviewMarkdownQueryData, PreviewMarkdownQueryVariables>;
-export const PreviewNotifierLiquidQueryDocument = gql`
-    query PreviewNotifierLiquidQuery($eventKey: String!, $liquid: String!) {
-  convention: conventionByRequestHost {
-    id
-    previewLiquid: preview_notifier_liquid(eventKey: $eventKey, content: $liquid)
-  }
-}
-    `;
-
-/**
- * __usePreviewNotifierLiquidQuery__
- *
- * To run a query within a React component, call `usePreviewNotifierLiquidQuery` and pass it any options that fit your needs.
- * When your component renders, `usePreviewNotifierLiquidQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = usePreviewNotifierLiquidQuery({
- *   variables: {
- *      eventKey: // value for 'eventKey'
- *      liquid: // value for 'liquid'
- *   },
- * });
- */
-export function usePreviewNotifierLiquidQuery(baseOptions: Apollo.QueryHookOptions<PreviewNotifierLiquidQueryData, PreviewNotifierLiquidQueryVariables> & ({ variables: PreviewNotifierLiquidQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<PreviewNotifierLiquidQueryData, PreviewNotifierLiquidQueryVariables>(PreviewNotifierLiquidQueryDocument, options);
-      }
-export function usePreviewNotifierLiquidQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PreviewNotifierLiquidQueryData, PreviewNotifierLiquidQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<PreviewNotifierLiquidQueryData, PreviewNotifierLiquidQueryVariables>(PreviewNotifierLiquidQueryDocument, options);
-        }
-export function usePreviewNotifierLiquidQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<PreviewNotifierLiquidQueryData, PreviewNotifierLiquidQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<PreviewNotifierLiquidQueryData, PreviewNotifierLiquidQueryVariables>(PreviewNotifierLiquidQueryDocument, options);
-        }
-export type PreviewNotifierLiquidQueryHookResult = ReturnType<typeof usePreviewNotifierLiquidQuery>;
-export type PreviewNotifierLiquidQueryLazyQueryHookResult = ReturnType<typeof usePreviewNotifierLiquidQueryLazyQuery>;
-export type PreviewNotifierLiquidQuerySuspenseQueryHookResult = ReturnType<typeof usePreviewNotifierLiquidQuerySuspenseQuery>;
-export type PreviewNotifierLiquidQueryQueryResult = Apollo.QueryResult<PreviewNotifierLiquidQueryData, PreviewNotifierLiquidQueryVariables>;
+export const PreviewLiquidQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"PreviewLiquidQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"liquid"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"cmsParent"},"name":{"kind":"Name","value":"cmsParentByRequestHost"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"previewLiquid"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"content"},"value":{"kind":"Variable","name":{"kind":"Name","value":"liquid"}}}]}]}}]}}]} as unknown as DocumentNode<PreviewLiquidQueryData, PreviewLiquidQueryVariables>;
+export const PreviewMarkdownQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"PreviewMarkdownQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"markdown"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"eventId"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"eventProposalId"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"cmsParent"},"name":{"kind":"Name","value":"cmsParentByRequestHost"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"previewMarkdown"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"markdown"},"value":{"kind":"Variable","name":{"kind":"Name","value":"markdown"}}},{"kind":"Argument","name":{"kind":"Name","value":"eventId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"eventId"}}},{"kind":"Argument","name":{"kind":"Name","value":"eventProposalId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"eventProposalId"}}}]}]}}]}}]} as unknown as DocumentNode<PreviewMarkdownQueryData, PreviewMarkdownQueryVariables>;
+export const PreviewNotifierLiquidQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"PreviewNotifierLiquidQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"eventKey"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"liquid"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"convention"},"name":{"kind":"Name","value":"conventionByRequestHost"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","alias":{"kind":"Name","value":"previewLiquid"},"name":{"kind":"Name","value":"preview_notifier_liquid"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"eventKey"},"value":{"kind":"Variable","name":{"kind":"Name","value":"eventKey"}}},{"kind":"Argument","name":{"kind":"Name","value":"content"},"value":{"kind":"Variable","name":{"kind":"Name","value":"liquid"}}}]}]}}]}}]} as unknown as DocumentNode<PreviewNotifierLiquidQueryData, PreviewNotifierLiquidQueryVariables>;

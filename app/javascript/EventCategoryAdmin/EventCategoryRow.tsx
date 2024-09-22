@@ -1,29 +1,17 @@
-import { Link } from 'react-router-dom';
-import {
-  ErrorDisplay,
-  useConfirm,
-  ButtonWithTooltip,
-  useDeleteMutationWithReferenceArrayUpdater,
-} from '@neinteractiveliterature/litform';
+import { Link, useSubmit } from 'react-router-dom';
+import { ErrorDisplay, useConfirm, ButtonWithTooltip } from '@neinteractiveliterature/litform';
 
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 import { EventCategoryAdminQueryData } from './queries.generated';
-import { useDeleteEventCategoryMutation } from './mutations.generated';
 import { Trans, useTranslation } from 'react-i18next';
 
 export type EventCategoryRowProps = {
-  convention: EventCategoryAdminQueryData['convention'];
   eventCategory: EventCategoryAdminQueryData['convention']['event_categories'][0];
 };
 
-function EventCategoryRow({ convention, eventCategory }: EventCategoryRowProps): JSX.Element {
+function EventCategoryRow({ eventCategory }: EventCategoryRowProps): JSX.Element {
   const confirm = useConfirm();
-  const [deleteEventCategory] = useDeleteMutationWithReferenceArrayUpdater(
-    useDeleteEventCategoryMutation,
-    convention,
-    'event_categories',
-    (category) => ({ id: category.id }),
-  );
+  const submit = useSubmit();
   const { t } = useTranslation();
 
   return (
@@ -67,7 +55,7 @@ function EventCategoryRow({ convention, eventCategory }: EventCategoryRowProps):
               confirm({
                 prompt: t('admin.eventCategories.deleteConfirmation'),
                 renderError: (error) => <ErrorDisplay graphQLError={error} />,
-                action: () => deleteEventCategory(eventCategory),
+                action: () => submit(null, { action: `./${eventCategory.id}`, method: 'DELETE' }),
               })
             }
           >

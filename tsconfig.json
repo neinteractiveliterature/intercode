@@ -4,16 +4,18 @@
     "sourceMap": true, // allow sourcemap support
     "strictNullChecks": true, // enable strict null checks as a best practice
     "module": "es2020", // specify module code generation
-    "moduleResolution": "node",
+    "moduleResolution": "Bundler",
     "resolveJsonModule": true,
     "jsx": "react-jsx", // use typescript to transpile jsx to js
     "target": "es6", // specify ECMAScript target version
     "allowJs": true, // allow a partial TypeScript and JavaScript codebase,
     "allowSyntheticDefaultImports": true,
-    "lib": ["DOM", "DOM.Iterable", "ES2015"],
+    "lib": ["DOM", "DOM.Iterable", "ES2023"],
     "noImplicitAny": true,
     "skipLibCheck": true,
-    "maxNodeModuleJsDepth": 10
+    "maxNodeModuleJsDepth": 10,
+    "baseUrl": "./app/javascript",
+    "types": ["vitest/globals", "@types/webpack-env"]
   },
   "include": [
     "./app/javascript/",

@@ -3,14 +3,13 @@ import { formatLCM, getDateTimeFormat } from '../../TimeUtils';
 import { useContext, useMemo } from 'react';
 import { parseSignupRounds } from '../../SignupRoundUtils';
 import { DateTime } from 'luxon';
-import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
-import { useMySignupQueueQuery } from './queries.generated';
 import AppRootContext from '../../AppRootContext';
 import { Link } from 'react-router-dom';
 import humanize from '../../humanize';
 import classNames from 'classnames';
+import { MySignupQueueQueryData } from './queries.generated';
 
-const NextRoundInfoBox = LoadQueryWrapper(useMySignupQueueQuery, ({ data }) => {
+function NextRoundInfoBox({ data }: { data: MySignupQueueQueryData }) {
   const { t } = useTranslation();
   const { ticketName, timezoneName } = useContext(AppRootContext);
 
@@ -103,6 +102,6 @@ const NextRoundInfoBox = LoadQueryWrapper(useMySignupQueueQuery, ({ data }) => {
       )}
     </>
   );
-});
+}
 
 export default NextRoundInfoBox;

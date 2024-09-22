@@ -1,17 +1,14 @@
 import { useState, useMemo } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
-import { useApolloClient } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { ErrorDisplay, sortByLocaleString } from '@neinteractiveliterature/litform';
 
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
 import { ProposeEventButtonQueryData } from './queries.generated';
-import { CreateEventProposalMutationData, useCreateEventProposalMutation } from './mutations.generated';
+import { useActionData, useNavigation, useSubmit } from 'react-router-dom';
+import { ApolloError } from '@apollo/client';
 
 export type CreateEventProposalModalProps = {
-  onCreate: (
-    newEventProposal: NonNullable<CreateEventProposalMutationData['createEventProposal']>['event_proposal'],
-  ) => void;
   cancel: () => void;
   visible: boolean;
   userEventProposals: NonNullable<
@@ -22,7 +19,6 @@ export type CreateEventProposalModalProps = {
 };
 
 function CreateEventProposalModal({
-  onCreate,
   cancel,
   visible,
   userEventProposals,
@@ -45,8 +41,10 @@ function CreateEventProposalModal({
       ? proposableEventCategories.find((category) => category.id === department.event_categories[0].id)
       : undefined,
   );
-  const [createProposal, { loading: createInProgress, error: createError }] = useCreateEventProposalMutation();
-  const apolloClient = useApolloClient();
+  const submit = useSubmit();
+  const navigation = useNavigation();
+  const createInProgress = navigation.state !== 'idle';
+  const createError = useActionData();
 
   const departmentEventCategories = useMemo(
     () =>
@@ -65,17 +63,13 @@ function CreateEventProposalModal({
     if (!eventCategory) {
       return;
     }
-    const { data } = await createProposal({
-      variables: {
-        cloneEventProposalId: cloneEventProposal?.id.toString(),
-        eventCategoryId: eventCategory.id.toString(),
+    submit(
+      {
+        ...(cloneEventProposal ? { clone_event_proposal_id: cloneEventProposal.id } : {}),
+        event_category_id: eventCategory.id,
       },
-    });
-
-    if (data) {
-      await apolloClient.clearStore();
-      onCreate(data.createEventProposal.event_proposal);
-    }
+      { method: 'POST', action: `/event_proposals?index` },
+    );
   };
 
   return (
@@ -158,22 +152,15 @@ function CreateEventProposalModal({
         eventCategory &&
         cloneEventProposal.event_category.name.toLowerCase() !== eventCategory.name.toLowerCase() ? (
           <div className="mt-4 alert alert-warning">
-            {t(
-              'eventProposals.newProposalModal.cloneFromDifferentCategoryWarning',
-              `You are proposing a {{ newCategoryName }}, but copying information
-                  from {{ cloneProposalTitle }}, which is a {{ cloneProposalCategoryName }}.
-                  Make sure this is what you want before continuing.  You will not be able to change
-                  the category of your new event once you have started the proposal.`,
-              {
-                newCategoryName: eventCategory.name,
-                cloneProposalTitle: cloneEventProposal.title,
-                cloneProposalCategoryName: cloneEventProposal.event_category.name,
-              },
-            )}
+            {t('eventProposals.newProposalModal.cloneFromDifferentCategoryWarning', {
+              newCategoryName: eventCategory.name,
+              cloneProposalTitle: cloneEventProposal.title,
+              cloneProposalCategoryName: cloneEventProposal.event_category.name,
+            })}
           </div>
         ) : null}
 
-        <ErrorDisplay graphQLError={createError} />
+        <ErrorDisplay graphQLError={createError as ApolloError} />
       </div>
       <div className="modal-footer">
         <button className="btn btn-secondary" type="button" disabled={createInProgress} onClick={cancel}>

@@ -18,9 +18,6 @@ Intercode::Application.routes.draw do
 
   get "/healthz" => "health#healthz"
 
-  # CMS stuff
-  get "liquid_docs/(*extra)" => "liquid_docs#show", :as => :liquid_docs
-
   direct :cdn_upload do |model, options|
     if model.respond_to?(:signed_id)
       route_for(

@@ -664,6 +664,8 @@ export type Convention = CmsParent & {
   cmsPartials: Array<CmsPartial>;
   /** Returns all CMS variables within the current domain. */
   cmsVariables: Array<CmsVariable>;
+  /** Find a coupon by ID. */
+  coupon: Coupon;
   coupons_paginated: CouponsPagination;
   /** When this convention was created. */
   created_at?: Maybe<Scalars['Date']['output']>;
@@ -787,6 +789,8 @@ export type Convention = CmsParent & {
   open_graph_image?: Maybe<ActiveStorageAttachment>;
   /** @deprecated Please use the open_graph_image field instead. */
   open_graph_image_url?: Maybe<Scalars['String']['output']>;
+  /** Find an order by ID. */
+  order: Order;
   orders_paginated: OrdersPagination;
   /** The organization in charge of this convention. */
   organization?: Maybe<Organization>;
@@ -944,6 +948,19 @@ export type ConventionCmsPageArgs = {
  * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
  * them as "web site."
  */
+export type ConventionCouponArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionCoupons_PaginatedArgs = {
   filters?: InputMaybe<CouponFiltersInput>;
   page?: InputMaybe<Scalars['Int']['input']>;
@@ -1088,6 +1105,19 @@ export type ConventionFullTextSearchArgs = {
  */
 export type ConventionNotifier_Liquid_AssignsArgs = {
   eventKey: Scalars['String']['input'];
+};
+
+
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
+export type ConventionOrderArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -2754,6 +2784,7 @@ export type Event = {
   can_play_concurrently: Scalars['Boolean']['output'];
   con_mail_destination?: Maybe<Scalars['String']['output']>;
   content_warnings?: Maybe<Scalars['String']['output']>;
+  convention: Convention;
   created_at?: Maybe<Scalars['Date']['output']>;
   current_user_form_item_viewer_role: FormItemRole;
   current_user_form_item_writer_role: FormItemRole;
@@ -4378,6 +4409,7 @@ export type Product = {
   available: Scalars['Boolean']['output'];
   clickwrap_agreement?: Maybe<Scalars['String']['output']>;
   clickwrap_agreement_html?: Maybe<Scalars['String']['output']>;
+  convention: Convention;
   description?: Maybe<Scalars['String']['output']>;
   description_html?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
@@ -4499,6 +4531,8 @@ export type Query = {
   currentUser?: Maybe<User>;
   /** Returns the default currency for this site */
   defaultCurrencyCode: Scalars['String']['output'];
+  /** Returns a global email route by ID. */
+  email_route: EmailRoute;
   /**
    * Returns a paginated list of the _global_ email routes configured in Intercode.
    * (Convention-specific email routing is controlled via that convention's StaffPositions.)
@@ -4568,6 +4602,11 @@ export type QueryConventions_PaginatedArgs = {
   page?: InputMaybe<Scalars['Int']['input']>;
   per_page?: InputMaybe<Scalars['Int']['input']>;
   sort?: InputMaybe<Array<SortInput>>;
+};
+
+
+export type QueryEmail_RouteArgs = {
+  id: Scalars['ID']['input'];
 };
 
 

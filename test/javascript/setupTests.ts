@@ -1,4 +1,2 @@
 import './tempPolyfills';
-import '@testing-library/jest-dom';
-
-jest.setTimeout(10000);
+import '@testing-library/jest-dom/vitest';

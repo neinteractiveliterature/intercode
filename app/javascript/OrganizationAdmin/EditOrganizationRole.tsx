@@ -1,40 +1,55 @@
-import { useMemo } from 'react';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import { LoadQueryWrapper, ErrorDisplay } from '@neinteractiveliterature/litform';
+import { LoaderFunction, Navigate, useActionData, useLoaderData, useNavigation, useSubmit } from 'react-router-dom';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import useOrganizationRoleForm, { OrganizationRoleFormState } from './useOrganizationRoleForm';
+import useOrganizationRoleForm from './useOrganizationRoleForm';
 import usePageTitle from '../usePageTitle';
-import { OrganizationAdminOrganizationsQueryData, useOrganizationAdminOrganizationsQuery } from './queries.generated';
-import { useUpdateOrganizationRoleMutation } from './mutations.generated';
-import FourOhFourPage from '../FourOhFourPage';
+import { OrganizationAdminOrganizationsQueryData } from './queries.generated';
+import { organizationsLoader } from './loaders';
+import { ApolloError } from '@apollo/client';
 
-type EditOrganizationRoleFormProps = {
+type LoaderResult = {
   organization: OrganizationAdminOrganizationsQueryData['organizations'][number];
   initialOrganizationRole: OrganizationAdminOrganizationsQueryData['organizations'][number]['organization_roles'][number];
 };
 
-function EditOrganizationRoleForm({ organization, initialOrganizationRole }: EditOrganizationRoleFormProps) {
-  const navigate = useNavigate();
+export const loader: LoaderFunction = async ({ params: { id, organizationRoleId }, ...args }) => {
+  const data = (await organizationsLoader({ params: {}, ...args })) as OrganizationAdminOrganizationsQueryData;
+  const organization = data.organizations.find((org) => org.id === id);
+  const initialOrganizationRole = organization?.organization_roles.find((role) => role.id === organizationRoleId);
 
+  if (!organization || !initialOrganizationRole) {
+    return new Response(null, { status: 404 });
+  }
+
+  return { initialOrganizationRole, organization } satisfies LoaderResult;
+};
+
+function EditOrganizationRoleForm() {
+  const { organization, initialOrganizationRole } = useLoaderData() as LoaderResult;
   const { renderForm, formState } = useOrganizationRoleForm(initialOrganizationRole);
-  const [mutate, { error: mutationError, loading: mutationInProgress }] = useUpdateOrganizationRoleMutation();
+  const submit = useSubmit();
+  const actionData = useActionData();
+  const mutationError = actionData instanceof Error ? actionData : undefined;
+  const mutationInProgress = useNavigation().state !== 'idle';
 
   usePageTitle(`Editing “${initialOrganizationRole.name}”`);
-  const updateOrganizationRole = async ({ name, usersChangeSet, permissionsChangeSet }: OrganizationRoleFormState) => {
-    await mutate({
-      variables: {
-        id: initialOrganizationRole.id,
-        name,
-        addUserIds: usersChangeSet.getAddValues().map((user) => user.id),
-        removeUserIds: usersChangeSet.getRemoveIds(),
-        addPermissions: permissionsChangeSet.getAddValues().map((permission) => ({
+  const updateOrganizationRole = () => {
+    submit(
+      {
+        name: formState.name,
+        addUserIds: formState.usersChangeSet.getAddValues().map((user) => user.id),
+        removeUserIds: formState.usersChangeSet.getRemoveIds(),
+        addPermissions: formState.permissionsChangeSet.getAddValues().map((permission) => ({
           permission: permission.permission,
         })),
-        removePermissionIds: permissionsChangeSet.getRemoveIds(),
+        removePermissionIds: formState.permissionsChangeSet.getRemoveIds(),
       },
-    });
-
-    navigate(`/organizations/${organization.id}`);
+      {
+        action: `/organizations/${organization.id}/roles/${initialOrganizationRole.id}`,
+        method: 'PATCH',
+        encType: 'application/json',
+      },
+    );
   };
 
   if (!organization.current_ability_can_manage_access) {
@@ -50,12 +65,12 @@ function EditOrganizationRoleForm({ organization, initialOrganizationRole }: Edi
 
       {renderForm()}
 
-      <ErrorDisplay graphQLError={mutationError} />
+      <ErrorDisplay graphQLError={mutationError as ApolloError} />
 
       <button
         className="btn btn-primary"
         type="button"
-        onClick={() => updateOrganizationRole(formState)}
+        onClick={() => updateOrganizationRole()}
         disabled={mutationInProgress}
       >
         Save changes
@@ -64,20 +79,4 @@ function EditOrganizationRoleForm({ organization, initialOrganizationRole }: Edi
   );
 }
 
-export default LoadQueryWrapper(useOrganizationAdminOrganizationsQuery, function EditOrganizationRole({ data }) {
-  const { organizationId, organizationRoleId } = useParams<{ organizationId: string; organizationRoleId: string }>();
-  const organization = useMemo(
-    () => data.organizations.find((org) => org.id === organizationId),
-    [data, organizationId],
-  );
-  const initialOrganizationRole = useMemo(
-    () => organization?.organization_roles.find((role) => role.id === organizationRoleId),
-    [organization, organizationRoleId],
-  );
-
-  if (!organization || !initialOrganizationRole) {
-    return <FourOhFourPage />;
-  }
-
-  return <EditOrganizationRoleForm organization={organization} initialOrganizationRole={initialOrganizationRole} />;
-});
+export const Component = EditOrganizationRoleForm;

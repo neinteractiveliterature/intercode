@@ -173,6 +173,7 @@ function EventCategoryForm<T extends EventCategoryForForm>({
         disabled={disabled}
       />
       <SelectWithLabel<T['department'] | null>
+        name="department_id"
         label={t('admin.eventCategories.departmentLabel')}
         options={departments}
         getOptionValue={(option) => option?.id.toString() ?? ''}
@@ -234,14 +235,17 @@ function EventCategoryForm<T extends EventCategoryForForm>({
               },
             ] as const
           ).map(({ variant, color, setColor, eventRunProps }) => (
-            <EventColorPicker
-              key={variant}
-              variant={variant}
-              eventRunProps={eventRunProps}
-              eventCategory={value}
-              color={color}
-              setColor={setColor}
-            />
+            <>
+              <EventColorPicker
+                key={variant}
+                variant={variant}
+                eventRunProps={eventRunProps}
+                eventCategory={value}
+                color={color}
+                setColor={setColor}
+              />
+              <input type="hidden" name={`${variant}_color`} value={color ?? ''} />
+            </>
           ))}
         </div>
 
@@ -262,6 +266,7 @@ function EventCategoryForm<T extends EventCategoryForForm>({
         value={value.event_form}
         onChange={(newValue: T['event_form']) => setEventForm(newValue)}
         isDisabled={disabled}
+        name="event_form_id"
       />
       <SelectWithLabel
         label={t('admin.eventCategories.eventProposalFormLabel')}
@@ -272,6 +277,7 @@ function EventCategoryForm<T extends EventCategoryForForm>({
         onChange={(newValue: T['event_proposal_form'] | null | undefined) => setEventProposalForm(newValue)}
         isDisabled={disabled}
         isClearable
+        name="event_proposal_form_id"
       />
       {ticketMode !== 'disabled' && (
         <BooleanInput

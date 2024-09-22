@@ -6,7 +6,7 @@ import EventSelect from '../BuiltInFormControls/EventSelect';
 import sortTicketTypes from '../TicketTypeAdmin/sortTicketTypes';
 import useAsyncFunction from '../useAsyncFunction';
 import formatMoney from '../formatMoney';
-import EditOrderModal from '../Store/EditOrderModal';
+import EditOrderModal from '../Store/OrderAdmin/EditOrderModal';
 import AddOrderToTicketButton, { AddOrderToTicketButtonProps } from './AddOrderToTicketButton';
 import { UserConProfileAdminQueryData } from './queries.generated';
 import { TicketInput, UserConProfile } from '../graphqlTypes.generated';
@@ -115,7 +115,7 @@ function TicketForm({
         </div>
       </div>
 
-      <EditOrderModal order={editOrderModal.visible ? order : undefined} closeModal={editOrderModal.close} />
+      {order && editOrderModal.visible && <EditOrderModal order={order} closeModal={editOrderModal.close} />}
 
       <ErrorDisplay graphQLError={submitError as ApolloError} />
 

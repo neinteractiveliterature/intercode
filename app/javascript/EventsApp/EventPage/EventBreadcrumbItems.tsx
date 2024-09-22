@@ -4,10 +4,10 @@ import { useTranslation } from 'react-i18next';
 import { DateTime } from 'luxon';
 
 import { ConventionForTimespanUtils, getConventionDayTimespans, timespanFromConvention } from '../../TimespanUtils';
-import RouteActivatedBreadcrumbItem from '../../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import AppRootContext from '../../AppRootContext';
 import { Run } from '../../graphqlTypes.generated';
-import { useConventionDayUrlPortion } from '../ScheduleGrid/ConventionDayTabContainer';
+import { useConventionDayUrlPortion } from '../conventionDayUrls';
+import NamedRouteBreadcrumbItem from '../../Breadcrumbs/NamedRouteBreadcrumbItem';
 
 function findRunFromHash<RunType extends { id: string }>(runs: RunType[], hash?: string | null) {
   if (!hash) {
@@ -45,12 +45,7 @@ export type EventBreadcrumbItemsProps = {
   eventPath: string;
 };
 
-function EventBreadcrumbItems({
-  event,
-  convention,
-  currentAbility,
-  eventPath,
-}: EventBreadcrumbItemsProps): JSX.Element {
+function EventBreadcrumbItems({ event, convention, currentAbility }: EventBreadcrumbItemsProps): JSX.Element {
   const { t } = useTranslation();
   const { timezoneName } = useContext(AppRootContext);
   const location = useLocation();
@@ -75,9 +70,7 @@ function EventBreadcrumbItems({
           <Link to="/events">{t('navigation.events.eventsList')}</Link>
         )}
       </li>
-      <RouteActivatedBreadcrumbItem to={eventPath} end>
-        {event.title}
-      </RouteActivatedBreadcrumbItem>
+      <NamedRouteBreadcrumbItem routeId="EventPage">{event.title}</NamedRouteBreadcrumbItem>
     </>
   );
 }

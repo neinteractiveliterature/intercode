@@ -1,43 +1,52 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { ActionFunction, Form, redirect, useActionData, useLoaderData, useNavigation } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import buildEventCategoryInput from './buildEventCategoryInput';
 import EventCategoryForm from './EventCategoryForm';
-import useAsyncFunction from '../useAsyncFunction';
 import usePageTitle from '../usePageTitle';
-import { LoadSingleValueFromCollectionWrapper } from '../GraphqlLoadingWrappers';
-import { useEventCategoryAdminQuery } from './queries.generated';
-import { useUpdateEventCategoryMutation } from './mutations.generated';
+import { singleEventCategoryAdminLoader, SingleEventCategoryAdminLoaderResult } from './loaders';
+import { client } from '../useIntercodeApolloClient';
+import { UpdateEventCategoryDocument } from './mutations.generated';
+import { buildEventCategoryFromFormData } from './buildEventCategoryInput';
+import { useTranslation } from 'react-i18next';
 
-export default LoadSingleValueFromCollectionWrapper(
-  useEventCategoryAdminQuery,
-  (data, id) => data.convention.event_categories.find((c) => c.id.toString() === id),
-  function EditEventCategoryForm({ value: initialEventCategory, data: { convention } }) {
-    const navigate = useNavigate();
-    const [updateMutate] = useUpdateEventCategoryMutation();
-    const [update, updateError, updateInProgress] = useAsyncFunction(updateMutate);
+export const action: ActionFunction = async ({ request, params: { id } }) => {
+  try {
+    const formData = await request.formData();
+    await client.mutate({
+      mutation: UpdateEventCategoryDocument,
+      variables: {
+        id,
+        eventCategory: buildEventCategoryFromFormData(formData),
+      },
+    });
+    return redirect('../..');
+  } catch (error) {
+    return error;
+  }
+};
 
-    const [eventCategory, setEventCategory] = useState(initialEventCategory);
+export const loader = singleEventCategoryAdminLoader;
 
-    usePageTitle(`Editing “${initialEventCategory.name}”`);
+function EditEventCategoryForm() {
+  const {
+    eventCategory: initialEventCategory,
+    data: { convention },
+  } = useLoaderData() as SingleEventCategoryAdminLoaderResult;
+  const navigation = useNavigation();
+  const updateError = useActionData();
+  const { t } = useTranslation();
 
-    const updateClicked = async () => {
-      await update({
-        variables: {
-          id: eventCategory.id,
-          eventCategory: buildEventCategoryInput(eventCategory),
-        },
-      });
+  const [eventCategory, setEventCategory] = useState(initialEventCategory);
 
-      navigate('/event_categories');
-    };
+  usePageTitle(`Editing “${initialEventCategory.name}”`);
 
-    return (
-      <>
-        <h1 className="mb-4">Edit event category</h1>
+  return (
+    <>
+      <h1 className="mb-4">Edit event category</h1>
 
+      <Form action="." method="PATCH">
         <EventCategoryForm
           value={eventCategory}
           onChange={setEventCategory}
@@ -45,15 +54,17 @@ export default LoadSingleValueFromCollectionWrapper(
           forms={convention.forms}
           ticketNamePlural={convention.ticketNamePlural}
           ticketMode={convention.ticket_mode}
-          disabled={updateInProgress}
+          disabled={navigation.state !== 'idle'}
         />
 
         <ErrorDisplay graphQLError={updateError as ApolloError} />
 
-        <button type="button" className="btn btn-primary" onClick={updateClicked} disabled={updateInProgress}>
-          Save changes
+        <button type="submit" className="btn btn-primary" disabled={navigation.state !== 'idle'}>
+          {t('buttons.saveChanges')}
         </button>
-      </>
-    );
-  },
-);
+      </Form>
+    </>
+  );
+}
+
+export const Component = EditEventCategoryForm;

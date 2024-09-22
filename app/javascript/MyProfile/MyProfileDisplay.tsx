@@ -1,56 +1,47 @@
-import { Fragment, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Fragment } from 'react';
+import { Link, LoaderFunction, useLoaderData } from 'react-router-dom';
 import { useTranslation, Trans } from 'react-i18next';
-import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
 import UserConProfileSignupsCard from '../EventsApp/SignupAdmin/UserConProfileSignupsCard';
 import AdminCaption from '../FormPresenter/ItemDisplays/AdminCaption';
 import FormItemDisplay from '../FormPresenter/ItemDisplays/FormItemDisplay';
 import usePageTitle from '../usePageTitle';
 import Gravatar from '../Gravatar';
-import { useMyProfileQuery } from './queries.generated';
+import { MyProfileQueryData, MyProfileQueryDocument } from './queries.generated';
 import { getSortedParsedFormItems } from '../Models/Form';
 import AdminWarning from '../UIComponents/AdminWarning';
 import { ConventionForTimespanUtils } from '../TimespanUtils';
-import FourOhFourPage from '../FourOhFourPage';
+import { client } from '../useIntercodeApolloClient';
+import { TypedFormItem } from '../FormAdmin/FormItemUtils';
+
+type LoaderResult = {
+  formResponse: Record<string, unknown>;
+  formItems: TypedFormItem[];
+  convention: MyProfileQueryData['convention'];
+  myProfile: NonNullable<MyProfileQueryData['convention']['my_profile']>;
+};
+
+export const loader: LoaderFunction = async () => {
+  const { data } = await client.query<MyProfileQueryData>({ query: MyProfileQueryDocument });
+  if (!data.convention.my_profile) {
+    return new Response(null, { status: 404 });
+  }
+  const formResponse = JSON.parse(data.convention.my_profile.form_response_attrs_json ?? '{}');
+  const formItems = getSortedParsedFormItems(data.convention.user_con_profile_form);
+
+  return {
+    formResponse,
+    formItems,
+    myProfile: data.convention.my_profile,
+    convention: data.convention,
+  } satisfies LoaderResult;
+};
 
 function MyProfileDisplay(): JSX.Element {
   const { t } = useTranslation();
-  const { data, loading, error } = useMyProfileQuery();
-
-  const formResponse = useMemo(() => {
-    if (loading || error) {
-      return null;
-    }
-
-    if (!data?.convention.my_profile) {
-      return null;
-    }
-
-    return JSON.parse(data.convention.my_profile.form_response_attrs_json ?? '{}');
-  }, [data, loading, error]);
-
-  const formItems = useMemo(() => {
-    if (!data?.convention?.user_con_profile_form) {
-      return [];
-    }
-
-    return getSortedParsedFormItems(data.convention.user_con_profile_form);
-  }, [data?.convention?.user_con_profile_form]);
+  const { formResponse, formItems, myProfile, convention } = useLoaderData() as LoaderResult;
 
   usePageTitle(t('myProfile.display.pageTitle'));
-
-  if (loading) {
-    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
-  if (!data) {
-    return <FourOhFourPage />;
-  }
 
   if (!formItems) {
     return (
@@ -64,13 +55,6 @@ function MyProfileDisplay(): JSX.Element {
         </Trans>
       </AdminWarning>
     );
-  }
-
-  const convention = data.convention;
-  const myProfile = data.convention.my_profile;
-
-  if (!myProfile) {
-    return <FourOhFourPage />;
   }
 
   return (
@@ -109,7 +93,7 @@ function MyProfileDisplay(): JSX.Element {
                     <div className="card-body">
                       <strong>{myProfile.bio_name}</strong>
                       <br />
-                      { }
+                      {}
                       <div dangerouslySetInnerHTML={{ __html: myProfile.bio_html ?? '' }} />
                     </div>
                   </div>
@@ -151,4 +135,4 @@ function MyProfileDisplay(): JSX.Element {
   );
 }
 
-export default MyProfileDisplay;
+export const Component = MyProfileDisplay;

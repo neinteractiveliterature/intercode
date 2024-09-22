@@ -4,7 +4,7 @@ class Mutations::DeleteCouponApplication < Mutations::BaseMutation
 
   argument :id, ID, required: false
 
-  load_and_authorize_model_with_id CouponApplication, :id, :manage_coupons
+  load_and_authorize_model_with_id CouponApplication, :id, :manage
 
   def resolve(**_args)
     coupon_application.destroy!

@@ -1,5 +1,5 @@
 import { RealIdObject, WithRealOrGeneratedId } from '../../GeneratedIdUtils';
-import { AdminProductsQueryData } from '../queries.generated';
+import { AdminProductsQueryData } from './queries.generated';
 
 type QueryProduct = AdminProductsQueryData['convention']['products'][0];
 

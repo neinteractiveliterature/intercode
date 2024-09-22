@@ -1,31 +1,22 @@
-import { Outlet } from 'react-router-dom';
-
-import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
-import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
-import LeafBreadcrumbItem from '../Breadcrumbs/LeafBreadcrumbItem';
+import OutletWithLoading from '../OutletWithLoading';
+import NamedRouteBreadcrumbItem from '../Breadcrumbs/NamedRouteBreadcrumbItem';
 
 function EventCategoryAdmin(): JSX.Element {
-  const authorizationWarning = useAuthorizationRequired('can_update_event_categories');
-
-  if (authorizationWarning) return authorizationWarning;
-
   return (
     <>
       <ol className="breadcrumb">
-        <RouteActivatedBreadcrumbItem to="/event_categories" end>
+        <NamedRouteBreadcrumbItem routeId={['EventCategoryAdmin', 'EventCategoryIndex']}>
           Event categories
-        </RouteActivatedBreadcrumbItem>
+        </NamedRouteBreadcrumbItem>
 
-        <LeafBreadcrumbItem path="/event_categories/new">New event category</LeafBreadcrumbItem>
+        <NamedRouteBreadcrumbItem routeId="NewEventCategory">New event category</NamedRouteBreadcrumbItem>
 
-        <RouteActivatedBreadcrumbItem pattern="/event_categories/:id/edit" to="." hideUnlessMatch>
-          Edit event category
-        </RouteActivatedBreadcrumbItem>
+        <NamedRouteBreadcrumbItem routeId="EditEventCategory">Edit event category</NamedRouteBreadcrumbItem>
       </ol>
 
-      <Outlet />
+      <OutletWithLoading />
     </>
   );
 }
 
-export default EventCategoryAdmin;
+export const Component = EventCategoryAdmin;

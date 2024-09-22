@@ -4,7 +4,7 @@ import { SearchCmsContentQueryData, SearchCmsContentQueryDocument } from './quer
 export type CmsContentOption = SearchCmsContentQueryData['cmsParent']['typeaheadSearchCmsContent'][0];
 
 export type CmsContentSelectProps<IsMulti extends boolean> = Omit<
-  GraphQLAsyncSelectProps<SearchCmsContentQueryData, CmsContentOption, IsMulti>,
+  GraphQLAsyncSelectProps<typeof SearchCmsContentQueryDocument, CmsContentOption, IsMulti>,
   'getOptions' | 'getVariables' | 'getOptionValue' | 'formatOptionLabel' | 'query'
 >;
 
@@ -12,7 +12,7 @@ function CmsContentSelect<IsMulti extends boolean = false>(props: CmsContentSele
   const { ...otherProps } = props;
 
   return (
-    <GraphQLAsyncSelect<SearchCmsContentQueryData, CmsContentOption, IsMulti>
+    <GraphQLAsyncSelect<typeof SearchCmsContentQueryDocument, CmsContentOption, IsMulti>
       getOptions={(data) => data.cmsParent.typeaheadSearchCmsContent}
       getVariables={(inputValue) => ({ name: inputValue })}
       getOptionValue={({ id: optionId, __typename }: CmsContentOption) => `${__typename}-${optionId}`}

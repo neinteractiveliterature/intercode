@@ -1,45 +1,43 @@
 import { useState } from 'react';
-import * as React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { ActionFunction, Form, redirect, useActionData, useNavigation } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
-import {
-  useCreateMutationWithReferenceArrayUpdater,
-  ErrorDisplay,
-  LoadQueryWrapper,
-} from '@neinteractiveliterature/litform';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import buildPartialInput from './buildPartialInput';
+import { buildPartialInputFromFormData } from './buildPartialInput';
 import CmsPartialForm, { CmsPartialFormFields } from './CmsPartialForm';
 import usePageTitle from '../../usePageTitle';
-import { CmsPartialFieldsFragmentDoc, useCmsPartialsAdminQuery } from './queries.generated';
-import { useCreatePartialMutation } from './mutations.generated';
+import { client } from '../../useIntercodeApolloClient';
+import { CreatePartialDocument } from './mutations.generated';
 
-export default LoadQueryWrapper(useCmsPartialsAdminQuery, function NewCmsPartial({ data }): JSX.Element {
-  const navigate = useNavigate();
+export const action: ActionFunction = async ({ request }) => {
+  const formData = await request.formData();
+
+  try {
+    await client.mutate({
+      mutation: CreatePartialDocument,
+      variables: {
+        cmsPartial: buildPartialInputFromFormData(formData),
+      },
+    });
+  } catch (e) {
+    return e;
+  }
+  await client.resetStore();
+
+  return redirect('/cms_partials');
+};
+
+function NewCmsPartial(): JSX.Element {
   const [partial, setPartial] = useState<CmsPartialFormFields>({});
-  const [createPartial, { error: createError, loading: createInProgress }] = useCreateMutationWithReferenceArrayUpdater(
-    useCreatePartialMutation,
-    data.cmsParent,
-    'cmsPartials',
-    (data) => data.createCmsPartial.cms_partial,
-    CmsPartialFieldsFragmentDoc,
-  );
+  const navigation = useNavigation();
+  const createInProgress = navigation.state !== 'idle';
+  const createError = useActionData();
 
   usePageTitle('New Partial');
 
-  const formSubmitted = async (event: React.FormEvent) => {
-    event.preventDefault();
-    await createPartial({
-      variables: {
-        cmsPartial: buildPartialInput(partial),
-      },
-    });
-    navigate('/cms_partials');
-  };
-
   return (
     <>
-      <form onSubmit={formSubmitted}>
+      <Form action="." method="POST">
         <CmsPartialForm partial={partial} onChange={setPartial} />
 
         <ErrorDisplay graphQLError={createError as ApolloError} />
@@ -51,7 +49,9 @@ export default LoadQueryWrapper(useCmsPartialsAdminQuery, function NewCmsPartial
           disabled={createInProgress}
           aria-label="Create partial"
         />
-      </form>
+      </Form>
     </>
   );
-});
+}
+
+export const Component = NewCmsPartial;

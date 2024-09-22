@@ -1,22 +1,19 @@
-import { useState, useContext, Suspense, useId } from 'react';
+import { useState, Suspense, useId } from 'react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { BootstrapFormInput, LoadingIndicator, ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform';
+import { BootstrapFormInput, LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import { Navigate } from 'react-router-dom';
+import { LoaderFunction, Navigate, useLoaderData } from 'react-router-dom';
 import PasswordConfirmationInput from './PasswordConfirmationInput';
-import AuthenticityTokensContext from '../AuthenticityTokensContext';
 import useAsyncFunction from '../useAsyncFunction';
 import AccountFormContent from './AccountFormContent';
 import UserFormFields, { UserFormState } from './UserFormFields';
 import usePageTitle from '../usePageTitle';
-import { lazyWithAppEntrypointHeadersCheck } from '../checkAppEntrypointHeadersMatch';
-import { useEditUserQuery } from './queries.generated';
+import { EditUserQueryData, EditUserQueryDocument } from './queries.generated';
 import humanize from '../humanize';
-
-const PasswordInputWithStrengthCheck = lazyWithAppEntrypointHeadersCheck(
-  () => import(/* webpackChunkName: "password-input-with-strength-check" */ './PasswordInputWithStrengthCheck'),
-);
+import AuthenticityTokensManager from '../AuthenticityTokensContext';
+import { client } from '../useIntercodeApolloClient';
+import PasswordInputWithStrengthCheck from './PasswordInputWithStrengthCheck';
 
 async function updateUser(
   authenticityToken: string,
@@ -61,9 +58,15 @@ async function updateUser(
   }
 }
 
-export default LoadQueryWrapper(useEditUserQuery, function EditUserForm({ data: { currentUser: initialFormState } }) {
+export const loader: LoaderFunction = async () => {
+  const { data } = await client.query<EditUserQueryData>({ query: EditUserQueryDocument });
+  return data;
+};
+
+function EditUserForm() {
+  const { currentUser: initialFormState } = useLoaderData() as EditUserQueryData;
   const { t } = useTranslation();
-  const authenticityToken = useContext(AuthenticityTokensContext).updateUser;
+  const authenticityToken = AuthenticityTokensManager.instance.tokens.updateUser;
   const [formState, setFormState] = useState<UserFormState | undefined>(initialFormState ?? undefined);
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
@@ -138,4 +141,6 @@ export default LoadQueryWrapper(useEditUserQuery, function EditUserForm({ data: 
       </form>
     </>
   );
-});
+}
+
+export const Component = EditUserForm;

@@ -1,13 +1,22 @@
-import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
 import { useContext } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { LoaderFunction, replace, useLoaderData, useNavigate } from 'react-router-dom';
 import AppRootContext from '../AppRootContext';
 import useLoginRequired from '../Authentication/useLoginRequired';
 import usePageTitle from '../usePageTitle';
-import { useTicketPurchaseFormQuery } from './queries.generated';
+import { TicketPurchaseFormQueryData, TicketPurchaseFormQueryDocument } from './queries.generated';
 import TicketPurchaseForm from './TicketPurchaseForm';
+import { client } from '../useIntercodeApolloClient';
 
-export default LoadQueryWrapper(useTicketPurchaseFormQuery, function TicketPurchasePage({ data }) {
+export const loader: LoaderFunction = async () => {
+  const { data } = await client.query<TicketPurchaseFormQueryData>({ query: TicketPurchaseFormQueryDocument });
+  if (data.convention.my_profile?.ticket) {
+    return replace('/ticket');
+  }
+  return data;
+};
+
+function TicketPurchasePage() {
+  const data = useLoaderData() as TicketPurchaseFormQueryData;
   const { ticketName } = useContext(AppRootContext);
   const navigate = useNavigate();
 
@@ -17,10 +26,6 @@ export default LoadQueryWrapper(useTicketPurchaseFormQuery, function TicketPurch
 
   if (loginRequired) {
     return <></>;
-  }
-
-  if (data.convention.my_profile?.ticket) {
-    return <Navigate to="/ticket" replace />;
   }
 
   return (
@@ -34,4 +39,6 @@ export default LoadQueryWrapper(useTicketPurchaseFormQuery, function TicketPurch
       </div>
     </div>
   );
-});
+}
+
+export const Component = TicketPurchasePage;

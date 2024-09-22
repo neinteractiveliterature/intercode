@@ -1,63 +1,61 @@
 import { useState } from 'react';
-import * as React from 'react';
-import { ApolloError, useApolloClient } from '@apollo/client';
-import { useNavigate, useNavigationType } from 'react-router-dom';
+import { ApolloError } from '@apollo/client';
+import { ActionFunction, Form, redirect, useActionData, useLoaderData, useNavigation } from 'react-router-dom';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import buildPartialInput from './buildPartialInput';
+import { buildPartialInputFromFormData } from './buildPartialInput';
 import CmsPartialForm from './CmsPartialForm';
-import useAsyncFunction from '../../useAsyncFunction';
 import usePageTitle from '../../usePageTitle';
-import { LoadSingleValueFromCollectionWrapper } from '../../GraphqlLoadingWrappers';
-import { useCmsPartialsAdminQuery } from './queries.generated';
-import { useUpdatePartialMutation } from './mutations.generated';
-import { Action } from 'history';
+import { singleCmsPartialAdminLoader, SingleCmsPartialAdminLoaderResult } from './loaders';
+import { UpdatePartialDocument } from './mutations.generated';
+import { client } from '../../useIntercodeApolloClient';
 
-export default LoadSingleValueFromCollectionWrapper(
-  useCmsPartialsAdminQuery,
-  (data, id) => data.cmsParent.cmsPartials.find((p) => id === p.id.toString()),
-  function EditCmsPartialForm({ value: initialPartial }) {
-    const navigate = useNavigate();
-    const navigationType = useNavigationType();
-    const [partial, setPartial] = useState(initialPartial);
-    const [updateMutate] = useUpdatePartialMutation();
-    const [updatePartial, updateError, updateInProgress] = useAsyncFunction(updateMutate);
-    const apolloClient = useApolloClient();
+export const action: ActionFunction = async ({ params: { id }, request }) => {
+  const formData = await request.formData();
 
-    usePageTitle(`Editing “${initialPartial.name}”`);
+  try {
+    await client.mutate({
+      mutation: UpdatePartialDocument,
+      variables: {
+        id: id ?? '',
+        cmsPartial: buildPartialInputFromFormData(formData),
+      },
+    });
+  } catch (e) {
+    return e;
+  }
+  await client.resetStore();
 
-    const formSubmitted = async (event: React.FormEvent) => {
-      event.preventDefault();
-      await updatePartial({
-        variables: {
-          id: initialPartial.id,
-          cmsPartial: buildPartialInput(partial),
-        },
-      });
-      await apolloClient.resetStore();
-      if (navigationType === Action.Push) {
-        navigate(-1);
-      } else {
-        navigate('/cms_partials');
-      }
-    };
+  return redirect(formData.get('destination')?.toString() ?? '/cms_partials');
+};
 
-    return (
-      <>
-        <form onSubmit={formSubmitted}>
-          <CmsPartialForm partial={partial} onChange={setPartial} />
+export const loader = singleCmsPartialAdminLoader;
 
-          <ErrorDisplay graphQLError={updateError as ApolloError} />
+function EditCmsPartialForm() {
+  const { partial: initialPartial } = useLoaderData() as SingleCmsPartialAdminLoaderResult;
+  const [partial, setPartial] = useState(initialPartial);
+  const navigation = useNavigation();
+  const updateError = useActionData();
 
-          <input
-            type="submit"
-            className="btn btn-primary"
-            value="Save changes"
-            aria-label="Save changes"
-            disabled={updateInProgress}
-          />
-        </form>
-      </>
-    );
-  },
-);
+  usePageTitle(`Editing “${initialPartial.name}”`);
+
+  return (
+    <>
+      <Form action="." method="PATCH">
+        <CmsPartialForm partial={partial} onChange={setPartial} />
+
+        <ErrorDisplay graphQLError={updateError as ApolloError} />
+
+        <input
+          type="submit"
+          className="btn btn-primary"
+          value="Save changes"
+          aria-label="Save changes"
+          disabled={navigation.state !== 'idle'}
+        />
+      </Form>
+    </>
+  );
+}
+
+export const Component = EditCmsPartialForm;

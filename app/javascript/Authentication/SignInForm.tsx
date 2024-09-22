@@ -8,9 +8,9 @@ import { useTranslation } from 'react-i18next';
 import { BootstrapFormInput, BootstrapFormCheckbox, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import AuthenticationModalContext from './AuthenticationModalContext';
-import AuthenticityTokensContext from '../AuthenticityTokensContext';
 import useAsyncFunction from '../useAsyncFunction';
 import useAfterSessionChange from './useAfterSessionChange';
+import AuthenticityTokensManager from '../AuthenticityTokensContext';
 
 async function signIn(authenticityToken: string, email: string, password: string, rememberMe: boolean) {
   const formData = new FormData();
@@ -51,7 +51,7 @@ function SignInForm(): JSX.Element {
     unauthenticatedError,
     setUnauthenticatedError,
   } = useContext(AuthenticationModalContext);
-  const { signIn: authenticityToken } = useContext(AuthenticityTokensContext);
+  const { signIn: authenticityToken } = AuthenticityTokensManager.instance.tokens;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);

@@ -1,17 +1,18 @@
 import { useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
 import groupBy from 'lodash/groupBy';
 import { sortByLocaleString } from '@neinteractiveliterature/litform/lib/ValueUtils';
 
 import FakeEventRun from './FakeEventRun';
-import { useCommonConventionDataQuery } from '../queries.generated';
+import { CommonConventionDataQueryDocument } from '../queries.generated';
 import { SignupStatus } from './StylingUtils';
 import AppRootContext from '../../AppRootContext';
 import { SignupAutomationMode, SignupMode } from '../../graphqlTypes.generated';
 import RankedChoicePriorityIndicator from '../MySignupQueue/RankedChoicePriorityIndicator';
+import { useSuspenseQuery } from '@apollo/client';
 
-export default LoadQueryWrapper(useCommonConventionDataQuery, function CategoryLegend({ data }) {
+export default function CategoryLegend() {
+  const { data } = useSuspenseQuery(CommonConventionDataQueryDocument);
   const { t } = useTranslation();
   const { signupAutomationMode, signupMode } = useContext(AppRootContext);
   const sortedEventCategories = useMemo(() => {
@@ -104,4 +105,4 @@ export default LoadQueryWrapper(useCommonConventionDataQuery, function CategoryL
       </div>
     </div>
   );
-});
+}

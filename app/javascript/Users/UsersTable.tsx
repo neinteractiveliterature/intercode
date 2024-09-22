@@ -1,6 +1,5 @@
-import { useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { Column } from 'react-table';
-import { useModal } from '@neinteractiveliterature/litform';
 
 import { buildFieldFilterCodecs } from '../Tables/FilterUtils';
 import EmailCell from '../Tables/EmailCell';
@@ -8,9 +7,8 @@ import FreeTextFilter from '../Tables/FreeTextFilter';
 import MultiUserActionsDropdown from './MultiUserActionsDropdown';
 import TableHeader from '../Tables/TableHeader';
 import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
-import MergeUsersModal from './MergeUsersModal';
 import usePageTitle from '../usePageTitle';
-import { UsersTableUsersQueryData, UsersTableUsersQueryVariables, useUsersTableUsersQuery } from './queries.generated';
+import { UsersTableUsersQueryData, UsersTableUsersQueryDocument } from './queries.generated';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
 import { useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
@@ -70,16 +68,11 @@ const defaultVisibleColumns = ['id', 'first_name', 'last_name', 'email'];
 function UsersTable(): JSX.Element {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const mergeModal = useModal<{ userIds: string[] }>();
   usePageTitle(t('navigation.admin.users'));
 
   const getPossibleColumnsWithTranslation = useCallback(() => getPossibleColumns(t), [t]);
 
-  const { tableInstance, refetch, tableHeaderProps, loading } = useReactTableWithTheWorks<
-    UsersTableUsersQueryData,
-    UserType,
-    UsersTableUsersQueryVariables
-  >({
+  const { tableInstance, tableHeaderProps, loading } = useReactTableWithTheWorks({
     decodeFilterValue,
     defaultVisibleColumns,
     encodeFilterValue,
@@ -88,7 +81,7 @@ function UsersTable(): JSX.Element {
     getPossibleColumns: getPossibleColumnsWithTranslation,
     rowSelect: true,
     storageKeyPrefix: 'users',
-    useQuery: useUsersTableUsersQuery,
+    query: UsersTableUsersQueryDocument,
   });
 
   return (
@@ -102,7 +95,7 @@ function UsersTable(): JSX.Element {
           <div className="ms-2 mb-2 d-inline-block align-top">
             <MultiUserActionsDropdown
               selectedUserIds={tableInstance.selectedFlatRows.map((row) => row.original.id)}
-              onClickMerge={(userIds) => mergeModal.open({ userIds })}
+              onClickMerge={(userIds) => navigate(`merge/${userIds.join(',')}`)}
             />
           </div>
         )}
@@ -116,17 +109,9 @@ function UsersTable(): JSX.Element {
         }}
       />
 
-      <MergeUsersModal
-        visible={mergeModal.visible}
-        closeModal={() => {
-          mergeModal.close();
-          refetch();
-          tableInstance.toggleAllRowsSelected(false);
-        }}
-        userIds={mergeModal.state?.userIds}
-      />
+      <Outlet />
     </div>
   );
 }
 
-export default UsersTable;
+export const Component = UsersTable;

@@ -1,98 +1,13 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
-const defaultOptions = {} as const;
-export type EventCategoryFieldsFragment = { __typename: 'EventCategory', id: string, name: string, team_member_name: string, proposal_description?: string | null, scheduling_ui: Types.SchedulingUi, default_color?: string | null, signed_up_color?: string | null, full_color?: string | null, can_provide_tickets: boolean, events_paginated: { __typename: 'EventsPagination', total_entries: number }, department?: { __typename: 'Department', id: string, name: string } | null, event_form: { __typename: 'Form', id: string, title: string, form_type: Types.FormType }, event_proposal_form?: { __typename: 'Form', id: string, title: string, form_type: Types.FormType } | null };
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
+export type EventCategoryFieldsFragment = { __typename: 'EventCategory', id: string, name: string, team_member_name: string, proposal_description?: string | null, scheduling_ui: Types.SchedulingUi, default_color?: string | null, signed_up_color?: string | null, full_color?: string | null, can_provide_tickets: boolean, events_paginated: { __typename: 'EventsPagination', total_entries: number }, department?: { __typename: 'Department', id: string, name: string } | null, event_form: { __typename: 'Form', id: string, title: string, form_type: Types.FormType }, event_proposal_form?: { __typename: 'Form', id: string, title: string, form_type: Types.FormType } | null, convention: { __typename: 'Convention', id: string } };
 
 export type EventCategoryAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type EventCategoryAdminQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, ticketNamePlural: string, ticket_mode: Types.TicketMode, departments: Array<{ __typename: 'Department', id: string, name: string }>, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, team_member_name: string, proposal_description?: string | null, scheduling_ui: Types.SchedulingUi, default_color?: string | null, signed_up_color?: string | null, full_color?: string | null, can_provide_tickets: boolean, events_paginated: { __typename: 'EventsPagination', total_entries: number }, department?: { __typename: 'Department', id: string, name: string } | null, event_form: { __typename: 'Form', id: string, title: string, form_type: Types.FormType }, event_proposal_form?: { __typename: 'Form', id: string, title: string, form_type: Types.FormType } | null }>, forms: Array<{ __typename: 'Form', id: string, title: string, form_type: Types.FormType }> } };
+export type EventCategoryAdminQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, ticketNamePlural: string, ticket_mode: Types.TicketMode, departments: Array<{ __typename: 'Department', id: string, name: string }>, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, team_member_name: string, proposal_description?: string | null, scheduling_ui: Types.SchedulingUi, default_color?: string | null, signed_up_color?: string | null, full_color?: string | null, can_provide_tickets: boolean, events_paginated: { __typename: 'EventsPagination', total_entries: number }, department?: { __typename: 'Department', id: string, name: string } | null, event_form: { __typename: 'Form', id: string, title: string, form_type: Types.FormType }, event_proposal_form?: { __typename: 'Form', id: string, title: string, form_type: Types.FormType } | null, convention: { __typename: 'Convention', id: string } }>, forms: Array<{ __typename: 'Form', id: string, title: string, form_type: Types.FormType }> } };
 
-export const EventCategoryFieldsFragmentDoc = gql`
-    fragment EventCategoryFields on EventCategory {
-  id
-  name
-  team_member_name
-  proposal_description
-  scheduling_ui
-  default_color
-  signed_up_color
-  full_color
-  can_provide_tickets
-  events_paginated {
-    total_entries
-  }
-  department {
-    id
-    name
-  }
-  event_form {
-    id
-    title
-    form_type
-  }
-  event_proposal_form {
-    id
-    title
-    form_type
-  }
-}
-    `;
-export const EventCategoryAdminQueryDocument = gql`
-    query EventCategoryAdminQuery {
-  convention: conventionByRequestHost {
-    id
-    name
-    ticketNamePlural
-    ticket_mode
-    departments {
-      id
-      name
-    }
-    event_categories {
-      id
-      ...EventCategoryFields
-    }
-    forms {
-      id
-      title
-      form_type
-    }
-  }
-}
-    ${EventCategoryFieldsFragmentDoc}`;
-
-/**
- * __useEventCategoryAdminQuery__
- *
- * To run a query within a React component, call `useEventCategoryAdminQuery` and pass it any options that fit your needs.
- * When your component renders, `useEventCategoryAdminQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useEventCategoryAdminQuery({
- *   variables: {
- *   },
- * });
- */
-export function useEventCategoryAdminQuery(baseOptions?: Apollo.QueryHookOptions<EventCategoryAdminQueryData, EventCategoryAdminQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<EventCategoryAdminQueryData, EventCategoryAdminQueryVariables>(EventCategoryAdminQueryDocument, options);
-      }
-export function useEventCategoryAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EventCategoryAdminQueryData, EventCategoryAdminQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<EventCategoryAdminQueryData, EventCategoryAdminQueryVariables>(EventCategoryAdminQueryDocument, options);
-        }
-export function useEventCategoryAdminQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<EventCategoryAdminQueryData, EventCategoryAdminQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<EventCategoryAdminQueryData, EventCategoryAdminQueryVariables>(EventCategoryAdminQueryDocument, options);
-        }
-export type EventCategoryAdminQueryHookResult = ReturnType<typeof useEventCategoryAdminQuery>;
-export type EventCategoryAdminQueryLazyQueryHookResult = ReturnType<typeof useEventCategoryAdminQueryLazyQuery>;
-export type EventCategoryAdminQuerySuspenseQueryHookResult = ReturnType<typeof useEventCategoryAdminQuerySuspenseQuery>;
-export type EventCategoryAdminQueryQueryResult = Apollo.QueryResult<EventCategoryAdminQueryData, EventCategoryAdminQueryVariables>;
+export const EventCategoryFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"EventCategoryFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"EventCategory"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"team_member_name"}},{"kind":"Field","name":{"kind":"Name","value":"proposal_description"}},{"kind":"Field","name":{"kind":"Name","value":"scheduling_ui"}},{"kind":"Field","name":{"kind":"Name","value":"default_color"}},{"kind":"Field","name":{"kind":"Name","value":"signed_up_color"}},{"kind":"Field","name":{"kind":"Name","value":"full_color"}},{"kind":"Field","name":{"kind":"Name","value":"can_provide_tickets"}},{"kind":"Field","name":{"kind":"Name","value":"events_paginated"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"total_entries"}}]}},{"kind":"Field","name":{"kind":"Name","value":"department"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"event_form"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"form_type"}}]}},{"kind":"Field","name":{"kind":"Name","value":"event_proposal_form"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"form_type"}}]}},{"kind":"Field","name":{"kind":"Name","value":"convention"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<EventCategoryFieldsFragment, unknown>;
+export const EventCategoryAdminQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"EventCategoryAdminQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"convention"},"name":{"kind":"Name","value":"conventionByRequestHost"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"ticketNamePlural"}},{"kind":"Field","name":{"kind":"Name","value":"ticket_mode"}},{"kind":"Field","name":{"kind":"Name","value":"departments"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"event_categories"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"EventCategoryFields"}}]}},{"kind":"Field","name":{"kind":"Name","value":"forms"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"form_type"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"EventCategoryFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"EventCategory"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"team_member_name"}},{"kind":"Field","name":{"kind":"Name","value":"proposal_description"}},{"kind":"Field","name":{"kind":"Name","value":"scheduling_ui"}},{"kind":"Field","name":{"kind":"Name","value":"default_color"}},{"kind":"Field","name":{"kind":"Name","value":"signed_up_color"}},{"kind":"Field","name":{"kind":"Name","value":"full_color"}},{"kind":"Field","name":{"kind":"Name","value":"can_provide_tickets"}},{"kind":"Field","name":{"kind":"Name","value":"events_paginated"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"total_entries"}}]}},{"kind":"Field","name":{"kind":"Name","value":"department"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"event_form"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"form_type"}}]}},{"kind":"Field","name":{"kind":"Name","value":"event_proposal_form"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"form_type"}}]}},{"kind":"Field","name":{"kind":"Name","value":"convention"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<EventCategoryAdminQueryData, EventCategoryAdminQueryVariables>;

@@ -1,10 +1,9 @@
-import { Routes, Route } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 
-import FormAdminIndex from './FormAdminIndex';
-import FormJSONEditor from './FormJSONEditor';
-import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
-import LeafBreadcrumbItem from '../Breadcrumbs/LeafBreadcrumbItem';
+import { Suspense } from 'react';
+import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
+import NamedRouteBreadcrumbItem from '../Breadcrumbs/NamedRouteBreadcrumbItem';
 
 function FormAdmin(): JSX.Element {
   const authorizationWarning = useAuthorizationRequired('can_manage_forms');
@@ -14,25 +13,16 @@ function FormAdmin(): JSX.Element {
     <>
       <nav aria-label="breadcrumb">
         <ol className="breadcrumb">
-          <RouteActivatedBreadcrumbItem to="/admin_forms" end>
-            Forms
-          </RouteActivatedBreadcrumbItem>
-
-          <Routes>
-            <Route
-              path=":id/edit_advanced"
-              element={<LeafBreadcrumbItem path="">Edit form (advanced)</LeafBreadcrumbItem>}
-            />
-          </Routes>
+          <NamedRouteBreadcrumbItem routeId={['AdminForms', 'FormAdminIndex']}>Forms</NamedRouteBreadcrumbItem>
+          <NamedRouteBreadcrumbItem routeId="FormJSONEditor">Edit form (advanced)</NamedRouteBreadcrumbItem>
         </ol>
       </nav>
 
-      <Routes>
-        <Route path=":id/edit_advanced" element={<FormJSONEditor />} />
-        <Route path="" element={<FormAdminIndex />} />
-      </Routes>
+      <Suspense fallback={<PageLoadingIndicator visible />}>
+        <Outlet />
+      </Suspense>
     </>
   );
 }
 
-export default FormAdmin;
+export const Component = FormAdmin;

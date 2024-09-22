@@ -1,10 +1,7 @@
 /* eslint-disable */
 import * as Types from '../../graphqlTypes.generated';
 
-import { gql } from '@apollo/client';
-import { CmsPageFieldsFragmentDoc } from './queries.generated';
-import * as Apollo from '@apollo/client';
-const defaultOptions = {} as const;
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type CreatePageMutationVariables = Types.Exact<{
   page: Types.PageInput;
 }>;
@@ -28,109 +25,6 @@ export type DeletePageMutationVariables = Types.Exact<{
 export type DeletePageMutationData = { __typename: 'Mutation', deletePage: { __typename: 'DeletePagePayload', clientMutationId?: string | null } };
 
 
-export const CreatePageDocument = gql`
-    mutation CreatePage($page: PageInput!) {
-  createPage(input: {page: $page}) {
-    page {
-      id
-      ...CmsPageFields
-    }
-  }
-}
-    ${CmsPageFieldsFragmentDoc}`;
-export type CreatePageMutationFn = Apollo.MutationFunction<CreatePageMutationData, CreatePageMutationVariables>;
-
-/**
- * __useCreatePageMutation__
- *
- * To run a mutation, you first call `useCreatePageMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreatePageMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createPageMutation, { data, loading, error }] = useCreatePageMutation({
- *   variables: {
- *      page: // value for 'page'
- *   },
- * });
- */
-export function useCreatePageMutation(baseOptions?: Apollo.MutationHookOptions<CreatePageMutationData, CreatePageMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreatePageMutationData, CreatePageMutationVariables>(CreatePageDocument, options);
-      }
-export type CreatePageMutationHookResult = ReturnType<typeof useCreatePageMutation>;
-export type CreatePageMutationResult = Apollo.MutationResult<CreatePageMutationData>;
-export type CreatePageMutationOptions = Apollo.BaseMutationOptions<CreatePageMutationData, CreatePageMutationVariables>;
-export const UpdatePageDocument = gql`
-    mutation UpdatePage($id: ID!, $page: PageInput!) {
-  updatePage(input: {id: $id, page: $page}) {
-    page {
-      id
-      ...CmsPageFields
-    }
-  }
-}
-    ${CmsPageFieldsFragmentDoc}`;
-export type UpdatePageMutationFn = Apollo.MutationFunction<UpdatePageMutationData, UpdatePageMutationVariables>;
-
-/**
- * __useUpdatePageMutation__
- *
- * To run a mutation, you first call `useUpdatePageMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdatePageMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updatePageMutation, { data, loading, error }] = useUpdatePageMutation({
- *   variables: {
- *      id: // value for 'id'
- *      page: // value for 'page'
- *   },
- * });
- */
-export function useUpdatePageMutation(baseOptions?: Apollo.MutationHookOptions<UpdatePageMutationData, UpdatePageMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdatePageMutationData, UpdatePageMutationVariables>(UpdatePageDocument, options);
-      }
-export type UpdatePageMutationHookResult = ReturnType<typeof useUpdatePageMutation>;
-export type UpdatePageMutationResult = Apollo.MutationResult<UpdatePageMutationData>;
-export type UpdatePageMutationOptions = Apollo.BaseMutationOptions<UpdatePageMutationData, UpdatePageMutationVariables>;
-export const DeletePageDocument = gql`
-    mutation DeletePage($id: ID!) {
-  deletePage(input: {id: $id}) {
-    clientMutationId
-  }
-}
-    `;
-export type DeletePageMutationFn = Apollo.MutationFunction<DeletePageMutationData, DeletePageMutationVariables>;
-
-/**
- * __useDeletePageMutation__
- *
- * To run a mutation, you first call `useDeletePageMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeletePageMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deletePageMutation, { data, loading, error }] = useDeletePageMutation({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useDeletePageMutation(baseOptions?: Apollo.MutationHookOptions<DeletePageMutationData, DeletePageMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeletePageMutationData, DeletePageMutationVariables>(DeletePageDocument, options);
-      }
-export type DeletePageMutationHookResult = ReturnType<typeof useDeletePageMutation>;
-export type DeletePageMutationResult = Apollo.MutationResult<DeletePageMutationData>;
-export type DeletePageMutationOptions = Apollo.BaseMutationOptions<DeletePageMutationData, DeletePageMutationVariables>;
+export const CreatePageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreatePage"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"page"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"PageInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createPage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"page"},"value":{"kind":"Variable","name":{"kind":"Name","value":"page"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"page"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"CmsPageFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CmsPageAdminLayoutFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsLayout"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CmsPageFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Page"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"admin_notes"}},{"kind":"Field","name":{"kind":"Name","value":"skip_clickwrap_agreement"}},{"kind":"Field","name":{"kind":"Name","value":"hidden_from_search"}},{"kind":"Field","name":{"kind":"Name","value":"current_ability_can_update"}},{"kind":"Field","name":{"kind":"Name","value":"current_ability_can_delete"}},{"kind":"Field","name":{"kind":"Name","value":"cms_layout"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"CmsPageAdminLayoutFields"}}]}}]}}]} as unknown as DocumentNode<CreatePageMutationData, CreatePageMutationVariables>;
+export const UpdatePageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdatePage"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"page"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"PageInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updatePage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"page"},"value":{"kind":"Variable","name":{"kind":"Name","value":"page"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"page"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"CmsPageFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CmsPageAdminLayoutFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsLayout"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CmsPageFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Page"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"admin_notes"}},{"kind":"Field","name":{"kind":"Name","value":"skip_clickwrap_agreement"}},{"kind":"Field","name":{"kind":"Name","value":"hidden_from_search"}},{"kind":"Field","name":{"kind":"Name","value":"current_ability_can_update"}},{"kind":"Field","name":{"kind":"Name","value":"current_ability_can_delete"}},{"kind":"Field","name":{"kind":"Name","value":"cms_layout"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"CmsPageAdminLayoutFields"}}]}}]}}]} as unknown as DocumentNode<UpdatePageMutationData, UpdatePageMutationVariables>;
+export const DeletePageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeletePage"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deletePage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"clientMutationId"}}]}}]}}]} as unknown as DocumentNode<DeletePageMutationData, DeletePageMutationVariables>;

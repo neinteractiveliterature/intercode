@@ -1,18 +1,17 @@
 import { useState, useMemo } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { Link, useParams, useSubmit } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
-import { ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import buildEventCategoryUrl from './buildEventCategoryUrl';
 import RunFormFields, { RunForRunFormFields } from '../BuiltInForms/RunFormFields';
-import useAsyncFunction from '../useAsyncFunction';
 import useEventFormWithCategorySelection, { EventFormWithCategorySelection } from './useEventFormWithCategorySelection';
-import useCreateEvent, { CreateEventOptions } from './useCreateEvent';
 import usePageTitle from '../usePageTitle';
-import { useEventAdminEventsQuery, EventAdminEventsQueryData } from './queries.generated';
+import { EventAdminEventsQueryData } from './queries.generated';
 import { buildEventInput } from './InputBuilders';
 import { Event, FormItemRole, SchedulingUi } from '../graphqlTypes.generated';
 import { ImageAttachmentConfig } from '../BuiltInFormControls/MarkdownInput';
+import { useEventAdminEventsLoader } from './loaders';
+import { CreateEventOptions } from './create';
 
 type NewEventFormResponseAttrs = {
   length_seconds?: number | null;
@@ -35,15 +34,16 @@ function runIsCreatable(run: RunForRunFormFields): run is Omit<RunForRunFormFiel
   return run.starts_at != null;
 }
 
-export default LoadQueryWrapper(useEventAdminEventsQuery, function NewEvent({ data }) {
+function NewEvent() {
+  const data = useEventAdminEventsLoader();
   const convention = data.convention;
-  const navigate = useNavigate();
+  const submit = useSubmit();
   const { eventCategoryId: eventCategoryIdParam } = useParams<{ eventCategoryId: string }>();
   const initialEventCategory = useMemo(
     () => convention.event_categories.find((c) => c.id === eventCategoryIdParam?.replace(/-.*$/, '')),
     [convention, eventCategoryIdParam],
   );
-  const [createMutate, createError] = useAsyncFunction<unknown, [CreateEventOptions]>(useCreateEvent(convention));
+  const [createError, setCreateError] = useState<ApolloError>();
   const initialEvent = useMemo<NewEventFormEvent>(
     () => ({
       __typename: 'Event',
@@ -81,9 +81,9 @@ export default LoadQueryWrapper(useEventAdminEventsQuery, function NewEvent({ da
   });
   usePageTitle('New event');
 
-  const donePath = convention.site_mode === 'single_event' ? '/' : buildEventCategoryUrl(eventCategory) ?? '/';
+  const donePath = convention.site_mode === 'single_event' ? '/' : '../..';
 
-  const createEvent = async () => {
+  const createEventClicked = async () => {
     if (!validateForm() || !runIsCreatable(run) || !eventCategory) {
       return;
     }
@@ -93,21 +93,32 @@ export default LoadQueryWrapper(useEventAdminEventsQuery, function NewEvent({ da
       event_category: eventCategory,
     };
 
+    let payload: CreateEventOptions;
     if (eventCategory.scheduling_ui === SchedulingUi.SingleRun) {
-      await createMutate({
+      payload = {
         event: eventForBuildEventInput,
         eventCategory,
         run,
         signedImageBlobIds: signedBlobIds,
-      });
+      };
     } else {
-      await createMutate({
+      payload = {
         event: eventForBuildEventInput,
         eventCategory,
         signedImageBlobIds: signedBlobIds,
-      });
+      };
     }
-    navigate(donePath);
+
+    try {
+      submit(payload, {
+        method: 'POST',
+        action: `/admin_events/${eventCategory.id}/events`,
+        encType: 'application/json',
+      });
+    } catch (error) {
+      setCreateError(error);
+      throw error;
+    }
   };
 
   const warningMessage =
@@ -144,13 +155,13 @@ export default LoadQueryWrapper(useEventAdminEventsQuery, function NewEvent({ da
 
       {warningMessage && <div className="alert alert-warning">{warningMessage}</div>}
 
-      <ErrorDisplay graphQLError={createError as ApolloError} />
+      <ErrorDisplay graphQLError={createError} />
 
       <div>
         <button
           type="button"
           className="btn btn-primary"
-          onClick={createEvent}
+          onClick={createEventClicked}
           disabled={!eventCategoryId || !!warningMessage}
         >
           Create event
@@ -161,4 +172,6 @@ export default LoadQueryWrapper(useEventAdminEventsQuery, function NewEvent({ da
       </div>
     </>
   );
-});
+}
+
+export const Component = NewEvent;

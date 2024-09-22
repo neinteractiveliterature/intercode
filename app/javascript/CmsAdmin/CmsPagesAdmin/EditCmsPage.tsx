@@ -1,63 +1,73 @@
 import { useState } from 'react';
-import * as React from 'react';
-import { ApolloError, useApolloClient } from '@apollo/client';
+import { ApolloError } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import { useNavigate, useNavigationType } from 'react-router-dom';
-import buildPageInput from './buildPageInput';
+import {
+  ActionFunction,
+  Form,
+  redirect,
+  useActionData,
+  useLoaderData,
+  useNavigation,
+  useSearchParams,
+} from 'react-router-dom';
+import { buildPageInputFromFormData } from './buildPageInput';
 import CmsPageForm from './CmsPageForm';
-import useAsyncFunction from '../../useAsyncFunction';
 import usePageTitle from '../../usePageTitle';
-import { LoadSingleValueFromCollectionWrapper } from '../../GraphqlLoadingWrappers';
-import { useCmsPagesAdminQuery } from './queries.generated';
-import { useUpdatePageMutation } from './mutations.generated';
-import { Action } from 'history';
+import { singleCmsPageAdminLoader, SingleCmsPageAdminLoaderResult } from './loaders';
+import { UpdatePageDocument } from './mutations.generated';
+import { client } from '../../useIntercodeApolloClient';
 
-export default LoadSingleValueFromCollectionWrapper(
-  useCmsPagesAdminQuery,
-  (data, id) => data.cmsParent.cmsPages.find((p) => id === p.id.toString()),
-  function EditCmsPageForm({ value: initialPage, data: { cmsParent } }) {
-    const navigate = useNavigate();
-    const navigationType = useNavigationType();
-    const [page, setPage] = useState(initialPage);
-    const [updateMutate] = useUpdatePageMutation();
-    const [updatePage, updateError, updateInProgress] = useAsyncFunction(updateMutate);
-    const apolloClient = useApolloClient();
+export const action: ActionFunction = async ({ params: { id }, request }) => {
+  const formData = await request.formData();
 
-    usePageTitle(`Edit “${initialPage.name}”`);
+  try {
+    await client.mutate({
+      mutation: UpdatePageDocument,
+      variables: {
+        id: id ?? '',
+        page: buildPageInputFromFormData(formData),
+      },
+    });
+  } catch (e) {
+    return e;
+  }
+  await client.resetStore();
 
-    const formSubmitted = async (event: React.FormEvent) => {
-      event.preventDefault();
-      await updatePage({
-        variables: {
-          id: initialPage.id,
-          page: buildPageInput(page),
-        },
-      });
-      await apolloClient.resetStore();
-      if (navigationType === Action.Push) {
-        navigate(-1);
-      } else {
-        navigate('/cms_pages');
-      }
-    };
+  return redirect(formData.get('destination')?.toString() ?? '/cms_pages');
+};
 
-    return (
-      <>
-        <form onSubmit={formSubmitted}>
-          <CmsPageForm page={page} onChange={setPage} cmsLayouts={cmsParent.cmsLayouts} cmsParent={cmsParent} />
+export const loader = singleCmsPageAdminLoader;
 
-          <ErrorDisplay graphQLError={updateError as ApolloError} />
+function EditCmsPageForm() {
+  const { data, page: initialPage } = useLoaderData() as SingleCmsPageAdminLoaderResult;
+  const { cmsParent } = data;
+  const [page, setPage] = useState(initialPage);
+  const [searchParams] = useSearchParams();
+  const navigation = useNavigation();
+  const updateError = useActionData();
 
-          <input
-            type="submit"
-            className="btn btn-primary"
-            value="Save changes"
-            aria-label="Save changes"
-            disabled={updateInProgress}
-          />
-        </form>
-      </>
-    );
-  },
-);
+  usePageTitle(`Edit “${initialPage.name}”`);
+
+  return (
+    <>
+      <Form method="PATCH" action=".">
+        <CmsPageForm page={page} onChange={setPage} cmsLayouts={cmsParent.cmsLayouts} cmsParent={cmsParent} />
+
+        <ErrorDisplay graphQLError={updateError as ApolloError} />
+
+        <input type="hidden" name="destination" value={searchParams.get('destination') ?? '/cms_pages'} />
+
+        <input
+          type="submit"
+          className="btn btn-primary"
+          value="Save changes"
+          aria-label="Save changes"
+          disabled={navigation.state !== 'idle'}
+        />
+      </Form>
+    </>
+  );
+}
+
+export const Component = EditCmsPageForm;

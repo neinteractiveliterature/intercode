@@ -5,9 +5,9 @@ import capitalize from 'lodash/capitalize';
 
 import AppRootContext from '../AppRootContext';
 import Checkmark from '../EventsApp/TeamMemberAdmin/Checkmark';
-import { describeUserPricingStructure } from '../Store/describePricingStructure';
 import ProductOrderForm, { ProductOrderFormProps } from '../Store/ProductOrderForm';
 import { PricingStructure, Product, Run } from '../graphqlTypes.generated';
+import { UserPricingStructureDescription } from 'Store/describePricingStructure';
 
 export type TicketPurchaseFormProps = {
   availableProducts: (Pick<Product, 'id' | 'name' | 'description_html'> & {
@@ -19,7 +19,7 @@ export type TicketPurchaseFormProps = {
 
 export default function TicketPurchaseForm({ availableProducts, onAddedToCart, run }: TicketPurchaseFormProps) {
   const { t } = useTranslation();
-  const { timezoneName, ticketName } = useContext(AppRootContext);
+  const { ticketName } = useContext(AppRootContext);
   const [product, setProduct] = useState<TicketPurchaseFormProps['availableProducts'][number]>();
   const [focusedProduct, setFocusedProduct] = useState<TicketPurchaseFormProps['availableProducts'][number]>();
 
@@ -47,13 +47,11 @@ export default function TicketPurchaseForm({ availableProducts, onAddedToCart, r
                 <strong>{productName}</strong>
               </div>
               <div className="card-body">
-                <p>{describeUserPricingStructure(pricingStructure, timezoneName, t)}</p>
+                <p>
+                  <UserPricingStructureDescription pricingStructure={pricingStructure} />
+                </p>
                 {availableProduct.description_html && (
-                  <p
-                    className="small"
-                     
-                    dangerouslySetInnerHTML={{ __html: availableProduct.description_html }}
-                  />
+                  <p className="small" dangerouslySetInnerHTML={{ __html: availableProduct.description_html }} />
                 )}
               </div>
               {availableProducts.length > 1 && (

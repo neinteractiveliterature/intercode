@@ -72,10 +72,11 @@ function CmsPageForm<T extends PageFormFields>({
 
   return (
     <>
-      <BootstrapFormInput label="Name" value={page.name ?? ''} onTextChange={setName} readOnly={readOnly} />
+      <BootstrapFormInput label="Name" name="name" value={page.name ?? ''} onTextChange={setName} readOnly={readOnly} />
 
       <BootstrapFormInput
         label="Admin notes"
+        name="admin_notes"
         value={page.admin_notes ?? ''}
         onTextChange={setAdminNotes}
         readOnly={readOnly}
@@ -90,6 +91,7 @@ function CmsPageForm<T extends PageFormFields>({
           {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           <input
             id={slugInputId}
+            name="slug"
             className="form-control"
             value={page.slug ?? ''}
             onChange={(event) => setSlug(event.target.value)}
@@ -99,6 +101,7 @@ function CmsPageForm<T extends PageFormFields>({
       </div>
 
       <BooleanInput
+        name="skip_clickwrap_agreement"
         caption="Skip clickwrap agreement"
         helpText="If selected, this page will not check whether the user has accepted the site clickwrap agreement."
         value={page.skip_clickwrap_agreement ?? false}
@@ -107,6 +110,7 @@ function CmsPageForm<T extends PageFormFields>({
       />
 
       <BooleanInput
+        name="hidden_from_search"
         caption="Hidden from search"
         helpText="If selected, this page will not appear in site search results."
         value={page.hidden_from_search ?? false}
@@ -115,6 +119,7 @@ function CmsPageForm<T extends PageFormFields>({
       />
 
       <SelectWithLabel<T['cms_layout']>
+        name="cms_layout_id"
         label="Layout"
         value={page.cms_layout}
         isClearable
@@ -129,6 +134,7 @@ function CmsPageForm<T extends PageFormFields>({
       <div className="mb-3">
         <legend className="col-form-label">Content</legend>
         <LiquidInput value={page.content ?? ''} onChange={setContent} extensions={extensions} />
+        <input type="hidden" name="content" value={page.content ?? ''} />
       </div>
     </>
   );

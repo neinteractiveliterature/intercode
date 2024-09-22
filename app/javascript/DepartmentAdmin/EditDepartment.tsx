@@ -1,41 +1,58 @@
-import { useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { ActionFunction, Form, redirect, useLoaderData, useNavigation } from 'react-router-dom';
 
 import usePageTitle from '../usePageTitle';
-import buildDepartmentInput from './buildDepartmentInput';
+import { buildDepartmentInputFromFormData } from './buildDepartmentInput';
 import DepartmentForm from './DepartmentForm';
-import { LoadSingleValueFromCollectionWrapper } from '../GraphqlLoadingWrappers';
-import { useDepartmentAdminQuery } from './queries.generated';
-import { useUpdateDepartmentMutation } from './mutations.generated';
+import { singleDepartmentAdminLoader, SingleDepartmentAdminLoaderResult } from './loaders';
+import { client } from '../useIntercodeApolloClient';
+import { UpdateDepartmentDocument } from './mutations.generated';
+import { DepartmentAdminQueryDocument } from './queries.generated';
+import { useTranslation } from 'react-i18next';
 
-export default LoadSingleValueFromCollectionWrapper(
-  useDepartmentAdminQuery,
-  (data, id) => data.convention.departments.find((d) => d.id.toString() === id),
-  function EditDepartment({ value: initialDepartment }) {
-    const [updateDepartment] = useUpdateDepartmentMutation();
-    const navigate = useNavigate();
-
-    usePageTitle(`Editing “${initialDepartment?.name}”`);
-
-    const onSave = useCallback(
-      async (department: typeof initialDepartment) => {
-        await updateDepartment({
-          variables: {
-            id: initialDepartment.id,
-            department: buildDepartmentInput(department),
-          },
-        });
-        navigate('/admin_departments');
+export const action: ActionFunction = async ({ params: { id }, request }) => {
+  try {
+    const formData = await request.formData();
+    await client.mutate({
+      mutation: UpdateDepartmentDocument,
+      variables: {
+        id,
+        department: buildDepartmentInputFromFormData(formData),
       },
-      [navigate, initialDepartment, updateDepartment],
-    );
+      refetchQueries: [{ query: DepartmentAdminQueryDocument }],
+      awaitRefetchQueries: true,
+    });
+    return redirect('../..');
+  } catch (error) {
+    return error;
+  }
+};
 
-    return (
-      <>
-        <h1 className="mb-4">Editing {initialDepartment.name}</h1>
+export const loader = singleDepartmentAdminLoader;
 
-        <DepartmentForm initialDepartment={initialDepartment} onSave={onSave} />
-      </>
-    );
-  },
-);
+function EditDepartment() {
+  const { department: initialDepartment } = useLoaderData() as SingleDepartmentAdminLoaderResult;
+  const navigation = useNavigation();
+  const { t } = useTranslation();
+
+  usePageTitle(`Editing “${initialDepartment?.name}”`);
+
+  return (
+    <>
+      <h1 className="mb-4">Editing {initialDepartment.name}</h1>
+
+      <Form action="." method="PATCH">
+        <DepartmentForm initialDepartment={initialDepartment} disabled={navigation.state !== 'idle'} />
+
+        <input
+          type="submit"
+          className="btn btn-primary"
+          value={t('buttons.save')}
+          aria-label={t('buttons.save')}
+          disabled={navigation.state !== 'idle'}
+        />
+      </Form>
+    </>
+  );
+}
+
+export const Component = EditDepartment;

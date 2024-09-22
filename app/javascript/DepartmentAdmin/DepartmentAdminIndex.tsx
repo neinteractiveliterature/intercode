@@ -1,28 +1,20 @@
-import { Link } from 'react-router-dom';
-import {
-  LoadQueryWrapper,
-  useGraphQLConfirm,
-  sortByLocaleString,
-  useDeleteMutationWithReferenceArrayUpdater,
-} from '@neinteractiveliterature/litform';
+import { Link, useSubmit } from 'react-router-dom';
+import { useGraphQLConfirm, sortByLocaleString } from '@neinteractiveliterature/litform';
 
 import usePageTitle from '../usePageTitle';
-import { useDepartmentAdminQuery } from './queries.generated';
-import { useDeleteDepartmentMutation } from './mutations.generated';
+import { useDepartmentAdminLoader } from './loaders';
+import { useTranslation } from 'react-i18next';
 
-export default LoadQueryWrapper(useDepartmentAdminQuery, function DepartmentAdminIndex({ data }) {
+function DepartmentAdminIndex() {
+  const data = useDepartmentAdminLoader();
   const confirm = useGraphQLConfirm();
-  const [deleteDepartment] = useDeleteMutationWithReferenceArrayUpdater(
-    useDeleteDepartmentMutation,
-    data.convention,
-    'departments',
-    (department) => ({ id: department.id }),
-  );
-  usePageTitle('Departments');
+  const { t } = useTranslation();
+  const submit = useSubmit();
+  usePageTitle(t('navigation.admin.departments'));
 
   return (
     <>
-      <h1 className="mb-4">Departments</h1>
+      <h1 className="mb-4">{t('navigation.admin.departments')}</h1>
 
       <table className="table table-striped">
         <thead>
@@ -48,7 +40,7 @@ export default LoadQueryWrapper(useDepartmentAdminQuery, function DepartmentAdmi
                   className="btn btn-sm btn-outline-danger me-2"
                   onClick={() =>
                     confirm({
-                      action: () => deleteDepartment(department),
+                      action: () => submit({}, { action: `./${department.id}`, method: 'DELETE' }),
                       prompt: `Are you sure you want to delete the department “${department.name}”?`,
                     })
                   }
@@ -70,4 +62,6 @@ export default LoadQueryWrapper(useDepartmentAdminQuery, function DepartmentAdmi
       </Link>
     </>
   );
-});
+}
+
+export const Component = DepartmentAdminIndex;

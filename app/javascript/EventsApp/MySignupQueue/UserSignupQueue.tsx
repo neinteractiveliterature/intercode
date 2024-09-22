@@ -2,19 +2,16 @@ import React, { useContext } from 'react';
 import { UserConProfileRankedChoiceQueueFieldsFragment } from './queries.generated';
 import { useTranslation } from 'react-i18next';
 import { ErrorDisplay, LoadingIndicator, useGraphQLConfirm } from '@neinteractiveliterature/litform';
-import {
-  useDeleteSignupRankedChoiceMutation,
-  useUpdateSignupRankedChoicePriorityMutation,
-} from './mutations.generated';
-import { InternalRefetchQueriesInclude } from '@apollo/client';
+import { InternalRefetchQueriesInclude, useMutation } from '@apollo/client';
 import RankedChoicePriorityIndicator from './RankedChoicePriorityIndicator';
 import buildEventUrl from '../buildEventUrl';
-import { Link } from 'react-router-dom';
+import { Link, useRevalidator } from 'react-router-dom';
 import { useAppDateTimeFormat } from '../../TimeUtils';
 import { DateTime } from 'luxon';
 import classNames from 'classnames';
 import { usePendingChoices } from './usePendingChoices';
 import AppRootContext from '../../AppRootContext';
+import { DeleteSignupRankedChoiceDocument, UpdateSignupRankedChoicePriorityDocument } from './mutations.generated';
 
 export type UserSignupQueueProps = {
   userConProfile: UserConProfileRankedChoiceQueueFieldsFragment;
@@ -28,13 +25,18 @@ function UserSignupQueue({ userConProfile, refetchQueries, readOnly }: UserSignu
   const confirm = useGraphQLConfirm();
   const formatDateTime = useAppDateTimeFormat();
   const { timezoneName } = useContext(AppRootContext);
-  const [deleteSignupRankedChoice] = useDeleteSignupRankedChoiceMutation({
+  const revalidator = useRevalidator();
+  const [deleteSignupRankedChoice] = useMutation(DeleteSignupRankedChoiceDocument, {
     refetchQueries,
+    onCompleted: revalidator.revalidate,
   });
-  const [updateSignupRankedChoicePriority, { loading: updatePriorityLoading }] =
-    useUpdateSignupRankedChoicePriorityMutation({
+  const [updateSignupRankedChoicePriority, { loading: updatePriorityLoading }] = useMutation(
+    UpdateSignupRankedChoicePriorityDocument,
+    {
       refetchQueries,
-    });
+      onCompleted: revalidator.revalidate,
+    },
+  );
 
   return (
     <section className="card">

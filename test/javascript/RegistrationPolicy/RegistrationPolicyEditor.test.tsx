@@ -6,9 +6,10 @@ import RegistrationPolicyEditor, {
 } from '../../../app/javascript/RegistrationPolicy/RegistrationPolicyEditor';
 import { RegistrationPolicy, RegistrationPolicyBucket } from '../../../app/javascript/graphqlTypes.generated';
 import { EditingRegistrationBucket } from '../../../app/javascript/RegistrationPolicy/RegistrationBucketRow';
+import { vi } from 'vitest';
 
 describe('RegistrationPolicyEditor', () => {
-  const onChange = jest.fn<void, [RegistrationPolicy]>();
+  const onChange = vi.fn<(rp: RegistrationPolicy) => void>();
   beforeEach(onChange.mockReset);
 
   const defaultRegistrationPolicyBucket: RegistrationPolicyBucket = {

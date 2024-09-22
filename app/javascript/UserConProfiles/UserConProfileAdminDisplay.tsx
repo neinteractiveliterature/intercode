@@ -1,11 +1,11 @@
-import { useMemo, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Suspense, useMemo, useState } from 'react';
+import { ActionFunction, Link, replace, useFetcher, useParams, useRouteLoaderData } from 'react-router-dom';
 import {
   useConfirm,
   useModal,
   ErrorDisplay,
-  PageLoadingIndicator,
   BootstrapFormTextarea,
+  LoadingIndicator,
 } from '@neinteractiveliterature/litform';
 import upperFirst from 'lodash/upperFirst';
 
@@ -13,16 +13,42 @@ import FormItemDisplay from '../FormPresenter/ItemDisplays/FormItemDisplay';
 import TicketAdminSection from './TicketAdminSection';
 import UserConProfileSignupsCard from '../EventsApp/SignupAdmin/UserConProfileSignupsCard';
 import usePageTitle from '../usePageTitle';
-import useValueUnless from '../useValueUnless';
 import Gravatar from '../Gravatar';
-import { useDeleteUserConProfileMutation } from './mutations.generated';
-import { useUserConProfileAdminQuery } from './queries.generated';
+import { UserConProfileAdminQueryData } from './queries.generated';
 import deserializeFormResponse from '../Models/deserializeFormResponse';
 import { getSortedParsedFormItems } from '../Models/Form';
 import humanize from '../humanize';
 import Modal from 'react-bootstrap4-modal';
 import useAsyncFunction from '../useAsyncFunction';
 import { Trans, useTranslation } from 'react-i18next';
+import { NamedRoute } from '../AppRouter';
+import { client } from 'useIntercodeApolloClient';
+import { DeleteUserConProfileDocument } from './mutations.generated';
+import invariant from 'tiny-invariant';
+import { UserConProfile } from 'graphqlTypes.generated';
+
+export const action: ActionFunction = async ({ request, params: { id } }) => {
+  invariant(id != null);
+  try {
+    if (request.method === 'DELETE') {
+      await client.mutate({
+        mutation: DeleteUserConProfileDocument,
+        variables: { userConProfileId: id },
+        update: (cache) => {
+          cache.modify<UserConProfile>({
+            id: cache.identify({ __typename: 'UserConProfile', id }),
+            fields: (value, { DELETE }) => DELETE,
+          });
+        },
+      });
+      return replace('/user_con_profiles');
+    } else {
+      return new Response(null, { status: 404 });
+    }
+  } catch (error) {
+    return error;
+  }
+};
 
 async function becomeUser(userConProfileId: string, justification: string) {
   const formData = new FormData();
@@ -107,32 +133,17 @@ function UserConProfileAdminDisplay(): JSX.Element {
   if (userConProfileId == null) {
     throw new Error('userConProfileId not found in params');
   }
-  const navigate = useNavigate();
-  const { data, loading, error } = useUserConProfileAdminQuery({
-    variables: { id: userConProfileId },
-  });
-  const formItems = useMemo(
-    () => (loading || error || !data ? [] : getSortedParsedFormItems(data.convention.user_con_profile_form)),
-    [data, loading, error],
-  );
-  const formResponse = useMemo(
-    () => (loading || error || !data ? null : deserializeFormResponse(data.convention.user_con_profile)),
-    [data, loading, error],
-  );
+  const data = useRouteLoaderData(NamedRoute.AdminUserConProfile) as UserConProfileAdminQueryData;
+  const formItems = useMemo(() => getSortedParsedFormItems(data.convention.user_con_profile_form), [data]);
+  const formResponse = useMemo(() => deserializeFormResponse(data.convention.user_con_profile), [data]);
   const confirm = useConfirm();
-  const [deleteUserConProfile] = useDeleteUserConProfileMutation();
   const becomeUserModal = useModal<{ userConProfileId: string; userConProfileName: string }>();
+  const fetcher = useFetcher();
 
-  usePageTitle(useValueUnless(() => data?.convention.user_con_profile.name, error || loading));
+  usePageTitle(data.convention.user_con_profile.name);
 
-  const deleteConfirmed = async () => {
-    if (!data) {
-      return;
-    }
-    await deleteUserConProfile({
-      variables: { userConProfileId: data.convention.user_con_profile.id },
-    });
-    navigate('/user_con_profiles', { replace: true });
+  const deleteConfirmed = () => {
+    fetcher.submit(null, { method: 'DELETE' });
   };
 
   const renderFormItems = () =>
@@ -233,14 +244,6 @@ function UserConProfileAdminDisplay(): JSX.Element {
     return <UserConProfileSignupsCard userConProfileId={data.convention.user_con_profile.id} showWithdrawFromAll />;
   };
 
-  if (loading) {
-    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
   if (!data) {
     return <ErrorDisplay stringError={t('errors.noData')} />;
   }
@@ -276,7 +279,9 @@ function UserConProfileAdminDisplay(): JSX.Element {
         </table>
 
         {data.convention.ticket_mode !== 'disabled' && (
-          <TicketAdminSection userConProfile={data.convention.user_con_profile} convention={data.convention} />
+          <Suspense fallback={<LoadingIndicator />}>
+            <TicketAdminSection userConProfile={data.convention.user_con_profile} convention={data.convention} />
+          </Suspense>
         )}
       </div>
 
@@ -288,4 +293,4 @@ function UserConProfileAdminDisplay(): JSX.Element {
   );
 }
 
-export default UserConProfileAdminDisplay;
+export const Component = UserConProfileAdminDisplay;

@@ -9,29 +9,25 @@ import RunCapacityGraph from '../EventsApp/EventPage/RunCapacityGraph';
 import { RankedChoiceDecisionValue, SignupAutomationMode, SignupRequestState } from '../graphqlTypes.generated';
 import {
   SignupModerationQueuePageQueryData,
+  SignupModerationQueuePageQueryDocument,
   SignupModerationQueueQueryData,
+  SignupModerationQueueQueryDocument,
   SignupModerationSignupRequestFieldsFragment,
-  useSignupModerationQueuePageQuerySuspenseQuery,
-  useSignupModerationQueueQuery,
 } from './queries.generated';
-import {
-  useAcceptSignupRequestMutation,
-  useRejectSignupRequestMutation,
-  useRerunModeratedRankedChoiceSignupRoundMutation,
-} from './mutations.generated';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
 import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
 import UserConProfileWithGravatarCell from '../Tables/UserConProfileWithGravatarCell';
 import TimestampCell from '../Tables/TimestampCell';
 import { useFormatRunTimespan } from '../EventsApp/runTimeFormatting';
-import { Link } from 'react-router-dom';
+import { Link, LoaderFunction, useFetcher, useLoaderData } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
-import { useApolloClient } from '@apollo/client';
 import { ParsedSignupRound, parseSignupRounds } from '../SignupRoundUtils';
 import { describeSignupRound } from '../SignupRoundsAdmin/describeSignupRound';
 import { describeDecision } from '../SignupRoundsAdmin/RankedChoiceSignupDecisionsPage';
 import { sortBy } from 'lodash';
+import { client } from '../useIntercodeApolloClient';
+import { ApolloError } from '@apollo/client';
 
 type SignupModerationContextValue = {
   acceptClicked: (signupRequest: SignupModerationSignupRequestFieldsFragment) => void;
@@ -295,15 +291,18 @@ function getPossibleColumns(
   ];
 }
 
+export const loader: LoaderFunction = async () => {
+  const { data } = await client.query({ query: SignupModerationQueuePageQueryDocument });
+  return data;
+};
+
 function SignupModerationQueue(): JSX.Element {
   const { t } = useTranslation();
-  const { data: pageData, error: pageDataError } = useSignupModerationQueuePageQuerySuspenseQuery();
-  const [acceptSignupRequest] = useAcceptSignupRequestMutation();
-  const [rejectSignupRequest] = useRejectSignupRequestMutation();
-  const [rerunModeratedRankedChoiceSignupRound] = useRerunModeratedRankedChoiceSignupRoundMutation();
-  const apolloClient = useApolloClient();
+  const pageData = useLoaderData() as SignupModerationQueuePageQueryData;
   const confirm = useConfirm();
   const getPossibleColumnsWithTranslation = useCallback(() => getPossibleColumns(t), [t]);
+  const fetcher = useFetcher();
+  const error = fetcher.data instanceof Error ? fetcher.data : undefined;
 
   const parsedSignupRounds = useMemo(
     () => parseSignupRounds(pageData.convention.signup_rounds),
@@ -311,7 +310,7 @@ function SignupModerationQueue(): JSX.Element {
   );
 
   const { tableInstance, loading } = useReactTableWithTheWorks({
-    useQuery: useSignupModerationQueueQuery,
+    query: SignupModerationQueueQueryDocument,
     storageKeyPrefix: 'signupModerationQueue',
     getData: (result) => result.data.convention.signup_requests_paginated.entries,
     getPages: (result) => result.data.convention.signup_requests_paginated.total_pages,
@@ -344,7 +343,11 @@ function SignupModerationQueue(): JSX.Element {
               <p className="mb-0">{t('admin.signupModeration.acceptPromptActions')}</p>
             </>
           ),
-          action: () => acceptSignupRequest({ variables: { id: signupRequest.id } }),
+          action: () =>
+            fetcher.submit(null, {
+              action: `/signup_moderation/signup_requests/${signupRequest.id}/accept`,
+              method: 'PATCH',
+            }),
           renderError: (acceptError) => <ErrorDisplay graphQLError={acceptError} />,
         }),
       parsedSignupRounds,
@@ -359,34 +362,29 @@ function SignupModerationQueue(): JSX.Element {
               <Trans i18nKey="admin.signupModeration.rejectPrompt" />
             </p>
           ),
-          action: () => rejectSignupRequest({ variables: { id: signupRequest.id } }),
+          action: () =>
+            fetcher.submit(null, {
+              action: `/signup_moderation/signup_requests/${signupRequest.id}/reject`,
+              method: 'PATCH',
+            }),
           renderError: (acceptError) => <ErrorDisplay graphQLError={acceptError} />,
         }),
       rerunSignupRound: async (id: string) => {
-        await rerunModeratedRankedChoiceSignupRound({ variables: { id } });
-        await apolloClient.resetStore();
+        fetcher.submit(null, {
+          action: `/signup_moderation/signup_rounds/${id}/rerun`,
+          method: 'PATCH',
+        });
       },
     }),
-    [
-      confirm,
-      rejectSignupRequest,
-      acceptSignupRequest,
-      t,
-      apolloClient,
-      rerunModeratedRankedChoiceSignupRound,
-      parsedSignupRounds,
-    ],
+    [confirm, t, parsedSignupRounds, fetcher],
   );
-
-  if (pageDataError) {
-    return <ErrorDisplay graphQLError={pageDataError} />;
-  }
 
   return (
     <SignupModerationContext.Provider value={contextValue}>
+      <ErrorDisplay graphQLError={error as ApolloError} />
       <ReactTableWithTheWorks tableInstance={tableInstance} loading={loading} />
     </SignupModerationContext.Provider>
   );
 }
 
-export default SignupModerationQueue;
+export const Component = SignupModerationQueue;

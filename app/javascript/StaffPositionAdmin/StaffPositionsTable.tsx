@@ -1,16 +1,9 @@
 import { Fragment, useContext, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, LoaderFunction, useFetcher, useLoaderData } from 'react-router-dom';
 import groupBy from 'lodash/groupBy';
 import flatMap from 'lodash/flatMap';
 import { assertNever } from 'assert-never';
-import {
-  useConfirm,
-  ErrorDisplay,
-  sortByLocaleString,
-  DisclosureTriangle,
-  LoadQueryWrapper,
-  useDeleteMutationWithReferenceArrayUpdater,
-} from '@neinteractiveliterature/litform';
+import { useConfirm, ErrorDisplay, sortByLocaleString, DisclosureTriangle } from '@neinteractiveliterature/litform';
 
 import PermissionNames from '../../../config/permission_names.json';
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
@@ -19,9 +12,9 @@ import { joinReact } from '../RenderingUtils';
 import Gravatar from '../Gravatar';
 import AppRootContext from '../AppRootContext';
 import { DropdownMenu } from '../UIComponents/DropdownMenu';
-import { StaffPositionsQueryData, useStaffPositionsQuery } from './queries.generated';
+import { StaffPositionsQueryData, StaffPositionsQueryDocument } from './queries.generated';
 import { PolymorphicPermission } from '../Permissions/PermissionUtils';
-import { useDeleteStaffPositionMutation } from './mutations.generated';
+import { client } from '../useIntercodeApolloClient';
 
 type UserConProfilesListProps = {
   userConProfiles: StaffPositionsQueryData['convention']['staff_positions'][0]['user_con_profiles'];
@@ -155,16 +148,16 @@ function PermissionsDescription({ permissions }: PermissionsDescriptionProps) {
   );
 }
 
-export default LoadQueryWrapper(useStaffPositionsQuery, function StaffPositionsTable({ data }) {
+export const loader: LoaderFunction = async () => {
+  const { data } = await client.query<StaffPositionsQueryData>({ query: StaffPositionsQueryDocument });
+  return data;
+};
+
+function StaffPositionsTable() {
+  const data = useLoaderData() as StaffPositionsQueryData;
   const { conventionDomain } = useContext(AppRootContext);
   const confirm = useConfirm();
-
-  const [deleteStaffPosition] = useDeleteMutationWithReferenceArrayUpdater(
-    useDeleteStaffPositionMutation,
-    data.convention,
-    'staff_positions',
-    (staffPosition) => ({ input: { id: staffPosition.id } }),
-  );
+  const fetcher = useFetcher();
 
   usePageTitle('Staff positions');
 
@@ -216,7 +209,7 @@ export default LoadQueryWrapper(useStaffPositionsQuery, function StaffPositionsT
             onClick={() =>
               confirm({
                 prompt: `Are you sure you want to delete the staff position ${staffPosition.name}?`,
-                action: () => deleteStaffPosition(staffPosition),
+                action: () => fetcher.submit({}, { action: `/staff_positions/${staffPosition.id}`, method: 'DELETE' }),
                 renderError: (e) => <ErrorDisplay graphQLError={e} />,
               })
             }
@@ -255,4 +248,6 @@ export default LoadQueryWrapper(useStaffPositionsQuery, function StaffPositionsT
       </Link>
     </div>
   );
-});
+}
+
+export const Component = StaffPositionsTable;

@@ -1,10 +1,16 @@
-import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
-
 import TabbedMailingList from './TabbedMailingList';
 import usePageTitle from '../usePageTitle';
-import { useEventProposersQuery } from './queries.generated';
+import { EventProposersQueryData, EventProposersQueryDocument } from './queries.generated';
+import { client } from '../useIntercodeApolloClient';
+import { LoaderFunction, useLoaderData } from 'react-router';
 
-export default LoadQueryWrapper(useEventProposersQuery, function EventProposers({ data }) {
+export const loader: LoaderFunction = async () => {
+  const { data } = await client.query<EventProposersQueryData>({ query: EventProposersQueryDocument });
+  return data;
+};
+
+function EventProposers() {
+  const data = useLoaderData() as EventProposersQueryData;
   usePageTitle('Event proposers');
 
   return (
@@ -18,4 +24,6 @@ export default LoadQueryWrapper(useEventProposersQuery, function EventProposers(
       />
     </>
   );
-});
+}
+
+export const Component = EventProposers;

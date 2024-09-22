@@ -4,16 +4,17 @@ import { Link, useLocation } from 'react-router-dom';
 import AssignDocHeader from './AssignDocHeader';
 import CompactAssignDocHeader from './CompactAssignDocHeader';
 import findClass from './findClass';
-import { LiquidAssignsQueryFromLocationData } from './useLiquidAssignsQueryFromLocation';
+import { LiquidDocsLoaderResult, useLiquidDocs } from './loader';
 
 export type AssignDocLinkProps = {
-  assign: LiquidAssignsQueryFromLocationData['cmsParent']['liquidAssigns'][0];
+  assign: LiquidDocsLoaderResult['sortedAssigns'][number];
   compact?: boolean;
   prefix?: string;
   preAssignNameContent?: React.ReactNode;
 };
 
 function AssignDocLink({ assign, compact = false, prefix, preAssignNameContent }: AssignDocLinkProps): JSX.Element {
+  const { docData } = useLiquidDocs();
   const location = useLocation();
 
   const renderCard = () => (
@@ -28,7 +29,7 @@ function AssignDocLink({ assign, compact = false, prefix, preAssignNameContent }
     </div>
   );
 
-  const assignClass = findClass(assign.drop_class_name);
+  const assignClass = findClass(docData, assign.drop_class_name);
   if (!assignClass) {
     return renderCard();
   }

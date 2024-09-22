@@ -4,6 +4,10 @@ class GraphqlOperation
     names.map { |name| new(name:, document: json_data.fetch(name)) }
   end
 
+  def self.find(name)
+    by_name(name).first
+  end
+
   attr_reader :document, :name
 
   def initialize(name:, document:)

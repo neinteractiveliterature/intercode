@@ -3,8 +3,8 @@ import Select, { Props as SelectProps } from 'react-select';
 import { DocumentNode, useQuery } from '@apollo/client';
 import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import { AdminProductsQueryData, AdminProductsQueryDocument } from '../Store/queries.generated';
 import FourOhFourPage from '../FourOhFourPage';
+import { AdminProductsQueryData, AdminProductsQueryDocument } from 'Store/ProductAdmin/queries.generated';
 
 export type ProductSelectProps<
   QueryType extends AdminProductsQueryData,

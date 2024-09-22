@@ -2,44 +2,7 @@ import { FormGroupWithLabel } from '@neinteractiveliterature/litform';
 import UserConProfileSelect from '../BuiltInFormControls/UserConProfileSelect';
 import { DefaultUserConProfilesQueryData } from '../BuiltInFormControls/selectDefaultQueries.generated';
 import { useEffect, useState } from 'react';
-import { Route, Routes, useNavigate } from 'react-router';
-import {
-  SignupModerationAttendeeRankedChoicesQueryDocument,
-  useSignupModerationAttendeeRankedChoicesQuery,
-} from './queries.generated';
-import { LoadQueryFromParamsWrapper } from '../GraphqlLoadingWrappers';
-import UserSignupQueue from '../EventsApp/MySignupQueue/UserSignupQueue';
-import UserConProfileSignupsCard from '../EventsApp/SignupAdmin/UserConProfileSignupsCard';
-
-const UserRankedChoiceQueue = LoadQueryFromParamsWrapper(
-  useSignupModerationAttendeeRankedChoicesQuery,
-  ({ userConProfileId }: { userConProfileId: string }) => ({ userConProfileId }),
-  ({ data }) => {
-    return (
-      <>
-        <h3>{data.convention.user_con_profile.name_without_nickname}</h3>
-
-        <div className="row">
-          <div className="col-12 col-md-8">
-            <UserSignupQueue
-              userConProfile={data.convention.user_con_profile}
-              refetchQueries={[
-                {
-                  query: SignupModerationAttendeeRankedChoicesQueryDocument,
-                  variables: { userConProfileId: data.convention.user_con_profile.id },
-                },
-              ]}
-              readOnly={true}
-            />
-          </div>
-          <div className="col-12 col-md-4">
-            <UserConProfileSignupsCard userConProfileId={data.convention.user_con_profile.id} />
-          </div>
-        </div>
-      </>
-    );
-  },
-);
+import { Outlet, useNavigate } from 'react-router';
 
 type UserConProfileType = NonNullable<
   DefaultUserConProfilesQueryData['convention']
@@ -67,11 +30,9 @@ function RankedChoiceQueue() {
         )}
       </FormGroupWithLabel>
 
-      <Routes>
-        <Route path=":userConProfileId" element={<UserRankedChoiceQueue />} />
-      </Routes>
+      <Outlet />
     </>
   );
 }
 
-export default RankedChoiceQueue;
+export const Component = RankedChoiceQueue;

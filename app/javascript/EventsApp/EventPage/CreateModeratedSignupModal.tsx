@@ -1,21 +1,22 @@
 import { useContext, useMemo } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
-import { ApolloError, useApolloClient } from '@apollo/client';
+import { ApolloError, useMutation, useSuspenseQuery } from '@apollo/client';
 import classnames from 'classnames';
-import { ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import AppRootContext from '../../AppRootContext';
 import { timespanFromRun } from '../../TimespanUtils';
 import useAsyncFunction from '../../useAsyncFunction';
 import {
-  CreateModeratedSignupModalQueryData,
-  CreateModeratedSignupModalQueryVariables,
+  CreateModeratedSignupModalQueryDocument,
   EventPageQueryData,
   EventPageQueryDocument,
-  useCreateModeratedSignupModalQuery,
 } from './queries.generated';
 import { SignupOption } from './buildSignupOptions';
-import { useCreateSignupRankedChoiceMutation, useCreateSignupRequestMutation } from './mutations.generated';
+import { CreateSignupRankedChoiceDocument, CreateSignupRequestDocument } from './mutations.generated';
+import { useRevalidator } from 'react-router';
+import { useTranslation } from 'react-i18next';
+import { client } from '../../useIntercodeApolloClient';
 
 export type CreateModeratedSignupModalProps = {
   visible: boolean;
@@ -25,95 +26,97 @@ export type CreateModeratedSignupModalProps = {
   signupOption?: SignupOption;
 };
 
-export default LoadQueryWrapper<
-  CreateModeratedSignupModalQueryData,
-  CreateModeratedSignupModalQueryVariables,
-  CreateModeratedSignupModalProps
->(
-  useCreateModeratedSignupModalQuery,
-  function CreateModeratedSignupModal({ visible, close, run, event, signupOption, data }): JSX.Element {
-    const { conventionName, timezoneName } = useContext(AppRootContext);
-    const [createMutate] = useCreateSignupRequestMutation({
-      refetchQueries: () => [{ query: EventPageQueryDocument, variables: { eventId: event.id } }],
+export default function CreateModeratedSignupModal({
+  visible,
+  close,
+  run,
+  event,
+  signupOption,
+}: CreateModeratedSignupModalProps): JSX.Element {
+  const { data } = useSuspenseQuery(CreateModeratedSignupModalQueryDocument);
+  const { conventionName, timezoneName } = useContext(AppRootContext);
+  const [createMutate] = useMutation(CreateSignupRequestDocument, {
+    refetchQueries: () => [{ query: EventPageQueryDocument, variables: { eventId: event.id } }],
+  });
+  const [createSignupRequest, createError, createInProgress] = useAsyncFunction(createMutate);
+  const runTimespan = useMemo(() => timespanFromRun(timezoneName, event, run), [timezoneName, event, run]);
+  const [createSignupRankedChoiceMutate] = useMutation(CreateSignupRankedChoiceDocument);
+  const revalidator = useRevalidator();
+  const { t } = useTranslation();
+
+  const conflictingSignup = useMemo(() => {
+    return (data.convention.my_profile?.signups || []).find((signup) => {
+      const timespan = timespanFromRun(timezoneName, signup.run.event, signup.run);
+
+      return (
+        !(event.can_play_concurrently || signup.run.event.can_play_concurrently) &&
+        timespan.overlapsTimespan(runTimespan) &&
+        signup.state !== 'withdrawn'
+      );
     });
-    const [createSignupRequest, createError, createInProgress] = useAsyncFunction(createMutate);
-    const runTimespan = useMemo(() => timespanFromRun(timezoneName, event, run), [timezoneName, event, run]);
-    const [createSignupRankedChoiceMutate] = useCreateSignupRankedChoiceMutation();
-    const apolloClient = useApolloClient();
+  }, [data.convention.my_profile?.signups, event.can_play_concurrently, runTimespan, timezoneName]);
 
-    const conflictingSignup = useMemo(() => {
-      return (data.convention.my_profile?.signups || []).find((signup) => {
-        const timespan = timespanFromRun(timezoneName, signup.run.event, signup.run);
+  const confirmClicked = async () => {
+    if (!signupOption) {
+      Rollbar?.error('CreateModeratedSignupModal: signupOption is null!');
+      throw new Error(
+        `Signup option not found in CreateModeratedSignupModal. This is probably a bug; we've been notified automatically and will look at it as soon as possible.`,
+      );
+    }
 
-        return (
-          !(event.can_play_concurrently || signup.run.event.can_play_concurrently) &&
-          timespan.overlapsTimespan(runTimespan) &&
-          signup.state !== 'withdrawn'
-        );
+    if (signupOption.action === 'ADD_TO_QUEUE') {
+      await createSignupRankedChoiceMutate({
+        variables: {
+          targetRunId: run.id,
+          requestedBucketKey: signupOption.bucket?.key,
+        },
       });
-    }, [data.convention.my_profile?.signups, event.can_play_concurrently, runTimespan, timezoneName]);
+    } else {
+      await createSignupRequest({
+        variables: {
+          targetRunId: run.id,
+          requestedBucketKey: signupOption.bucket?.key,
+          replaceSignupId: conflictingSignup?.id,
+        },
+      });
+    }
 
-    const confirmClicked = async () => {
-      if (!signupOption) {
-        Rollbar?.error('CreateModeratedSignupModal: signupOption is null!');
-        throw new Error(
-          `Signup option not found in CreateModeratedSignupModal. This is probably a bug; we've been notified automatically and will look at it as soon as possible.`,
-        );
-      }
+    await client.resetStore();
+    revalidator.revalidate();
+    close();
+  };
 
-      if (signupOption.action === 'ADD_TO_QUEUE') {
-        await createSignupRankedChoiceMutate({
-          variables: {
-            targetRunId: run.id,
-            requestedBucketKey: signupOption.bucket?.key,
-          },
-        });
+  return (
+    <Modal visible={visible}>
+      <div className="modal-header">Signup request</div>
 
-        await apolloClient.resetStore();
-      } else {
-        await createSignupRequest({
-          variables: {
-            targetRunId: run.id,
-            requestedBucketKey: signupOption.bucket?.key,
-            replaceSignupId: conflictingSignup?.id,
-          },
-        });
-      }
-      close();
-    };
+      <div className="modal-body">
+        <>
+          <p className={classnames({ 'm-0': !conflictingSignup })}>
+            {conventionName}
+            {' uses signup moderation.  Your request to sign up will go to a staff member for '}
+            review, and you’ll be notified by email when it’s approved.
+          </p>
 
-    return (
-      <Modal visible={visible}>
-        <div className="modal-header">Signup request</div>
+          {conflictingSignup && (
+            <div className="alert alert-warning">
+              You are currently signed up for <strong>{conflictingSignup.run.event.title}</strong>. If you continue, and
+              your signup request is approved, you’ll be automatically withdrawn from this conflicting event.
+            </div>
+          )}
+        </>
 
-        <div className="modal-body">
-          <>
-            <p className={classnames({ 'm-0': !conflictingSignup })}>
-              {conventionName}
-              {' uses signup moderation.  Your request to sign up will go to a staff member for '}
-              review, and you’ll be notified by email when it’s approved.
-            </p>
+        <ErrorDisplay graphQLError={createError as ApolloError} />
+      </div>
 
-            {conflictingSignup && (
-              <div className="alert alert-warning">
-                You are currently signed up for <strong>{conflictingSignup.run.event.title}</strong>. If you continue,
-                and your signup request is approved, you’ll be automatically withdrawn from this conflicting event.
-              </div>
-            )}
-          </>
-
-          <ErrorDisplay graphQLError={createError as ApolloError} />
-        </div>
-
-        <div className="modal-footer">
-          <button className="btn btn-secondary" type="button" onClick={close} disabled={createInProgress}>
-            Cancel
-          </button>
-          <button className="btn btn-primary" type="button" onClick={confirmClicked} disabled={createInProgress}>
-            Confirm
-          </button>
-        </div>
-      </Modal>
-    );
-  },
-);
+      <div className="modal-footer">
+        <button className="btn btn-secondary" type="button" onClick={close} disabled={createInProgress}>
+          {t('buttons.cancel')}
+        </button>
+        <button className="btn btn-primary" type="button" onClick={confirmClicked} disabled={createInProgress}>
+          {t('buttons.confirm')}
+        </button>
+      </div>
+    </Modal>
+  );
+}

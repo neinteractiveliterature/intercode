@@ -5,11 +5,12 @@ import ScheduledValueTimespanRow, {
   ScheduledValueTimespanRowProps,
 } from '../../../app/javascript/BuiltInFormControls/ScheduledValueTimespanRow';
 import { EditingTimespan } from '../../../app/javascript/BuiltInFormControls/ScheduledValueEditor';
+import { vi } from 'vitest';
 
 describe('ScheduledValueTimespanRow', () => {
-  const finishDidChange = jest.fn();
-  const valueDidChange = jest.fn();
-  const deleteClicked = jest.fn();
+  const finishDidChange = vi.fn();
+  const valueDidChange = vi.fn();
+  const deleteClicked = vi.fn();
 
   const timespanStart = '2017-01-01T00:00:00Z';
   const timespanFinish = '2017-01-02T00:00:00Z';

@@ -1,9 +1,7 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
-const defaultOptions = {} as const;
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type SignupRoundFieldsFragment = { __typename: 'SignupRound', id: string, maximum_event_signups: string, ranked_choice_order?: Types.RankedChoiceOrder | null, start?: string | null, executed_at?: string | null };
 
 export type SignupRoundsAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
@@ -22,135 +20,6 @@ export type SignupRoundRankedChoiceDecisionsTableQueryVariables = Types.Exact<{
 
 export type SignupRoundRankedChoiceDecisionsTableQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, signup_round: { __typename: 'SignupRound', id: string, ranked_choice_decisions_paginated: { __typename: 'RankedChoiceDecisionsPagination', total_pages: number, entries: Array<{ __typename: 'RankedChoiceDecision', id: string, created_at: string, decision: Types.RankedChoiceDecisionValue, reason?: Types.RankedChoiceDecisionReason | null, user_con_profile?: { __typename: 'UserConProfile', id: string, name_without_nickname: string } | null, signup_ranked_choice?: { __typename: 'SignupRankedChoice', id: string, priority: number, requested_bucket_key?: string | null, state: Types.SignupRankedChoiceState, target_run: { __typename: 'Run', id: string, starts_at: string, title_suffix?: string | null, event: { __typename: 'Event', id: string, title?: string | null } } } | null }> } } } };
 
-export const SignupRoundFieldsFragmentDoc = gql`
-    fragment SignupRoundFields on SignupRound {
-  id
-  maximum_event_signups
-  ranked_choice_order
-  start
-  executed_at
-}
-    `;
-export const SignupRoundsAdminQueryDocument = gql`
-    query SignupRoundsAdminQuery {
-  convention: conventionByRequestHost {
-    id
-    signup_rounds {
-      id
-      ...SignupRoundFields
-    }
-  }
-}
-    ${SignupRoundFieldsFragmentDoc}`;
-
-/**
- * __useSignupRoundsAdminQuery__
- *
- * To run a query within a React component, call `useSignupRoundsAdminQuery` and pass it any options that fit your needs.
- * When your component renders, `useSignupRoundsAdminQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useSignupRoundsAdminQuery({
- *   variables: {
- *   },
- * });
- */
-export function useSignupRoundsAdminQuery(baseOptions?: Apollo.QueryHookOptions<SignupRoundsAdminQueryData, SignupRoundsAdminQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<SignupRoundsAdminQueryData, SignupRoundsAdminQueryVariables>(SignupRoundsAdminQueryDocument, options);
-      }
-export function useSignupRoundsAdminQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SignupRoundsAdminQueryData, SignupRoundsAdminQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<SignupRoundsAdminQueryData, SignupRoundsAdminQueryVariables>(SignupRoundsAdminQueryDocument, options);
-        }
-export function useSignupRoundsAdminQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<SignupRoundsAdminQueryData, SignupRoundsAdminQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<SignupRoundsAdminQueryData, SignupRoundsAdminQueryVariables>(SignupRoundsAdminQueryDocument, options);
-        }
-export type SignupRoundsAdminQueryHookResult = ReturnType<typeof useSignupRoundsAdminQuery>;
-export type SignupRoundsAdminQueryLazyQueryHookResult = ReturnType<typeof useSignupRoundsAdminQueryLazyQuery>;
-export type SignupRoundsAdminQuerySuspenseQueryHookResult = ReturnType<typeof useSignupRoundsAdminQuerySuspenseQuery>;
-export type SignupRoundsAdminQueryQueryResult = Apollo.QueryResult<SignupRoundsAdminQueryData, SignupRoundsAdminQueryVariables>;
-export const SignupRoundRankedChoiceDecisionsTableQueryDocument = gql`
-    query SignupRoundRankedChoiceDecisionsTableQuery($signupRoundId: ID!, $page: Int, $perPage: Int, $filters: RankedChoiceDecisionFiltersInput, $sort: [SortInput!]) {
-  convention: conventionByRequestHost {
-    id
-    signup_round(id: $signupRoundId) {
-      id
-      ranked_choice_decisions_paginated(
-        page: $page
-        per_page: $perPage
-        filters: $filters
-        sort: $sort
-      ) {
-        total_pages
-        entries {
-          id
-          created_at
-          decision
-          reason
-          user_con_profile {
-            id
-            name_without_nickname
-          }
-          signup_ranked_choice {
-            id
-            priority
-            requested_bucket_key
-            state
-            target_run {
-              id
-              starts_at
-              title_suffix
-              event {
-                id
-                title
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}
-    `;
-
-/**
- * __useSignupRoundRankedChoiceDecisionsTableQuery__
- *
- * To run a query within a React component, call `useSignupRoundRankedChoiceDecisionsTableQuery` and pass it any options that fit your needs.
- * When your component renders, `useSignupRoundRankedChoiceDecisionsTableQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useSignupRoundRankedChoiceDecisionsTableQuery({
- *   variables: {
- *      signupRoundId: // value for 'signupRoundId'
- *      page: // value for 'page'
- *      perPage: // value for 'perPage'
- *      filters: // value for 'filters'
- *      sort: // value for 'sort'
- *   },
- * });
- */
-export function useSignupRoundRankedChoiceDecisionsTableQuery(baseOptions: Apollo.QueryHookOptions<SignupRoundRankedChoiceDecisionsTableQueryData, SignupRoundRankedChoiceDecisionsTableQueryVariables> & ({ variables: SignupRoundRankedChoiceDecisionsTableQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<SignupRoundRankedChoiceDecisionsTableQueryData, SignupRoundRankedChoiceDecisionsTableQueryVariables>(SignupRoundRankedChoiceDecisionsTableQueryDocument, options);
-      }
-export function useSignupRoundRankedChoiceDecisionsTableQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SignupRoundRankedChoiceDecisionsTableQueryData, SignupRoundRankedChoiceDecisionsTableQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<SignupRoundRankedChoiceDecisionsTableQueryData, SignupRoundRankedChoiceDecisionsTableQueryVariables>(SignupRoundRankedChoiceDecisionsTableQueryDocument, options);
-        }
-export function useSignupRoundRankedChoiceDecisionsTableQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<SignupRoundRankedChoiceDecisionsTableQueryData, SignupRoundRankedChoiceDecisionsTableQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<SignupRoundRankedChoiceDecisionsTableQueryData, SignupRoundRankedChoiceDecisionsTableQueryVariables>(SignupRoundRankedChoiceDecisionsTableQueryDocument, options);
-        }
-export type SignupRoundRankedChoiceDecisionsTableQueryHookResult = ReturnType<typeof useSignupRoundRankedChoiceDecisionsTableQuery>;
-export type SignupRoundRankedChoiceDecisionsTableQueryLazyQueryHookResult = ReturnType<typeof useSignupRoundRankedChoiceDecisionsTableQueryLazyQuery>;
-export type SignupRoundRankedChoiceDecisionsTableQuerySuspenseQueryHookResult = ReturnType<typeof useSignupRoundRankedChoiceDecisionsTableQuerySuspenseQuery>;
-export type SignupRoundRankedChoiceDecisionsTableQueryQueryResult = Apollo.QueryResult<SignupRoundRankedChoiceDecisionsTableQueryData, SignupRoundRankedChoiceDecisionsTableQueryVariables>;
+export const SignupRoundFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"SignupRoundFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"SignupRound"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"maximum_event_signups"}},{"kind":"Field","name":{"kind":"Name","value":"ranked_choice_order"}},{"kind":"Field","name":{"kind":"Name","value":"start"}},{"kind":"Field","name":{"kind":"Name","value":"executed_at"}}]}}]} as unknown as DocumentNode<SignupRoundFieldsFragment, unknown>;
+export const SignupRoundsAdminQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"SignupRoundsAdminQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"convention"},"name":{"kind":"Name","value":"conventionByRequestHost"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"signup_rounds"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"SignupRoundFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"SignupRoundFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"SignupRound"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"maximum_event_signups"}},{"kind":"Field","name":{"kind":"Name","value":"ranked_choice_order"}},{"kind":"Field","name":{"kind":"Name","value":"start"}},{"kind":"Field","name":{"kind":"Name","value":"executed_at"}}]}}]} as unknown as DocumentNode<SignupRoundsAdminQueryData, SignupRoundsAdminQueryVariables>;
+export const SignupRoundRankedChoiceDecisionsTableQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"SignupRoundRankedChoiceDecisionsTableQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"signupRoundId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"page"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"perPage"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"filters"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"RankedChoiceDecisionFiltersInput"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sort"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"SortInput"}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"convention"},"name":{"kind":"Name","value":"conventionByRequestHost"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"signup_round"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"signupRoundId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"ranked_choice_decisions_paginated"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"page"},"value":{"kind":"Variable","name":{"kind":"Name","value":"page"}}},{"kind":"Argument","name":{"kind":"Name","value":"per_page"},"value":{"kind":"Variable","name":{"kind":"Name","value":"perPage"}}},{"kind":"Argument","name":{"kind":"Name","value":"filters"},"value":{"kind":"Variable","name":{"kind":"Name","value":"filters"}}},{"kind":"Argument","name":{"kind":"Name","value":"sort"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sort"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"total_pages"}},{"kind":"Field","name":{"kind":"Name","value":"entries"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"created_at"}},{"kind":"Field","name":{"kind":"Name","value":"decision"}},{"kind":"Field","name":{"kind":"Name","value":"reason"}},{"kind":"Field","name":{"kind":"Name","value":"user_con_profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name_without_nickname"}}]}},{"kind":"Field","name":{"kind":"Name","value":"signup_ranked_choice"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"priority"}},{"kind":"Field","name":{"kind":"Name","value":"requested_bucket_key"}},{"kind":"Field","name":{"kind":"Name","value":"state"}},{"kind":"Field","name":{"kind":"Name","value":"target_run"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"starts_at"}},{"kind":"Field","name":{"kind":"Name","value":"title_suffix"}},{"kind":"Field","name":{"kind":"Name","value":"event"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}}]}}]}}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<SignupRoundRankedChoiceDecisionsTableQueryData, SignupRoundRankedChoiceDecisionsTableQueryVariables>;

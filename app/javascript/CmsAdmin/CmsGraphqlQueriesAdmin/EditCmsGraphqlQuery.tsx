@@ -1,60 +1,63 @@
 import { useState } from 'react';
-import { ApolloError, useApolloClient } from '@apollo/client';
-import { useNavigate } from 'react-router-dom';
+import { ApolloError } from '@apollo/client';
+import { ActionFunction, Form, redirect, useActionData, useLoaderData, useNavigation } from 'react-router-dom';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import CmsGraphqlQueryForm from './CmsGraphqlQueryForm';
-import useAsyncFunction from '../../useAsyncFunction';
 import usePageTitle from '../../usePageTitle';
 
 import 'graphiql/graphiql.css';
-import { useCmsGraphqlQueriesQuery } from './queries.generated';
-import { useUpdateCmsGraphqlQuery } from './mutations.generated';
-import { LoadSingleValueFromCollectionWrapper } from '../../GraphqlLoadingWrappers';
+import { singleCmsGraphqlQueryAdminLoader, SingleCmsGraphqlQueryAdminLoaderResult } from './loaders';
+import { client } from '../../useIntercodeApolloClient';
+import { UpdateCmsGraphqlQueryDocument } from './mutations.generated';
+import { buildCmsGraphqlQueryInputFromFormData } from './buildCmsGraphqlQueryInput';
 
-export default LoadSingleValueFromCollectionWrapper(
-  useCmsGraphqlQueriesQuery,
-  (data, id) => data.cmsParent.cmsGraphqlQueries.find((q) => q.id.toString() === id),
-  function EditCmsGraphqlQuery({ value: initialQuery }) {
-    const navigate = useNavigate();
-    const [query, setQuery] = useState(initialQuery);
-    const [updateMutate] = useUpdateCmsGraphqlQuery();
-    const apolloClient = useApolloClient();
+export const action: ActionFunction = async ({ params: { id }, request }) => {
+  const formData = await request.formData();
 
-    const saveClicked = async () => {
-      await updateMutate({
-        variables: {
-          id: query.id,
-          query: {
-            identifier: query.identifier,
-            admin_notes: query.admin_notes,
-            query: query.query,
-          },
-        },
-      });
+  try {
+    await client.mutate({
+      mutation: UpdateCmsGraphqlQueryDocument,
+      variables: {
+        id: id ?? '',
+        query: buildCmsGraphqlQueryInputFromFormData(formData),
+      },
+    });
+  } catch (e) {
+    return e;
+  }
+  await client.resetStore();
 
-      await apolloClient.resetStore();
-      navigate('/cms_graphql_queries');
-    };
+  return redirect(formData.get('destination')?.toString() ?? '/cms_graphql_queries');
+};
 
-    const [save, saveError, saveInProgress] = useAsyncFunction(saveClicked);
+export const loader = singleCmsGraphqlQueryAdminLoader;
 
-    usePageTitle(`Editing “${initialQuery.identifier}”`);
+function EditCmsGraphqlQuery() {
+  const { graphqlQuery: initialQuery } = useLoaderData() as SingleCmsGraphqlQueryAdminLoaderResult;
+  const [query, setQuery] = useState(initialQuery);
+  const navigation = useNavigation();
+  const saveError = useActionData();
 
-    return (
-      <>
-        <h2 className="mb-4">Edit GraphQL query</h2>
+  const saveInProgress = navigation.state !== 'idle';
 
-        <div className="mb-4">
-          <CmsGraphqlQueryForm value={query} readOnly={saveInProgress} onChange={setQuery} />
-        </div>
+  usePageTitle(`Editing “${initialQuery.identifier}”`);
 
-        <ErrorDisplay graphQLError={saveError as ApolloError} />
+  return (
+    <Form action="." method="PATCH">
+      <h2 className="mb-4">Edit GraphQL query</h2>
 
-        <button type="button" className="btn btn-primary" disabled={saveInProgress} onClick={save}>
-          Save GraphQL query
-        </button>
-      </>
-    );
-  },
-);
+      <div className="mb-4">
+        <CmsGraphqlQueryForm value={query} readOnly={saveInProgress} onChange={setQuery} />
+      </div>
+
+      <ErrorDisplay graphQLError={saveError as ApolloError} />
+
+      <button type="submit" className="btn btn-primary" disabled={saveInProgress}>
+        Save GraphQL query
+      </button>
+    </Form>
+  );
+}
+
+export const Component = EditCmsGraphqlQuery;

@@ -1,8 +1,8 @@
-import { usePreviewMarkdownQuery } from '../../BuiltInFormControls/previewQueries.generated';
-import { LoadQueryWithVariablesWrapper } from '../../GraphqlLoadingWrappers';
+import { useSuspenseQuery } from '@apollo/client';
 import parsePageContent from '../../parsePageContent';
 import Spoiler from '../../Spoiler';
 import { FormResponse } from '../useFormResponse';
+import { PreviewMarkdownQueryDocument } from '../../BuiltInFormControls/previewQueries.generated';
 
 export type MarkdownDisplayProps = {
   renderedMarkdown?: string | null;
@@ -17,12 +17,14 @@ export type UnrenderedMarkdownDisplayProps = {
   markdown?: string | null;
 };
 
-export const UnrenderedMarkdownDisplay = LoadQueryWithVariablesWrapper(
-  usePreviewMarkdownQuery,
-  ({ markdown, formResponse }: UnrenderedMarkdownDisplayProps) => ({
-    markdown: markdown ?? '',
-    eventId: formResponse?.__typename === 'Event' ? formResponse.id : undefined,
-    eventProposalId: formResponse?.__typename === 'EventProposal' ? formResponse.id : undefined,
-  }),
-  ({ data }) => <MarkdownDisplay renderedMarkdown={data.cmsParent.previewMarkdown} />,
-);
+export function UnrenderedMarkdownDisplay({ markdown, formResponse }: UnrenderedMarkdownDisplayProps) {
+  const { data } = useSuspenseQuery(PreviewMarkdownQueryDocument, {
+    variables: {
+      markdown: markdown ?? '',
+      eventId: formResponse?.__typename === 'Event' ? formResponse.id : undefined,
+      eventProposalId: formResponse?.__typename === 'EventProposal' ? formResponse.id : undefined,
+    },
+  });
+
+  return <MarkdownDisplay renderedMarkdown={data.cmsParent.previewMarkdown} />;
+}

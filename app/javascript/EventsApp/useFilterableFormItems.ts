@@ -76,23 +76,23 @@ function mergeFormItemsForFilter(items: TypedFormItem[]): TypedFormItem | undefi
   return items[0];
 }
 
-export default function useFilterableFormItems(convention: CommonConventionDataQueryData['convention']) {
-  return useMemo(
-    () =>
-      Object.values(
-        groupBy(
-          convention.event_categories.flatMap((eventCategory) =>
-            eventCategory.event_form.form_sections.flatMap((formSection) =>
-              parseTypedFormItemArray(
-                formSection.form_items.filter((item) => item.expose_in?.includes(FormItemExposeIn.EventCatalog)),
-              ),
-            ),
-          ) ?? [],
-          (formItem) => formItem.identifier,
+export function getFilterableFormItems(convention: CommonConventionDataQueryData['convention']) {
+  return Object.values(
+    groupBy(
+      convention.event_categories.flatMap((eventCategory) =>
+        eventCategory.event_form.form_sections.flatMap((formSection) =>
+          parseTypedFormItemArray(
+            formSection.form_items.filter((item) => item.expose_in?.includes(FormItemExposeIn.EventCatalog)),
+          ),
         ),
-      )
-        .map(mergeFormItemsForFilter)
-        .filter(notEmpty),
-    [convention.event_categories],
-  );
+      ) ?? [],
+      (formItem) => formItem.identifier,
+    ),
+  )
+    .map(mergeFormItemsForFilter)
+    .filter(notEmpty);
+}
+
+export default function useFilterableFormItems(convention: CommonConventionDataQueryData['convention']) {
+  return useMemo(() => getFilterableFormItems(convention), [convention]);
 }
