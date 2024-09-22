@@ -20734,7 +20734,7 @@ __metadata:
     ts-node: "npm:10.9.2"
     tsx: "npm:^4.16.2"
     typescript: "npm:5.6.2"
-    tzdata: "npm:1.0.41"
+    tzdata: "npm:1.0.42"
     uuid: "npm:10.0.0"
     vite: "npm:^5.4.7"
     vite-plugin-dynamic-base: "npm:^1.1.0"
@@ -22735,10 +22735,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tzdata@npm:1.0.41":
-  version: 1.0.41
-  resolution: "tzdata@npm:1.0.41"
-  checksum: 10c0/88ce89337bd2e0c7c54a4e4070299ce7b58f55e357dfa23c8c6de3912bb92c13e10c08cd5e08dc6c1a14414ba54ef12de5f48b3cd65bf7ca5491497a5065a2bf
+"tzdata@npm:1.0.42":
+  version: 1.0.42
+  resolution: "tzdata@npm:1.0.42"
+  checksum: 10c0/ea575cb1f7b38f85ab50c2a8eb1e34c33ab67b83015482975b6baa86bdd50e8ced9fe9e9a98379ecdb458f10ce8ca06ab5493b479c1f2cf658f8d40314f6b005
   languageName: node
   linkType: hard
 
