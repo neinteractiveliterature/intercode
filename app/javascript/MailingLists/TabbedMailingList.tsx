@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { stringify as csvStringify } from 'csv-string';
+import { stringify as csvStringify } from 'csv-stringify/browser/esm/sync';
 import { saveAs } from 'file-saver';
 import { useTabs, TabBody, TabList } from '@neinteractiveliterature/litform';
 

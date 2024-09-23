@@ -9,6 +9,7 @@
 # Ignore build artifacts
 /bin/*.cjs
 /bin/*.cjs.map
+/bin/chunks
 /bin/assets-manifest.json
 /doc-site/schema
 /test/html_reports
@@ -77,6 +78,7 @@ cookbooks
 /node_modules
 /public/packs
 /public/packs-test
+/public/packs-vite
 /node_modules
 
 # If the dev is keeping pgdumps around for debugging, ignore those

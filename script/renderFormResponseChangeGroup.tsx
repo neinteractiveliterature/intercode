@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import 'regenerator-runtime/runtime';
 
 import ReactDOMServer from 'react-dom/server';
