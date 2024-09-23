@@ -100,3 +100,6 @@ cookbooks
 
 # Ruby heap dumps
 /*.dump
+
+# Vite
+/vite.config.mts.timestamp-*.mjs

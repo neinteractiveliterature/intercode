@@ -2,8 +2,6 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import tsconfigPaths from 'vite-tsconfig-paths';
-import legacy from '@vitejs/plugin-legacy';
-import { dynamicBase } from 'vite-plugin-dynamic-base';
 import { fileURLToPath } from 'url';
 
 const ASSET_PATH =
@@ -14,24 +12,30 @@ function absolutePath(relativePath: string) {
 }
 
 export default defineConfig({
-  plugins: [legacy(), react(), tsconfigPaths(), dynamicBase({ transformIndexHtml: true })],
+  plugins: [react(), tsconfigPaths()],
   resolve: {
     mainFields: ['module'],
   },
-  base: '/__dynamic_base__/',
   define: {
     __DEV__: JSON.stringify(process.env.NODE_ENV !== 'production'),
     NODE_ENV: JSON.stringify(process.env.NODE_ENV ?? 'development'),
     ASSET_PATH: JSON.stringify(ASSET_PATH),
   },
+  experimental: {
+    renderBuiltUrl: (filename, { hostType }) => {
+      if (hostType !== 'js' || filename === 'setPublicPath.ts') {
+        return { relative: true };
+      } else {
+        return { runtime: `window.__intercodeAssetURL(${JSON.stringify(filename)})` };
+      }
+    },
+  },
   build: {
     copyPublicDir: false,
-    outDir: absolutePath('./public/packs-vite'),
     rollupOptions: {
       input: {
         application: absolutePath('./app/javascript/packs/applicationEntry.ts'),
         'application-styles': absolutePath('./app/javascript/packs/applicationStyles.ts'),
-        index: absolutePath('./index.html'),
         ...(process.env.NODE_ENV === 'production'
           ? {}
           : {
@@ -39,13 +43,33 @@ export default defineConfig({
             }),
       },
       output: {
+        dir: absolutePath('./public/packs'),
         entryFileNames: '[name].js',
+        manualChunks: {
+          apollo: ['@apollo/client', 'apollo-upload-client/createUploadLink.mjs'],
+          codemirror: [
+            '@codemirror/state',
+            '@codemirror/view',
+            '@codemirror/language',
+            '@codemirror/lang-html',
+            '@codemirror/lang-json',
+            '@codemirror/lang-markdown',
+            '@lezer/common',
+          ],
+          currencyCodes: ['@breezehr/currency-codes'],
+          graphql: ['graphql'],
+          i18next: ['i18next', 'react-i18next'],
+          lodash: ['lodash'],
+          luxon: ['luxon'],
+          reactRouter: ['react-router', 'react-router-dom'],
+        },
       },
     },
   },
   server: {
     port: 3135,
     host: '0.0.0.0',
+    origin: 'https://assets.intercode.test:3135',
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
@@ -55,6 +79,9 @@ export default defineConfig({
       key: absolutePath('./dev_certificate.key'),
       cert: absolutePath('./dev_certificate.crt'),
       ca: absolutePath('./dev_ca.crt'),
+    },
+    warmup: {
+      clientFiles: [absolutePath('./app/javascript/packs/applicationEntry.ts')],
     },
   },
   test: {
