@@ -6727,10 +6727,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash@npm:4.17.7":
-  version: 4.17.7
-  resolution: "@types/lodash@npm:4.17.7"
-  checksum: 10c0/40c965b5ffdcf7ff5c9105307ee08b782da228c01b5c0529122c554c64f6b7168fc8f11dc79aa7bae4e67e17efafaba685dc3a47e294dbf52a65ed2b67100561
+"@types/lodash@npm:4.17.9":
+  version: 4.17.9
+  resolution: "@types/lodash@npm:4.17.9"
+  checksum: 10c0/54de935e835508b5f835a5dfaedd2b9a299685a21d11e9c5cd2dde57331d03bc2f98b71d2424ca8460f447ecd55a673e45ccdb70e58f9f72745710f6b91abc60
   languageName: node
   linkType: hard
 
@@ -10960,7 +10960,7 @@ __metadata:
     "@graphql-tools/graphql-file-loader": "npm:^8.0.1"
     "@mdx-js/react": "npm:^3.0.0"
     "@svgr/webpack": "npm:8.1.0"
-    "@types/lodash": "npm:4.17.7"
+    "@types/lodash": "npm:4.17.9"
     clsx: "npm:2.1.1"
     entities: "npm:5.0.0"
     file-loader: "npm:6.2.0"
@@ -20598,7 +20598,7 @@ __metadata:
     "@types/events": "npm:3.0.3"
     "@types/file-saver": "npm:2.0.7"
     "@types/js-search": "npm:1.4.4"
-    "@types/lodash": "npm:4.17.7"
+    "@types/lodash": "npm:4.17.9"
     "@types/luxon": "npm:3.4.2"
     "@types/mapbox-gl": "npm:1.13.10"
     "@types/md5": "npm:^2"
