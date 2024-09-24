@@ -6,7 +6,8 @@ let appEntrypointHeaders: Record<(typeof HEADERS_TO_CHECK_FOR_MISMATCH)[number],
 
 async function appEntrypointHeadersMatch() {
   try {
-    const response = await fetch(`${__webpack_public_path__ ?? '/packs/'}application.js`, {
+    // eslint-disable-next-line no-underscore-dangle
+    const response = await fetch(window.__intercodeAssetURL(`application.js`), {
       method: 'HEAD',
       cache: 'no-store',
     });

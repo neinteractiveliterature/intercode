@@ -3,9 +3,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import { fileURLToPath } from 'url';
-
-const ASSET_PATH =
-  process.env.ASSET_PATH || (process.env.NODE_ENV === 'production' ? '/packs/' : 'https://localhost:3135/packs/');
+import { execSync } from 'child_process';
 
 function absolutePath(relativePath: string) {
   return fileURLToPath(new URL(relativePath, import.meta.url));
@@ -17,9 +15,7 @@ export default defineConfig({
     mainFields: ['module'],
   },
   define: {
-    __DEV__: JSON.stringify(process.env.NODE_ENV !== 'production'),
-    NODE_ENV: JSON.stringify(process.env.NODE_ENV ?? 'development'),
-    ASSET_PATH: JSON.stringify(ASSET_PATH),
+    COMMIT_HASH: JSON.stringify(execSync('git rev-parse --short HEAD').toString()),
   },
   experimental: {
     renderBuiltUrl: (filename, { hostType }) => {

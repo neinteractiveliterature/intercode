@@ -130,15 +130,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Set up webpack cache
-        uses: actions/cache@v4
-        id: webpack-cache # use this to check for `cache-hit` (`steps.webpack-cache.outputs.cache-hit != 'true'`)
-        with:
-          path: build-cache
-          key: ${{ runner.os }}-dockerimage-webpack-${{ github.ref }}
-          restore-keys: |
-            ${{ runner.os }}-dockerimage-webpack-${{ github.ref }}-
-            ${{ runner.os }}-dockerimage-webpack-
       - name: Read .node-version
         id: node-version
         run: echo "node-version=$(cat .node-version)" >> $GITHUB_OUTPUT
@@ -151,7 +142,7 @@ jobs:
         run: yarn install
       - name: Log in to registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-      - name: Build webpack bundle
+      - name: Build frontend bundle
         run: yarn run build
       - name: Set up Docker Buildx
         id: buildx

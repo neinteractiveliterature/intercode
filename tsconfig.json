@@ -15,7 +15,7 @@
     "skipLibCheck": true,
     "maxNodeModuleJsDepth": 10,
     "baseUrl": "./app/javascript",
-    "types": ["vitest/globals", "@types/webpack-env"]
+    "types": ["vitest/globals", "vite/client"]
   },
   "include": [
     "./app/javascript/",
@@ -24,8 +24,6 @@
     "buildTimezoneData.js",
     "graphql.config.js",
     "i18next-parser-english.config.cjs",
-    "i18next-parser-non-english.config.cjs",
-    "webpack.config.js",
-    "webpack.cliUtils.config.js"
+    "i18next-parser-non-english.config.cjs"
   ]
 }

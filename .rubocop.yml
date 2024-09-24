@@ -21,8 +21,6 @@ AllCops:
     - bin/setup
     - bin/spring
     - bin/update
-    - bin/webpack
-    - bin/webpack-dev-server
     - bin/yarn
     - db/schema.rb
     - public/uploads/**/*.rb
