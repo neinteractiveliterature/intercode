@@ -4,9 +4,7 @@ import { LoadingIndicator } from '@neinteractiveliterature/litform';
 import { lazyWithAppEntrypointHeadersCheck } from '../checkAppEntrypointHeadersMatch';
 import type { SyncColorPickerProps } from './SyncColorPicker';
 
-const SyncColorPicker = lazyWithAppEntrypointHeadersCheck(
-  () => import(/* webpackChunkName: "color-picker" */ './SyncColorPicker'),
-);
+const SyncColorPicker = lazyWithAppEntrypointHeadersCheck(() => import('./SyncColorPicker'));
 
 function ColorPicker(props: SyncColorPickerProps): JSX.Element {
   return (

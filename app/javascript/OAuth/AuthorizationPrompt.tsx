@@ -1,6 +1,5 @@
 import { useMemo, useContext } from 'react';
 import { LoaderFunction, useLoaderData } from 'react-router-dom';
-import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import AuthenticityTokensManager from '../AuthenticityTokensContext';
 import PermissionsPrompt from './PermissionsPrompt';
@@ -48,8 +47,6 @@ function AuthorizationPrompt() {
   const preAuth = useMemo(() => JSON.parse(data.oauthPreAuth) as PreAuth, [data]);
   const scopes = useMemo(() => preAuth.scope.split(' '), [preAuth]);
 
-  const { grantAuthorization: grantAuthorizationToken, denyAuthorization: denyAuthorizationToken } =
-    AuthenticityTokensManager.instance.tokens;
   const authorizationParams: AuthorizationParams | null = useMemo(
     () =>
       (
@@ -85,15 +82,6 @@ function AuthorizationPrompt() {
     return <></>;
   }
 
-  if (!grantAuthorizationToken || !denyAuthorizationToken) {
-    if (typeof Rollbar != 'undefined' && Rollbar != null) {
-      Rollbar?.error("CSRF tokens couldn't be loaded in <AuthorizationPrompt />!");
-    }
-    return (
-      <ErrorDisplay stringError="CSRF tokens for grant or deny authorization couldn't be loaded from server!  This is probably a bug, and we've automatically reported it to the server admins." />
-    );
-  }
-
   // doing this with a hidden form we create and submit because fetch will try to follow the
   // redirect and probably fail because of CORS
   const buildHiddenInput = (name: string, value: string) => {
@@ -120,11 +108,15 @@ function AuthorizationPrompt() {
   };
 
   const grantAuthorization = () => {
-    buildAndSubmitForm('POST', grantAuthorizationToken, authorizationParams);
+    buildAndSubmitForm('POST', AuthenticityTokensManager.instance.tokens.grantAuthorization ?? '', authorizationParams);
   };
 
   const denyAuthorization = async () => {
-    buildAndSubmitForm('DELETE', denyAuthorizationToken, authorizationParams);
+    buildAndSubmitForm(
+      'DELETE',
+      AuthenticityTokensManager.instance.tokens.denyAuthorization ?? '',
+      authorizationParams,
+    );
   };
 
   return (

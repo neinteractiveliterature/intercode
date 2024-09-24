@@ -38,7 +38,7 @@ const CodeSplitLoaderBackend: BackendModule<Record<string, never>> = {
   },
 };
 
-const localesVersion = typeof __webpack_hash__ === 'undefined' ? '' : __webpack_hash__;
+const localesVersion = import.meta.env.COMMIT_HASH;
 
 const initOptions: InitOptions<ChainedBackendOptions> = {
   backend: {

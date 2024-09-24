@@ -14,5 +14,6 @@ declare global {
   declare interface Window {
     intercodeAssetsHost?: string;
     sentryFrontendDSN?: string;
+    __intercodeAssetURL: (filename: string) => string;
   }
 }

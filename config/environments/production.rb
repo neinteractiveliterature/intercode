@@ -47,11 +47,7 @@ Rails.application.configure do
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   config.force_ssl = true
-  config.ssl_options = {
-    redirect: {
-      exclude: ->(request) { request.path =~ %r{\A/healthz(\z|/)} }
-    }
-  }
+  config.ssl_options = { redirect: { exclude: ->(request) { request.path =~ %r{\A/healthz(\z|/)} } } }
 
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.
@@ -88,7 +84,7 @@ Rails.application.configure do
   config.public_file_server.headers = {
     "Access-Control-Allow-Origin" => "*",
     "Cache-Control" => "public, max-age=15552000",
-    "Expires" => "#{1.year.from_now.to_formatted_s(:rfc822)}"
+    "Expires" => 1.year.from_now.to_fs(:rfc822)
   }
 
   if ENV["RAILS_SERVE_STATIC_FILES"].present?

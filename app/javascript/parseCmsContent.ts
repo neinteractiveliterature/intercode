@@ -3,28 +3,22 @@ import parsePageContent, { DEFAULT_COMPONENT_MAP, ComponentMap } from './parsePa
 import CookieConsent from './UIComponents/CookieConsent';
 
 const AddToCalendarDropdown = lazyWithAppEntrypointHeadersCheck(
-  () => import(/* webpackChunkName: "my-profile" */ './EventsApp/SignupAdmin/AddToCalendarDropdown'),
+  () => import('./EventsApp/SignupAdmin/AddToCalendarDropdown'),
 );
-const EventAdminMenu = lazyWithAppEntrypointHeadersCheck(
-  () => import(/* webpackChunkName: "events-app" */ './EventsApp/EventPage/EventAdminMenu'),
-);
+const EventAdminMenu = lazyWithAppEntrypointHeadersCheck(() => import('./EventsApp/EventPage/EventAdminMenu'));
 const LongFormEventDetails = lazyWithAppEntrypointHeadersCheck(
-  () => import(/* webpackChunkName: "events-app" */ './EventsApp/EventPage/LongFormEventDetails'),
+  () => import('./EventsApp/EventPage/LongFormEventDetails'),
 );
-const MapboxMap = lazyWithAppEntrypointHeadersCheck(
-  () => import(/* webpackChunkName: "mapbox-map" */ './Maps/MapboxMap'),
-);
+const MapboxMap = lazyWithAppEntrypointHeadersCheck(() => import('./Maps/MapboxMap'));
 const MaximumEventSignupsPreview = lazyWithAppEntrypointHeadersCheck(
   () => import(/* webpackChunkName: 'scheduled-value-preview' */ './SignupRoundsAdmin/MaximumEventSignupsPreview'),
 );
 const ProposeEventButton = lazyWithAppEntrypointHeadersCheck(
   () => import(/* webpackChunkName: 'propose-event-button' */ './EventProposals/ProposeEventButton'),
 );
-const RunsSection = lazyWithAppEntrypointHeadersCheck(
-  () => import(/* webpackChunkName: "events-app" */ './EventsApp/EventPage/RunsSection'),
-);
+const RunsSection = lazyWithAppEntrypointHeadersCheck(() => import('./EventsApp/EventPage/RunsSection'));
 const ShortFormEventDetails = lazyWithAppEntrypointHeadersCheck(
-  () => import(/* webpackChunkName: "events-app" */ './EventsApp/EventPage/ShortFormEventDetails'),
+  () => import('./EventsApp/EventPage/ShortFormEventDetails'),
 );
 const WithdrawMySignupButton = lazyWithAppEntrypointHeadersCheck(
   () => import(/* webpackChunkName: 'withdraw-my-signup-button' */ './EventsApp/EventPage/WithdrawMySignupButton'),
