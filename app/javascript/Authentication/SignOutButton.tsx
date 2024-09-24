@@ -25,10 +25,11 @@ export type SignOutButtonProps = {
 };
 
 function SignOutButton({ className, caption }: SignOutButtonProps): JSX.Element {
-  const { signOut: authenticityToken } = AuthenticityTokensManager.instance.tokens;
   const afterSessionChange = useAfterSessionChange();
 
   const onClick = async (event: React.SyntheticEvent) => {
+    const { signOut: authenticityToken } = AuthenticityTokensManager.instance.tokens;
+
     event.preventDefault();
     await signOut(authenticityToken ?? '');
     await afterSessionChange('/', {

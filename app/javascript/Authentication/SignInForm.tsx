@@ -51,7 +51,6 @@ function SignInForm(): JSX.Element {
     unauthenticatedError,
     setUnauthenticatedError,
   } = useContext(AuthenticationModalContext);
-  const { signIn: authenticityToken } = AuthenticityTokensManager.instance.tokens;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
@@ -59,6 +58,8 @@ function SignInForm(): JSX.Element {
 
   const onSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
+    const { signIn: authenticityToken } = AuthenticityTokensManager.instance.tokens;
+
     if (!authenticityToken) {
       throw new Error('No authenticity token received from server');
     }

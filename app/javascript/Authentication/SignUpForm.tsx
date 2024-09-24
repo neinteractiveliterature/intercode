@@ -59,7 +59,6 @@ async function signUp(
 function SignUpForm(): JSX.Element {
   const { t } = useTranslation();
   const { close: closeModal, setCurrentView, recaptchaSiteKey } = useContext(AuthenticationModalContext);
-  const authenticityToken = AuthenticityTokensManager.instance.tokens.signUp;
   const [formState, setFormState] = useState({});
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
@@ -68,6 +67,8 @@ function SignUpForm(): JSX.Element {
   const afterSessionChange = useAfterSessionChange();
 
   const onSubmit = async (event: React.SyntheticEvent) => {
+    const authenticityToken = AuthenticityTokensManager.instance.tokens.signUp;
+
     event.preventDefault();
     if (!authenticityToken) {
       throw new Error('No authenticity token received from server');
