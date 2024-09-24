@@ -7,9 +7,7 @@ import parseCmsContent from '../parseCmsContent';
 import { CmsPageQueryData, CmsPageQueryDocument, CmsPageQueryVariables } from './queries.generated';
 import { client } from '../useIntercodeApolloClient';
 
-const PageAdminDropdown = lazyWithAppEntrypointHeadersCheck(
-  () => import(/* webpackChunkName: "page-admin-dropdown" */ './PageAdminDropdown'),
-);
+const PageAdminDropdown = lazyWithAppEntrypointHeadersCheck(() => import('./PageAdminDropdown'));
 
 export type CmsPageProps = {
   slug?: string;

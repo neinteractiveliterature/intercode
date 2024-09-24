@@ -4,15 +4,9 @@ import { Modal } from 'react-bootstrap4-modal';
 import AuthenticationModalContext from './AuthenticationModalContext';
 import { lazyWithAppEntrypointHeadersCheck } from '../checkAppEntrypointHeadersMatch';
 
-const ForgotPasswordForm = lazyWithAppEntrypointHeadersCheck(
-  () => import(/* webpackChunkName: "authentication-forms" */ './ForgotPasswordForm'),
-);
-const SignInForm = lazyWithAppEntrypointHeadersCheck(
-  () => import(/* webpackChunkName: "authentication-forms" */ './SignInForm'),
-);
-const SignUpForm = lazyWithAppEntrypointHeadersCheck(
-  () => import(/* webpackChunkName: "authentication-forms" */ './SignUpForm'),
-);
+const ForgotPasswordForm = lazyWithAppEntrypointHeadersCheck(() => import('./ForgotPasswordForm'));
+const SignInForm = lazyWithAppEntrypointHeadersCheck(() => import('./SignInForm'));
+const SignUpForm = lazyWithAppEntrypointHeadersCheck(() => import('./SignUpForm'));
 
 function AuthenticationModal(): JSX.Element {
   const { visible, currentView } = useContext(AuthenticationModalContext);
