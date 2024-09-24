@@ -1,11 +1,10 @@
-/// <reference types="vitest/config" />
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import { fileURLToPath } from 'url';
 import { execSync } from 'child_process';
 
-function absolutePath(relativePath: string) {
+export function absolutePath(relativePath: string) {
   return fileURLToPath(new URL(relativePath, import.meta.url));
 }
 
@@ -79,23 +78,5 @@ export default defineConfig({
     warmup: {
       clientFiles: [absolutePath('./app/javascript/packs/applicationEntry.ts')],
     },
-  },
-  test: {
-    coverage: {
-      enabled: true,
-      include: ['./app/javascript/**/*.{js,jsx,ts,tsx}'],
-      reportsDirectory: absolutePath('./coverage'),
-      reporter: ['text', 'lcov'],
-      reportOnFailure: true,
-    },
-    environment: 'jsdom',
-    globals: true,
-    setupFiles: [absolutePath('./test/javascript/setupTests.ts')],
-    testTimeout: 10000,
-    reporters: [
-      'default',
-      ['junit', { outputFile: absolutePath('./test/reports/TEST-jest.xml') }],
-      ['html', { outputFile: absolutePath('./test/html_reports/jest-report.html') }],
-    ],
   },
 });
