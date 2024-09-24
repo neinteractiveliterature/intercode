@@ -79,4 +79,18 @@ export default defineConfig({
       clientFiles: [absolutePath('./app/javascript/packs/applicationEntry.ts')],
     },
   },
+  preview: {
+    port: 3135,
+    host: '0.0.0.0',
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+      'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
+    },
+    https: {
+      key: absolutePath('./dev_certificate.key'),
+      cert: absolutePath('./dev_certificate.crt'),
+      ca: absolutePath('./dev_ca.crt'),
+    },
+  },
 });

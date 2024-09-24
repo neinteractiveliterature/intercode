@@ -18,6 +18,7 @@
     "i18next:dedupe": "yarn run tsx ./script/deduplicateTranslations.ts",
     "lint": "eslint app/javascript test/javascript schema.graphql --cache",
     "prepare": "husky install",
+    "preview": "vite preview --outDir ./public",
     "start": "vite",
     "ts:check": "tsc --noEmit --incremental",
     "test": "vitest run",
