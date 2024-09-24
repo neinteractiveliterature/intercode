@@ -4981,9 +4981,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@neinteractiveliterature/litform@npm:0.29.0":
-  version: 0.29.0
-  resolution: "@neinteractiveliterature/litform@npm:0.29.0"
+"@neinteractiveliterature/litform@npm:0.30.0":
+  version: 0.30.0
+  resolution: "@neinteractiveliterature/litform@npm:0.30.0"
   dependencies:
     "@codemirror/commands": "npm:^6.3.3"
     "@codemirror/lang-html": "npm:^6.4.8"
@@ -4997,7 +4997,7 @@ __metadata:
     codemirror: "npm:^6.0"
     copy-to-clipboard: "npm:^3.3.1"
     lodash: "npm:^4.17.21"
-    luxon: "npm:^2.4.0"
+    luxon: "npm:^3.0.0"
     react-bootstrap4-modal: "npm:^2.0.0"
     react-cool-onclickoutside: "npm:^1.7.0"
     react-popper: "npm:^2.3.0"
@@ -5007,7 +5007,7 @@ __metadata:
     "@apollo/client": ^3.3.18
     graphql: ^15.5.0
     react: ">= 18"
-  checksum: 10c0/b82c1466e02537f6ecc95e77a26130435f07a35f698a55e85baf4f26ec48235d3776ffd85eba345719be59d34669365a2ec40f1d5c0eb4eb5b3c0727a285724e
+  checksum: 10c0/7f4f9a319e843d9028095f7fc065a794e430d3fac394bf12dfa09202633c90f3bee9c21819fd8f99643235ce633f6c916c8b72c4dcc6f2bea03c8f60ac62e18d
   languageName: node
   linkType: hard
 
@@ -15847,17 +15847,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"luxon@npm:3.5.0":
+"luxon@npm:3.5.0, luxon@npm:^3.0.0":
   version: 3.5.0
   resolution: "luxon@npm:3.5.0"
   checksum: 10c0/335789bba95077db831ef99894edadeb23023b3eb2137a1b56acd0d290082b691cf793143d69e30bc069ec95f0b49f36419f48e951c68014f19ffe12045e3494
-  languageName: node
-  linkType: hard
-
-"luxon@npm:^2.4.0":
-  version: 2.5.2
-  resolution: "luxon@npm:2.5.2"
-  checksum: 10c0/c93b71c4ae74c440982f39832159b9311eca6db1e55d032d30a3f9354e6ceb16d576158c5dc9f847eb15c481557063bd61defdb96ee0953f8df2c57cd91e0b13
   languageName: node
   linkType: hard
 
@@ -20595,7 +20588,7 @@ __metadata:
     "@graphql-typed-document-node/core": "npm:^3.2.0"
     "@juggle/resize-observer": "npm:3.4.0"
     "@lezer/common": "npm:1.2.1"
-    "@neinteractiveliterature/litform": "npm:0.29.0"
+    "@neinteractiveliterature/litform": "npm:0.30.0"
     "@popperjs/core": "npm:^2.11.8"
     "@prettier/plugin-ruby": "npm:4.0.4"
     "@rails/activestorage": "npm:7.2.100"

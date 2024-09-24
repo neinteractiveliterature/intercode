@@ -43,7 +43,7 @@
     "@graphql-typed-document-node/core": "^3.2.0",
     "@juggle/resize-observer": "3.4.0",
     "@lezer/common": "1.2.1",
-    "@neinteractiveliterature/litform": "0.29.0",
+    "@neinteractiveliterature/litform": "0.30.0",
     "@popperjs/core": "^2.11.8",
     "@rails/activestorage": "7.2.100",
     "@sentry/browser": "^8.7.0",
