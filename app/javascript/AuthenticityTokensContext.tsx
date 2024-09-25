@@ -17,8 +17,9 @@ export default class AuthenticityTokensManager {
   static instance: AuthenticityTokensManager;
 
   tokens: AuthenticityTokens;
+  url: URL;
 
-  constructor(tokens: AuthenticityTokens) {
+  constructor(tokens: AuthenticityTokens, url: URL) {
     if (AuthenticityTokensManager.instance) {
       throw new Error(
         "Please don't initialize AuthenticityTokensManager directly, instead use AuthenticityTokensManager.instance",
@@ -26,6 +27,7 @@ export default class AuthenticityTokensManager {
     }
 
     this.tokens = tokens;
+    this.url = url;
   }
 
   setTokens(tokens: AuthenticityTokens) {
@@ -45,7 +47,7 @@ export default class AuthenticityTokensManager {
   }
 
   async refresh() {
-    const response = await fetch('/authenticity_tokens', {
+    const response = await fetch(this.url, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
@@ -59,7 +61,15 @@ export default class AuthenticityTokensManager {
   }
 }
 
-AuthenticityTokensManager.instance = new AuthenticityTokensManager({});
+function getURL(): URL {
+  if (typeof window !== 'undefined') {
+    return new URL('/authenticity_tokens', window.location.href);
+  } else {
+    return new URL('/authenticity_tokens', process.env.INTERCODE_BACKEND);
+  }
+}
+
+AuthenticityTokensManager.instance = new AuthenticityTokensManager({}, getURL());
 
 export function useInitializeAuthenticityTokens(initialTokens: AuthenticityTokens) {
   const initializedRef = useRef(false);

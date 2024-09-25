@@ -14,18 +14,23 @@ import {
   ErrorDisplay,
   ToastProvider,
 } from '@neinteractiveliterature/litform';
-import { HelmetProvider } from 'react-helmet-async';
+import ReactHelmetAsync from 'react-helmet-async';
 
 import AuthenticationModalContext, {
   useAuthenticationModalProvider,
 } from './Authentication/AuthenticationModalContext';
 import AuthenticationModal from './Authentication/AuthenticationModal';
-import AuthenticityTokensManager, { useInitializeAuthenticityTokens } from './AuthenticityTokensContext';
+import AuthenticityTokensManager, {
+  AuthenticityTokens,
+  useInitializeAuthenticityTokens,
+} from './AuthenticityTokensContext';
 import MapboxContext, { useMapboxContext } from './MapboxContext';
 import getI18n from './setupI18Next';
 import RailsDirectUploadsContext from './RailsDirectUploadsContext';
 import { appRootRoutes } from './AppRouter';
 import { client } from './useIntercodeApolloClient';
+
+const { HelmetProvider } = ReactHelmetAsync;
 
 function I18NextWrapper({ children }: { children: (i18nInstance: i18n) => ReactNode }) {
   const [i18nInstance, seti18nInstance] = useState<i18n>();
@@ -48,7 +53,7 @@ function I18NextWrapper({ children }: { children: (i18nInstance: i18n) => ReactN
   return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
 }
 
-function ProviderStack(props: AppWrapperProps) {
+export function ProviderStack(props: AppWrapperProps) {
   const { authenticityTokens, mapboxAccessToken, recaptchaSiteKey } = props;
   // TODO bring this back when we re-add prompting
   // const confirm = useConfirm();
@@ -87,42 +92,44 @@ function ProviderStack(props: AppWrapperProps) {
   );
 
   return (
-    <ApolloProvider client={client}>
-      <HelmetProvider>
-        {/* TODO bring this back when we re-add prompting getUserConfirmation={getUserConfirmation}> */}
-        <RailsDirectUploadsContext.Provider value={railsDirectUploadsContextValue}>
-          <MapboxContext.Provider value={mapboxContextValue}>
-            <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
-              <>
-                {!unauthenticatedError && (
-                  <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
-                    <I18NextWrapper>
-                      {(i18nInstance) => (
-                        <AlertProvider okText={i18nInstance.t('buttons.ok', 'OK')}>
-                          <ToastProvider>
-                            <ErrorBoundary placement="replace" errorType="plain">
-                              <Outlet />
-                            </ErrorBoundary>
-                          </ToastProvider>
-                        </AlertProvider>
-                      )}
-                    </I18NextWrapper>
-                  </Suspense>
-                )}
-                <AuthenticationModal />
-              </>
-            </AuthenticationModalContext.Provider>
-          </MapboxContext.Provider>
-        </RailsDirectUploadsContext.Provider>
-      </HelmetProvider>
-    </ApolloProvider>
+    <React.StrictMode>
+      <Confirm>
+        <ApolloProvider client={client}>
+          <HelmetProvider>
+            {/* TODO bring this back when we re-add prompting getUserConfirmation={getUserConfirmation}> */}
+            <RailsDirectUploadsContext.Provider value={railsDirectUploadsContextValue}>
+              <MapboxContext.Provider value={mapboxContextValue}>
+                <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
+                  <>
+                    {!unauthenticatedError && (
+                      <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
+                        <I18NextWrapper>
+                          {(i18nInstance) => (
+                            <AlertProvider okText={i18nInstance.t('buttons.ok', 'OK')}>
+                              <ToastProvider>
+                                <ErrorBoundary placement="replace" errorType="plain">
+                                  <Outlet />
+                                </ErrorBoundary>
+                              </ToastProvider>
+                            </AlertProvider>
+                          )}
+                        </I18NextWrapper>
+                      </Suspense>
+                    )}
+                    <AuthenticationModal />
+                  </>
+                </AuthenticationModalContext.Provider>
+              </MapboxContext.Provider>
+            </RailsDirectUploadsContext.Provider>
+          </HelmetProvider>
+        </ApolloProvider>
+      </Confirm>
+    </React.StrictMode>
   );
 }
 
 export type AppWrapperProps = {
-  authenticityTokens: {
-    graphql: string;
-  };
+  authenticityTokens: AuthenticityTokens;
   mapboxAccessToken: string;
   queryData?: DataProxy.WriteQueryOptions<unknown, unknown>[];
   railsDefaultActiveStorageServiceName: string;
@@ -169,11 +176,7 @@ function AppWrapper<P extends JSX.IntrinsicAttributes>(
     //   [confirm],
     // );
 
-    return (
-      <React.StrictMode>
-        <RouterProvider router={router} future={{ v7_startTransition: true }} />
-      </React.StrictMode>
-    );
+    return <RouterProvider router={router} future={{ v7_startTransition: true }} />;
   }
 
   // eslint-disable-next-line i18next/no-literal-string
@@ -182,15 +185,7 @@ function AppWrapper<P extends JSX.IntrinsicAttributes>(
   // eslint-disable-next-line i18next/no-literal-string
   Wrapper.displayName = `AppWrapper(${wrappedComponentDisplayName})`;
 
-  function ConfirmWrapper(props: P & AppWrapperProps) {
-    return (
-      <Confirm>
-        <Wrapper {...props} />
-      </Confirm>
-    );
-  }
-
-  return ConfirmWrapper;
+  return Wrapper;
 }
 
 export default AppWrapper;

@@ -1,16 +1,40 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react-swc';
+import { defineConfig, Plugin, ViteDevServer } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
+import { vitePlugin as remix } from '@remix-run/dev';
 import { fileURLToPath } from 'url';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import { globalDefines } from './globalDefines.mts';
+import morgan from 'morgan';
 
 export function absolutePath(relativePath: string) {
   return fileURLToPath(new URL(relativePath, import.meta.url));
 }
 
+// https://github.com/remix-run/remix/discussions/7850
+function morganPlugin(): Plugin {
+  return {
+    name: 'morgan-plugin',
+    configureServer(server: ViteDevServer) {
+      return () => {
+        server.middlewares.use(morgan('tiny'));
+      };
+    },
+  };
+}
+
 export default defineConfig({
-  plugins: [react(), tsconfigPaths(), nodePolyfills()],
+  plugins: [
+    tsconfigPaths(),
+    morganPlugin(),
+    nodePolyfills(),
+    !process.env.VITEST &&
+      remix({
+        appDirectory: absolutePath('./app/javascript'),
+      }),
+  ],
+  ssr: {
+    noExternal: ['@neinteractiveliterature/litform', '@apollo/client'],
+  },
   resolve: {
     mainFields: ['module'],
   },
@@ -77,6 +101,8 @@ export default defineConfig({
     warmup: {
       clientFiles: [absolutePath('./app/javascript/packs/applicationEntry.ts')],
     },
+    // downgrade to HTTP 1.1 to work around https://github.com/remix-run/remix/issues/7867
+    proxy: {},
   },
   preview: {
     port: 3135,
