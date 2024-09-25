@@ -16,6 +16,7 @@
 /test/reports
 /stats.json
 *.tsbuildinfo
+/.cache
 
 # Ignore Yarn stuff
 .yarn/*
@@ -79,6 +80,7 @@ cookbooks
 /public/packs
 /public/packs-test
 /public/packs-vite
+/public/build
 /node_modules
 
 # If the dev is keeping pgdumps around for debugging, ignore those
