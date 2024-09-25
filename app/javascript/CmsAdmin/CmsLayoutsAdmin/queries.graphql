@@ -26,3 +26,12 @@ query CmsLayoutsAdminQuery {
     }
   }
 }
+
+query CmsLayoutAdminQuery($id: ID!) {
+  cmsParent: cmsParentByRequestHost {
+    id
+    cmsLayout(id: $id) {
+      ...CmsLayoutFields
+    }
+  }
+}

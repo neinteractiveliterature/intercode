@@ -1,12 +1,11 @@
-import { ActionFunction } from 'react-router';
-import { client } from '../../useIntercodeApolloClient';
 import { UpdateEventProposalAdminNotesDocument } from '../mutations.generated';
+import { Route } from './+types/admin_notes';
 
-export const action: ActionFunction = async ({ request, params: { id } }) => {
+export async function action({ request, params: { id }, context }: Route.ActionArgs) {
   try {
     if (request.method === 'PATCH') {
       const formData = await request.formData();
-      return await client.mutate({
+      return await context.client.mutate({
         mutation: UpdateEventProposalAdminNotesDocument,
         variables: {
           eventProposalId: id,
@@ -19,4 +18,4 @@ export const action: ActionFunction = async ({ request, params: { id } }) => {
   } catch (error) {
     return error;
   }
-};
+}

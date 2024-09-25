@@ -10,7 +10,7 @@ import { TeamMembersQueryData } from './queries.generated';
 import { DropdownMenu } from '../../UIComponents/DropdownMenu';
 import humanize from '../../humanize';
 import buildEventUrl from '../buildEventUrl';
-import { useTeamMembersLoader } from './loader';
+import { useTeamMembersLoader } from '.';
 
 function sortTeamMembers(teamMembers: TeamMembersQueryData['convention']['event']['team_members']) {
   return sortByLocaleString(teamMembers, (teamMember) => teamMember.user_con_profile.name_inverted ?? '');
@@ -184,4 +184,4 @@ function TeamMembersIndex(): JSX.Element {
   );
 }
 
-export const Component = TeamMembersIndex;
+export default TeamMembersIndex;

@@ -1,13 +1,13 @@
-import { ActionFunction, redirect } from 'react-router';
-import { client } from '../useIntercodeApolloClient';
+import { redirect } from 'react-router';
 import { DeleteEventCategoryDocument, UpdateEventCategoryDocument } from './mutations.generated';
 import { buildEventCategoryFromFormData } from './buildEventCategoryInput';
 import { EventCategory } from '../graphqlTypes.generated';
+import { Route } from './+types/$id';
 
-export const action: ActionFunction = async ({ request, params: { id } }) => {
+export async function action({ request, params: { id }, context }: Route.ActionArgs) {
   try {
     if (request.method === 'DELETE') {
-      await client.mutate({
+      await context.client.mutate({
         mutation: DeleteEventCategoryDocument,
         variables: {
           id,
@@ -22,7 +22,7 @@ export const action: ActionFunction = async ({ request, params: { id } }) => {
       return redirect('..');
     } else if (request.method === 'PATCH') {
       const formData = await request.formData();
-      await client.mutate({
+      await context.client.mutate({
         mutation: UpdateEventCategoryDocument,
         variables: {
           id,
@@ -35,4 +35,4 @@ export const action: ActionFunction = async ({ request, params: { id } }) => {
   } catch (error) {
     return error;
   }
-};
+}

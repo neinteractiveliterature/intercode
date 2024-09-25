@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { ApolloError } from '@apollo/client';
-import { ActionFunction, LoaderFunction, redirect, useActionData, useLoaderData, useSubmit } from 'react-router';
+import { redirect, useActionData, useSubmit } from 'react-router';
 import pick from 'lodash/pick';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -10,10 +10,10 @@ import usePageTitle from '../usePageTitle';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import { ConventionAdminConventionQueryData, ConventionAdminConventionQueryDocument } from './queries.generated';
 import { ConventionInput } from '../graphqlTypes.generated';
-import { client } from '../useIntercodeApolloClient';
 import { UpdateConventionDocument } from './mutations.generated';
+import { Route } from './+types/index';
 
-export const action: ActionFunction = async ({ request }) => {
+export const action = async ({ request, context }: Route.ActionArgs) => {
   try {
     const formData = await request.formData();
     const favicon = formData.get('favicon') as File | null;
@@ -54,7 +54,7 @@ export const action: ActionFunction = async ({ request }) => {
       ...(openGraphImage == null ? {} : { openGraphImage }),
     };
 
-    await client.mutate({
+    await context.client.mutate({
       mutation: UpdateConventionDocument,
       variables: {
         input: {
@@ -66,19 +66,18 @@ export const action: ActionFunction = async ({ request }) => {
     return error;
   }
 
-  await client.resetStore();
+  await context.client.resetStore();
   return redirect('/');
 };
 
-export const loader: LoaderFunction = async () => {
-  const { data } = await client.query<ConventionAdminConventionQueryData>({
+export const loader = async ({ context }: Route.LoaderArgs) => {
+  const { data } = await context.client.query<ConventionAdminConventionQueryData>({
     query: ConventionAdminConventionQueryDocument,
   });
   return data;
 };
 
-function ConventionAdmin() {
-  const data = useLoaderData() as ConventionAdminConventionQueryData;
+function ConventionAdmin({ loaderData: data }: Route.ComponentProps) {
   const authorizationWarning = useAuthorizationRequired('can_update_convention');
   const submit = useSubmit();
   const mutationError = useActionData();
@@ -128,4 +127,4 @@ function ConventionAdmin() {
   );
 }
 
-export const Component = ConventionAdmin;
+export default ConventionAdmin;

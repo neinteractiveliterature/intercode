@@ -5,14 +5,10 @@ import snakeCase from 'lodash/snakeCase';
 import ChoiceSetFilter from '../../Tables/ChoiceSetFilter';
 import EmailList from '../../UIComponents/EmailList';
 import usePageTitle from '../../usePageTitle';
-import {
-  RunSignupsTableSignupsQueryData,
-  RunSignupsTableSignupsQueryDocument,
-  RunSignupsTableSignupsQueryVariables,
-} from './queries.generated';
+import { RunSignupsTableSignupsQueryData, RunSignupsTableSignupsQueryDocument } from './queries.generated';
 import humanize from '../../humanize';
-import { LoaderFunction, Navigate, useLoaderData, useParams } from 'react-router';
-import { client } from '../../useIntercodeApolloClient';
+import { Navigate, useParams } from 'react-router';
+import { Route } from './+types/RunEmailList';
 
 function getEmails({ data, includes }: { data: RunSignupsTableSignupsQueryData; includes: string[] }) {
   const teamMemberUserConProfileIds = data.convention.event.team_members.map(
@@ -48,8 +44,9 @@ function getEmails({ data, includes }: { data: RunSignupsTableSignupsQueryData; 
   }));
 }
 
-export const loader: LoaderFunction = async ({ params: { runId, eventId } }) => {
-  const { data } = await client.query<RunSignupsTableSignupsQueryData, RunSignupsTableSignupsQueryVariables>({
+export const loader = async ({ params: { runId, eventId }, context }: Route.LoaderArgs) => {
+  const client = context!.client;
+  const { data } = await client.query({
     query: RunSignupsTableSignupsQueryDocument,
     variables: {
       eventId: eventId ?? '',
@@ -64,8 +61,7 @@ export const loader: LoaderFunction = async ({ params: { runId, eventId } }) => 
   return data;
 };
 
-function RunEmailList() {
-  const data = useLoaderData() as RunSignupsTableSignupsQueryData;
+function RunEmailList({ loaderData: data }: Route.ComponentProps) {
   const { separator } = useParams();
   const { t } = useTranslation();
   const [includes, setIncludes] = useState(() => [
@@ -145,4 +141,4 @@ function RunEmailList() {
   );
 }
 
-export const Component = RunEmailList;
+export default RunEmailList;

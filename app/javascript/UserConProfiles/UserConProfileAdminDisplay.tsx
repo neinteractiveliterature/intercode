@@ -1,5 +1,5 @@
 import { Suspense, useMemo, useState } from 'react';
-import { ActionFunction, Link, replace, useFetcher, useParams, useRouteLoaderData } from 'react-router';
+import { Link, replace, useFetcher } from 'react-router';
 import {
   useConfirm,
   useModal,
@@ -14,24 +14,21 @@ import TicketAdminSection from './TicketAdminSection';
 import UserConProfileSignupsCard from '../EventsApp/SignupAdmin/UserConProfileSignupsCard';
 import usePageTitle from '../usePageTitle';
 import Gravatar from '../Gravatar';
-import { UserConProfileAdminQueryData } from './queries.generated';
 import deserializeFormResponse from '../Models/deserializeFormResponse';
 import { getSortedParsedFormItems } from '../Models/Form';
 import humanize from '../humanize';
 import Modal from 'react-bootstrap4-modal';
 import useAsyncFunction from '../useAsyncFunction';
 import { Trans, useTranslation } from 'react-i18next';
-import { NamedRoute } from '../AppRouter';
-import { client } from 'useIntercodeApolloClient';
 import { DeleteUserConProfileDocument } from './mutations.generated';
-import invariant from 'tiny-invariant';
 import { UserConProfile } from 'graphqlTypes.generated';
+import { Route } from './+types/UserConProfileAdminDisplay';
+import { useUserConProfileLoaderData } from './userConProfileLoader';
 
-export const action: ActionFunction = async ({ request, params: { id } }) => {
-  invariant(id != null);
+export async function action({ request, params: { id }, context }: Route.ActionArgs) {
   try {
     if (request.method === 'DELETE') {
-      await client.mutate({
+      await context.client.mutate({
         mutation: DeleteUserConProfileDocument,
         variables: { userConProfileId: id },
         update: (cache) => {
@@ -48,7 +45,7 @@ export const action: ActionFunction = async ({ request, params: { id } }) => {
   } catch (error) {
     return error;
   }
-};
+}
 
 async function becomeUser(userConProfileId: string, justification: string) {
   const formData = new FormData();
@@ -127,13 +124,9 @@ function BecomeUserModal({ userConProfileId, userConProfileName, visible, close 
   );
 }
 
-function UserConProfileAdminDisplay(): JSX.Element {
+function UserConProfileAdminDisplay({ params: { id: userConProfileId } }: Route.ComponentProps): JSX.Element {
   const { t } = useTranslation();
-  const userConProfileId = useParams<{ id: string }>().id;
-  if (userConProfileId == null) {
-    throw new Error('userConProfileId not found in params');
-  }
-  const data = useRouteLoaderData(NamedRoute.AdminUserConProfile) as UserConProfileAdminQueryData;
+  const data = useUserConProfileLoaderData();
   const formItems = useMemo(() => getSortedParsedFormItems(data.convention.user_con_profile_form), [data]);
   const formResponse = useMemo(() => deserializeFormResponse(data.convention.user_con_profile), [data]);
   const confirm = useConfirm();
@@ -293,4 +286,4 @@ function UserConProfileAdminDisplay(): JSX.Element {
   );
 }
 
-export const Component = UserConProfileAdminDisplay;
+export default UserConProfileAdminDisplay;

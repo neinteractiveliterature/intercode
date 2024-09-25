@@ -6,8 +6,8 @@ import usePageTitle from '../../../usePageTitle';
 import { FilterCodecs, buildFieldFilterCodecs } from '../../../Tables/FilterUtils';
 import TableHeader from '../../../Tables/TableHeader';
 import ReactTableWithTheWorks from '../../../Tables/ReactTableWithTheWorks';
-import { LoaderFunction, useLoaderData, useNavigate } from 'react-router';
 import { CellContext, createColumnHelper } from '@tanstack/react-table';
+import { useNavigate } from 'react-router';
 import EventCategoryCell from '../../../Tables/EventCategoryCell';
 import EventCategoryFilter from '../../../Tables/EventCategoryFilter';
 import { useContext, useMemo } from 'react';
@@ -20,7 +20,7 @@ import FreeTextFilter from '../../../Tables/FreeTextFilter';
 import HtmlCell from '../../../Tables/HtmlCell';
 import { DateTime } from 'luxon';
 import EventCatalogNavTabs from '../EventCatalogNavTabs';
-import { client } from '../../../useIntercodeApolloClient';
+import { Route } from './+types/index';
 
 const FILTER_CODECS = buildFieldFilterCodecs({
   status: FilterCodecs.stringArray,
@@ -54,19 +54,15 @@ function RoomNamesCell<TData, TValue extends RunType['rooms']>({ getValue }: Cel
 
 const defaultVisibleColumns = ['category', 'title', 'starts_at', 'length_seconds', 'total_slots'];
 
-type LoaderResult = {
-  convention: CommonConventionDataQueryData['convention'];
-  filterableFormItems: ReturnType<typeof getFilterableFormItems>;
-};
-
-export const loader: LoaderFunction = async () => {
-  const { data } = await client.query({ query: CommonConventionDataQueryDocument });
+export const loader = async ({ context }: Route.LoaderArgs) => {
+  const { data } = await context.client.query<CommonConventionDataQueryData>({
+    query: CommonConventionDataQueryDocument,
+  });
   const filterableFormItems = getFilterableFormItems(data.convention);
-  return { convention: data.convention, filterableFormItems } satisfies LoaderResult;
+  return { convention: data.convention, filterableFormItems };
 };
 
-function EventTable() {
-  const { convention, filterableFormItems } = useLoaderData() as LoaderResult;
+function EventTable({ loaderData: { convention, filterableFormItems } }: Route.ComponentProps) {
   const navigate = useNavigate();
   usePageTitle('Table View - Event Catalog');
 
@@ -232,4 +228,4 @@ function EventTable() {
   );
 }
 
-export const Component = EventTable;
+export default EventTable;

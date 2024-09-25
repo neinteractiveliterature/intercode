@@ -131,6 +131,13 @@ represented as a JSON object."
     MARKDOWN
   end
 
+  field :organization, Types::OrganizationType, null: false do
+    description <<~MARKDOWN
+    Finds an organization by ID.
+    MARKDOWN
+    argument :id, ID, required: true, description: "The ID of the organization to find."
+  end
+
   field :organizations, [Types::OrganizationType], null: false do
     description <<~MARKDOWN
     Returns all organizations in the database.
@@ -145,6 +152,10 @@ represented as a JSON object."
 
   field :default_currency_code, String, null: false do
     description "Returns the default currency for this site"
+  end
+
+  field :client_configuration, Types::ClientConfigurationType, null: false do
+    description "Returns the client configuration data for this instance of Intercode"
   end
 
   field :supported_currency_codes, [String], null: false do
@@ -165,6 +176,11 @@ represented as a JSON object."
     description <<~MARKDOWN
     Finds up to 25 users by ID. If any of the IDs don't match an existing user, errors out.
   MARKDOWN
+  end
+
+  def client_configuration
+    # details of this are handled inside the ClientConfigurationType
+    {}
   end
 
   def convention_by_domain(domain:)
@@ -292,6 +308,10 @@ represented as a JSON object."
       )
     pre_auth.valid?
     pre_auth.as_json({})
+  end
+
+  def organization(id:)
+    Organization.find(id)
   end
 
   def organizations

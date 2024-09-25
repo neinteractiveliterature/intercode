@@ -5,28 +5,31 @@ import { useGraphQLConfirm, ErrorDisplay } from '@neinteractiveliterature/litfor
 
 import CouponForm from './CouponForm';
 import buildCouponInput from './buildCouponInput';
-import {
-  AdminCouponFieldsFragment,
-  AdminSingleCouponQueryData,
-  AdminSingleCouponQueryDocument,
-} from './queries.generated';
+import { AdminCouponFieldsFragment, AdminSingleCouponQueryDocument } from './queries.generated';
 import { useTranslation } from 'react-i18next';
-import { ActionFunction, LoaderFunction, redirect, useLoaderData } from 'react-router';
-import { client } from 'useIntercodeApolloClient';
+import { redirect } from 'react-router';
 import { Link, useFetcher } from 'react-router';
 import { DeleteCouponDocument, UpdateCouponDocument } from './mutations.generated';
 import { CouponInput } from 'graphqlTypes.generated';
+import { Route } from './+types/EditCouponModal';
 
-export const action: ActionFunction = async ({ params: { id }, request }) => {
+export async function action({ params: { id }, request, context }: Route.ActionArgs) {
   try {
     if (request.method === 'DELETE') {
-      await client.mutate({ mutation: DeleteCouponDocument, variables: { id } });
-      await client.resetStore();
+      await context.client.mutate({
+        mutation: DeleteCouponDocument,
+        variables: { id },
+        update: (cache) => {
+          cache.modify({
+            id: cache.identify({ __typename: 'Coupon', id }),
+            fields: (value, { DELETE }) => DELETE,
+          });
+        },
+      });
       return redirect('..');
     } else if (request.method === 'PATCH') {
       const coupon = (await request.json()) as CouponInput;
-      await client.mutate({ mutation: UpdateCouponDocument, variables: { id, coupon } });
-      await client.resetStore();
+      await context.client.mutate({ mutation: UpdateCouponDocument, variables: { id, coupon } });
       return redirect('..');
     } else {
       return new Response(null, { status: 404 });
@@ -34,18 +37,17 @@ export const action: ActionFunction = async ({ params: { id }, request }) => {
   } catch (error) {
     return error;
   }
-};
+}
 
-export const loader: LoaderFunction = async ({ params: { id } }) => {
-  const { data } = await client.query({
+export async function loader({ params: { id }, context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({
     query: AdminSingleCouponQueryDocument,
     variables: { id },
   });
   return data.convention.coupon;
-};
+}
 
-function EditCouponModal(): JSX.Element {
-  const initialCoupon = useLoaderData() as AdminSingleCouponQueryData['convention']['coupon'];
+function EditCouponModal({ loaderData: initialCoupon }: Route.ComponentProps): JSX.Element {
   const { t } = useTranslation();
   const confirm = useGraphQLConfirm();
   const [coupon, setCoupon] = useState(initialCoupon);
@@ -100,4 +102,4 @@ function EditCouponModal(): JSX.Element {
   );
 }
 
-export const Component = EditCouponModal;
+export default EditCouponModal;

@@ -1,14 +1,14 @@
 import { useTranslation } from 'react-i18next';
 import usePageTitle from '../usePageTitle';
 import UserConProfilesTable from './UserConProfilesTable';
-import { LoaderFunction, Outlet, useLoaderData } from 'react-router';
+import { Outlet, useLoaderData } from 'react-router';
 import { AttendeesPageQueryData, AttendeesPageQueryDocument } from './queries.generated';
-import { client } from 'useIntercodeApolloClient';
+import { Route } from './+types/AttendeesPage';
 
-export const loader: LoaderFunction = async () => {
-  const { data } = await client.query({ query: AttendeesPageQueryDocument });
+export async function loader({ context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({ query: AttendeesPageQueryDocument });
   return data;
-};
+}
 
 function AttendeesPage() {
   const { t } = useTranslation();
@@ -27,4 +27,4 @@ function AttendeesPage() {
   );
 }
 
-export const Component = AttendeesPage;
+export default AttendeesPage;

@@ -52,7 +52,7 @@ export default function useOrganizationRoleForm(initialOrganizationRole: Organiz
     <>
       <BootstrapFormInput name="name" label="Role name" value={name} onTextChange={onNameChange} />
 
-      <div className="mb-3">
+      <div className="mb-4">
         <label className="form-label" htmlFor="users">
           Users
         </label>
@@ -60,7 +60,7 @@ export default function useOrganizationRoleForm(initialOrganizationRole: Organiz
       </div>
 
       <fieldset>
-        <caption>Permissions</caption>
+        <legend className="mb-0">Permissions</legend>
 
         <PermissionsTableInput
           permissionNames={OrganizationRolePermissionNames}

@@ -9,24 +9,24 @@ import LongFormEventDetails from './LongFormEventDetails';
 import RateEventControl from '../../EventRatings/RateEventControl';
 import AppRootContext from '../../AppRootContext';
 import useRateEvent from '../../EventRatings/useRateEvent';
-import { EventPageQueryData, EventPageQueryDocument, EventPageQueryVariables } from './queries.generated';
+import { EventPageQueryDocument } from './queries.generated';
 import useSectionizedFormItems from './useSectionizedFormItems';
 import FormItemDisplay from '../../FormPresenter/ItemDisplays/FormItemDisplay';
 import { valueIsPresent } from './valueIsPresent';
-import { LoaderFunction, useLoaderData } from 'react-router';
 import buildEventUrl from '../buildEventUrl';
-import { client } from '../../useIntercodeApolloClient';
+import { Route } from './+types/index';
 
-export const loader: LoaderFunction = async ({ params: { eventId } }) => {
-  const { data } = await client.query<EventPageQueryData, EventPageQueryVariables>({
+export const loader = async ({ params: { eventId }, context }: Route.LoaderArgs) => {
+  const client = context!.client;
+
+  const { data } = await client.query({
     query: EventPageQueryDocument,
     variables: { eventId: eventId ?? '' },
   });
   return data;
 };
 
-function EventPage(): JSX.Element {
-  const data = useLoaderData() as EventPageQueryData;
+function EventPage({ loaderData: data }: Route.ComponentProps): JSX.Element {
   const { myProfile } = useContext(AppRootContext);
   const rateEvent = useRateEvent();
   const { secretFormItems, formResponse } = useSectionizedFormItems(data.convention.event);
@@ -100,4 +100,4 @@ function EventPage(): JSX.Element {
   );
 }
 
-export const Component = EventPage;
+export default EventPage;

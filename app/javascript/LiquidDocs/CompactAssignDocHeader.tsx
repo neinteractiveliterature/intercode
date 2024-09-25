@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import AssignName from './AssignName';
 import findClass from './findClass';
-import { LiquidDocsLoaderResult, useLiquidDocs } from './loader';
+import { LiquidDocsLoaderResult, useLiquidDocs } from './route';
 
 export type CompactAssignDocHeaderProps = {
   assign: LiquidDocsLoaderResult['sortedAssigns'][number];

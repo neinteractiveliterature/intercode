@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { ActionFunction, LoaderFunction, redirect, useFetcher, useLoaderData } from 'react-router';
+import { redirect, useFetcher } from 'react-router';
 import { ApolloError } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -13,32 +13,27 @@ import {
   UserActivityAlertsAdminQueryDocument,
 } from './queries.generated';
 import { CreateUserActivityAlertDocument, CreateUserActivityAlertMutationVariables } from './mutations.generated';
-import { client } from 'useIntercodeApolloClient';
 import { Convention, NotificationEventKey } from 'graphqlTypes.generated';
+import { Route } from './+types/NewUserActivityAlert';
 
-type LoaderResult = {
-  convention: UserActivityAlertsAdminQueryData['convention'];
-  userActivityAlertEvent: UserActivityAlertsAdminQueryData['notificationEvents'][number];
-};
-
-export const loader: LoaderFunction = async () => {
-  const { data } = await client.query({ query: UserActivityAlertsAdminQueryDocument });
+export async function loader({ context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({ query: UserActivityAlertsAdminQueryDocument });
 
   const userActivityAlertEvent = data.notificationEvents.find(
     (event) => event.key === NotificationEventKey.UserActivityAlertsAlert,
   );
   if (!userActivityAlertEvent) {
-    return new Response(null, { status: 404 });
+    throw new Response(null, { status: 404 });
   }
 
-  return { userActivityAlertEvent, convention: data.convention } satisfies LoaderResult;
-};
+  return { userActivityAlertEvent, convention: data.convention };
+}
 
-export const action: ActionFunction = async ({ request }) => {
+export async function action({ request, context }: Route.ActionArgs) {
   try {
     if (request.method === 'POST') {
       const variables = (await request.json()) as CreateUserActivityAlertMutationVariables;
-      await client.mutate({
+      await context.client.mutate({
         mutation: CreateUserActivityAlertDocument,
         variables,
         update: (cache, result) => {
@@ -64,11 +59,9 @@ export const action: ActionFunction = async ({ request }) => {
   } catch (error) {
     return error;
   }
-};
+}
 
-function NewUserActivityAlert() {
-  const { userActivityAlertEvent, convention } = useLoaderData() as LoaderResult;
-  // const data = useRouteLoaderData(NamedRoute.UserActivityAlerts) as UserActivityAlertsAdminQueryData;
+function NewUserActivityAlert({ loaderData: { userActivityAlertEvent, convention } }: Route.ComponentProps) {
   usePageTitle('New user activity alert');
 
   const [userActivityAlert, setUserActivityAlert] = useState<
@@ -98,7 +91,7 @@ function NewUserActivityAlert() {
     [notificationDestinationChangeSet, userActivityAlert],
   );
 
-  const saveClicked = () => {
+  const saveClicked = async () => {
     const variables: CreateUserActivityAlertMutationVariables = {
       userActivityAlert: buildUserActivityAlertInput(userActivityAlert),
       notificationDestinations: notificationDestinationChangeSet.getAddValues().map((addValue) => {
@@ -111,7 +104,7 @@ function NewUserActivityAlert() {
         throw new Error('Notification destination must have either a staff position or user con profile');
       }),
     };
-    fetcher.submit(variables, { method: 'POST', encType: 'application/json' });
+    await fetcher.submit(variables, { method: 'POST', encType: 'application/json' });
   };
 
   return (
@@ -137,4 +130,4 @@ function NewUserActivityAlert() {
   );
 }
 
-export const Component = NewUserActivityAlert;
+export default NewUserActivityAlert;

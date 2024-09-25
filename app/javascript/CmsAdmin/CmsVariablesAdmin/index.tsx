@@ -4,17 +4,15 @@ import { sortByLocaleString } from '@neinteractiveliterature/litform';
 import AddVariableRow, { AddingVariable } from './AddVariableRow';
 import ExistingVariableRow from './ExistingVariableRow';
 import usePageTitle from '../../usePageTitle';
-import { CmsVariablesQueryData, CmsVariablesQueryDocument } from './queries.generated';
-import { LoaderFunction, useLoaderData } from 'react-router';
-import { client } from '../../useIntercodeApolloClient';
+import { CmsVariablesQueryDocument } from './queries.generated';
+import { Route } from './+types/index';
 
-export const loader: LoaderFunction = async () => {
-  const { data } = await client.query({ query: CmsVariablesQueryDocument });
+export async function loader({ context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({ query: CmsVariablesQueryDocument });
   return data;
-};
+}
 
-function CmsVariablesAdmin(): JSX.Element {
-  const data = useLoaderData() as CmsVariablesQueryData;
+function CmsVariablesAdmin({ loaderData: data }: Route.ComponentProps): JSX.Element {
   const [addingVariables, setAddingVariables] = useState<AddingVariable[]>([]);
 
   const addVariable = useCallback(
@@ -103,4 +101,4 @@ function CmsVariablesAdmin(): JSX.Element {
   );
 }
 
-export const Component = CmsVariablesAdmin;
+export default CmsVariablesAdmin;

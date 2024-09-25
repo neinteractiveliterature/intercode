@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ActionFunction, Link, LoaderFunction, SubmitTarget, useFetcher, useLoaderData, useMatch } from 'react-router';
+import { Link, SubmitTarget, useFetcher, useMatch } from 'react-router';
 import md5 from 'md5';
 import { useTranslation, Trans } from 'react-i18next';
 import { BooleanInput, LoadingIndicator } from '@neinteractiveliterature/litform';
@@ -12,18 +12,16 @@ import { useItemInteractionTracking, ItemInteractionTrackerContext } from '../Fo
 import usePageTitle from '../usePageTitle';
 import MarkdownInput from '../BuiltInFormControls/MarkdownInput';
 import Gravatar from '../Gravatar';
-import { MyProfileQueryData, MyProfileQueryDocument } from './queries.generated';
-import { CommonFormFieldsFragment } from '../Models/commonFormFragments.generated';
-import { WithFormResponse } from '../Models/deserializeFormResponse';
+import { MyProfileQueryDocument } from './queries.generated';
 import { parseResponseErrors } from '../parseResponseErrors';
-import { client } from '../useIntercodeApolloClient';
 import { UpdateUserConProfileDocument } from '../UserConProfiles/mutations.generated';
+import { Route, Info } from './+types/MyProfileForm';
 
-export const action: ActionFunction = async ({ request }) => {
-  const profile = (await request.json()) as LoaderResult['initialUserConProfile'];
+export async function action({ context, request }: Route.ActionArgs) {
+  const profile = (await request.json()) as Info['loaderData']['initialUserConProfile'];
 
   try {
-    await client.mutate({
+    await context.client.mutate({
       mutation: UpdateUserConProfileDocument,
       variables: {
         input: {
@@ -43,19 +41,13 @@ export const action: ActionFunction = async ({ request }) => {
   } catch (e) {
     return parseResponseErrors(e, ['updateUserConProfile']);
   }
-};
+}
 
-type LoaderResult = {
-  initialUserConProfile: WithFormResponse<NonNullable<MyProfileQueryData['convention']['my_profile']>>;
-  convention: NonNullable<MyProfileQueryData['convention']>;
-  form: CommonFormFieldsFragment;
-};
-
-export const loader: LoaderFunction = async () => {
-  const { data } = await client.query<MyProfileQueryData>({ query: MyProfileQueryDocument });
+export async function loader({ context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({ query: MyProfileQueryDocument });
   const myProfile = data.convention.my_profile;
   if (!myProfile) {
-    return new Response(null, { status: 404 });
+    throw new Response(null, { status: 404 });
   }
   const formState = buildFormStateFromData(myProfile, data.convention);
 
@@ -63,11 +55,10 @@ export const loader: LoaderFunction = async () => {
     initialUserConProfile: formState.userConProfile,
     convention: formState.convention,
     form: formState.form,
-  } satisfies LoaderResult;
-};
+  };
+}
 
-function MyProfileForm() {
-  const { initialUserConProfile, convention, form } = useLoaderData() as LoaderResult;
+function MyProfileForm({ loaderData: { initialUserConProfile, convention, form } }: Route.ComponentProps) {
   const { t } = useTranslation();
   const initialSetup = useMatch('/my_profile/setup');
   const fetcher = useFetcher();
@@ -223,4 +214,4 @@ function MyProfileForm() {
   );
 }
 
-export const Component = MyProfileForm;
+export default MyProfileForm;

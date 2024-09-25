@@ -222,6 +222,12 @@ type ChoiceCount {
   state: SignupState!
 }
 
+type ClientConfiguration {
+  rails_default_active_storage_service_name: String!
+  rails_direct_uploads_url: String!
+  recaptcha_site_key: String!
+}
+
 union CmsContent = CmsLayout | CmsPartial | Page
 
 type CmsContentGroup {
@@ -272,6 +278,7 @@ input CmsGraphqlQueryInput {
 
 type CmsLayout {
   admin_notes: String
+  app_root_content(path: String!): String!
   content: String
   content_html(path: String): String
   content_html_with_placeholders(path: String): String
@@ -352,6 +359,26 @@ interface CmsParent {
   cmsGraphqlQueries: [CmsGraphqlQuery!]!
 
   """
+  Finds a CMS GraphQL query by ID.
+  """
+  cmsGraphqlQuery(
+    """
+    The ID of the CMS GraphQL query to find.
+    """
+    id: ID!
+  ): CmsGraphqlQuery!
+
+  """
+  Finds a CMS layout by ID.
+  """
+  cmsLayout(
+    """
+    The ID of the CMS layout to find.
+    """
+    id: ID!
+  ): CmsLayout!
+
+  """
   Returns all CMS layouts within the current domain.
   """
   cmsLayouts: [CmsLayout!]!
@@ -388,6 +415,16 @@ interface CmsParent {
   Returns all CMS pages within the current domain.
   """
   cmsPages: [Page!]!
+
+  """
+  Finds a CMS partial by ID.
+  """
+  cmsPartial(
+    """
+    The ID of the CMS partial to find.
+    """
+    id: ID!
+  ): CmsPartial!
 
   """
   Returns all CMS partials within the current domain.
@@ -629,6 +666,26 @@ type Convention implements CmsParent {
   cmsGraphqlQueries: [CmsGraphqlQuery!]!
 
   """
+  Finds a CMS GraphQL query by ID.
+  """
+  cmsGraphqlQuery(
+    """
+    The ID of the CMS GraphQL query to find.
+    """
+    id: ID!
+  ): CmsGraphqlQuery!
+
+  """
+  Finds a CMS layout by ID.
+  """
+  cmsLayout(
+    """
+    The ID of the CMS layout to find.
+    """
+    id: ID!
+  ): CmsLayout!
+
+  """
   Returns all CMS layouts within the current domain.
   """
   cmsLayouts: [CmsLayout!]!
@@ -665,6 +722,16 @@ type Convention implements CmsParent {
   Returns all CMS pages within the current domain.
   """
   cmsPages: [Page!]!
+
+  """
+  Finds a CMS partial by ID.
+  """
+  cmsPartial(
+    """
+    The ID of the CMS partial to find.
+    """
+    id: ID!
+  ): CmsPartial!
 
   """
   Returns all CMS partials within the current domain.
@@ -784,6 +851,16 @@ type Convention implements CmsParent {
   ): [EventCategory!]!
 
   """
+  Finds an EventCategory by ID in this convention.
+  """
+  event_category(
+    """
+    The ID of the EventCategory to find.
+    """
+    id: ID!
+  ): EventCategory!
+
+  """
   If present, the site will automatically offer to set up forwarding email addresses for event teams under this
   domain.
   """
@@ -859,6 +936,12 @@ type Convention implements CmsParent {
     Filters to restrict what items will appear in the result set.
     """
     filters: EventFiltersInput
+
+    """
+    If true, the results will include dropped events.  Only convention admins can see dropped events, so using
+    this may cause authorization errors.
+    """
+    includeDropped: Boolean
 
     """
     The page number to return from the result set.  Page numbers start with 1.
@@ -3644,7 +3727,7 @@ type Event {
   short_blurb: String
   short_blurb_html: String
   slots_limited: Boolean
-  status: String
+  status: EventStatus
   team_members: [TeamMember!]!
   ticket_types: [TicketType!]!
   title: String
@@ -3712,6 +3795,7 @@ input EventFiltersInput {
   category: [Int]
   form_items: JSON
   my_rating: [Int!]
+  status: EventStatus
   title: String
   title_prefix: String
 }
@@ -3785,6 +3869,14 @@ type EventProposalsPagination implements PaginationInterface {
 type EventProvidedTicketList {
   provided_by_event: Event!
   tickets: [Ticket!]!
+}
+
+"""
+The current status of an event in the convention.
+"""
+enum EventStatus {
+  active
+  dropped
 }
 
 type EventWithChoiceCounts {
@@ -5793,6 +5885,11 @@ type Query {
   assumedIdentityFromProfile: UserConProfile
 
   """
+  Returns the client configuration data for this instance of Intercode
+  """
+  clientConfiguration: ClientConfiguration!
+
+  """
   Returns the CMS parent object associated with a given domain name. In a
   convention domain, this is the `Convention` itself. Otherwise, it's the `RootSite`.
   """
@@ -5955,6 +6052,16 @@ type Query {
     """
     queryParams: Json!
   ): Json!
+
+  """
+  Finds an organization by ID.
+  """
+  organization(
+    """
+    The ID of the organization to find.
+    """
+    id: ID!
+  ): Organization!
 
   """
   Returns all organizations in the database.
@@ -6592,6 +6699,26 @@ type RootSite implements CmsParent {
   cmsGraphqlQueries: [CmsGraphqlQuery!]!
 
   """
+  Finds a CMS GraphQL query by ID.
+  """
+  cmsGraphqlQuery(
+    """
+    The ID of the CMS GraphQL query to find.
+    """
+    id: ID!
+  ): CmsGraphqlQuery!
+
+  """
+  Finds a CMS layout by ID.
+  """
+  cmsLayout(
+    """
+    The ID of the CMS layout to find.
+    """
+    id: ID!
+  ): CmsLayout!
+
+  """
   Returns all CMS layouts within the current domain.
   """
   cmsLayouts: [CmsLayout!]!
@@ -6628,6 +6755,16 @@ type RootSite implements CmsParent {
   Returns all CMS pages within the current domain.
   """
   cmsPages: [Page!]!
+
+  """
+  Finds a CMS partial by ID.
+  """
+  cmsPartial(
+    """
+    The ID of the CMS partial to find.
+    """
+    id: ID!
+  ): CmsPartial!
 
   """
   Returns all CMS partials within the current domain.

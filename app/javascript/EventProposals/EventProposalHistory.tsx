@@ -1,14 +1,9 @@
 import { useMemo } from 'react';
-import { LoaderFunction, useLoaderData } from 'react-router';
 
 import FormResponseChangeHistory from '../FormPresenter/ItemChangeDisplays/FormResponseChangeHistory';
-import {
-  EventProposalHistoryQueryData,
-  EventProposalHistoryQueryDocument,
-  EventProposalHistoryQueryVariables,
-} from './queries.generated';
+import { EventProposalHistoryQueryDocument } from './queries.generated';
 import { FormType } from '../graphqlTypes.generated';
-import { client } from '../useIntercodeApolloClient';
+import { Route } from './+types/EventProposalHistory';
 
 const EXCLUDE_FIELDS = new Set([
   'minimum_age',
@@ -18,16 +13,15 @@ const EXCLUDE_FIELDS = new Set([
   'team_mailing_list_name',
 ]);
 
-export const loader: LoaderFunction = async ({ params: { id } }) => {
-  const { data } = await client.query<EventProposalHistoryQueryData, EventProposalHistoryQueryVariables>({
+export async function loader({ params: { id }, context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({
     query: EventProposalHistoryQueryDocument,
     variables: { id: id ?? '' },
   });
   return data;
-};
+}
 
-function EventProposalHistory() {
-  const data = useLoaderData() as EventProposalHistoryQueryData;
+function EventProposalHistory({ loaderData: data }: Route.ComponentProps) {
   const changes = useMemo(
     () =>
       data.convention.event_proposal.form_response_changes.filter(
@@ -55,4 +49,4 @@ function EventProposalHistory() {
   );
 }
 
-export const Component = EventProposalHistory;
+export default EventProposalHistory;

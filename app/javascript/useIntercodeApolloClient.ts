@@ -7,7 +7,7 @@ import {
   InMemoryCache,
   NormalizedCacheObject,
   split,
-  createQueryPreloader,
+  ApolloCache,
 } from '@apollo/client';
 import { BatchHttpLink } from '@apollo/client/link/batch-http';
 import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
@@ -17,6 +17,7 @@ import { onError } from '@apollo/client/link/error/index.js';
 import possibleTypes from './possibleTypes.json';
 import AuthenticityTokensManager from './AuthenticityTokensContext';
 import { GraphQLFormattedError } from 'graphql';
+import { setContext } from '@apollo/client/link/context';
 
 // adapted from https://github.com/jaydenseric/apollo-upload-client/issues/63#issuecomment-392501449
 function isFile(value: unknown): value is Blob | File {
@@ -82,76 +83,88 @@ export function getIntercodeUserTimezoneHeader() {
   return { 'X-Intercode-User-Timezone': localTime.zoneName ?? '' };
 }
 
-export const AuthHeadersLink = new ApolloLink((operation: Operation, next: NextLink) => {
-  operation.setContext((context: ReturnType<Operation['getContext']>) => ({
-    ...context,
-    credentials: 'same-origin',
-    headers: {
-      ...context.headers,
-      'X-CSRF-Token': AuthenticityTokensManager.instance.tokens.graphql,
-    },
-  }));
+export function buildAuthHeadersLink(authenticityTokensManager: AuthenticityTokensManager) {
+  return setContext(async (operation, prevContext) => {
+    return {
+      ...prevContext,
+      authenticityTokensManager,
+      credentials: 'same-origin',
+      headers: {
+        'X-CSRF-Token': (await authenticityTokensManager.getTokens()).graphql,
+      },
+    };
+  });
+}
 
-  return next(operation);
-});
-
-export function buildIntercodeApolloLink(uri: URL): ApolloLink {
+export function buildTerminatingApolloLink(options: BatchHttpLink.Options): ApolloLink {
   // adapted from https://github.com/jaydenseric/apollo-upload-client/issues/63#issuecomment-392501449
-  const terminatingLink = split(
-    isUpload,
-    createUploadLink({ uri: uri.toString(), fetch }),
-    new BatchHttpLink({
+  return split(isUpload, createUploadLink(options), new BatchHttpLink(options));
+}
+
+export function buildClientApolloLink(uri: URL, authenticityTokensManager: AuthenticityTokensManager): ApolloLink {
+  return ApolloLink.from([
+    buildAuthHeadersLink(authenticityTokensManager),
+    AddTimezoneLink,
+    ErrorHandlerLink,
+    buildTerminatingApolloLink({
       uri: uri.toString(),
       fetch,
     }),
-  );
-
-  return ApolloLink.from([AuthHeadersLink, AddTimezoneLink, ErrorHandlerLink, terminatingLink]);
+  ]);
 }
 
-export function useIntercodeApolloLink(uri: URL): ApolloLink {
-  const link = useMemo(() => buildIntercodeApolloLink(uri), [uri]);
+export function useIntercodeApolloLink(uri: URL, authenticityTokensManager: AuthenticityTokensManager): ApolloLink {
+  const link = useMemo(() => buildClientApolloLink(uri, authenticityTokensManager), [uri, authenticityTokensManager]);
 
   return link;
 }
 
-export function buildIntercodeApolloClient(link: ApolloLink): ApolloClient<NormalizedCacheObject> {
-  return new ApolloClient({
-    link,
-    cache: new InMemoryCache({
-      addTypename: true,
-      possibleTypes,
-      typePolicies: {
-        Ability: {
-          merge: true,
-        },
-        AuthorizedApplication: {
-          keyFields: ['uid'],
-        },
-        ConventionReports: {
-          merge: true,
-        },
-        Event: {
-          fields: {
-            rooms: { merge: true },
-            room_names: { merge: true },
-          },
-        },
-        RegistrationPolicy: {
-          merge: (existing, incoming) => incoming,
+export function buildIntercodeApolloCache(): InMemoryCache {
+  return new InMemoryCache({
+    addTypename: true,
+    possibleTypes,
+    typePolicies: {
+      Ability: {
+        merge: true,
+      },
+      AuthorizedApplication: {
+        keyFields: ['uid'],
+      },
+      ConventionReports: {
+        merge: true,
+      },
+      Event: {
+        fields: {
+          rooms: { merge: true },
+          room_names: { merge: true },
         },
       },
-    }),
+      RegistrationPolicy: {
+        merge: (existing, incoming) => incoming,
+      },
+    },
   });
 }
 
-function getClientURL(): URL {
+export function buildIntercodeApolloClient(
+  link: ApolloLink,
+  options?: { ssrMode?: boolean; cache?: ApolloCache<NormalizedCacheObject> },
+): ApolloClient<NormalizedCacheObject> {
+  return new ApolloClient({
+    link,
+    ssrMode: options?.ssrMode,
+    cache: options?.cache ?? buildIntercodeApolloCache(),
+  });
+}
+
+export function getClientURL(): URL {
   if (typeof window !== 'undefined') {
     return new URL('/graphql', window.location.href);
   } else {
-    throw new Error('Not implemented: cannot yet use GraphQL outside a browser environment');
+    return new URL('/graphql', process.env.INTERCODE_BACKEND);
   }
 }
 
-export const client = buildIntercodeApolloClient(buildIntercodeApolloLink(getClientURL()));
-export const preloadQuery = createQueryPreloader(client);
+export function buildBrowserApolloClient(authenticityTokensManager: AuthenticityTokensManager) {
+  return buildIntercodeApolloClient(buildClientApolloLink(getClientURL(), authenticityTokensManager));
+}

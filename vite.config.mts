@@ -1,16 +1,56 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react-swc';
+import { defineConfig, Plugin, ProxyOptions, ViteDevServer } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
+import { reactRouter } from '@react-router/dev/vite';
 import { fileURLToPath } from 'url';
-import { nodePolyfills } from 'vite-plugin-node-polyfills';
+// import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import { globalDefines } from './globalDefines.mts';
+import morgan from 'morgan';
+import { envOnlyMacros } from 'vite-env-only';
+import { proxyPaths, getBackendUrl } from './app/javascript/proxyConfig';
 
 export function absolutePath(relativePath: string) {
   return fileURLToPath(new URL(relativePath, import.meta.url));
 }
 
+// https://github.com/remix-run/remix/discussions/7850
+function morganPlugin(): Plugin {
+  return {
+    name: 'morgan-plugin',
+    configureServer(server: ViteDevServer) {
+      return () => {
+        server.middlewares.use(morgan('tiny'));
+      };
+    },
+  };
+}
+
+function getProxyConfig() {
+  let backendUrl: URL;
+  try {
+    backendUrl = getBackendUrl();
+  } catch {
+    return undefined;
+  }
+
+  return [...proxyPaths].reduce<Record<string, ProxyOptions>>(
+    (memo, path) => ({
+      ...memo,
+      [path]: {
+        target: backendUrl,
+      },
+    }),
+    {},
+  );
+}
+
 export default defineConfig({
-  plugins: [react(), tsconfigPaths(), nodePolyfills()],
+  plugins: [tsconfigPaths(), morganPlugin(), envOnlyMacros(), !process.env.VITEST && reactRouter()],
+  ssr: {
+    noExternal: ['@neinteractiveliterature/litform', '@apollo/client', 'react-helmet-async'],
+  },
+  optimizeDeps: {
+    exclude: ['node-fetch'],
+  },
   resolve: {
     mainFields: ['module'],
   },
@@ -24,6 +64,18 @@ export default defineConfig({
       }
     },
   },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        // can't get import to work until Bootstrap supports it
+        silenceDeprecations: ['import', 'legacy-js-api'],
+        quietDeps: true,
+      },
+    },
+    modules: {
+      localsConvention: 'camelCaseOnly',
+    },
+  },
   build: {
     copyPublicDir: false,
     rollupOptions: {
@@ -31,7 +83,6 @@ export default defineConfig({
       // hopefully can remove this eventually
       treeshake: false,
       input: {
-        application: absolutePath('./app/javascript/packs/applicationEntry.ts'),
         'application-styles': absolutePath('./app/javascript/packs/applicationStyles.ts'),
         ...(process.env.NODE_ENV === 'production'
           ? {}
@@ -63,18 +114,6 @@ export default defineConfig({
       },
     },
   },
-  css: {
-    modules: {
-      localsConvention: 'camelCaseOnly',
-    },
-    preprocessorOptions: {
-      scss: {
-        // can't get import to work until Bootstrap supports it
-        silenceDeprecations: ['import', 'legacy-js-api'],
-        quietDeps: true,
-      },
-    },
-  },
   server: {
     port: 3135,
     host: '0.0.0.0',
@@ -89,9 +128,7 @@ export default defineConfig({
       cert: absolutePath('./dev_certificate.crt'),
       ca: absolutePath('./dev_ca.crt'),
     },
-    warmup: {
-      clientFiles: [absolutePath('./app/javascript/packs/applicationEntry.ts')],
-    },
+    proxy: getProxyConfig(),
   },
   preview: {
     port: 3135,

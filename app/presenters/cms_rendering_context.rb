@@ -6,6 +6,7 @@ class CmsRenderingContext
   include ActionView::Helpers::TagHelper
   include ActionView::Helpers::AssetTagHelper
   attr_reader :cms_parent, :controller, :assigns, :cached_partials, :cached_files, :timezone
+  # delegate :request, to: :controller
 
   NOSCRIPT_WARNING = <<~HTML.html_safe
   <noscript id="no-javascript-warning">
@@ -61,19 +62,22 @@ class CmsRenderingContext
   # We do this so that the doc that gets rendered will end up with the right stuff in <head>, but
   # not have its body content duplicated
   def render_app_root_content(cms_layout, assigns)
-    graphql_presend_presenter = GraphqlPresendPresenter.new(controller: controller, cms_parent: cms_parent)
-    doc = Nokogiri::HTML.parse("<!DOCTYPE html><html><head>#{assigns["content_for_head"]}</head><body></body></html>")
+    layout_doc = Nokogiri::HTML.parse(render_layout_content(cms_layout, assigns))
+    layout_head = layout_doc.xpath("//head").to_s
+
+    # graphql_presend_presenter = GraphqlPresendPresenter.new(controller: controller, cms_parent: cms_parent)
+    doc =
+      Nokogiri::HTML.parse(
+        "<!DOCTYPE html><html><head>#{assigns["content_for_head"]}#{layout_head}</head><body></body></html>"
+      )
     doc.xpath("//body/*").remove
     doc.xpath("//body").first.inner_html =
-      (assigns["browser_warning"] || "") + NOSCRIPT_WARNING +
-        tag.div(
-          "",
-          "data-react-class" => "AppRoot",
-          "data-react-props" =>
-            (controller&.app_component_props || {}).merge(
-              queryData: graphql_presend_presenter.graphql_presend_data
-            ).to_json
-        )
+      tag.div(
+        "",
+        "data-react-class" => "AppRoot",
+        "data-react-props" => (controller&.app_component_props || {}).merge({}).to_json
+        # queryData: graphql_presend_presenter.graphql_presend_data
+      )
     doc.to_s.html_safe
   rescue StandardError => e
     ErrorReporting.warn(e)

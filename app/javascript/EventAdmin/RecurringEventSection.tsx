@@ -9,9 +9,10 @@ import { useModal, DisclosureTriangle } from '@neinteractiveliterature/litform';
 import ScheduleMultipleRunsModal from './ScheduleMultipleRunsModal';
 import { timespanFromConvention, getConventionDayTimespans } from '../TimespanUtils';
 import AppRootContext from '../AppRootContext';
-import { ConventionFieldsFragment, EventFieldsFragment } from './queries.generated';
+import { EventFieldsFragment } from './queries.generated';
 import { getDateTimeFormat, useAppDateTimeFormat } from '../TimeUtils';
 import { DateTimeFormatKey } from '../DateTimeFormats';
+import { Convention, Room } from 'graphqlTypes.generated';
 
 function humanizeEventLength(event: Pick<EventFieldsFragment, 'length_seconds'>, t: TFunction) {
   const duration = Duration.fromObject({ seconds: event.length_seconds });
@@ -20,7 +21,7 @@ function humanizeEventLength(event: Pick<EventFieldsFragment, 'length_seconds'>,
 
 type RecurringEventSectionBodyProps = {
   event: EventFieldsFragment;
-  convention: ConventionFieldsFragment;
+  convention: Pick<Convention, 'timezone_mode' | 'timezone_name' | 'starts_at' | 'ends_at'>;
   startSchedulingRuns: () => void;
 };
 
@@ -85,7 +86,9 @@ function RecurringEventSectionBody({ event, convention, startSchedulingRuns }: R
 
 export type RecurringEventSectionProps = {
   event: EventFieldsFragment;
-  convention: ConventionFieldsFragment;
+  convention: Pick<Convention, 'id' | 'timezone_mode' | 'timezone_name' | 'starts_at' | 'ends_at'> & {
+    rooms: Pick<Room, '__typename' | 'id' | 'name'>[];
+  };
 };
 
 function RecurringEventSection({ event, convention }: RecurringEventSectionProps): JSX.Element {

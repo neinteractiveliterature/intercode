@@ -1,12 +1,12 @@
 import { OrderEntry } from 'graphqlTypes.generated';
-import { ActionFunction, data } from 'react-router';
+import { data } from 'react-router';
 import { DeleteOrderEntryDocument, UpdateOrderEntryDocument } from 'Store/OrderAdmin/mutations.generated';
-import { client } from 'useIntercodeApolloClient';
+import { Route } from './+types/$id';
 
-export const action: ActionFunction = async ({ params: { id }, request }) => {
+export async function action({ params: { id }, request, context }: Route.ActionArgs) {
   try {
     if (request.method === 'DELETE') {
-      const result = await client.mutate({
+      const result = await context.client.mutate({
         mutation: DeleteOrderEntryDocument,
         variables: { input: { id } },
         update: (cache) => {
@@ -19,7 +19,7 @@ export const action: ActionFunction = async ({ params: { id }, request }) => {
       return data(result.data);
     } else if (request.method === 'PATCH') {
       const formData = await request.formData();
-      const result = await client.mutate({
+      const result = await context.client.mutate({
         mutation: UpdateOrderEntryDocument,
         variables: {
           input: { id, order_entry: { quantity: Number.parseInt(formData.get('quantity')?.toString() ?? '') } },
@@ -32,4 +32,4 @@ export const action: ActionFunction = async ({ params: { id }, request }) => {
   } catch (error) {
     return error;
   }
-};
+}

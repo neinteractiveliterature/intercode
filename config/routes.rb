@@ -20,25 +20,17 @@ Intercode::Application.routes.draw do
   get "/healthz" => "health#healthz"
 
   direct :cdn_upload do |model, options|
+    uploads_host_from_env = ENV.fetch("UPLOADS_HOST", nil)
+    host, port = uploads_host_from_env&.split(":")
+
     if model.respond_to?(:signed_id)
-      route_for(
-        :rails_service_blob_proxy,
-        model.signed_id,
-        model.filename,
-        options.merge(host: ENV.fetch("UPLOADS_HOST", nil))
-      )
+      route_for(:rails_service_blob_proxy, model.signed_id, model.filename, options.merge(host:, port:))
     else
       signed_blob_id = model.blob.signed_id
       variation_key = model.variation.key
       filename = model.blob.filename
 
-      route_for(
-        :rails_blob_representation_proxy,
-        signed_blob_id,
-        variation_key,
-        filename,
-        options.merge(host: ENV.fetch("UPLOADS_HOST", nil))
-      )
+      route_for(:rails_blob_representation_proxy, signed_blob_id, variation_key, filename, options.merge(host:, port:))
     end
   end
 

@@ -1,15 +1,15 @@
 import { OrderInput } from 'graphqlTypes.generated';
-import { ActionFunction, data, LoaderFunction, useLoaderData, useNavigate } from 'react-router';
-import { client } from 'useIntercodeApolloClient';
+import { data, useNavigate } from 'react-router';
 import EditOrderModal from './EditOrderModal';
 import { AdminUpdateOrderDocument } from './mutations.generated';
-import { AdminOrderQueryData, AdminOrderQueryDocument } from './queries.generated';
+import { AdminOrderQueryDocument } from './queries.generated';
+import { Route } from './+types/$id';
 
-export const action: ActionFunction = async ({ params: { id }, request }) => {
+export async function action({ params: { id }, request, context }: Route.ActionArgs) {
   try {
     if (request.method === 'PATCH') {
       const order = (await request.json()) as OrderInput;
-      const result = await client.mutate({
+      const result = await context.client.mutate({
         mutation: AdminUpdateOrderDocument,
         variables: { id, order },
       });
@@ -20,21 +20,20 @@ export const action: ActionFunction = async ({ params: { id }, request }) => {
   } catch (error) {
     return error;
   }
-};
+}
 
-export const loader: LoaderFunction = async ({ params: { id } }) => {
-  const { data } = await client.query({
+export async function loader({ params: { id }, context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({
     query: AdminOrderQueryDocument,
     variables: { id },
   });
   return data;
-};
+}
 
-function EditOrderRoute() {
-  const data = useLoaderData() as AdminOrderQueryData;
+function EditOrderRoute({ loaderData: data }: Route.ComponentProps) {
   const navigate = useNavigate();
 
   return <EditOrderModal order={data.convention.order} closeModal={() => navigate('..')} />;
 }
 
-export const Component = EditOrderRoute;
+export default EditOrderRoute;

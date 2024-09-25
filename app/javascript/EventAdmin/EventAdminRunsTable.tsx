@@ -2,22 +2,17 @@ import { Link } from 'react-router';
 
 import EventAdminRow from './EventAdminRow';
 import usePageTitle from '../usePageTitle';
-import useEventAdminCategory from './useEventAdminCategory';
 import { useTranslation } from 'react-i18next';
-import { useEventAdminEventsLoader } from './loaders';
+import { CategorySpecificEventAdminComponentProps } from './CategorySpecificEventAdmin';
 
-export type EventAdminRunsTableProps = {
-  eventCategoryId: string;
-};
-
-export default function EventAdminRunsTable({ eventCategoryId }: EventAdminRunsTableProps) {
-  const data = useEventAdminEventsLoader();
-  const [eventCategory, sortedEvents] = useEventAdminCategory(data, eventCategoryId);
+export default function EventAdminRunsTable({ data }: CategorySpecificEventAdminComponentProps) {
   const { t } = useTranslation();
+  const eventCategory = data.convention.event_category;
+  const events = data.convention.event_category.events_paginated.entries;
 
   usePageTitle(
     t('admin.events.eventListPageTitle', {
-      categoryName: eventCategory?.name,
+      categoryName: eventCategory.name,
     }),
   );
 
@@ -25,7 +20,7 @@ export default function EventAdminRunsTable({ eventCategoryId }: EventAdminRunsT
     <div>
       <Link to={`./events/new`} className="btn btn-primary mt-4 mb-2">
         {t('admin.events.newEventLabel', {
-          categoryName: eventCategory?.name,
+          categoryName: eventCategory.name,
         })}
       </Link>
       <table className="table table-striped no-top-border">
@@ -37,8 +32,8 @@ export default function EventAdminRunsTable({ eventCategoryId }: EventAdminRunsT
           </tr>
         </thead>
         <tbody>
-          {sortedEvents.map((event) => (
-            <EventAdminRow event={event} convention={data.convention} key={event.id} />
+          {events.map((event) => (
+            <EventAdminRow event={event} eventCategory={eventCategory} key={event.id} />
           ))}
         </tbody>
       </table>

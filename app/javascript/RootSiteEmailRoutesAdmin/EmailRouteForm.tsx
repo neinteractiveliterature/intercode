@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { BootstrapFormInput } from '@neinteractiveliterature/litform';
+import { BootstrapFormInput, usePropertySetters } from '@neinteractiveliterature/litform';
 
 import { StringArrayEditor } from '../BuiltInFormControls/ArrayEditor';
-import { usePropertySetters } from '@neinteractiveliterature/litform';
 import { EmailRouteFieldsFragment } from './queries.generated';
 import { useTranslation } from 'react-i18next';
 

@@ -1,5 +1,5 @@
-import { Outlet, useNavigate } from 'react-router';
 import { createColumnHelper } from '@tanstack/react-table';
+import { Outlet, useNavigate } from 'react-router';
 
 import { buildFieldFilterCodecs } from '../Tables/FilterUtils';
 import EmailCell from '../Tables/EmailCell';
@@ -108,4 +108,4 @@ function UsersTable(): JSX.Element {
   );
 }
 
-export const Component = UsersTable;
+export default UsersTable;

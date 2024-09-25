@@ -3,27 +3,37 @@
     "outDir": "./dist/", // path to output directory
     "sourceMap": true, // allow sourcemap support
     "strictNullChecks": true, // enable strict null checks as a best practice
-    "module": "es2020", // specify module code generation
+    "module": "ESNext", // specify module code generation
     "moduleResolution": "Bundler",
     "resolveJsonModule": true,
     "jsx": "react-jsx", // use typescript to transpile jsx to js
-    "target": "es6", // specify ECMAScript target version
+    "target": "es2017", // specify ECMAScript target version
     "allowJs": true, // allow a partial TypeScript and JavaScript codebase,
     "allowSyntheticDefaultImports": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
     "lib": ["DOM", "DOM.Iterable", "ES2023"],
     "noImplicitAny": true,
     "skipLibCheck": true,
     "maxNodeModuleJsDepth": 10,
     "baseUrl": "./app/javascript",
-    "types": ["vitest/globals", "vite/client"]
+    "paths": {
+      "~/*": ["./app/*"]
+    },
+    "rootDirs": ["./app/javascript", "./.react-router/types/app/javascript"],
+    "types": ["vitest/globals", "vite/client", "@react-router/node"],
+    "plugins": [{ "name": "typescript-plugin-css-modules" }, { "name": "@react-router/dev" }]
   },
   "include": [
     "./app/javascript/",
     "./script",
     "./test/javascript/",
     "script/buildTimezoneData.js",
+    ".react-router/types/**/*",
+    "eslint.config.mjs",
     "graphql.config.js",
     "i18next-parser-english.config.cjs",
-    "i18next-parser-non-english.config.cjs"
+    "i18next-parser-non-english.config.cjs",
+    "vite.config.mts"
   ]
 }

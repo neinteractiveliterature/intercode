@@ -1,20 +1,20 @@
 import { useState } from 'react';
 import { ApolloError } from '@apollo/client';
-import { ActionFunction, Form, redirect, useActionData, useLoaderData, useNavigation } from 'react-router';
+import { Form, redirect, useNavigation } from 'react-router';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { buildLayoutInputFromFormData } from './buildLayoutInput';
 import CmsLayoutForm from './CmsLayoutForm';
 import usePageTitle from '../../usePageTitle';
-import { singleCmsLayoutAdminLoader, SingleCmsLayoutAdminLoaderResult } from './loaders';
-import { client } from '../../useIntercodeApolloClient';
 import { UpdateLayoutDocument } from './mutations.generated';
+import { Route } from './+types/EditCmsLayout';
+import { CmsLayoutAdminQueryDocument } from './queries.generated';
 
-export const action: ActionFunction = async ({ params: { id }, request }) => {
+export async function action({ params: { id }, request, context }: Route.ActionArgs) {
   const formData = await request.formData();
 
   try {
-    await client.mutate({
+    await context.client.mutate({
       mutation: UpdateLayoutDocument,
       variables: {
         id: id ?? '',
@@ -24,17 +24,23 @@ export const action: ActionFunction = async ({ params: { id }, request }) => {
   } catch (e) {
     return e;
   }
-  await client.resetStore();
+  await context.client.resetStore();
 
   return redirect(formData.get('destination')?.toString() ?? '/cms_layouts');
-};
+}
 
-export const loader = singleCmsLayoutAdminLoader;
+export async function loader({ context, params: { id } }: Route.LoaderArgs) {
+  const { data } = await context.client.query({ query: CmsLayoutAdminQueryDocument, variables: { id } });
+  return data;
+}
 
-function EditCmsLayout() {
-  const { layout: initialLayout } = useLoaderData() as SingleCmsLayoutAdminLoaderResult;
+function EditCmsLayout({
+  loaderData: {
+    cmsParent: { cmsLayout: initialLayout },
+  },
+  actionData: updateError,
+}: Route.ComponentProps) {
   const [layout, setLayout] = useState(initialLayout);
-  const updateError = useActionData();
   const navigation = useNavigation();
 
   usePageTitle(`Editing “${initialLayout.name}”`);
@@ -58,4 +64,4 @@ function EditCmsLayout() {
   );
 }
 
-export const Component = EditCmsLayout;
+export default EditCmsLayout;

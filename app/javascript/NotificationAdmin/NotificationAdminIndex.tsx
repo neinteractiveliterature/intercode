@@ -2,14 +2,14 @@ import { BootstrapFormCheckbox, ErrorDisplay } from '@neinteractiveliterature/li
 import { useModal } from '@neinteractiveliterature/litform';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import Modal from 'react-bootstrap4-modal';
-import { Link, LoaderFunction, useFetcher, useLoaderData } from 'react-router';
+import { Link, useFetcher } from 'react-router';
 
 import AppRootContext from '../AppRootContext';
 import { ApolloError } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
-import { client } from 'useIntercodeApolloClient';
 import { NotificationsConfigQueryData, NotificationsConfigQueryDocument } from './queries.generated';
 import sortBy from 'lodash/sortBy';
+import { Route } from './+types/NotificationAdminIndex';
 
 type NotificationPreviewModalProps = {
   visible: boolean;
@@ -76,14 +76,13 @@ function NotificationPreviewModal({ visible, close, eventConfig }: NotificationP
   );
 }
 
-export const loader: LoaderFunction = async () => {
-  const { data } = await client.query({ query: NotificationsConfigQueryDocument });
-  return data as NotificationsConfigQueryData;
-};
+export async function loader({ context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({ query: NotificationsConfigQueryDocument });
+  return data;
+}
 
-function NotificationAdminIndex(): JSX.Element {
+function NotificationAdminIndex({ loaderData: data }: Route.ComponentProps): JSX.Element {
   const previewModal = useModal<{ eventConfig: NotificationsConfigQueryData['notificationEvents'][number] }>();
-  const data = useLoaderData() as NotificationsConfigQueryData;
   const { t } = useTranslation();
 
   const sortedEvents = useMemo(() => {
@@ -133,4 +132,4 @@ function NotificationAdminIndex(): JSX.Element {
   );
 }
 
-export const Component = NotificationAdminIndex;
+export default NotificationAdminIndex;

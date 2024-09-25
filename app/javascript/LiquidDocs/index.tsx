@@ -1,7 +1,7 @@
 import AssignDocLink from './AssignDocLink';
 import FilterDocLink from './FilterDocLink';
 import LiquidTagDocLink from './LiquidTagDocLink';
-import { useLiquidDocs } from './loader';
+import { useLiquidDocs } from './route';
 
 function LiquidDocs(): JSX.Element {
   const { sortedAssigns, sortedFilters, sortedTags } = useLiquidDocs();
@@ -44,4 +44,4 @@ function LiquidDocs(): JSX.Element {
   );
 }
 
-export const Component = LiquidDocs;
+export default LiquidDocs;

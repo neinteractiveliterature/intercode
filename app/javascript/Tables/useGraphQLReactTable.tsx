@@ -114,5 +114,5 @@ export default function useGraphQLReactTable<
     [tableData, pages, refetch, loading, error, queryData],
   );
 
-  return result;
+  return result as UseGraphQLReactTableResult<RowType, QueryData, Variables>;
 }

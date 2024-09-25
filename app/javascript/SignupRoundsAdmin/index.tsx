@@ -1,14 +1,14 @@
-import { ActionFunction, data, Outlet } from 'react-router';
+import { data, Outlet } from 'react-router';
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import RouteActivatedBreadcrumbItemV2 from '../Breadcrumbs/RouteActivatedBreadcrumbItemV2';
 import { useTranslation } from 'react-i18next';
 import { buildSignupRoundInputFromFormData } from './buildSignupRoundInput';
 import { i18n } from '../setupI18Next';
-import { client } from '../useIntercodeApolloClient';
 import { CreateSignupRoundDocument } from './mutations.generated';
 import { SignupRoundsAdminQueryDocument } from './queries.generated';
+import { Route } from './+types/index';
 
-export const action: ActionFunction = async ({ request }) => {
+export async function action({ request, context }: Route.ActionArgs) {
   if (request.method === 'POST') {
     try {
       const formData = await request.formData();
@@ -17,7 +17,7 @@ export const action: ActionFunction = async ({ request }) => {
         throw new Error(i18n.t('signups.signupRounds.errors.startTimeRequired'));
       }
 
-      const result = await client.mutate({
+      const result = await context.client.mutate({
         mutation: CreateSignupRoundDocument,
         variables: {
           conventionId: formData.get('convention_id')?.toString() ?? '',
@@ -32,7 +32,7 @@ export const action: ActionFunction = async ({ request }) => {
       return error;
     }
   }
-};
+}
 
 function SignupRoundsAdmin() {
   const { t } = useTranslation();
@@ -54,4 +54,4 @@ function SignupRoundsAdmin() {
   );
 }
 
-export const Component = SignupRoundsAdmin;
+export default SignupRoundsAdmin;

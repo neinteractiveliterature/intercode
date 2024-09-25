@@ -19,4 +19,4 @@ function EventCategoryAdmin(): JSX.Element {
   );
 }
 
-export const Component = EventCategoryAdmin;
+export default EventCategoryAdmin;

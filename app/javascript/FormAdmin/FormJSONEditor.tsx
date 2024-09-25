@@ -1,13 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
-import {
-  ActionFunction,
-  Form,
-  LoaderFunction,
-  redirect,
-  useActionData,
-  useLoaderData,
-  useNavigation,
-} from 'react-router';
+import { Form, redirect, useActionData, useNavigation } from 'react-router';
 import { ApolloError } from '@apollo/client';
 import {
   BootstrapFormInput,
@@ -20,11 +12,10 @@ import { useTranslation } from 'react-i18next';
 import { json as jsonExtension } from '@codemirror/lang-json';
 
 import usePageTitle from '../usePageTitle';
-import { FormAdminQueryData, FormAdminQueryDocument } from './queries.generated';
+import { FormAdminQueryDocument } from './queries.generated';
 import { FormType } from '../graphqlTypes.generated';
-import { client } from '../useIntercodeApolloClient';
 import { CreateFormWithJsonDocument, UpdateFormWithJsonDocument } from './mutations.generated';
-import invariant from 'tiny-invariant';
+import { Route } from './+types/FormJSONEditor';
 
 function parseFormData(formData: FormData) {
   const formJSON = JSON.stringify({
@@ -35,7 +26,7 @@ function parseFormData(formData: FormData) {
   return formJSON;
 }
 
-export const action: ActionFunction = async ({ request, params }) => {
+export async function action({ request, params, context }: Route.ActionArgs) {
   try {
     if (request.method === 'POST') {
       const formData = await request.formData();
@@ -45,7 +36,7 @@ export const action: ActionFunction = async ({ request, params }) => {
       }
       const formJSON = parseFormData(await request.formData());
 
-      await client.mutate({
+      await context.client.mutate({
         mutation: CreateFormWithJsonDocument,
         variables: { formType, formJSON },
         refetchQueries: [{ query: FormAdminQueryDocument }],
@@ -54,10 +45,9 @@ export const action: ActionFunction = async ({ request, params }) => {
       return redirect('/admin_forms');
     } else if (request.method === 'PATCH') {
       const id = params.id;
-      invariant(id != null);
 
       const formJSON = parseFormData(await request.formData());
-      await client.mutate({
+      await context.client.mutate({
         mutation: UpdateFormWithJsonDocument,
         variables: { id, formJSON },
         refetchQueries: [{ query: FormAdminQueryDocument }],
@@ -70,7 +60,7 @@ export const action: ActionFunction = async ({ request, params }) => {
   } catch (error) {
     return error;
   }
-};
+}
 
 type EditingFormJSONData = {
   title: string;
@@ -91,22 +81,16 @@ function formDataFromJSON(json: string): EditingFormJSONData {
   };
 }
 
-type LoaderResult = {
-  initialForm: FormAdminQueryData['convention']['forms'][number];
-  data: FormAdminQueryData;
-};
-
-export const loader: LoaderFunction = async ({ params: { id } }) => {
-  const { data } = await client.query<FormAdminQueryData>({ query: FormAdminQueryDocument });
+export async function loader({ params: { id }, context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({ query: FormAdminQueryDocument });
   const initialForm = data.convention.forms.find((form) => form.id === id);
   if (!initialForm) {
     throw new Response(null, { status: 404 });
   }
-  return { data, initialForm } satisfies LoaderResult;
-};
+  return { data, initialForm };
+}
 
-function FormJSONEditor() {
-  const { initialForm } = useLoaderData() as LoaderResult;
+function FormJSONEditor({ loaderData: { initialForm } }: Route.ComponentProps) {
   const initialFormData = useMemo(() => formDataFromJSON(initialForm.export_json), [initialForm.export_json]);
   const [form, setForm] = useState(initialFormData);
   const { t } = useTranslation();
@@ -162,4 +146,4 @@ function FormJSONEditor() {
   );
 }
 
-export const Component = FormJSONEditor;
+export default FormJSONEditor;

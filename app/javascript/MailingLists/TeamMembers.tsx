@@ -1,16 +1,16 @@
 import TabbedMailingList from './TabbedMailingList';
 import usePageTitle from '../usePageTitle';
-import { TeamMembersMailingListQueryData, TeamMembersMailingListQueryDocument } from './queries.generated';
-import { client } from '../useIntercodeApolloClient';
-import { LoaderFunction, useLoaderData } from 'react-router';
+import { TeamMembersMailingListQueryDocument } from './queries.generated';
+import { Route } from './+types/TeamMembers';
 
-export const loader: LoaderFunction = async () => {
-  const { data } = await client.query<TeamMembersMailingListQueryData>({ query: TeamMembersMailingListQueryDocument });
+export async function loader({ context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({
+    query: TeamMembersMailingListQueryDocument,
+  });
   return data;
-};
+}
 
-function TeamMembers() {
-  const data = useLoaderData() as TeamMembersMailingListQueryData;
+function TeamMembers({ loaderData: data }: Route.ComponentProps) {
   usePageTitle('Event team members');
 
   return (
@@ -26,4 +26,4 @@ function TeamMembers() {
   );
 }
 
-export const Component = TeamMembers;
+export default TeamMembers;

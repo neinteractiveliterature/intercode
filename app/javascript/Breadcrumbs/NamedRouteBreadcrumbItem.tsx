@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 
 import BreadcrumbItem from './BreadcrumbItem';
-import { RouteName } from '../AppRouter';
+import { RouteName } from '../routes';
 import { useNamedRouteMatch } from '../useNamedRouteMatch';
 
 export type NamedRouteBreadcrumbItemProps = {

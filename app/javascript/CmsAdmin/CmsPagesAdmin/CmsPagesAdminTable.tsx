@@ -3,18 +3,12 @@ import { Link, useSubmit } from 'react-router';
 import { sortByLocaleString, useGraphQLConfirm } from '@neinteractiveliterature/litform';
 
 import usePageTitle from '../../usePageTitle';
-import { useCmsPagesAdminLoader } from './loaders';
+import { useCmsPagesAdminLoader } from './route';
 
 function CmsPagesAdminTable() {
   const data = useCmsPagesAdminLoader();
   const confirm = useGraphQLConfirm();
   const submit = useSubmit();
-  // const [deletePage] = useDeleteMutationWithReferenceArrayUpdater(
-  //   useDeletePageMutation,
-  //   data.cmsParent,
-  //   'cmsPages',
-  //   (page) => ({ id: page.id }),
-  // );
 
   usePageTitle('CMS Pages');
 
@@ -81,4 +75,4 @@ function CmsPagesAdminTable() {
   );
 }
 
-export const Component = CmsPagesAdminTable;
+export default CmsPagesAdminTable;

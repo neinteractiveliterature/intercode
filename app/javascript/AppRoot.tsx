@@ -1,9 +1,9 @@
-import { Suspense, useMemo, useState, useEffect, useContext, RefObject, useRef } from 'react';
-import { useLocation, useNavigate, useLoaderData, Outlet, useNavigation } from 'react-router';
+import { Suspense, useMemo, useState, useEffect, useContext, useRef, RefObject } from 'react';
+import { useLocation, useNavigate, Outlet, useNavigation } from 'react-router';
 import { Settings } from 'luxon';
 import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
-import { AppRootQueryData } from './appRootQueries.generated';
+import { AppRootQueryData, AppRootQueryDocument } from './appRootQueries.generated';
 import AppRootContext, { AppRootContextValue } from './AppRootContext';
 import { timezoneNameForConvention } from './TimeUtils';
 import getI18n from './setupI18Next';
@@ -14,6 +14,25 @@ import AuthenticationModalContext from './Authentication/AuthenticationModalCont
 import { GraphQLNotAuthenticatedErrorEvent } from './useIntercodeApolloClient';
 import { reloadOnAppEntrypointHeadersMismatch } from './checkAppEntrypointHeadersMatch';
 import { initErrorReporting } from 'ErrorReporting';
+import RouteErrorBoundary from 'RouteErrorBoundary';
+import { Route } from './+types/AppRoot';
+import { MetaDescriptors } from 'react-router/route-module';
+
+export const loader = async ({ context }: Route.LoaderArgs) => {
+  const client = context.client;
+  const [{ data }, authenticityTokens] = await Promise.all([
+    client.query({ query: AppRootQueryDocument }),
+    context.authenticityTokensManager.getTokens(),
+  ]);
+  return { data, authenticityTokens };
+};
+
+export function meta({ data }: Route.MetaArgs): MetaDescriptors {
+  // eslint-disable-next-line i18next/no-literal-string
+  return [{ name: 'csrf-token', content: data.authenticityTokens.railsDirectUploads }];
+}
+
+export const errorElement = RouteErrorBoundary;
 
 export function buildAppRootContextValue(
   data: AppRootQueryData,
@@ -51,10 +70,9 @@ export function buildAppRootContextValue(
   };
 }
 
-function AppRoot(): JSX.Element {
+function AppRoot({ loaderData: { data } }: Route.ComponentProps): JSX.Element {
   const location = useLocation();
   const navigate = useNavigate();
-  const data = useLoaderData() as AppRootQueryData;
   const authenticationModal = useContext(AuthenticationModalContext);
   const navigation = useNavigation();
   const navigationBarRef = useRef<HTMLElement>(null);

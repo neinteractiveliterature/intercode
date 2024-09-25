@@ -1,19 +1,19 @@
-import { ActionFunction, redirect } from 'react-router';
-import { client } from '../../useIntercodeApolloClient';
+import { redirect } from 'react-router';
 import { DeletePartialDocument } from './mutations.generated';
+import { Route } from './+types/SinglePartialRoute';
 
-export const action: ActionFunction = async ({ request, params: { id } }) => {
+export async function action({ request, params: { id }, context }: Route.ActionArgs) {
   if (request.method === 'DELETE') {
-    await client.mutate({
+    await context.client.mutate({
       mutation: DeletePartialDocument,
       variables: {
         id: id ?? '',
       },
     });
-    await client.resetStore();
+    await context.client.resetStore();
 
     return redirect('/cms_partials');
   }
 
   return new Response(null, { status: 404 });
-};
+}

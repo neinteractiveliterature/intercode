@@ -1,22 +1,20 @@
-import { ActionFunction, redirect } from 'react-router';
-import { client } from '../useIntercodeApolloClient';
+import { redirect } from 'react-router';
 import { UpdateEventAdminNotesDocument } from './mutations.generated';
-import { EventAdminEventsQueryDocument } from './queries.generated';
+import { Route } from './+types/AdminNotesRoute';
 
-export const action: ActionFunction = async ({ request, params: { eventId } }) => {
+export async function action({ request, params: { eventId }, context }: Route.ActionArgs) {
   try {
     const formData = await request.formData();
-    await client.mutate({
+    await context.client.mutate({
       mutation: UpdateEventAdminNotesDocument,
       variables: {
         eventId,
         adminNotes: formData.get('admin_notes')?.toString(),
       },
-      refetchQueries: [{ query: EventAdminEventsQueryDocument }],
-      awaitRefetchQueries: true,
     });
+    await context.client.resetStore();
     return redirect('../..');
   } catch (error) {
     return error;
   }
-};
+}

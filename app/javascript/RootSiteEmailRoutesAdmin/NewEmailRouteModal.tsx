@@ -6,30 +6,30 @@ import { ErrorDisplay } from '@neinteractiveliterature/litform';
 import EmailRouteForm from './EmailRouteForm';
 import buildEmailRouteInput from './buildEmailRouteInput';
 import { EmailRouteFieldsFragment } from './queries.generated';
-import { ActionFunction, redirect } from 'react-router';
-import { client } from 'useIntercodeApolloClient';
+import { Link, redirect } from 'react-router';
 import { CreateEmailRouteDocument } from './mutations.generated';
 import { EmailRouteInput } from 'graphqlTypes.generated';
-import { Link, useFetcher } from 'react-router';
 import { useTranslation } from 'react-i18next';
+import { useFetcher } from 'react-router';
+import { Route, Info } from './+types/NewEmailRouteModal';
 
-export const action: ActionFunction = async ({ request }) => {
+export async function action({ request, context }: Route.ActionArgs) {
   try {
     if (request.method === 'POST') {
       const emailRoute = (await request.json()) as EmailRouteInput;
-      await client.mutate({
+      await context.client.mutate({
         mutation: CreateEmailRouteDocument,
         variables: { emailRoute },
       });
-      await client.resetStore();
+      await context.client.resetStore();
       return redirect('..');
     } else {
-      return new Response(null, { status: 404 });
+      throw new Response(null, { status: 404 });
     }
   } catch (error) {
     return error;
   }
-};
+}
 
 function NewEmailRouteModal(): JSX.Element {
   const { t } = useTranslation();
@@ -39,9 +39,9 @@ function NewEmailRouteModal(): JSX.Element {
     receiver_address: '',
     forward_addresses: [],
   });
-  const fetcher = useFetcher();
+  const fetcher = useFetcher<Info['actionData']>();
   const createClicked = async () => {
-    fetcher.submit(buildEmailRouteInput(emailRoute), { method: 'POST', encType: 'application/json' });
+    await fetcher.submit(buildEmailRouteInput(emailRoute), { method: 'POST', encType: 'application/json' });
   };
   const error = fetcher.data instanceof Error ? fetcher.data : undefined;
   const inProgress = fetcher.state !== 'idle';
@@ -57,7 +57,7 @@ function NewEmailRouteModal(): JSX.Element {
       </div>
 
       <div className="modal-footer">
-        <Link className="btn btn-secondary" type="button" to="..">
+        <Link className="btn btn-secondary" type="button" to=".." aria-disabled={inProgress}>
           {t('buttons.cancel')}
         </Link>
 
@@ -69,4 +69,4 @@ function NewEmailRouteModal(): JSX.Element {
   );
 }
 
-export const Component = NewEmailRouteModal;
+export default NewEmailRouteModal;

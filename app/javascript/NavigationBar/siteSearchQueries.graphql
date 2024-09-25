@@ -9,7 +9,6 @@ query SiteSearchQuery($query: String!) {
         highlight
 
         model {
-           
           __typename
 
           ... on Page {

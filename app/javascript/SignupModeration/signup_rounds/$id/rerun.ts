@@ -1,16 +1,15 @@
-import { ActionFunction } from 'react-router';
-import { client } from '../../../useIntercodeApolloClient';
 import { RerunModeratedRankedChoiceSignupRoundDocument } from '../../mutations.generated';
+import { Route } from './+types/rerun';
 
-export const action: ActionFunction = async ({ params: { id } }) => {
+export async function action({ params: { id }, context }: Route.ActionArgs) {
   try {
-    await client.mutate({
+    await context.client.mutate({
       mutation: RerunModeratedRankedChoiceSignupRoundDocument,
       variables: { id },
     });
-    await client.resetStore();
+    await context.client.resetStore();
     return null;
   } catch (error) {
     return error;
   }
-};
+}

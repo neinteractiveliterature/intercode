@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ActionFunction, Form, redirect, useActionData, useNavigation } from 'react-router';
+import { Form, redirect, useNavigation } from 'react-router';
 import { ApolloError } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -8,14 +8,14 @@ import usePageTitle from '../../usePageTitle';
 
 import 'graphiql/graphiql.css';
 import { CreateCmsGraphqlQueryDocument } from './mutations.generated';
-import { client } from '../../useIntercodeApolloClient';
 import { buildCmsGraphqlQueryInputFromFormData } from './buildCmsGraphqlQueryInput';
+import { Route } from './+types/NewCmsGraphqlQuery';
 
-export const action: ActionFunction = async ({ request }) => {
+export async function action({ request, context }: Route.ActionArgs) {
   const formData = await request.formData();
 
   try {
-    await client.mutate({
+    await context.client.mutate({
       mutation: CreateCmsGraphqlQueryDocument,
       variables: {
         query: buildCmsGraphqlQueryInputFromFormData(formData),
@@ -24,14 +24,13 @@ export const action: ActionFunction = async ({ request }) => {
   } catch (e) {
     return e;
   }
-  await client.resetStore();
+  await context.client.resetStore();
 
   return redirect('/cms_graphql_queries');
-};
+}
 
-function NewCmsGraphqlQuery(): JSX.Element {
+function NewCmsGraphqlQuery({ actionData: createError }: Route.ComponentProps): JSX.Element {
   const [query, setQuery] = useState({ identifier: '', admin_notes: '', query: '' });
-  const createError = useActionData();
   const navigation = useNavigation();
 
   usePageTitle('CMS GraphQL Queries');
@@ -53,4 +52,4 @@ function NewCmsGraphqlQuery(): JSX.Element {
   );
 }
 
-export const Component = NewCmsGraphqlQuery;
+export default NewCmsGraphqlQuery;

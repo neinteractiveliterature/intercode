@@ -1,16 +1,14 @@
 import TabbedMailingList from './TabbedMailingList';
 import usePageTitle from '../usePageTitle';
-import { TicketedAttendeesQueryData, TicketedAttendeesQueryDocument } from './queries.generated';
-import { LoaderFunction, useLoaderData } from 'react-router';
-import { client } from '../useIntercodeApolloClient';
+import { TicketedAttendeesQueryDocument } from './queries.generated';
+import { Route } from './+types/TicketedAttendees';
 
-export const loader: LoaderFunction = async () => {
-  const { data } = await client.query<TicketedAttendeesQueryData>({ query: TicketedAttendeesQueryDocument });
+export async function loader({ context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({ query: TicketedAttendeesQueryDocument });
   return data;
-};
+}
 
-function TicketedAttendees() {
-  const data = useLoaderData() as TicketedAttendeesQueryData;
+function TicketedAttendees({ loaderData: data }: Route.ComponentProps) {
   usePageTitle(`All attendees with ${data.convention.ticket_name}`);
 
   return (
@@ -26,4 +24,4 @@ function TicketedAttendees() {
   );
 }
 
-export const Component = TicketedAttendees;
+export default TicketedAttendees;

@@ -35,4 +35,4 @@ function RankedChoiceQueue() {
   );
 }
 
-export const Component = RankedChoiceQueue;
+export default RankedChoiceQueue;

@@ -1,4 +1,4 @@
-import { ApolloError, useSuspenseQuery } from '@apollo/client';
+import { ApolloError, useApolloClient, useSuspenseQuery } from '@apollo/client';
 import { ErrorDisplay, LoadingIndicator } from '@neinteractiveliterature/litform';
 import { useContext, useState } from 'react';
 import Modal from 'react-bootstrap4-modal';
@@ -11,7 +11,6 @@ import { OrderPaymentModalContents, OrderPaymentModalContentsProps } from '../..
 import { useHumanizeTime, useISODateTimeInAppZone } from '../../TimeUtils';
 import useAsyncFunction from '../../useAsyncFunction';
 import { CurrentPendingOrderPaymentIntentClientSecretQueryDocument } from '../../Store/queries.generated';
-import { client } from '../../useIntercodeApolloClient';
 import { DeleteOrderEntryDocument } from 'Store/OrderAdmin/mutations.generated';
 
 export type EventTicketPurchaseModalProps = {
@@ -40,6 +39,7 @@ export default function EventTicketPurchaseModal({
     errorPolicy: 'ignore',
   });
   const [checkOutError, setCheckOutError] = useState<Error>();
+  const client = useApolloClient();
 
   const cancel = async () => {
     if (orderEntry) {

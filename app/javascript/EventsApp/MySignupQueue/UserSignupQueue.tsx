@@ -11,8 +11,8 @@ import {
 import { InternalRefetchQueriesInclude, useMutation } from '@apollo/client';
 import RankedChoicePriorityIndicator from './RankedChoicePriorityIndicator';
 import buildEventUrl from '../buildEventUrl';
-import { Link, useRevalidator } from 'react-router';
 import { formatLCM, getDateTimeFormat, useAppDateTimeFormat } from '../../TimeUtils';
+import { Link, useRevalidator } from 'react-router';
 import { DateTime } from 'luxon';
 import classNames from 'classnames';
 import { usePendingChoices } from './usePendingChoices';

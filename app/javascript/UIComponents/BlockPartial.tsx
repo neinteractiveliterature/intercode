@@ -12,7 +12,7 @@ import {
   DeletePartialDocument,
   UpdatePartialDocument,
 } from 'CmsAdmin/CmsPartialsAdmin/mutations.generated';
-import parseCmsContent from 'parseCmsContent';
+import { parseCmsContent } from 'parseCmsContent';
 import pageAdminDropdownStyles from 'styles/page_admin_dropdown.module.scss';
 
 export type BlockPartialProps = {

@@ -1,14 +1,14 @@
-import { ActionFunction, data } from 'react-router';
-import { client } from '../../useIntercodeApolloClient';
+import { data } from 'react-router';
 import {
   DeleteMaximumEventProvidedTicketsOverrideDocument,
   UpdateMaximumEventProvidedTicketsOverrideDocument,
 } from '../../EventAdmin/mutations.generated';
+import { Route } from './+types/$id';
 
-export const action: ActionFunction = async ({ request, params: { id } }) => {
+export async function action({ request, params: { id }, context }: Route.ActionArgs) {
   try {
     if (request.method === 'DELETE') {
-      const result = await client.mutate({
+      const result = await context.client.mutate({
         mutation: DeleteMaximumEventProvidedTicketsOverrideDocument,
         variables: {
           input: { id: id ?? '' },
@@ -26,7 +26,7 @@ export const action: ActionFunction = async ({ request, params: { id } }) => {
       return data(result.data);
     } else if (request.method === 'PATCH') {
       const formData = await request.formData();
-      const result = await client.mutate({
+      const result = await context.client.mutate({
         mutation: UpdateMaximumEventProvidedTicketsOverrideDocument,
         variables: {
           input: {
@@ -43,4 +43,4 @@ export const action: ActionFunction = async ({ request, params: { id } }) => {
   } catch (error) {
     return error;
   }
-};
+}

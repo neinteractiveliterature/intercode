@@ -8,9 +8,8 @@ import ReactTableExportButtonWithColumnTransform from '../../Tables/ReactTableEx
 import { AdminCouponsQueryData, AdminCouponsQueryDocument } from './queries.generated';
 import ReactTableWithTheWorks from '../../Tables/ReactTableWithTheWorks';
 import { useTranslation } from 'react-i18next';
-import { useMemo } from 'react';
-import { Outlet, useNavigate } from 'react-router';
-import { Link } from 'react-router';
+import { useEffect, useMemo } from 'react';
+import { Outlet, useLocation, useNavigate, Link } from 'react-router';
 
 type CouponType = AdminCouponsQueryData['convention']['coupons_paginated']['entries'][0];
 
@@ -36,6 +35,7 @@ function CouponEffectCell({ getValue }: CellContext<CouponType, CouponType>) {
 function CouponAdminTable(): JSX.Element {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const columns = useMemo(() => {
     const columnHelper = createColumnHelper<CouponType>();
@@ -67,18 +67,18 @@ function CouponAdminTable(): JSX.Element {
     ];
   }, [t]);
 
-  const {
-    tableHeaderProps,
-    columnSelectionProps,
-    table: tableInstance,
-    loading,
-  } = useReactTableWithTheWorks({
+  const { tableHeaderProps, columnSelectionProps, table, loading, refetch } = useReactTableWithTheWorks({
     getData: ({ data }) => data?.convention.coupons_paginated.entries,
     getPages: ({ data }) => data?.convention.coupons_paginated.total_pages,
     columns,
     query: AdminCouponsQueryDocument,
     storageKeyPrefix: 'coupons',
   });
+
+  // force a table refetch when the modals close
+  useEffect(() => {
+    refetch();
+  }, [location, refetch]);
 
   return (
     <>
@@ -100,15 +100,11 @@ function CouponAdminTable(): JSX.Element {
         }
       />
 
-      <ReactTableWithTheWorks
-        table={tableInstance}
-        loading={loading}
-        onClickRow={(row) => navigate(`./${row.original.id}`)}
-      />
+      <ReactTableWithTheWorks table={table} loading={loading} onClickRow={(row) => navigate(`./${row.original.id}`)} />
 
       <Outlet />
     </>
   );
 }
 
-export const Component = CouponAdminTable;
+export default CouponAdminTable;

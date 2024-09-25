@@ -1,5 +1,3 @@
- 
-
 fragment PricingStructureFields on PricingStructure {
   pricing_strategy
 
@@ -9,7 +7,6 @@ fragment PricingStructureFields on PricingStructure {
   }
 
   value {
-     
     __typename
 
     ... on Money {

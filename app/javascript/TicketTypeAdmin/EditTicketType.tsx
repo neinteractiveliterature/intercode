@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import { ActionFunction, redirect, useFetcher, useLoaderData } from 'react-router';
+import { useFetcher } from 'react-router';
 import { ApolloError } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -8,30 +8,8 @@ import TicketTypeForm from './TicketTypeForm';
 import usePageTitle from '../usePageTitle';
 import AppRootContext from '../AppRootContext';
 import { SingleTicketTypeLoaderResult } from './loaders';
-import { TicketTypeInput } from 'graphqlTypes.generated';
-import { client } from 'useIntercodeApolloClient';
-import { UpdateTicketTypeDocument } from './mutations.generated';
-import invariant from 'tiny-invariant';
 
-export const action: ActionFunction = async ({ request, params: { id } }) => {
-  invariant(id != null);
-  try {
-    const ticketType = (await request.json()) as TicketTypeInput;
-    await client.mutate({
-      mutation: UpdateTicketTypeDocument,
-      variables: {
-        input: { ticket_type: ticketType, id },
-      },
-    });
-
-    return redirect('/ticket_types');
-  } catch (error) {
-    return error;
-  }
-};
-
-function EditTicketTypeForm() {
-  const initialTicketType = useLoaderData() as SingleTicketTypeLoaderResult;
+function EditTicketTypeForm({ initialTicketType }: { initialTicketType: SingleTicketTypeLoaderResult }) {
   const { ticketName } = useContext(AppRootContext);
   usePageTitle(`Editing “${initialTicketType.name}”`);
   const [ticketType, setTicketType] = useState(initialTicketType);
@@ -57,4 +35,4 @@ function EditTicketTypeForm() {
   );
 }
 
-export const Component = EditTicketTypeForm;
+export default EditTicketTypeForm;

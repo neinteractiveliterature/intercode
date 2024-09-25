@@ -1,15 +1,15 @@
-import { ActionFunction, replace } from 'react-router';
-import { client } from '../../useIntercodeApolloClient';
+import { replace } from 'react-router';
 import { DeleteEventProposalDocument } from '../mutations.generated';
+import { Route } from './+types/route';
 
-export const action: ActionFunction = async ({ request, params: { id } }) => {
+export async function action({ request, params: { id }, context }: Route.ActionArgs) {
   try {
     if (request.method === 'DELETE') {
-      await client.mutate({
+      await context.client.mutate({
         mutation: DeleteEventProposalDocument,
         variables: { id },
       });
-      await client.resetStore();
+      await context.client.resetStore();
       return replace('/pages/new-proposal');
     } else {
       return new Response(null, { status: 404 });
@@ -17,4 +17,4 @@ export const action: ActionFunction = async ({ request, params: { id } }) => {
   } catch (error) {
     return error;
   }
-};
+}
