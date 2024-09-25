@@ -149,7 +149,7 @@ function getClientURL(): URL {
   if (typeof window !== 'undefined') {
     return new URL('/graphql', window.location.href);
   } else {
-    throw new Error('Not implemented: cannot yet use GraphQL outside a browser environment');
+    return new URL('/graphql', process.env.INTERCODE_BACKEND);
   }
 }
 
